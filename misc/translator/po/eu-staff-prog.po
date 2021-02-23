@@ -2,7 +2,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 20.05\n"
-"POT-Creation-Date: 2021-01-18 07:34-0300\n"
+"POT-Creation-Date: 2021-02-18 08:10-0300\n"
 "PO-Revision-Date: 2020-09-10 12:57+0000\n"
 "Last-Translator: Medialab Tabakalera <ubik_sistemak@tabakalera.eu>\n"
 "Language-Team: Koha Translation Team\n"
@@ -542,7 +542,7 @@ msgstr "%s %s %s%s %s %s%s %s "
 #. %5$s:  END 
 #. %6$s:  ELSE 
 #. %7$s:  END 
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:654
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:658
 #, fuzzy, c-format
 msgid "%s %s %s %s %s %s There are no recorded logs for this request %s "
 msgstr "%s %s egunak %s Ez dago adinik arau honentzat. %s "
@@ -2675,7 +2675,7 @@ msgstr "%s %s Erregistro honek ez dauzka itemak. %s "
 
 #. %1$s:  FOREACH error IN errors 
 #. %2$s:  IF ( error.sqlerr ) 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1226
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1227
 #, fuzzy, c-format
 msgid "%s %s This report contains the SQL keyword "
 msgstr "%s %sTxosten honek SQL gako hitza du"
@@ -2701,7 +2701,7 @@ msgstr ""
 #. %2$s:  IF defaultRefundRule 
 #. %3$s:  ELSE 
 #. %4$s:  END 
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:752
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:743
 #, c-format
 msgid "%s %s Use default (Yes) %s Use default (No) %s "
 msgstr ""
@@ -2773,7 +2773,7 @@ msgstr "%s %s %s Saski talde zk.°%s %s"
 #. %1$s:  IF ( hardduedate ) 
 #. %2$s:  IF ( hardduedatecompare == '-1' ) 
 #. %3$s:  hardduedate | $KohaDates 
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:219
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:210
 #, c-format
 msgid "%s %s before %s "
 msgstr "%s %s antes %s"
@@ -4102,6 +4102,13 @@ msgstr ""
 msgid "%s Add patron %s Duplicate patron %s Modify patron %s %s(%s)%s "
 msgstr ""
 
+#. %1$s:  IF heading_add_tag_p 
+#. %2$s:  ELSE 
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:53
+#, fuzzy, c-format
+msgid "%s Add tag %s Modify tag "
+msgstr "%s%sAldatu etiketa"
+
 #. %1$s:  ELSE 
 #. %2$s:  END 
 #. %3$s:  ELSIF op == 'list' 
@@ -4401,7 +4408,7 @@ msgstr "%s Jaiotze data:"
 #. %2$s:  ELSIF ( lengthunit == 'hours') 
 #. %3$s:  ELSE 
 #. %4$s:  END 
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:210
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:201
 #, fuzzy, c-format
 msgid "%s Days %s Hours %s Undefined %s "
 msgstr "%s %s %s No otros ítems. %s "
@@ -4562,19 +4569,19 @@ msgid "%s Framework"
 msgstr "%s Lan-orria"
 
 #. %1$s:  END 
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:503
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:494
 #, c-format
 msgid "%s From any library "
 msgstr "%s Edozein liburutegitik"
 
 #. %1$s:  END 
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:519
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:510
 #, c-format
 msgid "%s From home library "
 msgstr "%s Jatorri-liburutegian"
 
 #. %1$s:  END 
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:511
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:502
 #, c-format
 msgid "%s From local hold group "
 msgstr ""
@@ -4671,7 +4678,7 @@ msgid "%s Initials: "
 msgstr "%s Inizialak:"
 
 #. %1$s:  END 
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:617
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:608
 #, c-format
 msgid "%s Item floats "
 msgstr "%s Ítem permanece en sede de retorno "
@@ -4683,13 +4690,13 @@ msgid "%s Item may be shelved out of order"
 msgstr ""
 
 #. %1$s:  END 
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:603
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:594
 #, c-format
 msgid "%s Item returns home "
 msgstr "%s Ítem regresa a sede origen "
 
 #. %1$s:  END 
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:610
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:601
 #, c-format
 msgid "%s Item returns to issuing library "
 msgstr "%s Ítem regresa a sede de préstamo "
@@ -4855,8 +4862,8 @@ msgstr "%s Nuevo curso / materia %s "
 #. For the first occurrence,
 #. %1$s:  END 
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1240
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:743
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:774
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:734
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:765
 #, fuzzy, c-format
 msgid "%s No "
 msgstr "%s Bat ere ez "
@@ -4927,7 +4934,7 @@ msgid "%s No group "
 msgstr "Talde berria"
 
 #. %1$s:  END 
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:527
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:518
 #, c-format
 msgid "%s No holds allowed "
 msgstr "%s Ezin da erreserbarik egin"
@@ -5723,8 +5730,8 @@ msgstr "%s Erabiltzaile izena:"
 #. For the first occurrence,
 #. %1$s:  END 
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1232
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:736
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:767
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:727
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:758
 #, fuzzy, c-format
 msgid "%s Yes "
 msgstr "%s Bai%s, "
@@ -5852,7 +5859,7 @@ msgstr ""
 
 #. %1$s:  ELSIF ( hardduedatecompare == '1' ) 
 #. %2$s:  hardduedate | $KohaDates 
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:226
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:217
 #, c-format
 msgid "%s after %s "
 msgstr "%s g %s "
@@ -5949,7 +5956,7 @@ msgid "%s can't be opened"
 msgstr "%s ezin da ireki"
 
 #. %1$s:  request.illcomments.count | html 
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:673
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:677
 #, fuzzy, c-format
 msgid "%s comments"
 msgstr "Iruzkinak"
@@ -6333,7 +6340,7 @@ msgstr "%s noiz %s "
 
 #. %1$s:  ELSIF ( hardduedatecompare == '0' ) 
 #. %2$s:  hardduedate | $KohaDates 
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:223
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:214
 #, c-format
 msgid "%s on %s "
 msgstr "%s noiz %s "
@@ -6854,18 +6861,6 @@ msgstr "%s%s%s(ez dago helbide elektronikorik gordeta)%s"
 msgid "%s%s%s(none)%s"
 msgstr "%s%s%s(Bat ere ez)%s"
 
-#. %1$s:  searchfield | html 
-#. %2$s:  END 
-#. %3$s:  IF ( heading_add_tag_p ) 
-#. %4$s:  END 
-#. %5$s:  ELSE 
-#. %6$s:  action | html 
-#. %7$s:  END 
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:52
-#, c-format
-msgid "%s%s%sAdd tag%s%s%s%s"
-msgstr "%s%s%sAgregar etiqueta%s%s%s%s"
-
 #. %1$s:  IF ( frameworkcode ) 
 #. %2$s:  frameworkcode | html 
 #. %3$s:  ELSE 
@@ -6994,13 +6989,6 @@ msgstr "%s%s, nork %s%s"
 #, c-format
 msgid "%s%s; Published by %s %s%s in "
 msgstr "%s%s; Argitaratzailea:%s %s%s non"
-
-#. %1$s:  IF ( use_heading_flags_p ) 
-#. %2$s:  IF ( heading_modify_tag_p ) 
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:52
-#, c-format
-msgid "%s%sModify tag "
-msgstr "%s%sAldatu etiketa"
 
 #. For the first occurrence,
 #. %1$s:  IF ( suggestion.copyrightdate ) 
@@ -7233,7 +7221,7 @@ msgstr ""
 #. %2$s:  Branches.GetName( humanbranch ) | html 
 #. %3$s:  ELSE 
 #. %4$s:  END 
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:633
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:624
 #, fuzzy, c-format
 msgid ""
 "%sCheckout, hold policy by patron category for %s%sDefault checkout, hold "
@@ -7502,7 +7490,7 @@ msgstr "%sErreserba:%s "
 #. %2$s:  Branches.GetName( humanbranch ) | html 
 #. %3$s:  ELSE 
 #. %4$s:  END 
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:792
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:783
 #, c-format
 msgid "%sHolds policy by item type for %s%sDefault holds policy by item type%s"
 msgstr ""
@@ -7732,7 +7720,7 @@ msgstr ""
 #. %1$s:  IF chargeperiod_charge_at 
 #. %2$s:  ELSE 
 #. %3$s:  END 
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:237
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:228
 #, fuzzy, c-format
 msgid "%sStart of interval%sEnd of interval%s"
 msgstr "Tartearen amaiera"
@@ -7844,9 +7832,9 @@ msgstr "%sBai%s&nbsp;%s"
 #: intranet-tmpl/prog/en/modules/admin/classsources.tt:303
 #: intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:207
 #: intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:208
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:208
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:209
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:210
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:215
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:216
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:217
 #, c-format
 msgid "%sYes%sNo%s"
 msgstr "%sBai%sEz%s"
@@ -8485,6 +8473,16 @@ msgid ""
 msgstr ""
 "&rsaquo; %s%sAldatu moneta '%s'%sMoneta berria%s%s %sBerretsi moneta "
 "ezabatzea '"
+
+#. %1$s:  IF heading_add_tag_p 
+#. %2$s:  ELSE 
+#. %3$s:  END 
+#. %4$s:  searchfield | html 
+#. %5$s:  ELSIF ( else ) 
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:23
+#, fuzzy, c-format
+msgid "&rsaquo; %sAdd tag%sModify tag%s %s %s &rsaquo; "
+msgstr "&rsaquo; Gehitu EAN liburutegi berria %s %s &rsaquo; "
 
 #. %1$s:  IF ( patrons_in_category > 0 ) 
 #. %2$s:  categorycode | html 
@@ -10089,7 +10087,7 @@ msgstr "Barkatuta"
 
 #. %1$s:  HoldsToPullStartDate | html 
 #. %2$s:  HoldsToPullEndDate | html 
-#: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:236
+#: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:237
 #, fuzzy, c-format
 msgid ""
 "(Inclusive, default is %s days ago to %s days ahead. Set other date ranges "
@@ -10099,7 +10097,7 @@ msgstr ""
 "beharrezkoa izanez gero, ezarri beste bitarte batzuk.)"
 
 #. %1$s:  HoldsToPullStartDate | html 
-#: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:238
+#: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:239
 #, fuzzy, c-format
 msgid ""
 "(Inclusive, default is %s days ago to today. Set other date ranges as "
@@ -10118,8 +10116,8 @@ msgstr "(Indonesiera)"
 msgid "(Lost)"
 msgstr "Galdutakoa ("
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1925
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1947
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1926
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1948
 #, c-format
 msgid "(None)"
 msgstr "(Bat ere ez)"
@@ -10255,7 +10253,7 @@ msgstr "(balidatzen)"
 msgid "(current stage highlighted)"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:802
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:793
 #, c-format
 msgid "(default if none is defined)"
 msgstr "(lehenetsia, besterik definitu ezean)"
@@ -10283,7 +10281,7 @@ msgstr "(catalogación rápida)"
 msgid "(if empty, subscription is still active) "
 msgstr "(hutsik baldin badago, harpidetza oraindik aktibo dagoelako da) "
 
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:100
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:107
 #, c-format
 msgid ""
 "(if you select a value here, the indicators will be limited to the "
@@ -10883,7 +10881,7 @@ msgid ""
 "selected."
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:148
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:152
 #, c-format
 msgid ""
 "A bibliographic record for this request exists, but no item. You are about "
@@ -11421,7 +11419,7 @@ msgstr "Ekintza bat etortzerik aurkitzen ez bada:"
 #: intranet-tmpl/prog/en/modules/admin/credit_types.tt:127
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:91
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:120
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:477
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:468
 #: intranet-tmpl/prog/en/modules/admin/debit_types.tt:141
 #: intranet-tmpl/prog/en/modules/admin/aqcontract.tt:149
 #: intranet-tmpl/prog/en/modules/admin/items_search_fields.tt:68
@@ -11472,7 +11470,7 @@ msgstr "Ekintzak"
 #: intranet-tmpl/prog/en/modules/admin/oai_sets.tt:92
 #: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:138
 #: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:206
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:216
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:223
 #: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:174
 #: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:8
 #, c-format
@@ -11575,8 +11573,8 @@ msgstr "Kostu erreala:"
 #: intranet-tmpl/prog/en/modules/admin/cash_registers.tt:110
 #: intranet-tmpl/prog/en/modules/admin/oai_set_mappings.tt:104
 #: intranet-tmpl/prog/en/modules/admin/koha2marclinks.tt:46
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:705
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:917
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:696
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:908
 #: intranet-tmpl/prog/en/modules/admin/localization.tt:44
 #: intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:402
 #: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:291
@@ -11793,7 +11791,7 @@ msgstr "Gehitu hautatutakoa"
 msgid "Add classification source"
 msgstr "Gehitu sailkapen iturria"
 
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:688
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:692
 #, fuzzy, c-format
 msgid "Add comment"
 msgstr "Comentario Aprobado"
@@ -12650,7 +12648,7 @@ msgid "Advanced search"
 msgstr "Bilaketa aurreratua"
 
 #: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:210
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:357
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:348
 #, c-format
 msgid "After"
 msgstr "Ondoren"
@@ -12807,8 +12805,8 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:187
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:165
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:172
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:324
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:332
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:315
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:323
 #: intranet-tmpl/prog/en/modules/reports/cash_register_stats.tt:90
 #: intranet-tmpl/prog/en/modules/reports/itemslost.tt:126
 #: intranet-tmpl/prog/en/modules/reports/itemslost.tt:130
@@ -12821,7 +12819,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:194
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:203
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:822
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1303
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1304
 #, c-format
 msgid "All"
 msgstr "Guztia"
@@ -12989,8 +12987,8 @@ msgstr ""
 
 #: intranet-tmpl/prog/en/modules/members/discharges.tt:29
 #: intranet-tmpl/prog/en/modules/members/discharges.tt:38
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:296
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:403
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:287
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:394
 #, c-format
 msgid "Allow"
 msgstr "Baimendu"
@@ -13560,12 +13558,12 @@ msgstr ""
 msgid "An unknown error has occurred."
 msgstr "Errore ezezagun bat gertatu da."
 
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:124
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:128
 #, fuzzy, c-format
 msgid "An unknown error occurred while trying to add an item"
 msgstr "%s Errore bat jazo da zure eskaera prozesatzerakoan."
 
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:127
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:131
 #, fuzzy, c-format
 msgid "An unknown error occurred while trying to check out the item"
 msgstr "%s Errore bat jazo da zure eskaera prozesatzerakoan."
@@ -13804,7 +13802,7 @@ msgstr "Aplikatu iragazkia"
 
 #. INPUT type=submit
 #: intranet-tmpl/prog/en/modules/circ/overdue.tt:214
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1280
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1281
 msgid "Apply filter"
 msgstr "Aplikatu iragazkia"
 
@@ -13901,7 +13899,7 @@ msgid "Are you sure you want to cancel this order (%s)"
 msgstr "Ziur al zaude eskari hau ezabatu nahi duzula? (%s)"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:935
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:926
 msgid "Are you sure you want to cancel your changes?"
 msgstr "¿Está seguro de que quiere cancelar sus cambios?"
 
@@ -13914,7 +13912,7 @@ msgid ""
 msgstr "Está seguro de querer eliminar la etiqueta de este título?"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:935
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:926
 #, fuzzy
 msgid ""
 "Are you sure you want to clone this circulation and fine rule from %s to %s "
@@ -13922,7 +13920,7 @@ msgid ""
 msgstr "Ziur zaude erreserba hau bertan behera utzi nahi duzula?"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:935
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:926
 #, fuzzy
 msgid ""
 "Are you sure you want to clone this standard rule to %s library? This will "
@@ -14028,7 +14026,7 @@ msgid "Are you sure you want to delete the selected news?"
 msgstr "Ziur al zaude erlazionatutako berriak ezabatu nahi dituzula?"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1303
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1304
 msgid "Are you sure you want to delete the selected reports?"
 msgstr "Ziur al zaude erlazionatutako txostenak ezabatu bahi dituzula?"
 
@@ -14218,19 +14216,19 @@ msgid "Are you sure you want to delete this record?"
 msgstr "Ziur al zaude erregistro hau ezabatu nahi duzula?"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1303
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1304
 #, fuzzy
 msgid "Are you sure you want to delete this report? This cannot be undone."
 msgstr "Ziur zaude bazkide hau ezabatu nahi duzula? Hau ezin da desegin."
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:935
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:926
 #, fuzzy
 msgid "Are you sure you want to delete this rule? This cannot be undone."
 msgstr "Ziur zaude bazkide hau ezabatu nahi duzula? Hau ezin da desegin."
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1303
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1304
 msgid "Are you sure you want to delete this saved report?"
 msgstr "Ziur al zaude gordetako txosten hau ezabatu nahi duzula?"
 
@@ -14283,7 +14281,7 @@ msgid "Are you sure you want to do this?"
 msgstr "Ziur al zaude hori egin nahi duzula?"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:935
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:926
 msgid "Are you sure you want to edit another rule?"
 msgstr "¿Está seguro de que quiere editar otra regla?"
 
@@ -14429,7 +14427,7 @@ msgstr ""
 msgid "Are you sure you wish to delete quote(s) %s?"
 msgstr "Ziur al zaude esaldiak %s ezabatu nahi dituzula"
 
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:444
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:448
 #, fuzzy, c-format
 msgid "Are you sure you wish to delete this request?"
 msgstr "Ziur al zaude txantiloi hau ezabatu nahi duzula?"
@@ -14483,7 +14481,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/circ/article-requests.tt:55
 #: intranet-tmpl/prog/en/modules/circ/article-requests.tt:62
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:118
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:453
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:444
 #: intranet-tmpl/prog/en/modules/intranet-main.tt:142
 #, fuzzy, c-format
 msgid "Article requests"
@@ -14637,7 +14635,7 @@ msgstr "Autoritatea"
 msgid "Auth field copied"
 msgstr "Autoritate eremua kopiatu da"
 
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:187
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:194
 #, c-format
 msgid "Auth value"
 msgstr "Balio baimendua"
@@ -14777,7 +14775,7 @@ msgstr "Egilea(k): %s%s%s %s %s; %s %s %s %s%s %s %s;%s %s %s"
 #: intranet-tmpl/prog/en/modules/circ/article-requests.tt:267
 #: intranet-tmpl/prog/en/modules/circ/request-article.tt:100
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:182
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1270
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1271
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:76
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:289
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:812
@@ -14995,7 +14993,7 @@ msgid "Authorized value:"
 msgstr "Balio baimendua:"
 
 #: intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:105
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:96
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:103
 #: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:71
 #, c-format
 msgid "Authorized value: "
@@ -15088,13 +15086,13 @@ msgstr "Eskaera automatikoa:"
 
 #: intranet-tmpl/prog/en/modules/circ/circulation.tt:591
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:110
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:445
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:436
 #, c-format
 msgid "Automatic renewal"
 msgstr "Berritze automatikoa"
 
 #: intranet-tmpl/prog/en/includes/facets.inc:9
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:722
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:726
 #, c-format
 msgid "Availability"
 msgstr "Erabilgarritasuna"
@@ -15115,7 +15113,7 @@ msgid "Available call numbers"
 msgstr "Katalogo zenbaki erabilgarriak"
 
 #. INPUT type=text
-#: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:195
+#: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:196
 msgid "Available copy"
 msgstr "Copia disponible "
 
@@ -15125,7 +15123,7 @@ msgid "Available copy numbers"
 msgstr "Eskuragarri dauden ale kopuruak"
 
 #: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:63
-#: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:196
+#: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:197
 #, c-format
 msgid "Available enumeration"
 msgstr "Enumeración disponible "
@@ -15888,7 +15886,7 @@ msgstr "Sortak"
 msgid "BdP de la Meuse, France"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:352
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:356
 #, c-format
 msgid "Be sure to provide email addresses for these patrons."
 msgstr ""
@@ -15912,7 +15910,7 @@ msgstr ""
 "bazkide erregistroei ezin zaie bazkide atributu hedatuak ezarri. Jo ezazu"
 
 #: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:211
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:355
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:346
 #, c-format
 msgid "Before"
 msgstr "Aurrekoa"
@@ -16042,8 +16040,8 @@ msgstr "Registro bibliográfico %s"
 msgid "Bibliographic record ID"
 msgstr "Registro bibliográfico"
 
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:369
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:556
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:373
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:560
 #, fuzzy, c-format
 msgid "Bibliographic record ID:"
 msgstr "Registro bibliográfico"
@@ -16782,8 +16780,8 @@ msgid "Cache expiry (seconds)"
 msgstr "Caché expira (sergundos)"
 
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:434
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1081
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1191
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1082
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1192
 #, c-format
 msgid "Cache expiry:"
 msgstr "Caché de caducidad: "
@@ -16850,7 +16848,7 @@ msgstr "Katalogo zk."
 #: intranet-tmpl/prog/en/modules/acqui/newordersubscription.tt:39
 #: intranet-tmpl/prog/en/modules/circ/circulation.tt:928
 #: intranet-tmpl/prog/en/modules/circ/overdue.tt:63
-#: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:194
+#: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:195
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:110
 #: intranet-tmpl/prog/en/modules/circ/branchtransfers.tt:182
 #: intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:56
@@ -17143,10 +17141,10 @@ msgstr "Erregistro hau ezin da gorde eremu hauetan ezer idatzi ez delako:"
 #: intranet-tmpl/prog/en/modules/patroncards/edit-profile.tt:92
 #: intranet-tmpl/prog/en/modules/patron_lists/list.tt:100
 #: intranet-tmpl/prog/en/modules/patron_lists/add-modify.tt:74
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:233
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:322
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:353
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:437
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:237
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:326
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:357
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:441
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:79
 #: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:242
 #: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:252
@@ -17253,7 +17251,7 @@ msgstr "Erregistro hau ezin da gorde eremu hauetan ezer idatzi ez delako:"
 #: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:167
 #: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:237
 #: intranet-tmpl/prog/en/modules/admin/didyoumean.tt:59
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:105
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:112
 #: intranet-tmpl/prog/en/modules/admin/preferences.tt:157
 #: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:364
 #: intranet-tmpl/prog/en/modules/admin/transport-cost-matrix.tt:85
@@ -17265,8 +17263,8 @@ msgstr "Erregistro hau ezin da gorde eremu hauetan ezer idatzi ez delako:"
 #: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:256
 #: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:258
 #: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:354
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1109
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1218
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1110
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1219
 #: intranet-tmpl/prog/en/modules/virtualshelves/downloadshelf.tt:43
 #: intranet-tmpl/prog/en/modules/virtualshelves/addbybiblionumber.tt:111
 #: intranet-tmpl/prog/en/modules/virtualshelves/sendshelfform.tt:33
@@ -17299,7 +17297,7 @@ msgstr "Bertan behera utzi"
 msgid "Cancel "
 msgstr "Bertan behera utzi"
 
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:111
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:115
 #, fuzzy, c-format
 msgid "Cancel a confirmed request"
 msgstr "Artikulu juridikoak"
@@ -17658,7 +17656,7 @@ msgid "Cannot unpack file to the plugins directory."
 msgstr "No se pueden el archivo del directorio de plugins"
 
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:103
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:438
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:429
 #, fuzzy, c-format
 msgid "Cap fine at replacement price"
 msgstr "v - Kostua, alearen ordezte kostua"
@@ -18367,7 +18365,7 @@ msgstr "Kargua"
 msgid "Charge lost fee "
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:435
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:426
 #, c-format
 msgid "Charge when?"
 msgstr "Noiz kargatu?"
@@ -18519,8 +18517,8 @@ msgstr "Mailegua"
 msgid "Check out and check in items"
 msgstr "Prestar y devolver ítems"
 
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:143
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:243
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:147
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:247
 #, fuzzy, c-format
 msgid "Check out details"
 msgstr "Estado de préstamo:"
@@ -18735,7 +18733,7 @@ msgstr "Noiz hartu da maileguan"
 msgid "Checked out on (hidden, unformatted)"
 msgstr "Epe-muga data ezkutua, formateatu gabea"
 
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:246
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:250
 #, fuzzy, c-format
 msgid "Checked out to:"
 msgstr "Noiz hartu da maileguan"
@@ -19499,7 +19497,7 @@ msgid "Cleaned import batch #%s"
 msgstr "Inportatze sorta garbitu da #%s"
 
 #: intranet-tmpl/prog/en/modules/tools/modborrowers.tt:283
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:75
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:79
 #: intranet-tmpl/prog/en/modules/cataloguing/editor.tt:144
 #: intranet-tmpl/prog/en/modules/members/member.tt:185
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1400
@@ -19508,11 +19506,11 @@ msgstr "Inportatze sorta garbitu da #%s"
 #: intranet-tmpl/prog/en/modules/circ/circulation.tt:562
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:136
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:731
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:341
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:419
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:332
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:410
 #: intranet-tmpl/prog/en/modules/admin/aqplan.tt:143
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:187
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1281
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1282
 #, c-format
 msgid "Clear"
 msgstr "Garbitu"
@@ -19899,9 +19897,9 @@ msgstr "Zirkulazio arau eta isunen bikoizketa eten da"
 #: intranet-tmpl/prog/en/modules/tools/stockrotation.tt:189
 #: intranet-tmpl/prog/en/modules/tools/stockrotation.tt:363
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:884
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:341
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:641
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:665
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:345
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:645
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:669
 #: intranet-tmpl/prog/en/modules/cataloguing/editor.tt:286
 #: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:215
 #: intranet-tmpl/prog/en/modules/cataloguing/merge.tt:139
@@ -20095,8 +20093,8 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:127
 #: intranet-tmpl/prog/en/modules/admin/itemtypes.tt:372
 #: intranet-tmpl/prog/en/modules/admin/checkmarc.tt:166
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1938
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1965
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1939
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1966
 #: intranet-tmpl/prog/en/modules/pos/pay.tt:45
 #, c-format
 msgid "Code"
@@ -20372,7 +20370,7 @@ msgstr "Iruzkina"
 msgid "Comment "
 msgstr "Iruzkina"
 
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:679
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:683
 #, fuzzy, c-format
 msgid "Comment by: "
 msgstr "Iruzkina:"
@@ -20385,7 +20383,7 @@ msgid "Comment:"
 msgstr "Iruzkina:"
 
 #: intranet-tmpl/prog/en/includes/mana/mana-subscription-search-result.inc:103
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:697
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:701
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1306
 #, c-format
 msgid "Comment: "
@@ -20552,7 +20550,7 @@ msgstr ""
 msgid "Confirm"
 msgstr "Baieztatu"
 
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:107
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:111
 #, fuzzy, c-format
 msgid "Confirm ILL request"
 msgstr "Berretsi ezabatzea:"
@@ -20613,7 +20611,7 @@ msgstr "Berretsi erregistroen bat etortze araua ezabatzea"
 msgid "Confirm deletion of subfield %s?"
 msgstr "Berretsi %s azpieremua ezabatzea?"
 
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:113
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:120
 #, c-format
 msgid "Confirm deletion of tag "
 msgstr "Berretsi etiketa ezabatzea"
@@ -21166,8 +21164,8 @@ msgstr "Galduta:"
 msgid "Cost must be expressed as a decimal number >= 0"
 msgstr "Kostua zenbaki dezimal bat bezala adiera behar da >= 0"
 
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:410
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:588
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:414
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:592
 #, fuzzy, c-format
 msgid "Cost:"
 msgstr "Galduta:"
@@ -21528,7 +21526,7 @@ msgstr "Garbitu eremua"
 
 #. %1$s:  framework.frameworkcode | html 
 #. %2$s:  framework.frameworktext | html 
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:139
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:146
 #, c-format
 msgid "Create framework for %s (%s) using "
 msgstr "Sortu lan orriak honentzat: %s (%s), hau erabilita"
@@ -21648,7 +21646,7 @@ msgstr "Erregistroa sortu"
 
 #. INPUT type=submit name=submit
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:147
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1048
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1049
 #, c-format
 msgid "Create report from SQL"
 msgstr "Sortu txostenak SQLtik abiatuta"
@@ -21811,7 +21809,7 @@ msgid "Current article requests"
 msgstr "Uneko terminoak"
 
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:93
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:428
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:419
 #, c-format
 msgid "Current checkouts allowed"
 msgstr "Une honetan onartzen diren maileguak"
@@ -21850,7 +21848,7 @@ msgid "Current maintenance team"
 msgstr "Gaur egun eskuragarri dauden txantiloiak"
 
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:94
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:429
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:420
 #, fuzzy, c-format
 msgid "Current on-site checkouts allowed"
 msgstr "Une honetan onartzen diren maileguak"
@@ -21914,7 +21912,7 @@ msgstr "Gaur egun eskuragarri dauden txantiloiak"
 msgid "Currently in local use %s "
 msgstr "Gaur egun bertan erabilgarri daude %s "
 
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:797
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:788
 #, c-format
 msgid ""
 "Currently, this means hold policies. The various policies have the following "
@@ -22363,7 +22361,7 @@ msgstr "Fecha de pedido "
 msgid "Date ordered "
 msgstr "Fecha de pedido "
 
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:47
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:51
 #, fuzzy, c-format
 msgid "Date placed between:"
 msgstr "Azken aldiz ikusia"
@@ -22429,7 +22427,7 @@ msgstr "Data/ordua"
 #: intranet-tmpl/prog/en/modules/circ/article-requests.tt:270
 #: intranet-tmpl/prog/en/modules/circ/request-article.tt:115
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:179
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1265
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1266
 #, c-format
 msgid "Date:"
 msgstr "Data:"
@@ -22492,10 +22490,10 @@ msgstr "Eguna:"
 
 #: intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:92
 #: intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:95
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:349
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:340
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:440
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1087
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1197
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1088
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1198
 #, c-format
 msgid "Days"
 msgstr "Egunak"
@@ -22547,12 +22545,11 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/admin/categories.tt:285
 #: intranet-tmpl/prog/en/modules/admin/categories.tt:289
 #: intranet-tmpl/prog/en/modules/admin/categories.tt:293
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:207
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:661
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:652
 #: intranet-tmpl/prog/en/modules/admin/clone-rules.tt:41
 #: intranet-tmpl/prog/en/modules/admin/clone-rules.tt:53
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:142
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:160
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:149
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:167
 #: intranet-tmpl/prog/en/modules/admin/item_circulation_alerts.tt:60
 #, c-format
 msgid "Default"
@@ -22576,7 +22573,7 @@ msgstr "Orden lehenetsia"
 #. %1$s:  IF humanbranch 
 #. %2$s:  Branches.GetName( humanbranch ) | html 
 #. %3$s:  END 
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:463
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:454
 #, c-format
 msgid "Default checkout, hold and return policy%s for %s%s"
 msgstr "Mailegurako aurretik zehaztutako politikak %s %s%s-rentzat"
@@ -22602,7 +22599,7 @@ msgstr "Orden lehenetsia"
 msgid "Default framework"
 msgstr "Lan orri lehenetsia"
 
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:714
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:705
 #, c-format
 msgid "Default lost item fee refund on return policy"
 msgstr ""
@@ -22650,7 +22647,7 @@ msgstr "Sistemaren lehentasun globalak"
 msgid "Default: ReturnpathDefault system preference"
 msgstr "Buscar preferencias del sistema"
 
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:480
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:471
 #, fuzzy, c-format
 msgid "Defaults"
 msgstr "Lehenetsia"
@@ -22975,9 +22972,9 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/admin/authtypes.tt:159
 #: intranet-tmpl/prog/en/modules/admin/systempreferences.tt:366
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:179
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:315
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:689
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:866
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:306
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:680
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:857
 #: intranet-tmpl/prog/en/modules/admin/aqcontract.tt:161
 #: intranet-tmpl/prog/en/modules/admin/items_search_fields.tt:81
 #: intranet-tmpl/prog/en/modules/admin/edi_ean_accounts.tt:161
@@ -22998,7 +22995,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/admin/oai_sets.tt:96
 #: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:308
 #: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:212
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:222
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:229
 #: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:180
 #: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:182
 #: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:251
@@ -23744,7 +23741,7 @@ msgstr "Deskribapen fisikoa: "
 #. For the first occurrence,
 #. %1$s:  liblibrarian | html_entity 
 #: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:241
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:115
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:122
 #, c-format
 msgid "Description: %s"
 msgstr "Deskribapena: %s"
@@ -23842,18 +23839,18 @@ msgstr "Xehetasunak"
 msgid "Details for "
 msgstr "%s -ren maileguak"
 
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:716
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:720
 #, fuzzy, c-format
 msgid "Details for all requests"
 msgstr "%s -ren maileguak"
 
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:540
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:544
 #, fuzzy, c-format
 msgid "Details from library"
 msgstr "Helburu-liburutegia:"
 
 #. %1$s:  request.backend | html 
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:610
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:614
 #, fuzzy, c-format
 msgid "Details from supplier (%s)"
 msgstr "%s -ren maileguak"
@@ -24117,7 +24114,7 @@ msgstr "Mostrar ubicación:"
 msgid "Display member details."
 msgstr "Bistaratu bazkide xehetasunak"
 
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:170
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:177
 #, c-format
 msgid "Display only used tags/subfields"
 msgstr "Bistaratu bakarrik erabilitako etiketak/azpieremuak"
@@ -24139,11 +24136,11 @@ msgid "Display order: "
 msgstr "Bistaratzeko ordena:"
 
 #. A
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:526
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:530
 msgid "Display supplier metadata"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:527
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:531
 #, c-format
 msgid "Display supplier metadata "
 msgstr ""
@@ -24179,7 +24176,7 @@ msgstr ""
 "Bistaratzen %sGUZTIAK%s %sonartuak%s %segiteke daudenak%s %serrefusatuak%s "
 "terminoak"
 
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:724
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:728
 #, c-format
 msgid "Displaying availability results"
 msgstr ""
@@ -24287,8 +24284,8 @@ msgstr "Domeinua"
 msgid "Domain: "
 msgstr "Domeinua:"
 
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:298
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:402
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:289
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:393
 #, c-format
 msgid "Don't allow"
 msgstr "Ez utzi"
@@ -24533,8 +24530,8 @@ msgstr "Data: noiz hasi"
 msgid "Due date to:"
 msgstr "Itzultze data"
 
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:218
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:250
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:222
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:254
 #, fuzzy, c-format
 msgid "Due date:"
 msgstr "Itzultze data"
@@ -24819,7 +24816,7 @@ msgstr "Lehen erreserba-data"
 #: intranet-tmpl/prog/en/modules/admin/systempreferences.tt:366
 #: intranet-tmpl/prog/en/modules/admin/credit_types.tt:156
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:178
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:314
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:305
 #: intranet-tmpl/prog/en/modules/admin/debit_types.tt:181
 #: intranet-tmpl/prog/en/modules/admin/aqcontract.tt:160
 #: intranet-tmpl/prog/en/modules/admin/items_search_fields.tt:80
@@ -24901,7 +24898,7 @@ msgstr "OAI taldea editatu '%s'"
 msgid "Edit SQL"
 msgstr "Editatu SQL"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1163
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1164
 #, c-format
 msgid "Edit SQL report"
 msgstr "Editar informe SQL "
@@ -25130,12 +25127,12 @@ msgid "Edit record"
 msgstr "Editatu erregistroa"
 
 #. A
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:467
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:471
 #, fuzzy
 msgid "Edit request"
 msgstr "Editatu maiztasuna: %s"
 
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:468
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:472
 #, fuzzy, c-format
 msgid "Edit request "
 msgstr "Editatu ezabatzea"
@@ -25191,7 +25188,7 @@ msgstr "Editatu aldizkako argitalpenak"
 #. INPUT type=submit
 #: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:329
 #: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:318
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:221
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:228
 #, c-format
 msgid "Edit subfields"
 msgstr "Editatu azpieremuak"
@@ -25201,7 +25198,7 @@ msgstr "Editatu azpieremuak"
 msgid "Edit subscription"
 msgstr "Editatu harpidetza"
 
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:219
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:226
 #, fuzzy, c-format
 msgid "Edit tag"
 msgstr "Editar cesta"
@@ -25334,7 +25331,7 @@ msgstr "Email ha sido enviado."
 msgid "Email required"
 msgstr "nahitaezkoa"
 
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:312
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:316
 #, fuzzy, c-format
 msgid "Email text:"
 msgstr "Helbide elektronikoa:"
@@ -25471,7 +25468,7 @@ msgstr "Hasiera data eta harpidetzaren iraupena aukeratu behar dituzu"
 msgid "End date:"
 msgstr "Amaiera data:"
 
-#: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:228
+#: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:229
 #: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:142
 #: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:212
 #, c-format
@@ -25483,7 +25480,7 @@ msgstr "Amaiera data:"
 msgid "End of date range "
 msgstr "Dataren azken maila"
 
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:366
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:357
 #, c-format
 msgid "End of interval"
 msgstr "Tartearen amaiera"
@@ -25887,7 +25884,7 @@ msgstr "%s Errore bat jazo da zure eskaera prozesatzerakoan."
 msgid "Error message from Zebra: %s "
 msgstr "Error desde Zebra: %s "
 
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:94
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:98
 #, fuzzy, c-format
 msgid "Error performing operation"
 msgstr "Errorea jazo da OverDrive bildumaren bilaketan"
@@ -26103,7 +26100,7 @@ msgstr "Guztiak"
 msgid "Everything went okay. Update done."
 msgstr "Dena ongi egin da, eguneratzea amaitu da."
 
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:356
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:347
 #, c-format
 msgid "Exactly on"
 msgstr "Zehazki, noiz"
@@ -27151,7 +27148,7 @@ msgstr "Filmografiak"
 #: intranet-tmpl/prog/en/modules/reports/issues_stats.tt:96
 #: intranet-tmpl/prog/en/modules/reports/catalogue_stats.tt:75
 #: intranet-tmpl/prog/en/modules/reports/acquisitions_stats.tt:89
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1262
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1263
 #: intranet-tmpl/prog/en/modules/reports/issues_avg_stats.tt:73
 #: intranet-tmpl/prog/en/modules/reports/borrowers_stats.tt:74
 #, c-format
@@ -27193,7 +27190,7 @@ msgstr "Noiz iragazi:"
 msgid "Filter paid transactions"
 msgstr "Iragaziordaindutako trantsakzioak"
 
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:286
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:290
 #, fuzzy, c-format
 msgid "Filter partner libraries:"
 msgstr "FileSaver liburutegia"
@@ -27291,7 +27288,7 @@ msgid "Fine"
 msgstr "Isuna"
 
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:98
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:433
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:424
 #, c-format
 msgid "Fine amount"
 msgstr "Isunen zenbatekoa"
@@ -27302,13 +27299,13 @@ msgid "Fine amount: "
 msgstr "Isunaren zenbatekoa"
 
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:99
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:434
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:425
 #, c-format
 msgid "Fine charging interval"
 msgstr "Isuna kargatzeko bitartea"
 
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:101
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:436
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:427
 #, c-format
 msgid "Fine grace period"
 msgstr "Graziazko aldia isunentzat"
@@ -27358,7 +27355,7 @@ msgstr "Lehenengoa"
 msgid "First arrival:"
 msgstr "Lehenego iristea:"
 
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:90
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:97
 #, fuzzy, c-format
 msgid "First indicator default value: "
 msgstr "Lehen zenbakiaren argitalpen-data:"
@@ -27593,7 +27590,7 @@ msgstr ""
 msgid "For the selected operations: "
 msgstr "Para las operaciones seleccionadas: "
 
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:793
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:784
 #, c-format
 msgid ""
 "For this library, you can edit rules for given itemtypes, regardless of the "
@@ -27602,7 +27599,7 @@ msgstr ""
 "Liburutegi honetan elementu mota zehatzentzako arauak editatu ditzakezu, "
 "bazkide kategoria gorabehera."
 
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:634
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:625
 #, c-format
 msgid ""
 "For this library, you can specify the maximum number of loans that a patron "
@@ -27611,8 +27608,8 @@ msgstr ""
 "Liburutegi honetan kategoria jakin bateko bazkide baten gehieneko mailegu "
 "kopurua zehaztu dezakezu, elementu mota gorabehera."
 
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:294
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:404
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:285
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:395
 #, c-format
 msgid "Force"
 msgstr "Bortxatu"
@@ -27882,13 +27879,13 @@ msgstr "Existitzen den erregistro batean:"
 msgid "From an external source"
 msgstr "Kanpoko iturri batean"
 
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:834
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:881
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:825
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:872
 #, c-format
 msgid "From any library"
 msgstr "De cualquier biblioteca"
 
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:802
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:793
 #, c-format
 msgid "From any library:"
 msgstr "De cualquier biblioteca:"
@@ -27919,13 +27916,13 @@ msgstr "Desde fecha:"
 msgid "From existing orders (copy)"
 msgstr "Existitzen den erregistro batean:"
 
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:838
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:883
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:829
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:874
 #, c-format
 msgid "From home library"
 msgstr "De la biblioteca de origen"
 
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:804
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:795
 #, c-format
 msgid "From home library:"
 msgstr "De la biblioteca de origen:"
@@ -27935,13 +27932,13 @@ msgstr "De la biblioteca de origen:"
 msgid "From item call number: "
 msgstr "Elementuaren katalogo zenbakian:"
 
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:836
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:882
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:827
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:873
 #, c-format
 msgid "From local hold group"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:803
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:794
 #, fuzzy, c-format
 msgid "From local hold group:"
 msgstr "Signaturatik:"
@@ -28442,12 +28439,12 @@ msgstr ""
 "valores autorizados 'PA_CLASS')"
 
 #. INPUT type=text name=group
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1938
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1939
 msgid "Group code"
 msgstr "Coódigo de grupo"
 
 #. INPUT type=text name=groupdesc
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1939
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1940
 msgid "Group name"
 msgstr "Nombre del grupo"
 
@@ -28586,7 +28583,7 @@ msgid "Handy Shortcuts"
 msgstr "Laster-teklak"
 
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:97
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:432
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:423
 #, c-format
 msgid "Hard due date"
 msgstr "Itzultze data aldagaitza"
@@ -29053,8 +29050,8 @@ msgstr "Erabilera lokala gordeta"
 msgid "Hold next available item "
 msgstr "Urrengo item eskuragarria"
 
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:475
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:818
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:466
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:809
 #, fuzzy, c-format
 msgid "Hold pickup library match"
 msgstr "Elementua hartzeko liburutegia"
@@ -29064,8 +29061,8 @@ msgstr "Elementua hartzeko liburutegia"
 msgid "Hold placed by : "
 msgstr "Nork erreserbatuta:"
 
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:474
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:817
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:465
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:808
 #, c-format
 msgid "Hold policy"
 msgstr "Política de reserva"
@@ -29163,7 +29160,7 @@ msgid "Holds (%s)"
 msgstr "Erreserbak  (%s)"
 
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:114
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:449
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:440
 #, fuzzy, c-format
 msgid "Holds allowed (daily)"
 msgstr "Reservas permitidas (recuento)"
@@ -29174,7 +29171,7 @@ msgid "Holds allowed (daily): "
 msgstr "Reservas permitidas (recuento)"
 
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:113
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:448
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:439
 #, fuzzy, c-format
 msgid "Holds allowed (total)"
 msgstr "Reservas permitidas (recuento)"
@@ -29233,7 +29230,7 @@ msgid "Holds on this record: %s"
 msgstr "No hay imágenes para este registro."
 
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:115
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:450
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:441
 #, fuzzy, c-format
 msgid "Holds per record (count)"
 msgstr "Reservas permitidas (recuento)"
@@ -29754,10 +29751,10 @@ msgstr "Alokatze kostua:"
 
 #: intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:93
 #: intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:96
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:350
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:341
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:439
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1086
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1196
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1087
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1197
 #, c-format
 msgid "Hours"
 msgstr "Orduak"
@@ -29851,18 +29848,18 @@ msgstr "IBERMARC"
 msgid "ID"
 msgstr "ID"
 
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:89
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:93
 #, c-format
 msgid "ILL module configuration problem. Take a look at the "
 msgstr ""
 
 #. A
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:530
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:534
 #, fuzzy
 msgid "ILL request log"
 msgstr "Nuevo informe SQL"
 
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:531
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:535
 #, fuzzy, c-format
 msgid "ILL request log "
 msgstr "Nuevo informe SQL"
@@ -30116,8 +30113,8 @@ msgid ""
 msgstr ""
 
 #: intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:134
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:287
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:397
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:278
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:388
 #, fuzzy, c-format
 msgid "If all unavailable"
 msgstr "%s ez dago eskuragarri:"
@@ -30128,8 +30125,8 @@ msgid "If amounts changed, round to a multiple of"
 msgstr ""
 
 #: intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:133
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:289
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:396
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:280
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:387
 #, fuzzy, c-format
 msgid "If any unavailable"
 msgstr "edo eskuragarri dagoen edozein"
@@ -30289,7 +30286,7 @@ msgid ""
 "administrator correct the values in %s and/or %s in the database."
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:807
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:798
 #, fuzzy, c-format
 msgid ""
 "If the system preference 'AllowHoldPolicyOverride' is enabled, these "
@@ -30299,7 +30296,7 @@ msgstr ""
 "en konfiguratua baldin badago, politika horiek zizkulazioko langileengatik "
 "baztertuak izan daitezkela."
 
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:637
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:628
 #, c-format
 msgid ""
 "If the total amount loanable for a given patron category is left blank, no "
@@ -30337,7 +30334,7 @@ msgid ""
 "entries or a blank page"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:743
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:747
 #, c-format
 msgid "If you can't find what you are looking for, you can "
 msgstr ""
@@ -30366,7 +30363,7 @@ msgid ""
 "If you delete this fund, all orders linked to this fund will be deleted! "
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:220
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:224
 #, c-format
 msgid ""
 "If you do not specify a due date, it will be set according to circulation "
@@ -30374,7 +30371,7 @@ msgid ""
 msgstr ""
 
 #. %1$s:  INCLUDE 'patron-title.inc' patron = request.patron 
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:166
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:170
 #, c-format
 msgid ""
 "If you do not wish to check out the item to %s and would rather issue it to "
@@ -30465,12 +30462,6 @@ msgstr "Ezikusi"
 #, c-format
 msgid "Ignore and return to transfers: "
 msgstr "Ezikusi eta itzuli transferentzietara:"
-
-#. SPAN
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:205
-#, fuzzy, c-format
-msgid "Ignore the calendar"
-msgstr "Ezikusi"
 
 #: intranet-tmpl/prog/en/modules/tools/import_borrowers.tt:243
 #, c-format
@@ -30784,7 +30775,7 @@ msgstr "Inportatu sorta hau katalogora"
 
 #: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:216
 #: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:865
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:186
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:193
 #, fuzzy, c-format
 msgid "Important"
 msgstr "Garrantzitsua:"
@@ -30792,8 +30783,8 @@ msgstr "Garrantzitsua:"
 #: intranet-tmpl/prog/en/modules/installer/step1.tt:60
 #: intranet-tmpl/prog/en/modules/installer/step1.tt:72
 #: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:92
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:808
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:83
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:799
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:90
 #, c-format
 msgid "Important: "
 msgstr "Garrantzitsua:"
@@ -30815,7 +30806,7 @@ msgstr ""
 msgid "Imported"
 msgstr "Inportatua"
 
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:158
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:165
 #, c-format
 msgid "In framework:"
 msgstr "Lan orrian:"
@@ -30976,12 +30967,12 @@ msgstr "Hemen indexatua:"
 msgid "Indexes"
 msgstr "Aurkibideak"
 
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:188
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:195
 #, fuzzy, c-format
 msgid "Indicator 1"
 msgstr "Nahitaezkoa:"
 
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:189
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:196
 #, fuzzy, c-format
 msgid "Indicator 2"
 msgstr "Nahitaezkoa:"
@@ -31263,8 +31254,8 @@ msgstr "Barne oharra:"
 msgid "Interface:"
 msgstr "Barne oharra:"
 
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:283
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:350
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:287
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:354
 #, c-format
 msgid "Interlibrary loan request details"
 msgstr ""
@@ -31676,7 +31667,7 @@ msgid "Issue refund from "
 msgstr "Nuevo fondo para %s"
 
 #. %1$s:  INCLUDE 'patron-title.inc' patron = request.patron 
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:116
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:120
 #, fuzzy, c-format
 msgid "Issue requested item to %s"
 msgstr "Item mota espezifiko bat eskatu:"
@@ -31789,7 +31780,7 @@ msgid "Item barcode"
 msgstr "Código de barras del ítem:"
 
 #: intranet-tmpl/prog/en/modules/course_reserves/add_items-step1.tt:32
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:195
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:199
 #, c-format
 msgid "Item barcode:"
 msgstr "Código de barras del ítem:"
@@ -31820,7 +31811,7 @@ msgstr "Signatura topográfica del ítem:"
 msgid "Item cannot be renewed because it's an onsite checkout"
 msgstr "Horrek bazkideari kobratuko dio elementu bat maileguan hartzerakoan."
 
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:241
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:245
 #: intranet-tmpl/prog/en/modules/circ/circulation.tt:479
 #, c-format
 msgid "Item checked out"
@@ -31851,8 +31842,8 @@ msgstr "Elementu etiketa"
 msgid "Item details"
 msgstr "Detalles del ítem"
 
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:862
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:914
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:853
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:905
 #, c-format
 msgid "Item floats"
 msgstr "Ítem flotante"
@@ -32011,8 +32002,8 @@ msgstr "Item zenbakia (baarrukoa)"
 msgid "Item number file: "
 msgstr "Item zenbakiaren fitxategia:"
 
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:309
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:412
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:300
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:403
 #, fuzzy, c-format
 msgid "Item only"
 msgstr "Item kopurua"
@@ -32038,18 +32029,18 @@ msgstr "Itemaren erregistroak azken aldiz sinkronizatu ziren:"
 msgid "Item renewed:"
 msgstr "Item berritua:"
 
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:858
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:912
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:849
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:903
 #, c-format
 msgid "Item returns home"
 msgstr "Sede de devolución de ítem"
 
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:860
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:851
 #, fuzzy, c-format
 msgid "Item returns to issuing branch"
 msgstr "Ítem vuelve a la biblioteca de préstamo"
 
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:913
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:904
 #, c-format
 msgid "Item returns to issuing library"
 msgstr "Ítem vuelve a la biblioteca de préstamo"
@@ -32142,8 +32133,8 @@ msgstr "Item etiketak ezin dira gorde"
 #: intranet-tmpl/prog/en/modules/circ/article-requests.tt:213
 #: intranet-tmpl/prog/en/modules/circ/request-article.tt:156
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:90
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:425
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:816
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:416
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:807
 #: intranet-tmpl/prog/en/modules/admin/itemtypes.tt:341
 #: intranet-tmpl/prog/en/modules/reports/catalogue_out.tt:128
 #: intranet-tmpl/prog/en/modules/reports/cash_register_stats.tt:141
@@ -32192,7 +32183,7 @@ msgstr "Item mota ez da mailegagarria"
 #: intranet-tmpl/prog/en/modules/course_reserves/batch_add_items.tt:39
 #: intranet-tmpl/prog/en/modules/catalogue/moredetail.tt:36
 #: intranet-tmpl/prog/en/modules/catalogue/moredetail.tt:67
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:169
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:173
 #: intranet-tmpl/prog/en/modules/serials/subscription-add.tt:174
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:498
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:203
@@ -32594,8 +32585,9 @@ msgid "Keyword (any): "
 msgstr "Hitz-gakoak (edozein):"
 
 #: intranet-tmpl/prog/en/modules/tools/koha-news.tt:209
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:41
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:185
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1274
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1275
 #, c-format
 msgid "Keyword:"
 msgstr "Gako hitza:"
@@ -33109,22 +33101,24 @@ msgstr ""
 "Hiri berria %s%s%sHiriak &rsaquo; Berretsi hiria ezabatzea %s Hiriak%s%s"
 
 #. %1$s:  IF ( add_form ) 
-#. %2$s:  action | html 
-#. %3$s:  searchfield | html 
+#. %2$s:  IF heading_add_tag_p 
+#. %3$s:  ELSE 
 #. %4$s:  END 
-#. %5$s:  IF ( delete_confirm ) 
-#. %6$s:  searchfield | html 
-#. %7$s:  END 
-#. %8$s:  IF ( delete_confirmed ) 
+#. %5$s:  searchfield | html 
+#. %6$s:  END 
+#. %7$s:  IF ( delete_confirm ) 
+#. %8$s:  searchfield | html 
 #. %9$s:  END 
-#. %10$s:  IF ( else ) 
+#. %10$s:  IF ( delete_confirmed ) 
 #. %11$s:  END 
+#. %12$s:  IF ( else ) 
+#. %13$s:  END 
 #: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:6
-#, c-format
+#, fuzzy, c-format
 msgid ""
-"Koha &rsaquo; Administration &rsaquo; %sMARC frameworks &rsaquo; %s %s%s "
-"%sMARC frameworks &rsaquo; Confirm deletion of tag '%s'%s %sMARC frameworks "
-"&rsaquo; Data deleted%s %sMARC frameworks%s"
+"Koha &rsaquo; Administration &rsaquo; %sMARC frameworks &rsaquo; %sAdd tag"
+"%sModify tag%s %s%s %sMARC frameworks &rsaquo; Confirm deletion of tag "
+"'%s'%s %sMARC frameworks &rsaquo; Data deleted%s %sMARC frameworks%s"
 msgstr ""
 "Koha &rsaquo; Administrazioa &rsaquo; %sMARC lan-orriak &rsaquo; %s %s%s "
 "%sMARC lan orriak &rsaquo; Berretsi etiketa ezabatzea '%s'%s %sMARC lan-"
@@ -35548,12 +35542,12 @@ msgstr "Administrar lotes"
 msgid "Label creator"
 msgstr "Etiketa sortzailea"
 
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:67
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:74
 #, c-format
 msgid "Label for lib: "
 msgstr "Etiketa liburutegiarentzat:"
 
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:68
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:75
 #, c-format
 msgid "Label for opac: "
 msgstr "Etiketa OPACentzat:"
@@ -35780,8 +35774,8 @@ msgstr "Azken eguneraketa:"
 msgid "Last updated"
 msgstr "Azken eguneraketa"
 
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:402
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:579
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:406
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:583
 #, fuzzy, c-format
 msgid "Last updated:"
 msgstr "Azken eguneraketa:"
@@ -35954,7 +35948,7 @@ msgstr "Gutuna"
 
 #: intranet-tmpl/prog/en/modules/admin/koha2marclinks.tt:34
 #: intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:195
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:183
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:190
 #, c-format
 msgid "Lib"
 msgstr "Lib."
@@ -36227,10 +36221,10 @@ msgstr "Liburutegiaren erabilera"
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:263
 #: intranet-tmpl/prog/en/modules/tools/stockrotation.tt:196
 #: intranet-tmpl/prog/en/modules/tools/stockrotation.tt:288
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:63
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:200
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:373
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:564
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:67
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:204
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:377
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:568
 #: intranet-tmpl/prog/en/modules/serials/checkexpiration.tt:33
 #: intranet-tmpl/prog/en/modules/serials/subscription-renew.tt:61
 #: intranet-tmpl/prog/en/modules/serials/subscription-add.tt:121
@@ -36581,7 +36575,7 @@ msgstr "Lan hau barne hartzen duten zerrendak:"
 #: intranet-tmpl/prog/en/modules/cataloguing/merge.tt:184
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:458
 #: intranet-tmpl/prog/en/modules/acqui/edifactmsgs.tt:118
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1303
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1304
 msgid "Loading"
 msgstr "Kargatzen"
 
@@ -36664,7 +36658,7 @@ msgid "Loading... "
 msgstr "Kargatzen..."
 
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:95
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:430
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:421
 #, c-format
 msgid "Loan period"
 msgstr "Período de préstamo"
@@ -36718,7 +36712,7 @@ msgstr "Preferencias de uso locales"
 msgid "Local use recorded"
 msgstr "Erabilera lokala gordeta"
 
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:131
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:135
 #, fuzzy, c-format
 msgid "Local use recorded "
 msgstr "Erabilera lokala gordeta"
@@ -36887,7 +36881,7 @@ msgid "Lost card flag"
 msgstr "Galdutako txartela"
 
 #. %1$s:  Branches.GetName(current_branch) | html 
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:716
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:707
 #, fuzzy, c-format
 msgid "Lost item fee refund on return policy for %s"
 msgstr "Mailegurako aurretik zehaztutako politikak %s %s%s-rentzat"
@@ -37467,7 +37461,7 @@ msgstr "Bilaketaren konfigurazioa"
 msgid "Manage EDIFACT transmissions "
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:465
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:469
 #, fuzzy, c-format
 msgid "Manage ILL request"
 msgstr "Kudeatu aldizkapenak"
@@ -37986,7 +37980,7 @@ msgstr "Biblioteca principal"
 #: intranet-tmpl/prog/en/modules/installer/step3.tt:93
 #: intranet-tmpl/prog/en/modules/installer/step3.tt:133
 #: intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:197
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:185
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:192
 #, c-format
 msgid "Mandatory"
 msgstr "Nahitaezkoa"
@@ -37999,7 +37993,7 @@ msgstr "%s datu gehitu dira"
 #: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:84
 #: intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:98
 #: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:80
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:76
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:83
 #, c-format
 msgid "Mandatory: "
 msgstr "Nahitaezkoa:"
@@ -38285,7 +38279,7 @@ msgid "Max length:"
 msgstr "Longitud máxima:"
 
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:105
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:440
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:431
 #, fuzzy, c-format
 msgid "Max. suspension duration (day)"
 msgstr "Blokeatu, zenbat egun (eguna)"
@@ -38295,7 +38289,7 @@ msgstr "Blokeatu, zenbat egun (eguna)"
 msgid "Maximum Koha version"
 msgstr "Versión máxima de Koha: "
 
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:473
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:464
 #, fuzzy, c-format
 msgid "Maximum total holds allowed (count)"
 msgstr "Reservas permitidas (recuento)"
@@ -38561,8 +38555,8 @@ msgid "Minute"
 msgstr "Minutua"
 
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:438
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1085
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1195
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1086
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1196
 #, c-format
 msgid "Minutes"
 msgstr "Minutuak"
@@ -39188,13 +39182,13 @@ msgstr "%s datu gehitu dira"
 msgid "MySQL version: "
 msgstr "Versión de MySQL: "
 
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:407
 #: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:411
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:545
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:560
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:585
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:415
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:549
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:564
 #: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:589
 #: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:593
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:597
 #, c-format
 msgid "N/A"
 msgstr ""
@@ -39274,8 +39268,8 @@ msgstr "TE"
 #: intranet-tmpl/prog/en/modules/admin/sms_providers.tt:31
 #: intranet-tmpl/prog/en/modules/admin/additional-fields.tt:88
 #: intranet-tmpl/prog/en/modules/reports/dictionary.tt:67
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1939
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1966
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1940
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1967
 #, c-format
 msgid "Name"
 msgstr "Izena"
@@ -39500,7 +39494,7 @@ msgstr "Profil berria"
 msgid "New EAN "
 msgstr "Berria: "
 
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:103
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:107
 #, fuzzy, c-format
 msgid "New ILL request"
 msgstr "Nuevo informe SQL"
@@ -40088,11 +40082,6 @@ msgstr "- Hurrengo alearen argitalpen-data ez dago definitua"
 msgid "Next issue publication date:"
 msgstr "Hurrengo alearen argitaratze data:"
 
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:204
-#, fuzzy, c-format
-msgid "Next open day"
-msgstr "Nombre: *"
-
 #. INPUT type=button name=changepage_next
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:214
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:145
@@ -40136,11 +40125,11 @@ msgstr "Nicholas Rosasco (dokumentazio konpiladorea)"
 #: intranet-tmpl/prog/en/modules/admin/usage_statistics.tt:71
 #: intranet-tmpl/prog/en/modules/admin/usage_statistics.tt:183
 #: intranet-tmpl/prog/en/modules/admin/usage_statistics.tt:186
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:257
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:303
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:381
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:409
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:762
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:248
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:294
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:372
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:400
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:753
 #: intranet-tmpl/prog/en/modules/admin/branches.tt:153
 #: intranet-tmpl/prog/en/modules/admin/branches.tt:156
 #: intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:235
@@ -40196,10 +40185,10 @@ msgstr ""
 
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:418
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:426
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1065
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1073
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1175
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1183
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1066
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1074
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1176
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1184
 #, c-format
 msgid "No (default)"
 msgstr "Ez (lehenetsia)"
@@ -40308,14 +40297,14 @@ msgstr "No se han definido categorías. "
 
 # 'Berritze gehiagorik ez' baino 'Ezin da gehiago berritu'
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:111
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:446
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:437
 #, fuzzy, c-format
 msgid "No automatic renewal after"
 msgstr "%s Berritze automatikoa"
 
 # 'Berritze gehiagorik ez' baino 'Ezin da gehiago berritu'
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:112
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:447
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:438
 #, fuzzy, c-format
 msgid "No automatic renewal after (hard limit)"
 msgstr "%s Berritze automatikoa"
@@ -40398,7 +40387,7 @@ msgid "No color"
 msgstr "Kolorea"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1303
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1304
 msgid "No columns selected!"
 msgstr "Ez dago zutaberik gordeta!"
 
@@ -40481,15 +40470,15 @@ msgid "No group"
 msgstr "Talde berria"
 
 #: intranet-tmpl/prog/en/modules/catalogue/results.tt:480
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:840
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:884
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:831
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:875
 #: intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:218
 #: intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:224
 #, c-format
 msgid "No holds allowed"
 msgstr "Ezin da erreserbarik egin"
 
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:805
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:796
 #, c-format
 msgid "No holds allowed:"
 msgstr "Ezin da erreserbarik egin:"
@@ -40603,7 +40592,7 @@ msgstr "Ez dgo kopiarik eskuragarri"
 msgid "No items for %s"
 msgstr "Ez dago elementurik honentzat %s"
 
-#: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:205
+#: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:206
 #: intranet-tmpl/prog/en/modules/circ/reserveratios.tt:116
 #: intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:47
 #, c-format
@@ -40678,7 +40667,7 @@ msgid "No matching notices found"
 msgstr "No se encontraron registros coincidentes"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1303
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1304
 msgid "No matching reports found"
 msgstr "No se encontraron registros coincidentes"
 
@@ -40727,7 +40716,7 @@ msgstr "de un ítem"
 msgid "No outstanding charges"
 msgstr "Ez dago ordaindu gabeko kargurik"
 
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:351
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:355
 #, c-format
 msgid ""
 "No partners have been defined yet. Please create appropriate patron records "
@@ -40749,7 +40738,7 @@ msgstr ""
 msgid "No patron matched "
 msgstr "Ez dago bat datorren bazkiderik"
 
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:805
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:796
 #, c-format
 msgid "No patron may put this book on hold."
 msgstr "Bazkideek ezin dute liburu hau erreserbatu."
@@ -40875,7 +40864,7 @@ msgstr "Ez da erregistrorik ezabatu."
 
 # 'Berritze gehiagorik ez' baino 'Ezin da gehiago berritu'
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:109
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:444
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:435
 #, fuzzy, c-format
 msgid "No renewal before"
 msgstr "%s Ez berritu %s baino lehen"
@@ -40949,7 +40938,7 @@ msgstr "Esta suscricpión depende de otro proveedor"
 msgid "No system preferences matched your search for: "
 msgstr "Ez dago bilaketa honekin bat datorren sistemaren lehenetasunik"
 
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:264
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:268
 #, c-format
 msgid ""
 "No target email addresses found. Either select at least one partner or check "
@@ -40988,7 +40977,7 @@ msgid "No, do not Delete"
 msgstr "Ez, ez Ezabatu"
 
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:513
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:451
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:455
 #: intranet-tmpl/prog/en/modules/serials/subscription-frequencies.tt:122
 #: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:254
 #: intranet-tmpl/prog/en/modules/serials/serials-collection.tt:53
@@ -41007,7 +40996,7 @@ msgstr "Ez, ez Ezabatu"
 #: intranet-tmpl/prog/en/modules/admin/patron-attr-types.tt:188
 #: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:246
 #: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:115
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:123
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:130
 #: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:389
 #: intranet-tmpl/prog/en/modules/admin/cities.tt:120
 #: intranet-tmpl/prog/en/modules/admin/itemtypes.tt:361
@@ -41147,7 +41136,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/acqui/invoice.tt:198
 #: intranet-tmpl/prog/en/modules/circ/overdue.tt:137
 #: intranet-tmpl/prog/en/modules/circ/transferstoreceive.tt:72
-#: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:254
+#: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:255
 #: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:101
 #: intranet-tmpl/prog/en/modules/admin/additional-fields.tt:136
 #: intranet-tmpl/prog/en/modules/admin/itemtypes.tt:128
@@ -41167,7 +41156,7 @@ msgstr ""
 msgid "None"
 msgstr "Antolatu gabe"
 
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:232
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:223
 #, fuzzy, c-format
 msgid "None defined"
 msgstr "Zehaztu gabe"
@@ -41390,9 +41379,9 @@ msgstr "Argitalpen-data"
 msgid "Not seen"
 msgstr "Azken aldiz ikusia"
 
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:496
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:537
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:596
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:487
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:528
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:587
 #, fuzzy, c-format
 msgid "Not set "
 msgstr "Azken aldiz ikusia"
@@ -41408,7 +41397,7 @@ msgstr "Azken aldiz ikusia"
 #: intranet-tmpl/prog/en/modules/circ/checkout-notes.tt:69
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:92
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:183
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:427
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:418
 #, c-format
 msgid "Note"
 msgstr "Oharra"
@@ -41499,7 +41488,7 @@ msgstr "Oharra:"
 #: intranet-tmpl/prog/en/modules/members/mancredit.tt:55
 #: intranet-tmpl/prog/en/modules/members/paycollect.tt:274
 #: intranet-tmpl/prog/en/modules/acqui/invoice.tt:203
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:807
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:798
 #: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:78
 #, c-format
 msgid "Note: "
@@ -41604,7 +41593,7 @@ msgstr "Oharrak/Iruzkinak"
 
 #: intranet-tmpl/prog/en/modules/tools/import_borrowers.tt:284
 #: intranet-tmpl/prog/en/modules/catalogue/moredetail.tt:45
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:604
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:608
 #: intranet-tmpl/prog/en/modules/serials/routing.tt:86
 #: intranet-tmpl/prog/en/modules/serials/routing-preview.tt:32
 #: intranet-tmpl/prog/en/modules/members/housebound.tt:178
@@ -41614,9 +41603,9 @@ msgstr "Oharrak/Iruzkinak"
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:566
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:735
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:843
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1092
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1135
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1202
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1093
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1136
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1203
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:125
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:313
 #, c-format
@@ -42084,8 +42073,8 @@ msgstr "ITZALITA"
 #: intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:164
 #: intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:187
 #: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:256
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:132
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:147
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:139
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:154
 #: intranet-tmpl/prog/en/modules/admin/checkmarc.tt:36
 #: intranet-tmpl/prog/en/modules/admin/checkmarc.tt:50
 #: intranet-tmpl/prog/en/modules/admin/checkmarc.tt:62
@@ -42141,7 +42130,7 @@ msgid "OPAC info: "
 msgstr "Infromación de OPAC:"
 
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:117
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:452
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:443
 #, fuzzy, c-format
 msgid "OPAC item level holds"
 msgstr "Item erreserbatua"
@@ -42376,7 +42365,7 @@ msgid "On hold for"
 msgstr "Erreserbatuta honentzat"
 
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:116
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:451
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:442
 #, fuzzy, c-format
 msgid "On shelf holds allowed"
 msgstr "Ezin da erreserbarik egin"
@@ -42495,7 +42484,7 @@ msgstr "Gaur egun eskuragarri dauden itemak soilik:"
 msgid "Only on-site checkouts are allowed"
 msgstr "Une honetan onartzen diren maileguak"
 
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:803
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:794
 #, fuzzy, c-format
 msgid ""
 "Only patrons from libraries in the same item's home library hold groups may "
@@ -42504,7 +42493,7 @@ msgstr ""
 "Elementuaren jatorri-liburutegiko bazkideek bakarrik erreserbatu dezaketu "
 "liburu hau."
 
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:804
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:795
 #, c-format
 msgid "Only patrons from the item's home library may put this book on hold."
 msgstr ""
@@ -42530,7 +42519,7 @@ msgstr ""
 "Bilaketa emaitzetan superliburuzain edo eskurapen baimenak dituzten "
 "langileak bakarrik agertuko dira"
 
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:426
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:430
 #, fuzzy, c-format
 msgid "Opac notes:"
 msgstr "Buscar avisos "
@@ -42693,7 +42682,7 @@ msgstr "Aldatu"
 msgid "Order ID"
 msgstr "Eskaera"
 
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:544
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:548
 #, fuzzy, c-format
 msgid "Order ID:"
 msgstr "Eskaera"
@@ -43094,7 +43083,7 @@ msgid "Overdue"
 msgstr "Atzerapena"
 
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:102
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:437
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:428
 #, c-format
 msgid "Overdue fines cap (amount)"
 msgstr "Vencimiento de las multas (suma total)"
@@ -43304,7 +43293,7 @@ msgstr ""
 msgid "Partially received"
 msgstr "Aldizkako argitalpena jasotzea"
 
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:301
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:305
 #, c-format
 msgid "Partners available for searching: "
 msgstr ""
@@ -43542,7 +43531,7 @@ msgstr "Bazkidearen helbidea zalantzazkoa da"
 msgid "Patron '%s' is already in the list."
 msgstr "Esta usuario ya existe en la lista."
 
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:365
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:369
 #, fuzzy, c-format
 msgid "Patron ID:"
 msgstr "Bazkidea #:"
@@ -43640,8 +43629,8 @@ msgstr "Bazkide kategoriak"
 #: intranet-tmpl/prog/en/modules/onboarding/onboardingstep3.tt:61
 #: intranet-tmpl/prog/en/modules/circ/overdue.tt:57
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:89
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:424
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:645
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:415
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:636
 #: intranet-tmpl/prog/en/modules/reports/reserves_stats.tt:138
 #: intranet-tmpl/prog/en/modules/reports/issues_stats.tt:153
 #: intranet-tmpl/prog/en/modules/reports/borrowers_out.tt:78
@@ -44273,8 +44262,8 @@ msgstr " jatorri liburutegikoa (%s / %s )"
 msgid "Patron's record has guaranteed accounts attached."
 msgstr "Bazkidearen erregistroak kontu bermatuak ditu erantsita."
 
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:69
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:548
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:73
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:552
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:395
 #, c-format
 msgid "Patron:"
@@ -44360,7 +44349,7 @@ msgstr "Bazkideak eta zirkulazioa"
 msgid "Patrons found for: "
 msgstr "Bazkidea ez da aurkitu:"
 
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:802
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:793
 #, c-format
 msgid "Patrons from any library may put this item on hold. "
 msgstr "Edozein liburutegiko bazkideek elementu hau erreserbatu dezakete"
@@ -44930,7 +44919,7 @@ msgstr "hitzaldi argitalpena"
 msgid "Place request"
 msgstr "Lekuak"
 
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:261
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:265
 #, c-format
 msgid "Place request with partner libraries"
 msgstr ""
@@ -45049,7 +45038,7 @@ msgstr ""
 #. %1$s:  ELSIF ( error.cache_expiry ) 
 #. %2$s:  ELSE 
 #. %3$s:  END 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1234
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1235
 #, fuzzy, c-format
 msgid ""
 "Please check the log for further details. %s Please select a cache expiry "
@@ -45491,7 +45480,7 @@ msgid "Please return this item to %s "
 msgstr "Mesedez, itzuli hona %s"
 
 #. %1$s:  ELSIF ( error.queryerr ) 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1230
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1231
 #, fuzzy, c-format
 msgid ""
 "Please return to the &quot;Saved Reports&quot; screen and delete this report "
@@ -46070,8 +46059,8 @@ msgstr "Prezioa"
 msgid "Price effective from"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:414
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:592
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:418
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:596
 #, fuzzy, c-format
 msgid "Price paid:"
 msgstr "Prezioa"
@@ -47242,8 +47231,8 @@ msgstr "Erregistroen bat etortze arauak"
 msgid "Record not marked as UTF-8, may be corrupted"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:307
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:411
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:298
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:402
 #, fuzzy, c-format
 msgid "Record only"
 msgstr "Erregistro mota"
@@ -47326,7 +47315,7 @@ msgstr ""
 msgid "Referral:"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:220
+#: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:221
 #, c-format
 msgid "Refine results"
 msgstr "Hobetu emaitzak"
@@ -47351,7 +47340,7 @@ msgstr "Zehaztu zure bilaketa"
 msgid "Refresh "
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:725
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:716
 #, fuzzy, c-format
 msgid "Refund lost item fee"
 msgstr "Regresar a eliminación de ítems en lote"
@@ -47843,13 +47832,13 @@ msgid "Renewal due date:"
 msgstr "Berritzearen itzultze data:"
 
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:108
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:443
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:434
 #, c-format
 msgid "Renewal period"
 msgstr "Periodo de renovación"
 
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:107
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:442
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:433
 #, c-format
 msgid "Renewals allowed (count)"
 msgstr "Onartutako berritzeak (kontagailua)"
@@ -47897,7 +47886,7 @@ msgid "Rental charge: "
 msgstr "Alokatze kostua:"
 
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:119
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:454
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:445
 #, c-format
 msgid "Rental discount (%%)"
 msgstr "Descuento en alquiler (%%)"
@@ -47945,7 +47934,7 @@ msgid "Repeat this Tag"
 msgstr "Errepikatu etiketa hau"
 
 #: intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:196
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:184
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:191
 #, c-format
 msgid "Repeatable"
 msgstr "Errepikagarria"
@@ -47954,7 +47943,7 @@ msgstr "Errepikagarria"
 #: intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:91
 #: intranet-tmpl/prog/en/modules/admin/patron-attr-types.tt:79
 #: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:72
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:69
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:76
 #, c-format
 msgid "Repeatable: "
 msgstr "Errepikagarria:"
@@ -48086,17 +48075,17 @@ msgid ""
 "%s)"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1920
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1921
 #, c-format
 msgid "Report group:"
 msgstr "Informe de grupo"
 
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:416
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:424
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1063
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1071
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1173
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1181
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1064
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1072
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1174
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1182
 #, c-format
 msgid "Report is public:"
 msgstr "Informe es público:"
@@ -48113,13 +48102,13 @@ msgstr "Txostenaren izena:"
 msgid "Report name"
 msgstr "Txostenaren izena"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1051
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1052
 #, c-format
 msgid "Report name:"
 msgstr "Txostenaren izena:"
 
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:729
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1166
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1167
 #, c-format
 msgid "Report name: "
 msgstr "Txostenaren izena:"
@@ -48132,7 +48121,7 @@ msgstr "Txostenaren izena:"
 msgid "Report plugins"
 msgstr "Plugins-en txostena"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1942
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1943
 #, c-format
 msgid "Report subgroup:"
 msgstr "Informe de subgrupo:"
@@ -48213,19 +48202,19 @@ msgstr "Eskatuta"
 msgid "Request article from "
 msgstr "Mailegatze data noiz hasita"
 
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:361
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:537
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:365
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:541
 #, fuzzy, c-format
 msgid "Request details"
 msgstr "Detalles de adquisición"
 
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:652
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:656
 #, fuzzy, c-format
 msgid "Request log"
 msgstr "Eskatuta"
 
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:418
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:596
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:422
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:600
 #, fuzzy, c-format
 msgid "Request number:"
 msgstr "Informe-zenbakia:"
@@ -48235,8 +48224,8 @@ msgstr "Informe-zenbakia:"
 msgid "Request specific item type:"
 msgstr "Item mota espezifiko bat eskatu:"
 
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:406
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:583
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:410
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:587
 #, fuzzy, c-format
 msgid "Request type:"
 msgstr "Eskatuta"
@@ -48330,7 +48319,7 @@ msgstr "Nahitaezko modulua falta da"
 #: intranet-tmpl/prog/en/modules/tools/stockrotation.tt:298
 #: intranet-tmpl/prog/en/modules/tools/stockrotation.tt:303
 #: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:299
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:699
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:703
 #: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:215
 #: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:863
 #: intranet-tmpl/prog/en/modules/serials/checkexpiration.tt:43
@@ -48464,7 +48453,7 @@ msgstr "Nahitaezko modulua falta da"
 #: intranet-tmpl/prog/en/modules/admin/oai_sets.tt:40
 #: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:82
 #: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:88
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:64
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:71
 #: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:61
 #: intranet-tmpl/prog/en/modules/admin/additional-fields.tt:131
 #: intranet-tmpl/prog/en/modules/admin/cities.tt:70
@@ -48478,10 +48467,10 @@ msgstr "Nahitaezko modulua falta da"
 #: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:214
 #: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:224
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:731
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1057
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1102
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1168
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1212
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1058
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1103
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1169
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1213
 #: intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:276
 #: intranet-tmpl/prog/en/modules/services/itemrecorddisplay.tt:33
 #: intranet-tmpl/prog/en/modules/offline_circ/process_koc.tt:42
@@ -48747,7 +48736,7 @@ msgstr "Exportar registros de autoridad "
 #. For the first occurrence,
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/serials/subscription-add.tt:521
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1303
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1304
 msgid "Results from Mana Knowledge Base"
 msgstr ""
 
@@ -48791,8 +48780,8 @@ msgstr ""
 msgid "Return date"
 msgstr "Itzultze data"
 
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:476
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:819
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:467
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:810
 #, c-format
 msgid "Return policy"
 msgstr "Política de devolución"
@@ -48826,20 +48815,20 @@ msgstr "Lan orri lehenetsia"
 msgid "Return to patron detail"
 msgstr "Itzuli bazkideen xehetasunetara"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1240
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1241
 #, fuzzy, c-format
 msgid "Return to previous page"
 msgstr "Itzuli orri nagusira"
 
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:238
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:256
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:242
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:260
 #, fuzzy, c-format
 msgid "Return to request"
 msgstr "Isunaren xehetasunetara itzuli"
 
 #. A
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:322
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:353
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:326
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:357
 #, fuzzy
 msgid "Return to request details"
 msgstr "Isunaren xehetasunetara itzuli"
@@ -49309,8 +49298,8 @@ msgstr "SMS hornitzailea:"
 msgid "SMS provider:"
 msgstr "SMS hornitzailea:"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1099
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1209
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1100
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1210
 #, c-format
 msgid "SQL:"
 msgstr "SQL:"
@@ -49353,11 +49342,6 @@ msgstr "Serie: %s "
 #, fuzzy, c-format
 msgid "Salutation"
 msgstr "%s Agurrak:"
-
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:206
-#, fuzzy, c-format
-msgid "Same week day"
-msgstr "Nombre: *"
 
 #: intranet-tmpl/prog/en/modules/reports/reserves_stats.tt:93
 #, c-format
@@ -49443,10 +49427,10 @@ msgstr "Larunbatak"
 #: intranet-tmpl/prog/en/modules/admin/systempreferences.tt:362
 #: intranet-tmpl/prog/en/modules/admin/sru_modmapping_auth.tt:67
 #: intranet-tmpl/prog/en/modules/admin/credit_types.tt:106
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:340
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:418
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:624
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:783
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:331
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:409
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:615
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:774
 #: intranet-tmpl/prog/en/modules/admin/debit_types.tt:119
 #: intranet-tmpl/prog/en/modules/admin/aqcontract.tt:99
 #: intranet-tmpl/prog/en/modules/admin/branch_transfer_limits.tt:75
@@ -49553,7 +49537,7 @@ msgstr "Berrezarri eredua"
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:238
 #: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:231
 #: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:43
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:104
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:111
 #: intranet-tmpl/prog/en/modules/admin/itemtypes.tt:330
 #, c-format
 msgid "Save changes"
@@ -49593,7 +49577,7 @@ msgstr "Fitxategia ezin da irakurri."
 
 #. INPUT type=submit name=submit
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:741
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1108
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1109
 #, fuzzy
 msgid "Save report"
 msgstr "Gordetako txostenak"
@@ -49645,7 +49629,7 @@ msgstr "Itzultze data noiz hasten da"
 msgid "Saved preference %s"
 msgstr "Preferencia guardada"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1115
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1116
 #, c-format
 msgid "Saved report results"
 msgstr "Gordetako txosten emaitzak"
@@ -49655,7 +49639,7 @@ msgstr "Gordetako txosten emaitzak"
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:78
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:80
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:173
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1246
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1247
 #, c-format
 msgid "Saved reports"
 msgstr "Gordetako txostenak"
@@ -49783,7 +49767,7 @@ msgstr "monitorizatua"
 #: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:167
 #: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:153
 #: intranet-tmpl/prog/en/modules/catalogue/advsearch.tt:49
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:74
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:78
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:79
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:70
 #: intranet-tmpl/prog/en/modules/cataloguing/editor.tt:97
@@ -49805,7 +49789,7 @@ msgstr "monitorizatua"
 #: intranet-tmpl/prog/en/modules/acqui/histsearch.tt:164
 #: intranet-tmpl/prog/en/modules/acqui/acqui-home.tt:45
 #: intranet-tmpl/prog/en/modules/circ/request-article.tt:79
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:169
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:176
 #: intranet-tmpl/prog/en/modules/admin/admin-home.tt:52
 #: intranet-tmpl/prog/en/modules/reports/reports-home.tt:37
 #: intranet-tmpl/prog/en/modules/labels/label-bib-search.tt:6
@@ -50019,7 +50003,7 @@ msgstr "Bilatu bazkideak"
 msgid "Search for record"
 msgstr "Bilatu beste erregistro bat"
 
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:155
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:162
 #, c-format
 msgid "Search for tag:"
 msgstr "Bilatu etiketa:"
@@ -50134,7 +50118,7 @@ msgstr "Bilatu eskaerak:"
 msgid "Search orders:"
 msgstr "Bilatu eskaerak:"
 
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:331
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:335
 #, fuzzy, c-format
 msgid "Search partners"
 msgstr "Bilatu bazkideak"
@@ -50184,7 +50168,7 @@ msgstr "Bilaketaren emaitzak: %s(etik) %s(e)ra, guztira %s"
 msgid "Search results navigation"
 msgstr "Bilaketaren emaitzak"
 
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:303
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:307
 #, fuzzy, c-format
 msgid "Search selected partners"
 msgstr "Kedu aukeratutako erregistroak"
@@ -50374,7 +50358,7 @@ msgstr "Urtaroa"
 msgid "Second"
 msgstr "Bigarrena"
 
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:93
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:100
 #, fuzzy, c-format
 msgid "Second indicator default value: "
 msgstr "Balio lehenetsiak"
@@ -50406,8 +50390,8 @@ msgid "Secondary phone: "
 msgstr "Bigarren telefonoa: "
 
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:437
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1084
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1194
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1085
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1195
 #, c-format
 msgid "Seconds (default)"
 msgstr "Segunduak (lehenetsia)"
@@ -50475,8 +50459,8 @@ msgstr "software.coop, Reino Unido"
 #: intranet-tmpl/prog/en/modules/members/tables/guarantor_search.tt:21
 #: intranet-tmpl/prog/en/modules/acqui/tables/members_results.tt:19
 #: intranet-tmpl/prog/en/modules/circ/request-article.tt:70
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1923
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1945
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1924
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1946
 #: intranet-tmpl/prog/en/modules/labels/label-edit-batch.tt:120
 #: intranet-tmpl/prog/en/modules/labels/result.tt:72
 #, c-format
@@ -50828,7 +50812,7 @@ msgstr "Aukeratu liburutegi bat:"
 msgid "Select owner"
 msgstr "Seleccionar nota"
 
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:290
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:294
 #, fuzzy, c-format
 msgid "Select partner libraries:"
 msgstr "Aukeratu liburutegi bat:"
@@ -51007,7 +50991,7 @@ msgid "Send EDI order"
 msgstr "Sortu EDIFACT eskaera"
 
 #. INPUT type=submit
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:321
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:325
 #: intranet-tmpl/prog/en/modules/errors/errorpage.tt:28
 #, c-format
 msgid "Send email"
@@ -52092,11 +52076,6 @@ msgstr ""
 msgid "Size (bytes)"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:203
-#, fuzzy, c-format
-msgid "Skip closed days"
-msgstr "Suscripción cerrada %s "
-
 #: intranet-tmpl/prog/en/modules/serials/subscription-add.tt:91
 #: intranet-tmpl/prog/en/modules/serials/subscription-add.tt:100
 #, fuzzy, c-format
@@ -52459,7 +52438,7 @@ msgstr "Zehaztu jai eguna errepikatzeko modua."
 msgid "Specify return date %s: "
 msgstr "Zehaztu itzultze data %s: "
 
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:718
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:709
 #, c-format
 msgid "Specify the default policy for lost item fees on return. "
 msgstr ""
@@ -52610,8 +52589,8 @@ msgstr "Nota de staff:"
 msgid "Staff notes"
 msgstr "Nota de staff:"
 
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:422
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:600
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:426
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:604
 #, fuzzy, c-format
 msgid "Staff notes:"
 msgstr "Nota de staff:"
@@ -52755,7 +52734,7 @@ msgid "Start date:"
 msgstr "Hasiera data:"
 
 #: intranet-tmpl/prog/en/modules/serials/subscription-renew.tt:34
-#: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:223
+#: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:224
 #: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:135
 #: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:205
 #, c-format
@@ -52772,7 +52751,7 @@ msgstr "Hasi liburutegiak definitzen"
 msgid "Start of date range "
 msgstr "Data bitartearen hasiera"
 
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:367
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:358
 #, fuzzy, c-format
 msgid "Start of interval"
 msgstr "Tartearen amaiera"
@@ -52859,7 +52838,7 @@ msgstr "Estatistika 2"
 msgid "Statistical"
 msgstr "Estatistikoa"
 
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:152
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:156
 #, fuzzy, c-format
 msgid "Statistical patron:"
 msgstr "Estatistikoa"
@@ -52938,9 +52917,9 @@ msgstr "Azken moldaketa:"
 
 #: intranet-tmpl/prog/en/modules/tags/review.tt:203
 #: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:112
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:41
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:379
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:568
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:45
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:383
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:572
 #: intranet-tmpl/prog/en/modules/acqui/invoice.tt:71
 #: intranet-tmpl/prog/en/modules/acqui/invoice.tt:76
 #: intranet-tmpl/prog/en/modules/acqui/invoices.tt:130
@@ -53206,12 +53185,12 @@ msgid "Subgroup"
 msgstr "Subgrupo"
 
 #. INPUT type=text name=subgroup
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1965
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1966
 msgid "Subgroup code"
 msgstr "Código de subgrupo"
 
 #. INPUT type=text name=subgroupdesc
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1966
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1967
 msgid "Subgroup name"
 msgstr "Nombre de subgrupo"
 
@@ -53240,7 +53219,7 @@ msgstr "Gaia"
 msgid "Subject heading: "
 msgstr "Gaiaren izenburua:"
 
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:308
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:312
 #, fuzzy, c-format
 msgid "Subject line:"
 msgstr "Gaia: "
@@ -53344,9 +53323,9 @@ msgstr "Gaiak:"
 #: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:317
 #: intranet-tmpl/prog/en/modules/patron_lists/list.tt:88
 #: intranet-tmpl/prog/en/modules/catalogue/results.tt:372
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:232
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:436
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:704
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:236
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:440
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:708
 #: intranet-tmpl/prog/en/modules/cataloguing/moveitem.tt:90
 #: intranet-tmpl/prog/en/modules/cataloguing/moveitem.tt:102
 #: intranet-tmpl/prog/en/modules/serials/subscription-renew.tt:76
@@ -53358,7 +53337,7 @@ msgstr "Gaiak:"
 #: intranet-tmpl/prog/en/modules/onboarding/onboardingstep3.tt:109
 #: intranet-tmpl/prog/en/modules/onboarding/onboardingstep2.tt:122
 #: intranet-tmpl/prog/en/modules/circ/renew.tt:175
-#: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:241
+#: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:242
 #: intranet-tmpl/prog/en/modules/circ/set-library.tt:71
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:100
 #: intranet-tmpl/prog/en/modules/circ/branchtransfers.tt:161
@@ -53859,7 +53838,7 @@ msgstr "Harpidetza"
 msgid "Supplemental issue "
 msgstr "Ale gehigarria"
 
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:628
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:632
 #, fuzzy, c-format
 msgid "Supplier metadata"
 msgstr "Duplicar informe"
@@ -53911,13 +53890,13 @@ msgid "Suspend?"
 msgstr "Geldiarazia"
 
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:106
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:441
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:432
 #, fuzzy, c-format
 msgid "Suspension charging interval"
 msgstr "Isuna kargatzeko bitartea"
 
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:104
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:439
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:430
 #, c-format
 msgid "Suspension in days (day)"
 msgstr "Blokeatu, zenbat egun (eguna)"
@@ -54167,7 +54146,7 @@ msgstr "Fitxa:"
 #. %20$s:  IF ( subfield.value_builder ) 
 #. %21$s:  subfield.value_builder | html 
 #. %22$s:  END 
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:201
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:208
 #, c-format
 msgid ""
 "Tab:%s | $%s %s %s%s%s%s, repeatable%s%s, Mandatory%s%s, See %s%s%s, %s%s%s, "
@@ -54217,7 +54196,7 @@ msgstr "Tabulazioa (\t)"
 
 #: intranet-tmpl/prog/en/modules/admin/koha2marclinks.tt:32
 #: intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:194
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:182
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:189
 #: intranet-tmpl/prog/en/modules/admin/checkmarc.tt:168
 #: intranet-tmpl/prog/en/modules/admin/checkmarc.tt:201
 #: intranet-tmpl/prog/en/modules/admin/checkmarc.tt:236
@@ -54247,7 +54226,7 @@ msgstr "Etiketaren %s azpieremu egitura"
 msgid "Tag %s subfield structure"
 msgstr "Etiketaren %s azpieremu egitura"
 
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:130
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:137
 #, c-format
 msgid "Tag deleted"
 msgstr "Etiketa ezabatu da"
@@ -54276,7 +54255,7 @@ msgstr "Etiketaren %s azpieremu egitura"
 msgid "Tag moderation"
 msgstr "Etiketen moderazioa"
 
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:59
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:66
 #, c-format
 msgid "Tag:"
 msgstr "Etiketa: "
@@ -54293,13 +54272,13 @@ msgstr "Etiketa: "
 #: intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:78
 #: intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:84
 #: intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:127
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:62
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:69
 #, c-format
 msgid "Tag: "
 msgstr "Etiketa:"
 
 #. %1$s:  searchfield | html 
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:114
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:121
 #, c-format
 msgid "Tag: %s"
 msgstr "Etiketa: %s"
@@ -54813,7 +54792,7 @@ msgid ""
 "will have barcodes generated upon save to database"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:459
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:463
 #, c-format
 msgid ""
 "The backend you tried to migrate to does not yet support migrations, please "
@@ -54858,14 +54837,14 @@ msgstr ""
 "biblio.biblionumber eta biblioitems.biblioitemnumber eremuak MARC azpieremu "
 "batekin mapatzen badira,"
 
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:146
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:150
 #, c-format
 msgid ""
 "The bibliographic record for this request already has an item attached to "
 "it, you are about to check it out"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:121
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:125
 #, c-format
 msgid ""
 "The bibliographic record for this request has multiple items, it should only "
@@ -55106,7 +55085,7 @@ msgstr "Barra kode hauek aurkitu dira:"
 msgid "The following error occurred while importing the database structure:"
 msgstr "Errore hau gertatu da datu basearen egitura inportatzean:"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1226
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1227
 #, c-format
 msgid "The following error was encountered:"
 msgstr "Errore hau gertatu da:"
@@ -55373,21 +55352,21 @@ msgid "The order has been successfully cancelled %s "
 msgstr "Eskaera ongi ezeztatu da."
 
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:75
-#, c-format
+#, fuzzy, c-format
 msgid ""
-"The order line you trying to cancel was created from a partial receipt of "
-"another order line which has been deleted. Cancellation is not possible. "
+"The order line you are trying to cancel was created from a partial receipt "
+"of another order line which has been deleted. Cancellation is not possible. "
 msgstr ""
 "La línea de orden que trata de cancelar se creó a partir de una recepción "
 "parcial de otra línea de la orden que se ha suprimido. La cancelación no es "
 "posible."
 
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:70
-#, c-format
+#, fuzzy, c-format
 msgid ""
-"The order line you trying to cancel was created from a partial receipt of "
-"another order line which is already received. Try to cancel this one first "
-"and retry. "
+"The order line you are trying to cancel was created from a partial receipt "
+"of another order line which is already received. Try to cancel this one "
+"first and retry. "
 msgstr ""
 "La línea de orden que tratar de cancelar se creó a partir de una recepción "
 "parcial de otra línea de pedido que ya recibió. Trate de cancelar este "
@@ -55511,7 +55490,7 @@ msgstr ""
 msgid "The patron's guarantees collectively have a debt of %s."
 msgstr "Bazkidearen zorra %s"
 
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:808
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:799
 #, c-format
 msgid ""
 "The policies are applied based on the ReservesControlBranch system "
@@ -56092,7 +56071,7 @@ msgstr "Zure pasahitzak, gutxienez,  %s karaktere izan behar ditu."
 msgid "There was 1 barcode that was too long."
 msgstr "%s barra kodea ez da aurkitu."
 
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:135
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:139
 #, c-format
 msgid ""
 "There was a problem checking this item out, please check for problems with "
@@ -56417,7 +56396,7 @@ msgstr "Sentitzen dugu, item hau ezin da estazio honetan mailegatu"
 msgid "This item can not be renewed, it's an on-site checkout"
 msgstr "Horrek bazkideari kobratuko dio elementu bat maileguan hartzerakoan."
 
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:118
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:122
 #, c-format
 msgid ""
 "This item cannot be issued as it has no biblio record associated with it"
@@ -57739,14 +57718,14 @@ msgstr "Maileguak, guztira:"
 msgid "Total cost"
 msgstr "Guztizko kostua"
 
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:471
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:646
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:462
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:637
 #, c-format
 msgid "Total current checkouts allowed"
 msgstr "Total de préstamos actuales permitidos"
 
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:472
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:647
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:463
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:638
 #, fuzzy, c-format
 msgid "Total current on-site checkouts allowed"
 msgstr "Total de préstamos actuales permitidos"
@@ -57778,7 +57757,7 @@ msgstr "Deuda total: %s"
 msgid "Total holds"
 msgstr "Guztizko kostua"
 
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:648
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:639
 #, fuzzy, c-format
 msgid "Total holds allowed"
 msgstr "Ezin da erreserbarik egin"
@@ -58487,7 +58466,7 @@ msgstr "Identifikatzaile esklusiboa:"
 
 #: intranet-tmpl/prog/en/modules/serials/subscription-frequencies.tt:132
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:96
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:431
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:422
 #, c-format
 msgid "Unit"
 msgstr "Unitate"
@@ -58596,7 +58575,7 @@ msgstr ""
 msgid "Unknown"
 msgstr "Ezezaguna"
 
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:273
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:277
 #, c-format
 msgid "Unknown error processing your request. Contact your administrator. "
 msgstr ""
@@ -58641,12 +58620,12 @@ msgstr "Ezezaguna"
 
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:190
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:197
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:266
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:273
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:280
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:670
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:677
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:684
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:257
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:264
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:271
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:661
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:668
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:675
 #, fuzzy, c-format
 msgid "Unlimited"
 msgstr "Mugatzailea:"
@@ -58672,7 +58651,7 @@ msgstr "Eremu mugatzailea ezezaguna da edo falta da."
 msgid "Unrecognized patron (%s)"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:625
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:616
 #, c-format
 msgid "Unset"
 msgstr "Desezarri"
@@ -58713,7 +58692,7 @@ msgstr "Eguneratu"
 
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:104
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:320
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1217
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1218
 #, c-format
 msgid "Update SQL"
 msgstr "Eguneratu SQL"
@@ -58803,7 +58782,7 @@ msgstr "Eguneratu: %s"
 msgid "Updated SQL"
 msgstr "Eguneratu SQL"
 
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:55
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:59
 #, fuzzy, c-format
 msgid "Updated between:"
 msgstr "Eguneraketa:"
@@ -59201,7 +59180,7 @@ msgstr ""
 msgid "Use for staff search groups "
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1229
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1230
 #, fuzzy, c-format
 msgid ""
 "Use of this keyword is not allowed in Koha reports due to security and data "
@@ -59238,25 +59217,6 @@ msgstr "Erabili gordetakoa"
 msgid "Use the advanced cataloging editor (requires edit_catalogue) "
 msgstr ""
 
-#. SPAN
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:204
-#, fuzzy
-msgid "Use the calendar to push the due date to the next open day"
-msgstr "Bilatu egutegian jai eguna izatea nahi duzun eguna"
-
-#. SPAN
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:206
-msgid ""
-"Use the calendar to push the due date to the next open matching weekday for "
-"weekly loan periods, or the next open day otherwise"
-msgstr ""
-
-#. SPAN
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:203
-#, fuzzy
-msgid "Use the calendar to skip days the library is closed"
-msgstr "Definitu liburutegia itxita egongo den egunak"
-
 #: intranet-tmpl/prog/en/modules/reports/dictionary.tt:43
 #, c-format
 msgid "Use the dictionary to define custom criteria for reporting."
@@ -59291,11 +59251,6 @@ msgstr "Erabili ezkerreko bilatzailea fakturak aurkitzeko."
 #, c-format
 msgid "Use the search form on the left to find subscriptions."
 msgstr "Utilizar el buscador de la izquierda para encontrar suscripciones."
-
-#. SPAN
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:207
-msgid "Use the system preference 'useDaysMode' as a default value"
-msgstr ""
 
 #. For the first occurrence,
 #. %1$s:  PROCESS translate_card_element element=card_element 
@@ -59827,7 +59782,7 @@ msgstr "Ikusi guztia"
 msgid "View ILL availability plugins"
 msgstr "Ikusi liburutegi guztiak"
 
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:714
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:718
 #, c-format
 msgid "View ILL requests"
 msgstr ""
@@ -59881,8 +59836,8 @@ msgstr "Detalles de proveedor"
 #. For the first occurrence,
 #. SCRIPT
 #: intranet-tmpl/prog/en/includes/ill-list-table-strings.inc:2
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:550
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:680
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:554
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:684
 #, fuzzy
 msgid "View borrower details"
 msgstr "Detalles de proveedor"
@@ -59984,7 +59939,7 @@ msgstr "Kendu murrizketa"
 msgid "View spine label"
 msgstr "Ikusi bizkar-etiketak"
 
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:220
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:227
 #, fuzzy, c-format
 msgid "View subfields"
 msgstr "Editatu azpieremuak"
@@ -60352,7 +60307,7 @@ msgstr "Oinarrizko konfigurazioa ezartzeko prest gaude. Mesedez, "
 msgid "We are upgrading from Koha %s to %s"
 msgstr "Koha %s(e)tik %s(e)ra eguneratzen ari gara, zuk "
 
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:96
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:100
 #, fuzzy, c-format
 msgid "We encountered an error:"
 msgstr "Zenbait arazo ditut."
@@ -60841,13 +60796,13 @@ msgstr "Baimendu"
 #: intranet-tmpl/prog/en/modules/admin/usage_statistics.tt:70
 #: intranet-tmpl/prog/en/modules/admin/usage_statistics.tt:182
 #: intranet-tmpl/prog/en/modules/admin/usage_statistics.tt:185
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:255
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:285
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:305
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:382
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:395
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:410
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:761
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:246
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:276
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:296
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:373
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:386
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:401
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:752
 #: intranet-tmpl/prog/en/modules/admin/branches.tt:152
 #: intranet-tmpl/prog/en/modules/admin/branches.tt:155
 #: intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:234
@@ -60873,10 +60828,10 @@ msgstr "Baimendu"
 #: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:305
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:419
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:427
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1066
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1074
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1176
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1184
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1067
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1075
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1177
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1185
 #: intranet-tmpl/prog/en/modules/pos/pay.tt:163
 #, c-format
 msgid "Yes"
@@ -60932,7 +60887,7 @@ msgstr "Sí, cerrar (Y) "
 #. INPUT type=submit
 #: intranet-tmpl/prog/en/modules/tools/csv-profiles.tt:240
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:509
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:449
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:453
 #: intranet-tmpl/prog/en/modules/serials/subscription-frequencies.tt:119
 #: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:251
 #: intranet-tmpl/prog/en/modules/serials/serials-collection.tt:49
@@ -60996,7 +60951,7 @@ msgstr "Ezabatu elementu mota hau"
 msgid "Yes, delete this subfield"
 msgstr "Sí, eliminar este subcampo "
 
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:120
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:127
 #, fuzzy, c-format
 msgid "Yes, delete this tag"
 msgstr "Bai, ezabatu etiketa hau"
@@ -61274,7 +61229,7 @@ msgstr "Generar una excepción para este feriado repetible. "
 msgid "You can only select %s item(s)"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:464
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:455
 #, c-format
 msgid ""
 "You can set a default maximum number of checkouts, hold policy and return "
@@ -61552,7 +61507,7 @@ msgstr ""
 msgid "You must be online to use these options."
 msgstr "Aukera hauek erabiltzeko online egon behar duzu."
 
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:214
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:218
 #, fuzzy, c-format
 msgid "You must choose a branch"
 msgstr "Erregistro bat aukeratu edo sortu behar duzu"
@@ -61569,12 +61524,12 @@ msgstr "Erregistro bat aukeratu edo sortu behar duzu"
 msgid "You must choose a subscription length or an end date."
 msgstr "Hasiera data eta harpidetzaren iraupena aukeratu behar dituzu"
 
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:164
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:168
 #, fuzzy, c-format
 msgid "You must choose a valid patron"
 msgstr "Erregistro bat aukeratu edo sortu behar duzu"
 
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:190
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:194
 #, fuzzy, c-format
 msgid "You must choose an item type"
 msgstr "Erregistro bat aukeratu edo sortu behar duzu"
@@ -61680,7 +61635,7 @@ msgid "You must select one or more patrons to remove"
 msgstr "Gutxienez item bat aukeratu behar duzu "
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1303
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1304
 #, fuzzy
 msgid "You must select one or more reports to delete"
 msgstr "Aukeratu ezabatu nahi d(it)uzun irudia(k)."
@@ -61883,7 +61838,7 @@ msgstr ""
 msgid "Your koha-conf.xml does not contain a valid upload_path."
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:269
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:273
 #, fuzzy, c-format
 msgid "Your library has no usable email address. Please set it. "
 msgstr ""
@@ -61929,7 +61884,7 @@ msgid "Your patron lists"
 msgstr "Zure bazkide zerrendak"
 
 #. %1$s:  reportname | html 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1152
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1153
 #, fuzzy, c-format
 msgid "Your report \"%s\" has been saved"
 msgstr "Zure txostena gorde da"
@@ -62272,7 +62227,7 @@ msgstr "]%s (%s%s, %s atzerapen handia%s) itzultze data: %s %s "
 msgid "_ matches only a single character"
 msgstr "%% edozein karaktere-kopururekin bat dator"
 
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:89
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:93
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:285
 #, fuzzy, c-format
 msgid "about page"
@@ -62388,20 +62343,20 @@ msgstr "y el "
 msgid "and they must all be in the 10 (items) tab"
 msgstr "eta 10 (elementu) fitxan egon behar dira denak"
 
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:51
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:59
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:55
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:63
 #, fuzzy, c-format
 msgid "and:"
 msgstr "...y:"
 
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:845
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:836
 #, fuzzy, c-format
 msgid "any library"
 msgstr "Cualquier biblioteca"
 
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:542
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:546
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:889
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:533
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:537
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:880
 #, fuzzy, c-format
 msgid "any library "
 msgstr "Cualquier biblioteca"
@@ -62745,7 +62700,7 @@ msgstr ""
 msgid "can place %s of the requested %s holds for a maximum of %s total holds."
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:746
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:750
 #, fuzzy, c-format
 msgid "cancel your request"
 msgstr "Recibo cancelado"
@@ -62863,7 +62818,7 @@ msgstr "jarraitua"
 msgid "contains"
 msgstr "dauka"
 
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:745
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:749
 #, c-format
 msgid "continue creating your request"
 msgstr ""
@@ -63338,11 +63293,6 @@ msgstr "Diferentzia"
 msgid "if "
 msgstr "Diferentzia"
 
-#: intranet-tmpl/prog/en/modules/admin/patron-attr-types.tt:119
-#, c-format
-msgid "if set.)"
-msgstr ""
-
 #: intranet-tmpl/prog/en/modules/admin/categories.tt:165
 #, fuzzy, c-format
 msgid ""
@@ -63502,6 +63452,11 @@ msgstr "está en reserva para"
 msgid "is released under MIT license by Ludo van den Boom."
 msgstr ""
 
+#: intranet-tmpl/prog/en/modules/admin/patron-attr-types.tt:119
+#, c-format
+msgid "is set.)"
+msgstr ""
+
 #: intranet-tmpl/prog/en/includes/virtualshelves-toolbar.inc:28
 #: intranet-tmpl/prog/en/modules/basket/basket.tt:53
 #, c-format
@@ -63523,38 +63478,38 @@ msgstr "tipos de ítem no definidos"
 msgid "item type not defined"
 msgstr "tipos de ítem no definidos"
 
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:849
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:840
 #, fuzzy, c-format
 msgid "item's hold group"
 msgstr "Biblioteca de préstamo:"
 
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:552
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:556
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:893
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:543
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:547
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:884
 #, fuzzy, c-format
 msgid "item's hold group "
 msgstr "Biblioteca de préstamo:"
 
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:853
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:844
 #, fuzzy, c-format
 msgid "item's holding library"
 msgstr "Biblioteca de préstamo:"
 
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:582
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:586
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:905
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:573
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:577
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:896
 #, fuzzy, c-format
 msgid "item's holding library "
 msgstr "Biblioteca de préstamo:"
 
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:847
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:838
 #, fuzzy, c-format
 msgid "item's home library"
 msgstr "Biblioteca de origen del ítem:"
 
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:572
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:576
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:901
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:563
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:567
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:892
 #, fuzzy, c-format
 msgid "item's home library "
 msgstr "Biblioteca de origen del ítem:"
@@ -63895,7 +63850,7 @@ msgstr "noItemTypeImages sistemaren lehentasuna"
 #: intranet-tmpl/prog/en/includes/checkouts-table.inc:30
 #: intranet-tmpl/prog/en/includes/checkouts-table.inc:31
 #: intranet-tmpl/prog/en/includes/checkouts-table.inc:33
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:301
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:305
 #, c-format
 msgid "none"
 msgstr "bat ere ez"
@@ -64013,7 +63968,7 @@ msgstr "or"
 
 # 1suDyj  <a href="http://gfrwywrgxzzy.com/">gfrwywrgxzzy</a>, [url=http://mrhmchrkpwdk.com/]mrhmchrkpwdk[/url], [link=http://fsyrsrrhlrpz.com/]fsyrsrrhlrpz[/link], http://lhcnqtglyttf.com/
 #: intranet-tmpl/prog/en/modules/tools/import_borrowers.tt:301
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:745
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:749
 #: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:682
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:160
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:166
@@ -64035,12 +63990,12 @@ msgstr "edo MARC azpieremua."
 msgid "or any available"
 msgstr "edo eskuragarri dagoen edozein"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1964
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1965
 #, c-format
 msgid "or create"
 msgstr "o crear"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1937
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1938
 #, fuzzy, c-format
 msgid "or create:"
 msgstr "o crear"
@@ -64067,19 +64022,19 @@ msgstr "bazkide kategoriak"
 msgid "patron category "
 msgstr "bazkide kategoria"
 
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:136
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:140
 #, fuzzy, c-format
 msgid "patron's account"
 msgstr "Indicadores de cuenta de socio"
 
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:851
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:842
 #, fuzzy, c-format
 msgid "patron's hold group"
 msgstr "bazkide kategoria"
 
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:562
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:566
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:897
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:553
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:557
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:888
 #, fuzzy, c-format
 msgid "patron's hold group "
 msgstr "bazkide kategoria"
@@ -65006,9 +64961,9 @@ msgstr "%s |%s %s %s %s "
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:62
 #: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:290
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:877
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:330
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:627
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:651
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:334
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:631
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:655
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:179
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:110
 #: intranet-tmpl/prog/en/modules/cataloguing/editor.tt:128

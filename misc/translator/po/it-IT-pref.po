@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Koha 20.05\n"
 "POT-Creation-Date: 2013-05-02 01:29-0300\n"
-"PO-Revision-Date: 2020-11-29 19:27+0000\n"
+"PO-Revision-Date: 2021-02-16 22:23+0000\n"
 "Last-Translator: ztajoli <ztajoli@gmail.com>\n"
 "Language-Team: CILEA <z.tajoli@cineca.it>\n"
 "Language: it\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.8\n"
 "X-Poedit-SourceCharset: UTF-8\n"
-"X-POOTLE-MTIME: 1606678069.875236\n"
+"X-POOTLE-MTIME: 1613514204.494046\n"
 "X-Poedit-Basepath: ../../../versioni/master/koha-tmpl\n"
 "X-Poedit-SearchPath-0: .\n"
 "X-Pootle-Path: /it/20.05/it-IT-pref.po\n"
@@ -1720,7 +1720,7 @@ msgstr "lasca"
 
 # Authorities > General
 msgid "authorities.pref#AuthorityMergeMode# mode. In strict mode subfields that are not found in the authority record, are deleted. Loose mode will keep them. Loose mode is the historical behavior and still the default."
-msgstr ". In modalità stretta i sottocampi non presenti nell'authority, verranno cancellati. In moldalità lasca verrano mantenuti. La modalità lasca è quella presente si dalle origini ed è ancora il default."
+msgstr ". In modalità stretta i sottocampi non presenti nell'authority, verranno cancellati. In modalità lasca verranno mantenuti. La modalità lasca è quella presente sin dalle origini ed è ancora il default."
 
 # Authorities > General
 msgid "authorities.pref#AuthorityMergeMode# strict"
@@ -3738,6 +3738,10 @@ msgstr "dal cronjob longoverdue"
 # Circulation > Checkout policy
 msgid "circulation.pref#MarkLostItemsAsReturned# when cataloguing an item"
 msgstr "quando si cataloga una copia"
+
+# Circulation > Checkout policy
+msgid "circulation.pref#MarkLostItemsAsReturned# when marking an item as a return claim"
+msgstr "quando si valorizza una copia come un richiamo rientrato"
 
 # Circulation > Checkout policy
 msgid "circulation.pref#MarkLostItemsAsReturned# when receiving payment for the item"
@@ -7579,6 +7583,10 @@ msgid "opac.pref#PatronSelfRegistrationConfirmEmail# users to confirm their emai
 msgstr "che l'utente confermi l'indirizzo di posta scrivendolo due volte."
 
 # OPAC > Self registration and modification
+msgid "opac.pref#PatronSelfRegistrationDefaultCategory# <br><strong>WARNING: Do not use a regular patron category for self registration.</strong> If the <code>misc/cronjobs/cleanup_database.pl</code> cronjob is setup to delete unverified and unfinished OPAC self registrations, it will permanently and unrecoverably delete all patrons that have registered more than PatronSelfRegistrationExpireTemporaryAccountsDelay days ago."
+msgstr "<br><strong>ATTENZIONE: Non usare una normale categoria utente per l'autoregistrazione.</strong> Se il cronjob <code>misc/cronjobs/cleanup_database.pl</code> è configurato per cancellare le registrazioni dall'Opac non verficate e non finite, esso cancellerà definitivamente e senza possibile recupero tutti gli utenti che si sono registrati da più giorni di quanto indicato in PatronSelfRegistrationExpireTemporaryAccountsDelay."
+
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationDefaultCategory# Use the patron category code"
 msgstr "Usa il codice utente"
 
@@ -7659,16 +7667,20 @@ msgid "opac.pref#PayPalPwd# The password for the PayPal account to receive payme
 msgstr "La password per l'account PayPal che riceve i pagamenti è: "
 
 # OPAC > Payments
+msgid "opac.pref#PayPalReturnURL# ."
+msgstr "."
+
+# OPAC > Payments
 msgid "opac.pref#PayPalReturnURL# After payment or cancellation, PayPal should return to the "
 msgstr "Dopo pagamento o cancellazione, PayPal deve tornare a "
 
 # OPAC > Payments
-msgid "opac.pref#PayPalReturnURL# OPAC's alias"
-msgstr "URL alias dell'Opac"
-
-# OPAC > Payments
 msgid "opac.pref#PayPalReturnURL# OPACBaseURL"
 msgstr "OPACBaseURL"
+
+# OPAC > Payments
+msgid "opac.pref#PayPalReturnURL# configured return URL"
+msgstr "configura l' URL di ritorno"
 
 # OPAC > Payments
 msgid "opac.pref#PayPalSignature# The signature for the PayPal account to receive payments is "
@@ -8784,19 +8796,19 @@ msgstr "solo la biblioteca proprietaria"
 
 # Searching > Features
 msgid "searching.pref#ElasticsearchCrossFields# Disable"
-msgstr ""
+msgstr "Disattiva"
 
 # Searching > Features
 msgid "searching.pref#ElasticsearchCrossFields# Enable"
-msgstr ""
+msgstr "Attiva"
 
 # Searching > Features
 msgid "searching.pref#ElasticsearchCrossFields# See documentation at https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-multi-match-query.html#type-cross-fields"
-msgstr ""
+msgstr "Vedi la documentazione al link https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-multi-match-query.html#type-cross-fields"
 
 # Searching > Features
 msgid "searching.pref#ElasticsearchCrossFields# the cross_fields option for Elasticsearch searches, supported in Elasticsearch 6.X and above."
-msgstr ""
+msgstr "l'opzione cross_fields per le ricerche su Elasticsearch, è supportata da Elasticsearch 6.x e superiori"
 
 # Searching > Features
 msgid "searching.pref#EnableSearchHistory# Don't keep"
@@ -9044,7 +9056,7 @@ msgstr "Prova"
 
 # Searching > Features
 msgid "searching.pref#QueryFuzzy# to match similarly spelled words in a search (for example, a search for <cite>flang</cite> would also match <cite>flange</cite> and <cite>fang</cite>; Currently only affects Zebra searches. Any Elasticsearch term can be made fuzzy by adding a ~ directly after the term.)."
-msgstr ""
+msgstr " per trovar parole con letttere simili in una ricerca (per esempio una ricerca per <cite>flang</cite> troverà anche <cite>flange</cite> e <cite>fang</cite>; Attualmente riguarda solo le ricerche in Zebra. Ogni termine in Elasticsearch può essere cercato in modalità  fuzzy aggiungendo direttamente una ~ dopo il termine.)."
 
 # Searching > Features
 msgid "searching.pref#QueryRegexEscapeOptions# Don't escape"

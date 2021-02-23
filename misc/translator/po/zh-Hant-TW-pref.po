@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Koha 20.05\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-05-10 19:14+0200\n"
-"PO-Revision-Date: 2020-12-09 09:09+0000\n"
+"PO-Revision-Date: 2021-02-23 05:44+0000\n"
 "Last-Translator: Frank Chou <frank@sris.com.tw>\n"
 "Language-Team: koha_TW <kohataiwan@googlegroups.com>\n"
 "Language: zh_TW\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8-bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Generator: Pootle 2.8\n"
-"X-POOTLE-MTIME: 1607504965.112544\n"
+"X-POOTLE-MTIME: 1614059090.023476\n"
 "X-Pootle-Path: /zh_TW/20.05/zh-Hans-TW-pref.po\n"
 "X-Pootle-Revision: 1\n"
 
@@ -3738,6 +3738,10 @@ msgid "circulation.pref#MarkLostItemsAsReturned# when cataloguing an item"
 msgstr "編目館藏時"
 
 # Circulation > Checkout policy
+msgid "circulation.pref#MarkLostItemsAsReturned# when marking an item as a return claim"
+msgstr ""
+
+# Circulation > Checkout policy
 msgid "circulation.pref#MarkLostItemsAsReturned# when receiving payment for the item"
 msgstr "收到館藏付費時"
 
@@ -4123,7 +4127,7 @@ msgstr "讀者證到期前，應先還書(到期日必須在讀者證到期日�
 
 # Circulation > Self check-out module
 msgid "circulation.pref#SCOAllowCheckin# Allow"
-msgstr "允許"
+msgstr "circulation.pref#SCOAllowCheckin# 允許"
 
 # Circulation > Self check-out module
 msgid "circulation.pref#SCOAllowCheckin# Don't allow"
@@ -7577,6 +7581,10 @@ msgid "opac.pref#PatronSelfRegistrationConfirmEmail# users to confirm their emai
 msgstr "使用者們透過輸入兩次來確認他們的電子郵件."
 
 # OPAC > Self registration and modification
+msgid "opac.pref#PatronSelfRegistrationDefaultCategory# <br><strong>WARNING: Do not use a regular patron category for self registration.</strong> If the <code>misc/cronjobs/cleanup_database.pl</code> cronjob is setup to delete unverified and unfinished OPAC self registrations, it will permanently and unrecoverably delete all patrons that have registered more than PatronSelfRegistrationExpireTemporaryAccountsDelay days ago."
+msgstr ""
+
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationDefaultCategory# Use the patron category code"
 msgstr "使用讀者類型代碼"
 
@@ -7657,16 +7665,20 @@ msgid "opac.pref#PayPalPwd# The password for the PayPal account to receive payme
 msgstr "收取費用的 PayPal 帳號密碼是 "
 
 # OPAC > Payments
+msgid "opac.pref#PayPalReturnURL# ."
+msgstr ""
+
+# OPAC > Payments
 msgid "opac.pref#PayPalReturnURL# After payment or cancellation, PayPal should return to the "
 msgstr "支付或取消後，PayPal 會回到 "
 
 # OPAC > Payments
-msgid "opac.pref#PayPalReturnURL# OPAC's alias"
-msgstr "OPAC 的其他網址"
-
-# OPAC > Payments
 msgid "opac.pref#PayPalReturnURL# OPACBaseURL"
 msgstr "OPACBaseURL"
+
+# OPAC > Payments
+msgid "opac.pref#PayPalReturnURL# configured return URL"
+msgstr ""
 
 # OPAC > Payments
 msgid "opac.pref#PayPalSignature# The signature for the PayPal account to receive payments is "
@@ -10047,4 +10059,3 @@ msgstr "祗送回"
 # Web services > Reporting
 msgid "web_services.pref#SvcMaxReportRows# rows of a report requested via the reports web service."
 msgstr "經由報表頁面服務指定報表的列數。"
-
