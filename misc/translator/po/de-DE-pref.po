@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Koha 20.11\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-05-16 03:26+0200\n"
-"PO-Revision-Date: 2021-01-18 15:02+0000\n"
+"PO-Revision-Date: 2021-02-17 08:39+0000\n"
 "Last-Translator: Katrin Fischer <katrin.fischer@bsz-bw.de>\n"
 "Language-Team: \n"
 "Language: de\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.8\n"
 "X-Poedit-SourceCharset: utf-8\n"
-"X-POOTLE-MTIME: 1610982156.147928\n"
+"X-POOTLE-MTIME: 1613551151.258683\n"
 "X-Pootle-Path: /de/20.05/de-DE-pref.po\n"
 "X-Pootle-Revision: 1\n"
 
@@ -966,9 +966,9 @@ msgstr ""
 msgid ""
 "admin.pref#UsageStats# <br><strong>NOTE:</strong> Use the <a href=\"/cgi-bin/"
 "koha/admin/usage_statistics.pl\">dedicated configuration page</a> to edit "
-"the statisics you share."
+"the statistics you share."
 msgstr ""
-" <br><strong>HINWEIS:</strong> Verwenden Sie die <a href=\"/cgi-bin/koha/"
+"<br><strong>HINWEIS:</strong> Verwenden Sie die <a href=\"/cgi-bin/koha/"
 "admin/usage_statistics.pl\">Hea-Konfigurationsseite</a> um festzulegen, "
 "welche Statistiken Sie teilen."
 
@@ -5015,6 +5015,12 @@ msgstr "bei Katalogisierung eines Exemplars"
 
 # Circulation > Checkout policy
 msgid ""
+"circulation.pref#MarkLostItemsAsReturned# when marking an item as a return "
+"claim"
+msgstr "wenn ein Exemplare als angeblich zurückgegeben markiert wird"
+
+# Circulation > Checkout policy
+msgid ""
 "circulation.pref#MarkLostItemsAsReturned# when receiving payment for the item"
 msgstr "bei Bezahlung der Gebühr"
 
@@ -8745,8 +8751,7 @@ msgstr "Erlaube nicht,"
 
 # OPAC > Privacy
 msgid ""
-"opac.pref#OPACHoldsHistory# patrons to see what books they have place holds "
-"in the past."
+"opac.pref#OPACHoldsHistory# patrons to see the list of their past holds."
 msgstr ""
 "dass Benutzer sehen, welche Vormerkungen Sie in der Vergangenheit gemacht "
 "haben."
@@ -10179,6 +10184,22 @@ msgstr ""
 "dass die Benutzer ihre E-Mail-Adresse ein zweites Mal eingeben, um diese zu "
 "bestätigen."
 
+# OPAC > Self registration and modification > PatronSelfRegistrationDefaultCategory
+msgid ""
+"opac.pref#PatronSelfRegistrationDefaultCategory# <br><strong>WARNING: Do not "
+"use a regular patron category for self registration.</strong> If the "
+"<code>misc/cronjobs/cleanup_database.pl</code> cronjob is setup to delete "
+"unverified and unfinished OPAC self registrations, it will permanently and "
+"unrecoverably delete all patrons that have registered more than "
+"PatronSelfRegistrationExpireTemporaryAccountsDelay days ago."
+msgstr ""
+"<br><strong>WARNUNG: Verwenden Sie keinen normalen Benutzertyp für die "
+"Selbstregistrierung.</strong> Wenn der Cronjob "
+"<code>misc/cronjobs/cleanup_database.pl</code> aktiviert ist, um nicht "
+"verifizierte und nicht abgeschlossene Anmeldungen zu löschen, löscht dieser "
+"unwiederbringlich alle Benutzer, die sich vor mehr "
+"PatronSelfRegistrationExpireTemporaryAccountsDelay angemeldet haben."
+
 # OPAC > Self registration and modification
 msgid ""
 "opac.pref#PatronSelfRegistrationDefaultCategory# Use the patron category code"
@@ -10324,12 +10345,12 @@ msgid ""
 msgstr "Nach Zahlung oder Stornierung, sollte Paypal zurück"
 
 # OPAC > Payments
-msgid "opac.pref#PayPalReturnURL# OPAC's alias"
-msgstr "zum OPAC-Alias"
-
-# OPAC > Payments
 msgid "opac.pref#PayPalReturnURL# OPACBaseURL"
 msgstr "zur OPACBaseURL"
+
+# OPAC > Payments
+msgid "opac.pref#PayPalReturnURL# configured return URL"
+msgstr "konfigurierte Rückkehr-URL"
 
 # OPAC > Payments
 msgid "opac.pref#PayPalSignature# ."
@@ -12026,9 +12047,8 @@ msgid ""
 "elastic.co/guide/en/elasticsearch/reference/current/query-dsl-multi-match-"
 "query.html#type-cross-fields"
 msgstr ""
-"Dokumentation unter "
-"https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-"
-"multi-match-query.html#type-cross-fields"
+"Dokumentation unter https://www.elastic.co/guide/en/elasticsearch/reference/"
+"current/query-dsl-multi-match-query.html#type-cross-fields"
 
 # Searching > Features > ElasticsearchCrossFields
 msgid ""
@@ -13756,3 +13776,7 @@ msgid ""
 "reports web service."
 msgstr ""
 "Zeilen für einen Report, der über den Reports Web Service ausgeführt wird."
+
+# OPAC > Payments
+#~ msgid "opac.pref#PayPalReturnURL# OPAC's alias"
+#~ msgstr "zum OPAC-Alias"

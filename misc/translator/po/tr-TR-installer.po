@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 20.11\n"
-"PO-Revision-Date: 2021-01-04 08:35+0000\n"
+"PO-Revision-Date: 2021-02-03 11:53+0000\n"
 "Last-Translator: Onur Erdem <onurerdem@sdu.edu.tr>\n"
 "Language-Team: Koha Translation Team\n"
 "Language: tr\n"
@@ -10,7 +10,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.8\n"
-"X-POOTLE-MTIME: 1609749315.138242\n"
+"X-POOTLE-MTIME: 1612353210.852367\n"
 "X-Pootle-Path: /tr/20.11/tr-TR-installer.po\n"
 "X-Pootle-Revision: 1\n"
 
@@ -2860,9 +2860,17 @@ msgstr "Aşağıdaki materyalin iade tarihi gelmiştir:"
 msgid "The following item will be due soon:"
 msgstr "Aşağıdaki materyalin süresi yakında bitecektir:"
 
+#: installer/data/mysql/en/mandatory/sample_notices.yml:letter:1:row:15:mul:3
+msgid "The following item(s) are now due:"
+msgstr "Aşağıdaki materyalin iade tarihi gelmiştir: "
+
 #: installer/data/mysql/en/mandatory/sample_notices.yml:letter:1:row:19:mul:14
 msgid "The following item(s) is/are currently overdue:"
 msgstr "Aşağıdaki materyal/materallerin süresi dolmuştur:"
+
+#: installer/data/mysql/en/mandatory/sample_notices.yml:letter:1:row:22:mul:3
+msgid "The following item(s) will be due soon:"
+msgstr "Aşağıdaki materyalin süresi yakında bitecektir: "
 
 #: installer/data/mysql/en/mandatory/sample_notices.yml:letter:1:row:59:mul:20
 msgid "The following item, %s, has correctly been renewed and is now due on %s"
@@ -2909,12 +2917,16 @@ msgid ""
 "The patron for interlibrary loans request %s, with the following details, "
 "has modified this ILL request:"
 msgstr ""
+"Kütüphaneler arası ödünç verme talebi %s için kullanıcı, aşağıdaki "
+"ayrıntılarla birlikte bu ILL talebini değiştirdi: "
 
 #: installer/data/mysql/en/mandatory/sample_notices.yml:letter:1:row:29:mul:1
 msgid ""
 "The patron for interlibrary loans request %s, with the following details, "
 "has requested cancellation of this ILL request:"
 msgstr ""
+"Kütüphaneler arası ödünç verme talebi %s için kullanıcı, aşağıdaki "
+"ayrıntılarla birlikte bu ILL talebinin iptalini istedi: "
 
 #: installer/data/mysql/en/mandatory/sample_notices.yml:letter:1:row:55:mul:7
 msgid "The reason given is: %s"
@@ -3154,6 +3166,8 @@ msgid ""
 "We would like to request an interlibrary loan for a title matching the "
 "following description:"
 msgstr ""
+"Aşağıdaki açıklamayla eşleşen bir kitap için kütüphaneler arası ödünç talep "
+"etmek istiyoruz: "
 
 #: installer/data/mysql/en/optional/sample_news.yml:opac_news:1:row:1
 msgid "Welcome to Koha"
@@ -3235,14 +3249,6 @@ msgstr ""
 "You cannot become thorough Americans if you think of yourselves in groups. "
 "America does not consist of groups. A man who thinks of himself as belonging "
 "to a particular national group in America has not yet become an American."
-
-#: installer/data/mysql/en/mandatory/sample_notices.yml:letter:1:row:15:mul:1
-msgid "You have %s items due"
-msgstr "İade zamanı gelen %s kitabınız var"
-
-#: installer/data/mysql/en/mandatory/sample_notices.yml:letter:1:row:22:mul:1
-msgid "You have %s items due soon"
-msgstr "Yakında süresi dolacak %s kitabınız var"
 
 #: installer/data/mysql/en/mandatory/sample_notices.yml:letter:1:row:47:mul:3
 msgid "You have a hold available for pickup as of %s:"
@@ -3338,6 +3344,12 @@ msgstr "{X} {Y}"
 #, fuzzy
 #~ msgid "Notification of hold cancellation"
 #~ msgstr "Alma ile ilgili bildirim"
+
+#~ msgid "You have %s items due"
+#~ msgstr "İade zamanı gelen %s kitabınız var"
+
+#~ msgid "You have %s items due soon"
+#~ msgstr "Yakında süresi dolacak %s kitabınız var"
 
 #, fuzzy
 #~ msgid "Your hold for %s was canceled for the following reason: %s"

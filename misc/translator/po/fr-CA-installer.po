@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 20.11\n"
-"PO-Revision-Date: 2020-12-17 18:40+0000\n"
+"PO-Revision-Date: 2021-02-02 20:31+0000\n"
 "Last-Translator: Caroline Cyr-La-Rose <caroline.cyr-la-rose@inlibro.com>\n"
 "Language-Team: Koha Translation Team\n"
 "Language: fr_CA\n"
@@ -10,7 +10,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Generator: Pootle 2.8\n"
-"X-POOTLE-MTIME: 1608230455.475156\n"
+"X-POOTLE-MTIME: 1612297917.473204\n"
 "X-Pootle-Path: /fr_CA/20.11/fr-CA-installer.po\n"
 "X-Pootle-Revision: 1\n"
 
@@ -196,8 +196,7 @@ msgstr "Trois fois par semaine (3/semaine)"
 msgid ""
 "A hold has been placed on the following item : %s (%s) by the user %s %s "
 "(%s)."
-msgstr ""
-"Le document suivant a été réservé : %s (%s) par l'utilisateur %s %s (%s)."
+msgstr "Le document %s (%s) a été réservé par l'utilisateur %s %s (%s)."
 
 #: installer/data/mysql/en/mandatory/sample_notices.yml:letter:1:row:57:mul:3
 msgid "A new suggestion has been assigned to you: %s."
@@ -659,11 +658,11 @@ msgstr "Emprunts de %s %s %s %s %s"
 
 #: installer/data/mysql/en/mandatory/sample_notices.yml:letter:1:row:13
 msgid "Checkout note"
-msgstr "Notes sur un document en prêt"
+msgstr "Note sur un document en prêt"
 
 #: installer/data/mysql/en/mandatory/sample_notices.yml:letter:1:row:13
 msgid "Checkout note on item set by patron"
-msgstr "Notes d'un utilisateur sur un document en prêt"
+msgstr "Note d'un utilisateur sur un document en prêt"
 
 #: installer/data/mysql/en/mandatory/sample_notices.yml:letter:1:row:12
 msgid "Checkouts"
@@ -2042,7 +2041,7 @@ msgstr "Présentoir"
 
 #: installer/data/mysql/en/mandatory/sample_notices.yml:letter:1:row:24:mul:10
 msgid "On loan?: %s"
-msgstr "Prêté? : %s"
+msgstr "Prêté? %s"
 
 #: installer/data/mysql/en/optional/marc21_holdings_coded_values.yml:authorised_values:1:row:103
 msgid "On order"
@@ -2842,9 +2841,19 @@ msgstr "Le prêt de ce document arrive à échéance aujourd'hui :"
 msgid "The following item will be due soon:"
 msgstr "Le prêt de ce document arrivera à échéance bientôt :"
 
+#: installer/data/mysql/en/mandatory/sample_notices.yml:letter:1:row:15:mul:3
+#, fuzzy
+msgid "The following item(s) are now due:"
+msgstr "Le prêt de ce document arrive à échéance aujourd'hui :"
+
 #: installer/data/mysql/en/mandatory/sample_notices.yml:letter:1:row:19:mul:14
 msgid "The following item(s) is/are currently overdue:"
 msgstr "L'(es) exemplaire(s) suivant(s) sont en retard :"
+
+#: installer/data/mysql/en/mandatory/sample_notices.yml:letter:1:row:22:mul:3
+#, fuzzy
+msgid "The following item(s) will be due soon:"
+msgstr "Le prêt de ce document arrivera à échéance bientôt :"
 
 #: installer/data/mysql/en/mandatory/sample_notices.yml:letter:1:row:59:mul:20
 msgid "The following item, %s, has correctly been renewed and is now due on %s"
@@ -3221,14 +3230,6 @@ msgid ""
 "to a particular national group in America has not yet become an American."
 msgstr ""
 
-#: installer/data/mysql/en/mandatory/sample_notices.yml:letter:1:row:15:mul:1
-msgid "You have %s items due"
-msgstr "Vous avez %s prêts qui arrivent à échéance aujourd'hui"
-
-#: installer/data/mysql/en/mandatory/sample_notices.yml:letter:1:row:22:mul:1
-msgid "You have %s items due soon"
-msgstr "Vous avez %s prêts qui arrivent à échéance bientôt"
-
 #: installer/data/mysql/en/mandatory/sample_notices.yml:letter:1:row:47:mul:3
 msgid "You have a hold available for pickup as of %s:"
 msgstr "Votre réservation est disponible depuis le %s :"
@@ -3324,6 +3325,12 @@ msgstr "{X} {Y}"
 
 #~ msgid "Notification of hold cancellation"
 #~ msgstr "Avis d'annulation de réservation"
+
+#~ msgid "You have %s items due"
+#~ msgstr "Vous avez %s prêts qui arrivent à échéance aujourd'hui"
+
+#~ msgid "You have %s items due soon"
+#~ msgstr "Vous avez %s prêts qui arrivent à échéance bientôt"
 
 #~ msgid "Your hold for %s was canceled for the following reason: %s"
 #~ msgstr "Votre réservation de %s a été annulée pour la raison suivante : %s"

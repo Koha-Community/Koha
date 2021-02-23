@@ -2,10 +2,10 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Koha 20.11\n"
 "POT-Creation-Date: 2015-04-15 09:32-0300\n"
-"PO-Revision-Date: 2020-11-28 13:25+0000\n"
-"Last-Translator: Tomás Cohen Arazi <tomascohen@gmail.com>\n"
-"Language-Team: Koha Translation Team <koha-translate@lists.koha-community."
-"org>\n"
+"PO-Revision-Date: 2021-02-22 21:36+0000\n"
+"Last-Translator: Héctor Castro <hector.hecaxmmx@gmail.com>\n"
+"Language-Team: Koha Translation Team <koha-translate@lists.koha-"
+"community.org>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.8\n"
 "X-Poedit-SourceCharset: UTF-8\n"
-"X-POOTLE-MTIME: 1606569948.504214\n"
+"X-POOTLE-MTIME: 1614029761.058864\n"
 "X-Pootle-Path: /es/20.05/es-ES-pref.po\n"
 "X-Pootle-Revision: 1\n"
 
@@ -966,11 +966,11 @@ msgstr ""
 msgid ""
 "admin.pref#UsageStats# <br><strong>NOTE:</strong> Use the <a href=\"/cgi-bin/"
 "koha/admin/usage_statistics.pl\">dedicated configuration page</a> to edit "
-"the statisics you share."
+"the statistics you share."
 msgstr ""
-"<br><strong>NOTA:</strong> Utilice la <a href=\"/cgi-bin/koha/admin/"
-"usage_statistics.pl\">página de configuración administrativa dedicada</a> "
-"para editar las estadísticas que desea compartir."
+"pref.admin#UsodeEstadísticas#<br><strong>NOTA:</strong> Utilice la <a href"
+"=\"/cgi-bin/koha/admin/usage_statistics.pl\">página dedicada de "
+"configuración </a> para editar las estadísticas que comparte."
 
 # Administration > Share anonymous usage statistics
 msgid ""
@@ -2014,7 +2014,7 @@ msgstr "No"
 # Administration > Interface options
 msgid ""
 "admin.pref#noItemTypeImages# Show itemtype icons in the staff interface: "
-msgstr "Mostrar los íconos de itemtype en la interfaz administrativa:"
+msgstr "Mostrar los íconos de itemtype en la intranet:"
 
 # Administration > Interface options
 msgid "admin.pref#noItemTypeImages# Yes"
@@ -2600,8 +2600,7 @@ msgstr "el editor de catalogación avanzado."
 msgid ""
 "cataloguing.pref#ISBD# Use the following as the staff interface ISBD "
 "template:"
-msgstr ""
-"Utilizar la siguiente como plantilla ISBD en la interfáz administrativa:"
+msgstr "Utilizar la siguiente como plantilla ISBD en la intranet:"
 
 # Cataloging > Display
 msgid ""
@@ -2802,9 +2801,8 @@ msgid ""
 "(UNIMARC)."
 msgstr ""
 "campos de nota en las pestañas 'Notas de título' y 'Descripción' en las "
-"páginas de vista detallada del OPAC e interfaz administrativa. Utilice una "
-"coma para separar múltiples campos. Ejemplos: 500,502 (MARC21); 300,328 "
-"(UNIMARC)."
+"páginas de vista detallada del OPAC e intranet. Utilice una coma para "
+"separar múltiples campos. Ejemplos: 500,502 (MARC21); 300,328 (UNIMARC)."
 
 # Cataloging > Display
 msgid ""
@@ -4664,9 +4662,7 @@ msgstr "."
 msgid ""
 "circulation.pref#HoldsSplitQueue# In the staff interface, split the holds "
 "queue into separate tables by"
-msgstr ""
-"En la interfaz administrativa, separar la cola de reservas en tablas "
-"separadas por"
+msgstr "En la intranet, separar la cola de reservas en tablas separadas por"
 
 # Circulation > Holds policy
 msgid "circulation.pref#HoldsSplitQueue# hold item type"
@@ -4983,6 +4979,9 @@ msgid ""
 "circulation.pref#ManInvInNoissuesCharge# custom debit type charges when "
 "summing up charges for limit set in the noissuescharge system preference."
 msgstr ""
+"pref.circulación#ManIncInNoissuesCharge# personalizar los tipos de cargos de "
+"debito cuando se suman todos los cargos a un limite fijo en el sistema de "
+"preferencia noproblemasdecargos."
 
 # Circulation > Checkout policy
 msgid "circulation.pref#MarkLostItemsAsReturned# ."
@@ -5020,6 +5019,14 @@ msgstr "al catalogar un ítem"
 
 # Circulation > Checkout policy
 msgid ""
+"circulation.pref#MarkLostItemsAsReturned# when marking an item as a return "
+"claim"
+msgstr ""
+"pref.circulación#MarcarEjemplaresPerdidosComoDevueltos# al marcar un "
+"ejemplar como una reclamación de devolución"
+
+# Circulation > Checkout policy
+msgid ""
 "circulation.pref#MarkLostItemsAsReturned# when receiving payment for the item"
 msgstr "cuando reciba el pago por el ítem"
 
@@ -5042,24 +5049,32 @@ msgid ""
 "from checking out if the patron has guarantors and those guarantor's "
 "guarantees owing in total more than"
 msgstr ""
+"pref.circulación#SinProblemaCargarGaranteConGarantias#Prevenir a un usuario "
+"de prestar si el usuario tiene garantes y esos garantes deben en total más de"
 
 # Circulation > Checkout policy
 msgid ""
 "circulation.pref#NoIssuesChargeGuarantorsWithGuarantees# [% local_currency "
 "%] in fines."
 msgstr ""
+"circulation.pref#NoIssuesChargeGuarantorsWithGuarantees#[% local_currency %] "
+"en multas."
 
 # Circulation > Fines Policy
 msgid ""
 "circulation.pref#NoRefundOnLostReturnedItemsAge# Don't refund lost fees if a "
 "lost item is checked in more than"
 msgstr ""
+"pre.circulación#NoRefundOnLostReturnedItemsAge# No reembolse los cargos por "
+"perdida si el ejemplar perdido es devuelto en más de "
 
 # Circulation > Fines Policy
 msgid ""
 "circulation.pref#NoRefundOnLostReturnedItemsAge# days after it was marked "
 "lost."
 msgstr ""
+"pref.circulación#NoRefundOnLostReturnedItemsAge# días después de marcarse "
+"perdido."
 
 # Circulation > Checkout policy
 msgid ""
@@ -5087,6 +5102,8 @@ msgstr "tiempo exacto."
 msgid ""
 "circulation.pref#NoticeBcc# Send all notices as a BCC to this email address:"
 msgstr ""
+"pref.circulación#NoticeBcc# Mandar todas las notificaciones como BCC a este "
+"correo electrónico:"
 
 # Circulation > Interface
 msgid "circulation.pref#NoticeCSS# Include the stylesheet at"
@@ -5097,6 +5114,8 @@ msgid ""
 "circulation.pref#NoticeCSS# on notices. (This should be a complete URL, "
 "starting with <code>http://</code>)"
 msgstr ""
+"pref.circulación#NoticeCSS# en notificaciones. (Este debe ser un URL "
+"completo, empezando con <code>http://</code>)"
 
 # Circulation > Holds policy
 msgid "circulation.pref#OPACAllowHoldDateInFuture# Allow"
@@ -5138,10 +5157,12 @@ msgstr "Si un usuario debe más que el valor de OPACFineNoRenewals,"
 # Circulation > Checkout policy
 msgid "circulation.pref#OPACFineNoRenewalsBlockAutoRenew# allow"
 msgstr ""
+"pref.circulación#OPACMultaNoRenovacionesBloquearAutoRenovación# permitir "
 
 # Circulation > Checkout policy
 msgid "circulation.pref#OPACFineNoRenewalsBlockAutoRenew# block"
 msgstr ""
+"pref.circulación#OPACMultaNoRenovacionesBloquearAutoRenovación# bloquear"
 
 # Circulation > Checkout policy
 msgid "circulation.pref#OPACFineNoRenewalsBlockAutoRenew# their auto-renewals."
@@ -5160,6 +5181,8 @@ msgid ""
 "circulation.pref#OPACHoldsIfAvailableAtPickup# to pickup holds at libraries "
 "where the item is available."
 msgstr ""
+"pref.circulación#OPACReservacionesSiDisponiblesAlRecoger# para recoger "
+"reservaciones en las bibliotecas donde el ejemplar este disponible. "
 
 # Circulation > Holds policy
 msgid ""
@@ -5172,6 +5195,9 @@ msgid ""
 "circulation.pref#OPACHoldsIfAvailableAtPickupExceptions# Patron categories "
 "not affected by OPACHoldsIfAvailableAtPickup:"
 msgstr ""
+"pref.circulación#OPACReservacionesSiDisponibleAlRecogerExcepciones# Las "
+"categorias de Usuarios no afectadas por "
+"OPACReservacionesSiDisponblesAlRecoger: "
 
 # Circulation > Checkout policy
 msgid "circulation.pref#OnSiteCheckoutAutoCheck# Don't enable"
@@ -5186,6 +5212,8 @@ msgid ""
 "circulation.pref#OnSiteCheckoutAutoCheck# on-site checkout by default if "
 "last checkout was an on-site one."
 msgstr ""
+"pref.circulación#EnSitioPréstamoAutoPresta# préstamo en-sitio por defecto sí "
+"el último préstamo fué en-sitio."
 
 # Circulation > Checkout policy
 msgid "circulation.pref#OnSiteCheckouts# Disable"
@@ -5212,20 +5240,24 @@ msgid ""
 "circulation.pref#OnSiteCheckoutsForce# the on-site checkout for all cases "
 "(even if a patron is debarred, etc.)."
 msgstr ""
+"pref.circulación#EnSitioPréstamosForzar# el préstamo en-sitio para todos los "
+"casos (incluso si el usuario está inhabilitado, etc.)."
 
 # Circulation > Checkout policy
 msgid "circulation.pref#OverdueNoticeCalendar# Ignore calendar"
-msgstr ""
+msgstr "pref.circulación#CalendarioDeAvisosDeVencimiento# Ignorar calendario"
 
 # Circulation > Checkout policy
 msgid "circulation.pref#OverdueNoticeCalendar# Use calendar"
-msgstr ""
+msgstr "pref.circulación#CalendarioDeAvisosDeVencimiento# Usar calendario"
 
 # Circulation > Checkout policy
 msgid ""
 "circulation.pref#OverdueNoticeCalendar# when working out the period for "
 "overdue notices."
 msgstr ""
+"pref.circulación#CalendarioDeAvisoDeVencimiento# al calcular el período de "
+"las notificaciones atrasadas. "
 
 # Circulation > Checkout policy
 msgid "circulation.pref#OverduesBlockCirc# Ask for confirmation"
@@ -5244,6 +5276,8 @@ msgid ""
 "circulation.pref#OverduesBlockCirc# when checking out to a patron that has "
 "overdues outstanding."
 msgstr ""
+"circulación.pref#VencidosBloquearCirc# cuando haga préstamos al usuario que "
+"tenga cargos sin pagar."
 
 # Circulation > Checkout policy
 msgid ""
@@ -5300,6 +5334,12 @@ msgid ""
 "full list of overdue items. Set to 0 to include all overdue items in the "
 "notice, no matter how many there are."
 msgstr ""
+"circulación.pref#PrintNoticesMaxLines# líneas de ejemplares en un aviso de "
+"retraso impreso. Si el número de ejemplares es mayor a este número, el aviso "
+"finalizará con una advertencia pidiendo al usuario que revise su cuenta en "
+"línea para una lista completa de los ejemplares retrasados. Poner en 0 para "
+"incluir todos los ejemplares retrasados en el aviso, no importando la "
+"cantidad que sean. "
 
 # Circulation > Fines Policy
 msgid ""
@@ -5307,74 +5347,86 @@ msgid ""
 "'note', table 'accountlines' when the processing fee (defined for the item "
 "type) is applied:"
 msgstr ""
+"circulation.pref.#ProcessingFeeNote# Texto a ser registrado en la columna "
+"'note', de la tabla 'accountlines' cuando el cargo de procesamiento ("
+"definido para el tipo de ejemplar) es aplicado."
 
 # Circulation > Interface
 msgid "circulation.pref#RecordLocalUseOnReturn# Don't record"
-msgstr "No guardar"
+msgstr "circulation.pref#RecordLocalUseOnReturn# No registrar"
 
 # Circulation > Interface
 msgid "circulation.pref#RecordLocalUseOnReturn# Record"
-msgstr "Guardar"
+msgstr "circulation.pref#RecordLocalUseOnReturn# Registrar"
 
 # Circulation > Interface
 msgid ""
 "circulation.pref#RecordLocalUseOnReturn# local use when an unissued item is "
 "checked in."
-msgstr "como de uso local cuando un ítem no prestado es devuelto."
+msgstr ""
+"circulation.pref#RecordLocalUseOnReturn# uso local cuando un ejemplar no se "
+"ha publicado y es devuelto."
 
 # Circulation > Checkout policy
-#, fuzzy
 msgid "circulation.pref#RecordStaffUserOnCheckout# When checking out an item, "
-msgstr "Cuando se preste un ítem con costos de alquiler, "
+msgstr ""
+"circulation.pref#RecordStaffUserOnCheckout# Cuando se preste un ejemplar,"
 
 # Circulation > Interface
-#, fuzzy
 msgid "circulation.pref#RecordStaffUserOnCheckout# don't record"
-msgstr "No guardar"
+msgstr "circulation.pref#RecordStaffUserOnCheckout# No registrar "
 
 # Circulation > Interface
-#, fuzzy
 msgid "circulation.pref#RecordStaffUserOnCheckout# record"
-msgstr "Guardar"
+msgstr "circulation.pref#RecordStaffUserOnCheckout# registrar"
 
 # Circulation > Checkout policy
-#, fuzzy
 msgid ""
 "circulation.pref#RecordStaffUserOnCheckout# the user who checked out the "
 "item."
-msgstr "la característica de préstamos in situ."
+msgstr ""
+"circulation.pref#RecordStaffUserOnCheckout# el usuario quien tomo en "
+"préstamo el ejemplar."
 
 # Circulation > Fines Policy
 msgid ""
 "circulation.pref#RefundLostOnReturnControl# If a lost item is returned, "
 "apply the refunding rules defined for the"
 msgstr ""
+"circulation.pref#RefundLostOnReturnControl# Si un ejemplar perdido es "
+"devuelto, aplicar las reglas de reembolso como se define por el"
 
 # Circulation > Fines Policy
 msgid "circulation.pref#RefundLostOnReturnControl# check-in library."
-msgstr "biblioteca que recibe."
+msgstr "circulation.pref#RefundLostOnReturnControl# biblioteca que recibe."
 
 # Circulation > Fines Policy
 msgid "circulation.pref#RefundLostOnReturnControl# item's holding library."
 msgstr ""
+"circulation.pref#RefundLostOnReturnControl# biblioteca de reserva de "
+"ejemplares. "
 
 # Circulation > Fines Policy
 msgid "circulation.pref#RefundLostOnReturnControl# item's home library."
 msgstr ""
+"circulation.pref#RefundLostOnReturnControl# biblioteca de origen del ejemplar"
 
 # Circulation > Checkout policy
 msgid ""
 "circulation.pref#RenewAccruingItemInOpac# If a patron pays off all fines on "
 "an overdue item that is accruing fines in the OPAC via a payment plugin,"
 msgstr ""
+"circulation.pref#RenewAccruingItemInOpac# Si el usuario paga todas las "
+"multas en el ejemplar vencido que está acumulando cargos en el OPAC a través "
+"de un plugin de pago,"
 
 # Circulation > Checkout policy
 msgid "circulation.pref#RenewAccruingItemInOpac# don't renew"
-msgstr ""
+msgstr "circulation.pref#RenewAccruingItemInOpac# no renovar"
 
 # Circulation > Checkout policy
 msgid "circulation.pref#RenewAccruingItemInOpac# renew"
-msgstr ""
+msgstr "circulation.pref#RenewAccruingItemInOpac# renovar"
 
 # Circulation > Checkout policy
 msgid ""
@@ -5382,20 +5434,25 @@ msgid ""
 "system preference \"RenewalPeriodBase\" is set to \"due date\", renewed "
 "items may still be overdue."
 msgstr ""
+"circulation.pref#RenewAccruingItemInOpac# el ejemplar automaticamente. Si el "
+"sistema de preferencia \"RenewalPeriodBase\" se ajusta a \"due date\", "
+"ejemplares renovados pueden estar todavia vencidos."
 
 # Circulation > Checkout policy
 msgid ""
 "circulation.pref#RenewAccruingItemWhenPaid# If a patron pays off all fines "
 "on an overdue item that is accruing fines,"
 msgstr ""
+"circulation.pref#RenewAccruingItemWhenPaid# Si un usuario paga todas sus "
+"multas en un ejemplar vencido que esta acumulando cargos,"
 
 # Circulation > Checkout policy
 msgid "circulation.pref#RenewAccruingItemWhenPaid# don't renew"
-msgstr ""
+msgstr "circulation.pref#RenewAccruingItemWhenPaid# no renovar"
 
 # Circulation > Checkout policy
 msgid "circulation.pref#RenewAccruingItemWhenPaid# renew"
-msgstr ""
+msgstr "circulation.pref#RenewAccruingItemWhenPaid# renovar"
 
 # Circulation > Checkout policy
 msgid ""
@@ -5403,94 +5460,115 @@ msgid ""
 "system preference \"RenewalPeriodBase\" is set to \"due date\", renewed "
 "items may still be overdue."
 msgstr ""
+"circulation.pref#RenewAccruingItemInOpac# el ejemplar automaticamente. Si el "
+"sistema de preferencia \"RenewalPeriodBase\" se ajusta a \"due date\", "
+"ejemplares renovados pueden estar todavia vencidos."
 
 # Circulation > Checkout policy
 msgid ""
 "circulation.pref#RenewalPeriodBase# When renewing checkouts, base the new "
 "due date on"
-msgstr "Cuando se renueven préstamos, basar la fecha de vencimiento en"
+msgstr ""
+"circulation.pref#RenewalPeriodBase#Cuando se renueven los préstamos, base la "
+"nueva fecha de vencimiento en"
 
 # Circulation > Checkout policy
 msgid "circulation.pref#RenewalPeriodBase# the current date."
-msgstr "la fecha actual."
+msgstr "circulation.pref#RenewalPeriodBase# la fecha actual."
 
 # Circulation > Checkout policy
 msgid "circulation.pref#RenewalPeriodBase# the old due date of the checkout."
-msgstr "la vieja fecha de vencimiento del préstamo."
+msgstr ""
+"circulation.pref#RenewalPeriodBase# la vieja fecha de vencimiento del "
+"préstamo."
 
 # Circulation > Checkout policy
 msgid "circulation.pref#RenewalSendNotice# Don't send"
-msgstr "No envíe"
+msgstr "circulation.pref#RenewalSendNotice# No envíe"
 
 # Circulation > Checkout policy
 msgid "circulation.pref#RenewalSendNotice# Send"
-msgstr "Envíe"
+msgstr "circulation.pref#RenewalSendNotice# Enviar"
 
 # Circulation > Checkout policy
 msgid ""
 "circulation.pref#RenewalSendNotice# a renewal notice according to patron's "
 "messaging preferences for 'Item checkout'."
 msgstr ""
+"circulation.pref#RenewalSendNotice# una notificación de renovación de "
+"acuerdo a las preferencias de mensajes del usuario para un 'ejemplar en "
+"préstamo'."
 
 # Circulation > Checkout policy
 msgid ""
 "circulation.pref#RentalFeesCheckoutConfirmation# When checking out an item "
 "with rental fees, "
-msgstr "Cuando se preste un ítem con costos de alquiler, "
+msgstr ""
+"circulation.pref#RentalFeesCheckoutConfirmation# Cuando se preste un "
+"ejemplar con costos de alquiler, "
 
 # Circulation > Checkout policy
 msgid "circulation.pref#RentalFeesCheckoutConfirmation# ask"
-msgstr "pregunte"
+msgstr "circulation.pref#RentalFeesCheckoutConfirmation# pregunte"
 
 # Circulation > Checkout policy
 msgid "circulation.pref#RentalFeesCheckoutConfirmation# don't ask"
-msgstr ""
+msgstr "circulation.pref#RentalFeesCheckoutConfirmation# no preguntes"
 
 # Circulation > Checkout policy
 msgid "circulation.pref#RentalFeesCheckoutConfirmation# for confirmation."
-msgstr "para confirmación."
+msgstr "circulation.pref#RentalFeesCheckoutConfirmation# para confirmación."
 
 # Circulation > Checkout policy
 msgid "circulation.pref#RentalsInNoissuesCharge# Don't include"
-msgstr "No incluya"
+msgstr "circulation.pref#RentalsInNoissuesCharge# No incluya"
 
 # Circulation > Checkout policy
 msgid "circulation.pref#RentalsInNoissuesCharge# Include"
-msgstr "Incluya"
+msgstr "circulation.pref#RentalsInNoissuesCharge# Incluya"
 
 # Circulation > Checkout policy
 msgid ""
 "circulation.pref#RentalsInNoissuesCharge# rental charges when summing up "
 "charges for limit set in the noissuescharge system preference."
 msgstr ""
+"circulation.pref#RentalsInNoissuesCharge# cargos de alquiler cuando se suman "
+"todos los cargos por el límite establecido en el sistema de preferencia "
+"noissuescharge."
 
 # Circulation > Holds policy
 msgid "circulation.pref#ReservesControlBranch# Check the"
-msgstr "Verificar la"
+msgstr "circulation.pref#ReservesControlBranch# Verificar la"
 
 # Circulation > Holds policy
 msgid "circulation.pref#ReservesControlBranch# item's home library"
-msgstr "biblioteca de origen del ítem"
+msgstr ""
+"circulation.pref#ReservesControlBranch# biblioteca de origen del ejemplar"
 
 # Circulation > Holds policy
 msgid "circulation.pref#ReservesControlBranch# patron's home library"
-msgstr "biblioteca de origen del usuario"
+msgstr ""
+"circulation.pref#ReservesControlBranch# biblioteca de origen del usuario"
 
 # Circulation > Holds policy
 msgid ""
 "circulation.pref#ReservesControlBranch# to see if the patron can place a "
 "hold on the item."
-msgstr "para ver si el usuario puede hacer una reserva del ítem."
+msgstr ""
+"circulation.pref#ReservesControlBranch# para ver si el usuario puede hacer "
+"una reserva del ejemplar."
 
 # Circulation > Holds policy
 msgid ""
 "circulation.pref#ReservesMaxPickUpDelay# Mark a hold as problematic if it "
 "has been waiting for more than"
-msgstr "Marcar una reserva como problemática si ha estado en espera por más de"
+msgstr ""
+"circulation.pref#ReservesMaxPickUpDelay# Marcar una reserva como "
+"problemática si ha estado en espera por más de"
 
 # Circulation > Holds policy
 msgid "circulation.pref#ReservesMaxPickUpDelay# days."
-msgstr "días."
+msgstr "circulation.pref#ReservesMaxPickUpDelay# días."
 
 # Circulation > Holds policy
 msgid "circulation.pref#ReservesNeedReturns# Automatically"
@@ -5498,39 +5576,39 @@ msgstr "Automáticamente"
 
 # Circulation > Holds policy
 msgid "circulation.pref#ReservesNeedReturns# Don't automatically"
-msgstr "Manualmente"
+msgstr "No automáticamente"
 
 # Circulation > Holds policy
 msgid ""
 "circulation.pref#ReservesNeedReturns# mark a hold as found and waiting when "
 "a hold is placed on a specific item and that item is already checked in."
 msgstr ""
-"marcar una reserva que se encuentra a la espera cuando se ha reservado un "
-"ítem específico y ese ítem ya se devolvió."
+"marcar una reserva como encontrada y a la espera, cuando se ha reservado un "
+"ejemplar específico y ese ejemplar ha sido devuelto."
 
 # Circulation > Checkout policy
 msgid "circulation.pref#RestrictionBlockRenewing# If a patron is restricted,"
-msgstr ""
+msgstr "Si el usuario es restringido,"
 
 # Circulation > Checkout policy
 msgid "circulation.pref#RestrictionBlockRenewing# allow"
-msgstr ""
+msgstr "permitir"
 
 # Circulation > Checkout policy
 msgid "circulation.pref#RestrictionBlockRenewing# block"
-msgstr ""
+msgstr "bloquear"
 
 # Circulation > Checkout policy
 msgid "circulation.pref#RestrictionBlockRenewing# renewing of items."
-msgstr "la renovación de ítems."
+msgstr "la renovación de ejemplares"
 
 # Circulation > Checkout policy
 msgid "circulation.pref#ReturnBeforeExpiry# Don't require"
-msgstr "No requerir"
+msgstr "No se requiere"
 
 # Circulation > Checkout policy
 msgid "circulation.pref#ReturnBeforeExpiry# Require"
-msgstr "Requerir"
+msgstr "Requerir "
 
 # Circulation > Checkout policy
 msgid ""
@@ -5538,44 +5616,48 @@ msgid ""
 "accounts expire (by restricting due dates to before the patron's expiration "
 "date)."
 msgstr ""
+"el devolver ejemplares antes que las cuentas de los usuarios se venzan (al "
+"restringir las fechas de vencimiento antes de que la fecha del usuario se "
+"venza)."
 
 # Circulation > Self check-out module
 msgid "circulation.pref#SCOAllowCheckin# Allow"
-msgstr "Permita"
+msgstr "Permitir"
 
 # Circulation > Self check-out module
 msgid "circulation.pref#SCOAllowCheckin# Don't allow"
-msgstr "No permita"
+msgstr "No permitir"
 
 # Circulation > Self check-out module
 msgid ""
 "circulation.pref#SCOAllowCheckin# patrons to return items through web-based "
 "self checkout system."
 msgstr ""
-"a los usuarios devolver ítems utilizando el sistema basado en web de auto "
-"préstamo."
+"usuarios devolver ejemplares utilizando el sistema en la red de internet de "
+"auto préstamo."
 
 # Circulation > Self check-out module
 msgid ""
 "circulation.pref#SCOMainUserBlock# Include the following HTML on the the web-"
 "based self checkout screen:"
-msgstr "Incluir el siguiente código HTML en la pantalla web de auto préstamo:"
+msgstr ""
+"Incluir el siguiente HTML en la red de internet en pantalla de auto préstamo:"
 
 # Circulation > Self check-out module
 msgid ""
 "circulation.pref#SCOUserCSS# Include the following CSS on all pages in the "
 "web-based self checkout:"
 msgstr ""
-"Incluya el siguiente CSS en todas las páginas del sistema web de auto "
-"préstamo."
+"Incluya el siguiente CSS en todas las páginas de la red de internet de auto "
+"préstamo:"
 
 # Circulation > Self check-out module
 msgid ""
 "circulation.pref#SCOUserJS# Include the following JavaScript on all pages in "
 "the web-based self checkout:"
 msgstr ""
-"Incluya el siguiente JavaScript en todas las páginas del sistema web de auto "
-"préstamo."
+"Incluya el siguiente JavaScript en todas las páginas de la red de internet "
+"de auto préstamo."
 
 # Circulation > Self check-out module
 msgid ""
@@ -5583,56 +5665,60 @@ msgid ""
 "ranges or simple IP addresses separated by spaces, like <code>192.168.1.1 "
 "192.168.0.0/24</code>.)"
 msgstr ""
+"(Dejar en blanco si no se usa. Usar áreas o direcciones IP separadas por "
+"espacios, como <code>192.168.1.1 192.168.0.0/24</code>.)"
 
 # Circulation > Self check-out module
 msgid ""
 "circulation.pref#SelfCheckAllowByIPRanges# Allow access to the self check "
 "from the following IP addresses:"
-msgstr ""
+msgstr "Permitir el acceso al auto prestar desde la siguiente direcciones IP:"
 
 # Circulation > Self check-out module
 msgid ""
 "circulation.pref#SelfCheckHelpMessage# Include the following HTML in the "
 "Help page of the web-based self checkout system:"
 msgstr ""
-"Incluya el siguiente HTML en la página de ayuda del sistema Web de auto-"
-"préstamo:"
+"Incluya el siguiente HTML en la página de ayuda en la red de inernet del "
+"sistema de auto-préstamo:"
 
 # Circulation > Self check-in module
 msgid ""
 "circulation.pref#SelfCheckInMainUserBlock# Include the following HTML on the "
 "self check-in screen:"
-msgstr "Incluya el siguiente HTML en la pantalla de la auto-devolución:"
+msgstr "Incluya el siguiente HTML en la pantalla de la auto-devolución: "
 
 # Circulation > Self check-in module
 msgid "circulation.pref#SelfCheckInModule# Don't enable"
-msgstr "No habilitar"
+msgstr "No habilitar "
 
 # Circulation > Self check-in module
 msgid "circulation.pref#SelfCheckInModule# Enable"
-msgstr "Habilitar"
+msgstr "Habilitar "
 
 # Circulation > Self check-in module
 msgid ""
 "circulation.pref#SelfCheckInModule# the standalone self check-in module "
 "(available at: /cgi-bin/koha/sci/sci-main.pl)."
 msgstr ""
+"el módulo autónomo de auto-devolución (disponible en: /cgi-bin/koha/sci/sci-"
+"main.pl). "
 
 # Circulation > Self check-in module
 msgid ""
 "circulation.pref#SelfCheckInTimeout# Reset the current self check-in screen "
 "after"
-msgstr "Restablezca la pantalla de auto-devolución actual después de"
+msgstr "Restablezca la pantalla actual de auto-devolución después de"
 
 # Circulation > Self check-in module
 msgid "circulation.pref#SelfCheckInTimeout# seconds."
-msgstr "segundos."
+msgstr "segundos. "
 
 # Circulation > Self check-in module
 msgid ""
 "circulation.pref#SelfCheckInUserCSS# Include the following CSS on all the "
 "self check-in screens:"
-msgstr "Incluya el siguiente CSS en todas las pantallas de la auto-devolución:"
+msgstr "Incluya el siguiente CSS en todas las pantallas de auto-devolución:"
 
 # Circulation > Self check-in module
 msgid ""
@@ -5640,56 +5726,63 @@ msgid ""
 "the self check-in screens:"
 msgstr ""
 "Incluya el siguiente JavaScript en todas las pantallas de la auto-devolución:"
+" "
 
 # Circulation > Self check-out module
 msgid "circulation.pref#SelfCheckReceiptPrompt# Don't show"
-msgstr "No mostrar"
+msgstr "No mostrar "
 
 # Circulation > Self check-out module
 msgid "circulation.pref#SelfCheckReceiptPrompt# Show"
-msgstr "Mostrar"
+msgstr "Mostrar "
 
 # Circulation > Self check-out module
 msgid ""
 "circulation.pref#SelfCheckReceiptPrompt# the print receipt popup dialog when "
 "self checkout is finished."
 msgstr ""
+"el cuadro emergente de diálogo de impresión de recibos cuando el auto "
+"préstamo haya terminado."
 
 # Circulation > Self check-out module
 msgid ""
 "circulation.pref#SelfCheckTimeout# Time out the current patron's web-based "
 "self checkout system login after"
-msgstr "Expire la sesión del sistema Web de auto-préstamo luego de"
+msgstr ""
+"Terminar la sesion del usuario actual en la red de internet luego de "
+"ingresar al sistema de auto-préstamo despues de"
 
 # Circulation > Self check-out module
 msgid "circulation.pref#SelfCheckTimeout# seconds."
-msgstr "segundos."
+msgstr "segundos. "
 
 # Circulation > Self check-out module
 msgid "circulation.pref#SelfCheckoutByLogin# ."
-msgstr ""
+msgstr "\n"
 
 # Circulation > Self check-out module
 msgid ""
 "circulation.pref#SelfCheckoutByLogin# Have patrons log into the web-based "
 "self checkout system with their"
 msgstr ""
+"Hacer que los usuarios entren al sistema de auto prestamo en la red de "
+"internet con sus"
 
 # Circulation > Self check-out module
 msgid "circulation.pref#SelfCheckoutByLogin# cardnumber"
-msgstr ""
+msgstr "número de tarjeta"
 
 # Circulation > Self check-out module
 msgid "circulation.pref#SelfCheckoutByLogin# username and password"
-msgstr ""
+msgstr "nombre de usuario y contraseña"
 
 # Circulation > Interface
 msgid "circulation.pref#ShowAllCheckins# Don't show"
-msgstr ""
+msgstr "No mostrar"
 
 # Circulation > Interface
 msgid "circulation.pref#ShowAllCheckins# Show"
-msgstr "Mostrar"
+msgstr "Mostrar "
 
 # Circulation > Interface
 msgid ""
@@ -5762,7 +5855,7 @@ msgstr "al personal especificar una fecha de vencimiento para la devolución."
 msgid ""
 "circulation.pref#StaffSearchResultsDisplayBranch# For search results in the "
 "staff interface, display"
-msgstr ""
+msgstr "Para los resultados de búsqueda en la intranet, muestre"
 
 # Circulation > Checkout policy
 msgid ""
@@ -5859,7 +5952,7 @@ msgstr "No permitir"
 msgid ""
 "circulation.pref#SuspendHoldsIntranet# holds to be suspended from the staff "
 "interface."
-msgstr ""
+msgstr "que las reservas sean suspendidas desde la intranet."
 
 # Circulation > Holds policy
 msgid "circulation.pref#SuspendHoldsOpac# Allow"
@@ -8657,8 +8750,7 @@ msgstr "No permitir"
 # OPAC > Privacy
 #, fuzzy
 msgid ""
-"opac.pref#OPACHoldsHistory# patrons to see what books they have place holds "
-"in the past."
+"opac.pref#OPACHoldsHistory# patrons to see the list of their past holds."
 msgstr "usuarios para ver qué libros tuvieron en préstamo en el pasado."
 
 # OPAC > Features
@@ -10044,6 +10136,16 @@ msgid ""
 "address by entering it twice."
 msgstr ""
 
+# OPAC > Self registration and modification > PatronSelfRegistrationDefaultCategory
+msgid ""
+"opac.pref#PatronSelfRegistrationDefaultCategory# <br><strong>WARNING: Do not "
+"use a regular patron category for self registration.</strong> If the "
+"<code>misc/cronjobs/cleanup_database.pl</code> cronjob is setup to delete "
+"unverified and unfinished OPAC self registrations, it will permanently and "
+"unrecoverably delete all patrons that have registered more than "
+"PatronSelfRegistrationExpireTemporaryAccountsDelay days ago."
+msgstr ""
+
 # OPAC > Self registration and modification
 msgid ""
 "opac.pref#PatronSelfRegistrationDefaultCategory# Use the patron category code"
@@ -10190,11 +10292,12 @@ msgid ""
 msgstr "Luego de un pago o cancelación, PayPal debe volver a "
 
 # OPAC > Payments
-msgid "opac.pref#PayPalReturnURL# OPAC's alias"
-msgstr "el alias del OPAC"
+msgid "opac.pref#PayPalReturnURL# OPACBaseURL"
+msgstr "la OPACBaseURL"
 
 # OPAC > Payments
-msgid "opac.pref#PayPalReturnURL# OPACBaseURL"
+#, fuzzy
+msgid "opac.pref#PayPalReturnURL# configured return URL"
 msgstr "la OPACBaseURL"
 
 # OPAC > Payments
@@ -13487,3 +13590,7 @@ msgid ""
 "web_services.pref#SvcMaxReportRows# rows of a report requested via the "
 "reports web service."
 msgstr "filas del reporte solicitado a través del web service de reportes."
+
+# OPAC > Payments
+#~ msgid "opac.pref#PayPalReturnURL# OPAC's alias"
+#~ msgstr "el alias del OPAC"

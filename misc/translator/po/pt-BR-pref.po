@@ -919,11 +919,11 @@ msgstr ""
 "linha <code>misc/cronjobsshare_usage_with_koha_community.pl</code> no "
 "cronjob. Peça ao administrador do sistema para avaliar."
 
-# Administration > Share anonymous usage statistics
+# Administration > Share anonymous usage statistics > UsageStats
 msgid ""
 "admin.pref#UsageStats# <br><strong>NOTE:</strong> Use the <a href=\"/cgi-bin/"
 "koha/admin/usage_statistics.pl\">dedicated configuration page</a> to edit "
-"the statisics you share."
+"the statistics you share."
 msgstr ""
 
 # Administration > Share anonymous usage statistics
@@ -4796,6 +4796,13 @@ msgid "circulation.pref#MarkLostItemsAsReturned# when cataloguing an item"
 msgstr "circulation.pref#MarkLostItemsAsReturned# ao catalogar um item"
 
 # Circulation > Checkout policy
+#, fuzzy
+msgid ""
+"circulation.pref#MarkLostItemsAsReturned# when marking an item as a return "
+"claim"
+msgstr "circulation.pref#MarkLostItemsAsReturned# ao catalogar um item"
+
+# Circulation > Checkout policy
 msgid ""
 "circulation.pref#MarkLostItemsAsReturned# when receiving payment for the item"
 msgstr ""
@@ -8447,8 +8454,7 @@ msgstr "Não permitir"
 # OPAC > Privacy
 #, fuzzy
 msgid ""
-"opac.pref#OPACHoldsHistory# patrons to see what books they have place holds "
-"in the past."
+"opac.pref#OPACHoldsHistory# patrons to see the list of their past holds."
 msgstr "que usuários vejam quais materiais eles emprestaram no passado."
 
 # OPAC > Features
@@ -9822,6 +9828,16 @@ msgid ""
 "address by entering it twice."
 msgstr ""
 
+# OPAC > Self registration and modification > PatronSelfRegistrationDefaultCategory
+msgid ""
+"opac.pref#PatronSelfRegistrationDefaultCategory# <br><strong>WARNING: Do not "
+"use a regular patron category for self registration.</strong> If the "
+"<code>misc/cronjobs/cleanup_database.pl</code> cronjob is setup to delete "
+"unverified and unfinished OPAC self registrations, it will permanently and "
+"unrecoverably delete all patrons that have registered more than "
+"PatronSelfRegistrationExpireTemporaryAccountsDelay days ago."
+msgstr ""
+
 # OPAC > Self registration and modification
 msgid ""
 "opac.pref#PatronSelfRegistrationDefaultCategory# Use the patron category code"
@@ -9961,11 +9977,12 @@ msgid ""
 msgstr "Após o pagamento ou cancelamento, o PayPal deve retornar ao"
 
 # OPAC > Payments
-msgid "opac.pref#PayPalReturnURL# OPAC's alias"
-msgstr "Pseudônimo ​​do OPAC"
+msgid "opac.pref#PayPalReturnURL# OPACBaseURL"
+msgstr "URL base do OPAC"
 
 # OPAC > Payments
-msgid "opac.pref#PayPalReturnURL# OPACBaseURL"
+#, fuzzy
+msgid "opac.pref#PayPalReturnURL# configured return URL"
 msgstr "URL base do OPAC"
 
 # OPAC > Payments
@@ -13232,3 +13249,7 @@ msgid ""
 "reports web service."
 msgstr ""
 "linhas de um relatório solicitado através dos relatórios do serviço web."
+
+# OPAC > Payments
+#~ msgid "opac.pref#PayPalReturnURL# OPAC's alias"
+#~ msgstr "Pseudônimo ​​do OPAC"

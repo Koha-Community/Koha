@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Koha 20.11\n"
 "POT-Creation-Date: 2013-05-02 01:29-0300\n"
-"PO-Revision-Date: 2021-01-19 23:44+0000\n"
+"PO-Revision-Date: 2021-02-16 22:17+0000\n"
 "Last-Translator: ztajoli <ztajoli@gmail.com>\n"
 "Language-Team: CILEA <z.tajoli@cineca.it>\n"
 "Language: it\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.8\n"
 "X-Poedit-SourceCharset: UTF-8\n"
-"X-POOTLE-MTIME: 1611099896.827576\n"
+"X-POOTLE-MTIME: 1613513821.177670\n"
 "X-Poedit-Basepath: ../../../versioni/master/koha-tmpl\n"
 "X-Poedit-SearchPath-0: .\n"
 "X-Pootle-Path: /it/20.05/it-IT-pref.po\n"
@@ -963,7 +963,7 @@ msgstr ""
 msgid ""
 "admin.pref#UsageStats# <br><strong>NOTE:</strong> Use the <a href=\"/cgi-bin/"
 "koha/admin/usage_statistics.pl\">dedicated configuration page</a> to edit "
-"the statisics you share."
+"the statistics you share."
 msgstr ""
 "<br><strong>NOTA:</strong> Usa la <a href=\"/cgi-bin/koha/admin/"
 "usage_statistics.pl\">pagina di configurazione dedicata</a> per indicare le "
@@ -2145,8 +2145,8 @@ msgid ""
 "Loose mode is the historical behavior and still the default."
 msgstr ""
 ". In modalità stretta i sottocampi non presenti nell'authority, verranno "
-"cancellati. In moldalità lasca verrano mantenuti. La modalità lasca è quella "
-"presente si dalle origini ed è ancora il default."
+"cancellati. In modalità lasca verranno mantenuti. La modalità lasca è quella "
+"presente sin dalle origini ed è ancora il default."
 
 # Authorities > General
 msgid "authorities.pref#AuthorityMergeMode# strict"
@@ -4989,6 +4989,12 @@ msgstr "quando si cataloga una copia"
 
 # Circulation > Checkout policy
 msgid ""
+"circulation.pref#MarkLostItemsAsReturned# when marking an item as a return "
+"claim"
+msgstr "quando si valorizza una copia come un richiamo rientrato"
+
+# Circulation > Checkout policy
+msgid ""
 "circulation.pref#MarkLostItemsAsReturned# when receiving payment for the item"
 msgstr "quando si riceve i pagamento per una copia"
 
@@ -7483,7 +7489,7 @@ msgstr " ."
 msgid ""
 "enhanced_content.pref#OverDriveWebsiteID# Authenticate using OverDrive "
 "website id #"
-msgstr "Autenticazione usando l'id OverDrive #"
+msgstr "Autenticazione usando l'id OverDrive"
 
 # Enhanced content > RecordedBooks
 msgid "enhanced_content.pref#RecordedBooksClientSecret# ."
@@ -8719,8 +8725,7 @@ msgstr "Non permettere"
 
 # OPAC > Privacy
 msgid ""
-"opac.pref#OPACHoldsHistory# patrons to see what books they have place holds "
-"in the past."
+"opac.pref#OPACHoldsHistory# patrons to see the list of their past holds."
 msgstr "agli utenti di vedere quali prenotazioni hanno fatto in passato."
 
 # OPAC > Features
@@ -10144,6 +10149,23 @@ msgid ""
 "address by entering it twice."
 msgstr "che l'utente confermi l'indirizzo di posta scrivendolo due volte."
 
+# OPAC > Self registration and modification > PatronSelfRegistrationDefaultCategory
+msgid ""
+"opac.pref#PatronSelfRegistrationDefaultCategory# <br><strong>WARNING: Do not "
+"use a regular patron category for self registration.</strong> If the "
+"<code>misc/cronjobs/cleanup_database.pl</code> cronjob is setup to delete "
+"unverified and unfinished OPAC self registrations, it will permanently and "
+"unrecoverably delete all patrons that have registered more than "
+"PatronSelfRegistrationExpireTemporaryAccountsDelay days ago."
+msgstr ""
+"<br><strong>ATTENZIONE: Non usare una normale categoria utente per "
+"l'autoregistrazione.</strong> Se il cronjob "
+"<code>misc/cronjobs/cleanup_database.pl</code> è configurato per cancellare "
+"le registrazioni dall'Opac non verficate e non finite, esso cancellerà "
+"definitivamente e senza possibile recupero tutti gli utenti che si sono "
+"registrati da più giorni di quanto indicato in "
+"PatronSelfRegistrationExpireTemporaryAccountsDelay."
+
 # OPAC > Self registration and modification
 msgid ""
 "opac.pref#PatronSelfRegistrationDefaultCategory# Use the patron category code"
@@ -10284,12 +10306,12 @@ msgid ""
 msgstr "Dopo pagamento o cancellazione, PayPal deve tornare a "
 
 # OPAC > Payments
-msgid "opac.pref#PayPalReturnURL# OPAC's alias"
-msgstr "URL alias dell'Opac"
-
-# OPAC > Payments
 msgid "opac.pref#PayPalReturnURL# OPACBaseURL"
 msgstr "OPACBaseURL"
+
+# OPAC > Payments
+msgid "opac.pref#PayPalReturnURL# configured return URL"
+msgstr "configura l?URL di ritorno"
 
 # OPAC > Payments
 msgid "opac.pref#PayPalSignature# ."
@@ -11967,9 +11989,8 @@ msgid ""
 "elastic.co/guide/en/elasticsearch/reference/current/query-dsl-multi-match-"
 "query.html#type-cross-fields"
 msgstr ""
-"Vedi la documentazione al link "
-"https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-"
-"multi-match-query.html#type-cross-fields"
+"Vedi la documentazione al link https://www.elastic.co/guide/en/elasticsearch/"
+"reference/current/query-dsl-multi-match-query.html#type-cross-fields"
 
 # Searching > Features > ElasticsearchCrossFields
 msgid ""
@@ -12285,10 +12306,10 @@ msgid ""
 "cite> and <cite>fang</cite>; Currently only affects Zebra searches. Any "
 "Elasticsearch term can be made fuzzy by adding a ~ directly after the term.)."
 msgstr ""
-"a trovare parole simili nella ricerca (per esempio cercare <cite>flang</cite>"
-" trova anche <cite>flange</cite> e <cite>fang</cite>; Attualmente riguarda "
-"solo Zebra. Su Elasstichesearch ogni parola può essere cercata un modo "
-"fuzzi, basta aggiungere una ~ subito dopo la parola.)."
+"a trovare parole simili nella ricerca (per esempio cercare <cite>flang</"
+"cite> trova anche <cite>flange</cite> e <cite>fang</cite>; Attualmente "
+"riguarda solo Zebra. Su Elasstichesearch ogni parola può essere cercata un "
+"modo fuzzi, basta aggiungere una ~ subito dopo la parola.)."
 
 # Searching > Features
 msgid "searching.pref#QueryRegexEscapeOptions# Don't escape"
@@ -13686,3 +13707,7 @@ msgid ""
 "reports web service."
 msgstr ""
 "linee di un report se richiesto attraverso il web service per i reports."
+
+# OPAC > Payments
+#~ msgid "opac.pref#PayPalReturnURL# OPAC's alias"
+#~ msgstr "URL alias dell'Opac"

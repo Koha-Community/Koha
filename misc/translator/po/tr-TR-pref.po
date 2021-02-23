@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Koha 20.11\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-06-12 12:52+0000\n"
-"PO-Revision-Date: 2021-01-22 08:52+0000\n"
+"PO-Revision-Date: 2021-02-16 10:53+0000\n"
 "Last-Translator: Onur Erdem <onurerdem@sdu.edu.tr>\n"
 "Language-Team: Koha Translation Team\n"
 "Language: tr\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.8\n"
-"X-POOTLE-MTIME: 1611305574.935063\n"
+"X-POOTLE-MTIME: 1613472802.039505\n"
 "X-Pootle-Path: /tr/20.05/tr-TR-pref.po\n"
 "X-Pootle-Revision: 1\n"
 
@@ -893,7 +893,7 @@ msgstr "Geçici dosyalar"
 
 # Administration > Share anonymous usage statistics
 msgid "admin.pref#UsageStats# ."
-msgstr ""
+msgstr "."
 
 # Administration > Share anonymous usage statistics
 msgid ""
@@ -912,11 +912,11 @@ msgstr ""
 "share_usage_with_koha_community.pl</code> cronjob'unu gerektirir. Sistem "
 "yöneticinizden ayarlamasını isteyin."
 
-# Administration > Share anonymous usage statistics
+# Administration > Share anonymous usage statistics > UsageStats
 msgid ""
 "admin.pref#UsageStats# <br><strong>NOTE:</strong> Use the <a href=\"/cgi-bin/"
 "koha/admin/usage_statistics.pl\">dedicated configuration page</a> to edit "
-"the statisics you share."
+"the statistics you share."
 msgstr ""
 
 # Administration > Share anonymous usage statistics
@@ -4785,6 +4785,13 @@ msgid "circulation.pref#MarkLostItemsAsReturned# when cataloguing an item"
 msgstr "bir materyali kataloglarken"
 
 # Circulation > Checkout policy
+#, fuzzy
+msgid ""
+"circulation.pref#MarkLostItemsAsReturned# when marking an item as a return "
+"claim"
+msgstr "bir materyali kataloglarken"
+
+# Circulation > Checkout policy
 msgid ""
 "circulation.pref#MarkLostItemsAsReturned# when receiving payment for the item"
 msgstr ""
@@ -6037,7 +6044,7 @@ msgstr ""
 msgid ""
 "circulation.pref#decreaseLoanHighHolds# . Ignore items with the following "
 "statuses when counting items:"
-msgstr ""
+msgstr ". Materyalleri sayarken aşağıdaki durumlardaki materyalleri yoksay"
 
 # Circulation > Holds policy
 msgid "circulation.pref#decreaseLoanHighHolds# Damaged"
@@ -6065,6 +6072,8 @@ msgid ""
 "also be set up in the circulation conditions and will then overwrite the "
 "setting here."
 msgstr ""
+"Azaltılmış ödünç süresi dolaşım koşullarında da ayarlanabilir ve daha sonra "
+"burada ayarın üzerine yazılır."
 
 # Circulation > Holds policy
 msgid "circulation.pref#decreaseLoanHighHolds# Withdrawn"
@@ -6131,6 +6140,11 @@ msgid ""
 "If CalculateFinesOnReturn is enabled, final fines will be calculated when an "
 "item is returned."
 msgstr ""
+"<br><strong>NOT:</strong>Cronjobs / fines.pl cronjob çalıştırılıyorsa, cron "
+"çalıştığında tahakkuk eden ve nihai cezalar hesaplanacak ve bir materyal "
+"iade edildiğinde tahakkuk eden cezalar kesinleşecektir. "
+"CalculateFinesOnReturn etkinleştirilirse, son para cezaları bir materyal "
+"iade edildiğinde hesaplanacaktır."
 
 # Circulation > Fines Policy
 msgid "circulation.pref#finesMode# Calculate and charge"
@@ -6144,7 +6158,7 @@ msgstr "Hesaplama"
 msgid ""
 "circulation.pref#finesMode# fines (when <code>cronjobs/fines.pl</code> is "
 "being run)."
-msgstr ""
+msgstr "cezalar (<code>cronjobs/fines.pl</code> çalıştırıldığında)."
 
 # Circulation > Interface
 msgid "circulation.pref#itemBarcodeFallbackSearch# Don't enable"
@@ -6179,7 +6193,7 @@ msgstr "Filtreleme"
 # Circulation > Interface
 msgid ""
 "circulation.pref#itemBarcodeInputFilter# EAN-13 or zero-padded UPC-A form"
-msgstr ""
+msgstr "EAN-13 veya sıfır dolgulu UPC-A formu "
 
 # Circulation > Interface
 msgid "circulation.pref#itemBarcodeInputFilter# Remove spaces from"
@@ -6306,13 +6320,13 @@ msgstr "Kullanma"
 
 # Circulation > Fines Policy
 msgid "circulation.pref#useDefaultReplacementCost# Use"
-msgstr ""
+msgstr "Kullan"
 
 # Circulation > Fines Policy
 msgid ""
 "circulation.pref#useDefaultReplacementCost# the default replacement cost "
 "defined for the item type."
-msgstr ""
+msgstr "Materyal türü için tanımlanan varsayılan değiştirme maliyeti."
 
 # Enhanced content
 msgid "enhanced_content.pref"
@@ -6340,7 +6354,7 @@ msgstr "Baker and Taylor"
 
 # Enhanced content > Coce cover images cache
 msgid "enhanced_content.pref Coce cover images cache"
-msgstr ""
+msgstr "Coce kapak resimleri önbelleği"
 
 # Enhanced content > Google
 msgid "enhanced_content.pref Google"
@@ -6444,7 +6458,7 @@ msgstr "İzin verme"
 msgid ""
 "enhanced_content.pref#AllowMultipleCovers# multiple images to be attached to "
 "each bibliographic record and item."
-msgstr ""
+msgstr "her bibliyografik kayda ve materyale eklenecek çoklu resimler."
 
 # Enhanced content > Amazon
 msgid "enhanced_content.pref#AmazonAssocTag# Put the associate tag"
@@ -6530,25 +6544,25 @@ msgstr ""
 msgid ""
 "enhanced_content.pref#Babeltheque_url_js# (e.g. http://www.babeltheque.com/"
 "bw_XX.js)."
-msgstr ""
+msgstr "(örn. http://www.babeltheque.com/bw_XX.js)."
 
 # Enhanced content > Babelthèque
 msgid ""
 "enhanced_content.pref#Babeltheque_url_js# Use this URL for the Babelthèque "
 "javascript file: "
-msgstr ""
+msgstr "Babelthèque javascript dosyası için bu URL'yi kullanın:"
 
 # Enhanced content > Babelthèque
 msgid ""
 "enhanced_content.pref#Babeltheque_url_update# (e.g. http://www.babeltheque."
 "com/.../file.csv.bz2)."
-msgstr ""
+msgstr "(örn. http://www.babeltheque.com/.../file.csv.bz2)."
 
 # Enhanced content > Babelthèque
 msgid ""
 "enhanced_content.pref#Babeltheque_url_update# Use this URL for the "
 "Babelthèque periodic update: "
-msgstr ""
+msgstr "Babelthèque periyodik güncellemeleri için bu URL'yi kullanın:"
 
 # Enhanced content > Baker and Taylor
 msgid ""
@@ -6580,6 +6594,9 @@ msgid ""
 "images to the OPAC and staff interface. This requires that you have entered "
 "in a username and password (which can be seen in image links)."
 msgstr ""
+"OPAC ve personel arayüzü için Baker and Taylor bağlantıları ve kapak "
+"resimleri. Bu, bir kullanıcı adı ve şifre girmenizi gerektirir (resim "
+"bağlantılarında görülebilir)."
 
 # Enhanced content > Baker and Taylor
 msgid "enhanced_content.pref#BakerTaylorEnabled# Don't add"
@@ -6655,13 +6672,13 @@ msgstr ""
 msgid ""
 "enhanced_content.pref#CustomCoverImages# custom remote URL images at the "
 "OPAC.<br/>"
-msgstr ""
+msgstr "OPAC'da özel uzak URL görüntüleri.<br/>."
 
 # Enhanced content > Local or remote cover images
 msgid ""
 "enhanced_content.pref#CustomCoverImages# custom remote URL images in the "
 "staff interface.<br/>"
-msgstr ""
+msgstr "personel istemcisinde özel uzak URL görüntüleri.<br/>"
 
 # Enhanced content > All
 msgid "enhanced_content.pref#FRBRizeEditions# Don't show"
@@ -8218,6 +8235,8 @@ msgid ""
 "opac.pref#MaxOpenSuggestions# open suggestions. Leave empty for no limit. "
 "**Note: this setting does not affect anonymous suggestions."
 msgstr ""
+"Önerileri aç. Limitsiz olması için boş bırakın. **Not: Bu ayar anonim "
+"önerileri etkilemez."
 
 # OPAC > Policy
 msgid "opac.pref#MaxTotalSuggestions# Number of total suggestions allowed"
@@ -8262,7 +8281,7 @@ msgstr "OPAC'ın bulunduğu konum"
 
 # OPAC > Features
 msgid "opac.pref#OPACDetailQRCode# Disable"
-msgstr ""
+msgstr "Devre dışı bırak"
 
 # OPAC > Features
 msgid "opac.pref#OPACDetailQRCode# Enable"
@@ -8288,19 +8307,19 @@ msgstr "URI'yi 856u alanında resim olarak görüntüleyin: "
 
 # OPAC > Appearance
 msgid "opac.pref#OPACDisplay856uAsImage# both detail and result pages"
-msgstr ""
+msgstr "Ayrıntı ve sonuç sayfalarının her ikisinde"
 
 # OPAC > Appearance
 msgid "opac.pref#OPACDisplay856uAsImage# detail page only"
-msgstr ""
+msgstr "Yalnızca ayrıntı sayfasında"
 
 # OPAC > Appearance
 msgid "opac.pref#OPACDisplay856uAsImage# neither detail or result pages"
-msgstr ""
+msgstr "Ne ayrıntı ne de sonuç sayfalarında"
 
 # OPAC > Appearance
 msgid "opac.pref#OPACDisplay856uAsImage# result page only"
-msgstr ""
+msgstr "Yalnızca sonuç sayfasında"
 
 # OPAC > Appearance
 msgid "opac.pref#OPACFallback# Use the"
@@ -8345,6 +8364,8 @@ msgid ""
 "opac.pref#OPACFineNoRenewalsIncludeCredits# outstanding/unapplied credits "
 "when applying the OPACFineNoRenewals rule to patrons."
 msgstr ""
+"kullanıcılara OPACFineNoRenewals kuralını uygularken ödenmemiş/uygulanmamış "
+"krediler."
 
 # OPAC > Features
 msgid "opac.pref#OPACFinesTab# Allow"
@@ -8359,6 +8380,7 @@ msgid ""
 "opac.pref#OPACFinesTab# patrons to access the charges tab on their account "
 "page on the OPAC."
 msgstr ""
+"Kullanıcıların OPAC'da hesabım sayfasındaki cezalar sekmesine ulaşabilmeleri."
 
 # OPAC > Appearance
 msgid "opac.pref#OPACHoldingsDefaultSortField# First column of the table"
@@ -8376,24 +8398,20 @@ msgstr "Ana kütüphane"
 msgid ""
 "opac.pref#OPACHoldingsDefaultSortField# is the default sort field for the "
 "holdings table."
-msgstr ""
+msgstr "Ayırtılanlar tablosu için varsayılan sıralama alanıdır."
 
 # OPAC > Privacy
-#, fuzzy
 msgid "opac.pref#OPACHoldsHistory# Allow"
-msgstr "İzin ver"
+msgstr "İzin ver "
 
 # OPAC > Privacy
-#, fuzzy
 msgid "opac.pref#OPACHoldsHistory# Don't allow"
-msgstr "İzin verme"
+msgstr "İzin verme "
 
 # OPAC > Privacy
-#, fuzzy
 msgid ""
-"opac.pref#OPACHoldsHistory# patrons to see what books they have place holds "
-"in the past."
-msgstr "geçmişte hangi kitapları ödünç aldıklarına göz atacak kullanıcılar."
+"opac.pref#OPACHoldsHistory# patrons to see the list of their past holds."
+msgstr "Kullanıcıların kendi ayırtma geçmişlerinin listesini görebilmeleri."
 
 # OPAC > Features
 msgid "opac.pref#OPACISBD# Use the following as the OPAC ISBD template:"
@@ -8534,6 +8552,8 @@ msgid ""
 "opac.pref#OPACReportProblem# patrons to submit problem reports for OPAC "
 "pages to the library or Koha administrator."
 msgstr ""
+"kullanıcıların OPAC sayfaları için problem raporlarını kütüphaneye veya Koha "
+"Yöneticisine göndermelerine"
 
 # OPAC > Appearance
 msgid ""
@@ -8550,7 +8570,7 @@ msgstr "OPAC içindeki arama sonuçları için, materyalin şu öğesini göster
 
 # OPAC > Appearance
 msgid "opac.pref#OPACResultsLibrary# current library"
-msgstr ""
+msgstr "geçerli kütüphane"
 
 # OPAC > Appearance
 msgid "opac.pref#OPACResultsLibrary# home library"
@@ -8742,6 +8762,8 @@ msgid ""
 "opac.pref#OPACSuggestionUnwantedFields# <br />Note: Do not make "
 "OPACSuggestionMandatoryFields unwanted fields "
 msgstr ""
+"<br />Not: OPACSuggestionMandatoryFields alanlarını istenmeyen alanlar "
+"yapmayın  "
 
 # OPAC > Policy
 msgid "opac.pref#OPACSuggestionUnwantedFields# Author"
@@ -8784,11 +8806,11 @@ msgstr ""
 
 # OPAC > Policy
 msgid "opac.pref#OPACSuggestionUnwantedFields# Publication place"
-msgstr ""
+msgstr "Yayın yeri"
 
 # OPAC > Policy
 msgid "opac.pref#OPACSuggestionUnwantedFields# Publisher name"
-msgstr ""
+msgstr "Yayıncı adı"
 
 # OPAC > Policy
 msgid "opac.pref#OPACSuggestionUnwantedFields# Quantity"
@@ -8840,6 +8862,8 @@ msgid ""
 "opac.pref#OPACUserSummary# a summary of a logged in patron's checkouts, "
 "overdues, holds and charges on the OPAC start page."
 msgstr ""
+"OPAC ana sayfasındaki oturum açmış kullanıcının ödünç alma, gecikme, "
+"ayırtılan materyaller ve para cezaları özeti."
 
 # OPAC > Policy
 msgid "opac.pref#OPACViewOthersSuggestions# Don't show"
@@ -8865,6 +8889,13 @@ msgid ""
 "file</li><li>put an URL for an external specific stylesheet.</li></"
 "ul>{langcode} will be replaced with current interface language."
 msgstr ""
+"<br />Options:<ul><li><a href=\"#\" class=\"set_syspref\" data-syspref="
+"\"OPACXSLTDetailsDisplay\" data-value=\"\">Leave empty</a> for \"no xslt\"</"
+"li><li>enter \"<a href=\"#\" class=\"set_syspref\" data-syspref="
+"\"OPACXSLTDetailsDisplay\" data-value=\"default\">default</a>\" for the "
+"default one</li><li>put a path to define a xslt file</li><li>put an URL for "
+"an external specific stylesheet.</li></ul>{langcode} geçerli ara yüz diliyle "
+"değiştirilecektir"
 
 # OPAC > Appearance
 msgid ""
@@ -8882,6 +8913,13 @@ msgid ""
 "an URL for an external specific stylesheet.</li></ul>{langcode} will be "
 "replaced with current interface language."
 msgstr ""
+"<br />Seçenekler:<ul><li><a href=\"#\" class=\"set_syspref\" data-syspref="
+"\"OPACXSLTListsDisplay\" data-value=\"\">Boş bırakın</a>\"no xslt\" için</"
+"li><li>girin \"<a href=\"#\" class=\"set_syspref\" data-syspref="
+"\"OPACXSLTListsDisplay\" data-value=\"default\">varsayılan</a>varsayılan "
+"için</li><li>xslt dosyası tanımlamak için bir yol oluşturun</li><li>harici "
+"bir stil sayfası için bir URL oluşturun.</li></ul>{langcode} mevcut arayüz "
+"dili ile değiştirilecektir"
 
 # OPAC > Appearance
 msgid ""
@@ -8900,6 +8938,13 @@ msgid ""
 "file</li><li>put an URL for an external specific stylesheet.</li></"
 "ul>{langcode} will be replaced with current interface language."
 msgstr ""
+"<br />Options:<ul><li><a href=\"#\" class=\"set_syspref\" data-syspref="
+"\"OPACXSLTResultsDisplay\" data-value=\"\">Leave empty</a> for \"no xslt\"</"
+"li><li>enter \"<a href=\"#\" class=\"set_syspref\" data-syspref="
+"\"OPACXSLTResultsDisplay\" data-value=\"default\">default</a>\" for the "
+"default one</li><li> put a path to define a xslt file</li><li>put an URL for "
+"an external specific stylesheet.</li></ul>{langcode} geçerli ara yüz diliyle "
+"değiştirilecektir"
 
 # OPAC > Appearance
 msgid ""
@@ -8950,6 +8995,13 @@ msgid ""
 "language within the Koha templates directory. A full local path is expected "
 "to start from your HTTP document root."
 msgstr ""
+"varsayılan stil sayfasından özel ayarları geçersiz kılmak için (devre dışı "
+"bırakmak için boş bırakın). Sadece bir dosya ismi, tam lokal yol ya da "
+"<code>http://</code> ile başlayan bir tam URL giriniz (dosya uzak bir "
+"sunucuda bulunuyorsa). Lütfen sadece dosya ismi girdiğinize dikkat ediniz, "
+"dosyanın her aktif tema için css alt dizininde ve Koha şablon dizini "
+"içerisinde olması gerekir. Tam lokal yolun HTTP belge kökünden başlanması "
+"beklenir."
 
 # OPAC > Advanced search options
 msgid "opac.pref#OpacAdvSearchMoreOptions# Item types"
@@ -8971,7 +9023,7 @@ msgstr "Yayın tarihi"
 msgid ""
 "opac.pref#OpacAdvSearchMoreOptions# Show search options for the expanded "
 "view:"
-msgstr ""
+msgstr "Genişletilmiş görünüm için arama seçeneklerini göster:"
 
 # OPAC > Advanced search options
 msgid "opac.pref#OpacAdvSearchMoreOptions# Sorting"
@@ -8999,7 +9051,7 @@ msgstr "Yayın tarihi"
 
 # OPAC > Advanced search options
 msgid "opac.pref#OpacAdvSearchOptions# Show search options:"
-msgstr ""
+msgstr "Arama seçeneklerini göster:"
 
 # OPAC > Advanced search options
 msgid "opac.pref#OpacAdvSearchOptions# Sorting"
@@ -9020,7 +9072,7 @@ msgstr "İzin verme"
 # OPAC > Policy
 msgid ""
 "opac.pref#OpacAllowPublicListCreation# OPAC users to create public lists."
-msgstr ""
+msgstr "OPAC kullanıcılarının genel listeler oluşturmaları."
 
 # OPAC > Policy
 msgid "opac.pref#OpacAllowSharingPrivateLists# Allow"
@@ -9034,7 +9086,7 @@ msgstr "İzin verme"
 msgid ""
 "opac.pref#OpacAllowSharingPrivateLists# OPAC users to share private lists "
 "with other patrons."
-msgstr ""
+msgstr "OPAC kullanıcılarının diğer kullanıcılarla özel liste paylaşmaları."
 
 # OPAC > Features
 msgid "opac.pref#OpacAuthorities# Allow"
@@ -9074,7 +9126,7 @@ msgstr "Etkinleştir"
 msgid ""
 "opac.pref#OpacBrowseSearch# interface for browsing all holdings "
 "(Elasticsearch only)."
-msgstr ""
+msgstr "tüm kaynaklara göz atmak için arayüz (yalnızca Elasticsearch). "
 
 # OPAC > Features
 msgid ""
@@ -9097,7 +9149,7 @@ msgstr "İzin verme"
 # OPAC > Features
 msgid ""
 "opac.pref#OpacBrowser# patrons to browse subject authorities on the OPAC."
-msgstr ""
+msgstr "Kullanıcıların OPAC'da konu otoritelerine gözatmaları."
 
 # OPAC > Features
 msgid ""
@@ -9119,7 +9171,7 @@ msgstr "Göster"
 
 # OPAC > Features
 msgid "opac.pref#OpacCloud# a subject cloud on the OPAC."
-msgstr ""
+msgstr "OPAC'da bir konu bulutu."
 
 # OPAC > Appearance
 msgid "opac.pref#OpacExportOptions# BibTeX"
@@ -9750,6 +9802,16 @@ msgid ""
 "address by entering it twice."
 msgstr ""
 
+# OPAC > Self registration and modification > PatronSelfRegistrationDefaultCategory
+msgid ""
+"opac.pref#PatronSelfRegistrationDefaultCategory# <br><strong>WARNING: Do not "
+"use a regular patron category for self registration.</strong> If the "
+"<code>misc/cronjobs/cleanup_database.pl</code> cronjob is setup to delete "
+"unverified and unfinished OPAC self registrations, it will permanently and "
+"unrecoverably delete all patrons that have registered more than "
+"PatronSelfRegistrationExpireTemporaryAccountsDelay days ago."
+msgstr ""
+
 # OPAC > Self registration and modification
 msgid ""
 "opac.pref#PatronSelfRegistrationDefaultCategory# Use the patron category code"
@@ -9884,7 +9946,7 @@ msgstr "Ödeme almak için PayPal hesabının parolası"
 
 # OPAC > Payments
 msgid "opac.pref#PayPalReturnURL# ."
-msgstr ""
+msgstr " ."
 
 # OPAC > Payments
 msgid ""
@@ -9893,16 +9955,16 @@ msgid ""
 msgstr "Ödeme veya iptalden sonra, PayPal şuraya dönmelidir"
 
 # OPAC > Payments
-msgid "opac.pref#PayPalReturnURL# OPAC's alias"
-msgstr "OPAC diğer adları"
-
-# OPAC > Payments
 msgid "opac.pref#PayPalReturnURL# OPACBaseURL"
 msgstr "OPACBaseURL"
 
 # OPAC > Payments
+msgid "opac.pref#PayPalReturnURL# configured return URL"
+msgstr "yapılandırılmış dönüş URL'si"
+
+# OPAC > Payments
 msgid "opac.pref#PayPalSignature# ."
-msgstr ""
+msgstr " ."
 
 # OPAC > Payments
 msgid ""
@@ -9912,7 +9974,7 @@ msgstr "Ödeme almak için PayPal hesabının imzası"
 
 # OPAC > Payments
 msgid "opac.pref#PayPalUser# ."
-msgstr ""
+msgstr " ."
 
 # OPAC > Payments
 msgid "opac.pref#PayPalUser# The email address to receive PayPal payments is "
@@ -9964,6 +10026,7 @@ msgid ""
 "opac.pref#RestrictedPageLocalIPs# do not need to be authenticated (comma "
 "separated - ex: '127.0.0,127.0.1')."
 msgstr ""
+"kimlik doğrulaması gerekmez (virgülle ayrılmış - örn: '127.0.0,127.0.1')."
 
 # OPAC > Restricted page
 msgid "opac.pref#RestrictedPageTitle# Use"
@@ -9974,6 +10037,8 @@ msgid ""
 "opac.pref#RestrictedPageTitle# as title of your restricted page (appears in "
 "the breadcrumb and on the top of the restricted page)."
 msgstr ""
+"kısıtlanmış sayfanızın başlığı olarak (yer göstergeçlerinde ve kısıtlanmış "
+"sayfanın en üstünde görünür)."
 
 # OPAC > Policy
 msgid "opac.pref#SearchMyLibraryFirst# Don't limit"
@@ -10170,12 +10235,11 @@ msgid ""
 "expected to start from your HTTP document root."
 msgstr ""
 "varsayılan CSS yerine OPAC'daki tüm sayfalarda (bu alanı boş bırakırken "
-"kullanılır). Yalnızca bir dosya adı, tam bir yerel yol veya "
-"<code>http://</code> ile başlayan tam bir URL girin (dosya uzak bir sunucuda "
-"bulunuyorsa). Lütfen sadece bir dosya adı girerseniz, dosyanın Koha "
-"şablonları dizinindeki her aktif tema ve dil için css alt dizininde olması "
-"gerektiğini unutmayın. Tam bir yerel yolun HTTP belge kökünüzden başlaması "
-"beklenir."
+"kullanılır). Yalnızca bir dosya adı, tam bir yerel yol veya <code>http://</"
+"code> ile başlayan tam bir URL girin (dosya uzak bir sunucuda bulunuyorsa). "
+"Lütfen sadece bir dosya adı girerseniz, dosyanın Koha şablonları dizinindeki "
+"her aktif tema ve dil için css alt dizininde olması gerektiğini unutmayın. "
+"Tam bir yerel yolun HTTP belge kökünüzden başlaması beklenir."
 
 # OPAC > Privacy
 msgid "opac.pref#opacreadinghistory# Allow"
@@ -10338,7 +10402,8 @@ msgstr "OPACPatronDetails'in etkinleştirilmesini gerektirir."
 msgid ""
 "patrons.pref#AutoApprovePatronProfileSettings# automatic approval of patron "
 "detail changes from the OPAC."
-msgstr "kullanıcı detay değişikliklerinin OPAC'dan otomatik olarak onaylanması."
+msgstr ""
+"kullanıcı detay değişikliklerinin OPAC'dan otomatik olarak onaylanması."
 
 # Patrons > Notices and notifications
 msgid "patrons.pref#AutoEmailOpacUser# Don't send"
@@ -10635,6 +10700,8 @@ msgid ""
 "patrons.pref#EnhancedMessagingPreferences# staff to manage which notices "
 "patrons will receive and when they will receive them."
 msgstr ""
+"Personelin, kullanıcıların hangi bildirimleri alacağını ve ne zaman "
+"alacağını yönetmesi."
 
 # Patrons > Notices and notifications
 msgid ""
@@ -10694,6 +10761,8 @@ msgid ""
 "patrons.pref#FallbackToSMSIfNoEmail# sending purchase suggestion messages by "
 "SMS if no patron email is defined."
 msgstr ""
+"Herhangi bir kullanıcı e-postası tanımlanmamışsa satın alma öneri "
+"mesajlarının SMS ile gönderilmesi."
 
 # Patrons > General
 msgid "patrons.pref#FeeOnChangePatronCategory# Do"
@@ -10716,6 +10785,9 @@ msgid ""
 "Regulation. When you enforce, patrons need to give consent before using the "
 "OPAC. If you set to permissive, Koha will warn but not enforce."
 msgstr ""
+"GDPR, AB Genel Veri Koruma Yönetmeliğidir. Zorunlu kıldığınızda, "
+"kullanıcıların OPAC'ı kullanmadan önce onay vermeleri gerekir. İzin vermeyi "
+"seçerseniz, Koha uyaracak, ancak zorunlu kılmayacaktır."
 
 # Patrons > Privacy
 msgid ""
@@ -10728,19 +10800,19 @@ msgstr ""
 
 # Patrons > Privacy
 msgid "patrons.pref#GDPR_Policy# Set GDPR policy to:"
-msgstr ""
+msgstr "GDPR politikasını şuna göre belirleyin:"
 
 # Patrons > Privacy
 msgid "patrons.pref#GDPR_Policy# disabled"
-msgstr ""
+msgstr "Devre dışı bırakıldı"
 
 # Patrons > Privacy
 msgid "patrons.pref#GDPR_Policy# enforced"
-msgstr ""
+msgstr "Zorunlu"
 
 # Patrons > Privacy
 msgid "patrons.pref#GDPR_Policy# permissive"
-msgstr ""
+msgstr "İsteğe bağlı"
 
 # Patrons > General
 msgid ""
@@ -10818,6 +10890,10 @@ msgid ""
 "specified here. If applicable the guarantor form will be shown as well, "
 "individual fields in that form will be ignored."
 msgstr ""
+"yeni bir kullanıcı girerken kullanıcı hızlı ekleme formuna eklenecektir. "
+"Yalnızca burada belirtilen zorunlu alanları ve alanları görüntüler. Mümkünse "
+"kefil formu da gösterilecek, o formdaki münferit alanlar dikkate "
+"alınmayacaktır."
 
 # Patrons > General
 msgid "patrons.pref#PatronsPerPage# By default, show"
@@ -10825,7 +10901,7 @@ msgstr "Varsayılan, göster"
 
 # Patrons > General
 msgid "patrons.pref#PatronsPerPage# results per page in the staff interface."
-msgstr ""
+msgstr "personel arayüzünde sayfa başına sonuç."
 
 # Patrons > Notices and notifications > PhoneNotification
 msgid ""
@@ -10833,102 +10909,101 @@ msgid ""
 "\"></i> If <code>PhoneNotification</code> is enabled, "
 "<code>TalkingTechItivaPhoneNotification</code> should be disabled."
 msgstr ""
+"<br/><i class=\"fa fa-exclamation-triangle\"></i>Telefon Bildirimi</code> "
+"etkinleştirilmişse, <code>TalkingTechItivaPhoneNotification</code> devre "
+"dışı bırakılmalıdır."
 
 # Patrons > Notices and notifications
-#, fuzzy
 msgid "patrons.pref#PhoneNotification# Disable"
-msgstr "Etkinleştirme"
+msgstr "Devre dışı bırak"
 
 # Patrons > Notices and notifications
-#, fuzzy
 msgid "patrons.pref#PhoneNotification# Enable"
-msgstr "Etkinleştir"
+msgstr "Etkinleştir "
 
 # Patrons > Notices and notifications
-#, fuzzy
 msgid ""
 "patrons.pref#PhoneNotification# patron phone notifications generation. A "
 "plugin will be required to process the phone notifications."
 msgstr ""
-"Talking Tech i-TIVA kullanarak kullanıcı telefon bildirimleri (gecikmeye "
-"kalanlar, zamanı gelmeyenler ve ayırma bildirimleri şu anda "
-"desteklenmektedir)."
+"kullanıcı telefon bildirimleri oluşturma. Telefon bildirimlerini işlemek "
+"için bir eklenti gerekecektir. "
 
 # Patrons > Patron relationships
 msgid "patrons.pref#PrefillGuaranteeField# Alternate address - Address"
-msgstr ""
+msgstr "Alternatif adres - Adres"
 
 # Patrons > Patron relationships
 msgid "patrons.pref#PrefillGuaranteeField# Alternate address - Address 2"
-msgstr ""
+msgstr "Alternatif adres - Adres 2"
 
 # Patrons > Patron relationships
 msgid "patrons.pref#PrefillGuaranteeField# Alternate address - City"
-msgstr ""
+msgstr "Alternatif adres - Şehir"
 
 # Patrons > Patron relationships
 msgid "patrons.pref#PrefillGuaranteeField# Alternate address - Contact note"
-msgstr ""
+msgstr "Alternatif adres - İletişim notu"
 
 # Patrons > Patron relationships
 msgid "patrons.pref#PrefillGuaranteeField# Alternate address - Country"
-msgstr ""
+msgstr "Alternatif adres - Ülke"
 
 # Patrons > Patron relationships
 msgid "patrons.pref#PrefillGuaranteeField# Alternate address - Email"
-msgstr ""
+msgstr "Alternatif adres - E-posta"
 
 # Patrons > Patron relationships
 msgid "patrons.pref#PrefillGuaranteeField# Alternate address - Phone"
-msgstr ""
+msgstr "Alternatif adres - Telefon"
 
 # Patrons > Patron relationships
 msgid "patrons.pref#PrefillGuaranteeField# Alternate address - State"
-msgstr ""
+msgstr "Alternatif adres - Eyalet"
 
 # Patrons > Patron relationships
 msgid "patrons.pref#PrefillGuaranteeField# Alternate address - Street number"
-msgstr ""
+msgstr "Alternatif adres - Cadde numarası"
 
 # Patrons > Patron relationships
 msgid "patrons.pref#PrefillGuaranteeField# Alternate address - ZIP/Postal code"
-msgstr ""
+msgstr "Alternatif adres - ZIP/Posta kodu"
 
 # Patrons > Patron relationships
 msgid "patrons.pref#PrefillGuaranteeField# Alternate contact - Address"
-msgstr ""
+msgstr "Alternatif iletişim: Adres"
 
 # Patrons > Patron relationships
 msgid "patrons.pref#PrefillGuaranteeField# Alternate contact - Address 2"
-msgstr ""
+msgstr "Alternatif iletişim: Adres 2"
 
 # Patrons > Patron relationships
 msgid "patrons.pref#PrefillGuaranteeField# Alternate contact - City"
-msgstr ""
+msgstr "Alternatif iletişim: Şehir"
 
 # Patrons > Patron relationships
 msgid "patrons.pref#PrefillGuaranteeField# Alternate contact - Country"
-msgstr ""
+msgstr "Alternatif iletişim: Ülke"
 
 # Patrons > Patron relationships
 msgid "patrons.pref#PrefillGuaranteeField# Alternate contact - First name"
-msgstr ""
+msgstr "Alternatif iletişim: Ad"
 
 # Patrons > Patron relationships
 msgid "patrons.pref#PrefillGuaranteeField# Alternate contact - Phone"
-msgstr ""
+msgstr "Alternatif iletişim: Telefon"
 
 # Patrons > Patron relationships
 msgid "patrons.pref#PrefillGuaranteeField# Alternate contact - State"
-msgstr ""
+msgstr "Alternatif iletişim: Eyalet"
 
 # Patrons > Patron relationships
 msgid "patrons.pref#PrefillGuaranteeField# Alternate contact - Surname"
-msgstr ""
+msgstr "Alternatif iletişim: Soyadı"
 
 # Patrons > Patron relationships
 msgid "patrons.pref#PrefillGuaranteeField# Alternate contact - ZIP/Postal code"
-msgstr ""
+msgstr "Alternatif iletişim - ZIP/Posta kodu"
 
 # Patrons > Patron relationships
 msgid "patrons.pref#PrefillGuaranteeField# Contact - Fax"
@@ -10976,7 +11051,7 @@ msgstr "Ana adres - Eyalet"
 
 # Patrons > Patron relationships
 msgid "patrons.pref#PrefillGuaranteeField# Main address - Street number"
-msgstr ""
+msgstr "Ana adres - Sokak numarası"
 
 # Patrons > Patron relationships
 msgid "patrons.pref#PrefillGuaranteeField# Main address - ZIP/Postal code"
@@ -11527,14 +11602,12 @@ msgid "searching.pref#DisplayLibraryFacets# home library"
 msgstr "ana kütüphane"
 
 # Searching > Features
-#, fuzzy
 msgid "searching.pref#ElasticsearchCrossFields# Disable"
-msgstr "Etkinleştirme"
+msgstr "Devre dışı bırak"
 
 # Searching > Features
-#, fuzzy
 msgid "searching.pref#ElasticsearchCrossFields# Enable"
-msgstr "Etkinleştir"
+msgstr "Etkinleştir "
 
 # Searching > Features > ElasticsearchCrossFields
 msgid ""
@@ -11542,12 +11615,16 @@ msgid ""
 "elastic.co/guide/en/elasticsearch/reference/current/query-dsl-multi-match-"
 "query.html#type-cross-fields"
 msgstr ""
+"https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-"
+"multi-match-query.html#type-cross-fields adresindeki belgelere bakın"
 
 # Searching > Features > ElasticsearchCrossFields
 msgid ""
 "searching.pref#ElasticsearchCrossFields# the cross_fields option for "
 "Elasticsearch searches, supported in Elasticsearch 6.X and above."
 msgstr ""
+"Elasticsearch aramaları için cross_fields seçeneği, Elasticsearch 6.X ve "
+"üzeri sürümlerde desteklenmektedir."
 
 # Searching > Features
 msgid "searching.pref#EnableSearchHistory# Don't keep"
@@ -11561,7 +11638,7 @@ msgstr "Saklayın"
 msgid ""
 "searching.pref#EnableSearchHistory# patron search history in the staff "
 "interface."
-msgstr ""
+msgstr "personel istemci içerisinde kullanıcı arama geçmişi."
 
 # Searching > Results display
 msgid "searching.pref#FacetLabelTruncationLength# Truncate facets length to"
@@ -11641,11 +11718,11 @@ msgstr ""
 
 # Searching > Search form
 msgid "searching.pref#LoadSearchHistoryToTheFirstLoggedUser# Add"
-msgstr ""
+msgstr "Ekle"
 
 # Searching > Search form
 msgid "searching.pref#LoadSearchHistoryToTheFirstLoggedUser# Don't add"
-msgstr ""
+msgstr "Ekleme"
 
 # Searching > Search form
 msgid ""
@@ -12411,10 +12488,10 @@ msgid ""
 "and eventually Firefox add-on <a href='https://github.com/edabg/jsprintsetup/"
 "wiki'>jsPrintSetup documentation</a>:"
 msgstr ""
-"Slip yazdırmak için aşağıdaki JavaScript'i kullanın. <a href='https://wiki"
-".koha-community.org/wiki/Setting_up_slip_printer_to_print_silently'> Koha "
-"Wiki</a> ve sonuç olarak Firefox Eklentisi <a "
-"href='https://github.com/edabg/jsprintsetup/wiki'>jsPrintSetup belgeleri</a>:"
+"Slip yazdırmak için aşağıdaki JavaScript'i kullanın. <a href='https://wiki."
+"koha-community.org/wiki/Setting_up_slip_printer_to_print_silently'> Koha "
+"Wiki</a> ve sonuç olarak Firefox Eklentisi <a href='https://github.com/edabg/"
+"jsprintsetup/wiki'>jsPrintSetup belgeleri</a>:"
 
 # Staff interface > Appearance
 msgid ""
@@ -13189,3 +13266,7 @@ msgid ""
 "web_services.pref#SvcMaxReportRows# rows of a report requested via the "
 "reports web service."
 msgstr "raporlar web hizmeti yoluyla talep edilen bir raporun satırları"
+
+# OPAC > Payments
+#~ msgid "opac.pref#PayPalReturnURL# OPAC's alias"
+#~ msgstr "OPAC diğer adları"

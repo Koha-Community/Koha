@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Koha 20.11\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-01-15 10:26-0300\n"
-"PO-Revision-Date: 2020-09-07 08:22+0000\n"
+"POT-Creation-Date: 2021-02-02 09:59-0300\n"
+"PO-Revision-Date: 2021-02-03 02:02+0000\n"
 "Last-Translator: Atron Chen <atron@customer-support.com.tw>\n"
 "Language-Team: none\n"
 "Language: zh_TW\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Generator: Pootle 2.8\n"
-"X-POOTLE-MTIME: 1599466958.695761\n"
+"X-POOTLE-MTIME: 1612317727.741788\n"
 "X-Pootle-Path: /zh_TW/20.11/zh-Hant-TW-messages.po\n"
 "X-Pootle-Revision: 1\n"
 
@@ -30,7 +30,7 @@ msgstr "(搜尋欄位 {field_name} 用的是對映 {marc_field}。)"
 #, perl-brace-format
 msgid "({age} year)"
 msgid_plural "({age} years)"
-msgstr[0] ""
+msgstr[0] "Plural form 0 ({age} year) Plural form 1 ({age} years)"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:91
 msgid ""
@@ -52,7 +52,7 @@ msgstr "更新對映時發生錯誤：{message}。"
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:190
 msgctxt "Cancel hold button"
 msgid "Cancel"
-msgstr ""
+msgstr "取消"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1242
 msgctxt "patron restriction created on"
@@ -70,8 +70,8 @@ msgctxt "basket created by"
 msgid "Created by:"
 msgstr "建立者:"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:175
-#: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:391
+#: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:207
+#: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:465
 msgctxt "purchase suggestion created by"
 msgid "Created by:"
 msgstr "建立者："
@@ -97,7 +97,6 @@ msgstr "無效的欄位權值 '{weight}'，必須是正的小數。"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:121
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:263
-#, fuzzy
 msgid "Item does not belong to your library"
 msgstr "此館藏不屬於您的圖書館"
 
@@ -118,7 +117,7 @@ msgstr "館藏檢查過了"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:124
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:266
-msgid "Last item for bibliographic record wich biblio-level hold on it"
+msgid "Last item for bibliographic record with biblio-level hold on it"
 msgstr "書目紀錄的最後一項書目級別是保持不變的"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:106
@@ -152,12 +151,11 @@ msgid "Order"
 msgstr "排序"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/detail.tt:802
-#, fuzzy, perl-brace-format
+#, perl-brace-format
 msgctxt "pluralization"
 msgid "There is one archived suggestion."
 msgid_plural "There are {count} archived suggestions."
 msgstr[0] "有一個存檔的建議。"
-msgstr[1] ""
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:125
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:267
@@ -168,7 +166,7 @@ msgstr "原因不明"
 msgid ""
 "You attempted to delete all mappings for a required index, you must leave at "
 "least one mapping"
-msgstr ""
+msgstr "您嘗試刪除所有有對應的必要索引，您必須要下至少一組對應"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:535
 #, perl-brace-format
@@ -180,10 +178,12 @@ msgstr[0] "{count} items"
 #, perl-brace-format
 msgid "{count} library limitation"
 msgid_plural "{count} library limitations"
-msgstr[0] ""
+msgstr[0] "Plural form 0 {count} 圖書館限制 Plural form 1 {count} 圖書館限制"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/batch_rm_items.tt:46
 #, perl-brace-format
 msgid "{title} ({barcode}) was removed from {count} course."
 msgid_plural "{title} ({barcode}) was removed from {count} courses."
 msgstr[0] ""
+"Plural form 0 {title} ({barcode}) 被移除從 {count} 課程. Plural form 1 "
+"{title} ({barcode}) 被移除從 {count} 課程."

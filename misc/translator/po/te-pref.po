@@ -915,11 +915,11 @@ msgstr ""
 "share_usage_with_koha_community.pl </code> cronjob అవసరం. దీన్ని షెడ్యూల్ చేయడానికి మీ "
 "సిస్టమ్ నిర్వాహకుడిని అడగండి."
 
-# Administration > Share anonymous usage statistics
+# Administration > Share anonymous usage statistics > UsageStats
 msgid ""
 "admin.pref#UsageStats# <br><strong>NOTE:</strong> Use the <a href=\"/cgi-bin/"
 "koha/admin/usage_statistics.pl\">dedicated configuration page</a> to edit "
-"the statisics you share."
+"the statistics you share."
 msgstr ""
 
 # Administration > Share anonymous usage statistics
@@ -4688,6 +4688,13 @@ msgid "circulation.pref#MarkLostItemsAsReturned# when cataloguing an item"
 msgstr "అంశాన్ని జాబితా చేసేటప్పుడు"
 
 # Circulation > Checkout policy
+#, fuzzy
+msgid ""
+"circulation.pref#MarkLostItemsAsReturned# when marking an item as a return "
+"claim"
+msgstr "అంశాన్ని జాబితా చేసేటప్పుడు"
+
+# Circulation > Checkout policy
 msgid ""
 "circulation.pref#MarkLostItemsAsReturned# when receiving payment for the item"
 msgstr "అంశాన్ని జాబితా చేసేటప్పుడు"
@@ -8213,8 +8220,7 @@ msgstr "అనుమతించవద్దు"
 # OPAC > Privacy
 #, fuzzy
 msgid ""
-"opac.pref#OPACHoldsHistory# patrons to see what books they have place holds "
-"in the past."
+"opac.pref#OPACHoldsHistory# patrons to see the list of their past holds."
 msgstr "వారు గతంలో ఏ పుస్తకాలను తనిఖీ చేశారో చూడటానికి పోషకులు."
 
 # OPAC > Features
@@ -9546,6 +9552,16 @@ msgid ""
 "address by entering it twice."
 msgstr ""
 
+# OPAC > Self registration and modification > PatronSelfRegistrationDefaultCategory
+msgid ""
+"opac.pref#PatronSelfRegistrationDefaultCategory# <br><strong>WARNING: Do not "
+"use a regular patron category for self registration.</strong> If the "
+"<code>misc/cronjobs/cleanup_database.pl</code> cronjob is setup to delete "
+"unverified and unfinished OPAC self registrations, it will permanently and "
+"unrecoverably delete all patrons that have registered more than "
+"PatronSelfRegistrationExpireTemporaryAccountsDelay days ago."
+msgstr ""
+
 # OPAC > Self registration and modification
 msgid ""
 "opac.pref#PatronSelfRegistrationDefaultCategory# Use the patron category code"
@@ -9682,11 +9698,12 @@ msgid ""
 msgstr "చెల్లింపు లేదా రద్దు చేసిన తరువాత, పేపాల్ తిరిగి రావాలి "
 
 # OPAC > Payments
-msgid "opac.pref#PayPalReturnURL# OPAC's alias"
-msgstr "ఒపాక్ అలియాస్"
+msgid "opac.pref#PayPalReturnURL# OPACBaseURL"
+msgstr "opac.pref#PayPalReturnURL# OPACBaseURL"
 
 # OPAC > Payments
-msgid "opac.pref#PayPalReturnURL# OPACBaseURL"
+#, fuzzy
+msgid "opac.pref#PayPalReturnURL# configured return URL"
 msgstr "opac.pref#PayPalReturnURL# OPACBaseURL"
 
 # OPAC > Payments
@@ -12876,3 +12893,7 @@ msgid ""
 "web_services.pref#SvcMaxReportRows# rows of a report requested via the "
 "reports web service."
 msgstr "నివేదికల వెబ్ సేవ ద్వారా అభ్యర్థించిన నివేదిక యొక్క వరుసలు."
+
+# OPAC > Payments
+#~ msgid "opac.pref#PayPalReturnURL# OPAC's alias"
+#~ msgstr "ఒపాక్ అలియాస్"

@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Koha 20.11\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-01-15 10:22-0300\n"
-"PO-Revision-Date: 2020-12-08 08:01+0000\n"
+"POT-Creation-Date: 2021-02-15 09:52-0300\n"
+"PO-Revision-Date: 2021-02-17 08:08+0000\n"
 "Last-Translator: Onur Erdem <onurerdem@sdu.edu.tr>\n"
 "Language-Team: Koha Translation Team\n"
 "Language: tr\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.8\n"
-"X-POOTLE-MTIME: 1607414469.371801\n"
+"X-POOTLE-MTIME: 1613549293.304141\n"
 "X-Pootle-Path: /tr/20.05/tr-TR-opac-bootstrap.po\n"
 "X-Pootle-Revision: 1\n"
 
@@ -117,7 +117,7 @@ msgstr "%s %s %s %s%s/%s/images/favicon.ico %s "
 #. %37$s: - SWITCH account.status -
 #. %38$s: - CASE 'UNRETURNED' -
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/accounts.inc:9
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s %s %s %sAccount creation fee %sAccount renewal fee %sLost item %sManual "
 "fee %sNew card %sFine %sLost item processing fee %sRental fee %sDaily rental "
@@ -126,12 +126,13 @@ msgid ""
 "%sForgiven %sCredit %sLost item fee refund %sOverpayment refund %sRefund "
 "%sCancelled charge %s%s %s %s %s %s %s"
 msgstr ""
-"%s %s %sÖdeme %sBorç silme %sBağışlandı %sKredi %sKayıp materyal ücret "
-"iadesi %s%s %s %s %s %sHesap oluşturma bedeli%sHesap yenileme bedeli %sKayıp "
-"materyal %sManuel ödeme %sYeni kart %sCeza %sKayıp materyal işlem bedeli "
-"%sKiralama bedeli %sGünlük kiralama bedeli %sKiralanmış materyalin "
-"yenilenmesi %sGünlük kiralanmış materyalin yenilenmesi %sAyırma bedeli "
-"%sAyırma çok uzun süredir bekliyor %s%s %s %s %s %s"
+"%s %s %s %sHesap oluşturma ücreti %sHesap yenileme ücreti %sKayıp materyal %"
+"sManuel ücret %sYeni kart %sCeza %sKayıp materyal işlem ücreti %sKiralama "
+"bedeli %sGünlük kiralama bedeli %sKiralanmış materyalin süresinin uzatılması "
+"%sGünlük kiralanan materyalin sürsinin uzatılması %sAyırtma ücreti %"
+"sAyırtılan materyal çok uzun süredir bekliyor %sÖdeme %s%s %s %s %s %s %"
+"sÖdeme %sÖdeme iptali %sBağışlandı%sKredi %sKayıp materyal ücret iadesi %"
+"sFazla ödeme iadesi %sGeri ödeme %sİptal edilen ödeme %s%s %s %s %s %s %s"
 
 #. For the first occurrence,
 #. %1$s:  IF ( LibraryNameTitle ) 
@@ -221,14 +222,17 @@ msgid ""
 "Your problem report has been sent to the library. %s %s Something wrong "
 "happened when sending the report. Please contact your library. %s "
 msgstr ""
+"%s %s %s Sorun raporunuz Koha yöneticisine gönderildi. %s Sorun raporunuz "
+"kütüphaneye gönderildi. %s %s Raporu gönderirken bir sorun oldu. Lütfen "
+"kütüphanenizle iletişime geçin. %s "
 
 #. %1$s:  author.firstname | html 
 #. %2$s:  author.surname | html 
 #. %3$s:  ELSE 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:111
-#, fuzzy, c-format
+#, c-format
 msgid "%s %s %s by "
-msgstr "%s %s %s %s by "
+msgstr "%s %s %s yazar"
 
 #. %1$s:  END 
 #. %2$s:  IF ( ITEM_RESULT.itemcallnumber ) 
@@ -269,7 +273,7 @@ msgstr "%s %s <%s > <%s src=\"%s\" %s /> "
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:56
 #, c-format
 msgid "%s %s A similar document already exists: "
-msgstr ""
+msgstr "%s %s Benzer bir belge zaten var:"
 
 #. %1$s:  END 
 #. %2$s:  IF ( koha_spsuggest ) 
@@ -402,6 +406,9 @@ msgid ""
 "0 and expanded_options ) or ( OpacAdvSearchOptions and OpacAdvSearchOptions."
 "size > 0 and not expanded_options ) %%] "
 msgstr ""
+"%s %s [%% IF ( OpacAdvSearchMoreOptions and OpacAdvSearchMoreOptions.size > "
+"0 and expanded_options ) or ( OpacAdvSearchOptions and "
+"OpacAdvSearchOptions.size > 0 and not expanded_options ) %%] "
 
 #. %1$s:  END # / IF GROUP_RESULT.BiblioDefaultViewmarc 
 #. %2$s:  IF ( GROUP_RESULT.author ) 
@@ -539,7 +546,7 @@ msgstr "%s (Kayıt no. %s)"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-news-rss.tt:1
 #, c-format
 msgid "%s <?xml version=\"1.0\"?> "
-msgstr ""
+msgstr "%s <?xml version=\"1.0\"?>"
 
 #. %1$s:  IF ( OVERDUE.debarred ) 
 #. %2$s:  ELSIF ( OVERDUE.status ) 
@@ -723,7 +730,7 @@ msgstr "%s Sil %s Listeyi sil %s"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:140
 #, c-format
 msgid "%s Fulfilled %s Cancelled %s Waiting %s In transit %s Pending %s "
-msgstr ""
+msgstr "%s Tamamlandı %s İptal edildi %s Bekliyor %s Aktarımda %s Askıda %s"
 
 #. %1$s:  END 
 #. %2$s:  HOLDS.count | html 
@@ -834,6 +841,8 @@ msgid ""
 "%s Not renewable %s Item must be renewed at the library. %s renewals "
 "remaining %s Not allowed "
 msgstr ""
+"%s Süresi uzatılamaz %s Materyalin süresi kütüphanede uzatılmalıdır. %s "
+"Kalan uzatma hakkı %s İzin verilmiyor"
 
 #. %1$s:  ELSIF ( OVERDUE.onreserve ) 
 #. %2$s:  ELSE 
@@ -960,11 +969,11 @@ msgstr "%s Otomatik Ödünç & İade Sistemi"
 #. %2$s:  ELSE 
 #. %3$s:  END 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-tags.tt:88
-#, fuzzy, c-format
+#, c-format
 msgid "%s Tags to show from other users: %s Tags to show: %s "
 msgstr ""
-"%s Diğer kullanıcılardan gösterilecek olan etiketler %s Gösterilecek "
-"etiketler %s:"
+"%s Diğer kullanıcılardan gösterilecek olan tag'ler %s Gösterilecek tag'ler: "
+"%s"
 
 #. %1$s:  ELSIF (errLinkNotValid) 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:105
@@ -998,7 +1007,7 @@ msgstr "%s Şifreler eşleşmiyor. %s"
 #. %17$s:  ELSIF ( circ_error_ADDITIONAL_MATERIALS ) 
 #. %18$s:  END 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:55
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s The system does not recognize this barcode. %s You have checked out too "
 "many items and can't check out any more. %s This item is checked out to "
@@ -1013,13 +1022,14 @@ msgid ""
 msgstr ""
 "%s Sistem bu barkodu tanımıyor. %s Çok fazla materyal ödünç aldınız ve daha "
 "fazla ödünç alamazsınız. %s Bu materyal bir başkasına ödünç verilmiş. %s Bu "
-"materyalin süresini yeniden uzatamazsınız. %s Bu materyal ödünç verilmez. %s "
-"Kütüphaneye borcunuz var %s ve ödünç alamazsınız. %s Bu materyal "
-"koleksiyondan düşülmüş. %s Bu materyal kısıtlanmış. %s Bu materyal başka bir "
-"kullanıcı tarafından ayırtılmış. %s Bu materyal başka bir birime ait. %s "
+"materyalin süresini tekrar uzatamazsınız. %s Bu materyal ödünç verilmez. %s "
+"Kütüphaneye borçlusunuz %s ve ödünç alamazsınız. %s Bu materyal "
+"koleksiyondan düşülmüş. %s Bu materyal kısıtlanmış. %s Bu materyal başka "
+"kullanıcı tarafından ayırtılmış. %s Bu materyal başka birime ait. %s "
 "Hesabınızın süresi dolmuş. %s Hesabınız askıya alınmış. %s Bu kart kayıp "
-"olarak bildirilmiş. %s İletişim bilgileriniz eksik görünüyor. %s İade tarihi "
-"geçerli değil. %s Lütfen bir kütüphaneci ile görüşün."
+"olarak bildirilmiş. %s İletişim bilgileriniz eksik. %s İade tarihi geçerli "
+"değil. %s Materyal ödünç verme bankosunda ödünç verilmelidir. %s Lütfen "
+"kütüphaneci ile görüşün."
 
 #. %1$s:  IF error 
 #. %2$s:  ELSE 
@@ -1094,6 +1104,10 @@ msgid ""
 "holds must be item level. %s You already have at least one record level hold "
 "on this title. All further holds must be record level. %s "
 msgstr ""
+"%s Bu kitap üzerinde zaten en az bir tane materyal düzeyinde ayırmanız var. "
+"Diğer yapılacak tüm ayırma işlemleri materyal düzeyinde olmalıdır. %s Bu "
+"kitap üzerinde zaten en az bir tane kayıt düzeyinde ayırmanız var. Diğer "
+"yapılacak tüm ayırma işlemleri kayıt düzeyinde olmalıdır. %s"
 
 #. %1$s:  ELSE 
 #. %2$s:  END 
@@ -1112,9 +1126,9 @@ msgstr "%s Bu kütüphaneden bugüne kadar hiç bir şey ödünç almadınız. %
 #. %1$s:  IF !holds 
 #. %2$s:  ELSE 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:55
-#, fuzzy, c-format
+#, c-format
 msgid "%s You have never placed a hold from this library. %s "
-msgstr "%s Bu kütüphaneden bugüne kadar hiç bir şey ödünç almadınız. %s "
+msgstr "%s Bu kütüphaneden bugüne kadar hiç bir materyal ayırtmadınız. %s "
 
 #. %1$s:  IF Koha.Preference('HoldFeeMode') == 'any_time_is_collected' 
 #. %2$s:  RESERVE_CHARGE | $Price 
@@ -1783,9 +1797,9 @@ msgstr ""
 #. %3$s:  ELSE 
 #. %4$s:  END 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reportproblem.tt:3
-#, fuzzy, c-format
+#, c-format
 msgid "%s%s%sKoha online%s catalog &rsaquo; Report a problem"
-msgstr "%s%s%sKoha çevrimiçi%s katalog &rsaquo; Makale isteğinde bulun"
+msgstr "%s%s%sKoha çevrimiçi%s katalog &rsaquo; Bir sorunu raporlayın"
 
 #. %1$s:  IF ( LibraryNameTitle ) 
 #. %2$s:  LibraryNameTitle | html 
@@ -1891,9 +1905,9 @@ msgstr "%s%s%sKoha çevrimiçi%s katalog &rsaquo; Onaylarınız"
 #. %3$s:  ELSE 
 #. %4$s:  END 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:6
-#, fuzzy, c-format
+#, c-format
 msgid "%s%s%sKoha online%s catalog &rsaquo; Your holds history"
-msgstr "%s%s%sKoha çevrimiçi%s katalog &rsaquo; Ödünç alma geçmişiniz"
+msgstr "%s%s%sKoha çevrimiçi%s katalog &rsaquo; Ayırtma geçmişiniz"
 
 #. %1$s:  IF ( LibraryNameTitle ) 
 #. %2$s:  LibraryNameTitle | html 
@@ -2003,7 +2017,7 @@ msgstr ""
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-showreviews-rss.tt:1
 #, c-format
 msgid "%s%s<?xml version=\"1.0\" encoding=\"utf-8\"?> "
-msgstr ""
+msgstr "%s%s<?xml version=\"1.0\" encoding=\"utf-8\"?> "
 
 #. %1$s:  IF ( dateformat == "us" ) 
 #. %2$s:  ELSIF ( dateformat == "metric" ) 
@@ -2024,9 +2038,9 @@ msgstr "%s(AA/GG/YYYY)%s(GG/AA/YYYY)%s(YYYY-AA-GG)%s"
 #. %8$s:  END 
 #. %9$s:  END 
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:102
-#, fuzzy, c-format
+#, c-format
 msgid "%s, %s,%s %s since %s %s until %s %s %s "
-msgstr "%s tarihinden %s %s tarihine kadar %s %s %s"
+msgstr "%s, %s,%s %s tarihinden %s %s tarihine kadar %s %s %s"
 
 #. %1$s:  IF ( bibitemloo.author ) 
 #. %2$s:  bibitemloo.author | html 
@@ -2229,7 +2243,7 @@ msgstr "%s Materyal türü %s Koleksiyon %s Raf yeri %s Başka bir şey %s "
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-library.tt:140
 #, c-format
 msgid "%sLibrary%sLibraries%s"
-msgstr ""
+msgstr "%sKütüphane%sKütüphaneler%s"
 
 #. %1$s:  IF ( suggestions_loo.ASKED ) 
 #. %2$s:  ELSIF ( suggestions_loo.CHECKED ) 
@@ -2243,7 +2257,7 @@ msgstr ""
 #. %10$s:  IF ( suggestions_loo.reason ) 
 #. %11$s:  suggestions_loo.reason | html 
 #. %12$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:409
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:405
 #, c-format
 msgid ""
 "%sRequested %sChecked by the library %sAccepted by the library %sOrdered by "
@@ -2309,9 +2323,9 @@ msgstr "%sbir listeye:%s"
 #. %3$s:  END 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1110
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1115
-#, fuzzy, c-format
+#, c-format
 msgid "%sby %s%s "
-msgstr "%syazar %s%s"
+msgstr "%syazar %s%s "
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:176
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:179
@@ -2994,9 +3008,9 @@ msgstr ""
 "danışın)"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/accounts.inc:55
-#, fuzzy, c-format
+#, c-format
 msgid "(Cancelled)"
-msgstr "Ayırmayı iptal et"
+msgstr "(İptal edildi)"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:179
 #, c-format
@@ -3009,9 +3023,9 @@ msgid "(Forgiven)"
 msgstr "(Bağışlandı)"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/shelfbrowser.inc:10
-#, fuzzy, c-format
+#, c-format
 msgid "(Hides shelf browser)"
-msgstr "Raf tarayıcısını kapatın"
+msgstr "(Raf tarayıcısını kapatır)"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sci/sci-main.tt:14
 #, c-format
@@ -3042,15 +3056,15 @@ msgid "(Not supported yet)"
 msgstr "(Henüz desteklenmemektedir)"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:313
-#, fuzzy, c-format
+#, c-format
 msgid "(On-site checkout)"
-msgstr "Yerinde ödünç alımlar"
+msgstr "(Yerinde ödünç alma)"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1348
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1350
 #, c-format
 msgid "(Opens below)"
-msgstr ""
+msgstr "(Aşağıda açılır)"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/ilsdi.tt:112
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/ilsdi.tt:119
@@ -3093,7 +3107,7 @@ msgstr ""
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/accounts.inc:51
 #, c-format
 msgid "(Refunded)"
-msgstr ""
+msgstr "(Refunded)"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/accounts.inc:50
 #, c-format
@@ -3149,22 +3163,22 @@ msgstr ""
 "personeline danışın)"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sci/sci-main.tt:12
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "(The item cannot be checked in at this library, please see library staff for "
 "assistance)"
 msgstr ""
-"(Materyal bu kütüphaneye iade edilemez, lütfen yardım için kütüphane "
+"(Materyal bu kütüphanede iade edilemez, lütfen yardım için kütüphane "
 "personeline danışın)"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sci/sci-main.tt:20
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "(There was a problem checking in this item, please see library staff for "
 "assistance)"
 msgstr ""
 "(Bu materyalin iadesinde bir sorun oluştu, lütfen yardım için kütüphane "
-"personeline danışın)"
+"personeline danışın) "
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/ilsdi.tt:820
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/ilsdi.tt:821
@@ -3247,14 +3261,14 @@ msgstr "(ilgili aramalar: %s%s%s)"
 #. %2$s:  relate.related_search | html 
 #. %3$s:  END 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:125
-#, fuzzy, c-format
+#, c-format
 msgid "(related searches:%s %s%s)."
-msgstr "(ilgili aramalar: %s%s%s)"
+msgstr "(ilgili aramalar:%s %s%s)."
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/opac-detail-sidebar.inc:30
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/opac-detail-sidebar.inc:32
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/title-actions-menu.inc:56
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/title-actions-menu.inc:58
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/title-actions-menu.inc:60
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/title-actions-menu.inc:62
 #, c-format
 msgid "(remove)"
 msgstr "(Kaldır)"
@@ -3284,6 +3298,8 @@ msgstr "-- hiçbiri -- "
 msgid ""
 ". Click on \"Confirm your suggestion\" to ignore this message. %s %s %s "
 msgstr ""
+".Bu mesajı yok saymak için \"Önerinizi Onaylayın\" butonuna tıklayın. %s %s "
+"%s"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-privacy.tt:141
 #, c-format
@@ -3420,9 +3436,9 @@ msgid "A hold fee was charged to your account for collecting this item."
 msgstr "Bu materyali alabilmeniz için hesabınıza bir ayırtma ücreti yazıldı."
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reportproblem.tt:62
-#, fuzzy, c-format
+#, c-format
 msgid "A librarian"
-msgstr "Tüm kütüphaneler"
+msgstr "Kütüphaneci"
 
 #. %1$s:  message_value | html 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-account.tt:50
@@ -3532,7 +3548,7 @@ msgstr "Bir liste ekle"
 msgid "Add to a new list:"
 msgstr "Yeni bir listeye ekle:"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/title-actions-menu.inc:58
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/title-actions-menu.inc:62
 #, c-format
 msgid "Add to cart"
 msgstr "Sepete ekle"
@@ -3710,9 +3726,8 @@ msgstr "Alternatif iletişim adresi"
 
 #. SCRIPT
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:70
-#, fuzzy
 msgid "Always available"
-msgstr "Kullanılabilir materyaller:"
+msgstr "Her zaman kullanılabilir"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:489
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:503
@@ -3760,9 +3775,9 @@ msgid "An error occurred while processing your request."
 msgstr "Talebiniz işlenirken bir hata oluştu."
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-browse.tt:86
-#, fuzzy, c-format
+#, c-format
 msgid "An error occurred, please try again. "
-msgstr "Bir hata oluştu. Lütfen tekrar deneyin."
+msgstr "Bir hata oluştu, lütfen tekrar deneyin."
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/errors/errorpage.tt:58
 #, c-format
@@ -3826,7 +3841,7 @@ msgstr "Bu listeyi gören herkes"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:136
 #, c-format
 msgid "Apply field weights to search "
-msgstr ""
+msgstr "Aramak için alan ağırlıkları uygulayın"
 
 #. SCRIPT
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/calendar.inc:2
@@ -3867,7 +3882,7 @@ msgid "Are you sure you want to delete the selected tag(s)?"
 msgstr "Seçili tag'leri silmek istediğinizden emin misiniz?"
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:469
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:465
 msgid "Are you sure you want to delete these suggestions?"
 msgstr "Bu önerileri silmek istediğinizden emin misiniz?"
 
@@ -3878,7 +3893,7 @@ msgid "Are you sure you want to delete this list?"
 msgstr "Bu listeyi silmek istediğinizden emin misiniz?"
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:469
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:465
 msgid "Are you sure you want to delete this suggestion?"
 msgstr "Bu öneriyi silmek istediğinizden emin misiniz?"
 
@@ -4255,7 +4270,7 @@ msgid "Blocked"
 msgstr "Engellendi"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-blocked.tt:15
-#, fuzzy, c-format
+#, c-format
 msgid "Blocked record "
 msgstr "Blokeli kayıt"
 
@@ -4300,15 +4315,15 @@ msgstr "Sonuçlara gözat"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-browse.tt:18
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-browse.tt:41
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/masthead.inc:335
-#, fuzzy, c-format
+#, c-format
 msgid "Browse search"
-msgstr "Hiyerarşik sıralamaya göre göz at"
+msgstr "Aramaya göz atın"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1348
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1350
-#, fuzzy, c-format
+#, c-format
 msgid "Browse shelf "
-msgstr "Rafa gözat"
+msgstr "Rafa gözatın"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth.tt:98
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth.tt:121
@@ -4382,9 +4397,9 @@ msgstr "Yer numarası (0-9 dan A-Z)"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:291
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:293
-#, fuzzy, c-format
+#, c-format
 msgid "Call number (A-Z)"
-msgstr "Yer numarası (0-9 dan A-Z)"
+msgstr "Yer numarası (A-Z)"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/resort_form.inc:33
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/resort_form.inc:35
@@ -4394,9 +4409,9 @@ msgstr "Yer numarası (Z-A dan 9-0)"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:296
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:298
-#, fuzzy, c-format
+#, c-format
 msgid "Call number (Z-A)"
-msgstr "Yer numarası (Z-A dan 9-0)"
+msgstr "Yer numarası (Z-A)"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:171
 #, c-format
@@ -4484,14 +4499,14 @@ msgid "CancelRecall "
 msgstr "Geri almayı iptal et "
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:95
-#, fuzzy, c-format
+#, c-format
 msgid "Cancellation date"
-msgstr "Yayın tarihi"
+msgstr "İptal edilme tarihi"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/accounts.inc:69
-#, fuzzy, c-format
+#, c-format
 msgid "Cancelled charge"
-msgstr "Derecelendirmeyi iptal et"
+msgstr "İptal edilen ödeme"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/ilsdi.tt:795
 #, c-format
@@ -4750,7 +4765,7 @@ msgstr "Temizle"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-search-history.tt:160
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-search-history.tt:197
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:814
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:469
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:465
 #, c-format
 msgid "Clear all"
 msgstr "Tümünü temizle"
@@ -4769,9 +4784,8 @@ msgstr "Süresiz olarak askıya almak için tarihi silin"
 
 #. SCRIPT
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/datatables.inc:4
-#, fuzzy
 msgid "Clear filter"
-msgstr "Tarihi temizle"
+msgstr "Filtreyi temizle"
 
 #. %1$s:  INCLUDE 'patron-title.inc' patron = logged_in_user 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:58
@@ -4841,7 +4855,7 @@ msgid "Close"
 msgstr "Kapat"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/shelfbrowser.inc:10
-#, fuzzy, c-format
+#, c-format
 msgid "Close shelf browser "
 msgstr "Raf tarayıcısını kapatın"
 
@@ -5033,19 +5047,19 @@ msgid "Contents"
 msgstr "İçindekiler"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:104
-#, fuzzy, c-format
+#, c-format
 msgid "Contents of &nbsp;"
-msgstr "İçindekiler "
+msgstr "&nbsp; içeriği"
 
 #. SCRIPT
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/datatables.inc:4
 msgid "Copied %d rows to clipboard"
-msgstr ""
+msgstr "%d satırları panoya kopyalandı "
 
 #. SCRIPT
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/datatables.inc:4
 msgid "Copied one row to clipboard"
-msgstr ""
+msgstr "Bir satır panoya kopyalandı"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-course-details.tt:70
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1246
@@ -5057,7 +5071,7 @@ msgstr "Kopya numarası"
 #. SCRIPT
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/datatables.inc:4
 msgid "Copy to clipboard"
-msgstr ""
+msgstr "Panoya kopyala"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-basket.tt:154
 #, c-format
@@ -5077,9 +5091,9 @@ msgstr "Telif hakkı tarihi (en yeniden en eskiye)"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:308
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:310
-#, fuzzy, c-format
+#, c-format
 msgid "Copyright date (oldest to newest)"
-msgstr "Yayın/Telif tarihi: (Eskiden yeniye)"
+msgstr "Telif hakkı tarihi (en eskiden en yeniye)"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:95
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:99
@@ -5139,9 +5153,9 @@ msgid "Course reserves for "
 msgstr "Ayrılmış ders materyalleri "
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-course-details.tt:29
-#, fuzzy, c-format
+#, c-format
 msgid "Course reserves for &nbsp;"
-msgstr "Ayrılmış ders materyalleri "
+msgstr "&nbsp; için Ayrılmış ders materyalleri "
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-course-reserves.tt:34
 #, c-format
@@ -5176,7 +5190,7 @@ msgid "Create a new request "
 msgstr "Yeni bir talep oluştur"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:110
-#, fuzzy, c-format
+#, c-format
 msgid "Create new list "
 msgstr "Yeni liste oluştur"
 
@@ -5199,9 +5213,9 @@ msgstr ""
 "düzeyinde ayırtma isteği oluşturur."
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/accounts.inc:62
-#, fuzzy, c-format
+#, c-format
 msgid "Credit applied"
-msgstr "Uygulanan ödeme:"
+msgstr "Kredi uygulandı"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:501
 #, c-format
@@ -5215,15 +5229,15 @@ msgid "Credits (%s)"
 msgstr "Krediler (%s)"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1224
-#, fuzzy, c-format
+#, c-format
 msgid "Current library"
-msgstr "Ana kütüphane"
+msgstr "Geçerli Kütüphane"
 
 #. A
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-authoritiessearchresultlist.tt:18
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/page-numbers.inc:19
 msgid "Current page: Page %s"
-msgstr ""
+msgstr "Mevcut sayfa: Sayfa %s"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-passwd.tt:72
 #, c-format
@@ -5286,15 +5300,15 @@ msgstr "Eklenme tarih"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:315
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:317
-#, fuzzy, c-format
+#, c-format
 msgid "Date added (newest to oldest)"
-msgstr "Geliş tarihi: En yeniden en eskiye"
+msgstr "Eklendiği tarih (en yeniden en eskiye)"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:320
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:322
-#, fuzzy, c-format
+#, c-format
 msgid "Date added (oldest to newest)"
-msgstr "Geliş tarihi: En eskiden en yeniye"
+msgstr "Eklendiği tarih (en eskiden en yeniye)"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-tags.tt:169
 #, c-format
@@ -5371,13 +5385,13 @@ msgid "Default sorting"
 msgstr "Varsayılan sıralama"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-privacy.tt:54
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Default: keep my checkout history according to local laws. This is the "
 "default option : the library will keep your checkout history for the "
 "duration permitted by local laws."
 msgstr ""
-"Varsayılan: yerel yasalar uyarınca okuma geçmişimi saklayın. Bu varsayılan "
+"Varsayılan: yerel yasalar uyarınca okuma geçmişimi saklansın. Bu varsayılan "
 "seçenektir : Kütüphane, okuma geçmişinizi saklamaya, yerel yasalar "
 "tarafından izin verilen süre içerisinde devam edecektir."
 
@@ -5393,13 +5407,13 @@ msgstr "Kayıtların geri döndüğü üstveri şeması olası değerlerini tan�
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-search-history.tt:111
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-search-history.tt:164
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-search-history.tt:201
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:469
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:465
 #, c-format
 msgid "Delete"
 msgstr "Sil"
 
 #. INPUT type=submit
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:426
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:422
 msgid "Delete selected"
 msgstr "Seçileni sil"
 
@@ -5526,12 +5540,12 @@ msgstr "Yenilikleri göster:"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:244
 #, c-format
 msgid "Displaying availability results"
-msgstr ""
+msgstr "Kullanılabilirlik sonuçlarını görüntüleme"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:168
-#, fuzzy, c-format
+#, c-format
 msgid "Do not suspend"
-msgstr "Kayıt bulunamadı"
+msgstr "Askıya almayın"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-alert-subscribe.tt:24
 #, c-format
@@ -5570,9 +5584,9 @@ msgstr "İndir"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-basket.tt:32
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:212
-#, fuzzy, c-format
+#, c-format
 msgid "Download "
-msgstr "İndir"
+msgstr "İndir "
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:470
 #, c-format
@@ -5648,9 +5662,9 @@ msgid "Edit list"
 msgstr "Listeyi düzenle"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:116
-#, fuzzy, c-format
+#, c-format
 msgid "Edit list &nbsp;"
-msgstr "Listeyi düzenle "
+msgstr "Listeyi düzenle &nbsp;"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:613
 #, c-format
@@ -5850,9 +5864,9 @@ msgid "Errors: "
 msgstr "Hatalar: "
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-browse.tt:63
-#, fuzzy, c-format
+#, c-format
 msgid "Exact "
-msgstr "Tam"
+msgstr "Tam "
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/ilsdi.tt:199
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/ilsdi.tt:745
@@ -5915,9 +5929,9 @@ msgid "Expecting a specific item selection."
 msgstr "Belirli bir materyalin seçimi bekleniyor."
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:93
-#, fuzzy, c-format
+#, c-format
 msgid "Expiration date"
-msgstr "Sona erme tarihi:"
+msgstr "Sona erme tarihi"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:235
 #, c-format
@@ -6143,9 +6157,9 @@ msgid "Found %s results in the library's %s collection"
 msgstr "Kütüphanenin %s koleksiyonunda %s sonuç bulundu"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/openlibrary-readapi.inc:3
-#, fuzzy, c-format
+#, c-format
 msgid "Found in Open Library:"
-msgstr "Open Library:"
+msgstr "Open Library'de bulundu:"
 
 #. SCRIPT
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/calendar.inc:2
@@ -6185,9 +6199,9 @@ msgid "Full subscription history for %s"
 msgstr "%s için tam abonelik geçmişi"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-browse.tt:68
-#, fuzzy, c-format
+#, c-format
 msgid "Fuzzy "
-msgstr "Bulanık"
+msgstr "Bulanık "
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:1009
 #, c-format
@@ -6302,7 +6316,7 @@ msgstr ""
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:61
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:146
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:203
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:310
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:306
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/masthead.inc:264
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/masthead.inc:281
 #, c-format
@@ -6319,33 +6333,29 @@ msgstr "Ayrıntılara git"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-authoritiessearchresultlist.tt:22
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/page-numbers.inc:23
 msgid "Go to page %s"
-msgstr ""
+msgstr "%s Sayfasına git "
 
 #. A
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/page-numbers.inc:10
-#, fuzzy
 msgid "Go to the first page"
-msgstr "Ana sayfaya dön"
+msgstr "İlk sayfaya git"
 
 #. A
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/page-numbers.inc:32
-#, fuzzy
 msgid "Go to the last page"
-msgstr "Ana sayfaya dön"
+msgstr "Son sayfaya git"
 
 #. A
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-authoritiessearchresultlist.tt:28
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/page-numbers.inc:29
-#, fuzzy
 msgid "Go to the next page"
-msgstr "Ana sayfaya dön"
+msgstr "Sonraki sayfaya git"
 
 #. A
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-authoritiessearchresultlist.tt:10
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/page-numbers.inc:13
-#, fuzzy
 msgid "Go to the previous page"
-msgstr "Ana sayfaya dön"
+msgstr "Önceki sayfaya git"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:69
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:141
@@ -6458,9 +6468,9 @@ msgid "Highlight"
 msgstr "Vurgula"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:92
-#, fuzzy, c-format
+#, c-format
 msgid "Hold date"
-msgstr "Ayırma tarihi:"
+msgstr "Ayırtma tarihi"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:64
 #, c-format
@@ -6530,9 +6540,9 @@ msgid "Holds (%s)"
 msgstr "Ayırtılanlar (%s)"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:55
-#, fuzzy, c-format
+#, c-format
 msgid "Holds history"
-msgstr "Bütün geçmiş"
+msgstr "Ayırtma geçmişi"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/ilsdi.tt:39
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-ISBDdetail.tt:15
@@ -6766,9 +6776,9 @@ msgstr ""
 "beklediğiniz yanıtı vermiyorsa bu kılavuzu kullanabilirsiniz."
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:261
-#, fuzzy, c-format
+#, c-format
 msgid "If you can't find what you are looking for, you can "
-msgstr "Aradığınız şeyi bulamıyor musunuz?"
+msgstr "Aradığınız şeyi bulamıyorsanız, şöyle yapabilirsiniz"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:97
 #, c-format
@@ -6935,7 +6945,7 @@ msgid "In transit from %s to %s since %s"
 msgstr "%s öğesinden %s öğesine aktarım halinde %s tarihinden beri"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/opac-detail-sidebar.inc:30
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/title-actions-menu.inc:56
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/title-actions-menu.inc:60
 #, c-format
 msgid "In your cart"
 msgstr "Sepetinizde"
@@ -6989,9 +6999,9 @@ msgid "Interlibrary loan requests"
 msgstr "Kütüphanelerarası ödünç talepleri"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:44
-#, fuzzy, c-format
+#, c-format
 msgid "Interlibrary loan requests "
-msgstr "Kütüphanelerarası ödünç talepleri"
+msgstr "Kütüphaneler arası ödünç verme istekleri"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shareshelf.tt:54
 #, c-format
@@ -7066,9 +7076,9 @@ msgid "Item damaged"
 msgstr "Materyal hasarlı"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:511
-#, fuzzy, c-format
+#, c-format
 msgid "Item details"
-msgstr "Daha fazla ayrıntı"
+msgstr "Materyal ayrıntıları"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1257
 #, c-format
@@ -7263,9 +7273,9 @@ msgid "Languages"
 msgstr "Diller"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/opac-bottom.inc:60
-#, fuzzy, c-format
+#, c-format
 msgid "Languages:"
-msgstr "Diller"
+msgstr "Diller:"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:365
 #, c-format
@@ -7394,9 +7404,9 @@ msgid "Limit to any of the following:"
 msgstr "Aşağıdakilerden herhangi birine sınırlayın:"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/opac-facets.inc:14
-#, fuzzy, c-format
+#, c-format
 msgid "Limit to currently available items"
-msgstr "Mevcut kullanılabilir materyallere sınırla."
+msgstr "Mevcut kullanılabilir materyaller ile sınırlandırın"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/opac-topissues.inc:49
 #, c-format
@@ -7469,9 +7479,9 @@ msgid "Lists"
 msgstr "Listeler"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:76
-#, fuzzy, c-format
+#, c-format
 msgid "Lists "
-msgstr "Listeler"
+msgstr "Listeler "
 
 #. For the first occurrence,
 #. SCRIPT
@@ -7524,9 +7534,9 @@ msgid "Location (Status)"
 msgstr "Yer (Durum)"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:232
-#, fuzzy, c-format
+#, c-format
 msgid "Location and availability:"
-msgstr "Yeri ve kullanılabilirliği: "
+msgstr "Konumu ve kullanılabilirliği:"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-basket.tt:231
 #, c-format
@@ -7556,7 +7566,7 @@ msgstr "Konumlar"
 msgid "Log in"
 msgstr "Oturum aç"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/title-actions-menu.inc:39
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/title-actions-menu.inc:41
 #, c-format
 msgid "Log in to add tags"
 msgstr "Tag eklemek için oturum açın"
@@ -7617,9 +7627,9 @@ msgid "Log out"
 msgstr "Çıkış yap"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/masthead-sci.inc:37
-#, fuzzy, c-format
+#, c-format
 msgid "Log out "
-msgstr "Çıkış yap"
+msgstr "Oturumu kapat"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth.tt:44
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth.tt:46
@@ -7677,9 +7687,9 @@ msgid "LookupPatron"
 msgstr "KullanıcıArama"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/accounts.inc:66
-#, fuzzy, c-format
+#, c-format
 msgid "Lost item returned"
-msgstr "Materyalin süresi uzatıldı"
+msgstr "Kayıp materyal iade edildi"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-basket.tt:36
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-downloadcart.tt:19
@@ -7750,12 +7760,12 @@ msgstr "Ödeme yapın"
 msgid "Male:"
 msgstr "Erkek:"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:348
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:344
 #, c-format
 msgid "Managed by"
 msgstr "Yöneten"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:401
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:397
 #, c-format
 msgid "Managed by:"
 msgstr "Yöneten:"
@@ -7763,12 +7773,12 @@ msgstr "Yöneten:"
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/accounts.inc:64
 #, c-format
 msgid "Manual credit"
-msgstr ""
+msgstr "Manuel kredi "
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/accounts.inc:65
 #, c-format
 msgid "Manual invoice"
-msgstr ""
+msgstr "Manuel fatura "
 
 #. SCRIPT
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/calendar.inc:2
@@ -7990,8 +8000,8 @@ msgstr "Yeni liste"
 msgid "New password:"
 msgstr "Yeni şifre:"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:325
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:454
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:321
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:450
 #, c-format
 msgid "New purchase suggestion"
 msgstr "Yeni satın alma önerisi"
@@ -8272,12 +8282,12 @@ msgid "No, do not delete"
 msgstr "Hayır, silmeyin"
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:469
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:465
 msgid "No, do not delete suggestion"
 msgstr "Hayır, öneriyi silmeyin"
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:469
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:465
 msgid "No, do not delete suggestions"
 msgstr "Hayır, önerileri silmeyin"
 
@@ -8307,6 +8317,7 @@ msgid "Non-musical recording"
 msgstr "Müzik dışı kayıt"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-authorities-home.tt:78
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/av-build-dropbox.inc:19
 #, c-format
 msgid "None"
 msgstr "Hiç biri"
@@ -8375,7 +8386,7 @@ msgid "Not what you expected? Check for "
 msgstr "Aradığınızı bulamadınız mı? Bakınız "
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:829
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:346
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:342
 #, c-format
 msgid "Note"
 msgstr "Not"
@@ -8385,7 +8396,7 @@ msgstr "Not"
 msgid "Note:"
 msgstr "Not: "
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:386
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:382
 #, c-format
 msgid "Note: "
 msgstr "Not: "
@@ -8591,8 +8602,8 @@ msgstr "Siparişte"
 msgid "On-site checkouts"
 msgstr "Yerinde ödünç alımlar"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:323
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:452
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:319
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:448
 #, c-format
 msgid ""
 "Once the library has processed those suggestions you will be able to place "
@@ -9676,15 +9687,15 @@ msgstr "İlgili Terim"
 msgid "Relative"
 msgstr "Göreceli"
 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:205
+#, fuzzy, c-format
+msgid "Relatives' charges"
+msgstr "Yakınlarının ödünç aldıkları"
+
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:200
 #, c-format
 msgid "Relatives' checkouts"
 msgstr "Yakınlarının ödünç aldıkları"
-
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:205
-#, c-format
-msgid "Relatives' fines"
-msgstr "Yakınlarının cezaları"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/resort_form.inc:1
 #, c-format
@@ -9711,7 +9722,7 @@ msgstr "Alanı kaldır"
 msgid "Remove from list"
 msgstr "Listeden kaldır"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/title-actions-menu.inc:47
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/title-actions-menu.inc:51
 #, c-format
 msgid "Remove from this list"
 msgstr "Bu listeden kaldır"
@@ -10143,12 +10154,12 @@ msgstr "Kaydet"
 msgid "Save record "
 msgstr "Künyeyi kaydet"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/title-actions-menu.inc:45
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/title-actions-menu.inc:49
 #, c-format
 msgid "Save to another list"
 msgstr "Başka bir listeye kaydet"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/title-actions-menu.inc:50
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/title-actions-menu.inc:54
 #, c-format
 msgid "Save to lists"
 msgstr "Listelere kaydedin"
@@ -10251,7 +10262,6 @@ msgstr "Bu yazarın eserlerinde ara"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:32
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-browse.tt:46
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:292
 #, c-format
 msgid "Search for:"
 msgstr "Katalogda arayın:"
@@ -10285,8 +10295,6 @@ msgstr "Arama sonuçları"
 msgid "Search results pagination"
 msgstr "Arama sonuçları"
 
-#. INPUT type=text name=title
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:293
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/svc/suggestion.tt:4
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/svc/suggestion.tt:14
 #, c-format
@@ -10400,7 +10408,7 @@ msgstr "Belirli bir materyal seçin:"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-search-history.tt:159
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-search-history.tt:196
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:814
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:469
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:465
 #, c-format
 msgid "Select all"
 msgstr "Tümünü seç"
@@ -10426,8 +10434,8 @@ msgstr "Arama sonucunu seçin: %s"
 msgid "Select searches to: "
 msgstr "Aramaları seçin: "
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:334
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:469
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:330
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:465
 #, c-format
 msgid "Select suggestions to: "
 msgstr "Önerilerde seçin: "
@@ -10941,7 +10949,7 @@ msgstr "Bu listenin sıralama düzeni:"
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/ill-availability-table.inc:6
 #, c-format
 msgid "Source"
-msgstr ""
+msgstr "Kaynak"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:334
 #, c-format
@@ -10981,7 +10989,7 @@ msgstr "İstatistikler"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:131
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:99
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:135
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:349
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:345
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:727
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sci/sci-main.tt:82
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:26
@@ -10990,7 +10998,7 @@ msgid "Status"
 msgstr "Durum"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:195
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:409
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:405
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:98
 #, c-format
 msgid "Status:"
@@ -11062,9 +11070,9 @@ msgid "Subject(s):"
 msgstr "Konu(lar):"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reportproblem.tt:79
-#, fuzzy, c-format
+#, c-format
 msgid "Subject: "
-msgstr "Konu"
+msgstr "Konu:"
 
 #. For the first occurrence,
 #. %1$s:  BIBLIO_RESULT.subject | $raw 
@@ -11088,9 +11096,9 @@ msgid "Submit"
 msgstr "Gönder"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sci/sci-main.tt:122
-#, fuzzy, c-format
+#, c-format
 msgid "Submit "
-msgstr "Gönder"
+msgstr "Gönder "
 
 #. INPUT type=submit
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-review.tt:52
@@ -11211,38 +11219,38 @@ msgid "Sudoc"
 msgstr "Sudoc"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/opac-detail-sidebar.inc:37
-#, fuzzy, c-format
+#, c-format
 msgid "Suggest for purchase"
-msgstr "için önerilen"
+msgstr "Satın alma önerisi"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:302
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:305
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:298
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:301
 #, fuzzy, c-format
 msgid "Suggested by anyone"
 msgstr "Önerildiği tarih"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:301
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:304
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:297
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:300
 #, fuzzy, c-format
 msgid "Suggested by me"
 msgstr "Öneriyi yapan:"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:298
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:294
 #, c-format
 msgid "Suggested by:"
 msgstr "Öneriyi yapan:"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:347
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:343
 #, c-format
 msgid "Suggested for"
 msgstr "için önerilen"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:393
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:389
 #, c-format
 msgid "Suggested for:"
 msgstr "Önerilen:"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:345
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:341
 #, c-format
 msgid "Suggested on"
 msgstr "Önerildiği tarih"
@@ -11252,7 +11260,7 @@ msgstr "Önerildiği tarih"
 msgid "Suggestions"
 msgstr "Öneriler"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:344
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:340
 #, c-format
 msgid "Summary"
 msgstr "Özet"
@@ -11727,8 +11735,8 @@ msgstr "Seçilen materyal ile ilgili yorum yoktur."
 msgid "There are no items that can be placed on hold."
 msgstr "Ayırtma yapılacak hiç bir materyal yoktur."
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:434
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:439
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:430
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:435
 #, c-format
 msgid "There are no pending purchase suggestions."
 msgstr "Bekleyen satınalma önerileri yoktur."
@@ -12241,6 +12249,8 @@ msgstr "Kaydınıza yapılacak güncellemeler"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:260
 msgid "Use this to report any problems with your currently checked out items"
 msgstr ""
+"Şu anda ödünç aldığınız materyallerle ilgili herhangi bir sorunu bildirmek "
+"için bunu kullanın"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth.tt:217
 #, c-format
@@ -12263,7 +12273,7 @@ msgid "Username:"
 msgstr "Kullanıcı adı:"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reportproblem.tt:75
-#, fuzzy, c-format
+#, c-format
 msgid "Username: "
 msgstr "Kullanıcı adı:"
 
@@ -12319,10 +12329,10 @@ msgstr "Görüntüle"
 msgid "View All"
 msgstr "Hepsini gör"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:436
-#, fuzzy, c-format
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:432
+#, c-format
 msgid "View all suggestions"
-msgstr "Önerileri ara"
+msgstr "Tüm önerileri görüntüle"
 
 #. A
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-imageviewer.tt:78
@@ -12481,7 +12491,7 @@ msgid "With selected searches: "
 msgstr "Seçtiğiniz aramalarla birlikte:"
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:469
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:465
 msgid "With selected suggestions: "
 msgstr "Seçili önerilerle: "
 
@@ -12571,13 +12581,13 @@ msgid "Yes, delete"
 msgstr "Seçili önerilerle: "
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:469
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:465
 #, fuzzy
 msgid "Yes, delete suggestion"
 msgstr "Seçili önerilerle: "
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:469
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:465
 #, fuzzy
 msgid "Yes, delete suggestions"
 msgstr "Seçili önerilerle: "
@@ -12643,7 +12653,7 @@ msgstr ""
 msgid "You are not allowed to call this page directly"
 msgstr "Bu sayfayı doğrudan çağırma izniniz yok"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:445
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:441
 #, c-format
 msgid "You are not authorized to see pending purchase suggestions."
 msgstr "Beklemekte olan satın alma önerilerini görme yetkiniz yoktur."
@@ -12840,12 +12850,12 @@ msgstr "Şu anda hiç bir makale talebiniz yok."
 msgid "You have no fines or charges"
 msgstr "Herhangi bir para cezanız ya da borcunuz yoktur"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:443
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:439
 #, fuzzy, c-format
 msgid "You have no pending purchase suggestions."
 msgstr "Bekleyen satınalma önerileri yoktur."
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:436
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:432
 #, fuzzy, c-format
 msgid "You have no pending purchase suggestions. "
 msgstr "Bekleyen satınalma önerileri yoktur."
@@ -12865,7 +12875,7 @@ msgid "You have nothing checked out"
 msgstr "Üzerinizde ödünç alınmış hiçbir şey yoktur"
 
 #. %1$s:  Koha.Preference('MaxOpenSuggestions') | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:323
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:319
 #, fuzzy, c-format
 msgid ""
 "You have reached your limit for suggestions you can place at this time (%s)."
@@ -12882,7 +12892,7 @@ msgstr ""
 "Şu anda gönderebileceğiniz öneri sınırına ulaştınız (%s). Kütüphane bu "
 "önerileri değerlendirdikten sonra daha fazla öneri gönderebilirsiniz."
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:452
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:448
 #, fuzzy, c-format
 msgid "You have reached your limit for suggestions you can place at this time."
 msgstr "Şu anda gönderebileceğiniz öneri sınırına ulaştınız."
@@ -12937,8 +12947,8 @@ msgstr ""
 #. %1$s:  Koha.Preference('MaxTotalSuggestions') | html 
 #. %2$s:  Koha.Preference('NumberOfSuggestionDays') | html 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:45
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:321
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:450
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:317
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:446
 #, c-format
 msgid "You may only add up to %s suggestions in %s days."
 msgstr ""
@@ -14334,3 +14344,6 @@ msgstr "×"
 
 #~ msgid "Preview"
 #~ msgstr "Ön izleme"
+
+#~ msgid "Relatives' fines"
+#~ msgstr "Yakınlarının cezaları"
