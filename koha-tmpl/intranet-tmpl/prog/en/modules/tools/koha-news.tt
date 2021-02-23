@@ -239,6 +239,11 @@ Edit news item[% ELSE %]Add news item[% END %][% ELSE %]News[% END %]</div>
                                                 [% PROCESS options_for_libraries libraries => Branches.all( selected => branchcode, unfiltered => 1, ) %]
                                             </select>
                                         </li>
+                                        <li>
+                                            <label>
+                                                <input type="checkbox" name="show_expired" id="show_expired" /> Show expired
+                                            </label>
+                                        </li>
                                     </ol>
                                 </fieldset>
                             </form>
@@ -291,6 +296,20 @@ Edit news item[% ELSE %]Add news item[% END %][% ELSE %]News[% END %]</div>
                 }
             }
 
+            /* Custom table search configuration: If a table row
+               has an "expired" class, hide it UNLESS the
+               show_expired checkbox is checked */
+            $.fn.dataTable.ext.search.push(
+                function( settings, searchData, index, rowData, counter ) {
+                    var row = $(settings.aoData[index].nTr);
+                    if( row.hasClass("expired") && !$("#show_expired").prop("checked") ){
+                        return false;
+                    } else {
+                        return true;
+                    }
+                }
+            );
+
             $(document).ready(function() {
                 var newst = $("#newst").DataTable($.extend(true, {}, dataTablesDefaults, {
                     "order": [[ 4, "desc" ]],
@@ -313,6 +332,11 @@ Edit news item[% ELSE %]Add news item[% END %][% ELSE %]News[% END %]</div>
                         alert(_("Please select a news item to delete."));
                         return false;
                     }
+                });
+
+                $("#show_expired").on("change", function(){
+                    /* redraw the DataTable according to the custom search function */
+                    newst.draw();
                 });
 
                 newst.on( 'search.dt', function () {
