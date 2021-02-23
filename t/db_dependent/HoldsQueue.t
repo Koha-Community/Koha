@@ -1379,7 +1379,7 @@ subtest "Test _checkHoldPolicy" => sub {
     my $library1  = $builder->build_object( { class => 'Koha::Libraries' } );
     my $library2  = $builder->build_object( { class => 'Koha::Libraries' } );
     my $library_nongroup = $builder->build_object( { class => 'Koha::Libraries' } );
-    my $category = $builder->build_object( { class => 'Koha::Patron::Categories', value => {exclude_from_local_holds_priority => 0} });
+    my $category = $builder->build_object( { class => 'Koha::Patron::Categories' });
     my $patron  = $builder->build_object(
         {
             class => "Koha::Patrons",
@@ -1394,7 +1394,6 @@ subtest "Test _checkHoldPolicy" => sub {
         {
             biblionumber => $biblio->biblionumber,
             library      => $library1->branchcode,
-            exclude_from_local_holds_priority => 0,
         }
     );
 

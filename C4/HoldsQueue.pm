@@ -454,7 +454,6 @@ sub MapItemsToHoldRequests {
 
             my $local_hold_match;
             foreach my $item (@$available_items) {
-                next if $item->{_object}->exclude_from_local_holds_priority;
 
                 next unless _checkHoldPolicy($item, $request);
 
