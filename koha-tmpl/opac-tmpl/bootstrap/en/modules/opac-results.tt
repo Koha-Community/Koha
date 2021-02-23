@@ -934,7 +934,7 @@
                         }
 
                         if ( data.totalItems ) {
-                            $overdrive_results.html( '<a href="/cgi-bin/koha/opac-overdrive-search.pl?q=' + escape( od_querystring ) + '">' + MSG_RESULTS_FOUND_IN_COLLECTION.format(data.totalItems, 'OverDrive') + '</a>' );
+                            $overdrive_results.html( '<a href="/cgi-bin/koha/opac-overdrive-search.pl?q=' + encodeURIComponent( od_querystring ) + '">' + MSG_RESULTS_FOUND_IN_COLLECTION.format(data.totalItems, 'OverDrive') + '</a>' );
                         } else {
                             $overdrive_results.remove();
                         }
@@ -952,7 +952,7 @@
 
                         // data.total can be either 42 or "60+"
                         if ( typeof(data.total) === 'string' && data.total.charAt(0) > 0 || typeof(data.total) === 'number' && data.total > 0 ) {
-                            $recordedbooks_results.html( '<a href="/cgi-bin/koha/opac-recordedbooks-search.pl?q=' + escape( querystring ) + '">' + MSG_RESULTS_FOUND_IN_COLLECTION.format(data.total, 'RecordedBooks') + '</a>' );
+                            $recordedbooks_results.html( '<a href="/cgi-bin/koha/opac-recordedbooks-search.pl?q=' + encodeURIComponent( querystring ) + '">' + MSG_RESULTS_FOUND_IN_COLLECTION.format(data.total, 'RecordedBooks') + '</a>' );
                         } else {
                             $recordedbooks_results.remove();
                         }
