@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Koha 18.05\n"
 "POT-Creation-Date: 2013-05-02 01:29-0300\n"
-"PO-Revision-Date: 2020-11-16 16:42+0000\n"
+"PO-Revision-Date: 2021-01-29 11:43+0000\n"
 "Last-Translator: bargioni <bargioni@pusc.it>\n"
 "Language-Team: CILEA <z.tajoli@cineca.it>\n"
 "Language: it\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.8\n"
 "X-Poedit-SourceCharset: UTF-8\n"
-"X-POOTLE-MTIME: 1605544928.610893\n"
+"X-POOTLE-MTIME: 1611920610.222842\n"
 "X-Poedit-Basepath: ../../../versioni/master/koha-tmpl\n"
 "X-Poedit-SearchPath-0: .\n"
 "X-Pootle-Path: /it/18.05/it-IT-pref.po\n"
@@ -1692,7 +1692,7 @@ msgstr "lasca"
 
 # Authorities > General
 msgid "authorities.pref#AuthorityMergeMode# mode. In strict mode subfields that are not found in the authority record, are deleted. Loose mode will keep them. Loose mode is the historical behavior and still the default."
-msgstr ". In modalità stretta i sottocampi non presenti nell'authority, verranno cancellati. In moldalità lasca verrano mantenuti. La modalità lasca è quella presente si dalle origini ed è ancora il default."
+msgstr ". In modalità stretta i sottocampi non presenti nell'authority, verranno cancellati. In modalità lasca verranno mantenuti. La modalità lasca è quella presente sin dalle origini ed è ancora il default."
 
 # Authorities > General
 msgid "authorities.pref#AuthorityMergeMode# strict"
@@ -7423,6 +7423,10 @@ msgid "opac.pref#PatronSelfRegistrationBorrowerUnwantedField# The following <a h
 msgstr "Le seguenti <a href='http://schema.koha-community.org/__VERSION__/tables/borrowers.html' target='blank'>colonne di database</a> non compariranno nella schermata di auto-registrazione dell'utente:"
 
 # OPAC > Self registration and modification
+msgid "opac.pref#PatronSelfRegistrationDefaultCategory# <br><strong>WARNING: Do not use a regular patron category for self registration.</strong> If the <code>misc/cronjobs/cleanup_database.pl</code> cronjob is setup to delete unverified and unfinished OPAC self registrations, it will permanently and unrecoverably delete all patrons that have registered more than PatronSelfRegistrationExpireTemporaryAccountsDelay days ago."
+msgstr ""
+
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationDefaultCategory# Use the patron category code"
 msgstr "Usa il codice utente"
 
@@ -8671,8 +8675,8 @@ msgid "searching.pref#QueryFuzzy# Try"
 msgstr "Prova"
 
 # Searching > Features
-msgid "searching.pref#QueryFuzzy# to match similarly spelled words in a search (for example, a search for <cite>flang</cite> would also match <cite>flange</cite> and <cite>fang</cite>; REQUIRES ZEBRA)."
-msgstr "a trovare parole simili nella ricerca (per esempio cercare <cite>flang</cite> trova <cite>flange</cite> e <cite>fang</cite>; RICHIEDE ZEBRA)."
+msgid "searching.pref#QueryFuzzy# to match similarly spelled words in a search (for example, a search for <cite>flang</cite> would also match <cite>flange</cite> and <cite>fang</cite>; Currently only affects Zebra searches. Any Elasticsearch term can be made fuzzy by adding a ~ directly after the term.)."
+msgstr ""
 
 # Searching > Features
 msgid "searching.pref#QueryRegexEscapeOptions# Don't escape"

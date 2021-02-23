@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 18.05\n"
-"POT-Creation-Date: 2021-01-18 08:40-0300\n"
-"PO-Revision-Date: 2021-01-16 10:28+0000\n"
+"POT-Creation-Date: 2021-02-18 09:04-0300\n"
+"PO-Revision-Date: 2021-01-30 13:57+0000\n"
 "Last-Translator: Jónás János <janosjonas@outlook.com>\n"
 "Language-Team: Koha Translation Team <koha-translate@nongnu.org>\n"
 "Language: hu\n"
@@ -11,7 +11,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8-bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.8\n"
-"X-POOTLE-MTIME: 1610792921.291650\n"
+"X-POOTLE-MTIME: 1612015059.595800\n"
 "X-Pootle-Path: /hu/18.05/hu-HU-staff-prog.po\n"
 "X-Pootle-Revision: 1\n"
 
@@ -330,7 +330,7 @@ msgid ""
 "%sAccounts %sSerials %s %s %s "
 msgstr ""
 "%s %s %s %s %s %s %s %s %s %sKölcsönzés %sKatalógus %sOlvasók %sBeszerzések "
-"%sFiókok %sPeriodikák %s %s %s "
+"%sFiókok %sSorozatok %s %s %s "
 
 #. For the first occurrence,
 #. %1$s:  ar.biblio.biblioitem.publishercode | html 
@@ -3051,7 +3051,7 @@ msgstr "Engedélyezett érték "
 
 #. %1$s:  FOREACH error IN errors 
 #. %2$s:  IF ( error.sqlerr ) 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1023
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1024
 #, c-format
 msgid "%s %sThis report contains the SQL keyword "
 msgstr ""
@@ -3462,7 +3462,7 @@ msgstr ""
 
 #. For the first occurrence,
 #. %1$s:  END 
-#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:142
+#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:147
 #: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:136
 #, c-format
 msgid ""
@@ -3654,6 +3654,13 @@ msgstr "Új bibliográfiai tétel hozzáadva "
 msgid "%s Add new upload or search %s Results %s "
 msgstr ""
 
+#. %1$s:  IF heading_add_tag_p 
+#. %2$s:  ELSE 
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:53
+#, fuzzy, c-format
+msgid "%s Add tag %s Modify tag "
+msgstr "%s%sHívójel módosítása "
+
 #. %1$s:  ELSE 
 #. %2$s:  END 
 #. %3$s:  ELSIF op == 'list' 
@@ -3774,6 +3781,16 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/circ/circulation.tt:860
 #, c-format
 msgid "%s Article requests"
+msgstr ""
+
+#. %1$s:  FOR w IN warnHiddenBiblionumbers 
+#. %2$s:  w.frameworkcode | html 
+#. %3$s:  w.interface | html 
+#: intranet-tmpl/prog/en/modules/about.tt:347
+#, c-format
+msgid ""
+"%s Biblio framework \"%s\" has the biblionumber field hidden at the "
+"interface %s"
 msgstr ""
 
 #. %1$s:  IF (del_biblio) 
@@ -5101,7 +5118,7 @@ msgstr "%s Vezetéknév: "
 #. %29$s:  loo.link | html 
 #. %30$s:  END 
 #. %31$s:  END 
-#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:280
+#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:285
 #, c-format
 msgid ""
 "%s Tab:%s, %s | Koha field: %s, %s %sRepeatable, %sNot repeatable,%s "
@@ -6393,18 +6410,6 @@ msgstr "(nincs e-mail a nyilvántartásban)"
 msgid "%s%s%s(none)%s"
 msgstr "%s%s%s(egyik sem)%s"
 
-#. %1$s:  searchfield | html 
-#. %2$s:  END 
-#. %3$s:  IF ( heading_add_tag_p ) 
-#. %4$s:  END 
-#. %5$s:  ELSE 
-#. %6$s:  action | html 
-#. %7$s:  END 
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:52
-#, c-format
-msgid "%s%s%sAdd tag%s%s%s%s"
-msgstr "%s%s%sHívójel hozzáadása%s%s%s%s"
-
 #. %1$s:  IF ( frameworkcode ) 
 #. %2$s:  frameworkcode | html 
 #. %3$s:  ELSE 
@@ -6542,13 +6547,6 @@ msgstr "%s%s, %s%s ("
 #, c-format
 msgid "%s%s; Published by %s %s%s in "
 msgstr "%s%s; Kiadta %s %s%s "
-
-#. %1$s:  IF ( use_heading_flags_p ) 
-#. %2$s:  IF ( heading_modify_tag_p ) 
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:52
-#, c-format
-msgid "%s%sModify tag "
-msgstr "%s%sHívójel módosítása "
 
 #. %1$s:  IF ( suggestions_loo.copyrightdate ) 
 #. %2$s:  suggestions_loo.copyrightdate | html 
@@ -7172,7 +7170,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/catalogue/advsearch.tt:129
 #, c-format
 msgid "%sItem type %sCollection %sShelving location %sSomething else %s "
-msgstr ""
+msgstr "%sKiadványtípus %sGyűjtemény %sPolc helye %sValami más %s "
 
 #. %1$s:  INCLUDE 'doc-head-open.inc' 
 #. %2$s:  INCLUDE 'doc-head-close.inc' 
@@ -7453,8 +7451,8 @@ msgstr "%sIgen%s&nbsp;%s"
 #: intranet-tmpl/prog/en/modules/admin/classsources.tt:303
 #: intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:207
 #: intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:208
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:200
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:201
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:207
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:208
 #, c-format
 msgid "%sYes%sNo%s"
 msgstr "%sIgen%sNem%s"
@@ -7637,96 +7635,96 @@ msgstr "%sx%s = %s "
 msgid "%s✓%s"
 msgstr "%s - %s"
 
-#: intranet-tmpl/prog/en/modules/about.tt:736
+#: intranet-tmpl/prog/en/modules/about.tt:743
 #, c-format
 msgid ""
 "&#1041;&#1098;&#1083;&#1075;&#1072;&#1088;&#1089;&#1082;&#1080; (Bulgarian) "
 "Radoslav Kolev"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:770
+#: intranet-tmpl/prog/en/modules/about.tt:777
 #, c-format
 msgid ""
 "&#1056;&#1091;&#1089;&#1089;&#1082;&#1080;&#1081; (Russian) Victor Titarchuk "
 "and Serhij Dubyk"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:777
+#: intranet-tmpl/prog/en/modules/about.tt:784
 #, c-format
 msgid ""
 "&#1059;&#1082;&#1088;&#1072;&#1111;&#1085;&#1089;&#1100;&#1082;&#1072; "
 "(Ukrainian) Victor Titarchuk and Serhij Dubyk"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:751
+#: intranet-tmpl/prog/en/modules/about.tt:758
 #, c-format
 msgid "&#1506;&#1489;&#1512;&#1497;&#1514; (Hebrew)"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:776
+#: intranet-tmpl/prog/en/modules/about.tt:783
 #, c-format
 msgid "&#1575;&#1585;&#1583;&#1608;(Urdu) Ata ur Rehman"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:765
+#: intranet-tmpl/prog/en/modules/about.tt:772
 #, c-format
 msgid "&#1601;&#1575;&#1585;&#1587;&#1609; (Persian)"
 msgstr "&#1601;&#1575;&#1585;&#1587;&#1609; (Persian)"
 
-#: intranet-tmpl/prog/en/modules/about.tt:739
+#: intranet-tmpl/prog/en/modules/about.tt:746
 #, c-format
 msgid "&#20013;&#25991; (Chinese)"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:752
+#: intranet-tmpl/prog/en/modules/about.tt:759
 #, c-format
 msgid "&#2361;&#2367;&#2344;&#2381;&#2342;&#2368; (Hindi)"
 msgstr "&#2361;&#2367;&#2344;&#2381;&#2342;&#2368; (Hindi)"
 
-#: intranet-tmpl/prog/en/modules/about.tt:738
+#: intranet-tmpl/prog/en/modules/about.tt:745
 #, c-format
 msgid ""
 "&#2476;&#2494;&#2434;&#2482;&#2494; (Bengali) Parthasarathi Mukhopadhyay"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:758
+#: intranet-tmpl/prog/en/modules/about.tt:765
 #, c-format
 msgid "&#26085;&#26412;&#35486; (Japanese)"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:766
+#: intranet-tmpl/prog/en/modules/about.tt:773
 #, c-format
 msgid "&#2835;&#2908;&#2879;&#2822; (&#x014D;&#7771;iy&#257;)"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:760
+#: intranet-tmpl/prog/en/modules/about.tt:767
 #, c-format
 msgid "&#3221;&#3240;&#3277;&#3240;&#3233; (kanna&#7693;a)"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:764
+#: intranet-tmpl/prog/en/modules/about.tt:771
 #, c-format
 msgid "&#3374;&#3378;&#3375;&#3390;&#3379;&#3330; (Malayalam)"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:774
+#: intranet-tmpl/prog/en/modules/about.tt:781
 #, c-format
 msgid "&#3616;&#3634;&#3625;&#3634;&#3652;&#3607;&#3618; (Thai)"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:734
+#: intranet-tmpl/prog/en/modules/about.tt:741
 #, c-format
 msgid ""
 "&#4768;&#4635;&#4653;&#4763; (Amharic) Getway II Ethiopia Co. (Yohannes "
 "Mulugeta (Team Leader), Tegene Assefa, Abiyot Bayou)"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:759
+#: intranet-tmpl/prog/en/modules/about.tt:766
 #, c-format
 msgid "&#54620;&#44397;&#50612; (Korean)"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:750
+#: intranet-tmpl/prog/en/modules/about.tt:757
 #, c-format
 msgid ""
 "&#949;&#955;&#955;&#951;&#957;&#953;&#954;&#940; (Greek, Modern [1453- ]) "
@@ -7734,7 +7732,7 @@ msgid ""
 "Papadopoulos), Theodoros Theodoropoulos, Panoraia Gaitanou and Kiriaki Roditi"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:741
+#: intranet-tmpl/prog/en/modules/about.tt:748
 #, c-format
 msgid "&#x010D;e&#353;tina (Czech)"
 msgstr ""
@@ -8115,6 +8113,16 @@ msgid ""
 msgstr ""
 "&rsaquo; %s%sValuta módosítása '%s'%sÚj valuta%s%s %sValuta törlésének "
 "megerősítése %s %sValuták %s "
+
+#. %1$s:  IF heading_add_tag_p 
+#. %2$s:  ELSE 
+#. %3$s:  END 
+#. %4$s:  searchfield | html 
+#. %5$s:  ELSIF ( else ) 
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:23
+#, fuzzy, c-format
+msgid "&rsaquo; %sAdd tag%sModify tag%s %s %s &rsaquo; "
+msgstr "&rsaquo; Add hozzá az értesítést "
 
 #. %1$s:  IF ( patrons_in_category > 0 ) 
 #. %2$s:  categorycode | html 
@@ -9772,7 +9780,7 @@ msgstr ""
 "(Beleértve a kezdő és záró dátumot, alapértelmezetten %s nappal ezelőttől "
 "máig. Egyéb dátum igény szerint megadható.)"
 
-#: intranet-tmpl/prog/en/modules/about.tt:756
+#: intranet-tmpl/prog/en/modules/about.tt:763
 #, c-format
 msgid "(Indonesian)"
 msgstr "(indonéz)"
@@ -9782,8 +9790,8 @@ msgstr "(indonéz)"
 msgid "(Lost)"
 msgstr "Elveszett"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1715
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1737
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1716
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1738
 #, fuzzy, c-format
 msgid "(None)"
 msgstr "%s - %s"
@@ -9919,7 +9927,7 @@ msgstr "(jelenlegi)"
 msgid "(default if none is defined)"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:146
+#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:151
 #, c-format
 msgid "(e.g., Title or Local-Number) "
 msgstr "(pl. cím vagy helyi szám)"
@@ -9951,7 +9959,7 @@ msgstr ""
 msgid "(if empty, subscription is still active) "
 msgstr "%S(ha az üres előfizetés még aktív)"
 
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:93
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:100
 #, c-format
 msgid ""
 "(if you select a value here, the indicators will be limited to the "
@@ -10094,10 +10102,10 @@ msgstr ") megújítva %s %s ( "
 msgid ") you selected does not exist. "
 msgstr "%s tétel tárolva "
 
-#: intranet-tmpl/prog/en/modules/about.tt:505
-#, fuzzy, c-format
+#: intranet-tmpl/prog/en/modules/about.tt:512
+#, c-format
 msgid "), France"
-msgstr "Tamil, Franciaország"
+msgstr "), Franciaország"
 
 #. %1$s:  END 
 #. %2$s:  IF ( waiting ) 
@@ -10113,29 +10121,29 @@ msgstr ""
 msgid "** Vendor's listings already include tax."
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:451
+#: intranet-tmpl/prog/en/modules/about.tt:458
 #, c-format
 msgid ", Auckland, New Zealand (OPAC 'star-ratings' sponsorship)"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:448
+#: intranet-tmpl/prog/en/modules/about.tt:455
 #, c-format
 msgid ", Cyprus"
 msgstr ", Ciprus"
 
-#: intranet-tmpl/prog/en/modules/about.tt:445
+#: intranet-tmpl/prog/en/modules/about.tt:452
 #, c-format
 msgid ", France (Koha 3.0 enhancements to patrons and holds modules)"
 msgstr ", Franciaország (Koha 3.0 jobbítások a olvasó és előjegyzési modulon)"
 
-#: intranet-tmpl/prog/en/modules/about.tt:443
+#: intranet-tmpl/prog/en/modules/about.tt:450
 #, c-format
 msgid ", France (Suggestions, Stats wizards and improved LDAP sponsorship)"
 msgstr ""
 " , Franciaország (Ajánlások, Statisztikai varázslók és jobbított LDAP "
 "támogatások)"
 
-#: intranet-tmpl/prog/en/modules/about.tt:444
+#: intranet-tmpl/prog/en/modules/about.tt:451
 #, fuzzy, c-format
 msgid ""
 ", France (biblio frameworks, MARC authorities, OPAC basket, Serials "
@@ -10144,27 +10152,27 @@ msgstr ""
 " , Franciaország (biblio keretrendszer, MARC authority-k, OPAC kosár, "
 "Sorozatok)"
 
-#: intranet-tmpl/prog/en/modules/about.tt:441
+#: intranet-tmpl/prog/en/modules/about.tt:448
 #, c-format
 msgid ", New Zealand, and Rosalie Blake, Head of Libraries, (Koha 1.0)"
 msgstr ", Új Zéland, és Rosalie Blake, Könyvtár igazgató, (Koha 1.0)"
 
-#: intranet-tmpl/prog/en/modules/about.tt:447
+#: intranet-tmpl/prog/en/modules/about.tt:454
 #, fuzzy, c-format
 msgid ", OH, USA (Koha 3.0 beta testing)"
 msgstr ", PA, USA (Koha 3.0 Zebra Integration)"
 
-#: intranet-tmpl/prog/en/modules/about.tt:442
+#: intranet-tmpl/prog/en/modules/about.tt:449
 #, c-format
 msgid ", Ohio, USA (MARC sponsorship, documentation, template maintenance)"
 msgstr ", Ohio, USA (MARC, dokumentació, sablonok karbantartása)"
 
-#: intranet-tmpl/prog/en/modules/about.tt:446
+#: intranet-tmpl/prog/en/modules/about.tt:453
 #, c-format
 msgid ", PA, USA (Koha 3.0 Zebra Integration sponsorship)"
 msgstr ", PA, USA (Koha 3.0 Zebra Integration)"
 
-#: intranet-tmpl/prog/en/modules/about.tt:747
+#: intranet-tmpl/prog/en/modules/about.tt:754
 #, c-format
 msgid ", Pascale Nalon (ENSMP), and many more "
 msgstr ""
@@ -11001,7 +11009,7 @@ msgstr "Beszerési dátum "
 #: intranet-tmpl/prog/en/modules/plugins/plugins-home.tt:74
 #: intranet-tmpl/prog/en/modules/admin/cash_registers.tt:136
 #: intranet-tmpl/prog/en/modules/admin/categories.tt:426
-#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:266
+#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:271
 #: intranet-tmpl/prog/en/modules/admin/currency.tt:186
 #: intranet-tmpl/prog/en/modules/admin/systempreferences.tt:251
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:82
@@ -11053,7 +11061,7 @@ msgstr "Műveletek"
 #: intranet-tmpl/prog/en/modules/admin/oai_sets.tt:92
 #: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:138
 #: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:206
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:207
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:214
 #: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:174
 #: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:8
 #, c-format
@@ -11963,7 +11971,7 @@ msgstr "További paraméterek"
 msgid "Additional subfields (XML)"
 msgstr " almező"
 
-#: intranet-tmpl/prog/en/modules/about.tt:594
+#: intranet-tmpl/prog/en/modules/about.tt:601
 #, fuzzy, c-format
 msgid "Additional thanks to..."
 msgstr "További köszönet:"
@@ -12302,7 +12310,7 @@ msgstr "Adminisztráció"
 msgid "Ages allowed are %s-%s. "
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:451
+#: intranet-tmpl/prog/en/modules/about.tt:458
 #, c-format
 msgid "Albany Senior High School"
 msgstr "Albany Senior High School"
@@ -12348,7 +12356,7 @@ msgstr ""
 msgid "Alignment"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:494
+#: intranet-tmpl/prog/en/modules/about.tt:501
 #, c-format
 msgid "Alingsås Public Library, Sweden"
 msgstr ""
@@ -12399,7 +12407,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:165
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:174
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:704
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1092
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1093
 #, c-format
 msgid "All"
 msgstr "Minden"
@@ -12563,7 +12571,7 @@ msgstr "Animáció"
 msgid "All vendors"
 msgstr "Hozzáad forgalmazót"
 
-#: intranet-tmpl/prog/en/modules/about.tt:493
+#: intranet-tmpl/prog/en/modules/about.tt:500
 #, c-format
 msgid "Allen Ginsberg Library, USA"
 msgstr ""
@@ -12826,7 +12834,7 @@ msgstr "Második telefon: "
 msgid "Always show checkouts immediately"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:495
+#: intranet-tmpl/prog/en/modules/about.tt:502
 #, c-format
 msgid "American Numismatic Society, USA"
 msgstr ""
@@ -13072,7 +13080,7 @@ msgstr "Anonimálja minden olyan kölcsönzést, amely régebbi, mint"
 msgid "Another pattern with this name already exists."
 msgstr "Egy lista már viseli ezt a nevet!"
 
-#: intranet-tmpl/prog/en/modules/about.tt:633
+#: intranet-tmpl/prog/en/modules/about.tt:640
 #, c-format
 msgid "Antenna.io"
 msgstr ""
@@ -13244,7 +13252,7 @@ msgstr "Használd a találtatási szabályt"
 
 #. INPUT type=submit
 #: intranet-tmpl/prog/en/modules/circ/overdue.tt:214
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1066
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1067
 msgid "Apply filter"
 msgstr "A szűrő alkalmazása"
 
@@ -13294,7 +13302,7 @@ msgstr "Ápr"
 msgid "April"
 msgstr "Április"
 
-#: intranet-tmpl/prog/en/modules/about.tt:496
+#: intranet-tmpl/prog/en/modules/about.tt:503
 #, fuzzy, c-format
 msgid "Arcadia Public Library, USA"
 msgstr "Nelsonville Public Library, Ohio, USA"
@@ -13508,7 +13516,7 @@ msgid "Are you sure you want to delete the selected news?"
 msgstr "Biztos vagy, hogy le akarod törölni ezt a dokumentumot?"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1092
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1093
 #, fuzzy
 msgid "Are you sure you want to delete the selected reports?"
 msgstr "Biztos vagy, hogy le akarod törölni ezt a dokumentumot?"
@@ -13707,7 +13715,7 @@ msgid "Are you sure you want to delete this record?"
 msgstr "Biztos vagy, hogy le akarod törölni ezt a tételt?"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1092
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1093
 #, fuzzy
 msgid "Are you sure you want to delete this report? This cannot be undone."
 msgstr "Biztos vagy, hogy le akarod törölni ezt a dokumentumot?"
@@ -13725,7 +13733,7 @@ msgid "Are you sure you want to delete this rule? This cannot be undone."
 msgstr "Biztos vagy, hogy le akarod törölni ezt a dokumentumot?"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1092
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1093
 #, fuzzy
 msgid "Are you sure you want to delete this saved report?"
 msgstr "Biztos vagy, hogy le akarod törölni ezt a tételt?"
@@ -13988,7 +13996,7 @@ msgstr "Felület"
 msgid "Area:"
 msgstr "Felület:"
 
-#: intranet-tmpl/prog/en/modules/about.tt:735
+#: intranet-tmpl/prog/en/modules/about.tt:742
 #, c-format
 msgid "Armenian Tigran Zargaryan"
 msgstr "Armenian Tigran Zargaryan"
@@ -14073,12 +14081,12 @@ msgstr ""
 msgid "At library: %s"
 msgstr "A könyvtár: %s"
 
-#: intranet-tmpl/prog/en/modules/about.tt:442
+#: intranet-tmpl/prog/en/modules/about.tt:449
 #, c-format
 msgid "Athens County Public Libraries"
 msgstr "Athens County Public Libraries"
 
-#: intranet-tmpl/prog/en/modules/about.tt:497
+#: intranet-tmpl/prog/en/modules/about.tt:504
 #, fuzzy, c-format
 msgid "Athens County Public Libraries, USA"
 msgstr "Athens County Public Libraries"
@@ -14152,7 +14160,7 @@ msgstr "Auth"
 msgid "Auth field copied"
 msgstr "Auth mező lemásolva"
 
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:179
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:186
 #, c-format
 msgid "Auth value"
 msgstr "Auth érték"
@@ -14291,7 +14299,7 @@ msgstr "Szerző(k) %s%s%s %s %s; %s %s %s %s%s %s %s;%s %s %s"
 #: intranet-tmpl/prog/en/modules/circ/article-requests.tt:269
 #: intranet-tmpl/prog/en/modules/circ/request-article.tt:100
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:153
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1061
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1062
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:72
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:263
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:680
@@ -14495,7 +14503,7 @@ msgid ""
 "an authorized value list is not enforced during batch patron import."
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:171
+#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:176
 #: intranet-tmpl/prog/en/modules/admin/localization.tt:21
 #: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:167
 #, c-format
@@ -14503,7 +14511,7 @@ msgid "Authorized value:"
 msgstr "Engedélyezett érték:"
 
 #: intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:105
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:89
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:96
 #: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:71
 #, c-format
 msgid "Authorized value: "
@@ -14660,15 +14668,15 @@ msgstr "Átlag kölcsönzési periódus"
 msgid "BIBTEX"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:703
+#: intranet-tmpl/prog/en/modules/about.tt:710
 #, c-format
 msgid "BSD 3-clause Licence"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:617
-#: intranet-tmpl/prog/en/modules/about.tt:685
-#: intranet-tmpl/prog/en/modules/about.tt:694
-#: intranet-tmpl/prog/en/modules/about.tt:709
+#: intranet-tmpl/prog/en/modules/about.tt:624
+#: intranet-tmpl/prog/en/modules/about.tt:692
+#: intranet-tmpl/prog/en/modules/about.tt:701
+#: intranet-tmpl/prog/en/modules/about.tt:716
 #, c-format
 msgid "BSD License"
 msgstr ""
@@ -14678,7 +14686,7 @@ msgstr ""
 msgid "BT"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:505
+#: intranet-tmpl/prog/en/modules/about.tt:512
 #, c-format
 msgid "BULAC"
 msgstr ""
@@ -15348,7 +15356,7 @@ msgstr "Köteg:"
 msgid "Batches"
 msgstr "Köteg:"
 
-#: intranet-tmpl/prog/en/modules/about.tt:498
+#: intranet-tmpl/prog/en/modules/about.tt:505
 #, c-format
 msgid "BdP de la Meuse, France"
 msgstr ""
@@ -15409,7 +15417,7 @@ msgstr ". Kezdete"
 msgid "Behavior"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:499
+#: intranet-tmpl/prog/en/modules/about.tt:506
 #, c-format
 msgid "BibLibre, France"
 msgstr "BibLibre, Franciaország"
@@ -15579,19 +15587,19 @@ msgstr ""
 msgid "Biblios: "
 msgstr "17- Életrajz "
 
-#: intranet-tmpl/prog/en/modules/about.tt:500
+#: intranet-tmpl/prog/en/modules/about.tt:507
 #, c-format
 msgid ""
 "Biblioteca Provincial Fr. Mamerto Esquiú (Provincia Franciscana de la "
 "Asunción), Argentina"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:501
+#: intranet-tmpl/prog/en/modules/about.tt:508
 #, c-format
 msgid "Bibliotheksservice-Zentrum Baden-Württemberg (BSZ), Germany"
 msgstr "Bibliotheksservice-Zentrum Baden-Württemberg (BSZ), Németország"
 
-#: intranet-tmpl/prog/en/modules/about.tt:505
+#: intranet-tmpl/prog/en/modules/about.tt:512
 #, c-format
 msgid "Bibliothèque Universitaire des Langues et Civilisations ("
 msgstr ""
@@ -15649,7 +15657,7 @@ msgstr "Hozzáadta a %s besorolási szabályt"
 msgid "Biography"
 msgstr "Életrajz"
 
-#: intranet-tmpl/prog/en/modules/about.tt:450
+#: intranet-tmpl/prog/en/modules/about.tt:457
 #, c-format
 msgid ""
 "Birmingham (UK) based developer Mark James for the famfamfam Silk iconset."
@@ -15733,8 +15741,8 @@ msgstr ""
 msgid "Boolean"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:613
-#: intranet-tmpl/prog/en/modules/about.tt:614
+#: intranet-tmpl/prog/en/modules/about.tt:620
+#: intranet-tmpl/prog/en/modules/about.tt:621
 #, c-format
 msgid "Bootstrap"
 msgstr ""
@@ -15832,12 +15840,12 @@ msgstr "Animáció"
 msgid "Branches limitation: "
 msgstr "07- Romanization scheme "
 
-#: intranet-tmpl/prog/en/modules/about.tt:502
+#: intranet-tmpl/prog/en/modules/about.tt:509
 #, c-format
 msgid "Briar Cliff University, USA"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:626
+#: intranet-tmpl/prog/en/modules/about.tt:633
 #, c-format
 msgid "Bridge Material Type Icons Project"
 msgstr ""
@@ -15852,7 +15860,7 @@ msgstr "Minden helyszín"
 msgid "Brightness"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:503
+#: intranet-tmpl/prog/en/modules/about.tt:510
 #, c-format
 msgid "Brimbank City Council, Australia"
 msgstr ""
@@ -15862,12 +15870,12 @@ msgstr ""
 msgid "Broader Term"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:599
+#: intranet-tmpl/prog/en/modules/about.tt:606
 #, c-format
 msgid "Brooke Johnson"
 msgstr "Brooke Johnson"
 
-#: intranet-tmpl/prog/en/modules/about.tt:504
+#: intranet-tmpl/prog/en/modules/about.tt:511
 #, c-format
 msgid "Brooklyn Law School Library, USA"
 msgstr ""
@@ -16047,7 +16055,7 @@ msgstr "Szerző"
 msgid "By: "
 msgstr "Szerző: "
 
-#: intranet-tmpl/prog/en/modules/about.tt:506
+#: intranet-tmpl/prog/en/modules/about.tt:513
 #, c-format
 msgid "ByWater Solutions, USA"
 msgstr "ByWater Solutions, USA"
@@ -16057,17 +16065,17 @@ msgstr "ByWater Solutions, USA"
 msgid "Bytes"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:517
+#: intranet-tmpl/prog/en/modules/about.tt:524
 #, c-format
 msgid "C &amp; P Bibliography Services, USA"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:705
+#: intranet-tmpl/prog/en/modules/about.tt:712
 #, c-format
 msgid "C3.js"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:706
+#: intranet-tmpl/prog/en/modules/about.tt:713
 #, c-format
 msgid "C3.js v0.4.11"
 msgstr ""
@@ -16214,8 +16222,8 @@ msgid "Cache expiry (seconds)"
 msgstr ""
 
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:368
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:918
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:993
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:919
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:994
 #, c-format
 msgid "Cache expiry:"
 msgstr ""
@@ -16239,7 +16247,7 @@ msgstr "Naptár"
 msgid "Calendar information"
 msgstr "Információk a naptárról"
 
-#: intranet-tmpl/prog/en/modules/about.tt:507
+#: intranet-tmpl/prog/en/modules/about.tt:514
 #, c-format
 msgid "California College of the Arts, USA"
 msgstr ""
@@ -16372,12 +16380,12 @@ msgstr "Leltári szám osztályozási séma:"
 msgid "Callnumber: %s "
 msgstr "Leltári szám: %s "
 
-#: intranet-tmpl/prog/en/modules/about.tt:510
+#: intranet-tmpl/prog/en/modules/about.tt:517
 #, c-format
 msgid "Calyx, Australia"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:508
+#: intranet-tmpl/prog/en/modules/about.tt:515
 #, c-format
 msgid "Camden County, USA"
 msgstr ""
@@ -16626,8 +16634,8 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/admin/categories.tt:311
 #: intranet-tmpl/prog/en/modules/admin/categories.tt:387
 #: intranet-tmpl/prog/en/modules/admin/oai_set_mappings.tt:86
-#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:214
-#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:308
+#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:219
+#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:313
 #: intranet-tmpl/prog/en/modules/admin/currency.tt:119
 #: intranet-tmpl/prog/en/modules/admin/authtypes.tt:103
 #: intranet-tmpl/prog/en/modules/admin/usage_statistics.tt:235
@@ -16660,7 +16668,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:236
 #: intranet-tmpl/prog/en/modules/admin/didyoumean.tt:64
 #: intranet-tmpl/prog/en/modules/admin/printers.tt:80
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:98
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:105
 #: intranet-tmpl/prog/en/modules/admin/preferences.tt:155
 #: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:364
 #: intranet-tmpl/prog/en/modules/admin/transport-cost-matrix.tt:85
@@ -16672,8 +16680,8 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:256
 #: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:258
 #: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:354
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:937
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1013
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:938
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1014
 #: intranet-tmpl/prog/en/modules/virtualshelves/downloadshelf.tt:43
 #: intranet-tmpl/prog/en/modules/virtualshelves/addbybiblionumber.tt:111
 #: intranet-tmpl/prog/en/modules/virtualshelves/sendshelfform.tt:33
@@ -17232,7 +17240,7 @@ msgstr "Olvasójegy száma már szerepel a listán"
 msgid "Cardnumbers not found"
 msgstr ": Nem találja ezt a vonalkódot"
 
-#: intranet-tmpl/prog/en/modules/about.tt:509
+#: intranet-tmpl/prog/en/modules/about.tt:516
 #, c-format
 msgid "Carnegie Stout Library, USA"
 msgstr ""
@@ -17401,7 +17409,7 @@ msgstr "&rsaquo; Katalógus Statisztikák"
 msgid "Cataloguing tables"
 msgstr "&rsaquo; Katalógus Statisztikák"
 
-#: intranet-tmpl/prog/en/modules/about.tt:511
+#: intranet-tmpl/prog/en/modules/about.tt:518
 #, fuzzy, c-format
 msgid "Catalyst IT, New Zealand"
 msgstr "Hozzáad forgalmazót"
@@ -17544,12 +17552,12 @@ msgstr ""
 msgid "Center"
 msgstr "Bármely tartalom "
 
-#: intranet-tmpl/prog/en/modules/about.tt:512
+#: intranet-tmpl/prog/en/modules/about.tt:519
 #, c-format
 msgid "Central Kansas Library System (CKLS), USA"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:513
+#: intranet-tmpl/prog/en/modules/about.tt:520
 #, c-format
 msgid "Centre collégial des services regroupés (CCSR), Canada"
 msgstr ""
@@ -18286,7 +18294,7 @@ msgid ""
 "definition."
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:514
+#: intranet-tmpl/prog/en/modules/about.tt:521
 #, fuzzy, c-format
 msgid "Cheshire Libraries, United Kingdom"
 msgstr "software.coop, Egyesült Királyság"
@@ -18841,7 +18849,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:279
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:357
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:158
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1067
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1068
 #, c-format
 msgid "Clear"
 msgstr "Törlés"
@@ -19395,8 +19403,8 @@ msgstr "Klubok, melyekbe nem iratkoztak be"
 #: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:127
 #: intranet-tmpl/prog/en/modules/admin/itemtypes.tt:354
 #: intranet-tmpl/prog/en/modules/admin/checkmarc.tt:166
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1728
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1755
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1729
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1756
 #, c-format
 msgid "Code"
 msgstr "Kód"
@@ -19418,13 +19426,13 @@ msgstr ""
 msgid "Code:"
 msgstr "Kód:"
 
-#: intranet-tmpl/prog/en/modules/about.tt:675
-#: intranet-tmpl/prog/en/modules/about.tt:676
+#: intranet-tmpl/prog/en/modules/about.tt:682
+#: intranet-tmpl/prog/en/modules/about.tt:683
 #, fuzzy, c-format
 msgid "CodeMirror editing library"
 msgstr "Minden könyvtár"
 
-#: intranet-tmpl/prog/en/modules/about.tt:515
+#: intranet-tmpl/prog/en/modules/about.tt:522
 #, fuzzy, c-format
 msgid "Coeur d'Alene Public Library, USA"
 msgstr "Nelsonville Public Library, Ohio, USA"
@@ -19436,7 +19444,7 @@ msgstr "Nelsonville Public Library, Ohio, USA"
 msgid "Collapse all"
 msgstr "c- Gyűjtemény"
 
-#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:133
+#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:138
 #, fuzzy, c-format
 msgid "Collapsed"
 msgstr "c- Gyűjtemény"
@@ -19479,9 +19487,9 @@ msgstr "Gyűjtemény"
 #: intranet-tmpl/prog/en/modules/rotating_collections/editCollections.tt:39
 #: intranet-tmpl/prog/en/modules/rotating_collections/editCollections.tt:69
 #: intranet-tmpl/prog/en/modules/rotating_collections/editCollections.tt:74
-#, fuzzy, c-format
+#, c-format
 msgid "Collection "
-msgstr "c- Gyűjtemény "
+msgstr "Gyűjtemény "
 
 #: intranet-tmpl/prog/en/columns.def:97
 #, c-format
@@ -19520,26 +19528,26 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/catalogue/moredetail.tt:69
 #, c-format
 msgid "Collection:"
-msgstr ""
+msgstr "Gyűjtemény:"
 
 #: intranet-tmpl/prog/en/modules/circ/branchtransfers.tt:129
 #: intranet-tmpl/prog/en/modules/reports/cat_issues_top.tt:96
-#, fuzzy, c-format
+#, c-format
 msgid "Collection: "
-msgstr "c- Gyűjtemény "
+msgstr "Gyűjtemény: "
 
 #. For the first occurrence,
 #. %1$s:  BIBLIO_RESULT.seriestitle | $raw 
 #: intranet-tmpl/prog/en/modules/basket/sendbasket.tt:77
 #: intranet-tmpl/prog/en/modules/virtualshelves/sendshelf.tt:83
-#, fuzzy, c-format
+#, c-format
 msgid "Collection: %s "
-msgstr "c- Gyűjtemény "
+msgstr "Gyűjtemény: %s "
 
 #: intranet-tmpl/prog/en/includes/facets.inc:26
-#, fuzzy, c-format
+#, c-format
 msgid "Collections"
-msgstr "Gyűjtemény"
+msgstr "Gyűjtemények"
 
 #: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:352
 #, c-format
@@ -19882,12 +19890,12 @@ msgstr ""
 "&rsaquo; Erősítsd meg a &quot;%s&quot tétel találati szabály törlését; "
 
 #. %1$s:  tagsubfield | html 
-#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:222
+#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:227
 #, fuzzy, c-format
 msgid "Confirm deletion of subfield %s?"
 msgstr "&rsaquo; Erősítsd meg a %s besorolási szabály törlését"
 
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:106
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:113
 #, fuzzy, c-format
 msgid "Confirm deletion of tag "
 msgstr "&rsaquo; Erősítsd meg a Törlést "
@@ -19972,7 +19980,7 @@ msgstr ""
 msgid "Constrain proportions"
 msgstr "#- Nem életrajzi anyag"
 
-#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:265
+#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:270
 #: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:270
 #, c-format
 msgid "Constraints"
@@ -20203,7 +20211,7 @@ msgstr "Bármely tartalom"
 msgid "Contrast"
 msgstr "Összeg"
 
-#: intranet-tmpl/prog/en/modules/about.tt:491
+#: intranet-tmpl/prog/en/modules/about.tt:498
 #, c-format
 msgid "Contributing companies and institutions"
 msgstr ""
@@ -20378,12 +20386,12 @@ msgstr "Másolás a vágólapra"
 msgid "Copyright"
 msgstr "Szerzői jog"
 
-#: intranet-tmpl/prog/en/modules/about.tt:640
+#: intranet-tmpl/prog/en/modules/about.tt:647
 #, c-format
 msgid "Copyright &copy; 2003-2010 phpMyAdmin devel team"
 msgstr "Szerzői jog &copy; 2003-2010 phpMyAdmin fejlesztőcsapata"
 
-#: intranet-tmpl/prog/en/modules/about.tt:635
+#: intranet-tmpl/prog/en/modules/about.tt:642
 #, c-format
 msgid "Copyright &copy; 2012-2016 "
 msgstr "Szerzői jog &copy; 2012-2016 "
@@ -20420,7 +20428,7 @@ msgstr "Szerzői jog dátuma"
 msgid "Corporate"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:516
+#: intranet-tmpl/prog/en/modules/about.tt:523
 #, fuzzy, c-format
 msgid "Corpus Christi Public Libraries, USA"
 msgstr "Athens County Public Libraries"
@@ -20490,21 +20498,21 @@ msgstr "Hozzáad egy rendszer beállítást "
 msgid "Could not load emoticons"
 msgstr "Jelenlegi elhelyezés"
 
-#: intranet-tmpl/prog/en/modules/about.tt:485
+#: intranet-tmpl/prog/en/modules/about.tt:492
 #, c-format
 msgid ""
 "Could not read the contributors.yaml file. Please make sure &lt;docdir&gt; "
 "is correctly defined in koha-conf.xml. "
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:802
+#: intranet-tmpl/prog/en/modules/about.tt:809
 #, c-format
 msgid ""
 "Could not read the history.txt file. Please make sure &lt;docdir&gt; is "
 "correctly defined in koha-conf.xml. "
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:472
+#: intranet-tmpl/prog/en/modules/about.tt:479
 #, c-format
 msgid ""
 "Could not read the teams.yaml file. Please make sure &lt;docdir&gt; is "
@@ -20659,7 +20667,7 @@ msgstr "Kurzusok"
 msgid "Cover image"
 msgstr "(válassz ki egy könyvtárat)"
 
-#: intranet-tmpl/prog/en/modules/about.tt:446
+#: intranet-tmpl/prog/en/modules/about.tt:453
 #, c-format
 msgid "Crawford County Federated Library System"
 msgstr "Crawford County Federated Library System"
@@ -20775,7 +20783,7 @@ msgstr "Keresési mezők törlése"
 
 #. %1$s:  framework.frameworkcode | html 
 #. %2$s:  framework.frameworktext | html 
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:132
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:139
 #, fuzzy, c-format
 msgid "Create framework for %s (%s) using "
 msgstr "<a1>MARC Keret</a> &rsaquo; Törölje a %s (%s) Keretét? "
@@ -20888,7 +20896,7 @@ msgstr "MARC rekord létrehozása"
 
 #. INPUT type=submit name=submit
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:119
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:904
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:905
 #, c-format
 msgid "Create report from SQL"
 msgstr "SQL lekérdezés készítése"
@@ -20948,12 +20956,12 @@ msgstr "Létrehozás dátuma"
 msgid "Creation date: "
 msgstr "Létrehozás dátuma: "
 
-#: intranet-tmpl/prog/en/modules/about.tt:622
+#: intranet-tmpl/prog/en/modules/about.tt:629
 #, c-format
 msgid "Creative Commons Attribution 2.5 License"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:628
+#: intranet-tmpl/prog/en/modules/about.tt:635
 #, c-format
 msgid "Creative Commons Attribution-ShareAlike 2.5 License"
 msgstr ""
@@ -21091,7 +21099,7 @@ msgstr "Jelenlegi elhelyezés"
 msgid "Current location:"
 msgstr "Jelenlegi elhelyezés:"
 
-#: intranet-tmpl/prog/en/modules/about.tt:467
+#: intranet-tmpl/prog/en/modules/about.tt:474
 #, fuzzy, c-format
 msgid "Current maintenance team"
 msgstr "Elérhető"
@@ -21212,17 +21220,17 @@ msgstr ""
 msgid "Cyclical:"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:742
+#: intranet-tmpl/prog/en/modules/about.tt:749
 #, c-format
 msgid "D&aelig;nsk (Danish)"
 msgstr "D&aelig;nsk (dán)"
 
-#: intranet-tmpl/prog/en/modules/about.tt:702
+#: intranet-tmpl/prog/en/modules/about.tt:709
 #, c-format
 msgid "D3.js"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:703
+#: intranet-tmpl/prog/en/modules/about.tt:710
 #, c-format
 msgid "D3.js v3.5.17"
 msgstr ""
@@ -21242,7 +21250,7 @@ msgstr ""
 msgid "DISABLED"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:685
+#: intranet-tmpl/prog/en/modules/about.tt:692
 #, c-format
 msgid "DSpace project"
 msgstr ""
@@ -21331,7 +21339,7 @@ msgstr ""
 msgid "Dark Yellow"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:248
+#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:253
 #: intranet-tmpl/prog/en/modules/admin/systempreferences.tt:229
 #: intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:142
 #: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:253
@@ -21450,7 +21458,7 @@ msgstr "Adatbázis: "
 #: intranet-tmpl/prog/en/modules/circ/checkout-notes.tt:70
 #: intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:195
 #: intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:197
-#: intranet-tmpl/prog/en/modules/about.tt:788
+#: intranet-tmpl/prog/en/modules/about.tt:795
 #: intranet-tmpl/prog/en/modules/offline_circ/list.tt:30
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:168
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:362
@@ -21664,7 +21672,7 @@ msgstr "Változás dátuma/ideje"
 #: intranet-tmpl/prog/en/modules/circ/article-requests.tt:272
 #: intranet-tmpl/prog/en/modules/circ/request-article.tt:115
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:150
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1057
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1058
 #, c-format
 msgid "Date:"
 msgstr "Dátum:"
@@ -21749,8 +21757,8 @@ msgstr "Nap: "
 #: intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:95
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:287
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:373
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:923
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:998
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:924
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:999
 #, c-format
 msgid "Days"
 msgstr "Nap"
@@ -21817,8 +21825,8 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:570
 #: intranet-tmpl/prog/en/modules/admin/clone-rules.tt:41
 #: intranet-tmpl/prog/en/modules/admin/clone-rules.tt:53
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:135
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:153
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:142
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:160
 #: intranet-tmpl/prog/en/modules/admin/item_circulation_alerts.tt:60
 #, c-format
 msgid "Default"
@@ -22210,7 +22218,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/admin/categories.tt:541
 #: intranet-tmpl/prog/en/modules/admin/oai_set_mappings.tt:65
 #: intranet-tmpl/prog/en/modules/admin/oai_set_mappings.tt:78
-#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:297
+#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:302
 #: intranet-tmpl/prog/en/modules/admin/currency.tt:201
 #: intranet-tmpl/prog/en/modules/admin/authtypes.tt:159
 #: intranet-tmpl/prog/en/modules/admin/systempreferences.tt:366
@@ -22239,7 +22247,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:304
 #: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:212
 #: intranet-tmpl/prog/en/modules/admin/printers.tt:156
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:213
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:220
 #: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:180
 #: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:182
 #: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:249
@@ -22858,7 +22866,7 @@ msgstr "Intézet"
 #: intranet-tmpl/prog/en/modules/admin/checkmarc.tt:167
 #: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:149
 #: intranet-tmpl/prog/en/modules/reports/dictionary.tt:68
-#: intranet-tmpl/prog/en/modules/about.tt:789
+#: intranet-tmpl/prog/en/modules/about.tt:796
 #: intranet-tmpl/prog/en/modules/labels/label-manage.tt:70
 #, c-format
 msgid "Description"
@@ -22951,8 +22959,8 @@ msgstr "Leírás: "
 
 #. For the first occurrence,
 #. %1$s:  liblibrarian | html_entity 
-#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:224
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:108
+#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:229
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:115
 #, c-format
 msgid "Description: %s"
 msgstr "Leírás: %s"
@@ -23036,7 +23044,7 @@ msgstr "Részletek"
 msgid "Details of payment"
 msgstr "Áthelyezés ebbe a könyvtárba:"
 
-#: intranet-tmpl/prog/en/modules/about.tt:749
+#: intranet-tmpl/prog/en/modules/about.tt:756
 #, c-format
 msgid ""
 "Deutsch (German) Friedrich zur Hellen, Robert Hillig, Katrin Fischer, Beda "
@@ -23268,7 +23276,7 @@ msgstr "Megjelenítés helye:"
 msgid "Display member details."
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:163
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:170
 #, c-format
 msgid "Display only used tags/subfields"
 msgstr "Csak a használt hívójelek és almezők megjelenítése"
@@ -23333,7 +23341,7 @@ msgstr ""
 msgid "Div"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:518
+#: intranet-tmpl/prog/en/modules/about.tt:525
 #, c-format
 msgid "Do Space, USA"
 msgstr ""
@@ -23493,7 +23501,7 @@ msgstr ""
 msgid "Done"
 msgstr "Kész"
 
-#: intranet-tmpl/prog/en/modules/about.tt:519
+#: intranet-tmpl/prog/en/modules/about.tt:526
 #, c-format
 msgid "DoverNet, USA"
 msgstr ""
@@ -23636,7 +23644,7 @@ msgstr "Auth érték"
 msgid "Dublin Core"
 msgstr "(válassz ki egy könyvtárat)"
 
-#: intranet-tmpl/prog/en/modules/about.tt:521
+#: intranet-tmpl/prog/en/modules/about.tt:528
 #, fuzzy, c-format
 msgid "Duchesne County Library, USA"
 msgstr "Crawford County Federated Library System"
@@ -23853,7 +23861,7 @@ msgstr "EDIFACT üzenet"
 msgid "EDIFACT messages"
 msgstr "EDIOFACT üzenetek"
 
-#: intranet-tmpl/prog/en/modules/about.tt:443
+#: intranet-tmpl/prog/en/modules/about.tt:450
 #, c-format
 msgid "EMN (Ecole des Mines de Nantes)"
 msgstr ""
@@ -23963,7 +23971,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/admin/cash_registers.tt:152
 #: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:179
 #: intranet-tmpl/prog/en/modules/admin/categories.tt:540
-#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:296
+#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:301
 #: intranet-tmpl/prog/en/modules/admin/currency.tt:200
 #: intranet-tmpl/prog/en/modules/admin/authtypes.tt:158
 #: intranet-tmpl/prog/en/modules/admin/systempreferences.tt:366
@@ -24049,7 +24057,7 @@ msgstr "A(z) '%s' OAI szerkesztése"
 msgid "Edit SQL"
 msgstr "Hozzáad segítséget"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:983
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:984
 #, fuzzy, c-format
 msgid "Edit SQL report"
 msgstr "Hozzáad forgalmazót"
@@ -24340,9 +24348,9 @@ msgid "Edit serials"
 msgstr "Könyvelési részletek"
 
 #. INPUT type=submit
-#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:307
+#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:312
 #: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:313
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:212
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:219
 #, fuzzy, c-format
 msgid "Edit subfields"
 msgstr " almező"
@@ -24352,7 +24360,7 @@ msgstr " almező"
 msgid "Edit subscription"
 msgstr "Hozzáad új előfizetést"
 
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:210
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:217
 #, fuzzy, c-format
 msgid "Edit tag"
 msgstr "# Dokumentumok"
@@ -24429,7 +24437,7 @@ msgstr "Animáció "
 msgid "Editions"
 msgstr "Kiadások"
 
-#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:131
+#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:136
 #, fuzzy, c-format
 msgid "Editor"
 msgstr "Animáció"
@@ -24500,7 +24508,7 @@ msgstr "Email: "
 msgid "Embed"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:697
+#: intranet-tmpl/prog/en/modules/about.tt:704
 #, c-format
 msgid "Emojiarea plug-in for jQuery"
 msgstr ""
@@ -24625,7 +24633,7 @@ msgstr "9- Kódolás"
 msgid "End of interval"
 msgstr "9- Kódolás"
 
-#: intranet-tmpl/prog/en/modules/about.tt:745
+#: intranet-tmpl/prog/en/modules/about.tt:752
 #, c-format
 msgid "English"
 msgstr "Angol"
@@ -25141,12 +25149,12 @@ msgstr ""
 msgid "Errors occurred:"
 msgstr "Hibák fordultak elő:"
 
-#: intranet-tmpl/prog/en/modules/about.tt:522
+#: intranet-tmpl/prog/en/modules/about.tt:529
 #, c-format
 msgid "Escuela de Orientacion Lacaniana, Argentina"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:771
+#: intranet-tmpl/prog/en/modules/about.tt:778
 #, c-format
 msgid ""
 "Espa&ntilde;ol (Spanish) Bernardo González Kriegel, Héctor Castro and Tomás "
@@ -25652,7 +25660,7 @@ msgstr ""
 msgid "FINMARC"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:526
+#: intranet-tmpl/prog/en/modules/about.tt:533
 #, c-format
 msgid "FIT"
 msgstr ""
@@ -25819,22 +25827,22 @@ msgstr "c- Gyűjtemény"
 msgid "Fall"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:621
+#: intranet-tmpl/prog/en/modules/about.tt:628
 #, c-format
 msgid "FamFamFam Site"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:619
+#: intranet-tmpl/prog/en/modules/about.tt:626
 #, fuzzy, c-format
 msgid "Famfamfam iconset"
 msgstr "famfamfam.com"
 
-#: intranet-tmpl/prog/en/modules/about.tt:524
+#: intranet-tmpl/prog/en/modules/about.tt:531
 #, fuzzy, c-format
 msgid "Fargo Public Library, USA"
 msgstr "Nelsonville Public Library, Ohio, USA"
 
-#: intranet-tmpl/prog/en/modules/about.tt:525
+#: intranet-tmpl/prog/en/modules/about.tt:532
 #, fuzzy, c-format
 msgid "Farmington Public Library, USA"
 msgstr "Nelsonville Public Library, Ohio, USA"
@@ -25927,7 +25935,7 @@ msgstr "nő "
 msgid "Female "
 msgstr "nő "
 
-#: intranet-tmpl/prog/en/modules/about.tt:523
+#: intranet-tmpl/prog/en/modules/about.tt:530
 #, c-format
 msgid "Fenway Library Organization, USA"
 msgstr ""
@@ -26152,8 +26160,8 @@ msgstr "Fájl: "
 msgid "File: %s"
 msgstr "Fájl: %s"
 
-#: intranet-tmpl/prog/en/modules/about.tt:678
-#: intranet-tmpl/prog/en/modules/about.tt:679
+#: intranet-tmpl/prog/en/modules/about.tt:685
+#: intranet-tmpl/prog/en/modules/about.tt:686
 #, fuzzy, c-format
 msgid "FileSaver library"
 msgstr "Minden könyvtár"
@@ -26237,7 +26245,7 @@ msgstr "Filmográfia"
 #: intranet-tmpl/prog/en/modules/reports/issues_stats.tt:96
 #: intranet-tmpl/prog/en/modules/reports/catalogue_stats.tt:75
 #: intranet-tmpl/prog/en/modules/reports/acquisitions_stats.tt:89
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1055
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1056
 #: intranet-tmpl/prog/en/modules/reports/issues_avg_stats.tt:73
 #: intranet-tmpl/prog/en/modules/reports/borrowers_stats.tt:74
 #, c-format
@@ -26448,7 +26456,7 @@ msgstr "Első"
 msgid "First arrival:"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:83
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:90
 #, fuzzy, c-format
 msgid "First indicator default value: "
 msgstr "8- Előpublikálási szint"
@@ -26491,7 +26499,7 @@ msgstr "Első olvasó"
 msgid "First publication date is not defined"
 msgstr "8- Előpublikálási szint"
 
-#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:135
+#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:140
 #, c-format
 msgid "Flagged"
 msgstr ""
@@ -26582,14 +26590,14 @@ msgstr "hiányzó szó"
 msgid "Following required subfields are missing:"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:672
-#: intranet-tmpl/prog/en/modules/about.tt:673
+#: intranet-tmpl/prog/en/modules/about.tt:679
+#: intranet-tmpl/prog/en/modules/about.tt:680
 #, c-format
 msgid "Font Awesome"
 msgstr "Font Awesome"
 
-#: intranet-tmpl/prog/en/modules/about.tt:708
-#: intranet-tmpl/prog/en/modules/about.tt:709
+#: intranet-tmpl/prog/en/modules/about.tt:715
+#: intranet-tmpl/prog/en/modules/about.tt:716
 #, c-format
 msgid "Font Face Observer"
 msgstr ""
@@ -26777,7 +26785,7 @@ msgstr "import"
 msgid "Formatting:"
 msgstr "import"
 
-#: intranet-tmpl/prog/en/modules/about.tt:527
+#: intranet-tmpl/prog/en/modules/about.tt:534
 #, c-format
 msgid "Foundations Bible College &amp; Seminary, USA"
 msgstr ""
@@ -26806,7 +26814,7 @@ msgstr "%s Keret "
 msgid "Framework description"
 msgstr "Cselekmények"
 
-#: intranet-tmpl/prog/en/modules/about.tt:747
+#: intranet-tmpl/prog/en/modules/about.tt:754
 #, c-format
 msgid "Fran&ccedil;ais (French) "
 msgstr ""
@@ -27203,7 +27211,7 @@ msgstr "%s talált sorok."
 msgid "Funds"
 msgstr "Pénzforrások"
 
-#: intranet-tmpl/prog/en/modules/about.tt:638
+#: intranet-tmpl/prog/en/modules/about.tt:645
 #, c-format
 msgid "GPL License"
 msgstr ""
@@ -27227,7 +27235,7 @@ msgstr ""
 msgid "GST:"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:748
+#: intranet-tmpl/prog/en/modules/about.tt:755
 #, c-format
 msgid "Galego (Galician) Ignacio Javier"
 msgstr ""
@@ -27249,7 +27257,7 @@ msgstr ""
 msgid "Gap between rows:"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:447
+#: intranet-tmpl/prog/en/modules/about.tt:454
 #, c-format
 msgid "Geauga County Public Library"
 msgstr "Geauga County Public Library"
@@ -27384,7 +27392,7 @@ msgstr ""
 msgid "Global system preferences"
 msgstr "Globális rendszerbeállítások"
 
-#: intranet-tmpl/prog/en/modules/about.tt:614
+#: intranet-tmpl/prog/en/modules/about.tt:621
 #, c-format
 msgid "Glyphicons Free"
 msgstr ""
@@ -27465,7 +27473,7 @@ msgstr ""
 msgid "Go up"
 msgstr "Hozzáad csoportot"
 
-#: intranet-tmpl/prog/en/modules/about.tt:528
+#: intranet-tmpl/prog/en/modules/about.tt:535
 #, c-format
 msgid "Goethe-Institut, Germany"
 msgstr ""
@@ -27480,7 +27488,7 @@ msgstr "Második cím"
 msgid "Gone no address flag"
 msgstr "Második cím"
 
-#: intranet-tmpl/prog/en/modules/about.tt:529
+#: intranet-tmpl/prog/en/modules/about.tt:536
 #, c-format
 msgid "Gothenburg University Library, Sweden"
 msgstr ""
@@ -27522,13 +27530,13 @@ msgid ""
 msgstr ""
 
 #. INPUT type=text name=group
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1728
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1729
 #, fuzzy
 msgid "Group code"
 msgstr "Irányítószám"
 
 #. INPUT type=text name=groupdesc
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1729
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1730
 #, fuzzy
 msgid "Group name"
 msgstr "Hozzáad csoportot"
@@ -27605,8 +27613,8 @@ msgstr "Irányított lekérdezés készítő"
 msgid "H Align"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:714
-#: intranet-tmpl/prog/en/modules/about.tt:715
+#: intranet-tmpl/prog/en/modules/about.tt:721
+#: intranet-tmpl/prog/en/modules/about.tt:722
 #, c-format
 msgid "HC Sticky"
 msgstr ""
@@ -27621,7 +27629,7 @@ msgstr ""
 msgid "HTML message:"
 msgstr "HTML-üzenet"
 
-#: intranet-tmpl/prog/en/modules/about.tt:530
+#: intranet-tmpl/prog/en/modules/about.tt:537
 #, c-format
 msgid "Halland County Library, Sweden"
 msgstr ""
@@ -27648,7 +27656,7 @@ msgstr "8- Előpublikálási szint"
 msgid "Hard due date: "
 msgstr "8- Előpublikálási szint"
 
-#: intranet-tmpl/prog/en/modules/about.tt:531
+#: intranet-tmpl/prog/en/modules/about.tt:538
 #, fuzzy, c-format
 msgid "Harrison Carmel Public Library, USA"
 msgstr "Nelsonville Public Library, Ohio, USA"
@@ -27658,7 +27666,7 @@ msgstr "Nelsonville Public Library, Ohio, USA"
 msgid "Hashvalue"
 msgstr "Auth érték "
 
-#: intranet-tmpl/prog/en/modules/about.tt:532
+#: intranet-tmpl/prog/en/modules/about.tt:539
 #, c-format
 msgid "Hauraki District Libraries, New Zealand"
 msgstr ""
@@ -27945,7 +27953,7 @@ msgid ""
 "anyway?"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:533
+#: intranet-tmpl/prog/en/modules/about.tt:540
 #, c-format
 msgid "Higher Education Libraries of Massachusetts, USA"
 msgstr ""
@@ -27998,7 +28006,7 @@ msgstr "Hozzáad új előfizetést"
 msgid "History start date:"
 msgstr "Hozzáad új előfizetést"
 
-#: intranet-tmpl/prog/en/modules/about.tt:534
+#: intranet-tmpl/prog/en/modules/about.tt:541
 #, c-format
 msgid "Hochschule für Gesundheit (hsg), Germany"
 msgstr ""
@@ -28706,7 +28714,7 @@ msgstr ""
 msgid "Horizontal: "
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:441
+#: intranet-tmpl/prog/en/modules/about.tt:448
 #, c-format
 msgid "Horowhenua Library Trust"
 msgstr ""
@@ -28726,7 +28734,7 @@ msgstr "Gazdagép/Port"
 msgid "Hostname: "
 msgstr "Gazdaszámítógép: "
 
-#: intranet-tmpl/prog/en/modules/about.tt:535
+#: intranet-tmpl/prog/en/modules/about.tt:542
 #, c-format
 msgid "Hotchkiss School, USA"
 msgstr ""
@@ -28758,8 +28766,8 @@ msgstr "Kölcsönzési díj: "
 #: intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:96
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:288
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:372
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:922
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:997
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:923
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:998
 #, c-format
 msgid "Hours"
 msgstr ""
@@ -28802,7 +28810,7 @@ msgstr "%s olvasókat sikeresen törölte"
 msgid "How to process items: "
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:740
+#: intranet-tmpl/prog/en/modules/about.tt:747
 #, c-format
 msgid "Hrvatski (Croatian)"
 msgstr ""
@@ -29725,7 +29733,7 @@ msgstr "import"
 msgid "Importing to framework: %s. Importing from file: %s."
 msgstr "Hozzáad keretet"
 
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:151
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:158
 #, fuzzy, c-format
 msgid "In framework:"
 msgstr "Hozzáad keretet"
@@ -29867,12 +29875,12 @@ msgstr "Mutatózva a:"
 msgid "Indexes"
 msgstr "Mutatók"
 
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:180
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:187
 #, fuzzy, c-format
 msgid "Indicator 1"
 msgstr "Kötelező: "
 
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:181
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:188
 #, fuzzy, c-format
 msgid "Indicator 2"
 msgstr "Kötelező: "
@@ -30222,7 +30230,7 @@ msgstr "%S egy alkalmazásba %s %s "
 msgid "Into an application: "
 msgstr "%S egy alkalmazásba %s %s "
 
-#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:129
+#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:134
 #: intranet-tmpl/prog/en/modules/admin/didyoumean.tt:61
 #, fuzzy, c-format
 msgid "Intranet"
@@ -30450,7 +30458,7 @@ msgstr "Számlák "
 msgid "Invoices enabled: "
 msgstr "Kosár szám: %s"
 
-#: intranet-tmpl/prog/en/modules/about.tt:596
+#: intranet-tmpl/prog/en/modules/about.tt:603
 #, c-format
 msgid "Irma Birchall"
 msgstr "Irma Birchall"
@@ -30460,7 +30468,7 @@ msgstr "Irma Birchall"
 msgid "Irregularity:"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:138
+#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:143
 #: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:132
 #, fuzzy, c-format
 msgid "Is a URL:"
@@ -30546,7 +30554,7 @@ msgstr "%s elemzett tétel"
 msgid "Issuing library"
 msgstr "Minden könyvtár"
 
-#: intranet-tmpl/prog/en/modules/about.tt:420
+#: intranet-tmpl/prog/en/modules/about.tt:427
 #, fuzzy, c-format
 msgid "Issuing rules"
 msgstr "Hozzáadta a %s besorolási szabályt "
@@ -30562,7 +30570,7 @@ msgid ""
 "It is advisable to check for and resolve duplicate holds due to merging."
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:757
+#: intranet-tmpl/prog/en/modules/about.tt:764
 #, c-format
 msgid ""
 "Italiano (Italian) for 3.2: Zeno Tajoli, Pietro Gozzetti and Paolo Pozzan; "
@@ -31291,8 +31299,8 @@ msgstr "# Dokumentumok"
 msgid "JSON URL"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:699
-#: intranet-tmpl/prog/en/modules/about.tt:700
+#: intranet-tmpl/prog/en/modules/about.tt:706
+#: intranet-tmpl/prog/en/modules/about.tt:707
 #, c-format
 msgid "JSZip"
 msgstr ""
@@ -31310,24 +31318,24 @@ msgstr "Jan"
 msgid "January"
 msgstr "Január"
 
-#: intranet-tmpl/prog/en/modules/about.tt:726
-#: intranet-tmpl/prog/en/modules/about.tt:727
+#: intranet-tmpl/prog/en/modules/about.tt:733
+#: intranet-tmpl/prog/en/modules/about.tt:734
 #, c-format
 msgid "JavaScript Cookie"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:694
+#: intranet-tmpl/prog/en/modules/about.tt:701
 #, c-format
 msgid "JavaScript library by Vladimir Agafonkinis licensed under the "
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:700
+#: intranet-tmpl/prog/en/modules/about.tt:707
 #, c-format
 msgid "JavaScript library is licensed under both the "
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:663
-#: intranet-tmpl/prog/en/modules/about.tt:664
+#: intranet-tmpl/prog/en/modules/about.tt:670
+#: intranet-tmpl/prog/en/modules/about.tt:671
 #, c-format
 msgid "Javascript Diff Algorithm"
 msgstr ""
@@ -31342,7 +31350,7 @@ msgstr ", Új Zéland (a Koha 1.0 and 1.2 forgalomba hozataláért felelős)"
 msgid "Jenkins maintainers:"
 msgstr ", Új Zéland (a Koha 1.0 and 1.2 forgalomba hozataláért felelős)"
 
-#: intranet-tmpl/prog/en/modules/about.tt:600
+#: intranet-tmpl/prog/en/modules/about.tt:607
 #, c-format
 msgid "Jo Ransom"
 msgstr "Jo Ransom"
@@ -31398,17 +31406,17 @@ msgstr ""
 msgid "Juvenile"
 msgstr "Ifjúság"
 
-#: intranet-tmpl/prog/en/modules/about.tt:537
+#: intranet-tmpl/prog/en/modules/about.tt:544
 #, c-format
 msgid "KEEP SOLUTIONS, Portugal"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:536
+#: intranet-tmpl/prog/en/modules/about.tt:543
 #, c-format
 msgid "Katipo Communications, New Zealand"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:635
+#: intranet-tmpl/prog/en/modules/about.tt:642
 #, c-format
 msgid "Kazik Pietruszewski"
 msgstr ""
@@ -31465,7 +31473,7 @@ msgstr "Kulcsszó: "
 
 #: intranet-tmpl/prog/en/modules/tools/koha-news.tt:178
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:156
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1062
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1063
 #, c-format
 msgid "Keyword:"
 msgstr "Kulcsszó:"
@@ -31495,14 +31503,14 @@ msgstr "Kulcsszavak:"
 #: intranet-tmpl/prog/en/modules/onboarding/onboardingstep1.tt:11
 #: intranet-tmpl/prog/en/modules/onboarding/onboardingstep3.tt:13
 #: intranet-tmpl/prog/en/modules/onboarding/onboardingstep2.tt:20
-#: intranet-tmpl/prog/en/modules/about.tt:607
+#: intranet-tmpl/prog/en/modules/about.tt:614
 #: intranet-tmpl/prog/en/modules/auth.tt:22
 #, c-format
 msgid "Koha"
 msgstr "Koha"
 
 #. %1$s:  short_version | html 
-#: intranet-tmpl/prog/en/modules/about.tt:458
+#: intranet-tmpl/prog/en/modules/about.tt:465
 #, fuzzy, c-format
 msgid "Koha %s release team"
 msgstr ", Új Zéland (a Koha 1.0 and 1.2 forgalomba hozataláért felelős)"
@@ -31970,22 +31978,24 @@ msgstr ""
 "Valutaárfolyam</a> &rsaquo;"
 
 #. %1$s:  IF ( add_form ) 
-#. %2$s:  action | html 
-#. %3$s:  searchfield | html 
+#. %2$s:  IF heading_add_tag_p 
+#. %3$s:  ELSE 
 #. %4$s:  END 
-#. %5$s:  IF ( delete_confirm ) 
-#. %6$s:  searchfield | html 
-#. %7$s:  END 
-#. %8$s:  IF ( delete_confirmed ) 
+#. %5$s:  searchfield | html 
+#. %6$s:  END 
+#. %7$s:  IF ( delete_confirm ) 
+#. %8$s:  searchfield | html 
 #. %9$s:  END 
-#. %10$s:  IF ( else ) 
+#. %10$s:  IF ( delete_confirmed ) 
 #. %11$s:  END 
+#. %12$s:  IF ( else ) 
+#. %13$s:  END 
 #: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:6
 #, fuzzy, c-format
 msgid ""
-"Koha &rsaquo; Administration &rsaquo; %sMARC frameworks &rsaquo; %s %s%s "
-"%sMARC frameworks &rsaquo; Confirm deletion of tag '%s'%s %sMARC frameworks "
-"&rsaquo; Data deleted%s %sMARC frameworks%s"
+"Koha &rsaquo; Administration &rsaquo; %sMARC frameworks &rsaquo; %sAdd tag"
+"%sModify tag%s %s%s %sMARC frameworks &rsaquo; Confirm deletion of tag "
+"'%s'%s %sMARC frameworks &rsaquo; Data deleted%s %sMARC frameworks%s"
 msgstr ""
 " <a1>Főoldal</a> &rsaquo; <a2>Adminisztráció</a> &rsaquo; <a3>MARC Keret</ "
 "a> &rsaquo; <a4>%s A Keret szerkezete</a> &rsaquo;"
@@ -34148,7 +34158,7 @@ msgstr ""
 msgid "Koha database schema"
 msgstr "Koha adatbázis séma"
 
-#: intranet-tmpl/prog/en/modules/about.tt:477
+#: intranet-tmpl/prog/en/modules/about.tt:484
 #, c-format
 msgid "Koha development team"
 msgstr "Koha fejlesztői csapat"
@@ -34170,7 +34180,7 @@ msgstr ""
 msgid "Koha full call number"
 msgstr "Koha teljes leltári szám"
 
-#: intranet-tmpl/prog/en/modules/about.tt:783
+#: intranet-tmpl/prog/en/modules/about.tt:790
 #, fuzzy, c-format
 msgid "Koha history timeline"
 msgstr "Koha történeti idővonal"
@@ -34180,7 +34190,7 @@ msgstr "Koha történeti idővonal"
 msgid "Koha internal"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:609
+#: intranet-tmpl/prog/en/modules/about.tt:616
 #, c-format
 msgid ""
 "Koha is free software; you can redistribute it and/or modify it under the "
@@ -34194,7 +34204,7 @@ msgstr ""
 msgid "Koha itemtype"
 msgstr "Bármely típus"
 
-#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:148
+#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:153
 #, c-format
 msgid "Koha link:"
 msgstr ""
@@ -34220,7 +34230,7 @@ msgstr "Koha szerver nélküli kölcsönzés"
 msgid "Koha plugins"
 msgstr "Beszerzés"
 
-#: intranet-tmpl/prog/en/modules/about.tt:454
+#: intranet-tmpl/prog/en/modules/about.tt:461
 #, fuzzy, c-format
 msgid "Koha release teams"
 msgstr ", Új Zéland (a Koha 1.0 and 1.2 forgalomba hozataláért felelős)"
@@ -34262,17 +34272,17 @@ msgstr "Koha-MARC megfeleltetés"
 msgid "Koha version: "
 msgstr "Koha verzió: "
 
-#: intranet-tmpl/prog/en/modules/about.tt:539
+#: intranet-tmpl/prog/en/modules/about.tt:546
 #, c-format
 msgid "Koha-Suomi Oy, Finland"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:538
+#: intranet-tmpl/prog/en/modules/about.tt:545
 #, c-format
 msgid "KohaAloha, New Zealand"
 msgstr "KohaAloha, New Zealand"
 
-#: intranet-tmpl/prog/en/modules/about.tt:747
+#: intranet-tmpl/prog/en/modules/about.tt:754
 #, c-format
 msgid "Kohala"
 msgstr "Kohala"
@@ -34326,12 +34336,12 @@ msgstr "LCCN: %s"
 msgid "LEAVE UNCHANGED"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:670
+#: intranet-tmpl/prog/en/modules/about.tt:677
 #, c-format
 msgid "LGPL v2.1"
 msgstr "LGPL v2.1"
 
-#: intranet-tmpl/prog/en/modules/about.tt:721
+#: intranet-tmpl/prog/en/modules/about.tt:728
 #, fuzzy, c-format
 msgid "LGPL v3.0"
 msgstr "LGPL v2.1"
@@ -34376,12 +34386,12 @@ msgstr "Kosár szám: %s"
 msgid "Label creator"
 msgstr "Önéletrajz"
 
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:67
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:74
 #, c-format
 msgid "Label for lib: "
 msgstr "Leírás a könyvtáros számára: "
 
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:68
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:75
 #, c-format
 msgid "Label for opac: "
 msgstr "Leírás az olvasó számára: "
@@ -34462,7 +34472,7 @@ msgstr "Nyelv: "
 msgid "Languages"
 msgstr "Nyelvek"
 
-#: intranet-tmpl/prog/en/modules/about.tt:762
+#: intranet-tmpl/prog/en/modules/about.tt:769
 #, c-format
 msgid "Lao Anousak Anthony Souphavanh"
 msgstr "Lao Anousak Anthony Souphavanh"
@@ -34616,7 +34626,7 @@ msgstr ""
 msgid "Late orders"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:761
+#: intranet-tmpl/prog/en/modules/about.tt:768
 #, c-format
 msgid "Latina (Latin)"
 msgstr ""
@@ -34659,8 +34669,8 @@ msgstr "Kosár szám: %s "
 msgid "Layouts"
 msgstr "Kosár szám: %s "
 
-#: intranet-tmpl/prog/en/modules/about.tt:693
-#: intranet-tmpl/prog/en/modules/about.tt:694
+#: intranet-tmpl/prog/en/modules/about.tt:700
+#: intranet-tmpl/prog/en/modules/about.tt:701
 #, c-format
 msgid "Leaflet"
 msgstr ""
@@ -34758,12 +34768,12 @@ msgstr ""
 
 #: intranet-tmpl/prog/en/modules/admin/koha2marclinks.tt:33
 #: intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:195
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:176
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:183
 #, c-format
 msgid "Lib"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:540
+#: intranet-tmpl/prog/en/modules/about.tt:547
 #, c-format
 msgid "LibLime, USA"
 msgstr "LibLime, USA"
@@ -34970,11 +34980,11 @@ msgid "Library name: "
 msgstr "Könyvtár neve: "
 
 #: intranet-tmpl/prog/en/modules/admin/branches.tt:147
-#, fuzzy, c-format
+#, c-format
 msgid "Library of Congress"
-msgstr "Az olvasó könyvtára:"
+msgstr "Kongresszusi könyvtár"
 
-#: intranet-tmpl/prog/en/modules/about.tt:541
+#: intranet-tmpl/prog/en/modules/about.tt:548
 #, c-format
 msgid "Library of the Józef Piłsudski Institute of America, USA"
 msgstr ""
@@ -35073,7 +35083,7 @@ msgstr "Könyvtár: %s"
 msgid "Library: %s &rArr; %s"
 msgstr "Könyvtár: %s &rArr; %s"
 
-#: intranet-tmpl/prog/en/modules/about.tt:542
+#: intranet-tmpl/prog/en/modules/about.tt:549
 #, fuzzy, c-format
 msgid "Libriotech, Norway"
 msgstr "Minden könyvtár"
@@ -35212,7 +35222,7 @@ msgstr ", Kérem utalja át ezt a dolumentumot."
 msgid "Link..."
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:146
+#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:151
 #, c-format
 msgid "Link:"
 msgstr ""
@@ -35356,7 +35366,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:15
 #: intranet-tmpl/prog/en/modules/acqui/neworderbiblio.tt:112
 #: intranet-tmpl/prog/en/modules/acqui/edifactmsgs.tt:118
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1092
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1093
 #, fuzzy
 msgid "Loading"
 msgstr "a fülben"
@@ -35637,7 +35647,7 @@ msgstr "Naplók"
 msgid "Look for existing records in catalog?"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:543
+#: intranet-tmpl/prog/en/modules/about.tt:550
 #, fuzzy, c-format
 msgid "Los Gatos Public Library, USA"
 msgstr "Nelsonville Public Library, Ohio, USA"
@@ -35761,12 +35771,12 @@ msgstr "Bal alsó Y koordináta: "
 msgid "Lucida Console"
 msgstr "Lucida Console"
 
-#: intranet-tmpl/prog/en/modules/about.tt:544
+#: intranet-tmpl/prog/en/modules/about.tt:551
 #, c-format
 msgid "Lund University Library, Sweden"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:763
+#: intranet-tmpl/prog/en/modules/about.tt:770
 #, c-format
 msgid "M&#257;ori"
 msgstr "M&#257;ori"
@@ -35961,7 +35971,7 @@ msgstr "dokumentum mezők"
 #. %3$s:  frameworkcode | html 
 #. %4$s:  ELSE 
 #. %5$s:  END 
-#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:257
+#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:262
 #, fuzzy, c-format
 msgid ""
 "MARC subfield structure admin for %s %s(framework %s)%s(default framework)%s"
@@ -35995,34 +36005,34 @@ msgstr "MARC21/USMARC"
 msgid "MARCXML"
 msgstr "MARCXML"
 
-#: intranet-tmpl/prog/en/modules/about.tt:633
-#: intranet-tmpl/prog/en/modules/about.tt:664
-#: intranet-tmpl/prog/en/modules/about.tt:667
-#: intranet-tmpl/prog/en/modules/about.tt:673
-#: intranet-tmpl/prog/en/modules/about.tt:691
+#: intranet-tmpl/prog/en/modules/about.tt:640
+#: intranet-tmpl/prog/en/modules/about.tt:671
+#: intranet-tmpl/prog/en/modules/about.tt:674
+#: intranet-tmpl/prog/en/modules/about.tt:680
+#: intranet-tmpl/prog/en/modules/about.tt:698
 #, c-format
 msgid "MIT License"
 msgstr "MIT Licenc"
 
-#: intranet-tmpl/prog/en/modules/about.tt:700
+#: intranet-tmpl/prog/en/modules/about.tt:707
 #, fuzzy, c-format
 msgid "MIT and GPLv3 Licenses"
 msgstr "MIT Licenc"
 
-#: intranet-tmpl/prog/en/modules/about.tt:706
+#: intranet-tmpl/prog/en/modules/about.tt:713
 #, fuzzy, c-format
 msgid "MIT licence"
 msgstr "MIT licenc"
 
-#: intranet-tmpl/prog/en/modules/about.tt:612
-#: intranet-tmpl/prog/en/modules/about.tt:614
-#: intranet-tmpl/prog/en/modules/about.tt:676
-#: intranet-tmpl/prog/en/modules/about.tt:679
-#: intranet-tmpl/prog/en/modules/about.tt:682
-#: intranet-tmpl/prog/en/modules/about.tt:715
-#: intranet-tmpl/prog/en/modules/about.tt:718
-#: intranet-tmpl/prog/en/modules/about.tt:724
-#: intranet-tmpl/prog/en/modules/about.tt:727
+#: intranet-tmpl/prog/en/modules/about.tt:619
+#: intranet-tmpl/prog/en/modules/about.tt:621
+#: intranet-tmpl/prog/en/modules/about.tt:683
+#: intranet-tmpl/prog/en/modules/about.tt:686
+#: intranet-tmpl/prog/en/modules/about.tt:689
+#: intranet-tmpl/prog/en/modules/about.tt:722
+#: intranet-tmpl/prog/en/modules/about.tt:725
+#: intranet-tmpl/prog/en/modules/about.tt:731
+#: intranet-tmpl/prog/en/modules/about.tt:734
 #, c-format
 msgid "MIT license"
 msgstr "MIT licenc"
@@ -36043,7 +36053,7 @@ msgstr "Makrók"
 msgid "Macros..."
 msgstr "Makrük..."
 
-#: intranet-tmpl/prog/en/modules/about.tt:753
+#: intranet-tmpl/prog/en/modules/about.tt:760
 #, c-format
 msgid "Magyar (Hungarian)Agnes Imecs"
 msgstr "Magyar (Hungarian)"
@@ -36712,7 +36722,7 @@ msgstr "Minden könyvtár"
 #: intranet-tmpl/prog/en/modules/installer/step3.tt:92
 #: intranet-tmpl/prog/en/modules/installer/step3.tt:132
 #: intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:197
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:178
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:185
 #, c-format
 msgid "Mandatory"
 msgstr "Kötelező"
@@ -36725,7 +36735,7 @@ msgstr "%s hozzáadott adat"
 #: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:84
 #: intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:98
 #: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:80
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:76
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:83
 #, c-format
 msgid "Mandatory: "
 msgstr "Kötelező: "
@@ -36838,7 +36848,7 @@ msgstr "(válassz ki egy könyvtárat) "
 msgid "Mark the original budget as inactive"
 msgstr "Vonalkód "
 
-#: intranet-tmpl/prog/en/modules/about.tt:545
+#: intranet-tmpl/prog/en/modules/about.tt:552
 #, c-format
 msgid "MassCat, USA"
 msgstr ""
@@ -37213,7 +37223,7 @@ msgstr "8 mm (mikrofilm)"
 msgid "Middle"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:546
+#: intranet-tmpl/prog/en/modules/about.tt:553
 #, fuzzy, c-format
 msgid "Middletown Township Public Library, USA"
 msgstr "Nelsonville Public Library, Ohio, USA"
@@ -37234,7 +37244,7 @@ msgstr "Apache verzió: "
 msgid "Mine"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:444
+#: intranet-tmpl/prog/en/modules/about.tt:451
 #, c-format
 msgid ""
 "Mines Paristech (previously Ecole Nationale Supérieure des Mines de Paris)"
@@ -37257,8 +37267,8 @@ msgid "Minute"
 msgstr "Perc"
 
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:371
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:921
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:996
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:922
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:997
 #, c-format
 msgid "Minutes"
 msgstr "Perc"
@@ -37918,7 +37928,7 @@ msgid ""
 "not be copied"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:146
+#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:151
 #, c-format
 msgid ""
 "NOTE: If you change this value you must ask your administrator to run misc/"
@@ -37971,8 +37981,8 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/admin/printers.tt:144
 #: intranet-tmpl/prog/en/modules/admin/additional-fields.tt:88
 #: intranet-tmpl/prog/en/modules/reports/dictionary.tt:67
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1729
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1756
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1730
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1757
 #, c-format
 msgid "Name"
 msgstr "Név"
@@ -38104,7 +38114,7 @@ msgstr "Fájl neve: "
 msgid "Narrower Term"
 msgstr "Vonalkód típus"
 
-#: intranet-tmpl/prog/en/modules/about.tt:547
+#: intranet-tmpl/prog/en/modules/about.tt:554
 #, c-format
 msgid "National Library of Finland, Finland"
 msgstr ""
@@ -38114,7 +38124,7 @@ msgstr ""
 msgid "Navy Blue"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:448
+#: intranet-tmpl/prog/en/modules/about.tt:455
 #, c-format
 msgid "Near East University"
 msgstr "Near East University"
@@ -38126,12 +38136,12 @@ msgid ""
 "contact your server admin if you wish to configure Elasticsearch"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:744
+#: intranet-tmpl/prog/en/modules/about.tt:751
 #, c-format
 msgid "Nederlands-Belgi&euml; (Dutch-Belgium)"
 msgstr "Nederlands-Belgi&euml; (Dutch-Belgium)"
 
-#: intranet-tmpl/prog/en/modules/about.tt:743
+#: intranet-tmpl/prog/en/modules/about.tt:750
 #, c-format
 msgid "Nederlands-Nederland (Dutch-The Netherlands) Sponsored by Rijksmuseum"
 msgstr ""
@@ -38234,12 +38244,12 @@ msgstr "Új SRU szerver"
 msgid "New Z39.50 server"
 msgstr "Új Z39.50 szerver"
 
-#: intranet-tmpl/prog/en/modules/about.tt:549
+#: intranet-tmpl/prog/en/modules/about.tt:556
 #, c-format
 msgid "New Zealand Central Agencies Library, New Zealand"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:550
+#: intranet-tmpl/prog/en/modules/about.tt:557
 #, c-format
 msgid "New Zealand Ministry of Education Library, New Zealand"
 msgstr ""
@@ -38694,7 +38704,7 @@ msgstr "Új forgalmazó hozzáadása"
 msgid "New window"
 msgstr "Ablak bezárása"
 
-#: intranet-tmpl/prog/en/modules/about.tt:548
+#: intranet-tmpl/prog/en/modules/about.tt:555
 #, fuzzy, c-format
 msgid "Newcastle City Council, United Kingdom"
 msgstr "software.coop, Egyesült Királyság"
@@ -38792,7 +38802,7 @@ msgstr ""
 msgid "Next page"
 msgstr "Következő oldal"
 
-#: intranet-tmpl/prog/en/modules/about.tt:601
+#: intranet-tmpl/prog/en/modules/about.tt:608
 #, c-format
 msgid "Nicholas Rosasco (Documentation Compiler)"
 msgstr "Nicholas Rosasco (Documentation Compiler)"
@@ -38871,10 +38881,10 @@ msgstr ": %s"
 
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:363
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:365
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:913
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:915
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:988
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:990
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:914
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:916
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:989
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:991
 #, fuzzy, c-format
 msgid "No (default)"
 msgstr "Auth érték"
@@ -39066,7 +39076,7 @@ msgid "No color"
 msgstr "import"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1092
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1093
 msgid "No columns selected!"
 msgstr ""
 
@@ -39361,7 +39371,7 @@ msgid "No matching records found"
 msgstr "Új bibliográfiai tétel hozzáadva"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1092
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1093
 #, fuzzy
 msgid "No matching reports found"
 msgstr "Új bibliográfiai tétel hozzáadva"
@@ -39668,7 +39678,7 @@ msgstr "Nincs átveendő kiadvány."
 msgid "No valid patrons to merge were found."
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:434
+#: intranet-tmpl/prog/en/modules/about.tt:441
 #, fuzzy, c-format
 msgid "No warnings."
 msgstr "9- Kódolás"
@@ -39689,7 +39699,7 @@ msgstr "Igen, törlöm"
 #: intranet-tmpl/prog/en/modules/serials/subscription-frequencies.tt:122
 #: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:254
 #: intranet-tmpl/prog/en/modules/members/deletemem.tt:52
-#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:240
+#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:245
 #: intranet-tmpl/prog/en/modules/admin/currency.tt:158
 #: intranet-tmpl/prog/en/modules/admin/authtypes.tt:122
 #: intranet-tmpl/prog/en/modules/admin/systempreferences.tt:225
@@ -39703,7 +39713,7 @@ msgstr "Igen, törlöm"
 #: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:246
 #: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:115
 #: intranet-tmpl/prog/en/modules/admin/printers.tt:114
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:116
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:123
 #: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:389
 #: intranet-tmpl/prog/en/modules/admin/cities.tt:120
 #: intranet-tmpl/prog/en/modules/admin/itemtypes.tt:343
@@ -39938,22 +39948,22 @@ msgstr ""
 msgid "Normalization rule: "
 msgstr "Hozzáad tétel találati szabályt "
 
-#: intranet-tmpl/prog/en/modules/about.tt:754
+#: intranet-tmpl/prog/en/modules/about.tt:761
 #, c-format
 msgid "Norsk Bokmål (Norwegian) Axel Bojer and Thomas Gramstad"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:755
+#: intranet-tmpl/prog/en/modules/about.tt:762
 #, c-format
 msgid "Norsk Nynorsk (Norwegian) Unni Knutsen and Marit Kristine Ådland"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:551
+#: intranet-tmpl/prog/en/modules/about.tt:558
 #, c-format
 msgid "North Central Regional Library (NCRL), USA"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:552
+#: intranet-tmpl/prog/en/modules/about.tt:559
 #, c-format
 msgid "Northeast Kansas Library System (NEKLS), USA"
 msgstr ""
@@ -40317,9 +40327,9 @@ msgstr "Megjegyzések/Hozzászólások"
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:573
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:628
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:721
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:926
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:961
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1001
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:927
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:962
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1002
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:121
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:287
 #, c-format
@@ -40403,12 +40413,12 @@ msgstr ""
 msgid "Notification date"
 msgstr "Cselekmény"
 
-#: intranet-tmpl/prog/en/modules/about.tt:712
+#: intranet-tmpl/prog/en/modules/about.tt:719
 #, c-format
 msgid "Noto"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:711
+#: intranet-tmpl/prog/en/modules/about.tt:718
 #, c-format
 msgid "Noto fonts"
 msgstr ""
@@ -40694,13 +40704,12 @@ msgstr "Felnőtt olvasó"
 #: intranet-tmpl/prog/en/modules/serials/serials-edit.tt:115
 #, c-format
 msgid "Numbered"
-msgstr ""
+msgstr "Számozott"
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/includes/str/tinymce_i18n.inc:1
-#, fuzzy
 msgid "Numbered list"
-msgstr "Év/Szám "
+msgstr "Számozott lista"
 
 #: intranet-tmpl/prog/en/modules/serials/subscription-detail.tt:238
 #, c-format
@@ -40754,7 +40763,7 @@ msgstr "Hozzáadva"
 msgid "OAI sets configuration"
 msgstr "OAI halmazok konfigurálása"
 
-#: intranet-tmpl/prog/en/modules/about.tt:684
+#: intranet-tmpl/prog/en/modules/about.tt:691
 #, c-format
 msgid "OAI xslt stylesheet"
 msgstr ""
@@ -40797,7 +40806,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:530
 #: intranet-tmpl/prog/en/modules/circ/branchoverdues.tt:31
 #: intranet-tmpl/prog/en/modules/admin/categories.tt:382
-#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:251
+#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:256
 #: intranet-tmpl/prog/en/modules/admin/currency.tt:138
 #: intranet-tmpl/prog/en/modules/admin/systempreferences.tt:206
 #: intranet-tmpl/prog/en/modules/admin/aqcontract.tt:106
@@ -40808,8 +40817,8 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:256
 #: intranet-tmpl/prog/en/modules/admin/printers.tt:88
 #: intranet-tmpl/prog/en/modules/admin/printers.tt:123
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:125
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:140
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:132
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:147
 #: intranet-tmpl/prog/en/modules/admin/checkmarc.tt:36
 #: intranet-tmpl/prog/en/modules/admin/checkmarc.tt:50
 #: intranet-tmpl/prog/en/modules/admin/checkmarc.tt:62
@@ -40834,7 +40843,7 @@ msgid "ON"
 msgstr ""
 
 #: intranet-tmpl/prog/en/includes/prefs-menu.inc:13
-#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:127
+#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:132
 #: intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:173
 #: intranet-tmpl/prog/en/modules/admin/columns_settings.tt:174
 #: intranet-tmpl/prog/en/modules/admin/didyoumean.tt:57
@@ -40902,12 +40911,12 @@ msgstr "(válassz ki egy könyvtárat)"
 msgid "OPAC/Staff login"
 msgstr "Bejelentkezés a felhasználói fiókba olvasóként vagy könyvvtárosként"
 
-#: intranet-tmpl/prog/en/modules/about.tt:553
+#: intranet-tmpl/prog/en/modules/about.tt:560
 #, c-format
 msgid "OPUS"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:449
+#: intranet-tmpl/prog/en/modules/about.tt:456
 #, fuzzy, c-format
 msgid ""
 "OPUS International Consultants, Wellington, New Zealand (Corporate Serials "
@@ -41293,12 +41302,12 @@ msgstr ""
 msgid "Open on:"
 msgstr "Elfogadott"
 
-#: intranet-tmpl/prog/en/modules/about.tt:646
+#: intranet-tmpl/prog/en/modules/about.tt:653
 #, c-format
 msgid "OpenJS Keyboard Shortcuts Library"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:648
+#: intranet-tmpl/prog/en/modules/about.tt:655
 #, c-format
 msgid "OpenJS keyboard shortcuts library"
 msgstr ""
@@ -41592,7 +41601,7 @@ msgstr ""
 msgid "Orders with uncertain prices for vendor "
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:554
+#: intranet-tmpl/prog/en/modules/about.tt:561
 #, c-format
 msgid "Orex Digital, Spain"
 msgstr ""
@@ -41600,19 +41609,19 @@ msgstr ""
 #. OPTGROUP
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:729
 #: intranet-tmpl/prog/en/modules/admin/categories.tt:148
-#, fuzzy, c-format
+#, c-format
 msgid "Organization"
-msgstr "Hozzáad egy szervezet tagot"
+msgstr "Szervezet"
 
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:346
-#, fuzzy, c-format
+#, c-format
 msgid "Organization #:"
-msgstr "Hozzáad egy szervezet tagot"
+msgstr "Szervezet #:"
 
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:350
-#, fuzzy, c-format
+#, c-format
 msgid "Organization name: "
-msgstr "Hozzáad egy szervezet tagot "
+msgstr "Szervezet neve: "
 
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:647
 #, fuzzy, c-format
@@ -41646,7 +41655,7 @@ msgstr "rajz"
 msgid "Original version"
 msgstr "Eredeti verzió"
 
-#: intranet-tmpl/prog/en/modules/about.tt:555
+#: intranet-tmpl/prog/en/modules/about.tt:562
 #, fuzzy, c-format
 msgid "Oslo Public Library, Norway"
 msgstr "Nelsonville Public Library, Ohio, USA"
@@ -41694,7 +41703,7 @@ msgstr "00 Dokumentum kategória "
 msgid "Other names"
 msgstr "00 Dokumentum kategória "
 
-#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:168
+#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:173
 #, fuzzy, c-format
 msgid "Other options (choose one)"
 msgstr "(válassz egyet)"
@@ -41894,12 +41903,12 @@ msgstr ""
 msgid "PSGI: "
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:560
+#: intranet-tmpl/prog/en/modules/about.tt:567
 #, c-format
 msgid "PTFS Europe Ltd, United Kingdom"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:559
+#: intranet-tmpl/prog/en/modules/about.tt:566
 #, c-format
 msgid "PTFS, Maryland, USA"
 msgstr ""
@@ -43580,12 +43589,12 @@ msgstr "Vonalkód "
 msgid "Planning for %s %s"
 msgstr "%s %s bírságainak kifizetése"
 
-#: intranet-tmpl/prog/en/modules/about.tt:556
+#: intranet-tmpl/prog/en/modules/about.tt:563
 #, c-format
 msgid "Plano Independent School, USA"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:557
+#: intranet-tmpl/prog/en/modules/about.tt:564
 #, c-format
 msgid "Plant and Food Research Limited, New Zealand"
 msgstr ""
@@ -43631,7 +43640,7 @@ msgstr ""
 #. %1$s:  ELSIF ( error.cache_expiry ) 
 #. %2$s:  ELSE 
 #. %3$s:  END 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1028
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1029
 #, c-format
 msgid ""
 "Please check the log for further details. %sPlease select a cache expiry "
@@ -44043,7 +44052,7 @@ msgid "Please return this item to %s "
 msgstr "= adj ki egy dokumentumot az olvasónak "
 
 #. %1$s:  ELSIF ( error.queryerr ) 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1027
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1028
 #, c-format
 msgid ""
 "Please return to the &quot;Saved Reports&quot; screen and delete this report "
@@ -44277,7 +44286,7 @@ msgstr ""
 msgid "Plugin version"
 msgstr "Zebra verzió:"
 
-#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:196
+#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:201
 #: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:199
 #: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:301
 #, c-format
@@ -44319,7 +44328,7 @@ msgstr ", UK (Installáló)"
 msgid "Policy for %s: %s"
 msgstr "Hozzáad dokumentumokat %s részére"
 
-#: intranet-tmpl/prog/en/modules/about.tt:767
+#: intranet-tmpl/prog/en/modules/about.tt:774
 #, c-format
 msgid "Polski (Polish)"
 msgstr "Polski (Lengyel)"
@@ -44362,7 +44371,7 @@ msgstr ""
 msgid "Port: "
 msgstr "Port: "
 
-#: intranet-tmpl/prog/en/modules/about.tt:768
+#: intranet-tmpl/prog/en/modules/about.tt:775
 #, c-format
 msgid "Portugu&ecirc;s (Portuguese)"
 msgstr ""
@@ -45058,7 +45067,7 @@ msgstr "Vonalkód fájl:"
 msgid "Programmed texts"
 msgstr "Előre megírt szövegek"
 
-#: intranet-tmpl/prog/en/modules/about.tt:558
+#: intranet-tmpl/prog/en/modules/about.tt:565
 #, c-format
 msgid "Prosentient Systems, Australia"
 msgstr "Prosentient Systems, Ausztrália"
@@ -45533,7 +45542,7 @@ msgstr ""
 msgid "RT"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:597
+#: intranet-tmpl/prog/en/modules/about.tt:604
 #, c-format
 msgid "Rachel Hamilton-Williams (Kaitiaki from 2004 to present)"
 msgstr "Rachel Hamilton-Williams (Kaitiaki 2004-től máig)"
@@ -45916,7 +45925,7 @@ msgstr "Beiratkozás dátuma: "
 msgid "Registration date: %s"
 msgstr "Beiratkozás dátuma: %s "
 
-#: intranet-tmpl/prog/en/modules/about.tt:602
+#: intranet-tmpl/prog/en/modules/about.tt:609
 #, c-format
 msgid "Regula Sebastiao"
 msgstr "Regula Sebastiao"
@@ -45929,7 +45938,7 @@ msgstr "Rendes betűméretű nyomtatvány"
 #: intranet-tmpl/prog/en/modules/catalogue/advsearch.tt:209
 #, c-format
 msgid "Regular print"
-msgstr "Rendes betűméretű nyomtatvány"
+msgstr "Átlagos betűméret"
 
 #: intranet-tmpl/prog/en/modules/tags/review.tt:117
 #: intranet-tmpl/prog/en/modules/tags/review.tt:126
@@ -46472,7 +46481,7 @@ msgid "Repeat this Tag"
 msgstr "(válassz ki egy könyvtárat)"
 
 #: intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:196
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:177
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:184
 #, c-format
 msgid "Repeatable"
 msgstr "Ismételhető"
@@ -46481,7 +46490,7 @@ msgstr "Ismételhető"
 #: intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:91
 #: intranet-tmpl/prog/en/modules/admin/patron-attr-types.tt:77
 #: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:72
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:69
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:76
 #, c-format
 msgid "Repeatable: "
 msgstr "Ismételhető: "
@@ -46611,17 +46620,17 @@ msgid ""
 "%s)"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1710
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1711
 #, fuzzy, c-format
 msgid "Report group:"
 msgstr "&rsaquo; Új Lista létrehozása"
 
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:363
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:365
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:913
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:915
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:988
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:990
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:914
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:916
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:989
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:991
 #, fuzzy, c-format
 msgid "Report is public:"
 msgstr "(Tétel #%s)"
@@ -46638,13 +46647,13 @@ msgstr "00 Dokumentum kategória "
 msgid "Report name"
 msgstr "00 Dokumentum kategória"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:906
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:907
 #, fuzzy, c-format
 msgid "Report name:"
 msgstr "00 Dokumentum kategória"
 
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:626
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:985
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:986
 #, fuzzy, c-format
 msgid "Report name: "
 msgstr "00 Dokumentum kategória "
@@ -46657,7 +46666,7 @@ msgstr "00 Dokumentum kategória "
 msgid "Report plugins"
 msgstr "(Tétel #%s)"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1732
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1733
 #, fuzzy, c-format
 msgid "Report subgroup:"
 msgstr "&rsaquo; Új Lista létrehozása"
@@ -46797,8 +46806,8 @@ msgstr "dokumentum mezők"
 msgid "Require valid email address:"
 msgstr "Kötelező érvényes email cím:"
 
-#: intranet-tmpl/prog/en/modules/about.tt:681
-#: intranet-tmpl/prog/en/modules/about.tt:682
+#: intranet-tmpl/prog/en/modules/about.tt:688
+#: intranet-tmpl/prog/en/modules/about.tt:689
 #, fuzzy, c-format
 msgid "Require.js JS module system"
 msgstr "hiányzó szó"
@@ -47043,7 +47052,7 @@ msgstr "hiányzó szó"
 #: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:88
 #: intranet-tmpl/prog/en/modules/admin/printers.tt:67
 #: intranet-tmpl/prog/en/modules/admin/printers.tt:73
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:64
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:71
 #: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:61
 #: intranet-tmpl/prog/en/modules/admin/additional-fields.tt:131
 #: intranet-tmpl/prog/en/modules/admin/cities.tt:70
@@ -47057,10 +47066,10 @@ msgstr "hiányzó szó"
 #: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:214
 #: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:224
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:626
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:908
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:932
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:985
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1008
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:909
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:933
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:986
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1009
 #: intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:276
 #: intranet-tmpl/prog/en/modules/services/itemrecorddisplay.tt:33
 #: intranet-tmpl/prog/en/modules/offline_circ/process_koc.tt:42
@@ -47314,7 +47323,7 @@ msgstr "Authority száma %s"
 #. For the first occurrence,
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/serials/subscription-add.tt:520
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1092
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1093
 msgid "Results from Mana Knowledge Base"
 msgstr ""
 
@@ -47398,7 +47407,7 @@ msgstr "Vissza az elejére"
 msgid "Return to patron detail"
 msgstr "%S egy alkalmazásba %s %s"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1033
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1034
 #, fuzzy, c-format
 msgid "Return to previous page"
 msgstr "Vissza az elejére"
@@ -47551,7 +47560,7 @@ msgstr "Súly"
 msgid "Right to left"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:561
+#: intranet-tmpl/prog/en/modules/about.tt:568
 #, c-format
 msgid "Rijksmuseum, Amsterdam, The Netherlands"
 msgstr ""
@@ -47566,7 +47575,7 @@ msgstr ""
 msgid "Robots"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:562
+#: intranet-tmpl/prog/en/modules/about.tt:569
 #, c-format
 msgid "Rolling Hills Consolidated Libraries, USA"
 msgstr ""
@@ -47581,7 +47590,7 @@ msgstr ""
 msgid "Rollover:"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:769
+#: intranet-tmpl/prog/en/modules/about.tt:776
 #, c-format
 msgid "Rom&acirc;n&#259; (Romanian)"
 msgstr ""
@@ -47638,7 +47647,7 @@ msgstr ""
 msgid "Rotating collections"
 msgstr "c- Gyűjtemény"
 
-#: intranet-tmpl/prog/en/modules/about.tt:563
+#: intranet-tmpl/prog/en/modules/about.tt:570
 #, fuzzy, c-format
 msgid "Round Rock Public Library, USA"
 msgstr "Nelsonville Public Library, Ohio, USA"
@@ -47776,12 +47785,12 @@ msgstr "Vissza az elejére"
 msgid "SAN"
 msgstr "Mind "
 
-#: intranet-tmpl/prog/en/modules/about.tt:445
+#: intranet-tmpl/prog/en/modules/about.tt:452
 #, c-format
 msgid "SAN-Ouest Provence"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:564
+#: intranet-tmpl/prog/en/modules/about.tt:571
 #, c-format
 msgid "SAN-Ouest Provence, France"
 msgstr ""
@@ -47808,12 +47817,12 @@ msgstr ""
 msgid "SI Millimeters"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:673
+#: intranet-tmpl/prog/en/modules/about.tt:680
 #, c-format
 msgid "SIL OFL 1.1"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:712
+#: intranet-tmpl/prog/en/modules/about.tt:719
 #, c-format
 msgid "SIL Open Font License (OFL) v1.1"
 msgstr ""
@@ -47856,8 +47865,8 @@ msgstr "Kosár szám: %s"
 msgid "SMS provider:"
 msgstr "Vonalkód fájl:"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:930
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1006
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:931
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1007
 #, c-format
 msgid "SQL:"
 msgstr "SQL:"
@@ -47882,7 +47891,7 @@ msgstr ""
 msgid "STARTDATE:January 1 2010,TRACK:Day"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:570
+#: intranet-tmpl/prog/en/modules/about.tt:577
 #, c-format
 msgid "SWITCH Library Consortium, USA"
 msgstr ""
@@ -48092,9 +48101,9 @@ msgstr "mentés új sablonként"
 #: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:247
 #: intranet-tmpl/prog/en/modules/members/housebound.tt:189
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:238
-#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:214
+#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:219
 #: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:43
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:97
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:104
 #: intranet-tmpl/prog/en/modules/admin/itemtypes.tt:312
 #, c-format
 msgid "Save changes"
@@ -48133,7 +48142,7 @@ msgstr "Kosár/megrendelés"
 
 #. INPUT type=submit name=submit
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:631
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:937
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:938
 msgid "Save report"
 msgstr "Összesítés mentése"
 
@@ -48183,7 +48192,7 @@ msgstr "Utolsó kölcsönzés dátuma:"
 msgid "Saved preference %s"
 msgstr "Hozzáad egy rendszer beállítást"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:943
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:944
 #, fuzzy, c-format
 msgid "Saved report results"
 msgstr "&rsaquo; Riport Varázsló"
@@ -48193,7 +48202,7 @@ msgstr "&rsaquo; Riport Varázsló"
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:59
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:60
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:144
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1038
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1039
 #, fuzzy, c-format
 msgid "Saved reports"
 msgstr "&rsaquo; Riport Varázsló"
@@ -48350,7 +48359,7 @@ msgstr "Képernyő"
 #: intranet-tmpl/prog/en/modules/acqui/histsearch.tt:164
 #: intranet-tmpl/prog/en/modules/acqui/acqui-home.tt:45
 #: intranet-tmpl/prog/en/modules/circ/request-article.tt:79
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:162
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:169
 #: intranet-tmpl/prog/en/modules/admin/admin-home.tt:52
 #: intranet-tmpl/prog/en/modules/reports/reports-home.tt:37
 #: intranet-tmpl/prog/en/modules/labels/label-bib-search.tt:6
@@ -48558,7 +48567,7 @@ msgstr "Olvasók keresése"
 msgid "Search for record"
 msgstr "MARC rekordok keresése"
 
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:148
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:155
 #, fuzzy, c-format
 msgid "Search for tag:"
 msgstr "Apache verzió:"
@@ -48905,7 +48914,7 @@ msgstr ""
 msgid "Second"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:86
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:93
 #, fuzzy, c-format
 msgid "Second indicator default value: "
 msgstr "Alapértelmezett értékek használata"
@@ -48935,8 +48944,8 @@ msgid "Secondary phone: "
 msgstr "Másodlagos telefonszám: "
 
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:370
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:920
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:995
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:921
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:996
 #, fuzzy, c-format
 msgid "Seconds (default)"
 msgstr "Auth érték"
@@ -48990,7 +48999,7 @@ msgstr ""
 msgid "Seen"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:565
+#: intranet-tmpl/prog/en/modules/about.tt:572
 #, fuzzy, c-format
 msgid "Sefton Council, United Kingdom"
 msgstr "software.coop, Egyesült Királyság"
@@ -49004,8 +49013,8 @@ msgstr "software.coop, Egyesült Királyság"
 #: intranet-tmpl/prog/en/modules/members/tables/guarantor_search.tt:21
 #: intranet-tmpl/prog/en/modules/acqui/tables/members_results.tt:19
 #: intranet-tmpl/prog/en/modules/circ/request-article.tt:70
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1713
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1735
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1714
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1736
 #: intranet-tmpl/prog/en/modules/labels/label-edit-batch.tt:116
 #: intranet-tmpl/prog/en/modules/labels/result.tt:72
 #, c-format
@@ -49447,8 +49456,8 @@ msgstr "1-5 A nyilvántartásban levő dátum"
 msgid "Select your MARC flavor"
 msgstr "Authority MARC Keret:"
 
-#: intranet-tmpl/prog/en/modules/about.tt:687
-#: intranet-tmpl/prog/en/modules/about.tt:688
+#: intranet-tmpl/prog/en/modules/about.tt:694
+#: intranet-tmpl/prog/en/modules/about.tt:695
 #, fuzzy, c-format
 msgid "Select2"
 msgstr "(válassz ki egy könyvtárat)"
@@ -50872,12 +50881,12 @@ msgstr "Osztályozás forrása / polcra helyezési séma"
 msgid "Source records"
 msgstr "%s importált tételek"
 
-#: intranet-tmpl/prog/en/modules/about.tt:568
+#: intranet-tmpl/prog/en/modules/about.tt:575
 #, c-format
 msgid "South Taranaki District Council, New Zealand"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:567
+#: intranet-tmpl/prog/en/modules/about.tt:574
 #, c-format
 msgid "South-East Kansas Library System (SEKLS), USA"
 msgstr ""
@@ -50909,7 +50918,7 @@ msgstr ""
 msgid "Special relationship: "
 msgstr "Animáció "
 
-#: intranet-tmpl/prog/en/modules/about.tt:439
+#: intranet-tmpl/prog/en/modules/about.tt:446
 #, c-format
 msgid "Special thanks to the following organizations"
 msgstr ""
@@ -51533,7 +51542,7 @@ msgstr ": Konfiguráció OK!"
 msgid "Step 6 of 6: Choose how you want the report ordered"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:598
+#: intranet-tmpl/prog/en/modules/about.tt:605
 #, c-format
 msgid "Stephen Hedges (early Documentation Manager)"
 msgstr ""
@@ -51561,7 +51570,7 @@ msgstr "Hely"
 msgid "Stock rotation details for %s"
 msgstr "Készletforgalom részletei %s"
 
-#: intranet-tmpl/prog/en/modules/about.tt:569
+#: intranet-tmpl/prog/en/modules/about.tt:576
 #, c-format
 msgid "Stockholm University Library, Sweden"
 msgstr ""
@@ -51629,7 +51638,7 @@ msgid "Sub total "
 msgstr ": %s "
 
 #: intranet-tmpl/prog/en/modules/admin/oai_set_mappings.tt:35
-#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:263
+#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:268
 #: intranet-tmpl/prog/en/modules/admin/koha2marclinks.tt:32
 #: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:268
 #: intranet-tmpl/prog/en/modules/admin/checkmarc.tt:202
@@ -51666,7 +51675,7 @@ msgid "Subfield:"
 msgstr ""
 
 #. %1$s:  tagsubfield | html 
-#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:223
+#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:228
 #, c-format
 msgid "Subfield: %s"
 msgstr ""
@@ -51695,13 +51704,13 @@ msgid "Subgroup"
 msgstr "Hozzáad csoportot"
 
 #. INPUT type=text name=subgroup
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1755
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1756
 #, fuzzy
 msgid "Subgroup code"
 msgstr "Hozzáad csoportot"
 
 #. INPUT type=text name=subgroupdesc
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1756
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1757
 #, fuzzy
 msgid "Subgroup name"
 msgstr "Hozzáad csoportot"
@@ -52422,7 +52431,7 @@ msgstr ""
 msgid "Suspension in days (day)"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:772
+#: intranet-tmpl/prog/en/modules/about.tt:779
 #, c-format
 msgid "Svenska (Swedish)"
 msgstr "Svenska (Svéd)"
@@ -52448,8 +52457,8 @@ msgstr "Váltás egyszerű szerkesztőre"
 msgid "Switch to or from fullscreen mode"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:358
-#: intranet-tmpl/prog/en/modules/about.tt:366
+#: intranet-tmpl/prog/en/modules/about.tt:365
+#: intranet-tmpl/prog/en/modules/about.tt:373
 #, fuzzy, c-format
 msgid "Switching to dom indexing"
 msgstr "Összetett keresés"
@@ -52579,7 +52588,7 @@ msgstr "Keresés a rendszerbeállításokban:"
 msgid "System preferences"
 msgstr "Rendszerbeállítások"
 
-#: intranet-tmpl/prog/en/modules/about.tt:775
+#: intranet-tmpl/prog/en/modules/about.tt:782
 #, c-format
 msgid ""
 "T&uuml;rk&ccedil;e (Turkish) pre-3.8: Selma Aslan; for 3.8+, Suleyman "
@@ -52648,7 +52657,7 @@ msgstr ""
 #. %20$s:  IF ( subfield.value_builder ) 
 #. %21$s:  subfield.value_builder | html 
 #. %22$s:  END 
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:193
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:200
 #, c-format
 msgid ""
 "Tab:%s | $%s %s %s%s%s%s, repeatable%s%s, Mandatory%s%s, See %s%s%s, %s%s%s, "
@@ -52672,7 +52681,7 @@ msgstr "Tartalomjegyzék"
 msgid "Table properties"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:691
+#: intranet-tmpl/prog/en/modules/about.tt:698
 #, c-format
 msgid "TableDnD plug-in for jQuery"
 msgstr ""
@@ -52695,7 +52704,7 @@ msgstr "Tabulálás (\\t)"
 
 #: intranet-tmpl/prog/en/modules/admin/koha2marclinks.tt:31
 #: intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:194
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:175
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:182
 #: intranet-tmpl/prog/en/modules/admin/checkmarc.tt:168
 #: intranet-tmpl/prog/en/modules/admin/checkmarc.tt:201
 #: intranet-tmpl/prog/en/modules/admin/checkmarc.tt:236
@@ -52724,7 +52733,7 @@ msgstr "Címke %s Almező szerkezet"
 msgid "Tag %s subfield structure"
 msgstr "Authority MARC almező szerkezet"
 
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:123
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:130
 #, fuzzy, c-format
 msgid "Tag deleted"
 msgstr "Üres kosár"
@@ -52753,7 +52762,7 @@ msgstr "Authority MARC almező szerkezet"
 msgid "Tag moderation"
 msgstr "Címkék ellenőrzése"
 
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:59
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:66
 #, c-format
 msgid "Tag:"
 msgstr "Hívójel:"
@@ -52770,13 +52779,13 @@ msgstr "Hívójel:"
 #: intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:78
 #: intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:84
 #: intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:127
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:62
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:69
 #, c-format
 msgid "Tag: "
 msgstr "Hívójel: "
 
 #. %1$s:  searchfield | html 
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:107
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:114
 #, c-format
 msgid "Tag: %s"
 msgstr "Hívójel: %s"
@@ -52803,12 +52812,12 @@ msgstr "Jóváhagyásra váró címkék"
 msgid "Tags:"
 msgstr "Címkék:"
 
-#: intranet-tmpl/prog/en/modules/about.tt:571
+#: intranet-tmpl/prog/en/modules/about.tt:578
 #, c-format
 msgid "Talking Tech, Global"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:572
+#: intranet-tmpl/prog/en/modules/about.tt:579
 #, c-format
 msgid "Tamil, France"
 msgstr "Tamil, Franciaország"
@@ -53011,7 +53020,7 @@ msgstr ""
 msgid "Testing..."
 msgstr "a fülben"
 
-#: intranet-tmpl/prog/en/modules/about.tt:773
+#: intranet-tmpl/prog/en/modules/about.tt:780
 #, c-format
 msgid "Tetun (Tetum) Karen Myers"
 msgstr ""
@@ -53021,7 +53030,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/includes/str/tinymce_i18n.inc:1
 #: intranet-tmpl/prog/en/modules/tools/quotes.tt:42
 #: intranet-tmpl/prog/en/modules/tools/quotes-upload.tt:55
-#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:264
+#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:269
 #: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:269
 #, c-format
 msgid "Text"
@@ -53107,26 +53116,26 @@ msgid "That budget does not exist! Please select a budget to continue."
 msgstr ""
 
 #: intranet-tmpl/prog/en/modules/members/members-update.tt:170
-#: intranet-tmpl/prog/en/modules/about.tt:442
-#: intranet-tmpl/prog/en/modules/about.tt:446
-#: intranet-tmpl/prog/en/modules/about.tt:447
-#: intranet-tmpl/prog/en/modules/about.tt:448
-#: intranet-tmpl/prog/en/modules/about.tt:644
-#: intranet-tmpl/prog/en/modules/about.tt:648
-#: intranet-tmpl/prog/en/modules/about.tt:652
-#: intranet-tmpl/prog/en/modules/about.tt:656
-#: intranet-tmpl/prog/en/modules/about.tt:660
-#: intranet-tmpl/prog/en/modules/about.tt:664
+#: intranet-tmpl/prog/en/modules/about.tt:449
+#: intranet-tmpl/prog/en/modules/about.tt:453
+#: intranet-tmpl/prog/en/modules/about.tt:454
+#: intranet-tmpl/prog/en/modules/about.tt:455
+#: intranet-tmpl/prog/en/modules/about.tt:651
+#: intranet-tmpl/prog/en/modules/about.tt:655
+#: intranet-tmpl/prog/en/modules/about.tt:659
+#: intranet-tmpl/prog/en/modules/about.tt:663
 #: intranet-tmpl/prog/en/modules/about.tt:667
-#: intranet-tmpl/prog/en/modules/about.tt:670
-#: intranet-tmpl/prog/en/modules/about.tt:676
-#: intranet-tmpl/prog/en/modules/about.tt:679
-#: intranet-tmpl/prog/en/modules/about.tt:682
-#: intranet-tmpl/prog/en/modules/about.tt:688
-#: intranet-tmpl/prog/en/modules/about.tt:691
-#: intranet-tmpl/prog/en/modules/about.tt:694
-#: intranet-tmpl/prog/en/modules/about.tt:697
-#: intranet-tmpl/prog/en/modules/about.tt:700
+#: intranet-tmpl/prog/en/modules/about.tt:671
+#: intranet-tmpl/prog/en/modules/about.tt:674
+#: intranet-tmpl/prog/en/modules/about.tt:677
+#: intranet-tmpl/prog/en/modules/about.tt:683
+#: intranet-tmpl/prog/en/modules/about.tt:686
+#: intranet-tmpl/prog/en/modules/about.tt:689
+#: intranet-tmpl/prog/en/modules/about.tt:695
+#: intranet-tmpl/prog/en/modules/about.tt:698
+#: intranet-tmpl/prog/en/modules/about.tt:701
+#: intranet-tmpl/prog/en/modules/about.tt:704
+#: intranet-tmpl/prog/en/modules/about.tt:707
 #, c-format
 msgid "The "
 msgstr ""
@@ -53141,28 +53150,28 @@ msgstr "%S (az első előfizetés dátuma)"
 #. %2$s:  unit.categorycode | html 
 #. %3$s:  unit.itemtype | html 
 #. %4$s:  unit.lengthunit | html 
-#: intranet-tmpl/prog/en/modules/about.tt:424
+#: intranet-tmpl/prog/en/modules/about.tt:431
 #, c-format
 msgid ""
 "The %s, %s, %s issuingrule will fallback to 'days' for 'lengthunit' as it is "
 "incorrectly defined as %s. "
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:379
+#: intranet-tmpl/prog/en/modules/about.tt:386
 #, c-format
 msgid ""
 "The &lt;use_zebra_facets&gt; entry is missing in your configuration file. "
 "Falling back to legacy facet calculation. "
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:364
+#: intranet-tmpl/prog/en/modules/about.tt:371
 #, c-format
 msgid ""
 "The &lt;zebra_auth_index_mode&gt; entry set to 'grs1', which is no longer "
 "supported. Please use DOM instead. To switch follow this page of wiki: "
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:356
+#: intranet-tmpl/prog/en/modules/about.tt:363
 #, c-format
 msgid ""
 "The &lt;zebra_bib_index_mode&gt; entry set to 'grs1', which is no longer "
@@ -53192,12 +53201,12 @@ msgid ""
 "private."
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:624
+#: intranet-tmpl/prog/en/modules/about.tt:631
 #, c-format
 msgid "The Bridge Material Type Icon Set"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:627
+#: intranet-tmpl/prog/en/modules/about.tt:634
 #, c-format
 msgid "The Bridge Material Type Icon Set is licensed under a "
 msgstr ""
@@ -53369,7 +53378,7 @@ msgstr ""
 msgid "The change will be applied immediately."
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:259
+#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:264
 #: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:264
 #, c-format
 msgid ""
@@ -53553,7 +53562,7 @@ msgstr ": Nem találja ezt a vonalkódot "
 msgid "The following error occurred while importing the database structure:"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1023
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1024
 #, c-format
 msgid "The following error was encountered:"
 msgstr ""
@@ -53680,7 +53689,7 @@ msgstr ""
 msgid "The import id number "
 msgstr "00 Dokumentum kategória "
 
-#: intranet-tmpl/prog/en/modules/about.tt:685
+#: intranet-tmpl/prog/en/modules/about.tt:692
 #, c-format
 msgid "The included OAI.xslt file by the "
 msgstr ""
@@ -53823,16 +53832,16 @@ msgstr "%s olvasókat sikeresen törölte"
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:75
 #, c-format
 msgid ""
-"The order line you trying to cancel was created from a partial receipt of "
-"another order line which has been deleted. Cancellation is not possible. "
+"The order line you are trying to cancel was created from a partial receipt "
+"of another order line which has been deleted. Cancellation is not possible. "
 msgstr ""
 
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:70
 #, c-format
 msgid ""
-"The order line you trying to cancel was created from a partial receipt of "
-"another order line which is already received. Try to cancel this one first "
-"and retry. "
+"The order line you are trying to cancel was created from a partial receipt "
+"of another order line which is already received. Try to cancel this one "
+"first and retry. "
 msgstr ""
 
 #: intranet-tmpl/prog/en/modules/acqui/duplicate_orders.tt:196
@@ -54178,7 +54187,7 @@ msgstr ""
 msgid "The value \"%s\" is not supported for mappings"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:573
+#: intranet-tmpl/prog/en/modules/about.tt:580
 #, c-format
 msgid "Theke Solutions, Argentina"
 msgstr ""
@@ -54544,7 +54553,7 @@ msgstr ""
 msgid "Therefore, the record to be merged has not been deleted. "
 msgstr ": Nem találja ezt a vonalkódot "
 
-#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:184
+#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:189
 #: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:183
 #, c-format
 msgid "Thesaurus:"
@@ -55119,7 +55128,7 @@ msgstr ""
 msgid "This rota has no stages."
 msgstr "%s tétel tárolva"
 
-#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:258
+#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:263
 #: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:263
 #, c-format
 msgid ""
@@ -55329,12 +55338,12 @@ msgstr "Időtúllépés (0: nincs meghatározva): "
 msgid "Timestamp"
 msgstr "Időbélyeg"
 
-#: intranet-tmpl/prog/en/modules/about.tt:669
+#: intranet-tmpl/prog/en/modules/about.tt:676
 #, c-format
 msgid "TinyMCE WYSIWYG editor"
 msgstr "TinyMCE WYSIWYG szerkesztő"
 
-#: intranet-tmpl/prog/en/modules/about.tt:670
+#: intranet-tmpl/prog/en/modules/about.tt:677
 #, fuzzy, c-format
 msgid "TinyMCE WYSIWYG editor v5.0.16 "
 msgstr "TinyMCE WYSIWYG szerlkesztő (v3.5.8)"
@@ -56352,7 +56361,7 @@ msgid "Translate item type %s"
 msgstr "Elérhető"
 
 #: intranet-tmpl/prog/en/modules/admin/localization.tt:67
-#: intranet-tmpl/prog/en/modules/about.tt:731
+#: intranet-tmpl/prog/en/modules/about.tt:738
 #, c-format
 msgid "Translation"
 msgstr "Fordítás"
@@ -56450,7 +56459,7 @@ msgstr "Kedd"
 msgid "Tuesdays"
 msgstr "keddenként"
 
-#: intranet-tmpl/prog/en/modules/about.tt:574
+#: intranet-tmpl/prog/en/modules/about.tt:581
 #, c-format
 msgid "Tulong Aklatan, Philippines"
 msgstr ""
@@ -56553,7 +56562,7 @@ msgstr ""
 msgid "UTF-8 (Default)"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:575
+#: intranet-tmpl/prog/en/modules/about.tt:582
 #, fuzzy, c-format
 msgid "Uintah Library System, USA"
 msgstr "Crawford County Federated Library System"
@@ -56844,47 +56853,47 @@ msgstr ""
 msgid "Units: "
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:577
+#: intranet-tmpl/prog/en/modules/about.tt:584
 #, c-format
 msgid "Universidad Empresarial Siglo 21, Argentina"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:578
+#: intranet-tmpl/prog/en/modules/about.tt:585
 #, c-format
 msgid "Universidad Nacional de Córdoba, Argentina"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:579
+#: intranet-tmpl/prog/en/modules/about.tt:586
 #, c-format
 msgid "Universidad ORT Uruguay"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:576
+#: intranet-tmpl/prog/en/modules/about.tt:583
 #, c-format
 msgid "Universidad de El Salvador, El Salvador"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:584
+#: intranet-tmpl/prog/en/modules/about.tt:591
 #, fuzzy, c-format
 msgid "University of the Arts London, United Kingdom"
 msgstr "software.coop, Egyesült Királyság"
 
-#: intranet-tmpl/prog/en/modules/about.tt:580
+#: intranet-tmpl/prog/en/modules/about.tt:587
 #, c-format
 msgid "Université d'Aix-Marseille, France"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:581
+#: intranet-tmpl/prog/en/modules/about.tt:588
 #, c-format
 msgid "Université de Lyon 3, France"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:582
+#: intranet-tmpl/prog/en/modules/about.tt:589
 #, c-format
 msgid "Université de Rennes 2, France"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:583
+#: intranet-tmpl/prog/en/modules/about.tt:590
 #, c-format
 msgid "Université de St Etienne, France"
 msgstr ""
@@ -57005,7 +57014,7 @@ msgstr "Acetate"
 
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:77
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:267
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1013
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1014
 #, c-format
 msgid "Update SQL"
 msgstr ""
@@ -57489,7 +57498,7 @@ msgstr ""
 msgid "Use for staff search groups "
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1026
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1027
 #, c-format
 msgid ""
 "Use of this keyword is not allowed in Koha reports due to security and data "
@@ -57737,7 +57746,7 @@ msgstr ""
 msgid "VHS tape / Videocassette"
 msgstr "VHS szalag / Videókazetta"
 
-#: intranet-tmpl/prog/en/modules/about.tt:585
+#: intranet-tmpl/prog/en/modules/about.tt:592
 #, c-format
 msgid "Vaara-kirjastot, Finland"
 msgstr ""
@@ -57804,7 +57813,7 @@ msgstr ""
 " Asort1 egy engedélyezet érték a beszerzésnél, amelyet statisztikai célokra "
 "lehet használni."
 
-#: intranet-tmpl/prog/en/modules/about.tt:586
+#: intranet-tmpl/prog/en/modules/about.tt:593
 #, c-format
 msgid "Vanier College, Canada"
 msgstr ""
@@ -58016,17 +58025,17 @@ msgstr ""
 msgid "Verify you want to delete patrons"
 msgstr "&rsaquo; Nem tudja törölni az osztályozási szabályt"
 
-#: intranet-tmpl/prog/en/modules/about.tt:587
+#: intranet-tmpl/prog/en/modules/about.tt:594
 #, c-format
 msgid "Vermont Organization of Koha Automated Libraries (VOKAL), USA"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:720
+#: intranet-tmpl/prog/en/modules/about.tt:727
 #, c-format
 msgid "Verovio"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:721
+#: intranet-tmpl/prog/en/modules/about.tt:728
 #, c-format
 msgid ""
 "Verovio is developed by the Swiss RISM Office with the support of the Swiss "
@@ -58235,7 +58244,7 @@ msgstr "Adminisztráció"
 msgid "View spine label"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:211
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:218
 #, fuzzy, c-format
 msgid "View subfields"
 msgstr " almező"
@@ -58250,17 +58259,17 @@ msgstr "Beszerzés"
 msgid "View, manage, configure and run plugins."
 msgstr "Beépülő modulok megnézése, kezelése, konfigurálása és futtatása."
 
-#: intranet-tmpl/prog/en/modules/about.tt:588
+#: intranet-tmpl/prog/en/modules/about.tt:595
 #, c-format
 msgid "Ville de Victoriaville, Canada"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:589
+#: intranet-tmpl/prog/en/modules/about.tt:596
 #, c-format
 msgid "Virginia Tech, USA"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:125
+#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:130
 #, c-format
 msgid "Visibility: "
 msgstr "Láthatóság"
@@ -58371,15 +58380,16 @@ msgstr "Figyelmeztetés"
 #: intranet-tmpl/prog/en/modules/about.tt:325
 #: intranet-tmpl/prog/en/modules/about.tt:331
 #: intranet-tmpl/prog/en/modules/about.tt:336
-#: intranet-tmpl/prog/en/modules/about.tt:355
-#: intranet-tmpl/prog/en/modules/about.tt:363
-#: intranet-tmpl/prog/en/modules/about.tt:371
+#: intranet-tmpl/prog/en/modules/about.tt:347
+#: intranet-tmpl/prog/en/modules/about.tt:362
+#: intranet-tmpl/prog/en/modules/about.tt:370
 #: intranet-tmpl/prog/en/modules/about.tt:378
 #: intranet-tmpl/prog/en/modules/about.tt:385
 #: intranet-tmpl/prog/en/modules/about.tt:392
 #: intranet-tmpl/prog/en/modules/about.tt:399
-#: intranet-tmpl/prog/en/modules/about.tt:407
-#: intranet-tmpl/prog/en/modules/about.tt:423
+#: intranet-tmpl/prog/en/modules/about.tt:406
+#: intranet-tmpl/prog/en/modules/about.tt:414
+#: intranet-tmpl/prog/en/modules/about.tt:430
 #, c-format
 msgid "Warning"
 msgstr "Figyelmeztetés"
@@ -58558,7 +58568,7 @@ msgstr "Figyelmeztetés: Nem találjuk ezt a vonalkódot"
 msgid "Warnings regarding the system configuration"
 msgstr "A rendszer konfigurációjával kapcsolatos figyelmeztetések"
 
-#: intranet-tmpl/prog/en/modules/about.tt:590
+#: intranet-tmpl/prog/en/modules/about.tt:597
 #, fuzzy, c-format
 msgid "Washoe County Library System, USA"
 msgstr "Crawford County Federated Library System"
@@ -58987,7 +58997,7 @@ msgstr "X "
 msgid "XML"
 msgstr "MARCXML"
 
-#: intranet-tmpl/prog/en/modules/about.tt:351
+#: intranet-tmpl/prog/en/modules/about.tt:358
 #, c-format
 msgid "XML configuration file"
 msgstr "XML konfigurációs fájl"
@@ -58997,12 +59007,12 @@ msgstr "XML konfigurációs fájl"
 msgid "XSLT File(s) for transforming results: "
 msgstr "XSLT fájl(ok) a találatok átalakításához: "
 
-#: intranet-tmpl/prog/en/modules/about.tt:591
+#: intranet-tmpl/prog/en/modules/about.tt:598
 #, c-format
 msgid "Xercode, Spain"
 msgstr "Xercode, Spanyolország"
 
-#: intranet-tmpl/prog/en/modules/about.tt:615
+#: intranet-tmpl/prog/en/modules/about.tt:622
 #, c-format
 msgid "YUI"
 msgstr "YUI"
@@ -59099,10 +59109,10 @@ msgstr "Engedélyezett"
 #: intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:392
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:363
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:365
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:913
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:915
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:988
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:990
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:914
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:916
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:989
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:991
 #, c-format
 msgid "Yes"
 msgstr "Igen"
@@ -59212,13 +59222,13 @@ msgstr "Igen, törölje a címkét"
 msgid "Yes, delete this item type"
 msgstr "Igen, törölje ezt a tétel típust"
 
-#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:231
+#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:236
 #: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:238
 #, fuzzy, c-format
 msgid "Yes, delete this subfield"
 msgstr "Igen, törölje az almezőt"
 
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:113
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:120
 #, c-format
 msgid "Yes, delete this tag"
 msgstr "Igen, törölje ezt a címkét"
@@ -59293,7 +59303,7 @@ msgid ""
 "using this account."
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:386
+#: intranet-tmpl/prog/en/modules/about.tt:393
 #, c-format
 msgid ""
 "You are missing the &lt;log4perl_conf&gt; entry in your koha-conf.xml file. "
@@ -59308,7 +59318,7 @@ msgid ""
 msgstr ""
 
 #. %1$s:  config_entry.effective_tmp_dir | html 
-#: intranet-tmpl/prog/en/modules/about.tt:408
+#: intranet-tmpl/prog/en/modules/about.tt:415
 #, c-format
 msgid ""
 "You are missing the &lt;tmp_path&gt; entry in your koha-conf.xml file. "
@@ -59316,7 +59326,7 @@ msgid ""
 "instance. The effective temporary directory is '%s'. "
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:393
+#: intranet-tmpl/prog/en/modules/about.tt:400
 #, c-format
 msgid ""
 "You are missing the &lt;upload_path&gt; entry in your koha-conf.xml file. "
@@ -59324,7 +59334,7 @@ msgid ""
 "Koha instance. "
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:400
+#: intranet-tmpl/prog/en/modules/about.tt:407
 #, c-format
 msgid ""
 "You are missing the &lt;upload_path&gt; entry in your koha-conf.xml file. "
@@ -59393,7 +59403,7 @@ msgstr "A szerver nem érhető el, ezért nem leeht adatbázisáz szinkronizáln
 msgid "You are only viewing one item. "
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:460
+#: intranet-tmpl/prog/en/modules/about.tt:467
 #, c-format
 msgid "You are running a development version of Koha"
 msgstr ""
@@ -59643,7 +59653,7 @@ msgid "You have not selected any patrons to add to a list!"
 msgstr "Nem választott ki olvasót listához való hozzáadáshoz!"
 
 #. %1$s:  config_entry.file | html 
-#: intranet-tmpl/prog/en/modules/about.tt:372
+#: intranet-tmpl/prog/en/modules/about.tt:379
 #, c-format
 msgid ""
 "You have set UseQueryParser but the 'queryparser_config' entry is missing in "
@@ -59827,7 +59837,7 @@ msgid "You must select one or more patrons to remove"
 msgstr "= adj ki egy dokumentumot az olvasónak"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1092
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1093
 #, fuzzy
 msgid "You must select one or more reports to delete"
 msgstr "= adj ki egy dokumentumot az olvasónak"
@@ -60070,7 +60080,7 @@ msgid "Your patron lists"
 msgstr "Az Ön olvasólistái"
 
 #. %1$s:  reportname | html 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:972
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:973
 #, c-format
 msgid "Your report \"%s\" has been saved"
 msgstr "A(z) %s kimutatást mentettük"
@@ -60486,7 +60496,7 @@ msgstr "Anaglifa, térhatású képpár"
 msgid "and"
 msgstr "és"
 
-#: intranet-tmpl/prog/en/modules/about.tt:612
+#: intranet-tmpl/prog/en/modules/about.tt:619
 #, fuzzy, c-format
 msgid "and "
 msgstr "és "
@@ -60511,7 +60521,7 @@ msgstr ""
 msgid "and search for the \"data problems\" section"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:673
+#: intranet-tmpl/prog/en/modules/about.tt:680
 #, fuzzy, c-format
 msgid "and the "
 msgstr "dokumentum "
@@ -60545,7 +60555,7 @@ msgstr "Minden könyvtár"
 msgid "approved"
 msgstr "Engedélyez"
 
-#: intranet-tmpl/prog/en/modules/about.tt:612
+#: intranet-tmpl/prog/en/modules/about.tt:619
 #, c-format
 msgid "are licensed under the "
 msgstr ""
@@ -60754,78 +60764,78 @@ msgstr ""
 msgid "by %s: "
 msgstr "[ %s ] "
 
-#: intranet-tmpl/prog/en/modules/about.tt:656
+#: intranet-tmpl/prog/en/modules/about.tt:663
 #, c-format
 msgid "by Allan Jardine is licensed under the BSD 3 and GPL v2 license."
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:648
+#: intranet-tmpl/prog/en/modules/about.tt:655
 #, c-format
 msgid "by Binny V A is licensed under the BSD license."
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:697
+#: intranet-tmpl/prog/en/modules/about.tt:704
 #, c-format
 msgid "by DIY Co is licensed under the "
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:673
+#: intranet-tmpl/prog/en/modules/about.tt:680
 #, c-format
 msgid "by Dave Gandy is licensed under the "
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:691
+#: intranet-tmpl/prog/en/modules/about.tt:698
 #, c-format
 msgid "by Denis Howlett is licensed under the "
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:679
+#: intranet-tmpl/prog/en/modules/about.tt:686
 #, c-format
 msgid "by Eli Grey is licensed under an "
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:712
+#: intranet-tmpl/prog/en/modules/about.tt:719
 #, c-format
 msgid "by Google is a family of fonts licensed under the "
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:724
+#: intranet-tmpl/prog/en/modules/about.tt:731
 #, c-format
 msgid ""
 "by Klaus Hartl is a jQuery plugin for setting, reading, and deleting browser "
 "cookies, licensed under the "
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:718
+#: intranet-tmpl/prog/en/modules/about.tt:725
 #, c-format
 msgid ""
 "by Lars Jung is a JavaScript library that generates QR codes, licensed under "
 "the "
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:676
+#: intranet-tmpl/prog/en/modules/about.tt:683
 #, c-format
 msgid "by Marijn Haverbeke is licensed under an "
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:670
+#: intranet-tmpl/prog/en/modules/about.tt:677
 #, c-format
 msgid "by Moxiecode (Ephox) is licensed under the "
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:715
+#: intranet-tmpl/prog/en/modules/about.tt:722
 #, c-format
 msgid ""
 "by Some Web Media is a JavaScript library that makes any element on your "
 "page visible while you scroll, licensed under the "
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:682
+#: intranet-tmpl/prog/en/modules/about.tt:689
 #, c-format
 msgid "by The Dojo Foundation is licensed under an "
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:660
+#: intranet-tmpl/prog/en/modules/about.tt:667
 #, c-format
 msgid "by Zhixin Wen is licensed under the MIT license."
 msgstr ""
@@ -60853,7 +60863,7 @@ msgstr "Minden könyvtár"
 msgid "by months"
 msgstr "2 hónap"
 
-#: intranet-tmpl/prog/en/modules/about.tt:628
+#: intranet-tmpl/prog/en/modules/about.tt:635
 #, c-format
 msgid "by the Bridge Consortium of Carleton College and St. Olaf College."
 msgstr ""
@@ -60951,7 +60961,7 @@ msgstr "Megengedett"
 msgid "club %s "
 msgstr "klub %s "
 
-#: intranet-tmpl/prog/en/modules/about.tt:614
+#: intranet-tmpl/prog/en/modules/about.tt:621
 #, fuzzy, c-format
 msgid "code and "
 msgstr "és "
@@ -61003,7 +61013,7 @@ msgstr "Bármely tartalom"
 msgid "contains"
 msgstr "tartalmazza"
 
-#: intranet-tmpl/prog/en/modules/about.tt:656
+#: intranet-tmpl/prog/en/modules/about.tt:663
 #, c-format
 msgid "controls for column visiblity in DataTables"
 msgstr ""
@@ -61152,7 +61162,7 @@ msgstr ""
 msgid "do a catalog search"
 msgstr "Keresés a katalógusban"
 
-#: intranet-tmpl/prog/en/modules/about.tt:520
+#: intranet-tmpl/prog/en/modules/about.tt:527
 #, fuzzy, c-format
 msgid "doXulting"
 msgstr "Fiatal felnőtt"
@@ -61232,7 +61242,7 @@ msgstr "9- Kódolás"
 msgid "euro-currency sign"
 msgstr "Új pénznem"
 
-#: intranet-tmpl/prog/en/modules/about.tt:737
+#: intranet-tmpl/prog/en/modules/about.tt:744
 #, c-format
 msgid ""
 "euskara (Basque) Fernando Berrizbeitia, the librarians of Eima Katalogoa, "
@@ -61281,7 +61291,7 @@ msgstr "c- Gyűjtemény"
 msgid "failed to run"
 msgstr "c- Gyűjtemény"
 
-#: intranet-tmpl/prog/en/modules/about.tt:450
+#: intranet-tmpl/prog/en/modules/about.tt:457
 #, c-format
 msgid "famfamfam.com"
 msgstr "famfamfam.com"
@@ -61488,11 +61498,6 @@ msgstr ""
 msgid "if "
 msgstr "Tinta "
 
-#: intranet-tmpl/prog/en/modules/admin/patron-attr-types.tt:125
-#, c-format
-msgid "if set.)"
-msgstr ""
-
 #: intranet-tmpl/prog/en/modules/admin/categories.tt:165
 #, c-format
 msgid ""
@@ -61573,24 +61578,24 @@ msgstr "Authority típusok"
 msgid "is"
 msgstr "egyenlő"
 
-#: intranet-tmpl/prog/en/modules/about.tt:727
+#: intranet-tmpl/prog/en/modules/about.tt:734
 #, c-format
 msgid ""
 "is a \"simple, lightweight JavaScript API for handling cookies,\" licensed "
 "under the "
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:706
+#: intranet-tmpl/prog/en/modules/about.tt:713
 #, c-format
 msgid "is a D3-based reusable chart library under the "
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:709
+#: intranet-tmpl/prog/en/modules/about.tt:716
 #, c-format
 msgid "is a JavaScript library by Bram Stein licensed under the "
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:703
+#: intranet-tmpl/prog/en/modules/about.tt:710
 #, c-format
 msgid ""
 "is a JavaScript library for manipulating documents based on data. It is "
@@ -61635,12 +61640,12 @@ msgstr "egyenlő"
 msgid "is exactly"
 msgstr "pontosan"
 
-#: intranet-tmpl/prog/en/modules/about.tt:685
+#: intranet-tmpl/prog/en/modules/about.tt:692
 #, c-format
 msgid "is licensed under a "
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:633
+#: intranet-tmpl/prog/en/modules/about.tt:640
 #, c-format
 msgid "is licensed under the "
 msgstr ""
@@ -61662,7 +61667,7 @@ msgstr "%s %s (%s)"
 msgid "is on hold for "
 msgstr "%s talált sorok. "
 
-#: intranet-tmpl/prog/en/modules/about.tt:644
+#: intranet-tmpl/prog/en/modules/about.tt:651
 #, c-format
 msgid "is released under MIT license by Ludo van den Boom."
 msgstr ""
@@ -61670,6 +61675,11 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:190
 #, c-format
 msgid "is restricted. Please verify this patron should still be restricted. "
+msgstr ""
+
+#: intranet-tmpl/prog/en/modules/admin/patron-attr-types.tt:125
+#, c-format
+msgid "is set.)"
 msgstr ""
 
 #: intranet-tmpl/prog/en/includes/virtualshelves-toolbar.inc:28
@@ -61763,92 +61773,92 @@ msgstr ""
 msgid "itype"
 msgstr "# Dokumentumok"
 
-#: intranet-tmpl/prog/en/modules/about.tt:612
+#: intranet-tmpl/prog/en/modules/about.tt:619
 #, c-format
 msgid "jQuery"
 msgstr "jQuery"
 
-#: intranet-tmpl/prog/en/modules/about.tt:632
+#: intranet-tmpl/prog/en/modules/about.tt:639
 #, fuzzy, c-format
 msgid "jQuery Bar Rating Plugin"
 msgstr "jQuery Star Rating Plugin"
 
-#: intranet-tmpl/prog/en/modules/about.tt:633
+#: intranet-tmpl/prog/en/modules/about.tt:640
 #, fuzzy, c-format
 msgid "jQuery Bar Rating Plugin v1.22 by "
 msgstr "jQuery Star Rating Plugin"
 
-#: intranet-tmpl/prog/en/modules/about.tt:655
+#: intranet-tmpl/prog/en/modules/about.tt:662
 #, c-format
 msgid "jQuery Colvis plugin"
 msgstr "jQuery Colvis plugin"
 
-#: intranet-tmpl/prog/en/modules/about.tt:666
-#: intranet-tmpl/prog/en/modules/about.tt:667
+#: intranet-tmpl/prog/en/modules/about.tt:673
+#: intranet-tmpl/prog/en/modules/about.tt:674
 #, c-format
 msgid "jQuery Validation Plugin"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:611
+#: intranet-tmpl/prog/en/modules/about.tt:618
 #, c-format
 msgid "jQuery and jQueryUI"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:637
+#: intranet-tmpl/prog/en/modules/about.tt:644
 #, c-format
 msgid "jQuery insertAtCaret Plugin"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:638
+#: intranet-tmpl/prog/en/modules/about.tt:645
 #, c-format
 msgid ""
 "jQuery insertAtCaret Plugin v1.0 by the phpMyAdmin devel team is licensed "
 "under the "
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:660
+#: intranet-tmpl/prog/en/modules/about.tt:667
 #, c-format
 msgid "jQuery multiple select plugin"
 msgstr "jQuery multiple select plugin"
 
-#: intranet-tmpl/prog/en/modules/about.tt:642
+#: intranet-tmpl/prog/en/modules/about.tt:649
 #, c-format
 msgid "jQuery treetable Plugin"
 msgstr "jQuery treetable Plugin"
 
-#: intranet-tmpl/prog/en/modules/about.tt:644
+#: intranet-tmpl/prog/en/modules/about.tt:651
 #, c-format
 msgid "jQuery treetable Plugin 3.1.0"
 msgstr "jQuery treetable Plugin 3.1.0"
 
-#: intranet-tmpl/prog/en/modules/about.tt:612
+#: intranet-tmpl/prog/en/modules/about.tt:619
 #, c-format
 msgid "jQueryUI"
 msgstr "jQueryUI"
 
-#: intranet-tmpl/prog/en/modules/about.tt:723
-#: intranet-tmpl/prog/en/modules/about.tt:724
+#: intranet-tmpl/prog/en/modules/about.tt:730
+#: intranet-tmpl/prog/en/modules/about.tt:731
 #, fuzzy, c-format
 msgid "jquery.cookie"
 msgstr "jquery.tablednd.js"
 
-#: intranet-tmpl/prog/en/modules/about.tt:651
-#: intranet-tmpl/prog/en/modules/about.tt:652
+#: intranet-tmpl/prog/en/modules/about.tt:658
+#: intranet-tmpl/prog/en/modules/about.tt:659
 #, c-format
 msgid "jquery.dataTables.grouping.js"
 msgstr "jquery.dataTables.grouping.js"
 
-#: intranet-tmpl/prog/en/modules/about.tt:696
+#: intranet-tmpl/prog/en/modules/about.tt:703
 #, fuzzy, c-format
 msgid "jquery.emojiarea.js"
 msgstr "jquery.tablednd.js"
 
-#: intranet-tmpl/prog/en/modules/about.tt:659
+#: intranet-tmpl/prog/en/modules/about.tt:666
 #, c-format
 msgid "jquery.multiple.select.js"
 msgstr "jquery.multiple.select.js"
 
-#: intranet-tmpl/prog/en/modules/about.tt:690
+#: intranet-tmpl/prog/en/modules/about.tt:697
 #, c-format
 msgid "jquery.tablednd.js"
 msgstr "jquery.tablednd.js"
@@ -61858,8 +61868,8 @@ msgstr "jquery.tablednd.js"
 msgid "kip sign"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:717
-#: intranet-tmpl/prog/en/modules/about.tt:718
+#: intranet-tmpl/prog/en/modules/about.tt:724
+#: intranet-tmpl/prog/en/modules/about.tt:725
 #, c-format
 msgid "kjua"
 msgstr ""
@@ -61908,7 +61918,7 @@ msgstr ""
 msgid "let blank for the entire field"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:688
+#: intranet-tmpl/prog/en/modules/about.tt:695
 #, c-format
 msgid "library is licensed under "
 msgstr ""
@@ -61918,7 +61928,7 @@ msgstr ""
 msgid "library not defined"
 msgstr "Minden könyvtár"
 
-#: intranet-tmpl/prog/en/modules/about.tt:614
+#: intranet-tmpl/prog/en/modules/about.tt:621
 #, c-format
 msgid "licensed under the "
 msgstr ""
@@ -62230,12 +62240,12 @@ msgstr "dokumentum mezők"
 msgid "or any available"
 msgstr "Elérhető"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1754
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1755
 #, fuzzy, c-format
 msgid "or create"
 msgstr "Acetate"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1727
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1728
 #, fuzzy, c-format
 msgid "or create:"
 msgstr "Acetate"
@@ -62309,12 +62319,12 @@ msgstr "Kosár/megrendelés"
 msgid "please note your reason here..."
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:664
+#: intranet-tmpl/prog/en/modules/about.tt:671
 #, c-format
 msgid "plugin by John Resig is licensed under the "
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:652
+#: intranet-tmpl/prog/en/modules/about.tt:659
 #, c-format
 msgid "plugin by Jovan Popovic is licensed under the BSD and GPL v2 license."
 msgstr ""
@@ -62537,7 +62547,7 @@ msgstr "%S egy szünettel elválasztva. (pl., 100a 200 606) "
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:479
 #, c-format
 msgid "serial"
-msgstr "periodika"
+msgstr "sorozat"
 
 #. A
 #: intranet-tmpl/prog/en/modules/serials/serials-edit.tt:454
@@ -62588,7 +62598,7 @@ msgstr "%s nem megnyitható "
 msgid "since last transfer"
 msgstr "<a1></a>Kölcsönzési Átutalások"
 
-#: intranet-tmpl/prog/en/modules/about.tt:566
+#: intranet-tmpl/prog/en/modules/about.tt:573
 #, c-format
 msgid "software.coop, United Kingdom"
 msgstr "software.coop, Egyesült Királyság"
@@ -62678,7 +62688,7 @@ msgstr "Állapot"
 msgid "styles"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:280
+#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:285
 #: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:285
 #, c-format
 msgid "subfield ignored"
@@ -62722,7 +62732,7 @@ msgstr "javaslat"
 msgid "suggestion #%s"
 msgstr "%s. javaslat"
 
-#: intranet-tmpl/prog/en/modules/about.tt:746
+#: intranet-tmpl/prog/en/modules/about.tt:753
 #, c-format
 msgid "suomi, suomen kieli (Finnish) Pasi Korkalo"
 msgstr "suomi, suomen kieli (Finnish) Pasi Korkalo"
@@ -62761,12 +62771,12 @@ msgstr ""
 msgid "text/html; charset=utf-8"
 msgstr "text/html; charset=utf-8"
 
-#: intranet-tmpl/prog/en/modules/about.tt:697
+#: intranet-tmpl/prog/en/modules/about.tt:704
 #, c-format
 msgid "the Apache License, Version 2.0"
 msgstr "Apache License v2.0"
 
-#: intranet-tmpl/prog/en/modules/about.tt:688
+#: intranet-tmpl/prog/en/modules/about.tt:695
 #, c-format
 msgid ""
 "the Apache License, Version 2.0 (the \"Apache License\") or the GNU General "
@@ -63060,7 +63070,7 @@ msgstr "Auth érték"
 msgid "won sign"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:667
+#: intranet-tmpl/prog/en/modules/about.tt:674
 #, c-format
 msgid "written and maintained by Jörn Zaefferer is licensed under the "
 msgstr ""
@@ -63202,7 +63212,7 @@ msgstr "| Státusz: %s "
 msgid "×"
 msgstr "×"
 
-#: intranet-tmpl/prog/en/modules/about.tt:733
+#: intranet-tmpl/prog/en/modules/about.tt:740
 #, c-format
 msgid ""
 "العربية (Arabic) Version 3.2 to 3.4, 3.16 & 3.18 by KnowledgeWare "

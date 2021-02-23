@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Koha 18.05\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-06-12 12:52+0000\n"
-"PO-Revision-Date: 2021-01-20 08:47+0000\n"
+"PO-Revision-Date: 2021-02-16 09:06+0000\n"
 "Last-Translator: Onur Erdem <onurerdem@sdu.edu.tr>\n"
 "Language-Team: Koha Translation Team\n"
 "Language: tr\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.8\n"
-"X-POOTLE-MTIME: 1611132464.995938\n"
+"X-POOTLE-MTIME: 1613466360.311371\n"
 "X-Pootle-Path: /tr/18.05/tr-TR-pref.po\n"
 "X-Pootle-Revision: 1\n"
 
@@ -7421,6 +7421,10 @@ msgid "opac.pref#PatronSelfRegistrationBorrowerUnwantedField# The following <a h
 msgstr "Aşağıdaki <a href='http://schema.koha-community.org/__VERSION__/tables/borrowers.html' target='blank'>veritabanı sütunları</a> kullanıcının kendi kayıt olma ekranında görünmeyecektir: "
 
 # OPAC > Self registration and modification
+msgid "opac.pref#PatronSelfRegistrationDefaultCategory# <br><strong>WARNING: Do not use a regular patron category for self registration.</strong> If the <code>misc/cronjobs/cleanup_database.pl</code> cronjob is setup to delete unverified and unfinished OPAC self registrations, it will permanently and unrecoverably delete all patrons that have registered more than PatronSelfRegistrationExpireTemporaryAccountsDelay days ago."
+msgstr "<br><strong>UYARI: Kendi kendine kayıt için normal bir kullanıcı kategorisi kullanmayın. </strong> <code> misc/cronjobs/cleanup_database.pl </code> cronjob, doğrulanmamış ve tamamlanmamış OPAC kendi kendine kayıtlarını silmek üzere ayarlanmışsa, kalıcı ve kurtarılamaz bir şekilde PatronSelfRegistrationExpireTporaryAccountsDelay gününden daha fazla kayıt yapmış olan tüm kullanıcıları silecektir. "
+
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationDefaultCategory# Use the patron category code"
 msgstr "Kullanıcı kategori kodunu kullanın"
 
@@ -8430,15 +8434,11 @@ msgstr "Etkinleştir"
 
 # Searching > Features
 msgid "searching.pref#ElasticsearchCrossFields# See documentation at https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-multi-match-query.html#type-cross-fields"
-msgstr ""
-"https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-"
-"multi-match-query.html#type-cross-fields adresindeki belgelere bakın"
+msgstr "https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-multi-match-query.html#type-cross-fields adresindeki belgelere bakın"
 
 # Searching > Features
 msgid "searching.pref#ElasticsearchCrossFields# the cross_fields option for Elasticsearch searches, supported in Elasticsearch 6.X and above."
-msgstr ""
-"Elasticsearch aramaları için cross_fields seçeneği, Elasticsearch 6.X ve "
-"üzeri sürümlerde desteklenmektedir."
+msgstr "Elasticsearch aramaları için cross_fields seçeneği, Elasticsearch 6.X ve üzeri sürümlerde desteklenmektedir."
 
 # Searching > Features
 msgid "searching.pref#EnableSearchHistory# Don't keep"
@@ -8673,8 +8673,8 @@ msgid "searching.pref#QueryFuzzy# Try"
 msgstr "Dene"
 
 # Searching > Features
-msgid "searching.pref#QueryFuzzy# to match similarly spelled words in a search (for example, a search for <cite>flang</cite> would also match <cite>flange</cite> and <cite>fang</cite>; REQUIRES ZEBRA)."
-msgstr "bir aramada benzer harflerden kelimeleri eşleştirmek için (örneğin, <cite>flang</cite> - <cite>flange</cite> ve <cite>fang</cite>; ZEBRA GEREKLİDİR."
+msgid "searching.pref#QueryFuzzy# to match similarly spelled words in a search (for example, a search for <cite>flang</cite> would also match <cite>flange</cite> and <cite>fang</cite>; Currently only affects Zebra searches. Any Elasticsearch term can be made fuzzy by adding a ~ directly after the term.)."
+msgstr "Bir aramada benzer şekilde yazılmış kelimeleri eşleştirmek için (örneğin, <cite> flang </cite> araması da <cite> flange </cite> ve <cite> fang </cite> ile eşleşecektir; Şu anda sadece Zebra aramalarını etkilemektedir. Herhangi bir Elasticsearch terimi, terimin hemen arkasına ~ eklenerek bulanık hale getirilebilir.)."
 
 # Searching > Features
 msgid "searching.pref#QueryRegexEscapeOptions# Don't escape"
@@ -9651,3 +9651,4 @@ msgstr "Sadece geri dönen"
 # Web services > Reporting
 msgid "web_services.pref#SvcMaxReportRows# rows of a report requested via the reports web service."
 msgstr "raporlar web hizmeti yoluyla talep edilen bir raporun satırları"
+

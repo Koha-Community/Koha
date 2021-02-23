@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Koha 18.05\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2021-01-12 20:11+0000\n"
+"PO-Revision-Date: 2021-02-03 16:37+0000\n"
 "Last-Translator: Marjorie  Barry-Vila <marjorie.barry-vila@ccsr.qc.ca>\n"
 "Language-Team: French Canada <koha-translate@lists.koha-community.org>\n"
 "Language: fr_CA\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Generator: Pootle 2.8\n"
-"X-POOTLE-MTIME: 1610482267.697210\n"
+"X-POOTLE-MTIME: 1612370226.817420\n"
 "X-Pootle-Path: /fr_CA/18.05/fr-CA-pref.po\n"
 "X-Pootle-Revision: 1\n"
 
@@ -3851,7 +3851,7 @@ msgstr "bloquer le renouvellement seulement de l'exemplaire en retard."
 
 # Circulation > Interface
 msgid "circulation.pref#PatronAutoComplete# Don't try"
-msgstr ""
+msgstr "Ne pas essayer"
 
 # Circulation > Interface
 msgid "circulation.pref#PatronAutoComplete# Only returns the first 10 results at a time."
@@ -7421,6 +7421,10 @@ msgid "opac.pref#PatronSelfRegistrationBorrowerUnwantedField# The following <a h
 msgstr "Les champs suivants <a href='http://schema.koha-community.org/__VERSION__/tables/borrowers.html' target='blank'>de la base de données</a> n’apparaîtront pas sur l'écran d'auto-enregistrement d'un utilisateur:"
 
 # OPAC > Self registration and modification
+msgid "opac.pref#PatronSelfRegistrationDefaultCategory# <br><strong>WARNING: Do not use a regular patron category for self registration.</strong> If the <code>misc/cronjobs/cleanup_database.pl</code> cronjob is setup to delete unverified and unfinished OPAC self registrations, it will permanently and unrecoverably delete all patrons that have registered more than PatronSelfRegistrationExpireTemporaryAccountsDelay days ago."
+msgstr ""
+
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationDefaultCategory# Use the patron category code"
 msgstr "Utiliser le code de catégorie d'utilisateur"
 
@@ -8669,8 +8673,8 @@ msgid "searching.pref#QueryFuzzy# Try"
 msgstr "Essayer"
 
 # Searching > Features
-msgid "searching.pref#QueryFuzzy# to match similarly spelled words in a search (for example, a search for <cite>flang</cite> would also match <cite>flange</cite> and <cite>fang</cite>; REQUIRES ZEBRA)."
-msgstr "d'associer des mots à consonances similaires lors d'une recherche (par exemple, une recherche pour <cite>flang</cite> sera associé également à <cite>flange</cite> et <cite>fang</cite>; NECESSITE ZEBRA)."
+msgid "searching.pref#QueryFuzzy# to match similarly spelled words in a search (for example, a search for <cite>flang</cite> would also match <cite>flange</cite> and <cite>fang</cite>; Currently only affects Zebra searches. Any Elasticsearch term can be made fuzzy by adding a ~ directly after the term.)."
+msgstr ""
 
 # Searching > Features
 msgid "searching.pref#QueryRegexEscapeOptions# Don't escape"

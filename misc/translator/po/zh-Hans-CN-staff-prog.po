@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 18.05\n"
-"POT-Creation-Date: 2021-01-18 09:07-0300\n"
+"POT-Creation-Date: 2021-02-18 09:28-0300\n"
 "PO-Revision-Date: 2019-06-02 08:05+0000\n"
 "Last-Translator: jerryeast <haod.wu@gmail.com>\n"
 "Language-Team: koha_TW <kohataiwan@googlegroups.com>\n"
@@ -3119,7 +3119,7 @@ msgstr "%s 没有限制的值供 %s %s %s %s 使用 "
 
 #. %1$s:  FOREACH error IN errors 
 #. %2$s:  IF ( error.sqlerr ) 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1023
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1024
 #, c-format
 msgid "%s %sThis report contains the SQL keyword "
 msgstr "%s %s此报表包含 SQL 关键字 "
@@ -3520,7 +3520,7 @@ msgstr "%s (id=%s) Amount=%s%s (%s 额外的已删除)%s"
 
 #. For the first occurrence,
 #. %1$s:  END 
-#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:142
+#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:147
 #: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:136
 #, fuzzy, c-format
 msgid ""
@@ -3714,6 +3714,13 @@ msgstr "%s 新增书目记录至此框架："
 msgid "%s Add new upload or search %s Results %s "
 msgstr "%s 新增上传或寻找 %s 结果 %s "
 
+#. %1$s:  IF heading_add_tag_p 
+#. %2$s:  ELSE 
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:53
+#, fuzzy, c-format
+msgid "%s Add tag %s Modify tag "
+msgstr "%s%s修改字段 "
+
 #. %1$s:  ELSE 
 #. %2$s:  END 
 #. %3$s:  ELSIF op == 'list' 
@@ -3834,6 +3841,16 @@ msgstr "%s 批准 %s 拒绝 %s 测试 %s未明的作业 (%s) 在 %s %s 期间。
 #: intranet-tmpl/prog/en/modules/circ/circulation.tt:860
 #, c-format
 msgid "%s Article requests"
+msgstr ""
+
+#. %1$s:  FOR w IN warnHiddenBiblionumbers 
+#. %2$s:  w.frameworkcode | html 
+#. %3$s:  w.interface | html 
+#: intranet-tmpl/prog/en/modules/about.tt:347
+#, c-format
+msgid ""
+"%s Biblio framework \"%s\" has the biblionumber field hidden at the "
+"interface %s"
 msgstr ""
 
 #. %1$s:  IF (del_biblio) 
@@ -5159,7 +5176,7 @@ msgstr "%s 姓："
 #. %29$s:  loo.link | html 
 #. %30$s:  END 
 #. %31$s:  END 
-#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:280
+#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:285
 #, c-format
 msgid ""
 "%s Tab:%s, %s | Koha field: %s, %s %sRepeatable, %sNot repeatable,%s "
@@ -6450,18 +6467,6 @@ msgstr "%s%s%s(文件内无电子邮件信箱)%s"
 msgid "%s%s%s(none)%s"
 msgstr "%s%s%s(无)%s"
 
-#. %1$s:  searchfield | html 
-#. %2$s:  END 
-#. %3$s:  IF ( heading_add_tag_p ) 
-#. %4$s:  END 
-#. %5$s:  ELSE 
-#. %6$s:  action | html 
-#. %7$s:  END 
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:52
-#, c-format
-msgid "%s%s%sAdd tag%s%s%s%s"
-msgstr "%s%s%s新增标签%s%s%s%s"
-
 #. %1$s:  IF ( frameworkcode ) 
 #. %2$s:  frameworkcode | html 
 #. %3$s:  ELSE 
@@ -6599,13 +6604,6 @@ msgstr "%s%s, %s%s ("
 #, c-format
 msgid "%s%s; Published by %s %s%s in "
 msgstr "%s%s; 出版者 %s %s%s 在 "
-
-#. %1$s:  IF ( use_heading_flags_p ) 
-#. %2$s:  IF ( heading_modify_tag_p ) 
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:52
-#, c-format
-msgid "%s%sModify tag "
-msgstr "%s%s修改字段 "
 
 #. %1$s:  IF ( suggestions_loo.copyrightdate ) 
 #. %2$s:  suggestions_loo.copyrightdate | html 
@@ -7526,8 +7524,8 @@ msgstr "%s是的%s&nbsp;%s"
 #: intranet-tmpl/prog/en/modules/admin/classsources.tt:303
 #: intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:207
 #: intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:208
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:200
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:201
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:207
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:208
 #, c-format
 msgid "%sYes%sNo%s"
 msgstr "%s是%s否%s"
@@ -7710,7 +7708,7 @@ msgstr "%sx%s = %s "
 msgid "%s✓%s"
 msgstr "%s✓%s"
 
-#: intranet-tmpl/prog/en/modules/about.tt:736
+#: intranet-tmpl/prog/en/modules/about.tt:743
 #, c-format
 msgid ""
 "&#1041;&#1098;&#1083;&#1075;&#1072;&#1088;&#1089;&#1082;&#1080; (Bulgarian) "
@@ -7719,7 +7717,7 @@ msgstr ""
 "&#1041;&#1098;&#1083;&#1075;&#1072;&#1088;&#1089;&#1082;&#1080; (保加利亚语) "
 "Radoslav Kolev"
 
-#: intranet-tmpl/prog/en/modules/about.tt:770
+#: intranet-tmpl/prog/en/modules/about.tt:777
 #, c-format
 msgid ""
 "&#1056;&#1091;&#1089;&#1089;&#1082;&#1080;&#1081; (Russian) Victor Titarchuk "
@@ -7728,7 +7726,7 @@ msgstr ""
 "&#1056;&#1091;&#1089;&#1089;&#1082;&#1080;&#1081; (俄语) Victor Titarchuk "
 "and Serhij Dubyk"
 
-#: intranet-tmpl/prog/en/modules/about.tt:777
+#: intranet-tmpl/prog/en/modules/about.tt:784
 #, c-format
 msgid ""
 "&#1059;&#1082;&#1088;&#1072;&#1111;&#1085;&#1089;&#1100;&#1082;&#1072; "
@@ -7737,64 +7735,64 @@ msgstr ""
 "&#1059;&#1082;&#1088;&#1072;&#1111;&#1085;&#1089;&#1100;&#1082;&#1072; (乌克"
 "兰语) Victor Titarchuk and Serhij Dubyk"
 
-#: intranet-tmpl/prog/en/modules/about.tt:751
+#: intranet-tmpl/prog/en/modules/about.tt:758
 #, c-format
 msgid "&#1506;&#1489;&#1512;&#1497;&#1514; (Hebrew)"
 msgstr "&#1506;&#1489;&#1512;&#1497;&#1514; (希伯来语)"
 
-#: intranet-tmpl/prog/en/modules/about.tt:776
+#: intranet-tmpl/prog/en/modules/about.tt:783
 #, c-format
 msgid "&#1575;&#1585;&#1583;&#1608;(Urdu) Ata ur Rehman"
 msgstr "&#1575;&#1585;&#1583;&#1608;(乌都语) Ata ur Rehman"
 
-#: intranet-tmpl/prog/en/modules/about.tt:765
+#: intranet-tmpl/prog/en/modules/about.tt:772
 #, c-format
 msgid "&#1601;&#1575;&#1585;&#1587;&#1609; (Persian)"
 msgstr "&#1601;&#1575;&#1585;&#1587;&#1609; (波斯语)"
 
-#: intranet-tmpl/prog/en/modules/about.tt:739
+#: intranet-tmpl/prog/en/modules/about.tt:746
 #, c-format
 msgid "&#20013;&#25991; (Chinese)"
 msgstr "&#20013;&#25991; (中文)"
 
-#: intranet-tmpl/prog/en/modules/about.tt:752
+#: intranet-tmpl/prog/en/modules/about.tt:759
 #, c-format
 msgid "&#2361;&#2367;&#2344;&#2381;&#2342;&#2368; (Hindi)"
 msgstr "&#2361;&#2367;&#2344;&#2381;&#2342;&#2368; (印地语)"
 
-#: intranet-tmpl/prog/en/modules/about.tt:738
+#: intranet-tmpl/prog/en/modules/about.tt:745
 #, c-format
 msgid ""
 "&#2476;&#2494;&#2434;&#2482;&#2494; (Bengali) Parthasarathi Mukhopadhyay"
 msgstr ""
 "&#2476;&#2494;&#2434;&#2482;&#2494; (孟加拉语) Parthasarathi Mukhopadhyay"
 
-#: intranet-tmpl/prog/en/modules/about.tt:758
+#: intranet-tmpl/prog/en/modules/about.tt:765
 #, c-format
 msgid "&#26085;&#26412;&#35486; (Japanese)"
 msgstr "&#26085;&#26412;&#35486; (日文)"
 
-#: intranet-tmpl/prog/en/modules/about.tt:766
+#: intranet-tmpl/prog/en/modules/about.tt:773
 #, c-format
 msgid "&#2835;&#2908;&#2879;&#2822; (&#x014D;&#7771;iy&#257;)"
 msgstr "&#2835;&#2908;&#2879;&#2822; (&#x014D;&#7771;iy&#257;)"
 
-#: intranet-tmpl/prog/en/modules/about.tt:760
+#: intranet-tmpl/prog/en/modules/about.tt:767
 #, c-format
 msgid "&#3221;&#3240;&#3277;&#3240;&#3233; (kanna&#7693;a)"
 msgstr "&#3221;&#3240;&#3277;&#3240;&#3233; (kanna&#7693;a)"
 
-#: intranet-tmpl/prog/en/modules/about.tt:764
+#: intranet-tmpl/prog/en/modules/about.tt:771
 #, c-format
 msgid "&#3374;&#3378;&#3375;&#3390;&#3379;&#3330; (Malayalam)"
 msgstr "&#3374;&#3378;&#3375;&#3390;&#3379;&#3330; (马拉雅拉姆语)"
 
-#: intranet-tmpl/prog/en/modules/about.tt:774
+#: intranet-tmpl/prog/en/modules/about.tt:781
 #, c-format
 msgid "&#3616;&#3634;&#3625;&#3634;&#3652;&#3607;&#3618; (Thai)"
 msgstr "&#3616;&#3634;&#3625;&#3634;&#3652;&#3607;&#3618; (泰文)"
 
-#: intranet-tmpl/prog/en/modules/about.tt:734
+#: intranet-tmpl/prog/en/modules/about.tt:741
 #, c-format
 msgid ""
 "&#4768;&#4635;&#4653;&#4763; (Amharic) Getway II Ethiopia Co. (Yohannes "
@@ -7803,12 +7801,12 @@ msgstr ""
 "&#4768;&#4635;&#4653;&#4763; (阿姆哈拉语) Getway II Ethiopia Co. (Yohannes "
 "Mulugeta (团队组长), Tegene Assefa, Abiyot Bayou)"
 
-#: intranet-tmpl/prog/en/modules/about.tt:759
+#: intranet-tmpl/prog/en/modules/about.tt:766
 #, c-format
 msgid "&#54620;&#44397;&#50612; (Korean)"
 msgstr "&#54620;&#44397;&#50612; (韩文)"
 
-#: intranet-tmpl/prog/en/modules/about.tt:750
+#: intranet-tmpl/prog/en/modules/about.tt:757
 #, fuzzy, c-format
 msgid ""
 "&#949;&#955;&#955;&#951;&#957;&#953;&#954;&#940; (Greek, Modern [1453- ]) "
@@ -7818,7 +7816,7 @@ msgstr ""
 "&#949;&#955;&#955;&#951;&#957;&#953;&#954;&#940; (现代希腊文 [1453- ]) "
 "Georgia Katsarou, Panoraia Gaitanou and Kiriaki Roditi"
 
-#: intranet-tmpl/prog/en/modules/about.tt:741
+#: intranet-tmpl/prog/en/modules/about.tt:748
 #, c-format
 msgid "&#x010D;e&#353;tina (Czech)"
 msgstr "&#x010D;e&#353;tina (捷克文)"
@@ -8196,6 +8194,16 @@ msgid ""
 "&rsaquo; %s%sModify currency '%s'%sNew currency%s%s %sConfirm deletion of "
 "currency %s %sCurrencies %s "
 msgstr "&rsaquo; %s%s修改币别 '%s'%s新增币别%s%s %s确认删除币别 '"
+
+#. %1$s:  IF heading_add_tag_p 
+#. %2$s:  ELSE 
+#. %3$s:  END 
+#. %4$s:  searchfield | html 
+#. %5$s:  ELSIF ( else ) 
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:23
+#, fuzzy, c-format
+msgid "&rsaquo; %sAdd tag%sModify tag%s %s %s &rsaquo; "
+msgstr "&rsaquo; 新增推荐 %s %s "
 
 #. %1$s:  IF ( patrons_in_category > 0 ) 
 #. %2$s:  categorycode | html 
@@ -9824,7 +9832,7 @@ msgid ""
 "needed.)"
 msgstr "(内含，缺省 %s 天之前到 %s%s 在 %s今天%s，必要时可设置其它天数。)"
 
-#: intranet-tmpl/prog/en/modules/about.tt:756
+#: intranet-tmpl/prog/en/modules/about.tt:763
 #, c-format
 msgid "(Indonesian)"
 msgstr "(印尼)"
@@ -9834,8 +9842,8 @@ msgstr "(印尼)"
 msgid "(Lost)"
 msgstr "遗失"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1715
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1737
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1716
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1738
 #, c-format
 msgid "(None)"
 msgstr "(无)"
@@ -9970,7 +9978,7 @@ msgstr "现在辞汇"
 msgid "(default if none is defined)"
 msgstr "(若没有设置则取用缺省值)"
 
-#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:146
+#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:151
 #, c-format
 msgid "(e.g., Title or Local-Number) "
 msgstr "(e.g., 题名或在地编号) "
@@ -10002,7 +10010,7 @@ msgstr "(筛选自 _MAX_ total 款目)"
 msgid "(if empty, subscription is still active) "
 msgstr "(若空白，则订阅持续中) "
 
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:93
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:100
 #, c-format
 msgid ""
 "(if you select a value here, the indicators will be limited to the "
@@ -10140,7 +10148,7 @@ msgstr ") %s %s 的续借( "
 msgid ") you selected does not exist. "
 msgstr ") 您的选项不存在。"
 
-#: intranet-tmpl/prog/en/modules/about.tt:505
+#: intranet-tmpl/prog/en/modules/about.tt:512
 #, fuzzy, c-format
 msgid "), France"
 msgstr "坦米尔，法国"
@@ -10159,54 +10167,54 @@ msgstr ")。%s %s 馆藏处理中 %s 给 %s ("
 msgid "** Vendor's listings already include tax."
 msgstr "** 供应商清单已经含税。"
 
-#: intranet-tmpl/prog/en/modules/about.tt:451
+#: intranet-tmpl/prog/en/modules/about.tt:458
 #, c-format
 msgid ", Auckland, New Zealand (OPAC 'star-ratings' sponsorship)"
 msgstr ", 奥克兰, 纽西兰 (OPAC '星级评估' 支持者)"
 
-#: intranet-tmpl/prog/en/modules/about.tt:448
+#: intranet-tmpl/prog/en/modules/about.tt:455
 #, c-format
 msgid ", Cyprus"
 msgstr ", 塞普路斯"
 
-#: intranet-tmpl/prog/en/modules/about.tt:445
+#: intranet-tmpl/prog/en/modules/about.tt:452
 #, c-format
 msgid ", France (Koha 3.0 enhancements to patrons and holds modules)"
 msgstr ", 法国 (Koha 3.0 强化读者与预约模块)"
 
-#: intranet-tmpl/prog/en/modules/about.tt:443
+#: intranet-tmpl/prog/en/modules/about.tt:450
 #, c-format
 msgid ", France (Suggestions, Stats wizards and improved LDAP sponsorship)"
 msgstr ", 法国 (推荐，统计向导与改进LDAP赞助者)"
 
-#: intranet-tmpl/prog/en/modules/about.tt:444
+#: intranet-tmpl/prog/en/modules/about.tt:451
 #, c-format
 msgid ""
 ", France (biblio frameworks, MARC authorities, OPAC basket, Serials "
 "sponsorship)"
 msgstr ", 法国 (书目纪录框架、权威 MARC、OPAC 书目清单、期刊赞助者)"
 
-#: intranet-tmpl/prog/en/modules/about.tt:441
+#: intranet-tmpl/prog/en/modules/about.tt:448
 #, c-format
 msgid ", New Zealand, and Rosalie Blake, Head of Libraries, (Koha 1.0)"
 msgstr ", 纽西兰 and Rosalie Blake, 图书馆馆长, (Koha 1.0)"
 
-#: intranet-tmpl/prog/en/modules/about.tt:447
+#: intranet-tmpl/prog/en/modules/about.tt:454
 #, c-format
 msgid ", OH, USA (Koha 3.0 beta testing)"
 msgstr ", 俄亥俄州，美国 (Koha 3.0 外部测试)"
 
-#: intranet-tmpl/prog/en/modules/about.tt:442
+#: intranet-tmpl/prog/en/modules/about.tt:449
 #, c-format
 msgid ", Ohio, USA (MARC sponsorship, documentation, template maintenance)"
 msgstr ", 俄亥俄州，美国 (MARC 赞助者、文件、模板维护者)"
 
-#: intranet-tmpl/prog/en/modules/about.tt:446
+#: intranet-tmpl/prog/en/modules/about.tt:453
 #, c-format
 msgid ", PA, USA (Koha 3.0 Zebra Integration sponsorship)"
 msgstr ", 宾州，美国 (Koha 3.0 Zebra Integration 赞助者)"
 
-#: intranet-tmpl/prog/en/modules/about.tt:747
+#: intranet-tmpl/prog/en/modules/about.tt:754
 #, c-format
 msgid ", Pascale Nalon (ENSMP), and many more "
 msgstr ", Pascale Nalon (ENSMP), 及其它 "
@@ -11042,7 +11050,7 @@ msgstr "若找不到映射书目时，则："
 #: intranet-tmpl/prog/en/modules/plugins/plugins-home.tt:74
 #: intranet-tmpl/prog/en/modules/admin/cash_registers.tt:136
 #: intranet-tmpl/prog/en/modules/admin/categories.tt:426
-#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:266
+#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:271
 #: intranet-tmpl/prog/en/modules/admin/currency.tt:186
 #: intranet-tmpl/prog/en/modules/admin/systempreferences.tt:251
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:82
@@ -11094,7 +11102,7 @@ msgstr "动作"
 #: intranet-tmpl/prog/en/modules/admin/oai_sets.tt:92
 #: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:138
 #: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:206
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:207
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:214
 #: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:174
 #: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:8
 #, c-format
@@ -12003,7 +12011,7 @@ msgstr "其它参数"
 msgid "Additional subfields (XML)"
 msgstr "编辑分栏(XML)"
 
-#: intranet-tmpl/prog/en/modules/about.tt:594
+#: intranet-tmpl/prog/en/modules/about.tt:601
 #, c-format
 msgid "Additional thanks to..."
 msgstr "特别感谢..."
@@ -12340,7 +12348,7 @@ msgstr "年龄限制 %s。%s 仍借出？%s "
 msgid "Ages allowed are %s-%s. "
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:451
+#: intranet-tmpl/prog/en/modules/about.tt:458
 #, c-format
 msgid "Albany Senior High School"
 msgstr "Albany 高级中学"
@@ -12388,7 +12396,7 @@ msgstr "重点"
 msgid "Alignment"
 msgstr "文字对齐："
 
-#: intranet-tmpl/prog/en/modules/about.tt:494
+#: intranet-tmpl/prog/en/modules/about.tt:501
 #, c-format
 msgid "Alingsås Public Library, Sweden"
 msgstr ""
@@ -12439,7 +12447,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:165
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:174
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:704
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1092
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1093
 #, c-format
 msgid "All"
 msgstr "所有"
@@ -12601,7 +12609,7 @@ msgstr "显示所有交易"
 msgid "All vendors"
 msgstr "全部供应商"
 
-#: intranet-tmpl/prog/en/modules/about.tt:493
+#: intranet-tmpl/prog/en/modules/about.tt:500
 #, c-format
 msgid "Allen Ginsberg Library, USA"
 msgstr ""
@@ -12864,7 +12872,7 @@ msgstr "其它电话："
 msgid "Always show checkouts immediately"
 msgstr "总是立即显示借出"
 
-#: intranet-tmpl/prog/en/modules/about.tt:495
+#: intranet-tmpl/prog/en/modules/about.tt:502
 #, c-format
 msgid "American Numismatic Society, USA"
 msgstr ""
@@ -13106,7 +13114,7 @@ msgstr "匿名借出记录"
 msgid "Another pattern with this name already exists."
 msgstr "另个模式已使用该名称。"
 
-#: intranet-tmpl/prog/en/modules/about.tt:633
+#: intranet-tmpl/prog/en/modules/about.tt:640
 #, c-format
 msgid "Antenna.io"
 msgstr ""
@@ -13277,7 +13285,7 @@ msgstr "适用其它映射规则"
 
 #. INPUT type=submit
 #: intranet-tmpl/prog/en/modules/circ/overdue.tt:214
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1066
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1067
 msgid "Apply filter"
 msgstr "使用筛选器"
 
@@ -13327,7 +13335,7 @@ msgstr "四月"
 msgid "April"
 msgstr "四月"
 
-#: intranet-tmpl/prog/en/modules/about.tt:496
+#: intranet-tmpl/prog/en/modules/about.tt:503
 #, fuzzy, c-format
 msgid "Arcadia Public Library, USA"
 msgstr "尼尔森维尔公共图书馆系统，俄亥俄州，美国"
@@ -13528,7 +13536,7 @@ msgid "Are you sure you want to delete the selected news?"
 msgstr "确定删除指定的最新消息吗？"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1092
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1093
 msgid "Are you sure you want to delete the selected reports?"
 msgstr "确定删除指定的报表吗？"
 
@@ -13717,7 +13725,7 @@ msgid "Are you sure you want to delete this record?"
 msgstr "确定要删除此记录吗？"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1092
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1093
 #, fuzzy
 msgid "Are you sure you want to delete this report? This cannot be undone."
 msgstr "确定删除此读者吗？删除后不能恢复。"
@@ -13735,7 +13743,7 @@ msgid "Are you sure you want to delete this rule? This cannot be undone."
 msgstr "确定删除此读者吗？删除后不能恢复。"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1092
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1093
 msgid "Are you sure you want to delete this saved report?"
 msgstr "您确定要删除此存储的报表吗？"
 
@@ -13979,7 +13987,7 @@ msgstr "区"
 msgid "Area:"
 msgstr "区："
 
-#: intranet-tmpl/prog/en/modules/about.tt:735
+#: intranet-tmpl/prog/en/modules/about.tt:742
 #, c-format
 msgid "Armenian Tigran Zargaryan"
 msgstr "Armenian Tigran Zargaryan"
@@ -14065,12 +14073,12 @@ msgstr "合并时必须选定两笔纪录。"
 msgid "At library: %s"
 msgstr "在图书馆：%s"
 
-#: intranet-tmpl/prog/en/modules/about.tt:442
+#: intranet-tmpl/prog/en/modules/about.tt:449
 #, c-format
 msgid "Athens County Public Libraries"
 msgstr "美国俄亥俄州阿森斯郡公共图书馆"
 
-#: intranet-tmpl/prog/en/modules/about.tt:497
+#: intranet-tmpl/prog/en/modules/about.tt:504
 #, fuzzy, c-format
 msgid "Athens County Public Libraries, USA"
 msgstr "美国俄亥俄州阿森斯郡公共图书馆"
@@ -14144,7 +14152,7 @@ msgstr "权威"
 msgid "Auth field copied"
 msgstr "复制权威字段"
 
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:179
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:186
 #, c-format
 msgid "Auth value"
 msgstr "容许值"
@@ -14283,7 +14291,7 @@ msgstr "著者：%s%s%s %s %s; %s %s %s %s%s %s %s;%s %s %s "
 #: intranet-tmpl/prog/en/modules/circ/article-requests.tt:269
 #: intranet-tmpl/prog/en/modules/circ/request-article.tt:100
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:153
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1061
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1062
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:72
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:263
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:680
@@ -14489,7 +14497,7 @@ msgstr ""
 "容许值范围；选择其中之一，读者纪录键入页面将允许从容许值清单中选择一个值。不"
 "过，批次输入读者数据时，容许值清单不是强制性的。"
 
-#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:171
+#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:176
 #: intranet-tmpl/prog/en/modules/admin/localization.tt:21
 #: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:167
 #, c-format
@@ -14497,7 +14505,7 @@ msgid "Authorized value:"
 msgstr "容许值："
 
 #: intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:105
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:89
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:96
 #: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:71
 #, c-format
 msgid "Authorized value: "
@@ -14652,15 +14660,15 @@ msgstr "平均借出期间"
 msgid "BIBTEX"
 msgstr "BIBTEX"
 
-#: intranet-tmpl/prog/en/modules/about.tt:703
+#: intranet-tmpl/prog/en/modules/about.tt:710
 #, fuzzy, c-format
 msgid "BSD 3-clause Licence"
 msgstr "BSD License"
 
-#: intranet-tmpl/prog/en/modules/about.tt:617
-#: intranet-tmpl/prog/en/modules/about.tt:685
-#: intranet-tmpl/prog/en/modules/about.tt:694
-#: intranet-tmpl/prog/en/modules/about.tt:709
+#: intranet-tmpl/prog/en/modules/about.tt:624
+#: intranet-tmpl/prog/en/modules/about.tt:692
+#: intranet-tmpl/prog/en/modules/about.tt:701
+#: intranet-tmpl/prog/en/modules/about.tt:716
 #, c-format
 msgid "BSD License"
 msgstr "BSD License"
@@ -14670,7 +14678,7 @@ msgstr "BSD License"
 msgid "BT"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:505
+#: intranet-tmpl/prog/en/modules/about.tt:512
 #, c-format
 msgid "BULAC"
 msgstr ""
@@ -15340,7 +15348,7 @@ msgstr "批次 %s"
 msgid "Batches"
 msgstr "批次"
 
-#: intranet-tmpl/prog/en/modules/about.tt:498
+#: intranet-tmpl/prog/en/modules/about.tt:505
 #, c-format
 msgid "BdP de la Meuse, France"
 msgstr ""
@@ -15401,7 +15409,7 @@ msgstr "开始与"
 msgid "Behavior"
 msgstr "行为"
 
-#: intranet-tmpl/prog/en/modules/about.tt:499
+#: intranet-tmpl/prog/en/modules/about.tt:506
 #, c-format
 msgid "BibLibre, France"
 msgstr "BibLibre，法国"
@@ -15571,19 +15579,19 @@ msgstr "在存储库的书目"
 msgid "Biblios: "
 msgstr "书目："
 
-#: intranet-tmpl/prog/en/modules/about.tt:500
+#: intranet-tmpl/prog/en/modules/about.tt:507
 #, c-format
 msgid ""
 "Biblioteca Provincial Fr. Mamerto Esquiú (Provincia Franciscana de la "
 "Asunción), Argentina"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:501
+#: intranet-tmpl/prog/en/modules/about.tt:508
 #, c-format
 msgid "Bibliotheksservice-Zentrum Baden-Württemberg (BSZ), Germany"
 msgstr "Bibliotheksservice-Zentrum Baden-Württemberg (BSZ)，德国"
 
-#: intranet-tmpl/prog/en/modules/about.tt:505
+#: intranet-tmpl/prog/en/modules/about.tt:512
 #, c-format
 msgid "Bibliothèque Universitaire des Langues et Civilisations ("
 msgstr ""
@@ -15641,7 +15649,7 @@ msgstr "帐单日期："
 msgid "Biography"
 msgstr "传记"
 
-#: intranet-tmpl/prog/en/modules/about.tt:450
+#: intranet-tmpl/prog/en/modules/about.tt:457
 #, c-format
 msgid ""
 "Birmingham (UK) based developer Mark James for the famfamfam Silk iconset."
@@ -15727,8 +15735,8 @@ msgstr "售书者发票号码："
 msgid "Boolean"
 msgstr "清除"
 
-#: intranet-tmpl/prog/en/modules/about.tt:613
-#: intranet-tmpl/prog/en/modules/about.tt:614
+#: intranet-tmpl/prog/en/modules/about.tt:620
+#: intranet-tmpl/prog/en/modules/about.tt:621
 #, c-format
 msgid "Bootstrap"
 msgstr "Bootstrap"
@@ -15828,12 +15836,12 @@ msgstr "分馆限制"
 msgid "Branches limitation: "
 msgstr "分馆限制："
 
-#: intranet-tmpl/prog/en/modules/about.tt:502
+#: intranet-tmpl/prog/en/modules/about.tt:509
 #, c-format
 msgid "Briar Cliff University, USA"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:626
+#: intranet-tmpl/prog/en/modules/about.tt:633
 #, c-format
 msgid "Bridge Material Type Icons Project"
 msgstr "Bridge Material Type Icons Project"
@@ -15848,7 +15856,7 @@ msgstr "简短显示"
 msgid "Brightness"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:503
+#: intranet-tmpl/prog/en/modules/about.tt:510
 #, c-format
 msgid "Brimbank City Council, Australia"
 msgstr ""
@@ -15859,12 +15867,12 @@ msgstr ""
 msgid "Broader Term"
 msgstr "%sg - 广义词"
 
-#: intranet-tmpl/prog/en/modules/about.tt:599
+#: intranet-tmpl/prog/en/modules/about.tt:606
 #, c-format
 msgid "Brooke Johnson"
 msgstr "Brooke Johnson"
 
-#: intranet-tmpl/prog/en/modules/about.tt:504
+#: intranet-tmpl/prog/en/modules/about.tt:511
 #, c-format
 msgid "Brooklyn Law School Library, USA"
 msgstr ""
@@ -16044,7 +16052,7 @@ msgstr "By"
 msgid "By: "
 msgstr "著者："
 
-#: intranet-tmpl/prog/en/modules/about.tt:506
+#: intranet-tmpl/prog/en/modules/about.tt:513
 #, c-format
 msgid "ByWater Solutions, USA"
 msgstr "ByWater Solutions, 美国"
@@ -16054,17 +16062,17 @@ msgstr "ByWater Solutions, 美国"
 msgid "Bytes"
 msgstr "字节"
 
-#: intranet-tmpl/prog/en/modules/about.tt:517
+#: intranet-tmpl/prog/en/modules/about.tt:524
 #, c-format
 msgid "C &amp; P Bibliography Services, USA"
 msgstr "C &amp; P Bibliography Services, 美国"
 
-#: intranet-tmpl/prog/en/modules/about.tt:705
+#: intranet-tmpl/prog/en/modules/about.tt:712
 #, c-format
 msgid "C3.js"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:706
+#: intranet-tmpl/prog/en/modules/about.tt:713
 #, c-format
 msgid "C3.js v0.4.11"
 msgstr ""
@@ -16226,8 +16234,8 @@ msgid "Cache expiry (seconds)"
 msgstr "高速缓冲到期时间(秒)"
 
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:368
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:918
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:993
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:919
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:994
 #, c-format
 msgid "Cache expiry:"
 msgstr "高速缓冲到期时间："
@@ -16251,7 +16259,7 @@ msgstr "行事历"
 msgid "Calendar information"
 msgstr "行事历信息"
 
-#: intranet-tmpl/prog/en/modules/about.tt:507
+#: intranet-tmpl/prog/en/modules/about.tt:514
 #, c-format
 msgid "California College of the Arts, USA"
 msgstr ""
@@ -16384,12 +16392,12 @@ msgstr "新增分类法来源"
 msgid "Callnumber: %s "
 msgstr "索书号：%s "
 
-#: intranet-tmpl/prog/en/modules/about.tt:510
+#: intranet-tmpl/prog/en/modules/about.tt:517
 #, c-format
 msgid "Calyx, Australia"
 msgstr "Calyx，澳洲"
 
-#: intranet-tmpl/prog/en/modules/about.tt:508
+#: intranet-tmpl/prog/en/modules/about.tt:515
 #, c-format
 msgid "Camden County, USA"
 msgstr ""
@@ -16642,8 +16650,8 @@ msgstr "不能存储此纪录，因为以下字段尚未填入数据："
 #: intranet-tmpl/prog/en/modules/admin/categories.tt:311
 #: intranet-tmpl/prog/en/modules/admin/categories.tt:387
 #: intranet-tmpl/prog/en/modules/admin/oai_set_mappings.tt:86
-#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:214
-#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:308
+#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:219
+#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:313
 #: intranet-tmpl/prog/en/modules/admin/currency.tt:119
 #: intranet-tmpl/prog/en/modules/admin/authtypes.tt:103
 #: intranet-tmpl/prog/en/modules/admin/usage_statistics.tt:235
@@ -16676,7 +16684,7 @@ msgstr "不能存储此纪录，因为以下字段尚未填入数据："
 #: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:236
 #: intranet-tmpl/prog/en/modules/admin/didyoumean.tt:64
 #: intranet-tmpl/prog/en/modules/admin/printers.tt:80
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:98
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:105
 #: intranet-tmpl/prog/en/modules/admin/preferences.tt:155
 #: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:364
 #: intranet-tmpl/prog/en/modules/admin/transport-cost-matrix.tt:85
@@ -16688,8 +16696,8 @@ msgstr "不能存储此纪录，因为以下字段尚未填入数据："
 #: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:256
 #: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:258
 #: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:354
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:937
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1013
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:938
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1014
 #: intranet-tmpl/prog/en/modules/virtualshelves/downloadshelf.tt:43
 #: intranet-tmpl/prog/en/modules/virtualshelves/addbybiblionumber.tt:111
 #: intranet-tmpl/prog/en/modules/virtualshelves/sendshelfform.tt:33
@@ -17245,7 +17253,7 @@ msgstr "该读者证号码已经被使用。"
 msgid "Cardnumbers not found"
 msgstr "找不到此读者证号码"
 
-#: intranet-tmpl/prog/en/modules/about.tt:509
+#: intranet-tmpl/prog/en/modules/about.tt:516
 #, c-format
 msgid "Carnegie Stout Library, USA"
 msgstr ""
@@ -17414,7 +17422,7 @@ msgstr "目录表单"
 msgid "Cataloguing tables"
 msgstr "编目表单"
 
-#: intranet-tmpl/prog/en/modules/about.tt:511
+#: intranet-tmpl/prog/en/modules/about.tt:518
 #, c-format
 msgid "Catalyst IT, New Zealand"
 msgstr "Catalyst IT，纽西兰"
@@ -17558,12 +17566,12 @@ msgstr "存储格祗有估计值。"
 msgid "Center"
 msgstr "评论者 "
 
-#: intranet-tmpl/prog/en/modules/about.tt:512
+#: intranet-tmpl/prog/en/modules/about.tt:519
 #, c-format
 msgid "Central Kansas Library System (CKLS), USA"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:513
+#: intranet-tmpl/prog/en/modules/about.tt:520
 #, c-format
 msgid "Centre collégial des services regroupés (CCSR), Canada"
 msgstr ""
@@ -18295,7 +18303,7 @@ msgstr ""
 "勾选 MARC 结构。若您改变推荐的 MARC 书目框架，应执行此工具，测试您的定义找出"
 "错误。"
 
-#: intranet-tmpl/prog/en/modules/about.tt:514
+#: intranet-tmpl/prog/en/modules/about.tt:521
 #, fuzzy, c-format
 msgid "Cheshire Libraries, United Kingdom"
 msgstr "software.coop，英国"
@@ -18849,7 +18857,7 @@ msgstr "清除批次输入#%s"
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:279
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:357
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:158
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1067
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1068
 #, c-format
 msgid "Clear"
 msgstr "清除"
@@ -19397,8 +19405,8 @@ msgstr "注册费："
 #: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:127
 #: intranet-tmpl/prog/en/modules/admin/itemtypes.tt:354
 #: intranet-tmpl/prog/en/modules/admin/checkmarc.tt:166
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1728
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1755
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1729
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1756
 #, c-format
 msgid "Code"
 msgstr "代码"
@@ -19420,13 +19428,13 @@ msgstr ""
 msgid "Code:"
 msgstr "代码："
 
-#: intranet-tmpl/prog/en/modules/about.tt:675
-#: intranet-tmpl/prog/en/modules/about.tt:676
+#: intranet-tmpl/prog/en/modules/about.tt:682
+#: intranet-tmpl/prog/en/modules/about.tt:683
 #, c-format
 msgid "CodeMirror editing library"
 msgstr "镜射编辑图书馆"
 
-#: intranet-tmpl/prog/en/modules/about.tt:515
+#: intranet-tmpl/prog/en/modules/about.tt:522
 #, fuzzy, c-format
 msgid "Coeur d'Alene Public Library, USA"
 msgstr "尼尔森维尔公共图书馆系统，俄亥俄州，美国"
@@ -19438,7 +19446,7 @@ msgstr "尼尔森维尔公共图书馆系统，俄亥俄州，美国"
 msgid "Collapse all"
 msgstr "全部折叠"
 
-#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:133
+#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:138
 #, c-format
 msgid "Collapsed"
 msgstr "已收摺"
@@ -19886,12 +19894,12 @@ msgid "Confirm deletion of record matching rule "
 msgstr "确认删除匹配规则 "
 
 #. %1$s:  tagsubfield | html 
-#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:222
+#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:227
 #, c-format
 msgid "Confirm deletion of subfield %s?"
 msgstr "确认删除分栏 %s 吗？"
 
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:106
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:113
 #, c-format
 msgid "Confirm deletion of tag "
 msgstr "确认删除标签 "
@@ -19975,7 +19983,7 @@ msgstr "等宽无衬线字体"
 msgid "Constrain proportions"
 msgstr "限制"
 
-#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:265
+#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:270
 #: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:270
 #, c-format
 msgid "Constraints"
@@ -20206,7 +20214,7 @@ msgstr "合约"
 msgid "Contrast"
 msgstr "合约"
 
-#: intranet-tmpl/prog/en/modules/about.tt:491
+#: intranet-tmpl/prog/en/modules/about.tt:498
 #, c-format
 msgid "Contributing companies and institutions"
 msgstr "公司与机构"
@@ -20384,12 +20392,12 @@ msgstr "复制给所有图书馆"
 msgid "Copyright"
 msgstr "着作权"
 
-#: intranet-tmpl/prog/en/modules/about.tt:640
+#: intranet-tmpl/prog/en/modules/about.tt:647
 #, c-format
 msgid "Copyright &copy; 2003-2010 phpMyAdmin devel team"
 msgstr "着作权 &copy; 2003-2010 phpMyAdmin 发展团队"
 
-#: intranet-tmpl/prog/en/modules/about.tt:635
+#: intranet-tmpl/prog/en/modules/about.tt:642
 #, fuzzy, c-format
 msgid "Copyright &copy; 2012-2016 "
 msgstr "着作权 &copy; 2008 "
@@ -20426,7 +20434,7 @@ msgstr "着作权年"
 msgid "Corporate"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:516
+#: intranet-tmpl/prog/en/modules/about.tt:523
 #, fuzzy, c-format
 msgid "Corpus Christi Public Libraries, USA"
 msgstr "美国俄亥俄州阿森斯郡公共图书馆"
@@ -20496,7 +20504,7 @@ msgstr "找不到系统首选名为 "
 msgid "Could not load emoticons"
 msgstr "活动位置"
 
-#: intranet-tmpl/prog/en/modules/about.tt:485
+#: intranet-tmpl/prog/en/modules/about.tt:492
 #, fuzzy, c-format
 msgid ""
 "Could not read the contributors.yaml file. Please make sure &lt;docdir&gt; "
@@ -20505,7 +20513,7 @@ msgstr ""
 "不能读入 history.txt 文件。请确认 &lt;docdir&gt; 已正确定义在 koha-conf.xml "
 "里。"
 
-#: intranet-tmpl/prog/en/modules/about.tt:802
+#: intranet-tmpl/prog/en/modules/about.tt:809
 #, c-format
 msgid ""
 "Could not read the history.txt file. Please make sure &lt;docdir&gt; is "
@@ -20514,7 +20522,7 @@ msgstr ""
 "不能读入 history.txt 文件。请确认 &lt;docdir&gt; 已正确定义在 koha-conf.xml "
 "里。"
 
-#: intranet-tmpl/prog/en/modules/about.tt:472
+#: intranet-tmpl/prog/en/modules/about.tt:479
 #, fuzzy, c-format
 msgid ""
 "Could not read the teams.yaml file. Please make sure &lt;docdir&gt; is "
@@ -20671,7 +20679,7 @@ msgstr "课程"
 msgid "Cover image"
 msgstr "遥测图像"
 
-#: intranet-tmpl/prog/en/modules/about.tt:446
+#: intranet-tmpl/prog/en/modules/about.tt:453
 #, c-format
 msgid "Crawford County Federated Library System"
 msgstr "Crawford County Federated图书馆系统"
@@ -20788,7 +20796,7 @@ msgstr "清除字段"
 
 #. %1$s:  framework.frameworkcode | html 
 #. %2$s:  framework.frameworktext | html 
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:132
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:139
 #, c-format
 msgid "Create framework for %s (%s) using "
 msgstr "新增权威框架给 %s (%s) 使用 "
@@ -20900,7 +20908,7 @@ msgstr "新增纪录"
 
 #. INPUT type=submit name=submit
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:119
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:904
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:905
 #, c-format
 msgid "Create report from SQL"
 msgstr "从SQL新增报表"
@@ -20960,12 +20968,12 @@ msgstr "登记日期"
 msgid "Creation date: "
 msgstr "登记日期"
 
-#: intranet-tmpl/prog/en/modules/about.tt:622
+#: intranet-tmpl/prog/en/modules/about.tt:629
 #, c-format
 msgid "Creative Commons Attribution 2.5 License"
 msgstr "创用CC姓名置标 2.5"
 
-#: intranet-tmpl/prog/en/modules/about.tt:628
+#: intranet-tmpl/prog/en/modules/about.tt:635
 #, c-format
 msgid "Creative Commons Attribution-ShareAlike 2.5 License"
 msgstr "创用CC姓名置标-相同方式分享 2.5"
@@ -21103,7 +21111,7 @@ msgstr "活动位置"
 msgid "Current location:"
 msgstr "活动位置："
 
-#: intranet-tmpl/prog/en/modules/about.tt:467
+#: intranet-tmpl/prog/en/modules/about.tt:474
 #, fuzzy, c-format
 msgid "Current maintenance team"
 msgstr "可用的模板"
@@ -21223,17 +21231,17 @@ msgstr ""
 msgid "Cyclical:"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:742
+#: intranet-tmpl/prog/en/modules/about.tt:749
 #, c-format
 msgid "D&aelig;nsk (Danish)"
 msgstr "D&aelig;nsk (丹麦文)"
 
-#: intranet-tmpl/prog/en/modules/about.tt:702
+#: intranet-tmpl/prog/en/modules/about.tt:709
 #, c-format
 msgid "D3.js"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:703
+#: intranet-tmpl/prog/en/modules/about.tt:710
 #, c-format
 msgid "D3.js v3.5.17"
 msgstr ""
@@ -21253,7 +21261,7 @@ msgstr ""
 msgid "DISABLED"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:685
+#: intranet-tmpl/prog/en/modules/about.tt:692
 #, c-format
 msgid "DSpace project"
 msgstr ""
@@ -21342,7 +21350,7 @@ msgstr ""
 msgid "Dark Yellow"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:248
+#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:253
 #: intranet-tmpl/prog/en/modules/admin/systempreferences.tt:229
 #: intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:142
 #: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:253
@@ -21461,7 +21469,7 @@ msgstr "数据库："
 #: intranet-tmpl/prog/en/modules/circ/checkout-notes.tt:70
 #: intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:195
 #: intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:197
-#: intranet-tmpl/prog/en/modules/about.tt:788
+#: intranet-tmpl/prog/en/modules/about.tt:795
 #: intranet-tmpl/prog/en/modules/offline_circ/list.tt:30
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:168
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:362
@@ -21675,7 +21683,7 @@ msgstr "日期/时间"
 #: intranet-tmpl/prog/en/modules/circ/article-requests.tt:272
 #: intranet-tmpl/prog/en/modules/circ/request-article.tt:115
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:150
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1057
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1058
 #, c-format
 msgid "Date:"
 msgstr "日期："
@@ -21760,8 +21768,8 @@ msgstr "天："
 #: intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:95
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:287
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:373
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:923
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:998
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:924
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:999
 #, c-format
 msgid "Days"
 msgstr "日"
@@ -21829,8 +21837,8 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:570
 #: intranet-tmpl/prog/en/modules/admin/clone-rules.tt:41
 #: intranet-tmpl/prog/en/modules/admin/clone-rules.tt:53
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:135
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:153
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:142
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:160
 #: intranet-tmpl/prog/en/modules/admin/item_circulation_alerts.tt:60
 #, c-format
 msgid "Default"
@@ -22224,7 +22232,7 @@ msgstr "延迟是逾期后天数，届时才启发逾期通知。"
 #: intranet-tmpl/prog/en/modules/admin/categories.tt:541
 #: intranet-tmpl/prog/en/modules/admin/oai_set_mappings.tt:65
 #: intranet-tmpl/prog/en/modules/admin/oai_set_mappings.tt:78
-#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:297
+#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:302
 #: intranet-tmpl/prog/en/modules/admin/currency.tt:201
 #: intranet-tmpl/prog/en/modules/admin/authtypes.tt:159
 #: intranet-tmpl/prog/en/modules/admin/systempreferences.tt:366
@@ -22253,7 +22261,7 @@ msgstr "延迟是逾期后天数，届时才启发逾期通知。"
 #: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:304
 #: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:212
 #: intranet-tmpl/prog/en/modules/admin/printers.tt:156
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:213
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:220
 #: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:180
 #: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:182
 #: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:249
@@ -22866,7 +22874,7 @@ msgstr "系所"
 #: intranet-tmpl/prog/en/modules/admin/checkmarc.tt:167
 #: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:149
 #: intranet-tmpl/prog/en/modules/reports/dictionary.tt:68
-#: intranet-tmpl/prog/en/modules/about.tt:789
+#: intranet-tmpl/prog/en/modules/about.tt:796
 #: intranet-tmpl/prog/en/modules/labels/label-manage.tt:70
 #, c-format
 msgid "Description"
@@ -22958,8 +22966,8 @@ msgstr "说明："
 
 #. For the first occurrence,
 #. %1$s:  liblibrarian | html_entity 
-#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:224
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:108
+#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:229
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:115
 #, c-format
 msgid "Description: %s"
 msgstr "说明：%s"
@@ -23043,7 +23051,7 @@ msgstr "详情"
 msgid "Details of payment"
 msgstr "目的图书馆："
 
-#: intranet-tmpl/prog/en/modules/about.tt:749
+#: intranet-tmpl/prog/en/modules/about.tt:756
 #, c-format
 msgid ""
 "Deutsch (German) Friedrich zur Hellen, Robert Hillig, Katrin Fischer, Beda "
@@ -23277,7 +23285,7 @@ msgstr "显示位置："
 msgid "Display member details."
 msgstr "显示读者详情。"
 
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:163
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:170
 #, c-format
 msgid "Display only used tags/subfields"
 msgstr "祗显示使用中的标签/分栏"
@@ -23342,7 +23350,7 @@ msgstr "显示 %s全部%s %s认可%s %s待决%s %s拒绝%s 术语 "
 msgid "Div"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:518
+#: intranet-tmpl/prog/en/modules/about.tt:525
 #, c-format
 msgid "Do Space, USA"
 msgstr ""
@@ -23498,7 +23506,7 @@ msgstr "不含税"
 msgid "Done"
 msgstr "完成"
 
-#: intranet-tmpl/prog/en/modules/about.tt:519
+#: intranet-tmpl/prog/en/modules/about.tt:526
 #, c-format
 msgid "DoverNet, USA"
 msgstr ""
@@ -23639,7 +23647,7 @@ msgstr "不(缺省值)"
 msgid "Dublin Core"
 msgstr "都伯林核心(XML)"
 
-#: intranet-tmpl/prog/en/modules/about.tt:521
+#: intranet-tmpl/prog/en/modules/about.tt:528
 #, fuzzy, c-format
 msgid "Duchesne County Library, USA"
 msgstr "Crawford County Federated图书馆系统"
@@ -23855,7 +23863,7 @@ msgstr "HTML消息："
 msgid "EDIFACT messages"
 msgstr "HTML消息："
 
-#: intranet-tmpl/prog/en/modules/about.tt:443
+#: intranet-tmpl/prog/en/modules/about.tt:450
 #, c-format
 msgid "EMN (Ecole des Mines de Nantes)"
 msgstr "EMN (Ecole des Mines de Nantes)"
@@ -23965,7 +23973,7 @@ msgstr "最早预约日期"
 #: intranet-tmpl/prog/en/modules/admin/cash_registers.tt:152
 #: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:179
 #: intranet-tmpl/prog/en/modules/admin/categories.tt:540
-#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:296
+#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:301
 #: intranet-tmpl/prog/en/modules/admin/currency.tt:200
 #: intranet-tmpl/prog/en/modules/admin/authtypes.tt:158
 #: intranet-tmpl/prog/en/modules/admin/systempreferences.tt:366
@@ -24051,7 +24059,7 @@ msgstr "修改 OAI 数据集 '%s'"
 msgid "Edit SQL"
 msgstr "编辑 SQL"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:983
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:984
 #, c-format
 msgid "Edit SQL report"
 msgstr "编辑SQL报表"
@@ -24339,9 +24347,9 @@ msgid "Edit serials"
 msgstr "编辑期刊"
 
 #. INPUT type=submit
-#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:307
+#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:312
 #: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:313
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:212
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:219
 #, c-format
 msgid "Edit subfields"
 msgstr "编辑分栏"
@@ -24351,7 +24359,7 @@ msgstr "编辑分栏"
 msgid "Edit subscription"
 msgstr "编辑订阅"
 
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:210
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:217
 #, fuzzy, c-format
 msgid "Edit tag"
 msgstr "编辑提示"
@@ -24425,7 +24433,7 @@ msgstr "版本："
 msgid "Editions"
 msgstr "版本"
 
-#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:131
+#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:136
 #, c-format
 msgid "Editor"
 msgstr "编者"
@@ -24496,7 +24504,7 @@ msgstr "电子邮件："
 msgid "Embed"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:697
+#: intranet-tmpl/prog/en/modules/about.tt:704
 #, c-format
 msgid "Emojiarea plug-in for jQuery"
 msgstr ""
@@ -24621,7 +24629,7 @@ msgstr "终止日期范围"
 msgid "End of interval"
 msgstr "终止日期"
 
-#: intranet-tmpl/prog/en/modules/about.tt:745
+#: intranet-tmpl/prog/en/modules/about.tt:752
 #, c-format
 msgid "English"
 msgstr "英语"
@@ -25134,12 +25142,12 @@ msgstr "处理报表参数时，发生错误：%s"
 msgid "Errors occurred:"
 msgstr "发生错误："
 
-#: intranet-tmpl/prog/en/modules/about.tt:522
+#: intranet-tmpl/prog/en/modules/about.tt:529
 #, c-format
 msgid "Escuela de Orientacion Lacaniana, Argentina"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:771
+#: intranet-tmpl/prog/en/modules/about.tt:778
 #, c-format
 msgid ""
 "Espa&ntilde;ol (Spanish) Bernardo González Kriegel, Héctor Castro and Tomás "
@@ -25650,7 +25658,7 @@ msgstr ""
 msgid "FINMARC"
 msgstr "FINMARC"
 
-#: intranet-tmpl/prog/en/modules/about.tt:526
+#: intranet-tmpl/prog/en/modules/about.tt:533
 #, c-format
 msgid "FIT"
 msgstr ""
@@ -25817,22 +25825,22 @@ msgstr "不能更新字段。"
 msgid "Fall"
 msgstr "秋季"
 
-#: intranet-tmpl/prog/en/modules/about.tt:621
+#: intranet-tmpl/prog/en/modules/about.tt:628
 #, c-format
 msgid "FamFamFam Site"
 msgstr "FamFamFam网站"
 
-#: intranet-tmpl/prog/en/modules/about.tt:619
+#: intranet-tmpl/prog/en/modules/about.tt:626
 #, c-format
 msgid "Famfamfam iconset"
 msgstr "Famfamfam图示集"
 
-#: intranet-tmpl/prog/en/modules/about.tt:524
+#: intranet-tmpl/prog/en/modules/about.tt:531
 #, fuzzy, c-format
 msgid "Fargo Public Library, USA"
 msgstr "尼尔森维尔公共图书馆系统，俄亥俄州，美国"
 
-#: intranet-tmpl/prog/en/modules/about.tt:525
+#: intranet-tmpl/prog/en/modules/about.tt:532
 #, fuzzy, c-format
 msgid "Farmington Public Library, USA"
 msgstr "尼尔森维尔公共图书馆系统，俄亥俄州，美国"
@@ -25925,7 +25933,7 @@ msgstr "女性 "
 msgid "Female "
 msgstr "女性 "
 
-#: intranet-tmpl/prog/en/modules/about.tt:523
+#: intranet-tmpl/prog/en/modules/about.tt:530
 #, c-format
 msgid "Fenway Library Organization, USA"
 msgstr ""
@@ -26153,8 +26161,8 @@ msgstr "文件："
 msgid "File: %s"
 msgstr "文件：%s"
 
-#: intranet-tmpl/prog/en/modules/about.tt:678
-#: intranet-tmpl/prog/en/modules/about.tt:679
+#: intranet-tmpl/prog/en/modules/about.tt:685
+#: intranet-tmpl/prog/en/modules/about.tt:686
 #, c-format
 msgid "FileSaver library"
 msgstr "FileSaver 函式库"
@@ -26238,7 +26246,7 @@ msgstr "影片目录"
 #: intranet-tmpl/prog/en/modules/reports/issues_stats.tt:96
 #: intranet-tmpl/prog/en/modules/reports/catalogue_stats.tt:75
 #: intranet-tmpl/prog/en/modules/reports/acquisitions_stats.tt:89
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1055
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1056
 #: intranet-tmpl/prog/en/modules/reports/issues_avg_stats.tt:73
 #: intranet-tmpl/prog/en/modules/reports/borrowers_stats.tt:74
 #, c-format
@@ -26448,7 +26456,7 @@ msgstr "首先"
 msgid "First arrival:"
 msgstr "首先到馆："
 
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:83
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:90
 #, fuzzy, c-format
 msgid "First indicator default value: "
 msgstr "首期出版日期："
@@ -26491,7 +26499,7 @@ msgstr "编辑读者"
 msgid "First publication date is not defined"
 msgstr "- 首期出版日期不确定"
 
-#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:135
+#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:140
 #, c-format
 msgid "Flagged"
 msgstr "已标记"
@@ -26583,14 +26591,14 @@ msgstr "以下的必备字段已遗失："
 msgid "Following required subfields are missing:"
 msgstr "以下的必备分栏已遗失："
 
-#: intranet-tmpl/prog/en/modules/about.tt:672
-#: intranet-tmpl/prog/en/modules/about.tt:673
+#: intranet-tmpl/prog/en/modules/about.tt:679
+#: intranet-tmpl/prog/en/modules/about.tt:680
 #, c-format
 msgid "Font Awesome"
 msgstr "字体怪异"
 
-#: intranet-tmpl/prog/en/modules/about.tt:708
-#: intranet-tmpl/prog/en/modules/about.tt:709
+#: intranet-tmpl/prog/en/modules/about.tt:715
+#: intranet-tmpl/prog/en/modules/about.tt:716
 #, c-format
 msgid "Font Face Observer"
 msgstr ""
@@ -26778,7 +26786,7 @@ msgstr "正在格式化"
 msgid "Formatting:"
 msgstr "正在格式化"
 
-#: intranet-tmpl/prog/en/modules/about.tt:527
+#: intranet-tmpl/prog/en/modules/about.tt:534
 #, c-format
 msgid "Foundations Bible College &amp; Seminary, USA"
 msgstr ""
@@ -26807,7 +26815,7 @@ msgstr "框架代码："
 msgid "Framework description"
 msgstr "框架说明"
 
-#: intranet-tmpl/prog/en/modules/about.tt:747
+#: intranet-tmpl/prog/en/modules/about.tt:754
 #, c-format
 msgid "Fran&ccedil;ais (French) "
 msgstr "Fran&ccedil;ais (法文) "
@@ -27202,7 +27210,7 @@ msgstr "基金：%s"
 msgid "Funds"
 msgstr "基金"
 
-#: intranet-tmpl/prog/en/modules/about.tt:638
+#: intranet-tmpl/prog/en/modules/about.tt:645
 #, c-format
 msgid "GPL License"
 msgstr "GNU 通用公共许可证"
@@ -27226,7 +27234,7 @@ msgstr "营业税 %%"
 msgid "GST:"
 msgstr "营业税："
 
-#: intranet-tmpl/prog/en/modules/about.tt:748
+#: intranet-tmpl/prog/en/modules/about.tt:755
 #, c-format
 msgid "Galego (Galician) Ignacio Javier"
 msgstr "Galego (Galician) Ignacio Javier"
@@ -27248,7 +27256,7 @@ msgstr "栏间距离："
 msgid "Gap between rows:"
 msgstr "列间距离："
 
-#: intranet-tmpl/prog/en/modules/about.tt:447
+#: intranet-tmpl/prog/en/modules/about.tt:454
 #, c-format
 msgid "Geauga County Public Library"
 msgstr "Geauga County Public Library"
@@ -27381,7 +27389,7 @@ msgstr "有了！"
 msgid "Global system preferences"
 msgstr "整体系统首选"
 
-#: intranet-tmpl/prog/en/modules/about.tt:614
+#: intranet-tmpl/prog/en/modules/about.tt:621
 #, c-format
 msgid "Glyphicons Free"
 msgstr "Glyphicons Free"
@@ -27458,7 +27466,7 @@ msgstr "进入前一页"
 msgid "Go up"
 msgstr "前一页"
 
-#: intranet-tmpl/prog/en/modules/about.tt:528
+#: intranet-tmpl/prog/en/modules/about.tt:535
 #, c-format
 msgid "Goethe-Institut, Germany"
 msgstr ""
@@ -27473,7 +27481,7 @@ msgstr "无地址"
 msgid "Gone no address flag"
 msgstr "无地址标志"
 
-#: intranet-tmpl/prog/en/modules/about.tt:529
+#: intranet-tmpl/prog/en/modules/about.tt:536
 #, c-format
 msgid "Gothenburg University Library, Sweden"
 msgstr ""
@@ -27515,12 +27523,12 @@ msgid ""
 msgstr "群组属性类型含禁用题名(根据容许值类型 'PA_CLASS')"
 
 #. INPUT type=text name=group
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1728
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1729
 msgid "Group code"
 msgstr "群组代码"
 
 #. INPUT type=text name=groupdesc
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1729
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1730
 msgid "Group name"
 msgstr "群组名称"
 
@@ -27596,8 +27604,8 @@ msgstr "报表向导"
 msgid "H Align"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:714
-#: intranet-tmpl/prog/en/modules/about.tt:715
+#: intranet-tmpl/prog/en/modules/about.tt:721
+#: intranet-tmpl/prog/en/modules/about.tt:722
 #, c-format
 msgid "HC Sticky"
 msgstr ""
@@ -27612,7 +27620,7 @@ msgstr ""
 msgid "HTML message:"
 msgstr "HTML消息："
 
-#: intranet-tmpl/prog/en/modules/about.tt:530
+#: intranet-tmpl/prog/en/modules/about.tt:537
 #, c-format
 msgid "Halland County Library, Sweden"
 msgstr ""
@@ -27639,7 +27647,7 @@ msgstr "固定到期日"
 msgid "Hard due date: "
 msgstr "固定到期日"
 
-#: intranet-tmpl/prog/en/modules/about.tt:531
+#: intranet-tmpl/prog/en/modules/about.tt:538
 #, fuzzy, c-format
 msgid "Harrison Carmel Public Library, USA"
 msgstr "尼尔森维尔公共图书馆系统，俄亥俄州，美国"
@@ -27649,7 +27657,7 @@ msgstr "尼尔森维尔公共图书馆系统，俄亥俄州，美国"
 msgid "Hashvalue"
 msgstr "Hashvalue"
 
-#: intranet-tmpl/prog/en/modules/about.tt:532
+#: intranet-tmpl/prog/en/modules/about.tt:539
 #, c-format
 msgid "Hauraki District Libraries, New Zealand"
 msgstr ""
@@ -27935,7 +27943,7 @@ msgid ""
 "anyway?"
 msgstr "高需求馆藏。借期缩短至 %s 至 (到期日 %s)。仍借出吗？"
 
-#: intranet-tmpl/prog/en/modules/about.tt:533
+#: intranet-tmpl/prog/en/modules/about.tt:540
 #, c-format
 msgid "Higher Education Libraries of Massachusetts, USA"
 msgstr ""
@@ -27990,7 +27998,7 @@ msgstr "历史馆员说明："
 msgid "History start date:"
 msgstr "纪录开始日期："
 
-#: intranet-tmpl/prog/en/modules/about.tt:534
+#: intranet-tmpl/prog/en/modules/about.tt:541
 #, c-format
 msgid "Hochschule für Gesundheit (hsg), Germany"
 msgstr "Hochschule für Gesundheit (hsg), 德国"
@@ -28700,7 +28708,7 @@ msgstr "水平："
 msgid "Horizontal: "
 msgstr "水平："
 
-#: intranet-tmpl/prog/en/modules/about.tt:441
+#: intranet-tmpl/prog/en/modules/about.tt:448
 #, c-format
 msgid "Horowhenua Library Trust"
 msgstr "纽西兰赫罗范努瓦图书馆理事会"
@@ -28720,7 +28728,7 @@ msgstr "主机地址/端口"
 msgid "Hostname: "
 msgstr "主机地址："
 
-#: intranet-tmpl/prog/en/modules/about.tt:535
+#: intranet-tmpl/prog/en/modules/about.tt:542
 #, c-format
 msgid "Hotchkiss School, USA"
 msgstr ""
@@ -28752,8 +28760,8 @@ msgstr "借阅费用："
 #: intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:96
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:288
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:372
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:922
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:997
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:923
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:998
 #, c-format
 msgid "Hours"
 msgstr "时间"
@@ -28796,7 +28804,7 @@ msgstr "%s%s %s0 %s 读者将被删除"
 msgid "How to process items: "
 msgstr "如何处理这些馆藏："
 
-#: intranet-tmpl/prog/en/modules/about.tt:740
+#: intranet-tmpl/prog/en/modules/about.tt:747
 #, c-format
 msgid "Hrvatski (Croatian)"
 msgstr "洛夫奇(克罗埃西亚)"
@@ -29716,7 +29724,7 @@ msgstr "输入"
 msgid "Importing to framework: %s. Importing from file: %s."
 msgstr "输入框架：%s。从文件 %s 输入"
 
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:151
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:158
 #, c-format
 msgid "In framework:"
 msgstr "在框架："
@@ -29856,12 +29864,12 @@ msgstr "索引在："
 msgid "Indexes"
 msgstr "索引"
 
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:180
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:187
 #, fuzzy, c-format
 msgid "Indicator 1"
 msgstr "必备："
 
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:181
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:188
 #, fuzzy, c-format
 msgid "Indicator 2"
 msgstr "必备："
@@ -30218,7 +30226,7 @@ msgstr "进入应用程序："
 msgid "Into an application: "
 msgstr "进入应用程序："
 
-#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:129
+#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:134
 #: intranet-tmpl/prog/en/modules/admin/didyoumean.tt:61
 #, c-format
 msgid "Intranet"
@@ -30441,7 +30449,7 @@ msgstr "发票"
 msgid "Invoices enabled: "
 msgstr "发票号码："
 
-#: intranet-tmpl/prog/en/modules/about.tt:596
+#: intranet-tmpl/prog/en/modules/about.tt:603
 #, c-format
 msgid "Irma Birchall"
 msgstr "Irma Birchall"
@@ -30451,7 +30459,7 @@ msgstr "Irma Birchall"
 msgid "Irregularity:"
 msgstr "不定期："
 
-#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:138
+#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:143
 #: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:132
 #, c-format
 msgid "Is a URL:"
@@ -30536,7 +30544,7 @@ msgstr "每单位的期数"
 msgid "Issuing library"
 msgstr "在图书馆 "
 
-#: intranet-tmpl/prog/en/modules/about.tt:420
+#: intranet-tmpl/prog/en/modules/about.tt:427
 #, fuzzy, c-format
 msgid "Issuing rules"
 msgstr "排序规则："
@@ -30552,7 +30560,7 @@ msgid ""
 "It is advisable to check for and resolve duplicate holds due to merging."
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:757
+#: intranet-tmpl/prog/en/modules/about.tt:764
 #, c-format
 msgid ""
 "Italiano (Italian) for 3.2: Zeno Tajoli, Pietro Gozzetti and Paolo Pozzan; "
@@ -31277,8 +31285,8 @@ msgstr "Itype"
 msgid "JSON URL"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:699
-#: intranet-tmpl/prog/en/modules/about.tt:700
+#: intranet-tmpl/prog/en/modules/about.tt:706
+#: intranet-tmpl/prog/en/modules/about.tt:707
 #, c-format
 msgid "JSZip"
 msgstr ""
@@ -31296,24 +31304,24 @@ msgstr "一月"
 msgid "January"
 msgstr "一月"
 
-#: intranet-tmpl/prog/en/modules/about.tt:726
-#: intranet-tmpl/prog/en/modules/about.tt:727
+#: intranet-tmpl/prog/en/modules/about.tt:733
+#: intranet-tmpl/prog/en/modules/about.tt:734
 #, c-format
 msgid "JavaScript Cookie"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:694
+#: intranet-tmpl/prog/en/modules/about.tt:701
 #, fuzzy, c-format
 msgid "JavaScript library by Vladimir Agafonkinis licensed under the "
 msgstr "John Resig 加入的外挂以下列方式授权 "
 
-#: intranet-tmpl/prog/en/modules/about.tt:700
+#: intranet-tmpl/prog/en/modules/about.tt:707
 #, fuzzy, c-format
 msgid "JavaScript library is licensed under both the "
 msgstr "John Resig 加入的外挂以下列方式授权 "
 
-#: intranet-tmpl/prog/en/modules/about.tt:663
-#: intranet-tmpl/prog/en/modules/about.tt:664
+#: intranet-tmpl/prog/en/modules/about.tt:670
+#: intranet-tmpl/prog/en/modules/about.tt:671
 #, c-format
 msgid "Javascript Diff Algorithm"
 msgstr "Javascript 差别演算法"
@@ -31328,7 +31336,7 @@ msgstr "释出维护者："
 msgid "Jenkins maintainers:"
 msgstr "释出维护者："
 
-#: intranet-tmpl/prog/en/modules/about.tt:600
+#: intranet-tmpl/prog/en/modules/about.tt:607
 #, c-format
 msgid "Jo Ransom"
 msgstr "Jo Ransom"
@@ -31384,17 +31392,17 @@ msgstr ""
 msgid "Juvenile"
 msgstr "青少年"
 
-#: intranet-tmpl/prog/en/modules/about.tt:537
+#: intranet-tmpl/prog/en/modules/about.tt:544
 #, c-format
 msgid "KEEP SOLUTIONS, Portugal"
 msgstr "KEEP SOLUTIONS，葡萄牙"
 
-#: intranet-tmpl/prog/en/modules/about.tt:536
+#: intranet-tmpl/prog/en/modules/about.tt:543
 #, c-format
 msgid "Katipo Communications, New Zealand"
 msgstr "卡提朴公司，纽西兰"
 
-#: intranet-tmpl/prog/en/modules/about.tt:635
+#: intranet-tmpl/prog/en/modules/about.tt:642
 #, c-format
 msgid "Kazik Pietruszewski"
 msgstr ""
@@ -31451,7 +31459,7 @@ msgstr "键词(任何)："
 
 #: intranet-tmpl/prog/en/modules/tools/koha-news.tt:178
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:156
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1062
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1063
 #, c-format
 msgid "Keyword:"
 msgstr "键词："
@@ -31481,14 +31489,14 @@ msgstr "键词："
 #: intranet-tmpl/prog/en/modules/onboarding/onboardingstep1.tt:11
 #: intranet-tmpl/prog/en/modules/onboarding/onboardingstep3.tt:13
 #: intranet-tmpl/prog/en/modules/onboarding/onboardingstep2.tt:20
-#: intranet-tmpl/prog/en/modules/about.tt:607
+#: intranet-tmpl/prog/en/modules/about.tt:614
 #: intranet-tmpl/prog/en/modules/auth.tt:22
 #, c-format
 msgid "Koha"
 msgstr "Koha"
 
 #. %1$s:  short_version | html 
-#: intranet-tmpl/prog/en/modules/about.tt:458
+#: intranet-tmpl/prog/en/modules/about.tt:465
 #, fuzzy, c-format
 msgid "Koha %s release team"
 msgstr "Koha 3.22 释出团队"
@@ -31945,22 +31953,24 @@ msgstr ""
 "&rsaquo; 确认删除县市 %s 县市 %s%s"
 
 #. %1$s:  IF ( add_form ) 
-#. %2$s:  action | html 
-#. %3$s:  searchfield | html 
+#. %2$s:  IF heading_add_tag_p 
+#. %3$s:  ELSE 
 #. %4$s:  END 
-#. %5$s:  IF ( delete_confirm ) 
-#. %6$s:  searchfield | html 
-#. %7$s:  END 
-#. %8$s:  IF ( delete_confirmed ) 
+#. %5$s:  searchfield | html 
+#. %6$s:  END 
+#. %7$s:  IF ( delete_confirm ) 
+#. %8$s:  searchfield | html 
 #. %9$s:  END 
-#. %10$s:  IF ( else ) 
+#. %10$s:  IF ( delete_confirmed ) 
 #. %11$s:  END 
+#. %12$s:  IF ( else ) 
+#. %13$s:  END 
 #: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:6
-#, c-format
+#, fuzzy, c-format
 msgid ""
-"Koha &rsaquo; Administration &rsaquo; %sMARC frameworks &rsaquo; %s %s%s "
-"%sMARC frameworks &rsaquo; Confirm deletion of tag '%s'%s %sMARC frameworks "
-"&rsaquo; Data deleted%s %sMARC frameworks%s"
+"Koha &rsaquo; Administration &rsaquo; %sMARC frameworks &rsaquo; %sAdd tag"
+"%sModify tag%s %s%s %sMARC frameworks &rsaquo; Confirm deletion of tag "
+"'%s'%s %sMARC frameworks &rsaquo; Data deleted%s %sMARC frameworks%s"
 msgstr ""
 "Koha &rsaquo; 管理 &rsaquo; %s机读编目格式框架 &rsaquo; %s %s%s %s机读编目格"
 "式框架 &rsaquo; 确认删除标签 '%s'%s %s机读编目格式框架 &rsaquo; 删除数据%s %s"
@@ -34047,7 +34057,7 @@ msgstr "Koha不能显示既有的口令。保留该字段空白，即未改变�
 msgid "Koha database schema"
 msgstr "Koha数据库纲要"
 
-#: intranet-tmpl/prog/en/modules/about.tt:477
+#: intranet-tmpl/prog/en/modules/about.tt:484
 #, c-format
 msgid "Koha development team"
 msgstr "Koha发展团队"
@@ -34069,7 +34079,7 @@ msgstr "Koha字段："
 msgid "Koha full call number"
 msgstr "Koha完整索书号"
 
-#: intranet-tmpl/prog/en/modules/about.tt:783
+#: intranet-tmpl/prog/en/modules/about.tt:790
 #, c-format
 msgid "Koha history timeline"
 msgstr "Koha历史轨迹"
@@ -34079,7 +34089,7 @@ msgstr "Koha历史轨迹"
 msgid "Koha internal"
 msgstr "Koha内部"
 
-#: intranet-tmpl/prog/en/modules/about.tt:609
+#: intranet-tmpl/prog/en/modules/about.tt:616
 #, c-format
 msgid ""
 "Koha is free software; you can redistribute it and/or modify it under the "
@@ -34095,7 +34105,7 @@ msgstr ""
 msgid "Koha itemtype"
 msgstr "Koha馆藏类型"
 
-#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:148
+#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:153
 #, c-format
 msgid "Koha link:"
 msgstr "Koha连结："
@@ -34121,7 +34131,7 @@ msgstr "Koha脱机流通"
 msgid "Koha plugins"
 msgstr "Koha 外挂"
 
-#: intranet-tmpl/prog/en/modules/about.tt:454
+#: intranet-tmpl/prog/en/modules/about.tt:461
 #, fuzzy, c-format
 msgid "Koha release teams"
 msgstr "Koha 3.22 释出团队"
@@ -34163,17 +34173,17 @@ msgstr "Koha 映射至 MARC"
 msgid "Koha version: "
 msgstr "Koha版本："
 
-#: intranet-tmpl/prog/en/modules/about.tt:539
+#: intranet-tmpl/prog/en/modules/about.tt:546
 #, c-format
 msgid "Koha-Suomi Oy, Finland"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:538
+#: intranet-tmpl/prog/en/modules/about.tt:545
 #, c-format
 msgid "KohaAloha, New Zealand"
 msgstr "KohaAloha，纽西兰"
 
-#: intranet-tmpl/prog/en/modules/about.tt:747
+#: intranet-tmpl/prog/en/modules/about.tt:754
 #, c-format
 msgid "Kohala"
 msgstr "Kohala"
@@ -34227,12 +34237,12 @@ msgstr "美国国会图书馆控制号码：%s "
 msgid "LEAVE UNCHANGED"
 msgstr "请勿修改"
 
-#: intranet-tmpl/prog/en/modules/about.tt:670
+#: intranet-tmpl/prog/en/modules/about.tt:677
 #, c-format
 msgid "LGPL v2.1"
 msgstr "LGPL v2.1"
 
-#: intranet-tmpl/prog/en/modules/about.tt:721
+#: intranet-tmpl/prog/en/modules/about.tt:728
 #, fuzzy, c-format
 msgid "LGPL v3.0"
 msgstr "LGPL v2.1"
@@ -34277,12 +34287,12 @@ msgstr "批次书标"
 msgid "Label creator"
 msgstr "书标产生器"
 
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:67
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:74
 #, c-format
 msgid "Label for lib: "
 msgstr "图书馆的书标："
 
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:68
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:75
 #, c-format
 msgid "Label for opac: "
 msgstr "OPAC 书标："
@@ -34363,7 +34373,7 @@ msgstr "语言："
 msgid "Languages"
 msgstr "语言"
 
-#: intranet-tmpl/prog/en/modules/about.tt:762
+#: intranet-tmpl/prog/en/modules/about.tt:769
 #, c-format
 msgid "Lao Anousak Anthony Souphavanh"
 msgstr "Lao Anousak Anthony Souphavanh"
@@ -34516,7 +34526,7 @@ msgstr "迟到"
 msgid "Late orders"
 msgstr "迟到订单"
 
-#: intranet-tmpl/prog/en/modules/about.tt:761
+#: intranet-tmpl/prog/en/modules/about.tt:768
 #, c-format
 msgid "Latina (Latin)"
 msgstr "拉丁"
@@ -34559,8 +34569,8 @@ msgstr "布局"
 msgid "Layouts"
 msgstr "布局"
 
-#: intranet-tmpl/prog/en/modules/about.tt:693
-#: intranet-tmpl/prog/en/modules/about.tt:694
+#: intranet-tmpl/prog/en/modules/about.tt:700
+#: intranet-tmpl/prog/en/modules/about.tt:701
 #, c-format
 msgid "Leaflet"
 msgstr ""
@@ -34659,12 +34669,12 @@ msgstr "书信"
 
 #: intranet-tmpl/prog/en/modules/admin/koha2marclinks.tt:33
 #: intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:195
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:176
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:183
 #, c-format
 msgid "Lib"
 msgstr "Lib"
 
-#: intranet-tmpl/prog/en/modules/about.tt:540
+#: intranet-tmpl/prog/en/modules/about.tt:547
 #, c-format
 msgid "LibLime, USA"
 msgstr "LibLime，美国"
@@ -34873,7 +34883,7 @@ msgstr "图书馆代码："
 msgid "Library of Congress"
 msgstr "读者所属图书馆："
 
-#: intranet-tmpl/prog/en/modules/about.tt:541
+#: intranet-tmpl/prog/en/modules/about.tt:548
 #, c-format
 msgid "Library of the Józef Piłsudski Institute of America, USA"
 msgstr ""
@@ -34972,7 +34982,7 @@ msgstr "图书馆：%s"
 msgid "Library: %s &rArr; %s"
 msgstr "图书馆：%s &rArr; %s"
 
-#: intranet-tmpl/prog/en/modules/about.tt:542
+#: intranet-tmpl/prog/en/modules/about.tt:549
 #, c-format
 msgid "Libriotech, Norway"
 msgstr "Libriotech公司，挪威"
@@ -35118,7 +35128,7 @@ msgstr "连结至主纪录"
 msgid "Link..."
 msgstr "连结："
 
-#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:146
+#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:151
 #, c-format
 msgid "Link:"
 msgstr "连结："
@@ -35262,7 +35272,7 @@ msgstr "清单包括此题名："
 #: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:15
 #: intranet-tmpl/prog/en/modules/acqui/neworderbiblio.tt:112
 #: intranet-tmpl/prog/en/modules/acqui/edifactmsgs.tt:118
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1092
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1093
 msgid "Loading"
 msgstr "装入中"
 
@@ -35538,7 +35548,7 @@ msgstr "纪录"
 msgid "Look for existing records in catalog?"
 msgstr "寻找目录里的既有纪录吗？"
 
-#: intranet-tmpl/prog/en/modules/about.tt:543
+#: intranet-tmpl/prog/en/modules/about.tt:550
 #, fuzzy, c-format
 msgid "Los Gatos Public Library, USA"
 msgstr "尼尔森维尔公共图书馆系统，俄亥俄州，美国"
@@ -35662,12 +35672,12 @@ msgstr "左下方 Y 轴："
 msgid "Lucida Console"
 msgstr "Lucida Console"
 
-#: intranet-tmpl/prog/en/modules/about.tt:544
+#: intranet-tmpl/prog/en/modules/about.tt:551
 #, c-format
 msgid "Lund University Library, Sweden"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:763
+#: intranet-tmpl/prog/en/modules/about.tt:770
 #, c-format
 msgid "M&#257;ori"
 msgstr "M&#257;ori"
@@ -35862,7 +35872,7 @@ msgstr "MARC 分栏"
 #. %3$s:  frameworkcode | html 
 #. %4$s:  ELSE 
 #. %5$s:  END 
-#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:257
+#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:262
 #, c-format
 msgid ""
 "MARC subfield structure admin for %s %s(framework %s)%s(default framework)%s"
@@ -35896,34 +35906,34 @@ msgstr "MARC21/USMARC"
 msgid "MARCXML"
 msgstr "MARCXML"
 
-#: intranet-tmpl/prog/en/modules/about.tt:633
-#: intranet-tmpl/prog/en/modules/about.tt:664
-#: intranet-tmpl/prog/en/modules/about.tt:667
-#: intranet-tmpl/prog/en/modules/about.tt:673
-#: intranet-tmpl/prog/en/modules/about.tt:691
+#: intranet-tmpl/prog/en/modules/about.tt:640
+#: intranet-tmpl/prog/en/modules/about.tt:671
+#: intranet-tmpl/prog/en/modules/about.tt:674
+#: intranet-tmpl/prog/en/modules/about.tt:680
+#: intranet-tmpl/prog/en/modules/about.tt:698
 #, c-format
 msgid "MIT License"
 msgstr "MIT License"
 
-#: intranet-tmpl/prog/en/modules/about.tt:700
+#: intranet-tmpl/prog/en/modules/about.tt:707
 #, fuzzy, c-format
 msgid "MIT and GPLv3 Licenses"
 msgstr "MIT License"
 
-#: intranet-tmpl/prog/en/modules/about.tt:706
+#: intranet-tmpl/prog/en/modules/about.tt:713
 #, fuzzy, c-format
 msgid "MIT licence"
 msgstr "MIT license"
 
-#: intranet-tmpl/prog/en/modules/about.tt:612
-#: intranet-tmpl/prog/en/modules/about.tt:614
-#: intranet-tmpl/prog/en/modules/about.tt:676
-#: intranet-tmpl/prog/en/modules/about.tt:679
-#: intranet-tmpl/prog/en/modules/about.tt:682
-#: intranet-tmpl/prog/en/modules/about.tt:715
-#: intranet-tmpl/prog/en/modules/about.tt:718
-#: intranet-tmpl/prog/en/modules/about.tt:724
-#: intranet-tmpl/prog/en/modules/about.tt:727
+#: intranet-tmpl/prog/en/modules/about.tt:619
+#: intranet-tmpl/prog/en/modules/about.tt:621
+#: intranet-tmpl/prog/en/modules/about.tt:683
+#: intranet-tmpl/prog/en/modules/about.tt:686
+#: intranet-tmpl/prog/en/modules/about.tt:689
+#: intranet-tmpl/prog/en/modules/about.tt:722
+#: intranet-tmpl/prog/en/modules/about.tt:725
+#: intranet-tmpl/prog/en/modules/about.tt:731
+#: intranet-tmpl/prog/en/modules/about.tt:734
 #, c-format
 msgid "MIT license"
 msgstr "MIT license"
@@ -35944,7 +35954,7 @@ msgstr "宏"
 msgid "Macros..."
 msgstr "宏..."
 
-#: intranet-tmpl/prog/en/modules/about.tt:753
+#: intranet-tmpl/prog/en/modules/about.tt:760
 #, c-format
 msgid "Magyar (Hungarian)Agnes Imecs"
 msgstr "Magyar (Hungarian)Agnes Imecs"
@@ -36616,7 +36626,7 @@ msgstr "在图书馆 "
 #: intranet-tmpl/prog/en/modules/installer/step3.tt:92
 #: intranet-tmpl/prog/en/modules/installer/step3.tt:132
 #: intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:197
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:178
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:185
 #, c-format
 msgid "Mandatory"
 msgstr "必备"
@@ -36629,7 +36639,7 @@ msgstr "%s 新增数据"
 #: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:84
 #: intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:98
 #: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:80
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:76
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:83
 #, c-format
 msgid "Mandatory: "
 msgstr "必备："
@@ -36742,7 +36752,7 @@ msgstr "标记选择："
 msgid "Mark the original budget as inactive"
 msgstr "标记原预算为停用"
 
-#: intranet-tmpl/prog/en/modules/about.tt:545
+#: intranet-tmpl/prog/en/modules/about.tt:552
 #, c-format
 msgid "MassCat, USA"
 msgstr ""
@@ -37117,7 +37127,7 @@ msgstr "微秒"
 msgid "Middle"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:546
+#: intranet-tmpl/prog/en/modules/about.tt:553
 #, fuzzy, c-format
 msgid "Middletown Township Public Library, USA"
 msgstr "尼尔森维尔公共图书馆系统，俄亥俄州，美国"
@@ -37137,7 +37147,7 @@ msgstr "亳秒"
 msgid "Mine"
 msgstr "我的"
 
-#: intranet-tmpl/prog/en/modules/about.tt:444
+#: intranet-tmpl/prog/en/modules/about.tt:451
 #, c-format
 msgid ""
 "Mines Paristech (previously Ecole Nationale Supérieure des Mines de Paris)"
@@ -37161,8 +37171,8 @@ msgid "Minute"
 msgstr "分"
 
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:371
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:921
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:996
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:922
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:997
 #, c-format
 msgid "Minutes"
 msgstr "分"
@@ -37806,7 +37816,7 @@ msgid ""
 "not be copied"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:146
+#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:151
 #, c-format
 msgid ""
 "NOTE: If you change this value you must ask your administrator to run misc/"
@@ -37861,8 +37871,8 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/admin/printers.tt:144
 #: intranet-tmpl/prog/en/modules/admin/additional-fields.tt:88
 #: intranet-tmpl/prog/en/modules/reports/dictionary.tt:67
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1729
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1756
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1730
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1757
 #, c-format
 msgid "Name"
 msgstr "名称"
@@ -37994,7 +38004,7 @@ msgstr "命名："
 msgid "Narrower Term"
 msgstr "%sh - 狭义词"
 
-#: intranet-tmpl/prog/en/modules/about.tt:547
+#: intranet-tmpl/prog/en/modules/about.tt:554
 #, c-format
 msgid "National Library of Finland, Finland"
 msgstr ""
@@ -38004,7 +38014,7 @@ msgstr ""
 msgid "Navy Blue"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:448
+#: intranet-tmpl/prog/en/modules/about.tt:455
 #, c-format
 msgid "Near East University"
 msgstr "近东大学"
@@ -38016,12 +38026,12 @@ msgid ""
 "contact your server admin if you wish to configure Elasticsearch"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:744
+#: intranet-tmpl/prog/en/modules/about.tt:751
 #, c-format
 msgid "Nederlands-Belgi&euml; (Dutch-Belgium)"
 msgstr "Nederlands-Belgi&euml; (Dutch-Belgium)"
 
-#: intranet-tmpl/prog/en/modules/about.tt:743
+#: intranet-tmpl/prog/en/modules/about.tt:750
 #, c-format
 msgid "Nederlands-Nederland (Dutch-The Netherlands) Sponsored by Rijksmuseum"
 msgstr "Nederlands-Nederland (Dutch-The Netherlands) Sponsored by Rijksmuseum"
@@ -38124,12 +38134,12 @@ msgstr "新增 SRU 服务器"
 msgid "New Z39.50 server"
 msgstr "新增Z39.50服务器"
 
-#: intranet-tmpl/prog/en/modules/about.tt:549
+#: intranet-tmpl/prog/en/modules/about.tt:556
 #, c-format
 msgid "New Zealand Central Agencies Library, New Zealand"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:550
+#: intranet-tmpl/prog/en/modules/about.tt:557
 #, c-format
 msgid "New Zealand Ministry of Education Library, New Zealand"
 msgstr ""
@@ -38583,7 +38593,7 @@ msgstr "新增供应商"
 msgid "New window"
 msgstr "隐藏窗口"
 
-#: intranet-tmpl/prog/en/modules/about.tt:548
+#: intranet-tmpl/prog/en/modules/about.tt:555
 #, fuzzy, c-format
 msgid "Newcastle City Council, United Kingdom"
 msgstr "software.coop，英国"
@@ -38681,7 +38691,7 @@ msgstr "下期出版日期："
 msgid "Next page"
 msgstr "下一页"
 
-#: intranet-tmpl/prog/en/modules/about.tt:601
+#: intranet-tmpl/prog/en/modules/about.tt:608
 #, c-format
 msgid "Nicholas Rosasco (Documentation Compiler)"
 msgstr "Nicholas Rosasco (文件汇整者)"
@@ -38760,10 +38770,10 @@ msgstr "说明：%s "
 
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:363
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:365
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:913
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:915
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:988
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:990
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:914
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:916
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:989
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:991
 #, c-format
 msgid "No (default)"
 msgstr "不(缺省值)"
@@ -38952,7 +38962,7 @@ msgid "No color"
 msgstr "颜色"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1092
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1093
 msgid "No columns selected!"
 msgstr "未选择栏！"
 
@@ -39246,7 +39256,7 @@ msgid "No matching records found"
 msgstr "未找到匹配的纪录"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1092
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1093
 msgid "No matching reports found"
 msgstr "无找到匹配的报表"
 
@@ -39549,7 +39559,7 @@ msgstr "未收到转移"
 msgid "No valid patrons to merge were found."
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:434
+#: intranet-tmpl/prog/en/modules/about.tt:441
 #, c-format
 msgid "No warnings."
 msgstr "无报警。"
@@ -39570,7 +39580,7 @@ msgstr "不，不要删除"
 #: intranet-tmpl/prog/en/modules/serials/subscription-frequencies.tt:122
 #: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:254
 #: intranet-tmpl/prog/en/modules/members/deletemem.tt:52
-#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:240
+#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:245
 #: intranet-tmpl/prog/en/modules/admin/currency.tt:158
 #: intranet-tmpl/prog/en/modules/admin/authtypes.tt:122
 #: intranet-tmpl/prog/en/modules/admin/systempreferences.tt:225
@@ -39584,7 +39594,7 @@ msgstr "不，不要删除"
 #: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:246
 #: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:115
 #: intranet-tmpl/prog/en/modules/admin/printers.tt:114
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:116
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:123
 #: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:389
 #: intranet-tmpl/prog/en/modules/admin/cities.tt:120
 #: intranet-tmpl/prog/en/modules/admin/itemtypes.tt:343
@@ -39819,22 +39829,22 @@ msgstr "一般文字"
 msgid "Normalization rule: "
 msgstr "常规化规则："
 
-#: intranet-tmpl/prog/en/modules/about.tt:754
+#: intranet-tmpl/prog/en/modules/about.tt:761
 #, c-format
 msgid "Norsk Bokmål (Norwegian) Axel Bojer and Thomas Gramstad"
 msgstr "Norsk Bokmål (Norwegian) Axel Bojer and Thomas Gramstad"
 
-#: intranet-tmpl/prog/en/modules/about.tt:755
+#: intranet-tmpl/prog/en/modules/about.tt:762
 #, c-format
 msgid "Norsk Nynorsk (Norwegian) Unni Knutsen and Marit Kristine Ådland"
 msgstr "Norsk Nynorsk (Norwegian) Unni Knutsen and Marit Kristine Ådland"
 
-#: intranet-tmpl/prog/en/modules/about.tt:551
+#: intranet-tmpl/prog/en/modules/about.tt:558
 #, c-format
 msgid "North Central Regional Library (NCRL), USA"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:552
+#: intranet-tmpl/prog/en/modules/about.tt:559
 #, c-format
 msgid "Northeast Kansas Library System (NEKLS), USA"
 msgstr ""
@@ -40194,9 +40204,9 @@ msgstr "说明/评论"
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:573
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:628
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:721
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:926
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:961
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1001
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:927
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:962
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1002
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:121
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:287
 #, c-format
@@ -40280,12 +40290,12 @@ msgstr "通知 &amp; 收条"
 msgid "Notification date"
 msgstr "通知日期"
 
-#: intranet-tmpl/prog/en/modules/about.tt:712
+#: intranet-tmpl/prog/en/modules/about.tt:719
 #, c-format
 msgid "Noto"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:711
+#: intranet-tmpl/prog/en/modules/about.tt:718
 #, c-format
 msgid "Noto fonts"
 msgstr ""
@@ -40630,7 +40640,7 @@ msgstr "OAI 数据集"
 msgid "OAI sets configuration"
 msgstr "OAI 数据集"
 
-#: intranet-tmpl/prog/en/modules/about.tt:684
+#: intranet-tmpl/prog/en/modules/about.tt:691
 #, c-format
 msgid "OAI xslt stylesheet"
 msgstr ""
@@ -40673,7 +40683,7 @@ msgstr "OFF"
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:530
 #: intranet-tmpl/prog/en/modules/circ/branchoverdues.tt:31
 #: intranet-tmpl/prog/en/modules/admin/categories.tt:382
-#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:251
+#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:256
 #: intranet-tmpl/prog/en/modules/admin/currency.tt:138
 #: intranet-tmpl/prog/en/modules/admin/systempreferences.tt:206
 #: intranet-tmpl/prog/en/modules/admin/aqcontract.tt:106
@@ -40684,8 +40694,8 @@ msgstr "OFF"
 #: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:256
 #: intranet-tmpl/prog/en/modules/admin/printers.tt:88
 #: intranet-tmpl/prog/en/modules/admin/printers.tt:123
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:125
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:140
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:132
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:147
 #: intranet-tmpl/prog/en/modules/admin/checkmarc.tt:36
 #: intranet-tmpl/prog/en/modules/admin/checkmarc.tt:50
 #: intranet-tmpl/prog/en/modules/admin/checkmarc.tt:62
@@ -40710,7 +40720,7 @@ msgid "ON"
 msgstr "ON"
 
 #: intranet-tmpl/prog/en/includes/prefs-menu.inc:13
-#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:127
+#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:132
 #: intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:173
 #: intranet-tmpl/prog/en/modules/admin/columns_settings.tt:174
 #: intranet-tmpl/prog/en/modules/admin/didyoumean.tt:57
@@ -40778,12 +40788,12 @@ msgstr "查看 OPAC："
 msgid "OPAC/Staff login"
 msgstr "登录联机公共目录/馆员界面"
 
-#: intranet-tmpl/prog/en/modules/about.tt:553
+#: intranet-tmpl/prog/en/modules/about.tt:560
 #, c-format
 msgid "OPUS"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:449
+#: intranet-tmpl/prog/en/modules/about.tt:456
 #, c-format
 msgid ""
 "OPUS International Consultants, Wellington, New Zealand (Corporate Serials "
@@ -41166,12 +41176,12 @@ msgstr "在新窗口打开"
 msgid "Open on:"
 msgstr "打开位置："
 
-#: intranet-tmpl/prog/en/modules/about.tt:646
+#: intranet-tmpl/prog/en/modules/about.tt:653
 #, c-format
 msgid "OpenJS Keyboard Shortcuts Library"
 msgstr "OpenJS 键盘热键库"
 
-#: intranet-tmpl/prog/en/modules/about.tt:648
+#: intranet-tmpl/prog/en/modules/about.tt:655
 #, c-format
 msgid "OpenJS keyboard shortcuts library"
 msgstr "OpenJS 键盘热键库"
@@ -41464,7 +41474,7 @@ msgstr "价格不明的订单"
 msgid "Orders with uncertain prices for vendor "
 msgstr "给供应商价格不明的订单 "
 
-#: intranet-tmpl/prog/en/modules/about.tt:554
+#: intranet-tmpl/prog/en/modules/about.tt:561
 #, c-format
 msgid "Orex Digital, Spain"
 msgstr ""
@@ -41517,7 +41527,7 @@ msgstr "原始订单列"
 msgid "Original version"
 msgstr "原始订单列"
 
-#: intranet-tmpl/prog/en/modules/about.tt:555
+#: intranet-tmpl/prog/en/modules/about.tt:562
 #, fuzzy, c-format
 msgid "Oslo Public Library, Norway"
 msgstr "尼尔森维尔公共图书馆系统，俄亥俄州，美国"
@@ -41565,7 +41575,7 @@ msgstr "其它名称"
 msgid "Other names"
 msgstr "其它名称"
 
-#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:168
+#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:173
 #, c-format
 msgid "Other options (choose one)"
 msgstr "其它选项(选一个)"
@@ -41765,12 +41775,12 @@ msgstr "下午"
 msgid "PSGI: "
 msgstr "PSGI: "
 
-#: intranet-tmpl/prog/en/modules/about.tt:560
+#: intranet-tmpl/prog/en/modules/about.tt:567
 #, c-format
 msgid "PTFS Europe Ltd, United Kingdom"
 msgstr "PTFS Europe Ltd，英国"
 
-#: intranet-tmpl/prog/en/modules/about.tt:559
+#: intranet-tmpl/prog/en/modules/about.tt:566
 #, c-format
 msgid "PTFS, Maryland, USA"
 msgstr "PTFS，马里兰，美国"
@@ -43446,12 +43456,12 @@ msgstr "计画 "
 msgid "Planning for %s %s"
 msgstr "计画 %s by %s"
 
-#: intranet-tmpl/prog/en/modules/about.tt:556
+#: intranet-tmpl/prog/en/modules/about.tt:563
 #, c-format
 msgid "Plano Independent School, USA"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:557
+#: intranet-tmpl/prog/en/modules/about.tt:564
 #, c-format
 msgid "Plant and Food Research Limited, New Zealand"
 msgstr ""
@@ -43496,7 +43506,7 @@ msgstr "请勾选不出版的期数(不规则)"
 #. %1$s:  ELSIF ( error.cache_expiry ) 
 #. %2$s:  ELSE 
 #. %3$s:  END 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1028
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1029
 #, c-format
 msgid ""
 "Please check the log for further details. %sPlease select a cache expiry "
@@ -43905,7 +43915,7 @@ msgid "Please return this item to %s "
 msgstr "请送回至 %s"
 
 #. %1$s:  ELSIF ( error.queryerr ) 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1027
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1028
 #, c-format
 msgid ""
 "Please return to the &quot;Saved Reports&quot; screen and delete this report "
@@ -44124,7 +44134,7 @@ msgstr "请确认 zip 文件的完整性，并再试。"
 msgid "Plugin version"
 msgstr "外挂程序版本"
 
-#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:196
+#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:201
 #: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:199
 #: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:301
 #, c-format
@@ -44166,7 +44176,7 @@ msgstr "无安装外挂程序"
 msgid "Policy for %s: %s"
 msgstr "%s 的政策：%s"
 
-#: intranet-tmpl/prog/en/modules/about.tt:767
+#: intranet-tmpl/prog/en/modules/about.tt:774
 #, c-format
 msgid "Polski (Polish)"
 msgstr "波兰"
@@ -44209,7 +44219,7 @@ msgstr ""
 msgid "Port: "
 msgstr "端口："
 
-#: intranet-tmpl/prog/en/modules/about.tt:768
+#: intranet-tmpl/prog/en/modules/about.tt:775
 #, c-format
 msgid "Portugu&ecirc;s (Portuguese)"
 msgstr "葡萄牙"
@@ -44903,7 +44913,7 @@ msgstr "配置文件"
 msgid "Programmed texts"
 msgstr "程序化文字"
 
-#: intranet-tmpl/prog/en/modules/about.tt:558
+#: intranet-tmpl/prog/en/modules/about.tt:565
 #, c-format
 msgid "Prosentient Systems, Australia"
 msgstr "Prosentient Systems，澳洲"
@@ -45378,7 +45388,7 @@ msgstr "RRP 含税"
 msgid "RT"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:597
+#: intranet-tmpl/prog/en/modules/about.tt:604
 #, c-format
 msgid "Rachel Hamilton-Williams (Kaitiaki from 2004 to present)"
 msgstr "Rachel Hamilton-Williams (Kaitiaki from 2004 to present)"
@@ -45762,7 +45772,7 @@ msgstr "登记日期："
 msgid "Registration date: %s"
 msgstr "登记日期：%s"
 
-#: intranet-tmpl/prog/en/modules/about.tt:602
+#: intranet-tmpl/prog/en/modules/about.tt:609
 #, c-format
 msgid "Regula Sebastiao"
 msgstr "Regula Sebastiao"
@@ -46315,7 +46325,7 @@ msgid "Repeat this Tag"
 msgstr "重复此栏号"
 
 #: intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:196
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:177
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:184
 #, c-format
 msgid "Repeatable"
 msgstr "可重复"
@@ -46324,7 +46334,7 @@ msgstr "可重复"
 #: intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:91
 #: intranet-tmpl/prog/en/modules/admin/patron-attr-types.tt:77
 #: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:72
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:69
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:76
 #, c-format
 msgid "Repeatable: "
 msgstr "可重复："
@@ -46454,17 +46464,17 @@ msgid ""
 "%s)"
 msgstr "移动预算内未签收的订单报表 %s (%s - %s) to %s (%s - %s)"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1710
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1711
 #, c-format
 msgid "Report group:"
 msgstr "报表群组："
 
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:363
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:365
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:913
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:915
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:988
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:990
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:914
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:916
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:989
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:991
 #, c-format
 msgid "Report is public:"
 msgstr "公开报表："
@@ -46481,13 +46491,13 @@ msgstr "报表名称："
 msgid "Report name"
 msgstr "报表名称"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:906
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:907
 #, c-format
 msgid "Report name:"
 msgstr "报表名称："
 
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:626
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:985
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:986
 #, c-format
 msgid "Report name: "
 msgstr "报表名称："
@@ -46500,7 +46510,7 @@ msgstr "报表名称："
 msgid "Report plugins"
 msgstr "报表外挂程序"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1732
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1733
 #, c-format
 msgid "Report subgroup:"
 msgstr "报表次群组："
@@ -46640,8 +46650,8 @@ msgstr "要求"
 msgid "Require valid email address:"
 msgstr "请键入有效电子邮件地址。"
 
-#: intranet-tmpl/prog/en/modules/about.tt:681
-#: intranet-tmpl/prog/en/modules/about.tt:682
+#: intranet-tmpl/prog/en/modules/about.tt:688
+#: intranet-tmpl/prog/en/modules/about.tt:689
 #, c-format
 msgid "Require.js JS module system"
 msgstr "Require.js JS 模块系统"
@@ -46886,7 +46896,7 @@ msgstr "Require.js JS 模块系统"
 #: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:88
 #: intranet-tmpl/prog/en/modules/admin/printers.tt:67
 #: intranet-tmpl/prog/en/modules/admin/printers.tt:73
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:64
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:71
 #: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:61
 #: intranet-tmpl/prog/en/modules/admin/additional-fields.tt:131
 #: intranet-tmpl/prog/en/modules/admin/cities.tt:70
@@ -46900,10 +46910,10 @@ msgstr "Require.js JS 模块系统"
 #: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:214
 #: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:224
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:626
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:908
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:932
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:985
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1008
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:909
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:933
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:986
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1009
 #: intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:276
 #: intranet-tmpl/prog/en/modules/services/itemrecorddisplay.tt:33
 #: intranet-tmpl/prog/en/modules/offline_circ/process_koc.tt:42
@@ -47156,7 +47166,7 @@ msgstr "权威纪录结果"
 #. For the first occurrence,
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/serials/subscription-add.tt:520
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1092
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1093
 msgid "Results from Mana Knowledge Base"
 msgstr ""
 
@@ -47241,7 +47251,7 @@ msgstr "缺省框架"
 msgid "Return to patron detail"
 msgstr "回到读者详情"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1033
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1034
 #, c-format
 msgid "Return to previous page"
 msgstr "回到前一页"
@@ -47393,7 +47403,7 @@ msgstr "重量"
 msgid "Right to left"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:561
+#: intranet-tmpl/prog/en/modules/about.tt:568
 #, c-format
 msgid "Rijksmuseum, Amsterdam, The Netherlands"
 msgstr "阿姆斯特丹国立博物馆，荷兰"
@@ -47408,7 +47418,7 @@ msgstr ""
 msgid "Robots"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:562
+#: intranet-tmpl/prog/en/modules/about.tt:569
 #, c-format
 msgid "Rolling Hills Consolidated Libraries, USA"
 msgstr ""
@@ -47423,7 +47433,7 @@ msgstr "翻转在："
 msgid "Rollover:"
 msgstr "翻转："
 
-#: intranet-tmpl/prog/en/modules/about.tt:769
+#: intranet-tmpl/prog/en/modules/about.tt:776
 #, c-format
 msgid "Rom&acirc;n&#259; (Romanian)"
 msgstr "Rom&acirc;n&#259; (罗马尼亚)"
@@ -47480,7 +47490,7 @@ msgstr ""
 msgid "Rotating collections"
 msgstr "巡回馆藏"
 
-#: intranet-tmpl/prog/en/modules/about.tt:563
+#: intranet-tmpl/prog/en/modules/about.tt:570
 #, fuzzy, c-format
 msgid "Round Rock Public Library, USA"
 msgstr "尼尔森维尔公共图书馆系统，俄亥俄州，美国"
@@ -47617,12 +47627,12 @@ msgstr "执行工具"
 msgid "SAN"
 msgstr "AND"
 
-#: intranet-tmpl/prog/en/modules/about.tt:445
+#: intranet-tmpl/prog/en/modules/about.tt:452
 #, c-format
 msgid "SAN-Ouest Provence"
 msgstr "圣莫普罗旺斯"
 
-#: intranet-tmpl/prog/en/modules/about.tt:564
+#: intranet-tmpl/prog/en/modules/about.tt:571
 #, c-format
 msgid "SAN-Ouest Provence, France"
 msgstr "圣莫普罗旺斯，法国"
@@ -47649,12 +47659,12 @@ msgstr ""
 msgid "SI Millimeters"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:673
+#: intranet-tmpl/prog/en/modules/about.tt:680
 #, c-format
 msgid "SIL OFL 1.1"
 msgstr "SIL OFL 1.1"
 
-#: intranet-tmpl/prog/en/modules/about.tt:712
+#: intranet-tmpl/prog/en/modules/about.tt:719
 #, c-format
 msgid "SIL Open Font License (OFL) v1.1"
 msgstr ""
@@ -47697,8 +47707,8 @@ msgstr "简信号码："
 msgid "SMS provider:"
 msgstr "CSV 配置文件："
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:930
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1006
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:931
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1007
 #, c-format
 msgid "SQL:"
 msgstr "SQL："
@@ -47723,7 +47733,7 @@ msgstr ""
 msgid "STARTDATE:January 1 2010,TRACK:Day"
 msgstr "STARTDATE:January 1 2010,TRACK:Day"
 
-#: intranet-tmpl/prog/en/modules/about.tt:570
+#: intranet-tmpl/prog/en/modules/about.tt:577
 #, c-format
 msgid "SWITCH Library Consortium, USA"
 msgstr ""
@@ -47933,9 +47943,9 @@ msgstr "存储为新的模式"
 #: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:247
 #: intranet-tmpl/prog/en/modules/members/housebound.tt:189
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:238
-#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:214
+#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:219
 #: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:43
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:97
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:104
 #: intranet-tmpl/prog/en/modules/admin/itemtypes.tt:312
 #, c-format
 msgid "Save changes"
@@ -47974,7 +47984,7 @@ msgstr "不能阅读文件。"
 
 #. INPUT type=submit name=submit
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:631
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:937
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:938
 msgid "Save report"
 msgstr "存储报表"
 
@@ -48022,7 +48032,7 @@ msgstr "还入日期"
 msgid "Saved preference %s"
 msgstr "存储引用 %s"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:943
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:944
 #, c-format
 msgid "Saved report results"
 msgstr "存储报表结果"
@@ -48032,7 +48042,7 @@ msgstr "存储报表结果"
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:59
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:60
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:144
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1038
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1039
 #, c-format
 msgid "Saved reports"
 msgstr "存储报表"
@@ -48189,7 +48199,7 @@ msgstr "过滤的"
 #: intranet-tmpl/prog/en/modules/acqui/histsearch.tt:164
 #: intranet-tmpl/prog/en/modules/acqui/acqui-home.tt:45
 #: intranet-tmpl/prog/en/modules/circ/request-article.tt:79
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:162
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:169
 #: intranet-tmpl/prog/en/modules/admin/admin-home.tt:52
 #: intranet-tmpl/prog/en/modules/reports/reports-home.tt:37
 #: intranet-tmpl/prog/en/modules/labels/label-bib-search.tt:6
@@ -48394,7 +48404,7 @@ msgstr "寻找读者"
 msgid "Search for record"
 msgstr "寻找纪录"
 
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:148
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:155
 #, c-format
 msgid "Search for tag:"
 msgstr "寻找标签"
@@ -48734,7 +48744,7 @@ msgstr "季"
 msgid "Second"
 msgstr "第二"
 
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:86
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:93
 #, fuzzy, c-format
 msgid "Second indicator default value: "
 msgstr "使用缺省值"
@@ -48764,8 +48774,8 @@ msgid "Secondary phone: "
 msgstr "次要电话："
 
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:370
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:920
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:995
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:921
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:996
 #, c-format
 msgid "Seconds (default)"
 msgstr "次要(缺省)"
@@ -48819,7 +48829,7 @@ msgstr ""
 msgid "Seen"
 msgstr "看见"
 
-#: intranet-tmpl/prog/en/modules/about.tt:565
+#: intranet-tmpl/prog/en/modules/about.tt:572
 #, fuzzy, c-format
 msgid "Sefton Council, United Kingdom"
 msgstr "software.coop，英国"
@@ -48833,8 +48843,8 @@ msgstr "software.coop，英国"
 #: intranet-tmpl/prog/en/modules/members/tables/guarantor_search.tt:21
 #: intranet-tmpl/prog/en/modules/acqui/tables/members_results.tt:19
 #: intranet-tmpl/prog/en/modules/circ/request-article.tt:70
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1713
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1735
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1714
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1736
 #: intranet-tmpl/prog/en/modules/labels/label-edit-batch.tt:116
 #: intranet-tmpl/prog/en/modules/labels/result.tt:72
 #, c-format
@@ -49278,8 +49288,8 @@ msgstr "选择无馆藏"
 msgid "Select your MARC flavor"
 msgstr "选定您的 MARC 风格"
 
-#: intranet-tmpl/prog/en/modules/about.tt:687
-#: intranet-tmpl/prog/en/modules/about.tt:688
+#: intranet-tmpl/prog/en/modules/about.tt:694
+#: intranet-tmpl/prog/en/modules/about.tt:695
 #, fuzzy, c-format
 msgid "Select2"
 msgstr "选择"
@@ -50707,12 +50717,12 @@ msgstr "分类法来源 / 排架结构"
 msgid "Source records"
 msgstr "来源纪录"
 
-#: intranet-tmpl/prog/en/modules/about.tt:568
+#: intranet-tmpl/prog/en/modules/about.tt:575
 #, c-format
 msgid "South Taranaki District Council, New Zealand"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:567
+#: intranet-tmpl/prog/en/modules/about.tt:574
 #, c-format
 msgid "South-East Kansas Library System (SEKLS), USA"
 msgstr ""
@@ -50745,7 +50755,7 @@ msgstr "字符"
 msgid "Special relationship: "
 msgstr "特别关系："
 
-#: intranet-tmpl/prog/en/modules/about.tt:439
+#: intranet-tmpl/prog/en/modules/about.tt:446
 #, c-format
 msgid "Special thanks to the following organizations"
 msgstr "特别感谢以下机构"
@@ -51368,7 +51378,7 @@ msgstr "步骤5：确认定义"
 msgid "Step 6 of 6: Choose how you want the report ordered"
 msgstr "步骤6之6：选择报表的排序方式"
 
-#: intranet-tmpl/prog/en/modules/about.tt:598
+#: intranet-tmpl/prog/en/modules/about.tt:605
 #, c-format
 msgid "Stephen Hedges (early Documentation Manager)"
 msgstr "Stephen Hedges (早期的文件经理)"
@@ -51396,7 +51406,7 @@ msgstr "位置"
 msgid "Stock rotation details for %s"
 msgstr "&rsaquo; 课程详情 "
 
-#: intranet-tmpl/prog/en/modules/about.tt:569
+#: intranet-tmpl/prog/en/modules/about.tt:576
 #, c-format
 msgid "Stockholm University Library, Sweden"
 msgstr ""
@@ -51464,7 +51474,7 @@ msgid "Sub total "
 msgstr "小计 "
 
 #: intranet-tmpl/prog/en/modules/admin/oai_set_mappings.tt:35
-#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:263
+#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:268
 #: intranet-tmpl/prog/en/modules/admin/koha2marclinks.tt:32
 #: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:268
 #: intranet-tmpl/prog/en/modules/admin/checkmarc.tt:202
@@ -51500,7 +51510,7 @@ msgid "Subfield:"
 msgstr "分栏"
 
 #. %1$s:  tagsubfield | html 
-#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:223
+#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:228
 #, c-format
 msgid "Subfield: %s"
 msgstr "分栏：%s"
@@ -51529,12 +51539,12 @@ msgid "Subgroup"
 msgstr "次群组"
 
 #. INPUT type=text name=subgroup
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1755
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1756
 msgid "Subgroup code"
 msgstr "次群组代码"
 
 #. INPUT type=text name=subgroupdesc
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1756
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1757
 msgid "Subgroup name"
 msgstr "次群组名称"
 
@@ -52252,7 +52262,7 @@ msgstr "罚款收取间隔"
 msgid "Suspension in days (day)"
 msgstr "暂停天数"
 
-#: intranet-tmpl/prog/en/modules/about.tt:772
+#: intranet-tmpl/prog/en/modules/about.tt:779
 #, c-format
 msgid "Svenska (Swedish)"
 msgstr "瑞典"
@@ -52278,8 +52288,8 @@ msgstr "进入基本编辑器"
 msgid "Switch to or from fullscreen mode"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:358
-#: intranet-tmpl/prog/en/modules/about.tt:366
+#: intranet-tmpl/prog/en/modules/about.tt:365
+#: intranet-tmpl/prog/en/modules/about.tt:373
 #, fuzzy, c-format
 msgid "Switching to dom indexing"
 msgstr "进入高级编辑器"
@@ -52420,7 +52430,7 @@ msgstr "系统首选寻找："
 msgid "System preferences"
 msgstr "系统首选"
 
-#: intranet-tmpl/prog/en/modules/about.tt:775
+#: intranet-tmpl/prog/en/modules/about.tt:782
 #, c-format
 msgid ""
 "T&uuml;rk&ccedil;e (Turkish) pre-3.8: Selma Aslan; for 3.8+, Suleyman "
@@ -52492,7 +52502,7 @@ msgstr "定位："
 #. %20$s:  IF ( subfield.value_builder ) 
 #. %21$s:  subfield.value_builder | html 
 #. %22$s:  END 
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:193
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:200
 #, c-format
 msgid ""
 "Tab:%s | $%s %s %s%s%s%s, repeatable%s%s, Mandatory%s%s, See %s%s%s, %s%s%s, "
@@ -52519,7 +52529,7 @@ msgstr "内容"
 msgid "Table properties"
 msgstr "其它选项："
 
-#: intranet-tmpl/prog/en/modules/about.tt:691
+#: intranet-tmpl/prog/en/modules/about.tt:698
 #, c-format
 msgid "TableDnD plug-in for jQuery"
 msgstr ""
@@ -52542,7 +52552,7 @@ msgstr "制表 (\t)"
 
 #: intranet-tmpl/prog/en/modules/admin/koha2marclinks.tt:31
 #: intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:194
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:175
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:182
 #: intranet-tmpl/prog/en/modules/admin/checkmarc.tt:168
 #: intranet-tmpl/prog/en/modules/admin/checkmarc.tt:201
 #: intranet-tmpl/prog/en/modules/admin/checkmarc.tt:236
@@ -52571,7 +52581,7 @@ msgstr "栏号 %s 的分栏结构"
 msgid "Tag %s subfield structure"
 msgstr "栏号 %s 的分栏结构"
 
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:123
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:130
 #, c-format
 msgid "Tag deleted"
 msgstr "栏号被删除"
@@ -52599,7 +52609,7 @@ msgstr "标签无分栏"
 msgid "Tag moderation"
 msgstr "管理标签"
 
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:59
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:66
 #, c-format
 msgid "Tag:"
 msgstr "栏号："
@@ -52616,13 +52626,13 @@ msgstr "栏号："
 #: intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:78
 #: intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:84
 #: intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:127
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:62
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:69
 #, c-format
 msgid "Tag: "
 msgstr "栏号："
 
 #. %1$s:  searchfield | html 
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:107
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:114
 #, c-format
 msgid "Tag: %s"
 msgstr "栏号：%s"
@@ -52649,12 +52659,12 @@ msgstr "通过待决标签"
 msgid "Tags:"
 msgstr "栏号"
 
-#: intranet-tmpl/prog/en/modules/about.tt:571
+#: intranet-tmpl/prog/en/modules/about.tt:578
 #, c-format
 msgid "Talking Tech, Global"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:572
+#: intranet-tmpl/prog/en/modules/about.tt:579
 #, c-format
 msgid "Tamil, France"
 msgstr "坦米尔，法国"
@@ -52856,7 +52866,7 @@ msgstr ""
 msgid "Testing..."
 msgstr "测试..."
 
-#: intranet-tmpl/prog/en/modules/about.tt:773
+#: intranet-tmpl/prog/en/modules/about.tt:780
 #, c-format
 msgid "Tetun (Tetum) Karen Myers"
 msgstr "Tetun (Tetum) Karen Myers"
@@ -52866,7 +52876,7 @@ msgstr "Tetun (Tetum) Karen Myers"
 #: intranet-tmpl/prog/en/includes/str/tinymce_i18n.inc:1
 #: intranet-tmpl/prog/en/modules/tools/quotes.tt:42
 #: intranet-tmpl/prog/en/modules/tools/quotes-upload.tt:55
-#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:264
+#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:269
 #: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:269
 #, c-format
 msgid "Text"
@@ -52952,26 +52962,26 @@ msgid "That budget does not exist! Please select a budget to continue."
 msgstr "此预算不存在！请选择另个预算再继续工作。"
 
 #: intranet-tmpl/prog/en/modules/members/members-update.tt:170
-#: intranet-tmpl/prog/en/modules/about.tt:442
-#: intranet-tmpl/prog/en/modules/about.tt:446
-#: intranet-tmpl/prog/en/modules/about.tt:447
-#: intranet-tmpl/prog/en/modules/about.tt:448
-#: intranet-tmpl/prog/en/modules/about.tt:644
-#: intranet-tmpl/prog/en/modules/about.tt:648
-#: intranet-tmpl/prog/en/modules/about.tt:652
-#: intranet-tmpl/prog/en/modules/about.tt:656
-#: intranet-tmpl/prog/en/modules/about.tt:660
-#: intranet-tmpl/prog/en/modules/about.tt:664
+#: intranet-tmpl/prog/en/modules/about.tt:449
+#: intranet-tmpl/prog/en/modules/about.tt:453
+#: intranet-tmpl/prog/en/modules/about.tt:454
+#: intranet-tmpl/prog/en/modules/about.tt:455
+#: intranet-tmpl/prog/en/modules/about.tt:651
+#: intranet-tmpl/prog/en/modules/about.tt:655
+#: intranet-tmpl/prog/en/modules/about.tt:659
+#: intranet-tmpl/prog/en/modules/about.tt:663
 #: intranet-tmpl/prog/en/modules/about.tt:667
-#: intranet-tmpl/prog/en/modules/about.tt:670
-#: intranet-tmpl/prog/en/modules/about.tt:676
-#: intranet-tmpl/prog/en/modules/about.tt:679
-#: intranet-tmpl/prog/en/modules/about.tt:682
-#: intranet-tmpl/prog/en/modules/about.tt:688
-#: intranet-tmpl/prog/en/modules/about.tt:691
-#: intranet-tmpl/prog/en/modules/about.tt:694
-#: intranet-tmpl/prog/en/modules/about.tt:697
-#: intranet-tmpl/prog/en/modules/about.tt:700
+#: intranet-tmpl/prog/en/modules/about.tt:671
+#: intranet-tmpl/prog/en/modules/about.tt:674
+#: intranet-tmpl/prog/en/modules/about.tt:677
+#: intranet-tmpl/prog/en/modules/about.tt:683
+#: intranet-tmpl/prog/en/modules/about.tt:686
+#: intranet-tmpl/prog/en/modules/about.tt:689
+#: intranet-tmpl/prog/en/modules/about.tt:695
+#: intranet-tmpl/prog/en/modules/about.tt:698
+#: intranet-tmpl/prog/en/modules/about.tt:701
+#: intranet-tmpl/prog/en/modules/about.tt:704
+#: intranet-tmpl/prog/en/modules/about.tt:707
 #, c-format
 msgid "The "
 msgstr "这个 "
@@ -52986,14 +52996,14 @@ msgstr "与此订阅有关的%s 最新期："
 #. %2$s:  unit.categorycode | html 
 #. %3$s:  unit.itemtype | html 
 #. %4$s:  unit.lengthunit | html 
-#: intranet-tmpl/prog/en/modules/about.tt:424
+#: intranet-tmpl/prog/en/modules/about.tt:431
 #, c-format
 msgid ""
 "The %s, %s, %s issuingrule will fallback to 'days' for 'lengthunit' as it is "
 "incorrectly defined as %s. "
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:379
+#: intranet-tmpl/prog/en/modules/about.tt:386
 #, c-format
 msgid ""
 "The &lt;use_zebra_facets&gt; entry is missing in your configuration file. "
@@ -53001,7 +53011,7 @@ msgid ""
 msgstr ""
 "&lt;zebra_auth_index_mode&gt; 款目不在您的组态档内。退回至原来的层面计算。"
 
-#: intranet-tmpl/prog/en/modules/about.tt:364
+#: intranet-tmpl/prog/en/modules/about.tt:371
 #, fuzzy, c-format
 msgid ""
 "The &lt;zebra_auth_index_mode&gt; entry set to 'grs1', which is no longer "
@@ -53010,7 +53020,7 @@ msgstr ""
 "。GRS-1 支持已废弃且将在未来的版本里删除。请使用 DOM 设置&lt;"
 "zebra_auth_index_mode&gt; 为 "
 
-#: intranet-tmpl/prog/en/modules/about.tt:356
+#: intranet-tmpl/prog/en/modules/about.tt:363
 #, fuzzy, c-format
 msgid ""
 "The &lt;zebra_bib_index_mode&gt; entry set to 'grs1', which is no longer "
@@ -53042,12 +53052,12 @@ msgid ""
 "private."
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:624
+#: intranet-tmpl/prog/en/modules/about.tt:631
 #, c-format
 msgid "The Bridge Material Type Icon Set"
 msgstr "Bridge数据类型图示集"
 
-#: intranet-tmpl/prog/en/modules/about.tt:627
+#: intranet-tmpl/prog/en/modules/about.tt:634
 #, c-format
 msgid "The Bridge Material Type Icon Set is licensed under a "
 msgstr "Bridge数据类型图示集的授权方式为 "
@@ -53219,7 +53229,7 @@ msgstr ""
 msgid "The change will be applied immediately."
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:259
+#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:264
 #: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:264
 #, c-format
 msgid ""
@@ -53408,7 +53418,7 @@ msgstr "找到以下的条码："
 msgid "The following error occurred while importing the database structure:"
 msgstr "输入数据库结构时，发生以下错误："
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1023
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1024
 #, c-format
 msgid "The following error was encountered:"
 msgstr "碰到以下的错误："
@@ -53533,7 +53543,7 @@ msgstr ""
 msgid "The import id number "
 msgstr "输入代码 "
 
-#: intranet-tmpl/prog/en/modules/about.tt:685
+#: intranet-tmpl/prog/en/modules/about.tt:692
 #, c-format
 msgid "The included OAI.xslt file by the "
 msgstr ""
@@ -53672,18 +53682,18 @@ msgid "The order has been successfully cancelled %s "
 msgstr "订单已取消 %s "
 
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:75
-#, c-format
+#, fuzzy, c-format
 msgid ""
-"The order line you trying to cancel was created from a partial receipt of "
-"another order line which has been deleted. Cancellation is not possible. "
+"The order line you are trying to cancel was created from a partial receipt "
+"of another order line which has been deleted. Cancellation is not possible. "
 msgstr "打算取消的订单，系由其它已签收部份馆藏的订单产生。不能取消它。"
 
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:70
-#, c-format
+#, fuzzy, c-format
 msgid ""
-"The order line you trying to cancel was created from a partial receipt of "
-"another order line which is already received. Try to cancel this one first "
-"and retry. "
+"The order line you are trying to cancel was created from a partial receipt "
+"of another order line which is already received. Try to cancel this one "
+"first and retry. "
 msgstr ""
 "打算取消的订单，系由其它已签收部份馆藏的订单产生。必须先取消另个订单，请重"
 "试。"
@@ -54037,7 +54047,7 @@ msgstr "上传的文件不是 ZIP 文件。它的扩展文件名不是'.zip'。"
 msgid "The value \"%s\" is not supported for mappings"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:573
+#: intranet-tmpl/prog/en/modules/about.tt:580
 #, c-format
 msgid "Theke Solutions, Argentina"
 msgstr ""
@@ -54401,7 +54411,7 @@ msgstr "您送出的信息有问题"
 msgid "Therefore, the record to be merged has not been deleted. "
 msgstr "因此，未删除待合并的纪录。"
 
-#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:184
+#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:189
 #: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:183
 #, c-format
 msgid "Thesaurus:"
@@ -54967,7 +54977,7 @@ msgstr ""
 msgid "This rota has no stages."
 msgstr "此纪录没有馆藏。"
 
-#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:258
+#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:263
 #: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:263
 #, fuzzy, c-format
 msgid ""
@@ -55180,12 +55190,12 @@ msgstr "时间到(不会设为0)："
 msgid "Timestamp"
 msgstr "时间戳记"
 
-#: intranet-tmpl/prog/en/modules/about.tt:669
+#: intranet-tmpl/prog/en/modules/about.tt:676
 #, c-format
 msgid "TinyMCE WYSIWYG editor"
 msgstr "TinyMCE WYSIWYG 编辑器"
 
-#: intranet-tmpl/prog/en/modules/about.tt:670
+#: intranet-tmpl/prog/en/modules/about.tt:677
 #, fuzzy, c-format
 msgid "TinyMCE WYSIWYG editor v5.0.16 "
 msgstr "TinyMCE WYSIWYG 编辑器 v3.5.8 "
@@ -56202,7 +56212,7 @@ msgid "Translate item type %s"
 msgstr "Available itypes"
 
 #: intranet-tmpl/prog/en/modules/admin/localization.tt:67
-#: intranet-tmpl/prog/en/modules/about.tt:731
+#: intranet-tmpl/prog/en/modules/about.tt:738
 #, c-format
 msgid "Translation"
 msgstr "翻译"
@@ -56300,7 +56310,7 @@ msgstr "星期二"
 msgid "Tuesdays"
 msgstr "星期二"
 
-#: intranet-tmpl/prog/en/modules/about.tt:574
+#: intranet-tmpl/prog/en/modules/about.tt:581
 #, c-format
 msgid "Tulong Aklatan, Philippines"
 msgstr ""
@@ -56403,7 +56413,7 @@ msgstr ""
 msgid "UTF-8 (Default)"
 msgstr "UTF-8 (Default)"
 
-#: intranet-tmpl/prog/en/modules/about.tt:575
+#: intranet-tmpl/prog/en/modules/about.tt:582
 #, fuzzy, c-format
 msgid "Uintah Library System, USA"
 msgstr "Crawford County Federated图书馆系统"
@@ -56692,47 +56702,47 @@ msgstr "单位："
 msgid "Units: "
 msgstr "单位："
 
-#: intranet-tmpl/prog/en/modules/about.tt:577
+#: intranet-tmpl/prog/en/modules/about.tt:584
 #, fuzzy, c-format
 msgid "Universidad Empresarial Siglo 21, Argentina"
 msgstr "Universidad Nacional de Córdoba, 阿根廷"
 
-#: intranet-tmpl/prog/en/modules/about.tt:578
+#: intranet-tmpl/prog/en/modules/about.tt:585
 #, c-format
 msgid "Universidad Nacional de Córdoba, Argentina"
 msgstr "Universidad Nacional de Córdoba, 阿根廷"
 
-#: intranet-tmpl/prog/en/modules/about.tt:579
+#: intranet-tmpl/prog/en/modules/about.tt:586
 #, c-format
 msgid "Universidad ORT Uruguay"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:576
+#: intranet-tmpl/prog/en/modules/about.tt:583
 #, c-format
 msgid "Universidad de El Salvador, El Salvador"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:584
+#: intranet-tmpl/prog/en/modules/about.tt:591
 #, fuzzy, c-format
 msgid "University of the Arts London, United Kingdom"
 msgstr "software.coop，英国"
 
-#: intranet-tmpl/prog/en/modules/about.tt:580
+#: intranet-tmpl/prog/en/modules/about.tt:587
 #, c-format
 msgid "Université d'Aix-Marseille, France"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:581
+#: intranet-tmpl/prog/en/modules/about.tt:588
 #, c-format
 msgid "Université de Lyon 3, France"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:582
+#: intranet-tmpl/prog/en/modules/about.tt:589
 #, c-format
 msgid "Université de Rennes 2, France"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:583
+#: intranet-tmpl/prog/en/modules/about.tt:590
 #, c-format
 msgid "Université de St Etienne, France"
 msgstr ""
@@ -56850,7 +56860,7 @@ msgstr "更新"
 
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:77
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:267
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1013
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1014
 #, c-format
 msgid "Update SQL"
 msgstr "更新SQL"
@@ -57332,7 +57342,7 @@ msgstr ""
 msgid "Use for staff search groups "
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1026
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1027
 #, c-format
 msgid ""
 "Use of this keyword is not allowed in Koha reports due to security and data "
@@ -57582,7 +57592,7 @@ msgstr ""
 msgid "VHS tape / Videocassette"
 msgstr "VHS 录影带 / 录影卡带"
 
-#: intranet-tmpl/prog/en/modules/about.tt:585
+#: intranet-tmpl/prog/en/modules/about.tt:592
 #, c-format
 msgid "Vaara-kirjastot, Finland"
 msgstr ""
@@ -57645,7 +57655,7 @@ msgid ""
 "used for statistical purposes"
 msgstr "附属于读者的容许值，可供统计之用"
 
-#: intranet-tmpl/prog/en/modules/about.tt:586
+#: intranet-tmpl/prog/en/modules/about.tt:593
 #, c-format
 msgid "Vanier College, Canada"
 msgstr ""
@@ -57856,17 +57866,17 @@ msgstr "确认您要匿名读者的借出记录"
 msgid "Verify you want to delete patrons"
 msgstr "确认您要删除读者"
 
-#: intranet-tmpl/prog/en/modules/about.tt:587
+#: intranet-tmpl/prog/en/modules/about.tt:594
 #, c-format
 msgid "Vermont Organization of Koha Automated Libraries (VOKAL), USA"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:720
+#: intranet-tmpl/prog/en/modules/about.tt:727
 #, c-format
 msgid "Verovio"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:721
+#: intranet-tmpl/prog/en/modules/about.tt:728
 #, c-format
 msgid ""
 "Verovio is developed by the Swiss RISM Office with the support of the Swiss "
@@ -58075,7 +58085,7 @@ msgstr "查看限制"
 msgid "View spine label"
 msgstr "查看书标"
 
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:211
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:218
 #, fuzzy, c-format
 msgid "View subfields"
 msgstr "编辑分栏"
@@ -58090,17 +58100,17 @@ msgstr "使用工具外挂程序"
 msgid "View, manage, configure and run plugins."
 msgstr "查看、管理、组态与执行外挂。"
 
-#: intranet-tmpl/prog/en/modules/about.tt:588
+#: intranet-tmpl/prog/en/modules/about.tt:595
 #, c-format
 msgid "Ville de Victoriaville, Canada"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:589
+#: intranet-tmpl/prog/en/modules/about.tt:596
 #, c-format
 msgid "Virginia Tech, USA"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:125
+#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:130
 #, c-format
 msgid "Visibility: "
 msgstr "能见度："
@@ -58211,15 +58221,16 @@ msgstr "报警"
 #: intranet-tmpl/prog/en/modules/about.tt:325
 #: intranet-tmpl/prog/en/modules/about.tt:331
 #: intranet-tmpl/prog/en/modules/about.tt:336
-#: intranet-tmpl/prog/en/modules/about.tt:355
-#: intranet-tmpl/prog/en/modules/about.tt:363
-#: intranet-tmpl/prog/en/modules/about.tt:371
+#: intranet-tmpl/prog/en/modules/about.tt:347
+#: intranet-tmpl/prog/en/modules/about.tt:362
+#: intranet-tmpl/prog/en/modules/about.tt:370
 #: intranet-tmpl/prog/en/modules/about.tt:378
 #: intranet-tmpl/prog/en/modules/about.tt:385
 #: intranet-tmpl/prog/en/modules/about.tt:392
 #: intranet-tmpl/prog/en/modules/about.tt:399
-#: intranet-tmpl/prog/en/modules/about.tt:407
-#: intranet-tmpl/prog/en/modules/about.tt:423
+#: intranet-tmpl/prog/en/modules/about.tt:406
+#: intranet-tmpl/prog/en/modules/about.tt:414
+#: intranet-tmpl/prog/en/modules/about.tt:430
 #, c-format
 msgid "Warning"
 msgstr "报警"
@@ -58398,7 +58409,7 @@ msgstr "警告：找不到条码"
 msgid "Warnings regarding the system configuration"
 msgstr "警告有关系统组态"
 
-#: intranet-tmpl/prog/en/modules/about.tt:590
+#: intranet-tmpl/prog/en/modules/about.tt:597
 #, fuzzy, c-format
 msgid "Washoe County Library System, USA"
 msgstr "Crawford County Federated图书馆系统"
@@ -58827,7 +58838,7 @@ msgstr "X "
 msgid "XML"
 msgstr "MARCXML"
 
-#: intranet-tmpl/prog/en/modules/about.tt:351
+#: intranet-tmpl/prog/en/modules/about.tt:358
 #, c-format
 msgid "XML configuration file"
 msgstr "XML组态档"
@@ -58837,12 +58848,12 @@ msgstr "XML组态档"
 msgid "XSLT File(s) for transforming results: "
 msgstr "XSLT 供转换结果使用："
 
-#: intranet-tmpl/prog/en/modules/about.tt:591
+#: intranet-tmpl/prog/en/modules/about.tt:598
 #, c-format
 msgid "Xercode, Spain"
 msgstr "Xercode，西班牙"
 
-#: intranet-tmpl/prog/en/modules/about.tt:615
+#: intranet-tmpl/prog/en/modules/about.tt:622
 #, c-format
 msgid "YUI"
 msgstr "YUI"
@@ -58939,10 +58950,10 @@ msgstr "允许"
 #: intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:392
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:363
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:365
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:913
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:915
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:988
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:990
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:914
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:916
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:989
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:991
 #, c-format
 msgid "Yes"
 msgstr "是的"
@@ -59052,13 +59063,13 @@ msgstr "是的，删除此标签"
 msgid "Yes, delete this item type"
 msgstr "是的，删除此标签"
 
-#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:231
+#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:236
 #: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:238
 #, c-format
 msgid "Yes, delete this subfield"
 msgstr "是的，删除此分栏"
 
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:113
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:120
 #, c-format
 msgid "Yes, delete this tag"
 msgstr "是的，删除此标签"
@@ -59133,7 +59144,7 @@ msgid ""
 msgstr ""
 "以数据库管理器身份登录。不推荐这么做，部份 Koha 功能在此身份下，不能运作。"
 
-#: intranet-tmpl/prog/en/modules/about.tt:386
+#: intranet-tmpl/prog/en/modules/about.tt:393
 #, c-format
 msgid ""
 "You are missing the &lt;log4perl_conf&gt; entry in your koha-conf.xml file. "
@@ -59152,7 +59163,7 @@ msgstr ""
 "log4perl.conf 文件指向您的 Koha 样例。"
 
 #. %1$s:  config_entry.effective_tmp_dir | html 
-#: intranet-tmpl/prog/en/modules/about.tt:408
+#: intranet-tmpl/prog/en/modules/about.tt:415
 #, fuzzy, c-format
 msgid ""
 "You are missing the &lt;tmp_path&gt; entry in your koha-conf.xml file. "
@@ -59161,7 +59172,7 @@ msgid ""
 msgstr ""
 "在 koha-conf.xml 文件内的款目。请新增它，指向 Koha 样例内上传数据夹的组态档。"
 
-#: intranet-tmpl/prog/en/modules/about.tt:393
+#: intranet-tmpl/prog/en/modules/about.tt:400
 #, fuzzy, c-format
 msgid ""
 "You are missing the &lt;upload_path&gt; entry in your koha-conf.xml file. "
@@ -59170,7 +59181,7 @@ msgid ""
 msgstr ""
 "在 koha-conf.xml 文件内的款目。请新增它，指向 Koha 样例内上传数据夹的组态档。"
 
-#: intranet-tmpl/prog/en/modules/about.tt:400
+#: intranet-tmpl/prog/en/modules/about.tt:407
 #, fuzzy, c-format
 msgid ""
 "You are missing the &lt;upload_path&gt; entry in your koha-conf.xml file. "
@@ -59237,7 +59248,7 @@ msgstr "您已脱机不能同步数据库"
 msgid "You are only viewing one item. "
 msgstr "祗能查看一个馆藏。"
 
-#: intranet-tmpl/prog/en/modules/about.tt:460
+#: intranet-tmpl/prog/en/modules/about.tt:467
 #, c-format
 msgid "You are running a development version of Koha"
 msgstr ""
@@ -59487,7 +59498,7 @@ msgid "You have not selected any patrons to add to a list!"
 msgstr "您未选择任何读者加入此清单！"
 
 #. %1$s:  config_entry.file | html 
-#: intranet-tmpl/prog/en/modules/about.tt:372
+#: intranet-tmpl/prog/en/modules/about.tt:379
 #, fuzzy, c-format
 msgid ""
 "You have set UseQueryParser but the 'queryparser_config' entry is missing in "
@@ -59670,7 +59681,7 @@ msgid "You must select one or more patrons to remove"
 msgstr "您必须选择一或多个读者供删除"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1092
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1093
 msgid "You must select one or more reports to delete"
 msgstr "您必须选择一或两个报表供删除"
 
@@ -59909,7 +59920,7 @@ msgid "Your patron lists"
 msgstr "您的读者清单"
 
 #. %1$s:  reportname | html 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:972
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:973
 #, fuzzy, c-format
 msgid "Your report \"%s\" has been saved"
 msgstr "已存储您的报表"
@@ -60326,7 +60337,7 @@ msgstr "分析。"
 msgid "and"
 msgstr "与"
 
-#: intranet-tmpl/prog/en/modules/about.tt:612
+#: intranet-tmpl/prog/en/modules/about.tt:619
 #, c-format
 msgid "and "
 msgstr "与 "
@@ -60351,7 +60362,7 @@ msgstr "并置标一个币别为使用中。"
 msgid "and search for the \"data problems\" section"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:673
+#: intranet-tmpl/prog/en/modules/about.tt:680
 #, c-format
 msgid "and the "
 msgstr "与 "
@@ -60385,7 +60396,7 @@ msgstr "任何图书馆"
 msgid "approved"
 msgstr "通过"
 
-#: intranet-tmpl/prog/en/modules/about.tt:612
+#: intranet-tmpl/prog/en/modules/about.tt:619
 #, c-format
 msgid "are licensed under the "
 msgstr "授权方式是 "
@@ -60594,78 +60605,78 @@ msgstr ""
 msgid "by %s: "
 msgstr "著者 %s："
 
-#: intranet-tmpl/prog/en/modules/about.tt:656
+#: intranet-tmpl/prog/en/modules/about.tt:663
 #, c-format
 msgid "by Allan Jardine is licensed under the BSD 3 and GPL v2 license."
 msgstr "著者 Allan Jardine 依照 BSD 3 与 GPL v2 许可证授权。"
 
-#: intranet-tmpl/prog/en/modules/about.tt:648
+#: intranet-tmpl/prog/en/modules/about.tt:655
 #, c-format
 msgid "by Binny V A is licensed under the BSD license."
 msgstr "Binny V A 采用 BSD 授权条款。"
 
-#: intranet-tmpl/prog/en/modules/about.tt:697
+#: intranet-tmpl/prog/en/modules/about.tt:704
 #, c-format
 msgid "by DIY Co is licensed under the "
 msgstr "著者 Dave Gandy 授权方式为 "
 
-#: intranet-tmpl/prog/en/modules/about.tt:673
+#: intranet-tmpl/prog/en/modules/about.tt:680
 #, c-format
 msgid "by Dave Gandy is licensed under the "
 msgstr "著者 Dave Gandy 授权方式为 "
 
-#: intranet-tmpl/prog/en/modules/about.tt:691
+#: intranet-tmpl/prog/en/modules/about.tt:698
 #, c-format
 msgid "by Denis Howlett is licensed under the "
 msgstr "著者 Dave Gandy 授权方式为 "
 
-#: intranet-tmpl/prog/en/modules/about.tt:679
+#: intranet-tmpl/prog/en/modules/about.tt:686
 #, c-format
 msgid "by Eli Grey is licensed under an "
 msgstr "著者 Eli Grey 授权方式是 "
 
-#: intranet-tmpl/prog/en/modules/about.tt:712
+#: intranet-tmpl/prog/en/modules/about.tt:719
 #, fuzzy, c-format
 msgid "by Google is a family of fonts licensed under the "
 msgstr "著者 Dave Gandy 授权方式为 "
 
-#: intranet-tmpl/prog/en/modules/about.tt:724
+#: intranet-tmpl/prog/en/modules/about.tt:731
 #, c-format
 msgid ""
 "by Klaus Hartl is a jQuery plugin for setting, reading, and deleting browser "
 "cookies, licensed under the "
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:718
+#: intranet-tmpl/prog/en/modules/about.tt:725
 #, fuzzy, c-format
 msgid ""
 "by Lars Jung is a JavaScript library that generates QR codes, licensed under "
 "the "
 msgstr "John Resig 加入的外挂以下列方式授权 "
 
-#: intranet-tmpl/prog/en/modules/about.tt:676
+#: intranet-tmpl/prog/en/modules/about.tt:683
 #, c-format
 msgid "by Marijn Haverbeke is licensed under an "
 msgstr "著者 Marijn Haverbeke 授权方式是 "
 
-#: intranet-tmpl/prog/en/modules/about.tt:670
+#: intranet-tmpl/prog/en/modules/about.tt:677
 #, c-format
 msgid "by Moxiecode (Ephox) is licensed under the "
 msgstr "著者 Moxiecode (Ephox) 授权方式是 "
 
-#: intranet-tmpl/prog/en/modules/about.tt:715
+#: intranet-tmpl/prog/en/modules/about.tt:722
 #, c-format
 msgid ""
 "by Some Web Media is a JavaScript library that makes any element on your "
 "page visible while you scroll, licensed under the "
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:682
+#: intranet-tmpl/prog/en/modules/about.tt:689
 #, c-format
 msgid "by The Dojo Foundation is licensed under an "
 msgstr "著者 The Dojo Foundation 授权方式是 "
 
-#: intranet-tmpl/prog/en/modules/about.tt:660
+#: intranet-tmpl/prog/en/modules/about.tt:667
 #, c-format
 msgid "by Zhixin Wen is licensed under the MIT license."
 msgstr "著者 Zhixin Wen 以 MIT 条款授权。"
@@ -60693,7 +60704,7 @@ msgstr "依图书馆"
 msgid "by months"
 msgstr "依月份"
 
-#: intranet-tmpl/prog/en/modules/about.tt:628
+#: intranet-tmpl/prog/en/modules/about.tt:635
 #, c-format
 msgid "by the Bridge Consortium of Carleton College and St. Olaf College."
 msgstr "制作者 Carleton College 与 St. Olaf College 的 Bridge Consortium。"
@@ -60789,7 +60800,7 @@ msgstr "已关闭"
 msgid "club %s "
 msgstr "背面 %s "
 
-#: intranet-tmpl/prog/en/modules/about.tt:614
+#: intranet-tmpl/prog/en/modules/about.tt:621
 #, c-format
 msgid "code and "
 msgstr "代码与 "
@@ -60840,7 +60851,7 @@ msgstr "包括 "
 msgid "contains"
 msgstr "包括"
 
-#: intranet-tmpl/prog/en/modules/about.tt:656
+#: intranet-tmpl/prog/en/modules/about.tt:663
 #, c-format
 msgid "controls for column visiblity in DataTables"
 msgstr "控制 DataTables 字段的可见度"
@@ -60981,7 +60992,7 @@ msgstr "显示这个馆员的详情。"
 msgid "do a catalog search"
 msgstr "目录寻找"
 
-#: intranet-tmpl/prog/en/modules/about.tt:520
+#: intranet-tmpl/prog/en/modules/about.tt:527
 #, fuzzy, c-format
 msgid "doXulting"
 msgstr "传阅"
@@ -61059,7 +61070,7 @@ msgstr "ending.ogg"
 msgid "euro-currency sign"
 msgstr "新增币别"
 
-#: intranet-tmpl/prog/en/modules/about.tt:737
+#: intranet-tmpl/prog/en/modules/about.tt:744
 #, c-format
 msgid ""
 "euskara (Basque) Fernando Berrizbeitia, the librarians of Eima Katalogoa, "
@@ -61109,7 +61120,7 @@ msgstr "不能更新"
 msgid "failed to run"
 msgstr "不能执行"
 
-#: intranet-tmpl/prog/en/modules/about.tt:450
+#: intranet-tmpl/prog/en/modules/about.tt:457
 #, c-format
 msgid "famfamfam.com"
 msgstr "famfamfam.com"
@@ -61315,11 +61326,6 @@ msgstr "若"
 msgid "if "
 msgstr "若"
 
-#: intranet-tmpl/prog/en/modules/admin/patron-attr-types.tt:125
-#, c-format
-msgid "if set.)"
-msgstr ""
-
 #: intranet-tmpl/prog/en/modules/admin/categories.tt:165
 #, c-format
 msgid ""
@@ -61399,24 +61405,24 @@ msgstr "无效的容许值类型"
 msgid "is"
 msgstr "是"
 
-#: intranet-tmpl/prog/en/modules/about.tt:727
+#: intranet-tmpl/prog/en/modules/about.tt:734
 #, c-format
 msgid ""
 "is a \"simple, lightweight JavaScript API for handling cookies,\" licensed "
 "under the "
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:706
+#: intranet-tmpl/prog/en/modules/about.tt:713
 #, c-format
 msgid "is a D3-based reusable chart library under the "
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:709
+#: intranet-tmpl/prog/en/modules/about.tt:716
 #, fuzzy, c-format
 msgid "is a JavaScript library by Bram Stein licensed under the "
 msgstr "John Resig 加入的外挂以下列方式授权 "
 
-#: intranet-tmpl/prog/en/modules/about.tt:703
+#: intranet-tmpl/prog/en/modules/about.tt:710
 #, fuzzy, c-format
 msgid ""
 "is a JavaScript library for manipulating documents based on data. It is "
@@ -61460,12 +61466,12 @@ msgstr "等同于"
 msgid "is exactly"
 msgstr "是同样的"
 
-#: intranet-tmpl/prog/en/modules/about.tt:685
+#: intranet-tmpl/prog/en/modules/about.tt:692
 #, fuzzy, c-format
 msgid "is licensed under a "
 msgstr "授权方式是 "
 
-#: intranet-tmpl/prog/en/modules/about.tt:633
+#: intranet-tmpl/prog/en/modules/about.tt:640
 #, c-format
 msgid "is licensed under the "
 msgstr "授权方式是 "
@@ -61487,7 +61493,7 @@ msgstr "现在禁止直到 %s "
 msgid "is on hold for "
 msgstr "预约中，为 "
 
-#: intranet-tmpl/prog/en/modules/about.tt:644
+#: intranet-tmpl/prog/en/modules/about.tt:651
 #, c-format
 msgid "is released under MIT license by Ludo van den Boom."
 msgstr "以 MIT 授权被 Ludo van den Boom释出。"
@@ -61496,6 +61502,11 @@ msgstr "以 MIT 授权被 Ludo van den Boom释出。"
 #, c-format
 msgid "is restricted. Please verify this patron should still be restricted. "
 msgstr "受封锁的。请确认此读者仍应被封锁。"
+
+#: intranet-tmpl/prog/en/modules/admin/patron-attr-types.tt:125
+#, c-format
+msgid "is set.)"
+msgstr ""
 
 #: intranet-tmpl/prog/en/includes/virtualshelves-toolbar.inc:28
 #: intranet-tmpl/prog/en/modules/basket/basket.tt:53
@@ -61588,43 +61599,43 @@ msgstr "馆藏类型未映射"
 msgid "itype"
 msgstr "Itype"
 
-#: intranet-tmpl/prog/en/modules/about.tt:612
+#: intranet-tmpl/prog/en/modules/about.tt:619
 #, c-format
 msgid "jQuery"
 msgstr "jQuery"
 
-#: intranet-tmpl/prog/en/modules/about.tt:632
+#: intranet-tmpl/prog/en/modules/about.tt:639
 #, fuzzy, c-format
 msgid "jQuery Bar Rating Plugin"
 msgstr "jQuery Star Rating Plugin"
 
-#: intranet-tmpl/prog/en/modules/about.tt:633
+#: intranet-tmpl/prog/en/modules/about.tt:640
 #, fuzzy, c-format
 msgid "jQuery Bar Rating Plugin v1.22 by "
 msgstr "jQuery Star Rating Plugin v3.14 by "
 
-#: intranet-tmpl/prog/en/modules/about.tt:655
+#: intranet-tmpl/prog/en/modules/about.tt:662
 #, c-format
 msgid "jQuery Colvis plugin"
 msgstr "jQuery Colvis 外挂"
 
-#: intranet-tmpl/prog/en/modules/about.tt:666
-#: intranet-tmpl/prog/en/modules/about.tt:667
+#: intranet-tmpl/prog/en/modules/about.tt:673
+#: intranet-tmpl/prog/en/modules/about.tt:674
 #, c-format
 msgid "jQuery Validation Plugin"
 msgstr "jQuery Validation 外挂"
 
-#: intranet-tmpl/prog/en/modules/about.tt:611
+#: intranet-tmpl/prog/en/modules/about.tt:618
 #, c-format
 msgid "jQuery and jQueryUI"
 msgstr "jQuery 与 jQueryUI"
 
-#: intranet-tmpl/prog/en/modules/about.tt:637
+#: intranet-tmpl/prog/en/modules/about.tt:644
 #, c-format
 msgid "jQuery insertAtCaret Plugin"
 msgstr "jQuery insertAtCaret 外挂"
 
-#: intranet-tmpl/prog/en/modules/about.tt:638
+#: intranet-tmpl/prog/en/modules/about.tt:645
 #, c-format
 msgid ""
 "jQuery insertAtCaret Plugin v1.0 by the phpMyAdmin devel team is licensed "
@@ -61632,49 +61643,49 @@ msgid ""
 msgstr ""
 "jQuery insertAtCaret Plugin v1.0 由 phpMyAdmin 发展团队按照以下方式授权 "
 
-#: intranet-tmpl/prog/en/modules/about.tt:660
+#: intranet-tmpl/prog/en/modules/about.tt:667
 #, c-format
 msgid "jQuery multiple select plugin"
 msgstr "jQuery 多重选择外挂"
 
-#: intranet-tmpl/prog/en/modules/about.tt:642
+#: intranet-tmpl/prog/en/modules/about.tt:649
 #, c-format
 msgid "jQuery treetable Plugin"
 msgstr "jQuery 树表外挂"
 
-#: intranet-tmpl/prog/en/modules/about.tt:644
+#: intranet-tmpl/prog/en/modules/about.tt:651
 #, c-format
 msgid "jQuery treetable Plugin 3.1.0"
 msgstr "jQuery 树表外挂 3.1.0"
 
-#: intranet-tmpl/prog/en/modules/about.tt:612
+#: intranet-tmpl/prog/en/modules/about.tt:619
 #, c-format
 msgid "jQueryUI"
 msgstr "jQueryUI"
 
-#: intranet-tmpl/prog/en/modules/about.tt:723
-#: intranet-tmpl/prog/en/modules/about.tt:724
+#: intranet-tmpl/prog/en/modules/about.tt:730
+#: intranet-tmpl/prog/en/modules/about.tt:731
 #, fuzzy, c-format
 msgid "jquery.cookie"
 msgstr "jquery.dataTables.grouping.js"
 
-#: intranet-tmpl/prog/en/modules/about.tt:651
-#: intranet-tmpl/prog/en/modules/about.tt:652
+#: intranet-tmpl/prog/en/modules/about.tt:658
+#: intranet-tmpl/prog/en/modules/about.tt:659
 #, c-format
 msgid "jquery.dataTables.grouping.js"
 msgstr "jquery.dataTables.grouping.js"
 
-#: intranet-tmpl/prog/en/modules/about.tt:696
+#: intranet-tmpl/prog/en/modules/about.tt:703
 #, fuzzy, c-format
 msgid "jquery.emojiarea.js"
 msgstr "jquery.dataTables.grouping.js"
 
-#: intranet-tmpl/prog/en/modules/about.tt:659
+#: intranet-tmpl/prog/en/modules/about.tt:666
 #, c-format
 msgid "jquery.multiple.select.js"
 msgstr "jquery.multiple.select.js"
 
-#: intranet-tmpl/prog/en/modules/about.tt:690
+#: intranet-tmpl/prog/en/modules/about.tt:697
 #, fuzzy, c-format
 msgid "jquery.tablednd.js"
 msgstr "jquery.dataTables.grouping.js"
@@ -61684,8 +61695,8 @@ msgstr "jquery.dataTables.grouping.js"
 msgid "kip sign"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:717
-#: intranet-tmpl/prog/en/modules/about.tt:718
+#: intranet-tmpl/prog/en/modules/about.tt:724
+#: intranet-tmpl/prog/en/modules/about.tt:725
 #, c-format
 msgid "kjua"
 msgstr ""
@@ -61734,7 +61745,7 @@ msgstr "最后在：%s"
 msgid "let blank for the entire field"
 msgstr "让整个字段留空"
 
-#: intranet-tmpl/prog/en/modules/about.tt:688
+#: intranet-tmpl/prog/en/modules/about.tt:695
 #, fuzzy, c-format
 msgid "library is licensed under "
 msgstr "授权方式是 "
@@ -61744,7 +61755,7 @@ msgstr "授权方式是 "
 msgid "library not defined"
 msgstr "图书馆未定义"
 
-#: intranet-tmpl/prog/en/modules/about.tt:614
+#: intranet-tmpl/prog/en/modules/about.tt:621
 #, fuzzy, c-format
 msgid "licensed under the "
 msgstr "授权方式是 "
@@ -62049,12 +62060,12 @@ msgstr "或 MARC 分栏。"
 msgid "or any available"
 msgstr "或任何可取得"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1754
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1755
 #, c-format
 msgid "or create"
 msgstr "或新增"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1727
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1728
 #, fuzzy, c-format
 msgid "or create:"
 msgstr "或新增"
@@ -62128,12 +62139,12 @@ msgstr "催缺订单"
 msgid "please note your reason here..."
 msgstr "请注意您的理由在这里..."
 
-#: intranet-tmpl/prog/en/modules/about.tt:664
+#: intranet-tmpl/prog/en/modules/about.tt:671
 #, c-format
 msgid "plugin by John Resig is licensed under the "
 msgstr "John Resig 加入的外挂以下列方式授权 "
 
-#: intranet-tmpl/prog/en/modules/about.tt:652
+#: intranet-tmpl/prog/en/modules/about.tt:659
 #, c-format
 msgid "plugin by Jovan Popovic is licensed under the BSD and GPL v2 license."
 msgstr "Jovan Popovic 的外挂程序采取 BSD 与 GPL v2 许可证。"
@@ -62405,7 +62416,7 @@ msgstr "%s 待提取 "
 msgid "since last transfer"
 msgstr "自从上次转移"
 
-#: intranet-tmpl/prog/en/modules/about.tt:566
+#: intranet-tmpl/prog/en/modules/about.tt:573
 #, c-format
 msgid "software.coop, United Kingdom"
 msgstr "software.coop，英国"
@@ -62495,7 +62506,7 @@ msgstr "状态"
 msgid "styles"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:280
+#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:285
 #: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:285
 #, c-format
 msgid "subfield ignored"
@@ -62539,7 +62550,7 @@ msgstr "推荐"
 msgid "suggestion #%s"
 msgstr "推荐 #%s"
 
-#: intranet-tmpl/prog/en/modules/about.tt:746
+#: intranet-tmpl/prog/en/modules/about.tt:753
 #, c-format
 msgid "suomi, suomen kieli (Finnish) Pasi Korkalo"
 msgstr "suomi, suomen kieli (Finnish) Pasi Korkalo"
@@ -62577,12 +62588,12 @@ msgstr ""
 msgid "text/html; charset=utf-8"
 msgstr "text/html; charset=utf-8"
 
-#: intranet-tmpl/prog/en/modules/about.tt:697
+#: intranet-tmpl/prog/en/modules/about.tt:704
 #, c-format
 msgid "the Apache License, Version 2.0"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:688
+#: intranet-tmpl/prog/en/modules/about.tt:695
 #, c-format
 msgid ""
 "the Apache License, Version 2.0 (the \"Apache License\") or the GNU General "
@@ -62874,7 +62885,7 @@ msgstr "容许值 "
 msgid "won sign"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:667
+#: intranet-tmpl/prog/en/modules/about.tt:674
 #, c-format
 msgid "written and maintained by Jörn Zaefferer is licensed under the "
 msgstr "由 Jörn Zaefferer 撰写与维护的授权方式为 "
@@ -63019,7 +63030,7 @@ msgstr "%s %s 至 %s %s "
 msgid "×"
 msgstr "×"
 
-#: intranet-tmpl/prog/en/modules/about.tt:733
+#: intranet-tmpl/prog/en/modules/about.tt:740
 #, c-format
 msgid ""
 "العربية (Arabic) Version 3.2 to 3.4, 3.16 & 3.18 by KnowledgeWare "

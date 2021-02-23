@@ -7421,6 +7421,10 @@ msgid "opac.pref#PatronSelfRegistrationBorrowerUnwantedField# The following <a h
 msgstr "以下 <a href='http://schema.koha-community.org/__VERSION__/tables/borrowers.html' target='blank'>資料庫欄位</a> 將不會顯示在讀者自助登錄螢幕："
 
 # OPAC > Self registration and modification
+msgid "opac.pref#PatronSelfRegistrationDefaultCategory# <br><strong>WARNING: Do not use a regular patron category for self registration.</strong> If the <code>misc/cronjobs/cleanup_database.pl</code> cronjob is setup to delete unverified and unfinished OPAC self registrations, it will permanently and unrecoverably delete all patrons that have registered more than PatronSelfRegistrationExpireTemporaryAccountsDelay days ago."
+msgstr ""
+
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationDefaultCategory# Use the patron category code"
 msgstr "使用讀者類型代碼"
 
@@ -8669,8 +8673,8 @@ msgid "searching.pref#QueryFuzzy# Try"
 msgstr "試著"
 
 # Searching > Features
-msgid "searching.pref#QueryFuzzy# to match similarly spelled words in a search (for example, a search for <cite>flang</cite> would also match <cite>flange</cite> and <cite>fang</cite>; REQUIRES ZEBRA)."
-msgstr "比對相似拚法的字 (如：檢索 <cite>flang</cite> 同時比對 <cite>flange</cite> 及 <cite>fang</cite>; 須先啟用 ZEBRA)。"
+msgid "searching.pref#QueryFuzzy# to match similarly spelled words in a search (for example, a search for <cite>flang</cite> would also match <cite>flange</cite> and <cite>fang</cite>; Currently only affects Zebra searches. Any Elasticsearch term can be made fuzzy by adding a ~ directly after the term.)."
+msgstr ""
 
 # Searching > Features
 msgid "searching.pref#QueryRegexEscapeOptions# Don't escape"

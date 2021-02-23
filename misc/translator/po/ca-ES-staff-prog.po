@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 18.05\n"
-"POT-Creation-Date: 2021-01-18 08:28-0300\n"
+"POT-Creation-Date: 2021-02-18 08:53-0300\n"
 "PO-Revision-Date: 2020-11-03 22:05+0000\n"
 "Last-Translator: Katrin Fischer <katrin.fischer@bsz-bw.de>\n"
 "Language-Team: Koha Translation Team <koha-translate@lists.koha-community."
@@ -3259,7 +3259,7 @@ msgstr "%s %sNo hi ha camps addicionals per aquesta taula.%s %s %s %s "
 
 #. %1$s:  FOREACH error IN errors 
 #. %2$s:  IF ( error.sqlerr ) 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1023
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1024
 #, c-format
 msgid "%s %sThis report contains the SQL keyword "
 msgstr "%s %sAquest informe conté la instrucció SQL "
@@ -3685,7 +3685,7 @@ msgstr "%s (id=%s) Quantitat=%s%s (%s pendent s’ha transferit)%s"
 
 #. For the first occurrence,
 #. %1$s:  END 
-#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:142
+#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:147
 #: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:136
 #, c-format
 msgid ""
@@ -3884,6 +3884,13 @@ msgstr "%s Afegir nou registres bibliogràfics en aquest plantilla: "
 msgid "%s Add new upload or search %s Results %s "
 msgstr "%s Afegir nova carregar o cerca %s Resultats %s "
 
+#. %1$s:  IF heading_add_tag_p 
+#. %2$s:  ELSE 
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:53
+#, fuzzy, c-format
+msgid "%s Add tag %s Modify tag "
+msgstr "%s%s Editar etiqueta"
+
 #. %1$s:  ELSE 
 #. %2$s:  END 
 #. %3$s:  ELSIF op == 'list' 
@@ -4010,6 +4017,16 @@ msgstr ""
 #, c-format
 msgid "%s Article requests"
 msgstr "%s Sol·licitud d’article"
+
+#. %1$s:  FOR w IN warnHiddenBiblionumbers 
+#. %2$s:  w.frameworkcode | html 
+#. %3$s:  w.interface | html 
+#: intranet-tmpl/prog/en/modules/about.tt:347
+#, c-format
+msgid ""
+"%s Biblio framework \"%s\" has the biblionumber field hidden at the "
+"interface %s"
+msgstr ""
 
 #. %1$s:  IF (del_biblio) 
 #. %2$s:  ELSE 
@@ -5372,7 +5389,7 @@ msgstr "%s Cognom: "
 #. %29$s:  loo.link | html 
 #. %30$s:  END 
 #. %31$s:  END 
-#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:280
+#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:285
 #, c-format
 msgid ""
 "%s Tab:%s, %s | Koha field: %s, %s %sRepeatable, %sNot repeatable,%s "
@@ -6693,18 +6710,6 @@ msgstr "%s%s%s(sense correu electrònic principal en arxiu)%s"
 msgid "%s%s%s(none)%s"
 msgstr "%s %s %s (cap) %s"
 
-#. %1$s:  searchfield | html 
-#. %2$s:  END 
-#. %3$s:  IF ( heading_add_tag_p ) 
-#. %4$s:  END 
-#. %5$s:  ELSE 
-#. %6$s:  action | html 
-#. %7$s:  END 
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:52
-#, c-format
-msgid "%s%s%sAdd tag%s%s%s%s"
-msgstr "%s%s%sAfegir etiqueta%s%s%s%s"
-
 #. %1$s:  IF ( frameworkcode ) 
 #. %2$s:  frameworkcode | html 
 #. %3$s:  ELSE 
@@ -6842,13 +6847,6 @@ msgstr "%s%s, %s%s ("
 #, c-format
 msgid "%s%s; Published by %s %s%s in "
 msgstr "%s %s; Publicat per %s %s %s en "
-
-#. %1$s:  IF ( use_heading_flags_p ) 
-#. %2$s:  IF ( heading_modify_tag_p ) 
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:52
-#, c-format
-msgid "%s%sModify tag "
-msgstr "%s%s Editar etiqueta"
 
 #. %1$s:  IF ( suggestions_loo.copyrightdate ) 
 #. %2$s:  suggestions_loo.copyrightdate | html 
@@ -7794,8 +7792,8 @@ msgstr "%sSí%s&nbsp;%s"
 #: intranet-tmpl/prog/en/modules/admin/classsources.tt:303
 #: intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:207
 #: intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:208
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:200
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:201
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:207
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:208
 #, c-format
 msgid "%sYes%sNo%s"
 msgstr "%sSí%sNo%s"
@@ -7978,7 +7976,7 @@ msgstr "%sx%s = %s "
 msgid "%s✓%s"
 msgstr "%s✓%s"
 
-#: intranet-tmpl/prog/en/modules/about.tt:736
+#: intranet-tmpl/prog/en/modules/about.tt:743
 #, c-format
 msgid ""
 "&#1041;&#1098;&#1083;&#1075;&#1072;&#1088;&#1089;&#1082;&#1080; (Bulgarian) "
@@ -7987,7 +7985,7 @@ msgstr ""
 "&#1041; &#1098; &#1083; &#1075; &#1072; &#1088; &#1089; &#1082; &#1080; "
 "(Búlgar) Radoslav Kolev"
 
-#: intranet-tmpl/prog/en/modules/about.tt:770
+#: intranet-tmpl/prog/en/modules/about.tt:777
 #, c-format
 msgid ""
 "&#1056;&#1091;&#1089;&#1089;&#1082;&#1080;&#1081; (Russian) Victor Titarchuk "
@@ -7996,7 +7994,7 @@ msgstr ""
 "&#1056; &#1091; &#1089; &#1089; &#1082; &#1080; &#1081; (Rus) Victor "
 "Titarchuk i Serhij Dubyk"
 
-#: intranet-tmpl/prog/en/modules/about.tt:777
+#: intranet-tmpl/prog/en/modules/about.tt:784
 #, c-format
 msgid ""
 "&#1059;&#1082;&#1088;&#1072;&#1111;&#1085;&#1089;&#1100;&#1082;&#1072; "
@@ -8005,64 +8003,64 @@ msgstr ""
 "&#1059; &#1082; &#1088; &#1072; &#1111; &#1085; &#1089; &#1100; &#1082; "
 "&#1072; (Ucraïnès) Victor Titarchuk i Serhij Dubyk"
 
-#: intranet-tmpl/prog/en/modules/about.tt:751
+#: intranet-tmpl/prog/en/modules/about.tt:758
 #, c-format
 msgid "&#1506;&#1489;&#1512;&#1497;&#1514; (Hebrew)"
 msgstr "&#1506;&#1489;&#1512;&#1497;&#1514; (Hebreu)"
 
-#: intranet-tmpl/prog/en/modules/about.tt:776
+#: intranet-tmpl/prog/en/modules/about.tt:783
 #, c-format
 msgid "&#1575;&#1585;&#1583;&#1608;(Urdu) Ata ur Rehman"
 msgstr "&#1575;&#1585;&#1583;&#1608;(Urdu) Ata ur Rehman"
 
-#: intranet-tmpl/prog/en/modules/about.tt:765
+#: intranet-tmpl/prog/en/modules/about.tt:772
 #, c-format
 msgid "&#1601;&#1575;&#1585;&#1587;&#1609; (Persian)"
 msgstr "&#1601; &#1575; &#1585; &#1587; &#1609; (Persa)"
 
-#: intranet-tmpl/prog/en/modules/about.tt:739
+#: intranet-tmpl/prog/en/modules/about.tt:746
 #, c-format
 msgid "&#20013;&#25991; (Chinese)"
 msgstr "&#20013; &#25991; (Xinès)"
 
-#: intranet-tmpl/prog/en/modules/about.tt:752
+#: intranet-tmpl/prog/en/modules/about.tt:759
 #, c-format
 msgid "&#2361;&#2367;&#2344;&#2381;&#2342;&#2368; (Hindi)"
 msgstr "&#2361; &#2367; &#2344; &#2381; &#2342; &#2368; (Hindi)"
 
-#: intranet-tmpl/prog/en/modules/about.tt:738
+#: intranet-tmpl/prog/en/modules/about.tt:745
 #, c-format
 msgid ""
 "&#2476;&#2494;&#2434;&#2482;&#2494; (Bengali) Parthasarathi Mukhopadhyay"
 msgstr ""
 "&#2476; &#2494; &#2434; &#2482; &#2494; (Bengalí) Parthasarathi Mukhopadhyay"
 
-#: intranet-tmpl/prog/en/modules/about.tt:758
+#: intranet-tmpl/prog/en/modules/about.tt:765
 #, c-format
 msgid "&#26085;&#26412;&#35486; (Japanese)"
 msgstr "&#26085;&#26412;&#35486; (Japonès)"
 
-#: intranet-tmpl/prog/en/modules/about.tt:766
+#: intranet-tmpl/prog/en/modules/about.tt:773
 #, c-format
 msgid "&#2835;&#2908;&#2879;&#2822; (&#x014D;&#7771;iy&#257;)"
 msgstr "&#2835; &#2908; &#2879; &#2822; (ō &#7771; iyā)"
 
-#: intranet-tmpl/prog/en/modules/about.tt:760
+#: intranet-tmpl/prog/en/modules/about.tt:767
 #, c-format
 msgid "&#3221;&#3240;&#3277;&#3240;&#3233; (kanna&#7693;a)"
 msgstr "&#3221; &#3240; &#3277; &#3240; &#3233; (kanna &#7693; un)"
 
-#: intranet-tmpl/prog/en/modules/about.tt:764
+#: intranet-tmpl/prog/en/modules/about.tt:771
 #, c-format
 msgid "&#3374;&#3378;&#3375;&#3390;&#3379;&#3330; (Malayalam)"
 msgstr "&#3374; &#3378; &#3375; &#3390; &#3379; &#3330; (Malayalam)"
 
-#: intranet-tmpl/prog/en/modules/about.tt:774
+#: intranet-tmpl/prog/en/modules/about.tt:781
 #, c-format
 msgid "&#3616;&#3634;&#3625;&#3634;&#3652;&#3607;&#3618; (Thai)"
 msgstr "&#3616; &#3634; &#3625; &#3634; &#3652; &#3607; &#3618; (Tailàndia)"
 
-#: intranet-tmpl/prog/en/modules/about.tt:734
+#: intranet-tmpl/prog/en/modules/about.tt:741
 #, c-format
 msgid ""
 "&#4768;&#4635;&#4653;&#4763; (Amharic) Getway II Ethiopia Co. (Yohannes "
@@ -8071,12 +8069,12 @@ msgstr ""
 "&#4768; &#4635; &#4653; &#4763; (Amhàric) Getway II Etiòpia co (Yohannes "
 "Mulugeta (equip líder), Tegene Assefa, Abiyot Bayou)"
 
-#: intranet-tmpl/prog/en/modules/about.tt:759
+#: intranet-tmpl/prog/en/modules/about.tt:766
 #, c-format
 msgid "&#54620;&#44397;&#50612; (Korean)"
 msgstr "&#54620; &#44397; &#50612; (Coreà)"
 
-#: intranet-tmpl/prog/en/modules/about.tt:750
+#: intranet-tmpl/prog/en/modules/about.tt:757
 #, c-format
 msgid ""
 "&#949;&#955;&#955;&#951;&#957;&#953;&#954;&#940; (Greek, Modern [1453- ]) "
@@ -8087,7 +8085,7 @@ msgstr ""
 "Koha Hellenic Users’ Group (Georgia Katsarou, Dimitris Antonakis, Eugenios "
 "Papadopoulos), Theodoros Theodoropoulos, Panoraia Gaitanou and Kiriaki Roditi"
 
-#: intranet-tmpl/prog/en/modules/about.tt:741
+#: intranet-tmpl/prog/en/modules/about.tt:748
 #, fuzzy, c-format
 msgid "&#x010D;e&#353;tina (Czech)"
 msgstr "Čeština (txec)"
@@ -8469,6 +8467,16 @@ msgid ""
 msgstr ""
 "&rsaquo; %s%sEditar divisa ‘%s’%sNova divisa%s%s %sConfirmar supressió "
 "divisa %s %sDivises %s "
+
+#. %1$s:  IF heading_add_tag_p 
+#. %2$s:  ELSE 
+#. %3$s:  END 
+#. %4$s:  searchfield | html 
+#. %5$s:  ELSIF ( else ) 
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:23
+#, fuzzy, c-format
+msgid "&rsaquo; %sAdd tag%sModify tag%s %s %s &rsaquo; "
+msgstr "&rsaquo; Afegir un nou compte %s %s &rsaquo;"
 
 #. %1$s:  IF ( patrons_in_category > 0 ) 
 #. %2$s:  categorycode | html 
@@ -10115,7 +10123,7 @@ msgstr ""
 "(Inclòs, per defecte és %s dies abans fins avui. Establir altres intervals "
 "segons calgui.)"
 
-#: intranet-tmpl/prog/en/modules/about.tt:756
+#: intranet-tmpl/prog/en/modules/about.tt:763
 #, c-format
 msgid "(Indonesian)"
 msgstr "(Indonèsia)"
@@ -10125,8 +10133,8 @@ msgstr "(Indonèsia)"
 msgid "(Lost)"
 msgstr "Perdut"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1715
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1737
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1716
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1738
 #, c-format
 msgid "(None)"
 msgstr "(Cap)"
@@ -10260,7 +10268,7 @@ msgstr "(actual)"
 msgid "(default if none is defined)"
 msgstr "(per defecte si no es defineix)"
 
-#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:146
+#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:151
 #, c-format
 msgid "(e.g., Title or Local-Number) "
 msgstr "(p. ex., Títol o número local) "
@@ -10292,7 +10300,7 @@ msgstr "(filtrat des de  _MAX_ entrades totals)"
 msgid "(if empty, subscription is still active) "
 msgstr "(si és buit, subscripció és encara activa)"
 
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:93
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:100
 #, c-format
 msgid ""
 "(if you select a value here, the indicators will be limited to the "
@@ -10434,7 +10442,7 @@ msgstr ") renovat pel %s %s ( "
 msgid ") you selected does not exist. "
 msgstr ") Que ha seleccionat no existeix. "
 
-#: intranet-tmpl/prog/en/modules/about.tt:505
+#: intranet-tmpl/prog/en/modules/about.tt:512
 #, c-format
 msgid "), France"
 msgstr "), França"
@@ -10453,27 +10461,27 @@ msgstr "). %s %s exemplar marcat esperannt a %s per %s ("
 msgid "** Vendor's listings already include tax."
 msgstr "* * Llistes de proveïdors ja inclouen impostos."
 
-#: intranet-tmpl/prog/en/modules/about.tt:451
+#: intranet-tmpl/prog/en/modules/about.tt:458
 #, c-format
 msgid ", Auckland, New Zealand (OPAC 'star-ratings' sponsorship)"
 msgstr ", Auckland, Nova Zelanda (patrocini OPAC 'estrella-índexs')"
 
-#: intranet-tmpl/prog/en/modules/about.tt:448
+#: intranet-tmpl/prog/en/modules/about.tt:455
 #, c-format
 msgid ", Cyprus"
 msgstr ", Xipre"
 
-#: intranet-tmpl/prog/en/modules/about.tt:445
+#: intranet-tmpl/prog/en/modules/about.tt:452
 #, c-format
 msgid ", France (Koha 3.0 enhancements to patrons and holds modules)"
 msgstr ", França (Koha 3.0 millores a usuaris i mòdul de reserves)"
 
-#: intranet-tmpl/prog/en/modules/about.tt:443
+#: intranet-tmpl/prog/en/modules/about.tt:450
 #, c-format
 msgid ", France (Suggestions, Stats wizards and improved LDAP sponsorship)"
 msgstr ", França (suggeriments, estadístiques mags i patrocini LDAP millorada)"
 
-#: intranet-tmpl/prog/en/modules/about.tt:444
+#: intranet-tmpl/prog/en/modules/about.tt:451
 #, c-format
 msgid ""
 ", France (biblio frameworks, MARC authorities, OPAC basket, Serials "
@@ -10482,29 +10490,29 @@ msgstr ""
 ", França (biblio marcs, les autoritats MARC, cistella OPAC, patrocini "
 "Serials)"
 
-#: intranet-tmpl/prog/en/modules/about.tt:441
+#: intranet-tmpl/prog/en/modules/about.tt:448
 #, c-format
 msgid ", New Zealand, and Rosalie Blake, Head of Libraries, (Koha 1.0)"
 msgstr ""
 ", Nova Zelanda i Rosalie Blake, responsable de biblioteques, (Koha 1.0)"
 
-#: intranet-tmpl/prog/en/modules/about.tt:447
+#: intranet-tmpl/prog/en/modules/about.tt:454
 #, c-format
 msgid ", OH, USA (Koha 3.0 beta testing)"
 msgstr ", OH, Estats Units (Koha 3.0 beta testing)"
 
-#: intranet-tmpl/prog/en/modules/about.tt:442
+#: intranet-tmpl/prog/en/modules/about.tt:449
 #, c-format
 msgid ", Ohio, USA (MARC sponsorship, documentation, template maintenance)"
 msgstr ""
 ", Ohio, EUA (patrocini MARC, documentació, manteniment de la plantilla)"
 
-#: intranet-tmpl/prog/en/modules/about.tt:446
+#: intranet-tmpl/prog/en/modules/about.tt:453
 #, c-format
 msgid ", PA, USA (Koha 3.0 Zebra Integration sponsorship)"
 msgstr ", PA, Estats Units (patrocini Koha 3.0 Zebra integració)"
 
-#: intranet-tmpl/prog/en/modules/about.tt:747
+#: intranet-tmpl/prog/en/modules/about.tt:754
 #, c-format
 msgid ", Pascale Nalon (ENSMP), and many more "
 msgstr ", Pascale Nalon (ENSMP) i molts més"
@@ -11349,7 +11357,7 @@ msgstr "Acció si no es troba coincidència: "
 #: intranet-tmpl/prog/en/modules/plugins/plugins-home.tt:74
 #: intranet-tmpl/prog/en/modules/admin/cash_registers.tt:136
 #: intranet-tmpl/prog/en/modules/admin/categories.tt:426
-#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:266
+#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:271
 #: intranet-tmpl/prog/en/modules/admin/currency.tt:186
 #: intranet-tmpl/prog/en/modules/admin/systempreferences.tt:251
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:82
@@ -11401,7 +11409,7 @@ msgstr "Accions"
 #: intranet-tmpl/prog/en/modules/admin/oai_sets.tt:92
 #: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:138
 #: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:206
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:207
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:214
 #: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:174
 #: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:8
 #, c-format
@@ -12311,7 +12319,7 @@ msgstr "Paràmetres addicionals"
 msgid "Additional subfields (XML)"
 msgstr "Camps addicionals (XML)"
 
-#: intranet-tmpl/prog/en/modules/about.tt:594
+#: intranet-tmpl/prog/en/modules/about.tt:601
 #, c-format
 msgid "Additional thanks to..."
 msgstr "Agraïments addicionals per …"
@@ -12648,7 +12656,7 @@ msgstr "Restricció esdat %s. %s Prestar igualment? %s "
 msgid "Ages allowed are %s-%s. "
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:451
+#: intranet-tmpl/prog/en/modules/about.tt:458
 #, c-format
 msgid "Albany Senior High School"
 msgstr "Albany batxillerat"
@@ -12696,7 +12704,7 @@ msgstr "Ressalta"
 msgid "Alignment"
 msgstr "Alineació del text: "
 
-#: intranet-tmpl/prog/en/modules/about.tt:494
+#: intranet-tmpl/prog/en/modules/about.tt:501
 #, c-format
 msgid "Alingsås Public Library, Sweden"
 msgstr "Biblioteca pública Alingsås, Suècia"
@@ -12747,7 +12755,7 @@ msgstr "Biblioteca pública Alingsås, Suècia"
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:165
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:174
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:704
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1092
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1093
 #, c-format
 msgid "All"
 msgstr "Tot"
@@ -12913,7 +12921,7 @@ msgstr "Totes les transaccions"
 msgid "All vendors"
 msgstr "Tots els proveïdors"
 
-#: intranet-tmpl/prog/en/modules/about.tt:493
+#: intranet-tmpl/prog/en/modules/about.tt:500
 #, c-format
 msgid "Allen Ginsberg Library, USA"
 msgstr "Biblioteca d'Allen Ginsberg, Estats Units"
@@ -13180,7 +13188,7 @@ msgstr "Telèfon alternatiu: "
 msgid "Always show checkouts immediately"
 msgstr "Mostra sempre els préstecs immediatament"
 
-#: intranet-tmpl/prog/en/modules/about.tt:495
+#: intranet-tmpl/prog/en/modules/about.tt:502
 #, c-format
 msgid "American Numismatic Society, USA"
 msgstr "Societat numismàtica americà, USA"
@@ -13426,7 +13434,7 @@ msgstr "Anonimitzar la història de lectura"
 msgid "Another pattern with this name already exists."
 msgstr "Ja existeix una plantilla amb aquest nom."
 
-#: intranet-tmpl/prog/en/modules/about.tt:633
+#: intranet-tmpl/prog/en/modules/about.tt:640
 #, c-format
 msgid "Antenna.io"
 msgstr ""
@@ -13600,7 +13608,7 @@ msgstr "Aplicar normes de coincidència diferents"
 
 #. INPUT type=submit
 #: intranet-tmpl/prog/en/modules/circ/overdue.tt:214
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1066
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1067
 msgid "Apply filter"
 msgstr "Aplica el filtre"
 
@@ -13650,7 +13658,7 @@ msgstr "Abr"
 msgid "April"
 msgstr "Abril"
 
-#: intranet-tmpl/prog/en/modules/about.tt:496
+#: intranet-tmpl/prog/en/modules/about.tt:503
 #, c-format
 msgid "Arcadia Public Library, USA"
 msgstr "Biblioteca pública d'Arcadia, Estats Units"
@@ -13856,7 +13864,7 @@ msgid "Are you sure you want to delete the selected news?"
 msgstr "Esteu segur que voleu suprimir les notícies seleccionades?"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1092
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1093
 msgid "Are you sure you want to delete the selected reports?"
 msgstr "Esteu segur que voleu suprimir els informes seleccionats?"
 
@@ -14038,7 +14046,7 @@ msgid "Are you sure you want to delete this record?"
 msgstr "Esteu segur que voleu suprimir aquest registre?"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1092
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1093
 msgid "Are you sure you want to delete this report? This cannot be undone."
 msgstr "Esteu segur que voleu suprimir aquest informe? Això no es pot desfer."
 
@@ -14054,7 +14062,7 @@ msgid "Are you sure you want to delete this rule? This cannot be undone."
 msgstr "Esteu segur que voleu suprimir aquesta norma? Això no es pot desfer."
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1092
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1093
 msgid "Are you sure you want to delete this saved report?"
 msgstr "Esteu segur que voleu suprimir aquest informe?"
 
@@ -14295,7 +14303,7 @@ msgstr "Àrea"
 msgid "Area:"
 msgstr "Àrea"
 
-#: intranet-tmpl/prog/en/modules/about.tt:735
+#: intranet-tmpl/prog/en/modules/about.tt:742
 #, c-format
 msgid "Armenian Tigran Zargaryan"
 msgstr "Armeni Tigran Zargaryan"
@@ -14383,12 +14391,12 @@ msgstr "Cal seleccionar com a mínim dos registres per combinar-los."
 msgid "At library: %s"
 msgstr "A la biblioteca: %s"
 
-#: intranet-tmpl/prog/en/modules/about.tt:442
+#: intranet-tmpl/prog/en/modules/about.tt:449
 #, c-format
 msgid "Athens County Public Libraries"
 msgstr "Atenes County biblioteques públiques"
 
-#: intranet-tmpl/prog/en/modules/about.tt:497
+#: intranet-tmpl/prog/en/modules/about.tt:504
 #, c-format
 msgid "Athens County Public Libraries, USA"
 msgstr "Biblioteques públiques de Comtat d'Atenes, Estats Units"
@@ -14462,7 +14470,7 @@ msgstr "Aut"
 msgid "Auth field copied"
 msgstr "Aut camp copiat"
 
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:179
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:186
 #, c-format
 msgid "Auth value"
 msgstr "Valor aut"
@@ -14601,7 +14609,7 @@ msgstr "Autor(s): %s%s%s %s %s; %s %s %s %s%s %s %s;%s %s %s "
 #: intranet-tmpl/prog/en/modules/circ/article-requests.tt:269
 #: intranet-tmpl/prog/en/modules/circ/request-article.tt:100
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:153
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1061
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1062
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:72
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:263
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:680
@@ -14809,7 +14817,7 @@ msgstr ""
 "autoritzats. No obstant això, una llista d'autoritzats valor no l'aplica "
 "limitacions durant la importació d’usuaris de lot."
 
-#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:171
+#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:176
 #: intranet-tmpl/prog/en/modules/admin/localization.tt:21
 #: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:167
 #, c-format
@@ -14817,7 +14825,7 @@ msgid "Authorized value:"
 msgstr "Valor Autoritzat:"
 
 #: intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:105
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:89
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:96
 #: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:71
 #, c-format
 msgid "Authorized value: "
@@ -14976,15 +14984,15 @@ msgstr "Temps de préstec mitjà"
 msgid "BIBTEX"
 msgstr "BIBTEX"
 
-#: intranet-tmpl/prog/en/modules/about.tt:703
+#: intranet-tmpl/prog/en/modules/about.tt:710
 #, fuzzy, c-format
 msgid "BSD 3-clause Licence"
 msgstr "Llicència BSD"
 
-#: intranet-tmpl/prog/en/modules/about.tt:617
-#: intranet-tmpl/prog/en/modules/about.tt:685
-#: intranet-tmpl/prog/en/modules/about.tt:694
-#: intranet-tmpl/prog/en/modules/about.tt:709
+#: intranet-tmpl/prog/en/modules/about.tt:624
+#: intranet-tmpl/prog/en/modules/about.tt:692
+#: intranet-tmpl/prog/en/modules/about.tt:701
+#: intranet-tmpl/prog/en/modules/about.tt:716
 #, c-format
 msgid "BSD License"
 msgstr "Llicència BSD"
@@ -14994,7 +15002,7 @@ msgstr "Llicència BSD"
 msgid "BT"
 msgstr "TG"
 
-#: intranet-tmpl/prog/en/modules/about.tt:505
+#: intranet-tmpl/prog/en/modules/about.tt:512
 #, c-format
 msgid "BULAC"
 msgstr "BULAC"
@@ -15668,7 +15676,7 @@ msgstr "Lot: "
 msgid "Batches"
 msgstr "Lots"
 
-#: intranet-tmpl/prog/en/modules/about.tt:498
+#: intranet-tmpl/prog/en/modules/about.tt:505
 #, c-format
 msgid "BdP de la Meuse, France"
 msgstr "BdP de la Mosa, França"
@@ -15736,7 +15744,7 @@ msgstr "Comença amb"
 msgid "Behavior"
 msgstr "Comportament"
 
-#: intranet-tmpl/prog/en/modules/about.tt:499
+#: intranet-tmpl/prog/en/modules/about.tt:506
 #, c-format
 msgid "BibLibre, France"
 msgstr "BibLibre, França"
@@ -15905,19 +15913,19 @@ msgstr "Biblios en memòria"
 msgid "Biblios: "
 msgstr "Registres: "
 
-#: intranet-tmpl/prog/en/modules/about.tt:500
+#: intranet-tmpl/prog/en/modules/about.tt:507
 #, c-format
 msgid ""
 "Biblioteca Provincial Fr. Mamerto Esquiú (Provincia Franciscana de la "
 "Asunción), Argentina"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:501
+#: intranet-tmpl/prog/en/modules/about.tt:508
 #, c-format
 msgid "Bibliotheksservice-Zentrum Baden-Württemberg (BSZ), Germany"
 msgstr "Bibliotheksservice-Zentrum Baden-Württemberg (BSZ), Alemanya"
 
-#: intranet-tmpl/prog/en/modules/about.tt:505
+#: intranet-tmpl/prog/en/modules/about.tt:512
 #, fuzzy, c-format
 msgid "Bibliothèque Universitaire des Langues et Civilisations ("
 msgstr "Bibliothèque universitaire des langues et civilisations ("
@@ -15975,7 +15983,7 @@ msgstr "Lloc de facturació: "
 msgid "Biography"
 msgstr "Biografía"
 
-#: intranet-tmpl/prog/en/modules/about.tt:450
+#: intranet-tmpl/prog/en/modules/about.tt:457
 #, c-format
 msgid ""
 "Birmingham (UK) based developer Mark James for the famfamfam Silk iconset."
@@ -16063,8 +16071,8 @@ msgstr "Factura de proveïdor no:"
 msgid "Boolean"
 msgstr "Booleà"
 
-#: intranet-tmpl/prog/en/modules/about.tt:613
-#: intranet-tmpl/prog/en/modules/about.tt:614
+#: intranet-tmpl/prog/en/modules/about.tt:620
+#: intranet-tmpl/prog/en/modules/about.tt:621
 #, c-format
 msgid "Bootstrap"
 msgstr "Bootstrap"
@@ -16166,12 +16174,12 @@ msgstr "Limitació a biblioteques"
 msgid "Branches limitation: "
 msgstr "Limitació biblioteques "
 
-#: intranet-tmpl/prog/en/modules/about.tt:502
+#: intranet-tmpl/prog/en/modules/about.tt:509
 #, c-format
 msgid "Briar Cliff University, USA"
 msgstr "Penya-segat de Briar University, EUA"
 
-#: intranet-tmpl/prog/en/modules/about.tt:626
+#: intranet-tmpl/prog/en/modules/about.tt:633
 #, fuzzy, c-format
 msgid "Bridge Material Type Icons Project"
 msgstr "Projecte d'icones de tipus Material de pont"
@@ -16186,7 +16194,7 @@ msgstr "Vista breu"
 msgid "Brightness"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:503
+#: intranet-tmpl/prog/en/modules/about.tt:510
 #, c-format
 msgid "Brimbank City Council, Australia"
 msgstr ""
@@ -16196,12 +16204,12 @@ msgstr ""
 msgid "Broader Term"
 msgstr "Terme més ampli"
 
-#: intranet-tmpl/prog/en/modules/about.tt:599
+#: intranet-tmpl/prog/en/modules/about.tt:606
 #, c-format
 msgid "Brooke Johnson"
 msgstr "Brooke Johnson"
 
-#: intranet-tmpl/prog/en/modules/about.tt:504
+#: intranet-tmpl/prog/en/modules/about.tt:511
 #, c-format
 msgid "Brooklyn Law School Library, USA"
 msgstr "Biblioteca de la Facultat de dret de Brooklyn, Estats Units"
@@ -16383,7 +16391,7 @@ msgstr "Per"
 msgid "By: "
 msgstr "Per: "
 
-#: intranet-tmpl/prog/en/modules/about.tt:506
+#: intranet-tmpl/prog/en/modules/about.tt:513
 #, c-format
 msgid "ByWater Solutions, USA"
 msgstr "ByWater solucions, EUA"
@@ -16393,17 +16401,17 @@ msgstr "ByWater solucions, EUA"
 msgid "Bytes"
 msgstr "Bytes"
 
-#: intranet-tmpl/prog/en/modules/about.tt:517
+#: intranet-tmpl/prog/en/modules/about.tt:524
 #, c-format
 msgid "C &amp; P Bibliography Services, USA"
 msgstr "C &amp; P bibliografia serveis, EUA"
 
-#: intranet-tmpl/prog/en/modules/about.tt:705
+#: intranet-tmpl/prog/en/modules/about.tt:712
 #, c-format
 msgid "C3.js"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:706
+#: intranet-tmpl/prog/en/modules/about.tt:713
 #, c-format
 msgid "C3.js v0.4.11"
 msgstr ""
@@ -16566,8 +16574,8 @@ msgid "Cache expiry (seconds)"
 msgstr "Memòria cau vençuda (segons)"
 
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:368
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:918
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:993
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:919
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:994
 #, c-format
 msgid "Cache expiry:"
 msgstr "Caducitat de la caché:"
@@ -16591,7 +16599,7 @@ msgstr "Calendari"
 msgid "Calendar information"
 msgstr "Informació del calendari"
 
-#: intranet-tmpl/prog/en/modules/about.tt:507
+#: intranet-tmpl/prog/en/modules/about.tt:514
 #, c-format
 msgid "California College of the Arts, USA"
 msgstr "Universitat de Califòrnia de les Arts, USA"
@@ -16724,12 +16732,12 @@ msgstr "Nova font de classificació"
 msgid "Callnumber: %s "
 msgstr "Signatura: %s "
 
-#: intranet-tmpl/prog/en/modules/about.tt:510
+#: intranet-tmpl/prog/en/modules/about.tt:517
 #, c-format
 msgid "Calyx, Australia"
 msgstr "Calze, Austràlia"
 
-#: intranet-tmpl/prog/en/modules/about.tt:508
+#: intranet-tmpl/prog/en/modules/about.tt:515
 #, c-format
 msgid "Camden County, USA"
 msgstr "Comtat de Camden, Estats Units"
@@ -16989,8 +16997,8 @@ msgstr "No es pot desar aquest registre perquè el camp següent està buit:"
 #: intranet-tmpl/prog/en/modules/admin/categories.tt:311
 #: intranet-tmpl/prog/en/modules/admin/categories.tt:387
 #: intranet-tmpl/prog/en/modules/admin/oai_set_mappings.tt:86
-#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:214
-#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:308
+#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:219
+#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:313
 #: intranet-tmpl/prog/en/modules/admin/currency.tt:119
 #: intranet-tmpl/prog/en/modules/admin/authtypes.tt:103
 #: intranet-tmpl/prog/en/modules/admin/usage_statistics.tt:235
@@ -17023,7 +17031,7 @@ msgstr "No es pot desar aquest registre perquè el camp següent està buit:"
 #: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:236
 #: intranet-tmpl/prog/en/modules/admin/didyoumean.tt:64
 #: intranet-tmpl/prog/en/modules/admin/printers.tt:80
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:98
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:105
 #: intranet-tmpl/prog/en/modules/admin/preferences.tt:155
 #: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:364
 #: intranet-tmpl/prog/en/modules/admin/transport-cost-matrix.tt:85
@@ -17035,8 +17043,8 @@ msgstr "No es pot desar aquest registre perquè el camp següent està buit:"
 #: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:256
 #: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:258
 #: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:354
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:937
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1013
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:938
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1014
 #: intranet-tmpl/prog/en/modules/virtualshelves/downloadshelf.tt:43
 #: intranet-tmpl/prog/en/modules/virtualshelves/addbybiblionumber.tt:111
 #: intranet-tmpl/prog/en/modules/virtualshelves/sendshelfform.tt:33
@@ -17590,7 +17598,7 @@ msgstr "El número de carnet ja s’està fent servir"
 msgid "Cardnumbers not found"
 msgstr "No es troba el número de carnet"
 
-#: intranet-tmpl/prog/en/modules/about.tt:509
+#: intranet-tmpl/prog/en/modules/about.tt:516
 #, c-format
 msgid "Carnegie Stout Library, USA"
 msgstr "Biblioteca robusta Carnegie, EUA"
@@ -17759,7 +17767,7 @@ msgstr "Taules de catàleg"
 msgid "Cataloguing tables"
 msgstr "Taules de catalogació"
 
-#: intranet-tmpl/prog/en/modules/about.tt:511
+#: intranet-tmpl/prog/en/modules/about.tt:518
 #, c-format
 msgid "Catalyst IT, New Zealand"
 msgstr "Catalitzador IT, Nova Zelanda"
@@ -17904,12 +17912,12 @@ msgstr "Les cel·la contenen només valors estimats."
 msgid "Center"
 msgstr "Comentarista "
 
-#: intranet-tmpl/prog/en/modules/about.tt:512
+#: intranet-tmpl/prog/en/modules/about.tt:519
 #, c-format
 msgid "Central Kansas Library System (CKLS), USA"
 msgstr "Sistema bibliotecari central Kansas (CKLS), EUA"
 
-#: intranet-tmpl/prog/en/modules/about.tt:513
+#: intranet-tmpl/prog/en/modules/about.tt:520
 #, c-format
 msgid "Centre collégial des services regroupés (CCSR), Canada"
 msgstr "Centre collégial de serveis regroupés (CCSR), Canadà"
@@ -18656,7 +18664,7 @@ msgstr ""
 "us recomanem que executeu aquesta eina per provar els errors en la vostra "
 "definició."
 
-#: intranet-tmpl/prog/en/modules/about.tt:514
+#: intranet-tmpl/prog/en/modules/about.tt:521
 #, c-format
 msgid "Cheshire Libraries, United Kingdom"
 msgstr "Biblioteques de Cheshire, Regne Unit"
@@ -19217,7 +19225,7 @@ msgstr "Netejar lot d’importació #%s"
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:279
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:357
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:158
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1067
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1068
 #, c-format
 msgid "Clear"
 msgstr "Esborra"
@@ -19780,8 +19788,8 @@ msgstr "Clubs no matriculats"
 #: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:127
 #: intranet-tmpl/prog/en/modules/admin/itemtypes.tt:354
 #: intranet-tmpl/prog/en/modules/admin/checkmarc.tt:166
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1728
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1755
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1729
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1756
 #, c-format
 msgid "Code"
 msgstr "Codi"
@@ -19803,13 +19811,13 @@ msgstr ""
 msgid "Code:"
 msgstr "Codi:"
 
-#: intranet-tmpl/prog/en/modules/about.tt:675
-#: intranet-tmpl/prog/en/modules/about.tt:676
+#: intranet-tmpl/prog/en/modules/about.tt:682
+#: intranet-tmpl/prog/en/modules/about.tt:683
 #, c-format
 msgid "CodeMirror editing library"
 msgstr "Biblioteca d'edició CodeMirror"
 
-#: intranet-tmpl/prog/en/modules/about.tt:515
+#: intranet-tmpl/prog/en/modules/about.tt:522
 #, c-format
 msgid "Coeur d'Alene Public Library, USA"
 msgstr "Biblioteca pública de Coeur d'Alene, Estats Units"
@@ -19821,7 +19829,7 @@ msgstr "Biblioteca pública de Coeur d'Alene, Estats Units"
 msgid "Collapse all"
 msgstr "Col · lapsar tot"
 
-#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:133
+#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:138
 #, c-format
 msgid "Collapsed"
 msgstr "Col·lapsat"
@@ -20274,12 +20282,12 @@ msgid "Confirm deletion of record matching rule "
 msgstr "Confirmeu l’ eliminació de la regla de coincidència"
 
 #. %1$s:  tagsubfield | html 
-#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:222
+#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:227
 #, c-format
 msgid "Confirm deletion of subfield %s?"
 msgstr "Confirmeu la supressió del subcamp %s?"
 
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:106
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:113
 #, c-format
 msgid "Confirm deletion of tag "
 msgstr "Confirmeu la supressió de l’etiqueta"
@@ -20363,7 +20371,7 @@ msgstr "Consolas"
 msgid "Constrain proportions"
 msgstr "Restriccions"
 
-#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:265
+#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:270
 #: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:270
 #, c-format
 msgid "Constraints"
@@ -20598,7 +20606,7 @@ msgstr "Contractes"
 msgid "Contrast"
 msgstr "Contracte"
 
-#: intranet-tmpl/prog/en/modules/about.tt:491
+#: intranet-tmpl/prog/en/modules/about.tt:498
 #, c-format
 msgid "Contributing companies and institutions"
 msgstr "Empreses i institucions contribuidores"
@@ -20776,12 +20784,12 @@ msgstr "Copieu al porta-retalls"
 msgid "Copyright"
 msgstr "Copyright"
 
-#: intranet-tmpl/prog/en/modules/about.tt:640
+#: intranet-tmpl/prog/en/modules/about.tt:647
 #, c-format
 msgid "Copyright &copy; 2003-2010 phpMyAdmin devel team"
 msgstr "Copyright © 2003-2010 phpMyAdmin devel equip"
 
-#: intranet-tmpl/prog/en/modules/about.tt:635
+#: intranet-tmpl/prog/en/modules/about.tt:642
 #, fuzzy, c-format
 msgid "Copyright &copy; 2012-2016 "
 msgstr "Copyright &copy; 2008 "
@@ -20818,7 +20826,7 @@ msgstr "Copyrightdate"
 msgid "Corporate"
 msgstr "Institució"
 
-#: intranet-tmpl/prog/en/modules/about.tt:516
+#: intranet-tmpl/prog/en/modules/about.tt:523
 #, c-format
 msgid "Corpus Christi Public Libraries, USA"
 msgstr "Corpus Christi biblioteques públiques, EUA"
@@ -20896,7 +20904,7 @@ msgstr "No es pot trobar la preferència anomenada"
 msgid "Could not load emoticons"
 msgstr "No es pot afegir usuari."
 
-#: intranet-tmpl/prog/en/modules/about.tt:485
+#: intranet-tmpl/prog/en/modules/about.tt:492
 #, fuzzy, c-format
 msgid ""
 "Could not read the contributors.yaml file. Please make sure &lt;docdir&gt; "
@@ -20905,7 +20913,7 @@ msgstr ""
 "No es pot llegir el fitxer History. txt. Assegureu-vos &lt;docdir&gt;; està "
 "correctament definit en Koha-conf. xml. "
 
-#: intranet-tmpl/prog/en/modules/about.tt:802
+#: intranet-tmpl/prog/en/modules/about.tt:809
 #, c-format
 msgid ""
 "Could not read the history.txt file. Please make sure &lt;docdir&gt; is "
@@ -20914,7 +20922,7 @@ msgstr ""
 "No es pot llegir el fitxer History. txt. Assegureu-vos &lt;docdir&gt;; està "
 "correctament definit en Koha-conf. xml. "
 
-#: intranet-tmpl/prog/en/modules/about.tt:472
+#: intranet-tmpl/prog/en/modules/about.tt:479
 #, fuzzy, c-format
 msgid ""
 "Could not read the teams.yaml file. Please make sure &lt;docdir&gt; is "
@@ -21071,7 +21079,7 @@ msgstr "Cursos"
 msgid "Cover image"
 msgstr "Imatge remota"
 
-#: intranet-tmpl/prog/en/modules/about.tt:446
+#: intranet-tmpl/prog/en/modules/about.tt:453
 #, c-format
 msgid "Crawford County Federated Library System"
 msgstr "Crawford County Federated Library System"
@@ -21191,7 +21199,7 @@ msgstr "Esborra camp"
 
 #. %1$s:  framework.frameworkcode | html 
 #. %2$s:  framework.frameworktext | html 
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:132
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:139
 #, c-format
 msgid "Create framework for %s (%s) using "
 msgstr "Crear plantilla per %s (%s) usant"
@@ -21304,7 +21312,7 @@ msgstr "Crear el registre"
 
 #. INPUT type=submit name=submit
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:119
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:904
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:905
 #, c-format
 msgid "Create report from SQL"
 msgstr "Crear informe de SQL"
@@ -21364,12 +21372,12 @@ msgstr "Data de creació"
 msgid "Creation date: "
 msgstr "Data de creació"
 
-#: intranet-tmpl/prog/en/modules/about.tt:622
+#: intranet-tmpl/prog/en/modules/about.tt:629
 #, c-format
 msgid "Creative Commons Attribution 2.5 License"
 msgstr "Llicència Reconeixement 2.5 de Creative Commons"
 
-#: intranet-tmpl/prog/en/modules/about.tt:628
+#: intranet-tmpl/prog/en/modules/about.tt:635
 #, c-format
 msgid "Creative Commons Attribution-ShareAlike 2.5 License"
 msgstr "Llicència de Reconeixement-CompartirIgual 2.5 de Creative Commons"
@@ -21507,7 +21515,7 @@ msgstr "Localització actual"
 msgid "Current location:"
 msgstr "Localització actual:"
 
-#: intranet-tmpl/prog/en/modules/about.tt:467
+#: intranet-tmpl/prog/en/modules/about.tt:474
 #, fuzzy, c-format
 msgid "Current maintenance team"
 msgstr "Plantilles disponibles"
@@ -21629,17 +21637,17 @@ msgstr ""
 msgid "Cyclical:"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:742
+#: intranet-tmpl/prog/en/modules/about.tt:749
 #, c-format
 msgid "D&aelig;nsk (Danish)"
 msgstr "Dænsk (danès)"
 
-#: intranet-tmpl/prog/en/modules/about.tt:702
+#: intranet-tmpl/prog/en/modules/about.tt:709
 #, c-format
 msgid "D3.js"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:703
+#: intranet-tmpl/prog/en/modules/about.tt:710
 #, c-format
 msgid "D3.js v3.5.17"
 msgstr ""
@@ -21659,7 +21667,7 @@ msgstr "DBMS auto increment solució"
 msgid "DISABLED"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:685
+#: intranet-tmpl/prog/en/modules/about.tt:692
 #, c-format
 msgid "DSpace project"
 msgstr "DSpace projecte"
@@ -21749,7 +21757,7 @@ msgstr ""
 msgid "Dark Yellow"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:248
+#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:253
 #: intranet-tmpl/prog/en/modules/admin/systempreferences.tt:229
 #: intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:142
 #: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:253
@@ -21868,7 +21876,7 @@ msgstr "Base de dades: "
 #: intranet-tmpl/prog/en/modules/circ/checkout-notes.tt:70
 #: intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:195
 #: intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:197
-#: intranet-tmpl/prog/en/modules/about.tt:788
+#: intranet-tmpl/prog/en/modules/about.tt:795
 #: intranet-tmpl/prog/en/modules/offline_circ/list.tt:30
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:168
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:362
@@ -22082,7 +22090,7 @@ msgstr "Data i hora del canvi"
 #: intranet-tmpl/prog/en/modules/circ/article-requests.tt:272
 #: intranet-tmpl/prog/en/modules/circ/request-article.tt:115
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:150
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1057
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1058
 #, c-format
 msgid "Date:"
 msgstr "Data:"
@@ -22165,8 +22173,8 @@ msgstr "Dia: "
 #: intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:95
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:287
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:373
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:923
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:998
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:924
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:999
 #, c-format
 msgid "Days"
 msgstr "Dies"
@@ -22234,8 +22242,8 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:570
 #: intranet-tmpl/prog/en/modules/admin/clone-rules.tt:41
 #: intranet-tmpl/prog/en/modules/admin/clone-rules.tt:53
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:135
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:153
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:142
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:160
 #: intranet-tmpl/prog/en/modules/admin/item_circulation_alerts.tt:60
 #, c-format
 msgid "Default"
@@ -22650,7 +22658,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/admin/categories.tt:541
 #: intranet-tmpl/prog/en/modules/admin/oai_set_mappings.tt:65
 #: intranet-tmpl/prog/en/modules/admin/oai_set_mappings.tt:78
-#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:297
+#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:302
 #: intranet-tmpl/prog/en/modules/admin/currency.tt:201
 #: intranet-tmpl/prog/en/modules/admin/authtypes.tt:159
 #: intranet-tmpl/prog/en/modules/admin/systempreferences.tt:366
@@ -22679,7 +22687,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:304
 #: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:212
 #: intranet-tmpl/prog/en/modules/admin/printers.tt:156
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:213
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:220
 #: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:180
 #: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:182
 #: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:249
@@ -23293,7 +23301,7 @@ msgstr "Dep."
 #: intranet-tmpl/prog/en/modules/admin/checkmarc.tt:167
 #: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:149
 #: intranet-tmpl/prog/en/modules/reports/dictionary.tt:68
-#: intranet-tmpl/prog/en/modules/about.tt:789
+#: intranet-tmpl/prog/en/modules/about.tt:796
 #: intranet-tmpl/prog/en/modules/labels/label-manage.tt:70
 #, c-format
 msgid "Description"
@@ -23385,8 +23393,8 @@ msgstr "Descripció: "
 
 #. For the first occurrence,
 #. %1$s:  liblibrarian | html_entity 
-#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:224
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:108
+#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:229
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:115
 #, c-format
 msgid "Description: %s"
 msgstr "Descripció: %s"
@@ -23470,7 +23478,7 @@ msgstr "Detalls per quota"
 msgid "Details of payment"
 msgstr "Dades pel pagament"
 
-#: intranet-tmpl/prog/en/modules/about.tt:749
+#: intranet-tmpl/prog/en/modules/about.tt:756
 #, c-format
 msgid ""
 "Deutsch (German) Friedrich zur Hellen, Robert Hillig, Katrin Fischer, Beda "
@@ -23702,7 +23710,7 @@ msgstr "Mostrar la ubicació:"
 msgid "Display member details."
 msgstr "Mostra els detalls dels usuaris."
 
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:163
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:170
 #, c-format
 msgid "Display only used tags/subfields"
 msgstr "Veure només Etiquetes/subcamps utilitzats"
@@ -23768,7 +23776,7 @@ msgstr "Mostrant %stots%s %saprovat%s %spendent%s %srebutjat%s terms "
 msgid "Div"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:518
+#: intranet-tmpl/prog/en/modules/about.tt:525
 #, c-format
 msgid "Do Space, USA"
 msgstr "Fer espai, USA"
@@ -23927,7 +23935,7 @@ msgstr "No incloure impostos"
 msgid "Done"
 msgstr "Fet"
 
-#: intranet-tmpl/prog/en/modules/about.tt:519
+#: intranet-tmpl/prog/en/modules/about.tt:526
 #, c-format
 msgid "DoverNet, USA"
 msgstr "DoverNet, Estats Units"
@@ -24068,7 +24076,7 @@ msgstr "No (per defecte)"
 msgid "Dublin Core"
 msgstr "Dublin Core"
 
-#: intranet-tmpl/prog/en/modules/about.tt:521
+#: intranet-tmpl/prog/en/modules/about.tt:528
 #, fuzzy, c-format
 msgid "Duchesne County Library, USA"
 msgstr "Sistema biblioteca Comtat Washo, Estats Units"
@@ -24285,7 +24293,7 @@ msgstr "Missatge EDIFACT"
 msgid "EDIFACT messages"
 msgstr "Missatges EDIFACT"
 
-#: intranet-tmpl/prog/en/modules/about.tt:443
+#: intranet-tmpl/prog/en/modules/about.tt:450
 #, c-format
 msgid "EMN (Ecole des Mines de Nantes)"
 msgstr "EMN (Ecole des Mines de Nantes)"
@@ -24397,7 +24405,7 @@ msgstr "Primera data de reserva"
 #: intranet-tmpl/prog/en/modules/admin/cash_registers.tt:152
 #: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:179
 #: intranet-tmpl/prog/en/modules/admin/categories.tt:540
-#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:296
+#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:301
 #: intranet-tmpl/prog/en/modules/admin/currency.tt:200
 #: intranet-tmpl/prog/en/modules/admin/authtypes.tt:158
 #: intranet-tmpl/prog/en/modules/admin/systempreferences.tt:366
@@ -24483,7 +24491,7 @@ msgstr "Editar conjunt OAI ‘%s’"
 msgid "Edit SQL"
 msgstr "Editar SQL"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:983
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:984
 #, c-format
 msgid "Edit SQL report"
 msgstr "Editar informe SQL"
@@ -24769,9 +24777,9 @@ msgid "Edit serials"
 msgstr "Editar publicacions periòdiques"
 
 #. INPUT type=submit
-#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:307
+#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:312
 #: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:313
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:212
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:219
 #, c-format
 msgid "Edit subfields"
 msgstr "Editar subcamps"
@@ -24781,7 +24789,7 @@ msgstr "Editar subcamps"
 msgid "Edit subscription"
 msgstr "Editar subscripció"
 
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:210
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:217
 #, fuzzy, c-format
 msgid "Edit tag"
 msgstr "Editar "
@@ -24855,7 +24863,7 @@ msgstr "Edició: "
 msgid "Editions"
 msgstr "Edicions"
 
-#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:131
+#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:136
 #, c-format
 msgid "Editor"
 msgstr "Editor"
@@ -24926,7 +24934,7 @@ msgstr "Correu electrònic: "
 msgid "Embed"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:697
+#: intranet-tmpl/prog/en/modules/about.tt:704
 #, c-format
 msgid "Emojiarea plug-in for jQuery"
 msgstr "Emojiarea plug-in per jQuery"
@@ -25051,7 +25059,7 @@ msgstr "Final de l'interval de dates "
 msgid "End of interval"
 msgstr "Final de l'interval"
 
-#: intranet-tmpl/prog/en/modules/about.tt:745
+#: intranet-tmpl/prog/en/modules/about.tt:752
 #, c-format
 msgid "English"
 msgstr "Anglès"
@@ -25570,12 +25578,12 @@ msgstr "Errors trobats en processar els paràmetres per a l'informe: %s"
 msgid "Errors occurred:"
 msgstr "S'ha produït un error:"
 
-#: intranet-tmpl/prog/en/modules/about.tt:522
+#: intranet-tmpl/prog/en/modules/about.tt:529
 #, c-format
 msgid "Escuela de Orientacion Lacaniana, Argentina"
 msgstr "Escuela de Orientacion Lacaniana, Argentina"
 
-#: intranet-tmpl/prog/en/modules/about.tt:771
+#: intranet-tmpl/prog/en/modules/about.tt:778
 #, c-format
 msgid ""
 "Espa&ntilde;ol (Spanish) Bernardo González Kriegel, Héctor Castro and Tomás "
@@ -26079,7 +26087,7 @@ msgstr ""
 msgid "FINMARC"
 msgstr "FINMARC"
 
-#: intranet-tmpl/prog/en/modules/about.tt:526
+#: intranet-tmpl/prog/en/modules/about.tt:533
 #, c-format
 msgid "FIT"
 msgstr "Encaixar"
@@ -26244,22 +26252,22 @@ msgstr "No s'ha pogut carregat la imatge: _({0}"
 msgid "Fall"
 msgstr "Tardor"
 
-#: intranet-tmpl/prog/en/modules/about.tt:621
+#: intranet-tmpl/prog/en/modules/about.tt:628
 #, c-format
 msgid "FamFamFam Site"
 msgstr "Lloc de FamFamFam"
 
-#: intranet-tmpl/prog/en/modules/about.tt:619
+#: intranet-tmpl/prog/en/modules/about.tt:626
 #, c-format
 msgid "Famfamfam iconset"
 msgstr "Conjunt d'icones de famfamfam"
 
-#: intranet-tmpl/prog/en/modules/about.tt:524
+#: intranet-tmpl/prog/en/modules/about.tt:531
 #, fuzzy, c-format
 msgid "Fargo Public Library, USA"
 msgstr "Biblioteca pública de Farmington, Estats Units"
 
-#: intranet-tmpl/prog/en/modules/about.tt:525
+#: intranet-tmpl/prog/en/modules/about.tt:532
 #, c-format
 msgid "Farmington Public Library, USA"
 msgstr "Biblioteca pública de Farmington, Estats Units"
@@ -26352,7 +26360,7 @@ msgstr "Femení:"
 msgid "Female "
 msgstr "Femení "
 
-#: intranet-tmpl/prog/en/modules/about.tt:523
+#: intranet-tmpl/prog/en/modules/about.tt:530
 #, c-format
 msgid "Fenway Library Organization, USA"
 msgstr ""
@@ -26582,8 +26590,8 @@ msgstr "Fitxer: "
 msgid "File: %s"
 msgstr "Fitxer: %s"
 
-#: intranet-tmpl/prog/en/modules/about.tt:678
-#: intranet-tmpl/prog/en/modules/about.tt:679
+#: intranet-tmpl/prog/en/modules/about.tt:685
+#: intranet-tmpl/prog/en/modules/about.tt:686
 #, c-format
 msgid "FileSaver library"
 msgstr "FileSaver biblioteca"
@@ -26671,7 +26679,7 @@ msgstr "Filmografies"
 #: intranet-tmpl/prog/en/modules/reports/issues_stats.tt:96
 #: intranet-tmpl/prog/en/modules/reports/catalogue_stats.tt:75
 #: intranet-tmpl/prog/en/modules/reports/acquisitions_stats.tt:89
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1055
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1056
 #: intranet-tmpl/prog/en/modules/reports/issues_avg_stats.tt:73
 #: intranet-tmpl/prog/en/modules/reports/borrowers_stats.tt:74
 #, c-format
@@ -26881,7 +26889,7 @@ msgstr "Primer"
 msgid "First arrival:"
 msgstr "La primera recepció:"
 
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:83
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:90
 #, c-format
 msgid "First indicator default value: "
 msgstr "Valor predeterminat primer indicador: "
@@ -26923,7 +26931,7 @@ msgstr "Primer usuari"
 msgid "First publication date is not defined"
 msgstr "Data de publicació de primer no està definida"
 
-#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:135
+#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:140
 #, c-format
 msgid "Flagged"
 msgstr "Marcat"
@@ -27015,14 +27023,14 @@ msgstr "Falten els camps obligatoris:"
 msgid "Following required subfields are missing:"
 msgstr "Falten els subcamps obligatoris:"
 
-#: intranet-tmpl/prog/en/modules/about.tt:672
-#: intranet-tmpl/prog/en/modules/about.tt:673
+#: intranet-tmpl/prog/en/modules/about.tt:679
+#: intranet-tmpl/prog/en/modules/about.tt:680
 #, c-format
 msgid "Font Awesome"
 msgstr "Font Awesome"
 
-#: intranet-tmpl/prog/en/modules/about.tt:708
-#: intranet-tmpl/prog/en/modules/about.tt:709
+#: intranet-tmpl/prog/en/modules/about.tt:715
+#: intranet-tmpl/prog/en/modules/about.tt:716
 #, c-format
 msgid "Font Face Observer"
 msgstr ""
@@ -27219,7 +27227,7 @@ msgstr "Formatejant"
 msgid "Formatting:"
 msgstr "Formatejant"
 
-#: intranet-tmpl/prog/en/modules/about.tt:527
+#: intranet-tmpl/prog/en/modules/about.tt:534
 #, c-format
 msgid "Foundations Bible College &amp; Seminary, USA"
 msgstr "Escola de Bíblia de fundacions i EUA, seminari"
@@ -27248,7 +27256,7 @@ msgstr "Codi de plantilla: "
 msgid "Framework description"
 msgstr "Descripció del marc"
 
-#: intranet-tmpl/prog/en/modules/about.tt:747
+#: intranet-tmpl/prog/en/modules/about.tt:754
 #, c-format
 msgid "Fran&ccedil;ais (French) "
 msgstr "Français (francès)"
@@ -27642,7 +27650,7 @@ msgstr "Fons: %s"
 msgid "Funds"
 msgstr "Fons"
 
-#: intranet-tmpl/prog/en/modules/about.tt:638
+#: intranet-tmpl/prog/en/modules/about.tt:645
 #, c-format
 msgid "GPL License"
 msgstr "Llicència GPL"
@@ -27666,7 +27674,7 @@ msgstr "Import %%"
 msgid "GST:"
 msgstr "Impost:"
 
-#: intranet-tmpl/prog/en/modules/about.tt:748
+#: intranet-tmpl/prog/en/modules/about.tt:755
 #, c-format
 msgid "Galego (Galician) Ignacio Javier"
 msgstr "Galego (gallec) Ignacio Javier"
@@ -27688,7 +27696,7 @@ msgstr "Espai entre columnes:"
 msgid "Gap between rows:"
 msgstr "Bretxa entre les files:"
 
-#: intranet-tmpl/prog/en/modules/about.tt:447
+#: intranet-tmpl/prog/en/modules/about.tt:454
 #, c-format
 msgid "Geauga County Public Library"
 msgstr "Biblioteca pública de Geauga County"
@@ -27821,7 +27829,7 @@ msgstr "Aconsegueix-lo!"
 msgid "Global system preferences"
 msgstr "Preferències de sistema"
 
-#: intranet-tmpl/prog/en/modules/about.tt:614
+#: intranet-tmpl/prog/en/modules/about.tt:621
 #, c-format
 msgid "Glyphicons Free"
 msgstr "Glyphicons gratuït"
@@ -27898,7 +27906,7 @@ msgstr "Anar a dalt"
 msgid "Go up"
 msgstr "Pujar"
 
-#: intranet-tmpl/prog/en/modules/about.tt:528
+#: intranet-tmpl/prog/en/modules/about.tt:535
 #, c-format
 msgid "Goethe-Institut, Germany"
 msgstr "Goethe-Institut, Alemanya"
@@ -27913,7 +27921,7 @@ msgstr "Cap adreça"
 msgid "Gone no address flag"
 msgstr "Indicador de manca d’adreça"
 
-#: intranet-tmpl/prog/en/modules/about.tt:529
+#: intranet-tmpl/prog/en/modules/about.tt:536
 #, c-format
 msgid "Gothenburg University Library, Sweden"
 msgstr "Biblioteca de la Universitat de Göteborg, Suècia"
@@ -27957,12 +27965,12 @@ msgstr ""
 "valors autoritzats'PA_CLASS')"
 
 #. INPUT type=text name=group
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1728
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1729
 msgid "Group code"
 msgstr "Codi de grup"
 
 #. INPUT type=text name=groupdesc
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1729
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1730
 msgid "Group name"
 msgstr "Nom del grup"
 
@@ -28038,8 +28046,8 @@ msgstr "Assistent ‘informes guiats"
 msgid "H Align"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:714
-#: intranet-tmpl/prog/en/modules/about.tt:715
+#: intranet-tmpl/prog/en/modules/about.tt:721
+#: intranet-tmpl/prog/en/modules/about.tt:722
 #, c-format
 msgid "HC Sticky"
 msgstr ""
@@ -28054,7 +28062,7 @@ msgstr "HTML"
 msgid "HTML message:"
 msgstr "Missatge HTML"
 
-#: intranet-tmpl/prog/en/modules/about.tt:530
+#: intranet-tmpl/prog/en/modules/about.tt:537
 #, c-format
 msgid "Halland County Library, Sweden"
 msgstr "Biblioteca Comtat de Halland, Suècia"
@@ -28081,7 +28089,7 @@ msgstr "Data límit venciment"
 msgid "Hard due date: "
 msgstr "Data límit venciment"
 
-#: intranet-tmpl/prog/en/modules/about.tt:531
+#: intranet-tmpl/prog/en/modules/about.tt:538
 #, c-format
 msgid "Harrison Carmel Public Library, USA"
 msgstr "Biblioteca pública Harrison Carmel, Estats Units"
@@ -28091,7 +28099,7 @@ msgstr "Biblioteca pública Harrison Carmel, Estats Units"
 msgid "Hashvalue"
 msgstr "Hashvalue"
 
-#: intranet-tmpl/prog/en/modules/about.tt:532
+#: intranet-tmpl/prog/en/modules/about.tt:539
 #, c-format
 msgid "Hauraki District Libraries, New Zealand"
 msgstr "Biblioteques de barri disposa, Nova Zelanda"
@@ -28381,7 +28389,7 @@ msgstr ""
 "Exemplar d'alta demanda. Préstec escurçat a %s dies (venciment %s). Prestar "
 "igualment?"
 
-#: intranet-tmpl/prog/en/modules/about.tt:533
+#: intranet-tmpl/prog/en/modules/about.tt:540
 #, c-format
 msgid "Higher Education Libraries of Massachusetts, USA"
 msgstr ""
@@ -28438,7 +28446,7 @@ msgstr "Historial de notes administratives:"
 msgid "History start date:"
 msgstr "Data d'inici de la història:"
 
-#: intranet-tmpl/prog/en/modules/about.tt:534
+#: intranet-tmpl/prog/en/modules/about.tt:541
 #, c-format
 msgid "Hochschule für Gesundheit (hsg), Germany"
 msgstr "Hochschule für Gesundheit (hsg), Alemanya"
@@ -29147,7 +29155,7 @@ msgstr "Horitzontal:"
 msgid "Horizontal: "
 msgstr "Horitzontal:"
 
-#: intranet-tmpl/prog/en/modules/about.tt:441
+#: intranet-tmpl/prog/en/modules/about.tt:448
 #, c-format
 msgid "Horowhenua Library Trust"
 msgstr "Horowhenua biblioteca confiança"
@@ -29167,7 +29175,7 @@ msgstr "Hostname/Port"
 msgid "Hostname: "
 msgstr "Hostname: "
 
-#: intranet-tmpl/prog/en/modules/about.tt:535
+#: intranet-tmpl/prog/en/modules/about.tt:542
 #, c-format
 msgid "Hotchkiss School, USA"
 msgstr "Escola Hotchkiss, Estats Units"
@@ -29199,8 +29207,8 @@ msgstr "Càrrec de lloguer: "
 #: intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:96
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:288
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:372
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:922
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:997
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:923
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:998
 #, c-format
 msgid "Hours"
 msgstr "Hores"
@@ -29243,7 +29251,7 @@ msgstr "Com s'han de suprimir els usuaris?"
 msgid "How to process items: "
 msgstr "Com processar exemplars: "
 
-#: intranet-tmpl/prog/en/modules/about.tt:740
+#: intranet-tmpl/prog/en/modules/about.tt:747
 #, c-format
 msgid "Hrvatski (Croatian)"
 msgstr "Hrvatski (croat)"
@@ -30232,7 +30240,7 @@ msgstr "Importat"
 msgid "Importing to framework: %s. Importing from file: %s."
 msgstr "Importació a la plantilla: %s. importació des del fitxer: %s."
 
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:151
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:158
 #, c-format
 msgid "In framework:"
 msgstr "En plantilla:"
@@ -30380,12 +30388,12 @@ msgstr "Indexat a:"
 msgid "Indexes"
 msgstr "Índexs"
 
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:180
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:187
 #, c-format
 msgid "Indicator 1"
 msgstr "Indicador 1"
 
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:181
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:188
 #, c-format
 msgid "Indicator 2"
 msgstr "Indicador 2"
@@ -30738,7 +30746,7 @@ msgstr "En una aplicació:"
 msgid "Into an application: "
 msgstr "En una aplicació: "
 
-#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:129
+#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:134
 #: intranet-tmpl/prog/en/modules/admin/didyoumean.tt:61
 #, c-format
 msgid "Intranet"
@@ -30960,7 +30968,7 @@ msgstr "Factures "
 msgid "Invoices enabled: "
 msgstr "Factures adjuntes: "
 
-#: intranet-tmpl/prog/en/modules/about.tt:596
+#: intranet-tmpl/prog/en/modules/about.tt:603
 #, c-format
 msgid "Irma Birchall"
 msgstr "Irma Birchall"
@@ -30970,7 +30978,7 @@ msgstr "Irma Birchall"
 msgid "Irregularity:"
 msgstr "Irregular:"
 
-#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:138
+#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:143
 #: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:132
 #, c-format
 msgid "Is a URL:"
@@ -31055,7 +31063,7 @@ msgstr "Fascicles per unitat: "
 msgid "Issuing library"
 msgstr "Biblioteca emissora"
 
-#: intranet-tmpl/prog/en/modules/about.tt:420
+#: intranet-tmpl/prog/en/modules/about.tt:427
 #, fuzzy, c-format
 msgid "Issuing rules"
 msgstr "Norma d'arxivament"
@@ -31071,7 +31079,7 @@ msgid ""
 "It is advisable to check for and resolve duplicate holds due to merging."
 msgstr "És aconsellable comprovar i resoldre els duplicats de la combinacio."
 
-#: intranet-tmpl/prog/en/modules/about.tt:757
+#: intranet-tmpl/prog/en/modules/about.tt:764
 #, c-format
 msgid ""
 "Italiano (Italian) for 3.2: Zeno Tajoli, Pietro Gozzetti and Paolo Pozzan; "
@@ -31805,8 +31813,8 @@ msgstr "Itype"
 msgid "JSON URL"
 msgstr "URL de JSON"
 
-#: intranet-tmpl/prog/en/modules/about.tt:699
-#: intranet-tmpl/prog/en/modules/about.tt:700
+#: intranet-tmpl/prog/en/modules/about.tt:706
+#: intranet-tmpl/prog/en/modules/about.tt:707
 #, c-format
 msgid "JSZip"
 msgstr "JSZip"
@@ -31824,24 +31832,24 @@ msgstr "Gen"
 msgid "January"
 msgstr "Gener"
 
-#: intranet-tmpl/prog/en/modules/about.tt:726
-#: intranet-tmpl/prog/en/modules/about.tt:727
+#: intranet-tmpl/prog/en/modules/about.tt:733
+#: intranet-tmpl/prog/en/modules/about.tt:734
 #, c-format
 msgid "JavaScript Cookie"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:694
+#: intranet-tmpl/prog/en/modules/about.tt:701
 #, c-format
 msgid "JavaScript library by Vladimir Agafonkinis licensed under the "
 msgstr "Llibreria JavaScript per Vladimir Agafonkinis llicenciat sota la"
 
-#: intranet-tmpl/prog/en/modules/about.tt:700
+#: intranet-tmpl/prog/en/modules/about.tt:707
 #, c-format
 msgid "JavaScript library is licensed under both the "
 msgstr "Biblioteca JavaScript està llicenciada sota "
 
-#: intranet-tmpl/prog/en/modules/about.tt:663
-#: intranet-tmpl/prog/en/modules/about.tt:664
+#: intranet-tmpl/prog/en/modules/about.tt:670
+#: intranet-tmpl/prog/en/modules/about.tt:671
 #, c-format
 msgid "Javascript Diff Algorithm"
 msgstr "JavaScript Diff algorisme"
@@ -31856,7 +31864,7 @@ msgstr "Jenkins mantenidor:"
 msgid "Jenkins maintainers:"
 msgstr "Jenkins mantenidor:"
 
-#: intranet-tmpl/prog/en/modules/about.tt:600
+#: intranet-tmpl/prog/en/modules/about.tt:607
 #, c-format
 msgid "Jo Ransom"
 msgstr "Jo Ransom"
@@ -31912,17 +31920,17 @@ msgstr ""
 msgid "Juvenile"
 msgstr "Juvenil"
 
-#: intranet-tmpl/prog/en/modules/about.tt:537
+#: intranet-tmpl/prog/en/modules/about.tt:544
 #, c-format
 msgid "KEEP SOLUTIONS, Portugal"
 msgstr "MANTENIR solucions, Portugal"
 
-#: intranet-tmpl/prog/en/modules/about.tt:536
+#: intranet-tmpl/prog/en/modules/about.tt:543
 #, c-format
 msgid "Katipo Communications, New Zealand"
 msgstr "Katipo comunicacions, Nova Zelanda"
 
-#: intranet-tmpl/prog/en/modules/about.tt:635
+#: intranet-tmpl/prog/en/modules/about.tt:642
 #, c-format
 msgid "Kazik Pietruszewski"
 msgstr ""
@@ -31979,7 +31987,7 @@ msgstr "Paraula clau (qualsevol): "
 
 #: intranet-tmpl/prog/en/modules/tools/koha-news.tt:178
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:156
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1062
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1063
 #, c-format
 msgid "Keyword:"
 msgstr "Paraula clau:"
@@ -32009,14 +32017,14 @@ msgstr "Paraules clau:"
 #: intranet-tmpl/prog/en/modules/onboarding/onboardingstep1.tt:11
 #: intranet-tmpl/prog/en/modules/onboarding/onboardingstep3.tt:13
 #: intranet-tmpl/prog/en/modules/onboarding/onboardingstep2.tt:20
-#: intranet-tmpl/prog/en/modules/about.tt:607
+#: intranet-tmpl/prog/en/modules/about.tt:614
 #: intranet-tmpl/prog/en/modules/auth.tt:22
 #, c-format
 msgid "Koha"
 msgstr "Koha"
 
 #. %1$s:  short_version | html 
-#: intranet-tmpl/prog/en/modules/about.tt:458
+#: intranet-tmpl/prog/en/modules/about.tt:465
 #, c-format
 msgid "Koha %s release team"
 msgstr "Equip de desenvolupament de koha %s"
@@ -32493,22 +32501,24 @@ msgstr ""
 "%s"
 
 #. %1$s:  IF ( add_form ) 
-#. %2$s:  action | html 
-#. %3$s:  searchfield | html 
+#. %2$s:  IF heading_add_tag_p 
+#. %3$s:  ELSE 
 #. %4$s:  END 
-#. %5$s:  IF ( delete_confirm ) 
-#. %6$s:  searchfield | html 
-#. %7$s:  END 
-#. %8$s:  IF ( delete_confirmed ) 
+#. %5$s:  searchfield | html 
+#. %6$s:  END 
+#. %7$s:  IF ( delete_confirm ) 
+#. %8$s:  searchfield | html 
 #. %9$s:  END 
-#. %10$s:  IF ( else ) 
+#. %10$s:  IF ( delete_confirmed ) 
 #. %11$s:  END 
+#. %12$s:  IF ( else ) 
+#. %13$s:  END 
 #: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:6
-#, c-format
+#, fuzzy, c-format
 msgid ""
-"Koha &rsaquo; Administration &rsaquo; %sMARC frameworks &rsaquo; %s %s%s "
-"%sMARC frameworks &rsaquo; Confirm deletion of tag '%s'%s %sMARC frameworks "
-"&rsaquo; Data deleted%s %sMARC frameworks%s"
+"Koha &rsaquo; Administration &rsaquo; %sMARC frameworks &rsaquo; %sAdd tag"
+"%sModify tag%s %s%s %sMARC frameworks &rsaquo; Confirm deletion of tag "
+"'%s'%s %sMARC frameworks &rsaquo; Data deleted%s %sMARC frameworks%s"
 msgstr ""
 "Koha &rsaquo; Administració &rsaquo; %sPlantilles MARC&rsaquo; %s %s%s "
 "%sPlantilles MARC &rsaquo; Confirmeu la supressio de l’etiqueta ‘%s’%s "
@@ -34711,7 +34721,7 @@ msgstr ""
 msgid "Koha database schema"
 msgstr "Esquema de la base de dades Koha"
 
-#: intranet-tmpl/prog/en/modules/about.tt:477
+#: intranet-tmpl/prog/en/modules/about.tt:484
 #, c-format
 msgid "Koha development team"
 msgstr "Equip de desenvolupament de koha"
@@ -34733,7 +34743,7 @@ msgstr "Camp Koja:"
 msgid "Koha full call number"
 msgstr "Koha signatura topogràfica"
 
-#: intranet-tmpl/prog/en/modules/about.tt:783
+#: intranet-tmpl/prog/en/modules/about.tt:790
 #, c-format
 msgid "Koha history timeline"
 msgstr "Cronologia Koha"
@@ -34743,7 +34753,7 @@ msgstr "Cronologia Koha"
 msgid "Koha internal"
 msgstr "Koha interna"
 
-#: intranet-tmpl/prog/en/modules/about.tt:609
+#: intranet-tmpl/prog/en/modules/about.tt:616
 #, c-format
 msgid ""
 "Koha is free software; you can redistribute it and/or modify it under the "
@@ -34761,7 +34771,7 @@ msgstr ""
 msgid "Koha itemtype"
 msgstr "Koha tipus element"
 
-#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:148
+#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:153
 #, c-format
 msgid "Koha link:"
 msgstr "Enllaç de Koha:"
@@ -34787,7 +34797,7 @@ msgstr "Koha circulació fora de línia"
 msgid "Koha plugins"
 msgstr "Plugins de Koha"
 
-#: intranet-tmpl/prog/en/modules/about.tt:454
+#: intranet-tmpl/prog/en/modules/about.tt:461
 #, fuzzy, c-format
 msgid "Koha release teams"
 msgstr "Equip de llançament"
@@ -34829,17 +34839,17 @@ msgstr "Assignació Koha a MARC "
 msgid "Koha version: "
 msgstr "Versió Koha: "
 
-#: intranet-tmpl/prog/en/modules/about.tt:539
+#: intranet-tmpl/prog/en/modules/about.tt:546
 #, c-format
 msgid "Koha-Suomi Oy, Finland"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:538
+#: intranet-tmpl/prog/en/modules/about.tt:545
 #, c-format
 msgid "KohaAloha, New Zealand"
 msgstr "KohaAloha, Nova Zelanda"
 
-#: intranet-tmpl/prog/en/modules/about.tt:747
+#: intranet-tmpl/prog/en/modules/about.tt:754
 #, c-format
 msgid "Kohala"
 msgstr "Kohala"
@@ -34893,12 +34903,12 @@ msgstr "LCCN: %s "
 msgid "LEAVE UNCHANGED"
 msgstr "DEIXAR SENSE CANVIS"
 
-#: intranet-tmpl/prog/en/modules/about.tt:670
+#: intranet-tmpl/prog/en/modules/about.tt:677
 #, c-format
 msgid "LGPL v2.1"
 msgstr "LGPL v 2.1"
 
-#: intranet-tmpl/prog/en/modules/about.tt:721
+#: intranet-tmpl/prog/en/modules/about.tt:728
 #, fuzzy, c-format
 msgid "LGPL v3.0"
 msgstr "LGPL v 2.1"
@@ -34943,12 +34953,12 @@ msgstr "Lots d'etiquetes"
 msgid "Label creator"
 msgstr "Creador d'etiquetes"
 
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:67
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:74
 #, c-format
 msgid "Label for lib: "
 msgstr "Etiqueta per lib: "
 
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:68
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:75
 #, c-format
 msgid "Label for opac: "
 msgstr "Etiqueta per opac: "
@@ -35029,7 +35039,7 @@ msgstr "Idioma: "
 msgid "Languages"
 msgstr "Idiomes"
 
-#: intranet-tmpl/prog/en/modules/about.tt:762
+#: intranet-tmpl/prog/en/modules/about.tt:769
 #, c-format
 msgid "Lao Anousak Anthony Souphavanh"
 msgstr "Letó Anousak Anthony Souphavanh"
@@ -35182,7 +35192,7 @@ msgstr "Endarrerit"
 msgid "Late orders"
 msgstr "Comandes endarrerides"
 
-#: intranet-tmpl/prog/en/modules/about.tt:761
+#: intranet-tmpl/prog/en/modules/about.tt:768
 #, c-format
 msgid "Latina (Latin)"
 msgstr "Latina (llatí)"
@@ -35225,8 +35235,8 @@ msgstr "Disposició: "
 msgid "Layouts"
 msgstr "Maquetacions"
 
-#: intranet-tmpl/prog/en/modules/about.tt:693
-#: intranet-tmpl/prog/en/modules/about.tt:694
+#: intranet-tmpl/prog/en/modules/about.tt:700
+#: intranet-tmpl/prog/en/modules/about.tt:701
 #, c-format
 msgid "Leaflet"
 msgstr "Tríptic"
@@ -35325,12 +35335,12 @@ msgstr "Carta"
 
 #: intranet-tmpl/prog/en/modules/admin/koha2marclinks.tt:33
 #: intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:195
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:176
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:183
 #, c-format
 msgid "Lib"
 msgstr "Lib"
 
-#: intranet-tmpl/prog/en/modules/about.tt:540
+#: intranet-tmpl/prog/en/modules/about.tt:547
 #, c-format
 msgid "LibLime, USA"
 msgstr "LibLime, Estats Units"
@@ -35541,7 +35551,7 @@ msgstr "Nom de la biblioteca: "
 msgid "Library of Congress"
 msgstr "Biblioteca del Congrés"
 
-#: intranet-tmpl/prog/en/modules/about.tt:541
+#: intranet-tmpl/prog/en/modules/about.tt:548
 #, c-format
 msgid "Library of the Józef Piłsudski Institute of America, USA"
 msgstr "Biblioteca de l'Institut de Józef Piłsudski d'Amèrica, EUA"
@@ -35640,7 +35650,7 @@ msgstr "Biblioteca: %s"
 msgid "Library: %s &rArr; %s"
 msgstr "Biblioteca: %s &rArr; %s"
 
-#: intranet-tmpl/prog/en/modules/about.tt:542
+#: intranet-tmpl/prog/en/modules/about.tt:549
 #, c-format
 msgid "Libriotech, Norway"
 msgstr "Libriotech, Noruega"
@@ -35790,7 +35800,7 @@ msgstr "Enllaçar amb la font"
 msgid "Link..."
 msgstr "Enllaç"
 
-#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:146
+#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:151
 #, c-format
 msgid "Link:"
 msgstr "Enllaç:"
@@ -35936,7 +35946,7 @@ msgstr "Llistes que inclouen aquest títol: "
 #: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:15
 #: intranet-tmpl/prog/en/modules/acqui/neworderbiblio.tt:112
 #: intranet-tmpl/prog/en/modules/acqui/edifactmsgs.tt:118
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1092
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1093
 msgid "Loading"
 msgstr "Carregant"
 
@@ -36213,7 +36223,7 @@ msgstr "Logs"
 msgid "Look for existing records in catalog?"
 msgstr "Busqui els registres existents en el catàleg?"
 
-#: intranet-tmpl/prog/en/modules/about.tt:543
+#: intranet-tmpl/prog/en/modules/about.tt:550
 #, c-format
 msgid "Los Gatos Public Library, USA"
 msgstr "Biblioteca pública de Los Gatos, Estats Units"
@@ -36337,12 +36347,12 @@ msgstr "Coordenades Inferior esquerra Y : "
 msgid "Lucida Console"
 msgstr "Lucida Console"
 
-#: intranet-tmpl/prog/en/modules/about.tt:544
+#: intranet-tmpl/prog/en/modules/about.tt:551
 #, fuzzy, c-format
 msgid "Lund University Library, Sweden"
 msgstr "Biblioteca de la Universitat de Göteborg, Suècia"
 
-#: intranet-tmpl/prog/en/modules/about.tt:763
+#: intranet-tmpl/prog/en/modules/about.tt:770
 #, c-format
 msgid "M&#257;ori"
 msgstr "M&#257;ori"
@@ -36540,7 +36550,7 @@ msgstr "Subcamp de MARC"
 #. %3$s:  frameworkcode | html 
 #. %4$s:  ELSE 
 #. %5$s:  END 
-#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:257
+#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:262
 #, fuzzy, c-format
 msgid ""
 "MARC subfield structure admin for %s %s(framework %s)%s(default framework)%s"
@@ -36575,34 +36585,34 @@ msgstr "MARC21/USMARC"
 msgid "MARCXML"
 msgstr "MARCXML"
 
-#: intranet-tmpl/prog/en/modules/about.tt:633
-#: intranet-tmpl/prog/en/modules/about.tt:664
-#: intranet-tmpl/prog/en/modules/about.tt:667
-#: intranet-tmpl/prog/en/modules/about.tt:673
-#: intranet-tmpl/prog/en/modules/about.tt:691
+#: intranet-tmpl/prog/en/modules/about.tt:640
+#: intranet-tmpl/prog/en/modules/about.tt:671
+#: intranet-tmpl/prog/en/modules/about.tt:674
+#: intranet-tmpl/prog/en/modules/about.tt:680
+#: intranet-tmpl/prog/en/modules/about.tt:698
 #, c-format
 msgid "MIT License"
 msgstr "Llicència MIT"
 
-#: intranet-tmpl/prog/en/modules/about.tt:700
+#: intranet-tmpl/prog/en/modules/about.tt:707
 #, c-format
 msgid "MIT and GPLv3 Licenses"
 msgstr "MIT i llicències de la GPLv3"
 
-#: intranet-tmpl/prog/en/modules/about.tt:706
+#: intranet-tmpl/prog/en/modules/about.tt:713
 #, fuzzy, c-format
 msgid "MIT licence"
 msgstr "Llicència MIT"
 
-#: intranet-tmpl/prog/en/modules/about.tt:612
-#: intranet-tmpl/prog/en/modules/about.tt:614
-#: intranet-tmpl/prog/en/modules/about.tt:676
-#: intranet-tmpl/prog/en/modules/about.tt:679
-#: intranet-tmpl/prog/en/modules/about.tt:682
-#: intranet-tmpl/prog/en/modules/about.tt:715
-#: intranet-tmpl/prog/en/modules/about.tt:718
-#: intranet-tmpl/prog/en/modules/about.tt:724
-#: intranet-tmpl/prog/en/modules/about.tt:727
+#: intranet-tmpl/prog/en/modules/about.tt:619
+#: intranet-tmpl/prog/en/modules/about.tt:621
+#: intranet-tmpl/prog/en/modules/about.tt:683
+#: intranet-tmpl/prog/en/modules/about.tt:686
+#: intranet-tmpl/prog/en/modules/about.tt:689
+#: intranet-tmpl/prog/en/modules/about.tt:722
+#: intranet-tmpl/prog/en/modules/about.tt:725
+#: intranet-tmpl/prog/en/modules/about.tt:731
+#: intranet-tmpl/prog/en/modules/about.tt:734
 #, c-format
 msgid "MIT license"
 msgstr "Llicència MIT"
@@ -36623,7 +36633,7 @@ msgstr "Macros"
 msgid "Macros..."
 msgstr "Macros..."
 
-#: intranet-tmpl/prog/en/modules/about.tt:753
+#: intranet-tmpl/prog/en/modules/about.tt:760
 #, c-format
 msgid "Magyar (Hungarian)Agnes Imecs"
 msgstr "Magyar (hongarès) Agnes Imecs"
@@ -37316,7 +37326,7 @@ msgstr "Biblioteca principal"
 #: intranet-tmpl/prog/en/modules/installer/step3.tt:92
 #: intranet-tmpl/prog/en/modules/installer/step3.tt:132
 #: intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:197
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:178
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:185
 #, c-format
 msgid "Mandatory"
 msgstr "Obligatori"
@@ -37329,7 +37339,7 @@ msgstr "Data obligatòria afegida"
 #: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:84
 #: intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:98
 #: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:80
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:76
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:83
 #, c-format
 msgid "Mandatory: "
 msgstr "Obligatori: "
@@ -37440,7 +37450,7 @@ msgstr "Marcar seleccionat com:"
 msgid "Mark the original budget as inactive"
 msgstr "Marcar el pressupost original com a inactiu"
 
-#: intranet-tmpl/prog/en/modules/about.tt:545
+#: intranet-tmpl/prog/en/modules/about.tt:552
 #, c-format
 msgid "MassCat, USA"
 msgstr "MassCat, Estats Units"
@@ -37814,7 +37824,7 @@ msgstr "Microsegons"
 msgid "Middle"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:546
+#: intranet-tmpl/prog/en/modules/about.tt:553
 #, c-format
 msgid "Middletown Township Public Library, USA"
 msgstr "Biblioteca pública Middletown Township, Estats Units"
@@ -37834,7 +37844,7 @@ msgstr "Mil·lisegon"
 msgid "Mine"
 msgstr "Extreure"
 
-#: intranet-tmpl/prog/en/modules/about.tt:444
+#: intranet-tmpl/prog/en/modules/about.tt:451
 #, c-format
 msgid ""
 "Mines Paristech (previously Ecole Nationale Supérieure des Mines de Paris)"
@@ -37858,8 +37868,8 @@ msgid "Minute"
 msgstr "Minut"
 
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:371
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:921
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:996
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:922
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:997
 #, c-format
 msgid "Minutes"
 msgstr "Minuts"
@@ -38505,7 +38515,7 @@ msgstr ""
 "Nota: els camps llistats a la preferència del sistema  \\’UniqueItemsFields"
 "\\’  'no es copiaran"
 
-#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:146
+#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:151
 #, c-format
 msgid ""
 "NOTE: If you change this value you must ask your administrator to run misc/"
@@ -38560,8 +38570,8 @@ msgstr "TE"
 #: intranet-tmpl/prog/en/modules/admin/printers.tt:144
 #: intranet-tmpl/prog/en/modules/admin/additional-fields.tt:88
 #: intranet-tmpl/prog/en/modules/reports/dictionary.tt:67
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1729
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1756
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1730
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1757
 #, c-format
 msgid "Name"
 msgstr "Nom"
@@ -38692,7 +38702,7 @@ msgstr "Nom: "
 msgid "Narrower Term"
 msgstr "Terme més precís"
 
-#: intranet-tmpl/prog/en/modules/about.tt:547
+#: intranet-tmpl/prog/en/modules/about.tt:554
 #, c-format
 msgid "National Library of Finland, Finland"
 msgstr ""
@@ -38702,7 +38712,7 @@ msgstr ""
 msgid "Navy Blue"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:448
+#: intranet-tmpl/prog/en/modules/about.tt:455
 #, c-format
 msgid "Near East University"
 msgstr "A prop de Universitat d'Orient"
@@ -38714,12 +38724,12 @@ msgid ""
 "contact your server admin if you wish to configure Elasticsearch"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:744
+#: intranet-tmpl/prog/en/modules/about.tt:751
 #, c-format
 msgid "Nederlands-Belgi&euml; (Dutch-Belgium)"
 msgstr "Nederlands-België (neerlandès-Bèlgica)"
 
-#: intranet-tmpl/prog/en/modules/about.tt:743
+#: intranet-tmpl/prog/en/modules/about.tt:750
 #, c-format
 msgid "Nederlands-Nederland (Dutch-The Netherlands) Sponsored by Rijksmuseum"
 msgstr "Nederlands-Nederland (neerlandès-Holanda) patrocinat per Rijksmuseum"
@@ -38822,12 +38832,12 @@ msgstr "Nou servidor SRU"
 msgid "New Z39.50 server"
 msgstr "Nou servidor Z39.50"
 
-#: intranet-tmpl/prog/en/modules/about.tt:549
+#: intranet-tmpl/prog/en/modules/about.tt:556
 #, c-format
 msgid "New Zealand Central Agencies Library, New Zealand"
 msgstr "Nova Zelanda Central agències Library, Nova Zelanda"
 
-#: intranet-tmpl/prog/en/modules/about.tt:550
+#: intranet-tmpl/prog/en/modules/about.tt:557
 #, c-format
 msgid "New Zealand Ministry of Education Library, New Zealand"
 msgstr "Nova Zelanda Ministeri d'educació Library, Nova Zelanda"
@@ -39280,7 +39290,7 @@ msgstr "Nou proveïdor"
 msgid "New window"
 msgstr "Oculta la finestra"
 
-#: intranet-tmpl/prog/en/modules/about.tt:548
+#: intranet-tmpl/prog/en/modules/about.tt:555
 #, fuzzy, c-format
 msgid "Newcastle City Council, United Kingdom"
 msgstr "Biblioteques de Cheshire, Regne Unit"
@@ -39377,7 +39387,7 @@ msgstr "Propera data de publicació :"
 msgid "Next page"
 msgstr "Pàgina següent"
 
-#: intranet-tmpl/prog/en/modules/about.tt:601
+#: intranet-tmpl/prog/en/modules/about.tt:608
 #, c-format
 msgid "Nicholas Rosasco (Documentation Compiler)"
 msgstr "Nicholas Rosasco (compilador de documentació)"
@@ -39456,10 +39466,10 @@ msgstr "No: %s "
 
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:363
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:365
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:913
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:915
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:988
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:990
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:914
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:916
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:989
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:991
 #, c-format
 msgid "No (default)"
 msgstr "No (per defecte)"
@@ -39659,7 +39669,7 @@ msgid "No color"
 msgstr "Color"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1092
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1093
 msgid "No columns selected!"
 msgstr "No s’han seleccionat columnes!"
 
@@ -39958,7 +39968,7 @@ msgid "No matching records found"
 msgstr "No s'han trobat registres coincidents"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1092
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1093
 msgid "No matching reports found"
 msgstr "Cap informe de coincidència trobat"
 
@@ -40278,7 +40288,7 @@ msgstr "No hi ha transferències a rebre"
 msgid "No valid patrons to merge were found."
 msgstr "No s’han trobat usuaris vàlids per a combinar."
 
-#: intranet-tmpl/prog/en/modules/about.tt:434
+#: intranet-tmpl/prog/en/modules/about.tt:441
 #, c-format
 msgid "No warnings."
 msgstr "No hi ha advertències."
@@ -40298,7 +40308,7 @@ msgstr "No, no esborreu"
 #: intranet-tmpl/prog/en/modules/serials/subscription-frequencies.tt:122
 #: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:254
 #: intranet-tmpl/prog/en/modules/members/deletemem.tt:52
-#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:240
+#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:245
 #: intranet-tmpl/prog/en/modules/admin/currency.tt:158
 #: intranet-tmpl/prog/en/modules/admin/authtypes.tt:122
 #: intranet-tmpl/prog/en/modules/admin/systempreferences.tt:225
@@ -40312,7 +40322,7 @@ msgstr "No, no esborreu"
 #: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:246
 #: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:115
 #: intranet-tmpl/prog/en/modules/admin/printers.tt:114
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:116
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:123
 #: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:389
 #: intranet-tmpl/prog/en/modules/admin/cities.tt:120
 #: intranet-tmpl/prog/en/modules/admin/itemtypes.tt:343
@@ -40548,22 +40558,22 @@ msgstr "Text normal"
 msgid "Normalization rule: "
 msgstr "Regla de normalització: "
 
-#: intranet-tmpl/prog/en/modules/about.tt:754
+#: intranet-tmpl/prog/en/modules/about.tt:761
 #, c-format
 msgid "Norsk Bokmål (Norwegian) Axel Bojer and Thomas Gramstad"
 msgstr "Norsk Bokmål (noruec) Axel Bojer i Thomas Gramstad"
 
-#: intranet-tmpl/prog/en/modules/about.tt:755
+#: intranet-tmpl/prog/en/modules/about.tt:762
 #, c-format
 msgid "Norsk Nynorsk (Norwegian) Unni Knutsen and Marit Kristine Ådland"
 msgstr "Norsk Nynorsk (Noruega) Unni Knutsen i Marit Kristine Ådland"
 
-#: intranet-tmpl/prog/en/modules/about.tt:551
+#: intranet-tmpl/prog/en/modules/about.tt:558
 #, c-format
 msgid "North Central Regional Library (NCRL), USA"
 msgstr "Nord Regional Biblioteca Central (NCRL), EUA"
 
-#: intranet-tmpl/prog/en/modules/about.tt:552
+#: intranet-tmpl/prog/en/modules/about.tt:559
 #, c-format
 msgid "Northeast Kansas Library System (NEKLS), USA"
 msgstr "Sistema bibliotecari Kansas nord-est (NEKLS), EUA"
@@ -40946,9 +40956,9 @@ msgstr "Notes/Comentaris"
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:573
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:628
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:721
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:926
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:961
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1001
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:927
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:962
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1002
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:121
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:287
 #, c-format
@@ -41032,12 +41042,12 @@ msgstr "Avisos &amp; cartes"
 msgid "Notification date"
 msgstr "Data de notificació"
 
-#: intranet-tmpl/prog/en/modules/about.tt:712
+#: intranet-tmpl/prog/en/modules/about.tt:719
 #, c-format
 msgid "Noto"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:711
+#: intranet-tmpl/prog/en/modules/about.tt:718
 #, c-format
 msgid "Noto fonts"
 msgstr ""
@@ -41383,7 +41393,7 @@ msgstr "Conjunts OAI"
 msgid "OAI sets configuration"
 msgstr "Configuració de sets OAI"
 
-#: intranet-tmpl/prog/en/modules/about.tt:684
+#: intranet-tmpl/prog/en/modules/about.tt:691
 #, c-format
 msgid "OAI xslt stylesheet"
 msgstr "Fulla d estil de OAI XSLT"
@@ -41426,7 +41436,7 @@ msgstr "OFF"
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:530
 #: intranet-tmpl/prog/en/modules/circ/branchoverdues.tt:31
 #: intranet-tmpl/prog/en/modules/admin/categories.tt:382
-#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:251
+#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:256
 #: intranet-tmpl/prog/en/modules/admin/currency.tt:138
 #: intranet-tmpl/prog/en/modules/admin/systempreferences.tt:206
 #: intranet-tmpl/prog/en/modules/admin/aqcontract.tt:106
@@ -41437,8 +41447,8 @@ msgstr "OFF"
 #: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:256
 #: intranet-tmpl/prog/en/modules/admin/printers.tt:88
 #: intranet-tmpl/prog/en/modules/admin/printers.tt:123
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:125
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:140
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:132
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:147
 #: intranet-tmpl/prog/en/modules/admin/checkmarc.tt:36
 #: intranet-tmpl/prog/en/modules/admin/checkmarc.tt:50
 #: intranet-tmpl/prog/en/modules/admin/checkmarc.tt:62
@@ -41463,7 +41473,7 @@ msgid "ON"
 msgstr "ON"
 
 #: intranet-tmpl/prog/en/includes/prefs-menu.inc:13
-#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:127
+#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:132
 #: intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:173
 #: intranet-tmpl/prog/en/modules/admin/columns_settings.tt:174
 #: intranet-tmpl/prog/en/modules/admin/didyoumean.tt:57
@@ -41531,12 +41541,12 @@ msgstr "Vista OPAC"
 msgid "OPAC/Staff login"
 msgstr "Autenticació OPAC/personal"
 
-#: intranet-tmpl/prog/en/modules/about.tt:553
+#: intranet-tmpl/prog/en/modules/about.tt:560
 #, c-format
 msgid "OPUS"
 msgstr "OPUS"
 
-#: intranet-tmpl/prog/en/modules/about.tt:449
+#: intranet-tmpl/prog/en/modules/about.tt:456
 #, c-format
 msgid ""
 "OPUS International Consultants, Wellington, New Zealand (Corporate Serials "
@@ -41931,12 +41941,12 @@ msgstr "Obre en una finestra nova."
 msgid "Open on:"
 msgstr "Obre en:"
 
-#: intranet-tmpl/prog/en/modules/about.tt:646
+#: intranet-tmpl/prog/en/modules/about.tt:653
 #, c-format
 msgid "OpenJS Keyboard Shortcuts Library"
 msgstr "Biblioteca de dreceres de teclat OpenJS"
 
-#: intranet-tmpl/prog/en/modules/about.tt:648
+#: intranet-tmpl/prog/en/modules/about.tt:655
 #, c-format
 msgid "OpenJS keyboard shortcuts library"
 msgstr "OpenJS biblioteca de dreceres de teclat"
@@ -42233,7 +42243,7 @@ msgstr "Comandes amb preus incerts"
 msgid "Orders with uncertain prices for vendor "
 msgstr "Comandes amb preus incerts per proveïdor "
 
-#: intranet-tmpl/prog/en/modules/about.tt:554
+#: intranet-tmpl/prog/en/modules/about.tt:561
 #, c-format
 msgid "Orex Digital, Spain"
 msgstr "Orex Digital, Espanya"
@@ -42286,7 +42296,7 @@ msgstr "Línia de comanda original"
 msgid "Original version"
 msgstr "Versió original"
 
-#: intranet-tmpl/prog/en/modules/about.tt:555
+#: intranet-tmpl/prog/en/modules/about.tt:562
 #, c-format
 msgid "Oslo Public Library, Norway"
 msgstr "Biblioteca pública d'Oslo, Noruega"
@@ -42334,7 +42344,7 @@ msgstr "Altre nom"
 msgid "Other names"
 msgstr "Altres noms"
 
-#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:168
+#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:173
 #, c-format
 msgid "Other options (choose one)"
 msgstr "Altres opcions (a escollir)"
@@ -42534,12 +42544,12 @@ msgstr "PM"
 msgid "PSGI: "
 msgstr "PSGI: "
 
-#: intranet-tmpl/prog/en/modules/about.tt:560
+#: intranet-tmpl/prog/en/modules/about.tt:567
 #, c-format
 msgid "PTFS Europe Ltd, United Kingdom"
 msgstr "PTFS Europe Ltd, Regne Unit"
 
-#: intranet-tmpl/prog/en/modules/about.tt:559
+#: intranet-tmpl/prog/en/modules/about.tt:566
 #, c-format
 msgid "PTFS, Maryland, USA"
 msgstr "PTFS, Maryland, EUA"
@@ -44225,12 +44235,12 @@ msgstr "Planificació "
 msgid "Planning for %s %s"
 msgstr "Planificació de %s per %s"
 
-#: intranet-tmpl/prog/en/modules/about.tt:556
+#: intranet-tmpl/prog/en/modules/about.tt:563
 #, c-format
 msgid "Plano Independent School, USA"
 msgstr "L'escola Independent de Plano, Estats Units"
 
-#: intranet-tmpl/prog/en/modules/about.tt:557
+#: intranet-tmpl/prog/en/modules/about.tt:564
 #, c-format
 msgid "Plant and Food Research Limited, New Zealand"
 msgstr ""
@@ -44277,7 +44287,7 @@ msgstr "Si us plau marqueu fascicles que no publicats (irregularitats)"
 #. %1$s:  ELSIF ( error.cache_expiry ) 
 #. %2$s:  ELSE 
 #. %3$s:  END 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1028
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1029
 #, c-format
 msgid ""
 "Please check the log for further details. %sPlease select a cache expiry "
@@ -44703,7 +44713,7 @@ msgid "Please return this item to %s "
 msgstr "Si us plau torneu l’exemplar a: %s "
 
 #. %1$s:  ELSIF ( error.queryerr ) 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1027
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1028
 #, fuzzy, c-format
 msgid ""
 "Please return to the &quot;Saved Reports&quot; screen and delete this report "
@@ -44925,7 +44935,7 @@ msgstr "Verifiqueu la integritat del fitxer zip i torneu-ho a provar."
 msgid "Plugin version"
 msgstr "Versió del connector"
 
-#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:196
+#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:201
 #: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:199
 #: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:301
 #, c-format
@@ -44966,7 +44976,7 @@ msgstr "Connectors instal·lats ({0}):"
 msgid "Policy for %s: %s"
 msgstr "Política de %s: %s"
 
-#: intranet-tmpl/prog/en/modules/about.tt:767
+#: intranet-tmpl/prog/en/modules/about.tt:774
 #, c-format
 msgid "Polski (Polish)"
 msgstr "Polski (polonès)"
@@ -45009,7 +45019,7 @@ msgstr ""
 msgid "Port: "
 msgstr "Port: "
 
-#: intranet-tmpl/prog/en/modules/about.tt:768
+#: intranet-tmpl/prog/en/modules/about.tt:775
 #, c-format
 msgid "Portugu&ecirc;s (Portuguese)"
 msgstr "Português (portuguès)"
@@ -45703,7 +45713,7 @@ msgstr "Perfils"
 msgid "Programmed texts"
 msgstr "Textos programats"
 
-#: intranet-tmpl/prog/en/modules/about.tt:558
+#: intranet-tmpl/prog/en/modules/about.tt:565
 #, c-format
 msgid "Prosentient Systems, Australia"
 msgstr "Prosentient sistemes, Austràlia"
@@ -46176,7 +46186,7 @@ msgstr "RRP fiscal inc."
 msgid "RT"
 msgstr "TR"
 
-#: intranet-tmpl/prog/en/modules/about.tt:597
+#: intranet-tmpl/prog/en/modules/about.tt:604
 #, c-format
 msgid "Rachel Hamilton-Williams (Kaitiaki from 2004 to present)"
 msgstr "Rachel Hamilton-Williams (Kaitiaki des de 2004 per presentar)"
@@ -46559,7 +46569,7 @@ msgstr "Data de registre: "
 msgid "Registration date: %s"
 msgstr "Data de registre: %s"
 
-#: intranet-tmpl/prog/en/modules/about.tt:602
+#: intranet-tmpl/prog/en/modules/about.tt:609
 #, c-format
 msgid "Regula Sebastiao"
 msgstr "Regula Sebastiao"
@@ -47117,7 +47127,7 @@ msgid "Repeat this Tag"
 msgstr "Repeteix aquesta etiqueta"
 
 #: intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:196
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:177
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:184
 #, c-format
 msgid "Repeatable"
 msgstr "Repetible"
@@ -47126,7 +47136,7 @@ msgstr "Repetible"
 #: intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:91
 #: intranet-tmpl/prog/en/modules/admin/patron-attr-types.tt:77
 #: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:72
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:69
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:76
 #, c-format
 msgid "Repeatable: "
 msgstr "Repetible: "
@@ -47258,17 +47268,17 @@ msgstr ""
 "Informe després de desplaçar les comandes no rebudes del pressupost%s (%s - "
 "%s) to %s (%s - %s)"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1710
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1711
 #, c-format
 msgid "Report group:"
 msgstr "Grup d’informe:"
 
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:363
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:365
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:913
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:915
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:988
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:990
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:914
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:916
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:989
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:991
 #, c-format
 msgid "Report is public:"
 msgstr "Informe és públic:"
@@ -47285,13 +47295,13 @@ msgstr "Nom de l’informe: "
 msgid "Report name"
 msgstr "Nom de l’informe"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:906
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:907
 #, c-format
 msgid "Report name:"
 msgstr "Nom de l’informe:"
 
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:626
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:985
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:986
 #, c-format
 msgid "Report name: "
 msgstr "Nom de l’informe: "
@@ -47304,7 +47314,7 @@ msgstr "Nom de l’informe: "
 msgid "Report plugins"
 msgstr "Informe plugins"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1732
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1733
 #, c-format
 msgid "Report subgroup:"
 msgstr "Subgrup d'informe:"
@@ -47443,8 +47453,8 @@ msgstr "Tipus d’exemplar sol·licitat"
 msgid "Require valid email address:"
 msgstr "Requereix una adreça de correu electrònic vàlida:"
 
-#: intranet-tmpl/prog/en/modules/about.tt:681
-#: intranet-tmpl/prog/en/modules/about.tt:682
+#: intranet-tmpl/prog/en/modules/about.tt:688
+#: intranet-tmpl/prog/en/modules/about.tt:689
 #, c-format
 msgid "Require.js JS module system"
 msgstr "Requereix el sistema de mòduls. js JS"
@@ -47689,7 +47699,7 @@ msgstr "Requereix el sistema de mòduls. js JS"
 #: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:88
 #: intranet-tmpl/prog/en/modules/admin/printers.tt:67
 #: intranet-tmpl/prog/en/modules/admin/printers.tt:73
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:64
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:71
 #: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:61
 #: intranet-tmpl/prog/en/modules/admin/additional-fields.tt:131
 #: intranet-tmpl/prog/en/modules/admin/cities.tt:70
@@ -47703,10 +47713,10 @@ msgstr "Requereix el sistema de mòduls. js JS"
 #: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:214
 #: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:224
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:626
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:908
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:932
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:985
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1008
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:909
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:933
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:986
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1009
 #: intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:276
 #: intranet-tmpl/prog/en/modules/services/itemrecorddisplay.tt:33
 #: intranet-tmpl/prog/en/modules/offline_circ/process_koc.tt:42
@@ -47959,7 +47969,7 @@ msgstr "Resultats per a registres d'autoritat"
 #. For the first occurrence,
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/serials/subscription-add.tt:520
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1092
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1093
 msgid "Results from Mana Knowledge Base"
 msgstr ""
 
@@ -48043,7 +48053,7 @@ msgstr "Tornar a les plantilles"
 msgid "Return to patron detail"
 msgstr "Tornar a la fitxa d’usuari"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1033
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1034
 #, c-format
 msgid "Return to previous page"
 msgstr "Tornar a pàgina anterior"
@@ -48194,7 +48204,7 @@ msgstr "Pes"
 msgid "Right to left"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:561
+#: intranet-tmpl/prog/en/modules/about.tt:568
 #, c-format
 msgid "Rijksmuseum, Amsterdam, The Netherlands"
 msgstr "Rijksmuseum, Amsterdam, Països Baixos"
@@ -48209,7 +48219,7 @@ msgstr ""
 msgid "Robots"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:562
+#: intranet-tmpl/prog/en/modules/about.tt:569
 #, c-format
 msgid "Rolling Hills Consolidated Libraries, USA"
 msgstr "Rolling Hills Consolidated Libraries, USA"
@@ -48224,7 +48234,7 @@ msgstr "Tornar a:"
 msgid "Rollover:"
 msgstr "Tornar:"
 
-#: intranet-tmpl/prog/en/modules/about.tt:769
+#: intranet-tmpl/prog/en/modules/about.tt:776
 #, c-format
 msgid "Rom&acirc;n&#259; (Romanian)"
 msgstr "Română (romanès)"
@@ -48281,7 +48291,7 @@ msgstr ""
 msgid "Rotating collections"
 msgstr "Rotació de col·leccions"
 
-#: intranet-tmpl/prog/en/modules/about.tt:563
+#: intranet-tmpl/prog/en/modules/about.tt:570
 #, c-format
 msgid "Round Rock Public Library, USA"
 msgstr "Biblioteca pública Round Rock, Estats Units"
@@ -48418,12 +48428,12 @@ msgstr "Executa eina"
 msgid "SAN"
 msgstr "SAN"
 
-#: intranet-tmpl/prog/en/modules/about.tt:445
+#: intranet-tmpl/prog/en/modules/about.tt:452
 #, c-format
 msgid "SAN-Ouest Provence"
 msgstr "SAN-Ouest Provença"
 
-#: intranet-tmpl/prog/en/modules/about.tt:564
+#: intranet-tmpl/prog/en/modules/about.tt:571
 #, c-format
 msgid "SAN-Ouest Provence, France"
 msgstr "SAN-Ouest Provença, França"
@@ -48450,12 +48460,12 @@ msgstr "SI Centímetres"
 msgid "SI Millimeters"
 msgstr "SI Mil·límetres"
 
-#: intranet-tmpl/prog/en/modules/about.tt:673
+#: intranet-tmpl/prog/en/modules/about.tt:680
 #, c-format
 msgid "SIL OFL 1.1"
 msgstr "SIL OFL 1.1"
 
-#: intranet-tmpl/prog/en/modules/about.tt:712
+#: intranet-tmpl/prog/en/modules/about.tt:719
 #, c-format
 msgid "SIL Open Font License (OFL) v1.1"
 msgstr ""
@@ -48498,8 +48508,8 @@ msgstr "Número SMS:"
 msgid "SMS provider:"
 msgstr "Proveïdors de SMS:"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:930
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1006
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:931
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1007
 #, c-format
 msgid "SQL:"
 msgstr "SQL:"
@@ -48524,7 +48534,7 @@ msgstr "SRW-DC"
 msgid "STARTDATE:January 1 2010,TRACK:Day"
 msgstr "STARTDATE:January 1 2010, dia a la pista:"
 
-#: intranet-tmpl/prog/en/modules/about.tt:570
+#: intranet-tmpl/prog/en/modules/about.tt:577
 #, c-format
 msgid "SWITCH Library Consortium, USA"
 msgstr "SWITCH Library Consortium, USA"
@@ -48733,9 +48743,9 @@ msgstr "Desa com patró nou"
 #: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:247
 #: intranet-tmpl/prog/en/modules/members/housebound.tt:189
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:238
-#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:214
+#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:219
 #: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:43
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:97
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:104
 #: intranet-tmpl/prog/en/modules/admin/itemtypes.tt:312
 #, c-format
 msgid "Save changes"
@@ -48774,7 +48784,7 @@ msgstr "No s'ha pogut llegir el fitxer."
 
 #. INPUT type=submit name=submit
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:631
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:937
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:938
 msgid "Save report"
 msgstr "Desa l'informe"
 
@@ -48822,7 +48832,7 @@ msgstr "Data devolució des de"
 msgid "Saved preference %s"
 msgstr "Preferència desada %s"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:943
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:944
 #, c-format
 msgid "Saved report results"
 msgstr "Desar els resultats dels informes"
@@ -48832,7 +48842,7 @@ msgstr "Desar els resultats dels informes"
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:59
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:60
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:144
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1038
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1039
 #, c-format
 msgid "Saved reports"
 msgstr "Informes disponibles"
@@ -48989,7 +48999,7 @@ msgstr "Pantalla"
 #: intranet-tmpl/prog/en/modules/acqui/histsearch.tt:164
 #: intranet-tmpl/prog/en/modules/acqui/acqui-home.tt:45
 #: intranet-tmpl/prog/en/modules/circ/request-article.tt:79
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:162
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:169
 #: intranet-tmpl/prog/en/modules/admin/admin-home.tt:52
 #: intranet-tmpl/prog/en/modules/reports/reports-home.tt:37
 #: intranet-tmpl/prog/en/modules/labels/label-bib-search.tt:6
@@ -49193,7 +49203,7 @@ msgstr "Cercar usuaris"
 msgid "Search for record"
 msgstr "Cerca per registre"
 
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:148
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:155
 #, c-format
 msgid "Search for tag:"
 msgstr "Cerca per etiqueta:"
@@ -49531,7 +49541,7 @@ msgstr "Estació"
 msgid "Second"
 msgstr "Segon"
 
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:86
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:93
 #, c-format
 msgid "Second indicator default value: "
 msgstr "Valor segon indicador predeterminat: "
@@ -49561,8 +49571,8 @@ msgid "Secondary phone: "
 msgstr "Telèfon secundari: "
 
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:370
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:920
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:995
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:921
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:996
 #, c-format
 msgid "Seconds (default)"
 msgstr "Segons (per defecte)"
@@ -49616,7 +49626,7 @@ msgstr "Veure la pàgina pública: "
 msgid "Seen"
 msgstr "Vist"
 
-#: intranet-tmpl/prog/en/modules/about.tt:565
+#: intranet-tmpl/prog/en/modules/about.tt:572
 #, fuzzy, c-format
 msgid "Sefton Council, United Kingdom"
 msgstr "software.Coop, Regne Unit"
@@ -49630,8 +49640,8 @@ msgstr "software.Coop, Regne Unit"
 #: intranet-tmpl/prog/en/modules/members/tables/guarantor_search.tt:21
 #: intranet-tmpl/prog/en/modules/acqui/tables/members_results.tt:19
 #: intranet-tmpl/prog/en/modules/circ/request-article.tt:70
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1713
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1735
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1714
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1736
 #: intranet-tmpl/prog/en/modules/labels/label-edit-batch.tt:116
 #: intranet-tmpl/prog/en/modules/labels/result.tt:72
 #, c-format
@@ -50087,8 +50097,8 @@ msgstr "Seleccionar sense exemplars"
 msgid "Select your MARC flavor"
 msgstr "Seleccioni el seu tipu de MARC"
 
-#: intranet-tmpl/prog/en/modules/about.tt:687
-#: intranet-tmpl/prog/en/modules/about.tt:688
+#: intranet-tmpl/prog/en/modules/about.tt:694
+#: intranet-tmpl/prog/en/modules/about.tt:695
 #, c-format
 msgid "Select2"
 msgstr "Select2"
@@ -51523,12 +51533,12 @@ msgstr "Codi de classificació / esquema"
 msgid "Source records"
 msgstr "Registres d'origen"
 
-#: intranet-tmpl/prog/en/modules/about.tt:568
+#: intranet-tmpl/prog/en/modules/about.tt:575
 #, fuzzy, c-format
 msgid "South Taranaki District Council, New Zealand"
 msgstr "Biblioteques de barri disposa, Nova Zelanda"
 
-#: intranet-tmpl/prog/en/modules/about.tt:567
+#: intranet-tmpl/prog/en/modules/about.tt:574
 #, c-format
 msgid "South-East Kansas Library System (SEKLS), USA"
 msgstr "Sud-est de Kansas sistema bibliotecari (SEKLS), EUA"
@@ -51561,7 +51571,7 @@ msgstr "escriviu els caracters"
 msgid "Special relationship: "
 msgstr "Relació especial: "
 
-#: intranet-tmpl/prog/en/modules/about.tt:439
+#: intranet-tmpl/prog/en/modules/about.tt:446
 #, c-format
 msgid "Special thanks to the following organizations"
 msgstr "Agraïments especials a les següents organitzacions"
@@ -52195,7 +52205,7 @@ msgstr "Pas 5: Confirmar definició"
 msgid "Step 6 of 6: Choose how you want the report ordered"
 msgstr "Pas 6 de 6: Trieu com voleu ordenar l'informe"
 
-#: intranet-tmpl/prog/en/modules/about.tt:598
+#: intranet-tmpl/prog/en/modules/about.tt:605
 #, c-format
 msgid "Stephen Hedges (early Documentation Manager)"
 msgstr "Stephen tanques (principis documentació Manager)"
@@ -52223,7 +52233,7 @@ msgstr "Ubicació"
 msgid "Stock rotation details for %s"
 msgstr "Detalls préstec a domicili per a %s"
 
-#: intranet-tmpl/prog/en/modules/about.tt:569
+#: intranet-tmpl/prog/en/modules/about.tt:576
 #, c-format
 msgid "Stockholm University Library, Sweden"
 msgstr "Biblioteca Universitat d'Estocolm, Suècia"
@@ -52291,7 +52301,7 @@ msgid "Sub total "
 msgstr "Subtotal "
 
 #: intranet-tmpl/prog/en/modules/admin/oai_set_mappings.tt:35
-#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:263
+#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:268
 #: intranet-tmpl/prog/en/modules/admin/koha2marclinks.tt:32
 #: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:268
 #: intranet-tmpl/prog/en/modules/admin/checkmarc.tt:202
@@ -52327,7 +52337,7 @@ msgid "Subfield:"
 msgstr "Subcamp:"
 
 #. %1$s:  tagsubfield | html 
-#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:223
+#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:228
 #, c-format
 msgid "Subfield: %s"
 msgstr "Subcamp: %s"
@@ -52356,12 +52366,12 @@ msgid "Subgroup"
 msgstr "Subgrup"
 
 #. INPUT type=text name=subgroup
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1755
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1756
 msgid "Subgroup code"
 msgstr "Codi de subgrup"
 
 #. INPUT type=text name=subgroupdesc
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1756
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1757
 msgid "Subgroup name"
 msgstr "Nom del subgrup"
 
@@ -53076,7 +53086,7 @@ msgstr "Interval de càrrega de suspensió"
 msgid "Suspension in days (day)"
 msgstr "Suspensió en dies (dia)"
 
-#: intranet-tmpl/prog/en/modules/about.tt:772
+#: intranet-tmpl/prog/en/modules/about.tt:779
 #, c-format
 msgid "Svenska (Swedish)"
 msgstr "Svenska (suec)"
@@ -53101,8 +53111,8 @@ msgstr "Canviar a editor bàsic"
 msgid "Switch to or from fullscreen mode"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:358
-#: intranet-tmpl/prog/en/modules/about.tt:366
+#: intranet-tmpl/prog/en/modules/about.tt:365
+#: intranet-tmpl/prog/en/modules/about.tt:373
 #, c-format
 msgid "Switching to dom indexing"
 msgstr "Canvi a indexació DOM"
@@ -53253,7 +53263,7 @@ msgstr "Cerca de preferència de sistema:"
 msgid "System preferences"
 msgstr "Preferències de sistema"
 
-#: intranet-tmpl/prog/en/modules/about.tt:775
+#: intranet-tmpl/prog/en/modules/about.tt:782
 #, c-format
 msgid ""
 "T&uuml;rk&ccedil;e (Turkish) pre-3.8: Selma Aslan; for 3.8+, Suleyman "
@@ -53324,7 +53334,7 @@ msgstr "Pestanya:"
 #. %20$s:  IF ( subfield.value_builder ) 
 #. %21$s:  subfield.value_builder | html 
 #. %22$s:  END 
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:193
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:200
 #, c-format
 msgid ""
 "Tab:%s | $%s %s %s%s%s%s, repeatable%s%s, Mandatory%s%s, See %s%s%s, %s%s%s, "
@@ -53351,7 +53361,7 @@ msgstr "Continguts"
 msgid "Table properties"
 msgstr "Opcions variables:"
 
-#: intranet-tmpl/prog/en/modules/about.tt:691
+#: intranet-tmpl/prog/en/modules/about.tt:698
 #, c-format
 msgid "TableDnD plug-in for jQuery"
 msgstr "TableDnD plug-in per jQuery"
@@ -53374,7 +53384,7 @@ msgstr "Tabulació (\\t)"
 
 #: intranet-tmpl/prog/en/modules/admin/koha2marclinks.tt:31
 #: intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:194
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:175
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:182
 #: intranet-tmpl/prog/en/modules/admin/checkmarc.tt:168
 #: intranet-tmpl/prog/en/modules/admin/checkmarc.tt:201
 #: intranet-tmpl/prog/en/modules/admin/checkmarc.tt:236
@@ -53403,7 +53413,7 @@ msgstr "Etiqueta %s estructura subcamp"
 msgid "Tag %s subfield structure"
 msgstr "Etiqueta %s estructura subcamp"
 
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:123
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:130
 #, c-format
 msgid "Tag deleted"
 msgstr "Etiqueta suprimida"
@@ -53431,7 +53441,7 @@ msgstr "Etiqueta no té subcamps"
 msgid "Tag moderation"
 msgstr "Moderació d’etiquetes"
 
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:59
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:66
 #, c-format
 msgid "Tag:"
 msgstr "Etiqueta:"
@@ -53448,13 +53458,13 @@ msgstr "Etiqueta:"
 #: intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:78
 #: intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:84
 #: intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:127
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:62
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:69
 #, c-format
 msgid "Tag: "
 msgstr "Etiqueta: "
 
 #. %1$s:  searchfield | html 
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:107
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:114
 #, c-format
 msgid "Tag: %s"
 msgstr "Etiqueta: %s"
@@ -53481,12 +53491,12 @@ msgstr "Etiquetes pendents d'aprovació"
 msgid "Tags:"
 msgstr "Etiquetes:"
 
-#: intranet-tmpl/prog/en/modules/about.tt:571
+#: intranet-tmpl/prog/en/modules/about.tt:578
 #, c-format
 msgid "Talking Tech, Global"
 msgstr "Parlant de tecnologia, Global"
 
-#: intranet-tmpl/prog/en/modules/about.tt:572
+#: intranet-tmpl/prog/en/modules/about.tt:579
 #, c-format
 msgid "Tamil, France"
 msgstr "Tàmil, França"
@@ -53687,7 +53697,7 @@ msgstr ""
 msgid "Testing..."
 msgstr "Provant…"
 
-#: intranet-tmpl/prog/en/modules/about.tt:773
+#: intranet-tmpl/prog/en/modules/about.tt:780
 #, c-format
 msgid "Tetun (Tetum) Karen Myers"
 msgstr "Tetun (tetun) Karen Myers"
@@ -53697,7 +53707,7 @@ msgstr "Tetun (tetun) Karen Myers"
 #: intranet-tmpl/prog/en/includes/str/tinymce_i18n.inc:1
 #: intranet-tmpl/prog/en/modules/tools/quotes.tt:42
 #: intranet-tmpl/prog/en/modules/tools/quotes-upload.tt:55
-#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:264
+#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:269
 #: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:269
 #, c-format
 msgid "Text"
@@ -53785,26 +53795,26 @@ msgstr ""
 "continuar."
 
 #: intranet-tmpl/prog/en/modules/members/members-update.tt:170
-#: intranet-tmpl/prog/en/modules/about.tt:442
-#: intranet-tmpl/prog/en/modules/about.tt:446
-#: intranet-tmpl/prog/en/modules/about.tt:447
-#: intranet-tmpl/prog/en/modules/about.tt:448
-#: intranet-tmpl/prog/en/modules/about.tt:644
-#: intranet-tmpl/prog/en/modules/about.tt:648
-#: intranet-tmpl/prog/en/modules/about.tt:652
-#: intranet-tmpl/prog/en/modules/about.tt:656
-#: intranet-tmpl/prog/en/modules/about.tt:660
-#: intranet-tmpl/prog/en/modules/about.tt:664
+#: intranet-tmpl/prog/en/modules/about.tt:449
+#: intranet-tmpl/prog/en/modules/about.tt:453
+#: intranet-tmpl/prog/en/modules/about.tt:454
+#: intranet-tmpl/prog/en/modules/about.tt:455
+#: intranet-tmpl/prog/en/modules/about.tt:651
+#: intranet-tmpl/prog/en/modules/about.tt:655
+#: intranet-tmpl/prog/en/modules/about.tt:659
+#: intranet-tmpl/prog/en/modules/about.tt:663
 #: intranet-tmpl/prog/en/modules/about.tt:667
-#: intranet-tmpl/prog/en/modules/about.tt:670
-#: intranet-tmpl/prog/en/modules/about.tt:676
-#: intranet-tmpl/prog/en/modules/about.tt:679
-#: intranet-tmpl/prog/en/modules/about.tt:682
-#: intranet-tmpl/prog/en/modules/about.tt:688
-#: intranet-tmpl/prog/en/modules/about.tt:691
-#: intranet-tmpl/prog/en/modules/about.tt:694
-#: intranet-tmpl/prog/en/modules/about.tt:697
-#: intranet-tmpl/prog/en/modules/about.tt:700
+#: intranet-tmpl/prog/en/modules/about.tt:671
+#: intranet-tmpl/prog/en/modules/about.tt:674
+#: intranet-tmpl/prog/en/modules/about.tt:677
+#: intranet-tmpl/prog/en/modules/about.tt:683
+#: intranet-tmpl/prog/en/modules/about.tt:686
+#: intranet-tmpl/prog/en/modules/about.tt:689
+#: intranet-tmpl/prog/en/modules/about.tt:695
+#: intranet-tmpl/prog/en/modules/about.tt:698
+#: intranet-tmpl/prog/en/modules/about.tt:701
+#: intranet-tmpl/prog/en/modules/about.tt:704
+#: intranet-tmpl/prog/en/modules/about.tt:707
 #, c-format
 msgid "The "
 msgstr "El "
@@ -53819,14 +53829,14 @@ msgstr "Els %s últimes fascicles relacionats amb aquesta subscripció:"
 #. %2$s:  unit.categorycode | html 
 #. %3$s:  unit.itemtype | html 
 #. %4$s:  unit.lengthunit | html 
-#: intranet-tmpl/prog/en/modules/about.tt:424
+#: intranet-tmpl/prog/en/modules/about.tt:431
 #, c-format
 msgid ""
 "The %s, %s, %s issuingrule will fallback to 'days' for 'lengthunit' as it is "
 "incorrectly defined as %s. "
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:379
+#: intranet-tmpl/prog/en/modules/about.tt:386
 #, c-format
 msgid ""
 "The &lt;use_zebra_facets&gt; entry is missing in your configuration file. "
@@ -53835,7 +53845,7 @@ msgstr ""
 "La configuració &lt; use_zebra_facets &gt; no es troba en el fitxer de "
 "configuració. Fent servir el sistema antic de facetes."
 
-#: intranet-tmpl/prog/en/modules/about.tt:364
+#: intranet-tmpl/prog/en/modules/about.tt:371
 #, fuzzy, c-format
 msgid ""
 "The &lt;zebra_auth_index_mode&gt; entry set to 'grs1', which is no longer "
@@ -53845,7 +53855,7 @@ msgstr ""
 "suport GRS-1 ara està obsolet i s'eliminarà en futures versions. Si us plau, "
 "utilitzeu DOM en el seu lloc. Per canviar seguiu aquesta pàgina de wiki: "
 
-#: intranet-tmpl/prog/en/modules/about.tt:356
+#: intranet-tmpl/prog/en/modules/about.tt:363
 #, fuzzy, c-format
 msgid ""
 "The &lt;zebra_bib_index_mode&gt; entry set to 'grs1', which is no longer "
@@ -53885,12 +53895,12 @@ msgstr ""
 "El permís total no té cap efecte real, mentre que aquesta llista és "
 "estrictament privada."
 
-#: intranet-tmpl/prog/en/modules/about.tt:624
+#: intranet-tmpl/prog/en/modules/about.tt:631
 #, c-format
 msgid "The Bridge Material Type Icon Set"
 msgstr "Conjunt de icones Bridge Material"
 
-#: intranet-tmpl/prog/en/modules/about.tt:627
+#: intranet-tmpl/prog/en/modules/about.tt:634
 #, c-format
 msgid "The Bridge Material Type Icon Set is licensed under a "
 msgstr "El grup d’icones Bridge Material està. llicenciat sota una "
@@ -54070,7 +54080,7 @@ msgstr ""
 msgid "The change will be applied immediately."
 msgstr "El canvi s'aplicarà immediatament."
 
-#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:259
+#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:264
 #: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:264
 #, c-format
 msgid ""
@@ -54267,7 +54277,7 @@ msgid "The following error occurred while importing the database structure:"
 msgstr ""
 "S'ha produït el següent error en importar l'estructura de base de dades:"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1023
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1024
 #, c-format
 msgid "The following error was encountered:"
 msgstr "S’ ha trobat el següent error:"
@@ -54399,7 +54409,7 @@ msgstr ""
 msgid "The import id number "
 msgstr "Número d'identificació de la importació "
 
-#: intranet-tmpl/prog/en/modules/about.tt:685
+#: intranet-tmpl/prog/en/modules/about.tt:692
 #, c-format
 msgid "The included OAI.xslt file by the "
 msgstr "El fitxer inclòs OAI.xslt per la "
@@ -54547,21 +54557,21 @@ msgid "The order has been successfully cancelled %s "
 msgstr "La comanda ha estat anul·lada amb èxit %s "
 
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:75
-#, c-format
+#, fuzzy, c-format
 msgid ""
-"The order line you trying to cancel was created from a partial receipt of "
-"another order line which has been deleted. Cancellation is not possible. "
+"The order line you are trying to cancel was created from a partial receipt "
+"of another order line which has been deleted. Cancellation is not possible. "
 msgstr ""
 "La línia de comanda que intententeu anul·lar neix ud’na confirmació parcial "
 "d'una altra línia de comanda que s'ha suprimit. La cancel·lació no és "
 "possible. "
 
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:70
-#, c-format
+#, fuzzy, c-format
 msgid ""
-"The order line you trying to cancel was created from a partial receipt of "
-"another order line which is already received. Try to cancel this one first "
-"and retry. "
+"The order line you are trying to cancel was created from a partial receipt "
+"of another order line which is already received. Try to cancel this one "
+"first and retry. "
 msgstr ""
 "La línia de comanda que intenteu anul·lar va ser creada des de una "
 "confirmació parcial d'una altra línia de comanda que ja s’ha rebut. Intenteu "
@@ -54943,7 +54953,7 @@ msgstr ""
 msgid "The value \"%s\" is not supported for mappings"
 msgstr "El valor \"%s\" no està suportat per mapeig"
 
-#: intranet-tmpl/prog/en/modules/about.tt:573
+#: intranet-tmpl/prog/en/modules/about.tt:580
 #, c-format
 msgid "Theke Solutions, Argentina"
 msgstr ""
@@ -55311,7 +55321,7 @@ msgstr "Hi va haver problemes amb l’enviament"
 msgid "Therefore, the record to be merged has not been deleted. "
 msgstr "Per tant, el registre per ser fusionats no s'ha suprimit. "
 
-#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:184
+#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:189
 #: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:183
 #, c-format
 msgid "Thesaurus:"
@@ -55906,7 +55916,7 @@ msgstr ""
 msgid "This rota has no stages."
 msgstr "Aquest registre no té exemplars"
 
-#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:258
+#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:263
 #: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:263
 #, c-format
 msgid ""
@@ -56140,12 +56150,12 @@ msgstr "Timeout (0 és com no definit): "
 msgid "Timestamp"
 msgstr "Marca de temps"
 
-#: intranet-tmpl/prog/en/modules/about.tt:669
+#: intranet-tmpl/prog/en/modules/about.tt:676
 #, c-format
 msgid "TinyMCE WYSIWYG editor"
 msgstr "Editor TinyMCE WYSIWYG"
 
-#: intranet-tmpl/prog/en/modules/about.tt:670
+#: intranet-tmpl/prog/en/modules/about.tt:677
 #, fuzzy, c-format
 msgid "TinyMCE WYSIWYG editor v5.0.16 "
 msgstr "TinyMCE WYSIWYG editor v3.5.8"
@@ -57180,7 +57190,7 @@ msgid "Translate item type %s"
 msgstr "Suprimir tipos d’exemplar ‘%s’?"
 
 #: intranet-tmpl/prog/en/modules/admin/localization.tt:67
-#: intranet-tmpl/prog/en/modules/about.tt:731
+#: intranet-tmpl/prog/en/modules/about.tt:738
 #, c-format
 msgid "Translation"
 msgstr "Traducció"
@@ -57277,7 +57287,7 @@ msgstr "Dimarts"
 msgid "Tuesdays"
 msgstr "Dimarts"
 
-#: intranet-tmpl/prog/en/modules/about.tt:574
+#: intranet-tmpl/prog/en/modules/about.tt:581
 #, c-format
 msgid "Tulong Aklatan, Philippines"
 msgstr "Tulong biblioteca, Filipines"
@@ -57380,7 +57390,7 @@ msgstr "US polzades"
 msgid "UTF-8 (Default)"
 msgstr "UTF-8 (per defecte)"
 
-#: intranet-tmpl/prog/en/modules/about.tt:575
+#: intranet-tmpl/prog/en/modules/about.tt:582
 #, fuzzy, c-format
 msgid "Uintah Library System, USA"
 msgstr "Sistema biblioteca Comtat Washo, Estats Units"
@@ -57667,47 +57677,47 @@ msgstr "Quantitat:"
 msgid "Units: "
 msgstr "Unitats: "
 
-#: intranet-tmpl/prog/en/modules/about.tt:577
+#: intranet-tmpl/prog/en/modules/about.tt:584
 #, c-format
 msgid "Universidad Empresarial Siglo 21, Argentina"
 msgstr "Universidad Empresarial Siglo 21, Argentina"
 
-#: intranet-tmpl/prog/en/modules/about.tt:578
+#: intranet-tmpl/prog/en/modules/about.tt:585
 #, c-format
 msgid "Universidad Nacional de Córdoba, Argentina"
 msgstr "Universitat Nacional de Córdoba, Argentina"
 
-#: intranet-tmpl/prog/en/modules/about.tt:579
+#: intranet-tmpl/prog/en/modules/about.tt:586
 #, c-format
 msgid "Universidad ORT Uruguay"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:576
+#: intranet-tmpl/prog/en/modules/about.tt:583
 #, c-format
 msgid "Universidad de El Salvador, El Salvador"
 msgstr "Universidad del Salvador, El Salvador"
 
-#: intranet-tmpl/prog/en/modules/about.tt:584
+#: intranet-tmpl/prog/en/modules/about.tt:591
 #, c-format
 msgid "University of the Arts London, United Kingdom"
 msgstr "Universitat de les Arts Londres, Regne Unit"
 
-#: intranet-tmpl/prog/en/modules/about.tt:580
+#: intranet-tmpl/prog/en/modules/about.tt:587
 #, c-format
 msgid "Université d'Aix-Marseille, France"
 msgstr "Université d'Aix-Marsella, França"
 
-#: intranet-tmpl/prog/en/modules/about.tt:581
+#: intranet-tmpl/prog/en/modules/about.tt:588
 #, c-format
 msgid "Université de Lyon 3, France"
 msgstr "Université de Lyon 3, França"
 
-#: intranet-tmpl/prog/en/modules/about.tt:582
+#: intranet-tmpl/prog/en/modules/about.tt:589
 #, c-format
 msgid "Université de Rennes 2, France"
 msgstr "Université de Rennes 2, França"
 
-#: intranet-tmpl/prog/en/modules/about.tt:583
+#: intranet-tmpl/prog/en/modules/about.tt:590
 #, c-format
 msgid "Université de St Etienne, France"
 msgstr "Universitat de St Etienne, França"
@@ -57828,7 +57838,7 @@ msgstr "Actualitzar "
 
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:77
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:267
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1013
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1014
 #, c-format
 msgid "Update SQL"
 msgstr "Actualitzar SQL"
@@ -58308,7 +58318,7 @@ msgstr "Ús per a grups de cerca administrador"
 msgid "Use for staff search groups "
 msgstr "Ús per a grups de recerca a l’administrador"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1026
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1027
 #, c-format
 msgid ""
 "Use of this keyword is not allowed in Koha reports due to security and data "
@@ -58565,7 +58575,7 @@ msgstr ""
 msgid "VHS tape / Videocassette"
 msgstr "Cinta VHS / Videocasete"
 
-#: intranet-tmpl/prog/en/modules/about.tt:585
+#: intranet-tmpl/prog/en/modules/about.tt:592
 #, c-format
 msgid "Vaara-kirjastot, Finland"
 msgstr "Vaara-kirjastot, Finlàndia"
@@ -58632,7 +58642,7 @@ msgstr ""
 "Un valor autoritzat pels usuaris, que es pot utilitzar amb finalitats "
 "estadístiques"
 
-#: intranet-tmpl/prog/en/modules/about.tt:586
+#: intranet-tmpl/prog/en/modules/about.tt:593
 #, fuzzy, c-format
 msgid "Vanier College, Canada"
 msgstr "Vanier College, Canadà"
@@ -58843,18 +58853,18 @@ msgstr "Verificar que voleu anonymize història de comanda de patró"
 msgid "Verify you want to delete patrons"
 msgstr "Verificar que voleu suprimir mecenes"
 
-#: intranet-tmpl/prog/en/modules/about.tt:587
+#: intranet-tmpl/prog/en/modules/about.tt:594
 #, c-format
 msgid "Vermont Organization of Koha Automated Libraries (VOKAL), USA"
 msgstr ""
 "Organització de Vermont de Koha automatitzada de biblioteques (VOKAL), EUA"
 
-#: intranet-tmpl/prog/en/modules/about.tt:720
+#: intranet-tmpl/prog/en/modules/about.tt:727
 #, c-format
 msgid "Verovio"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:721
+#: intranet-tmpl/prog/en/modules/about.tt:728
 #, c-format
 msgid ""
 "Verovio is developed by the Swiss RISM Office with the support of the Swiss "
@@ -59066,7 +59076,7 @@ msgstr "Veure restriccions"
 msgid "View spine label"
 msgstr "Veure teixell"
 
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:211
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:218
 #, fuzzy, c-format
 msgid "View subfields"
 msgstr "Editar subcamps"
@@ -59081,17 +59091,17 @@ msgstr "Veure plugins"
 msgid "View, manage, configure and run plugins."
 msgstr "Visualitzar, gestionar, configurar i executar plugins."
 
-#: intranet-tmpl/prog/en/modules/about.tt:588
+#: intranet-tmpl/prog/en/modules/about.tt:595
 #, c-format
 msgid "Ville de Victoriaville, Canada"
 msgstr "Ville de Victoriaville, Canadà"
 
-#: intranet-tmpl/prog/en/modules/about.tt:589
+#: intranet-tmpl/prog/en/modules/about.tt:596
 #, c-format
 msgid "Virginia Tech, USA"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:125
+#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:130
 #, c-format
 msgid "Visibility: "
 msgstr "Visibilitat: "
@@ -59202,15 +59212,16 @@ msgstr "Advertència"
 #: intranet-tmpl/prog/en/modules/about.tt:325
 #: intranet-tmpl/prog/en/modules/about.tt:331
 #: intranet-tmpl/prog/en/modules/about.tt:336
-#: intranet-tmpl/prog/en/modules/about.tt:355
-#: intranet-tmpl/prog/en/modules/about.tt:363
-#: intranet-tmpl/prog/en/modules/about.tt:371
+#: intranet-tmpl/prog/en/modules/about.tt:347
+#: intranet-tmpl/prog/en/modules/about.tt:362
+#: intranet-tmpl/prog/en/modules/about.tt:370
 #: intranet-tmpl/prog/en/modules/about.tt:378
 #: intranet-tmpl/prog/en/modules/about.tt:385
 #: intranet-tmpl/prog/en/modules/about.tt:392
 #: intranet-tmpl/prog/en/modules/about.tt:399
-#: intranet-tmpl/prog/en/modules/about.tt:407
-#: intranet-tmpl/prog/en/modules/about.tt:423
+#: intranet-tmpl/prog/en/modules/about.tt:406
+#: intranet-tmpl/prog/en/modules/about.tt:414
+#: intranet-tmpl/prog/en/modules/about.tt:430
 #, c-format
 msgid "Warning"
 msgstr "Advertència"
@@ -59406,7 +59417,7 @@ msgstr "Advertència: No s'han trobat els itemnumbers"
 msgid "Warnings regarding the system configuration"
 msgstr "Avisos sobre la configuració del sistema"
 
-#: intranet-tmpl/prog/en/modules/about.tt:590
+#: intranet-tmpl/prog/en/modules/about.tt:597
 #, c-format
 msgid "Washoe County Library System, USA"
 msgstr "Sistema biblioteca Comtat Washo, Estats Units"
@@ -59841,7 +59852,7 @@ msgstr "X"
 msgid "XML"
 msgstr "XML"
 
-#: intranet-tmpl/prog/en/modules/about.tt:351
+#: intranet-tmpl/prog/en/modules/about.tt:358
 #, c-format
 msgid "XML configuration file"
 msgstr "Fitxer de configuració XML"
@@ -59851,12 +59862,12 @@ msgstr "Fitxer de configuració XML"
 msgid "XSLT File(s) for transforming results: "
 msgstr "Fitxer XSLT per transformar els resultats: "
 
-#: intranet-tmpl/prog/en/modules/about.tt:591
+#: intranet-tmpl/prog/en/modules/about.tt:598
 #, c-format
 msgid "Xercode, Spain"
 msgstr "Xercode, Espanya"
 
-#: intranet-tmpl/prog/en/modules/about.tt:615
+#: intranet-tmpl/prog/en/modules/about.tt:622
 #, c-format
 msgid "YUI"
 msgstr "YUI"
@@ -59953,10 +59964,10 @@ msgstr "Permetre"
 #: intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:392
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:363
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:365
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:913
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:915
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:988
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:990
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:914
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:916
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:989
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:991
 #, c-format
 msgid "Yes"
 msgstr "Sí"
@@ -60066,13 +60077,13 @@ msgstr "Sí, suprimeix aquest fons"
 msgid "Yes, delete this item type"
 msgstr "Sí, suprimeix aquest tipus d’exemplar"
 
-#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:231
+#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:236
 #: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:238
 #, c-format
 msgid "Yes, delete this subfield"
 msgstr ",subcamp complet"
 
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:113
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:120
 #, c-format
 msgid "Yes, delete this tag"
 msgstr "Sí, suprimeix aquesta etiqueta"
@@ -60149,7 +60160,7 @@ msgstr ""
 "recomanable perquè algunes parts del Koha no funcionaran com s'espera en "
 "utilitzar aquest compte."
 
-#: intranet-tmpl/prog/en/modules/about.tt:386
+#: intranet-tmpl/prog/en/modules/about.tt:393
 #, c-format
 msgid ""
 "You are missing the &lt;log4perl_conf&gt; entry in your koha-conf.xml file. "
@@ -60169,7 +60180,7 @@ msgstr ""
 "provocarà un increment de rendiment. "
 
 #. %1$s:  config_entry.effective_tmp_dir | html 
-#: intranet-tmpl/prog/en/modules/about.tt:408
+#: intranet-tmpl/prog/en/modules/about.tt:415
 #, c-format
 msgid ""
 "You are missing the &lt;tmp_path&gt; entry in your koha-conf.xml file. "
@@ -60180,7 +60191,7 @@ msgstr ""
 "afegeixi'l, apuntant amb el guia provisional configurat per a la seva "
 "instància de Koha. El directori temporal eficaç és \" %s\"."
 
-#: intranet-tmpl/prog/en/modules/about.tt:393
+#: intranet-tmpl/prog/en/modules/about.tt:400
 #, c-format
 msgid ""
 "You are missing the &lt;upload_path&gt; entry in your koha-conf.xml file. "
@@ -60191,7 +60202,7 @@ msgstr ""
 "plau afegeixi'l, assenyalant el guia de càrrega d'arxiu configurat per a la "
 "seva instància de Koha. "
 
-#: intranet-tmpl/prog/en/modules/about.tt:400
+#: intranet-tmpl/prog/en/modules/about.tt:407
 #, c-format
 msgid ""
 "You are missing the &lt;upload_path&gt; entry in your koha-conf.xml file. "
@@ -60264,7 +60275,7 @@ msgstr ""
 msgid "You are only viewing one item. "
 msgstr "Només s’està veient un exemplar. "
 
-#: intranet-tmpl/prog/en/modules/about.tt:460
+#: intranet-tmpl/prog/en/modules/about.tt:467
 #, c-format
 msgid "You are running a development version of Koha"
 msgstr ""
@@ -60550,7 +60561,7 @@ msgid "You have not selected any patrons to add to a list!"
 msgstr "No ha seleccionat cap usuari per afegir a una llista!"
 
 #. %1$s:  config_entry.file | html 
-#: intranet-tmpl/prog/en/modules/about.tt:372
+#: intranet-tmpl/prog/en/modules/about.tt:379
 #, c-format
 msgid ""
 "You have set UseQueryParser but the 'queryparser_config' entry is missing in "
@@ -60741,7 +60752,7 @@ msgid "You must select one or more patrons to remove"
 msgstr "Heu de seleccionar almenys un usuari per eliminar"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1092
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1093
 msgid "You must select one or more reports to delete"
 msgstr "Heu de seleccionar un o més informes de suprimir"
 
@@ -60990,7 +61001,7 @@ msgid "Your patron lists"
 msgstr "Les teves llistes d’ usuaris"
 
 #. %1$s:  reportname | html 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:972
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:973
 #, c-format
 msgid "Your report \"%s\" has been saved"
 msgstr "S'ha desat el seu informe \"%s\""
@@ -61442,7 +61453,7 @@ msgstr "analítiques."
 msgid "and"
 msgstr "i"
 
-#: intranet-tmpl/prog/en/modules/about.tt:612
+#: intranet-tmpl/prog/en/modules/about.tt:619
 #, c-format
 msgid "and "
 msgstr "i "
@@ -61467,7 +61478,7 @@ msgstr "i marcar una divisa com activa."
 msgid "and search for the \"data problems\" section"
 msgstr "i cerqueu la secció \"problemes de dades\""
 
-#: intranet-tmpl/prog/en/modules/about.tt:673
+#: intranet-tmpl/prog/en/modules/about.tt:680
 #, c-format
 msgid "and the "
 msgstr "i la "
@@ -61501,7 +61512,7 @@ msgstr "qualsevol biblioteca "
 msgid "approved"
 msgstr "aprovat"
 
-#: intranet-tmpl/prog/en/modules/about.tt:612
+#: intranet-tmpl/prog/en/modules/about.tt:619
 #, c-format
 msgid "are licensed under the "
 msgstr "estan llicenciats sota la "
@@ -61708,78 +61719,78 @@ msgstr ""
 msgid "by %s: "
 msgstr "per %s: "
 
-#: intranet-tmpl/prog/en/modules/about.tt:656
+#: intranet-tmpl/prog/en/modules/about.tt:663
 #, c-format
 msgid "by Allan Jardine is licensed under the BSD 3 and GPL v2 license."
 msgstr "per Allan Jardine està sota llicència del BSD 3 i llicència GPL v2."
 
-#: intranet-tmpl/prog/en/modules/about.tt:648
+#: intranet-tmpl/prog/en/modules/about.tt:655
 #, c-format
 msgid "by Binny V A is licensed under the BSD license."
 msgstr "per Binny V A està subjecta a la llicència BSD."
 
-#: intranet-tmpl/prog/en/modules/about.tt:697
+#: intranet-tmpl/prog/en/modules/about.tt:704
 #, c-format
 msgid "by DIY Co is licensed under the "
 msgstr "per DIY Co es concedeix una llicència sota el "
 
-#: intranet-tmpl/prog/en/modules/about.tt:673
+#: intranet-tmpl/prog/en/modules/about.tt:680
 #, c-format
 msgid "by Dave Gandy is licensed under the "
 msgstr "per Dave Gandy està subjecta a la"
 
-#: intranet-tmpl/prog/en/modules/about.tt:691
+#: intranet-tmpl/prog/en/modules/about.tt:698
 #, c-format
 msgid "by Denis Howlett is licensed under the "
 msgstr "per Denis Howlett està subjecta a la"
 
-#: intranet-tmpl/prog/en/modules/about.tt:679
+#: intranet-tmpl/prog/en/modules/about.tt:686
 #, c-format
 msgid "by Eli Grey is licensed under an "
 msgstr "per Eli gris està subjecta a una "
 
-#: intranet-tmpl/prog/en/modules/about.tt:712
+#: intranet-tmpl/prog/en/modules/about.tt:719
 #, fuzzy, c-format
 msgid "by Google is a family of fonts licensed under the "
 msgstr "per Dave Gandy està subjecta a la"
 
-#: intranet-tmpl/prog/en/modules/about.tt:724
+#: intranet-tmpl/prog/en/modules/about.tt:731
 #, c-format
 msgid ""
 "by Klaus Hartl is a jQuery plugin for setting, reading, and deleting browser "
 "cookies, licensed under the "
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:718
+#: intranet-tmpl/prog/en/modules/about.tt:725
 #, fuzzy, c-format
 msgid ""
 "by Lars Jung is a JavaScript library that generates QR codes, licensed under "
 "the "
 msgstr "Llibreria JavaScript per Vladimir Agafonkinis llicenciat sota la"
 
-#: intranet-tmpl/prog/en/modules/about.tt:676
+#: intranet-tmpl/prog/en/modules/about.tt:683
 #, c-format
 msgid "by Marijn Haverbeke is licensed under an "
 msgstr "els Marijn Haverbeke està subjecta sota llicència"
 
-#: intranet-tmpl/prog/en/modules/about.tt:670
+#: intranet-tmpl/prog/en/modules/about.tt:677
 #, c-format
 msgid "by Moxiecode (Ephox) is licensed under the "
 msgstr "per Moxiecode (Ephox) està subjecta a la"
 
-#: intranet-tmpl/prog/en/modules/about.tt:715
+#: intranet-tmpl/prog/en/modules/about.tt:722
 #, c-format
 msgid ""
 "by Some Web Media is a JavaScript library that makes any element on your "
 "page visible while you scroll, licensed under the "
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:682
+#: intranet-tmpl/prog/en/modules/about.tt:689
 #, c-format
 msgid "by The Dojo Foundation is licensed under an "
 msgstr "per la Fundació Dojo està subjecta a una"
 
-#: intranet-tmpl/prog/en/modules/about.tt:660
+#: intranet-tmpl/prog/en/modules/about.tt:667
 #, c-format
 msgid "by Zhixin Wen is licensed under the MIT license."
 msgstr "els Zhixin Wen està llicenciat sota la Llicència MIT."
@@ -61807,7 +61818,7 @@ msgstr "per biblioteques"
 msgid "by months"
 msgstr "per mesos"
 
-#: intranet-tmpl/prog/en/modules/about.tt:628
+#: intranet-tmpl/prog/en/modules/about.tt:635
 #, c-format
 msgid "by the Bridge Consortium of Carleton College and St. Olaf College."
 msgstr "pel Consorci pont de Carleton College i St Olaf College."
@@ -61905,7 +61916,7 @@ msgstr "tancat"
 msgid "club %s "
 msgstr "club %s "
 
-#: intranet-tmpl/prog/en/modules/about.tt:614
+#: intranet-tmpl/prog/en/modules/about.tt:621
 #, c-format
 msgid "code and "
 msgstr "codi i "
@@ -61956,7 +61967,7 @@ msgstr "contenen "
 msgid "contains"
 msgstr "conté"
 
-#: intranet-tmpl/prog/en/modules/about.tt:656
+#: intranet-tmpl/prog/en/modules/about.tt:663
 #, c-format
 msgid "controls for column visiblity in DataTables"
 msgstr "controls de visibilitat de columnes en DataTables"
@@ -62108,7 +62119,7 @@ msgstr "Mostra els detalls d'aquest bibliotecari."
 msgid "do a catalog search"
 msgstr "fer una cerca"
 
-#: intranet-tmpl/prog/en/modules/about.tt:520
+#: intranet-tmpl/prog/en/modules/about.tt:527
 #, fuzzy, c-format
 msgid "doXulting"
 msgstr "Circulació"
@@ -62186,7 +62197,7 @@ msgstr "ending.ogg"
 msgid "euro-currency sign"
 msgstr "Nova divisa"
 
-#: intranet-tmpl/prog/en/modules/about.tt:737
+#: intranet-tmpl/prog/en/modules/about.tt:744
 #, c-format
 msgid ""
 "euskara (Basque) Fernando Berrizbeitia, the librarians of Eima Katalogoa, "
@@ -62236,7 +62247,7 @@ msgstr "no s'ha pogut actualitzar"
 msgid "failed to run"
 msgstr "no s'ha pogut executar"
 
-#: intranet-tmpl/prog/en/modules/about.tt:450
+#: intranet-tmpl/prog/en/modules/about.tt:457
 #, c-format
 msgid "famfamfam.com"
 msgstr "famfamfam.com"
@@ -62450,11 +62461,6 @@ msgstr "si"
 msgid "if "
 msgstr "si"
 
-#: intranet-tmpl/prog/en/modules/admin/patron-attr-types.tt:125
-#, c-format
-msgid "if set.)"
-msgstr ""
-
 #: intranet-tmpl/prog/en/modules/admin/categories.tt:165
 #, c-format
 msgid ""
@@ -62537,24 +62543,24 @@ msgstr "tipus d'autoritat no vàlida"
 msgid "is"
 msgstr "és"
 
-#: intranet-tmpl/prog/en/modules/about.tt:727
+#: intranet-tmpl/prog/en/modules/about.tt:734
 #, c-format
 msgid ""
 "is a \"simple, lightweight JavaScript API for handling cookies,\" licensed "
 "under the "
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:706
+#: intranet-tmpl/prog/en/modules/about.tt:713
 #, c-format
 msgid "is a D3-based reusable chart library under the "
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:709
+#: intranet-tmpl/prog/en/modules/about.tt:716
 #, fuzzy, c-format
 msgid "is a JavaScript library by Bram Stein licensed under the "
 msgstr "Llibreria JavaScript per Vladimir Agafonkinis llicenciat sota la"
 
-#: intranet-tmpl/prog/en/modules/about.tt:703
+#: intranet-tmpl/prog/en/modules/about.tt:710
 #, fuzzy, c-format
 msgid ""
 "is a JavaScript library for manipulating documents based on data. It is "
@@ -62598,12 +62604,12 @@ msgstr "és igual a"
 msgid "is exactly"
 msgstr "és exactament"
 
-#: intranet-tmpl/prog/en/modules/about.tt:685
+#: intranet-tmpl/prog/en/modules/about.tt:692
 #, c-format
 msgid "is licensed under a "
 msgstr " llicenciat sota "
 
-#: intranet-tmpl/prog/en/modules/about.tt:633
+#: intranet-tmpl/prog/en/modules/about.tt:640
 #, c-format
 msgid "is licensed under the "
 msgstr "llicenciat sota "
@@ -62625,7 +62631,7 @@ msgstr "ara és bloquejat fins a %s."
 msgid "is on hold for "
 msgstr "està reservat per "
 
-#: intranet-tmpl/prog/en/modules/about.tt:644
+#: intranet-tmpl/prog/en/modules/about.tt:651
 #, c-format
 msgid "is released under MIT license by Ludo van den Boom."
 msgstr "és alliberat sota llicència de MIT per Ludo van den Boom."
@@ -62636,6 +62642,11 @@ msgid "is restricted. Please verify this patron should still be restricted. "
 msgstr ""
 "està restringit. Si us plau verifiqueu si aquest usuari encara hauria de ser "
 "restringit. "
+
+#: intranet-tmpl/prog/en/modules/admin/patron-attr-types.tt:125
+#, c-format
+msgid "is set.)"
+msgstr ""
 
 #: intranet-tmpl/prog/en/includes/virtualshelves-toolbar.inc:28
 #: intranet-tmpl/prog/en/modules/basket/basket.tt:53
@@ -62728,43 +62739,43 @@ msgstr "tipus d’exemplar no assignat"
 msgid "itype"
 msgstr "itype"
 
-#: intranet-tmpl/prog/en/modules/about.tt:612
+#: intranet-tmpl/prog/en/modules/about.tt:619
 #, c-format
 msgid "jQuery"
 msgstr "jQuery"
 
-#: intranet-tmpl/prog/en/modules/about.tt:632
+#: intranet-tmpl/prog/en/modules/about.tt:639
 #, fuzzy, c-format
 msgid "jQuery Bar Rating Plugin"
 msgstr "Star Rating Plugin jQuery"
 
-#: intranet-tmpl/prog/en/modules/about.tt:633
+#: intranet-tmpl/prog/en/modules/about.tt:640
 #, fuzzy, c-format
 msgid "jQuery Bar Rating Plugin v1.22 by "
 msgstr "v 3.14 de Star Rating Plugin jQuery per"
 
-#: intranet-tmpl/prog/en/modules/about.tt:655
+#: intranet-tmpl/prog/en/modules/about.tt:662
 #, c-format
 msgid "jQuery Colvis plugin"
 msgstr "jQuery plugin de Colvis"
 
-#: intranet-tmpl/prog/en/modules/about.tt:666
-#: intranet-tmpl/prog/en/modules/about.tt:667
+#: intranet-tmpl/prog/en/modules/about.tt:673
+#: intranet-tmpl/prog/en/modules/about.tt:674
 #, c-format
 msgid "jQuery Validation Plugin"
 msgstr "jQuery Plugin de validació"
 
-#: intranet-tmpl/prog/en/modules/about.tt:611
+#: intranet-tmpl/prog/en/modules/about.tt:618
 #, c-format
 msgid "jQuery and jQueryUI"
 msgstr "jQuery i jQueryUI"
 
-#: intranet-tmpl/prog/en/modules/about.tt:637
+#: intranet-tmpl/prog/en/modules/about.tt:644
 #, c-format
 msgid "jQuery insertAtCaret Plugin"
 msgstr "jQuery insertAtCaret Plugin"
 
-#: intranet-tmpl/prog/en/modules/about.tt:638
+#: intranet-tmpl/prog/en/modules/about.tt:645
 #, c-format
 msgid ""
 "jQuery insertAtCaret Plugin v1.0 by the phpMyAdmin devel team is licensed "
@@ -62773,49 +62784,49 @@ msgstr ""
 "insertAtCaret de jQuery Plugin v 1.0 per l'equip phpMyAdmin devel està "
 "subjecta a la"
 
-#: intranet-tmpl/prog/en/modules/about.tt:660
+#: intranet-tmpl/prog/en/modules/about.tt:667
 #, c-format
 msgid "jQuery multiple select plugin"
 msgstr "jQuery plugin seleccionar múltiples"
 
-#: intranet-tmpl/prog/en/modules/about.tt:642
+#: intranet-tmpl/prog/en/modules/about.tt:649
 #, c-format
 msgid "jQuery treetable Plugin"
 msgstr "jQuery treetable Plugin"
 
-#: intranet-tmpl/prog/en/modules/about.tt:644
+#: intranet-tmpl/prog/en/modules/about.tt:651
 #, c-format
 msgid "jQuery treetable Plugin 3.1.0"
 msgstr "treetable jQuery Plugin 3.1.0"
 
-#: intranet-tmpl/prog/en/modules/about.tt:612
+#: intranet-tmpl/prog/en/modules/about.tt:619
 #, c-format
 msgid "jQueryUI"
 msgstr "jQueryUI"
 
-#: intranet-tmpl/prog/en/modules/about.tt:723
-#: intranet-tmpl/prog/en/modules/about.tt:724
+#: intranet-tmpl/prog/en/modules/about.tt:730
+#: intranet-tmpl/prog/en/modules/about.tt:731
 #, fuzzy, c-format
 msgid "jquery.cookie"
 msgstr "jQuery.emojiarea.js"
 
-#: intranet-tmpl/prog/en/modules/about.tt:651
-#: intranet-tmpl/prog/en/modules/about.tt:652
+#: intranet-tmpl/prog/en/modules/about.tt:658
+#: intranet-tmpl/prog/en/modules/about.tt:659
 #, c-format
 msgid "jquery.dataTables.grouping.js"
 msgstr "jquery.dataTables.grouping.js"
 
-#: intranet-tmpl/prog/en/modules/about.tt:696
+#: intranet-tmpl/prog/en/modules/about.tt:703
 #, c-format
 msgid "jquery.emojiarea.js"
 msgstr "jQuery.emojiarea.js"
 
-#: intranet-tmpl/prog/en/modules/about.tt:659
+#: intranet-tmpl/prog/en/modules/about.tt:666
 #, c-format
 msgid "jquery.multiple.select.js"
 msgstr "jQuery.Multiple.Select.js"
 
-#: intranet-tmpl/prog/en/modules/about.tt:690
+#: intranet-tmpl/prog/en/modules/about.tt:697
 #, c-format
 msgid "jquery.tablednd.js"
 msgstr "jQuery.tablednd.js"
@@ -62825,8 +62836,8 @@ msgstr "jQuery.tablednd.js"
 msgid "kip sign"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:717
-#: intranet-tmpl/prog/en/modules/about.tt:718
+#: intranet-tmpl/prog/en/modules/about.tt:724
+#: intranet-tmpl/prog/en/modules/about.tt:725
 #, c-format
 msgid "kjua"
 msgstr ""
@@ -62875,7 +62886,7 @@ msgstr "últim a: %s"
 msgid "let blank for the entire field"
 msgstr "deixar en blanc per a tot el camp"
 
-#: intranet-tmpl/prog/en/modules/about.tt:688
+#: intranet-tmpl/prog/en/modules/about.tt:695
 #, c-format
 msgid "library is licensed under "
 msgstr "biblioteca està sota llicència "
@@ -62885,7 +62896,7 @@ msgstr "biblioteca està sota llicència "
 msgid "library not defined"
 msgstr "biblioteca no definida"
 
-#: intranet-tmpl/prog/en/modules/about.tt:614
+#: intranet-tmpl/prog/en/modules/about.tt:621
 #, c-format
 msgid "licensed under the "
 msgstr "llicenciat sota la "
@@ -63190,12 +63201,12 @@ msgstr "o subcamp de MARC."
 msgid "or any available"
 msgstr "o qualsevol disponible"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1754
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1755
 #, c-format
 msgid "or create"
 msgstr "o crear"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1727
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1728
 #, c-format
 msgid "or create:"
 msgstr "o crear:"
@@ -63269,12 +63280,12 @@ msgstr "fer una comanda"
 msgid "please note your reason here..."
 msgstr "Si us plau anoteu la raó aqui…"
 
-#: intranet-tmpl/prog/en/modules/about.tt:664
+#: intranet-tmpl/prog/en/modules/about.tt:671
 #, c-format
 msgid "plugin by John Resig is licensed under the "
 msgstr "plugin per John Resig està subjecta a la"
 
-#: intranet-tmpl/prog/en/modules/about.tt:652
+#: intranet-tmpl/prog/en/modules/about.tt:659
 #, c-format
 msgid "plugin by Jovan Popovic is licensed under the BSD and GPL v2 license."
 msgstr "plugin per Jovan Popovic està subjecta a la llicència v2 BSD i GPL."
@@ -63547,7 +63558,7 @@ msgstr "Des de %s %s A l'espera de ser estirat "
 msgid "since last transfer"
 msgstr "des de la darrera transferència"
 
-#: intranet-tmpl/prog/en/modules/about.tt:566
+#: intranet-tmpl/prog/en/modules/about.tt:573
 #, c-format
 msgid "software.coop, United Kingdom"
 msgstr "software.Coop, Regne Unit"
@@ -63637,7 +63648,7 @@ msgstr "Estat"
 msgid "styles"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:280
+#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:285
 #: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:285
 #, c-format
 msgid "subfield ignored"
@@ -63681,7 +63692,7 @@ msgstr "suggeriment"
 msgid "suggestion #%s"
 msgstr "suggeriment #%s"
 
-#: intranet-tmpl/prog/en/modules/about.tt:746
+#: intranet-tmpl/prog/en/modules/about.tt:753
 #, c-format
 msgid "suomi, suomen kieli (Finnish) Pasi Korkalo"
 msgstr "Suomi, suomen kieli (en finès) Pasi Korkalo"
@@ -63719,12 +63730,12 @@ msgstr ""
 msgid "text/html; charset=utf-8"
 msgstr "text/html; charset=utf-8"
 
-#: intranet-tmpl/prog/en/modules/about.tt:697
+#: intranet-tmpl/prog/en/modules/about.tt:704
 #, c-format
 msgid "the Apache License, Version 2.0"
 msgstr "la llicència Apache, versió 2.0"
 
-#: intranet-tmpl/prog/en/modules/about.tt:688
+#: intranet-tmpl/prog/en/modules/about.tt:695
 #, c-format
 msgid ""
 "the Apache License, Version 2.0 (the \"Apache License\") or the GNU General "
@@ -64025,7 +64036,7 @@ msgstr "amb valor "
 msgid "won sign"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:667
+#: intranet-tmpl/prog/en/modules/about.tt:674
 #, c-format
 msgid "written and maintained by Jörn Zaefferer is licensed under the "
 msgstr "escrit i mantingut per Jörn Zaefferer està subjecta a la "
@@ -64170,7 +64181,7 @@ msgstr "| Estat: %s "
 msgid "×"
 msgstr "×"
 
-#: intranet-tmpl/prog/en/modules/about.tt:733
+#: intranet-tmpl/prog/en/modules/about.tt:740
 #, c-format
 msgid ""
 "العربية (Arabic) Version 3.2 to 3.4, 3.16 & 3.18 by KnowledgeWare "

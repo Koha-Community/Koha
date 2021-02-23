@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 18.05\n"
-"POT-Creation-Date: 2021-01-18 08:46-0300\n"
+"POT-Creation-Date: 2021-02-18 09:09-0300\n"
 "PO-Revision-Date: 2015-10-07 15:49+0000\n"
 "Last-Translator: Vinea-Hgi <dopple813@naver.com>\n"
 "Language-Team: Koha Translation Team <koha-translate@nongnu.org>\n"
@@ -3128,7 +3128,7 @@ msgstr "%s 정의된 값이 없습니다 %s %s %s %s "
 
 #. %1$s:  FOREACH error IN errors 
 #. %2$s:  IF ( error.sqlerr ) 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1023
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1024
 #, c-format
 msgid "%s %sThis report contains the SQL keyword "
 msgstr "%s %s이 보고서에는 SQL 키워드가 포함되어잇습니다."
@@ -3534,7 +3534,7 @@ msgstr "%s (id=%s) 총계=%s%s (%s 남은것이 이동되었습니다)%s"
 
 #. For the first occurrence,
 #. %1$s:  END 
-#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:142
+#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:147
 #: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:136
 #, fuzzy, c-format
 msgid ""
@@ -3728,6 +3728,13 @@ msgstr "%s 이 프레임워크에 신규 서지 레코드 추가: "
 msgid "%s Add new upload or search %s Results %s "
 msgstr ""
 
+#. %1$s:  IF heading_add_tag_p 
+#. %2$s:  ELSE 
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:53
+#, fuzzy, c-format
+msgid "%s Add tag %s Modify tag "
+msgstr "%s%s태그 수정"
+
 #. %1$s:  ELSE 
 #. %2$s:  END 
 #. %3$s:  ELSIF op == 'list' 
@@ -3850,6 +3857,16 @@ msgstr "%s 승인 %s 거부 %s 테스트 %s알 수 없는 작업 (%s) %s %s 용�
 #: intranet-tmpl/prog/en/modules/circ/circulation.tt:860
 #, c-format
 msgid "%s Article requests"
+msgstr ""
+
+#. %1$s:  FOR w IN warnHiddenBiblionumbers 
+#. %2$s:  w.frameworkcode | html 
+#. %3$s:  w.interface | html 
+#: intranet-tmpl/prog/en/modules/about.tt:347
+#, c-format
+msgid ""
+"%s Biblio framework \"%s\" has the biblionumber field hidden at the "
+"interface %s"
 msgstr ""
 
 #. %1$s:  IF (del_biblio) 
@@ -5187,7 +5204,7 @@ msgstr "%s 성: "
 #. %29$s:  loo.link | html 
 #. %30$s:  END 
 #. %31$s:  END 
-#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:280
+#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:285
 #, c-format
 msgid ""
 "%s Tab:%s, %s | Koha field: %s, %s %sRepeatable, %sNot repeatable,%s "
@@ -6495,18 +6512,6 @@ msgstr "%s%s%s(파일안에 대표이메일이 없습니다)%s"
 msgid "%s%s%s(none)%s"
 msgstr "%s%s%s(없음)%s"
 
-#. %1$s:  searchfield | html 
-#. %2$s:  END 
-#. %3$s:  IF ( heading_add_tag_p ) 
-#. %4$s:  END 
-#. %5$s:  ELSE 
-#. %6$s:  action | html 
-#. %7$s:  END 
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:52
-#, c-format
-msgid "%s%s%sAdd tag%s%s%s%s"
-msgstr "%s%s%s태그 추가%s%s%s%s"
-
 #. %1$s:  IF ( frameworkcode ) 
 #. %2$s:  frameworkcode | html 
 #. %3$s:  ELSE 
@@ -6644,13 +6649,6 @@ msgstr "%s%s, %s%s ("
 #, c-format
 msgid "%s%s; Published by %s %s%s in "
 msgstr "%s%s; 출판사 %s %s%s"
-
-#. %1$s:  IF ( use_heading_flags_p ) 
-#. %2$s:  IF ( heading_modify_tag_p ) 
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:52
-#, c-format
-msgid "%s%sModify tag "
-msgstr "%s%s태그 수정"
 
 #. %1$s:  IF ( suggestions_loo.copyrightdate ) 
 #. %2$s:  suggestions_loo.copyrightdate | html 
@@ -7577,8 +7575,8 @@ msgstr "%s네%s&nbsp;%s"
 #: intranet-tmpl/prog/en/modules/admin/classsources.tt:303
 #: intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:207
 #: intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:208
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:200
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:201
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:207
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:208
 #, c-format
 msgid "%sYes%sNo%s"
 msgstr "%s예%s아니요%s"
@@ -7761,7 +7759,7 @@ msgstr "%sx%s = %s "
 msgid "%s✓%s"
 msgstr "%s✓%s"
 
-#: intranet-tmpl/prog/en/modules/about.tt:736
+#: intranet-tmpl/prog/en/modules/about.tt:743
 #, c-format
 msgid ""
 "&#1041;&#1098;&#1083;&#1075;&#1072;&#1088;&#1089;&#1082;&#1080; (Bulgarian) "
@@ -7770,7 +7768,7 @@ msgstr ""
 "&#1041;&#1098;&#1083;&#1075;&#1072;&#1088;&#1089;&#1082;&#1080; (불가리아어) "
 "Radoslav Kolev"
 
-#: intranet-tmpl/prog/en/modules/about.tt:770
+#: intranet-tmpl/prog/en/modules/about.tt:777
 #, c-format
 msgid ""
 "&#1056;&#1091;&#1089;&#1089;&#1082;&#1080;&#1081; (Russian) Victor Titarchuk "
@@ -7779,7 +7777,7 @@ msgstr ""
 "&#1056;&#1091;&#1089;&#1089;&#1082;&#1080;&#1081; (러시아어) Victor "
 "Titarchuk and Serhij Dubyk"
 
-#: intranet-tmpl/prog/en/modules/about.tt:777
+#: intranet-tmpl/prog/en/modules/about.tt:784
 #, c-format
 msgid ""
 "&#1059;&#1082;&#1088;&#1072;&#1111;&#1085;&#1089;&#1100;&#1082;&#1072; "
@@ -7788,64 +7786,64 @@ msgstr ""
 "&#1059;&#1082;&#1088;&#1072;&#1111;&#1085;&#1089;&#1100;&#1082;&#1072; (우크"
 "라이나어) Victor Titarchuk and Serhij Dubyk"
 
-#: intranet-tmpl/prog/en/modules/about.tt:751
+#: intranet-tmpl/prog/en/modules/about.tt:758
 #, c-format
 msgid "&#1506;&#1489;&#1512;&#1497;&#1514; (Hebrew)"
 msgstr "&#1506;&#1489;&#1512;&#1497;&#1514; (히브리어)"
 
-#: intranet-tmpl/prog/en/modules/about.tt:776
+#: intranet-tmpl/prog/en/modules/about.tt:783
 #, c-format
 msgid "&#1575;&#1585;&#1583;&#1608;(Urdu) Ata ur Rehman"
 msgstr "&#1575;&#1585;&#1583;&#1608;(우르두어) Ata ur Rehman"
 
-#: intranet-tmpl/prog/en/modules/about.tt:765
+#: intranet-tmpl/prog/en/modules/about.tt:772
 #, c-format
 msgid "&#1601;&#1575;&#1585;&#1587;&#1609; (Persian)"
 msgstr "&#1601;&#1575;&#1585;&#1587;&#1609; (페르시아어)"
 
-#: intranet-tmpl/prog/en/modules/about.tt:739
+#: intranet-tmpl/prog/en/modules/about.tt:746
 #, c-format
 msgid "&#20013;&#25991; (Chinese)"
 msgstr "&#20013;&#25991; (중국어)"
 
-#: intranet-tmpl/prog/en/modules/about.tt:752
+#: intranet-tmpl/prog/en/modules/about.tt:759
 #, c-format
 msgid "&#2361;&#2367;&#2344;&#2381;&#2342;&#2368; (Hindi)"
 msgstr "&#2361;&#2367;&#2344;&#2381;&#2342;&#2368; (힌디어)"
 
-#: intranet-tmpl/prog/en/modules/about.tt:738
+#: intranet-tmpl/prog/en/modules/about.tt:745
 #, c-format
 msgid ""
 "&#2476;&#2494;&#2434;&#2482;&#2494; (Bengali) Parthasarathi Mukhopadhyay"
 msgstr ""
 "&#2476;&#2494;&#2434;&#2482;&#2494; (벵골어) Parthasarathi Mukhopadhyay"
 
-#: intranet-tmpl/prog/en/modules/about.tt:758
+#: intranet-tmpl/prog/en/modules/about.tt:765
 #, c-format
 msgid "&#26085;&#26412;&#35486; (Japanese)"
 msgstr "&#26085;&#26412;&#35486; (일본어)"
 
-#: intranet-tmpl/prog/en/modules/about.tt:766
+#: intranet-tmpl/prog/en/modules/about.tt:773
 #, c-format
 msgid "&#2835;&#2908;&#2879;&#2822; (&#x014D;&#7771;iy&#257;)"
 msgstr "&#2835;&#2908;&#2879;&#2822; (&#x014D;&#7771;iy&#257;)"
 
-#: intranet-tmpl/prog/en/modules/about.tt:760
+#: intranet-tmpl/prog/en/modules/about.tt:767
 #, c-format
 msgid "&#3221;&#3240;&#3277;&#3240;&#3233; (kanna&#7693;a)"
 msgstr "&#3221;&#3240;&#3277;&#3240;&#3233; (kanna&#7693;a)"
 
-#: intranet-tmpl/prog/en/modules/about.tt:764
+#: intranet-tmpl/prog/en/modules/about.tt:771
 #, c-format
 msgid "&#3374;&#3378;&#3375;&#3390;&#3379;&#3330; (Malayalam)"
 msgstr "&#3374;&#3378;&#3375;&#3390;&#3379;&#3330; (말라얄람어)"
 
-#: intranet-tmpl/prog/en/modules/about.tt:774
+#: intranet-tmpl/prog/en/modules/about.tt:781
 #, c-format
 msgid "&#3616;&#3634;&#3625;&#3634;&#3652;&#3607;&#3618; (Thai)"
 msgstr "&#3616;&#3634;&#3625;&#3634;&#3652;&#3607;&#3618; (타이어)"
 
-#: intranet-tmpl/prog/en/modules/about.tt:734
+#: intranet-tmpl/prog/en/modules/about.tt:741
 #, c-format
 msgid ""
 "&#4768;&#4635;&#4653;&#4763; (Amharic) Getway II Ethiopia Co. (Yohannes "
@@ -7854,12 +7852,12 @@ msgstr ""
 "&#4768;&#4635;&#4653;&#4763; (암하라어) Getway II Ethiopia Co. (Yohannes "
 "Mulugeta (Team Leader), Tegene Assefa, Abiyot Bayou)"
 
-#: intranet-tmpl/prog/en/modules/about.tt:759
+#: intranet-tmpl/prog/en/modules/about.tt:766
 #, c-format
 msgid "&#54620;&#44397;&#50612; (Korean)"
 msgstr "&#54620;&#44397;&#50612; (한국어)"
 
-#: intranet-tmpl/prog/en/modules/about.tt:750
+#: intranet-tmpl/prog/en/modules/about.tt:757
 #, fuzzy, c-format
 msgid ""
 "&#949;&#955;&#955;&#951;&#957;&#953;&#954;&#940; (Greek, Modern [1453- ]) "
@@ -7869,7 +7867,7 @@ msgstr ""
 "&#949;&#955;&#955;&#951;&#957;&#953;&#954;&#940; (그리스어, 근대 [1453- ]) "
 "Georgia Katsarou, Panoraia Gaitanou and Kiriaki Roditi"
 
-#: intranet-tmpl/prog/en/modules/about.tt:741
+#: intranet-tmpl/prog/en/modules/about.tt:748
 #, c-format
 msgid "&#x010D;e&#353;tina (Czech)"
 msgstr "&#x010D;e&#353;tina (체코어)"
@@ -8247,6 +8245,16 @@ msgid ""
 "&rsaquo; %s%sModify currency '%s'%sNew currency%s%s %sConfirm deletion of "
 "currency %s %sCurrencies %s "
 msgstr "&rsaquo; %s%s현재성 수정 '%s'%s신규 현재성%s%s %s현재성 삭제 확인 '"
+
+#. %1$s:  IF heading_add_tag_p 
+#. %2$s:  ELSE 
+#. %3$s:  END 
+#. %4$s:  searchfield | html 
+#. %5$s:  ELSIF ( else ) 
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:23
+#, fuzzy, c-format
+msgid "&rsaquo; %sAdd tag%sModify tag%s %s %s &rsaquo; "
+msgstr "&rsaquo; 제안 추가 %s %s "
 
 #. %1$s:  IF ( patrons_in_category > 0 ) 
 #. %2$s:  categorycode | html 
@@ -9874,7 +9882,7 @@ msgid ""
 "needed.)"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:756
+#: intranet-tmpl/prog/en/modules/about.tt:763
 #, c-format
 msgid "(Indonesian)"
 msgstr "(인도네시아어)"
@@ -9884,8 +9892,8 @@ msgstr "(인도네시아어)"
 msgid "(Lost)"
 msgstr "분실"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1715
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1737
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1716
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1738
 #, c-format
 msgid "(None)"
 msgstr "(없음)"
@@ -10020,7 +10028,7 @@ msgstr "현재 용어"
 msgid "(default if none is defined)"
 msgstr "(정의가 없다면 기본값)"
 
-#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:146
+#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:151
 #, c-format
 msgid "(e.g., Title or Local-Number) "
 msgstr ""
@@ -10052,7 +10060,7 @@ msgstr ""
 msgid "(if empty, subscription is still active) "
 msgstr "(비어있다면, 계속 구독 활성)"
 
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:93
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:100
 #, c-format
 msgid ""
 "(if you select a value here, the indicators will be limited to the "
@@ -10190,7 +10198,7 @@ msgstr ") 갱신됨 %s %s ( "
 msgid ") you selected does not exist. "
 msgstr ") 존재하지 않는것을 선택하셨습니다. "
 
-#: intranet-tmpl/prog/en/modules/about.tt:505
+#: intranet-tmpl/prog/en/modules/about.tt:512
 #, fuzzy, c-format
 msgid "), France"
 msgstr "타밀, 프랑스"
@@ -10209,54 +10217,54 @@ msgstr "항목취소"
 msgid "** Vendor's listings already include tax."
 msgstr "** 세금이 포함되어 있는 판매업자의 목록."
 
-#: intranet-tmpl/prog/en/modules/about.tt:451
+#: intranet-tmpl/prog/en/modules/about.tt:458
 #, c-format
 msgid ", Auckland, New Zealand (OPAC 'star-ratings' sponsorship)"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:448
+#: intranet-tmpl/prog/en/modules/about.tt:455
 #, c-format
 msgid ", Cyprus"
 msgstr ", 키프로스"
 
-#: intranet-tmpl/prog/en/modules/about.tt:445
+#: intranet-tmpl/prog/en/modules/about.tt:452
 #, c-format
 msgid ", France (Koha 3.0 enhancements to patrons and holds modules)"
 msgstr ", 프랑스 (Koha 3.0 이용자와 예약 모듈을 강화)"
 
-#: intranet-tmpl/prog/en/modules/about.tt:443
+#: intranet-tmpl/prog/en/modules/about.tt:450
 #, c-format
 msgid ", France (Suggestions, Stats wizards and improved LDAP sponsorship)"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:444
+#: intranet-tmpl/prog/en/modules/about.tt:451
 #, c-format
 msgid ""
 ", France (biblio frameworks, MARC authorities, OPAC basket, Serials "
 "sponsorship)"
 msgstr ", 프랑스 (도서 프레임워크, MARC 전거, OPAC 바스켓, 후원자 연속간행물)"
 
-#: intranet-tmpl/prog/en/modules/about.tt:441
+#: intranet-tmpl/prog/en/modules/about.tt:448
 #, c-format
 msgid ", New Zealand, and Rosalie Blake, Head of Libraries, (Koha 1.0)"
 msgstr ", 뉴질랜드와 Rosalie Blake, 도서관의 관장, (Koha 1.0)"
 
-#: intranet-tmpl/prog/en/modules/about.tt:447
+#: intranet-tmpl/prog/en/modules/about.tt:454
 #, c-format
 msgid ", OH, USA (Koha 3.0 beta testing)"
 msgstr ", 오하이오 주, 미국 (Koha 3.0 베타 테스트)"
 
-#: intranet-tmpl/prog/en/modules/about.tt:442
+#: intranet-tmpl/prog/en/modules/about.tt:449
 #, c-format
 msgid ", Ohio, USA (MARC sponsorship, documentation, template maintenance)"
 msgstr ", 오하이오 주, 미국 (MARC 후원자, 문서화, 템플릿 유지보수)"
 
-#: intranet-tmpl/prog/en/modules/about.tt:446
+#: intranet-tmpl/prog/en/modules/about.tt:453
 #, c-format
 msgid ", PA, USA (Koha 3.0 Zebra Integration sponsorship)"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:747
+#: intranet-tmpl/prog/en/modules/about.tt:754
 #, c-format
 msgid ", Pascale Nalon (ENSMP), and many more "
 msgstr ", Pascale Nalon (ENSMP), 그리고 더 많은"
@@ -11092,7 +11100,7 @@ msgstr "잋리하는 것을 찾을 수 없을 경우 동작:"
 #: intranet-tmpl/prog/en/modules/plugins/plugins-home.tt:74
 #: intranet-tmpl/prog/en/modules/admin/cash_registers.tt:136
 #: intranet-tmpl/prog/en/modules/admin/categories.tt:426
-#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:266
+#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:271
 #: intranet-tmpl/prog/en/modules/admin/currency.tt:186
 #: intranet-tmpl/prog/en/modules/admin/systempreferences.tt:251
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:82
@@ -11144,7 +11152,7 @@ msgstr "동작"
 #: intranet-tmpl/prog/en/modules/admin/oai_sets.tt:92
 #: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:138
 #: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:206
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:207
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:214
 #: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:174
 #: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:8
 #, c-format
@@ -12054,7 +12062,7 @@ msgstr "추가적인 매개변수"
 msgid "Additional subfields (XML)"
 msgstr "추가적인 하위분야 (XML)"
 
-#: intranet-tmpl/prog/en/modules/about.tt:594
+#: intranet-tmpl/prog/en/modules/about.tt:601
 #, c-format
 msgid "Additional thanks to..."
 msgstr "추가적인 감사표시..."
@@ -12391,7 +12399,7 @@ msgstr "연령 제한 %s. %s 그래도 대출합니까? %s"
 msgid "Ages allowed are %s-%s. "
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:451
+#: intranet-tmpl/prog/en/modules/about.tt:458
 #, c-format
 msgid "Albany Senior High School"
 msgstr "Albany 고등학교"
@@ -12439,7 +12447,7 @@ msgstr "강조"
 msgid "Alignment"
 msgstr "텍스트 정렬:"
 
-#: intranet-tmpl/prog/en/modules/about.tt:494
+#: intranet-tmpl/prog/en/modules/about.tt:501
 #, c-format
 msgid "Alingsås Public Library, Sweden"
 msgstr ""
@@ -12490,7 +12498,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:165
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:174
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:704
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1092
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1093
 #, c-format
 msgid "All"
 msgstr "모든"
@@ -12652,7 +12660,7 @@ msgstr "모든 처리 보기"
 msgid "All vendors"
 msgstr "모든 판매업체"
 
-#: intranet-tmpl/prog/en/modules/about.tt:493
+#: intranet-tmpl/prog/en/modules/about.tt:500
 #, c-format
 msgid "Allen Ginsberg Library, USA"
 msgstr ""
@@ -12915,7 +12923,7 @@ msgstr "다른 전화:"
 msgid "Always show checkouts immediately"
 msgstr "언제나 대출을 즉시 보이기"
 
-#: intranet-tmpl/prog/en/modules/about.tt:495
+#: intranet-tmpl/prog/en/modules/about.tt:502
 #, c-format
 msgid "American Numismatic Society, USA"
 msgstr ""
@@ -13161,7 +13169,7 @@ msgstr "익명의 대출 이력"
 msgid "Another pattern with this name already exists."
 msgstr "같은 이름의 패턴이 이미 존재합니다."
 
-#: intranet-tmpl/prog/en/modules/about.tt:633
+#: intranet-tmpl/prog/en/modules/about.tt:640
 #, c-format
 msgid "Antenna.io"
 msgstr ""
@@ -13332,7 +13340,7 @@ msgstr "다른 일치규칙 적용"
 
 #. INPUT type=submit
 #: intranet-tmpl/prog/en/modules/circ/overdue.tt:214
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1066
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1067
 msgid "Apply filter"
 msgstr "필터 적용"
 
@@ -13382,7 +13390,7 @@ msgstr "4월"
 msgid "April"
 msgstr "4월"
 
-#: intranet-tmpl/prog/en/modules/about.tt:496
+#: intranet-tmpl/prog/en/modules/about.tt:503
 #, fuzzy, c-format
 msgid "Arcadia Public Library, USA"
 msgstr "Geauga County Public Library"
@@ -13584,7 +13592,7 @@ msgid "Are you sure you want to delete the selected news?"
 msgstr "정말로 선택한 뉴스를 삭제하시겠습니까?"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1092
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1093
 msgid "Are you sure you want to delete the selected reports?"
 msgstr "정말로 선택된 보고서를 삭제하시겠습니까?"
 
@@ -13778,7 +13786,7 @@ msgid "Are you sure you want to delete this record?"
 msgstr "정말로 이 레코드를 삭제하시겠습니까?"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1092
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1093
 #, fuzzy
 msgid "Are you sure you want to delete this report? This cannot be undone."
 msgstr "정말로 이 이용자를 삭제하시겠습니까? 실행취소되지 않습니다."
@@ -13796,7 +13804,7 @@ msgid "Are you sure you want to delete this rule? This cannot be undone."
 msgstr "정말로 이 이용자를 삭제하시겠습니까? 실행취소되지 않습니다."
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1092
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1093
 msgid "Are you sure you want to delete this saved report?"
 msgstr "정말로 이 저장된 보고서를 삭제하시겠습니까?"
 
@@ -14043,7 +14051,7 @@ msgstr "영역"
 msgid "Area:"
 msgstr "영역:"
 
-#: intranet-tmpl/prog/en/modules/about.tt:735
+#: intranet-tmpl/prog/en/modules/about.tt:742
 #, c-format
 msgid "Armenian Tigran Zargaryan"
 msgstr "Armenian Tigran Zargaryan"
@@ -14131,12 +14139,12 @@ msgstr "병합하기 위해서 두개의 레코드를 선택해야 합니다."
 msgid "At library: %s"
 msgstr "도서관: %s"
 
-#: intranet-tmpl/prog/en/modules/about.tt:442
+#: intranet-tmpl/prog/en/modules/about.tt:449
 #, c-format
 msgid "Athens County Public Libraries"
 msgstr "Athens County Public Libraries"
 
-#: intranet-tmpl/prog/en/modules/about.tt:497
+#: intranet-tmpl/prog/en/modules/about.tt:504
 #, fuzzy, c-format
 msgid "Athens County Public Libraries, USA"
 msgstr "Athens County Public Libraries"
@@ -14210,7 +14218,7 @@ msgstr "허용"
 msgid "Auth field copied"
 msgstr "필드 복사 허용"
 
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:179
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:186
 #, c-format
 msgid "Auth value"
 msgstr "허용 값"
@@ -14349,7 +14357,7 @@ msgstr "저자: %s%s%s %s %s; %s %s %s %s%s %s %s;%s %s %s "
 #: intranet-tmpl/prog/en/modules/circ/article-requests.tt:269
 #: intranet-tmpl/prog/en/modules/circ/request-article.tt:100
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:153
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1061
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1062
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:72
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:263
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:680
@@ -14553,7 +14561,7 @@ msgid ""
 "an authorized value list is not enforced during batch patron import."
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:171
+#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:176
 #: intranet-tmpl/prog/en/modules/admin/localization.tt:21
 #: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:167
 #, fuzzy, c-format
@@ -14561,7 +14569,7 @@ msgid "Authorized value:"
 msgstr "검정된 제목들"
 
 #: intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:105
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:89
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:96
 #: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:71
 #, fuzzy, c-format
 msgid "Authorized value: "
@@ -14716,15 +14724,15 @@ msgstr "평균 대출기간"
 msgid "BIBTEX"
 msgstr "BIBTEX"
 
-#: intranet-tmpl/prog/en/modules/about.tt:703
+#: intranet-tmpl/prog/en/modules/about.tt:710
 #, fuzzy, c-format
 msgid "BSD 3-clause Licence"
 msgstr "BSD 라이센스"
 
-#: intranet-tmpl/prog/en/modules/about.tt:617
-#: intranet-tmpl/prog/en/modules/about.tt:685
-#: intranet-tmpl/prog/en/modules/about.tt:694
-#: intranet-tmpl/prog/en/modules/about.tt:709
+#: intranet-tmpl/prog/en/modules/about.tt:624
+#: intranet-tmpl/prog/en/modules/about.tt:692
+#: intranet-tmpl/prog/en/modules/about.tt:701
+#: intranet-tmpl/prog/en/modules/about.tt:716
 #, c-format
 msgid "BSD License"
 msgstr "BSD 라이센스"
@@ -14734,7 +14742,7 @@ msgstr "BSD 라이센스"
 msgid "BT"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:505
+#: intranet-tmpl/prog/en/modules/about.tt:512
 #, c-format
 msgid "BULAC"
 msgstr ""
@@ -15404,7 +15412,7 @@ msgstr "묶음 %s"
 msgid "Batches"
 msgstr "일치"
 
-#: intranet-tmpl/prog/en/modules/about.tt:498
+#: intranet-tmpl/prog/en/modules/about.tt:505
 #, c-format
 msgid "BdP de la Meuse, France"
 msgstr ""
@@ -15466,7 +15474,7 @@ msgstr "다음으로 시작"
 msgid "Behavior"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:499
+#: intranet-tmpl/prog/en/modules/about.tt:506
 #, c-format
 msgid "BibLibre, France"
 msgstr "BibLibre, 프랑스"
@@ -15636,19 +15644,19 @@ msgstr "저장소의 도서"
 msgid "Biblios: "
 msgstr "도서:"
 
-#: intranet-tmpl/prog/en/modules/about.tt:500
+#: intranet-tmpl/prog/en/modules/about.tt:507
 #, c-format
 msgid ""
 "Biblioteca Provincial Fr. Mamerto Esquiú (Provincia Franciscana de la "
 "Asunción), Argentina"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:501
+#: intranet-tmpl/prog/en/modules/about.tt:508
 #, c-format
 msgid "Bibliotheksservice-Zentrum Baden-Württemberg (BSZ), Germany"
 msgstr "Bibliotheksservice-Zentrum Baden-Württemberg (BSZ), 독일"
 
-#: intranet-tmpl/prog/en/modules/about.tt:505
+#: intranet-tmpl/prog/en/modules/about.tt:512
 #, c-format
 msgid "Bibliothèque Universitaire des Langues et Civilisations ("
 msgstr ""
@@ -15706,7 +15714,7 @@ msgstr "간행물 년도:"
 msgid "Biography"
 msgstr "전기"
 
-#: intranet-tmpl/prog/en/modules/about.tt:450
+#: intranet-tmpl/prog/en/modules/about.tt:457
 #, c-format
 msgid ""
 "Birmingham (UK) based developer Mark James for the famfamfam Silk iconset."
@@ -15790,8 +15798,8 @@ msgstr "서점 청구서 번호:"
 msgid "Boolean"
 msgstr "제거"
 
-#: intranet-tmpl/prog/en/modules/about.tt:613
-#: intranet-tmpl/prog/en/modules/about.tt:614
+#: intranet-tmpl/prog/en/modules/about.tt:620
+#: intranet-tmpl/prog/en/modules/about.tt:621
 #, c-format
 msgid "Bootstrap"
 msgstr "부트스트랩"
@@ -15892,12 +15900,12 @@ msgstr "분관 제한"
 msgid "Branches limitation: "
 msgstr "분관 제한:"
 
-#: intranet-tmpl/prog/en/modules/about.tt:502
+#: intranet-tmpl/prog/en/modules/about.tt:509
 #, c-format
 msgid "Briar Cliff University, USA"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:626
+#: intranet-tmpl/prog/en/modules/about.tt:633
 #, c-format
 msgid "Bridge Material Type Icons Project"
 msgstr "Bridge Material Type Icons Project"
@@ -15912,7 +15920,7 @@ msgstr "간략표시"
 msgid "Brightness"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:503
+#: intranet-tmpl/prog/en/modules/about.tt:510
 #, c-format
 msgid "Brimbank City Council, Australia"
 msgstr ""
@@ -15923,12 +15931,12 @@ msgstr ""
 msgid "Broader Term"
 msgstr "%sg - 상위어"
 
-#: intranet-tmpl/prog/en/modules/about.tt:599
+#: intranet-tmpl/prog/en/modules/about.tt:606
 #, c-format
 msgid "Brooke Johnson"
 msgstr "Brooke Johnson"
 
-#: intranet-tmpl/prog/en/modules/about.tt:504
+#: intranet-tmpl/prog/en/modules/about.tt:511
 #, c-format
 msgid "Brooklyn Law School Library, USA"
 msgstr ""
@@ -16108,7 +16116,7 @@ msgstr ""
 msgid "By: "
 msgstr "미안합니다 "
 
-#: intranet-tmpl/prog/en/modules/about.tt:506
+#: intranet-tmpl/prog/en/modules/about.tt:513
 #, c-format
 msgid "ByWater Solutions, USA"
 msgstr "ByWater Solutions, 미국"
@@ -16118,17 +16126,17 @@ msgstr "ByWater Solutions, 미국"
 msgid "Bytes"
 msgstr "바이트"
 
-#: intranet-tmpl/prog/en/modules/about.tt:517
+#: intranet-tmpl/prog/en/modules/about.tt:524
 #, c-format
 msgid "C &amp; P Bibliography Services, USA"
 msgstr "C &amp; P Bibliography Services, 미국"
 
-#: intranet-tmpl/prog/en/modules/about.tt:705
+#: intranet-tmpl/prog/en/modules/about.tt:712
 #, c-format
 msgid "C3.js"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:706
+#: intranet-tmpl/prog/en/modules/about.tt:713
 #, c-format
 msgid "C3.js v0.4.11"
 msgstr ""
@@ -16290,8 +16298,8 @@ msgid "Cache expiry (seconds)"
 msgstr "캐쉬 만료 (초)"
 
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:368
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:918
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:993
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:919
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:994
 #, c-format
 msgid "Cache expiry:"
 msgstr "캐쉬 만료:"
@@ -16315,7 +16323,7 @@ msgstr "달력"
 msgid "Calendar information"
 msgstr "달력 정보"
 
-#: intranet-tmpl/prog/en/modules/about.tt:507
+#: intranet-tmpl/prog/en/modules/about.tt:514
 #, c-format
 msgid "California College of the Arts, USA"
 msgstr ""
@@ -16448,12 +16456,12 @@ msgstr "신규 분류 소스"
 msgid "Callnumber: %s "
 msgstr "청구기호: %s "
 
-#: intranet-tmpl/prog/en/modules/about.tt:510
+#: intranet-tmpl/prog/en/modules/about.tt:517
 #, c-format
 msgid "Calyx, Australia"
 msgstr "Calyx, 호주"
 
-#: intranet-tmpl/prog/en/modules/about.tt:508
+#: intranet-tmpl/prog/en/modules/about.tt:515
 #, c-format
 msgid "Camden County, USA"
 msgstr ""
@@ -16710,8 +16718,8 @@ msgstr "다음의 필드가 채워지지 않아서 이 레코드를 저장할 �
 #: intranet-tmpl/prog/en/modules/admin/categories.tt:311
 #: intranet-tmpl/prog/en/modules/admin/categories.tt:387
 #: intranet-tmpl/prog/en/modules/admin/oai_set_mappings.tt:86
-#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:214
-#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:308
+#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:219
+#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:313
 #: intranet-tmpl/prog/en/modules/admin/currency.tt:119
 #: intranet-tmpl/prog/en/modules/admin/authtypes.tt:103
 #: intranet-tmpl/prog/en/modules/admin/usage_statistics.tt:235
@@ -16744,7 +16752,7 @@ msgstr "다음의 필드가 채워지지 않아서 이 레코드를 저장할 �
 #: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:236
 #: intranet-tmpl/prog/en/modules/admin/didyoumean.tt:64
 #: intranet-tmpl/prog/en/modules/admin/printers.tt:80
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:98
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:105
 #: intranet-tmpl/prog/en/modules/admin/preferences.tt:155
 #: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:364
 #: intranet-tmpl/prog/en/modules/admin/transport-cost-matrix.tt:85
@@ -16756,8 +16764,8 @@ msgstr "다음의 필드가 채워지지 않아서 이 레코드를 저장할 �
 #: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:256
 #: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:258
 #: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:354
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:937
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1013
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:938
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1014
 #: intranet-tmpl/prog/en/modules/virtualshelves/downloadshelf.tt:43
 #: intranet-tmpl/prog/en/modules/virtualshelves/addbybiblionumber.tt:111
 #: intranet-tmpl/prog/en/modules/virtualshelves/sendshelfform.tt:33
@@ -17313,7 +17321,7 @@ msgstr "카드 번호가 이미 사용중입니다."
 msgid "Cardnumbers not found"
 msgstr "카드 번호를 찾을 수 없습니다"
 
-#: intranet-tmpl/prog/en/modules/about.tt:509
+#: intranet-tmpl/prog/en/modules/about.tt:516
 #, c-format
 msgid "Carnegie Stout Library, USA"
 msgstr ""
@@ -17482,7 +17490,7 @@ msgstr "목록표"
 msgid "Cataloguing tables"
 msgstr "목록표"
 
-#: intranet-tmpl/prog/en/modules/about.tt:511
+#: intranet-tmpl/prog/en/modules/about.tt:518
 #, c-format
 msgid "Catalyst IT, New Zealand"
 msgstr "Catalyst IT, 뉴질랜드"
@@ -17627,12 +17635,12 @@ msgstr "셀은 추정 값만 포함되어야 합니다."
 msgid "Center"
 msgstr "설명자"
 
-#: intranet-tmpl/prog/en/modules/about.tt:512
+#: intranet-tmpl/prog/en/modules/about.tt:519
 #, c-format
 msgid "Central Kansas Library System (CKLS), USA"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:513
+#: intranet-tmpl/prog/en/modules/about.tt:520
 #, c-format
 msgid "Centre collégial des services regroupés (CCSR), Canada"
 msgstr ""
@@ -18363,7 +18371,7 @@ msgstr ""
 "MARC 구조를 확인합니다. 당신의 MARC 서지 프레임워크를 변경한다면 정의에 오류"
 "가 있는지 테스트할 수 있게 당신이 이 도구를 실행하는 것을 추천할 것입니다."
 
-#: intranet-tmpl/prog/en/modules/about.tt:514
+#: intranet-tmpl/prog/en/modules/about.tt:521
 #, fuzzy, c-format
 msgid "Cheshire Libraries, United Kingdom"
 msgstr "software.coop, 영국"
@@ -18918,7 +18926,7 @@ msgstr "가져온 묶음 제거 #%s"
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:279
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:357
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:158
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1067
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1068
 #, c-format
 msgid "Clear"
 msgstr "제거"
@@ -19475,8 +19483,8 @@ msgstr "등록비:"
 #: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:127
 #: intranet-tmpl/prog/en/modules/admin/itemtypes.tt:354
 #: intranet-tmpl/prog/en/modules/admin/checkmarc.tt:166
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1728
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1755
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1729
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1756
 #, c-format
 msgid "Code"
 msgstr "코드"
@@ -19498,13 +19506,13 @@ msgstr ""
 msgid "Code:"
 msgstr "코드:"
 
-#: intranet-tmpl/prog/en/modules/about.tt:675
-#: intranet-tmpl/prog/en/modules/about.tt:676
+#: intranet-tmpl/prog/en/modules/about.tt:682
+#: intranet-tmpl/prog/en/modules/about.tt:683
 #, fuzzy, c-format
 msgid "CodeMirror editing library"
 msgstr "도서관예약"
 
-#: intranet-tmpl/prog/en/modules/about.tt:515
+#: intranet-tmpl/prog/en/modules/about.tt:522
 #, fuzzy, c-format
 msgid "Coeur d'Alene Public Library, USA"
 msgstr "Geauga County Public Library"
@@ -19516,7 +19524,7 @@ msgstr "Geauga County Public Library"
 msgid "Collapse all"
 msgstr "모두 접기"
 
-#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:133
+#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:138
 #, fuzzy, c-format
 msgid "Collapsed"
 msgstr "변경사항 저장"
@@ -19965,12 +19973,12 @@ msgid "Confirm deletion of record matching rule "
 msgstr "레코드 일치규칙의 정의 확인"
 
 #. %1$s:  tagsubfield | html 
-#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:222
+#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:227
 #, c-format
 msgid "Confirm deletion of subfield %s?"
 msgstr "하위분야 삭제 확인 %s?"
 
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:106
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:113
 #, c-format
 msgid "Confirm deletion of tag "
 msgstr "태그 삭제 확인"
@@ -20054,7 +20062,7 @@ msgstr "제한"
 msgid "Constrain proportions"
 msgstr "제한"
 
-#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:265
+#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:270
 #: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:270
 #, c-format
 msgid "Constraints"
@@ -20286,7 +20294,7 @@ msgstr "계약"
 msgid "Contrast"
 msgstr "계약"
 
-#: intranet-tmpl/prog/en/modules/about.tt:491
+#: intranet-tmpl/prog/en/modules/about.tt:498
 #, c-format
 msgid "Contributing companies and institutions"
 msgstr ""
@@ -20462,12 +20470,12 @@ msgstr "모든 도서관에 복사"
 msgid "Copyright"
 msgstr "저작권"
 
-#: intranet-tmpl/prog/en/modules/about.tt:640
+#: intranet-tmpl/prog/en/modules/about.tt:647
 #, fuzzy, c-format
 msgid "Copyright &copy; 2003-2010 phpMyAdmin devel team"
 msgstr "판권년: %s "
 
-#: intranet-tmpl/prog/en/modules/about.tt:635
+#: intranet-tmpl/prog/en/modules/about.tt:642
 #, fuzzy, c-format
 msgid "Copyright &copy; 2012-2016 "
 msgstr "판권년: %s "
@@ -20504,7 +20512,7 @@ msgstr "판권년"
 msgid "Corporate"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:516
+#: intranet-tmpl/prog/en/modules/about.tt:523
 #, fuzzy, c-format
 msgid "Corpus Christi Public Libraries, USA"
 msgstr "Athens County Public Libraries"
@@ -20582,7 +20590,7 @@ msgstr "시스템 기본 설정 이름을 찾을 수 없습니다"
 msgid "Could not load emoticons"
 msgstr "현재 위치"
 
-#: intranet-tmpl/prog/en/modules/about.tt:485
+#: intranet-tmpl/prog/en/modules/about.tt:492
 #, fuzzy, c-format
 msgid ""
 "Could not read the contributors.yaml file. Please make sure &lt;docdir&gt; "
@@ -20591,7 +20599,7 @@ msgstr ""
 "history.txt 파일을 읽을 수 없습니다. 확인해주세요 &lt;docdir&gt; koha-conf."
 "xml이 올바르게 정의되어 있는지. "
 
-#: intranet-tmpl/prog/en/modules/about.tt:802
+#: intranet-tmpl/prog/en/modules/about.tt:809
 #, c-format
 msgid ""
 "Could not read the history.txt file. Please make sure &lt;docdir&gt; is "
@@ -20600,7 +20608,7 @@ msgstr ""
 "history.txt 파일을 읽을 수 없습니다. 확인해주세요 &lt;docdir&gt; koha-conf."
 "xml이 올바르게 정의되어 있는지. "
 
-#: intranet-tmpl/prog/en/modules/about.tt:472
+#: intranet-tmpl/prog/en/modules/about.tt:479
 #, fuzzy, c-format
 msgid ""
 "Could not read the teams.yaml file. Please make sure &lt;docdir&gt; is "
@@ -20757,7 +20765,7 @@ msgstr "코스"
 msgid "Cover image"
 msgstr "원격 이미지"
 
-#: intranet-tmpl/prog/en/modules/about.tt:446
+#: intranet-tmpl/prog/en/modules/about.tt:453
 #, c-format
 msgid "Crawford County Federated Library System"
 msgstr "Crawford County Federated 도서관 시스템"
@@ -20876,7 +20884,7 @@ msgstr "필드 제거"
 
 #. %1$s:  framework.frameworkcode | html 
 #. %2$s:  framework.frameworktext | html 
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:132
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:139
 #, c-format
 msgid "Create framework for %s (%s) using "
 msgstr "프레임워크 생성 %s (%s) 사용"
@@ -20988,7 +20996,7 @@ msgstr "레코드 생성"
 
 #. INPUT type=submit name=submit
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:119
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:904
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:905
 #, c-format
 msgid "Create report from SQL"
 msgstr "SQL로부터 보고서 생성"
@@ -21048,12 +21056,12 @@ msgstr "생성일"
 msgid "Creation date: "
 msgstr "생성일"
 
-#: intranet-tmpl/prog/en/modules/about.tt:622
+#: intranet-tmpl/prog/en/modules/about.tt:629
 #, c-format
 msgid "Creative Commons Attribution 2.5 License"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:628
+#: intranet-tmpl/prog/en/modules/about.tt:635
 #, c-format
 msgid "Creative Commons Attribution-ShareAlike 2.5 License"
 msgstr ""
@@ -21191,7 +21199,7 @@ msgstr "현재 위치"
 msgid "Current location:"
 msgstr "현재 위치:"
 
-#: intranet-tmpl/prog/en/modules/about.tt:467
+#: intranet-tmpl/prog/en/modules/about.tt:474
 #, fuzzy, c-format
 msgid "Current maintenance team"
 msgstr "현재 사용 가능한 템플릿"
@@ -21310,17 +21318,17 @@ msgstr ""
 msgid "Cyclical:"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:742
+#: intranet-tmpl/prog/en/modules/about.tt:749
 #, c-format
 msgid "D&aelig;nsk (Danish)"
 msgstr "D&aelig;nsk (덴마크어)"
 
-#: intranet-tmpl/prog/en/modules/about.tt:702
+#: intranet-tmpl/prog/en/modules/about.tt:709
 #, c-format
 msgid "D3.js"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:703
+#: intranet-tmpl/prog/en/modules/about.tt:710
 #, c-format
 msgid "D3.js v3.5.17"
 msgstr ""
@@ -21340,7 +21348,7 @@ msgstr ""
 msgid "DISABLED"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:685
+#: intranet-tmpl/prog/en/modules/about.tt:692
 #, c-format
 msgid "DSpace project"
 msgstr ""
@@ -21429,7 +21437,7 @@ msgstr ""
 msgid "Dark Yellow"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:248
+#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:253
 #: intranet-tmpl/prog/en/modules/admin/systempreferences.tt:229
 #: intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:142
 #: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:253
@@ -21548,7 +21556,7 @@ msgstr "데이터베이스:"
 #: intranet-tmpl/prog/en/modules/circ/checkout-notes.tt:70
 #: intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:195
 #: intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:197
-#: intranet-tmpl/prog/en/modules/about.tt:788
+#: intranet-tmpl/prog/en/modules/about.tt:795
 #: intranet-tmpl/prog/en/modules/offline_circ/list.tt:30
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:168
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:362
@@ -21762,7 +21770,7 @@ msgstr "날짜/시간"
 #: intranet-tmpl/prog/en/modules/circ/article-requests.tt:272
 #: intranet-tmpl/prog/en/modules/circ/request-article.tt:115
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:150
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1057
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1058
 #, c-format
 msgid "Date:"
 msgstr "날짜:"
@@ -21847,8 +21855,8 @@ msgstr "일:"
 #: intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:95
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:287
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:373
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:923
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:998
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:924
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:999
 #, c-format
 msgid "Days"
 msgstr "일"
@@ -21916,8 +21924,8 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:570
 #: intranet-tmpl/prog/en/modules/admin/clone-rules.tt:41
 #: intranet-tmpl/prog/en/modules/admin/clone-rules.tt:53
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:135
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:153
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:142
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:160
 #: intranet-tmpl/prog/en/modules/admin/item_circulation_alerts.tt:60
 #, c-format
 msgid "Default"
@@ -22308,7 +22316,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/admin/categories.tt:541
 #: intranet-tmpl/prog/en/modules/admin/oai_set_mappings.tt:65
 #: intranet-tmpl/prog/en/modules/admin/oai_set_mappings.tt:78
-#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:297
+#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:302
 #: intranet-tmpl/prog/en/modules/admin/currency.tt:201
 #: intranet-tmpl/prog/en/modules/admin/authtypes.tt:159
 #: intranet-tmpl/prog/en/modules/admin/systempreferences.tt:366
@@ -22337,7 +22345,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:304
 #: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:212
 #: intranet-tmpl/prog/en/modules/admin/printers.tt:156
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:213
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:220
 #: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:180
 #: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:182
 #: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:249
@@ -22950,7 +22958,7 @@ msgstr "부서"
 #: intranet-tmpl/prog/en/modules/admin/checkmarc.tt:167
 #: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:149
 #: intranet-tmpl/prog/en/modules/reports/dictionary.tt:68
-#: intranet-tmpl/prog/en/modules/about.tt:789
+#: intranet-tmpl/prog/en/modules/about.tt:796
 #: intranet-tmpl/prog/en/modules/labels/label-manage.tt:70
 #, c-format
 msgid "Description"
@@ -23042,8 +23050,8 @@ msgstr "설명:"
 
 #. For the first occurrence,
 #. %1$s:  liblibrarian | html_entity 
-#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:224
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:108
+#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:229
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:115
 #, c-format
 msgid "Description: %s"
 msgstr "설명: %s"
@@ -23127,7 +23135,7 @@ msgstr "세부사항"
 msgid "Details of payment"
 msgstr "대상 도서관:"
 
-#: intranet-tmpl/prog/en/modules/about.tt:749
+#: intranet-tmpl/prog/en/modules/about.tt:756
 #, c-format
 msgid ""
 "Deutsch (German) Friedrich zur Hellen, Robert Hillig, Katrin Fischer, Beda "
@@ -23361,7 +23369,7 @@ msgstr "위치 표시:"
 msgid "Display member details."
 msgstr "회원 세부사항 표시."
 
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:163
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:170
 #, c-format
 msgid "Display only used tags/subfields"
 msgstr "사용된 태그/하위분야만 표시"
@@ -23426,7 +23434,7 @@ msgstr "표시 %s모든%s %s승인%s %s보류%s %s거부%s 용어 "
 msgid "Div"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:518
+#: intranet-tmpl/prog/en/modules/about.tt:525
 #, c-format
 msgid "Do Space, USA"
 msgstr ""
@@ -23584,7 +23592,7 @@ msgstr "세금을 포함하지 않음"
 msgid "Done"
 msgstr "완료"
 
-#: intranet-tmpl/prog/en/modules/about.tt:519
+#: intranet-tmpl/prog/en/modules/about.tt:526
 #, c-format
 msgid "DoverNet, USA"
 msgstr ""
@@ -23725,7 +23733,7 @@ msgstr "없음 (기본값)"
 msgid "Dublin Core"
 msgstr "더블린 코어 (XML)"
 
-#: intranet-tmpl/prog/en/modules/about.tt:521
+#: intranet-tmpl/prog/en/modules/about.tt:528
 #, fuzzy, c-format
 msgid "Duchesne County Library, USA"
 msgstr "Crawford County Federated 도서관 시스템"
@@ -23941,7 +23949,7 @@ msgstr "HTML 메시지:"
 msgid "EDIFACT messages"
 msgstr "HTML 메시지:"
 
-#: intranet-tmpl/prog/en/modules/about.tt:443
+#: intranet-tmpl/prog/en/modules/about.tt:450
 #, c-format
 msgid "EMN (Ecole des Mines de Nantes)"
 msgstr "EMN (Ecole des Mines de Nantes)"
@@ -24052,7 +24060,7 @@ msgstr "최초 예약일자"
 #: intranet-tmpl/prog/en/modules/admin/cash_registers.tt:152
 #: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:179
 #: intranet-tmpl/prog/en/modules/admin/categories.tt:540
-#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:296
+#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:301
 #: intranet-tmpl/prog/en/modules/admin/currency.tt:200
 #: intranet-tmpl/prog/en/modules/admin/authtypes.tt:158
 #: intranet-tmpl/prog/en/modules/admin/systempreferences.tt:366
@@ -24138,7 +24146,7 @@ msgstr "OAI 설정 수정 '%s'"
 msgid "Edit SQL"
 msgstr "SQL 편집"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:983
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:984
 #, c-format
 msgid "Edit SQL report"
 msgstr "SQL 보고서 편집"
@@ -24426,9 +24434,9 @@ msgid "Edit serials"
 msgstr "연속간행물 편집"
 
 #. INPUT type=submit
-#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:307
+#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:312
 #: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:313
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:212
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:219
 #, c-format
 msgid "Edit subfields"
 msgstr "하위분야 편집"
@@ -24438,7 +24446,7 @@ msgstr "하위분야 편집"
 msgid "Edit subscription"
 msgstr "구독 편집"
 
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:210
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:217
 #, fuzzy, c-format
 msgid "Edit tag"
 msgstr "바스켓 편집"
@@ -24515,7 +24523,7 @@ msgstr "판:"
 msgid "Editions"
 msgstr "판"
 
-#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:131
+#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:136
 #, c-format
 msgid "Editor"
 msgstr "편집자"
@@ -24586,7 +24594,7 @@ msgstr "이메일:"
 msgid "Embed"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:697
+#: intranet-tmpl/prog/en/modules/about.tt:704
 #, c-format
 msgid "Emojiarea plug-in for jQuery"
 msgstr ""
@@ -24711,7 +24719,7 @@ msgstr "종료일 범위"
 msgid "End of interval"
 msgstr "종료일 범위"
 
-#: intranet-tmpl/prog/en/modules/about.tt:745
+#: intranet-tmpl/prog/en/modules/about.tt:752
 #, c-format
 msgid "English"
 msgstr "영어"
@@ -25224,12 +25232,12 @@ msgstr "보고서 매개변수를 처리할 때 오류가 발생했습니다: %s
 msgid "Errors occurred:"
 msgstr "오류 발생:"
 
-#: intranet-tmpl/prog/en/modules/about.tt:522
+#: intranet-tmpl/prog/en/modules/about.tt:529
 #, c-format
 msgid "Escuela de Orientacion Lacaniana, Argentina"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:771
+#: intranet-tmpl/prog/en/modules/about.tt:778
 #, c-format
 msgid ""
 "Espa&ntilde;ol (Spanish) Bernardo González Kriegel, Héctor Castro and Tomás "
@@ -25743,7 +25751,7 @@ msgstr ""
 msgid "FINMARC"
 msgstr "MARC"
 
-#: intranet-tmpl/prog/en/modules/about.tt:526
+#: intranet-tmpl/prog/en/modules/about.tt:533
 #, c-format
 msgid "FIT"
 msgstr ""
@@ -25910,22 +25918,22 @@ msgstr "필드를 업데이트하는데 실패했습니다."
 msgid "Fall"
 msgstr "가을"
 
-#: intranet-tmpl/prog/en/modules/about.tt:621
+#: intranet-tmpl/prog/en/modules/about.tt:628
 #, c-format
 msgid "FamFamFam Site"
 msgstr "FamFamFam 사이트"
 
-#: intranet-tmpl/prog/en/modules/about.tt:619
+#: intranet-tmpl/prog/en/modules/about.tt:626
 #, c-format
 msgid "Famfamfam iconset"
 msgstr "Famfamfam 아이콘설정"
 
-#: intranet-tmpl/prog/en/modules/about.tt:524
+#: intranet-tmpl/prog/en/modules/about.tt:531
 #, fuzzy, c-format
 msgid "Fargo Public Library, USA"
 msgstr "Geauga County Public Library"
 
-#: intranet-tmpl/prog/en/modules/about.tt:525
+#: intranet-tmpl/prog/en/modules/about.tt:532
 #, fuzzy, c-format
 msgid "Farmington Public Library, USA"
 msgstr "Geauga County Public Library"
@@ -26018,7 +26026,7 @@ msgstr "여성"
 msgid "Female "
 msgstr "여성"
 
-#: intranet-tmpl/prog/en/modules/about.tt:523
+#: intranet-tmpl/prog/en/modules/about.tt:530
 #, c-format
 msgid "Fenway Library Organization, USA"
 msgstr ""
@@ -26248,8 +26256,8 @@ msgstr "파일: "
 msgid "File: %s"
 msgstr "파일: %s"
 
-#: intranet-tmpl/prog/en/modules/about.tt:678
-#: intranet-tmpl/prog/en/modules/about.tt:679
+#: intranet-tmpl/prog/en/modules/about.tt:685
+#: intranet-tmpl/prog/en/modules/about.tt:686
 #, fuzzy, c-format
 msgid "FileSaver library"
 msgstr "도서관 설정"
@@ -26333,7 +26341,7 @@ msgstr "영화목록"
 #: intranet-tmpl/prog/en/modules/reports/issues_stats.tt:96
 #: intranet-tmpl/prog/en/modules/reports/catalogue_stats.tt:75
 #: intranet-tmpl/prog/en/modules/reports/acquisitions_stats.tt:89
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1055
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1056
 #: intranet-tmpl/prog/en/modules/reports/issues_avg_stats.tt:73
 #: intranet-tmpl/prog/en/modules/reports/borrowers_stats.tt:74
 #, c-format
@@ -26541,7 +26549,7 @@ msgstr "우선"
 msgid "First arrival:"
 msgstr "우선 도착:"
 
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:83
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:90
 #, fuzzy, c-format
 msgid "First indicator default value: "
 msgstr "첫 호 발행일"
@@ -26584,7 +26592,7 @@ msgstr "이용자 편집"
 msgid "First publication date is not defined"
 msgstr "- 첫 발행일이 정의되지 않았습니다"
 
-#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:135
+#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:140
 #, c-format
 msgid "Flagged"
 msgstr ""
@@ -26677,14 +26685,14 @@ msgstr "배열 규칙 코드 분실"
 msgid "Following required subfields are missing:"
 msgstr "배열 규칙 코드 분실"
 
-#: intranet-tmpl/prog/en/modules/about.tt:672
-#: intranet-tmpl/prog/en/modules/about.tt:673
+#: intranet-tmpl/prog/en/modules/about.tt:679
+#: intranet-tmpl/prog/en/modules/about.tt:680
 #, fuzzy, c-format
 msgid "Font Awesome"
 msgstr "글꼴 크기:"
 
-#: intranet-tmpl/prog/en/modules/about.tt:708
-#: intranet-tmpl/prog/en/modules/about.tt:709
+#: intranet-tmpl/prog/en/modules/about.tt:715
+#: intranet-tmpl/prog/en/modules/about.tt:716
 #, c-format
 msgid "Font Face Observer"
 msgstr ""
@@ -26876,7 +26884,7 @@ msgstr "포매팅"
 msgid "Formatting:"
 msgstr "포매팅"
 
-#: intranet-tmpl/prog/en/modules/about.tt:527
+#: intranet-tmpl/prog/en/modules/about.tt:534
 #, c-format
 msgid "Foundations Bible College &amp; Seminary, USA"
 msgstr ""
@@ -26905,7 +26913,7 @@ msgstr "프레임워크 코드:"
 msgid "Framework description"
 msgstr "프레임워크 설명"
 
-#: intranet-tmpl/prog/en/modules/about.tt:747
+#: intranet-tmpl/prog/en/modules/about.tt:754
 #, c-format
 msgid "Fran&ccedil;ais (French) "
 msgstr "Fran&ccedil;ais (프랑스어) "
@@ -27300,7 +27308,7 @@ msgstr "자금: %s"
 msgid "Funds"
 msgstr "자금"
 
-#: intranet-tmpl/prog/en/modules/about.tt:638
+#: intranet-tmpl/prog/en/modules/about.tt:645
 #, c-format
 msgid "GPL License"
 msgstr "GPL 라이선스"
@@ -27324,7 +27332,7 @@ msgstr "영업세 %%"
 msgid "GST:"
 msgstr "영업세:"
 
-#: intranet-tmpl/prog/en/modules/about.tt:748
+#: intranet-tmpl/prog/en/modules/about.tt:755
 #, c-format
 msgid "Galego (Galician) Ignacio Javier"
 msgstr "Galego (Galician) Ignacio Javier"
@@ -27346,7 +27354,7 @@ msgstr "열 사이의 거리:"
 msgid "Gap between rows:"
 msgstr "행 사이의 거리:"
 
-#: intranet-tmpl/prog/en/modules/about.tt:447
+#: intranet-tmpl/prog/en/modules/about.tt:454
 #, c-format
 msgid "Geauga County Public Library"
 msgstr "Geauga County Public Library"
@@ -27479,7 +27487,7 @@ msgstr "입수!"
 msgid "Global system preferences"
 msgstr "국제적 시스템 기본 설정"
 
-#: intranet-tmpl/prog/en/modules/about.tt:614
+#: intranet-tmpl/prog/en/modules/about.tt:621
 #, c-format
 msgid "Glyphicons Free"
 msgstr "Glyphicons Free"
@@ -27556,7 +27564,7 @@ msgstr "맨 위로 이동"
 msgid "Go up"
 msgstr "위로 이동"
 
-#: intranet-tmpl/prog/en/modules/about.tt:528
+#: intranet-tmpl/prog/en/modules/about.tt:535
 #, c-format
 msgid "Goethe-Institut, Germany"
 msgstr ""
@@ -27571,7 +27579,7 @@ msgstr "현재 거주지 주소"
 msgid "Gone no address flag"
 msgstr "현재 거주지 주소"
 
-#: intranet-tmpl/prog/en/modules/about.tt:529
+#: intranet-tmpl/prog/en/modules/about.tt:536
 #, c-format
 msgid "Gothenburg University Library, Sweden"
 msgstr ""
@@ -27613,12 +27621,12 @@ msgid ""
 msgstr ""
 
 #. INPUT type=text name=group
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1728
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1729
 msgid "Group code"
 msgstr "그룹 코드"
 
 #. INPUT type=text name=groupdesc
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1729
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1730
 msgid "Group name"
 msgstr "그룹 이름"
 
@@ -27694,8 +27702,8 @@ msgstr "안내 보고서 마법사"
 msgid "H Align"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:714
-#: intranet-tmpl/prog/en/modules/about.tt:715
+#: intranet-tmpl/prog/en/modules/about.tt:721
+#: intranet-tmpl/prog/en/modules/about.tt:722
 #, c-format
 msgid "HC Sticky"
 msgstr ""
@@ -27710,7 +27718,7 @@ msgstr ""
 msgid "HTML message:"
 msgstr "HTML 메시지:"
 
-#: intranet-tmpl/prog/en/modules/about.tt:530
+#: intranet-tmpl/prog/en/modules/about.tt:537
 #, c-format
 msgid "Halland County Library, Sweden"
 msgstr ""
@@ -27737,7 +27745,7 @@ msgstr "고정 만기일"
 msgid "Hard due date: "
 msgstr "고정 만기일"
 
-#: intranet-tmpl/prog/en/modules/about.tt:531
+#: intranet-tmpl/prog/en/modules/about.tt:538
 #, c-format
 msgid "Harrison Carmel Public Library, USA"
 msgstr ""
@@ -27747,7 +27755,7 @@ msgstr ""
 msgid "Hashvalue"
 msgstr "값"
 
-#: intranet-tmpl/prog/en/modules/about.tt:532
+#: intranet-tmpl/prog/en/modules/about.tt:539
 #, c-format
 msgid "Hauraki District Libraries, New Zealand"
 msgstr ""
@@ -28034,7 +28042,7 @@ msgid ""
 "anyway?"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:533
+#: intranet-tmpl/prog/en/modules/about.tt:540
 #, c-format
 msgid "Higher Education Libraries of Massachusetts, USA"
 msgstr ""
@@ -28087,7 +28095,7 @@ msgstr ""
 msgid "History start date:"
 msgstr "시작일 이력:"
 
-#: intranet-tmpl/prog/en/modules/about.tt:534
+#: intranet-tmpl/prog/en/modules/about.tt:541
 #, c-format
 msgid "Hochschule für Gesundheit (hsg), Germany"
 msgstr "Hochschule für Gesundheit (hsg), 독일"
@@ -28797,7 +28805,7 @@ msgstr "수평:"
 msgid "Horizontal: "
 msgstr "수평:"
 
-#: intranet-tmpl/prog/en/modules/about.tt:441
+#: intranet-tmpl/prog/en/modules/about.tt:448
 #, c-format
 msgid "Horowhenua Library Trust"
 msgstr ""
@@ -28817,7 +28825,7 @@ msgstr "호스트 이름/포트"
 msgid "Hostname: "
 msgstr "호스트 이름:"
 
-#: intranet-tmpl/prog/en/modules/about.tt:535
+#: intranet-tmpl/prog/en/modules/about.tt:542
 #, c-format
 msgid "Hotchkiss School, USA"
 msgstr ""
@@ -28849,8 +28857,8 @@ msgstr "대여비용:"
 #: intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:96
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:288
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:372
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:922
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:997
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:923
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:998
 #, c-format
 msgid "Hours"
 msgstr "시간"
@@ -28893,7 +28901,7 @@ msgstr "%s%s %s0 %s 이용자가 삭제될 것입니다"
 msgid "How to process items: "
 msgstr "항목 처리 방법:"
 
-#: intranet-tmpl/prog/en/modules/about.tt:740
+#: intranet-tmpl/prog/en/modules/about.tt:747
 #, c-format
 msgid "Hrvatski (Croatian)"
 msgstr "Hrvatski (크로아티아어)"
@@ -29822,7 +29830,7 @@ msgstr "가져옴"
 msgid "Importing to framework: %s. Importing from file: %s."
 msgstr "프레임워크 가져오기: %s. 파일로부터 가져오기: %s"
 
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:151
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:158
 #, c-format
 msgid "In framework:"
 msgstr "프레임워크:"
@@ -29962,12 +29970,12 @@ msgstr "색인:"
 msgid "Indexes"
 msgstr "색인"
 
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:180
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:187
 #, fuzzy, c-format
 msgid "Indicator 1"
 msgstr "필수:"
 
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:181
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:188
 #, fuzzy, c-format
 msgid "Indicator 2"
 msgstr "필수:"
@@ -30319,7 +30327,7 @@ msgstr "응용프로그램 내부:"
 msgid "Into an application: "
 msgstr "응용프로그램 내부:"
 
-#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:129
+#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:134
 #: intranet-tmpl/prog/en/modules/admin/didyoumean.tt:61
 #, c-format
 msgid "Intranet"
@@ -30545,7 +30553,7 @@ msgstr "청구서"
 msgid "Invoices enabled: "
 msgstr "청구서 번호:"
 
-#: intranet-tmpl/prog/en/modules/about.tt:596
+#: intranet-tmpl/prog/en/modules/about.tt:603
 #, c-format
 msgid "Irma Birchall"
 msgstr "Irma Birchall"
@@ -30555,7 +30563,7 @@ msgstr "Irma Birchall"
 msgid "Irregularity:"
 msgstr "비정기적:"
 
-#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:138
+#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:143
 #: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:132
 #, c-format
 msgid "Is a URL:"
@@ -30640,7 +30648,7 @@ msgstr "단위당 발행"
 msgid "Issuing library"
 msgstr "도서관"
 
-#: intranet-tmpl/prog/en/modules/about.tt:420
+#: intranet-tmpl/prog/en/modules/about.tt:427
 #, fuzzy, c-format
 msgid "Issuing rules"
 msgstr "배열 규칙:"
@@ -30656,7 +30664,7 @@ msgid ""
 "It is advisable to check for and resolve duplicate holds due to merging."
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:757
+#: intranet-tmpl/prog/en/modules/about.tt:764
 #, c-format
 msgid ""
 "Italiano (Italian) for 3.2: Zeno Tajoli, Pietro Gozzetti and Paolo Pozzan; "
@@ -31382,8 +31390,8 @@ msgstr "Itype"
 msgid "JSON URL"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:699
-#: intranet-tmpl/prog/en/modules/about.tt:700
+#: intranet-tmpl/prog/en/modules/about.tt:706
+#: intranet-tmpl/prog/en/modules/about.tt:707
 #, c-format
 msgid "JSZip"
 msgstr ""
@@ -31401,24 +31409,24 @@ msgstr "1월"
 msgid "January"
 msgstr "1월"
 
-#: intranet-tmpl/prog/en/modules/about.tt:726
-#: intranet-tmpl/prog/en/modules/about.tt:727
+#: intranet-tmpl/prog/en/modules/about.tt:733
+#: intranet-tmpl/prog/en/modules/about.tt:734
 #, c-format
 msgid "JavaScript Cookie"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:694
+#: intranet-tmpl/prog/en/modules/about.tt:701
 #, c-format
 msgid "JavaScript library by Vladimir Agafonkinis licensed under the "
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:700
+#: intranet-tmpl/prog/en/modules/about.tt:707
 #, c-format
 msgid "JavaScript library is licensed under both the "
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:663
-#: intranet-tmpl/prog/en/modules/about.tt:664
+#: intranet-tmpl/prog/en/modules/about.tt:670
+#: intranet-tmpl/prog/en/modules/about.tt:671
 #, c-format
 msgid "Javascript Diff Algorithm"
 msgstr ""
@@ -31433,7 +31441,7 @@ msgstr "발표 관리자:"
 msgid "Jenkins maintainers:"
 msgstr "발표 관리자:"
 
-#: intranet-tmpl/prog/en/modules/about.tt:600
+#: intranet-tmpl/prog/en/modules/about.tt:607
 #, c-format
 msgid "Jo Ransom"
 msgstr "Jo Ransom"
@@ -31489,17 +31497,17 @@ msgstr ""
 msgid "Juvenile"
 msgstr "청소년"
 
-#: intranet-tmpl/prog/en/modules/about.tt:537
+#: intranet-tmpl/prog/en/modules/about.tt:544
 #, c-format
 msgid "KEEP SOLUTIONS, Portugal"
 msgstr "KEEP SOLUTIONS, 포르투갈"
 
-#: intranet-tmpl/prog/en/modules/about.tt:536
+#: intranet-tmpl/prog/en/modules/about.tt:543
 #, c-format
 msgid "Katipo Communications, New Zealand"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:635
+#: intranet-tmpl/prog/en/modules/about.tt:642
 #, c-format
 msgid "Kazik Pietruszewski"
 msgstr ""
@@ -31556,7 +31564,7 @@ msgstr "키워드 (어떤):"
 
 #: intranet-tmpl/prog/en/modules/tools/koha-news.tt:178
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:156
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1062
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1063
 #, c-format
 msgid "Keyword:"
 msgstr "키워드:"
@@ -31586,14 +31594,14 @@ msgstr "키워드:"
 #: intranet-tmpl/prog/en/modules/onboarding/onboardingstep1.tt:11
 #: intranet-tmpl/prog/en/modules/onboarding/onboardingstep3.tt:13
 #: intranet-tmpl/prog/en/modules/onboarding/onboardingstep2.tt:20
-#: intranet-tmpl/prog/en/modules/about.tt:607
+#: intranet-tmpl/prog/en/modules/about.tt:614
 #: intranet-tmpl/prog/en/modules/auth.tt:22
 #, c-format
 msgid "Koha"
 msgstr "Koha"
 
 #. %1$s:  short_version | html 
-#: intranet-tmpl/prog/en/modules/about.tt:458
+#: intranet-tmpl/prog/en/modules/about.tt:465
 #, fuzzy, c-format
 msgid "Koha %s release team"
 msgstr "Koha 3.20 발표팀"
@@ -32052,22 +32060,24 @@ msgstr ""
 "시 &rsaquo; 도시 삭제 확인%s 도시%s%s"
 
 #. %1$s:  IF ( add_form ) 
-#. %2$s:  action | html 
-#. %3$s:  searchfield | html 
+#. %2$s:  IF heading_add_tag_p 
+#. %3$s:  ELSE 
 #. %4$s:  END 
-#. %5$s:  IF ( delete_confirm ) 
-#. %6$s:  searchfield | html 
-#. %7$s:  END 
-#. %8$s:  IF ( delete_confirmed ) 
+#. %5$s:  searchfield | html 
+#. %6$s:  END 
+#. %7$s:  IF ( delete_confirm ) 
+#. %8$s:  searchfield | html 
 #. %9$s:  END 
-#. %10$s:  IF ( else ) 
+#. %10$s:  IF ( delete_confirmed ) 
 #. %11$s:  END 
+#. %12$s:  IF ( else ) 
+#. %13$s:  END 
 #: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:6
-#, c-format
+#, fuzzy, c-format
 msgid ""
-"Koha &rsaquo; Administration &rsaquo; %sMARC frameworks &rsaquo; %s %s%s "
-"%sMARC frameworks &rsaquo; Confirm deletion of tag '%s'%s %sMARC frameworks "
-"&rsaquo; Data deleted%s %sMARC frameworks%s"
+"Koha &rsaquo; Administration &rsaquo; %sMARC frameworks &rsaquo; %sAdd tag"
+"%sModify tag%s %s%s %sMARC frameworks &rsaquo; Confirm deletion of tag "
+"'%s'%s %sMARC frameworks &rsaquo; Data deleted%s %sMARC frameworks%s"
 msgstr ""
 "Koha &rsaquo; 관리 &rsaquo; %sMARC 프레임워크 &rsaquo; %s %s%s %sMARC 프레임"
 "워크 &rsaquo; 태그 삭제 확인 '%s'%s %sMARC 프레임워크 &rsaquo; 데이터 삭제%s "
@@ -34168,7 +34178,7 @@ msgstr ""
 msgid "Koha database schema"
 msgstr "Koha 데이터베이스 스키마"
 
-#: intranet-tmpl/prog/en/modules/about.tt:477
+#: intranet-tmpl/prog/en/modules/about.tt:484
 #, c-format
 msgid "Koha development team"
 msgstr "Koha 개발팀"
@@ -34190,7 +34200,7 @@ msgstr "Koha 필드:"
 msgid "Koha full call number"
 msgstr "Koha 완전 청구기호"
 
-#: intranet-tmpl/prog/en/modules/about.tt:783
+#: intranet-tmpl/prog/en/modules/about.tt:790
 #, c-format
 msgid "Koha history timeline"
 msgstr "Koha 타임라인 이력"
@@ -34200,7 +34210,7 @@ msgstr "Koha 타임라인 이력"
 msgid "Koha internal"
 msgstr "Koha 내부"
 
-#: intranet-tmpl/prog/en/modules/about.tt:609
+#: intranet-tmpl/prog/en/modules/about.tt:616
 #, c-format
 msgid ""
 "Koha is free software; you can redistribute it and/or modify it under the "
@@ -34217,7 +34227,7 @@ msgstr ""
 msgid "Koha itemtype"
 msgstr "Koha 항목 형식"
 
-#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:148
+#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:153
 #, c-format
 msgid "Koha link:"
 msgstr "Koha 링크:"
@@ -34243,7 +34253,7 @@ msgstr "Koha 오프라인 대출"
 msgid "Koha plugins"
 msgstr "Koha 링크:"
 
-#: intranet-tmpl/prog/en/modules/about.tt:454
+#: intranet-tmpl/prog/en/modules/about.tt:461
 #, fuzzy, c-format
 msgid "Koha release teams"
 msgstr "Koha 3.20 발표팀"
@@ -34285,17 +34295,17 @@ msgstr ""
 msgid "Koha version: "
 msgstr "Koha 버전:"
 
-#: intranet-tmpl/prog/en/modules/about.tt:539
+#: intranet-tmpl/prog/en/modules/about.tt:546
 #, c-format
 msgid "Koha-Suomi Oy, Finland"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:538
+#: intranet-tmpl/prog/en/modules/about.tt:545
 #, c-format
 msgid "KohaAloha, New Zealand"
 msgstr "KohaAloha, 뉴질랜드"
 
-#: intranet-tmpl/prog/en/modules/about.tt:747
+#: intranet-tmpl/prog/en/modules/about.tt:754
 #, c-format
 msgid "Kohala"
 msgstr "Kohala"
@@ -34349,12 +34359,12 @@ msgstr "미국의회도서관 제어 번호： %s"
 msgid "LEAVE UNCHANGED"
 msgstr "수정하지 마세요"
 
-#: intranet-tmpl/prog/en/modules/about.tt:670
+#: intranet-tmpl/prog/en/modules/about.tt:677
 #, c-format
 msgid "LGPL v2.1"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:721
+#: intranet-tmpl/prog/en/modules/about.tt:728
 #, c-format
 msgid "LGPL v3.0"
 msgstr ""
@@ -34399,12 +34409,12 @@ msgstr "묶음 관리"
 msgid "Label creator"
 msgstr "레이블 생성"
 
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:67
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:74
 #, c-format
 msgid "Label for lib: "
 msgstr "도서관의 레이블:"
 
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:68
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:75
 #, c-format
 msgid "Label for opac: "
 msgstr "opac의 레이블:"
@@ -34485,7 +34495,7 @@ msgstr "언어:"
 msgid "Languages"
 msgstr "언어"
 
-#: intranet-tmpl/prog/en/modules/about.tt:762
+#: intranet-tmpl/prog/en/modules/about.tt:769
 #, c-format
 msgid "Lao Anousak Anthony Souphavanh"
 msgstr "Lao Anousak Anthony Souphavanh"
@@ -34639,7 +34649,7 @@ msgstr "늦게"
 msgid "Late orders"
 msgstr "늦은 주문"
 
-#: intranet-tmpl/prog/en/modules/about.tt:761
+#: intranet-tmpl/prog/en/modules/about.tt:768
 #, c-format
 msgid "Latina (Latin)"
 msgstr "라틴"
@@ -34682,8 +34692,8 @@ msgstr "레이아웃 이름:"
 msgid "Layouts"
 msgstr "Clay Fouts"
 
-#: intranet-tmpl/prog/en/modules/about.tt:693
-#: intranet-tmpl/prog/en/modules/about.tt:694
+#: intranet-tmpl/prog/en/modules/about.tt:700
+#: intranet-tmpl/prog/en/modules/about.tt:701
 #, c-format
 msgid "Leaflet"
 msgstr ""
@@ -34782,12 +34792,12 @@ msgstr "레터"
 
 #: intranet-tmpl/prog/en/modules/admin/koha2marclinks.tt:33
 #: intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:195
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:176
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:183
 #, c-format
 msgid "Lib"
 msgstr "Lib"
 
-#: intranet-tmpl/prog/en/modules/about.tt:540
+#: intranet-tmpl/prog/en/modules/about.tt:547
 #, c-format
 msgid "LibLime, USA"
 msgstr "LibLime 회사, 미국"
@@ -34996,7 +35006,7 @@ msgstr "도서관 코드:"
 msgid "Library of Congress"
 msgstr "이용자들의 소속도서관:"
 
-#: intranet-tmpl/prog/en/modules/about.tt:541
+#: intranet-tmpl/prog/en/modules/about.tt:548
 #, c-format
 msgid "Library of the Józef Piłsudski Institute of America, USA"
 msgstr ""
@@ -35095,7 +35105,7 @@ msgstr "도서관: %s"
 msgid "Library: %s &rArr; %s"
 msgstr "도서관: %s &rArr; %s"
 
-#: intranet-tmpl/prog/en/modules/about.tt:542
+#: intranet-tmpl/prog/en/modules/about.tt:549
 #, c-format
 msgid "Libriotech, Norway"
 msgstr "Libriotech 회사, 노르웨이"
@@ -35235,7 +35245,7 @@ msgstr "호스트 항목에 링크"
 msgid "Link..."
 msgstr "링크:"
 
-#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:146
+#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:151
 #, c-format
 msgid "Link:"
 msgstr "링크:"
@@ -35379,7 +35389,7 @@ msgstr "이 표제를 포함한 목록:"
 #: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:15
 #: intranet-tmpl/prog/en/modules/acqui/neworderbiblio.tt:112
 #: intranet-tmpl/prog/en/modules/acqui/edifactmsgs.tt:118
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1092
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1093
 msgid "Loading"
 msgstr "불러오는 중"
 
@@ -35657,7 +35667,7 @@ msgstr "로그"
 msgid "Look for existing records in catalog?"
 msgstr "목록에 존재하는 레코드를 찾습니까?"
 
-#: intranet-tmpl/prog/en/modules/about.tt:543
+#: intranet-tmpl/prog/en/modules/about.tt:550
 #, fuzzy, c-format
 msgid "Los Gatos Public Library, USA"
 msgstr "Geauga County Public Library"
@@ -35781,12 +35791,12 @@ msgstr ""
 msgid "Lucida Console"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:544
+#: intranet-tmpl/prog/en/modules/about.tt:551
 #, c-format
 msgid "Lund University Library, Sweden"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:763
+#: intranet-tmpl/prog/en/modules/about.tt:770
 #, c-format
 msgid "M&#257;ori"
 msgstr "M&#257;ori"
@@ -35981,7 +35991,7 @@ msgstr "MARC 하위분야"
 #. %3$s:  frameworkcode | html 
 #. %4$s:  ELSE 
 #. %5$s:  END 
-#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:257
+#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:262
 #, c-format
 msgid ""
 "MARC subfield structure admin for %s %s(framework %s)%s(default framework)%s"
@@ -36015,34 +36025,34 @@ msgstr "MARC21/USMARC"
 msgid "MARCXML"
 msgstr "MARCXML"
 
-#: intranet-tmpl/prog/en/modules/about.tt:633
-#: intranet-tmpl/prog/en/modules/about.tt:664
-#: intranet-tmpl/prog/en/modules/about.tt:667
-#: intranet-tmpl/prog/en/modules/about.tt:673
-#: intranet-tmpl/prog/en/modules/about.tt:691
+#: intranet-tmpl/prog/en/modules/about.tt:640
+#: intranet-tmpl/prog/en/modules/about.tt:671
+#: intranet-tmpl/prog/en/modules/about.tt:674
+#: intranet-tmpl/prog/en/modules/about.tt:680
+#: intranet-tmpl/prog/en/modules/about.tt:698
 #, c-format
 msgid "MIT License"
 msgstr "MIT 라이선스"
 
-#: intranet-tmpl/prog/en/modules/about.tt:700
+#: intranet-tmpl/prog/en/modules/about.tt:707
 #, fuzzy, c-format
 msgid "MIT and GPLv3 Licenses"
 msgstr "MIT 라이선스"
 
-#: intranet-tmpl/prog/en/modules/about.tt:706
+#: intranet-tmpl/prog/en/modules/about.tt:713
 #, fuzzy, c-format
 msgid "MIT licence"
 msgstr "MIT 라이선스"
 
-#: intranet-tmpl/prog/en/modules/about.tt:612
-#: intranet-tmpl/prog/en/modules/about.tt:614
-#: intranet-tmpl/prog/en/modules/about.tt:676
-#: intranet-tmpl/prog/en/modules/about.tt:679
-#: intranet-tmpl/prog/en/modules/about.tt:682
-#: intranet-tmpl/prog/en/modules/about.tt:715
-#: intranet-tmpl/prog/en/modules/about.tt:718
-#: intranet-tmpl/prog/en/modules/about.tt:724
-#: intranet-tmpl/prog/en/modules/about.tt:727
+#: intranet-tmpl/prog/en/modules/about.tt:619
+#: intranet-tmpl/prog/en/modules/about.tt:621
+#: intranet-tmpl/prog/en/modules/about.tt:683
+#: intranet-tmpl/prog/en/modules/about.tt:686
+#: intranet-tmpl/prog/en/modules/about.tt:689
+#: intranet-tmpl/prog/en/modules/about.tt:722
+#: intranet-tmpl/prog/en/modules/about.tt:725
+#: intranet-tmpl/prog/en/modules/about.tt:731
+#: intranet-tmpl/prog/en/modules/about.tt:734
 #, c-format
 msgid "MIT license"
 msgstr "MIT 라이선스"
@@ -36063,7 +36073,7 @@ msgstr ""
 msgid "Macros..."
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:753
+#: intranet-tmpl/prog/en/modules/about.tt:760
 #, c-format
 msgid "Magyar (Hungarian)Agnes Imecs"
 msgstr "Magyar (Hungarian)Agnes Imecs"
@@ -36734,7 +36744,7 @@ msgstr "도서관"
 #: intranet-tmpl/prog/en/modules/installer/step3.tt:92
 #: intranet-tmpl/prog/en/modules/installer/step3.tt:132
 #: intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:197
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:178
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:185
 #, c-format
 msgid "Mandatory"
 msgstr "필수"
@@ -36747,7 +36757,7 @@ msgstr "%s 데이터 추가"
 #: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:84
 #: intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:98
 #: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:80
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:76
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:83
 #, c-format
 msgid "Mandatory: "
 msgstr "필수:"
@@ -36860,7 +36870,7 @@ msgstr "선택된 표시:"
 msgid "Mark the original budget as inactive"
 msgstr "비활성 원본예산 표시"
 
-#: intranet-tmpl/prog/en/modules/about.tt:545
+#: intranet-tmpl/prog/en/modules/about.tt:552
 #, c-format
 msgid "MassCat, USA"
 msgstr ""
@@ -37231,7 +37241,7 @@ msgstr "마이크로초"
 msgid "Middle"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:546
+#: intranet-tmpl/prog/en/modules/about.tt:553
 #, c-format
 msgid "Middletown Township Public Library, USA"
 msgstr ""
@@ -37251,7 +37261,7 @@ msgstr "밀리초"
 msgid "Mine"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:444
+#: intranet-tmpl/prog/en/modules/about.tt:451
 #, c-format
 msgid ""
 "Mines Paristech (previously Ecole Nationale Supérieure des Mines de Paris)"
@@ -37275,8 +37285,8 @@ msgid "Minute"
 msgstr "분"
 
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:371
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:921
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:996
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:922
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:997
 #, c-format
 msgid "Minutes"
 msgstr "분"
@@ -37926,7 +37936,7 @@ msgid ""
 "not be copied"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:146
+#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:151
 #, c-format
 msgid ""
 "NOTE: If you change this value you must ask your administrator to run misc/"
@@ -37979,8 +37989,8 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/admin/printers.tt:144
 #: intranet-tmpl/prog/en/modules/admin/additional-fields.tt:88
 #: intranet-tmpl/prog/en/modules/reports/dictionary.tt:67
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1729
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1756
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1730
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1757
 #, c-format
 msgid "Name"
 msgstr "이름"
@@ -38112,7 +38122,7 @@ msgstr "이름:"
 msgid "Narrower Term"
 msgstr "%sh - 하위어"
 
-#: intranet-tmpl/prog/en/modules/about.tt:547
+#: intranet-tmpl/prog/en/modules/about.tt:554
 #, c-format
 msgid "National Library of Finland, Finland"
 msgstr ""
@@ -38122,7 +38132,7 @@ msgstr ""
 msgid "Navy Blue"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:448
+#: intranet-tmpl/prog/en/modules/about.tt:455
 #, c-format
 msgid "Near East University"
 msgstr ""
@@ -38134,12 +38144,12 @@ msgid ""
 "contact your server admin if you wish to configure Elasticsearch"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:744
+#: intranet-tmpl/prog/en/modules/about.tt:751
 #, c-format
 msgid "Nederlands-Belgi&euml; (Dutch-Belgium)"
 msgstr "Nederlands-Belgi&euml; (Dutch-Belgium)"
 
-#: intranet-tmpl/prog/en/modules/about.tt:743
+#: intranet-tmpl/prog/en/modules/about.tt:750
 #, c-format
 msgid "Nederlands-Nederland (Dutch-The Netherlands) Sponsored by Rijksmuseum"
 msgstr "Nederlands-Nederland (Dutch-The Netherlands) Sponsored by Rijksmuseum"
@@ -38242,12 +38252,12 @@ msgstr "신규 SRU 서버"
 msgid "New Z39.50 server"
 msgstr "신규 Z39.50 서버"
 
-#: intranet-tmpl/prog/en/modules/about.tt:549
+#: intranet-tmpl/prog/en/modules/about.tt:556
 #, c-format
 msgid "New Zealand Central Agencies Library, New Zealand"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:550
+#: intranet-tmpl/prog/en/modules/about.tt:557
 #, c-format
 msgid "New Zealand Ministry of Education Library, New Zealand"
 msgstr ""
@@ -38703,7 +38713,7 @@ msgstr "신규 판매업체"
 msgid "New window"
 msgstr "창 숨기기"
 
-#: intranet-tmpl/prog/en/modules/about.tt:548
+#: intranet-tmpl/prog/en/modules/about.tt:555
 #, fuzzy, c-format
 msgid "Newcastle City Council, United Kingdom"
 msgstr "software.coop, 영국"
@@ -38801,7 +38811,7 @@ msgstr "다음 호 출판일:"
 msgid "Next page"
 msgstr "다음 페이지"
 
-#: intranet-tmpl/prog/en/modules/about.tt:601
+#: intranet-tmpl/prog/en/modules/about.tt:608
 #, c-format
 msgid "Nicholas Rosasco (Documentation Compiler)"
 msgstr "Nicholas Rosasco (문서화 컴파일러)"
@@ -38880,10 +38890,10 @@ msgstr "주기 : %s"
 
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:363
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:365
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:913
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:915
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:988
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:990
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:914
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:916
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:989
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:991
 #, c-format
 msgid "No (default)"
 msgstr "없음 (기본값)"
@@ -39079,7 +39089,7 @@ msgid "No color"
 msgstr "색상"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1092
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1093
 msgid "No columns selected!"
 msgstr "선택된 열이 없습니다!"
 
@@ -39373,7 +39383,7 @@ msgid "No matching records found"
 msgstr "일치하는 레코드를 찾을 수 없습니다"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1092
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1093
 msgid "No matching reports found"
 msgstr "일치하는 보고서를 찾을 수 없습니다"
 
@@ -39682,7 +39692,7 @@ msgstr ""
 msgid "No valid patrons to merge were found."
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:434
+#: intranet-tmpl/prog/en/modules/about.tt:441
 #, c-format
 msgid "No warnings."
 msgstr "경고가 없습니다."
@@ -39703,7 +39713,7 @@ msgstr "아니요, 삭제할 수 없습니다"
 #: intranet-tmpl/prog/en/modules/serials/subscription-frequencies.tt:122
 #: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:254
 #: intranet-tmpl/prog/en/modules/members/deletemem.tt:52
-#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:240
+#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:245
 #: intranet-tmpl/prog/en/modules/admin/currency.tt:158
 #: intranet-tmpl/prog/en/modules/admin/authtypes.tt:122
 #: intranet-tmpl/prog/en/modules/admin/systempreferences.tt:225
@@ -39717,7 +39727,7 @@ msgstr "아니요, 삭제할 수 없습니다"
 #: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:246
 #: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:115
 #: intranet-tmpl/prog/en/modules/admin/printers.tt:114
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:116
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:123
 #: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:389
 #: intranet-tmpl/prog/en/modules/admin/cities.tt:120
 #: intranet-tmpl/prog/en/modules/admin/itemtypes.tt:343
@@ -39952,22 +39962,22 @@ msgstr "보통"
 msgid "Normalization rule: "
 msgstr "정규화 규칙:"
 
-#: intranet-tmpl/prog/en/modules/about.tt:754
+#: intranet-tmpl/prog/en/modules/about.tt:761
 #, c-format
 msgid "Norsk Bokmål (Norwegian) Axel Bojer and Thomas Gramstad"
 msgstr "Norsk Bokmål (Norwegian) Axel Bojer and Thomas Gramstad"
 
-#: intranet-tmpl/prog/en/modules/about.tt:755
+#: intranet-tmpl/prog/en/modules/about.tt:762
 #, c-format
 msgid "Norsk Nynorsk (Norwegian) Unni Knutsen and Marit Kristine Ådland"
 msgstr "Norsk Nynorsk (Norwegian) Unni Knutsen and Marit Kristine Ådland"
 
-#: intranet-tmpl/prog/en/modules/about.tt:551
+#: intranet-tmpl/prog/en/modules/about.tt:558
 #, c-format
 msgid "North Central Regional Library (NCRL), USA"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:552
+#: intranet-tmpl/prog/en/modules/about.tt:559
 #, c-format
 msgid "Northeast Kansas Library System (NEKLS), USA"
 msgstr ""
@@ -40326,9 +40336,9 @@ msgstr "주기/주석"
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:573
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:628
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:721
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:926
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:961
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1001
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:927
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:962
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1002
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:121
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:287
 #, c-format
@@ -40412,12 +40422,12 @@ msgstr "알림 &amp; 슬립"
 msgid "Notification date"
 msgstr "통지일"
 
-#: intranet-tmpl/prog/en/modules/about.tt:712
+#: intranet-tmpl/prog/en/modules/about.tt:719
 #, c-format
 msgid "Noto"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:711
+#: intranet-tmpl/prog/en/modules/about.tt:718
 #, c-format
 msgid "Noto fonts"
 msgstr ""
@@ -40762,7 +40772,7 @@ msgstr "OAI 설정"
 msgid "OAI sets configuration"
 msgstr "OAI 설정 구성"
 
-#: intranet-tmpl/prog/en/modules/about.tt:684
+#: intranet-tmpl/prog/en/modules/about.tt:691
 #, c-format
 msgid "OAI xslt stylesheet"
 msgstr ""
@@ -40805,7 +40815,7 @@ msgstr "끄기"
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:530
 #: intranet-tmpl/prog/en/modules/circ/branchoverdues.tt:31
 #: intranet-tmpl/prog/en/modules/admin/categories.tt:382
-#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:251
+#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:256
 #: intranet-tmpl/prog/en/modules/admin/currency.tt:138
 #: intranet-tmpl/prog/en/modules/admin/systempreferences.tt:206
 #: intranet-tmpl/prog/en/modules/admin/aqcontract.tt:106
@@ -40816,8 +40826,8 @@ msgstr "끄기"
 #: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:256
 #: intranet-tmpl/prog/en/modules/admin/printers.tt:88
 #: intranet-tmpl/prog/en/modules/admin/printers.tt:123
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:125
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:140
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:132
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:147
 #: intranet-tmpl/prog/en/modules/admin/checkmarc.tt:36
 #: intranet-tmpl/prog/en/modules/admin/checkmarc.tt:50
 #: intranet-tmpl/prog/en/modules/admin/checkmarc.tt:62
@@ -40842,7 +40852,7 @@ msgid "ON"
 msgstr "켜기"
 
 #: intranet-tmpl/prog/en/includes/prefs-menu.inc:13
-#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:127
+#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:132
 #: intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:173
 #: intranet-tmpl/prog/en/modules/admin/columns_settings.tt:174
 #: intranet-tmpl/prog/en/modules/admin/didyoumean.tt:57
@@ -40910,12 +40920,12 @@ msgstr "OPAC 보기:"
 msgid "OPAC/Staff login"
 msgstr "OPAC/직원 로그인"
 
-#: intranet-tmpl/prog/en/modules/about.tt:553
+#: intranet-tmpl/prog/en/modules/about.tt:560
 #, c-format
 msgid "OPUS"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:449
+#: intranet-tmpl/prog/en/modules/about.tt:456
 #, c-format
 msgid ""
 "OPUS International Consultants, Wellington, New Zealand (Corporate Serials "
@@ -41300,12 +41310,12 @@ msgstr "새 창에서 열기"
 msgid "Open on:"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:646
+#: intranet-tmpl/prog/en/modules/about.tt:653
 #, c-format
 msgid "OpenJS Keyboard Shortcuts Library"
 msgstr "OpenJS 키보드단축키 도서관"
 
-#: intranet-tmpl/prog/en/modules/about.tt:648
+#: intranet-tmpl/prog/en/modules/about.tt:655
 #, c-format
 msgid "OpenJS keyboard shortcuts library"
 msgstr "OpenJS 키보드단축키 도서관"
@@ -41598,7 +41608,7 @@ msgstr "불분명한 가격의 주문"
 msgid "Orders with uncertain prices for vendor "
 msgstr "판매업체들의 불분명한 가격의 주문"
 
-#: intranet-tmpl/prog/en/modules/about.tt:554
+#: intranet-tmpl/prog/en/modules/about.tt:561
 #, c-format
 msgid "Orex Digital, Spain"
 msgstr ""
@@ -41651,7 +41661,7 @@ msgstr "원본 주문 라인"
 msgid "Original version"
 msgstr "원본 주문 라인"
 
-#: intranet-tmpl/prog/en/modules/about.tt:555
+#: intranet-tmpl/prog/en/modules/about.tt:562
 #, c-format
 msgid "Oslo Public Library, Norway"
 msgstr ""
@@ -41699,7 +41709,7 @@ msgstr "다른 이름"
 msgid "Other names"
 msgstr "다른 이름"
 
-#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:168
+#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:173
 #, c-format
 msgid "Other options (choose one)"
 msgstr "다른 옵션 (한가지 선택)"
@@ -41899,12 +41909,12 @@ msgstr "오후"
 msgid "PSGI: "
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:560
+#: intranet-tmpl/prog/en/modules/about.tt:567
 #, c-format
 msgid "PTFS Europe Ltd, United Kingdom"
 msgstr "PTFS Europe Ltd, 영국"
 
-#: intranet-tmpl/prog/en/modules/about.tt:559
+#: intranet-tmpl/prog/en/modules/about.tt:566
 #, c-format
 msgid "PTFS, Maryland, USA"
 msgstr "PTFS, 메릴랜드, 미국"
@@ -43581,12 +43591,12 @@ msgstr "계획"
 msgid "Planning for %s %s"
 msgstr "계획 %s %s"
 
-#: intranet-tmpl/prog/en/modules/about.tt:556
+#: intranet-tmpl/prog/en/modules/about.tt:563
 #, c-format
 msgid "Plano Independent School, USA"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:557
+#: intranet-tmpl/prog/en/modules/about.tt:564
 #, c-format
 msgid "Plant and Food Research Limited, New Zealand"
 msgstr ""
@@ -43631,7 +43641,7 @@ msgstr "출판되지 않은 호를 확인해주세요 (불규칙)"
 #. %1$s:  ELSIF ( error.cache_expiry ) 
 #. %2$s:  ELSE 
 #. %3$s:  END 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1028
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1029
 #, c-format
 msgid ""
 "Please check the log for further details. %sPlease select a cache expiry "
@@ -44049,7 +44059,7 @@ msgid "Please return this item to %s "
 msgstr "%s로 돌아가주세요"
 
 #. %1$s:  ELSIF ( error.queryerr ) 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1027
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1028
 #, c-format
 msgid ""
 "Please return to the &quot;Saved Reports&quot; screen and delete this report "
@@ -44269,7 +44279,7 @@ msgstr "zip 파일의 완전성을 인증하고 다시 시도해 주세요."
 msgid "Plugin version"
 msgstr "플러그인 버전"
 
-#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:196
+#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:201
 #: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:199
 #: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:301
 #, c-format
@@ -44311,7 +44321,7 @@ msgstr "설치된 플러그인이 없습니다"
 msgid "Policy for %s: %s"
 msgstr "정책 %s: %s"
 
-#: intranet-tmpl/prog/en/modules/about.tt:767
+#: intranet-tmpl/prog/en/modules/about.tt:774
 #, c-format
 msgid "Polski (Polish)"
 msgstr "Polski (폴란드어)"
@@ -44354,7 +44364,7 @@ msgstr ""
 msgid "Port: "
 msgstr "포트: "
 
-#: intranet-tmpl/prog/en/modules/about.tt:768
+#: intranet-tmpl/prog/en/modules/about.tt:775
 #, c-format
 msgid "Portugu&ecirc;s (Portuguese)"
 msgstr "포르투갈"
@@ -45050,7 +45060,7 @@ msgstr "프로파일:"
 msgid "Programmed texts"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:558
+#: intranet-tmpl/prog/en/modules/about.tt:565
 #, c-format
 msgid "Prosentient Systems, Australia"
 msgstr "Prosentient 시스템, 호주"
@@ -45525,7 +45535,7 @@ msgstr "세금 포함 RRP."
 msgid "RT"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:597
+#: intranet-tmpl/prog/en/modules/about.tt:604
 #, c-format
 msgid "Rachel Hamilton-Williams (Kaitiaki from 2004 to present)"
 msgstr "Rachel Hamilton-Williams (Kaitiaki from 2004 to present)"
@@ -45908,7 +45918,7 @@ msgstr "등록일:"
 msgid "Registration date: %s"
 msgstr "등록일: %s"
 
-#: intranet-tmpl/prog/en/modules/about.tt:602
+#: intranet-tmpl/prog/en/modules/about.tt:609
 #, c-format
 msgid "Regula Sebastiao"
 msgstr "Regula Sebastiao"
@@ -46461,7 +46471,7 @@ msgid "Repeat this Tag"
 msgstr "이 태그를 반복"
 
 #: intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:196
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:177
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:184
 #, c-format
 msgid "Repeatable"
 msgstr "반복가능"
@@ -46470,7 +46480,7 @@ msgstr "반복가능"
 #: intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:91
 #: intranet-tmpl/prog/en/modules/admin/patron-attr-types.tt:77
 #: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:72
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:69
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:76
 #, c-format
 msgid "Repeatable: "
 msgstr "반복가능:"
@@ -46600,17 +46610,17 @@ msgid ""
 "%s)"
 msgstr "예산에서 받지 않은 주문을 이동후에 보고 %s (%s - %s) to %s (%s - %s)"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1710
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1711
 #, c-format
 msgid "Report group:"
 msgstr "보고서 그룹:"
 
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:363
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:365
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:913
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:915
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:988
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:990
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:914
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:916
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:989
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:991
 #, c-format
 msgid "Report is public:"
 msgstr "보고서가 공개:"
@@ -46627,13 +46637,13 @@ msgstr "보고서 이름:"
 msgid "Report name"
 msgstr "보고서 이름"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:906
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:907
 #, c-format
 msgid "Report name:"
 msgstr "보고서 이름:"
 
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:626
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:985
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:986
 #, c-format
 msgid "Report name: "
 msgstr "보고서 이름:"
@@ -46646,7 +46656,7 @@ msgstr "보고서 이름:"
 msgid "Report plugins"
 msgstr "보고서 플러그인"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1732
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1733
 #, c-format
 msgid "Report subgroup:"
 msgstr "하위그룹 보고서:"
@@ -46786,8 +46796,8 @@ msgstr "필수"
 msgid "Require valid email address:"
 msgstr "유효한 이메일 주소를 입력해주세요."
 
-#: intranet-tmpl/prog/en/modules/about.tt:681
-#: intranet-tmpl/prog/en/modules/about.tt:682
+#: intranet-tmpl/prog/en/modules/about.tt:688
+#: intranet-tmpl/prog/en/modules/about.tt:689
 #, fuzzy, c-format
 msgid "Require.js JS module system"
 msgstr "필요한 모듈이 없습니다"
@@ -47032,7 +47042,7 @@ msgstr "필요한 모듈이 없습니다"
 #: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:88
 #: intranet-tmpl/prog/en/modules/admin/printers.tt:67
 #: intranet-tmpl/prog/en/modules/admin/printers.tt:73
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:64
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:71
 #: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:61
 #: intranet-tmpl/prog/en/modules/admin/additional-fields.tt:131
 #: intranet-tmpl/prog/en/modules/admin/cities.tt:70
@@ -47046,10 +47056,10 @@ msgstr "필요한 모듈이 없습니다"
 #: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:214
 #: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:224
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:626
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:908
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:932
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:985
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1008
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:909
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:933
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:986
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1009
 #: intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:276
 #: intranet-tmpl/prog/en/modules/services/itemrecorddisplay.tt:33
 #: intranet-tmpl/prog/en/modules/offline_circ/process_koc.tt:42
@@ -47302,7 +47312,7 @@ msgstr "전거레코드 결과"
 #. For the first occurrence,
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/serials/subscription-add.tt:520
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1092
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1093
 msgid "Results from Mana Knowledge Base"
 msgstr ""
 
@@ -47387,7 +47397,7 @@ msgstr "프레임워크 기본값"
 msgid "Return to patron detail"
 msgstr "이용자 세부사항으로 돌아가기"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1033
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1034
 #, c-format
 msgid "Return to previous page"
 msgstr "이전 페이지로 돌아갑니다"
@@ -47539,7 +47549,7 @@ msgstr "무게"
 msgid "Right to left"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:561
+#: intranet-tmpl/prog/en/modules/about.tt:568
 #, c-format
 msgid "Rijksmuseum, Amsterdam, The Netherlands"
 msgstr "암스테르담 국립박물관, 네덜란드"
@@ -47554,7 +47564,7 @@ msgstr ""
 msgid "Robots"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:562
+#: intranet-tmpl/prog/en/modules/about.tt:569
 #, c-format
 msgid "Rolling Hills Consolidated Libraries, USA"
 msgstr ""
@@ -47569,7 +47579,7 @@ msgstr ""
 msgid "Rollover:"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:769
+#: intranet-tmpl/prog/en/modules/about.tt:776
 #, c-format
 msgid "Rom&acirc;n&#259; (Romanian)"
 msgstr "Rom&acirc;n&#259; (루마니아)"
@@ -47626,7 +47636,7 @@ msgstr ""
 msgid "Rotating collections"
 msgstr "합집:"
 
-#: intranet-tmpl/prog/en/modules/about.tt:563
+#: intranet-tmpl/prog/en/modules/about.tt:570
 #, fuzzy, c-format
 msgid "Round Rock Public Library, USA"
 msgstr "Geauga County Public Library"
@@ -47764,12 +47774,12 @@ msgstr "실행 도구"
 msgid "SAN"
 msgstr "AND"
 
-#: intranet-tmpl/prog/en/modules/about.tt:445
+#: intranet-tmpl/prog/en/modules/about.tt:452
 #, c-format
 msgid "SAN-Ouest Provence"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:564
+#: intranet-tmpl/prog/en/modules/about.tt:571
 #, c-format
 msgid "SAN-Ouest Provence, France"
 msgstr ""
@@ -47796,12 +47806,12 @@ msgstr ""
 msgid "SI Millimeters"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:673
+#: intranet-tmpl/prog/en/modules/about.tt:680
 #, c-format
 msgid "SIL OFL 1.1"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:712
+#: intranet-tmpl/prog/en/modules/about.tt:719
 #, c-format
 msgid "SIL Open Font License (OFL) v1.1"
 msgstr ""
@@ -47844,8 +47854,8 @@ msgstr "SMS 번호:"
 msgid "SMS provider:"
 msgstr "CSV 프로파일:"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:930
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1006
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:931
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1007
 #, c-format
 msgid "SQL:"
 msgstr "SQL:"
@@ -47870,7 +47880,7 @@ msgstr ""
 msgid "STARTDATE:January 1 2010,TRACK:Day"
 msgstr "&quot;STARTDATE:January 1, 2010&quot;,&quot;TRACK:Day&quot;"
 
-#: intranet-tmpl/prog/en/modules/about.tt:570
+#: intranet-tmpl/prog/en/modules/about.tt:577
 #, c-format
 msgid "SWITCH Library Consortium, USA"
 msgstr ""
@@ -48079,9 +48089,9 @@ msgstr "신규 패턴 저장"
 #: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:247
 #: intranet-tmpl/prog/en/modules/members/housebound.tt:189
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:238
-#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:214
+#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:219
 #: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:43
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:97
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:104
 #: intranet-tmpl/prog/en/modules/admin/itemtypes.tt:312
 #, c-format
 msgid "Save changes"
@@ -48120,7 +48130,7 @@ msgstr "오류: 목록을 수정할 수 없습니다."
 
 #. INPUT type=submit name=submit
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:631
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:937
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:938
 msgid "Save report"
 msgstr "보고서 저장"
 
@@ -48170,7 +48180,7 @@ msgstr "반납일"
 msgid "Saved preference %s"
 msgstr "기본 설정 저장 %s"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:943
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:944
 #, c-format
 msgid "Saved report results"
 msgstr "결과 보고서 저장"
@@ -48180,7 +48190,7 @@ msgstr "결과 보고서 저장"
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:59
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:60
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:144
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1038
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1039
 #, c-format
 msgid "Saved reports"
 msgstr "보고서 저장"
@@ -48337,7 +48347,7 @@ msgstr "화면"
 #: intranet-tmpl/prog/en/modules/acqui/histsearch.tt:164
 #: intranet-tmpl/prog/en/modules/acqui/acqui-home.tt:45
 #: intranet-tmpl/prog/en/modules/circ/request-article.tt:79
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:162
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:169
 #: intranet-tmpl/prog/en/modules/admin/admin-home.tt:52
 #: intranet-tmpl/prog/en/modules/reports/reports-home.tt:37
 #: intranet-tmpl/prog/en/modules/labels/label-bib-search.tt:6
@@ -48545,7 +48555,7 @@ msgstr "이용자 검색"
 msgid "Search for record"
 msgstr "레코드 검색"
 
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:148
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:155
 #, c-format
 msgid "Search for tag:"
 msgstr "태그 검색:"
@@ -48890,7 +48900,7 @@ msgstr "시즌"
 msgid "Second"
 msgstr "두 번째"
 
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:86
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:93
 #, fuzzy, c-format
 msgid "Second indicator default value: "
 msgstr "기본 값을 사용"
@@ -48920,8 +48930,8 @@ msgid "Secondary phone: "
 msgstr "부차적인 전화:"
 
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:370
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:920
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:995
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:921
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:996
 #, c-format
 msgid "Seconds (default)"
 msgstr "초 (기본값)"
@@ -48975,7 +48985,7 @@ msgstr ""
 msgid "Seen"
 msgstr "보았음"
 
-#: intranet-tmpl/prog/en/modules/about.tt:565
+#: intranet-tmpl/prog/en/modules/about.tt:572
 #, fuzzy, c-format
 msgid "Sefton Council, United Kingdom"
 msgstr "software.coop, 영국"
@@ -48989,8 +48999,8 @@ msgstr "software.coop, 영국"
 #: intranet-tmpl/prog/en/modules/members/tables/guarantor_search.tt:21
 #: intranet-tmpl/prog/en/modules/acqui/tables/members_results.tt:19
 #: intranet-tmpl/prog/en/modules/circ/request-article.tt:70
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1713
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1735
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1714
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1736
 #: intranet-tmpl/prog/en/modules/labels/label-edit-batch.tt:116
 #: intranet-tmpl/prog/en/modules/labels/result.tt:72
 #, c-format
@@ -49436,8 +49446,8 @@ msgstr "선택한 항목들을 삭제하세요"
 msgid "Select your MARC flavor"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:687
-#: intranet-tmpl/prog/en/modules/about.tt:688
+#: intranet-tmpl/prog/en/modules/about.tt:694
+#: intranet-tmpl/prog/en/modules/about.tt:695
 #, fuzzy, c-format
 msgid "Select2"
 msgstr "선택"
@@ -50859,12 +50869,12 @@ msgstr "분류 자료 / 서가 계획"
 msgid "Source records"
 msgstr "레코드 자료"
 
-#: intranet-tmpl/prog/en/modules/about.tt:568
+#: intranet-tmpl/prog/en/modules/about.tt:575
 #, c-format
 msgid "South Taranaki District Council, New Zealand"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:567
+#: intranet-tmpl/prog/en/modules/about.tt:574
 #, c-format
 msgid "South-East Kansas Library System (SEKLS), USA"
 msgstr ""
@@ -50897,7 +50907,7 @@ msgstr "문자"
 msgid "Special relationship: "
 msgstr "특수 관계:"
 
-#: intranet-tmpl/prog/en/modules/about.tt:439
+#: intranet-tmpl/prog/en/modules/about.tt:446
 #, c-format
 msgid "Special thanks to the following organizations"
 msgstr ""
@@ -51521,7 +51531,7 @@ msgstr "5단계: 정의 확인"
 msgid "Step 6 of 6: Choose how you want the report ordered"
 msgstr "6의 6단계: 주문에 대한 보고서를 어떻게 할지 선택"
 
-#: intranet-tmpl/prog/en/modules/about.tt:598
+#: intranet-tmpl/prog/en/modules/about.tt:605
 #, c-format
 msgid "Stephen Hedges (early Documentation Manager)"
 msgstr "Stephen Hedges (초기 문서화 관리자)"
@@ -51549,7 +51559,7 @@ msgstr "로케이션"
 msgid "Stock rotation details for %s"
 msgstr "&rsaquo; 코스 세부사항"
 
-#: intranet-tmpl/prog/en/modules/about.tt:569
+#: intranet-tmpl/prog/en/modules/about.tt:576
 #, c-format
 msgid "Stockholm University Library, Sweden"
 msgstr ""
@@ -51617,7 +51627,7 @@ msgid "Sub total "
 msgstr "소계"
 
 #: intranet-tmpl/prog/en/modules/admin/oai_set_mappings.tt:35
-#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:263
+#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:268
 #: intranet-tmpl/prog/en/modules/admin/koha2marclinks.tt:32
 #: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:268
 #: intranet-tmpl/prog/en/modules/admin/checkmarc.tt:202
@@ -51654,7 +51664,7 @@ msgid "Subfield:"
 msgstr "하위분야:"
 
 #. %1$s:  tagsubfield | html 
-#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:223
+#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:228
 #, c-format
 msgid "Subfield: %s"
 msgstr "하위분야: %s"
@@ -51683,12 +51693,12 @@ msgid "Subgroup"
 msgstr "하위그룹"
 
 #. INPUT type=text name=subgroup
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1755
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1756
 msgid "Subgroup code"
 msgstr "하위그룹 코드"
 
 #. INPUT type=text name=subgroupdesc
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1756
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1757
 msgid "Subgroup name"
 msgstr "하위그룹 이름"
 
@@ -52408,7 +52418,7 @@ msgstr "벌금 부과 간격"
 msgid "Suspension in days (day)"
 msgstr "일시 정지 일수"
 
-#: intranet-tmpl/prog/en/modules/about.tt:772
+#: intranet-tmpl/prog/en/modules/about.tt:779
 #, c-format
 msgid "Svenska (Swedish)"
 msgstr "스웨덴어"
@@ -52434,8 +52444,8 @@ msgstr ""
 msgid "Switch to or from fullscreen mode"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:358
-#: intranet-tmpl/prog/en/modules/about.tt:366
+#: intranet-tmpl/prog/en/modules/about.tt:365
+#: intranet-tmpl/prog/en/modules/about.tt:373
 #, fuzzy, c-format
 msgid "Switching to dom indexing"
 msgstr "상세검색으로 가기"
@@ -52568,7 +52578,7 @@ msgstr "시스템 기본 설정 검색:"
 msgid "System preferences"
 msgstr "시스템 기본 설정"
 
-#: intranet-tmpl/prog/en/modules/about.tt:775
+#: intranet-tmpl/prog/en/modules/about.tt:782
 #, c-format
 msgid ""
 "T&uuml;rk&ccedil;e (Turkish) pre-3.8: Selma Aslan; for 3.8+, Suleyman "
@@ -52640,7 +52650,7 @@ msgstr "탭:"
 #. %20$s:  IF ( subfield.value_builder ) 
 #. %21$s:  subfield.value_builder | html 
 #. %22$s:  END 
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:193
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:200
 #, c-format
 msgid ""
 "Tab:%s | $%s %s %s%s%s%s, repeatable%s%s, Mandatory%s%s, See %s%s%s, %s%s%s, "
@@ -52667,7 +52677,7 @@ msgstr "목차"
 msgid "Table properties"
 msgstr "변수 옵션:"
 
-#: intranet-tmpl/prog/en/modules/about.tt:691
+#: intranet-tmpl/prog/en/modules/about.tt:698
 #, c-format
 msgid "TableDnD plug-in for jQuery"
 msgstr ""
@@ -52690,7 +52700,7 @@ msgstr "표(\t)"
 
 #: intranet-tmpl/prog/en/modules/admin/koha2marclinks.tt:31
 #: intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:194
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:175
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:182
 #: intranet-tmpl/prog/en/modules/admin/checkmarc.tt:168
 #: intranet-tmpl/prog/en/modules/admin/checkmarc.tt:201
 #: intranet-tmpl/prog/en/modules/admin/checkmarc.tt:236
@@ -52719,7 +52729,7 @@ msgstr "태그 %s 하위분야 구조"
 msgid "Tag %s subfield structure"
 msgstr "태그 %s 하위분야 구조"
 
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:123
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:130
 #, c-format
 msgid "Tag deleted"
 msgstr "태그 삭제"
@@ -52748,7 +52758,7 @@ msgstr "태그 %s 하위분야 구조"
 msgid "Tag moderation"
 msgstr "태그 관리"
 
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:59
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:66
 #, c-format
 msgid "Tag:"
 msgstr "태그:"
@@ -52765,13 +52775,13 @@ msgstr "태그:"
 #: intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:78
 #: intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:84
 #: intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:127
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:62
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:69
 #, c-format
 msgid "Tag: "
 msgstr "태그:"
 
 #. %1$s:  searchfield | html 
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:107
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:114
 #, c-format
 msgid "Tag: %s"
 msgstr "태그: %s"
@@ -52798,12 +52808,12 @@ msgstr "태그 보류 승인"
 msgid "Tags:"
 msgstr "태그:"
 
-#: intranet-tmpl/prog/en/modules/about.tt:571
+#: intranet-tmpl/prog/en/modules/about.tt:578
 #, c-format
 msgid "Talking Tech, Global"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:572
+#: intranet-tmpl/prog/en/modules/about.tt:579
 #, c-format
 msgid "Tamil, France"
 msgstr "타밀, 프랑스"
@@ -53005,7 +53015,7 @@ msgstr ""
 msgid "Testing..."
 msgstr "테스트..."
 
-#: intranet-tmpl/prog/en/modules/about.tt:773
+#: intranet-tmpl/prog/en/modules/about.tt:780
 #, c-format
 msgid "Tetun (Tetum) Karen Myers"
 msgstr "Tetun (Tetum) Karen Myers"
@@ -53015,7 +53025,7 @@ msgstr "Tetun (Tetum) Karen Myers"
 #: intranet-tmpl/prog/en/includes/str/tinymce_i18n.inc:1
 #: intranet-tmpl/prog/en/modules/tools/quotes.tt:42
 #: intranet-tmpl/prog/en/modules/tools/quotes-upload.tt:55
-#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:264
+#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:269
 #: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:269
 #, c-format
 msgid "Text"
@@ -53101,26 +53111,26 @@ msgid "That budget does not exist! Please select a budget to continue."
 msgstr ""
 
 #: intranet-tmpl/prog/en/modules/members/members-update.tt:170
-#: intranet-tmpl/prog/en/modules/about.tt:442
-#: intranet-tmpl/prog/en/modules/about.tt:446
-#: intranet-tmpl/prog/en/modules/about.tt:447
-#: intranet-tmpl/prog/en/modules/about.tt:448
-#: intranet-tmpl/prog/en/modules/about.tt:644
-#: intranet-tmpl/prog/en/modules/about.tt:648
-#: intranet-tmpl/prog/en/modules/about.tt:652
-#: intranet-tmpl/prog/en/modules/about.tt:656
-#: intranet-tmpl/prog/en/modules/about.tt:660
-#: intranet-tmpl/prog/en/modules/about.tt:664
+#: intranet-tmpl/prog/en/modules/about.tt:449
+#: intranet-tmpl/prog/en/modules/about.tt:453
+#: intranet-tmpl/prog/en/modules/about.tt:454
+#: intranet-tmpl/prog/en/modules/about.tt:455
+#: intranet-tmpl/prog/en/modules/about.tt:651
+#: intranet-tmpl/prog/en/modules/about.tt:655
+#: intranet-tmpl/prog/en/modules/about.tt:659
+#: intranet-tmpl/prog/en/modules/about.tt:663
 #: intranet-tmpl/prog/en/modules/about.tt:667
-#: intranet-tmpl/prog/en/modules/about.tt:670
-#: intranet-tmpl/prog/en/modules/about.tt:676
-#: intranet-tmpl/prog/en/modules/about.tt:679
-#: intranet-tmpl/prog/en/modules/about.tt:682
-#: intranet-tmpl/prog/en/modules/about.tt:688
-#: intranet-tmpl/prog/en/modules/about.tt:691
-#: intranet-tmpl/prog/en/modules/about.tt:694
-#: intranet-tmpl/prog/en/modules/about.tt:697
-#: intranet-tmpl/prog/en/modules/about.tt:700
+#: intranet-tmpl/prog/en/modules/about.tt:671
+#: intranet-tmpl/prog/en/modules/about.tt:674
+#: intranet-tmpl/prog/en/modules/about.tt:677
+#: intranet-tmpl/prog/en/modules/about.tt:683
+#: intranet-tmpl/prog/en/modules/about.tt:686
+#: intranet-tmpl/prog/en/modules/about.tt:689
+#: intranet-tmpl/prog/en/modules/about.tt:695
+#: intranet-tmpl/prog/en/modules/about.tt:698
+#: intranet-tmpl/prog/en/modules/about.tt:701
+#: intranet-tmpl/prog/en/modules/about.tt:704
+#: intranet-tmpl/prog/en/modules/about.tt:707
 #, fuzzy, c-format
 msgid "The "
 msgstr "서가에 추가하세요 "
@@ -53135,21 +53145,21 @@ msgstr "이 %s 구독과 관련된 최신의 호:"
 #. %2$s:  unit.categorycode | html 
 #. %3$s:  unit.itemtype | html 
 #. %4$s:  unit.lengthunit | html 
-#: intranet-tmpl/prog/en/modules/about.tt:424
+#: intranet-tmpl/prog/en/modules/about.tt:431
 #, c-format
 msgid ""
 "The %s, %s, %s issuingrule will fallback to 'days' for 'lengthunit' as it is "
 "incorrectly defined as %s. "
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:379
+#: intranet-tmpl/prog/en/modules/about.tt:386
 #, c-format
 msgid ""
 "The &lt;use_zebra_facets&gt; entry is missing in your configuration file. "
 "Falling back to legacy facet calculation. "
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:364
+#: intranet-tmpl/prog/en/modules/about.tt:371
 #, fuzzy, c-format
 msgid ""
 "The &lt;zebra_auth_index_mode&gt; entry set to 'grs1', which is no longer "
@@ -53158,7 +53168,7 @@ msgstr ""
 ". GRS-1의 지원이 중단되어 앞으로 제거될 것입니다. DOM을 사용해주세요  &lt;"
 "zebra_auth_index_mode&gt; to "
 
-#: intranet-tmpl/prog/en/modules/about.tt:356
+#: intranet-tmpl/prog/en/modules/about.tt:363
 #, fuzzy, c-format
 msgid ""
 "The &lt;zebra_bib_index_mode&gt; entry set to 'grs1', which is no longer "
@@ -53190,12 +53200,12 @@ msgid ""
 "private."
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:624
+#: intranet-tmpl/prog/en/modules/about.tt:631
 #, c-format
 msgid "The Bridge Material Type Icon Set"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:627
+#: intranet-tmpl/prog/en/modules/about.tt:634
 #, c-format
 msgid "The Bridge Material Type Icon Set is licensed under a "
 msgstr ""
@@ -53367,7 +53377,7 @@ msgstr ""
 msgid "The change will be applied immediately."
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:259
+#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:264
 #: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:264
 #, c-format
 msgid ""
@@ -53560,7 +53570,7 @@ msgstr "다음 바코드를 찾았습니다:"
 msgid "The following error occurred while importing the database structure:"
 msgstr "데이터베이스 구조를 가져오는 동안 다음 오류가 발생했습니다:"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1023
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1024
 #, c-format
 msgid "The following error was encountered:"
 msgstr "다음 오류가 발생했습니다:"
@@ -53687,7 +53697,7 @@ msgstr ""
 msgid "The import id number "
 msgstr "id 번호 가져오기"
 
-#: intranet-tmpl/prog/en/modules/about.tt:685
+#: intranet-tmpl/prog/en/modules/about.tt:692
 #, c-format
 msgid "The included OAI.xslt file by the "
 msgstr ""
@@ -53828,20 +53838,20 @@ msgid "The order has been successfully cancelled %s "
 msgstr "주문이 성공적으로 취소되었습니다 %s"
 
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:75
-#, c-format
+#, fuzzy, c-format
 msgid ""
-"The order line you trying to cancel was created from a partial receipt of "
-"another order line which has been deleted. Cancellation is not possible. "
+"The order line you are trying to cancel was created from a partial receipt "
+"of another order line which has been deleted. Cancellation is not possible. "
 msgstr ""
 "취소하려고한 주문 라인이 삭제된 다른 주문 라인에서 만들어진 것입니다. 삭제가 "
 "불가능합니다."
 
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:70
-#, c-format
+#, fuzzy, c-format
 msgid ""
-"The order line you trying to cancel was created from a partial receipt of "
-"another order line which is already received. Try to cancel this one first "
-"and retry. "
+"The order line you are trying to cancel was created from a partial receipt "
+"of another order line which is already received. Try to cancel this one "
+"first and retry. "
 msgstr ""
 "취소하려고한 주문 라인이 이미 받은 다른 주문 라인에서 만들어진 것입니다. 이것"
 "을 먼저 삭제하고 다시 시도해주세요."
@@ -54192,7 +54202,7 @@ msgstr "업로드파일이 zip 파일로 나타나지 않습니다. 확장자가
 msgid "The value \"%s\" is not supported for mappings"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:573
+#: intranet-tmpl/prog/en/modules/about.tt:580
 #, c-format
 msgid "Theke Solutions, Argentina"
 msgstr ""
@@ -54556,7 +54566,7 @@ msgstr "전송에 문제가 생겼습니다"
 msgid "Therefore, the record to be merged has not been deleted. "
 msgstr "그러므로, 병합딘 레코드는 삭제되지 않습니다."
 
-#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:184
+#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:189
 #: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:183
 #, c-format
 msgid "Thesaurus:"
@@ -55135,7 +55145,7 @@ msgstr ""
 msgid "This rota has no stages."
 msgstr "이 레코드는 항목이 없습니다."
 
-#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:258
+#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:263
 #: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:263
 #, fuzzy, c-format
 msgid ""
@@ -55353,12 +55363,12 @@ msgstr ""
 msgid "Timestamp"
 msgstr "타임스탬프"
 
-#: intranet-tmpl/prog/en/modules/about.tt:669
+#: intranet-tmpl/prog/en/modules/about.tt:676
 #, c-format
 msgid "TinyMCE WYSIWYG editor"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:670
+#: intranet-tmpl/prog/en/modules/about.tt:677
 #, c-format
 msgid "TinyMCE WYSIWYG editor v5.0.16 "
 msgstr ""
@@ -56378,7 +56388,7 @@ msgid "Translate item type %s"
 msgstr "사용 가능한 항목형식"
 
 #: intranet-tmpl/prog/en/modules/admin/localization.tt:67
-#: intranet-tmpl/prog/en/modules/about.tt:731
+#: intranet-tmpl/prog/en/modules/about.tt:738
 #, c-format
 msgid "Translation"
 msgstr "번역"
@@ -56476,7 +56486,7 @@ msgstr "화요일"
 msgid "Tuesdays"
 msgstr "화요일"
 
-#: intranet-tmpl/prog/en/modules/about.tt:574
+#: intranet-tmpl/prog/en/modules/about.tt:581
 #, c-format
 msgid "Tulong Aklatan, Philippines"
 msgstr ""
@@ -56579,7 +56589,7 @@ msgstr ""
 msgid "UTF-8 (Default)"
 msgstr "UTF-8 (Default)"
 
-#: intranet-tmpl/prog/en/modules/about.tt:575
+#: intranet-tmpl/prog/en/modules/about.tt:582
 #, fuzzy, c-format
 msgid "Uintah Library System, USA"
 msgstr "Crawford County Federated 도서관 시스템"
@@ -56868,47 +56878,47 @@ msgstr "단위:"
 msgid "Units: "
 msgstr "단위: "
 
-#: intranet-tmpl/prog/en/modules/about.tt:577
+#: intranet-tmpl/prog/en/modules/about.tt:584
 #, fuzzy, c-format
 msgid "Universidad Empresarial Siglo 21, Argentina"
 msgstr "Universidad Nacional de Córdoba, Argentina"
 
-#: intranet-tmpl/prog/en/modules/about.tt:578
+#: intranet-tmpl/prog/en/modules/about.tt:585
 #, c-format
 msgid "Universidad Nacional de Córdoba, Argentina"
 msgstr "Universidad Nacional de Córdoba, Argentina"
 
-#: intranet-tmpl/prog/en/modules/about.tt:579
+#: intranet-tmpl/prog/en/modules/about.tt:586
 #, c-format
 msgid "Universidad ORT Uruguay"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:576
+#: intranet-tmpl/prog/en/modules/about.tt:583
 #, c-format
 msgid "Universidad de El Salvador, El Salvador"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:584
+#: intranet-tmpl/prog/en/modules/about.tt:591
 #, fuzzy, c-format
 msgid "University of the Arts London, United Kingdom"
 msgstr "software.coop, 영국"
 
-#: intranet-tmpl/prog/en/modules/about.tt:580
+#: intranet-tmpl/prog/en/modules/about.tt:587
 #, c-format
 msgid "Université d'Aix-Marseille, France"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:581
+#: intranet-tmpl/prog/en/modules/about.tt:588
 #, c-format
 msgid "Université de Lyon 3, France"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:582
+#: intranet-tmpl/prog/en/modules/about.tt:589
 #, c-format
 msgid "Université de Rennes 2, France"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:583
+#: intranet-tmpl/prog/en/modules/about.tt:590
 #, c-format
 msgid "Université de St Etienne, France"
 msgstr ""
@@ -57028,7 +57038,7 @@ msgstr "업데이트"
 
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:77
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:267
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1013
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1014
 #, c-format
 msgid "Update SQL"
 msgstr "SQL 업데이트"
@@ -57513,7 +57523,7 @@ msgstr ""
 msgid "Use for staff search groups "
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1026
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1027
 #, c-format
 msgid ""
 "Use of this keyword is not allowed in Koha reports due to security and data "
@@ -57761,7 +57771,7 @@ msgstr ""
 msgid "VHS tape / Videocassette"
 msgstr "VHS 테이프 / 비디오카세트"
 
-#: intranet-tmpl/prog/en/modules/about.tt:585
+#: intranet-tmpl/prog/en/modules/about.tt:592
 #, c-format
 msgid "Vaara-kirjastot, Finland"
 msgstr ""
@@ -57824,7 +57834,7 @@ msgid ""
 "used for statistical purposes"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:586
+#: intranet-tmpl/prog/en/modules/about.tt:593
 #, c-format
 msgid "Vanier College, Canada"
 msgstr ""
@@ -58036,17 +58046,17 @@ msgstr "익명의 이용자 대출기록을 보려면 인증하세요"
 msgid "Verify you want to delete patrons"
 msgstr "이용자를 삭제하려면 인증하세요"
 
-#: intranet-tmpl/prog/en/modules/about.tt:587
+#: intranet-tmpl/prog/en/modules/about.tt:594
 #, c-format
 msgid "Vermont Organization of Koha Automated Libraries (VOKAL), USA"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:720
+#: intranet-tmpl/prog/en/modules/about.tt:727
 #, c-format
 msgid "Verovio"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:721
+#: intranet-tmpl/prog/en/modules/about.tt:728
 #, c-format
 msgid ""
 "Verovio is developed by the Swiss RISM Office with the support of the Swiss "
@@ -58256,7 +58266,7 @@ msgstr "보기 제한"
 msgid "View spine label"
 msgstr "사용가능함"
 
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:211
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:218
 #, fuzzy, c-format
 msgid "View subfields"
 msgstr "하위분야 편집"
@@ -58271,17 +58281,17 @@ msgstr "도구 플러그인을 사용"
 msgid "View, manage, configure and run plugins."
 msgstr "플러그인 보기, 관리, 구성 그리고 실행."
 
-#: intranet-tmpl/prog/en/modules/about.tt:588
+#: intranet-tmpl/prog/en/modules/about.tt:595
 #, c-format
 msgid "Ville de Victoriaville, Canada"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:589
+#: intranet-tmpl/prog/en/modules/about.tt:596
 #, c-format
 msgid "Virginia Tech, USA"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:125
+#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:130
 #, c-format
 msgid "Visibility: "
 msgstr "가시성:"
@@ -58392,15 +58402,16 @@ msgstr "경고"
 #: intranet-tmpl/prog/en/modules/about.tt:325
 #: intranet-tmpl/prog/en/modules/about.tt:331
 #: intranet-tmpl/prog/en/modules/about.tt:336
-#: intranet-tmpl/prog/en/modules/about.tt:355
-#: intranet-tmpl/prog/en/modules/about.tt:363
-#: intranet-tmpl/prog/en/modules/about.tt:371
+#: intranet-tmpl/prog/en/modules/about.tt:347
+#: intranet-tmpl/prog/en/modules/about.tt:362
+#: intranet-tmpl/prog/en/modules/about.tt:370
 #: intranet-tmpl/prog/en/modules/about.tt:378
 #: intranet-tmpl/prog/en/modules/about.tt:385
 #: intranet-tmpl/prog/en/modules/about.tt:392
 #: intranet-tmpl/prog/en/modules/about.tt:399
-#: intranet-tmpl/prog/en/modules/about.tt:407
-#: intranet-tmpl/prog/en/modules/about.tt:423
+#: intranet-tmpl/prog/en/modules/about.tt:406
+#: intranet-tmpl/prog/en/modules/about.tt:414
+#: intranet-tmpl/prog/en/modules/about.tt:430
 #, c-format
 msgid "Warning"
 msgstr "경고"
@@ -58585,7 +58596,7 @@ msgstr "경고: 바코드를 찾을 수 없습니다"
 msgid "Warnings regarding the system configuration"
 msgstr "시스템 구성에 관하여 경고"
 
-#: intranet-tmpl/prog/en/modules/about.tt:590
+#: intranet-tmpl/prog/en/modules/about.tt:597
 #, fuzzy, c-format
 msgid "Washoe County Library System, USA"
 msgstr "Crawford County Federated 도서관 시스템"
@@ -59013,7 +59024,7 @@ msgstr "X "
 msgid "XML"
 msgstr "MARCXML"
 
-#: intranet-tmpl/prog/en/modules/about.tt:351
+#: intranet-tmpl/prog/en/modules/about.tt:358
 #, c-format
 msgid "XML configuration file"
 msgstr "XML 설정 파일"
@@ -59023,12 +59034,12 @@ msgstr "XML 설정 파일"
 msgid "XSLT File(s) for transforming results: "
 msgstr "XSLT 파일 변환 결과:"
 
-#: intranet-tmpl/prog/en/modules/about.tt:591
+#: intranet-tmpl/prog/en/modules/about.tt:598
 #, c-format
 msgid "Xercode, Spain"
 msgstr "Xercode, 스페인"
 
-#: intranet-tmpl/prog/en/modules/about.tt:615
+#: intranet-tmpl/prog/en/modules/about.tt:622
 #, c-format
 msgid "YUI"
 msgstr "YUI"
@@ -59125,10 +59136,10 @@ msgstr "허용"
 #: intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:392
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:363
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:365
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:913
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:915
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:988
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:990
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:914
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:916
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:989
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:991
 #, c-format
 msgid "Yes"
 msgstr "그렇다"
@@ -59238,13 +59249,13 @@ msgstr "네, 이 태그를 삭제합니다"
 msgid "Yes, delete this item type"
 msgstr "네, 이 태그를 삭제합니다"
 
-#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:231
+#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:236
 #: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:238
 #, c-format
 msgid "Yes, delete this subfield"
 msgstr "네, 이 하위분야를 삭제합니다"
 
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:113
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:120
 #, c-format
 msgid "Yes, delete this tag"
 msgstr "네, 이 태그를 삭제합니다"
@@ -59320,7 +59331,7 @@ msgstr ""
 "데이터베이스 관리 사용자로 로그인되어 있습니다. 이 계정을 사용하는 동안에는 "
 "Koha의 일부 기능이 작동하지 않기 때문에 추천하지 않습니다."
 
-#: intranet-tmpl/prog/en/modules/about.tt:386
+#: intranet-tmpl/prog/en/modules/about.tt:393
 #, c-format
 msgid ""
 "You are missing the &lt;log4perl_conf&gt; entry in your koha-conf.xml file. "
@@ -59335,7 +59346,7 @@ msgid ""
 msgstr ""
 
 #. %1$s:  config_entry.effective_tmp_dir | html 
-#: intranet-tmpl/prog/en/modules/about.tt:408
+#: intranet-tmpl/prog/en/modules/about.tt:415
 #, c-format
 msgid ""
 "You are missing the &lt;tmp_path&gt; entry in your koha-conf.xml file. "
@@ -59343,7 +59354,7 @@ msgid ""
 "instance. The effective temporary directory is '%s'. "
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:393
+#: intranet-tmpl/prog/en/modules/about.tt:400
 #, c-format
 msgid ""
 "You are missing the &lt;upload_path&gt; entry in your koha-conf.xml file. "
@@ -59351,7 +59362,7 @@ msgid ""
 "Koha instance. "
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:400
+#: intranet-tmpl/prog/en/modules/about.tt:407
 #, c-format
 msgid ""
 "You are missing the &lt;upload_path&gt; entry in your koha-conf.xml file. "
@@ -59416,7 +59427,7 @@ msgstr "오프라인 상태이기 때문에 당신의 데이터베이스를 동�
 msgid "You are only viewing one item. "
 msgstr "하나의 항목만 볼 수 있습니다."
 
-#: intranet-tmpl/prog/en/modules/about.tt:460
+#: intranet-tmpl/prog/en/modules/about.tt:467
 #, c-format
 msgid "You are running a development version of Koha"
 msgstr ""
@@ -59680,7 +59691,7 @@ msgid "You have not selected any patrons to add to a list!"
 msgstr "목록에 추가할 어떤 이용자도 선택하지 않았습니다"
 
 #. %1$s:  config_entry.file | html 
-#: intranet-tmpl/prog/en/modules/about.tt:372
+#: intranet-tmpl/prog/en/modules/about.tt:379
 #, fuzzy, c-format
 msgid ""
 "You have set UseQueryParser but the 'queryparser_config' entry is missing in "
@@ -59866,7 +59877,7 @@ msgid "You must select one or more patrons to remove"
 msgstr "하나 또는 그 이상의 제거할 이용자를 선택해야 합니다"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1092
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1093
 msgid "You must select one or more reports to delete"
 msgstr "한개나 그 이상의 삭제할 보고서를 선택해야 합니다"
 
@@ -60111,7 +60122,7 @@ msgid "Your patron lists"
 msgstr "이용자 목록"
 
 #. %1$s:  reportname | html 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:972
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:973
 #, fuzzy, c-format
 msgid "Your report \"%s\" has been saved"
 msgstr "보고서가 저장되었습니다"
@@ -60528,7 +60539,7 @@ msgstr "분석."
 msgid "and"
 msgstr "그리고"
 
-#: intranet-tmpl/prog/en/modules/about.tt:612
+#: intranet-tmpl/prog/en/modules/about.tt:619
 #, c-format
 msgid "and "
 msgstr "그리고"
@@ -60553,7 +60564,7 @@ msgstr "그리고 활성화된 최신성 표시."
 msgid "and search for the \"data problems\" section"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:673
+#: intranet-tmpl/prog/en/modules/about.tt:680
 #, c-format
 msgid "and the "
 msgstr "그리고"
@@ -60587,7 +60598,7 @@ msgstr "어떤 도서관"
 msgid "approved"
 msgstr "승인됨"
 
-#: intranet-tmpl/prog/en/modules/about.tt:612
+#: intranet-tmpl/prog/en/modules/about.tt:619
 #, c-format
 msgid "are licensed under the "
 msgstr ""
@@ -60796,78 +60807,78 @@ msgstr ""
 msgid "by %s: "
 msgstr "%s%s 환영합니다 "
 
-#: intranet-tmpl/prog/en/modules/about.tt:656
+#: intranet-tmpl/prog/en/modules/about.tt:663
 #, c-format
 msgid "by Allan Jardine is licensed under the BSD 3 and GPL v2 license."
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:648
+#: intranet-tmpl/prog/en/modules/about.tt:655
 #, c-format
 msgid "by Binny V A is licensed under the BSD license."
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:697
+#: intranet-tmpl/prog/en/modules/about.tt:704
 #, c-format
 msgid "by DIY Co is licensed under the "
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:673
+#: intranet-tmpl/prog/en/modules/about.tt:680
 #, c-format
 msgid "by Dave Gandy is licensed under the "
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:691
+#: intranet-tmpl/prog/en/modules/about.tt:698
 #, c-format
 msgid "by Denis Howlett is licensed under the "
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:679
+#: intranet-tmpl/prog/en/modules/about.tt:686
 #, c-format
 msgid "by Eli Grey is licensed under an "
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:712
+#: intranet-tmpl/prog/en/modules/about.tt:719
 #, c-format
 msgid "by Google is a family of fonts licensed under the "
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:724
+#: intranet-tmpl/prog/en/modules/about.tt:731
 #, c-format
 msgid ""
 "by Klaus Hartl is a jQuery plugin for setting, reading, and deleting browser "
 "cookies, licensed under the "
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:718
+#: intranet-tmpl/prog/en/modules/about.tt:725
 #, c-format
 msgid ""
 "by Lars Jung is a JavaScript library that generates QR codes, licensed under "
 "the "
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:676
+#: intranet-tmpl/prog/en/modules/about.tt:683
 #, c-format
 msgid "by Marijn Haverbeke is licensed under an "
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:670
+#: intranet-tmpl/prog/en/modules/about.tt:677
 #, c-format
 msgid "by Moxiecode (Ephox) is licensed under the "
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:715
+#: intranet-tmpl/prog/en/modules/about.tt:722
 #, c-format
 msgid ""
 "by Some Web Media is a JavaScript library that makes any element on your "
 "page visible while you scroll, licensed under the "
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:682
+#: intranet-tmpl/prog/en/modules/about.tt:689
 #, c-format
 msgid "by The Dojo Foundation is licensed under an "
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:660
+#: intranet-tmpl/prog/en/modules/about.tt:667
 #, c-format
 msgid "by Zhixin Wen is licensed under the MIT license."
 msgstr ""
@@ -60895,7 +60906,7 @@ msgstr "도서관에 의해"
 msgid "by months"
 msgstr "달마다"
 
-#: intranet-tmpl/prog/en/modules/about.tt:628
+#: intranet-tmpl/prog/en/modules/about.tt:635
 #, c-format
 msgid "by the Bridge Consortium of Carleton College and St. Olaf College."
 msgstr "Bridge Consortium of Carleton College 와 St. Olaf College에 의해."
@@ -60992,7 +61003,7 @@ msgstr "닫기"
 msgid "club %s "
 msgstr "%s로 돌아가기"
 
-#: intranet-tmpl/prog/en/modules/about.tt:614
+#: intranet-tmpl/prog/en/modules/about.tt:621
 #, c-format
 msgid "code and "
 msgstr "코드 그리고"
@@ -61044,7 +61055,7 @@ msgstr "포함한다"
 msgid "contains"
 msgstr "포함한다"
 
-#: intranet-tmpl/prog/en/modules/about.tt:656
+#: intranet-tmpl/prog/en/modules/about.tt:663
 #, c-format
 msgid "controls for column visiblity in DataTables"
 msgstr "데이터표에서 열을 보이도록 제어"
@@ -61185,7 +61196,7 @@ msgstr "이 사서의 세부사항 표시"
 msgid "do a catalog search"
 msgstr "목록 검색"
 
-#: intranet-tmpl/prog/en/modules/about.tt:520
+#: intranet-tmpl/prog/en/modules/about.tt:527
 #, fuzzy, c-format
 msgid "doXulting"
 msgstr "미안합니다"
@@ -61264,7 +61275,7 @@ msgstr "보류"
 msgid "euro-currency sign"
 msgstr "신규 최신성"
 
-#: intranet-tmpl/prog/en/modules/about.tt:737
+#: intranet-tmpl/prog/en/modules/about.tt:744
 #, c-format
 msgid ""
 "euskara (Basque) Fernando Berrizbeitia, the librarians of Eima Katalogoa, "
@@ -61315,7 +61326,7 @@ msgstr "업데이트 실패"
 msgid "failed to run"
 msgstr "%s 풀기 실패."
 
-#: intranet-tmpl/prog/en/modules/about.tt:450
+#: intranet-tmpl/prog/en/modules/about.tt:457
 #, c-format
 msgid "famfamfam.com"
 msgstr "famfamfam.com"
@@ -61526,11 +61537,6 @@ msgstr "만약"
 msgid "if "
 msgstr "만약"
 
-#: intranet-tmpl/prog/en/modules/admin/patron-attr-types.tt:125
-#, c-format
-msgid "if set.)"
-msgstr ""
-
 #: intranet-tmpl/prog/en/modules/admin/categories.tt:165
 #, c-format
 msgid ""
@@ -61612,24 +61618,24 @@ msgstr "잘못된 전거형식"
 msgid "is"
 msgstr "은/는"
 
-#: intranet-tmpl/prog/en/modules/about.tt:727
+#: intranet-tmpl/prog/en/modules/about.tt:734
 #, c-format
 msgid ""
 "is a \"simple, lightweight JavaScript API for handling cookies,\" licensed "
 "under the "
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:706
+#: intranet-tmpl/prog/en/modules/about.tt:713
 #, c-format
 msgid "is a D3-based reusable chart library under the "
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:709
+#: intranet-tmpl/prog/en/modules/about.tt:716
 #, c-format
 msgid "is a JavaScript library by Bram Stein licensed under the "
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:703
+#: intranet-tmpl/prog/en/modules/about.tt:710
 #, c-format
 msgid ""
 "is a JavaScript library for manipulating documents based on data. It is "
@@ -61673,12 +61679,12 @@ msgstr "같음"
 msgid "is exactly"
 msgstr "정확히"
 
-#: intranet-tmpl/prog/en/modules/about.tt:685
+#: intranet-tmpl/prog/en/modules/about.tt:692
 #, c-format
 msgid "is licensed under a "
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:633
+#: intranet-tmpl/prog/en/modules/about.tt:640
 #, c-format
 msgid "is licensed under the "
 msgstr ""
@@ -61700,7 +61706,7 @@ msgstr "%s 위에 %s 까지 %s"
 msgid "is on hold for "
 msgstr "예약중"
 
-#: intranet-tmpl/prog/en/modules/about.tt:644
+#: intranet-tmpl/prog/en/modules/about.tt:651
 #, c-format
 msgid "is released under MIT license by Ludo van den Boom."
 msgstr ""
@@ -61709,6 +61715,11 @@ msgstr ""
 #, c-format
 msgid "is restricted. Please verify this patron should still be restricted. "
 msgstr "제한되었습니다. 이 이용자릉 계속 제한하려면 인증해주세요."
+
+#: intranet-tmpl/prog/en/modules/admin/patron-attr-types.tt:125
+#, c-format
+msgid "is set.)"
+msgstr ""
 
 #: intranet-tmpl/prog/en/includes/virtualshelves-toolbar.inc:28
 #: intranet-tmpl/prog/en/modules/basket/basket.tt:53
@@ -61801,92 +61812,92 @@ msgstr "항목 형식이 맵핑되지 않음"
 msgid "itype"
 msgstr "Itype"
 
-#: intranet-tmpl/prog/en/modules/about.tt:612
+#: intranet-tmpl/prog/en/modules/about.tt:619
 #, c-format
 msgid "jQuery"
 msgstr "jQuery"
 
-#: intranet-tmpl/prog/en/modules/about.tt:632
+#: intranet-tmpl/prog/en/modules/about.tt:639
 #, fuzzy, c-format
 msgid "jQuery Bar Rating Plugin"
 msgstr "jQuery Star Rating Plugin"
 
-#: intranet-tmpl/prog/en/modules/about.tt:633
+#: intranet-tmpl/prog/en/modules/about.tt:640
 #, fuzzy, c-format
 msgid "jQuery Bar Rating Plugin v1.22 by "
 msgstr "jQuery Star Rating Plugin v3.14 by "
 
-#: intranet-tmpl/prog/en/modules/about.tt:655
+#: intranet-tmpl/prog/en/modules/about.tt:662
 #, c-format
 msgid "jQuery Colvis plugin"
 msgstr "jQuery Colvis plugin"
 
-#: intranet-tmpl/prog/en/modules/about.tt:666
-#: intranet-tmpl/prog/en/modules/about.tt:667
+#: intranet-tmpl/prog/en/modules/about.tt:673
+#: intranet-tmpl/prog/en/modules/about.tt:674
 #, fuzzy, c-format
 msgid "jQuery Validation Plugin"
 msgstr "jQuery Star Rating Plugin"
 
-#: intranet-tmpl/prog/en/modules/about.tt:611
+#: intranet-tmpl/prog/en/modules/about.tt:618
 #, c-format
 msgid "jQuery and jQueryUI"
 msgstr "jQuery 그리고 jQueryUI"
 
-#: intranet-tmpl/prog/en/modules/about.tt:637
+#: intranet-tmpl/prog/en/modules/about.tt:644
 #, c-format
 msgid "jQuery insertAtCaret Plugin"
 msgstr "jQuery insertAtCaret Plugin"
 
-#: intranet-tmpl/prog/en/modules/about.tt:638
+#: intranet-tmpl/prog/en/modules/about.tt:645
 #, c-format
 msgid ""
 "jQuery insertAtCaret Plugin v1.0 by the phpMyAdmin devel team is licensed "
 "under the "
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:660
+#: intranet-tmpl/prog/en/modules/about.tt:667
 #, c-format
 msgid "jQuery multiple select plugin"
 msgstr "jQuery multiple select plugin"
 
-#: intranet-tmpl/prog/en/modules/about.tt:642
+#: intranet-tmpl/prog/en/modules/about.tt:649
 #, c-format
 msgid "jQuery treetable Plugin"
 msgstr "jQuery treetable Plugin"
 
-#: intranet-tmpl/prog/en/modules/about.tt:644
+#: intranet-tmpl/prog/en/modules/about.tt:651
 #, c-format
 msgid "jQuery treetable Plugin 3.1.0"
 msgstr "jQuery를 처리할 수 있는 플러그인 3.1.0"
 
-#: intranet-tmpl/prog/en/modules/about.tt:612
+#: intranet-tmpl/prog/en/modules/about.tt:619
 #, c-format
 msgid "jQueryUI"
 msgstr "jQueryUI"
 
-#: intranet-tmpl/prog/en/modules/about.tt:723
-#: intranet-tmpl/prog/en/modules/about.tt:724
+#: intranet-tmpl/prog/en/modules/about.tt:730
+#: intranet-tmpl/prog/en/modules/about.tt:731
 #, fuzzy, c-format
 msgid "jquery.cookie"
 msgstr "jquery.dataTables.grouping.js"
 
-#: intranet-tmpl/prog/en/modules/about.tt:651
-#: intranet-tmpl/prog/en/modules/about.tt:652
+#: intranet-tmpl/prog/en/modules/about.tt:658
+#: intranet-tmpl/prog/en/modules/about.tt:659
 #, c-format
 msgid "jquery.dataTables.grouping.js"
 msgstr "jquery.dataTables.grouping.js"
 
-#: intranet-tmpl/prog/en/modules/about.tt:696
+#: intranet-tmpl/prog/en/modules/about.tt:703
 #, fuzzy, c-format
 msgid "jquery.emojiarea.js"
 msgstr "jquery.dataTables.grouping.js"
 
-#: intranet-tmpl/prog/en/modules/about.tt:659
+#: intranet-tmpl/prog/en/modules/about.tt:666
 #, c-format
 msgid "jquery.multiple.select.js"
 msgstr "jquery.multiple.select.js"
 
-#: intranet-tmpl/prog/en/modules/about.tt:690
+#: intranet-tmpl/prog/en/modules/about.tt:697
 #, fuzzy, c-format
 msgid "jquery.tablednd.js"
 msgstr "jquery.dataTables.grouping.js"
@@ -61896,8 +61907,8 @@ msgstr "jquery.dataTables.grouping.js"
 msgid "kip sign"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:717
-#: intranet-tmpl/prog/en/modules/about.tt:718
+#: intranet-tmpl/prog/en/modules/about.tt:724
+#: intranet-tmpl/prog/en/modules/about.tt:725
 #, c-format
 msgid "kjua"
 msgstr ""
@@ -61946,7 +61957,7 @@ msgstr "마지막으로: %s"
 msgid "let blank for the entire field"
 msgstr "전체 필드를 빈칸으로 두기"
 
-#: intranet-tmpl/prog/en/modules/about.tt:688
+#: intranet-tmpl/prog/en/modules/about.tt:695
 #, c-format
 msgid "library is licensed under "
 msgstr ""
@@ -61956,7 +61967,7 @@ msgstr ""
 msgid "library not defined"
 msgstr "도서관이 정의되지 않았습니다"
 
-#: intranet-tmpl/prog/en/modules/about.tt:614
+#: intranet-tmpl/prog/en/modules/about.tt:621
 #, c-format
 msgid "licensed under the "
 msgstr ""
@@ -62262,12 +62273,12 @@ msgstr "또는 MARC 하위분야."
 msgid "or any available"
 msgstr "또는 어떤 사용 가능한것"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1754
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1755
 #, c-format
 msgid "or create"
 msgstr "또는 생성"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1727
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1728
 #, fuzzy, c-format
 msgid "or create:"
 msgstr "또는 생성"
@@ -62341,12 +62352,12 @@ msgstr "주문 청구"
 msgid "please note your reason here..."
 msgstr "여기에 이유를 메모하세요..."
 
-#: intranet-tmpl/prog/en/modules/about.tt:664
+#: intranet-tmpl/prog/en/modules/about.tt:671
 #, c-format
 msgid "plugin by John Resig is licensed under the "
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:652
+#: intranet-tmpl/prog/en/modules/about.tt:659
 #, c-format
 msgid "plugin by Jovan Popovic is licensed under the BSD and GPL v2 license."
 msgstr ""
@@ -62619,7 +62630,7 @@ msgstr "%s 당겨지는 것을 기다리는 중 "
 msgid "since last transfer"
 msgstr "마지막 전송 이후"
 
-#: intranet-tmpl/prog/en/modules/about.tt:566
+#: intranet-tmpl/prog/en/modules/about.tt:573
 #, c-format
 msgid "software.coop, United Kingdom"
 msgstr "software.coop, 영국"
@@ -62709,7 +62720,7 @@ msgstr "지위"
 msgid "styles"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:280
+#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:285
 #: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:285
 #, c-format
 msgid "subfield ignored"
@@ -62753,7 +62764,7 @@ msgstr "제안"
 msgid "suggestion #%s"
 msgstr "제안 #%s"
 
-#: intranet-tmpl/prog/en/modules/about.tt:746
+#: intranet-tmpl/prog/en/modules/about.tt:753
 #, c-format
 msgid "suomi, suomen kieli (Finnish) Pasi Korkalo"
 msgstr "suomi, suomen kieli (Finnish) Pasi Korkalo"
@@ -62792,12 +62803,12 @@ msgstr ""
 msgid "text/html; charset=utf-8"
 msgstr "text/html; charset=utf-8"
 
-#: intranet-tmpl/prog/en/modules/about.tt:697
+#: intranet-tmpl/prog/en/modules/about.tt:704
 #, c-format
 msgid "the Apache License, Version 2.0"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:688
+#: intranet-tmpl/prog/en/modules/about.tt:695
 #, c-format
 msgid ""
 "the Apache License, Version 2.0 (the \"Apache License\") or the GNU General "
@@ -63092,7 +63103,7 @@ msgstr "값과"
 msgid "won sign"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:667
+#: intranet-tmpl/prog/en/modules/about.tt:674
 #, c-format
 msgid "written and maintained by Jörn Zaefferer is licensed under the "
 msgstr ""
@@ -63237,7 +63248,7 @@ msgstr "%s %s to %s %s "
 msgid "×"
 msgstr "×"
 
-#: intranet-tmpl/prog/en/modules/about.tt:733
+#: intranet-tmpl/prog/en/modules/about.tt:740
 #, c-format
 msgid ""
 "العربية (Arabic) Version 3.2 to 3.4, 3.16 & 3.18 by KnowledgeWare "
