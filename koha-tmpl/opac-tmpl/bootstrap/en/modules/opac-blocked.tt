@@ -1,6 +1,13 @@
 [% USE raw %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% IF ( LibraryNameTitle ) %][% LibraryNameTitle | html %][% ELSE %]Koha online[% END %] catalog</title>
+<title>
+    Record blocked &rsaquo;
+    [% IF ( LibraryNameTitle ) %]
+        [% LibraryNameTitle | html %]
+    [% ELSE %]
+        Koha online
+    [% END %] catalog
+</title>
 [% INCLUDE 'doc-head-close.inc' %]
 [% BLOCK cssinclude %][% END %]
 </head>
