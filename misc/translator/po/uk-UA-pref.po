@@ -2,18 +2,18 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Koha 20.11\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2021-01-20 23:03+0000\n"
+"PO-Revision-Date: 2021-02-12 07:37+0000\n"
 "Last-Translator: Serhij Dubyk <dubyk@ukr.net>\n"
 "Language-Team: Ukrainian Linux Team <translation@linux.org.ua>\n"
 "Language: uk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
-"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 "X-Generator: Pootle 2.8\n"
 "X-Poedit-SourceCharset: utf-8\n"
-"X-POOTLE-MTIME: 1611183804.159722\n"
+"X-POOTLE-MTIME: 1613115431.901910\n"
 "X-Pootle-Path: /uk/20.05/uk-UA-pref.po\n"
 "X-Pootle-Revision: 1\n"
 
@@ -916,11 +916,11 @@ msgstr ""
 "сценарію <code>misc/cronjobs/share_usage_with_koha_community.pl</code>. "
 "Попросіть системного адміністратора запланувати його."
 
-# Administration > Share anonymous usage statistics
+# Administration > Share anonymous usage statistics > UsageStats
 msgid ""
 "admin.pref#UsageStats# <br><strong>NOTE:</strong> Use the <a href=\"/cgi-bin/"
 "koha/admin/usage_statistics.pl\">dedicated configuration page</a> to edit "
-"the statisics you share."
+"the statistics you share."
 msgstr ""
 
 # Administration > Share anonymous usage statistics
@@ -3320,10 +3320,9 @@ msgid ""
 "someone else in the SCO module. If allowed do not generate RESERVE_WAITING "
 "and RESERVED warning. This allows self checkouts for those items."
 msgstr ""
-"видавати примірники, замовлені для когось іншого в модулі "
-"самообслуговування. Якщо дозволено, не генерувати попередження "
-"RESERVE_WAITING та RESERVED. Це дозволяє самостійно провести видачу цих "
-"примірників."
+"видавати примірники, замовлені для когось іншого в модулі самостійно видачі. "
+"Якщо дозволено, не генерувати попередження RESERVE_WAITING та RESERVED. Це "
+"дозволяє самостійно провести видачу цих примірників."
 
 # Circulation > Checkout policy
 msgid "circulation.pref#AllowItemsOnHoldCheckoutSIP# Allow"
@@ -4710,6 +4709,13 @@ msgid "circulation.pref#MarkLostItemsAsReturned# when cataloguing an item"
 msgstr ""
 
 # Circulation > Checkout policy
+#, fuzzy
+msgid ""
+"circulation.pref#MarkLostItemsAsReturned# when marking an item as a return "
+"claim"
+msgstr "При видачі примірника, який був позначений як втрачений, "
+
+# Circulation > Checkout policy
 msgid ""
 "circulation.pref#MarkLostItemsAsReturned# when receiving payment for the item"
 msgstr ""
@@ -5256,7 +5262,7 @@ msgstr ""
 msgid ""
 "circulation.pref#SCOUserJS# Include the following JavaScript on all pages in "
 "the web-based self checkout:"
-msgstr ""
+msgstr "Включити такий JavaScript на усі Інтернет-сторінки самостійної видачі:"
 
 # Circulation > Self check-out module
 msgid ""
@@ -5318,6 +5324,7 @@ msgid ""
 "circulation.pref#SelfCheckInUserJS# Include the following JavaScript on all "
 "the self check-in screens:"
 msgstr ""
+"Включити такий JavaScript на усі сторінки модуля самостійного повернення:"
 
 # Circulation > Self check-out module
 msgid "circulation.pref#SelfCheckReceiptPrompt# Don't show"
@@ -6409,7 +6416,7 @@ msgstr ""
 msgid ""
 "enhanced_content.pref#Babeltheque_url_js# Use this URL for the Babelthèque "
 "javascript file: "
-msgstr ""
+msgstr "Використовувати цю URL-адресу для JavaScript-файлу Babelthèque: "
 
 # Enhanced content > Babelthèque
 msgid ""
@@ -8230,8 +8237,7 @@ msgstr "Не дозволяти"
 # OPAC > Privacy
 #, fuzzy
 msgid ""
-"opac.pref#OPACHoldsHistory# patrons to see what books they have place holds "
-"in the past."
+"opac.pref#OPACHoldsHistory# patrons to see the list of their past holds."
 msgstr " користувачам бачити, які книги вони брали в минулому."
 
 # OPAC > Features
@@ -8651,7 +8657,7 @@ msgstr ""
 msgid ""
 "opac.pref#OPACUserJS# Include the following JavaScript on all pages in the "
 "OPAC:"
-msgstr ""
+msgstr "Включити такий JavaScript на усі сторінки електронного каталогу: "
 
 # OPAC > Appearance
 msgid "opac.pref#OPACUserSummary# Don't show"
@@ -9564,6 +9570,16 @@ msgid ""
 "address by entering it twice."
 msgstr ""
 
+# OPAC > Self registration and modification > PatronSelfRegistrationDefaultCategory
+msgid ""
+"opac.pref#PatronSelfRegistrationDefaultCategory# <br><strong>WARNING: Do not "
+"use a regular patron category for self registration.</strong> If the "
+"<code>misc/cronjobs/cleanup_database.pl</code> cronjob is setup to delete "
+"unverified and unfinished OPAC self registrations, it will permanently and "
+"unrecoverably delete all patrons that have registered more than "
+"PatronSelfRegistrationExpireTemporaryAccountsDelay days ago."
+msgstr ""
+
 # OPAC > Self registration and modification
 msgid ""
 "opac.pref#PatronSelfRegistrationDefaultCategory# Use the patron category code"
@@ -9697,11 +9713,11 @@ msgid ""
 msgstr ""
 
 # OPAC > Payments
-msgid "opac.pref#PayPalReturnURL# OPAC's alias"
+msgid "opac.pref#PayPalReturnURL# OPACBaseURL"
 msgstr ""
 
-# OPAC > Payments
-msgid "opac.pref#PayPalReturnURL# OPACBaseURL"
+# OPAC > Payments > PayPalReturnURL
+msgid "opac.pref#PayPalReturnURL# configured return URL"
 msgstr ""
 
 # OPAC > Payments
@@ -10336,7 +10352,7 @@ msgstr ""
 
 # Patrons > Patron forms
 msgid "patrons.pref#CollapseFieldsPatronAddForm# Patron messaging preferences"
-msgstr "Уподобання обміну повідомленнями з користувачем"
+msgstr "Налаштування обміну повідомленнями з користувачем"
 
 # Patrons > Patron forms
 msgid ""
@@ -12150,6 +12166,11 @@ msgid ""
 "and eventually Firefox add-on <a href='https://github.com/edabg/jsprintsetup/"
 "wiki'>jsPrintSetup documentation</a>:"
 msgstr ""
+"Для друку квитанцій використовуйте наступний JavaScript. Дивіться детальний "
+"опис на <a href='https://wiki.koha-community.org/wiki/"
+"Setting_up_slip_printer_to_print_silently'>Koha Вікі</a> та зрештою у "
+"документації до додатку Firefox <a href='https://github.com/edabg/"
+"jsprintsetup/wiki'>jsPrintSetup</a>:"
 
 # Staff interface > Appearance
 msgid ""
@@ -12161,7 +12182,7 @@ msgstr ""
 msgid ""
 "staff_interface.pref#IntranetUserJS# Include the following JavaScript on all "
 "pages in the staff interface:"
-msgstr ""
+msgstr "Включити такий JavaScript на усі сторінки інтерфейсу бібліотекаря: "
 
 # Staff interface > Appearance
 msgid ""

@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Koha 20.11\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-05-16 03:25+0200\n"
-"PO-Revision-Date: 2021-01-05 02:39+0000\n"
+"PO-Revision-Date: 2021-02-15 16:01+0000\n"
 "Last-Translator: Nikunj Tyagi <nikunj1@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: hi\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.8\n"
-"X-POOTLE-MTIME: 1609814372.445171\n"
+"X-POOTLE-MTIME: 1613404886.009480\n"
 "X-Pootle-Path: /hi/20.05/hi-pref.po\n"
 "X-Pootle-Revision: 1\n"
 
@@ -994,7 +994,7 @@ msgstr ""
 msgid ""
 "admin.pref#UsageStats# <br><strong>NOTE:</strong> Use the <a href=\"/cgi-bin/"
 "koha/admin/usage_statistics.pl\">dedicated configuration page</a> to edit "
-"the statisics you share."
+"the statistics you share."
 msgstr ""
 "admin.pref#UsageStats# <br><strong>नोट:</strong>उपयोग करें <a href=\"/cgi-bin/"
 "koha/admin/usage_statistics.pl\">समर्पित कॉन्फ़िगरेशन पृष्ठ</a> आपके द्वारा साझा की "
@@ -5215,6 +5215,14 @@ msgstr "circulation.pref#MarkLostItemsAsReturned# जब एक वस्तु 
 
 # Circulation > Checkout policy
 msgid ""
+"circulation.pref#MarkLostItemsAsReturned# when marking an item as a return "
+"claim"
+msgstr ""
+"circulation.pref#MarkLostItemsAsReturned# वापसी के दावे के रूप में किसी आइटम "
+"को चिह्नित करते समय"
+
+# Circulation > Checkout policy
+msgid ""
 "circulation.pref#MarkLostItemsAsReturned# when receiving payment for the item"
 msgstr ""
 "circulation.pref#MarkLostItemsAsReturned# आइटम के लिए भुगतान प्राप्त करते समय"
@@ -9157,9 +9165,9 @@ msgid "opac.pref#OPACHoldsHistory# Don't allow"
 msgstr "opac.pref#OPACHoldsHistory# अनुमति न दें"
 
 # OPAC > Privacy
+#, fuzzy
 msgid ""
-"opac.pref#OPACHoldsHistory# patrons to see what books they have place holds "
-"in the past."
+"opac.pref#OPACHoldsHistory# patrons to see the list of their past holds."
 msgstr ""
 "opac.pref#OPACHoldsHistory# यह देखने के लिए संरक्षक हैं कि उनके पास कौन-कौन सी पुस्तकें "
 "हैं."
@@ -10618,6 +10626,16 @@ msgid ""
 "address by entering it twice."
 msgstr ""
 
+# OPAC > Self registration and modification > PatronSelfRegistrationDefaultCategory
+msgid ""
+"opac.pref#PatronSelfRegistrationDefaultCategory# <br><strong>WARNING: Do not "
+"use a regular patron category for self registration.</strong> If the "
+"<code>misc/cronjobs/cleanup_database.pl</code> cronjob is setup to delete "
+"unverified and unfinished OPAC self registrations, it will permanently and "
+"unrecoverably delete all patrons that have registered more than "
+"PatronSelfRegistrationExpireTemporaryAccountsDelay days ago."
+msgstr ""
+
 # OPAC > Self registration and modification
 msgid ""
 "opac.pref#PatronSelfRegistrationDefaultCategory# Use the patron category code"
@@ -10775,11 +10793,12 @@ msgstr ""
 "opac.pref#PayPalReturnURL# भुगतान या रद्दीकरण के बाद, पेपाल को वापस लौटना चाहिए "
 
 # OPAC > Payments
-msgid "opac.pref#PayPalReturnURL# OPAC's alias"
-msgstr "opac.pref#PayPalReturnURL# ओपेक का उपनाम"
+msgid "opac.pref#PayPalReturnURL# OPACBaseURL"
+msgstr "opac.pref#PayPalReturnURL# OPACBaseURL"
 
 # OPAC > Payments
-msgid "opac.pref#PayPalReturnURL# OPACBaseURL"
+#, fuzzy
+msgid "opac.pref#PayPalReturnURL# configured return URL"
 msgstr "opac.pref#PayPalReturnURL# OPACBaseURL"
 
 # OPAC > Payments
@@ -14137,3 +14156,7 @@ msgid ""
 msgstr ""
 "web_services.pref # SvcMaxReportRows # एक रिपोर्ट रिपोर्टों वेब सेवा के माध्यम से "
 "अनुरोध किया की पंक्तियों।"
+
+# OPAC > Payments
+#~ msgid "opac.pref#PayPalReturnURL# OPAC's alias"
+#~ msgstr "opac.pref#PayPalReturnURL# ओपेक का उपनाम"

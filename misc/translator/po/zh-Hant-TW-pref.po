@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Koha 20.11\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-05-10 19:14+0200\n"
-"PO-Revision-Date: 2020-10-21 06:27+0000\n"
+"PO-Revision-Date: 2021-02-23 04:02+0000\n"
 "Last-Translator: Frank Chou <frank@sris.com.tw>\n"
 "Language-Team: koha_TW <kohataiwan@googlegroups.com>\n"
 "Language: zh_TW\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8-bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Generator: Pootle 2.8\n"
-"X-POOTLE-MTIME: 1603261652.419626\n"
+"X-POOTLE-MTIME: 1614052968.576091\n"
 "X-Pootle-Path: /zh_TW/20.05/zh-Hans-TW-pref.po\n"
 "X-Pootle-Revision: 1\n"
 
@@ -34,7 +34,7 @@ msgstr "執行"
 
 # Accounting > Policy
 msgid "accounting.pref#AccountAutoReconcile# Don't"
-msgstr ""
+msgstr "accounting.pref#AccountAutoReconcile# 不要"
 
 # Accounting > Policy
 msgid ""
@@ -48,30 +48,34 @@ msgid ""
 "enabled for each credit type (<a href=\"/cgi-bin/koha/admin/credit_types.pl"
 "\">Configure credit types</a>)"
 msgstr ""
+"accounting.pref#AutoCreditNumber# 自動產生同樣適用於每一種credit類型 (<a "
+"href=\"/cgi-bin/koha/admin/credit_types.pl\">定義 credit 類型</a>)"
 
 # Accounting > Features
 msgid ""
 "accounting.pref#AutoCreditNumber# Automatically generate credit numbers in "
 "the form 1, 2, 3"
-msgstr ""
+msgstr "accounting.pref#AutoCreditNumber# 在表單1,2,3 中自動產生認證號碼"
 
 # Accounting > Features
 msgid ""
 "accounting.pref#AutoCreditNumber# Automatically generate credit numbers in "
 "the form <branchcode>yyyymm0001"
 msgstr ""
+"accounting.pref#AutoCreditNumber# 自動產生認證號碼在表單 "
+"<branchcode>yyyymm0001"
 
 # Accounting > Features
 msgid ""
 "accounting.pref#AutoCreditNumber# Automatically generate credit numbers in "
 "the form <year>-0001"
-msgstr ""
+msgstr "accounting.pref#AutoCreditNumber# 在表單<year>-0001中自動產生認證碼"
 
 # Accounting > Features
 msgid ""
 "accounting.pref#AutoCreditNumber# Do not automatically generate credit "
 "numbers"
-msgstr ""
+msgstr "accounting.pref#AutoCreditNumber# 請勿自動產生信用號碼"
 
 # Accounting > Features
 msgid ""
@@ -139,7 +143,7 @@ msgstr "採訪"
 
 # Acquisitions > EDIFACT
 msgid "acquisitions.pref EDIFACT"
-msgstr ""
+msgstr "acquisitions.pref 電子數據交換標準(EDIFACT)"
 
 # Acquisitions > Policy
 msgid "acquisitions.pref Policy"
@@ -191,6 +195,8 @@ msgid ""
 "a receipt, update the item's subfields if they were created when placing an "
 "order (e.g. o=5|a=\"bar foo\"):"
 msgstr ""
+"acquisitions.pref#AcqItemSetSubfieldsWhenReceiptIsCancelled# 取消收據時，在館藏的分欄更新， "
+"如果是在下訂單時新增的分欄。（如 o=5|a=\"bar foo\"):"
 
 # Acquisitions > Policy
 msgid ""
@@ -198,6 +204,8 @@ msgid ""
 "update their subfields if they were created when placing an order (e.g. o=5|"
 "a=\"foo bar\"):"
 msgstr ""
+"acquisitions.pref#AcqItemSetSubfieldsWhenReceived# "
+"在收到館藏時，更新他們的分欄，如果這些分欄是在下訂單時新增（如 o=5|a=\"foo bar\"):"
 
 # Acquisitions > Policy
 msgid "acquisitions.pref#AcqViewBaskets# Show baskets"
@@ -278,15 +286,15 @@ msgstr "使用下列格式顯示金額"
 msgid ""
 "acquisitions.pref#EdifactInvoiceImport#  automatically import EDIFACT "
 "invoice message files when they are downloaded."
-msgstr ""
+msgstr "acquisitions.pref#EdifactInvoiceImport# 自動匯入 EDIFACT 發票訊息檔案當他們被下載時"
 
 # Acquisitions > EDIFACT
 msgid "acquisitions.pref#EdifactInvoiceImport# Do"
-msgstr ""
+msgstr "acquisitions.pref#EdifactInvoiceImport# 做"
 
 # Acquisitions > EDIFACT
 msgid "acquisitions.pref#EdifactInvoiceImport# Don't"
-msgstr ""
+msgstr "acquisitions.pref#EdifactInvoiceImport# 不做"
 
 # Acquisitions > Policy
 msgid ""
@@ -314,7 +322,7 @@ msgstr "分館的電子郵件信箱"
 
 # Acquisitions > Policy
 msgid "acquisitions.pref#EmailPurchaseSuggestions# none"
-msgstr ""
+msgstr "acquisitions.pref#EmailPurchaseSuggestions# 無"
 
 # Acquisitions > Policy
 msgid ""
@@ -874,11 +882,11 @@ msgstr ""
 "share_usage_with_koha_community.pl</code> 工作排程。請詢問您的系統管理安排此"
 "項排程。"
 
-# Administration > Share anonymous usage statistics
+# Administration > Share anonymous usage statistics > UsageStats
 msgid ""
 "admin.pref#UsageStats# <br><strong>NOTE:</strong> Use the <a href=\"/cgi-bin/"
 "koha/admin/usage_statistics.pl\">dedicated configuration page</a> to edit "
-"the statisics you share."
+"the statistics you share."
 msgstr ""
 
 # Administration > Share anonymous usage statistics
@@ -4612,6 +4620,13 @@ msgid "circulation.pref#MarkLostItemsAsReturned# when cataloguing an item"
 msgstr "編目館藏時"
 
 # Circulation > Checkout policy
+#, fuzzy
+msgid ""
+"circulation.pref#MarkLostItemsAsReturned# when marking an item as a return "
+"claim"
+msgstr "編目館藏時"
+
+# Circulation > Checkout policy
 msgid ""
 "circulation.pref#MarkLostItemsAsReturned# when receiving payment for the item"
 msgstr "收到館藏付費時"
@@ -8101,8 +8116,7 @@ msgstr "不允許"
 # OPAC > Privacy
 #, fuzzy
 msgid ""
-"opac.pref#OPACHoldsHistory# patrons to see what books they have place holds "
-"in the past."
+"opac.pref#OPACHoldsHistory# patrons to see the list of their past holds."
 msgstr "讀者檢視自己的借出記錄。"
 
 # OPAC > Features
@@ -9413,6 +9427,16 @@ msgid ""
 "address by entering it twice."
 msgstr ""
 
+# OPAC > Self registration and modification > PatronSelfRegistrationDefaultCategory
+msgid ""
+"opac.pref#PatronSelfRegistrationDefaultCategory# <br><strong>WARNING: Do not "
+"use a regular patron category for self registration.</strong> If the "
+"<code>misc/cronjobs/cleanup_database.pl</code> cronjob is setup to delete "
+"unverified and unfinished OPAC self registrations, it will permanently and "
+"unrecoverably delete all patrons that have registered more than "
+"PatronSelfRegistrationExpireTemporaryAccountsDelay days ago."
+msgstr ""
+
 # OPAC > Self registration and modification
 msgid ""
 "opac.pref#PatronSelfRegistrationDefaultCategory# Use the patron category code"
@@ -9548,11 +9572,12 @@ msgid ""
 msgstr "支付或取消後，PayPal 會回到 "
 
 # OPAC > Payments
-msgid "opac.pref#PayPalReturnURL# OPAC's alias"
-msgstr "OPAC 的其他網址"
+msgid "opac.pref#PayPalReturnURL# OPACBaseURL"
+msgstr "OPACBaseURL"
 
 # OPAC > Payments
-msgid "opac.pref#PayPalReturnURL# OPACBaseURL"
+#, fuzzy
+msgid "opac.pref#PayPalReturnURL# configured return URL"
 msgstr "OPACBaseURL"
 
 # OPAC > Payments
@@ -12716,3 +12741,7 @@ msgid ""
 "web_services.pref#SvcMaxReportRows# rows of a report requested via the "
 "reports web service."
 msgstr "經由報表頁面服務指定報表的列數。"
+
+# OPAC > Payments
+#~ msgid "opac.pref#PayPalReturnURL# OPAC's alias"
+#~ msgstr "OPAC 的其他網址"
