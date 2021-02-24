@@ -16,5 +16,5 @@ if( CheckVersion( $DBversion ) ) {
     }
 
     # Always end with this (adjust the bug info)
-    NewVersion( $DBversion, 8976, "Description");
+    NewVersion( $DBversion, 8976, "Allow setting a default sequence of subfields in cataloguing editor" );
 }
