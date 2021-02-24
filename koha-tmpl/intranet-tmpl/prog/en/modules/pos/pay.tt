@@ -21,7 +21,7 @@
 
 <div class="main container-fluid">
     <div class="row">
-        <div class="col-sm-10 col-sm-push-2">
+        <div class="col-md-10 col-md-push-2">
 
         [% IF ( registers.size == 0 ) %]
             <div id="error_message" class="dialog message">
@@ -46,7 +46,7 @@
         <form name="payForm" id="payForm" method="post" action="/cgi-bin/koha/pos/pay.pl">
             <div class="row">
 
-                <div class="col-sm-6">
+                <div class="col-md-6">
                     <fieldset class="rows">
                         <legend>Items for purchase</legend>
                             Please select items from below to add to this transaction:
@@ -78,7 +78,7 @@
                     </fieldset>
                 </div>
 
-                <div class="col-sm-6">
+                <div class="col-md-6">
 
                     <fieldset class="rows">
                         <legend>This sale</legend>
@@ -149,7 +149,7 @@
         [% END %]
     </div>
 
-    <div class="col-sm-2 col-sm-pull-10">
+    <div class="col-md-2 col-md-pull-10">
         <aside>
             [% INCLUDE 'pos-menu.inc' %]
         </aside>
@@ -333,7 +333,8 @@
                 nFoot.getElementsByTagName('td')[1].innerHTML = iTotalPrice.format_price();
                 $('#paid').val(iTotalPrice);
                 $('#paid').trigger('change');
-            }
+            },
+            "autoWidth": false
         }));
 
         $("#sale").on("click", "button.drop", function(){
@@ -344,6 +345,7 @@
         var items_table = KohaTable("invoices", {
                "sPaginationType": "full",
                "aaSorting": [[ 0, "asc" ]],
+               "autoWidth": false
         }, items_columns_settings, false);
 
         $("#invoices").on("click", ".add_button", function(e) {
