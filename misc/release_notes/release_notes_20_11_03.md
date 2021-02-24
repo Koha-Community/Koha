@@ -19,15 +19,16 @@ Installation instructions can be found at:
 
 Koha 20.11.03 is a bugfix/maintenance release.
 
-It includes 2 new features, 22 enhancements, 74 bugfixes, 1 security fix.
+It includes 2 new features, 22 enhancements, 74 bugfixes, 2 security fixes.
 
 ### System requirements
 
 You can learn about the system components (like OS and database) for running Koha [here](https://wiki.koha-community.org/wiki/System_requirements_and_recommendations).
 
-## Security fix
+## Security fixes
 
 - [[27715]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=27715) Possibly SQL injection in virtualshelves
+- [[27604]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=27604) PatronSelfRegistrationLibraryList can be bypassed
 
 ## New features
 
