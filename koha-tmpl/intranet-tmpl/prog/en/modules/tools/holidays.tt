@@ -242,6 +242,10 @@
 <!--   this will probably always have the least amount of data -->
 [% IF ( EXCEPTION_HOLIDAYS_LOOP ) %]
 <h3>Exceptions</h3>
+    <label class="controls">
+        <input type="checkbox" name="show_past" id="show_past_holidayexceptions" class="show_past" />
+        Show past entries
+    </label>
   <table id="holidayexceptions">
 <thead><tr>
   <th class="exception">Date</th>
@@ -251,7 +255,7 @@
 </thead>
 <tbody>
   [% FOREACH EXCEPTION_HOLIDAYS_LOO IN EXCEPTION_HOLIDAYS_LOOP %]
-  <tr>
+  <tr data-date="[% EXCEPTION_HOLIDAYS_LOO.DATE_SORT | html %]">
   <td data-order="[% EXCEPTION_HOLIDAYS_LOO.DATE_SORT | html %]">
     <a href="/cgi-bin/koha/tools/holidays.pl?branch=[% branch | uri %]&amp;calendardate=[% EXCEPTION_HOLIDAYS_LOO.DATE | uri %]">
         [% EXCEPTION_HOLIDAYS_LOO.DATE | html %]
@@ -318,6 +322,10 @@
 
 [% IF ( HOLIDAYS_LOOP ) %]
 <h3>Unique holidays</h3>
+<label class="controls">
+    <input type="checkbox" name="show_past" id="show_past_holidaysunique" class="show_past" />
+    Show past entries
+</label>
 <table id="holidaysunique">
 <thead>
 <tr>
@@ -328,7 +336,7 @@
 </thead>
 <tbody>
     [% FOREACH HOLIDAYS_LOO IN HOLIDAYS_LOOP %]
-<tr>
+<tr data-date="[% HOLIDAYS_LOO.DATE_SORT | html %]">
     <td data-order="[% HOLIDAYS_LOO.DATE_SORT | html %]">
         <a href="/cgi-bin/koha/tools/holidays.pl?branch=[% branch | uri %]&amp;calendardate=[% HOLIDAYS_LOO.DATE | uri %]">
             [% HOLIDAYS_LOO.DATE | html %]
@@ -504,6 +512,25 @@
                 }
         };
 
+            /* Custom table search configuration: If a table row
+               has an "expired" class, hide it UNLESS the
+               show_expired checkbox is checked */
+            $.fn.dataTable.ext.search.push(
+                function( settings, searchData, index, rowData, counter ) {
+                    var table = settings.nTable.id;
+                    var row = $(settings.aoData[index].nTr);
+                    if( row.hasClass("date_past") && !$("#show_past_" + table ).prop("checked") ){
+                        return false;
+                    } else {
+                        return true;
+                    }
+                }
+            );
+
+        // Create current date variable
+        var date = new Date();
+        var datestring = date.toISOString().substring(0, 10);
+
         $(document).ready(function() {
 
             $(".hint").hide();
@@ -518,10 +545,21 @@
                 "sDom": 't',
                 "bPaginate": false
             }));
-            $("#holidayexceptions,#holidaysyearlyrepeatable,#holidaysunique").dataTable($.extend(true, {}, dataTablesDefaults, {
+            var tables = $("#holidayexceptions,#holidaysyearlyrepeatable,#holidaysunique").DataTable($.extend(true, {}, dataTablesDefaults, {
                 "sDom": 't',
-                "bPaginate": false
+                "bPaginate": false,
+                "createdRow": function( row, data, dataIndex ) {
+                    var holiday = $(row).data("date");
+                    if( holiday < datestring ){
+                        $(row).addClass("date_past");
+                    }
+                }
             }));
+
+            $(".show_past").on("change", function(){
+                tables.draw();
+            });
+
             $("a.helptext").click(function(){
                 $(this).parent().find(".hint").toggle(); return false;
             });
