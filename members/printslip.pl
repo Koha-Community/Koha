@@ -105,6 +105,7 @@ if ( $print eq 'checkinslip' ) {
         module => 'circulation',
         letter_code => 'CHECKINSLIP',
         branchcode => $checkinslip_branch,
+        lang => $patron->lang,
         tables => {
             branches => $checkinslip_branch,
             borrowers => $borrowernumber,
