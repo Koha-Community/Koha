@@ -31,7 +31,11 @@ Koha::MarcSubfieldStructures - Koha MarcSubfieldStructure Object set class
 
 =head1 API
 
-=head2 Class Methods
+=head2 Class methods
+
+=cut
+
+=head2 Internal methods
 
 =cut
 

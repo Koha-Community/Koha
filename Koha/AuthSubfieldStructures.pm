@@ -31,11 +31,15 @@ Koha::AuthSubfieldStructures - Koha AuthSubfieldStructure Object set class
 
 =head1 API
 
-=head2 Class Methods
+=head2 Class methods
 
 =cut
 
-=head3 type
+=head2 Internal methods
+
+=cut
+
+=head3 _type
 
 =cut
 
