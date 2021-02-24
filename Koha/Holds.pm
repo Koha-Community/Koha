@@ -140,7 +140,7 @@ sub get_items_that_can_fill {
         }
     )->get_column('itemtype');
 
-    my $items = Koha::Items->search(
+    return Koha::Items->search(
         {
             biblionumber => { in => \@biblionumbers },
             itemlost     => 0,
@@ -151,7 +151,6 @@ sub get_items_that_can_fill {
             itype        => { -not_in => \@hold_not_allowed_itypes },
         }
     );
-
 }
 
 =head3 type
