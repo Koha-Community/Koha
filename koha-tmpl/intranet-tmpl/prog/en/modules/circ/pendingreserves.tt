@@ -79,6 +79,7 @@
         <th class="string-sort">Available locations</th>
         <th>Earliest hold date</th>
         <th>Reserve notes</th>
+        <th class="string-sort">Pickup location</th>
         <th>Action</th>
         </tr>
     </thead>
@@ -180,6 +181,9 @@
         </td>
         <td>[% hold.reservenotes | html %]</td>
         <td>
+            [% Branches.GetName ( hold.branchcode ) | html %]
+        </td>
+        <td>
             <form name="cancelReserve" action="/cgi-bin/koha/circ/pendingreserves.pl" method="post">
                 <input type="hidden" name="op" value="cancel_reserve" />
                 <input type="hidden" name="reserve_id" value="[% hold.reserve_id | html %]" />
@@ -239,6 +243,7 @@
         <td id="itemtype-filter"></td>
         <td id="locationfilter"></td>
         <td></td>
+        <td id="pickup-location"></td>
         <td></td>
         <td></td>
         </tr>
@@ -345,6 +350,12 @@
               $(this).html( createSelect( holdst.fnGetColumnData(11) ) );
               $('select', this).change( function () {
                   holdst.fnFilter( $(this).val(), 11 );
+              });
+          });
+          $("#pickup-location").each( function () {
+              $(this).html( createSelect( holdst.fnGetColumnData(13) ) );
+              $('select', this).change( function () {
+                  holdst.fnFilter( $(this).val(), 13 );
               });
           });
         });
