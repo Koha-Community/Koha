@@ -50,6 +50,7 @@
 	</p>
 	[% END %]
     [% SET total = 0 %]
+    [% SET total_quantity = 0 %]
     [% IF bookseller_filter %]
         <p><a id="CheckAll" href="#"><i class="fa fa-check"></i> Check all</a> <a id="CheckNone" href="#"><i class="fa fa-remove"></i> Uncheck all</a></p>
     [% END %]
@@ -106,7 +107,10 @@
                         [% END %]
                    [% END %]
             </td>
-            <td>[% lateorder.quantity | html %]</td>
+            <td>
+                [% lateorder.quantity | html %]
+                [% SET total_quantity = total_quantity + lateorder.quantity %]
+            </td>
             <td>
                 [% SET subtotal = (lateorder.quantity - lateorder.quantityreceived) * lateorder.rrp %]
                 [% SET total = total + subtotal %]
@@ -174,14 +178,14 @@
       <tfoot>
         <tr>
             <th colspan="6">Total</th>
+            <th>[% total_quantity | html %]</th>
             <th>[% total | $Price %]</th>
             <th colspan="10">&nbsp;</th>
         </tr>
       </tfoot>
     </table>
-    <div class="spacer"></div>
 
-    <p style="display:block;">
+    <fieldset class="action">
         <div class="btn-group">
           <a id="exportbutton" class="btn btn-default" href="/cgi-bin/koha/acqui/lateorders-export.pl"><i class="fa fa-download"></i> Export as CSV</a>
           <a class="btn btn-default dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></a>
@@ -196,7 +200,7 @@
         </div>
 
         <input type="submit"  class="btn btn-default" value="Claim order" />
-    </p>
+    </fieldset>
 </form>
 [% ELSE %]<p>There are no late orders.</p>
 [% END %]
