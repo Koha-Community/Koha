@@ -129,7 +129,7 @@
           <button type="button" data-toggle="modal" data-target="#issuePayoutModal" data-account="[%- PROCESS account_type_description account=account -%]" data-accountline="[% account.accountlines_id | html %]" data-amount="[% account.amountoutstanding | $Price %]" class="btn btn-default btn-xs"><i class="fa fa-money"></i> Issue payout</button>
         [% END %]
         [% IF CAN_user_updatecharges_refund && account.is_debit && ( account.amountoutstanding != account.amount ) && !(account.status == 'REFUNDED') && !(account.debit_type_code == 'PAYOUT') %]
-          <button type="button" data-toggle="modal" data-target="#issueRefundModal" data-item="[%- PROCESS account_type_description account=account -%]" data-accountline="[% account.accountlines_id | html %]" data-amount="[% account.amount | $Price %]" data-amountoutstanding="[% account.amountoutstanding | $Price %]" class="btn btn-default btn-xs"><i class="fa fa-money"></i> Issue refund</button>
+          <button type="button"  class="btn btn-default btn-xs" data-toggle="modal" data-target="#issueRefundModal" data-item="[%- PROCESS account_type_description account=account -%]" data-accountline="[% account.accountlines_id | html %]" data-amount="[% account.amount | $Price %]" data-amountoutstanding="[% account.amountoutstanding | $Price %]" data-member="[% credit.debit.borrowernumber %]"><i class="fa fa-money"></i> Issue refund</button>
         [% END %]
         [% IF CAN_user_updatecharges_discount && account.is_debit && ( account.amountoutstanding == account.amount ) && !(account.debit_type_code == 'PAYOUT') %]
           <button type="button" data-toggle="modal" data-target="#applyDiscountModal" data-item="[%- PROCESS account_type_description account=account -%]" data-accountline="[% account.accountlines_id | html %]" data-amount="[% account.amount | $Price %]" data-amountoutstanding="[% account.amountoutstanding | $Price %]" class="btn btn-default btn-xs">Apply discount</button>
@@ -191,20 +191,8 @@
                                     <input type="text" inputmode="numeric" pattern="[0-9]*" id="amount" name="amount" required="required">
                                     <span class="required">Required</span>
                                 </li>
-                                [% SET payment_types = AuthorisedValues.GetAuthValueDropbox('PAYMENT_TYPE') %]
-                                [% SET excluded = ['SIP00', 'SIP01', 'SIP02'] %]
-                                [% IF payment_types > 3 %]
-                                <li>
-                                    <label for="transaction_type">Transaction type: </label>
-                                    <select name="transaction_type" id="payout_transaction_type">
-                                        [% FOREACH pt IN payment_types %]
-                                            [% UNLESS excluded.grep("^$pt.authorised_value\$").size %]
-                                            <option value="[% pt.authorised_value | html %]">[% pt.lib | html %]</option>
-                                            [% END %]
-                                        [% END %]
-                                    </select>
-                                </li>
-                                [% END %]
+
+                                [% INCLUDE 'transaction_types.inc' type="payout" %]
 
                                 [% IF Koha.Preference('UseCashRegisters') %]
                                 <li>
@@ -260,18 +248,8 @@
                                     <input type="text" inputmode="numeric" pattern="[0-9]*" id="returned" name="amount" required="required">
                                     <span class="required">Required</span>
                                 </li>
-                                [% SET payment_types = AuthorisedValues.GetAuthValueDropbox('PAYMENT_TYPE') %]
-                                <li>
-                                    <label for="transaction_type">Transaction type: </label>
-                                    <select name="transaction_type" id="refund_transaction_type">
-                                        <option value="AC">Account credit</option>
-                                        [% IF payment_types %]
-                                        [% FOREACH pt IN payment_types %]
-                                        <option value="[% pt.authorised_value | html %]">[% pt.lib | html %]</option>
-                                        [% END %]
-                                        [% END %]
-                                    </select>
-                                </li>
+
+                                [% INCLUDE 'transaction_types.inc' type="refund" %]
 
                                 [% IF Koha.Preference('UseCashRegisters') %]
                                 <li>
@@ -393,11 +371,17 @@
                 var accountline = button.data('accountline');
                 $('#refundline').val(accountline);
                 var amount = button.data('amount');
-                var amountoutstanding = button.data('amountoutstanding');
+                var amountoutstanding = button.data('amountoutstanding') || 0;
                 var paid = amount - amountoutstanding;
                 $("#paid + span").replaceWith(paid);
                 $("#returned").attr({ "value": paid, "max": paid, "min": 0 });
-                $("#returned, #refund_transaction_type").focus();
+                var member = button.data('member');
+                if ( member === '' ) {
+                    $("#refund_type option[value='AC']").remove();
+                } else if ( $("#refund_type option[value='AC']").length == 0 ) {
+                    $("#refund_type").prepend('<option value="AC" selected="selected">Account credit</option>');
+                }
+                $("#returned, #refund_type").focus();
             });
 
             $("#applyDiscountModal").on("shown.bs.modal", function(e){

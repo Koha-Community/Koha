@@ -79,12 +79,12 @@ if ( $action eq 'payout' ) {
     my $payment_id        = scalar $input->param('accountlines_id');
     my $payment           = Koha::Account::Lines->find($payment_id);
     my $amount           = scalar $input->param('amount');
-    my $transaction_type = scalar $input->param('transaction_type');
+    my $payout_type = scalar $input->param('payout_type');
     $schema->txn_do(
         sub {
             my $payout = $payment->payout(
                 {
-                    payout_type   => $transaction_type,
+                    payout_type   => $payout_type,
                     branch        => $library_id,
                     staff_id      => $logged_in_user->id,
                     cash_register => $registerid,
@@ -100,7 +100,7 @@ if ( $action eq 'refund' ) {
     my $charge_id        = scalar $input->param('accountlines_id');
     my $charge           = Koha::Account::Lines->find($charge_id);
     my $amount           = scalar $input->param('amount');
-    my $transaction_type = scalar $input->param('transaction_type');
+    my $refund_type = scalar $input->param('refund_type');
     $schema->txn_do(
         sub {
 
@@ -113,10 +113,10 @@ if ( $action eq 'refund' ) {
                     amount         => $amount
                 }
             );
-            unless ( $transaction_type eq 'AC' ) {
+            unless ( $refund_type eq 'AC' ) {
                 my $payout = $refund->payout(
                     {
-                        payout_type   => $transaction_type,
+                        payout_type   => $refund_type,
                         branch        => $library_id,
                         staff_id      => $logged_in_user->id,
                         cash_register => $registerid,

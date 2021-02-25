@@ -5,7 +5,6 @@
 [% USE Registers %]
 [% USE Price %]
 [% SET footerjs = 1 %]
-[% PROCESS 'payments.inc' %]
 [% PROCESS 'accounts.inc' %]
 [% INCLUDE 'doc-head-open.inc' %]
 [% BLOCK cash_register_required %]
@@ -167,7 +166,7 @@
         <span id="change">0.00</span>
     </li>
 
-    [% PROCESS account_payment_types %]
+    [% INCLUDE 'transaction_types.inc' type="payment" %]
 
     [% IF Koha.Preference('UseCashRegisters') %]
     <li>
@@ -298,7 +297,7 @@
             <span id="change">0.00</span>
         </li>
 
-    [% PROCESS account_payment_types %]
+    [% INCLUDE 'transaction_types.inc' type="payment" %]
 
     [% IF Koha.Preference('UseCashRegisters') %]
     <li>
