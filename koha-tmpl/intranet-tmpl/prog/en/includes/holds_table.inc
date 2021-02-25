@@ -1,8 +1,9 @@
 [% USE Koha %]
 [% SET hold_cancellation = AuthorisedValues.GetAuthValueDropbox('HOLD_CANCELLATION') %]
 [% USE AuthorisedValues %]
-<table>
+<table class="holds_table">
     <tr>
+        <th><input type="checkbox" class="select_hold_all"/></th>
         [% IF ( CAN_user_reserveforothers_modify_holds_priority ) %]
             <th>Priority</th>
             <th>&nbsp;</th>
@@ -48,6 +49,7 @@
         [%- this_priority = loop.count() - found_holds -%]
     [%- END -%]
         <tr>
+            <th><input type="checkbox" class="select_hold" data-id="[% hold.reserve_id | html %]"/></th>
             <td>
                 <input type="hidden" name="reserve_id" value="[% hold.reserve_id | html %]" />
                 <input type="hidden" name="borrowernumber" value="[% hold.borrowernumber | html %]" />

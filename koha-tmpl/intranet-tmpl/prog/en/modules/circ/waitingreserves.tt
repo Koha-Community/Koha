@@ -4,6 +4,7 @@
 [% USE KohaDates %]
 [% USE Branches %]
 [% USE TablesSettings %]
+[% USE AuthorisedValues %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Holds awaiting pickup &rsaquo; Circulation &rsaquo; Koha</title>
@@ -72,6 +73,12 @@
             [% END %]
         [% END %]
     [% ELSE %]
+        [% IF enqueued %]
+            <div class="dialog message">
+                <p>The job has been enqueued! It will be processed as soon as possible.</p>
+                <p><a href="/cgi-bin/koha/admin/background_jobs.pl?op=view&id=[% job_id | uri %]" title="View detail of the enqueued job">View detail of the enqueued job</a></p>
+            </div>
+        [% END %]
         <div id="resultlist" class="toptabs">
             <ul>
                 <li><a href="#holdswaiting">Holds waiting: [% reservecount | html %]</a></li>
@@ -83,7 +90,10 @@
             </ul>
             <div id="holdswaiting">
         [% IF ( reserveloop ) %]
-            [% INCLUDE waiting_holds.inc table_name='holdst' reserveloop=reserveloop tab='holdwaiting' %]
+            <div id="toolbar" class="btn-toolbar">
+                <button class="cancel_selected_holds" data-bulk="true"></button>
+            </div>
+            [% INCLUDE waiting_holds.inc select_column='1' table_name='holdst' reserveloop=reserveloop tab='holdwaiting' %]
         [% ELSE %]
             <div class="dialog message">No holds found.</div>
         [% END %]
@@ -92,6 +102,7 @@
             [% IF ( ReservesMaxPickUpDelay ) %]<p>Holds listed here have been awaiting pickup for more than [% ReservesMaxPickUpDelay | html %] days.</p>[% END %]
             [% IF ( overloop ) %]
                 <span id="holdsover-cancel-all">
+                   <button class="cancel_selected_holds" data-bulk="true"></button>
                    <form name="cancelAllReserve" action="waitingreserves.pl" method="post">
                        <input type="hidden" name="cancelall" value="1" />
                        <input type="hidden" name="allbranches" value="[% allbranches | html %]" />
@@ -105,8 +116,9 @@
                    [% UNLESS TransferWhenCancelAllWaitingHolds %]
                         Only items that need not be transferred will be cancelled (TransferWhenCancelAllWaitingHolds syspref)
                    [% END %]
+
                 </span>
-               [% INCLUDE waiting_holds.inc table_name='holdso' reserveloop=overloop tab='holdsover' %]
+               [% INCLUDE waiting_holds.inc select_column='1' table_name='holdso' reserveloop=overloop tab='holdsover' %]
             [% ELSE %]
                 <div class="dialog message">No holds found.</div>
             [% END %]
@@ -128,24 +140,127 @@
         </div> <!-- /.col-sm-12 -->
     </div> <!-- /.row -->
 
+    <div id="cancelModal" class="modal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="closebtn" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h3>Confirm deletion</h3>
+                </div>
+
+                <div class="modal-body">
+                    <p>Are you sure you want to cancel this hold?</p>
+
+                    <fieldset class="action">
+                        [% SET hold_cancellation = AuthorisedValues.GetAuthValueDropbox('HOLD_CANCELLATION') %]
+                        [% IF hold_cancellation %]
+                            <label for="cancellation-reason">Cancellation reason: </label>
+                            <select class="cancellation-reason" name="modal-cancellation-reason" id="modal-cancellation-reason">
+                                <option value="">No reason given</option>
+                                [% FOREACH reason IN hold_cancellation %]
+                                    <option value="[% reason.authorised_value | html %]">[% reason.lib | html %]</option>
+                                [% END %]
+                            </select>
+                        [% END %]
+                    </fieldset>
+                </div>
+
+                <div class="modal-footer">
+                    <button id="cancelModalConfirmBtn" type="button" class="btn btn-danger">Confirm cancellation</button>
+                    <a href="#" data-dismiss="modal">Cancel</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'datatables.inc' %]
     [% INCLUDE 'columns_settings.inc' %]
     <script>
+        var MSG_CANCEL_SELECTED = _("Cancel selected (%s)");
         var holdst_columns_settings = [% TablesSettings.GetColumns( 'circ', 'holds_awaiting_pickup', 'holdst', 'json' ) | $raw %];
         var holdso_columns_settings = [% TablesSettings.GetColumns( 'circ', 'holds_awaiting_pickup', 'holdso', 'json' ) | $raw %];
 
         $(document).ready(function() {
 
             KohaTable("holdst", {
-                "sPaginationType": "full"
+                "sPaginationType": "full",
+                "order": [[1, 'asc']]
             }, holdst_columns_settings);
 
             KohaTable("holdso", {
-                "sPaginationType": "full"
+                "sPaginationType": "full",
+                "order": [[1, 'asc']]
             }, holdso_columns_settings);
 
             $('#resultlist').tabs();
+
+            let cancel_link;
+
+            $("#cancelModalConfirmBtn").on("click",function(e) {
+                var ids = cancel_link.data('ids');
+                localStorage.selectedWaitingHolds = JSON.stringify(JSON.parse(localStorage.selectedWaitingHolds).filter(id => !ids.includes(id)));
+                let link = `waitingreserves.pl?cancelBulk=1&amp;ids=${ids.join(',')}`;
+                let reason = $("#modal-cancellation-reason").val();
+                if ( reason ) {
+                    link += "&amp;cancellation-reason=" + reason
+                }
+                window.location.href = link;
+                return false;
+            });
+
+            if(!localStorage.selectedWaitingHolds || document.referrer.replace(/\?.*/, '') !== document.location.origin+document.location.pathname) {
+                localStorage.selectedWaitingHolds = '[]';
+            }
+
+            try {
+                JSON.parse(localStorage.selectedWaitingHolds);
+            } catch(e) {
+                localStorage.selectedWaitingHolds = '[]';
+            }
+
+            $('.holds_table .select_hold').each(function() {
+                if(JSON.parse(localStorage.selectedWaitingHolds).includes($(this).data('id'))) {
+                    $(this).prop('checked', true);
+                }
+            });
+
+            $('.holds_table').each(function() {
+              var table = $(this);
+              var parent = table.parents('.ui-tabs-panel');
+
+              $('.holds_table .select_hold_all', parent).each(function() {
+                  var count = $('.select_hold:not(:checked)', table).length;
+                  $('.select_hold_all', table).prop('checked', !count);
+              });
+
+              $('.cancel_selected_holds', parent).html(MSG_CANCEL_SELECTED.format($('.holds_table .select_hold:checked', parent).length));
+
+              $('.holds_table .select_hold_all', parent).click(function() {
+                  var count = $('.select_hold:checked', table).length;
+                  $('.select_hold', table).prop('checked', !count);
+                  $(this).prop('checked', !count);
+                  $('.cancel_selected_holds', parent).data('ids', $('.holds_table .select_hold:checked', parent).toArray().map(el => $(el).data('id'))).html(MSG_CANCEL_SELECTED.format($('.holds_table .select_hold:checked', parent).length));
+                  localStorage.selectedWaitingHolds = JSON.stringify($('.holds_table .select_hold:checked').toArray().map(el => $(el).data('id')));
+              });
+
+              $('.holds_table .select_hold', parent).click(function() {
+                  var count = $('.select_hold:not(:checked)', table).length;
+                  $('.select_hold_all', table).prop('checked', !count);
+                  $('.cancel_selected_holds', parent).data('ids', $('.holds_table .select_hold:checked', parent).toArray().map(el => $(el).data('id'))).html(MSG_CANCEL_SELECTED.format($('.holds_table .select_hold:checked', parent).length));
+                  localStorage.selectedWaitingHolds = JSON.stringify($('.holds_table .select_hold:checked').toArray().map(el => $(el).data('id')));
+              });
+
+              $('.cancel_selected_holds', parent).click(function(e) {
+                  e.preventDefault();
+                  if($('.select_hold:checked', table).length) {
+                      cancel_link = $(this);
+                      $('#cancelModal').modal();
+                  }
+                  return false;
+              });
+            });
+
 
         });
     </script>

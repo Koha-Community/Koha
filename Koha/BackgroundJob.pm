@@ -28,6 +28,7 @@ use Koha::BackgroundJob::BatchUpdateBiblio;
 use Koha::BackgroundJob::BatchUpdateAuthority;
 use Koha::BackgroundJob::BatchDeleteBiblio;
 use Koha::BackgroundJob::BatchDeleteAuthority;
+use Koha::BackgroundJob::BatchCancelHold;
 
 use base qw( Koha::Object );
 
@@ -159,7 +160,6 @@ sub process {
     $args ||= {};
 
     return $derived_class->process({job_id => $self->id, %$args});
-
 }
 
 =head3 job_type
@@ -256,6 +256,7 @@ sub type_to_class_mapping {
         batch_authority_record_modification => 'Koha::BackgroundJob::BatchUpdateAuthority',
         batch_biblio_record_deletion        => 'Koha::BackgroundJob::BatchDeleteBiblio',
         batch_biblio_record_modification    => 'Koha::BackgroundJob::BatchUpdateBiblio',
+        batch_hold_cancel                   => 'Koha::BackgroundJob::BatchCancelHold',
     };
 }
 

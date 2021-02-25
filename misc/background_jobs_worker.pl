@@ -33,6 +33,7 @@ my @job_types = qw(
     batch_authority_record_modification
     batch_biblio_record_deletion
     batch_authority_record_deletion
+    batch_hold_cancel
 );
 
 if ( $conn ) {

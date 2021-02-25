@@ -1,0 +1,154 @@
+package Koha::BackgroundJob::BatchCancelHold;
+
+# This file is part of Koha.
+#
+# Koha is free software; you can redistribute it and/or modify it
+# under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 3 of the License, or
+# (at your option) any later version.
+#
+# Koha is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with Koha; if not, see <http://www.gnu.org/licenses>.
+
+use Modern::Perl;
+use JSON qw( encode_json decode_json );
+
+use Koha::BackgroundJobs;
+use Koha::DateUtils qw( dt_from_string );
+use Koha::Holds;
+
+use base 'Koha::BackgroundJob';
+
+=head1 NAME
+
+Koha::BackgroundJob::BatchCancelHold - Batch cancel holds
+
+This is a subclass of Koha::BackgroundJob.
+
+=head1 API
+
+=head2 Class methods
+
+=head3 job_type
+
+Define the job type of this job: batch_hold_cancel
+
+=cut
+
+sub job_type {
+    return 'batch_hold_cancel';
+}
+
+=head3 process
+
+Process the modification.
+
+=cut
+
+sub process {
+    my ( $self, $args ) = @_;
+
+    my $job = Koha::BackgroundJobs->find( $args->{job_id} );
+
+    if ( !exists $args->{job_id} || !$job || $job->status eq 'cancelled' ) {
+        return;
+    }
+
+    my $job_progress = 0;
+    $job->started_on(dt_from_string)->progress($job_progress)
+      ->status('started')->store;
+
+    my @hold_ids = @{ $args->{hold_ids} };
+
+    my $report = {
+        total_holds   => scalar @hold_ids,
+        total_success => 0,
+    };
+    my @messages;
+      HOLD_IDS: for my $hold_id ( sort { $a <=> $b } @hold_ids ) {
+        next unless $hold_id;
+
+        # Authorities
+        my ( $hold, $patron, $biblio );
+        $hold = Koha::Holds->find($hold_id);
+
+        my $error = eval {
+            $patron = $hold->patron;
+            $biblio = $hold->biblio;
+            $hold->cancel( { cancellation_reason => $args->{reason} } );
+        };
+
+        if ( $error and $error != $hold or $@ ) {
+            push @messages,
+              {
+                type        => 'error',
+                code        => 'hold_not_cancelled',
+                patron_id   => defined $patron ? $patron->borrowernumber : '',
+                patron_name => defined $patron
+                ? ( $patron->firstname ? $patron->firstname . ', ' : '' )
+                  . $patron->surname
+                : '',
+                biblio_id    => defined $biblio ? $biblio->biblionumber : '',
+                biblio_title => defined $biblio ? $biblio->title        : '',
+                hold_id      => $hold_id,
+                error        => defined $hold
+                ? ( $@ ? $@ : 0 )
+                : 'No hold with id ' . $hold_id . ' found',
+              };
+        }
+        else {
+            push @messages,
+              {
+                type      => 'success',
+                code      => 'hold_cancelled',
+                patron_id => $patron->borrowernumber,
+                patron_name =>
+                  ( $patron->firstname ? $patron->firstname . ', ' : '' )
+                  . $patron->surname,
+                biblio_id    => $biblio->biblionumber,
+                biblio_title => $biblio->title,
+                hold_id      => $hold_id,
+              };
+            $report->{total_success}++;
+        }
+        $job->progress( ++$job_progress )->store;
+    }
+
+    my $job_data = decode_json $job->data;
+    $job_data->{messages} = \@messages;
+    $job_data->{report}   = $report;
+
+    $job->ended_on(dt_from_string)->data( encode_json $job_data);
+    $job->status('finished') if $job->status ne 'cancelled';
+    $job->store;
+
+}
+
+=head3 enqueue
+
+Enqueue the new job
+
+=cut
+
+sub enqueue {
+    my ( $self, $args ) = @_;
+
+    # TODO Raise exception instead
+    return unless exists $args->{hold_ids};
+
+    my @hold_ids = @{ $args->{hold_ids} };
+
+    $self->SUPER::enqueue(
+        {
+            job_size => scalar @hold_ids,
+            job_args => { hold_ids => \@hold_ids, reason => $args->{reason} }
+        }
+    );
+}
+
+1;

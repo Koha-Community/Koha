@@ -31,6 +31,7 @@ use Koha::BiblioFrameworks;
 use Koha::Items;
 use Koha::ItemTypes;
 use Koha::Patrons;
+use Koha::BackgroundJob::BatchCancelHold;
 
 my $input = CGI->new;
 
@@ -41,6 +42,7 @@ my $tbr            = $input->param('tbr') || '';
 my $all_branches   = $input->param('allbranches') || '';
 my $cancelall      = $input->param('cancelall');
 my $tab            = $input->param('tab');
+my $cancelBulk     = $input->param('cancelBulk');
 
 my ( $template, $loggedinuser, $cookie, $flags ) = get_template_and_user(
     {
@@ -70,6 +72,21 @@ if ( C4::Context->preference('IndependentBranches') ) {
       unless $all_branches;
 }
 $template->param( all_branches => 1 ) if $all_branches;
+
+if ($cancelBulk) {
+    my $reason   = $input->param("cancellation-reason");
+    my @hold_ids = split ',', $input->param("ids");
+    my $params   = {
+        reason   => $reason,
+        hold_ids => \@hold_ids,
+    };
+    my $job_id = Koha::BackgroundJob::BatchCancelHold->new->enqueue($params);
+
+    $template->param(
+        enqueued => 1,
+        job_id   => $job_id
+    );
+}
 
 my (@reserve_loop, @over_loop);
 # FIXME - Is priority => 0 useful? If yes it must be moved to waiting, otherwise we need to remove it from here.

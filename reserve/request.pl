@@ -52,6 +52,7 @@ use Koha::ItemTypes;
 use Koha::Libraries;
 use Koha::Patrons;
 use Koha::Clubs;
+use Koha::BackgroundJob::BatchCancelHold;
 
 my $dbh = C4::Context->dbh;
 my $input = CGI->new;
@@ -89,30 +90,51 @@ my $action = $input->param('action');
 $action ||= q{};
 
 if ( $action eq 'move' ) {
-  my $where           = $input->param('where');
-  my $reserve_id      = $input->param('reserve_id');
-  my $prev_priority   = $input->param('prev_priority');
-  my $next_priority   = $input->param('next_priority');
-  my $first_priority  = $input->param('first_priority');
-  my $last_priority   = $input->param('last_priority');
-  my $hold_itemnumber = $input->param('itemnumber');
-  if ( $prev_priority == 0 && $next_priority == 1 ){
-      C4::Reserves::RevertWaitingStatus({ itemnumber => $hold_itemnumber });
-  } else {
-      AlterPriority( $where, $reserve_id, $prev_priority, $next_priority, $first_priority, $last_priority );
-  }
-} elsif ( $action eq 'cancel' ) {
-  my $reserve_id = $input->param('reserve_id');
-  my $cancellation_reason = $input->param("cancellation-reason");
-  my $hold = Koha::Holds->find( $reserve_id );
-  $hold->cancel({ cancellation_reason => $cancellation_reason }) if $hold;
-} elsif ( $action eq 'setLowestPriority' ) {
-  my $reserve_id = $input->param('reserve_id');
-  ToggleLowestPriority( $reserve_id );
-} elsif ( $action eq 'toggleSuspend' ) {
-  my $reserve_id = $input->param('reserve_id');
-  my $suspend_until  = $input->param('suspend_until');
-  ToggleSuspend( $reserve_id, $suspend_until );
+    my $where           = $input->param('where');
+    my $reserve_id      = $input->param('reserve_id');
+    my $prev_priority   = $input->param('prev_priority');
+    my $next_priority   = $input->param('next_priority');
+    my $first_priority  = $input->param('first_priority');
+    my $last_priority   = $input->param('last_priority');
+    my $hold_itemnumber = $input->param('itemnumber');
+    if ( $prev_priority == 0 && $next_priority == 1 ) {
+        C4::Reserves::RevertWaitingStatus( { itemnumber => $hold_itemnumber } );
+    }
+    else {
+        AlterPriority(
+            $where,         $reserve_id,     $prev_priority,
+            $next_priority, $first_priority, $last_priority
+        );
+    }
+}
+elsif ( $action eq 'cancel' ) {
+    my $reserve_id          = $input->param('reserve_id');
+    my $cancellation_reason = $input->param("cancellation-reason");
+    my $hold                = Koha::Holds->find($reserve_id);
+    $hold->cancel( { cancellation_reason => $cancellation_reason } ) if $hold;
+}
+elsif ( $action eq 'setLowestPriority' ) {
+    my $reserve_id = $input->param('reserve_id');
+    ToggleLowestPriority($reserve_id);
+}
+elsif ( $action eq 'toggleSuspend' ) {
+    my $reserve_id    = $input->param('reserve_id');
+    my $suspend_until = $input->param('suspend_until');
+    ToggleSuspend( $reserve_id, $suspend_until );
+}
+elsif ( $action eq 'cancelBulk' ) {
+    my $cancellation_reason = $input->param("cancellation-reason");
+    my @hold_ids            = split ',', $input->param("ids");
+    my $params              = {
+        reason   => $cancellation_reason,
+        hold_ids => \@hold_ids,
+    };
+    my $job_id = Koha::BackgroundJob::BatchCancelHold->new->enqueue($params);
+
+    $template->param(
+        enqueued => 1,
+        job_id   => $job_id
+    );
 }
 
 if ($findborrower) {

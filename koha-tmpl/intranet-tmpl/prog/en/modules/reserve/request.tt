@@ -885,9 +885,16 @@
                             <input type = "hidden" name="biblionumbers" value="[% biblionumbers | html %]"/>
                         [% END %]
 
+                        [% IF enqueued %]
+                            <div class="dialog message">
+                                <p>The job has been enqueued! It will be processed as soon as possible.</p>
+                                <p><a href="/cgi-bin/koha/admin/background_jobs.pl?op=view&id=[% job_id | uri %]" title="View detail of the enqueued job">View detail of the enqueued job</a></p>
+                            </div>
+                        [% END %]
+
                         <h2>Existing holds</h2>
                         <div id="toolbar" class="btn-toolbar">
-                            <input type="submit" name="submit" value="Update hold(s)" />
+                            <input type="submit" name="submit" value="Update hold(s)" /> <button class="cancel_selected_holds" data-bulk="true"></button>
                         <fieldset id="cancellation-reason-fieldset" class="action">
                             [% SET hold_cancellation = AuthorisedValues.GetAuthValueDropbox('HOLD_CANCELLATION') %]
                             [% IF hold_cancellation %]
@@ -1092,6 +1099,8 @@
             cannotBeTransferred: _("Cannot be transferred to pickup library"),
             pickupNotInHoldGroup: _("Only pickup locations within the same hold group are allowed")
         }
+
+        var MSG_CANCEL_SELECTED = _("Cancel selected (%s)");
         columns_settings_borrowers_table = [% TablesSettings.GetColumns( 'circ', 'circulation', 'table_borrowers', 'json' ) | $raw %];
         $.fn.select2.defaults.set("width", "100%" );
         $.fn.select2.defaults.set("dropdownAutoWidth", true );
@@ -1556,11 +1565,20 @@
                 return false;
             });
             $("#cancelModalConfirmBtn").on("click",function(e) {
-                let borrowernumber = cancel_link.data('borrowernumber');
-                let biblionumber = cancel_link.data('biblionumber');
-                let reserve_id = cancel_link.data('id');
+                let link;
+                if(cancel_link.data('bulk')) {
+                    [% IF biblionumbers %]
+                        link = `request.pl?biblionumbers=[% biblionumbers | url %]&amp;action=cancelBulk&amp;ids=${$('.holds_table .select_hold:checked').toArray().map(el => $(el).data('id')).join(',')}`;
+                    [% ELSE %]
+                        link = `request.pl?biblionumber=[% biblionumber | url %]&amp;action=cancelBulk&amp;ids=${$('.holds_table .select_hold:checked').toArray().map(el => $(el).data('id')).join(',')}`;
+                    [% END %]
+                } else {
+                    let borrowernumber = cancel_link.data('borrowernumber');
+                    let biblionumber = cancel_link.data('biblionumber');
+                    let reserve_id = cancel_link.data('id');
+                    link = `request.pl?action=cancel&amp;borrowernumber=${ borrowernumber }&amp;biblionumber=${ biblionumber }&amp;reserve_id=${ reserve_id }`;
+                }
                 let reason = $("#modal-cancellation-reason").val();
-                let link = `request.pl?action=cancel&amp;borrowernumber=${ borrowernumber }&amp;biblionumber=${ biblionumber }&amp;reserve_id=${ reserve_id }`;
                 if ( reason ) {
                     link += "&amp;cancellation-reason=" + reason
                 }
@@ -1608,6 +1626,52 @@
                 stickTo: "#existing_holds",
                 stickyClass: "floating"
             });
+
+            if(!localStorage.selectedHolds  || document.referrer.replace(/\?.*/, '') !== document.location.origin+document.location.pathname) {
+                localStorage.selectedHolds = [];
+            }
+
+            $('.holds_table .select_hold').each(function() {
+                if(localStorage.selectedHolds.includes($(this).data('id'))) {
+                    $(this).prop('checked', true);
+                }
+            });
+
+            $('.holds_table .select_hold_all').each(function() {
+                var table = $(this).parents('.holds_table');
+                var count = $('.select_hold:not(:checked)', table).length;
+                $('.select_hold_all', table).prop('checked', !count);
+            });
+
+            $('.cancel_selected_holds').html(MSG_CANCEL_SELECTED.format($('.holds_table .select_hold:checked').length));
+
+            $('.holds_table .select_hold_all').click(function() {
+                var table = $(this).parents('.holds_table');
+                var count = $('.select_hold:checked', table).length;
+                $('.select_hold', table).prop('checked', !count);
+                $(this).prop('checked', !count);
+                $('.cancel_selected_holds').html(MSG_CANCEL_SELECTED.format($('.holds_table .select_hold:checked').length));
+                localStorage.selectedHolds = $('.holds_table .select_hold:checked').toArray().map(el => $(el).data('id'));
+            });
+
+            $('.holds_table .select_hold').click(function() {
+                var table = $(this).parents('.holds_table');
+                var count = $('.select_hold:not(:checked)', table).length;
+                $('.select_hold_all', table).prop('checked', !count);
+                $('.cancel_selected_holds').html(MSG_CANCEL_SELECTED.format($('.holds_table .select_hold:checked').length));
+                localStorage.selectedHolds = $('.holds_table .select_hold:checked').toArray().map(el => $(el).data('id'));
+            });
+
+            $('.cancel_selected_holds').click(function(e) {
+                e.preventDefault();
+                if($('.holds_table .select_hold:checked').length) {
+                    cancel_link = $(this);
+                    delete localStorage.selectedHolds;
+                    $('#cancelModal').modal();
+                }
+                return false;
+            });
+
         });
     </script>
 [% END %]

@@ -1,8 +1,11 @@
 [% USE ItemTypes %]
 [% USE AuthorisedValues %]
-<table id="[% table_name | html %]">
+<table class="holds_table" id="[% table_name | html %]">
     <thead>
         <tr>
+            [% IF select_column %]
+            <th class="NoSort"><input type="checkbox" class="select_hold_all"/></th>
+            [% END %]
             <th class="title-string">Waiting since</th>
             <th class="title-string">Date hold placed</th>
             <th class="anti-the">Title</th>
@@ -19,6 +22,9 @@
     <tbody>
         [% FOREACH reserveloo IN reserveloop %]
             <tr>
+                [% IF select_column %]
+                <th><input type="checkbox" class="select_hold" data-id="[% reserveloo.reserve_id | html %]"/></th>
+                [% END %]
                 <td><span title="[% reserveloo.waitingdate | html %]">[% reserveloo.waitingdate | $KohaDates %]</span></td>
                 <td><span title="[% reserveloo.reservedate | html %]">[% reserveloo.reservedate | $KohaDates %]</span></td>
                 <td>
