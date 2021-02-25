@@ -98,8 +98,7 @@
                 ([% lateorder.basket.bookseller.id | html %])
             </td>
             <td>
-                <b>[% lateorder.biblio.title | html %]</b>
-                   [% IF ( lateorder.biblio.author ) %]<br/><i>Author:</i> [% lateorder.biblio.author | html %][% END %]
+                <span class="title">[% INCLUDE 'biblio-title.inc' biblio=lateorder.biblio link=1 %]</span>
                    [% IF ( lateorder.biblio.biblioitem.publishercode ) %]
                         <br/><i>Published by:</i> [% lateorder.biblio.biblioitem.publishercode | html %]
                         [% IF ( lateorder.biblio.biblioitem.publicationyear ) %]
