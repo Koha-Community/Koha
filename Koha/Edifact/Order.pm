@@ -408,10 +408,6 @@ sub order_line {
     }
     my $budget = GetBudget( $orderline->budget_id );
     my $ol_fields = { budget_code => $budget->{budget_code}, };
-    if ( $orderline->order_vendornote ) {
-        $ol_fields->{servicing_instruction} = $orderline->order_vendornote;
-        chomp $ol_fields->{servicing_instruction};
-    }
 
     my $item_fields = [];
     for my $item (@items) {
@@ -434,8 +430,16 @@ sub order_line {
 
     # TBD what if #items exceeds quantity
 
-    # FTX free text for current orderline TBD
-    #    dont really have a special instructions field to encode here
+    # FTX free text for current orderline
+    #    Pass vendor note in FTX free text segment
+    if ( $orderline->order_vendornote ) {
+        my $vendornote = $orderline->order_vendornote;
+        chomp $vendornote;
+        my $ftx = 'FTX+LIN+++';
+        $ftx .= $vendornote;
+        $ftx .= $seg_terminator;
+        $self->add_seg($ftx);
+    }
     # Encode notes here
     # PRI-CUX-DTM unit price on which order is placed : optional
     # Coutts read this as 0.00 if not present
