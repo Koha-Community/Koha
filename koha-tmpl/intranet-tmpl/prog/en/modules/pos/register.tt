@@ -101,9 +101,9 @@
                                 <td></td>
                                 <td>
                                     [% IF CAN_user_cash_management_anonymous_refund && !(credit.debit.status == 'REFUNDED' ) %]
-                                    <button type="button" class="btn btn-default btn-xs" data-toggle="modal" data-target="#issueRefundModal" data-item="[%- PROCESS account_type_description account=credit.debit -%]" data-accountline="[% credit.debit.accountlines_id | html %]" data-amount="[% credit.debit.amount | $Price %]" data-quantity="[% credit.debit.note | html %]"><i class="fa fa-money"></i> Issue refund</button>
+                                    <button type="button" class="btn btn-default btn-xs" data-toggle="modal" data-target="#issueRefundModal" data-item="[%- PROCESS account_type_description account=credit.debit -%]" data-accountline="[% credit.debit.accountlines_id | html %]" data-amount="[% credit.debit.amount | $Price %]" data-amountoutstanding="[% credit.debit.amountoutstanding | $Price %]" data-member="[% credit.debit.borrowernumber %]"><i class="fa fa-money"></i> Issue refund</button>
                                     [% ELSIF CAN_user_updatecharges_refund && !(credit.debit.status == 'REFUNDED') && credit.debit.borrowernumber %]
-                                    <button type="button" class="btn btn-default btn-xs" data-toggle="modal" data-target="#issueRefundModal" data-item="[%- PROCESS account_type_description account=credit.debit -%]" data-accountline="[% credit.debit.accountlines_id | html %]" data-amount="[% credit.debit.amount | $Price %]" data-quantity="[% credit.debit.note | html %]"><i class="fa fa-money"></i> Issue refund</button>
+                                    <button type="button" class="btn btn-default btn-xs" data-toggle="modal" data-target="#issueRefundModal" data-item="[%- PROCESS account_type_description account=credit.debit -%]" data-accountline="[% credit.debit.accountlines_id | html %]" data-amount="[% credit.debit.amount | $Price %]" data-amountoutstanding="[% credit.debit.amountoutstanding | $Price %]" data-member="[% credit.debit.borrowernumber %]"><i class="fa fa-money"></i> Issue refund</button>
                                     [% END %]
                                 </td>
                             </tr>
@@ -189,8 +189,8 @@
                                 <td>[% credit.debit.amount | $Price %]</td>
                                 <td></td>
                                 <td>
-                                    [% IF CAN_user_cash_management_refund_cash_registers && !(credit.debit.status == 'REFUNDED' ) %]
-                                    <button type="button" class="btn btn-default btn-xs pos_refund" data-toggle="modal" data-target="#issueRefundModal" data-item="[%- PROCESS account_type_description account=credit.debit -%]" data-accountline="[% credit.debit.accountlines_id | html %]" data-amount="[% credit.debit.amount | $Price %]" data-quantity="[% credit.debit.note | html %]"><i class="fa fa-money"></i> Issue refund</button>
+                                    [% IF CAN_user_cash_management_refund_cash_registers && !(credit.debit.status == 'REFUNDED') && !(credit.debit.debit_type_code == 'PAYOUT') %]
+                                    <button type="button" class="btn btn-default btn-xs pos_refund" data-toggle="modal" data-target="#issueRefundModal" data-item="[%- PROCESS account_type_description account=credit.debit -%]" data-accountline="[% credit.debit.accountlines_id | html %]" data-amount="[% credit.debit.amount | $Price %]" data-amountoutstanding="[% credit.debit.amountoutstanding | $Price %]" data-member="[% credit.debit.borrowernumber %]"><i class="fa fa-money"></i> Issue refund</button>
                                     [% END %]
                                 </td>
                             </tr>
@@ -277,19 +277,7 @@
                                     <input type="number" step="0.01" id="returned" name="amount" min="0.00" required="required">
                                     <span class="required">Required</span>
                                 </li>
-                                [% SET payment_types = [] %]
-                                [% FOR pt IN AuthorisedValues.GetAuthValueDropbox('PAYMENT_TYPE') %]
-                                    [% NEXT IF pt.authorised_value.grep("^SIP[[:digit:]]{2}$").size() %]
-                                    [% payment_types.push(pt) %]
-                                [% END %]
-                                <li>
-                                    <label for="transaction_type">Transaction type: </label>
-                                    <select name="transaction_type" id="transaction_type">
-                                        [% FOREACH pt IN payment_types %]
-                                            <option value="[% pt.authorised_value | html %]">[% pt.lib | html %]</option>
-                                        [% END %]
-                                    </select>
-                                </li>
+                                [% INCLUDE 'transaction_types.inc' type="refund" %]
                             </ol>
                         </fieldset> <!-- /.rows -->
                     </div> <!-- /.modal-body -->
@@ -420,9 +408,17 @@
            var accountline = button.data('accountline');
            $('#refundline').val(accountline);
            var amount = button.data('amount');
-           $("#paid + span").replaceWith(amount);
-           $("#returned").attr({ "value": amount, "max": amount });
-           $("#returned, #transaction_type").focus();
+           var amountoutstanding = button.data('amountoutstanding') || 0;
+           var paid = amount - amountoutstanding;
+           $("#paid + span").replaceWith(paid);
+           $("#returned").attr({ "value": paid, "max": paid });
+           var member = button.data('member');
+           if ( member === '' ) {
+               $("#refund_type option[value='AC']").remove();
+           } else if ( $("#refund_type option[value='AC']").length == 0 ) {
+               $("#refund_type").prepend('<option value="AC" selected="selected">Account credit</option>');
+           }
+           $("#returned, #refund_type").focus();
         });
 
         $(".printReceipt").click(function() {

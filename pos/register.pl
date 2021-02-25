@@ -119,7 +119,7 @@ else {
             my $amount           = $input->param('amount');
             my $quantity         = $input->param('quantity');
             my $accountline_id   = $input->param('accountline');
-            my $transaction_type = $input->param('transaction_type');
+            my $refund_type      = $input->param('refund_type');
 
             my $accountline = Koha::Account::Lines->find($accountline_id);
             $schema->txn_do(
@@ -136,7 +136,7 @@ else {
                     );
                     my $payout = $refund->payout(
                         {
-                            payout_type   => $transaction_type,
+                            payout_type   => $refund_type,
                             branch        => $library_id,
                             staff_id      => $logged_in_user->id,
                             cash_register => $cash_register->id,

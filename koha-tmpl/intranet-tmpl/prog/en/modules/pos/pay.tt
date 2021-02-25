@@ -6,7 +6,6 @@
 [% USE TablesSettings %]
 [% USE Registers %]
 [% SET footerjs = 1 %]
-[% PROCESS 'payments.inc' %]
 [% INCLUDE 'doc-head-open.inc' %]
 [% SET registers = Registers.all( filters => { current_branch => 1 } ) %]
 <title>Koha &rsaquo; Payments</title>
@@ -125,7 +124,7 @@
                                 <input type="hidden" name="change" value="[% 0 | $Price %]"/>
                             </li>
 
-                            [% PROCESS account_payment_types %]
+                            [% INCLUDE 'transaction_types.inc' type="payment" %]
 
                             <li>
                                 <label for="registerid" class="required">Cash register: </label>
