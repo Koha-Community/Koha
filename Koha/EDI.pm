@@ -685,7 +685,7 @@ sub quote_item {
         quantity           => $order_quantity,
         quantityreceived   => 0,
         order_vendornote   => q{},
-        order_internalnote => $order_note,
+        order_internalnote => q{},
         replacementprice   => $price,
         rrp_tax_included   => $price,
         rrp_tax_excluded   => $price,
@@ -724,7 +724,9 @@ sub quote_item {
             $txt .= $si;
             ++$occ;
         }
-        $order_hash->{order_vendornote} = $txt;
+    }
+    if ($order_note) {
+        $order_hash->{order_vendornote} = $order_note;
     }
 
     if ( $item->internal_notes() ) {
