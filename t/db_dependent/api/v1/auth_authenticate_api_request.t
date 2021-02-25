@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 4;
+use Test::More tests => 5;
 use Test::Mojo;
 
 use Module::Load::Conditional qw(can_load);
@@ -254,6 +254,44 @@ subtest 'x-koha-library tests' => sub {
         "//$unprivileged_userid:$password@/api/v1/cities",
         { 'x-koha-library' => $library->id }
     );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'x-koha-override stash tests' => sub {
+
+    plan tests => 3;
+
+    $schema->storage->txn_begin;
+
+    my $patron = $builder->build_object({
+        class => 'Koha::Patrons',
+        value => { flags => 1 }
+    });
+    my $password = 'thePassword123';
+    $patron->set_password({ password => $password, skip_validation => 1 });
+    my $userid = $patron->userid;
+
+    my $item = $builder->build_sample_item();
+
+    my $hold_data = {
+        patron_id => $patron->id,
+        biblio_id => $item->biblionumber,
+        item_id   => $item->id,
+        pickup_library_id => $patron->branchcode,
+    };
+
+    my $stash;
+
+    $t->app->hook(after_dispatch => sub {
+        $stash = shift->stash;
+    });
+
+    $t->post_ok( "//$userid:$password@/api/v1/holds" => { 'x-koha-override' => "any" } => json => $hold_data );
+
+    my $overrides = $stash->{'koha.overrides'};
+    is( ref($overrides), 'HASH', 'arrayref returned' );
+    ok( $overrides->{'any'}, "The value 'any' is found" );
 
     $schema->storage->txn_rollback;
 };
