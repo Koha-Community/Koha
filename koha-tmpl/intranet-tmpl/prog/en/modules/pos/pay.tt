@@ -306,20 +306,20 @@
                     local.fnUpdate( value, aPos[0], aPos[1], true, false );
                     return value;
                 },{
-                    type    : 'number',
-                    step    : '0.01',
-                    min     : '0',
-                    onblur  : 'submit'
+                    type    : 'text',
+                    pattern : "^\d+(\.\d{2})?$",
+                    onblur  : 'submit',
+                    width   : "8em"
                 });
                 local.$('.editable_int').editable( function(value, settings) {
                     var aPos = local.fnGetPosition( this );
                     local.fnUpdate( value, aPos[0], aPos[1], true, false );
                     return value;
                 },{
-                    type    : 'number',
-                    step    : '1',
-                    min     : '0',
-                    onblur  : 'submit'
+                    type    : 'text',
+                    pattern : "[0-9]*",
+                    onblur  : 'submit',
+                    width   : "4em"
                 });
             },
             "fnRowCallback": function( nRow, aData, iDisplayIndex, iDisplayIndexFull ) {
