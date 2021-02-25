@@ -265,6 +265,34 @@ Merges parameters from $q_params into $filtered_params.
             return $c;
         }
     );
+
+=head3 stash_overrides
+
+    $c->stash_overrides();
+
+=cut
+
+    $app->helper(
+        'stash_overrides' => sub {
+
+            my ( $c ) = @_;
+
+            my $override_header = $c->req->headers->header('x-koha-override');
+
+            my $overrides = {};
+
+            if ( $override_header ) {
+                my @overrides = ();
+                foreach my $override ( split /\s*,\s*/, $override_header ) {
+                    $overrides->{$override} = 1;
+                }
+            }
+
+            $c->stash( 'koha.overrides' => $overrides );
+
+            return $c;
+        }
+    );
 }
 
 =head2 Internal methods

@@ -255,6 +255,18 @@ get '/stash_embed_no_spec' => sub {
     };
 };
 
+get '/stash_overrides' => sub {
+    my $c = shift;
+
+    $c->stash_overrides();
+    my $overrides = $c->stash('koha.overrides');
+
+    $c->render(
+        status => 200,
+        json   => $overrides
+    );
+};
+
 sub to_model {
     my ($args) = @_;
     $args->{three} = delete $args->{tres}
@@ -264,7 +276,7 @@ sub to_model {
 
 # The tests
 
-use Test::More tests => 6;
+use Test::More tests => 7;
 use Test::Mojo;
 
 subtest 'extract_reserved_params() tests' => sub {
@@ -486,4 +498,17 @@ subtest 'stash_embed() tests' => sub {
         }
       );
 
+};
+
+subtest 'stash_overrides() tests' => sub {
+
+    plan tests => 4;
+
+    my $t = Test::Mojo->new;
+
+    $t->get_ok( '/stash_overrides' => { 'x-koha-override' => 'any,none,some_other,any,' } )
+      ->json_is( { 'any' => 1, 'none' => 1, 'some_other' => 1 } ); # empty string and duplicates are skipped
+
+    $t->get_ok( '/stash_overrides' => { 'x-koha-override' => '' } )
+      ->json_is( {} ); # empty string is skipped
 };
