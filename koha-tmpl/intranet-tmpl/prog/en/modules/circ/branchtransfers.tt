@@ -32,7 +32,7 @@
                 Item is marked waiting at [% branchname | html %] for [% name | html %] (<a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrowernumber | uri %]">[% borrowernumber | html %]</a>).
             [% END %]
             [% IF ( transferred ) %]
-                Item is attached to a hold and being transferred for [% name | html %] (<a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrowernumber | uri %]">[% borrowernumber | html %]</a>).
+                Item has been trapped to fill a hold and is in transit for [% name | html %] (<a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrowernumber | uri %]">[% borrowernumber | html %]</a>).
             [% END %]
         </caption>
         <tr>
