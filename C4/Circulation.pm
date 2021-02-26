@@ -1477,6 +1477,8 @@ sub AddIssue {
                 my ( $allowed, $message ) = CanBookBeReturned( $item_unblessed, C4::Context->userenv->{branch} );
                 return unless $allowed;
                 AddReturn( $item_object->barcode, C4::Context->userenv->{'branch'} );
+                # AddReturn certainly has side-effects, like onloan => undef
+                $item_object->discard_changes;
             }
 
             C4::Reserves::MoveReserve( $item_object->itemnumber, $borrower->{'borrowernumber'}, $cancelreserve );
@@ -1566,7 +1568,6 @@ sub AddIssue {
             $item_object->holdingbranch(C4::Context->userenv->{'branch'});
             $item_object->itemlost(0);
             $item_object->onloan($datedue->ymd());
-            $item_object->make_column_dirty('onloan'); # Force write onloan so we don't need to fetch from db
             $item_object->datelastborrowed( dt_from_string()->ymd() );
             $item_object->datelastseen( dt_from_string()->ymd() );
             $item_object->store({log_action => 0});
