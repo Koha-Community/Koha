@@ -456,6 +456,7 @@ if ((!$nok) and $nodouble and ($op eq 'insert' or $op eq 'save')){
             add_guarantors( $patron, $input );
             $borrowernumber = $patron->borrowernumber;
             $newdata{'borrowernumber'} = $borrowernumber;
+            delete $newdata{password};
         }
 
         # If 'AutoEmailOpacUser' syspref is on, email user their account details from the 'notice' that matches the user's branchcode.
