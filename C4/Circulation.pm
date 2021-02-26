@@ -1563,6 +1563,7 @@ sub AddIssue {
             $item_object->holdingbranch(C4::Context->userenv->{'branch'});
             $item_object->itemlost(0);
             $item_object->onloan($datedue->ymd());
+            $item_object->make_column_dirty('onloan'); # Force write onloan so we don't need to fetch from db
             $item_object->datelastborrowed( dt_from_string()->ymd() );
             $item_object->datelastseen( dt_from_string()->ymd() );
             $item_object->store({log_action => 0});
