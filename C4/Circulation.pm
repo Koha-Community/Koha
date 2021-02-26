@@ -3034,13 +3034,10 @@ sub AddRenewal {
         # Update the issues record to have the new due date, and a new count
         # of how many times it has been renewed.
         my $renews = ( $issue->renewals || 0 ) + 1;
-        my $sth = $dbh->prepare("UPDATE issues SET date_due = ?, renewals = ?, unseen_renewals = ?, lastreneweddate = ?
-                                WHERE borrowernumber=?
-                                AND itemnumber=?"
-        );
+        my $sth = $dbh->prepare("UPDATE issues SET date_due = ?, renewals = ?, unseen_renewals = ?, lastreneweddate = ? WHERE issue_id = ?");
 
         eval{
-        $sth->execute( $datedue->strftime('%Y-%m-%d %H:%M'), $renews, $unseen_renewals, $lastreneweddate, $borrowernumber, $itemnumber );
+            $sth->execute( $datedue->strftime('%Y-%m-%d %H:%M'), $renews, $unseen_renewals, $lastreneweddate, $issue->issue_id );
         };
         if( $sth->err ){
             Koha::Exceptions::Checkout::FailedRenewal->throw(
