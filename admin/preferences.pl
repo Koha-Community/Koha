@@ -72,6 +72,8 @@ sub _get_chunk {
 
     if ( $options{'class'} && $options{'class'} eq 'password' ) {
         $chunk->{'input_type'} = 'password';
+    } elsif ( $options{'class'} && $options{'class'} eq 'email' ) {
+        $chunk->{'input_type'} = 'email';
     } elsif ( $options{'class'} && $options{'class'} eq 'date' ) {
         $chunk->{'dateinput'} = 1;
     } elsif ( $options{'type'} && ( $options{'type'} eq 'opac-languages' || $options{'type'} eq 'staff-languages' ) ) {
