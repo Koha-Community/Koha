@@ -171,7 +171,8 @@
       "x-mojo-to": "Holds#add",
       "operationId": "addHold",
       "tags": ["patrons", "holds"],
-      "parameters": [{
+      "parameters": [
+        {
           "name": "body",
           "in": "body",
           "description": "A JSON object containing informations about the new hold",
@@ -215,6 +216,13 @@
             },
             "required": [ "patron_id", "pickup_library_id" ]
           }
+        },
+        {
+          "name": "x-koha-override",
+          "description": "Comma-separated list of overrides (valid values: any)",
+          "in": "header",
+          "type": "string",
+          "required": false
         }
       ],
       "consumes": ["application/json"],
