@@ -832,7 +832,7 @@
     <script>
         function tableInit( tableId ){
             if( tableId == "checkoutst" ){
-                $(".dt-buttons").append("<a class=\"dt-button buttons-ical\" href=\"opac-ics.pl\">iCal</a> ");
+                $(".dt-buttons").append("<button type=\"button\" class=\"dt-button buttons-ical\" id=\"buttons-ics\">iCal</button> ");
                 [% IF ( OpacRenewalAllowed && canrenew && !userdebarred ) %]
                     $(".dt-buttons").append("<button id=\"renewselected_link\" class=\"dt-button buttons-renew\"><i class=\"fa fa-check\" aria-hidden=\"true\"></i> "+_("Renew selected")+"</button> <button id=\"renewall_link\" class=\"dt-button buttons-renewall\"><span class=\"fa-stack\"><i class=\"fa fa-check fa-stack-1x\" aria-hidden=\"true\"></i><i class=\"fa fa-check fa-stack-1x\" aria-hidden=\"true\"></i></span> "+_("Renew all")+"</button>");
                 [% END %]
@@ -907,8 +907,13 @@
                     "language": {
                         "search": "_INPUT_",
                         "searchPlaceholder": _("Search")
-                    }
+                    },
+                    "autoWidth": false
                 }));
+            });
+
+            $("body").on("click", "#buttons-ics", function(){
+                location.href="/cgi-bin/koha/opac-ics.pl";
             });
 
             [% IF ( GoogleJackets ) %]KOHA.Google.GetCoverFromIsbn();[% END %]
