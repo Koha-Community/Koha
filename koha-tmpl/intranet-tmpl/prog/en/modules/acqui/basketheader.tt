@@ -4,12 +4,12 @@
 [% USE Koha %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Koha &rsaquo; Acquisitions &rsaquo;
-[% IF ( add_form ) %]
-    [% IF ( basketno ) %]Edit basket '[% basketname | html %]'
+<title>
+    [% IF ( add_form ) %]
+        [% IF ( basketno ) %]Edit basket '[% basketname | html %]'
         [% ELSE %]Add a basket to [% booksellername | html %]
-    [% END %]
-[% END %]
+        [% END %]
+    [% END %] &rsaquo; Acquisitions &rsaquo; Koha
 </title>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>

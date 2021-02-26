@@ -6,7 +6,7 @@
 [% USE ItemTypes %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Koha &rsaquo; Acquisitions &rsaquo; Basket [% basketno | html %] &rsaquo; [% IF ( ordernumber ) %]Modify order details (line #[% ordernumber | html %])[% ELSE %]New order[% END %]</title>
+<title>[% IF ( ordernumber ) %]Modify order details (line #[% ordernumber | html %])[% ELSE %]New order[% END %] &rsaquo; Basket [% basketno | html %] &rsaquo; Acquisitions &rsaquo; Koha</title>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 

@@ -3,7 +3,8 @@
 [% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Koha &rsaquo; Acquisitions &rsaquo; [% IF ( opsearch ) %]Order from external source[% ELSE %]Order from external source &rsaquo; Search results[% END %]</title>
+<title>[% IF ( opsearch ) %]Order from external source[% ELSE %]Search results &rsaquo; Acquisitions &rsaquo; Order from external source[% END %] &rsaquo; Koha</title>
+
 [% INCLUDE 'doc-head-close.inc' %]
 [% USE Koha %]
 

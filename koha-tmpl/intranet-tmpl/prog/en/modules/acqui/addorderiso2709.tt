@@ -3,12 +3,12 @@
 [% USE KohaDates %]
 [% USE Branches %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Koha &rsaquo; Acquisitions &rsaquo; Order staged MARC records
+<title>
 [% IF ( batch_details ) %]
- &rsaquo; Batch [% import_batch_id | html %]
+Batch [% import_batch_id | html %]
 [% ELSE %]
- &rsaquo; Batch list
-[% END %]
+Batch list
+[% END %] &rsaquo; Order staged MARC records &rsaquo; Acquisitions &rsaquo; Koha
 </title>
 <style>#dataPreview { width : 80%; } @media (max-width: 767px) { #dataPreview { margin: 0; width : auto; } }</style>
 [% INCLUDE 'doc-head-close.inc' %]
