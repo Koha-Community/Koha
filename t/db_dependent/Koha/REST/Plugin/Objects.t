@@ -208,7 +208,7 @@ subtest 'objects.search helper' => sub {
 
 subtest 'objects.search helper, sorting on mapped column' => sub {
 
-    plan tests => 35;
+    plan tests => 42;
 
     $schema->storage->txn_begin;
 
@@ -221,7 +221,7 @@ subtest 'objects.search helper, sorting on mapped column' => sub {
     $builder->build_object({ class => 'Koha::Cities', value => { city_name => 'C', city_country => 'Belarus' } });
 
     my $t = Test::Mojo->new;
-    diag("CSV-param");
+    # CSV-param
     $t->get_ok('/cities?_order_by=%2Bname,-country')
       ->status_is(200)
       ->json_has('/0')
@@ -234,7 +234,7 @@ subtest 'objects.search helper, sorting on mapped column' => sub {
       ->json_is('/3/country' => 'Argentina')
       ->json_hasnt('/4');
 
-    diag("Multi-param: traditional");
+    # Multi-param: traditional
     $t->get_ok('/cities?_order_by=%2Bname&_order_by=-country')
       ->status_is(200)
       ->json_has('/0')
@@ -247,15 +247,20 @@ subtest 'objects.search helper, sorting on mapped column' => sub {
       ->json_is('/3/country' => 'Argentina')
       ->json_hasnt('/4');
 
-    diag("Pipe-param: Passes validation (treated as a 'single value array or one string), subsequently explodes");
-    $t->get_ok('/cities?_order_by=%2Bname|-country')
-      ->status_is(500);
-
-    diag("Multi-param: PHP Style, Passes validation as above, subsequntly explodes");
+    # Multi-param: PHP Style, Passes validation as above, subsequntly explodes
     $t->get_ok('/cities?_order_by[]=%2Bname&_order_by[]=-country')
-      ->status_is(500);
+      ->status_is(200)
+      ->json_has('/0')
+      ->json_has('/1')
+      ->json_is('/0/name' => 'A')
+      ->json_is('/1/name' => 'B')
+      ->json_is('/2/name' => 'C')
+      ->json_is('/2/country' => 'Belarus')
+      ->json_is('/3/name' => 'C')
+      ->json_is('/3/country' => 'Argentina')
+      ->json_hasnt('/4');
 
-    diag("Single-param");
+    # Single-param
     $t->get_ok('/cities?_order_by=-name')
       ->status_is(200)
       ->json_has('/0')

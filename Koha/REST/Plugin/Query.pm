@@ -90,18 +90,42 @@ Generates the DBIC order_by attributes based on I<$params>, and merges into I<$a
             my $attributes = $args->{attributes};
             my $result_set = $args->{result_set};
 
-            if ( defined $args->{params}->{_order_by} ) {
-                my $order_by = $args->{params}->{_order_by};
-                $order_by = [ split(/,/, $order_by) ] if ( !reftype($order_by) && index(',',$order_by) == -1);
-                if ( reftype($order_by) and reftype($order_by) eq 'ARRAY' ) {
-                    my @order_by = map { _build_order_atom({ string => $_, result_set => $result_set }) }
-                                @{ $order_by };
-                    $attributes->{order_by} = \@order_by;
+            my @order_by_styles = (
+                '_order_by',
+                '_order_by[]'
+            );
+            my @order_by_params;
+
+            foreach my $order_by_style ( @order_by_styles ) {
+                if ( defined $args->{params}->{$order_by_style} and ref($args->{params}->{$order_by_style}) eq 'ARRAY' )  {
+                    push( @order_by_params, @{$args->{params}->{$order_by_style} });
                 }
                 else {
-                    $attributes->{order_by} = _build_order_atom({ string => $order_by, result_set => $result_set });
+                    push @order_by_params, $args->{params}->{$order_by_style}
+                        if defined $args->{params}->{$order_by_style};
                 }
             }
+
+            my @THE_order_by;
+
+            foreach my $order_by_param ( @order_by_params ) {
+                my $order_by;
+                $order_by = [ split(/,/, $order_by_param) ]
+                    if ( !reftype($order_by_param) && index(',',$order_by_param) == -1);
+
+                if ($order_by) {
+                    if ( reftype($order_by) and reftype($order_by) eq 'ARRAY' ) {
+                        my @order_by = map { _build_order_atom({ string => $_, result_set => $result_set }) } @{ $order_by };
+                        push( @THE_order_by, @order_by);
+                    }
+                    else {
+                        push @THE_order_by, _build_order_atom({ string => $order_by, result_set => $result_set });
+                    }
+                }
+            }
+
+            $attributes->{order_by} = \@THE_order_by
+                if scalar @THE_order_by > 0;
 
             return $attributes;
         }
@@ -253,7 +277,7 @@ Merges parameters from $q_params into $filtered_params.
 
 sub _reserved_words {
 
-    my @reserved_words = qw( _match _order_by _page _per_page q query x-koha-query);
+    my @reserved_words = qw( _match _order_by _order_by[] _page _per_page q query x-koha-query);
     return \@reserved_words;
 }
 
