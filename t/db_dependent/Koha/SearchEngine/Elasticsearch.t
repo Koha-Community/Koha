@@ -747,7 +747,7 @@ subtest 'Koha::SearchEngine::Elasticsearch::marc_records_to_documents_array () t
 
 subtest 'Koha::SearchEngine::Elasticsearch::marc_records_to_documents () authority tests' => sub {
 
-    plan tests => 3;
+    plan tests => 5;
 
     t::lib::Mocks::mock_preference('marcflavour', 'MARC21');
     t::lib::Mocks::mock_preference('ElasticsearchMARCFormat', 'ISO2709');
@@ -768,6 +768,16 @@ subtest 'Koha::SearchEngine::Elasticsearch::marc_records_to_documents () authori
             sort => 0,
             marc_type => 'marc21',
             marc_field => '150(aevxyz)',
+        },
+        {
+            name => 'match',
+            type => 'string',
+            facet => 0,
+            suggestible => 0,
+            searchable => 1,
+            sort => 0,
+            marc_type => 'marc21',
+            marc_field => '185v',
         }
     );
 
@@ -801,7 +811,11 @@ subtest 'Koha::SearchEngine::Elasticsearch::marc_records_to_documents () authori
     $marc_record_2->append_fields(
         MARC::Field->new('150', '', '', a => 'Subject', v => 'Genresubdiv', z => 'Geosubdiv', x => 'Generalsubdiv', e => 'wrongsubdiv' ),
     );
-    my $records = [ $marc_record_1, $marc_record_2 ];
+    my $marc_record_3 = MARC::Record->new();
+    $marc_record_3->append_fields(
+        MARC::Field->new('185', '', '', v => 'Formsubdiv' ),
+    );
+    my $records = [ $marc_record_1, $marc_record_2, $marc_record_3 ];
 
     $see->get_elasticsearch_mappings(); #sort_fields will call this and use the actual db values unless we call it first
 
@@ -822,6 +836,13 @@ subtest 'Koha::SearchEngine::Elasticsearch::marc_records_to_documents () authori
         $docs->[1]->{'match'} ,
         "Second record heading should contain the subfields with record order retained"
     );
+    ok( !exists $docs->[2]->{'match-heading'}, "No match heading defined for subdivision record");
+    is_deeply(
+        [ "Formsubdiv" ],
+        $docs->[2]->{'match'} ,
+        "Third record heading should contain the subfield"
+    );
+
 };
 
 $schema->storage->txn_rollback;
