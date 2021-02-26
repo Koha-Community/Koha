@@ -18,7 +18,7 @@
 use Modern::Perl;
 use utf8;
 
-use Test::More tests => 52;
+use Test::More tests => 53;
 use Test::Exception;
 use Test::MockModule;
 use Test::Deep qw( cmp_deeply );
@@ -4724,6 +4724,35 @@ subtest 'AddIssue records staff who checked out item if appropriate' => sub  {
       AddIssue( $patron->unblessed, $item->barcode, $dt_to, undef, $dt_from );
 
     is( $issue->issuer, $issuer->{borrowernumber}, "Staff who checked out the item recorded when RecordStaffUserOnCheckout turned on" );
+};
+
+subtest "Item's onloan value should be set if checked out item is checked out to a different patron" => sub {
+    plan tests => 2;
+
+    my $library_1 = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $patron_1 = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => { branchcode => $library_1->branchcode }
+        }
+    );
+    my $patron_2 = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => { branchcode => $library_1->branchcode }
+        }
+    );
+
+    my $item = $builder->build_sample_item(
+        {
+            library => $library_1->branchcode,
+        }
+    );
+
+    AddIssue( $patron_1->unblessed, $item->barcode );
+    ok( $item->get_from_storage->onloan, "Item's onloan column is set after initial checkout" );
+    AddIssue( $patron_2->unblessed, $item->barcode );
+    ok( $item->get_from_storage->onloan, "Item's onloan column is set after second checkout" );
 };
 
 $schema->storage->txn_rollback;
