@@ -902,7 +902,7 @@ require( [ 'koha-backend', 'search', 'macros', 'marc-editor', 'marc-record', 'pr
                 })
             };
             $.ajax(options)
-                .then(function(undef, result) {
+                .then(function(result) {
                     showSavedMacros();
                     loadMacro( result.name, result.macro_id );
                 })
