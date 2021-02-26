@@ -354,48 +354,76 @@ subtest 'test AllowHoldDateInFuture' => sub {
       ->json_is('/hold_date', output_pref({ dt => $future_hold_date, dateformat => 'rfc3339', dateonly => 1 }));
 };
 
-subtest 'test AllowHoldPolicyOverride' => sub {
+$schema->storage->txn_rollback;
 
-    plan tests => 7;
+subtest 'x-koha-override and AllowHoldPolicyOverride tests' => sub {
 
-    $dbh->do('DELETE FROM reserves');
+    plan tests => 8;
 
-    Koha::CirculationRules->set_rules(
+    $schema->storage->txn_begin;
+
+    my $patron = $builder->build_object(
         {
-            itemtype   => undef,
-            branchcode => undef,
-            rules      => {
-                holdallowed => 'from_home_library'
-            }
+            class => 'Koha::Patrons',
+            value => { flags => 1 }
         }
     );
+    my $password = 'thePassword123';
+    $patron->set_password( { password => $password, skip_validation => 1 } );
+    $patron->discard_changes;
+    my $userid = $patron->userid;
 
     t::lib::Mocks::mock_preference( 'AllowHoldPolicyOverride', 0 );
 
     # Make sure pickup location checks doesn't get in the middle
     my $mock_biblio = Test::MockModule->new('Koha::Biblio');
-    $mock_biblio->mock( 'pickup_locations', sub { return Koha::Libraries->search; });
-    my $mock_item   = Test::MockModule->new('Koha::Item');
-    $mock_item->mock( 'pickup_locations', sub { return Koha::Libraries->search });
+    $mock_biblio->mock( 'pickup_locations',
+        sub { return Koha::Libraries->search; } );
+    my $mock_item = Test::MockModule->new('Koha::Item');
+    $mock_item->mock( 'pickup_locations',
+        sub { return Koha::Libraries->search } );
 
-    $t->post_ok( "//$userid_3:$password@/api/v1/holds" => json => $post_data )
+    my $can_item_be_reserved_result;
+    my $mock_reserves = Test::MockModule->new('C4::Reserves');
+    $mock_reserves->mock(
+        'CanItemBeReserved',
+        sub {
+            return $can_item_be_reserved_result;
+        }
+    );
+
+    my $item = $builder->build_sample_item;
+
+    my $post_data = {
+        item_id           => $item->id,
+        biblio_id         => $item->biblionumber,
+        patron_id         => $patron->id,
+        pickup_library_id => $patron->branchcode,
+    };
+
+    $can_item_be_reserved_result = { status => 'ageRestricted' };
+
+    $t->post_ok( "//$userid:$password@/api/v1/holds" => json => $post_data )
       ->status_is(403)
-      ->json_has('/error');
+      ->json_is( '/error' => "Hold cannot be placed. Reason: ageRestricted" );
 
     t::lib::Mocks::mock_preference( 'AllowHoldPolicyOverride', 1 );
 
-    $t->post_ok( "//$userid_3:$password@/api/v1/holds" => json => $post_data )
-      ->status_is(403);
+    $can_item_be_reserved_result = { status => 'pickupNotInHoldGroup' };
 
-    $t->post_ok(
-        "//$userid_3:$password@/api/v1/holds" => {
-            'x-koha-override' =>
-              encode_json( { AllowHoldPolicyOverride => Mojo::JSON->true } )
-        } => json => $post_data
-    )->status_is(201);
+    $t->post_ok( "//$userid:$password@/api/v1/holds" => json => $post_data )
+      ->status_is(403)
+      ->json_is(
+        '/error' => "Hold cannot be placed. Reason: pickupNotInHoldGroup" );
+
+    $can_item_be_reserved_result = { status => 'OK' };
+
+    $t->post_ok( "//$userid:$password@/api/v1/holds" =>
+          { 'x-koha-override' => 'any' } => json => $post_data )
+      ->status_is(201);
+
+    $schema->storage->txn_rollback;
 };
-
-$schema->storage->txn_rollback;
 
 subtest 'suspend and resume tests' => sub {
 
