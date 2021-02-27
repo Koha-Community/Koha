@@ -99,20 +99,24 @@ foreach my $m (@metadatas) {
         foreach my $item ( @items ) {
             my $itemnumber = $item->itemnumber;
 
-            my $error = $test ? "Test mode enabled" : $item->safe_delete;
-            $error = undef if $error eq '1';
-
-            if ($error) {
-                say "ERROR DELETING ITEM $itemnumber: $error";
+            if( $test ){
+                my $result = $item->safe_to_delete;
+                if ( $result eq "1") {
+                    say "TEST MODE: Item $itemnumber would have been deleted";
+                } else {
+                    say "TEST MODE: ERROR DELETING ITEM $itemnumber: $result";
+                }
+            } else {
+                my $result = $item->safe_delete;
+                if ( ref $result eq "Koha::Item" ){
+                    say "DELETED ITEM $itemnumber" if $verbose;
+                    $deleted_items_count++;
+                } else {
+                    say "ERROR DELETING ITEM $itemnumber: $result";
+                }
             }
-            else {
-                say "DELETED ITEM $itemnumber" if $verbose;
-                $deleted_items_count++;
-            }
-
             $total_items_count++;
         }
-
     }
 
     my $error = $test ? q{Test mode enabled} : DelBiblio($biblionumber);
