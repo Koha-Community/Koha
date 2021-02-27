@@ -222,9 +222,8 @@ sub update {
 Removes the object from storage.
 
 Returns:
-    1  if the deletion was a success
-    0  if the deletion failed
-    -1 if the object was never in storage
+    The item object if deletion was a success
+    The DBIX::Class error if deletion failed
 
 =cut
 
