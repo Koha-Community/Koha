@@ -2,17 +2,16 @@
 [% USE Asset %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Koha &rsaquo; Administration &rsaquo; Library EANs
+<title>
 [% IF ean_form %]
-  [% IF ean %]
-     &rsaquo; Modify library EAN
-  [% ELSE %]
-     &rsaquo; Add new library EAN
-  [% END %]
-[% END %]
+    [% IF ean %]
+        Modify library EAN
+    [% ELSE %]
+        Add new library EAN
+    [% END %] &rsaquo; [% END %]
 [% IF delete_confirm %]
-     &rsaquo; Confirm deletion of EAN
-[% END %]
+    Confirm deletion of EAN &rsaquo; [% END %]
+Library EANs &rsaquo; Administration &rsaquo; Koha
 </title>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>

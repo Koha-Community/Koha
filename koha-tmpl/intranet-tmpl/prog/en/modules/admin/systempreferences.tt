@@ -3,8 +3,25 @@
 [% USE Koha %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Koha &rsaquo; Administration &rsaquo; [% IF ( add_form ) %] System preferences &rsaquo; [% IF ( modify ) %]Modify system preference '[% searchfield | html %]'[% ELSE %]Add a system preference[% END %][% END %][% IF ( add_validate ) %] System preferences &rsaquo; Data added[% END %]
-[% IF ( delete_confirm ) %] System preferences &rsaquo; [% searchfield | html %] &rsaquo; Confirm deletion of parameter '[% searchfield | html %]'[% END %][% IF ( delete_confirmed ) %] System preferences &rsaquo; Parameter deleted[% END %][% IF ( else ) %]System preferences[% END %]</title>
+<title>
+    [% IF ( add_form ) %]
+        [% IF ( modify ) %]
+            Modify system preference '[% searchfield | html %]'
+        [% ELSE %]
+            Add a system preference
+        [% END %] &rsaquo; [% END %]
+
+    [% IF ( add_validate ) %]
+        Data added &rsaquo; [% END %]
+
+    [% IF ( delete_confirm ) %]
+        Confirm deletion of parameter '[% searchfield | html %]' &rsaquo; [% searchfield | html %] &rsaquo; [% END %]
+
+    [% IF ( delete_confirmed ) %]
+        Parameter deleted &rsaquo; [% END %]
+
+    System preferences &rsaquo; Administration &rsaquo; Koha
+</title>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 

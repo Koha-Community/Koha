@@ -3,17 +3,16 @@
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>
-    Koha &rsaquo; Administration &rsaquo; Record matching rules
     [% IF ( matching_rule_form ) %]
         [% IF ( edit_matching_rule ) %]
-            &rsaquo; Modify record matching rule
-        [% ELSE %]
-            &rsaquo; Add record matching rule
-        [% END %]
+            Modify record matching rule &rsaquo; [% ELSE %]
+            Add record matching rule &rsaquo; [% END %]
     [% END %]
+
     [% IF ( delete_matching_rule_form ) %]
-        &rsaquo; Confirm deletion of record matching rule &quot;[% code | html %]&quot;
-    [% END %]
+        Confirm deletion of record matching rule &quot;[% code | html %]&quot; &rsaquo; [% END %]
+
+    Record matching rules &rsaquo; Administration &rsaquo; Koha
 </title>
 [% INCLUDE 'doc-head-close.inc' %]
 

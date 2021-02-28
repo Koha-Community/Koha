@@ -6,17 +6,17 @@
 [% USE scalar %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Koha &rsaquo; Administration &rsaquo; Patron attribute types
+<title>
 [% IF ( attribute_type_form ) %]
-  [% IF ( edit_attribute_type ) %]
-    &rsaquo; Modify patron attribute type
-  [% ELSE %]
-    &rsaquo; Add patron attribute type
-  [% END %]
+    [% IF ( edit_attribute_type ) %]
+        Modify patron attribute type &rsaquo; [% ELSE %]
+        Add patron attribute type &rsaquo; [% END %]
 [% END %]
+
 [% IF ( delete_attribute_type_form ) %]
-  &rsaquo; Confirm deletion of patron attribute type &quot;[% code | html %]&quot;
-[% END %]
+    Confirm deletion of patron attribute type &quot;[% code | html %]&quot; &rsaquo; [% END %]
+
+Patron attribute types &rsaquo; Administration &rsaquo; Koha
 </title>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>

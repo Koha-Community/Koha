@@ -6,23 +6,22 @@
 [% USE TablesSettings %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Koha &rsaquo; Administration &rsaquo; Item types [% IF op == 'add_form' %]&rsaquo;
-  [% IF ( itemtype ) %]
-Modify item type '[% itemtype.itemtype | html %]'
-  [% ELSE %]
-Add item type
-  [% END %]
-[% END %]
-[% IF op == 'delete_confirm' %]&rsaquo;
-  [% IF ( total ) %]
-Cannot delete item type '[% itemtype.itemtype | html %]'
-  [% ELSE %]
-Delete item type '[% itemtype.itemtype | html %]'?
-  [% END %]
-[% END %]
-[% IF op == 'delete_confirmed' %]&rsaquo;
-Data deleted
-[% END %]
+<title>
+[% IF op == 'add_form' %]
+    [% IF ( itemtype ) %]
+        Modify item type '[% itemtype.itemtype | html %]'
+    [% ELSE %]
+        Add item type
+    [% END %] &rsaquo; [% END %]
+[% IF op == 'delete_confirm' %]
+    [% IF ( total ) %]
+        Cannot delete item type '[% itemtype.itemtype | html %]'
+    [% ELSE %]
+        Delete item type '[% itemtype.itemtype | html %]'?
+    [% END %] &rsaquo; [% END %]
+[% IF op == 'delete_confirmed' %]
+    Data deleted &rsaquo; [% END %]
+Item types &rsaquo; Administration &rsaquo; Koha
 </title>
 [% INCLUDE 'doc-head-close.inc' %]
 <style>

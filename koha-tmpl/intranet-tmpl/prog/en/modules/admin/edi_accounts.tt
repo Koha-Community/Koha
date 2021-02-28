@@ -2,17 +2,16 @@
 [% USE Asset %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Koha &rsaquo; Administration &rsaquo; EDI accounts
+<title>
 [% IF acct_form %]
-  [% IF account %]
-     &rsaquo; Modify account
-  [% ELSE %]
-     &rsaquo; Add new account
-  [% END %]
-[% END %]
+    [% IF account %]
+        Modify account
+    [% ELSE %]
+        Add new account
+    [% END %] &rsaquo; [% END %]
 [% IF delete_confirm %]
-     &rsaquo; Confirm deletion of account
-[% END %]
+    Confirm deletion of account &rsaquo; [% END %]
+EDI accounts &rsaquo; Administration &rsaquo; Koha
 </title>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>

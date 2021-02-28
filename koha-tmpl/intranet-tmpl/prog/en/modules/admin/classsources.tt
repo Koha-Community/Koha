@@ -2,18 +2,24 @@
 [% USE Asset %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Koha &rsaquo; Administration &rsaquo; Classification sources
+<title>
 [% IF op == 'add_source' %]
-&rsaquo;
-    [% IF class_source %]Modify classification source[% ELSE %]Add classification source[% END %]
-[% ELSIF op == 'add_sort_rule' %]
-&rsaquo;
-    [% IF sort_rule %]Modify filing rule[% ELSE %]Add filing rule[% END %]
-[% ELSIF op == 'add_split_rule' %]
-&rsaquo;
-    [% IF split_rule %]Modify splitting rule[% ELSE %]Add splitting rule[% END %]
-[% END %]
-
+    [% IF class_source %]
+        Modify classification source
+    [% ELSE %]
+        Add classification source
+    [% END %] &rsaquo; [% ELSIF op == 'add_sort_rule' %]
+    [% IF sort_rule %]
+        Modify filing rule
+    [% ELSE %]
+        Add filing rule
+    [% END %] &rsaquo; [% ELSIF op == 'add_split_rule' %]
+    [% IF split_rule %]
+        Modify splitting rule
+    [% ELSE %]
+        Add splitting rule
+    [% END %] &rsaquo; [% END %]
+Classification sources &rsaquo; Administration &rsaquo; Koha
 </title>
 [% INCLUDE 'doc-head-close.inc' %]
 <style>

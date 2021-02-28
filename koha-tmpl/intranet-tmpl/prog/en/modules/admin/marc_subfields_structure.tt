@@ -3,22 +3,33 @@
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>
-    Koha &rsaquo; Administration &rsaquo;
     [%- IF ( add_form ) -%]
         [%- IF ( use_heading_flags_p ) -%]
             [%- IF ( heading_edit_subfields_p ) -%]
-                MARC subfield structure &rsaquo; Edit MARC subfields constraints
+                Edit MARC subfields constraints &rsaquo; MARC subfield structure
             [%- END -%]
+
         [%- ELSE -%]
-            MARC subfield structure &rsaquo; [%- action | html -%]
+            [%- action | html -%] &rsaquo; MARC subfield structure
         [%- END -%]
+
     [%- END -%]
+
     [%- IF ( delete_confirm ) -%]
+
         MARC subfield structure &rsaquo; Confirm deletion of subfield [%- mss.tagsubfield | html -%]
+
+        Confirm deletion of subfield [%- tagsubfield | html -%] &rsaquo; MARC subfield structure
     [%- END -%]
+
+    [%- IF ( delete_confirmed ) -%]
+        Subfield deleted &rsaquo; MARC subfield structure
+
+    [%- END -%]
+
     [%- IF ( else ) -%]
         MARC subfield structure
-    [%- END -%]
+    [%- END -%] &rsaquo; Administration &rsaquo; Koha
 </title>
 [% INCLUDE 'doc-head-close.inc' %]
 <style>.constraints::after { content:  " "; clear: both; display:block; }</style>

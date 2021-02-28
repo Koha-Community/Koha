@@ -3,11 +3,21 @@
 [% USE AuthorisedValues %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Koha &rsaquo; Administration &rsaquo;
-[% IF ( add_form ) %]MARC frameworks &rsaquo; [% IF heading_add_tag_p %]Add tag[% ELSE %]Modify tag[% END %] [% searchfield | html %][% END %]
-[% IF ( delete_confirm ) %]MARC frameworks &rsaquo; Confirm deletion of tag '[% searchfield | html %]'[% END %]
-[% IF ( delete_confirmed ) %]MARC frameworks &rsaquo;  Data deleted[% END %]
-[% IF ( else ) %]MARC frameworks[% END %]</title>
+<title>
+[% IF ( add_form ) %]
+    [% IF heading_add_tag_p %]
+        Add tag [% searchfield | html %]
+    [% ELSE %]
+        Modify tag [% searchfield | html %]
+    [% END %] &rsaquo; [% END %]
+
+[% IF ( delete_confirm ) %]
+    Confirm deletion of tag '[% searchfield | html %]' &rsaquo; [% END %]
+
+[% IF ( delete_confirmed ) %]
+    Data deleted &rsaquo; [% END %]
+MARC frameworks &rsaquo; Administration &rsaquo; Koha
+</title>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 

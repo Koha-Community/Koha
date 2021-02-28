@@ -2,14 +2,12 @@
 [% USE Asset %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Koha &rsaquo;
-Administration &rsaquo;
-SMTP servers
-[% IF    op == 'add_form' %]
-    &rsaquo; New SMTP server
-[% ELSIF op == 'edit_form' %]
-    &rsaquo; Edit SMTP server
-[% END %]
+<title>
+    [% IF op == 'add_form' %]
+        New SMTP server &rsaquo; [% ELSIF op == 'edit_form' %]
+        Edit SMTP server &rsaquo; [% END %]
+
+    SMTP servers &rsaquo; Administration &rsaquo; Koha
 </title>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>

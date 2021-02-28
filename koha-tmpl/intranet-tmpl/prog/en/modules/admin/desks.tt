@@ -3,7 +3,18 @@
 [% USE Asset %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Koha &rsaquo; Administration &rsaquo; [% IF op =='add_form' %]Desks &rsaquo; [% IF desk.desk_id %] Modify desk[% ELSE %] New desk[% END %][% ELSE %][% IF op == 'delete_confirm' %]Desks &rsaquo; Confirm deletion of desk[% ELSE %] Desks[% END %][% END %]</title>
+<title>
+    [% IF op =='add_form' %]
+        [% IF desk.desk_id %]
+            Modify desk
+        [% ELSE %]
+            New desk
+        [% END %] &rsaquo; [% ELSE %]
+        [% IF op == 'delete_confirm' %]
+            Confirm deletion of desk &rsaquo; [% END %]
+    [% END %]
+    Desks &rsaquo; Administration &rsaquo; Koha
+</title>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 

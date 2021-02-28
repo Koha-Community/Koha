@@ -4,12 +4,15 @@
 [% SET footerjs = 1 %]
 [% USE TablesSettings %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Koha &rsaquo; Administration &rsaquo; Libraries
+<title>
 [% IF op == 'add_form' %]
-    &rsaquo;[% IF library %]Modify library[% ELSE %]New library [% library.branchcode | html %][% END %]
-[% ELSIF op == 'delete_confirm' %]
-    &rsaquo; Confirm deletion of library '[% library.branchcode | html %]'
-[% END %]
+    [% IF library %]
+        Modify library
+    [% ELSE %]
+        New library [% library.branchcode | html %]
+    [% END %] &rsaquo; [% ELSIF op == 'delete_confirm' %]
+    Confirm deletion of library '[% library.branchcode | html %]' &rsaquo; [% END %]
+Libraries &rsaquo; Administration &rsaquo; Koha
 </title>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>

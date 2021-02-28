@@ -4,17 +4,14 @@
 [% USE Price %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Koha &rsaquo; Administration &rsaquo;
+<title>
     [% IF op =='add_form' %]
-       Debit types &rsaquo;
        [% IF debit_type.code %]
            Modify debit type
        [% ELSE %]
            New debit type
-       [% END %]
-    [% ELSE %]
-       Debit types
-    [% END %]
+       [% END %] &rsaquo; [% END %]
+    Debit types &rsaquo; Administration &rsaquo; Koha
 </title>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>

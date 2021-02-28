@@ -4,12 +4,15 @@
 [% USE Price %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Koha &rsaquo; Administration &rsaquo; Cash registers
+<title>
 [% IF op == 'add_form' %]
-    &rsaquo;[% IF cash_register %]Modify cash register[% ELSE %]New cash register [% cash_register.id | html %][% END %]
-[% ELSIF op == 'delete_confirm' %]
-    &rsaquo; Confirm deletion of cash register '[% cash_register.id | html %]'
-[% END %]
+    [% IF cash_register %]
+        Modify cash register
+    [% ELSE %]
+        New cash register [% cash_register.id | html %]
+    [% END %] &rsaquo; [% ELSIF op == 'delete_confirm' %]
+    Confirm deletion of cash register '[% cash_register.id | html %]' &rsaquo; [% END %]
+Cash registers &rsaquo; Administration &rsaquo; Koha
 </title>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>

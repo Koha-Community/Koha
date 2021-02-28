@@ -2,7 +2,15 @@
 [% USE Asset %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Koha &rsaquo; Administration &rsaquo; [% IF op =='add_form' %]Background jobs&rsaquo; [% IF job %] View background job[% ELSE %] Background jobs[% END %][% END %]</title>
+<title>
+[% IF op =='add_form' %]
+    [% IF job %]
+        View background job
+    [% ELSE %]
+        Background jobs
+    [% END %] &rsaquo; Background jobs &rsaquo; [% END %]
+Administration &rsaquo; Koha
+</title>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 

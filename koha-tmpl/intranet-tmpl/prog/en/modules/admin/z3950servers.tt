@@ -11,9 +11,14 @@
     [% END %]
 [% END %]
 
-<title>Koha &rsaquo; Administration &rsaquo; Z39.50/SRU servers
-[% IF op == 'edit' %] &rsaquo; Modify [% PROCESS ServerType %] server [% server.servername | html %][% END %]
-[% IF op ==  'add' %] &rsaquo; New [% PROCESS ServerType %] server[% END %]
+<title>
+    [% IF op == 'edit' %]
+        Modify [% PROCESS ServerType %] server [% server.servername | html %] &rsaquo; [% END %]
+
+    [% IF op ==  'add' %]
+        New [% PROCESS ServerType %] server &rsaquo; [% END %]
+
+    Z39.50/SRU servers &rsaquo; Administration &rsaquo; Koha
 </title>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>

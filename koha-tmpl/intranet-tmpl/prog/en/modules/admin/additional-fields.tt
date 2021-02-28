@@ -1,11 +1,11 @@
 [% USE AuthorisedValues %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Koha &rsaquo; Administration &rsaquo;
+<title>
     [% SWITCH op %]
         [% CASE 'add_form' %][% IF field %]Modify additional field '[% field.name | html %]'[% ELSE %]Add additional field[% END %]
         [% CASE %]Manage additional fields
-    [% END %]
+    [% END %] &rsaquo; Administration &rsaquo; Koha
 </title>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>

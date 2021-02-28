@@ -3,7 +3,7 @@
 [% USE KohaDates %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Koha &rsaquo; Acquisitions &rsaquo; Contracts &rsaquo;
+<title>
 [% IF ( add_form ) %]
     [% IF ( contractnumber ) %]Modify contract '[% contractname | html %]'
 [% ELSE %]New contract[% END %]
@@ -11,7 +11,9 @@
 [% IF ( else ) %]Contracts of [% booksellername | html %][% END %]
 [% IF ( add_validate ) %]Data recorded[% END %]
 [% IF ( delete_confirm ) %]Confirm deletion of contract '[% contractnumber | html %]'[% END %]
-[% IF ( delete_confirmed ) %]Contract deleted[% END %]</title>
+[% IF ( delete_confirmed ) %]Contract deleted[% END %]
+ &rsaquo; Contracts &rsaquo; Acquisitions &rsaquo; Koha
+</title>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 

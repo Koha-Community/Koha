@@ -2,12 +2,15 @@
 [% USE Asset %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Koha &rsaquo; Administration &rsaquo; Authority types
+<title>
 [% IF op == 'add_form' %]
-&rsaquo; [% IF authority_type.authtypecode.defined %]Modify authority type[% ELSE %]New authority type[% END %]
-[% ELSIF op == 'delete_confirm' %]
-&rsaquo; Confirm deletion of authority type
-[% END %]
+    [% IF authority_type.authtypecode.defined %]
+        Modify authority type
+    [% ELSE %]
+        New authority type
+    [% END %] &rsaquo; [% ELSIF op == 'delete_confirm' %]
+    Confirm deletion of authority type &rsaquo; [% END %]
+Authority types &rsaquo; Administration &rsaquo; Koha
 </title>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>

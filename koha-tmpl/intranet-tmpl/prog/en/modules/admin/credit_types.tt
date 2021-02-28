@@ -3,7 +3,7 @@
 [% USE Branches %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Koha &rsaquo; Administration &rsaquo;
+<title>
     [% IF op =='add_form' %]
        Credit types &rsaquo;
        [% IF credit_type.code %]
@@ -13,7 +13,7 @@
        [% END %]
     [% ELSE %]
        Credit types
-    [% END %]
+    [% END %] &rsaquo; Administration &rsaquo; Koha
 </title>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>

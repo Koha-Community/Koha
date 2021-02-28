@@ -41,28 +41,30 @@
 [% END %]
 
 <title>
-    Koha &rsaquo; Administration &rsaquo; Budgets
-
-    [% IF ( add_form ) %]&rsaquo;
+    [% IF ( add_form ) %]
         [% IF ( budget_period_id ) %]
             Modify budget [% budget_period_description | html %]
         [% ELSE %]
             Add budget
-        [% END %]
-    [% END %]
-    [% IF ( duplicate_form ) %]&rsaquo; Duplicate budget[% END %]
-    [% IF ( delete_confirm ) %]&rsaquo;
-            Delete budget '[% budget_period_description | html %]'?
-    [% END %]
-    [% IF ( delete_confirmed ) %]&rsaquo;
-        Data deleted
-    [% END %]
-    [% IF close_form %]&rsaquo;
-      Close budget [% budget_period_description | html %]
-    [% END %]
-    [% IF closed %]&rsaquo;
-      Budget [% budget_period_description | html %] closed
-    [% END %]
+        [% END %] &rsaquo; [% END %]
+
+    [% IF ( duplicate_form ) %]
+        Duplicate budget &rsaquo; [% END %]
+
+    [% IF ( delete_confirm ) %]
+            Delete budget '[% budget_period_description | html %]'? &rsaquo; [% END %]
+
+    [% IF ( delete_confirmed ) %]
+        Data deleted &rsaquo; [% END %]
+
+    [% IF close_form %]
+      Close budget [% budget_period_description | html %] &rsaquo; [% END %]
+
+    [% IF closed %]
+      Budget [% budget_period_description | html %] closed &rsaquo; [% END %]
+
+    Budgets &rsaquo; Administration &rsaquo; Koha
+
 </title>
 
 
