@@ -23484,6 +23484,19 @@ if( CheckVersion( $DBversion ) ) {
     NewVersion( $DBversion, 27316, "In Elastisearch mappings convert NULL (Undef) for sort to 1 (Yes)");
 }
 
+$DBversion = '20.11.03.004';
+if( CheckVersion( $DBversion ) ) {
+
+    $dbh->do(q|
+        UPDATE items
+        LEFT JOIN issues ON issues.itemnumber=items.itemnumber
+        SET items.onloan=CAST(issues.date_due AS DATE)
+        WHERE items.onloan IS NULL
+    |);
+
+    NewVersion( $DBversion, 27808, "Adjust items.onloan if needed" );
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 my $update_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/atomicupdate/';
