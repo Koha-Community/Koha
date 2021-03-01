@@ -1,11 +1,11 @@
 [% USE Koha %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Koha &rsaquo;
+<title>
     [% IF ( nopermission ) %]Access denied[% END %]
     [% IF ( timed_out ) %]Session timed out[% END %]
     [% IF ( different_ip ) %]IP address change[% END %]
     [% IF ( invalid_username_or_password ) %]Invalid username or password[% END %]
-    [% IF ( loginprompt ) %]Log in to the Koha web installer[% END %]
+    [% IF ( loginprompt ) %]Log in to the Koha web installer[% END %] &rsaquo; Koha
 </title>
 [% INCLUDE 'installer-doc-head-close.inc' %]
 </head>
