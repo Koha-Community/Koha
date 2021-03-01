@@ -20,31 +20,21 @@
 [% INCLUDE 'doc-head-open.inc' %]
 
 <title>
-    Koha &rsaquo; Reports &rsaquo; Guided reports wizard
     [%- IF ( saved1 ) -%]
-        &rsaquo; Saved reports
-    [%- ELSIF ( create ) -%]
-        &rsaquo; Create from SQL
-    [%- ELSIF ( showsql ) -%]
-        &rsaquo; Saved reports &rsaquo; SQL view
-    [%- ELSIF ( execute ) -%]
-        &rsaquo; Saved reports &rsaquo; Report [% name | html %] ([% id | html %])
-    [%- ELSIF ( editsql ) -%]
-        &rsaquo; Saved reports &rsaquo; Edit report [% reportname | html %] ([% id | html %])
-    [%- END -%]
+        Saved reports &rsaquo; [%- ELSIF ( create ) -%]
+        Create from SQL &rsaquo; [%- ELSIF ( showsql ) -%]
+        SQL view &rsaquo; Saved reports &rsaquo; [%- ELSIF ( execute ) -%]
+        Report [% name | html %] ([% id | html %]) &rsaquo; Saved reports &rsaquo; [%- ELSIF ( editsql ) -%]
+        Edit report [% reportname | html %] ([% id | html %]) &rsaquo; Saved reports &rsaquo; [%- END -%]
+
     [%- IF ( build1 ) -%]
-        &rsaquo; Build a report, step 1 of 6: Choose a module
-    [%- ELSIF ( build2 ) -%]
-        &rsaquo; Build a report, step 2 of 6: Pick a report type
-    [%- ELSIF ( build3 ) -%]
-        &rsaquo; Build a report, step 3 of 6: Select columns for display
-    [%- ELSIF ( build4 ) -%]
-        &rsaquo; Build a report, step 4 of 6: Select criteria to limit on
-    [%- ELSIF ( build5 ) -%]
-        &rsaquo; Build a report, step 5 of 6: Pick which columns to total
-    [%- ELSIF ( build6 ) -%]
-        &rsaquo; Build a report, step 6 of 6: Select how you want the report ordered
-    [%- END -%]
+        Build a report, step 1 of 6: Choose a module &rsaquo; [%- ELSIF ( build2 ) -%]
+        Build a report, step 2 of 6: Pick a report type &rsaquo; [%- ELSIF ( build3 ) -%]
+        Build a report, step 3 of 6: Select columns for display &rsaquo; [%- ELSIF ( build4 ) -%]
+        Build a report, step 4 of 6: Select criteria to limit on &rsaquo; [%- ELSIF ( build5 ) -%]
+        Build a report, step 5 of 6: Pick which columns to total &rsaquo; [%- ELSIF ( build6 ) -%]
+        Build a report, step 6 of 6: Select how you want the report ordered &rsaquo; [%- END -%]
+    Guided reports wizard &rsaquo; Reports &rsaquo; Koha
 </title>
 
 [% INCLUDE 'doc-head-close.inc' %]
