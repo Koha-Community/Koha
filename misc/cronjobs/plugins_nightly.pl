@@ -2,9 +2,13 @@
 
 use Modern::Perl;
 
-use Koha::Logger;
-use Koha::Script -cron;
+use Try::Tiny;
+
+use C4::Context;
 use C4::Log;
+use Koha::Logger;
+use Koha::Plugins;
+use Koha::Script -cron;
 
 cronlogaction();
 
