@@ -22559,7 +22559,7 @@ if( CheckVersion( $DBversion ) ) {
         UPDATE items
         LEFT JOIN issues ON issues.itemnumber=items.itemnumber
         SET items.onloan=CAST(issues.date_due AS DATE)
-        WHERE items.onloan IS NULL
+        WHERE items.onloan IS NULL AND issues.issue_id IS NOT NULL
     |);
 
     NewVersion( $DBversion, 27808, "Adjust items.onloan if needed");
