@@ -5,7 +5,7 @@
 [% USE Branches %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Koha &rsaquo; Patrons &rsaquo; [% UNLESS blocking_error  %]Discharge for [% patron.firstname | html %] [% patron.surname | html %] ([% patron.cardnumber | html %])[% END %]</title>
+<title>[% UNLESS blocking_error  %]Discharge for [% patron.firstname | html %] [% patron.surname | html %] ([% patron.cardnumber | html %])[% END %] &rsaquo; Patrons &rsaquo; Koha</title>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 <body id="discharge" class="discharge">

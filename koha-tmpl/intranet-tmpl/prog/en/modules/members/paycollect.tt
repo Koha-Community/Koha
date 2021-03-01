@@ -21,12 +21,12 @@
     </div>
 [% END %]
 [% SET registers = Registers.all( filters => { current_branch => 1 } ) %]
-<title>Koha &rsaquo; Patrons &rsaquo;
+<title>
     [% IF type == 'WRITEOFF' %]
         Write off an amount for [% patron.firstname | html %] [% patron.surname | html %]
     [% ELSE %]
         Collect fine payment for [% patron.firstname | html %] [% patron.surname | html %]
-    [% END %]
+    [% END %] &rsaquo; Patrons &rsaquo; Koha
 </title>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
