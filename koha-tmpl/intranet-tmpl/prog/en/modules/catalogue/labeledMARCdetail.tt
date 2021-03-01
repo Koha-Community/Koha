@@ -4,12 +4,12 @@
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 
-<title>Koha &rsaquo; Catalog &rsaquo;
+<title>
   [% IF ( unknownbiblionumber ) %]
     Unknown record
   [% ELSE %]
     Labeled MARC details for [% bibliotitle | html %]
-  [% END %]
+  [% END %] &rsaquo; Catalog &rsaquo; Koha
 </title>
 
 	[% INCLUDE 'doc-head-close.inc' %]
