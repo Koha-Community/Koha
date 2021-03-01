@@ -23558,6 +23558,16 @@ if( CheckVersion( $DBversion ) ) {
     NewVersion( $DBversion, 8976, "Allow setting a default sequence of subfields in cataloguing editor" );
 }
 
+$DBversion = '20.12.00.017';
+if( CheckVersion( $DBversion ) ) {
+    $dbh->do(q|
+        INSERT IGNORE INTO systempreferences (variable,value,explanation,options,type)
+        VALUES ('CheckPrevCheckoutDelay','0', 'Maximum number of days that will trigger a warning if the patron has borrowed that item in the past when CheckPrevCheckout is enabled. Disabled if 0 or empty.', NULL, 'free')
+    |);
+
+    NewVersion( $DBversion, 26937, "Add CheckPrevCheckoutDelay system preference)" );
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 my $update_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/atomicupdate/';
