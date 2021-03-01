@@ -23538,6 +23538,26 @@ if( CheckVersion( $DBversion ) ) {
     NewVersion( $DBversion, 27316, "In Elastisearch mappings convert NULL (Undef) for sort to 1 (Yes)");
 }
 
+$DBversion = '20.12.00.016';
+if( CheckVersion( $DBversion ) ) {
+
+    unless ( column_exists( 'marc_subfield_structure', 'display_order' ) ) {
+        $dbh->do(q{
+            ALTER TABLE marc_subfield_structure
+            ADD COLUMN display_order INT(2) NOT NULL DEFAULT 0 AFTER maxlength
+        });
+    }
+
+    unless ( column_exists( 'auth_subfield_structure', 'display_order' ) ) {
+        $dbh->do(q{
+            ALTER TABLE auth_subfield_structure
+            ADD COLUMN display_order INT(2) NOT NULL DEFAULT 0 AFTER defaultvalue
+        });
+    }
+
+    NewVersion( $DBversion, 8976, "Allow setting a default sequence of subfields in cataloguing editor" );
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 my $update_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/atomicupdate/';
