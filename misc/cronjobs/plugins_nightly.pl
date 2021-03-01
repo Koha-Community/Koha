@@ -4,6 +4,7 @@ use Modern::Perl;
 
 use Koha::Logger;
 use Koha::Script -cron;
+use C4::Log;
 
 cronlogaction();
 
