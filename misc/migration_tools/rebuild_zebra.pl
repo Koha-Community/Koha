@@ -836,17 +836,15 @@ sub pretty_time {
     my $now = time;
     my $elapsed = $now - $start_time;
     local $_ = $elapsed;
-    my ( $d, $h, $m, $s );
+    my ( $h, $m, $s );
     $s = $_ % 60;
     $_ /= 60;
     $m = $_ % 60;
     $_ /= 60;
     $h = $_ % 24;
-    $_ /= 24;
-    $d = $_;
 
     my $now_pretty = POSIX::strftime("%H:%M:%S",localtime($now));
-    my $elapsed_pretty = $d ? "[$d:$h:$m:$s]" : $h ? "[$h:$m:$s]" : $m ? "[$m:$s]" : "[$s]";
+    my $elapsed_pretty = sprintf "[%02d:%02d:%02d]",$h,$m,$s;
 
     return "$now_pretty $elapsed_pretty";
 }
