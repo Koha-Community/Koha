@@ -23468,6 +23468,15 @@ if ( CheckVersion($DBversion) ) {
     NewVersion( $DBversion, 18506, "Add OPACShibOnly and staffShibOnly system preferences" );
 }
 
+$DBversion = '20.11.03.002';
+if( CheckVersion( $DBversion ) ) {
+
+    sanitize_zero_date('aqorders', 'datecancellationprinted');
+    sanitize_zero_date('old_issues', 'returndate');
+
+    NewVersion( $DBversion, 7806, "Remove remaining possible 0000-00-00 values");
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 my $update_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/atomicupdate/';
