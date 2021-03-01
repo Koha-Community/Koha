@@ -23616,11 +23616,23 @@ sub CheckVersion {
 
 sub sanitize_zero_date {
     my ( $table_name, $column_name ) = @_;
-    $dbh->do(qq|
-        UPDATE $table_name
-        SET $column_name = NULL
-        WHERE CAST($column_name AS CHAR(10)) = '0000-00-00';
-    |);
+
+    my (undef, $datatype) = $dbh->selectrow_array(qq|
+        SHOW COLUMNS FROM $table_name WHERE Field = ?|, undef, $column_name);
+
+    if ( $datatype eq 'date' ) {
+        $dbh->do(qq|
+            UPDATE $table_name
+            SET $column_name = NULL
+            WHERE CAST($column_name AS CHAR(10)) = '0000-00-00';
+        |);
+    } else {
+        $dbh->do(qq|
+            UPDATE $table_name
+            SET $column_name = NULL
+            WHERE CAST($column_name AS CHAR(19)) = '0000-00-00 00:00:00';
+        |);
+    }
 }
 
 exit;
