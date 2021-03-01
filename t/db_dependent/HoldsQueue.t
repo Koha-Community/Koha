@@ -8,7 +8,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 56;
+use Test::More tests => 57;
 use Data::Dumper;
 
 use C4::Calendar;
@@ -1524,7 +1524,10 @@ sub test_queue {
 }
 
 subtest "Test _checkHoldPolicy" => sub {
+
     plan tests => 25;
+
+    $schema->storage->txn_begin;
 
     my $library1  = $builder->build_object( { class => 'Koha::Libraries' } );
     my $library2  = $builder->build_object( { class => 'Koha::Libraries' } );
@@ -1652,6 +1655,8 @@ subtest "Test _checkHoldPolicy" => sub {
     $item->{borrowerbranch} = $library2->id;
     is( C4::HoldsQueue::_checkHoldPolicy( $item, $request ), 1, "_checkHoldPolicy returns true if library is part of hold group with hfp = holdgroup" );
     $item->{borrowerbranch} = $library1->id;
+
+    $schema->storage->txn_rollback;
 };
 
 sub dump_records {
@@ -1660,12 +1665,10 @@ sub dump_records {
 }
 
 subtest 'Remove holds on check-in match' => sub {
+
     plan tests => 2;
 
     $schema->storage->txn_begin;
-
-    $dbh->do('DELETE FROM tmp_holdsqueue');
-    $dbh->do('DELETE FROM hold_fill_targets');
 
     my $lib = $builder->build_object( { class => 'Koha::Libraries' } );
 
@@ -1705,8 +1708,18 @@ subtest 'Remove holds on check-in match' => sub {
 
     C4::HoldsQueue::CreateQueue();
 
-    my $sth = $dbh->prepare("SELECT count(*) FROM tmp_holdsqueue");
-    $sth->execute();
+    my $sth = $dbh->prepare(q{
+        SELECT  COUNT(*)
+        FROM    tmp_holdsqueue q
+        INNER JOIN hold_fill_targets t
+        ON  q.borrowernumber = t.borrowernumber
+            AND q.biblionumber = t.biblionumber
+            AND q.itemnumber = t.itemnumber
+            AND q.item_level_request = t.item_level_request
+            AND q.holdingbranch = t.source_branchcode
+        WHERE t.reserve_id = ?
+    });
+    $sth->execute($hold->reserve_id);
     my ($count_1) = $sth->fetchrow_array;
 
     is( $count_1, 1, "Holds queue has one element" );
@@ -1716,7 +1729,7 @@ subtest 'Remove holds on check-in match' => sub {
     ModReserveAffect( $item->itemnumber, $hold->borrowernumber, 0,
         $hold->reserve_id );
 
-    $sth->execute();
+    $sth->execute($hold->reserve_id);
     my ($count_2) = $sth->fetchrow_array;
 
     is( $count_2, 0,
