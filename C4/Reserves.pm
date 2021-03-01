@@ -192,6 +192,7 @@ sub AddReserve {
     my $itemtype               = $params->{itemtype};
     my $non_priority           = $params->{non_priority};
     my $item_group_id          = $params->{item_group_id};
+    my $hold_group_id          = $params->{hold_group_id};
 
     $resdate ||= dt_from_string;
 
@@ -254,6 +255,7 @@ sub AddReserve {
             itemtype               => $itemtype,
             item_level_hold        => $checkitem    ? 1 : 0,
             non_priority           => $non_priority ? 1 : 0,
+            hold_group_id          => $hold_group_id,
         }
     )->store();
     $hold->set_waiting() if $found && $found eq 'W';
@@ -567,21 +569,21 @@ sub CanItemBeReserved {
                 borrowernumber => $patron->borrowernumber,
                 biblionumber   => $item->biblionumber,
             };
-            my $holds = Koha::Holds->search($search_params);
+            my $holds_count = Koha::Holds->count_holds($search_params);
             return _cache { status => "tooManyHoldsForThisRecord", limit => $holds_per_record }
-                if $holds->count() >= $holds_per_record;
+                if $holds_count >= $holds_per_record;
         }
     }
 
     if ( !$params->{ignore_hold_counts} && defined $holds_per_day && $holds_per_day ne '' ) {
-        my $today_holds = Koha::Holds->search(
+        my $today_holds_count = Koha::Holds->count_holds(
             {
                 borrowernumber => $patron->borrowernumber,
                 reservedate    => dt_from_string->date
             }
         );
         return _cache { status => 'tooManyReservesToday', limit => $holds_per_day }
-            if $today_holds->count() >= $holds_per_day;
+            if $today_holds_count >= $holds_per_day;
     }
 
     # we check if it's ok or not
@@ -1237,6 +1239,9 @@ sub ModReserveAffect {
 
     $hold->itemnumber($itemnumber);
 
+    my @reserve_ids;
+    push @reserve_ids, $hold->reserve_id;
+
     if ($transferToDo) {
         $hold->set_transfer();
     } elsif ( C4::Context->preference('HoldsNeedProcessingSIP')
@@ -1251,6 +1256,15 @@ sub ModReserveAffect {
         # Complete transfer if one exists
         my $transfer = $hold->item->get_transfer;
         $transfer->receive if $transfer;
+
+        # if this hold was part of a group, cancel other holds in the group
+        if ( $hold->hold_group_id ) {
+            my @holds = $hold->hold_group->holds->as_list;
+            foreach my $h (@holds) {
+                push @reserve_ids, $h->reserve_id;
+                $h->cancel unless $h->reserve_id == $hold->reserve_id;
+            }
+        }
     }
 
     _koha_notify_hold_changed($hold) if $notify_library;
@@ -1264,8 +1278,9 @@ sub ModReserveAffect {
         CartToShelf($itemnumber);
     }
 
-    my $std = $dbh->prepare(
-        q{
+    foreach my $id (@reserve_ids) {
+        my $std = $dbh->prepare(
+            q{
         DELETE  q, t
         FROM    tmp_holdsqueue q
         INNER JOIN hold_fill_targets t
@@ -1275,9 +1290,10 @@ sub ModReserveAffect {
             AND q.item_level_request = t.item_level_request
             AND q.holdingbranch = t.source_branchcode
         WHERE t.reserve_id = ?
+            }
+        );
+        $std->execute($id);
     }
-    );
-    $std->execute( $hold->reserve_id );
 
     logaction( 'HOLDS', 'MODIFY', $hold->reserve_id, $hold, undef, $original )
         if C4::Context->preference('HoldsLog');

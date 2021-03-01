@@ -206,6 +206,32 @@ sub filter_out_has_cancellation_requests {
     );
 }
 
+=head3 count_holds
+
+    $holds->count_holds( $search_params );
+
+This overwrites the default count().
+
+Return the number of holds, where a hold group is counted as one hold.
+
+=cut
+
+sub count_holds {
+    my ( $self, $search_params ) = @_;
+
+    $search_params = {
+        hold_group_id => undef,
+    };
+    my $holds_without_group_count = $self->search($search_params)->count();
+
+    $search_params = {
+        hold_group_id => { '!=', undef },
+    };
+    my $hold_groups_count = $self->search( $search_params, { group_by => 'me.hold_group_id' } )->count();
+
+    return $holds_without_group_count + $hold_groups_count;
+}
+
 =head2 Internal methods
 
 =head3 _type

@@ -1068,6 +1068,95 @@ subtest 'Test Koha::Hold::item_group' => sub {
     );
 };
 
+subtest 'count_holds' => sub {
+    plan tests => 3;
+    $schema->storage->txn_begin;
+
+    my $patron = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+        }
+    );
+    my $patron_id = $patron->borrowernumber;
+
+    my $hold1 = $builder->build_object(
+        {
+            class => 'Koha::Holds',
+            value => {
+                borrowernumber => $patron_id,
+                hold_group_id  => undef,
+            },
+        }
+    );
+
+    is( $patron->holds->count_holds, 1, 'Test patron has 1 hold.' );
+
+    my $hold_group = $builder->build_object(
+        {
+            class => 'Koha::HoldGroups',
+        }
+    );
+
+    my $hold2 = $builder->build_object(
+        {
+            class => 'Koha::Holds',
+            value => {
+                borrowernumber => $patron_id,
+                hold_group_id  => $hold_group->hold_group_id,
+            }
+        }
+    );
+    my $hold3 = $builder->build_object(
+        {
+            class => 'Koha::Holds',
+            value => {
+                borrowernumber => $patron_id,
+                hold_group_id  => $hold_group->hold_group_id,
+            }
+        }
+    );
+
+    is( $patron->holds->count_holds, 2, 'Test patron has 2 holds.' );
+
+    my $hold_group2 = $builder->build_object(
+        {
+            class => 'Koha::HoldGroups',
+        }
+    );
+
+    my $hold4 = $builder->build_object(
+        {
+            class => 'Koha::Holds',
+            value => {
+                borrowernumber => $patron_id,
+                hold_group_id  => $hold_group2->hold_group_id,
+            }
+        }
+    );
+    my $hold5 = $builder->build_object(
+        {
+            class => 'Koha::Holds',
+            value => {
+                borrowernumber => $patron_id,
+                hold_group_id  => $hold_group2->hold_group_id,
+            }
+        }
+    );
+    my $hold6 = $builder->build_object(
+        {
+            class => 'Koha::Holds',
+            value => {
+                borrowernumber => $patron_id,
+                hold_group_id  => $hold_group2->hold_group_id,
+            }
+        }
+    );
+
+    is( $patron->holds->count_holds, 3, 'Test patron has 3 holds.' );
+
+    $schema->storage->txn_rollback;
+};
+
 $schema->storage->txn_rollback;
 
 subtest 'filter_by_found() tests' => sub {

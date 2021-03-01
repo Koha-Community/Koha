@@ -40,6 +40,7 @@ use Koha::Plugins;
 use Koha::BackgroundJob::BatchUpdateBiblioHoldsQueue;
 
 use Koha::Exceptions;
+use Koha::HoldGroups;
 use Koha::Exceptions::Hold;
 
 use base qw(Koha::Object);
@@ -881,6 +882,14 @@ sub fill {
             C4::Log::logaction( 'HOLDS', 'FILL', $self->id, $self, undef, $original )
                 if C4::Context->preference('HoldsLog');
 
+            # if this hold was part of a group, cancel other holds in the group
+            if ( $self->hold_group_id ) {
+                my @holds = $self->hold_group->holds->as_list;
+                foreach my $h (@holds) {
+                    $h->cancel unless $h->reserve_id == $self->id;
+                }
+            }
+
             Koha::BackgroundJob::BatchUpdateBiblioHoldsQueue->new->enqueue(
                 { biblio_ids => [ $old_me->biblionumber ] } )
                 if C4::Context->preference('RealTimeHoldsQueue');
@@ -1050,6 +1059,25 @@ sub _set_default_expirationdate {
     {
         $self->expirationdate( dt_from_string( $self->reservedate )->add( $timeunit => $period ) );
     }
+}
+
+=head3 hold_group
+
+    my $hold_group = $hold->hold_group;
+    my $hold_group_id = $hold_group->id if $hold_group;
+
+Return the Koha::HoldGroup object of a hold if part of a hold group
+
+=cut
+
+sub hold_group {
+    my ($self) = @_;
+
+    if ( $self->hold_group_id ) {
+        return Koha::HoldGroups->find( $self->hold_group_id );
+    }
+
+    return;
 }
 
 =head3 _move_to_old
