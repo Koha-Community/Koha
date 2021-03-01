@@ -5060,6 +5060,18 @@ CREATE TABLE `old_issues` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Table structure for table `hold_groups`
+--
+DROP TABLE IF EXISTS `hold_groups`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE hold_groups (
+    hold_group_id int unsigned NOT NULL AUTO_INCREMENT,
+    PRIMARY KEY (hold_group_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Table structure for table `old_reserves`
 --
 
@@ -5093,6 +5105,7 @@ CREATE TABLE `old_reserves` (
   `itemtype` varchar(10) DEFAULT NULL COMMENT 'If record level hold, the optional itemtype of the item the patron is requesting',
   `item_level_hold` tinyint(1) NOT NULL DEFAULT 0 COMMENT 'Is the hold placed at item level',
   `non_priority` tinyint(1) NOT NULL DEFAULT 0 COMMENT 'Is this a non priority hold',
+  `hold_group_id` int unsigned NULL DEFAULT NULL COMMENT 'The id of a group of titles reservations fulfilled when one title is picked',
   PRIMARY KEY (`reserve_id`),
   KEY `old_reserves_borrowernumber` (`borrowernumber`),
   KEY `old_reserves_biblionumber` (`biblionumber`),
@@ -5105,7 +5118,8 @@ CREATE TABLE `old_reserves` (
   CONSTRAINT `old_reserves_ibfk_3` FOREIGN KEY (`itemnumber`) REFERENCES `items` (`itemnumber`) ON DELETE SET NULL ON UPDATE SET NULL,
   CONSTRAINT `old_reserves_ibfk_4` FOREIGN KEY (`itemtype`) REFERENCES `itemtypes` (`itemtype`) ON DELETE SET NULL ON UPDATE SET NULL,
   CONSTRAINT `old_reserves_ibfk_branchcode` FOREIGN KEY (`branchcode`) REFERENCES `branches` (`branchcode`) ON DELETE SET NULL ON UPDATE CASCADE,
-  CONSTRAINT `old_reserves_ibfk_ig` FOREIGN KEY (`item_group_id`) REFERENCES `item_groups` (`item_group_id`) ON DELETE SET NULL ON UPDATE SET NULL
+  CONSTRAINT `old_reserves_ibfk_ig` FOREIGN KEY (`item_group_id`) REFERENCES `item_groups` (`item_group_id`) ON DELETE SET NULL ON UPDATE SET NULL,
+  CONSTRAINT `old_reserves_ibfk_hg` FOREIGN KEY (`hold_group_id`) REFERENCES `hold_groups` (`hold_group_id`) ON DELETE SET NULL ON UPDATE SET NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -5662,6 +5676,7 @@ CREATE TABLE `reserves` (
   `itemtype` varchar(10) DEFAULT NULL COMMENT 'If record level hold, the optional itemtype of the item the patron is requesting',
   `item_level_hold` tinyint(1) NOT NULL DEFAULT 0 COMMENT 'Is the hold placed at item level',
   `non_priority` tinyint(1) NOT NULL DEFAULT 0 COMMENT 'Is this a non priority hold',
+  `hold_group_id` int unsigned NULL DEFAULT NULL COMMENT 'The id of a group of titles reservations fulfilled when one title is picked',
   PRIMARY KEY (`reserve_id`),
   KEY `priorityfoundidx` (`priority`,`found`),
   KEY `borrowernumber` (`borrowernumber`),
@@ -5677,7 +5692,8 @@ CREATE TABLE `reserves` (
   CONSTRAINT `reserves_ibfk_4` FOREIGN KEY (`branchcode`) REFERENCES `branches` (`branchcode`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `reserves_ibfk_5` FOREIGN KEY (`itemtype`) REFERENCES `itemtypes` (`itemtype`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `reserves_ibfk_6` FOREIGN KEY (`desk_id`) REFERENCES `desks` (`desk_id`) ON DELETE SET NULL ON UPDATE CASCADE,
-  CONSTRAINT `reserves_ibfk_ig` FOREIGN KEY (`item_group_id`) REFERENCES `item_groups` (`item_group_id`) ON DELETE SET NULL ON UPDATE CASCADE
+  CONSTRAINT `reserves_ibfk_ig` FOREIGN KEY (`item_group_id`) REFERENCES `item_groups` (`item_group_id`) ON DELETE SET NULL ON UPDATE CASCADE,
+  CONSTRAINT `reserves_ibfk_hg` FOREIGN KEY (`hold_group_id`) REFERENCES `hold_groups` (`hold_group_id`) ON DELETE SET NULL ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
