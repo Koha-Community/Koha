@@ -2,12 +2,12 @@
 [% USE AuthorisedValues %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Koha &rsaquo; Tools &rsaquo; Patron clubs &rsaquo;
+<title>
     [% IF club_template %]
         Modify club template [% club_template.name | html %]
     [% ELSE %]
         Create a new club template
-    [% END %]
+    [% END %] &rsaquo; Patron clubs &rsaquo; Tools &rsaquo; Koha
 </title>
 [% INCLUDE 'doc-head-close.inc' %]
 <style>
