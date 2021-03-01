@@ -2,7 +2,7 @@
 [% USE Asset %]
 [% USE Koha %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Koha &rsaquo; Cataloging &rsaquo; [% IF ( biblionumber ) %]Editing [% title | html %] (Record number [% biblionumber | html %])[% ELSE %]Add MARC record[% END %]</title>
+<title>[% IF ( biblionumber ) %]Editing [% title | html %] (Record number [% biblionumber | html %])[% ELSE %]Add MARC record[% END %] &rsaquo; Cataloging &rsaquo; Koha</title>
 [% INCLUDE 'doc-head-close.inc' %]
 [% Asset.js("lib/hc-sticky.js") | $raw %]
 [% INCLUDE 'select2.inc' %]

@@ -4,7 +4,7 @@
 [% USE KohaDates %]
 [% USE TablesSettings %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Koha &rsaquo; Cataloging &rsaquo; [% title | html %] [% IF ( author ) %] by [% author | html %][% END %] (Record #[% biblionumber | html %]) &rsaquo; Items</title>
+<title>Items &rsaquo; [% title | html %] [% IF ( author ) %] by [% author | html %][% END %] (Record #[% biblionumber | html %]) &rsaquo; Cataloging &rsaquo; Koha</title>
 [% INCLUDE 'doc-head-close.inc' %]
 [% Asset.css("css/addbiblio.css") | $raw %]
 [% INCLUDE 'datatables.inc' %]
