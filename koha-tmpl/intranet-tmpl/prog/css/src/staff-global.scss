@@ -1023,6 +1023,39 @@ details[open] {
     }
 }
 
+nav.breadcrumb {
+    background-color: #E6F0F2;
+    clear: both;
+    margin: 0;
+    padding: .8em .5em .8em 10px;
+    position: relative;
+}
+
+nav.breadcrumb ol {
+    margin: 0;
+    padding-left: 0;
+    list-style: none;
+}
+
+nav.breadcrumb li {
+    display: inline;
+}
+
+nav.breadcrumb li + li::before {
+    display: inline-block;
+    margin: 0 0.25em;
+    transform: rotate(15deg);
+    border-right: 0.1em solid currentColor;
+    height: 0.8em;
+    content: '';
+}
+
+nav.breadcrumb [aria-current="page"] {
+    color: #000;
+    font-weight: 700;
+    text-decoration: none;
+}
+
 #header {
     + #breadcrumbs {
         margin-top: 1em;
