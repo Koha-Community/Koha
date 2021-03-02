@@ -3,10 +3,10 @@
 [% USE KohaDates %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Koha &rsaquo; Tools &rsaquo; Manage staged MARC records
+<title>
     [% IF ( import_batch_id ) %]
-        &rsaquo; Batch [% import_batch_id | html %]
-    [% END %]
+        Batch [% import_batch_id | html %] &rsaquo; [% END %]
+    Manage staged MARC records &rsaquo; Tools &rsaquo; Koha
 </title>
 [% INCLUDE 'doc-head-close.inc' %]
 [% Asset.css("css/humanmsg.css") | $raw %]

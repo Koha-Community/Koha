@@ -5,7 +5,13 @@
 [% USE Branches %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Koha &rsaquo; Tools &rsaquo; Batch patron deletion and anonymization [% IF step == 2 %]&rsaquo; Confirm[% END %][% IF step == 3 %]&rsaquo; Finished[% END %]</title>
+<title>
+    [% IF step == 2 %]
+        Confirm &rsaquo; [% END %]
+    [% IF step == 3 %]
+        Finished &rsaquo; [% END %]
+    Batch patron deletion and anonymization &rsaquo; Tools &rsaquo; Koha
+</title>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 

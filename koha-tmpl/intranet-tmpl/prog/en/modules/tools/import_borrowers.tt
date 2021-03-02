@@ -4,7 +4,11 @@
 [% USE Branches %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Koha &rsaquo; Tools &rsaquo; Import patrons [% IF ( uploadborrowers ) %]&rsaquo; Results[% END %]</title>
+<title>
+    [% IF ( uploadborrowers ) %]
+        Results &rsaquo; [% END %]
+    Import patrons &rsaquo; Tools &rsaquo; Koha
+</title>
 [% INCLUDE 'doc-head-close.inc' %]
 <style>
     .yui-u fieldset.rows .widelabel { width: 12em; }

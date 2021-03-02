@@ -7,20 +7,19 @@
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>
-    Koha &rsaquo; Tools &rsaquo; Notices
     [% IF ( add_form or copy_form ) %]
         [% IF ( modify ) %]
-             &rsaquo; Modify notice
-        [% ELSE %]
-            &rsaquo; Add notice
-        [% END %]
+            Modify notice &rsaquo; [% ELSE %]
+            Add notice &rsaquo; [% END %]
     [% END %]
+
     [% IF ( add_validate or copy_validate) %]
-        &rsaquo; Notice added
-    [% END %]
+        Notice added &rsaquo; [% END %]
+
     [% IF ( delete_confirm ) %]
-        &rsaquo; Confirm deletion
-    [% END %]
+        Confirm deletion &rsaquo; [% END %]
+
+    Notices &rsaquo; Tools &rsaquo; Koha
 </title>
 [% INCLUDE 'doc-head-close.inc' %]
 <style>#preview_template .modal-dialog { width : 80%; } .spinner { display: none; } @media (max-width: 767px) { #preview_template { margin: 0; width : auto; } }</style>
