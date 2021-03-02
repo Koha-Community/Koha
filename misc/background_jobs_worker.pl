@@ -51,16 +51,32 @@ while (1) {
         # FIXME This means we need to have create the DB entry before
         # It could work in a first step, but then we will want to handle job that will be created from the message received
         my $job = Koha::BackgroundJobs->find($args->{job_id});
-        my $success = $job->process( $args );
 
-        $conn->ack( { frame => $frame } ); # FIXME depending on $success?
+        process_job( $job, $args );
+        $conn->ack( { frame => $frame } ); # FIXME depending on success?
+
     } else {
         my $jobs = Koha::BackgroundJobs->search({ status => 'new' });
         while ( my $job = $jobs->next ) {
             my $args = decode_json($job->data);
-            $job->process( { job_id => $job->id, %$args } );
+            process_job( $job, { job_id => $job->id, %$args } );
         }
         sleep 10;
     }
 }
 $conn->disconnect;
+
+sub process_job {
+    my ( $job, $args ) = @_;
+
+    my $pid;
+    if ( $pid = fork ) {
+        wait;
+        return;
+    }
+
+    die "fork failed!" unless defined $pid;
+
+    $job->process( $args );
+    exit;
+}
