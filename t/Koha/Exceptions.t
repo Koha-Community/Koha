@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 6;
+use Test::More tests => 7;
 use Test::MockObject;
 use Test::Exception;
 
@@ -194,6 +194,35 @@ subtest 'Koha::Exceptions::Object::NotInstantiated tests' => sub {
     throws_ok
         { Koha::Exceptions::Object::NotInstantiated->throw( "Manual message exception" ) }
         'Koha::Exceptions::Object::NotInstantiated',
+        'Exception is thrown :-D';
+    is( "$@", 'Manual message exception', 'Exception not stringified if manually passed' );
+};
+
+subtest 'Koha::Exceptions::Patron::Attribute::* tests' => sub {
+
+    plan tests => 5;
+
+    use_ok("Koha::Exceptions::Patron::Attribute");
+
+    my $code      = 'CODE';
+    my $attribute = 'ATTRIBUTE';
+
+    my $mocked_attribute = Test::MockObject->new();
+    $mocked_attribute->mock('code', sub { return $code } );
+    $mocked_attribute->mock('attribute', sub { return $attribute } );
+
+    throws_ok
+        { Koha::Exceptions::Patron::Attribute::NonRepeatable->throw(
+            attribute => $mocked_attribute ); }
+        'Koha::Exceptions::Patron::Attribute::NonRepeatable',
+        'Exception is thrown :-D';
+
+    # stringify the exception
+    is( "$@", "Tried to add more than one non-repeatable attributes. code=$code attribute=$attribute", 'Exception stringified correctly' );
+
+    throws_ok
+        { Koha::Exceptions::Patron::Attribute::NonRepeatable->throw( "Manual message exception" ) }
+        'Koha::Exceptions::Patron::Attribute::NonRepeatable',
         'Exception is thrown :-D';
     is( "$@", 'Manual message exception', 'Exception not stringified if manually passed' );
 };
