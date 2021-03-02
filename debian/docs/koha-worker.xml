@@ -1,0 +1,82 @@
+<article xmlns='http://docbook.org/ns/docbook'>
+<title>koha-worker</title>
+<info>
+<productname>Koha</productname> is the first free software library automation package.
+<author>
+  <orgname>The Koha Community</orgname>
+  <uri>https://koha-community.org/</uri>
+</author>
+</info>
+
+<refentry xml:id="koha-worker">
+
+  <refmeta>
+    <refentrytitle>koha-worker</refentrytitle>
+    <manvolnum>8</manvolnum>
+  </refmeta>
+
+  <refnamediv>
+    <refname>koha-worker</refname>
+    <refpurpose>Handle worker daemon for named Koha instances.</refpurpose>
+    <refclass>UNIX/Linux</refclass>
+  </refnamediv>
+
+  <refsynopsisdiv>
+    <cmdsynopsis>
+      <command>koha-worker</command>
+      <arg><option>--start</option>|<option>--stop</option>|<option>--restart</option></arg>
+      <arg><option>--status</option></arg>
+      <arg><option>--quiet</option>|<option>-q</option></arg>
+      <arg><option>-h</option>|<option>--help</option></arg>
+    </cmdsynopsis>
+  </refsynopsisdiv>
+
+  <refsect1><title>Options</title>
+  <para>All option switches are mutually exclusive</para>
+  <variablelist>
+    <varlistentry>
+      <term><option>--start</option></term>
+      <listitem>
+        <para>Start worker daemon for named Koha instances.</para>
+      </listitem>
+    </varlistentry>
+    <varlistentry>
+      <term><option>--stop</option></term>
+      <listitem>
+        <para>Stop worker daemon for named Koha instances.</para>
+      </listitem>
+    </varlistentry>
+    <varlistentry>
+      <term><option>--restart</option></term>
+      <listitem>
+        <para>Restart worker daemon for named Koha instances.</para>
+      </listitem>
+    </varlistentry>
+    <varlistentry>
+      <term><option>--status</option></term>
+      <listitem>
+        <para>Show status information about worker daemon for named Koha instances.</para>
+      </listitem>
+    </varlistentry>
+    <varlistentry>
+      <term><option>-v</option>|<option>--verbose</option></term>
+      <listitem>
+        <para>Enable verbose output.</para>
+      </listitem>
+    </varlistentry>
+    <varlistentry>
+      <term><option>-h</option>|<option>--help</option></term>
+      <listitem>
+        <para>This help.</para>
+      </listitem>
+    </varlistentry>
+  </variablelist>
+  </refsect1>
+
+  <refsect1><title>Description</title>
+  <para>This script handles worker daemons for Koha instances.</para>
+  </refsect1>
+
+</refentry>
+
+</article>
