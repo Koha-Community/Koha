@@ -338,7 +338,9 @@ subtest 'dbic_merge_sorting() tests' => sub {
     $t->get_ok('/dbic_merge_sorting_single')->status_is(200)
       ->json_is( '/a' => 'a', 'Existing values are kept (a)' )
       ->json_is( '/b' => 'b', 'Existing values are kept (b)' )->json_is(
-        '/order_by' => { '-desc' => 'uno' }
+        '/order_by' => [
+            { '-desc' => 'uno' }
+        ]
       );
 };
 
