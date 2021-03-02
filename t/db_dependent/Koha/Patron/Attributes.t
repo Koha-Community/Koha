@@ -33,7 +33,7 @@ my $builder = t::lib::TestBuilder->new;
 
 subtest 'store() repeatable attributes tests' => sub {
 
-    plan tests => 4;
+    plan tests => 5;
 
     $schema->storage->txn_begin;
 
@@ -84,6 +84,15 @@ subtest 'store() repeatable attributes tests' => sub {
     }
     'Koha::Exceptions::Patron::Attribute::NonRepeatable',
         'Exception thrown trying to store more than one non-repeatable attribute';
+
+    is(
+        "$@",
+        "Tried to add more than one non-repeatable attributes. code="
+          . $attribute_type_2->{code}
+          . " attribute=Bar",
+        'Exception stringified correctly, attribute passed correctly'
+    );
+
     my $attributes = Koha::Patron::Attributes->search(
         { borrowernumber => $patron, code => $attribute_type_2->{code} } );
     is( $attributes->count, 1, '1 non-repeatable attribute stored' );
@@ -95,7 +104,7 @@ subtest 'store() repeatable attributes tests' => sub {
 
 subtest 'store() unique_id attributes tests' => sub {
 
-    plan tests => 4;
+    plan tests => 5;
 
     $schema->storage->txn_begin;
 
@@ -148,6 +157,15 @@ subtest 'store() unique_id attributes tests' => sub {
     }
     'Koha::Exceptions::Patron::Attribute::UniqueIDConstraint',
         'Exception thrown trying to store more than one unique attribute';
+
+    is(
+        "$@",
+        "Your action breaks a unique constraint on the attribute. code="
+          . $attribute_type_2->{code}
+          . " attribute=Foo",
+        'Exception stringified correctly, attribute passed correctly'
+    );
+
     my $attributes = Koha::Patron::Attributes->search(
         { borrowernumber => $patron_1, code => $attribute_type_2->{code} } );
     is( $attributes->count, 1, '1 unique attribute stored' );
