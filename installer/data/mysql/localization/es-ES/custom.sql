@@ -19,7 +19,7 @@
 UPDATE systempreferences SET value = 'padre|madre' WHERE variable = 'borrowerRelationship';
 UPDATE systempreferences SET value = 'Sr.|Sra.' WHERE variable = 'BorrowersTitles';
 UPDATE systempreferences SET value = 'FR' WHERE variable = 'CurencyFormat';
-UPDATE systempreferences SET value = 'US' WHERE variable = 'AddressFormat';
+UPDATE systempreferences SET value = 'us' WHERE variable = 'AddressFormat';
 UPDATE systempreferences SET value = 'metric' WHERE variable = 'dateformat';
 UPDATE systempreferences SET value = 'ddc' WHERE variable = 'DefaultClassificationSource';
 UPDATE systempreferences SET value = 'Bienvenido al catálogo!' WHERE variable = 'OpacMainUserBlock';
