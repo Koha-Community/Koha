@@ -85,7 +85,11 @@
                 </p>
                 [% IF ( biblio.author ) %]<p> by [% biblio.author | html %]</p>[% END %]
                 [% IF ( biblio.biblioitem.editionstatement ) %]<p>[% biblio.biblioitem.editionstatement | html %]</p>[% END %]
-                [% IF ( biblio.biblioitem.publicationyear ) %]<p>[% biblio.biblioitem.publicationyear | html %]</p>[% END %]
+                [% IF ( Koha.Preference('marcflavour') == 'MARC21' ) %]
+                    [% IF ( biblio.copyrightdate ) %]<p>[% biblio.copyrightdate | html %]</p>[% END %]
+                [% ELSE %]
+                    [% IF ( biblio.biblioitem.publicationyear ) %]<p>[% biblio.biblioitem.publicationyear | html %]</p>[% END %]
+                [% END %]
             </td>
         [% ELSE %]
             <td>"</td>
