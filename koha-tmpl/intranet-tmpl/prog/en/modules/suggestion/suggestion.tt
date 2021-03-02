@@ -1270,7 +1270,7 @@
                 [% FOREACH suggestion IN suggestions %]
                     [% IF ( suggestion.suggestions_loop ) %]
                         KohaTable("table_[% loop.count| html %]", {
-                            "sorting": [[ 1, "asc" ]],
+                            "sorting": [[ 3, "asc" ]],
                             "autoWidth": false,
                         }, columns_settings );
                     [% END %]
