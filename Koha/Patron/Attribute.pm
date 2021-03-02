@@ -148,7 +148,7 @@ sub _check_repeatable {
                 code           => $self->code
             }
             )->count;
-        Koha::Exceptions::Patron::Attribute::NonRepeatable->throw()
+        Koha::Exceptions::Patron::Attribute::NonRepeatable->throw( attribute => $self )
             if $attr_count > 0;
     }
 
@@ -176,7 +176,7 @@ sub check_unique_id {
         my $unique_count = Koha::Patron::Attributes
             ->search( $params )
             ->count;
-        Koha::Exceptions::Patron::Attribute::UniqueIDConstraint->throw()
+        Koha::Exceptions::Patron::Attribute::UniqueIDConstraint->throw( attribute => $self )
             if $unique_count > 0;
     }
 
