@@ -82,7 +82,7 @@ use C4::Members;
 use C4::Search qw/FindDuplicate/;
 
 #needed for z3950 import:
-use C4::ImportBatch qw/GetImportRecordMarc SetImportRecordStatus/;
+use C4::ImportBatch qw/GetImportRecordMarc SetImportRecordStatus SetMatchedBiblionumber/;
 
 use Koha::Acquisition::Booksellers;
 use Koha::Acquisition::Currencies;
