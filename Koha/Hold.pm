@@ -562,6 +562,13 @@ sub cancel {
     return $self;
 }
 
+=head3 store
+
+Override base store method to set default
+expirationdate for holds.
+
+=cut
+
 sub store {
     my ($self) = @_;
 
