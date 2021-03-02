@@ -640,9 +640,9 @@ jQuery.fn.dataTable.ext.errMode = function(settings, note, message) {
                                         var order_by       = options.columns[order_col].data;
                                         order_by           = order_by.split(':');
                                         var order_dir      = e.dir == 'asc' ? '+' : '-';
-                                        orderArray.push(order_by.map(x => order_dir + (!x.includes('.')?'me.'+x:x)).join(','));
+                                        Array.prototype.push.apply(orderArray,order_by.map(x => order_dir + (!x.includes('.')?'me.'+x:x)));
                                     });
-                                    dataSet._order_by = orderArray.join(',');
+                                    dataSet._order_by = orderArray.filter((v, i, a) => a.indexOf(v) === i).join(',');
                                 }
 
                                 return dataSet;
