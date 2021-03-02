@@ -26,7 +26,7 @@ use C4::Koha;
 
 use Koha::Authority::Types;
 use Koha::AuthorisedValues;
-use Koha::AuthSubfieldStructures;
+use Koha::Authority::Subfields;
 
 use List::MoreUtils qw( uniq );
 
@@ -104,7 +104,7 @@ if ($op eq 'add_form') {
 	closedir DIR;
 
     my @loop_data;
-    my $asses = Koha::AuthSubfieldStructures->search({ tagfield => $tagfield, authtypecode => $authtypecode}, {order_by => 'display_order'})->unblessed;
+    my $asses = Koha::Authority::Subfields->search({ tagfield => $tagfield, authtypecode => $authtypecode}, {order_by => 'display_order'})->unblessed;
     my $i;
     for my $ass ( @$asses ) {
         my %row_data = %$ass;
@@ -181,7 +181,7 @@ if ($op eq 'add_form') {
 		my $hidden = $ohidden[$i]; #collate from 3 hiddens;
 		my $isurl = $input->param("isurl$i")?1:0;
         if ($liblibrarian) {
-            my $ass = Koha::AuthSubfieldStructures->find(
+            my $ass = Koha::Authority::Subfields->find(
                 {
                     authtypecode => $authtypecode,
                     tagfield     => $tagfield,
@@ -209,7 +209,7 @@ if ($op eq 'add_form') {
                 $ass->update($attributes);
             }
             else {
-                Koha::AuthSubfieldStructure->new(
+                Koha::Authority::Subfield->new(
                     {
                         authtypecode => $authtypecode,
                         tagfield     => $tagfield,
@@ -229,7 +229,7 @@ if ($op eq 'add_form') {
 # called by default form, used to confirm deletion of data in DB
 }
 elsif ( $op eq 'delete_confirm' ) {
-  my $ass = Koha::AuthSubfieldStructures->find(
+  my $ass = Koha::Authority::Subfields->find(
       {
           authtypecode => $authtypecode,
           tagfield     => $tagfield,
@@ -242,7 +242,7 @@ elsif ( $op eq 'delete_confirm' ) {
   );
 }
 elsif ( $op eq 'delete_confirmed' ) {
-    Koha::AuthSubfieldStructures->find(
+    Koha::Authority::Subfields->find(
         {
             authtypecode => $authtypecode,
             tagfield     => $tagfield,
@@ -253,7 +253,7 @@ elsif ( $op eq 'delete_confirmed' ) {
     exit;
 }
 else {    # DEFAULT
-    my $ass = Koha::AuthSubfieldStructures->search(
+    my $ass = Koha::Authority::Subfields->search(
         {
             tagfield      => { -like => "$tagfield%" },
             authtypecode  => $authtypecode,
