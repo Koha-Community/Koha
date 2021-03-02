@@ -184,7 +184,7 @@ function confirmnotdup(redirect){
 
 <div class="main container-fluid">
     <div class="row">
-        <div class="col-md-8 col-md-offset-2">
+        <div class="col-md-10 col-md-offset-1">
 
 [% IF ( authid ) %]
 <h1>Modify authority #[% authid | html %] [% authtypetext | html %]</h1>
@@ -252,15 +252,23 @@ function confirmnotdup(redirect){
             </ul>
         [% END %]
         [% previous = innerloo.tag %]
-        <ul class="sortable_field">
+        [% IF ( innerloo.repeatable ) %]
+            <ul class="sortable_field">
+        [% ELSE %]
+            <ul>
+        [% END %]
     [% END %]
-    <li class="tag clearfix" id="tag_[% innerloo.tag | html %]_[% innerloo.index | html %][% innerloo.random | html %]">
+    [% IF ( innerloo.repeatable ) %]
+        <li class="tag sortable_tag clearfix" id="tag_[% innerloo.tag | html %]_[% innerloo.index | html %][% innerloo.random | html %]">
+    [% ELSE %]
+        <li class="tag clearfix" id="tag_[% innerloo.tag | html %]_[% innerloo.index | html %][% innerloo.random | html %]">
+    [% END %]
         <div class="tag_title" id="div_indicator_tag_[% innerloo.tag | html %]_[% innerloo.index | html %][% innerloo.random | html %]">
         [% UNLESS hide_marc %]
             [% IF advancedMARCEditor %]
                 <a href="#" tabindex="1" class="tagnum" title="[% innerloo.tag_lib | html %] - Click to Expand this Tag" onclick="ExpandField('tag_[% innerloo.tag | html %]_[% innerloo.index | html %][% innerloo.random | html %]'); return false;">[% innerloo.tag | html %]</a>
             [% ELSE %]
-                <span title="[% innerloo.tag_lib | html %]">[% innerloo.tag | html %]</span>
+                <span class="tagnum" title="[% innerloo.tag_lib | html %]">[% innerloo.tag | html %]</span>
             [% END %]
                 [% IF ( innerloo.fixedfield ) %]
                     <input type="text"
@@ -329,23 +337,17 @@ function confirmnotdup(redirect){
                     <a href="#" tabindex="1" class="buttonMinus" onclick="UnCloneField('tag_[% innerloo.tag | html %]_[% innerloo.index | html %][% innerloo.random | html %]'); return false;" title="Delete this Tag">
                         <img src="[% interface | html %]/[% theme | html %]/img/delete-tag.png" alt="Delete this Tag" />
                     </a>
-                </span>
+                </span> <!-- /.field_controls -->
 
-        </div>
+        </div> <!-- /div.tag_title -->
 
         <ul class="sortable_subfield">
         [% FOREACH subfield_loo IN innerloo.subfield_loop %]
             <!--  One line on the marc editor -->
             <li class="subfield_line" style="[% subfield_loo.visibility | html %]" id="subfield[% subfield_loo.tag | html %][% subfield_loo.subfield | html %][% subfield_loo.random | html %]">
 
-                [% UNLESS advancedMARCEditor %]
-                    [% IF ( subfield_loo.fixedfield ) %]<label for="tag_[% subfield_loo.tag | html %]_subfield_[% subfield_loo.subfield | html %]_[% subfield_loo.index | html %]_[% subfield_loo.index_subfield | html %]" style="display:none;" class="labelsubfield">
-                    [% ELSE %]<label for="tag_[% subfield_loo.tag | html %]_subfield_[% subfield_loo.subfield | html %]_[% subfield_loo.index | html %]_[% subfield_loo.index_subfield | html %]" class="labelsubfield">
-                    [% END %]
-                [% END %]
-                
                 [% UNLESS hide_marc %]
-                <span class="subfieldcode">
+                <div class="subfieldcode">
                         <input type="text"
                             title="[% subfield_loo.marc_lib | $raw %]"
                             style=" [% IF ( subfield_loo.fixedfield ) %]display:none; [% END %]border:0;"
@@ -355,7 +357,7 @@ function confirmnotdup(redirect){
                             maxlength="1"
                             class="flat"
                             tabindex="0" />
-                </span>
+                </div>
                 [% ELSE %]
                     <input type="hidden"
                         name="tag_[% subfield_loo.tag | html %]_code_[% subfield_loo.subfield | html %]_[% subfield_loo.index | html %]_[% subfield_loo.index_subfield | html %]"
@@ -363,14 +365,23 @@ function confirmnotdup(redirect){
                 [% END %]
 
                 [% UNLESS advancedMARCEditor %]
-                    [% IF ( subfield_loo.mandatory ) %]<span class="subfield subfield_mandatory">[% ELSE %]<span class="subfield">[% END %]
-                        [% subfield_loo.marc_lib | $raw %]
-                        [% IF ( subfield_loo.mandatory ) %]<span class="mandatory_marker" title="This field is mandatory">*</span>[% END %]
-                    </span>
-                    </label>
+                    [% IF ( subfield_loo.mandatory ) %]
+                        <div class="subfield subfield_mandatory">
+                    [% ELSE %]
+                        <div class="subfield">
+                    [% END %]
+                        [% IF ( subfield_loo.fixedfield ) %]
+                            <label for="tag_[% subfield_loo.tag | html %]_subfield_[% subfield_loo.subfield | html %]_[% subfield_loo.index | html %]_[% subfield_loo.index_subfield | html %]" style="display:none;" class="labelsubfield">
+                        [% ELSE %]
+                            <label for="tag_[% subfield_loo.tag | html %]_subfield_[% subfield_loo.subfield | html %]_[% subfield_loo.index | html %]_[% subfield_loo.index_subfield | html %]" class="labelsubfield">
+                        [% END %]
+                            [% subfield_loo.marc_lib | $raw %]
+                        </label>
+                    </div>
                 [% END %]
-                
+
                 [% SET mv = subfield_loo.marc_value %]
+                <div id="field_marceditor[% subfield_loo.tag | html %][% subfield_loo.subfield | html %][% subfield_loo.random | html %]" class="field_marceditor">
                 [% IF ( mv.type == 'select' ) %]
                     [% IF mv.category AND CAN_user_parameters_manage_auth_values %]
                         <select name="[%- mv.name | html -%]" tabindex="1" size="1" class="input_marceditor" id="[%- mv.id | html -%]" data-category="[% mv.category | html %]">
@@ -388,15 +399,8 @@ function confirmnotdup(redirect){
                      </select>
                 [% ELSIF ( mv.type == 'text1' ) %]
                     <input type="text" id="[%- mv.id | html -%]" name="[%- mv.id | html -%]" value="[%- mv.value | html -%]" class="input_marceditor" tabindex="1" />
-                    <a href="#" class="buttonDot" onclick="openAuth(this.parentNode.getElementsByTagName('input')[1].id,'[%- mv.authtypecode | html -%]','auth'); return false;" tabindex="1" title="Tag editor">...</a>
                 [% ELSIF ( mv.type == 'text2' ) %]
                     <input type="text" id="[%- mv.id | html -%]" size="67" maxlength="[%- mv.maxlength | html -%]" name="[%- mv.name | html -%]" value="[%- mv.value | html -%]" class="input_marceditor" />
-                    [% IF mv.noclick %]
-                        <a href="#" class="buttonDot tag_editor disabled" tabindex="-1" title="No popup">...</a>
-                    [% ELSE %]
-                        <a href="#" id="buttonDot_[% mv.id | html %]" class="buttonDot tag_editor" title="Tag editor">...</a>
-                    [% END %]
-                    [% mv.javascript | $raw %]
                 [% ELSIF ( mv.type == 'text' ) %]
                     <input type="text" id="[%- mv.id | html -%]" name="[%- mv.name | html -%]" value="[%- mv.value | html -%]" class="input_marceditor" tabindex="1" size="67" maxlength="[%- mv.maxlength | html -%]" />
                 [% ELSIF ( mv.type == 'textarea' ) %]
@@ -406,17 +410,32 @@ function confirmnotdup(redirect){
                 [% ELSIF ( mv.type == 'hidden_simple' ) %]
                     <input type="hidden" name="[%- mv.name | html -%]" />
                 [% END %]
-
-                <span class="subfield_controls">
-                [% IF ( subfield_loo.repeatable ) %]
-                    <a href="#" class="buttonPlus" tabindex="1" onclick="CloneSubfield('subfield[% subfield_loo.tag | html %][% subfield_loo.subfield | html %][% subfield_loo.random | html %]','[% advancedMARCEditor | html %]'); return false;">
-                        <img src="[% interface | html %]/[% theme | html %]/img/clone-subfield.png" alt="Clone" title="Clone this subfield" />
-                    </a>
-                    <a href="#" class="buttonMinus" tabindex="1" onclick="UnCloneField('subfield[% subfield_loo.tag | html %][% subfield_loo.subfield | html %][% subfield_loo.random | html %]'); return false;">
-                        <img src="[% interface | html %]/[% theme | html %]/img/delete-subfield.png" alt="Delete" title="Delete this subfield" />
-                    </a>
+                </div>
+                [% IF ( subfield_loo.mandatory ) %]
+                    <div class="subfield_loop_mandatory">
+                        <span class="required">Required</span>
+                    </div>
                 [% END %]
-                </span>
+                <div class="subfield_controls">
+                    [% IF ( mv.type == 'text1' ) %]
+                        <a href="#" class="buttonDot tag_editor" onclick="openAuth(this.parentNode.parentNode.getElementsByTagName('input')[1].id,'[%- mv.authtypecode | html -%]','auth'); return false;" tabindex="1" title="Tag editor">Tag editor</a>
+                    [% ELSIF ( mv.type == 'text2' ) %]
+                        [% IF mv.noclick %]
+                            <a href="#" class="buttonDot tag_editor disabled" tabindex="-1" title="No popup">...</a>
+                        [% ELSE %]
+                            <a href="#" id="buttonDot_[% mv.id | html %]" class="buttonDot tag_editor" title="Tag editor">...</a>
+                        [% END %]
+                        [% mv.javascript | $raw %]
+                    [% END %]
+                    [% IF ( subfield_loo.repeatable ) %]
+                        <a href="#" class="buttonPlus" tabindex="1" onclick="CloneSubfield('subfield[% subfield_loo.tag | html %][% subfield_loo.subfield | html %][% subfield_loo.random | html %]','[% advancedMARCEditor | html %]'); return false;">
+                            <img src="[% interface | html %]/[% theme | html %]/img/clone-subfield.png" alt="Clone" title="Clone this subfield" />
+                        </a>
+                        <a href="#" class="buttonMinus" tabindex="1" onclick="UnCloneField('subfield[% subfield_loo.tag | html %][% subfield_loo.subfield | html %][% subfield_loo.random | html %]'); return false;">
+                            <img src="[% interface | html %]/[% theme | html %]/img/delete-subfield.png" alt="Delete" title="Delete this subfield" />
+                        </a>
+                    [% END %]
+                </div>
                                 </li>
                                 <!-- End of the line -->
                             [% END %]
