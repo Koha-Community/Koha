@@ -23581,6 +23581,26 @@ if( CheckVersion( $DBversion ) ) {
     NewVersion( $DBversion, 27808, "Adjust items.onloan if needed" );
 }
 
+$DBversion = '20.12.00.019';
+if( CheckVersion( $DBversion ) ) {
+
+    if( !column_exists( 'branchtransfers', 'datecancelled' ) ) {
+        $dbh->do(q|
+            ALTER TABLE `branchtransfers`
+            ADD COLUMN `datecancelled` datetime default NULL AFTER `datearrived`
+        |);
+    }
+
+    if( !column_exists( 'branchtransfers', 'cancellation_reason' ) ) {
+        $dbh->do(q|
+            ALTER TABLE `branchtransfers`
+            ADD COLUMN `cancellation_reason` ENUM('Manual', 'StockrotationAdvance', 'StockrotationRepatriation', 'ReturnToHome', 'ReturnToHolding', 'RotatingCollection', 'Reserve', 'LostReserve', 'CancelReserve') DEFAULT NULL AFTER `reason`
+        |);
+    }
+
+    NewVersion( $DBversion, 26057, "Add datecancelled field to branchtransfers");
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 my $update_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/atomicupdate/';
