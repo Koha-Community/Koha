@@ -214,7 +214,11 @@ sub _add_default_csrf_params {
     my ( $params ) = @_;
     $params->{session_id} //= '';
     if( !$params->{id} ) {
-        $params->{id} = Encode::encode( 'UTF-8', C4::Context->userenv->{id} . $params->{session_id} );
+        if( defined( C4::Context->userenv ) ) {
+            $params->{id} = Encode::encode( 'UTF-8', C4::Context->userenv->{id} . $params->{session_id} );
+        } else {
+            $params->{id} = Encode::encode( 'UTF-8', $params->{session_id} );
+        }
     } else {
         $params->{id} .= $params->{session_id};
     }
