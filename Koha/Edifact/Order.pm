@@ -389,18 +389,23 @@ sub order_line {
         foreach my $item (@linked_itemnumbers) {
             my $i_obj = $schema->resultset('Item')->find( $item->itemnumber );
             if ( defined $i_obj ) {
-                push @items, $i_obj;
+                push @items, {
+                    branchcode     => $item->{branchcode},
+                    itype          => $item->{itype},
+                    location       => $item->{location},
+                    itemcallnumber => $item->{itemcallnumber},
+                };
             }
         }
     }
     else {
         my $item_hash = {
-            itemtype  => $biblioitem->itemtype,
-            shelfmark => $biblioitem->cn_class,
+            itemtype       => $biblioitem->itemtype,
+            itemcallnumber => $biblioitem->cn_class,
         };
         my $branch = $orderline->basketno->deliveryplace;
         if ($branch) {
-            $item_hash->{branch} = $branch;
+            $item_hash->{branchcode} = $branch;
         }
         for ( 1 .. $orderline->quantity ) {
             push @items, $item_hash;
@@ -413,10 +418,10 @@ sub order_line {
     for my $item (@items) {
         push @{$item_fields},
           {
-            branchcode     => $item->homebranch->branchcode,
-            itype          => $item->itype,
-            location       => $item->location,
-            itemcallnumber => $item->itemcallnumber,
+            branchcode     => $item->{branchcode},
+            itype          => $item->{itype},
+            location       => $item->{location},
+            itemcallnumber => $item->{itemcallnumber},
           };
     }
     $self->add_seg(
