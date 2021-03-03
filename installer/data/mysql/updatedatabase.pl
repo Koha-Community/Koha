@@ -23601,6 +23601,22 @@ if( CheckVersion( $DBversion ) ) {
     NewVersion( $DBversion, 26057, "Add datecancelled field to branchtransfers");
 }
 
+$DBversion = '20.12.00.020';
+if ( CheckVersion($DBversion) ) {
+
+    # Update daterequested from datesent for stockrotation
+    $dbh->do(q|
+            UPDATE `branchtransfers`
+            SET
+              `daterequested` = `datesent`,
+              `datesent` = NULL
+            WHERE `reason` LIKE 'Stockrotation%'
+            AND   `datearrived` IS NULL
+    |);
+
+    NewVersion( $DBversion, 24446, "Update stockrotation 'daterequested' field in transfers table" );
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 my $update_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/atomicupdate/';
