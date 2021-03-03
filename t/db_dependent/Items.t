@@ -981,7 +981,7 @@ subtest 'Split subfields in Item2Marc (Bug 21774)' => sub {
 };
 
 subtest 'ModItemFromMarc' => sub {
-    plan tests => 5;
+    plan tests => 6;
     $schema->storage->txn_begin;
 
     my $builder = t::lib::TestBuilder->new;
@@ -1035,6 +1035,47 @@ subtest 'ModItemFromMarc' => sub {
         $marc = C4::Items::Item2Marc( { %{$item->unblessed}, itemcallnumber => 'yyy' }, $item->biblionumber );
         ModItemFromMarc( $marc, $item->biblionumber, $item->itemnumber );
         is( $item->get_from_storage->cn_sort, 'YYY', 'cn_sort has been updated' );
+    };
+
+    subtest 'permanent_location' => sub {
+        plan tests => 6;
+
+        my $item = $builder->build_sample_item;
+
+        # By default, setting location to something new should set permanent location to the same thing
+        # with the usual exceptions
+        $item->set({ location => 'A', permanent_location => 'A' })->store;
+        is( $item->location, 'A', 'initial location set as expected' );
+        is( $item->permanent_location, 'A', 'initial permanent location set as expected' );
+
+        $item->location('B');
+        my $marc = C4::Items::Item2Marc( $item->unblessed, $item->biblionumber );
+        ModItemFromMarc( $marc, $item->biblionumber, $item->itemnumber );
+
+        $item = $item->get_from_storage;
+        is( $item->location, 'B', 'new location set as expected' );
+        is( $item->permanent_location, 'B', 'new permanent location set as expected' );
+
+        # Added a marc mapping for permanent location, allows it to be edited independently
+        my $mapping = Koha::MarcSubfieldStructure->new(
+            {
+                frameworkcode => q{},
+                tagfield      => '952',
+                tagsubfield   => 'C',
+                kohafield     => 'items.permanent_location',
+                repeatable    => 0
+            }
+        )->store;
+        Koha::Caches->get_instance->clear_from_cache( "MarcSubfieldStructure-" );
+
+        # Now if we change location, and also pass in a permanent location
+        # the permanent_location will not be overwritten by location
+        $item->location('C');
+        $marc = C4::Items::Item2Marc( $item->unblessed, $item->biblionumber );
+        ModItemFromMarc( $marc, $item->biblionumber, $item->itemnumber );
+        $item = $item->get_from_storage;
+        is( $item->location, 'C', 'next new location set as expected' );
+        is( $item->permanent_location, 'B', 'permanent location remains unchanged as expected' );
     };
 
     $schema->storage->txn_rollback;
