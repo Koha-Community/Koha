@@ -95,7 +95,7 @@ function verify_images() {
 
         /* If no slides contain any cover images, remove the container */
         if( $(".cover-image:visible", slide).length < 1 ){
-            slide.remove();
+            slide.html('<div class="no-image">' + __("No cover image available") + '</div>');
         }
     });
 }

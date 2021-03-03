@@ -436,8 +436,8 @@
             [% IF ( AdlibrisEnabled && SEARCH_RESULT.normalized_isbn ) %]
                 <div id="adlibris-coverimg-[% SEARCH_RESULT.biblionumber | html %]" class="cover-image adlibris-coverimg">
                     <a href="[% AdlibrisURL | url %]?isbn=[% SEARCH_RESULT.normalized_isbn | uri %]"><img src="[% AdlibrisURL | url %]?isbn=[% SEARCH_RESULT.normalized_isbn | uri %]" class="adlibris-cover" alt="Adlibris cover image" /></a>
+                    <div class="hint">Adlibris cover image</div>
                 </div>
-                <div class="hint">Adlibris cover image</div>
             [% END %]
 
             [% IF ( AmazonCoverImages && SEARCH_RESULT.normalized_isbn ) %]
