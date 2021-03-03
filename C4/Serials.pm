@@ -1355,6 +1355,9 @@ sub ModSubscription {
             mana_id           => $mana_id,
         }
     )->store;
+    # FIXME Must be $subscription->serials
+    # FIXME We shouldn't need serial.subscription (instead use serial->subscription->biblionumber)
+    Koha::Serials->search({ subscriptionid => $subscriptionid })->update({ biblionumber => $biblionumber });
 
     logaction( "SERIAL", "MODIFY", $subscriptionid, "" ) if C4::Context->preference("SubscriptionLog");
 
