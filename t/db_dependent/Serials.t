@@ -419,8 +419,8 @@ subtest "PreserveSerialNotes preference" => sub {
 
 };
 
-subtest "NewSubscription" => sub {
-    plan tests => 1;
+subtest "NewSubscription|ModSubscription" => sub {
+    plan tests => 4;
     my $subscriptionid = NewSubscription(
         "",      "",     "", "", $budget_id, $biblionumber,
         '2013-01-01', $frequency_id, "", "",  "",
@@ -430,4 +430,25 @@ subtest "NewSubscription" => sub {
         "", "", 0,          "",         '2013-12-31', 0
     );
     ok($subscriptionid, "Sending empty string instead of undef to reflect use of the interface");
+
+    my $subscription = Koha::Subscriptions->find($subscriptionid);
+    my $serials = Koha::Serials->search({ subscriptionid => $subscriptionid });
+    is( $serials->count, 1, "NewSubscription created a first serial" );
+
+    my $biblio_2 = $builder->build_sample_biblio;
+    my $subscription_info = $subscription->unblessed;
+    $subscription_info->{biblionumber} = $biblio_2->biblionumber;
+    ModSubscription( @$subscription_info{qw(
+        librarian branchcode aqbooksellerid cost aqbudgetid startdate
+        periodicity firstacquidate irregularity numberpattern locale
+        numberlength weeklength monthlength lastvalue1 innerloop1 lastvalue2
+        innerloop2 lastvalue3 innerloop3 status biblionumber callnumber notes
+        letter manualhistory internalnotes serialsadditems staffdisplaycount
+        opacdisplaycount graceperiod location enddate subscriptionid
+        skip_serialseq
+    )} );
+
+    $serials = Koha::Serials->search({ subscriptionid => $subscriptionid });
+    is( $serials->count, 1, "Still only one serial" );
+    is( $serials->next->biblionumber, $biblio_2->biblionumber, 'ModSubscription should have updated serial.biblionumber');
 };
