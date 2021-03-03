@@ -112,6 +112,21 @@ sub description {
     return $self->attribute;
 }
 
+=head3 to_api_mapping
+
+This method returns the mapping for representing a Koha::Patron::Attribute object
+on the API.
+
+=cut
+
+sub to_api_mapping {
+    return {
+        id             => 'extended_attribute_id',
+        attribute      => 'value',
+        borrowernumber => undef,
+        code           => 'type'
+    };
+}
 
 =head2 Internal methods
 
