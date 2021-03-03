@@ -44,61 +44,23 @@ sub list {
 
     return try {
 
-        my $patrons_rs = Koha::Patrons->new;
-        my $args = $c->validation->output;
-        my $attributes = {};
+        my $query = {};
+        my $restricted = delete $c->validation->output->{restricted};
+        $query->{debarred} = { '!=' => undef }
+            if $restricted;
 
-        # Extract reserved params
-        my ( $filtered_params, $reserved_params ) = $c->extract_reserved_params($args);
+        my $patrons_rs = Koha::Patrons->search($query);
+        my $patrons    = $c->objects->search( $patrons_rs );
 
-        my $restricted = delete $filtered_params->{restricted};
-
-        # Merge sorting into query attributes
-        $c->dbic_merge_sorting(
-            {
-                attributes => $attributes,
-                params     => $reserved_params,
-                result_set => $patrons_rs
-            }
+        return $c->render(
+            status  => 200,
+            openapi => $patrons
         );
-
-        # Merge pagination into query attributes
-        $c->dbic_merge_pagination(
-            {
-                filter => $attributes,
-                params => $reserved_params
-            }
-        );
-
-        if ( defined $filtered_params ) {
-
-            # Apply the mapping function to the passed params
-            $filtered_params = $patrons_rs->attributes_from_api($filtered_params);
-            $filtered_params = $c->build_query_params( $filtered_params, $reserved_params );
-        }
-
-        # translate 'restricted' => 'debarred'
-        $filtered_params->{debarred} = { '!=' => undef }
-          if $restricted;
-
-        my $patrons = $patrons_rs->search( $filtered_params, $attributes );
-        my $total   = $patrons_rs->search->count;
-
-        $c->add_pagination_headers(
-            {
-                total      => ($patrons->is_paged ? $patrons->pager->total_entries : $patrons->count),
-                base_total => $total,
-                params => $args,
-            }
-        );
-
-        return $c->render( status => 200, openapi => $patrons->to_api );
     }
     catch {
         $c->unhandled_exception($_);
     };
 }
-
 
 =head3 get
 
