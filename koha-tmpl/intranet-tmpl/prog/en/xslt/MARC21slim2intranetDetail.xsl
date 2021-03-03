@@ -290,11 +290,15 @@
             <xsl:when test="marc:datafield[@tag=260]">
                 <span class="results_summary publisher"><span class="label">Publication details: </span>
                     <xsl:for-each select="marc:datafield[@tag=260]">
-                        <xsl:if test="marc:subfield[@code='a']">
-                            <xsl:call-template name="subfieldSelect">
-                                <xsl:with-param name="codes">a</xsl:with-param>
-                            </xsl:call-template>
-                        </xsl:if>
+                        <xsl:for-each select="marc:subfield[@code='a']">
+                            <a>
+                                <xsl:attribute name="href">/cgi-bin/koha/catalogue/search.pl?q=pl:"<xsl:value-of select="str:encode-uri(., true())"/>"</xsl:attribute>
+                                <xsl:value-of select="."/>
+                            </a>
+                            <xsl:if test="position() != last()">
+                                <xsl:text> </xsl:text>
+                            </xsl:if>
+                        </xsl:for-each>
                         <xsl:text> </xsl:text>
                         <xsl:if test="marc:subfield[@code='b']">
                         <a>
@@ -302,13 +306,23 @@
                             <xsl:call-template name="subfieldSelect">
                                 <xsl:with-param name="codes">b</xsl:with-param>
                             </xsl:call-template>
-                       </a>
-                       </xsl:if>
-                       <xsl:text> </xsl:text>
+                        </a>
+                        </xsl:if>
+                        <xsl:text> </xsl:text>
+                        <xsl:for-each select="marc:subfield[@code='c']">
+                            <a>
+                                <xsl:attribute name="href">/cgi-bin/koha/catalogue/search.pl?q=copydate:"<xsl:value-of select="str:encode-uri(., true())"/>"</xsl:attribute>
+                                <xsl:value-of select="."/>
+                            </a>
+                            <xsl:if test="position() != last()">
+                                <xsl:text> </xsl:text>
+                            </xsl:if>
+                        </xsl:for-each>
+                        <xsl:text> </xsl:text>
                         <xsl:call-template name="chopPunctuation">
                           <xsl:with-param name="chopString">
                             <xsl:call-template name="subfieldSelect">
-                                <xsl:with-param name="codes">cg</xsl:with-param>
+                                <xsl:with-param name="codes">g</xsl:with-param>
                             </xsl:call-template>
                            </xsl:with-param>
                        </xsl:call-template>
