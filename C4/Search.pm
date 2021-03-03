@@ -1951,7 +1951,7 @@ sub searchResults {
                 $onloan_items->{$key}->{due_date} = $item->{onloan};
                 $onloan_items->{$key}->{count}++ if $item->{$hbranch};
                 $onloan_items->{$key}->{branchname}     = $item->{branchname};
-                $onloan_items->{$key}->{location}       = $shelflocations->{ $item->{location} };
+                $onloan_items->{$key}->{location}       = $shelflocations->{ $item->{location} } if $item->{location};
                 $onloan_items->{$key}->{itemcallnumber} = $item->{itemcallnumber};
                 $onloan_items->{$key}->{description}    = $item->{description};
                 $onloan_items->{$key}->{imageurl} =
