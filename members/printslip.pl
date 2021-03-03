@@ -84,16 +84,17 @@ if ( $print eq 'checkinslip' ) {
     my $checkinslip_branch = $session->param('branch') ? $session->param('branch') : $branch;
 
     # get today's checkins
-    my $today_start = dt_from_string->set( hour => 0, minute => 0, second => 0 );
-    my $today_end = dt_from_string->set( hour => 23, minute => 59, second => 0 );
-    $today_start = Koha::Database->new->schema->storage->datetime_parser->format_datetime( $today_start );
-    $today_end = Koha::Database->new->schema->storage->datetime_parser->format_datetime( $today_end );
-    my @todays_checkins = Koha::Old::Checkouts->search({
+    my $dtf = Koha::Database->new->schema->storage->datetime_parser;
+    my $today = dt_from_string;
+    my $today_start = $today->clone->set( hour => 0, minute => 0, second => 0 );
+    my $today_end   = $today->clone->set( hour => 23, minute => 59, second => 0 );
+    $today_start = $dtf->format_datetime( $today_start );
+    $today_end   = $dtf->format_datetime( $today_end );
+    my @todays_checkins = $patron->old_checkouts->search({
         returndate => {
             '>=' => $today_start,
             '<=' => $today_end,
         },
-        borrowernumber => $borrowernumber,
         branchcode => $checkinslip_branch,
     });
 
@@ -102,19 +103,19 @@ if ( $print eq 'checkinslip' ) {
     );
 
     my $letter = C4::Letters::GetPreparedLetter(
-        module => 'circulation',
+        module      => 'circulation',
         letter_code => 'CHECKINSLIP',
-        branchcode => $checkinslip_branch,
-        lang => $patron->lang,
-        tables => {
-            branches => $checkinslip_branch,
+        branchcode  => $checkinslip_branch,
+        lang        => $patron->lang,
+        tables      => {
+            branches  => $checkinslip_branch,
             borrowers => $borrowernumber,
         },
-        loops => \%loops,
+        loops                  => \%loops,
         message_transport_type => 'print'
     );
 
-    $slip = $letter->{content};
+    $slip    = $letter->{content};
     $is_html = $letter->{is_html};
 
 } elsif (my $letter = IssueSlip ($session->param('branch') || $branch, $borrowernumber, $print eq "qslip")) {
