@@ -75,6 +75,14 @@ the branch the transfer is coming from
 
 the date the transfer arrived at its destination
 
+=head2 datecancelled
+
+  data_type: 'datetime'
+  datetime_undef_if_invalid: 1
+  is_nullable: 1
+
+the date the transfer was cancelled
+
 =head2 tobranch
 
   data_type: 'varchar'
@@ -99,6 +107,14 @@ any comments related to the transfer
   is_nullable: 1
 
 what triggered the transfer
+
+=head2 cancellation_reason
+
+  data_type: 'enum'
+  extra: {list => ["Manual","StockrotationAdvance","StockrotationRepatriation","ReturnToHome","ReturnToHolding","RotatingCollection","Reserve","LostReserve","CancelReserve"]}
+  is_nullable: 1
+
+what triggered the transfer cancellation
 
 =cut
 
@@ -139,6 +155,12 @@ __PACKAGE__->add_columns(
     datetime_undef_if_invalid => 1,
     is_nullable => 1,
   },
+  "datecancelled",
+  {
+    data_type => "datetime",
+    datetime_undef_if_invalid => 1,
+    is_nullable => 1,
+  },
   "tobranch",
   {
     data_type => "varchar",
@@ -150,6 +172,24 @@ __PACKAGE__->add_columns(
   "comments",
   { data_type => "longtext", is_nullable => 1 },
   "reason",
+  {
+    data_type => "enum",
+    extra => {
+      list => [
+        "Manual",
+        "StockrotationAdvance",
+        "StockrotationRepatriation",
+        "ReturnToHome",
+        "ReturnToHolding",
+        "RotatingCollection",
+        "Reserve",
+        "LostReserve",
+        "CancelReserve",
+      ],
+    },
+    is_nullable => 1,
+  },
+  "cancellation_reason",
   {
     data_type => "enum",
     extra => {
@@ -229,8 +269,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2021-01-21 13:39:29
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:rseS0EldT7FjkmfRkgasBg
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2021-03-03 13:47:35
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:pL0dO9OUwImy2rv7Md3AyA
 
 sub koha_object_class {
     'Koha::Item::Transfer';
