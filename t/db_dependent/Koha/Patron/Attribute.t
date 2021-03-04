@@ -33,7 +33,7 @@ my $builder = t::lib::TestBuilder->new;
 
 subtest 'store() tests' => sub {
 
-    plan tests => 2;
+    plan tests => 3;
 
     subtest 'repeatable attributes tests' => sub {
 
@@ -175,6 +175,43 @@ subtest 'store() tests' => sub {
         is( $attributes->count, 1, '1 unique attribute stored' );
         is( $attributes->next->attribute,
             'Foo', 'unique attribute remains unchanged' );
+
+        $schema->storage->txn_rollback;
+    };
+
+    subtest 'invalid type tests' => sub {
+
+        plan tests => 2;
+
+        $schema->storage->txn_begin;
+
+        my $patron = $builder->build_object({ class => 'Koha::Patrons' });
+        my $attribute_type = $builder->build_object(
+            {
+                class => 'Koha::Patron::Attribute::Types',
+                value => {
+                    unique_id  => 0,
+                    repeatable => 0
+                }
+            }
+        );
+
+        my $code = $attribute_type->code;
+        $attribute_type->delete;
+
+        throws_ok
+            { Koha::Patron::Attribute->new(
+                {
+                    borrowernumber => $patron->borrowernumber,
+                    code           => $code,
+                    attribute      => 'Who knows'
+
+                })->store;
+            }
+            'Koha::Exceptions::Patron::Attribute::InvalidType',
+            'Exception thrown on invalid attribute code';
+
+        is( $@->type, $code, 'type exception parameter passed'  );
 
         $schema->storage->txn_rollback;
     };
