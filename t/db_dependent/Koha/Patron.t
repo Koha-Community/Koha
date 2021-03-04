@@ -19,8 +19,9 @@
 
 use Modern::Perl;
 
-use Test::More tests => 6;
+use Test::More tests => 7;
 use Test::Exception;
+use Test::Warn;
 
 use Koha::Database;
 use Koha::DateUtils qw(dt_from_string);
@@ -362,6 +363,179 @@ subtest 'is_superlibrarian() tests' => sub {
 
     $patron->flags(0)->store->discard_changes;
     is( $patron->is_superlibrarian, 0, 'Patron is not a superlibrarian and the method returns the correct value' );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'extended_attributes' => sub {
+    plan tests => 14;
+    my $schema = Koha::Database->new->schema;
+    $schema->storage->txn_begin;
+
+    my $patron_1 = $builder->build_object({class=> 'Koha::Patrons'});
+    my $patron_2 = $builder->build_object({class=> 'Koha::Patrons'});
+
+    t::lib::Mocks::mock_userenv({ patron => $patron_1 });
+
+    my $attribute_type1 = Koha::Patron::Attribute::Type->new(
+        {
+            code        => 'my code1',
+            description => 'my description1',
+            unique_id   => 1
+        }
+    )->store;
+    my $attribute_type2 = Koha::Patron::Attribute::Type->new(
+        {
+            code             => 'my code2',
+            description      => 'my description2',
+            opac_display     => 1,
+            staff_searchable => 1
+        }
+    )->store;
+
+    my $attribute_type3 = $builder->build_object({ class => 'Koha::Patron::Attribute::Types' });
+
+    my $deleted_attribute_type = $builder->build_object({ class => 'Koha::Patron::Attribute::Types' });
+    my $deleted_attribute_type_code = $deleted_attribute_type->code;
+    $deleted_attribute_type->delete;
+
+    my $new_library = $builder->build( { source => 'Branch' } );
+    my $attribute_type_limited = Koha::Patron::Attribute::Type->new(
+        { code => 'my code3', description => 'my description3' } )->store;
+    $attribute_type_limited->library_limits( [ $new_library->{branchcode} ] );
+
+    my $attributes_for_1 = [
+        {
+            attribute => 'my attribute1',
+            code => $attribute_type1->code(),
+        },
+        {
+            attribute => 'my attribute2',
+            code => $attribute_type2->code(),
+        },
+        {
+            attribute => 'my attribute limited',
+            code => $attribute_type_limited->code(),
+        }
+    ];
+
+    my $attributes_for_2 = [
+        {
+            attribute => 'my attribute12',
+            code => $attribute_type1->code(),
+        },
+        {
+            attribute => 'my attribute limited 2',
+            code => $attribute_type_limited->code(),
+        },
+        {
+            attribute => 'my nonexistent attribute 2',
+            code => $deleted_attribute_type_code,
+        }
+    ];
+
+    my $extended_attributes = $patron_1->extended_attributes;
+    is( ref($extended_attributes), 'Koha::Patron::Attributes', 'Koha::Patron->extended_attributes must return a Koha::Patron::Attribute set' );
+    is( $extended_attributes->count, 0, 'There should not be attribute yet');
+
+    $patron_1->extended_attributes->filter_by_branch_limitations->delete;
+    $patron_2->extended_attributes->filter_by_branch_limitations->delete;
+    $patron_1->extended_attributes($attributes_for_1);
+
+    warning_like {
+        $patron_2->extended_attributes($attributes_for_2);
+    } [ qr/a foreign key constraint fails/ ], 'nonexistent attribute should have not exploded but print a warning';
+
+    my $extended_attributes_for_1 = $patron_1->extended_attributes;
+    is( $extended_attributes_for_1->count, 3, 'There should be 3 attributes now for patron 1');
+
+    my $extended_attributes_for_2 = $patron_2->extended_attributes;
+    is( $extended_attributes_for_2->count, 2, 'There should be 2 attributes now for patron 2');
+
+    my $attribute_12 = $extended_attributes_for_2->search({ code => $attribute_type1->code });
+    is( $attribute_12->next->attribute, 'my attribute12', 'search by code should return the correct attribute' );
+
+    $attribute_12 = $patron_2->get_extended_attribute( $attribute_type1->code );
+    is( $attribute_12->attribute, 'my attribute12', 'Koha::Patron->get_extended_attribute should return the correct attribute value' );
+
+    warning_is {
+        $extended_attributes_for_2 = $patron_2->extended_attributes->merge_with(
+            [
+                {
+                    attribute => 'my attribute12 XXX',
+                    code      => $attribute_type1->code(),
+                },
+                {
+                    attribute => 'my nonexistent attribute 2',
+                    code      => $deleted_attribute_type_code,
+                },
+                {
+                    attribute => 'my attribute 3', # Adding a new attribute using merge_with
+                    code      => $attribute_type3->code,
+                },
+            ]
+        );
+    }
+    "Cannot merge element: unrecognized code = '$deleted_attribute_type_code'",
+    "Trying to merge_with using a nonexistent attribute code should display a warning";
+
+    is( @$extended_attributes_for_2, 3, 'There should be 3 attributes now for patron 3');
+    my $expected_attributes_for_2 = [
+        {
+            code      => $attribute_type1->code(),
+            attribute => 'my attribute12 XXX',
+        },
+        {
+            code      => $attribute_type_limited->code(),
+            attribute => 'my attribute limited 2',
+        },
+        {
+            attribute => 'my attribute 3',
+            code      => $attribute_type3->code,
+        },
+    ];
+    # Sorting them by code
+    $expected_attributes_for_2 = [ sort { $a->{code} cmp $b->{code} } @$expected_attributes_for_2 ];
+
+    is_deeply(
+        [
+            {
+                code      => $extended_attributes_for_2->[0]->{code},
+                attribute => $extended_attributes_for_2->[0]->{attribute}
+            },
+            {
+                code      => $extended_attributes_for_2->[1]->{code},
+                attribute => $extended_attributes_for_2->[1]->{attribute}
+            },
+            {
+                code      => $extended_attributes_for_2->[2]->{code},
+                attribute => $extended_attributes_for_2->[2]->{attribute}
+            },
+        ],
+        $expected_attributes_for_2
+    );
+
+    # TODO - What about multiple? POD explains the problem
+    my $non_existent = $patron_2->get_extended_attribute( 'not_exist' );
+    is( $non_existent, undef, 'Koha::Patron->get_extended_attribute must return undef if the attribute does not exist' );
+
+    # Test branch limitations
+    t::lib::Mocks::mock_userenv({ patron => $patron_2 });
+    # Return all
+    $extended_attributes_for_1 = $patron_1->extended_attributes;
+    is( $extended_attributes_for_1->count, 3, 'There should be 2 attributes for patron 1, the limited one should be returned');
+
+    # Return filtered
+    $extended_attributes_for_1 = $patron_1->extended_attributes->filter_by_branch_limitations;
+    is( $extended_attributes_for_1->count, 2, 'There should be 2 attributes for patron 1, the limited one should be returned');
+
+    # Not filtered
+    my $limited_value = $patron_1->get_extended_attribute( $attribute_type_limited->code );
+    is( $limited_value->attribute, 'my attribute limited', );
+
+    ## Do we need a filtered?
+    #$limited_value = $patron_1->get_extended_attribute( $attribute_type_limited->code );
+    #is( $limited_value, undef, );
 
     $schema->storage->txn_rollback;
 };
