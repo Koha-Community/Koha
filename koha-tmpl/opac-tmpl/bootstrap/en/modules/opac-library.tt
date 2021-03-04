@@ -1,6 +1,7 @@
 [% USE raw %]
 [% USE Asset %]
 [% USE Koha %]
+[% PROCESS 'display-library-address.inc' %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>
    [% IF ( library ) %]
@@ -28,40 +29,18 @@
 [% END %]
 
 [% BLOCK library_info %]
-    <div property="address" typeof="PostalAddress">
-        <span property="streetAddress">
-            [% IF ( library.branchaddress1 ) %]
-                [% library.branchaddress1 | html %]
-            [% END %]
-            [% IF ( library.branchaddress2 ) %]
-                <br />[% library.branchaddress2 | html %]
-            [% END %]
-            [% IF ( library.branchaddress3 ) %]
-                <br />[% library.branchaddress3 | html %]
-            [% END %]
-        </span><br>
-        [% IF ( library.branchcity ) %]
-            <span property="addressLocality">[% library.branchcity | html %]</span>
-        [% END %]
-        [% IF ( library.branchstate ) %]
-            <span property="addressRegion">[% library.branchstate | html %]</span>
-        [% END %]
-        [% IF ( library.branchzip ) %]
-            <span property="postalCode">[% library.branchzip | html %]</span>
-        [% END %]
-        [% IF ( library.branchcountry ) %]
-            <br /><span property="addressCountry">[% library.branchcountry | html %]</span>
-        [% END %]
-        [% IF ( library.branchphone ) %]
-            <p>Phone: <a href="tel:[% library.branchphone | url %]" property="telephone">[% library.branchphone | html %]</a></p>
-        [% END %]
-        [% IF ( library.branchfax ) %]
-            <p>Fax: <span property="faxNumber">[% library.branchfax | html %]</span></p>
-        [% END %]
-        [% IF ( library.branchurl ) %]
-            <p><a href="[% library.branchurl | url %]" property="url">[% library.branchurl | html %]</a></p>
-        [% END %]
+    <div class="branchaddress" property="address" typeof="PostalAddress">
+        [% PROCESS 'display-library-address' %]
     </div> <!-- /div property=address -->
+    [% IF ( library.branchphone ) %]
+        <p>Phone: <a href="tel:[% library.branchphone | url %]" property="telephone">[% library.branchphone | html %]</a></p>
+    [% END %]
+    [% IF ( library.branchfax ) %]
+        <p>Fax: <span property="faxNumber">[% library.branchfax | html %]</span></p>
+    [% END %]
+    [% IF ( library.branchurl ) %]
+        <p><a href="[% library.branchurl | url %]" property="url">[% library.branchurl | html %]</a></p>
+    [% END %]
 [% END %]
 
 <div class="main">
