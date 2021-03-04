@@ -30,6 +30,7 @@
                     <div class="import_errors dialog alert" style="display: none;"></div>
                 </div>
 
+                <div id="csv_error" class="alert" style="visibility: hidden;">Something went wrong, check your CSV file.</div>
                 <div id="instructions">
                 <fieldset id="file_uploader_help" class="rows">
                     <legend>Instructions</legend>
@@ -217,7 +218,11 @@
 
                 // Now that we have our value string, let's add
                 // it to the data array.
-                arrData[ arrData.length - 1 ].push( strMatchedValue );
+                if ( arrData[ arrData.length - 1 ] ) {
+                    arrData[ arrData.length - 1 ].push( strMatchedValue );
+                } else {
+                    $('#csv_error').css( 'visibility' , 'visible' );
+                }
             }
 
             // Return the parsed data.
