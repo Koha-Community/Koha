@@ -21701,6 +21701,15 @@ if( CheckVersion( $DBversion ) ) {
 
     unless ( foreign_key_exists( 'serial', 'serial_ibfk_1' ) ) {
         my $serials = $dbh->selectall_arrayref(q|
+            SELECT serialid FROM serial JOIN subscription USING (subscriptionid) WHERE serial.biblionumber != subscription.biblionumber
+        |, { Slice => {} });
+        if ( @$serials ) {
+            push @warnings, q|WARNING - The following serials will be updated, they were attached to a different biblionumber than their related subscription: | . join ", ", map { $_->{serialid} } @$serials;
+            $dbh->do(q|
+                UPDATE serial JOIN subscription USING (subcriptionid) SET serial.biblionumber = subscription.biblionumber WHERE serial.biblionumber != subscription.biblionumber
+            |);
+        }
+        $serials = $dbh->selectall_arrayref(q|
             SELECT serialid FROM serial WHERE biblionumber NOT IN (SELECT biblionumber FROM biblio)
         |, { Slice => {} });
         if ( @$serials ) {
@@ -21743,6 +21752,9 @@ if( CheckVersion( $DBversion ) ) {
     |);
 
     unless ( foreign_key_exists( 'subscriptionhistory', 'subscription_history_ibfk_1' ) ) {
+        $dbh->do(q|
+            UPDATE subscriptionhistory JOIN subscription USING (subcriptionid) SET subscriptionhistory.biblionumber = subscription.biblionumber WHERE subscriptionhistory.biblionumber != subscription.biblionumber
+        |);
         $dbh->do(q|
             DELETE FROM subscriptionhistory WHERE biblionumber NOT IN (SELECT biblionumber FROM biblio)
         |);
