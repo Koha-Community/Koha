@@ -172,7 +172,7 @@ sub add {
         }
 
         my $overrides = $c->stash('koha.overrides');
-        my $can_override = $overrides->{any} and C4::Context->preference('AllowHoldPolicyOverride');
+        my $can_override = $overrides->{any} && C4::Context->preference('AllowHoldPolicyOverride');
 
         unless ( $can_override || $can_place_hold->{status} eq 'OK' ) {
             return $c->render(

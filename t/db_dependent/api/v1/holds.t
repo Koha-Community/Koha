@@ -358,7 +358,7 @@ $schema->storage->txn_rollback;
 
 subtest 'x-koha-override and AllowHoldPolicyOverride tests' => sub {
 
-    plan tests => 8;
+    plan tests => 12;
 
     $schema->storage->txn_begin;
 
@@ -407,6 +407,11 @@ subtest 'x-koha-override and AllowHoldPolicyOverride tests' => sub {
       ->status_is(403)
       ->json_is( '/error' => "Hold cannot be placed. Reason: ageRestricted" );
 
+    # x-koha-override doesn't override if AllowHoldPolicyOverride not set
+    $t->post_ok( "//$userid:$password@/api/v1/holds" =>
+          { 'x-koha-override' => 'any' } => json => $post_data )
+      ->status_is(403);
+
     t::lib::Mocks::mock_preference( 'AllowHoldPolicyOverride', 1 );
 
     $can_item_be_reserved_result = { status => 'pickupNotInHoldGroup' };
@@ -416,8 +421,14 @@ subtest 'x-koha-override and AllowHoldPolicyOverride tests' => sub {
       ->json_is(
         '/error' => "Hold cannot be placed. Reason: pickupNotInHoldGroup" );
 
+    # x-koha-override overrides the status
+    $t->post_ok( "//$userid:$password@/api/v1/holds" =>
+          { 'x-koha-override' => 'any' } => json => $post_data )
+      ->status_is(201);
+
     $can_item_be_reserved_result = { status => 'OK' };
 
+    # x-koha-override works when status not need override
     $t->post_ok( "//$userid:$password@/api/v1/holds" =>
           { 'x-koha-override' => 'any' } => json => $post_data )
       ->status_is(201);
