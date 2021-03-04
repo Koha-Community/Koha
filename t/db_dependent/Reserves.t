@@ -866,6 +866,7 @@ subtest 'ReservesNeedReturns' => sub {
         value => {
           itemnumber  => $item->itemnumber,
           datearrived => undef,
+          datecancelled => undef
         }
     });
     $item->damaged(0)->store;

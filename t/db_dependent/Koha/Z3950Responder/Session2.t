@@ -56,7 +56,16 @@ subtest 'add_item_status' => sub {
     my $item_marc_1 = C4::Items::GetMarcItem( $item_1->biblionumber, $item_1->itemnumber );
     my $item_field_1 = scalar $item_marc_1->field('952');
     $builder->build({ source => 'Reserve', value=> { itemnumber => $item_1->itemnumber } });
-    $builder->build({ source => 'Branchtransfer', value=> { itemnumber => $item_1->itemnumber, datearrived => undef } });
+    $builder->build(
+        {
+            source => 'Branchtransfer',
+            value  => {
+                itemnumber    => $item_1->itemnumber,
+                datearrived   => undef,
+                datecancelled => undef
+            }
+        }
+    );
     ## END FIRST ITEM ##
 
     ## SECOND ITEM HAS NO STATUSES ##

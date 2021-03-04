@@ -90,6 +90,7 @@ subtest 'buildKohaItemsNamespace status tests' => sub {
     $builder->build({ source => "Branchtransfer", value => {
         itemnumber  => $item->itemnumber,
         datearrived => undef,
+        datecancelled => undef,
         }
     });
     $xml = C4::XSLT::buildKohaItemsNamespace( $item->biblionumber,[]);

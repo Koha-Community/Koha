@@ -120,7 +120,8 @@ subtest 'waiting_or_in_transit' => sub {
         source => 'Branchtransfer',
         value => {
             itemnumber => $item->itemnumber,
-            datearrived => undef
+            datearrived => undef,
+            datecancelled => undef,
         }
     });
     my $t = Koha::Database->new()->schema()->resultset( 'Branchtransfer' )->find($transfer->{branchtransfer_id});
