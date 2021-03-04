@@ -1039,6 +1039,7 @@ sub EmailReport {
         message_transport_type => 'email',
     });
     $letter = $letter->unblessed;
+    $letter->{'content-type'} = 'text/html; charset="UTF-8"' if $letter->{'is_html'};
 
     my $report = Koha::Reports->find( $report_id );
     my $sql = $report->savedsql;
