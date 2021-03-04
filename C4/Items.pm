@@ -308,7 +308,7 @@ sub ModItemFromMarc {
     my $item_object = Koha::Items->find($itemnumber);
     my $item = TransformMarcToKoha( $localitemmarc, $frameworkcode, 'items' );
 
-    my $has_permanent_location = $item->{permanent_location};
+    my $has_permanent_location = exists $item->{permanent_location};
 
     # Retrieving the values for the fields that are not linked
     my @mapped_fields = Koha::MarcSubfieldStructures->search(
