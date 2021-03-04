@@ -23617,6 +23617,23 @@ if ( CheckVersion($DBversion) ) {
     NewVersion( $DBversion, 24446, "Update stockrotation 'daterequested' field in transfers table" );
 }
 
+$DBversion = '20.12.00.021';
+if( CheckVersion( $DBversion ) ) {
+    $dbh->do(q{
+        UPDATE systempreferences SET type="Free" WHERE variable="OverDriveClientSecret" OR variable="RecordedBooksClientSecret"
+    });
+    $dbh->do(q{
+        UPDATE systempreferences SET type="integer" WHERE variable="UsageStats"
+    });
+    $dbh->do(q{
+        UPDATE systempreferences
+        SET value="0"
+        WHERE ( ( type = "YesNo" AND ( value NOT IN ( "1", "0" ) OR value IS NULL ) ) )
+    });
+
+    NewVersion( $DBversion, 22824, "Update syspref values for YesNo");
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 my $update_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/atomicupdate/';
