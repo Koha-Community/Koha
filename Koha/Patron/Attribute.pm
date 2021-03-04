@@ -46,6 +46,9 @@ sub store {
 
     my $self = shift;
 
+    Koha::Exceptions::Patron::Attribute::InvalidType->throw( type => $self->code )
+        unless Koha::Patron::Attribute::Types->find( $self->code );
+
     $self->_check_repeatable;
     $self->check_unique_id;
 
