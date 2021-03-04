@@ -139,7 +139,7 @@ Libraries &rsaquo; Administration &rsaquo; Koha
                         [% library.branchcode | html %]
                     [% ELSE %]
                         <label for="branchcode" class="required">Library code: </label>
-                        <input type="text" name="branchcode" id="branchcode" size="10" maxlength="10" value="[% library.branchcode | html %]" class="required" required="required" />
+                        <input type="text" name="branchcode" id="branchcode" size="10" maxlength="10" value="[% library.branchcode | html %]" class="required focus" required="required" />
                         <span class="required">Required</span>
                     [% END %]
                 </li>
@@ -326,8 +326,6 @@ Libraries &rsaquo; Administration &rsaquo; Koha
     <script>
         var columns_settings = [% TablesSettings.GetColumns( 'admin', 'libraries', 'libraries', 'json' ) | $raw %];
         $(document).ready(function() {
-
-            $("#branchcode").focus();
 
             var libraries_url = '/api/v1/libraries';
             var libraries = $("#libraries").api({
