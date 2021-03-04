@@ -73,13 +73,19 @@ sub get {
 
     return try {
         my $patron_id = $c->validation->param('patron_id');
-        my $patron    = Koha::Patrons->find($patron_id);
+        my $patron    = $c->objects->find( Koha::Patrons->new, $patron_id );
 
         unless ($patron) {
-            return $c->render( status => 404, openapi => { error => "Patron not found." } );
+            return $c->render(
+                status  => 404,
+                openapi => { error => "Patron not found." }
+            );
         }
 
-        return $c->render( status => 200, openapi => $patron->to_api );
+        return $c->render(
+            status  => 200,
+            openapi => $patron
+        );
     }
     catch {
         $c->unhandled_exception($_);
