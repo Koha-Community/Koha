@@ -200,7 +200,7 @@ subtest 'Koha::Exceptions::Object::NotInstantiated tests' => sub {
 
 subtest 'Koha::Exceptions::Patron::Attribute::* tests' => sub {
 
-    plan tests => 5;
+    plan tests => 13;
 
     use_ok("Koha::Exceptions::Patron::Attribute");
 
@@ -218,11 +218,70 @@ subtest 'Koha::Exceptions::Patron::Attribute::* tests' => sub {
         'Exception is thrown :-D';
 
     # stringify the exception
-    is( "$@", "Tried to add more than one non-repeatable attributes. code=$code attribute=$attribute", 'Exception stringified correctly' );
+    is(
+        "$@",
+        "Tried to add more than one non-repeatable attributes. code=$code attribute=$attribute",
+        'Exception stringified correctly'
+    );
 
     throws_ok
         { Koha::Exceptions::Patron::Attribute::NonRepeatable->throw( "Manual message exception" ) }
         'Koha::Exceptions::Patron::Attribute::NonRepeatable',
         'Exception is thrown :-D';
-    is( "$@", 'Manual message exception', 'Exception not stringified if manually passed' );
+
+    is(
+        "$@",
+        'Manual message exception',
+        'Exception not stringified if manually passed'
+    );
+
+    throws_ok
+        { Koha::Exceptions::Patron::Attribute::UniqueIDConstraint->throw(
+            attribute => $mocked_attribute ); }
+        'Koha::Exceptions::Patron::Attribute::UniqueIDConstraint',
+        'Exception is thrown :-D';
+
+    # stringify the exception
+    is(
+        "$@",
+        "Your action breaks a unique constraint on the attribute. code=$code attribute=$attribute",
+        'Exception stringified correctly'
+    );
+
+    throws_ok
+        { Koha::Exceptions::Patron::Attribute::UniqueIDConstraint->throw( "Manual message exception" ) }
+        'Koha::Exceptions::Patron::Attribute::UniqueIDConstraint',
+        'Exception is thrown :-D';
+
+    is(
+        "$@",
+        'Manual message exception',
+        'Exception not stringified if manually passed'
+    );
+
+    my $type = "SOME_TYPE";
+
+    throws_ok
+        { Koha::Exceptions::Patron::Attribute::InvalidType->throw(
+            type => $type ); }
+        'Koha::Exceptions::Patron::Attribute::InvalidType',
+        'Exception is thrown :-D';
+
+    # stringify the exception
+    is(
+        "$@",
+        "Tried to use an invalid attribute type. type=$type",
+        'Exception stringified correctly'
+    );
+
+    throws_ok
+        { Koha::Exceptions::Patron::Attribute::InvalidType->throw( "Manual message exception" ) }
+        'Koha::Exceptions::Patron::Attribute::InvalidType',
+        'Exception is thrown :-D';
+
+    is(
+        "$@",
+        'Manual message exception',
+        'Exception not stringified if manually passed'
+    );
 };

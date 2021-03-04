@@ -7,6 +7,11 @@ use Exception::Class (
     'Koha::Exceptions::Patron::Attribute' => {
         description => 'Something went wrong'
     },
+    'Koha::Exceptions::Patron::Attribute::InvalidType' => {
+        isa         => 'Koha::Exceptions::Patron::Attribute',
+        description => "the passed type is invalid",
+        fields      => [ "type" ]
+    },
     'Koha::Exceptions::Patron::Attribute::NonRepeatable' => {
         isa         => 'Koha::Exceptions::Patron::Attribute',
         description => "repeatable not set for attribute type and tried to add a new attribute for the same code",
@@ -37,6 +42,12 @@ sub full_message {
                 "Your action breaks a unique constraint on the attribute. code=%s attribute=%s",
                 $self->attribute->code,
                 $self->attribute->attribute
+            );
+        }
+        elsif ( $self->isa('Koha::Exceptions::Patron::Attribute::InvalidType') ) {
+            $msg = sprintf(
+                "Tried to use an invalid attribute type. type=%s",
+                $self->type
             );
         }
     }
