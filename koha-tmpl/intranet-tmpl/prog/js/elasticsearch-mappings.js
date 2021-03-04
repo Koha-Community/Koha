@@ -1,4 +1,4 @@
-/* global __ */
+/* global __ dataTablesDefaults */
 
 function clean_line(line) {
     $(line).find('input[type="text"]').val("");
@@ -22,10 +22,12 @@ function clone_line(line) {
 
 function tableInit( oldtabid, newtabid ) {
 
-    var oldTableId = $("#" + oldtabid + "_table");
-    var newTableId = $("#" + newtabid + "_table");
+    if ( oldtabid ){
+        var oldTableId = $("#" + oldtabid + "_table");
+        oldTableId.DataTable().destroy();
+    }
 
-    oldTableId.DataTable().destroy();
+    var newTableId = $("#" + newtabid + "_table");
     newTableId.DataTable(
         $.extend(true, {}, dataTablesDefaults, {
             "columnDefs": [

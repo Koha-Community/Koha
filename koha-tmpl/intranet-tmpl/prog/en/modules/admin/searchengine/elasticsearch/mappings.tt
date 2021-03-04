@@ -97,7 +97,7 @@ a.add, a.delete {
         </div>
     [% END %]
     <form method="post">
-        <div id="tabs" class="toptabs" style="clear:both">
+        <div id="tabs" class="toptabs ui-tabs" style="clear:both">
             <ul>
                 <li><a href="#search_fields">Search fields</a></li>
                 [% FOREACH index IN indexes %]
@@ -107,7 +107,7 @@ a.add, a.delete {
                     [% END %]
                 [% END %]
             </ul>
-            <div id="search_fields">
+            <div id="search_fields" class="ui-tabs-panel">
               <table class="search_fields" id="search_fields_table">
                 <thead>
                   <tr>
@@ -229,7 +229,7 @@ a.add, a.delete {
               </table>
             </div>
             [% FOREACH index IN indexes %]
-                <div id="mapping_[% index.index_name | html %]">
+                <div id="mapping_[% index.index_name | html %]" class="ui-tabs-panel">
                     <table class="mappings" data-index_name="[% index.index_name | html %]" data-ordering="false" id="mapping_[% index.index_name | html %]_table">
                       <thead>
                         <tr class="nodrag nodrop">
@@ -398,7 +398,7 @@ a.add, a.delete {
 
                     [% IF index.index_name == 'biblios' %]
                         <h3>Facet order</h3>
-                        <div id="facet_[% index.index_name | html %]">
+                        <div id="facet_[% index.index_name | html %]" class="ui-tabs-panel">
                             <table>
                                 <thead>
                                     <tr>
