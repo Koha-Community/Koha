@@ -347,6 +347,7 @@ sub buildKohaItemsNamespace {
                 $substatus = exists $descs{$item->notforloan} ? $descs{$item->notforloan}->{opac_description} : "Not for loan_".$item->notforloan;
         }
         elsif ( exists $itemtypes->{ $item->effective_itemtype }
+            && $itemtypes->{ $item->effective_itemtype }->{notforloan}
             && $itemtypes->{ $item->effective_itemtype }->{notforloan} == 1 )
         {
             $status = "reference";
