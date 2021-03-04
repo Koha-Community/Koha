@@ -1040,6 +1040,15 @@ subtest 'ModItemFromMarc' => sub {
     subtest 'permanent_location' => sub {
         plan tests => 6;
 
+        # Make sure items.permanent_location is not mapped
+        Koha::MarcSubfieldStructures->search(
+            {
+                frameworkcode => q{},
+                kohafield     => 'items.permanent_location',
+            }
+        )->delete;
+        Koha::Caches->get_instance->clear_from_cache( "MarcSubfieldStructure-" );
+
         my $item = $builder->build_sample_item;
 
         # By default, setting location to something new should set permanent location to the same thing
@@ -1079,4 +1088,5 @@ subtest 'ModItemFromMarc' => sub {
     };
 
     $schema->storage->txn_rollback;
-};
+    Koha::Caches->get_instance->clear_from_cache( "MarcSubfieldStructure-" );
+}
