@@ -282,7 +282,11 @@
                                                <h5>Cannot check in</h5>
                                                <p><strong>NOT CHECKED IN</strong></p>
                                             [% END %]
-                                           <p class="problem ret_withdrawn">Item is withdrawn.</p>
+                                           <p class="problem ret_withdrawn">
+                                               <span>Item has been withdrawn</span>
+                                               [% item_withdrawn_lib = AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.withdrawn', authorised_value => item.withdrawn ) %]
+                                               [% IF (item_withdrawn_lib) %]<span class="ci-withdrawn">([% item_withdrawn_lib | html %])</span>[% END %]
+                                           </p>
                                         [% END %]
                                         [% IF ( errmsgloo.debarred ) %]
                                             <p class="problem ret_debarred"><a href="/cgi-bin/koha/circ/circulation.pl?borrowernumber=[% errmsgloo.debarborrowernumber | uri %]">[% errmsgloo.debarname | html %]([% errmsgloo.debarcardnumber | html %])</a> is now debarred until [% errmsgloo.debarred | $KohaDates %].</p>
