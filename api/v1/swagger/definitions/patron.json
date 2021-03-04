@@ -281,6 +281,13 @@
       "type": "boolean",
       "readOnly": true,
       "description": "If the patron has been anonymized"
+    },
+    "extended_attributes": {
+      "type": "array",
+      "description": "patron's extended attributes",
+      "items": {
+        "$ref": "extended_attribute.json"
+      }
     }
   },
   "additionalProperties": false,

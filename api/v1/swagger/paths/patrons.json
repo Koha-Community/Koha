@@ -451,7 +451,10 @@
         "permissions": {
           "borrowers": "1"
         }
-      }
+      },
+      "x-koha-embed": [
+        "extended_attributes"
+      ]
     },
     "post": {
       "x-mojo-to": "Patrons#add",
@@ -580,7 +583,10 @@
         "permissions": {
           "borrowers": "edit_borrowers"
         }
-      }
+      },
+      "x-koha-embed": [
+        "extended_attributes"
+      ]
     },
     "put": {
       "x-mojo-to": "Patrons#update",
