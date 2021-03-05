@@ -753,8 +753,8 @@ foreach my $biblionumber (@biblionumbers) {
 }
 
 $template->param( biblioloop => \@biblioloop );
-$template->param( biblionumbers => $biblionumbers );
 $template->param( no_reserves_allowed => $no_reserves_allowed );
+$template->param( biblionumbers => join('/', @biblionumbers) );
 $template->param( exceeded_maxreserves => $exceeded_maxreserves );
 $template->param( exceeded_holds_per_record => $exceeded_holds_per_record );
 $template->param( subscriptionsnumber => CountSubscriptionFromBiblionumber($biblionumber));
