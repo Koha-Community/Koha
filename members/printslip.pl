@@ -84,22 +84,11 @@ if ( $print eq 'checkinslip' ) {
     my $checkinslip_branch = $session->param('branch') ? $session->param('branch') : $branch;
 
     # get today's checkins
-    my $dtf = Koha::Database->new->schema->storage->datetime_parser;
-    my $today = dt_from_string;
-    my $today_start = $today->clone->set( hour => 0, minute => 0, second => 0 );
-    my $today_end   = $today->clone->set( hour => 23, minute => 59, second => 0 );
-    $today_start = $dtf->format_datetime( $today_start );
-    $today_end   = $dtf->format_datetime( $today_end );
-    my @todays_checkins = $patron->old_checkouts->search({
-        returndate => {
-            '>=' => $today_start,
-            '<=' => $today_end,
-        },
-        branchcode => $checkinslip_branch,
-    });
+    my @itemnumbers = $patron->old_checkouts->search( { branchcode => $checkinslip_branch } )
+      ->filter_by_todays_checkins->get_column('itemnumber');
 
     my %loops = (
-        old_issues => [ map { $_->itemnumber } @todays_checkins ],
+        old_issues => \@itemnumbers,
     );
 
     my $letter = C4::Letters::GetPreparedLetter(
