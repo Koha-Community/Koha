@@ -157,15 +157,20 @@ if ( $op eq 'form' ) {
     my @record_ids = $input->multi_param('record_id');
 
     try {
+        my $patron = Koha::Patrons->find( $loggedinuser );
         my $params = {
             mmtid       => $mmtid,
             record_ids  => \@record_ids,
+            context => {
+                source => 'batchmod',
+                categorycode => $patron->categorycode,
+                userid => $patron->userid
+            }
         };
 
-        my $patron = Koha::Patrons->find( $loggedinuser );
         my $job_id =
           $recordtype eq 'biblio'
-          ? Koha::BackgroundJob::BatchUpdateBiblio->new->enqueue($params, { source => 'batchmod', categorycode => $patron->categorycode, userid => $patron->userid })
+          ? Koha::BackgroundJob::BatchUpdateBiblio->new->enqueue($params)
           : Koha::BackgroundJob::BatchUpdateAuthority->new->enqueue($params);
 
         $template->param(

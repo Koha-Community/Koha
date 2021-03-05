@@ -91,13 +91,9 @@ sub process {
             my $record = C4::Biblio::GetMarcBiblio({ biblionumber => $biblionumber });
             C4::MarcModificationTemplates::ModifyRecordWithTemplate( $mmtid, $record );
             my $frameworkcode = C4::Biblio::GetFrameworkCode( $biblionumber );
-            C4::Biblio::ModBiblio( $record, $biblionumber, $frameworkcode,
-                {
-                    source => $args->{source},
-                    categorycode => $args->{categorycode},
-                    userid => $args->{userid},
-                }
-            );
+            C4::Biblio::ModBiblio( $record, $biblionumber, $frameworkcode, {
+                context => $args->{context},
+            });
         };
         if ( $error and $error != 1 or $@ ) { # ModBiblio returns 1 if everything as gone well
             push @messages, {
@@ -140,12 +136,9 @@ sub enqueue {
     return unless exists $args->{mmtid};
     return unless exists $args->{record_ids};
 
-    my $mmtid = $args->{mmtid};
-    my @record_ids = @{ $args->{record_ids} };
-
     $self->SUPER::enqueue({
-        job_size => scalar @record_ids,
-        job_args => {mmtid => $mmtid, record_ids => \@record_ids,}
+        job_size => scalar @{$args->{record_ids}},
+        job_args => $args,
     });
 }
 

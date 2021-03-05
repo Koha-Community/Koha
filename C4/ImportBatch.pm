@@ -602,6 +602,10 @@ sub BatchCommitRecords {
                              WHERE import_batch_id = ?");
     $sth->execute($batch_id);
     my $marcflavour = C4::Context->preference('marcflavour');
+
+    my $userenv = C4::Context->userenv;
+    my $logged_in_patron = Koha::Patrons->find( $userenv->{number} );
+
     my $rec_num = 0;
     while (my $rowref = $sth->fetchrow_hashref) {
         $record_type = $rowref->{'record_type'};
@@ -675,7 +679,13 @@ sub BatchCommitRecords {
                 }
                 $oldxml = $old_marc->as_xml($marc_type);
 
-                ModBiblio($marc_record, $recordid, $oldbiblio->frameworkcode, {context => {source => 'batchimport'}});
+                ModBiblio($marc_record, $recordid, $oldbiblio->frameworkcode, {
+                    context => {
+                        source => 'batchimport',
+                        categorycode => $logged_in_patron->categorycode,
+                        userid => $logged_in_patron->userid
+                    },
+                });
                 $query = "UPDATE import_biblios SET matched_biblionumber = ? WHERE import_record_id = ?"; # FIXME call SetMatchedBiblionumber instead
 
                 if ($item_result eq 'create_new' || $item_result eq 'replace') {
