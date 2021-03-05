@@ -153,7 +153,7 @@ sub SendPasswordRecoveryEmail {
     my $library = $borrower->library;
     my $kohaEmail = $library->branchemail || C4::Context->preference('KohaAdminEmailAddress');  # send from patron's branch or Koha Admin
 
-    C4::Letters::EnqueueLetter(
+    my $message_id = C4::Letters::EnqueueLetter(
         {
             letter                 => $letter,
             borrowernumber         => $borrower->borrowernumber,
@@ -162,10 +162,10 @@ sub SendPasswordRecoveryEmail {
             message_transport_type => 'email',
         }
     );
-    my $num_letters_attempted = C4::Letters::SendQueuedMessages( {
-        borrowernumber => $borrower->borrowernumber,
-        letter_code => 'PASSWORD_RESET'
-    } );
+
+    my $num_letters_attempted =
+      C4::Letters::SendQueuedMessages( { message_id => $message_id } );
+
     return ($num_letters_attempted > 0);
 }
 
