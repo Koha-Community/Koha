@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 8;
+use Test::More tests => 9;
 
 use C4::Circulation;
 use Koha::Checkouts;
@@ -27,6 +27,7 @@ use Koha::Database;
 use Koha::DateUtils qw( dt_from_string );
 
 use t::lib::TestBuilder;
+use t::lib::Mocks;
 
 my $schema = Koha::Database->new->schema;
 $schema->storage->txn_begin;
@@ -153,6 +154,70 @@ subtest 'issuer' => sub {
         'Koha::Checkout->issuer_id should return undef if the patron record has been deleted'
     );
 
+};
+
+subtest 'Koha::Old::Checkouts->filter_by_todays_checkins' => sub {
+
+    plan tests => 3;
+
+    # We will create 7 checkins for a given patron
+    # 3 checked in today - 2 days, and 4 checked in today
+    my $librarian = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => { branchcode => $library->{branchcode} }
+        }
+    );
+    t::lib::Mocks::mock_userenv( { patron => $librarian } );
+    my $patron = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => { branchcode => $library->{branchcode} }
+        }
+    );
+
+    my @checkouts;
+    # Create 7 checkouts
+    for ( 0 .. 6 ) {
+        my $item = $builder->build_sample_item;
+        push @checkouts,
+          Koha::Checkout->new(
+            {
+                borrowernumber => $patron->borrowernumber,
+                itemnumber     => $item->itemnumber,
+                branchcode     => $library->{branchcode},
+            }
+        )->store;
+    }
+
+    # Checkin 3 today - 2 days
+    my $not_today = dt_from_string->add( days => -2 );
+    for my $i ( 0 .. 2 ) {
+        my $checkout = $checkouts[$i];
+        C4::Circulation::AddReturn(
+            $checkout->item->barcode, $library->{branchcode},
+            undef, $not_today->set_hour( int( rand(24) ) )
+        );
+    }
+    # Checkin 4 today
+    my $today = dt_from_string;
+    for my $i ( 3 .. 6 ) {
+        my $checkout = $checkouts[$i];
+        C4::Circulation::AddReturn(
+            $checkout->item->barcode, $library->{branchcode},
+            undef, $today->set_hour( int( rand(24) ) )
+        );
+    }
+
+    my $old_checkouts = $patron->old_checkouts;
+    is( $old_checkouts->count, 7, 'There should be 7 old checkouts' );
+    my $todays_checkins = $old_checkouts->filter_by_todays_checkins;
+    is( $todays_checkins->count, 4, 'There should be 4 checkins today' );
+    is_deeply(
+        [ $todays_checkins->get_column('itemnumber') ],
+        [ map { $_->itemnumber } @checkouts[ 3 .. 6 ] ],
+        q{Correct list of today's checkins}
+    );
 };
 
 $schema->storage->txn_rollback;
