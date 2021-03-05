@@ -921,8 +921,7 @@
                 [% END # /IF OpacHighlightedWords %]
                 [% IF ( OverDriveEnabled ) %]
                     var $overdrive_results = $( '<div id="overdrive-results">' + MSG_SEARCHING.format('OverDrive') + ' <img class="throbber" src="[% interface | html %]/lib/jquery/plugins/themes/classic/throbber.gif" /></div>' );
-                    $( '#numresults' ) .append( ' ' )
-                        .append( $overdrive_results );
+                    $( '#numresults' ) .after( $overdrive_results );
                     //Clean querystring, first we remove CCL entities, then decode HTML entities, then swap double quotes for single quotes
                     //as the overdrive API treats double quotes as a search term and returns extra results
                     od_querystring = querystring.replace(/(?:^|\W)([\w-]+)(,[\w-]+)*([:=])/g,' ');
@@ -943,8 +942,7 @@
                 [% END # /IF OverDriveEnabled %]
                 [% IF ( RecordedBooksEnabled ) %]
                     var $recordedbooks_results = $( '<div id="recordedbooks-results">' + MSG_SEARCHING.format('RecordedBooks') + ' <img class="throbber" src="[% interface | html %]/lib/jquery/plugins/themes/classic/throbber.gif" /></div>' );
-                    $( '#numresults' ) .append( ' ' )
-                        .append( $recordedbooks_results );
+                    $( '#numresults' ) .after( $recordedbooks_results );
                     KOHA.RecordedBooks.search( querystring, [% OPACnumSearchResults || "null" | html %], null, function( data ) {
                         if ( data.error ) {
                             $recordedbooks_results.html( MSG_ERROR_SEARCHING_COLLECTION.format('RecordedBooks')  + ': ' + data.error);
@@ -961,8 +959,7 @@
                 [% END # /IF RecordedBooksEnabled %]
                 [% IF ( OpenLibrarySearch ) %]
                     var $openlibrary_results = $( '<div id="openlibrary-results">' + MSG_SEARCHING.format('OpenLibrary' ) + ' <img class="throbber" src="[% interface | html %]/lib/jquery/plugins/themes/classic/throbber.gif" /></div>' );
-                    $( '#numresults' ) .append( ' ' )
-                        .append( $openlibrary_results );
+                    $( '#numresults' ) .after( $openlibrary_results );
                     KOHA.OpenLibrary.search( querystring, null, function( data ) {
                         if ( data.error ) {
                             $openlibrary_results.html( MSG_ERROR_SEARCHING_COLLECTION.format('OpenLibrary') );
