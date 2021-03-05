@@ -8,7 +8,7 @@ use C4::Items;
 use Koha::Items;
 use Koha::CirculationRules;
 
-use Test::More tests => 12;
+use Test::More tests => 13;
 
 use t::lib::TestBuilder;
 use t::lib::Mocks;
@@ -423,6 +423,39 @@ subtest 'Check item checkout availability with ordered item' => sub {
     $is = ItemsAnyAvailableAndNotRestricted( { biblionumber => $biblio2->biblionumber, patron => $patron1 } );
     is( $is, 0, "Ordered item cannot be checked out" );
 };
+
+subtest 'Check item availability for hold with ordered item' => sub {
+    plan tests => 1;
+
+    my $biblio2       = $builder->build_sample_biblio( { itemtype => $itemtype } );
+    my $item1 = $builder->build_sample_item(
+        {   biblionumber  => $biblio2->biblionumber,
+            itype         => $itemtype2,
+            homebranch    => $library_A,
+            holdingbranch => $library_A,
+            notforloan    => -1
+        }
+    );
+
+    $dbh->do("DELETE FROM circulation_rules");
+    Koha::CirculationRules->set_rules(
+        {   categorycode => undef,
+            itemtype     => $itemtype2,
+            branchcode   => undef,
+            rules        => {
+                issuelength      => 7,
+                lengthunit       => 8,
+                reservesallowed  => 99,
+                holds_per_record => 99,
+                onshelfholds     => 2,
+            }
+        }
+    );
+
+    $is = IsAvailableForItemLevelRequest( $item1, $patron1 );
+    is( $is, 1, "Ordered items are available for hold" );
+};
+
 
 # Cleanup
 $schema->storage->txn_rollback;
