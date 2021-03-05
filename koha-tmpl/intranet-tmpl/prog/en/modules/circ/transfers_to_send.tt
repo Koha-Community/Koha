@@ -4,6 +4,7 @@
 [% USE KohaDates %]
 [% USE Branches %]
 [% SET footerjs = 1 %]
+[% PROCESS 'transfer_reasons.inc' %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Circulation &rsaquo; Transfers to send</title>
 [% INCLUDE 'doc-head-close.inc' %]
@@ -57,7 +58,7 @@
                                                     [% IF ( transfer.item.effective_itemtype ) %] (<b>[% transfer.item.effective_itemtype | html %]</b>)[% END %]
                                                     <br />Barcode: [% transfer.item.barcode | html %]
                                                 </td>
-                                                <td><p>[% transfer.reason | html %]</p></td>
+                                                <td><p>[% PROCESS transfer_reason transfer=transfer %]</p></td>
                                                 <td>[% IF transfer.item.onloan %]Due [% transfer.item.onloan | $KohaDates %][% ELSE %]On shelf[% END %]</td>
                                                 <td>[% Branches.GetName( transfer.item.homebranch ) | html %]</td>
                                                 <td>[% transfer.item.itemcallnumber | html %]</td>
