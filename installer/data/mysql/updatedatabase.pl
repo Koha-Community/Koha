@@ -23634,6 +23634,30 @@ if( CheckVersion( $DBversion ) ) {
     NewVersion( $DBversion, 22824, "Update syspref values for YesNo");
 }
 
+$DBversion = '20.12.00.022';
+if( CheckVersion( $DBversion ) ) {
+    $dbh->do(q{ INSERT IGNORE INTO letter (module, code, branchcode, name, is_html, title, content, message_transport_type) VALUES
+        ('circulation','CHECKINSLIP','','Checkin slip',1,'Checkin slip',
+"<h3>[% branch.branchname %]</h3>
+Checked in items for [% borrower.title %] [% borrower.firstname %] [% borrower.initials %] [% borrower.surname %] <br />
+([% borrower.cardnumber %]) <br />
+
+[% today | $KohaDates %]<br />
+
+<h4>Checked in today</h4>
+[% FOREACH checkin IN old_checkouts %]
+[% SET item = checkin.item %]
+<p>
+[% item.biblio.title %] <br />
+Barcode: [% item.barcode %] <br />
+</p>
+[% END %]",
+        'print')
+    });
+
+    NewVersion( $DBversion, 12224, "Add CHECKINSLIP notice" );
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 my $update_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/atomicupdate/';
