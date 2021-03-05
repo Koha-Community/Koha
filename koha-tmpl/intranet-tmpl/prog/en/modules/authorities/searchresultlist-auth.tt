@@ -73,7 +73,13 @@
                     <tr>
                         <td>[% PROCESS authresult summary=resul.summary authid=resul.authid auth_preview=1 %]</td>
                         <td>[% resul.summary.label | html %]</td>
-                        <td>[% resul.used | html %] times</td>
+                        <td>
+                            [% IF resul.used > 0 %]
+                                <a href="/cgi-bin/koha/catalogue/search.pl?type=intranet&amp;op=do_search&amp;idx=an,phr&amp;q=[% resul.authid | uri %]" class="button">[% resul.used | html %] times</a>
+                            [% ELSE %]
+                                0 times
+                            [% END %]
+                        </td>
                         [% IF Koha.Preference('ShowHeadingUse') %]
                             <td class="heading_use"><ul class="usefor">
                                 <li>[% IF resul.main %]<i class="fa fa-check"></i>[% ELSE %]<i class="fa fa-times"></i>[% END %] Main/Added Entry</li>
