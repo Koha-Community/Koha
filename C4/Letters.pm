@@ -1008,6 +1008,7 @@ sub SendQueuedMessages {
     my $params = shift;
 
     my $which_unsent_messages  = {
+        'message_id'     => $params->{'message_id'},
         'limit'          => $params->{'limit'} // 0,
         'borrowernumber' => $params->{'borrowernumber'} // q{},
         'letter_code'    => $params->{'letter_code'} // q{},
@@ -1263,6 +1264,7 @@ sub _add_attachments {
    message_transport_type: method of message sending (e.g. email, sms, etc.)
    borrowernumber        : who the message is to be sent
    letter_code           : type of message being sent (e.g. PASSWORD_RESET)
+   message_id            : the message_id of the message. In that case the sub will return only 1 result
    limit                 : maximum number of messages to send
 
   This function returns an array of matching hash referenced rows from
@@ -1298,6 +1300,10 @@ sub _get_unsent_messages {
         if ( $params->{'type'} ) {
             $statement .= ' AND message_transport_type = ? ';
             push @query_params, $params->{'type'};
+        }
+        if ( $params->{message_id} ) {
+            $statement .= ' AND message_id = ?';
+            push @query_params, $params->{message_id};
         }
         if ( $params->{'limit'} ) {
             $statement .= ' limit ? ';
