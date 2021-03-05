@@ -1312,7 +1312,7 @@ sub IsAvailableForItemLevelRequest {
     return 0 if
         $notforloan_per_itemtype ||
         $item->itemlost        ||
-        $item->notforloan > 0  ||
+        $item->notforloan > 0  || # item with negative or zero notforloan value is holdable
         $item->withdrawn        ||
         ($item->damaged && !C4::Context->preference('AllowHoldsOnDamagedItems'));
 
@@ -1373,7 +1373,7 @@ sub ItemsAnyAvailableAndNotRestricted {
         # we can return (end the loop) when first one found:
         return 1
             unless $i->itemlost
-            || $i->notforloan
+            || $i->notforloan # items with non-zero notforloan cannot be checked out
             || $i->withdrawn
             || $i->onloan
             || IsItemOnHoldAndFound( $i->id )
