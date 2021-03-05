@@ -25,6 +25,7 @@ use C4::Auth;
 use C4::Output;
 
 use Koha::AuthorisedValues;
+use Koha::Biblios;
 use Koha::CsvProfiles;
 
 my $query = CGI->new;

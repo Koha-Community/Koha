@@ -28,6 +28,7 @@ use C4::Output;
 use Koha::RecordProcessor;
 use Koha::CsvProfiles;
 use Koha::AuthorisedValues;
+use Koha::Biblios;
 
 my $query = CGI->new;
 
