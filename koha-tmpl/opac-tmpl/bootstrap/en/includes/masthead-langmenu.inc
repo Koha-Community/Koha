@@ -11,16 +11,16 @@
                                 [% FOREACH sublanguages_loo IN languages_loo.sublanguages_loop %]
                                     [% IF ( sublanguages_loo.enabled ) %]
                                         [% IF ( sublanguages_loo.sublanguage_current ) %]
-                                            <a class="dropdown-item" <a href="#" tabindex="-1" role="menuitem">[% sublanguages_loo.native_description | html %] [% sublanguages_loo.script_description | html %] [% sublanguages_loo.region_description | html %] [% sublanguages_loo.variant_description | html %]&nbsp;<i class="fa fa-check" aria-hidden="true"></i></a>
+                                            <a class="dropdown-item" href="#" tabindex="-1" role="menuitem">[% sublanguages_loo.native_description | html %] [% sublanguages_loo.script_description | html %] [% sublanguages_loo.region_description | html %] [% sublanguages_loo.variant_description | html %]&nbsp;<i class="fa fa-check" aria-hidden="true"></i></a>
                                         [% ELSE %]
-                                            <a class="dropdown-item"<a href="/cgi-bin/koha/opac-changelanguage.pl?language=[% sublanguages_loo.rfc4646_subtag | uri %]"  tabindex="-1" role="menuitem"> [% sublanguages_loo.native_description | html %] [% sublanguages_loo.script_description | html %] [% sublanguages_loo.region_description | html %] [% sublanguages_loo.variant_description | html %]</a>
+                                            <a class="dropdown-item" href="/cgi-bin/koha/opac-changelanguage.pl?language=[% sublanguages_loo.rfc4646_subtag | uri %]"  tabindex="-1" role="menuitem"> [% sublanguages_loo.native_description | html %] [% sublanguages_loo.script_description | html %] [% sublanguages_loo.region_description | html %] [% sublanguages_loo.variant_description | html %]</a>
                                         [% END # /IF ( sublanguages_loo.sublanguage_current ) %]
                                     [% END # / IF sublanguages_loo.enabled %]
                                 [% END # / FOREACH sublanguages_loo %]
                             [% ELSE %]
                                 [% IF ( languages_loo.group_enabled ) %]
                                     [% IF ( languages_loo.current ) %]
-                                        <a class="dropdown-item"<a href="#" tabindex="-1" class="menu-inactive" role="menuitem">
+                                        <a class="dropdown-item" href="#" tabindex="-1" class="menu-inactive" role="menuitem">
                                             [% IF ( languages_loo.native_description ) %]
                                                 [% languages_loo.native_description | html %]
                                             [% ELSE %]
@@ -28,7 +28,7 @@
                                             [% END %]&nbsp;<i class="fa fa-check" aria-hidden="true"></i>
                                         </a>
                                     [% ELSE %]
-                                        <a class="dropdown-item"<a href="/cgi-bin/koha/opac-changelanguage.pl?language=[% languages_loo.rfc4646_subtag | uri %]"  tabindex="-1" role="menuitem">
+                                        <a class="dropdown-item" href="/cgi-bin/koha/opac-changelanguage.pl?language=[% languages_loo.rfc4646_subtag | uri %]"  tabindex="-1" role="menuitem">
                                             [% IF ( languages_loo.native_description ) %]
                                                 [% languages_loo.native_description | html %]
                                             [% ELSE %]
