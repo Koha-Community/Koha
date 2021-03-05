@@ -3,6 +3,7 @@
 [% USE Koha %]
 [% USE KohaDates %]
 [% USE Branches %]
+[% USE ItemTypes %]
 [% SET footerjs = 1 %]
 [% PROCESS 'transfer_reasons.inc' %]
 [% INCLUDE 'doc-head-open.inc' %]
@@ -55,7 +56,7 @@
                                                 <td><p><span title="[% transfer.daterequested | html %]">[% transfer.daterequested | $KohaDates %]</span></p></td>
                                                 <td>
                                                     [% INCLUDE 'biblio-title.inc' biblio = transfer.item.biblio link = 1 %][% IF ( transfer.item.biblio.author ) %] by [% transfer.item.biblio.author | html %][% END %]
-                                                    [% IF ( transfer.item.effective_itemtype ) %] (<b>[% transfer.item.effective_itemtype | html %]</b>)[% END %]
+                                                    [% IF ( transfer.item.effective_itemtype ) %] (<b>[% ItemTypes.GetDescription( transfer.item.effective_itemtype ) | html %]</b>)[% END %]
                                                     <br />Barcode: [% transfer.item.barcode | html %]
                                                 </td>
                                                 <td><p>[% PROCESS transfer_reason transfer=transfer %]</p></td>
