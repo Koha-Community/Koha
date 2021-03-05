@@ -27,7 +27,7 @@ INSERT INTO `letter` (module, code, branchcode, name, is_html, title, content, m
 Checked in items for [% borrower.title %] [% borrower.firstname %] [% borrower.initials %] [% borrower.surname %] <br />
 ([% borrower.cardnumber %]) <br />
 
-[% today %]<br />
+[% today | $KohaDates %]<br />
 
 <h4>Checked in today</h4>
 [% FOREACH checkin IN old_checkouts %]
