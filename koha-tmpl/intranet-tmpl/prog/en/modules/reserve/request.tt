@@ -1164,13 +1164,17 @@
                 this_dropdown.select2({
                     allowClear: false,
                     ajax: {
+                      [%- IF Koha.Preference('AllowHoldPolicyOverride') -%]
+                        url: '/api/v1/libraries',
+                      [%- ELSE -%]
                         url: '/api/v1/holds/' + encodeURIComponent(hold_id) + '/pickup_locations',
+                      [%- END -%]
                         delay: 300, // wait 300 milliseconds before triggering the request
                         dataType: 'json',
                         data: function (params) {
                             var search_term = (params.term === undefined) ? '' : params.term;
                             var query = {
-                                "q": JSON.stringify({"name":{"-like":search_term+'%'}}),
+                                "q": JSON.stringify({"name":{"-like":search_term+'%'},"pickup_location":1}),
                                 "_order_by": "name"
                             };
                             return query;
