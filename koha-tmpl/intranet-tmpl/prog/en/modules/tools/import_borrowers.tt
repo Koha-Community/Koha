@@ -290,6 +290,23 @@
 
             </ol>
         </fieldset>
+        <fieldset class="rows">
+            <legend>
+                <a href="#" class="expand_preserves"><i class="fa fa-plus-square"></i> Preserve existing values</a>
+                <a href="#" class="expand_preserves" style="display:none;"><i class="fa fa-minus-square"></i> Hide preserve value fields</a>
+            </legend>
+
+            <ol class="preserve_values" style="display:none;">
+                <div class="hint">Selected fields will be preserved from original patron record when overwriting existing patron.</div>
+                [% FOREACH borrower_field IN borrower_fields %]
+                        <li>
+                            <label class="description" for="[% borrower_field.field | html %]">[% borrower_field.description | html %]: </label>
+                            <input name="preserve_existing" id="preserve_existing_[%  borrower_field.field | html %]" value="[%  borrower_field.field | html %]" type="checkbox">
+                            <span class="field_hint">[% borrower_field.field | html %]</span>
+                        </li>
+                [% END %]
+            </ol>
+        </fieldset>
 
         <fieldset class="rows">
             <legend>If matching record is already in the borrowers table:</legend>
@@ -398,6 +415,12 @@ you can supply dates in ISO format (e.g., '2010-10-28').
                 e.preventDefault();
                 $(".default_values").toggle();
                 $(".expand_defaults").toggle();
+            });
+
+            $(".expand_preserves").click(function(e){
+                e.preventDefault();
+                $(".preserve_values").toggle();
+                $(".expand_preserves").toggle();
             });
         });
 

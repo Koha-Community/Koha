@@ -35,17 +35,19 @@ my $ext_preserve = 0;
 my $confirm;
 my $verbose      = 0;
 my $help;
+my @preserve_fields;
 
 GetOptions(
-    'c|confirm'                     => \$confirm,
-    'f|file=s'                      => \$csv_file,
-    'm|matchpoint=s'                => \$matchpoint,
-    'd|default=s'                   => \%defaults,
-    'o|overwrite'                   => \$overwrite_cardnumber,
-    'op|overwrite_passwords'        => \$overwrite_passwords,
+    'c|confirm'                      => \$confirm,
+    'f|file=s'                       => \$csv_file,
+    'm|matchpoint=s'                 => \$matchpoint,
+    'd|default=s'                    => \%defaults,
+    'o|overwrite'                    => \$overwrite_cardnumber,
+    'op|overwrite_passwords'         => \$overwrite_passwords,
     'p|preserve-extended-attributes' => \$ext_preserve,
-    'v|verbose+'                    => \$verbose,
-    'h|help|?'                      => \$help,
+    'pf|preserve-field=s'            => \@preserve_fields,
+    'v|verbose+'                     => \$verbose,
+    'h|help|?'                       => \$help,
 ) or pod2usage(2);
 
 pod2usage(1) if $help;
@@ -65,6 +67,7 @@ my $return = $Import->import_patrons(
         overwrite_cardnumber         => $overwrite_cardnumber,
         overwrite_passwords          => $overwrite_passwords,
         preserve_extended_attributes => $ext_preserve,
+        preserve_fields              => \@preserve_fields,
         dry_run                      => !$confirm,
     }
 );
@@ -104,7 +107,7 @@ import_patrons.pl - CLI script to import patrons data into Koha
 
 =head1 SYNOPSIS
 
-import_patrons.pl --file /path/to/patrons.csv --matchpoint cardnumber --confirm [--default branchcode=MPL] [--overwrite] [--preserve-extended-attributes] [--verbose]
+import_patrons.pl --file /path/to/patrons.csv --matchpoint cardnumber --confirm [--default branchcode=MPL] [--overwrite] [--preserve_field <column>] [--preserve-extended-attributes] [--verbose]
 
 =head1 OPTIONS
 
@@ -129,6 +132,10 @@ Field on which to match incoming patrons to existing patrons
 =item B<-d|--default>
 
 Set defaults to patron fields, repeatable e.g. --default branchcode=MPL --default categorycode=PT
+
+=item B<-k|--preserve-field>
+
+Prevent specified patron fields for existing patrons from being overwritten
 
 =item B<-o|--overwrite>
 

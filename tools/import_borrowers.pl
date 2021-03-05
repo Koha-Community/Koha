@@ -93,6 +93,8 @@ if ( $input->param('sample') ) {
     exit 0;
 }
 
+my @preserve_fields = $input->param('preserve_existing');
+
 my $uploadborrowers = $input->param('uploadborrowers');
 my $matchpoint      = $input->param('matchpoint');
 if ($matchpoint) {
@@ -122,9 +124,10 @@ if ( $uploadborrowers && length($uploadborrowers) > 0 ) {
             file                         => $handle,
             defaults                     => \%defaults,
             matchpoint                   => $matchpoint,
-            overwrite_cardnumber         => scalar $input->param('overwrite_cardnumber'),
+            overwrite_cardnumber         => scalar $input->param( 'overwrite_cardnumber' ),
             overwrite_passwords          => $overwrite_passwords,
-            preserve_extended_attributes => scalar $input->param('ext_preserve') || 0,
+            preserve_extended_attributes => scalar $input->param( 'ext_preserve' ) || 0,
+            preserve_fields              => \@preserve_fields,
         }
     );
 
