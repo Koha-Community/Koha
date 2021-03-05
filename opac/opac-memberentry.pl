@@ -197,7 +197,7 @@ if ( $action eq 'create' ) {
                 },
             );
 
-            C4::Letters::EnqueueLetter(
+            my $message_id = C4::Letters::EnqueueLetter(
                 {
                     letter                 => $letter,
                     message_transport_type => 'email',
@@ -206,9 +206,7 @@ if ( $action eq 'create' ) {
                       C4::Context->preference('KohaAdminEmailAddress'),
                 }
             );
-            my $num_letters_attempted = C4::Letters::SendQueuedMessages( {
-                    letter_code => 'OPAC_REG_VERIFY'
-                    } );
+            C4::Letters::SendQueuedMessages({ message_id => $message_id });
         }
         else {
             ( $template, $borrowernumber, $cookie ) = get_template_and_user(
