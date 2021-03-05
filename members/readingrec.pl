@@ -56,27 +56,16 @@ if ($input->param('borrowernumber')) {
 my $logged_in_user = Koha::Patrons->find( $loggedinuser );
 output_and_exit_if_error( $input, $cookie, $template, { module => 'members', logged_in_user => $logged_in_user, current_patron => $patron } );
 
-my $order = 'date_due desc';
-my $limit = 0;
-my $issues = ();
-# Do not request the old issues of anonymous patron
-if ( $patron->borrowernumber eq C4::Context->preference('AnonymousPatron') ){
-    # use of 'eq' in the above comparison is intentional -- the
-    # system preference value could be blank
-    $template->param( is_anonymous => 1 );
-} else {
-    $issues = GetAllIssues($patron->borrowernumber,$order,$limit);
-}
-
 #   barcode export
 if ( $op eq 'export_barcodes' ) {
     # FIXME This should be moved out of this script
     if ( $patron->privacy < 2) {
-        my $today = output_pref({ dt => dt_from_string, dateformat => 'iso', dateonly => 1 });
-        my @barcodes =
-          map { $_->{barcode} } grep { $_->{returndate} =~ m/^$today/o } @{$issues};
+        my @barcodes = $patron->old_checkouts->search( {}, { prefetch => 'item' } )
+          ->filter_by_todays_checkins->get_column('item.barcode');
+
         my $borrowercardnumber = $patron->cardnumber;
         my $delimiter = "\n";
+        my $today = dt_from_string->ymd;
         binmode( STDOUT, ":encoding(UTF-8)" );
         print $input->header(
             -type       => 'application/octet-stream',
@@ -88,6 +77,18 @@ if ( $op eq 'export_barcodes' ) {
         print $content;
         exit;
     }
+}
+
+my $order = 'date_due desc';
+my $limit = 0;
+my $issues = ();
+# Do not request the old issues of anonymous patron
+if ( $patron->borrowernumber eq C4::Context->preference('AnonymousPatron') ){
+    # use of 'eq' in the above comparison is intentional -- the
+    # system preference value could be blank
+    $template->param( is_anonymous => 1 );
+} else {
+    $issues = GetAllIssues($patron->borrowernumber,$order,$limit);
 }
 
 if (! $limit){
