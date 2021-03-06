@@ -146,22 +146,22 @@
                     [% END %]
                     }
                 }
-            [% END %]
 
-            //Delete create authority button and status
-            var linkinfos = field_start.getElementsByTagName('i');
-            for (index = linkinfos.length - 1; index >= 0; index--) {
-                linkinfos[index].parentNode.removeChild(linkinfos[index]);
-            }
-            //Change message autolinker_dialog
-            var subfield_dialog = $(autolinker_dialog).children('ul').children('li');
-            for (index = subfield_dialog.length - 1; index >= 0; index--){
-                var tag_field = field_start.id.split("_")[1];
-                if (subfield_dialog[index].innerHTML.indexOf(tag_field) !== -1 ){
-                    subfield_dialog[index].innerHTML = subfield_dialog[index].innerHTML.replace(_("No matching authority found."), _("No matching authority found. A new authority was created or imported"));
-                    break;
+                //Delete create authority button and status
+                var linkinfos = field_start.getElementsByTagName('i');
+                for (index = linkinfos.length - 1; index >= 0; index--) {
+                    linkinfos[index].parentNode.removeChild(linkinfos[index]);
                 }
-            }
+                //Change message autolinker_dialog
+                var subfield_dialog = $(autolinker_dialog).children('ul').children('li');
+                for (index = subfield_dialog.length - 1; index >= 0; index--){
+                    var tag_field = field_start.id.split("_")[1];
+                    if (subfield_dialog[index].innerHTML.indexOf(tag_field) !== -1 ){
+                        subfield_dialog[index].innerHTML = subfield_dialog[index].innerHTML.replace(_("No matching authority found."), _("No matching authority found. A new authority was created or imported"));
+                        break;
+                    }
+                }
+            [% END %]
             opener.close();
             window.close();
             return false;
