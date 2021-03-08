@@ -888,7 +888,7 @@ subtest 'pickup_locations() tests' => sub {
 
 subtest 'edit() tests' => sub {
 
-    plan tests => 14;
+    plan tests => 20;
 
     $schema->storage->txn_begin;
 
@@ -913,6 +913,7 @@ subtest 'edit() tests' => sub {
     # Disable logging
     t::lib::Mocks::mock_preference( 'HoldsLog',      0 );
     t::lib::Mocks::mock_preference( 'RESTBasicAuth', 1 );
+    t::lib::Mocks::mock_preference( 'AllowHoldPolicyOverride', 1 );
 
     my $mock_biblio = Test::MockModule->new('Koha::Biblio');
     my $mock_item   = Test::MockModule->new('Koha::Item');
@@ -958,6 +959,12 @@ subtest 'edit() tests' => sub {
     $biblio_hold->discard_changes;
     is( $biblio_hold->branchcode, $library_3->branchcode, 'branchcode remains untouched' );
 
+    $t->put_ok( "//$userid:$password@/api/v1/holds/" . $biblio_hold->id
+          => { 'x-koha-override' => 'any' }
+          => json => $biblio_hold_data )
+      ->status_is(200)
+      ->json_has( '/pickup_library_id' => $library_1->id );
+
     $biblio_hold_data->{pickup_library_id} = $library_2->branchcode;
     $t->put_ok( "//$userid:$password@/api/v1/holds/"
           . $biblio_hold->id
@@ -991,6 +998,12 @@ subtest 'edit() tests' => sub {
 
     $item_hold->discard_changes;
     is( $item_hold->branchcode, $library_3->branchcode, 'branchcode remains untouched' );
+
+    $t->put_ok( "//$userid:$password@/api/v1/holds/" . $item_hold->id
+          => { 'x-koha-override' => 'any' }
+          => json => $item_hold_data )
+      ->status_is(200)
+      ->json_has( '/pickup_library_id' => $library_1->id );
 
     $item_hold_data->{pickup_library_id} = $library_2->branchcode;
     $t->put_ok( "//$userid:$password@/api/v1/holds/"
