@@ -228,7 +228,9 @@ if ($dotransfer){
 }
 
 if ($canceltransfer){
-    DeleteTransfer($itemnumber);
+    my $item = Koha::Items->find($itemnumber);
+    my $transfer = $item->get_transfer;
+    $transfer->cancel({ reason => 'Manual', force => 1});
     if($dest eq "ttr"){
         print $query->redirect("/cgi-bin/koha/circ/transferstoreceive.pl");
         exit;
