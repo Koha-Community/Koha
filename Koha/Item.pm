@@ -506,6 +506,38 @@ sub get_transfer {
     return Koha::Item::Transfer->_new_from_dbic($transfer_rs);
 }
 
+=head3 get_transfers
+
+  my $transfer = $item->get_transfers;
+
+Return the list of outstanding transfers (i.e requested but not yet cancelled
+or recieved).
+
+Note: Transfers are retrieved in a Modified FIFO (First In First Out) order
+whereby the most recently sent, but not received, transfer will be returned
+first if it exists, otherwise requests are in oldest to newest request order.
+
+This allows for transfers to queue, which is the case for stock rotation and
+rotating collections where a manual transfer may need to take precedence but
+we still expect the item to end up at a final location eventually.
+
+=cut
+
+sub get_transfers {
+    my ($self) = @_;
+    my $transfer_rs = $self->_result->branchtransfers->search(
+        {
+            datearrived   => undef,
+            datecancelled => undef
+        },
+        {
+            order_by =>
+              [ { -desc => 'datesent' }, { -asc => 'daterequested' } ],
+        }
+    );
+    return Koha::Item::Transfers->_new_from_dbic($transfer_rs);
+}
+
 =head3 last_returned_by
 
 Gets and sets the last borrower to return an item.

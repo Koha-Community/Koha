@@ -3897,11 +3897,12 @@ sub LostItem{
         MarkIssueReturned($borrowernumber,$itemnumber,undef,$patron->privacy) if $mark_returned;
     }
 
-    #When item is marked lost automatically cancel its outstanding transfers and set items holdingbranch to the transfer source branch (frombranch)
-    if (my ( $datesent,$frombranch,$tobranch ) = GetTransfers($itemnumber)) {
-        Koha::Items->find($itemnumber)->holdingbranch($frombranch)->store({ skip_record_index => $params->{skip_record_index} });
+    # When an item is marked as lost, we should automatically cancel its outstanding transfers.
+    my $item = Koha::Items->find($itemnumber);
+    my $transfers = $item->get_transfers;
+    while (my $transfer = $transfers->next) {
+        $transfer->cancel({ reason => 'ItemLost', force => 1 });
     }
-    my $transferdeleted = DeleteTransfer($itemnumber);
 }
 
 sub GetOfflineOperations {
