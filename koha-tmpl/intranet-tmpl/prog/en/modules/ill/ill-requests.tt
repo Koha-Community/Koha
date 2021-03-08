@@ -17,15 +17,39 @@
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'cat-search.inc' %]
 
-<div id="breadcrumbs">
-    <a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo;
-    <a href="/cgi-bin/koha/ill/ill-requests.pl">ILL requests</a>
-    [% IF query_type == 'create' %]
-         &rsaquo; New request
-    [% ELSIF query_type == 'status' %]
-         &rsaquo; Status
-    [% END %]
-</div>
+<nav aria-label="Breadcrumb" class="breadcrumb">
+    <ol>
+        <li>
+            <a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo;
+        </li>
+
+        [% IF query_type == 'create' %]
+            <li>
+                <a href="/cgi-bin/koha/ill/ill-requests.pl">ILL requests</a>
+            </li>
+            <li>
+                <a href="#" aria-current="page">
+                    New request
+                </a>
+            </li>
+        [% ELSIF query_type == 'status' %]
+            <li>
+                <a href="/cgi-bin/koha/ill/ill-requests.pl">ILL requests</a>
+            </li>
+            <li>
+                <a href="#" aria-current="page">
+                    Status
+                </a>
+            </li>
+        [% ELSE %]
+            <li>
+                <a href="#" aria-current="page">
+                    ILL requests
+                </a>
+            </li>
+        [% END %]
+    </ol>
+</nav>
 
 <div class="main container-fluid">
     <div class="row">

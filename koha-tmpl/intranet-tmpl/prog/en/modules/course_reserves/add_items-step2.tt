@@ -10,7 +10,22 @@
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'cat-search.inc' %]
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/course_reserves/course-reserves.pl">Course reserves</a> &rsaquo;[% IF is_edit || course_reserve %] Edit [% ELSE %] Reserve [% END %]<em><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% biblio.biblionumber | html %]">[% biblio.title | html %]</a></em> for <em><a href="/cgi-bin/koha/course_reserves/course-details.pl?course_id=[% course.course_id | html %]">[% course.course_name | html %]</a></em></div>
+<nav aria-label="Breadcrumb" class="breadcrumb">
+    <ol>
+        <li>
+            <a href="/cgi-bin/koha/mainpage.pl">Home</a>
+        </li>
+        <li>
+            <a href="/cgi-bin/koha/course_reserves/course-reserves.pl">Course reserves</a>
+        </li>
+        <li>
+            <a href="#" aria-current="page">
+                [% IF is_edit || course_reserve %] Edit [% ELSE %] Reserve [% END %]
+                <em>[% biblio.title | html %]</em> for <em>[% course.course_name | html %]</em>
+            </a>
+        </li>
+    </ol>
+</nav>
 
 <div class="main container-fluid">
     <div class="row">

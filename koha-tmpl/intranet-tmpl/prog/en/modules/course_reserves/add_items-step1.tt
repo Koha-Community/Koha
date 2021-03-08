@@ -7,7 +7,21 @@
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'cat-search.inc' %]
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/course_reserves/course-reserves.pl">Course reserves</a> &rsaquo; Add reserves for <em><a href="/cgi-bin/koha/course_reserves/course-details.pl?course_id=[% course.course_id | html %]">[% course.course_name | html %]</a></em></div>
+<nav aria-label="Breadcrumb" class="breadcrumb">
+    <ol>
+        <li>
+            <a href="/cgi-bin/koha/mainpage.pl">Home</a>
+        </li>
+        <li>
+            <a href="/cgi-bin/koha/course_reserves/course-reserves.pl">Course reserves</a>
+        </li>
+        <li>
+            <a href="#" aria-current="page">
+                Add reserves for <em>[% course.course_name | html %]</em>
+            </a>
+        </li>
+    </ol>
+</nav>
 
 <div class="main container-fluid">
     <div class="row">

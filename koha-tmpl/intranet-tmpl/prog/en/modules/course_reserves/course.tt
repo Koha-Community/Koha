@@ -17,7 +17,21 @@
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'cat-search.inc' %]
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/course_reserves/course-reserves.pl">Course reserves</a> &rsaquo; [% IF course_name %] Edit <em>[% course_name | html %]</em> [% ELSE %] New course [% END %]</div>
+<nav aria-label="Breadcrumb" class="breadcrumb">
+    <ol>
+        <li>
+            <a href="/cgi-bin/koha/mainpage.pl">Home</a>
+        </li>
+        <li>
+            <a href="/cgi-bin/koha/course_reserves/course-reserves.pl">Course reserves</a>
+        </li>
+        <li>
+            <a href="#" aria-current="page">
+                [% IF course_name %] Edit <em>[% course_name | html %]</em> [% ELSE %] New course [% END %]
+            </a>
+        </li>
+    </ol>
+</nav>
 
 [% IF ( departments ) %]
 
