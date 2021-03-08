@@ -410,16 +410,6 @@ function showLess() {
 }
 
 function updateBasket(updated_value,target) {
-<<<<<<< HEAD
-	if(target){
-	target.$('#basketcount').html(" <span>("+updated_value+")</span>");
-    target.$('#cartDetails').html(MSG_IN_YOUR_CART.format(updated_value));
-	} else {
-	$('#basketcount').html(" <span>("+updated_value+")</span>");
-    $('#cartDetails').html(MSG_IN_YOUR_CART.format(updated_value));
-	}
-	var basketcount = updated_value;
-=======
     if(target){
         target.$('#basketcount').html(" <span>("+updated_value+")</span>");
         target.$('#cartDetails').html(__("Items in your cart: %s").format(updated_value));
@@ -427,7 +417,6 @@ function updateBasket(updated_value,target) {
         $('#basketcount').html(" <span>("+updated_value+")</span>");
         $('#cartDetails').html(__("Items in your cart: %s").format(updated_value));
     }
->>>>>>> 7666b52cec... Bug 27754: Correct eslint errors in basket.js
 }
 
 function openBiblio(openerURL) {
@@ -437,17 +426,10 @@ function openBiblio(openerURL) {
 
 function addSelToShelf() {
     var items = document.getElementById('records').value;
-<<<<<<< HEAD
-	if(items){
-    document.location = "/cgi-bin/koha/virtualshelves/addbybiblionumber.pl?biblionumber="+items;
-	} else {
-        alert(MSG_NO_RECORD_SELECTED);
-=======
     if(items){
         document.location = "/cgi-bin/koha/virtualshelves/addbybiblionumber.pl?biblionumber="+items;
     } else {
         alert(__("No item was selected"));
->>>>>>> 7666b52cec... Bug 27754: Correct eslint errors in basket.js
     }
 }
 
