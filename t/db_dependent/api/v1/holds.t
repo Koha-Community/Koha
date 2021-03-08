@@ -1036,6 +1036,21 @@ subtest 'add() tests' => sub {
         return Koha::Libraries->search( { branchcode => [ $library_2->branchcode, $library_3->branchcode ] } );
     });
 
+    my $can_be_reserved = 'OK';
+    my $mock_reserves = Test::MockModule->new('C4::Reserves');
+    $mock_reserves->mock( 'CanItemBeReserved', sub
+        {
+            return { status => $can_be_reserved }
+        }
+
+    );
+    $mock_reserves->mock( 'CanBookBeReserved', sub
+        {
+            return { status => $can_be_reserved }
+        }
+
+    );
+
     my $biblio = $builder->build_sample_biblio;
     my $item   = $builder->build_sample_item({ biblionumber => $biblio->biblionumber });
 
