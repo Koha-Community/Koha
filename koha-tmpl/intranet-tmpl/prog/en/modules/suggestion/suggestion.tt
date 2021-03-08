@@ -8,18 +8,20 @@
 [% USE TablesSettings %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Koha &rsaquo; Acquisitions  &rsaquo;
+<title>
     [% IF op == 'save' %]
         [% IF ( suggestionid ) %]
-            Suggestions &rsaquo;  Edit suggestion #[% suggestionid | html %]
+            Edit suggestion #[% suggestionid | html %] &rsaquo; Suggestions
         [% ELSE %]
-            Suggestions &rsaquo; Add suggestion
+            Add suggestion &rsaquo; Suggestions
         [% END %]
+
     [% ELSIF ( op == 'show' ) %]
-           Suggestions &rsaquo; Show suggestion #[% suggestionid | html %]
+           Show suggestion #[% suggestionid | html %] &rsaquo; Suggestions
+
     [% ELSE %]
         Suggestions management
-    [% END %]
+    [% END %] &rsaquo; Acquisitions &rsaquo; Koha
 </title>
 [% INCLUDE 'doc-head-close.inc' %]
 [% IF op == 'else' %]
