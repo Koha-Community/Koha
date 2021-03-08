@@ -358,7 +358,7 @@ $schema->storage->txn_rollback;
 
 subtest 'x-koha-override and AllowHoldPolicyOverride tests' => sub {
 
-    plan tests => 12;
+    plan tests => 16;
 
     $schema->storage->txn_begin;
 
@@ -373,15 +373,17 @@ subtest 'x-koha-override and AllowHoldPolicyOverride tests' => sub {
     $patron->discard_changes;
     my $userid = $patron->userid;
 
+    my $renegade_library = $builder->build_object({ class => 'Koha::Libraries' });
+
     t::lib::Mocks::mock_preference( 'AllowHoldPolicyOverride', 0 );
 
     # Make sure pickup location checks doesn't get in the middle
     my $mock_biblio = Test::MockModule->new('Koha::Biblio');
     $mock_biblio->mock( 'pickup_locations',
-        sub { return Koha::Libraries->search; } );
+        sub { return Koha::Libraries->search({ branchcode => { '!=' => $renegade_library->branchcode } }); } );
     my $mock_item = Test::MockModule->new('Koha::Item');
     $mock_item->mock( 'pickup_locations',
-        sub { return Koha::Libraries->search } );
+        sub { return Koha::Libraries->search({ branchcode => { '!=' => $renegade_library->branchcode } }) } );
 
     my $can_item_be_reserved_result;
     my $mock_reserves = Test::MockModule->new('C4::Reserves');
@@ -429,6 +431,16 @@ subtest 'x-koha-override and AllowHoldPolicyOverride tests' => sub {
     $can_item_be_reserved_result = { status => 'OK' };
 
     # x-koha-override works when status not need override
+    $t->post_ok( "//$userid:$password@/api/v1/holds" =>
+          { 'x-koha-override' => 'any' } => json => $post_data )
+      ->status_is(201);
+
+    # Test pickup locations can be overridden
+    $post_data->{pickup_library_id} = $renegade_library->branchcode;
+
+    $t->post_ok( "//$userid:$password@/api/v1/holds" => json => $post_data )
+      ->status_is(400);
+
     $t->post_ok( "//$userid:$password@/api/v1/holds" =>
           { 'x-koha-override' => 'any' } => json => $post_data )
       ->status_is(201);

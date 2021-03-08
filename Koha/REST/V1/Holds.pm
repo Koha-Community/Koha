@@ -80,6 +80,9 @@ sub add {
         my $hold_date         = $body->{hold_date};
         my $non_priority      = $body->{non_priority};
 
+        my $overrides = $c->stash('koha.overrides');
+        my $can_override = $overrides->{any} && C4::Context->preference('AllowHoldPolicyOverride');
+
         if(!C4::Context->preference( 'AllowHoldDateInFuture' ) && $hold_date) {
             return $c->render(
                 status  => 400,
@@ -160,7 +163,7 @@ sub add {
             openapi => {
                 error => 'The supplied pickup location is not valid'
             }
-        ) unless $valid_pickup_location;
+        ) unless $valid_pickup_location || $can_override;
 
         my $can_place_hold
             = $item_id
@@ -170,9 +173,6 @@ sub add {
         if ( $patron->holds->count + 1 > C4::Context->preference('maxreserves') ) {
             $can_place_hold->{status} = 'tooManyReserves';
         }
-
-        my $overrides = $c->stash('koha.overrides');
-        my $can_override = $overrides->{any} && C4::Context->preference('AllowHoldPolicyOverride');
 
         unless ( $can_override || $can_place_hold->{status} eq 'OK' ) {
             return $c->render(
