@@ -22543,6 +22543,15 @@ if ( CheckVersion($DBversion) ) {
     SetVersion ($DBversion);
 }
 
+$DBversion = '20.05.09.001';
+if( CheckVersion( $DBversion ) ) {
+
+    sanitize_zero_date('aqorders', 'datecancellationprinted');
+    sanitize_zero_date('old_issues', 'returndate');
+
+    NewVersion( $DBversion, 7806, "Remove remaining possible 0000-00-00 values");
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 my $update_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/atomicupdate/';
