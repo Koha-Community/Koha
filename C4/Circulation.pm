@@ -120,7 +120,6 @@ BEGIN {
 		&GetTransfers
 		&GetTransfersFromTo
 		&updateWrongTransfer
-		&DeleteTransfer
                 &IsBranchTransferAllowed
                 &CreateBranchTransferLimit
                 &DeleteBranchTransferLimits
@@ -3485,24 +3484,6 @@ sub GetTransfersFromTo {
         push @gettransfers, $data;
     }
     return (@gettransfers);
-}
-
-=head2 DeleteTransfer
-
-  &DeleteTransfer($itemnumber);
-
-=cut
-
-sub DeleteTransfer {
-    my ($itemnumber) = @_;
-    return unless $itemnumber;
-    my $dbh          = C4::Context->dbh;
-    my $sth          = $dbh->prepare(
-        "DELETE FROM branchtransfers
-         WHERE itemnumber=?
-         AND datearrived IS NULL "
-    );
-    return $sth->execute($itemnumber);
 }
 
 =head2 SendCirculationAlert
