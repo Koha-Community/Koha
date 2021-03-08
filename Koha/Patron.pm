@@ -1561,8 +1561,27 @@ sub extended_attributes {
                 $self->extended_attributes->filter_by_branch_limitations->delete;
 
                 # Insert the new ones
+                my $new_types = {};
                 for my $attribute (@$attributes) {
                     $self->add_extended_attribute($attribute);
+                    $new_types->{$attribute->{code}} = 1;
+                }
+
+                # Check globally mandatory types
+                my @required_attribute_types =
+                    Koha::Patron::Attribute::Types->search(
+                        {
+                            mandatory => 1,
+                            'borrower_attribute_types_branches.b_branchcode' =>
+                              undef
+                        },
+                        { join => 'borrower_attribute_types_branches' }
+                    )->get_column('class');
+                for my $type ( @required_attribute_types ) {
+                    Koha::Exceptions::Object::FKConstraint->throw(
+                        broken_fk => "$type",
+                        value     => "$type",
+                    ) if !$new_types->{$type};
                 }
             }
         );

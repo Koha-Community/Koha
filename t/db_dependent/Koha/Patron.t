@@ -369,7 +369,7 @@ subtest 'is_superlibrarian() tests' => sub {
 
 subtest 'extended_attributes' => sub {
 
-    plan tests => 14;
+    plan tests => 15;
 
     my $schema = Koha::Database->new->schema;
     $schema->storage->txn_begin;
@@ -610,6 +610,42 @@ subtest 'extended_attributes' => sub {
             }
             'Koha::Exceptions::Patron::Attribute::InvalidType',
             'Exception thrown on invalid attribute type';
+
+        is( $patron->extended_attributes->count, 0, 'Extended attributes storing rolled back' );
+    };
+
+    subtest 'globally mandatory attributes tests' => sub {
+
+        plan tests => 3;
+
+        my $patron = $builder->build_object({ class => 'Koha::Patrons' });
+
+        my $attribute_type_1 = $builder->build_object(
+            {
+                class => 'Koha::Patron::Attribute::Types',
+                value => { mandatory => 1 }
+            }
+        );
+
+        my $attribute_type_2 = $builder->build_object(
+            {
+                class => 'Koha::Patron::Attribute::Types',
+                value => { mandatory => 0 }
+            }
+        );
+
+        is( $patron->extended_attributes->count, 0, 'Patron has no extended attributes' );
+
+        throws_ok
+            {
+                $patron->extended_attributes(
+                    [
+                        { code => $attribute_type_2->code, attribute => 'b' }
+                    ]
+                );
+            }
+            'Koha::Exceptions::Object::FKConstraint',
+            'Exception thrown on missing mandatory attribute type';
 
         is( $patron->extended_attributes->count, 0, 'Extended attributes storing rolled back' );
     };
