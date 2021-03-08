@@ -252,17 +252,22 @@ sub edit {
         my $hold = Koha::Holds->find( $hold_id );
 
         unless ($hold) {
-            return $c->render( status  => 404,
-                            openapi => {error => "Hold not found"} );
+            return $c->render(
+                status  => 404,
+                openapi => { error => "Hold not found" }
+            );
         }
 
-        my $body = $c->req->json;
+        my $overrides = $c->stash('koha.overrides');
+        my $can_override = $overrides->{any} && C4::Context->preference('AllowHoldPolicyOverride');
+
+        my $body = $c->validation->output->{body};
 
         my $pickup_library_id = $body->{pickup_library_id};
 
         if (
             defined $pickup_library_id
-            and not $hold->is_pickup_location_valid({ library_id => $pickup_library_id })
+            && ( !$hold->is_pickup_location_valid({ library_id => $pickup_library_id }) && !$can_override )
           )
         {
             return $c->render(
