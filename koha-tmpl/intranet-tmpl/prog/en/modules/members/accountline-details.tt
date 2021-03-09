@@ -15,13 +15,42 @@
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'patron-search.inc' %]
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/members/members-home.pl">Patrons</a>  &rsaquo; <a href="/cgi-bin/koha/members/boraccount.pl?borrowernumber=[% patron.borrowernumber | html %]">Account for [% INCLUDE 'patron-title.inc' %]</a> &rsaquo;
-    [% IF type == 'credit' %]
-        Details of payment
-    [% ELSIF type == 'debit' %]
-        Details of fee
-    [% END %]
-</div>
+<nav aria-label="Breadcrumb" class="breadcrumb">
+    <ol>
+        <li>
+            <a href="/cgi-bin/koha/mainpage.pl">Home</a>
+        </li>
+        <li>
+            <a href="/cgi-bin/koha/members/members-home.pl">Patrons</a>
+        </li>
+
+        [% IF type == 'credit' %]
+            <li>
+                <a href="/cgi-bin/koha/members/boraccount.pl?borrowernumber=[% patron.borrowernumber | uri %]">Account for [% INCLUDE 'patron-title.inc' %]</a>
+            </li>
+            <li>
+                <a href="#" aria-current="page">
+                    Details of payment
+                </a>
+            </li>
+        [% ELSIF type == 'debit' %]
+            <li>
+                <a href="/cgi-bin/koha/members/boraccount.pl?borrowernumber=[% patron.borrowernumber | uri %]">Account for [% INCLUDE 'patron-title.inc' %]</a>
+            </li>
+            <li>
+                <a href="#" aria-current="page">
+                    Details of fee
+                </a>
+            </li>
+        [% ELSE %]
+            <li>
+                <a href="#" aria-current="page">
+                    Account for [% INCLUDE 'patron-title.inc' %]
+                </a>
+            </li>
+        [% END %]
+    </ol>
+</nav>
 
 <div class="main container-fluid">
     <div class="row">

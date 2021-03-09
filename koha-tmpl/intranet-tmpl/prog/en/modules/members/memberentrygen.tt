@@ -35,28 +35,44 @@ legend:hover {
     [% INCLUDE 'header.inc' %]
     [% INCLUDE 'patron-search.inc' %]
 
-    <div id="breadcrumbs">
-        <a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo;
-        <a href="/cgi-bin/koha/members/members-home.pl">Patrons</a>
-        [% UNLESS blocking_error %]
-            &rsaquo;
-            [% IF (firstname || surname ) %]
-                <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrowernumber | uri %]">
-                    [% INCLUDE 'patron-title.inc' %]
-                </a>  &rsaquo;
-            [% END %]
-            <strong>
-                [% IF ( opadd ) %]
-                    Add patron
-                [% ELSIF ( opduplicate ) %]
-                    Duplicate patron
-                [% ELSE %]
-                    Modify patron
+    <nav aria-label="Breadcrumb" class="breadcrumb">
+        <ol>
+            <li>
+                <a href="/cgi-bin/koha/mainpage.pl">Home</a>
+            </li>
+
+            [% IF blocking_error %]
+                <li>
+                    <a href="/cgi-bin/koha/members/members-home.pl">Patrons</a>
+                </li>
+            [% ELSE %]
+                <li>
+                    <a href="/cgi-bin/koha/members/members-home.pl">Patrons</a>
+                </li>
+                [% IF (firstname || surname ) %]
+                    <li>
+                        <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrowernumber | uri %]">
+                            [% INCLUDE 'patron-title.inc' %]
+                        </a>
+                    </li>
                 [% END %]
-                [% IF categoryname %]([% categoryname | html %])[% END %]
-            </strong>
-        [% END %]
-    </div> <!-- /#breadcrumbs -->
+                <li>
+                    <a href="#" aria-current="page">
+                        [% IF ( opadd ) %]
+                            Add patron
+                        [% ELSIF ( opduplicate ) %]
+                            Duplicate patron
+                        [% ELSE %]
+                            Modify patron
+                        [% END %]
+                        [% IF categoryname %]
+                            ([% categoryname | html %])
+                        [% END %]
+                    </a>
+                </li>
+            [% END %]
+        </ol>
+    </nav> <!-- /#breadcrumbs -->
 
     <div class="main container-fluid">
         <div class="row">

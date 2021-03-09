@@ -35,21 +35,39 @@
 <body id="pat_paycollect" class="pat">
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'patron-search.inc' %]
-<div id="breadcrumbs">
-    <a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo;
-    <a href="/cgi-bin/koha/members/members-home.pl">Patrons</a> &rsaquo;
-    <a href="/cgi-bin/koha/members/pay.pl?borrowernumber=[% patron.borrowernumber | uri %]">Pay fines for [% patron.firstname | html %] [% patron.surname | html %]</a> &rsaquo;
-    [% IF    ( pay_individual )      %]Pay an individual fine
-    [% ELSIF ( writeoff_individual ) %]Write off an individual fine
-    [% ELSE %]
-        [% IF ( selected_accts ) %]
-            [% IF type == 'WRITEOFF' %]Write off an amount toward selected fines
-            [% ELSE                  %]Pay an amount toward selected fines
-            [% END %]
-        [% ELSE                      %]Pay an amount toward all fines
-        [% END %]
-    [% END %]
-</div>
+
+<nav aria-label="Breadcrumb" class="breadcrumb">
+    <ol>
+        <li>
+            <a href="/cgi-bin/koha/mainpage.pl">Home</a>
+        </li>
+        <li>
+            <a href="/cgi-bin/koha/members/members-home.pl">Patrons</a>
+        </li>
+        <li>
+            <a href="/cgi-bin/koha/members/pay.pl?borrowernumber=[% patron.borrowernumber | uri %]">Pay fines for [% patron.firstname | html %] [% patron.surname | html %]</a>
+        </li>
+        <li>
+            <a href="#" aria-current="page">
+                [% IF ( pay_individual ) %]
+                    Pay an individual fine
+                [% ELSIF ( writeoff_individual ) %]
+                    Write off an individual fine
+                [% ELSE %]
+                    [% IF ( selected_accts ) %]
+                        [% IF type == 'WRITEOFF' %]
+                            Write off an amount toward selected fines
+                        [% ELSE %]
+                            Pay an amount toward selected fines
+                        [% END %]
+                    [% ELSE %]
+                        Pay an amount toward all fines
+                    [% END %]
+                [% END %]
+            </a>
+        </li>
+    </ol>
+</nav>
 
 <div class="main container-fluid">
     <div class="row">
