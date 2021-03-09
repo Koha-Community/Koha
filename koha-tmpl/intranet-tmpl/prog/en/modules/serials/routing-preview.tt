@@ -8,7 +8,24 @@
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'serials-search.inc' %]
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/serials/serials-home.pl">Serials</a> &rsaquo; <a href="/cgi-bin/koha/serials/subscription-detail.pl?subscriptionid=[% subscriptionid | html %]"><em>[% title | html %]</em></a> &rsaquo; Preview routing list</div>
+<nav aria-label="Breadcrumb" class="breadcrumb">
+    <ol>
+        <li>
+            <a href="/cgi-bin/koha/mainpage.pl">Home</a>
+        </li>
+        <li>
+            <a href="/cgi-bin/koha/serials/serials-home.pl">Serials</a>
+        </li>
+        <li>
+            <a href="/cgi-bin/koha/serials/subscription-detail.pl?subscriptionid=[% subscriptionid | uri %]"><em>[% title | html %]</em></a>
+        </li>
+        <li>
+            <a href="#" aria-current="page">
+                Preview routing list
+            </a>
+        </li>
+    </ol>
+</nav>
 
 <div class="main container-fluid">
     <div class="row">

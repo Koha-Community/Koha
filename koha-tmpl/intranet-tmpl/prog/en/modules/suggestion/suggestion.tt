@@ -54,20 +54,53 @@
     [% INCLUDE 'header.inc' %]
     [% INCLUDE 'cat-search.inc' %]
 
-    <div id="breadcrumbs">
-        <a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a> &rsaquo;
-        [% IF op == 'save' %]
-            [% IF ( suggestionid ) %]
-                <a href="/cgi-bin/koha/suggestion/suggestion.pl">Suggestions</a> &rsaquo;  Edit suggestion #[% suggestionid | html %]
+    <nav aria-label="Breadcrumb" class="breadcrumb">
+        <ol>
+            <li>
+                <a href="/cgi-bin/koha/mainpage.pl">Home</a>
+            </li>
+            <li>
+                <a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a>
+            </li>
+
+            [% IF op == 'save' %]
+                [% IF ( suggestionid ) %]
+                    <li>
+                        <a href="/cgi-bin/koha/suggestion/suggestion.pl">Suggestions</a>
+                    </li>
+                    <li>
+                        <a href="#" aria-current="page">
+                            Edit suggestion #[% suggestionid | html %]
+                        </a>
+                    </li>
+                [% ELSE %]
+                    <li>
+                        <a href="/cgi-bin/koha/suggestion/suggestion.pl">Suggestions</a>
+                    </li>
+                    <li>
+                        <a href="#" aria-current="page">
+                            Add suggestion
+                        </a>
+                    </li>
+                [% END %]
+            [% ELSIF ( op == 'show' ) %]
+                <li>
+                    <a href="/cgi-bin/koha/suggestion/suggestion.pl">Suggestions</a>
+                </li>
+                <li>
+                    <a href="#" aria-current="page">
+                        Show suggestion #[% suggestionid | html %]
+                    </a>
+                </li>
             [% ELSE %]
-                <a href="/cgi-bin/koha/suggestion/suggestion.pl">Suggestions</a> &rsaquo; Add suggestion
+                <li>
+                    <a href="#" aria-current="page">
+                        Suggestions management
+                    </a>
+                </li>
             [% END %]
-        [% ELSIF ( op == 'show' ) %]
-            <a href="/cgi-bin/koha/suggestion/suggestion.pl">Suggestions</a> &rsaquo; Show suggestion #[% suggestionid | html %]
-        [% ELSE %]
-            Suggestions management
-        [% END %]
-    </div> <!-- /.breadcrumbs -->
+        </ol>
+    </nav> <!-- /.breadcrumbs -->
 
     [% IF ( op == 'show' ) %]
         <div class="main container-fluid">

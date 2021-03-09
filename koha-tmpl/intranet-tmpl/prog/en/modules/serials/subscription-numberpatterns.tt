@@ -10,16 +10,42 @@
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'serials-search.inc' %]
 
-<div id="breadcrumbs">
-    <a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo;
-    <a href="/cgi-bin/koha/serials/serials-home.pl">Serials</a> &rsaquo;
-    <a href="/cgi-bin/koha/serials/subscription-numberpatterns.pl">Numbering patterns</a>
-    [% IF ( new ) %]
-        &rsaquo; New numbering pattern
-    [% ELSIF ( modify ) %]
-        &rsaquo; Modifying numbering pattern '[% label | html %]'
-    [% END %]
-</div>
+<nav aria-label="Breadcrumb" class="breadcrumb">
+    <ol>
+        <li>
+            <a href="/cgi-bin/koha/mainpage.pl">Home</a>
+        </li>
+        <li>
+            <a href="/cgi-bin/koha/serials/serials-home.pl">Serials</a>
+        </li>
+
+        [% IF ( new ) %]
+            <li>
+                <a href="/cgi-bin/koha/serials/subscription-numberpatterns.pl">Numbering patterns</a>
+            </li>
+            <li>
+                <a href="#" aria-current="page">
+                    New numbering pattern
+                </a>
+            </li>
+        [% ELSIF ( modify ) %]
+            <li>
+                <a href="/cgi-bin/koha/serials/subscription-numberpatterns.pl">Numbering patterns</a>
+            </li>
+            <li>
+                <a href="#" aria-current="page">
+                    Modifying numbering pattern '[% label | html %]'
+                </a>
+            </li>
+        [% ELSE %]
+            <li>
+                <a href="#" aria-current="page">
+                    Numbering patterns
+                </a>
+            </li>
+        [% END %]
+    </ol>
+</nav>
 
 <div class="main container-fluid">
     <div class="row">

@@ -22,13 +22,42 @@ fieldset.rows table { clear: none; margin: 0; }
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'serials-search.inc' %]
 
-<div id="breadcrumbs">
-    <a href="/cgi-bin/koha/mainpage.pl">Home</a>
-    &rsaquo; <a href="/cgi-bin/koha/serials/serials-home.pl">Serials</a>
-    [% UNLESS blocking_error %]
-        &rsaquo; [% IF ( modify ) %]<a href="/cgi-bin/koha/serials/subscription-detail.pl?subscriptionid=[% subscriptionid | uri %]"><em>[% bibliotitle | html %]</em></a> &rsaquo; Modify subscription[% ELSE %]New subscription[% END %]
-    [% END %]
-</div>
+<nav aria-label="Breadcrumb" class="breadcrumb">
+    <ol>
+        <li>
+            <a href="/cgi-bin/koha/mainpage.pl">Home</a>
+        </li>
+
+        [% IF blocking_error %]
+            <li>
+                <a href="#" aria-current="page">
+                    Serials
+                </a>
+            </li>
+        [% ELSE %]
+            <li>
+                <a href="/cgi-bin/koha/serials/serials-home.pl">Serials</a>
+            </li>
+            [% IF ( modify ) %]
+                <li>
+                    <a href="/cgi-bin/koha/serials/subscription-detail.pl?subscriptionid=[% subscriptionid | uri %]"><em>[% bibliotitle | html %]</em></a>
+                </li>
+                <li>
+                    <a href="#" aria-current="page">
+                        Modify subscription
+                    </a>
+                </li>
+            [% ELSE %]
+                <li>
+                    <a href="#" aria-current="page">
+                        New subscription
+                    </a>
+                </li>
+            [% END %]
+        [% END %]
+    </ol>
+</nav>
+
 [% INCLUDE 'blocking_errors.inc' %]
 
 <div class="main container-fluid">
