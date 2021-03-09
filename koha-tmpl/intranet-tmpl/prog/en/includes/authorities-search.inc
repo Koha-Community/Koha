@@ -31,10 +31,10 @@
             [% ELSE %]
             <option value="start">starts with</option>
             [% END %]
-            [% IF ( operator == 'is' ) %]
-            <option value="is" selected="selected">is exactly</option>
+            [% IF ( operator == 'exact' ) %]
+            <option value="exact" selected="selected">is exactly</option>
             [% ELSE %]
-            <option value="is">is exactly</option>
+            <option value="exact">is exactly</option>
             [% END %]
         </select>
         <input id="value_mainentry" type="text" name="value" value="[% value | html %]" class="head-searchbox" />
@@ -87,10 +87,10 @@
             [% ELSE %]
             <option value="start">starts with</option>
             [% END %]
-            [% IF ( operator == 'is' ) %]
-            <option value="is" selected="selected">is exactly</option>
+            [% IF ( operator == 'exact' ) %]
+            <option value="exact" selected="selected">is exactly</option>
             [% ELSE %]
-            <option value="is">is exactly</option>
+            <option value="exact">is exactly</option>
             [% END %]
         </select>
         <input id="value_mainheading" type="text" name="value" value="[% value | html %]" class="head-searchbox" />
@@ -129,7 +129,7 @@
             [% END %]
         [% END %]
         </select>
-        <input type="hidden" name="marclist" value="match" />
+        <input type="hidden" name="marclist" value="exact" />
         <select name="operator">
             [% IF ( operator == 'contains' ) %]
             <option value="contains" selected="selected">contains</option>
@@ -141,10 +141,10 @@
             [% ELSE %]
             <option value="start">starts with</option>
             [% END %]
-            [% IF ( operator == 'is' ) %]
-            <option value="is" selected="selected">is exactly</option>
+            [% IF ( operator == 'exact' ) %]
+            <option value="exact" selected="selected">is exactly</option>
             [% ELSE %]
-            <option value="is">is exactly</option>
+            <option value="exact">is exactly</option>
             [% END %]
         </select>
         <input id="value_matchheading" type="text" name="value" value="[% value | html %]" class="head-searchbox" />
@@ -197,10 +197,10 @@
             [% ELSE %]
             <option value="start">starts with</option>
             [% END %]
-            [% IF ( operator == 'is' ) %]
-            <option value="is" selected="selected">is exactly</option>
+            [% IF ( operator == 'exact' ) %]
+            <option value="exact" selected="selected">is exactly</option>
             [% ELSE %]
-            <option value="is">is exactly</option>
+            <option value="exact">is exactly</option>
             [% END %]
         </select>
         <input id="value_anywhere" type="text" name="value" value="[% value | html %]" class="head-searchbox" />
