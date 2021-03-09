@@ -24,13 +24,37 @@
 <body id="labels_label-edit-layout" class="tools labels">
     [% INCLUDE 'header.inc' %]
     [% INCLUDE 'cat-search.inc' %]
-    <div id="breadcrumbs">
-        <a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo;
-        <a href="/cgi-bin/koha/tools/tools-home.pl">Tools</a> &rsaquo;
-        <a href="/cgi-bin/koha/labels/label-home.pl">Label creator</a> &rsaquo;
-        <a href="/cgi-bin/koha/labels/label-manage.pl?label_element=layout">Layouts</a> &rsaquo;
-        [% IF ( layout_id ) %]Edit ([% layout_id | html %])[% ELSE %]New[% END %]
-    </div>
+
+    <nav aria-label="Breadcrumb" class="breadcrumb">
+        <ol>
+            <li>
+                <a href="/cgi-bin/koha/mainpage.pl">Home</a>
+            </li>
+            <li>
+                <a href="/cgi-bin/koha/tools/tools-home.pl">Tools</a>
+            </li>
+            <li>
+                <a href="/cgi-bin/koha/labels/label-home.pl">Label creator</a>
+            </li>
+            <li>
+                <a href="/cgi-bin/koha/labels/label-manage.pl?label_element=layout">Layouts</a>
+            </li>
+
+            [% IF ( layout_id ) %]
+                <li>
+                    <a href="#" aria-current="page">
+                        Edit ([% layout_id | html %])
+                    </a>
+                </li>
+            [% ELSE %]
+                <li>
+                    <a href="#" aria-current="page">
+                        New
+                    </a>
+                </li>
+            [% END %]
+        </ol>
+    </nav>
 
     <div class="main container-fluid">
         <div class="row">
