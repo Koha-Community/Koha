@@ -25,18 +25,38 @@
 [% INCLUDE 'circ-search.inc' %]
 
 [% UNLESS ( multi_hold ) %]
-    <div id="breadcrumbs">
-        <a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo;
-        <a href="/cgi-bin/koha/catalogue/search.pl">Catalog</a> &rsaquo;
-        [% INCLUDE 'biblio-title.inc' link =1 %] &rsaquo;
-        Place a hold
-    </div>
+    <nav aria-label="Breadcrumb" class="breadcrumb">
+        <ol>
+            <li>
+                <a href="/cgi-bin/koha/mainpage.pl">Home</a>
+            </li>
+            <li>
+                <a href="/cgi-bin/koha/catalogue/search.pl">Catalog</a>
+            </li>
+            [% INCLUDE 'biblio-title.inc' link =1 %]
+            <li>
+                <a href="#" aria-current="page">
+                    Place a hold
+                </a>
+            </li>
+        </ol>
+    </nav>
 [% ELSE %]
-    <div id="breadcrumbs">
-        <a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo;
-        <a href="/cgi-bin/koha/catalogue/search.pl">Catalog</a> &rsaquo;
-        Confirm holds
-    </div>
+    <nav aria-label="Breadcrumb" class="breadcrumb">
+        <ol>
+            <li>
+                <a href="/cgi-bin/koha/mainpage.pl">Home</a>
+            </li>
+            <li>
+                <a href="/cgi-bin/koha/catalogue/search.pl">Catalog</a>
+            </li>
+            <li>
+                <a href="#" aria-current="page">
+                    Confirm holds
+                </a>
+            </li>
+        </ol>
+    </nav>
 [% END # UNLESS multi_hold %]
 
 <div class="main container-fluid">

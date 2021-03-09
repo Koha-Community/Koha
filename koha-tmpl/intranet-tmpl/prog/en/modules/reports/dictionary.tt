@@ -20,13 +20,77 @@
     [%- END -%]
 [%- END -%]
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/reports/reports-home.pl">Reports</a> &rsaquo; <a href="/cgi-bin/koha/reports/guided_reports.pl">Guided reports wizard</a>
-[% IF ( new_dictionary ) %] &rsaquo; <a href="/cgi-bin/koha/reports/dictionary.pl">Dictionary</a> &rsaquo; <strong>Name the new definition</strong>
-[% ELSIF ( step_2 ) %] &rsaquo; <a href="/cgi-bin/koha/reports/dictionary.pl">Dictionary</a> &rsaquo; <strong>Step 2: Choose the area </strong> 
-[% ELSIF ( step_3 ) %] &rsaquo; <a href="/cgi-bin/koha/reports/dictionary.pl">Dictionary</a> &rsaquo; <strong>Step 3: Choose a column </strong>
-[% ELSIF ( step_4 ) %] &rsaquo; <a href="/cgi-bin/koha/reports/dictionary.pl">Dictionary</a> &rsaquo; <strong>Step 4: Specify a value </strong> 
-[% ELSIF ( step_5 ) %] &rsaquo; <a href="/cgi-bin/koha/reports/dictionary.pl">Dictionary</a> &rsaquo; <strong>Step 5: Confirm definition</strong> 
-[% ELSE %] &rsaquo; <strong> Dictionary </strong>[% END %]</div>
+<nav aria-label="Breadcrumb" class="breadcrumb">
+    <ol>
+        <li>
+            <a href="/cgi-bin/koha/mainpage.pl">Home</a>
+        </li>
+        <li>
+            <a href="/cgi-bin/koha/reports/reports-home.pl">Reports</a>
+        </li>
+        <li>
+            <a href="/cgi-bin/koha/reports/guided_reports.pl">Guided reports wizard</a>
+        </li>
+
+        [% IF ( new_dictionary ) %]
+            <li>
+                <a href="/cgi-bin/koha/reports/dictionary.pl">Dictionary</a>
+            </li>
+            <li>
+                <a href="#" aria-current="page">
+                    Name the new definition
+                </a>
+            </li>
+
+        [% ELSIF ( step_2 ) %]
+            <li>
+                <a href="/cgi-bin/koha/reports/dictionary.pl">Dictionary</a>
+            </li>
+            <li>
+                <a href="#" aria-current="page">
+                    Step 2: Choose the area
+                </a>
+            </li>
+
+        [% ELSIF ( step_3 ) %]
+            <li>
+                <a href="/cgi-bin/koha/reports/dictionary.pl">Dictionary</a>
+            </li>
+            <li>
+                <a href="#" aria-current="page">
+                    Step 3: Choose a column
+                </a>
+            </li>
+
+        [% ELSIF ( step_4 ) %]
+            <li>
+                <a href="/cgi-bin/koha/reports/dictionary.pl">Dictionary</a>
+            </li>
+            <li>
+                <a href="#" aria-current="page">
+                    Step 4: Specify a value
+                </a>
+            </li>
+
+        [% ELSIF ( step_5 ) %]
+            <li>
+                <a href="/cgi-bin/koha/reports/dictionary.pl">Dictionary</a>
+            </li>
+            <li>
+                <a href="#" aria-current="page">
+                    Step 5: Confirm definition
+                </a>
+            </li>
+
+        [% ELSE %]
+            <li>
+                <a href="#" aria-current="page">
+                    Dictionary
+                </a>
+            </li>
+        [% END %]
+    </ol>
+</nav>
 
 <div class="main container-fluid">
     <div class="row">
