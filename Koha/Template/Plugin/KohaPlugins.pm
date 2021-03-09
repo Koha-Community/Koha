@@ -147,6 +147,18 @@ sub get_plugins_intranet_js {
     return join( "\n", @data );
 }
 
+=head3 get_plugins_intranet_catalog_biblio_tab
+
+  [% SET plugins_intranet_catalog_biblio_tabs = KohaPlugins.get_plugins_intranet_catalog_biblio_tab %]
+  [% FOREACH plugins_intranet_catalog_biblio_tab IN plugins_intranet_catalog_biblio_tabs %]
+    <li><a href="#[% plugins_intranet_catalog_biblio_tab.id | uri %]">[% plugins_intranet_catalog_biblio_tab.title | html %]</a></li>
+  [% END %]
+
+This method collects the output of all plugins with a intranet_catalog_biblio_tab
+method to output to the list of extra cataloguing tabs on intranet pages.
+
+=cut
+
 sub get_plugins_intranet_catalog_biblio_tab {
 
     my $tabs = [];
