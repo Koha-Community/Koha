@@ -31,10 +31,10 @@
                         [% ELSE %]
                         <option value="start">starts with</option>
                         [% END %]
-                        [% IF ( operator_mainstr == 'is' ) %]
-                        <option value="is" selected="selected">is exactly</option>
+                        [% IF ( operator_mainstr == 'exact' ) %]
+                        <option value="exact" selected="selected">is exactly</option>
                         [% ELSE %]
-                        <option value="is">is exactly</option>
+                        <option value="exact">is exactly</option>
                         [% END %]
                     </select>
                     <input id="value_mainstr" style="width:400px;" type="text" name="value_mainstr" value="[% value_mainstr | html %]" />
@@ -57,10 +57,10 @@
                         [% ELSE %]
                         <option value="start">starts with</option>
                         [% END %]
-                        [% IF ( operator_main == 'is' ) %]
-                        <option value="is" selected="selected">is exactly</option>
+                        [% IF ( operator_main == 'exact' ) %]
+                        <option value="exact" selected="selected">is exactly</option>
                         [% ELSE %]
-                        <option value="is">is exactly</option>
+                        <option value="exact">is exactly</option>
                         [% END %]
                     </select>
                     <input id="value_main" style="width:400px;" type="text" name="value_main" value="[% value_main | html %]" />
@@ -82,10 +82,10 @@
                         [% ELSE %]
                         <option value="start">starts with</option>
                         [% END %]
-                        [% IF ( operator_match == 'is' ) %]
-                        <option value="is" selected="selected">is exactly</option>
+                        [% IF ( operator_match == 'exact' ) %]
+                        <option value="exact" selected="selected">is exactly</option>
                         [% ELSE %]
-                        <option value="is">is exactly</option>
+                        <option value="exact">is exactly</option>
                         [% END %]
                     </select>
                     <input type="text" name="value_match" value="[% value_match | html %]" />
@@ -106,10 +106,10 @@
                         [% ELSE %]
                         <option value="start">starts with</option>
                         [% END %]
-                        [% IF ( operator_any == 'is' ) %]
-                        <option value="is" selected="selected">is exactly</option>
+                        [% IF ( operator_any == 'exact' ) %]
+                        <option value="exact" selected="selected">is exactly</option>
                         [% ELSE %]
-                        <option value="is">is exactly</option>
+                        <option value="exact">is exactly</option>
                         [% END %]
                     </select>
                     <input id="value_any" style="width:400px;" type="text" name="value_any" value="[% value_any | html %]" />
