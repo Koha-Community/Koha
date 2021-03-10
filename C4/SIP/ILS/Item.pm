@@ -281,6 +281,9 @@ sub sip_circulation_status {
     elsif ( $self->{location} eq 'CART' ) {
         return '09';    # waiting to be re-shelved
     }
+    elsif ( $self->{notforloan} < 0 ) {
+        return '02';    # on order
+    }
     else {
         return '03';    # available
     }    # FIXME: 01-13 enumerated in spec.
