@@ -6,7 +6,7 @@
 [% USE raw %]
 
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Koha &rsaquo; Reports &rsaquo; Mana Knowledge Base reports search</title>
+<title>Mana Knowledge Base reports search &rsaquo; Reports &rsaquo; Koha</title>
 [% INCLUDE 'doc-head-close.inc' %]
 [% Asset.css("css/reports.css") | $raw %]
 </head>
