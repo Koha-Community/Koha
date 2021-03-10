@@ -19,21 +19,28 @@
 [% END %]
 
 [% BLOCK breadcrumbs %]
-    <div id="breadcrumbs">
-        <a href="/cgi-bin/koha/mainpage.pl">Home</a>
-        &rsaquo;
-        <a href="/cgi-bin/koha/tools/tools-home.pl">Tools</a>
-        &rsaquo;
-        <a href="/cgi-bin/koha/tools/upload.pl">Upload</a>
-        &rsaquo;
-        <span id="lastbreadcrumb">
-        [% IF mode=='new' || mode =='deleted'%]
-            Add new upload or search
-        [% ELSE %]
-            Results
-        [% END %]
-        </span>
-    </div>
+    <nav aria-label="Breadcrumb" class="breadcrumb">
+        <ol>
+            <li>
+                <a href="/cgi-bin/koha/mainpage.pl">Home</a>
+            </li>
+            <li>
+                <a href="/cgi-bin/koha/tools/tools-home.pl">Tools</a>
+            </li>
+            <li>
+                <a href="/cgi-bin/koha/tools/upload.pl">Upload</a>
+            </li>
+            <li>
+                <a href="#" aria-current="page">
+                    [% IF mode=='new' || mode =='deleted'%]
+                        Add new upload or search
+                    [% ELSE %]
+                        Results
+                    [% END %]
+                </a>
+            </li>
+        </ol>
+    </nav>
 [% END %]
 
 [% BLOCK form_new %]

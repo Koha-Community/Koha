@@ -14,33 +14,75 @@
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'cat-search.inc' %]
 
-<div id="breadcrumbs">
-    <a href="/cgi-bin/koha/mainpage.pl">Home</a>
-    &rsaquo; <a href="/cgi-bin/koha/tools/tools-home.pl">Tools</a>
+<nav aria-label="Breadcrumb" class="breadcrumb">
+    <ol>
+        <li>
+            <a href="/cgi-bin/koha/mainpage.pl">Home</a>
+        </li>
+        <li>
+            <a href="/cgi-bin/koha/tools/tools-home.pl">Tools</a>
+        </li>
 
-[% IF no_op_set %]
-    &rsaquo; Stock rotation
-[% ELSE %]
-    &rsaquo; <a href="/cgi-bin/koha/tools/stockrotation.pl">Stock rotation</a>
-[% END %]
+        [% IF no_op_set %]
+            <li>
+                <a href="#" aria-current="page">
+                    Stock rotation
+                </a>
+            </li>
+        [% ELSE %]
+            <li>
+                <a href="/cgi-bin/koha/tools/stockrotation.pl">Stock rotation</a>
+            </li>
+        [% END %]
 
-[% IF (op == 'create_edit_rota' && rota.rota_id) %]
-    &rsaquo; Edit rota
-[% ELSIF (op == 'create_edit_rota' && !rota.rota_id) %]
-    &rsaquo; Create rota
-[% ELSIF (op == 'manage_stages') %]
-    &rsaquo; Manage stages
-[% ELSIF (op == 'create_edit_stage' && stage.id) %]
-    <a href="?op=manage_stages&amp;rota_id=[% rota_id | uri %]">&rsaquo; Manage stages</a>
-    &rsaquo; Edit stage
-[% ELSIF (op == 'create_edit_stage' && !stage.id) %]
-    <a href="?op=manage_stages&amp;rota_id=[% rota_id | uri %]">&rsaquo; Manage stages</a>
-    &rsaquo; Create stage
-[% ELSIF (op == 'manage_items') %]
-    &rsaquo; Manage items
-[% END %]
-
-</div>
+        [% IF (op == 'create_edit_rota' && rota.rota_id) %]
+            <li>
+                <a href="#" aria-current="page">
+                    Edit rota
+                </a>
+            </li>
+        [% ELSIF (op == 'create_edit_rota' && !rota.rota_id) %]
+            <li>
+                <a href="#" aria-current="page">
+                    Create rota
+                </a>
+            </li>
+        [% ELSIF (op == 'manage_stages') %]
+            <li>
+                <a href="#" aria-current="page">
+                    Manage stages
+                </a>
+            </li>
+        [% ELSIF (op == 'create_edit_stage' && stage.id) %]
+            <li>
+                <a href="?op=manage_stages&amp;rota_id=[% rota_id | uri %]">Manage stages</a>
+            </li>
+            <li>
+                <a href="#" aria-current="page">
+                    Edit stage
+                </a>
+            </li>
+        [% ELSIF (op == 'create_edit_stage' && !stage.id) %]
+            <li>
+                <a href="?op=manage_stages&amp;rota_id=[% rota_id | uri %]">
+            </li>
+            <li>
+                Manage stages</a>
+            </li>
+            <li>
+                <a href="#" aria-current="page">
+                    Create stage
+                </a>
+            </li>
+        [% ELSIF (op == 'manage_items') %]
+            <li>
+                <a href="#" aria-current="page">
+                    Manage items
+                </a>
+            </li>
+        [% END %]
+    </ol>
+</nav>
 
 <div class="main container-fluid">
     <div class="row">

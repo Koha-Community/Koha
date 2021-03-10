@@ -35,28 +35,76 @@
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'cat-search.inc' %]
 
-<div id="breadcrumbs">
-    <a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo;
-    [% IF op != 'list' %]
-        <a href="/cgi-bin/koha/virtualshelves/shelves.pl">Lists</a>
-    [% ELSE %]
-        Lists
-    [% END %]
-    [% IF shelf AND shelf.is_private %] &rsaquo;
-        [% IF op == 'view' OR op == 'edit_form' %]
-            <a href="/cgi-bin/koha/virtualshelves/shelves.pl?op=list&amp;category=[% PRIVATE | uri %]">Your lists</a>
-        [% ELSE %]
-            Your lists
-        [% END %]
-    [% ELSIF shelf AND shelf.is_public %] &rsaquo;
-        [% IF op == 'view' %]
-            <a href="/cgi-bin/koha/virtualshelves/shelves.pl?op=list&amp;category=[% PUBLIC | uri %]">Public lists</a>
-        [% ELSE %]
-            Public lists
-        [% END %]
-    [% END %]
+<nav aria-label="Breadcrumb" class="breadcrumb">
+    <ol>
+        <li>
+            <a href="/cgi-bin/koha/mainpage.pl">Home</a>
+        </li>
 
-[% IF op == 'view' %]&rsaquo; Contents of <em>[% shelf.shelfname | html %]</em>[% END %][% IF op == 'add_form' %] &rsaquo; Create new list[% END %][% IF op == 'edit_form' %] &rsaquo; Edit list <em>[% shelf.shelfname | html %]</em>[% END %]</div>
+        [% IF op != 'list' %]
+            <li>
+                <a href="/cgi-bin/koha/virtualshelves/shelves.pl">Lists</a>
+            </li>
+        [% ELSE %]
+            <li>
+                <a href="#" aria-current="page">
+                    Lists
+                </a>
+            </li>
+        [% END %]
+
+        [% IF shelf AND shelf.is_private %]
+            [% IF op == 'view' OR op == 'edit_form' %]
+                <li>
+                    <a href="/cgi-bin/koha/virtualshelves/shelves.pl?op=list&amp;category=[% PRIVATE | uri %]">Your lists</a>
+                </li>
+            [% ELSE %]
+                <li>
+                    <a href="#" aria-current="page">
+                        Your lists
+                    </a>
+                </li>
+            [% END %]
+
+        [% ELSIF shelf AND shelf.is_public %]
+            [% IF op == 'view' %]
+                <li>
+                    <a href="/cgi-bin/koha/virtualshelves/shelves.pl?op=list&amp;category=[% PUBLIC | uri %]">Public lists</a>
+                </li>
+            [% ELSE %]
+                <li>
+                    <a href="#" aria-current="page">
+                        Public lists
+                    </a>
+                </li>
+            [% END %]
+        [% END %]
+
+        [% IF op == 'view' %]
+            <li>
+                <a href="#" aria-current="page">
+            Contents of <em>[% shelf.shelfname | html %]</em>
+                </a>
+            </li>
+        [% END %]
+
+        [% IF op == 'add_form' %]
+            <li>
+                <a href="#" aria-current="page">
+                    Create new list
+                </a>
+            </li>
+        [% END %]
+
+        [% IF op == 'edit_form' %]
+            <li>
+                <a href="#" aria-current="page">
+                    Edit list <em>[% shelf.shelfname | html %]</em>
+                </a>
+            </li>
+        [% END %]
+    </ol>
+</nav>
 
     <div class="main container-fluid">
         <div class="row">

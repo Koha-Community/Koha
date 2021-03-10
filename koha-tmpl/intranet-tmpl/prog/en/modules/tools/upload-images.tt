@@ -13,15 +13,51 @@
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'cat-search.inc' %]
 
-<div id="breadcrumbs">
-    <a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo;
-    <a href="/cgi-bin/koha/tools/tools-home.pl">Tools</a> &rsaquo;
-    <a href="/cgi-bin/koha/tools/upload-cover-image.pl">Upload local cover image</a>
-    [% IF ( uploadimage ) %] &rsaquo; Upload results
-    [% ELSIF itemnumber %] &rsaquo; Upload cover for itemnumber: [% itemnumber | html %]
-    [% ELSIF biblionumber %] &rsaquo; Upload cover for biblionumber: [% biblionumber | html %]
-    [% END %]
-</div>
+<nav aria-label="Breadcrumb" class="breadcrumb">
+    <ol>
+        <li>
+            <a href="/cgi-bin/koha/mainpage.pl">Home</a>
+        </li>
+        <li>
+            <a href="/cgi-bin/koha/tools/tools-home.pl">Tools</a>
+        </li>
+
+        [% IF ( uploadimage ) %]
+            <li>
+                <a href="/cgi-bin/koha/tools/upload-cover-image.pl">Upload local cover image</a>
+            </li>
+            <li>
+                <a href="#" aria-current="page">
+                    Upload results
+                </a>
+            </li>
+        [% ELSIF itemnumber %]
+            <li>
+                <a href="/cgi-bin/koha/tools/upload-cover-image.pl">Upload local cover image</a>
+            </li>
+            <li>
+                <a href="#" aria-current="page">
+                    Upload cover for itemnumber: [% itemnumber | html %]
+                </a>
+            </li>
+        [% ELSIF biblionumber %]
+            <li>
+                <a href="/cgi-bin/koha/tools/upload-cover-image.pl">Upload local cover image</a>
+            </li>
+            <li>
+                <a href="#" aria-current="page">
+                    Upload cover for biblionumber: [% biblionumber | html %]
+                </a>
+            </li>
+        [% ELSE %]
+            <li>
+                <a href="#" aria-current="page">
+                    Upload local cover image
+                </a>
+            </li>
+        [% END %]
+    </ol>
+</nav>
 
 <div class="main container-fluid">
     <div class="row">

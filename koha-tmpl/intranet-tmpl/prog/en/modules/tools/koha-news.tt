@@ -25,8 +25,37 @@
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'cat-search.inc' %]
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/tools/tools-home.pl">Tools</a> &rsaquo; [% IF ( add_form ) %]<a href="/cgi-bin/koha/tools/koha-news.pl">News</a> &rsaquo; [% IF ( id ) %]
-Edit news item[% ELSE %]Add news item[% END %][% ELSE %]News[% END %]</div>
+<nav aria-label="Breadcrumb" class="breadcrumb">
+    <ol>
+        <li>
+            <a href="/cgi-bin/koha/mainpage.pl">Home</a>
+        </li>
+        <li>
+            <a href="/cgi-bin/koha/tools/tools-home.pl">Tools</a>
+        </li>
+
+        [% IF ( add_form ) %]
+            <li>
+                <a href="/cgi-bin/koha/tools/koha-news.pl">News</a>
+            </li>
+            <li>
+                <a href="#" aria-current="page">
+                    [% IF ( id ) %]
+                        Edit news item
+                    [% ELSE %]
+                        Add news item
+                    [% END %]
+                </a>
+            </li>
+        [% ELSE %]
+            <li>
+                <a href="#" aria-current="page">
+                    News
+                </a>
+            </li>
+        [% END %]
+    </ol>
+</nav>
 
 [% IF ( add_form ) %]
     <div class="main container-fluid">
