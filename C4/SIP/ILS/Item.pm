@@ -278,6 +278,9 @@ sub sip_circulation_status {
     elsif ( grep { $_->{itemnumber} == $self->{itemnumber}  } @{ $self->{hold_attached} } ) {
         return '08';    # waiting on hold shelf
     }
+    elsif ( $self->{location} eq 'CART' ) {
+        return '09';    # waiting to be re-shelved
+    }
     else {
         return '03';    # available
     }    # FIXME: 01-13 enumerated in spec.
