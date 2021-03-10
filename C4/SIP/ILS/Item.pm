@@ -281,6 +281,9 @@ sub sip_circulation_status {
     elsif ( $self->{location} eq 'CART' ) {
         return '09';    # waiting to be re-shelved
     }
+    elsif ( $self->{damaged} ) {
+        return '01';    # damaged
+    }
     elsif ( $self->{notforloan} < 0 ) {
         return '02';    # on order
     }

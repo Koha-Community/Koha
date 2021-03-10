@@ -1207,10 +1207,15 @@ sub handle_item_information {
     } else {
 
         # Valid Item ID, send the good stuff
-        $resp .= $item->sip_circulation_status;
+        my $circulation_status = $item->sip_circulation_status;
+        $resp .= $circulation_status;
         $resp .= $item->sip_security_marker;
         $resp .= $item->sip_fee_type;
         $resp .= timestamp;
+
+        if ( $circulation_status eq '01' ) {
+            $resp .= maybe_add( FID_SCREEN_MSG, "Item is damaged", $server );
+        }
 
         $resp .= add_field( FID_ITEM_ID,  $item->id, $server );
         $resp .= add_field( FID_TITLE_ID, $item->title_id, $server );
@@ -1219,6 +1224,7 @@ sub handle_item_information {
         $resp .= maybe_add( FID_PERM_LOCN,    $item->permanent_location, $server );
         $resp .= maybe_add( FID_CURRENT_LOCN, $item->current_location, $server );
         $resp .= maybe_add( FID_ITEM_PROPS,   $item->sip_item_properties, $server );
+
 
         if ( my $CR = $server->{account}->{cr_item_field} ) {
                 $resp .= maybe_add( FID_COLLECTION_CODE, $item->{$CR}, $server );
