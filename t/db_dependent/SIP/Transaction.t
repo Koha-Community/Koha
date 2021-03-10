@@ -515,7 +515,7 @@ subtest checkin_withdrawn => sub {
 };
 
 subtest item_circulation_status => sub {
-    plan tests => 4;
+    plan tests => 5;
 
     my $library  = $builder->build_object( { class => 'Koha::Libraries' } );
     my $library2 = $builder->build_object( { class => 'Koha::Libraries' } );
@@ -571,5 +571,11 @@ subtest item_circulation_status => sub {
     $sip_item = C4::SIP::ILS::Item->new( $item->barcode );
     $status = $sip_item->sip_circulation_status;
     is( $status, '12', "Item circulation status is lost" );
+    $item->itemlost(0)->store();
+
+    $item->location("CART")->store();
+    $sip_item = C4::SIP::ILS::Item->new( $item->barcode );
+    $status = $sip_item->sip_circulation_status;
+    is( $status, '09', "Item circulation status is waiting to be re-shelved" );
 };
 $schema->storage->txn_rollback;
