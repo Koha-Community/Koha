@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 64;
+use Test::More tests => 65;
 use Test::MockModule;
 use Test::Warn;
 
@@ -32,6 +32,7 @@ use C4::Items;
 use C4::Biblio;
 use C4::Members;
 use C4::Reserves;
+use Koha::ActionLogs;
 use Koha::Caches;
 use Koha::DateUtils;
 use Koha::Holds;
@@ -1154,6 +1155,50 @@ subtest 'CheckReserves additional test' => sub {
         $reserve1->reserve_id, "We got the Transit reserve" );
     is( scalar @$possible_reserves, 2, 'We do get both reserves' );
 
+};
+
+subtest 'ModReserveAffect logging' => sub {
+
+    plan tests => 4;
+
+    my $item = $builder->build_sample_item;
+    my $patron = $builder->build_object(
+        {
+            class => "Koha::Patrons",
+            value => { branchcode => $item->homebranch }
+        }
+    );
+
+    t::lib::Mocks::mock_userenv({ patron => $patron });
+    t::lib::Mocks::mock_preference('HoldsLog', 1);
+
+    my $reserve_id = AddReserve(
+        {
+            branchcode     => $item->homebranch,
+            borrowernumber => $patron->borrowernumber,
+            biblionumber   => $item->biblionumber,
+            priority       => 1,
+            itemnumber     => $item->itemnumber,
+        }
+    );
+
+    my $hold = Koha::Holds->find($reserve_id);
+    my $previous_timestamp = '1970-01-01 12:34:56';
+    $hold->timestamp($previous_timestamp)->store;
+
+    $hold = Koha::Holds->find($reserve_id);
+    is( $hold->timestamp, $previous_timestamp, 'Make sure the previous timestamp has been used' );
+
+    # Mark it waiting
+    ModReserveAffect( $item->itemnumber, $patron->borrowernumber );
+
+    $hold = Koha::Holds->find($reserve_id);
+    is( $hold->found, 'W', 'Hold has been set waiting' );
+    isnt( $hold->timestamp, $previous_timestamp, 'The timestamp has been modified' );
+
+    my $log = Koha::ActionLogs->search({ module => 'HOLDS', action => 'MODIFY', object => $hold->reserve_id })->next;
+    my $expected = sprintf q{'timestamp' => '%s'}, $hold->timestamp;
+    like( $log->info, qr{$expected}, 'Timestamp logged is the current one' );
 };
 
 sub count_hold_print_messages {
