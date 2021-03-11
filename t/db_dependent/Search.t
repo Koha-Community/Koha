@@ -925,37 +925,48 @@ subtest 'UNIMARC + DOM' => sub {
 
 
 subtest 'FindDuplicate' => sub {
-    plan tests => 3;
+    plan tests => 6;
     Koha::Caches->get_instance('config')->flush_all;
     t::lib::Mocks::mock_preference('marcflavour', 'marc21' );
     mock_GetMarcSubfieldStructure('marc21');
-    my $searcher = Test::MockModule->new('C4::Search');
-    $searcher->mock('SimpleSearch', sub {
+    my $z_searcher = Test::MockModule->new('C4::Search');
+    $z_searcher->mock('SimpleSearch', sub {
+        warn shift @_;
+        return 1;
+    });
+    my $e_searcher = Test::MockModule->new('Koha::SearchEngine::Elasticsearch::Search');
+    $e_searcher->mock('simple_search_compat', sub {
+        shift @_;
         warn shift @_;
         return 1;
     });
 
-    my $record = MARC::Record->new;
-    $record->add_fields(
+    my $record_1 = MARC::Record->new;
+    $record_1 ->add_fields(
             [ '100', '0', '0', a => 'Morgenstern, Erin' ],
             [ '245', '0', '0', a => 'The night circus /' ]
     );
-    warning_is { C4::Search::FindDuplicate($record);}
-        q/ti,ext:"The night circus \/" and au,ext:"Morgenstern, Erin"/,"Term correctly formed";
-
-    $record = MARC::Record->new;
-    $record->add_fields(
+    my $record_2 = MARC::Record->new;
+    $record_2 ->add_fields(
             [ '245', '0', '0', a => 'The book of nothing /' ]
     );
-    warning_is { C4::Search::FindDuplicate($record);}
-        q/ti,ext:"The book of nothing \/"/,"Term correctly formed";
-
-    $record = MARC::Record->new;
-    $record->add_fields(
+    my $record_3 = MARC::Record->new;
+    $record_3->add_fields(
             [ '245', '0', '0', a => 'Frog and toad all year /' ]
     );
-    warning_is { C4::Search::FindDuplicate($record);}
-        q/ti,ext:"Frog and toad all year \/"/,"Term correctly formed";
+
+    foreach my $engine ('Zebra','Elasticsearch'){
+        t::lib::Mocks::mock_preference('searchEngine', $engine );
+
+        warning_is { C4::Search::FindDuplicate($record_1);}
+            q/ti,ext:"The night circus \/" and au,ext:"Morgenstern, Erin"/,"Term correctly formed and passed to $engine";
+
+        warning_is { C4::Search::FindDuplicate($record_2);}
+            q/ti,ext:"The book of nothing \/"/,"Term correctly formed and passed to $engine";
+
+        warning_is { C4::Search::FindDuplicate($record_3);}
+            q/ti,ext:"Frog and toad all year \/"/,"Term correctly formed and passed to $engine";
+    }
 
 };
 
