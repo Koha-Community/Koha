@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 4;
+use Test::More tests => 5;
 use Test::MockModule;
 use Test::Mojo;
 use Test::Warn;
@@ -326,6 +326,124 @@ subtest 'get_public() tests' => sub {
                  => { Accept => 'application/marc' } )
       ->status_is(404)
       ->json_is( '/error', 'Object not found.' );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'pickup_locations() tests' => sub {
+
+    plan tests => 15;
+
+    $schema->storage->txn_begin;
+
+    t::lib::Mocks::mock_preference( 'AllowHoldPolicyOverride', 0 );
+
+    # Small trick to ease testing
+    Koha::Libraries->search->update({ pickup_location => 0 });
+
+    my $library_1 = $builder->build_object({ class => 'Koha::Libraries', value => { marcorgcode => 'A', pickup_location => 1 } });
+    my $library_2 = $builder->build_object({ class => 'Koha::Libraries', value => { marcorgcode => 'B', pickup_location => 1 } });
+    my $library_3 = $builder->build_object({ class => 'Koha::Libraries', value => { marcorgcode => 'C', pickup_location => 1 } });
+
+    my $library_1_api = $library_1->to_api();
+    my $library_2_api = $library_2->to_api();
+    my $library_3_api = $library_3->to_api();
+
+    $library_1_api->{needs_override} = Mojo::JSON->false;
+    $library_2_api->{needs_override} = Mojo::JSON->false;
+    $library_3_api->{needs_override} = Mojo::JSON->true;
+
+    my $patron = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => { userid => 'tomasito', flags => 0 }
+        }
+    );
+    my $password = 'thePassword123';
+    $patron->set_password( { password => $password, skip_validation => 1 } );
+    my $userid = $patron->userid;
+    $builder->build(
+        {
+            source => 'UserPermission',
+            value  => {
+                borrowernumber => $patron->borrowernumber,
+                module_bit     => 6,
+                code           => 'place_holds',
+            },
+        }
+    );
+
+    my $biblio_class = Test::MockModule->new('Koha::Biblio');
+    $biblio_class->mock(
+        'pickup_locations',
+        sub {
+            my ( $self, $params ) = @_;
+            my $mock_patron = $params->{patron};
+            is( $mock_patron->borrowernumber,
+                $patron->borrowernumber, 'Patron passed correctly' );
+            return Koha::Libraries->search(
+                {
+                    branchcode => {
+                        '-in' => [
+                            $library_1->branchcode,
+                            $library_2->branchcode
+                        ]
+                    }
+                },
+                {   # we make sure no surprises in the order of the result
+                    order_by => { '-asc' => 'marcorgcode' }
+                }
+            );
+        }
+    );
+
+    my $biblio = $builder->build_sample_biblio;
+
+    $t->get_ok( "//$userid:$password@/api/v1/biblios/"
+          . $biblio->id
+          . "/pickup_locations?patron_id=" . $patron->id )
+      ->json_is( [ $library_1_api, $library_2_api ] );
+
+    # filtering works!
+    $t->get_ok( "//$userid:$password@/api/v1/biblios/"
+          . $biblio->id
+          . '/pickup_locations?'
+          . 'patron_id=' . $patron->id . '&q={"marc_org_code": { "-like": "A%" }}' )
+      ->json_is( [ $library_1_api ] );
+
+    t::lib::Mocks::mock_preference( 'AllowHoldPolicyOverride', 1 );
+
+    my $library_4 = $builder->build_object({ class => 'Koha::Libraries', value => { pickup_location => 0, marcorgcode => 'X' } });
+    my $library_5 = $builder->build_object({ class => 'Koha::Libraries', value => { pickup_location => 1, marcorgcode => 'Y' } });
+
+    my $library_5_api = $library_5->to_api();
+    $library_5_api->{needs_override} = Mojo::JSON->true;
+
+    $t->get_ok( "//$userid:$password@/api/v1/biblios/"
+          . $biblio->id
+          . "/pickup_locations?"
+          . "patron_id=" . $patron->id . "&_order_by=marc_org_code" )
+      ->json_is( [ $library_1_api, $library_2_api, $library_3_api, $library_5_api ] );
+
+    my $deleted_patron = $builder->build_object({ class => 'Koha::Patrons' });
+    my $deleted_patron_id = $deleted_patron->id;
+    $deleted_patron->delete;
+
+    $t->get_ok( "//$userid:$password@/api/v1/biblios/"
+          . $biblio->id
+          . "/pickup_locations?"
+          . "patron_id=" . $deleted_patron_id )
+      ->status_is( 400 )
+      ->json_is( '/error' => 'Patron not found' );
+
+    $biblio->delete;
+
+    $t->get_ok( "//$userid:$password@/api/v1/biblios/"
+          . $biblio->id
+          . "/pickup_locations?"
+          . "patron_id=" . $patron->id )
+      ->status_is( 404 )
+      ->json_is( '/error' => 'Biblio not found' );
 
     $schema->storage->txn_rollback;
 };
