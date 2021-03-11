@@ -277,16 +277,9 @@ Merges parameters from $q_params into $filtered_params.
 
             my ( $c ) = @_;
 
-            my $override_header = $c->req->headers->header('x-koha-override');
+            my $override_header = $c->req->headers->header('x-koha-override') || q{};
 
-            my $overrides = {};
-
-            if ( $override_header ) {
-                my @overrides = ();
-                foreach my $override ( split /\s*,\s*/, $override_header ) {
-                    $overrides->{$override} = 1;
-                }
-            }
+            my $overrides = { map { $_ => 1 } split /\s*,\s*/, $override_header };
 
             $c->stash( 'koha.overrides' => $overrides );
 

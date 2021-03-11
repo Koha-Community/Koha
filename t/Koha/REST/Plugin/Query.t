@@ -502,7 +502,7 @@ subtest 'stash_embed() tests' => sub {
 
 subtest 'stash_overrides() tests' => sub {
 
-    plan tests => 4;
+    plan tests => 6;
 
     my $t = Test::Mojo->new;
 
@@ -511,4 +511,8 @@ subtest 'stash_overrides() tests' => sub {
 
     $t->get_ok( '/stash_overrides' => { 'x-koha-override' => '' } )
       ->json_is( {} ); # empty string is skipped
+
+    $t->get_ok( '/stash_overrides' => { } )
+      ->json_is( {} ); # x-koha-ovverride not passed is skipped
+
 };
