@@ -116,7 +116,8 @@ sub FindDuplicate {
         }
     }
 
-    my ( $error, $searchresults, undef ) = SimpleSearch($query); # FIXME :: hardcoded !
+    my $searcher = Koha::SearchEngine::Search->new({index => $Koha::SearchEngine::BIBLIOS_INDEX});
+    my ( $error, $searchresults, undef ) = $searcher->simple_search_compat($query,0,50);
     my @results;
     if (!defined $error) {
         foreach my $possible_duplicate_record (@{$searchresults}) {
