@@ -104,7 +104,6 @@ if ($completedJobID) {
         # BatchStageMarcRecords can handle that
 
     my $job = undef;
-    my $dbh;
     if ($runinbackground) {
         my $job_size = scalar(@$marcrecords);
         # if we're matching, job size is doubled
@@ -137,9 +136,9 @@ if ($completedJobID) {
 
     }
 
-    # New handle, as we're a child.
-    $dbh = C4::Context->dbh({new => 1});
-    $dbh->{AutoCommit} = 0;
+    my $schema = Koha::Database->new->schema;
+    $schema->storage->txn_begin;
+
     # FIXME branch code
     my ( $batch_id, $num_valid, $num_items, @import_errors ) =
       BatchStageMarcRecords(
@@ -148,7 +147,7 @@ if ($completedJobID) {
         $marc_modification_template,
         $comments,       '',
         $parse_items,    0,
-        50, staging_progress_callback( $job, $dbh )
+        50, staging_progress_callback( $job )
       );
 
     my $num_with_matches = 0;
@@ -162,17 +161,18 @@ if ($completedJobID) {
             $matcher_code = $matcher->code();
             $num_with_matches =
               BatchFindDuplicates( $batch_id, $matcher, 10, 50,
-                matching_progress_callback( $job, $dbh ) );
+                matching_progress_callback($job) );
             SetImportBatchMatcher($batch_id, $matcher_id);
             SetImportBatchOverlayAction($batch_id, $overlay_action);
             SetImportBatchNoMatchAction($batch_id, $nomatch_action);
             SetImportBatchItemAction($batch_id, $item_action);
-            $dbh->commit();
+            $schema->storage->txn_commit;
         } else {
             $matcher_failed = 1;
+            $schema->storage->txn_rollback;
         }
     } else {
-        $dbh->commit();
+        $schema->storage->txn_commit;
     }
 
     my $results = {
@@ -232,7 +232,6 @@ exit 0;
 
 sub staging_progress_callback {
     my $job = shift;
-    my $dbh = shift;
     return sub {
         my $progress = shift;
         $job->progress($progress);
@@ -241,7 +240,6 @@ sub staging_progress_callback {
 
 sub matching_progress_callback {
     my $job = shift;
-    my $dbh = shift;
     my $start_progress = $job->progress();
     return sub {
         my $progress = shift;
