@@ -22,16 +22,31 @@
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'acquisitions-search.inc' %]
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a> &rsaquo;
+<nav aria-label="Breadcrumb" class="breadcrumb">
+    <ol>
+        <li>
+            <a href="/cgi-bin/koha/mainpage.pl">Home</a>
+        </li>
+        <li>
+            <a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a>
+        </li>
     [% IF invoiceclosedate %]
+        <li>
         Receipt summary for <em>[% name | html %]</em>
         [% IF ( invoice ) %]
             <em>[ [% invoice | html %] ]</em>
         [% END %]
+        </li>
     [% ELSE %]
-        <a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% booksellerid | uri %]">[% name | html %]</a> &rsaquo; Receive orders from [% name | html %]
+        <li>
+        <a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% booksellerid | uri %]">[% name | html %]</a>
+        </li>
+        <li>
+        Receive orders from [% name | html %]
+        </li>
     [% END %]
-</div>
+    </ol>
+</nav>
 
 
 <div class="main container-fluid">

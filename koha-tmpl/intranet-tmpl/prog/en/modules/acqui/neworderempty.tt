@@ -15,7 +15,36 @@
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'acquisitions-search.inc' %]
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a> &rsaquo; <a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% booksellerid | html %]">[% name | html %]</a> &rsaquo; <a href="/cgi-bin/koha/acqui/basket.pl?basketno=[% basketno | html %]">Basket [% basketno | html %]</a> &rsaquo; [% IF ( ordernumber ) %]Modify order details (line #[% ordernumber | html %])[% ELSE %]New order[% END %]</div>
+<nav aria-label="Breadcrumb" class="breadcrumb">
+    <ol>
+        <li>
+            <a href="/cgi-bin/koha/mainpage.pl">Home</a>
+        </li>
+        <li>
+            <a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a>
+        </li>
+        <li>
+            <a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% booksellerid | uri %]">[% name | html %]</a>
+        </li>
+        <li>
+            <a href="/cgi-bin/koha/acqui/basket.pl?basketno=[% basketno | uri %]">Basket [% basketno | html %]</a>
+        </li>
+
+    [% IF ( ordernumber ) %]
+    <li>
+        <a href="#" aria-current="page">
+            Modify order details (line #[% ordernumber | html %])
+        </a>
+    </li>
+    [% ELSE %]
+    <li>
+        <a href="#" aria-current="page">
+            New order
+        </a>
+    </li>
+    [% END %]
+    </ol>
+</nav>
 
 [% INCLUDE 'blocking_errors.inc' %]
 

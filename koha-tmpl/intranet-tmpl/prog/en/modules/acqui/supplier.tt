@@ -97,7 +97,40 @@
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'acquisitions-search.inc' %]
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a> &rsaquo; [% IF ( enter ) %][% IF ( booksellerid ) %] <a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% booksellerid | html %]">[% name | html %]</a> &rsaquo; Update: [% name | html %][% ELSE %]Add vendor[% END %] [% ELSE %][% name | html %][% END %]</div>
+<nav aria-label="Breadcrumb" class="breadcrumb">
+    <ol>
+        <li>
+            <a href="/cgi-bin/koha/mainpage.pl">Home</a>
+        </li>
+        <li>
+            <a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a>
+        </li>
+    [% IF ( enter ) %]
+        [% IF ( booksellerid ) %]
+        <li>
+            <a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% booksellerid | uri %]">[% name | html %]</a>
+        </li>
+        <li>
+            <a href="#" aria-current="page">
+                Update: [% name | html %]
+            </a>
+        </li>
+        [% ELSE %]
+        <li>
+            <a href="#" aria-current="page">
+                Add vendor
+            </a>
+        </li>
+        [% END %]
+    [% ELSE %]
+        <li>
+            <a href="#" aria-current="page">
+                [% name | html %]
+            </a>
+        </li>
+    [% END %]
+    </ol>
+</nav>
 
 <div class="main container-fluid">
     <div class="row">

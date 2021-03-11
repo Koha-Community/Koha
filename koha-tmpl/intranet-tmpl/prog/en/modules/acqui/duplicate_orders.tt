@@ -21,15 +21,29 @@ Basket [% basket.basketno | html %] &rsaquo; Duplicate existing orders
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'acquisitions-search.inc' %]
 
-<div id="breadcrumbs">
-    <a href="/cgi-bin/koha/mainpage.pl">Home</a>
-    &rsaquo; <a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a>
+<nav aria-label="Breadcrumb" class="breadcrumb">
+    <ol>
+        <li>
+            <a href="/cgi-bin/koha/mainpage.pl">Home</a>
+        </li>
+        <li>
+            <a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a>
     [% UNLESS blocking_error %]
-    &rsaquo; <a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% vendor.id | uri %]">[% vendor.name | html %]</a>
-    &rsaquo; <a href="/cgi-bin/koha/acqui/basket.pl?basketno=[% basket.basketno | uri %]">Basket [% basket.basketno | html %]</a>
-    &rsaquo; Duplicate existing orders
+        </li>
+        <li>
+            <a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% vendor.id | uri %]">[% vendor.name | html %]</a>
+        </li>
+        <li>
+            <a href="/cgi-bin/koha/acqui/basket.pl?basketno=[% basket.basketno | uri %]">Basket [% basket.basketno | html %]</a>
+        </li>
+        <li>
+            <a href="#" aria-current="page">
+                Duplicate existing orders
+            </a>
+        </li>
     [% END %]
-</div>
+    </ol>
+</nav>
 
 <div class="main container-fluid">
     <div class="row">

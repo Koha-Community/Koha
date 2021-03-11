@@ -33,13 +33,31 @@
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'acquisitions-search.inc' %]
 
-
-<div id="breadcrumbs">
-    <a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo;
-    <a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a> &rsaquo;
-    <a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% booksellerid | uri %]">[% booksellername | html %]</a> &rsaquo;
-    [% UNLESS ( basketno ) %][% IF ( delete_confirmed ) %]Deleted [% ELSE %]New [% END %][% END %]Basket [% basketname | html %] [% IF ( basketno ) %]([% basketno | html %])[% END %] for [% booksellername | html %]
-</div>
+<nav aria-label="Breadcrumb" class="breadcrumb">
+    <ol>
+        <li>
+            <a href="/cgi-bin/koha/mainpage.pl">Home</a>
+        </li>
+        <li>
+            <a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a>
+        </li>
+        <li>
+            <a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% booksellerid | uri %]">[% booksellername | html %]</a>
+        </li>
+        <li>
+            <a href="#" aria-current="page">
+    [% UNLESS ( basketno ) %]
+        [% IF ( delete_confirmed ) %]
+        Deleted [% ELSE %]
+        New [% END %]
+    [% END %]
+    Basket [% basketname | html %] [% IF ( basketno ) %]
+        ([% basketno | html %])
+    [% END %] for [% booksellername | html %]
+            </a>
+        </li>
+    </ol?
+</nav>
 
 <div class="main container-fluid">
     <div class="row">

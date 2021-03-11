@@ -11,7 +11,26 @@
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'acquisitions-search.inc' %]
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a> &rsaquo; <a href="/cgi-bin/koha/acqui/invoices.pl">Invoices</a> &rsaquo; <a href="/cgi-bin/koha/acqui/invoice.pl?invoiceid=[% invoiceid | html %]">[% invoicenumber | html %]</a> &rsaquo; Files</div>
+
+<nav aria-label="Breadcrumb" class="breadcrumb">
+    <ol>
+        <li>
+            <a href="/cgi-bin/koha/mainpage.pl">Home</a>
+        </li>
+        <li>
+            <a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a>
+        </li>
+        <li>
+            <a href="/cgi-bin/koha/acqui/invoices.pl">Invoices</a>
+        </li>
+        <li>
+            <a href="/cgi-bin/koha/acqui/invoice.pl?invoiceid=[% invoiceid | uri %]">[% invoicenumber | html %]</a>
+        </li>
+        <li>
+            <a href="#" aria-current="page">Files</a>
+        </li>
+    </ol>
+</nav>
 
 <div class="main container-fluid">
     <div class="row">
