@@ -1230,7 +1230,7 @@ sub ModReserveAffect {
     });
     $std->execute($hold->reserve_id);
 
-    logaction( 'HOLDS', 'MODIFY', $hold->reserve_id, Dumper($hold->unblessed) )
+    logaction( 'HOLDS', 'MODIFY', $hold->reserve_id, Dumper($hold->get_from_storage->unblessed) )
         if C4::Context->preference('HoldsLog');
 
     return;
