@@ -1179,6 +1179,22 @@
                 });
             [% END %]
 
+            function display_pickup_location (state) {
+                var $text;
+                if ( state.needs_override === true ) {
+                    $text = $(
+                        '<span>' + state.text + '</span> <span style="float:right;" title="' +
+                        _("This pickup location is not allowed according to circulation rules") +
+                        '"><i class="fa fa-exclamation-circle" aria-hidden="true"></i></span>'
+                    );
+                }
+                else {
+                    $text = $('<span>'+state.text+'</span>');
+                }
+
+                return $text;
+            };
+
             $(".pickup_location_dropdown").each( function () {
                 var this_dropdown = $(this);
                 var hold_id = $(this).data('hold_id');
@@ -1186,34 +1202,32 @@
                 this_dropdown.select2({
                     allowClear: false,
                     ajax: {
-                      [%- IF Koha.Preference('AllowHoldPolicyOverride') -%]
-                        url: '/api/v1/libraries',
-                      [%- ELSE -%]
                         url: '/api/v1/holds/' + encodeURIComponent(hold_id) + '/pickup_locations',
-                      [%- END -%]
                         delay: 300, // wait 300 milliseconds before triggering the request
                         dataType: 'json',
                         data: function (params) {
                             var search_term = (params.term === undefined) ? '' : params.term;
                             var query = {
-                                "q": JSON.stringify({"name":{"-like":search_term+'%'},"pickup_location":1}),
+                                "q": JSON.stringify({"name":{"-like":search_term+'%'}}),
                                 "_order_by": "name"
                             };
                             return query;
                         },
                         processResults: function (data) {
                             var results = [];
-                            data.forEach( function ( library ) {
+                            data.forEach( function ( pickup_location ) {
                                 results.push(
                                     {
-                                        "id": library.library_id.escapeHtml(),
-                                        "text": library.name.escapeHtml()
+                                        "id": pickup_location.library_id.escapeHtml(),
+                                        "text": pickup_location.name.escapeHtml(),
+                                        "needs_override": pickup_location.needs_override
                                     }
                                 );
                             });
                             return { "results": results };
                         }
-                    }
+                    },
+                    templateResult: display_pickup_location
                 });
             });
         });
