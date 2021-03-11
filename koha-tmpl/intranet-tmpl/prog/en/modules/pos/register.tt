@@ -414,15 +414,6 @@
                "manager"
             ],
             "order": [[ 0, "asc" ]],
-            "columnDefs": [ {
-                "targets": [0,1,2],
-                "render": function (data, type, row, meta) {
-                    if ( type == 'display' ) {
-                        return data.escapeHtml();
-                    }
-                    return data;
-                }
-            } ],
             "columns": [
                 {
                     "data": "timestamp",
@@ -444,7 +435,7 @@
                         else {
                             fullname = row.manager.firstname + " " + row.manager.surname;
                         }
-                        return fullname;
+                        return escape_str(fullname);
                     }
                 },
                 {
@@ -453,7 +444,7 @@
                     "orderable": true,
                     "render": function(data, type, row, meta) {
                         var amt = row.amount * -1;
-                        return (amt).format_price();
+                        return escape_price(amt);
                     }
                 },
                 {
