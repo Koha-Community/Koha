@@ -4,7 +4,7 @@
         <tr>
             <th>Name</th>
             <th>Card number</th>
-            <th>Date of birth</th>
+            <th class="title-string">Date of birth</th>
             <th>Category</th>
             <th>Library</th>
             <th>Address</th>
@@ -26,7 +26,7 @@
                     <td><a href="[% data_url | url %]">[% borrower.surname | html %], [% borrower.firstname | html %]</a></td>
             [% END %]
                 <td>[% borrower.cardnumber | html %]</td>
-                <td>[% INCLUDE 'patron-age.inc' patron = borrower %]</td>
+                <td><span title="[% borrower.dateofbirth | html %]">[% INCLUDE 'patron-age.inc' patron = borrower %]</span></td>
                 <td>[% Categories.GetName( borrower.categorycode ) | html %]</td>
                 <td>[% Branches.GetName( borrower.branchcode ) | html %]</td>
                 <td>[% borrower.address | html %]</td>
