@@ -315,6 +315,9 @@
                             <p>
                                 No results match your search [% IF ( query_desc ) %]for <span style="font-weight: bold;">'[% query_desc | html %]'</span>[% END %][% IF ( limit_desc ) %]&nbsp;with limit(s): <span style="font-weight: bold;">'[% limit_desc | html %]'</span>[% END %][% IF ( LibraryName ) %] in [% LibraryName | html %] Catalog[% END %].
                             </p>
+                            [% IF CAN_user_acquisition_order_manage && searchtoorder_basketno && searchtoorder_vendorid %][%# Coming from the basket or vendor view %]
+                                <p><a href="/cgi-bin/koha/acqui/basket.pl?basketno=[% searchtoorder_basketno %]">Go to the basket view<a></p>
+                            [% END %]
                         [% ELSE %]
                             <p>You did not specify any search criteria.</p>
                         [% END %]
