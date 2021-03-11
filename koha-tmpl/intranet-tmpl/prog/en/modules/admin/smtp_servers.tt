@@ -18,16 +18,44 @@ SMTP servers
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'prefs-admin-search.inc' %]
 
-<div id="breadcrumbs">
-    <a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo;
-    <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo;
-    <a href="/cgi-bin/koha/admin/smtp_servers.pl">SMTP servers</a>
-[% IF op == 'add_form' %]
- &rsaquo; <span> New</span>
-[% ELSIF op == 'edit_form' %]
- &rsaquo; <span> Edit</span>
-[% END %]
-</div>
+<nav aria-label="Breadcrumb" class="breadcrumb">
+    <ol>
+        <li>
+            <a href="/cgi-bin/koha/mainpage.pl">Home</a>
+        </li>
+        <li>
+            <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a>
+        </li>
+
+        [% IF op == 'add_form' %]
+            <li>
+                <a href="/cgi-bin/koha/admin/smtp_servers.pl">SMTP servers</a>
+            </li>
+            <li>
+                <a href="#" aria-current="page">
+                    New
+                </a>
+            </li>
+
+        [% ELSIF op == 'edit_form' %]
+            <li>
+                <a href="/cgi-bin/koha/admin/smtp_servers.pl">SMTP servers</a>
+            </li>
+            <li>
+                <a href="#" aria-current="page">
+                    Edit
+                </a>
+            </li>
+
+        [% ELSE %]
+            <li>
+                <a href="#" aria-current="page">
+                    SMTP servers
+                </a>
+            </li>
+        [% END %]
+    </ol>
+</nav>
 
 <div class="main container-fluid">
     <div class="row">

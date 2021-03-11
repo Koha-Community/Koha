@@ -22,21 +22,61 @@
 <body id="admin_authorised_values" class="admin">
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'prefs-admin-search.inc' %]
-<div id="breadcrumbs">
-    <a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo;
-    <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo;
+
+<nav aria-label="Breadcrumb" class="breadcrumb">
+    <ol>
+        <li>
+            <a href="/cgi-bin/koha/mainpage.pl">Home</a>
+        </li>
+        <li>
+            <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a>
+        </li>
+
     [% IF op == 'add_form' %]
-        <a href="/cgi-bin/koha/admin/authorised_values.pl">Authorized values</a> &rsaquo;
-        [% IF ( action_modify ) %]Modify authorized value[% END %]
-        [% IF ( action_add_value ) %]New authorized value[% END %]
-        [% IF ( action_add_category ) %]New category[% END %]
+        <li>
+            <a href="/cgi-bin/koha/admin/authorised_values.pl">Authorized values</a>
+        </li>
+        [% IF ( action_modify ) %]
+            <li>
+                <a href="#" aria-current="page">
+                    Modify authorized value
+                </a>
+            </li>
+        [% END %]
+        [% IF ( action_add_value ) %]
+            <li>
+                <a href="#" aria-current="page">
+                    New authorized value
+                </a>
+            </li>
+        [% END %]
+        [% IF ( action_add_category ) %]
+            <li>
+                <a href="#" aria-current="page">
+                    New category
+                </a>
+            </li>
+        [% END %]
+
     [% ELSIF ( loop || searchfield ) %]
-        <a href="/cgi-bin/koha/admin/authorised_values.pl">Authorized values</a> &rsaquo;
-        Authorized values for category [% category.category_name | html %]
+        <li>
+            <a href="/cgi-bin/koha/admin/authorised_values.pl">Authorized values</a>
+        </li>
+        <li>
+            <a href="#" aria-current="page">
+                Authorized values for category [% category.category_name | html %]
+            </a>
+        </li>
+
     [% ELSE %]
-        Authorized values
+        <li>
+            <a href="#" aria-current="page">
+                Authorized values
+            </a>
+        </li>
     [% END %]
-</div>
+    </ol>
+</nav>
 
 <div class="main container-fluid">
     <div class="row">

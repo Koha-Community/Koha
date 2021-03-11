@@ -37,26 +37,73 @@ Data deleted
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'prefs-admin-search.inc' %]
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo; [% IF op == 'add_form' %]
-  [% IF itemtype %]
-<a href="/cgi-bin/koha/admin/itemtypes.pl">Item types</a> &rsaquo; Modify item type '[% itemtype.itemtype | html %]'
-  [% ELSE %]
-<a href="/cgi-bin/koha/admin/itemtypes.pl">Item types</a> &rsaquo; Add item type
-  [% END %]
-[% END %]
-[% IF op == 'delete_confirm' %]
-  [% IF total %]
-<a href="/cgi-bin/koha/admin/itemtypes.pl">Item types</a> &rsaquo; Cannot delete item type '[% itemtype.itemtype | html %]'
-  [% ELSE %]
-<a href="/cgi-bin/koha/admin/itemtypes.pl">Item types</a> &rsaquo; Delete item type '[% itemtype.itemtype | html %]'?
-  [% END %]
-[% END %]
-[% IF op == 'delete_confirmed' %]
-<a href="/cgi-bin/koha/admin/itemtypes.pl">Item types</a> &rsaquo;Data deleted
-[% END %]
-[% IF op == 'list' %]
-Item types administration
-[% END %]</div>
+<nav aria-label="Breadcrumb" class="breadcrumb">
+    <ol>
+        <li>
+            <a href="/cgi-bin/koha/mainpage.pl">Home</a>
+        </li>
+        <li>
+            <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a>
+        </li>
+
+        [% IF op == 'add_form' %]
+            <li>
+                <a href="/cgi-bin/koha/admin/itemtypes.pl">Item types</a>
+            </li>
+            [% IF itemtype %]
+                <li>
+                    <a href="#" aria-current="page">
+                        Modify item type '[% itemtype.itemtype | html %]'
+                    </a>
+                </li>
+            [% ELSE %]
+                <li>
+                    <a href="#" aria-current="page">
+                        Add item type
+                    </a>
+                </li>
+            [% END %]
+        [% END %]
+
+        [% IF op == 'delete_confirm' %]
+            <li>
+                <a href="/cgi-bin/koha/admin/itemtypes.pl">Item types</a>
+            </li>
+            [% IF total %]
+                <li>
+                    <a href="#" aria-current="page">
+                        Cannot delete item type '[% itemtype.itemtype | html %]'
+                    </a>
+                </li>
+            [% ELSE %]
+                <li>
+                    <a href="#" aria-current="page">
+                        Delete item type '[% itemtype.itemtype | html %]'?
+                    </a>
+                </li>
+            [% END %]
+        [% END %]
+
+        [% IF op == 'delete_confirmed' %]
+            <li>
+                <a href="/cgi-bin/koha/admin/itemtypes.pl">Item types</a>
+            </li>
+            <li>
+                <a href="#" aria-current="page">
+                    Data deleted
+                </a>
+            </li>
+        [% END %]
+
+        [% IF op == 'list' %]
+            <li>
+                <a href="#" aria-current="page">
+                    Item types administration
+                </a>
+            </li>
+        [% END %]
+    </ol>
+</nav>
 
 <div class="main container-fluid">
     <div class="row">

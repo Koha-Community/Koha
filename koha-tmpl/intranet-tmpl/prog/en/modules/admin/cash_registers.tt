@@ -18,16 +18,51 @@
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'prefs-admin-search.inc' %]
 
-<div id="breadcrumbs">
-    <a href="/cgi-bin/koha/mainpage.pl">Home</a>
-&rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a>
-&rsaquo; <a href="/cgi-bin/koha/admin/cash_registers.pl">Cash registers</a>
-[% IF op == 'add_form'  %]
-&rsaquo; [% IF cash_register %]Modify cash register [% cash_register.id | html %][% ELSE %]New cash register[% END %]
-[% ELSIF op == 'delete_confirm' %]
-&rsaquo; Confirm deletion of cash register '[% cash_register.id | html %]'
-[% END %]
-</div>
+<nav aria-label="Breadcrumb" class="breadcrumb">
+    <ol>
+        <li>
+            <a href="/cgi-bin/koha/mainpage.pl">Home</a>
+        </li>
+        <li>
+            <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a>
+        </li>
+
+        [% IF op == 'add_form'  %]
+            <li>
+                <a href="/cgi-bin/koha/admin/cash_registers.pl">Cash registers</a>
+            </li>
+            [% IF cash_register %]
+                <li>
+                    <a href="#" aria-current="page">
+                        Modify cash register [% cash_register.id | html %]
+                    </a>
+                </li>
+            [% ELSE %]
+                <li>
+                    <a href="#" aria-current="page">
+                        New cash register
+                    </a>
+                </li>
+            [% END %]
+
+        [% ELSIF op == 'delete_confirm' %]
+            <li>
+                <a href="/cgi-bin/koha/admin/cash_registers.pl">Cash registers</a>
+            </li>
+            <li>
+                <a href="#" aria-current="page">
+                    Confirm deletion of cash register '[% cash_register.id | html %]'
+                </a>
+            </li>
+
+        [% ELSE %]
+            <li>
+                <a href="#" aria-current="page">
+                    Cash registers</a>
+            </li>
+        [% END %]
+    </ol>
+</nav>
 
 <div class="main container-fluid">
     <div class="row">

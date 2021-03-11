@@ -12,11 +12,19 @@
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'cat-search.inc' %]
 
-<div id="breadcrumbs">
-    <a href="/cgi-bin/koha/mainpage.pl">Home</a>
-    &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a>
-    &rsaquo; <a href="/cgi-bin/koha/admin/library_groups.pl">Library groups</a>
-</div>
+<nav aria-label="Breadcrumb" class="breadcrumb">
+    <ol>
+        <li>
+            <a href="/cgi-bin/koha/mainpage.pl">Home</a>
+        </li>
+        <li>
+            <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a>
+        </li>
+        <li>
+            <a href="#" aria-current="page">Library groups</a>
+        </li>
+    </ol>
+</nav>
 
 [% FOR m IN messages %]
     <div class="dialog [% m.type | html %]">

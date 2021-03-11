@@ -15,23 +15,83 @@
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'prefs-admin-search.inc' %]
 
-<div id="breadcrumbs">
-         <a href="/cgi-bin/koha/mainpage.pl">Home</a>
-&rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a>
-&rsaquo; <a href="/cgi-bin/koha/admin/biblio_framework.pl">MARC frameworks</a>
-[% IF ( add_form ) %]
-&rsaquo; <a href="/cgi-bin/koha/admin/marctagstructure.pl?frameworkcode=[% framework.frameworkcode | uri %]">[% IF framework %][% framework.frameworktext | html %] ([% framework.frameworkcode | html %])[% ELSE %]Default MARC framework[% END%]</a>
-&rsaquo; [% IF heading_add_tag_p %]Add tag[% ELSE %]Modify tag[% END %] [% searchfield | html %]
-[% ELSIF ( else ) %]
-&rsaquo; <a href="/cgi-bin/koha/admin/marctagstructure.pl?frameworkcode=[% framework.frameworkcode | uri %]">[% IF framework %][% framework.frameworktext | html %] ([% framework.frameworkcode | html %])[% ELSE %]Default MARC framework[% END %]</a>
-[% ELSIF ( delete_confirm ) %]
-&rsaquo; <a href="/cgi-bin/koha/admin/marctagstructure.pl?frameworkcode=[% framework.frameworkcode | uri %]">[% IF framework %][% framework.frameworktext | html %] ([% framework.frameworkcode | html %])[% ELSE %]Default MARC framework[% END %]</a>
-&rsaquo; Confirm deletion of tag '[% searchfield | html %]'
-[% ELSIF ( delete_confirmed ) %]
-&rsaquo; <a href="/cgi-bin/koha/admin/marctagstructure.pl?frameworkcode=[% framework.frameworkcode | uri %]">[% IF framework %][% framework.frameworktext | html %] ([% framework.frameworkcode | html %])[% ELSE %]Default MARC framework[% END %]</a>
-&rsaquo; Data deleted
-[% END %]
-</div>
+<nav aria-label="Breadcrumb" class="breadcrumb">
+    <ol>
+        <li>
+            <a href="/cgi-bin/koha/mainpage.pl">Home</a>
+        </li>
+        <li>
+            <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a>
+        </li>
+        <li>
+            <a href="/cgi-bin/koha/admin/biblio_framework.pl">MARC frameworks</a>
+        </li>
+
+        [% IF ( add_form ) %]
+            <li>
+                <a href="/cgi-bin/koha/admin/marctagstructure.pl?frameworkcode=[% framework.frameworkcode | uri %]">
+                    [% IF framework %]
+                        [% framework.frameworktext | html %] ([% framework.frameworkcode | html %])
+                    [% ELSE %]
+                        Default MARC framework
+                    [% END%]
+                </a>
+            </li>
+            <li>
+                <a href="#" aria-current="page">
+                    [% IF heading_add_tag_p %]
+                        Add tag
+                    [% ELSE %]
+                        Modify tag
+                    [% END %] [% searchfield | html %]
+                </a>
+            </li>
+
+        [% ELSIF ( else ) %]
+            <li>
+                <a href="#" aria-current="page">
+                    [% IF framework %]
+                        [% framework.frameworktext | html %] ([% framework.frameworkcode | html %])
+                    [% ELSE %]
+                        Default MARC framework
+                    [% END %]
+                </a>
+            </li>
+
+        [% ELSIF ( delete_confirm ) %]
+            <li>
+                <a href="/cgi-bin/koha/admin/marctagstructure.pl?frameworkcode=[% framework.frameworkcode | uri %]">
+                    [% IF framework %]
+                        [% framework.frameworktext | html %] ([% framework.frameworkcode | html %])
+                    [% ELSE %]
+                        Default MARC framework
+                    [% END %]
+                </a>
+            </li>
+            <li>
+                <a href="#" aria-current="page">
+                    Confirm deletion of tag '[% searchfield | html %]'
+                </a>
+            </li>
+
+        [% ELSIF ( delete_confirmed ) %]
+            <li>
+                <a href="/cgi-bin/koha/admin/marctagstructure.pl?frameworkcode=[% framework.frameworkcode | uri %]">
+                    [% IF framework %]
+                        [% framework.frameworktext | html %] ([% framework.frameworkcode | html %])
+                    [% ELSE %]
+                        Default MARC framework
+                    [% END %]
+                </a>
+            </li>
+            <li>
+                <a href="#" aria-current="page">
+                    Data deleted
+                </a>
+            </li>
+        [% END %]
+    </ol>
+</nav>
 
 <div class="main container-fluid">
     <div class="row">

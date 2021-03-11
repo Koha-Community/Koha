@@ -18,16 +18,52 @@
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'prefs-admin-search.inc' %]
 
-<div id="breadcrumbs">
-    <a href="/cgi-bin/koha/mainpage.pl">Home</a>
-&rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a>
-&rsaquo; <a href="/cgi-bin/koha/admin/branches.pl">Libraries</a>
-[% IF op == 'add_form'  %]
-&rsaquo; [% IF library %]Modify library[% ELSE %]New library [% library.branchcode | html %][% END %]
-[% ELSIF op == 'delete_confirm' %]
-&rsaquo; Confirm deletion of library '[% library.branchcode | html %]'
-[% END %]
-</div>
+<nav aria-label="Breadcrumb" class="breadcrumb">
+    <ol>
+        <li>
+            <a href="/cgi-bin/koha/mainpage.pl">Home</a>
+        </li>
+        <li>
+            <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a>
+        </li>
+
+        [% IF op == 'add_form'  %]
+            <li>
+                <a href="/cgi-bin/koha/admin/branches.pl">Libraries</a>
+            </li>
+            [% IF library %]
+                <li>
+                    <a href="#" aria-current="page">
+                        Modify library
+                    </a>
+                </li>
+            [% ELSE %]
+                <li>
+                    <a href="#" aria-current="page">
+                        New library [% library.branchcode | html %]
+                    </a>
+                </li>
+            [% END %]
+
+        [% ELSIF op == 'delete_confirm' %]
+            <li>
+                <a href="/cgi-bin/koha/admin/branches.pl">Libraries</a>
+            </li>
+            <li>
+                <a href="#" aria-current="page">
+                    Confirm deletion of library '[% library.branchcode | html %]'
+                </a>
+            </li>
+
+        [% ELSE %]
+            <li>
+                <a href="#" aria-current="page">
+                    Libraries
+                </a>
+            </li>
+        [% END %]
+    </ol>
+</nav>
 
 <div class="main container-fluid">
     <div class="row">

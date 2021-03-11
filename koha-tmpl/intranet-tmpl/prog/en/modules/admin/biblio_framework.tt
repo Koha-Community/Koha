@@ -16,16 +16,52 @@
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'prefs-admin-search.inc' %]
 
-<div id="breadcrumbs">
-        <a href="/cgi-bin/koha/mainpage.pl">Home</a>
-&rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a>
-&rsaquo; <a href="/cgi-bin/koha/admin/biblio_framework.pl">MARC frameworks</a>
-[% IF op == 'add_form' %]
-&rsaquo; [% IF framework %]Modify framework text[% ELSE %]Add framework[% END %]
-[% ELSIF op == 'delete_confirm' %]
-&rsaquo; Delete framework for [% framework.frameworktext | html %] ([% framework.frameworkcode | html %])?
-[% END %]
-</div>
+<nav aria-label="Breadcrumb" class="breadcrumb">
+    <ol>
+        <li>
+            <a href="/cgi-bin/koha/mainpage.pl">Home</a>
+        </li>
+        <li>
+            <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a>
+        </li>
+
+    [% IF op == 'add_form' %]
+        <li>
+            <a href="/cgi-bin/koha/admin/biblio_framework.pl">MARC frameworks</a>
+        </li>
+        [% IF framework %]
+            <li>
+                <a href="#" aria-current="page">
+                    Modify framework text
+                </a>
+            </li>
+        [% ELSE %]
+            <li>
+                <a href="#" aria-current="page">
+                    Add framework
+                </a>
+            </li>
+        [% END %]
+
+    [% ELSIF op == 'delete_confirm' %]
+        <li>
+            <a href="/cgi-bin/koha/admin/biblio_framework.pl">MARC frameworks</a>
+        </li>
+        <li>
+            <a href="#" aria-current="page">
+                Delete framework for [% framework.frameworktext | html %] ([% framework.frameworkcode | html %])?
+            </a>
+        </li>
+
+    [% ELSE %]
+        <li>
+            <a href="#" aria-current="page">
+                MARC frameworks
+            </a>
+        </li>
+    [% END %]
+    </ol>
+</nav>
 
 <div class="main container-fluid">
     <div class="row">

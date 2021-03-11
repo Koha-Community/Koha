@@ -10,16 +10,48 @@
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'cities-admin-search.inc' %]
 
-<div id="breadcrumbs">
-    <a href="/cgi-bin/koha/mainpage.pl">Home</a>
-    &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a>
-    &rsaquo; <a href="/cgi-bin/koha/admin/cities.pl">Cities</a>
-    [% IF op == 'add_form' %]
-    &rsaquo; [% IF city.cityid %]Modify[% ELSE %]New[% END %] City
-    [% ELSIF op == 'delete_confirm' %]
-    &rsaquo; Confirm deletion of city
-    [% END %]
-</div>
+<nav aria-label="Breadcrumb" class="breadcrumb">
+    <ol>
+        <li>
+            <a href="/cgi-bin/koha/mainpage.pl">Home</a>
+        </li>
+        <li>
+            <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a>
+        </li>
+
+        [% IF op == 'add_form' %]
+            <li>
+                <a href="/cgi-bin/koha/admin/cities.pl">Cities</a>
+            </li>
+            <li>
+                <a href="#" aria-current="page">
+                    [% IF city.cityid %]
+                        Modify
+                    [% ELSE %]
+                        New
+                    [% END %] City
+                </a>
+            </li>
+
+        [% ELSIF op == 'delete_confirm' %]
+            <li>
+                <a href="/cgi-bin/koha/admin/cities.pl">Cities</a>
+            </li>
+            <li>
+                <a href="#" aria-current="page">
+                    Confirm deletion of city
+                </a>
+            </li>
+
+        [% ELSE %]
+            <li>
+                <a href="#" aria-current="page">
+                    Cities
+                </a>
+            </li>
+        [% END %]
+    </ol>
+</nav>
 
 <div class="main container-fluid">
     <div class="row">

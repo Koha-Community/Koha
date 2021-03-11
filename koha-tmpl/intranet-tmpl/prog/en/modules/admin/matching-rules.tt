@@ -63,25 +63,48 @@
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'prefs-admin-search.inc' %]
 
-<div id="breadcrumbs">
-    <a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo;
-    <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo;
-    [% IF ( display_list ) %]
-        Record matching rules
-    [% ELSE %]
-        <a href="/cgi-bin/koha/admin/matching-rules.pl">Record matching rules</a>
-    [% END %]
-    [% IF ( matching_rule_form ) %]
-        [% IF ( edit_matching_rule ) %]
-            &rsaquo; Modify record matching rule
+<nav aria-label="Breadcrumb" class="breadcrumb">
+    <ol>
+        <li>
+            <a href="/cgi-bin/koha/mainpage.pl">Home</a>
+        </li>
+        <li>
+            <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a>
+        </li>
+
+        [% IF ( matching_rule_form ) %]
+            <li>
+                <a href="/cgi-bin/koha/admin/matching-rules.pl">Record matching rules</a>
+            </li>
+            <li>
+                <a href="#" aria-current="page">
+                    [% IF ( edit_matching_rule ) %]
+                        Modify record matching rule
+                    [% ELSE %]
+                        Add record matching rule
+                    [% END %]
+                </a>
+            </li>
+
+        [% ELSIF ( delete_matching_rule_form ) %]
+            <li>
+                <a href="/cgi-bin/koha/admin/matching-rules.pl">Record matching rules</a>
+            </li>
+            <li>
+                <a href="#" aria-current="page">
+                    Confirm deletion of record matching rule &quot;[% code | html %]&quot;
+                </a>
+            </li>
+
         [% ELSE %]
-            &rsaquo; Add record matching rule
+            <li>
+                <a href="#" aria-current="page">
+                    Record matching rules
+                </a>
+            </li>
         [% END %]
-    [% END %]
-    [% IF ( delete_matching_rule_form ) %]
-        &rsaquo; Confirm deletion of record matching rule &quot;[% code | html %]&quot;
-    [% END %]
-</div> <!-- /#breadcrumbs -->
+    </ol>
+</nav> <!-- /#breadcrumbs -->
 
 <div class="main container-fluid">
     <div class="row">

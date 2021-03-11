@@ -17,14 +17,53 @@
     [% INCLUDE 'header.inc' %]
     [% INCLUDE 'cat-search.inc' %]
 
-    <div id="breadcrumbs">
-        <a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo;
+    <nav aria-label="Breadcrumb" class="breadcrumb">
+        <ol>
+            <li>
+                <a href="/cgi-bin/koha/mainpage.pl">Home</a>
+            </li>
+            <li>
+                <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a>
+            </li>
         [% SWITCH op %]
-            [% CASE 'add_form' %]<a href="/cgi-bin/koha/admin/additional-fields.pl">Manage additional fields</a> &rsaquo; [% IF field %]Modify field '[% field.name | html %]'[% ELSE %]Add field[% END %]
-            [% CASE 'list' %]<a href="/cgi-bin/koha/admin/additional-fields.pl">Manage additional fields</a> &rsaquo; Modify fields for '[% tablename | html %]'
-            [% CASE %]Manage additional fields
+            [% CASE 'add_form' %]
+            <li>
+                <a href="/cgi-bin/koha/admin/additional-fields.pl">Manage additional fields</a>
+            </li>
+                [% IF field %]
+                    <li>
+                        <a href="#" aria-current="page">
+                            Modify field '[% field.name | html %]'
+                        </a>
+                    </li>
+                [% ELSE %]
+                    <li>
+                        <a href="#" aria-current="page">
+                            Add field
+                        </a>
+                    </li>
+                [% END %]
+
+            [% CASE 'list' %]
+            <li>
+                <a href="/cgi-bin/koha/admin/additional-fields.pl">Manage additional fields</a>
+            </li>
+            <li>
+                <a href="#" aria-current="page">
+                    Modify fields for '[% tablename | html %]'
+                </a>
+            </li>
+
+            [% CASE %]
+            <li>
+                <a href="#" aria-current="page">
+                    Manage additional fields
+                </a>
+            </li>
+
         [% END %]
-    </div>
+        </ol>
+    </nav>
 
 <div class="main container-fluid">
     <div class="row">

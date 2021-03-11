@@ -16,11 +16,46 @@
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'currencies-admin-search.inc' %]
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo;  <a href="/cgi-bin/koha/admin/currency.pl">Currencies &amp; Exchange rates</a> &rsaquo; [% IF op == 'add_form' %][% IF currency %]Modify currency '[% currency.currency | html %]'[% ELSE %]New currency[% END %][% END %]
-[% IF op == 'delete_confirm' %]Confirm deletion of currency [% currency.currency | $HtmlTags tag='span' attributes=>'class="ex"' %]
-[% ELSIF op == 'list' %]Currencies
-[% END %]
-</div>
+<nav aria-label="Breadcrumb" class="breadcrumb">
+    <ol>
+        <li>
+            <a href="/cgi-bin/koha/mainpage.pl">Home</a>
+        </li>
+        <li>
+            <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a>
+        </li>
+        <li>
+            <a href="/cgi-bin/koha/admin/currency.pl">Currencies &amp; Exchange rates</a>
+        </li>
+
+        [% IF op == 'add_form' %]
+            <li>
+                <a href="#" aria-current="page">
+                    [% IF currency %]
+                        Modify currency '[% currency.currency | html %]'
+                    [% ELSE %]
+                        New currency
+                    [% END %]
+                </a>
+            </li>
+        [% END %]
+
+        [% IF op == 'delete_confirm' %]
+            <li>
+                <a href="#" aria-current="page">
+                    Confirm deletion of currency [% currency.currency | $HtmlTags tag='span' attributes=>'class="ex"' %]
+                </a>
+            </li>
+
+        [% ELSIF op == 'list' %]
+            <li>
+                <a href="#" aria-current="page">
+                    Currencies
+                </a>
+            </li>
+        [% END %]
+    </ol>
+</nav>
 
 <div class="main container-fluid">
     <div class="row">

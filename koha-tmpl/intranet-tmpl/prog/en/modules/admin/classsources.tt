@@ -30,18 +30,67 @@
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'prefs-admin-search.inc' %]
 
-<div id="breadcrumbs">
-         <a href="/cgi-bin/koha/mainpage.pl">Home</a>
-&rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a>
-&rsaquo; <a href="/cgi-bin/koha/admin/classsources.pl">Classification sources</a>
-[% IF op == 'add_source' %]
-&rsaquo; [% IF class_source %]Modify classification source[% ELSE %]Add classification source[% END %]
-[% ELSIF op == 'add_sort_rule' %]
-&rsaquo; [% IF sort_rule %]Modify filing rule[% ELSE %]Add filing rule[% END %]
-[% ELSIF op == 'add_split_rule' %]
-&rsaquo; [% IF split_rule %]Modify splitting rule[% ELSE %]Add splitting rule[% END %]
-[% END %]
-</div>
+<nav aria-label="Breadcrumb" class="breadcrumb">
+    <ol>
+        <li>
+            <a href="/cgi-bin/koha/mainpage.pl">Home</a>
+        </li>
+        <li>
+            <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a>
+        </li>
+
+        [% IF op == 'add_source' %]
+            <li>
+                <a href="/cgi-bin/koha/admin/classsources.pl">Classification sources</a>
+            </li>
+            <li>
+                <a href="#" aria-current="page">
+                    [% IF class_source %]
+                        Modify classification source
+                    [% ELSE %]
+                        Add classification source
+                    [% END %]
+                </a>
+            </li>
+
+        [% ELSIF op == 'add_sort_rule' %]
+            <li>
+                <a href="/cgi-bin/koha/admin/classsources.pl">Classification sources</a>
+            </li>
+            <li>
+                <a href="#" aria-current="page">
+                    [% IF sort_rule %]
+                        Modify filing rule
+                    [% ELSE %]
+                        Add filing rule
+                    [% END %]
+                </a>
+            </li>
+
+        [% ELSIF op == 'add_split_rule' %]
+            <li>
+                <a href="/cgi-bin/koha/admin/classsources.pl">Classification sources</a>
+            </li>
+            <li>
+                <a href="#" aria-current="page">
+                    [% IF split_rule %]
+                        Modify splitting rule
+                    [% ELSE %]
+                        Add splitting rule
+                    [% END %]
+                </a>
+            </li>
+
+        [% ELSE %]
+            <li>
+                <a href="#" aria-current="page">
+                    Classification sources
+                </a>
+            </li>
+        [% END %]
+
+    </ol>
+</nav>
 
 <div class="main container-fluid">
     <div class="row">

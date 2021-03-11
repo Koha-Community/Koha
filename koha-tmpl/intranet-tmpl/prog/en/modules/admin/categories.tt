@@ -17,10 +17,73 @@
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'patrons-admin-search.inc' %]
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo; [% IF op == 'add_form' %] <a href="/cgi-bin/koha/admin/categories.pl">Patron categories</a> &rsaquo; [% IF ( categorycode ) %]Modify category '[% categorycode | html %]'[% ELSE %]New category[% END %][% END %]
-[% IF op == 'delete_confirm' %] <a href="/cgi-bin/koha/admin/categories.pl">Patron categories</a> &rsaquo; [% IF ( patrons_in_category > 0 ) %]Cannot delete: Category [% categorycode | html %] in use[% ELSE %]Confirm deletion of category '[% categorycode | html %]'[% END %][% END %]
-[% IF op == 'delete_confirmed' %] <a href="/cgi-bin/koha/admin/categories.pl">Patron categories</a> &rsaquo; Category deleted[% END %]
-[% IF op == 'list' %]Patron categories[% END %]</div>
+<nav aria-label="Breadcrumb" class="breadcrumb">
+    <ol>
+        <li>
+            <a href="/cgi-bin/koha/mainpage.pl">Home</a>
+        </li>
+        <li>
+            <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a>
+        </li>
+
+        [% IF op == 'add_form' %]
+            <li>
+                <a href="/cgi-bin/koha/admin/categories.pl">Patron categories</a>
+            </li>
+            [% IF ( categorycode ) %]
+                <li>
+                    <a href="#" aria-current="page">
+                        Modify category '[% categorycode | html %]'
+                    </a>
+                </li>
+            [% ELSE %]
+                <li>
+                    <a href="#" aria-current="page">
+                        New category
+                    </a>
+                </li>
+            [% END %]
+        [% END %]
+
+        [% IF op == 'delete_confirm' %]
+            <li>
+                <a href="/cgi-bin/koha/admin/categories.pl">Patron categories</a>
+            </li>
+            [% IF ( patrons_in_category > 0 ) %]
+                <li>
+                    <a href="#" aria-current="page">
+                        Cannot delete: Category [% categorycode | html %] in use
+                    </a>
+                </li>
+            [% ELSE %]
+                <li>
+                    <a href="#" aria-current="page">
+                        Confirm deletion of category '[% categorycode | html %]'
+                    </a>
+                </li>
+            [% END %]
+        [% END %]
+
+        [% IF op == 'delete_confirmed' %]
+            <li>
+                <a href="/cgi-bin/koha/admin/categories.pl">Patron categories</a>
+            </li>
+            <li>
+                <a href="#" aria-current="page">
+                    Category deleted
+                </a>
+            </li>
+        [% END %]
+
+        [% IF op == 'list' %]
+            <li>
+                <a href="#" aria-current="page">
+                    Patron categories
+                </a>
+            </li>
+        [% END %]
+    </ol>
+</nav>
 
 <div class="main container-fluid">
     <div class="row">

@@ -20,21 +20,52 @@
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'prefs-admin-search.inc' %]
 
-<div id="breadcrumbs">
-<a href="/cgi-bin/koha/mainpage.pl">Home</a>
-&rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a>
- [% IF acct_form %]
-  [% IF account %]
-     &rsaquo; <a href="/cgi-bin/koha/admin/edi_accounts.pl">EDI accounts</a> &rsaquo; Modify account
-  [% ELSE %]
-     &rsaquo; <a href="/cgi-bin/koha/admin/edi_accounts.pl">EDI accounts</a> &rsaquo; Add new account
-  [% END %]
-[% ELSIF delete_confirm %]
-     &rsaquo; <a href="/cgi-bin/koha/admin/edi_accounts.pl">EDI accounts</a> &rsaquo; Confirm deletion of account
-[% ELSE %]
-     &rsaquo; EDI accounts
-[% END %]
-</div>
+<nav aria-label="Breadcrumb" class="breadcrumb">
+    <ol>
+        <li>
+            <a href="/cgi-bin/koha/mainpage.pl">Home</a>
+        </li>
+        <li>
+            <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a>
+        </li>
+
+        [% IF acct_form %]
+            <li>
+                <a href="/cgi-bin/koha/admin/edi_accounts.pl">EDI accounts</a>
+            </li>
+            [% IF account %]
+                <li>
+                    <a href="#" aria-current="page">
+                        Modify account
+                    </a>
+                </li>
+            [% ELSE %]
+                <li>
+                    <a href="#" aria-current="page">
+                        Add new account
+                    </a>
+                </li>
+            [% END %]
+
+        [% ELSIF delete_confirm %]
+            <li>
+                <a href="/cgi-bin/koha/admin/edi_accounts.pl">EDI accounts</a>
+            </li>
+            <li>
+                <a href="#" aria-current="page">
+                    Confirm deletion of account
+                </a>
+            </li>
+
+        [% ELSE %]
+            <li>
+                <a href="#" aria-current="page">
+                    EDI accounts
+                </a>
+            </li>
+        [% END %]
+    </ol>
+</nav>
 
 <div class="main container-fluid">
     <div class="row">

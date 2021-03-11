@@ -14,15 +14,66 @@
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'budgets-admin-search.inc' %]
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo;
-    <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo; <a href="/cgi-bin/koha/admin/aqbudgetperiods.pl">Budgets</a> &rsaquo; [% IF op == 'list' %][% IF budget_period_id %]Funds for '[% budget_period_description | html %]'[% ELSE %]All funds[% END %][% END %]
+<nav aria-label="Breadcrumb" class="breadcrumb">
+    <ol>
+    <li>
+        <a href="/cgi-bin/koha/mainpage.pl">Home</a>
+    </li>
+    <li>
+        <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a>
+    </li>
+    <li>
+        <a href="/cgi-bin/koha/admin/aqbudgetperiods.pl">Budgets</a>
+    </li>
+
+    [% IF op == 'list' %]
+        [% IF budget_period_id %]
+            <li>
+                <a href="#" aria-current="page">
+                    Funds for '[% budget_period_description | html %]'
+                </a>
+            </li>
+        [% ELSE %]
+            <li>
+                <a href="#" aria-current="page">
+                    All funds
+                </a>
+            </li>
+        [% END %]
+    [% END %]
+
     [% IF op == 'add_form' %]
-      <a href="/cgi-bin/koha/admin/aqbudgets.pl?budget_period_id=[% budget_period_id | uri %]">Funds</a> &rsaquo; [% IF ( budget_id ) %]Modify fund[% IF ( budget_name ) %] '[% budget_name | html %]'[% END %][% ELSE %]Add fund[% END %]
+        <li>
+            <a href="/cgi-bin/koha/admin/aqbudgets.pl?budget_period_id=[% budget_period_id | uri %]">Funds</a>
+        </li>
+        [% IF ( budget_id ) %]
+            <li>
+                <a href="#" aria-current="page">
+                Modify fund
+                    [% IF ( budget_name ) %] '[% budget_name | html %]'[% END %]
+                </a>
+            </li>
+        [% ELSE %]
+            <li>
+                <a href="#" aria-current="page">
+                    Add fund
+                </a>
+            </li>
+        [% END %]
     [% END %]
+
     [% IF op == 'delete_confirm' %]
-      <a href="/cgi-bin/koha/admin/aqbudgets.pl">Funds</a> &rsaquo; Delete fund?
+        <li>
+            <a href="/cgi-bin/koha/admin/aqbudgets.pl">Funds</a>
+        </li>
+        <li>
+            <a href="#" aria-current="page">
+                Delete fund?
+            </a>
+        </li>
     [% END %]
-</div>
+    </ol>
+</nav>
 
 <div class="main container-fluid">
     <div class="row">
