@@ -472,10 +472,35 @@ sub pickup_locations {
         }
 
         my $pickup_locations = $c->objects->search( $ps_set );
+        my @response = ();
+
+        if ( C4::Context->preference('AllowHoldPolicyOverride') ) {
+
+            my $libraries_rs = Koha::Libraries->search( { pickup_location => 1 } );
+            my $libraries    = $c->objects->search($libraries_rs);
+
+            @response = map {
+                my $library = $_;
+                $library->{needs_override} = (
+                    any { $_->{library_id} eq $library->{library_id} }
+                    @{$pickup_locations}
+                  )
+                  ? Mojo::JSON->false
+                  : Mojo::JSON->true;
+                $library;
+            } @{$libraries};
+
+            return $c->render(
+                status  => 200,
+                openapi => \@response
+            );
+        }
+
+        @response = map { $_->{needs_override} = Mojo::JSON->false; $_; } @{$pickup_locations};
 
         return $c->render(
             status  => 200,
-            openapi => $pickup_locations
+            openapi => \@response
         );
     }
     catch {
