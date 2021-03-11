@@ -232,6 +232,107 @@
       }
     }
   },
+  "/biblios/{biblio_id}/pickup_locations": {
+    "get": {
+      "x-mojo-to": "Biblios#pickup_locations",
+      "operationId": "getBiblioPickupLocations",
+      "tags": [
+        "biblios",
+        "pickup_locations"
+      ],
+      "parameters": [
+        {
+          "$ref": "../parameters.json#/biblio_id_pp"
+        },
+        {
+          "name": "patron_id",
+          "in": "query",
+          "description": "Internal patron identifier",
+          "required": true,
+          "type": "integer"
+        },
+        {
+          "$ref": "../parameters.json#/match"
+        },
+        {
+          "$ref": "../parameters.json#/order_by"
+        },
+        {
+          "$ref": "../parameters.json#/page"
+        },
+        {
+          "$ref": "../parameters.json#/per_page"
+        },
+        {
+          "$ref": "../parameters.json#/q_param"
+        },
+        {
+          "$ref": "../parameters.json#/q_body"
+        },
+        {
+          "$ref": "../parameters.json#/q_header"
+        }
+      ],
+      "consumes": [
+        "application/json"
+      ],
+      "produces": [
+        "application/json"
+      ],
+      "responses": {
+        "200": {
+          "description": "Biblio pickup locations",
+          "schema": {
+            "type": "array",
+            "items": {
+              "$ref": "../definitions.json#/library"
+            }
+          }
+        },
+        "400": {
+          "description": "Missing or wrong parameters",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "401": {
+          "description": "Authentication required",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "403": {
+          "description": "Access forbidden",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "404": {
+          "description": "Biblio not found",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "500": {
+          "description": "Internal server error",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "503": {
+          "description": "Under maintenance",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        }
+      },
+      "x-koha-authorization": {
+        "permissions": {
+          "reserveforothers": "place_holds"
+        }
+      }
+    }
+  },
   "/public/biblios/{biblio_id}": {
     "get": {
       "x-mojo-to": "Biblios#get_public",

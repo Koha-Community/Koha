@@ -23,6 +23,7 @@ use Koha::Biblios;
 use Koha::RecordProcessor;
 use C4::Biblio qw(DelBiblio);
 
+use List::MoreUtils qw(any);
 use MARC::Record::MiJ;
 
 use Try::Tiny;
@@ -261,6 +262,77 @@ sub get_items {
         return $c->render(
             status  => 200,
             openapi => $items
+        );
+    }
+    catch {
+        $c->unhandled_exception($_);
+    };
+}
+
+=head3 pickup_locations
+
+Method that returns the possible pickup_locations for a given biblio
+used for building the dropdown selector
+
+=cut
+
+sub pickup_locations {
+    my $c = shift->openapi->valid_input or return;
+
+    my $biblio_id = $c->validation->param('biblio_id');
+    my $biblio = Koha::Biblios->find( $biblio_id );
+
+    unless ($biblio) {
+        return $c->render(
+            status  => 404,
+            openapi => { error => "Biblio not found" }
+        );
+    }
+
+    my $patron_id = delete $c->validation->output->{patron_id};
+    my $patron    = Koha::Patrons->find( $patron_id );
+
+    unless ($patron) {
+        return $c->render(
+            status  => 400,
+            openapi => { error => "Patron not found" }
+        );
+    }
+
+    return try {
+
+        my $ps_set = $biblio->pickup_locations( { patron => $patron } );
+
+        my $pickup_locations = $c->objects->search( $ps_set );
+        my @response = ();
+
+        if ( C4::Context->preference('AllowHoldPolicyOverride') ) {
+
+            my $libraries_rs = Koha::Libraries->search( { pickup_location => 1 } );
+            my $libraries    = $c->objects->search($libraries_rs);
+
+            @response = map {
+                my $library = $_;
+                $library->{needs_override} = (
+                    any { $_->{library_id} eq $library->{library_id} }
+                    @{$pickup_locations}
+                  )
+                  ? Mojo::JSON->false
+                  : Mojo::JSON->true;
+                $library;
+            } @{$libraries};
+
+            return $c->render(
+                status  => 200,
+                openapi => \@response
+            );
+        }
+
+        @response = map { $_->{needs_override} = Mojo::JSON->false; $_; } @{$pickup_locations};
+
+        return $c->render(
+            status  => 200,
+            openapi => \@response
         );
     }
     catch {
