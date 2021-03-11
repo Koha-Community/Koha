@@ -26,6 +26,9 @@ String.prototype.escapeHtml = function() {
         return HtmlCharsToEscape[c] || c;
     });
 };
+function escape_str(s){
+    return s != null ? s.escapeHtml() : "";
+}
 
 /*
  * Void method for numbers, for consistency
@@ -33,6 +36,9 @@ String.prototype.escapeHtml = function() {
 Number.prototype.escapeHtml = function() {
     return this;
 };
+function escape_price(p){
+    return p != null ? p.escapeHtml().format_price() : "";
+}
 
 // http://stackoverflow.com/questions/14859281/select-tab-by-name-in-jquery-ui-1-10-0/16550804#16550804
 $.fn.tabIndex = function () {
