@@ -687,13 +687,26 @@ subtest 'add() tests (maxreserves behaviour)' => sub {
 
 subtest 'pickup_locations() tests' => sub {
 
-    plan tests => 9;
+    plan tests => 12;
 
     $schema->storage->txn_begin;
 
-    my $library_1 = $builder->build_object({ class => 'Koha::Libraries', value => { marcorgcode => 'A' } });
-    my $library_2 = $builder->build_object({ class => 'Koha::Libraries', value => { marcorgcode => 'B' } });
-    my $library_3 = $builder->build_object({ class => 'Koha::Libraries', value => { marcorgcode => 'C' } });
+    t::lib::Mocks::mock_preference( 'AllowHoldPolicyOverride', 0 );
+
+    # Small trick to ease testing
+    Koha::Libraries->search->update({ pickup_location => 0 });
+
+    my $library_1 = $builder->build_object({ class => 'Koha::Libraries', value => { marcorgcode => 'A', pickup_location => 1 } });
+    my $library_2 = $builder->build_object({ class => 'Koha::Libraries', value => { marcorgcode => 'B', pickup_location => 1 } });
+    my $library_3 = $builder->build_object({ class => 'Koha::Libraries', value => { marcorgcode => 'C', pickup_location => 1 } });
+
+    my $library_1_api = $library_1->to_api();
+    my $library_2_api = $library_2->to_api();
+    my $library_3_api = $library_3->to_api();
+
+    $library_1_api->{needs_override} = Mojo::JSON->false;
+    $library_2_api->{needs_override} = Mojo::JSON->false;
+    $library_3_api->{needs_override} = Mojo::JSON->false;
 
     my $patron = $builder->build_object(
         {
@@ -790,19 +803,34 @@ subtest 'pickup_locations() tests' => sub {
     $t->get_ok( "//$userid:$password@/api/v1/holds/"
           . $hold_1->id
           . "/pickup_locations" )
-      ->json_is( [ $library_2->to_api, $library_3->to_api ] );
+      ->json_is( [ $library_2_api, $library_3_api ] );
 
     $t->get_ok( "//$userid:$password@/api/v1/holds/"
           . $hold_2->id
           . "/pickup_locations" )
-      ->json_is( [ $library_1->to_api, $library_2->to_api ] );
+      ->json_is( [ $library_1_api, $library_2_api ] );
 
     # filtering works!
     $t->get_ok( "//$userid:$password@/api/v1/holds/"
           . $hold_2->id
           . '/pickup_locations?q={"marc_org_code": { "-like": "A%" }}' )
-      ->json_is( [ $library_1->to_api ] );
+      ->json_is( [ $library_1_api ] );
 
+    t::lib::Mocks::mock_preference( 'AllowHoldPolicyOverride', 1 );
+
+    my $library_4 = $builder->build_object({ class => 'Koha::Libraries', value => { pickup_location => 0, marcorgcode => 'X' } });
+    my $library_5 = $builder->build_object({ class => 'Koha::Libraries', value => { pickup_location => 1, marcorgcode => 'Y' } });
+
+    my $library_5_api = $library_5->to_api();
+    $library_5_api->{needs_override} = Mojo::JSON->true;
+
+    # bibli-level mock doesn't include library_1 as valid pickup location
+    $library_1_api->{needs_override} = Mojo::JSON->true;
+
+    $t->get_ok( "//$userid:$password@/api/v1/holds/"
+          . $hold_1->id
+          . "/pickup_locations?_order_by=marc_org_code" )
+      ->json_is( [ $library_1_api, $library_2_api, $library_3_api, $library_5_api ] );
 
     $schema->storage->txn_rollback;
 };
