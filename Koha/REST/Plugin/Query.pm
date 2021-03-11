@@ -268,7 +268,19 @@ Merges parameters from $q_params into $filtered_params.
 
 =head3 stash_overrides
 
+    # Stash the overrides
     $c->stash_overrides();
+    #Use it
+    my $overrides = $c->stash('koha.overrides');
+    if ( $overrides->{pickup_location} ) { ... }
+
+This helper method parses 'x-koha-override' headers and stashes the passed overriders
+in the for of a I<hashref> for easy use in controller methods.
+
+FIXME: With the currently used JSON::Validator version we use, it is not possible to
+use the validated and coerced data (it doesn't validate array-type headers) so this
+implementation relies on manual parsing. Look at the JSON::Validator changelog for
+reference: https://metacpan.org/changes/distribution/JSON-Validator#L14
 
 =cut
 
