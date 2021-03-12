@@ -57,6 +57,18 @@ output_and_exit_if_error(
 
 my $letter = C4::Letters::GetPreparedLetter(
     module                 => 'circulation',
+    letter_code            => $debit->debit_type_code,
+    branchcode             => C4::Context::mybranch,
+    message_transport_type => 'print',
+    lang                   => $patron->lang,
+    tables                 => {
+        debits    => $debit_id,
+        borrowers => $patron->borrowernumber
+    }
+);
+
+$letter //= C4::Letters::GetPreparedLetter(
+    module                 => 'circulation',
     letter_code            => 'ACCOUNT_DEBIT',
     branchcode             => C4::Context::mybranch,
     message_transport_type => 'print',
