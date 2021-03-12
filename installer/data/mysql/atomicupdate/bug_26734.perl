@@ -136,6 +136,17 @@ if ( CheckVersion($DBversion) ) {
     <td class="debit">[% debit.amountoutstanding | $Price %]</td>
   </tr>
 
+  [% IF ( tendered ) %]
+    <tr>
+      <td colspan="3">Amount tendered: </td>
+      <td>[% tendered | $Price %]</td>
+    </tr>
+    <tr>
+      <td colspan="3">Change given: </td>
+      <td>[% change | $Price %]</td>
+    </tr>
+  [% END %]
+
   <tfoot>
     <tr>
       <td colspan="4">Total outstanding dues as on date: </td>
