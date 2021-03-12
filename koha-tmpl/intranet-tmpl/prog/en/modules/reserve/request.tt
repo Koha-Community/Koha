@@ -441,12 +441,13 @@
                             </li>
                             <li>
                                 <label for="pickup">Pickup at:</label>
-                                <select name="pickup" id="pickup">
-                                    [% UNLESS ( multi_hold ) %]
-                                        [% PROCESS options_for_libraries libraries => Branches.pickup_locations({ search_params => { biblio => biblionumber, patron => patron }, selected => pickup }) %]
-                                    [% ELSE %]
-                                        [% PROCESS options_for_libraries libraries => Branches.all({ selected => pickup, search_params => { pickup_location => 1 } }) %]
-                                    [% END %]
+                            [% UNLESS ( multi_hold ) %]
+                                <select name="pickup" size="1" id="pickup" data-biblio-id="[% biblio.biblionumber | html %]" data-patron-id="[% patron.borrowernumber | html %]">
+                                    <option selected="selected" value="[% pickup | html %]">[% Branches.GetName(pickup) | html %]</option>
+                            [% ELSE %]
+                                <select name="pickup" size="1" id="pickup" data-patron-id="[% patron.borrowernumber | html %]">
+                                    [% PROCESS options_for_libraries libraries => Branches.all({ selected => pickup, search_params => { pickup_location => 1 } }) %]
+                            [% END %]
                                 </select>
                             </li>
 
@@ -1217,6 +1218,43 @@
                             var query = {
                                 "q": JSON.stringify({"name":{"-like":search_term+'%'}}),
                                 "_order_by": "name"
+                            };
+                            return query;
+                        },
+                        processResults: function (data) {
+                            var results = [];
+                            data.forEach( function ( pickup_location ) {
+                                results.push(
+                                    {
+                                        "id": pickup_location.library_id.escapeHtml(),
+                                        "text": pickup_location.name.escapeHtml(),
+                                        "needs_override": pickup_location.needs_override
+                                    }
+                                );
+                            });
+                            return { "results": results };
+                        }
+                    },
+                    templateResult: display_pickup_location
+                });
+            });
+            $("#pickup").each( function () {
+                var this_dropdown = $(this);
+                var patron_id = $(this).data('patron-id');
+                var biblio_id = $(this).data('biblio-id');
+
+                this_dropdown.select2({
+                    allowClear: false,
+                    ajax: {
+                        url: '/api/v1/biblios/' + encodeURIComponent(biblio_id) + '/pickup_locations',
+                        delay: 300, // wait 300 milliseconds before triggering the request
+                        dataType: 'json',
+                        data: function (params) {
+                            var search_term = (params.term === undefined) ? '' : params.term;
+                            var query = {
+                                "q": JSON.stringify({"name":{"-like":search_term+'%'}}),
+                                "_order_by": "name",
+                                "patron_id": patron_id
                             };
                             return query;
                         },
