@@ -28,6 +28,7 @@
             [% END %]
           [% ELSIF ( messaging_preference.Ill_ready ) %]Interlibrary loan ready
           [% ELSIF ( messaging_preference.Ill_unavailable ) %]Interlibrary loan unavailable
+          [% ELSIF ( messaging_preference.Auto_Renewals ) %]Auto renewal
           [% ELSE %]Unknown [% END %]</td>
       [% IF ( messaging_preference.takes_days ) %]
       <td>
