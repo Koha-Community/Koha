@@ -57,6 +57,22 @@ output_and_exit_if_error(
 
 my $letter = C4::Letters::GetPreparedLetter(
     module                 => 'circulation',
+    letter_code            => $credit->credit_type_code,
+    branchcode             => C4::Context::mybranch,
+    message_transport_type => 'print',
+    lang                   => $patron->lang,
+    tables                 => {
+        credits   => $credit_id,
+        borrowers => $patron->borrowernumber
+    },
+    substitute => {
+        tendered => scalar $input->param('tendered'),
+        change   => scalar $input->param('change')
+    }
+);
+
+$letter //= C4::Letters::GetPreparedLetter(
+    module                 => 'circulation',
     letter_code            => 'ACCOUNT_CREDIT',
     branchcode             => C4::Context::mybranch,
     message_transport_type => 'print',
