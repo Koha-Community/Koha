@@ -19,7 +19,7 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use Test::More tests => 27;
+use Test::More tests => 28;
 use Test::MockModule;
 use Test::Warn;
 
@@ -1080,6 +1080,28 @@ subtest 'add_tt_filters' => sub {
     );
     my $expected_letter = q|patron=with_punctuation_;biblio=with_punctuation;biblioitems=with_punctuation|;
     is( $letter->{content}, $expected_letter, "Pre-processing should call TT plugin to remove punctuation if table is biblio or biblioitems");
+};
+
+subtest 'Handle includes' => sub {
+    plan tests => 1;
+    my $cgi = CGI->new();
+    my $code = 'TEST_INCLUDE';
+    my $account =
+      $builder->build_object( { class => 'Koha::Account::Lines', value => { credit_type_code => 'PAYMENT', status => 'CANCELLED' } } );
+    my $template = <<EOF;
+[%- USE Price -%]
+[%- PROCESS 'accounts.inc' -%]
+[%- PROCESS account_type_description account=credit -%]
+EOF
+    reset_template({ template => $template, code => $code, module => 'test' });
+    my $letter = GetPreparedLetter(
+        module      => 'test',
+        letter_code => $code,
+        tables      => {
+            credits => $account->accountlines_id
+        }
+    );
+    is($letter->{content},'    <span>Payment<span> (Cancelled)</span>    </span>', "Include used in notice");
 };
 
 subtest 'Dates formatting' => sub {
