@@ -18,11 +18,34 @@
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'cat-search.inc' %]
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a>
-&rsaquo; <a href="/cgi-bin/koha/circ/circulation-home.pl">Circulation</a>
-&rsaquo; <a href="/cgi-bin/koha/circ/view_holdsqueue.pl">Holds queue</a>
-[% IF ( run_report ) %] &rsaquo; Results[% END %]
-</div>
+<nav aria-label="Breadcrumb" class="breadcrumb">
+    <ol>
+        <li>
+            <a href="/cgi-bin/koha/mainpage.pl">Home</a>
+        </li>
+        <li>
+            <a href="/cgi-bin/koha/circ/circulation-home.pl">Circulation</a>
+        </li>
+
+        [% IF ( run_report ) %]
+        <li>
+            <a href="/cgi-bin/koha/circ/view_holdsqueue.pl">Holds queue</a>
+        </li>
+        <li>
+            <a href="#" aria-current="page">
+                Results
+            </a>
+        </li>
+
+        [% ELSE %]
+        <li>
+            <a href="#" aria-current="page">
+                Holds queue
+            </a>
+        </li>
+        [% END %]
+    </ol>
+</nav>
 
 <div class="main container-fluid">
     <div class="row">

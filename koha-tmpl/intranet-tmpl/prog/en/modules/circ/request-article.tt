@@ -15,17 +15,29 @@
     [% INCLUDE 'header.inc' %]
     [% INCLUDE 'circ-search.inc' %]
 
-    <div id="breadcrumbs">
-        <a href="/cgi-bin/koha/mainpage.pl">Home</a>
-        &rsaquo;
-        <a href="/cgi-bin/koha/catalogue/search.pl">Catalog</a>
-        [% UNLESS blocking_error %]
-        &rsaquo;
-            [% INCLUDE 'biblio-title.inc' link = 1 %]
-        &rsaquo;
-        Request article
-        [% END %]
-    </div>
+    <nav aria-label="Breadcrumb" class="breadcrumb">
+        <ol>
+            <li>
+                <a href="/cgi-bin/koha/mainpage.pl">Home</a>
+            </li>
+
+            [% IF blocking_error %]
+                <li>
+                    <a href="#" aria-current="page">
+                        Catalog
+                    </a>
+                </li>
+
+            [% ELSE %]
+                [% INCLUDE 'biblio-title.inc' link = 1 %]
+                <li>
+                    <a href="#" aria-current="page">
+                        Request article
+                    </a>
+                </li>
+            [% END %]
+        </ol>
+    </nav>
 
 [% INCLUDE 'blocking_errors.inc' %]
 <div class="main container-fluid">

@@ -26,15 +26,33 @@
     [% INCLUDE 'header.inc' %]
     [% INCLUDE 'circ-search.inc' %]
 
-    <div id="breadcrumbs">
-        <a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo;
-        <a href="/cgi-bin/koha/circ/circulation-home.pl">Circulation</a> &rsaquo;
-        [% IF patron %]
-            <a href="/cgi-bin/koha/circ/circulation.pl">Checkouts</a> &rsaquo; [% INCLUDE 'patron-title.inc' %]
-        [% ELSE %]
-            <strong>Checkouts</strong>
-        [% END %]
-    </div>
+    <nav aria-label="Breadcrumb" class="breadcrumb">
+        <ol>
+            <li>
+                <a href="/cgi-bin/koha/mainpage.pl">Home</a>
+            </li>
+            <li>
+                <a href="/cgi-bin/koha/circ/circulation-home.pl">Circulation</a>
+            </li>
+
+            [% IF patron %]
+                <li>
+                    <a href="/cgi-bin/koha/circ/circulation.pl">Checkouts</a>
+                </li>
+                <li>
+                    <a href="#" aria-current="page">
+                        [% INCLUDE 'patron-title.inc' %]
+                    </a>
+                </li>
+            [% ELSE %]
+                <li>
+                    <a href="#" aria-current="page">
+                        Checkouts
+                    </a>
+                </li>
+            [% END %]
+        </ol>
+    </nav>
 
     <div class="main container-fluid">
         <main>

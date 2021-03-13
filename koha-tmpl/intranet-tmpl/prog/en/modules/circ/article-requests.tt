@@ -56,13 +56,20 @@
     [% INCLUDE 'header.inc' %]
     [% INCLUDE 'cat-search.inc' %]
 
-    <div id="breadcrumbs">
-        <a href="/cgi-bin/koha/mainpage.pl">Home</a>
-        &rsaquo;
-        <a href="/cgi-bin/koha/circ/circulation-home.pl">Circulation</a>
-        &rsaquo;
-        <a href="/cgi-bin/koha/circ/article-requests.pl">Article requests</a>
-    </div>
+
+    <nav aria-label="Breadcrumb" class="breadcrumb">
+        <ol>
+            <li>
+                <a href="/cgi-bin/koha/mainpage.pl">Home</a>
+            </li>
+            <li>
+                <a href="/cgi-bin/koha/circ/circulation-home.pl">Circulation</a>
+            </li>
+            <li>
+                <a href="#" aria-current="page">Article requests</a>
+            </li>
+        </ol>
+    </nav>
 
     <div class="main container-fluid starthidden">
         <div class="row">
