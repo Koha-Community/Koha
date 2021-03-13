@@ -5,7 +5,22 @@
 <body id="catalog_linkitem" class="catalog">
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'cat-search.inc' %]
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/cataloguing/addbooks.pl">Cataloging</a>  &rsaquo; Link a host record to <em>[% bibliotitle | html %]</em></div>
+
+<nav aria-label="Breadcrumb" class="breadcrumb">
+    <ol>
+        <li>
+            <a href="/cgi-bin/koha/mainpage.pl">Home</a>
+        </li>
+        <li>
+            <a href="/cgi-bin/koha/cataloguing/addbooks.pl">Cataloging</a>
+        </li>
+        <li>
+            <a href="#" aria-current="page">
+                Link a host record to <em>[% bibliotitle | html %]</em>
+            </a>
+        </li>
+    </ol>
+</nav>
 
 <div class="container-fluid">
     <div class="row">

@@ -24,12 +24,24 @@
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'cataloging-search.inc' %]
 
-<div id="breadcrumbs">
+<nav aria-label="Breadcrumb" class="breadcrumb">
+    <ol>
+        <li>
           <a href="/cgi-bin/koha/mainpage.pl">Home</a>
- &rsaquo; <a href="/cgi-bin/koha/cataloguing/addbooks.pl">Cataloging</a>
- &rsaquo; Edit <a href="/cgi-bin/koha/cataloguing/addbiblio.pl?biblionumber=[% biblionumber | uri %]">[% title | html %] [% IF ( author ) %] by [% author | html %][% END %] (Record #[% biblionumber | html %])</a>
- &rsaquo; <a href="/cgi-bin/koha/cataloguing/additem.pl?biblionumber=[% biblionumber | uri %]">Items</a>
-</div>
+        </li>
+        <li>
+            <a href="/cgi-bin/koha/cataloguing/addbooks.pl">Cataloging</a>
+        </li>
+        <li>
+            <a href="/cgi-bin/koha/cataloguing/addbiblio.pl?biblionumber=[% biblionumber | uri %]">Edit <em>[% title | html %] [% IF ( author ) %] by [% author | html %][% END %] (Record #[% biblionumber | html %])</em></a>
+        </li>
+        <li>
+            <a href="#" aria-current="page">
+                Items
+            </a>
+        </li>
+    </ol>
+</nav>
 
 <div class="main container-fluid">
     <div class="row">

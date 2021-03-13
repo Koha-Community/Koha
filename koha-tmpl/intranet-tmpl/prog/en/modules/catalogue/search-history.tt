@@ -13,9 +13,21 @@
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'cat-search.inc' %]
 
-<div id="breadcrumbs">
-  <a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/catalogue/search.pl">Catalog</a>  &rsaquo; Search history
-</div>
+<nav aria-label="Breadcrumb" class="breadcrumb">
+    <ol>
+        <li>
+            <a href="/cgi-bin/koha/mainpage.pl">Home</a>
+        </li>
+        <li>
+            <a href="/cgi-bin/koha/catalogue/search.pl">Catalog</a>
+        </li>
+        <li>
+            <a href="#" aria-current="page">
+                Search history
+            </a>
+        </li>
+    </ol>
+</nav>
 
 <div class="container-fluid">
     <div class="row">

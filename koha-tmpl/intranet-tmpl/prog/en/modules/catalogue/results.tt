@@ -32,11 +32,22 @@
 [% CoceProviders   = Koha.Preference('CoceProviders') %]
 [% CoceHost        = Koha.Preference('CoceHost') %]
 
-<div id="breadcrumbs">
-    <a href="/cgi-bin/koha/mainpage.pl">Home</a>
-    &rsaquo; <a href="/cgi-bin/koha/catalogue/search.pl">Catalog</a>
-    &rsaquo; Search [% IF ( query_desc ) %]for '[% query_desc | html %]'[% END %][% IF ( limit_desc ) %]&nbsp;with limit(s):&nbsp;'[% limit_desc | html %]'[% END %]
-</div>
+<nav aria-label="Breadcrumb" class="breadcrumb">
+    <ol>
+        <li>
+            <a href="/cgi-bin/koha/mainpage.pl">Home</a>
+        </li>
+        <li>
+            <a href="/cgi-bin/koha/catalogue/search.pl">Catalog</a>
+        </li>
+        <li>
+            <a href="#" aria-current="page">
+                Search [% IF ( query_desc ) %] for '[% query_desc | html %]'[% END %]
+                [% IF ( limit_desc ) %] &nbsp;with limit(s):&nbsp;'[% limit_desc | html %]'[% END %]
+            </a>
+        </li>
+    </ol>
+</nav>
 
 <div class="main container-fluid">
     <div class="row">
