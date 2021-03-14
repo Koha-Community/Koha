@@ -23,7 +23,7 @@ use C4::CourseReserves qw/ModCourseItem ModCourseReserve DelCourseReserve GetCou
 use C4::Context;
 use Koha::Items;
 
-use Test::More tests => 35;
+use Test::More tests => 36;
 
 BEGIN {
     require_ok('C4::CourseReserves');
@@ -406,7 +406,35 @@ subtest 'Ensure item info is preserved' => sub {
 
 };
 
+subtest 'biblio added to course without items' => sub {
+    plan tests => 1;
 
+    my $course = $builder->build({
+        source => 'Course',
+        value => {
+            enabled => 'no',
+        }
+    });
+    #Add course item but change nothing
+    my $course_item_id = ModCourseItem(
+        itemnumber    => undef,
+        biblionumber  => $biblionumber,
+        itype         => '',
+        ccode         => '',
+        holdingbranch => '',
+        location      => '',
+    );
+    #Add course reserve
+    my $course_reserve_id = ModCourseReserve(
+        course_id   => $course->{course_id},
+        ci_id       => $course_item_id,
+        staff_note  => 'staff note',
+        public_note => '',
+    );
+
+    my $course_item = GetCourseItem({ ci_id => $course_item_id });
+    is( $course_item->{itemnumber}, undef, "Course reserve with no item correctly added" );
+};
 
 
 
