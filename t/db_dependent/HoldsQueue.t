@@ -309,7 +309,7 @@ $dbh->do("DELETE FROM circulation_rules");
 Koha::CirculationRules->set_rule(
     {
         rule_name    => 'holdallowed',
-        rule_value   => 1,
+        rule_value   => 'from_home_library',
         branchcode   => undef,
         itemtype     => undef,
     }
@@ -346,7 +346,7 @@ $dbh->do("DELETE FROM circulation_rules");
 Koha::CirculationRules->set_rule(
     {
         rule_name    => 'holdallowed',
-        rule_value   => 2,
+        rule_value   => 'from_any_library',
         branchcode   => undef,
         itemtype     => undef,
     }
@@ -373,7 +373,7 @@ $dbh->do("DELETE FROM circulation_rules");
 Koha::CirculationRules->set_rule(
     {
         rule_name    => 'holdallowed',
-        rule_value   => 2,
+        rule_value   => 'from_any_library',
         branchcode   => undef,
         itemtype     => undef,
     }
@@ -538,7 +538,7 @@ Koha::CirculationRules->set_rules(
         branchcode   => $library_A,
         itemtype     => $itemtype,
         rules        => {
-            holdallowed  => 2,
+            holdallowed  => 'from_any_library',
             returnbranch => 'homebranch',
         }
     }
@@ -651,7 +651,7 @@ Koha::CirculationRules->set_rules(
         branchcode   => undef,
         itemtype     => undef,
         rules        => {
-            holdallowed             => 2,
+            holdallowed             => 'from_any_library',
             hold_fulfillment_policy => 'homebranch',
         }
     }
@@ -712,7 +712,7 @@ Koha::CirculationRules->set_rules(
         branchcode   => undef,
         itemtype     => undef,
         rules        => {
-            holdallowed             => 2,
+            holdallowed             => 'from_any_library',
             hold_fulfillment_policy => 'holdingbranch',
         }
     }
@@ -770,7 +770,7 @@ Koha::CirculationRules->set_rules(
         branchcode   => undef,
         itemtype     => undef,
         rules        => {
-            holdallowed             => 2,
+            holdallowed             => 'from_any_library',
             hold_fulfillment_policy => 'any',
         }
     }
@@ -861,7 +861,7 @@ Koha::CirculationRules->set_rules(
         branchcode   => undef,
         itemtype     => undef,
         rules        => {
-            holdallowed             => 2,
+            holdallowed             => 'from_any_library',
             hold_fulfillment_policy => 'any',
         }
     }
@@ -1572,7 +1572,7 @@ subtest "Test _checkHoldPolicy" => sub {
     ok( $hold, "Found hold" );
 
     my $item = {
-        holdallowed              => 1,
+        holdallowed              => 'from_home_library',
         homebranch               => $request->{borrowerbranch}, # library1
         hold_fulfillment_policy  => 'any'
     };
@@ -1580,31 +1580,31 @@ subtest "Test _checkHoldPolicy" => sub {
     # Base case should work
     is( C4::HoldsQueue::_checkHoldPolicy( $item, $request ), 1, "_checkHoldPolicy returns true" );
 
-    # Test holdallowed = 0
-    $item->{holdallowed} = 0;
-    is( C4::HoldsQueue::_checkHoldPolicy( $item, $request ), 0, "_checkHoldPolicy returns false if holdallowed = 0" );
+    # Test holdallowed = 'not_allowed'
+    $item->{holdallowed} = 'not_allowed';
+    is( C4::HoldsQueue::_checkHoldPolicy( $item, $request ), 0, "_checkHoldPolicy returns false if holdallowed = not_allowed" );
 
-    # Test holdallowed = 1
-    $item->{holdallowed} = 1;
+    # Test holdallowed = 'from_home_library'
+    $item->{holdallowed} = 'from_home_library';
     $item->{homebranch} = $library_nongroup->id;
-    is( C4::HoldsQueue::_checkHoldPolicy( $item, $request ), 0, "_checkHoldPolicy returns false if holdallowed = 1 and branches do not match" );
+    is( C4::HoldsQueue::_checkHoldPolicy( $item, $request ), 0, "_checkHoldPolicy returns false if holdallowed = from_home_library and branches do not match" );
 
     $item->{homebranch} = $request->{borrowerbranch};
-    is( C4::HoldsQueue::_checkHoldPolicy( $item, $request ), 1, "_checkHoldPolicy returns true if holdallowed = 1 and branches do match" );
+    is( C4::HoldsQueue::_checkHoldPolicy( $item, $request ), 1, "_checkHoldPolicy returns true if holdallowed = from_home_library and branches do match" );
 
     # Test holdallowed = 3
-    $item->{holdallowed} = 3;
+    $item->{holdallowed} = 'from_local_hold_group';
     $item->{homebranch} = $library_nongroup->id;
-    is( C4::HoldsQueue::_checkHoldPolicy( $item, $request ), 0, "_checkHoldPolicy returns false if branchode doesn't match, holdallowed = 3 and no group branches exist" );
+    is( C4::HoldsQueue::_checkHoldPolicy( $item, $request ), 0, "_checkHoldPolicy returns false if branchode doesn't match, holdallowed = from_local_hold_group and no group branches exist" );
     $item->{homebranch} = $request->{borrowerbranch};
-    is( C4::HoldsQueue::_checkHoldPolicy( $item, $request ), 1, "_checkHoldPolicy returns true if branchode matches, holdallowed = 3 and no group branches exist" );
+    is( C4::HoldsQueue::_checkHoldPolicy( $item, $request ), 1, "_checkHoldPolicy returns true if branchode matches, holdallowed = from_local_hold_group and no group branches exist" );
 
     # Create library groups hierarchy
     my $rootgroup = $builder->build_object( { class => 'Koha::Library::Groups', value => {ft_local_hold_group => 1} } );
     my $group1 = $builder->build_object( { class => 'Koha::Library::Groups', value => {parent_id => $rootgroup->id, branchcode => $library1->branchcode}} );
     my $group2 = $builder->build_object( { class => 'Koha::Library::Groups', value => {parent_id => $rootgroup->id, branchcode => $library2->branchcode}} );
 
-    is( C4::HoldsQueue::_checkHoldPolicy( $item, $request ), 1, "_checkHoldPolicy returns true if holdallowed = 3 and no group branches exist" );
+    is( C4::HoldsQueue::_checkHoldPolicy( $item, $request ), 1, "_checkHoldPolicy returns true if holdallowed = from_local_hold_group and no group branches exist" );
 
     $group1->delete;
 

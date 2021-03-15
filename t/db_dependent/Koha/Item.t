@@ -215,66 +215,66 @@ subtest 'pickup_locations' => sub {
     my $patron4 = $builder->build_object( { class => 'Koha::Patrons', value => { branchcode => $library4->branchcode, firstname => '4' } } );
 
     my $results = {
-        "1-1-1-any"           => 3,
-        "1-1-1-holdgroup"     => 2,
-        "1-1-1-patrongroup"   => 2,
-        "1-1-1-homebranch"    => 1,
-        "1-1-1-holdingbranch" => 1,
-        "1-1-2-any"           => 3,
-        "1-1-2-holdgroup"     => 2,
-        "1-1-2-patrongroup"   => 2,
-        "1-1-2-homebranch"    => 1,
-        "1-1-2-holdingbranch" => 1,
-        "1-1-3-any"           => 3,
-        "1-1-3-holdgroup"     => 2,
-        "1-1-3-patrongroup"   => 2,
-        "1-1-3-homebranch"    => 1,
-        "1-1-3-holdingbranch" => 1,
-        "1-4-1-any"           => 0,
-        "1-4-1-holdgroup"     => 0,
-        "1-4-1-patrongroup"   => 0,
-        "1-4-1-homebranch"    => 0,
-        "1-4-1-holdingbranch" => 0,
-        "1-4-2-any"           => 3,
-        "1-4-2-holdgroup"     => 2,
-        "1-4-2-patrongroup"   => 1,
-        "1-4-2-homebranch"    => 1,
-        "1-4-2-holdingbranch" => 1,
-        "1-4-3-any"           => 0,
-        "1-4-3-holdgroup"     => 0,
-        "1-4-3-patrongroup"   => 0,
-        "1-4-3-homebranch"    => 0,
-        "1-4-3-holdingbranch" => 0,
-        "3-1-1-any"           => 0,
-        "3-1-1-holdgroup"     => 0,
-        "3-1-1-patrongroup"   => 0,
-        "3-1-1-homebranch"    => 0,
-        "3-1-1-holdingbranch" => 0,
-        "3-1-2-any"           => 3,
-        "3-1-2-holdgroup"     => 1,
-        "3-1-2-patrongroup"   => 2,
-        "3-1-2-homebranch"    => 0,
-        "3-1-2-holdingbranch" => 1,
-        "3-1-3-any"           => 0,
-        "3-1-3-holdgroup"     => 0,
-        "3-1-3-patrongroup"   => 0,
-        "3-1-3-homebranch"    => 0,
-        "3-1-3-holdingbranch" => 0,
-        "3-4-1-any"           => 0,
-        "3-4-1-holdgroup"     => 0,
-        "3-4-1-patrongroup"   => 0,
-        "3-4-1-homebranch"    => 0,
-        "3-4-1-holdingbranch" => 0,
-        "3-4-2-any"           => 3,
-        "3-4-2-holdgroup"     => 1,
-        "3-4-2-patrongroup"   => 1,
-        "3-4-2-homebranch"    => 0,
-        "3-4-2-holdingbranch" => 1,
-        "3-4-3-any"           => 3,
-        "3-4-3-holdgroup"     => 1,
-        "3-4-3-patrongroup"   => 1,
-        "3-4-3-homebranch"    => 0,
-        "3-4-3-holdingbranch" => 1
+        "1-1-from_home_library-any"               => 3,
+        "1-1-from_home_library-holdgroup"         => 2,
+        "1-1-from_home_library-patrongroup"       => 2,
+        "1-1-from_home_library-homebranch"        => 1,
+        "1-1-from_home_library-holdingbranch"     => 1,
+        "1-1-from_any_library-any"                => 3,
+        "1-1-from_any_library-holdgroup"          => 2,
+        "1-1-from_any_library-patrongroup"        => 2,
+        "1-1-from_any_library-homebranch"         => 1,
+        "1-1-from_any_library-holdingbranch"      => 1,
+        "1-1-from_local_hold_group-any"           => 3,
+        "1-1-from_local_hold_group-holdgroup"     => 2,
+        "1-1-from_local_hold_group-patrongroup"   => 2,
+        "1-1-from_local_hold_group-homebranch"    => 1,
+        "1-1-from_local_hold_group-holdingbranch" => 1,
+        "1-4-from_home_library-any"               => 0,
+        "1-4-from_home_library-holdgroup"         => 0,
+        "1-4-from_home_library-patrongroup"       => 0,
+        "1-4-from_home_library-homebranch"        => 0,
+        "1-4-from_home_library-holdingbranch"     => 0,
+        "1-4-from_any_library-any"                => 3,
+        "1-4-from_any_library-holdgroup"          => 2,
+        "1-4-from_any_library-patrongroup"        => 1,
+        "1-4-from_any_library-homebranch"         => 1,
+        "1-4-from_any_library-holdingbranch"      => 1,
+        "1-4-from_local_hold_group-any"           => 0,
+        "1-4-from_local_hold_group-holdgroup"     => 0,
+        "1-4-from_local_hold_group-patrongroup"   => 0,
+        "1-4-from_local_hold_group-homebranch"    => 0,
+        "1-4-from_local_hold_group-holdingbranch" => 0,
+        "3-1-from_home_library-any"               => 0,
+        "3-1-from_home_library-holdgroup"         => 0,
+        "3-1-from_home_library-patrongroup"       => 0,
+        "3-1-from_home_library-homebranch"        => 0,
+        "3-1-from_home_library-holdingbranch"     => 0,
+        "3-1-from_any_library-any"                => 3,
+        "3-1-from_any_library-holdgroup"          => 1,
+        "3-1-from_any_library-patrongroup"        => 2,
+        "3-1-from_any_library-homebranch"         => 0,
+        "3-1-from_any_library-holdingbranch"      => 1,
+        "3-1-from_local_hold_group-any"           => 0,
+        "3-1-from_local_hold_group-holdgroup"     => 0,
+        "3-1-from_local_hold_group-patrongroup"   => 0,
+        "3-1-from_local_hold_group-homebranch"    => 0,
+        "3-1-from_local_hold_group-holdingbranch" => 0,
+        "3-4-from_home_library-any"               => 0,
+        "3-4-from_home_library-holdgroup"         => 0,
+        "3-4-from_home_library-patrongroup"       => 0,
+        "3-4-from_home_library-homebranch"        => 0,
+        "3-4-from_home_library-holdingbranch"     => 0,
+        "3-4-from_any_library-any"                => 3,
+        "3-4-from_any_library-holdgroup"          => 1,
+        "3-4-from_any_library-patrongroup"        => 1,
+        "3-4-from_any_library-homebranch"         => 0,
+        "3-4-from_any_library-holdingbranch"      => 1,
+        "3-4-from_local_hold_group-any"           => 3,
+        "3-4-from_local_hold_group-holdgroup"     => 1,
+        "3-4-from_local_hold_group-patrongroup"   => 1,
+        "3-4-from_local_hold_group-homebranch"    => 0,
+        "3-4-from_local_hold_group-holdingbranch" => 1
     };
 
     sub _doTest {
@@ -291,7 +291,12 @@ subtest 'pickup_locations' => sub {
                 }
             }
         );
-        my $ha_value=$ha==3?'holdgroup':($ha==2?'any':'homebranch');
+        my $ha_value =
+          $ha eq 'from_local_hold_group' ? 'holdgroup'
+          : (
+            $ha eq 'from_any_library' ? 'any'
+            : 'homebranch'
+          );
 
         my @pl = map {
             my $pickup_location = $_;
@@ -299,7 +304,7 @@ subtest 'pickup_locations' => sub {
         } $item->pickup_locations( { patron => $patron } )->as_list;
 
         ok(
-            scalar(@pl) == $results->{
+            scalar(@pl) eq $results->{
                     $item->copynumber . '-'
                   . $patron->firstname . '-'
                   . $ha . '-'
@@ -330,7 +335,7 @@ subtest 'pickup_locations' => sub {
     foreach my $item ($item1, $item3) {
         foreach my $patron ($patron1, $patron4) {
             #holdallowed 1: homebranch, 2: any, 3: holdgroup
-            foreach my $ha (1, 2, 3) {
+            foreach my $ha ('from_home_library', 'from_any_library', 'from_local_hold_group') {
                 foreach my $hfp ('any', 'holdgroup', 'patrongroup', 'homebranch', 'holdingbranch') {
                     _doTest($item, $patron, $ha, $hfp, $results);
                 }
@@ -355,7 +360,7 @@ subtest 'pickup_locations' => sub {
             branchcode => undef,
             itemtype   => $item1->itype,
             rules      => {
-                holdallowed             => 1,
+                holdallowed             => 'from_home_library',
                 hold_fulfillment_policy => 1,
                 returnbranch            => 'any'
             }

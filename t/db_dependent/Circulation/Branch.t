@@ -174,7 +174,7 @@ Koha::CirculationRules->set_rules(
         branchcode   => $samplebranch2->{branchcode},
         itemtype     => undef,
         rules        => {
-            holdallowed       => 1,
+            holdallowed       => 'from_home_library',
             returnbranch      => 'holdingbranch',
         }
     }
@@ -195,7 +195,7 @@ Koha::CirculationRules->set_rules(
         branchcode   => undef,
         itemtype     => undef,
         rules        => {
-            holdallowed       => 3,
+            holdallowed       => 'from_local_hold_group',
             returnbranch      => 'homebranch',
         }
     }
@@ -206,7 +206,7 @@ Koha::CirculationRules->set_rules(
         branchcode   => $samplebranch1->{branchcode},
         itemtype     => $sampleitemtype1->{itemtype},
         rules        => {
-            holdallowed       => 5,
+            holdallowed       => 'invalid_value',
             returnbranch      => 'homebranch',
         }
     }
@@ -216,7 +216,7 @@ Koha::CirculationRules->set_rules(
         branchcode   => $samplebranch2->{branchcode},
         itemtype     => $sampleitemtype1->{itemtype},
         rules        => {
-            holdallowed       => 5,
+            holdallowed       => 'invalid_value',
             returnbranch      => 'holdingbranch',
         }
     }
@@ -226,7 +226,7 @@ Koha::CirculationRules->set_rules(
         branchcode   => $samplebranch2->{branchcode},
         itemtype     => $sampleitemtype2->{itemtype},
         rules        => {
-            holdallowed       => 5,
+            holdallowed       => 'invalid_value',
             returnbranch      => 'noreturn',
         }
     }
@@ -264,22 +264,22 @@ is_deeply(
         $samplebranch1->{branchcode},
         $sampleitemtype1->{itemtype},
     ),
-    { returnbranch => 'homebranch', holdallowed => 5, @lazy_any },
+    { returnbranch => 'homebranch', holdallowed => 'invalid_value', @lazy_any },
     "GetBranchitem returns holdallowed and return branch"
 );
 is_deeply(
     GetBranchItemRule(),
-    { returnbranch => 'homebranch', holdallowed => 3, @lazy_any },
+    { returnbranch => 'homebranch', holdallowed => 'from_local_hold_group', @lazy_any },
 "Without parameters GetBranchItemRule returns the values in default_circ_rules"
 );
 is_deeply(
     GetBranchItemRule( $samplebranch2->{branchcode} ),
-    { returnbranch => 'holdingbranch', holdallowed => 1, @lazy_any },
+    { returnbranch => 'holdingbranch', holdallowed => 'from_home_library', @lazy_any },
 "With only a branchcode GetBranchItemRule returns values in default_branch_circ_rules"
 );
 is_deeply(
     GetBranchItemRule( -1, -1 ),
-    { returnbranch => 'homebranch', holdallowed => 3, @lazy_any },
+    { returnbranch => 'homebranch', holdallowed => 'from_local_hold_group', @lazy_any },
     "With only one parametern GetBranchItemRule returns default values"
 );
 

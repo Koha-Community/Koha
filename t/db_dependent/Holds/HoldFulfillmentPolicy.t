@@ -78,7 +78,7 @@ Koha::CirculationRules->set_rules(
         branchcode   => undef,
         itemtype     => undef,
         rules        => {
-            holdallowed             => 2,
+            holdallowed             => 'from_any_library',
             hold_fulfillment_policy => 'homebranch',
         }
     }
@@ -130,7 +130,7 @@ Koha::CirculationRules->set_rules(
         branchcode   => undef,
         itemtype     => undef,
         rules        => {
-            holdallowed             => 2,
+            holdallowed             => 'from_any_library',
             hold_fulfillment_policy => 'holdingbranch',
         }
     }
@@ -182,7 +182,7 @@ Koha::CirculationRules->set_rules(
         branchcode   => undef,
         itemtype     => undef,
         rules        => {
-            holdallowed             => 2,
+            holdallowed             => 'from_any_library',
             hold_fulfillment_policy => 'any',
         }
     }

@@ -198,7 +198,7 @@ Koha::CirculationRules->set_rules(
         branchcode   => $branch_1,
         itemtype     => undef,
         rules        => {
-            holdallowed  => 1,
+            holdallowed  => 'from_home_library',
             returnbranch => 'homebranch',
         }
     }
@@ -210,7 +210,7 @@ Koha::CirculationRules->set_rules(
         branchcode   => $branch_2,
         itemtype     => undef,
         rules        => {
-            holdallowed  => 2,
+            holdallowed  => 'from_any_library',
             returnbranch => 'homebranch',
         }
     }

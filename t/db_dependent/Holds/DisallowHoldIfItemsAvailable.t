@@ -126,8 +126,8 @@ AddReturn( $item1->barcode );
     subtest 'IsAvailableForItemLevelRequest behaviours depending on ReservesControlBranch + holdallowed' => sub {
         plan tests => 2;
 
-        my $hold_allowed_from_home_library  = 1;
-        my $hold_allowed_from_any_libraries = 2;
+        my $hold_allowed_from_home_library  = 'from_home_library';
+        my $hold_allowed_from_any_libraries = 'from_any_library';
 
         subtest 'Item is available at a different library' => sub {
             plan tests => 13;

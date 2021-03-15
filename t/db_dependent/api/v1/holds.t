@@ -365,7 +365,7 @@ subtest 'test AllowHoldPolicyOverride' => sub {
             itemtype   => undef,
             branchcode => undef,
             rules      => {
-                holdallowed => 1
+                holdallowed => 'from_home_library'
             }
         }
     );

@@ -221,7 +221,7 @@ subtest 'pickup_locations' => sub {
             branchcode => $library1->branchcode,
             itemtype   => undef,
             rules => {
-                holdallowed => 1,
+                holdallowed => 'from_home_library',
                 hold_fulfillment_policy => 'any',
                 returnbranch => 'any'
             }
@@ -233,7 +233,7 @@ subtest 'pickup_locations' => sub {
             branchcode => $library2->branchcode,
             itemtype   => undef,
             rules => {
-                holdallowed => 3,
+                holdallowed => 'from_local_hold_group',
                 hold_fulfillment_policy => 'holdgroup',
                 returnbranch => 'any'
             }
@@ -245,7 +245,7 @@ subtest 'pickup_locations' => sub {
             branchcode => $library3->branchcode,
             itemtype   => undef,
             rules => {
-                holdallowed => 3,
+                holdallowed => 'from_local_hold_group',
                 hold_fulfillment_policy => 'patrongroup',
                 returnbranch => 'any'
             }
@@ -257,7 +257,7 @@ subtest 'pickup_locations' => sub {
             branchcode => $library4->branchcode,
             itemtype   => undef,
             rules => {
-                holdallowed => 2,
+                holdallowed => 'from_any_library',
                 hold_fulfillment_policy => 'holdingbranch',
                 returnbranch => 'any'
             }
@@ -269,7 +269,7 @@ subtest 'pickup_locations' => sub {
             branchcode => $library5->branchcode,
             itemtype   => undef,
             rules => {
-                holdallowed => 2,
+                holdallowed => 'from_any_library',
                 hold_fulfillment_policy => 'homebranch',
                 returnbranch => 'any'
             }
@@ -281,7 +281,7 @@ subtest 'pickup_locations' => sub {
             branchcode => $library6->branchcode,
             itemtype   => undef,
             rules => {
-                holdallowed => 1,
+                holdallowed => 'from_home_library',
                 hold_fulfillment_policy => 'holdgroup',
                 returnbranch => 'any'
             }
@@ -293,7 +293,7 @@ subtest 'pickup_locations' => sub {
             branchcode => $library7->branchcode,
             itemtype   => undef,
             rules => {
-                holdallowed => 3,
+                holdallowed => 'from_local_hold_group',
                 hold_fulfillment_policy => 'holdingbranch',
                 returnbranch => 'any'
             }
@@ -306,7 +306,7 @@ subtest 'pickup_locations' => sub {
             branchcode => $library8->branchcode,
             itemtype   => undef,
             rules => {
-                holdallowed => 2,
+                holdallowed => 'from_any_library',
                 hold_fulfillment_policy => 'patrongroup',
                 returnbranch => 'any'
             }

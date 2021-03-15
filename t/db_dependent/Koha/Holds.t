@@ -490,7 +490,7 @@ subtest 'get_items_that_can_fill' => sub {
     Koha::CirculationRule->new(
         {
             rule_name  => 'holdallowed',
-            rule_value => 0,
+            rule_value => 'not_allowed',
             itemtype   => $item_5->itype
         }
     )->store;

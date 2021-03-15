@@ -420,7 +420,7 @@ Koha::CirculationRules->set_rules(
         branchcode => $branch_1,
         itemtype   => 'CANNOT',
         rules => {
-            holdallowed => 0,
+            holdallowed => 'not_allowed',
             returnbranch => 'homebranch',
         }
     }
@@ -430,7 +430,7 @@ Koha::CirculationRules->set_rules(
         branchcode => $branch_1,
         itemtype   => 'CAN',
         rules => {
-            holdallowed => 1,
+            holdallowed => 'from_home_library',
             returnbranch => 'homebranch',
         }
     }
@@ -877,7 +877,7 @@ subtest 'CanItemBeReserved / branch_not_in_hold_group' => sub {
             branchcode => undef,
             itemtype   => undef,
             rules => {
-                holdallowed => 3,
+                holdallowed => 'from_local_hold_group',
                 hold_fulfillment_policy => 'any',
                 returnbranch => 'any'
             }
@@ -904,7 +904,7 @@ subtest 'CanItemBeReserved / branch_not_in_hold_group' => sub {
             branchcode => $library2->branchcode,
             itemtype   => undef,
             rules => {
-                holdallowed => 2,
+                holdallowed => 'from_any_library',
                 hold_fulfillment_policy => 'any',
                 returnbranch => 'any'
             }
@@ -924,7 +924,7 @@ subtest 'CanItemBeReserved / branch_not_in_hold_group' => sub {
             branchcode => $library2->branchcode,
             itemtype   => undef,
             rules => {
-                holdallowed => 3,
+                holdallowed => 'from_local_hold_group',
                 hold_fulfillment_policy => 'any',
                 returnbranch => 'any'
             }
@@ -944,7 +944,7 @@ subtest 'CanItemBeReserved / branch_not_in_hold_group' => sub {
             branchcode => $library2->branchcode,
             itemtype   => $itemtype2->itemtype,
             rules => {
-                holdallowed => 2,
+                holdallowed => 'from_any_library',
                 hold_fulfillment_policy => 'any',
                 returnbranch => 'any'
             }
@@ -964,7 +964,7 @@ subtest 'CanItemBeReserved / branch_not_in_hold_group' => sub {
             branchcode => $library2->branchcode,
             itemtype   => $itemtype2->itemtype,
             rules => {
-                holdallowed => 3,
+                holdallowed => 'from_local_hold_group',
                 hold_fulfillment_policy => 'any',
                 returnbranch => 'any'
             }
@@ -984,7 +984,7 @@ subtest 'CanItemBeReserved / branch_not_in_hold_group' => sub {
             branchcode => $library2->branchcode,
             itemtype   => $itemtype2->itemtype,
             rules => {
-                holdallowed => 2,
+                holdallowed => 'from_any_library',
                 hold_fulfillment_policy => 'any',
                 returnbranch => 'any'
             }
@@ -1004,7 +1004,7 @@ subtest 'CanItemBeReserved / branch_not_in_hold_group' => sub {
             branchcode => $library2->branchcode,
             itemtype   => $itemtype2->itemtype,
             rules => {
-                holdallowed => 3,
+                holdallowed => 'from_local_hold_group',
                 hold_fulfillment_policy => 'any',
                 returnbranch => 'any'
             }
@@ -1091,7 +1091,7 @@ subtest 'CanItemBeReserved / pickup_not_in_hold_group' => sub {
             branchcode => undef,
             itemtype   => undef,
             rules => {
-                holdallowed => 2,
+                holdallowed => 'from_any_library',
                 hold_fulfillment_policy => 'holdgroup',
                 returnbranch => 'any'
             }
@@ -1118,7 +1118,7 @@ subtest 'CanItemBeReserved / pickup_not_in_hold_group' => sub {
             branchcode => $library2->branchcode,
             itemtype   => undef,
             rules => {
-                holdallowed => 2,
+                holdallowed => 'from_any_library',
                 hold_fulfillment_policy => 'any',
                 returnbranch => 'any'
             }
@@ -1138,7 +1138,7 @@ subtest 'CanItemBeReserved / pickup_not_in_hold_group' => sub {
             branchcode => $library2->branchcode,
             itemtype   => undef,
             rules => {
-                holdallowed => 2,
+                holdallowed => 'from_any_library',
                 hold_fulfillment_policy => 'holdgroup',
                 returnbranch => 'any'
             }
@@ -1158,7 +1158,7 @@ subtest 'CanItemBeReserved / pickup_not_in_hold_group' => sub {
             branchcode => $library2->branchcode,
             itemtype   => $itemtype2->itemtype,
             rules => {
-                holdallowed => 2,
+                holdallowed => 'from_any_library',
                 hold_fulfillment_policy => 'any',
                 returnbranch => 'any'
             }
@@ -1178,7 +1178,7 @@ subtest 'CanItemBeReserved / pickup_not_in_hold_group' => sub {
             branchcode => $library2->branchcode,
             itemtype   => $itemtype2->itemtype,
             rules => {
-                holdallowed => 2,
+                holdallowed => 'from_any_library',
                 hold_fulfillment_policy => 'holdgroup',
                 returnbranch => 'any'
             }
@@ -1198,7 +1198,7 @@ subtest 'CanItemBeReserved / pickup_not_in_hold_group' => sub {
             branchcode => $library2->branchcode,
             itemtype   => $itemtype2->itemtype,
             rules => {
-                holdallowed => 2,
+                holdallowed => 'from_any_library',
                 hold_fulfillment_policy => 'any',
                 returnbranch => 'any'
             }
@@ -1218,7 +1218,7 @@ subtest 'CanItemBeReserved / pickup_not_in_hold_group' => sub {
             branchcode => $library2->branchcode,
             itemtype   => $itemtype2->itemtype,
             rules => {
-                holdallowed => 2,
+                holdallowed => 'from_any_library',
                 hold_fulfillment_policy => 'holdgroup',
                 returnbranch => 'any'
             }
