@@ -26,13 +26,13 @@ use C4::Biblio qw(
     GetMarcSubjects
     GetMarcUrls
 );
-use C4::Circulation qw( GetTransfers );
 use C4::Auth qw( get_template_and_user );
 use C4::Output qw( output_html_with_http_headers );
 use Koha::RecordProcessor;
 use Koha::CsvProfiles;
 use Koha::AuthorisedValues;
 use Koha::Biblios;
+use Koha::Items;
 
 my $query = CGI->new;
 
@@ -123,11 +123,12 @@ foreach my $biblionumber ( @bibs ) {
         if ($itm->{'location'}){
             $itm->{'location_opac'} = $shelflocations->{$itm->{'location'} };
         }
-        my ( $transfertwhen, $transfertfrom, $transfertto ) = GetTransfers($itm->{itemnumber});
-        if ( defined( $transfertwhen ) && $transfertwhen ne '' ) {
-             $itm->{transfertwhen} = $transfertwhen;
-             $itm->{transfertfrom} = $transfertfrom;
-             $itm->{transfertto}   = $transfertto;
+        my $item_object = Koha::Items->find($itm->{itemnumber});
+        my $transfer = $item_object->get_transfer;
+        if ( $transfer && $transfer->in_transit ) {
+            $itm->{transfertwhen} = $transfer->datesent;
+            $itm->{transfertfrom} = $transfer->frombranch;
+            $itm->{transfertto} = $transfer->tobranch;
         }
     }
     $num++;
