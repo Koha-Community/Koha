@@ -629,6 +629,8 @@
                                                                         Only pickup locations within the same hold group are allowed
                                                                     [% ELSIF itemloo.not_holdable == 'noReservesAllowed' %]
                                                                         No reserves are allowed on this item
+                                                                    [% ELSIF itemloo.not_holdable == 'libraryNotPickupLocation' %]
+                                                                        Library is not a pickup location
                                                                     [% ELSE %]
                                                                         [% itemloo.not_holdable | html %]
                                                                     [% END %]
