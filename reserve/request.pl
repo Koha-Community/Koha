@@ -573,16 +573,15 @@ foreach my $biblionumber (@biblionumbers) {
                 {
                     $item->{available} = 1;
                     $num_available++;
-                    if($branchitemrule->{'hold_fulfillment_policy'} eq 'any' ) {
-                        $item->{any_pickup_location} = 1;
-                    } else {
-                        my $arr_locations = Koha::Items->find($itemnumber)
-                                    ->pickup_locations( { patron => $patron } )->as_list();
 
-                        $item->{pickup_locations} = join( ', ',
-                            map { $_->unblessed->{branchname} } @$arr_locations);
-                        $item->{pickup_locations_code} = join( ',',
-                            map { $_->unblessed->{branchcode} } @$arr_locations);
+                    if ( $branchitemrule->{'hold_fulfillment_policy'} eq 'any' )
+                    {
+                        $item->{any_pickup_location} = 1;
+                    }
+                    else {
+                        my @pickup_locations = $item_object->pickup_locations({ patron => $patron });
+
+                        $item->{pickup_locations} = join( ', ', map { $_->branchname } @pickup_locations );
                     }
 
                     push( @available_itemtypes, $item->{itype} );
