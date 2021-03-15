@@ -1244,6 +1244,7 @@
                 var biblio_id = $(this).data('biblio-id');
 
                 this_dropdown.select2({
+                    width: 'style',
                     allowClear: false,
                     ajax: {
                         url: '/api/v1/biblios/' + encodeURIComponent(biblio_id) + '/pickup_locations',
