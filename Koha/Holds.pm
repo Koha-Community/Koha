@@ -136,7 +136,7 @@ sub get_items_that_can_fill {
             rule_name    => 'holdallowed',
             branchcode   => undef,
             categorycode => undef,
-            rule_value   => 0,
+            rule_value   => 'not_allowed',
         }
     )->get_column('itemtype');
 

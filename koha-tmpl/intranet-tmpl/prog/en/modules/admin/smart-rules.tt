@@ -564,34 +564,34 @@
                                 Not set
                             </option>
 
-                            [% IF holdallowed == 2 %]
-                                <option value="2" selected="selected">
+                            [% IF holdallowed == 'from_any_library' %]
+                                <option value="from_any_library" selected="selected">
                             [% ELSE %]
-                                <option value="2">
+                                <option value="from_any_library">
                             [% END %]
                                 From any library
                             </option>
 
-                            [% IF holdallowed == 3 %]
-                            <option value="3" selected="selected">
+                            [% IF holdallowed == 'from_local_hold_group' %]
+                            <option value="from_local_hold_group" selected="selected">
                             [% ELSE %]
-                            <option value="3">
+                            <option value="from_local_hold_group">
                             [% END %]
                                 From local hold group
                             </option>
 
-                            [% IF holdallowed == 1 %]
-                                <option value="1" selected="selected">
+                            [% IF holdallowed == 'from_home_library' %]
+                                <option value="from_home_library" selected="selected">
                             [% ELSE %]
-                                <option value="1">
+                                <option value="from_home_library">
                             [% END %]
                                 From home library
                             </option>
 
-                            [% IF holdallowed == 0 %]
-                                <option value="0" selected="selected">
+                            [% IF holdallowed == 'not_allowed' %]
+                                <option value="not_allowed" selected="selected">
                             [% ELSE %]
-                                <option value="0">
+                                <option value="not_allowed">
                             [% END %]
                                 No holds allowed
                             </option>
@@ -916,17 +916,17 @@
                     [% SET hold_fulfillment_policy = CirculationRules.Search( branchcode, undef, i.itemtype, 'hold_fulfillment_policy' ) %]
                     [% SET returnbranch = CirculationRules.Search( branchcode, undef, i.itemtype, 'returnbranch' ) %]
 
-                    [% IF holdallowed || hold_fulfillment_policy || returnbranch %]
+                    [% IF holdallowed != 'not_allowed' || hold_fulfillment_policy || returnbranch %]
                         <tr>
                             <td>
                                 [% i.translated_description | html %]
                             </td>
                             <td>
-                                [% IF holdallowed == 2 %]
+                                [% IF holdallowed == 'from_any_library' %]
                                     <span>From any library</span>
-                                [% ELSIF holdallowed == 3 %]
+                                [% ELSIF holdallowed == 'from_local_hold_group' %]
                                     <span>From local hold group</span>
-                                [% ELSIF holdallowed == 1 %]
+                                [% ELSIF holdallowed == 'from_home_library' %]
                                     <span>From home library</span>
                                 [% ELSE %]
                                     <span>No holds allowed</span>
@@ -970,10 +970,10 @@
                     </td>
                     <td>
                         <select name="holdallowed">
-                            <option value="2">From any library</option>
-                            <option value="3">From local hold group</option>
-                            <option value="1">From home library</option>
-                            <option value="0">No holds allowed</option>
+                            <option value="from_any_library">From any library</option>
+                            <option value="from_local_hold_group">From local hold group</option>
+                            <option value="from_home_library">From home library</option>
+                            <option value="not_allowed">No holds allowed</option>
                         </select>
                     </td>
                     <td>

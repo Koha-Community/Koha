@@ -1830,9 +1830,10 @@ branch and item type, regardless of patron category.
 The return value is a hashref containing the following keys:
 
 holdallowed => Hold policy for this branch and itemtype. Possible values:
-  0: No holds allowed.
-  1: Holds allowed only by patrons that have the same homebranch as the item.
-  2: Holds allowed from any patron.
+  not_allowed:           No holds allowed.
+  from_home_library:     Holds allowed only by patrons that have the same homebranch as the item.
+  from_any_library:      Holds allowed from any patron.
+  from_local_hold_group: Holds allowed from libraries in hold group
 
 returnbranch => branch to which to return item.  Possible values:
   noreturn: do not return, let item remain where checked in (floating collections)
@@ -1857,22 +1858,22 @@ sub GetBranchItemRule {
     my $holdallowed_rule = Koha::CirculationRules->get_effective_rule(
         {
             branchcode => $branchcode,
-            itemtype => $itemtype,
-            rule_name => 'holdallowed',
+            itemtype   => $itemtype,
+            rule_name  => 'holdallowed',
         }
     );
     my $hold_fulfillment_policy_rule = Koha::CirculationRules->get_effective_rule(
         {
             branchcode => $branchcode,
-            itemtype => $itemtype,
-            rule_name => 'hold_fulfillment_policy',
+            itemtype   => $itemtype,
+            rule_name  => 'hold_fulfillment_policy',
         }
     );
     my $returnbranch_rule = Koha::CirculationRules->get_effective_rule(
         {
             branchcode => $branchcode,
-            itemtype => $itemtype,
-            rule_name => 'returnbranch',
+            itemtype   => $itemtype,
+            rule_name  => 'returnbranch',
         }
     );
 
@@ -1880,7 +1881,7 @@ sub GetBranchItemRule {
     my $rules;
     $rules->{holdallowed} = defined $holdallowed_rule
         ? $holdallowed_rule->rule_value
-        : 2;
+        : 'from_any_library';
     $rules->{hold_fulfillment_policy} = defined $hold_fulfillment_policy_rule
         ? $hold_fulfillment_policy_rule->rule_value
         : 'any';

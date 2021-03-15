@@ -663,8 +663,8 @@ sub pickup_locations {
       C4::Circulation::GetBranchItemRule( $circ_control_branch, $self->itype );
 
     if(defined $patron) {
-        return Koha::Libraries->new()->empty if $branchitemrule->{holdallowed} == 3 && !$self->home_branch->validate_hold_sibling( {branchcode => $patron->branchcode} );
-        return Koha::Libraries->new()->empty if $branchitemrule->{holdallowed} == 1 && $self->home_branch->branchcode ne $patron->branchcode;
+        return Koha::Libraries->new()->empty if $branchitemrule->{holdallowed} eq 'from_local_hold_group' && !$self->home_branch->validate_hold_sibling( {branchcode => $patron->branchcode} );
+        return Koha::Libraries->new()->empty if $branchitemrule->{holdallowed} eq 'from_home_library' && $self->home_branch->branchcode ne $patron->branchcode;
     }
 
     my $pickup_libraries = Koha::Libraries->search();

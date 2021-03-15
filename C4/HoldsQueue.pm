@@ -373,14 +373,14 @@ sub GetItemsAvailableToFillHoldRequestsForBib {
 sub _checkHoldPolicy {
     my ( $item, $request ) = @_;
 
-    return 0 unless $item->{holdallowed};
+    return 0 unless $item->{holdallowed} ne 'not_allowed';
 
     return 0
-      if $item->{holdallowed} == 1
+      if $item->{holdallowed} eq 'from_home_library'
       && $item->{homebranch} ne $request->{borrowerbranch};
 
     return 0
-      if $item->{'holdallowed'} == 3
+      if $item->{'holdallowed'} eq 'from_local_hold_group'
       && !Koha::Libraries->find( $item->{homebranch} )
               ->validate_hold_sibling( { branchcode => $request->{borrowerbranch} } );
 
@@ -544,7 +544,7 @@ sub MapItemsToHoldRequests {
     # group available items by branch
     my %items_by_branch = ();
     foreach my $item (@$available_items) {
-        next unless $item->{holdallowed};
+        next unless $item->{holdallowed} ne 'not_allowed';
 
         push @{ $items_by_branch{ $item->{holdingbranch} } }, $item
           unless exists $allocated_items{ $item->{itemnumber} };

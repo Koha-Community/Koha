@@ -1302,8 +1302,8 @@
                 var msg = '';
 
                 switch (override_items[itemnumber].holdallowed) {
-                    case 0: msg = _("This item normally cannot be put on hold."); break;
-                    case 1: msg = _("This item normally cannot be put on hold except for patrons from %s.").format(override_items[itemnumber].homebranch); break;
+                    case "not_allowed": msg = _("This item normally cannot be put on hold."); break;
+                    case "from_home_library": msg = _("This item normally cannot be put on hold except for patrons from %s.").format(override_items[itemnumber].homebranch); break;
                 }
 
                 msg += "\n\n" + _("Place hold on this item?");
