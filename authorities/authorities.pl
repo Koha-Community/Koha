@@ -543,6 +543,7 @@ my $myindex = $input->param('index');
 my $linkid=$input->param('linkid');
 my $authtypecode = $input->param('authtypecode');
 my $breedingid    = $input->param('breedingid');
+my $changed_authtype = $input->param('changed_authtype') // q{};
 
 
 my $dbh = C4::Context->dbh;
@@ -634,6 +635,10 @@ if ($op eq "duplicate")
         {
                 $authid = "";
         }
+        if($changed_authtype eq "changed"){
+            $record = TransformHtmlToMarc( $input, 0 );
+        }
+
         build_tabs ($template, $record, $dbh, $input);
         build_hidden_data;
         $template->param(oldauthtypetagfield=>$oldauthtypetagfield, oldauthtypetagsubfield=>$oldauthtypetagsubfield,

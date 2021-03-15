@@ -79,6 +79,16 @@
             selectTab( tablink );
             window.scrollTo( 0, getScrollto( field, "toolbar" ) );
         });
+
+        $(".change-authtype").on("click", function(){
+            var authtypecode = $(this).data("authtypecode");
+            var f = document.f;
+            f.op.value = "[% op | html %]";
+            f.authid.value = "[% authid | html %]";
+            f.changed_authtype.value = "changed";
+            f.authtypecode.value = authtypecode;
+            f.submit();
+        });
     });
 
     function selectTab( tablink ){
@@ -314,6 +324,7 @@
                     <input type="hidden" name="authid" value="[% authid | html %]" />
                     <input type="hidden" name="index" value="[% index | html %]" />
                     <input type="hidden" value="0" id="confirm_not_duplicate" name="confirm_not_duplicate" />
+                    <input type="hidden" name="changed_authtype" value="" />
 
                     <div id="toolbar" class="btn-toolbar">
                         <div class="btn-group"><a href="#" id="addauth" class="btn btn-primary" accesskey="w"><i class="fa fa-save"></i> Save</a></div>
@@ -324,6 +335,34 @@
                                 <a class="btn btn-default" id="z3950submit" href="#"><i class="fa fa-search"></i> Z39.50/SRU search</a>
                             [% END %]
                         </div>
+                        <div class="btn-group">
+                            <button class="btn btn-default dropdown-toggle" data-toggle="dropdown"><i class="fa fa-cog"></i> Settings <span class="caret"></span></button>
+                            <ul id="settings-menu" class="dropdown-menu">
+                                <li class="dropdown-header">Change authority type</li>
+                                <li>
+                                    <a href="#" class="change-authtype" data-authtypecode="">
+                                        [% IF ( authtypecode ) %]
+                                           <i class="fa fa-fw">&nbsp;</i>
+                                        [% ELSE %]
+                                            <i class="fa fa-fw fa-check"></i>
+                                        [% END %]
+                                        Default
+                                    </a>
+                                </li>
+                                [% FOREACH authority_type IN authority_types %]
+                                    <li>
+                                        <a href="#" class="change-authtype" data-authtypecode="[% authority_type.authtypecode | html %]">
+                                            [% IF authority_type.authtypecode == authtypecode %]
+                                                <i class="fa fa-fw fa-check"></i>
+                                            [% ELSE %]
+                                                <i class="fa fa-fw">&nbsp;</i>
+                                            [% END %]
+                                            [% authority_type.authtypetext | html %]
+                                        </a>
+                                    </li>
+                                [% END %]
+                            </ul> <!-- /#settings-menu -->
+                        </div> <!-- /.btn-group -->
                         <div class="btn-group">
                             [% IF ( authid ) %]
                                 <a class="btn btn-default" id="cancel" href="/cgi-bin/koha/authorities/detail.pl?authid=[% authid | url %]">Cancel</a>
