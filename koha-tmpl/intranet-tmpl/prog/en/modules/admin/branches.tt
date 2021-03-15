@@ -145,7 +145,11 @@ Libraries &rsaquo; Administration &rsaquo; Koha
                 </li>
                 <li>
                     <label for="branchname" class="required">Name: </label>
-                    <input type="text" name="branchname" id="branchname" size="80" value="[% library.branchname | html %]" class="required" required="required" />
+                    [% IF library %]
+                        <input type="text" name="branchname" id="branchname" size="80" value="[% library.branchname | html %]" class="required focus" required="required" />
+                    [% ELSE %]
+                        <input type="text" name="branchname" id="branchname" size="80" value="[% library.branchname | html %]" class="required" required="required" />
+                    [% END %]
                     <span class="required">Required</span>
                 </li>
             </ol>
