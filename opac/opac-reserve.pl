@@ -24,7 +24,7 @@ use Modern::Perl;
 use CGI qw ( -utf8 );
 use C4::Auth qw( get_template_and_user );
 use C4::Koha qw( getitemtypeimagelocation getitemtypeimagesrc );
-use C4::Circulation qw( GetBranchItemRule GetTransfers );
+use C4::Circulation qw( GetBranchItemRule );
 use C4::Reserves qw( CanItemBeReserved CanBookBeReserved AddReserve GetReservesControlBranch ItemsAnyAvailableAndNotRestricted IsAvailableForItemLevelRequest );
 use C4::Biblio qw( GetBiblioData GetFrameworkCode );
 use C4::Output qw( output_html_with_http_headers );
@@ -481,12 +481,11 @@ foreach my $biblioNum (@biblionumbers) {
         $item_info->{checkout} = $item->checkout;
 
         # Check of the transferred documents
-        my ( $transfertwhen, $transfertfrom, $transfertto ) =
-          GetTransfers($item->itemnumber);
-        if ( $transfertwhen && ($transfertwhen ne '') ) {
-            $item_info->{transfertwhen} = $transfertwhen;
-            $item_info->{transfertfrom} = $transfertfrom;
-            $item_info->{transfertto} = $transfertto;
+        my $transfer = $item->get_transfer;
+        if ( $transfer && $transfer->in_transit ) {
+            $item_info->{transfertwhen} = $transfer->datesent;
+            $item_info->{transfertfrom} = $transfer->frombranch;
+            $item_info->{transfertto} = $transfer->tobranch;
             $item_info->{nocancel} = 1;
         }
 
