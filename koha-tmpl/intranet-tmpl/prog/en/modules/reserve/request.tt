@@ -594,6 +594,8 @@
                                                                         Cannot be transferred to pickup library
                                                                     [% ELSIF itemloo.not_holdable == 'pickupNotInHoldGroup' %]
                                                                         Only pickup locations within the same hold group are allowed
+                                                                    [% ELSIF itemloo.not_holdable == 'libraryNotPickupLocation' %]
+                                                                        Library is not a pickup location
                                                                     [% ELSE %]
                                                                         [% itemloo.not_holdable | html %]
                                                                     [% END %]
