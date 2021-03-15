@@ -37,7 +37,7 @@ use C4::Reserves qw( RevertWaitingStatus AlterPriority ToggleLowestPriority Togg
 use C4::Items qw( get_hostitemnumbers_of );
 use C4::Koha qw( getitemtypeimagelocation );
 use C4::Serials qw( CountSubscriptionFromBiblionumber );
-use C4::Circulation qw( GetTransfers _GetCircControlBranch GetBranchItemRule );
+use C4::Circulation qw( _GetCircControlBranch GetBranchItemRule );
 use Koha::DateUtils qw( dt_from_string );
 use C4::Search qw( enabled_staff_search_views );
 
@@ -450,13 +450,11 @@ if (   ( $findborrower && $borrowernumber_hold || $findclub && $club_hold )
                 }
 
                 # Check the transit status
-                my ( $transfertwhen, $transfertfrom, $transfertto ) =
-                  GetTransfers($item_object->itemnumber); # FIXME replace with get_transfer
-
-                if ( defined $transfertwhen && $transfertwhen ne '' ) {
-                    $item->{transfertwhen} = $transfertwhen;
-                    $item->{transfertfrom} = $transfertfrom;
-                    $item->{transfertto} = $transfertto;
+                my $transfer = $item_object->get_transfer;
+                if ( $transfer && $transfer->in_transit ) {
+                    $item->{transfertwhen} = $transfer->datesent;
+                    $item->{transfertfrom} = $transfer->frombranch;
+                    $item->{transfertto} = $transfer->tobranch;
                     $item->{nocancel} = 1;
                 }
 
