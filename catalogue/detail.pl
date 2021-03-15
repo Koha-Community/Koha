@@ -34,7 +34,6 @@ use C4::Serials qw( CountSubscriptionFromBiblionumber SearchSubscriptions GetLat
 use C4::Output qw( output_html_with_http_headers );
 use C4::Biblio qw( GetBiblioData GetFrameworkCode );
 use C4::Items qw( GetAnalyticsCount );
-use C4::Circulation qw( GetTransfers );
 use C4::Reserves;
 use C4::Serials qw( CountSubscriptionFromBiblionumber SearchSubscriptions GetLatestSerials );
 use C4::XISBN qw( get_xisbns );
@@ -402,12 +401,12 @@ foreach my $item (@items) {
     $item_info->{checkout} = $item->checkout;
 
     # Check the transit status
-    my $transfer = $item->get_transfer;
-    if ( $transfer ) {
-        $item_info->{transfertwhen} = $transfer->datesent;
-        $item_info->{transfertfrom} = $transfer->frombranch;
-        $item_info->{transfertto}   = $transfer->tobranch;
-        $item_info->{nocancel} = 1;
+    my $transfer = $item_object->get_transfer;
+    if ( $transfer && $transfer->in_transit ) {
+        $item->{transfertwhen} = $transfer->datesent;
+        $item->{transfertfrom} = $transfer->frombranch;
+        $item->{transfertto} = $transfer->tobranch;
+        $item->{nocancel} = 1;
     }
 
     foreach my $f (qw( itemnotes )) {
