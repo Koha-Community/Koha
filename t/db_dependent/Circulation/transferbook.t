@@ -21,7 +21,7 @@ use Test::More tests => 6;
 use t::lib::TestBuilder;
 use t::lib::Mocks;
 
-use C4::Circulation qw( transferbook AddIssue GetTransfers );
+use C4::Circulation qw( transferbook AddIssue );
 use C4::Reserves qw( AddReserve );
 use Koha::DateUtils qw( dt_from_string );
 use Koha::Item::Transfers;
@@ -317,18 +317,18 @@ subtest 'transferbook test from branch' => sub {
         barcode   => $item->barcode,
         trigger => "Manual"
     });
-    my ($datesent,$from_branch,$to_branch) = GetTransfers($item->itemnumber);
-    is( $from_branch, $library->branchcode, 'The transfer is initiated from the specified branch, not the items home or holdingbranch');
-    is( $to_branch, $item->homebranch, 'The transfer is initiated to the specified branch');
+    my $transfer = $item->get_transfer;
+    is( $transfer->frombranch, $library->branchcode, 'The transfer is initiated from the specified branch, not the items home or holdingbranch');
+    is( $transfer->tobranch, $item->homebranch, 'The transfer is initiated to the specified branch');
     C4::Circulation::transferbook({
         from_branch => $item->homebranch,
         to_branch => $library->branchcode,
         barcode   => $item->barcode,
         trigger => "Manual"
     });
-    ($datesent,$from_branch,$to_branch) = GetTransfers($item->itemnumber);
-    is( $from_branch, $item->homebranch, 'The transfer is initiated from the specified branch');
-    is( $to_branch, $library->branchcode, 'The transfer is initiated to the specified branch');
+    $transfer = $item->get_transfer;
+    is( $transfer->frombranch, $item->homebranch, 'The transfer is initiated from the specified branch');
+    is( $transfer->tobranch, $library->branchcode, 'The transfer is initiated to the specified branch');
 
 };
 $schema->storage->txn_rollback;
