@@ -685,7 +685,11 @@
                                                         [% END %]
                                                     </td>
                                                     <td>
+                                                    [% IF itemloo.any_pickup_location %]
+                                                        Any library
+                                                    [% ELSE %]
                                                         [% itemloo.pickup_locations | html %]
+                                                    [% END %]
                                                     </td>
                                                 </tr>
                                             [% END # / UNLESS itemloo.hide %]
