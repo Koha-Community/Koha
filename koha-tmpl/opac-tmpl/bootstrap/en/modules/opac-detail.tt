@@ -1378,19 +1378,27 @@
                 [% IF ( itemdata_uri ) %]
                     <td class="url">
                     [% IF ITEM_RESULT.uri %]
-                        [%# Initialize three helper vars %]
-                        [% SET target_attr = ''; SET rel_attr = ''; SET href_attr = '' %]
+                        [%# Initialize two helper vars %]
+                        [% SET target_attr = ''; SET rel_attr = '' %]
                         [% IF Koha.Preference('OPACURLOpenInNewWindow') %][% SET target_attr = '_blank'; SET rel_attr = 'noreferrer' %][% END %]
 
                         [%# Check if there are multiple URIs; in the single case we only use pref URLLinkText or Link to resource %]
                         [% IF ITEM_RESULT.uri.split(' \| ').size > 1 %]
                             [% FOREACH uri IN ITEM_RESULT.uri.split(' \| ') %]
-                                [% IF trackclicks == 'track' || trackclicks == 'anonymous' %][% SET href_attr = "/cgi-bin/koha/tracklinks.pl?uri=" _ uri _ "&amp;biblionumber=" _ biblio.biblionumber _ "&amp;itemnumber=" _ ITEM_RESULT.itemnumber %] [% ELSE %][% SET href_attr = uri %][% END %]
-                                <a target="[% target_attr | html %]" rel="[% rel_attr | html %]" href="[% href_attr | url %]" property="url">[% uri | html %]</a><br>
+                                [% IF trackclicks == 'track' || trackclicks == 'anonymous' %]
+                                    <a target="[% target_attr | html %]" rel="[% rel_attr | html %]" href="/cgi-bin/koha/tracklinks.pl?uri=[% uri | uri %]&amp;biblionumber=[% biblio.biblionumber | html %]&amp;itemnumber=[% ITEM_RESULT.itemnumber | html %]" property="url">[% uri | html %]</a>
+                                [% ELSE %]
+                                    <a target="[% target_attr | html %]" rel="[% rel_attr | html %]" href="[% uri | url %]" property="url">[% uri | html %]</a>
+                                [% END %]
                             [% END %]
                         [% ELSE %]
-                            [% IF trackclicks == 'track' || trackclicks == 'anonymous' %][% SET href_attr = "/cgi-bin/koha/tracklinks.pl?uri=" _ ITEM_RESULT.uri _ "&amp;biblionumber=" _ biblio.biblionumber _ "&amp;itemnumber=" _ ITEM_RESULT.itemnumber %] [% ELSE %][% SET href_attr = ITEM_RESULT.uri %][% END %]
-                            <a target="[% target_attr | html %]" rel="[% rel_attr | html %]" href="[% href_attr | url %]" property="url">[% IF Koha.Preference('URLLinkText') %][% Koha.Preference('URLLinkText') | html %][% ELSE %]Link to resource[% END %]</a>
+                            [% IF trackclicks == 'track' || trackclicks == 'anonymous' %]
+                                <a target="[% target_attr | html %]" rel="[% rel_attr | html %]" href="/cgi-bin/koha/tracklinks.pl?uri=[% ITEM_RESULT.uri | uri %]&amp;biblionumber=[% biblio.biblionumber | html %]&amp;itemnumber=[% ITEM_RESULT.itemnumber | html %]" property="url">
+                            [% ELSE %]
+                                <a target="[% target_attr | html %]" rel="[% rel_attr | html %]" href="[% ITEM_RESULT.uri | url %]" property="url">
+                            [% END %]
+                                [% IF Koha.Preference('URLLinkText') %][% Koha.Preference('URLLinkText') | html %][% ELSE %]Link to resource[% END %]
+                            </a>
                         [% END %]
                     [% END %]
                     </td>
