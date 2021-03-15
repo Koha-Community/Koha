@@ -19,7 +19,6 @@ package Koha::Z3950Responder::Session;
 
 use Modern::Perl;
 
-use C4::Circulation qw( GetTransfers );
 use C4::Context;
 use C4::Reserves qw( GetReserveStatus );
 use C4::Search qw( new_record_from_zebra );
@@ -286,8 +285,8 @@ sub add_item_status {
         push @statuses, $status_strings->{WITHDRAWN};
     }
 
-    if ( scalar( GetTransfers( $itemnumber ) ) ) {
-        push @statuses, $status_strings->{IN_TRANSIT};
+    if ( my $transfer = $item->get_transfer ) {
+        push @statuses, $status_strings->{IN_TRANSIT} if $transfer->in_transit;
     }
 
     if ( GetReserveStatus( $itemnumber ) ne '' ) {
