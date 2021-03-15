@@ -307,7 +307,8 @@
                     type    : 'text',
                     pattern : "^\\d+(\.\\d{2})?$",
                     onblur  : 'submit',
-                    width   : "8em"
+                    width   : "8em",
+                    tooltip : _("Click to edit")
                 });
                 local.$('.editable_int').editable( function(value, settings) {
                     var aPos = local.fnGetPosition( this );
@@ -317,7 +318,8 @@
                     type    : 'text',
                     pattern : "[0-9]*",
                     onblur  : 'submit',
-                    width   : "4em"
+                    width   : "4em",
+                    tooltip : _("Click to edit")
                 });
             },
             "fnRowCallback": function( nRow, aData, iDisplayIndex, iDisplayIndexFull ) {
