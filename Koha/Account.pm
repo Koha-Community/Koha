@@ -62,7 +62,6 @@ Koha::Account->new( { patron_id => $borrowernumber } )->pay(
         library_id  => $branchcode,
         lines       => $lines, # Arrayref of Koha::Account::Line objects to pay
         credit_type => $type,  # credit_type_code code
-        offset_type => $offset_type,    # offset type code
         item_id     => $itemnumber,     # pass the itemnumber if this is a credit pertianing to a specific item (i.e LOST_FOUND)
     }
 );
@@ -242,8 +241,8 @@ sub add_credit {
                 my $account_offset = Koha::Account::Offset->new(
                     {
                         credit_id => $line->id,
-                        type   => $Koha::Account::offset_type->{$credit_type} // $Koha::Account::offset_type->{CREDIT},
-                        amount => $amount
+                        type      => 'CREATE',
+                        amount    => $amount
                     }
                 )->store();
 
@@ -459,7 +458,6 @@ sub add_debit {
     my $transaction_type = $params->{transaction_type};
     my $item_id          = $params->{item_id};
     my $issue_id         = $params->{issue_id};
-    my $offset_type      = $Koha::Account::offset_type->{$debit_type} // 'Manual Debit';
 
     my $line;
     my $schema = Koha::Database->new->schema;
@@ -496,7 +494,7 @@ sub add_debit {
                 my $account_offset = Koha::Account::Offset->new(
                     {
                         debit_id => $line->id,
-                        type     => $offset_type,
+                        type     => 'CREATE',
                         amount   => $amount
                     }
                 )->store();
@@ -773,33 +771,6 @@ sub reconcile_balance {
 }
 
 1;
-
-=head2 Name mappings
-
-=head3 $offset_type
-
-=cut
-
-our $offset_type = {
-    'CREDIT'           => 'Manual Credit',
-    'FORGIVEN'         => 'Writeoff',
-    'LOST_FOUND'       => 'Lost Item Found',
-    'OVERPAYMENT'      => 'Overpayment',
-    'PAYMENT'          => 'Payment',
-    'WRITEOFF'         => 'Writeoff',
-    'ACCOUNT'          => 'Account Fee',
-    'ACCOUNT_RENEW'    => 'Account Fee',
-    'RESERVE'          => 'Reserve Fee',
-    'PROCESSING'       => 'Processing Fee',
-    'LOST'             => 'Lost Item',
-    'RENT'             => 'Rental Fee',
-    'RENT_DAILY'       => 'Rental Fee',
-    'RENT_RENEW'       => 'Rental Fee',
-    'RENT_DAILY_RENEW' => 'Rental Fee',
-    'OVERDUE'          => 'OVERDUE',
-    'RESERVE_EXPIRED'  => 'Hold Expired',
-    'PAYOUT'           => 'PAYOUT',
-};
 
 =head1 AUTHORS
 
