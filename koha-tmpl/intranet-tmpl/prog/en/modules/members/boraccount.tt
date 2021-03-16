@@ -365,7 +365,7 @@
                 $('#payoutline').val(accountline);
                 var amount = button.data('amount') * -1;
                 $("#paid + span").replaceWith(amount);
-                $("#amount").attr({ "value": amount, "max": amount });
+                $("#amount").attr({ "value": amount, "max": amount, "min": 0 });
                 $("#amount, #payout_transaction_type").focus();
             });
 
