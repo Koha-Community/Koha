@@ -923,7 +923,13 @@ Circulation:
                   off: "Don't calculate"
                   production: Calculate and charge
             - fines (when <code>cronjobs/fines.pl</code> is being run).
-            - "<br><strong>NOTE:</strong> If the cronjobs/fines.pl cronjob is being run, accruing and final fines will be calculated when the cron runs and accruing fines will be finalized when an item is returned. If CalculateFinesOnReturn is enabled, final fines will be calculated when an item is returned."
+            - "<br><strong>NOTE:</strong> If the cronjobs/fines.pl cronjob is being run, accruing and final fines will be calculated when the cron runs and accruing fines will be finalized when an item is returned. If CalculateFinesOnReturn is enabled, final fines will be calculated when an item is returned.<br/>"
+            - pref: ChargeFinesOnCloseDay
+              type: choice
+              choices:
+                  0: "Don't charge"
+                  1: Charge
+            - on close days. If set the fines.pl cronjob will not generate fines when run on days marked as closed in the calendar.
         -
             - If a lost item is returned, apply the refunding rules defined in the
             - pref: RefundLostOnReturnControl
