@@ -149,18 +149,23 @@ for my $overdue ( @{$overdues} ) {
 
     # Don't update the fine if today is a holiday.
     # This ensures that dropbox mode will remove the correct amount of fine.
-    if ( $mode eq 'production' && !$is_holiday{$branchcode} ) {
-        if ( $amount && $amount > 0 ) {
-            UpdateFine(
-                {
-                    issue_id       => $overdue->{issue_id},
-                    itemnumber     => $overdue->{itemnumber},
-                    borrowernumber => $overdue->{borrowernumber},
-                    amount         => $amount,
-                    due            => output_pref($datedue),
-                }
-            );
-        }
+    if (
+        $mode eq 'production'
+        && ( !$is_holiday{$branchcode}
+            || C4::Context->preference('ChargeFinesOnCloseDay') )
+        && ( $amount && $amount > 0 )
+      )
+    {
+        warn 'charge';
+        UpdateFine(
+            {
+                issue_id       => $overdue->{issue_id},
+                itemnumber     => $overdue->{itemnumber},
+                borrowernumber => $overdue->{borrowernumber},
+                amount         => $amount,
+                due            => output_pref($datedue),
+            }
+        );
     }
     my $borrower = $patron->unblessed;
     if ($filename) {
