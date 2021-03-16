@@ -970,7 +970,7 @@ Circulation:
                   production: Calculate and charge
             - fines (when <code>cronjobs/fines.pl</code> is being run).
             - '<br><strong>NOTE:</strong> If the cronjobs/fines.pl cronjob is being run, accruing and final fines will be calculated when the cron runs and accruing fines will be finalized when an item is returned. If <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=CalculateFinesOnReturn">CalculateFinesOnReturn</a> is enabled, final fines will be calculated when an item is returned.<br/>'
-            - pref: ChargeFinesOnCloseDay
+            - pref: ChargeFinesOnClosedDays
               type: choice
               choices:
                   0: "Don't charge"

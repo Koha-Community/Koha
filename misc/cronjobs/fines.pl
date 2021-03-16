@@ -115,6 +115,7 @@ if ($filename) {
     print {$fh} "\n";
 }
 my $counted = 0;
+my $updated = 0;
 my $params;
 $params->{maximumdays} = $maxdays if $maxdays;
 my $overdues = Getoverdues($params);
@@ -152,11 +153,10 @@ for my $overdue ( @{$overdues} ) {
     if (
         $mode eq 'production'
         && ( !$is_holiday{$branchcode}
-            || C4::Context->preference('ChargeFinesOnCloseDay') )
+            || C4::Context->preference('ChargeFinesOnClosedDays') )
         && ( $amount && $amount > 0 )
       )
     {
-        warn 'charge';
         UpdateFine(
             {
                 issue_id       => $overdue->{issue_id},
@@ -166,6 +166,7 @@ for my $overdue ( @{$overdues} ) {
                 due            => output_pref($datedue),
             }
         );
+        $updated++;
     }
     my $borrower = $patron->unblessed;
     if ($filename) {
@@ -194,6 +195,7 @@ EOM
 Number of Overdue Items:
      counted $overdue_items
     reported $counted
+     updated $updated
 
 EOM
 }
