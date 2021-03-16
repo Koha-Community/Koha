@@ -83,8 +83,15 @@ $sth_fetch->execute();
 
 # fetch info from the search
 while (my ($biblionumber, $itemnumber, $itemcallnumber) = $sth_fetch->fetchrow_array){
-   
-  eval { Koha::Items->find($itemnumber)->itemcallnumber($itemcallnumber)->store; };
+
+  my $item = Koha::Items->find($itemnumber);
+  next unless $item;
+
+  for my $c (qw( itemcallnumber cn_source ) ){
+      $item->make_column_dirty($c);
+  }
+
+  eval { $item->store };
   my $modok = $@ ? 0 : 1;
 
   if ($modok) {
