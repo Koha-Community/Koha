@@ -526,14 +526,26 @@ INSERT IGNORE INTO letter (module, code, name, title, content, message_transport
     There were [% error %] items that were not renewed.
 [% END %]
 [% IF success %]
-    There were [% success %] items that where renewed.
+    There were [% success %] items that were renewed.
 [% END %]
 [% FOREACH checkout IN checkouts %]
     [% checkout.item.biblio.title %] : [% checkout.item.barcode %]
     [% IF !checkout.auto_renew_error %]
         was renewed until [% checkout.date_due | $KohaDates as_due_date => 1%]
-    [% ELSE %]
-        was not renewed with error: [% checkout.auto_renew_error %]
+    [% ELSIF checkout.auto_renew_error == 'too_many' %]
+        You have reached the maximum number of checkouts possible.
+    [% ELSIF checkout.auto_renew_error == 'on_reserve' %]
+        This item is on hold for another patron.
+    [% ELSIF checkout.auto_renew_error == 'restriction' %]
+        You are currently restricted.
+    [% ELSIF checkout.auto_renew_error == 'overdue' %]
+        You have overdue items.
+    [% ELSIF checkout.auto_renew_error == 'auto_too_late' %]
+        It's too late to renew this item.
+    [% ELSIF checkout.auto_renew_error == 'auto_too_much_oweing' %]
+        Your total unpaid fines are too high.
+    [% ELSIF checkout.auto_renew_error == 'too_unseen' %]
+        This item must be renewed at the library.
     [% END %]
 [% END %]
 ", 'email');

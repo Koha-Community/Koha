@@ -183,7 +183,7 @@ while ( my $auto_renew = $auto_renews->next ) {
         # cache this one to process after we've run through all of the items.
         if ($digest_per_branch) {
             $renew_digest->{ $auto_renew->branchcode }->{ $auto_renew->borrowernumber }->{success}++ if $error eq 'auto_renew';
-            $renew_digest->{ $auto_renew->branchcode }->{ $auto_renew->borrowernumber }->{error}++ unless $error eq 'auto_renew' || $error == 'auto_too_soon' ;
+            $renew_digest->{ $auto_renew->branchcode }->{ $auto_renew->borrowernumber }->{error}++ unless $error eq 'auto_renew' || $error eq 'auto_too_soon' ;
             push @{$renew_digest->{ $auto_renew->branchcode }->{ $auto_renew->borrowernumber }->{issues}}, $auto_renew->itemnumber;
         } else {
             $renew_digest->{ $auto_renew->borrowernumber }->{success} ++ if $error eq 'auto_renew';
