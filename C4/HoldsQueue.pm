@@ -23,7 +23,7 @@ use strict;
 use warnings;
 
 use C4::Context;
-use C4::Circulation qw( GetTransfers GetBranchItemRule );
+use C4::Circulation qw( GetBranchItemRule );
 use Koha::DateUtils qw( dt_from_string );
 use Koha::Items;
 use Koha::Patrons;
@@ -314,7 +314,7 @@ sub GetItemsAvailableToFillHoldRequestsForBib {
     my ($biblionumber, $branches_to_use) = @_;
 
     my $dbh = C4::Context->dbh;
-    my $items_query = "SELECT itemnumber, homebranch, holdingbranch, itemtypes.itemtype AS itype
+    my $items_query = "SELECT items.itemnumber, homebranch, holdingbranch, itemtypes.itemtype AS itype
                        FROM items ";
 
     if (C4::Context->preference('item-level_itypes')) {
@@ -323,14 +323,17 @@ sub GetItemsAvailableToFillHoldRequestsForBib {
         $items_query .=   "JOIN biblioitems USING (biblioitemnumber)
                            LEFT JOIN itemtypes USING (itemtype) ";
     }
-    $items_query .=   "WHERE items.notforloan = 0
+    $items_query .=  " LEFT JOIN branchtransfers ON (items.itemnumber = branchtransfers.itemnumber)";
+    $items_query .=  " WHERE items.notforloan = 0
                        AND holdingbranch IS NOT NULL
                        AND itemlost = 0
                        AND withdrawn = 0";
+    $items_query .= "  AND branchtransfers.datearrived IS NULL
+                       AND branchtransfers.datecancelled IS NULL";
     $items_query .= "  AND damaged = 0" unless C4::Context->preference('AllowHoldsOnDamagedItems');
     $items_query .= "  AND items.onloan IS NULL
                        AND (itemtypes.notforloan IS NULL OR itemtypes.notforloan = 0)
-                       AND itemnumber NOT IN (
+                       AND items.itemnumber NOT IN (
                            SELECT itemnumber
                            FROM reserves
                            WHERE biblionumber = ?
@@ -348,12 +351,11 @@ sub GetItemsAvailableToFillHoldRequestsForBib {
     $sth->execute(@params);
 
     my $itm = $sth->fetchall_arrayref({});
-    my @items = grep { ! scalar C4::Circulation::GetTransfers($_->{itemnumber}) } @$itm;
     return [ grep {
         my $rule = C4::Circulation::GetBranchItemRule($_->{homebranch}, $_->{itype});
         $_->{holdallowed} = $rule->{holdallowed};
         $_->{hold_fulfillment_policy} = $rule->{hold_fulfillment_policy};
-    } @items ];
+    } @{$itm} ];
 }
 
 =head2 _checkHoldPolicy
