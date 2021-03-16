@@ -68,13 +68,20 @@ sub getMultipleAuth {
 
 # Logout from CAS
 sub logout_cas {
-    my ($query, $type) = @_;
-    my ( $cas, $uri ) = _get_cas_and_service($query, undef, $type);
-    $uri =~ s/\?logout\.x=1//; # We don't want to keep triggering a logout, if we got here, the borrower is already logged out of Koha
-    my $logout_url = $cas->logout_url(url => $uri);
-    $logout_url = _fix_logout_url($logout_url);
-    print $query->redirect( $logout_url );
+    my ( $query, $type ) = @_;
+    my ( $cas,   $uri )  = _get_cas_and_service( $query, undef, $type );
+
+    # We don't want to keep triggering a logout, if we got here,
+    # the borrower is already logged out of Koha
+    $uri =~ s/\?logout\.x=1//;
+
+    my $logout_url = $cas->logout_url( url => $uri );
+    $logout_url =~ s/url=/service=/
+      if C4::Context->preference('casServerVersion') eq '3';
+
+    print $query->redirect($logout_url);
 }
+
 
 # Login to CAS
 sub login_cas {
@@ -204,15 +211,6 @@ sub _get_cas_and_service {
     my $cas = Authen::CAS::Client->new( $casservers->{$casparam} );
 
     return ( $cas, $uri );
-}
-
-# Fix the logout URL when the cas server is 3.0 or superior
-sub _fix_logout_url {
-    my $url = shift;
-    if (C4::Context->preference('casServerVersion') eq '3') {
-        $url =~ s/url=/service=/;
-    }
-    return $url;
 }
 
 # Get the current URL with parameters contained directly into URL (GET params)
