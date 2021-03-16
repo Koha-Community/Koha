@@ -382,7 +382,7 @@
                 var amountoutstanding = button.data('amountoutstanding');
                 var paid = amount - amountoutstanding;
                 $("#paid + span").replaceWith(paid);
-                $("#returned").attr({ "value": paid, "max": paid });
+                $("#returned").attr({ "value": paid, "max": paid, "min": 0 });
                 $("#returned, #refund_transaction_type").focus();
             });
 
@@ -394,7 +394,7 @@
                 $('#discountline').val(accountline);
                 var amount = button.data('amount');
                 $("#charged + span").replaceWith(amount);
-                $("#discount").attr({ "max": amount });
+                $("#discount").attr({ "max": amount, "min": 0 });
                 $("#discount").focus();
             });
         });
