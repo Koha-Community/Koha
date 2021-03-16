@@ -3,8 +3,8 @@ if( CheckVersion( $DBversion ) ) {
 
     $dbh->do(q|
         INSERT IGNORE INTO systempreferences (variable,value,options,explanation,type)
-        VALUES ('ChargeFinesOnCloseDay', '1', NULL, 'Charge fines on close day.', 'YesNo')
+        VALUES ('ChargeFinesOnClosedDays', '1', NULL, 'Charge fines on days the library is closed.', 'YesNo')
     |);
 
-    NewVersion( $DBversion, 27835, "Add new system preference ChargeFinesOnCloseDay");
+    NewVersion( $DBversion, 27835, "Add new system preference ChargeFinesOnClosedDays");
 }
