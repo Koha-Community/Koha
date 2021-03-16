@@ -232,7 +232,7 @@
                                             </div> <!-- /.col -->
 
                                             [% IF ( Koha.Preference( 'OpacAddMastheadLibraryPulldown' ) == 1 ) %]
-                                                <div class="col-sm order-3 order-sm-4">
+                                                <div class="col-sm col-md-3 col-lg-2 order-3 order-sm-4">
                                                     <select name="branch_group_limit" id="select_library" class="form-control">
                                                         <option value="">All libraries</option>
 
