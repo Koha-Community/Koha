@@ -1,4 +1,5 @@
 INSERT INTO account_offset_types ( type ) VALUES
+('CREATE'),
 ('Writeoff'),
 ('Payment'),
 ('Purchase'),
