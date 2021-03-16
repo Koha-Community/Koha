@@ -283,7 +283,7 @@ sub void {
             Koha::Account::Offset->new(
                 {
                     debit_id => $void->id,
-                    type     => 'VOID',
+                    type     => 'CREATE',
                     amount   => $self->amount * -1
                 }
             )->store();
@@ -415,7 +415,7 @@ sub cancel {
             my $cancellation_offset = Koha::Account::Offset->new(
                 {
                     credit_id => $cancellation->accountlines_id,
-                    type      => 'CANCELLATION',
+                    type      => 'CREATE',
                     amount    => $self->amount
                 }
             )->store();
@@ -539,7 +539,7 @@ sub reduce {
             my $reduction_offset = Koha::Account::Offset->new(
                 {
                     credit_id => $reduction->accountlines_id,
-                    type      => uc( $params->{reduction_type} ),
+                    type      => 'CREATE',
                     amount    => $params->{amount}
                 }
             )->store();
@@ -772,7 +772,7 @@ sub payout {
             my $payout_offset = Koha::Account::Offset->new(
                 {
                     debit_id => $payout->accountlines_id,
-                    type     => 'PAYOUT',
+                    type     => 'CREATE',
                     amount   => $amount
                 }
             )->store();
