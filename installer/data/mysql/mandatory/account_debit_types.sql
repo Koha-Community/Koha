@@ -12,4 +12,5 @@ INSERT INTO account_debit_types ( code, description, can_be_invoiced, can_be_sol
 ('RENT_RENEW', 'Renewal of rental item', 0, 0, NULL, 1),
 ('RENT_DAILY_RENEW', 'Renewal of daily rental item', 0, 0, NULL, 1),
 ('RESERVE', 'Hold fee', 0, 0, NULL, 1),
-('RESERVE_EXPIRED', 'Hold waiting too long', 0, 0, NULL, 1);
+('RESERVE_EXPIRED', 'Hold waiting too long', 0, 0, NULL, 1),
+('VOID', 'Credit has been voided', 0, 0, NULL, 1);

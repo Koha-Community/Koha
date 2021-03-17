@@ -210,7 +210,10 @@ sub debits {
 
 =head3 void
 
-  $payment_accountline->void();
+  $payment_accountline->void({
+      interface => $interface,
+      [ staff_id => $staff_id, branch => $branchcode ]
+  });
 
 Used to 'void' (or reverse) a payment/credit. It will roll back any offsets
 created by the application of this credit upon any debits and mark the credit
@@ -219,17 +222,74 @@ as 'void' by updating it's status to "VOID".
 =cut
 
 sub void {
-    my ($self) = @_;
+    my ($self, $params) = @_;
 
-    # Make sure it is a payment we are voiding
-    return unless $self->amount < 0;
+    # Make sure it is a credit we are voiding
+    unless ( $self->is_credit ) {
+        Koha::Exceptions::Account::IsNotCredit->throw(
+            error => 'Account line ' . $self->id . 'is not a credit' );
+    }
 
+    # Make sure it is not already voided
+    if ( $self->status && $self->status eq 'VOID' ) {
+        Koha::Exceptions::Account->throw(
+            error => 'Account line ' . $self->id . 'is already void' );
+    }
+
+    # Check for mandatory parameters
+    my @mandatory = ( 'interface' );
+    for my $param (@mandatory) {
+        unless ( defined( $params->{$param} ) ) {
+            Koha::Exceptions::MissingParameter->throw(
+                error => "The $param parameter is mandatory" );
+        }
+    }
+
+    # More mandatory parameters
+    if ( $params->{interface} eq 'intranet' ) {
+        my @optional = ( 'staff_id', 'branch' );
+        for my $param (@optional) {
+            unless ( defined( $params->{$param} ) ) {
+                Koha::Exceptions::MissingParameter->throw( error =>
+"The $param parameter is mandatory when interface is set to 'intranet'"
+                );
+            }
+        }
+    }
+
+    # Find any applied offsets for the credit so we may reverse them
     my @account_offsets =
       Koha::Account::Offsets->search(
         { credit_id => $self->id, amount => { '<' => 0 }  } );
 
+    my $void;
     $self->_result->result_source->schema->txn_do(
         sub {
+
+            # A 'void' is a 'debit'
+            $void = Koha::Account::Line->new(
+                {
+                    borrowernumber    => $self->borrowernumber,
+                    date              => \'NOW()',
+                    debit_type_code   => 'VOID',
+                    amount            => $self->amount * -1,
+                    amountoutstanding => $self->amount * -1,
+                    manager_id        => $params->{staff_id},
+                    interface         => $params->{interface},
+                    branchcode        => $params->{branch},
+                }
+            )->store();
+
+            # Record the creation offset
+            Koha::Account::Offset->new(
+                {
+                    debit_id => $void->id,
+                    type     => 'VOID',
+                    amount   => $self->amount * -1
+                }
+            )->store();
+
+            # Reverse any applied payments
             foreach my $account_offset (@account_offsets) {
                 my $fee_paid =
                   Koha::Account::Lines->find( $account_offset->debit_id );
@@ -246,10 +306,17 @@ sub void {
                         credit_id => $self->id,
                         debit_id  => $fee_paid->id,
                         amount    => $amount_paid,
-                        type      => 'Void Payment',
+                        type      => 'VOID',
                     }
                 )->store();
             }
+
+            # Link void to payment
+            $self->set({
+                amountoutstanding => $self->amount,
+                status => 'VOID'
+            })->store();
+            $self->apply({ debits => [$void]});
 
             if ( C4::Context->preference("FinesLog") ) {
                 logaction(
@@ -273,18 +340,11 @@ sub void {
                     )
                 );
             }
-
-            $self->set(
-                {
-                    status            => 'VOID',
-                    amountoutstanding => 0,
-                    amount            => 0,
-                }
-            );
-            $self->store();
         }
     );
 
+    $void->discard_changes;
+    return $void;
 }
 
 =head3 cancel

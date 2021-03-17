@@ -777,7 +777,7 @@ subtest "void() tests" => sub {
     is( $line1->amountoutstanding+0, 0, 'First fee has amount outstanding of 0' );
     is( $line2->amountoutstanding+0, 0, 'Second fee has amount outstanding of 0' );
 
-    my $ret = $account_payment->void();
+    my $ret = $account_payment->void({ interface => 'test' });
 
     is( ref($ret), 'Koha::Account::Line', 'Void returns the account line' );
     is( $account->balance(), 30, "Account balance is again 30" );
@@ -788,7 +788,7 @@ subtest "void() tests" => sub {
 
     is( $account_payment->credit_type_code, 'PAYMENT', 'Voided payment credit_type_code is still PAYMENT' );
     is( $account_payment->status, 'VOID', 'Voided payment status is VOID' );
-    is( $account_payment->amount+0, 0, 'Voided payment amount is 0' );
+    is( $account_payment->amount+0, -30, 'Voided payment amount is -30' );
     is( $account_payment->amountoutstanding+0, 0, 'Voided payment amount outstanding is 0' );
 
     is( $line1->amountoutstanding+0, 10, 'First fee again has amount outstanding of 10' );
@@ -796,7 +796,7 @@ subtest "void() tests" => sub {
 
     # Accountlines that are not credits should be un-voidable
     my $line1_pre = $line1->unblessed();
-    $ret = $line1->void();
+    $ret = $line1->void({ interface => 'test' });
     $line1->_result->discard_changes();
     my $line1_post = $line1->unblessed();
     is( $ret, undef, 'Attempted void on non-credit returns undef' );

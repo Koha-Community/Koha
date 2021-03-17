@@ -72,7 +72,13 @@ my $registerid = $input->param('registerid');
 if ( $action eq 'void' ) {
     my $payment_id = scalar $input->param('accountlines_id');
     my $payment    = Koha::Account::Lines->find( $payment_id );
-    $payment->void();
+    $payment->void(
+        {
+            branch    => $library_id,
+            staff_id  => $logged_in_user->id,
+            interface => 'intranet',
+        }
+    );
 }
 
 if ( $action eq 'payout' ) {

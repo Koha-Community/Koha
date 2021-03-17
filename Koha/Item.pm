@@ -1088,7 +1088,7 @@ sub _set_found_trigger {
 
                     if ( $refund ) {
                         # Revert the forgive credit
-                        $refund->void();
+                        $refund->void({ interface => 'trigger' });
                         $self->{_restored} = 1;
                     }
 

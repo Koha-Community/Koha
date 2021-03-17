@@ -23,4 +23,5 @@ INSERT INTO account_offset_types ( type ) VALUES
 ('PAYOUT'),
 ('DISCOUNT'),
 ('REFUND'),
-('CANCELLATION');
+('CANCELLATION'),
+('VOID');
