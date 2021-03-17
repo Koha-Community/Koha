@@ -329,7 +329,7 @@ subtest "Koha::Account::pay writeoff tests" => sub {
 
 subtest "More Koha::Account::pay tests" => sub {
 
-    plan tests => 8;
+    plan tests => 12;
 
     # Create a borrower
     my $category   = $builder->build({ source => 'Category' })->{ categorycode };
@@ -363,11 +363,24 @@ subtest "More Koha::Account::pay tests" => sub {
     my $account = Koha::Account->new( { patron_id => $borrowernumber } );
     my $line = Koha::Account::Lines->find( $accountline->{ accountlines_id } );
     # make the full payment
-    $account->pay({ lines => [$line], amount => $amount, library_id => $branch, note => 'A payment note' });
+    my $payment = $account->pay(
+        {
+            lines      => [$line],
+            amount     => $amount,
+            library_id => $branch,
+            note       => 'A payment note'
+        }
+    );
 
-    my $offset = Koha::Account::Offsets->search({ debit_id => $accountline->{accountlines_id} })->next();
-    is( $offset->amount+0, -100, 'Offset amount is -100.00' );
-    is( $offset->type(), 'Payment', 'Offset type is Payment' );
+    my $offsets = Koha::Account::Offsets->search({ credit_id => $payment->{payment_id} });
+    is( $offsets->count, 2, 'Two offsets recorded');
+    my $offset = $offsets->next;
+    is( $offset->type(), 'CREATE', 'First offset type is CREATE' );
+    is( $offset->amount+0, -100, 'First offset amount is -100.00' );
+    $offset = $offsets->next;
+    is( $offset->type(), 'APPLY', 'Second offset type is APPLY' );
+    is( $offset->amount+0, -100, 'Second offset amount is -100.00' );
+    is( $offset->debit_id, $accountline->{accountlines_id}, 'Second offset is against the right accountline');
 
     my $stat = $schema->resultset('Statistic')->search({
         branch  => $branch,
@@ -388,7 +401,7 @@ subtest "More Koha::Account::pay tests" => sub {
 
 subtest "Even more Koha::Account::pay tests" => sub {
 
-    plan tests => 8;
+    plan tests => 12;
 
     # Create a borrower
     my $category   = $builder->build({ source => 'Category' })->{ categorycode };
@@ -423,11 +436,24 @@ subtest "Even more Koha::Account::pay tests" => sub {
     my $account = Koha::Account->new( { patron_id => $borrowernumber } );
     my $line = Koha::Account::Lines->find( $accountline->{ accountlines_id } );
     # make the full payment
-    $account->pay({ lines => [$line], amount => $partialamount, library_id => $branch, note => 'A payment note' });
+    my $payment = $account->pay(
+        {
+            lines      => [$line],
+            amount     => $partialamount,
+            library_id => $branch,
+            note       => 'A payment note'
+        }
+    );
 
-    my $offset = Koha::Account::Offsets->search( { debit_id => $accountline->{ accountlines_id } } )->next();
-    is( $offset->amount+0, -60, 'Offset amount is -60.00' );
-    is( $offset->type, 'Payment', 'Offset type is payment' );
+    my $offsets = Koha::Account::Offsets->search({ credit_id => $payment->{payment_id} });
+    is( $offsets->count, 2, 'Two offsets recorded');
+    my $offset = $offsets->next;
+    is( $offset->type(), 'CREATE', 'First offset type is CREATE' );
+    is( $offset->amount+0, -60, 'First offset amount is -60.00' );
+    $offset = $offsets->next;
+    is( $offset->type(), 'APPLY', 'Second offset type is APPLY' );
+    is( $offset->amount+0, -60, 'Second offset amount is -60.00' );
+    is( $offset->debit_id, $accountline->{accountlines_id}, 'Second offset is against the right accountline');
 
     my $stat = $schema->resultset('Statistic')->search({
         branch  => $branch,

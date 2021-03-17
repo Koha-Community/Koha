@@ -1374,7 +1374,7 @@ subtest "CanBookBeRenewed tests" => sub {
     is( $line->issue_id, $issue->id, 'Account line issue id matches' );
 
     my $offset = Koha::Account::Offsets->search({ debit_id => $line->id })->next();
-    is( $offset->type, 'OVERDUE', 'Account offset type is Fine' );
+    is( $offset->type, 'CREATE', 'Account offset type is CREATE' );
     is( $offset->amount+0, 15, 'Account offset amount is 15.00' );
 
     t::lib::Mocks::mock_preference('WhenLostForgiveFine','0');
@@ -3386,7 +3386,7 @@ subtest '_FixOverduesOnReturn' => sub {
     C4::Circulation::_FixOverduesOnReturn( $patron->{borrowernumber}, $item->itemnumber, 1, 'RETURNED' );
 
     $accountline->_result()->discard_changes();
-    my $offset = Koha::Account::Offsets->search({ debit_id => $accountline->id, type => 'Forgiven' })->next();
+    my $offset = Koha::Account::Offsets->search({ debit_id => $accountline->id, type => 'APPLY' })->next();
 
     is( $accountline->amountoutstanding + 0, 0, 'Fine amountoutstanding has been reduced to 0' );
     isnt( $accountline->status, 'UNRETURNED', 'Open fine ( account type OVERDUE ) has been closed out ( status not UNRETURNED )');

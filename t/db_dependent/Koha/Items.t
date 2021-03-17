@@ -347,8 +347,7 @@ subtest 'store' => sub {
                     interface => 'test',
                 }
             );
-            $credit->apply(
-                { debits => [ $debts->as_list ], offset_type => 'Writeoff' } );
+            $credit->apply( { debits => [ $debts->as_list ] } );
 
             # Simulate item marked as found
             $item->itemlost(0)->store;
@@ -431,8 +430,7 @@ subtest 'store' => sub {
                     interface => 'test',
                 }
             );
-            $credit->apply(
-                { debits => [ $debts->as_list ], offset_type => 'Payment' } );
+            $credit->apply( { debits => [ $debts->as_list ] } );
 
             # Simulate item marked as found
             $item->itemlost(0)->store;
@@ -630,8 +628,7 @@ subtest 'store' => sub {
                 }
             );
 
-            $payment->apply(
-                { debits => [$lost_fee_line], offset_type => 'Payment' } );
+            $payment->apply( { debits => [$lost_fee_line] } );
 
             # Partially write off fee
             my $write_off_amount = 25;
@@ -642,8 +639,7 @@ subtest 'store' => sub {
                     interface => 'test',
                 }
             );
-            $write_off->apply(
-                { debits => [$lost_fee_line], offset_type => 'Writeoff' } );
+            $write_off->apply( { debits => [$lost_fee_line] } );
 
             is(
                 $account->balance,
@@ -771,8 +767,7 @@ subtest 'store' => sub {
                     interface => 'test',
                 }
             );
-            $payment->apply(
-                { debits => [$lost_fee_line], offset_type => 'Payment' } );
+            $payment->apply( { debits => [$lost_fee_line] } );
 
             is(
                 $account->balance,
@@ -962,8 +957,7 @@ subtest 'store' => sub {
                     interface => 'test',
                 }
             );
-            $credit->apply(
-                { debits => [ $debts->as_list ], offset_type => 'Payment' } );
+            $credit->apply( { debits => [ $debts->as_list ] } );
 
             # Simulate item marked as found
             $item->itemlost(0)->store;
@@ -1054,8 +1048,7 @@ subtest 'store' => sub {
                     interface => 'test',
                 }
             );
-            $credit->apply(
-                { debits => [ $debts->as_list ], offset_type => 'Payment' } );
+            $credit->apply( { debits => [ $debts->as_list ] } );
 
             # Fine not forgiven
             my $overdue = $account->add_debit(
@@ -1165,8 +1158,7 @@ subtest 'store' => sub {
                     interface => 'test',
                 }
             );
-            $credit->apply(
-                { debits => [ $debts->as_list ], offset_type => 'Payment' } );
+            $credit->apply( { debits => [ $debts->as_list ] } );
 
             # Add overdue
             my $overdue = $account->add_debit(
@@ -1196,8 +1188,7 @@ subtest 'store' => sub {
                     item_id    => $item->itemnumber
                 }
             );
-            $credit->apply(
-                { debits => [$overdue], offset_type => 'Forgiven' } );
+            $credit->apply( { debits => [$overdue] } );
 
             # Simulate item marked as found
             $item->itemlost(0)->store;

@@ -1264,19 +1264,19 @@ subtest 'Koha::Account::payout_amount() tests' => sub {
     my $offsets = Koha::Account::Offsets->search( { debit_id => $payout->id } );
     is( $offsets->count, 4, 'Four offsets generated' );
     my $offset = $offsets->next;
-    is( $offset->type, 'PAYOUT', 'PAYOUT offset added for payout line' );
+    is( $offset->type, 'CREATE', 'CREATE offset added for payout line' );
     is( $offset->amount * 1, 10, 'Correct offset amount recorded' );
     $offset = $offsets->next;
     is( $offset->credit_id, $credit_1->id, "Offset added against credit_1");
-    is( $offset->type,       'PAYOUT', "PAYOUT used for offset_type" );
+    is( $offset->type,       'APPLY', "APPLY used for offset_type" );
     is( $offset->amount * 1, -2,      'Correct amount offset against credit_1' );
     $offset = $offsets->next;
     is( $offset->credit_id, $credit_2->id, "Offset added against credit_2");
-    is( $offset->type,       'PAYOUT', "PAYOUT used for offset_type" );
+    is( $offset->type,       'APPLY', "APPLY used for offset_type" );
     is( $offset->amount * 1, -3,      'Correct amount offset against credit_2' );
     $offset = $offsets->next;
     is( $offset->credit_id, $credit_3->id, "Offset added against credit_3");
-    is( $offset->type,       'PAYOUT', "PAYOUT used for offset_type" );
+    is( $offset->type,       'APPLY', "APPLY used for offset_type" );
     is( $offset->amount * 1, -5,      'Correct amount offset against credit_3' );
 
     my $credit_5 = $account->add_credit( { amount => 5, interface => 'commandline' } );
@@ -1297,11 +1297,11 @@ subtest 'Koha::Account::payout_amount() tests' => sub {
     $offsets = Koha::Account::Offsets->search( { debit_id => $payout->id } );
     is( $offsets->count, 2, 'Two offsets generated' );
     $offset = $offsets->next;
-    is( $offset->type, 'PAYOUT', 'PAYOUT offset added for payout line' );
+    is( $offset->type, 'CREATE', 'CREATE offset added for payout line' );
     is( $offset->amount * 1, 2.50, 'Correct offset amount recorded' );
     $offset = $offsets->next;
     is( $offset->credit_id, $credit_5->id, "Offset added against credit_5");
-    is( $offset->type,       'PAYOUT', "PAYOUT used for offset_type" );
+    is( $offset->type,       'APPLY', "APPLY used for offset_type" );
     is( $offset->amount * 1, -2.50,      'Correct amount offset against credit_5' );
 
     $schema->storage->txn_rollback;
@@ -1391,19 +1391,19 @@ subtest 'Koha::Account::payin_amount() tests' => sub {
     my $offsets = Koha::Account::Offsets->search( { credit_id => $payin->id } );
     is( $offsets->count, 4, 'Four offsets generated' );
     my $offset = $offsets->next;
-    is( $offset->type, 'Payment', 'Payment offset added for payin line' );
+    is( $offset->type, 'CREATE', 'CREATE offset added for payin line' );
     is( $offset->amount * 1, -10, 'Correct offset amount recorded' );
     $offset = $offsets->next;
     is( $offset->debit_id, $debit_1->id, "Offset added against debit_1");
-    is( $offset->type,       'Payment', "Payment used for offset_type" );
+    is( $offset->type,       'APPLY', "APPLY used for offset_type" );
     is( $offset->amount * 1, -2,      'Correct amount offset against debit_1' );
     $offset = $offsets->next;
     is( $offset->debit_id, $debit_2->id, "Offset added against debit_2");
-    is( $offset->type,       'Payment', "Payment used for offset_type" );
+    is( $offset->type,       'APPLY', "APPLY used for offset_type" );
     is( $offset->amount * 1, -3,      'Correct amount offset against debit_2' );
     $offset = $offsets->next;
     is( $offset->debit_id, $debit_3->id, "Offset added against debit_3");
-    is( $offset->type,       'Payment', "Payment used for offset_type" );
+    is( $offset->type,       'APPLY', "APPLY used for offset_type" );
     is( $offset->amount * 1, -5,      'Correct amount offset against debit_3' );
 
     my $debit_5 = $account->add_debit( { amount => 5, interface => 'commandline', type => 'OVERDUE' } );
@@ -1424,11 +1424,11 @@ subtest 'Koha::Account::payin_amount() tests' => sub {
     $offsets = Koha::Account::Offsets->search( { credit_id => $payin->id } );
     is( $offsets->count, 2, 'Two offsets generated' );
     $offset = $offsets->next;
-    is( $offset->type, 'Payment', 'Payment offset added for payin line' );
+    is( $offset->type, 'CREATE', 'CREATE offset added for payin line' );
     is( $offset->amount * 1, -2.50, 'Correct offset amount recorded' );
     $offset = $offsets->next;
     is( $offset->debit_id, $debit_5->id, "Offset added against debit_5");
-    is( $offset->type,       'Payment', "Payment used for offset_type" );
+    is( $offset->type,       'APPLY', "APPLY used for offset_type" );
     is( $offset->amount * 1, -2.50,      'Correct amount offset against debit_5' );
 
     $schema->storage->txn_rollback;
