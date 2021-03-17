@@ -61,7 +61,7 @@ if ($uri && ($biblionumber || $itemnumber) ) {
 
     my $record = C4::Biblio::GetMarcBiblio({ biblionumber => $biblionumber });
     my $marc_urls = $record ? C4::Biblio::GetMarcUrls($record, C4::Context->preference('marcflavour')) : [];
-    my $search_crit = { uri => $uri };
+    my $search_crit = { uri => { -like => "%$uri%" } };
     if( $itemnumber ) { # itemnumber is leading over biblionumber
         $search_crit->{itemnumber} = $itemnumber;
     } elsif( $biblionumber ) {
