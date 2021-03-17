@@ -119,7 +119,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('casServerUrl','https://localhost:8443/cas','','URL of the cas server','Free'),
 ('CatalogModuleRelink','0',NULL,'If OFF the linker will never replace the authids that are set in the cataloging module.','YesNo'),
 ('CataloguingLog','1',NULL,'If ON, log edit/create/delete actions on bibliographic data. WARNING: this feature is very resource consuming.','YesNo'),
-('ChargeFinesOnClosedDays','1',NULL,'Charge fines on days the library is closed.','YesNo')
+('ChargeFinesOnClosedDays','0',NULL,'Charge fines on days the library is closed.','YesNo'),
 ('CheckPrevCheckout','hardno','hardyes|softyes|softno|hardno','By default, for every item checked out, should we warn if the patron has borrowed that item in the past?','Choice'),
 ('CircAutoPrintQuickSlip','qslip',NULL,'Choose what should happen when an empty barcode field is submitted in circulation: Display a print quick slip window, Display a print slip window or Clear the screen.','Choice'),
 ('CircControl','ItemHomeLibrary','PickupLibrary|PatronLibrary|ItemHomeLibrary','Specify the agency that controls the circulation and fines policy','Choice'),
