@@ -326,6 +326,11 @@ sub _version_compare {
         # 0.0.0 <=> 0.2.1 = -1
         push( @v1, 0 ) unless defined( $v1[$i] );
         push( @v2, 0 ) unless defined( $v2[$i] );
+
+        # Strip letters before comparing, supresses 'Argument "v1" isn't numeric in int' warning
+        $v1[$i] =~ s/^v//g;
+        $v2[$i] =~ s/^v//g;
+
         if ( int( $v1[$i] ) > int( $v2[$i] ) ) {
             return 1;
         }
