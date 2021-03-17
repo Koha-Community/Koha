@@ -28,7 +28,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('AllowHoldsOnDamagedItems','1','','Allow hold requests to be placed on damaged items','YesNo'),
 ('AllowHoldsOnPatronsPossessions','1',NULL,'Allow holds on records that patron have items of it','YesNo'),
 ('AllowCheckoutNotes', '0', NULL, 'Allow patrons to submit notes about checked out items.','YesNo'),
-('AllowItemsOnHoldCheckoutSIP','0','','Do not generate RESERVE_WAITING and RESERVED warning when checking out items reserved to someone else via SIP. This allows self checkouts for those items.','YesNo'),
+('AllowItemsOnHoldCheckoutSIP','0','','Do not generate RESERVED warning when checking out items reserved to someone else via SIP. This allows self checkouts for those items.','YesNo'),
 ('AllowItemsOnHoldCheckoutSCO','0','','Do not generate RESERVE_WAITING and RESERVED warning in the SCO module when checking out items reserved to someone else. This allows self checkouts for those items.','YesNo'),
 ('AllowMultipleCovers','0','1','Allow multiple cover images to be attached to each bibliographic record.','YesNo'),
 ('AllowMultipleIssuesOnABiblio',1,'Allow/Don\'t allow patrons to check out multiple items from one biblio','','YesNo'),
