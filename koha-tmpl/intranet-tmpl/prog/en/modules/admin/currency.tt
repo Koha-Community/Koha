@@ -215,7 +215,7 @@
             <th>Rate</th>
             <th>Symbol</th>
             <th>ISO code</th>
-            <th class="title-string">Last updated</th>
+            <th>Last updated</th>
             <th>Active</th>
             <th>Archived</th>
             <th class="NoSort noExport">Actions</th>
@@ -228,7 +228,7 @@
             <td>[% currency.rate | html %]</td>
             <td>[% currency.symbol | html %]</td>
             <td>[% currency.isocode | html %]</td>
-            <td><span title="[% currency.timestamp | html %]">[% currency.timestamp | $KohaDates %]</span></td>
+            <td data-order="[% currency.timestamp | html %]">[% currency.timestamp | $KohaDates %]</td>
             <td style="color:green;">[% IF currency.active %]✓[% END %]</td>
             <td>[% IF currency.archived %]Yes[% END %]</td>
             <td class="actions">

@@ -480,8 +480,8 @@
           <thead>
             <tr>
               <th>Budget name</th>
-              <th class="title-string">Start date</th>
-              <th class="title-string">End date</th>
+              <th>Start date</th>
+              <th>End date</th>
               <th>Locked</th>
               <th>Total</th>
               <th class="noExport">Actions</th>
@@ -491,8 +491,8 @@
               [% FOREACH period_active IN period_active_loop %]
                 <tr>
                 <td><a href="/cgi-bin/koha/admin/aqbudgets.pl?budget_period_id=[% period_active.budget_period_id | uri %]" title="View funds for [% period_active.budget_period_description | html %]">[% period_active.budget_period_description | html %]</a></td>
-                <td><span title="[% period_active.budget_period_startdate | html %]">[% period_active.budget_period_startdate | $KohaDates %]</span></td>
-                <td><span title="[% period_active.budget_period_enddate | html %]">[% period_active.budget_period_enddate | $KohaDates %]</span></td>
+                <td data-order="[% period_active.budget_period_startdate | html %]">[% period_active.budget_period_startdate | $KohaDates %]</td>
+                <td data-order="[% period_active.budget_period_enddate | html %]">[% period_active.budget_period_enddate | $KohaDates %]</td>
                 <td>
                   [% IF ( period_active.budget_period_locked ) %]
                     <i class="fa fa-lock"></i> Locked</span>
@@ -516,8 +516,8 @@
           <thead>
               <tr>
                   <th>Budget name</th>
-                  <th class="title-string">Start date</th>
-                  <th class="title-string">End date</th>
+                  <th>Start date</th>
+                  <th>End date</th>
                   <th>Locked</th>
                   <th>Total</th>
                   <th class="noExport">Actions</th>
@@ -527,8 +527,8 @@
               [% FOREACH period_loo IN period_inactive_loop %]
                   <tr>
                   <td><a href="/cgi-bin/koha/admin/aqbudgets.pl?budget_period_id=[% period_loo.budget_period_id | uri %]" title="View funds for [% period_loo.budget_period_description | html %]">[% period_loo.budget_period_description | html %]</a></td>
-                  <td><span title="[% period_loo.budget_period_startdate | html %]">[% period_loo.budget_period_startdate | $KohaDates %]</span></td>
-                  <td><span title="[% period_loo.budget_period_enddate | html %]">[% period_loo.budget_period_enddate | $KohaDates %]</span></td>
+                  <td data-order="[% period_loo.budget_period_startdate | html %]">[% period_loo.budget_period_startdate | $KohaDates %]</td>
+                  <td data-order="[% period_loo.budget_period_enddate | html %]">[% period_loo.budget_period_enddate | $KohaDates %]</td>
                   <td>[% IF ( period_loo.budget_period_locked ) %]<i class="fa fa-lock"></i> Locked[% END %]</td>
                   <td class="data">[% period_loo.budget_period_total | $Price %]</td>
                   <td>
@@ -571,7 +571,6 @@
             $("#activeperiodst,#inactiveperiodst").dataTable($.extend(true, {}, dataTablesDefaults, {
                 "aoColumnDefs": [
                     { "aTargets": [ -1 ], "bSortable": false, "bSearchable": false },
-                    { "sType": "title-string", "aTargets" : [ "title-string" ] }
                 ],
                 "sPaginationType": "full",
                 'bAutoWidth': false
