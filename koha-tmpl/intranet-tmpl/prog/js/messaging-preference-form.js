@@ -49,7 +49,7 @@ $(document).ready(function(){
     }
 
     // At load time, we want digest disabled if no digest using transport is enabled
-    $("#memberentry_messaging_prefs .email").each(function(){
+    $(".pmp_email").each(function(){
         var rowid = $(this).attr("id");
         id = Number(rowid.replace("email",""));
         if ( $("#email"+id).prop("checked") || $("#sms"+id).prop("checked") ) {
@@ -60,16 +60,16 @@ $(document).ready(function(){
     });
 
     // If user clears all digest using transports for a notice, disable digest checkbox
-    $(".email").click(function(){
+    $(".pmp_email").click(function(){
         var rowid = $(this).attr("id");
         id = Number(rowid.replace("email",""));
         if ( $("#email"+id).prop("checked") || $("#sms"+id).prop("checked") ) {
             $("#digest"+id).attr("disabled", false);
         } else {
-            $("#digest"+id).attr("disabled", true);
+            $("#digest"+id).attr("disabled", true).prop("checked",false);
         }
     });
-    $(".sms").click(function(){
+    $(".pmp_sms").click(function(){
         var rowid = $(this).attr("id");
         id = Number(rowid.replace("sms",""));
         if ( $("#email"+id).prop("checked") || $("#sms"+id).prop("checked") ) {
