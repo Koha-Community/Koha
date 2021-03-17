@@ -53,9 +53,9 @@
             <tbody>
               [% FOREACH item IN pending_onsite_checkouts %]
                 <tr>
-                  <td>
+                  <td data-order="[% item.date_due | html %]">
                     [% IF item.is_overdue %]<span class="overdue">[% END %]
-                    <span title="[% item.date_due | html %]">[% item.date_due | $KohaDates %]</span>
+                    [% item.date_due | $KohaDates %]
                     [% IF item.is_overdue %]</span>[% END %]
                   </td>
                   <td>
@@ -97,20 +97,7 @@
     <script>
         $(document).ready(function(){
             if ( $("#pending_onsite_checkout").length ) {
-                $("#pending_onsite_checkout").dataTable($.extend(true, {}, dataTablesDefaults, {
-                    "aLengthMenu": [[10, 20, 50, 100, -1], [10, 20, 50, 100, "All"]],
-                    "aoColumns": [
-                        { "sType": "title-string" },
-                        { "sType": "html" },
-                        { "sType": "html" },
-                        null,
-                        { "sType": "html" },
-                        null,
-                        null,
-                    ],
-                    'bAutoWidth': false,
-                    "sPaginationType": "full"
-                }));
+                $("#pending_onsite_checkout").dataTable($.extend(true, {}, dataTablesDefaults));
             }
         });
     </script>

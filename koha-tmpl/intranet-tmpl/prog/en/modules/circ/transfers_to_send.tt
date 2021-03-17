@@ -52,7 +52,7 @@
                                     <caption>Sending to [% library.branchname | html %]</caption>
                                     <thead>
                                         <tr>
-                                            <th class="title-string">Date of request</th>
+                                            <th>Date of request</th>
                                             <th class="anti-the">Title</th>
                                             <th>Reason</th>
                                             <th>On loan</th>
@@ -65,7 +65,9 @@
                                         [% FOREACH transfer IN library.inbound_transfers %]
                                             [% UNLESS transfer.datesent %]
                                             <tr>
-                                                <td><p><span title="[% transfer.daterequested | html %]">[% transfer.daterequested | $KohaDates %]</span></p></td>
+                                                <td data-order="[% transfer.daterequested | html %]">
+                                                    [% transfer.daterequested | $KohaDates %]
+                                                </td>
                                                 <td>
                                                     [% INCLUDE 'biblio-title.inc' biblio = transfer.item.biblio link = 1 %][% IF ( transfer.item.biblio.author ) %] by [% transfer.item.biblio.author | html %][% END %]
                                                     [% IF ( transfer.item.effective_itemtype ) %] (<b>[% ItemTypes.GetDescription( transfer.item.effective_itemtype ) | html %]</b>)[% END %]
@@ -115,8 +117,7 @@
             $("#transferst[% library.branchcode | html %]").dataTable($.extend(true, {}, dataTablesDefaults, {
                 "aoColumnDefs": [
                     { "aTargets": [ -1 ], "bSortable": false, "bSearchable": false },
-                    { "sType": "anti-the", "aTargets" : [ "anti-the" ] },
-                    { "sType": "title-string", "aTargets" : [ "title-string" ] }
+                    { "sType": "anti-the", "aTargets" : [ "anti-the" ] }
                 ],
                 "sDom": 't',
                 "bPaginate": false

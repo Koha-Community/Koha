@@ -77,7 +77,7 @@
         <th>Available enumeration</th>
         <th class="string-sort">Available item types</th>
         <th class="string-sort">Available locations</th>
-        <th class="title-string">Earliest hold date</th>
+        <th>Earliest hold date</th>
         <th>Action</th>
         </tr>
     </thead>
@@ -174,8 +174,8 @@
             [% END %]
             </ul>
         </td>
-        <td>
-            <span title="[% hold.reservedate | html %]">[% hold.reservedate | $KohaDates %] in [% Branches.GetName ( hold.branchcode ) | html %]</span>
+        <td data-order="[% hold.reservedate | html %]">
+            [% hold.reservedate | $KohaDates %] in [% Branches.GetName ( hold.branchcode ) | html %]
         </td>
         <td>
             <form name="cancelReserve" action="/cgi-bin/koha/circ/pendingreserves.pl" method="post">

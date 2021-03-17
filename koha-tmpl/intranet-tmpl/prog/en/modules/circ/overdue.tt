@@ -65,7 +65,7 @@
     <table id="overduest">
       <thead>
         <tr>
-          <th class="title-string">Due date</th>
+          <th>Due date</th>
           <th>Patron</th>
           <th>Patron category</th>
           <th>Patron library</th>
@@ -83,7 +83,7 @@
       <tbody>
       [% FOREACH overdueloo IN overdueloop %]
         <tr>
-          <td><span title="[% overdueloo.duedate | html %]">[% overdueloo.duedate | $KohaDates %]</span></td>
+          <td data-order="[% overdueloo.duedate | html %]">[% overdueloo.duedate | $KohaDates %]</td>
           <td>
             [% INCLUDE 'patron-title.inc' patron=overdueloo.patron hide_patron_infos_if_needed=1 %]
             [% IF logged_in_user.can_see_patron_infos( overdueloo.patron ) %]

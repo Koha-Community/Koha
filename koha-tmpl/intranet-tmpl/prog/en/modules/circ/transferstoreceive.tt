@@ -51,7 +51,7 @@
             <table style="width: 100%" id="transferst[% branchesloo.branchcode | html %]">
             <caption>Coming from [% branchesloo.branchname | html %]</caption>
             <thead><tr>
-                <th class="title-string">Date of transfer</th>
+                <th>Date of transfer</th>
                 <th class="anti-the">Title</th>
                 <th>On hold for</th>
                 <th>Home library</th>
@@ -64,7 +64,7 @@
                 [% ELSE %]
                 <tr>
                 [% END %]
-                    <td><p><span title="[% reser.datetransfer | html %]">[% reser.datetransfer | $KohaDates %]</span></p> [% IF ( reser.messcompa ) %]<span class="error">Transfer is [% reser.diff | html %] days late</span>[% END %]</td>
+                    <td data-order="[% reser.datetransfer | html %]"><p>[% reser.datetransfer | $KohaDates %]</p> [% IF ( reser.messcompa ) %]<span class="error">Transfer is [% reser.diff | html %] days late</span>[% END %]</td>
                     <td>
                         [% INCLUDE 'biblio-title.inc' biblio=reser link = 1 %] [% IF ( reser.author ) %]by [% reser.author | html %][% END %]
                             [% IF ( reser.itemtype ) %] (<strong>[% reser.itemtype | html %]</strong>)[% END %]
@@ -121,8 +121,7 @@
             $("#transferst[% branchesloo.branchcode | html %]").dataTable($.extend(true, {}, dataTablesDefaults, {
                 "aoColumnDefs": [
                     { "aTargets": [ -1 ], "bSortable": false, "bSearchable": false },
-                    { "sType": "anti-the", "aTargets" : [ "anti-the" ] },
-                    { "sType": "title-string", "aTargets" : [ "title-string" ] }
+                    { "sType": "anti-the", "aTargets" : [ "anti-the" ] }
                 ],
                 "sDom": 't',
                 "bPaginate": false

@@ -82,7 +82,7 @@
         <th class="hq-barcode">Barcode</th>
         <th class="hq-patron">Patron</th>
         <th class="hq-sendto">Send to</th>
-        <th class="hq-date title-string">Date</th>
+        <th class="hq-date">Date</th>
         <th class="hq-notes">Notes</th>
     </tr>
     <tr>
@@ -191,7 +191,7 @@
               [% END %]
             </td>
             <td class="hq-sendto">[% Branches.GetName( itemsloo.pickbranch ) | html %]</td>
-            <td class="hq-date"><span title="[% itemsloo.reservedate | html %]">[% itemsloo.reservedate | $KohaDates %]</span></td>
+            <td class="hq-date" data-order="[% itemsloo.reservedate | html %]">[% itemsloo.reservedate | $KohaDates %]</td>
             <td class="hq-notes">[% itemsloo.notes | html %]</td>
         </tr>
     [% END %]</tbody>
