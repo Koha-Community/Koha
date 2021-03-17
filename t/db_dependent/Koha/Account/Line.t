@@ -719,7 +719,7 @@ subtest 'credits() and debits() tests' => sub {
 
 subtest "void() tests" => sub {
 
-    plan tests => 16;
+    plan tests => 23;
 
     $schema->storage->txn_begin;
 
@@ -777,9 +777,35 @@ subtest "void() tests" => sub {
     is( $line1->amountoutstanding+0, 0, 'First fee has amount outstanding of 0' );
     is( $line2->amountoutstanding+0, 0, 'Second fee has amount outstanding of 0' );
 
-    my $ret = $account_payment->void({ interface => 'test' });
+    throws_ok {
+        $line1->void( { interface => 'test' } );
+    }
+    'Koha::Exceptions::Account::IsNotCredit',
+      '->void() can only be used with credits';
 
-    is( ref($ret), 'Koha::Account::Line', 'Void returns the account line' );
+    throws_ok {
+        $account_payment->void();
+    }
+    'Koha::Exceptions::MissingParameter',
+      "->void() requires the `interface` parameter is passed";
+
+    throws_ok {
+        $account_payment->void( { interface => 'intranet' } );
+    }
+    'Koha::Exceptions::MissingParameter',
+      "->void() requires the `staff_id` parameter is passed when `interface` equals 'intranet'";
+    throws_ok {
+        $account_payment->void( { interface => 'intranet', staff_id => $borrower->borrowernumber } );
+    }
+    'Koha::Exceptions::MissingParameter',
+      "->void() requires the `branch` parameter is passed when `interface` equals 'intranet'";
+
+    my $void = $account_payment->void({ interface => 'test' });
+
+    is( ref($void), 'Koha::Account::Line', 'Void returns the account line' );
+    is( $void->debit_type_code, 'VOID', 'Void returns the VOID account line' );
+    is( $void->manager_id, undef, 'Void proceeds without manager_id OK if interface is not "intranet"' );
+    is( $void->branchcode, undef, 'Void proceeds without branchcode OK if interface is not "intranet"' );
     is( $account->balance(), 30, "Account balance is again 30" );
 
     $account_payment->_result->discard_changes();
@@ -788,19 +814,22 @@ subtest "void() tests" => sub {
 
     is( $account_payment->credit_type_code, 'PAYMENT', 'Voided payment credit_type_code is still PAYMENT' );
     is( $account_payment->status, 'VOID', 'Voided payment status is VOID' );
-    is( $account_payment->amount+0, -30, 'Voided payment amount is -30' );
+    is( $account_payment->amount+0, -30, 'Voided payment amount is still -30' );
     is( $account_payment->amountoutstanding+0, 0, 'Voided payment amount outstanding is 0' );
 
     is( $line1->amountoutstanding+0, 10, 'First fee again has amount outstanding of 10' );
     is( $line2->amountoutstanding+0, 20, 'Second fee again has amount outstanding of 20' );
 
-    # Accountlines that are not credits should be un-voidable
-    my $line1_pre = $line1->unblessed();
-    $ret = $line1->void({ interface => 'test' });
-    $line1->_result->discard_changes();
-    my $line1_post = $line1->unblessed();
-    is( $ret, undef, 'Attempted void on non-credit returns undef' );
-    is_deeply( $line1_pre, $line1_post, 'Non-credit account line cannot be voided' );
+    my $credit2 = $account->add_credit( { interface => 'test', amount => 10 } );
+    $void = $credit2->void(
+        {
+            interface => 'intranet',
+            staff_id  => $borrower->borrowernumber,
+            branch    => $branchcode
+        }
+    );
+    is( $void->manager_id, $borrower->borrowernumber, "->void stores the manager_id when it's passed");
+    is( $void->branchcode, $branchcode, "->void stores the branchcode when it's passed");
 
     $schema->storage->txn_rollback;
 };
