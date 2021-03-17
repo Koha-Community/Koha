@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 13;
+use Test::More tests => 14;
 use Test::MockModule;
 use Test::Exception;
 
@@ -305,7 +305,7 @@ subtest 'add_credit() tests' => sub {
       'Exception thrown for UseCashRegisters:1 + payment_type:CASH + cash_register:undef';
 
     # Disable cash registers
-    t::lib::Mocks::mock_preference( 'UseCashRegisters', 1 );
+    t::lib::Mocks::mock_preference( 'UseCashRegisters', 0 );
 
     $schema->storage->txn_rollback;
 };
@@ -717,7 +717,7 @@ subtest 'pay() tests' => sub {
       'Exception thrown for UseCashRegisters:1 + payment_type:CASH + cash_register:undef';
 
     # Disable cash registers
-    t::lib::Mocks::mock_preference( 'UseCashRegisters', 1 );
+    t::lib::Mocks::mock_preference( 'UseCashRegisters', 0 );
 
     # Undef userenv
     $context->mock( 'userenv', undef );
@@ -1172,6 +1172,106 @@ subtest 'Koha::Account::pay() generates credit number (Koha::Account::Line->stor
     }
     'Koha::Exceptions::Account',
 "Exception thrown when AutoCreditNumber is enabled but credit_number is already defined";
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'Koha::Account::payout_amount() tests' => sub {
+    plan tests => 21;
+
+    $schema->storage->txn_begin;
+
+    # delete logs and statistics
+    my $action_logs = $schema->resultset('ActionLog')->search()->count;
+    my $statistics  = $schema->resultset('Statistic')->search()->count;
+
+    my $staff = $builder->build_object( { class => 'Koha::Patrons' } );
+    my $library = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $register =
+      $builder->build_object( { class => 'Koha::Cash::Registers' } );
+    my $patron = $builder->build_object( { class => 'Koha::Patrons' } );
+    my $account =
+      Koha::Account->new( { patron_id => $patron->borrowernumber } );
+
+    is( $account->balance, 0, 'Test patron has no balance' );
+
+    my $payout_params = {
+        payout_type => 'CASH',
+        branch      => $library->id,
+        register_id => $register->id,
+        staff_id    => $staff->id,
+        interface   => 'intranet',
+        amount      => -10,
+    };
+
+    my @required_fields =
+      ( 'interface', 'staff_id', 'branch', 'payout_type', 'amount' );
+    for my $required_field (@required_fields) {
+        my $this_payout = { %{$payout_params} };
+        delete $this_payout->{$required_field};
+
+        throws_ok {
+            $account->payout_amount($this_payout);
+        }
+        'Koha::Exceptions::MissingParameter',
+          "Exception thrown if $required_field parameter missing";
+    }
+
+    throws_ok {
+        $account->payout_amount($payout_params);
+    }
+    'Koha::Exceptions::Account::AmountNotPositive',
+      'Expected validation exception thrown (amount not positive)';
+
+    $payout_params->{amount} = 10;
+    throws_ok {
+        $account->payout_amount($payout_params);
+    }
+    'Koha::Exceptions::ParameterTooHigh',
+      'Expected validation exception thrown (amount greater than outstanding)';
+
+    # Enable cash registers
+    t::lib::Mocks::mock_preference( 'UseCashRegisters', 1 );
+    throws_ok {
+        $account->payout_amount($payout_params);
+    }
+    'Koha::Exceptions::Account::RegisterRequired',
+'Exception thrown for UseCashRegisters:1 + payout_type:CASH + cash_register:undef';
+
+    # Disable cash registers
+    t::lib::Mocks::mock_preference( 'UseCashRegisters', 0 );
+
+    # Add some outstanding credits
+    my $credit_1 = $account->add_credit( { amount => 2,  interface => 'commandline' } );
+    my $credit_2 = $account->add_credit( { amount => 3,  interface => 'commandline' } );
+    my $credit_3 = $account->add_credit( { amount => 5,  interface => 'commandline' } );
+    my $credit_4 = $account->add_credit( { amount => 10, interface => 'commandline' } );
+    my $credits = $account->outstanding_credits();
+    is( $credits->count, 4, "Found 4 credits with outstanding amounts" );
+    is( $credits->total_outstanding + 0, -20, "Total -20 outstanding credit" );
+
+    my $payout = $account->payout_amount($payout_params);
+    is(ref($payout), 'Koha::Account::Line', 'Return the Koha::Account::Line object for the payout');
+    is($payout->amount + 0, 10, "Payout amount recorded correctly");
+    is($payout->amountoutstanding + 0, 0, "Full amount was paid out");
+    $credits = $account->outstanding_credits();
+    is($credits->count, 1, "Payout was applied against oldest outstanding credits first");
+    is($credits->total_outstanding + 0, -10, "Total of 10 outstanding credit remaining");
+
+    my $credit_5 = $account->add_credit( { amount => 5, interface => 'commandline' } );
+    $credits = $account->outstanding_credits();
+    is($credits->count, 2, "New credit added");
+    $payout_params->{amount} = 2.50;
+    $payout_params->{credits} = [$credit_5];
+    $account->payout_amount($payout_params);
+
+    $credits = $account->outstanding_credits();
+    is($credits->count, 2, "Second credit not fully paid off");
+    is($credits->total_outstanding + 0, -12.50, "12.50 outstanding credit remaining");
+    $credit_4->discard_changes;
+    $credit_5->discard_changes;
+    is($credit_4->amountoutstanding + 0, -10, "Credit 4 unaffected when credit_5 was passed to payout_amount");
+    is($credit_5->amountoutstanding + 0, -2.50, "Credit 5 correctly reduced when payout_amount called with credit_5 passed");
 
     $schema->storage->txn_rollback;
 };
