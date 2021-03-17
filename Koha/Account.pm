@@ -692,20 +692,18 @@ sub payout_amount {
         sub {
 
             # A 'payout' is a 'debit'
-            $payout = Koha::Account::Line->new(
+            $payout = $self->add_debit(
                 {
-                    date              => \'NOW()',
-                    amount            => $amount,
-                    debit_type_code   => 'PAYOUT',
+                    amount            => $params->{amount},
+                    type              => 'PAYOUT',
                     payment_type      => $params->{payout_type},
-                    amountoutstanding => $amount,
+                    amountoutstanding => $params->{amount},
                     manager_id        => $params->{staff_id},
-                    borrowernumber    => $self->{patron_id},
                     interface         => $params->{interface},
                     branchcode        => $params->{branch},
                     register_id       => $params->{cash_register}
                 }
-            )->store();
+            );
 
             # Offset against credits
             for my $credit ( @{$outstanding_credits} ) {
