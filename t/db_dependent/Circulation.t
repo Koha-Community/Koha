@@ -2729,8 +2729,7 @@ subtest 'AddReturn | is_overdue' => sub {
                 interface => 'test',
             }
         );
-        $credit->apply(
-            { debits => [ $debit ], offset_type => 'Payment' } );
+        $credit->apply( { debits => [$debit] } );
 
         is( int( $patron->account->balance() ),
             0, "Overdue fine should be paid off" );
@@ -2856,7 +2855,7 @@ subtest 'AddReturn | is_overdue' => sub {
                 interface => 'test',
             }
         );
-        $credit->apply( { debits => [$debit], offset_type => 'Payment' } );
+        $credit->apply( { debits => [$debit] } );
 
         is( $patron->account->balance(), .05, 'Overdue fine reduced to $0.05' );
 
@@ -3193,8 +3192,7 @@ subtest 'AddReturn | is_overdue' => sub {
                     item_id    => $item->itemnumber
                 }
             );
-            $overdue_forgive->apply(
-                { debits => [$overdue_fee], offset_type => 'Forgiven' } );
+            $overdue_forgive->apply( { debits => [$overdue_fee] } );
             $overdue_fee->discard_changes;
             is($overdue_fee->amountoutstanding + 0, 0, 'Overdue fee forgiven');
 
@@ -3291,8 +3289,7 @@ subtest 'AddReturn | is_overdue' => sub {
                     item_id    => $item->itemnumber
                 }
             );
-            $overdue_forgive->apply(
-                { debits => [$overdue_fee], offset_type => 'Forgiven' } );
+            $overdue_forgive->apply( { debits => [$overdue_fee] } );
             $overdue_fee->discard_changes;
             is($overdue_fee->amountoutstanding + 0, 0, 'Overdue fee forgiven');
 

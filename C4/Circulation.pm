@@ -2608,7 +2608,7 @@ sub _FixOverduesOnReturn {
                     }
                 );
 
-                $credit->apply({ debits => [ $accountline ], offset_type => 'Forgiven' });
+                $credit->apply({ debits => [ $accountline ] });
 
                 if (C4::Context->preference("FinesLog")) {
                     &logaction("FINES", 'MODIFY',$borrowernumber,"Overdue forgiven: item $item");

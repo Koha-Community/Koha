@@ -288,6 +288,13 @@ sub void {
                 }
             )->store();
 
+            # Link void to payment
+            $self->set({
+                amountoutstanding => $self->amount,
+                status => 'VOID'
+            })->store();
+            $self->apply( { debits => [$void] } );
+
             # Reverse any applied payments
             foreach my $account_offset (@account_offsets) {
                 my $fee_paid =
@@ -309,13 +316,6 @@ sub void {
                     }
                 )->store();
             }
-
-            # Link void to payment
-            $self->set({
-                amountoutstanding => $self->amount,
-                status => 'VOID'
-            })->store();
-            $self->apply({ debits => [$void]});
 
             if ( C4::Context->preference("FinesLog") ) {
                 logaction(
@@ -421,12 +421,7 @@ sub cancel {
             )->store();
 
             # Link cancellation to charge
-            $cancellation->apply(
-                {
-                    debits      => [$self],
-                    offset_type => 'CANCELLATION'
-                }
-            );
+            $cancellation->apply( { debits => [$self] } );
             $cancellation->status('APPLIED')->store();
 
             # Update status of original debit
@@ -548,12 +543,7 @@ sub reduce {
             my $debit_outstanding = $self->amountoutstanding;
             if ( $debit_outstanding >= $params->{amount} ) {
 
-                $reduction->apply(
-                    {
-                        debits      => [$self],
-                        offset_type => uc( $params->{reduction_type} )
-                    }
-                );
+                $reduction->apply( { debits => [$self] } );
                 $reduction->status('APPLIED')->store();
             }
             else {
@@ -564,7 +554,7 @@ sub reduce {
                     {
                         credit_id => $reduction->accountlines_id,
                         debit_id  => $self->accountlines_id,
-                        type      => uc( $params->{reduction_type} ),
+                        type      => 'APPLY',
                         amount    => 0
                     }
                 )->store();
@@ -582,7 +572,7 @@ sub reduce {
 =head3 apply
 
     my $debits = $account->outstanding_debits;
-    my $credit = $credit->apply( { debits => $debits, [ offset_type => $offset_type ] } );
+    my $credit = $credit->apply( { debits => $debits } );
 
 Applies the credit to a given debits array reference.
 
@@ -592,9 +582,6 @@ Applies the credit to a given debits array reference.
 
 =item debits - Koha::Account::Lines object set of debits
 
-=item offset_type (optional) - a string indicating the offset type (valid values are those from
-the 'account_offset_types' table)
-
 =back
 
 =cut
@@ -603,7 +590,6 @@ sub apply {
     my ( $self, $params ) = @_;
 
     my $debits      = $params->{debits};
-    my $offset_type = $params->{offset_type} // 'Credit Applied';
 
     unless ( $self->is_credit ) {
         Koha::Exceptions::Account::IsNotCredit->throw(
@@ -644,7 +630,7 @@ sub apply {
                 {   credit_id => $self->id,
                     debit_id  => $debit->id,
                     amount    => $amount_to_cancel * -1,
-                    type      => $offset_type,
+                    type      => 'APPLY'
                 }
             )->store();
 
@@ -777,7 +763,7 @@ sub payout {
                 }
             )->store();
 
-            $self->apply( { debits => [$payout], offset_type => 'PAYOUT' } );
+            $self->apply( { debits => [$payout] } );
             $self->status('PAID')->store;
         }
     );

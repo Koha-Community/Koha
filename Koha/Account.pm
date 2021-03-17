@@ -360,8 +360,7 @@ sub payin_amount {
             if ( exists( $params->{debits} ) ) {
                 $credit = $credit->apply(
                     {
-                        debits      => $params->{debits},
-                        offset_type => $Koha::Account::offset_type->{$params->{type}}
+                        debits => $params->{debits}
                     }
                 );
             }
@@ -372,8 +371,7 @@ sub payin_amount {
             {
                 $credit = $credit->apply(
                     {
-                        debits      => [ $self->outstanding_debits->as_list ],
-                        offset_type => $Koha::Account::offset_type->{$params->{type}}
+                        debits => [ $self->outstanding_debits->as_list ]
                     }
                 );
             }
@@ -617,8 +615,7 @@ sub payout_amount {
 
             # Offset against credits
             for my $credit ( @{$outstanding_credits} ) {
-                $credit->apply(
-                    { debits => [$payout], offset_type => 'PAYOUT' } );
+                $credit->apply( { debits => [$payout] } );
                 $payout->discard_changes;
                 last if $payout->amountoutstanding == 0;
             }

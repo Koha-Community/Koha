@@ -133,12 +133,12 @@ sub add_credit {
 
         if ($debits) {
             # pay them!
-            $credit = $credit->apply({ debits => [ $debits->as_list ], offset_type => 'payment' });
+            $credit = $credit->apply({ debits => [ $debits->as_list ] });
         }
 
         if ($credit->amountoutstanding != 0) {
             my $outstanding_debits = $account->outstanding_debits;
-            $credit->apply({ debits => [ $outstanding_debits->as_list ], offset_type => 'payment' });
+            $credit->apply({ debits => [ $outstanding_debits->as_list ] });
         }
 
         $credit->discard_changes;
