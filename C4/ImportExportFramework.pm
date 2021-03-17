@@ -977,6 +977,9 @@ sub _import_table_csv
                     } elsif ($fields->[$j] eq 'frameworkcode' && $value ne $frameworkcode) {
                         $dataFields{$fields->[$j]} = $frameworkcode;
                         push @values, $frameworkcode;
+                    } elsif ($fields->[$j] eq 'isurl' && defined $value && $value eq q{}) {
+                        $dataFields{$fields->[$j]} = undef;
+                        push @values, undef;
                     } else {
                         $dataFields{$fields->[$j]} = $value;
                         push @values, $value;
@@ -1094,7 +1097,12 @@ sub _getDataFields
             if ($ok) {
                 $data //= '';
                 $data = '' if ($data eq '#');
-                $data = $frameworkcode if ($fields->[$i] eq 'frameworkcode');
+                if ( $fields->[$i] eq 'frameworkcode' ) {
+                    $data = $frameworkcode;
+                }
+                elsif ( $fields->[$i] eq 'isurl' ) {
+                    $data = undef if defined $data && $data eq q{};
+                }
                 $dataFields->{$fields->[$i]} = $data;
                 push @dataFieldsA, $data;
                 $i++;
