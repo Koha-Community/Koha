@@ -57,7 +57,7 @@
                                 <th>Vendor</th>
                                 <th>Library</th>
                                 <th>Call number</th>
-                                <th class="title-string">Expiration date</th>
+                                <th>Expiration date</th>
                                 <th class="NoSort"></th>
                             </tr>
                         </thead>
@@ -81,12 +81,8 @@
                                 <td>
                                     [% IF (sub.callnumber) %][% sub.callnumber | html %][% END %]
                                 </td>
-                                <td>
-                                    [% IF (sub.enddate) %]
-                                        <span title="[% sub.enddate | html %]">[% sub.enddate | $KohaDates %]</span>
-                                    [% ELSE %]
-                                        <span title="0000-00-00"></span>
-                                    [% END %]
+                                <td data-order="[% sub.enddate | html %]">
+                                    [% sub.enddate | $KohaDates %]
                                 </td>
                                 <td class="actions">
                                     [% IF (sub.alreadyOnOrder) %]
@@ -138,8 +134,7 @@
             $("#srlt").dataTable($.extend(true, {}, dataTablesDefaults, {
                 "aoColumnDefs": [
                     { "bSortable": false, "bSearchable": false, 'aTargets': [ 'NoSort' ] },
-                    { "sType": "anti-the", "aTargets" : [ "anti-the" ] },
-                    { "sType": "title-string", "aTargets" : [ "title-string" ] }
+                    { "sType": "anti-the", "aTargets" : [ "anti-the" ] }
                 ],
                 "sPaginationType": "full"
             }));

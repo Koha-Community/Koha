@@ -72,8 +72,8 @@
         <tr>
             <th class="NoSort"></th>
             <th>Order line</th>
-            <th class="title-string">Order date</th>
-            <th class="title-string">Estimated delivery date</th>
+            <th>Order date</th>
+            <th>Estimated delivery date</th>
             <th>Vendor</th>
             <th class="anti-the">Information</th>
             <th>Quantity</th>
@@ -84,7 +84,7 @@
             <th>Budget</th>
             <th>Fund</th>
             <th>Claims count</th>
-            <th class="title-string">Claimed date</th>
+            <th>Claimed date</th>
             <th>Internal note</th>
             <th>Vendor note</th>
             <th>ISBN</th>
@@ -99,14 +99,12 @@
             <td>
                 [% lateorder.ordernumber | $raw %]
             </td>
-            <td>
-                <span title="[% lateorder.basket.closedate | html %]">[% lateorder.basket.closedate | $KohaDates %] ([% lateorder.basket.late_since_days | html %] days)</span>
+            <td data-order="[% lateorder.basket.closedate | html %]">
+                [% lateorder.basket.closedate | $KohaDates %] ([% lateorder.basket.late_since_days | html %] days)
             </td>
-            <td>
-                [% SET estimated_delivery_date = lateorder.get_column('estimated_delivery_date') %]
-                [% IF estimated_delivery_date %]
-                    <span title="[% estimated_delivery_date | html %]">[% estimated_delivery_date | $KohaDates  %]</span>
-                [% END %]
+            [% SET estimated_delivery_date = lateorder.get_column('estimated_delivery_date') %]
+            <td data-order="[% estimated_delivery_date | html %]">
+                [% estimated_delivery_date | $KohaDates  %]
             </td>
             <td>
                 [% lateorder.basket.bookseller.name | html %]
@@ -152,9 +150,9 @@
             <td>[% lateorder.fund.budget.budget_period_description | html %]</td>
             <td>[% lateorder.fund.budget_name | html %]</td>
             <td>[% lateorder.claims.count | html %]</td>
-            <td>
+            <td data-order="[% lateorder.claims.last.claimed_on | html %]">
                 [% FOR claim IN lateorder.claims %]
-                    <span title="[% lateorder.claims.last.claimed_on | html %]">[% claim.claimed_on | $KohaDates %]</span>
+                    [% claim.claimed_on | $KohaDates %]
                     [% UNLESS loop.last %]<br/>[% END %]
                 [% END %]
             </td>

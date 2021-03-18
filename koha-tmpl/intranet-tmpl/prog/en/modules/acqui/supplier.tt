@@ -388,8 +388,8 @@
                     <tr>
                         <th scope="col">Name</th>
                         <th scope="col">Description</th>
-                        <th scope="col" class="title-string">Start date</th>
-                        <th scope="col" class="title-string">End date</th>
+                        <th scope="col">Start date</th>
+                        <th scope="col">End date</th>
                         [% IF CAN_user_acquisition_contracts_manage %]
                             <th scope="col" class="NoSort noExport">Actions</th>
                         [% END %]
@@ -402,8 +402,8 @@
                             <a href="/cgi-bin/koha/admin/aqcontract.pl?op=add_form&amp;contractnumber=[% contract.contractnumber | uri %]&amp;booksellerid=[% contract.booksellerid | uri %]">[% contract.contractname | html %]</a>
                         </td>
                         <td>[% contract.contractdescription | html %]</td>
-                        <td><span title="[% contract.contractstartdate | html %]">[% contract.contractstartdate | $KohaDates %]</span></td>
-                        <td><span title="[% contract.contractenddate | html %]">[% contract.contractenddate | $KohaDates %]</span></td>
+                        <td data-order="[% contract.contractstartdate | html %]">[% contract.contractstartdate | $KohaDates %]</td>
+                        <td data-order="[% contract.contractenddate | html %]">[% contract.contractenddate | $KohaDates %]</td>
                         [% IF CAN_user_acquisition_contracts_manage %]
                             <td class="actions">
                                 <a class="btn btn-default btn-xs" href="/cgi-bin/koha/admin/aqcontract.pl?op=add_form&amp;contractnumber=[% contract.contractnumber | html %]&amp;booksellerid=[% contract.booksellerid | html %]"><i class="fa fa-pencil"></i> Edit</a>

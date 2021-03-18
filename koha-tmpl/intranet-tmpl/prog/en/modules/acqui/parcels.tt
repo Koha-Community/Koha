@@ -83,7 +83,7 @@
     <thead>
         <tr>
             <th>Line</th>
-            <th class="title-string">Date received</th>
+            <th>Date received</th>
             <th>Invoice number</th>
             <th>Item count</th>
             <th>Biblio count</th>
@@ -97,8 +97,8 @@
             <td>
                 [% searchresult.number | html %]
             </td>
-            <td>
-                <span title="[% searchresult.datereceived | html %]">[% searchresult.datereceived | $KohaDates %]</span>
+            <td data-order="[% searchresult.datereceived | html %]">
+                [% searchresult.datereceived | $KohaDates %]
             </td>
             <td>
                 [% IF ( searchresult.code ) %]
@@ -233,10 +233,7 @@
     <script>
         $(document).ready(function() {
             var parcelst = $("#parcelst").dataTable($.extend(true, {}, dataTablesDefaults, {
-                "aoColumnDefs": [
-                  { "sType": "title-string", "aTargets" : [ "title-string" ] }
-                ],
-                'bPaginate': false,
+                'bPaginate': false
             }));
 
             //keep a copy of all budgets before removing the inactives

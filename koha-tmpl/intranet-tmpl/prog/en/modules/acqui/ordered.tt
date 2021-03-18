@@ -48,7 +48,7 @@
     <th> Item types </th>
     <th> Left on order </th>
     <th> Estimated cost per unit </th>
-    <th class="title-string"> Date ordered </th>
+    <th> Date ordered </th>
     <th> Subtotal </th>
     </tr>
     </thead>
@@ -82,8 +82,8 @@
     <td class="data cell">
         [% order.ecost_tax_included | $Price %]
     </td>
-    <td class="cell">
-        <span title="[% order.entrydate | html %]">[% order.entrydate | $KohaDates %]</span>
+    <td class="cell" data-order="[% order.entrydate | html %]">
+        [% order.entrydate | $KohaDates %]
     </td>
     <td class="data cell">
         [% order.subtotal | $Price %]
