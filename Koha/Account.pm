@@ -489,19 +489,21 @@ sub add_credit {
 
 This method allows adding debits to a patron's account
 
-my $debit_line = Koha::Account->new({ patron_id => $patron_id })->add_debit(
-    {
-        amount       => $amount,
-        description  => $description,
-        note         => $note,
-        user_id      => $user_id,
-        interface    => $interface,
-        library_id   => $library_id,
-        type         => $debit_type,
-        item_id      => $item_id,
-        issue_id     => $issue_id
-    }
-);
+    my $debit_line = Koha::Account->new({ patron_id => $patron_id })->add_debit(
+        {
+            amount           => $amount,
+            description      => $description,
+            note             => $note,
+            user_id          => $user_id,
+            interface        => $interface,
+            library_id       => $library_id,
+            type             => $debit_type,
+            transaction_type => $transaction_type,
+            cash_register    => $register_id,
+            item_id          => $item_id,
+            issue_id         => $issue_id
+        }
+    );
 
 $debit_type can be any of:
   - ACCOUNT
@@ -517,6 +519,7 @@ $debit_type can be any of:
   - RENT_RENEW
   - RENT_DAILY_RENEW
   - RESERVE
+  - PAYOUT
 
 =cut
 
@@ -533,6 +536,13 @@ sub add_debit {
         }
     }
 
+    # check for cash register if using cash
+    Koha::Exceptions::Account::RegisterRequired->throw()
+      if ( C4::Context->preference("UseCashRegisters")
+        && defined( $params->{transaction_type} )
+        && ( $params->{transaction_type} eq 'CASH' )
+        && !defined( $params->{cash_register} ) );
+
     # amount should always be a positive value
     my $amount = $params->{amount};
     unless ( $amount > 0 ) {
@@ -540,15 +550,17 @@ sub add_debit {
             error => 'Debit amount passed is not positive' );
     }
 
-    my $description = $params->{description} // q{};
-    my $note        = $params->{note} // q{};
-    my $user_id     = $params->{user_id};
-    my $interface   = $params->{interface};
-    my $library_id  = $params->{library_id};
-    my $debit_type  = $params->{type};
-    my $item_id     = $params->{item_id};
-    my $issue_id    = $params->{issue_id};
-    my $offset_type = $Koha::Account::offset_type->{$debit_type} // 'Manual Debit';
+    my $description      = $params->{description} // q{};
+    my $note             = $params->{note} // q{};
+    my $user_id          = $params->{user_id};
+    my $interface        = $params->{interface};
+    my $library_id       = $params->{library_id};
+    my $cash_register    = $params->{cash_register};
+    my $debit_type       = $params->{type};
+    my $transaction_type = $params->{transaction_type};
+    my $item_id          = $params->{item_id};
+    my $issue_id         = $params->{issue_id};
+    my $offset_type      = $Koha::Account::offset_type->{$debit_type} // 'Manual Debit';
 
     my $line;
     my $schema = Koha::Database->new->schema;
@@ -565,13 +577,14 @@ sub add_debit {
                         description       => $description,
                         debit_type_code   => $debit_type,
                         amountoutstanding => $amount,
-                        payment_type      => undef,
+                        payment_type      => $transaction_type,
                         note              => $note,
                         manager_id        => $user_id,
                         interface         => $interface,
                         itemnumber        => $item_id,
                         issue_id          => $issue_id,
                         branchcode        => $library_id,
+                        register_id       => $cash_register,
                         (
                             $debit_type eq 'OVERDUE'
                             ? ( status => 'UNRETURNED' )
@@ -669,7 +682,7 @@ sub payout_amount {
     my $amount = $params->{amount};
     unless ( $amount > 0 ) {
         Koha::Exceptions::Account::AmountNotPositive->throw(
-            error => 'Debit amount passed is not positive' );
+            error => 'Payout amount passed is not positive' );
     }
 
     # Amount should always be less than or equal to outstanding credit
@@ -696,12 +709,12 @@ sub payout_amount {
                 {
                     amount            => $params->{amount},
                     type              => 'PAYOUT',
-                    payment_type      => $params->{payout_type},
+                    transaction_type  => $params->{payout_type},
                     amountoutstanding => $params->{amount},
                     manager_id        => $params->{staff_id},
                     interface         => $params->{interface},
                     branchcode        => $params->{branch},
-                    register_id       => $params->{cash_register}
+                    cash_register     => $params->{cash_register}
                 }
             );
 
@@ -710,6 +723,7 @@ sub payout_amount {
                 $credit->apply(
                     { debits => [$payout], offset_type => 'PAYOUT' } );
                 $payout->discard_changes;
+                last if $payout->amountoutstanding == 0;
             }
 
             # Set payout as paid
@@ -884,7 +898,8 @@ our $offset_type = {
     'RENT_RENEW'       => 'Rental Fee',
     'RENT_DAILY_RENEW' => 'Rental Fee',
     'OVERDUE'          => 'OVERDUE',
-    'RESERVE_EXPIRED'  => 'Hold Expired'
+    'RESERVE_EXPIRED'  => 'Hold Expired',
+    'PAYOUT'           => 'PAYOUT',
 };
 
 =head1 AUTHORS

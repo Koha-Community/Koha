@@ -1177,7 +1177,7 @@ subtest 'Koha::Account::pay() generates credit number (Koha::Account::Line->stor
 };
 
 subtest 'Koha::Account::payout_amount() tests' => sub {
-    plan tests => 21;
+    plan tests => 39;
 
     $schema->storage->txn_begin;
 
@@ -1258,12 +1258,30 @@ subtest 'Koha::Account::payout_amount() tests' => sub {
     is($credits->count, 1, "Payout was applied against oldest outstanding credits first");
     is($credits->total_outstanding + 0, -10, "Total of 10 outstanding credit remaining");
 
+    my $offsets = Koha::Account::Offsets->search( { debit_id => $payout->id } );
+    is( $offsets->count, 4, 'Four offsets generated' );
+    my $offset = $offsets->next;
+    is( $offset->type, 'PAYOUT', 'PAYOUT offset added for payout line' );
+    is( $offset->amount * 1, 10, 'Correct offset amount recorded' );
+    $offset = $offsets->next;
+    is( $offset->credit_id, $credit_1->id, "Offset added against credit_1");
+    is( $offset->type,       'PAYOUT', "PAYOUT used for offset_type" );
+    is( $offset->amount * 1, -2,      'Correct amount offset against credit_1' );
+    $offset = $offsets->next;
+    is( $offset->credit_id, $credit_2->id, "Offset added against credit_2");
+    is( $offset->type,       'PAYOUT', "PAYOUT used for offset_type" );
+    is( $offset->amount * 1, -3,      'Correct amount offset against credit_2' );
+    $offset = $offsets->next;
+    is( $offset->credit_id, $credit_3->id, "Offset added against credit_3");
+    is( $offset->type,       'PAYOUT', "PAYOUT used for offset_type" );
+    is( $offset->amount * 1, -5,      'Correct amount offset against credit_3' );
+
     my $credit_5 = $account->add_credit( { amount => 5, interface => 'commandline' } );
     $credits = $account->outstanding_credits();
     is($credits->count, 2, "New credit added");
     $payout_params->{amount} = 2.50;
     $payout_params->{credits} = [$credit_5];
-    $account->payout_amount($payout_params);
+    $payout = $account->payout_amount($payout_params);
 
     $credits = $account->outstanding_credits();
     is($credits->count, 2, "Second credit not fully paid off");
@@ -1272,6 +1290,16 @@ subtest 'Koha::Account::payout_amount() tests' => sub {
     $credit_5->discard_changes;
     is($credit_4->amountoutstanding + 0, -10, "Credit 4 unaffected when credit_5 was passed to payout_amount");
     is($credit_5->amountoutstanding + 0, -2.50, "Credit 5 correctly reduced when payout_amount called with credit_5 passed");
+
+    $offsets = Koha::Account::Offsets->search( { debit_id => $payout->id } );
+    is( $offsets->count, 2, 'Two offsets generated' );
+    $offset = $offsets->next;
+    is( $offset->type, 'PAYOUT', 'PAYOUT offset added for payout line' );
+    is( $offset->amount * 1, 2.50, 'Correct offset amount recorded' );
+    $offset = $offsets->next;
+    is( $offset->credit_id, $credit_5->id, "Offset added against credit_5");
+    is( $offset->type,       'PAYOUT', "PAYOUT used for offset_type" );
+    is( $offset->amount * 1, -2.50,      'Correct amount offset against credit_5' );
 
     $schema->storage->txn_rollback;
 };
