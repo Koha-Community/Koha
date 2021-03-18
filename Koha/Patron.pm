@@ -50,7 +50,7 @@ use Koha::Patron::HouseboundRole;
 use Koha::Patron::Images;
 use Koha::Patron::Messages;
 use Koha::Patron::Modifications;
-use Koha::Patron::Message::Preferences;
+use Koha::Patron::MessagePreferences;
 use Koha::Patron::Relationships;
 use Koha::Patron::Restrictions;
 use Koha::Patrons;
@@ -2083,7 +2083,7 @@ sub get_extended_attribute {
 
 Sets default messaging preferences on patron.
 
-See Koha::Patron::Message::Preference(s) for more documentation, especially on
+See Koha::Patron::MessagePreference(s) for more documentation, especially on
 thrown exceptions.
 
 =cut
@@ -2091,11 +2091,11 @@ thrown exceptions.
 sub set_default_messaging_preferences {
     my ($self, $categorycode) = @_;
 
-    my $options = Koha::Patron::Message::Preferences->get_options;
+    my $options = Koha::Patron::MessagePreferences->get_options;
 
     foreach my $option (@$options) {
         # Check that this option has preference configuration for this category
-        unless (Koha::Patron::Message::Preferences->search({
+        unless (Koha::Patron::MessagePreferences->search({
             message_attribute_id => $option->{message_attribute_id},
             categorycode         => $categorycode || $self->categorycode,
         })->count) {
@@ -2103,12 +2103,12 @@ sub set_default_messaging_preferences {
         }
 
         # Delete current setting
-        Koha::Patron::Message::Preferences->search({
+        Koha::Patron::MessagePreferences->search({
              borrowernumber => $self->borrowernumber,
              message_attribute_id => $option->{message_attribute_id},
         })->delete;
 
-        Koha::Patron::Message::Preference->new_from_default({
+        Koha::Patron::MessagePreference->new_from_default({
             borrowernumber => $self->borrowernumber,
             categorycode   => $categorycode || $self->categorycode,
             message_attribute_id => $option->{message_attribute_id},

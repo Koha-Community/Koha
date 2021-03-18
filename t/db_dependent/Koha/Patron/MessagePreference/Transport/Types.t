@@ -28,16 +28,16 @@ my $schema  = Koha::Database->new->schema;
 subtest 'Test class imports' => sub {
     plan tests => 2;
 
-    use_ok('Koha::Patron::Message::Transport::Type');
-    use_ok('Koha::Patron::Message::Transport::Types');
+    use_ok('Koha::Patron::MessagePreference::Transport::Type');
+    use_ok('Koha::Patron::MessagePreference::Transport::Types');
 };
 
-subtest 'Test Koha::Patron::Message::Transport::Types' => sub {
+subtest 'Test Koha::Patron::MessagePreference::Transport::Types' => sub {
     plan tests => 2;
 
     $schema->storage->txn_begin;
 
-    my $transport_type = Koha::Patron::Message::Transport::Type->new({
+    my $transport_type = Koha::Patron::MessagePreference::Transport::Type->new({
         message_transport_type => 'test'
     })->store;
 
@@ -45,7 +45,7 @@ subtest 'Test Koha::Patron::Message::Transport::Types' => sub {
        'Added a new message transport type.');
 
     $transport_type->delete;
-    is(Koha::Patron::Message::Transport::Types->find('test'), undef,
+    is(Koha::Patron::MessagePreference::Transport::Types->find('test'), undef,
        'Deleted the message transport type.');
 
     $schema->storage->txn_rollback;

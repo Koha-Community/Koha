@@ -1,7 +1,5 @@
-package Koha::Patron::Message::Transport::Types;
+package Koha::Exceptions::Patron::MessagePreference::Transport;
 
-# Copyright Koha-Suomi Oy 2016
-#
 # This file is part of Koha.
 #
 # Koha is free software; you can redistribute it and/or modify it
@@ -19,44 +17,16 @@ package Koha::Patron::Message::Transport::Types;
 
 use Modern::Perl;
 
-use Koha::Database;
-use Koha::Patron::Message::Transport::Type;
+use Exception::Class (
 
-use base qw(Koha::Objects);
-
-=head1 NAME
-
-Koha::Patron::Message::Transport::Types - Koha Patron Message Transport Types
-object class
-
-=head1 API
-
-=head2 Class Methods
-
-=cut
-
-=head2 Internal Methods
-
-=head3 _type
-
-=cut
-
-sub _type {
-    return 'MessageTransportType';
-}
-
-=head3 object_class
-
-=cut
-
-sub object_class {
-    return 'Koha::Patron::Message::Transport::Type';
-}
-
-=head1 AUTHOR
-
-Lari Taskula <lari.taskula@hypernova.fi>
-
-=cut
+    'Koha::Exceptions::Patron::MessagePreference::Transport' => {
+        description => 'Something went wrong'
+    },
+    'Koha::Exceptions::Patron::MessagePreference::Transport::TypeNotFound' => {
+        isa => 'Koha::Exceptions::Patron::MessagePreference::Transport',
+        description => "Transport type does not exist.",
+        fields => ['transport_type']
+    },
+);
 
 1;

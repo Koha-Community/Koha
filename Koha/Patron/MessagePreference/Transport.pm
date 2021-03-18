@@ -1,4 +1,4 @@
-package Koha::Patron::Message::Attribute;
+package Koha::Patron::MessagePreference::Transport;
 
 # Copyright Koha-Suomi Oy 2016
 #
@@ -25,7 +25,7 @@ use base qw(Koha::Object);
 
 =head1 NAME
 
-Koha::Patron::Message::Attribute - Koha Patron Message Attribute object class
+Koha::Patron::MessagePreference::Transport - Koha Patron Message Transport object class
 
 =head1 API
 
@@ -33,12 +33,12 @@ Koha::Patron::Message::Attribute - Koha Patron Message Attribute object class
 
 =cut
 
-=head3 _type
+=head3 type
 
 =cut
 
 sub _type {
-    return 'MessageAttribute';
+    return 'MessageTransport';
 }
 
 =head1 AUTHOR

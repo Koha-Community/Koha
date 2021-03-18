@@ -136,10 +136,10 @@ __PACKAGE__->belongs_to(
 # You can replace this text with custom content, and it will be preserved on regeneration
 
 sub koha_object_class {
-  'Koha::Patron::Message::Transport';
+  'Koha::Patron::MessagePreference::Transport';
 }
 sub koha_objects_class {
-  'Koha::Patron::Message::Transports';
+  'Koha::Patron::MessagePreference::Transports';
 }
 
 1;

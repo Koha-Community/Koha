@@ -1,4 +1,4 @@
-package Koha::Patron::Message::Attributes;
+package Koha::Patron::MessagePreference::Attribute;
 
 # Copyright Koha-Suomi Oy 2016
 #
@@ -20,13 +20,12 @@ package Koha::Patron::Message::Attributes;
 use Modern::Perl;
 
 use Koha::Database;
-use Koha::Patron::Message::Attribute;
 
-use base qw(Koha::Objects);
+use base qw(Koha::Object);
 
 =head1 NAME
 
-Koha::Patron::Message::Attributes - Koha Patron Message Attributes object class
+Koha::Patron::MessagePreference::Attribute - Koha Patron Message Attribute object class
 
 =head1 API
 
@@ -34,22 +33,12 @@ Koha::Patron::Message::Attributes - Koha Patron Message Attributes object class
 
 =cut
 
-=head2 Internal methods
-
 =head3 _type
 
 =cut
 
 sub _type {
     return 'MessageAttribute';
-}
-
-=head3 object_class
-
-=cut
-
-sub object_class {
-    return 'Koha::Patron::Message::Attribute';
 }
 
 =head1 AUTHOR

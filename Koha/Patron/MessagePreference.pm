@@ -1,4 +1,4 @@
-package Koha::Patron::Message::Preference;
+package Koha::Patron::MessagePreference;
 
 # Copyright Koha-Suomi Oy 2016
 #
@@ -21,22 +21,22 @@ use Modern::Perl;
 
 use Koha::Database;
 use Koha::Exceptions;
-use Koha::Exceptions::Patron::Message::Preference;
-use Koha::Exceptions::Patron::Message::Transport;
+use Koha::Exceptions::Patron::MessagePreference;
+use Koha::Exceptions::Patron::MessagePreference::Transport;
 use Koha::Exceptions::Patron::Category;
 use Koha::Patron::Categories;
-use Koha::Patron::Message::Attributes;
-use Koha::Patron::Message::Preferences;
-use Koha::Patron::Message::Transport::Preferences;
-use Koha::Patron::Message::Transport::Types;
-use Koha::Patron::Message::Transports;
+use Koha::Patron::MessagePreference::Attributes;
+use Koha::Patron::MessagePreferences;
+use Koha::Patron::MessagePreference::Transport::Preferences;
+use Koha::Patron::MessagePreference::Transport::Types;
+use Koha::Patron::MessagePreference::Transports;
 use Koha::Patrons;
 
 use base qw(Koha::Object);
 
 =head1 NAME
 
-Koha::Patron::Message::Preference - Koha Patron Message Preference object class
+Koha::Patron::MessagePreference - Koha Patron Message Preference object class
 
 =head1 API
 
@@ -46,7 +46,7 @@ Koha::Patron::Message::Preference - Koha Patron Message Preference object class
 
 =head3 new
 
-my $preference = Koha::Patron::Message::Preference->new({
+my $preference = Koha::Patron::MessagePreference->new({
    borrowernumber => 123,
    #categorycode => 'ABC',
    message_attribute_id => 4,
@@ -89,7 +89,7 @@ sub new {
 
 =head3 new_from_default
 
-my $preference = Koha::Patron::Message::Preference->new_from_default({
+my $preference = Koha::Patron::MessagePreference->new_from_default({
     borrowernumber => 123,
     categorycode   => 'ABC',   # if not given, patron's categorycode will be used
     message_attribute_id => 1,
@@ -124,7 +124,7 @@ sub new_from_default {
         $params->{'categorycode'} = $patron->categorycode;
     }
 
-    my $default = Koha::Patron::Message::Preferences->find({
+    my $default = Koha::Patron::MessagePreferences->find({
         categorycode => $params->{'categorycode'},
         message_attribute_id => $params->{'message_attribute_id'},
     });
@@ -144,12 +144,12 @@ sub new_from_default {
 
     # Set default messaging transport types
     my $default_transport_types =
-    Koha::Patron::Message::Transport::Preferences->search({
+    Koha::Patron::MessagePreference::Transport::Preferences->search({
         borrower_message_preference_id =>
                     $default->{'borrower_message_preference_id'}
     });
     while (my $transport = $default_transport_types->next) {
-        Koha::Patron::Message::Transport::Preference->new({
+        Koha::Patron::MessagePreference::Transport::Preference->new({
             borrower_message_preference_id => $self->borrower_message_preference_id,
             message_transport_type => $transport->message_transport_type,
         })->store;
@@ -174,7 +174,7 @@ sub message_name {
     if ($self->{'_message_name'}) {
         return $self->{'_message_name'};
     }
-    $self->{'_message_name'} = Koha::Patron::Message::Attributes->find({
+    $self->{'_message_name'} = Koha::Patron::MessagePreference::Attributes->find({
         message_attribute_id => $self->message_attribute_id,
     })->message_name;
     return $self->{'_message_name'};
@@ -201,7 +201,7 @@ sub message_transport_types {
             return $self->{'_message_transport_types'};
         }
         map {
-            my $transport = Koha::Patron::Message::Transports->find({
+            my $transport = Koha::Patron::MessagePreference::Transports->find({
                 message_attribute_id => $self->message_attribute_id,
                 message_transport_type => $_->message_transport_type,
                 is_digest => $self->wants_digest
@@ -217,7 +217,7 @@ sub message_transport_types {
             $self->{'_message_transport_types'}->{$_->message_transport_type}
                 = $transport ? $transport->letter_code : ' ';
         }
-        Koha::Patron::Message::Transport::Preferences->search({
+        Koha::Patron::MessagePreference::Transport::Preferences->search({
             borrower_message_preference_id => $self->borrower_message_preference_id,
         })->as_list;
         return $self->{'_message_transport_types'} || {};
@@ -295,12 +295,12 @@ sub store {
 
     # store message transport types
     if (exists $self->{'_message_transport_types'}) {
-        Koha::Patron::Message::Transport::Preferences->search({
+        Koha::Patron::MessagePreference::Transport::Preferences->search({
             borrower_message_preference_id =>
                 $self->borrower_message_preference_id,
         })->delete;
         foreach my $type (keys %{$self->{'_message_transport_types'}}) {
-            Koha::Patron::Message::Transport::Preference->new({
+            Koha::Patron::MessagePreference::Transport::Preference->new({
                 borrower_message_preference_id =>
                     $self->borrower_message_preference_id,
                 message_transport_type => $type,
@@ -315,7 +315,7 @@ sub store {
 
 Makes a basic validation for object.
 
-Returns Koha::Patron::Message::Preference object, or throws and exception.
+Returns Koha::Patron::MessagePreference object, or throws and exception.
 
 =cut
 
@@ -344,7 +344,7 @@ sub validate {
     }
 
     if (!$self->in_storage) {
-        my $previous = Koha::Patron::Message::Preferences->search({
+        my $previous = Koha::Patron::MessagePreferences->search({
             borrowernumber => $self->borrowernumber,
             categorycode   => $self->categorycode,
             message_attribute_id => $self->message_attribute_id,
@@ -357,11 +357,11 @@ sub validate {
         }
     }
 
-    my $attr = Koha::Patron::Message::Attributes->find(
+    my $attr = Koha::Patron::MessagePreference::Attributes->find(
         $self->message_attribute_id
     );
     unless ($attr) {
-        Koha::Exceptions::Patron::Message::Preference::AttributeNotFound->throw(
+        Koha::Exceptions::Patron::MessagePreference::AttributeNotFound->throw(
             error => 'Message attribute with id '.$self->message_attribute_id
             .' not found',
             message_attribute_id => $self->message_attribute_id,
@@ -369,14 +369,14 @@ sub validate {
     }
     if (defined $self->days_in_advance) {
         if ($attr && $attr->takes_days == 0) {
-            Koha::Exceptions::Patron::Message::Preference::DaysInAdvanceNotAvailable->throw(
+            Koha::Exceptions::Patron::MessagePreference::DaysInAdvanceNotAvailable->throw(
                 error => 'days_in_advance cannot be defined for '.
                 $attr->message_name . '.',
                 message_name => $attr->message_name,
             );
         }
         elsif ($self->days_in_advance < 0 || $self->days_in_advance > 30) {
-            Koha::Exceptions::Patron::Message::Preference::DaysInAdvanceOutOfRange->throw(
+            Koha::Exceptions::Patron::MessagePreference::DaysInAdvanceOutOfRange->throw(
                 error => 'days_in_advance has to be a value between 0-30 for '.
                 $attr->message_name . '.',
                 message_name => $attr->message_name,
@@ -386,18 +386,18 @@ sub validate {
         }
     }
     if (defined $self->wants_digest) {
-        my $transports = Koha::Patron::Message::Transports->search({
+        my $transports = Koha::Patron::MessagePreference::Transports->search({
             message_attribute_id => $self->message_attribute_id,
             is_digest            => $self->wants_digest ? 1 : 0,
         });
         unless ($transports->count) {
             if (!$self->wants_digest) {
-                Koha::Exceptions::Patron::Message::Preference::DigestRequired->throw(
+                Koha::Exceptions::Patron::MessagePreference::DigestRequired->throw(
                     error => 'Digest must be selected for '.$attr->message_name.'.',
                     message_name => $attr->message_name
                 );
             } else {
-                Koha::Exceptions::Patron::Message::Preference::DigestNotAvailable->throw(
+                Koha::Exceptions::Patron::MessagePreference::DigestNotAvailable->throw(
                     error => 'Digest cannot be selected for '.$attr->message_name.'.',
                     message_name => $attr->message_name
                 );
@@ -419,12 +419,12 @@ sub _set_message_transport_types {
     $self->_validate_message_transport_types({ message_transport_types => $types });
     foreach my $type (@$types) {
         unless (exists $self->{'_message_transport_types'}->{$type}) {
-            my $transport = Koha::Patron::Message::Transports->search({
+            my $transport = Koha::Patron::MessagePreference::Transports->search({
                 message_attribute_id => $self->message_attribute_id,
                 message_transport_type => $type
             })->next;
             unless ($transport) {
-                Koha::Exceptions::Patron::Message::Preference::NoTransportType->throw(
+                Koha::Exceptions::Patron::MessagePreference::NoTransportType->throw(
                     error => 'No transport configured for '.$self->message_name.
                         " transport type $type.",
                     message_name => $self->message_name,
@@ -433,25 +433,25 @@ sub _set_message_transport_types {
             }
             if (defined $self->borrowernumber) {
                 if ( ! $self->mtt_deliverable($type) ) {
-                    Koha::Exceptions::Patron::Message::Preference::EmailAddressRequired->throw(
+                    Koha::Exceptions::Patron::MessagePreference::EmailAddressRequired->throw(
                         error => 'Patron has not set email address, '.
                                   'cannot use email as message transport',
                         message_name => $self->message_name,
                         borrowernumber => $self->borrowernumber,
                     ) if $type eq 'email';
-                    Koha::Exceptions::Patron::Message::Preference::TalkingTechItivaPhoneNotificationRequired->throw(
+                    Koha::Exceptions::Patron::MessagePreference::TalkingTechItivaPhoneNotificationRequired->throw(
                         error => 'System preference TalkingTechItivaPhoneNotification disabled'.
                                  'cannot use itiva as message transport',
                         message_name => $self->message_name,
                         borrowernumber => $self->borrowernumber,
                     ) if $type eq 'itiva';
-                    Koha::Exceptions::Patron::Message::Preference::PhoneNumberRequired->throw(
+                    Koha::Exceptions::Patron::MessagePreference::PhoneNumberRequired->throw(
                         error => 'Patron has not set phone number'.
                                  'cannot use phone as message transport',
                         message_name => $self->message_name,
                         borrowernumber => $self->borrowernumber,
                     ) if $type eq 'phone';
-                    Koha::Exceptions::Patron::Message::Preference::SMSNumberRequired->throw(
+                    Koha::Exceptions::Patron::MessagePreference::SMSNumberRequired->throw(
                         error => 'Patron has not set SMS number'.
                                  'cannot use sms as message transport',
                         message_name => $self->message_name,
@@ -476,10 +476,10 @@ sub _validate_message_transport_types {
         my $types = $params->{'message_transport_types'};
 
         foreach my $type (@{$types}) {
-            unless (Koha::Patron::Message::Transport::Types->find({
+            unless (Koha::Patron::MessagePreference::Transport::Types->find({
                 message_transport_type => $type
             })) {
-                Koha::Exceptions::Patron::Message::Transport::TypeNotFound->throw(
+                Koha::Exceptions::Patron::MessagePreference::Transport::TypeNotFound->throw(
                     error => "Message transport type '$type' does not exist",
                     transport_type => $type,
                 );

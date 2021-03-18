@@ -24,8 +24,8 @@ use Test::More tests => 2;
 use t::lib::TestBuilder;
 
 use Koha::Notice::Templates;
-use Koha::Patron::Message::Attributes;
-use Koha::Patron::Message::Transport::Types;
+use Koha::Patron::MessagePreference::Attributes;
+use Koha::Patron::MessagePreference::Transport::Types;
 
 my $schema  = Koha::Database->new->schema;
 my $builder = t::lib::TestBuilder->new;
@@ -33,22 +33,22 @@ my $builder = t::lib::TestBuilder->new;
 subtest 'Test class imports' => sub {
     plan tests => 2;
 
-    use_ok('Koha::Patron::Message::Transport');
-    use_ok('Koha::Patron::Message::Transports');
+    use_ok('Koha::Patron::MessagePreference::Transport');
+    use_ok('Koha::Patron::MessagePreference::Transports');
 };
 
-subtest 'Test Koha::Patron::Message::Transports' => sub {
+subtest 'Test Koha::Patron::MessagePreference::Transports' => sub {
     plan tests => 2;
 
     $schema->storage->txn_begin;
 
-    my $attribute = $builder->build_object({ class => 'Koha::Patron::Message::Attributes' });
-    my $mtt       = $builder->build_object({ class => 'Koha::Patron::Message::Transport::Types' });
+    my $attribute = $builder->build_object({ class => 'Koha::Patron::MessagePreference::Attributes' });
+    my $mtt       = $builder->build_object({ class => 'Koha::Patron::MessagePreference::Transport::Types' });
     my $letter    = build_a_test_letter({
         mtt => $mtt->message_transport_type
     });
 
-    my $transport = Koha::Patron::Message::Transport->new({
+    my $transport = Koha::Patron::MessagePreference::Transport->new({
         message_attribute_id   => $attribute->message_attribute_id,
         message_transport_type => $mtt->message_transport_type,
         is_digest              => 0,
@@ -60,7 +60,7 @@ subtest 'Test Koha::Patron::Message::Transports' => sub {
        'Added a new messaging transport.');
 
     $transport->delete;
-    is(Koha::Patron::Message::Transports->search({
+    is(Koha::Patron::MessagePreference::Transports->search({
         message_attribute_id => $attribute->message_attribute_id,
         message_transport_type => $mtt->message_transport_type,
         is_digest => 0

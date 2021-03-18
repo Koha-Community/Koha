@@ -28,26 +28,26 @@ my $schema  = Koha::Database->new->schema;
 subtest 'Test class imports' => sub {
     plan tests => 2;
 
-    use_ok('Koha::Patron::Message::Attribute');
-    use_ok('Koha::Patron::Message::Attributes');
+    use_ok('Koha::Patron::MessagePreference::Attribute');
+    use_ok('Koha::Patron::MessagePreference::Attributes');
 };
 
-subtest 'Test Koha::Patron::Message::Attributes' => sub {
+subtest 'Test Koha::Patron::MessagePreference::Attributes' => sub {
     plan tests => 6;
 
     $schema->storage->txn_begin;
 
-    Koha::Patron::Message::Attribute->new({
+    Koha::Patron::MessagePreference::Attribute->new({
         message_name => 'Test_Attribute'
     })->store;
-    Koha::Patron::Message::Attribute->new({
+    Koha::Patron::MessagePreference::Attribute->new({
         message_name => 'Test_Attribute2',
         takes_days   => 1
     })->store;
 
-    my $attribute  = Koha::Patron::Message::Attributes->find({
+    my $attribute  = Koha::Patron::MessagePreference::Attributes->find({
         message_name => 'Test_Attribute' });
-    my $attribute2 = Koha::Patron::Message::Attributes->find({
+    my $attribute2 = Koha::Patron::MessagePreference::Attributes->find({
         message_name => 'Test_Attribute2' });
 
     is($attribute->message_name, 'Test_Attribute',
@@ -61,10 +61,10 @@ subtest 'Test Koha::Patron::Message::Attributes' => sub {
 
     $attribute->delete;
     $attribute2->delete;
-    is(Koha::Patron::Message::Attributes->find({
+    is(Koha::Patron::MessagePreference::Attributes->find({
         message_name => 'Test_Attribute' }), undef,
        'Deleted the first message attribute.');
-    is(Koha::Patron::Message::Attributes->find({
+    is(Koha::Patron::MessagePreference::Attributes->find({
         message_name => 'Test_Attribute2' }), undef,
        'Deleted the second message attribute.');
 

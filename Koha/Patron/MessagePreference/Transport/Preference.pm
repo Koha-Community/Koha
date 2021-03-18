@@ -1,4 +1,4 @@
-package Koha::Patron::Message::Transports;
+package Koha::Patron::MessagePreference::Transport::Preference;
 
 # Copyright Koha-Suomi Oy 2016
 #
@@ -20,13 +20,13 @@ package Koha::Patron::Message::Transports;
 use Modern::Perl;
 
 use Koha::Database;
-use Koha::Patron::Message::Transport;
 
-use base qw(Koha::Objects);
+use base qw(Koha::Object);
 
 =head1 NAME
 
-Koha::Patron::Message::Transports - Koha Patron Message Transports object class
+Koha::Patron::MessagePreference::Transport::Preference - Koha Patron Message Transport
+Preference object class
 
 =head1 API
 
@@ -34,22 +34,12 @@ Koha::Patron::Message::Transports - Koha Patron Message Transports object class
 
 =cut
 
-=head2 Internal Methods
-
-=head3 _type
+=head3 type
 
 =cut
 
 sub _type {
-    return 'MessageTransport';
-}
-
-=head3 object_class
-
-=cut
-
-sub object_class {
-    return 'Koha::Patron::Message::Transport';
+    return 'BorrowerMessageTransportPreference';
 }
 
 =head1 AUTHOR

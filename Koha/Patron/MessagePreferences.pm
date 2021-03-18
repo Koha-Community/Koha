@@ -1,4 +1,4 @@
-package Koha::Patron::Message::Preferences;
+package Koha::Patron::MessagePreferences;
 
 # Copyright Koha-Suomi Oy 2016
 #
@@ -20,15 +20,15 @@ package Koha::Patron::Message::Preferences;
 use Modern::Perl;
 
 use Koha::Database;
-use Koha::Patron::Message::Attributes;
-use Koha::Patron::Message::Preference;
-use Koha::Patron::Message::Transports;
+use Koha::Patron::MessagePreference::Attributes;
+use Koha::Patron::MessagePreference;
+use Koha::Patron::MessagePreference::Transports;
 
 use base qw(Koha::Objects);
 
 =head1 NAME
 
-Koha::Patron::Message::Preferences - Koha Patron Message Preferences object class
+Koha::Patron::MessagePreferences - Koha Patron Message Preferences object class
 
 =head1 API
 
@@ -38,7 +38,7 @@ Koha::Patron::Message::Preferences - Koha Patron Message Preferences object clas
 
 =head3 find_with_message_name
 
-Koha::Patron::Message::Preferences->find_with_message_name({
+Koha::Patron::MessagePreferences->find_with_message_name({
     borrowernumber => 123,
     message_name => 'Hold_Filled',
 });
@@ -51,7 +51,7 @@ sub find_with_message_name {
     my ($self, $id) = @_;
 
     if (ref($id) eq "HASH" && $id->{'message_name'}) {
-        my $attr = Koha::Patron::Message::Attributes->find({
+        my $attr = Koha::Patron::MessagePreference::Attributes->find({
             message_name => $id->{'message_name'},
         });
         $id->{'message_attribute_id'} = ($attr) ?
@@ -64,7 +64,7 @@ sub find_with_message_name {
 
 =head3 get_options
 
-my $messaging_options = Koha::Patron::Message::Preferences->get_options
+my $messaging_options = Koha::Patron::MessagePreferences->get_options
 
 Returns an ARRAYref of HASHrefs on available messaging options.
 
@@ -73,7 +73,7 @@ Returns an ARRAYref of HASHrefs on available messaging options.
 sub get_options {
     my ($self) = @_;
 
-    my $transports = Koha::Patron::Message::Transports->search(undef,
+    my $transports = Koha::Patron::MessagePreference::Transports->search(undef,
         {
             join => ['message_attribute'],
             '+select' => ['message_attribute.message_name', 'message_attribute.takes_days'],
@@ -99,13 +99,13 @@ sub get_options {
 
 =head3 search_with_message_name
 
-Koha::Patron::Message::Preferences->search_with_message_name({
+Koha::Patron::MessagePreferences->search_with_message_name({
     borrowernumber => 123,
     message_name => 'Hold_Filled',
 });
 
 Converts C<message_name> into C<message_attribute_id> and continues search. Use
-Koha::Patron::Message::Preferences->search with a proper join for more complicated
+Koha::Patron::MessagePreferences->search with a proper join for more complicated
 searches.
 
 =cut
@@ -114,7 +114,7 @@ sub search_with_message_name {
     my ($self, $params, $attributes) = @_;
 
     if (ref($params) eq "HASH" && $params->{'message_name'}) {
-        my $attr = Koha::Patron::Message::Attributes->find({
+        my $attr = Koha::Patron::MessagePreference::Attributes->find({
             message_name => $params->{'message_name'},
         });
         $params->{'message_attribute_id'} = ($attr) ?
@@ -138,7 +138,7 @@ sub _type {
 =cut
 
 sub object_class {
-    return 'Koha::Patron::Message::Preference';
+    return 'Koha::Patron::MessagePreference';
 }
 
 =head1 AUTHOR
