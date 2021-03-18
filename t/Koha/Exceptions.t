@@ -220,7 +220,7 @@ subtest 'Koha::Exceptions::Patron::Attribute::* tests' => sub {
     # stringify the exception
     is(
         "$@",
-        "Tried to add more than one non-repeatable attributes. code=$code attribute=$attribute",
+        "Tried to add more than one non-repeatable attributes. type=$code value=$attribute",
         'Exception stringified correctly'
     );
 
@@ -244,7 +244,7 @@ subtest 'Koha::Exceptions::Patron::Attribute::* tests' => sub {
     # stringify the exception
     is(
         "$@",
-        "Your action breaks a unique constraint on the attribute. code=$code attribute=$attribute",
+        "Your action breaks a unique constraint on the attribute. type=$code value=$attribute",
         'Exception stringified correctly'
     );
 

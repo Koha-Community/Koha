@@ -91,9 +91,9 @@ subtest 'store() tests' => sub {
 
         is(
             "$@",
-            "Tried to add more than one non-repeatable attributes. code="
+            "Tried to add more than one non-repeatable attributes. type="
             . $attribute_type_2->{code}
-            . " attribute=Bar",
+            . " value=Bar",
             'Exception stringified correctly, attribute passed correctly'
         );
 
@@ -164,9 +164,9 @@ subtest 'store() tests' => sub {
 
         is(
             "$@",
-            "Your action breaks a unique constraint on the attribute. code="
+            "Your action breaks a unique constraint on the attribute. type="
             . $attribute_type_2->{code}
-            . " attribute=Foo",
+            . " value=Foo",
             'Exception stringified correctly, attribute passed correctly'
         );
 

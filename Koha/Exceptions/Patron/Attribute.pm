@@ -32,14 +32,14 @@ sub full_message {
     unless ( $msg) {
         if ( $self->isa('Koha::Exceptions::Patron::Attribute::NonRepeatable') ) {
             $msg = sprintf(
-                "Tried to add more than one non-repeatable attributes. code=%s attribute=%s",
+                "Tried to add more than one non-repeatable attributes. type=%s value=%s",
                 $self->attribute->code,
                 $self->attribute->attribute
             );
         }
         elsif ( $self->isa('Koha::Exceptions::Patron::Attribute::UniqueIDConstraint') ) {
             $msg = sprintf(
-                "Your action breaks a unique constraint on the attribute. code=%s attribute=%s",
+                "Your action breaks a unique constraint on the attribute. type=%s value=%s",
                 $self->attribute->code,
                 $self->attribute->attribute
             );
