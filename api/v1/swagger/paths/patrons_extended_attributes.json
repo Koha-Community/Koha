@@ -1,0 +1,318 @@
+{
+  "/patrons/{patron_id}/extended_attributes": {
+    "get": {
+      "x-mojo-to": "Patrons::Attributes#list_patron_attributes",
+      "operationId": "getPatronAttributes",
+      "tags": [
+        "patrons",
+        "extended_attributes"
+      ],
+      "parameters": [
+        {
+          "$ref": "../parameters.json#/patron_id_pp"
+        },
+        {
+          "$ref": "../parameters.json#/match"
+        },
+        {
+          "$ref": "../parameters.json#/order_by"
+        },
+        {
+          "$ref": "../parameters.json#/page"
+        },
+        {
+          "$ref": "../parameters.json#/per_page"
+        },
+        {
+          "$ref": "../parameters.json#/q_param"
+        },
+        {
+          "$ref": "../parameters.json#/q_body"
+        },
+        {
+          "$ref": "../parameters.json#/q_header"
+        }
+      ],
+      "produces": [
+        "application/json"
+      ],
+      "responses": {
+        "200": {
+          "description": "The patron extended attributes",
+          "schema": {
+            "type": "array",
+            "items": {
+              "$ref": "../definitions.json#/patron_extended_attribute"
+            }
+          }
+        },
+        "401": {
+          "description": "Authentication required",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "403": {
+          "description": "Access forbidden",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "404": {
+          "description": "Patron not found",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "500": {
+          "description": "Internal server error",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "503": {
+          "description": "Under maintenance",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        }
+      },
+      "x-koha-authorization": {
+        "permissions": {
+          "catalogue": "1"
+        }
+      }
+    },
+    "post": {
+      "x-mojo-to": "Patrons::Attributes#add",
+      "operationId": "addPatronAttribute",
+      "tags": [
+        "patrons",
+        "extended_attributes"
+      ],
+      "parameters": [
+        {
+          "$ref": "../parameters.json#/patron_id_pp"
+        },
+        {
+          "name": "body",
+          "in": "body",
+          "description": "A JSON representation of the patron extended attribute",
+          "required": true,
+          "schema": {
+            "$ref": "../definitions.json#/patron_extended_attribute"
+          }
+        }
+      ],
+      "produces": [
+        "application/json"
+      ],
+      "responses": {
+        "201": {
+          "description": "A successfully created patron extended attribute",
+          "schema": {
+            "$ref": "../definitions.json#/patron_extended_attribute"
+          }
+        },
+        "400": {
+          "description": "Bad parameter",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "401": {
+          "description": "Authentication required",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "403": {
+          "description": "Access forbidden",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "404": {
+          "description": "Patron not found",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "409": {
+          "description": "Conflict in creating resource",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "500": {
+          "description": "Internal server error",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "503": {
+          "description": "Under maintenance",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        }
+      },
+      "x-koha-authorization": {
+        "permissions": {
+          "borrowers": "edit_borrowers"
+        }
+      }
+    },
+    "put": {
+      "x-mojo-to": "Patrons::Attributes#overwrite",
+      "operationId": "overwritePatronAttributes",
+      "tags": [
+        "patrons",
+        "extended_attributes"
+      ],
+      "parameters": [
+        {
+          "$ref": "../parameters.json#/patron_id_pp"
+        },
+        {
+          "name": "body",
+          "in": "body",
+          "description": "A JSON representation of the patron extended attribute",
+          "required": true,
+          "schema": {
+            "type": "array",
+            "items": {
+              "$ref": "../definitions.json#/patron_extended_attribute"
+            }
+          }
+        }
+      ],
+      "produces": [
+        "application/json"
+      ],
+      "responses": {
+        "200": {
+          "description": "The successfully created patron extended attributes",
+          "schema": {
+            "type": "array",
+            "items": {
+              "$ref": "../definitions.json#/patron_extended_attribute"
+            }
+          }
+        },
+        "400": {
+          "description": "Bad parameters",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "401": {
+          "description": "Authentication required",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "403": {
+          "description": "Access forbidden",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "404": {
+          "description": "Patron not found",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "409": {
+          "description": "Conflict in creating resource",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "500": {
+          "description": "Internal server error",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "503": {
+          "description": "Under maintenance",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        }
+      },
+      "x-koha-authorization": {
+        "permissions": {
+          "borrowers": "edit_borrowers"
+        }
+      }
+    }
+  },
+  "/patrons/{patron_id}/extended_attributes/{extended_attribute_id}": {
+    "delete": {
+      "x-mojo-to": "Patrons::Attributes#delete",
+      "operationId": "deletePatronAttribute",
+      "tags": [
+        "patrons",
+        "extended_attributes"
+      ],
+      "parameters": [
+        {
+          "$ref": "../parameters.json#/patron_id_pp"
+        },
+        {
+          "name": "extended_attribute_id",
+          "in": "path",
+          "description": "Internal patron extended attribute identifier",
+          "type": "integer",
+          "required": true
+        }
+      ],
+      "produces": [
+        "application/json"
+      ],
+      "responses": {
+        "204": {
+          "description": "Extended patron attribute deleted"
+        },
+        "401": {
+          "description": "Authentication required",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "403": {
+          "description": "Access forbidden",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "404": {
+          "description": "Patron not found",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "500": {
+          "description": "Internal server error",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "503": {
+          "description": "Under maintenance",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        }
+      },
+      "x-koha-authorization": {
+        "permissions": {
+          "borrowers": "edit_borrowers"
+        }
+      }
+    }
+  }
+}
