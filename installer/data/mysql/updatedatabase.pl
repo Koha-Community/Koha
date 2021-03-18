@@ -23728,6 +23728,17 @@ if( CheckVersion( $DBversion ) ) {
     NewVersion( $DBversion, 18532, 'Messaging preferences for auto renewals' );
 }
 
+$DBversion = '20.12.00.025';
+if( CheckVersion( $DBversion ) ) {
+
+    $dbh->do(q|
+        INSERT IGNORE INTO systempreferences (variable,value,options,explanation,type)
+        VALUES ('ChargeFinesOnClosedDays', '0', NULL, 'Charge fines on days the library is closed.', 'YesNo')
+    |);
+
+    NewVersion( $DBversion, 27835, "Add new system preference ChargeFinesOnClosedDays");
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 my $update_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/atomicupdate/';
