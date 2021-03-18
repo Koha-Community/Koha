@@ -416,7 +416,7 @@ sub cancel {
                 {
                     credit_id => $cancellation->accountlines_id,
                     type      => 'CREATE',
-                    amount    => $self->amount
+                    amount    => 0 - $self->amount
                 }
             )->store();
 
@@ -535,7 +535,7 @@ sub reduce {
                 {
                     credit_id => $reduction->accountlines_id,
                     type      => 'CREATE',
-                    amount    => $params->{amount}
+                    amount    => 0 - $params->{amount}
                 }
             )->store();
 
