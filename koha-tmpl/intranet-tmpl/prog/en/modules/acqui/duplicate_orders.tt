@@ -124,13 +124,9 @@ Basket [% basket.basketno | html %] &rsaquo; Duplicate existing orders
             <br />[% order.author | html %] <br /> [% order.isbn | html %]
         </td>
         <td><a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% order.id | uri %]">[% order.name | html %]</a></td>
-        <td><span title="[% order.creationdate | html %]">[% order.creationdate | $KohaDates %]</span></td>
-        <td>
-            [% IF order.datereceived %]
-                <span title="[% order.datereceived | html %]">[% order.datereceived | $KohaDates %]</span>
-            [% ELSE %]
-                <span title="0000-00-00"></span>
-            [% END %]
+        <td data-order="[% order.creationdate | html %]">[% order.creationdate | $KohaDates %]</td>
+        <td data-order="[% order.datereceived | html %]">
+            [% order.datereceived | $KohaDates %]
         </td>
         <td>[% order.quantityreceived | html %]</td>
         <td>[% order.quantity | html %]</td>
@@ -159,8 +155,8 @@ Basket [% basket.basketno | html %] &rsaquo; Duplicate existing orders
                     <th>Invoice number</th>
                     <th class="anti-the">Summary</th>
                     <th>Vendor</th>
-                    <th class="title-string">Placed on</th>
-                    <th class="title-string">Received on</th>
+                    <th>Placed on</th>
+                    <th>Received on</th>
                     <th>Quantity received</th>
                     <th>Quantity ordered</th>
                     <th>Unit cost</th>
@@ -280,8 +276,8 @@ Basket [% basket.basketno | html %] &rsaquo; Duplicate existing orders
                     <th>Invoice number</th>
                     <th class="anti-the">Summary</th>
                     <th>Vendor</th>
-                    <th class="title-string">Placed on</th>
-                    <th class="title-string">Received on</th>
+                    <th>Placed on</th>
+                    <th>Received on</th>
                     <th>Quantity received</th>
                     <th>Quantity ordered</th>
                     <th>Unit cost</th>

@@ -455,8 +455,8 @@
                          <td><a href="/cgi-bin/koha/acqui/invoice-files.pl?invoiceid=[% invoiceid | uri %]&amp;op=download&amp;view=1&amp;file_id=[% f.file_id | uri %]">[% f.file_name | html %]</a></td>
                          <td>[% f.file_type | html %]</td>
                          <td>[% f.file_description | html %]</td>
-                         <td class="title-string">
-                           <span title="[% f.date_uploaded | html %]">[% f.date_uploaded | $KohaDates %]</span>
+                         <td data-order="[% f.date_uploaded | html %]">
+                            [% f.date_uploaded | $KohaDates %]
                          </td>
                     </tr>
                 [% END %]

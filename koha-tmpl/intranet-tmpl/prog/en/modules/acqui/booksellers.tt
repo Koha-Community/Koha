@@ -99,13 +99,13 @@
                                 <tr>
                                     <th>No.</th>
                                     <th>Name</th>
-                                    <th class="title-numeric">Item count</th>
-                                    <th class="title-numeric">Bibliographic record count</th>
+                                    <th>Item count</th>
+                                    <th>Bibliographic record count</th>
                                     <th>Items expected</th>
                                     <th>[% tp('basket created by', 'Created by') | html %]</th>
-                                    <th class="title-string">Date</th>
+                                    <th>Date</th>
                                     <th>Basket group</th>
-                                    <th class="title-string">Closed</th>
+                                    <th>Closed</th>
                                     <th class="noExport">Actions</th>
                                 </tr>
                             </thead>
@@ -118,19 +118,17 @@
                                     [% END %]
                                         <td>[% basket.basketno | html %]</td>
                                         <td><a href="/cgi-bin/koha/acqui/basket.pl?basketno=[% basket.basketno | uri %]">[% basket.basketname | html %]</a></td>
-                                        <td>
-                                            <span title="[% basket.total_items | html %]">[% basket.total_items | html %]
-                                                [% IF basket.total_items_cancelled %]
-                                                    ([% basket.total_items_cancelled | html %] cancelled)
-                                                [% END %]
-                                            </span>
+                                        <td data-order="[% basket.total_items | html %]">
+                                            [% basket.total_items | html %]
+                                            [% IF basket.total_items_cancelled %]
+                                                ([% basket.total_items_cancelled | html %] cancelled)
+                                            [% END %]
                                         </td>
-                                        <td>
-                                            <span title="[% basket.total_biblios | html %]">[% basket.total_biblios | html %]
-                                                [% IF basket.total_biblios_cancelled %]
-                                                    ([% basket.total_biblios_cancelled | html %] cancelled)
-                                                [% END %]
-                                            </span>
+                                        <td data-order="[% basket.total_biblios | html %]">
+                                            [% basket.total_biblios | html %]
+                                            [% IF basket.total_biblios_cancelled %]
+                                                ([% basket.total_biblios_cancelled | html %] cancelled)
+                                            [% END %]
                                         </td>
                                         <td>[% basket.expected_items | html %]</td>
                                         <td>
@@ -139,7 +137,7 @@
                                                 [% basket.authorisedby.surname | html %]
                                             [% END %]
                                         </td>
-                                        <td><span title="[% basket.creationdate | html %]">[% basket.creationdate | $KohaDates %]</span></td>
+                                        <td data-order="[% basket.creationdate | html %]">[% basket.creationdate | $KohaDates %]</td>
                                         <td>
                                           [% IF basket.basketgroup %]
                                             [% basketgroup = basket.basketgroup %]
@@ -150,12 +148,8 @@
                                             [% END %]
                                           [% END %]
                                         </td>
-                                        <td>
-                                            [% IF ( basket.closedate ) %]
-                                                <span title="[% basket.closedate | html %]">[% basket.closedate | $KohaDates %]</span>
-                                            [% ELSE %]
-                                                <span title="9999-99-99"></span>
-                                            [% END %]
+                                        <td data-order="[% basket.closedate | html %]">
+                                            [% basket.closedate | $KohaDates %]
                                         </td>
                                         <td class="actions">
                                         [% IF not basket.closedate and supplier.active %]
@@ -229,8 +223,6 @@
                 'bInfo': false,
                 "aaSorting": [[ 1, "asc" ]],
                 "aoColumnDefs": [
-                    { "sType": "title-string", "aTargets" : [ "title-string" ] },
-                    { "sType": "title-numeric", "aTargets" : [ "title-numeric" ] },
                     { 'aTargets': [-1], 'bSortable': false }
                 ]
             }));

@@ -51,8 +51,8 @@
                 <th>&nbsp;</th>
                 <th>Invoice no.</th>
                 <th>Vendor</th>
-                <th class="title-string">Shipment date</th>
-                <th class="title-string">Billing date</th>
+                <th>Shipment date</th>
+                <th>Billing date</th>
                 <th>Received bibliographic records</th>
                 <th>Received items</th>
                 <th>Status</th>
@@ -68,19 +68,11 @@
                   <td><input type="checkbox" class="select-invoice" value="[% invoice.invoiceid | html %]" /></td>
                   <td><a href="/cgi-bin/koha/acqui/invoice.pl?invoiceid=[% invoice.invoiceid | uri %]">[% invoice.invoicenumber | html %]</a></td>
                   <td><a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% invoice.booksellerid | uri %]">[% invoice.suppliername | html %]</a></td>
-                  <td>
-                    [% IF invoice.shipmentdate %]
-                      <span title="[% invoice.shipmentdate | html %]">[% invoice.shipmentdate | $KohaDates %]</span>
-                    [% ELSE %]
-                      <span title="0000-00-00"></span>
-                    [% END %]
+                  <td data-order="[% invoice.shipmentdate | html %]">
+                      [% invoice.shipmentdate | $KohaDates %]
                   </td>
-                  <td>
-                    [% IF invoice.billingdate %]
-                      <span title="[% invoice.billingdate | html %]">[% invoice.billingdate | $KohaDates %]</span>
-                    [% ELSE %]
-                      <span title="0000-00-00"></span>
-                    [% END %]
+                  <td data-order="[% invoice.billingdate | html %]">
+                      [% invoice.billingdate | $KohaDates %]
                   </td>
                   <td>[% invoice.receivedbiblios | html %]</td>
                   <td>[% invoice.receiveditems | html %]</td>

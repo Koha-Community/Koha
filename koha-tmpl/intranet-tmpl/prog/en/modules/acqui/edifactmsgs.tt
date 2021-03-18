@@ -41,7 +41,7 @@
 <thead>
 <tr>
 <th>Type</th>
-<th class="title-string">Transferred</th>
+<th>Transferred</th>
 <th>Status</th>
 <th>Vendor</th>
 <th>Details</th>
@@ -53,7 +53,7 @@
 [% FOREACH msg IN messages %]
 <tr>
 <td>[% msg.message_type | html %]</td>
-<td><span title="[% msg.transfer_date | html %]">[% msg.transfer_date | $KohaDates %]</span></td>
+<td data-order="[% msg.transfer_date | html %]">[% msg.transfer_date | $KohaDates %]</td>
 <td>[% msg.status | html %]</td>
 <td>
     <a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% msg.vendor_id | uri %]">
@@ -132,8 +132,7 @@
                 'aaSorting': [[1, "desc" ]],
                 'sPaginationType': "full",
                 "aoColumnDefs": [
-                    { "aTargets": [ -1 ], "bSortable": false, "bSearchable": false },
-                    { "sType": "title-string", "aTargets" : [ "title-string" ] }
+                    { "aTargets": [ -1 ], "bSortable": false, "bSearchable": false }
                 ]
             }));
 
