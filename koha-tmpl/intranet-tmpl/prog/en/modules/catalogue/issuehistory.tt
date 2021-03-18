@@ -58,9 +58,9 @@
             <th>Checked out by</th>
             [% END %]
             <th>Renewed</th>
-            <th class='title-string'>Checkout on</th>
-            <th class='title-string'>Due date</th>
-            <th class='title-string'>Checkin on</th>
+            <th>Checkout on</th>
+            <th>Due date</th>
+            <th>Checkin on</th>
             </tr></thead>
             <tbody>
         [% FOREACH checkout IN checkouts %]
@@ -96,21 +96,15 @@
                     [% ELSE %]
                         No
                     [% END %]</td>
-                <td>[% IF checkout.issuedate %]
-                        <span title="[% checkout.issuedate | html %]">[% checkout.issuedate |$KohaDates  with_hours => 1 %]</span>
-                    [% ELSE %]
-                        <span title="0000-00-00"></span>
-                    [% END %]</td>
-                <td>[% IF checkout.date_due %]
-                        <span title="[% checkout.date_due | html %]">[% checkout.date_due |$KohaDates  with_hours => 1 %]</span>
-                    [% ELSE %]
-                        <span title="0000-00-00"></span>
-                    [% END %]</td>
-                <td>[% IF checkout.returndate %]
-                        <span title="[% checkout.returndate | html %]">[% checkout.returndate |$KohaDates  with_hours => 1 %]</span>
-                    [% ELSE %]
-                        <span title="Checked out"><small>Checked out</small></span>
-                    [% END %]</td>
+                <td data-order="[% checkout.issuedate | html %]">
+                    [% checkout.issuedate |$KohaDates  with_hours => 1 %]
+                </td>
+                <td data-order="[% checkout.date_due | html %]">
+                    [% checkout.date_due |$KohaDates  with_hours => 1 %]
+                </td>
+                <td data-order="[% checkout.returndate | html %]">
+                    [% checkout.returndate |$KohaDates  with_hours => 1 %]
+                </td>
            </tr>
         [% END %]
         </tbody>

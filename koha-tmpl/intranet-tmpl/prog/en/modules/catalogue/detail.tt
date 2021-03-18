@@ -316,16 +316,12 @@
                 [% IF ( itemdata_ccode ) %]<th id="[% tab | html %]_ccode" data-colname="[% tab | html %]_ccode">Collection</th>[% END %]
                 <th id="[% tab | html %]_itemcallnumber" data-colname="[% tab | html %]_itemcallnumber">Call number</th>
                 [% IF volinfo %]
-                [% IF itemdata_publisheddate #If there is at least one published date, use it for sorting%]
-                        <th id="[% tab | html %]_enumchron" data-colname="[% tab | html %]_enumchron" class="title-string">Serial enumeration / chronology</th>
-                    [% ELSE %]
-                        <th id="[% tab | html %]_enumchron" data-colname="[% tab | html %]_enumchron">Serial enumeration / chronology</th>
-                    [% END %]
+                    <th id="[% tab | html %]_enumchron" data-colname="[% tab | html %]_enumchron">Serial enumeration / chronology</th>
                 [% END %]
                 <th id="[% tab | html %]_status" data-colname="[% tab | html %]_status">Status</th>
-                <th id="[% tab | html %]_lastseen" data-colname="[% tab | html %]_lastseen" class="title-string">Last seen</th>
-                <th id="[% tab | html %]_dateaccessioned" data-colname="[% tab | html %]_dateaccessioned" class="title-string">Date accessioned</th>
-                <th id="[% tab | html %]_datelastborrowed" data-colname="[% tab | html %]_datelastborrowed" class="title-string">Date last borrowed</th>
+                <th id="[% tab | html %]_lastseen" data-colname="[% tab | html %]_lastseen">Last seen</th>
+                <th id="[% tab | html %]_dateaccessioned" data-colname="[% tab | html %]_dateaccessioned">Date accessioned</th>
+                <th id="[% tab | html %]_datelastborrowed" data-colname="[% tab | html %]_datelastborrowed">Date last borrowed</th>
                 <th id="[% tab | html %]_barcode" data-colname="[% tab | html %]_barcode">Barcode</th>
                 [% IF ( itemdata_uri ) %]<th id="[% tab | html %]_uri" data-colname="[% tab | html %]_uri">URL</th>[% END %]
                 [% IF ( itemdata_copynumber ) %]<th id="[% tab | html %]_copynumber" data-colname="[% tab | html %]_copynumber">Copy number</th>[% END %]
@@ -394,8 +390,7 @@ Note that permanent location is a code, and location may be an authval.
                     [% IF ( itemdata_ccode ) %]<td>[% item.ccode | html %]</td>[% END %]
                     <td class="itemcallnumber">[% IF ( item.itemcallnumber ) %] [% item.itemcallnumber | html %][% END %]</td>
                     [% IF ( volinfo ) %]
-                        <td class="enumchron">
-                            [% IF itemdata_publisheddate %]<span title="[% item.publisheddate | html %]">[% END %]
+                        <td class="enumchron" data-order="[% item.publisheddate | html %]">
                             [% IF ( itemdata_enumchron ) %]
                                 [% IF item.enumchron && item.serialseq %]
                                     <span class="enum">[% item.enumchron | html %]</span>
@@ -502,9 +497,9 @@ Note that permanent location is a code, and location may be an authval.
                         [% END %]
 
                     </td>
-                    <td class="datelastseen"><span title="[% item.datelastseen | html %]">[% item.datelastseen | $KohaDates %]</span></td>
-                    <td class="dateaccessioned"><span title="[% item.dateaccessioned | html %]">[% item.dateaccessioned | $KohaDates %]</span></td>
-                    <td class="datelastborrowed"><span title="[% item.datelastborrowed | html %]">[% item.datelastborrowed | $KohaDates %]</span></td>
+                    <td class="datelastseen" data-order="[% item.datelastseen | html %]">[% item.datelastseen | $KohaDates %]</td>
+                    <td class="dateaccessioned" data-order="[% item.dateaccessioned | html %]">[% item.dateaccessioned | $KohaDates %]</td>
+                    <td class="datelastborrowed" data-order="[% item.datelastborrowed | html %]">[% item.datelastborrowed | $KohaDates %]</td>
                     <td><a href="/cgi-bin/koha/catalogue/moredetail.pl?type=[% item.type | uri %]&amp;itemnumber=[% item.itemnumber | uri %]&amp;biblionumber=[% item.biblionumber | uri %]&amp;bi=[% item.biblioitemnumber | uri %]#item[% item.itemnumber | uri %]">[% item.barcode | html %]</a></td>
                     [% IF ( itemdata_uri ) %]
                         [% IF item.uri.split(' \| ').size > 1 %]
@@ -699,8 +694,8 @@ Note that permanent location is a code, and location may be an authval.
             [% FOREACH latestserial IN subscription.latestserials %]
                 <tr>
                     <td>[% latestserial.serialseq | html %]</td>
-                    <td><span title="[% latestserial.planneddate | html %]">[% latestserial.planneddate | $KohaDates %]</span></td>
-                    <td><span title="[% latestserial.publisheddate | html %]">[% latestserial.publisheddate | $KohaDates %]</span></td>
+                    <td data-order="[% latestserial.planneddate | html %]">[% latestserial.planneddate | $KohaDates %]</td>
+                    <td data-order="[% latestserial.publisheddate | html %]">[% latestserial.publisheddate | $KohaDates %]</td>
                     <td>
                       [% IF ( latestserial.status1 ) %]Expected[% END %]
                       [% IF ( latestserial.status2 ) %]Arrived[% END %]
@@ -737,8 +732,8 @@ Note that permanent location is a code, and location may be an authval.
           <th>Basket group</th>
           <th>Basket</th>
           <th>Order number</th>
-          <th class="title-string">Creation date</th>
-          <th class="title-string">Receive date</th>
+          <th>Creation date</th>
+          <th>Receive date</th>
           <th>Status</th>
           <th>Quantity</th>
           <th title="Estimated cost tax incl. while pending, actual cost tax incl. once received">Price</th>
@@ -782,8 +777,8 @@ Note that permanent location is a code, and location may be an authval.
                 [% basket.basketname | html %] ([% basket.basketno | html %])
             [% END %]</td>
             <td>[% order.ordernumber | html %]</td>
-            <td><span title="[% basket.creationdate | uri %]">[% basket.creationdate | $KohaDates%]</span></td>
-            <td><span title="[% order.datereceived | uri %]">[% order.datereceived | $KohaDates%]</span></td>
+            <td data-order="[% basket.creationdate | uri %]">[% basket.creationdate | $KohaDates%]</td>
+            <td data-order="[% order.datereceived | uri %]">[% order.datereceived | $KohaDates%]</td>
             <td>
               [% SWITCH order.orderstatus %]
                 [% CASE 'new' %]New
