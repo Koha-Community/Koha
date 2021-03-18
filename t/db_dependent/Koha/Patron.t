@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 24;
+use Test::More tests => 25;
 use Test::Exception;
 use Test::Warn;
 
@@ -286,6 +286,57 @@ subtest 'add_enrolment_fee_if_needed() tests' => sub {
 
         $schema->storage->txn_rollback;
     };
+};
+
+subtest 'messaging_preferences() tests' => sub {
+    plan tests => 5;
+
+    $schema->storage->txn_begin;
+
+    my $mtt = $builder->build_object({
+        class => 'Koha::Patron::MessagePreference::Transport::Types'
+    });
+    my $attribute = $builder->build_object({
+        class => 'Koha::Patron::MessagePreference::Attributes'
+    });
+    my $branchcode     = $builder->build({
+        source => 'Branch' })->{branchcode};
+    my $letter = $builder->build_object({
+        class => 'Koha::Notice::Templates',
+        value => {
+            branchcode => '',
+            is_html => 0,
+            message_transport_type => $mtt->message_transport_type
+        }
+    });
+
+    Koha::Patron::MessagePreference::Transport->new({
+        message_attribute_id   => $attribute->message_attribute_id,
+        message_transport_type => $mtt->message_transport_type,
+        is_digest              => 0,
+        letter_module          => $letter->module,
+        letter_code            => $letter->code,
+    })->store;
+
+    my $patron = $builder->build_object({ class => 'Koha::Patrons' });
+
+    my $preference = Koha::Patron::MessagePreference->new({
+        borrowernumber => $patron->borrowernumber,
+        message_attribute_id => $attribute->message_attribute_id,
+        wants_digest => 0,
+        days_in_advance => undef,
+    })->store;
+
+    my $messaging_preferences = $patron->messaging_preferences();
+    is($messaging_preferences->count, 1, 'Found one preference');
+
+    my $messaging_preference = $messaging_preferences->next;
+    is($messaging_preference->borrowernumber, $patron->borrowernumber);
+    is($messaging_preference->message_attribute_id, $attribute->message_attribute_id);
+    is($messaging_preference->wants_digest, 0);
+    is($messaging_preference->days_in_advance, undef);
+
+    $schema->storage->txn_rollback;
 };
 
 subtest 'to_api() tests' => sub {

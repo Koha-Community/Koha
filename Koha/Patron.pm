@@ -681,6 +681,20 @@ sub merge_with {
 }
 
 
+=head3 messaging_preferences
+
+    my $patron = Koha::Patrons->find($id);
+    $patron->messaging_preferences();
+
+=cut
+
+sub messaging_preferences {
+    my ( $self ) = @_;
+
+    return Koha::Patron::MessagePreferences->search({
+        borrowernumber => $self->borrowernumber,
+    });
+}
 
 =head3 wants_check_for_previous_checkout
 
