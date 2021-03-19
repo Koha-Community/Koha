@@ -404,7 +404,7 @@ if($allDebarments) {
 my $days = C4::Context->preference('LockExpiredDelay');
 if( defined $days && $days ne q{} ) {
     say "Start locking expired patrons" if $verbose;
-    my $expired_patrons = Koha::Patrons->search_expired({ days => $days })->search({ login_attempts => { '!=' => -1 } });
+    my $expired_patrons = Koha::Patrons->filter_by_dateexpiry({ days => $days })->search({ login_attempts => { '!=' => -1 } });
     my $count = $expired_patrons->count;
     $expired_patrons->lock({ remove => 1 }) if $confirm;
     if( $verbose ) {
