@@ -616,21 +616,21 @@ subtest 'extended_attributes' => sub {
 
     subtest 'globally mandatory attributes tests' => sub {
 
-        plan tests => 3;
+        plan tests => 5;
 
         my $patron = $builder->build_object({ class => 'Koha::Patrons' });
 
         my $attribute_type_1 = $builder->build_object(
             {
                 class => 'Koha::Patron::Attribute::Types',
-                value => { mandatory => 1 }
+                value => { mandatory => 1, class => 'a' }
             }
         );
 
         my $attribute_type_2 = $builder->build_object(
             {
                 class => 'Koha::Patron::Attribute::Types',
-                value => { mandatory => 0 }
+                value => { mandatory => 0, class => 'a' }
             }
         );
 
@@ -647,7 +647,17 @@ subtest 'extended_attributes' => sub {
             'Koha::Exceptions::Object::FKConstraint',
             'Exception thrown on missing mandatory attribute type';
 
+        is( $@->value, $attribute_type_1->code, 'Exception parameters are correct' );
+
         is( $patron->extended_attributes->count, 0, 'Extended attributes storing rolled back' );
+
+        $patron->extended_attributes(
+            [
+                { code => $attribute_type_1->code, attribute => 'b' }
+            ]
+        );
+
+        is( $patron->extended_attributes->count, 1, 'Extended attributes succeeded' );
     };
 
     $schema->storage->txn_rollback;

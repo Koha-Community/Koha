@@ -1576,7 +1576,7 @@ sub extended_attributes {
                               undef
                         },
                         { join => 'borrower_attribute_types_branches' }
-                    )->get_column('class');
+                    )->get_column('code');
                 for my $type ( @required_attribute_types ) {
                     Koha::Exceptions::Object::FKConstraint->throw(
                         broken_fk => "$type",
