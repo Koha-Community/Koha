@@ -175,7 +175,7 @@ subtest 'is_credit() and is_debit() tests' => sub {
 
 subtest 'apply() tests' => sub {
 
-    plan tests => 26;
+    plan tests => 30;
 
     $schema->storage->txn_begin;
 
@@ -208,10 +208,9 @@ subtest 'apply() tests' => sub {
     $debit_1->discard_changes;
 
     my $debits = Koha::Account::Lines->search({ accountlines_id => $debit_1->id });
-    my $remaining_credit = $credit->apply( { debits => [ $debits->as_list ], offset_type => 'Manual Credit' } );
-    is( $remaining_credit * 1, 90, 'Remaining credit is correctly calculated' );
-    $credit->discard_changes;
-    is( $credit->amountoutstanding * -1, $remaining_credit, 'Remaining credit correctly stored' );
+    $credit = $credit->apply( { debits => [ $debits->as_list ], offset_type => 'Manual Credit' } );
+    is( ref($credit), 'Koha::Account::Line', '->apply returns the updated Koha::Account::Line credit object');
+    is( $credit->amountoutstanding * -1, 90, 'Remaining credit is correctly calculated' );
 
     # re-read debit info
     $debit_1->discard_changes;
@@ -224,10 +223,8 @@ subtest 'apply() tests' => sub {
     is( $THE_offset->type, 'Manual Credit', 'Passed type stored correctly' );
 
     $debits = Koha::Account::Lines->search({ accountlines_id => $debit_2->id });
-    $remaining_credit = $credit->apply( { debits => [ $debits->as_list ] } );
-    is( $remaining_credit, 0, 'No remaining credit left' );
-    $credit->discard_changes;
-    is( $credit->amountoutstanding * 1, 0, 'No outstanding credit' );
+    $credit = $credit->apply( { debits => [ $debits->as_list ] } );
+    is( $credit->amountoutstanding * 1, 0, 'No remaining credit' );
     $debit_2->discard_changes;
     is( $debit_2->amountoutstanding * 1, 10, 'Outstanding amount decremented correctly' );
 
@@ -279,12 +276,12 @@ subtest 'apply() tests' => sub {
     is( $credit_2->discard_changes->amountoutstanding * -1, 20, 'No changes made' );
 
     $debits = Koha::Account::Lines->search({ accountlines_id => { -in => [ $debit_1->id, $debit_2->id, $debit_3->id ] } });
-    $remaining_credit = $credit_2->apply( { debits => [ $debits->as_list ], offset_type => 'Manual Credit' } );
+    $credit_2 = $credit_2->apply( { debits => [ $debits->as_list ], offset_type => 'Manual Credit' } );
 
     is( $debit_1->discard_changes->amountoutstanding * 1,  0, 'No changes to already cancelled debit' );
     is( $debit_2->discard_changes->amountoutstanding * 1,  0, 'Debit cancelled' );
     is( $debit_3->discard_changes->amountoutstanding * 1, 90, 'Outstanding amount correctly calculated' );
-    is( $credit_2->discard_changes->amountoutstanding * 1, 0, 'No remaining credit' );
+    is( $credit_2->amountoutstanding * 1, 0, 'No remaining credit' );
 
     my $library  = $builder->build_object( { class => 'Koha::Libraries' } );
     my $biblio = $builder->build_sample_biblio();
@@ -336,7 +333,7 @@ subtest 'apply() tests' => sub {
         }
     );
     my $debits_renew = Koha::Account::Lines->search({ accountlines_id => $accountline->id })->as_list;
-    $credit_forgive->apply( { debits => $debits_renew, offset_type => 'Forgiven' } );
+    $credit_forgive = $credit_forgive->apply( { debits => $debits_renew, offset_type => 'Forgiven' } );
     is( $called, 0, 'C4::Circulation::AddRenew NOT called when RenewAccruingItemWhenPaid enabled but credit type is "FORGIVEN"' );
 
     $accountline = Koha::Account::Line->new(
@@ -355,8 +352,15 @@ subtest 'apply() tests' => sub {
     )->store();
     my $credit_renew = $account->add_credit({ amount => 100, user_id => $patron->id, interface => 'commandline' });
     $debits_renew = Koha::Account::Lines->search({ accountlines_id => $accountline->id })->as_list;
-    $credit_renew->apply( { debits => $debits_renew, offset_type => 'Manual Credit' } );
+    $credit_renew = $credit_renew->apply( { debits => $debits_renew, offset_type => 'Manual Credit' } );
     is( $called, 1, 'RenewAccruingItemWhenPaid causes C4::Circulation::AddRenew to be called when appropriate' );
+
+    my @messages = @{$credit_renew->messages};
+    is( $messages[0]->type, 'info', 'Info message added for renewal' );
+    is( $messages[0]->message, 'renewal', 'Message is "renewal"' );
+    is( $messages[0]->payload->{itemnumber}, $item->id, 'itemnumber found in payload' );
+    is( $messages[0]->payload->{due_date}, 1, 'due_date key in payload' );
+    is( $messages[0]->payload->{success}, 1, "'success' key in payload" );
 
     $schema->storage->txn_rollback;
 };
