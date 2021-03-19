@@ -40,7 +40,7 @@ subtest 'list_patron_attributes() tests' => sub {
 
     my $patron = $builder->build_object({
         class => 'Koha::Patrons',
-        value => { flags => 2 ** 2 } # 'catalogue' flag == 2
+        value => { flags => 2 ** 4 } # 'borrowers' flag == 4
     });
     my $password = 'thePassword123';
     $patron->set_password({ password => $password, skip_validation => 1 });
@@ -208,8 +208,8 @@ subtest 'overwrite() tests' => sub {
 
     my $patron = $builder->build_object({
         class => 'Koha::Patrons',
-        value => { flags => 2 ** 4 + 2 ** 2 } # 'borrowers' flag == 4
-    });                                       # 'catalogue' flag == 2
+        value => { flags => 2 ** 4 } # 'borrowers' flag == 4
+    });
     my $password = 'thePassword123';
     $patron->set_password({ password => $password, skip_validation => 1 });
     my $userid = $patron->userid;
