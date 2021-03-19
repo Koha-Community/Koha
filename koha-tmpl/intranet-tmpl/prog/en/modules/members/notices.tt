@@ -49,8 +49,8 @@
                 <th>Notice</th>
                 <th>Type</th>
                 <th>Status</th>
-                <th class="title-string">Updated on</th>
-                <th class="title-string">Time created</th>
+                <th>Updated on</th>
+                <th>Time created</th>
             </tr>
         </thead>
 	<tbody>
@@ -88,8 +88,8 @@
             </div>
             [% END %]
         </td>
-        <td><span title="[% QUEUED_MESSAGE.updated_on | html %]">[% QUEUED_MESSAGE.updated_on | $KohaDates  with_hours => 1 %]</span></td>
-        <td><span title="[% QUEUED_MESSAGE.time_queued | html %]">[% QUEUED_MESSAGE.time_queued | $KohaDates  with_hours => 1 %]</span></td>
+        <td data-order="[% QUEUED_MESSAGE.updated_on | html %]">[% QUEUED_MESSAGE.updated_on | $KohaDates  with_hours => 1 %]</td>
+        <td data-order="[% QUEUED_MESSAGE.time_queued | html %]">[% QUEUED_MESSAGE.time_queued | $KohaDates  with_hours => 1 %]</td>
 	    </tr>
 	    [% END %]
 	</tbody>
@@ -114,7 +114,6 @@
         $(document).ready(function() {
             $("#noticestable").dataTable($.extend(true, {}, dataTablesDefaults, {
                 "aaSorting": [[ 3, "desc" ]],
-                "aoColumns": [ null,null,null, { "sType": "title-string" } ,{ "sType": "title-string" } ],
                 "sPaginationType": "full"
             }));
 

@@ -58,10 +58,10 @@
         <th>Author</th>
         <th>Barcode</th>
         <th>Library</th>
-        <th class="title-string">Hold date</th>
-        <th class="title-string">Expiration date</th>
-        <th class="title-string">Waiting date</th>
-        <th class="title-string">Cancellation date</th>
+        <th>Hold date</th>
+        <th>Expiration date</th>
+        <th>Waiting date</th>
+        <th>Cancellation date</th>
         [% IF show_itemtype_column %]
           <th>Requested item type</th>
         [% END %]
@@ -75,27 +75,15 @@
           <td>[% hold.biblio.author | html %]</td>
           <td>[% hold.item.barcode | html %]</td>
           <td>[% Branches.GetName( hold.branchcode ) | html %]</td>
-          <td><span title="[% hold.reservedate | html %]">[% hold.reservedate | $KohaDates %]</span></td>
-          <td>
-              [% IF hold.expirationdate %]
-                  <span title="[% hold.expirationdate | html %]">[% hold.expirationdate | $KohaDates %]</span>
-              [% ELSE %]
-                  <span title="0000-00-00"></span>
-              [% END %]
+          <td data-order="[% hold.reservedate | html %]">[% hold.reservedate | $KohaDates %]</td>
+          <td data-order="[% hold.expirationdate | html %]">
+                [% hold.expirationdate | $KohaDates %]
           </td>
-          <td>
-              [% IF hold.waitingdate %]
-                  <span title="[% hold.waitingdate | html %]">[% hold.waitingdate | $KohaDates %]</span>
-              [% ELSE %]
-                  <span title="0000-00-00"></span>
-              [% END %]
+          <td data-order="[% hold.waitingdate | html %]">
+                [% hold.waitingdate | $KohaDates %]
           </td>
-          <td>
-              [% IF hold.cancellationdate %]
-                  <span title="[% hold.cancellationdate | html %]">[% hold.cancellationdate | $KohaDates %]</span>
-              [% ELSE %]
-                  <span title="0000-00-00"></span>
-              [% END %]
+          <td data-order="[% hold.cancellationdate | html %]">
+                [% hold.cancellationdate | $KohaDates %]
           </td>
           [% IF show_itemtype_column %]
             <td>
@@ -156,8 +144,7 @@
             [% END %]
             var table = KohaTable("table_holdshistory", {
                 "sPaginationType": "full",
-                "aaSorting": [[4, 'desc']],
-                "sDom": 'C<"top pager"ilpfB><"#filter_c">tr<"bottom pager"ip>',
+                "aaSorting": [[4, 'desc']]
             }, columns_settings);
         });
     </script>

@@ -987,17 +987,6 @@
                     $('#'+ui.newTab.context.id).click();
                 }
             } );
-            $("#holdst").dataTable($.extend(true, {}, dataTablesDefaults, {
-                "sDom": 't',
-                "aoColumnDefs": [
-                    { "aTargets": [ -1,-2 ], "bSortable": false, "bSearchable": false }
-                ],
-                "aoColumns": [
-                    { "sType": "title-string" },{ "sType": "anti-the" },null,null,null,null,null,null
-                ],
-                "bPaginate": false
-            }));
-
 
             $("#view_restrictions").on("click",function(){
                 $('#debarments-tab-link').click();

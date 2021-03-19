@@ -62,7 +62,7 @@
     <th class="NoSort noExport">Actions</th>
     <th>Account type</th>
     <th>Description</th>
-    <th class="title-string">Date</th>
+    <th>Date</th>
     <th>Barcode</th>
     <th>Due date</th>
     <th>Checkin date</th>
@@ -104,8 +104,8 @@
         [%- IF line.description %][% line.description | html %][% END %]
         [% IF line.itemnumber %]([% line.item.biblio.title | html %])[% END %]
     </td>
-    <td>
-        <span title="[% line.date | html %]">[% line.date | $KohaDates %]</span>
+    <td data-order="[% line.date | html %]">
+        [% line.date | $KohaDates %]
     </td>
     <td>
         [% IF line.itemnumber %]

@@ -69,7 +69,7 @@
                 <table id="table_account_fines">
                     <thead>
                         <tr>
-                            <th class="title-string">Date</th>
+                            <th>Date</th>
                             <th>Description of charges</th>
                             <th>Barcode</th>
                             <th>Due date</th>
@@ -83,7 +83,7 @@
                     <tbody>
                         <tr>
                             <td>
-                                <span title="[% accountline.date | html %]">[% accountline.date |$KohaDates %]</span>
+                                [% accountline.date |$KohaDates %]
                             </td>
                             <td>
                                 [%- PROCESS account_type_description account=accountline -%]
