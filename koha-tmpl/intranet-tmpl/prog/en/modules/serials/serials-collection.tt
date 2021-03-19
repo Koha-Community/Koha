@@ -178,11 +178,11 @@
 [% IF ( subscriptions.size > 1 ) %]
                 <th># Subs</th>
 [% END %]
-                <th class="title-string">Date published
+                <th>Date published
                 </th>
-                <th class="title-string">Date published (text)
+                <th>Date published (text)
                 </th>
-                <th class="title-string">Date received
+                <th>Date received
                 </th>
                 <th>Number
                 </th>
@@ -226,30 +226,24 @@
 [% IF ( subscriptions.size > 1 ) %]
                  <td><a href="serials-collection.pl?subscriptionid=[% serial.subscriptionid | uri %]">[% serial.subscriptionid | html %]</a></td>
 [% END %]
-                <td>
-                    <span title="[% serial.publisheddate | html %]">
-                      [% IF serial.publisheddate %]
+                <td data-order="[% serial.publisheddate | html %]">
+                    [% IF serial.publisheddate %]
                         [% serial.publisheddate | $KohaDates %]
-                      [% ELSE %]
+                    [% ELSE %]
                         Unknown
-                      [% END %]
-                    </span>
+                    [% END %]
                 </td>
-                <td>
-                   [% IF serial.publisheddatetext %]
-                      <span title="[% serial.publisheddatetext | html %]">
+                <td data-order="[% serial.publisheddatetext | html %]">
+                    [% IF serial.publisheddatetext %]
                         [% serial.publisheddatetext | html %]
-                      </span>
-                   [% END %]
+                    [% END %]
                 </td>
-                <td>
-                    <span title="[% serial.planneddate | html %]">
-                      [% IF serial.planneddate %]
+                <td data-order="[% serial.planneddate | html %]">
+                    [% IF serial.planneddate %]
                         [% serial.planneddate | $KohaDates %]
-                      [% ELSE %]
+                    [% ELSE %]
                         Unknown
-                      [% END %]
-                    </span>
+                    [% END %]
                 </td>
                 <td>
                     [% IF ( matches = serial.serialseq.match('(.*)Spring(.*)') ) %]

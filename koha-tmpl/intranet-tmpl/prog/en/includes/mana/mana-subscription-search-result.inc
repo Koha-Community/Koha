@@ -16,7 +16,7 @@
                     <th>Frequency</th>
                     <th>Numbering pattern</th>
                     <th title="Number of libraries using this pattern"># of users</th>
-                    <th class="title-string" title="Last time a library used this pattern">Last import</th>
+                    <th title="Last time a library used this pattern">Last import</th>
                     <th> Comments </th>
                     [% UNLESS search_only %]
                       <th class="NoSort noExport">Actions</th>
@@ -42,7 +42,7 @@
                             <td>[% IF ( subscription.sfdescription ) %][% subscription.sfdescription | html %][% END %]</td>
                             <td>[% IF ( subscription.numberingmethod ) %][% subscription.numberingmethod | html %][% END %]</td>
                             <td>[% IF ( subscription.nbofusers ) %][% subscription.nbofusers | html %][% END %]</td>
-                            <td><span title="[% subscription.lastimport | html %]">[% subscription.lastimport | $KohaDates %]</span></td>
+                            <td data-order="[% subscription.lastimport | html %]">[% subscription.lastimport | $KohaDates %]</td>
                             <td>
                                 [% FOREACH comment IN subscription.comments %]
                                     [% comment.message | html %] ([% comment.nb | html %])<br />

@@ -105,9 +105,9 @@
                         <th>ISSN</th>
                         <th>Issue number</th>
                         <th>Status</th>
-                        <th class="title-string">Since</th>
+                        <th>Since</th>
                         <th>Claims count</th>
-                        <th class="title-string">Claim date</th>
+                        <th>Claim date</th>
                         [% FOR field IN additional_fields_for_subscription %]
                           <th>[% field.name | html %]</th>
                         [% END %]
@@ -156,20 +156,12 @@
                             [% IF ( missingissue.status44 ) %]<span class="status-missing_lost">Missing (lost)</span>[% END %]
                             [% IF ( missingissue.status7 ) %]<span class="status-claimed">Claimed</span>[% END %]
                         </td>
-                        <td class="planneddate">
-                            [% IF ( missingissue.planneddate ) %]
-                                <span title="[% missingissue.planneddateISO | html %]">[% missingissue.planneddate | html %]</span>
-                            [% ELSE %]
-                                <span title="0000-00-00"></span>
-                            [% END %]
+                        <td class="planneddate" data-order="[% missingissue.planneddateISO | html %]">
+                            [% missingissue.planneddate | html %]
                         </td>
                         <td>[% missingissue.claims_count | html %]</td>
-                        <td>
-                            [% IF ( missingissue.claimdate ) %]
-                                <span title="[% missingissue.claimdateISO | html %]">[% missingissue.claimdate | html %]</span>
-                            [% ELSE %]
-                                <span title="0000-00-00"></span>
-                            [% END %]
+                        <td data-order="[% missingissue.claimdateISO | html %]">
+                            [% missingissue.claimdate | html %]
                         </td>
                         [% FOR field IN additional_fields_for_subscription %]
                           [% IF field.authorised_value_category %]

@@ -79,7 +79,7 @@
             <th>Location</th>
             <th>Call number</th>
             [% UNLESS closed %]
-                <th class="title-string">Expiration date</th>
+                <th>Expiration date</th>
             [% END %]
             [% FOR field IN additional_fields_for_subscription %]
               <th>[% field.name | html %]</th>
@@ -137,12 +137,8 @@
               [% IF ( subscription.callnumber ) %][% subscription.callnumber | html %][% END %]
             </td>
             [% UNLESS closed %]
-                <td>
-                    [% IF ( subscription.enddate ) %]
-                        <span title="[% subscription.enddate | html %]">[% subscription.enddate | $KohaDates %]</span>
-                    [% ELSE %]
-                        <span title="0000-00-00"></span>
-                    [% END %]
+                <td data-order="[% subscription.enddate | html %]">
+                    [% subscription.enddate | $KohaDates %]
                 </td>
             [% END %]
 

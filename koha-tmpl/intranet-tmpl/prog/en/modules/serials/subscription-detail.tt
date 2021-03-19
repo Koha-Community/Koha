@@ -408,9 +408,9 @@
                                         <th>Invoice</th>
                                         <th>Basket</th>
                                         <th>Order number</th>
-                                        <th class="title-string">Creation date</th>
-                                        <th class="title-string">Receive date</th>
-                                        <th class="title-string">Status</th>
+                                        <th>Creation date</th>
+                                        <th>Receive date</th>
+                                        <th>Status</th>
                                         <th>Internal note</th>
                                         <th>Vendor note</th>
                                         <th>Fund</th>
@@ -465,15 +465,14 @@
                                                 </td>
                                                 <td></td> [%# basket %]
                                                 <td>[% order.ordernumber | html %]</td>
-                                                <td><span title="[% order.basket.creationdate | uri %]">[% order.basket.creationdate | $KohaDates%]</span></td>
-                                                <td>[% IF order.datereceived %]<span title="[% order.datereceived | uri %]">[% order.datereceived | $KohaDates %]</span>[% END %]</td>
-                                                <td>
+                                                <td data-order="[% order.basket.creationdate | uri %]">[% order.basket.creationdate | $KohaDates%]</td>
+                                                <td data-order="[% order.datereceived | uri %]">[% order.datereceived | $KohaDates %]</td>
                                                     [% SWITCH order.orderstatus %]
-                                                        [% CASE 'new' %]<span title="status_1">New</span>
-                                                        [% CASE 'ordered' %]<span title="status_2">Ordered</span>
-                                                        [% CASE 'partial' %]<span title="status_3">Partial</span>
-                                                        [% CASE 'complete' %]<span title="status_4">Complete</span>
-                                                        [% CASE 'cancelled' %]<span title="status_5">Cancelled</span>
+                                                        [% CASE 'new' %]<td data-order="status_1">New
+                                                        [% CASE 'ordered' %]<td data-order="status_2">Ordered
+                                                        [% CASE 'partial' %]<td data-order="status_3">Partial
+                                                        [% CASE 'complete' %]<td data-order="status_4">Complete
+                                                        [% CASE 'cancelled' %]<td data-order="status_5">Cancelled
                                                     [% END %]
                                                 </td>
                                                 <td>[% order.order_internalnote | html %]</td>
