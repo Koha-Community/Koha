@@ -38,7 +38,7 @@
                                     <th class="anti-the">Notes</th>
                                     <th>Type</th>
                                     <th title="Number of libraries using this pattern"># of users</th>
-                                    <th class="title-string" title="Last time a library used this pattern">Last import</th>
+                                    <th title="Last time a library used this pattern">Last import</th>
                                     <th> Comments </th>
                                     [% UNLESS search_only %]
                                         <th class="NoSort noExport">Actions</th>
@@ -82,10 +82,8 @@
                                                 [% report.nbofusers | html %]
                                             [% END %]
                                         </td>
-                                        <td>
-                                            <span title="[% report.lastimport | html %]">
-                                                [% report.lastimport | $KohaDates %]
-                                            </span>
+                                        <td data-order="[% report.lastimport | html %]">
+                                            [% report.lastimport | $KohaDates %]
                                         </td>
                                         <td>
                                             [% FOREACH comment IN report.comments %]

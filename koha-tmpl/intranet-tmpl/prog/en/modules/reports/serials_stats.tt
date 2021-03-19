@@ -42,7 +42,7 @@
 		<thead>
 			<tr>
 				<th>Vendor</th>
-				<th>Title</th>
+                <th class="anti-the">Title</th>
                 <th>Subscription ID</th>
                 <th>Library</th>
                 <th>Call number</th>
@@ -59,8 +59,8 @@
 					<td>[% data.subscriptionid | html %]</td>
                     <td>[% Branches.GetName( data.branchcode ) | html %]</td>
 					<td>[% data.callnumber | html %]</td>
-                    <td><span title="[% data.startdate | html %]">[% data.startdate | $KohaDates %]</span></td>
-                    <td><span title="[% data.enddate | html %]">[% data.enddate | $KohaDates %]</span></td>
+                    <td data-order="[% data.startdate | html %]">[% data.startdate | $KohaDates %]</td>
+                    <td data-order="[% data.enddate | html %]">[% data.enddate | $KohaDates %]</td>
                     <td>
                         [% IF data.closed %]
                             Closed
@@ -159,11 +159,7 @@
     <script>
         $(document).ready(function() {
             $("#resulttable").dataTable($.extend(true, {}, dataTablesDefaults, {
-                "sDom": 't',
                 "bPaginate": false,
-                "aoColumns": [
-                    null,{ "sType": "anti-the" },null,null,null,{ "sType": "title-string" },{ "sType": "title-string" },null
-                ],
             }));
         });
     </script>

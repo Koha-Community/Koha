@@ -276,9 +276,9 @@
                                                 <th>Subgroup</th>
                                                 <th>Notes</th>
                                                 <th>Author</th>
-                                                <th class="title-string">Creation date</th>
-                                                <th class="title-string">Last edit</th>
-                                                <th class="title-string">Last run</th>
+                                                <th>Creation date</th>
+                                                <th>Last edit</th>
+                                                <th>Last run</th>
                                                 <th class="report_public">Public</th>
                                                 <th class="report_json_url">JSON URL</th>
                                                 [% IF (usecache) %]
@@ -333,14 +333,14 @@
                                                         [% END %]
                                                         ([% savedreport.borrowernumber | html %])
                                                     </td>
-                                                    <td>
-                                                        <span title="[% savedreport.date_created | html %]">[% savedreport.date_created | $KohaDates %]</span>
+                                                    <td data-order="[% savedreport.date_created | html %]">
+                                                        [% savedreport.date_created | $KohaDates %]
                                                     </td>
-                                                    <td>
-                                                        <span title="[% savedreport.last_modified | html %]">[% savedreport.last_modified | $KohaDates  with_hours => 1 %]</span>
+                                                    <td data-order="[% savedreport.last_modified | html %]">
+                                                        [% savedreport.last_modified | $KohaDates  with_hours => 1 %]
                                                     </td>
-                                                    <td>
-                                                        <span title="[% savedreport.last_run | html %]">[% savedreport.last_run | $KohaDates  with_hours => 1 %]</span>
+                                                    <td data-order="[% savedreport.last_run | html %]">
+                                                        [% savedreport.last_run | $KohaDates  with_hours => 1 %]
                                                     </td>
                                                     <td class="report_public">
                                                         [% IF (savedreport.public) %]
@@ -1653,8 +1653,6 @@
                     'sPaginationType': 'full',
                     'aaSorting': [[ 1, "asc" ]],
                     'aoColumnDefs': [
-                        { 'bSearchable': false, 'aTargets': [3] },
-                        { "aTargets": [ 1, 2 ], "sType": "natural"  },
                         { "visible": false, "aTargets" : [ "hidden" ] }
                     ],
                     'oLanguage': {
@@ -1979,7 +1977,6 @@
                             ],
                             "aoColumnDefs": [
                                 { 'bSortable': false, "bSearchable": false, 'aTargets': [ 'NoSort' ] },
-                                { "sType": "title-string", "aTargets" : [ "title-string" ] },
                                 { 'sType': "anti-the", 'aTargets' : [ 'anti-the'] }
                             ]
                         }));
