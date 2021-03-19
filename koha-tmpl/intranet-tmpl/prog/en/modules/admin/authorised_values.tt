@@ -147,7 +147,7 @@
 
 [% IF ( searchfield ) %]
     <h1>Authorized values for category [% category.category_name | html %]</h1>
-    [% PROCESS category_descriptions code_category = category %]
+    [% PROCESS category_descriptions code_category = category.category_name %]
 [% ELSE %]
     <h1>Authorized values</h1>
 [% END %]
