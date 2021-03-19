@@ -94,7 +94,9 @@ Boolean returning whether the transfer is in transit or waiting
 sub in_transit {
     my ($self) = @_;
 
-    return ( defined( $self->datesent ) && !defined( $self->datearrived ) );
+    return ( defined( $self->datesent )
+          && !defined( $self->datearrived )
+          && !defined( $self->datecancelled ) );
 }
 
 =head3 receive
