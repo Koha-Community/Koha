@@ -81,232 +81,33 @@ sub pay {
     my $lines         = $params->{lines};
     my $type          = $params->{type} || 'PAYMENT';
     my $payment_type  = $params->{payment_type} || undef;
-    my $credit_type   = $params->{credit_type};
     my $offset_type   = $params->{offset_type} || $type eq 'WRITEOFF' ? 'Writeoff' : 'Payment';
     my $cash_register = $params->{cash_register};
     my $item_id       = $params->{item_id};
 
     my $userenv = C4::Context->userenv;
 
-    $credit_type ||=
-      $type eq 'WRITEOFF'
-      ? 'WRITEOFF'
-      : 'PAYMENT';
-
-    my $patron = Koha::Patrons->find( $self->{patron_id} );
 
     my $manager_id = $userenv ? $userenv->{number} : undef;
     my $interface = $params ? ( $params->{interface} || C4::Context->interface ) : C4::Context->interface;
-    Koha::Exceptions::Account::RegisterRequired->throw()
-      if ( C4::Context->preference("UseCashRegisters")
-        && defined($payment_type)
-        && ( $payment_type eq 'CASH' )
-        && !defined($cash_register) );
-
-    my @fines_paid; # List of account lines paid on with this payment
-
-    # The outcome of any attempted item renewals as a result of fines being
-    # paid off
-    my $renew_outcomes = [];
-
-    my $balance_remaining = $amount; # Set it now so we can adjust the amount if necessary
-    $balance_remaining ||= 0;
-
-    my @account_offsets;
-
-    # We were passed a specific line to pay
-    foreach my $fine ( @$lines ) {
-        my $amount_to_pay =
-            $fine->amountoutstanding > $balance_remaining
-          ? $balance_remaining
-          : $fine->amountoutstanding;
-
-        my $old_amountoutstanding = $fine->amountoutstanding;
-        my $new_amountoutstanding = $old_amountoutstanding - $amount_to_pay;
-        $fine->amountoutstanding($new_amountoutstanding)->store();
-        $balance_remaining = $balance_remaining - $amount_to_pay;
-
-        # Attempt to renew the item associated with this debit if
-        # appropriate
-        if ($fine->is_renewable) {
-            # We're ignoring the definition of $interface above, by all
-            # accounts we can't rely on C4::Context::interface, so here
-            # we're only using what we've been explicitly passed
-            my $outcome = $fine->renew_item({ interface => $interface });
-            push @{$renew_outcomes}, $outcome if $outcome;
-        }
-
-        # Same logic exists in Koha::Account::Line::apply
-        if ( C4::Context->preference('MarkLostItemsAsReturned') =~ m|onpayment|
-            && $fine->debit_type_code
-            && $fine->debit_type_code eq 'LOST'
-            && $new_amountoutstanding == 0
-            && $fine->itemnumber
-            && !(  $credit_type eq 'LOST_FOUND'
-                && $item_id == $fine->itemnumber ) )
+    my $payment = $self->payin_amount(
         {
-            C4::Circulation::ReturnLostItem( $self->{patron_id},
-                $fine->itemnumber );
-        }
-
-        my $account_offset = Koha::Account::Offset->new(
-            {
-                debit_id => $fine->id,
-                type     => $offset_type,
-                amount   => $amount_to_pay * -1,
-            }
-        );
-        push( @account_offsets, $account_offset );
-
-        if ( C4::Context->preference("FinesLog") ) {
-            logaction(
-                "FINES", 'MODIFY',
-                $self->{patron_id},
-                Dumper(
-                    {
-                        action                => 'fee_payment',
-                        borrowernumber        => $fine->borrowernumber,
-                        old_amountoutstanding => $old_amountoutstanding,
-                        new_amountoutstanding => 0,
-                        amount_paid           => $old_amountoutstanding,
-                        accountlines_id       => $fine->id,
-                        manager_id            => $manager_id,
-                        note                  => $note,
-                    }
-                ),
-                $interface
-            );
-            push( @fines_paid, $fine->id );
-        }
-    }
-
-    # Were not passed a specific line to pay, or the payment was for more
-    # than the what was owed on the given line. In that case pay down other
-    # lines with remaining balance.
-    my @outstanding_fines;
-    @outstanding_fines = $self->lines->search(
-        {
-            amountoutstanding => { '>' => 0 },
-        }
-    ) if $balance_remaining > 0;
-
-    foreach my $fine (@outstanding_fines) {
-        my $amount_to_pay =
-            $fine->amountoutstanding > $balance_remaining
-          ? $balance_remaining
-          : $fine->amountoutstanding;
-
-        my $old_amountoutstanding = $fine->amountoutstanding;
-        $fine->amountoutstanding( $old_amountoutstanding - $amount_to_pay );
-        $fine->store();
-
-        # If we need to make a note of the item associated with this line,
-        # in order that we can potentially renew it, do so.
-        my $amt = $old_amountoutstanding - $amount_to_pay;
-        if ( $fine->is_renewable ) {
-            my $outcome = $fine->renew_item({ interface => $interface });
-            push @{$renew_outcomes}, $outcome if $outcome;
-        }
-
-        if ( C4::Context->preference('MarkLostItemsAsReturned') =~ m|onpayment|
-            && $fine->debit_type_code
-            && $fine->debit_type_code eq 'LOST'
-            && $fine->amountoutstanding == 0
-            && $fine->itemnumber
-            && !(  $credit_type eq 'LOST_FOUND'
-                && $item_id == $fine->itemnumber ) )
-        {
-            C4::Circulation::ReturnLostItem( $self->{patron_id},
-                $fine->itemnumber );
-        }
-
-        my $account_offset = Koha::Account::Offset->new(
-            {
-                debit_id => $fine->id,
-                type     => $offset_type,
-                amount   => $amount_to_pay * -1,
-            }
-        );
-        push( @account_offsets, $account_offset );
-
-        if ( C4::Context->preference("FinesLog") ) {
-            logaction(
-                "FINES", 'MODIFY',
-                $self->{patron_id},
-                Dumper(
-                    {
-                        action                => "fee_$type",
-                        borrowernumber        => $fine->borrowernumber,
-                        old_amountoutstanding => $old_amountoutstanding,
-                        new_amountoutstanding => $fine->amountoutstanding,
-                        amount_paid           => $amount_to_pay,
-                        accountlines_id       => $fine->id,
-                        manager_id            => $manager_id,
-                        note                  => $note,
-                    }
-                ),
-                $interface
-            );
-            push( @fines_paid, $fine->id );
-        }
-
-        $balance_remaining = $balance_remaining - $amount_to_pay;
-        last unless $balance_remaining > 0;
-    }
-
-    $description ||= $type eq 'WRITEOFF' ? 'Writeoff' : q{};
-
-    my $payment = Koha::Account::Line->new(
-        {
-            borrowernumber    => $self->{patron_id},
-            date              => dt_from_string(),
-            amount            => 0 - $amount,
-            description       => $description,
-            credit_type_code  => $credit_type,
-            payment_type      => $payment_type,
-            amountoutstanding => 0 - $balance_remaining,
-            manager_id        => $manager_id,
-            interface         => $interface,
-            branchcode        => $library_id,
-            register_id       => $cash_register,
-            note              => $note,
-            itemnumber        => $item_id,
-        }
-    )->store();
-
-    foreach my $o ( @account_offsets ) {
-        $o->credit_id( $payment->id() );
-        $o->store();
-    }
-
-    C4::Stats::UpdateStats(
-        {
-            branch         => $library_id,
-            type           => lc($type),
-            amount         => $amount,
-            borrowernumber => $self->{patron_id},
+            interface     => $interface,
+            type          => $type,
+            amount        => $amount,
+            payment_type  => $payment_type,
+            cash_register => $cash_register,
+            user_id       => $manager_id,
+            library_id    => $library_id,
+            item_id       => $item_id,
+            description   => $description,
+            note          => $note,
+            debits        => $lines
         }
     );
 
-    if ( C4::Context->preference("FinesLog") ) {
-        logaction(
-            "FINES", 'CREATE',
-            $self->{patron_id},
-            Dumper(
-                {
-                    action            => "create_$type",
-                    borrowernumber    => $self->{patron_id},
-                    amount            => 0 - $amount,
-                    amountoutstanding => 0 - $balance_remaining,
-                    credit_type_code  => $credit_type,
-                    accountlines_paid => \@fines_paid,
-                    manager_id        => $manager_id,
-                }
-            ),
-            $interface
-        );
-    }
-
+    my $patron = Koha::Patrons->find( $self->{patron_id} );
+    my @account_offsets = $payment->debit_offsets;
     if ( C4::Context->preference('UseEmailReceipts') ) {
         if (
             my $letter = C4::Letters::GetPreparedLetter(
@@ -333,6 +134,11 @@ sub pay {
                 }
             ) or warn "can't enqueue letter $letter";
         }
+    }
+
+    my $renew_outcomes = [];
+    for my $message ( @{$payment->messages} ) {
+        push @{$renew_outcomes}, $message->payload;
     }
 
     return { payment_id => $payment->id, renew_result => $renew_outcomes };
@@ -490,7 +296,7 @@ sub add_credit {
     my $credit = $account->payin_amount(
         {
             amount          => $amount,
-            credit_type     => $credit_type,
+            type            => $credit_type,
             payment_type    => $payment_type,
             cash_register   => $register_id,
             interface       => $interface,
