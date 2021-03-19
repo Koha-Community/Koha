@@ -205,7 +205,11 @@
                                                   [% ELSE %]
                                                       <option value="[% budget.b_id | html %]">
                                                   [% END %]
-                                                  [% budget.b_txt | html %]
+                                                  [% IF budget.b_active %]
+                                                      [% budget.b_txt | html %]
+                                                  [% ELSE %]
+                                                      [% budget.b_txt | html %] (inactive)
+                                                  [% END %]
                                                   </option>
                                               [% END %]
                                           </select>
