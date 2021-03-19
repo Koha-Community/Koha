@@ -173,7 +173,7 @@ subtest 'receive tests' => sub {
 
 subtest 'in_transit tests' => sub {
 
-    plan tests => 3;
+    plan tests => 4;
 
     $schema->storage->txn_begin;
 
@@ -203,6 +203,8 @@ subtest 'in_transit tests' => sub {
     $transfer->datearrived(dt_from_string)->store;
     ok( !$transfer->in_transit, 'in_transit returns false when datearrived is defined');
 
+    $transfer->set( { datearrived => undef, datecancelled => dt_from_string } )->store;
+    ok( !$transfer->in_transit, 'in_transit returns false when datecancelled is defined');
 
     $schema->storage->txn_rollback;
 };
