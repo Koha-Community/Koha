@@ -144,9 +144,13 @@
                                                   <option selected="selected" value="[% budget.b_id | html %]">
                                               [% ELSE %]
                                                   <option value="[% budget.b_id | html %]">
-                                              [% END %]
-                                              [% budget.b_txt | html %]
-                                              </option>
+                                                 [% END %]
+                                                  [% IF budget.b_active %]
+                                                      [% budget.b_txt | html %]
+                                                  [% ELSE %]
+                                                      [% budget.b_txt | html %] (inactive)
+                                                  [% END %]
+                                                  </option>
                                           [% END %]
                                       </select>
                                   </td>
