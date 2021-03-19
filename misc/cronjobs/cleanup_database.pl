@@ -142,6 +142,7 @@ my $pOldReserves;
 my $pTransfers;
 my ( $pPseudoTransactions, $pPseudoTransactionsFrom, $pPseudoTransactionsTo );
 my $pMessages;
+my $lock_days = C4::Context->preference('LockExpiredDelay');
 
 GetOptions(
     'h|help'            => \$help,
@@ -222,6 +223,7 @@ unless ( $sessions
     || $pPseudoTransactionsFrom
     || $pPseudoTransactionsTo
     || $pMessages
+    || defined $lock_days && $lock_days ne q{}
 ) {
     print "You did not specify any cleanup work for the script to do.\n\n";
     usage(1);
@@ -401,10 +403,9 @@ if($allDebarments) {
 }
 
 # Lock expired patrons?
-my $days = C4::Context->preference('LockExpiredDelay');
-if( defined $days && $days ne q{} ) {
+if( defined $lock_days && $lock_days ne q{} ) {
     say "Start locking expired patrons" if $verbose;
-    my $expired_patrons = Koha::Patrons->filter_by_dateexpiry({ days => $days })->search({ login_attempts => { '!=' => -1 } });
+    my $expired_patrons = Koha::Patrons->filter_by_dateexpiry({ days => $lock_days })->search({ login_attempts => { '!=' => -1 } });
     my $count = $expired_patrons->count;
     $expired_patrons->lock({ remove => 1 }) if $confirm;
     if( $verbose ) {
