@@ -132,13 +132,12 @@ sub add_credit {
         $debits = Koha::Account::Lines->search({ accountlines_id => { -in => $debits_ids } })
             if $debits_ids;
 
-        my $outstanding_credit = $credit->amountoutstanding;
         if ($debits) {
             # pay them!
-            $outstanding_credit = $credit->apply({ debits => [ $debits->as_list ], offset_type => 'payment' });
+            $credit = $credit->apply({ debits => [ $debits->as_list ], offset_type => 'payment' });
         }
 
-        if ($outstanding_credit) {
+        if ($credit->amountoutstanding != 0) {
             my $outstanding_debits = $account->outstanding_debits;
             $credit->apply({ debits => [ $outstanding_debits->as_list ], offset_type => 'payment' });
         }

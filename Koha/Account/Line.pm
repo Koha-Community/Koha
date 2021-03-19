@@ -657,7 +657,14 @@ sub apply {
             # Attempt to renew the item associated with this debit if
             # appropriate
             if ( $self->credit_type_code ne 'FORGIVEN' && $debit->is_renewable ) {
-                $debit->renew_item( { interface => $params->{interface} } );
+                my $outcome = $debit->renew_item( { interface => $params->{interface} } );
+                $self->add_message(
+                    {
+                        type    => 'info',
+                        message => 'renewal',
+                        payload => $outcome
+                    }
+                ) if $outcome;
             }
 
             # Same logic exists in Koha::Account::pay
@@ -677,10 +684,12 @@ sub apply {
                 C4::Circulation::ReturnLostItem( $self->borrowernumber,
                     $debit->itemnumber );
             }
+
+            last if $available_credit == 0;
         }
     });
 
-    return $available_credit;
+    return $self;
 }
 
 =head3 payout
