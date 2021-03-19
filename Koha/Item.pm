@@ -1158,7 +1158,13 @@ sub _set_found_trigger {
                     );
 
                     $credit->apply( { debits => [$lost_charge] } );
-                    $self->{_refunded} = 1;
+                    $self->add_message(
+                        {
+                            type    => 'info',
+                            message => 'lost_refunded',
+                            payload => { credit_id => $credit->id }
+                        }
+                    );
                 }
 
                 # Update the account status
@@ -1208,7 +1214,13 @@ sub _set_found_trigger {
                     if ( $refund ) {
                         # Revert the forgive credit
                         $refund->void({ interface => 'trigger' });
-                        $self->{_restored} = 1;
+                        $self->add_message(
+                            {
+                                type    => 'info',
+                                message => 'lost_restored',
+                                payload => { refund_id => $refund->id }
+                            }
+                        );
                     }
 
                     # Reconcile balances if required
@@ -1218,7 +1230,12 @@ sub _set_found_trigger {
                 }
             }
         } elsif ( $lostreturn_policy eq 'charge' ) {
-            $self->{_charge} = 1;
+            $self->add_message(
+                {
+                    type    => 'info',
+                    message => 'lost_charge',
+                }
+            );
         }
     }
 

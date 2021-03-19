@@ -2128,29 +2128,34 @@ sub AddReturn {
     if ($item_was_lost) {
         $messages->{'WasLost'} = 1;
         unless ( C4::Context->preference("BlockReturnOfLostItems") ) {
-            $messages->{'LostItemFeeRefunded'} = 1 if $updated_item->{_refunded};
-            $messages->{'LostItemFeeRestored'} = 1 if $updated_item->{_restored};
+            my @object_messages = @{ $updated_item->messages };
+            for my $message (@object_messages) {
+                $messages->{'LostItemFeeRefunded'} = 1
+                  if $message->message eq 'lost_refunded';
+                $messages->{'LostItemFeeRestored'} = 1
+                  if $message->message eq 'lost_restored';
 
-            if ( $updated_item->{_charge} ) {
-                $issue //= Koha::Old::Checkouts->search(
-                    { itemnumber => $item->itemnumber },
-                    { order_by   => { '-desc' => 'returndate' }, rows => 1 } )
-                  ->single;
-                unless ( exists( $patron_unblessed->{branchcode} ) ) {
-                    my $patron = $issue->patron;
-                    $patron_unblessed = $patron->unblessed;
-                }
-                _CalculateAndUpdateFine(
-                    {
-                        issue       => $issue,
-                        item        => $item->unblessed,
-                        borrower    => $patron_unblessed,
-                        return_date => $return_date
+                if ( $message->message eq 'lost_charge' ) {
+                    $issue //= Koha::Old::Checkouts->search(
+                        { itemnumber => $item->itemnumber },
+                        { order_by   => { '-desc' => 'returndate' }, rows => 1 }
+                    )->single;
+                    unless ( exists( $patron_unblessed->{branchcode} ) ) {
+                        my $patron = $issue->patron;
+                        $patron_unblessed = $patron->unblessed;
                     }
-                );
-                _FixOverduesOnReturn( $patron_unblessed->{borrowernumber},
-                    $item->itemnumber, undef, 'RETURNED' );
-                $messages->{'LostItemFeeCharged'} = 1;
+                    _CalculateAndUpdateFine(
+                        {
+                            issue       => $issue,
+                            item        => $item->unblessed,
+                            borrower    => $patron_unblessed,
+                            return_date => $return_date
+                        }
+                    );
+                    _FixOverduesOnReturn( $patron_unblessed->{borrowernumber},
+                        $item->itemnumber, undef, 'RETURNED' );
+                    $messages->{'LostItemFeeCharged'} = 1;
+                }
             }
         }
     }
