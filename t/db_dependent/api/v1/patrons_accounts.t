@@ -39,6 +39,9 @@ subtest 'get_balance() tests' => sub {
 
     $schema->storage->txn_begin;
 
+    # Enable AccountAutoReconcile
+    t::lib::Mocks::mock_preference( 'AccountAutoReconcile', 1 );
+
     my $patron = $builder->build_object({
         class => 'Koha::Patrons',
         value => { flags => 1 }

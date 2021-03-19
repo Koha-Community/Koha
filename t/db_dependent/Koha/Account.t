@@ -857,6 +857,9 @@ subtest 'pay() handles lost items when paying by amount ( not specifying the los
 
     $schema->storage->txn_begin;
 
+    # Enable AccountAutoReconcile
+    t::lib::Mocks::mock_preference( 'AccountAutoReconcile', 1 );
+
     my $patron  = $builder->build_object( { class => 'Koha::Patrons' } );
     my $library = $builder->build_object( { class => 'Koha::Libraries' } );
     my $account = $patron->account;
