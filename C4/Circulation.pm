@@ -2786,7 +2786,12 @@ sub CanBookBeRenewed {
             return ( 0, 'overdue');
         }
 
-        $auto_renew = _CanBookBeAutoRenewed($borrowernumber, $itemnumber);
+        $auto_renew = _CanBookBeAutoRenewed({
+            patron     => $patron,
+            item       => $item,
+            branchcode => $branchcode,
+            issue      => $issue
+        });
         return ( 0, $auto_renew  ) if $auto_renew =~ 'auto_account_expired';
         return ( 0, $auto_renew  ) if $auto_renew =~ 'auto_too_late';
         return ( 0, $auto_renew  ) if $auto_renew =~ 'auto_too_much_oweing';
@@ -4238,12 +4243,11 @@ sub _CalculateAndUpdateFine {
 }
 
 sub _CanBookBeAutoRenewed {
-    my ( $borrowernumber, $itemnumber ) = @_;
-
-    my $item = Koha::Items->find($itemnumber);
-    my $issue = $item->checkout;
-    my $patron = $issue->patron;
-    my $branchcode = _GetCircControlBranch( $item->unblessed, $patron->unblessed );
+    my ( $params ) = @_;
+    my $patron = $params->{patron};
+    my $item = $params->{item};
+    my $branchcode = $params->{branchcode};
+    my $issue = $params->{issue};
 
     my $issuing_rule = Koha::CirculationRules->get_effective_rules(
         {
