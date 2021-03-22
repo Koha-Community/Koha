@@ -18,6 +18,7 @@ package Koha::Item::Transfer;
 use Modern::Perl;
 
 use Carp;
+use Try::Tiny;
 
 use C4::Items;
 
@@ -133,13 +134,23 @@ sub cancel {
         error => "The 'reason' parameter is mandatory" )
       unless defined($params->{reason});
 
+    my $in_transit = $self->in_transit;
+
     # Throw exception if item is in transit already
-    Koha::Exceptions::Item::Transfer::InTransit->throw() if ( !$params->{force} && $self->in_transit );
+    Koha::Exceptions::Item::Transfer::InTransit->throw() if ( !$params->{force} && $in_transit );
 
     # Update the cancelled date
     $self->set(
         { datecancelled => dt_from_string, cancellation_reason => $params->{reason} } )
       ->store;
+
+    # Set up return transfer if transfer was force cancelled whilst in transit
+    # NOTE: We don't catch here, as we're happy to fail if there are already
+    # other transfers in the queue.
+    try {
+        $self->item->request_transfer(
+            { to => $self->frombranch, reason => 'TransferCancellation' } );
+    };
 
     return $self;
 }
