@@ -4,6 +4,7 @@
 [% USE KohaDates %]
 [% USE Branches %]
 [% USE Categories %]
+[% USE TablesSettings %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Tools &rsaquo; Batch patron modification</title>
@@ -142,7 +143,9 @@
                                         <thead>
                                             <tr>
                                                 [% IF ( op == 'show' ) %]
-                                                    <th>&nbsp;</th>
+                                                    <th class="NoSort">&nbsp;</th>
+                                                [% ELSE %]
+                                                    <th class="hidden">&nbsp;</th>
                                                 [% END %]
                                                 <th>Card number</th>
                                                 <th>Surname</th>
@@ -174,8 +177,12 @@
                                             [% FOREACH borrower IN borrowers %]
                                                 <tr>
                                                     [% IF ( op == 'show' ) %]
-                                                        <td><input type="checkbox" name="borrowernumber" value="[% borrower.borrowernumber | html %]" checked="checked" /></td>
+                                                        <td>
+                                                    [% ELSE %]
+                                                        <td class="hidden">
                                                     [% END %]
+                                                        <input type="checkbox" name="borrowernumber" value="[% borrower.borrowernumber | html %]" checked="checked" />
+                                                    </td>
                                                     <td><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrower.borrowernumber | uri %]">[% borrower.cardnumber | html %]</a></td>
                                                     <td>[% borrower.surname | html %]</td>
                                                     <td>[% borrower.firstname | html %]</td>
@@ -344,21 +351,30 @@
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'calendar.inc' %]
     [% INCLUDE 'datatables.inc' %]
+    [% INCLUDE 'columns_settings.inc' %]
     [% Asset.js("js/tools-menu.js") | $raw %]
     <script>
         var patron_attributes_lib = new Array();
         var patron_attributes_values = new Array();
+        var table_settings = [% TablesSettings.GetColumns( 'tools', 'batch_patron_modification', 'borrowerst', 'json' ) | $raw %];
+        [% FOREACH attrh IN attributes_header %]
+            table_settings.push({
+                columname: "[% attrh.attribute | html %]",
+                cannot_be_modified: 0,
+                cannot_be_toggled: 0,
+                is_hidden: 0
+            });
+        [% END %]
         $(document).ready(function() {
             [% IF borrowers %]
-                $("#borrowerst").dataTable($.extend(true, {}, dataTablesDefaults, {
-                    "sDom": 't',
-                    [% UNLESS ( op == 'show_results' ) %]
-                        "aoColumnDefs": [
-                            { "aTargets": [ 0 ], "bSortable": false, "bSearchable": false },
-                        ],
-                    [% END %]
-                    "bPaginate": false
-                }));
+                KohaTable("borrowerst", {
+                    "order": [[ 1, "asc" ]],
+                    "autoWidth": false,
+                    "columnDefs": [
+                        { "visible": false, "targets" : [ "hidden" ] }
+                    ]
+                }, table_settings);
+
                 $("#selectallbutton").click(function() {
                     $("#borrowerst").find("input:checkbox").each(function() {
                         $(this).prop("checked", true);
