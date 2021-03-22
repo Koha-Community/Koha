@@ -96,7 +96,7 @@ tr > td input,td input[type="submit"] { font-size: 85%; padding: 1px; }
 		<th>Weight</th>
             <th class="NoSort noExport">Actions</th>
             [% UNLESS ( filter_approved_pending ) %]<th>Reviewer</th>[% END %]
-        <th class="title-string">Date</th>
+        <th>Date</th>
 	</tr>
     </thead>
     <tbody>
@@ -151,8 +151,8 @@ tr > td input,td input[type="submit"] { font-size: 85%; padding: 1px; }
             </td>
             [% UNLESS ( filter_approved_pending ) %]<td>&nbsp;</td>[% END %]
             [% END %]
-            <td>
-                <span title="[% tagloo.date_approved | html %]">[% tagloo.date_approved | $KohaDates %]</span>
+            <td data-order="[% tagloo.date_approved | html %]">
+                [% tagloo.date_approved | $KohaDates %]
             </td>
         </tr>
     [% END %]

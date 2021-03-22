@@ -147,7 +147,7 @@
                         <th>Address</th>
                         <th>Category</th>
                         <th>Library</th>
-                        <th class="title-string">Expires on</th>
+                        <th>Expires on</th>
                         <th>Circ notes</th>
                     </tr>
                 </thead>
@@ -175,7 +175,7 @@
                             </td>
                             <td>[% p.borrowernumber.categorycode.description | html %] ([% p.borrowernumber.categorycode.categorycode | html %])</td>
                             <td>[% p.borrowernumber.branchcode.branchname | html %]</td>
-                            <td><span title="[% p.borrowernumber.dateexpiry | html %]">[% p.borrowernumber.dateexpiry | $KohaDates %]</span></td>
+                            <td data-order="[% p.borrowernumber.dateexpiry | html %]">[% p.borrowernumber.dateexpiry | $KohaDates %]</td>
                             <td>[% p.borrowernumber.borrowernotes | html %]</td>
                         </tr>
                     [% END %]

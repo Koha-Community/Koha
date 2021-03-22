@@ -563,8 +563,8 @@
                                             [% IF itemdata_enumchron %]
                                                 <th>Vol no.</th>
                                             [% END %]
-                                            <th class="title-string">Information</th>
-                                            <th class="title-string">Allowed pickup locations</th>
+                                            <th>Information</th>
+                                            <th>Allowed pickup locations</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -649,17 +649,16 @@
                                                             [% itemloo.enumchron | html %]
                                                         </td>
                                                     [% END %]
-                                                    <td>
-                                                        [% IF ( itemloo.onloan ) %]
-                                                            <span title="[% itemloo.date_due | html %]" class="checkedout">Due [% itemloo.date_due | $KohaDates  as_due_date => 1 %]</span>
-                                                        [% ELSE %]
-                                                            <span title="0000-00-00">
-                                                                [% IF ( itemloo.transfertwhen ) %]
-                                                                    In transit from [% Branches.GetName( itemloo.transfertfrom ) | html %],
-                                                                    to [% Branches.GetName( itemloo.transfertto ) | html %], since [% itemloo.transfertwhen | html %]
-                                                                [% END %]
-                                                            </span>
-                                                        [% END %]
+                                                    [% IF ( itemloo.onloan ) %]
+                                                        <td data-order="[% itemloo.date_due | html %]">
+                                                            <span class="checkedout">Due [% itemloo.date_due | $KohaDates  as_due_date => 1 %]</span>
+                                                    [% ELSE %]
+                                                        <td>
+                                                            [% IF ( itemloo.transfertwhen ) %]
+                                                                In transit from [% Branches.GetName( itemloo.transfertfrom ) | html %],
+                                                                to [% Branches.GetName( itemloo.transfertto ) | html %], since [% itemloo.transfertwhen | html %]
+                                                            [% END %]
+                                                    [% END %]
 
                                                         [% IF ( itemloo.reservedate ) %]
                                                             [% IF ( itemloo.nocancel ) %]
@@ -1100,9 +1099,6 @@
             var my_table = $("#requestspecific").dataTable($.extend(true, {}, dataTablesDefaults, {
                 'bPaginate': false,
                 "sDom": '<"top pager"ilf>t',
-                "aoColumnDefs": [
-                    { "sType": "title-string", "aTargets" : [ "title-string" ] }
-                ]
             }));
 
             //Override fieldset styling for dataTables search box
