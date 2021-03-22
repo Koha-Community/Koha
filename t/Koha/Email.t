@@ -28,7 +28,7 @@ use_ok('Koha::Email');
 
 subtest 'create() tests' => sub {
 
-    plan tests => 23;
+    plan tests => 24;
 
     t::lib::Mocks::mock_preference( 'SendAllEmailsTo', undef );
 
@@ -61,6 +61,16 @@ subtest 'create() tests' => sub {
     like( $email->email->content_type, qr|text/html|, "Content type set correctly");
     like( $email->email->content_type, qr|charset="?iso-8859-1"?|, "Charset set correctly");
     like( $email->email->header('Message-ID'), qr/\<.*@.*\>/, 'Value set correctly' );
+
+    $email = Koha::Email->create(
+        {
+            from        => 'from@example.com',
+            to          => 'to@example.com',
+            bcc         => 'root@localhost',
+        }
+    );
+
+    is( $email->email->header('Bcc'), 'root@localhost', 'Non-FQDN (@localhost) supported' );
 
     t::lib::Mocks::mock_preference( 'SendAllEmailsTo', 'catchall@example.com' );
     t::lib::Mocks::mock_preference( 'ReplytoDefault', 'replytodefault@example.com' );
