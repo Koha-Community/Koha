@@ -159,8 +159,8 @@
                                                 <th>Primary email</th>
                                                 <th>Phone</th>
                                                 <th>Mobile</th>
-                                                <th class="title-string">Registration date</th>
-                                                <th class="title-string">Expiry date</th>
+                                                <th>Registration date</th>
+                                                <th>Expiry date</th>
                                                 <th>Circulation note</th>
                                                 <th>OPAC note</th>
                                                 <th>Restriction expiration</th>
@@ -191,11 +191,11 @@
                                                     <td>[% borrower.email | html %]</td>
                                                     <td>[% borrower.phone | html %]</td>
                                                     <td>[% borrower.mobile | html %]</td>
-                                                    <td><span title="[% borrower.dateenrolled | html %]">[% borrower.dateenrolled | $KohaDates %]</span></td>
-                                                    <td><span title="[% borrower.dateexpiry | html %]">[% borrower.dateexpiry | $KohaDates %]</span></td>
+                                                    <td data-order="[% borrower.dateenrolled | html %]">[% borrower.dateenrolled | $KohaDates %]</td>
+                                                    <td data-order="[% borrower.dateexpiry | html %]">[% borrower.dateexpiry | $KohaDates %]</td>
                                                     <td>[% borrower.borrowernotes | html %]</td>
                                                     <td>[% borrower.opacnote | html %]</td>
-                                                    <td><span title="[% borrower.debarred | html %]">[% borrower.debarred | $KohaDates %]</span></td>
+                                                    <td data-order="[% borrower.debarred | html %]">[% borrower.debarred | $KohaDates %]</td>
                                                     <td>[% borrower.debarredcomment | html %]</td>
                                                     [% FOREACH pa IN borrower.patron_attributes %]
                                                         [% IF ( pa.code ) %]

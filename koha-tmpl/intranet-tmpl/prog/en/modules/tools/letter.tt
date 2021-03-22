@@ -179,7 +179,7 @@
                                     <th>Module</th>
                                     <th>Code</th>
                                     <th>Name</th>
-                                    <th class="title-string">Last updated</th>
+                                    <th>Last updated</th>
                                     <th class="NoSort noExport">Copy notice</th>
                                     <th class="NoSort noExport">Actions</th>
                                 </tr>
@@ -214,7 +214,7 @@
                                         </td>
                                         <td>[% lette.code | html %]</td>
                                         <td>[% lette.name | html %]</td>
-                                        <td><span title="[% lette.updated_on | $KohaDates with_hours = 1 %]">[% lette.updated_on | $KohaDates with_hours = 1 %]</span></td>
+                                        <td data-order="[% lette.updated_on | html %]">[% lette.updated_on | $KohaDates with_hours = 1 %]</td>
                                         <td class="actions">
                                             [% IF !independant_branch || !lette.branchcode %]
                                                 <form method="post" action="/cgi-bin/koha/tools/letter.pl">

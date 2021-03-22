@@ -252,7 +252,11 @@
 <tbody>
   [% FOREACH EXCEPTION_HOLIDAYS_LOO IN EXCEPTION_HOLIDAYS_LOOP %]
   <tr>
-  <td><a href="/cgi-bin/koha/tools/holidays.pl?branch=[% branch | uri %]&amp;calendardate=[% EXCEPTION_HOLIDAYS_LOO.DATE | uri %]"><span title="[% EXCEPTION_HOLIDAYS_LOO.DATE_SORT | html %]">[% EXCEPTION_HOLIDAYS_LOO.DATE | html %]</span></a></td>
+  <td data-order="[% EXCEPTION_HOLIDAYS_LOO.DATE_SORT | html %]">
+    <a href="/cgi-bin/koha/tools/holidays.pl?branch=[% branch | uri %]&amp;calendardate=[% EXCEPTION_HOLIDAYS_LOO.DATE | uri %]">
+        [% EXCEPTION_HOLIDAYS_LOO.DATE | html %]
+    </a>
+    </td>
   <td>[% EXCEPTION_HOLIDAYS_LOO.TITLE | html %]</td>
   <td>[% EXCEPTION_HOLIDAYS_LOO.DESCRIPTION | html %]</td>
   </tr>
@@ -301,7 +305,9 @@
 <tbody>
   [% FOREACH DAY_MONTH_HOLIDAYS_LOO IN DAY_MONTH_HOLIDAYS_LOOP %]
   <tr>
-  <td><span title="[% DAY_MONTH_HOLIDAYS_LOO.DATE_SORT | html %]">[% DAY_MONTH_HOLIDAYS_LOO.DATE | html %]</span></td>
+        <td data-order="[% DAY_MONTH_HOLIDAYS_LOO.DATE_SORT | html %]">
+            [% DAY_MONTH_HOLIDAYS_LOO.DATE | html %]
+        </td>
   <td>[% DAY_MONTH_HOLIDAYS_LOO.TITLE | html %]</td>
   <td>[% DAY_MONTH_HOLIDAYS_LOO.DESCRIPTION | html %]</td>
   </tr>
@@ -323,7 +329,11 @@
 <tbody>
     [% FOREACH HOLIDAYS_LOO IN HOLIDAYS_LOOP %]
 <tr>
-  <td><a href="/cgi-bin/koha/tools/holidays.pl?branch=[% branch | uri %]&amp;calendardate=[% HOLIDAYS_LOO.DATE | uri %]"><span title="[% HOLIDAYS_LOO.DATE_SORT | html %]">[% HOLIDAYS_LOO.DATE | html %]</span></a></td>
+    <td data-order="[% HOLIDAYS_LOO.DATE_SORT | html %]">
+        <a href="/cgi-bin/koha/tools/holidays.pl?branch=[% branch | uri %]&amp;calendardate=[% HOLIDAYS_LOO.DATE | uri %]">
+            [% HOLIDAYS_LOO.DATE | html %]
+        </a>
+    </td>
   <td>[% HOLIDAYS_LOO.TITLE | html %]</td>
   <td>[% HOLIDAYS_LOO.DESCRIPTION.replace('\\\r\\\n', '<br />') | html %]</td>
 </tr>
@@ -510,9 +520,6 @@
             }));
             $("#holidayexceptions,#holidaysyearlyrepeatable,#holidaysunique").dataTable($.extend(true, {}, dataTablesDefaults, {
                 "sDom": 't',
-                "aoColumns": [
-                    { "sType": "title-string" },null,null
-                ],
                 "bPaginate": false
             }));
             $("a.helptext").click(function(){

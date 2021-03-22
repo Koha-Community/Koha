@@ -76,7 +76,7 @@
                                 <th class="anti-the">Message</th>
                                 <th>Problem page</th>
                                 <th>Sent to</th>
-                                <th class="title-string">Created on</th>
+                                <th>Created on</th>
                                 <th>Set by</th>
                                 <th>Status</th>
                                 <th class="NoSort noExport">Actions</th>
@@ -97,7 +97,7 @@
                                         [% CASE 'library' %]A librarian
                                         [% END %]
                                     </td>
-                                    <td><span title="[% report.created_on | html %]">[% report.created_on | $KohaDates with_hours => 1 %]</span></td>
+                                    <td data-order="[% report.created_on | html %]">[% report.created_on | $KohaDates with_hours => 1 %]</td>
                                     <td>[% INCLUDE 'patron-title.inc' patron => report.patron hide_patron_infos_if_needed=1 %]</td>
                                     <td class="status[% report.status | html %]" name="status">
                                         <span id="status_[% report.reportid | html %]">

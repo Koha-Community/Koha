@@ -148,8 +148,8 @@
                         <th>Location</th>
                         <th>Library</th>
                         <th>Number</th>
-                        <th class="title-string">Publication date</th>
-                        <th class="title-string">Expiration date</th>
+                        <th>Publication date</th>
+                        <th>Expiration date</th>
                         <th class="anti-the">Title</th>
                         <th>Author</th>
                         <th class="anti-the">News</th>
@@ -180,8 +180,8 @@
                                 [% ELSE %][% opac_new.branchname | html %]
                                 [% END %]</td>
                             <td>[% opac_new.number | html %]</td>
-                            <td><span title="[% opac_new.newdate | html %]">[% opac_new.newdate | $KohaDates %]</span></td>
-                            <td><span title="[% opac_new.expirationdate | html %]">[% opac_new.expirationdate | $KohaDates %] [% IF ( opac_new.expired ) %](<span class="expired">expired</span>)[% END %]</span></td>
+                            <td data-order="[% opac_new.newdate | html %]">[% opac_new.newdate | $KohaDates %]</td>
+                            <td data-order="[% opac_new.expirationdate | html %]">[% opac_new.expirationdate | $KohaDates %] [% IF ( opac_new.expired ) %](<span class="expired">expired</span>)[% END %]</td>
                             <td>[% opac_new.title | html %]</td>
                             <td>[% opac_new.author_title | html %] [% opac_new.author_firstname | html %] [% opac_new.author_surname | html %]</td>
                             <td>
@@ -344,8 +344,7 @@
                     "order": [[ 4, "desc" ]],
                     "aoColumnDefs": [
                         { "sortable": false, "searchable": false, 'targets': [ 'NoSort' ] },
-                        { "type": "anti-the", "targets": [ "anti-the" ] },
-                        { "type": "title-string", "targets" : [ "title-string"] }
+                        { "type": "anti-the", "targets": [ "anti-the" ] }
                     ],
                     "sPaginationType": "full_numbers"
                 }));

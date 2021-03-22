@@ -239,14 +239,14 @@
         <tr>
             [% UNLESS uploadedbarcodesflag %]<th>Seen</th>[% END %]
             <th>Barcode</th>
-            <th class="title-string">Call number</th>
+            <th>Call number</th>
             <th>Library</th>
             <th class="anti-the">Title</th>
             <th>Not for loan</th>
             <th>Lost</th>
             <th>Damaged</th>
             <th>Withdrawn</th>
-            <th class="title-string">Last seen</th>
+            <th>Last seen</th>
             <th>Problems</th>
         </tr>
     </thead>
@@ -261,8 +261,8 @@
             <td>
             [% result.barcode | html %]
             </td>
-            <td>
-                <span title="[% result.cn_sort | html %]">[% result.itemcallnumber | html %]</span>
+            <td data-order="[% result.cn_sort | html %]">
+                [% result.itemcallnumber | html %]
             </td>
             <td>
                 [% Branches.GetName( result.homebranch ) | html %]
@@ -286,8 +286,8 @@
             <td>
             [% result.withdrawn | html %]
             </td>
-            <td>
-                <span title="[% result.datelastseen | html %]">[% result.datelastseen | $KohaDates%]</span>
+            <td data-order="[% result.datelastseen | html %]">
+                [% result.datelastseen | $KohaDates%]
             </td>
             <td>
             [% FOREACH problem IN result.problems %]
@@ -397,8 +397,7 @@
                     // first column contains checkboxes
                     "aoColumnDefs": [
                         { "sType": "anti-the", "aTargets" : [ "anti-the" ] },
-                        { "bSortable": false, "bSearchable": false, "aTargets": [ 0 ] },
-                        { "sType": "title-string", "aTargets" : [ "title-string" ] },
+                        { "bSortable": false, "bSearchable": false, "aTargets": [ 0 ] }
                     ],
                     // 3rd column is callnumber
                     "aaSorting": [[ 2, "asc" ]],
