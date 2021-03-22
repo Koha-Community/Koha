@@ -52,6 +52,20 @@ sub item {
     return Koha::Item->_new_from_dbic($item_rs);
 }
 
+=head3 from_library
+
+  my $from_library = $transfer->from_library;
+
+Returns the associated from_library for this transfer.
+
+=cut
+
+sub from_library {
+    my ($self) = @_;
+    my $from_library_rs = $self->_result->frombranch;
+    return Koha::Library->_new_from_dbic($from_library_rs);
+}
+
 =head3 transit
 
 Set the transfer as in transit by updating the datesent time.
@@ -147,10 +161,12 @@ sub cancel {
     # Set up return transfer if transfer was force cancelled whilst in transit
     # NOTE: We don't catch here, as we're happy to fail if there are already
     # other transfers in the queue.
-    try {
-        $self->item->request_transfer(
-            { to => $self->frombranch, reason => 'TransferCancellation' } );
-    };
+    if ($in_transit) {
+        try {
+            $self->item->request_transfer(
+                { to => $self->from_library, reason => 'TransferCancellation' } );
+        };
+    }
 
     return $self;
 }

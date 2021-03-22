@@ -497,8 +497,17 @@ Cancel a hold:
 
 sub cancel {
     my ( $self, $params ) = @_;
+
     $self->_result->result_source->schema->txn_do(
         sub {
+            if ( $self->is_in_transit ) {
+                my $transfer = $self->item->get_transfer;
+                # NOTE: Transfers are well bound with Holds.. as such we have to check that there is actually a
+                # transfer enqueued and in transit here prior to trying to cancel it.
+                if ( $transfer && $transfer->in_transit ) {
+                    $transfer->cancel({ reason => 'CancelReserve', force => 1 });
+                }
+            }
             $self->cancellationdate( dt_from_string->strftime( '%Y-%m-%d %H:%M:%S' ) );
             $self->priority(0);
             $self->cancellation_reason( $params->{cancellation_reason} );
