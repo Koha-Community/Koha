@@ -136,27 +136,26 @@
                                     <tbody>
                                         [% FOREACH serial IN year.serials %]
                                             <tr>
-                                                <td>
+                                                <td data-order="[% serial.publisheddate | html %]">
                                                     [% IF ( serial.publisheddate ) %]
-                                                        <span title="[% serial.publisheddate | html %]">
-                                                            [% IF serial.publisheddatetext %]
-                                                                [% serial.publisheddatetext | html %]
-                                                            [% ELSE %]
-                                                                [% serial.publisheddate | $KohaDates %]
-                                                            [% END %]
-                                                        </span>
+                                                        [% IF serial.publisheddatetext %]
+                                                            [% serial.publisheddatetext | html %]
+                                                        [% ELSE %]
+                                                            [% serial.publisheddate | $KohaDates %]
+                                                        [% END %]
                                                     [% ELSE %]
                                                         &nbsp;
                                                     [% END %]
                                                 </td>
                                                 <td class="libraryfilterclass">[% Branches.GetName( serial.branchcode ) | html %]</td>
                                                 <td>[% serial.notes | html %]</td>
-                                                <td>
-                                                    [% IF ( serial.status2 && serial.planneddate ) %]
-                                                        <span title="[% serial.planneddate | html %]">[% serial.planneddate | $KohaDates %]</span>
-                                                    [% ELSE %]
-                                                        <span title="9999-12-31">&nbsp;</span>
-                                                    [% END %]
+                                                [% IF ( serial.status2 && serial.planneddate ) %]
+                                                    <td data-order="[% serial.planneddate | html %]">
+                                                        [% serial.planneddate | $KohaDates %]
+                                                [% ELSE %]
+                                                    <td data-order="9999-12-31">
+                                                        &nbsp;
+                                                [% END %]
                                                 </td>
                                                 <td>[% serial.serialseq | html %]</td>
                                                 <td>
@@ -211,16 +210,7 @@
                 $(this).addClass("currentsubtab");
             });
             $(".subscriptionstclass").dataTable($.extend(true, {}, dataTablesDefaults, {
-                "order": [[ 0, "desc" ]],
-                "columns": [
-                    { "type": "title-string" },
-                    null,
-                    null,
-                    { "type": "title-string" },
-                    null,
-                    null,
-                    null
-                ]
+                "order": [[ 0, "desc" ]]
             }));
         });
 

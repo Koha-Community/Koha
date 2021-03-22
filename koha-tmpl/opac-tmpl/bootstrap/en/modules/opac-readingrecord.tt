@@ -91,7 +91,7 @@
                                                 <th class="anti-the">Title</th>
                                                 <th>Item type</th>
                                                 <th>Call no.</th>
-                                                <th class="title-string">Date</th>
+                                                <th>Date</th>
                                                 [% IF ( OPACMySummaryHTML ) %]
                                                     <th class="NoSort noExport">Links</th>
                                                 [% END %]
@@ -173,13 +173,14 @@
                                                 <span class="tdlabel">Call number:</span>
                                                 [% issue.itemcallnumber | html %]
                                                 </td>
-                                                <td>
-                                                    [% IF issue.returndate %]
+                                                [% IF issue.returndate %]
+                                                    <td data-order="[% issue.returndate | html %]">
                                                         <span class="tdlabel">Check-in date:</span>
-                                                        <span title="[% issue.returndate | html %]">[% issue.returndate | $KohaDates %]</span>
-                                                    [% ELSE %]
-                                                        <span title="Checked out"><em>(Checked out)</em></span>
-                                                    [% END %]
+                                                        [% issue.returndate | $KohaDates %]
+                                                [% ELSE %]
+                                                    <td data-order="Checked out">
+                                                        <em>(Checked out)</em>
+                                                [% END %]
                                                 </td>
                                                 [% IF OPACMySummaryHTML %]
                                                     <td>[% issue.MySummaryHTML | $raw %]</td>

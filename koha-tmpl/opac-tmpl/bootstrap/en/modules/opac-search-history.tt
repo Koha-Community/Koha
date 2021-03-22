@@ -76,9 +76,9 @@
                                                         <td class="selectcol">
                                                             <input type="checkbox" name="id" value="[% s.id | html %]" id="result[% s.id | html %]" />
                                                         </td>
-                                                        <td>
+                                                        <td data-order="[% s.time | html %]">
                                                             <label for="result[% s.id | html %]">
-                                                                <span title="[% s.time | html %]">[% s.time |$KohaDates  with_hours => 1 %]</span>
+                                                                [% s.time |$KohaDates  with_hours => 1 %]
                                                             </label>
                                                         </td>
                                                         <td>
@@ -119,9 +119,9 @@
                                                     <td class="selectcol">
                                                         <input type="checkbox" name="id" value="[% s.id | html %]" id="result[% s.id | html %]" />
                                                     </td>
-                                                    <td>
+                                                    <td data-order="[% s.time | html %]">
                                                         <label for="result[% s.id | html %]">
-                                                            <span title="[% s.time | html %]">[% s.time |$KohaDates  with_hours => 1 %]</span>
+                                                            [% s.time |$KohaDates  with_hours => 1 %]
                                                         </label>
                                                     </td>
                                                     <td>
@@ -169,9 +169,9 @@
                                                         <td class="selectcol">
                                                             <input type="checkbox" name="id" value="[% s.id | html %]" id="result[% s.id | html %]" />
                                                         </td>
-                                                        <td>
+                                                        <td data-order="[% s.time | html %]">
                                                             <label for="result[% s.id | html %]">
-                                                                <span title="[% s.time | html %]">[% s.time |$KohaDates  with_hours => 1 %]</span>
+                                                                [% s.time |$KohaDates  with_hours => 1 %]
                                                             </label>
                                                         </td>
                                                         <td><a href="/cgi-bin/koha/opac-authorities-home.pl?[% s.query_cgi | $raw %]">[% s.query_desc | html %]</a></td>
@@ -204,9 +204,9 @@
                                                         <td class="selectcol">
                                                             <input type="checkbox" name="id" value="[% s.id | html %]" id="result[% s.id | html %]" />
                                                         </td>
-                                                        <td>
+                                                        <td data-order="[% s.time | html %]">
                                                             <label for="result[% s.id | html %]">
-                                                                <span title="[% s.time | html %]">[% s.time |$KohaDates  with_hours => 1 %]</span>
+                                                                [% s.time |$KohaDates  with_hours => 1 %]
                                                             </label>
                                                         </td>
                                                         <td><a href="/cgi-bin/koha/opac-authorities-home.pl?[% s.query_cgi | $raw %]">[% s.query_desc | html %]</a></td>
@@ -259,8 +259,7 @@
             "order": [[ 1, "desc" ]],
             "dom": '<"top"<"table_entries"><"table_controls"fB>>t',
             "columnDefs": [
-                { "targets": [ 0 ], "sortable": false, "searchable": false },
-                { "targets": [ 1 ], "type": "title-string" },
+                { "targets": [ 0 ], "sortable": false, "searchable": false }
             ],
             "language": {
                 "search": "_INPUT_",

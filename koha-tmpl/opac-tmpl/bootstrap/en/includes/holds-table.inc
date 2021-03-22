@@ -12,11 +12,11 @@
                 <tr>
                     <th class="anti-the">Title</th>
                     [% IF ( showpriority ) %]
-                        <th class="title-string">Placed on</th>
+                        <th>Placed on</th>
                     [% ELSE %]
-                        <th class="psort title-string">Placed on</th>
+                        <th class="psort">Placed on</th>
                     [% END %]
-                    <th class="title-string">Expires on</th>
+                    <th>Expires on</th>
                     [% UNLESS( singleBranchMode) %]
                         <th>Pick up location</th>
                     [% END %]
@@ -62,28 +62,24 @@
                                 <p class="hint">Item on hold: [% HOLD.item.barcode | html %]</p>
                             [% END %]
                         </td>
-                        <td class="reservedate">
-                            <span title="[% HOLD.reservedate | html %]">
-                                <span class="tdlabel">Hold date:</span>
+                        <td class="reservedate" data-order="[% HOLD.reservedate | html %]">
+                            <span class="tdlabel">Hold date:</span>
                                 [% HOLD.reservedate | $KohaDates %]
                             </span>
                         </td>
-                        <td class="expirationdate">
-                            [% IF ! HOLD.found %]
+                        [% IF ! HOLD.found %]
+                            <td class="expirationdate" data-order="[% HOLD.expirationdate | html %]">
                                 [% IF ( HOLD.expirationdate ) %]
-                                    <span title="[% HOLD.expirationdate | html %]">
-                                        <span class="tdlabel">Expiration:</span>
-                                            [% HOLD.expirationdate | $KohaDates %]
-                                    </span>
+                                    <span class="tdlabel">Expiration:</span>
+                                    [% HOLD.expirationdate | $KohaDates %]
                                 [% ELSE %]
-                                    <span title="0000-00-00">
-                                        <span class="tdlabel">Expiration:</span>
-                                        Never expires
-                                    </span>
+                                    <span class="tdlabel">Expiration:</span>
+                                    Never expires
                                 [% END %]
-                            [% ELSE %]
-                                <span title="0000-00-00">-</span>
-                            [% END %]
+                        [% ELSE %]
+                            <td class="expirationdate" data-order="0000-00-00">
+                                -
+                        [% END %]
                         </td>
                         [% UNLESS( singleBranchMode) %]
                             <td class="branch">

@@ -94,9 +94,6 @@ $( document ).ready(function() {
     var txtInactivefilter = _("Show all transactions");
 
     var fines_table = $("#finestable").dataTable($.extend(true, {}, dataTablesDefaults, {
-        "columnDefs": [
-             { "type": "title-string", "targets" : [ "title-string" ] }
-         ],
          [% IF ENABLE_OPAC_PAYMENTS %]
          "order": [[ 1, "desc" ]],
          [% ELSE %]

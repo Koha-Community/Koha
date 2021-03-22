@@ -69,7 +69,7 @@
                                     <th>Call number</th>
                                     <th>Copy number</th>
                                     <th>Status</th>
-                                    <th class="title-string">Date due</th>
+                                    <th>Date due</th>
                                     <th>Notes</th>
                                     <th>Link</th>
                                 </tr>
@@ -86,7 +86,7 @@
                                         <td>[% cr.item.itemcallnumber | html %]</td>
                                         <td>[% cr.item.copynumber | html %]</td>
                                         <td>[% INCLUDE 'item-status.inc' item=cr.item issue=cr.issue %]</td>
-                                        <td><span title="[% cr.issue.date_due | html %]">[% cr.issue.date_due | $KohaDates  as_due_date => 1 %]</span></td>
+                                        <td data-order="[% cr.issue.date_due | html %]">[% cr.issue.date_due | $KohaDates  as_due_date => 1 %]</td>
                                         <td>[% IF ( cr.public_note ) %]
                                                 [% cr.public_note | $raw %]
                                             [% ELSIF ( cr.item.itemnotes ) %]

@@ -6,7 +6,7 @@
             <thead>
                 <tr>
                     [% IF ENABLE_OPAC_PAYMENTS %]<th>&nbsp;</th>[% END %]
-                    <th class="title-string">Date</th>
+                    <th>Date</th>
                     <th>Type</th>
                     <th>Description</th>
                     <th>Amount</th>
@@ -26,7 +26,7 @@
                                 [% END %]
                             </td>
                         [% END %]
-                        <td><span title="[% ACCOUNT_LINE.date | html %]">[% ACCOUNT_LINE.date | $KohaDates %]</span></td>
+                        <td data-order="[% ACCOUNT_LINE.date | html %]">[% ACCOUNT_LINE.date | $KohaDates %]</td>
                         <td>
                             [% PROCESS account_type_description account=ACCOUNT_LINE %]
                         </td>
@@ -89,7 +89,7 @@
             <thead>
                 <tr>
                     [% IF ENABLE_OPAC_PAYMENTS %]<th>&nbsp;</th>[% END %]
-                    <th class="title-string">Date</th>
+                    <th>Date</th>
                     <th>Description</th>
                     <th>Fine amount</th>
                     <th>Amount outstanding</th>
@@ -110,7 +110,7 @@
                                 [% END %]
                             </td>
                         [% END %]
-                        <td><span title="[% a.date | html %]">[% a.date | $KohaDates %]</span></td>
+                        <td data-order="[% a.date | html %]">[% a.date | $KohaDates %]</td>
                         <td>
                             [% PROCESS account_type_description account=a %]
                             [%- IF a.payment_type %], [% AuthorisedValues.GetByCode('PAYMENT_TYPE', a.payment_type, 1) | html %][% END %]

@@ -99,10 +99,9 @@ function KohaTable(selector, dt_parameters, columns_settings) {
     var new_parameters = {}
     $.extend(true, new_parameters, dataTablesDefaults, dt_parameters);
     var default_column_defs = [
-        { "aTargets": ["title-string"], "sType": "title-string" },
         { "aTargets": ["string-sort"], "sType": "string" },
         { "aTargets": ["anti-the"], "sType": "anti-the" },
-        { "aTargets": ["NoSort"], "bSortable": false, "bSearchable": false },
+        { "aTargets": ["NoSort"], "bSortable": false, "bSearchable": false }
     ];
     if (new_parameters["aoColumnDefs"] === undefined) {
         new_parameters["aoColumnDefs"] = default_column_defs;

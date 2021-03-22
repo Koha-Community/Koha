@@ -823,8 +823,8 @@
                                         <thead>
                                             <tr>
                                                 <th id="serial_serialseq" data-colname="serial_serialseq">Issue #</th>
-                                                <th id="serial_publisheddate" data-colname="serial_publisheddate" class="title-string">Publication date</th>
-                                                <th id="serial_planneddate" data-colname="serial_planneddate" class="title-string">Received date</th>
+                                                <th id="serial_publisheddate" data-colname="serial_publisheddate">Publication date</th>
+                                                <th id="serial_planneddate" data-colname="serial_planneddate">Received date</th>
                                                 <th id="serial_status" data-colname="serial_status">Status</th>
                                                 <th id="serial_notes" data-colname="serial_notes">Note</th>
                                             </tr>
@@ -833,8 +833,8 @@
                                             [% FOREACH latestserial IN subscription.latestserials %]
                                                 <tr>
                                                     <td class="serialseq">[% latestserial.serialseq | html %]</td>
-                                                    <td class="publisheddate"><span title="[% latestserial.publisheddate | html %]">[% latestserial.publisheddate | $KohaDates %]</span></td>
-                                                    <td class="planneddate"><span title="[% latestserial.planneddate | html %]">[% latestserial.planneddate | $KohaDates %]</span></td>
+                                                    <td class="publisheddate" data-order="[% latestserial.publisheddate | html %]">[% latestserial.publisheddate | $KohaDates %]</td>
+                                                    <td class="planneddate" data-order="[% latestserial.planneddate | html %]">[% latestserial.planneddate | $KohaDates %]</td>
                                                     <td class="serial_status">
                                                         [% IF (latestserial.status1 ) %]<span>Expected</span>[% END %]
                                                         [% IF (latestserial.status2 ) %]<span>Arrived</span>[% END %]
@@ -1398,7 +1398,7 @@
                 [% IF ( itemdata_copynumber ) %]<td class="copynumber">[% ITEM_RESULT.copynumber | html %]</td>[% END %]
                 <td class="status">[% INCLUDE 'item-status-schema-org.inc' item = ITEM_RESULT %][% INCLUDE 'item-status.inc' item = ITEM_RESULT %]</td>
                 [% IF ( itemdata_itemnotes ) %]<td class="notes" property="description">[% ITEM_RESULT.itemnotes | $raw %]</td>[% END %]
-                <td class="date_due"><span title="[% ITEM_RESULT.datedue | html %]">[% ITEM_RESULT.datedue | $KohaDates  as_due_date => 1 %]</span></td>
+                <td class="date_due" data-order="[% ITEM_RESULT.datedue | html %]">[% ITEM_RESULT.datedue | $KohaDates  as_due_date => 1 %]</td>
                     <td class="barcode" property="serialNumber">[% ITEM_RESULT.barcode | html %]</td>
                 [% IF holds_count.defined || show_priority %]
                     <td class="holds_count">

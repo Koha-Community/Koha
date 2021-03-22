@@ -134,8 +134,8 @@
                                         <th>Requested from</th>
                                         <th>Request type</th>
                                         <th>Status</th>
-                                        <th class="title-string">Request placed</th>
-                                        <th class="title-string">Last updated</th>
+                                        <th>Request placed</th>
+                                        <th>Last updated</th>
                                         <th></th>
                                     </tr>
                                 </thead>
@@ -156,8 +156,8 @@
                                                 [% IF type %][% type | html %][% ELSE %]<span>N/A</span>[% END %]
                                             </td>
                                             <td>[% request.status_alias ? request.statusalias.lib_opac : request.capabilities.$status.name | html %]</td>
-                                            <td><span title="[% request.placed | html %]">[% request.placed | $KohaDates %]</span></td>
-                                            <td><span title="[% request.updated | html %]">[% request.updated | $KohaDates %]</span></td>
+                                            <td data-order="[% request.placed | html %]">[% request.placed | $KohaDates %]</td>
+                                            <td data-order="[% request.updated | html %]">[% request.updated | $KohaDates %]</td>
                                             <td>
                                                 <a href="/cgi-bin/koha/opac-illrequests.pl?method=view&amp;illrequest_id=[% request.id | uri %]" class="btn btn-primary btn-sm pull-right">View</a>
                                             </td>
@@ -285,8 +285,7 @@
     <script>
         $("#illrequestlist").dataTable($.extend(true, {}, dataTablesDefaults, {
             "columnDefs": [
-                { "targets": [ -1 ], "sortable": false, "searchable": false },
-                { "type": "title-string", "targets" : [ "title-string" ] }
+                { "targets": [ -1 ], "sortable": false, "searchable": false }
             ],
             "order": [[ 3, "desc" ]],
             "deferRender": true
