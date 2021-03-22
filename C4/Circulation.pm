@@ -2804,16 +2804,14 @@ sub CanBookBeRenewed {
         }
     }
 
-    my ( $resfound, $resrec, undef ) = C4::Reserves::CheckReserves($itemnumber);
+    my ( $resfound, $resrec, $possible_reserves ) = C4::Reserves::CheckReserves($itemnumber);
 
     # This item can fill one or more unfilled reserve, can those unfilled reserves
     # all be filled by other available items?
     if ( $resfound
         && C4::Context->preference('AllowRenewalIfOtherItemsAvailable') )
     {
-        my $schema = Koha::Database->new()->schema();
-
-        my $item_holds = $schema->resultset('Reserve')->search( { itemnumber => $itemnumber, found => undef } )->count();
+        my $item_holds = Koha::Holds->search( { itemnumber => $itemnumber, found => undef } )->count();
         if ($item_holds) {
             # There is an item level hold on this item, no other item can fill the hold
             $resfound = 1;
@@ -2821,29 +2819,18 @@ sub CanBookBeRenewed {
         else {
 
             # Get all other items that could possibly fill reserves
-            my @itemnumbers = $schema->resultset('Item')->search(
-                {
-                    biblionumber => $resrec->{biblionumber},
-                    onloan       => undef,
-                    notforloan   => 0,
-                    -not         => { itemnumber => $itemnumber }
-                },
-                { columns => 'itemnumber' }
-            )->get_column('itemnumber')->all();
+            my $items = Koha::Items->search({
+                biblionumber => $resrec->{biblionumber},
+                onloan       => undef,
+                notforloan   => 0,
+                -not         => { itemnumber => $itemnumber }
+            });
 
             # Get all other reserves that could have been filled by this item
-            my @borrowernumbers;
-            while (1) {
-                my ( $reserve_found, $reserve, undef ) =
-                  C4::Reserves::CheckReserves( $itemnumber, undef, undef, \@borrowernumbers );
-
-                if ($reserve_found) {
-                    push( @borrowernumbers, $reserve->{borrowernumber} );
-                }
-                else {
-                    last;
-                }
-            }
+            my @borrowernumbers = map { $_->{borrowernumber} } @$possible_reserves;
+            my $patrons = Koha::Patrons->search({
+                borrowernumber => { -in => \@borrowernumbers }
+            });
 
             # If the count of the union of the lists of reservable items for each borrower
             # is equal or greater than the number of borrowers, we know that all reserves
@@ -2851,15 +2838,12 @@ sub CanBookBeRenewed {
             # by pushing all the elements onto an array and removing the duplicates.
             my @reservable;
             my %patrons;
-            ITEM: foreach my $itemnumber (@itemnumbers) {
-                my $item = Koha::Items->find( $itemnumber );
-                next if IsItemOnHoldAndFound( $itemnumber );
-                for my $borrowernumber (@borrowernumbers) {
-                    my $patron = $patrons{$borrowernumber} //= Koha::Patrons->find( $borrowernumber );
+            ITEM: while ( my $item = $items->next ) {
+                next if IsItemOnHoldAndFound( $item->itemnumber );
+                while ( my $patron = $patrons->next ) {
                     next unless IsAvailableForItemLevelRequest($item, $patron);
-                    next unless CanItemBeReserved($borrowernumber,$itemnumber);
-
-                    push @reservable, $itemnumber;
+                    next unless CanItemBeReserved($patron->borrowernumber,$item->itemnumber);
+                    push @reservable, $item->itemnumber;
                     if (@reservable >= @borrowernumbers) {
                         $resfound = 0;
                         last ITEM;
