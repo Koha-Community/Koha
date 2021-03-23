@@ -28,7 +28,7 @@ use_ok('Koha::Email');
 
 subtest 'create() tests' => sub {
 
-    plan tests => 24;
+    plan tests => 25;
 
     t::lib::Mocks::mock_preference( 'SendAllEmailsTo', undef );
 
@@ -64,13 +64,14 @@ subtest 'create() tests' => sub {
 
     $email = Koha::Email->create(
         {
-            from        => 'from@example.com',
+            from        => 'from@8.8.8.8',
             to          => 'to@example.com',
             bcc         => 'root@localhost',
         }
     );
 
     is( $email->email->header('Bcc'), 'root@localhost', 'Non-FQDN (@localhost) supported' );
+    is( $email->email->header('From'), 'from@8.8.8.8', 'IPs supported' );
 
     t::lib::Mocks::mock_preference( 'SendAllEmailsTo', 'catchall@example.com' );
     t::lib::Mocks::mock_preference( 'ReplytoDefault', 'replytodefault@example.com' );
