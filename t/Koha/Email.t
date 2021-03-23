@@ -232,7 +232,7 @@ subtest 'send_or_die() tests' => sub {
             'to@example.com',    'cc@example.com',
             'bcc_1@example.com', 'bcc_2@example.com'
         ],
-        'If explicitly passed, "to" is preserved'
+        'If "to" is not explicitly passed, extract recipients from headers'
     );
     is( $email->header_str('Bcc'), undef, 'The Bcc header is unset' );
 };
