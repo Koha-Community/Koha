@@ -25,35 +25,35 @@
             <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a>
         </li>
 
-    [% IF op == 'add_form' %]
-        <li>
-            <a href="/cgi-bin/koha/admin/authtypes.pl">Authority types</a>
-        </li>
-        <li>
-            <a href="#" aria-current="page">
-                [% IF authority_type.authtypecode.defined %]
-                    Modify
-                [% ELSE %]
-                    New
-                [% END %] Authority type
-            </a>
-        </li>
+        [% IF op == 'add_form' %]
+            <li>
+                <a href="/cgi-bin/koha/admin/authtypes.pl">Authority types</a>
+            </li>
+            <li>
+                <a href="#" aria-current="page">
+                    [% IF authority_type.authtypecode.defined %]
+                        Modify
+                    [% ELSE %]
+                        New
+                    [% END %] Authority type
+                </a>
+            </li>
 
-    [% ELSIF op == 'delete_confirm' %]
-        <li>
-            <a href="/cgi-bin/koha/admin/authtypes.pl">Authority types</a>
-        </li>
-        <li>
-            <a href="#" aria-current="page">
-                Confirm deletion of authority type
-            </a>
-        </li>
+        [% ELSIF op == 'delete_confirm' %]
+            <li>
+                <a href="/cgi-bin/koha/admin/authtypes.pl">Authority types</a>
+            </li>
+            <li>
+                <a href="#" aria-current="page">
+                    Confirm deletion of authority type
+                </a>
+            </li>
 
-    [% ELSE %]
-        <li>
-            <a href="#" aria-current="page">Authority types</a>
-        </li>
-    [% END %]
+        [% ELSE %]
+            <li>
+                <a href="#" aria-current="page">Authority types</a>
+            </li>
+        [% END %]
     </ol>
 </nav>
 

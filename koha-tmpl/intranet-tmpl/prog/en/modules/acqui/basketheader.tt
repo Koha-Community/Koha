@@ -29,21 +29,21 @@
         <li>
             <a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% booksellerid | uri %]">[% booksellername | html %]</a>
         </li>
-    [% IF ( add_form ) %]
-        [% IF ( basketno ) %]
-        <li>
-            <a href="#" aria-current="page">
-                Edit basket '[% basketname | html %]'
-            </a>
-        </li>
-        [% ELSE %]
-        <li>
-            <a href="#" aria-current="page">
-                Add a basket to [% booksellername | html %]
-            </a>
-        </li>
+        [% IF ( add_form ) %]
+            [% IF ( basketno ) %]
+                <li>
+                    <a href="#" aria-current="page">
+                        Edit basket '[% basketname | html %]'
+                    </a>
+                </li>
+            [% ELSE %]
+                <li>
+                    <a href="#" aria-current="page">
+                        Add a basket to [% booksellername | html %]
+                    </a>
+                </li>
+            [% END %]
         [% END %]
-    [% END %]
     </ol>
 </nav>
 

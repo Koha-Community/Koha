@@ -32,49 +32,49 @@
             <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a>
         </li>
 
-    [% IF op == 'add_form' %]
-        <li>
-            <a href="/cgi-bin/koha/admin/authorised_values.pl">Authorized values</a>
-        </li>
-        [% IF ( action_modify ) %]
+        [% IF op == 'add_form' %]
             <li>
-                <a href="#" aria-current="page">
-                    Modify authorized value
-                </a>
+                <a href="/cgi-bin/koha/admin/authorised_values.pl">Authorized values</a>
             </li>
-        [% END %]
-        [% IF ( action_add_value ) %]
-            <li>
-                <a href="#" aria-current="page">
-                    New authorized value
-                </a>
-            </li>
-        [% END %]
-        [% IF ( action_add_category ) %]
-            <li>
-                <a href="#" aria-current="page">
-                    New category
-                </a>
-            </li>
-        [% END %]
+            [% IF ( action_modify ) %]
+                <li>
+                    <a href="#" aria-current="page">
+                        Modify authorized value
+                    </a>
+                </li>
+            [% END %]
+            [% IF ( action_add_value ) %]
+                <li>
+                    <a href="#" aria-current="page">
+                        New authorized value
+                    </a>
+                </li>
+            [% END %]
+            [% IF ( action_add_category ) %]
+                <li>
+                    <a href="#" aria-current="page">
+                        New category
+                    </a>
+                </li>
+            [% END %]
 
-    [% ELSIF ( loop || searchfield ) %]
-        <li>
-            <a href="/cgi-bin/koha/admin/authorised_values.pl">Authorized values</a>
-        </li>
-        <li>
-            <a href="#" aria-current="page">
-                Authorized values for category [% category.category_name | html %]
-            </a>
-        </li>
+        [% ELSIF ( loop || searchfield ) %]
+            <li>
+                <a href="/cgi-bin/koha/admin/authorised_values.pl">Authorized values</a>
+            </li>
+            <li>
+                <a href="#" aria-current="page">
+                    Authorized values for category [% category.category_name | html %]
+                </a>
+            </li>
 
-    [% ELSE %]
-        <li>
-            <a href="#" aria-current="page">
-                Authorized values
-            </a>
-        </li>
-    [% END %]
+        [% ELSE %]
+            <li>
+                <a href="#" aria-current="page">
+                    Authorized values
+                </a>
+            </li>
+        [% END %]
     </ol>
 </nav>
 

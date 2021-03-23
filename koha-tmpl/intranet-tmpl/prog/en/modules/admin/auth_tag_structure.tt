@@ -27,10 +27,44 @@
             <a href="/cgi-bin/koha/admin/authtypes.pl">Authority types</a>
         </li>
 
-    [% IF ( add_form ) %]
-        [% IF ( use_heading_flags_p ) %]
+        [% IF ( add_form ) %]
+            [% IF ( use_heading_flags_p ) %]
 
-            [% IF ( heading_modify_tag_p ) %]
+                [% IF ( heading_modify_tag_p ) %]
+                    [% IF ( authtypecode ) %]
+                        <li>
+                            <a href="/cgi-bin/koha/admin/auth_tag_structure.pl?authtypecode=[% authtypecode | uri %]">[% authtypecode | html %] Framework</a>
+                        </li>
+                    [% ELSE %]
+                        <li>
+                            <a href="/cgi-bin/koha/admin/auth_tag_structure.pl">Default framework</a>
+                        </li>
+                    [% END %]
+                    <li>
+                        <a href="#" aria-current="page">
+                            Modify tag
+                        </a>
+                    </li>
+                [% END %]
+
+                [% IF ( heading_add_tag_p ) %]
+                    [% IF ( authtypecode ) %]
+                        <li>
+                            <a href="/cgi-bin/koha/admin/auth_tag_structure.pl?authtypecode=[% authtypecode | uri %]">[% authtypecode | html %] framework</a>
+                        </li>
+                    [% ELSE %]
+                        <li>
+                            <a href="/cgi-bin/koha/admin/auth_tag_structure.pl">Default framework</a>
+                        </li>
+                    [% END %]
+                    <li>
+                        <a href="#" aria-current="page">
+                            New tag
+                        </a>
+                    </li>
+                [% END %]
+
+            [% ELSE %]
                 [% IF ( authtypecode ) %]
                     <li>
                         <a href="/cgi-bin/koha/admin/auth_tag_structure.pl?authtypecode=[% authtypecode | uri %]">[% authtypecode | html %] Framework</a>
@@ -42,12 +76,13 @@
                 [% END %]
                 <li>
                     <a href="#" aria-current="page">
-                        Modify tag
+                        [% action | html %]
                     </a>
                 </li>
             [% END %]
 
-            [% IF ( heading_add_tag_p ) %]
+        [% ELSE %]
+            [% IF ( delete_confirm ) %]
                 [% IF ( authtypecode ) %]
                     <li>
                         <a href="/cgi-bin/koha/admin/auth_tag_structure.pl?authtypecode=[% authtypecode | uri %]">[% authtypecode | html %] framework</a>
@@ -59,78 +94,43 @@
                 [% END %]
                 <li>
                     <a href="#" aria-current="page">
-                        New tag
-                    </a>
-                </li>
-            [% END %]
-
-        [% ELSE %]
-            [% IF ( authtypecode ) %]
-                <li>
-                    <a href="/cgi-bin/koha/admin/auth_tag_structure.pl?authtypecode=[% authtypecode | uri %]">[% authtypecode | html %] Framework</a>
-                </li>
-            [% ELSE %]
-                <li>
-                    <a href="/cgi-bin/koha/admin/auth_tag_structure.pl">Default framework</a>
-                </li>
-            [% END %]
-            <li>
-                <a href="#" aria-current="page">
-                    [% action | html %]
-                </a>
-            </li>
-        [% END %]
-
-    [% ELSE %]
-        [% IF ( delete_confirm ) %]
-            [% IF ( authtypecode ) %]
-                <li>
-                    <a href="/cgi-bin/koha/admin/auth_tag_structure.pl?authtypecode=[% authtypecode | uri %]">[% authtypecode | html %] framework</a>
-                </li>
-            [% ELSE %]
-                <li>
-                    <a href="/cgi-bin/koha/admin/auth_tag_structure.pl">Default framework</a>
-                </li>
-            [% END %]
-            <li>
-                <a href="#" aria-current="page">
-                    Confirm deletion
-                </a>
-            </li>
-        [% ELSE %]
-            [% IF ( delete_confirmed ) %]
-                [% IF ( authtypecode ) %]
-                    <li>
-                        <a href="/cgi-bin/koha/admin/auth_tag_structure.pl?authtypecode=[% authtypecode | uri %]">[% authtypecode | html %] framework</a>
-                    </li>
-                [% ELSE %]
-                    <li>
-                        <a href="/cgi-bin/koha/admin/auth_tag_structure.pl">Default framework</a>
-                    </li>
-                [% END %]
-                <li>
-                    <a href="#" aria-current="page">
-                        Data deleted
+                        Confirm deletion
                     </a>
                 </li>
             [% ELSE %]
-                [% IF ( authtypecode ) %]
+                [% IF ( delete_confirmed ) %]
+                    [% IF ( authtypecode ) %]
+                        <li>
+                            <a href="/cgi-bin/koha/admin/auth_tag_structure.pl?authtypecode=[% authtypecode | uri %]">[% authtypecode | html %] framework</a>
+                        </li>
+                    [% ELSE %]
+                        <li>
+                            <a href="/cgi-bin/koha/admin/auth_tag_structure.pl">Default framework</a>
+                        </li>
+                    [% END %]
                     <li>
                         <a href="#" aria-current="page">
-                            [% authtypecode | html %] Framework
+                            Data deleted
                         </a>
                     </li>
                 [% ELSE %]
-                    <li>
-                        <a href="#" aria-current="page">
-                            Default framework
-                        </a>
-                    </li>
+                    [% IF ( authtypecode ) %]
+                        <li>
+                            <a href="#" aria-current="page">
+                                [% authtypecode | html %] Framework
+                            </a>
+                        </li>
+                    [% ELSE %]
+                        <li>
+                            <a href="#" aria-current="page">
+                                Default framework
+                            </a>
+                        </li>
+                    [% END %]
                 [% END %]
-            [% END %]
 
+            [% END %]
         [% END %]
-    [% END %]
     </ol>
 </nav>
 

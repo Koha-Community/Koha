@@ -22,53 +22,53 @@
             <a href="/cgi-bin/koha/admin/authtypes.pl">Authority types</a>
         </li>
 
-    [% IF ( authtypecode ) %]
-        <li>
-            <a href="/cgi-bin/koha/admin/auth_tag_structure.pl?authtypecode=[% authtypecode | uri%]">[% authtypecode | html %] framework</a>
-        </li>
-    [% ELSE %]
-        <li>
-            <a href="/cgi-bin/koha/admin/auth_tag_structure.pl">Default framework</a>
-        </li>
-    [% END %]
-
-    [% IF ( else ) %]
-        <li>
-            <a href="#" aria-current="page">
-                Authority MARC subfield structure for [% tagfield | html %]
-            </a>
-        </li>
-    [% ELSE %]
-        <li>
-            <a href="/cgi-bin/koha/admin/auth_subfields_structure.pl?tagfield=[% tagfield | uri %]&amp;tagsubfield=[% tagsubfield | uri %]&amp;authtypecode=[% authtypecode |uri %]">Authority MARC subfield structure for [% tagfield | html %]</a>
-        </li>
-    [% END %]
-
-    [% IF ( delete_confirm ) %]
-        <li>
-            <a href="#" aria-current="page">
-                Confirm deletion of subfield [% tagsubfield | html %]?
-            </a>
-        </li>
-    [% END %]
-
-    [% IF ( add_form ) %]
-        [% IF ( use_heading_flags_p ) %]
-            [% IF ( heading_edit_subfields_p ) %]
-                <li>
-                    <a href="#" aria-current="page">
-                        Edit MARC subfields constraints
-                    </a>
-                </li>
-            [% END %]
+        [% IF ( authtypecode ) %]
+            <li>
+                <a href="/cgi-bin/koha/admin/auth_tag_structure.pl?authtypecode=[% authtypecode | uri%]">[% authtypecode | html %] framework</a>
+            </li>
         [% ELSE %]
             <li>
+                <a href="/cgi-bin/koha/admin/auth_tag_structure.pl">Default framework</a>
+            </li>
+        [% END %]
+
+        [% IF ( else ) %]
+            <li>
                 <a href="#" aria-current="page">
-                    [% action | html %]
+                    Authority MARC subfield structure for [% tagfield | html %]
+                </a>
+            </li>
+        [% ELSE %]
+            <li>
+                <a href="/cgi-bin/koha/admin/auth_subfields_structure.pl?tagfield=[% tagfield | uri %]&amp;tagsubfield=[% tagsubfield | uri %]&amp;authtypecode=[% authtypecode |uri %]">Authority MARC subfield structure for [% tagfield | html %]</a>
+            </li>
+        [% END %]
+
+        [% IF ( delete_confirm ) %]
+            <li>
+                <a href="#" aria-current="page">
+                    Confirm deletion of subfield [% tagsubfield | html %]?
                 </a>
             </li>
         [% END %]
-    [% END %]
+
+        [% IF ( add_form ) %]
+            [% IF ( use_heading_flags_p ) %]
+                [% IF ( heading_edit_subfields_p ) %]
+                    <li>
+                        <a href="#" aria-current="page">
+                            Edit MARC subfields constraints
+                        </a>
+                    </li>
+                [% END %]
+            [% ELSE %]
+                <li>
+                    <a href="#" aria-current="page">
+                        [% action | html %]
+                    </a>
+                </li>
+            [% END %]
+        [% END %]
     </ol>
 </nav>
 

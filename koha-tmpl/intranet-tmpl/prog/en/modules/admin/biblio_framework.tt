@@ -25,41 +25,41 @@
             <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a>
         </li>
 
-    [% IF op == 'add_form' %]
-        <li>
-            <a href="/cgi-bin/koha/admin/biblio_framework.pl">MARC frameworks</a>
-        </li>
-        [% IF framework %]
+        [% IF op == 'add_form' %]
+            <li>
+                <a href="/cgi-bin/koha/admin/biblio_framework.pl">MARC frameworks</a>
+            </li>
+            [% IF framework %]
+                <li>
+                    <a href="#" aria-current="page">
+                        Modify framework text
+                    </a>
+                </li>
+            [% ELSE %]
+                <li>
+                    <a href="#" aria-current="page">
+                        Add framework
+                    </a>
+                </li>
+            [% END %]
+
+        [% ELSIF op == 'delete_confirm' %]
+            <li>
+                <a href="/cgi-bin/koha/admin/biblio_framework.pl">MARC frameworks</a>
+            </li>
             <li>
                 <a href="#" aria-current="page">
-                    Modify framework text
+                    Delete framework for [% framework.frameworktext | html %] ([% framework.frameworkcode | html %])?
                 </a>
             </li>
+
         [% ELSE %]
             <li>
                 <a href="#" aria-current="page">
-                    Add framework
+                    MARC frameworks
                 </a>
             </li>
         [% END %]
-
-    [% ELSIF op == 'delete_confirm' %]
-        <li>
-            <a href="/cgi-bin/koha/admin/biblio_framework.pl">MARC frameworks</a>
-        </li>
-        <li>
-            <a href="#" aria-current="page">
-                Delete framework for [% framework.frameworktext | html %] ([% framework.frameworkcode | html %])?
-            </a>
-        </li>
-
-    [% ELSE %]
-        <li>
-            <a href="#" aria-current="page">
-                MARC frameworks
-            </a>
-        </li>
-    [% END %]
     </ol>
 </nav>
 

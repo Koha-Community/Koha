@@ -30,22 +30,22 @@ tr.selected { background-color : #FFFFCC; } tr.selected td { background-color : 
         <li>
             <a href="/cgi-bin/koha/acqui/basket.pl?basketno=[% basketno | uri %]">Basket [% basketno | html %]</a>
         </li>
-    [% IF ( opsearch ) %]
-    <li>
-        <a href="#" aria-current="page">
-            Order from external source
-        </a>
-    </li>
-    [% ELSE %]
-    <li>
-        <a href="/cgi-bin/koha/acqui/z3950_search.pl?booksellerid=[% booksellerid | uri %]&amp;basketno=[% basketno | uri %]">Order from external source</a>
-    </li>
-    <li>
-        <a href="#" aria-current="page">
-            Search results
-        </a>
-    </li>
-    [% END %]
+        [% IF ( opsearch ) %]
+            <li>
+                <a href="#" aria-current="page">
+                    Order from external source
+                </a>
+            </li>
+        [% ELSE %]
+            <li>
+                <a href="/cgi-bin/koha/acqui/z3950_search.pl?booksellerid=[% booksellerid | uri %]&amp;basketno=[% basketno | uri %]">Order from external source</a>
+            </li>
+            <li>
+                <a href="#" aria-current="page">
+                    Search results
+                </a>
+            </li>
+        [% END %]
     </ol>
 </nav>
 

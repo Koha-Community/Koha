@@ -30,21 +30,21 @@
         <li>
             <a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a>
         </li>
-    [% IF invoiceclosedate %]
-        <li>
-        Receipt summary for <em>[% name | html %]</em>
-        [% IF ( invoice ) %]
-            <em>[ [% invoice | html %] ]</em>
+        [% IF invoiceclosedate %]
+            <li>
+                Receipt summary for <em>[% name | html %]</em>
+                [% IF ( invoice ) %]
+                    <em>[ [% invoice | html %] ]</em>
+                [% END %]
+            </li>
+        [% ELSE %]
+            <li>
+                <a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% booksellerid | uri %]">[% name | html %]</a>
+            </li>
+            <li>
+                Receive orders from [% name | html %]
+            </li>
         [% END %]
-        </li>
-    [% ELSE %]
-        <li>
-        <a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% booksellerid | uri %]">[% name | html %]</a>
-        </li>
-        <li>
-        Receive orders from [% name | html %]
-        </li>
-    [% END %]
     </ol>
 </nav>
 

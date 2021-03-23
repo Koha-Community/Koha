@@ -86,84 +86,84 @@
             <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a>
         </li>
 
-    [% IF ( add_form ) %]
-        <li>
-            <a href="/cgi-bin/koha/admin/aqbudgetperiods.pl">Budgets</a>
-        </li>
-        [% IF ( budget_period_id ) %]
+        [% IF ( add_form ) %]
             <li>
-                <a href="#" aria-current="page">
-                    Modify budget '[% budget_period_description | html %]'
-                </a>
+                <a href="/cgi-bin/koha/admin/aqbudgetperiods.pl">Budgets</a>
             </li>
-        [% ELSE %]
+            [% IF ( budget_period_id ) %]
+                <li>
+                    <a href="#" aria-current="page">
+                        Modify budget '[% budget_period_description | html %]'
+                    </a>
+                </li>
+            [% ELSE %]
+                <li>
+                    <a href="#" aria-current="page">
+                        Add budget
+                    </a>
+                </li>
+            [% END %]
+        [% END %]
+
+        [% IF ( delete_confirm ) %]
+            <li>
+                <a href="/cgi-bin/koha/admin/aqbudgetperiods.pl">Budgets</a>
+            </li>
+            [% IF ( total || funds_exist ) %]
+                <li>
+                    <a href="#" aria-current="page">
+                        Cannot delete budget '[% budget_period_description | html %]'
+                    </a>
+                </li>
+            [% ELSE %]
+                <li>
+                    <a href="#" aria-current="page">
+                        Delete budget '[% budget_period_description | html %]'?
+                    </a>
+                </li>
+            [% END %]
+        [% END %]
+
+            [% IF ( duplicate_form ) %]
+                <li>
+                    <a href="/cgi-bin/koha/admin/aqbudgetperiods.pl">Budgets</a>
+                </li>
+                <li>
+                    <a href="#" aria-current="page">
+                        Duplicate budget
+                    </a>
+                </li>
+            [% END %]
+
+        [% IF close_form %]
+            <li>
+                <a href="/cgi-bin/koha/admin/aqbudgetperiods.pl">Budgets</a>
+            </li>
             <li>
                 <a href="#" aria-current="page">
-                    Add budget
+                    Close budget [% budget_period_description | html %]
                 </a>
             </li>
         [% END %]
-    [% END %]
 
-    [% IF ( delete_confirm ) %]
-        <li>
-            <a href="/cgi-bin/koha/admin/aqbudgetperiods.pl">Budgets</a>
-        </li>
-        [% IF ( total || funds_exist ) %]
+        [% IF closed %]
             <li>
-                <a href="#" aria-current="page">
-                    Cannot delete budget '[% budget_period_description | html %]'
-                </a>
+                <a href="/cgi-bin/koha/admin/aqbudgetperiods.pl">Budgets</a>
             </li>
-        [% ELSE %]
             <li>
                 <a href="#" aria-current="page">
-                    Delete budget '[% budget_period_description | html %]'?
+                    Budget [% budget_period_description | html %] closed
                 </a>
             </li>
         [% END %]
-    [% END %]
 
-    [% IF ( duplicate_form ) %]
-        <li>
-            <a href="/cgi-bin/koha/admin/aqbudgetperiods.pl">Budgets</a>
-        </li>
-        <li>
-            <a href="#" aria-current="page">
-                Duplicate budget
-            </a>
-        </li>
-    [% END %]
-
-    [% IF close_form %]
-        <li>
-            <a href="/cgi-bin/koha/admin/aqbudgetperiods.pl">Budgets</a>
-        </li>
-        <li>
-            <a href="#" aria-current="page">
-                Close budget [% budget_period_description | html %]
-            </a>
-        </li>
-    [% END %]
-
-    [% IF closed %]
-        <li>
-            <a href="/cgi-bin/koha/admin/aqbudgetperiods.pl">Budgets</a>
-        </li>
-        <li>
-            <a href="#" aria-current="page">
-                Budget [% budget_period_description | html %] closed
-            </a>
-        </li>
-    [% END %]
-
-    [% IF ( else ) %]
-        <li>
-            <a href="#" aria-current="page">
-                Budgets administration
-            </a>
-        </li>
-    [% END %]
+        [% IF ( else ) %]
+            <li>
+                <a href="#" aria-current="page">
+                    Budgets administration
+                </a>
+            </li>
+        [% END %]
     </ol>
 </nav>
 

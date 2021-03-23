@@ -27,22 +27,22 @@
             <a href="/cgi-bin/koha/catalogue/search.pl">Catalog</a>
         </li>
 
-    [% IF ( unknownbiblionumber ) %]
-        <li>
-            <a href="#" aria-current="page">
-                Unknown record
-            </a>
-        </li>
-    [% ELSE %]
-        <li>
-            [% INCLUDE 'biblio-title.inc' link = 1 %]
-        </li>
-        <li>
-            <a href="#" aria-current="page">
-                MARC details
-            </a>
-        </li>
-    [% END %]
+        [% IF ( unknownbiblionumber ) %]
+            <li>
+                <a href="#" aria-current="page">
+                    Unknown record
+                </a>
+            </li>
+        [% ELSE %]
+            <li>
+                [% INCLUDE 'biblio-title.inc' link = 1 %]
+            </li>
+            <li>
+                <a href="#" aria-current="page">
+                    MARC details
+                </a>
+            </li>
+        [% END %]
     </ol>
 </nav>
 

@@ -20,21 +20,21 @@
         <li>
             <a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a>
         </li>
-    [% IF ( booksellername ) %]
-        <li>
-            <a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% booksellerid | uri %]">[% booksellername | html %]</a>
-        </li>
-        <li>
-            <a href="#" aria-current="page">
-                Uncertain prices for vendor [% booksellername | html %]
-            </a>
-        </li>
+        [% IF ( booksellername ) %]
+            <li>
+                <a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% booksellerid | uri %]">[% booksellername | html %]</a>
+            </li>
+            <li>
+                <a href="#" aria-current="page">
+                    Uncertain prices for vendor [% booksellername | html %]
+                </a>
+            </li>
         [% ELSE %]
-        <li>
-            <a href="#" aria-current="page">
-                Uncertain prices
-            </a>
-        </li>
+            <li>
+                <a href="#" aria-current="page">
+                    Uncertain prices
+                </a>
+            </li>
         [% END %]
     </ol>
 </nav>

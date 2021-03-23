@@ -31,65 +31,65 @@
             <a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% booksellerid | uri %]">[% booksellername | html %]</a>
         </li>
 
-    [% IF ( add_form ) %]
-        <li>
-            <a href="/cgi-bin/koha/admin/aqcontract.pl?booksellerid=[% booksellerid | uri %]">Contracts</a>
-        </li>
-        [% IF ( contractnumber ) %]
+        [% IF ( add_form ) %]
             <li>
-                <a href="#" aria-current="page">
-                    Modify contract '[% contractname | html %]'
-                </a>
+                <a href="/cgi-bin/koha/admin/aqcontract.pl?booksellerid=[% booksellerid | uri %]">Contracts</a>
             </li>
-        [% ELSE %]
+            [% IF ( contractnumber ) %]
+                <li>
+                    <a href="#" aria-current="page">
+                        Modify contract '[% contractname | html %]'
+                    </a>
+                </li>
+            [% ELSE %]
+                <li>
+                    <a href="#" aria-current="page">
+                        New contract
+                    </a>
+                </li>
+            [% END %]
+        [% END %]
+
+        [% IF ( add_validate ) %]
+            <li>
+                <a href="/cgi-bin/koha/admin/aqcontract.pl?booksellerid=[% booksellerid | uri %]">Contracts</a>
+            </li>
             <li>
                 <a href="#" aria-current="page">
-                    New contract
+                    Data recorded
                 </a>
             </li>
         [% END %]
-    [% END %]
 
-    [% IF ( add_validate ) %]
-        <li>
-            <a href="/cgi-bin/koha/admin/aqcontract.pl?booksellerid=[% booksellerid | uri %]">Contracts</a>
-        </li>
-        <li>
-            <a href="#" aria-current="page">
-                Data recorded
-            </a>
-        </li>
-    [% END %]
+        [% IF ( delete_confirm ) %]
+            <li>
+                <a href="/cgi-bin/koha/admin/aqcontract.pl?booksellerid=[% booksellerid | uri %]">Contracts</a>
+            </li>
+            <li>
+                <a href="#" aria-current="page">
+                    Confirm deletion of contract [% contractnumber | html %]
+                </a>
+            </li>
+        [% END %]
 
-    [% IF ( delete_confirm ) %]
-        <li>
-            <a href="/cgi-bin/koha/admin/aqcontract.pl?booksellerid=[% booksellerid | uri %]">Contracts</a>
-        </li>
-        <li>
-            <a href="#" aria-current="page">
-                Confirm deletion of contract [% contractnumber | html %]
-            </a>
-        </li>
-    [% END %]
+        [% IF ( delete_confirmed ) %]
+            <li>
+                <a href="/cgi-bin/koha/admin/aqcontract.pl?booksellerid=[% booksellerid | uri %]">Contracts</a>
+            </li>
+            <li>
+                <a href="#" aria-current="page">
+                    Contract deleted
+                </a>
+            </li>
+        [% END %]
 
-    [% IF ( delete_confirmed ) %]
-        <li>
-            <a href="/cgi-bin/koha/admin/aqcontract.pl?booksellerid=[% booksellerid | uri %]">Contracts</a>
-        </li>
-        <li>
-            <a href="#" aria-current="page">
-                Contract deleted
-            </a>
-        </li>
-    [% END %]
-
-    [% IF ( else ) %]
-        <li>
-            <a href="#" aria-current="page">
-                Contracts
-            </a>
-        </li>
-    [% END %]
+        [% IF ( else ) %]
+            <li>
+                <a href="#" aria-current="page">
+                    Contracts
+                </a>
+            </li>
+        [% END %]
     </ol>
 </nav>
 

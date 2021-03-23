@@ -25,43 +25,43 @@
             <li>
                 <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a>
             </li>
-        [% SWITCH op %]
-            [% CASE 'add_form' %]
-            <li>
-                <a href="/cgi-bin/koha/admin/additional-fields.pl">Manage additional fields</a>
-            </li>
-                [% IF field %]
+            [% SWITCH op %]
+                [% CASE 'add_form' %]
+                    <li>
+                        <a href="/cgi-bin/koha/admin/additional-fields.pl">Manage additional fields</a>
+                    </li>
+                    [% IF field %]
+                        <li>
+                            <a href="#" aria-current="page">
+                                Modify field '[% field.name | html %]'
+                            </a>
+                        </li>
+                    [% ELSE %]
+                        <li>
+                            <a href="#" aria-current="page">
+                                Add field
+                            </a>
+                        </li>
+                    [% END %]
+
+                [% CASE 'list' %]
+                    <li>
+                        <a href="/cgi-bin/koha/admin/additional-fields.pl">Manage additional fields</a>
+                    </li>
                     <li>
                         <a href="#" aria-current="page">
-                            Modify field '[% field.name | html %]'
+                            Modify fields for '[% tablename | html %]'
                         </a>
                     </li>
-                [% ELSE %]
+
+                [% CASE %]
                     <li>
                         <a href="#" aria-current="page">
-                            Add field
+                            Manage additional fields
                         </a>
                     </li>
-                [% END %]
 
-            [% CASE 'list' %]
-            <li>
-                <a href="/cgi-bin/koha/admin/additional-fields.pl">Manage additional fields</a>
-            </li>
-            <li>
-                <a href="#" aria-current="page">
-                    Modify fields for '[% tablename | html %]'
-                </a>
-            </li>
-
-            [% CASE %]
-            <li>
-                <a href="#" aria-current="page">
-                    Manage additional fields
-                </a>
-            </li>
-
-        [% END %]
+            [% END %]
         </ol>
     </nav>
 

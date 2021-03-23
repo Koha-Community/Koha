@@ -105,30 +105,30 @@
         <li>
             <a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a>
         </li>
-    [% IF ( enter ) %]
-        [% IF ( booksellerid ) %]
-        <li>
-            <a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% booksellerid | uri %]">[% name | html %]</a>
-        </li>
-        <li>
-            <a href="#" aria-current="page">
-                Update: [% name | html %]
-            </a>
-        </li>
+        [% IF ( enter ) %]
+            [% IF ( booksellerid ) %]
+                <li>
+                    <a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% booksellerid | uri %]">[% name | html %]</a>
+                </li>
+                <li>
+                    <a href="#" aria-current="page">
+                        Update: [% name | html %]
+                    </a>
+                </li>
+            [% ELSE %]
+                <li>
+                    <a href="#" aria-current="page">
+                        Add vendor
+                    </a>
+                </li>
+            [% END %]
         [% ELSE %]
-        <li>
-            <a href="#" aria-current="page">
-                Add vendor
-            </a>
-        </li>
+            <li>
+                <a href="#" aria-current="page">
+                    [% name | html %]
+                </a>
+            </li>
         [% END %]
-    [% ELSE %]
-        <li>
-            <a href="#" aria-current="page">
-                [% name | html %]
-            </a>
-        </li>
-    [% END %]
     </ol>
 </nav>
 
