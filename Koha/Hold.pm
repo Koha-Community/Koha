@@ -572,16 +572,46 @@ expirationdate for holds.
 sub store {
     my ($self) = @_;
 
-    if ( C4::Context->preference('DefaultHoldExpirationdate')
-        and ( not defined $self->expirationdate or $self->expirationdate eq '' ) ){
+    if ( !$self->in_storage ) {
+        if (
+            C4::Context->preference('DefaultHoldExpirationdate')
+            and ( not defined $self->expirationdate
+                or $self->expirationdate eq '' )
+          )
+        {
+            $self->_set_default_expirationdate;
+        }
+    }
+    else {
 
-        my $period = C4::Context->preference('DefaultHoldExpirationdatePeriod');
-        my $timeunit = C4::Context->preference('DefaultHoldExpirationdateUnitOfTime');
+        my %updated_columns = $self->_result->get_dirty_columns;
+        return $self->SUPER::store unless %updated_columns;
 
-        $self->expirationdate( dt_from_string( $self->reservedate )->add( $timeunit => $period ) );
+        if ( exists $updated_columns{reservedate} ) {
+            if (
+                C4::Context->preference('DefaultHoldExpirationdate')
+                and ( not exists $updated_columns{expirationdate}
+                    or exists $updated_columns{expirationdate}
+                    and $updated_columns{expirationdate} eq '' )
+              )
+            {
+                $self->_set_default_expirationdate;
+            }
+        }
     }
 
     $self = $self->SUPER::store;
+}
+
+sub _set_default_expirationdate {
+    my $self = shift;
+
+    my $period = C4::Context->preference('DefaultHoldExpirationdatePeriod');
+    my $timeunit =
+      C4::Context->preference('DefaultHoldExpirationdateUnitOfTime');
+
+    $self->expirationdate(
+        dt_from_string( $self->reservedate )->add( $timeunit => $period ) );
 }
 
 =head3 _move_to_old

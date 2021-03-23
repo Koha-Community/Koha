@@ -142,28 +142,88 @@ ok( !$hold->is_at_destination(), "Waiting hold where hold branchcode is not the 
 $item->holdingbranch( $branches[1]->{branchcode} );
 ok( $hold->is_at_destination(), "Waiting hold where hold branchcode is the same as the item's holdingbranch is at destination" );
 
-# Test setting expiration date
-t::lib::Mocks::mock_preference( 'DefaultHoldExpirationdate', 1 );
-t::lib::Mocks::mock_preference( 'DefaultHoldExpirationdatePeriod', 2 );
-t::lib::Mocks::mock_preference( 'DefaultHoldExpirationdateUnitOfTime', 'years' );
-
-my $hold_2 = Koha::Hold->new(
-    {
-        biblionumber   => $biblionumber,
-        itemnumber     => $item->id(),
-        reservedate    => '2020-11-30',
-        waitingdate    => '2020-11-30',
-        borrowernumber => $borrower->{borrowernumber},
-        branchcode     => $branches[1]->{branchcode},
-        suspend        => 0,
-    }
-);
-$hold_2->store();
-
-my $expected_date = dt_from_string( $hold_2->reservedate )->add( years => 2);
-is($hold_2->expirationdate->ymd, $expected_date->ymd,'Expiration date is correctly set.');
-
 $schema->storage->txn_rollback();
+
+subtest "store() tests" => sub {
+
+    plan tests => 5;
+
+    $schema->storage->txn_begin();
+
+    my $item     = $builder->build_sample_item;
+    my $biblio   = $item->biblio;
+    my $borrower = $builder->build_object( { class => 'Koha::Patrons' } );
+    my $library  = $builder->build_object( { class => 'Koha::Libraries' } );
+
+    # Test setting expiration date
+    t::lib::Mocks::mock_preference( 'DefaultHoldExpirationdate',       1 );
+    t::lib::Mocks::mock_preference( 'DefaultHoldExpirationdatePeriod', 2 );
+    t::lib::Mocks::mock_preference( 'DefaultHoldExpirationdateUnitOfTime',
+        'years' );
+
+    my $hold = Koha::Hold->new(
+        {
+            biblionumber   => $biblio->biblionumber,
+            itemnumber     => $item->id,
+            reservedate    => '2020-11-30',
+            waitingdate    => '2020-11-30',
+            borrowernumber => $borrower->borrowernumber,
+            branchcode     => $library->branchcode,
+            suspend        => 0,
+        }
+    )->store;
+    $hold->discard_changes;
+
+    my $expected_date =
+      dt_from_string( $hold->reservedate )->add( years => 2 );
+    is( $hold->expirationdate,
+        $expected_date->ymd, 'Default expiration date for new hold is correctly set.' );
+
+    my $passed_date =
+      dt_from_string( $hold->reservedate )->add( months => 2 );
+    $hold = Koha::Hold->new(
+        {
+            biblionumber   => $biblio->biblionumber,
+            itemnumber     => $item->id,
+            reservedate    => '2020-11-30',
+            expirationdate => $passed_date->ymd,
+            waitingdate    => '2020-11-30',
+            borrowernumber => $borrower->borrowernumber,
+            branchcode     => $library->branchcode,
+            suspend        => 0,
+        }
+    )->store;
+    $hold->discard_changes;
+
+    is( $hold->expirationdate,
+        $passed_date->ymd, 'Passed expiration date for new hold is correctly set.' );
+
+    $passed_date->add( months => 1 );
+    $hold->expirationdate($passed_date->ymd)->store();
+    $hold->discard_changes;
+
+    is( $hold->expirationdate,
+        $passed_date->ymd, 'Passed expiration date when updating hold is correctly set.' );
+
+    $hold->reservedate($passed_date->ymd)->store();
+    $hold->discard_changes;
+
+    is( $hold->expirationdate,
+        $passed_date->add( years => 2 )->ymd, 'Default expiration date correctly set on reservedate update.' );
+
+    $hold->set(
+        {
+            reservedate    => $passed_date->ymd,
+            expirationdate => $passed_date->add( weeks => 2 )->ymd
+        }
+    )->store();
+    $hold->discard_changes;
+
+    is( $hold->expirationdate,
+        $passed_date->ymd, 'Passed expiration date when updating hold correctly set (Passing both reservedate and expirationdate.' );
+
+    $schema->storage->txn_rollback();
+};
 
 subtest "delete() tests" => sub {
 
