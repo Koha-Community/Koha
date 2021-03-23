@@ -226,11 +226,12 @@ subtest 'send_or_die() tests' => sub {
         'If explicitly passed, "to" is preserved' );
 
     $THE_email->send_or_die( { transport => $transport } );
+    my @to = sort @{ $args->{to} };
     is_deeply(
-        $args->{to},
+        [@to],
         [
-            'to@example.com',    'cc@example.com',
-            'bcc_1@example.com', 'bcc_2@example.com'
+            'bcc_1@example.com', 'bcc_2@example.com',
+            'cc@example.com',    'to@example.com',
         ],
         'If "to" is not explicitly passed, extract recipients from headers'
     );
