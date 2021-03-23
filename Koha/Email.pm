@@ -120,7 +120,7 @@ sub create {
 
     my $email = $self->SUPER::new( $args );
 
-    $email->header( 'ReplyTo', $addresses->{reply_to} )
+    $email->header( 'Reply-To', $addresses->{reply_to} )
         if $addresses->{reply_to};
 
     $email->header( 'Sender'       => $addresses->{sender} ) if $addresses->{sender};
