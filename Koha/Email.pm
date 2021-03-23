@@ -22,6 +22,8 @@ use Modern::Perl;
 
 use Email::Valid;
 use Email::MessageID;
+use List::Util qw(pairs);
+
 use Koha::Exceptions;
 
 use C4::Context;
@@ -153,11 +155,11 @@ sub send_or_die {
 
         my @recipients;
 
-        # extract all recipient addresses from header
-        foreach my $header ( 'To', 'Cc', 'Bcc' ) {
-            push @recipients,
-              map { $_->as_string }
-              $self->email->header_obj->header_as_obj($header)->addresses;
+        my @headers = $self->email->header_str_pairs;
+        foreach my $pair ( pairs @headers ) {
+            my ( $header, $value ) = @$pair;
+            push @recipients, split (', ', $value)
+                if grep { $_ eq $header } ('To', 'Cc', 'Bcc');
         }
 
         # Remove the Bcc header
