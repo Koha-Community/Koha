@@ -136,4 +136,38 @@ sub create {
     return $email;
 }
 
+=head3 send_or_die
+
+    $email->send_or_die({ transport => $transport [, $args] });
+
+Overloaded Email::Stuffer I<send_or_die> method, that takes care of Bcc handling.
+Bcc is removed from the message headers, and included in the recipients list to be
+passed to I<send_or_die>.
+
+=cut
+
+sub send_or_die {
+    my ( $self, $args ) = @_;
+
+    unless ( $args->{to} ) {    # don't do it if passed an explicit 'to' param
+
+        my @recipients;
+
+        # extract all recipient addresses from header
+        foreach my $header ( 'To', 'Cc', 'Bcc' ) {
+            push @recipients,
+              map { $_->as_string }
+              $self->email->header_obj->header_as_obj($header)->addresses;
+        }
+
+        # Remove the Bcc header
+        $self->email->header_str_set('Bcc');
+
+        # Tweak $args
+        $args->{to} = \@recipients;
+    }
+
+    $self->SUPER::send_or_die($args);
+}
+
 1;
