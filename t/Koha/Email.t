@@ -53,7 +53,7 @@ subtest 'create() tests' => sub {
     is( $email->email->header('To'), 'to@example.com', 'Value set correctly' );
     is( $email->email->header('Cc'), 'cc@example.com', 'Value set correctly' );
     is( $email->email->header('Bcc'), 'bcc@example.com', 'Value set correctly' );
-    is( $email->email->header('ReplyTo'), 'reply_to@example.com', 'Value set correctly' );
+    is( $email->email->header('Reply-To'), 'reply_to@example.com', 'Value set correctly' );
     is( $email->email->header('Sender'), 'sender@example.com', 'Value set correctly' );
     is( $email->email->header('Subject'), 'Some subject', 'Value set correctly' );
     is( $email->email->header('X-Mailer'), 'Koha', 'Value set correctly' );
@@ -80,7 +80,7 @@ subtest 'create() tests' => sub {
     is( $email->email->header('To'), 'catchall@example.com', 'SendAllEmailsTo overloads any address' );
     is( $email->email->header('Cc'), undef, 'SendAllEmailsTo overloads any address' );
     is( $email->email->header('Bcc'), undef, 'SendAllEmailsTo overloads any address' );
-    is( $email->email->header('ReplyTo'), 'replytodefault@example.com', 'ReplytoDefault picked when replyto not passed' );
+    is( $email->email->header('Reply-To'), 'replytodefault@example.com', 'ReplytoDefault picked when replyto not passed' );
     is( $email->email->header('Sender'), 'returnpathdefault@example.com', 'ReturnpathDefault picked when sender not passed' );
     is( $email->email->header('Subject'), '', 'No subject passed, empty string' );
     is( $email->email->body, $text_body, "Body set correctly" );
