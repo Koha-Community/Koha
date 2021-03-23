@@ -25,7 +25,7 @@ use File::Temp qw( tempdir tempfile );
 use FindBin qw($Bin);
 use Module::Load::Conditional qw(can_load);
 use Test::MockModule;
-use Test::More tests => 58;
+use Test::More tests => 59;
 use Test::Warn;
 
 use C4::Context;
@@ -82,6 +82,36 @@ subtest 'call() tests' => sub {
     t::lib::Mocks::mock_config('enable_plugins', 0);
     @responses = Koha::Plugins->call('check_password', { password => '1234' });
     is_deeply(\@responses, [], 'call() should return an empty array if plugins are disabled');
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'call_recursive() tests' => sub {
+    plan tests => 6;
+
+    $schema->storage->txn_begin;
+    # Temporarily remove any installed plugins data
+    Koha::Plugins::Methods->delete;
+
+    t::lib::Mocks::mock_config('enable_plugins', 1);
+    my $plugins = Koha::Plugins->new({ enable_plugins => 1 });
+    my @plugins = $plugins->InstallPlugins;
+    foreach my $plugin (@plugins) {
+        $plugin->enable();
+    }
+
+    my (@responses) = Koha::Plugins->call_recursive('test_call_recursive', 1);
+    is( scalar @responses, 1, "Got back one element" );
+    is( $responses[0], 11, "Got expected response" );
+
+    (@responses) = Koha::Plugins->call_recursive('test_call_recursive', 'abcd');
+    is( scalar @responses, 1, "Got back one element" );
+    is( $responses[0], 'abcdabcd', "Got expected response" );
+
+    t::lib::Mocks::mock_config('enable_plugins', 0);
+    (@responses) = Koha::Plugins->call_recursive('test_call_recursive', 1);
+    is( scalar @responses, 1, "Got back one element" );
+    is( $responses[0], 1, "call_recursive should return the original arguments if plugins are disabled" );
 
     $schema->storage->txn_rollback;
 };
