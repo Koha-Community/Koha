@@ -30,9 +30,9 @@
         [% IF ( action_modify ) %]Modify authorized value[% END %]
         [% IF ( action_add_value ) %]New authorized value[% END %]
         [% IF ( action_add_category ) %]New category[% END %]
-    [% ELSIF ( loop ) %]
+    [% ELSIF ( loop || searchfield ) %]
         <a href="/cgi-bin/koha/admin/authorised_values.pl">Authorized values</a> &rsaquo;
-        Authorized values for category [% category_name | html %]
+        Authorized values for category [% category.category_name | html %]
     [% ELSE %]
         Authorized values
     [% END %]
