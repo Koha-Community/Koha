@@ -17,7 +17,9 @@
 
 use Modern::Perl;
 
-use Test::More tests => 2;
+use Test::More tests => 3;
+
+use Test::MockModule;
 use Test::Exception;
 
 use t::lib::Mocks;
@@ -174,4 +176,63 @@ subtest 'create() tests' => sub {
 
         is( "$@", q{Invalid 'bcc' parameter: not_an_email}, 'Exception message correct' );
     };
+};
+
+subtest 'send_or_die() tests' => sub {
+
+    plan tests => 4;
+
+    my $email;
+    my $args;
+
+    my $transport = "Hi there!";
+
+    my $mocked_email_simple = Test::MockModule->new('Email::Sender::Simple');
+    $mocked_email_simple->mock(
+        'send',
+        sub {
+            my @params = @_;
+            $email = $params[1];
+            $args  = $params[2];
+            return;
+        }
+    );
+
+    my $html_body = '<h1>Title</h1><p>Message</p>';
+    my $THE_email = Koha::Email->create(
+        {
+            from      => 'from@example.com',
+            to        => 'to@example.com',
+            cc        => 'cc@example.com',
+            reply_to  => 'reply_to@example.com',
+            sender    => 'sender@example.com',
+            html_body => $html_body
+        }
+    );
+
+    my @bcc = ( 'bcc_1@example.com', 'bcc_2@example.com' );
+
+    $THE_email->bcc(@bcc);
+
+    is(
+        $THE_email->email->header_str('Bcc'),
+        join( ', ', @bcc ),
+        'Bcc header set correctly'
+    );
+
+    $THE_email->send_or_die(
+        { transport => $transport, to => ['tomasito@mail.com'] } );
+    is_deeply( $args->{to}, ['tomasito@mail.com'],
+        'If explicitly passed, "to" is preserved' );
+
+    $THE_email->send_or_die( { transport => $transport } );
+    is_deeply(
+        $args->{to},
+        [
+            'to@example.com',    'cc@example.com',
+            'bcc_1@example.com', 'bcc_2@example.com'
+        ],
+        'If explicitly passed, "to" is preserved'
+    );
+    is( $email->header_str('Bcc'), undef, 'The Bcc header is unset' );
 };
