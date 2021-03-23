@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 20.05\n"
-"POT-Creation-Date: 2021-02-18 08:08-0300\n"
+"POT-Creation-Date: 2021-03-19 17:12-0300\n"
 "PO-Revision-Date: 2020-11-03 15:58+0000\n"
 "Last-Translator: Bruce Crisp <brcrisp@sympatico.ca>\n"
 "Language-Team: \n"
@@ -171,6 +171,16 @@ msgstr ""
 "problem-raporto estas sendita al la biblioteko. %s %s Okazis eraro dum la "
 "sendo de la raporto. Bovolu kontakti vian bibliotekon. %s "
 
+# "fare de" ĉar temas pri la verkisto. En la kunteksto (videbla en Pootle aŭ Poedit) oni povas legi «IF ( GROUP_RESULT.author )»
+# -- tuxayo
+#. %1$s:  author.firstname | html 
+#. %2$s:  author.surname | html 
+#. %3$s:  ELSE 
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:101
+#, fuzzy, c-format
+msgid "%s %s %s by "
+msgstr "%s %s %s %s fare de "
+
 #. %1$s: - IF account.credit_type_code -
 #. %2$s: - SWITCH account.credit_type_code -
 #. %3$s: - CASE 'PAYMENT'          -
@@ -330,7 +340,7 @@ msgstr "%s %s Nenio troviĝis. %s "
 #. %9$s:  ELSE 
 #. %10$s:  END 
 #. %11$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:112
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:117
 #, c-format
 msgid ""
 "%s %s RSS feed for %s library news %s RSS feed for library news %s %s %s RSS "
@@ -5414,7 +5424,7 @@ msgid "Don't have a password yet?"
 msgstr "Ĉu vi ankoraŭ ne havas pasvorton?"
 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:374
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:191
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:196
 #: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:97
 #, c-format
 msgid "Don't have an account? "
@@ -5977,7 +5987,7 @@ msgstr ""
 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:369
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:178
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:186
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:191
 #, c-format
 msgid "Forgot your password?"
 msgstr "Ĉu vi forgesis vian pasvorton?"
@@ -7390,7 +7400,7 @@ msgstr "Lokoj"
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:380
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:23
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:175
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:177
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:182
 #: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:95
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:379
 #, c-format
@@ -7441,7 +7451,7 @@ msgstr "Ensalutu al via konto OverDrive"
 msgid "Log in to your account"
 msgstr "Ensalutu al via konto"
 
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:173
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:178
 #: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:81
 #, c-format
 msgid "Log in to your account:"
@@ -7488,7 +7498,7 @@ msgstr "Ensaluto-paĝo"
 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:360
 #: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:96
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:174
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:179
 #: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:82
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:374
 #, c-format
@@ -7987,7 +7997,7 @@ msgstr "Neniu limo"
 msgid "No matching records found"
 msgstr "Neniuj kongruaj rikordoj troviĝis"
 
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:137
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:142
 #, c-format
 msgid "No news to display."
 msgstr "Neniuj novaĵoj vidigeblaj."
@@ -8647,7 +8657,7 @@ msgstr "Pasvorto ĝisdatigita"
 
 #: opac-tmpl/bootstrap/en/includes/overdrive-login.inc:9
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:361
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:175
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:180
 #: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:46
 #: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:88
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:376
@@ -9291,9 +9301,11 @@ msgstr "Eldonita de: %s %s en %s %s %s , %s %s %s , %s %s "
 
 #. %1$s:  koha_new.timestamp | $KohaDates with_hours = 1 
 #. %2$s:  IF ( (newsdisp == 'opac' || newsdisp == 'both') && koha_new.borrowernumber ) 
+#. %3$s:  IF news_item 
+#. %4$s:  SET author = koha_new.author 
 #: opac-tmpl/bootstrap/en/modules/opac-main.tt:96
-#, c-format
-msgid "Published on %s %s by "
+#, fuzzy, c-format
+msgid "Published on %s %s %s %s by "
 msgstr "Eldonita je %s %s fare de "
 
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:85
@@ -9325,7 +9337,7 @@ msgstr "Aĉetproponoj"
 msgid "Quantity:"
 msgstr "Kvanto:"
 
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:148
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:153
 #, c-format
 msgid "Quote of the day"
 msgstr "Citaĵo de la tago"
@@ -9436,7 +9448,7 @@ msgid "Register a new account"
 msgstr "Registru novan konton"
 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:374
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:191
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:196
 #: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:97
 #, c-format
 msgid "Register here."
@@ -10422,7 +10434,7 @@ msgstr "Show _MENU_ entries"
 msgid "Show all items"
 msgstr "Montru ĉiujn ekzemplerojn"
 
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:102
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:107
 #, c-format
 msgid "Show all news"
 msgstr "Montru ĉiujn novaĵojn"
@@ -12196,7 +12208,7 @@ msgstr "mer"
 msgid "Wednesday"
 msgstr "merkredo"
 
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:201
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:206
 #, c-format
 msgid "Welcome, "
 msgstr "Bonvenon, "
@@ -13240,7 +13252,7 @@ msgstr "kartonumero"
 msgid "change your password"
 msgstr "ŝanĝu vian pasvorton"
 
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:204
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:209
 #, c-format
 msgid "checkout(s)"
 msgstr "pruntepreno(j)"
@@ -13302,7 +13314,7 @@ msgstr ""
 msgid "desired_due_date"
 msgstr "desired_due_date"
 
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:216
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:221
 #, c-format
 msgid "due in fines and charges"
 msgstr "ŝuldataj monpunoj kaj pagotaĵoj"
@@ -13340,12 +13352,12 @@ msgstr "por pli da informoj pri ĝia funkcio kaj kiel ĝin agordi."
 msgid "here"
 msgstr "ĉi tie"
 
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:210
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:215
 #, c-format
 msgid "hold(s) pending"
 msgstr "rezervo/j pritraktota/j"
 
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:213
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:218
 #, c-format
 msgid "hold(s) waiting"
 msgstr "rezervo/j atendanta/j"
@@ -13521,7 +13533,7 @@ msgstr "aŭ "
 msgid "out of"
 msgstr "el"
 
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:207
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:212
 #, c-format
 msgid "overdue(s)"
 msgstr "malfruaĵo(j)"

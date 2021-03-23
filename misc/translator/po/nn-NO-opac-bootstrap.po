@@ -8,7 +8,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 20.05\n"
-"POT-Creation-Date: 2021-02-18 08:32-0300\n"
+"POT-Creation-Date: 2021-03-19 17:35-0300\n"
 "PO-Revision-Date: 2011-11-04 09:04+0200\n"
 "Last-Translator: gangagiri <amsvrama@gmail.com>\n"
 "Language-Team: Norwegian bokmål <i18n-nb@lister.pping.uio.no>\n"
@@ -163,6 +163,14 @@ msgid ""
 "happened when sending the report. Please contact your library. %s "
 msgstr ""
 
+#. %1$s:  author.firstname | html 
+#. %2$s:  author.surname | html 
+#. %3$s:  ELSE 
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:101
+#, fuzzy, c-format
+msgid "%s %s %s by "
+msgstr "%s %s %s %s(%s)"
+
 #. %1$s: - IF account.credit_type_code -
 #. %2$s: - SWITCH account.credit_type_code -
 #. %3$s: - CASE 'PAYMENT'          -
@@ -311,7 +319,7 @@ msgstr "Fann ingen resultat "
 #. %9$s:  ELSE 
 #. %10$s:  END 
 #. %11$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:112
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:117
 #, c-format
 msgid ""
 "%s %s RSS feed for %s library news %s RSS feed for library news %s %s %s RSS "
@@ -5043,7 +5051,7 @@ msgid "Don't have a password yet?"
 msgstr "Manglar du passord?"
 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:374
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:191
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:196
 #: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:97
 #, fuzzy, c-format
 msgid "Don't have an account? "
@@ -5597,7 +5605,7 @@ msgstr ""
 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:369
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:178
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:186
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:191
 #, fuzzy, c-format
 msgid "Forgot your password?"
 msgstr "Endre passord"
@@ -6996,7 +7004,7 @@ msgstr "Plassering"
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:380
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:23
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:175
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:177
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:182
 #: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:95
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:379
 #, fuzzy, c-format
@@ -7048,7 +7056,7 @@ msgstr "Logg inn på kontoen din"
 msgid "Log in to your account"
 msgstr "Logg inn på kontoen din"
 
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:173
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:178
 #: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:81
 #, fuzzy, c-format
 msgid "Log in to your account:"
@@ -7096,7 +7104,7 @@ msgstr "katalog"
 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:360
 #: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:96
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:174
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:179
 #: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:82
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:374
 #, fuzzy, c-format
@@ -7601,7 +7609,7 @@ msgstr "Inga grense"
 msgid "No matching records found"
 msgstr "Handling dersom ein identisk post vert funnen"
 
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:137
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:142
 #, c-format
 msgid "No news to display."
 msgstr ""
@@ -8256,7 +8264,7 @@ msgstr "Passordet er oppdatert"
 
 #: opac-tmpl/bootstrap/en/includes/overdrive-login.inc:9
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:361
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:175
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:180
 #: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:46
 #: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:88
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:376
@@ -8888,9 +8896,11 @@ msgstr "%s %s %s %s (%s) "
 
 #. %1$s:  koha_new.timestamp | $KohaDates with_hours = 1 
 #. %2$s:  IF ( (newsdisp == 'opac' || newsdisp == 'both') && koha_new.borrowernumber ) 
+#. %3$s:  IF news_item 
+#. %4$s:  SET author = koha_new.author 
 #: opac-tmpl/bootstrap/en/modules/opac-main.tt:96
 #, fuzzy, c-format
-msgid "Published on %s %s by "
+msgid "Published on %s %s %s %s by "
 msgstr "(publisert %s)"
 
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:85
@@ -8922,7 +8932,7 @@ msgstr "Kva er innkjøpsforslag?"
 msgid "Quantity:"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:148
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:153
 #, c-format
 msgid "Quote of the day"
 msgstr ""
@@ -9032,7 +9042,7 @@ msgid "Register a new account"
 msgstr ""
 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:374
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:191
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:196
 #: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:97
 #, fuzzy, c-format
 msgid "Register here."
@@ -10026,7 +10036,7 @@ msgstr ""
 msgid "Show all items"
 msgstr "Vis alle budsjett"
 
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:102
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:107
 #, fuzzy, c-format
 msgid "Show all news"
 msgstr "Vis alle budsjett"
@@ -11772,7 +11782,7 @@ msgstr ""
 msgid "Wednesday"
 msgstr "Onsdag"
 
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:201
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:206
 #, fuzzy, c-format
 msgid "Welcome, "
 msgstr "Velkomen, <a1> "
@@ -12793,7 +12803,7 @@ msgstr "Lånarnummer"
 msgid "change your password"
 msgstr "Endre passord"
 
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:204
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:209
 #, fuzzy, c-format
 msgid "checkout(s)"
 msgstr "Utlån"
@@ -12851,7 +12861,7 @@ msgstr ""
 msgid "desired_due_date"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:216
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:221
 #, fuzzy, c-format
 msgid "due in fines and charges"
 msgstr "Gebyr og satsar"
@@ -12888,12 +12898,12 @@ msgstr ""
 msgid "here"
 msgstr "Theatre"
 
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:210
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:215
 #, c-format
 msgid "hold(s) pending"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:213
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:218
 #, c-format
 msgid "hold(s) waiting"
 msgstr ""
@@ -13063,7 +13073,7 @@ msgstr "eller"
 msgid "out of"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:207
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:212
 #, fuzzy, c-format
 msgid "overdue(s)"
 msgstr "Forfalne lån "

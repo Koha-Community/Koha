@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 20.05\n"
-"POT-Creation-Date: 2021-02-18 08:17-0300\n"
+"POT-Creation-Date: 2021-03-19 17:20-0300\n"
 "PO-Revision-Date: 2020-08-05 06:47+0000\n"
 "Last-Translator: Jónás János <janosjonas@outlook.com>\n"
 "Language-Team: Koha Translation Team <koha-translate@nongnu.org>\n"
@@ -160,6 +160,14 @@ msgid ""
 "happened when sending the report. Please contact your library. %s "
 msgstr ""
 
+#. %1$s:  author.firstname | html 
+#. %2$s:  author.surname | html 
+#. %3$s:  ELSE 
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:101
+#, fuzzy, c-format
+msgid "%s %s %s by "
+msgstr "%s %s %s %s által "
+
 #. %1$s: - IF account.credit_type_code -
 #. %2$s: - SWITCH account.credit_type_code -
 #. %3$s: - CASE 'PAYMENT'          -
@@ -309,7 +317,7 @@ msgstr "%s %s Nincs találat. %s "
 #. %9$s:  ELSE 
 #. %10$s:  END 
 #. %11$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:112
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:117
 #, c-format
 msgid ""
 "%s %s RSS feed for %s library news %s RSS feed for library news %s %s %s RSS "
@@ -5347,7 +5355,7 @@ msgid "Don't have a password yet?"
 msgstr "Még nincs jelszava?"
 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:374
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:191
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:196
 #: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:97
 #, fuzzy, c-format
 msgid "Don't have an account? "
@@ -5907,7 +5915,7 @@ msgstr ""
 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:369
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:178
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:186
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:191
 #, fuzzy, c-format
 msgid "Forgot your password?"
 msgstr "Jelszó megváltoztatása"
@@ -7301,7 +7309,7 @@ msgstr "Helyek"
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:380
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:23
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:175
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:177
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:182
 #: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:95
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:379
 #, c-format
@@ -7352,7 +7360,7 @@ msgstr "Bejelentkezés OverDrive fiókjába"
 msgid "Log in to your account"
 msgstr "Bejelentkezés"
 
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:173
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:178
 #: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:81
 #, c-format
 msgid "Log in to your account:"
@@ -7400,7 +7408,7 @@ msgstr "Bejelentkezési oldal"
 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:360
 #: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:96
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:174
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:179
 #: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:82
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:374
 #, c-format
@@ -7897,7 +7905,7 @@ msgstr "Nincs korlát"
 msgid "No matching records found"
 msgstr "Nem található megegyező bejegyzés"
 
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:137
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:142
 #, c-format
 msgid "No news to display."
 msgstr ""
@@ -8556,7 +8564,7 @@ msgstr "Jelszó frissült"
 
 #: opac-tmpl/bootstrap/en/includes/overdrive-login.inc:9
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:361
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:175
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:180
 #: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:46
 #: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:88
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:376
@@ -9185,9 +9193,11 @@ msgstr "Publikálva: %s %s év %s %s %s , %s %s %s , %s %s "
 
 #. %1$s:  koha_new.timestamp | $KohaDates with_hours = 1 
 #. %2$s:  IF ( (newsdisp == 'opac' || newsdisp == 'both') && koha_new.borrowernumber ) 
+#. %3$s:  IF news_item 
+#. %4$s:  SET author = koha_new.author 
 #: opac-tmpl/bootstrap/en/modules/opac-main.tt:96
-#, c-format
-msgid "Published on %s %s by "
+#, fuzzy, c-format
+msgid "Published on %s %s %s %s by "
 msgstr "Publikálva %s %s szerző "
 
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:85
@@ -9219,7 +9229,7 @@ msgstr "Vásárlási javaslatok"
 msgid "Quantity:"
 msgstr "Mennyiség:"
 
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:148
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:153
 #, fuzzy, c-format
 msgid "Quote of the day"
 msgstr "Napi idézet"
@@ -9329,7 +9339,7 @@ msgid "Register a new account"
 msgstr "Új fiók regisztrálása"
 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:374
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:191
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:196
 #: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:97
 #, c-format
 msgid "Register here."
@@ -10310,7 +10320,7 @@ msgstr ""
 msgid "Show all items"
 msgstr "Az összes elem megjelenítése"
 
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:102
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:107
 #, fuzzy, c-format
 msgid "Show all news"
 msgstr "Összes dokumentum listája"
@@ -12039,7 +12049,7 @@ msgstr "Sze"
 msgid "Wednesday"
 msgstr "Szerda"
 
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:201
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:206
 #, c-format
 msgid "Welcome, "
 msgstr "Üdvözöljük, "
@@ -13067,7 +13077,7 @@ msgstr "olvasójegy száma"
 msgid "change your password"
 msgstr "Jelszó módosítása"
 
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:204
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:209
 #, c-format
 msgid "checkout(s)"
 msgstr "Kölcsönzés(ek)"
@@ -13125,7 +13135,7 @@ msgstr ""
 msgid "desired_due_date"
 msgstr "desired_due_date"
 
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:216
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:221
 #, fuzzy, c-format
 msgid "due in fines and charges"
 msgstr "Késedelmi díjak és más költségek"
@@ -13162,12 +13172,12 @@ msgstr ""
 msgid "here"
 msgstr "itt"
 
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:210
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:215
 #, c-format
 msgid "hold(s) pending"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:213
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:218
 #, c-format
 msgid "hold(s) waiting"
 msgstr ""
@@ -13342,7 +13352,7 @@ msgstr "vagy"
 msgid "out of"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:207
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:212
 #, fuzzy, c-format
 msgid "overdue(s)"
 msgstr "Késedelmesek "

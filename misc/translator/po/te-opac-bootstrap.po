@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2021-02-18 08:43-0300\n"
+"POT-Creation-Date: 2021-03-19 17:47-0300\n"
 "PO-Revision-Date: 2020-11-30 15:54+0000\n"
 "Last-Translator: Alexander <alexjohn2000@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -164,6 +164,14 @@ msgstr ""
 "%s %s %s మీ సమస్య నివేదిక కోహా నిర్వాహకుడికి పంపబడింది. %s మీ సమస్య నివేదిక లైబ్రరీకి పంపబడింది. %s "
 "%s నివేదిక పంపేటప్పుడు ఏదో తప్పు జరిగింది. దయచేసి మీ లైబ్రరీని సంప్రదించండి. %s "
 
+#. %1$s:  author.firstname | html 
+#. %2$s:  author.surname | html 
+#. %3$s:  ELSE 
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:101
+#, fuzzy, c-format
+msgid "%s %s %s by "
+msgstr "%s వలన %s %s %s "
+
 #. %1$s: - IF account.credit_type_code -
 #. %2$s: - SWITCH account.credit_type_code -
 #. %3$s: - CASE 'PAYMENT'          -
@@ -320,7 +328,7 @@ msgstr "%s %s ఎటువంటి ఫలితాలు లభించలే�
 #. %9$s:  ELSE 
 #. %10$s:  END 
 #. %11$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:112
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:117
 #, c-format
 msgid ""
 "%s %s RSS feed for %s library news %s RSS feed for library news %s %s %s RSS "
@@ -5326,7 +5334,7 @@ msgid "Don't have a password yet?"
 msgstr "ఇంకా పాస్‌వర్డ్ లేదా?"
 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:374
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:191
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:196
 #: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:97
 #, c-format
 msgid "Don't have an account? "
@@ -5878,7 +5886,7 @@ msgstr ""
 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:369
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:178
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:186
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:191
 #, c-format
 msgid "Forgot your password?"
 msgstr "మీ పాస్వర్డ్ మర్చిపోయారా?"
@@ -7263,7 +7271,7 @@ msgstr "స్థానాలు"
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:380
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:23
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:175
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:177
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:182
 #: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:95
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:379
 #, c-format
@@ -7314,7 +7322,7 @@ msgstr "మీ ఓవర్‌డ్రైవ్ ఖాతాకు ప్రవ
 msgid "Log in to your account"
 msgstr "మీ ఖాతాకు ప్రవేశించండి"
 
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:173
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:178
 #: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:81
 #, c-format
 msgid "Log in to your account:"
@@ -7361,7 +7369,7 @@ msgstr "ప్రవేశించే పేజీ"
 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:360
 #: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:96
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:174
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:179
 #: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:82
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:374
 #, c-format
@@ -7860,7 +7868,7 @@ msgstr "పరిమితి లేకుండా"
 msgid "No matching records found"
 msgstr "సరిపోలే రికార్డులు కనుగొనబడలేదు"
 
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:137
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:142
 #, c-format
 msgid "No news to display."
 msgstr "ప్రదర్శించడానికి వార్తలు లేవు."
@@ -8506,7 +8514,7 @@ msgstr "పాస్వర్డ్ నవీకరించబడింది"
 
 #: opac-tmpl/bootstrap/en/includes/overdrive-login.inc:9
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:361
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:175
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:180
 #: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:46
 #: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:88
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:376
@@ -9140,9 +9148,11 @@ msgstr "ప్రచురించింది: %s %s లో %s %s %s , %s %s %
 
 #. %1$s:  koha_new.timestamp | $KohaDates with_hours = 1 
 #. %2$s:  IF ( (newsdisp == 'opac' || newsdisp == 'both') && koha_new.borrowernumber ) 
+#. %3$s:  IF news_item 
+#. %4$s:  SET author = koha_new.author 
 #: opac-tmpl/bootstrap/en/modules/opac-main.tt:96
-#, c-format
-msgid "Published on %s %s by "
+#, fuzzy, c-format
+msgid "Published on %s %s %s %s by "
 msgstr "ప్రచురించబడింది %s %s ద్వారా "
 
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:85
@@ -9174,7 +9184,7 @@ msgstr "సలహాలను కొనండి"
 msgid "Quantity:"
 msgstr "మొత్తము:"
 
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:148
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:153
 #, c-format
 msgid "Quote of the day"
 msgstr "ఈ రోజు సూక్తి"
@@ -9283,7 +9293,7 @@ msgid "Register a new account"
 msgstr "క్రొత్త ఖాతాను నమోదు చేయండి"
 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:374
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:191
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:196
 #: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:97
 #, c-format
 msgid "Register here."
@@ -10261,7 +10271,7 @@ msgstr "ప్రదర్శించు_కార్యక్రమాలప�
 msgid "Show all items"
 msgstr "అన్ని అంశాలను చూపించు"
 
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:102
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:107
 #, c-format
 msgid "Show all news"
 msgstr "అన్ని వార్తలను చూపించు"
@@ -12003,7 +12013,7 @@ msgstr "బుధ"
 msgid "Wednesday"
 msgstr "బుధవారం"
 
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:201
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:206
 #, c-format
 msgid "Welcome, "
 msgstr "స్వాగతం, "
@@ -13014,7 +13024,7 @@ msgstr "కార్డు సంఖ్య"
 msgid "change your password"
 msgstr "పాస్వర్డ్ మార్చుకొనుము"
 
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:204
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:209
 #, c-format
 msgid "checkout(s)"
 msgstr "చెక్అవుట్ (s)"
@@ -13075,7 +13085,7 @@ msgstr "అభ్యర్థనలో ఉపయోగించబడుతు�
 msgid "desired_due_date"
 msgstr "కావలసిన_గడువు_తేదీ"
 
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:216
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:221
 #, c-format
 msgid "due in fines and charges"
 msgstr "జరిమానాలు మరియు ఛార్జీలు చెల్లించాలి"
@@ -13112,12 +13122,12 @@ msgstr "ఇది ఏమి చేస్తుంది మరియు ఎల�
 msgid "here"
 msgstr "ఇక్కడ"
 
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:210
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:215
 #, c-format
 msgid "hold(s) pending"
 msgstr "పట్టుకోండి (s) పెండింగ్"
 
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:213
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:218
 #, c-format
 msgid "hold(s) waiting"
 msgstr "పట్టుకోండి (s) వేచి"
@@ -13291,7 +13301,7 @@ msgstr "లేదా "
 msgid "out of"
 msgstr "బయట కు"
 
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:207
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:212
 #, c-format
 msgid "overdue(s)"
 msgstr "మీరిన(s)"

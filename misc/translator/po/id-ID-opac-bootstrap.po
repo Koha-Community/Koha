@@ -6,9 +6,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 20.05\n"
-"POT-Creation-Date: 2021-02-18 08:19-0300\n"
-"PO-Revision-Date: 2019-08-27 16:32+0000\n"
-"Last-Translator: Anonymous Pootle User\n"
+"POT-Creation-Date: 2021-03-19 17:22-0300\n"
+"PO-Revision-Date: 2021-03-21 15:13+0000\n"
+"Last-Translator: Keith Sorbo <keith@thesorbos.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: id\n"
 "MIME-Version: 1.0\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Generator: Pootle 2.8\n"
-"X-POOTLE-MTIME: 1566923564.433491\n"
+"X-POOTLE-MTIME: 1616339629.377427\n"
 "X-Pootle-Path: /id/20.05/id-ID-opac-bootstrap.po\n"
 "X-Pootle-Revision: 1\n"
 
@@ -44,9 +44,9 @@ msgstr ""
 #. %3$s:  INCLUDE 'biblio-title.inc' biblio=SEARCH_RESULT 
 #. %4$s:  IF ( SEARCH_RESULT.author ) 
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:386
-#, fuzzy, c-format
+#, c-format
 msgid "%s %s %s %s by "
-msgstr "%s %s oleh %s %s "
+msgstr "%s %s %s %s oleh"
 
 #. %1$s: # First line will be summary, second line will be description. Avoid indenting. Var newline added to avoid translating problems. -
 #. %2$s: - newline="\n" | html -
@@ -67,6 +67,10 @@ msgid ""
 "%s %s %s %s is overdue %sYour copy of %s (barcode %s) is overdue %s %s is "
 "due %sYour copy of %s (barcode %s) is due back at the library today %s "
 msgstr ""
+"%s %s %s %s telah lewat tanggal pengembalian %sBuku yang anda pinjam %s ("
+"barcode %s) telah lewat waktu pengembalian %s %s harus dikembalikan pada %"
+"sBuku yang anda pinjam %s (barcode %s) harus dikembalikan kepada "
+"perpustakaan hari ini %s "
 
 #. %1$s:  IF ( Koha.Preference('OpacFavicon') ) 
 #. %2$s:  Koha.Preference('OpacFavicon') | url 
@@ -78,7 +82,7 @@ msgstr ""
 #: opac-tmpl/bootstrap/en/modules/opac-opensearch.tt:12
 #, c-format
 msgid "%s %s %s %s%s/%s/images/favicon.ico %s "
-msgstr ""
+msgstr "%s %s %s %s%s/%s/images/favicon.ico %s "
 
 #. %1$s:  IF ( LibraryNameTitle ) 
 #. %2$s:  LibraryNameTitle | html 
@@ -109,9 +113,9 @@ msgstr "%s %s %s Koha daring %s katalog%s &rsaquo; %s %s "
 #. %6$s:  library.branchname | html 
 #. %7$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-library.tt:5
-#, fuzzy, c-format
+#, c-format
 msgid "%s %s %s Koha online %s catalog &rsaquo; Libraries %s &rsaquo; %s %s "
-msgstr "%s %s %s Koha daring %s katalog%s &rsaquo; %s %s "
+msgstr "%s %s %s Koha daring %s katalog%s &rsaquo; Perpustakaan %s %s "
 
 #. %1$s:  IF ( biblio.title ) 
 #. %2$s:  biblio.title | html 
@@ -135,11 +139,11 @@ msgstr "%s %s %s Koha daring %s katalog%s &rsaquo; %s %s "
 #. %20$s:  i = i + 1 
 #. %21$s:  END 
 #: opac-tmpl/bootstrap/en/includes/biblio-title-head.inc:1
-#, fuzzy, c-format
+#, c-format
 msgid "%s %s %s No title %s %s%s,%s %s %s %s %s %s %s %s %s %s %s %s %s %s %s "
 msgstr ""
-"%s Ditambah %s oleh anda %s %s Ditambah %s oleh %s %s %s %s %s %s %s %s %s "
-"%s %s %s %s %s %s %s %s "
+"%s %s %s Tidak ada judul %s %s%s,%s %s %s %s %s %s %s %s %s %s %s %s %s %s %"
+"s "
 
 #. %1$s:  END 
 #. %2$s:  END # / FOREACH ERROR 
@@ -166,6 +170,18 @@ msgid ""
 "Your problem report has been sent to the library. %s %s Something wrong "
 "happened when sending the report. Please contact your library. %s "
 msgstr ""
+"%s %s %s Masalah yang anda melapor telah disampaikan kepada administrator "
+"Koha%s Masalah yang anda melapor telah disampaikan kepada perpustakaan. %s %"
+"s Terjadi kesalahan saat mengirim laporan anda. Tolong hubungi perpustakaan "
+"anda. %s "
+
+#. %1$s:  author.firstname | html 
+#. %2$s:  author.surname | html 
+#. %3$s:  ELSE 
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:101
+#, c-format
+msgid "%s %s %s by "
+msgstr "%s %s %s oleh"
 
 #. %1$s: - IF account.credit_type_code -
 #. %2$s: - SWITCH account.credit_type_code -
@@ -207,6 +223,12 @@ msgid ""
 "fee %sRenewal of rental item %sRenewal of daily rental item %sHold fee "
 "%sHold waiting too long %s%s %s %s %s %s"
 msgstr ""
+"%s %s %sPembayaran %sPembatalan %sDiampuni %sKredit %sBiaya barang hilang "
+"dikembalikan %s%s %s %s %s %sBiaya penciptaan akaun %sBiaya pembaruan akaun %"
+"sBarang hilang %sBiaya manual %sKartu baru %sDenda %sBiaya proses benda "
+"hilang %sBiaya sewa %sBiaya sewa harian %sPembaruan biaya pemimjaman harian %"
+"sRenewal of daily rental item %sBiaya tahan %sDitahan terlalu lama %s%s %s %"
+"s %s %s"
 
 #. %1$s:  END 
 #. %2$s:  IF ( ITEM_RESULT.itemcallnumber ) 
@@ -229,7 +251,7 @@ msgstr "%s %s (%s) %s.%s,%s %s %s %s Tidak ada eksemplar untuk rekor ini %s "
 #: opac-tmpl/bootstrap/en/modules/opac-tags.tt:139
 #, c-format
 msgid "%s %s (not approved) %s "
-msgstr ""
+msgstr "%s %s (belum disetujui) %s "
 
 #. %1$s:  ELSE 
 #. %2$s:  SET ctrl_preload = ' controls preload=none' #translatability 
@@ -238,23 +260,23 @@ msgstr ""
 #. %5$s:  HTML5MediaSet.srcblock | url 
 #. %6$s:  HTML5MediaSet.typeblock | html 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:960
-#, fuzzy, c-format
+#, c-format
 msgid "%s %s <%s > <%s src=\"%s\" %s /> "
-msgstr "%s <%s > <%s src=\"%s\" %s /> "
+msgstr "%s %s <%s > <%s src=\"%s\" %s /> "
 
 #. %1$s:  SWITCH m.code 
 #. %2$s:  CASE 'biblio_exists' 
 #: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:47
 #, c-format
 msgid "%s %s A similar document already exists: "
-msgstr ""
+msgstr "%s %s Sebuah dokumen yang mirip sudah ada:"
 
 #. %1$s:  END 
 #. %2$s:  IF ( koha_spsuggest ) 
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:128
-#, fuzzy, c-format
+#, c-format
 msgid "%s %s Did you mean: "
-msgstr "%s Apakah maksud Anda: "
+msgstr "%s %s Apakah maksud Anda: "
 
 #. For the first occurrence,
 #. %1$s:  END 
@@ -263,7 +285,7 @@ msgstr "%s Apakah maksud Anda: "
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:124
 #, c-format
 msgid "%s %s End date: "
-msgstr ""
+msgstr "%s %s Tanggal akhir: "
 
 #. %1$s:  END 
 #. %2$s:  ELSE 
@@ -315,7 +337,7 @@ msgstr "%s %s Hasil tidak ditemukan. %s "
 #. %9$s:  ELSE 
 #. %10$s:  END 
 #. %11$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:112
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:117
 #, c-format
 msgid ""
 "%s %s RSS feed for %s library news %s RSS feed for library news %s %s %s RSS "
@@ -334,6 +356,8 @@ msgid ""
 "%s %s Search also for narrower subjects %s Search also for broader subjects "
 "%s Search also for related subjects %s "
 msgstr ""
+"%s %s Cari juga pokok yang lebih sempit %s Cari juga pokok yang lebih luas %"
+"s Cari juga pokok yang berhubungan %s "
 
 #. %1$s:  SWITCH m.code 
 #. %2$s:  CASE 'total_suggestions' 
@@ -357,6 +381,12 @@ msgid ""
 "suggestion with this title already exists. %s Your suggestion has been "
 "submitted. %s %s %s "
 msgstr ""
+"%s %s Saran tidak disimpan. Anda telah mencapai batas saran yang boleh "
+"diberikan pada saat ini. (%s di dalam %s hari). %s Saran tidak disimpan. "
+"Anda telah mencapai batas saran yang boleh diberikan pada saat ini. (%s). "
+"Setelah perpustakaan telah memproses saran tersebut, maka anda dapat "
+"menambah saran lain. %s Saran tersebut tidak ditambahkan Sebuah saran dengan "
+"judul ini sudah ada. %s Saran anda telah dikirim. %s %s %s"
 
 #. %1$s:  END 
 #. %2$s:  ELSE 
@@ -390,9 +420,9 @@ msgstr "%s %s oleh %s %s "
 #. %1$s:  r.firstname | html 
 #. %2$s:  r.surname | html 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:480
-#, fuzzy, c-format
+#, c-format
 msgid "%s %s currently owes fines and charges amounting to:"
-msgstr "Kewajiban anda saat ini adalah denda dan biaya sebesar:"
+msgstr "%s %s saat ini terkena denda dan biaya sebesar:"
 
 #. %1$s:  firstname | $raw 
 #. %2$s:  surname | $raw 
@@ -412,9 +442,9 @@ msgstr "%s %s Telah mengirimi anda sebuah lis %s dari katalog daring kami."
 #. %1$s:  r.patron.firstname | html 
 #. %2$s:  r.patron.surname | html 
 #: opac-tmpl/bootstrap/en/includes/account-table.inc:86
-#, fuzzy, c-format
+#, c-format
 msgid "%s %s's fines and charges"
-msgstr "Denda dan biaya"
+msgstr "Denda dan biayanya %s %s"
 
 #. %1$s:  SWITCH type 
 #. %2$s:  CASE 'earlier' 
@@ -457,6 +487,9 @@ msgid ""
 "%s %sBIBTEX %sEndNote %sMARCXML %sMARC (non-Unicode/MARC-8) %sMARC (Unicode/"
 "UTF-8) %sMARC (Unicode/UTF-8, Standard) %sMODS (XML) %sRIS %sISBD %s "
 msgstr ""
+"%s %sBIBTEX %sEndNote %sMARCXML %sMARC (non-Unicode/MARC-8) %sMARC "
+"(Unicode/UTF-8) %sMARC (Unicode/UTF-8, Standard) %sMODS (XML) %sRIS %sISBD %"
+"s "
 
 #. %1$s:  IF s.is_private 
 #. %2$s:  IF s.is_shared 
@@ -506,7 +539,7 @@ msgstr "%s (Catatan no. %s)"
 #: opac-tmpl/bootstrap/en/modules/opac-news-rss.tt:1
 #, c-format
 msgid "%s <?xml version=\"1.0\"?> "
-msgstr ""
+msgstr "%s <?xml version=\"1.0\"?>"
 
 #. %1$s:  IF ( OVERDUE.debarred ) 
 #. %2$s:  ELSIF ( OVERDUE.status ) 
@@ -521,6 +554,8 @@ msgstr "%s Akun dibekukan %s %s "
 #, c-format
 msgid "%s Account identification with this email address only is ambiguous. "
 msgstr ""
+"%s Akaun yang mana tidak dapat ditentukan dengan menggunakan alamat email "
+"ini saja. "
 
 #. %1$s:  IF review.your_comment 
 #. %2$s:  review.datereviewed | $KohaDates 
@@ -650,6 +685,7 @@ msgstr ""
 #, c-format
 msgid "%s Contact your library to be disenrolled from this club. %s "
 msgstr ""
+"%s Hubungi perpustakaan anda untuk mengeluarkan diri dari ikatan ini. %s "
 
 #. %1$s:  IF (errcode==1) 
 #. %2$s:  ELSE 
@@ -667,9 +703,9 @@ msgstr ""
 #. %2$s:  ELSE 
 #. %3$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:17
-#, fuzzy, c-format
+#, c-format
 msgid "%s Delete %s Delete list %s "
-msgstr "Hapus barang yang dipilih"
+msgstr "%s Hapus barang %s Hapus daftar %s"
 
 #. %1$s:  END 
 #. %2$s:  HOLDS.count | html 
@@ -707,9 +743,9 @@ msgstr "%s Barang yang sedang dipinjam"
 #. %2$s:  ELSE 
 #. %3$s:  END 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:319
-#, fuzzy, c-format
+#, c-format
 msgid "%s Library %s Libraries %s "
-msgstr "%s oleh %s%s "
+msgstr "%s Perpustakaan %s Perpustakaan %s "
 
 #. %1$s:  ELSIF ( ISSUE.auto_too_late ) 
 #. %2$s:  ELSIF ISSUE.auto_too_much_oweing 
@@ -748,9 +784,9 @@ msgstr "%s Tidak ada hasil, coba mengubah filternya. %s "
 #. %4$s:  IF Koha.Preference('marcflavour')=='UNIMARC' 
 #. %5$s:  END 
 #: opac-tmpl/bootstrap/en/includes/biblio-title.inc:2
-#, fuzzy, c-format
+#, c-format
 msgid "%s No title %s %s%s,%s "
-msgstr "%s %s %s%s%sTidak ada judul%s %s %s%s "
+msgstr "%s Tidak ada judul %s %s%s,%s  "
 
 #. %1$s:  ELSIF ( OVERDUE.norenew_overdue ) 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:632
@@ -791,7 +827,7 @@ msgstr "%s Sedang dipinjam %s Tidak ada lagi perpanjangan %s "
 #. %10$s:  IF ( WrongPass ) 
 #. %11$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:33
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s Passwords do not match. Please re-type your new password. %s %s Password "
 "must be at least %s characters long. %s %s Password must contain at least "
@@ -803,9 +839,9 @@ msgstr ""
 "%s Kata sandi tidak sama. Silahkan ketik ulang kata sandi anda. %s %s Kata "
 "sandi anda sekurang-kurangnya harus sepanjang % karakter %s %s Kata sandi "
 "harus berisi sekurangnya satu angka, satu huruf kecil dan satu huruf besar. "
-"%s%s Kata sandi tidak dapat dimulai atau berakhir dengan spase. %s%s Kata "
-"sandi anda salah. Jikalau masalah ini tetap muncul, silahkan minta bantuan "
-"petugas perpustakaan untuk membuat-ulang kata sandi anda. %s "
+"%s%s Kata sandi tidak dapat dimulai atau berakhir dengan spase. %s %s Kata "
+"sandi yang anda ketik salah. Jikalau masalah ini tetap muncul, silahkan "
+"minta bantuan petugas perpustakaan untuk membuat-ulang kata sandi anda. %s "
 
 #. %1$s:  IF ar.status == 'PENDING' 
 #. %2$s:  ELSIF ar.status == 'PROCESSING' 
@@ -815,7 +851,7 @@ msgstr ""
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:731
 #, c-format
 msgid "%s Pending %s Processing %s Completed %s Canceled %s "
-msgstr ""
+msgstr "%s Sedang menunggu %s Sedang diproses %s Selesai %s Dibatalkan %s "
 
 #. %1$s:  SEARCH_RESULT.num_critics_pro | html 
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:490
@@ -860,7 +896,7 @@ msgstr "%s Perpanjangan tidak diizinkan %s "
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:117
 #, c-format
 msgid "%s Restriction added by overdues process %s %s %s %s "
-msgstr ""
+msgstr " %s Dibatasi karena proses denda yang terlewat %s %s %s %s "
 
 #. %1$s:  LibraryName | html 
 #. %2$s:  IF ( query_desc ) 
@@ -881,7 +917,7 @@ msgstr "%s Cari RSS feed"
 
 #. %1$s:  LibraryName | html 
 #: opac-tmpl/bootstrap/en/modules/sci/sci-main.tt:90
-#, fuzzy, c-format
+#, c-format
 msgid "%s Self check-in"
 msgstr "%s Sistem peminjaman mandiri"
 
@@ -895,22 +931,24 @@ msgstr "%s Sistem peminjaman mandiri"
 #. %2$s:  ELSE 
 #. %3$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-tags.tt:79
-#, fuzzy, c-format
+#, c-format
 msgid "%s Tags to show from other users %s Tags to show %s: "
-msgstr "tag%s dari pengguna lain%s. "
+msgstr ""
+"%s Tag yang akan ditunjukkan dari pengguna lain %s Tag yang akan ditunjukkan "
+"%s: "
 
 #. %1$s:  ELSIF (errLinkNotValid) 
 #: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:79
 #, c-format
 msgid "%s The link you clicked is either invalid, or expired. "
-msgstr ""
+msgstr "%s Link yang anda klik tidak benar atau sudah kadaluarsa."
 
 #. %1$s:  ELSIF (errPassNotMatch) 
 #. %2$s:  ELSIF password_too_short 
 #: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:71
-#, fuzzy, c-format
+#, c-format
 msgid "%s The passwords do not match. %s "
-msgstr "Kata sandi sudah diperbarui"
+msgstr "%s Kata sandi tidak sama %s "
 
 #. %1$s:  IF ( circ_error_UNKNOWN_BARCODE ) 
 #. %2$s:  ELSIF ( circ_error_max_loans_allowed ) 
@@ -942,21 +980,31 @@ msgid ""
 "been declared lost. %s Your contact information seems to be incomplete. %s "
 "Due date is not valid. %s Please see a member of the library staff. "
 msgstr ""
+"%s Sistem tidak mengenal barcode ini. %s Anda telah pinjam terlalu banyak "
+"buku dan tidak bisa pinjam lagi. %s Buku ini telah dipinjam oleh orang lain. "
+"%s Anda tidak boleh memperpanjang pinjaman buku ini. %s Barang ini tidak "
+"bisa dipinjam. %s Anda masih berutang %s dan tidak boleh pinjam saat ini. %s "
+"Barang ini tidak ada lagi dalam koleksi perpustakaan. %s Barang ini telah "
+"dibatasi. %s Barang ini ditahan untuk dipinjam orang lain. %s Barang ini "
+"adalah milik cabang yang lain. %s Akaun anda telah kadaluarsa. %s Akaun anda "
+"telah dikunci. %s Kartu ini telah dinyatakan hilang. %s Keterangan kontak "
+"anda belum lengkap. %s Tanggal kembali tidak benar. %s Tolong bertemu staf "
+"perpustakaan. "
 
 #. %1$s:  IF error 
 #. %2$s:  ELSE 
 #. %3$s:  FOREACH role IN content 
 #: opac-tmpl/bootstrap/en/modules/opac-idref.tt:20
-#, fuzzy, c-format
+#, c-format
 msgid "%s This ppn is not found on the idref service. %s %s "
-msgstr "%s Tidak ada permintaan terhadap pencarian ini. %s "
+msgstr "%s PPN ini tidak ditemukan pada pelayanan idref %s %s "
 
 #. %1$s:  ELSE 
 #. %2$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:247
-#, fuzzy, c-format
+#, c-format
 msgid "%s This record has no items. %s "
-msgstr "%sTidak ada barang di catatan.%s "
+msgstr "%sTidak ada barang di rekor ini.%s "
 
 #. %1$s:  ELSE 
 #. %2$s:  END 
@@ -987,13 +1035,13 @@ msgstr "%s Ekstraksi video"
 #. %13$s:  END 
 #. %14$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:415
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s Waiting %s On hold %s for patron %s at %s expected at %s %s since %s %s "
 "%s %s %s %s %s. "
 msgstr ""
-"%sMenunggu%sPemesanan pinjaman %s untuk patron %spada%sdiharapkan pada%s %s "
-"sejak %s%s%s%s%s%s%s. "
+"%s Menunggu %s Pemesanan pinjaman %s untuk patron %s pada %s diharapkan pada "
+"%s %s sejak %s %s %s %s %s %s %s. "
 
 #. %1$s:  IF ( OVERDUE.charges ) 
 #. %2$s:  ELSE 
@@ -1011,6 +1059,7 @@ msgstr "%s Ya %s Tidak %s "
 #, c-format
 msgid "%s Yes (Item overdue or lost) %s Yes (Rental fees) %s No %s "
 msgstr ""
+"%s Ya (Barang belum dikembalikan atau hilang) %s Ya (Biaya sewa) %s Tidak %s "
 
 #. %1$s:  IF bibitemloo.forced_hold_level == 'item' 
 #. %2$s:  ELSE 
@@ -1069,15 +1118,15 @@ msgstr "%s oleh "
 #. %4$s:  END # /IF MY_TAG.XSLTBloc 
 #. %5$s:  INCLUDE 'title-actions-menu.inc' items=MY_TAG 
 #: opac-tmpl/bootstrap/en/modules/opac-tags.tt:151
-#, fuzzy, c-format
+#, c-format
 msgid "%s by %s %s %s %s "
-msgstr "%s oleh %s%s "
+msgstr "%s oleh %s %s %s %s "
 
 #. %1$s:  Branches.GetLoggedInBranchname | html 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:482
-#, fuzzy, c-format
+#, c-format
 msgid "%s holdings"
-msgstr "Pesan pinjam:"
+msgstr "%s koleksi"
 
 #. For the first occurrence,
 #. %1$s:  acquisition_details.total_quantity | html 
@@ -1093,18 +1142,20 @@ msgstr ""
 #, c-format
 msgid "%s of %s results loaded, refine your search to view other records"
 msgstr ""
+"%s dari %s hasil pencarian telah dimuat, persempit pencarian anda untuk "
+"melihat barang lain"
 
 #. %1$s:  ISSUE.itemtype_object.rentalcharge_daily | $Price 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:352
 #, c-format
 msgid "%s per day"
-msgstr ""
+msgstr "%s per hari"
 
 #. %1$s:  ISSUE.itemtype_object.rentalcharge_hourly | $Price 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:355
 #, c-format
 msgid "%s per hour"
-msgstr ""
+msgstr "%s per jam"
 
 #. %1$s:  IF ( HOLD.waitingdate ) 
 #. %2$s:  HOLD.waitingdate | $KohaDates 
@@ -1113,9 +1164,9 @@ msgstr ""
 #. %5$s:  END 
 #. %6$s:  END 
 #: opac-tmpl/bootstrap/en/includes/holds-table.inc:109
-#, fuzzy, c-format
+#, c-format
 msgid "%s since %s %s until %s %s %s "
-msgstr "%s %s %s%s%sTidak ada judul%s %s %s%s "
+msgstr "%s mulai %s %s hingga %s %s %s "
 
 #. %1$s:  ELSE 
 #. %2$s:  heading | html 
@@ -1133,10 +1184,11 @@ msgstr "%s %s %s%s%sTidak ada judul%s %s %s%s "
 #. %14$s:  END 
 #. %15$s:  END 
 #: opac-tmpl/bootstrap/en/includes/opac-authorities.inc:56
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s%s %s %s %s %s %sEnglish %sFrench %sItalian %sGerman %sSpanish %s%s %s %s "
-msgstr "%s %s oleh %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s%s "
+msgstr ""
+"%s%s %s %s %s %s %sInggris %sPrancis %sItali %sGerman %sSpanyol %s%s %s %s "
 
 #. %1$s:  FILTER trim 
 #. %2$s:  SWITCH type 
@@ -1180,9 +1232,9 @@ msgstr "%s%s %sbarang%sbarang-barang%s%sKosong%s"
 #. %7$s:  BLOCK cssinclude 
 #. %8$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-account-pay-error.tt:1
-#, fuzzy, c-format
+#, c-format
 msgid "%s%s%s%sKoha online%s catalog &rsaquo; Your payment %s %s%s "
-msgstr "%s %s%s%sKoha daring%s Katalog &rsaquo; Troli anda %s "
+msgstr "%s%s%s%sKoha daring%s katalog&rsaquo; Pembayaran anda %s %s%s"
 
 #. %1$s:  IF ( LibraryNameTitle ) 
 #. %2$s:  IF ( LibraryNameTitle ) 
@@ -1192,30 +1244,29 @@ msgstr "%s %s%s%sKoha daring%s Katalog &rsaquo; Troli anda %s "
 #. %6$s:  ELSE 
 #. %7$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-messaging.tt:3
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s%s%s%sKoha online%s%sKoha online%s catalog &rsaquo; Your messaging settings"
 msgstr ""
-"%s%s%s%s%sKoha daring%s%sKoha daring%s katalog &rsaquo; Pengaturan pesan "
-"anda %s%s %s%s %s "
+"%s%s%s%sKoha daring%s%sKoha daring %s katalog &rsaquo; Pengaturan pesan anda"
 
 #. %1$s:  IF ( LibraryNameTitle ) 
 #. %2$s:  LibraryNameTitle | html 
 #. %3$s:  ELSE 
 #. %4$s:  END 
 #: opac-tmpl/bootstrap/en/modules/sci/sci-main.tt:25
-#, fuzzy, c-format
+#, c-format
 msgid "%s%s%sKoha %s &rsaquo; Self check-in"
-msgstr "%s %s%s%s%sKoha %s &rsaquo; Peminjaman Mandiri "
+msgstr "%s%s%sKoha %s &rsaquo; Pengembalian mandiri"
 
 #. %1$s:  IF ( LibraryNameTitle ) 
 #. %2$s:  LibraryNameTitle | html 
 #. %3$s:  ELSE 
 #. %4$s:  END 
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:9
-#, fuzzy, c-format
+#, c-format
 msgid "%s%s%sKoha %s &rsaquo; Self checkout "
-msgstr "%s %s%s%s%sKoha %s &rsaquo; Peminjaman Mandiri "
+msgstr "%s%s%sKoha %s &rsaquo; Pemimjaman mandiri"
 
 #. %1$s:  IF ( LibraryNameTitle ) 
 #. %2$s:  LibraryNameTitle | html 
@@ -1223,18 +1274,20 @@ msgstr "%s %s%s%s%sKoha %s &rsaquo; Peminjaman Mandiri "
 #. %4$s:  END 
 #. %5$s:  borrowernumber | html 
 #: opac-tmpl/bootstrap/en/modules/sco/printslip.tt:5
-#, fuzzy, c-format
+#, c-format
 msgid "%s%s%sKoha %s &rsaquo; Self checkout &rsaquo; Print Receipt for %s"
-msgstr "%s %s%s%s%sKoha %s &rsaquo; Peminjaman Mandiri"
+msgstr ""
+"%s%s%sKoha %s &rsaquo; Pemimjaman mandiri &rsaquo; Cetak tanda terima untuk "
+"%s"
 
 #. %1$s:  IF ( LibraryNameTitle ) 
 #. %2$s:  LibraryNameTitle | html 
 #. %3$s:  ELSE 
 #. %4$s:  END 
 #: opac-tmpl/bootstrap/en/modules/sco/help.tt:6
-#, fuzzy, c-format
+#, c-format
 msgid "%s%s%sKoha %s &rsaquo; Self checkout help"
-msgstr "%s %s%s%s%sKoha %s &rsaquo; Peminjaman Mandiri"
+msgstr "%s%s%sKoha %s &rsaquo; Bantuan untuk pemimjaman mandiri"
 
 #. For the first occurrence,
 #. %1$s:  IF ( LibraryNameTitle ) 
@@ -1246,9 +1299,9 @@ msgstr "%s %s%s%s%sKoha %s &rsaquo; Peminjaman Mandiri"
 #: opac-tmpl/bootstrap/en/modules/opac-main.tt:12
 #: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:5
 #: opac-tmpl/bootstrap/en/modules/opac-blocked.tt:3
-#, fuzzy, c-format
+#, c-format
 msgid "%s%s%sKoha online%s catalog"
-msgstr "%s %s%s%sKoha daring%s katalog %s "
+msgstr "%s%s%sKoha daring%s katalog"
 
 #. %1$s:  IF ( LibraryNameTitle ) 
 #. %2$s:  LibraryNameTitle | html 
@@ -1262,14 +1315,13 @@ msgstr "%s %s%s%sKoha daring%s katalog %s "
 #. %10$s:  ELSE 
 #. %11$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:15
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s%s%sKoha online%s catalog &rsaquo; %s %s Results of search for '%s' %s "
 "Search results %s %s You did not specify any search criteria. %s"
 msgstr ""
-"%s %s%s%sKoha daring%s katalog &rsaquo; %s Hasil Pencarian %suntuk '%s'%s"
-"%s&nbsp;dengan batasan:&nbsp;'%s'%s %s Anda tidak memasukkan kriteria "
-"pencarian. %s %s "
+"%s%s%sKoha daring%s katalog &rsaquo; %s %s Hasil pencarian dengan batasan "
+"'%s%s' Hasil pencarian %s %s Anda tidak memasukkan kriteria pencarian. %s"
 
 #. %1$s:  IF ( LibraryNameTitle ) 
 #. %2$s:  LibraryNameTitle | html 
@@ -1308,11 +1360,13 @@ msgstr ""
 #. %6$s:  ELSE 
 #. %7$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:8
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s%s%sKoha online%s catalog &rsaquo; %s Log in to your account %s Catalog "
 "login disabled %s"
-msgstr "%s%s%s%sKoha daring%s katalog &rsaquo; %sIsi dari %s%sLis anda%s%s "
+msgstr ""
+"%s%s%sKoha daring%s katalog &rsaquo; %s Log in ke akaun anda %s Login tidak "
+"diizinkan pada saat ini %s"
 
 #. %1$s:  IF ( LibraryNameTitle ) 
 #. %2$s:  LibraryNameTitle | html 
@@ -1328,15 +1382,15 @@ msgstr "%s%s%s%sKoha daring%s katalog &rsaquo; %sIsi dari %s%sLis anda%s%s "
 #. %12$s:  ELSE 
 #. %13$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:7
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s%s%sKoha online%s catalog &rsaquo; %s Results of search %sfor '%s'%s"
 "%s&nbsp;with limit(s):&nbsp;'%s'%s %s You did not specify any search "
 "criteria. %s"
 msgstr ""
-"%s %s%s%sKoha daring%s katalog &rsaquo; %s Hasil Pencarian %suntuk '%s'%s"
-"%s&nbsp;dengan batasan:&nbsp;'%s'%s %s Anda tidak memasukkan kriteria "
-"pencarian. %s %s "
+"%s%s%sKoha daring%s katalog &rsaquo; %s Hasil Pencarian %suntuk "
+"'%s'%s%s&nbsp;dengan batasan:&nbsp;'%s'%s %s Anda tidak memasukkan kriteria "
+"pencarian. %s  "
 
 #. %1$s:  IF ( LibraryNameTitle ) 
 #. %2$s:  LibraryNameTitle | html 
@@ -1346,11 +1400,13 @@ msgstr ""
 #. %6$s:  ELSE 
 #. %7$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-authoritiessearchresultlist.tt:31
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s%s%sKoha online%s catalog &rsaquo; %sAuthority search result%sNo results "
 "found%s"
-msgstr "%s %s%s%sKoha daring%s katalog &rsaquo; Pencarian tingkat lanjut %s "
+msgstr ""
+"%s%s%sKoha daring%s katalog &rsaquo; %sHasil pencarian otoritas%sTidak ada "
+"hasil%s"
 
 #. %1$s:  IF ( LibraryNameTitle ) 
 #. %2$s:  LibraryNameTitle | html 
@@ -1361,9 +1417,9 @@ msgstr "%s %s%s%sKoha daring%s katalog &rsaquo; Pencarian tingkat lanjut %s "
 #. %7$s:  ELSE 
 #. %8$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:28
-#, fuzzy, c-format
+#, c-format
 msgid "%s%s%sKoha online%s catalog &rsaquo; %sContents of %s%sYour lists%s"
-msgstr "%s%s%s%sKoha daring%s katalog &rsaquo; %sIsi dari %s%sLis anda%s%s "
+msgstr "%s%s%sKoha daring%s katalog &rsaquo; %sIsi %s%sDaftar (lis) anda%s"
 
 #. %1$s:  IF ( LibraryNameTitle ) 
 #. %2$s:  LibraryNameTitle | html 
@@ -1374,13 +1430,13 @@ msgstr "%s%s%s%sKoha daring%s katalog &rsaquo; %sIsi dari %s%sLis anda%s%s "
 #. %7$s:  IF ( op_else ) 
 #. %8$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:8
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s%s%sKoha online%s catalog &rsaquo; %sEnter a new purchase suggestion%s "
 "%sPurchase Suggestions%s"
 msgstr ""
-"%s%s%s%sKoha daring%s katalog &rsaquo; %sMasukkan sebuah saran pembelian "
-"terbaru%s %sSaran-saran Pembelian%s %s "
+"%s%s%sKoha daring%s katalog &rsaquo; %sMasukkan saran pembelian buku%s "
+"%sSaran-saran Pembelian%s "
 
 #. %1$s:  IF ( LibraryNameTitle ) 
 #. %2$s:  LibraryNameTitle | html 
@@ -1405,49 +1461,49 @@ msgstr ""
 #. %6$s:  ELSE 
 #. %7$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:26
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s%s%sKoha online%s catalog &rsaquo; %sUpdate your personal details"
 "%sRegister a new account%s"
 msgstr ""
-"%s%s%s%sKoha daring%s katalog &rsaquo; Perincian personal untuk %s %s %s "
+"%s%s%sKoha daring%s katalog &rsaquo; %sMengubah keterangan pribadi Anda %"
+"sMendaftarkan akaun baru%s"
 
 #. %1$s:  IF ( LibraryNameTitle ) 
 #. %2$s:  LibraryNameTitle | html 
 #. %3$s:  ELSE 
 #. %4$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-addbybiblionumber.tt:2
-#, fuzzy, c-format
+#, c-format
 msgid "%s%s%sKoha online%s catalog &rsaquo; Add to your list"
-msgstr "%s %s%s%sKoha daring%s katalog &rsaquo; Tambahkan ke lis Anda %s "
+msgstr "%s%s%sKoha daring%s katalog &rsaquo; Tambahkan sesuatu ke lis Anda "
 
 #. %1$s:  IF ( LibraryNameTitle ) 
 #. %2$s:  LibraryNameTitle | html 
 #. %3$s:  ELSE 
 #. %4$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:6
-#, fuzzy, c-format
+#, c-format
 msgid "%s%s%sKoha online%s catalog &rsaquo; Advanced search"
-msgstr "%s %s%s%sKoha daring%s katalog &rsaquo; Pencarian tingkat lanjut %s "
+msgstr "%s%s%sKoha daring%s katalog &rsaquo; Pencarian tingkat lanjut"
 
 #. %1$s:  IF ( LibraryNameTitle ) 
 #. %2$s:  LibraryNameTitle | html 
 #. %3$s:  ELSE 
 #. %4$s:  END 
 #: opac-tmpl/bootstrap/en/modules/errors/errorpage.tt:2
-#, fuzzy, c-format
+#, c-format
 msgid "%s%s%sKoha online%s catalog &rsaquo; An error has occurred"
-msgstr ""
-"%s%s%s%sKoha daring%s katalog &rsaquo; Telah terjadi sebuah kesalahan %s "
+msgstr "%s%s%sKoha daring%s katalog &rsaquo; Telah terjadi sebuah kesalahan "
 
 #. %1$s:  IF ( LibraryNameTitle ) 
 #. %2$s:  LibraryNameTitle | html 
 #. %3$s:  ELSE 
 #. %4$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-authorities-home.tt:3
-#, fuzzy, c-format
+#, c-format
 msgid "%s%s%sKoha online%s catalog &rsaquo; Authority search"
-msgstr "%s %s%s%sKoha daring%s katalog &rsaquo; Pencarian tingkat lanjut %s "
+msgstr "%s%s%sKoha daring%s katalog &rsaquo; Pencarian otoritas "
 
 #. %1$s:  IF ( LibraryNameTitle ) 
 #. %2$s:  LibraryNameTitle | html 
@@ -1458,12 +1514,11 @@ msgstr "%s %s%s%sKoha daring%s katalog &rsaquo; Pencarian tingkat lanjut %s "
 #. %7$s:  authtypetext | html 
 #. %8$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-auth-detail.tt:6
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s%s%sKoha online%s catalog &rsaquo; Authority search &rsaquo; %s%s (%s)%s"
 msgstr ""
-"%s%s%s%sKoha daring%s katalog &rsaquo; %sOtoritas hasil pencarian%sHasil "
-"tidak ditemukan%s %s "
+"%s%s%sKoha daring%s katalog &rsaquo; Pencarian otoritas &rsaquo; %s%s (%s)%s"
 
 #. For the first occurrence,
 #. %1$s:  IF ( LibraryNameTitle ) 
@@ -1472,18 +1527,18 @@ msgstr ""
 #. %4$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-browse.tt:5
 #: opac-tmpl/bootstrap/en/modules/opac-browser.tt:3
-#, fuzzy, c-format
+#, c-format
 msgid "%s%s%sKoha online%s catalog &rsaquo; Browse our catalog"
-msgstr "%s %s%s%sKoha daring%s Katalog &rsaquo; Troli anda %s "
+msgstr "%s%s%sKoha daring%s katalog &rsaquo; Menelusuri katalog kami"
 
 #. %1$s:  IF ( LibraryNameTitle ) 
 #. %2$s:  LibraryNameTitle | html 
 #. %3$s:  ELSE 
 #. %4$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:5
-#, fuzzy, c-format
+#, c-format
 msgid "%s%s%sKoha online%s catalog &rsaquo; Change your password"
-msgstr "%s%s%s%sKoha daring%s katalog &rsaquo; Ganti kata sandi anda %s "
+msgstr "%s%s%sKoha daring%s katalog &rsaquo; Ganti kata sandi anda"
 
 #. %1$s:  IF ( LibraryNameTitle ) 
 #. %2$s:  LibraryNameTitle | html 
@@ -1491,9 +1546,9 @@ msgstr "%s%s%s%sKoha daring%s katalog &rsaquo; Ganti kata sandi anda %s "
 #. %4$s:  END 
 #. %5$s:  INCLUDE 'biblio-title-head.inc' 
 #: opac-tmpl/bootstrap/en/modules/opac-review.tt:2
-#, fuzzy, c-format
+#, c-format
 msgid "%s%s%sKoha online%s catalog &rsaquo; Comments on %s"
-msgstr "%s%s%s%sKoha daring%s Katalog &rsaquo; Komentar Terbaru %s "
+msgstr "%s%s%sKoha daring%s catalog &rsaquo; Komentar pada %s "
 
 #. %1$s:  IF ( LibraryNameTitle ) 
 #. %2$s:  LibraryNameTitle | html 
@@ -1501,18 +1556,18 @@ msgstr "%s%s%s%sKoha daring%s Katalog &rsaquo; Komentar Terbaru %s "
 #. %4$s:  END 
 #. %5$s:  course.course_name | html 
 #: opac-tmpl/bootstrap/en/modules/opac-course-details.tt:10
-#, fuzzy, c-format
+#, c-format
 msgid "%s%s%sKoha online%s catalog &rsaquo; Course reserves for %s"
-msgstr "%s%s%s%sKoha daring%s Katalog &rsaquo; Perincian untuk: %s%s, %s%s %s "
+msgstr "%s%s%sKoha daring%s Katalog &rsaquo; Reserv untuk kuliah %s"
 
 #. %1$s:  IF ( LibraryNameTitle ) 
 #. %2$s:  LibraryNameTitle | html 
 #. %3$s:  ELSE 
 #. %4$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-course-reserves.tt:8
-#, fuzzy, c-format
+#, c-format
 msgid "%s%s%sKoha online%s catalog &rsaquo; Courses"
-msgstr "%s%s%s%sKoha daring%s katalog &rsaquo; Pembukuan %s %s "
+msgstr "%s%s%sKoha daring%s katalog &rsaquo; Mata kuliah%s %s "
 
 #. %1$s:  IF ( LibraryNameTitle ) 
 #. %2$s:  LibraryNameTitle | html 
@@ -1520,27 +1575,27 @@ msgstr "%s%s%s%sKoha daring%s katalog &rsaquo; Pembukuan %s %s "
 #. %4$s:  END 
 #. %5$s:  INCLUDE 'biblio-title-head.inc' 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:33
-#, fuzzy, c-format
+#, c-format
 msgid "%s%s%sKoha online%s catalog &rsaquo; Details for: %s"
-msgstr "%s %s%s%sKoha daring%s katalog &rsaquo; Gambar untuk: %s %s "
+msgstr "%s%s%sKoha daring%s katalog &rsaquo; Perincian untuk: %s"
 
 #. %1$s:  IF ( LibraryNameTitle ) 
 #. %2$s:  LibraryNameTitle | html 
 #. %3$s:  ELSE 
 #. %4$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-discharge.tt:3
-#, fuzzy, c-format
+#, c-format
 msgid "%s%s%sKoha online%s catalog &rsaquo; Discharge"
-msgstr "%s%s%s%sKoha daring%s Katalog &rsaquo; Tag %s "
+msgstr "%s%s%sKoha daring%s Katalog &rsaquo; Keluarkan"
 
 #. %1$s:  IF ( LibraryNameTitle ) 
 #. %2$s:  LibraryNameTitle | html 
 #. %3$s:  ELSE 
 #. %4$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-downloadcart.tt:2
-#, fuzzy, c-format
+#, c-format
 msgid "%s%s%sKoha online%s catalog &rsaquo; Download cart"
-msgstr "%s%s%s%sKoha daring%s katalog &rsaquo; Unduh troli%s "
+msgstr "%s%s%sKoha daring%s katalog &rsaquo; Unduh isi troli"
 
 #. %1$s:  IF ( LibraryNameTitle ) 
 #. %2$s:  LibraryNameTitle | html 
@@ -1548,9 +1603,9 @@ msgstr "%s%s%s%sKoha daring%s katalog &rsaquo; Unduh troli%s "
 #. %4$s:  END 
 #. %5$s:  shelf.shelfname | html 
 #: opac-tmpl/bootstrap/en/modules/opac-downloadshelf.tt:4
-#, fuzzy, c-format
+#, c-format
 msgid "%s%s%sKoha online%s catalog &rsaquo; Download list %s"
-msgstr "%s%s%s%sKoha daring%s katalog &rsaquo; Unduh troli%s "
+msgstr "%s%s%sKoha daring%s katalog &rsaquo; Unduh ini lis %s"
 
 #. %1$s:  IF ( LibraryNameTitle ) 
 #. %2$s:  LibraryNameTitle | html 
@@ -1558,18 +1613,18 @@ msgstr "%s%s%s%sKoha daring%s katalog &rsaquo; Unduh troli%s "
 #. %4$s:  END 
 #. %5$s:  authtypetext | html 
 #: opac-tmpl/bootstrap/en/modules/opac-auth-MARCdetail.tt:6
-#, fuzzy, c-format
+#, c-format
 msgid "%s%s%sKoha online%s catalog &rsaquo; Entry %s"
-msgstr "%s%s%s%sKoha daring%s katalog &rsaquo; Pembukuan %s %s "
+msgstr "%s%s%sKoha daring%s katalog &rsaquo; Pembukuan %s"
 
 #. %1$s:  IF ( LibraryNameTitle ) 
 #. %2$s:  LibraryNameTitle | html 
 #. %3$s:  ELSE 
 #. %4$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:4
-#, fuzzy, c-format
+#, c-format
 msgid "%s%s%sKoha online%s catalog &rsaquo; Forgotten password recovery"
-msgstr "%s%s%s%sKoha daring%s katalog &rsaquo; Ganti kata sandi anda %s "
+msgstr "%s%s%sKoha daring%s katalog &rsaquo; Ganti kata sandi yang terlupa"
 
 #. %1$s:  IF ( LibraryNameTitle ) 
 #. %2$s:  LibraryNameTitle | html 
@@ -1577,19 +1632,19 @@ msgstr "%s%s%s%sKoha daring%s katalog &rsaquo; Ganti kata sandi anda %s "
 #. %4$s:  END 
 #. %5$s:  bibliotitle | html 
 #: opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:5
-#, fuzzy, c-format
+#, c-format
 msgid "%s%s%sKoha online%s catalog &rsaquo; Full subscription history for %s"
 msgstr ""
-"%s%s%s%sKoha daring%s katalog &rsaquo; Informasi berlangganan untuk %s %s "
+"%s%s%sKoha daring%s katalog &rsaquo; Informasi berlangganan lengkap untuk %s"
 
 #. %1$s:  IF ( LibraryNameTitle ) 
 #. %2$s:  LibraryNameTitle | html 
 #. %3$s:  ELSE 
 #. %4$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-ISBDdetail.tt:4
-#, fuzzy, c-format
+#, c-format
 msgid "%s%s%sKoha online%s catalog &rsaquo; ISBD view"
-msgstr "%s%s%s%sKoha daring%s katalog &rsaquo; Tampilan ISBD %s "
+msgstr "%s%s%sKoha daring%s katalog &rsaquo; Tampilan ISBD"
 
 #. %1$s:  IF ( LibraryNameTitle ) 
 #. %2$s:  LibraryNameTitle | html 
@@ -1597,18 +1652,18 @@ msgstr "%s%s%s%sKoha daring%s katalog &rsaquo; Tampilan ISBD %s "
 #. %4$s:  END 
 #. %5$s:  INCLUDE 'biblio-title-head.inc' 
 #: opac-tmpl/bootstrap/en/modules/opac-imageviewer.tt:3
-#, fuzzy, c-format
+#, c-format
 msgid "%s%s%sKoha online%s catalog &rsaquo; Images for: %s"
-msgstr "%s %s%s%sKoha daring%s katalog &rsaquo; Gambar untuk: %s %s "
+msgstr "%s%s%sKoha daring%s katalog &rsaquo; Gambar untuk: %s"
 
 #. %1$s:  IF ( LibraryNameTitle ) 
 #. %2$s:  LibraryNameTitle | html 
 #. %3$s:  ELSE 
 #. %4$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-serial-issues.tt:3
-#, fuzzy, c-format
+#, c-format
 msgid "%s%s%sKoha online%s catalog &rsaquo; Issues for a subscription"
-msgstr "%s %s%s%sKoha daring%s katalog &rsaquo; Gambar untuk: %s %s "
+msgstr "%s%s%sKoha daring%s katalog &rsaquo; Nomor-nomor untuk sebuah langganan"
 
 #. %1$s:  IF ( LibraryNameTitle ) 
 #. %2$s:  LibraryNameTitle | html 
@@ -1616,20 +1671,18 @@ msgstr "%s %s%s%sKoha daring%s katalog &rsaquo; Gambar untuk: %s %s "
 #. %4$s:  END 
 #. %5$s:  biblio.biblionumber | html 
 #: opac-tmpl/bootstrap/en/modules/opac-MARCdetail.tt:4
-#, fuzzy, c-format
+#, c-format
 msgid "%s%s%sKoha online%s catalog &rsaquo; MARC details for record no. %s"
-msgstr ""
-"%s%s%s%sKoha daring%s katalog &rsaquo; Perincian MARC untuk catatan no. %s "
-"%s "
+msgstr "%s%s%sKoha daring%s katalog &rsaquo; Perincian MARC untuk rekor no. %s"
 
 #. %1$s:  IF ( LibraryNameTitle ) 
 #. %2$s:  LibraryNameTitle | html 
 #. %3$s:  ELSE 
 #. %4$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:6
-#, fuzzy, c-format
+#, c-format
 msgid "%s%s%sKoha online%s catalog &rsaquo; Most popular titles"
-msgstr "%s%s%s%sKoha daring%s katalog &rsaquo; Judul paling populer %s "
+msgstr "%s%s%sKoha daring%s katalog &rsaquo; Judul paling populer"
 
 #. %1$s:  IF ( LibraryNameTitle ) 
 #. %2$s:  LibraryNameTitle | html 
@@ -1637,9 +1690,10 @@ msgstr "%s%s%s%sKoha daring%s katalog &rsaquo; Judul paling populer %s "
 #. %4$s:  END 
 #. %5$s:  q | html 
 #: opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:5
-#, fuzzy, c-format
+#, c-format
 msgid "%s%s%sKoha online%s catalog &rsaquo; OverDrive search for '%s'"
-msgstr "%s %s%s%sKoha daring%s katalog &rsaquo; Riwayat pencarian anda %s "
+msgstr ""
+"%s%s%sKoha daring%s katalog &rsaquo; Pencarian dari OverDrive untuk '%s'"
 
 #. %1$s:  IF ( LibraryNameTitle ) 
 #. %2$s:  LibraryNameTitle | html 
@@ -5345,7 +5399,7 @@ msgid "Don't have a password yet?"
 msgstr "Belum memiliki sebuah kata sandi?"
 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:374
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:191
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:196
 #: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:97
 #, fuzzy, c-format
 msgid "Don't have an account? "
@@ -5909,7 +5963,7 @@ msgstr ""
 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:369
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:178
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:186
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:191
 #, fuzzy, c-format
 msgid "Forgot your password?"
 msgstr "ubah kata sandi saya"
@@ -7323,7 +7377,7 @@ msgstr ""
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:380
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:23
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:175
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:177
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:182
 #: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:95
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:379
 #, c-format
@@ -7375,7 +7429,7 @@ msgstr "Log masuk ke akun anda"
 msgid "Log in to your account"
 msgstr "Log masuk ke akun anda"
 
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:173
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:178
 #: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:81
 #, c-format
 msgid "Log in to your account:"
@@ -7423,7 +7477,7 @@ msgstr "katalog"
 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:360
 #: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:96
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:174
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:179
 #: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:82
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:374
 #, c-format
@@ -7925,7 +7979,7 @@ msgstr "Tidak ada batas"
 msgid "No matching records found"
 msgstr "Tidak ditemukan catatan yang cocok"
 
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:137
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:142
 #, c-format
 msgid "No news to display."
 msgstr ""
@@ -8589,7 +8643,7 @@ msgstr "Kata sandi sudah diperbarui"
 
 #: opac-tmpl/bootstrap/en/includes/overdrive-login.inc:9
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:361
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:175
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:180
 #: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:46
 #: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:88
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:376
@@ -9224,9 +9278,11 @@ msgstr "%s - %s%s %s - %s%s %s, %s%s %s, %s%s %s, %s%s %s "
 
 #. %1$s:  koha_new.timestamp | $KohaDates with_hours = 1 
 #. %2$s:  IF ( (newsdisp == 'opac' || newsdisp == 'both') && koha_new.borrowernumber ) 
+#. %3$s:  IF news_item 
+#. %4$s:  SET author = koha_new.author 
 #: opac-tmpl/bootstrap/en/modules/opac-main.tt:96
 #, fuzzy, c-format
-msgid "Published on %s %s by "
+msgid "Published on %s %s %s %s by "
 msgstr "(dipublikasikan pada %s)"
 
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:85
@@ -9258,7 +9314,7 @@ msgstr "Saran Pembelian"
 msgid "Quantity:"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:148
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:153
 #, c-format
 msgid "Quote of the day"
 msgstr ""
@@ -9367,7 +9423,7 @@ msgid "Register a new account"
 msgstr ""
 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:374
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:191
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:196
 #: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:97
 #, fuzzy, c-format
 msgid "Register here."
@@ -10358,7 +10414,7 @@ msgstr "Show _MENU_ entries"
 msgid "Show all items"
 msgstr "Tampilkan semua barang"
 
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:102
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:107
 #, fuzzy, c-format
 msgid "Show all news"
 msgstr "Tampilkan semua barang"
@@ -12111,7 +12167,7 @@ msgstr ""
 msgid "Wednesday"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:201
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:206
 #, c-format
 msgid "Welcome, "
 msgstr "Selamat datang, "
@@ -13140,7 +13196,7 @@ msgstr "cardnumber"
 msgid "change your password"
 msgstr "ubah kata sandi saya"
 
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:204
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:209
 #, fuzzy, c-format
 msgid "checkout(s)"
 msgstr "Peminjaman"
@@ -13200,7 +13256,7 @@ msgstr ""
 msgid "desired_due_date"
 msgstr "desired_due_date"
 
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:216
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:221
 #, fuzzy, c-format
 msgid "due in fines and charges"
 msgstr "Denda dan biaya"
@@ -13239,12 +13295,12 @@ msgstr ""
 msgid "here"
 msgstr "di sini"
 
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:210
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:215
 #, c-format
 msgid "hold(s) pending"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:213
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:218
 #, c-format
 msgid "hold(s) waiting"
 msgstr ""
@@ -13419,7 +13475,7 @@ msgstr "atau"
 msgid "out of"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:207
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:212
 #, fuzzy, c-format
 msgid "overdue(s)"
 msgstr "Terlambat "

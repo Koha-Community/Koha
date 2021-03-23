@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 20.05\n"
-"POT-Creation-Date: 2021-02-18 07:59-0300\n"
+"POT-Creation-Date: 2021-03-19 17:02-0300\n"
 "PO-Revision-Date: 2020-11-24 10:19+0000\n"
 "Last-Translator: KnowledgeWare Technologies Est. <massoudalshareef@kwareict."
 "com>\n"
@@ -173,6 +173,14 @@ msgstr ""
 "تقرير المشكلة الخاص بك إلى المكتبة. %s %s لقد حدث خطأ ما أثناء إرسال "
 "التقرير. يرجى الاتصال بمكتبتك. %s "
 
+#. %1$s:  author.firstname | html 
+#. %2$s:  author.surname | html 
+#. %3$s:  ELSE 
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:101
+#, fuzzy, c-format
+msgid "%s %s %s by "
+msgstr "%s %s %s %s بواسطة"
+
 #. %1$s: - IF account.credit_type_code -
 #. %2$s: - SWITCH account.credit_type_code -
 #. %3$s: - CASE 'PAYMENT'          -
@@ -330,7 +338,7 @@ msgstr "%s %s لم يتم العثور على نتائج. %s"
 #. %9$s:  ELSE 
 #. %10$s:  END 
 #. %11$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:112
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:117
 #, c-format
 msgid ""
 "%s %s RSS feed for %s library news %s RSS feed for library news %s %s %s RSS "
@@ -5374,7 +5382,7 @@ msgid "Don't have a password yet?"
 msgstr "أليس لديك كلمة سر بعد ؟"
 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:374
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:191
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:196
 #: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:97
 #, c-format
 msgid "Don't have an account? "
@@ -5933,7 +5941,7 @@ msgstr ""
 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:369
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:178
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:186
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:191
 #, c-format
 msgid "Forgot your password?"
 msgstr "نسيت كلمة مرورك؟"
@@ -7331,7 +7339,7 @@ msgstr "مواقع"
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:380
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:23
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:175
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:177
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:182
 #: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:95
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:379
 #, c-format
@@ -7382,7 +7390,7 @@ msgstr "سجل الدخول إلى حسابك"
 msgid "Log in to your account"
 msgstr "تسجيل الدخول إلى حسابك"
 
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:173
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:178
 #: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:81
 #, c-format
 msgid "Log in to your account:"
@@ -7429,7 +7437,7 @@ msgstr "صفحة الدخول"
 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:360
 #: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:96
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:174
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:179
 #: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:82
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:374
 #, c-format
@@ -7928,7 +7936,7 @@ msgstr "لا يوجد حدود"
 msgid "No matching records found"
 msgstr "لم يعثر على تسجيلات مطابقة"
 
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:137
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:142
 #, c-format
 msgid "No news to display."
 msgstr "لا يوجد أخبار للعرض"
@@ -8578,7 +8586,7 @@ msgstr "كلمة المرور تم تحديثها"
 
 #: opac-tmpl/bootstrap/en/includes/overdrive-login.inc:9
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:361
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:175
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:180
 #: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:46
 #: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:88
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:376
@@ -9219,9 +9227,11 @@ msgstr "منشور بواسطة: %s %s in %s %s %s , %s %s %s , %s %s "
 
 #. %1$s:  koha_new.timestamp | $KohaDates with_hours = 1 
 #. %2$s:  IF ( (newsdisp == 'opac' || newsdisp == 'both') && koha_new.borrowernumber ) 
+#. %3$s:  IF news_item 
+#. %4$s:  SET author = koha_new.author 
 #: opac-tmpl/bootstrap/en/modules/opac-main.tt:96
-#, c-format
-msgid "Published on %s %s by "
+#, fuzzy, c-format
+msgid "Published on %s %s %s %s by "
 msgstr "نشر في %s %s بواسطة"
 
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:85
@@ -9253,7 +9263,7 @@ msgstr "مقترحات الشراء"
 msgid "Quantity:"
 msgstr "الكمية:"
 
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:148
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:153
 #, c-format
 msgid "Quote of the day"
 msgstr "اقتباس اليوم"
@@ -9362,7 +9372,7 @@ msgid "Register a new account"
 msgstr "تسجيل حساب جديد"
 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:374
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:191
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:196
 #: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:97
 #, c-format
 msgid "Register here."
@@ -10340,7 +10350,7 @@ msgstr "اظهر _القائمة_ مدخلات"
 msgid "Show all items"
 msgstr "أظهر جميع المواد"
 
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:102
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:107
 #, c-format
 msgid "Show all news"
 msgstr "عرض كل الأخبار"
@@ -12088,7 +12098,7 @@ msgstr "الاربعاء"
 msgid "Wednesday"
 msgstr "الاربعاء"
 
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:201
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:206
 #, c-format
 msgid "Welcome, "
 msgstr "مرحـــبــا "
@@ -13118,7 +13128,7 @@ msgstr ":رقم البطاقة"
 msgid "change your password"
 msgstr "تغيير كلمة مرورك"
 
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:204
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:209
 #, c-format
 msgid "checkout(s)"
 msgstr "الإعارة (الإعارات)"
@@ -13179,7 +13189,7 @@ msgstr "يحدد نوع التسجيلة والمعرف المستخدم في ا
 msgid "desired_due_date"
 msgstr "desired_due_date"
 
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:216
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:221
 #, c-format
 msgid "due in fines and charges"
 msgstr "المستحق في الغرامات والرسوم"
@@ -13216,12 +13226,12 @@ msgstr "لمزيد من المعلومات حول ما تقوم به وكيفي�
 msgid "here"
 msgstr "هنا"
 
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:210
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:215
 #, c-format
 msgid "hold(s) pending"
 msgstr "الحجز (الحجوزات) في الانتظار"
 
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:213
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:218
 #, c-format
 msgid "hold(s) waiting"
 msgstr "حجز (حجوزات) في الانتظار"
@@ -13395,7 +13405,7 @@ msgstr "أو"
 msgid "out of"
 msgstr "من"
 
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:207
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:212
 #, c-format
 msgid "overdue(s)"
 msgstr "المتأخر (المتأخرات)"
