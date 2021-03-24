@@ -1858,10 +1858,13 @@ sub queue_notice {
     my $print_sent = 0;
     my %return;
     foreach my $mtt (@message_transports){
-        next if ($mtt eq 'phone' and C4::Context->preference('TalkingTechItivaPhoneNotification') );
-        # Phone notices are handled by TalkingTech_itiva_outbound.pl
-        if( ($mtt eq 'email' and not $self->notice_email_address) or ($mtt eq 'sms' and not $self->smsalertnumber) ){
-            push @{$return{fallback}}, $mtt;
+        next if ($mtt eq 'itiva' and C4::Context->preference('TalkingTechItivaPhoneNotification') );
+        # Notice is handled by TalkingTech_itiva_outbound.pl
+        if (   ( $mtt eq 'email' and not $self->notice_email_address )
+            or ( $mtt eq 'sms'   and not $self->smsalertnumber )
+            or ( $mtt eq 'phone' and not $self->phone ) )
+        {
+            push @{ $return{fallback} }, $mtt;
             $mtt = 'print';
         }
         next if $mtt eq 'print' && $print_sent;
