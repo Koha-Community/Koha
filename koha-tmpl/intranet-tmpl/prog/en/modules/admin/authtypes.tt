@@ -103,6 +103,7 @@
                             <input type="hidden" name="checked" value="0" />
                             <input type="hidden" name="authtypecode" value="[% authority_type.authtypecode | html %]" />[% authority_type.authtypecode | html %]
                     [% ELSE %]
+                            <div class="hint">10 characters maximum</div>
                             <label for="authtypecode" class="required">Authority type: </label>
                             <input id="authtypecode" type="text" class="required" required="required" name="authtypecode" size="20" maxlength="10" />
                             <span class="required">Required</span>
