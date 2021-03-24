@@ -203,9 +203,9 @@ sub pay {
         # If we need to make a note of the item associated with this line,
         # in order that we can potentially renew it, do so.
         my $amt = $old_amountoutstanding - $amount_to_pay;
-        if ($fine->renewable) {
+        if ( $fine->renewable ) {
             my $outcome = $fine->renew_item;
-            push @{$renew_outcomes}, $outcome;
+            push @{$renew_outcomes}, $outcome if $outcome;
         }
 
         if ( C4::Context->preference('MarkLostItemsAsReturned') =~ m|onpayment|
