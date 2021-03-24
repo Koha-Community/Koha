@@ -1825,7 +1825,7 @@ sub to_api_mapping {
 
     $letter_params is a hashref of the values to be passed to GetPreparedLetter
 
-    test_mode will only report which notices would be sent, but nothign will be queued
+    test_mode will only report which notices would be sent, but nothing will be queued
 
 =cut
 
