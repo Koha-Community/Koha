@@ -596,8 +596,8 @@ sub apply {
 
             # Attempt to renew the item associated with this debit if
             # appropriate
-            if ($debit->renewable) {
-                $debit->renew_item($params->{interface});
+            if ( $self->credit_type_code ne 'FORGIVEN' && $debit->renewable ) {
+                $debit->renew_item( { interface => $params->{interface} } );
             }
 
             # Same logic exists in Koha::Account::pay
