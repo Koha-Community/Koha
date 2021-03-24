@@ -2,18 +2,18 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Koha 20.11\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2021-02-12 07:37+0000\n"
+"PO-Revision-Date: 2021-03-24 07:18+0000\n"
 "Last-Translator: Serhij Dubyk <dubyk@ukr.net>\n"
 "Language-Team: Ukrainian Linux Team <translation@linux.org.ua>\n"
 "Language: uk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
-"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 "X-Generator: Pootle 2.8\n"
 "X-Poedit-SourceCharset: utf-8\n"
-"X-POOTLE-MTIME: 1613115431.901910\n"
+"X-POOTLE-MTIME: 1616570301.560962\n"
 "X-Pootle-Path: /uk/20.05/uk-UA-pref.po\n"
 "X-Pootle-Revision: 1\n"
 
@@ -749,6 +749,13 @@ msgstr ""
 msgid ""
 "admin.pref#GoogleOpenIDConnectDomain# Restrict Google OpenID Connect to this "
 "domain (or subdomain of this domain): "
+msgstr ""
+
+# Administration > Login options > IndependentBranches
+msgid ""
+"admin.pref#IndependentBranches# <p class='text-danger'><strong>Warning:</"
+"strong> Changing this system preference will radically alter the behavior of "
+"Koha. Changing preference on a production system is highly discouraged.</p>"
 msgstr ""
 
 # Administration > Login options
@@ -4161,7 +4168,7 @@ msgstr ""
 
 # Circulation > Holds policy
 msgid "circulation.pref#ExcludeHolidaysFromMaxPickUpDelay# Ignore the calendar"
-msgstr ""
+msgstr "Ігнорувати календар"
 
 # Circulation > Holds policy
 msgid "circulation.pref#ExcludeHolidaysFromMaxPickUpDelay# Use the calendar"
@@ -5999,7 +6006,7 @@ msgstr ""
 
 # Circulation > Fines Policy
 msgid "circulation.pref#finesCalendar# Ignore the calendar"
-msgstr ""
+msgstr "Ігнорувати календар"
 
 # Circulation > Fines Policy
 msgid "circulation.pref#finesCalendar# Use the calendar"
@@ -6192,11 +6199,11 @@ msgstr "при розрахунку очікуваної дати поверне
 
 # Circulation > Fines Policy
 msgid "circulation.pref#useDefaultReplacementCost# Don't use"
-msgstr ""
+msgstr "Не використовувати"
 
 # Circulation > Fines Policy
 msgid "circulation.pref#useDefaultReplacementCost# Use"
-msgstr ""
+msgstr "Використовувати"
 
 # Circulation > Fines Policy
 msgid ""
@@ -7644,45 +7651,51 @@ msgstr "інформацію з періодичних завдань."
 
 # Logging > Debugging
 msgid "logs.pref#DumpSearchQueryTemplate# Do"
-msgstr ""
+msgstr "Виводити"
 
 # Logging > Debugging
 msgid "logs.pref#DumpSearchQueryTemplate# Don't"
-msgstr ""
+msgstr "Не виводити"
 
 # Logging > Debugging
 msgid ""
 "logs.pref#DumpSearchQueryTemplate# dump search query as a template "
 "parameter, requires DumpTemplateVars[interface] to be visible."
 msgstr ""
+"дамп пошукового запиту як параметр шаблону, вимагає включення "
+"DumpTemplateVars[інтерфейс]."
 
 # Logging > Debugging
 msgid "logs.pref#DumpTemplateVarsIntranet# Do"
-msgstr ""
+msgstr "Виводити"
 
 # Logging > Debugging
 msgid "logs.pref#DumpTemplateVarsIntranet# Don't"
-msgstr ""
+msgstr "Не виводити"
 
 # Logging > Debugging
 msgid ""
 "logs.pref#DumpTemplateVarsIntranet# dump all Template Toolkit variables to a "
 "comment in the HTML source for the staff interface."
 msgstr ""
+"дамп усіх змінних шаблонізатора „Template Toolkit“ як коментарі у HTML для "
+"бібліотечного інтерфейсу."
 
 # Logging > Debugging
 msgid "logs.pref#DumpTemplateVarsOpac# Do"
-msgstr ""
+msgstr "Виводити"
 
 # Logging > Debugging
 msgid "logs.pref#DumpTemplateVarsOpac# Don't"
-msgstr ""
+msgstr "Не виводити"
 
 # Logging > Debugging
 msgid ""
 "logs.pref#DumpTemplateVarsOpac# dump all Template Toolkit variables to a "
 "comment in the HTML source for the OPAC."
 msgstr ""
+"дамп усіх змінних шаблонізатора „Template Toolkit“ як коментарі у HTML для "
+"електронного каталогу."
 
 # Logging > Logging
 msgid "logs.pref#FinesLog# Don't log"
@@ -7808,6 +7821,11 @@ msgstr "Параметри детальнішого пошуку"
 msgid "opac.pref Appearance"
 msgstr "Зовнішній вигляд"
 
+# Administration > CAS authentication
+#, fuzzy
+msgid "opac.pref Authentication"
+msgstr "Автентифікація CAS (Центральна служба автентифікації)"
+
 # OPAC > Features
 msgid "opac.pref Features"
 msgstr "Можливості"
@@ -7884,6 +7902,9 @@ msgid ""
 "suggestions. Suggestions are connected to the AnonymousPatron system "
 "preference."
 msgstr ""
+"користувачам, які не увійшли в систему, робити пропозиції на придбання. "
+"Можливість таких пропозицій пов’язана із системним параметром "
+"„AnonymousPatron“."
 
 # OPAC > Privacy
 msgid "opac.pref#AnonymousPatron# Use borrowernumber"
@@ -8054,25 +8075,27 @@ msgstr " в якості назви бібліотеки в електронно
 
 # OPAC > Policy
 msgid "opac.pref#MaxOpenSuggestions# Limit patrons to"
-msgstr ""
+msgstr "Обмежувати користувачів на подання "
 
 # OPAC > Policy
 msgid ""
 "opac.pref#MaxOpenSuggestions# open suggestions. Leave empty for no limit. "
 "**Note: this setting does not affect anonymous suggestions."
 msgstr ""
+"пропозицій. Залиште порожнім щоб зняти обмеження. ** Примітка: це "
+"налаштування не впливає на анонімні пропозиції. "
 
 # OPAC > Policy
 msgid "opac.pref#MaxTotalSuggestions# Number of total suggestions allowed"
-msgstr ""
+msgstr "Загалом дозволено "
 
 # OPAC > Policy
 msgid "opac.pref#MaxTotalSuggestions# days."
-msgstr ""
+msgstr "днів."
 
 # OPAC > Policy
 msgid "opac.pref#MaxTotalSuggestions# in"
-msgstr ""
+msgstr " пропозицій на протязі "
 
 # OPAC > Features
 msgid "opac.pref#OPACAcquisitionDetails# Display"
@@ -8205,6 +8228,8 @@ msgid ""
 "opac.pref#OPACFinesTab# patrons to access the charges tab on their account "
 "page on the OPAC."
 msgstr ""
+"користувачам мати доступ до вкладки „Мої сплати“ на сторінці облікового "
+"запису в електронному каталозі."
 
 # OPAC > Appearance
 msgid "opac.pref#OPACHoldingsDefaultSortField# First column of the table"
@@ -8440,6 +8465,22 @@ msgid ""
 "your collection has a large number of items."
 msgstr ""
 
+# OPAC > Privacy
+#, fuzzy
+msgid "opac.pref#OPACShibOnly# Allow"
+msgstr "Дозволяти"
+
+# OPAC > Privacy
+#, fuzzy
+msgid "opac.pref#OPACShibOnly# Don't allow"
+msgstr "Не дозволяти"
+
+# OPAC > Privacy
+#, fuzzy
+msgid ""
+"opac.pref#OPACShibOnly# patrons to login by means other than Shibboleth."
+msgstr " користувачам бачити, які книги вони брали в минулому."
+
 # OPAC > Appearance
 msgid "opac.pref#OPACShowCheckoutName# Don't show"
 msgstr "Не показувати"
@@ -8521,114 +8562,118 @@ msgid ""
 "opac.pref#OPACSuggestionMandatoryFields# <br />Note: if none of the above "
 "options are selected, 'Title' field would be mandatory anyway, by default."
 msgstr ""
+"<br />Примітка: якщо жоден із наведених вище варіантів не вибраний, поле "
+"„Назва“ буде обовʼязковим за замовчуванням."
 
 # OPAC > Policy
 msgid "opac.pref#OPACSuggestionMandatoryFields# Author"
-msgstr ""
+msgstr "автор"
 
 # OPAC > Policy
 msgid "opac.pref#OPACSuggestionMandatoryFields# Collection title"
-msgstr ""
+msgstr "назва зібрання"
 
 # OPAC > Policy
 msgid "opac.pref#OPACSuggestionMandatoryFields# Copyright or publication date"
-msgstr ""
+msgstr "рік чи дата видання і т.п."
 
 # OPAC > Policy
 msgid ""
 "opac.pref#OPACSuggestionMandatoryFields# Fields that should be mandatory for "
 "patron purchase suggestions:"
-msgstr ""
+msgstr "Обовʼязкові поля для пропозицій користувачів на придбання: "
 
 # OPAC > Policy
 msgid ""
 "opac.pref#OPACSuggestionMandatoryFields# ISBN, ISSN or other standard number"
-msgstr ""
+msgstr "ISBN, ISSN або інший стандартний номер"
 
 # OPAC > Policy
 msgid "opac.pref#OPACSuggestionMandatoryFields# Item type"
-msgstr ""
+msgstr "тип одиниці"
 
 # OPAC > Policy
 msgid "opac.pref#OPACSuggestionMandatoryFields# Library or branch"
-msgstr ""
+msgstr "підрозділ або бібліотека"
 
 # OPAC > Policy
 msgid "opac.pref#OPACSuggestionMandatoryFields# Note"
-msgstr ""
+msgstr "примітка"
 
 # OPAC > Policy
 msgid "opac.pref#OPACSuggestionMandatoryFields# Patron reason"
-msgstr ""
+msgstr "причина пропозиції користувача"
 
 # OPAC > Policy
 msgid "opac.pref#OPACSuggestionMandatoryFields# Publication place"
-msgstr ""
+msgstr "місце публікації"
 
 # OPAC > Policy
 msgid "opac.pref#OPACSuggestionMandatoryFields# Publisher name"
-msgstr ""
+msgstr "видавництво"
 
 # OPAC > Policy
 msgid "opac.pref#OPACSuggestionMandatoryFields# Title"
-msgstr "Назва"
+msgstr "назва"
 
 # OPAC > Policy
 msgid ""
 "opac.pref#OPACSuggestionUnwantedFields# <br />Note: Do not make "
 "OPACSuggestionMandatoryFields unwanted fields "
 msgstr ""
+"<br />Примітка: не позначайте обовʼязковими небажані поля у "
+"OPACSuggestionMandatoryFields"
 
 # OPAC > Policy
 msgid "opac.pref#OPACSuggestionUnwantedFields# Author"
-msgstr ""
+msgstr "автор"
 
 # OPAC > Policy
 msgid "opac.pref#OPACSuggestionUnwantedFields# Collection title"
-msgstr ""
+msgstr "назва зібрання"
 
 # OPAC > Policy
 msgid "opac.pref#OPACSuggestionUnwantedFields# Copyright or publication date"
-msgstr ""
+msgstr "рік чи дата видання і т.п."
 
 # OPAC > Policy
 msgid ""
 "opac.pref#OPACSuggestionUnwantedFields# Fields that should be hidden for "
 "patron purchase suggestions:"
-msgstr ""
+msgstr "Поля, які слід приховувати для пропозицій користувачів на придбання: "
 
 # OPAC > Policy
 msgid ""
 "opac.pref#OPACSuggestionUnwantedFields# ISBN, ISSN or other standard number"
-msgstr ""
+msgstr "ISBN, ISSN або інший стандартний номер"
 
 # OPAC > Policy
 msgid "opac.pref#OPACSuggestionUnwantedFields# Item type"
-msgstr ""
+msgstr "тип одиниці"
 
 # OPAC > Policy
 msgid "opac.pref#OPACSuggestionUnwantedFields# Library or branch"
-msgstr ""
+msgstr "підрозділ або бібліотека"
 
 # OPAC > Policy
 msgid "opac.pref#OPACSuggestionUnwantedFields# Note"
-msgstr ""
+msgstr "примітка"
 
 # OPAC > Policy
 msgid "opac.pref#OPACSuggestionUnwantedFields# Patron reason"
-msgstr ""
+msgstr "причина пропозиції користувача"
 
 # OPAC > Policy
 msgid "opac.pref#OPACSuggestionUnwantedFields# Publication place"
-msgstr ""
+msgstr "місце публікації"
 
 # OPAC > Policy
 msgid "opac.pref#OPACSuggestionUnwantedFields# Publisher name"
-msgstr ""
+msgstr "видавництво"
 
 # OPAC > Policy
 msgid "opac.pref#OPACSuggestionUnwantedFields# Quantity"
-msgstr ""
+msgstr "кількість"
 
 # OPAC > Appearance
 msgid ""
@@ -8854,6 +8899,7 @@ msgstr "Не дозволяти"
 msgid ""
 "opac.pref#OpacAllowPublicListCreation# OPAC users to create public lists."
 msgstr ""
+"користувачам створювати загальнодоступні списки з електронного каталогу."
 
 # OPAC > Policy
 msgid "opac.pref#OpacAllowSharingPrivateLists# Allow"
@@ -8868,6 +8914,8 @@ msgid ""
 "opac.pref#OpacAllowSharingPrivateLists# OPAC users to share private lists "
 "with other patrons."
 msgstr ""
+" користувачам у електронному каталозі ділитися особистими списками з іншими "
+"користувачами."
 
 # OPAC > Features
 msgid "opac.pref#OpacAuthorities# Allow"
@@ -8933,6 +8981,7 @@ msgstr "Не дозволяти"
 msgid ""
 "opac.pref#OpacBrowser# patrons to browse subject authorities on the OPAC."
 msgstr ""
+"користувачам переглядати авторитетні джерела рубрик в електронному каталозі."
 
 # OPAC > Features
 msgid ""
@@ -8954,7 +9003,7 @@ msgstr "Показувати"
 
 # OPAC > Features
 msgid "opac.pref#OpacCloud# a subject cloud on the OPAC."
-msgstr ""
+msgstr "хмару рубрик в електронному каталозі."
 
 # OPAC > Appearance
 msgid "opac.pref#OpacExportOptions# BibTeX"
@@ -9056,11 +9105,11 @@ msgstr "Дозволити"
 
 # OPAC > Features
 msgid "opac.pref#OpacHoldNotes# Don't allow"
-msgstr ""
+msgstr "Не дозволяти"
 
 # OPAC > Features
 msgid "opac.pref#OpacHoldNotes# patrons to add a note when placing a hold."
-msgstr ""
+msgstr "користувачам додавати примітку під час розміщення замовлення."
 
 # OPAC > Features
 msgid "opac.pref#OpacItemLocation# Show"
@@ -9432,6 +9481,7 @@ msgid ""
 "opac.pref#OpacSuggestionManagedBy# the name of the staff member who managed "
 "a suggestion in OPAC."
 msgstr ""
+" імʼя співробітника, який опрацьовує пропозиції з електронного каталогу."
 
 # OPAC > Features
 msgid "opac.pref#OpacTopissue# Allow"
@@ -9740,19 +9790,19 @@ msgstr ""
 
 # OPAC > Features
 msgid "opac.pref#QuoteOfTheDay# OPAC"
-msgstr ""
+msgstr "електронний каталог"
 
 # OPAC > Features
 msgid "opac.pref#QuoteOfTheDay# Show quote of the day in the"
-msgstr ""
+msgstr "Показувати цитату дня на головній сторінці "
 
 # OPAC > Features
 msgid "opac.pref#QuoteOfTheDay# main page."
-msgstr ""
+msgstr "."
 
 # OPAC > Features
 msgid "opac.pref#QuoteOfTheDay# staff interface"
-msgstr ""
+msgstr "бібліотечний інтерфейс"
 
 # OPAC > Features
 msgid "opac.pref#RequestOnOpac# Allow"
@@ -11188,8 +11238,7 @@ msgid ""
 "patrons.pref#useDischarge# librarians to discharge borrowers and borrowers "
 "to request a discharge."
 msgstr ""
-"бібліотекарям розраховувати користувачів та користувачів, що вимагають "
-"розрахування."
+"бібліотекарям надавати користувачам обхідні листи а користувачам вимагати їх."
 
 # Searching
 msgid "searching.pref"
@@ -12041,6 +12090,11 @@ msgid "staff_interface.pref Appearance"
 msgstr "Зовнішній вигляд"
 
 # Staff interface > Options
+#, fuzzy
+msgid "staff_interface.pref Authentication"
+msgstr "Опції"
+
+# Staff interface > Options
 msgid "staff_interface.pref Options"
 msgstr "Опції"
 
@@ -12379,6 +12433,22 @@ msgid ""
 "starting with http:// or https://. Do not include a trailing slash in the "
 "URL. (This must be filled in correctly for CAS, svc, and load_testing to "
 "work.)"
+msgstr ""
+
+# Staff interface > Options
+#, fuzzy
+msgid "staff_interface.pref#staffShibOnly# Allow"
+msgstr "Опції"
+
+# Staff interface > Options
+#, fuzzy
+msgid "staff_interface.pref#staffShibOnly# Don't allow"
+msgstr "Опції"
+
+# Staff interface > Authentication > staffShibOnly
+msgid ""
+"staff_interface.pref#staffShibOnly# staff to login by means other than "
+"shibboleth."
 msgstr ""
 
 # Staff interface > Appearance

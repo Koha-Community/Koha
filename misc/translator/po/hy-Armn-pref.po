@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Koha 20.11\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-05-10 19:14+0200\n"
-"PO-Revision-Date: 2021-02-08 06:03+0000\n"
+"PO-Revision-Date: 2021-03-16 07:00+0000\n"
 "Last-Translator: tigran <tigran@flib.sci.am>\n"
 "Language-Team: Koha Translation Team <koha-translate@nongnu.org>\n"
 "Language: hy\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Generator: Pootle 2.8\n"
 "X-Poedit-Bookmarks: 1755,-1,-1,-1,-1,-1,-1,-1,-1,-1\n"
-"X-POOTLE-MTIME: 1612764226.090605\n"
+"X-POOTLE-MTIME: 1615878028.191735\n"
 "X-Pootle-Path: /hy/20.05/hy-Armn-pref.po\n"
 "X-Pootle-Revision: 1\n"
 
@@ -830,6 +830,17 @@ msgid ""
 msgstr ""
 "admin.pref#GoogleOpenIDConnectDomain# Սահմանափակել Google OpenID Connect այս "
 "տիրույթի համար (կամ այս տիրույթի ենթադոմեյնի համար). "
+
+# Administration > Login options > IndependentBranches
+msgid ""
+"admin.pref#IndependentBranches# <p class='text-danger'><strong>Warning:</"
+"strong> Changing this system preference will radically alter the behavior of "
+"Koha. Changing preference on a production system is highly discouraged.</p>"
+msgstr ""
+"admin.pref#IndependentBranches# <p class='text-"
+"danger'><strong>Զգուշացում․</strong> Համակարգի այս նախապատվության "
+"փոփոխությունը արմատապես կփոխի Կոհայի վարքը: Արտադրական համակարգի "
+"նախապատվությունը փոխելը խիստ հուսահատեցնող է:</p>"
 
 # Administration > Login options
 msgid "admin.pref#IndependentBranches# No"
@@ -5312,11 +5323,12 @@ msgid "circulation.pref#MarkLostItemsAsReturned# when cataloguing an item"
 msgstr "circulation.pref#MarkLostItemsAsReturned# երբ քարտագրվում է նյութը"
 
 # Circulation > Checkout policy
-#, fuzzy
 msgid ""
 "circulation.pref#MarkLostItemsAsReturned# when marking an item as a return "
 "claim"
-msgstr "circulation.pref#MarkLostItemsAsReturned# երբ քարտագրվում է նյութը"
+msgstr ""
+"circulation.pref#MarkLostItemsAsReturned# երբ նյութը նշվում է որպես "
+"վերադարձի պահանջ"
 
 # Circulation > Checkout policy
 msgid ""
@@ -8855,6 +8867,10 @@ msgstr "opac.pref Խորացված փնտրման ընտրանքներ"
 msgid "opac.pref Appearance"
 msgstr "opac.pref Հայտնվել"
 
+# Administration > CAS authentication
+msgid "opac.pref Authentication"
+msgstr "opac.pref Փոխճանաչում"
+
 # OPAC > Features
 msgid "opac.pref Features"
 msgstr "opac.pref Ապագա զարգացումներ"
@@ -9557,6 +9573,21 @@ msgstr ""
 "թույլ է տալիս ընթերցողներին ինչ կա այդ նյութին մոտիկ դարակի վրա։ Նկատի առ որ "
 "սա օգտագործում է բավական շատ պաշարներ սպասարկող կայանի վրա, և պետք է բացառվի "
 "եթե քո հավաքածուն ունի մեծաթիվ նյութեր։"
+
+# OPAC > Privacy
+msgid "opac.pref#OPACShibOnly# Allow"
+msgstr "opac.pref#OPACShibOnly# Թույլատրել"
+
+# OPAC > Privacy
+msgid "opac.pref#OPACShibOnly# Don't allow"
+msgstr "opac.pref#OPACShibOnly# Մի թույլատրեք"
+
+# OPAC > Privacy
+msgid ""
+"opac.pref#OPACShibOnly# patrons to login by means other than Shibboleth."
+msgstr ""
+"opac.pref#OPACShibOnly# ընթերցողները կարողանան գրանցվել Shibboleth-ից տարբեր "
+"միջոցներով։"
 
 # OPAC > Appearance
 msgid "opac.pref#OPACShowCheckoutName# Don't show"
@@ -10858,6 +10889,12 @@ msgid ""
 "unrecoverably delete all patrons that have registered more than "
 "PatronSelfRegistrationExpireTemporaryAccountsDelay days ago."
 msgstr ""
+"opac.pref#PatronSelfRegistrationDefaultCategory# <br><strong>ԶԳՈՒՇԱՑՈՒՄ. Մի "
+"օգտագործեք սովորական ընթերցողի դասը ինքնագրանցման համար:</strong> Եթե "
+"<code>misc/cronjobs/cleanup_database.pl</code> միջուկի աշխատանքը կարգավորված "
+"է ՀՕԱՔ չստուգված և անավարտ ինքնագրանցումները ջնջելու համար, այն ընդմիշտ և "
+"անվերադարձ վերականգնելու է բոլոր այն ընթերցողներին, ովքեր գրանցվել են ավելի "
+"քան PatronSelfRegistrationExpireTemporaryAccountsDelay օր առաջ:"
 
 # OPAC > Self registration and modification
 msgid ""
@@ -13640,6 +13677,10 @@ msgid "staff_interface.pref Appearance"
 msgstr "staff_interface.pref Հայտնվելը"
 
 # Staff interface > Options
+msgid "staff_interface.pref Authentication"
+msgstr "staff_interface.pref Փոխճանաչում"
+
+# Staff interface > Options
 msgid "staff_interface.pref Options"
 msgstr "staff_interface.pref Ընտրանքներ"
 
@@ -14075,6 +14116,22 @@ msgstr ""
 "staff_interface.pref#staffClientBaseURL# Սա պետք է լինի ամբողջական URL, որը "
 "սկսվում է http:// կամ https://։ Մի ավելացրու URL-ում թեք գիծ։ (Սա պետք է "
 "ճիշտ լրացված լինի CAS, svc, և load_testing համար, որպեսզի աշխատի։)"
+
+# Staff interface > Options
+msgid "staff_interface.pref#staffShibOnly# Allow"
+msgstr "staff_interface.pref#staffShibOnly# Թույլատրել"
+
+# Staff interface > Options
+msgid "staff_interface.pref#staffShibOnly# Don't allow"
+msgstr "staff_interface.pref#staffShibOnly# Մի թույլատրեք"
+
+# Staff interface > Appearance
+msgid ""
+"staff_interface.pref#staffShibOnly# staff to login by means other than "
+"shibboleth."
+msgstr ""
+"staff_interface.pref#staffShibOnly# staff աշխատակազմը պետք է մուտք գործի, "
+"shibboleth-ից տարբեր միջոցներով։"
 
 # Staff interface > Appearance
 msgid "staff_interface.pref#template# Use the"
