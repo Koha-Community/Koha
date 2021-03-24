@@ -25,7 +25,7 @@
 [% INCLUDE 'circ-search.inc' %]
 
 [% UNLESS ( multi_hold ) %]
-    <nav aria-label="Breadcrumb" class="breadcrumb">
+    <nav id="breadcrumbs" aria-label="Breadcrumb" class="breadcrumb">
         <ol>
             <li>
                 <a href="/cgi-bin/koha/mainpage.pl">Home</a>
@@ -44,7 +44,7 @@
         </ol>
     </nav>
 [% ELSE %]
-    <nav aria-label="Breadcrumb" class="breadcrumb">
+    <nav id="breadcrumbs" aria-label="Breadcrumb" class="breadcrumb">
         <ol>
             <li>
                 <a href="/cgi-bin/koha/mainpage.pl">Home</a>
