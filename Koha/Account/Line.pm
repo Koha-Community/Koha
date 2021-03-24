@@ -901,7 +901,9 @@ sub renewable {
         $self->debit_type_code &&
         $self->debit_type_code eq 'OVERDUE' &&
         $self->status &&
-        $self->status eq 'UNRETURNED'
+        $self->status eq 'UNRETURNED' &&
+        $self->item &&
+        $self->patron
     ) ? 1 : 0;
 }
 
@@ -919,19 +921,14 @@ sub renew_item {
 
     my $outcome = {};
 
-    # We want to reject the call to renew if any of these apply:
+    # We want to reject the call to renew if:
     # - The RenewAccruingItemWhenPaid syspref is off
-    # - The line item doesn't have an item attached to it
-    # - The line item doesn't have a patron attached to it
-    #
+    # OR
     # - The RenewAccruingItemInOpac syspref is off
-    # AND
     # - There is an interface param passed and it's value is 'opac'
 
     if (
         !C4::Context->preference('RenewAccruingItemWhenPaid') ||
-        !$self->item ||
-        !$self->patron ||
         (
             !C4::Context->preference('RenewAccruingItemInOpac') &&
             $params->{interface} &&
