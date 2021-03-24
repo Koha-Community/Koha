@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Koha 20.11\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2021-02-20 04:04+0000\n"
+"PO-Revision-Date: 2021-03-21 14:51+0000\n"
 "Last-Translator: Stebeneva Anna <stebeneva@lib.tsu.ru>\n"
 "Language-Team: Ukrainian Linux Team <translation@linux.org.ua>\n"
 "Language: ru\n"
@@ -14,7 +14,7 @@ msgstr ""
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 "X-Generator: Pootle 2.8\n"
 "X-Poedit-SourceCharset: utf-8\n"
-"X-POOTLE-MTIME: 1613793856.890857\n"
+"X-POOTLE-MTIME: 1616338270.616401\n"
 "X-Pootle-Path: /ru/20.05/ru-RU-pref.po\n"
 "X-Pootle-Revision: 1\n"
 
@@ -785,6 +785,16 @@ msgid ""
 "domain (or subdomain of this domain): "
 msgstr ""
 "Google OpenID Connect Ограничить доменом (или субдоменом этого домена):"
+
+# Administration > Login options > IndependentBranches
+msgid ""
+"admin.pref#IndependentBranches# <p class='text-danger'><strong>Warning:</"
+"strong> Changing this system preference will radically alter the behavior of "
+"Koha. Changing preference on a production system is highly discouraged.</p>"
+msgstr ""
+"<p class='text-danger'><strong>Внимание:</strong> Изменение этой системной "
+"настройки радикально изменит поведение Koha. Крайне не рекомендуется менять "
+"настройки в производственной системе.</p>"
 
 # Administration > Login options
 msgid "admin.pref#IndependentBranches# No"
@@ -4198,7 +4208,7 @@ msgstr "не взимать плату за утерю"
 
 # Circulation > Return claims
 msgid "circulation.pref#ClaimReturnedLostValue# Use the LOST authorised value"
-msgstr "Использовать авторизованное значение LOST"
+msgstr "Использовать списочное значение LOST"
 
 # Circulation > Return claims
 msgid ""
@@ -4265,7 +4275,7 @@ msgstr ""
 msgid ""
 "circulation.pref#ConsiderOnSiteCheckoutsAsNormalCheckouts# on-site checkouts "
 "as normal checkouts."
-msgstr "локальные (on-site) книговыдачи как обычные книговыдачи."
+msgstr "внутренние (on-site) книговыдачи как обычные книговыдачи."
 
 # Circulation > Checkin policy
 msgid "circulation.pref#CumulativeRestrictionPeriods# Cumulate"
@@ -5204,8 +5214,8 @@ msgid ""
 "circulation.pref#OnSiteCheckoutAutoCheck# on-site checkout by default if "
 "last checkout was an on-site one."
 msgstr ""
-"локальная книговыдача по умолчанию, если последняя книговыдача была "
-"локальная."
+"внутренняя книговыдача по умолчанию, если последняя книговыдача была "
+"внутренняя."
 
 # Circulation > Checkout policy
 msgid "circulation.pref#OnSiteCheckouts# Disable"
@@ -5217,7 +5227,7 @@ msgstr "Включить"
 
 # Circulation > Checkout policy
 msgid "circulation.pref#OnSiteCheckouts# the on-site checkouts feature."
-msgstr "функцию локальных (on-site) книговыдач."
+msgstr "функцию внутренних (on-site) книговыдач."
 
 # Circulation > Checkout policy
 msgid "circulation.pref#OnSiteCheckoutsForce# Disable"
@@ -5232,8 +5242,8 @@ msgid ""
 "circulation.pref#OnSiteCheckoutsForce# the on-site checkout for all cases "
 "(even if a patron is debarred, etc.)."
 msgstr ""
-"локальная книговыдача для всех случаев (даже если читатель заблокирован и т. "
-"д.)."
+"внутренняя книговыдача для всех случаев (даже если читатель заблокирован и "
+"т. д.)."
 
 # Circulation > Checkout policy
 msgid "circulation.pref#OverdueNoticeCalendar# Ignore calendar"
@@ -5385,7 +5395,8 @@ msgstr "библиотеке-возвратчике."
 
 # Circulation > Fines Policy
 msgid "circulation.pref#RefundLostOnReturnControl# item's holding library."
-msgstr "библиотеке хранения экземпляра."
+msgstr ""
+"circulation.pref#RefundLostOnReturnControl# библиотеке хранения экземпляра."
 
 # Circulation > Fines Policy
 msgid "circulation.pref#RefundLostOnReturnControl# item's home library."
@@ -5948,7 +5959,7 @@ msgstr "Переключать"
 msgid ""
 "circulation.pref#SwitchOnSiteCheckouts# on-site checkouts to normal "
 "checkouts when checked out."
-msgstr "локальные (on-site) книговыдачи на обычные книговыдачи когда выдано."
+msgstr "внутренние (on-site) книговыдачи на обычные книговыдачи когда выдано."
 
 # Circulation > Holds policy
 msgid "circulation.pref#TransferWhenCancelAllWaitingHolds# Don't transfer"
@@ -8317,6 +8328,10 @@ msgstr "Параметры расширенного поиска"
 msgid "opac.pref Appearance"
 msgstr "Внешний вид"
 
+# Administration > CAS authentication
+msgid "opac.pref Authentication"
+msgstr "Аутентификация"
+
 # OPAC > Features
 msgid "opac.pref Features"
 msgstr "Особенности"
@@ -8985,6 +9000,19 @@ msgstr ""
 "внимание, что это использует довольно большое количество ресурсов на вашем "
 "сервере, и этого следует избегать, если ваша коллекция содержит большое "
 "количество экземпляров."
+
+# OPAC > Privacy
+msgid "opac.pref#OPACShibOnly# Allow"
+msgstr "Разрешить"
+
+# OPAC > Privacy
+msgid "opac.pref#OPACShibOnly# Don't allow"
+msgstr "Запретить"
+
+# OPAC > Privacy
+msgid ""
+"opac.pref#OPACShibOnly# patrons to login by means other than Shibboleth."
+msgstr "читателям входить в систему с помощью других средств, кроме Shibboleth."
 
 # OPAC > Appearance
 msgid "opac.pref#OPACShowCheckoutName# Don't show"
@@ -10201,10 +10229,10 @@ msgid ""
 "PatronSelfRegistrationExpireTemporaryAccountsDelay days ago."
 msgstr ""
 "<br><strong>ВНИМАНИЕ: Не используйте обычный тип читателя для "
-"самостоятельной регистрации.</strong> Если cron задача "
-"<code>misc/cronjobs/cleanup_database.pl</code> настроена на удаление "
-"непроверенных и незавершенных саморегистраций ЭК, она навсегда и "
-"безвозвратно удалит всех читателей, которые зарегистрировались более чем "
+"самостоятельной регистрации.</strong> Если cron задача <code>misc/cronjobs/"
+"cleanup_database.pl</code> настроена на удаление непроверенных и "
+"незавершенных саморегистраций ЭК, она навсегда и безвозвратно удалит всех "
+"читателей, которые зарегистрировались более чем "
 "PatronSelfRegistrationExpireTemporaryAccountsDelay дней назад."
 
 # OPAC > Self registration and modification
@@ -11912,7 +11940,8 @@ msgid ""
 "patrons.pref#useDischarge# librarians to discharge borrowers and borrowers "
 "to request a discharge."
 msgstr ""
-"библиотекарям аннулировать читателей и читателям требовать освобождение ?"
+"библиотекарям оформлять справку об  отсутствии задолженности (выписку) для "
+"читателей и читателям требовать оформления справки."
 
 # Searching
 msgid "searching.pref"
@@ -12816,6 +12845,10 @@ msgid "staff_interface.pref Appearance"
 msgstr "Вид"
 
 # Staff interface > Options
+msgid "staff_interface.pref Authentication"
+msgstr "Аутентификация"
+
+# Staff interface > Options
 msgid "staff_interface.pref Options"
 msgstr "Параметры"
 
@@ -13218,6 +13251,21 @@ msgstr ""
 "Это должен быть полный URL, начинающийся с http:// или https://. Не "
 "включайте в URL завершающую косую черту. (Это должно быть правильно "
 "заполнено, чтобы CAS, svc и load_testing работали.)"
+
+# Staff interface > Options
+msgid "staff_interface.pref#staffShibOnly# Allow"
+msgstr "Разрешить"
+
+# Staff interface > Options
+msgid "staff_interface.pref#staffShibOnly# Don't allow"
+msgstr "Запретить"
+
+# Staff interface > Appearance
+msgid ""
+"staff_interface.pref#staffShibOnly# staff to login by means other than "
+"shibboleth."
+msgstr ""
+"сотрудникам входить в систему с помощью других средств, кроме shibboleth."
 
 # Staff interface > Appearance
 msgid "staff_interface.pref#template# Use the"

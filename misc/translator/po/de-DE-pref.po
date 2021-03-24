@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Koha 20.11\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-05-16 03:26+0200\n"
-"PO-Revision-Date: 2021-02-17 08:39+0000\n"
+"PO-Revision-Date: 2021-03-15 22:10+0000\n"
 "Last-Translator: Katrin Fischer <katrin.fischer@bsz-bw.de>\n"
 "Language-Team: \n"
 "Language: de\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.8\n"
 "X-Poedit-SourceCharset: utf-8\n"
-"X-POOTLE-MTIME: 1613551151.258683\n"
+"X-POOTLE-MTIME: 1615846245.598174\n"
 "X-Pootle-Path: /de/20.05/de-DE-pref.po\n"
 "X-Pootle-Revision: 1\n"
 
@@ -784,6 +784,17 @@ msgid ""
 "domain (or subdomain of this domain): "
 msgstr ""
 "Google OpenID Connect auf diese Domain (oder deren Subdomain) beschränken: "
+
+# Administration > Login options > IndependentBranches
+msgid ""
+"admin.pref#IndependentBranches# <p class='text-danger'><strong>Warning:</"
+"strong> Changing this system preference will radically alter the behavior of "
+"Koha. Changing preference on a production system is highly discouraged.</p>"
+msgstr ""
+"<p class='text-danger'><strong>Warnung:</strong> Wenn dieser Systemparameter "
+"geändert wird, hat dies große Auswirkungen auf das Verhalten von Koha. Es "
+"wird nicht empfohlen diese Einstellung in einem produktiven System zu "
+"verändern.</p>"
 
 # Administration > Login options
 msgid "admin.pref#IndependentBranches# No"
@@ -8302,6 +8313,10 @@ msgstr "Erweiterte Suche"
 msgid "opac.pref Appearance"
 msgstr "Erscheinungsbild"
 
+# Administration > CAS authentication
+msgid "opac.pref Authentication"
+msgstr "Authentifikation"
+
 # OPAC > Features
 msgid "opac.pref Features"
 msgstr "Funktionen"
@@ -8971,6 +8986,21 @@ msgstr ""
 "ermöglicht zu sehen, was neben dem Titel noch im Regal steht. Beachten Sie, "
 "dass dieses Feature relativ viele Ressourcen Ihres Servers verbraucht und "
 "bei großen Beständen deaktiviert werden sollte."
+
+# OPAC > Privacy
+msgid "opac.pref#OPACShibOnly# Allow"
+msgstr "Erlaube,"
+
+# OPAC > Privacy
+msgid "opac.pref#OPACShibOnly# Don't allow"
+msgstr "Erlaube nicht,"
+
+# OPAC > Privacy
+msgid ""
+"opac.pref#OPACShibOnly# patrons to login by means other than Shibboleth."
+msgstr ""
+"dass Benutzer sich mit anderen Authentifizierungsmethoden als Shibboleth "
+"anmelden können."
 
 # OPAC > Appearance
 msgid "opac.pref#OPACShowCheckoutName# Don't show"
@@ -10194,10 +10224,10 @@ msgid ""
 "PatronSelfRegistrationExpireTemporaryAccountsDelay days ago."
 msgstr ""
 "<br><strong>WARNUNG: Verwenden Sie keinen normalen Benutzertyp für die "
-"Selbstregistrierung.</strong> Wenn der Cronjob "
-"<code>misc/cronjobs/cleanup_database.pl</code> aktiviert ist, um nicht "
-"verifizierte und nicht abgeschlossene Anmeldungen zu löschen, löscht dieser "
-"unwiederbringlich alle Benutzer, die sich vor mehr "
+"Selbstregistrierung.</strong> Wenn der Cronjob <code>misc/cronjobs/"
+"cleanup_database.pl</code> aktiviert ist, um nicht verifizierte und nicht "
+"abgeschlossene Anmeldungen zu löschen, löscht dieser unwiederbringlich alle "
+"Benutzer, die sich vor mehr "
 "PatronSelfRegistrationExpireTemporaryAccountsDelay angemeldet haben."
 
 # OPAC > Self registration and modification
@@ -12812,6 +12842,10 @@ msgid "staff_interface.pref Appearance"
 msgstr " "
 
 # Staff interface > Options
+msgid "staff_interface.pref Authentication"
+msgstr "Authentifizierung"
+
+# Staff interface > Options
 msgid "staff_interface.pref Options"
 msgstr " "
 
@@ -13206,6 +13240,22 @@ msgid ""
 msgstr ""
 "Dies muss eine komplette URL sein die mit http:// or https:// beginnt und am "
 "Schluss kein / enthält. (Erforderlich für CAS, SVC und Lasttests.)"
+
+# Staff interface > Options
+msgid "staff_interface.pref#staffShibOnly# Allow"
+msgstr "Erlaube,"
+
+# Staff interface > Options
+msgid "staff_interface.pref#staffShibOnly# Don't allow"
+msgstr "Erlaube nicht,"
+
+# Staff interface > Appearance
+msgid ""
+"staff_interface.pref#staffShibOnly# staff to login by means other than "
+"shibboleth."
+msgstr ""
+"dass Bibliothekspersonal sich in der Dienstoberfläche mit anderen "
+"Authentifizierungsmethoden als Shibboleth anmeldet."
 
 # Staff interface > Appearance
 msgid "staff_interface.pref#template# Use the"

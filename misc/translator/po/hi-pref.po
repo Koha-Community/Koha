@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Koha 20.11\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-05-16 03:25+0200\n"
-"PO-Revision-Date: 2021-02-15 16:01+0000\n"
+"PO-Revision-Date: 2021-03-16 14:05+0000\n"
 "Last-Translator: Nikunj Tyagi <nikunj1@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: hi\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.8\n"
-"X-POOTLE-MTIME: 1613404886.009480\n"
+"X-POOTLE-MTIME: 1615903530.483460\n"
 "X-Pootle-Path: /hi/20.05/hi-pref.po\n"
 "X-Pootle-Revision: 1\n"
 
@@ -809,6 +809,17 @@ msgid ""
 msgstr ""
 "admin.pref#GoogleOpenIDConnectDomain# Google OpenID को इस डोमेन से कनेक्ट करें (या "
 "इस डोमेन का उपडोमेन): "
+
+# Administration > Login options > IndependentBranches
+msgid ""
+"admin.pref#IndependentBranches# <p class='text-danger'><strong>Warning:</"
+"strong> Changing this system preference will radically alter the behavior of "
+"Koha. Changing preference on a production system is highly discouraged.</p>"
+msgstr ""
+"admin.pref#IndependentBranches# <p class='text-"
+"danger'><strong>चेतावनी</strong> इस सिस्टम वरीयता को बदलने से कोहा के व्यवहा"
+"र में मौलिक रूप से बदलाव आएगा. उत्पादन प्रणाली पर वरीयता बदलना अत्यधिक "
+"हतोत्साहित करता है.</p>"
 
 # Administration > Login options
 msgid "admin.pref#IndependentBranches# No"
@@ -5218,8 +5229,8 @@ msgid ""
 "circulation.pref#MarkLostItemsAsReturned# when marking an item as a return "
 "claim"
 msgstr ""
-"circulation.pref#MarkLostItemsAsReturned# वापसी के दावे के रूप में किसी आइटम "
-"को चिह्नित करते समय"
+"circulation.pref#MarkLostItemsAsReturned# वापसी के दावे के रूप में किसी आइटम को "
+"चिह्नित करते समय"
 
 # Circulation > Checkout policy
 msgid ""
@@ -8704,6 +8715,10 @@ msgstr "opac.pref उन्नत खोज विकल्प"
 msgid "opac.pref Appearance"
 msgstr "opac.pref सूरत"
 
+# Administration > CAS authentication
+msgid "opac.pref Authentication"
+msgstr "admin.pref प्रमाणीकरण"
+
 # OPAC > Features
 msgid "opac.pref Features"
 msgstr "opac.pref सुविधाएँ"
@@ -9165,12 +9180,9 @@ msgid "opac.pref#OPACHoldsHistory# Don't allow"
 msgstr "opac.pref#OPACHoldsHistory# अनुमति न दें"
 
 # OPAC > Privacy
-#, fuzzy
 msgid ""
 "opac.pref#OPACHoldsHistory# patrons to see the list of their past holds."
-msgstr ""
-"opac.pref#OPACHoldsHistory# यह देखने के लिए संरक्षक हैं कि उनके पास कौन-कौन सी पुस्तकें "
-"हैं."
+msgstr "opac.pref#OPACHoldsHistory# उनके अतीत होेल्ड देखने के लिए संरक्षक."
 
 # OPAC > Features
 msgid "opac.pref#OPACISBD# Use the following as the OPAC ISBD template:"
@@ -9393,6 +9405,21 @@ msgstr ""
 "शेल्फ पर है कि आइटम के पास है देखने के लिए अनुमति देता है। ध्यान दें कि यह आपके सर्वर पर "
 "संसाधनों का एक काफी बड़ी राशि का उपयोग करता है, और अगर अपने संग्रह मदों की एक बड़ी "
 "संख्या है बचा जाना चाहिए।"
+
+# OPAC > Privacy
+msgid "opac.pref#OPACShibOnly# Allow"
+msgstr "opac.pref#OPACShibOnly# अनुमति"
+
+# OPAC > Privacy
+msgid "opac.pref#OPACShibOnly# Don't allow"
+msgstr "opac.pref#OPACShibOnly# अनुमति न दें"
+
+# OPAC > Privacy
+msgid ""
+"opac.pref#OPACShibOnly# patrons to login by means other than Shibboleth."
+msgstr ""
+"opac.pref#OPACShibOnly# शिब्बोलेथ के अलावा अन्य माध्यमों से लॉगिन करने के लि"
+"ए संरक्षक."
 
 # OPAC > Appearance
 msgid "opac.pref#OPACShowCheckoutName# Don't show"
@@ -9949,7 +9976,7 @@ msgstr "opac.pref # OpacBrowser # अनुमति न दें"
 # OPAC > Features
 msgid ""
 "opac.pref#OpacBrowser# patrons to browse subject authorities on the OPAC."
-msgstr ""
+msgstr "opac.pref#OpacBrowser# ओपेक पर विषय अधिकारियों को ब्राउज़ करने के लिए संरक्षक."
 
 # OPAC > Features
 msgid ""
@@ -10055,7 +10082,7 @@ msgstr ""
 
 # OPAC > Appearance
 msgid "opac.pref#OpacHighlightedWords# (separate columns with |)."
-msgstr ""
+msgstr "opac.pref#OpacHighlightedWords# (| के साथ अलग कॉलम )."
 
 # OPAC > Appearance
 msgid "opac.pref#OpacHighlightedWords# Don't highlight"
@@ -10071,6 +10098,9 @@ msgid ""
 "search results and detail pages. To prevent certain words from ever being "
 "highlighted, enter a list of stopwords here:"
 msgstr ""
+"opac.pref#OpacHighlightedWords# संरक्षक ने अपने खोज परिणामों और विवरण पृष्ठों में खोज "
+"की। कुछ शब्दों को कभी भी हाइलाइट करने से रोकने के लिए, यहां स्टॉपवर्ड्स की एक सूची दर्ज "
+"करें:"
 
 # OPAC > Features
 msgid "opac.pref#OpacHoldNotes# Allow"
@@ -10078,11 +10108,11 @@ msgstr "opac.pref # OpacHoldNotes # अनुमति दें"
 
 # OPAC > Features
 msgid "opac.pref#OpacHoldNotes# Don't allow"
-msgstr ""
+msgstr "opac.pref#OpacHoldNotes# अनुमति न दें"
 
 # OPAC > Features
 msgid "opac.pref#OpacHoldNotes# patrons to add a note when placing a hold."
-msgstr ""
+msgstr "opac.pref#OpacHoldNotes# एक होल्ड रखने पर एक नोट जोड़ने के लिए संरक्षक."
 
 # OPAC > Features
 msgid "opac.pref#OpacItemLocation# Show"
@@ -10094,19 +10124,19 @@ msgstr "opac.pref # OpacItemLocation # ओपेक खोज परिणाम
 
 # OPAC > Features
 msgid "opac.pref#OpacItemLocation# library and call number"
-msgstr ""
+msgstr "opac.pref#OpacItemLocation# lपुस्तकालय और कॉल नंबर"
 
 # OPAC > Features
 msgid "opac.pref#OpacItemLocation# library, collection code, and call number"
-msgstr ""
+msgstr "opac.pref#OpacItemLocation# पुस्तकालय, संग्रह कोड, और कॉल नंबर"
 
 # OPAC > Features
 msgid "opac.pref#OpacItemLocation# library, location, and call number"
-msgstr ""
+msgstr "opac.pref#OpacItemLocation# पुस्तकालय, स्थान और कॉल नंबर"
 
 # OPAC > Features
 msgid "opac.pref#OpacItemLocation# only library"
-msgstr ""
+msgstr "opac.pref#OpacItemLocation# केवल पुस्तकालय"
 
 # OPAC > Appearance
 msgid "opac.pref#OpacKohaUrl# 'Powered by Koha' text on OPAC footer."
@@ -10122,7 +10152,7 @@ msgstr "opac.pref # OpacKohaUrl # दिखाएँ"
 
 # OPAC > Appearance
 msgid "opac.pref#OpacLangSelectorMode# ."
-msgstr ""
+msgstr "opac.pref#OpacLangSelectorMode# ."
 
 # OPAC > Appearance
 msgid "opac.pref#OpacLangSelectorMode# Display language selector on "
@@ -10171,6 +10201,10 @@ msgid ""
 "<a href='/cgi-bin/koha/admin/columns_settings.pl'>configure columns</a> "
 "administration page."
 msgstr ""
+"opac.pref#OpacLocationOnDetail# <br />नोट: यदि 'अलग स्तंभ पर' चुना गया है, तो "
+"आपको अभी भी इस पर item_shelving_location प्रदर्शन को सक्षम करने की आवश्यकता है <a "
+"href='/cgi-bin/koha/admin/columns_settings.pl'>कॉलम कॉन्फ़िगर करें</a> प्रशासन "
+"पृष्ठ."
 
 # OPAC > Appearance
 msgid "opac.pref#OpacLocationOnDetail# Display the shelving location "
@@ -10232,12 +10266,17 @@ msgid ""
 "page (if the bibliographic record has more items than this, a link is "
 "displayed instead that allows the patron to choose to display all items)."
 msgstr ""
+"opac.pref#OpacMaxItemsToDisplay# ग्रंथ सूची रिकॉर्ड पृष्ठ पर आइटम (यदि ग्रंथ सूची इस "
+"से अधिक आइटम है, तो इसके बजाय एक लिंक प्रदर्शित किया जाता है जो संरक्षक को सभी आइटम "
+"प्रदर्शित करने की अनुमति देता है)."
 
 # OPAC > Appearance
 msgid ""
 "opac.pref#OpacMetaDescription# This description will show in search engine "
 "results (160 characters)."
 msgstr ""
+"opac.pref#OpacMetaDescription# यह विवरण खोज इंजन परिणामों (160 वर्ण) में दिखाई "
+"देगा."
 
 # OPAC > Appearance
 msgid ""
@@ -10277,6 +10316,7 @@ msgid ""
 "opac.pref#OpacNewsLibrarySelect# a library selection list for news items in "
 "the OPAC."
 msgstr ""
+"opac.pref#OpacNewsLibrarySelect# ओपेक में समाचार मदों के लिए एक पुस्तकालय चयन सूची."
 
 # OPAC > Appearance
 msgid "opac.pref#OpacNoItemTypeImages# No"
@@ -10378,10 +10418,12 @@ msgid ""
 "opac.pref#OpacResetPassword#  to recover their password via e-mail in the "
 "OPAC."
 msgstr ""
+"opac.pref#OpacResetPassword#  ओपेक में ई-मेल के माध्यम से अपना पासवर्ड पुनर्प्राप्त करने "
+"के लिए."
 
 # OPAC > Features
 msgid "opac.pref#OpacResetPassword# Library patrons are "
-msgstr ""
+msgstr "opac.pref#OpacResetPassword# पुस्तकालय संरक्षक हैं "
 
 # OPAC > Features
 msgid "opac.pref#OpacResetPassword# allowed"
@@ -10412,6 +10454,8 @@ msgid ""
 "opac.pref#OpacSeparateHoldings# is the logged in patrons's library. The "
 "second tab will contain all other items."
 msgstr ""
+"opac.pref#OpacSeparateHoldings# संरक्षक के पुस्तकालय में लॉग इन है। दूसरे टैब में अन्य सभी "
+"आइटम होंगे."
 
 # OPAC > Appearance
 msgid ""
@@ -10455,7 +10499,7 @@ msgstr "opac.pref # OpacStarRatings # पृष्ठों की है।"
 
 # OPAC > Appearance
 msgid "opac.pref#OpacStarRatings# results, details, and patron"
-msgstr ""
+msgstr "opac.pref#OpacStarRatings# परिणाम, विवरण और संरक्षक"
 
 # OPAC > Appearance
 msgid "opac.pref#OpacSuggestionManagedBy# Don't show"
@@ -10614,7 +10658,7 @@ msgstr ""
 
 # OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationConfirmEmail# Don't require"
-msgstr ""
+msgstr "opac.pref#PatronSelfRegistrationConfirmEmail# आवश्यकता नहीं है"
 
 # OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationConfirmEmail# Require"
@@ -10625,6 +10669,8 @@ msgid ""
 "opac.pref#PatronSelfRegistrationConfirmEmail# patrons to confirm their email "
 "address by entering it twice."
 msgstr ""
+"opac.pref#PatronSelfRegistrationConfirmEmail# दो बार दर्ज करके अपने ईमेल पते की "
+"पुष्टि करने के लिए संरक्षक."
 
 # OPAC > Self registration and modification > PatronSelfRegistrationDefaultCategory
 msgid ""
@@ -10635,6 +10681,12 @@ msgid ""
 "unrecoverably delete all patrons that have registered more than "
 "PatronSelfRegistrationExpireTemporaryAccountsDelay days ago."
 msgstr ""
+"opac.pref#PatronSelfRegistrationDefaultCategory# <br><strong>चेतावनी: स्व-"
+"पंजीकरण के लिए एक नियमित संरक्षक श्रेणी का उपयोग न करें.</strong> यदि <code>misc/"
+"cronjobs/cleanup_database.pl</code> क्रोनजोब असत्यापित और अधूरे ओपैक स्व पंजीकरणों "
+"को हटाने के लिए सेटअप है, यह स्थायी रूप से और अपरिवर्तनीय रूप से उन सभी संरक्षकों को हटा "
+"देगा, जिन्होंने PatronSelfRegistrationExpireTemporaryAccroDelay दिनों से अधिक "
+"पंजीकरण किया है."
 
 # OPAC > Self registration and modification
 msgid ""
@@ -10657,7 +10709,7 @@ msgstr "opac.pref#PatronSelfRegistrationEmailMustBeUnique# विचार क�
 
 # OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationEmailMustBeUnique# Don't consider"
-msgstr ""
+msgstr "opac.pref#PatronSelfRegistrationEmailMustBeUnique# विचार नही करें"
 
 # OPAC > Self registration and modification
 msgid ""
@@ -10724,7 +10776,7 @@ msgstr "opac.pref#PatronSelfRegistrationPrefillForm# प्रदर्शन �
 
 # OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationPrefillForm# Don't display and prefill"
-msgstr ""
+msgstr "opac.pref#PatronSelfRegistrationPrefillForm# प्रदर्शन नही करें और Prefill"
 
 # OPAC > Self registration and modification
 msgid ""
@@ -10762,7 +10814,7 @@ msgstr ""
 
 # OPAC > Payments
 msgid "opac.pref#PayPalChargeDescription# ."
-msgstr ""
+msgstr "opac.pref#PayPalChargeDescription# ."
 
 # OPAC > Payments
 msgid ""
@@ -10773,7 +10825,7 @@ msgstr ""
 
 # OPAC > Payments
 msgid "opac.pref#PayPalPwd# ."
-msgstr ""
+msgstr "opac.pref#PayPalPwd# ."
 
 # OPAC > Payments
 msgid ""
@@ -10783,7 +10835,7 @@ msgstr "opac.pref # PayPalPwd # पेपैल के लिए पासवर
 
 # OPAC > Payments
 msgid "opac.pref#PayPalReturnURL# ."
-msgstr ""
+msgstr "opac.pref#PayPalReturnURL# ."
 
 # OPAC > Payments
 msgid ""
@@ -10797,13 +10849,12 @@ msgid "opac.pref#PayPalReturnURL# OPACBaseURL"
 msgstr "opac.pref#PayPalReturnURL# OPACBaseURL"
 
 # OPAC > Payments
-#, fuzzy
 msgid "opac.pref#PayPalReturnURL# configured return URL"
-msgstr "opac.pref#PayPalReturnURL# OPACBaseURL"
+msgstr "opac.pref#PayPalReturnURL# कॉन्फ़िगर किया गया वापसी यूआरएल"
 
 # OPAC > Payments
 msgid "opac.pref#PayPalSignature# ."
-msgstr ""
+msgstr "opac.pref#PayPalSignature# ."
 
 # OPAC > Payments
 msgid ""
@@ -10814,7 +10865,7 @@ msgstr ""
 
 # OPAC > Payments
 msgid "opac.pref#PayPalUser# ."
-msgstr ""
+msgstr "opac.pref#PayPalUser# ."
 
 # OPAC > Payments
 msgid "opac.pref#PayPalUser# The email address to receive PayPal payments is "
@@ -10822,19 +10873,19 @@ msgstr "पेपैल भुगतान प्राप्त करने �
 
 # OPAC > Features
 msgid "opac.pref#QuoteOfTheDay# OPAC"
-msgstr ""
+msgstr "opac.pref#QuoteOfTheDay# ओपेक"
 
 # OPAC > Features
 msgid "opac.pref#QuoteOfTheDay# Show quote of the day in the"
-msgstr ""
+msgstr "opac.pref#QuoteOfTheDay# दिन के उद्धरण दिखाएँ"
 
 # OPAC > Features
 msgid "opac.pref#QuoteOfTheDay# main page."
-msgstr ""
+msgstr "opac.pref#QuoteOfTheDay# मुख्य पृष्ठ."
 
 # OPAC > Features
 msgid "opac.pref#QuoteOfTheDay# staff interface"
-msgstr ""
+msgstr "opac.pref#QuoteOfTheDay# स्टाफ इंटरफ़ेस"
 
 # OPAC > Features
 msgid "opac.pref#RequestOnOpac# Allow"
@@ -10866,6 +10917,8 @@ msgid ""
 "opac.pref#RestrictedPageLocalIPs# do not need to be authenticated (comma "
 "separated - ex: '127.0.0,127.0.1')."
 msgstr ""
+"opac.pref#RestrictedPageLocalIPs# प्रमाणीकृत करने की जरूरत नहीं (अल्पविराम से अलग - "
+"जैसे: '127.0.0,127.0.1')"
 
 # OPAC > Restricted page
 msgid "opac.pref#RestrictedPageTitle# Use"
@@ -10876,6 +10929,8 @@ msgid ""
 "opac.pref#RestrictedPageTitle# as title of your restricted page (appears in "
 "the breadcrumb and on the top of the restricted page)."
 msgstr ""
+"opac.pref # RestrictedPageTitle # अपने प्रतिबंधित पेज के शीर्षक के रूप में (ब्रेडक्रम्ब में "
+"और प्रतिबंधित पेज के शीर्ष पर दिखाई देता है)"
 
 # OPAC > Policy
 msgid "opac.pref#SearchMyLibraryFirst# Don't limit"
@@ -11010,7 +11065,7 @@ msgstr "opac.pref#SocialNetworks# ट्विटर"
 # OPAC > Features
 msgid ""
 "opac.pref#SocialNetworks# social network links on the OPAC detail pages."
-msgstr ""
+msgstr "opac.pref#SocialNetworks# ओपैक विवरण पृष्ठों पर सामाजिक नेटवर्क लिंक."
 
 # OPAC > Privacy
 msgid "opac.pref#TrackClicks# Don't track"
@@ -11026,7 +11081,7 @@ msgstr "opac.pref # TrackClicks # ट्रैक गुमनाम रूप �
 
 # OPAC > Privacy
 msgid "opac.pref#TrackClicks# links that patrons click on."
-msgstr ""
+msgstr "opac.pref#TrackClicks# लिंक है कि संरक्षक पर क्लिक करें."
 
 # OPAC > Appearance
 msgid "opac.pref#hidelostitems# Don't show"
@@ -11078,6 +11133,12 @@ msgid ""
 "and language within the Koha templates directory. A full local path is "
 "expected to start from your HTTP document root."
 msgstr ""
+"opac.pref#opaclayoutstylesheet# डिफ़ॉल्ट CSS के बजाय ओपेक के सभी पृष्ठों पर (इस फ़ील्ड "
+"को खाली छोड़ते समय उपयोग किया जाता है)। केवल एक फ़ाइल नाम, एक पूर्ण स्थानीय पथ या "
+"<code>http://</code> (यदि फ़ाइल किसी दूरस्थ सर्वर पर रहती है) के साथ पूर्ण URL दर्ज "
+"करें। कृपया ध्यान दें कि यदि आप सिर्फ एक फ़ाइल नाम दर्ज करते हैं, तो फ़ाइल कोहा टेम्पलेट "
+"निर्देशिका के भीतर प्रत्येक सक्रिय विषय और भाषा के लिए सीएसएस उपनिर्देशिका में होनी "
+"चाहिए। एक पूर्ण स्थानीय पथ आपके HTTP दस्तावेज़ रूट से शुरू होने की उम्मीद है."
 
 # OPAC > Privacy
 msgid "opac.pref#opacreadinghistory# Allow"
@@ -11186,6 +11247,9 @@ msgid ""
 "for account. If allowed a patron will be able to update their own account to "
 "allow/disallow auto-renewal."
 msgstr ""
+"patrons.pref#AllowPatronToControlAutorenewal# खाते के लिए ऑटो-नवीनीकरण को "
+"अनुमति/अस्वीकार करने के लिए। यदि अनुमति दी गई है, तो ऑटो-नवीनीकरण को अनुमति/अस्वीकार "
+"करने के लिए एक संरक्षक अपने स्वयं के खाते को अपडेट करने में सक्षम होगा"
 
 # Patrons > Patron relationships
 msgid "patrons.pref#AllowStaffToSetCheckoutsVisibilityForGuarantor# Allow"
@@ -11226,23 +11290,27 @@ msgstr ""
 
 # Patrons > General
 msgid "patrons.pref#AutoApprovePatronProfileSettings# Disable"
-msgstr ""
+msgstr "patrons.pref#AutoApprovePatronProfileSettings# अक्षम"
 
 # Patrons > General
 msgid "patrons.pref#AutoApprovePatronProfileSettings# Enable"
-msgstr ""
+msgstr "patrons.pref#AutoApprovePatronProfileSettings# सक्षम"
 
 # Patrons > General
 msgid ""
 "patrons.pref#AutoApprovePatronProfileSettings# Requires OPACPatronDetails to "
 "be activated."
 msgstr ""
+"patrons.pref#AutoApprovePatronProfileSettings# OPACPatronDetails को सक्रिय "
+"करने की आवश्यकता है."
 
 # Patrons > General
 msgid ""
 "patrons.pref#AutoApprovePatronProfileSettings# automatic approval of patron "
 "detail changes from the OPAC."
 msgstr ""
+"patrons.pref#AutoApprovePatronProfileSettings# ओपैक से संरक्षक विस्तार परिवर्तनों "
+"की स्वचालित स्वीकृति."
 
 # Patrons > Notices and notifications
 msgid "patrons.pref#AutoEmailOpacUser# Don't send"
@@ -11447,7 +11515,7 @@ msgstr "patrons.pref#CollapseFieldsPatronAddForm# मुख्य पता"
 
 # Patrons > Patron forms
 msgid "patrons.pref#CollapseFieldsPatronAddForm# OPAC/Staff interface login"
-msgstr ""
+msgstr "patrons.pref#CollapseFieldsPatronAddForm# ओपेक/स्टाफ इंटरफेस लॉगिन"
 
 # Patrons > Patron forms
 msgid ""
@@ -11457,7 +11525,7 @@ msgstr "patrons.pref#CollapseFieldsPatronAddForm# संरक्षक खा�
 
 # Patrons > Patron forms
 msgid "patrons.pref#CollapseFieldsPatronAddForm# Patron identity"
-msgstr ""
+msgstr "patrons.pref#CollapseFieldsPatronAddForm# संरक्षक पहचान"
 
 # Patrons > Patron forms
 msgid "patrons.pref#CollapseFieldsPatronAddForm# Patron messaging preferences"
@@ -11475,6 +11543,9 @@ msgid ""
 "existing patrons, collapse the following fields from the full form (can "
 "still be expanded later):"
 msgstr ""
+"patrons.pref#CollapseFieldsPatronAddForm# नए संरक्षक जोड़ते समय या मौजूदा संरक्षकों "
+"को संपादित करते हुए, निम्नलिखित फ़ील्ड को पूर्ण रूप से संक्षिप्त करें (अभी भी बाद में "
+"विस्तारित किया जा सकता है)"
 
 # Patrons > General
 msgid ""
@@ -11482,6 +11553,8 @@ msgid ""
 "default fields to be used during a patron search using the \"standard\" "
 "option:"
 msgstr ""
+"patrons.pref#DefaultPatronSearchFields# \"मानक\" विकल्प का उपयोग करके संरक्षक "
+"खोज के दौरान उपयोग किए जाने वाले डिफ़ॉल्ट फ़ील्ड को परिभाषित करने वाली कोमा अलग सूची:"
 
 # Patrons > General
 msgid ""
@@ -11490,6 +11563,9 @@ msgid ""
 "to this preference will be added as search options in the dropdown menu on "
 "the patron search page."
 msgstr ""
+"patrons.pref#DefaultPatronSearchFields# यदि खाली कोहा \"उपनाम, फर्स्टनाम, "
+"अन्यनाम, कार्डनंबर, यूजरिड\" के लिए डिफ़ॉल्ट होगा। इस वरीयता में जोड़े गए अतिरिक्त फ़ील्ड "
+"संरक्षक खोज पृष्ठ पर ड्रॉपडाउन मेनू में खोज विकल्प के रूप में जोड़े जाएंगे."
 
 # Patrons > General
 msgid "patrons.pref#EnableBorrowerFiles# Do"
@@ -11542,6 +11618,8 @@ msgid ""
 "patrons.pref#EnhancedMessagingPreferences# staff to manage which notices "
 "patrons will receive and when they will receive them."
 msgstr ""
+"patrons.pref#EnhancedMessagingPreferences# प्रबंधन के लिए कौन से नोटिस संरक्षक "
+"प्राप्त करेंगे और कब उन्हें प्राप्त करेंगे."
 
 # Patrons > Notices and notifications
 msgid ""
@@ -11604,6 +11682,8 @@ msgid ""
 "patrons.pref#FallbackToSMSIfNoEmail# sending purchase suggestion messages by "
 "SMS if no patron email is defined."
 msgstr ""
+"patrons.pref#FallbackToSMSIfNoEmail# यदि कोई संरक्षक ईमेल परिभाषित नहीं है, तो "
+"एसएमएस द्वारा खरीद सुझाव संदेश भेजें."
 
 # Patrons > General
 msgid "patrons.pref#FeeOnChangePatronCategory# Do"
@@ -11627,6 +11707,9 @@ msgid ""
 "Regulation. When you enforce, patrons need to give consent before using the "
 "OPAC. If you set to permissive, Koha will warn but not enforce."
 msgstr ""
+"patrons.pref#GDPR_Policy# GDPR ईयू जनरल डेटा प्रोटेक्शन रेगुलेशन है। जब आप लागू करते हैं, "
+"तो संरक्षक को ओपीएसी का उपयोग करने से पहले सहमति देने की आवश्यकता होती है। यदि आप "
+"अनुमति देने के लिए तैयार हैं, तो कोहा चेतावनी देगा लेकिन लागू नहीं करेगा."
 
 # Patrons > Privacy
 msgid ""
@@ -11640,19 +11723,19 @@ msgstr ""
 
 # Patrons > Privacy
 msgid "patrons.pref#GDPR_Policy# Set GDPR policy to:"
-msgstr ""
+msgstr "patrons.pref#GDPR_Policy# GDPR नीति सेट करें"
 
 # Patrons > Privacy
 msgid "patrons.pref#GDPR_Policy# disabled"
-msgstr ""
+msgstr "patrons.pref#GDPR_Policy# अक्षम"
 
 # Patrons > Privacy
 msgid "patrons.pref#GDPR_Policy# enforced"
-msgstr ""
+msgstr "patrons.pref#GDPR_Policy# बलपूर्वक"
 
 # Patrons > Privacy
 msgid "patrons.pref#GDPR_Policy# permissive"
-msgstr ""
+msgstr "patrons.pref#GDPR_Policy# अनुमोदक"
 
 # Patrons > General
 msgid ""
@@ -11713,12 +11796,17 @@ msgid ""
 "schema.koha-community.org/__VERSION__/tables/borrowers.html' "
 "target='blank'>database columns</a>:"
 msgstr ""
+"patrons.pref#PatronDuplicateMatchingAddFields# निम्नलिखित <a href='http://"
+"schema.koha-community.org/__VERSION__/tables/borrowers.html' "
+"target='blank'>डेटाबेस कॉलम</a>:"
 
 # Patrons > Patron forms
 msgid ""
 "patrons.pref#PatronDuplicateMatchingAddFields# will be used to detect "
 "possible duplicates when adding a new patron."
 msgstr ""
+"patrons.pref#PatronDuplicateMatchingAddFields# एक नए संरक्षक को जोड़ते समय "
+"संभावित डुप्लिकेट का पता लगाने के लिए उपयोग किया जाएगा."
 
 # Patrons > Patron forms
 msgid ""
@@ -11726,6 +11814,9 @@ msgid ""
 "community.org/__VERSION__/tables/borrowers.html' target='blank'>database "
 "columns</a>:"
 msgstr ""
+"patrons.pref#PatronQuickAddFields# निम्नलिखित <a href='http://schema.koha-"
+"community.org/__VERSION__/tables/borrowers.html' target='blank'>डेटाबेस कॉलम</"
+"a>:"
 
 # Patrons > Patron forms
 msgid ""
@@ -11734,6 +11825,10 @@ msgid ""
 "specified here. If applicable the guarantor form will be shown as well, "
 "individual fields in that form will be ignored."
 msgstr ""
+"patrons.pref#PatronQuickAddFields# जब एक नया संरक्षक में प्रवेश संरक्षक त्वरित जोड़ने के "
+"फार्म के लिए इन क्षेत्रों को जोड़ने। दिखाता केवल अनिवार्य क्षेत्रों और खेतों यहाँ निर्दिष्ट। "
+"गारंटर फार्म के रूप में अच्छी तरह से दिखाया जाएगा लागू करते हैं, तो उस रूप में अलग-अलग "
+"क्षेत्रों नजरअंदाज कर दिया जाएगा।"
 
 # Patrons > General
 msgid "patrons.pref#PatronsPerPage# By default, show"
@@ -11741,7 +11836,7 @@ msgstr "patrons.pref # PatronsPerPage # डिफ़ॉल्ट, शो से"
 
 # Patrons > General
 msgid "patrons.pref#PatronsPerPage# results per page in the staff interface."
-msgstr ""
+msgstr "patrons.pref # PatronsPerPage # स्टाफ ग्राहक में प्रति पृष्ठ परिणाम है।"
 
 # Patrons > Notices and notifications > PhoneNotification
 msgid ""
@@ -11749,25 +11844,25 @@ msgid ""
 "\"></i> If <code>PhoneNotification</code> is enabled, "
 "<code>TalkingTechItivaPhoneNotification</code> should be disabled."
 msgstr ""
+"patrons.pref#PhoneNotification# <br/><i class=\"fa fa-exclamation-triangle"
+"\"></i> यदि <code>PhoneNotification</code>सक्षम किया गया है, "
+"<code>TalkingTechItivaPhoneNotification</code> अक्षम होना चाहिए."
 
 # Patrons > Notices and notifications
-#, fuzzy
 msgid "patrons.pref#PhoneNotification# Disable"
-msgstr "patrons.pref # TalkingTechItivaPhoneNotification # अक्षम"
+msgstr "patrons.pref#PhoneNotification# अक्षम"
 
 # Patrons > Notices and notifications
-#, fuzzy
 msgid "patrons.pref#PhoneNotification# Enable"
-msgstr "patrons.pref # TalkingTechItivaPhoneNotification # सक्षम करें"
+msgstr "patrons.pref#PhoneNotification# सक्षम"
 
 # Patrons > Notices and notifications
-#, fuzzy
 msgid ""
 "patrons.pref#PhoneNotification# patron phone notifications generation. A "
 "plugin will be required to process the phone notifications."
 msgstr ""
-"patrons.pref # TalkingTechItivaPhoneNotification # संरक्षक फोन में बात कर रहे टेक "
-"मैं-Tiva का उपयोग कर सूचनाएं (अतिदेय, predues और नोटिस रखती वर्तमान में समर्थित)।"
+"patrons.pref#PhoneNotification# संरक्षक फोन सूचना पीढ़ी। फोन नोटिफिकेशन को प्रोसेस "
+"करने के लिए एक प्लगइन की आवश्यकता होगी."
 
 # Patrons > Patron relationships
 msgid "patrons.pref#PrefillGuaranteeField# Alternate address - Address"
@@ -11811,39 +11906,39 @@ msgstr "patrons.pref#PrefillGuaranteeField# वैकल्पिक पता -
 
 # Patrons > Patron relationships
 msgid "patrons.pref#PrefillGuaranteeField# Alternate contact - Address"
-msgstr ""
+msgstr "patrons.pref#PrefillGuaranteeField# वैकल्पिक पता: पता"
 
 # Patrons > Patron relationships
 msgid "patrons.pref#PrefillGuaranteeField# Alternate contact - Address 2"
-msgstr ""
+msgstr "patrons.pref#PrefillGuaranteeField# वैकल्पिक पता: पता 2"
 
 # Patrons > Patron relationships
 msgid "patrons.pref#PrefillGuaranteeField# Alternate contact - City"
-msgstr ""
+msgstr "patrons.pref#PrefillGuaranteeField# वैकल्पिक पता - नगर"
 
 # Patrons > Patron relationships
 msgid "patrons.pref#PrefillGuaranteeField# Alternate contact - Country"
-msgstr ""
+msgstr "patrons.pref#PrefillGuaranteeField# वैकल्पिक पता - देश"
 
 # Patrons > Patron relationships
 msgid "patrons.pref#PrefillGuaranteeField# Alternate contact - First name"
-msgstr ""
+msgstr "patrons.pref#PrefillGuaranteeField# वैकल्पिक पता - प्रथम नाम"
 
 # Patrons > Patron relationships
 msgid "patrons.pref#PrefillGuaranteeField# Alternate contact - Phone"
-msgstr ""
+msgstr "patrons.pref#PrefillGuaranteeField# वैकल्पिक पता - फोन"
 
 # Patrons > Patron relationships
 msgid "patrons.pref#PrefillGuaranteeField# Alternate contact - State"
-msgstr ""
+msgstr "patrons.pref#PrefillGuaranteeField# वैकल्पिक पता - राज्य"
 
 # Patrons > Patron relationships
 msgid "patrons.pref#PrefillGuaranteeField# Alternate contact - Surname"
-msgstr ""
+msgstr "patrons.pref#PrefillGuaranteeField# वैकल्पिक पता - कुलनाम"
 
 # Patrons > Patron relationships
 msgid "patrons.pref#PrefillGuaranteeField# Alternate contact - ZIP/Postal code"
-msgstr ""
+msgstr "patrons.pref#PrefillGuaranteeField# वैकल्पिक पता - जिप/पोस्टल कोड"
 
 # Patrons > Patron relationships
 msgid "patrons.pref#PrefillGuaranteeField# Contact - Fax"
@@ -11891,7 +11986,7 @@ msgstr "patrons.pref#PrefillGuaranteeField# मुख्य पता - रा�
 
 # Patrons > Patron relationships
 msgid "patrons.pref#PrefillGuaranteeField# Main address - Street number"
-msgstr ""
+msgstr "patrons.pref#PrefillGuaranteeField# मुख्य पता - गली संख्या"
 
 # Patrons > Patron relationships
 msgid "patrons.pref#PrefillGuaranteeField# Main address - ZIP/Postal code"
@@ -11959,122 +12054,129 @@ msgstr ""
 msgid ""
 "patrons.pref#Pseudonymization# <br/> And the following fields for the "
 "transactions:"
-msgstr ""
+msgstr "patrons.pref#Pseudonymization# <br/> और लेनदेन के लिए निम्नलिखित क्षेत्र:"
 
 # Patrons > Security
 msgid ""
 "patrons.pref#Pseudonymization# <br/>Use the following fields for patrons:"
 msgstr ""
+"patrons.pref#Pseudonymization# <br/>संरक्षक के लिए निम्नलिखित क्षेत्रों का उपयोग करें:"
 
 # Patrons > Security
 msgid "patrons.pref#Pseudonymization# City"
-msgstr ""
+msgstr "patrons.pref#Pseudonymization# नगर"
 
 # Patrons > Security
 msgid "patrons.pref#Pseudonymization# Collection code"
-msgstr ""
+msgstr "patrons.pref#Pseudonymization# संग्रह कोड"
 
 # Patrons > Security
 msgid "patrons.pref#Pseudonymization# Country"
-msgstr ""
+msgstr "patrons.pref#Pseudonymization# नगर"
 
 # Patrons > Security
 msgid "patrons.pref#Pseudonymization# Date and time of the transaction"
-msgstr ""
+msgstr "patrons.pref#Pseudonymization# लेन-देन की तिथि और समय"
 
 # Patrons > Security
 msgid "patrons.pref#Pseudonymization# Date the patron was added to Koha"
-msgstr ""
+msgstr "patrons.pref#Pseudonymization# तारीख को कोहा में जोड़ा गया था"
 
 # Patrons > Security
 msgid "patrons.pref#Pseudonymization# Disable"
-msgstr ""
+msgstr "patrons.pref#Pseudonymization# सक्षम"
 
 # Patrons > Security
 msgid "patrons.pref#Pseudonymization# Enable"
-msgstr ""
+msgstr "patrons.pref#Pseudonymization# अक्षम"
 
 # Patrons > Security
 msgid "patrons.pref#Pseudonymization# Holding branch"
-msgstr ""
+msgstr "patrons.pref#Pseudonymization# होल्डिंग शाखा"
 
 # Patrons > Security
 msgid "patrons.pref#Pseudonymization# Home branch"
-msgstr ""
+msgstr "patrons.pref#Pseudonymization# गृह शाखा"
 
 # Patrons > Security
 msgid "patrons.pref#Pseudonymization# Item type"
-msgstr ""
+msgstr "patrons.pref#Pseudonymization# आइटम प्रकार"
 
 # Patrons > Security
 msgid "patrons.pref#Pseudonymization# Item's callnumber"
-msgstr ""
+msgstr "patrons.pref#Pseudonymization# आइटम कॉलनंबर"
 
 # Patrons > Security
 msgid "patrons.pref#Pseudonymization# Itemnumber"
-msgstr ""
+msgstr "patrons.pref#Pseudonymization# आइटम संख्या"
 
 # Patrons > Security
 msgid "patrons.pref#Pseudonymization# Library where the transaction occurred"
-msgstr ""
+msgstr "patrons.pref#Pseudonymization# लाइब्रेरी जहां लेनदेन हुआ"
 
 # Patrons > Security
 msgid "patrons.pref#Pseudonymization# Location"
-msgstr ""
+msgstr "patrons.pref#Pseudonymization# स्थान"
 
 # Patrons > Security
 msgid "patrons.pref#Pseudonymization# Patron's category"
-msgstr ""
+msgstr "patrons.pref#Pseudonymization# संरक्षक की श्रेणी"
 
 # Patrons > Security
 msgid "patrons.pref#Pseudonymization# Patron's gender"
-msgstr ""
+msgstr "patrons.pref#Pseudonymization# संरक्षक का लिंग"
 
 # Patrons > Security
 msgid "patrons.pref#Pseudonymization# Patron's library"
-msgstr ""
+msgstr "patrons.pref#Pseudonymization# संरक्षक का पुस्तकालय"
 
 # Patrons > Security
 msgid "patrons.pref#Pseudonymization# Patron's title"
-msgstr ""
+msgstr "patrons.pref#Pseudonymization# संरक्षक का शीर्षक"
 
 # Patrons > Security
 msgid ""
 "patrons.pref#Pseudonymization# Patrons and transactions will be copied to a "
 "separate table for statistics purpose."
 msgstr ""
+"patrons.pref#Pseudonymization# आँकड़ों और उद्देश्यों के लिए संरक्षक और लेनदेन को एक अलग "
+"तालिका में कॉपी किया जाएगा."
 
 # Patrons > Security
 msgid "patrons.pref#Pseudonymization# Sort1"
-msgstr ""
+msgstr "patrons.pref#Pseudonymization# शार्ट1"
 
 # Patrons > Security
 msgid "patrons.pref#Pseudonymization# Sort2"
-msgstr ""
+msgstr "patrons.pref#Pseudonymization# शार्ट2"
 
 # Patrons > Security
 msgid "patrons.pref#Pseudonymization# State"
-msgstr ""
+msgstr "patrons.pref#Pseudonymization# राज्य"
 
 # Patrons > Security
 msgid "patrons.pref#Pseudonymization# Transaction type"
-msgstr ""
+msgstr "patrons.pref#Pseudonymization# लेनदेन प्रकार"
 
 # Patrons > Security
 msgid "patrons.pref#Pseudonymization# Zipcode"
-msgstr ""
+msgstr "patrons.pref#Pseudonymization# जिपकोड"
 
 # Patrons > Security
 msgid ""
 "patrons.pref#Pseudonymization# pseudonymization to comply with GDPR for "
 "personal information."
 msgstr ""
+"patrons.pref#Pseudonymization# व्यक्तिगत जानकारी के लिए GDPR का अनुपालन करने "
+"के लिए छद्म नामकरण."
 
 # Patrons > Security
 msgid ""
 "patrons.pref#RequireStrongPassword# (must contain at least one digit, one "
 "lowercase and one uppercase)."
 msgstr ""
+"patrons.pref#RequireStrongPassword# (कम से कम एक अंक, एक लोअरकेस और एक अपरके"
+"स होना चाहिए)."
 
 # Patrons > Security
 msgid "patrons.pref#RequireStrongPassword# Don't require"
@@ -12127,6 +12229,8 @@ msgstr ""
 msgid ""
 "patrons.pref#StatisticsFields# If empty, defaults to: location|itype|ccode"
 msgstr ""
+"patrons.pref#StatisticsFields# यदि खाली हैं, तो डिफ़ॉल्ट रूप "
+"में:location|itype|ccode"
 
 # Patrons > General
 msgid ""
@@ -12142,6 +12246,10 @@ msgid ""
 "exclamation-triangle\"></i> If <code>TalkingTechItivaPhoneNotification</"
 "code> is enabled, <code>PhoneNotification</code> should be disabled."
 msgstr ""
+"patrons.pref#TalkingTechItivaPhoneNotification# <br/><i class=\"fa fa-"
+"exclamation-triangle\"></i>यदि "
+"<code>TalkingTechItivaPhoneNotification</code>सक्षम किया गया है, "
+"<code>PhoneNotification</code> अक्षम होना चाहिए."
 
 # Patrons > Notices and notifications
 msgid "patrons.pref#TalkingTechItivaPhoneNotification# Disable"
@@ -12264,6 +12372,8 @@ msgid ""
 "patrons.pref#borrowerRelationship# (input multiple choices separated by |). "
 "Leave empty to deactivate."
 msgstr ""
+"patrons.pref # borrowerRelationship # (इनपुट एकाधिक द्वारा अलग विकल्प |)। "
+"निष्क्रिय करने के लिए खाली छोड़ दो"
 
 # Patrons > Patron relationships
 msgid ""
@@ -12287,6 +12397,9 @@ msgid ""
 "hold history (checkout history is still stored, regardless of staff being "
 "allowed access or not)."
 msgstr ""
+"patrons.pref#intranetreadinghistory# कर्मचारियों को संरक्षक के चेकआउट तक "
+"पहुंचने और इतिहास को होल्ड करने के लिए (चेकआउट इतिहास अभी भी संग्रहीत है, भले"
+" ही कर्मचारियों को एक्सेस की अनुमति दी जाए या नहीं)."
 
 # Patrons > Security
 msgid ""
@@ -12313,6 +12426,8 @@ msgid ""
 "patrons.pref#patronimages# images to be uploaded and shown for patrons on "
 "the staff interface."
 msgstr ""
+"patrons.pref#patronimages# स्टाफ इंटरफेस पर संरक्षक के लिए छवियों को अपलोड "
+"और दिखाया जाना है।"
 
 # Patrons > Patron forms
 msgid "patrons.pref#uppercasesurnames# Do"
@@ -12403,6 +12518,8 @@ msgid ""
 "searching.pref#AdvancedSearchTypes# Show tabs in the OPAC and staff "
 "interface advanced search for limiting searches on the"
 msgstr ""
+"searching.pref#AdvancedSearchTypes# ओपेक और स्टाफ इंटरफ़ेस में टैब दिखाएं, खो"
+"ज को सीमित करने के लिए उन्नत खोज"
 
 # Searching > Search form
 msgid ""
@@ -12419,14 +12536,18 @@ msgid ""
 "displays if the item-level_itypes system preference is set to bibliographic "
 "record."
 msgstr ""
+"searching.pref#BiblioItemtypeInfo#  ओपेक और स्टाफ इंटरफेस में विस्तार और "
+"परिणाम पृष्ठों पर कोहा रिकॉर्ड स्तर के आइटम की जानकारी। यह जानकारी यह भी "
+"प्रदर्शित करती है कि क्या आइटम-level_itypes सिस्टम वरीयता को संदर्भ सूची में "
+"सेट किया गया है."
 
 # Searching > Results display
 msgid "searching.pref#BiblioItemtypeInfo# Display"
-msgstr ""
+msgstr "searching.pref#BiblioItemtypeInfo# प्रदर्शन"
 
 # Searching > Results display
 msgid "searching.pref#BiblioItemtypeInfo# Don't display"
-msgstr ""
+msgstr "searching.pref#BiblioItemtypeInfo# प्रदर्शित न करें"
 
 # Searching > Features
 msgid "searching.pref#BrowseResultSelection# Disable"
@@ -12441,6 +12562,8 @@ msgid ""
 "searching.pref#BrowseResultSelection# browsing search results from the "
 "bibliographic record detail page in staff interface."
 msgstr ""
+"searching.pref#BrowseResultSelection# स्टाफ इंटरफ़ेस में ग्रंथ सूची रिकॉर्ड "
+"पृष्ठ से खोज परिणाम ब्राउज़ करना."
 
 # Searching > Results display
 msgid "searching.pref#DisplayLibraryFacets# Show facets for"
@@ -12459,14 +12582,12 @@ msgid "searching.pref#DisplayLibraryFacets# home library"
 msgstr "searching.pref # DisplayLibraryFacets # घर पुस्तकालय"
 
 # Searching > Features
-#, fuzzy
 msgid "searching.pref#ElasticsearchCrossFields# Disable"
-msgstr "searching.pref # QueryWeightFields # अक्षम"
+msgstr "searching.pref#ElasticsearchCrossFields#अक्षम"
 
 # Searching > Features
-#, fuzzy
 msgid "searching.pref#ElasticsearchCrossFields# Enable"
-msgstr "searching.pref # QueryWeightFields # सक्षम करें"
+msgstr "searching.pref#ElasticsearchCrossFields# सक्षम"
 
 # Searching > Features > ElasticsearchCrossFields
 msgid ""
@@ -12474,12 +12595,17 @@ msgid ""
 "elastic.co/guide/en/elasticsearch/reference/current/query-dsl-multi-match-"
 "query.html#type-cross-fields"
 msgstr ""
+"searching.pref#ElasticsearchCrossFields# प्रलेखन देखें "
+"https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-"
+"multi-match-query.html#type-cross-fields"
 
 # Searching > Features > ElasticsearchCrossFields
 msgid ""
 "searching.pref#ElasticsearchCrossFields# the cross_fields option for "
 "Elasticsearch searches, supported in Elasticsearch 6.X and above."
 msgstr ""
+"searching.pref#ElasticsearchCrossFields# Elasticsearch खोजों के लिए "
+"cross_fields विकल्प, Elasticsearch 6.X और इसके बाद के संस्करण में समर्थित है."
 
 # Searching > Features
 msgid "searching.pref#EnableSearchHistory# Don't keep"
@@ -12494,6 +12620,7 @@ msgid ""
 "searching.pref#EnableSearchHistory# patron search history in the staff "
 "interface."
 msgstr ""
+"searching.pref#EnableSearchHistory# स्टाफ इंटरफेश में संरक्षक खोज इतिहास।."
 
 # Searching > Results display
 msgid "searching.pref#FacetLabelTruncationLength# Truncate facets length to"
@@ -12520,6 +12647,9 @@ msgid ""
 "form) headings in bibliographic searches. Please note: you will need to "
 "reindex your bibliographic database when changing this preference."
 msgstr ""
+"searching.pref#IncludeSeeFromInSearches# <em>से देखें</em> (गैर-पसंदीदा रूप) "
+"ग्रंथ सूची खोजों में शीर्षासन करता है। कृपया ध्यान दें: इस वरीयता को बदलते "
+"समय आपको अपने ग्रंथ सूची डेटाबेस को फिर से लिखना होगा."
 
 # Searching > Features
 msgid "searching.pref#IncludeSeeFromInSearches# Don't include"
@@ -12542,6 +12672,8 @@ msgid ""
 "searching.pref#IntranetNumbersPreferPhrase# the operator \"phr\" in the "
 "callnumber and standard number staff interface searches."
 msgstr ""
+"searching.pref#IntranetNumbersPreferPhrase# ऑपरेटर \"PHR\" कॉल संख्या और मा"
+"नक संख्या स्टाफ ग्राहक खोजों में"
 
 # Searching > Search form
 msgid "searching.pref#IntranetNumbersPreferPhrase# use"
@@ -12577,17 +12709,19 @@ msgstr ""
 
 # Searching > Search form
 msgid "searching.pref#LoadSearchHistoryToTheFirstLoggedUser# Add"
-msgstr ""
+msgstr "searching.pref#LoadSearchHistoryToTheFirstLoggedUser# जोड़े"
 
 # Searching > Search form
 msgid "searching.pref#LoadSearchHistoryToTheFirstLoggedUser# Don't add"
-msgstr ""
+msgstr "searching.pref#LoadSearchHistoryToTheFirstLoggedUser# जोड़े नही"
 
 # Searching > Search form
 msgid ""
 "searching.pref#LoadSearchHistoryToTheFirstLoggedUser# search history of the "
 "unlogged user to the next patron logging in."
 msgstr ""
+"searching.pref#LoadSearchHistoryToTheFirstLoggedUser# अगले संरक्षक लॉगिंग में"
+" अनलॉग्ड उपयोगकर्ता की खोज इतिहास."
 
 # Searching > Results display
 msgid ""
@@ -12649,6 +12783,8 @@ msgid ""
 "searching.pref#OPACNumbersPreferPhrase# the operator \"phr\" in the "
 "callnumber and standard number OPAC searches."
 msgstr ""
+"searching.pref#OPACNumbersPreferPhrase# ऑपरेटर \"phr\" कॉलसंख्या और "
+"मानकसंख्या ओपेक खोजों में."
 
 # Searching > Search form
 msgid "searching.pref#OPACNumbersPreferPhrase# use"
@@ -12784,16 +12920,17 @@ msgid "searching.pref#QueryFuzzy# Try"
 msgstr "searching.pref # QueryFuzzy # प्रयास"
 
 # Searching > Features
-#, fuzzy
 msgid ""
 "searching.pref#QueryFuzzy# to match similarly spelled words in a search (for "
 "example, a search for <cite>flang</cite> would also match <cite>flange</"
 "cite> and <cite>fang</cite>; Currently only affects Zebra searches. Any "
 "Elasticsearch term can be made fuzzy by adding a ~ directly after the term.)."
 msgstr ""
-"searching.pref#QueryFuzzy#  मेल करने के इसी तरह से लिखे गए शब्दों को एक खोज में "
-"(उदाहरण के लिए, के लिए एक खोज से <cite>flang</cite> यह भी मेल खाएंगे <cite>flange</"
-"cite>और<cite>fang</cite>; REQUIRES ZEBRA)."
+"searching.pref#QueryFuzzy# किसी खोज में समान वर्तनी वाले शब्दों का मिलान करना"
+" (उदाहरण के लिए, एक खोज <cite>flang</cite>भी मेल खाएगा <cite>flange</cite> "
+"and <cite>fang</cite>; वर्तमान में केवल ज़ेबरा खोजों को प्रभावित करता है। "
+"किसी भी एलिस्टिक्स खोज शब्द को सीधे शब्द के बाद ~ जोड़कर फजी बनाया जा सकता "
+"है।)."
 
 # Searching > Features
 msgid "searching.pref#QueryRegexEscapeOptions# Don't escape"
@@ -12887,6 +13024,8 @@ msgid ""
 "searching.pref#TraceCompleteSubfields# subject tracings in the OPAC and "
 "staff interface to search only for complete-subfield matches."
 msgstr ""
+"searching.pref#TraceCompleteSubfields# केवल पूर्ण-सबफील्ड मैचों के लिए खोज "
+"करने के लिए ओपेक और स्टाफ इंटरफ़ेस में विषय ट्रेसिंग."
 
 # Searching > Features
 msgid "searching.pref#TraceSubjectSubdivisions# Don't include"
@@ -12941,6 +13080,8 @@ msgid ""
 "searching.pref#defaultSortField# By default, sort search results in the "
 "staff interface by"
 msgstr ""
+"searching.pref#defaultSortField# डिफ़ॉल्ट रूप से, स्टाफ इंटरफ़ेस में खोज "
+"परिणामों को क्रमबद्ध करें"
 
 # Searching > Results display
 msgid "searching.pref#defaultSortField# ascending."
@@ -13009,6 +13150,8 @@ msgid ""
 "searching.pref#expandedSearchOption# \"More options\" on the OPAC and staff "
 "interface advanced search pages."
 msgstr ""
+"searching.pref#expandedSearchOption# ओपेक और स्टाफ इंटरफ़ेस उन्नत खोज पृष्ठों"
+" पर \"अधिक विकल्प\"।"
 
 # Searching > Search form
 msgid "searching.pref#expandedSearchOption# By default,"
@@ -13049,7 +13192,7 @@ msgstr "searching.pref # numSearchResults # डिफ़ॉल्ट, शो स
 # Searching > Results display
 msgid ""
 "searching.pref#numSearchResults# results per page in the staff interface."
-msgstr ""
+msgstr "searching.pref#numSearchResults# स्टाफ इंटरफ़ेस में प्रति पृष्ठ परिणाम."
 
 # Searching > Results display
 msgid "searching.pref#numSearchResultsDropdown# Don't show"
@@ -13064,6 +13207,8 @@ msgid ""
 "searching.pref#numSearchResultsDropdown# results per page dropdown on staff "
 "interface search results."
 msgstr ""
+"searching.pref#numSearchResultsDropdown# स्टाफ इंटरफ़ेस खोज परिणामों पर प्रति"
+" पृष्ठ ड्रॉपडाउन के परिणाम."
 
 # Serials
 msgid "serials.pref"
@@ -13087,7 +13232,7 @@ msgstr "serials.pref#PreserveSerialNotes# करें"
 
 # Serials
 msgid "serials.pref#PreserveSerialNotes# Don't"
-msgstr ""
+msgstr "serials.pref#PreserveSerialNotes# नही करें"
 
 # Serials
 msgid ""
@@ -13134,6 +13279,8 @@ msgid ""
 "serials.pref#RoutingListNote# Include the following note on all routing "
 "lists:"
 msgstr ""
+"serials.pref#RoutingListNote# सभी रूटिंग सूचियों पर निम्नलिखित नोट शामिल "
+"करें:"
 
 # Serials
 msgid "serials.pref#RoutingSerials# Don't use"
@@ -13157,12 +13304,17 @@ msgid ""
 "serials.pref#StaffSerialIssueDisplayCount# previous issues of a serial on "
 "the staff interface."
 msgstr ""
+"serials.pref#StaffSerialIssueDisplayCount# स्टाफ इंटरफेस पर एक धारावाहिक के "
+"पिछले अंक."
 
 # Serials
 msgid ""
 "serials.pref#SubscriptionDuplicateDroppedInput# List of fields which must "
 "not be rewritten when a subscription is duplicated (separated by pipe |)"
 msgstr ""
+"serials.pref#SubscriptionDuplicateDroppedInput# उन क्षेत्रों की सूची, जिन्हें"
+" एक सदस्यता के डुप्लिकेट होने पर (| पाइप द्वारा अलग) दोबारा नहीं लिखा जाना "
+"चाहिए।"
 
 # Serials
 msgid ""
@@ -13186,7 +13338,7 @@ msgstr "सीरियल मुद्दों के serials.pref # Subscript
 
 # Serials
 msgid "serials.pref#makePreviousSerialAvailable# Don't make"
-msgstr ""
+msgstr "serials.pref#makePreviousSerialAvailable# मत बनाओ"
 
 # Serials
 msgid "serials.pref#makePreviousSerialAvailable# Make"
@@ -13199,6 +13351,10 @@ msgid ""
 "set to another item type when receiving a new one. Please note that the item-"
 "level_itypes system preference must be set to specific item."
 msgstr ""
+"serials.pref#makePreviousSerialAvailable# नया धारावाहिक जारी करते समय पिछला "
+"धारावाहिक स्वचालित रूप से उपलब्ध होता है। नया प्राप्त करते समय पिछला मुद्दा "
+"दूसरे आइटम प्रकार पर भी सेट किया जा सकता है। कृपया ध्यान दें कि item-"
+"level_itypes सिस्टम वरीयता को विशिष्ट आइटम पर सेट किया जाना चाहिए।"
 
 # Serials
 msgid "serials.pref#opacSerialDefaultTab# Show"
@@ -13210,80 +13366,94 @@ msgid ""
 "Please note that the serial collection tab is currently available only for "
 "UNIMARC."
 msgstr ""
+"serials.pref#opacSerialDefaultTab# ओपेक में धारावाहिकों के लिए डिफ़ॉल्ट टैब "
+"के रूप में। कृपया ध्यान दें कि धारावाहिक संग्रह टैब वर्तमान में केवल UNIMARC "
+"के लिए उपलब्ध है."
 
 # Serials
 msgid "serials.pref#opacSerialDefaultTab# holdings tab"
-msgstr ""
+msgstr "serials.pref#opacSerialDefaultTab# होल्डिंग्स टैब"
 
 # Serials
 msgid "serials.pref#opacSerialDefaultTab# serial collection tab"
-msgstr ""
+msgstr "serials.pref#opacSerialDefaultTab# सीरियल संग्रह टैब"
 
 # Serials
 msgid "serials.pref#opacSerialDefaultTab# subscriptions tab"
-msgstr ""
+msgstr "serials.pref#opacSerialDefaultTab# सदस्यताएँ टैब"
 
 # Staff interface
 msgid "staff_interface.pref"
-msgstr ""
+msgstr "staff_interface.pref"
 
 # Staff interface > Appearance
 msgid "staff_interface.pref Appearance"
-msgstr ""
+msgstr "staff_interface.pref दिखावट"
+
+# Administration > CAS authentication
+msgid "staff_interface.pref Authentication"
+msgstr "staff_interface.pref प्रमाणीकरण"
 
 # Staff interface > Options
 msgid "staff_interface.pref Options"
-msgstr ""
+msgstr "staff_interface.pref विकल्प"
 
 # Staff interface > Options
 msgid "staff_interface.pref#AudioAlerts# Don't enable"
-msgstr ""
+msgstr "staff_interface.pref#AudioAlerts# सक्षम न करें"
 
 # Staff interface > Options
 msgid "staff_interface.pref#AudioAlerts# Enable"
-msgstr ""
+msgstr "staff_interface.pref#AudioAlerts# सक्षम करें"
 
 # Staff interface > Options
 msgid ""
 "staff_interface.pref#AudioAlerts# audio alerts for events defined in the "
 "audio alerts section of administration."
 msgstr ""
+"staff_interface.pref#AudioAlerts# प्रशासन के ऑडियो अलर्ट अनुभाग में परिभाषित "
+"घटनाओं के लिए ऑडियो अलर्ट."
 
 # Staff interface > Appearance
 msgid ""
 "staff_interface.pref#Display856uAsImage# . Note: The corresponding XSLT "
 "option must be turned on."
 msgstr ""
+"staff_interface.pref#Display856uAsImage# . नोट: संबंधित XSLT विकल्प होने "
+"चाहिए."
 
 # Staff interface > Appearance
 msgid "staff_interface.pref#Display856uAsImage# Both result and detail pages"
-msgstr ""
+msgstr "staff_interface.pref#Display856uAsImage# परिणाम और विवरण दोनों पृष्ठ"
 
 # Staff interface > Appearance
 msgid "staff_interface.pref#Display856uAsImage# Detail page only"
-msgstr ""
+msgstr "staff_interface.pref#Display856uAsImage# केवल विवरण पृष्ठ"
 
 # Staff interface > Appearance
 msgid ""
 "staff_interface.pref#Display856uAsImage# Display the URI in the 856u field "
 "as an image on: "
 msgstr ""
+"staff_interface.pref#Display856uAsImage# एक छवि के रूप में 856u फ़ील्ड में "
+"URI प्रदर्शित करें: "
 
 # Staff interface > Appearance
 msgid "staff_interface.pref#Display856uAsImage# Neither detail or result pages"
 msgstr ""
+"staff_interface.pref#Display856uAsImage# न तो विस्तार और न ही परिणाम पृष्ठ"
 
 # Staff interface > Appearance
 msgid "staff_interface.pref#Display856uAsImage# Result page"
-msgstr ""
+msgstr "staff_interface.pref#Display856uAsImage# परिणाम पृष्ठ"
 
 # Staff interface > Appearance
 msgid "staff_interface.pref#DisplayIconsXSLT# Don't show"
-msgstr ""
+msgstr "staff_interface.pref#DisplayIconsXSLT# मत दिखाओ"
 
 # Staff interface > Appearance
 msgid "staff_interface.pref#DisplayIconsXSLT# Show"
-msgstr ""
+msgstr "staff_interface.pref#DisplayIconsXSLT# दिखाओ"
 
 # Staff interface > Appearance
 msgid ""
@@ -13291,50 +13461,60 @@ msgid ""
 "type icons and descriptions in XSLT MARC21 results and detail pages in the "
 "staff interface."
 msgstr ""
+"staff_interface.pref#DisplayIconsXSLT# tXSLT MARC21 के परिणाम, प्रारूप और "
+"ऑडियंस, और सामग्री प्रकार के विवरण और स्टाफ इंटरफ़ेस में विवरण पृष्ठ."
 
 # Staff interface > Options
 msgid "staff_interface.pref#HidePatronName# Don't show"
-msgstr ""
+msgstr "staff_interface.pref#HidePatronName# मत दिखाओ"
 
 # Staff interface > Options
 msgid "staff_interface.pref#HidePatronName# Show"
-msgstr ""
+msgstr "staff_interface.pref#HidePatronName# दिखाओ"
 
 # Staff interface > Options
 msgid ""
 "staff_interface.pref#HidePatronName# the names of patrons that have items "
 "checked out or on hold on detail pages or the \"Place Hold\" screen."
 msgstr ""
+"staff_interface.pref#HidePatronName# उन संरक्षकों के नाम जिनके पास विस्तृत "
+"पृष्ठ या \"प्लेस होल्ड\" स्क्रीन पर आइटम चेक आउट या होल्ड पर हैं."
 
 # Staff interface > Options
 msgid "staff_interface.pref#IntranetCatalogSearchPulldown# Don't show"
-msgstr ""
+msgstr "staff_interface.pref#IntranetCatalogSearchPulldown# मत दिखाओ"
 
 # Staff interface > Options
 msgid "staff_interface.pref#IntranetCatalogSearchPulldown# Show"
-msgstr ""
+msgstr "staff_interface.pref#IntranetCatalogSearchPulldown# दिखाओ"
 
 # Staff interface > Options
 msgid ""
 "staff_interface.pref#IntranetCatalogSearchPulldown# a search field pulldown "
 "for 'Search the catalog' boxes."
 msgstr ""
+"staff_interface.pref#IntranetCatalogSearchPulldown# 'खोज कैटलॉग बॉक्स' के लि"
+"ए एक खोज क्षेत्र पुलडाउन।"
 
 # Staff interface > Appearance
 msgid ""
 "staff_interface.pref#IntranetCirculationHomeHTML# Show the following HTML in "
 "its own div on the bottom of the home page of the circulation module:"
 msgstr ""
+"staff_interface.pref#IntranetCirculationHomeHTML# संचलन मॉड्यूल के मुख पृष्ठ "
+"के तल पर अपनी स्वयं की div में निम्न HTML दिखाएं:"
 
 # Staff interface > Appearance
 msgid "staff_interface.pref#IntranetFavicon# Use the image at"
-msgstr ""
+msgstr "staff_interface.pref#IntranetFavicon# पर छवि का उपयोग करें"
 
 # Staff interface > Appearance
 msgid ""
 "staff_interface.pref#IntranetFavicon# for the staff interface's favicon. "
 "(This should be a complete URL, starting with <code>http://</code>.)"
 msgstr ""
+"staff_interface.pref#IntranetFavicon# स्टाफ इंटरफ़ेस के फ़ेविकॉन के लिए। (यह "
+"एक पूर्ण URL होना चाहिए, जिसके साथ शुरू होना चाहिए <code>http://</code>.)"
 
 # Staff interface > Appearance
 msgid ""
@@ -13342,12 +13522,17 @@ msgid ""
 "More menu at the top of each page on the staff interface (should be a list "
 "of links or blank):"
 msgstr ""
+"staff_interface.pref#IntranetNav# स्टाफ इंटरफ़ेस पर प्रत्येक पृष्ठ के शीर्ष "
+"पर अधिक मेनू के बाईं ओर निम्न HTML दिखाएं (लिंक या रिक्त की एक सूची होनी "
+"चाहिए):"
 
 # Staff interface > Appearance
 msgid ""
 "staff_interface.pref#IntranetReportsHomeHTML# Show the following HTML in its "
 "own div on the bottom of the home page of the reports module:"
 msgstr ""
+"staff_interface.pref#IntranetReportsHomeHTML# रिपोर्ट मॉड्यूल के मुख पृष्ठ के"
+" तल पर अपनी स्वयं की div में निम्न HTML दिखाएं:"
 
 # Staff interface > Appearance
 msgid ""
@@ -13357,85 +13542,106 @@ msgid ""
 "and eventually Firefox add-on <a href='https://github.com/edabg/jsprintsetup/"
 "wiki'>jsPrintSetup documentation</a>:"
 msgstr ""
+"staff_interface.pref#IntranetSlipPrinterJS# स्लिप छापने के लिए निम्न "
+"जावास्क्रिप्ट का प्रयोग करें। विस्तृत विवरण देखें <a href='https://wiki.koha-"
+"community.org/wiki/Setting_up_slip_printer_to_print_silently'>कोहा विकी</a> "
+"और अंततः फ़ायरफ़ॉक्स ऐड-ऑन <a "
+"href='https://github.com/edabg/jsprintsetup/wiki'>jsPrintSetup "
+"documentation</a>:"
 
 # Staff interface > Appearance
 msgid ""
 "staff_interface.pref#IntranetUserCSS# Include the following CSS on all pages "
 "in the staff interface:"
 msgstr ""
+"staff_interface.pref#IntranetUserCSS# स्टाफ ग्राहक में सभी पृष्ठों पर "
+"निम्नलिखित सीएसएस में शामिल हैं:"
 
 # Staff interface > Appearance
 msgid ""
 "staff_interface.pref#IntranetUserJS# Include the following JavaScript on all "
 "pages in the staff interface:"
 msgstr ""
+"staff_interface.pref#IntranetUserJS# स्टाफ इंटरफेस में सभी पृष्ठों पर "
+"निम्नलिखित जावास्क्रिप्ट शामिल करें:"
 
 # Staff interface > Appearance
 msgid ""
 "staff_interface.pref#IntranetmainUserblock# Show the following HTML in its "
 "own column on the main page of the staff interface:"
 msgstr ""
+"staff_interface.pref#IntranetmainUserblock# स्टाफ इंटरफ़ेस के मुख्य पृष्ठ पर "
+"अपने स्वयं के कॉलम में निम्न HTML दिखाएं:"
 
 # Staff interface > Appearance
 msgid "staff_interface.pref#SlipCSS# Include the stylesheet at"
-msgstr ""
+msgstr "staff_interface.pref#SlipCSS# पर स्टाइलशीट शामिल करें"
 
 # Staff interface > Appearance
 msgid ""
 "staff_interface.pref#SlipCSS# on Issue and Hold Slips. (This should be a "
 "complete URL, starting with <code>http://</code>.)"
 msgstr ""
+"staff_interface.pref#SlipCSS# इश्यू और होल्ड स्लिप पर (यह एक पूरा URL होना "
+"चाहिए, साथ शुरू <code>http://</code>.)"
 
 # Staff interface > Options
 msgid "staff_interface.pref#StaffDetailItemSelection# Disable"
-msgstr ""
+msgstr "staff_interface.pref#StaffDetailItemSelection# अक्षम"
 
 # Staff interface > Options
 msgid "staff_interface.pref#StaffDetailItemSelection# Enable"
-msgstr ""
+msgstr "staff_interface.pref#StaffDetailItemSelection# अक्षम"
 
 # Staff interface > Options
 msgid ""
 "staff_interface.pref#StaffDetailItemSelection# item selection in record "
 "detail page."
 msgstr ""
+"staff_interface.pref#StaffDetailItemSelection# रिकॉर्ड विस्तार पृष्ठ में "
+"आइटम का चयन."
 
 # Staff interface > Appearance
 msgid ""
 "staff_interface.pref#StaffLangSelectorMode# Display language selector on "
 msgstr ""
+"staff_interface.pref#StaffLangSelectorMode# पर भाषा चयनकर्ता प्रदर्शित करें"
 
 # Staff interface > Appearance
 msgid "staff_interface.pref#StaffLangSelectorMode# both top and footer"
-msgstr ""
+msgstr "staff_interface.pref#StaffLangSelectorMode# दोनों शीर्ष और पाद"
 
 # Staff interface > Appearance
 msgid "staff_interface.pref#StaffLangSelectorMode# only footer"
-msgstr ""
+msgstr "staff_interface.pref#StaffLangSelectorMode# केवल पाद"
 
 # Staff interface > Appearance
 msgid "staff_interface.pref#StaffLangSelectorMode# top"
-msgstr ""
+msgstr "staff_interface.pref#StaffLangSelectorMode# शीर्ष "
 
 # Staff interface > Appearance
 msgid ""
 "staff_interface.pref#StaffLoginInstructions# Show the following HTML on the "
 "staff interface login page"
 msgstr ""
+"staff_interface.pref#StaffLoginInstructions# स्टाफ क्लाइंट लॉगिन पृष्ठ पर "
+"निम्न HTML दिखाएं"
 
 # Staff interface > Options
 msgid "staff_interface.pref#UseWYSIWYGinSystemPreferences# Don't show"
-msgstr ""
+msgstr "staff_interface.pref#UseWYSIWYGinSystemPreferences# मत दिखाओ"
 
 # Staff interface > Options
 msgid "staff_interface.pref#UseWYSIWYGinSystemPreferences# Show"
-msgstr ""
+msgstr "staff_interface.pref#UseWYSIWYGinSystemPreferences# दिखाओ"
 
 # Staff interface > Options
 msgid ""
 "staff_interface.pref#UseWYSIWYGinSystemPreferences# WYSIWYG editor when "
 "editing certain HTML system preferences."
 msgstr ""
+"staff_interface.pref#UseWYSIWYGinSystemPreferences# कुछ HTML सिस्टम वरीयताओं "
+"को संपादित करते समय WYSIWYG संपादक।"
 
 # Staff interface > Appearance
 msgid ""
@@ -13445,12 +13651,19 @@ msgid ""
 "define a xslt file</li><li>Put an URL for an external specific stylesheet.</"
 "li></ul>{langcode} will be replaced with current interface language"
 msgstr ""
+"staff_interface.pref#XSLTDetailsDisplay#<br />विकल्प:<ul><li>दर्ज करे \"<a "
+"href=\"#\" class=\"set_syspref\" data-syspref=\"XSLTDetailsDisplay\" data-"
+"value=\"default\">डिफाल्ट</a>\" डिफ़ॉल्ट एक के लिए</li><li>एक xslt फ़ाइल को "
+"परिभाषित करने के लिए एक रास्ता रखो</li><li>बाहरी विशिष्ट स्टाइलशीट के लिए एक "
+"URL डालें.</li></ul>{langcode} वर्तमान इंटरफ़ेस भाषा के साथ बदल दिया जाएगा"
 
 # Staff interface > Appearance
 msgid ""
 "staff_interface.pref#XSLTDetailsDisplay# Display details in the staff "
 "interface using XSLT stylesheet at: "
 msgstr ""
+"staff_interface.pref#XSLTDetailsDisplay# XSLT स्टाइलशीट का उपयोग करते हुए "
+"स्टाफ इंटरफ़ेस में विवरण दिखाएं: "
 
 # Staff interface > Appearance
 msgid ""
@@ -13462,12 +13675,22 @@ msgid ""
 "file</li><li>put an URL for an external specific stylesheet.</li></"
 "ul>{langcode} will be replaced with current interface language"
 msgstr ""
+"staff_interface.pref#XSLTListsDisplay# <br />विकल्पों:<ul><li><a href=\"#\" "
+"class=\"set_syspref\" data-syspref=\"XSLTListsDisplay\" data-value=\"\">खाली "
+"छोड़े</a> for \"no xslt\"</li><li>दर्ज करें \"<a href=\"#\" class=\""
+"set_syspref\" data-syspref=\"XSLTListsDisplay\" data-value=\"default\""
+">डिफॉल्ट</a>\" for the default one</li><li> एक XSLT फ़ाइल को परिभाषित करने के"
+" लिए एक पथ डाले</li><li>एक बाहरी विशिष्ट शैली के लिए एक यूआरएल "
+"डाले.</li></ul>{langcode} वर्तमान इंटरफ़ेस भाषा के साथ प्रतिस्थापित किया "
+"जाएगा"
 
 # Staff interface > Appearance
 msgid ""
 "staff_interface.pref#XSLTListsDisplay# Display lists in the staff interface "
 "using XSLT stylesheet at: "
 msgstr ""
+"staff_interface.pref#XSLTListsDisplay# XSLT स्टाइलशीट का उपयोग करते हुए स्टा"
+"फ इंटरफ़ेस में सूची प्रदर्शित करें:"
 
 # Staff interface > Appearance
 msgid ""
@@ -13477,41 +13700,53 @@ msgid ""
 "define a xslt file</li><li>Put an URL for an external specific stylesheet.</"
 "li></ul>{langcode} will be replaced with current interface language"
 msgstr ""
+"staff_interface.pref#XSLTResultsDisplay# <br />विकल्प:<ul><li>दर्ज करे \"<a "
+"href=\"#\" class=\"set_syspref\" data-syspref=\"XSLTDetailsDisplay\" data-"
+"value=\"default\">डिफाल्ट</a>\" डिफ़ॉल्ट एक के लिए</li><li>एक xslt फ़ाइल को "
+"परिभाषित करने के लिए एक रास्ता रखो</li><li>बाहरी विशिष्ट स्टाइलशीट के लिए एक "
+"URL डालें.</li></ul>{langcode} वर्तमान इंटरफ़ेस भाषा के साथ बदल दिया जाएगा"
 
 # Staff interface > Appearance
 msgid ""
 "staff_interface.pref#XSLTResultsDisplay# Display results in the staff "
 "interface using XSLT stylesheet at: "
 msgstr ""
+"staff_interface.pref#XSLTResultsDisplay#XSLT स्टाइलशीट का उपयोग करते हुए स्टा"
+"फ इंटरफ़ेस में परिणाम प्रदर्शित करें: "
 
 # Staff interface > Appearance
 msgid "staff_interface.pref#intranet_includes# Use include files from the"
-msgstr ""
+msgstr "staff_interface.pref#intranet_includes# इसमें से फ़ाइलों का उपयोग करें"
 
 # Staff interface > Appearance
 msgid ""
 "staff_interface.pref#intranet_includes# directory in the template directory, "
 "instead of <code>includes/</code>. (Leave blank to disable)"
 msgstr ""
+"staff_interface.pref#intranet_includes# टेम्पलेट निर्देशिका में निर्देशिका के"
+" बजाय <code>includes/</code>. (निष्क्रिय करने के लिए खाली छोड़ दें)"
 
 # Staff interface > Options
 msgid "staff_interface.pref#intranetbookbag# Don't show"
-msgstr ""
+msgstr "staff_interface.pref#intranetbookbag# मत दिखाओ"
 
 # Staff interface > Options
 msgid "staff_interface.pref#intranetbookbag# Show"
-msgstr ""
+msgstr "staff_interface.pref#intranetbookbag# दिखाओ"
 
 # Staff interface > Options
 msgid ""
 "staff_interface.pref#intranetbookbag# the cart option in the staff interface."
 msgstr ""
+"staff_interface.pref#intranetbookbag# वह स्टाफ क्लाइंट में कार्ट का विकल्प."
 
 # Staff interface > Appearance
 msgid ""
 "staff_interface.pref#intranetcolorstylesheet# Include the additional CSS "
 "stylesheet"
 msgstr ""
+"staff_interface.pref#intranetcolorstylesheet# अतिरिक्त CSS स्टाइलशीट शामिल "
+"करें"
 
 # Staff interface > Appearance
 msgid ""
@@ -13523,10 +13758,17 @@ msgid ""
 "and language within the Koha templates directory. A full local path is "
 "expected to start from your HTTP document root."
 msgstr ""
+"staff_interface.pref#intranetcolorstylesheet# डिफ़ॉल्ट stylesheet के से "
+"निर्दिष्ट सेटिंग्स ओवरराइड करने के लिए (निष्क्रिय करने के लिए खाली छोड़ दें।)"
+" सिर्फ एक फ़ाइल नाम, एक पूर्ण स्थानीय पथ या एक पूरा यूआरएल के साथ शुरू दर्ज "
+"<code>http://</code>(फ़ाइल एक रिमोट सर्वर पर रहता है)। कृपया ध्यान दें कि "
+"अगर आप सिर्फ एक फ़ाइल नाम दर्ज करें, फ़ाइल सीएसएस उपनिर्देशिका Koha के भीतर "
+"प्रत्येक सक्रिय विषय और भाषा के लिए निर्देशिका टेम्पलेट्स में होना चाहिए। एक "
+"पूर्ण स्थानीय पथ अपने HTTP दस्तावेज़ के लिए रूट से शुरू होने की उम्मीद है।"
 
 # Staff interface > Appearance
 msgid "staff_interface.pref#intranetstylesheet# Use the CSS stylesheet"
-msgstr ""
+msgstr "staff_interface.pref#intranetstylesheet# CSS स्टाइलशीट का उपयोग करें"
 
 # Staff interface > Appearance
 msgid ""
@@ -13539,25 +13781,34 @@ msgid ""
 "directory. A full local path is expected to start from your HTTP document "
 "root."
 msgstr ""
+"staff_interface.pref#intranetstylesheet# डिफ़ॉल्ट सीएसएस के बजाय स्टाफ इंटरफे"
+"स के सभी पृष्ठों पर (इस फ़ील्ड को खाली छोड़ते समय उपयोग किया जाता है)। केवल "
+"एक फ़ाइल नाम, एक पूर्ण स्थानीय पथ या <code>http://</code> (यदि फ़ाइल किसी "
+"दूरस्थ सर्वर पर रहती है) के साथ पूर्ण URL दर्ज करें। कृपया ध्यान दें कि यदि "
+"आप केवल एक फ़ाइल नाम दर्ज करते हैं, तो फ़ाइल कोहा टेम्पलेट निर्देशिका के भी"
+"तर प्रत्येक सक्रिय विषय और भाषा के लिए सीएसएस उपनिर्देशिका में होनी चाहिए। "
+"एक पूर्ण स्थानीय पथ आपके HTTP दस्तावेज़ रूट से शुरू होने की उम्मीद है।"
 
 # Staff interface > Options
 msgid "staff_interface.pref#showLastPatron# Don't show"
-msgstr ""
+msgstr "staff_interface.pref#showLastPatron# नही दिखाएं"
 
 # Staff interface > Options
 msgid "staff_interface.pref#showLastPatron# Show"
-msgstr ""
+msgstr "staff_interface.pref#showLastPatron# दिखाएं"
 
 # Staff interface > Options
 msgid ""
 "staff_interface.pref#showLastPatron# a link to the last searched patron in "
 "the staff interface."
 msgstr ""
+"staff_interface.pref#showLastPatron# स्टाफ क्लाइंट में अंतिम खोज किए गए संरक्"
+"षक के लिए एक लिंक."
 
 # Staff interface > Appearance
 msgid ""
 "staff_interface.pref#staffClientBaseURL# The staff interface is located at"
-msgstr ""
+msgstr "staff_interface.pref#staffClientBaseURL# स्टाफ इंटरफेस पर स्थित है"
 
 # Staff interface > Appearance
 msgid ""
@@ -13566,56 +13817,81 @@ msgid ""
 "URL. (This must be filled in correctly for CAS, svc, and load_testing to "
 "work.)"
 msgstr ""
+"staff_interface.pref#staffClientBaseURL# http:// या https:// के साथ शुरू होने"
+" वाला यह एक पूर्ण URL होना चाहिए। URL में अनुगामी स्लैश शामिल न करें। (यह कै"
+"स, svc और load_testing को काम करने के लिए सही ढंग से भरना चाहिए।)"
+
+# Staff interface > Authentication > staffShibOnly
+msgid "staff_interface.pref#staffShibOnly# Allow"
+msgstr "staff_interface.pref#staffShibOnly# अनुमति दें"
+
+# OPAC > Features
+msgid "staff_interface.pref#staffShibOnly# Don't allow"
+msgstr "staff_interface.pref#staffShibOnly# अनुमति न दें"
+
+# Staff interface > Authentication > staffShibOnly
+msgid ""
+"staff_interface.pref#staffShibOnly# staff to login by means other than "
+"shibboleth."
+msgstr ""
+"staff_interface.pref#staffShibOnly# कर्मचारियों को शिब्बोलेथ के अलावा अन्य "
+"माध्यमों से लॉगिन करना है."
 
 # Staff interface > Appearance
 msgid "staff_interface.pref#template# Use the"
-msgstr ""
+msgstr "staff_interface.pref#template# का प्रयोग करें"
 
 # Staff interface > Appearance
 msgid "staff_interface.pref#template# theme on the staff interface."
-msgstr ""
+msgstr "staff_interface.pref#template# स्टाफ इंटरफ़ेस पर थीम"
 
 # Staff interface > Options
 msgid "staff_interface.pref#viewISBD# Allow"
-msgstr ""
+msgstr "staff_interface.pref#viewISBD# अनुमति"
 
 # Staff interface > Options
 msgid "staff_interface.pref#viewISBD# Don't allow"
-msgstr ""
+msgstr "staff_interface.pref#viewISBD# अनुमति न दें"
 
 # Staff interface > Options
 msgid ""
 "staff_interface.pref#viewISBD# staff to view records in ISBD form on the "
 "staff interface."
 msgstr ""
+"staff_interface.pref#viewISBD# स्टाफ इंटरफ़ेस में ISBD फॉर्म में रिकॉर्ड "
+"देखने के लिए कर्मचारी."
 
 # Staff interface > Options
 msgid "staff_interface.pref#viewLabeledMARC# Allow"
-msgstr ""
+msgstr "staff_interface.pref#viewLabeledMARC# अनुमति"
 
 # Staff interface > Options
 msgid "staff_interface.pref#viewLabeledMARC# Don't allow"
-msgstr ""
+msgstr "staff_interface.pref#viewLabeledMARC# अनुमति नही दे"
 
 # Staff interface > Options
 msgid ""
 "staff_interface.pref#viewLabeledMARC# staff to view records in labeled MARC "
 "form on the staff interface."
 msgstr ""
+"staff_interface.pref#viewLabeledMARC# स्टाफ इंटरफेस पर लेबल मार्क फॉर्म में "
+"रिकॉर्ड देखने के लिए."
 
 # Staff interface > Options
 msgid "staff_interface.pref#viewMARC# Allow"
-msgstr ""
+msgstr "staff_interface.pref#viewMARC# अनुमति"
 
 # Staff interface > Options
 msgid "staff_interface.pref#viewMARC# Don't allow"
-msgstr ""
+msgstr "staff_interface.pref#viewMARC# अनुमति नही"
 
 # Staff interface > Options
 msgid ""
 "staff_interface.pref#viewMARC# staff to view records in plain MARC form on "
 "the staff interface."
 msgstr ""
+"staff_interface.pref#viewMARC# स्टाफ इंटरफ़ेस में सादे मार्क फॉर्म में रिकॉर्"
+"ड देखने के लिए कर्मचारी."
 
 # Tools
 msgid "tools.pref"
@@ -13709,7 +13985,7 @@ msgstr ""
 
 # Tools > News
 msgid "tools.pref#NewsAuthorDisplay# ."
-msgstr ""
+msgstr "tools.pref#NewsAuthorDisplay# ."
 
 # Tools > News
 msgid "tools.pref#NewsAuthorDisplay# OPAC only"
@@ -13721,23 +13997,23 @@ msgstr "tools.pref # NewsAuthorDisplay # खबर मदों के लिए
 
 # Tools > News
 msgid "tools.pref#NewsAuthorDisplay# both OPAC and staff interface"
-msgstr ""
+msgstr "tools.pref#NewsAuthorDisplay# ओपेक और स्टाफ इंटरफ़ेस दोनों"
 
 # Tools > News
 msgid "tools.pref#NewsAuthorDisplay# not at all"
-msgstr ""
+msgstr "tools.pref#NewsAuthorDisplay# बिल्कुल नहीं"
 
 # Tools > News
 msgid "tools.pref#NewsAuthorDisplay# staff interface only"
-msgstr ""
+msgstr "tools.pref#NewsAuthorDisplay# केवल स्टाफ इंटरफ़ेस"
 
 # Tools > News
 msgid "tools.pref#NewsToolEditor# ."
-msgstr ""
+msgstr "tools.pref#NewsToolEditor# ."
 
 # Tools > News
 msgid "tools.pref#NewsToolEditor# By default edit news items with"
-msgstr ""
+msgstr "tools.pref#NewsToolEditor# डिफ़ॉल्ट रूप से समाचार आइटम संपादित करें"
 
 # Tools > News
 msgid "tools.pref#NewsToolEditor# a WYSIWYG editor (TinyMCE)"
@@ -13753,7 +14029,7 @@ msgstr "tools.pref#NumSavedReports# डिफ़ॉल्ट रूप से, �
 
 # Tools > Reports
 msgid "tools.pref#NumSavedReports# reports on the saved reports page."
-msgstr ""
+msgstr "tools.pref#NumSavedReports# सहेजे गए रिपोर्ट पृष्ठ पर रिपोर्ट."
 
 # Tools > Upload
 msgid ""
@@ -13822,10 +14098,12 @@ msgid ""
 "web_services.pref#AutoShareWithMana# Fields automatically shared with Mana "
 "KB:"
 msgstr ""
+"web_services.pref#AutoShareWithMana# फ़ील्ड्स स्वचालित रूप से मना केबी के सा"
+"थ साझा किए जाते हैं"
 
 # Web services > Mana KB
 msgid "web_services.pref#AutoShareWithMana# subscriptions"
-msgstr ""
+msgstr "web_services.pref#AutoShareWithMana# सदस्यता"
 
 # Web services > ILS-DI
 msgid "web_services.pref#ILS-DI# Disable"
@@ -13878,6 +14156,8 @@ msgid ""
 "web_services.pref#IdRef# the IdRef web service from the OPAC detail page. "
 "IdRef allows requests for authorities from the Sudoc database."
 msgstr ""
+"web_services.pref#IdRef# ओपेक विवरण पृष्ठ से IdRef वेब सेवा। IdRef, Sudoc "
+"डेटाबेस से अधिकारियों के लिए अनुरोध करता है."
 
 # Web services > Mana KB
 msgid "web_services.pref#Mana# Disable"
@@ -13954,26 +14234,33 @@ msgid ""
 "web_services.pref#OAI-PMH:AutoUpdateSets# automatic update of OAI-PMH sets "
 "when a bibliographic or item record is created or updated."
 msgstr ""
+"web_services.pref # OAI-PMH: AutoUpdateSets # OAI-PMH का स्वत: अद्यतन सेट जब "
+"एक ग्रंथ सूची रिकॉर्ड बनाया या अद्यतन किया जाता है"
 
 # Web services > OAI-PMH
 msgid ""
 "web_services.pref#OAI-PMH:AutoUpdateSetsEmbedItemData# <br><strong>NOTE:</"
 "strong> This needs OAI-PMH:AutoUpdateSets syspref to be enabled."
 msgstr ""
+"web_services.pref#OAI-PMH:AutoUpdateSetsEmbedItemData# "
+"<br><strong>नोट:</strong> इसके लिए OAI-PMH: AutoUpdateSets syspref सक्षम होना"
+" चाहिए."
 
 # Web services > OAI-PMH
 msgid "web_services.pref#OAI-PMH:AutoUpdateSetsEmbedItemData# Disable"
-msgstr ""
+msgstr "web_services.pref#OAI-PMH:AutoUpdateSetsEmbedItemData# अक्षम"
 
 # Web services > OAI-PMH
 msgid "web_services.pref#OAI-PMH:AutoUpdateSetsEmbedItemData# Enable"
-msgstr ""
+msgstr "web_services.pref#OAI-PMH:AutoUpdateSetsEmbedItemData# सक्षम"
 
 # Web services > OAI-PMH
 msgid ""
 "web_services.pref#OAI-PMH:AutoUpdateSetsEmbedItemData# embedding of item "
 "data when automatically updating OAI-PMH sets."
 msgstr ""
+"web_services.pref#OAI-PMH:AutoUpdateSetsEmbedItemData# स्वचालित रूप से OAI-"
+"PMH सेट को अपडेट करते समय आइटम डेटा की एम्बेडिंग।"
 
 # Web services > OAI-PMH
 msgid ""

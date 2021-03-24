@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Koha 20.11\n"
 "POT-Creation-Date: 2013-05-02 01:29-0300\n"
-"PO-Revision-Date: 2021-02-16 22:17+0000\n"
+"PO-Revision-Date: 2021-03-16 22:12+0000\n"
 "Last-Translator: ztajoli <ztajoli@gmail.com>\n"
 "Language-Team: CILEA <z.tajoli@cineca.it>\n"
 "Language: it\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.8\n"
 "X-Poedit-SourceCharset: UTF-8\n"
-"X-POOTLE-MTIME: 1613513821.177670\n"
+"X-POOTLE-MTIME: 1615932739.804104\n"
 "X-Poedit-Basepath: ../../../versioni/master/koha-tmpl\n"
 "X-Poedit-SearchPath-0: .\n"
 "X-Pootle-Path: /it/20.05/it-IT-pref.po\n"
@@ -781,6 +781,16 @@ msgid ""
 "admin.pref#GoogleOpenIDConnectDomain# Restrict Google OpenID Connect to this "
 "domain (or subdomain of this domain): "
 msgstr "Limita Google OpenID Connect a questo dominio (o suoi sottodomini): "
+
+# Administration > Login options > IndependentBranches
+msgid ""
+"admin.pref#IndependentBranches# <p class='text-danger'><strong>Warning:</"
+"strong> Changing this system preference will radically alter the behavior of "
+"Koha. Changing preference on a production system is highly discouraged.</p>"
+msgstr ""
+"<p class='text-danger'><strong>Attenzione:</strong> Cambiare questa "
+"preferenza di sistema altera radicalmente il funzionamento di Koha. Cambiare "
+"in un sistema in produzione è fortemente sconsigliato.</p>"
 
 # Administration > Login options
 msgid "admin.pref#IndependentBranches# No"
@@ -8276,6 +8286,10 @@ msgstr "Opzioni ricerca avanzata"
 msgid "opac.pref Appearance"
 msgstr "Aspetto"
 
+# Administration > CAS authentication
+msgid "opac.pref Authentication"
+msgstr "Autenticazione"
+
 # OPAC > Features
 msgid "opac.pref Features"
 msgstr "Caratteristiche"
@@ -8942,6 +8956,19 @@ msgstr ""
 "agli utenti di vedere le copie vicine sullo scaffale. Si noti che richiede "
 "largo uso di risorse del server e va evitato nel caso di collezioni con "
 "molte copie."
+
+# OPAC > Privacy
+msgid "opac.pref#OPACShibOnly# Allow"
+msgstr "Permetti"
+
+# OPAC > Privacy
+msgid "opac.pref#OPACShibOnly# Don't allow"
+msgstr "Non permettere"
+
+# OPAC > Privacy
+msgid ""
+"opac.pref#OPACShibOnly# patrons to login by means other than Shibboleth."
+msgstr "agli utenti di loggarsi in altri modi diversi da Shibboleth."
 
 # OPAC > Appearance
 msgid "opac.pref#OPACShowCheckoutName# Don't show"
@@ -10159,11 +10186,11 @@ msgid ""
 "PatronSelfRegistrationExpireTemporaryAccountsDelay days ago."
 msgstr ""
 "<br><strong>ATTENZIONE: Non usare una normale categoria utente per "
-"l'autoregistrazione.</strong> Se il cronjob "
-"<code>misc/cronjobs/cleanup_database.pl</code> è configurato per cancellare "
-"le registrazioni dall'Opac non verficate e non finite, esso cancellerà "
-"definitivamente e senza possibile recupero tutti gli utenti che si sono "
-"registrati da più giorni di quanto indicato in "
+"l'autoregistrazione.</strong> Se il cronjob <code>misc/cronjobs/"
+"cleanup_database.pl</code> è configurato per cancellare le registrazioni "
+"dall'Opac non verficate e non finite, esso cancellerà definitivamente e "
+"senza possibile recupero tutti gli utenti che si sono registrati da più "
+"giorni di quanto indicato in "
 "PatronSelfRegistrationExpireTemporaryAccountsDelay."
 
 # OPAC > Self registration and modification
@@ -12747,6 +12774,10 @@ msgid "staff_interface.pref Appearance"
 msgstr "Aspetto"
 
 # Staff interface > Options
+msgid "staff_interface.pref Authentication"
+msgstr "Autenticazione"
+
+# Staff interface > Options
 msgid "staff_interface.pref Options"
 msgstr "Opzioni"
 
@@ -13140,6 +13171,20 @@ msgstr ""
 "Questo deve essere un URL completo, a partire da http: // o https: //. Non "
 "includere una barra finale nell'URL. (Questo deve essere compilato "
 "correttamente per CAS, svc e load_testing.)"
+
+# Staff interface > Options
+msgid "staff_interface.pref#staffShibOnly# Allow"
+msgstr "Permetti"
+
+# Staff interface > Options
+msgid "staff_interface.pref#staffShibOnly# Don't allow"
+msgstr "Non permettere"
+
+# Staff interface > Appearance
+msgid ""
+"staff_interface.pref#staffShibOnly# staff to login by means other than "
+"shibboleth."
+msgstr "allo staff di autenticarsi in modi diversi da Shibboleth."
 
 # Staff interface > Appearance
 msgid "staff_interface.pref#template# Use the"
