@@ -33,7 +33,7 @@ my $builder = t::lib::TestBuilder->new;
 
 subtest 'store() tests' => sub {
 
-    plan tests => 3;
+    plan tests => 4;
 
     subtest 'repeatable attributes tests' => sub {
 
@@ -214,6 +214,38 @@ subtest 'store() tests' => sub {
         is( $@->type, $code, 'type exception parameter passed'  );
 
         $schema->storage->txn_rollback;
+    };
+
+    subtest 'Edit attribute tests for non-repeatable tests (Bug 28031)' => sub {
+
+        plan tests => 1;
+
+        my $patron = $builder->build_object({ class => 'Koha::Patrons' });
+        my $non_repeatable_type = $builder->build_object(
+            {
+                class => 'Koha::Patron::Attribute::Types',
+                value => {
+                    mandatory     => 0,
+                    repeatable    => 0,
+                    unique_id     => 1,
+                    category_code => undef
+                }
+            }
+        );
+
+        # Here we test the case of editing an already stored attribute
+        my $non_repeatable_attr = $patron->add_extended_attribute(
+            {
+                code      => $non_repeatable_type->code,
+                attribute => 'WOW'
+            }
+        );
+
+        $non_repeatable_attr->set({ attribute => 'HEY' })
+                        ->store
+                        ->discard_changes;
+
+        is( $non_repeatable_attr->attribute, 'HEY', 'Value stored correctly' );
     };
 };
 
