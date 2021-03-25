@@ -200,7 +200,7 @@
 
                                             <p>[% ar.borrower.phone | html %]</p>
                                         </td>
-                                        <td class="ar-date"><span title="[% ar.created_on | html %]">[% ar.created_on | $KohaDates %]</span></td>
+                                        <td class="ar-date" data-order="[% ar.created_on | html %]">[% ar.created_on | $KohaDates %]</td>
                                         <td class="ar-actions">
                                             [% PROCESS actions menuid = "row" _ ar.id id_arg=ar.id pull_right='pull-right' aria_menu='ar-actions' %]
                                         </td>
@@ -299,7 +299,7 @@
 
                                             <p>[% ar.borrower.phone | html %]</p>
                                         </td>
-                                        <td class="ar-date"><span title="[% ar.created_on | html %]">[% ar.created_on | $KohaDates %]</span></td>
+                                        <td class="ar-date" data-order="[% ar.created_on | html %]">[% ar.created_on | $KohaDates %]</td>
                                         <td class="ar-actions">
                                             [% PROCESS actions menuid="table_" _ ar.id id_arg=ar.id pull_right='pull-right' aria_menu='ar-actions' %]
                                         </td>
