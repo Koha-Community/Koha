@@ -4597,7 +4597,7 @@ DROP TABLE IF EXISTS `problem_reports`;
 CREATE TABLE `problem_reports` (
     `reportid` int(11) NOT NULL auto_increment, -- unique identifier assigned by Koha
     `title` varchar(40) NOT NULL default '', -- report subject line
-    `content` varchar(255) NOT NULL default '', -- report message content
+    `content` text NOT NULL, -- report message content
     `borrowernumber` int(11) NOT NULL default 0, -- the user who created the problem report
     `branchcode` varchar(10) NOT NULL default '', -- borrower's branch
     `username` varchar(75) default NULL, -- OPAC username
