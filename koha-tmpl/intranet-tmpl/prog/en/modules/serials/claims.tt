@@ -4,7 +4,7 @@
 [% USE Branches %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-    <title>Koha &rsaquo; Serials &rsaquo; Claims</title>
+    <title>Koha &rsaquo; Serials &rsaquo; Claims [% IF ( supplierid ) -%] &rsaquo; Claims for [% suppliername | html %] [% END %]</title>
     [% INCLUDE 'doc-head-close.inc' %]
 </head>
 
@@ -20,11 +20,22 @@
         <li>
             <a href="/cgi-bin/koha/serials/serials-home.pl">Serials</a>
         </li>
-        <li>
-            <a href="#" aria-current="page">
-                Claims
-            </a>
-        </li>
+        [% IF ( supplierid ) -%]
+            <li>
+                <a href="/cgi-bin/koha/serials/claims.pl">
+                    Claims
+                </a>
+            </li>
+            <li>
+                <a href="#" aria-current="page">Claims for [% suppliername | html %]</a>
+            </li>
+        [% ELSE -%]
+            <li>
+                <a href="#" aria-current="page">
+                    Claims
+                </a>
+            </li>
+        [% END %]
     </ol>
 </nav>
 
@@ -33,7 +44,7 @@
         <div class="col-sm-10 col-sm-push-2">
             <main>
 
-    <h1>Claims</h1>
+    <h1>Claims [% IF ( suppliername ) %] for [% suppliername | html %] [% END %]</h1>
 
     [% IF error_claim %]
         [% IF error_claim == 'no_vendor_email' %]
