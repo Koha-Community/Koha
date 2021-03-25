@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 4;
+use Test::More tests => 5;
 use Test::Mojo;
 
 use t::lib::TestBuilder;
@@ -391,6 +391,120 @@ subtest 'delete() tests' => sub {
     $t->delete_ok("//$userid:$password@/api/v1/patrons/" . $dummy_patron->id . '/extended_attributes/' . $attr->id )
       ->status_is(404)
       ->json_is( '/error' => 'Patron not found' );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'update() tests' => sub {
+
+    plan tests => 12;
+
+    $schema->storage->txn_begin;
+
+    my $patron = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => { flags => 2**4 }    # 'borrowers' flag == 4
+        }
+    );
+    my $password = 'thePassword123';
+    $patron->set_password( { password => $password, skip_validation => 1 } );
+    my $userid = $patron->userid;
+
+    my $repeatable_attr_type = $builder->build_object(
+        {
+            class => 'Koha::Patron::Attribute::Types',
+            value => {
+                mandatory     => 0,
+                repeatable    => 1,
+                unique_id     => 0,
+                category_code => undef
+            }
+        }
+    );
+    my $unique_attr_type = $builder->build_object(
+        {
+            class => 'Koha::Patron::Attribute::Types',
+            value => {
+                mandatory     => 0,
+                repeatable    => 0,
+                unique_id     => 1,
+                category_code => undef
+            }
+        }
+    );
+
+    # Add a unique attribute to our patron
+    my $unique_attribute = $patron->add_extended_attribute(
+        {
+            code      => $unique_attr_type->code,
+            attribute => 'WOW'
+        }
+    );
+
+    # Let's have an attribute ID we are sure doesn't exist on the DB
+    my $non_existent_attribute = $patron->add_extended_attribute(
+        {
+            code      => $repeatable_attr_type->code,
+            attribute => 'BOO'
+        }
+    );
+    my $non_existent_attribute_id = $non_existent_attribute->id;
+    $non_existent_attribute->delete;
+
+    my $non_existent_patron =
+      $builder->build_object( { class => 'Koha::Patrons' } );
+    my $non_existent_patron_id = $non_existent_patron->id;
+
+    # get rid of the patron
+    $non_existent_patron->delete;
+
+    $t->patch_ok( "//$userid:$password@/api/v1/patrons/"
+          . $non_existent_patron_id
+          . '/extended_attributes/'
+          . 123 => json => { value => 'something' } )->status_is(404)
+      ->json_is( '/error' => 'Patron not found' );
+
+    $t->patch_ok( "//$userid:$password@/api/v1/patrons/"
+          . $patron->id
+          . '/extended_attributes/'
+          . $non_existent_attribute_id => json => { value => 'something' } )
+      ->status_is(404)->json_is( '/error' => 'Attribute not found' );
+
+    my $response =
+      $t->patch_ok( "//$userid:$password@/api/v1/patrons/"
+          . $patron->id
+          . '/extended_attributes/'
+          . $unique_attribute->id => json => { value => 'HEY' } )
+      ->status_is(200)->tx->res->json;
+
+    is_deeply(
+        Koha::Patron::Attributes->find( $response->{extended_attribute_id} )
+          ->to_api,
+        $response,
+        "The returned object is on the DB"
+    );
+
+    my $unique_value = 'HEHE';
+
+    # Add a patron with the unique attribute to test changing to it
+    $builder->build_object( { class => 'Koha::Patrons' } )
+      ->add_extended_attribute(
+        {
+            code      => $unique_attr_type->code,
+            attribute => $unique_value
+        }
+      );
+
+    $t->patch_ok( "//$userid:$password@/api/v1/patrons/"
+          . $patron->id
+          . '/extended_attributes/'
+          . $unique_attribute->id => json => { value => $unique_value } )
+      ->status_is(409)
+      ->json_is( '/error' =>
+            "Your action breaks a unique constraint on the attribute. type="
+          . $unique_attr_type->code
+          . " value=$unique_value" );
 
     $schema->storage->txn_rollback;
 };

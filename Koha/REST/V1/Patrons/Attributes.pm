@@ -186,7 +186,6 @@ sub overwrite {
                     status  => 400,
                     openapi => { error => "$_" }
                 );
-
             }
             elsif (
                 $_->isa(
@@ -222,9 +221,84 @@ sub overwrite {
     };
 }
 
+
+=head3 update
+
+Controller method that handles updating a single extended patron attribute.
+
+=cut
+
+sub update {
+    my $c = shift->openapi->valid_input or return;
+
+    my $patron = Koha::Patrons->find( $c->validation->param('patron_id') );
+
+    unless ($patron) {
+        return $c->render(
+            status  => 404,
+            openapi => {
+                error => 'Patron not found'
+            }
+        );
+    }
+
+    return try {
+        my $attribute = $patron->extended_attributes->find(
+            $c->validation->param('extended_attribute_id') );
+
+        unless ($attribute) {
+            return $c->render(
+                status  => 404,
+                openapi => {
+                    error => 'Attribute not found'
+                }
+            );
+        }
+
+        $attribute->set_from_api( $c->validation->param('body') )->store;
+        $attribute->discard_changes;
+
+        return $c->render(
+            status  => 200,
+            openapi => $attribute->to_api
+        );
+    }
+    catch {
+        if ( blessed $_ ) {
+            if ( $_->isa('Koha::Exceptions::Patron::Attribute::InvalidType') ) {
+                return $c->render(
+                    status  => 400,
+                    openapi => { error => "$_" }
+                );
+            }
+            elsif (
+                $_->isa(
+                    'Koha::Exceptions::Patron::Attribute::UniqueIDConstraint')
+              )
+            {
+                return $c->render(
+                    status  => 409,
+                    openapi => { error => "$_" }
+                );
+            }
+            elsif (
+                $_->isa('Koha::Exceptions::Patron::Attribute::NonRepeatable') )
+            {
+                return $c->render(
+                    status  => 409,
+                    openapi => { error => "$_" }
+                );
+            }
+        }
+
+        $c->unhandled_exception($_);
+    };
+
+}
+
 =head3 delete
 
-Controller method that handling removing an extended patron attribute
+Controller method that handles removing an extended patron attribute.
 
 =cut
 

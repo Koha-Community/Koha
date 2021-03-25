@@ -251,6 +251,99 @@
     }
   },
   "/patrons/{patron_id}/extended_attributes/{extended_attribute_id}": {
+    "patch": {
+      "x-mojo-to": "Patrons::Attributes#update",
+      "operationId": "updatePatronAttribute",
+      "tags": [
+        "patrons",
+        "extended_attributes"
+      ],
+      "parameters": [
+        {
+          "$ref": "../parameters.json#/patron_id_pp"
+        },
+        {
+          "name": "extended_attribute_id",
+          "in": "path",
+          "description": "Internal patron extended attribute identifier",
+          "type": "integer",
+          "required": true
+        },
+        {
+          "name": "body",
+          "in": "body",
+          "description": "An object containing the updated values for the patron extended attribute",
+          "required": true,
+          "schema": {
+            "type": "object",
+            "properties": {
+              "value": {
+                "description": "Extended attribute value",
+                "type": "string"
+              }
+            }
+          }
+        }
+      ],
+      "produces": [
+        "application/json"
+      ],
+      "responses": {
+        "200": {
+          "description": "A successfully updated patron extended attribute",
+          "schema": {
+            "$ref": "../definitions.json#/patron_extended_attribute"
+          }
+        },
+        "400": {
+          "description": "Bad parameter",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "401": {
+          "description": "Authentication required",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "403": {
+          "description": "Access forbidden",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "404": {
+          "description": "Object not found",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "409": {
+          "description": "Conflict in updating resource",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "500": {
+          "description": "Internal server error",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "503": {
+          "description": "Under maintenance",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        }
+      },
+      "x-koha-authorization": {
+        "permissions": {
+          "borrowers": "edit_borrowers"
+        }
+      }
+    },
     "delete": {
       "x-mojo-to": "Patrons::Attributes#delete",
       "operationId": "deletePatronAttribute",
