@@ -2,7 +2,7 @@
 [% USE Koha %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Koha &rsaquo; Cataloging</title>
+<title>Koha &rsaquo; Cataloging [% IF ( total || breeding_loop ) %] &rsaquo; Search results [% ELSIF ( query ) %] &rsaquo; No results found [% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 
@@ -15,11 +15,27 @@
         <li>
             <a href="/cgi-bin/koha/mainpage.pl">Home</a>
         </li>
-        <li>
-            <a href="#" aria-current="page">
-                Cataloging
-            </a>
-        </li>
+        [% IF ( total || breeding_loop ) %]
+            <li>
+                <a href="/cgi-bin/koha/cataloguing/addbooks.pl">Cataloging</a>
+            </li>
+            <li>
+                <a href="#" aria-current="page">Search results</a>
+            </li>
+        [% ELSIF ( query ) %]
+            <li>
+                <a href="/cgi-bin/koha/cataloguing/addbooks.pl">Cataloging</a>
+            </li>
+            <li>
+                <a href="#" aria-current="page">No results found</a>
+            </li>
+        [% ELSE %]
+            <li>
+                <a href="#" aria-current="page">
+                    Cataloging
+                </a>
+            </li>
+        [% END %]
     </ol>
 </nav>
 
@@ -67,7 +83,9 @@
 
                 [%# display the search results %]
 
+
                 [% IF ( total ) %]
+                    <h1>Records found in the catalog</h1>
                     <div>
                         [% total | html %] result(s) found in catalog,
                         <a href="#searchresult-breeding">[% breeding_count | html %] result(s) found in reservoir</a>
@@ -160,20 +178,24 @@
                             [% END # /FOREACH resultsloo %]
                         </table>
                         <div class="pages">[% pagination_bar | $raw %]</div>
-                        <hr />
                     </div> <!-- /.searchresults -->
                 [% ELSE # IF total %]
                     [% IF ( query ) %]
-                        [% IF ( error ) %]<div class="dialog alert">[% END %]<strong>No results found</strong>
                         [% IF ( error ) %]
-                            Error: <span class="error">[% error | html %]</span></div>
+                            <div class="dialog alert">
+                        [% END %]
+                            <h3>No results found</h3>
+                        [% IF ( error ) %]
+                                Error: <span class="error">[% error | html %]</span>
+                            </div>
                         [% END %]
                     [% END %]
                 [% END # /IF total %]
 
                 [% IF ( query ) %]
+                    <hr />
                     <div id="searchresult-breeding">
-                        <h3>Biblios in reservoir</h3>
+                        <h2>Records found in the reservoir</h2>
                         [% IF ( breeding_loop ) %]
                             <table>
                                 <tr>
@@ -212,7 +234,7 @@
                                 [% END # /IF breeding_loo %]
                             </table>
                         [% ELSE %]
-                            <p>None</p>
+                            <h3 id="searchresult-breeding">No results found</h3>
                         [% END # /IF breeding_loop %]
                     </div>
                 [% END # /IF query %]
