@@ -426,7 +426,6 @@ function mana_search() {
                 ],
                 "aoColumnDefs": [
                     { 'bSortable': false, "bSearchable": false, 'aTargets': [ 'NoSort' ] },
-                    { "sType": "title-string", "aTargets" : [ "title-string" ] },
                     { 'sType': "anti-the", 'aTargets' : [ 'anti-the'] }
                 ]
             }));
