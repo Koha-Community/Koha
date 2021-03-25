@@ -5,8 +5,7 @@ $(document).ready(function() {
     $("#files").dataTable($.extend(true, {}, dataTablesDefaults, {
         "aoColumnDefs": [
             { "bSortable": false, "bSearchable": false, 'aTargets': [ 'NoSort' ] },
-            { "sType": "anti-the", "aTargets" : [ "anti-the" ] },
-            { "sType": "title-string", "aTargets" : [ "title-string" ] }
+            { "sType": "anti-the", "aTargets" : [ "anti-the" ] }
         ],
         "sPaginationType": "full",
         "aaSorting": []
