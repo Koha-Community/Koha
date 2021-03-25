@@ -506,9 +506,6 @@
             }));
             [% IF ( (Koha.Preference('AcqEnableFiles')) && files ) %]
                 $("#invoice_files_table").dataTable($.extend(true, {}, dataTablesDefaults, {
-                    "aoColumnDefs": [
-                        { "aTargets": [ "title-string" ], "sType": "title-string" }
-                    ],
                     bInfo: false,
                     bPaginate: false,
                     bFilter: false,
