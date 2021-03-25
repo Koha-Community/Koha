@@ -23,7 +23,7 @@
                             <h2>Subscribe to a subscription alert</h2>
                             <form action="opac-alert-subscribe.pl" method="post">
                                 <p>Do you want to receive an email when a new issue for this subscription arrives?</p>
-                                <h4>[% bibliotitle | html %]</h4>
+                                <h3>[% bibliotitle | html %]</h3>
                                 [% IF ( notes ) %]<p>[% notes | html %]</p>[% END %]
                                 <input type="hidden" name="subscriptionid" value="[% subscriptionid | html %]">
                                 <input type="hidden" name="referer" value="[% referer | html %]">
@@ -37,7 +37,7 @@
                             <h2>Unsubscribe from a subscription alert</h2>
                             <form action="opac-alert-subscribe.pl" method="post">
                                 <p>Please confirm that you do not want to receive email when a new issue arrives for this subscription.</p>
-                                <h4>[% bibliotitle | html %]</h4>
+                                <h3>[% bibliotitle | html %]</h3>
                                 [% IF ( notes ) %]<p>[% notes | html %]</p>[% END %]
                                 <input type="hidden" name="subscriptionid" value="[% subscriptionid | html %]">
                                 <input type="hidden" name="referer" value="[% referer | html %]">

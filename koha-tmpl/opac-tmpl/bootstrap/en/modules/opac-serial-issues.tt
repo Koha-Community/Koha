@@ -53,7 +53,7 @@
                         <form method="post" name="f">
                             [% FOREACH subscription_LOO IN subscription_LOOP %]
                                 <div id="subscriptionline[% subscription_LOO.subscriptionid | html %]" class="subscriptionline">
-                                    <h3>Subscription information for [% subscription_LOO.bibliotitle | html %]</h3>
+                                    <h2>Subscription information for [% subscription_LOO.bibliotitle | html %]</h2>
                                     <p>
                                         The current subscription began on [% subscription_LOO.startdate | html %] and is issued
                                         [% IF ( subscription_LOO.periodicity1 ) %]
@@ -127,24 +127,24 @@
                                         <p>The subscription expired on [% subscription_LOO.histenddate | html %]</p>
                                     [% END %]
 
-                                    <h4>[% subscription_LOO.branchname | html %]</h4>
+                                    <h3>[% subscription_LOO.branchname | html %]</h3>
 
                                     [% IF ( subscription_LOO.notes ) %]
                                         <p>[% subscription_LOO.notes | html | html_line_break %]</p>
                                     [% END %]
 
                                     [% IF ( subscription_LOO.recievedlist ) %]
-                                        <h5>Available issues</h5>
+                                        <h4>Available issues</h4>
                                             <p>[% subscription_LOO.recievedlist | html | html_line_break %]</p>
                                     [% END %]
 
                                     [% IF ( subscription_LOO.missinglist ) %]
-                                        <h5>Unavailable issues</h5>
+                                        <h4>Unavailable issues</h4>
                                         <p>[% subscription_LOO.missinglist | html | html_line_break %]</p>
                                     [% END %]
 
                                     [% IF ( subscription_LOO.opacnote ) %]
-                                        <h5>Issues summary</h5>
+                                        <h4>Issues summary</h4>
                                         <p>
                                             [% subscription_LOO.opacnote | html | html_line_break %]
                                         </p>

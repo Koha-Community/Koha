@@ -40,7 +40,7 @@
                         [% IF ( nopermission ) %]
                             <!-- This is what is displayed if user doesn't have permission -->
                             <div class="alert alert-warning">
-                                <h2>Access denied</h2>
+                                <h1>Access denied</h1>
                                 <p>Sorry, the system doesn't think you have permission to access this page. </p>
                                 [% IF SCO_login %]
                                     <p><a href="/cgi-bin/koha/sco/sco-main.pl?logout.x=1">Log out and try again with a different user.</a></p>
@@ -95,15 +95,15 @@
                                         [% END %]
                                     </div>
                                 [% ELSE %]
-                                    <h3>Shibboleth Login</h3>
+                                    <h2>Shibboleth Login</h2>
                                     <p><a href="[% shibbolethLoginUrl | $raw %]">Log in using a Shibboleth account.</a></p>
                                 [% END # /IF invalidShibLogin %]
                                 [% UNLESS ( Koha.Preference('OPACShibOnly') ) %]
                                     [% IF ( casAuthentication ) %]
-                                        <h3>CAS login</h3>
+                                        <h2>CAS login</h2>
                                         <p>If you do not have a Shibboleth account, but you do have a CAS account, you can use CAS.</p>
                                     [% ELSE %]
-                                        <h3>Local login</h3>
+                                        <h2>Local login</h2>
                                         <p>If you do not have a Shibboleth account, but you do have a local login, then you may login below.</p>
                                     [% END %]
                                 [% END %]
@@ -125,7 +125,7 @@
                                         </ul>
                                     [% END %]
                                 [% ELSE %]
-                                    <h3>CAS login</h3>
+                                    <h2>CAS login</h2>
 
                                     [% IF ( invalidCasLogin ) %]
                                         <!-- This is what is displayed if cas login has failed -->
@@ -149,7 +149,7 @@
                                 [% IF ( shibbolethAuthentication ) %]
                                     <p>Nothing</p>
                                 [% ELSE %]
-                                    <h3>Local login</h3>
+                                    <h2>Local login</h2>
                                     <p>If you do not have a CAS account, but do have a local account, you can still log in: </p>
                                 [% END %]
 
@@ -157,7 +157,7 @@
 
                             [% IF ( Koha.Preference('GoogleOpenIDConnect') == 1 ) %]
                                 [% IF ( invalidGoogleOpenIDConnectLogin ) %]
-                                    <h3>Google login</h3>
+                                    <h2>Google login</h2>
                                     <p>Sorry, your Google login failed. <span class="error">[% invalidGoogleOpenIDConnectLogin | html %]</span></p>
                                     <p>Please note that the Google login will only work if you are using the e-mail address registered with this library.</p>
                                     <p>If you want to, you can try to <a href="/cgi-bin/koha/svc/auth/googleopenidconnect?reauthenticate=select_account">log in using a different account</a>
@@ -204,9 +204,9 @@
                                     [% IF ( OpacLoginInstructions ) %]
                                         [% PROCESS koha_news_block news => OpacLoginInstructions %]
                                     [% ELSE %]
-                                        <h3>Don't have a password yet?</h3>
+                                        <h2>Don't have a password yet?</h2>
                                         <p>If you don't have a password yet, stop by the circulation desk the next time you're in the library. We'll happily set one up for you.</p>
-                                        <h3>Don't have a library card?</h3>
+                                        <h2>Don't have a library card?</h2>
                                         <p>If you don't have a library card, stop by your local library to sign up.</p>
                                     [% END # / IF  OpacLoginInstructions %]
 
@@ -221,7 +221,7 @@
                     [% END # / IF loginprompt %]
 
                     [% ELSE %]
-                        <h2>Logging on to the catalog has not been enabled by the library.</h2>
+                        <h1>Logging on to the catalog has not been enabled by the library.</h1>
                         <ul>
                             <li>To report this error, you can email the Koha Administrator.<a href="mailto:[% admin | uri %]">Email</a></li>
                             <li>Use top menu bar to navigate to another part of Koha.</li>

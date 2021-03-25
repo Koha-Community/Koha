@@ -100,7 +100,7 @@
                             <p>Given a set of bibliographic or item identifiers, returns a
                             list with availability of the items associated with the identifiers.</p>
 
-                            <h4>Parameters</h4>
+                            <h3>Parameters</h3>
                             <dl>
                                 <dt><strong>id</strong> (Required)</dt>
                                 <dd>list of either bibliographic or item identifiers</dd>
@@ -122,12 +122,12 @@
                                 <dd>requests a particular format or set of formats in reporting availability</dd>
                             </dl>
 
-                            <h4>Example call</h4>
+                            <h3>Example call</h3>
                             <a href="ilsdi.pl?service=GetAvailability&amp;id=1+2+99999&amp;id_type=item">
                                 ilsdi.pl?service=GetAvailability&amp;id=1+2+99999&amp;id_type=item
                             </a>
 
-                            <h4>Example response</h4>
+                            <h3>Example response</h3>
 <pre>&lt;?xml version="1.0" encoding="ISO-8859-1" ?&gt;
 &lt;dlf:collection
   xmlns:dlf="http://diglib.org/ilsdi/1.1"
@@ -185,7 +185,7 @@
                                 time lookup by bibliographic identifier.</p>
                                 <p>You can use OAI-PMH ListRecords instead of this service.</p>
 
-                                <h4>Parameters</h4>
+                                <h3>Parameters</h3>
                                 <dl>
                                     <dt><strong>id</strong> (Required)</dt>
                                     <dd>list of system record identifiers</dd>
@@ -198,12 +198,12 @@
                                     </dd>
                                 </dl>
 
-                                <h4>Example Call</h4>
+                                <h3>Example Call</h3>
                                 <a href="ilsdi.pl?service=GetRecords&amp;id=1+2+99999">
                                     ilsdi.pl?service=GetRecords&amp;id=1+2+99999
                                 </a>
 
-                                <h4>Example response</h4>
+                                <h3>Example response</h3>
 <pre>&lt;?xml version="1.0" encoding="ISO-8859-1" ?&gt;
 &lt;GetRecords&gt;
   &lt;record&gt;
@@ -400,7 +400,7 @@
                                 of record objects that contain the authority records. The function
                                 user may request a specific metadata schema for the record objects.</p>
 
-                                <h4>Parameters</h4>
+                                <h3>Parameters</h3>
                                 <dl>
                                     <dt><strong>id</strong> (Required)</dt>
                                     <dd>list of authority record identifiers</dd>
@@ -412,12 +412,12 @@
                                     </dd>
                                 </dl>
 
-                                <h4>Example call</h4>
+                                <h3>Example call</h3>
                                 <a href="ilsdi.pl?service=GetAuthorityRecords&amp;id=1+2+99999">
                                     ilsdi.pl?service=GetAuthorityRecords&amp;id=1+2+99999
                                 </a>
 
-                                <h4>Example response</h4>
+                                <h3>Example response</h3>
 <pre>&lt;xml version="1.0" encoding="UTF-8"&gt;;
 &lt;GetAuthorityRecords&gt;
   &lt;record&gt;
@@ -459,7 +459,7 @@
                                 <p>Looks up a patron in the ILS by an identifier, and returns
                                 the ILS identifier for that patron, aka the patron identifier.</p>
 
-                                <h4>Parameters</h4>
+                                <h3>Parameters</h3>
                                 <dl>
                                     <dt><strong>id</strong> (Required)</dt>
                                     <dd>an identifier used to look up the patron in Koha</dd>
@@ -476,12 +476,12 @@
                                     </dd>
                                 </dl>
 
-                                <h4>Example call</h4>
+                                <h3>Example call</h3>
                                 <a href="ilsdi.pl?service=LookupPatron&amp;id=815&amp;id_type=cardnumber">
                                     ilsdi.pl?service=LookupPatron&amp;id=815&amp;id_type=cardnumber
                                 </a>
 
-                                <h4>Example response</h4>
+                                <h3>Example response</h3>
 <pre>&lt;?xml version="1.0" encoding="ISO-8859-1" ?&gt;
 &lt;LookupPatron&gt;
   &lt;id&gt;419&lt;/id&gt;
@@ -492,19 +492,19 @@
                                 <h2>AuthenticatePatron</h2>
                                 <p>Authenticates a user's login credentials and returns the identifier for the patron.</p>
 
-                                <h4>Parameters</h4>
+                                <h3>Parameters</h3>
                                 <dl>
                                     <dt><strong>username</strong> (Required)</dt>
                                     <dd>user's login identifier</dd>
                                     <dt><strong>password</strong> (Required)</dt>
                                     <dd>user's password</dd>
                                 </dl>
-                                <h4>Example call</h4>
+                                <h3>Example call</h3>
                                 <a href="ilsdi.pl?service=AuthenticatePatron&amp;username=john9&amp;password=soul">
                                     ilsdi.pl?service=AuthenticatePatron&amp;username=john9&amp;password=soul
                                 </a>
 
-                                <h4>Example Response</h4>
+                                <h3>Example Response</h3>
 <pre>&lt;?xml version="1.0" encoding="ISO-8859-1" ?&gt;
 &lt;AuthenticatePatron&gt;
   &lt;id&gt;419&lt;/id&gt;
@@ -518,7 +518,7 @@
                                 patron's contact information, fine information, hold request
                                 information, loan information, and messages.</p>
 
-                                <h4>Parameters</h4>
+                                <h3>Parameters</h3>
                                 <dl>
                                     <dt><strong>patron_id</strong> (Required)</dt>
                                     <dd>the unique patron identifier in the ILS; the same identifier returned by LookupPatron or AuthenticatePatron</dd>
@@ -534,12 +534,12 @@
                                     <dd>whether or not to return extended patron attributes information in the response</dd>
                                 </dl>
 
-                                <h4>Example call</h4>
+                                <h3>Example call</h3>
                                 <a href="ilsdi.pl?service=GetPatronInfo&amp;patron_id=1&amp;show_contact=0&amp;show_loans=1">
                                     ilsdi.pl?service=GetPatronInfo&amp;patron_id=1&amp;show_contact=0&amp;show_loans=1
                                 </a>
 
-                                <h4>Example response</h4>
+                                <h3>Example response</h3>
 <pre>&lt;?xml version="1.0" encoding="ISO-8859-1" ?&gt;
 &lt;GetPatronInfo&gt;
   &lt;category_type&gt;A&lt;/category_type&gt;
@@ -651,18 +651,18 @@
                                 <h2>GetPatronStatus</h2>
                                 <p>Returns a patron's status information from Koha.</p>
 
-                                <h4>Parameters</h4>
+                                <h3>Parameters</h3>
                                 <dl>
                                     <dt><strong>patron_id</strong> (Required)</dt>
                                     <dd>the unique patron identifier in the ILS; the same identifier returned by LookupPatron or AuthenticatePatron</dd>
                                 </dl>
 
-                                <h4>Example call</h4>
+                                <h3>Example call</h3>
                                 <a href="ilsdi.pl?service=GetPatronStatus&amp;patron_id=1">
                                     ilsdi.pl?service=GetPatronStatus&amp;patron_id=1
                                 </a>
 
-                                <h4>Example Response</h4>
+                                <h3>Example Response</h3>
 <pre>&lt;?xml version="1.0" encoding="ISO-8859-1" ?&gt;
 &lt;GetPatronStatus&gt;
   &lt;expiry&gt;2010-03-04&lt;/expiry&gt;
@@ -675,7 +675,7 @@
                                 <h2>GetServices</h2>
                                 <p>Returns information about the services available on a particular item for a particular patron.</p>
 
-                                <h4>Parameters</h4>
+                                <h3>Parameters</h3>
                                 <dl>
                                     <dt><strong>patron_id</strong> (Required)</dt>
                                     <dd>the unique patron identifier in the ILS; the same identifier returned by LookupPatron or AuthenticatePatron</dd>
@@ -683,12 +683,12 @@
                                     <dd>system item identifier</dd>
                                 </dl>
 
-                                <h4>Example call</h4>
+                                <h3>Example call</h3>
                                 <a href="ilsdi.pl?service=GetServices&amp;patron_id=1&amp;item_id=1">
                                     ilsdi.pl?service=GetServices&amp;patron_id=1&amp;item_id=1
                                 </a>
 
-                                <h4>Example response</h4>
+                                <h3>Example response</h3>
 <pre>&lt;?xml version="1.0" encoding="ISO-8859-1" ?&gt;
 &lt;GetServices&gt;
   &lt;AvailableFor&gt;title level hold&lt;/AvailableFor&gt;
@@ -700,7 +700,7 @@
                                 <h2>RenewLoan</h2>
                                 <p>Extends the due date for a patron's existing loan.</p>
 
-                                <h4>Parameters</h4>
+                                <h3>Parameters</h3>
                                 <dl>
                                     <dt><strong>patron_id</strong> (Required)</dt>
                                     <dd>the unique patron identifier in the ILS; the same identifier returned by LookupPatron or AuthenticatePatron</dd>
@@ -710,12 +710,12 @@
                                     <dd>the date the patron would like the item returned by</dd>
                                 </dl>
 
-                                <h4>Example call</h4>
+                                <h3>Example call</h3>
                                 <a href="ilsdi.pl?service=RenewLoan&amp;patron_id=1&amp;item_id=1">
                                     ilsdi.pl?service=RenewLoan&amp;patron_id=1&amp;item_id=1
                                 </a>
 
-                                <h4>Example response</h4>
+                                <h3>Example response</h3>
 <pre>&lt;?xml version="1.0" encoding="ISO-8859-1" ?&gt;
 &lt;RenewLoan&gt;
   &lt;success&gt;0&lt;/success&gt;
@@ -728,7 +728,7 @@
                                 <h2>HoldTitle</h2>
                                 <p>Creates, for a patron, a title-level hold request on a given bibliographic record in Koha.</p>
 
-                                <h4>Parameters</h4>
+                                <h3>Parameters</h3>
                                 <dl>
                                     <dt><strong>patron_id</strong> (Required)</dt>
                                     <dd>the ILS identifier for the patron for whom the request is placed</dd>
@@ -744,12 +744,12 @@
                                     <dd>date after which item returned to shelf if item is not picked up</dd>
                                 </dl>
 
-                                <h4>Example Call</h4>
+                                <h3>Example Call</h3>
                                 <a href="ilsdi.pl?service=HoldTitle&amp;patron_id=1&amp;bib_id=1&amp;request_location=127.0.0.1">
                                     ilsdi.pl?service=HoldTitle&amp;patron_id=1&amp;bib_id=1&amp;request_location=127.0.0.1
                                 </a>
 
-                                <h4>Example response</h4>
+                                <h3>Example response</h3>
 <pre>&lt;?xml version="1.0" encoding="ISO-8859-1" ?&gt;
 &lt;HoldTitle&gt;
   &lt;title&gt;(les) galères de l'Orfèvre&lt;/title&gt;
@@ -762,7 +762,7 @@
                                 <h2>HoldItem</h2>
                                 <p>Creates, for a patron, an item-level hold request on a specific item of a bibliographic record Koha.</p>
 
-                                <h4>Parameters</h4>
+                                <h3>Parameters</h3>
                                 <dl>
                                     <dt><strong>patron_id</strong> (Required)</dt>
                                     <dd>the ILS identifier for the patron for whom the request is placed</dd>
@@ -778,12 +778,12 @@
                                     <dd>date after which item returned to shelf if item is not picked up</dd>
                                 </dl>
 
-                                <h4>Example Call</h4>
+                                <h3>Example Call</h3>
                                 <a href="ilsdi.pl?service=HoldItem&amp;patron_id=1&amp;bib_id=1&amp;item_id=1">
                                     ilsdi.pl?service=HoldItem&amp;patron_id=1&amp;bib_id=1&amp;item_id=1
                                 </a>
 
-                                <h4>Example response</h4>
+                                <h3>Example response</h3>
 <pre>&lt;?xml version="1.0" encoding="ISO-8859-1" ?&gt;
 &lt;HoldTitle&gt;
   &lt;title&gt;(les) galères de l'Orfèvre&lt;/title&gt;
@@ -796,7 +796,7 @@
                                 <h2>CancelHold</h2>
                                 <p>Cancels an active hold request for the patron.</p>
 
-                                <h4>Parameters</h4>
+                                <h3>Parameters</h3>
                                 <dl>
                                     <dt><strong>patron_id</strong> (Required)</dt>
                                     <dd>the unique patron identifier in the ILS; the same identifier returned by LookupPatron or AuthenticatePatron</dd>
@@ -804,12 +804,12 @@
                                     <dd>system hold identifier (returned by GetRecords and GetPatronInfo into element 'reserve_id')</dd>
                                 </dl>
 
-                                <h4>Example call</h4>
+                                <h3>Example call</h3>
                                 <a href="ilsdi.pl?service=CancelHold&amp;patron_id=1&amp;item_id=1">
                                     ilsdi.pl?service=CancelHold&amp;patron_id=1&amp;item_id=1
                                 </a>
 
-                                <h4>Example response</h4>
+                                <h3>Example response</h3>
 <pre>&lt;?xml version="1.0" encoding="ISO-8859-1" ?&gt;
 &lt;CancelHold&gt;
   &lt;message&gt;Canceled&lt;/message&gt;

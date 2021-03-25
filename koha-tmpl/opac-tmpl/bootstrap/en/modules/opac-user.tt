@@ -58,11 +58,11 @@
                     <br />
                     <a href="/cgi-bin/koha/opac-main.pl?logout.x=1">Click here if you're not [% INCLUDE 'patron-title.inc' patron = logged_in_user %]</a></p>
 
-                    [% IF ( patronupdate ) %]<div class="alert alert-info"><h3>Thank you!</h3><p>Your corrections have been submitted to the library, and a staff member will update your record as soon as possible.</p></div>[% END %]
+                    [% IF ( patronupdate ) %]<div class="alert alert-info"><h2>Thank you!</h2><p>Your corrections have been submitted to the library, and a staff member will update your record as soon as possible.</p></div>[% END %]
 
                     [% IF failed_holds %]
                         <div class="alert alert-info">
-                            <h3>Notice:</h3>
+                            <h2>Notice:</h2>
                             <p>One or more holds were not placed due to existing holds.</p>
                         </div>
                     [% END %]
@@ -482,7 +482,7 @@
                         [% IF ( OPACFinesTab ) %]
                             <!-- FINES BOX -->
                             [% IF ( amountoutstanding > 0 ) %]
-                                <div id="opac-user-fines"> <h3>Charges</h3>
+                                <div id="opac-user-fines"> <h2>Charges</h2>
                                     <table class="table table-bordered table-striped">
                                         <thead><tr><th colspan="2">Amount</th></tr></thead>
                                         <tbody>
@@ -496,7 +496,7 @@
                             [% END %]
 
                             [% IF ( amountoutstanding < 0 ) %]
-                                <div id="opac-user-fines">  <h3>Credits</h3>
+                                <div id="opac-user-fines">  <h2>Credits</h2>
                                     <table class="table table-bordered table-striped">
                                         <thead><tr><th colspan="2">Amount</th></tr></thead>
                                         <tbody>
@@ -509,7 +509,7 @@
                             [% END %]
 
                             [% IF relatives_with_fines %]
-                               <div id="opac-user-relative-fines"> <h3>Fines and charges</h3>
+                               <div id="opac-user-relative-fines"> <h2>Fines and charges</h2>
                                     <table class="table table-bordered table-striped">
                                         <thead>
                                             <tr>

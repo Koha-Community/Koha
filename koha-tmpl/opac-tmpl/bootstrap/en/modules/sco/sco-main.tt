@@ -46,7 +46,7 @@
                     [% IF ( impossible ) %]<!-- We tried to issue, but failed. -->
                         <div class="alert alert-warning">
                             <span class="sco-alert-warning noissue"></span>
-                            <h3>Item cannot be checked out.</h3>
+                            <h2>Item cannot be checked out.</h2>
                             <p>Sorry, this item cannot be checked out at this station.</p>
                             [% IF ( title ) %]
                                 <p>Title: <em>[% title | html %]</em> </p>
@@ -110,7 +110,7 @@
                     [% END # / IF ( impossible %]
 
                     [% IF ( confirm ) %]<!-- We need to confirm the issue.. -->
-                        <div class="alert alert-warning"><h3>Please confirm the checkout:</h3>
+                        <div class="alert alert-warning"><h2>Please confirm the checkout:</h2>
                             <span class="sco-alert-warning confirm"></span>
                             [% IF ( confirm_renew_issue ) %]
                                 <p>This item is already checked out to you.</p>
@@ -160,7 +160,7 @@
                         <!-- This is what is displayed if user doesn't have permission -->
                         <div class="alert alert-warning">
                             <span class="sco-alert-warning nopermission"></span>
-                            <h3>Access denied</h3>
+                            <h2>Access denied</h2>
                             <p>Sorry, this self-checkout station has lost authentication.  Please contact the administrator to resolve this problem.</p>
                         </div>
                     [% END %]
@@ -169,7 +169,7 @@
                         <!-- This is what is displayed if user doesn't have permission -->
                         <div class="alert alert-warning">
                             <span class="sco-alert-warning sessionlost"></span>
-                            <h3>Session lost</h3>
+                            <h2>Session lost</h2>
                             <p>You are accessing self-checkout from a different IP address! please log in again.</p>
                         </div>
                     [% END %]
@@ -178,7 +178,7 @@
                         <!-- This is what is displayed if user doesn't have permission -->
                         <div class="alert alert-warning">
                             <span class="sco-alert-warning notfound"></span>
-                            <h3>Record not found</h3>
+                            <h2>Record not found</h2>
                             <p>Your userid was not found in the database.  Please try again.</p>
                         </div>
                     [% END %]
@@ -219,7 +219,7 @@
 
                             [% IF ( nouser ) %]
                                 <div class="alert alert-warning">
-                                    <h4>Sorry</h4>
+                                    <h3>Sorry</h3>
                                     <p>The userid <strong>[% patronid | html %]</strong> was not found in the database.  Please try again.</p>
                                 </div>
                             [% END %]

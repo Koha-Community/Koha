@@ -684,7 +684,7 @@
                             <div class="content_set">
 
                                 [% IF ( SyndeticsEnabled && SyndeticsSummary && SYNDETICS_SUMMARY ) %]
-                                    <h4>Enhanced descriptions from Syndetics:</h4>
+                                    <h2>Enhanced descriptions from Syndetics:</h2>
                                     <p>[% SYNDETICS_SUMMARY | $raw %]</p>
                                 [% END %]
 
@@ -714,7 +714,7 @@
                         [% IF ( SyndeticsTOC && SYNDETICS_TOC ) %]
                             <div id="toc">
                                 <div class="content_set">
-                                    <h3>Table of contents provided by Syndetics</h3>
+                                    <h2>Table of contents provided by Syndetics</h2>
                                         <ul>
                                             [% FOREACH SYNDETICS_TO IN SYNDETICS_TOC %]
                                                 <li><strong>[% SYNDETICS_TO.l | html %] [% SYNDETICS_TO.t | html %]</strong>[% IF ( SYNDETICS_TO.p ) %] ([% SYNDETICS_TO.p | $raw %])[% END %]</li>
@@ -727,7 +727,7 @@
                         [% IF ( SyndeticsExcerpt && SYNDETICS_EXCERPT ) %]
                             <div id="excerpt">
                                 <div class="content_set">
-                                    <h3>Excerpt provided by Syndetics</h3>
+                                    <h2>Excerpt provided by Syndetics</h2>
                                     [% SYNDETICS_EXCERPT | $raw %]
                                 </div>
                             </div>
@@ -736,10 +736,10 @@
                         [% IF ( SyndeticsReviews && SYNDETICS_REVIEWS ) %]
                             <div id="reviews">
                                 <div class="content_set">
-                                    <h3>Reviews provided by Syndetics</h3>
+                                    <h2>Reviews provided by Syndetics</h2>
                                     [% FOREACH SYNDETICS_REVIEW IN SYNDETICS_REVIEWS %]
                                         [% IF ( SYNDETICS_REVIEW.title ) %]
-                                            <h4>[% SYNDETICS_REVIEW.title | html %]</h4>
+                                            <h3>[% SYNDETICS_REVIEW.title | html %]</h3>
                                                 [% FOREACH review IN SYNDETICS_REVIEW.reviews %]
 
                                                     [% IF ( review.content ) %]
@@ -756,7 +756,7 @@
                         [% IF ( SyndeticsAuthorNotes && SYNDETICS_ANOTES ) %]
                             <div id="anotes">
                                 <div class="content_set">
-                                    <h3>Author notes provided by Syndetics</h3>
+                                    <h2>Author notes provided by Syndetics</h2>
                                     [% FOREACH SYNDETICS_ANOTE IN SYNDETICS_ANOTES %]
                                         [% IF ( SYNDETICS_ANOTE.content ) %]
                                             [% SYNDETICS_ANOTE.content | $raw %]
@@ -892,9 +892,9 @@
                                                     <img class="avatar" src="[% review.avatarurl | html %]" height="80" width="80" alt="" />
                                                 [% END %]
                                                 [% IF review.approved %]
-                                                    <h5>Your comment</h5>
+                                                    <h2 id="comment">Your comment</h2>
                                                 [% ELSE %]
-                                                    <h5>Your comment (preview, pending approval)</h5>
+                                                    <h2 id="comment">Your comment (preview, pending approval)</h2>
                                                 [% END %]
                                                 <small>[% review.datereviewed | $KohaDates %]</small>
                                                 <p>
@@ -913,20 +913,20 @@
                                                     [% END %]
                                                     [% SWITCH ShowReviewer %]
                                                     [% CASE 'full' %]
-                                                        <h5>Comment by [% review.patron.title | html %] [% review.patron.firstname | html %] [% review.patron.surname | html %]</h5>
+                                                        <h2 id="comment">Comment by [% review.patron.title | html %] [% review.patron.firstname | html %] [% review.patron.surname | html %]</h2>
                                                     [% CASE 'first' %]
-                                                        <h5>Comment by [% review.patron.firstname | html %]</h5>
+                                                        <h2 id="comment">Comment by [% review.patron.firstname | html %]</h2>
                                                     [% CASE 'surname' %]
-                                                        <h5>Comment by [% review.patron.surname | html %]</h5>
+                                                        <h2 id="comment">Comment by [% review.patron.surname | html %]</h2>
                                                     [% CASE 'firstandinitial' %]
-                                                        <h5>Comment by [% review.patron.firstname | html %] [% review.patron.surname|truncate(2,'.') | html %]</h5>
+                                                        <h2 id="comment">Comment by [% review.patron.firstname | html %] [% review.patron.surname|truncate(2,'.') | html %]</h2>
                                                     [% CASE 'username' %]
-                                                        <h5>Comment by [% review.patron.userid | html %]</h5>
+                                                        <h2 id="comment">Comment by [% review.patron.userid | html %]</h2>
                                                     [% END %]
 
                                                     <small>[% review.datereviewed | $KohaDates %]</small>
                                                 [% ELSE %]
-                                                    <h5>Patron comment on [% review.datereviewed | $KohaDates %]</h5>
+                                                    <h2 id="comment">Patron comment on [% review.datereviewed | $KohaDates %]</h2>
                                                 [% END # / IF ShowReviewer != "none" && review.patron %]
                                                 <p>
                                                     [% FILTER html_break %]
@@ -958,7 +958,7 @@
 
                         [% IF ( OPACFRBRizeEditions && XISBNS ) %]
                             <div id="editions">
-                                <h4>Other editions of this work</h4>
+                                <h2>Other editions of this work</h2>
                                 <table class="table table-bordered table-striped">
                                     [% FOREACH XISBN IN XISBNS %]
                                         <tr>
@@ -1029,7 +1029,7 @@
 
                 [% IF ( NovelistSelectProfile && NovelistSelectView == 'below' && ( normalized_isbn || normalized_upc ) ) %]
                     <div id="NovelistSelect">
-                        <h3>Novelist Select</h3>
+                        <h2>Novelist Select</h2>
                         <div data-novelist-novelistselect="[% IF normalized_isbn %][% normalized_isbn | html %][% ELSE %][% normalized_upc | html %][% END %]"></div>
                     </div>
                 [% END %]
@@ -1130,7 +1130,7 @@
 
                     [% IF ( NovelistSelectProfile && NovelistSelectView == 'right' && ( normalized_isbn || normalized_upc ) ) %]
                         <div id="NovelistSelect">
-                            <h4>Novelist Select</h4>
+                            <h2>Novelist Select</h2>
                             <div data-novelist-novelistselect="[% IF normalized_isbn %][% normalized_isbn | html %][% ELSE %][% normalized_upc | html %][% END %]"></div>
                         </div>
                     [% END %]
@@ -1187,7 +1187,7 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h3 id="multiSearchLabel">Select the item(s) to search</h3>
+                    <h1 id="multiSearchLabel">Select the item(s) to search</h1>
                     <button type="button" class="closebtn" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                 </div>
                 <div class="modal-body">

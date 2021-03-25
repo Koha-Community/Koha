@@ -44,7 +44,7 @@
 
                     <form action="/cgi-bin/koha/opac-patron-consent.pl" method="post">
                         [% IF Koha.Preference('GDPR_Policy') %]
-                            <h5>GDPR consents</h5>
+                            <h2 id="GDPR_consents">GDPR consents</h2>
                             <input type="hidden" name="op" value="gdpr_proc_save"/>
                             <input type="hidden" name="borrowernumber" value="[% patron.borrowernumber | html %]"/>
                             <fieldset>

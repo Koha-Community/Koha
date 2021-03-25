@@ -35,7 +35,7 @@
                     <div id="usermessaging" class="maincontent">
                         <h1>Your messaging settings</h1>
                         [% IF ( settings_updated ) %]
-                            <div class="alert alert-success"><h4>Settings updated</h4></div>
+                        <div class="alert alert-success"><p><strong>Settings updated</strong></p></div>
                         [% END %]
                         <form action="/cgi-bin/koha/opac-messaging.pl" method="post" name="opacmessaging">
                             <input type="hidden" name="csrf_token" value="[% csrf_token | html %]" />
@@ -233,7 +233,7 @@
                         </form>
                     </div> <!-- / #usermessaging -->
                 [% ELSE %]
-                    <h4>You are not allowed to call this page directly</h4>
+                <p><strong>You are not allowed to call this page directly</strong></p>
                 [% END # /IF Koha.Preference( 'EnhancedMessagingPreferencesOPAC' ) %]
            </div> <!-- / .col-lg-10 -->
         </div> <!-- / .row -->

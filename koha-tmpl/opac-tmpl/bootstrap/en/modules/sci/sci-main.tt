@@ -62,20 +62,20 @@
                     [% IF ( nopermission ) %]
                         [%# This is what is displayed if user doesn't have permission %]
                         <div class="alert alert-warning">
-                            <h3>Access denied</h3>
+                            <h2>Access denied</h2>
                             <p>Sorry, this self check-in station has lost authentication. Please contact the administrator to resolve this problem.</p>
                         </div>
                     [% ELSIF ( different_ip ) %]
                         [%# This is what is displayed if user doesn't have permission %]
                         <div class="alert alert-warning">
-                            <h3>Session lost</h3>
+                            <h2>Session lost</h2>
                             <p>You are accessing self check-in from a different IP address! Please log in again.</p>
                         </div>
                     [% ELSIF ( checkins ) %]
                         [%# We have results from a check-in attempt %]
                         <div id="checkins" class="sci_results_list">
                             [% IF ( success && success.size > 0 || errors && errors.size > 0 ) %]
-                                <h3>Results</h3>
+                                <h2>Results</h2>
                                     <table id="sci_bcheckins_table" class="table table-bordered table-striped dataTable no-footer">
                                         <thead>
                                             <th>Barcode</th>
@@ -163,7 +163,7 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h3 id="helpModalLabel">Self check-in help</h3>
+                <h2 id="helpModalLabel">Self check-in help</h2>
                 <button type="button" class="closebtn" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>

@@ -121,13 +121,13 @@
                         <h1>[% IF ( singleBranchMode ) %]Library[% ELSE %]Libraries[% END %]</h1>
 
                         [% FOREACH library IN libraries %]
-                            <h3 property="name">
+                            <h2 property="name">
                                 [% IF ( libraries.count > 1 ) %]
                                     <a href="/cgi-bin/koha/opac-library.pl?branchcode=[% library.branchcode | url %]">[% library.branchname | html %]</a>
                                 [% ELSE %]
                                     [% library.branchname | html %]
                                 [% END %]
-                            </h3>
+                            </h2>
                             [% PROCESS library_info %]
                             <hr>
                             [% IF ( libraries.count == 1 ) %]
