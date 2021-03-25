@@ -146,13 +146,16 @@ sub _check_repeatable {
     my $self = shift;
 
     if ( !$self->type->repeatable ) {
-        my $attr_count = Koha::Patron::Attributes->search(
-            {   borrowernumber => $self->borrowernumber,
-                code           => $self->code
-            }
-            )->count;
+        my $params = {
+            borrowernumber => $self->borrowernumber,
+            code           => $self->code
+        };
+
+        $params->{id} = { '!=' => $self->id }
+            if $self->in_storage;
+
         Koha::Exceptions::Patron::Attribute::NonRepeatable->throw( attribute => $self )
-            if $attr_count > 0;
+            if Koha::Patron::Attributes->search($params)->count > 0;
     }
 
     return $self;
