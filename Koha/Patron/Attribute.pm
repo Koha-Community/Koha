@@ -46,11 +46,13 @@ sub store {
 
     my $self = shift;
 
-    Koha::Exceptions::Patron::Attribute::InvalidType->throw( type => $self->code )
-        unless Koha::Patron::Attribute::Types->find( $self->code );
+    my $type = $self->type;
 
-    $self->_check_repeatable;
-    $self->check_unique_id;
+    Koha::Exceptions::Patron::Attribute::InvalidType->throw( type => $self->code )
+        unless $type;
+
+    $self->check_repeatable($type);
+    $self->check_unique_id($type);
 
     return $self->SUPER::store();
 }
@@ -133,19 +135,19 @@ sub to_api_mapping {
 
 =head2 Internal methods
 
-=head3 _check_repeatable
+=head3 check_repeatable
 
-_check_repeatable checks if the attribute type is repeatable and throws and exception
+check_repeatable checks if the attribute type is repeatable and throws and exception
 if the attribute type isn't repeatable and there's already an attribute with the same
 code for the given patron.
 
 =cut
 
-sub _check_repeatable {
+sub check_repeatable {
 
-    my $self = shift;
+    my ( $self, $type ) = @_;
 
-    if ( !$self->type->repeatable ) {
+    if ( !$type->repeatable ) {
         my $params = {
             borrowernumber => $self->borrowernumber,
             code           => $self->code
@@ -171,9 +173,9 @@ code and value on the database.
 
 sub check_unique_id {
 
-    my $self = shift;
+    my ( $self, $type ) = @_;
 
-    if ( $self->type->unique_id ) {
+    if ( $type->unique_id ) {
         my $params = { code => $self->code, attribute => $self->attribute };
 
         $params->{borrowernumber} = { '!=' => $self->borrowernumber } if $self->borrowernumber;
