@@ -51,8 +51,11 @@ sub store {
     Koha::Exceptions::Patron::Attribute::InvalidType->throw( type => $self->code )
         unless $type;
 
-    $self->check_repeatable($type);
-    $self->check_unique_id($type);
+    Koha::Exceptions::Patron::Attribute::NonRepeatable->throw( attribute => $self )
+        unless $self->repeatable_ok($type);
+
+    Koha::Exceptions::Patron::Attribute::UniqueIDConstraint->throw( attribute => $self )
+        unless $self->unique_ok($type);
 
     return $self->SUPER::store();
 }
@@ -133,20 +136,18 @@ sub to_api_mapping {
     };
 }
 
-=head2 Internal methods
+=head3 repeatable_ok
 
-=head3 check_repeatable
-
-check_repeatable checks if the attribute type is repeatable and throws and exception
-if the attribute type isn't repeatable and there's already an attribute with the same
-code for the given patron.
+Checks if the attribute type is repeatable and returns a boolean representing
+whether storing the current object state would break the repeatable constraint.
 
 =cut
 
-sub check_repeatable {
+sub repeatable_ok {
 
     my ( $self, $type ) = @_;
 
+    my $ok = 1;
     if ( !$type->repeatable ) {
         my $params = {
             borrowernumber => $self->borrowernumber,
@@ -156,25 +157,24 @@ sub check_repeatable {
         $params->{id} = { '!=' => $self->id }
             if $self->in_storage;
 
-        Koha::Exceptions::Patron::Attribute::NonRepeatable->throw( attribute => $self )
-            if Koha::Patron::Attributes->search($params)->count > 0;
+        $ok = 0 if Koha::Patron::Attributes->search($params)->count > 0;
     }
 
-    return $self;
+    return $ok;
 }
 
-=head3 check_unique_id
+=head3 unique_ok
 
-check_unique_id checks if the attribute type is marked as unique id and throws and exception
-if the attribute type is a unique id and there's already an attribute with the same
-code and value on the database.
+Checks if the attribute type is marked as unique and returns a boolean representing
+whether storing the current object state would break the unique constraint.
 
 =cut
 
-sub check_unique_id {
+sub unique_ok {
 
     my ( $self, $type ) = @_;
 
+    my $ok = 1;
     if ( $type->unique_id ) {
         my $params = { code => $self->code, attribute => $self->attribute };
 
@@ -184,12 +184,14 @@ sub check_unique_id {
         my $unique_count = Koha::Patron::Attributes
             ->search( $params )
             ->count;
-        Koha::Exceptions::Patron::Attribute::UniqueIDConstraint->throw( attribute => $self )
-            if $unique_count > 0;
+
+        $ok = 0 if $unique_count > 0;
     }
 
-    return $self;
+    return $ok;
 }
+
+=head2 Internal methods
 
 =head3 _type
 

@@ -107,8 +107,7 @@ my $conflicting_attribute = 0;
 
 foreach my $attr (@$attributes) {
     my $attribute = Koha::Patron::Attribute->new($attr);
-    eval {$attribute->check_unique_id};
-    if ( $@ ) {
+    if ( !$$attribute->unique_ok ) {
         my $attr_type = Koha::Patron::Attribute::Types->find($attr->{code});
         $template->param(
             extended_unique_id_failed_code => $attr->{code},

@@ -412,8 +412,7 @@ if ($op eq 'save' || $op eq 'insert'){
       for my $attr ( @$extended_patron_attributes ) {
           $attr->{borrowernumber} = $borrowernumber if $borrowernumber;
           my $attribute = Koha::Patron::Attribute->new($attr);
-          eval {$attribute->check_unique_id};
-          if ( $@ ) {
+          if ( !$attribute->unique_ok ) {
               push @errors, "ERROR_extended_unique_id_failed";
               my $attr_type = Koha::Patron::Attribute::Types->find($attr->{code});
               $template->param(
