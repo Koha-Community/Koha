@@ -39,7 +39,7 @@
             <tr>
               <th>Patron</th>
               <th>Library</th>
-              <th class="title-string">Date requested</th>
+              <th>Date requested</th>
               <th>Allow</th>
             </tr>
           </thead>
@@ -48,7 +48,7 @@
               <tr>
                 <td><a href="/cgi-bin/koha/members/discharge.pl?borrowernumber=[% d.borrower.borrowernumber | uri %]">[% d.borrower.surname | html %], [% d.borrower.firstname | html %]</a></td>
                 <td>[% d.borrower.branchcode.branchname | html %]</td>
-                <td><span title="[% d.needed | html %]">[% d.needed | $KohaDates %]</span></td>
+                <td data-order="[% d.needed | html %]">[% d.needed | $KohaDates %]</td>
                 <td><a class="btn btn-xs btn-default" href="/cgi-bin/koha/members/discharges.pl?op=allow&borrowernumber=[% d.borrower.borrowernumber | html %]"><i class="fa fa-check"></i> Allow</a></td>
               </tr>
             [% END %]
@@ -77,8 +77,7 @@
                 searching: true,
                 order: [[2, "asc"]],
                 columnDefs: [
-                    { targets: -1, orderable: false },
-                    { "sType": "title-string", "aTargets" : [ "title-string" ] }
+                    { targets: -1, orderable: false }
                 ],
             }));
         });
