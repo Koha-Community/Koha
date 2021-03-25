@@ -352,14 +352,9 @@
             [% IF borrowers %]
                 $("#borrowerst").dataTable($.extend(true, {}, dataTablesDefaults, {
                     "sDom": 't',
-                    [% IF ( op == 'show_results' ) %]
-                        "aoColumnDefs": [
-                            { 'sType': "title-string", 'aTargets' : [ 'title-string'] }
-                        ],
-                    [% ELSE %]
+                    [% UNLESS ( op == 'show_results' ) %]
                         "aoColumnDefs": [
                             { "aTargets": [ 0 ], "bSortable": false, "bSearchable": false },
-                            { 'sType': "title-string", 'aTargets' : [ 'title-string'] }
                         ],
                     [% END %]
                     "bPaginate": false

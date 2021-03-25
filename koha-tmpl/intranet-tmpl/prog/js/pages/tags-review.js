@@ -62,8 +62,7 @@ $(document).ready(function() {
     $("#tagst").dataTable($.extend(true, {}, dataTablesDefaults, {
         "aoColumnDefs": [
             { "bSortable": false, "bSearchable": false, 'aTargets': [ 'NoSort' ] },
-            { "sType": "anti-the", "aTargets" : [ "anti-the" ] },
-            { "sType": "title-string", "aTargets" : [ "title-string" ] }
+            { "sType": "anti-the", "aTargets" : [ "anti-the" ] }
         ],
         "aaSorting": [[ 2, "desc" ]],
         "sPaginationType": "full"
