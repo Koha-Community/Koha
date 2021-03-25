@@ -4134,7 +4134,7 @@ DROP TABLE IF EXISTS `problem_reports`;
 CREATE TABLE `problem_reports` (
   `reportid` int(11) NOT NULL AUTO_INCREMENT COMMENT 'unique identifier assigned by Koha',
   `title` varchar(40) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT 'report subject line',
-  `content` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT 'report message content',
+  `content` text COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'report message content',
   `borrowernumber` int(11) NOT NULL DEFAULT 0 COMMENT 'the user who created the problem report',
   `branchcode` varchar(10) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT 'borrower''s branch',
   `username` varchar(75) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'OPAC username',
