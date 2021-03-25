@@ -2,7 +2,16 @@
 [% USE Asset %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Koha &rsaquo; Tools &rsaquo; CSV export profiles</title>
+<title>
+    Koha &rsaquo; Tools &rsaquo; CSV profiles
+    [% IF op == 'add_form' %]
+        [% IF csv_profile %]
+            &rsaquo; Modify a CSV profile
+        [% ELSE %]
+            &rsaquo; New CSV profile
+        [% END %]
+    [% END %]
+</title>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 
@@ -18,11 +27,28 @@
         <li>
             <a href="/cgi-bin/koha/tools/tools-home.pl">Tools</a>
         </li>
-        <li>
-            <a href="#" aria-current="page">
-                CSV export profiles
-            </a>
-        </li>
+        [% IF op == 'add_form' %]
+            <li>
+                <a href="/cgi-bin/koha/tools/csv-profiles.pl">
+                    CSV profiles
+                </a>
+            </li>
+            [% IF csv_profile %]
+                <li>
+                    <a href="#" aria-current="page">Modify a CSV profile</a>
+                </li>
+            [% ELSE %]
+                <li>
+                    <a href="#" aria-current="page">New CSV profile</a>
+                </li>
+            [% END %]
+        [% ELSE %]
+            <li>
+                <a href="#" aria-current="page">
+                    CSV profiles
+                </a>
+            </li>
+        [% END %]
     </ol>
 </nav>
 
