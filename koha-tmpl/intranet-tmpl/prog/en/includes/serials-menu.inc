@@ -34,6 +34,11 @@
             [% IF Koha.Preference('Mana') == 1 %]
                 <li><a href="/cgi-bin/koha/serials/serials-search.pl?mana=1">Search on Mana</a></li>
             [% END %]
+            [% IF CAN_user_serials_edit_subscription && CAN_user_parameters_manage_additional_fields %]
+                <li>
+                    <a href="/cgi-bin/koha/admin/additional-fields.pl?tablename=subscription">Manage subscription fields</a>
+                </li>
+            [% END %]
         </ul>
 
         [% IF ( CAN_user_reports ) %]
