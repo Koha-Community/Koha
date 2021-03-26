@@ -1,17 +1,6 @@
 $DBversion = 'XXX';    # will be replaced by the RM
 if ( CheckVersion($DBversion) ) {
 
-    unless (TableExists('marc_overlay_rules_modules')) {
-        $dbh->do(q{
-            CREATE TABLE `marc_overlay_rules_modules` (
-              `name` varchar(127) NOT NULL,
-              `description` varchar(255),
-              `specificity` int(11) NOT NULL UNIQUE,
-              PRIMARY KEY(`name`)
-            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-        });
-    }
-
     unless ( TableExists('marc_overlay_rules') ) {
         $dbh->do(q{
             CREATE TABLE IF NOT EXISTS `marc_overlay_rules` (
@@ -23,8 +12,7 @@ if ( CheckVersion($DBversion) ) {
               `append` TINYINT(1) NOT NULL DEFAULT 0,
               `remove` TINYINT(1) NOT NULL DEFAULT 0,
               `delete` TINYINT(1) NOT NULL DEFAULT 0,
-              PRIMARY KEY(`id`),
-              CONSTRAINT `marc_overlay_rules_ibfk1` FOREIGN KEY (`module`) REFERENCES `marc_overlay_rules_modules` (`name`) ON DELETE CASCADE ON UPDATE CASCADE
+              PRIMARY KEY(`id`)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
         });
     }
