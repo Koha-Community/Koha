@@ -160,21 +160,21 @@
                 ]
             } ));
 
-            $(".delete_club").on("click", function(e){
+            $("body").on("click", ".delete_club", function(e){
                 e.preventDefault();
                 var club_id = $(this).data("id");
                 var club_name = $(this).data("name");
                 ConfirmDeleteClub( club_id, club_name );
             });
 
-            $(".delete_template").on("click", function(e){
+            $("body").on("click", ".delete_template", function(e){
                 e.preventDefault();
                 var template_id = $(this).data("id");
                 var template_name = $(this).data("name");
                 ConfirmDeleteTemplate( template_id, template_name );
             });
 
-            $(".club_hold_search").on("click", function(e){
+            $("body").on("click", ".club_hold_search", function(e){
                 e.preventDefault;
                 var club_id = $(this).data("id");
                 SearchToHold( club_id );
