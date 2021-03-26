@@ -316,10 +316,10 @@ $(document).ready(function(){
         <th>Filter</th>
         <th>Tag</th>
         <th>Preset</th>
-        <th>Added</th>
-        <th>Appended</th>
-        <th>Removed</th>
-        <th>Deleted</th>
+        <th>Added <i id="info_added" data-toggle="tooltip" title="If a field matching the rule tag only exists in the incoming record" data-placement="right" class="fa fa-info-circle"></i></th>
+        <th>Appended <i id="info_appended" data-toggle="tooltip" title="If the original record has one or more fields matching with the rule tag, but one or more fields matching the rule tag differ in the incoming record" data-placement="right" class="fa fa-info-circle"></i></th>
+        <th>Removed <i id="info_removed" data-toggle="tooltip" title="If the original record has a field matching the rule tag, but the matching field is not in the incoming record" data-placement="right" class="fa fa-info-circle"></i></th>
+        <th>Deleted <i id="info_deleted" data-toggle="tooltip" title="If the original record has fields matching the rule tag, but no fields with this are found in the incoming record" data-placement="right" class="fa fa-info-circle"></i></th>
         <th>Actions</th>
         <th>&nbsp;</th>
     </tr></thead>
