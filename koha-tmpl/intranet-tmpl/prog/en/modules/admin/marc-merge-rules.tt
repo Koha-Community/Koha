@@ -375,8 +375,8 @@ $(document).ready(function(){
                     <option value="1">Delete</option>
                 </select>
             </th>
-            <th><button class="btn btn-sm" title="Add" id="add"><i class="fa fa-plus"></i> Add rule</button></th>
-            <th><button id="btn_batchremove" disabled="disabled" class="btn btn-sm" title="Batch remove"><i class="fa fa-trash"></i> Delete selected</button></th>
+            <th><button class="btn btn-default btn-xs" title="Add" id="add"><i class="fa fa-plus"></i> Add rule</button></th>
+            <th><button id="btn_batchremove" disabled="disabled" class="btn btn-default btn-xs" title="Batch remove"><i class="fa fa-trash"></i> Delete selected</button></th>
         </tr>
     </tfoot>
     [% END %]
@@ -466,8 +466,8 @@ $(document).ready(function(){
                     </select>
                 </td>
                 <td class="actions">
-                    <button class="btn btn-sm" title="Save" id="doedit" value="[% rule.id | html %]"><i class="fa fa-check"></i> Save</button>
-                    <button type="submit" class="btn btn-sm" title="Cancel" ><i class="fa fa-times"></i> Cancel</button>
+                    <button class="btn btn-default btn-xs" title="Save" id="doedit" value="[% rule.id | html %]"><i class="fa fa-check"></i> Save</button>
+                    <button type="submit" class="btn btn-default btn-xs" title="Cancel" ><i class="fa fa-times"></i> Cancel</button>
                 </td>
                 <td></td>
             [% ELSE %]
@@ -481,8 +481,8 @@ $(document).ready(function(){
                 <td class="rule-operation-action" data-operation="remove">[% IF rule.remove %]Remove[% ELSE %]Skip[% END %]</td>
                 <td class="rule-operation-action" data-operation="delete">[% IF rule.delete %]Delete[% ELSE %]Skip[% END %]</td>
                 <td class="actions">
-                    <a href="?op=remove&id=[% rule.id %]" title="Delete" class="btn btn-sm"><i class="fa fa-trash"></i> Delete</a>
-                    <a href="?op=edit&id=[% rule.id %]" title="Edit" class="btn btn-sm"><i class="fa fa-pencil"></i> Edit</a>
+                    <a href="?op=remove&id=[% rule.id %]" title="Delete" class="btn btn-default btn-xs"><i class="fa fa-trash"></i> Delete</a>
+                    <a href="?op=edit&id=[% rule.id %]" title="Edit" class="btn btn-default btn-xs"><i class="fa fa-pencil"></i> Edit</a>
                 </td>
                 <td>
                     [% IF rule.removemarked %]
