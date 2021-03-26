@@ -332,7 +332,7 @@ The C<$options> argument is a hashref with additional parameters:
 
 =over 4
 
-=item C<context>
+=item C<overlay_context>
 
 This parameter is forwarded to L</ApplyMarcOverlayRules> where it is used for
 selecting the current rule set if MARCOverlayRules is enabled.
@@ -389,13 +389,13 @@ sub ModBiblio {
     if (   C4::Context->preference('MARCOverlayRules')
         && $biblionumber
         && defined $options
-        && exists $options->{'context'} )
+        && exists $options->{overlay_context} )
     {
         $record = ApplyMarcOverlayRules(
             {
-                biblionumber => $biblionumber,
-                record       => $record,
-                context      => $options->{'context'},
+                biblionumber    => $biblionumber,
+                record          => $record,
+                overlay_context => $options->{overlay_context},
             }
         );
     }
@@ -3282,7 +3282,7 @@ biblionumber of old record
 =item C<record>
 Incoming record that will be merged with old record
 
-=item C<context>
+=item C<overlay_context>
 hashref containing at least one context module and filter value on
 the form {module => filter, ...}.
 
@@ -3320,8 +3320,8 @@ sub ApplyMarcOverlayRules {
     my $old_record = GetMarcBiblio({ biblionumber => $biblionumber });
 
     # Skip overlay rules if called with no context
-    if ($old_record && defined $params->{context}) {
-        return Koha::MarcOverlayRules->merge_records($old_record, $incoming_record, $params->{context});
+    if ($old_record && defined $params->{overlay_context}) {
+        return Koha::MarcOverlayRules->merge_records($old_record, $incoming_record, $params->{overlay_context});
     }
     return $incoming_record;
 }

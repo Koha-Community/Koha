@@ -92,7 +92,7 @@ sub process {
             C4::MarcModificationTemplates::ModifyRecordWithTemplate( $mmtid, $record );
             my $frameworkcode = C4::Biblio::GetFrameworkCode( $biblionumber );
             C4::Biblio::ModBiblio( $record, $biblionumber, $frameworkcode, {
-                context => $args->{context},
+                overlay_context => $args->{overlay_context},
             });
         };
         if ( $error and $error != 1 or $@ ) { # ModBiblio returns 1 if everything as gone well

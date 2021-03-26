@@ -450,7 +450,7 @@ RECORD: while (  ) {
                     $biblioitemnumber = Koha::Biblios->find( $biblionumber )->biblioitem->biblioitemnumber;
                 };
                 if ($update) {
-                    eval { ModBiblio( $record, $biblionumber, $framework, { context => { source => 'bulkmarcimport' } } ) };
+                    eval { ModBiblio( $record, $biblionumber, $framework, { overlay_context => { source => 'bulkmarcimport' } } ) };
                     if ($@) {
                         warn "ERROR: Edit biblio $biblionumber failed: $@\n";
                         printlog( { id => $id || $originalid || $biblionumber, op => "update", status => "ERROR" } ) if ($logfile);

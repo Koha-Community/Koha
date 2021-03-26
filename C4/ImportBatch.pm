@@ -680,7 +680,7 @@ sub BatchCommitRecords {
                 $oldxml = $old_marc->as_xml($marc_type);
 
                 ModBiblio($marc_record, $recordid, $oldbiblio->frameworkcode, {
-                    context => {
+                    overlay_context => {
                         source => 'batchimport',
                         categorycode => $logged_in_patron->categorycode,
                         userid => $logged_in_patron->userid

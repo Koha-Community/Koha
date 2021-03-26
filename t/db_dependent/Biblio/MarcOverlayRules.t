@@ -749,7 +749,7 @@ subtest 'context option in ModBiblio is handled correctly' => sub {
         MARC::Field->new('500', '', '', 'a' => 'One cold bottle of beer in the fridge'), # Appended
     );
 
-    ModBiblio($saved_record, $biblionumber, '', { context => { 'source' => 'test' } });
+    ModBiblio($saved_record, $biblionumber, '', { overlay_context => { 'source' => 'test' } });
 
     my $updated_record = GetMarcBiblio({ biblionumber => $biblionumber });
 

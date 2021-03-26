@@ -866,11 +866,15 @@ if ( $op eq "addbiblio" ) {
         my $oldbibitemnum;
         if ( $is_a_modif ) {
             my $member = Koha::Patrons->find($loggedinuser);
-            ModBiblio( $record, $biblionumber, $frameworkcode, {
-                    context => {
-                        source => $z3950 ? 'z39.50' : 'intranet',
+            ModBiblio(
+                $record,
+                $biblionumber,
+                $frameworkcode,
+                {
+                    overlay_context => {
+                        source       => $z3950 ? 'z39.50' : 'intranet',
                         categorycode => $member->categorycode,
-                        userid => $member->userid
+                        userid       => $member->userid
                     }
                 }
             );

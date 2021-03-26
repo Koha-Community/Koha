@@ -159,12 +159,12 @@ if ( $op eq 'form' ) {
     try {
         my $patron = Koha::Patrons->find( $loggedinuser );
         my $params = {
-            mmtid       => $mmtid,
-            record_ids  => \@record_ids,
-            context => {
-                source => 'batchmod',
+            mmtid           => $mmtid,
+            record_ids      => \@record_ids,
+            overlay_context => {
+                source       => 'batchmod',
                 categorycode => $patron->categorycode,
-                userid => $patron->userid
+                userid       => $patron->userid
             }
         };
 
