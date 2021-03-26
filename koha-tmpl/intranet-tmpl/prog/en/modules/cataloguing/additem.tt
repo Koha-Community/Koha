@@ -68,11 +68,7 @@
                 <th class="NoSort">&nbsp;</th>
                 [% FOREACH item_header IN item_header_loop %]
                     [% IF item_header.column_name %]
-                        [% IF date_fields.grep(item_header.column_name).size %]
-                            <th class="title-string" data-colname="[% item_header.column_name | html %]">
-                        [% ELSE %]
-                            <th data-colname="[% item_header.column_name | html %]">
-                        [% END %]
+                        <th data-colname="[% item_header.column_name | html %]">
                     [% ELSE %]
                         <th>
                     [% END %]
@@ -127,7 +123,7 @@
                     [% END %]
                 [% FOREACH item_valu IN item_loo.item_value %]
                     [% IF item_valu.datatype == 'date' %]
-                        <td><span title="[% item_valu.field | html %]">[% item_valu.field | $KohaDates %]</span></td>
+                        <td data-order="[% item_valu.field | html %]">[% item_valu.field | $KohaDates %]</td>
                     [% ELSE %]
                         <td>[% item_valu.field | html %]</td>
                     [% END %]
