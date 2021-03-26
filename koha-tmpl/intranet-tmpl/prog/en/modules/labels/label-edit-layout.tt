@@ -10,7 +10,7 @@
 [%  END %]
 [% END %]
     [% INCLUDE 'doc-head-open.inc' %]
-    <title>Koha &rsaquo; Tools &rsaquo; Label creator &rsaquo; Layouts &rsaquo; [% IF ( layout_id ) %]Edit ([% layout_id | html %])[% ELSE %]New[% END %]</title>
+    <title>Koha &rsaquo; Tools &rsaquo; Label creator &rsaquo; Layouts &rsaquo; [% IF ( layout_id ) %]Edit label layout [% layout_id | html %] [% ELSE %] New label layout [% END %]</title>
     [% INCLUDE 'doc-head-close.inc' %]
 </head>
 
@@ -43,13 +43,13 @@
             [% IF ( layout_id ) %]
                 <li>
                     <a href="#" aria-current="page">
-                        Edit ([% layout_id | html %])
+                        Edit label layout [% layout_id | html %]
                     </a>
                 </li>
             [% ELSE %]
                 <li>
                     <a href="#" aria-current="page">
-                        New
+                        New label layout
                     </a>
                 </li>
             [% END %]
@@ -63,9 +63,14 @@
 
                     [% INCLUDE 'labels-toolbar.inc' %]
 
+                    [% IF ( layout_id ) %]
+                        <h1>Edit label layout [% layout_id | html %]</h1>
+                    [% ELSE %]
+                        <h1>New label layout</h1>
+                    [% END %]
+
                     <form name="input" action="/cgi-bin/koha/labels/label-edit-layout.pl" method="get">
                         <fieldset class="rows">
-                            <legend>[% IF ( layout_id ) %]Edit[% ELSE %]Create[% END %] label layout</legend>
                             <ol>
                                 <li>
                                     <label for="layout_name">Layout name: </label>

@@ -3,7 +3,7 @@
 [% USE ItemTypes %]
 [% SET footerjs = 1 %]
     [% INCLUDE 'doc-head-open.inc' %]
-    <title>Koha &rsaquo; Tools &rsaquo; Label creator &rsaquo; Batches &rsaquo; [% IF batch_id %]Edit ([% batch_id | html %])[% ELSE %]New[% END %]</title>
+    <title>Koha &rsaquo; Tools &rsaquo; Label creator &rsaquo; Batches &rsaquo; [% IF batch_id %]Edit label batch [% batch_id | html %][% ELSE %]New label batch[% END %]</title>
     [% INCLUDE 'doc-head-close.inc' %]
 </head>
 
@@ -36,14 +36,14 @@
             [% ELSIF batch_id %]
                 <li>
                     <a href="#" aria-current="page">
-                        Edit ([% batch_id | html %])
+                        Edit label batch [% batch_id | html %]
                     </a>
                 </li>
 
             [% ELSE %]
                 <li>
                     <a href="#" aria-current="page">
-                        New
+                        New label batch
                     </a>
                 </li>
             [% END %]
@@ -56,6 +56,15 @@
                 <main>
 
                         [% INCLUDE 'labels-toolbar.inc' %]
+
+                        [% IF description %]
+                            <h1>Edit [% description | html %]</h1>
+                        [% ELSIF batch_id %]
+                            <h1>Edit label batch [% batch_id | html %]</h1>
+                        [% ELSE %]
+                            <h1>New label batch</h1>
+                        [% END %]
+
                         [% IF ( err ) %]
                             [% BLOCK xlate_errtype %]
                             [%    SWITCH errtype %]

@@ -1,7 +1,7 @@
 [% USE raw %]
 [% SET footerjs = 1 %]
     [% INCLUDE 'doc-head-open.inc' %]
-    <title>Koha &rsaquo; Tools &rsaquo; Label creator &rsaquo; Profiles &rsaquo; [% IF ( profile_id ) %]Edit ([% profile_id | html %])[% ELSE %]New[% END%]</title>
+    <title>Koha &rsaquo; Tools &rsaquo; Label creator &rsaquo; Profiles &rsaquo; [% IF ( profile_id ) %]Edit printer profile [% profile_id | html %] [% ELSE %] New printer profile [% END%]</title>
     [% INCLUDE 'doc-head-close.inc' %]
 </head>
 
@@ -24,19 +24,15 @@
                 <a href="/cgi-bin/koha/labels/label-manage.pl?label_element=profile">Profiles</a>
             </li>
 
-            [% IF ( profile_id ) %]
                 <li>
                     <a href="#" aria-current="page">
-                        Edit ([% profile_id | html %])
+                        [% IF ( profile_id ) %]
+                            Edit printer profile [% profile_id | html %]
+                        [% ELSE %]
+                            New printer profile
+                        [% END%]
                     </a>
                 </li>
-            [% ELSE %]
-                <li>
-                    <a href="#" aria-current="page">
-                        New
-                    </a>
-                </li>
-            [% END%]
         </ol>
     </nav>
 
@@ -46,7 +42,13 @@
                 <main>
 
                     [% INCLUDE 'labels-toolbar.inc' %]
-                            <h3>Edit printer profile</h3>
+
+                    [% IF ( profile_id ) %]
+                        <h1>Edit printer profile [% profile_id | html %]</h1>
+                    [% ELSE %]
+                        <h1>New printer profile</h1>
+                    [% END%]
+
                     <form name="input" action="/cgi-bin/koha/labels/label-edit-profile.pl" method="get">
                                     <fieldset class="rows"><legend>Profile settings</legend>
                                         <ol>

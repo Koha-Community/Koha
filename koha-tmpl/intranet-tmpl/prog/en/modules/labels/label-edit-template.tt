@@ -1,7 +1,7 @@
 [% USE raw %]
 [% SET footerjs = 1 %]
     [% INCLUDE 'doc-head-open.inc' %]
-    <title>Koha &rsaquo; Tools &rsaquo; Label creator &rsaquo; Templates &rsaquo; [% IF ( template_id ) %]Edit ([% template_id | html %])[% ELSE %]New[% END %]</title>
+    <title>Koha &rsaquo; Tools &rsaquo; Label creator &rsaquo; Templates &rsaquo; [% IF ( template_id ) %]Edit label template [% template_id | html %] [% ELSE %] New label template [% END %]</title>
     [% INCLUDE 'doc-head-close.inc' %]
 </head>
 
@@ -26,9 +26,9 @@
             <li>
                 <a href="#" aria-current="page">
                     [% IF ( template_id ) %]
-                        Edit ([% template_id | html %])
+                        Edit label template [% template_id | html %]
                     [% ELSE %]
-                        New
+                        New label template
                     [% END %]
                 </a>
             </li>
@@ -41,7 +41,12 @@
                 <main>
                     [% INCLUDE 'labels-toolbar.inc' %]
 
-                    <h3>Edit label template</h3>
+                    [% IF ( template_id ) %]
+                        <h1>Edit label template [% template_id | html %]</h1>
+                    [% ELSE %]
+                        <h1>New label template</h1>
+                    [% END %]
+
                     <form name="input" action="/cgi-bin/koha/labels/label-edit-template.pl" method="get">
                     <div class="row">
                         <div class="col-sm-6">
