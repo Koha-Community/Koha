@@ -1,41 +1,51 @@
-$DBversion = 'XXX'; # will be replaced by the RM
-if( CheckVersion( $DBversion ) ) {
-    my $sql = q{
-      CREATE TABLE IF NOT EXISTS `marc_merge_rules` (
-        `id` int(11) NOT NULL auto_increment,
-        `tag` varchar(255) NOT NULL,
-        `module` varchar(127) NOT NULL,
-        `filter` varchar(255) NOT NULL,
-        `add` tinyint NOT NULL,
-        `append` tinyint NOT NULL,
-        `remove` tinyint NOT NULL,
-        `delete` tinyint NOT NULL,
-        PRIMARY KEY(`id`)
-      );
-    };
-    $dbh->do( $sql );
+$DBversion = 'XXX';    # will be replaced by the RM
+if ( CheckVersion($DBversion) ) {
 
-    $sql = q{
+    unless (TableExists('marc_overlay_rules_modules')) {
+        $dbh->do(q{
+            CREATE TABLE `marc_overlay_rules_modules` (
+              `name` varchar(127) NOT NULL,
+              `description` varchar(255),
+              `specificity` int(11) NOT NULL UNIQUE,
+              PRIMARY KEY(`name`)
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+        });
+    }
+
+    unless ( TableExists('marc_overlay_rules') ) {
+        $dbh->do(q{
+            CREATE TABLE IF NOT EXISTS `marc_overlay_rules` (
+              `id` int(11) NOT NULL auto_increment,
+              `tag` varchar(255) NOT NULL, -- can be regexp, so need > 3 chars
+              `module` varchar(127) NOT NULL,
+              `filter` varchar(255) NOT NULL,
+              `add`    TINYINT(1) NOT NULL DEFAULT 0,
+              `append` TINYINT(1) NOT NULL DEFAULT 0,
+              `remove` TINYINT(1) NOT NULL DEFAULT 0,
+              `delete` TINYINT(1) NOT NULL DEFAULT 0,
+              PRIMARY KEY(`id`),
+              CONSTRAINT `marc_overlay_rules_ibfk1` FOREIGN KEY (`module`) REFERENCES `marc_overlay_rules_modules` (`name`) ON DELETE CASCADE ON UPDATE CASCADE
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+        });
+    }
+
+    $dbh->do(q{
       INSERT IGNORE INTO systempreferences (`variable`, `value`, `options`, `explanation`, `type`) VALUES (
-        'MARCMergeRules',
+        'MARCOverlayRules',
         '0',
         NULL,
-        'Use the MARC merge rules system to decide what actions to take for each field when modifying records.',
+        'Use the MARC record overlay rules system to decide what actions to take for each field when modifying records.',
         'YesNo'
       );
-    };
-    $dbh->do( $sql );
+    });
 
-    $sql = q{
+    $dbh->do(q{
       INSERT IGNORE INTO permissions (module_bit, code, description) VALUES (
         3,
-        'manage_marc_merge_rules',
-        'Manage MARC merge rules configuration'
+        'manage_marc_overlay_rules',
+        'Manage MARC overlay rules configuration'
       );
-    };
-    $dbh->do( $sql );
+    });
 
-    # Always end with this (adjust the bug info)
-    SetVersion( $DBversion );
-    print "Upgrade to $DBversion done (Bug 14957 - Write protecting MARC fields based on source of import)\n";
+    NewVersion( $DBversion, 14957, "Add a way to define overlay rules for incoming MARC records)\n" );
 }

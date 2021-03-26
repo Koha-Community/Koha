@@ -3386,11 +3386,11 @@ CREATE TABLE `marc_matchers` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Table structure for table `marc_merge_rules_modules`
+-- Table structure for table `marc_overlay_rules_modules`
 --
 
-DROP TABLE IF EXISTS `marc_merge_rules_modules`;
-CREATE TABLE `marc_merge_rules_modules` (
+DROP TABLE IF EXISTS `marc_overlay_rules_modules`;
+CREATE TABLE `marc_overlay_rules_modules` (
   `name` varchar(127) NOT NULL,
   `description` varchar(255),
   `specificity` int(11) NOT NULL UNIQUE,
@@ -3398,22 +3398,22 @@ CREATE TABLE `marc_merge_rules_modules` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
--- Table structure for table `marc_merge_rules`
+-- Table structure for table `marc_overlay_rules`
 --
 
-DROP TABLE IF EXISTS `marc_merge_rules`;
-CREATE TABLE IF NOT EXISTS `marc_merge_rules` (
-  `id` int(11) NOT NULL auto_increment,
-  `tag` varchar(255) NOT NULL, -- can be regexp, so need > 3 chars
+DROP TABLE IF EXISTS `marc_overlay_rules`;
+CREATE TABLE IF NOT EXISTS `marc_overlay_rules` (
+  `id`     int(11) NOT NULL auto_increment,
+  `tag`    varchar(255) NOT NULL, -- can be regexp, so need > 3 chars
   `module` varchar(127) NOT NULL,
   `filter` varchar(255) NOT NULL,
-  `add` tinyint NOT NULL,
-  `append` tinyint NOT NULL,
-  `remove` tinyint NOT NULL,
-  `delete` tinyint NOT NULL,
+  `add`    TINYINT(1) NOT NULL DEFAULT 0,
+  `append` TINYINT(1) NOT NULL DEFAULT 0,
+  `remove` TINYINT(1) NOT NULL DEFAULT 0,
+  `delete` TINYINT(1) NOT NULL DEFAULT 0,
   PRIMARY KEY(`id`),
-  CONSTRAINT `marc_merge_rules_ibfk1` FOREIGN KEY (`module`) REFERENCES `marc_merge_rules_modules` (`name`) ON DELETE CASCADE ON UPDATE CASCADE
-);
+  CONSTRAINT `marc_overlay_rules_ibfk1` FOREIGN KEY (`module`) REFERENCES `marc_overlay_rules_modules` (`name`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Table structure for table `marc_modification_template_actions`

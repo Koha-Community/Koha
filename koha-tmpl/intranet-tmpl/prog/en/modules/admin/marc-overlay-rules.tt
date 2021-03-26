@@ -1,6 +1,6 @@
 [% USE Koha %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Koha &rsaquo; Administration &rsaquo; MARC merge rules</title>
+<title>Koha &rsaquo; Administration &rsaquo; MARC overlay rules</title>
 [% INCLUDE 'doc-head-close.inc' %]
 [% Asset.css("css/datatables.css") %]
 [% INCLUDE 'datatables.inc' %]
@@ -16,20 +16,20 @@ function doSubmit(op, id) {
     $('<input type="hidden"/>')
     .attr('name', 'op')
     .attr('value', op)
-    .appendTo('#marc-merge-rules-form');
+    .appendTo('#marc-overlay-rules-form');
 
     if(id) {
         $('<input type="hidden"/>')
         .attr('name', 'id')
         .attr('value', id)
-        .appendTo('#marc-merge-rules-form');
+        .appendTo('#marc-overlay-rules-form');
     }
 
     var valid = true;
     if (op == 'add' || op == 'edit') {
         var validate = [
-            $('#marc-merge-rules-form input[name="filter"]'),
-            $('#marc-merge-rules-form input[name="tag"]')
+            $('#marc-overlay-rules-form input[name="filter"]'),
+            $('#marc-overlay-rules-form input[name="tag"]')
         ];
         for(var i = 0; i < validate.length; i++) {
             if (validate[i].length) {
@@ -44,7 +44,7 @@ function doSubmit(op, id) {
     }
 
     if (valid) {
-        $('#marc-merge-rules-form').submit();
+        $('#marc-overlay-rules-form').submit();
     }
 
     return valid;
@@ -87,7 +87,7 @@ $(document).ready(function(){
             });
     }
 
-    $('#marc-merge-rules').dataTable($.extend(true, {}, dataTablesDefaults, {
+    $('#marc-overlay-rules').dataTable($.extend(true, {}, dataTablesDefaults, {
         "aoColumns": [
             {"bSearchable": false, "bSortable": false},
             {"sSortDataType": "dom-input"},
@@ -104,56 +104,56 @@ $(document).ready(function(){
         "pagingType": "simple"
     }));
 
-    var merge_rules_presets = {};
-    merge_rules_presets[_("Protect")] = {
+    var overlay_rules_presets = {};
+    overlay_rules_presets[_("Protect")] = {
       'add': 0,
       'append': 0,
       'remove': 0,
       'delete': 0
     };
-    merge_rules_presets[_("Overwrite")] = {
+    overlay_rules_presets[_("Overwrite")] = {
       'add': 1,
       'append': 1,
       'remove': 1,
       'delete': 1
     };
-    merge_rules_presets[_("Add new")] = {
+    overlay_rules_presets[_("Add new")] = {
       'add': 1,
       'append': 0,
       'remove': 0,
       'delete': 0
     };
-    merge_rules_presets[_("Add and append")] = {
+    overlay_rules_presets[_("Add and append")] = {
       'add': 1,
       'append': 1,
       'remove': 0,
       'delete': 0
     };
-    merge_rules_presets[_("Protect from deletion")] = {
+    overlay_rules_presets[_("Protect from deletion")] = {
       'add': 1,
       'append': 1,
       'remove': 1,
       'delete': 0
     };
 
-    var merge_rules_label_to_value = {};
-    merge_rules_label_to_value[_("Add")] = 1;
-    merge_rules_label_to_value[_("Append")] = 1;
-    merge_rules_label_to_value[_("Remove")] = 1;
-    merge_rules_label_to_value[_("Delete")] = 1;
-    merge_rules_label_to_value[_("Skip")] = 0;
+    var overlay_rules_label_to_value = {};
+    overlay_rules_label_to_value[_("Add")] = 1;
+    overlay_rules_label_to_value[_("Append")] = 1;
+    overlay_rules_label_to_value[_("Remove")] = 1;
+    overlay_rules_label_to_value[_("Delete")] = 1;
+    overlay_rules_label_to_value[_("Skip")] = 0;
 
     function hash_config(config) {
       return JSON.stringify(config, Object.keys(config).sort());
     }
 
-    var merge_rules_preset_map = {};
-    $.each(merge_rules_presets, function(preset, config) {
-      merge_rules_preset_map[hash_config(config)] = preset;
+    var overlay_rules_preset_map = {};
+    $.each(overlay_rules_presets, function(preset, config) {
+      overlay_rules_preset_map[hash_config(config)] = preset;
     });
 
-    function operations_config_merge_rule_preset(config) {
-      return merge_rules_preset_map[hash_config(config)] || '';
+    function operations_config_overlay_rule_preset(config) {
+      return overlay_rules_preset_map[hash_config(config)] || '';
     }
 
     /* Set preset values according to operation config */
@@ -162,10 +162,10 @@ $(document).ready(function(){
       var operations_config = {};
       $('.rule-operation-action', $this).each(function() {
         var $operation = $(this);
-        operations_config[$operation.data('operation')] = merge_rules_label_to_value[$operation.text()];
+        operations_config[$operation.data('operation')] = overlay_rules_label_to_value[$operation.text()];
       });
       $('.rule-preset', $this).text(
-        operations_config_merge_rule_preset(operations_config) || _("Custom")
+        operations_config_overlay_rule_preset(operations_config) || _("Custom")
       );
     });
 
@@ -178,7 +178,7 @@ $(document).ready(function(){
         operations_config[$this.attr('name')] = parseInt($this.val());
       });
       $('select[name="preset"]', $parent_row).val(
-          operations_config_merge_rule_preset(operations_config)
+          operations_config_overlay_rule_preset(operations_config)
       );
     });
 
@@ -188,7 +188,7 @@ $(document).ready(function(){
       var $parent_row = $this.closest('tr');
       var preset = $this.val();
       if (preset) {
-        $.each(merge_rules_presets[preset], function(operation, action) {
+        $.each(overlay_rules_presets[preset], function(operation, action) {
           $('select[name="' + operation + '"]', $parent_row).val(action);
         });
       }
@@ -264,19 +264,19 @@ $(document).ready(function(){
 });
 </script>
 </head>
-<body id="admin_marc-merge-rules" class="admin">
+<body id="admin_marc-overlay-rules" class="admin">
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'cat-search.inc' %]
 
 <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a>
- &rsaquo; MARC merge rules
+ &rsaquo; MARC overlay rules
 </div>
 
 <div class="main container-fluid">
 <div class="row">
 <div class="col-sm-10 col-sm-push-2">
 
-<h1>Manage MARC merge rules</h1>
+<h1>Manage MARC overlay rules</h1>
 
 [% FOR m IN messages %]
   <div class="dialog [% m.type | html %]">
@@ -291,9 +291,9 @@ $(document).ready(function(){
   </div>
 [% END %]
 
-[% UNLESS Koha.Preference( 'MARCMergeRules' ) %]
+[% UNLESS Koha.Preference( 'MARCOverlayRules' ) %]
     <div class="dialog message">
-        The <b>MARCMergeRules</b> preference is not set, don't forget to enable it for rules to take effect.
+        The <b>MARCOverlayRules</b> preference is not set, don't forget to enable it for rules to take effect.
     </div>
 [% END %]
 [% IF removeConfirm %]
@@ -308,8 +308,8 @@ $(document).ready(function(){
 </div>
 [% END %]
 
-<form action="[% script_name %]" method="POST" id="marc-merge-rules-form">
-<table id="marc-merge-rules">
+<form action="[% script_name %]" method="POST" id="marc-overlay-rules-form">
+<table id="marc-overlay-rules">
     <thead><tr>
         <th>Rule</th>
         <th>Module</th>

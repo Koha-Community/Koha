@@ -61,7 +61,7 @@ BEGIN {
         DelBiblio
         BiblioAutoLink
         LinkBibHeadingsToAuthorities
-        ApplyMarcMergeRules
+        ApplyMarcOverlayRules
         TransformMarcToKoha
         TransformHtmlToMarc
         TransformHtmlToXml
@@ -110,12 +110,12 @@ use Koha::Acquisition::Currencies;
 use Koha::Biblio::Metadatas;
 use Koha::Holds;
 use Koha::ItemTypes;
+use Koha::MarcOverlayRules;
 use Koha::Plugins;
 use Koha::SearchEngine;
 use Koha::SearchEngine::Indexer;
 use Koha::Libraries;
 use Koha::Util::MARC;
-use Koha::MarcMergeRules;
 
 =head1 NAME
 
@@ -334,9 +334,9 @@ The C<$options> argument is a hashref with additional parameters:
 
 =item C<context>
 
-This parameter is forwared to L</ApplyMarcMergeRules> where it is used for
-selecting the current rule set if Marc Merge Rules is enabled.
-See L</ApplyMarcMergeRules> for more details.
+This parameter is forwarded to L</ApplyMarcOverlayRules> where it is used for
+selecting the current rule set if MARCOverlayRules is enabled.
+See L</ApplyMarcOverlayRules> for more details.
 
 =item C<disable_autolink>
 
@@ -385,12 +385,17 @@ sub ModBiblio {
 
     _strip_item_fields($record, $frameworkcode);
 
-    # apply merge rules
-    if (C4::Context->preference('MARCMergeRules') && $biblionumber && defined $options && exists $options->{'context'}) {
-        $record = ApplyMarcMergeRules({
+    # apply overlay rules
+    if (   C4::Context->preference('MARCOverlayRules')
+        && $biblionumber
+        && defined $options
+        && exists $options->{'context'} )
+    {
+        $record = ApplyMarcOverlayRules(
+            {
                 biblionumber => $biblionumber,
-                record => $record,
-                context => $options->{'context'},
+                record       => $record,
+                context      => $options->{'context'},
             }
         );
     }
@@ -3261,9 +3266,9 @@ sub RemoveAllNsb {
     return $record;
 }
 
-=head2 ApplyMarcMergeRules
+=head2 ApplyMarcOverlayRules
 
-    my $record = ApplyMarcMergeRules($params)
+    my $record = ApplyMarcOverlayRules($params)
 
 Applies marc merge rules to a record.
 
@@ -3299,29 +3304,27 @@ fields with this field tag from C<record>.
 
 =cut
 
-sub ApplyMarcMergeRules {
+sub ApplyMarcOverlayRules {
     my ($params) = @_;
     my $biblionumber = $params->{biblionumber};
     my $incoming_record = $params->{record};
 
     if (!$biblionumber) {
-        carp 'ApplyMarcMergeRules called on undefined biblionumber';
+        carp 'ApplyMarcOverlayRules called on undefined biblionumber';
         return;
     }
     if (!$incoming_record) {
-        carp 'ApplyMarcMergeRules called on undefined record';
+        carp 'ApplyMarcOverlayRules called on undefined record';
         return;
     }
     my $old_record = GetMarcBiblio({ biblionumber => $biblionumber });
 
-    # Skip merge rules if called with no context
+    # Skip overlay rules if called with no context
     if ($old_record && defined $params->{context}) {
-        return Koha::MarcMergeRules->merge_records($old_record, $incoming_record, $params->{context});
+        return Koha::MarcOverlayRules->merge_records($old_record, $incoming_record, $params->{context});
     }
     return $incoming_record;
 }
-
-1;
 
 =head2 _after_biblio_action_hooks
 
@@ -3345,6 +3348,8 @@ sub _after_biblio_action_hooks {
         }
     );
 }
+
+1;
 
 __END__
 

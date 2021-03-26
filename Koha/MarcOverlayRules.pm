@@ -1,26 +1,26 @@
-package Koha::MarcMergeRules;
+package Koha::MarcOverlayRules;
 
 # This file is part of Koha.
 #
-# Koha is free software; you can redistribute it and/or modify it under the
-# terms of the GNU General Public License as published by the Free Software
-# Foundation; either version 3 of the License, or (at your option) any later
-# version.
+# Koha is free software; you can redistribute it and/or modify it
+# under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 3 of the License, or
+# (at your option) any later version.
 #
-# Koha is distributed in the hope that it will be useful, but WITHOUT ANY
-# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
-# A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+# Koha is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
 #
-# You should have received a copy of the GNU General Public License along
-# with Koha; if not, write to the Free Software Foundation, Inc.,
-# 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+# You should have received a copy of the GNU General Public License
+# along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
 use List::Util qw(first);
-use Koha::MarcMergeRule;
+use Koha::MarcOverlayRule;
 use Carp;
 
-use Koha::Exceptions::MarcMergeRule;
+use Koha::Exceptions::MarcOverlayRule;
 use Try::Tiny;
 use Scalar::Util qw(looks_like_number);
 
@@ -30,11 +30,11 @@ my $cache = Koha::Caches->get_instance();
 
 =head1 NAME
 
-Koha::MarcMergeRules - Koha MarcMergeRules Object set class
+Koha::MarcOverlayRules - Koha MarcOverlayRules Object set class
 
 =head1 API
 
-=head2 Class Methods
+=head2 Class methods
 
 =head3 operations
 
@@ -48,9 +48,9 @@ sub operations {
 
 =head3 context_rules
 
-    my $rules = Koha::MarcMergeRules->context_rules($context);
+    my $rules = Koha::MarcOverlayRules->context_rules($context);
 
-Gets all MARC merge rules for the supplied C<$context> (hashref with { module => filter, ... } values).
+Gets all MARC overlay rules for the supplied C<$context> (hashref with { module => filter, ... } values).
 
 =cut
 
@@ -59,7 +59,7 @@ sub context_rules {
 
     return unless %{$context};
 
-    my $rules = $cache->get_from_cache('marc_merge_rules', { unsafe => 1 });
+    my $rules = $cache->get_from_cache('marc_overlay_rules', { unsafe => 1 });
 
     if (!$rules) {
         $rules = {};
@@ -93,7 +93,7 @@ sub context_rules {
                 push @{$regexps}, [$rule{tag}, $operations];
             }
         }
-        $cache->set_in_cache('marc_merge_rules', $rules);
+        $cache->set_in_cache('marc_overlay_rules', $rules);
     }
 
     my $context_rules = undef;
@@ -120,9 +120,9 @@ sub context_rules {
 
 =head3 merge_records
 
-    my $merged_record = Koha::MarcMergeRules->merge_records($old_record, $incoming_record, $context);
+    my $merged_record = Koha::MarcOverlayRules->merge_records($old_record, $incoming_record, $context);
 
-Merge C<$old_record> with C<$incoming_record> applying merge rules for C<$context>.
+Overlay C<$old_record> with C<$incoming_record> applying overlay rules for C<$context>.
 Returns merged record C<$merged_record>. C<$old_record>, C<$incoming_record> and
 C<$merged_record> are all MARC::Record objects.
 
@@ -289,12 +289,12 @@ sub merge_records {
 }
 
 sub _clear_caches {
-    $cache->clear_from_cache('marc_merge_rules');
+    $cache->clear_from_cache('marc_overlay_rules');
 }
 
 =head2 find_or_create
 
-Override C<find_or_create> to clear marc merge rules cache.
+Override C<find_or_create> to clear marc overlay rules cache.
 
 =cut
 
@@ -306,7 +306,7 @@ sub find_or_create {
 
 =head2 update
 
-Override C<update> to clear marc merge rules cache.
+Override C<update> to clear marc overlay rules cache.
 
 =cut
 
@@ -318,7 +318,7 @@ sub update {
 
 =head2 delete
 
-Override C<delete> to clear marc merge rules cache.
+Override C<delete> to clear marc overlay rules cache.
 
 =cut
 
@@ -330,11 +330,11 @@ sub delete {
 
 =head2 validate
 
-    Koha::MarcMergeRules->validate($rule_data);
+    Koha::MarcOverlayRules->validate($rule_data);
 
-Validates C<$rule_data>. Throws C<Koha::Exceptions::MarcMergeRule::InvalidTagRegExp>
+Validates C<$rule_data>. Throws C<Koha::Exceptions::MarcOverlayRule::InvalidTagRegExp>
 if C<$rule_data->{tag}> contains an invalid regular expression. Throws
-C<Koha::Exceptions::MarcMergeRule::InvalidControlFieldActions> if contains invalid
+C<Koha::Exceptions::MarcOverlayRule::InvalidControlFieldActions> if contains invalid
 combination of actions for control fields. Otherwise returns true.
 
 =cut
@@ -346,7 +346,7 @@ sub validate {
         if ($rule_data->{tag} ne '*') {
             eval { qr/$rule_data->{tag}/ };
             if ($@) {
-                Koha::Exceptions::MarcMergeRule::InvalidTagRegExp->throw(
+                Koha::Exceptions::MarcOverlayRule::InvalidTagRegExp->throw(
                     "Invalid tag regular expression"
                 );
             }
@@ -358,7 +358,7 @@ sub validate {
             $rule_data->{append} &&
             !$rule_data->{remove}
         ) {
-            Koha::Exceptions::MarcMergeRule::InvalidControlFieldActions->throw(
+            Koha::Exceptions::MarcOverlayRule::InvalidControlFieldActions->throw(
                 "Combination of allow append and skip remove not permitted for control fields"
             );
         }
@@ -367,7 +367,7 @@ sub validate {
 }
 
 sub _type {
-    return 'MarcMergeRule';
+    return 'MarcOverlayRule';
 }
 
 =head3 object_class
@@ -375,7 +375,7 @@ sub _type {
 =cut
 
 sub object_class {
-    return 'Koha::MarcMergeRule';
+    return 'Koha::MarcOverlayRule';
 }
 
 1;

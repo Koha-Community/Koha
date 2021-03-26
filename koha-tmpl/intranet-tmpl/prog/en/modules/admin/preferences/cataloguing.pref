@@ -299,7 +299,12 @@ Cataloging:
                   1: "do"
                   0: "don't"
             - attempt to match aggressively by trying all variations of the ISSNs in the imported record as a phrase in the ISSN fields of already cataloged records.
-
+        -
+            - pref: MARCOverlayRules
+              choices:
+                  1: "Use"
+                  0: "Don't use"
+            - MARC overlay rules for incoming records, to decide which action to take for each field.
     Exporting:
         -
             - "Include the following fields when exporting BibTeX:"
@@ -325,10 +330,3 @@ Cataloging:
             - "All values of repeating tags and subfields will be printed with the given RIS tag."
             - "<br/>"
             - "Use of TY ( record type ) as a key will <em>replace</em> the default TY with the field value of your choosing."
-        -
-            - When importing records
-            - pref: MARCMergeRules
-              choices:
-                  yes: "use"
-                  no: "don't use"
-            - MARC merge rules to decide which action to take for each field.

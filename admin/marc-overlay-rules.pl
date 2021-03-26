@@ -25,20 +25,16 @@ use Try::Tiny;
 
 # Koha modules used
 use C4::Context;
-use C4::Koha;
-use C4::Auth;
-use C4::AuthoritiesMarc;
-use C4::Output;
-use C4::Biblio;
+use C4::Auth qw( get_template_and_user );
+use C4::Output qw( output_html_with_http_headers );
 use C4::ImportBatch;
 use C4::Matcher;
 use C4::BackgroundJob;
 use C4::Labels::Batch;
-use Koha::MarcMergeRules;
-use Koha::MarcMergeRule;
-use Koha::Patron::Categories; # TODO: Required? Try without use
+use Koha::MarcOverlayRules;
+use Koha::Patron::Categories;
 
-my $script_name = "/cgi-bin/koha/admin/marc-merge-rules.pl";
+my $script_name = "/cgi-bin/koha/admin/marc-overlay-rules.pl";
 
 my $input = new CGI;
 my $op = $input->param('op') || '';
@@ -67,11 +63,11 @@ my $rule_from_cgi = sub {
 
 my ($template, $loggedinuser, $cookie) = get_template_and_user(
     {
-        template_name   => "admin/marc-merge-rules.tt",
+        template_name   => "admin/marc-overlay-rules.tt",
         query           => $input,
         type            => "intranet",
         authnotrequired => 0,
-        flagsrequired   => { parameters => 'manage_marc_merge_rules' },
+        flagsrequired   => { parameters => 'manage_marc_overlay_rules' },
         debug           => 1,
     }
 );
@@ -83,7 +79,7 @@ our $sessionID = $cookies{'CGISESSID'}->value;
 
 my $get_rules = sub {
     # TODO: order?
-    return [map { { $_->get_columns() } } Koha::MarcMergeRules->_resultset->all];
+    return [map { { $_->get_columns() } } Koha::MarcOverlayRules->_resultset->all];
 };
 my $rules;
 
@@ -101,7 +97,7 @@ if ($op eq 'remove' || $op eq 'doremove') {
     elsif ($op eq 'doremove') {
         my @remove_ids = $input->multi_param('batchremove');
         push @remove_ids, scalar $input->param('id') if $input->param('id');
-        Koha::MarcMergeRules->search({ id => { in => \@remove_ids } })->delete();
+        Koha::MarcOverlayRules->search({ id => { in => \@remove_ids } })->delete();
         $rules = $get_rules->();
     }
 }
@@ -120,19 +116,19 @@ elsif ($op eq 'doedit' || $op eq 'add') {
     my $rule_data = $rule_from_cgi->($input);
     if (!@{$errors}) {
         try {
-            Koha::MarcMergeRules->validate($rule_data);
+            Koha::MarcOverlayRules->validate($rule_data);
         }
         catch {
             die $_ unless blessed $_ && $_->can('rethrow');
 
-            if ($_->isa('Koha::Exceptions::MarcMergeRule::InvalidTagRegExp')) {
+            if ($_->isa('Koha::Exceptions::MarcOverlayRule::InvalidTagRegExp')) {
                 push @{$errors}, {
                     type => 'error',
                     code => 'invalid_tag_regexp',
                     tag => $rule_data->{tag},
                 };
             }
-            elsif ($_->isa('Koha::Exceptions::MarcMergeRule::InvalidControlFieldActions')) {
+            elsif ($_->isa('Koha::Exceptions::MarcOverlayRule::InvalidControlFieldActions')) {
                 push @{$errors}, {
                     type => 'error',
                     code => 'invalid_control_field_actions',
@@ -144,7 +140,7 @@ elsif ($op eq 'doedit' || $op eq 'add') {
             }
         };
         if (!@{$errors}) {
-            my $rule = Koha::MarcMergeRules->find_or_create($rule_data);
+            my $rule = Koha::MarcOverlayRules->find_or_create($rule_data);
             # Need to call set and store here in case we have an update
             $rule->set($rule_data);
             $rule->store();

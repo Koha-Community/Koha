@@ -210,9 +210,9 @@
             Manage search engine configuration
         </span>
         <span class="permissioncode">([% name | html %])</span>
-    [%- CASE 'manage_marc_merge_rules' -%]
-        <span class="sub_permission manage_marc_merge_rules_subpermission">
-          Manage MARC merge rules configuration
+    [%- CASE 'manage_marc_overlay_rules' -%]
+        <span class="sub_permission manage_marc_overlay_rules_subpermission">
+          Manage MARC overlay rules configuration
         </span>
         <span class="permissioncode">([% name | html %])</span>
     [%- CASE 'manage_search_targets' -%]

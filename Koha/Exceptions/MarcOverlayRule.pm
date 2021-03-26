@@ -1,4 +1,4 @@
-package Koha::Exceptions::MarcMergeRule;
+package Koha::Exceptions::MarcOverlayRule;
 
 # This file is part of Koha.
 #
@@ -19,34 +19,34 @@ use Modern::Perl;
 
 use Exception::Class (
 
-    'Koha::Exceptions::MarcMergeRule' => {
+    'Koha::Exceptions::MarcOverlayRule' => {
         description => 'Something went wrong!',
     },
-    'Koha::Exceptions::MarcMergeRule::InvalidTagRegExp' => {
-        isa => 'Koha::Exceptions::MarcMergeRule',
+    'Koha::Exceptions::MarcOverlayRule::InvalidTagRegExp' => {
+        isa => 'Koha::Exceptions::MarcOverlayRule',
         description => 'Invalid regular expression for tag'
     },
-    'Koha::Exceptions::MarcMergeRule::InvalidControlFieldActions' => {
-        isa => 'Koha::Exceptions::MarcMergeRule',
+    'Koha::Exceptions::MarcOverlayRule::InvalidControlFieldActions' => {
+        isa => 'Koha::Exceptions::MarcOverlayRule',
         description => 'Invalid control field actions'
     }
 );
 
 =head1 NAME
 
-Koha::Exceptions::MarcMergeRule - Base class for MarcMergeRule exceptions
+Koha::Exceptions::MarcOverlayRule - Base class for MarcOverlayRule exceptions
 
 =head1 Exceptions
 
-=head2 Koha::Exceptions::MarcMergeRule
+=head2 Koha::Exceptions::MarcOverlayRule
 
-Generic MarcMergeRule exception
+Generic MarcOverlayRule exception
 
-=head2 Koha::Exceptions::MarcMergeRule::InvalidTagRegExp
+=head2 Koha::Exceptions::MarcOverlayRule::InvalidTagRegExp
 
 Exception for rule validation when rule tag is an invalid regular expression
 
-=head2 Koha::Exceptions::MarcMergeRule::InvalidControlFieldActions
+=head2 Koha::Exceptions::MarcOverlayRule::InvalidControlFieldActions
 
 Exception for rule validation for control field rules with invalid combination of actions
 

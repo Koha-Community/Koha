@@ -21,20 +21,20 @@ use Try::Tiny;
 use MARC::Record;
 
 use C4::Context;
-use C4::Biblio;
-use Koha::Database; #??
+use C4::Biblio qw( AddBiblio ModBiblio DelBiblio GetMarcBiblio );
+use Koha::Database;
 
 use Test::More tests => 23;
 use Test::MockModule;
 
-use Koha::MarcMergeRules;
+use Koha::MarcOverlayRules;
 
 use t::lib::Mocks;
 
 my $schema = Koha::Database->schema;
 $schema->storage->txn_begin;
 
-t::lib::Mocks::mock_preference('MARCMergeRules', '1');
+t::lib::Mocks::mock_preference('MARCOverlayRules', '1');
 
 # Create a record
 my $orig_record = MARC::Record->new();
@@ -54,11 +54,11 @@ $incoming_record->append_fields(
     MARC::Field->new('501', '', '', 'a' => 'Two cold bottles of beer in the fridge'), # Added
 );
 
-# Test default behavior when MARCMergeRules is enabled, but no rules defined (overwrite)
+# Test default behavior when MARCOverlayRules is enabled, but no rules defined (overwrite)
 subtest 'Record fields has been overwritten when no merge rules are defined' => sub {
     plan tests => 4;
 
-    my $merged_record = Koha::MarcMergeRules->merge_records($orig_record, $incoming_record, { 'source' => 'test' });
+    my $merged_record = Koha::MarcOverlayRules->merge_records($orig_record, $incoming_record, { 'source' => 'test' });
 
     my @all_fields = $merged_record->fields();
 
@@ -79,7 +79,7 @@ subtest 'Record fields has been overwritten when no merge rules are defined' => 
     );
 };
 
-my $rule =  Koha::MarcMergeRules->find_or_create({
+my $rule =  Koha::MarcOverlayRules->find_or_create({
     tag => '*',
     module => 'source',
     filter => '*',
@@ -92,7 +92,7 @@ my $rule =  Koha::MarcMergeRules->find_or_create({
 subtest 'Record fields has been protected when matched merge all rule operations are set to "0"' => sub {
     plan tests => 3;
 
-    my $merged_record = Koha::MarcMergeRules->merge_records($orig_record, $incoming_record, { 'source' => 'test' });
+    my $merged_record = Koha::MarcOverlayRules->merge_records($orig_record, $incoming_record, { 'source' => 'test' });
 
     my @all_fields = $merged_record->fields();
     cmp_ok(scalar @all_fields, '==', 3, "Record has the expected number of fields");
@@ -122,7 +122,7 @@ subtest 'Only new fields has been added when add = 1, append = 0, remove = 0, de
     );
     $rule->store();
 
-    my $merged_record = Koha::MarcMergeRules->merge_records($orig_record, $incoming_record, { 'source' => 'test' });
+    my $merged_record = Koha::MarcOverlayRules->merge_records($orig_record, $incoming_record, { 'source' => 'test' });
 
     my @all_fields = $merged_record->fields();
     cmp_ok(scalar @all_fields, '==', 5, "Record has the expected number of fields");
@@ -159,7 +159,7 @@ subtest 'Only appended fields has been added when add = 0, append = 1, remove = 
     );
     $rule->store();
 
-    my $merged_record = Koha::MarcMergeRules->merge_records($orig_record, $incoming_record, { 'source' => 'test' });
+    my $merged_record = Koha::MarcOverlayRules->merge_records($orig_record, $incoming_record, { 'source' => 'test' });
 
     my @all_fields = $merged_record->fields();
     cmp_ok(scalar @all_fields, '==', 4, "Record has the expected number of fields");
@@ -191,7 +191,7 @@ subtest 'Appended and added fields has been added when add = 1, append = 1, remo
     );
     $rule->store();
 
-    my $merged_record = Koha::MarcMergeRules->merge_records($orig_record, $incoming_record, { 'source' => 'test' });
+    my $merged_record = Koha::MarcOverlayRules->merge_records($orig_record, $incoming_record, { 'source' => 'test' });
 
     my @all_fields = $merged_record->fields();
     cmp_ok(scalar @all_fields, '==', 6, "Record has the expected number of fields");
@@ -228,7 +228,7 @@ subtest 'Record fields has been only removed when add = 0, append = 0, remove = 
     );
     $rule->store();
 
-    my $merged_record = Koha::MarcMergeRules->merge_records($orig_record, $incoming_record, { 'source' => 'test' });
+    my $merged_record = Koha::MarcOverlayRules->merge_records($orig_record, $incoming_record, { 'source' => 'test' });
 
     my @all_fields = $merged_record->fields();
     cmp_ok(scalar @all_fields, '==', 2, "Record has the expected number of fields");
@@ -258,7 +258,7 @@ subtest 'Record fields has been added and removed when add = 1, append = 0, remo
     );
     $rule->store();
 
-    my $merged_record = Koha::MarcMergeRules->merge_records($orig_record, $incoming_record, { 'source' => 'test' });
+    my $merged_record = Koha::MarcOverlayRules->merge_records($orig_record, $incoming_record, { 'source' => 'test' });
 
     my @all_fields = $merged_record->fields();
     cmp_ok(scalar @all_fields, '==', 4, "Record has the expected number of fields");
@@ -294,7 +294,7 @@ subtest 'Record fields has been appended and removed when add = 0, append = 1, r
     );
     $rule->store();
 
-    my $merged_record = Koha::MarcMergeRules->merge_records($orig_record, $incoming_record, { 'source' => 'test' });
+    my $merged_record = Koha::MarcOverlayRules->merge_records($orig_record, $incoming_record, { 'source' => 'test' });
 
     my @all_fields = $merged_record->fields();
     cmp_ok(scalar @all_fields, '==', 3, "Record has the expected number of fields");
@@ -324,7 +324,7 @@ subtest 'Record fields has been added, appended and removed when add = 0, append
     );
     $rule->store();
 
-    my $merged_record = Koha::MarcMergeRules->merge_records($orig_record, $incoming_record, { 'source' => 'test' });
+    my $merged_record = Koha::MarcOverlayRules->merge_records($orig_record, $incoming_record, { 'source' => 'test' });
 
     my @all_fields = $merged_record->fields();
     cmp_ok(scalar @all_fields, '==', 5, "Record has the expected number of fields");
@@ -361,7 +361,7 @@ subtest 'Record fields has been deleted when add = 0, append = 0, remove = 0, de
     );
     $rule->store();
 
-    my $merged_record = Koha::MarcMergeRules->merge_records($orig_record, $incoming_record, { 'source' => 'test' });
+    my $merged_record = Koha::MarcOverlayRules->merge_records($orig_record, $incoming_record, { 'source' => 'test' });
 
     my @all_fields = $merged_record->fields();
     cmp_ok(scalar @all_fields, '==', 2, "Record has the expected number of fields");
@@ -386,7 +386,7 @@ subtest 'Record fields has been added and deleted when add = 1, append = 0, remo
     );
     $rule->store();
 
-    my $merged_record = Koha::MarcMergeRules->merge_records($orig_record, $incoming_record, { 'source' => 'test' });
+    my $merged_record = Koha::MarcOverlayRules->merge_records($orig_record, $incoming_record, { 'source' => 'test' });
 
     my @all_fields = $merged_record->fields();
     cmp_ok(scalar @all_fields, '==', 4, "Record has the expected number of fields");
@@ -417,7 +417,7 @@ subtest 'Record fields has been appended and deleted when add = 0, append = 1, r
     );
     $rule->store();
 
-    my $merged_record = Koha::MarcMergeRules->merge_records($orig_record, $incoming_record, { 'source' => 'test' });
+    my $merged_record = Koha::MarcOverlayRules->merge_records($orig_record, $incoming_record, { 'source' => 'test' });
 
     my @all_fields = $merged_record->fields();
     cmp_ok(scalar @all_fields, '==', 3, "Record has the expected number of fields");
@@ -442,7 +442,7 @@ subtest 'Record fields has been added, appended and deleted when add = 1, append
     );
     $rule->store();
 
-    my $merged_record = Koha::MarcMergeRules->merge_records($orig_record, $incoming_record, { 'source' => 'test' });
+    my $merged_record = Koha::MarcOverlayRules->merge_records($orig_record, $incoming_record, { 'source' => 'test' });
 
     my @all_fields = $merged_record->fields();
     cmp_ok(scalar @all_fields, '==', 5, "Record has the expected number of fields");
@@ -473,7 +473,7 @@ subtest 'Record fields has been removed and deleted when add = 0, append = 0, re
     );
     $rule->store();
 
-    my $merged_record = Koha::MarcMergeRules->merge_records($orig_record, $incoming_record, { 'source' => 'test' });
+    my $merged_record = Koha::MarcOverlayRules->merge_records($orig_record, $incoming_record, { 'source' => 'test' });
 
     my @all_fields = $merged_record->fields();
     cmp_ok(scalar @all_fields, '==', 1, "Record has the expected number of fields");
@@ -498,7 +498,7 @@ subtest 'Record fields has been added, removed and deleted when add = 1, append 
     );
     $rule->store();
 
-    my $merged_record = Koha::MarcMergeRules->merge_records($orig_record, $incoming_record, { 'source' => 'test' });
+    my $merged_record = Koha::MarcOverlayRules->merge_records($orig_record, $incoming_record, { 'source' => 'test' });
 
     my @all_fields = $merged_record->fields();
     cmp_ok(scalar @all_fields, '==', 3, "Record has the expected number of fields");
@@ -529,7 +529,7 @@ subtest 'Record fields has been appended, removed and deleted when add = 0, appe
     );
     $rule->store();
 
-    my $merged_record = Koha::MarcMergeRules->merge_records($orig_record, $incoming_record, { 'source' => 'test' });
+    my $merged_record = Koha::MarcOverlayRules->merge_records($orig_record, $incoming_record, { 'source' => 'test' });
 
     my @all_fields = $merged_record->fields();
     cmp_ok(scalar @all_fields, '==', 2, "Record has the expected number of fields");
@@ -554,7 +554,7 @@ subtest 'Record fields has been overwritten when add = 1, append = 1, remove = 1
     );
     $rule->store();
 
-    my $merged_record = Koha::MarcMergeRules->merge_records($orig_record, $incoming_record, { 'source' => 'test' });
+    my $merged_record = Koha::MarcOverlayRules->merge_records($orig_record, $incoming_record, { 'source' => 'test' });
 
     my @all_fields = $merged_record->fields();
 
@@ -578,7 +578,7 @@ subtest 'Record fields has been overwritten when add = 1, append = 1, remove = 1
 # Test rule tag specificity
 
 # Protect field 500 with more specific tag value
-my $skip_all_rule = Koha::MarcMergeRules->find_or_create({
+my $skip_all_rule = Koha::MarcOverlayRules->find_or_create({
     tag => '500',
     module => 'source',
     filter => '*',
@@ -591,7 +591,7 @@ my $skip_all_rule = Koha::MarcMergeRules->find_or_create({
 subtest '"500" field has been protected when rule matching on tag "500" is add = 0, append = 0, remove = 0, delete = 0' => sub {
     plan tests => 4;
 
-    my $merged_record = Koha::MarcMergeRules->merge_records($orig_record, $incoming_record, { 'source' => 'test' });
+    my $merged_record = Koha::MarcOverlayRules->merge_records($orig_record, $incoming_record, { 'source' => 'test' });
 
     my @all_fields = $merged_record->fields();
 
@@ -626,7 +626,7 @@ subtest '"5XX" fields has been protected when rule matching on regexp "5\d{2}" i
     );
     $skip_all_rule->store();
 
-    my $merged_record = Koha::MarcMergeRules->merge_records($orig_record, $incoming_record, { 'source' => 'test' });
+    my $merged_record = Koha::MarcOverlayRules->merge_records($orig_record, $incoming_record, { 'source' => 'test' });
 
     my @all_fields = $merged_record->fields();
 
@@ -655,7 +655,7 @@ subtest 'Record fields has been overwritten when non wild card rule with filter 
     );
     $rule->store();
 
-    my $merged_record = Koha::MarcMergeRules->merge_records($orig_record, $incoming_record, { 'source' => 'test' });
+    my $merged_record = Koha::MarcOverlayRules->merge_records($orig_record, $incoming_record, { 'source' => 'test' });
 
     my @all_fields = $merged_record->fields();
 
@@ -679,7 +679,7 @@ subtest 'Record fields has been overwritten when non wild card rule with filter 
 subtest 'An exception is thrown when append = 1, remove = 0 is set for control field rule' => sub {
     plan tests => 2;
     my $exception = try {
-        Koha::MarcMergeRules->validate({
+        Koha::MarcOverlayRules->validate({
             'tag' => '008',
             'append' => 1,
             'remove' => 0,
@@ -689,14 +689,14 @@ subtest 'An exception is thrown when append = 1, remove = 0 is set for control f
         return $_;
     };
     ok(defined $exception, "Exception was caught");
-    ok($exception->isa('Koha::Exceptions::MarcMergeRule::InvalidControlFieldActions'), "Exception is of correct class");
+    ok($exception->isa('Koha::Exceptions::MarcOverlayRule::InvalidControlFieldActions'), "Exception is of correct class");
 };
 
 subtest 'An exception is thrown when rule tag is set to invalid regexp' => sub {
     plan tests => 2;
 
     my $exception = try {
-        Koha::MarcMergeRules->validate({
+        Koha::MarcOverlayRules->validate({
             'tag' => '**'
         });
     }
@@ -704,7 +704,7 @@ subtest 'An exception is thrown when rule tag is set to invalid regexp' => sub {
         return $_;
     };
     ok(defined $exception, "Exception was caught");
-    ok($exception->isa('Koha::Exceptions::MarcMergeRule::InvalidTagRegExp'), "Exception is of correct class");
+    ok($exception->isa('Koha::Exceptions::MarcOverlayRule::InvalidTagRegExp'), "Exception is of correct class");
 };
 
 $skip_all_rule->delete();
@@ -775,5 +775,3 @@ subtest 'context option in ModBiblio is handled correctly' => sub {
 $rule->delete();
 
 $schema->storage->txn_rollback;
-
-1;
