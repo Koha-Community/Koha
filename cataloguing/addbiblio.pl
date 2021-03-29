@@ -352,13 +352,14 @@ sub create_input {
           build_authorized_values_list( $tag, $subfield, $value, $dbh,
             $authorised_values_sth,$index_tag,$index_subfield );
 
-    # it's a subfield $9 linking to an authority record - see bug 2206
+    # it's a subfield $9 linking to an authority record - see bug 2206 and 28022
     }
     elsif ($subfield eq "9" and
            exists($tagslib->{$tag}->{'a'}->{authtypecode}) and
            defined($tagslib->{$tag}->{'a'}->{authtypecode}) and
-           $tagslib->{$tag}->{'a'}->{authtypecode} ne '') {
-
+           $tagslib->{$tag}->{'a'}->{authtypecode} ne '' and
+           $tagslib->{$tag}->{'a'}->{hidden} > -4 and
+           $tagslib->{$tag}->{'a'}->{hidden} < 5) {
         $subfield_data{marc_value} = {
             type      => 'text',
             id        => $subfield_data{id},
@@ -600,11 +601,13 @@ sub build_tabs {
                             and not ( $subfield eq "9" and
                                       exists($tagslib->{$tag}->{'a'}->{authtypecode}) and
                                       defined($tagslib->{$tag}->{'a'}->{authtypecode}) and
-                                      $tagslib->{$tag}->{'a'}->{authtypecode} ne ""
+                                      $tagslib->{$tag}->{'a'}->{authtypecode} ne "" and
+                                      $tagslib->{$tag}->{'a'}->{hidden} > -4 and
+                                      $tagslib->{$tag}->{'a'}->{hidden} < 5
                                     )
                           ;    #check for visibility flag
                                # if subfield is $9 in a field whose $a is authority-controlled,
-                               # always include in the form regardless of the hidden setting - bug 2206
+                               # always include in the form regardless of the hidden setting - bug 2206 and 28022
                         next if ( defined( $field->subfield($subfield) ) );
                         push(
                             @subfields_data,
@@ -653,11 +656,13 @@ sub build_tabs {
                       and not ( $subfield->{subfield} eq "9" and
                                 exists($tagslib->{$tag}->{'a'}->{authtypecode}) and
                                 defined($tagslib->{$tag}->{'a'}->{authtypecode}) and
-                                $tagslib->{$tag}->{'a'}->{authtypecode} ne ""
+                                $tagslib->{$tag}->{'a'}->{authtypecode} ne "" and
+                                $tagslib->{$tag}->{'a'}->{hidden} > -4 and
+                                $tagslib->{$tag}->{'a'}->{hidden} < 5
                               )
                       ;    #check for visibility flag
                            # if subfield is $9 in a field whose $a is authority-controlled,
-                           # always include in the form regardless of the hidden setting - bug 2206
+                           # always include in the form regardless of the hidden setting - bug 2206 and 28022
                     next
                       if ( $subfield->{tab} ne $tabloop );
 			push(
