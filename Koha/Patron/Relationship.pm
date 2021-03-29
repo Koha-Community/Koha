@@ -48,7 +48,8 @@ Overloaded method that makes some checks before storing on the DB
 sub store {
     my ( $self ) = @_;
 
-    my @valid_relationships = split /\|/, C4::Context->preference('borrowerRelationship');
+    my @valid_relationships = split /\|/, C4::Context->preference('borrowerRelationship'), -1;
+    @valid_relationships = ('') unless @valid_relationships;
 
     Koha::Exceptions::Patron::Relationship::InvalidRelationship->throw(
         no_relationship => 1 )
