@@ -107,7 +107,7 @@ my @messages;
 ## Deal with guarantor stuff
 $template->param( relationships => scalar $patron->guarantor_relationships ) if $patron;
 
-my @relations = split /,|\|/, C4::Context->preference('borrowerRelationship');
+my @relations = split /\|/, C4::Context->preference('borrowerRelationship');
 my $empty_relationship_allowed = grep {$_ eq ""} @relations;
 $template->param( empty_relationship_allowed => $empty_relationship_allowed );
 
