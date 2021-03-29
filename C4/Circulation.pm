@@ -2837,7 +2837,6 @@ sub CanBookBeRenewed {
             # can be filled with available items. We can get the union of the sets simply
             # by pushing all the elements onto an array and removing the duplicates.
             my @reservable;
-            my %patrons;
             ITEM: while ( my $item = $items->next ) {
                 next if IsItemOnHoldAndFound( $item->itemnumber );
                 while ( my $patron = $patrons->next ) {
