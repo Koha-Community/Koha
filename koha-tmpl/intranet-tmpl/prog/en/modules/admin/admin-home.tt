@@ -180,6 +180,10 @@
                         <dt><a href="/cgi-bin/koha/admin/matching-rules.pl">Record matching rules</a></dt>
                         <dd>Manage rules for automatically matching MARC records during record imports</dd>
                     [% END %]
+                    [% IF ( CAN_user_parameters_manage_marc_overlay_rules ) %]
+                        <dt><a href="/cgi-bin/koha/admin/marc-overlay-rules.pl">Record overlay rules</a></dt>
+                        <dd>Managed rules for automatic overlay of MARC fields during record imports and updates</dd>
+                    [% END %]
                     [% IF ( CAN_user_parameters_manage_oai_sets ) %]
                         <dt><a href="/cgi-bin/koha/admin/oai_sets.pl">OAI sets configuration</a></dt>
                         <dd>Manage OAI Sets</dd>
@@ -191,10 +195,6 @@
                     [% IF ( CAN_user_parameters_manage_search_engine_config ) %]
                         <dt><a href="/cgi-bin/koha/admin/searchengine/elasticsearch/mappings.pl">Search engine configuration (Elasticsearch)</a></dt>
                         <dd>Manage indexes, facets, and their mappings to MARC fields and subfields</dd>
-                    [% END %]
-                    [% IF ( CAN_user_parameters_manage_marc_overlay_rules ) %]
-                        <dt><a href="/cgi-bin/koha/admin/marc-overlay-rules.pl">MARC overlay rules</a></dt>
-                        <dd>Managed MARC field overlay rules</dd>
                     [% END %]
                 </dl>
             [% END %]
