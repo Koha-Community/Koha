@@ -589,35 +589,47 @@
 
                                                 <select id="borrower_primary_contact_method" name="borrower_primary_contact_method">
                                                     <option value=""></option>
-                                                    [% IF ( borrower.primary_contact_method == 'phone' ) %]
-                                                        <option value="phone" selected="selected">Primary phone</option>
-                                                    [% ELSE %]
-                                                        <option value="phone">Primary phone</option>
+                                                    [% UNLESS hidden.defined('phone') %]
+                                                        [% IF ( borrower.primary_contact_method == 'phone' ) %]
+                                                            <option value="phone" selected="selected">Primary phone</option>
+                                                        [% ELSE %]
+                                                            <option value="phone">Primary phone</option>
+                                                        [% END %]
                                                     [% END %]
-                                                    [% IF ( borrower.primary_contact_method == 'phonepro' ) %]
-                                                        <option value="phonepro" selected="selected">Secondary phone</option>
-                                                    [% ELSE %]
-                                                        <option value="phonepro">Secondary phone</option>
+                                                    [% UNLESS hidden.defined('phonepro') %]
+                                                        [% IF ( borrower.primary_contact_method == 'phonepro' ) %]
+                                                            <option value="phonepro" selected="selected">Secondary phone</option>
+                                                        [% ELSE %]
+                                                            <option value="phonepro">Secondary phone</option>
+                                                        [% END %]
                                                     [% END %]
-                                                    [% IF ( borrower.primary_contact_method == 'mobile' ) %]
-                                                        <option value="mobile" selected="selected">Other phone</option>
-                                                    [% ELSE %]
-                                                        <option value="mobile">Other phone</option>
+                                                    [% UNLESS hidden.defined('mobile') %]
+                                                        [% IF ( borrower.primary_contact_method == 'mobile' ) %]
+                                                            <option value="mobile" selected="selected">Other phone</option>
+                                                        [% ELSE %]
+                                                            <option value="mobile">Other phone</option>
+                                                        [% END %]
                                                     [% END %]
-                                                    [% IF ( borrower.primary_contact_method == 'email' ) %]
-                                                        <option value="email" selected="selected">Primary email</option>
-                                                    [% ELSE %]
-                                                        <option value="email">Primary email</option>
+                                                    [% UNLESS hidden.defined('email') %]
+                                                        [% IF ( borrower.primary_contact_method == 'email' ) %]
+                                                            <option value="email" selected="selected">Primary email</option>
+                                                        [% ELSE %]
+                                                            <option value="email">Primary email</option>
+                                                        [% END %]
                                                     [% END %]
-                                                    [% IF ( borrower.primary_contact_method == 'emailpro' ) %]
-                                                        <option value="emailpro" selected="selected">Secondary email</option>
-                                                    [% ELSE %]
-                                                        <option value="emailpro">Secondary email</option>
+                                                    [% UNLESS hidden.defined('emailpro') %]
+                                                        [% IF ( borrower.primary_contact_method == 'emailpro' ) %]
+                                                            <option value="emailpro" selected="selected">Secondary email</option>
+                                                        [% ELSE %]
+                                                            <option value="emailpro">Secondary email</option>
+                                                        [% END %]
                                                     [% END %]
-                                                    [% IF ( borrower.primary_contact_method == 'fax' ) %]
-                                                        <option value="fax" selected="selected">Fax</option>
-                                                    [% ELSE %]
-                                                        <option value="fax">Fax</option>
+                                                    [% UNLESS hidden.defined('fax') %]
+                                                        [% IF ( borrower.primary_contact_method == 'fax' ) %]
+                                                            <option value="fax" selected="selected">Fax</option>
+                                                        [% ELSE %]
+                                                            <option value="fax">Fax</option>
+                                                        [% END %]
                                                     [% END %]
                                                 </select>
                                                 [% IF ( mandatory.defined('primary_contact_method') ) %]<span class="required">Required</span>[% END %]
