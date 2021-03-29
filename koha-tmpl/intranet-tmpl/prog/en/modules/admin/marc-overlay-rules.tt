@@ -197,12 +197,12 @@ $(document).ready(function(){
     var module_filter_options = {
       source: {
         '*': '*',
-        batchmod: "Batch record modification",
-        intranet: "Staff client MARC editor",
-        batchimport: "Staged MARC import",
-        z3950: "Z39.50",
-        bulkmarcimport: "bulkmarcimport.pl",
-        import_lexile: "import_lexile.pl"
+        batchmod: _("Batch record modification"),
+        intranet: _("Staff client MARC editor"),
+        batchimport: _("Staged MARC import"),
+        z3950: _("Z39.50"),
+        bulkmarcimport: _("bulkmarcimport.pl"),
+        import_lexile: _("import_lexile.pl")
       },
       categorycode: {
         '*': '*',
@@ -339,16 +339,11 @@ $(document).ready(function(){
             <th>
                 <select name="preset">
                     <option value="" selected>Custom</option>
-                    [% FOR preset IN [
-                            'Protect',
-                            'Overwrite',
-                            'Add new',
-                            'Add and append',
-                            'Protect from deletion'
-                        ]
-                    %]
-                        <option value="[% preset | html %]">[% preset | html %]</option>
-                    [% END %]
+                    <option value="Protect">Protect</option>
+                    <option value="Overwrite">Overwrite</option>
+                    <option value="Add new">Add new</option>
+                    <option value="Add and append">Add and append</option>
+                    <option value="Protect from deletion">Protect from deletion</option>
                 </select>
             </th>
             <th class="rule-operation-action-edit">
@@ -409,16 +404,11 @@ $(document).ready(function(){
                 <th>
                     <select name="preset">
                         <option value="" selected>Custom</option>
-                        [% FOR preset IN [
-                                'Protect',
-                                'Overwrite',
-                                'Add new',
-                                'Add and append',
-                                'Protect from deletion'
-                            ]
-                        %]
-                            <option value="[% preset | html %]">[% preset | html %]</option>
-                        [% END %]
+                        <option value="Protect">Protect</option>
+                        <option value="Overwrite">Overwrite</option>
+                        <option value="Add new">Add new</option>
+                        <option value="Add and append">Add and append</option>
+                        <option value="Protect from deletion">Protect from deletion</option>
                     </select>
                 </th>
                 <td class="rule-operation-action-edit">
