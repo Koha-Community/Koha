@@ -17,7 +17,7 @@
                 <li><a href="/cgi-bin/koha/reports/orders_by_fund.pl">Orders by fund</a></li>
             </ul>
         [% END %]
-        [% IF ( CAN_user_acquisition_period_manage || CAN_user_acquisition_budget_manage || CAN_user_acquisition_currencies_manage || CAN_user_acquisition_edi_manage ) %]
+        [% IF ( CAN_user_acquisition_period_manage || CAN_user_acquisition_budget_manage || CAN_user_acquisition_currencies_manage || CAN_user_acquisition_edi_manage || CAN_user_parameters_manage_additional_fields ) %]
             <h5>Administration</h5>
             <ul>
                 [% IF ( CAN_user_acquisition_period_manage ) %]
@@ -32,6 +32,11 @@
                 [% IF CAN_user_acquisition_edi_manage %]
                     <li><a href="/cgi-bin/koha/admin/edi_accounts.pl">EDI accounts</a></li>
                     <li><a href="/cgi-bin/koha/admin/edi_ean_accounts.pl">Library EANs</a></li>
+                [% END %]
+                [% IF CAN_user_acquisition_order_manage && CAN_user_parameters_manage_additional_fields %]
+                    <li>
+                        <a href="/cgi-bin/koha/admin/additional-fields.pl?tablename=aqbasket">Manage order basket fields</a>
+                    </li>
                 [% END %]
             </ul>
         [% END %]
