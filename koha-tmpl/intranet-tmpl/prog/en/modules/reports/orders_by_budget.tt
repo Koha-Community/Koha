@@ -130,12 +130,12 @@
                 <label class="inline" for="basename">Named: </label>
                 <input type="text" name="basename" id="basename" value="Export" />
                 <label class="inline" for="MIME">Into an application </label>
-                <select id='MIME' name='MIME' size='1'>
+                <select id='MIME' name='MIME'>
                 [% FOREACH outputFormatloo IN outputFormatloop %]
                     <option value="[% outputFormatloo | html %]">[% outputFormatloo | html %]</option>
                 [% END %]
                 </select>
-                <select id='sep' name='sep' size='1'>
+                <select id='sep' name='sep'>
                 [% FOREACH delimiterloo IN delimiterloop %]
                     [% IF delimiterloo == delimiterPreference %]
                         <option value="[% delimiterloo | html %]">[% delimiterloo | html %]</option>
