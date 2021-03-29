@@ -116,7 +116,7 @@
             <a href="/cgi-bin/koha/acqui/basket.pl?basketno=[% uncertainpriceorder.basketno | uri %]">[% uncertainpriceorder.basketname | html %]</a>
         </td>
 	    <td>
-            <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% uncertainpriceorder.biblionumber | uri %]">[% uncertainpriceorder.title | html %]</a>
+            [% INCLUDE 'biblio-title.inc' biblio=uncertainpriceorder link = 1 %]
             [% IF ( uncertainpriceorder.author ) %] <em>by</em> [% uncertainpriceorder.author | html %][% END %]
             [% IF ( uncertainpriceorder.publishercode ) %]
                 <br /><em>Publisher:</em> [% uncertainpriceorder.publishercode | html %]

@@ -531,9 +531,9 @@
                         <td>
                             <p>
                                 [% IF ( books_loo.order_received ) %] <span class="order-received">(received)</span>[% END %]
-                                [%- IF books_loo.title %]
-                                    <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% books_loo.biblionumber | uri %]">[% books_loo.title | html %]</a>[% IF books_loo.author %] by [% books_loo.author | html %][% END -%]
-                                [%- ELSE -%]
+                                [% IF books_loo.title %]
+                                    [% INCLUDE 'biblio-title.inc' biblio=books_loo link = 1 %] [% IF books_loo.author %] by [% books_loo.author | html %][% END %]
+                                [% ELSE %]
                                     <em>Deleted bibliographic record, can't find title</em><br />
                                 [%- END %]
                                 <br />

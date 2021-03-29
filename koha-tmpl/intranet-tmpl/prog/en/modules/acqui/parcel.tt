@@ -227,7 +227,8 @@
                     0
                   [% END %]
                 </td>
-                <td><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% order.biblionumber | uri %]">[% order.title | html %]</a>
+                <td>
+                    [% INCLUDE 'biblio-title.inc' biblio=order link = 1 %]
                 [% IF ( order.author ) %] / [% order.author | html %][% END %]
                 [% IF ( order.isbn ) %] - [% order.isbn | html %][% END %]
                 [% IF ( order.publishercode ) %]

@@ -53,7 +53,11 @@
 
     <fieldset class="rows">
     <legend>Catalog details</legend>
-    <ol><li><span class="label">Title: </span><span class="title">[% order.biblio.title | html %]</span></li>
+    <ol>
+        <li>
+            <span class="label">Title: </span>
+            [% INCLUDE 'biblio-title.inc' biblio=order.biblio link = 1 %]
+        </li>
     <li> <span class="label">Author: </span>
         [% order.biblio.author | html %]</li>
     <li><span class="label">Copyright: </span>

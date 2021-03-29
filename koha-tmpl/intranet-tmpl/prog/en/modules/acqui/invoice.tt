@@ -364,7 +364,7 @@
                 <tr>
                   <td>
                     [% IF order.biblionumber %]
-                      <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% order.biblionumber | uri %]">[% order.title | html %]</a>
+                      [% INCLUDE 'biblio-title.inc' biblio=order link = 1 %]
                       [% IF ( order.author ) %]
                         <br /><em>by</em> [% order.author | html %]
                       [% END %]
