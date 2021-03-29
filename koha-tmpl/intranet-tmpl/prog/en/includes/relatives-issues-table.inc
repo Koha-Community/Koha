@@ -14,8 +14,8 @@
                     <th scope="col">Checked out on (hidden, unformatted)</th>
                     <th scope="col">Checked out on</th>
                     <th scope="col">Checked out from</th>
-                    <th scope="col">Call no</th>
-                    <th scope="col">Copy no</th>
+                    <th scope="col">Call number</th>
+                    <th scope="col">Copy number</th>
                     <th scope="col">Charge</th>
                     <th scope="col">Fine</th>
                     <th scope="col">Price</th>
