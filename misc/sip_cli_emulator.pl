@@ -494,7 +494,7 @@ sub build_checkin_command_message {
 sub build_hold_command_message {
     my ($params) = @_;
 
-    my $hold_mode         = $params->{hold_mode} || '+';
+    my $hold_mode         = $params->{hold_mode};
     my $transaction_date  = $params->{transaction_date};
     my $expiration_date   = $params->{expiration_date};
     my $pickup_location   = $params->{pickup_location};
@@ -641,7 +641,7 @@ Options:
   --fee-identifier  Fee identifier for Fee Paid message, optional
   --transaction-id  Transaction id for Fee Paid message, optional
   --pickup-location Pickup location (branchcode) for Hold message, optional
-  --hold-mode       Accepts +: Add hold or -:cancel hold, defaults to +
+  --hold-mode       Accepts "+" to add hold or "-" to cancel hold, defaults to +
 
   -m --message     SIP2 message to execute
 
