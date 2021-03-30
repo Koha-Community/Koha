@@ -19,6 +19,11 @@
 
         <ul class="dropdown-menu [% pull_right | html %]" role="menu" aria-labelledby="[% aria_menu | html %]">
             <li>
+                <a class="ar-set-pending-request" href="#" onclick="HandleMulti( SetPending, [% id_arg | html %], $(this) ); return false;">
+                    <i class="fa fa-bars"></i>
+                    Set request as pending
+                </a>
+
                 <a class="ar-process-request" href="#" onclick="HandleMulti( Process, [% id_arg | html %], $(this) ); return false;">
                     <i class="fa fa-cog"></i>
                     Process request
@@ -97,7 +102,7 @@
 
     <div class="main container-fluid starthidden">
         <div class="row">
-            <div class="col-md-10 col-md-offset-1 col-lg-8 col-lg-offset-2">
+            <div class="col-md-10 col-md-offset-1 col-lg-10 col-lg-offset-1">
 
                 <h1>Article requests</h1>
                 [% PROCESS urls_modal %]
@@ -121,6 +126,12 @@
                 <div id="article-request-tabs" class="toptabs">
                     <ul>
                         <li>
+                            <a href="#article-requests-requested">
+                                New (<span id="ar_requested_count">[% article_requests_requested.count | html %]</span>)
+                            </a>
+                        </li>
+
+                        <li>
                             <a href="#article-requests-pending">
                                 Pending (<span id="ar_pending_count">[% article_requests_pending.count | html %]</span>)
                             </a>
@@ -132,6 +143,112 @@
                             </a>
                         </li>
                     </ul>
+
+                    <div id="article-requests-requested">
+                        <div class="article-requests-requested_table_controls">
+                            <a href="#" class="SelectAll"><i class="fa fa-check"></i> Select all</a> | <a href="#" class="ClearAll"><i class="fa fa-remove"></i> Clear all</a>
+                            [% PROCESS actions menuid='article-menu-requested' id_arg=0 pull_right='' aria_menu='table_controls' %]
+                        </div>
+
+                        <table id="article-requests-requested-table">
+                            <thead>
+                                <tr>
+                                    <th/>
+                                    <th class="ar-title">Title</th>
+                                    <th class="ar-request">Requested article</th>
+                                    <th class="ar-collection">Collection</th>
+                                    <th class="ar-itemtype">Item type</th>
+                                    <th class="ar-callnumber">Call number</th>
+                                    <th class="ar-status">Status</th>
+                                    <th class="ar-copynumber">Copy number</th>
+                                    <th class="ar-enumchron">Enumeration</th>
+                                    <th class="ar-barcode">Barcode</th>
+                                    <th class="ar-format">Format</th>
+                                    <th class="ar-urls">URLs</th>
+                                    <th class="ar-patron">Patron</th>
+                                    <th class="ar-date">Date</th>
+                                    <th class="ar-actions noExport">Actions</th>
+                                </tr>
+                            </thead>
+
+                             <tbody>
+                                [% FOREACH ar IN article_requests_requested %]
+                                    <tr class="ar-row ar-requested">
+                                        <td><input type="checkbox" reqid="[% ar.id | html %]"/></td>
+                                        <td class="ar-title">
+                                            <p>
+                                                <a class="title" href="/cgi-bin/koha/circ/request-article.pl?biblionumber=[% ar.biblionumber | uri %]">
+                                                    [% INCLUDE 'biblio-title.inc' biblio=ar.biblio %]
+                                                </a>
+                                            </p>
+
+                                            <p>
+                                                <div class="ar-biblionumber content_hidden">[% ar.biblionumber | html %]</div>
+                                                <div class="ar-author">[% ar.biblio.author | html %]</div>
+                                                <div class="ar-pubdata">
+                                                    [% ar.biblio.biblioitem.publishercode | html %]
+
+                                                    [% IF ar.biblio.biblioitem.publicationyear %]
+                                                        [% ar.biblio.biblioitem.publicationyear | html %]
+                                                    [% ELSIF ar.biblio.copyrightdate %]
+                                                        [% ar.biblio.copyrightdate | html %]
+                                                    [% END %]
+
+                                                    [% IF ar.biblio.biblioitem.pages %]
+                                                        : [% ar.biblio.biblioitem.pages | html %]
+                                                    [% END %]
+
+                                                    [% r.biblio.biblioitem.size | html %]
+
+                                                    [% IF ar.biblio.biblioitem.isbn %]
+                                                        ISBN: [% ar.biblio.biblioitem.isbn | html %]
+                                                    [% END %]
+                                                </div>
+                                            </p>
+                                        </td>
+                                        <td class="ar-request">
+                                            [% IF ar.title %]        <p><strong>Title:</strong>        [% ar.title | html %]        </p> [% END %]
+                                            [% IF ar.author %]       <p><strong>Author:</strong>       [% ar.author | html %]       </p> [% END %]
+                                            [% IF ar.volume %]       <p><strong>Volume:</strong>       [% ar.volume | html %]       </p> [% END %]
+                                            [% IF ar.issue %]        <p><strong>Issue:</strong>        [% ar.issue | html %]        </p> [% END %]
+                                            [% IF ar.date %]         <p><strong>Date:</strong>         [% ar.date | html %]         </p> [% END %]
+                                            [% IF ar.pages %]        <p><strong>Pages:</strong>        [% ar.pages | html %]        </p> [% END %]
+                                            [% IF ar.chapters %]     <p><strong>Chapters:</strong>     [% ar.chapters | html %]     </p> [% END %]
+                                            [% IF ar.patron_notes %] <p><strong>Patron notes:</strong> [% ar.patron_notes | html %] </p> [% END %]
+                                        </td>
+                                        <td class="ar-collection">[% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.ccode', authorised_value => ar.item.ccode ) | html %]</td>
+                                        <td class="ar-itemtype">[% ItemTypes.GetDescription( ar.item.effective_itemtype ) | html %]</td>
+                                        <td class="ar-callnumber">
+                                            [% IF ar.item.location %]
+                                                <em>[% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.location', authorised_value => ar.item.location ) | html %]</em>
+                                            [% END %]
+
+                                            [% ar.item.itemcallnumber | html %]
+                                        </td>
+                                        <td class="ar-status">[% PROCESS 'item_status' myitem = ar.item IF ar.item %]</td>
+                                        <td class="ar-copynumber">[% ar.item.copynumber | html %]</td>
+                                        <td class="ar-enumchron">[% ar.item.enumchron | html %]</td>
+                                        <td class="ar-barcode">[% ar.item.barcode | html %]</td>
+                                        <td class="ar-format">[% IF ar.format == 'PHOTOCOPY' %]Copy[% ELSIF ar.format == 'SCAN' %]Scan[% END %]</td>
+                                        <td class="ar-urls">[% IF ar.format == 'SCAN' %]<span id="url_yesno_[% ar.id | html %]">[% IF ar.urls %]Yes[% ELSE %]No[% END%]</span><span id="url_[% ar.id | html %]" style="display:none;">[% ar.urls | url %]</span>[% END %]</td>
+                                        <td class="ar-patron">
+                                            <p>
+                                                <a href="/cgi-bin/koha/circ/circulation.pl?findborrower=[% ar.borrower.cardnumber | uri %]">
+                                                    [% ar.borrower.surname | html %][% IF ar.borrower.firstname %], [% ar.borrower.firstname | html %][% END %] ([% ar.borrower.cardnumber | html %])
+                                                </a>
+                                            </p>
+
+                                            <p>[% ar.borrower.phone | html %]</p>
+                                        </td>
+                                        <td class="ar-date"><span title="[% ar.created_on | html %]">[% ar.created_on | $KohaDates %]</span></td>
+                                        <td class="ar-actions">
+                                            [% PROCESS actions menuid = "row" _ ar.id id_arg=ar.id pull_right='pull-right' aria_menu='ar-actions' %]
+                                        </td>
+                                    </tr>
+                                [% END %]
+                            </tbody>
+                        </table>
+                    </div>
 
                     <div id="article-requests-pending">
                         <div class="article-requests-pending_table_controls">
@@ -350,13 +467,15 @@
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'datatables.inc' %]
     <script>
-        var active_tab = "#article-requests-pending";
-        var last_cancel_reason, pending_datatable, processing_datatable, active_datatable;
+        var active_tab = "#article-requests-requested";
+        var last_cancel_reason, requested_datatable, pending_datatable, processing_datatable, active_datatable;
         $(document).ready(function() {
             $('#article-request-tabs').tabs({
                 activate: function( activate_event, activate_ui ) {
                     active_tab = activate_ui.newPanel.selector;
-                    if( active_tab == '#article-requests-pending' )
+                    if( active_tab == '#article-requests-requested' )
+                        active_datatable = requested_datatable;
+                    else if( active_tab == '#article-requests-pending' )
                         active_datatable = pending_datatable;
                     else active_datatable = processing_datatable;
                     activateBatchActions( active_tab );
@@ -380,9 +499,13 @@
             });
             $("a.ar-actions").on('click', function(e) {
                 // Hide menu option ?
-                if( $('#article-requests-processing-table').is(":visible") )
-                    $('a.ar-process-request').hide();
-                else $('a.ar-process-request').show();
+                if( $('#article-requests-requested-table:visible,#article-requests-pending-table:visible').length )
+                    $('a.ar-process-request').show();
+                else $('a.ar-process-request').hide();
+
+                if( $('#article-requests-requested-table').is(":visible") )
+                    $('a.ar-set-pending-request').show();
+                else $('a.ar-set-pending-request').hide();
             });
 
             $('#myModal').on("shown.bs.modal", function () {
@@ -398,17 +521,23 @@
                 SaveURLs( $('#myModal textarea').val() );
             });
 
+            requested_datatable = $("#article-requests-requested-table").DataTable($.extend(true, {}, dataTablesDefaults, {
+                "aoColumnDefs": [
+                    { "aTargets": [0, -1], "bSortable": false, "bSearchable": false },
+                ],
+            }));
+
             pending_datatable = $("#article-requests-pending-table").DataTable($.extend(true, {}, dataTablesDefaults, {
                 "aoColumnDefs": [
                     { "aTargets": [0, -1], "bSortable": false, "bSearchable": false },
                 ],
             }));
-            active_datatable = pending_datatable;
             processing_datatable = $("#article-requests-processing-table").DataTable($.extend(true, {}, dataTablesDefaults, {
                 "aoColumnDefs": [
                     { "aTargets": [0, -1], "bSortable": false, "bSearchable": false },
                 ],
             }));
+            active_datatable = requested_datatable;
             activateBatchActions( active_tab );
             $(".starthidden").show();
         });
@@ -468,8 +597,33 @@
             });
         }
 
+        function SetPending( id, a ) {
+            var table_row = a.closest('tr');
+            table_row.find('.ar-set-pending-request').remove();
+            table_row.find('input[type="checkbox"]').prop('checked', false);
+            a.closest('td').prepend('<img src="[% interface | html %]/[% theme | html %]/img/spinner-small.gif" class="spinner"/>').find('div.dropdown').hide();
+            $.ajax({
+                type: "POST",
+                url: '/cgi-bin/koha/svc/article_request',
+                data: {
+                    action: 'open',
+                    id: id,
+                },
+                success: function( data ) {
+                    $("img.spinner").remove();
+                    requested_datatable.row( table_row ).remove().draw();
+                    pending_datatable.row.add( table_row ).draw();
+                    UpdateTabCounts();
+                    activateBatchActions( active_tab );
+                },
+                dataType: 'json'
+            });
+        }
+
         function Process( id, a ) {
             var table_row = a.closest('tr');
+            var table = a.closest('table');
+            var orig_datatable = table.attr('id')==='article-requests-pending-table'?pending_datatable:requested_datatable;
             table_row.find('.ar-process-request').remove();
             table_row.find('input[type="checkbox"]').prop('checked', false);
 
@@ -483,7 +637,7 @@
                 },
                 success: function( data ) {
                     $("img.spinner").remove();
-                    pending_datatable.row( table_row ).remove().draw();
+                    orig_datatable.row( table_row ).remove().draw();
                     processing_datatable.row.add( table_row ).draw();
                     UpdateTabCounts();
                     activateBatchActions( active_tab );
@@ -517,6 +671,7 @@
         }
 
         function UpdateTabCounts() {
+            $("#ar_requested_count").html( requested_datatable.rows().count() );
             $("#ar_pending_count").html( pending_datatable.rows().count() );
             $("#ar_processing_count").html( processing_datatable.rows().count() );
         }

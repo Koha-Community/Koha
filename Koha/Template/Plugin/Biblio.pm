@@ -44,6 +44,7 @@ sub ArticleRequestsActiveCount {
             biblionumber => $biblionumber,
             status       => [
                 -or => [
+                    status => Koha::ArticleRequest::Status::Requested,
                     status => Koha::ArticleRequest::Status::Pending,
                     status => Koha::ArticleRequest::Status::Processing
                 ]

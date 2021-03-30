@@ -19,6 +19,22 @@ package Koha::ArticleRequest::Status;
 
 use Modern::Perl;
 
+=head1 AUTHOR
+
+Kyle M Hall <kyle@bywatersolutions.com>
+
+=cut
+
+=head2 Requested
+
+    returns constant string 'REQUESTED'
+
+=cut
+
+sub Requested {
+    return 'REQUESTED';
+}
+
 sub Pending {
     return 'PENDING';
 }
@@ -35,10 +51,5 @@ sub Canceled {
     return 'CANCELED';
 }
 
-=head1 AUTHOR
-
-Kyle M Hall <kyle@bywatersolutions.com>
-
-=cut
 
 1;

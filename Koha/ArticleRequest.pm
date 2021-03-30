@@ -39,6 +39,19 @@ Koha::ArticleRequest - Koha Article Request Object class
 
 =cut
 
+=head3 request
+
+=cut
+
+sub request {
+    my ($self) = @_;
+
+    $self->status(Koha::ArticleRequest::Status::Requested);
+    $self->SUPER::store();
+    $self->notify();
+    return $self;
+}
+
 =head3 open
 
 =cut
@@ -105,7 +118,7 @@ sub notify {
     if (
         my $letter = C4::Letters::GetPreparedLetter(
             module                 => 'circulation',
-            letter_code            => "AR_$status", # AR_PENDING, AR_PROCESSING, AR_COMPLETED, AR_CANCELED
+            letter_code            => "AR_$status", # AR_REQUESTED, AR_PENDING, AR_PROCESSING, AR_COMPLETED, AR_CANCELED
             message_transport_type => 'email',
             lang                   => $self->borrower->lang,
             tables                 => {
@@ -198,7 +211,7 @@ sub store {
         return $self->SUPER::store;
     } else {
         $self->created_on( dt_from_string() );
-        return $self->open;
+        return $self->request;
     }
 }
 

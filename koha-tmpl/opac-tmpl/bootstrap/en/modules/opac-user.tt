@@ -840,6 +840,8 @@
                                                         Pending
                                                     [% ELSIF ar.status == 'PROCESSING' %]
                                                         Processing
+                                                    [% ELSIF ar.status == 'REQUESTED' %]
+                                                        New
                                                     [% ELSIF ar.status == 'COMPLETED' %]
                                                         Completed
                                                     [% ELSIF ar.status == 'CANCELED' %]

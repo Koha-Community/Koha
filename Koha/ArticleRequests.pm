@@ -60,6 +60,17 @@ sub search_limited {
     return $self->search( $params, $attributes );
 }
 
+=head3 requested
+
+=cut
+
+sub requested {
+    my ( $self, $branchcode ) = @_;
+    my $params = { status => Koha::ArticleRequest::Status::Requested };
+    $params->{'me.branchcode'} = $branchcode if $branchcode;
+    return Koha::ArticleRequests->search_limited($params);
+}
+
 =head3 pending
 
 =cut

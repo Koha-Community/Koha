@@ -371,6 +371,7 @@ sub article_requests_current {
         {
             biblionumber => $self->biblionumber(),
             -or          => [
+                { status => Koha::ArticleRequest::Status::Requested },
                 { status => Koha::ArticleRequest::Status::Pending },
                 { status => Koha::ArticleRequest::Status::Processing }
             ]

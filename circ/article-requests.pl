@@ -39,6 +39,7 @@ my $branchcode = defined( $query->param('branchcode') ) ? $query->param('branchc
 
 $template->param(
     branchcode                  => $branchcode,
+    article_requests_requested  => scalar Koha::ArticleRequests->requested($branchcode),
     article_requests_pending    => scalar Koha::ArticleRequests->pending($branchcode),
     article_requests_processing => scalar Koha::ArticleRequests->processing($branchcode),
 );
