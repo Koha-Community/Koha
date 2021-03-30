@@ -749,7 +749,7 @@ CREATE TABLE `article_requests` (
   `pages` mediumtext COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `chapters` mediumtext COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `patron_notes` mediumtext COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `status` enum('PENDING','PROCESSING','COMPLETED','CANCELED') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'PENDING',
+  `status` enum('REQUESTED', 'PENDING','PROCESSING','COMPLETED','CANCELED') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'REQUESTED',
   `notes` mediumtext COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `format` enum('PHOTOCOPY', 'SCAN') NOT NULL DEFAULT 'PHOTOCOPY',
   `urls` MEDIUMTEXT,
