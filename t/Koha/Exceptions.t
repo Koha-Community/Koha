@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 7;
+use Test::More tests => 8;
 use Test::MockObject;
 use Test::Exception;
 
@@ -284,4 +284,28 @@ subtest 'Koha::Exceptions::Patron::Attribute::* tests' => sub {
         'Manual message exception',
         'Exception not stringified if manually passed'
     );
+};
+
+subtest 'Koha::Exceptions::Patron tests' => sub {
+
+    plan tests => 5;
+
+    use_ok("Koha::Exceptions::Patron");
+
+    my $type = 'yahey';
+
+    throws_ok
+        { Koha::Exceptions::Patron::MissingMandatoryExtendedAttribute->throw(
+            type => $type ); }
+        'Koha::Exceptions::Patron::MissingMandatoryExtendedAttribute',
+        'Exception is thrown :-D';
+
+    # stringify the exception
+    is( "$@", "Missing mandatory extended attribute (type=$type)", 'Exception stringified correctly' );
+
+    throws_ok
+        { Koha::Exceptions::Patron::MissingMandatoryExtendedAttribute->throw( "Manual message exception" ) }
+        'Koha::Exceptions::Patron::MissingMandatoryExtendedAttribute',
+        'Exception is thrown :-D';
+    is( "$@", 'Manual message exception', 'Exception not stringified if manually passed' );
 };
