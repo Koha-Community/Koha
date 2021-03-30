@@ -175,7 +175,7 @@ sub patronflags {
     if ( defined $no_issues_charge_guarantees ) {
         my $p = Koha::Patrons->find( $patroninformation->{borrowernumber} );
         my @guarantees = map { $_->guarantee } $p->guarantee_relationships;
-        my $guarantees_non_issues_charges;
+        my $guarantees_non_issues_charges = 0;
         foreach my $g ( @guarantees ) {
             $guarantees_non_issues_charges += $g->account->non_issues_charges;
         }
