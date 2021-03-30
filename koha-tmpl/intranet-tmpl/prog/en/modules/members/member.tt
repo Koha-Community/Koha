@@ -465,7 +465,15 @@
                     { 'mDataProp': 'dt_name' },
                     { 'mDataProp': 'dt_dateofbirth' },
                     { 'mDataProp': 'dt_category' },
-                    { 'mDataProp': 'dt_branch' },
+                    {
+                        'mDataProp': function ( oObj ) {
+                            if( oObj.dt_branch == "[% Branches.GetLoggedInBranchname | html %]" ){
+                                return "<span class=\"currentlibrary\">" + oObj.dt_branch + "</span>";
+                            } else {
+                                return oObj.dt_branch;
+                            }
+                        }
+                    },
                     { 'mDataProp': 'dt_dateexpiry' },
                     { 'mDataProp': 'dt_od_checkouts', 'bSortable': false },
                     { 'mDataProp': 'dt_fines', 'bSortable': false },

@@ -90,6 +90,7 @@ while ( my $b = $borrowers_rs->next ) {
         city           => $b->city       // '',
         zipcode        => $b->zipcode    // '',
         country        => $b->country    // '',
+        branchcode     => $b->branchcode // '',
       };
 }
 

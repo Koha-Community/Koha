@@ -1,6 +1,7 @@
 [% USE raw %]
 [% USE Asset %]
 [% USE AudioAlerts %]
+[% USE Branches %]
 [% USE To %]
 [% USE Koha %]
 [%# Prevent XFS attacks -%]
@@ -69,6 +70,8 @@
     [% IF ( PatronAutoComplete ) %]
         <script>
             // PatronAutoComplete && CAN_user_circulate_circulate_remaining_permissions
+            var loggedInLibrary = '[% Branches.GetLoggedInBranchcode | html %]';
+            var loggedInClass = "";
             $(document).ready(function(){
                 var obj = $( "#findborrower" ).autocomplete({
                     source: "/cgi-bin/koha/circ/ysearch.pl",
@@ -86,6 +89,13 @@
                             cardnumber = " (" + item.cardnumber + ") ";
                         }
                         var itemString = "<a href=\"" + item.link + "\">" + ( item.surname ? item.surname.escapeHtml() : "" ) + ", " + ( item.firstname ? item.firstname.escapeHtml() : "" ) + cardnumber.escapeHtml() + " <small>";
+
+                        if( item.branchcode == loggedInLibrary ){
+                            loggedInClass = "ac-currentlibrary";
+                        } else {
+                            loggedInClass = "";
+                        }
+
                         if( item.dateofbirth ) {
                             itemString += ( item.dateofbirth ? item.dateofbirth.escapeHtml() : "" )
                                         + "<span class=\"age_years\"> (" + ( item.age ? item.age.escapeHtml() : "" ) + " " +  _("years") + ")</span>, ";
@@ -95,7 +105,9 @@
                                     + ( item.zipcode ? item.zipcode.escapeHtml() : "" ) + " "
                                     + ( item.country ? item.country.escapeHtml() : "" )
                                     + "</small></a>";
+                        itemString += " <span class=\"ac-library\">" + item.branchcode + "</span> " + "</a>";
                         return $( "<li></li>" )
+                        .addClass( loggedInClass )
                         .data( "ui-autocomplete-item", item )
                         .append( itemString )
                         .appendTo( ul );
@@ -108,6 +120,8 @@
 [% IF ( PatronAutoComplete ) %]
     <script>
     // PatronAutoComplete
+    var loggedInLibrary = '[% Branches.GetLoggedInBranchcode | html %]';
+    var loggedInClass = "";
     $(document).ready(function(){
         var obj = $( "#searchmember" ).autocomplete({
             source: "/cgi-bin/koha/circ/ysearch.pl",
@@ -124,7 +138,13 @@
                     // Display card number in parentheses if it exists
                     cardnumber = " (" + item.cardnumber + ") ";
                 }
+                if( item.branchcode == loggedInLibrary ){
+                    loggedInClass = "ac-currentlibrary";
+                } else {
+                    loggedInClass = "";
+                }
                 return $( "<li></li>" )
+                .addClass( loggedInClass )
                 .data( "ui-autocomplete-item", item )
                 .append(
                     "<a href=\"" + item.link + "\">" + ( item.surname ? item.surname.escapeHtml() : "" ) + ", "
@@ -135,7 +155,10 @@
                             + ( item.address     ? item.address.escapeHtml() : "" )     + " "
                             + ( item.city        ? item.city.escapeHtml() : "" )        + " "
                             + ( item.zipcode     ? item.zipcode.escapeHtml() : "" )     + " "
-                            + ( item.country     ? item.country.escapeHtml() : "" )
+                            + ( item.country     ? item.country.escapeHtml() : "" ) + " "
+                            + "<span class=\"ac-library\">"
+                            + ( item.branchcode  ? item.branchcode.escapeHtml() : "" )
+                            + "</span>"
                         + "</small>"
                     + "</a>" )
                 .appendTo( ul );
