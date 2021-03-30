@@ -1,3 +1,5 @@
+#!/usr/bin/perl
+
 package C4::SIP::SIPServer;
 
 use strict;
