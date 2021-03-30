@@ -644,7 +644,7 @@ subtest 'extended_attributes' => sub {
                     ]
                 );
             }
-            'Koha::Exceptions::Object::FKConstraint',
+            'Koha::Exceptions::Patron::MissingMandatoryExtendedAttribute',
             'Exception thrown on missing mandatory attribute type';
 
         is( $@->value, $attribute_type_1->code, 'Exception parameters are correct' );
