@@ -333,7 +333,7 @@ sub handle {
 
     # Set system preference overrides, first global, then account level
     # Clear overrides from previous message handling first
-    foreach my $key ( %ENV ) {
+    foreach my $key ( keys %ENV ) {
         delete $ENV{$key} if index($key, 'OVERRIDE_SYSPREF_') > 0;
     }
     foreach my $key ( keys %{ $config->{'syspref_overrides'} } ) {
