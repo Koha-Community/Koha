@@ -35,7 +35,7 @@ my $builder = t::lib::TestBuilder->new;
 
 subtest 'store() tests' => sub {
 
-    plan tests => 9;
+    plan tests => 13;
 
     $schema->storage->txn_begin;
 
@@ -76,7 +76,23 @@ subtest 'store() tests' => sub {
         'No guarantors added'
     );
 
-    $relationship_1->relationship('father1')->store;
+    $relationship = '';
+
+    throws_ok
+        { $relationship_1->relationship($relationship)->store; }
+        'Koha::Exceptions::Patron::Relationship::InvalidRelationship',
+        'Exception is thrown as a wrong relationship was passed';
+
+    is( "$@", "Invalid relationship passed, '$relationship' is not defined.", 'Exception stringified correctly' );
+
+    is( Koha::Patron::Relationships->search( { guarantee_id => $patron_1->borrowernumber } )->count,
+        0,
+        'No guarantors added when empty relationship passed and not defined'
+    );
+
+    $relationship = 'father1';
+
+    $relationship_1->relationship($relationship)->store;
 
     is( Koha::Patron::Relationships->search( { guarantee_id => $patron_1->borrowernumber } )->count,
         1,
@@ -107,6 +123,18 @@ subtest 'store() tests' => sub {
             'Exception stringified correctly'
         );
     }
+
+    t::lib::Mocks::mock_preference( 'borrowerRelationship', '' );
+
+    my $relationship_3 = Koha::Patron::Relationship->new(
+        {
+            guarantor_id => $patron_1->borrowernumber,
+            guarantee_id => $patron_2->borrowernumber,
+            relationship => ''
+        }
+    )->store();
+
+    is( $relationship_3->relationship, '', 'Empty relationship allowed' );
 
     $schema->storage->txn_rollback;
 };
