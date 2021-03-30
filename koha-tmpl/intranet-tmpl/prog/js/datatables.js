@@ -5,22 +5,22 @@
 //      // other settings
 //  } ) );
 var dataTablesDefaults = {
-    "oLanguage": {
-        "oPaginate": {
-            "sFirst"    : __('First'),
-            "sLast"     : __('Last'),
-            "sNext"     : __('Next'),
-            "sPrevious" : __('Previous'),
+    "language": {
+        "paginate": {
+            "first"    : __('First'),
+            "last"     : __('Last'),
+            "next"     : __('Next'),
+            "previous" : __('Previous'),
         },
-        "sEmptyTable"       : __('No data available in table'),
-        "sInfo"             : __('Showing _START_ to _END_ of _TOTAL_ entries'),
-        "sInfoEmpty"        : __('No entries to show'),
-        "sInfoFiltered"     : __('(filtered from _MAX_ total entries)'),
-        "sLengthMenu"       : __('Show _MENU_ entries'),
-        "sLoadingRecords"   : __('Loading...'),
-        "sProcessing"       : __('Processing...'),
-        "sSearch"           : __('Search:'),
-        "sZeroRecords"      : __('No matching records found'),
+        "emptyTable"       : __('No data available in table'),
+        "info"             : __('Showing _START_ to _END_ of _TOTAL_ entries'),
+        "infoEmpty"        : __('No entries to show'),
+        "infoFiltered"     : __('(filtered from _MAX_ total entries)'),
+        "lengthMenu"       : __('Show _MENU_ entries'),
+        "loadingRecords"   : __('Loading...'),
+        "processing"       : __('Processing...'),
+        "search"           : __('Search:'),
+        "zeroRecords"      : __('No matching records found'),
         buttons: {
             "copyTitle"     : __('Copy to clipboard'),
             "copyKeys"      : __('Press <i>ctrl</i> or <i>⌘</i> + <i>C</i> to copy the table data<br>to your system clipboard.<br><br>To cancel, click this message or press escape.'),
@@ -48,8 +48,8 @@ var dataTablesDefaults = {
             node.addClass("disabled");
         }
     }],
-    "aLengthMenu": [[10, 20, 50, 100, -1], [10, 20, 50, 100, __('All')]],
-    "iDisplayLength": 20,
+    "lengthMenu": [[10, 20, 50, 100, -1], [10, 20, 50, 100, __('All')]],
+    "pageLength": 20,
     "fixedHeader": true,
     initComplete: function( settings) {
         var tableId = settings.nTable.id
