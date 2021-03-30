@@ -457,25 +457,29 @@ legend:hover {
                                                                 <input type="hidden" class="new_guarantor_id" name="new_guarantor_id" value="[% guarantor.borrowernumber | html %]"/>
                                                             </li>
 
-                                                            <li>
-                                                                [% UNLESS empty_relationship_allowed %]
-                                                                    <label for="guarantor_relationship" class="required">Relationship: </label>
-                                                                    <select class="new_guarantor_relationship" name="new_guarantor_relationship" required="required">
-                                                                [% ELSE %]
-                                                                    <label for="guarantor_relationship">Relationship: </label>
-                                                                    <select class="new_guarantor_relationship" name="new_guarantor_relationship">
-                                                                [% END %]
-                                                                    <option value="" selected>Empty option</option>
-                                                                    [% FOREACH pr IN possible_relationships.split('\|') %]
-                                                                        [% IF pr != "" %]
-                                                                            <option value="[% pr | html %]">[% pr | html %]</option>
-                                                                        [% END %]
+                                                            [% IF possible_relationships %]
+                                                                <li>
+                                                                    [% UNLESS empty_relationship_allowed %]
+                                                                        <label for="guarantor_relationship" class="required">Relationship: </label>
+                                                                        <select class="new_guarantor_relationship" name="new_guarantor_relationship" required="required">
+                                                                    [% ELSE %]
+                                                                        <label for="guarantor_relationship">Relationship: </label>
+                                                                        <select class="new_guarantor_relationship" name="new_guarantor_relationship">
                                                                     [% END %]
-                                                                </select>
-                                                                [% UNLESS empty_relationship_allowed %]
-                                                                    <span class="required">Required</span>
-                                                                [% END %]
-                                                            </li>
+                                                                        <option value="" selected>Empty option</option>
+                                                                        [% FOREACH pr IN possible_relationships.split('\|') %]
+                                                                            [% IF pr != "" %]
+                                                                                <option value="[% pr | html %]">[% pr | html %]</option>
+                                                                            [% END %]
+                                                                        [% END %]
+                                                                    </select>
+                                                                    [% UNLESS empty_relationship_allowed %]
+                                                                        <span class="required">Required</span>
+                                                                    [% END %]
+                                                                </li>
+                                                            [% ELSE %]
+                                                                <input type="hidden" name="new_guarantor_relationship" value="" />
+                                                            [% END %]
 
                                                             <li>
                                                                 <label for="guarantor_cancel">&nbsp;</label>
@@ -497,25 +501,29 @@ legend:hover {
                                                         <input type="hidden" class="new_guarantor_id" name="new_guarantor_id" value=""/>
                                                     </li>
 
-                                                    <li>
-                                                        [% UNLESS empty_relationship_allowed %]
-                                                            <label for="guarantor_relationship" class="required">Relationship: </label>
-                                                            <select class="new_guarantor_relationship" name="new_guarantor_relationship" required="required">
-                                                        [% ELSE %]
-                                                            <label for="guarantor_relationship">Relationship: </label>
-                                                            <select class="new_guarantor_relationship" name="new_guarantor_relationship">
-                                                        [% END %]
-                                                            <option value="" selected></option>
-                                                            [% FOREACH pr IN possible_relationships.split('\|') %]
-                                                                [% IF pr != "" %]
-                                                                    <option value="[% pr | html %]">[% pr | html %]</option>
-                                                                [% END %]
+                                                    [% IF possible_relationships %]
+                                                        <li>
+                                                            [% UNLESS empty_relationship_allowed %]
+                                                                <label for="guarantor_relationship" class="required">Relationship: </label>
+                                                                <select class="new_guarantor_relationship" name="new_guarantor_relationship" required="required">
+                                                            [% ELSE %]
+                                                                <label for="guarantor_relationship">Relationship: </label>
+                                                                <select class="new_guarantor_relationship" name="new_guarantor_relationship">
                                                             [% END %]
-                                                        </select>
-                                                        [% UNLESS empty_relationship_allowed %]
-                                                            <span class="required">Required</span>
-                                                        [% END %]
-                                                    </li>
+                                                                <option value="" selected></option>
+                                                                [% FOREACH pr IN possible_relationships.split('\|') %]
+                                                                    [% IF pr != "" %]
+                                                                        <option value="[% pr | html %]">[% pr | html %]</option>
+                                                                    [% END %]
+                                                                [% END %]
+                                                            </select>
+                                                            [% UNLESS empty_relationship_allowed %]
+                                                                <span class="required">Required</span>
+                                                            [% END %]
+                                                        </li>
+                                                    [% ELSE %]
+                                                        <input type="hidden" name="new_guarantor_relationship" value="" />
+                                                    [% END %]
 
                                                     <li>
                                                         <label for="guarantor_cancel">&nbsp;</label>
