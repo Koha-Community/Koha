@@ -632,12 +632,15 @@ sub get_file_path_from_name {
 sub primary_key_exists {
     my ( $table_name, $key_name ) = @_;
     my $dbh = C4::Context->dbh;
-    my ($exists) = $dbh->selectrow_array(
-        qq|
-        SHOW INDEX FROM $table_name
-        WHERE key_name = 'PRIMARY' AND column_name = ?
-        |, undef, $key_name
-    );
+    my $sql = qq| SHOW INDEX FROM $table_name WHERE key_name='PRIMARY' |;
+    my $exists;
+    if( $key_name ){
+        $sql .= 'AND column_name = ? ' if $key_name;
+        ($exists) = $dbh->selectrow_array( $sql, undef, $key_name );
+    } else {
+        ($exists) = $dbh->selectrow_array( $sql, undef );
+    }
+
     return $exists;
 }
 

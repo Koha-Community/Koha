@@ -22,7 +22,7 @@
 # Add more tests here!!!
 
 use Modern::Perl;
-use Test::More tests => 21;
+use Test::More tests => 22;
 use File::Temp qw(tempfile);
 use utf8;
 
@@ -73,7 +73,7 @@ ok( ! foreign_key_exists( 'borrowers', 'xxx' ), 'FK xxxx does not exist' );
 ok( unique_key_exists( 'items', 'itembarcodeidx' ), 'UNIQUE KEY itembarcodeidx exists' );
 ok( ! unique_key_exists( 'borrowers', 'xxx' ), 'UNIQUE KEY xxxx does not exist' );
 
-
+ok( primary_key_exists( 'borrowers' ), 'Borrowers does have a primary key on some column');
 ok( primary_key_exists( 'borrowers', 'borrowernumber'), 'Borrowers has primary key on borrowernumber');
 ok( ! primary_key_exists( 'borrowers', 'email'), 'Borrowers does not have a primary key on email');
 

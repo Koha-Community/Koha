@@ -29,11 +29,11 @@ Koha::Import::Record - Koha Import Record Object class
 
 =head1 API
 
-=head2 Class methods
-
 =head2 Internal methods
 
 =head3 _type
+
+Returns name of corresponding DBIC resultset
 
 =cut
 
