@@ -280,6 +280,32 @@ tables:
           branchcode: ""
           name: "Article request - open"
           is_html: 0
+          title: "Pending article request"
+          message_transport_type: email
+          lang: default
+          content:
+            - "Dear <<borrowers.firstname>> <<borrowers.surname>> (<<borrowers.cardnumber>>)"
+            - ""
+            - "Your request for an article from <<biblio.title>> (<<items.barcode>>) is now in pending state."
+            - ""
+            - "Article requested:"
+            - "Title: <<article_requests.title>>"
+            - "Author: <<article_requests.author>>"
+            - "Volume: <<article_requests.volume>>"
+            - "Issue: <<article_requests.issue>>"
+            - "Date: <<article_requests.date>>"
+            - "Pages: <<article_requests.pages>>"
+            - "Chapters: <<article_requests.chapters>>"
+            - "Notes: <<article_requests.patron_notes>>"
+            - ""
+            - ""
+            - "Thank you!"
+
+        - module: circulation
+          code: AR_REQUESTED
+          branchcode: ""
+          name: "Article requested"
+          is_html: 0
           title: "Article request received"
           message_transport_type: email
           lang: default
