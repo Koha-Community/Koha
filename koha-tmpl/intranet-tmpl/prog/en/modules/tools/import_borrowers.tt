@@ -300,7 +300,7 @@
                 <div class="hint">Selected fields will be preserved from original patron record when overwriting existing patron.</div>
                 [% FOREACH borrower_field IN borrower_fields %]
                         <li>
-                            <label class="description" for="[% borrower_field.field | html %]">[% borrower_field.description | html %]: </label>
+                            <label class="description" for="preserve_existing_[% borrower_field.field | html %]">[% borrower_field.description | html %]: </label>
                             <input name="preserve_existing" id="preserve_existing_[%  borrower_field.field | html %]" value="[%  borrower_field.field | html %]" type="checkbox">
                             <span class="field_hint">[% borrower_field.field | html %]</span>
                         </li>
