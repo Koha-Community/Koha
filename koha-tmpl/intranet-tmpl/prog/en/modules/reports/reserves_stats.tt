@@ -285,12 +285,12 @@
             <label for="outputfile">To a file:</label> <input type="radio" name="output" value="file" id="outputfile" />
             <label class="inline" for="basename">Named: </label><input type="text" name="basename" id="basename" value="Export" />
             <label class="inline" for="MIME">Into an application:</label>
-            <select name="MIME" id="MIME" size="1">
+            <select name="MIME" id="MIME">
             [% FOREACH value IN CGIextChoice %]
                 <option value="[% value | html %]">[% value | html %]</option>
             [% END %]
             </select>
-            <select name="sep" id="sep" size="1">
+            <select name="sep" id="sep">
             [% FOREACH value IN CGIsepChoice.values.sort() %]
               [% IF ( value == CGIsepChoice.default ) %]
                 <option value="[% value | html %]" selected="selected">[% value | html %]</option>

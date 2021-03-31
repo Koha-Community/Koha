@@ -178,7 +178,7 @@
                                                         [% END %]
                                                     </li>
                                                     <li><label for="tab[% loo.row | html %]">Managed in tab: </label>
-                                                        <select name="tab" tabindex="" size="1" id="tab[% loo.row | html %]">
+                                                        <select name="tab" tabindex="" id="tab[% loo.row | html %]">
                                                         [%- IF ( loo.tab ==  -1 ) -%]
                                                             <option value="-1" selected="selected">ignore</option>
                                                         [%- ELSE -%]
@@ -250,7 +250,7 @@
                                                     <li>
                                                         <label for="kohafield[% loo.row | html %]">Koha link:</label>
                                                         <!-- This select should be DISABLED; value is submitted by the following hidden input -->
-                                                        <select name="kohafield" id="kohafield[% loo.row | html %]" size="1" disabled>
+                                                        <select name="kohafield" id="kohafield[% loo.row | html %]" disabled>
                                                         [% FOREACH value IN loo.kohafields %]
                                                         [% IF ( value == loo.kohafield ) %]
                                                             <option value="[% value | html %]" selected="selected">[% value | html %]</option>
@@ -272,7 +272,7 @@
                                                 <ol>
                                                     <li>
                                                         <label for="authorised_value[% loo.row | html %]">Authorized value:</label>
-                                                        <select name="authorised_value" id="authorised_value[% loo.row | html %]" size="1">
+                                                        <select name="authorised_value" id="authorised_value[% loo.row | html %]">
                                                         <option value=""></option>
                                                         [% FOREACH value IN loo.authorised_values %]
                                                             [% IF ( value == loo.authorised_value ) %]
@@ -285,7 +285,7 @@
                                                     </li>
                                                     <li>
                                                         <label for="authtypecode[% loo.row | html %]">Thesaurus:</label>
-                                                        <select name="authtypecode" id="authtypecode[% loo.row | html %]" size="1">
+                                                        <select name="authtypecode" id="authtypecode[% loo.row | html %]">
                                                         [% FOREACH value IN loo.authtypes %]
                                                             [% IF ( value == loo.authtypecode ) %]
                                                                 <option value="[% value | html %]" selected="selected">[% value | html %]</option>
@@ -297,7 +297,7 @@
                                                     </li>
                                                     <li>
                                                         <label for="value_builder[% loo.row | html %]">Plugin:</label>
-                                                        <select name="value_builder" id="value_builder[% loo.row | html %]" size="1">
+                                                        <select name="value_builder" id="value_builder[% loo.row | html %]">
                                                         [% FOREACH value IN loo.value_builders %]
                                                             [% IF ( value == loo.value_builder ) %]
                                                                 <option value="[% value | html %]" selected="selected">[% value | html %]</option>

@@ -182,7 +182,7 @@
                             </li>
                             <li>
                                 <label for="pickup">Pickup at:</label>
-                                <select name="pickup" size="1" id="pickup">
+                                <select name="pickup" id="pickup">
                                     [% PROCESS options_for_libraries libraries => Branches.all({ selected => club.branchcode, search_params => { pickup_location => 1 } }) %]
                                 </select>
                             </li>
@@ -437,7 +437,7 @@
                             </li>
                             <li>
                                 <label for="pickup">Pickup at:</label>
-                                <select name="pickup" size="1" id="pickup">
+                                <select name="pickup" id="pickup">
                                     [% UNLESS ( multi_hold ) %]
                                         [% PROCESS options_for_libraries libraries => Branches.pickup_locations({ search_params => { biblio => biblionumber, patron => patron }, selected => pickup }) %]
                                     [% ELSE %]
@@ -450,7 +450,7 @@
                                 [% IF Koha.Preference('AllowHoldItemTypeSelection') %]
                                     <li>
                                         <label for="itemtype">Request specific item type:</label>
-                                        <select name="itemtype" size="1" id="itemtype">
+                                        <select name="itemtype" id="itemtype">
                                             <option value="">Any item type</option>
                                             [%- FOREACH itemtype IN available_itemtypes %]
                                                 <option value="[% itemtype | html %]">[% ItemTypes.GetDescription( itemtype ) | html %]</option>

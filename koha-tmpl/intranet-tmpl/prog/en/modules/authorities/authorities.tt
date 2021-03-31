@@ -410,9 +410,9 @@ function confirmnotdup(redirect){
                 <div id="field_marceditor[% subfield_loo.tag | html %][% subfield_loo.subfield | html %][% subfield_loo.random | html %]" class="field_marceditor">
                 [% IF ( mv.type == 'select' ) %]
                     [% IF mv.category AND CAN_user_parameters_manage_auth_values %]
-                        <select name="[%- mv.name | html -%]" tabindex="1" size="1" class="input_marceditor" id="[%- mv.id | html -%]" data-category="[% mv.category | html %]">
+                        <select name="[%- mv.name | html -%]" tabindex="1" class="input_marceditor" id="[%- mv.id | html -%]" data-category="[% mv.category | html %]">
                     [% ELSE %]
-                        <select name="[%- mv.name | html -%]" tabindex="1" size="1" class="input_marceditor select2" id="[%- mv.id | html -%]">
+                        <select name="[%- mv.name | html -%]" tabindex="1" class="input_marceditor select2" id="[%- mv.id | html -%]">
                     [% END %]
 
                      [% FOREACH aval IN mv.values %]

@@ -146,7 +146,7 @@
                 <td><input type="radio" checked="checked" name="Line" value="borrowers.categorycode" /></td>
 				<td><input type="radio" name="Column" value="borrowers.categorycode" /></td>
                 <td>
-                    <select name="Filter" size="1" id="borcat">
+                    <select name="Filter" id="borcat">
                         <option value=""></option>
                         [% FOREACH patron_category IN patron_categories %]
                             <option value="[%- patron_category.categorycode | html -%]">[%- patron_category.description | html -%]</option>
@@ -159,7 +159,7 @@
 				<td><input type="radio" name="Line" value="itemtype" /></td>
 				<td><input type="radio" name="Column" value="itemtype" /></td>
                 <td>
-                    <select name="Filter" size="1" id="itemtypes">
+                    <select name="Filter" id="itemtypes">
                         <option value=""></option>
                         [% FOREACH itemtype IN itemtypes %]
                         <option value="[%- itemtype.itemtype | html -%]">[%- itemtype.translated_description | html -%]</option>
@@ -172,7 +172,7 @@
 				<td><input type="radio" name="Line" value="branchcode" /></td>
 				<td><input type="radio" name="Column" value="branchcode" /></td>
                 <td>
-                    <select name="Filter" size="1" id="branch">
+                    <select name="Filter" id="branch">
                         <option value=""></option>
                         [% PROCESS options_for_libraries libraries => Branches.all() %]
                     </select>
@@ -184,7 +184,7 @@
 					<td><input type="radio" name="Line" value="borrowers.sort1" /></td>
 					<td><input type="radio" name="Column" value="borrowers.sort1" /></td>
                     <td>
-                        <select name="Filter" size="1" id="sort1">
+                        <select name="Filter" id="sort1">
                             <option value=""></option>
                             [%- FOREACH value IN Sort1.values %]
                             <option value="[%- value | html -%]">[%- value | html -%]</option>
@@ -199,7 +199,7 @@
 					<td><input type="radio" name="Line" value="borrowers.sort2" /></td>
 					<td><input type="radio" name="Column" value="borrowers.sort2" /></td>
                     <td>
-                        <select name="Filter" size="1" id="sort2">
+                        <select name="Filter" id="sort2">
                             <option value=""></option>
                             [%- FOREACH value IN Sort2.values %]
                             <option value="[%- value | html -%]">[%- value | html -%]</option>
@@ -222,10 +222,10 @@
             <label for="outputfile">To a file:</label> <input type="radio" name="output" value="file" id="outputfile" />
             <label class="inline" for="basename">Named: </label><input type="text" name="basename" id="basename" value="Export" />
             <label class="inline" for="MIME">Into an application: </label>
-            <select name="MIME"  size="1" id="MIME">
+            <select name="MIME" id="MIME">
                 <option value="CSV">CSV</option>
             </select>
-            <select name="sep" id="sep" size="1">
+            <select name="sep" id="sep">
             [% FOREACH value IN CGIsepChoice.values.sort() %]
               [% IF ( value == CGIsepChoice.default ) %]
                 <option value="[% value | html %]" selected="selected">[% value | html %]</option>

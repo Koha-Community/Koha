@@ -208,7 +208,7 @@ Basket [% basket.basketno | html %] &rsaquo; Duplicate existing orders
               <li>
                   <label for="all_budget_id">Fund: </label>
                   <input type="checkbox" name="copy_existing_value" value="budget_id" title="Copy existing value" />
-                  <select id="all_budget_id" size="1" name="all_budget_id">
+                  <select id="all_budget_id" name="all_budget_id">
                     <option value="">Select a fund</option>
                   [% FOREACH budget_loo IN budget_loop %]
                       [% IF ( budget_loo.b_active ) %]<option value="[% budget_loo.b_id | html %]" data-sort1-authcat="[% budget_loo.b_sort1_authcat | html %]" data-sort2-authcat="[% budget_loo.b_sort2_authcat | html %]">[% budget_loo.b_txt | html %]</option>

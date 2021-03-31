@@ -213,7 +213,7 @@
 				<td><input type="radio" name="Line" value="biblioitems.itemtype" /></td>
 				<td><input type="radio" name="Column" value="biblioitems.itemtype" /></td>
                 <td>
-                    <select name="Filter" size="1" id="itemtypes">
+                    <select name="Filter" id="itemtypes">
                         <option value="">All item types</option>
                         [% FOREACH itemtype IN itemtypes %]
                         <option value="[% itemtype.itemtype | html %]">[% itemtype.translated_description | html %]</option>
@@ -227,7 +227,7 @@
 				<td><input type="radio" name="Line" value="aqbudgets.budget_code" /></td>
 				<td><input type="radio" name="Column" value="aqbudgets.budget_code" /></td>
                 <td>
-                    <select name="Filter" size="1" id="budget">
+                    <select name="Filter" id="budget">
                         <option value="">All funds</option>
                         [% FOREACH value IN Budgets.values %]
                         <option value="[% value | html %]">[% Budgets.labels.$value | html %]</option>
@@ -242,7 +242,7 @@
 					<td><input type="radio" name="Line" value="aqorders.sort1" /></td>
 					<td><input type="radio" name="Column" value="aqorders.sort1" /></td>
                     <td>
-                        <select name="Filter" size="1" id="sort1">
+                        <select name="Filter" id="sort1">
                             <option value="">All</option>
                             [% FOREACH value IN Sort1.values %]
                             <option value="[% value | html %]">[% Sort1.labels.$value | html %]</option>
@@ -257,7 +257,7 @@
 					<td><input type="radio" name="Line" value="aqorders.sort2" /></td>
 					<td><input type="radio" name="Column" value="aqorders.sort2" /></td>
                     <td>
-                        <select name="Filter" size="1" id="sort2">
+                        <select name="Filter" id="sort2">
                             <option value="">All</option>
                             [% FOREACH value IN Sort2.values %]
                             <option value="[% value | html %]">[% Sort2.labels.$value | html %]</option>
@@ -301,10 +301,10 @@
             <label for="outputfile">To a file:</label> <input type="radio" name="output" value="file" id="outputfile" />
             <label class="inline" for="basename">Named: </label> <input type="text" name="basename" id="basename" value="Export" />
             <label class="inline" for="MIME">Into an application:</label>
-            <select name="MIME" id="MIME" size="1">
+            <select name="MIME" id="MIME">
                 <option value="CSV">CSV</option>
             </select>
-            <select name="sep" id="sep" size="1">
+            <select name="sep" id="sep">
             [% FOREACH value IN CGIsepChoice.values.sort() %]
               [% IF ( value == CGIsepChoice.default ) %]
                 <option value="[% value | html %]" selected="selected">[% value | html %]</option>

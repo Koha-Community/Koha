@@ -168,9 +168,9 @@
                     <input type="hidden" id="[%- mv.id | html -%]" name="field_value" class="input_marceditor" size="50" maxlength="[%- mv.maxlength | html -%]" value="[%- mv.value | html -%]">
                 [% ELSIF ( mv.type == 'select' ) %]
                     [% IF ( mv.readonly || ite.IS_RETURN_CLAIM ) %]
-                        <select name="field_value" id="[%- mv.id | html -%]" size="1" class="input_marceditor" readonly="readonly" disabled="disabled">
+                        <select name="field_value" id="[%- mv.id | html -%]" class="input_marceditor" readonly="readonly" disabled="disabled">
                     [% ELSE %]
-                        <select name="field_value" id="[%- mv.id | html -%]" size="1" class="input_marceditor" data-category="[% mv.category | html %]">
+                        <select name="field_value" id="[%- mv.id | html -%]" class="input_marceditor" data-category="[% mv.category | html %]">
                     [% END %]
                     [% FOREACH aval IN mv.values %]
                         [% IF aval == mv.default %]

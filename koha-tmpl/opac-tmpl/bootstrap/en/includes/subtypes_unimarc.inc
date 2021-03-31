@@ -50,7 +50,7 @@
     </p>
     <p>
         <label>Biography</label>
-            <select name="limit" class="subtype" size="1">
+            <select name="limit" class="subtype">
                 <option value="">Any</option>
                 <option value="Biography-code:y">not a biography</option>
                 <option value="Biography-code:a">autobiography</option>
@@ -61,7 +61,7 @@
     </p>
     <p>
         <label>Illustration</label>
-        <select name="limit" class="subtype" size="1">
+        <select name="limit" class="subtype">
             <option value="">Any</option>
             <option value="Illustration-Code:a">illustrations</option>
             <option value="Illustration-Code:b">maps</option>

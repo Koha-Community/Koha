@@ -278,7 +278,7 @@ fieldset.rows table { clear: none; margin: 0; }
                                     [% END %]
                                     <li>
                                         <label for="frequency" class="required">Frequency:</label>
-                                        <select name="frequency" size="1" id="frequency" class="required" required="required">
+                                        <select name="frequency" id="frequency" class="required" required="required">
                                             <option value="">-- please choose --</option>
                                             [% FOREACH frequency IN frequencies %]
                                                 [% IF (frequency.selected) %]
@@ -335,7 +335,7 @@ fieldset.rows table { clear: none; margin: 0; }
                                     </li>
                                     <li>
                                         <label for="numberpattern" class="required">Numbering pattern:</label>
-                                        <select name="numbering_pattern" size="1" id="numberpattern" class="required" required="required">
+                                        <select name="numbering_pattern" id="numberpattern" class="required" required="required">
                                             <option value="">-- please choose --</option>
                                             [% FOREACH numberpattern IN numberpatterns %]
                                                 [% IF (numberpattern.selected) %]

@@ -137,7 +137,7 @@
                                     <input type="hidden" size="20" name="budget_id" value="[% budget_id | html %]" />[% Budget_name | html %]
                                 [% ELSE %]
                                     <label for="fund_record_[% biblio.import_record_id | html %]">Fund: </label>
-                                    <select id="fund_record_[% biblio.import_record_id | html %]" size="1" name="budget_id">
+                                    <select id="fund_record_[% biblio.import_record_id | html %]" name="budget_id">
                                     <option value="">Select a fund (will use default if set)</option>
                                     [% FOREACH budget IN budget_loop %]
                                         [% IF ( budget.b_id == biblio.budget_id ) %]
@@ -295,7 +295,7 @@
                                         [% END %]
 
                                         [% IF ( iteminformatio.marc_value.type == 'select' ) %]
-                                            <select name="field_value" size="1">
+                                            <select name="field_value">
                                             [% FOREACH value IN iteminformatio.marc_value.values %]
                                                 [% IF ( value == iteminformatio.marc_value.default ) %]
                                                     <option value="[% value | html %]" selected="selected">[% iteminformatio.marc_value.labels.$value | html %]</option>
@@ -350,7 +350,7 @@
                                         </li>
                                         <li>
                                             <label for="all_budget_id">Fund: </label>
-                                            <select id="all_budget_id" size="1" name="all_budget_id">
+                                            <select id="all_budget_id" name="all_budget_id">
                                               <option value="">Select a fund (will populate orders/items if set)</option>
                                             [% FOREACH budget_loo IN budget_loop %]
                                                 [% IF ( budget_loo.b_active ) %]<option value="[% budget_loo.b_id | html %]" data-sort1-authcat="[% budget_loo.b_sort1_authcat | html %]" data-sort2-authcat="[% budget_loo.b_sort2_authcat | html %]">[% budget_loo.b_txt | html %]</option>

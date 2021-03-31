@@ -154,12 +154,12 @@ $(document).ready(function() {
         <td>
             [% IF ( serialslis.editdisable ) %]
               <input type="hidden" name="status" id="status[% serialslis.serialid | html %]" value="[% serialslis.serstatus | html %]">
-              <select name="status" size="1"  disabled="disabled">
+              <select name="status" disabled="disabled">
             [% ELSE %]
               [% IF ( serialslis.serialsadditems ) %]
-              <select name="status" size="1" id="status[% serialslis.serialid | html %]" onchange="if (this.value==2){unHideItems('items'+[% serialslis.subscriptionid | html %][% serialslis.serialid | html %],'label[% serialslis.subscriptionid | html %][% serialslis.serialid | html %]','[% serialslis.serialid | html %]'); changeDate(this, '[% serialslis.arriveddate | html %]')} else if (this.value==7){changeDate(this, '[% serialslis.arriveddate | html %]')} else { HideItems('items'+[% serialslis.subscriptionid | html %]+[% serialslis.serialid | html %],'label[% serialslis.subscriptionid | html %][% serialslis.serialid | html %]'); changeDate(this, '[% serialslis.planneddate | html %]')}" >
+              <select name="status" id="status[% serialslis.serialid | html %]" onchange="if (this.value==2){unHideItems('items'+[% serialslis.subscriptionid | html %][% serialslis.serialid | html %],'label[% serialslis.subscriptionid | html %][% serialslis.serialid | html %]','[% serialslis.serialid | html %]'); changeDate(this, '[% serialslis.arriveddate | html %]')} else if (this.value==7){changeDate(this, '[% serialslis.arriveddate | html %]')} else { HideItems('items'+[% serialslis.subscriptionid | html %]+[% serialslis.serialid | html %],'label[% serialslis.subscriptionid | html %][% serialslis.serialid | html %]'); changeDate(this, '[% serialslis.planneddate | html %]')}" >
                [% ELSE %]
-              <select name="status" size="1" id="status[% serialslis.serialid | html %]" onchange="if (this.value==2 || this.value==7){changeDate(this, '[% serialslis.arriveddate | html %]')} else {changeDate(this, '[% serialslis.planneddate | html %]')}" >
+              <select name="status" id="status[% serialslis.serialid | html %]" onchange="if (this.value==2 || this.value==7){changeDate(this, '[% serialslis.arriveddate | html %]')} else {changeDate(this, '[% serialslis.planneddate | html %]')}" >
                [% END %] 
             [% END %]
             [% IF ( serialslis.status1 ) %]
@@ -248,7 +248,7 @@ $(document).ready(function() {
                     <label>[% iteminformatio.subfield | html %] - [% iteminformatio.marc_lib | $raw %]</label>
                 [% END %]
                 [% IF ( iteminformatio.marc_value.type == 'select' ) %]
-                  <select name="field_value" size="1" class="select2">
+                  <select name="field_value" class="select2">
                   [% FOREACH value IN iteminformatio.marc_value.values %]
                     [% IF ( value == iteminformatio.marc_value.default ) %]
                       <option value="[% value | html %]" selected="selected">[% iteminformatio.marc_value.labels.$value | html %]</option>
@@ -315,7 +315,7 @@ $(document).ready(function() {
             <input type="text" name="planneddate" value="[% newserialloo.planneddate | html %]" size="10" maxlength="15" class="datepicker" />
         </td>
         <td>
-            <select name="status" size="1" id="addstatus[% newserialloo.serialid | html %]" onchange="if (this.value==2){unHideItems('items'+'[% newserialloo.subscriptionid | html %][% newserialloo.serialid | html %]','label[% newserialloo.subscriptionid | html %][% newserialloo.serialid | html %]','[% newserialloo.serialid | html %]'); changeDate(this, '[% newserialloo.arriveddate | html %]')} else if (this.value==7){changeDate(this, '[% newserialloo.arriveddate | html %]')} else { HideItems('items'+'[% newserialloo.subscriptionid | html %]'+[% newserialloo.serialid | html %],'label[% serialslis.subscriptionid | html %][% serialslis.serialid | html %]'); changeDate(this, '[% serialslis.planneddate | html %]')}" >
+            <select name="status" id="addstatus[% newserialloo.serialid | html %]" onchange="if (this.value==2){unHideItems('items'+'[% newserialloo.subscriptionid | html %][% newserialloo.serialid | html %]','label[% newserialloo.subscriptionid | html %][% newserialloo.serialid | html %]','[% newserialloo.serialid | html %]'); changeDate(this, '[% newserialloo.arriveddate | html %]')} else if (this.value==7){changeDate(this, '[% newserialloo.arriveddate | html %]')} else { HideItems('items'+'[% newserialloo.subscriptionid | html %]'+[% newserialloo.serialid | html %],'label[% serialslis.subscriptionid | html %][% serialslis.serialid | html %]'); changeDate(this, '[% serialslis.planneddate | html %]')}" >
 
                     <option value="">----</option>
                   [% IF ( newserialloo.status1 ) %]
@@ -400,7 +400,7 @@ $(document).ready(function() {
                     <label>[% iteminformatio.subfield | html %] - [% iteminformatio.marc_lib | $raw %]</label>
                 [% END %]
                 [% IF ( iteminformatio.marc_value.type == 'select' ) %]
-                  <select name="field_value" size="1">
+                  <select name="field_value">
                   [% FOREACH value IN iteminformatio.marc_value.values %]
                     [% IF ( value == iteminformatio.marc_value.default ) %]
                       <option value="[% value | html %]" selected="selected">[% iteminformatio.marc_value.labels.$value | html %]</option>

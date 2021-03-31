@@ -213,7 +213,7 @@
 <ol>
     <li>
         <label for="authcat"> Select planning type:</label>
-        <select name="authcat" id="authcat" size="1">
+        <select name="authcat" id="authcat">
         [% FOREACH value IN authcat_dropbox.values %]
             [% IF ( value == authcat_dropbox.default ) %]
             <option value="[% value | html %]" selected="selected">[% PROCESS planning_types type=value %]</option>
@@ -264,12 +264,12 @@
     <ol>
         <li><label for="basename">Output to a file named: </label><input type="text" name="basename" id="basename" value="Export" /></li>
         <li><label class="inline" for="MIME">Into an application</label>
-            <select name="MIME" id="MIME" size="1">
+            <select name="MIME" id="MIME">
             [% FOREACH value IN CGIextChoice %]
                 <option value="[% value | html %]">[% value | html %]</option>
             [% END %]
             </select>
-            <select name="sep" id="sep" size="1">
+            <select name="sep" id="sep">
             [% FOREACH value IN CGIsepChoice %]
                 <option value="[% value | html %]">[% value | html %]</option>
             [% END %]

@@ -264,7 +264,7 @@
                                             </label>
 
                                             [% IF ( mv.type == 'select' ) -%]
-                                                <select name="[%- mv.name | html -%]" id="[%- mv.id | html -%]" size="1" tabindex="1" class="input_marceditor select2">
+                                                <select name="[%- mv.name | html -%]" id="[%- mv.id | html -%]" tabindex="1" class="input_marceditor select2">
                                                     [%- FOREACH aval IN mv.values %]
                                                         [% ite.subfield | html %] -
                                                         [% IF aval == mv.default %]

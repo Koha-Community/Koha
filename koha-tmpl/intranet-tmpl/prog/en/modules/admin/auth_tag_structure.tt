@@ -184,7 +184,7 @@
             [% END %]
         </li>
         <li><label for="authorised_value">Authorized value: </label>
-            <select name="authorised_value" id="authorised_value" size="1">
+            <select name="authorised_value" id="authorised_value">
                 <option value=""></option>
                 [% PROCESS options_for_authorised_value_categories authorised_value_categories => AuthorisedValues.GetCategories( selected => authorised_value ) %]
             </select>

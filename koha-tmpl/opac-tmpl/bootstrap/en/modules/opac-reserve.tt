@@ -298,7 +298,7 @@
                                                     [%- END %]
                                                     <li>
                                                         <label for="itemtype">Request specific item type:</label>
-                                                        <select name="itemtype" size="1" id="itemtype">
+                                                        <select name="itemtype" id="itemtype">
                                                             <option value="">Any item type</option>
                                                             [% FOREACH i IN itemtypes.unique.sort %]
                                                                 <option value="[% i | html %]">[% ItemTypes.GetDescription( i ) | html %]</option>

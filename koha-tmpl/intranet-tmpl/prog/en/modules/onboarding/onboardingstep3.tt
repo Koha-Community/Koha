@@ -50,7 +50,7 @@
 
                                 <!--require a foreach loop to get all the values for the library that the user has either imported (in web installer) or created in the first step of this onboarding tool-->
                                 <label for="libraries" class="required"> Library: </label>
-                                <select name="libraries" size="1" id="libraries">
+                                <select name="libraries" id="libraries">
                                     [% FOREACH library IN libraries %]
                                         <option value="[% library.branchcode | html %]"> [% library.branchname | html %] </option>
                                     [% END %]

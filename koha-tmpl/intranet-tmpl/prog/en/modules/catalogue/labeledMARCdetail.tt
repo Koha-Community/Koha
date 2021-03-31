@@ -54,7 +54,7 @@
                         <h1>Labeled MARC biblio : [% biblionumber | html %]  ( [% bibliotitle | html %] )</h1>
 					[% END %]
                     <p><strong>With framework:
-                    <select name="Frameworks" id="Frameworks" size="1" onchange="Changefwk(this);">
+                    <select name="Frameworks" id="Frameworks" onchange="Changefwk(this);">
                         <option value="">Default</option>
                         [% FOREACH framework IN frameworks %]
                         [% IF framework.frameworkcode == frameworkcode %]

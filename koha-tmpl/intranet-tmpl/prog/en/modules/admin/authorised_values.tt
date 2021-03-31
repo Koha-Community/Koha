@@ -236,7 +236,7 @@
     <form action="/cgi-bin/koha/admin/authorised_values.pl" method="get" id="category">
         <p>
             <label for="category_search">Show category: </label>
-            <select name="searchfield" id="category_search" size="1">
+            <select name="searchfield" id="category_search">
                 [% FOR c IN categories %]
                     [% IF c == searchfield %]
                         <option value="[% c | html %]" selected="selected">[% c | html %]</option>

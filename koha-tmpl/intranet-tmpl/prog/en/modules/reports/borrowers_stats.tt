@@ -105,7 +105,7 @@
 			<td><input type="radio" name="Line" value="categorycode" /></td>
             <td><input type="radio" checked="checked" name="Column" value="categorycode" /></td>
             <td>
-                <select name="Filter"  size="1" id="catcode">
+                <select name="Filter" id="catcode">
                     <option value=""></option>
                     [% FOREACH patron_category IN patron_categories %]
                         <option value="[% patron_category.categorycode | html %]">[% patron_category.description | html %]</option>
@@ -134,7 +134,7 @@
             <td rowspan="2">ZIP/Postal code</td>
 			<td><input type="radio" name="Line" value="zipcode" /></td>
 			<td><input type="radio" name="Column" value="zipcode" /></td>
-			<td><select name="Filter"  size="1" id="zipcode">
+            <td><select name="Filter" id="zipcode">
 				<option value=""> </option>
 				[% FOREACH ZIP_LOO IN ZIP_LOOP %]
 				<option value="[% ZIP_LOO.zipcode | html %]">[% ZIP_LOO.zipcode | html %]</option>
@@ -166,7 +166,7 @@
             <td><input type="radio" checked="checked" name="Line"   value="branchcode" /></td>
 			<td><input type="radio" name="Column" value="branchcode" /></td>
 			<td>
-                <select name="Filter"  size="1" id="branch">
+                <select name="Filter" id="branch">
                 <option value=""></option>
                 [% FOREACH l IN Branches.all( unfiltered => 1 ) %]
                     <option value="[% l.branchcode | html %]">[% l.branchcode | html %] - [% l.branchname || 'UNKNOWN' | html %]</option>
@@ -187,7 +187,7 @@
                 <td><input type="radio" name="Line" value="sex" /></td>
                 <td><input type="radio" name="Column" value="sex" /></td>
                 <td>
-                    <select id="sex" size="1" name="Filter">
+                    <select id="sex" name="Filter">
                         <option value="" />
                         <option value="M">Men</option>
                         <option value="F">Women</option>
@@ -200,7 +200,7 @@
 				<td><input type="radio" name="Line" value="sort1" /></td>
 				<td><input type="radio" name="Column" value="sort1" /></td>
 				<td>
-					<select id="sort1" size="1" name="Filter">
+                    <select id="sort1" name="Filter">
 					<option value=""/>
 					[% FOREACH SORT1_LOO IN SORT1_LOOP %]
 						<option value="[% SORT1_LOO.authorized_value | html %]">[% SORT1_LOO.lib | html %]</option>
@@ -217,7 +217,7 @@
 				<td><input type="radio" name="Line" value="sort2" /></td>
 				<td><input type="radio" name="Column" value="sort2" /></td>
 				<td>
-					<select id="sort2" size="1" name="Filter">
+                    <select id="sort2" name="Filter">
 					<option value=""/>
 					[% FOREACH SORT2_LOO IN SORT2_LOOP %]
 						<option value="[% SORT2_LOO.value | html %]">[% SORT2_LOO.value | html %]</option>
@@ -287,12 +287,12 @@
             <label for="outputfile">To a file:</label> <input type="radio" name="output" value="file" id="outputfile" />
             <label class="inline" for="basename">Named: </label><input type="text" name="basename" id="basename" value="Export" />
             <label class="inline" for="MIME">Into an application:</label>
-            <select name="MIME" id="MIME" size="1">
+            <select name="MIME" id="MIME">
             [% FOREACH value IN CGIextChoice %]
                 <option value="[% value | html %]">[% value | html %]</option>
             [% END %]
             </select>
-            <select name="sep" id="sep" size="1">
+            <select name="sep" id="sep">
             [% FOREACH value IN CGIsepChoice.values.sort() %]
               [% IF ( value == CGIsepChoice.default ) %]
                 <option value="[% value | html %]" selected="selected">[% value | html %]</option>

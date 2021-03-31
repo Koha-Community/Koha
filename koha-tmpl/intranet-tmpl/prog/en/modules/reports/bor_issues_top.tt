@@ -185,7 +185,7 @@
 			[% END %]
 			</select>
 			<label class="inline" for="sep">Delimiter: </label>
-            <select name="sep" id="sep" size="1">
+            <select name="sep" id="sep">
             [% FOREACH value IN CGIseplist.values.sort() %]
               [% IF ( value == CGIseplist.default ) %]
                 <option value="[% value | html %]" selected="selected">[% value | html %]</option>
