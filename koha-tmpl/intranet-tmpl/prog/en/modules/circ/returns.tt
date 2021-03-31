@@ -1039,6 +1039,10 @@
                 this.form.print_slip.value = 1;
                 let barcode = document.getElementById('confirm-hold-barcode');
                 if ( barcode ) barcode.remove();
+                if ($(this).attr('name') == "dotransfer") {
+                    var dotransfer = $("<input>").attr("type", "hidden").attr("name", "dotransfer").val("Yes");
+                    $('#mainform').append(dotransfer);
+                }
                 this.form.submit();
             });
 
