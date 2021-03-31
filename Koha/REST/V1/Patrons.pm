@@ -19,6 +19,7 @@ use Modern::Perl;
 
 use Mojo::Base 'Mojolicious::Controller';
 
+use Koha::Database;
 use Koha::DateUtils;
 use Koha::Patrons;
 
@@ -103,53 +104,99 @@ sub add {
 
     return try {
 
-        my $patron = Koha::Patron->new_from_api( $c->validation->param('body') )->store;
+        Koha::Database->new->schema->txn_do(
+            sub {
 
-        $c->res->headers->location( $c->req->url->to_string . '/' . $patron->borrowernumber );
-        return $c->render(
-            status  => 201,
-            openapi => $patron->to_api
+                my $body = $c->validation->param('body');
+
+                my $extended_attributes = delete $body->{extended_attributes} // [];
+
+                my $patron = Koha::Patron->new_from_api($body)->store;
+                $patron->extended_attributes(
+                    [
+                        map { { code => $_->{type}, attribute => $_->{value} } }
+                          @$extended_attributes
+                    ]
+                );
+
+                $c->res->headers->location($c->req->url->to_string . '/' . $patron->borrowernumber);
+                return $c->render(
+                    status  => 201,
+                    openapi => $patron->to_api
+                );
+            }
         );
     }
     catch {
 
         my $to_api_mapping = Koha::Patron->new->to_api_mapping;
 
-        unless ( blessed $_ && $_->can('rethrow') ) {
-            return $c->render(
-                status  => 500,
-                openapi => { error => "Something went wrong, check Koha logs for details." }
-            );
+        if ( blessed $_ ) {
+            if ( $_->isa('Koha::Exceptions::Object::DuplicateID') ) {
+                return $c->render(
+                    status  => 409,
+                    openapi => { error => $_->error, conflict => $_->duplicate_id }
+                );
+            }
+            elsif ( $_->isa('Koha::Exceptions::Object::FKConstraint') ) {
+                return $c->render(
+                    status  => 400,
+                    openapi => {
+                            error => "Given "
+                            . $to_api_mapping->{ $_->broken_fk }
+                            . " does not exist"
+                    }
+                );
+            }
+            elsif ( $_->isa('Koha::Exceptions::BadParameter') ) {
+                return $c->render(
+                    status  => 400,
+                    openapi => {
+                            error => "Given "
+                            . $to_api_mapping->{ $_->parameter }
+                            . " does not exist"
+                    }
+                );
+            }
+            elsif (
+                $_->isa('Koha::Exceptions::Patron::MissingMandatoryExtendedAttribute')
+              )
+            {
+                return $c->render(
+                    status  => 400,
+                    openapi => { error => "$_" }
+                );
+            }
+            elsif (
+                $_->isa('Koha::Exceptions::Patron::Attribute::InvalidType')
+              )
+            {
+                return $c->render(
+                    status  => 400,
+                    openapi => { error => "$_" }
+                );
+            }
+            elsif (
+                $_->isa('Koha::Exceptions::Patron::Attribute::NonRepeatable')
+              )
+            {
+                return $c->render(
+                    status  => 400,
+                    openapi => { error => "$_" }
+                );
+            }
+            elsif (
+                $_->isa('Koha::Exceptions::Patron::Attribute::UniqueIDConstraint')
+              )
+            {
+                return $c->render(
+                    status  => 400,
+                    openapi => { error => "$_" }
+                );
+            }
         }
-        if ( $_->isa('Koha::Exceptions::Object::DuplicateID') ) {
-            return $c->render(
-                status  => 409,
-                openapi => { error => $_->error, conflict => $_->duplicate_id }
-            );
-        }
-        elsif ( $_->isa('Koha::Exceptions::Object::FKConstraint') ) {
-            return $c->render(
-                status  => 400,
-                openapi => {
-                          error => "Given "
-                        . $to_api_mapping->{ $_->broken_fk }
-                        . " does not exist"
-                }
-            );
-        }
-        elsif ( $_->isa('Koha::Exceptions::BadParameter') ) {
-            return $c->render(
-                status  => 400,
-                openapi => {
-                          error => "Given "
-                        . $to_api_mapping->{ $_->parameter }
-                        . " does not exist"
-                }
-            );
-        }
-        else {
-            $c->unhandled_exception($_);
-        }
+
+        $c->unhandled_exception($_);
     };
 }
 
