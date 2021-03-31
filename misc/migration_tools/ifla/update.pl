@@ -236,7 +236,12 @@ for my $subfield (@subfields) {
         say sprintf('Subfield already exists: %s$%s', $subfield->{tagfield}, $subfield->{tagsubfield});
         if ($force) {
             say sprintf('Force mode is active, updating subfield %s$%s', $subfield->{tagfield}, $subfield->{tagsubfield});
-            $mss->update($subfield);
+
+            # Do not modify the tab of existing subfield
+            my %values = %$subfield;
+            delete $values{tab};
+
+            $mss->update(\%values);
         }
         next;
     }
@@ -299,7 +304,12 @@ for my $authsubfield (@authsubfields) {
         say sprintf('Auth subfield already exists: %s$%s (%s)', $authsubfield->{tagfield}, $authsubfield->{tagsubfield}, $authsubfield->{authtypecode});
         if ($force) {
             say sprintf('Force mode is active, updating auth subfield %s$%s (%s)', $authsubfield->{tagfield}, $authsubfield->{tagsubfield}, $authsubfield->{authtypecode});
-            $ass->update($authsubfield);
+
+            # Do not modify the tab of existing subfield
+            my %values = %$authsubfield;
+            delete $values{tab};
+
+            $ass->update(\%values);
         }
         next;
     }
