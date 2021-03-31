@@ -1046,6 +1046,12 @@
 
             $('.print').on("click",function(e){
                 this.form.print_slip.value = 1;
+
+                if ($(this).attr('name') == "dotransfer") {
+                    var dotransfer = $("<input>").attr("type", "hidden").attr("name", "dotransfer").val("Yes");
+                    $('#mainform').append(dotransfer);
+                }
+
                 this.form.submit();
             });
 
