@@ -301,7 +301,7 @@ subtest 'overwrite() tests' => sub {
           . '/extended_attributes' => json =>
           [ { type => $unique_attr_type->code, value => $value_1 } ] )
       ->status_is(400)
-      ->json_is( '/error' => 'Missing mandatory attribute of type "' . $mandatory_attr_type->code . '".' );
+      ->json_is( '/error' => "Missing mandatory extended attribute (type=" . $mandatory_attr_type->code . ')' );
 
     $patron->add_extended_attribute({ code => $repeatable_attr_type->code, attribute => 'repeatable_1' });
     $patron->add_extended_attribute({ code => $repeatable_attr_type->code, attribute => 'repeatable_2' });

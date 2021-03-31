@@ -205,13 +205,10 @@ sub overwrite {
                     openapi => { error => "$_" }
                 );
             }
-            elsif ( $_->isa('Koha::Exceptions::Object::FKConstraint') ) {
+            elsif ( $_->isa('Koha::Exceptions::Patron::MissingMandatoryExtendedAttribute') ) {
                 return $c->render(
                     status  => 400,
-                    openapi => {
-                        error => 'Missing mandatory attribute of type "'
-                          . $_->value . '".'
-                    }
+                    openapi => { error => "$_" }
                 );
 
             }
