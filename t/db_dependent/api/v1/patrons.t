@@ -18,6 +18,7 @@
 use Modern::Perl;
 
 use Test::More tests => 7;
+use Test::MockModule;
 use Test::Mojo;
 use Test::Warn;
 
@@ -26,6 +27,9 @@ use t::lib::Mocks;
 
 use C4::Auth;
 use Koha::Database;
+use Koha::Exceptions::Patron;
+use Koha::Exceptions::Patron::Attribute;
+use Koha::Patron::Attributes;
 use Koha::Patron::Debarments qw/AddDebarment/;
 
 my $schema  = Koha::Database->new->schema;
@@ -127,9 +131,39 @@ subtest 'add() tests' => sub {
     $schema->storage->txn_rollback;
 
     subtest 'librarian access tests' => sub {
-        plan tests => 21;
+        plan tests => 22;
 
         $schema->storage->txn_begin;
+
+        my $extended_attrs_exception;
+        my $type = 'hey';
+        my $code = 'ho';
+        my $attr = "Let's go";
+
+        # Mock early, so existing mandatory attributes don't break all the tests
+        my $mocked_patron = Test::MockModule->new('Koha::Patron');
+        $mocked_patron->mock(
+            'extended_attributes',
+            sub {
+
+                if ($extended_attrs_exception) {
+                    if ( $extended_attrs_exception eq 'Koha::Exceptions::Patron::Attribute::NonRepeatable'
+                        or $extended_attrs_exception eq 'Koha::Exceptions::Patron::Attribute::UniqueIDConstraint'
+                      )
+                    {
+                        $extended_attrs_exception->throw(
+                            attribute => Koha::Patron::Attribute->new(
+                                { code => $code, attribute => $attr }
+                            )
+                        );
+                    }
+                    else {
+                        $extended_attrs_exception->throw( type => $type );
+                    }
+                }
+                return [];
+            }
+        );
 
         my $patron = $builder->build_object({ class => 'Koha::Patrons' });
         my $newpatron = $patron->to_api;
@@ -209,6 +243,124 @@ subtest 'add() tests' => sub {
               ->json_has( '/error', 'Fails when trying to POST duplicate cardnumber' )
               ->json_like( '/conflict' => qr/(borrowers\.)?cardnumber/ ); }
             qr/DBD::mysql::st execute failed: Duplicate entry '(.*?)' for key '(borrowers\.)?cardnumber'/;
+
+        subtest 'extended_attributes handling tests' => sub {
+
+            plan tests => 19;
+
+            my $patrons_count = Koha::Patrons->search->count;
+
+            $extended_attrs_exception = 'Koha::Exceptions::Patron::MissingMandatoryExtendedAttribute';
+            $t->post_ok(
+                "//$userid:$password@/api/v1/patrons" => json => {
+                    "firstname"   => "Katrina",
+                    "surname"     => "Fischer",
+                    "address"     => "Somewhere",
+                    "category_id" => "ST",
+                    "city"        => "Konstanz",
+                    "library_id"  => "MPL"
+                }
+            )->status_is(400)
+              ->json_is( '/error' =>
+                  "Missing mandatory extended attribute (type=$type)" );
+
+            is( Koha::Patrons->search->count, $patrons_count, 'No patron added' );
+
+            $extended_attrs_exception = 'Koha::Exceptions::Patron::Attribute::InvalidType';
+            $t->post_ok(
+                "//$userid:$password@/api/v1/patrons" => json => {
+                    "firstname"   => "Katrina",
+                    "surname"     => "Fischer",
+                    "address"     => "Somewhere",
+                    "category_id" => "ST",
+                    "city"        => "Konstanz",
+                    "library_id"  => "MPL"
+                }
+            )->status_is(400)
+              ->json_is( '/error' =>
+                  "Tried to use an invalid attribute type. type=$type" );
+
+            is( Koha::Patrons->search->count, $patrons_count, 'No patron added' );
+
+            $extended_attrs_exception = 'Koha::Exceptions::Patron::Attribute::NonRepeatable';
+            $t->post_ok(
+                "//$userid:$password@/api/v1/patrons" => json => {
+                    "firstname"   => "Katrina",
+                    "surname"     => "Fischer",
+                    "address"     => "Somewhere",
+                    "category_id" => "ST",
+                    "city"        => "Konstanz",
+                    "library_id"  => "MPL"
+                }
+            )->status_is(400)
+              ->json_is( '/error' =>
+                  "Tried to add more than one non-repeatable attributes. type=$code value=$attr" );
+
+            is( Koha::Patrons->search->count, $patrons_count, 'No patron added' );
+
+            $extended_attrs_exception = 'Koha::Exceptions::Patron::Attribute::UniqueIDConstraint';
+            $t->post_ok(
+                "//$userid:$password@/api/v1/patrons" => json => {
+                    "firstname"   => "Katrina",
+                    "surname"     => "Fischer",
+                    "address"     => "Somewhere",
+                    "category_id" => "ST",
+                    "city"        => "Konstanz",
+                    "library_id"  => "MPL"
+                }
+            )->status_is(400)
+              ->json_is( '/error' =>
+                  "Your action breaks a unique constraint on the attribute. type=$code value=$attr" );
+
+            is( Koha::Patrons->search->count, $patrons_count, 'No patron added' );
+
+            $mocked_patron->unmock('extended_attributes');
+            # Temporarily get rid of mandatory attribute types
+            Koha::Patron::Attribute::Types->search({ mandatory => 1 })->delete;
+            # Create a couple attribute attribute types
+            my $repeatable_1 = $builder->build_object(
+                {
+                    class => 'Koha::Patron::Attribute::Types',
+                    value => {
+                        mandatory     => 0,
+                        repeatable    => 1,
+                        unique        => 0,
+                        category_code => 'ST'
+                    }
+                }
+            );
+            my $repeatable_2 = $builder->build_object(
+                {
+                    class => 'Koha::Patron::Attribute::Types',
+                    value => {
+                        mandatory     => 0,
+                        repeatable    => 1,
+                        unique        => 0,
+                        category_code => 'ST'
+                    }
+                }
+            );
+
+            my $patron_id = $t->post_ok(
+                "//$userid:$password@/api/v1/patrons" => json => {
+                    "firstname"   => "Katrina",
+                    "surname"     => "Fischer",
+                    "address"     => "Somewhere",
+                    "category_id" => "ST",
+                    "city"        => "Konstanz",
+                    "library_id"  => "MPL",
+                    "extended_attributes" => [
+                        { type => $repeatable_1->code, value => 'a' },
+                        { type => $repeatable_1->code, value => 'b' },
+                        { type => $repeatable_1->code, value => 'c' },
+                        { type => $repeatable_2->code, value => 'd' },
+                        { type => $repeatable_2->code, value => 'e' }
+                    ]
+                }
+            )->status_is(201, 'Patron added')->tx->res->json->{patron_id};
+            my $extended_attributes = join( ' ', sort map {$_->attribute} Koha::Patrons->find($patron_id)->extended_attributes->as_list);
+            is( $extended_attributes, 'a b c d e', 'Extended attributes are stored correctly');
+        };
 
         $schema->storage->txn_rollback;
     };
