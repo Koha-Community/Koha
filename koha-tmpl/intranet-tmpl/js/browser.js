@@ -42,9 +42,9 @@ KOHA.browser = function (searchid, biblionumber) {
 
     me.create = function (offset, query, limit, sort, newresults, total) {
         if (current_search) {
-            if (offset === current_search.offset - newresults.length) {
+            if (offset === parseInt(current_search.offset) - newresults.length) {
                 current_search.results = newresults.concat(current_search.results);
-            } else if (searchOffset = current_search.offset + newresults.length) {
+            } else if (searchOffset = parseInt(current_search.offset) + newresults.length) {
                 current_search.results = current_search.results.concat(newresults);
             } else {
                 delete current_search;
@@ -73,10 +73,10 @@ KOHA.browser = function (searchid, biblionumber) {
     me.show = function () {
         if (current_search) {
             me.curPos = $.inArray(biblionumber, current_search.results);
-            if ( current_search.offset + me.curPos <= current_search.pagelen ) { // First page
+            if ( parseInt(current_search.offset ) + me.curPos <= current_search.pagelen ) { // First page
                 me.offset = 0;
             } else {
-                me.offset = current_search.offset - 1;
+                me.offset = parseInt(current_search.offset) - 1;
             }
 
             $(document).ready(function () {
@@ -84,12 +84,12 @@ KOHA.browser = function (searchid, biblionumber) {
                     var searchURL = '/cgi-bin/koha/catalogue/search.pl?' + decodeURIComponent(current_search.query) + '&limit=' + decodeURIComponent(current_search.limit) + '&sort_by=' + current_search.sort + '&searchid=' + me.searchid + '&offset=' + me.offset;
                     var prevbutton;
                     var nextbutton;
-                    if (me.curPos === 0 && current_search.offset === 1) {
+                    if (me.curPos === 0 && parseInt(current_search.offset) === 1) {
                         prevbutton = '<span id="browse-previous" class="browse-button" title="' + __("Previous") + '"><i class="fa fa-arrow-left"></i></span>';
                     } else {
                         prevbutton = '<a href="#" id="browse-previous" class="browse-button" title="' + __("Previous") + '"><i class="fa fa-arrow-left"></i></a>';
                     }
-                    if (current_search.offset + me.curPos == current_search.total) {
+                    if (parseInt(current_search.offset) + me.curPos == current_search.total) {
                         nextbutton = '<span id="browse-next" class="browse-button" title="' + __("Next") + '"><i class="fa fa-arrow-right"></i></span>';
                     } else {
                         nextbutton = '<a href="#" id="browse-next" class="browse-button" title="' + __("Next") + '"><i class="fa fa-arrow-right"></i></a>';
