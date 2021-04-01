@@ -25,7 +25,7 @@ use Exception::Class (
     'Koha::Exceptions::Elasticsearch::BadResponse' => {
         isa         => 'Koha::Exceptions::Elasticsearch',
         description => 'Bad response received when submitting request to Elasticsearch',
-        fields      => [ 'error', 'details' ]
+        fields      => [ 'type', 'details' ]
     },
     'Koha::Exceptions::Elasticsearch::MARCFieldExprParseError' => {
         isa         => 'Koha::Exceptions::Elasticsearch',

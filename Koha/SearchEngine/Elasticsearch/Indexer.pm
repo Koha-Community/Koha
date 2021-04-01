@@ -125,12 +125,10 @@ sub update_index {
                 carp "One or more ElasticSearch errors occurred when indexing documents";
             }
         } catch {
-            if( ref $_ eq 'Search::Elasticsearch::Error::Timeout' ){
             Koha::Exceptions::Elasticsearch::BadResponse->throw(
-                error => "Record commit failed.",
-                details => "Timeout",
+                type => $_->{type},
+                details => $_->{text},
             );
-            }
         };
     }
     return $response;
