@@ -222,6 +222,14 @@ for my $tag (@tags) {
     $marc_tag_structure_rs->create($tag);
 }
 
+my @mss = $marc_subfield_structure_rs->search({ frameworkcode => '' });
+my %tab_for_field;
+foreach my $mss (@mss) {
+    next if $mss->tab < 0;
+    next if exists $tab_for_field{$mss->tagfield};
+    $tab_for_field{$mss->tagfield} = $mss->tab;
+}
+
 my $subfield_defaults = $defaults->{subfield};
 for my $subfield (@subfields) {
     foreach my $key (keys %$subfield_defaults) {
@@ -230,6 +238,11 @@ for my $subfield (@subfields) {
         }
     }
     $subfield->{liblibrarian} = t($subfield->{liblibrarian});
+
+    # If other subfields exist in this field, use the same tab
+    if (exists $tab_for_field{$subfield->{tagfield}}) {
+        $subfield->{tab} = $tab_for_field{$subfield->{tagfield}};
+    }
 
     my $mss = $marc_subfield_structure_rs->find('', $subfield->{tagfield}, $subfield->{tagsubfield});
     if ($mss) {
@@ -290,6 +303,18 @@ for my $authtag (@authtags) {
     $auth_tag_structure_rs->create($authtag);
 }
 
+my @ass = $auth_subfield_structure_rs->search();
+my %tab_for_authfield;
+foreach my $ass (@ass) {
+    my $authtypecode = $ass->get_column('authtypecode');
+    $tab_for_authfield{$authtypecode} //= {};
+
+    next if $ass->tab < 0;
+    next if exists $tab_for_authfield{$authtypecode}->{$ass->tagfield};
+
+    $tab_for_authfield{$authtypecode}->{$ass->tagfield} = $ass->tab;
+}
+
 my $authsubfield_defaults = $defaults->{authsubfield};
 for my $authsubfield (@authsubfields) {
     foreach my $key (keys %$authsubfield_defaults) {
@@ -298,6 +323,11 @@ for my $authsubfield (@authsubfields) {
         }
     }
     $authsubfield->{liblibrarian} = t($authsubfield->{liblibrarian});
+
+    # If other subfields exist in this field, use the same tab
+    if (exists $tab_for_authfield{$authsubfield->{authtypecode}}->{$authsubfield->{tagfield}}) {
+        $authsubfield->{tab} = $tab_for_authfield{$authsubfield->{authtypecode}}->{$authsubfield->{tagfield}};
+    }
 
     my $ass = $auth_subfield_structure_rs->find($authsubfield->{authtypecode}, $authsubfield->{tagfield}, $authsubfield->{tagsubfield});
     if ($ass) {
