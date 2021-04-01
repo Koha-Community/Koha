@@ -261,7 +261,7 @@ require( [ 'koha-backend', 'widget', 'text-marc' ], function( KohaBackend, Widge
     Widget.Register( '008@', {
         makeTemplate: function() {
             var now = new Date();
-            return Widget.PadNum( now.getYear() % 100, 2 ) + Widget.PadNum( now.getMonth() + 1, 2 ) + Widget.PadNum( now.getDate(), 2 ) + "b        xxu||||| |||| 00| 0 [% DefaultLanguageField008 | html %] d";
+            return Widget.PadNum( now.getYear() % 100, 2 ) + Widget.PadNum( now.getMonth() + 1, 2 ) + Widget.PadNum( now.getDate(), 2 ) + "b        [% DefaultCountryField008 | html %]||||| |||| 00| 0 [% DefaultLanguageField008 | html %] d";
         },
         init: function() {
             var $result = $( '<span class="subfield-widget fixed-widget">' + _("Fixed data:") + '<span class="hint widget-loading">' + _("Loading...") + '</span></span>' );
