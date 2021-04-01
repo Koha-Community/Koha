@@ -465,7 +465,7 @@ if ($patron) {
 if ( $patron ) {
     my $noissues;
     if ( $patron->gonenoaddress ) {
-        $template->param( gna => 1 );
+        $template->param( gonenoaddress => 1 );
         $noissues = 1;
     }
     if ( $patron->lost ) {
@@ -473,7 +473,7 @@ if ( $patron ) {
         $noissues = 1;
     }
     if ( $patron->is_debarred ) {
-        $template->param( dbarred=> 1 );
+        $template->param( is_debarred=> 1 );
         $noissues = 1;
     }
     my $account = $patron->account;
@@ -542,7 +542,7 @@ if ( $patron ) {
     }
 }
 
-my $messages = Koha::Patron::Messages->search(
+my $patron_messages = Koha::Patron::Messages->search(
     {
         'me.borrowernumber' => $borrowernumber,
     },
@@ -598,7 +598,7 @@ if ($restoreduedatespec || $stickyduedate) {
 }
 
 $template->param(
-    messages           => $messages,
+    patron_messages           => $patron_messages,
     borrowernumber    => $borrowernumber,
     branch            => $branch,
     was_renewed       => scalar $query->param('was_renewed') ? 1 : 0,

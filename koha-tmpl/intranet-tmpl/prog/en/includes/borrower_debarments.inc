@@ -23,7 +23,7 @@
                                 [% CASE 'MANUAL' %]
                                     Manual
                                 [% CASE 'OVERDUES' %]
-                                    Overdues
+                                Overdues
                                 [% CASE 'SUSPENSION' %]
                                     Suspension
                                 [% CASE 'DISCHARGE' %]
