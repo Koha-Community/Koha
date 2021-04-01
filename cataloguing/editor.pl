@@ -69,6 +69,7 @@ $template->{VARS}->{editable_batches} = [ $schema->resultset('ImportBatch')->sea
 
 # Needed information for cataloging plugins
 $template->{VARS}->{DefaultLanguageField008} = pack( 'A3', C4::Context->preference('DefaultLanguageField008') || 'eng' );
+$template->{VARS}->{DefaultCountryField008} = pack( 'A3', C4::Context->preference('DefaultCountryField008') || '|||' );
 
 my $authtags = Koha::MarcSubfieldStructures->search({ authtypecode => { '!=' => '' }, 'frameworkcode' => '' });
 $template->{VARS}->{authtags} = $authtags;
