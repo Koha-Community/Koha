@@ -114,9 +114,9 @@
                     <div id="pending_updates">
                             [% FOREACH pm IN PendingModifications %]
                                 [% SET borrowernumber = pm.borrowernumber %]
-                                <h3><a href="#panel_modify_[% pm.borrowernumber | uri %]">[% borrowers.$borrowernumber.surname | html %][% IF ( borrowers.$borrowernumber.firstname ) %], [% borrowers.$borrowernumber.firstname | html %][% END %] - [% Categories.GetName( borrowers.$borrowernumber.categorycode ) | html %] ([% Branches.GetName( borrowers.$borrowernumber.branchcode ) | html %]) ([% borrowers.$borrowernumber.cardnumber | html %]) - Requested on [% pm.timestamp | $KohaDates with_hours = 1 %]</a></h3>
+                                <h3 class="panel-header" id="panel-header-[% pm.borrowernumber | html %]"><a href="#panel_modify_[% pm.borrowernumber | uri %]">[% borrowers.$borrowernumber.surname | html %][% IF ( borrowers.$borrowernumber.firstname ) %], [% borrowers.$borrowernumber.firstname | html %][% END %] - [% Categories.GetName( borrowers.$borrowernumber.categorycode ) | html %] ([% Branches.GetName( borrowers.$borrowernumber.branchcode ) | html %]) ([% borrowers.$borrowernumber.cardnumber | html %]) - Requested on [% pm.timestamp | $KohaDates with_hours = 1 %]</a></h3>
                                 <div id="panel_modify_[% pm.borrowernumber | html %]">
-                                    <div style="background-color:#E6F0F2;padding:.5em;margin:.3em 0;">
+                                    <div class="btn-toolbar">
                                         <input type="radio" id="approve_modify_[% pm.borrowernumber | html %]" name="modify_[% pm.borrowernumber | html %]" value="approve" />
                                         <label for="approve_modify_[% pm.borrowernumber | html %]">Approve</label>
 
@@ -127,6 +127,16 @@
                                         <label for="ignore_modify_[% pm.borrowernumber | html %]">Ignore</label>
                                         | <a target="_blank" href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% pm.borrowernumber | html %]" >Patron details</a>
                                     </div>
+
+                                    [% IF borrowers.$borrowernumber.gonenoaddress > 0 %]
+                                        <div class="dialog message" style="margin-top:.8em">
+                                            <h4>Patron's address in doubt</h4>
+                                            <p>The <strong>Gone no address</strong> flag is set for this patron. If this modification request resolves the issue, please unset the flag.</p>
+                                            <input type="checkbox" id="unset_gna_[% pm.borrowernumber | html %]" name="unset_gna_[% pm.borrowernumber | html %]" value="unset_gna_[% pm.borrowernumber | html %]"/>
+                                            <label for="unset_gna_[% pm.borrowernumber | html %]">Unset Gone no address for this patron</label>
+                                        </div>
+                                    [% END %]
+
                                   [% IF !pm.extended_attributes and pm.size > 3 or pm.extended_attributes and pm.size > 4 %]
                                   [%# timestamp+verification_token+borrowernumber=3 %]
                                     <div class="members-update-table">
@@ -179,19 +189,10 @@
                                         </table>
                                     </div>
                                   [%  END %]
-                                  [% IF borrowers.$borrowernumber.gonenoaddress > 0 %]
-                                    <div class="dialog message" style="margin-top:.8em">
-                                        <h4>Patron's address in doubt</h4>
-                                        <p>The <strong>Gone no address</strong> flag is set for this patron. If this modification request resolves the issue, please unset the flag.</p>
-                                        <input type="checkbox" id="unset_gna_[% pm.borrowernumber | html %]" name="unset_gna_[% pm.borrowernumber | html %]" value="unset_gna_[% pm.borrowernumber | html %]"/>
-                                        <label for="unset_gna_[% pm.borrowernumber | html %]">Unset Gone no address for this patron</label>
-                                    </div>
-                                  [% END %]
                                 </div>
                             [% END %]
                         </div>
                     <fieldset class="action"><input type="submit" value="Submit" /></fieldset>
-
                 </form>
             [% ELSE %]
             <div class="dialog message">
@@ -207,7 +208,15 @@
     [% Asset.js("js/members-menu.js") | $raw %]
     <script>
         $(function() {
-            $( "#pending_updates" ).accordion();
+            $( "#pending_updates" ).accordion({
+                collapsible: true,
+                heightStyle: "content",
+                [%- IF ( active ) -%]
+                    active: $(".panel-header").index( $("#panel-header-[% active | html %]") )
+                [%- ELSE -%]
+                    active: 0
+                [%- END -%]
+            });
         });
     </script>
 [% END %]

@@ -70,7 +70,8 @@ foreach my $pm (@$pending_modifications) {
 
 $template->param(
     PendingModifications => $pending_modifications,
-    borrowers            => $borrowers
+    borrowers            => $borrowers,
+    active               => ( $query->param('active') || 0 ),
 );
 
 output_html_with_http_headers $query, $cookie, $template->output;

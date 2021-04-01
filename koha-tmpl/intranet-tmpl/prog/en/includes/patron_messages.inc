@@ -6,9 +6,11 @@
     <ul>
         [% IF ( has_modifications ) %]
             <li class="has_modifications">
-                <span class="circ-hlt">Pending modifications:</span> Patron has pending modifications.
+                <span class="circ-hlt">Pending modifications:</span>
                 [% IF CAN_user_borrowers_edit_borrowers && ( !Koha.Preference('IndependentBranchesPatronModifications') || borrower.branch == branch ) %]
-                        <a href="/cgi-bin/koha/members/members-update.pl">View all pending patron modifications</a>
+                    <a href="/cgi-bin/koha/members/members-update.pl?active=[% patron.borrowernumber | uri %]">Review pending modifications</a>
+                [% ELSE %]
+                    Patron has pending modifications
                 [% END %]
             </li>
         [% END %]
