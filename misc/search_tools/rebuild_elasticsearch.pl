@@ -309,10 +309,8 @@ sub _do_reindex {
                 _handle_response($response);
                 _log( 1, "Commit complete\n" );
             } catch {
-                if( ref $_ eq 'Koha::Exceptions::Elasticsearch::BadResponse'){
-                    _log(1,$_->{error});
-                    _log(2,$_->{details});
-                }
+                _log(1,"Elasticsearch exception thrown: ".$_->type."\n");
+                _log(2,"Details: ".$_->details."\n");
             };
             $commit_count  = $commit;
             @id_buffer     = ();
