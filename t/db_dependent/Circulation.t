@@ -18,7 +18,7 @@
 use Modern::Perl;
 use utf8;
 
-use Test::More tests => 49;
+use Test::More tests => 50;
 use Test::Exception;
 use Test::MockModule;
 use Test::Deep qw( cmp_deeply );
@@ -275,6 +275,92 @@ Koha::CirculationRules->set_rules(
         }
     }
 );
+
+subtest "CanBookBeRenewed AllowRenewalIfOtherItemsAvailable multiple borrowers and items tests" => sub {
+    plan tests => 5;
+
+    #Can only reserve from home branch
+    Koha::CirculationRules->set_rule(
+        {
+            branchcode   => undef,
+            itemtype     => undef,
+            rule_name    => 'holdallowed',
+            rule_value   => 1
+        }
+    );
+    Koha::CirculationRules->set_rule(
+        {
+            branchcode   => undef,
+            categorycode   => undef,
+            itemtype     => undef,
+            rule_name    => 'onshelfholds',
+            rule_value   => 1
+        }
+    );
+
+    # Patrons from three different branches
+    my $patron_borrower = $builder->build_object({ class => 'Koha::Patrons' });
+    my $patron_hold_1   = $builder->build_object({ class => 'Koha::Patrons' });
+    my $patron_hold_2   = $builder->build_object({ class => 'Koha::Patrons' });
+    my $biblio = $builder->build_sample_biblio();
+
+    # Item at each patron branch
+    my $item_1 = $builder->build_sample_item({
+        biblionumber => $biblio->biblionumber,
+        homebranch   => $patron_borrower->branchcode
+    });
+    my $item_2 = $builder->build_sample_item({
+        biblionumber => $biblio->biblionumber,
+        homebranch   => $patron_hold_2->branchcode
+    });
+    my $item_3 = $builder->build_sample_item({
+        biblionumber => $biblio->biblionumber,
+        homebranch   => $patron_hold_1->branchcode
+    });
+
+    my $issue = AddIssue( $patron_borrower->unblessed, $item_1->barcode);
+    my $datedue = dt_from_string( $issue->date_due() );
+    is (defined $issue->date_due(), 1, "Item 1 checked out, due date: " . $issue->date_due() );
+
+    # Biblio-level holds
+    AddReserve(
+        {
+            branchcode       => $patron_hold_1->branchcode,
+            borrowernumber   => $patron_hold_1->borrowernumber,
+            biblionumber     => $biblio->biblionumber,
+            priority         => 1,
+            reservation_date => dt_from_string(),
+            expiration_date  => undef,
+            itemnumber       => undef,
+            found            => undef,
+        }
+    );
+    AddReserve(
+        {
+            branchcode       => $patron_hold_2->branchcode,
+            borrowernumber   => $patron_hold_2->borrowernumber,
+            biblionumber     => $biblio->biblionumber,
+            priority         => 2,
+            reservation_date => dt_from_string(),
+            expiration_date  => undef,
+            itemnumber       => undef,
+            found            => undef,
+        }
+    );
+    t::lib::Mocks::mock_preference('AllowRenewalIfOtherItemsAvailable', 0 );
+
+    my ( $renewokay, $error ) = CanBookBeRenewed($patron_borrower->borrowernumber, $item_1->itemnumber);
+    is( $renewokay, 0, 'Cannot renew, reserved');
+    is( $error, 'on_reserve', 'Cannot renew, reserved (returned error is on_reserve)');
+
+    t::lib::Mocks::mock_preference('AllowRenewalIfOtherItemsAvailable', 1 );
+
+    ( $renewokay, $error ) = CanBookBeRenewed($patron_borrower->borrowernumber, $item_1->itemnumber);
+    is( $renewokay, 1, 'Can renew, two items available for two holds');
+    is( $error, undef, 'Can renew, each reserve has an item');
+
+
+};
 
 subtest "GetIssuingCharges tests" => sub {
     plan tests => 4;
