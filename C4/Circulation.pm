@@ -2903,7 +2903,7 @@ sub CanBookBeRenewed {
                 next if IsItemOnHoldAndFound( $item->itemnumber );
                 while ( my $patron = $patrons->next ) {
                     next unless IsAvailableForItemLevelRequest($item, $patron);
-                    next unless CanItemBeReserved($patron->borrowernumber,$item->itemnumber);
+                    next unless CanItemBeReserved($patron->borrowernumber,$item->itemnumber,undef,{ignore_hold_counts=>1})->{status} eq 'OK';
                     push @reservable, $item->itemnumber;
                     if (@reservable >= @borrowernumbers) {
                         $resfound = 0;
