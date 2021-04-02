@@ -2849,6 +2849,7 @@ sub CanBookBeRenewed {
                     }
                     last;
                 }
+                $patrons->reset;
             }
         }
     }
