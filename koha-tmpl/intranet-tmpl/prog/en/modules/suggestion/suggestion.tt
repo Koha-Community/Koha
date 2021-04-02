@@ -361,7 +361,7 @@
                     </select>
                 </li>
                 <li>
-                    <label for="reason">Reason</label>
+                    <label for="reason">Reason:</label>
                     <select class="select-reason" id="reason" name="reason">
                         <option value=""> -- Choose a reason -- </option>
                         [% FOREACH reasonsloo IN suggestion.reasonsloop %]
@@ -553,7 +553,6 @@
         [% END %]
     </ul>
 [% END %]
-
 [% FOREACH suggestion IN suggestions %]
 <div id="[% suggestion.suggestiontype | html %]">
 <form class="update_suggestions" name="f" method="post" action="/cgi-bin/koha/suggestion/suggestion.pl#[% suggestion.suggestiontype| uri %]">
