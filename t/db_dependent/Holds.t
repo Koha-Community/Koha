@@ -7,7 +7,7 @@ use t::lib::TestBuilder;
 
 use C4::Context;
 
-use Test::More tests => 68;
+use Test::More tests => 70;
 use MARC::Record;
 
 use C4::Biblio;
@@ -386,6 +386,10 @@ is(
     CanItemBeReserved( $borrowernumbers[0], $item->itemnumber)->{status}, 'tooManyReserves',
     "cannot request item if policy that matches on item-level item type forbids it"
 );
+is(
+    CanItemBeReserved( $borrowernumbers[0], $item->itemnumber, undef, { ignore_hold_counts => 1 })->{status}, 'tooManyReserves',
+    "cannot request item if policy that matches on item-level item type forbids it even if ignoring counts"
+);
 
 $item->itype('CAN')->store;
 ok(
@@ -491,6 +495,8 @@ my $res_id = AddReserve(
 
 is( CanItemBeReserved( $borrowernumbers[0], $itemnumber )->{status},
     'tooManyReserves', 'Patron cannot reserve item with hold limit of 1, 1 bib level hold placed' );
+is( CanItemBeReserved( $borrowernumbers[0], $itemnumber, undef, { ignore_hold_counts => 1 } )->{status},
+    'OK', 'Patron can reserve item if checking policy but not counts' );
 
     #results should be the same for both ReservesControlBranch settings
 t::lib::Mocks::mock_preference( 'ReservesControlBranch', 'ItemHomeLibrary' );
