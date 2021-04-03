@@ -117,12 +117,12 @@
         </select>        </li>
         [% END %]
         <li>
-            <label for="minlocation">Item callnumber between: </label>
+            <label for="minlocation">Item call number between: </label>
                 <input type="text" name="minlocation" id="minlocation" value="[% minlocation | html %]" /> (items.itemcallnumber)  </li>
            <li><label for="maxlocation">...and: </label>
                 <input type="text" name="maxlocation" id="maxlocation" value="[% maxlocation | html %]" />
            <li>
-            <label for="class_source">Callnumber classification scheme</label>
+            <label for="class_source">Call number classification scheme</label>
             <select name="class_source">
             [% FOREACH class_source IN class_sources %]
                 [% IF class_source.cn_source == pref_class %]

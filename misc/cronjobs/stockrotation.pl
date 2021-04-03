@@ -393,7 +393,7 @@ sub _print_item {
     return sprintf "
     Title:           %s
     Author:          %s
-    Callnumber:      %s
+    Call number:     %s
     Location:        %s
     Barcode:         %s
     On loan?:        %s
