@@ -55,9 +55,10 @@
 
 
 [% IF ( unknownauthid ) %]
+    <h1>Authority does not exist</h1>
     <div class="dialog message">The authority record you requested does not exist ([% errauthid | html %]).</div>
 [% ELSE %]
-<h1>Authority #[% authid | html %] ([% authtypetext | html %])</h1>
+    <h1>Authority #[% authid | html %] ([% authtypetext | html %])</h1>
 
 <div id="action">
     [% IF count %]

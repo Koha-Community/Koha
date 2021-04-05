@@ -52,11 +52,13 @@
                 <fieldset class="rows">
 
                     <legend>
-                        [% IF club %]
-                            Modify club <em>[% club.name | html %]</em>
-                        [% ELSE %]
-                            Create a new <em>[% club_template.name | html %]</em> club
-                        [% END %]
+                        <h1>
+                            [% IF club %]
+                                Modify club <em>[% club.name | html %]</em>
+                            [% ELSE %]
+                                Create a new <em>[% club_template.name | html %]</em> club
+                            [% END %]
+                        </h1>
                     </legend>
 
                     <ol>

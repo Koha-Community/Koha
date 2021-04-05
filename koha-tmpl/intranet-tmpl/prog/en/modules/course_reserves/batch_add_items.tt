@@ -32,6 +32,7 @@
 <div class="main container-fluid">
     <div class="row">
         <div class="col-md-8 col-md-offset-2">
+            <h1>Add reserves for <em>[% course.course_name | html %]</em></h1>
         [% IF action == 'invalid_course' %]
             <div id="invalid-course-error" class="dialog alert">Invalid course!</div>
         [% END %]
@@ -152,7 +153,7 @@
         [% END %]
 
         [% IF action == 'display_results' %]
-            <h1>Results</h1>
+            <h2>Results</h2>
 
             [% IF barcodes %]
                 <h3>Items added</h3>
