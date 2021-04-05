@@ -460,7 +460,7 @@ if ((!$nok) and $nodouble and ($op eq 'insert' or $op eq 'save')){
         }
 
         # If 'AutoEmailOpacUser' syspref is on, email user their account details from the 'notice' that matches the user's branchcode.
-        if ( C4::Context->preference("AutoEmailOpacUser") == 1 && $newdata{'userid'}  && $newdata{'password'}) {
+        if ( C4::Context->preference("AutoEmailOpacUser") ) {
             #look for defined primary email address, if blank - attempt to use borr.email and borr.emailpro instead
             my $emailaddr;
             if  (C4::Context->preference("AutoEmailPrimaryAddress") ne 'OFF'  && 
