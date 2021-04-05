@@ -95,7 +95,7 @@
 
                     [% INCLUDE 'stockrotation-toolbar.inc' %]
 
-                    <h2>Stock rotation</h2>
+                    <h1>Stock rotation</h1>
 
                     [% IF existing_rotas.size > 0 %]
                         <table id="stock_rotation" class="rotas_table" role="grid">
@@ -152,9 +152,9 @@
                 [% ELSIF (op == 'create_edit_rota') %]
 
                     [% IF rota.rota_id %]
-                        <h2>Edit "[% rota.title | html %]"</h2>
+                        <h1>Edit "[% rota.title | html %]"</h1>
                     [% ELSE %]
-                        <h2>Create new rota</h2>
+                        <h1>Create new rota</h1>
                     [% END %]
 
                     [% IF error == 'invalid_form' %]
@@ -209,7 +209,7 @@
                     </div>
                     [% END %]
 
-                    <h2>Manage <em>[% rota.title | html %]</em> stages</h2>
+                    <h1>Manage <em>[% rota.title | html %]</em> stages</h1>
                     <div id="ajax_status"
                         data-saving-msg="Saving changes..."
                         data-success-msg=""
@@ -312,9 +312,9 @@
                 [% ELSIF (op == 'create_edit_stage') %]
 
                     [% IF stage.id %]
-                        <h2>Edit "[% Branches.GetName(stage.branchcode_id) | html %]"</h2>
+                        <h1>Edit "[% Branches.GetName(stage.branchcode_id) | html %]"</h1>
                     [% ELSE %]
-                        <h2>Create new stage</h2>
+                        <h1>Create new stage</h1>
                     [% END %]
 
                     [% IF error == 'invalid_form' %]
@@ -357,7 +357,7 @@
                 [% ELSIF (op == 'confirm_remove_from_rota') %]
 
                     <div class="dialog alert">
-                        <h3>Are you sure you wish to remove this item from it's rota</h3>
+                        <h1>Are you sure you wish to remove this item from it's rota</h1>
                         <p>
                             <a class="btn btn-default btn-xs approve" href="?op=remove_item_from_stage&amp;item_id=[% item_id | uri %]&amp;stage_id=[% stage_id | uri %]&amp;rota_id=[% rota_id | uri %]"><i class="fa fa-fw fa-check"></i>Yes</a>
                             <a class="btn btn-default btn-xs deny" href="?op=manage_items&amp;rota_id=[% rota_id | uri %]"><i class="fa fa-fw fa-remove"></i>No</a>
@@ -366,7 +366,7 @@
                 [% ELSIF (op == 'confirm_delete_stage') %]
 
                     <div class="dialog alert">
-                        <h3>Are you sure you want to delete this stage?</h3>
+                        <h1>Are you sure you want to delete this stage?</h1>
                         [% IF stage.stockrotationitems.count > 0 %]
                             <p>This stage contains the following item(s):</p>
                             <ul>
@@ -394,7 +394,7 @@
                         </div>
                     [% END %]
 
-                    <h2>Manage items assigned to <em>[% rota.title | html %]</em></h2>
+                    <h1>Manage items assigned to <em>[% rota.title | html %]</em></h1>
 
                     <!-- Add items modal -->
                     <div class="modal" id="addItemsModal" tabindex="-1" role="dialog" aria-labelledby="addItemsLabel">
@@ -521,7 +521,7 @@
                 [% ELSIF op == 'add_items_to_rota' %]
 
                     <div class="dialog message">
-                        <h3>Add items to rota report</h3>
+                        <h1>Add items to rota report</h1>
                     </div>
 
                     <div>

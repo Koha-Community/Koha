@@ -7,6 +7,7 @@
     <div class="container-fluid">
 
 [% UNLESS (authorized) %]
+<h1>Error adding to list</h1>
     <p align="center">
         [% IF (errcode==1) %]Could not create a new list. Please check the name.<br/>[% END %]
         [% IF (errcode==2) %]Sorry, you do not have permission to add items to this list.<br/>[% END %]

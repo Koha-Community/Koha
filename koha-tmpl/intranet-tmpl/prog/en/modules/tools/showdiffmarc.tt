@@ -41,9 +41,10 @@
 <div class="main container-fluid">
     <div class="row">
             <main>
+            <h1>Compare matched records</h1>
 
         <div id="col1" class="col-sm-6">
-            <h1>Original</h1>
+            <h2>Original</h2>
             [% IF ( ERROR_FORMATTED1 ) %]
                 <div class="dialog alert">
                     <p>The record id <em>[% RECORDID | html %]</em> doesn't match any existing record.</p>
@@ -54,7 +55,7 @@
             [% END %]
         </div>
         <div id="col2" class="col-sm-6">
-            <h1>Imported</h1>
+            <h2>Imported</h2>
             [% IF ( ERROR_FORMATTED2 ) %]
                 <div class="dialog alert">
                     <p>The import id number <em>[% IMPORTID | html %]</em> doesn't match any existing record.</p>

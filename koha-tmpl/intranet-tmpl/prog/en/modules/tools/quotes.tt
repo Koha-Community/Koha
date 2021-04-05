@@ -60,7 +60,7 @@
 [% END %]
 
 [% IF op == 'add_form' %]
-    <h3>[% IF quote %]Modify quote[% ELSE %]New quote[% END %]</h3>
+    <h1>[% IF quote %]Modify quote[% ELSE %]New quote[% END %]</h1>
     <form action="/cgi-bin/koha/tools/quotes.pl" id="Aform" name="Aform" class="validated" method="post">
         <fieldset class="rows">
             <input type="hidden" name="op" value="add_validate" />
@@ -88,7 +88,7 @@
 [% IF op == 'delete_confirm' %]
     <div class="dialog alert">
         <form action="/cgi-bin/koha/tools/quotes.pl" method="post">
-            <h3>Are you sure you want to delete the following quote?</h3>
+            <h1>Are you sure you want to delete the following quote?</h1>
             [% quote.source | html %] - [% quote.text | html %]
             <input type="hidden" name="op" value="delete_confirmed" />
             <input type="hidden" name="id" value="[% quote.id | html %]" />
@@ -101,7 +101,7 @@
 [% END %]
 
 [% IF op == 'list' %]
-    <h3>Quotes</h3>
+    <h1>Quotes</h1>
     [% IF quotes_count > 0 %]
         <table id="quotes">
             <thead>

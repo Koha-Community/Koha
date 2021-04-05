@@ -184,9 +184,8 @@
 [% END %]
 
 [% IF op == 'view' %]
+    <h1>Contents of <em>[% shelf.shelfname | html %]</em></h1>
     [% IF itemsloop %]
-
-    <h3>Contents of <em>[% shelf.shelfname | html %]</em></h3>
     <div class="pages">[% pagination_bar | $raw %]</div>
     <form action="/cgi-bin/koha/virtualshelves/shelves.pl" id="listform" method="post">
         <input type="hidden" name="op" value="remove_biblios" />
@@ -320,10 +319,10 @@
         <fieldset class="rows">
 
         [% IF op == 'add_form' %]
-            <legend>Create a new list</legend>
+        <legend><h1>Create a new list</h1></legend>
             <input type="hidden" name="op" value="add" />
         [% ELSE %]
-            <legend>Edit list <em>[% shelf.shelfname | html %]</em></legend>
+        <legend><h1>Edit list <em>[% shelf.shelfname | html %]</em></h1></legend>
             <input type="hidden" name="op" value="edit" />
         [% END %]
         <input type="hidden" name="referer" value="[% referer | html %]" />
@@ -389,7 +388,7 @@
 [% END %]
 
 [% IF op == 'list' %]
-    <h2>Lists</h2>
+    <h1>Lists</h1>
     <div id="tabs" class="toptabs">
         <ul>
             <li id="privateshelves_tab" class="active"><a href="#tab_content">Your lists</a></li>
