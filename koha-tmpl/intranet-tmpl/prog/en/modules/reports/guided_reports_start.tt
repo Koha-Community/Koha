@@ -172,7 +172,7 @@
                 [% INCLUDE "reports-toolbar.inc" %]
 
                 [% IF ( start ) %]
-                    <h2>Guided reports</h2>
+                    <h1>Guided reports</h1>
                     <p>Use the guided reports engine to create non standard reports. This feature aims to provide some middle ground between the built in canned reports and writing custom SQL reports.</p>
 
                     <h3>Build and run reports</h3>
@@ -219,8 +219,8 @@
                 [% END %]
 
                 [% IF ( saved1 ) %]
-                    [% IF ( savedreports ) %]
                         <h1>Saved reports</h1>
+                    [% IF ( savedreports ) %]
 
                         [% IF ( filters.date || filters.author || filters.keyword ) %]
                             <p>Filtered by:
@@ -1193,6 +1193,7 @@
                 [% END #/IF ( execute ) %]
 
                 [% IF ( create ) %]
+                    <h1>Create from SQL</h1>
                     <form action="/cgi-bin/koha/reports/guided_reports.pl" method="post" id="sql_report_form">
                         <fieldset class="rows">
                             <legend>Create report from SQL</legend>
@@ -1278,6 +1279,7 @@
                 [% END # /IF saved_results %]
 
                 [% IF ( showsql ) %]
+                <h1>Saved reports - SQL</h1>
                     <fieldset class="rows">
                         <legend>[% reportname | html %]</legend>
                         <ol>

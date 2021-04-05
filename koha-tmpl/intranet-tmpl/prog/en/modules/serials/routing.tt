@@ -45,7 +45,6 @@
     <div class="row">
         <div class="col-sm-10 col-sm-push-2">
             <main>
-[% INCLUDE 'blocking_errors.inc' %]
 
 [% IF ( op ) %]
 <h1>Create routing list for <em>[% title | html %]</em></h1>
@@ -53,6 +52,7 @@
 <h1>Edit routing list for <em>[% title | html %]</em></h1>
 [% END %]
 
+[% INCLUDE 'blocking_errors.inc' %]
 <form method="post" action="routing.pl">
 <input type="hidden" name="op" value="save" />
 <input type="hidden" name="subscriptionid" value="[% subscriptionid | html %]" />
