@@ -42,8 +42,8 @@
                 <main>
 
                     [% INCLUDE 'patroncards-toolbar.inc' %]
+                    <h1>[% IF (template_id) %]Edit[% ELSE %]Create[% END %] patron card template[% IF (template_id) %] ([% template_id | html %])[% END %]</h1>
                     <form name="input" action="/cgi-bin/koha/patroncards/edit-template.pl" method="get">
-                        <h3>[% IF (template_id) %]Edit[% ELSE %]Create[% END %] patron card template[% IF (template_id) %] ([% template_id | html %])[% END %]</h3>
                         <div class="row">
                         <div class="col-sm-6">
                             <fieldset class="rows">

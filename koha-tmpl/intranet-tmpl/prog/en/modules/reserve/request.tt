@@ -90,6 +90,7 @@
         [% END %]
 
         <main>
+            <h1>Holds</h1>
 
             [% IF ( nobiblio ) %]
                 <div class="dialog alert">
@@ -122,9 +123,9 @@
             [% END %]
 
             [% UNLESS ( multi_hold ) %]
-                <h1>Place a hold on [% INCLUDE 'biblio-title.inc' link = 1 %] [% IF biblio.author %] by [% biblio.author | html %][% END %]</h1>
+                <h2>Place a hold on [% INCLUDE 'biblio-title.inc' link = 1 %] [% IF biblio.author %] by [% biblio.author | html %][% END %]</h2>
             [% ELSE %]
-                <h1>
+                <h2>
                     [% IF ( patron ) %]
                         Place holds
                     [% ELSE %]
@@ -134,7 +135,7 @@
                             Search patrons
                         [% END %]
                     [% END %]
-                </h1>
+                </h2>
             [% END %]
 
             [% UNLESS club OR patron OR patron.borrowernumber OR noitems OR nobiblio %]

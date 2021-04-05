@@ -43,7 +43,7 @@
         <div class="col-md-10 col-md-offset-1 col-lg-8 col-lg-offset-2">
 
 [% IF ( transactions_loaded ) %]
-  <h2>Koha offline circulation</h2>
+  <h1>Koha offline circulation</h1>
   <p>Your data was processed. Here are the results:</p>
   [% FOREACH message IN messages %]
     [% IF ( message.message ) %]
@@ -58,7 +58,7 @@
     [% IF ( message.payment ) %]<p>Accepted payment ([% message.amount | html %]) from <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% message.borrowernumber | uri %]">[% message.firstname | html %] [% message.surname | html %]</a> ([% message.cardnumber | html %]): [% message.datetime | html %]</p>[% END %]
   [% END %]
 [% ELSE %]
-   <h2>Upload offline circulation data</h2>
+   <h1>Upload offline circulation data</h1>
 
    <div id="fileuploadform">
      <form method="post" action="/cgi-bin/koha/offline_circ/process_koc.pl" enctype="multipart/form-data" class="validated">

@@ -32,10 +32,11 @@
             <main>
 
                 [% INCLUDE 'patroncards-toolbar.inc' %]
+                <h1>Image manager</h1>
                 [% INCLUDE 'patroncards-errors.inc' %]
                 <div class="row">
                     <div class="col-sm-6">
-                        <h1>Upload additional images for patron cards</h1>
+                        <h2>Upload additional images for patron cards</h2>
                         <p>Manage additional images to use as logo, decoration or background on a patron card layout.</p>
                         <form name="upload_images" method="post" action="/cgi-bin/koha/patroncards/image-manage.pl" enctype="multipart/form-data">
                             <fieldset class="brief">
@@ -74,7 +75,7 @@
                         </form>
                     </div>
                     <div class="col-sm-6">
-                    <h1>Delete images</h1>
+                    <h2>Delete images</h2>
                         [% IF ( TABLE ) %]
                         <form name="delete_images" method="post" action="/cgi-bin/koha/patroncards/image-manage.pl" enctype="multipart/form-data">
                             <fieldset class="brief">

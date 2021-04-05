@@ -41,6 +41,8 @@
 
                     [% INCLUDE 'patroncards-toolbar.inc' %]
 
+                    <h1>[% IF ( layout_id ) %]Edit[% ELSE %]Create[% END %] patron card layout</h1>
+
                 <!-- NOTE: The order of the elements on this form is crictical to correct processing. You've been warned...  -->
                 <form name="input" action="/cgi-bin/koha/patroncards/edit-layout.pl" method="get">
                 <div class="row">
