@@ -38,13 +38,13 @@
             <div class="col-md-10 col-md-offset-1 col-lg-8 col-lg-offset-2">
         [% END %]
             <main>
+<h1>Receive shipment from vendor <a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% booksellerid | uri %]">[% name | html %]</a></h1>
 
 [% IF ( error_failed_to_create_invoice ) %]
     <div id="error" class="dialog alert">
         <p>An error has occurred. Invoice cannot be created.</p>
     </div>
 [% END %]
-<h1>Receive shipment from vendor <a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% booksellerid | uri %]">[% name | html %]</a></h1>
 
     [% IF duplicate_invoices %]
     <div id="parcels_duplicate_invoice" class="dialog alert">

@@ -40,6 +40,7 @@
         <div class="col-sm-10 col-sm-push-2">
             <main>
 
+      <h1>Invoice: [% invoicenumber | html %]</h1>
                 [% INCLUDE 'blocking_errors.inc' %]
 
       [% IF ( modified ) %]
@@ -47,7 +48,6 @@
           <p>Invoice has been modified</p>
         </div>
       [% END %]
-      <h1>Invoice: [% invoicenumber | html %]</h1>
 
       <p>Vendor: <a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% booksellerid | uri %]">[% suppliername | html %]</a></p>
         <form action="/cgi-bin/koha/acqui/invoice.pl" method="post" class="validated">
