@@ -78,6 +78,7 @@
         <th class="string-sort">Available item types</th>
         <th class="string-sort">Available locations</th>
         <th>Earliest hold date</th>
+        <th>Reserve notes</th>
         <th>Action</th>
         </tr>
     </thead>
@@ -177,6 +178,7 @@
         <td data-order="[% hold.reservedate | html %]">
             [% hold.reservedate | $KohaDates %] in [% Branches.GetName ( hold.branchcode ) | html %]
         </td>
+        <td>[% hold.reservenotes | html %]</td>
         <td>
             <form name="cancelReserve" action="/cgi-bin/koha/circ/pendingreserves.pl" method="post">
                 <input type="hidden" name="op" value="cancel_reserve" />
@@ -236,6 +238,7 @@
         <td><input type="text" class="filter" data-column_num="9" placeholder="Available enumeration" style="width:95%"/></td>
         <td id="itemtype-filter"></td>
         <td id="locationfilter"></td>
+        <td></td>
         <td></td>
         <td></td>
         </tr>
