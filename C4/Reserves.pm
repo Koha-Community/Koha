@@ -394,7 +394,7 @@ sub CanItemBeReserved {
 
     # Check that the patron doesn't have an item level hold on this item already
     return { status =>'itemAlreadyOnHold' }
-      if Koha::Holds->search( { borrowernumber => $borrowernumber, itemnumber => $itemnumber } )->count();
+      if ( !$params->{ignore_hold_counts} && Koha::Holds->search( { borrowernumber => $borrowernumber, itemnumber => $itemnumber } )->count() );
 
     # Check that patron have not checked out this biblio (if AllowHoldsOnPatronsPossessions set)
     if ( !C4::Context->preference('AllowHoldsOnPatronsPossessions')

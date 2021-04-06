@@ -7,7 +7,7 @@ use t::lib::TestBuilder;
 
 use C4::Context;
 
-use Test::More tests => 70;
+use Test::More tests => 72;
 use MARC::Record;
 
 use C4::Biblio;
@@ -369,6 +369,14 @@ t::lib::Mocks::mock_preference( 'SkipHoldTrapOnNotForLoanValue', '-1' );
 ok( !defined( ( CheckReserves($itemnumber) )[1] ), "Hold cannot be trapped for item with notforloan value matching SkipHoldTrapOnNotForLoanValue" );
 t::lib::Mocks::mock_preference( 'SkipHoldTrapOnNotForLoanValue', '-1|1' );
 ok( !defined( ( CheckReserves($itemnumber) )[1] ), "Hold cannot be trapped for item with notforloan value matching SkipHoldTrapOnNotForLoanValue" );
+is(
+    CanItemBeReserved( $borrowernumbers[0], $itemnumber)->{status}, 'itemAlreadyOnHold',
+    "cannot request item that you have already reservedd"
+);
+is(
+    CanItemBeReserved( $borrowernumbers[0], $item->itemnumber, undef, { ignore_hold_counts => 1 })->{status}, 'OK',
+    "can request item if we are not checking holds counts, but only if policy allows or forbids it"
+);
 $hold->delete();
 
 # Regression test for bug 9532
