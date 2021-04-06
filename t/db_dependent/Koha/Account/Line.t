@@ -178,7 +178,7 @@ subtest 'is_credit() and is_debit() tests' => sub {
 
 subtest 'apply() tests' => sub {
 
-    plan tests => 25;
+    plan tests => 26;
 
     $schema->storage->txn_begin;
 
@@ -330,10 +330,35 @@ subtest 'apply() tests' => sub {
     my $module = new Test::MockModule('C4::Circulation');
     $module->mock('AddRenewal', sub { $called = 1; });
     $module->mock('CanBookBeRenewed', sub { return 1; });
-    my $credit_renew = $account->add_credit({ amount => 100, user_id => $patron->id, interface => 'commandline' });
+    my $credit_forgive = $account->add_credit(
+        {
+            amount    => 1,
+            user_id   => $patron->id,
+            interface => 'cli',
+            type      => 'FORGIVEN'
+        }
+    );
     my $debits_renew = Koha::Account::Lines->search({ accountlines_id => $accountline->id })->as_list;
-    $credit_renew->apply( { debits => $debits_renew, offset_type => 'Manual Credit' } );
+    $credit_forgive->apply( { debits => $debits_renew, offset_type => 'Forgiven' } );
+    is( $called, 0, 'C4::Circulation::AddRenew NOT called when RenewAccruingItemWhenPaid enabled but credit type is "FORGIVEN"' );
 
+    $accountline = Koha::Account::Line->new(
+        {
+            issue_id       => $checkout->id,
+            borrowernumber => $patron->id,
+            itemnumber     => $item->id,
+            branchcode     => $library->id,
+            date           => \'NOW()',
+            debit_type_code => 'OVERDUE',
+            status         => 'UNRETURNED',
+            interface      => 'cli',
+            amount => '1',
+            amountoutstanding => '1',
+        }
+    )->store();
+    my $credit_renew = $account->add_credit({ amount => 100, user_id => $patron->id, interface => 'commandline' });
+    $debits_renew = Koha::Account::Lines->search({ accountlines_id => $accountline->id })->as_list;
+    $credit_renew->apply( { debits => $debits_renew, offset_type => 'Manual Credit' } );
     is( $called, 1, 'RenewAccruingItemWhenPaid causes C4::Circulation::AddRenew to be called when appropriate' );
 
     $schema->storage->txn_rollback;
@@ -390,7 +415,7 @@ subtest 'Keep account info when related patron, staff, item or cash_register is 
 
 subtest 'Renewal related tests' => sub {
 
-    plan tests => 7;
+    plan tests => 8;
 
     $schema->storage->txn_begin;
 
@@ -431,10 +456,13 @@ subtest 'Renewal related tests' => sub {
 
 
     t::lib::Mocks::mock_preference( 'RenewAccruingItemWhenPaid', 0 );
-    is ($line->renew_item, undef, 'Attempt to renew fails when syspref is not set');
+    is ($line->renew_item({ interface => 'intranet' }), undef, 'Attempt to renew fails when syspref is not set');
     t::lib::Mocks::mock_preference( 'RenewAccruingItemWhenPaid', 1 );
+    t::lib::Mocks::mock_preference( 'RenewAccruingItemInOpac', 0 );
+    is ($line->renew_item({ interface => 'opac' }), undef, 'Attempt to renew fails when syspref is not set - OPAC');
+    t::lib::Mocks::mock_preference( 'RenewAccruingItemInOpac', 1 );
     is_deeply(
-        $line->renew_item,
+        $line->renew_item({ interface => 'intranet' }),
         {
             itemnumber => $item->itemnumber,
             error      => 'too_many',
