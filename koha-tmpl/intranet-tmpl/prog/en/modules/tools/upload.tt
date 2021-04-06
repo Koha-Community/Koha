@@ -434,11 +434,11 @@
 
             $(".get-file").on("click", function(e){
                 e.preventDefault();
-                if( navigator.clipboard ){
+                if( navigator.clipboard && navigator.clipboard.writeText){
                     navigator.clipboard.writeText( $(this).attr("href") );
+                    $(this).attr("data-original-title", _( "Link copied to the clipboard" ) )
+                        .tooltip("show");
                 }
-                $(this).attr("data-original-title", _( "Link copied to the clipboard" ) )
-                    .tooltip("show");
             });
             $(".get-file").tooltip({
                 delay: { "show": 100, "hide": 500 }
