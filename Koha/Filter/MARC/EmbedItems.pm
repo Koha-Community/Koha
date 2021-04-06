@@ -28,13 +28,9 @@ my $biblio = Koha::Biblios->find(
     { prefetch => [ items, metadata ] }
 );
 
-my $opachiddenitems_rules;
-eval {
-    my $yaml = C4::Context->preference('OpacHiddenItems') . "\n\n";
-    $opachiddenitems_rules = YAML::XS::Load(Encode::encode_utf8($yaml));
-};
+my $rules = C4::Context->yaml_preference('OpacHiddenItems');
 
-my @items  = grep { !$_->hidden_in_opac({ rules => $opachiddenitems_rules }) @{$biblio->items};
+my @items  = grep { !$_->hidden_in_opac({ rules => $rules }) @{$biblio->items};
 my $record = $biblio->metadata->record;
 
 my $processor = Koha::RecordProcessor->new(

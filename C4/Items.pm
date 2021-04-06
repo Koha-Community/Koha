@@ -49,7 +49,6 @@ BEGIN {
 
 use Carp;
 use Try::Tiny;
-use Encode;
 use C4::Context;
 use C4::Koha;
 use C4::Biblio;
@@ -58,7 +57,6 @@ use MARC::Record;
 use C4::ClassSource;
 use C4::Log;
 use List::MoreUtils qw(any);
-use YAML::XS;
 use DateTime::Format::MySQL;
 use Data::Dumper; # used as part of logging item record changes, not just for
                   # debugging; so please don't remove this
@@ -988,17 +986,11 @@ sub GetHiddenItemnumbers {
     }
     my @resultitems;
 
-    my $yaml = C4::Context->preference('OpacHiddenItems');
-    return () if (! $yaml =~ /\S/ );
-    $yaml = "$yaml\n\n"; # YAML is anal on ending \n. Surplus does not hurt
-    my $hidingrules;
-    eval {
-        $hidingrules = YAML::XS::Load(Encode::encode_utf8($yaml));
-    };
-    if ($@) {
-        warn "Unable to parse OpacHiddenItems syspref : $@";
-        return ();
-    }
+    my $hidingrules = C4::Context->yaml_preference('OpacHiddenItems');
+
+    return
+        unless $hidingrules;
+
     my $dbh = C4::Context->dbh;
 
     # For each item

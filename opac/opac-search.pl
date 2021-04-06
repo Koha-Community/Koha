@@ -30,7 +30,6 @@ use Modern::Perl;
 use C4::Context;
 use List::MoreUtils q/any/;
 use Try::Tiny;
-use YAML::XS;
 use Encode;
 
 use Data::Dumper; # TODO remove
@@ -242,17 +241,7 @@ my $cnt;
 my $advanced_search_types = C4::Context->preference("AdvancedSearchTypes") || "itemtypes";
 my @advanced_search_types = split(/\|/, $advanced_search_types);
 
-my $hidingrules = {};
-my $yaml = C4::Context->preference('OpacHiddenItems');
-if ( $yaml =~ /\S/ ) {
-    $yaml = "$yaml\n\n"; # YAML expects trailing newline. Surplus does not hurt.
-    eval {
-        $hidingrules = YAML::XS::Load(Encode::encode_utf8($yaml));
-    };
-    if ($@) {
-        warn "Unable to parse OpacHiddenItems syspref : $@";
-    }
-}
+my $hidingrules = C4::Context->yaml_preference('OpacHiddenItems') // {};
 
 my @sorted_itemtypes = sort { $itemtypes->{$a}->{translated_description} cmp $itemtypes->{$b}->{translated_description} } keys %$itemtypes;
 foreach my $advanced_srch_type (@advanced_search_types) {
@@ -811,8 +800,7 @@ for (my $i=0;$i<@servers;$i++) {
                 $template->param(searchdesc => 1);
             }
             $template->param(results_per_page =>  $results_per_page);
-            my $hide = C4::Context->preference('OpacHiddenItems');
-            $hide = ($hide =~ m/\S/) if $hide; # Just in case it has some spaces/new lines
+            my $hide = ($hidingrules) ? 1 : 0;
             my $branch = '';
             if (C4::Context->userenv){
                 $branch = C4::Context->userenv->{branch};
