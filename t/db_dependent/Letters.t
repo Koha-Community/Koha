@@ -962,7 +962,7 @@ subtest 'Test limit parameter for SendQueuedMessages' => sub {
 
 subtest 'Test message_id parameter for SendQueuedMessages' => sub {
 
-    plan tests => 5;
+    plan tests => 6;
 
     my $dbh = C4::Context->dbh;
 
@@ -987,7 +987,7 @@ subtest 'Test message_id parameter for SendQueuedMessages' => sub {
         'borrowernumber'         => $borrowernumber,
         'to_address'             => 'to@example.org',
         'message_transport_type' => 'email',
-        'from_address'           => 'root@localhost' # invalid KohaAdminEmailAddress
+        'from_address'           => 'root@localhost.' # invalid KohaAdminEmailAddress
     };
     my $message_id = C4::Letters::EnqueueLetter($my_message);
     throws_ok {
@@ -1000,7 +1000,9 @@ subtest 'Test message_id parameter for SendQueuedMessages' => sub {
 
     $my_message->{from_address} = 'root@example.org'; # valid KohaAdminEmailAddress
     $message_id = C4::Letters::EnqueueLetter($my_message);
-    C4::Letters::SendQueuedMessages( { message_id => $message_id } );
+    warning_like { C4::Letters::SendQueuedMessages( { message_id => $message_id } ); }
+        qr|Fake send_or_die|,
+        "SendQueuedMessages is using the mocked send_or_die routine";
     $message_1 = C4::Letters::GetMessage($message_1->{message_id});
     my $message_2 = C4::Letters::GetMessage($message_id);
     is( $message_1->{status}, 'pending', 'Message 1 status is unchanged' ); # Must be 'failed'
