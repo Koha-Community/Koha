@@ -406,7 +406,7 @@ sub preference {
     my $self = shift;
     my $var  = shift;    # The system preference to return
 
-    return $ENV{"OVERRIDE_SYSPREF_$var"}
+    return Encode::decode_utf8($ENV{"OVERRIDE_SYSPREF_$var"})
         if defined $ENV{"OVERRIDE_SYSPREF_$var"};
 
     $var = lc $var;
