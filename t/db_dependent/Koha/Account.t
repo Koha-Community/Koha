@@ -924,7 +924,7 @@ subtest 'pay() handles lost items when paying by amount ( not specifying the los
 
 subtest 'pay() renews items when appropriate' => sub {
 
-    plan tests => 1;
+    plan tests => 7;
 
     $schema->storage->txn_begin;
 
@@ -975,7 +975,7 @@ subtest 'pay() renews items when appropriate' => sub {
     my $module = Test::MockModule->new('C4::Circulation');
     $module->mock('AddRenewal', sub { $called = 1; });
     $module->mock('CanBookBeRenewed', sub { return 1; });
-    $account->pay(
+    my $result = $account->pay(
         {
             amount     => '1',
             library_id => $library->id,
@@ -983,6 +983,37 @@ subtest 'pay() renews items when appropriate' => sub {
     );
 
     is( $called, 1, 'RenewAccruingItemWhenPaid causes C4::Circulation::AddRenew to be called when appropriate' );
+    is(ref($result->{renew_result}), 'ARRAY', "Pay result contains 'renew_result' ARRAY" );
+    is( scalar @{$result->{renew_result}}, 1, "renew_result contains one renewal result" );
+    is( $result->{renew_result}->[0]->{itemnumber}, $item->id, "renew_result contains itemnumber of renewed item" );
+
+    # Reset test by adding a new overdue
+    Koha::Account::Line->new(
+        {
+            issue_id       => $checkout->id,
+            borrowernumber => $patron->id,
+            itemnumber     => $item->id,
+            date           => \'NOW()',
+            debit_type_code => 'OVERDUE',
+            status         => 'UNRETURNED',
+            interface      => 'cli',
+            amount => '1',
+            amountoutstanding => '1',
+        }
+    )->store();
+    $called = 0;
+
+    t::lib::Mocks::mock_preference( 'RenewAccruingItemWhenPaid', 0 );
+    $result = $account->pay(
+        {
+            amount     => '1',
+            library_id => $library->id,
+        }
+    );
+
+    is( $called, 0, 'C4::Circulation::AddRenew NOT called when RenewAccruingItemWhenPaid disabled' );
+    is(ref($result->{renew_result}), 'ARRAY', "Pay result contains 'renew_result' ARRAY" );
+    is( scalar @{$result->{renew_result}}, 0, "renew_result contains no renewal results" );
 
     $schema->storage->txn_rollback;
 };
