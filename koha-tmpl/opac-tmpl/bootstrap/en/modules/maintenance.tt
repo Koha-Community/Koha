@@ -40,7 +40,14 @@
                         [% Koha.Preference( 'OpacMaintenanceNotice' ) | $raw %]
                     [% ELSE %]
                         <h1>System Maintenance</h1>
-                          <p>The [% IF ( LibraryNameTitle ) %][% LibraryNameTitle | html %][% ELSE %]Koha online[% END %] catalog is offline for system maintenance. We'll be back soon! If you have any questions, please contact the <a href="mailto:[% Koha.Preference( 'KohaAdminEmailAddress' ) | $raw %]">site administrator</a></p>
+                            <p>
+                                The [% IF ( LibraryNameTitle ) %][% LibraryNameTitle | html %][% ELSE %]Koha online[% END %] catalog is offline for system maintenance. We'll be back soon!
+                                [% IF ( Koha.Preference( 'ReplytoDefault' ) ) %]
+                                    If you have any questions, please contact the <a href="mailto:[% Koha.Preference( 'ReplytoDefault' ) | $raw %]">site administrator</a>
+                                [% ELSIF ( Koha.Preference( 'KohaAdminEmailAddress' ) ) %]
+                                    If you have any questions, please contact the <a href="mailto:[% Koha.Preference( 'KohaAdminEmailAddress' ) | $raw %]">site administrator</a>
+                                [% END %]
+                            </p>
                     [% END %]
                 </div>
             </div>
