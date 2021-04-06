@@ -530,14 +530,22 @@ if ($pStatistics) {
 
 if ($return_claims) {
     print "Purging return claims older than $return_claims days.\n" if $verbose;
-    $sth = $dbh->prepare(
-        q{
-            DELETE FROM return_claims
-            WHERE resolved_on < DATE_SUB(CURDATE(), INTERVAL ? DAY)
+
+    $return_claims = Koha::Checkouts::ReturnClaims->filter_by_last_update(
+        {
+            timestamp_column_name => 'resolved_on',
+            days => $return_claims
         }
     );
-    $sth->execute($return_claims);
-    print "Done with purging return claims.\n" if $verbose;
+
+    my $count = $return_claims->count;
+    $return_claims->delete if $confirm;
+
+    if ($verbose) {
+        say $confirm
+            ? sprintf "Done with purging %d resolved return claims.", $count
+            : sprintf "%d resolved return claims would have been purged.", $count;
+    }
 }
 
 if ($pDeletedCatalog) {
