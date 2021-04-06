@@ -380,7 +380,7 @@ sub CanItemBeReserved {
 
     # Check that the patron doesn't have an item level hold on this item already
     return { status =>'itemAlreadyOnHold' }
-      if Koha::Holds->search( { borrowernumber => $borrowernumber, itemnumber => $itemnumber } )->count();
+      if ( !$params->{ignore_hold_counts} && Koha::Holds->search( { borrowernumber => $borrowernumber, itemnumber => $itemnumber } )->count() );
 
     my $controlbranch = C4::Context->preference('ReservesControlBranch');
 
