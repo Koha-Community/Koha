@@ -104,10 +104,15 @@ sub dt_build_orderby {
 
     return unless @orderbys;
 
+    my @sanitized_orderbys;
+
+    # Trick for virtualshelves, should not be extended
+    push @sanitized_orderbys, 'count asc' if grep {$_ eq 'count asc'} @orderbys;
+    push @sanitized_orderbys, 'count desc' if grep {$_ eq 'count desc'} @orderbys;
+
     # Must be "branches.branchname asc", "borrowers.firstname desc", etc.
     @orderbys = grep { /^\w+\.\w+ (asc|desc)$/ } @orderbys;
 
-    my @sanitized_orderbys;
     for my $orderby (@orderbys) {
       my ($identifier, $direction) = split / /, $orderby, 2;
       my ($table, $column) = split /\./, $identifier, 2;
