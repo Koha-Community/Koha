@@ -340,7 +340,7 @@
                                             <a href="/cgi-bin/koha/authorities/detail.pl?authid=[% loopro.object | uri %]" title="Display detail for this authority">Authority [% loopro.object | html %]</a>
                                         [% ELSIF ( loopro.module == 'NOTICES' ) %]
                                             [% IF ( loopro.notice ) %]
-                                                <a href="/cgi-bin/koha/tools/letter.pl?op=add_form&branchcode=[% loopro.notice.branchcode | uri %]&module=[% loopro.notice.module | uri %]&code=[% loopro.notice.code | uri %]&lang=[% loopro.notice.lang | uri %]">Notice [% loopro.notice.title | html %] ([% loopro.notice.code | html %])</a>
+                                                <a href="/cgi-bin/koha/tools/letter.pl?op=add_form&branchcode=[% loopro.notice.branchcode | uri %]&module=[% loopro.notice.module | uri %]&code=[% loopro.notice.code | uri %]#lang_[% loopro.notice.lang | uri %]">Notice [% loopro.notice.title | html %] ([% loopro.notice.code | html %])</a>
                                             [% ELSE %]
                                                 [% loopro.object | html %]
                                             [% END %]
