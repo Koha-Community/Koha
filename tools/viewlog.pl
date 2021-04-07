@@ -186,6 +186,16 @@ if ($do_it) {
                 }
             }
         }
+
+        if ( $log->module eq 'NOTICES' ) {
+            if ( $log->object ) {
+                my $notice = Koha::Notice::Templates->find( { id => $log->object } );
+                if ($notice && $output eq 'screen') {
+                    $result->{notice} = $notice->unblessed;
+                }
+            }
+        }
+
         push @data, $result;
     }
     if ( $output eq "screen" ) {

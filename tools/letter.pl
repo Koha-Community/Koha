@@ -46,6 +46,7 @@ use C4::Auth;
 use C4::Context;
 use C4::Output;
 use C4::Letters;
+use C4::Log;
 
 use Koha::Patron::Attribute::Types;
 
@@ -315,6 +316,10 @@ sub add_validate {
             next;
         }
         elsif ( $letter and $letter->{message_transport_type} eq $mtt and $letter->{lang} eq $lang ) {
+            logaction( 'NOTICES', 'MODIFY', $letter->{id}, $content,
+                'Intranet' )
+              if ( C4::Context->preference("NoticesLog")
+                && $content ne $letter->{content} );
             $dbh->do(
                 q{
                     UPDATE letter
@@ -326,11 +331,22 @@ sub add_validate {
                 $branchcode, $oldmodule, $code, $mtt, $lang
             );
         } else {
-            $dbh->do(
-                q{INSERT INTO letter (branchcode,module,code,name,is_html,title,content,message_transport_type, lang) VALUES (?,?,?,?,?,?,?,?,?)},
-                undef,
-                $branchcode || '', $module, $code, $name, $is_html || 0, $title, $content, $mtt, $lang
-            );
+            my $letter = Koha::Notice::Template->new(
+                {
+                    branchcode             => $branchcode,
+                    module                 => $module,
+                    code                   => $code,
+                    name                   => $name,
+                    is_html                => $is_html,
+                    title                  => $title,
+                    content                => $content,
+                    message_transport_type => $mtt,
+                    lang                   => $lang
+                }
+            )->store;
+            logaction( 'NOTICES', 'CREATE', $letter->id, $letter->content,
+                'Intranet' )
+              if C4::Context->preference("NoticesLog");
         }
     }
     # set up default display
@@ -350,16 +366,23 @@ sub delete_confirm {
 }
 
 sub delete_confirmed {
-    my ($branchcode, $module, $code, $mtt, $lang) = @_;
-    C4::Letters::DelLetter(
+    my ( $branchcode, $module, $code, $mtt, $lang ) = @_;
+    my $letters = Koha::Notice::Templates->search(
         {
             branchcode => $branchcode || '',
             module     => $module,
             code       => $code,
-            mtt        => $mtt,
-            lang       => $lang,
+            ( $mtt ? ( message_transport_type => $mtt ) : () ),
+            ( $lang ? ( lang => $lang ) : () ),
         }
     );
+    while ( my $letter = $letters->next ) {
+        logaction( 'NOTICES', 'DELETE', $letter->id, $letter->content,
+            'Intranet' )
+          if C4::Context->preference("NoticesLog");
+        $letter->delete;
+    }
+
     # setup default display for screen
     default_display($branchcode);
     return;
