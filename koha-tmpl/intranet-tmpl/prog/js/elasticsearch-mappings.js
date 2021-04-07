@@ -14,6 +14,7 @@ function clone_line(line) {
     $(new_line).find("select").each(function () {
         var attr = $(this).attr('name');
         var val = $(line).find('[data-id="' + attr + '"]').val();
+        $(this).find('option').removeAttr('selected');
         $(this).find('option[value="' + val + '"]').attr("selected", "selected");
     });
     return new_line;
@@ -46,7 +47,7 @@ $(document).ready(function () {
         tableInit( oldtabid, newtabid );
     });
 
-    $('.delete').click(function () {
+    $(document).on('click', '.delete', function() {
         if ($(this).hasClass('mandatory') && $(".mandatory[data-field_name=" + $(this).attr('data-field_name') + "]").length < 2) {
             alert( __("This field is mandatory and must have at least one mapping") );
             return;
@@ -54,6 +55,25 @@ $(document).ready(function () {
             var table = $(this).closest('table');
             let dt = $(table).DataTable();
             dt.row( $(this).closest('tr') ).remove().draw();
+            $(this).parents('tr').remove();
+            var line = $(this).closest("tr");
+
+            var name;
+            // We clicked delete button on search fields tab.
+            if (name = $(line).find('input[name="search_field_name"]').val()) {
+                // Prevent user from using a search field for a mapping
+                // after removing it without saving.
+                $('select[data-id="mapping_search_field_name"]').each(function( index, element) {
+                    $(element).find('option[value="' + name + '"]').remove();
+                });
+            }
+
+            var search_field_name = $(line).find('input[name="mapping_search_field_name"]').val();
+            var mappings = $('input[name="mapping_search_field_name"][type="hidden"][value="' + search_field_name + '"]');
+            if (mappings.length == 0) {
+                var search_field_line = $('input[name="search_field_name"][value="' + search_field_name + '"]').closest("tr");
+                $(search_field_line).find('a.btn-default').removeClass('disabled');
+            }
         }
     });
 
@@ -65,9 +85,15 @@ $(document).ready(function () {
         var marc_field = $(line).find('input[data-id="mapping_marc_field"]').val();
         if (marc_field.length > 0) {
             var new_line = clone_line(line);
+            var search_field_name = $(line).find('select[data-id="mapping_search_field_name"] option:selected').text();
             new_line.appendTo($('table[data-index_name="' + index_name + '"]>tbody'));
             let dt = $('#' + table_id).DataTable();
             dt.row.add(new_line).draw();
+
+            var search_field_line = $('input[name="search_field_name"][value="' + search_field_name + '"]').closest("tr");
+            $(search_field_line).find('a.btn-default').addClass('disabled');
+
+            clean_line(line);
 
             $(table).on( 'click', '.delete', function () {
                 var table = $(this).closest('table');
@@ -98,5 +124,27 @@ $(document).ready(function () {
             table.search('').draw();
         });
         return true;
+    });
+
+    $('.add-search-field').click(function() {
+        var table = $(this).closest('table');
+        var line = $(this).closest("tr");
+        var name = $(line).find('input[data-id="search_field_name"]').val();
+        let already_exist = 0;
+
+        if ( $('input[name="search_field_name"][value="' + name + '"]').val() ) {
+            already_exist = 1;
+        }
+
+        if (already_exist) {
+            alert("SearchField "+ name + " already exist");
+        } else {
+            var label = $(line).find('input[data-id="search_field_label"]').val();
+            if ( name.length > 0 && label.length > 0 ) {
+                var new_line = clone_line( line );
+                new_line.appendTo(table.find('tbody'));
+                clean_line(line);
+            }
+        }
     });
 });

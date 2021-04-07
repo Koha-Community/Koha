@@ -68,6 +68,18 @@ sub search_marc_maps {
     return $marc_map_fields;
 }
 
+=head3 is_mapped
+
+my $is_mapped = $search_field->is_mapped
+
+=cut
+
+sub is_mapped {
+    my ( $self ) = @_;
+
+    return $self->search_marc_maps()->count ? 1 : 0;
+}
+
 =head3 is_mapped_biblios
 
 my $is_mapped_biblios = $search_field->is_mapped_biblios

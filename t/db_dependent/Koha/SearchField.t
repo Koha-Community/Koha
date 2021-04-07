@@ -19,10 +19,11 @@
 
 use Modern::Perl;
 
-use Test::More tests => 10;
+use Test::More tests => 12;
 
 use Koha::Database;
 use Koha::SearchFields;
+use Koha::SearchMarcMaps;
 
 use t::lib::Mocks;
 use t::lib::TestBuilder;
@@ -37,6 +38,32 @@ t::lib::Mocks::mock_preference('marcflavour', 'marc21');
 my $sf = $builder->build({
     source => 'SearchField',
 });
+
+my $search_field = Koha::SearchFields->find($sf->{id});
+ok(!$search_field->is_mapped, 'Search field 1 is not mapped');
+
+my $auth_smm = $builder->build({
+    source => 'SearchMarcMap',
+    value => {
+        index_name  => 'authorities',
+        marc_type   => 'marc21',
+        marc_field  => '200abde'
+    }
+});
+
+my $auth_smtf = $builder->build({
+    source => 'SearchMarcToField',
+    value => {
+        search_marc_map_id  => $auth_smm->{id},
+        search_field_id     => $sf->{id}
+    }
+});
+
+$search_field = Koha::SearchFields->find($sf->{id});
+ok($search_field->is_mapped, 'Search field 1 is mapped');
+
+Koha::SearchMarcMaps->search({})->delete;
+$schema->resultset('SearchMarcToField')->search({})->delete;
 
 my $smm = $builder->build({
     source => 'SearchMarcMap',
@@ -72,7 +99,7 @@ my $smtf2 = $builder->build({
     }
 });
 
-my $search_field = Koha::SearchFields->find($sf->{id});
+$search_field = Koha::SearchFields->find($sf->{id});
 my $marc_maps = $search_field->search_marc_maps;
 my $marc_map = $marc_maps->next;
 is($marc_maps->count, 1, 'search_marc_maps should return 1 marc map');

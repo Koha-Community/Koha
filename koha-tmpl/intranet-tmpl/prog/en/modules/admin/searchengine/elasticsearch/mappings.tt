@@ -133,7 +133,7 @@ a.add, a.delete {
 
             [% WRAPPER tab_panels %]
                 [% WRAPPER tab_panel tabname="search_fields" bt_active= 1 %]
-                    <table class="search_fields" id="search_fields_table">
+                    <table class="search_fields" id="search_fields_table" data-index_name="search_fields">
                         <thead>
                             <tr>
                                 <th>Name</th>
@@ -142,11 +142,13 @@ a.add, a.delete {
                                 <th>Type</th>
                                 <th>Weight</th>
                                 <th colspan="2">Searchable</th>
+                                <th>&nbsp;</th>
                             </tr>
                             <tr>
                                 <th colspan="5" class="NoSort">&nbsp;</th>
                                 <th class="NoSort">Staff interface</th>
                                 <th class="NoSort">OPAC</th>
+                                <th>&nbsp;</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -253,9 +255,56 @@ a.add, a.delete {
                                             [% END %]
                                         </select>
                                     </td>
+                                    <td>
+                                        [% IF search_field.is_mapped %]
+                                            <a class="btn btn-default btn-xs disabled delete" style="cursor: pointer;"><i class="fa fa-trash"></i> Delete</a>
+                                        [% ELSE %]
+                                            <a class="btn btn-default btn-xs delete" style="cursor: pointer;"><i class="fa fa-trash"></i> Delete</a>
+                                        [% END %]
+                                    </td>
                                 </tr>
                             [% END %]
                         </tbody>
+                        <tfoot>
+                            <tr>
+                                <td>
+                                    <input type="text" data-id="search_field_name"/>
+                                </td>
+                                <td></td>
+                                <td>
+                                    <input type="text" data-id="search_field_label"/>
+                                </td>
+                                <td>
+                                    <select data-id="search_field_type">
+                                        <option value=""></option>
+                                        <option value="string">String</option>
+                                        <option value="date">Date</option>
+                                        <option value="year">Year</option>
+                                        <option value="number">Number</option>
+                                        <option value="boolean">Boolean</option>
+                                        <option value="sum">Sum</option>
+                                        <option value="isbn">ISBN</option>
+                                        <option value="stdno">Std. Number</option>
+                                    </select>
+                                </td>
+                                <td>
+                                    <input type="text" data-id="search_field_weight" value="">
+                                </td>
+                                <td>
+                                    <select data-id="search_field_staff_client">
+                                        <option value="1">Yes</option>
+                                        <option value="0">No</option>
+                                    </select>
+                                </td>
+                                <td>
+                                    <select data-id="search_field_opac">
+                                        <option value="1">Yes</option>
+                                        <option value="0">No</option>
+                                    </select>
+                                </td>
+                                <td><a class="btn btn-default btn-xs add-search-field"><i class="fa fa-plus"></i> Add</a></td>
+                            </tr>
+                        </tfoot>
                     </table>
                 [% END %]
                 [% FOREACH index IN indexes %]

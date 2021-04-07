@@ -109,6 +109,8 @@ if ( $op eq 'cud-edit' ) {
 
     eval {
 
+        Koha::SearchFields->search()->delete;
+
         for my $i ( 0 .. scalar(@field_name) - 1 ) {
             my $field_name = $field_name[$i];
             my $field_label = $field_label[$i];
@@ -117,9 +119,11 @@ if ( $op eq 'cud-edit' ) {
             my $field_staff_client = $field_staff_client[$i];
             my $field_opac = $field_opac[$i];
 
-            my $search_field = Koha::SearchFields->find( { name => $field_name }, { key => 'name' } );
-            $search_field->label($field_label);
-            $search_field->type($field_type);
+            my $search_field = Koha::SearchFields->find_or_create({
+                name => $field_name,
+                label => $field_label,
+                type => $field_type,
+            });
 
             if (!length($field_weight)) {
                 $search_field->weight(undef);
@@ -285,6 +289,7 @@ my @all_search_fields;
 while ( my $search_field = $search_fields->next ) {
     my $search_field_unblessed = $search_field->unblessed;
     $search_field_unblessed->{mapped_biblios} = 1 if $search_field->is_mapped_biblios;
+    $search_field_unblessed->{is_mapped} = $search_field->is_mapped;
     $search_field_unblessed->{aliases} = $search_fields_aliases->{$search_field_unblessed->{name}};
     push @all_search_fields, $search_field_unblessed;
 }
