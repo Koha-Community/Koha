@@ -35,12 +35,25 @@ tr.selected { background-color : #FFFFCC; } tr.selected td { background-color : 
              <li><label for="searchtitle">Title: </label> <input type="text" id="searchtitle"  name="title" value="[% title | html %]" class="focus" /></li>
              <li><label for="author">Author: </label> <input type="text" id="author" name="author" value="[% author | html %]" /></li>
              <li><label for="publicationyear">Publication year: </label> <input type="text" id="publicationyear" name="publicationyear" value="[% publicationyear | html %]" /></li>
-             <li><label for="subject">Subject heading: </label> <input type="text" id="subject" name="subject" value="" /></li>
-             <li><label for="srchany">Keyword (any): </label> <input type="text" id="srchany" name="srchany" value="" /></li>
-             <li><label for="lccall">LC call number: </label> <input type="text" id="lccall" name="lccall" value="" /></li>
-             <li><label for="controlnumber">Control no.: </label> <input type="text" id="controlnumber" name="controlnumber" value="" /></li>
-             <li><label for="dewey">Dewey: </label> <input type="text" id="dewey" name="dewey" value="" /></li>
-             <li><label for="stdid">Standard ID: </label> <input type="text" id="stdid" name="stdid" value="" /></li>
+            <li>
+                <label for="subject">Subject heading: </label> <input type="text" id="subject" name="subject" value="[% subject | html %]" />
+            </li>
+            <li>
+                <label for="srchany">Keyword (any): </label> <input type="text" id="srchany" name="srchany" value="[% srchany | html %]" />
+            </li>
+            <li>
+                <label for="lccall">LC call number: </label> <input type="text" id="lccall" name="lccall" value="[% lccall | html %]" />
+            </li>
+            <li>
+                <label for="controlnumber">Control no.: </label> <input type="text" id="controlnumber" name="controlnumber" value="[% controlnumber | html %]" />
+            </li>
+            <li>
+                <label for="dewey">Dewey: </label> <input type="text" id="dewey" name="dewey" value="[% dewey | html %]" />
+            </li>
+            <li>
+                <label for="stdid">Standard ID: </label> <input type="text" id="stdid" name="stdid" value="[% stdid | html %]" />
+            </li>
+            <li>
              <li><label for="frameworkcode" >Select MARC framework:</label>
              <select id="frameworkcode" name="frameworkcode" >
              <option value="">Default</option>
