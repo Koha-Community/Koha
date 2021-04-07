@@ -460,8 +460,8 @@ is($err->{'error'}, 'no_email', "Trying to send an alert when there's no e-mail 
 $bookseller = Koha::Acquisition::Booksellers->find( $booksellerid );
 $bookseller->contacts->next->email('testemail@mydomain.com')->store;
 
-# Ensure that the preference 'LetterLog' is set to logging
-t::lib::Mocks::mock_preference( 'LetterLog', 'on' );
+# Ensure that the preference 'ClaimsLog' is set to logging
+t::lib::Mocks::mock_preference( 'ClaimsLog', 'on' );
 
 # SendAlerts needs branchemail or KohaAdminEmailAddress as sender
 t::lib::Mocks::mock_preference( 'KohaAdminEmailAddress', 'library@domain.com' );
@@ -639,8 +639,8 @@ subtest 'SendAlerts - claimissue' => sub {
     $bookseller = Koha::Acquisition::Booksellers->find( $booksellerid );
     $bookseller->contacts->next->email('testemail@mydomain.com')->store;
 
-    # Ensure that the preference 'LetterLog' is set to logging
-    t::lib::Mocks::mock_preference( 'LetterLog', 'on' );
+    # Ensure that the preference 'ClaimsLog' is set to logging
+    t::lib::Mocks::mock_preference( 'ClaimsLog', 'on' );
 
     # SendAlerts needs branchemail or KohaAdminEmailAddress as sender
     t::lib::Mocks::mock_userenv({ branchcode => $library->{branchcode} });

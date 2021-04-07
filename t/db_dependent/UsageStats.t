@@ -484,7 +484,7 @@ sub mocking_systempreferences_to_a_set_value {
         CataloguingLog
         FinesLog
         IssueLog
-        LetterLog
+        ClaimsLog
         ReturnLog
         SubscriptionLog
         BiblioDefaultView

@@ -223,7 +223,7 @@ sub BuildReport {
         CataloguingLog
         FinesLog
         IssueLog
-        LetterLog
+        ClaimsLog
         ReturnLog
         SubscriptionLog
         BiblioDefaultView

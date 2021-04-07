@@ -82,7 +82,7 @@
 
 [%        CASE 'CIRCULATION'  %]Circulation[% UNLESS Koha.Preference('IssueLog') %] <i class="fa fa-warning" title="Log not enabled"></i>[% END %]
 
-[%        CASE 'LETTER'       %]Letter[% UNLESS Koha.Preference('LetterLog') %] <i class="fa fa-warning" title="Log not enabled"></i>[% END %]
+[%        CASE 'CLAIMS'       %]Claims[% UNLESS Koha.Preference('ClaimsLog') %] <i class="fa fa-warning" title="Log not enabled"></i>[% END %]
 
 [%        CASE 'FINES'        %]Fines[% UNLESS Koha.Preference('FinesLog') %] <i class="fa fa-warning" title="Log not enabled"></i>[% END %]
 
@@ -197,7 +197,7 @@
                                         [% ELSE %]
                                             <label for="moduleALL" class="viewlog"><input type="checkbox" id="moduleALL" name="modules" value=""> All</label>
                                         [% END %]
-                                        [% FOREACH modx IN [ 'AUTH' 'CATALOGUING' 'AUTHORITIES' 'MEMBERS' 'ACQUISITIONS' 'SERIAL' 'HOLDS' 'ILL' 'CIRCULATION' 'LETTER' 'FINES' 'SYSTEMPREFERENCE' 'CRONJOBS', 'REPORTS', 'SEARCHENGINE', 'NOTICES' ] %]
+                                        [% FOREACH modx IN [ 'AUTH' 'CATALOGUING' 'AUTHORITIES' 'MEMBERS' 'ACQUISITIONS' 'SERIAL' 'HOLDS' 'ILL' 'CIRCULATION' 'CLAIMS' 'FINES' 'SYSTEMPREFERENCE' 'CRONJOBS', 'REPORTS', 'SEARCHENGINE', 'NOTICES' ] %]
                                             [% IF modules.grep(modx).size %]
                                                 <label for="module[% modx | html %]" class="viewlog"><input type="checkbox" id="module[% modx | html %]" name="modules" value="[% modx | html %]" checked="checked"> [% PROCESS translate_log_module module=modx %]</label>
                                             [% ELSE %]

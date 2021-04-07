@@ -301,7 +301,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('KohaManualLanguage','en','en|ar|cs|de|es|fr|it|pt_BR|tr|zh_TW','What is the language of the online manual you want to use?','Choice'),
 ('LabelMARCView','standard','standard|economical','Define how a MARC record will display','Choice'),
 ('language','en',NULL,'Set the default language in the staff interface.','Languages'),
-('LetterLog','1',NULL,'If ON, log all notices sent','YesNo'),
+('ClaimsLog','1',NULL,'If ON, log all notices sent','YesNo'),
 ('LibraryName','','','Define the library name as displayed on the OPAC',''),
 ('LibraryThingForLibrariesEnabled','0','','Enable or Disable Library Thing for Libraries Features','YesNo'),
 ('LibraryThingForLibrariesID','','','See:http://librarything.com/forlibraries/','free'),

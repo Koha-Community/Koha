@@ -535,7 +535,7 @@ sub SendAlerts {
             unless $success;
 
         logaction(
-            "ACQUISITION",
+            "CLAIMS",
             $action,
             undef,
             "To="
@@ -544,7 +544,7 @@ sub SendAlerts {
                 . $letter->{title}
                 . " Content="
                 . $letter->{content}
-        ) if C4::Context->preference("LetterLog");
+        ) if C4::Context->preference("ClaimsLog");
     }
    # send an "account details" notice to a newly created user
     elsif ( $type eq 'members' ) {
