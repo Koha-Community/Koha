@@ -3260,6 +3260,7 @@ DROP TABLE IF EXISTS `letter`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `letter` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'primary key identifier',
   `module` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT 'Koha module that triggers this notice or slip',
   `code` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT 'unique identifier for this notice or slip',
   `branchcode` varchar(10) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT 'the branch this notice or slip is used at (branches.branchcode)',
@@ -3270,7 +3271,8 @@ CREATE TABLE `letter` (
   `message_transport_type` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'email' COMMENT 'transport type for this notice',
   `lang` varchar(25) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'default' COMMENT 'lang of the notice',
   `updated_on` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp() COMMENT 'last modification',
-  PRIMARY KEY (`module`,`code`,`branchcode`,`message_transport_type`,`lang`),
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `letter_uniq_1` (`module`,`code`,`branchcode`,`message_transport_type`,`lang`),
   KEY `message_transport_type_fk` (`message_transport_type`),
   CONSTRAINT `message_transport_type_fk` FOREIGN KEY (`message_transport_type`) REFERENCES `message_transport_types` (`message_transport_type`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
