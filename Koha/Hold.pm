@@ -606,9 +606,9 @@ sub store {
 sub _set_default_expirationdate {
     my $self = shift;
 
-    my $period = C4::Context->preference('DefaultHoldExpirationdatePeriod');
+    my $period = C4::Context->preference('DefaultHoldExpirationdatePeriod') || 0;
     my $timeunit =
-      C4::Context->preference('DefaultHoldExpirationdateUnitOfTime');
+      C4::Context->preference('DefaultHoldExpirationdateUnitOfTime') || 'days';
 
     $self->expirationdate(
         dt_from_string( $self->reservedate )->add( $timeunit => $period ) );
