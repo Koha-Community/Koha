@@ -597,11 +597,16 @@ subtest 'checkout() tests' => sub {
         item_id   => $item->itemnumber,
         issue_id  => $checkout->issue_id,
         type      => 'OVERDUE',
+        status    => 'UNRETURNED'
     });
 
     my $line_checkout = $line->checkout;
     is( ref($line_checkout), 'Koha::Checkout', 'Result type is correct' );
     is( $line_checkout->issue_id, $checkout->issue_id, 'Koha::Account::Line->checkout should return the correct checkout');
+
+    # Prevent re-calculation of fines at check-in for the test; Since bug 8338 the recalculation would result in a '0'
+    # fine which would subsequently be removed by _FixOverduesOnReturn
+    t::lib::Mocks::mock_preference( 'finesMode', 'off' );
 
     my ( $returned, undef, $old_checkout) = C4::Circulation::AddReturn( $item->barcode, $library->branchcode );
     is( $returned, 1, 'The item should have been returned' );
