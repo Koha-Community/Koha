@@ -1837,8 +1837,8 @@ sub queue_notice {
     return unless $letter_params;
     return unless exists $params->{message_name} xor $params->{message_transports}; # We only want one of these
 
-    my $library = Koha::Libraries->find( $letter_params->{branchcode} )->unblessed;
-    my $admin_email_address = $library->{branchemail} || C4::Context->preference('KohaAdminEmailAddress');
+    my $library = Koha::Libraries->find( $letter_params->{branchcode} );
+    my $admin_email_address = $library->inbound_email_address;
 
     my @message_transports;
     my $letter_code;
