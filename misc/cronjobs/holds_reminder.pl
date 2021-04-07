@@ -46,9 +46,10 @@ holds_reminder.pl - prepare reminder messages to be sent to patrons with waiting
 =head1 SYNOPSIS
 
 holds_reminder.pl
-  [ -n ][ -library <branchcode> ][ -library <branchcode> ... ]
-  [ -days <number of days> ][ -csv [<filename>] ][ -itemscontent <field list> ]
-  [ -email <email_type> ... ]
+  -lettercode <notice to send>
+  [ -n ][ -v ][ -library <branchcode> ][ -library <branchcode> ... ]
+  [ -days <number of days> ][ -mtt <transport type> ... ][ -holidays ]
+  [ -date <YYYY-MM-DD> ]
 
  Options:
    -help                          brief help message
