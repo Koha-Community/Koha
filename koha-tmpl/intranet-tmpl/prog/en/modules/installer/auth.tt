@@ -15,7 +15,7 @@
         <div class="row">
             <div id="installer-login" class="installer-main col-sm-6 col-sm-offset-3 col-md-6 col-md-offset-3">
 
-                <h1 id="logo"><a href="#">Koha</a></h1>
+                <div id="logo"><a href="#">Koha</a></div>
 
                 [% IF ( nopermission ) %]
                     <div id="login_error" class="alert alert-danger"><strong>Error: </strong>Unauthorized user <a href="/cgi-bin/koha/mainpage.pl?logout.x=1">click to log out</a></div>
@@ -34,7 +34,7 @@
                 [% END %]
 
                 [% IF ( loginprompt ) %]
-                    <h2>Welcome to the Koha [%- Koha.Version.release | html -%] web installer</h2>
+                    <h1>Welcome to the Koha [%- Koha.Version.release | html -%] web installer</h1>
 
                     <p>Before we begin, please verify you have the correct credentials to continue. Please log in with the username and password given to you by your systems administrator and located in your <code>koha-conf.xml</code> configuration file.</p>
 

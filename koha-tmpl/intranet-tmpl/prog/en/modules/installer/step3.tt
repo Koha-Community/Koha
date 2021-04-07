@@ -40,9 +40,9 @@
     <div class="container-fluid">
         <div class="row">
             <div id="installer-step3" class="installer-main col-sm-8 col-sm-offset-2 col-md-8 col-md-offset-2">
-                <h1 id="logo"><a href="#">Koha</a></h1>
+                <div id="logo"><a href="#">Koha</a></div>
                 [% IF ( finish ) %]
-                    <h2>Web installer &rsaquo; Installation complete</h2>
+                    <h1>Web installer &rsaquo; Installation complete</h1>
 
                     <div id="steps">
                         <ol>
@@ -99,7 +99,7 @@
                 [% END # / IF choosemarc %]
 
                 [% IF ( selectframeworks ) %]
-                    <h2>Web installer &rsaquo; Selecting default settings</h2>
+                    <h1>Web installer &rsaquo; Selecting default settings</h1>
 
                     <div id="steps">
                         <ol>
@@ -202,7 +202,7 @@
                 [% END # / IF selectframeworks %]
 
                 [% IF ( addframeworks ) %]
-                    <h2>Web installer &rsaquo; Default data loaded</h2>
+                    <h1>Web installer &rsaquo; Default data loaded</h1>
 
                     <div id="steps">
                         <ol>
@@ -268,7 +268,7 @@
                         <div class="alert alert-warning"><p>[% error | html %] </p></div>
                         <p>Please contact your system administrator</p>
                     [% ELSE %]
-                        <h2>Web installer &rsaquo; Success</h2>
+                        <h1>Web installer &rsaquo; Success</h1>
                         <div class="alert alert-success"><p>Database tables created</p></div>
 
                         <div id="steps">
@@ -290,7 +290,7 @@
                 [% END # / IF importdatastructure %]
 
                 [% IF ( proposeimport ) %]
-                    <h2>Web installer &rsaquo; Set up database</h2>
+                    <h1>Web installer &rsaquo; Set up database</h1>
 
                     <div id="steps">
                         <ol>
@@ -313,11 +313,11 @@
 
                 [% IF ( default ) %]
                     [% IF ( upgrading ) %]
-                        <h2>Web installer &rsaquo; Update database</h2>
+                        <h1>Web installer &rsaquo; Update database</h1>
                         <p>We are upgrading from Koha [% dbversion | html %] to [% kohaversion | html %]</p>
                         <p><a href="install.pl?step=3&amp;op=updatestructure" class="btn btn-primary">Update your database</a></p>
                     [% ELSE %]
-                        <h2>Web installer &rsaquo; Install basic configuration settings</h2>
+                        <h1>Web installer &rsaquo; Install basic configuration settings</h1>
 
                         <div id="steps">
                             <ol>

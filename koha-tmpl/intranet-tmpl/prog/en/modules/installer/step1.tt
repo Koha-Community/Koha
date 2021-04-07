@@ -22,10 +22,10 @@
         <div class="row">
             <div id="installer-step1" class="installer-main col-sm-8 col-sm-offset-2 col-md-8 col-md-offset-2">
 
-                <h1 id="logo"><a href="#">Koha</a></h1>
+                <div id="logo"><a href="#">Koha</a></div>
 
                 [% UNLESS ( language ) %]
-                    <h2>Web installer &rsaquo; Choose your language</h2>
+                    <h1>Web installer &rsaquo; Choose your language</h1>
 
                     <div id="steps">
                         <ol>
@@ -66,7 +66,7 @@
                 [% IF ( language ) %]
                     [% UNLESS ( checkmodule ) %]
                         [% IF ( missing_modules ) %]
-                            <h2>Web installer &rsaquo; Perl modules missing</h2>
+                            <h1>Web installer &rsaquo; Perl modules missing</h1>
 
                             <div id="steps">
                                 <ol>
@@ -90,7 +90,7 @@
                         [% END %]
 
                         [% IF ( upgrade_modules ) %]
-                            <h2>Web installer &rsaquo; Perl modules due for upgrade</h2>
+                            <h1>Web installer &rsaquo; Perl modules due for upgrade</h1>
 
                             <div id="steps">
                                 <ol>
@@ -116,7 +116,7 @@
                         [% END %]
 
                         [% IF ( problems ) %]
-                            <h2>Web installer &rsaquo; Perl version too old</h2>
+                            <h1>Web installer &rsaquo; Perl version too old</h1>
 
                             <div id="steps">
                                 <ol>
@@ -143,7 +143,7 @@
                         </form>
 
                     [% ELSE # IF checkmodule %]
-                        <h2>Web installer &rsaquo; Check Perl dependencies</h2>
+                        <h1>Web installer &rsaquo; Check Perl dependencies</h1>
 
                         <div id="steps">
                             <ol>
