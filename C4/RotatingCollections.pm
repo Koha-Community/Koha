@@ -571,7 +571,7 @@ sub isItemInAnyCollection {
     my $dbh = C4::Context->dbh;
 
     my $sth = $dbh->prepare(
-        "SELECT itemnumber FROM collections_tracking WHERE itemnumber = ?");
+        "SELECT itemnumber FROM collections_tracking JOIN collections USING (colId) WHERE itemnumber = ?");
     $sth->execute($itemnumber) or return (0);
 
     my $row = $sth->fetchrow_hashref;

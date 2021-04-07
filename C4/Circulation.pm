@@ -2165,7 +2165,6 @@ sub AddReturn {
     my $transfer = $item->get_transfer;
 
     # if we have a transfer to complete, we update the line of transfers with the datearrived
-    my $is_in_rotating_collection = C4::RotatingCollections::isItemInAnyCollection( $item->itemnumber );
     if ($transfer) {
         $validTransfer = 0;
         if ( $transfer->in_transit ) {
@@ -2277,7 +2276,7 @@ sub AddReturn {
     }
 
     # Transfer to returnbranch if Automatic transfer set or append message NeedsTransfer
-    if ( $validTransfer && !$is_in_rotating_collection
+    if ( $validTransfer && !C4::RotatingCollections::isItemInAnyCollection( $item->itemnumber )
         && ( $doreturn or $messages->{'NotIssued'} )
         and !$resfound
         and ( $branch ne $returnbranch )
