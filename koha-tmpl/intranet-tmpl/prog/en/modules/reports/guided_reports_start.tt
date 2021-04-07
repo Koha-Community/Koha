@@ -1488,33 +1488,33 @@
             switch ( category ){
                 case "insertAuthVal":
                     modalTitle.text( _("Insert authorized value parameter") );
-                    $("#paramLabel").val("Authorized value")
+                    $("#paramLabel").val( _("Authorized value") );
                     $("#authorised_value_category").show();
                     $("#authorised_value").prop("required", true ).attr("required", "required");
                     break;
                 case "insertDate":
                     modalTitle.text( _("Insert date parameter") );
-                    $("#paramLabel").val("Date")
+                    $("#paramLabel").val( _("Date") );
                     $("#param_category").val("date");
                     break;
                 case "insertItemtypes":
                     modalTitle.text( _("Insert item types parameter") );
-                    $("#paramLabel").val("Item type")
+                    $("#paramLabel").val( _("Item type") );
                     $("#param_category").val("itemtypes");
                     break;
                 case "insertBranches":
                     modalTitle.text( _("Insert libraries parameter") );
-                    $("#paramLabel").val("Library")
+                    $("#paramLabel").val( _("Library") );
                     $("#param_category").val("branches");
                     break;
                 case "insertCategorycode":
                     modalTitle.text( _("Insert patron category parameter") );
-                    $("#paramLabel").val("Patron category")
+                    $("#paramLabel").val( _("Patron category") );
                     $("#param_category").val("categorycode");
                     break;
                 case "insertText":
                     modalTitle.text( _("Insert text parameter") );
-                    $("#paramLabel").val("Text")
+                    $("#paramLabel").val( _("Text") );
                     $("#param_category").val("");
                     break;
             }
@@ -1544,7 +1544,7 @@
 
             $("body").on('click',".fetch_chart_data",function(){
                 if( [% unlimited_total || 0 | $raw %] > 1000 ){
-                    if( confirm("Fetching full chart data for reports with many rows can cause performance issues. Are you sure you with to chart this report?") ){
+                    if( confirm( _("Fetching full chart data for reports with many rows can cause performance issues. Are you sure you with to chart this report?") ) ){
                         return true;
                     } else {
                         return false;
@@ -2154,12 +2154,12 @@
                         </div>\
                         <div class="modal-body"><textarea id="code' + reportid + '">' + message + '</textarea>\
                         <div class="modal-footer">\
-                            <a id="preview-modal-editreport" class="btn btn-default" href="/cgi-bin/koha/reports/guided_reports.pl?reports=' + reportid + '&amp;phase=Edit%20SQL"><i class="fa fa-pencil"></i> Edit</a>\
-                            <a id="preview-modal-duplicate" class="btn btn-default" href="/cgi-bin/koha/reports/guided_reports.pl?phase=Create report from existing&amp;report_id=' + reportid + '"><i class="fa fa-copy"></i> Duplicate</a>\
-                            <a id="preview-modal-duplicate" class="btn btn-default" href="/cgi-bin/koha/tools/scheduler.pl?id=' + reportid + '"><i class="fa fa-clock-o"></i> Schedule</a>\
-                            <a id="preview-modal-delete" class="delete btn btn-default" href="/cgi-bin/koha/reports/guided_reports.pl?reports=' + reportid + '&amp;phase=Delete%20Saved"><i class="fa fa-trash"></i> Delete</a>\
-                            <a id="preview-modal-runreport" class="btn btn-default" href="/cgi-bin/koha/reports/guided_reports.pl?reports=' + reportid + '&amp;phase=Run%20this%20report"><i class="fa fa-play"></i> Run report</a>\
-                            <a href="#" id="preview-sql-modal-cancel" data-dismiss="modal" class="btn btn-default"><i class="fa fa-remove" aria-hidden="true"></i> Close</a>\
+                            <a id="preview-modal-editreport" class="btn btn-default" href="/cgi-bin/koha/reports/guided_reports.pl?reports=' + reportid + '&amp;phase=Edit%20SQL"><i class="fa fa-pencil"></i> ' + _("Edit") + '</a>\
+                            <a id="preview-modal-duplicate" class="btn btn-default" href="/cgi-bin/koha/reports/guided_reports.pl?phase=Create report from existing&amp;report_id=' + reportid + '"><i class="fa fa-copy"></i> ' + _("Duplicate") + '</a>\
+                            <a id="preview-modal-duplicate" class="btn btn-default" href="/cgi-bin/koha/tools/scheduler.pl?id=' + reportid + '"><i class="fa fa-clock-o"></i> ' + _("Schedule") + '</a>\
+                            <a id="preview-modal-delete" class="delete btn btn-default" href="/cgi-bin/koha/reports/guided_reports.pl?reports=' + reportid + '&amp;phase=Delete%20Saved"><i class="fa fa-trash"></i> ' + _("Delete") + '</a>\
+                            <a id="preview-modal-runreport" class="btn btn-default" href="/cgi-bin/koha/reports/guided_reports.pl?reports=' + reportid + '&amp;phase=Run%20this%20report"><i class="fa fa-play"></i> ' + _("Run report") + '</a>\
+                            <a href="#" id="preview-sql-modal-cancel" data-dismiss="modal" class="btn btn-default"><i class="fa fa-remove" aria-hidden="true"></i> ' + _("Close") + '</a>\
                         </div>\
                     </div>\
                 </div>\
