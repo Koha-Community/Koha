@@ -246,8 +246,8 @@ foreach my $branchcode (@branchcodes) { #BEGIN BRANCH LOOP
     my $waiting_since = $dtf->format_date( $waiting_date );
     my $reserves = Koha::Holds->search({
         waitingdate => {'<=' => $waiting_since },
-        branchcode  => $branchcode,
-    });
+        'me.branchcode'  => $branchcode,
+    },{ prefetch => 'patron' });
 
     $verbose and warn "No reserves found for $branchcode\n" unless $reserves->count;
     next unless $reserves->count;
@@ -261,12 +261,16 @@ foreach my $branchcode (@branchcodes) { #BEGIN BRANCH LOOP
     my $sending_params = @mtts ? { message_transports => \@mtts } : { message_name => "Hold_Filled" };
 
 
+    my %patrons;
     while ( my $reserve = $reserves->next ) {
+        $patrons{$reserve->borrowernumber}->{patron} = $reserve->patron unless exists $patrons{$reserve->borrowernumber};
+        push @{$patrons{$reserve->borrowernumber}->{reserves}}, $reserve->reserve_id;
+    }
 
-        my $patron = $reserve->borrower;
-        # Skip if we already dealt with this borrower
-        next if ( $done{$patron->borrowernumber} );
-        $verbose and print "  borrower " . $patron->surname . ", " . $patron->firstname . " has holds triggering notice.\n";
+    foreach my $borrowernumber (keys %patrons){
+
+        my $patron = $patrons{$borrowernumber}->{patron};
+        $verbose and print "  borrower " . $patron->surname . ", " . $patron->firstname . " has " . scalar @{$patrons{$borrowernumber}->{reserves}}  . " holds triggering notice.\n";
 
         # Setup the notice information
         my $letter_params = {
@@ -276,8 +280,10 @@ foreach my $branchcode (@branchcodes) { #BEGIN BRANCH LOOP
             branchcode      => $branchcode,
             tables          => {
                  borrowers  => $patron->borrowernumber,
-                 branches   => $reserve->branchcode,
-                 reserves   => $reserve->unblessed
+                 branches   => $branchcode,
+            },
+            loops           => {
+                reserves    => $patrons{$borrowernumber}->{reserves}
             },
         };
         $sending_params->{letter_params} = $letter_params;
