@@ -57,7 +57,7 @@ holds_reminder.pl
    -v                             verbose
    -n                             No email will be sent
    -days          <days>          days waiting to deal with
-   -lettercode   <lettercode>     predefined notice to use
+   -lettercode   <lettercode>     predefined notice to use, default is HOLD_REMINDER
    -library      <branchname>     only deal with holds from this library (repeatable : several libraries can be given)
    -holidays                      use the calendar to not count holidays as waiting days
    -mtt          <message_transport_type> type of messages to send, default is to use patrons messaging preferences for Hold filled
@@ -91,6 +91,10 @@ the patrons are printed to standard out.
 Optional parameter, number of days an items has been 'waiting' on hold
 to send a message for. If not included a notice will be sent to all
 patrons with waiting holds.
+
+=item B<-lettercode>
+
+Optional parameter, choose a notice to use. Default is 'HOLD_REMINDER'.
 
 =item B<-library>
 
@@ -134,7 +138,7 @@ of the notices sent to patrons.
 
 C<holds_reminder.pl> - With no arguments the simple help is printed
 
-C<holds_reminder.pl -lettercode CODE > In this most basic usage all
+C<holds_reminder.pl > In this most basic usage all
 libraries are processed individually, and notices are prepared for
 all patrons with waiting holds for whom we have email addresses.
 Messages for those patrons for whom we have no email
@@ -142,16 +146,15 @@ address are sent in a single attachment to the library administrator's
 email address, or to the address in the KohaAdminEmailAddress system
 preference.
 
-C<holds_reminder.pl -lettercode CODE -n -csv /tmp/holds_reminder.csv> - sends no email and
+C<holds_reminder.pl -n -csv /tmp/holds_reminder.csv> - sends no email and
 populates F</tmp/holds_reminder.csv> with information about all waiting holds
 items.
 
-C<holds_reminder.pl -lettercode CODE -library MAIN -days 14> - prepare notices of
+C<holds_reminder.pl -library MAIN -days 14> - prepare notices of
 holds waiting for 2 weeks for the MAIN library.
 
-C<holds_reminder.pl -library MAIN -days 14 -list-all> - prepare notices
-of holds waiting for 2 weeks for the MAIN library and include all the
-patron's waiting hold
+C<holds_reminder.pl -lettercode LATE_HOLDS -library MAIN -days 14> - prepare notices of
+holds waiting for 2 weeks for the MAIN library. Use lettercode 'LATE_HOLDS'
 
 =cut
 
@@ -185,13 +188,7 @@ GetOptions(
 pod2usage(1) if $help;
 pod2usage( -verbose => 2 ) if $man;
 
-if ( !$lettercode ) {
-    pod2usage({
-        -exitval => 1,
-        -msg => qq{\nError: You must specify a lettercode to send reminders.\n},
-    });
-}
-
+$lettercode ||= 'HOLD_REMINDER';
 
 cronlogaction();
 

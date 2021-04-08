@@ -1233,6 +1233,17 @@ tables:
           content:
             - "A hold has been placed on the following item : <<biblio.title>> (<<biblio.biblionumber>>) by the user <<borrowers.firstname>> <<borrowers.surname>> (<<borrowers.cardnumber>>)."
 
+        - module: reserves
+          code: HOLD_REMINDER
+          branchcode: ""
+          name: "Waiting hold reminder"
+          is_html: 0
+          title: "You have waiting holds."
+          message_transport_type: email
+          lang: default
+          content:
+            - "Dear [% borrower.firstname %] [% borrower.surname %],\r\n\r\nThe follwing holds are waiting at [% branch.branchname %]:\r\n\\r\n[% FOREACH hold IN holds %]\r\n    [% hold.biblio.title %] : waiting since [% hold.waitingdate %]\r\n[% END %]"
+
         - module: serial
           code: SERIAL_ALERT
           branchcode: ""
