@@ -23739,6 +23739,16 @@ if( CheckVersion( $DBversion ) ) {
     NewVersion( $DBversion, 27835, "Add new system preference ChargeFinesOnClosedDays");
 }
 
+$DBversion = '20.12.00.026';
+if( CheckVersion( $DBversion ) ) {
+
+    $dbh->do(q{INSERT IGNORE INTO systempreferences (variable,value,options,explanation,type) VALUES ('DefaultHoldExpirationdate','0','','Automatically set default expiration date for holds','YesNo') });
+    $dbh->do(q{INSERT IGNORE INTO systempreferences (variable,value,options,explanation,type) VALUES ('DefaultHoldExpirationdatePeriod','0','','How long into the future default expiration date is set to be.','integer') });
+    $dbh->do(q{INSERT IGNORE INTO systempreferences (variable,value,options,explanation,type) VALUES ('DefaultHoldExpirationdateUnitOfTime','days','days|months|years','Which unit of time is used when setting the default expiration date. ','choice') });
+
+    NewVersion( $DBversion, 26498, "Bug 26498 - Add option to set a default expire date for holds at reservation time");
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 my $update_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/atomicupdate/';
