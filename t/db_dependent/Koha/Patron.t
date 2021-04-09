@@ -647,7 +647,7 @@ subtest 'extended_attributes' => sub {
             'Koha::Exceptions::Patron::MissingMandatoryExtendedAttribute',
             'Exception thrown on missing mandatory attribute type';
 
-        is( $@->value, $attribute_type_1->code, 'Exception parameters are correct' );
+        is( $@->type, $attribute_type_1->code, 'Exception parameters are correct' );
 
         is( $patron->extended_attributes->count, 0, 'Extended attributes storing rolled back' );
 
