@@ -1,6 +1,7 @@
 #!/usr/bin/perl
 
 use Modern::Perl;
+use feature 'say';
 
 use Getopt::Long;
 use Pod::Usage;
@@ -12,12 +13,12 @@ use Koha::Script -cron;
 
 my ( $help, $verbose, @type, $added, $file, $confirm );
 GetOptions(
-    'h|help'         => \$help,
-    'v|verbose'      => \$verbose,
-    'type:s'         => \@type,
-    'added_before:s' => \$added,
-    'f|file:s'       => \$file,
-    'c|confirm'      => \$confirm,
+    'h|help'            => \$help,
+    'v|verbose+'        => \$verbose,
+    't|type:s'          => \@type,
+    'ab|added_before:s' => \$added,
+    'f|file:s'          => \$file,
+    'c|confirm'         => \$confirm,
 );
 @type = split( /,/, join( ',', @type ) );
 
@@ -58,10 +59,10 @@ if ( $verbose ) {
 }
 
 while ( my $line = $lines->next ) {
-    warn "Skipping " . $line->accountlines_id . "; Not a debt" and next
-      if $line->is_credit;
-    warn "Skipping " . $line->accountlines_id . "; Is a PAYOUT" and next
-      if $line->debit_type_code eq 'PAYOUT';
+    say "Skipping " . $line->accountlines_id . "; Not a debt" and next
+      if $line->is_credit && $verbose > 1;
+    say "Skipping " . $line->accountlines_id . "; Is a PAYOUT" and next
+      if $line->debit_type_code eq 'PAYOUT' && $verbose > 1;
 
     if ($confirm) {
         $line->_result->result_source->schema->txn_do(
@@ -107,10 +108,10 @@ while ( my $line = $lines->next ) {
 
     if ($verbose) {
         if ($confirm) {
-            print "Accountline " . $line->accountlines_id . " written off\n";
+            say "Accountline " . $line->accountlines_id . " written off";
         }
         else {
-            print "Accountline " . $line->accountlines_id . " will be written off\n";
+            say "Accountline " . $line->accountlines_id . " will be written off";
         }
     }
 }
