@@ -1242,7 +1242,7 @@ tables:
           message_transport_type: email
           lang: default
           content:
-            - "Dear [% borrower.firstname %] [% borrower.surname %],\r\n\r\nThe follwing holds are waiting at [% branch.branchname %]:\r\n\\r\n[% FOREACH hold IN holds %]\r\n    [% hold.biblio.title %] : waiting since [% hold.waitingdate | $KohaDates %]\r\n[% END %]"
+            - "Dear [% borrower.firstname %] [% borrower.surname %],\r\n\r\nThe following holds are waiting at [% branch.branchname %]:\r\n\\r\n[% FOREACH hold IN holds %]\r\n    [% hold.biblio.title %] : waiting since [% hold.waitingdate | $KohaDates %]\r\n[% END %]"
 
         - module: serial
           code: SERIAL_ALERT
