@@ -428,8 +428,10 @@ sub GetBorrowersToExpunge {
         if (ref($filtercategory) ne 'ARRAY' ) {
             $filtercategory = [ $filtercategory ];
         }
-        $query .= " AND categorycode IN (" . join(',', ('?') x @$filtercategory) . ") ";
-        push( @query_params, @$filtercategory );
+        if ( @$filtercategory ) {
+            $query .= " AND categorycode IN (" . join(',', ('?') x @$filtercategory) . ") ";
+            push( @query_params, @$filtercategory );
+        }
     }
     if ( $filterpatronlist ){
         $query.=" AND patron_list_id = ? ";

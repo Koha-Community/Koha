@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 53;
+use Test::More tests => 54;
 use Test::MockModule;
 use Test::Exception;
 
@@ -303,6 +303,8 @@ $patstodel = GetBorrowersToExpunge( {branchcode => $library3->{branchcode},patro
 is( scalar(@$patstodel),1,'Borrower with issue not deleted by branchcode and list');
 $patstodel = GetBorrowersToExpunge( {category_code => 'CIVILIAN',patron_list_id => $list1->patron_list_id() } );
 is( scalar(@$patstodel),1,'Borrower with issue not deleted by category_code and list');
+$patstodel = GetBorrowersToExpunge( {category_code => [], patron_list_id => $list1->patron_list_id() } );
+is( scalar(@$patstodel),1,'category_code can contain an empty arrayref');
 $patstodel = GetBorrowersToExpunge( {category_code => ['CIVILIAN','STAFFER'],patron_list_id => $list1->patron_list_id() } );
 is( scalar(@$patstodel),1,'Borrower with issue not deleted by multiple category_code and list');
 $patstodel = GetBorrowersToExpunge( {expired_before => '2015-01-02',patron_list_id => $list1->patron_list_id() } );
