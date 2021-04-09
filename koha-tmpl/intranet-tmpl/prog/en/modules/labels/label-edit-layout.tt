@@ -1,14 +1,14 @@
 [% USE raw %]
 [% SET footerjs = 1 %]
-[% BLOCK translate_label_types %]
-[%  SWITCH type %]
-[%   CASE 'BIB'    %]Biblio
-[%   CASE 'BARBIB' %]Barcode/Biblio
-[%   CASE 'BIBBAR' %]Biblio/Barcode
-[%   CASE 'ALT'    %]Alternating
-[%   CASE 'BAR'    %]Barcode
-[%  END %]
-[% END %]
+[%- BLOCK translate_label_types -%]
+    [%-  SWITCH type -%]
+        [%- CASE 'BIB' -%] Only the bibliographic data is printed
+        [%- CASE 'BARBIB'-%] Barcode proceeds bibliographic data
+        [%- CASE 'BIBBAR'-%] Bibliographic data proceeds barcode
+        [%- CASE 'ALT' -%] Barcode and bibliographic data are printed on alternating labels
+        [%- CASE 'BAR' -%] Only the barcode is printed
+    [%- END -%]
+[%- END -%]
     [% INCLUDE 'doc-head-open.inc' %]
     <title>[% IF ( layout_id ) %]Edit label layout [% layout_id | html %] [% ELSE %] New label layout [% END %] &rsaquo; Layouts &rsaquo; Label creator &rsaquo; Tools &rsaquo; Koha</title>
     [% INCLUDE 'doc-head-close.inc' %]
