@@ -469,19 +469,21 @@
                 SubmitMe('new');
             });
 
-            $(".get-file").on("click", function(e){
-                e.preventDefault();
-                if( navigator.clipboard && navigator.clipboard.writeText){
-                    navigator.clipboard.writeText( $(this).attr("href") );
-                    $(this).attr("data-original-title", _( "Link copied to the clipboard" ) )
-                        .tooltip("show");
-                }
-            });
-            $(".get-file").tooltip({
-                delay: { "show": 100, "hide": 500 }
-            }).on("hidden.bs.tooltip", function(){
-                $(this).attr("data-original-title", _( "Copy link to this file" ) );
-            });
+            if ( window.isSecureContext ) {
+                $(".get-file").on("click", function(e){
+                    e.preventDefault();
+                    if( navigator.clipboard && navigator.clipboard.writeText){
+                        navigator.clipboard.writeText( $(this).attr("href") );
+                        $(this).attr("data-original-title", _( "Link copied to the clipboard" ) )
+                            .tooltip("show");
+                    }
+                });
+                $(".get-file").tooltip({
+                    delay: { "show": 100, "hide": 500 }
+                }).on("hidden.bs.tooltip", function(){
+                    $(this).attr("data-original-title", _( "Copy link to this file" ) );
+                });
+            }
         });
     </script>
 [% END %]
