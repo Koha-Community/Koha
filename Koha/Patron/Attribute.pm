@@ -46,16 +46,14 @@ sub store {
 
     my $self = shift;
 
-    my $type = $self->type;
-
     Koha::Exceptions::Patron::Attribute::InvalidType->throw( type => $self->code )
-        unless $type;
+        unless $self->type;
 
     Koha::Exceptions::Patron::Attribute::NonRepeatable->throw( attribute => $self )
-        unless $self->repeatable_ok($type);
+        unless $self->repeatable_ok();
 
     Koha::Exceptions::Patron::Attribute::UniqueIDConstraint->throw( attribute => $self )
-        unless $self->unique_ok($type);
+        unless $self->unique_ok();
 
     return $self->SUPER::store();
 }
@@ -145,10 +143,10 @@ whether storing the current object state would break the repeatable constraint.
 
 sub repeatable_ok {
 
-    my ( $self, $type ) = @_;
+    my ( $self ) = @_;
 
     my $ok = 1;
-    if ( !$type->repeatable ) {
+    if ( ! $self->type->repeatable ) {
         my $params = {
             borrowernumber => $self->borrowernumber,
             code           => $self->code
@@ -172,10 +170,10 @@ whether storing the current object state would break the unique constraint.
 
 sub unique_ok {
 
-    my ( $self, $type ) = @_;
+    my ( $self ) = @_;
 
     my $ok = 1;
-    if ( $type->unique_id ) {
+    if ( $self->type->unique_id ) {
         my $params = { code => $self->code, attribute => $self->attribute };
 
         $params->{borrowernumber} = { '!=' => $self->borrowernumber } if $self->borrowernumber;
