@@ -46,7 +46,7 @@
 <h1>Receive items from : [% name | html %] [% IF ( invoice ) %][[% invoice | html %]] [% END %] (order #[% order.ordernumber | html %])</h1>
 
 [% IF ( order ) %]
-    <form action="/cgi-bin/koha/acqui/finishreceive.pl" class="noEnterSubmit" method="post" onsubmit="return Check(this);">
+    <form id="f" action="/cgi-bin/koha/acqui/finishreceive.pl" class="noEnterSubmit" method="post" onsubmit="return Check(this);">
 <div class="row">
 <div class="col-sm-6">
     <div class="dialog alert order_error" style="display:none"></div>
