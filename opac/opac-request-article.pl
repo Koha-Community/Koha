@@ -40,6 +40,10 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
 my $action = $cgi->param('action') || q{};
 my $biblionumber = $cgi->param('biblionumber');
 my $biblio = Koha::Biblios->find($biblionumber);
+if( !$biblio ) {
+    print $cgi->redirect("/cgi-bin/koha/errors/404.pl");
+    exit;
+}
 
 if ( $action eq 'create' ) {
     my $branchcode = $cgi->param('branchcode');
