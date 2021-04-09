@@ -220,6 +220,8 @@ subtest 'store() tests' => sub {
 
         plan tests => 1;
 
+        $schema->storage->txn_begin;
+
         my $patron = $builder->build_object({ class => 'Koha::Patrons' });
         my $non_repeatable_type = $builder->build_object(
             {
@@ -246,6 +248,8 @@ subtest 'store() tests' => sub {
                         ->discard_changes;
 
         is( $non_repeatable_attr->attribute, 'HEY', 'Value stored correctly' );
+
+        $schema->storage->txn_rollback;
     };
 };
 
