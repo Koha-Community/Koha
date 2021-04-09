@@ -25,6 +25,10 @@ use Koha::Reports;
 use Koha::DateUtils qw( dt_from_string output_pref );
 
 use base qw(Koha::Object);
+#
+# FIXME We could only return an error code instead of the arrayref
+# Only 1 error is returned
+# TODO Koha::Report->store should check this before saving
 
 =head1 NAME
 
@@ -34,11 +38,6 @@ Koha::Report - Koha Report Object class
 
 =head2 Class Methods
 
-=cut
-
-# FIXME We could only return an error code instead of the arrayref
-# Only 1 error is returned
-# TODO Koha::Report->store should check this before saving
 =head3 is_sql_valid
 
 my ( $is_sql_valid, $errors ) = $report->is_sql_valid;
