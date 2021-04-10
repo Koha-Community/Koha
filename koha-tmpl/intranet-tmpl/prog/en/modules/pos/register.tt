@@ -104,7 +104,7 @@
                             <tr>
                                 <td>[% accountline.accountlines_id | html %]</td>
                                 <td>{ "type": "credit", "identifier": "[%- accountline.credit_number | html -%]", "description": "[%- PROCESS account_type_description account=accountline -%] ([% AuthorisedValues.GetByCode( 'PAYMENT_TYPE', accountline.payment_type ) | html %])", "amount": "[% accountline.amount * -1 | $Price %]" }</td>
-                                <td></td>
+                                <td>[% IF accountline.timestamp %][% accountline.timestamp | $KohaDates with_hours => 1 %][% END %]</td>
                                 <td>
                                     [%- PROCESS account_type_description account=credit.debit -%]
                                     [%- IF credit.debit.description -%] ([% credit.debit.description | html %])[%- END -%]
@@ -193,7 +193,7 @@
                             <tr>
                                 <td>[% accountline.accountlines_id | html %]</td>
                                 <td>{ "type": "credit", "identifier": "[%- accountline.credit_number | html -%]", "description": "[%- PROCESS account_type_description account=accountline -%] ([% accountline.payment_type | html %])", "amount": "[% accountline.amount * -1 | $Price %]" }</td>
-                                <td></td>
+                                <td>[% IF accountline.timestamp %][% accountline.timestamp | $KohaDates with_hours => 1 %][% END %]</td>
                                 <td>
                                     [%- PROCESS account_type_description account=credit.debit -%]
                                     [%- IF credit.debit.description -%] ([% credit.debit.description | html %])[%- END -%]
