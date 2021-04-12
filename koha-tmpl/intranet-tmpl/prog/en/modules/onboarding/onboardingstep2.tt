@@ -99,9 +99,9 @@
                                         <li>
                                             <label for="enrolmentperiod">In months: </label>
                                             [% IF category.enrolmentperiod %]
-                                                <input type="number" class="enrolmentperiod" name="enrolmentperiod" id="enrolmentperiod" min="0" size="3" value="[% category.enrolmentperiod | html %]" />
+                                                <input type="text" inputmode="numeric" pattern="[0-9]*" class="enrolmentperiod" name="enrolmentperiod" id="enrolmentperiod" size="3" value="[% category.enrolmentperiod | html %]" />
                                             [% ELSE %]
-                                                <input type="number" class="enrolmentperiod" name="enrolmentperiod" id="enrolmentperiod" min="0" size="3" value="" />
+                                                <input type="text" inputmode="numeric" pattern="[0-9]*" class="enrolmentperiod" name="enrolmentperiod" id="enrolmentperiod" size="3" value="" />
                                             [% END %]
                                         </li>
                                         <li>
