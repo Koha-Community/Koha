@@ -916,7 +916,7 @@
                     [% SET hold_fulfillment_policy = CirculationRules.Search( branchcode, undef, i.itemtype, 'hold_fulfillment_policy' ) %]
                     [% SET returnbranch = CirculationRules.Search( branchcode, undef, i.itemtype, 'returnbranch' ) %]
 
-                    [% IF holdallowed != 'not_allowed' || hold_fulfillment_policy || returnbranch %]
+                    [% IF holdallowed || hold_fulfillment_policy || returnbranch %]
                         <tr>
                             <td>
                                 [% i.translated_description | html %]
