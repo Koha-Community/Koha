@@ -1539,8 +1539,14 @@ sub generate_userid {
 
 sub add_extended_attribute {
     my ($self, $attribute) = @_;
-    $attribute->{borrowernumber} = $self->borrowernumber;
-    return Koha::Patron::Attribute->new($attribute)->store;
+
+    return Koha::Patron::Attribute->new(
+        {
+            %$attribute,
+            ( borrowernumber => $self->borrowernumber ),
+        }
+    )->store;
+
 }
 
 =head3 extended_attributes
