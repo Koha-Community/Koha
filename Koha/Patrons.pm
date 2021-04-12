@@ -243,12 +243,14 @@ sub delete {
 
 sub filter_by_dateexpiry {
     my ( $class, $params ) = @_;
-    my $days = $params->{days} || 0;
-    my $parser = Koha::Database->new->schema->storage->datetime_parser;
-    my $dt = dt_from_string()->subtract( days => $days );
-    return $class->search({
-        dateexpiry => { '<=' => $parser->format_datetime($dt) },
-    });
+
+    return $class->filter_by_last_update(
+        {
+            timestamp_column_name => 'dateexpiry',
+            days                  => $params->{days} || 0,
+            days_inclusive        => 1,
+        }
+    );
 }
 
 =head3 search_unsubscribed

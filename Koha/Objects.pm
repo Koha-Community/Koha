@@ -257,7 +257,7 @@ sub update {
 
 my $filtered_objects = $objects->filter_by_last_update
 
-days exclusive
+days exclusive by default (will be inclusive if days_inclusive is passed and set)
 from inclusive
 to   inclusive
 
@@ -266,6 +266,7 @@ to   inclusive
 sub filter_by_last_update {
     my ( $self, $params ) = @_;
     my $timestamp_column_name = $params->{timestamp_column_name} || 'timestamp';
+    my $days_inclusive = $params->{days_inclusive} || 0;
     my $conditions;
     Koha::Exceptions::MissingParameter->throw(
         "Missing mandatory parameter: days or from or to")
@@ -275,7 +276,9 @@ sub filter_by_last_update {
 
     my $dtf = Koha::Database->new->schema->storage->datetime_parser;
     if ( exists $params->{days} ) {
-        $conditions->{'<'} = $dtf->format_date( dt_from_string->subtract( days => $params->{days} ) );
+        my $dt = Koha::DateUtils::dt_from_string();
+        my $operator = $days_inclusive ? '<=' : '<';
+        $conditions->{$operator} = $dtf->format_date( $dt->subtract( days => $params->{days} ) );
     }
     if ( exists $params->{from} ) {
         my $from = ref($params->{from}) ? $params->{from} : dt_from_string($params->{from});
