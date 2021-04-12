@@ -415,7 +415,7 @@ if ( $messages->{'ResFound'}) {
     my $patron = Koha::Patrons->find( $reserve->{borrowernumber} );
     my $holdmsgpreferences =  C4::Members::Messaging::GetMessagingPreferences( { borrowernumber => $reserve->{'borrowernumber'}, message_name   => 'Hold_Filled' } );
     my $branchCheck = ( $userenv_branch eq $reserve->{branchcode} );
-    if ( $reserve->{'ResFound'} eq "Reserved" && C4::Context->preference('HoldsAutoFill') ) {
+    if ( ( $reserve->{'ResFound'} eq "Reserved" || $reserve->{'ResFound'} eq "Transferred" ) && C4::Context->preference('HoldsAutoFill') ) {
         my $item = Koha::Items->find( $itemnumber );
         my $biblio = $item->biblio;
 
@@ -441,7 +441,7 @@ if ( $messages->{'ResFound'}) {
         $template->param(
             waiting      => $branchCheck ? 1 : undef,
         );
-    } elsif ( $reserve->{'ResFound'} eq "Reserved" || $reserve->{'ResFound'} eq "Processing" ) {
+    } elsif ( $reserve->{'ResFound'} eq "Reserved" || $reserve->{'ResFound'} eq "Processing" || $reserve->{'ResFound'} eq "Transferred" ) {
         $template->param(
             intransit    => $branchCheck ? undef : 1,
             transfertodo => $branchCheck ? undef : 1,
