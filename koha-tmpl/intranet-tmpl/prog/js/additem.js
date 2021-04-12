@@ -182,7 +182,7 @@ function cloneItemBlock(index, unique_item_fields, callback) {
             buttonPlus += '<input type="button" class="addItemControl cancel" name="buttonClear" style="cursor:pointer;" onclick="clearItemBlock(this)" value="' + __("Clear") + '" />';
             buttonPlus += '<input type="button" class="addItemControl" name="buttonPlusMulti" onclick="javascript:this.nextSibling.style.display=\'inline\'; return false;" style="cursor:pointer; margin:0 1em;" value="' + __("Add multiple items") + '" />';
             buttonPlus += '<span id="add_multiple_copies" style="display:none">'
-                +     '<input type="number" class="addItemControl" id="multiValue" name="multiValue" placeholder="' + __("Number of items to add") + '" />'
+                +     '<input type="text" inputmode="numeric" pattern="[0-9]*" class="addItemControl" id="multiValue" name="multiValue" placeholder="' + __("Number of items to add") + '" />'
                 +     '<input type="button" class="addItemControl" name=buttonAddMulti" style="cursor:pointer; margin:0 1em;" onclick="checkCount( this ,\'' + unique_item_fields + '\')" value="' + __("Add") + '" />'
                 +     '<div class="dialog message">' + __("NOTE: Fields listed in the 'UniqueItemsFields' system preference will not be copied") + '</div>'
                 + '</span>';
