@@ -818,8 +818,8 @@ is( scalar @{$authCat}, 0, "GetBudgetAuthCats returns only non-empty sorting cat
 
 # /Test GetBudgetAuthCats
 
-subtest 'GetBudgetSpent and GetBudgetOrdered' => sub {
-    plan tests => 20;
+subtest 'GetBudgetSpent and GetBudgetOrdered and GetBudgetHierarchy shipping and adjustments' => sub {
+    plan tests => 26;
 
     my $budget_period = $builder->build({
         source => 'Aqbudgetperiod',
@@ -959,6 +959,37 @@ subtest 'GetBudgetSpent and GetBudgetOrdered' => sub {
     is( $ordered, 3, "After adding invoice adjustment on a child budget, should still be 3 ordered/budget unaffected");
     is( @$hierarchy[0]->{total_spent},9,"After adding invoice adjustment on child budget, budget hierarchy shows 9 spent");
     is( @$hierarchy[0]->{total_ordered},6,"After adding invoice adjustment on child budget, budget hierarchy shows 6 ordered");
+
+    my $invoice_3 = $builder->build({
+        source => 'Aqinvoice',
+        value  => {
+            closedate => '2017-07-01',
+            shipmentcost_budgetid => $budget0->{budget_id},
+            shipmentcost           => 1.25
+        }
+    });
+    my $invoice_4 = $builder->build({
+        source => 'Aqinvoice',
+        value  => {
+            closedate => '2017-07-01',
+            shipmentcost_budgetid => $budget0->{budget_id},
+            shipmentcost           => 1.75
+        }
+    });
+
+    $spent = GetBudgetSpent( $budget->{budget_id} );
+    $ordered = GetBudgetOrdered( $budget->{budget_id} );
+    is( $spent, 6, "After adding invoice shipment cost on open and closed invoice on child, neither are counted as spent from parent");
+    is( $ordered, 3, "After adding invoice shipment cost on open and closed invoice, neither are counted as ordered from parent");
+    $spent = GetBudgetSpent( $budget0->{budget_id} );
+    $ordered = GetBudgetOrdered( $budget0->{budget_id} );
+    is( $spent, 6, "After adding invoice shipment cost on open and closed invoice on child, both are counted as spent from child");
+    is( $ordered, 3, "After adding invoice shipment cost on open and closed invoice, neither are counted as ordered from child");
+    $hierarchy = GetBudgetHierarchy($budget_period->{budget_period_id} );
+    is( @$hierarchy[0]->{total_spent},12,"After adding shipmentcost on child, budget hierarchy shows 12 spent total");
+    is( @$hierarchy[0]->{total_ordered},6,"After adding shipmentcost on child, budget hierarchy still shows 6 ordered total");
+
+
 };
 
 subtest 'GetBudgetSpent GetBudgetOrdered GetBudgetsPlanCell tests' => sub {
