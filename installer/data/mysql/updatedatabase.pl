@@ -23790,6 +23790,13 @@ if ( CheckVersion($DBversion) ) {
     NewVersion( $DBversion, 14233, "Add id field to letter table" );
 }
 
+$DBversion = '20.12.00.029';
+if( CheckVersion( $DBversion ) ) {
+    $dbh->do("ALTER TABLE problem_reports MODIFY content TEXT NOT NULL");
+
+    NewVersion( $DBversion, 27726, "Increase field size for problem_reports.content");
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 my $update_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/atomicupdate/';
