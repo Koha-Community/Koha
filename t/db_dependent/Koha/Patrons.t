@@ -1798,16 +1798,16 @@ subtest '->set_password' => sub {
 };
 
 $schema->storage->txn_begin;
-subtest 'filter_by_dateexpiry' => sub {
+subtest 'filter_by_expiration_date' => sub {
     plan tests => 3;
-    my $count1 = Koha::Patrons->filter_by_dateexpiry({ days => 28 })->count;
+    my $count1 = Koha::Patrons->filter_by_expiration_date({ days => 28 })->count;
     my $patron1 = $builder->build_object({ class => 'Koha::Patrons' });
     $patron1->dateexpiry( dt_from_string->subtract(days => 27) )->store;
-    is( Koha::Patrons->filter_by_dateexpiry({ days => 28 })->count, $count1, 'No more expired' );
+    is( Koha::Patrons->filter_by_expiration_date({ days => 28 })->count, $count1, 'No more expired' );
     $patron1->dateexpiry( dt_from_string->subtract(days => 28) )->store;
-    is( Koha::Patrons->filter_by_dateexpiry({ days => 28 })->count, $count1 + 1, 'One more expired' );
+    is( Koha::Patrons->filter_by_expiration_date({ days => 28 })->count, $count1 + 1, 'One more expired' );
     $patron1->dateexpiry( dt_from_string->subtract(days => 29) )->store;
-    is( Koha::Patrons->filter_by_dateexpiry({ days => 28 })->count, $count1 + 1, 'Same number again' );
+    is( Koha::Patrons->filter_by_expiration_date({ days => 28 })->count, $count1 + 1, 'Same number again' );
 };
 
 subtest 'search_unsubscribed' => sub {

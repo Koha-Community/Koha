@@ -233,15 +233,15 @@ sub delete {
     return $patrons_deleted;
 }
 
-=head3 filter_by_dateexpiry
+=head3 filter_by_expiration_date
 
-    Koha::Patrons->filter_by_dateexpiry{{ days => $x });
+    Koha::Patrons->filter_by_expiration_date{{ days => $x });
 
     Returns set of Koha patron objects expired $x days.
 
 =cut
 
-sub filter_by_dateexpiry {
+sub filter_by_expiration_date {
     my ( $class, $params ) = @_;
 
     return $class->filter_by_last_update(

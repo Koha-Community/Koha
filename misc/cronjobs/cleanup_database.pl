@@ -405,7 +405,7 @@ if($allDebarments) {
 # Lock expired patrons?
 if( defined $lock_days && $lock_days ne q{} ) {
     say "Start locking expired patrons" if $verbose;
-    my $expired_patrons = Koha::Patrons->filter_by_dateexpiry({ days => $lock_days })->search({ login_attempts => { '!=' => -1 } });
+    my $expired_patrons = Koha::Patrons->filter_by_expiration_date({ days => $lock_days })->search({ login_attempts => { '!=' => -1 } });
     my $count = $expired_patrons->count;
     $expired_patrons->lock({ remove => 1 }) if $confirm;
     if( $verbose ) {
