@@ -551,7 +551,7 @@ foreach my $biblionumber (@biblionumbers) {
 
                 $item->{'holdallowed'} = $branchitemrule->{'holdallowed'};
 
-                my $reserves_control_branch = $pickup // C4::Reserves::GetReservesControlBranch( $item, $patron_unblessed );
+                my $reserves_control_branch = $pickup || C4::Reserves::GetReservesControlBranch( $item, $patron_unblessed );
                 my $can_item_be_reserved = CanItemBeReserved( $patron->borrowernumber, $itemnumber, $reserves_control_branch )->{status};
                 $item->{not_holdable} = $can_item_be_reserved unless ( $can_item_be_reserved eq 'OK' );
 
@@ -732,7 +732,9 @@ $template->param( biblionumbers => $biblionumbers );
 $template->param( exceeded_maxreserves => $exceeded_maxreserves );
 $template->param( exceeded_holds_per_record => $exceeded_holds_per_record );
 $template->param( subscriptionsnumber => CountSubscriptionFromBiblionumber($biblionumber));
-$template->param( pickup => $pickup );
+
+# pass the userenv branch if no pickup location selected
+$template->param( pickup => $pickup || C4::Context->userenv->{branch} );
 
 if ( C4::Context->preference( 'AllowHoldDateInFuture' ) ) {
     $template->param( reserve_in_future => 1 );
