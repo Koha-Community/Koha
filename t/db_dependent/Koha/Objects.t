@@ -1097,6 +1097,10 @@ subtest "filter_by_last_update" => sub {
         );
     };
 
+    my $filtered_patrons = $patrons->filter_by_last_update(
+        { timestamp_column_name => 'updated_on', days => 2 } );
+    is( ref($filtered_patrons), 'Koha::Patrons', 'filter_by_last_update must return a Koha::Objects-based object' );
+
     my $count = $patrons->filter_by_last_update(
         { timestamp_column_name => 'updated_on', days => 2 } )->count;
     is( $count, 3, '3 patrons have been updated before the last 2 days (exclusive)' );

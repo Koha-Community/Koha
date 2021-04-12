@@ -289,7 +289,7 @@ sub filter_by_last_update {
         $conditions->{'<='} = $dtf->format_date( $to );
     }
 
-    return $self->_resultset->search(
+    return $self->search(
         {
             $timestamp_column_name => $conditions
         }
