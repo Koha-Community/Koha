@@ -60,17 +60,17 @@
                     [% END %]
                     <div class="btn-group"><a href="basketheader.pl?booksellerid=[% booksellerid | uri %]&amp;basketno=[% basketno | uri %]&amp;op=add_form" class="btn btn-default" id="basketheadbutton"><i class="fa fa-pencil"></i> Edit basket</a></div>
                     [% IF CAN_user_acquisition_delete_baskets %]
-                        <div class="btn-group"><a href="#deleteBasketModal" role="button" class="btn btn-default" data-toggle="modal" id="delbasketbutton"><i class="fa fa-trash"></i> Delete this basket</a></div>
+                        <div class="btn-group"><a href="#deleteBasketModal" role="button" class="btn btn-default" data-toggle="modal" id="delbasketbutton"><i class="fa fa-trash"></i> Delete basket</a></div>
                     [% END %]
                    [% IF ( unclosable ) %]
                     [% ELSIF ( uncertainprices ) %]
                         <div class="btn-group"><a href="/cgi-bin/koha/acqui/uncertainprice.pl?booksellerid=[% booksellerid | uri %]&amp;owner=1" class="btn btn-default" id="uncertpricesbutton"><i class="fa fa-usd"></i> Uncertain prices</a></div>
                         <div title="Can not close baskets that have items with uncertain prices in them." class="btn-group">
-                            <a href="" class="btn btn-default disabled" id="closebutton"><i class="fa fa-times-circle"></i> Close this basket</a>
+                            <a href="" class="btn btn-default disabled" id="closebutton"><i class="fa fa-times-circle"></i> Close basket</a>
                         </div>
                     [% ELSE %]
                         <div class="btn-group">
-                            <a href="/cgi-bin/koha/acqui/basket.pl?op=close&amp;basketno=[% basketno | uri %]&amp;booksellerid=[% booksellerid | uri %]" class="btn btn-default" id="closebutton"><i class="fa fa-times-circle"></i> Close this basket</a>
+                            <a href="/cgi-bin/koha/acqui/basket.pl?op=close&amp;basketno=[% basketno | uri %]&amp;booksellerid=[% booksellerid | uri %]" class="btn btn-default" id="closebutton"><i class="fa fa-times-circle"></i> Close basket</a>
                         </div>
                     [% END %]
 
@@ -150,10 +150,10 @@
                 <div id="toolbar" class="btn-toolbar">
                     [% IF grouped %]
                         <div title="Can not reopen baskets that are part of a basket group." class="btn-group">
-                            <div class="btn-group"><a href="#" class="btn btn-default disabled" id="reopenbutton"><i class="fa fa-refresh"></i> Reopen this basket</a></div>
+                            <div class="btn-group"><a href="#" class="btn btn-default disabled" id="reopenbutton"><i class="fa fa-refresh"></i> Reopen basket</a></div>
                         </div>
                     [% ELSE %]
-                        <div class="btn-group"><a href="#" class="btn btn-default" id="reopenbutton"><i class="fa fa-refresh"></i> Reopen this basket</a></div>
+                        <div class="btn-group"><a href="#" class="btn btn-default" id="reopenbutton"><i class="fa fa-refresh"></i> Reopen basket</a></div>
 
                         [% PROCESS csv_export %]
                     [% END %]
