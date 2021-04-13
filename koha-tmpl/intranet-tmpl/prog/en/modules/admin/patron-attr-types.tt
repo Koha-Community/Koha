@@ -214,7 +214,7 @@ Patron attribute types &rsaquo; Administration &rsaquo; Koha
         <li><label for="branches">Library limitation: </label>
             <select id="branches" name="branches" multiple size="10">
                 <option value="">All libraries</option>
-                [% PROCESS options_for_libraries libraries => Branches.all( selecteds => attribute_type.library_limits ) %]
+                [% PROCESS options_for_libraries libraries => Branches.all( selected => attribute_type.library_limits ) %]
             </select>
             <div class="hint">Select "All libraries" if this attribute type should always be displayed. Otherwise select libraries you want to associate with this value.
             </div>

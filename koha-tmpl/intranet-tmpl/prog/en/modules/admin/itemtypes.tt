@@ -376,7 +376,7 @@ Item types &rsaquo; Administration &rsaquo; Koha
                 <li><label for="branches">Library limitation: </label>
                     <select id="branches" name="branches" multiple size="10">
                         <option value="">All libraries</option>
-                        [% PROCESS options_for_libraries libraries => Branches.all( selecteds => itemtype.get_library_limits, unfiltered => 1, do_not_select_my_library => 1 ) %]
+                        [% PROCESS options_for_libraries libraries => Branches.all( selected => itemtype.get_library_limits, unfiltered => 1, do_not_select_my_library => 1 ) %]
                     </select>
                     <span class="hint">Select 'All libraries' if all libraries use this item type. Otherwise, select the specific libraries that use this item type.</span>
                 </li>

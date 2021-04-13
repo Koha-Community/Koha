@@ -58,8 +58,7 @@ sub GetURL {
 
 sub all {
     my ( $self, $params ) = @_;
-    my $selected = $params->{selected};
-    my $selecteds = $params->{selecteds};
+    my $selected = $params->{selected} || ();
     my $unfiltered = $params->{unfiltered} || 0;
     my $search_params = $params->{search_params} || {};
     my $do_not_select_my_library = $params->{do_not_select_my_library} || 0; # By default we select the library of the logged in user if no selected passed
@@ -77,25 +76,17 @@ sub all {
       ? Koha::Libraries->search( $search_params, { order_by => ['branchname'] } )->unblessed
       : Koha::Libraries->search_filtered( $search_params, { order_by => ['branchname'] } )->unblessed;
 
-    if (defined $selecteds) {
-        # For a select multiple, must be a Koha::Libraries
-        my @selected_branchcodes = $selecteds ? $selecteds->get_column( ['branchcode'] ) : ();
-        $libraries = [ map {
-            my $l = $_;
-            $l->{selected} = 1
-              if grep { $_ eq $l->{branchcode} } @selected_branchcodes;
-            $l;
-        } @$libraries ];
-    }
-    else {
-        for my $l ( @$libraries ) {
-            if (       defined $selected and $l->{branchcode} eq $selected
-                or not defined $selected and C4::Context->userenv and $l->{branchcode} eq ( C4::Context->userenv->{branch} // q{} )
-            ) {
-                $l->{selected} = 1;
-            }
+    for my $l (@$libraries) {
+        if ( grep { $l->{branchcode} eq $_ } @selected
+            or  not @selected
+                and not $do_not_select_my_library
+                and C4::Context->userenv
+                and $l->{branchcode} eq ( C4::Context->userenv->{branch} // q{} ) )
+        {
+             $l->{selected} = 1;
         }
     }
+
 
     return $libraries;
 }
