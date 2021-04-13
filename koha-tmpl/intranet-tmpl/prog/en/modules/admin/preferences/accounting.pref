@@ -13,6 +13,13 @@ Accounting:
                   0: "Don't"
             - automatically display a print dialog for a payment receipt when making a payment.
         -
+            - pref: RequirePaymentType
+              choices:
+                  0: "Do not require"
+                  1: "Require"
+            - staff to select a payment type when a payment is made.
+            - This preference has no effect when UseCashRegisters is enabled or when no payment type is defined in PAYMENT_TYPE authorised value category
+        -
             - pref: RoundFinesAtPayment
               choices:
                   1: Do

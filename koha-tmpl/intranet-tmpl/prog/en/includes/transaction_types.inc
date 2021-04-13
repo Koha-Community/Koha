@@ -6,7 +6,7 @@
 [% END %]
 [% IF payment_types.size > 0 %]
     <li>
-        [% IF Koha.Preference('UseCashRegisters') %]
+        [% IF Koha.Preference('UseCashRegisters') || Koha.Preference('RequirePaymentType') %]
             <label for="[% type | html %]_type" class="required">[% IF type == 'payment' %]Payment[% ELSE %]Transaction[% END %] type: </label>
             <select name="[% type | html %]_type" id="[% type | html %]_type" class="required" required="required">
                 [% IF type == 'refund' %]
