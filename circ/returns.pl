@@ -415,7 +415,7 @@ if ( $messages->{'ResFound'}) {
     my $patron = Koha::Patrons->find( $reserve->{borrowernumber} );
     my $holdmsgpreferences =  C4::Members::Messaging::GetMessagingPreferences( { borrowernumber => $reserve->{'borrowernumber'}, message_name   => 'Hold_Filled' } );
     my $branchCheck = ( $userenv_branch eq $reserve->{branchcode} );
-    if ( ( $reserve->{'ResFound'} eq "Reserved" || $reserve->{'ResFound'} eq "Transferred" ) && C4::Context->preference('HoldsAutoFill') ) {
+    if ( ( $reserve->{'ResFound'} eq "Reserved" || $reserve->{'ResFound'} eq "Processing" || $reserve->{'ResFound'} eq "Transferred" ) && C4::Context->preference('HoldsAutoFill') ) {
         my $item = Koha::Items->find( $itemnumber );
         my $biblio = $item->biblio;
 
