@@ -23784,7 +23784,7 @@ if ( CheckVersion($DBversion) ) {
 
     $dbh->do(q{
         INSERT IGNORE INTO systempreferences (variable, value, explanation, options, type)
-        VALUES ('NoticesLog','',NULL,'If enabled, log changes to notice templates','YesNo')
+        VALUES ('NoticesLog','0',NULL,'If enabled, log changes to notice templates','YesNo')
     });
 
     NewVersion( $DBversion, 14233, "Add id field to letter table" );
