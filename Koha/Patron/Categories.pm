@@ -33,13 +33,19 @@ Koha::Patron::Categories - Koha Patron Category Object set class
 
 =cut
 
-=head3 type
+=head2 Internal methods
+
+=head3 _type
 
 =cut
 
 sub _type {
     return 'Category';
 }
+
+=head3 object_class
+
+=cut
 
 sub object_class {
     return 'Koha::Patron::Category';
