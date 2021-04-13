@@ -200,6 +200,10 @@ my $warnPrefAnonymousPatronOPACPrivacy_PatronDoesNotExist = ( not $anonymous_pat
 
 my $warnPrefKohaAdminEmailAddress = not Email::Valid->address(C4::Context->preference('KohaAdminEmailAddress'));
 
+my $c = Koha::Items->filter_by_visible_in_opac->count;
+my @warnings = C4::Context->dbh->selectrow_array('SHOW WARNINGS');
+my $warnPrefOpacHiddenItems = $warnings[2];
+
 my $errZebraConnection = C4::Context->Zconn("biblioserver",0)->errcode();
 
 my $warnIsRootUser   = (! $loggedinuser);
@@ -592,6 +596,7 @@ $template->param(
     warnPrefAnonymousPatronOPACPrivacy_PatronDoesNotExist     => $warnPrefAnonymousPatronOPACPrivacy_PatronDoesNotExist,
     warnPrefAnonymousPatronAnonSuggestions_PatronDoesNotExist => $warnPrefAnonymousPatronAnonSuggestions_PatronDoesNotExist,
     warnPrefKohaAdminEmailAddress => $warnPrefKohaAdminEmailAddress,
+    warnPrefOpacHiddenItems => $warnPrefOpacHiddenItems,
     errZebraConnection => $errZebraConnection,
     warnIsRootUser => $warnIsRootUser,
     warnNoActiveCurrency => $warnNoActiveCurrency,

@@ -1323,7 +1323,7 @@ $schema->storage->txn_rollback;
 
 subtest 'filter_by_visible_in_opac() tests' => sub {
 
-    plan tests => 11;
+    plan tests => 12;
 
     $schema->storage->txn_begin;
 
@@ -1469,6 +1469,12 @@ subtest 'filter_by_visible_in_opac() tests' => sub {
         $item_5->itemnumber,
         'The right item is returned'
     );
+
+    # Make sure the warning on the about page will work
+    $rules = { itemlost => ['AB'] };
+    my $c = Koha::Items->filter_by_visible_in_opac->count;
+    my @warnings = C4::Context->dbh->selectrow_array('SHOW WARNINGS');
+    is( $warnings[2], q{Truncated incorrect DOUBLE value: 'AB'});
 
     $schema->storage->txn_rollback;
 };

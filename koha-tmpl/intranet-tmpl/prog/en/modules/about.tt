@@ -207,7 +207,7 @@
         </div>
 
         <div id="sysinfo">
-    [% IF warnPrefBiblioAddsAuthorities || warnPrefEasyAnalyticalRecords || warnPrefAnonymousPatronOPACPrivacy || warnPrefAnonymousPatronAnonSuggestions || warnPrefAnonymousPatronOPACPrivacy_PatronDoesNotExist || warnPrefAnonymousPatronAnonSuggestions_PatronDoesNotExist || warnPrefKohaAdminEmailAddress || warnNoActiveCurrency || warnIsRootUser || xml_config_warnings.size || AutoSelfCheckPatronDoesNotHaveSelfCheckPerm || AutoSelfCheckPatronHasTooManyPerm || warnStatisticsFieldsError || warnNoTemplateCaching || warnILLConfiguration || has_ai_issues || oauth2_missing_deps || bad_yaml_prefs || warnRelationships || log4perl_errors || config_bcrypt_settings_no_set || warnHiddenBiblionumbers.size || warnConnectBroker %]
+    [% IF warnPrefBiblioAddsAuthorities || warnPrefEasyAnalyticalRecords || warnPrefAnonymousPatronOPACPrivacy || warnPrefAnonymousPatronAnonSuggestions || warnPrefAnonymousPatronOPACPrivacy_PatronDoesNotExist || warnPrefAnonymousPatronAnonSuggestions_PatronDoesNotExist || warnPrefKohaAdminEmailAddress || warnPrefOpacHiddenItems || warnNoActiveCurrency || warnIsRootUser || xml_config_warnings.size || AutoSelfCheckPatronDoesNotHaveSelfCheckPerm || AutoSelfCheckPatronHasTooManyPerm || warnStatisticsFieldsError || warnNoTemplateCaching || warnILLConfiguration || has_ai_issues || oauth2_missing_deps || bad_yaml_prefs || warnRelationships || log4perl_errors || config_bcrypt_settings_no_set || warnHiddenBiblionumbers.size || warnConnectBroker %]
         [% IF (warnIsRootUser) %]
             <h2>Warning regarding current user</h2>
             <p>You are logged in as the database administrative user. This is not recommended because some parts of Koha will not function as expected when using this account.</p>
@@ -291,7 +291,7 @@
             Contact your system administrator.
         [% END %]
 
-        [% IF warnPrefBiblioAddsAuthorities || warnPrefEasyAnalyticalRecords || warnPrefAnonymousPatronOPACPrivacy || warnPrefAnonymousPatronAnonSuggestions || warnPrefAnonymousPatronOPACPrivacy_PatronDoesNotExist || warnPrefAnonymousPatronAnonSuggestions_PatronDoesNotExist || warnPrefKohaAdminEmailAddress || warnNoActiveCurrency || AutoSelfCheckPatronDoesNotHaveSelfCheckPerm || AutoSelfCheckPatronHasTooManyPerm || warnStatisticsFieldsError || warnNoTemplateCaching || warnILLConfiguration || oauth2_missing_deps || bad_yaml_prefs || warnIssuingRules || config_bcrypt_settings_no_set || warnHiddenBiblionumbers.size || paypal_enabled %]
+        [% IF warnPrefBiblioAddsAuthorities || warnPrefEasyAnalyticalRecords || warnPrefAnonymousPatronOPACPrivacy || warnPrefAnonymousPatronAnonSuggestions || warnPrefAnonymousPatronOPACPrivacy_PatronDoesNotExist || warnPrefAnonymousPatronAnonSuggestions_PatronDoesNotExist || warnPrefKohaAdminEmailAddress || warnPrefOpacHiddenItems || warnNoActiveCurrency || AutoSelfCheckPatronDoesNotHaveSelfCheckPerm || AutoSelfCheckPatronHasTooManyPerm || warnStatisticsFieldsError || warnNoTemplateCaching || warnILLConfiguration || oauth2_missing_deps || bad_yaml_prefs || warnIssuingRules || config_bcrypt_settings_no_set || warnHiddenBiblionumbers.size || paypal_enabled %]
             <h2>Warnings regarding the system configuration</h2>
             <table>
                 <caption>Preferences and parameters</caption>
@@ -315,6 +315,9 @@
                 [% END %]
                 [% IF warnPrefKohaAdminEmailAddress %]
                     <tr><th scope="row"><strong>Warning</strong> </th><td>System preference 'KohaAdminEmailAddress' does not contain a valid email address. Emails will not be sent.</td></tr>
+                [% END %]
+                [% IF warnPrefOpacHiddenItems %]
+                    <tr><th scope="row"><strong>Warning</strong> </th><td>System preference 'OpacHiddenItems' generates a warning and will produce unexpected behaviors: [% warnPrefOpacHiddenItems | html %]</th></tr>
                 [% END %]
                 [% IF warnNoActiveCurrency %]
                     <tr><th scope="row"><strong>Warning</strong> </th><td>No active currency is defined. Please go to <a href="/cgi-bin/koha/admin/currency.pl">Administration &gt; Currencies and exchange rates</a> and mark one currency as active.</td></tr>
