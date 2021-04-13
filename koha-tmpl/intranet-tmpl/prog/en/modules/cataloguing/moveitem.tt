@@ -30,6 +30,7 @@
     <div class="row">
         <div class="col-md-10 col-md-offset-1 col-lg-8 col-lg-offset-2">
 
+        <h1>Attach an item [% IF ( biblio.title ) %] to [% INCLUDE 'biblio-title.inc' %][% END %]</h1>
 [% BLOCK actions %]
                         [% IF Koha.Preference('IntranetBiblioDefaultView') == 'marc' %]
                              <form action="/cgi-bin/koha/catalogue/MARCdetail.pl" method="post">
@@ -112,7 +113,6 @@
 	    [% END %]
 
 		[% IF ( missingbarcode ) %]
-        <h3>Attach an item [% IF ( biblio.title ) %] to [% INCLUDE 'biblio-title.inc' %][% END %]</h3>
 	    <fieldset id="barcode_fieldset">
 		<label for="barcode">Enter the barcode of the item to attach:</label>
 		    <p class="hint">The item you select will be moved to the target record.</p>
