@@ -131,7 +131,7 @@ sub httpheaders {
     if( $self->filename =~ /\.pdf$/ ) {
         return (
             '-type'       => 'application/pdf',
-            'Content-Disposition' => 'inline; filename='.$self->filename,
+            'Content-Disposition' => 'inline; filename="'.$self->filename.'"',
         );
     } else {
         return (
