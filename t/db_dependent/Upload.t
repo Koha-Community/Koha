@@ -323,7 +323,7 @@ subtest 'Testing download headers' => sub {
     plan tests => 2;
     my $test_pdf = Koha::UploadedFile->new({ filename => 'pdf.pdf', uploadcategorycode => 'B', filesize => 1000 });
     my $test_not = Koha::UploadedFile->new({ filename => 'pdf.not', uploadcategorycode => 'B', filesize => 1000 });
-    my @pdf_expect = ( '-type'=>'application/pdf','Content-Disposition'=>'inline; filename=pdf.pdf' );
+    my @pdf_expect = ( '-type'=>'application/pdf','Content-Disposition'=>'inline; filename="pdf.pdf"' );
     my @not_expect = ( '-type'=>'application/octet-stream','-attachment'=>'pdf.not' );
     my @pdf_head = $test_pdf->httpheaders;
     my @not_head = $test_not->httpheaders;
