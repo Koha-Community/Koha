@@ -17,6 +17,7 @@ package Koha::Objects::Limit::Library;
 
 use Modern::Perl;
 
+use C4::Context;
 use Koha::Database;
 
 =head1 NAME
@@ -52,6 +53,9 @@ limits
 
 sub search_with_library_limits {
     my ( $self, $params, $attributes, $library_id ) = @_;
+
+    $library_id //= C4::Context->userenv->{branch}
+        if defined C4::Context->userenv;
 
     return $self->search( $params, $attributes ) unless $library_id;
 

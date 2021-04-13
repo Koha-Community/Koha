@@ -17,10 +17,6 @@ package Koha::Patron::Categories;
 
 use Modern::Perl;
 
-use Carp;
-
-use C4::Context; # Sigh...
-
 use Koha::Database;
 
 use Koha::Patron::Category;
@@ -33,7 +29,7 @@ Koha::Patron::Categories - Koha Patron Category Object set class
 
 =head1 API
 
-=head2 Class Methods
+=head2 Class methods
 
 =cut
 

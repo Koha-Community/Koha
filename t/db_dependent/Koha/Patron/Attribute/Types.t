@@ -388,31 +388,19 @@ subtest 'replace_library_limits() tests' => sub {
 
 subtest 'search_with_library_limits() tests' => sub {
 
-    plan tests => 4;
+    plan tests => 5;
 
     $schema->storage->txn_begin;
 
     # Cleanup before running the tests
     Koha::Patron::Attribute::Types->search()->delete();
 
-    my $object_code_1
-        = Koha::Patron::Attribute::Type->new( { code => 'code_1', description => 'a description for code_1' } )
-        ->store();
+    my $object_code_1 = $builder->build_object({ class => 'Koha::Patron::Attribute::Types', value => { code => 'code_1' } });
+    my $object_code_2 = $builder->build_object({ class => 'Koha::Patron::Attribute::Types', value => { code => 'code_2' } });
+    my $object_code_3 = $builder->build_object({ class => 'Koha::Patron::Attribute::Types', value => { code => 'code_3' } });
+    my $object_code_4 = $builder->build_object({ class => 'Koha::Patron::Attribute::Types', value => { code => 'code_4' } });
 
-    my $object_code_2
-        = Koha::Patron::Attribute::Type->new( { code => 'code_2', description => 'a description for code_2' } )
-        ->store();
-
-    my $object_code_3
-        = Koha::Patron::Attribute::Type->new( { code => 'code_3', description => 'a description for code_3' } )
-        ->store();
-
-    my $object_code_4
-        = Koha::Patron::Attribute::Type->new( { code => 'code_4', description => 'a description for code_4' } )
-        ->store();
-
-    is( Koha::Patron::Attribute::Types->search()->count,
-        4, 'Three objects created' );
+    is( Koha::Patron::Attribute::Types->search()->count, 4, 'Three objects created' );
 
     my $branch_1 = $builder->build( { source => 'Branch' } )->{branchcode};
     my $branch_2 = $builder->build( { source => 'Branch' } )->{branchcode};
@@ -421,15 +409,23 @@ subtest 'search_with_library_limits() tests' => sub {
     $object_code_2->library_limits( [$branch_2] );
     $object_code_3->library_limits( [ $branch_1, $branch_2 ] );
 
-    is( Koha::Patron::Attribute::Types->search_with_library_limits( {}, {}, $branch_1 )->count,
-        3, '3 attribute types are available for the specified branch' );
-    is( Koha::Patron::Attribute::Types->search_with_library_limits( {}, {}, $branch_2 )->count,
-        3, '3 attribute types are available for the specified branch' );
-    is( Koha::Patron::Attribute::Types->search_with_library_limits( {}, {}, undef )->count,
-        4, '4 attribute types are available with no library passed'
-    );
+    my $results = Koha::Patron::Attribute::Types->search_with_library_limits( {}, { order_by => 'code' }, $branch_1 );
 
-    # TODO test if filter_by_branch_limitations restriced on logged-in-user's branch
+    is( $results->count, 3, '3 attribute types are available for the specified branch' );
+
+    $results = Koha::Patron::Attribute::Types->search_with_library_limits( {}, { order_by => 'code' }, $branch_2 );
+
+    is( $results->count, 3, '3 attribute types are available for the specified branch' );
+
+    $results = Koha::Patron::Attribute::Types->search_with_library_limits( {}, { order_by => 'code' }, undef );
+
+    is( $results->count, 4, 'All attribute types are available with no library pssed' );
+
+    t::lib::Mocks::mock_userenv({ branchcode => $branch_2 });
+
+    $results = Koha::Patron::Attribute::Types->search_with_library_limits( {}, { order_by => 'code' }, undef );
+
+    is( $results->count, 3, '3 attribute types are available with no library passed' );
 
     $schema->storage->txn_rollback;
 };
