@@ -412,7 +412,7 @@
                                                 <!-- CONFIRM -->
                                                 <button type="button" data-dismiss="modal" class="btn btn-default approve"><i class="fa fa-check"></i> OK</button>
                                                 <!-- PRINT SLIP -->
-                                                <button type="button" data-dismiss="modal" class="btn btn-default print openWin" data-url="transfer-slip.pl?transferitem=[% itemnumber | uri %]&amp;&amp;branchcode=[% TransferWaitingAt | uri %]&amp;op=slip"><i class="fa fa-print"></i> Print transfer slip</button>
+                                                <button type="button" data-dismiss="modal" class="btn btn-default openWin" data-url="transfer-slip.pl?transferitem=[% itemnumber | uri %]&amp;&amp;branchcode=[% TransferWaitingAt | uri %]&amp;op=slip"><i class="fa fa-print"></i> Print transfer slip</button>
                                                 <!-- CANCEL TRANSFER -->
                                                 <form method="post" action="returns.pl" name="mainform">
                                                     <button class="btn btn-default deny" type="submit"><i class="fa fa-times"></i> Cancel transfer</button>
@@ -533,7 +533,7 @@
                                     <div id="item-transfer-modal" class="modal fade audio-alert-action block">
                                 [% ELSE %]
                                     <div id="item-transfer-modal" class="modal fade audio-alert-action noblock">
-                                [% END %]1
+                                [% END %]
                                     <div class="modal-dialog">
                                         <div class="modal-content">
                                             <form method="post" action="returns.pl" name="mainform" id="mainform">
