@@ -94,6 +94,7 @@ elsif ( $input->param('apply_credits') ) {
     apply_credits({ patron => $patron, cgi => $input });
 }
 elsif ( $input->param('confirm_writeoff') ) {
+    my $item_id         = $input->param('itemnumber');
     my $accountlines_id = $input->param('accountlines_id');
     my $amount          = $input->param('amountwrittenoff');
     my $payment_note    = $input->param("payment_note");
@@ -120,6 +121,7 @@ elsif ( $input->param('confirm_writeoff') ) {
                 type       => 'WRITEOFF',
                 note       => $payment_note,
                 interface  => C4::Context->interface,
+                item_id    => $item_id,
                 library_id => $branch,
             }
         )->{payment_id};
