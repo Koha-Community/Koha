@@ -23797,6 +23797,16 @@ if( CheckVersion( $DBversion ) ) {
     NewVersion( $DBversion, 27726, "Increase field size for problem_reports.content");
 }
 
+$DBversion = '20.12.00.030';
+if( CheckVersion( $DBversion ) ) {
+    $dbh->do(q|
+        INSERT IGNORE INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `type` )
+        VALUES ('LockExpiredDelay','','','Delay for locking expired patrons (empty means no locking)','Integer')
+    |);
+
+    NewVersion( $DBversion, 21549, "Add new system preference LockExpiredDelay");
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 my $update_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/atomicupdate/';
