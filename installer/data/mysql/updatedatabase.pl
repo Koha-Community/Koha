@@ -23807,6 +23807,16 @@ if( CheckVersion( $DBversion ) ) {
     NewVersion( $DBversion, 21549, "Add new system preference LockExpiredDelay");
 }
 
+$DBversion = '20.12.00.031';
+if( CheckVersion( $DBversion ) ) {
+    $dbh->do(q{
+        INSERT IGNORE INTO systempreferences (variable, value, explanation, options, type)
+        VALUES ('Reference_NFL_Statuses','1|2',NULL,'Contains not for loan statuses considered as available for reference','Free')
+    });
+
+    NewVersion( $DBversion, 21260, "Add new system preference Reference_NFL_Statuses");
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 my $update_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/atomicupdate/';
