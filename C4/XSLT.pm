@@ -316,7 +316,7 @@ sub buildKohaItemsNamespace {
     my $itemtypes = { map { $_->{itemtype} => $_ } @{ Koha::ItemTypes->search->unblessed } };
     my $xml = '';
     my %descs = map { $_->{authorised_value} => $_ } Koha::AuthorisedValues->get_descriptions_by_koha_field( { kohafield => 'items.notforloan' } );
-    my $ref_status = C4::Context->preference('Available_NFL') || '1|2';
+    my $ref_status = C4::Context->preference('Reference_NFL_Statuses') || '1|2';
 
     for my $item (@items) {
         my $status;

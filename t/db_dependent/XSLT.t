@@ -36,7 +36,7 @@ $schema->storage->txn_begin;
 subtest 'buildKohaItemsNamespace status tests' => sub {
     plan tests => 14;
 
-    t::lib::Mocks::mock_preference('Available_NFL', '1|2');
+    t::lib::Mocks::mock_preference('Reference_NFL_Statuses', '1|2');
 
     my $itype = $builder->build_object({ class => 'Koha::ItemTypes' });
     my $itemtype = $builder->build_object({ class => 'Koha::ItemTypes' });
@@ -73,10 +73,10 @@ subtest 'buildKohaItemsNamespace status tests' => sub {
         like($xml,qr{<status>reference</status>},"reference if positive notforloan value");
 
         # But now make status notforloan==1 count under Not available
-        t::lib::Mocks::mock_preference('Available_NFL', '2');
+        t::lib::Mocks::mock_preference('Reference_NFL_Statuses', '2');
         $xml = C4::XSLT::buildKohaItemsNamespace( $item->biblionumber,[]);
-        like($xml,qr{<status>reallynotforloan</status>},"reallynotforloan when we change Avaiable_NFL");
-        t::lib::Mocks::mock_preference('Available_NFL', '1|2');
+        like($xml,qr{<status>reallynotforloan</status>},"reallynotforloan when we change Reference_NFL_Statuses");
+        t::lib::Mocks::mock_preference('Reference_NFL_Statuses', '1|2');
     }
 
     $item->onloan('2001-01-01')->store;

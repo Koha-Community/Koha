@@ -551,6 +551,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('RandomizeHoldsQueueWeight','0',NULL,'if ON, the holds queue in circulation will be randomized, either based on all location codes, or by the location codes specified in StaticHoldsQueueWeight','YesNo'),
 ('RecordStaffUserOnCheckout','0',NULL,'If ON, when an item is checked out, the user who checked out the item is recorded','YesNo'),
 ('RecordLocalUseOnReturn','0',NULL,'If ON, statistically record returns of unissued items as local use, instead of return','YesNo'),
+('Reference_NFL_Statuses','1|2',NULL,'Contains not for loan statuses considered as available for reference','Free'),
 ('RefundLostOnReturnControl','CheckinLibrary','CheckinLibrary|ItemHomeBranch|ItemHoldingBranch','If a lost item is returned, choose which branch to pick rules for refunding.','Choice'),
 ('RenewAccruingItemWhenPaid','0','','If enabled, when the fines on an item accruing is paid off, attempt to renew that item. If the syspref "RenewalPeriodBase" is set to "due date", renewed items may still be overdue','YesNo'),
 ('RenewAccruingItemInOpac','0','','If enabled, when the fines on an item accruing is paid off in the OPAC via a payment plugin, attempt to renew that item. If the syspref "RenewalPeriodBase" is set to "due date", renewed items may still be overdue','YesNo'),
