@@ -45,6 +45,7 @@ use Koha::Virtualshelves;
 use Koha::RecordProcessor;
 
 use constant ANYONE => 2;
+use constant STAFF => 3;
 
 my $query = CGI->new;
 
@@ -116,6 +117,7 @@ if ( $op eq 'add_form' ) {
                     public             => $public,
                     allow_change_from_owner => $allow_changes_from > 0,
                     allow_change_from_others => $allow_changes_from == ANYONE,
+                    allow_change_from_staff => $allow_changes_from == STAFF,
                     owner              => scalar $loggedinuser,
                 }
             );
@@ -147,6 +149,7 @@ if ( $op eq 'add_form' ) {
             my $allow_changes_from = $query->param('allow_changes_from');
             $shelf->allow_change_from_owner( $allow_changes_from > 0 );
             $shelf->allow_change_from_others( $allow_changes_from == ANYONE );
+            $shelf->allow_change_from_staff( $allow_changes_from == STAFF );
             $shelf->public( $public );
             eval { $shelf->store };
 
@@ -441,7 +444,8 @@ if ( $op eq 'list' ) {
         ),
     );
 }
-
+my $staffuser;
+$staffuser = Koha::Patrons->find( $loggedinuser )->can_patron_change_staff_only_lists if $loggedinuser;
 $template->param(
     op       => $op,
     referer  => $referer,
@@ -450,6 +454,7 @@ $template->param(
     public   => $public,
     print    => scalar $query->param('print') || 0,
     listsview => 1,
+    staffuser => $staffuser,
 );
 
 my $content_type = $query->param('rss')? 'rss' : 'html';

@@ -2114,6 +2114,21 @@ sub has_messaging_preference {
     )->count;
 }
 
+=head3 can_patron_change_staff_only_lists
+
+$patron->can_patron_change_staff_only_lists;
+
+Return 1 if a patron has 'Superlibrarian' or 'Catalogue' permission.
+Otherwise, return 0.
+
+=cut
+
+sub can_patron_change_staff_only_lists {
+    my ( $self, $params ) = @_;
+    return 1 if C4::Auth::haspermission( $self->userid, { 'catalogue' => 1 });
+    return 0;
+}
+
 =head2 Internal methods
 
 =head3 _type

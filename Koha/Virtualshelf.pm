@@ -56,6 +56,8 @@ sub store {
         unless defined $self->allow_change_from_owner;
     $self->allow_change_from_others( 0 )
         unless defined $self->allow_change_from_others;
+    $self->allow_change_from_staff( 0 )
+        unless defined $self->allow_change_from_staff;
 
     $self->created_on( dt_from_string )
         unless defined $self->created_on;
@@ -177,7 +179,8 @@ sub add_biblio {
     return if $already_exists;
 
     # Check permissions
-    return unless ( $self->owner == $borrowernumber && $self->allow_change_from_owner ) || $self->allow_change_from_others;
+    my $patron = Koha::Patrons->find( $borrowernumber ) or return 0;
+    return 0 unless ( $self->owner == $borrowernumber && $self->allow_change_from_owner ) || ( $self->allow_change_from_staff && $patron->can_patron_change_staff_only_lists ) || $self->allow_change_from_others;
 
     my $content = Koha::Virtualshelfcontent->new(
         {
@@ -199,7 +202,9 @@ sub remove_biblios {
     return unless @$biblionumbers;
 
     my $number_removed = 0;
+    my $patron = Koha::Patrons->find( $borrowernumber ) or return 0;
     if( ( $self->owner == $borrowernumber && $self->allow_change_from_owner )
+      || ( $self->allow_change_from_staff && $patron->can_patron_change_staff_only_lists )
       || $self->allow_change_from_others ) {
         $number_removed += $self->get_contents->search({
             biblionumber => $biblionumbers,
@@ -226,9 +231,9 @@ sub can_be_deleted {
     return 0 unless $borrowernumber;
     return 1 if $self->owner == $borrowernumber;
 
-    my $patron = Koha::Patrons->find( $borrowernumber );
+    my $patron = Koha::Patrons->find( $borrowernumber ) or return 0;
 
-    return 1 if $self->is_public and C4::Auth::haspermission( $patron->userid, { lists => 'delete_public_lists' } );
+    return 1 if $self->is_public and haspermission( $patron->userid, { lists => 'delete_public_lists' } );
 
     return 0;
 }
@@ -237,15 +242,20 @@ sub can_be_managed {
     my ( $self, $borrowernumber ) = @_;
     return 1
       if $borrowernumber and $self->owner == $borrowernumber;
+
+    my $patron = Koha::Patrons->find( $borrowernumber ) or return 0;
+    return 1
+      if $self->is_public and haspermission( $patron->userid, { lists => 'edit_public_lists' } );
     return 0;
 }
 
 sub can_biblios_be_added {
     my ( $self, $borrowernumber ) = @_;
 
+    my $patron = Koha::Patrons->find( $borrowernumber ) or return 0;
     return 1
       if $borrowernumber
-      and ( ( $self->owner == $borrowernumber && $self->allow_change_from_owner ) or $self->allow_change_from_others );
+      and ( ( $self->owner == $borrowernumber && $self->allow_change_from_owner ) or ( $self->allow_change_from_staff && $patron->can_patron_change_staff_only_lists ) or $self->allow_change_from_others );
     return 0;
 }
 

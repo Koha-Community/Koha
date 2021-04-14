@@ -41,6 +41,7 @@ use Koha::Patrons;
 use Koha::Virtualshelves;
 
 use constant ANYONE => 2;
+use constant STAFF  => 3;
 
 my $query = CGI->new;
 
@@ -84,6 +85,7 @@ if ( $op eq 'add_form' ) {
                 public             => $public,
                 allow_change_from_owner => $allow_changes_from > 0,
                 allow_change_from_others => $allow_changes_from == ANYONE,
+                allow_change_from_staff => $allow_changes_from == STAFF,
                 owner              => scalar $query->param('owner'),
             }
         );
@@ -113,6 +115,7 @@ if ( $op eq 'add_form' ) {
             my $allow_changes_from = $query->param('allow_changes_from');
             $shelf->allow_change_from_owner( $allow_changes_from > 0 );
             $shelf->allow_change_from_others( $allow_changes_from == ANYONE );
+            $shelf->allow_change_from_staff( $allow_changes_from == STAFF );
             $shelf->public( scalar $query->param('public') );
             eval { $shelf->store };
 

@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 15;
+use Test::More tests => 16;
 use Test::Exception;
 use Test::Warn;
 
@@ -848,6 +848,36 @@ subtest 'article_requests() tests' => sub {
 
     $article_requests = $patron->article_requests;
     is( $article_requests->count, 4, '4 article requests' );
+
+    $schema->storage->txn_rollback;
+
+};
+
+subtest 'can_patron_change_staff_only_lists() tests' => sub {
+
+    plan tests => 3;
+
+    $schema->storage->txn_begin;
+
+    # make a user with no special permissions
+    my $patron = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => {
+                flags => undef
+            }
+        }
+    );
+    is( $patron->can_patron_change_staff_only_lists(), 0, 'Patron without permissions cannot change staff only lists');
+
+    # make it a 'Catalogue' permission
+    $patron->set({ flags => 4 })->store->discard_changes;
+    is( $patron->can_patron_change_staff_only_lists(), 1, 'Catalogue patron can change staff only lists');
+
+
+    # make it a superlibrarian
+    $patron->set({ flags => 1 })->store->discard_changes;
+    is( $patron->can_patron_change_staff_only_lists(), 1, 'Superlibrarian patron can change staff only lists');
 
     $schema->storage->txn_rollback;
 };

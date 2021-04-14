@@ -117,18 +117,51 @@ if ($newvirtualshelf) {
             },
             { join => 'virtualshelfshares', }
         );
-        my $public_shelves = Koha::Virtualshelves->search(
-            {   public   => 1,
-                -or      => [
-                    -and => {
-                        allow_change_from_owner => 1,
-                        owner     => $loggedinuser,
+        my $public_shelves;
+        if ( $loggedinuser ) {
+            if ( Koha::Patrons->find( $loggedinuser )->can_patron_change_staff_only_lists ) {
+                $public_shelves = Koha::Virtualshelves->search(
+                    {   public   => 1,
+                        -or      => [
+                            -and => {
+                                allow_change_from_owner => 1,
+                                owner     => $loggedinuser,
+                            },
+                            allow_change_from_others => 1,
+                            allow_change_from_staff  => 1
+                        ],
                     },
-                    allow_change_from_others => 1,
-                ],
-            },
-            { order_by => 'shelfname' }
-        );
+                    { order_by => 'shelfname' }
+                );
+            } else {
+                $public_shelves = Koha::Virtualshelves->search(
+                    {   public   => 1,
+                        -or      => [
+                            -and => {
+                                allow_change_from_owner => 1,
+                                owner => $loggedinuser,
+                            },
+                            allow_change_from_others => 1,
+                        ],
+                    },
+                    {order_by => 'shelfname' }
+                );
+            }
+        } else {
+            $public_shelves = Koha::Virtualshelves->search(
+                {   public   => 1,
+                    -or      => [
+                        -and => {
+                            allow_change_from_owner => 1,
+                            owner => $loggedinuser,
+                        },
+                        allow_change_from_others => 1,
+                    ],
+                },
+                {order_by => 'shelfname' }
+            );
+        }
+
         $template->param(
             private_shelves                => $private_shelves,
             private_shelves_shared_with_me => $shelves_shared_with_me,

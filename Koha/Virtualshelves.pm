@@ -22,6 +22,7 @@ use Koha::Database;
 
 use Koha::Virtualshelf;
 
+
 use base qw(Koha::Objects);
 
 =head1 NAME
@@ -86,17 +87,37 @@ sub get_some_shelves {
     my $add_allowed = $params->{add_allowed};
 
     my @conditions;
+    my $patron;
+    my $staffuser = 0;
+    if ( $borrowernumber != 0 ) {
+        $patron = Koha::Patrons->find( $borrowernumber );
+        $staffuser = $patron->can_patron_change_staff_only_lists;
+    }
     if ( $add_allowed ) {
-        push @conditions, {
-            -or =>
-            [
-                {
-                    "me.owner" => $borrowernumber,
-                    "me.allow_change_from_owner" => 1,
-                },
-                "me.allow_change_from_others" => 1,
-            ]
-        };
+        if ( $staffuser ) {
+            push @conditions, {
+                -or =>
+                [
+                    {
+                        "me.owner" => $borrowernumber,
+                        "me.allow_change_from_owner" => 1,
+                    },
+                    "me.allow_change_from_others" => 1,
+                    "me.allow_change_from_staff"  => 1
+                ]
+            };
+        } else {
+            push @conditions, {
+                -or =>
+                [
+                    {
+                        "me.owner" => $borrowernumber,
+                        "me.allow_change_from_owner" => 1,
+                    },
+                    "me.allow_change_from_others" => 1,
+                ]
+            };
+        }
     }
     if ( !$public ) {
         push @conditions, {

@@ -678,6 +678,11 @@
             Delete public lists
         </span>
         <span class="permissioncode">([% name | html %])</span>
+    [%- CASE 'edit_public_lists' -%]
+        <span class="sub_permission edit_public_lists_subpermission">
+            Edit public lists
+        </span>
+        <span class="permissioncode">([% name | html %])</span>
     [%- CASE 'upload_general_files' -%]
         <span class="sub_permission upload_general_files_subpermission">
             Upload any file

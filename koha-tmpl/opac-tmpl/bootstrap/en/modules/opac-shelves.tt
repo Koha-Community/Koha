@@ -50,8 +50,11 @@
 
             [% IF shelf.allow_change_from_others %]<option value="2" selected="selected">Anyone seeing this list</option>[% ELSE %]<option value="2">Anyone seeing this list</option>[% END %]
 
+            [% IF staffuser == 1 %][% IF shelf.allow_change_from_staff %]<option value="3" selected="selected">Staff only</option>[% ELSE %]<option value="3">Staff only</option>[% END %][% END %]
+
         </select>
         &emsp; <span id="anyone_remark" style="display:none;color:red;">The "Anyone" permission has no actual effect while this list is strictly private.</span>
+        &emsp; <span id="staff_remark" style="display:none;color:red;">The "Staff only" permission has no actual effect while this list is strictly private.</span>
     </li>
 [% END %]
 
@@ -1034,16 +1037,25 @@ function AdjustRemark() {
 
     if( perms < 2 ) {
         $("#anyone_remark").hide();
+        $("#staff_remark").hide();
     } else if( public==0 ) {
         // If we move to Private (without shares), show Anyone remark
         // Note: the number of shares is not tested real-time
         [% IF !shelf.is_shared %]
-            $("#anyone_remark").show();
+            if ( perms==2 ) {
+                $("#anyone_remark").show();
+                $("#staff_remark").hide();
+            } else if ( perms==3 ) {
+                $("#anyone_remark").hide();
+                $("#staff_remark").show();
+            }
         [% ELSE %]
             $("#anyone_remark").hide();
+            $("#staff_remark").hide();
         [% END %]
     } else { // public==1
         $("#anyone_remark").hide();
+        $("#staff_remark").hide();
     }
 }
 </script>
