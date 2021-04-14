@@ -402,8 +402,8 @@ foreach my $biblionumber (@biblionumbers) {
         $biblioloopiter{noitems} = 1;
     }
 
-    ## Here we go backwards again to create hash of biblioitemnumber to itemnumbers,
-    ## when by definition all of the itemnumber have the same biblioitemnumber
+    ## Here we go backwards again to create hash of biblioitemnumber to itemnumbers
+    ## this is important when we have analytic items which may be on another record
     my ( $iteminfos_of );
     while ( my $item = $items->next ) {
         $item = $item->unblessed;
@@ -413,7 +413,6 @@ foreach my $biblionumber (@biblionumbers) {
         $iteminfos_of->{$itemnumber} = $item;
     }
 
-    ## Should be same as biblionumber
     my @biblioitemnumbers = keys %itemnumbers_of_biblioitem;
 
     my $biblioiteminfos_of = {
@@ -461,7 +460,7 @@ foreach my $biblionumber (@biblionumbers) {
         # (before this loop was inside that sub loop so it was O(n^2) )
         my $items_any_available;
 
-        $items_any_available = ItemsAnyAvailableAndNotRestricted( { biblionumber => $biblioitemnumber, patron => $patron })
+        $items_any_available = ItemsAnyAvailableAndNotRestricted( { biblionumber => $biblioitem->{biblionumber}, patron => $patron })
             if $patron;
 
         foreach my $itemnumber ( @{ $itemnumbers_of_biblioitem{$biblioitemnumber} } )    {
