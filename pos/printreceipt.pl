@@ -36,30 +36,31 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     }
 );
 
+my $action = $input->param('action') || '';
 my $payment_id = $input->param('accountlines_id');
-my $payment    = Koha::Account::Lines->find($payment_id);
-my $patron     = $payment->patron;
 
 my $logged_in_user = Koha::Patrons->find($loggedinuser) or die "Not logged in";
 output_and_exit_if_error(
     $input, $cookie,
     $template,
     {
-        module         => 'members',
+        module         => 'pos',
         logged_in_user => $logged_in_user,
-        current_patron => $patron
     }
-) if $patron;    # Payment could have been anonymous
+);
 
-my $letter = C4::Letters::getletter( 'pos', 'RECEIPT',
-    C4::Context::mybranch, 'print', $patron->lang );
+my $payment = Koha::Account::Lines->find($payment_id);
+my @offsets = Koha::Account::Offsets->search( { credit_id => $payment_id } );
+
+my $letter =
+  C4::Letters::getletter( 'pos', 'RECEIPT', C4::Context::mybranch, 'print' );
 
 $template->param(
-    letter  => $letter,
-    payment => $payment,
-
-    tendered => scalar $input->param('tendered'),
-    change   => scalar $input->param('change')
+    letter    => $letter,
+    payment   => $payment,
+    offsets   => \@offsets,
+    collected => scalar $input->param('collected'),
+    change    => scalar $input->param('change')
 );
 
 output_html_with_http_headers $input, $cookie, $template->output;
