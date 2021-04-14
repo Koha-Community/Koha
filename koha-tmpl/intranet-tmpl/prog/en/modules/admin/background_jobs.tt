@@ -1,21 +1,46 @@
 [% USE raw %]
 [% USE Asset %]
+[% USE KohaDates %]
 [% SET footerjs = 1 %]
+[% BLOCK show_job_status %]
+    [% SWITCH job.status %]
+        [% CASE "cancelled" %]
+            Cancelled
+        [% CASE "finished" %]
+            Finished
+        [% CASE "started" %]
+            Started
+        [% CASE "running" %]
+            Running
+        [% CASE # Default case %]
+            [% job.status | html %]
+    [% END -%]
+[% END %]
+[% BLOCK show_job_type %]
+    [% SWITCH job.type %]
+        [% CASE "batch_biblio_record_modification" %]
+            Batch bibliographic record modification
+        [% CASE "batch_authority_record_modification" %]
+            Batch authority record modification
+        [% CASE # Default case %]
+            [% job.type | html %]
+    [% END %]
+[% END %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>
-[% IF op =='add_form' %]
-    [% IF job %]
-        View background job
-    [% ELSE %]
-        Background jobs
-    [% END %] &rsaquo; Background jobs &rsaquo; [% END %]
-Administration &rsaquo; Koha
+    [% IF op == 'view' %]
+        Details of job #[% job.id | html %] &rsaquo;
+    [% END %]
+    Background jobs &rsaquo;
+    Administration &rsaquo; Koha
 </title>
+
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 
 <body id="admin_background_jobs" class="admin">
 [% INCLUDE 'header.inc' %]
+[% INCLUDE 'prefs-admin-search.inc' %]
 
 <nav id="breadcrumbs" aria-label="Breadcrumb" class="breadcrumb">
     <ol>
@@ -27,9 +52,18 @@ Administration &rsaquo; Koha
         <li>
             <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a>
         </li>
-        <li>
-            <a href="#" aria-current="page">Background jobs</a>
-        </li>
+        [% IF op == 'view' %]
+            <li>
+                <a href="/cgi-bin/koha/admin/background_jobs.pl">Background jobs</a>
+            </li>
+            <li>
+                <a href="#" aria-current="page">Details of job #[% job.id | html %]</a>
+            </li>
+        [% ELSE %]
+            <li>
+                <a href="#" aria-current="page">Background jobs</a>
+            </li>
+        [% END %]
     [% ELSE %]
         <li>
             <a href="#" aria-current="page">Administration</a>
@@ -55,17 +89,32 @@ Administration &rsaquo; Koha
 [% END %]
 
 [% IF op == 'view' %]
-    <h1>Detail of job #[% job.id | html %]</h1>
+    <h1>Details of job #[% job.id | html %]</h1>
 
     <fieldset class="rows">
         <ol>
             <li><span class="label">Job ID: </span>[% job.id | html %]</li>
-            <li><label for="job_status">Status: </label>[% job.status | html %]</li>
+            <li>
+                <label for="job_status">Status: </label>
+                [% PROCESS show_job_status %]
+            </li>
             <li><label for="job_progress">Progress: </label>[% job.progress || 0 | html %] / [% job.size | html %]</li>
-            <li><label for="job_type">Type: </label>[% job.type | html %]</li>
-            <li><label for="job_enqueued_on">Queued: </label>[% job.enqueued_on | html %]</li>
-            <li><label for="job_started_on">Started: </label>[% job.started_on | html %]</li>
-            <li><label for="job_ended_on">Ended: </label>[% job.ended_on | html %]</li>
+            <li>
+                <label for="job_type">Type: </label>
+                [% PROCESS show_job_type %]
+            </li>
+            <li>
+                <label for="job_enqueued_on">Queued: </label>
+                [% job.enqueued_on | $KohaDates with_hours = 1 %]
+            </li>
+            <li>
+                <label for="job_started_on">Started: </label>
+                [% job.started_on | $KohaDates with_hours = 1 %]
+            </li>
+            <li>
+                <label for="job_ended_on">Ended: </label>
+                [% job.ended_on | $KohaDates with_hours = 1 %]
+            </li>
             <li><label for="job_data">Report: </label>
                 [% SWITCH job.type %]
                 [% CASE 'batch_biblio_record_modification' %]
@@ -156,7 +205,9 @@ Administration &rsaquo; Koha
     </fieldset>
 
     [% IF CAN_user_parameters_manage_background_jobs %]
-        <a href="/cgi-bin/koha/admin/background_jobs.pl">Return to the job list</a>
+        <fieldset class="action">
+            <a href="/cgi-bin/koha/admin/background_jobs.pl">Return to the job list</a>
+        </fieldset>
     [% END %]
 [% END %]
 
@@ -182,7 +233,9 @@ Administration &rsaquo; Koha
                 [% FOREACH job IN jobs %]
                 <tr>
                     <td>[% job.id | html %]</td>
-                    <td>[% job.status | html %]</td>
+                    <td>
+                        [% PROCESS show_job_status %]
+                    </td>
                     <td>[% job.progress || 0 | html %] / [% job.size | html %]</td>
                     <td>
                         [% SWITCH job.type %]
@@ -191,9 +244,9 @@ Administration &rsaquo; Koha
                         [% CASE %][% job.type | html %]
                         [% END %]
                     </td>
-                    <td>[% job.enqueued_on | html %]</td>
-                    <td>[% job.started_on| html %]</td>
-                    <td>[% job.ended_on| html %]</td>
+                    <td>[% job.enqueued_on | $KohaDates with_hours = 1 %]</td>
+                    <td>[% job.started_on| $KohaDates with_hours = 1 %]</td>
+                    <td>[% job.ended_on| $KohaDates with_hours = 1 %]</td>
                     <td class="actions">
                         <a class="btn btn-default btn-xs" href="/cgi-bin/koha/admin/background_jobs.pl?op=view&amp;id=[% job.id | html %]"><i class="fa fa-eye"></i> View</a>
                         [% IF job.status == 'new' || job.status == 'started' %]
