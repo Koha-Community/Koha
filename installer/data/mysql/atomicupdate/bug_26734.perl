@@ -159,4 +159,5 @@ if ( CheckVersion($DBversion) ) {
     $d_insert->execute($d_notice);
 
     NewVersion( $DBversion, 26734, "Update notices to use defaults" );
+    warn "Warning - ACCOUNT_DEBIT and ACCOUNT_CREDIT slip templates have been replaced. Backups have been made to the action logs for your reference.";
 }
