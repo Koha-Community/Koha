@@ -47,7 +47,7 @@ holds_reminder.pl - prepare reminder messages to be sent to patrons with waiting
 
 holds_reminder.pl
   -lettercode <notice to send>
-  [ -n ][ -v ][ -library <branchcode> ][ -library <branchcode> ... ]
+  [ -c ][ -v ][ -library <branchcode> ][ -library <branchcode> ... ]
   [ -days <number of days> ][ -mtt <transport type> ... ][ -holidays ]
   [ -date <YYYY-MM-DD> ]
 
@@ -55,7 +55,7 @@ holds_reminder.pl
    -help                          brief help message
    -man                           full documentation
    -v                             verbose
-   -n                             No email will be sent
+   -c --confirm                   confirm, if not set no email will be sent
    -days          <days>          days waiting to deal with
    -lettercode   <lettercode>     predefined notice to use, default is HOLD_REMINDER
    -library      <branchname>     only deal with holds from this library (repeatable : several libraries can be given)
@@ -81,9 +81,10 @@ Prints the manual page and exits.
 
 Verbose. Without this flag set, only fatal errors are reported.
 
-=item B<-n>
+=item B<--confirm | -c>
 
-Do not send any email (test-mode) . If verbose a list of notices that would have been sent to
+Confirm. Unless set this script does not send any email (test-mode). 
+If verbose and not confirm a list of notices that would have been sent to
 the patrons are printed to standard out.
 
 =item B<-days>
@@ -164,7 +165,7 @@ my $dbh = C4::Context->dbh();
 my $help    = 0;
 my $man     = 0;
 my $verbose = 0;
-my $nomail  = 0;
+my $confirm  = 0;
 my $days    ;
 my $lettercode;
 my @branchcodes; # Branch(es) passed as parameter
@@ -177,7 +178,7 @@ GetOptions(
     'help|?'         => \$help,
     'man'            => \$man,
     'v'              => \$verbose,
-    'n'              => \$nomail,
+    'c|confirm'      => \$confirm,
     'days=s'         => \$days,
     'lettercode=s'   => \$lettercode,
     'library=s'      => \@branchcodes,
@@ -284,8 +285,8 @@ foreach my $branchcode (@branchcodes) { #BEGIN BRANCH LOOP
             },
         };
         $sending_params->{letter_params} = $letter_params;
-        $sending_params->{test_mode} = $nomail;
-        my $result_text = $nomail ? "would have been sent" : "was sent";
+        $sending_params->{test_mode} = !$confirm;
+        my $result_text = $confirm ? "was sent" : "would have been sent";
         # queue_notice queues the notices, falling back to print for email or SMS, and ignores phone (they are handled by Itiva)
         my $result = $patron->queue_notice( $sending_params );
         $verbose and print "   borrower " . $patron->surname . ", " . $patron->firstname . " $result_text notices via: @{$result->{sent}}\n" if defined $result->{sent};
