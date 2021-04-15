@@ -61,7 +61,7 @@ holds_reminder.pl
    -lettercode   <lettercode>     predefined notice to use, default is HOLD_REMINDER
    -library      <branchname>     only deal with holds from this library (repeatable : several libraries can be given)
    -holidays                      use the calendar to not count holidays as waiting days
-   -mtt          <message_transport_type> type of messages to send, default is to use patrons messaging preferences for Hold filled
+   -mtt          <message_transport_type> type of messages to send, default is to use patrons messaging preferences for Hold reminder
                                   populating this will force send even if patron has not chosen to receive hold notices
                                   email and sms will fallback to print if borrower does not have an address/phone
    -date                          Send notices as would have been sent on a specific date
@@ -265,8 +265,8 @@ foreach my $branchcode (@branchcodes) { #BEGIN BRANCH LOOP
     my %done;
 
     # If passed message transports we force use those, otherwise we will use the patrons preferences
-    # for the 'Hold_Filled' notice
-    my $sending_params = @mtts ? { message_transports => \@mtts } : { message_name => "Hold_Filled" };
+    # for the 'Hold_Reminder' notice
+    my $sending_params = @mtts ? { message_transports => \@mtts } : { message_name => "Hold_Reminder" };
 
 
     my %patrons;

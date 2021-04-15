@@ -19,6 +19,7 @@
       <td>[% IF ( messaging_preference.Item_Due ) %]Item due
           [% ELSIF ( messaging_preference.Advance_Notice ) %]Advance notice
           [% ELSIF ( messaging_preference.Hold_Filled ) %]Hold filled
+          [% ELSIF ( messaging_preference.Hold_Reminder ) %]Hold reminder
           [% ELSIF ( messaging_preference.Item_Check_in ) %]Item check-in
           [% ELSIF ( messaging_preference.Item_Checkout ) %]
             [% IF Koha.Preference( 'RenewalSendNotice' ) %]
