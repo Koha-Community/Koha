@@ -41,8 +41,8 @@
                 <div class="col-md-12 col-lg-10 order-1">
 
                     <div id="usersuggestions" class="maincontent">
-                        <h1>Your purchase suggestions</h1>
                         [% IF ( op_add ) %]
+                            <h1>Your purchase suggestions</h1>
                             [% IF ( Koha.Preference('MaxTotalSuggestions') != '' && patrons_total_suggestions_count >= Koha.Preference('MaxTotalSuggestions') ) %]
                                     <h2 class="TooManySuggestions">You cannot place any more suggestions</h2>
                                     <p class="TooManySuggestionsText">You may only add up to [% Koha.Preference('MaxTotalSuggestions') | html %] suggestions in [% Koha.Preference('NumberOfSuggestionDays') | html %] days.</p>
@@ -261,7 +261,7 @@
                         [% END #  IF op_add %]
 
                         [% IF ( op_else ) %]
-                            <h2>
+                            <h1>
                                 [% IF Koha.Preference( 'OPACViewOthersSuggestions' ) == 1 %]
                                     Purchase suggestions
                                 [% ELSE %]
@@ -271,7 +271,7 @@
                                         Purchase suggestions
                                     [% END %]
                                 [% END %]
-                            </h2>
+                            </h1>
                             [% FOR m IN messages %]
                                 <div class="alert alert-[% m.type | html %]">
                                     [% SWITCH m.code %]
