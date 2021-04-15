@@ -93,28 +93,28 @@ unless ($confirm) {
     $verbose ||= 1;
 }
 
-say scalar(@$members) . " patrons to delete" if $verbose;;
+say scalar(@$members) . " patrons match conditions" if $verbose;;
 
 my $anonymous_patron = C4::Context->preference("AnonymousPatron");
 my $deleted = 0;
 for my $member (@$members) {
-    print "Trying to delete patron $member->{borrowernumber}... "
+    print "Testing that we can delete patron $member->{borrowernumber}... "
       if $verbose;
 
     my $borrowernumber = $member->{borrowernumber};
     my $patron = Koha::Patrons->find( $borrowernumber );
     unless ( $patron ) {
-        say "Patron with borrowernumber $borrowernumber does not exist";
+        say "Cannot delete: Patron with borrowernumber $borrowernumber does not exist";
         next;
     }
     if ( my $charges = $patron->account->non_issues_charges ) { # And what if we owe to this patron?
-        say "Failed to delete patron $borrowernumber: patron has $charges in fines" if $verbose;
+        say "Cannot delete patron $borrowernumber: patron has $charges in fines" if $verbose;
         next;
     }
 
     if ( $anonymous_patron ) {
         if ( $patron->id eq $anonymous_patron ) {
-            say "Failed to delete patron $borrowernumber: patron is AnonymousPatron";
+            say "Cannot delete patron $borrowernumber: patron is AnonymousPatron";
             next;
         }
     }
@@ -122,13 +122,13 @@ for my $member (@$members) {
     if ( $confirm ) {
         my $deleted = eval { $patron->move_to_deleted; };
         if ($@ or not $deleted) {
-            say "Failed to delete patron $borrowernumber, cannot move it" . ( $@ ? ": ($@)" : "" ) if $verbose;
+            say "Cannot delete patron $borrowernumber, cannot move it" . ( $@ ? ": ($@)" : "" ) if $verbose;
             next;
         }
 
         eval { $patron->delete };
         if ($@) {
-            say "Failed to delete patron $borrowernumber: $@)";
+            say "Cannot delete patron $borrowernumber: $@)";
             next;
         }
     }
@@ -136,7 +136,8 @@ for my $member (@$members) {
     say "OK" if $verbose;
 }
 
-say "$deleted patrons deleted" if $verbose;
+
+say $confirm ? "$deleted patrons deleted" : "$deleted patrons would have been deleted" if $verbose;
 
 =head1 NAME
 
