@@ -204,7 +204,7 @@ sub pay {
         # in order that we can potentially renew it, do so.
         my $amt = $old_amountoutstanding - $amount_to_pay;
         if ( $fine->renewable ) {
-            my $outcome = $fine->renew_item;
+            my $outcome = $fine->renew_item({ interface => $interface });
             push @{$renew_outcomes}, $outcome if $outcome;
         }
 
