@@ -305,10 +305,10 @@ foreach my $biblionumber (@biblionumbers) {
 
                 #All is OK and we can continue
             }
-            elsif ( $canReserve eq 'noReservesAllowed') {
+            elsif ( $canReserve->{status} eq 'noReservesAllowed' || $canReserve->{status} eq 'notReservable' ) {
                 $no_reserves_allowed = 1;
             }
-            elsif ( $canReserve eq 'tooManyReserves' ) {
+            elsif ( $canReserve->{status} eq 'tooManyReserves' ) {
                 $exceeded_maxreserves = 1;
                 $template->param( maxreserves => $canReserve->{limit} );
             }
