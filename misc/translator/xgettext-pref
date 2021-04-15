@@ -104,7 +104,7 @@ for my $file (@files) {
     }
 }
 
-Locale::PO->save_file_fromhash($output, $pot);
+Locale::PO->save_file_fromhash($output, $pot, 'utf8');
 
 sub add_prefs {
     my ($file, $context, $prefs) = @_;
