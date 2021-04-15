@@ -135,7 +135,7 @@
     [% IF ENABLE_OPAC_PAYMENTS && DISPLAY_PAYMENT_BLOCK %]
         <fieldset class="pay-online hidden">
             <legend>Pay selected fines and charges</legend>
-            <span class="help-block"><h3>Payment method</h3></span>
+            <span class="help-block"><h2>Payment method</h2></span>
 
             [% IF Koha.Preference('EnablePayPalOpacPayments') %]
                 <div class="control-group">
