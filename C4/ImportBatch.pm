@@ -790,7 +790,7 @@ sub BatchCommitItems {
             $num_items_replaced++;
         } elsif ($duplicate_barcode) {
             $updsth->bind_param( 1, 'error' );
-            $updsth->bind_param( 2, 'duplicate item barcode' );
+            $updsth->bind_param( 2, undef );
             $updsth->bind_param( 3, $row->{'import_items_id'} );
             $updsth->execute();
             $num_items_errored++;
