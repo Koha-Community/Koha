@@ -52,7 +52,7 @@ function GetZ3950Terms(){
     for(var i=0,len=mandatories.length; i<len ; i++){
         var field_value = document.getElementById(mandatories[i]).value;
         if( field_value ){
-            strQuery += "&"+mandatories_label[i]+"="+field_value;
+            strQuery += "&"+mandatories_label[i]+"="+encodeURIComponent(field_value);
         }
     }
     return strQuery;
