@@ -511,7 +511,7 @@ sub get_transfer {
   my $transfer = $item->get_transfers;
 
 Return the list of outstanding transfers (i.e requested but not yet cancelled
-or recieved).
+or received).
 
 Note: Transfers are retrieved in a Modified FIFO (First In First Out) order
 whereby the most recently sent, but not received, transfer will be returned

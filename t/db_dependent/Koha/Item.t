@@ -781,7 +781,7 @@ subtest 'get_transfers' => sub {
 
     $transfer_2->datearrived(\'NOW()')->store;
     $transfers = $item->get_transfers();
-    is($transfers->count, 2, 'Once a transfer is recieved, it no longer appears in the list from ->get_transfers()');
+    is($transfers->count, 2, 'Once a transfer is received, it no longer appears in the list from ->get_transfers()');
     $result_1 = $transfers->next;
     $result_2 = $transfers->next;
     is( $result_1->branchtransfer_id, $transfer_1->branchtransfer_id, 'Koha::Item->get_transfers returns the other transfers oldest to newest');
