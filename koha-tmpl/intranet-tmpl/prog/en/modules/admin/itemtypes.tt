@@ -301,6 +301,15 @@ Item types &rsaquo; Administration &rsaquo; Koha
                         <span class="hint">If checked, no item of this type can be issued. If not checked, every item of this type can be issued unless notforloan is set for a specific item.</span>
                 </li>
                 <li>
+                    <label for="automatic_checkin">Automatic checkin: </label>
+                        [% IF itemtype.automatic_checkin %]
+                            <input type="checkbox" id="automatic_checkin" name="automatic_checkin" checked="checked" value="1" />
+                        [% ELSE %]
+                            <input type="checkbox" id="automatic_checkin" name="automatic_checkin" value="1" />
+                        [% END %]
+                        <span class="hint">If checked, items will be automatically checked in once they've reached their due date.</span>
+                </li>
+                <li>
                     <label for="rentalcharge">Rental charge: </label>
                     <input type="text" id="rentalcharge" name="rentalcharge" size="10" value="[% itemtype.rentalcharge | $Price on_editing => 1 %]" />
                     <span class="hint">This fee is charged once per checkout/renewal per item</span>
@@ -379,15 +388,6 @@ Item types &rsaquo; Administration &rsaquo; Koha
                         [% PROCESS options_for_libraries libraries => Branches.all( selected => itemtype.get_library_limits, unfiltered => 1, do_not_select_my_library => 1 ) %]
                     </select>
                     <span class="hint">Select 'All libraries' if all libraries use this item type. Otherwise, select the specific libraries that use this item type.</span>
-                </li>
-                <li>
-                    <label for="automatic_checkin">Automatic checkin: </label>
-                        [% IF itemtype.automatic_checkin %]
-                            <input type="checkbox" id="automatic_checkin" name="automatic_checkin" checked="checked" value="1" />
-                        [% ELSE %]
-                            <input type="checkbox" id="automatic_checkin" name="automatic_checkin" value="1" />
-                        [% END %]
-                        <span class="hint">If checked, items will be checked in automatically after a period of time. Useful for materials where you really don't care for fisical return, like museum passes, etc.</span>
                 </li>
                 <li>
                     <label for="summary">Summary: </label>
