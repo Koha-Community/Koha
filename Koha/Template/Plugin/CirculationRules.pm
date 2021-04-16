@@ -43,7 +43,7 @@ sub Get {
 }
 
 sub Search {
-    my ( $self, $branchcode, $categorycode, $itemtype, $rule_name ) = @_;
+    my ( $self, $branchcode, $categorycode, $itemtype, $rule_name, $want_rule) = @_;
 
     $branchcode   = undef if $branchcode eq q{}   or $branchcode eq q{*};
     $categorycode = undef if $categorycode eq q{} or $categorycode eq q{*};
@@ -58,8 +58,8 @@ sub Search {
         }
     )->next;
 
+    return $rule if $want_rule;
     return $rule->rule_value if $rule;
 }
-
 
 1;

@@ -543,28 +543,39 @@
                     <th>Return policy</th>
                     <th class="noExport">Actions</th>
                 </tr>
+                [% SET patron_maxissueqty = CirculationRules.Search( current_branch, undef, undef, 'patron_maxissueqty', 1, 1 ) %]
+                [% SET patron_maxonsiteissueqty = CirculationRules.Search( current_branch, undef, undef, 'patron_maxonsiteissueqty', 1, 1 ) %]
+                [% SET rule_value = CirculationRules.Search( current_branch, undef , undef, 'max_holds', 1, 1 ) %]
+                [% SET holdallowed = CirculationRules.Search( current_branch, undef, undef, 'holdallowed', 1 ) %]
+                [% SET hold_fulfillment_policy = CirculationRules.Search( current_branch, undef, undef, 'hold_fulfillment_policy', 1 ) %]
+                [% SET returnbranch = CirculationRules.Search( current_branch, undef, undef, 'returnbranch', 1 ) %]
+                [% SET dcharp = ( patron_maxissueqty || patron_maxonsiteissueqty || rule_value || holdallowed || hold_fulfillment_policy || returnbranch ) %]
                 <tr>
-                    <td><em>Defaults</em></td>
                     <td>
-                        [% SET patron_maxissueqty = CirculationRules.Search( current_branch, undef, undef, 'patron_maxissueqty' ) %]
-                        <input type="text" name="patron_maxissueqty" size="3" value="[% patron_maxissueqty | html %]"/>
+                        [% IF ( dcharp ) %]
+                            <em>
+                            Defaults
+                            </em>
+                        [% ELSE %]
+                            Not set
+                        [% END %]
                     </td>
                     <td>
-                        [% SET patron_maxonsiteissueqty = CirculationRules.Search( current_branch, undef, undef, 'patron_maxonsiteissueqty' ) %]
-                        <input type="text" name="patron_maxonsiteissueqty" size="3" value="[% patron_maxonsiteissueqty | html %]"/>
+                        <input type="text" name="patron_maxissueqty" size="9" value="[% patron_maxissueqty.rule_value | html %]" placeholder="Unlimited"/>
                     </td>
                     <td>
-                        [% SET rule_value = CirculationRules.Search( current_branch, undef , undef, 'max_holds' ) %]
-                        <input name="max_holds" size="3" value="[% rule_value | html %]" />
+                        <input type="text" name="patron_maxonsiteissueqty" size="9" value="[% patron_maxonsiteissueqty.rule_value | html %]" placeholder="Unlimited"/>
+                    </td>
+                    <td>
+                        <input name="max_holds" size="9" value="[% rule_value.rule_value | html %]" placeholder="Unlimited"/>
                     </td>
                     <td>
                         <select name="holdallowed">
-                            [% SET holdallowed = CirculationRules.Search( current_branch, undef, undef, 'holdallowed' ) %]
                             <option value="">
                                 Not set
                             </option>
 
-                            [% IF holdallowed == 'from_any_library' %]
+                            [% IF holdallowed.rule_value == 'from_any_library' %]
                                 <option value="from_any_library" selected="selected">
                             [% ELSE %]
                                 <option value="from_any_library">
@@ -572,7 +583,7 @@
                                 From any library
                             </option>
 
-                            [% IF holdallowed == 'from_local_hold_group' %]
+                            [% IF holdallowed.rule_value == 'from_local_hold_group' %]
                             <option value="from_local_hold_group" selected="selected">
                             [% ELSE %]
                             <option value="from_local_hold_group">
@@ -580,7 +591,7 @@
                                 From local hold group
                             </option>
 
-                            [% IF holdallowed == 'from_home_library' %]
+                            [% IF holdallowed.rule_value == 'from_home_library' %]
                                 <option value="from_home_library" selected="selected">
                             [% ELSE %]
                                 <option value="from_home_library">
@@ -588,7 +599,7 @@
                                 From home library
                             </option>
 
-                            [% IF holdallowed == 'not_allowed' %]
+                            [% IF holdallowed.rule_value == 'not_allowed' %]
                                 <option value="not_allowed" selected="selected">
                             [% ELSE %]
                                 <option value="not_allowed">
@@ -599,13 +610,12 @@
                     </td>
                     <td>
                         <select name="hold_fulfillment_policy">
-                            [% SET hold_fulfillment_policy = CirculationRules.Search( current_branch, undef, undef, 'hold_fulfillment_policy' ) %]
 
                             <option value="">
                                 Not set
                             </option>
 
-                            [% IF hold_fulfillment_policy == 'any' %]
+                            [% IF hold_fulfillment_policy.rule_value == 'any' %]
                                 <option value="any" selected="selected">
                                     any library
                                 </option>
@@ -615,7 +625,7 @@
                                 </option>
                             [% END %]
 
-                            [% IF hold_fulfillment_policy == 'holdgroup' %]
+                            [% IF hold_fulfillment_policy.rule_value == 'holdgroup' %]
                                 <option value="holdgroup" selected="selected">
                                     item's hold group
                                 </option>
@@ -625,7 +635,7 @@
                                 </option>
                             [% END %]
 
-                            [% IF hold_fulfillment_policy == 'patrongroup' %]
+                            [% IF hold_fulfillment_policy.rule_value == 'patrongroup' %]
                                 <option value="patrongroup" selected="selected">
                                     patron's hold group
                                 </option>
@@ -635,7 +645,7 @@
                                 </option>
                             [% END %]
 
-                            [% IF hold_fulfillment_policy == 'homebranch' %]
+                            [% IF hold_fulfillment_policy.rule_value == 'homebranch' %]
                                 <option value="homebranch" selected="selected">
                                     item's home library
                                 </option>
@@ -645,7 +655,7 @@
                                 </option>
                             [% END %]
 
-                            [% IF hold_fulfillment_policy == 'holdingbranch' %]
+                            [% IF hold_fulfillment_policy.rule_value == 'holdingbranch' %]
                                 <option value="holdingbranch" selected="selected">
                                     item's holding library
                                 </option>
@@ -658,27 +668,26 @@
                     </td>
                     <td>
                         <select name="returnbranch">
-                            [% SET returnbranch = CirculationRules.Search( current_branch, undef, undef, 'returnbranch' ) %]
 
                             <option value="">
                                 Not set
                             </option>
 
-                            [% IF returnbranch == 'homebranch' %]
+                            [% IF returnbranch.rule_value == 'homebranch' %]
                             <option value="homebranch" selected="selected">
                             [% ELSE %]
                             <option value="homebranch">
                             [% END %]
                                 Item returns home
                             </option>
-                            [% IF returnbranch == 'holdingbranch' %]
+                            [% IF returnbranch.rule_value == 'holdingbranch' %]
                             <option value="holdingbranch" selected="selected">
                             [% ELSE %]
                             <option value="holdingbranch">
                             [% END %]
                                 Item returns to issuing library
                             </option>
-                            [% IF returnbranch == 'noreturn' %]
+                            [% IF returnbranch.rule_value == 'noreturn' %]
                             <option value="noreturn" selected="selected">
                             [% ELSE %]
                             <option value="noreturn">
@@ -689,7 +698,9 @@
                     </td>
                     <td class="actions">
                         <button type="submit" class="btn btn-default btn-xs"><i class="fa fa-save"></i> Save</button>
-                        <a class="btn btn-default btn-xs delete" href="/cgi-bin/koha/admin/smart-rules.pl?op=delete-branch-cat&amp;categorycode=*&amp;branch=[% current_branch | html %]" id="unset"><i class="fa fa-undo"></i> Unset</a>
+                        [% IF (dcharp) %]
+                            <a class="btn btn-default btn-xs delete" href="/cgi-bin/koha/admin/smart-rules.pl?op=delete-branch-cat&amp;categorycode=*&amp;branch=[% current_branch | html %]" id="unset"><i class="fa fa-undo"></i> Unset</a>
+                        [% END %]
                     </td>
                 </tr>
             </table>
