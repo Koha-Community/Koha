@@ -444,15 +444,15 @@ subtest 'Renewal related tests' => sub {
         interface         => 'commandline',
     })->store;
 
-    is( $line->renewable, 1, "Item is returned as renewable when it meets the conditions" );
+    is( $line->is_renewable, 1, "Item is returned as renewable when it meets the conditions" );
     $line->amountoutstanding(5);
-    is( $line->renewable, 0, "Item is returned as unrenewable when it has outstanding fine" );
+    is( $line->is_renewable, 0, "Item is returned as unrenewable when it has outstanding fine" );
     $line->amountoutstanding(0);
     $line->debit_type_code("VOID");
-    is( $line->renewable, 0, "Item is returned as unrenewable when it has the wrong account type" );
+    is( $line->is_renewable, 0, "Item is returned as unrenewable when it has the wrong account type" );
     $line->debit_type_code("OVERDUE");
     $line->status("RETURNED");
-    is( $line->renewable, 0, "Item is returned as unrenewable when it has the wrong account status" );
+    is( $line->is_renewable, 0, "Item is returned as unrenewable when it has the wrong account status" );
 
 
     t::lib::Mocks::mock_preference( 'RenewAccruingItemWhenPaid', 0 );

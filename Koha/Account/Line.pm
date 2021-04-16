@@ -500,7 +500,7 @@ sub apply {
 
             # Attempt to renew the item associated with this debit if
             # appropriate
-            if ( $self->credit_type_code ne 'FORGIVEN' && $debit->renewable ) {
+            if ( $self->credit_type_code ne 'FORGIVEN' && $debit->is_renewable ) {
                 $debit->renew_item( { interface => $params->{interface} } );
             }
 
@@ -792,13 +792,13 @@ sub to_api_mapping {
 
 }
 
-=head3 renewable
+=head3 is_renewable
 
-    my $bool = $line->renewable;
+    my $bool = $line->is_renewable;
 
 =cut
 
-sub renewable {
+sub is_renewable {
     my ($self) = @_;
 
     return (
@@ -818,7 +818,7 @@ sub renewable {
 
 Conditionally attempt to renew an item and return the outcome. This is
 as a consequence of the fine on an item being fully paid off.
-Caller must call renewable before.
+Caller must call is_renewable before.
 
 =cut
 

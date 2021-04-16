@@ -128,7 +128,7 @@ sub pay {
 
         # Attempt to renew the item associated with this debit if
         # appropriate
-        if ($fine->renewable) {
+        if ($fine->is_renewable) {
             # We're ignoring the definition of $interface above, by all
             # accounts we can't rely on C4::Context::interface, so here
             # we're only using what we've been explicitly passed
@@ -203,7 +203,7 @@ sub pay {
         # If we need to make a note of the item associated with this line,
         # in order that we can potentially renew it, do so.
         my $amt = $old_amountoutstanding - $amount_to_pay;
-        if ( $fine->renewable ) {
+        if ( $fine->is_renewable ) {
             my $outcome = $fine->renew_item({ interface => $interface });
             push @{$renew_outcomes}, $outcome if $outcome;
         }
