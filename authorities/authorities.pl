@@ -336,7 +336,7 @@ sub GetMandatoryFieldZ3950 {
             '110a' => 'authorcorp',
             '111a' => 'authormeetingcon',
             '130a' => 'uniformtitle',
-            '150a' => 'topic',
+            '150a' => 'subject',
         };
     }else{
         return {
