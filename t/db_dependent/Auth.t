@@ -38,7 +38,7 @@ $schema->storage->txn_begin;
 
 subtest 'checkauth() tests' => sub {
 
-    plan tests => 3;
+    plan tests => 4;
 
     my $patron = $builder->build_object({ class => 'Koha::Patrons', value => { flags => undef } });
 
@@ -77,6 +77,36 @@ subtest 'checkauth() tests' => sub {
 
     # FIXME This belongs to t/db_dependent/Auth/haspermission.t but we do not want to c/p the pervious mock statements
     ok( !$is_allowed, 'DB user should not have any permissions');
+
+    subtest 'Prevent authentication when sending credential via GET' => sub {
+
+        plan tests => 2;
+
+        my $patron = $builder->build_object(
+            { class => 'Koha::Patrons', value => { flags => 1 } } );
+        my $password = 'password';
+        t::lib::Mocks::mock_preference( 'RequireStrongPassword', 0 );
+        $patron->set_password( { password => $password } );
+        $cgi = Test::MockObject->new();
+        $cgi->mock( 'cookie', sub { return; } );
+        $cgi->mock(
+            'param',
+            sub {
+                my ( $self, $param ) = @_;
+                if    ( $param eq 'userid' )   { return $patron->userid; }
+                elsif ( $param eq 'password' ) { return $password; }
+                else                           { return; }
+            }
+        );
+
+        $cgi->mock( 'request_method', sub { return 'POST' } );
+        ( $userid, $cookie, $sessionID, $flags ) = C4::Auth::checkauth( $cgi, 'authrequired' );
+        is( $userid, $patron->userid, 'If librarian user is used and password with POST, they should be logged in' );
+
+        $cgi->mock( 'request_method', sub { return 'GET' } );
+        ( $userid, $cookie, $sessionID, $flags ) = C4::Auth::checkauth( $cgi, 'authrequired' );
+        is( $userid, undef, 'If librarian user is used and password with GET, they should not be logged in' );
+    };
 
     C4::Context->_new_userenv; # For next tests
 
