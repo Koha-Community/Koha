@@ -817,7 +817,8 @@ sub renewable {
     my $renew_result = $line->renew_item;
 
 Conditionally attempt to renew an item and return the outcome. This is
-as a consequence of the fine on an item being fully paid off
+as a consequence of the fine on an item being fully paid off.
+Caller must call renewable before.
 
 =cut
 
