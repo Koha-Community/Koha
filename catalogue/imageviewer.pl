@@ -77,7 +77,7 @@ if ( C4::Context->preference("LocalCoverImages") ) {
     $template->param(
         LocalCoverImages => 1,
         images           => $images,
-        imagenumber      => (@$images ? $images->[0]->imagenumber : undef),
+        imagenumber      => ( $imagenumber || ( @$images ? $images->[0]->imagenumber : undef ) ),
     );
 }
 $template->{VARS}->{'count'}        = $itemcount;
