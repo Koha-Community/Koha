@@ -66,7 +66,7 @@
                     [% FOREACH image IN images %]
                             <li id="imagenumber-[% image.imagenumber | html %]" data-itemnumber="[% image.itemnumber | html %]" data-biblionumber="[% image.biblionumber | html %]" class="thumbnail">
                             <a class="show_cover" data-coverimg="[% image.imagenumber | html %]" href="/cgi-bin/koha/catalogue/imageviewer.pl?biblionumber=[% biblionumber | html %]&amp;imagenumber=[% image.imagenumber | html %]">
-                                [% IF loop.first %]
+                                [% IF image.imagenumber == imagenumber %]
                                     <img class="selected" id="thumbnail_[% image.imagenumber | html %]" src="/cgi-bin/koha/catalogue/image.pl?imagenumber=[% image.imagenumber | html %]&amp;thumbnail=1" alt="Thumbnail" />
                                 [% ELSE %]
                                     <img id="thumbnail_[% image.imagenumber | html %]" src="/cgi-bin/koha/catalogue/image.pl?imagenumber=[% image.imagenumber | html %]&amp;thumbnail=1" alt="Thumbnail" />
