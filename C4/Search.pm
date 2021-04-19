@@ -1914,8 +1914,16 @@ sub searchResults {
                     # FIXME: to avoid having the query the database like this, and to make
                     #        the in transit status count as unavailable for search limiting,
                     #        should map transit status to record indexed in Zebra.
-                    #
-                    ($transfertwhen, $transfertfrom, $transfertto) = C4::Circulation::GetTransfers($item->{itemnumber});
+
+                    my $item_object = Koha::Items->find($item->{itemnumber});
+                    my $transfer = defined($item_object) ? $item_object->get_transfer : undef;
+                    ( $transfertwhen, $transfertfrom, $transfertto ) =
+                      defined($transfer)
+                      ? (
+                        $transfer->datesent, $transfer->frombranch,
+                        $transfer->tobranch
+                      )
+                      : ( '', '', '' );
                     $reservestatus = C4::Reserves::GetReserveStatus( $item->{itemnumber} );
                     if ( C4::Context->preference('UseRecalls') ) {
                         if ( Koha::Recalls->search({ item_id => $item->{itemnumber}, status => 'waiting' })->count ) {
