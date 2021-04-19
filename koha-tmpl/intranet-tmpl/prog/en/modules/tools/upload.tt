@@ -429,17 +429,17 @@
             $("#searchbutton").on("click",function(){
                 return CheckSearch();
             });
-            $(".choose_entry").on("click",function(e){
+            $("#uploadresults tbody").on("click",".choose_entry",function(e){
                 e.preventDefault();
                 var record_hashvalue = $(this).data("record-hashvalue");
                 Choose( record_hashvalue );
             });
-            $(".download_entry").on("click",function(e){
+            $("#uploadresults tbody").on("click",".download_entry",function(e){
                 e.preventDefault();
                 var record_id = $(this).data("record-id");
                 SubmitMe( 'download', record_id );
             });
-            $(".delete_entry").on("click",function(e){
+            $("#uploadresults tbody").on("click",".delete_entry",function(e){
                 e.preventDefault();
                 var record_id = $(this).data("record-id");
                 DeleteEntry( record_id );
