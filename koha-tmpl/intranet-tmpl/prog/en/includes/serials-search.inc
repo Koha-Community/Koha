@@ -1,6 +1,6 @@
 [% USE Koha %]
 <div class="gradient">
-  <h1 id="logo"><a href="/cgi-bin/koha/mainpage.pl">[% LibraryName | html %]</a></h1><!-- Begin Serials Resident Search Box -->
+  <div id="logo"><a href="/cgi-bin/koha/mainpage.pl">[% LibraryName | html %]</a></div><!-- Begin Serials Resident Search Box -->
   <div id="header_search">
     <div id="subscription_search" class="residentsearch">
     <p class="tip">Search subscriptions:</p>

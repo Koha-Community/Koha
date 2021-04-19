@@ -1,7 +1,7 @@
 [% USE Koha %]
 [% USE Branches %]
 <div class="gradient">
-<h1 id="logo"><a href="/cgi-bin/koha/mainpage.pl">[% LibraryName | html %]</a></h1><!-- Begin Fund Admin Resident Search Box -->
+<div id="logo"><a href="/cgi-bin/koha/mainpage.pl">[% LibraryName | html %]</a></div><!-- Begin Fund Admin Resident Search Box -->
 
     <div id="header_search">
         <div id="budgets_search" class="residentsearch">
