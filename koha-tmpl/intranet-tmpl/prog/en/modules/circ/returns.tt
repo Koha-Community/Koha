@@ -1007,7 +1007,13 @@
             }).on('hidden.bs.modal', function() {
                 $("#barcode").prop("disabled", false).focus();
             });
-            $(".modal.noblock").modal({ backdrop: 'static'}).on('shown.bs.modal', function() {
+            $(".modal.noblock").on('show.bs.modal', function() {
+                /* If the modal doesn't block further action, the backdrop should be hidden.
+                   In order for this to happen smoothly we add a class to the body tag which
+                   targeted in the CSS */
+                $("body").addClass("nobackdrop");
+            }).modal()
+            .on('shown.bs.modal', function() {
                 $("#barcode").prop("disabled", false).focus();
             }).on('hidden.bs.modal', function() {
                 $("#barcode").prop("disabled", false).focus();
