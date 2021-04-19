@@ -44,7 +44,7 @@
 
                 [% IF error %]
                     <div class="dialog alert">
-                        <h3>Cannot renew:</h3>
+                        <h1>Cannot renew:</h1>
 
                             [% IF error == "no_item" %]
 
@@ -182,7 +182,7 @@
 
                 [% IF date_due %]
                     <div class="dialog message">
-                        <h3>Item renewed:</h3>
+                        <h1>Item renewed:</h1>
                         <p>
                             [% INCLUDE 'biblio-title.inc' biblio=item.biblio link = 1 %]
                             ( <a href="/cgi-bin/koha/catalogue/moredetail.pl?itemnumber=[% item.itemnumber | uri %]&amp;biblionumber=[% item.biblio.biblionumber | uri %]&amp;bi=[% item.biblioitemnumber.biblioitemnumber | uri %]#item[% item.itemnumber | uri %]">[% item.barcode | html %]</a> )
@@ -197,7 +197,7 @@
                 <form method="post" action="/cgi-bin/koha/circ/renew.pl" autocomplete="off" >
 
                     <fieldset>
-                        <h2>Renew</h2>
+                        <h1>Renew</h1>
 
                         [% IF Koha.Preference('UnseenRenewals') %]
                             <div class="renew_formfield">
