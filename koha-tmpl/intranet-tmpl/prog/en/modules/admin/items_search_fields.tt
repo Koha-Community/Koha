@@ -66,7 +66,7 @@
           [% END %]
           [% IF fields.size %]
               <div id="search_fields_list">
-                  <h2>Item search fields</h2>
+                  <h1>Item search fields</h1>
 
                   <table id="search_fields_table">
                     <thead>
@@ -104,7 +104,7 @@
 
           <form id="add_field_form" action="/cgi-bin/koha/admin/items_search_fields.pl" method="POST">
             <fieldset class="rows">
-              <legend>Add a new field</legend>
+                <legend><h1>Add a new field</h1></legend>
               [% INCLUDE 'admin-items-search-field-form.inc' field=undef %]
               <input type="hidden" name="op" value="add" />
             </fieldset>

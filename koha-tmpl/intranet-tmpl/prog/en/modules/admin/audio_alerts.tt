@@ -38,7 +38,7 @@
 
                 <form id="new-alert-form" action="audio_alerts.pl" method="post" class="validated">
                     <fieldset class="rows">
-                        <legend><span class="create-alert">Add new alert</span><span class="edit-alert">Edit alert</span></legend>
+                        <legend><h1><span class="create-alert">Add new alert</span><span class="edit-alert">Edit alert</span></h1></legend>
 
                         <input id="id" name="id" type="hidden" value="" />
                         <ol>
@@ -86,7 +86,7 @@
                 </form>
 
                 <form id="delete-alert-form" action="audio_alerts.pl" method="post">
-                    <h3>Audio alerts</h3>
+                    <h1>Audio alerts</h1>
                     [%IF !( Koha.Preference('AudioAlerts') ) %]
                         <div class="dialog alert">
                             <h3>Audio alerts are disabled</h3>

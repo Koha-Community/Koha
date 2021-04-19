@@ -144,7 +144,7 @@
 
 [% IF op == 'delete_confirm' %]
     <div class="dialog alert">
-        <h3>Delete desk "[% desk.desk_name | html %]"?</h3>
+        <h1>Delete desk "[% desk.desk_name | html %]?"</h1>
         <table>
             <tr><th>Desk ID</th>
                 <td>[% desk.desk_id | html %]</td>
@@ -173,7 +173,7 @@
         <a class="btn btn-default" id="newdesk" href="/cgi-bin/koha/admin/desks.pl?op=add_form"><i class="fa fa-plus"></i> New desk</a>
     </div>
 
-    <h2>Desks</h2>
+    <h1>Desks</h1>
     [% IF searchfield %]
         Searching: [% searchfield | html %]
     [% END %]

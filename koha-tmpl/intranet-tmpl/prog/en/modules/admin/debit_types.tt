@@ -77,9 +77,9 @@
 
                 [% IF op == 'add_form' %]
                     [% IF debit_type %]
-                        <h3>Modify a debit type</h3>
+                        <h1>Modify a debit type</h1>
                     [% ELSE %]
-                        <h3>New debit type</h3>
+                        <h1>New debit type</h1>
                     [% END %]
 
                     <form action="/cgi-bin/koha/admin/debit_types.pl" name="Aform" method="post" class="validated">
@@ -148,7 +148,7 @@
                         <a class="btn btn-default" id="newdebittype" href="/cgi-bin/koha/admin/debit_types.pl?op=add_form"><i class="fa fa-plus"></i> New debit type</a>
                     </div>
 
-                    <h3>Account debit types</h3>
+                    <h1>Account debit types</h1>
                     [% IF debit_types.count %]
                         <table id="table_debit_types">
                             <thead>

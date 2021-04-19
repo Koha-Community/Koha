@@ -112,9 +112,9 @@
 
                 [% IF ( matching_rule_form ) %]
                     [% IF ( edit_matching_rule ) %]
-                        <h2>Modify record matching rule</h2>
+                        <h1>Modify record matching rule</h1>
                     [% ELSE %]
-                        <h2>Add record matching rule</h2>
+                        <h1>Add record matching rule</h1>
                     [% END %]
                     <form action="[% script_name | html %]" name="Aform" method="post">
                         <input type="hidden" name="op" value="[% confirm_op | html %]" />
@@ -425,7 +425,7 @@
 
                 [% IF ( delete_matching_rule_form ) %]
                     <div class="dialog alert">
-                        <h3>Confirm deletion of record matching rule <span class="ex">'[% code | html %]' ([% description | html %])</span>?</h3>
+                        <h1>Confirm deletion of record matching rule <span class="ex">'[% code | html %]' ([% description | html %])</span>?</h1>
                         <form action="[% script_name | html %]" name="Aform" method="post">
                             <input type="hidden" name="op" value="[% confirm_op | html %]" />
                             <input type="hidden" name="matcher_id" value="[% matcher_id | html %]" />
@@ -443,7 +443,7 @@
                         <a class="btn btn-default" id="newrule" href="[% script_name | url %]?op=add_matching_rule"><i class="fa fa-plus"></i> New record matching rule</a>
                     </div>
 
-                    <h2>Record matching rules</h2>
+                    <h1>Record matching rules</h1>
 
                     [% IF ( added_matching_rule ) %]
                         <div class="dialog message">Added record matching rule &quot;[% added_matching_rule | html %]&quot;</div>

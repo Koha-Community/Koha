@@ -137,7 +137,7 @@
 
 [% IF op == 'delete_confirm' %]
     <div class="dialog alert">
-        <h3>Delete city "[% city.city_name | html %]?"</h3>
+        <h1>Delete city "[% city.city_name | html %]?"</h1>
         <table>
             <tr><th>City id</th>
                 <td>[% city.cityid | html %]</td>
@@ -172,7 +172,7 @@
         <a class="btn btn-default" id="newcity" href="/cgi-bin/koha/admin/cities.pl?op=add_form"><i class="fa fa-plus"></i> New city</a>
     </div>
 
-    <h2>Cities</h2>
+    <h1>Cities</h1>
     [% IF city_name_filter %]
         Searching: [% city_name_filter | html %]
     [% END %]

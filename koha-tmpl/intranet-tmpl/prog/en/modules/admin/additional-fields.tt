@@ -102,7 +102,7 @@
 
     [% IF op == 'list_tables' %]
         [% IF CAN_user_acquisitions_order_manage || CAN_user_serials_edit_subscription %]
-        <h3>Additional fields</h3>
+        <h1>Additional fields</h1>
         <p>Select a table:</p>
         [% BLOCK table_option %]
             <li><a href="?tablename=[% value | uri %]">[% content | html %] (<span class="ex">[% value | html %]</span>)</a></li>
@@ -119,7 +119,7 @@
             Additional permissions in the acquisitions or serials modules are required for editing additional fields
         [% END %]
     [% ELSIF op == 'list' %]
-        <h3>Additional fields for '[% tablename | html %]'</h3>
+        <h1>Additional fields for '[% tablename | html %]'</h1>
         [% IF fields %]
             <table id="fieldst">
                 <thead>
@@ -157,9 +157,9 @@
         [% END %]
     [% ELSIF op == 'add_form' %]
         [% IF field %]
-            <h3>Modify field</h3>
+            <h1>Modify field</h1>
         [% ELSE %]
-            <h3>Add field</h3>
+            <h1>Add field</h1>
         [% END %]
         <form action="" name="add_form" id="add_field" method="post">
             <fieldset class="rows">

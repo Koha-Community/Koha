@@ -97,11 +97,13 @@
     <input type="hidden" name="op" value="add_validate" />
     <fieldset class="rows">
         <legend>
-            [% IF currency %]
-                <span>Modify currency</span>
-            [% ELSE %]
-                <span>New currency</span>
-            [% END %]
+            <h1>
+                [% IF currency %]
+                    <span>Modify currency</span>
+                [% ELSE %]
+                    <span>New currency</span>
+                [% END %]
+            </h1>
         </legend>
         <ol>
             <li>
@@ -160,7 +162,7 @@
 [% IF op =='delete_confirm' %]
     [% IF nb_of_orders or nb_of_vendors %]
     <div class="dialog alert">
-        <h3>Cannot delete currency [% currency.currency | $HtmlTags tag='span' attributes=>'class="ex"' %]</h3>
+        <h1>Cannot delete currency [% currency.currency | $HtmlTags tag='span' attributes=>'class="ex"' %]</h1>
         <p>
             [% IF nb_of_orders %]
                 <span>This currency is used by [% nb_of_orders | html %] orders.</span>
@@ -175,7 +177,7 @@
     </div>
     [% ELSE %]
     <div class="dialog alert">
-        <h3>Confirm deletion of currency [% currency.currency | $HtmlTags tag='span' attributes=>'class="ex"' %]</h3>
+        <h1>Confirm deletion of currency [% currency.currency | $HtmlTags tag='span' attributes=>'class="ex"' %]</h1>
         <table>
             <tr><th>Currency</th>
                 <td>[% currency.currency | html %]</td>
@@ -198,7 +200,7 @@
 
 [% IF op == 'list' %]
 
-<h2>Currencies and exchange rates</h2>
+<h1>Currencies and exchange rates</h1>
 
     [% IF currencies and no_active_currency %]
         <div class="dialog alert"><h3>No active currency is defined</h3><p>Please edit one currency and mark it as active.</p></div>

@@ -155,9 +155,9 @@ Item types &rsaquo; Administration &rsaquo; Koha
 
 [% IF op == 'add_form' %]
     [% IF itemtype %]
-        <h3>Modify item type</h3>
+        <h1>Modify item type</h1>
     [% ELSE %]
-        <h3>Add item type</h3>
+        <h1>Add item type</h1>
     [% END %]
     <form action="/cgi-bin/koha/admin/itemtypes.pl" name="Aform" method="post" id="itemtypeentry">
         <input type="hidden" name="op" value="add_validate" />
@@ -437,7 +437,7 @@ Item types &rsaquo; Administration &rsaquo; Koha
 
 [% IF op == 'delete_confirm' %]
     <div class="dialog alert">
-        <h3>Delete item type '[% itemtype.itemtype | html %]'?</h3>
+        <h1>Delete item type '[% itemtype.itemtype | html %]'?</h1>
         <table>
             <tr>
                 <th scope="row">Item type</th>
@@ -466,7 +466,7 @@ Item types &rsaquo; Administration &rsaquo; Koha
 [% END %]
 
 [% IF op == 'list' %]
-    <h2>Item types administration</h2>
+    <h1>Item types administration</h1>
     [% IF itemtypes %]
         <table id="table_item_type">
           <thead>

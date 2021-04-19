@@ -86,11 +86,13 @@ Library EANs &rsaquo; Administration &rsaquo; Koha
 
   <fieldset class="rows">
       <legend>
-          [% IF ean %]
-             Modify EAN
-          [% ELSE %]
-            New EAN
-          [% END %]
+            <h1>
+                [% IF ean %]
+                    Modify EAN
+                [% ELSE %]
+                    New EAN
+                [% END %]
+            </h1>
       </legend>
 
       <ol>
@@ -143,7 +145,7 @@ Library EANs &rsaquo; Administration &rsaquo; Koha
 
 [% IF delete_confirm %]
 <div class="dialog alert">
-<h3>Delete EAN [% ean.ean | html %] for [% ean.branch.branchname | html %]?</h3>
+<h1>Delete EAN [% ean.ean | html %] for [% ean.branch.branchname | html %]?</h1>
 <form action="/cgi-bin/koha/admin/edi_ean_accounts.pl" method="post">
     <input type="hidden" name="op" value="delete_confirmed" />
     <input type="hidden" name="id" value="[% ean.id | html %]" />
@@ -157,7 +159,7 @@ Library EANs &rsaquo; Administration &rsaquo; Koha
 
 [% IF display %]
 [% IF ( eans ) %]
-    <h2>Library EANs</h2>
+    <h1>Library EANs</h1>
     <table>
         <tr>
             <th>Library</th>

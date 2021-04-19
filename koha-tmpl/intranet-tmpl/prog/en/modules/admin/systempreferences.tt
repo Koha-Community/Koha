@@ -111,9 +111,12 @@
             <form action="[% script_name | html %]" name="Aform" method="post">
         [% END %]
         <fieldset class="rows"><legend>
+        <h1>
         [% IF ( modify ) %]Modify
         [% ELSE %]Add
-        [% END %] a system preference</legend><ol>
+        [% END %] a system preference
+        </h1>
+            </legend><ol>
             <li><label for="explanation">Explanation: </label><input type="text" name="explanation" id="explanation" size="60" value="[% explanation | html %]" /><input type="hidden" name="op" value="add_validate" /></li>
             <li>[% IF ( searchfield ) %]<span class="label">Variable: </span>[% searchfield | html %]<input type="hidden" name="variable" value="[% searchfield | html %]" />
             [% ELSE %]<label for="variable">Variable: </label><input type="text" name="variable" id="variable" size="60" />[% END %]</li>
@@ -284,7 +287,7 @@
     [% END %]
     
     [% IF ( add_validate ) %]
-        <h3>Data recorded</h3>
+        <h1>Data recorded</h1>
         
         <form action="[% script_name | html %]" method="post">
         <input type="submit" value="OK" />
@@ -293,7 +296,7 @@
     
     [% IF ( delete_confirm ) %]
     <table>
-        <caption>Confirm deletion of [% searchfield | html %]?</caption>
+        <caption><h1>Confirm deletion of [% searchfield | html %]?</h1></caption>
         <tr>
             <th>Variable name:</th>
             <td>[% searchfield | html %]</td>
@@ -310,7 +313,7 @@
     [% END %]
     
     [% IF ( delete_confirmed ) %]
-        <h3>Data deleted</h3>
+        <h1>Data deleted</h1>
         <form action="[% script_name | html %]" method="post">
             <input type="submit" value="Back to system preferences" />
         </form>

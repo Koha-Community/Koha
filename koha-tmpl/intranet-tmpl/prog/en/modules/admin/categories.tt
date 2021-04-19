@@ -425,11 +425,13 @@
     <form action="/cgi-bin/koha/admin/categories.pl" method="post">
         <fieldset>
             <legend>
-                [% IF patrons_in_category > 0 %]
-                    Category [% categorycode | html %] is in use.  Deletion not possible!
-                [% ELSE %]
-                    Confirm deletion of category [% categorycode | html %]
-                [% END %]
+                <h1>
+                    [% IF patrons_in_category > 0 %]
+                        Category [% categorycode | html %] is in use.  Deletion not possible!
+                    [% ELSE %]
+                        Confirm deletion of category [% categorycode | html %]
+                    [% END %]
+            </h1>
             </legend>
 
             [% IF patrons_in_category > 0  %]
@@ -505,7 +507,7 @@
         <a class="btn btn-default" id="newcategory" href="/cgi-bin/koha/admin/categories.pl?op=add_form"><i class="fa fa-plus"></i> New category</a>
     </div>
 
-    <h2>Patron categories</h2>
+    <h1>Patron categories</h1>
     [% IF searchfield %]
         You searched for [% searchfield | html %]</span>
     [% END %]

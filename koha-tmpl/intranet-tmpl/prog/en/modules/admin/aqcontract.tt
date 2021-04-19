@@ -149,14 +149,14 @@
                     </form>
             [% END %]
             [% IF ( add_validate ) %]
-                <h3>Data recorded</h3>
+                <h1>Data recorded</h1>
                 <form action="[% script_name | html %]" method="post">
                     <input type="submit" value="OK" />
                 </form>
             [% END %]
             [% IF ( delete_confirm ) %]
                     <div class="dialog alert">
-                        <h3>Confirm deletion of contract <em>[% contractname | html %]</em></h3>
+                        <h1>Confirm deletion of contract <em>[% contractname | html %]</em></h1>
                         <table>
                             <tr><th scope="row">Contract number:</th><td>[% contractnumber | html %]</td></tr>
                             <tr><th scope="row">Contract name:</th><td>[% contractname | html %]</td></tr>
@@ -179,14 +179,14 @@
                     </div>
             [% END %]
             [% IF ( delete_confirmed ) %]
-                <h3>Contract deleted</h3>
+                <h1>Contract deleted</h1>
                 <form action="[% script_name | html %]" method="post">
                     <input type="hidden" name="booksellerid" value="[% booksellerid | html %]" />
                     <input type="submit" value="OK" />
                 </form>
             [% END %]
             [% IF ( else ) %]
-                <h2>Contract(s) of [% booksellername | html %]</h2>
+                <h1>Contract(s) of [% booksellername | html %]</h1>
                 [% IF ( loop ) %]
                     <table>
                         <tr>

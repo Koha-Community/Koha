@@ -81,7 +81,7 @@
     <div class="dialog alert"   id="smtp_delete_error"   style="display: none;"></div>
 
 [% IF op == 'add_form' %]
-    <h3>New SMTP server</h3>
+    <h1>New SMTP server</h1>
     <form action="/cgi-bin/koha/admin/smtp_servers.pl" id="add" name="add" class="validated" method="post">
         <input type="hidden" name="op" value="add" />
         <fieldset class="rows">
@@ -144,7 +144,7 @@
 [% END %]
 
 [% IF op == 'edit_form' %]
-    <h3>Edit SMTP server</h3>
+    <h1>Edit SMTP server</h1>
     <form action="/cgi-bin/koha/admin/smtp_servers.pl" id="edit_save" name="edit_save" class="validated" method="post">
         <input type="hidden" name="op" value="edit_save" />
         <input type="hidden" name="smtp_server_id" value="[%- smtp_server.id | html -%]" />
@@ -231,7 +231,7 @@
         <a class="btn btn-default" id="new_smtp_server" href="/cgi-bin/koha/admin/smtp_servers.pl?op=add_form"><i class="fa fa-plus"></i> New SMTP server</a>
     </div>
 
-    <h3>SMTP servers</h3>
+    <h1>SMTP servers</h1>
 
         <div class="dialog message" id="default_server_message">
         <p>Default configuration:</p>

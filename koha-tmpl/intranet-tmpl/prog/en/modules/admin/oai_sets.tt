@@ -61,10 +61,10 @@
         [% IF ( op_new || op_mod ) %]
             <form method="post" action="/cgi-bin/koha/admin/oai_sets.pl" class="validated">
             [% IF ( op_new ) %]
-                <h2>Add a new OAI set</h2>
+                <h1>Add a new OAI set</h1>
                 <input type="hidden" name="op" value="savenew" />
             [% ELSIF ( op_mod ) %]
-                <h2>Edit OAI set '[% spec | html %]'</h2>
+                <h1>Edit OAI set '[% spec | html %]'</h1>
                     <input type="hidden" name="op" value="savemod" />
                     <input type="hidden" name="id" value="[% id | html %]" />
             [% END %]
@@ -101,7 +101,7 @@
             <a class="btn btn-default" id="newoaiset" href="/cgi-bin/koha/admin/oai_sets.pl?op=new"><i class="fa fa-plus"></i> New set</a>
         </div>
 
-        <h2>OAI sets</h2>
+        <h1>OAI sets</h1>
         [% IF sets_loop %]
             <table>
                 <thead>

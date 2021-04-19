@@ -98,7 +98,7 @@ Cash registers &rsaquo; Administration &rsaquo; Koha
                 [% END %]
 
                 [% IF op == 'add_form' %]
-                <h3>[% IF cash_register %]Modify cash register[% ELSE %]Add new cash register[% END %]</h3>
+                <h1>[% IF cash_register %]Modify cash register[% ELSE %]Add new cash register[% END %]</h1>
                 <form action="/cgi-bin/koha/admin/cash_registers.pl" id="Aform" name="Aform" class="validated" method="post">
 
                     <fieldset class="rows">
@@ -155,6 +155,7 @@ Cash registers &rsaquo; Administration &rsaquo; Koha
                    <a class="btn btn-default" id="newcashregister" href="/cgi-bin/koha/admin/cash_registers.pl?op=add_form"><i class="fa fa-plus"></i> New cash register</a>
                </div>
 
+               <h1>Cash registers</h1>
                <h3>Cash registers for <select id="branch_filter" name="branch_filter">
                        <option value=""></option>
                        [% PROCESS options_for_libraries libraries => Branches.all( selected => branchcode, unfiltered => 1, ) %]

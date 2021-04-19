@@ -179,7 +179,7 @@
 [% END %]
 
 [% IF ( duplicate_form ) %]
-<h3>Duplicate budget</h3>
+<h1>Duplicate budget</h1>
 <form action="/cgi-bin/koha/admin/aqbudgetperiods.pl" id="add_modify_budget" name="f" method="post">
     <fieldset class="rows">
     <input type="hidden" name="op" value="duplicate_budget" />
@@ -245,9 +245,9 @@
     <!--  add or modify a budget period   -->
 
     [% IF ( budget_period_id ) %]
-        <h3>Modify budget <em>[% budget_period_description | html %]</em></h3>
+        <h1>Modify budget <em>[% budget_period_description | html %]</em></h1>
     [% ELSE %]
-        <h3>Add budget</h3>
+        <h1>Add budget</h1>
 	[% END %]
 <form action="/cgi-bin/koha/admin/aqbudgetperiods.pl" id="add_modify_budget" name="f" method="post">
     <fieldset class="rows">
@@ -326,16 +326,16 @@
 [% IF ( delete_confirm ) %]
     [% IF ( total ) %]
         <div class="dialog message">
-        <h3>Cannot delete budget</h3>
+        <h1>Cannot delete budget</h1>
         <p><strong>This record is used [% total | html %] times</strong>
         . Deletion is not possible.</p>
     [% ELSIF ( funds_exist ) %]
         <div class="dialog message">
-        <h3>Cannot delete budget</h3>
+        <h1>Cannot delete budget</h1>
         <p>This budget has funds attached. You must delete all attached funds before you can delete this budget.</p>
     [% ELSE %]
         <div class="dialog alert">
-        <h3>Delete budget '[% budget_period_description | html %]'?</h3>
+        <h1>Delete budget '[% budget_period_description | html %]'?</h1>
 
     <!-- ############################################################# -->
     <!-- "delete" and "cancel" buttons    -->
@@ -355,6 +355,7 @@
 [% END %]
 
 [% IF close_form %]
+<h1>Close budget [% budget_period_description | html %]</h1>
   [% IF budget_periods.size == 0 %]
     <span>You cannot move funds of this budget, there is no active budget.
     Please create a new active budget and retry.</span>
@@ -412,6 +413,7 @@
     </form>
   [% END %]
 [% ELSIF closed %]
+    <h1>Budget [% budget_period_description | html %] closed</h1>
   <h3>Report after moving unreceived orders from budget [% from_budget_period.budget_period_description | html %] ([% from_budget_period.budget_period_startdate | $KohaDates %] - [% from_budget_period.budget_period_enddate | $KohaDates %]) to [% to_budget_period.budget_period_description | html %] ([% to_budget_period.budget_period_startdate | $KohaDates %] - [% to_budget_period.budget_period_enddate | $KohaDates%])</h3>
 
   <table id="closed_report">
@@ -462,7 +464,7 @@
 
 <!--  DEFAULT  display budget periods list -->
 [% IF ( else ) %]
-  <h2>Budgets administration</h2>
+  <h1>Budgets administration</h1>
 
     [% IF ( failed_delete_funds_exist ) %]
         <div class="dialog message">Failed to delete budget because funds exist.</div>

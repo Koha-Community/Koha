@@ -79,9 +79,9 @@
 
                 [% IF op == 'add_form' %]
                     [% IF credit_type %]
-                        <h3>Modify a credit type</h3>
+                        <h1>Modify a credit type</h1>
                     [% ELSE %]
-                        <h3>New credit type</h3>
+                        <h1>New credit type</h1>
                     [% END %]
 
                     <form action="/cgi-bin/koha/admin/credit_types.pl" name="Aform" method="post" class="validated">
@@ -157,7 +157,7 @@
                         <a class="btn btn-default" id="newcredittype" href="/cgi-bin/koha/admin/credit_types.pl?op=add_form"><i class="fa fa-plus"></i> New credit type</a>
                     </div>
 
-                    <h3>Account credit types</h3>
+                    <h1>Account credit types</h1>
                     [% IF credit_types.count %]
                         <table id="table_credit_types">
                             <thead>

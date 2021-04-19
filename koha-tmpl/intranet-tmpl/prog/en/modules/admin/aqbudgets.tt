@@ -243,10 +243,11 @@
 [% IF op == 'add_form' && !error_not_authorised_to_modify %]
 <form action="/cgi-bin/koha/admin/aqbudgets.pl" id="edit_fund" name="Aform" method="post">
     <fieldset class="rows">
-    <legend>[% IF ( budget_id ) %]Modify[% ELSE %]Add[% END %] Fund
+        <legend><h1>[% IF ( budget_id ) %]Modify[% ELSE %]Add[% END %] Fund
     [% IF ( budget_period_description ) %]
         [% budget_name | html %] for Budget '[% budget_period_description | html %]'
     [% END %]
+            </h1>
     </legend>
 
     <input type="hidden" name="op" value="add_validate" />
@@ -411,7 +412,7 @@
 
 [% IF op == 'delete_confirm' %]
     <div class="dialog alert">
-        <h3>Delete fund [% budget_name | html %]?</h3>
+        <h1>Delete fund [% budget_name | html %]?</h1>
         If you delete this fund, all orders linked to this fund will be deleted!
         <table>
             <tr>
