@@ -44,6 +44,7 @@
             <main>
 
 [% INCLUDE 'members-toolbar.inc' %]
+<h1>Account for [% INCLUDE 'patron-title.inc' %]</h1>
 <form action="/cgi-bin/koha/members/boraccount.pl" method="get"><input type="hidden" name="borrowernumber" id="borrowernumber" value="[% patron.borrowernumber | html %]" /></form>
 
 <!-- The manual invoice and credit buttons -->

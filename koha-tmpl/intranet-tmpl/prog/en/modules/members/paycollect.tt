@@ -73,8 +73,25 @@
         <div class="col-sm-10 col-sm-push-2">
             <main>
 
-[% INCLUDE 'members-toolbar.inc' borrowernumber=patron.borrowernumber %]
+            <h1>
+                [% IF ( pay_individual ) %]
+                    Pay an individual fine
+                [% ELSIF ( writeoff_individual ) %]
+                    Write off an individual fine
+                [% ELSE %]
+                    [% IF ( selected_accts ) %]
+                        [% IF type == 'WRITEOFF' %]
+                            Write off an amount toward selected fines
+                        [% ELSE %]
+                            Pay an amount toward selected fines
+                        [% END %]
+                    [% ELSE %]
+                        Pay an amount toward all fines
+                    [% END %]
+                [% END %]
+            </h1>
 
+[% INCLUDE 'members-toolbar.inc' borrowernumber=patron.borrowernumber %]
 
 <!-- The manual invoice and credit buttons -->
 <div class="statictabs">

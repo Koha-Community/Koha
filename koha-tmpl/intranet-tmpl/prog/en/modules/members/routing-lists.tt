@@ -34,8 +34,9 @@
         <div class="col-sm-10 col-sm-push-2">
             <main>
 
-[% INCLUDE 'members-toolbar.inc' %]
+                [% INCLUDE 'members-toolbar.inc' %]
 
+                <h1>Subscription routing lists for [% INCLUDE 'patron-title.inc' %]</h1>
 <!-- Search Bar -->
 <p class="tip">Search subscriptions:</p>
 <form action="/cgi-bin/koha/serials/serials-search.pl" method="get">[% IF ( routing ) %]<input type="hidden" name="routing" value="[% routing | html %]" />[% END %]<input type="hidden" name="searched" value="1" /> <label for="ISSN_filter">ISSN:</label> <input type="text" size="10" maxlength="11" name="ISSN_filter" id="ISSN_filter" value="[% ISSN_filter | html %]" /> <label for="title_filter">Title:</label> <input type="text" size="20" maxlength="40" name="title_filter" id="title_filter" value="[% title_filter | html %]" /><input type="submit" value="Search" class="submit" />
@@ -43,7 +44,7 @@
 <!-- Search Bar End -->
 
 [% SET routinglists = patron.get_routing_lists %]
-<h1>
+<h2>
 [% UNLESS ( routinglists ) %]
 0 subscription routing lists
 [% ELSIF ( routinglists.count == 1 ) %]
@@ -51,7 +52,7 @@
 [% ELSE %]
 [% routinglists.count | html %] subscription routing lists
 [% END %]
-</h1>
+</h2>
 
 <div id="subscriptions">
 
