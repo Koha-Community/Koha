@@ -39,7 +39,8 @@ KOHA.coce = {
                                 $(this).closest(".coce-coverimg").remove();
                             }
                         };
-                        $(this).html(img);
+                        $(this).attr('href', url);
+                        $(this).append(img);
                     });
                 }
             },

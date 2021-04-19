@@ -43,6 +43,7 @@
   [% END %] &rsaquo; Catalog &rsaquo; Koha
 </title>
 [% INCLUDE 'doc-head-close.inc' %]
+[% Asset.css("lib/Chocolat/css/chocolat.css") | $raw %]
 </head>
 
 <body id="catalog_detail" class="catalog">
@@ -196,8 +197,8 @@
                         [% IF localimages.count %]
                             [% FOREACH image IN localimages %]
                                 <div class="cover-image local-coverimg">
-                                    <a href="/cgi-bin/koha/catalogue/imageviewer.pl?biblionumber=[% biblionumber | uri %]&amp;imagenumber=[% image.imagenumber | uri %]">
-                                        <img src="/cgi-bin/koha/catalogue/image.pl?thumbnail=1&amp;imagenumber=[% image.imagenumber | uri %]" alt="Local cover image" />
+                                    <a href="/cgi-bin/koha/catalogue/image.pl?imagenumber=[% image.imagenumber | uri %]" title="Local cover image">
+                                        <img src="/cgi-bin/koha/catalogue/image.pl?thumbnail=1&amp;imagenumber=[% image.imagenumber | uri %]" alt="Local cover image" data-link="/cgi-bin/koha/catalogue/imageviewer.pl?biblionumber=[% biblionumber | uri %]&amp;imagenumber=[% image.imagenumber | uri %]" />
                                     </a>
                                     <div class="hint">Local cover image</div>
                                 </div>
@@ -207,8 +208,8 @@
 
                     [% IF ( AdlibrisEnabled && normalized_isbn ) %]
                         <div class="cover-image" id="adlibris-coverimg">
-                            <a href="[% AdlibrisURL | url %]?isbn=[% normalized_isbn | uri %]">
-                                <img src="[% AdlibrisURL | url %]?isbn=[% normalized_isbn | uri %]" class="adlibris-cover-big" alt="Adlibris cover image" />
+                            <a href="[% AdlibrisURL | url %]?isbn=[% normalized_isbn | uri %]" title="Addlibris cover image">
+                                <img src="[% AdlibrisURL | url %]?isbn=[% normalized_isbn | uri %]" class="adlibris-cover-big" alt="Adlibris cover image" data-link="[% AdlibrisURL | url %]?isbn=[% normalized_isbn | uri %]" />
                             </a>
                             <div class="hint">Image from Adlibris</div>
                         </div>
@@ -216,8 +217,8 @@
 
                     [% IF ( AmazonCoverImages && normalized_isbn) %]
                         <div class="cover-image" id="amazon-bookcoverimg">
-                            <a href="http://www.amazon[% AmazonTld | uri %]/gp/reader/[% normalized_isbn | uri %][% AmazonAssocTag | uri %]#reader-link">
-                                <img src="https://images-na.ssl-images-amazon.com/images/P/[% normalized_isbn | html %].01.MZZZZZZZ.jpg" alt="Amazon cover image" />
+                            <a href="https://images-na.ssl-images-amazon.com/images/P/[% normalized_isbn | uri %].01.LZZZZZZZ.jpg" title="Amazon cover image">
+                                <img src="https://images-na.ssl-images-amazon.com/images/P/[% normalized_isbn | uri %].01.MZZZZZZZ.jpg" alt="Amazon cover image" data-link="http://www.amazon[% AmazonTld | uri %]/gp/reader/[% normalized_isbn | uri %][% AmazonAssocTag | uri %]#reader-link"/>
                             </a>
                             <div class="hint">Image from Amazon.com</div>
                         </div>
@@ -227,7 +228,7 @@
                         [% coce_id = normalized_ean || normalized_isbn %]
                         <div class="cover-image" id="coce-coverimg">
                             [% IF ( coce_id ) %]
-                                <span title="[% biblionumber | url %]" class="[% coce_id | html %]" id="coce-thumbnail-preview"></span>
+                                <a title="Image from Coce" class="[% coce_id | html %]" id="coce-thumbnail-preview"></a>
                             [% ELSE %]
                                 <span class="no-image">No cover image available</span>
                             [% END %]
@@ -239,7 +240,7 @@
                         [% SET custom_cover_image_url = biblio.custom_cover_image_url %]
                         [% IF custom_cover_image_url %]
                             <div class="cover-image" id="custom-coverimg">
-                                <a class="custom_cover_image" href="[% custom_cover_image_url | url %]">
+                                <a class="custom_cover_image" href="[% custom_cover_image_url | url %]" title="Custom cover image">
                                     <img id="custom-img" alt="Custom cover image" src="[% custom_cover_image_url | url %]" />
                                 </a>
                                 <div class="hint">Custom cover image</div>
@@ -353,7 +354,7 @@
                                 <div class="cover-slider">
                                     [% FOREACH image IN item.cover_images %]
                                         <div class="cover-image local-coverimg">
-                                            <a href="/cgi-bin/koha/catalogue/imageviewer.pl?itemnumber=[% image.itemnumber | uri %]&amp;imagenumber=[% image.imagenumber | uri %]">
+                                            <a href="/cgi-bin/koha/catalogue/image.pl?itemnumber=[% image.itemnumber | uri %]&amp;imagenumber=[% image.imagenumber | uri %]" title="Local cover image">
                                                 <img src="/cgi-bin/koha/catalogue/image.pl?thumbnail=1&amp;imagenumber=[% image.imagenumber | uri %]" alt="Local cover image" />
                                             </a>
                                         </div>
@@ -1014,6 +1015,7 @@ Note that permanent location is a code, and location may be an authval.
     [% INCLUDE 'catalog-strings.inc' %]
     [% Asset.js("js/catalog.js") | $raw %]
     [% Asset.js("js/coce.js") | $raw %]
+    [% Asset.js("lib/Chocolat/js/chocolat.js") | $raw %]
     <script>
         var interface = "[% interface | html %]";
         var theme = "[% theme | html %]";
@@ -1021,11 +1023,13 @@ Note that permanent location is a code, and location may be an authval.
         function verify_images() {
             // Loop over each container in the template which contains covers
             $(".cover-slider").each(function(){
+                var lightbox_descriptions = [];
                 $(this).find(".cover-image").each( function( index ){
                     var div = $(this);
                     // Find the image in the container
                     var img = div.find("img")[0];
                     if( $(img).length > 0 ){
+                        var description = "";
                         if( (img.complete != null) && (!img.complete) || img.naturalHeight == 0 ){
                             // No image loaded in the container. Remove the slide
                             div.remove();
@@ -1042,28 +1046,47 @@ Note that permanent location is a code, and location may be an authval.
                                     // Amazon returned single-pixel placeholder
                                     // Remove the container
                                     div.remove();
+                                } else {
+                                    lightbox_descriptions.push(_("Amazon cover image (<a href='%s'>see the original image</a>)").format($(img).data('link')));
                                 }
-                            }
-                            if( div.attr("id") == "custom-img" ){
+                            } else if( div.attr("id") == "custom-coverimg" ){
                                 if ( (img.complete != null) && (!img.complete) || img.naturalHeight == 0 ) {
                                     // No image was loaded via the CustomCoverImages system preference
                                     // Remove the container
                                     div.remove();
+                                } else {
+                                    lightbox_descriptions.push("Custom cover image");
                                 }
-                            }
-                            if( div.attr("id") == "coce-coverimg" ){
+                            } else if( div.attr("id") == "coce-coverimg" ){
                                 // Identify which service's image is being loaded by Coce
+                                var coce_description;
                                 if( $(img).attr("src").indexOf('amazon.com') >= 0 ){
-                                    div.find(".hint").html(_("Coce image from Amazon.com"));
+                                    coce_description = ("Coce image from Amazon.com");
                                 } else if( $(img).attr("src").indexOf('google.com') >= 0 ){
-                                    div.find(".hint").html(_("Coce image from Google Books"));
+                                    coce_description = _("Coce image from Google Books");
                                 } else if( $(img).attr("src").indexOf('openlibrary.org') >= 0 ){
-                                    div.find(".hint").html(_("Coce image from Open Library"));
+                                    coce_description = _("Coce image from Open Library");
                                 }
+                                div.find(".hint").html(coce_description);
+                                lightbox_descriptions.push(coce_description);
+                            } else if ( div.attr("id") == "adlibris-coverimg" ){
+                                lightbox_descriptions.push(_("Image from Adlibris (<a href='%s'>see the original image</a>)").format($(img).data('link')));
+                            } else if ( div.attr("class") == "cover-image local-coverimg" ) {
+                                lightbox_descriptions.push(_("Local cover image (<a href='%s'>edit</a>)").format($(img).data('link')));
+                            } else {
+                                console.log("Source of the image cannot be guessed.")
                             }
                         }
                     }
                 });
+
+                // Lightbox for cover images
+                Chocolat(this.querySelectorAll('.cover-image a'), {
+                    description: function(){
+                        return lightbox_descriptions[this.settings.currentImageIndex];
+                    }
+                });
+
             });
 
             $(".cover-slider").each(function(){
