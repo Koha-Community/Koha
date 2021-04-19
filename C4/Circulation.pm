@@ -107,7 +107,6 @@ BEGIN {
 
       transferbook
       TooMany
-      GetTransfers
       GetTransfersFromTo
       updateWrongTransfer
       CalcDateDue
@@ -3537,35 +3536,6 @@ sub AddIssuingCharge {
             issue_id    => $checkout->issue_id,
         }
     );
-}
-
-=head2 GetTransfers
-
-  GetTransfers($itemnumber);
-
-=cut
-
-sub GetTransfers {
-    my ($itemnumber) = @_;
-
-    my $dbh = C4::Context->dbh;
-
-    my $query = '
-        SELECT datesent,
-               frombranch,
-               tobranch,
-               branchtransfer_id,
-               daterequested,
-               reason
-        FROM branchtransfers
-        WHERE itemnumber = ?
-          AND datearrived IS NULL
-          AND datecancelled IS NULL
-        ';
-    my $sth = $dbh->prepare($query);
-    $sth->execute($itemnumber);
-    my @row = $sth->fetchrow_array();
-    return @row;
 }
 
 =head2 GetTransfersFromTo

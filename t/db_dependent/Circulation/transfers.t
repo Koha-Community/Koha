@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 use C4::Context;
-use C4::Circulation qw( CreateBranchTransferLimit DeleteBranchTransferLimits GetTransfers GetTransfersFromTo TransferSlip );
+use C4::Circulation qw( CreateBranchTransferLimit DeleteBranchTransferLimits GetTransfersFromTo TransferSlip );
 use C4::Biblio qw( AddBiblio );
 use C4::Items qw( ModItemTransfer );
 use Koha::Database;
@@ -27,18 +27,17 @@ use Koha::Item::Transfers;
 
 use t::lib::TestBuilder;
 
-use Test::More tests => 22;
+use Test::More tests => 19;
 use Test::Deep;
 
 BEGIN {
-    use_ok('C4::Circulation', qw( CreateBranchTransferLimit DeleteBranchTransferLimits GetTransfers GetTransfersFromTo TransferSlip ));
+    use_ok('C4::Circulation', qw( CreateBranchTransferLimit DeleteBranchTransferLimits GetTransfersFromTo TransferSlip ));
 }
 can_ok(
     'C4::Circulation',
     qw(
       CreateBranchTransferLimit
       DeleteBranchTransferLimits
-      GetTransfers
       GetTransfersFromTo
       )
 );
@@ -167,20 +166,6 @@ is(CreateBranchTransferLimit(undef,$branchcode_2),undef,
 #FIXME: Currently, we can add a transferlimit even to nonexistent branches because in the database,
 #branch_transfer_limits.toBranch and branch_transfer_limits.fromBranch aren't foreign keys
 #is(CreateBranchTransferLimit(-1,-1,'CODE'),0,"With wrong CreateBranchTransferLimit returns 0 - No transfertlimit added");
-
-#Test GetTransfers
-my @transfers = GetTransfers($item_id1);
-cmp_deeply(
-    \@transfers,
-    [ re('^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$'), $branchcode_1, $branchcode_2, re('[0-9]*'), re('^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$'), 'Manual' ],
-    "Transfers of the item1"
-);    #NOTE: Only the first transfer is returned
-@transfers = GetTransfers;
-is_deeply( \@transfers, [],
-    "GetTransfers without params returns an empty array" );
-@transfers = GetTransfers(-1);
-is_deeply( \@transfers, [],
-    "GetTransfers with a wrong item id returns an empty array" );
 
 #Test GetTransfersFromTo
 my @transferfrom1to2 = GetTransfersFromTo( $branchcode_1,
