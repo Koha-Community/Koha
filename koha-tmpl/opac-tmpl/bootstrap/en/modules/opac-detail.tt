@@ -117,6 +117,22 @@
                                 </div>
                             [% END %]
 
+                            [% bt_id = ( normalized_upc || normalized_isbn ) %]
+                            [% IF ( BakerTaylorEnabled && bt_id ) %]
+                                <div class="cover-image" id="bakertaylor-coverimg">
+                                    [% IF BakerTaylorBookstoreURL %]
+                                        <a href="https://[% BakerTaylorBookstoreURL | url %][% bt_id | url %]">
+                                            <img alt="See Baker &amp; Taylor" src="[% BakerTaylorImageURL | url %][% bt_id | uri %]" />
+                                        </a>
+                                    [% ELSE %]
+                                        <a href="[% BakerTaylorImageURL | url %][% bt_id | uri%]">
+                                            <img alt="See Baker &amp; Taylor" src="[% BakerTaylorImageURL | url %][% bt_id | uri %]" />
+                                        </a>
+                                    [% END %]
+                                    <div class="hint">Image from BakerTaylor</div>
+                                </div>
+                            [% END %]
+
                             [% IF Koha.Preference('OPACCustomCoverImages') && Koha.Preference('CustomCoverImagesURL') %]
                                 [% SET custom_cover_image_url = biblio.custom_cover_image_url %]
                                 [% IF custom_cover_image_url %]
@@ -1568,6 +1584,8 @@
                                 }
                                 div.find(".hint").html(coce_description);
                                 lightbox_descriptions.push(coce_description);
+                            } else if ( div.attr("id") == "bakertaylor-coverimg" ){
+                                lightbox_descriptions.push(_("Image from Baker Taylor"));
                             } else if ( div.attr("id") == "adlibris-coverimg" ){
                                 lightbox_descriptions.push(_("Image from Adlibris (<a href='%s'>see the original image</a>)").format($(img).data('link')));
                             } else if ( div.attr("class") == "cover-image local-coverimg" ) {
