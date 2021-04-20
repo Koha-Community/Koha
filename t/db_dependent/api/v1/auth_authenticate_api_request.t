@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 3;
+use Test::More tests => 4;
 use Test::Mojo;
 
 use Module::Load::Conditional qw(can_load);
@@ -188,6 +188,72 @@ subtest 'anonymous requests to public API' => sub {
 
     $t->get_ok("/api/v1/public/biblios/" . $biblio_id => { Accept => 'application/marc' })
       ->status_is( 200, 'Successfull anonymous access to a resource' );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'x-koha-library tests' => sub {
+
+    plan tests => 10;
+
+    $schema->storage->txn_begin;
+
+    my $stash;
+    my $userenv;
+
+    $t->app->hook(after_dispatch => sub {
+        $stash   = shift->stash;
+        $userenv = C4::Context->userenv;
+    });
+
+    t::lib::Mocks::mock_preference( 'RESTBasicAuth', 1 );
+    my $superlibrarian = $builder->build_object({
+        class => 'Koha::Patrons',
+        value => { flags => 1 }
+    });
+    my $password = 'thePassword123';
+    $superlibrarian->set_password({ password => $password, skip_validation => 1 });
+    my $superlibrarian_userid = $superlibrarian->userid;
+
+    my $unprivileged = $builder->build_object({
+        class => 'Koha::Patrons',
+        value => { flags => undef }
+    });
+    $unprivileged->set_password({ password => $password, skip_validation => 1 });
+    my $unprivileged_userid = $unprivileged->userid;
+
+    my $library = $builder->build_object( { class => 'Koha::Libraries' } );
+
+    ## Independent branches tests
+    t::lib::Mocks::mock_preference('IndependentBranches', 1);
+
+    $t->get_ok(
+        "//$unprivileged_userid:$password@/api/v1/cities",
+        { 'x-koha-library' => $unprivileged->branchcode }
+    );
+
+    is( $userenv->{branch}, $unprivileged->branchcode, 'branch set correctly' );
+
+    $t->get_ok( "//$unprivileged_userid:$password@/api/v1/cities" =>
+          { 'x-koha-library' => $library->id } )->status_is(403)
+      ->json_is(
+        '/error' => 'Unauthorized attempt to set library to ' . $library->id );
+
+    $t->get_ok( "//$superlibrarian_userid:$password@/api/v1/cities" =>
+          { 'x-koha-library' => $library->id } )->status_is(200);
+
+    is( $userenv->{branch}, $library->id, 'branch set correctly' );
+
+    ## !Independent branches tests
+    t::lib::Mocks::mock_preference('IndependentBranches', 1);
+    $t->get_ok(
+        "//$unprivileged_userid:$password@/api/v1/cities",
+        { 'x-koha-library' => $unprivileged->branchcode }
+    );
+    $t->get_ok(
+        "//$unprivileged_userid:$password@/api/v1/cities",
+        { 'x-koha-library' => $library->id }
+    );
 
     $schema->storage->txn_rollback;
 };
