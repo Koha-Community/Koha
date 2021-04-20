@@ -309,7 +309,7 @@
           }
 
           this.settings.currentImageIndex = index;
-          this.elems.description.textContent = this.settings.description.call(this);
+          this.elems.description.innerHTML = this.settings.description.call(this);
           this.elems.pagination.textContent = this.settings.pagination.call(this);
           this.arrows();
           return this.position(image).then(() => {
