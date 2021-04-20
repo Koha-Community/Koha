@@ -93,6 +93,13 @@
                                 [% END %]
                             [% END %]
 
+                            [% IF ( GoogleJackets ) %]
+                                <div class="cover-image" id="googlejacket-coverimg">
+                                    <div title="[% img_title | html %]" class="[% normalized_isbn | html %]" id="gbs-thumbnail-preview" data-use-data-link="1"></div>
+                                    <div class="hint">Image from Google Jackets</div>
+                                </div>
+                            [% END %]
+
                             [% IF ( Koha.Preference('OPACCoce') && Koha.Preference('CoceProviders') && normalized_isbn ) %]
                                 [% coce_id = normalized_ean || normalized_isbn %]
                                 <div class="cover-image" id="coce-coverimg">
@@ -1487,6 +1494,10 @@
                 [% END %]
             [% END %]
 
+            [% IF ( GoogleJackets ) %]
+                KOHA.Google.GetCoverFromIsbn([% covernewwindow | html %]);
+            [% END %]
+
             [% IF ( Koha.Preference('OpacCoce') && Koha.Preference('CoceProviders') ) %]
                 KOHA.coce.getURL('[% Koha.Preference('CoceHost') | html %]', '[% Koha.Preference('CoceProviders') | html %]',[% covernewwindow | html %]);
             [% END %]
@@ -1530,6 +1541,8 @@
                                 }
                             } else if( div.attr("id") == "syndetics-coverimg" ){
                                 lightbox_descriptions.push("Image from Syndetics")
+                            } else if( div.attr("id") == "googlejacket-coverimg" ){
+                                lightbox_descriptions.push(_("Image from Google Jacket (<a href='%s'>see the original image</a>)").format($(img).data('link')));
                             } else if( div.attr("id") == "coce-coverimg" ){
                                 // Identify which service's image is being loaded by Coce
                                 var coce_description;

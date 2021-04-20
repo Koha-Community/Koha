@@ -46,22 +46,30 @@ KOHA.Google = {
          for (id in booksInfo) {
              var book = booksInfo[id];
              $("[id^=gbs-thumbnail]."+book.bib_key).each(function() {
-                 var a = document.createElement("a");
-                 a.href = book.info_url;
                  if (typeof(book.thumbnail_url) != "undefined") {
-                     var img = document.createElement("img");
-                     img.src = book.thumbnail_url;
-                     $(this).empty().append(img);
-                     var re = /^gbs-thumbnail-preview/;
-                     if ( re.exec($(this).attr("id")) ) {
-                         $(this).append(
-                             '<div class="google-books-preview">' +
-                             '<a '+target+'href="' +
-                             book.info_url +
-                             '"><img src="' +
-                             'https://books.google.com/intl/en/googlebooks/images/gbs_preview_sticker1.gif' +
-                             '"></a></div>'
-                             );
+                     if ( $(this).data('use-data-link') ) {
+                         var a = document.createElement("a");
+                         a.href = book.thumbnail_url;
+                         var img = document.createElement("img");
+                         img.src = book.thumbnail_url;
+                         img.setAttribute('data-link', book.info_url);
+                         a.append(img)
+                         $(this).empty().append(a);
+                     } else {
+                         var img = document.createElement("img");
+                         img.src = book.thumbnail_url;
+                         $(this).empty().append(img);
+                         var re = /^gbs-thumbnail-preview/;
+                         if ( re.exec($(this).attr("id")) ) {
+                             $(this).append(
+                                 '<div class="google-books-preview">' +
+                                 '<a '+target+'href="' +
+                                 book.info_url +
+                                 '"><img src="' +
+                                 'https://books.google.com/intl/en/googlebooks/images/gbs_preview_sticker1.gif' +
+                                 '"></a></div>'
+                                 );
+                         }
                      }
                  } else {
                      var message = document.createElement("span");
