@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 7;
+use Test::More tests => 8;
 use Test::Exception;
 use Test::Warn;
 
@@ -680,4 +680,39 @@ subtest 'extended_attributes' => sub {
 
     };
 
+};
+
+subtest 'can_log_into() tests' => sub {
+
+    plan tests => 5;
+
+    $schema->storage->txn_begin;
+
+    my $patron = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => {
+                flags => undef
+            }
+        }
+    );
+    my $library = $builder->build_object({ class => 'Koha::Libraries' });
+
+    t::lib::Mocks::mock_preference('IndependentBranches', 1);
+
+    ok( $patron->can_log_into( $patron->library ), 'Patron can log into its own library' );
+    ok( !$patron->can_log_into( $library ), 'Patron cannot log into different library, IndependentBranches on' );
+
+    # make it a superlibrarian
+    $patron->set({ flags => 1 })->store->discard_changes;
+    ok( $patron->can_log_into( $library ), 'Superlibrarian can log into different library, IndependentBranches on' );
+
+    t::lib::Mocks::mock_preference('IndependentBranches', 0);
+
+    # No special permissions
+    $patron->set({ flags => undef })->store->discard_changes;
+    ok( $patron->can_log_into( $patron->library ), 'Patron can log into its own library' );
+    ok( $patron->can_log_into( $library ), 'Patron can log into any library' );
+
+    $schema->storage->txn_rollback;
 };

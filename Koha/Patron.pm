@@ -1364,6 +1364,33 @@ sub can_see_patrons_from {
     return $can;
 }
 
+=head3 can_log_into
+
+my $can_log_into = $patron->can_log_into( $library );
+
+Given a I<Koha::Library> object, it returns a boolean representing
+the fact the patron can log into a the library.
+
+=cut
+
+sub can_log_into {
+    my ( $self, $library ) = @_;
+
+    my $can = 0;
+
+    if ( C4::Context->preference('IndependentBranches') ) {
+        $can = 1
+          if $self->is_superlibrarian
+          or $self->branchcode eq $library->id;
+    }
+    else {
+        # no restrictions
+        $can = 1;
+    }
+
+   return $can;
+}
+
 =head3 libraries_where_can_see_patrons
 
 my $libraries = $patron-libraries_where_can_see_patrons;
