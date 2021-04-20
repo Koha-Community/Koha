@@ -28,6 +28,7 @@ use Koha::ApiKeys;
 use Koha::Account::Lines;
 use Koha::Checkouts;
 use Koha::Holds;
+use Koha::Libraries;
 use Koha::OAuth;
 use Koha::OAuthAccessTokens;
 use Koha::Old::Checkouts;
@@ -310,7 +311,6 @@ sub validate_query_parameters {
     ) if @errors;
 }
 
-
 =head3 allow_owner
 
 Allows access to object for its owner.
@@ -500,19 +500,30 @@ Internal method that sets C4::Context->userenv
 sub _set_userenv {
     my ( $c, $patron ) = @_;
 
-    my $library = $patron->library;
+    my $passed_library_id = $c->req->headers->header('x-koha-library');
+    my $THE_library;
+
+    if ( $passed_library_id ) {
+        $THE_library = Koha::Libraries->find( $passed_library_id );
+        Koha::Exceptions::Authorization::Unauthorized->throw(
+            "Unauthorized attempt to set library to $passed_library_id"
+        ) unless $THE_library and $patron->can_log_into($THE_library);
+    }
+    else {
+        $THE_library = $patron->library;
+    }
 
     C4::Context->_new_userenv( $patron->borrowernumber );
     C4::Context->set_userenv(
-        $patron->borrowernumber, # number,
-        $patron->userid,         # userid,
-        $patron->cardnumber,     # cardnumber
-        $patron->firstname,      # firstname
-        $patron->surname,        # surname
-        $library->branchcode,    # branch
-        $library->branchname,    # branchname
-        $patron->flags,          # flags,
-        $patron->email,          # emailaddress
+        $patron->borrowernumber,  # number,
+        $patron->userid,          # userid,
+        $patron->cardnumber,      # cardnumber
+        $patron->firstname,       # firstname
+        $patron->surname,         # surname
+        $THE_library->branchcode, # branch
+        $THE_library->branchname, # branchname
+        $patron->flags,           # flags,
+        $patron->email,           # emailaddress
     );
 
     return $c;
