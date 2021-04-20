@@ -82,6 +82,17 @@
                                 </div>
                             [% END %]
 
+                            [% IF ( SyndeticsEnabled && SyndeticsCoverImages ) %]
+                                [% IF ( content_identifier_exists ) %]
+                                    <div class="cover-image" id="syndetics-coverimg">
+                                        <a href="https://secure.syndetics.com/index.aspx?isbn=[% normalized_isbn | uri %]/[% SyndeticsCoverImageSize | uri %].GIF&amp;amp;client=[% SyndeticsClientCode | uri %]&amp;type=xw10&amp;upc=[% normalized_upc | uri %]&amp;oclc=[% normalized_oclc | uri %]" title="Syndetics cover image">
+                                            <img src="https://secure.syndetics.com/index.aspx?isbn=[% normalized_isbn | uri %]/[% SyndeticsCoverImageSize | uri %].GIF&amp;amp;client=[% SyndeticsClientCode | uri %]&amp;type=xw10&amp;upc=[% normalized_upc | uri %]&amp;oclc=[% normalized_oclc | uri %]" alt="Syndetics cover image" />
+                                        </a>
+                                        <div class="hint">Image from Syndetics</div>
+                                    </div>
+                                [% END %]
+                            [% END %]
+
                             [% IF ( Koha.Preference('OPACCoce') && Koha.Preference('CoceProviders') && normalized_isbn ) %]
                                 [% coce_id = normalized_ean || normalized_isbn %]
                                 <div class="cover-image" id="coce-coverimg">
@@ -1517,6 +1528,8 @@
                                 } else {
                                     lightbox_descriptions.push("Custom cover image");
                                 }
+                            } else if( div.attr("id") == "syndetics-coverimg" ){
+                                lightbox_descriptions.push("Image from Syndetics")
                             } else if( div.attr("id") == "coce-coverimg" ){
                                 // Identify which service's image is being loaded by Coce
                                 var coce_description;
