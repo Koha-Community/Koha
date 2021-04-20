@@ -38,13 +38,7 @@ KOHA.LocalCover = {
                         catch(err){
                         };
                     } else if (this.width > 1) { // don't show the silly 1px "no image" img
-                        if (uselink) {
-                            var a = $("<a />").attr('href', '/cgi-bin/koha/opac-imageviewer.pl?biblionumber=' + $(mydiv).attr("class"));
-                            $(a).append(img);
-                            $(mydiv).empty().append(a);
-                        } else {
-                            $(mydiv).empty().append(img);
-                        }
+                        $(mydiv).empty().append(img);
                         $(mydiv).children('.no-image').remove();
                     }
                 })

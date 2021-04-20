@@ -617,10 +617,11 @@ th {
     width: 75px;
 }
 
-#bookcover {
+.bookcover {
     float: left;
     margin: 0;
     padding: 0;
+    text-align: center;
 
     .no-image {
         margin-bottom: 10px;
@@ -636,6 +637,62 @@ th {
     img {
         max-width: 140px;
     }
+}
+
+#biblio-cover-slider {
+    border: 1px solid #b9d8d9;
+    border-radius: 3px;
+    margin: 5px;
+    padding: 10px 5px 5px 5px;
+    min-height: 175px;
+}
+
+.cover-slides {
+    background: #FFF url("../img/spinner-small.gif") center center no-repeat;
+
+    .hint {
+        font-size: 90%;
+        padding: .5em 0;
+    }
+
+    a {
+        &.nav-active {
+            &:link,
+            &:visited {
+                color: #85ca11;
+            }
+        }
+    }
+}
+
+td {
+    &.bookcover {
+        background: #FFF url("../img/spinner-small.gif") center center no-repeat;
+        min-width: 120px;
+        text-align: center;
+    }
+
+    .cover-slides {
+        background: transparent none;
+        border: 0;
+        margin: 0;
+        min-height: unset;
+        padding: 0;
+    }
+}
+
+.cover-image {
+    display: none;
+
+    img {
+        height: auto;
+        max-width: 100%;
+    }
+}
+
+.cover-nav {
+    display: inline-block;
+    padding: 3px 4px;
 }
 
 div {

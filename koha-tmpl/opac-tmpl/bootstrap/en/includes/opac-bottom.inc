@@ -262,11 +262,6 @@ $.widget.bridge('uitooltip', $.ui.tooltip);
 
 [% IF OPACLocalCoverImages %]
     [% Asset.js("js/localcovers.js") | $raw %]
-    <script>
-
-    var NO_LOCAL_JACKET = _("No cover image available");
-
-    </script>
 [% END %]
 
 [% IF ( BakerTaylorEnabled ) %]

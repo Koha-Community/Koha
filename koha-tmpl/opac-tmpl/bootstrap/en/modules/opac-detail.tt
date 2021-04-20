@@ -34,6 +34,7 @@
     [% IF ( Koha.Preference('OPACShowMusicalInscripts') ) %]
         [% Asset.css("lib/verovio/midiplayer.css") | $raw %]
     [% END %]
+    [% Asset.css("lib/Chocolat/css/chocolat.css") | $raw %]
 </head>
 [% BLOCK cssinclude %][% END %]
 [% INCLUDE 'bodytag.inc' bodyid='opac-detail' bodyclass='scrollto' %]
@@ -56,67 +57,55 @@
             <div class="col-lg-9">
                 <div id="catalogue_detail_biblio" class="maincontent" data-biblionumber="[% biblio.biblionumber | html %]">
 
-                    <div id="bookcover">
-                        [% IF ( biblio.title ) %]
-                            [% img_title = biblio.title %]
-                        [% ELSE %]
-                            [% img_title = biblio.biblionumber %]
-                        [% END %]
+                    <div class="bookcover">
 
-                        [% IF ( OPACLocalCoverImages ) %]
-                            <div title="[% img_title | html %]" class="[% biblio.biblionumber | html %]" id="local-thumbnail-preview"></div>
-                        [% END %]
-
-                        [% IF ( OPACAmazonCoverImages ) %]
-                            [% IF ( OPACURLOpenInNewWindow ) %]
-                                <a href="http://www.amazon[% AmazonTld | uri %]/gp/reader/[% normalized_isbn | uri %][% AmazonAssocTag | uri %]#reader-link" target="_blank" rel="noreferrer">
-                            [% ELSE %]
-                                <a href="http://www.amazon[% AmazonTld | uri %]/dp/[% normalized_isbn | uri %][% AmazonAssocTag | uri %]">
-                            [% END %]
-                            <img src="https://images-na.ssl-images-amazon.com/images/P/[% normalized_isbn | html %].01.MZZZZZZZ.jpg" alt="Cover image" /></a>
-                        [% END %]
-
-                        [% IF ( SyndeticsEnabled && SyndeticsCoverImages ) %]
-                            [% IF ( content_identifier_exists ) %]
-                                <img src="https://secure.syndetics.com/index.aspx?isbn=[% normalized_isbn | html %]/[% SyndeticsCoverImageSize | html %].GIF&amp;client=[% SyndeticsClientCode | html %]&amp;type=xw10&amp;upc=[% normalized_upc | html %]&amp;oclc=[% normalized_oclc | html %]" alt="" class="thumbnail" />
-                            [% ELSE %]
-                                <span class="no-image">No cover image available</span>
-                            [% END %]
-                        [% END %]
-
-                        [% IF ( GoogleJackets ) %]
-                            <div title="[% img_title | html %]" class="[% normalized_isbn | html %]" id="gbs-thumbnail-preview"></div>
-                        [% END %]
-                        [% IF ( Koha.Preference('OpacCoce') && Koha.Preference('CoceProviders') ) %]
-                            [% coce_id = normalized_ean || normalized_isbn | html %]
-                            <div title="[% img_title | html %]" class="[% coce_id | html %]" id="coce-thumbnail-preview"></div>
-                        [% END %]
-                        [% IF OpenLibraryCovers %]
-                            <div title="[% img_title | html %]" class="[% normalized_isbn | html %]" id="openlibrary-thumbnail-preview"></div>
-                        [% END %]
-                        [% bt_id = ( normalized_upc || normalized_isbn ) %]
-                        [% IF ( BakerTaylorEnabled && bt_id ) %]
-                            [% IF BakerTaylorBookstoreURL %]
-                                [% IF ( OPACURLOpenInNewWindow ) %]
-                                    <a href="https://[% BakerTaylorBookstoreURL | url %][% bt_id | url %]" target="_blank" rel="noreferrer"><img alt="See Baker &amp; Taylor" src="[% BakerTaylorImageURL | html %][% bt_id | html %]" /></a>
-                                [% ELSE %]
-                                    <a href="https://[% BakerTaylorBookstoreURL | url %][% bt_id | url %]"><img alt="See Baker &amp; Taylor" src="[% BakerTaylorImageURL | html %][% bt_id | html %]" /></a>
-                                [% END %]
-                            [% ELSE %]
-                                <img alt="See Baker &amp; Taylor" src="[% BakerTaylorImageURL | html %][% bt_id | html %]" />
-                            [% END %]
-                        [% END %]
-                        [% IF Koha.Preference('OPACCustomCoverImages') AND Koha.Preference('CustomCoverImagesURL') %]
-                            [% SET custom_cover_image_url = biblio.custom_cover_image_url %]
-                            [% IF custom_cover_image_url %]
-                                [% IF ( OPACURLOpenInNewWindow ) %]
-                                    <a class="custom_cover_image" href="[% custom_cover_image_url | url %]" target="_blank" rel="noreferrer"><img alt="Cover image" src="[% custom_cover_image_url | url %]" /></a>
-                                [% ELSE %]
-                                    <a class="custom_cover_image" href="[% custom_cover_image_url | url %]"><img alt="Cover image" src="[% custom_cover_image_url | url %]" /></a>
+                        <div id="biblio-cover-slider" class="cover-slider">
+                            [% IF ( OPACLocalCoverImages ) %]
+                                [% IF localimages.count %]
+                                    [% FOREACH image IN localimages %]
+                                        <div class="cover-image local-coverimg">
+                                            <a href="/cgi-bin/koha/opac-image.pl?imagenumber=[% image.imagenumber | uri %]" title="Local cover image">
+                                                <img src="/cgi-bin/koha/opac-image.pl?thumbnail=1&amp;imagenumber=[% image.imagenumber | uri %]" alt="Local cover image" data-link="/cgi-bin/koha/opac-imageviewer.pl?biblionumber=[% biblionumber | uri %]&amp;imagenumber=[% image.imagenumber | uri %]" />
+                                            </a>
+                                            <div class="hint">Local cover image</div>
+                                        </div>
+                                    [% END %]
                                 [% END %]
                             [% END %]
-                        [% END %]
-                    </div><!-- / #bookcover -->
+
+                            [% IF ( OPACAmazonCoverImages && normalized_isbn) %]
+                                <div class="cover-image" id="amazon-bookcoverimg">
+                                    <a href="https://images-na.ssl-images-amazon.com/images/P/[% normalized_isbn | uri %].01.LZZZZZZZ.jpg" title="Amazon cover image">
+                                        <img src="https://images-na.ssl-images-amazon.com/images/P/[% normalized_isbn | uri %].01.MZZZZZZZ.jpg" alt="Amazon cover image" data-link="http://www.amazon[% AmazonTld | uri %]/gp/reader/[% normalized_isbn | uri %][% AmazonAssocTag | uri %]#reader-link"/>
+                                    </a>
+                                    <div class="hint">Image from Amazon.com</div>
+                                </div>
+                            [% END %]
+
+                            [% IF ( Koha.Preference('OPACCoce') && Koha.Preference('CoceProviders') && normalized_isbn ) %]
+                                [% coce_id = normalized_ean || normalized_isbn %]
+                                <div class="cover-image" id="coce-coverimg">
+                                    [% IF ( coce_id ) %]
+                                        <a title="Image from Coce" class="[% coce_id | html %]" id="coce-thumbnail-preview"></a>
+                                    [% END %]
+                                    <div class="hint">Image from Coce</div>
+                                </div>
+                            [% END %]
+
+                            [% IF Koha.Preference('OPACCustomCoverImages') && Koha.Preference('CustomCoverImagesURL') %]
+                                [% SET custom_cover_image_url = biblio.custom_cover_image_url %]
+                                [% IF custom_cover_image_url %]
+                                    <div class="cover-image" id="custom-coverimg">
+                                        <a class="custom_cover_image" href="[% custom_cover_image_url | url %]" title="Custom cover image">
+                                            <img id="custom-img" alt="Custom cover image" src="[% custom_cover_image_url | url %]" />
+                                        </a>
+                                        <div class="hint">Custom cover image</div>
+                                    </div>
+                                [% END %]
+                            [% END %]
+                        </div> <!-- /.cover-slider -->
+
+                    </div><!-- / .bookcover -->
 
                     <abbr class="unapi-id" title="koha:biblionumber:[% biblio.biblionumber | html %]"><!-- unAPI --></abbr>
                     [% IF ( ocoins ) # COinS / Openurl %]
@@ -868,7 +857,9 @@
                             <div id="images">
                                 <p>Click on an image to view it in the image viewer</p>
                                 [% FOREACH image IN localimages %]
-                                    <a class="localimage" href="/cgi-bin/koha/opac-imageviewer.pl?biblionumber=[% biblio.biblionumber | html %]&amp;imagenumber=[% image.imagenumber | html %]"><img alt="" src="/cgi-bin/koha/opac-image.pl?thumbnail=1&amp;imagenumber=[% image.imagenumber | html %]" /></a>
+                                    <a href="/cgi-bin/koha/opac-imageviewer.pl?biblionumber=[% biblio.biblionumber | uri %]&amp;imagenumber=[% image.imagenumber | uri %]" title="Local cover image">
+                                        <img src="/cgi-bin/koha/opac-image.pl?thumbnail=1&amp;imagenumber=[% image.imagenumber | uri %]" alt="Local cover image" />
+                                    </a>
                                 [% END %]
                             </div><!-- / #images -->
                         [% END # / IF OPACLocalCoverImages && localimages.size %]
@@ -1116,9 +1107,17 @@
 
                 [% IF Koha.Preference('OPACLocalCoverImages') && ( tab == 'holdings' && itemloop_has_images || tab == 'otherholdings' && otheritemloop_has_images ) %]
                     <td class="cover">
-                        [% FOR image IN ITEM_RESULT.cover_images %]
-                            <div title="[% ITEM_RESULT.itemnumber | html %]" data-imagenumber="[% image.imagenumber | html %]" data-biblionumber="[% ITEM_RESULT.biblionumber | html %]" class="local-thumbnail-preview"></div>
-                        [% END %]
+                        <div class="bookcover">
+                            <div class="cover-slider">
+                                [% FOR image IN ITEM_RESULT.cover_images %]
+                                    <div class="cover-image local-coverimg">
+                                        <a href="/cgi-bin/koha/opac-image.pl?itemnumber=[% image.itemnumber | uri %]&amp;imagenumber=[% image.imagenumber | uri %]" title="Local cover image">
+                                            <img src="/cgi-bin/koha/opac-image.pl?thumbnail=1&amp;imagenumber=[% image.imagenumber | uri %]" alt="Local cover image" />
+                                        </a>
+                                    </div>
+                                [% END %]
+                            </div>
+                        </div>
                     </td>
                 [% END %]
 
@@ -1300,6 +1299,8 @@
         [% Asset.js("lib/kjua/kjua.min.js") | $raw %]
     [% END %]
 
+    [% Asset.js("lib/Chocolat/js/chocolat.js") | $raw %]
+
     [% IF ( Koha.Preference('OPACShowMusicalInscripts') ) %]
         <script>
             var interface = "[% interface | html %]";
@@ -1474,22 +1475,131 @@
                     $("#highlight_toggle_off").show().click(function() {highlightOff(); return false;});
                 [% END %]
             [% END %]
-            [% IF ( GoogleJackets ) %]
-                KOHA.Google.GetCoverFromIsbn([% covernewwindow | html %]);
-            [% END %]
+
             [% IF ( Koha.Preference('OpacCoce') && Koha.Preference('CoceProviders') ) %]
                 KOHA.coce.getURL('[% Koha.Preference('CoceHost') | html %]', '[% Koha.Preference('CoceProviders') | html %]',[% covernewwindow | html %]);
             [% END %]
 
-            [% IF OpenLibraryCovers %]
-                KOHA.OpenLibrary.GetCoverFromIsbn();
-            [% END %]
-            [% IF OPACLocalCoverImages %]
-                KOHA.LocalCover.GetCoverFromBibnumber(true);
-                [% IF itemloop_has_images OR oheritemloop_has_images %]
-                    KOHA.LocalCover.GetCoverFromItemnumber(true);
-                [% END %]
-            [% END %]
+        function verify_images() {
+            // Loop over each container in the template which contains covers
+            $(".cover-slider").each(function(){
+                var lightbox_descriptions = [];
+                $(this).find(".cover-image").each( function( index ){
+                    var div = $(this);
+                    // Find the image in the container
+                    var img = div.find("img")[0];
+                    if( $(img).length > 0 ){
+                        var description = "";
+                        if( (img.complete != null) && (!img.complete) || img.naturalHeight == 0 ){
+                            // No image loaded in the container. Remove the slide
+                            div.remove();
+                        } else {
+                            // All slides start hidden. If this is the first one, show it.
+                            if( index == 0 ){
+                                div.show();
+                            }
+                            // Check if Amazon image is present
+                            if ( div.attr("id") == "amazon-bookcoverimg"  ) {
+                                w = img.width;
+                                h = img.height;
+                                if ((w == 1) || (h == 1)) {
+                                    // Amazon returned single-pixel placeholder
+                                    // Remove the container
+                                    div.remove();
+                                } else {
+                                    lightbox_descriptions.push(_("Amazon cover image (<a href='%s'>see the original image</a>)").format($(img).data('link')));
+                                }
+                            } else if( div.attr("id") == "custom-coverimg" ){
+                                if ( (img.complete != null) && (!img.complete) || img.naturalHeight == 0 ) {
+                                    // No image was loaded via the CustomCoverImages system preference
+                                    // Remove the container
+                                    div.remove();
+                                } else {
+                                    lightbox_descriptions.push("Custom cover image");
+                                }
+                            } else if( div.attr("id") == "coce-coverimg" ){
+                                // Identify which service's image is being loaded by Coce
+                                var coce_description;
+                                if( $(img).attr("src").indexOf('amazon.com') >= 0 ){
+                                    coce_description = ("Coce image from Amazon.com");
+                                } else if( $(img).attr("src").indexOf('google.com') >= 0 ){
+                                    coce_description = _("Coce image from Google Books");
+                                } else if( $(img).attr("src").indexOf('openlibrary.org') >= 0 ){
+                                    coce_description = _("Coce image from Open Library");
+                                }
+                                div.find(".hint").html(coce_description);
+                                lightbox_descriptions.push(coce_description);
+                            } else if ( div.attr("id") == "adlibris-coverimg" ){
+                                lightbox_descriptions.push(_("Image from Adlibris (<a href='%s'>see the original image</a>)").format($(img).data('link')));
+                            } else if ( div.attr("class") == "cover-image local-coverimg" ) {
+                                lightbox_descriptions.push(_("Local cover image"));
+                            } else {
+                                console.log("Source of the image cannot be guessed.")
+                            }
+                        }
+                    }
+                });
+
+                // Lightbox for cover images
+                Chocolat(this.querySelectorAll('.cover-image a'), {
+                    description: function(){
+                        return lightbox_descriptions[this.settings.currentImageIndex];
+                    }
+                });
+
+            });
+
+            $(".cover-slider").each(function(){
+                var coverSlide = this;
+                var coverImages = $(this).find(".cover-image");
+                if( coverImages.length > 1 ){
+                    coverImages.each(function( index ){
+                        // If more that one image is present, add a navigation link
+                        // for activating the slide
+                        var covernav = $("<a href=\"#\" data-num=\"" + index + "\" class=\"cover-nav\"></a>");
+                        if( index == 0 ){
+                            // Set the first navigation link as active
+                            $(covernav).addClass("nav-active");
+                        }
+                        $(covernav).html("<i class=\"fa fa-circle\"></i>");
+                        $(coverSlide).append( covernav );
+                    });
+                }
+
+                if( $(coverSlide).find(".cover-image:visible").length < 1 ){
+                    $(coverSlide).remove();
+                } else {
+                    $(coverSlide).addClass("cover-slides");
+                }
+            });
+
+            $(".cover-slider").on("click",".cover-nav", function(e){
+                e.preventDefault();
+                var cover_slider = $(this).parent();
+                // Adding click handler for cover image navigation links
+                var num = $(this).data("num");
+                $(cover_slider).find(".cover-nav").removeClass("nav-active");
+                $(this).addClass("nav-active");
+                $(cover_slider).find(".cover-image").hide();
+                $(cover_slider).find(".cover-image").eq( num ).show();
+            });
+
+            $("#editions img").each(function(i){
+                if ( this.src.indexOf('amazon.com') >= 0 ) {
+                    w = this.width;
+                    h = this.height;
+                    if ((w == 1) || (h == 1)) {
+                        this.src = 'https://images-na.ssl-images-amazon.com/images/G/01/x-site/icons/no-img-sm.gif';
+                    } else if ( (this.complete != null) && (!this.complete) || this.naturalHeight == 0 ) {
+                        this.src = 'https://images-na.ssl-images-amazon.com/images/G/01/x-site/icons/no-img-sm.gif';
+                    }
+                }
+            });
+        }
+
+        $(window).load(function() {
+            verify_images();
+        });
             [% IF ( NovelistSelectProfile && ( normalized_isbn || normalized_upc ) ) %]
                 novSelect.loadContentForQuery(
                     {
