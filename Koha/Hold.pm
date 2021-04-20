@@ -785,8 +785,9 @@ sub cancel {
             C4::Reserves::_FixPriority({ biblionumber => $self->biblionumber });
 
             # and, if desired, charge a cancel fee
-            my $charge;
-            if (my $item = $self->item) {
+            if ( $params->{'charge_cancel_fee'} ) {
+                my $charge;
+                my $item = $self->item;
                 my $branchcode = C4::Reserves::GetReservesControlBranch($item->unblessed, $self->borrower->unblessed);
 
                 my $rule = Koha::CirculationRules->get_effective_rule(
@@ -799,11 +800,7 @@ sub cancel {
                 );
                 my $rule_value = $rule && $rule->rule_value // '';
                 $charge = $rule_value ne '' ? $rule_value : C4::Context->preference("ExpireReservesMaxPickUpDelayCharge");
-            } else {
-                $charge = C4::Context->preference("ExpireReservesMaxPickUpDelayCharge");
-            }
 
-            if ( $charge && $params->{'charge_cancel_fee'} ) {
                 my $account =
                   Koha::Account->new( { patron_id => $self->borrowernumber } );
                 $account->add_debit(
@@ -815,7 +812,7 @@ sub cancel {
                         type       => 'RESERVE_EXPIRED',
                         item_id    => $self->itemnumber
                     }
-                );
+                ) if $charge;
             }
 
             C4::Log::logaction( 'HOLDS', 'CANCEL', $self->reserve_id, $self, undef, $original )
