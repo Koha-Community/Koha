@@ -40,15 +40,19 @@ KOHA.OpenLibrary = new function() {
             var book = booksInfo[id];
             var isbn = id.substring(5);
             $("[id^=openlibrary-thumbnail]."+isbn).each(function() {
-                var is_opacdetail = /openlibrary-thumbnail-preview/.exec($(this).attr("id"));
                 var a = document.createElement("a");
                 a.href = booksInfo.url;
                 if (book.cover) {
-                    var img = document.createElement("img");
-                    if (is_opacdetail) {
-                        img.src = book.cover.medium;
-                        $(this).empty().append(img);
+                    if ( $(this).data('use-data-link') ) {
+                         var a = document.createElement("a");
+                         a.href = book.cover.large;
+                         var img = document.createElement("img");
+                         img.src = book.cover.medium;
+                         img.setAttribute('data-link', book.cover.large);
+                         a.append(img)
+                         $(this).empty().append(a);
                     } else {
+                        var img = document.createElement("img");
                         img.src = book.cover.medium;
                         img.height = '110';
                         $(this).append(img);

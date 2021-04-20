@@ -110,6 +110,13 @@
                                 </div>
                             [% END %]
 
+                            [% IF OpenLibraryCovers %]
+                                <div class="cover-image" id="openlibrary-coverimg">
+                                    <div title="[% img_title | html %]" class="[% normalized_isbn | html %]" id="openlibrary-thumbnail-preview" data-use-data-link="1"></div>
+                                    <div class="hint">Image from OpenLibrary</div>
+                                </div>
+                            [% END %]
+
                             [% IF Koha.Preference('OPACCustomCoverImages') && Koha.Preference('CustomCoverImagesURL') %]
                                 [% SET custom_cover_image_url = biblio.custom_cover_image_url %]
                                 [% IF custom_cover_image_url %]
@@ -1502,6 +1509,10 @@
                 KOHA.coce.getURL('[% Koha.Preference('CoceHost') | html %]', '[% Koha.Preference('CoceProviders') | html %]',[% covernewwindow | html %]);
             [% END %]
 
+            [% IF OpenLibraryCovers %]
+                KOHA.OpenLibrary.GetCoverFromIsbn();
+            [% END %]
+
         function verify_images() {
             // Loop over each container in the template which contains covers
             $(".cover-slider").each(function(){
@@ -1543,6 +1554,8 @@
                                 lightbox_descriptions.push("Image from Syndetics")
                             } else if( div.attr("id") == "googlejacket-coverimg" ){
                                 lightbox_descriptions.push(_("Image from Google Jacket (<a href='%s'>see the original image</a>)").format($(img).data('link')));
+                            } else if( div.attr("id") == "openlibrary-coverimg" ){
+                                lightbox_descriptions.push(_("Image from OpenLibrary (<a href='%s'>see the original image</a>)").format($(img).data('link')));
                             } else if( div.attr("id") == "coce-coverimg" ){
                                 // Identify which service's image is being loaded by Coce
                                 var coce_description;
