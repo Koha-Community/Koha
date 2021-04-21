@@ -3133,7 +3133,7 @@ CREATE TABLE `itemtypes` (
   `sip_media_type` varchar(3) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'SIP2 protocol media type for this itemtype',
   `hideinopac` tinyint(1) NOT NULL DEFAULT 0 COMMENT 'Hide the item type from the search options in OPAC',
   `searchcategory` varchar(80) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'Group this item type with others with the same value on OPAC search options',
-  `automatic_checkin` tinyint(1) NOT NULL DEFAULT 0, -- 1 if automatic checkin is enabled for items of this type
+  `automatic_checkin` tinyint(1) NOT NULL DEFAULT 0 COMMENT 'If automatic checkin is enabled for items of this type',
   PRIMARY KEY (`itemtype`),
   UNIQUE KEY `itemtype` (`itemtype`),
   KEY `itemtypes_ibfk_1` (`parent_type`),
