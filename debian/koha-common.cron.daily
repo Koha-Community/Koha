@@ -16,6 +16,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 koha-foreach --chdir --enabled /usr/share/koha/bin/cronjobs/automatic_renewals.pl -c
+koha-foreach --chdir --enabled /usr/share/koha/bin/cronjobs/automatic_checkin.pl
 koha-foreach --chdir --enabled /usr/share/koha/bin/cronjobs/fines.pl
 koha-foreach --chdir --enabled --email /usr/share/koha/bin/cronjobs/overdue_notices.pl -t
 koha-foreach --chdir --enabled --email /usr/share/koha/bin/cronjobs/advance_notices.pl -c
