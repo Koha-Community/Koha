@@ -969,7 +969,7 @@ subtest 'GetBudgetSpent and GetBudgetOrdered and GetBudgetHierarchy shipping and
     my $invoice_4 = $builder->build({
         source => 'Aqinvoice',
         value  => {
-            closedate => '2017-07-01',
+            closedate => undef,
             shipmentcost_budgetid => $budget0->{budget_id},
             shipmentcost           => 1.75
         }
