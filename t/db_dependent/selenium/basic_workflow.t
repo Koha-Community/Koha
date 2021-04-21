@@ -219,7 +219,7 @@ SKIP: {
         }
 
         $driver->find_element('//input[@name="add_submit"]')->click;
-        like( $driver->get_title(), qr($biblionumber.*Items) );
+        like( $driver->get_title(), qr(Items.*Record #$biblionumber) );
 
         $dbh->do(q|UPDATE items SET notforloan=0 WHERE biblionumber=?|, {}, $biblionumber );
         $dbh->do(q|UPDATE biblioitems SET itemtype=? WHERE biblionumber=?|, {}, $itemtype->{itemtype}, $biblionumber);

@@ -125,7 +125,7 @@ subtest 'Search patrons' => sub {
     is(
         $driver->get_title,
         sprintf(
-            "Koha › Patrons › Modify patron %s %s (%s) %s (%s) (%s)",
+            "Modify patron %s %s (%s) %s (%s) (%s) › Patrons › Koha",
             $first_patron->title, $first_patron->firstname, $first_patron->othernames, $first_patron->surname, $first_patron->cardnumber,
             $first_patron->category->description,
         )
