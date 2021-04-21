@@ -394,7 +394,11 @@ Note that permanent location is a code, and location may be an authval.
                     [% IF ( itemdata_ccode ) %]<td>[% item.ccode | html %]</td>[% END %]
                     <td class="itemcallnumber">[% IF ( item.itemcallnumber ) %] [% item.itemcallnumber | html %][% END %]</td>
                     [% IF ( volinfo ) %]
-                        <td class="enumchron" data-order="[% item.publisheddate | html %]">
+                        [% IF ( itemdata_publisheddate ) %]
+                            <td class="enumchron" data-order="[% item.publisheddate | html %]">
+                        [% ELSE %]
+                            <td class="enumchron">
+                        [% END %]
                             [% IF ( itemdata_enumchron ) %]
                                 [% IF item.enumchron && item.serialseq %]
                                     <span class="enum">[% item.enumchron | html %]</span>
