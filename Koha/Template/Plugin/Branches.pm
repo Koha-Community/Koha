@@ -58,7 +58,7 @@ sub GetURL {
 
 sub all {
     my ( $self, $params ) = @_;
-    my $selected = $params->{selected} || ();
+    my $selected = $params->{selected} // ();
     my $unfiltered = $params->{unfiltered} || 0;
     my $search_params = $params->{search_params} || {};
     my $do_not_select_my_library = $params->{do_not_select_my_library} || 0; # By default we select the library of the logged in user if no selected passed
@@ -70,7 +70,7 @@ sub all {
     my @selected =
       ref $selected eq 'Koha::Libraries'
       ? $selected->get_column('branchcode')
-      : $selected;
+      : ( $selected // () );
 
     my $libraries = $unfiltered
       ? Koha::Libraries->search( $search_params, { order_by => ['branchname'] } )->unblessed
