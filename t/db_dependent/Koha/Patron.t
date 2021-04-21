@@ -395,8 +395,6 @@ subtest 'extended_attributes' => sub {
         }
     )->store;
 
-    my $attribute_type3 = $builder->build_object({ class => 'Koha::Patron::Attribute::Types' });
-
     my $new_library = $builder->build( { source => 'Branch' } );
     my $attribute_type_limited = Koha::Patron::Attribute::Type->new(
         { code => 'my code3', description => 'my description3' } )->store;
