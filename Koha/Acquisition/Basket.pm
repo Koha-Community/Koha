@@ -203,7 +203,7 @@ sub close {
     );
 
     # Log the closure
-    if (C4::Context->preference("AcqLog")) {
+    if (C4::Context->preference("AcquisitionLog")) {
         logaction(
             'ACQUISITIONS',
             'CLOSE_BASKET',

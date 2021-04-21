@@ -207,7 +207,7 @@ sub NewBasket {
         $basketcontractnumber, $booksellerid, $deliveryplace, $billingplace, $is_standing, $create_items );
 
     # Log the basket creation
-    if (C4::Context->preference("AcqLog")) {
+    if (C4::Context->preference("AcquisitionLog")) {
         my $created = Koha::Acquisition::Baskets->find( $basket );
         logaction(
             'ACQUISITIONS',
@@ -241,7 +241,7 @@ sub ReopenBasket {
         }, {}, $basketno);
 
     # Log the basket reopening
-    if (C4::Context->preference("AcqLog")) {
+    if (C4::Context->preference("AcquisitionLog")) {
         my $reopened = Koha::Acquisition::Baskets->find( $basketno );
         logaction(
             'ACQUISITIONS',
@@ -526,7 +526,7 @@ sub ModBasket {
     $sth->execute(@params);
 
     # Log the basket update
-    if (C4::Context->preference("AcqLog")) {
+    if (C4::Context->preference("AcquisitionLog")) {
         my $modified = Koha::Acquisition::Baskets->find(
             $basketinfo->{basketno}
         );
@@ -597,7 +597,7 @@ sub ModBasketHeader {
     }
 
     # Log the basket update
-    if (C4::Context->preference("AcqLog")) {
+    if (C4::Context->preference("AcquisitionLog")) {
         my $modified = Koha::Acquisition::Baskets->find(
             $basketno
         );
@@ -791,7 +791,7 @@ sub ModBasketUsers {
     }
 
     # Log the basket update
-    if (C4::Context->preference("AcqLog")) {
+    if (C4::Context->preference("AcquisitionLog")) {
         logaction(
             'ACQUISITIONS',
             'MODIFY_BASKET_USERS',

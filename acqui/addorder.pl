@@ -363,7 +363,7 @@ if ( $basket->{is_standing} || $orderinfo->{quantity} ne '0' ) {
 
 }
 
-if (C4::Context->preference("AcqLog") && $basketno) {
+if (C4::Context->preference("AcquisitionLog") && $basketno) {
     my $modified = Koha::Acquisition::Baskets->find( $basketno );
     logaction(
         'ACQUISITIONS',

@@ -338,7 +338,7 @@ subtest 'close() tests' => sub {
     plan tests => 4;
 
     # Turn on acquisitions logging and ensure the logs are empty
-    t::lib::Mocks::mock_preference('AcqLog', 1);
+    t::lib::Mocks::mock_preference('AcquisitionLog', 1);
     Koha::ActionLogs->delete;
 
     $schema->storage->txn_begin;

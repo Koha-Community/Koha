@@ -623,7 +623,7 @@ sub process_quote {
             );
             Koha::Acquisition::Baskets->find($b)->close;
             # Log the approval
-            if (C4::Context->preference("AcqLog")) {
+            if (C4::Context->preference("AcquisitionLog")) {
                 my $approved = Koha::Acquisition::Baskets->find( $b );
                 logaction(
                     'ACQUISITIONS',

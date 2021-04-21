@@ -903,7 +903,7 @@ subtest 'Acquisition logging' => sub {
 
     plan tests => 5;
 
-    t::lib::Mocks::mock_preference('AcqLog', 1);
+    t::lib::Mocks::mock_preference('AcquisitionLog', 1);
 
     Koha::ActionLogs->delete;
     my $basketno = NewBasket( $booksellerid, 1 );
@@ -933,7 +933,7 @@ subtest 'Acquisition logging' => sub {
     my @mod_users_logs = Koha::ActionLogs->search({ module =>'ACQUISITIONS', action => 'MODIFY_BASKET_USERS', object => $basketno });
     is (scalar @mod_users_logs, 1, 'Basket users modify is logged');
 
-    t::lib::Mocks::mock_preference('AcqLog', 0);
+    t::lib::Mocks::mock_preference('AcquisitionLog', 0);
 };
 
 $schema->storage->txn_rollback();
