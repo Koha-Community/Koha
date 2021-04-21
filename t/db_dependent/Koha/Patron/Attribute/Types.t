@@ -388,7 +388,7 @@ subtest 'replace_library_limits() tests' => sub {
 
 subtest 'search_with_library_limits() tests' => sub {
 
-    plan tests => 5;
+    plan tests => 6;
 
     $schema->storage->txn_begin;
 
@@ -426,6 +426,10 @@ subtest 'search_with_library_limits() tests' => sub {
     $results = Koha::Patron::Attribute::Types->search_with_library_limits( {}, { order_by => 'code' }, undef );
 
     is( $results->count, 3, '3 attribute types are available with no library passed' );
+
+    $results = Koha::Patron::Attribute::Types->search_with_library_limits();
+
+    is( $results->count, 3, 'No crash if no params passed' );
 
     $schema->storage->txn_rollback;
 };

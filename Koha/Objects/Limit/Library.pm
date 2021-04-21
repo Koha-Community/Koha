@@ -71,6 +71,7 @@ sub search_with_library_limits {
         ]
     };
 
+    $params //= {};
     $attributes //= {};
     if ( exists $attributes->{join} ) {
         if ( ref $attributes->{join} eq 'ARRAY' ) {
