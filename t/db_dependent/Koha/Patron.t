@@ -499,9 +499,13 @@ subtest 'extended_attributes' => sub {
     #$limited_value = $patron_1->get_extended_attribute( $attribute_type_limited->code );
     #is( $limited_value, undef, );
 
+    $schema->storage->txn_rollback;
+
     subtest 'non-repeatable attributes tests' => sub {
 
         plan tests => 3;
+
+        $schema->storage->txn_begin;
 
         my $patron = $builder->build_object({ class => 'Koha::Patrons' });
         my $attribute_type = $builder->build_object(
@@ -526,11 +530,16 @@ subtest 'extended_attributes' => sub {
             'Exception thrown on non-repeatable attribute';
 
         is( $patron->extended_attributes->count, 0, 'Extended attributes storing rolled back' );
+
+        $schema->storage->txn_rollback;
+
     };
 
     subtest 'unique attributes tests' => sub {
 
         plan tests => 5;
+
+        $schema->storage->txn_begin;
 
         my $patron_1 = $builder->build_object({ class => 'Koha::Patrons' });
         my $patron_2 = $builder->build_object({ class => 'Koha::Patrons' });
@@ -573,11 +582,16 @@ subtest 'extended_attributes' => sub {
 
         is( $patron_1->extended_attributes->count, 2, 'Extended attributes stored' );
         is( $patron_2->extended_attributes->count, 0, 'Extended attributes storing rolled back' );
+
+        $schema->storage->txn_rollback;
+
     };
 
     subtest 'invalid type attributes tests' => sub {
 
         plan tests => 3;
+
+        $schema->storage->txn_begin;
 
         my $patron = $builder->build_object({ class => 'Koha::Patrons' });
 
@@ -612,11 +626,16 @@ subtest 'extended_attributes' => sub {
             'Exception thrown on invalid attribute type';
 
         is( $patron->extended_attributes->count, 0, 'Extended attributes storing rolled back' );
+
+        $schema->storage->txn_rollback;
+
     };
 
     subtest 'globally mandatory attributes tests' => sub {
 
         plan tests => 5;
+
+        $schema->storage->txn_begin;
 
         my $patron = $builder->build_object({ class => 'Koha::Patrons' });
 
@@ -658,7 +677,9 @@ subtest 'extended_attributes' => sub {
         );
 
         is( $patron->extended_attributes->count, 1, 'Extended attributes succeeded' );
+
+        $schema->storage->txn_rollback;
+
     };
 
-    $schema->storage->txn_rollback;
 };
