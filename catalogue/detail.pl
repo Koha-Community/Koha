@@ -445,6 +445,7 @@ $template->param(
     itemdata_uri        => $itemfields{uri},
     itemdata_copynumber => $itemfields{copynumber},
     itemdata_stocknumber => $itemfields{stocknumber},
+    itemdata_publisheddate => $itemfields{publisheddate},
     volinfo                => $itemfields{enumchron},
         itemdata_itemnotes  => $itemfields{itemnotes},
         itemdata_nonpublicnotes => $itemfields{itemnotes_nonpublic},
