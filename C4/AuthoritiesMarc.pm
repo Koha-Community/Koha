@@ -643,20 +643,24 @@ sub AddAuthority {
 
     # Save record into auth_header, update 001
     my $action;
+    my $authority;
     if (!$authid ) {
         $action = 'create';
         # Save a blank record, get authid
-        $dbh->do( "INSERT INTO auth_header (datecreated,marcxml) values (NOW(),?)", undef, '' );
-        $authid = $dbh->last_insert_id( undef, undef, 'auth_header', 'authid' );
+        $authority = Koha::Authority->new({ datecreated => \'NOW()', marcxml => '' })->store();
+        $authority->discard_changes();
+        $authid = $authority->authid;
         logaction( "AUTHORITIES", "ADD", $authid, "authority" ) if C4::Context->preference("AuthoritiesLog");
     } else {
         $action = 'modify';
+        $authority = Koha::Authorities->find($authid);
     }
+
     # Insert/update the recordID in MARC record
     $record->delete_field( $record->field('001') );
     $record->insert_fields_ordered( MARC::Field->new( '001', $authid ) );
     # Update
-    $dbh->do( "UPDATE auth_header SET authtypecode=?, marc=?, marcxml=? WHERE authid=?", undef, $authtypecode, $record->as_usmarc, $record->as_xml_record($format), $authid ) or die $DBI::errstr;
+    $authority->update({ authtypecode => $authtypecode, marc => $record->as_usmarc, marcxml => $record->as_xml_record($format) });
 
     unless ( $skip_record_index ) {
         my $indexer = Koha::SearchEngine::Indexer->new({ index => $Koha::SearchEngine::AUTHORITIES_INDEX });
