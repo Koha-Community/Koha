@@ -1,0 +1,32 @@
+---
+swagger: 2.0
+basePath: /api/v1
+paths:
+  $ref: paths.json
+definitions:
+  $ref: definitions.json
+parameters:
+  $ref: parameters.json
+x-primitives:
+  $ref: x-primitives.json
+info:
+  title: Koha REST API
+  version: 1
+  license:
+    name: GPL v3,
+    url: http://www.gnu.org/licenses/gpl.txt
+  contact:
+    name: Koha Development Team
+    url: https://koha-community.org/
+  description: |
+    ## Introduction
+
+    This API is documented in **OpenAPI format**.
+
+    ## Special headers
+
+    ### x-koha-library
+
+    This optional header should be passed to give your api request a library
+    context; If it is not included in the request, then the request context
+    will default to using your api comsumer's assigned home library.

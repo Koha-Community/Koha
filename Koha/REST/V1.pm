@@ -79,7 +79,7 @@ sub startup {
         $spec = $validator->bundle(
             {
                 replace => 1,
-                schema => $self->home->rel_file("api/v1/swagger/swagger.json")
+                schema => $self->home->rel_file("api/v1/swagger/swagger.yaml")
             }
         );
 
