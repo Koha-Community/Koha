@@ -72,7 +72,7 @@
 
 [%        CASE 'MEMBERS'      %]Patrons[% UNLESS Koha.Preference('BorrowersLog') %] <i class="fa fa-warning" title="Log not enabled"></i>[% END %]
 
-[%        CASE 'ACQUISITIONS' %]Acquisitions <i class="fa fa-warning" title="Log not enabled"></i>
+[%        CASE 'ACQUISITIONS' %]Acquisitions [% UNLESS Koha.Preference('AcquisitionLog') %]<i class="fa fa-warning" title="Log not enabled"></i>[% END %]
 
 [%        CASE 'SERIAL'       %]Serials[% UNLESS Koha.Preference('SubscriptionLog') %] <i class="fa fa-warning" title="Log not enabled"></i>[% END %]
 
