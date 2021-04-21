@@ -54,7 +54,7 @@ is( Koha::Patron::Categories->search->count, $nb_of_categories + 2, 'The 2 patro
 
 my $retrieved_category_1 = Koha::Patron::Categories->find( $new_category_1->categorycode );
 is( $retrieved_category_1->categorycode, $new_category_1->categorycode, 'Find a patron category by categorycode should return the correct category' );
-is_deeply( [ $retrieved_category_1->library_limits->get_column('branchcode') ], [ $library_1->branchcode, $library_2->branchcode ], 'The branch limitation should have been stored and retrieved' );
+is_deeply( [ sort $retrieved_category_1->library_limits->get_column('branchcode') ], [ sort $library_1->branchcode, $library_2->branchcode ], 'The branch limitation should have been stored and retrieved' );
 is_deeply( $retrieved_category_1->default_messaging, [], 'By default there is not messaging option' );
 
 my $retrieved_category_2 = Koha::Patron::Categories->find( $new_category_2->categorycode );
