@@ -132,7 +132,7 @@
     [% IF CAN_user_borrowers_edit_borrowers %]
         [% IF ( detailview ) %]<li class="active">[% ELSE %]<li>[% END %]<a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% patron.borrowernumber | uri %]">Details</a></li>
     [% END %]
-    [% IF ( CAN_user_updatecharges ) %]
+    [% IF ( CAN_user_updatecharges_remaining_permissions ) %]
         [% IF ( finesview ) %]<li class="active">[% ELSE %]<li>[% END %]<a href="/cgi-bin/koha/members/pay.pl?borrowernumber=[% patron.borrowernumber | uri %]">Accounting</a></li>
     [% END %]
     [% IF ( CAN_user_circulate_circulate_remaining_permissions  )  %]
