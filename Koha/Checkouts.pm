@@ -82,12 +82,12 @@ sub automatic_checkin {
         { prefetch => 'item'}
     );
 
-    while(my $checkout = $due_checkouts->next) {
-        if($checkout->item->itemtype->automatic_checkin) {
-            C4::Circulation::AddReturn($checkout->item->barcode, $checkout->branchcode);
+    while ( my $checkout = $due_checkouts->next ) {
+        if ( $checkout->item->itemtype->automatic_checkin ) {
+            C4::Circulation::AddReturn( $checkout->item->barcode,
+                $checkout->branchcode, undef, dt_from_string($checkout->date_due) );
         }
     }
-
 }
 
 =head3 type
