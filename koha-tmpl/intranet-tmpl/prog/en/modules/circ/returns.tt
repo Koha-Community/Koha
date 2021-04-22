@@ -517,7 +517,7 @@
                                                 <div class="modal-footer">
                                                     [% IF !transfer %]
                                                         <button type="submit" name="dotransfer" value="Yes" class="btn btn-default approve"><i class="fa fa-check"></i> Yes</button>
-                                                        <button type="button" name="dotransfer" value="Yes" class="btn btn-default print openWin" data-url="transfer-slip.pl?transferitem=[% itemnumber | uri %]&amp;&amp;branchcode=[% returnbranch | uri %]&amp;op=slip"><i class="fa fa-print"></i> Yes, print slip</button>
+                                                        <button type="button" name="dotransfer" class="btn btn-default print openWin" data-url="transfer-slip.pl?transferitem=[% itemnumber | uri %]&amp;&amp;branchcode=[% returnbranch | uri %]&amp;op=slip"><i class="fa fa-print"></i> Yes, print slip</button>
                                                         <button type="button" data-dismiss="modal" class="btn btn-default deny" name="notransfer" value="No"><i class="fa fa-times"></i> No</button>
                                                     [% ELSE %]
                                                         <button type="button" data-dismiss="modal" class="btn btn-default approve"><i class="fa fa-check"></i> OK</button>
