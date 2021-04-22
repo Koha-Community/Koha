@@ -3475,16 +3475,18 @@ subtest 'Set waiting flag' => sub {
 };
 
 subtest 'Cancel transfers on lost items' => sub {
-    plan tests => 5;
+    plan tests => 6;
 
     my $library_to = $builder->build_object( { class => 'Koha::Libraries' } );
     my $item   = $builder->build_sample_item();
+    my $holdingbranch = $item->holdingbranch;
+    # Historic transfer (datearrived is defined)
     my $old_transfer = $builder->build_object(
         {
             class => 'Koha::Item::Transfers',
             value => {
                 itemnumber    => $item->itemnumber,
-                frombranch    => $item->holdingbranch,
+                frombranch    => $holdingbranch,
                 tobranch      => $library_to->branchcode,
                 reason        => 'Manual',
                 datesent      => \'NOW()',
@@ -3494,12 +3496,13 @@ subtest 'Cancel transfers on lost items' => sub {
             }
         }
     );
+    # Queued transfer (datesent is undefined)
     my $transfer_1 = $builder->build_object(
         {
             class => 'Koha::Item::Transfers',
             value => {
                 itemnumber    => $item->itemnumber,
-                frombranch    => $item->holdingbranch,
+                frombranch    => $holdingbranch,
                 tobranch      => $library_to->branchcode,
                 reason        => 'Manual',
                 datesent      => undef,
@@ -3509,12 +3512,13 @@ subtest 'Cancel transfers on lost items' => sub {
             }
         }
     );
+    # In transit transfer (datesent is defined, datearrived and datecancelled are both undefined)
     my $transfer_2 = $builder->build_object(
         {
             class => 'Koha::Item::Transfers',
             value => {
                 itemnumber    => $item->itemnumber,
-                frombranch    => $item->holdingbranch,
+                frombranch    => $holdingbranch,
                 tobranch      => $library_to->branchcode,
                 reason        => 'Manual',
                 datesent      => \'NOW()',
@@ -3537,6 +3541,8 @@ subtest 'Cancel transfers on lost items' => sub {
     is($transfer_2->cancellation_reason, 'ItemLost', "Cancellation reason was set to 'ItemLost'");
     $old_transfer->discard_changes;
     is($old_transfer->datecancelled, undef, "Old transfers are unaffected");
+    $item->discard_changes;
+    is($item->holdingbranch, $holdingbranch, "Items holding branch remains unchanged");
 };
 
 subtest 'CanBookBeIssued | is_overdue' => sub {
