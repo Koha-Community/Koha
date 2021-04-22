@@ -7,13 +7,13 @@
 [% USE Registers %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Koha &rsaquo;
-    [% IF ( nopermission ) %]Access denied[% END %]
-    [% IF ( timed_out ) %]Session timed out[% END %]
-    [% IF ( different_ip ) %]IP address change[% END %]
+<title>
+    [% IF ( loginprompt ) %]Log in to Koha[% END %]
     [% IF too_many_login_attempts %]This account has been locked.
     [% ELSIF invalid_username_or_password %]Invalid username or password[% END %]
-    [% IF ( loginprompt ) %]Log in to Koha[% END %]
+    [% IF ( different_ip ) %]IP address change[% END %]
+    [% IF ( timed_out ) %]Session timed out[% END %]
+    [% IF ( nopermission ) %]Access denied[% END %] &rsaquo; Koha
 </title>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
