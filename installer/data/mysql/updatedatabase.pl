@@ -23862,6 +23862,18 @@ if( CheckVersion( $DBversion ) ) {
     NewVersion( $DBversion, 20854, "Add new system preference casServerVersion");
 }
 
+$DBversion = '20.12.00.035';
+if( CheckVersion( $DBversion ) ) {
+    if( !column_exists( 'itemtypes', 'automatic_checkin' ) ) {
+        $dbh->do(q{
+            ALTER TABLE itemtypes
+                ADD COLUMN `automatic_checkin` tinyint(1) NOT NULL DEFAULT 0 COMMENT 'If automatic checkin is enabled for items of this type' AFTER `searchcategory`
+        });
+    }
+
+    NewVersion( $DBversion, 23207, "Add automatic_checkin to itemtypes table");
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 my $update_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/atomicupdate/';
