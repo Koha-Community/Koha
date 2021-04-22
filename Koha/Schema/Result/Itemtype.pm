@@ -167,6 +167,14 @@ Hide the item type from the search options in OPAC
 
 Group this item type with others with the same value on OPAC search options
 
+=head2 automatic_checkin
+
+  data_type: 'tinyint'
+  default_value: 0
+  is_nullable: 0
+
+If automatic checkin is enabled for items of this type
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -211,6 +219,8 @@ __PACKAGE__->add_columns(
   { data_type => "tinyint", default_value => 0, is_nullable => 0 },
   "searchcategory",
   { data_type => "varchar", is_nullable => 1, size => 80 },
+  "automatic_checkin",
+  { data_type => "tinyint", default_value => 0, is_nullable => 0 },
 );
 
 =head1 PRIMARY KEY
@@ -323,8 +333,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2021-01-21 13:39:29
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:iByLvz6PwhMByZC9bJb8ig
+# Created by DBIx::Class::Schema::Loader v0.07046 @ 2021-04-22 09:12:04
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:/kFAnQQ7q1KaLJ9h7vk0vg
 
 __PACKAGE__->add_columns(
     '+rentalcharge_hourly_calendar' => { is_boolean => 1 },
