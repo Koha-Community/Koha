@@ -300,7 +300,7 @@ subtest 'LookupPatron test' => sub {
 
 subtest 'Holds test' => sub {
 
-    plan tests => 8;
+    plan tests => 9;
 
     $schema->storage->txn_begin;
 
@@ -359,7 +359,7 @@ subtest 'Holds test' => sub {
             itemtype     => $item2->{itype},
             branchcode   => $patron->{branchcode},
             rule_name    => 'reservesallowed',
-            rule_value   => 0,
+            rule_value   => 1,
         }
     );
 
@@ -370,6 +370,24 @@ subtest 'Holds test' => sub {
 
     $reply = C4::ILSDI::Services::HoldItem( $query );
     is( $reply->{code}, 'tooManyReserves', "Too many reserves" );
+
+    Koha::CirculationRules->set_rule(
+        {
+            categorycode => $patron->{categorycode},
+            itemtype     => $item2->{itype},
+            branchcode   => $patron->{branchcode},
+            rule_name    => 'reservesallowed',
+            rule_value   => 0,
+        }
+    );
+
+    $query = CGI->new;
+    $query->param( 'patron_id', $patron->{borrowernumber});
+    $query->param( 'bib_id', $item2->biblionumber);
+    $query->param( 'item_id', $item2->itemnumber);
+
+    $reply = C4::ILSDI::Services::HoldItem( $query );
+    is( $reply->{code}, 'noReservesAllowed', "No reserves allowed" );
 
     my $origin_branch = $builder->build(
         {
