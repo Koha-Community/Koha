@@ -23874,6 +23874,22 @@ if( CheckVersion( $DBversion ) ) {
     NewVersion( $DBversion, 23207, "Add automatic_checkin to itemtypes table");
 }
 
+$DBversion = '20.12.00.036';
+if( CheckVersion( $DBversion ) ) {
+    $dbh->do(q{
+        ALTER TABLE club_holds_to_patron_holds
+        MODIFY COLUMN error_code
+        ENUM ( 'damaged', 'ageRestricted', 'itemAlreadyOnHold',
+            'tooManyHoldsForThisRecord', 'tooManyReservesToday',
+            'tooManyReserves', 'notReservable', 'cannotReserveFromOtherBranches',
+            'libraryNotFound', 'libraryNotPickupLocation', 'cannotBeTransferred',
+            'noReservesAllowed'
+        )
+    });
+
+    NewVersion( $DBversion, 16787, "Add noReservesAllowed to club holds error codes");
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 my $update_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/atomicupdate/';
