@@ -262,41 +262,62 @@ subtest 'Koha::Old::Checkouts->filter_by_todays_checkins' => sub {
 $schema->storage->txn_rollback;
 
 subtest 'automatic_checkin' => sub {
-    plan tests => 6;
+
+    plan tests => 9;
 
     $schema->storage->txn_begin;
 
     my $patron = $builder->build_object( { class => 'Koha::Patrons' } );
 
     my $due_ac_item =
-      $builder->build_sample_item( { homebranch => $patron->branchcode } );
+      $builder->build_sample_item(
+        { homebranch => $patron->branchcode, itemlost => 0 } );
     my $ac_item =
-      $builder->build_sample_item( { homebranch => $patron->branchcode } );
+      $builder->build_sample_item(
+        { homebranch => $patron->branchcode, itemlost => 0 } );
+    my $odue_ac_item =
+      $builder->build_sample_item(
+        { homebranch => $patron->branchcode, itemlost => 0 } );
     my $normal_item =
-      $builder->build_sample_item( { homebranch => $patron->branchcode } );
+      $builder->build_sample_item(
+        { homebranch => $patron->branchcode, itemlost => 0 } );
 
     $due_ac_item->itemtype->automatic_checkin(1)->store;
+    $odue_ac_item->itemtype->automatic_checkin(1)->store;
     $ac_item->itemtype->automatic_checkin(1)->store;
     $normal_item->itemtype->automatic_checkin(0)->store;
 
-    my $current_date = dt_from_string;
+    my $today     = dt_from_string;
+    my $tomorrow  = dt_from_string->add( days => 1 );
+    my $yesterday = dt_from_string->subtract( days => 1 );
 
-    # due checkout for automatic checkin
+    # Checkout do for automatic checkin
     my $checkout_due_aci = Koha::Checkout->new(
         {
             borrowernumber => $patron->borrowernumber,
             itemnumber     => $due_ac_item->itemnumber,
             branchcode     => $patron->branchcode,
-            date_due       => $current_date,
+            date_due       => $today,
         }
     )->store;
 
-    # in time checkout for automatic checkin
+    # Checkout not due for automatic checkin
+    my $checkout_odue_aci = Koha::Checkout->new(
+        {
+            borrowernumber => $patron->borrowernumber,
+            itemnumber     => $odue_ac_item->itemnumber,
+            branchcode     => $patron->branchcode,
+            date_due       => $yesterday
+        }
+    )->store;
+
+    # Checkout not due for automatic checkin
     my $checkout_aci = Koha::Checkout->new(
         {
             borrowernumber => $patron->borrowernumber,
             itemnumber     => $ac_item->itemnumber,
             branchcode     => $patron->branchcode,
+            date_due       => $tomorrow
         }
     )->store;
 
@@ -306,7 +327,7 @@ subtest 'automatic_checkin' => sub {
             borrowernumber => $patron->borrowernumber,
             itemnumber     => $normal_item->itemnumber,
             branchcode     => $patron->branchcode,
-            date_due       => $current_date,
+            date_due       => $today,
         }
     )->store;
 
@@ -325,6 +346,13 @@ subtest 'automatic_checkin' => sub {
         'checkout for due_ac_item exists'
     );
 
+    $searched = Koha::Checkouts->find( $checkout_odue_aci->issue_id );
+    is(
+        $searched->issue_id,
+        $checkout_odue_aci->issue_id,
+        'checkout for odue_ac_item exists'
+    );
+
     Koha::Checkouts->automatic_checkin;
 
     $searched = Koha::Checkouts->find( $checkout_ni->issue_id );
@@ -337,6 +365,12 @@ subtest 'automatic_checkin' => sub {
 
     $searched = Koha::Checkouts->find( $checkout_due_aci->issue_id );
     is( $searched, undef, 'checkout for due_ac_item doesn\'t exist anymore' );
+
+    $searched = Koha::Checkouts->find( $checkout_odue_aci->issue_id );
+    is( $searched, undef, 'checkout for odue_ac_item doesn\'t exist anymore' );
+
+    $searched = Koha::Old::Checkouts->find( $checkout_odue_aci->issue_id );
+    is( dt_from_string($searched->returndate), $yesterday, 'old checkout for odue_ac_item has the right return date' );
 
     $schema->storage->txn_rollback;
 }
