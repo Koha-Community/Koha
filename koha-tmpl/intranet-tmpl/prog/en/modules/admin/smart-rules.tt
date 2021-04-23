@@ -543,16 +543,16 @@
                     <th>Return policy</th>
                     <th class="noExport">Actions</th>
                 </tr>
-                [% SET patron_maxissueqty = CirculationRules.Search( current_branch, undef, undef, 'patron_maxissueqty', 1, 1 ) %]
-                [% SET patron_maxonsiteissueqty = CirculationRules.Search( current_branch, undef, undef, 'patron_maxonsiteissueqty', 1, 1 ) %]
-                [% SET rule_value = CirculationRules.Search( current_branch, undef , undef, 'max_holds', 1, 1 ) %]
-                [% SET holdallowed = CirculationRules.Search( current_branch, undef, undef, 'holdallowed', 1 ) %]
-                [% SET hold_fulfillment_policy = CirculationRules.Search( current_branch, undef, undef, 'hold_fulfillment_policy', 1 ) %]
-                [% SET returnbranch = CirculationRules.Search( current_branch, undef, undef, 'returnbranch', 1 ) %]
-                [% SET dcharp = ( patron_maxissueqty || patron_maxonsiteissueqty || rule_value || holdallowed || hold_fulfillment_policy || returnbranch ) %]
+                [% SET patron_maxissueqty = CirculationRules.Search( current_branch, undef, undef, 'patron_maxissueqty', { want_rule = 1 } ) %]
+                [% SET patron_maxonsiteissueqty = CirculationRules.Search( current_branch, undef, undef, 'patron_maxonsiteissueqty', { want_rule = 1 } ) %]
+                [% SET rule_value = CirculationRules.Search( current_branch, undef , undef, 'max_holds', { want_rule = 1 } ) %]
+                [% SET holdallowed = CirculationRules.Search( current_branch, undef, undef, 'holdallowed', { want_rule = 1 } ) %]
+                [% SET hold_fulfillment_policy = CirculationRules.Search( current_branch, undef, undef, 'hold_fulfillment_policy', { want_rule = 1 }) %]
+                [% SET returnbranch = CirculationRules.Search( current_branch, undef, undef, 'returnbranch', { want_rule = 1 }) %]
+                [% SET default_checkout_hold_and_return_policy = ( patron_maxissueqty || patron_maxonsiteissueqty || rule_value || holdallowed || hold_fulfillment_policy || returnbranch ) %]
                 <tr>
                     <td>
-                        [% IF ( dcharp ) %]
+                        [% IF ( default_checkout_hold_and_return_policy ) %]
                             <em>
                             Defaults
                             </em>
@@ -698,7 +698,7 @@
                     </td>
                     <td class="actions">
                         <button type="submit" class="btn btn-default btn-xs"><i class="fa fa-save"></i> Save</button>
-                        [% IF (dcharp) %]
+                        [% IF ( default_checkout_hold_and_return_policy ) %]
                             <a class="btn btn-default btn-xs delete" href="/cgi-bin/koha/admin/smart-rules.pl?op=delete-branch-cat&amp;categorycode=*&amp;branch=[% current_branch | html %]" id="unset"><i class="fa fa-undo"></i> Unset</a>
                         [% END %]
                     </td>
