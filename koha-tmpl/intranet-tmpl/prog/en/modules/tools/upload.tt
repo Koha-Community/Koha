@@ -271,10 +271,14 @@
 [% IF mode == 'new' || mode == 'deleted' %]
     [% PROCESS form_new %]
     <div class="row">
-        <div class="col-sm-6">
-            [% PROCESS form_browse %]
-        </div>
-        <div class="col-sm-6">
+        [% IF uploadcategories %]
+            <div class="col-sm-6">
+                [% PROCESS form_browse %]
+            </div>
+            <div class="col-sm-6">
+        [% ELSE %]
+            <div class="col-sm-12">
+        [% END %]
             [% PROCESS form_search %]
         </div>
     </div>
