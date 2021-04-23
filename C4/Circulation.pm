@@ -3815,21 +3815,12 @@ sub ReturnLostItem{
 
 =head2 LostItem
 
-  LostItem( $itemnumber, $mark_lost_from, $force_mark_returned, [$params] );
-
-The final optional parameter, C<$params>, expected to contain
-'skip_record_index' key, which relayed down to Koha::Item/store,
-there it prevents calling of ModZebra index_records,
-which takes most of the time in batch adds/deletes: index_records better
-to be called later in C<additem.pl> after the whole loop.
-
-$params:
-    skip_record_index => 1|0
+  LostItem( $itemnumber, $mark_lost_from, $force_mark_returned );
 
 =cut
 
 sub LostItem{
-    my ($itemnumber, $mark_lost_from, $force_mark_returned, $params) = @_;
+    my ($itemnumber, $mark_lost_from, $force_mark_returned) = @_;
 
     unless ( $mark_lost_from ) {
         # Temporary check to avoid regressions

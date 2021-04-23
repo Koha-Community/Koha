@@ -61,7 +61,7 @@ subtest 'Test indexer object creation' => sub {
 };
 
 subtest 'Test indexer calls' => sub {
-    plan tests => 40;
+    plan tests => 36;
 
     my @engines = ('Zebra');
     eval { Koha::SearchEngine::Elasticsearch->get_elasticsearch_params; };
@@ -158,35 +158,6 @@ subtest 'Test indexer calls' => sub {
         warnings_are{
             AddReturn($item->barcode, $item->homebranch, 0, undef);
         } [$engine,'C4::Circulation'], "index_records is called once for $engine when calling AddReturn if item not issued";
-
-        $builder->build(
-            {
-                source => 'Branchtransfer',
-                value  => {
-                    itemnumber    => $item->itemnumber,
-                    datesent      => dt_from_string,
-                    datearrived   => undef,
-                    datecancelled => undef
-                }
-            }
-        );
-        warnings_are{
-            LostItem( $item->itemnumber, "tests");
-        } [$engine,"Koha::Item"], "index_records is called for $engine when calling LostItem and transfer exists";
-        $builder->build(
-            {
-                source => 'Branchtransfer',
-                value  => {
-                    itemnumber    => $item2->itemnumber,
-                    datesent      => dt_from_string,
-                    datearrived   => undef,
-                    datecancelled => undef
-                }
-            }
-        );
-        warnings_are{
-            LostItem( $item->itemnumber, "tests", undef, { skip_record_index => 1 });
-        } undef, "index_records is not called for $engine when calling LostItem and transfer exists if skip_record_index";
 
         $item->datelastseen('2020-02-02');
         $item->store({skip_record_index=>1});
