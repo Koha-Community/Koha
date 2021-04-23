@@ -26,8 +26,6 @@ use t::lib::Mocks;
 use Koha::Suggestions;
 use Koha::Database;
 
-use Data::Printer colored => 1;
-
 my $schema  = Koha::Database->new->schema;
 my $builder = t::lib::TestBuilder->new;
 

@@ -139,6 +139,52 @@ sub _type {
     return 'Suggestion';
 }
 
+=head3 to_api_mapping
+
+This method returns the mapping for representing a Koha::Patron object
+on the API.
+
+=cut
+
+sub to_api_mapping {
+    return {
+        suggestionid         => 'suggestion_id',
+        suggestedby          => 'suggested_by',
+        suggesteddate        => 'suggestion_date',
+        managedby            => 'managed_by',
+        manageddate          => 'managed_date',
+        acceptedby           => 'accepted_by',
+        accepteddate         => 'accepted_date',
+        rejectedby           => 'rejected_by',
+        rejecteddate         => 'rejected_date',
+        lastmodificationdate => 'last_status_change_date',
+        lastmodificationby   => 'last_status_change_by',
+        STATUS               => 'status',
+        note                 => 'note',
+        author               => 'author',
+        title                => 'title',
+        copyrightdate        => 'copyright_date',
+        publishercode        => 'publisher_code',
+        date                 => 'timestamp',
+        volumedesc           => 'volume_desc',
+        publicationyear      => 'publication_year',
+        place                => 'publication_place',
+        isbn                 => 'isbn',
+        biblionumber         => 'biblio_id',
+        reason               => 'reason',
+        patronreason         => 'patron_reason',
+        budgetid             => 'budget_id',
+        branchcode           => 'library_id',
+        collectiontitle      => 'collection_title',
+        itemtype             => 'item_type',
+        quantity             => 'quantity',
+        currency             => 'currency',
+        price                => 'item_price',
+        total                => 'total_price',
+        archived             => 'archived',
+    };
+}
+
 =head1 AUTHOR
 
 Kyle M Hall <kyle@bywatersolutions.com>
