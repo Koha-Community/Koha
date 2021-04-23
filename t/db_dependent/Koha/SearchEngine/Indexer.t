@@ -198,10 +198,10 @@ subtest 'Test indexer calls' => sub {
         } undef, "index_records is not called for $engine when calling ModDateLastSeen if skip_record_index";
 
         warnings_are{
-            ModItemTransfer( $item->itemnumber, $item->homebranch, $item2->homebranch,'Manual');
+            ModItemTransfer( $item->itemnumber, $item2->homebranch, $item->homebranch,'Manual');
         } [$engine,"Koha::Item"], "index_records is called for $engine when calling ModItemTransfer";
         warnings_are{
-            ModItemTransfer( $item->itemnumber, $item2->homebranch, $item->homebranch,'Manual',{skip_record_index=>1});
+            ModItemTransfer( $item->itemnumber, $item->homebranch, $item2->homebranch,'Manual',{skip_record_index=>1});
         } undef, "index_records is not called for $engine when calling ModItemTransfer with skip_record_index";
 
         warnings_are{
