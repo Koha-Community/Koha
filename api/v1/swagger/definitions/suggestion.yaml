@@ -1,0 +1,185 @@
+---
+type: object
+properties:
+  suggestion_id:
+    type: integer
+    readOnly: true
+    description: unique identifier assigned automatically by Koha
+  suggested_by:
+    type:
+      - integer
+      - "null"
+    description: patron_id for the person making the suggestion, foreign key linking to the
+      borrowers table
+  suggestion_date:
+    type: string
+    format: date
+    description: the suggestion was submitted
+  managed_by:
+    type:
+      - integer
+      - "null"
+    description: patron_id for the librarian managing the suggestion, foreign key linking
+      to the borrowers table
+  managed_date:
+    type:
+      - string
+      - "null"
+    format: date
+    description: date the suggestion was updated
+  accepted_by:
+    type:
+      - integer
+      - "null"
+    description: patron_id for the librarian who accepted the suggestion, foreign key
+      linking to the borrowers table
+  accepted_date:
+    type:
+      - string
+      - "null"
+    format: date
+    description: date the suggestion was marked as accepted
+  rejected_by:
+    type:
+      - integer
+      - "null"
+    description: patron_id for the librarian who rejected the suggestion, foreign key
+      linking to the borrowers table
+  rejected_date:
+    type:
+      - string
+      - "null"
+    format: date
+    description: date the suggestion was marked as rejected
+  last_status_change_by:
+    type:
+      - integer
+      - "null"
+    description: patron the suggestion was last modified by
+  last_status_change_date:
+    type:
+      - string
+      - "null"
+    format: date
+    description: date the suggestion was last modified
+  status:
+    type: string
+    description: Suggestion status
+    enum:
+      - ASKED
+      - CHECKED
+      - ACCEPTED
+      - REJECTED
+  note:
+    type:
+      - string
+      - "null"
+    description: note entered on the suggestion
+  author:
+    type:
+      - string
+      - "null"
+    description: author of the suggested item
+  title:
+    type:
+      - string
+      - "null"
+    description: title of the suggested item
+  copyright_date:
+    type:
+      - integer
+      - "null"
+    description: copyright date of the suggested item
+  publisher_code:
+    type:
+      - string
+      - "null"
+    description: publisher of the suggested item
+  timestamp:
+    type:
+      - string
+      - "null"
+    format: date-time
+    description: timestamp of date created
+  volume_desc:
+    type:
+      - string
+      - "null"
+    description: volume description
+  publication_year:
+    type:
+      - string
+      - "null"
+    description: year of publication
+  publication_place:
+    type:
+      - string
+      - "null"
+    description: publication place of the suggested item
+  isbn:
+    type:
+      - string
+      - "null"
+    description: isbn of the suggested item
+  biblio_id:
+    type:
+      - integer
+      - "null"
+    description: foreign key linking the suggestion to the biblio table after the
+      suggestion has been ordered
+  reason:
+    type:
+      - string
+      - "null"
+    description: reason for accepting or rejecting the suggestion
+  patron_reason:
+    type:
+      - string
+      - "null"
+    description: reason for making the suggestion
+  budget_id:
+    type:
+      - integer
+      - "null"
+    description: foreign key linking the suggested budget to the aqbudgets table
+  library_id:
+    type:
+      - string
+      - "null"
+    description: foreign key linking the suggested branch to the branches table
+  collection_title:
+    type:
+      - string
+      - "null"
+    description: collection name for the suggested item
+  item_type:
+    type:
+      - string
+      - "null"
+    description: suggested item type
+  quantity:
+    type:
+      - string
+      - "null"
+    description: suggested quantity to be purchased
+  currency:
+    type:
+      - string
+      - "null"
+    description: suggested currency for the suggested price
+  item_price:
+    type:
+      - number
+      - "null"
+    description: suggested price
+  total_price:
+    type:
+      - string
+      - "null"
+    description: suggested total cost (price*quantity updated for currency)
+  archived:
+    type:
+      - boolean
+      - "null"
+    description: archived (processed) suggestion
+additionalProperties: false
