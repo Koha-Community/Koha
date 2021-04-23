@@ -583,7 +583,7 @@ sub reduce {
 =head3 apply
 
     my $debits = $account->outstanding_debits;
-    my $outstanding_amount = $credit->apply( { debits => $debits, [ offset_type => $offset_type ] } );
+    my $credit = $credit->apply( { debits => $debits, [ offset_type => $offset_type ] } );
 
 Applies the credit to a given debits array reference.
 
