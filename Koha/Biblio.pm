@@ -226,7 +226,7 @@ sub pickup_locations {
     }
 
     return Koha::Libraries->search(
-        { branchcode => { '-in' => \@pickup_locations } } );
+        { branchcode => { '-in' => \@pickup_locations } }, { order_by => ['branchname'] } );
 }
 
 =head3 hidden_in_opac
