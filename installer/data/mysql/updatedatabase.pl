@@ -23900,6 +23900,34 @@ if( CheckVersion( $DBversion ) ) {
     NewVersion( $DBversion, 23971, "Add new system preference AcquisitionLog");
 }
 
+$DBversion = '20.12.00.038';
+if( CheckVersion( $DBversion ) ) {
+
+    # Add 'ItemLost' to reserves cancellation_reason enum
+    $dbh->do(
+        q{
+            ALTER TABLE
+                `branchtransfers`
+            MODIFY COLUMN
+                `cancellation_reason` enum(
+                    'Manual',
+                    'StockrotationAdvance',
+                    'StockrotationRepatriation',
+                    'ReturnToHome',
+                    'ReturnToHolding',
+                    'RotatingCollection',
+                    'Reserve',
+                    'LostReserve',
+                    'CancelReserve',
+                    'ItemLost'
+                )
+            AFTER `comments`
+          }
+    );
+
+    NewVersion( $DBversion, 27281, "Add 'ItemLost' to branchtransfers.cancellation_reason enum");
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 my $update_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/atomicupdate/';
