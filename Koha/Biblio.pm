@@ -234,7 +234,8 @@ sub pickup_locations {
     my $bool = $biblio->hidden_in_opac({ [ rules => $rules ] })
 
 Returns true if the biblio matches the hidding criteria defined in $rules.
-Returns false otherwise.
+Returns false otherwise. It involves the I<OpacHiddenItems> and
+I<OpacHiddenItemsHidesRecord> system preferences.
 
 Takes HASHref that can have the following parameters:
     OPTIONAL PARAMETERS:
@@ -253,6 +254,9 @@ sub hidden_in_opac {
     my @items = $self->items->as_list;
 
     return 0 unless @items; # Do not hide if there is no item
+
+    # Ok, there are items, don't even try the rules unless OpacHiddenItemsHidesRecord
+    return 0 unless C4::Context->preference('OpacHiddenItemsHidesRecord');
 
     return !(any { !$_->hidden_in_opac({ rules => $rules }) } @items);
 }

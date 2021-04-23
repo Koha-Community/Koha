@@ -63,13 +63,26 @@ subtest 'metadata() tests' => sub {
 
 subtest 'hidden_in_opac() tests' => sub {
 
-    plan tests => 4;
+    plan tests => 6;
 
     $schema->storage->txn_begin;
 
     my $biblio = $builder->build_sample_biblio();
+    my $rules  = { withdrawn => [ 2 ] };
 
-    ok( !$biblio->hidden_in_opac({ rules => { withdrawn => [ 2 ] } }), 'Biblio not hidden if there is no item attached' );
+    t::lib::Mocks::mock_preference( 'OpacHiddenItemsHidesRecord', 0 );
+
+    ok(
+        !$biblio->hidden_in_opac({ rules => $rules }),
+        'Biblio not hidden if there is no item attached (!OpacHiddenItemsHidesRecord)'
+    );
+
+    t::lib::Mocks::mock_preference( 'OpacHiddenItemsHidesRecord', 1 );
+
+    ok(
+        !$biblio->hidden_in_opac({ rules => $rules }),
+        'Biblio not hidden if there is no item attached (OpacHiddenItemsHidesRecord)'
+    );
 
     my $item_1 = $builder->build_sample_item({ biblionumber => $biblio->biblionumber });
     my $item_2 = $builder->build_sample_item({ biblionumber => $biblio->biblionumber });
@@ -77,17 +90,24 @@ subtest 'hidden_in_opac() tests' => sub {
     $item_1->withdrawn( 1 )->store->discard_changes;
     $item_2->withdrawn( 1 )->store->discard_changes;
 
-    ok( !$biblio->hidden_in_opac({ rules => { withdrawn => [ 2 ] } }), 'Biblio not hidden' );
+    ok( !$biblio->hidden_in_opac({ rules => $rules }), 'Biblio not hidden' );
 
     $item_2->withdrawn( 2 )->store->discard_changes;
     $biblio->discard_changes; # refresh
 
-    ok( !$biblio->hidden_in_opac({ rules => { withdrawn => [ 2 ] } }), 'Biblio not hidden' );
+    ok( !$biblio->hidden_in_opac({ rules => $rules }), 'Biblio not hidden' );
 
     $item_1->withdrawn( 2 )->store->discard_changes;
     $biblio->discard_changes; # refresh
 
-    ok( $biblio->hidden_in_opac({ rules => { withdrawn => [ 2 ] } }), 'Biblio hidden' );
+    ok( $biblio->hidden_in_opac({ rules => $rules }), 'Biblio hidden' );
+
+    t::lib::Mocks::mock_preference( 'OpacHiddenItemsHidesRecord', 0 );
+    ok(
+        !$biblio->hidden_in_opac( { rules => $rules } ),
+        'Biblio hidden (!OpacHiddenItemsHidesRecord)'
+    );
+
 
     $schema->storage->txn_rollback;
 };
