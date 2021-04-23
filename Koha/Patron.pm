@@ -61,7 +61,6 @@ our $RESULTSET_PATRON_ID_MAPPING = {
     Aqbudget             => 'budget_owner_id',
     Aqbudgetborrower     => 'borrowernumber',
     ArticleRequest       => 'borrowernumber',
-    BorrowerAttribute    => 'borrowernumber',
     BorrowerDebarment    => 'borrowernumber',
     BorrowerFile         => 'borrowernumber',
     BorrowerModification => 'borrowernumber',
@@ -627,6 +626,16 @@ sub merge_with {
 
             # Unbless for safety, the patron will end up being deleted
             $results->{merged}->{$patron_id}->{patron} = $patron->unblessed;
+
+            my $attributes = $patron->extended_attributes;
+            my $new_attributes = [
+                map { { code => $_->code, attribute => $_->attribute } }
+                    $attributes->as_list
+            ];
+            $attributes->delete; # We need to delete before trying to merge them to prevent exception on unique and repeatable
+            for my $attribute ( @$new_attributes ) {
+                $self->add_extended_attribute($attribute);
+            }
 
             while (my ($r, $field) = each(%$RESULTSET_PATRON_ID_MAPPING)) {
                 my $rs = $schema->resultset($r)->search({ $field => $patron_id });

@@ -1605,7 +1605,7 @@ subtest 'BorrowersLog tests' => sub {
 $schema->storage->txn_rollback;
 
 subtest 'Test Koha::Patrons::merge' => sub {
-    plan tests => 113;
+    plan tests => 110;
 
     my $schema = Koha::Database->new()->schema();
 
@@ -1655,6 +1655,118 @@ subtest 'Test Koha::Patrons::merge' => sub {
     $results = $anonymous_patron->merge_with( [ $keeper->id ] );
     is( $results, undef, "Anonymous patron cannot have other patrons merged into it" );
     is( Koha::Patrons->search( { borrowernumber => $keeper->id } )->count, 1, "Patron from attempted merge with AnonymousPatron still exists" );
+
+    subtest 'extended attributes' => sub {
+        plan tests => 5;
+
+        my $keep_patron =
+          $builder->build_object( { class => 'Koha::Patrons' } );
+        my $merge_patron =
+          $builder->build_object( { class => 'Koha::Patrons' } );
+
+        my $attribute_type_normal_1 = $builder->build_object(
+            {
+                class => 'Koha::Patron::Attribute::Types',
+                value => { repeatable => 0, unique_id => 0 }
+            }
+        );
+        my $attribute_type_normal_2 = $builder->build_object(
+            {
+                class => 'Koha::Patron::Attribute::Types',
+                value => { repeatable => 0, unique_id => 0 }
+            }
+        );
+
+        my $attribute_type_repeatable = $builder->build_object(
+            {
+                class => 'Koha::Patron::Attribute::Types',
+                value => { repeatable => 1, unique_id => 0 }
+            }
+        );
+
+        my $attr_keep = [
+            {
+                code      => $attribute_type_normal_1->code,
+                attribute => 'from attr 1'
+            },
+            {
+                code      => $attribute_type_repeatable->code,
+                attribute => 'from attr repeatable'
+            }
+        ];
+
+        my $attr_merge = [
+            {
+                code      => $attribute_type_normal_2->code,
+                attribute => 'to attr 2'
+            },
+            {
+                code      => $attribute_type_repeatable->code,
+                attribute => 'to attr repeatable'
+            },
+        ];
+
+        $keep_patron->extended_attributes($attr_keep);
+        $merge_patron->extended_attributes($attr_merge);
+
+        $keep_patron->merge_with( [ $merge_patron->borrowernumber ] );
+        my $merged_attributes = $keep_patron->extended_attributes;
+        is( $merged_attributes->count, 4 );
+
+        sub compare_attributes {
+            my ( $got, $expected, $code ) = @_;
+
+            is_deeply(
+                [
+                    sort $got->search( { code => $code } )
+                      ->get_column('attribute')
+                ],
+                $expected
+            );
+        }
+        compare_attributes(
+            $merged_attributes,
+            ['from attr 1'],
+            $attribute_type_normal_1->code
+        );
+        compare_attributes(
+            $merged_attributes,
+            ['to attr 2'],
+            $attribute_type_normal_2->code
+        );
+        compare_attributes(
+            $merged_attributes,
+            [ 'from attr repeatable', 'to attr repeatable' ],
+            $attribute_type_repeatable->code
+        );
+
+        # Cleanup
+        $keep_patron->delete;
+        $merge_patron->delete;
+
+        # Recreate but expect an exception because 2 "normal" attributes will be in the resulting patron
+        $keep_patron =
+          $builder->build_object( { class => 'Koha::Patrons' } );
+        $merge_patron =
+          $builder->build_object( { class => 'Koha::Patrons' } );
+
+        $keep_patron->extended_attributes($attr_keep);
+        $merge_patron->extended_attributes(
+            [
+                @$attr_merge,
+                {
+                    code      => $attribute_type_normal_1->code,
+                    attribute => 'yet another attribute for non-repeatable'
+                }
+            ]
+        );
+
+        throws_ok {
+            $keep_patron->merge_with( [ $merge_patron->borrowernumber ] );
+        }
+        'Koha::Exceptions::Patron::Attribute::NonRepeatable',
+            'Exception thrown trying to merge several non-repeatable attributes';
+    };
 
     t::lib::Mocks::mock_preference( 'AnonymousPatron', '' );
     $schema->storage->txn_rollback;
