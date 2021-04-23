@@ -2,7 +2,7 @@
 <form method="post" action="opac-account-pay.pl" class="form-horizontal">
     [% IF ( ACCOUNT_LINES ) %]
         <table class="table table-bordered table-striped" id="finestable">
-            <caption>Your charges</caption>
+            <caption class="sr-only">Your charges</caption>
             <thead>
                 <tr>
                     [% IF ENABLE_OPAC_PAYMENTS %]<th>&nbsp;</th>[% END %]
