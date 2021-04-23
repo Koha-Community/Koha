@@ -243,8 +243,8 @@
         <td id="itemtype-filter"></td>
         <td id="locationfilter"></td>
         <td></td>
-        <td id="pickup-location"></td>
         <td></td>
+        <td id="pickup-location"></td>
         <td></td>
         </tr>
     </tfoot>
@@ -353,9 +353,9 @@
               });
           });
           $("#pickup-location").each( function () {
-              $(this).html( createSelect( holdst.fnGetColumnData(13) ) );
+              $(this).html( createSelect( holdst.fnGetColumnData(14) ) );
               $('select', this).change( function () {
-                  holdst.fnFilter( $(this).val(), 13 );
+                  holdst.fnFilter( $(this).val(), 14 );
               });
           });
         });
