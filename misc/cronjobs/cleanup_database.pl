@@ -625,38 +625,22 @@ if (defined $pPseudoTransactions or $pPseudoTransactionsFrom or $pPseudoTransact
 
 if ($labels) {
     print "Purging item label batches last added to more than $labels days ago.\n" if $verbose;
-    $sth = $dbh->prepare(
-        q{
-        DELETE from creator_batches
-        WHERE batch_id in
-            (SELECT batch_id
-            FROM (SELECT batch_id
-                    FROM creator_batches
-                    WHERE creator='labels'
-                    GROUP BY batch_id
-                    HAVING max(timestamp) < date_sub(curdate(),interval ? day)) a)
-        }
-    );
-    $sth->execute($labels) or die $dbh->errstr;
-    print "Done with purging item label batches last added to more than $labels days ago.\n" if $verbose;
+    my $count = PurgeCreatorBatches($labels, 'labels', $confirm);
+    if ($verbose) {
+        say $confirm
+          ? sprintf "Done with purging %d item label batches last added to more than %d days ago.\n", $count, $labels
+          : sprintf "%d item label batches would have been purged.", $count;
+    }
 }
 
 if ($cards) {
     print "Purging card creator batches last added to more than $cards days ago.\n" if $verbose;
-    $sth = $dbh->prepare(
-        q{
-        DELETE from creator_batches
-        WHERE batch_id in
-            (SELECT batch_id
-            FROM (SELECT batch_id
-                    FROM creator_batches
-                    WHERE creator='patroncards'
-                    GROUP BY batch_id
-                    HAVING max(timestamp) < date_sub(curdate(),interval ? day)) a);
-        }
-    );
-    $sth->execute($cards) or die $dbh->errstr;
-    print "Done with purging card creator batches last added to more than $cards days ago.\n" if $verbose;
+    my $count = PurgeCreatorBatches($labels, 'patroncards', $confirm);
+    if ($verbose) {
+        say $confirm
+          ? sprintf "Done with purging %d card creator batches last added to more than %d days ago.\n", $count, $labels
+          : sprintf "%d card creator batches would have been purged.", $count;
+    }
 }
 
 exit(0);
@@ -742,6 +726,33 @@ sub PurgeDebarments {
     $sth->execute($days) or die $dbh->errstr;
     while ( my ($borrower_debarment_id) = $sth->fetchrow_array ) {
         Koha::Patron::Debarments::DelDebarment($borrower_debarment_id) if $doit;
+        $count++;
+    }
+    return $count;
+}
+
+sub PurgeCreatorBatches {
+    require C4::Labels::Batch;
+    my ( $days, $creator, $doit ) = @_;
+    my $count = 0;
+    $sth = $dbh->prepare(
+        q{
+            SELECT batch_id, branch_code FROM creator_batches
+            WHERE batch_id in
+                (SELECT batch_id
+                FROM (SELECT batch_id
+                        FROM creator_batches
+                        WHERE creator=?
+                        GROUP BY batch_id
+                        HAVING max(timestamp) <= date_sub(curdate(),interval ? day)) a)
+        }
+    );
+    $sth->execute( $creator, $days ) or die $dbh->errstr;
+    while ( my ( $batch_id, $branch_code ) = $sth->fetchrow_array ) {
+        C4::Labels::Batch::delete(
+            batch_id    => $batch_id,
+            branch_code => $branch_code
+        ) if $doit;
         $count++;
     }
     return $count;
