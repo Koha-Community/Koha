@@ -95,13 +95,15 @@ sub intranet_js {
 
 sub item_barcode_transform {
     my ( $self, $barcode ) = @_;
-    Koha::Exceptions::Exception->throw("item_barcode_transform called with parameter: $barcode");
+    my $param = $$barcode;
+    $$barcode = 4 if "$$barcode" eq 1;
+    Koha::Exceptions::Exception->throw("item_barcode_transform called with parameter: $param");
 }
 
 sub patron_barcode_transform {
     my ( $self, $barcode ) = @_;
-    $barcode //= '';
-    Koha::Exceptions::Exception->throw("patron_barcode_transform called with parameter: $barcode");
+    $$barcode //= '';
+    Koha::Exceptions::Exception->throw("patron_barcode_transform called with parameter: $$barcode");
 }
 
 sub configure {

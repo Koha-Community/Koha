@@ -86,8 +86,8 @@ subtest 'call() tests' => sub {
     $schema->storage->txn_rollback;
 };
 
-subtest 'call_recursive() tests' => sub {
-    plan tests => 6;
+subtest 'more call() tests' => sub {
+    plan tests => 3;
 
     $schema->storage->txn_begin;
     # Temporarily remove any installed plugins data
@@ -100,18 +100,18 @@ subtest 'call_recursive() tests' => sub {
         $plugin->enable();
     }
 
-    my (@responses) = Koha::Plugins->call_recursive('test_call_recursive', 1);
-    is( scalar @responses, 1, "Got back one element" );
-    is( $responses[0], 11, "Got expected response" );
+    my $bc = 1;
+    Koha::Plugins->call('item_barcode_transform', \$bc);
+    is( $bc, 4, "Got expected response" );
 
-    (@responses) = Koha::Plugins->call_recursive('test_call_recursive', 'abcd');
-    is( scalar @responses, 1, "Got back one element" );
-    is( $responses[0], 'abcdabcd', "Got expected response" );
+    my $cn = 'abcd';
+    Koha::Plugins->call('item_barcode_transform', \$cn);
+    is( $cn, 'abcd', "Got expected response" );
 
     t::lib::Mocks::mock_config('enable_plugins', 0);
-    (@responses) = Koha::Plugins->call_recursive('test_call_recursive', 1);
-    is( scalar @responses, 1, "Got back one element" );
-    is( $responses[0], 1, "call_recursive should return the original arguments if plugins are disabled" );
+    $bc = 1;
+    Koha::Plugins->call('item_barcode_transform', \$bc);
+    is( $bc, 1, "call should return the original arguments if plugins are disabled" );
 
     $schema->storage->txn_rollback;
 };

@@ -166,7 +166,7 @@ sub barcodedecode {
     my ($barcode, $filter) = @_;
     my $branch = C4::Context::mybranch();
     $filter = C4::Context->preference('itemBarcodeInputFilter') unless $filter;
-    ($barcode) = Koha::Plugins->call_recursive('item_barcode_transform',  $barcode );
+    Koha::Plugins->call('item_barcode_transform',  \$barcode );
     $filter or return $barcode;     # ensure filter is defined, else return untouched barcode
 	if ($filter eq 'whitespace') {
 		$barcode =~ s/\s//g;

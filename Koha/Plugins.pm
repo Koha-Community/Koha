@@ -85,41 +85,6 @@ sub call {
     return @responses;
 }
 
-=head2 call_recursive
-
-Calls a plugin method for all enabled plugins,
-passing the return value from the previous plugin
-to the next one.
-
-    @response = Koha::Plugins->call_recursive($method, @args)
-
-=cut
-
-sub call_recursive {
-    my ( $class, $method, @args ) = @_;
-
-    my @responses;
-    if ( C4::Context->config('enable_plugins') ) {
-
-        my @plugins = $class->new( { enable_plugins => 1 } )->GetPlugins( { method => $method } );
-        @plugins = grep { $_->can($method) } @plugins;
-
-        foreach my $plugin (@plugins) {
-            my @response = eval { $plugin->$method(@args) };
-
-            if ($@) {
-                warn sprintf( "Plugin error (%s): %s", $plugin->get_metadata->{name}, $@ );
-                next;
-            } else {
-                @args = @response;
-            }
-        }
-
-    }
-
-    return @args;
-}
-
 =head2 GetPlugins
 
 This will return a list of all available plugins, optionally limited by
