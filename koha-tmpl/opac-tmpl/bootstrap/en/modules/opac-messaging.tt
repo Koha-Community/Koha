@@ -155,9 +155,9 @@
                                             [% IF ( messaging_preference.has_digest ) %]
                                                 <td>
                                                     [% IF ( messaging_preference.digest ) %]
-                                                        <input type="checkbox" id="digest[% messaging_preference.message_attribute_id | html %]" value="[% messaging_preference.message_attribute_id | html %]" name="digest" checked="checked" />
+                                                        <input type="checkbox" id="digest[% messaging_preference.message_attribute_id | html %]" value="[% messaging_preference.message_attribute_id | html %]" name="digest" checked="checked" data-toggle="tooltip" title="You must select a digestible transport to select digests" />
                                                     [% ELSE %]
-                                                        <input type="checkbox" id="digest[% messaging_preference.message_attribute_id | html %]" value="[% messaging_preference.message_attribute_id | html %]" name="digest" />
+                                                        <input type="checkbox" id="digest[% messaging_preference.message_attribute_id | html %]" value="[% messaging_preference.message_attribute_id | html %]" name="digest" data-toggle="tooltip" title="You must select a digestible transport to select digests" />
                                                     [% END %]
                                                 </td>
                                             [% ELSE %]
@@ -254,9 +254,9 @@
                 var rowid = $(this).attr("id");
                 id = Number(rowid.replace("email",""));
                 if ( $("#email"+id).prop("checked") || $("#sms"+id).prop("checked") ) {
-                    $("#digest"+id).attr("disabled", false);
+                    $("#digest"+id).attr("disabled", false).tooltip('disable');
                 } else {
-                    $("#digest"+id).attr("disabled", true);
+                    $("#digest"+id).attr("disabled", true).tooltip('enable');
                 }
             });
 
@@ -265,18 +265,18 @@
                 var rowid = $(this).attr("id");
                 id = Number(rowid.replace("email",""));
                 if ( $("#email"+id).prop("checked") || $("#sms"+id).prop("checked") ) {
-                    $("#digest"+id).attr("disabled", false);
+                    $("#digest"+id).attr("disabled", false).tooltip('disable');
                 } else {
-                    $("#digest"+id).attr("disabled", true).prop("checked",false);
+                    $("#digest"+id).attr("disabled", true).prop("checked",false).tooltip('enable');
                 }
             });
             $(".pmp_sms").click(function(){
                 var rowid = $(this).attr("id");
                 id = Number(rowid.replace("sms",""));
                 if ( $("#email"+id).prop("checked") || $("#sms"+id).prop("checked") ) {
-                    $("#digest"+id).attr("disabled", false);
+                    $("#digest"+id).attr("disabled", false).tooltip('disable');
                 } else {
-                    $("#digest"+id).attr("disabled", true).prop("checked",false);
+                    $("#digest"+id).attr("disabled", true).prop("checked",false).tooltip('enable');
                 }
             });
         });
