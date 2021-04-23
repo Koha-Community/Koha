@@ -316,28 +316,30 @@ INSERT INTO `letter` (`module`, `code`, `branchcode`, `name`, `is_html`, `title`
 ('circulation', 'ACCOUNT_WRITEOFF', '', 'Account writeoff', 0, 'Account writeoff', '[%- USE Price -%]\r\nAn account writeoff of [% credit.amount * -1 | $Price %] has been applied to your account.\r\n\r\nThis writeoff affected the following fees:\r\n[%- FOREACH o IN offsets %]\r\nDescription: [% o.debit.description %]\r\nAmount paid: [% o.amount * -1 | $Price %]\r\nAmount remaining: [% o.debit.amountoutstanding | $Price %]\r\n[% END %]', 'email', 'default');
 
 INSERT INTO `letter` (`module`, `code`, `branchcode`, `name`, `is_html`, `title`, `content`, `message_transport_type`, `lang`) VALUES
-('circulation', 'ACCOUNT_CREDIT', '', 'Account payment', 0, 'Account payment', '<table>
+('circulation', 'ACCOUNT_CREDIT', '', 'Confirmation de paiement', 0, 'Confirmation de paiement', '[% USE Price %]
+[% PROCESS \"accounts.inc\" %]
+<table>
 [% IF ( LibraryName ) %]
  <tr>
-    <th colspan="4" class="centerednames">
+    <th colspan=\"4\" class=\"centerednames\">
         <h3>[% LibraryName | html %]</h3>
     </th>
  </tr>
 [% END %]
  <tr>
-    <th colspan="4" class="centerednames">
+    <th colspan=\"4\" class=\"centerednames\">
         <h2><u>Fee receipt</u></h2>
     </th>
  </tr>
  <tr>
-    <th colspan="4" class="centerednames">
-        <h2>[% Branches.GetName( patron.branchcode ) | html %]</h2>
+    <th colspan=\"4\" class=\"centerednames\">
+        <h2>[% Branches.GetName( credit.patron.branchcode ) | html %]</h2>
     </th>
  </tr>
  <tr>
-    <th colspan="4">
-        Received with thanks from  [% patron.firstname | html %] [% patron.surname | html %] <br />
-        Card number: [% patron.cardnumber | html %]<br />
+    <th colspan=\"4\">
+        Received with thanks from  [% credit.patron.firstname | html %] [% credit.patron.surname | html %] <br />
+        Card number: [% credit.patron.cardnumber | html %]<br />
     </th>
  </tr>
   <tr>
@@ -347,77 +349,86 @@ INSERT INTO `letter` (`module`, `code`, `branchcode`, `name`, `is_html`, `title`
     <th>Amount</th>
  </tr>
 
-  [% FOREACH account IN accounts %]
-    <tr class="highlight">
-      <td>[% account.date | $KohaDates %]</td>
-      <td>
-        [% PROCESS account_type_description account=account %]
-        [%- IF account.description %], [% account.description | html %][% END %]
-      </td>
-      <td>[% account.note | html %]</td>
-      [% IF ( account.amountcredit ) %]<td class="credit">[% ELSE %]<td class="debit">[% END %][% account.amount | $Price %]</td>
-    </tr>
+ <tr class=\"highlight\">
+    <td>[% credit.date | $KohaDates %]</td>
+    <td>
+      [% PROCESS account_type_description account=credit %]
+      [%- IF credit.description %], [% credit.description | html %][% END %]
+    </td>
+    <td>[% credit.note | html %]</td>
+    <td class=\"credit\">[% credit.amount | $Price %]</td>
+ </tr>
 
-  [% END %]
+[% IF ( tendered ) %]
+  <tr>
+    <td colspan=\"3\">Amount tendered: </td>
+    <td>[% tendered | $Price %]</td>
+  </tr>
+  <tr>
+    <td colspan=\"3\">Change given: </td>
+    <td>[% change | $Price %]</td>
+  </tr>
+[% END %]
+
 <tfoot>
   <tr>
-    <td colspan="3">Total outstanding dues as on date: </td>
-    [% IF ( totalcredit ) %]<td class="credit">[% ELSE %]<td class="debit">[% END %][% total | $Price %]</td>
+    <td colspan=\"3\">Total outstanding dues as on date: </td>
+    [% IF ( credit.patron.account.balance >= 0 ) %]<td class=\"credit\">[% ELSE %]<td class=\"debit\">[% END %][% credit.patron.account.balance | $Price %]</td>
   </tr>
 </tfoot>
 </table>', 'print', 'default');
 
 INSERT IGNORE INTO `letter` (`module`, `code`, `branchcode`, `name`, `is_html`, `title`, `content`, `message_transport_type`, `lang`) VALUES
-('circulation', 'ACCOUNT_DEBIT', '', 'Account fee', 0, 'Account fee', '<table>
+('circulation', 'ACCOUNT_DEBIT', '', 'Account fee', 0, 'Account fee', '[% USE Price %]
+[% PROCESS \"accounts.inc\" %]
+<table>
   [% IF ( LibraryName ) %]
     <tr>
-      <th colspan="5" class="centerednames">
+      <th colspan=\"5\" class=\"centerednames\">
         <h3>[% LibraryName | html %]</h3>
       </th>
     </tr>
   [% END %]
 
   <tr>
-    <th colspan="5" class="centerednames">
+    <th colspan=\"5\" class=\"centerednames\">
       <h2><u>INVOICE</u></h2>
     </th>
   </tr>
   <tr>
-    <th colspan="5" class="centerednames">
-      <h2>[% Branches.GetName( patron.branchcode ) | html %]</h2>
+    <th colspan=\"5\" class=\"centerednames\">
+      <h2>[% Branches.GetName( debit.patron.branchcode ) | html %]</h2>
     </th>
   </tr>
   <tr>
-    <th colspan="5" >
-      Bill to: [% patron.firstname | html %] [% patron.surname | html %] <br />
-      Card number: [% patron.cardnumber | html %]<br />
+    <th colspan=\"5\" >
+      Bill to: [% debit.patron.firstname | html %] [% debit.patron.surname | html %] <br />
+      Card number: [% debit.patron.cardnumber | html %]<br />
     </th>
   </tr>
   <tr>
     <th>Date</th>
     <th>Description of charges</th>
     <th>Note</th>
-    <th style="text-align:right;">Amount</th>
-    <th style="text-align:right;">Amount outstanding</th>
+    <th style=\"text-align:right;\">Amount</th>
+    <th style=\"text-align:right;\">Amount outstanding</th>
   </tr>
 
-  [% FOREACH account IN accounts %]
-    <tr class="highlight">
-      <td>[% account.date | $KohaDates%]</td>
-      <td>
-        [% PROCESS account_type_description account=account %]
-        [%- IF account.description %], [% account.description | html %][% END %]
-      </td>
-      <td>[% account.note | html %]</td>
-      [% IF ( account.amountcredit ) %]<td class="credit">[% ELSE %]<td class="debit">[% END %][% account.amount | $Price %]</td>
-      [% IF ( account.amountoutstandingcredit ) %]<td class="credit">[% ELSE %]<td class="debit">[% END %][% account.amountoutstanding | $Price %]</td>
-    </tr>
-  [% END %]
+  <tr class=\"highlight\">
+    <td>[% debit.date | $KohaDates%]</td>
+    <td>
+      [% PROCESS account_type_description account=debit %]
+      [%- IF debit.description %], [% debit.description | html %][% END %]
+    </td>
+    <td>[% debit.note | html %]</td>
+    <td class=\"debit\">[% debit.amount | $Price %]</td>
+    <td class=\"debit\">[% debit.amountoutstanding | $Price %]</td>
+  </tr>
 
   <tfoot>
     <tr>
-      <td colspan="4">Total outstanding dues as on date: </td>
-      [% IF ( totalcredit ) %]<td class="credit">[% ELSE %]<td class="debit">[% END %][% total | $Price %]</td>
+      <td colspan=\"4\">Total outstanding dues as on date: </td>
+      [% IF ( debit.patron.account.balance <= 0 ) %]<td class=\"credit\">[% ELSE %]<td class=\"debit\">[% END %][% debit.patron.account.balance | $Price %]</td>
     </tr>
   </tfoot>
 </table>', 'print', 'default');
