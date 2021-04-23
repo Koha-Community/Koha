@@ -185,7 +185,7 @@ subtest 'is_serial() tests' => sub {
 };
 
 subtest 'pickup_locations' => sub {
-    plan tests => 8;
+    plan tests => 9;
 
     $schema->storage->txn_begin;
 
@@ -205,14 +205,14 @@ subtest 'pickup_locations' => sub {
     my $root2 = $builder->build_object( { class => 'Koha::Library::Groups', value => { ft_local_hold_group => 1 } } );
     my $root3 = $builder->build_object( { class => 'Koha::Library::Groups', value => { ft_local_hold_group => 1 } } );
 
-    my $library1 = $builder->build_object( { class => 'Koha::Libraries', value => { pickup_location => 1 } } );
-    my $library2 = $builder->build_object( { class => 'Koha::Libraries', value => { pickup_location => 1 } } );
-    my $library3 = $builder->build_object( { class => 'Koha::Libraries', value => { pickup_location => 0 } } );
-    my $library4 = $builder->build_object( { class => 'Koha::Libraries', value => { pickup_location => 1 } } );
-    my $library5 = $builder->build_object( { class => 'Koha::Libraries', value => { pickup_location => 1 } } );
-    my $library6 = $builder->build_object( { class => 'Koha::Libraries', value => { pickup_location => 1 } } );
-    my $library7 = $builder->build_object( { class => 'Koha::Libraries', value => { pickup_location => 1 } } );
-    my $library8 = $builder->build_object( { class => 'Koha::Libraries', value => { pickup_location => 0 } } );
+    my $library1 = $builder->build_object( { class => 'Koha::Libraries', value => { pickup_location => 1, branchname => 'zzz' } } );
+    my $library2 = $builder->build_object( { class => 'Koha::Libraries', value => { pickup_location => 1, branchname => 'AAA' } } );
+    my $library3 = $builder->build_object( { class => 'Koha::Libraries', value => { pickup_location => 0, branchname => 'FFF' } } );
+    my $library4 = $builder->build_object( { class => 'Koha::Libraries', value => { pickup_location => 1, branchname => 'CCC' } } );
+    my $library5 = $builder->build_object( { class => 'Koha::Libraries', value => { pickup_location => 1, branchname => 'eee' } } );
+    my $library6 = $builder->build_object( { class => 'Koha::Libraries', value => { pickup_location => 1, branchname => 'BBB' } } );
+    my $library7 = $builder->build_object( { class => 'Koha::Libraries', value => { pickup_location => 1, branchname => 'DDD' } } );
+    my $library8 = $builder->build_object( { class => 'Koha::Libraries', value => { pickup_location => 0, branchname => 'GGG' } } );
 
     our @branchcodes = map { $_->branchcode } ($library1, $library2, $library3, $library4, $library5, $library6, $library7, $library8);
 
@@ -413,6 +413,13 @@ subtest 'pickup_locations' => sub {
         }
     }
 
+    my @pl_names = map { $_->branchname } $biblio1->pickup_locations( { patron => $patron1 } )->as_list;
+    my $pl_ori_str = join('|', @pl_names);
+    my $pl_sorted_str = join('|', sort { lc($a) cmp lc($b) } @pl_names);
+    ok(
+        $pl_ori_str eq $pl_sorted_str,
+        'Libraries must be sorted by name'
+    );
     $schema->storage->txn_rollback;
 };
 
