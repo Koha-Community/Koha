@@ -23890,6 +23890,16 @@ if( CheckVersion( $DBversion ) ) {
     NewVersion( $DBversion, 16787, "Add noReservesAllowed to club holds error codes");
 }
 
+$DBversion = '20.12.00.037';
+if( CheckVersion( $DBversion ) ) {
+    $dbh->do( q{
+        INSERT IGNORE INTO systempreferences (variable, value, explanation, options, type)
+        VALUES ('AcquisitionLog', '0', 'If enabled, log acquisition activity', '', 'YesNo');
+    });
+
+    NewVersion( $DBversion, 23971, "Add new system preference AcquisitionLog");
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 my $update_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/atomicupdate/';
