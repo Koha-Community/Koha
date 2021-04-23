@@ -53,9 +53,9 @@ $(document).ready(function(){
         var rowid = $(this).attr("id");
         id = Number(rowid.replace("email",""));
         if ( $("#email"+id).prop("checked") || $("#sms"+id).prop("checked") ) {
-            $("#digest"+id).attr("disabled", false);
+            $("#digest"+id).attr("disabled", false).tooltip('disable');
         } else {
-            $("#digest"+id).attr("disabled", true).prop("checked",false);
+            $("#digest"+id).attr("disabled", true).prop("checked",false).tooltip('enable');
         }
     });
 
@@ -64,18 +64,20 @@ $(document).ready(function(){
         var rowid = $(this).attr("id");
         id = Number(rowid.replace("email",""));
         if ( $("#email"+id).prop("checked") || $("#sms"+id).prop("checked") ) {
-            $("#digest"+id).attr("disabled", false);
+            $("#digest"+id).attr("disabled", false).tooltip('disable');
         } else {
-            $("#digest"+id).attr("disabled", true).prop("checked",false);
+            $("#digest"+id).attr("disabled", true).prop("checked",false).tooltip('enable');
         }
     });
     $(".pmp_sms").click(function(){
         var rowid = $(this).attr("id");
         id = Number(rowid.replace("sms",""));
         if ( $("#email"+id).prop("checked") || $("#sms"+id).prop("checked") ) {
-            $("#digest"+id).attr("disabled", false);
+            $("#digest"+id).attr("disabled", false).tooltip('disable');
         } else {
-            $("#digest"+id).attr("disabled", true).prop("checked",false);
+            $("#digest"+id).attr("disabled", true).prop("checked",false).tooltip('enable');
         }
     });
+
+//    $('#memberentry_messaging_prefs [data-toggle="tooltip"][disabled]').tooltip();
 });

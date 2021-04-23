@@ -187,24 +187,24 @@
                 <input type="checkbox"
                      id="digest[% messaging_preference.message_attribute_id | html %]"
                      value="[% messaging_preference.message_attribute_id | html %]"
-                     name="digest" class="pmp_digest" checked="checked" disabled="disabled" />
+                     name="digest" class="pmp_digest" checked="checked" disabled="disabled" data-toggle="tooltip" title="You must select a digestible transport to select digests" />
               [% ELSE %]
                 <input type="checkbox"
                      id="digest[% messaging_preference.message_attribute_id | html %]"
                      value="[% messaging_preference.message_attribute_id | html %]"
-                     name="digest" class="pmp_digest" disabled="disabled" />
+                     name="digest" class="pmp_digest" disabled="disabled" data-toggle="tooltip" title="You must select a digestible transport to select digests" />
               [% END %]
           [% ELSE %]
               [% IF ( messaging_preference.digest ) %]
                 <input type="checkbox"
                      id="digest[% messaging_preference.message_attribute_id | html %]"
                      value="[% messaging_preference.message_attribute_id | html %]"
-                     name="digest" checked="checked" class="pmp_digest active_notify" data-attr-id="[% messaging_preference.message_attribute_id | html %]" />
+                     name="digest" checked="checked" class="pmp_digest active_notify" data-attr-id="[% messaging_preference.message_attribute_id | html %]" data-toggle="tooltip" title="You must select a digestible transport to select digests" />
               [% ELSE %]
                 <input type="checkbox"
                      id="digest[% messaging_preference.message_attribute_id | html %]"
                      value="[% messaging_preference.message_attribute_id | html %]"
-                     name="digest" class="pmp_digest active_notify" data-attr-id="[% messaging_preference.message_attribute_id | html %]" />
+                     name="digest" class="pmp_digest active_notify" data-attr-id="[% messaging_preference.message_attribute_id | html %]" data-toggle="tooltip" title="You must select a digestible transport to select digests" />
               [% END %]
           [% END %]
       </td>
