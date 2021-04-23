@@ -102,16 +102,18 @@ if ( ! $record ) {
     exit;
 }
 
-my @all_items = GetItemsInfo($biblionumber);
 my $biblio = Koha::Biblios->find( $biblionumber );
-my $framework = $biblio ? $biblio->frameworkcode : q{};
-my $tagslib = &GetMarcStructure( 0, $framework );
-my ($tag_itemnumber,$subtag_itemnumber) = &GetMarcFromKohaField( 'items.itemnumber' );
-my @nonhiddenitems = $record->field($tag_itemnumber);
-if ( C4::Context->preference('OpacHiddenItemsHidesRecord') && scalar @all_items >= 1 && scalar @nonhiddenitems == 0 ) {
-    print $query->redirect("/cgi-bin/koha/errors/404.pl");
-    exit;
+unless ( $patron and $patron->category->override_hidden_items ) {
+    # only skip this check if there's a logged in user
+    # and its category overrides OpacHiddenItems
+    if ( $biblio->hidden_in_opac({ rules => C4::Context->yaml_preference('OpacHiddenItems') }) ) {
+        print $query->redirect('/cgi-bin/koha/errors/404.pl'); # escape early
+        exit;
+    }
 }
+
+my $framework = $biblio ? $biblio->frameworkcode : q{};
+my $tagslib   = &GetMarcStructure( 0, $framework );
 
 my $record_processor = Koha::RecordProcessor->new({
     filters => 'ViewPolicy',
@@ -137,8 +139,8 @@ $template->param(
      $tagslib->{$bt_tag}->{$bt_subtag}->{hidden} > -8;   # except -8;
 
 my $allow_onshelf_holds;
-for my $itm (@all_items) {
-    my $item = Koha::Items->find( $itm->{itemnumber} );
+my $items = $biblio->items;
+while ( my $item = $items->next ) {
     $allow_onshelf_holds = Koha::CirculationRules->get_onshelfholds_policy( { item => $item, patron => $patron } );
     last if $allow_onshelf_holds;
 }

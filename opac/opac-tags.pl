@@ -233,8 +233,8 @@ my $borcat  = q{};
 if ($loggedinuser) {
     my $patron = Koha::Patrons->find( { borrowernumber => $loggedinuser } );
     $borcat = $patron ? $patron->categorycode : $borcat;
-    my $should_hide = C4::Context->preference('OpacHiddenItems') // q{};
-    $should_hide = ( $should_hide =~ /\S/ ) ? 1 : 0;
+    my $rules = C4::Context->yaml_preference('OpacHiddenItems');
+    my $should_hide = ( $rules ) ? 1 : 0;
     $my_tags = get_tag_rows({borrowernumber=>$loggedinuser});
     my $my_approved_tags = get_approval_rows({ approved => 1 });
 
@@ -270,7 +270,14 @@ if ($loggedinuser) {
                 borcat => $borcat });
             $hidden_items = \@hidden_itemnumbers;
         }
-        next if ( C4::Context->preference('OpacHiddenItemsHidesRecord') && $should_hide && scalar @all_items == scalar @hidden_itemnumbers );
+        next
+          if (
+            (
+                !$patron
+                or ( $patron and !$patron->category->override_hidden_items )
+            )
+            and $biblio->hidden_in_opac( { rules => $rules } )
+          );
         $tag->{title} = $biblio->title;
         $tag->{subtitle} = $biblio->subtitle;
         $tag->{medium} = $biblio->medium;

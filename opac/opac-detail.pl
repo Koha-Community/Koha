@@ -89,10 +89,6 @@ if( $specific_item ) {
 }
 my @hiddenitems;
 my $patron = Koha::Patrons->find( $borrowernumber );
-our $borcat= q{};
-if ( C4::Context->preference('OpacHiddenItemsExceptions') ) {
-    $borcat = $patron ? $patron->categorycode : q{};
-}
 
 my $record = GetMarcBiblio({
     biblionumber => $biblionumber,
@@ -102,17 +98,16 @@ if ( ! $record ) {
     exit;
 }
 
-if ( scalar @all_items >= 1 ) {
-    push @hiddenitems,
-      GetHiddenItemnumbers( { items => \@all_items, borcat => $borcat } );
-
-    if ( C4::Context->preference('OpacHiddenItemsHidesRecord') && scalar @hiddenitems == scalar @all_items ) {
-        print $query->redirect("/cgi-bin/koha/errors/404.pl"); # escape early
+my $biblio = Koha::Biblios->find( $biblionumber );
+unless ( $patron and $patron->category->override_hidden_items ) {
+    # only skip this check if there's a logged in user
+    # and its category overrides OpacHiddenItems
+    if ( $biblio->hidden_in_opac({ rules => C4::Context->yaml_preference('OpacHiddenItems') }) ) {
+        print $query->redirect('/cgi-bin/koha/errors/404.pl'); # escape early
         exit;
     }
 }
 
-my $biblio = Koha::Biblios->find( $biblionumber );
 my $framework = $biblio ? $biblio->frameworkcode : q{};
 my $record_processor = Koha::RecordProcessor->new({
     filters => 'ViewPolicy',
@@ -280,7 +275,7 @@ if ($session->param('busc')) {
         my @newresults;
         my $search_context = {
             'interface' => 'opac',
-            'category'  => $borcat
+            'category'  => ($patron) ? $patron->categorycode : q{}
         };
         for (my $i=0;$i<@servers;$i++) {
             my $server = $servers[$i];
