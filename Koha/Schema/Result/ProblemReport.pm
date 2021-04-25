@@ -38,10 +38,8 @@ __PACKAGE__->table("problem_reports");
 
 =head2 content
 
-  data_type: 'varchar'
-  default_value: (empty string)
+  data_type: 'text'
   is_nullable: 0
-  size: 255
 
 =head2 borrowernumber
 
@@ -98,7 +96,7 @@ __PACKAGE__->add_columns(
   "title",
   { data_type => "varchar", default_value => "", is_nullable => 0, size => 40 },
   "content",
-  { data_type => "varchar", default_value => "", is_nullable => 0, size => 255 },
+  { data_type => "text", is_nullable => 0 },
   "borrowernumber",
   {
     data_type      => "integer",
@@ -181,8 +179,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07046 @ 2020-04-03 12:13:26
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:ho9ENAxH51/ZlZO9KD4KOQ
+# Created by DBIx::Class::Schema::Loader v0.07046 @ 2021-04-25 14:35:45
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:kJQVMtlQWWS1mU8vcKmjSA
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
