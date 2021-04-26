@@ -442,10 +442,10 @@
                             <li>
                                 <label for="pickup">Pickup at:</label>
                             [% UNLESS ( multi_hold ) %]
-                                <select name="pickup" size="1" id="pickup" data-biblio-id="[% biblio.biblionumber | html %]" data-patron-id="[% patron.borrowernumber | html %]">
+                                <select name="pickup" id="pickup" data-biblio-id="[% biblio.biblionumber | html %]" data-patron-id="[% patron.borrowernumber | html %]">
                                     <option selected="selected" value="[% pickup | html %]">[% Branches.GetName(pickup) | html %]</option>
                             [% ELSE %]
-                                <select name="pickup" size="1" id="pickup" data-patron-id="[% patron.borrowernumber | html %]">
+                                <select name="pickup" id="pickup" data-patron-id="[% patron.borrowernumber | html %]">
                                     [% PROCESS options_for_libraries libraries => Branches.all({ selected => pickup, search_params => { pickup_location => 1 } }) %]
                             [% END %]
                                 </select>
