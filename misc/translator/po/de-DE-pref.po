@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: Koha 20.11\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-05-16 03:26+0200\n"
-"PO-Revision-Date: 2021-03-15 22:10+0000\n"
-"Last-Translator: Katrin Fischer <katrin.fischer@bsz-bw.de>\n"
+"PO-Revision-Date: 2021-04-22 07:18+0000\n"
+"Last-Translator: AnkeB <anke.bruns@gwdg.de>\n"
 "Language-Team: \n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
@@ -13,8 +13,8 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.8\n"
 "X-Poedit-SourceCharset: utf-8\n"
-"X-POOTLE-MTIME: 1615846245.598174\n"
-"X-Pootle-Path: /de/20.05/de-DE-pref.po\n"
+"X-POOTLE-MTIME: 1619075920.950904\n"
+"X-Pootle-Path: /de/20.11/de-DE-pref.po\n"
 "X-Pootle-Revision: 1\n"
 
 # Accounting
@@ -85,7 +85,7 @@ msgid ""
 "anonymous transactions with the accounting system. (Requires "
 "UseCashRegisters)"
 msgstr ""
-"die Verkaufsfunktion um anonyme Transaktionen mit dem Gebührensystem zu "
+"die Verkaufsfunktion, um anonyme Transaktionen mit dem Gebührensystem zu "
 "verbuchen. (Erfordert UseCashRegisters)"
 
 # Accounting > Features
@@ -134,7 +134,7 @@ msgstr ""
 msgid ""
 "accounting.pref#UseCashRegisters#  cash registers with the accounting system "
 "to track payments."
-msgstr "Kassen um die Zahlungen zu verwalten."
+msgstr "Kassen, um die Zahlungen zu verwalten."
 
 # Accounting > Features
 msgid "accounting.pref#UseCashRegisters# Don't use"
@@ -2511,9 +2511,9 @@ msgstr "als voreingestellte Klassifikation."
 
 # Cataloging > Record structure
 msgid ""
-"cataloguing.pref#DefaultCountryField008#  Empty defaults to xxu for United "
-"States."
-msgstr " Leer wird mit xxu für die USA vorbelegt."
+"cataloguing.pref#DefaultCountryField008#  Empty defaults to ||| - No attempt "
+"to code."
+msgstr " Leer wird vorbelegt mit: ||| - Kein Versuch der Codierung."
 
 # Cataloging > Record structure
 msgid ""
@@ -3525,10 +3525,8 @@ msgstr "Erlaube nicht"
 # Circulation > Checkout policy
 msgid ""
 "circulation.pref#AllowItemsOnHoldCheckoutSIP# If allowed do not generate "
-"RESERVE_WAITING and RESERVED warning."
-msgstr ""
-"Wenn erlaubt, werden keine Warnungen für RESERVE_WAITING und RESERVED "
-"ausgegeben."
+"RESERVED warning."
+msgstr "Wenn erlaubt, wird keine Warnung für RESERVED ausgegeben."
 
 # Circulation > Checkout policy
 msgid ""
@@ -6446,16 +6444,20 @@ msgid ""
 "pl cronjob is being run, accruing and final fines will be calculated when "
 "the cron runs and accruing fines will be finalized when an item is returned. "
 "If CalculateFinesOnReturn is enabled, final fines will be calculated when an "
-"item is returned."
+"item is returned.<br/>"
 msgstr ""
 "<br><strong>Hinweis:</strong> Wenn cronjobs/fines.pl ausgeführt wird, werden "
 "laufenden und finale Mahngebühren berechnet wenn der Cronjob läuft und "
 "laufende Mahngebühren werden zu finalen, wenn das Exemplar zurückgegeben "
 "wird. Wenn CalculateFinesOnReturn aktiv ist, werden finale Mahngebühren auch "
-"bei der Rückgabe berechnet."
+"bei der Rückgabe berechnet.<br/>"
 
 # Circulation > Fines Policy
 msgid "circulation.pref#finesMode# Calculate and charge"
+msgstr "Berechne und buche"
+
+# Circulation > Fines Policy
+msgid "circulation.pref#finesMode# Charge"
 msgstr "Berechne und buche"
 
 # Circulation > Fines Policy
@@ -6463,10 +6465,22 @@ msgid "circulation.pref#finesMode# Don't calculate"
 msgstr "Berechne keine"
 
 # Circulation > Fines Policy
+msgid "circulation.pref#finesMode# Don't charge"
+msgstr "Berechne keine"
+
+# Circulation > Fines Policy
 msgid ""
 "circulation.pref#finesMode# fines (when <code>cronjobs/fines.pl</code> is "
 "being run)."
 msgstr "Mahngebühren (wenn <code>cronjobs/fines.pl</code> ausgeführt wird)."
+
+# Circulation > Fines Policy > finesMode
+msgid ""
+"circulation.pref#finesMode# on close days. If set the fines.pl cronjob will "
+"not generate fines when run on days marked as closed in the calendar."
+msgstr ""
+"an Schließtagen. Wenn gesetzt, generiert der fines.pl-Cronjob keine Gebühren "
+"an Tagen, die im Kalender als Schließtage markiert wurden."
 
 # Circulation > Interface
 msgid "circulation.pref#itemBarcodeFallbackSearch# Don't enable"
@@ -8444,8 +8458,8 @@ msgid ""
 "category takes priority over this system preference."
 msgstr ""
 "Benutzer mit abgelaufenem Konto für Aktionen wie Verlängern oder Vormerken "
-"im OPAC. Hinweis: Die entsprechende Einstellung bei den Benutzerkategorien "
-"hat Vorrang vor dieser Systemeinstellung."
+"im OPAC. Hinweis: Die entsprechende Einstellung bei den Benutzertypen hat "
+"Vorrang vor dieser Systemeinstellung."
 
 # OPAC > Appearance
 msgid ""
@@ -12839,7 +12853,7 @@ msgstr " "
 
 # Staff interface > Appearance
 msgid "staff_interface.pref Appearance"
-msgstr " "
+msgstr "Erscheinungsbild"
 
 # Staff interface > Options
 msgid "staff_interface.pref Authentication"
@@ -12847,7 +12861,7 @@ msgstr "Authentifizierung"
 
 # Staff interface > Options
 msgid "staff_interface.pref Options"
-msgstr " "
+msgstr "Optionen"
 
 # Staff interface > Options
 msgid "staff_interface.pref#AudioAlerts# Don't enable"
@@ -12862,7 +12876,7 @@ msgid ""
 "staff_interface.pref#AudioAlerts# audio alerts for events defined in the "
 "audio alerts section of administration."
 msgstr ""
-"akustische Signale für die unter Administration > Akustische Signale "
+"akustische Signale für die unter Administration / Akustische Signale "
 "definierten Auslöser."
 
 # Staff interface > Appearance
@@ -12987,7 +13001,7 @@ msgid ""
 "and eventually Firefox add-on <a href='https://github.com/edabg/jsprintsetup/"
 "wiki'>jsPrintSetup documentation</a>:"
 msgstr ""
-"Benutze folgendes JavaScript zum Quittungsruck. Eine detaillierte "
+"Benutze folgendes JavaScript zum Quittungsdruck. Eine detaillierte "
 "Beschreibung ist im <a href='https://wiki.koha-community.org/wiki/"
 "Setting_up_slip_printer_to_print_silently'>Koha Wiki</a> zu finden, sowie "
 "für das Firefox PlugIn jsPrintSetup in der <a href='https://github.com/edabg/"

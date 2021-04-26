@@ -2,19 +2,19 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Koha 20.11\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2021-03-24 07:18+0000\n"
+"PO-Revision-Date: 2021-04-06 12:15+0000\n"
 "Last-Translator: Serhij Dubyk <dubyk@ukr.net>\n"
 "Language-Team: Ukrainian Linux Team <translation@linux.org.ua>\n"
 "Language: uk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
-"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 "X-Generator: Pootle 2.8\n"
 "X-Poedit-SourceCharset: utf-8\n"
-"X-POOTLE-MTIME: 1616570301.560962\n"
-"X-Pootle-Path: /uk/20.05/uk-UA-pref.po\n"
+"X-POOTLE-MTIME: 1617711357.049048\n"
+"X-Pootle-Path: /uk/20.11/uk-UA-pref.po\n"
 "X-Pootle-Revision: 1\n"
 
 # Accounting
@@ -2400,9 +2400,10 @@ msgid ""
 msgstr " у якості джерела класифікації за умовчанням."
 
 # Cataloging > Record structure
+#, fuzzy
 msgid ""
-"cataloguing.pref#DefaultCountryField008#  Empty defaults to xxu for United "
-"States."
+"cataloguing.pref#DefaultCountryField008#  Empty defaults to ||| - No attempt "
+"to code."
 msgstr ""
 "Пусте значення за умовчанням відповідатиме значенню„xxu“ для Сполучених "
 "Штатів."
@@ -3340,9 +3341,10 @@ msgid "circulation.pref#AllowItemsOnHoldCheckoutSIP# Don't allow"
 msgstr "Не дозволяти"
 
 # Circulation > Checkout policy
+#, fuzzy
 msgid ""
 "circulation.pref#AllowItemsOnHoldCheckoutSIP# If allowed do not generate "
-"RESERVE_WAITING and RESERVED warning."
+"RESERVED warning."
 msgstr ""
 "Якщо це дозволено, не генерувати попередження „RESERVE_WAITING“ та "
 "„RESERVED“."
@@ -4467,7 +4469,7 @@ msgstr "Задіяти"
 
 # Circulation > Housebound module
 msgid "circulation.pref#HouseboundModule# the housebound module."
-msgstr ""
+msgstr "модуль прикутих до дому."
 
 # Circulation > Interlibrary loans
 msgid "circulation.pref#ILLCheckAvailability# Check"
@@ -5025,26 +5027,22 @@ msgstr ""
 "місцеве використання, коли виконується повернення невиданого примірника."
 
 # Circulation > Checkout policy
-#, fuzzy
 msgid "circulation.pref#RecordStaffUserOnCheckout# When checking out an item, "
-msgstr "можливість видач по місцю."
+msgstr ""
 
 # Circulation > Interface
-#, fuzzy
 msgid "circulation.pref#RecordStaffUserOnCheckout# don't record"
-msgstr "Не записувати"
+msgstr "не записувати"
 
 # Circulation > Interface
-#, fuzzy
 msgid "circulation.pref#RecordStaffUserOnCheckout# record"
-msgstr "Записувати"
+msgstr "записувати"
 
 # Circulation > Checkout policy
-#, fuzzy
 msgid ""
 "circulation.pref#RecordStaffUserOnCheckout# the user who checked out the "
 "item."
-msgstr "можливість видач по місцю."
+msgstr ""
 
 # Circulation > Fines Policy
 msgid ""
@@ -5122,17 +5120,19 @@ msgstr ""
 
 # Circulation > Checkout policy
 msgid "circulation.pref#RenewalSendNotice# Don't send"
-msgstr ""
+msgstr "Не надсилати"
 
 # Circulation > Checkout policy
 msgid "circulation.pref#RenewalSendNotice# Send"
-msgstr ""
+msgstr "Надсилати"
 
 # Circulation > Checkout policy
 msgid ""
 "circulation.pref#RenewalSendNotice# a renewal notice according to patron's "
 "messaging preferences for 'Item checkout'."
 msgstr ""
+"повідомлення щодо продовження відповідно до налаштувань сповіщень для "
+"користувача при оформленні видачі."
 
 # Circulation > Checkout policy
 msgid ""
@@ -6016,13 +6016,13 @@ msgstr ""
 msgid "circulation.pref#finesCalendar# when calculating the period for fines."
 msgstr ""
 
-# Circulation > Fines Policy
+# Circulation > Fines Policy > finesMode
 msgid ""
 "circulation.pref#finesMode# <br><strong>NOTE:</strong> If the cronjobs/fines."
 "pl cronjob is being run, accruing and final fines will be calculated when "
 "the cron runs and accruing fines will be finalized when an item is returned. "
 "If CalculateFinesOnReturn is enabled, final fines will be calculated when an "
-"item is returned."
+"item is returned.<br/>"
 msgstr ""
 
 # Circulation > Fines Policy
@@ -6030,13 +6030,29 @@ msgid "circulation.pref#finesMode# Calculate and charge"
 msgstr "Підраховувати та стягувати"
 
 # Circulation > Fines Policy
+#, fuzzy
+msgid "circulation.pref#finesMode# Charge"
+msgstr "Підраховувати та стягувати"
+
+# Circulation > Fines Policy
 msgid "circulation.pref#finesMode# Don't calculate"
+msgstr "Не підраховувати"
+
+# Circulation > Fines Policy
+#, fuzzy
+msgid "circulation.pref#finesMode# Don't charge"
 msgstr "Не підраховувати"
 
 # Circulation > Fines Policy
 msgid ""
 "circulation.pref#finesMode# fines (when <code>cronjobs/fines.pl</code> is "
 "being run)."
+msgstr ""
+
+# Circulation > Fines Policy > finesMode
+msgid ""
+"circulation.pref#finesMode# on close days. If set the fines.pl cronjob will "
+"not generate fines when run on days marked as closed in the calendar."
 msgstr ""
 
 # Circulation > Interface
@@ -6417,7 +6433,7 @@ msgstr ""
 msgid ""
 "enhanced_content.pref#Babeltheque_url_js# (e.g. http://www.babeltheque.com/"
 "bw_XX.js)."
-msgstr ""
+msgstr "(наприклад, http://www.babeltheque.com/bw_XX.js)."
 
 # Enhanced content > Babelthèque
 msgid ""
@@ -6496,7 +6512,7 @@ msgstr ""
 
 # Enhanced content > Coce cover images cache
 msgid "enhanced_content.pref#CoceProviders# Open Library"
-msgstr ""
+msgstr "Відкрита Бібліотека (Open Library)"
 
 # Enhanced content > Coce cover images cache
 msgid ""
@@ -10483,6 +10499,8 @@ msgid ""
 "patrons.pref#EnhancedMessagingPreferences# staff to manage which notices "
 "patrons will receive and when they will receive them."
 msgstr ""
+"працівникам бібліотеки керувати, які повідомлення отримуватимуть користувачі "
+"та коли вони їх отримуватимуть."
 
 # Patrons > Notices and notifications
 msgid ""
