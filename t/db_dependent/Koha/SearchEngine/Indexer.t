@@ -115,12 +115,14 @@ subtest 'Test indexer calls' => sub {
             $item = $builder->build_sample_item({
                 biblionumber => $biblio->biblionumber,
                 onloan => '2020-02-02',
-                datelastseen => '2020-01-01'
+                datelastseen => '2020-01-01',
+                replacementprice => 0
             });
             $item2 = $builder->build_sample_item({
                 biblionumber => $biblio->biblionumber,
                 onloan => '2020-12-12',
-                datelastseen => '2020-11-11'
+                datelastseen => '2020-11-11',
+                replacementprice => 0
             });
         } [$engine,"Koha::Item",$engine,"Koha::Item"], "index_records is called for $engine when adding an item (Item->store)";
         warnings_are{
@@ -158,15 +160,28 @@ subtest 'Test indexer calls' => sub {
         warnings_are{
             AddReturn($item->barcode, $item->homebranch, 0, undef);
         } [$engine,'C4::Circulation'], "index_records is called once for $engine when calling AddReturn if item not issued";
+        $builder->build({
+            source => 'Issue',
+            value  => {
+                itemnumber => $item->itemnumber
+            }
+        });
+        $item->onloan('2000-01-01')->store({ skip_record_index => 1 });
         warnings_are{
             LostItem( $item->itemnumber, "tests", 1);
         } [$engine,"Koha::Item"], "index_records is called for $engine when calling LostItem with 'force_mark_returned'";
+        $builder->build({
+            source => 'Issue',
+            value  => {
+                itemnumber => $item->itemnumber
+            }
+        });
+        $item->onloan('2000-01-01')->store({ skip_record_index => 1 });
         warnings_are{
             LostItem( $item->itemnumber, "tests", 1, { skip_record_index => 1 });
         } undef, "index_records is not called for $engine when calling LostItem with 'force_mark_returned' if skip_record_index";
 
-        $item->datelastseen('2020-02-02');
-        $item->store({skip_record_index=>1});
+        $item->datelastseen('2001-01-01')->store({skip_record_index=>1});
         warnings_are{
             my $t1 = ModDateLastSeen( $item->itemnumber, 1, undef );
         } [$engine, "Koha::Item"], "index_records is called for $engine when calling ModDateLastSeen";
