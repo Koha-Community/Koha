@@ -147,8 +147,8 @@
         Create framework for [% framework.frameworkcode | html %] ([% framework.frameworktext | html %]) using
         <select name="existingframeworkcode">
             <option value="">Default</option>
-        [% FOREACH existingframeworkloo IN existingframeworkloop %]
-            <option value="[% existingframeworkloo.value | html %]">[% existingframeworkloo.frameworktext | html %]</option>
+        [% FOREACH fw IN existing_frameworks%]
+            <option value="[% fw.frameworkcode | html %]">[% fw.frameworktext | html %]</option>
         [% END %]
         </select>
         <input type="submit" value="OK" />
