@@ -194,20 +194,24 @@ if (C4::Context->preference("marcflavour") eq "UNIMARC" ) {
 
 if($cgi->cookie("holdfor")){ 
     my $holdfor_patron = Koha::Patrons->find( $cgi->cookie("holdfor") );
-    $template->param(
-        holdfor => $cgi->cookie("holdfor"),
-        holdfor_surname => $holdfor_patron->surname,
-        holdfor_firstname => $holdfor_patron->firstname,
-        holdfor_cardnumber => $holdfor_patron->cardnumber,
-    );
+    if ( $holdfor_patron ) { # may have been deleted in the meanwhile
+        $template->param(
+            holdfor => $cgi->cookie("holdfor"),
+            holdfor_surname => $holdfor_patron->surname,
+            holdfor_firstname => $holdfor_patron->firstname,
+            holdfor_cardnumber => $holdfor_patron->cardnumber,
+        );
+    }
 }
 
 if($cgi->cookie("holdforclub")){
     my $holdfor_club = Koha::Clubs->find( $cgi->cookie("holdforclub") );
-    $template->param(
-        holdforclub => $cgi->cookie("holdforclub"),
-        holdforclub_name => $holdfor_club->name,
-    );
+    if ( $holdfor_club ) { # May have been deleted in the meanwhile
+        $template->param(
+            holdforclub => $cgi->cookie("holdforclub"),
+            holdforclub_name => $holdfor_club->name,
+        );
+    }
 }
 
 if($cgi->cookie("searchToOrder")){
