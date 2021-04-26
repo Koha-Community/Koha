@@ -30,6 +30,7 @@ use Koha::Script -cron;
 use C4::Letters;
 use C4::Log;
 use Getopt::Long;
+use Try::Tiny;
 
 my $username = undef;
 my $password = undef;
