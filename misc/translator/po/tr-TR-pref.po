@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Koha 20.05\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-06-12 12:52+0000\n"
-"PO-Revision-Date: 2021-03-22 08:29+0000\n"
+"PO-Revision-Date: 2021-04-12 06:49+0000\n"
 "Last-Translator: Onur Erdem <onurerdem@sdu.edu.tr>\n"
 "Language-Team: Koha Translation Team\n"
 "Language: tr\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.8\n"
-"X-POOTLE-MTIME: 1616401785.316898\n"
+"X-POOTLE-MTIME: 1618210148.823649\n"
 "X-Pootle-Path: /tr/20.05/tr-TR-pref.po\n"
 "X-Pootle-Revision: 1\n"
 
@@ -534,10 +534,7 @@ msgstr "Tüm google etki alanları için boş bırakın "
 
 # Administration > Login options
 msgid "admin.pref#IndependentBranches# <p class='text-danger'><strong>Warning:</strong> Changing this system preference will radically alter the behavior of Koha. Changing preference on a production system is highly discouraged.</p>"
-msgstr ""
-"<p class='text-danger'><strong>Uyarı:</strong>Bu sistem tercihini "
-"değiştirmek Koha'nın davranışını kökten değiştirecektir. Bir üretim "
-"sistemindeki tercihi değiştirmek kesinlikle önerilmez.</p>"
+msgstr "<p class='text-danger'><strong>Uyarı:</strong>Bu sistem tercihini değiştirmek Koha'nın davranışını kökten değiştirecektir. Bir üretim sistemindeki tercihi değiştirmek kesinlikle önerilmez.</p>"
 
 # Administration > Login options
 msgid "admin.pref#IndependentBranches# No"
@@ -4725,20 +4722,32 @@ msgid "circulation.pref#finesCalendar# when calculating the period for fines."
 msgstr "para cezaları için süre hesaplanırken."
 
 # Circulation > Fines policy
-msgid "circulation.pref#finesMode# <br><strong>NOTE:</strong> If the cronjobs/fines.pl cronjob is being run, accruing and final fines will be calculated when the cron runs and accruing fines will be finalized when an item is returned. If CalculateFinesOnReturn is enabled, final fines will be calculated when an item is returned."
-msgstr "<br><strong>NOT:</strong>Cronjobs / fines.pl cronjob çalıştırılıyorsa, cron çalıştığında tahakkuk eden ve nihai cezalar hesaplanacak ve bir materyal iade edildiğinde tahakkuk eden cezalar kesinleşecektir. CalculateFinesOnReturn etkinleştirilirse, son para cezaları bir materyal iade edildiğinde hesaplanacaktır."
+msgid "circulation.pref#finesMode# <br><strong>NOTE:</strong> If the cronjobs/fines.pl cronjob is being run, accruing and final fines will be calculated when the cron runs and accruing fines will be finalized when an item is returned. If CalculateFinesOnReturn is enabled, final fines will be calculated when an item is returned.<br/>"
+msgstr "<br><strong>NOT:</strong>Cronjobs / fines.pl cronjob çalıştırılıyorsa, cron çalıştığında tahakkuk eden ve nihai cezalar hesaplanacak ve bir materyal iade edildiğinde tahakkuk eden cezalar kesinleşecektir. CalculateFinesOnReturn etkinleştirilirse, son para cezaları bir materyal iade edildiğinde hesaplanacaktır.<br/>"
 
 # Circulation > Fines policy
 msgid "circulation.pref#finesMode# Calculate and charge"
 msgstr "Hesapla ve tahsil et"
 
 # Circulation > Fines policy
+msgid "circulation.pref#finesMode# Charge"
+msgstr "Tahsil edin"
+
+# Circulation > Fines policy
 msgid "circulation.pref#finesMode# Don't calculate"
 msgstr "Hesaplama"
 
 # Circulation > Fines policy
+msgid "circulation.pref#finesMode# Don't charge"
+msgstr "Tahsil etmeyin"
+
+# Circulation > Fines policy
 msgid "circulation.pref#finesMode# fines (when <code>cronjobs/fines.pl</code> is being run)."
 msgstr "cezalar (<code>cronjobs/fines.pl</code> çalıştırıldığında)."
+
+# Circulation > Fines policy
+msgid "circulation.pref#finesMode# on close days. If set the fines.pl cronjob will not generate fines when run on days marked as closed in the calendar."
+msgstr "kapalı günlerde. Ayarlanırsa fines.pl cronjob, takvimde kapalı olarak işaretlenen günlerde çalıştırıldığında ceza oluşturmaz."
 
 # Circulation > Interface
 msgid "circulation.pref#itemBarcodeFallbackSearch# Don't enable"
@@ -10066,3 +10075,4 @@ msgstr "Sadece geri dönen"
 # Web services > Reporting
 msgid "web_services.pref#SvcMaxReportRows# rows of a report requested via the reports web service."
 msgstr "raporlar web hizmeti yoluyla talep edilen bir raporun satırları"
+

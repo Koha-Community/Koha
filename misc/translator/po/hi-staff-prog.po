@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 20.05\n"
-"POT-Creation-Date: 2021-03-19 17:19-0300\n"
+"POT-Creation-Date: 2021-04-22 08:03-0300\n"
 "PO-Revision-Date: 2021-03-16 12:37+0000\n"
 "Last-Translator: Nikunj Tyagi <nikunj1@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1797,7 +1797,7 @@ msgstr "%s %s (यह त्रुटि थी: %s. अधिक जानक�
 #. %1$s:  order.replacementprice | $Price 
 #. %2$s:  IF ( order.uncertainprice ) 
 #. %3$s:  END 
-#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:283
+#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:289
 #, c-format
 msgid "%s %s (Uncertain) %s"
 msgstr "%s %s(निष्क्रिय)%s"
@@ -3143,10 +3143,12 @@ msgstr ""
 "%s %s (इससे पहले शीर्षक) %s (बाद में शीर्षक) %s (संक्षिप्त) %s (संगीत रचना) %s (व्यापक "
 "शीर्षक) %s (संकरा शीर्षक) %s (तत्काल माता पिता के शरीर) %s %s ( %s ) %s %s "
 
+#. For the first occurrence,
 #. %1$s:  budget.b_txt | html 
 #. %2$s:  IF ( !budget.b_active ) 
 #. %3$s:  END 
 #: intranet-tmpl/prog/en/modules/acqui/invoice.tt:57
+#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:212
 #, c-format
 msgid "%s %s(inactive)%s"
 msgstr "%s %s(निष्क्रिय)%s"
@@ -4015,6 +4017,7 @@ msgstr "%s (यदि चुना है, इसका अर्थ है क�
 #. %1$s:  budget_loo.b_txt | html 
 #: intranet-tmpl/prog/en/modules/acqui/duplicate_orders.tt:205
 #: intranet-tmpl/prog/en/modules/acqui/invoice.tt:61
+#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:216
 #: intranet-tmpl/prog/en/modules/acqui/parcels.tt:164
 #, c-format
 msgid "%s (inactive)"
@@ -8385,6 +8388,7 @@ msgstr "&nbsp;&nbsp; (प्रारूप: yyyy-yyyy)"
 
 #: intranet-tmpl/prog/en/modules/acqui/duplicate_orders.tt:209
 #: intranet-tmpl/prog/en/modules/acqui/invoice.tt:65
+#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:220
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:363
 #: intranet-tmpl/prog/en/modules/acqui/parcels.tt:168
 #: intranet-tmpl/prog/en/modules/reports/orders_by_budget.tt:101
@@ -11657,7 +11661,7 @@ msgstr "गतिविधि"
 msgid "Actual cost"
 msgstr "वास्तविक लागत"
 
-#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:250
+#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:256
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:401
 #, c-format
 msgid "Actual cost tax exc."
@@ -11669,7 +11673,7 @@ msgstr "वास्तविक भुगतान टैक्स exc."
 msgid "Actual cost tax exc. / Actual cost tax inc."
 msgstr "वास्तविक लागत कर अतिरिक्त / वास्तविक लागत कर सम्मिलित"
 
-#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:251
+#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:257
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:404
 #, c-format
 msgid "Actual cost tax inc."
@@ -12582,7 +12586,7 @@ msgid "Adjustments"
 msgstr "समायोजन"
 
 #. %1$s:  total_adj + shipmentcost | $Price 
-#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:337
+#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:343
 #, c-format
 msgid "Adjustments plus shipping: %s"
 msgstr "समायोजन प्लस शिपिंग:%s"
@@ -14219,7 +14223,7 @@ msgstr "क्या आप वाकई इस क्षेत्र को म
 
 #. For the first occurrence,
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:382
+#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:388
 #: intranet-tmpl/prog/en/modules/acqui/invoice-files.tt:94
 msgid "Are you sure you want to delete this file ?"
 msgstr "क्या आप वाकई इस फाइल को मिटाना चाहते हैं?"
@@ -14241,7 +14245,7 @@ msgstr "क्या आप वाकई इस छवि को मिटान
 
 #. For the first occurrence,
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:382
+#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:388
 #: intranet-tmpl/prog/en/modules/acqui/invoices.tt:304
 msgid "Are you sure you want to delete this invoice?"
 msgstr "क्या आप वाकई इस चालान को हटाना चाहते हैं?"
@@ -17219,7 +17223,7 @@ msgstr "इस रिकॉर्ड के सेव नहीं कर सक
 #: intranet-tmpl/prog/en/modules/clubs/patron-enroll.tt:32
 #: intranet-tmpl/prog/en/modules/acqui/duplicate_orders.tt:252
 #: intranet-tmpl/prog/en/modules/acqui/transferorder.tt:123
-#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:224
+#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:230
 #: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:80
 #: intranet-tmpl/prog/en/modules/acqui/basketheader.tt:141
 #: intranet-tmpl/prog/en/modules/acqui/basketheader.tt:143
@@ -23390,7 +23394,7 @@ msgstr "हटाएँ विक्रेता"
 msgid "Delete?"
 msgstr "हटाएँ?"
 
-#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:271
+#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:277
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:490
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:626
 #, c-format
@@ -23564,7 +23568,7 @@ msgstr "विभाग"
 #: intranet-tmpl/prog/en/modules/clubs/clubs.tt:58
 #: intranet-tmpl/prog/en/modules/clubs/patron-clubs-tab.tt:10
 #: intranet-tmpl/prog/en/modules/clubs/patron-clubs-tab.tt:43
-#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:349
+#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:355
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:357
 #: intranet-tmpl/prog/en/modules/acqui/invoice-files.tt:37
 #: intranet-tmpl/prog/en/modules/plugins/plugins-home.tt:68
@@ -25373,7 +25377,7 @@ msgstr "एन्कोडिंग:"
 msgid "Encumber while invoice open"
 msgstr "उलझाना जब चालान खुला है "
 
-#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:218
+#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:224
 #, c-format
 msgid "Encumber while invoice open? "
 msgstr "उलझाना जब चालान खुला है ? "
@@ -26997,7 +27001,7 @@ msgstr "फ़ाइलनाम"
 msgid "Files"
 msgstr "फ़ाइलें"
 
-#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:343
+#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:349
 #, c-format
 msgid "Files attached to invoice"
 msgstr "फ़ाइलें चालान से जुड़ी"
@@ -27911,7 +27915,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/acqui/duplicate_orders.tt:274
 #: intranet-tmpl/prog/en/modules/acqui/newordersuggestion.tt:34
 #: intranet-tmpl/prog/en/modules/acqui/invoice.tt:108
-#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:258
+#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:264
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:125
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:236
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:412
@@ -28036,14 +28040,14 @@ msgstr "कोष"
 msgid "GPL License"
 msgstr "GPL लाइसेंस"
 
-#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:257
+#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:263
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:411
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:610
 #, c-format
 msgid "GST"
 msgstr "GST"
 
-#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:256
+#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:262
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:410
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:609
 #, c-format
@@ -28272,7 +28276,7 @@ msgstr "आइटम खोजने के लिए जाएं"
 msgid "Go to page : "
 msgstr "पृष्ठ पर जाओ :"
 
-#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:235
+#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:241
 #, c-format
 msgid "Go to receipt page"
 msgstr "रसीद पृष्ठ पर जाएं"
@@ -31356,7 +31360,7 @@ msgstr "इनवाइस"
 msgid "Invoice detail page"
 msgstr "चालान विवरण पृष्ठ"
 
-#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:238
+#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:244
 #, c-format
 msgid "Invoice details"
 msgstr "चालान विवरण"
@@ -35853,7 +35857,7 @@ msgstr "पुस्तकालयों: "
 #: intranet-tmpl/prog/en/modules/members/merge-patrons.tt:65
 #: intranet-tmpl/prog/en/modules/clubs/clubs.tt:61
 #: intranet-tmpl/prog/en/modules/acqui/newordersuggestion.tt:33
-#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:249
+#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:255
 #: intranet-tmpl/prog/en/modules/acqui/lateorders.tt:70
 #: intranet-tmpl/prog/en/modules/acqui/newordersubscription.tt:38
 #: intranet-tmpl/prog/en/modules/acqui/acqui-home.tt:94
@@ -37510,7 +37514,7 @@ msgid ""
 msgstr ""
 "क्षेत्रों और उपक्षेत्रों चिह्नित करने के लिए अनुक्रमणिका, पहलुओं, और उनके मैपिंग की व्यवस्था करें."
 
-#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:236
+#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:242
 #, c-format
 msgid "Manage invoice files"
 msgstr "चालान फाइलों का प्रबंधन"
@@ -39041,7 +39045,7 @@ msgstr "NT"
 #: intranet-tmpl/prog/en/modules/clubs/patron-clubs-tab.tt:9
 #: intranet-tmpl/prog/en/modules/clubs/patron-clubs-tab.tt:42
 #: intranet-tmpl/prog/en/modules/acqui/transferorder.tt:105
-#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:347
+#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:353
 #: intranet-tmpl/prog/en/modules/acqui/basketgroup.tt:308
 #: intranet-tmpl/prog/en/modules/acqui/basketgroup.tt:347
 #: intranet-tmpl/prog/en/modules/acqui/booksellers.tt:87
@@ -40481,7 +40485,7 @@ msgstr "किसी भी आदेश की नकल नहीं की �
 msgid "No order selected"
 msgstr "कोई आदेश चयनित नहीं"
 
-#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:335
+#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:341
 #, c-format
 msgid "No orders yet"
 msgstr "आदेश नहीं अभी तक"
@@ -46487,7 +46491,7 @@ msgstr "खरीद सुझाव"
 msgid "Purple"
 msgstr "बैंगनी"
 
-#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:253
+#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:259
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:407
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:606
 #, c-format
@@ -47297,6 +47301,7 @@ msgstr "दूरस्थ छवि:"
 #: intranet-tmpl/prog/en/modules/admin/oai_sets.tt:122
 #: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:274
 #: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:442
+#: intranet-tmpl/prog/en/modules/pos/pay.tt:179
 #, c-format
 msgid "Remove"
 msgstr "हटाना"
@@ -47694,7 +47699,7 @@ msgid "Replacement cost: "
 msgstr "प्रतिस्थापन लागत: "
 
 #: intranet-tmpl/prog/en/columns.def:73
-#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:252
+#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:258
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:121
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:234
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:406
@@ -51435,7 +51440,7 @@ msgstr "सभी क्रेडिट प्रकार दिखाएं"
 msgid "Show all debit types"
 msgstr "सभी डेबिट प्रकार दिखाएं"
 
-#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:242
+#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:248
 #, c-format
 msgid "Show all details "
 msgstr "सभी विवरण दिखाएँ "
@@ -53388,7 +53393,7 @@ msgstr "कुल"
 #: intranet-tmpl/prog/en/modules/acqui/duplicate_orders.tt:146
 #: intranet-tmpl/prog/en/modules/acqui/duplicate_orders.tt:267
 #: intranet-tmpl/prog/en/modules/acqui/transferorder.tt:70
-#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:248
+#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:254
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:119
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:232
 #: intranet-tmpl/prog/en/modules/acqui/histsearch.tt:45
@@ -57308,14 +57313,14 @@ msgstr "कुल"
 
 #. For the first occurrence,
 #. %1$s:  currency.symbol | html 
-#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:309
+#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:315
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:451
 #, c-format
 msgid "Total (%s)"
 msgstr "कुल (%s)"
 
 #. %1$s:  tf.tax_rate * 100 | html 
-#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:296
+#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:302
 #, c-format
 msgid "Total (GST %s %%)"
 msgstr "योग (GST %s %%)"
@@ -57333,7 +57338,7 @@ msgid "Total (GST %s)"
 msgstr "योग (GST %s)"
 
 #. %1$s:  currency.symbol | html 
-#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:321
+#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:327
 #, c-format
 msgid "Total + adjustments + shipment cost (%s)"
 msgstr "कुल + समायोजन + शिपमेंट लागत (%s)"
@@ -57528,7 +57533,7 @@ msgstr "कुल टैक्स अतिरिक्त"
 
 #. For the first occurrence,
 #. %1$s:  currency.symbol | html 
-#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:254
+#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:260
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:408
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:607
 #, c-format
@@ -57542,7 +57547,7 @@ msgstr "कुल टैक्स शामिल."
 
 #. For the first occurrence,
 #. %1$s:  currency.symbol | html 
-#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:255
+#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:261
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:409
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:608
 #, c-format
@@ -57841,7 +57846,7 @@ msgstr "फ़ीरोजा"
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1258
 #: intranet-tmpl/prog/en/modules/members/notices.tt:36
 #: intranet-tmpl/prog/en/modules/members/accountline-details.tt:122
-#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:348
+#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:354
 #: intranet-tmpl/prog/en/modules/acqui/invoice-files.tt:36
 #: intranet-tmpl/prog/en/modules/acqui/edifactmsgs.tt:35
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:110
@@ -58370,7 +58375,7 @@ msgid "Update action"
 msgstr "अद्यतन कार्रवाई"
 
 #. INPUT type=submit
-#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:230
+#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:236
 msgid "Update adjustments"
 msgstr "समायोजन अपडेट करें"
 
@@ -58692,7 +58697,7 @@ msgid "Upload transactions"
 msgstr "अपलोड करें लेनदेन"
 
 #: intranet-tmpl/prog/en/modules/members/files.tt:41
-#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:350
+#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:356
 #: intranet-tmpl/prog/en/modules/acqui/invoice-files.tt:38
 #, c-format
 msgid "Uploaded"
@@ -62197,7 +62202,7 @@ msgid "biblionumber|borrowernumber"
 msgstr "biblionumber|borrowernumber"
 
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/cn_browser.tt:53
-#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:268
+#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:274
 #: intranet-tmpl/prog/en/modules/acqui/uncertainprice.tt:94
 #, c-format
 msgid "by"

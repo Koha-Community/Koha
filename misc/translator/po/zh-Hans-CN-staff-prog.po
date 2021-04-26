@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 20.05\n"
-"POT-Creation-Date: 2021-03-19 17:52-0300\n"
+"POT-Creation-Date: 2021-04-22 08:37-0300\n"
 "PO-Revision-Date: 2019-06-02 08:05+0000\n"
 "Last-Translator: jerryeast <haod.wu@gmail.com>\n"
 "Language-Team: koha_TW <kohataiwan@googlegroups.com>\n"
@@ -1740,7 +1740,7 @@ msgstr "已修改成功。%s %s (错误是：%s，详情见 Koha 纪录档)。%s
 #. %1$s:  order.replacementprice | $Price 
 #. %2$s:  IF ( order.uncertainprice ) 
 #. %3$s:  END 
-#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:283
+#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:289
 #, fuzzy, c-format
 msgid "%s %s (Uncertain) %s"
 msgstr "%s %s%s (未启用)%s "
@@ -2994,10 +2994,12 @@ msgstr ""
 "%s %s(较早标题) %s(较新标题) %s(缩写) %s(音乐编曲) %s(较广标题) %s(较狭标题) "
 "%s(上层标题) %s%s(%s) %s %s "
 
+#. For the first occurrence,
 #. %1$s:  budget.b_txt | html 
 #. %2$s:  IF ( !budget.b_active ) 
 #. %3$s:  END 
 #: intranet-tmpl/prog/en/modules/acqui/invoice.tt:57
+#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:212
 #, fuzzy, c-format
 msgid "%s %s(inactive)%s"
 msgstr "%s %s%s (未启用)%s "
@@ -3836,6 +3838,7 @@ msgstr "%s (如点选，即表示此分栏为可点选的 URL)"
 #. %1$s:  budget_loo.b_txt | html 
 #: intranet-tmpl/prog/en/modules/acqui/duplicate_orders.tt:205
 #: intranet-tmpl/prog/en/modules/acqui/invoice.tt:61
+#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:216
 #: intranet-tmpl/prog/en/modules/acqui/parcels.tt:164
 #, c-format
 msgid "%s (inactive)"
@@ -8122,6 +8125,7 @@ msgstr "&nbsp;&nbsp;(格式：yyyy-yyyy)"
 
 #: intranet-tmpl/prog/en/modules/acqui/duplicate_orders.tt:209
 #: intranet-tmpl/prog/en/modules/acqui/invoice.tt:65
+#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:220
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:363
 #: intranet-tmpl/prog/en/modules/acqui/parcels.tt:168
 #: intranet-tmpl/prog/en/modules/reports/orders_by_budget.tt:101
@@ -11366,7 +11370,7 @@ msgstr "使用中"
 msgid "Actual cost"
 msgstr "实际成本"
 
-#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:250
+#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:256
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:401
 #, c-format
 msgid "Actual cost tax exc."
@@ -11379,7 +11383,7 @@ msgstr "不含税的价格。"
 msgid "Actual cost tax exc. / Actual cost tax inc."
 msgstr "不含税的价格。"
 
-#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:251
+#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:257
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:404
 #, c-format
 msgid "Actual cost tax inc."
@@ -12294,7 +12298,7 @@ msgid "Adjustments"
 msgstr ""
 
 #. %1$s:  total_adj + shipmentcost | $Price 
-#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:337
+#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:343
 #, c-format
 msgid "Adjustments plus shipping: %s"
 msgstr ""
@@ -13941,7 +13945,7 @@ msgstr "您确定删除此字段吗？"
 
 #. For the first occurrence,
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:382
+#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:388
 #: intranet-tmpl/prog/en/modules/acqui/invoice-files.tt:94
 msgid "Are you sure you want to delete this file ?"
 msgstr "您确定删除此文件吗？"
@@ -13965,7 +13969,7 @@ msgstr "确定删除此封面吗？"
 
 #. For the first occurrence,
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:382
+#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:388
 #: intranet-tmpl/prog/en/modules/acqui/invoices.tt:304
 #, fuzzy
 msgid "Are you sure you want to delete this invoice?"
@@ -16956,7 +16960,7 @@ msgstr "不能存储此纪录，因为以下字段尚未填入数据："
 #: intranet-tmpl/prog/en/modules/clubs/patron-enroll.tt:32
 #: intranet-tmpl/prog/en/modules/acqui/duplicate_orders.tt:252
 #: intranet-tmpl/prog/en/modules/acqui/transferorder.tt:123
-#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:224
+#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:230
 #: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:80
 #: intranet-tmpl/prog/en/modules/acqui/basketheader.tt:141
 #: intranet-tmpl/prog/en/modules/acqui/basketheader.tt:143
@@ -23118,7 +23122,7 @@ msgstr "删除代理商"
 msgid "Delete?"
 msgstr "删除吗？"
 
-#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:271
+#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:277
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:490
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:626
 #, c-format
@@ -23292,7 +23296,7 @@ msgstr "系所"
 #: intranet-tmpl/prog/en/modules/clubs/clubs.tt:58
 #: intranet-tmpl/prog/en/modules/clubs/patron-clubs-tab.tt:10
 #: intranet-tmpl/prog/en/modules/clubs/patron-clubs-tab.tt:43
-#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:349
+#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:355
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:357
 #: intranet-tmpl/prog/en/modules/acqui/invoice-files.tt:37
 #: intranet-tmpl/prog/en/modules/plugins/plugins-home.tt:68
@@ -25103,7 +25107,7 @@ msgstr "编码："
 msgid "Encumber while invoice open"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:218
+#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:224
 #, c-format
 msgid "Encumber while invoice open? "
 msgstr ""
@@ -26739,7 +26743,7 @@ msgstr "文件名称"
 msgid "Files"
 msgstr "文件"
 
-#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:343
+#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:349
 #, c-format
 msgid "Files attached to invoice"
 msgstr "在收据内的文件"
@@ -27649,7 +27653,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/acqui/duplicate_orders.tt:274
 #: intranet-tmpl/prog/en/modules/acqui/newordersuggestion.tt:34
 #: intranet-tmpl/prog/en/modules/acqui/invoice.tt:108
-#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:258
+#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:264
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:125
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:236
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:412
@@ -27774,14 +27778,14 @@ msgstr "基金"
 msgid "GPL License"
 msgstr "GNU 通用公共许可证"
 
-#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:257
+#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:263
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:411
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:610
 #, c-format
 msgid "GST"
 msgstr "营业税"
 
-#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:256
+#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:262
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:410
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:609
 #, c-format
@@ -28006,7 +28010,7 @@ msgstr "进入馆藏寻找"
 msgid "Go to page : "
 msgstr "至网页："
 
-#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:235
+#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:241
 #, c-format
 msgid "Go to receipt page"
 msgstr "至收条网页"
@@ -31057,7 +31061,7 @@ msgstr "发票 "
 msgid "Invoice detail page"
 msgstr "发票详情"
 
-#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:238
+#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:244
 #, c-format
 msgid "Invoice details"
 msgstr "发票详情"
@@ -35487,7 +35491,7 @@ msgstr "图书馆"
 #: intranet-tmpl/prog/en/modules/members/merge-patrons.tt:65
 #: intranet-tmpl/prog/en/modules/clubs/clubs.tt:61
 #: intranet-tmpl/prog/en/modules/acqui/newordersuggestion.tt:33
-#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:249
+#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:255
 #: intranet-tmpl/prog/en/modules/acqui/lateorders.tt:70
 #: intranet-tmpl/prog/en/modules/acqui/newordersubscription.tt:38
 #: intranet-tmpl/prog/en/modules/acqui/acqui-home.tt:94
@@ -37119,7 +37123,7 @@ msgid ""
 "Manage indexes, facets, and their mappings to MARC fields and subfields."
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:236
+#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:242
 #, c-format
 msgid "Manage invoice files"
 msgstr "管理收据档"
@@ -38662,7 +38666,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/clubs/patron-clubs-tab.tt:9
 #: intranet-tmpl/prog/en/modules/clubs/patron-clubs-tab.tt:42
 #: intranet-tmpl/prog/en/modules/acqui/transferorder.tt:105
-#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:347
+#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:353
 #: intranet-tmpl/prog/en/modules/acqui/basketgroup.tt:308
 #: intranet-tmpl/prog/en/modules/acqui/basketgroup.tt:347
 #: intranet-tmpl/prog/en/modules/acqui/booksellers.tt:87
@@ -40092,7 +40096,7 @@ msgstr ""
 msgid "No order selected"
 msgstr "还没有选择订单"
 
-#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:335
+#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:341
 #, c-format
 msgid "No orders yet"
 msgstr "还没有订单"
@@ -46086,7 +46090,7 @@ msgstr "新书推荐"
 msgid "Purple"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:253
+#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:259
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:407
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:606
 #, c-format
@@ -46901,6 +46905,7 @@ msgstr "遥测图像："
 #: intranet-tmpl/prog/en/modules/admin/oai_sets.tt:122
 #: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:274
 #: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:442
+#: intranet-tmpl/prog/en/modules/pos/pay.tt:179
 #, c-format
 msgid "Remove"
 msgstr "删除"
@@ -47303,7 +47308,7 @@ msgid "Replacement cost: "
 msgstr "重置成本："
 
 #: intranet-tmpl/prog/en/columns.def:73
-#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:252
+#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:258
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:121
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:234
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:406
@@ -51054,7 +51059,7 @@ msgstr "显示所有馆藏"
 msgid "Show all debit types"
 msgstr "显示所有馆藏"
 
-#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:242
+#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:248
 #, c-format
 msgid "Show all details "
 msgstr "显示所有详情 "
@@ -53014,7 +53019,7 @@ msgstr "星期日"
 #: intranet-tmpl/prog/en/modules/acqui/duplicate_orders.tt:146
 #: intranet-tmpl/prog/en/modules/acqui/duplicate_orders.tt:267
 #: intranet-tmpl/prog/en/modules/acqui/transferorder.tt:70
-#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:248
+#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:254
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:119
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:232
 #: intranet-tmpl/prog/en/modules/acqui/histsearch.tt:45
@@ -56798,14 +56803,14 @@ msgstr "总计 "
 
 #. For the first occurrence,
 #. %1$s:  currency.symbol | html 
-#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:309
+#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:315
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:451
 #, c-format
 msgid "Total (%s)"
 msgstr "总计(%s)"
 
 #. %1$s:  tf.tax_rate * 100 | html 
-#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:296
+#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:302
 #, c-format
 msgid "Total (GST %s %%)"
 msgstr "总计(含税 %s %%)"
@@ -56823,7 +56828,7 @@ msgid "Total (GST %s)"
 msgstr "总计(含税 %s)"
 
 #. %1$s:  currency.symbol | html 
-#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:321
+#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:327
 #, fuzzy, c-format
 msgid "Total + adjustments + shipment cost (%s)"
 msgstr "总额 + 运费 (%s)"
@@ -57018,7 +57023,7 @@ msgstr "未税总额"
 
 #. For the first occurrence,
 #. %1$s:  currency.symbol | html 
-#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:254
+#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:260
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:408
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:607
 #, c-format
@@ -57032,7 +57037,7 @@ msgstr "含税总额"
 
 #. For the first occurrence,
 #. %1$s:  currency.symbol | html 
-#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:255
+#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:261
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:409
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:608
 #, c-format
@@ -57333,7 +57338,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1258
 #: intranet-tmpl/prog/en/modules/members/notices.tt:36
 #: intranet-tmpl/prog/en/modules/members/accountline-details.tt:122
-#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:348
+#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:354
 #: intranet-tmpl/prog/en/modules/acqui/invoice-files.tt:36
 #: intranet-tmpl/prog/en/modules/acqui/edifactmsgs.tt:35
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:110
@@ -57870,7 +57875,7 @@ msgid "Update action"
 msgstr "更新作业"
 
 #. INPUT type=submit
-#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:230
+#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:236
 #, fuzzy
 msgid "Update adjustments"
 msgstr "更新作业"
@@ -58195,7 +58200,7 @@ msgid "Upload transactions"
 msgstr "上传交易"
 
 #: intranet-tmpl/prog/en/modules/members/files.tt:41
-#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:350
+#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:356
 #: intranet-tmpl/prog/en/modules/acqui/invoice-files.tt:38
 #, c-format
 msgid "Uploaded"
@@ -61580,7 +61585,7 @@ msgid "biblionumber|borrowernumber"
 msgstr "书目与书目号"
 
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/cn_browser.tt:53
-#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:268
+#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:274
 #: intranet-tmpl/prog/en/modules/acqui/uncertainprice.tt:94
 #, c-format
 msgid "by"

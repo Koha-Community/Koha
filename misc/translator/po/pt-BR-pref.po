@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: Koha 20.05\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-05-16 03:30+0200\n"
-"PO-Revision-Date: 2020-07-22 13:00+0000\n"
-"Last-Translator: Ingrid Schiessl <ingridschiessl@gmail.com>\n"
+"PO-Revision-Date: 2021-04-22 14:38+0000\n"
+"Last-Translator: Ricardo Quaglio <ricardoquaglio@hotmail.com>\n"
 "Language-Team: Portuguese/Brazil <koha-br@lists.koha.org>\n"
 "Language: pt_BR\n"
 "MIME-Version: 1.0\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Generator: Pootle 2.8\n"
-"X-POOTLE-MTIME: 1595422848.533882\n"
+"X-POOTLE-MTIME: 1619102318.968605\n"
 "X-Pootle-Path: /pt_BR/20.05/pt-BR-pref.po\n"
 "X-Pootle-Revision: 1\n"
 
@@ -3751,11 +3751,13 @@ msgstr "circulation.pref#MarkLostItemsAsReturned# ao receber pagamento pelo item
 
 # Circulation > Checkout policy
 msgid "circulation.pref#NoIssuesChargeGuarantees# Prevent a patron from checking out if the patron has guarantees owing in total more than"
-msgstr "Impedir que um usuário faça o check-out se o usuário tiver garantias devidas no total mais de"
+msgstr ""
+"Impedir que um usuário faça o empréstimo, se o assistido dele estiver "
+"devendo no total mais do que"
 
 # Circulation > Checkout policy
 msgid "circulation.pref#NoIssuesChargeGuarantees# [% local_currency %] in fines."
-msgstr "[% local_currency%] em multas."
+msgstr "[% local_currency %] em multas."
 
 # Circulation > Checkout policy
 msgid "circulation.pref#NoRenewalBeforePrecision# Calculate \"No renewal before\" based on"
@@ -4722,20 +4724,32 @@ msgid "circulation.pref#finesCalendar# when calculating the period for fines."
 msgstr "circulation.pref#finesCalendar# ao calcular o período para multas."
 
 # Circulation > Fines policy
-msgid "circulation.pref#finesMode# <br><strong>NOTE:</strong> If the cronjobs/fines.pl cronjob is being run, accruing and final fines will be calculated when the cron runs and accruing fines will be finalized when an item is returned. If CalculateFinesOnReturn is enabled, final fines will be calculated when an item is returned."
-msgstr "circulation.pref#finesMode# <br><strong>NOTE:</strong> Se o cronjob cronjobs/fines.pl está em execução, as multas acumuladas serão calculadas quando o cron for executado e as multas acumuladas serão finalizadas quando um item for devolvido. Se CalculateFinesOnReturn estiver ativado, as multas finais serão calculadas quando um item for devolvido."
+msgid "circulation.pref#finesMode# <br><strong>NOTE:</strong> If the cronjobs/fines.pl cronjob is being run, accruing and final fines will be calculated when the cron runs and accruing fines will be finalized when an item is returned. If CalculateFinesOnReturn is enabled, final fines will be calculated when an item is returned.<br/>"
+msgstr ""
 
 # Circulation > Fines policy
 msgid "circulation.pref#finesMode# Calculate and charge"
 msgstr "Calcule e aplique multa"
 
 # Circulation > Fines policy
+msgid "circulation.pref#finesMode# Charge"
+msgstr ""
+
+# Circulation > Fines policy
 msgid "circulation.pref#finesMode# Don't calculate"
 msgstr "Não calcule"
 
 # Circulation > Fines policy
+msgid "circulation.pref#finesMode# Don't charge"
+msgstr ""
+
+# Circulation > Fines policy
 msgid "circulation.pref#finesMode# fines (when <code>cronjobs/fines.pl</code> is being run)."
 msgstr "circulation.pref#finesMode# multas (quando <code>cronjobs/fines.pl</code> está em execução)."
+
+# Circulation > Fines policy
+msgid "circulation.pref#finesMode# on close days. If set the fines.pl cronjob will not generate fines when run on days marked as closed in the calendar."
+msgstr ""
 
 # Circulation > Interface
 msgid "circulation.pref#itemBarcodeFallbackSearch# Don't enable"
@@ -8402,7 +8416,7 @@ msgstr "Endereço alternativo - Email"
 
 # Patrons > Patron relationships
 msgid "patrons.pref#PrefillGuaranteeField# Alternate address - Phone"
-msgstr "Endereço alternativo - telefone"
+msgstr "Endereço alternativo - Telefone"
 
 # Patrons > Patron relationships
 msgid "patrons.pref#PrefillGuaranteeField# Alternate address - State"
@@ -8410,7 +8424,7 @@ msgstr "Endereço alternativo - Estado"
 
 # Patrons > Patron relationships
 msgid "patrons.pref#PrefillGuaranteeField# Alternate address - Street number"
-msgstr "Endereço alternativo - número da rua"
+msgstr "Endereço alternativo - Número"
 
 # Patrons > Patron relationships
 msgid "patrons.pref#PrefillGuaranteeField# Alternate address - ZIP/Postal code"
@@ -8466,15 +8480,15 @@ msgstr "Contato - Email principal"
 
 # Patrons > Patron relationships
 msgid "patrons.pref#PrefillGuaranteeField# Contact - Primary phone"
-msgstr "Contato - telefone principal"
+msgstr "Contato - Telefone principal"
 
 # Patrons > Patron relationships
 msgid "patrons.pref#PrefillGuaranteeField# Contact - Secondary email"
-msgstr "Contato - email secundário"
+msgstr "Contato - Email secundário"
 
 # Patrons > Patron relationships
 msgid "patrons.pref#PrefillGuaranteeField# Contact - Secondary phone"
-msgstr "Contato - telefone secundário"
+msgstr "Contato - Telefone secundário"
 
 # Patrons > Patron relationships
 msgid "patrons.pref#PrefillGuaranteeField# Main address - Address"
@@ -8502,11 +8516,14 @@ msgstr "Endereço principal - CEP"
 
 # Patrons > Patron relationships
 msgid "patrons.pref#PrefillGuaranteeField# Main address - street number"
-msgstr "Endereço principal - número da rua"
+msgstr "Endereço principal - número"
 
 # Patrons > Patron relationships
 msgid "patrons.pref#PrefillGuaranteeField# When adding a guarantee to a guarantor patron fill the following fields in the guarantee's member entry form from the guarantors record:"
-msgstr "Ao adicionar uma garantia a um usuário garantidor, preencha os seguintes campos no formulário de inscrição de membro da garantia no registro de garantidores:"
+msgstr ""
+"Ao adicionar um responsável a um usuário assistido, preencha os seguintes "
+"campos no formulário de inscrição do usuário menor nos campos de "
+"responsáveis:"
 
 # Patrons > Privacy
 msgid "patrons.pref#PrivacyPolicyURL# <br><strong>NOTE:</strong> The URL will only be displayed if GDPR_Policy is set."
@@ -8666,7 +8683,8 @@ msgstr "(digite multiplos campos separados por |). Deixe em branco para desativa
 
 # Patrons > Patron relationships
 msgid "patrons.pref#borrowerRelationship# Guarantors can be the following of those they guarantee:"
-msgstr "Os responsáveis podem ter os seguintes relacionamentos com as crianças:"
+msgstr ""
+"Os responsáveis podem ter os seguintes relacionamentos com os assistidos:"
 
 # Patrons > General
 msgid "patrons.pref#intranetreadinghistory# Allow"
@@ -10063,4 +10081,3 @@ msgstr "Retornar somente"
 # Web services > Reporting
 msgid "web_services.pref#SvcMaxReportRows# rows of a report requested via the reports web service."
 msgstr "linhas de um relatório solicitado através dos relatórios do serviço web."
-
