@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Koha 20.11\n"
 "POT-Creation-Date: 2015-04-15 09:32-0300\n"
-"PO-Revision-Date: 2021-03-23 22:04+0000\n"
-"Last-Translator: Héctor Castro <hector.hecaxmmx@gmail.com>\n"
+"PO-Revision-Date: 2021-04-22 21:07+0000\n"
+"Last-Translator: Olga <orodriguez@duncanville.com>\n"
 "Language-Team: Koha Translation Team <koha-translate@lists.koha-"
 "community.org>\n"
 "Language: es\n"
@@ -13,8 +13,8 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.8\n"
 "X-Poedit-SourceCharset: UTF-8\n"
-"X-POOTLE-MTIME: 1616537080.412790\n"
-"X-Pootle-Path: /es/20.05/es-ES-pref.po\n"
+"X-POOTLE-MTIME: 1619125677.335320\n"
+"X-Pootle-Path: /es/20.11/es-ES-pref.po\n"
 "X-Pootle-Revision: 1\n"
 
 # Accounting
@@ -2537,9 +2537,11 @@ msgstr "como fuente de clasificación predeterminada."
 
 # Cataloging > Record structure
 msgid ""
-"cataloguing.pref#DefaultCountryField008#  Empty defaults to xxu for United "
-"States."
-msgstr "  Valor predeterminado xxu para Estados Unidos."
+"cataloguing.pref#DefaultCountryField008#  Empty defaults to ||| - No attempt "
+"to code."
+msgstr ""
+"catalogando.pref#CampoPaísPredeterminado008#  Vacio predeterminado a ||| - "
+"No hay intento en codificar."
 
 # Cataloging > Record structure
 msgid ""
@@ -3547,8 +3549,10 @@ msgstr "No permitir"
 # Circulation > Checkout policy
 msgid ""
 "circulation.pref#AllowItemsOnHoldCheckoutSIP# If allowed do not generate "
-"RESERVE_WAITING and RESERVED warning."
-msgstr "Si permitido no generar advertencias RESERVE_WAITING y RESERVED."
+"RESERVED warning."
+msgstr ""
+"circulacion.pref#PermitirPrestamoEjemplaresEnReservaSIP# Si se permite no "
+"generar advertencias de RESERVA."
 
 # Circulation > Checkout policy
 msgid ""
@@ -6493,27 +6497,44 @@ msgid ""
 "pl cronjob is being run, accruing and final fines will be calculated when "
 "the cron runs and accruing fines will be finalized when an item is returned. "
 "If CalculateFinesOnReturn is enabled, final fines will be calculated when an "
-"item is returned."
+"item is returned.<br/>"
 msgstr ""
-"<br><strong>NOTA:</strong> Si se está ejecutando la tarea programada "
-"cronjobs/fines.pl, las multas acumuladas y finales se calcularán cuando se "
-"ejecute el cron y las multas acumuladas se finalizarán cuando se devuelva el "
-"ítem. Si CalculateFinesOnReturn está habilitado, las multas finales se "
-"calcularán cuando se devuelva un artículo."
+"circulation.pref#finesMode# <br><strong>NOTA:</strong> Si se está ejecutando "
+"la tarea programada cronjobs/fines.pl, las multas acumuladas y finales se "
+"calcularán cuando se ejecute el cron y las multas acumuladas se finalizarán "
+"cuando se devuelva el ejemplar. Si CalculateFinesOnReturn está habilitado, "
+"las multas finales se calcularán cuando se devuelva el ejemplar.<br/>"
 
 # Circulation > Fines Policy
 msgid "circulation.pref#finesMode# Calculate and charge"
 msgstr "Calcular y cargar"
 
 # Circulation > Fines Policy
+msgid "circulation.pref#finesMode# Charge"
+msgstr "circulation.pref#finesMode# Cargos"
+
+# Circulation > Fines Policy
 msgid "circulation.pref#finesMode# Don't calculate"
 msgstr "No calcular"
+
+# Circulation > Fines Policy
+msgid "circulation.pref#finesMode# Don't charge"
+msgstr "circulation.pref#finesMode# No multar"
 
 # Circulation > Fines Policy
 msgid ""
 "circulation.pref#finesMode# fines (when <code>cronjobs/fines.pl</code> is "
 "being run)."
 msgstr "multas (cuando se ejecuta <code>cronjobs/fines.pl</code>)"
+
+# Circulation > Fines Policy > finesMode
+msgid ""
+"circulation.pref#finesMode# on close days. If set the fines.pl cronjob will "
+"not generate fines when run on days marked as closed in the calendar."
+msgstr ""
+"circulation.pref#finesMode# en días cerrados. Si se establece las multas.pl "
+"el cronjob no generará las multas cuando se corra en los días marcados como "
+"cerrados en el calendario."
 
 # Circulation > Interface
 msgid "circulation.pref#itemBarcodeFallbackSearch# Don't enable"
@@ -9350,14 +9371,13 @@ msgid ""
 "file</li><li>put an URL for an external specific stylesheet.</li></"
 "ul>{langcode} will be replaced with current interface language."
 msgstr ""
-"<br />Opciones:<ul><li><a href=\"#\" class=\"set_syspref\" data-syspref=\""
-"OPACXSLTDetailsDisplay\" data-value=\"\">dejar vacío</a> para \"no xslt\""
-"</li><li>ingrese \"<a href=\"#\" class=\"set_syspref\" data-syspref=\""
-"OPACXSLTDetailsDisplay\" data-value=\"default\">default</a>\" para el valor "
-"predeterminado</li><li> ingrese una ruta para definir un archivo "
-"xslt</li><li>ingrese una URL para una hoja de estilo "
-"específica</li></ul>{langcode} será reemplazado con el lenguaje actual de la "
-"interfaz"
+"<br />Opciones:<ul><li><a href=\"#\" class=\"set_syspref\" data-syspref="
+"\"OPACXSLTDetailsDisplay\" data-value=\"\">dejar vacío</a> para \"no xslt\"</"
+"li><li>ingrese \"<a href=\"#\" class=\"set_syspref\" data-syspref="
+"\"OPACXSLTDetailsDisplay\" data-value=\"default\">default</a>\" para el "
+"valor predeterminado</li><li> ingrese una ruta para definir un archivo xslt</"
+"li><li>ingrese una URL para una hoja de estilo específica</li></"
+"ul>{langcode} será reemplazado con el lenguaje actual de la interfaz"
 
 # OPAC > Appearance
 msgid ""
@@ -9375,14 +9395,13 @@ msgid ""
 "an URL for an external specific stylesheet.</li></ul>{langcode} will be "
 "replaced with current interface language."
 msgstr ""
-"<br />Opciones:<ul><li><a href=\"#\" class=\"set_syspref\" data-syspref=\""
-"OPACXSLTListsDisplay\" data-value=\"\">dejar vacío</a> para \"no xslt\""
-"</li><li>ingrese \"<a href=\"#\" class=\"set_syspref\" data-syspref=\""
-"OPACXSLTListsDisplay\" data-value=\"default\">default</a>\" para el "
-"predeterminado</li><li> coloque una ruta para definir un archivo "
-"xslt</li><li>coloque un URL para una hoja de estilo externa en "
-"específico.</li></ul>{langcode} será reemplazado con el lenguaje de la "
-"interfaz actual"
+"<br />Opciones:<ul><li><a href=\"#\" class=\"set_syspref\" data-syspref="
+"\"OPACXSLTListsDisplay\" data-value=\"\">dejar vacío</a> para \"no xslt\"</"
+"li><li>ingrese \"<a href=\"#\" class=\"set_syspref\" data-syspref="
+"\"OPACXSLTListsDisplay\" data-value=\"default\">default</a>\" para el "
+"predeterminado</li><li> coloque una ruta para definir un archivo xslt</"
+"li><li>coloque un URL para una hoja de estilo externa en específico.</li></"
+"ul>{langcode} será reemplazado con el lenguaje de la interfaz actual"
 
 # OPAC > Appearance
 msgid ""
@@ -9400,14 +9419,13 @@ msgid ""
 "file</li><li>put an URL for an external specific stylesheet.</li></"
 "ul>{langcode} will be replaced with current interface language."
 msgstr ""
-"<br />Opciones:<ul><li><a href=\"#\" class=\"set_syspref\" data-syspref=\""
-"OPACXSLTResultsDisplay\" data-value=\"\">dejar vacío</a> para \"no xslt\""
-"</li><li>ingrese \"<a href=\"#\" class=\"set_syspref\" data-syspref=\""
-"OPACXSLTResultsDisplay\" data-value=\"default\">default</a>\" para el valor "
-"predeterminado</li><li> ingrese una ruta para definir un archivo "
-"xslt</li><li>ingrese una URL para una hoja de estilo "
-"específica</li></ul>{langcode} será reemplazado con el lenguaje actual de la "
-"interfaz"
+"<br />Opciones:<ul><li><a href=\"#\" class=\"set_syspref\" data-syspref="
+"\"OPACXSLTResultsDisplay\" data-value=\"\">dejar vacío</a> para \"no xslt\"</"
+"li><li>ingrese \"<a href=\"#\" class=\"set_syspref\" data-syspref="
+"\"OPACXSLTResultsDisplay\" data-value=\"default\">default</a>\" para el "
+"valor predeterminado</li><li> ingrese una ruta para definir un archivo xslt</"
+"li><li>ingrese una URL para una hoja de estilo específica</li></"
+"ul>{langcode} será reemplazado con el lenguaje actual de la interfaz"
 
 # OPAC > Appearance
 msgid ""
@@ -9840,8 +9858,8 @@ msgid ""
 msgstr ""
 "<br />Nota: Si está seleccionado 'en una columna separada', adicionalmente "
 "tiene que habilitar la propiedad item_shelving_location en la página de "
-"aministración <a href='/cgi-bin/koha/admin/columns_settings.pl'>"
-"configuración de columnas</a>."
+"aministración <a href='/cgi-bin/koha/admin/columns_settings."
+"pl'>configuración de columnas</a>."
 
 # OPAC > Appearance
 msgid "opac.pref#OpacLocationOnDetail# Display the shelving location "
@@ -10305,12 +10323,11 @@ msgid ""
 "PatronSelfRegistrationExpireTemporaryAccountsDelay days ago."
 msgstr ""
 "<br><strong>ADVERTENCIA: no utilice una categoría regular de usuario para el "
-"autoregistro.</strong> Si el cronjob "
-"<code>misc/cronjobs/cleanup_database.pl</code> está configurado para "
-"eliminar autorregistros de OPAC no verificados y sin terminar, eliminará de "
-"forma permanente e irrecuperable a todos los usuarios que se hayan "
-"registrado hace más de PatronSelfRegistrationExpireTemporaryAccountsDelay "
-"días atrás."
+"autoregistro.</strong> Si el cronjob <code>misc/cronjobs/cleanup_database."
+"pl</code> está configurado para eliminar autorregistros de OPAC no "
+"verificados y sin terminar, eliminará de forma permanente e irrecuperable a "
+"todos los usuarios que se hayan registrado hace más de "
+"PatronSelfRegistrationExpireTemporaryAccountsDelay días atrás."
 
 # OPAC > Self registration and modification
 msgid ""
@@ -11160,10 +11177,10 @@ msgid ""
 "to this preference will be added as search options in the dropdown menu on "
 "the patron search page."
 msgstr ""
-"Si está vació Koha se predestinará a \""
-"surname,firstname,othernames,cardnumber,userid\". Campos adicionales "
-"adheridos a ésta preferencia serán agregados como opciones de búsqueda en el "
-"menú desplegable en la página de búsqueda del usuario."
+"Si está vació Koha se predestinará a \"surname,firstname,othernames,"
+"cardnumber,userid\". Campos adicionales adheridos a ésta preferencia serán "
+"agregados como opciones de búsqueda en el menú desplegable en la página de "
+"búsqueda del usuario."
 
 # Patrons > General
 msgid "patrons.pref#EnableBorrowerFiles# Do"
@@ -12005,6 +12022,8 @@ msgid ""
 "patrons.pref#patronimages# images to be uploaded and shown for patrons on "
 "the staff interface."
 msgstr ""
+"patrons.pref# patronimages# imágenes para ser cargadas y mostradas a los "
+"usuarios en la intranet."
 
 # Patrons > Patron forms
 msgid "patrons.pref#uppercasesurnames# Do"
@@ -12091,6 +12110,8 @@ msgid ""
 "searching.pref#AdvancedSearchTypes# Show tabs in the OPAC and staff "
 "interface advanced search for limiting searches on the"
 msgstr ""
+"searching.pref#AdvancedSearchTypes# Muestra pestañas en la búsqueda avanzada "
+"de OPAC e intranet para limitar búsquedas en los campos"
 
 # Searching > Search form
 msgid ""
@@ -12106,14 +12127,19 @@ msgid ""
 "displays if the item-level_itypes system preference is set to bibliographic "
 "record."
 msgstr ""
+"searching.pref#BiblioItemtypeInfo#  Koha registrará la información del nivel "
+"de tipo de ejemplar en detalle y las páginas de resultados en el OPAC y la "
+"interfaz administrativa. Esta información también se mostrará en la pantalla "
+"si el item-level_itypes del sistema de preferencia se establece a un "
+"registro bibliográfico."
 
 # Searching > Results display
 msgid "searching.pref#BiblioItemtypeInfo# Display"
-msgstr ""
+msgstr "searching.pref#BiblioItemtypeInfo# Mostrar en pantalla"
 
 # Searching > Results display
 msgid "searching.pref#BiblioItemtypeInfo# Don't display"
-msgstr ""
+msgstr "searching.pref#BiblioItemtypeInfo# No mostrar en pantalla"
 
 # Searching > Features
 msgid "searching.pref#BrowseResultSelection# Disable"
@@ -12128,6 +12154,9 @@ msgid ""
 "searching.pref#BrowseResultSelection# browsing search results from the "
 "bibliographic record detail page in staff interface."
 msgstr ""
+"searching.pref#BrowseResultSelection# resultados de busqueda de navegación "
+"desde la página de detalle de registro bibliográfico en la interfaz "
+"administrativa."
 
 # Searching > Results display
 msgid "searching.pref#DisplayLibraryFacets# Show facets for"
@@ -12146,14 +12175,12 @@ msgid "searching.pref#DisplayLibraryFacets# home library"
 msgstr "biblioteca local"
 
 # Searching > Features
-#, fuzzy
 msgid "searching.pref#ElasticsearchCrossFields# Disable"
-msgstr "Deshabilitar"
+msgstr "searching.pref#ElasticsearchCrossFields# Deshabilitar"
 
 # Searching > Features
-#, fuzzy
 msgid "searching.pref#ElasticsearchCrossFields# Enable"
-msgstr "Habilitar"
+msgstr "searching.pref#ElasticsearchCrossFields# Habilitar"
 
 # Searching > Features > ElasticsearchCrossFields
 msgid ""
@@ -12161,12 +12188,17 @@ msgid ""
 "elastic.co/guide/en/elasticsearch/reference/current/query-dsl-multi-match-"
 "query.html#type-cross-fields"
 msgstr ""
+"buscar.pref#BúsquedaelásticaCamposcruzados# Ver documentación en "
+"http://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-"
+"multi-match-query.html#type-cross-fields"
 
 # Searching > Features > ElasticsearchCrossFields
 msgid ""
 "searching.pref#ElasticsearchCrossFields# the cross_fields option for "
 "Elasticsearch searches, supported in Elasticsearch 6.X and above."
 msgstr ""
+"buscar.pref#BúsquedaelásticaCamposCruzados# los cruzados_opcion de campo "
+"para la Búsquedaelástica, apoyada en Búsquedaelástica 6.X y arriba."
 
 # Searching > Features
 msgid "searching.pref#EnableSearchHistory# Don't keep"
@@ -12181,6 +12213,8 @@ msgid ""
 "searching.pref#EnableSearchHistory# patron search history in the staff "
 "interface."
 msgstr ""
+"searching.pref#EnableSearchHistory# el historial de busqueda del usuario en "
+"la interfaz administrativa."
 
 # Searching > Results display
 msgid "searching.pref#FacetLabelTruncationLength# Truncate facets length to"
@@ -12206,6 +12240,10 @@ msgid ""
 "form) headings in bibliographic searches. Please note: you will need to "
 "reindex your bibliographic database when changing this preference."
 msgstr ""
+"searching.pref#IncludeSeeFromInSearches# <em>ver desde</em> (forma no "
+"predilecta) cabeceras en las busquedas bibliográficas. Por favor note: "
+"necesitará re-indexar su base de datos bibliográficos cuando cambie su "
+"preferencia."
 
 # Searching > Features
 msgid "searching.pref#IncludeSeeFromInSearches# Don't include"
@@ -12228,6 +12266,9 @@ msgid ""
 "searching.pref#IntranetNumbersPreferPhrase# the operator \"phr\" in the "
 "callnumber and standard number staff interface searches."
 msgstr ""
+"searching.pref#IntranetNumersPreferPhrase# el operador \"phr\" en la "
+"signatura topografica y numero estadar en la interfaz administrativa de "
+"busqueda."
 
 # Searching > Search form
 msgid "searching.pref#IntranetNumbersPreferPhrase# use"
@@ -12260,17 +12301,19 @@ msgstr ""
 
 # Searching > Search form
 msgid "searching.pref#LoadSearchHistoryToTheFirstLoggedUser# Add"
-msgstr ""
+msgstr "searching.pref#LoadSearchHistoryToTheFirstLoggedUser# Agregar"
 
 # Searching > Search form
 msgid "searching.pref#LoadSearchHistoryToTheFirstLoggedUser# Don't add"
-msgstr ""
+msgstr "searching.pref#LoadSearchHistoryToTheFirstLoggedUser# No agregar"
 
 # Searching > Search form
 msgid ""
 "searching.pref#LoadSearchHistoryToTheFirstLoggedUser# search history of the "
 "unlogged user to the next patron logging in."
 msgstr ""
+"searching.pref#LoadSearchHistoryToTheFirstLoggedUser# historial de busqueda "
+"del usuario no registrado a el proximo usuario registrado."
 
 # Searching > Results display
 msgid ""
@@ -12330,6 +12373,8 @@ msgid ""
 "searching.pref#OPACNumbersPreferPhrase# the operator \"phr\" in the "
 "callnumber and standard number OPAC searches."
 msgstr ""
+"searching.pref#OPACNumbersPreferPhrase# el operador \"phr\" en la signatura "
+"topográfica y número estándar en las busquedas del OPAC."
 
 # Searching > Search form
 msgid "searching.pref#OPACNumbersPreferPhrase# use"

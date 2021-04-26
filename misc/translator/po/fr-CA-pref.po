@@ -13,7 +13,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Generator: Pootle 2.8\n"
 "X-POOTLE-MTIME: 1615216827.766332\n"
-"X-Pootle-Path: /fr_CA/20.05/fr-CA-pref.po\n"
+"X-Pootle-Path: /fr_CA/20.11/fr-CA-pref.po\n"
 "X-Pootle-Revision: 1\n"
 
 # Accounting
@@ -2455,9 +2455,10 @@ msgid ""
 msgstr "comme source de classification par défaut."
 
 # Cataloging > Record structure
+#, fuzzy
 msgid ""
-"cataloguing.pref#DefaultCountryField008#  Empty defaults to xxu for United "
-"States."
+"cataloguing.pref#DefaultCountryField008#  Empty defaults to ||| - No attempt "
+"to code."
 msgstr ""
 "  Si le champ est vide, le code par défaut sera xxu pour les États-Unis."
 
@@ -3446,9 +3447,10 @@ msgid "circulation.pref#AllowItemsOnHoldCheckoutSIP# Don't allow"
 msgstr "Ne pas autoriser"
 
 # Circulation > Checkout policy
+#, fuzzy
 msgid ""
 "circulation.pref#AllowItemsOnHoldCheckoutSIP# If allowed do not generate "
-"RESERVE_WAITING and RESERVED warning."
+"RESERVED warning."
 msgstr ""
 "Si 'Autorisé' est choisi, ne pas générer d'avertissement RESERVE_WAITING ni "
 "RESERVED."
@@ -6321,12 +6323,13 @@ msgid "circulation.pref#finesCalendar# when calculating the period for fines."
 msgstr "pour le calcul de la période applicable aux amendes."
 
 # Circulation > Fines Policy
+#, fuzzy
 msgid ""
 "circulation.pref#finesMode# <br><strong>NOTE:</strong> If the cronjobs/fines."
 "pl cronjob is being run, accruing and final fines will be calculated when "
 "the cron runs and accruing fines will be finalized when an item is returned. "
 "If CalculateFinesOnReturn is enabled, final fines will be calculated when an "
-"item is returned."
+"item is returned.<br/>"
 msgstr ""
 "<br><strong>NOTE :</strong> Si la tâche planifiée (cronjob) fines.pl est "
 "exécutée, les amendes en accumulation et finales seront calculées lorsque la "
@@ -6339,7 +6342,17 @@ msgid "circulation.pref#finesMode# Calculate and charge"
 msgstr "Calculer et facturer"
 
 # Circulation > Fines Policy
+#, fuzzy
+msgid "circulation.pref#finesMode# Charge"
+msgstr "Calculer et facturer"
+
+# Circulation > Fines Policy
 msgid "circulation.pref#finesMode# Don't calculate"
+msgstr "Ne pas calculer"
+
+# Circulation > Fines Policy
+#, fuzzy
+msgid "circulation.pref#finesMode# Don't charge"
 msgstr "Ne pas calculer"
 
 # Circulation > Fines Policy
@@ -6347,6 +6360,12 @@ msgid ""
 "circulation.pref#finesMode# fines (when <code>cronjobs/fines.pl</code> is "
 "being run)."
 msgstr "les amendes (quand <code>misc/cronjobs/fines.pl</code> est exécuté)."
+
+# Circulation > Fines Policy > finesMode
+msgid ""
+"circulation.pref#finesMode# on close days. If set the fines.pl cronjob will "
+"not generate fines when run on days marked as closed in the calendar."
+msgstr ""
 
 # Circulation > Interface
 msgid "circulation.pref#itemBarcodeFallbackSearch# Don't enable"

@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Koha 20.11\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-05-10 19:14+0200\n"
-"PO-Revision-Date: 2021-03-16 07:00+0000\n"
+"PO-Revision-Date: 2021-04-19 12:11+0000\n"
 "Last-Translator: tigran <tigran@flib.sci.am>\n"
 "Language-Team: Koha Translation Team <koha-translate@nongnu.org>\n"
 "Language: hy\n"
@@ -13,8 +13,8 @@ msgstr ""
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Generator: Pootle 2.8\n"
 "X-Poedit-Bookmarks: 1755,-1,-1,-1,-1,-1,-1,-1,-1,-1\n"
-"X-POOTLE-MTIME: 1615878028.191735\n"
-"X-Pootle-Path: /hy/20.05/hy-Armn-pref.po\n"
+"X-POOTLE-MTIME: 1618834270.544814\n"
+"X-Pootle-Path: /hy/20.11/hy-Armn-pref.po\n"
 "X-Pootle-Revision: 1\n"
 
 # Accounting
@@ -837,10 +837,9 @@ msgid ""
 "strong> Changing this system preference will radically alter the behavior of "
 "Koha. Changing preference on a production system is highly discouraged.</p>"
 msgstr ""
-"admin.pref#IndependentBranches# <p class='text-"
-"danger'><strong>Զգուշացում․</strong> Համակարգի այս նախապատվության "
-"փոփոխությունը արմատապես կփոխի Կոհայի վարքը: Արտադրական համակարգի "
-"նախապատվությունը փոխելը խիստ հուսահատեցնող է:</p>"
+"admin.pref#IndependentBranches# <p class='text-danger'><strong>Զգուշացում․</"
+"strong> Համակարգի այս նախապատվության փոփոխությունը արմատապես կփոխի Կոհայի "
+"վարքը: Արտադրական համակարգի նախապատվությունը փոխելը խիստ հուսահատեցնող է:</p>"
 
 # Administration > Login options
 msgid "admin.pref#IndependentBranches# No"
@@ -2630,10 +2629,11 @@ msgstr ""
 
 # Cataloging > Record structure
 msgid ""
-"cataloguing.pref#DefaultCountryField008#  Empty defaults to xxu for United "
-"States."
+"cataloguing.pref#DefaultCountryField008#  Empty defaults to ||| - No attempt "
+"to code."
 msgstr ""
-"cataloguing.pref#DefaultCountryField008#  Դատարկ լռակյաց xxu ԱՄՆ-ի համար։"
+"cataloguing.pref#DefaultCountryField008#  Դատարկ լռակյացներ դեպի ||| - կոդին "
+"փորձ չի արվել։"
 
 # Cataloging > Record structure
 msgid ""
@@ -3726,10 +3726,10 @@ msgstr "circulation.pref#AllowItemsOnHoldCheckoutSIP# ՄԻ թույլատրեք"
 # Circulation > Checkout policy
 msgid ""
 "circulation.pref#AllowItemsOnHoldCheckoutSIP# If allowed do not generate "
-"RESERVE_WAITING and RESERVED warning."
+"RESERVED warning."
 msgstr ""
 "circulation.pref#AllowItemsOnHoldCheckoutSIP# Եթե թույլատրված է, մի "
-"գեներացրու RESERVE_WAITING և RESERVED զգուշացումը։"
+"գեներացրու RESERVED զգուշացումը։"
 
 # Circulation > Checkout policy
 msgid ""
@@ -6862,21 +6862,29 @@ msgid ""
 "pl cronjob is being run, accruing and final fines will be calculated when "
 "the cron runs and accruing fines will be finalized when an item is returned. "
 "If CalculateFinesOnReturn is enabled, final fines will be calculated when an "
-"item is returned."
+"item is returned.<br/>"
 msgstr ""
-"circulation.pref#finesMode# <br><strong>NOTE:</strong> Եթե cronjobs/fines.pl "
-"միջուկի աշխատանքը կատարվում է, հաշվեգրման և վերջնական տուգանքների հաշվարկը "
-"կկատարվի, երբ միջուկը կատարվում է, և կուտակված տուգանքները վերջնական տեսք "
-"կունենան, երբ ապրանքը վերադարձվի: Եթե CalculateFinesOnReturn թույլատրված է, "
-"վերջնական տուգանքները կհաշվարկվեն, երբ նյութը վերադարձվի:"
+"circulation.pref#finesMode# <br><strong>ՆՇՈՒՄ:</strong> Եթե cronjobs/fines."
+"pl միջուկի աշխատանքը կատարվում է, հաշվեգրման և վերջնական տուգանքների "
+"հաշվարկը կկատարվի, երբ միջուկը կատարվում է, և կուտակված տուգանքները "
+"վերջնական տեսք կունենան, երբ նյութը վերադարձվի: Եթե CalculateFinesOnReturn "
+"թույլատրված է, վերջնական տուգանքները կհաշվարկվեն, երբ նյութը վերադարձվի:<br/>"
 
 # Circulation > Fines Policy
 msgid "circulation.pref#finesMode# Calculate and charge"
 msgstr "circulation.pref#finesMode# Հաշվիր և գանձիր"
 
 # Circulation > Fines Policy
+msgid "circulation.pref#finesMode# Charge"
+msgstr "circulation.pref#finesMode# Գանձիր"
+
+# Circulation > Fines Policy
 msgid "circulation.pref#finesMode# Don't calculate"
 msgstr "circulation.pref#finesMode# Մի հաշվիր"
+
+# Circulation > Fines Policy
+msgid "circulation.pref#finesMode# Don't charge"
+msgstr "circulation.pref#finesMode# Մի գանձիր"
 
 # Circulation > Fines Policy
 msgid ""
@@ -6885,6 +6893,15 @@ msgid ""
 msgstr ""
 "circulation.pref#finesMode# fines (when <code>cronjobs/fines.pl</code> "
 "կատարվում է)։"
+
+# Circulation > Fines Policy > finesMode
+msgid ""
+"circulation.pref#finesMode# on close days. If set the fines.pl cronjob will "
+"not generate fines when run on days marked as closed in the calendar."
+msgstr ""
+"circulation.pref#finesMode# փակ օրերին: Եթե սահմանեք fines.pl միջուկի "
+"աշխատանքը տուգանքներ չի առաջացնի, երբ աշխատացվում է այն օրերին, որոնք "
+"օրացույցում որպես փակ են նշված։"
 
 # Circulation > Interface
 msgid "circulation.pref#itemBarcodeFallbackSearch# Don't enable"

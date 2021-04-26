@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 20.11\n"
-"POT-Creation-Date: 2021-03-19 16:51-0300\n"
+"POT-Creation-Date: 2021-04-22 07:34-0300\n"
 "PO-Revision-Date: 2017-03-22 21:02+0000\n"
 "Last-Translator: Sorin-Alexandru <sorin@curierul.ro>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,7 +18,7 @@ msgstr ""
 "20)) ? 1 : 2);;\n"
 "X-Generator: Pootle 2.5.1.1\n"
 "X-POOTLE-MTIME: 1490216549.000000\n"
-"X-Pootle-Path: /ro/20.05/ro-RO-staff-prog.po\n"
+"X-Pootle-Path: /ro/20.11/ro-RO-staff-prog.po\n"
 "X-Pootle-Revision: 1\n"
 
 #. %1$s:  data.borrowernumber | html 
@@ -607,6 +607,17 @@ msgstr ""
 "%s %s %saspect %sAspecte %sșablon %sȘabloane %sprofil %sProfile %slot "
 "%sLoturi %s %s %s "
 
+#. %1$s:  END 
+#. %2$s:  IF budget.b_active 
+#. %3$s:  budget.b_txt | html 
+#. %4$s:  ELSE 
+#. %5$s:  budget.b_txt | html 
+#. %6$s:  END 
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoice.tt:206
+#, fuzzy, c-format
+msgid "%s %s %s %s %s (inactive) %s "
+msgstr "%s %s (%s) "
+
 #. %1$s:  INCLUDE 'header.inc' 
 #. %2$s:  INCLUDE 'serials-search.inc' 
 #. %3$s:  BLOCK translate_frequnit 
@@ -953,7 +964,7 @@ msgstr "%s %s %s %s (%s) "
 #. %7$s:  SET location_lang = location _ "_" _ lang_lis.language 
 #. %8$s:  END 
 #. %9$s:  IF ( location_lang == language ) 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/koha-news.tt:405
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/koha-news.tt:407
 #, fuzzy, c-format
 msgid "%s %s %s %sOPAC news%s %s %s %s %s "
 msgstr "%s %s %s %s (%s) "
@@ -1698,7 +1709,7 @@ msgstr ""
 #. %1$s:  order.replacementprice | $Price 
 #. %2$s:  IF ( order.uncertainprice ) 
 #. %3$s:  END 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoice.tt:362
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoice.tt:366
 #, fuzzy, c-format
 msgid "%s %s (Uncertain) %s"
 msgstr "%s %s (%s) "
@@ -2323,7 +2334,7 @@ msgstr ""
 #. %5$s:  END # /IF SEARCH_RESULT.norequests 
 #. %6$s:  IF Koha.Preference('intranetbookbag') == 1 
 #. %7$s:  IF ( SEARCH_RESULT.incart ) 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:488
+#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:491
 #, fuzzy, c-format
 msgid "%s %s Holds (%s) %s %s %s %s | "
 msgstr "%s %s %s %s (%s) "
@@ -2955,7 +2966,7 @@ msgstr "<b>%srezultate găsite </b> %s "
 #. %5$s:  ELSE 
 #. %6$s:  END 
 #. %7$s:  IF MaxSearchResultsItemsPerRecordStatusCheck && SEARCH_RESULT.items_count > MaxSearchResultsItemsPerRecordStatusCheck 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:532
+#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:535
 #, fuzzy, c-format
 msgid "%s %s%s, %s available:%s, None available%s %s "
 msgstr "%s %s %sarticole%sarticol%s%s, %s disponibil:%s, Indisponibil%s %s "
@@ -2986,7 +2997,7 @@ msgstr ""
 #. %2$s:  IF ( !budget.b_active ) 
 #. %3$s:  END 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoice.tt:86
-#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoice.tt:284
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoice.tt:288
 #: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:557
 #, fuzzy, c-format
 msgid "%s %s(inactive)%s"
@@ -3559,7 +3570,7 @@ msgstr "Definiţi categoriile şi valorile autorizate pentru acestea. "
 #. %4$s:  END 
 #. %5$s:  ELSIF credit_type.can_be_added_manually 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/credit_types.tt:85
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1224
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1232
 #, fuzzy, c-format
 msgid "%s %sYes%sNo%s %s "
 msgstr "%s %s %sDa%sNu%s %s "
@@ -4078,7 +4089,7 @@ msgstr ""
 #. %1$s:  budget_loo.b_txt | html 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/duplicate_orders.tt:205
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoice.tt:90
-#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoice.tt:288
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoice.tt:292
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/parcels.tt:164
 #: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:561
 #, fuzzy, c-format
@@ -4395,6 +4406,15 @@ msgstr ""
 msgid "%s An unknown error has occurred."
 msgstr "%s O eroare necunoscută a avut loc."
 
+#. %1$s:  IF itemloo.any_pickup_location 
+#. %2$s:  ELSE 
+#. %3$s:  itemloo.pickup_locations | html 
+#. %4$s:  END 
+#: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:686
+#, fuzzy, c-format
+msgid "%s Any library %s %s %s "
+msgstr "A fost verificat de %s ori "
+
 #. %1$s:  IF ( op == 'approve' ) 
 #. %2$s:  ELSIF ( op == 'reject' ) 
 #. %3$s:  ELSIF ( op == 'test' ) 
@@ -4446,7 +4466,7 @@ msgid ""
 msgstr ""
 
 #. %1$s:  END 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:772
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:780
 #, fuzzy, c-format
 msgid "%s Card number: "
 msgstr "%s - Număr_de_card: %s "
@@ -4487,7 +4507,7 @@ msgid "%s Checkout(s)"
 msgstr "%s Împrumut(uri)"
 
 #. %1$s:  END 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1033
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1041
 #, fuzzy, c-format
 msgid "%s Circulation note: "
 msgstr "Notă de circulaţie: "
@@ -4543,7 +4563,7 @@ msgid "%s Closed on %s %s Open %s "
 msgstr "Închis pe: %s "
 
 #. %1$s:  END 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1147
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1155
 #, fuzzy, c-format
 msgid "%s Confirm password: "
 msgstr "(Parolă: "
@@ -4725,13 +4745,13 @@ msgid ""
 msgstr ""
 
 #. %1$s:  END 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:993
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1001
 #, fuzzy, c-format
 msgid "%s Expiry date (leave blank for auto calc): "
 msgstr "Data de expirare (lăsaţi spaţiu gol pentru calcularea automată) "
 
 #. %1$s:  END 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:733
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:741
 #, fuzzy, c-format
 msgid "%s Fax: "
 msgstr "%s / Fax: %s "
@@ -4826,13 +4846,13 @@ msgid "%s Group %s has been deleted. %s %s has been removed from group. %s "
 msgstr ""
 
 #. %1$s:  END 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:596
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:604
 #, fuzzy, c-format
 msgid "%s Guarantor first name: "
 msgstr "Prenume: "
 
 #. %1$s:  END 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:579
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:587
 #, fuzzy, c-format
 msgid "%s Guarantor surname: "
 msgstr "Prenume: "
@@ -5070,7 +5090,7 @@ msgid "%s New course %s"
 msgstr "Cod_de_bare %s"
 
 #. %1$s:  END 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1221
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1229
 #, fuzzy, c-format
 msgid "%s No "
 msgstr "%s - %s "
@@ -5304,7 +5324,7 @@ msgid ""
 msgstr ""
 
 #. %1$s:  END 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1016
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1024
 #, c-format
 msgid "%s OPAC note: "
 msgstr ""
@@ -5325,7 +5345,7 @@ msgid "%s Other name: "
 msgstr "Prenume: "
 
 #. %1$s:  END 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:676
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:684
 #, fuzzy, c-format
 msgid "%s Other phone: "
 msgstr "Prenume: "
@@ -5361,7 +5381,7 @@ msgstr "De La Orice Bibliotecă "
 #. %2$s:  current_page | html 
 #. %3$s:  total_pages | html 
 #. %4$s:  IF ( show_nextbutton ) 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:198
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:211
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:141
 #, fuzzy, c-format
 msgid "%s Page %s / %s %s "
@@ -5374,7 +5394,7 @@ msgid "%s Parsing upload file "
 msgstr "Perioada de graţie:"
 
 #. %1$s:  END 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1090
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1098
 #, fuzzy, c-format
 msgid "%s Password: "
 msgstr "(Parolă: "
@@ -5446,13 +5466,13 @@ msgid "%s Phone: "
 msgstr ""
 
 #. %1$s:  END 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:692
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:700
 #, fuzzy, c-format
 msgid "%s Primary email: "
 msgstr "Email: "
 
 #. %1$s:  END 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:643
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:651
 #, fuzzy, c-format
 msgid "%s Primary phone: "
 msgstr "Email: "
@@ -5473,7 +5493,7 @@ msgid "%s Receipt summary for "
 msgstr ""
 
 #. %1$s:  END 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:970
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:978
 #, fuzzy, c-format
 msgid "%s Registration date: "
 msgstr "Data expirării: "
@@ -5535,7 +5555,7 @@ msgstr "%s articole găsite pentru"
 #. %4$s:  debarredcomment | $raw | html_line_break 
 #. %5$s:  END 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:760
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1252
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1260
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:135
 #: koha-tmpl/intranet-tmpl/prog/en/includes/borrower_debarments.inc:33
 #, c-format
@@ -5566,8 +5586,8 @@ msgstr ""
 
 #. For the first occurrence,
 #. %1$s:  IF ( scan_search_term_to_use ) 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:335
-#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:337
+#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:338
+#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:340
 #, fuzzy, c-format
 msgid "%s Scan Index for: "
 msgstr "indicele tematice"
@@ -5584,13 +5604,13 @@ msgid "%s Searching: %s %s %s "
 msgstr "%s %s (%s) "
 
 #. %1$s:  END 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:713
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:721
 #, fuzzy, c-format
 msgid "%s Secondary email: "
 msgstr "%s : "
 
 #. %1$s:  END 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:660
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:668
 #, fuzzy, c-format
 msgid "%s Secondary phone: "
 msgstr "%s : "
@@ -5632,13 +5652,13 @@ msgid "%s Something went wrong. %s "
 msgstr ""
 
 #. %1$s:  END 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:859
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:867
 #, c-format
 msgid "%s Sort 1: "
 msgstr ""
 
 #. %1$s:  END 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:875
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:883
 #, c-format
 msgid "%s Sort 2: "
 msgstr ""
@@ -5906,7 +5926,7 @@ msgid "%s Used in "
 msgstr "Reţineri existente "
 
 #. %1$s:  END 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1057
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1065
 #, fuzzy, c-format
 msgid "%s Username: "
 msgstr "Prenume: "
@@ -5918,7 +5938,7 @@ msgid "%s Version: "
 msgstr "Descriere: %s "
 
 #. %1$s:  END 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1213
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1221
 #, fuzzy, c-format
 msgid "%s Yes "
 msgstr "%s =%s "
@@ -6117,7 +6137,7 @@ msgid "%s by%s %s %s\", \"%s\", \"%s\", \"%s\", \"%s "
 msgstr "%s %s %s %s (%s) "
 
 #. %1$s:  Branches.GetName( branch ) | html 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:39
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:21
 #, fuzzy, c-format
 msgid "%s calendar"
 msgstr "Calendar"
@@ -6383,13 +6403,13 @@ msgid "%s mandatory fields empty (highlighted)"
 msgstr "câmpuri obligatorii goale (a se vedea subcâmpurile proeminente)"
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1469
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1477
 #, fuzzy
 msgid "%s month"
 msgstr "2 luni"
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1469
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1477
 #, fuzzy
 msgid "%s months"
 msgstr "2 luni"
@@ -6468,7 +6488,7 @@ msgid "%s on %s until %s"
 msgstr "%s %s %s %s (%s)"
 
 #. %1$s:  SEARCH_RESULT.onloancount | html 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:570
+#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:573
 #, c-format
 msgid "%s on loan:"
 msgstr ""
@@ -6576,8 +6596,8 @@ msgstr "%s directoare scanate."
 #. %1$s:  errcon.server | html 
 #. %2$s:  errcon.seq | html 
 #. %3$s:  PROCESS 'xslt-handler.inc' code=errcon.error 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:109
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:110
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:119
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:120
 #, fuzzy, c-format
 msgid "%s record %s: %s"
 msgstr "%s Deţin(e)"
@@ -6686,7 +6706,7 @@ msgid "%s to order"
 msgstr "%s a comanda"
 
 #. %1$s:  SEARCH_RESULT.othercount | html 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:598
+#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:601
 #, fuzzy, c-format
 msgid "%s unavailable:"
 msgstr "%s disponibil:"
@@ -6706,7 +6726,7 @@ msgid "%s will expire before "
 msgstr "va expira înainte de <b>%s</b> "
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1469
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1477
 #, fuzzy
 msgid "%s year"
 msgstr "%s ani"
@@ -6717,7 +6737,7 @@ msgstr "%s ani"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/categories.tt:395
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/categories.tt:505
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/categories.tt:510
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1469
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1477
 #, c-format
 msgid "%s years"
 msgstr "%s ani"
@@ -7501,7 +7521,7 @@ msgstr ""
 #. %2$s:  END 
 #. %3$s:  IF ( flagloo.key == 'lost' ) 
 #. %4$s:  END 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1204
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1212
 #, c-format
 msgid "%sGone no address:%s %sLost card:%s "
 msgstr ""
@@ -8269,7 +8289,7 @@ msgstr "&nbsp;&nbsp;(format: yyyy-yyyy)"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/duplicate_orders.tt:209
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoice.tt:94
-#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoice.tt:292
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoice.tt:296
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:363
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/parcels.tt:168
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/orders_by_budget.tt:95
@@ -8527,7 +8547,7 @@ msgstr ""
 "i> "
 
 #. %1$s:  Branches.GetName( branch ) | html 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:32
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:14
 #, fuzzy, c-format
 msgid "&rsaquo; %s calendar"
 msgstr "Calendar"
@@ -8655,7 +8675,7 @@ msgstr ""
 #. %4$s:  END 
 #. %5$s:  IF ( action_add_category ) 
 #. %6$s:  END 
-#. %7$s:  ELSIF ( loop ) 
+#. %7$s:  ELSIF ( loop || searchfield ) 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/authorised_values.tt:29
 #, fuzzy, c-format
 msgid ""
@@ -8919,7 +8939,7 @@ msgstr "<a1>Acasă</a> &rsaquo; Autorităţi"
 msgid "&rsaquo; Authority search results"
 msgstr "Rezultatele Autorităţii de Căutare"
 
-#. %1$s:  category_name | html 
+#. %1$s:  category.category_name | html 
 #. %2$s:  ELSE 
 #. %3$s:  END 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/authorised_values.tt:34
@@ -10003,7 +10023,7 @@ msgstr ""
 msgid "' ~%%] [%%~ action_block = action_block _ '"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:332
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:314
 #, c-format
 msgid "') | html %%]"
 msgstr ""
@@ -10171,8 +10191,8 @@ msgid "(Current: %s - %s)"
 msgstr "Valută = %s"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:339
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:979
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1006
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:987
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1014
 #, c-format
 msgid "(Error)"
 msgstr "(Eroare)"
@@ -10485,8 +10505,8 @@ msgstr "%S ordonează dupa: "
 msgid "(related searches: %s%s%s)"
 msgstr "(căutări apropiate:"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:496
-#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:498
+#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:499
+#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:501
 #, fuzzy, c-format
 msgid "(remove)"
 msgstr "Elimină"
@@ -10715,7 +10735,7 @@ msgid "- None -"
 msgstr "%s - %s "
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:992
+#: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:996
 #, fuzzy
 msgid "- Please select an item to place a hold"
 msgstr "- Rugăm să selectaţi un articol pentru a efectua o blocare\n"
@@ -11082,7 +11102,7 @@ msgid "A group with the title %s already exists. "
 msgstr "O Listă numită %s deja există!"
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:992
+#: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:996
 msgid "A hold cannot be requested on any of these items."
 msgstr "O reţinere la oricare dintre aceste articole nu poate fi solicitată."
 
@@ -11588,7 +11608,7 @@ msgstr "Acţionaţi în cazul în care nu a fost găsită nici o potrivire: "
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/systempreferences.tt:251
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/z3950servers.tt:165
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:82
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:131
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:141
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/article-requests.tt:125
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/article-requests.tt:226
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/checkout-notes.tt:73
@@ -11642,7 +11662,7 @@ msgstr "Acţiuni"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:188
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/additem.tt:92
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:92
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:159
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:169
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/article-requests.tt:16
 #: koha-tmpl/intranet-tmpl/prog/en/modules/patron_lists/lists.tt:57
 #: koha-tmpl/intranet-tmpl/prog/en/modules/plugins/plugins-home.tt:164
@@ -11706,7 +11726,7 @@ msgid "Actual cost"
 msgstr "Costul actual"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/basket.tt:402
-#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoice.tt:329
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoice.tt:333
 #, fuzzy, c-format
 msgid "Actual cost tax exc."
 msgstr "Cantitate"
@@ -11719,7 +11739,7 @@ msgid "Actual cost tax exc. / Actual cost tax inc."
 msgstr "Cantitate"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/basket.tt:405
-#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoice.tt:330
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoice.tt:334
 #, fuzzy, c-format
 msgid "Actual cost tax inc."
 msgstr "Cantitate"
@@ -11738,7 +11758,8 @@ msgstr "Costul actual:"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cash_registers.tt:108
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/koha2marclinks.tt:46
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/localization.tt:44
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/oai_set_mappings.tt:104
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/oai_set_mappings.tt:75
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/oai_set_mappings.tt:105
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:758
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:995
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/additem.tt:249
@@ -11893,8 +11914,8 @@ msgstr "Unelte Suplimentare"
 msgid "Add an SMS cellular provider"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoice.tt:243
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoice.tt:247
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoice.tt:251
 #, fuzzy, c-format
 msgid "Add an adjustment"
 msgstr "Adăugaţi tipul de atribut a clientului"
@@ -11920,8 +11941,9 @@ msgstr ""
 msgid "Add and remove items from rotas "
 msgstr "Adăugaţi/Înlăturaţi Articole"
 
-#. INPUT type=button
+#. BUTTON
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/oai_set_mappings.tt:75
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/oai_set_mappings.tt:105
 #, fuzzy
 msgid "Add another condition"
 msgstr "Adăugaţi un alt domeniu"
@@ -12023,7 +12045,7 @@ msgstr "Adăugaţi un nou Grup"
 msgid "Add guarantee"
 msgstr "Garanţii:"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:533
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:541
 #, fuzzy, c-format
 msgid "Add guarantor"
 msgstr "Garanţii:"
@@ -12108,8 +12130,8 @@ msgstr "Introduceţi codul de bare a articolului:"
 msgid "Add library "
 msgstr "Adăugaţi o nouă Bibliotecă/Sucursală"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1281
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1284
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1289
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1292
 #: koha-tmpl/intranet-tmpl/prog/en/includes/borrower_debarments.inc:55
 #: koha-tmpl/intranet-tmpl/prog/en/includes/borrower_debarments.inc:60
 #, fuzzy, c-format
@@ -12183,7 +12205,7 @@ msgstr "Adăugaţi un alt domeniu"
 msgid "Add new group"
 msgstr "Adăugaţi un nou Grup"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:134
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:116
 #, c-format
 msgid "Add new holiday"
 msgstr "Adăugaţi o nouă sărbătoare"
@@ -12204,7 +12226,7 @@ msgstr "Circulaţia Rapoartelor"
 msgid "Add or remove items"
 msgstr "Adăugaţi/Înlăturaţi Articole"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:515
+#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:518
 #: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:148
 #, c-format
 msgid "Add order"
@@ -12367,7 +12389,7 @@ msgid "Add to basket"
 msgstr "Adăugaţi Comanda La Coş"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:81
-#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:498
+#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:501
 #: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:114
 #, fuzzy, c-format
 msgid "Add to cart"
@@ -12516,7 +12538,7 @@ msgstr "Adăugarea autorităţii %s"
 msgid "Additional SRU options: "
 msgstr "Unelte Suplimentare"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1349
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1357
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/members-update.tt:66
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:395
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:419
@@ -12529,10 +12551,10 @@ msgstr "Atribute şi identificatori suplimentari"
 msgid "Additional content types"
 msgstr "Tipuri suplimentare de conţinut"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:114
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:127
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/additional-fields.tt:66
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/admin-home.tt:240
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:129
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:139
 #: koha-tmpl/intranet-tmpl/prog/en/includes/additional-fields-entry.inc:4
 #: koha-tmpl/intranet-tmpl/prog/en/includes/admin-menu.inc:154
 #, fuzzy, c-format
@@ -12648,14 +12670,14 @@ msgid "Adjustments"
 msgstr ""
 
 #. %1$s:  total_adj + shipmentcost | $Price 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoice.tt:416
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoice.tt:420
 #, c-format
 msgid "Adjustments plus shipping: %s"
 msgstr ""
 
 #. IMG
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/detail.tt:188
-#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:432
+#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:435
 #, fuzzy
 msgid "Adlibris cover image"
 msgstr "Alegeţi 'Încărcaţi imaginile clientului'"
@@ -12782,7 +12804,7 @@ msgstr "Adolescent"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/categories.tt:145
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/advsearch.tt:208
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:834
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:842
 #, c-format
 msgid "Adult"
 msgstr "Adult"
@@ -12858,7 +12880,7 @@ msgstr "Filtraţi"
 
 #. For the first occurrence,
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1469
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1477
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/automatic_item_modification_by_age.tt:176
 #, fuzzy, c-format
 msgid "Age"
@@ -12882,7 +12904,7 @@ msgid "Age required: "
 msgstr "Necesar de indicat vârsta: "
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:319
-#: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:992
+#: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:996
 #, fuzzy, c-format
 msgid "Age restricted"
 msgstr "vest"
@@ -13006,7 +13028,7 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/serials-search.tt:379
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/subscription-bib-search.tt:25
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/subscription-bib-search.tt:37
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/koha-news.tt:392
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/koha-news.tt:394
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:206
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:171
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:173
@@ -13213,7 +13235,7 @@ msgstr "Tot"
 msgid "Allow access to the reports module"
 msgstr "Accesaţi acest raport de la: <a1>Pagina Rapoartelor Salvate</a> "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:888
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:896
 #, fuzzy, c-format
 msgid "Allow auto-renewal of items: "
 msgstr "Termeni Curenţi"
@@ -13223,13 +13245,13 @@ msgstr "Termeni Curenţi"
 msgid "Allow changes to contents from: "
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:548
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:556
 #, c-format
 msgid ""
 "Allow guarantors of this patron to view this patron's checkouts from the OPAC"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:563
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:571
 #, c-format
 msgid ""
 "Allow guarantors of this patron to view this patron's fines from the OPAC"
@@ -13627,7 +13649,7 @@ msgstr "Numărul contractului: "
 msgid "Amount:"
 msgstr "Cantitate: "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoice.tt:251
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoice.tt:255
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:222
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/mancredit.tt:59
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/maninvoice.tt:72
@@ -13933,8 +13955,8 @@ msgstr "<em>numele bazei de date : </em>%s "
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/cat_issues_top.tt:86
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/catalogue_out.tt:99
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:431
-#: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:879
-#: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:913
+#: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:883
+#: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:917
 #, c-format
 msgid "Any item type"
 msgstr "Orice tip de articol"
@@ -13961,8 +13983,8 @@ msgstr ""
 "Circulaţia mesajelor înseamnă că personalul va apărea pe ecranul cu "
 "împrumuturile clientului."
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:348
-#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:349
+#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:351
+#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:352
 #, fuzzy, c-format
 msgid "Any phrase"
 msgstr "Orice Frază"
@@ -13982,7 +14004,7 @@ msgstr ""
 msgid "Any vendor"
 msgstr "Orice Furnizor"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:347
+#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:350
 #, c-format
 msgid "Any word"
 msgstr "Orice cuvânt"
@@ -14133,7 +14155,7 @@ msgstr ""
 msgid "Are you sure you want to cancel adding this quote?"
 msgstr "Sunteţi sigur că doriţi să anulaţi această comandă?"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:961
+#: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:965
 #, fuzzy, c-format
 msgid "Are you sure you want to cancel this hold?"
 msgstr "Sunteţi sigur că doriţi să anulaţi această comandă?"
@@ -14391,7 +14413,7 @@ msgstr "Sunteţi sigur că doriţi să suprimaţi acest articol?"
 #. For the first occurrence,
 #. SCRIPT
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoice-files.tt:94
-#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoice.tt:461
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoice.tt:465
 #, fuzzy
 msgid "Are you sure you want to delete this file ?"
 msgstr "Sunteţi sigur că doriţi să suprimaţi acest articol?"
@@ -14416,7 +14438,7 @@ msgstr "Sunteţi sigur că doriţi să suprimaţi acest articol?"
 
 #. For the first occurrence,
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoice.tt:461
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoice.tt:465
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoices.tt:318
 #, fuzzy
 msgid "Are you sure you want to delete this invoice?"
@@ -14951,12 +14973,12 @@ msgstr "Autorizat"
 msgid "Authname"
 msgstr "Autorizat"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:108
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:121
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:12
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:214
-#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:354
-#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:355
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:123
+#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:357
+#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:358
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:133
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/branchtransfers.tt:183
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/offline.tt:110
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/request-article.tt:228
@@ -15082,10 +15104,10 @@ msgstr "Autor:"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:139
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:38
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:36
-#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:93
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:106
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/sru_modmapping.tt:46
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:32
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:92
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:34
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:102
 #: koha-tmpl/intranet-tmpl/prog/en/includes/filter-orders.inc:7
 #, fuzzy, c-format
 msgid "Author: "
@@ -15366,7 +15388,7 @@ msgstr ": codul de bare nu a fost găsit"
 msgid "AutoCreditNumber"
 msgstr "%s - Număr_de_card: %s "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:808
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:816
 #, c-format
 msgid ""
 "AutoMemberNum is set to enabled, but cardnumber is marked as mandatory in "
@@ -17115,7 +17137,7 @@ msgstr "Calculat pe %s. De la %s până la %s"
 msgid "Calendar"
 msgstr "Calendar"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:207
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:189
 #, c-format
 msgid "Calendar information"
 msgstr "Informaţii calendarului"
@@ -17400,7 +17422,7 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/basketheader.tt:143
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/booksellers.tt:173
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/duplicate_orders.tt:252
-#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoice.tt:302
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoice.tt:306
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/lateorders.tt:269
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/modordernotes.tt:37
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:464
@@ -17412,7 +17434,7 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/parcels.tt:174
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/supplier.tt:123
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/transferorder.tt:123
-#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:80
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:93
 #: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:230
 #: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:232
 #: koha-tmpl/intranet-tmpl/prog/en/modules/basket/downloadcart.tt:28
@@ -17460,7 +17482,7 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:376
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:112
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/matching-rules.tt:399
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/oai_set_mappings.tt:113
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/oai_set_mappings.tt:115
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/oai_sets.tt:54
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/patron-attr-types.tt:195
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/preferences.tt:172
@@ -17483,7 +17505,7 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/additem.tt:249
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/additem.tt:259
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:70
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:79
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:89
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/branchoverdues.tt:76
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/branchtransfers.tt:56
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/branchtransfers.tt:80
@@ -17515,7 +17537,7 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/maninvoice.tt:78
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/member-flags.tt:33
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/member-password.tt:84
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1297
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1305
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:347
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/pay.tt:154
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/paycollect.tt:168
@@ -17535,7 +17557,7 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/en/modules/pos/registers.tt:178
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1110
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1219
-#: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:979
+#: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:983
 #: koha-tmpl/intranet-tmpl/prog/en/modules/rotating_collections/editCollections.tt:128
 #: koha-tmpl/intranet-tmpl/prog/en/modules/rotating_collections/transferCollection.tt:50
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/acqui-search-result.tt:37
@@ -17564,8 +17586,8 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:139
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:200
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/csv-profiles.tt:228
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:124
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:194
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:106
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:176
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/koha-news.tt:111
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/letter.tt:235
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:274
@@ -17772,8 +17794,8 @@ msgstr "Data Creaţiei"
 msgid "Cancellation reason:"
 msgstr "Data Creaţiei"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:816
-#: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:966
+#: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:820
+#: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:970
 #, fuzzy, c-format
 msgid "Cancellation reason: "
 msgstr "Data Creaţiei"
@@ -17837,7 +17859,7 @@ msgid "Cannot be toggled"
 msgstr "Data primită"
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:992
+#: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:996
 #, fuzzy
 msgid "Cannot be transferred to pickup library"
 msgstr "Copierea regulilor de emitere"
@@ -17947,7 +17969,7 @@ msgid "Cannot open this record in the basic editor"
 msgstr ""
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:308
-#: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:992
+#: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:996
 #, fuzzy, c-format
 msgid "Cannot place hold"
 msgstr "Nu poate plasa reţinerea:"
@@ -18002,8 +18024,8 @@ msgstr "Citaţie"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/parcel.tt:176
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/parcel.tt:342
-#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:149
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:164
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:162
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:174
 #: koha-tmpl/intranet-tmpl/prog/en/modules/common/patron_search.tt:77
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/member.tt:98
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/merge-patrons.tt:61
@@ -18051,7 +18073,7 @@ msgstr "Numărul_cardului în uz deja."
 
 #. %1$s:  maxlength_cardnumber | html 
 #. %2$s:  ELSE 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:798
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:806
 #, fuzzy, c-format
 msgid "Card number can be up to %s characters. %s "
 msgstr ". Parola trebuie să conţină cel puţin %s caractere."
@@ -18074,23 +18096,23 @@ msgstr "Lista codurilor_de_bare (un cod_de_bare pe linie): "
 #. %1$s:  minlength_cardnumber | html 
 #. %2$s:  maxlength_cardnumber | html 
 #. %3$s:  ELSIF maxlength_cardnumber 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:791
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:799
 #, fuzzy, c-format
 msgid "Card number must be between %s and %s characters. %s "
 msgstr ". Parola trebuie să conţină cel puţin %s caractere."
 
 #. %1$s:  minlength_cardnumber | html 
 #. %2$s:  ELSIF minlength_cardnumber && maxlength_cardnumber 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:784
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:792
 #, fuzzy, c-format
 msgid "Card number must be exactly %s characters. %s "
 msgstr ". Parola trebuie să conţină cel puţin %s caractere."
 
 #. For the first occurrence,
 #. %1$s:  maxlength_cardnumber | html 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:783
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:790
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:797
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:791
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:798
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:805
 #, fuzzy, c-format
 msgid "Card number must not be more than %s characters."
 msgstr ". Parola trebuie să conţină cel puţin %s caractere."
@@ -18104,7 +18126,7 @@ msgstr "Numărul cardului: "
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:138
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:193
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:164
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:174
 #, fuzzy, c-format
 msgid "Card preview"
 msgstr "Permiteţi parolei:"
@@ -18427,7 +18449,7 @@ msgstr "Categorie:"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/authorised_values.tt:59
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/patron-attr-types.tt:177
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:828
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:836
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember-brief.tt:72
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:470
 #: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:297
@@ -18518,7 +18540,7 @@ msgid "Centre collégial des services regroupés (CCSR), Canada"
 msgstr ""
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1469
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1477
 msgid "Change"
 msgstr "Schimbaţi"
 
@@ -18566,7 +18588,7 @@ msgid "Change library"
 msgstr "Orice Bibliotecă"
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1469
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1477
 #, fuzzy
 msgid "Change messaging preferences to default for this category?"
 msgstr "Preferinţe implicite ale mesajelor pentru această categorie client"
@@ -18781,7 +18803,7 @@ msgid "Check for embedded item record data?"
 msgstr "Verificaţi informaţia de înregistrare încorporată în articol?"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/categories.tt:294
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:915
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:923
 #, fuzzy, c-format
 msgid "Check for previous checkouts: "
 msgstr "<a1></a>Împrumuturile anterioare"
@@ -19338,7 +19360,7 @@ msgid "Cheshire Libraries, United Kingdom"
 msgstr ", Regatul Unit al Marii Britanii"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/categories.tt:146
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:833
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:841
 #, c-format
 msgid "Child"
 msgstr "Produs"
@@ -19532,7 +19554,7 @@ msgstr "Alegeţi"
 msgid "Chooser:"
 msgstr "Alegeţi: "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1311
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1319
 #, fuzzy, c-format
 msgid "Chooser: "
 msgstr "Alegeţi: "
@@ -19903,7 +19925,7 @@ msgstr "Lot de import #%s gol"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:775
 #: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:79
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/member.tt:185
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1391
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1399
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:187
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1282
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/modborrowers.tt:283
@@ -19912,7 +19934,7 @@ msgid "Clear"
 msgstr "Eliberaţi"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/duplicate_orders.tt:135
-#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:62
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:75
 #: koha-tmpl/intranet-tmpl/prog/en/modules/basket/basket.tt:6
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branch_transfer_limits.tt:31
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branch_transfer_limits.tt:45
@@ -19920,7 +19942,7 @@ msgstr "Eliberaţi"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/detail.tt:274
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:73
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:53
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:61
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:71
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/article-requests.tt:106
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/article-requests.tt:208
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/checkout-notes.tt:59
@@ -19958,7 +19980,7 @@ msgstr ""
 "Sunteţi sigur că doriţi să suprimaţi acest client? Aceasta nu poate fi "
 "anulată."
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1293
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1301
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:445
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:453
 #: koha-tmpl/intranet-tmpl/prog/en/includes/borrower_debarments.inc:64
@@ -20001,9 +20023,9 @@ msgstr "Informaţie de Contact"
 msgid "Clear screen"
 msgstr "Eliberaţi Ecranul"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:52
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:65
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:45
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:48
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:58
 #, fuzzy, c-format
 msgid "Clear search form"
 msgstr "Introduceţi termenii căutării"
@@ -20034,7 +20056,7 @@ msgstr "Creaţi un lot nou"
 msgid "Click ID to select/deselect quote"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:233
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:215
 #, fuzzy, c-format
 msgid "Click Save to finish."
 msgstr "Făceţi clic pe 'Salvaţi' pentru a încheia procesul."
@@ -20159,7 +20181,7 @@ msgid ""
 "quotes."
 msgstr "Făceţi clic pe '...' la stânga rubricii"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:230
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:212
 #, c-format
 msgid "Click the date to add or edit a holiday."
 msgstr ""
@@ -20183,6 +20205,7 @@ msgstr "Rubrică decisivă &quot;%s&quot;"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/preferences.tt:124
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/systempreferences.tt:278
+#: koha-tmpl/intranet-tmpl/prog/en/modules/pos/pay.tt:189
 #, fuzzy, c-format
 msgid "Click to edit"
 msgstr "Făceţi clic pentru Editare"
@@ -20257,7 +20280,7 @@ msgstr "Copierea regulilor de emitere eşuată!"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoices.tt:95
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/lateorders.tt:258
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/parcel.tt:394
-#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:171
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:184
 #: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/searchresultlist-auth.tt:97
 #: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/searchresultlist-auth.tt:104
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:28
@@ -20326,6 +20349,12 @@ msgstr "Închideţi"
 msgid "Close and export as PDF"
 msgstr "Închideţi şi Imprimaţi"
 
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/basket.tt:69
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/basket.tt:73
+#, fuzzy, c-format
+msgid "Close basket"
+msgstr "Închideţi acest coş"
+
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/basketgroup.tt:273
 #, fuzzy, c-format
 msgid "Close basket group"
@@ -20336,15 +20365,13 @@ msgstr "Creaţi grupul de coşuri?"
 msgid "Close budget "
 msgstr "&rsaquo; Tipuri de Articole "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/basket.tt:69
-#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/basket.tt:73
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/booksellers.tt:157
 #, c-format
 msgid "Close this basket"
 msgstr "Închideţi acest coş"
 
 #. A
-#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:123
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:136
 #, fuzzy
 msgid "Close this menu"
 msgstr "Închideţi acest coş"
@@ -20745,7 +20772,7 @@ msgstr "Virgulă (,)"
 msgid "Comma separated text (.csv)"
 msgstr "Text separat prin virgulă"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1240
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1248
 #: koha-tmpl/intranet-tmpl/prog/en/includes/borrower_debarments.inc:10
 #: koha-tmpl/intranet-tmpl/prog/en/columns.def:62
 #, fuzzy, c-format
@@ -20772,7 +20799,7 @@ msgid "Comment:"
 msgstr "Comentaţi:"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:740
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1287
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1295
 #: koha-tmpl/intranet-tmpl/prog/en/includes/mana/mana-subscription-search-result.inc:103
 #, fuzzy, c-format
 msgid "Comment: "
@@ -20956,7 +20983,7 @@ msgstr "Confirmaţi"
 msgid "Confirm ILL request"
 msgstr "Confirmaţi Suprimarea"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:978
+#: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:982
 #, fuzzy, c-format
 msgid "Confirm cancellation"
 msgstr "Confirmaţi Suprimarea"
@@ -20975,7 +21002,7 @@ msgstr "Confirmaţi Raportul Taxă"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/basket.tt:101
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:124
-#: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:957
+#: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:961
 #, fuzzy, c-format
 msgid "Confirm deletion"
 msgstr "Confirmaţi Suprimarea"
@@ -21084,9 +21111,9 @@ msgstr "Conexiune stabilită."
 
 #. For the first occurrence,
 #. %1$s:  errcon.server | html 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:215
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:228
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:156
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:107
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:117
 #, c-format
 msgid "Connection failed to %s"
 msgstr "Conexiune eşuată la %s"
@@ -21094,7 +21121,7 @@ msgstr "Conexiune eşuată la %s"
 #. For the first occurrence,
 #. %1$s:  errcon.server | html 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:157
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:108
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:118
 #, fuzzy, c-format
 msgid "Connection timeout to %s"
 msgstr "Conexiune eşuată la %s"
@@ -21138,7 +21165,7 @@ msgid "Contact details"
 msgstr "Detalii de contact"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/uncertainprice.tt:29
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:636
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:644
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:185
 #, c-format
 msgid "Contact information"
@@ -21362,14 +21389,14 @@ msgstr "Companii Contribuitoare"
 msgid "Control key is \"Ctrl\""
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:41
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:42
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:48
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:49
 #, fuzzy, c-format
 msgid "Control no.: "
 msgstr "Nr. de control: "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:99
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:98
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:112
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:108
 #, fuzzy, c-format
 msgid "Control no: "
 msgstr "Nr. de control: "
@@ -21417,7 +21444,7 @@ msgid "Copies:"
 msgstr "Continuă:"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/z3950servers.tt:186
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:220
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:202
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/letter.tt:195
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:200
 #: koha-tmpl/intranet-tmpl/prog/en/includes/columns_settings.inc:4
@@ -21431,7 +21458,7 @@ msgstr "Nr. de Copiere"
 msgid "Copy and replace"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:117
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:99
 #, fuzzy, c-format
 msgid "Copy changes to all libraries"
 msgstr "Copiaţi la toate bibliotecile"
@@ -21462,7 +21489,7 @@ msgstr "Suprimaţi Subdomeniul"
 msgid "Copy existing value"
 msgstr "De la o înregistrare existentă:"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:213
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:195
 #, fuzzy, c-format
 msgid "Copy holidays to:"
 msgstr "Copiaţi/Volum :"
@@ -21510,7 +21537,7 @@ msgstr "Nr. de copiere"
 msgid "Copy to %s"
 msgstr "Nr. de copiere"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:188
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:170
 #, c-format
 msgid "Copy to all libraries"
 msgstr "Copiaţi la toate bibliotecile"
@@ -21661,7 +21688,7 @@ msgid ""
 "correctly defined in koha-conf.xml. "
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:382
+#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:385
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/itemtypes.tt:32
 #, c-format
 msgid "Count"
@@ -21801,7 +21828,7 @@ msgid "Courses"
 msgstr "Contracte"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/detail.tt:291
-#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:458
+#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:461
 #, fuzzy, c-format
 msgid "Cover image"
 msgstr "Suprimaţi Imaginile"
@@ -22444,7 +22471,7 @@ msgid "DVD video / Videodisc"
 msgstr "DVD video / Disc_video"
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:992
+#: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:996
 msgid "Daily hold limit reached for patron"
 msgstr ""
 
@@ -22642,8 +22669,8 @@ msgstr "Bază de date: "
 #: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:201
 #: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:457
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tags/review.tt:85
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:251
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:322
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:233
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:304
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:280
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:162
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:164
@@ -22907,12 +22934,12 @@ msgstr "Ziua"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/acquisitions_stats.tt:107
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/acquisitions_stats.tt:129
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/issues_stats.tt:119
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:273
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:255
 #, c-format
 msgid "Day of week"
 msgstr "O Zi a săptămânii"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:297
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:279
 #, fuzzy, c-format
 msgid "Day/month"
 msgstr "Zi/Lună"
@@ -22984,7 +23011,7 @@ msgstr ""
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/basket.tt:9
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/lateorders.tt:195
-#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:46
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:59
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:151
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:153
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:242
@@ -23002,7 +23029,7 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/MARCdetail.tt:44
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/labeledMARCdetail.tt:47
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/merge.tt:111
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:938
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:946
 #: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep2.tt:75
 #: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep2.tt:79
 #: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep2.tt:83
@@ -23278,7 +23305,7 @@ msgstr ""
 msgid "Define rules to modify items by age"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:43
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:25
 #, fuzzy, c-format
 msgid "Define the holidays for:"
 msgstr "Definiţi sărbătorile pentru :"
@@ -23301,7 +23328,7 @@ msgstr ""
 
 #. P
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoice.tt:184
-#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoice.tt:271
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoice.tt:275
 #, fuzzy, c-format
 msgid "Define values in authorised value category ADJ_REASON to enable"
 msgstr "Definiţi categoriile şi valorile autorizate pentru acestea."
@@ -23406,7 +23433,7 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/edifactmsgs.tt:73
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoice-files.tt:54
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoice.tt:128
-#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoice.tt:233
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoice.tt:237
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoices.tt:100
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/supplier.tt:377
 #: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:435
@@ -23442,7 +23469,7 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:229
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/matching-rules.tt:450
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/oai_set_mappings.tt:78
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/oai_set_mappings.tt:105
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/oai_set_mappings.tt:107
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/oai_sets.tt:96
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/patron-attr-types.tt:277
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:195
@@ -23586,6 +23613,7 @@ msgstr "Suprimaţi Abonamentul"
 msgid "Delete associated items? "
 msgstr "Suprimaţi selectarea"
 
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/basket.tt:63
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/basket.tt:114
 #, fuzzy, c-format
 msgid "Delete basket"
@@ -23661,7 +23689,7 @@ msgstr "Suprimaţi Subdomeniul"
 #. %1$s:  desk.desk_name | html 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/desks.tt:99
 #, fuzzy, c-format
-msgid "Delete desk \"%s?\""
+msgid "Delete desk \"%s\"?"
 msgstr "Suprimaţi Oraşul \"%s?\""
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/templates-add-modify.tt:213
@@ -23867,17 +23895,17 @@ msgstr "Suprimaţi lista"
 msgid "Delete template"
 msgstr "Suprimaţi lista"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:108
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:90
 #, fuzzy, c-format
 msgid "Delete the exceptions on a range"
 msgstr "Suprimaţi acest coş"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:104
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:86
 #, fuzzy, c-format
 msgid "Delete the repeated holidays on a range"
 msgstr "Data de sfârşit *"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:100
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:82
 #, fuzzy, c-format
 msgid "Delete the single holidays on a range"
 msgstr "Suprimaţi această sărbătoare"
@@ -23895,11 +23923,6 @@ msgstr "Șterge această etichetă"
 msgid "Delete this account?"
 msgstr "Nu Poate Suprima Valuta"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/basket.tt:63
-#, c-format
-msgid "Delete this basket"
-msgstr "Suprimaţi acest coş"
-
 #. INPUT type=submit
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/categories.tt:436
 #, fuzzy
@@ -23907,19 +23930,19 @@ msgid "Delete this category"
 msgstr "Suprimaţi acest coş"
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:356
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:338
 #, fuzzy
 msgid "Delete this exception."
 msgstr "Suprimaţi acest coş"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:97
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:79
 #, c-format
 msgid "Delete this holiday"
 msgstr "Suprimaţi această sărbătoare"
 
 #. For the first occurrence,
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:356
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:338
 #, fuzzy
 msgid "Delete this holiday."
 msgstr "Suprimaţi această sărbătoare"
@@ -23957,7 +23980,7 @@ msgstr "Suprimaţi?"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/basket.tt:491
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/basket.tt:629
-#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoice.tt:350
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoice.tt:354
 #, c-format
 msgid "Deleted bibliographic record, can't find title"
 msgstr ""
@@ -24013,7 +24036,7 @@ msgid "Deliverer"
 msgstr "Destinaţia Livrării:"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/housebound.tt:287
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1327
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1335
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:372
 #, fuzzy, c-format
 msgid "Deliverer:"
@@ -24108,7 +24131,7 @@ msgstr ""
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:860
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoice-files.tt:37
-#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoice.tt:428
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoice.tt:432
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/supplier.tt:357
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/adveditorshortcuts.tt:41
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:149
@@ -24153,10 +24176,10 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/subscription-frequencies.tt:131
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:268
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/csv-profiles.tt:264
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:253
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:275
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:302
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:324
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:235
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:257
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:284
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:306
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:102
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/stockrotation.tt:65
 #: koha-tmpl/intranet-tmpl/prog/en/includes/clubs-table.inc:6
@@ -24216,8 +24239,8 @@ msgstr "Descrierea taxelor"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/files.tt:72
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/dictionary.tt:235
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:60
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:83
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:158
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:65
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:140
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:265
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/stockrotation.tt:145
 #: koha-tmpl/intranet-tmpl/prog/en/includes/modals/cataloguing_create_av.inc:23
@@ -24429,11 +24452,11 @@ msgstr "Număr de Apel"
 msgid "Dewey/classification"
 msgstr "Clasificare"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:42
-#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:100
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:51
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:113
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/sru_modmapping.tt:58
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:44
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:99
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:52
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:109
 #, fuzzy, c-format
 msgid "Dewey: "
 msgstr "Dewey: "
@@ -25615,7 +25638,7 @@ msgstr "Editaţi Articolele"
 msgid "Edit item"
 msgstr "Editaţi Articolele"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:510
+#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:513
 #: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:230
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:261
 #: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:40
@@ -25684,7 +25707,7 @@ msgid "Edit quotes for quote-of-the-day feature "
 msgstr ""
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:104
-#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:507
+#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:510
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:140
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/subscription-add.tt:70
 #: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:227
@@ -25775,8 +25798,8 @@ msgstr "Editaţi Abonamentul"
 msgid "Edit tag"
 msgstr "Editaţi coşul %s"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:57
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:112
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:39
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:94
 #, c-format
 msgid "Edit this holiday"
 msgstr "Editaţi această sărbătoare"
@@ -25842,9 +25865,9 @@ msgstr "Editaţi Înregistrarea"
 msgid "Editing search result"
 msgstr "Rezultatele Autorităţii de Căutare"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:110
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:123
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:172
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:125
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:135
 #: koha-tmpl/intranet-tmpl/prog/en/includes/cateditor-ui.inc:42
 #, c-format
 msgid "Edition"
@@ -25949,7 +25972,7 @@ msgstr ""
 msgid "Empty and close"
 msgstr "Goliţi şi Închideţi"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:468
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:469
 #, fuzzy, c-format
 msgid "Empty option"
 msgstr "Modificând Înregistrările Autorităţilor"
@@ -26022,7 +26045,7 @@ msgstr "Codare: "
 msgid "Encumber while invoice open"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoice.tt:296
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoice.tt:300
 #, c-format
 msgid "Encumber while invoice open? "
 msgstr ""
@@ -26219,7 +26242,7 @@ msgstr ""
 "Introduceţi un cuprins care va rescrie carenţa în lista cu rezultatele "
 "căutării. Exemplu, pentru un tip_de_articol a website-ului "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:231
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:213
 #, fuzzy, c-format
 msgid "Enter a title and description for the holiday."
 msgstr "Generaţi o excepţie pentru această vacanţă/sărbătoare repetată."
@@ -26524,7 +26547,7 @@ msgid "Error while creating PDF file. "
 msgstr "Eroare la adăugarea articolelor:"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/auth.tt:29
-#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:325
+#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:328
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:533
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:111
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:116
@@ -26733,7 +26756,7 @@ msgid "Example: Personal name=200|Entry element=210$a|300|009"
 msgstr "Exemplu: Nume personal=200|Elementul de intrare=210$a|300|009"
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:992
+#: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:996
 msgid "Exceeded max holds per record"
 msgstr ""
 
@@ -26743,12 +26766,12 @@ msgid "Excel"
 msgstr ""
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:356
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:338
 #, fuzzy
 msgid "Exception: %s"
 msgstr "Excepţii"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:248
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:230
 #, c-format
 msgid "Exceptions"
 msgstr "Excepţii"
@@ -26785,7 +26808,7 @@ msgstr "Descărcaţi raportul:"
 msgid "Existing SQL"
 msgstr "Reţineri existente"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:810
+#: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:814
 #, c-format
 msgid "Existing holds"
 msgstr "Reţineri existente"
@@ -26811,7 +26834,7 @@ msgid "Expected on"
 msgstr "Aşteptat pe"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:975
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1241
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1249
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:835
 #: koha-tmpl/intranet-tmpl/prog/en/includes/borrower_debarments.inc:11
 #: koha-tmpl/intranet-tmpl/prog/en/includes/holds_table.inc:15
@@ -26852,7 +26875,7 @@ msgstr "Data expirării: "
 msgid "Expiration:"
 msgstr "Termen de Expirare:"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1291
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1299
 #, fuzzy, c-format
 msgid "Expiration: "
 msgstr "Termen de Expirare:"
@@ -26977,6 +27000,11 @@ msgstr "Exportaţi în fişier csv"
 #, fuzzy, c-format
 msgid "Export authority records"
 msgstr "Adăugarea unei Înregistrări Autorizate"
+
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/basketgroup.tt:143
+#, fuzzy, c-format
+msgid "Export basket group as CSV"
+msgstr "Exportaţi acest coş ca CSV"
 
 #: koha-tmpl/intranet-tmpl/prog/en/includes/permissions.inc:469
 #, fuzzy, c-format
@@ -27110,11 +27138,6 @@ msgstr "Exportaţi Lot"
 #, fuzzy
 msgid "Export single card"
 msgstr "Exportând card(uri) %s."
-
-#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/basketgroup.tt:143
-#, fuzzy, c-format
-msgid "Export this basket group as CSV"
-msgstr "Exportaţi acest coş ca CSV"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/inventory.tt:168
 #, fuzzy, c-format
@@ -27699,7 +27722,7 @@ msgstr "Numele fişierului"
 msgid "Files"
 msgstr "Filtre"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoice.tt:422
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoice.tt:426
 #, c-format
 msgid "Files attached to invoice"
 msgstr ""
@@ -28440,7 +28463,7 @@ msgid "Friday"
 msgstr "Vineri"
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:356
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:338
 #, fuzzy
 msgid "Fridays"
 msgstr "Vineri"
@@ -28536,8 +28559,8 @@ msgstr "De la un număr bibliografic: "
 msgid "From call number:"
 msgstr "De la numărul_de_apel_al_articolului: "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:65
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:142
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:47
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:124
 #, fuzzy, c-format
 msgid "From date:"
 msgstr "Format:"
@@ -28626,7 +28649,7 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/duplicate_orders.tt:274
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/histsearch.tt:52
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoice.tt:149
-#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoice.tt:337
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoice.tt:341
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/lateorders.tt:72
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/newordersuggestion.tt:34
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/parcel.tt:130
@@ -28720,7 +28743,7 @@ msgid "Fund:"
 msgstr "Fond"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/duplicate_orders.tt:199
-#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoice.tt:279
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoice.tt:283
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:333
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:250
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/orders_by_budget.tt:80
@@ -28754,14 +28777,14 @@ msgstr "Licenţă BSD"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/basket.tt:412
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/basket.tt:613
-#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoice.tt:336
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoice.tt:340
 #, fuzzy, c-format
 msgid "GST"
 msgstr "GST:"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/basket.tt:411
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/basket.tt:612
-#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoice.tt:335
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoice.tt:339
 #, fuzzy, c-format
 msgid "GST %%"
 msgstr "GST:"
@@ -28863,7 +28886,7 @@ msgstr "Creaţi o Listă nouă"
 msgid "Generate a new client id/secret pair"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:87
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:69
 #, c-format
 msgid "Generate an exception for this repeated holiday."
 msgstr "Generaţi o excepţie pentru această vacanţă/sărbătoare repetată."
@@ -28874,7 +28897,7 @@ msgstr "Generaţi o excepţie pentru această vacanţă/sărbătoare repetată."
 msgid "Generate discharge"
 msgstr "Generaţi Următorul"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:93
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:75
 #, fuzzy, c-format
 msgid "Generate exceptions on a range of dates."
 msgstr "Generaţi o excepţie pentru această vacanţă/sărbătoare repetată."
@@ -28933,10 +28956,10 @@ msgid "Glyphicons Free"
 msgstr ""
 
 #. INPUT type=submit name=changepage_goto
-#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:204
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:217
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:430
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:147
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:216
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:226
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/reserveratios.tt:165
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/dictionary.tt:61
 #: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:972
@@ -28978,14 +29001,14 @@ msgstr "Editaţi detaliile"
 msgid "Go to item search"
 msgstr "Autoritate de Căutare"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:204
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:217
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:147
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:216
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:226
 #, fuzzy, c-format
 msgid "Go to page : "
 msgstr "această pagina "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoice.tt:314
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoice.tt:318
 #, fuzzy, c-format
 msgid "Go to receipt page"
 msgstr "această pagina"
@@ -29139,7 +29162,7 @@ msgstr "Garant:"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:435
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:455
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:492
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:496
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember-brief.tt:54
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:295
 #, c-format
@@ -29562,7 +29585,7 @@ msgstr ""
 msgid "Hint:"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:227
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:209
 #, fuzzy, c-format
 msgid "Hints"
 msgstr "culoare"
@@ -29780,7 +29803,7 @@ msgstr ""
 
 #. For the first occurrence,
 #. %1$s:  Biblio.HoldsCount( SEARCH_RESULT.biblionumber ) | html 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:486
+#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:489
 #: koha-tmpl/intranet-tmpl/prog/en/includes/biblio-view-menu.inc:28
 #, fuzzy, c-format
 msgid "Holds (%s)"
@@ -29921,45 +29944,45 @@ msgstr "Statisticile catalogului"
 msgid "Holds:"
 msgstr "0 Reţineri"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:241
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:356
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:223
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:338
 #, c-format
 msgid "Holiday exception"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:162
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:144
 #, c-format
 msgid "Holiday only on this day"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:167
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:149
 #, c-format
 msgid "Holiday repeated every same day of the week"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:172
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:154
 #, c-format
 msgid "Holiday repeated yearly on the same date"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:239
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:356
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:221
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:338
 #, c-format
 msgid "Holiday repeating weekly"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:240
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:356
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:222
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:338
 #, c-format
 msgid "Holiday repeating yearly"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:177
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:159
 #, fuzzy, c-format
 msgid "Holidays on a range"
 msgstr "Data de sfârşit *"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:182
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:164
 #, c-format
 msgid "Holidays repeated yearly on a range"
 msgstr ""
@@ -30212,7 +30235,7 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:17
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/csv-profiles.tt:14
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/export.tt:19
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:32
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:14
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/import_borrowers.tt:21
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/inventory.tt:15
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/koha-news.tt:28
@@ -30412,7 +30435,7 @@ msgstr "Orice Furnizor"
 msgid "Housebound details for %s"
 msgstr "&rsaquo; Tipuri de Articole "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1308
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1316
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:358
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:383
 #, c-format
@@ -30566,13 +30589,13 @@ msgid "ISBD"
 msgstr ""
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/lateorders.tt:77
-#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:111
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:124
 #: koha-tmpl/intranet-tmpl/prog/en/modules/basket/basket.tt:82
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:16
-#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:366
-#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:367
+#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:369
+#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:370
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:170
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:126
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:136
 #: koha-tmpl/intranet-tmpl/prog/en/modules/labels/search.tt:36
 #: koha-tmpl/intranet-tmpl/prog/en/modules/labels/search.tt:37
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:187
@@ -30618,10 +30641,10 @@ msgstr "ISBN:"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:176
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:42
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:33
-#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:95
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:108
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/sru_modmapping.tt:26
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:25
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:94
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:104
 #: koha-tmpl/intranet-tmpl/prog/en/modules/labels/result.tt:54
 #: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:725
 #: koha-tmpl/intranet-tmpl/prog/en/includes/filter-orders.inc:8
@@ -30682,8 +30705,8 @@ msgstr "Codul Fondului: "
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/newordersubscription.tt:34
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:17
-#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:368
-#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:369
+#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:371
+#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:372
 #: koha-tmpl/intranet-tmpl/prog/en/modules/labels/search.tt:39
 #: koha-tmpl/intranet-tmpl/prog/en/modules/labels/search.tt:40
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/checkexpiration.tt:77
@@ -30711,10 +30734,10 @@ msgid "ISSN:"
 msgstr "ISSN:"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:34
-#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:96
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:109
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/sru_modmapping.tt:50
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:28
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:95
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:105
 #, c-format
 msgid "ISSN: "
 msgstr ""
@@ -30789,7 +30812,7 @@ msgid ""
 "record. This setting cannot be changed after an attribute is defined."
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:119
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:101
 #, c-format
 msgid ""
 "If checked, changes for this holiday will be copied to all libraries. If the "
@@ -30844,7 +30867,7 @@ msgstr ""
 "este bifat, fiecare articol de acest tip pot fi emis cu excepţia cazului în "
 "care nu se împrumută este setat pentru un anumit articol) "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:190
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:172
 #, c-format
 msgid ""
 "If checked, this holiday will be copied to all libraries. If the holiday "
@@ -31313,7 +31336,7 @@ msgstr "%s - %s "
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:216
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:260
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:97
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:165
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:175
 #: koha-tmpl/intranet-tmpl/prog/en/modules/installer/step3.tt:163
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/import_borrowers.tt:276
 #: koha-tmpl/intranet-tmpl/prog/en/includes/cateditor-ui.inc:42
@@ -31496,7 +31519,7 @@ msgstr "%s începând cu"
 msgid "In use"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:496
+#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:499
 #, fuzzy, c-format
 msgid "In your cart"
 msgstr "Expedierea coșului"
@@ -31584,13 +31607,13 @@ msgstr ""
 msgid "Increase indent"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1263
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1271
 #: koha-tmpl/intranet-tmpl/prog/en/includes/borrower_debarments.inc:40
 #, fuzzy, c-format
 msgid "Indefinite"
 msgstr "7-8 Nedefinit"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:345
+#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:348
 #, c-format
 msgid "Indexed in:"
 msgstr "Indexate în:"
@@ -31629,15 +31652,15 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:121
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:224
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:543
-#: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:714
+#: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:718
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/subscription-detail.tt:76
 #, c-format
 msgid "Information"
 msgstr "Informaţii"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:920
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:924
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:928
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:932
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:936
 #, fuzzy, c-format
 msgid "Inherit from settings"
 msgstr "Setări Generale"
@@ -32000,7 +32023,7 @@ msgid "Invalid course!"
 msgstr ""
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1469
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1477
 #, fuzzy
 msgid "Invalid day entered in field %s"
 msgstr "Data introdusă în fişier "
@@ -32017,7 +32040,7 @@ msgid "Invalid input. Enter something like: 245,a"
 msgstr ""
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1469
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1477
 #, fuzzy
 msgid "Invalid month entered in field %s"
 msgstr "Data introdusă în fişier "
@@ -32051,7 +32074,7 @@ msgid "Invalid value for %s"
 msgstr "Făceţi clic pe 'Cadru Nou de Autoritate'"
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1469
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1477
 #, fuzzy
 msgid "Invalid year entered in field %s"
 msgstr "Data introdusă în fişier "
@@ -32097,7 +32120,7 @@ msgstr "Nr. de control: "
 msgid "Invoice detail page"
 msgstr "Editaţi detaliile"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoice.tt:317
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoice.tt:321
 #, fuzzy, c-format
 msgid "Invoice details"
 msgstr "Editaţi detaliile"
@@ -32478,7 +32501,7 @@ msgid "Item count"
 msgstr "Data Taxelor"
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:992
+#: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:996
 #, fuzzy
 msgid "Item damaged"
 msgstr "Etichetă articol"
@@ -32743,7 +32766,7 @@ msgid "Item sorting"
 msgstr "Creatori"
 
 #. SPAN
-#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:532
+#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:535
 msgid ""
 "Item statuses may be inaccurate. Please view the record details for accurate "
 "item statuses"
@@ -32794,7 +32817,7 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/reserves_stats.tt:150
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:221
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:530
-#: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:711
+#: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:715
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/subscription-batchedit.tt:39
 #: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:957
 #: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:959
@@ -33221,7 +33244,7 @@ msgstr ""
 msgid "Keep issue number"
 msgstr "Numărul cardului"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:235
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:217
 #, c-format
 msgid "Key"
 msgstr ""
@@ -33250,10 +33273,10 @@ msgstr "Orice Furnizor"
 msgid "Keyword"
 msgstr "Cuvinte cheie"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:39
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:42
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/sru_modmapping_auth.tt:19
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:27
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:38
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:43
 #, fuzzy, c-format
 msgid "Keyword (any): "
 msgstr "Orice cuvânt "
@@ -36130,18 +36153,18 @@ msgstr "| Câmp Koha: %s,"
 msgid "LC call number:"
 msgstr "Număr de Apel: "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:40
-#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:97
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:45
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:110
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/sru_modmapping.tt:30
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:40
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:96
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:46
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:106
 #, fuzzy, c-format
 msgid "LC call number: "
 msgstr "Număr de Apel: "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:112
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:125
 #: koha-tmpl/intranet-tmpl/prog/en/modules/basket/basket.tt:197
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:127
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:137
 #: koha-tmpl/intranet-tmpl/prog/en/includes/cateditor-ui.inc:42
 #: koha-tmpl/intranet-tmpl/prog/en/columns.def:139
 #, c-format
@@ -36549,7 +36572,7 @@ msgstr ""
 
 #. %1$s:  END 
 #. %2$s:  END 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:810
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:818
 #, c-format
 msgid "Leave blank for auto calc during registration %s %s "
 msgstr ""
@@ -36665,8 +36688,8 @@ msgstr ""
 msgid "Librarian identity:"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/koha-news.tt:395
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/koha-news.tt:397
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/koha-news.tt:399
 #, c-format
 msgid "Librarian interface"
 msgstr ""
@@ -36708,7 +36731,7 @@ msgid "Libraries: "
 msgstr "Orice Bibliotecă "
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/acqui-home.tt:105
-#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoice.tt:328
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoice.tt:332
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/lateorders.tt:70
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/newordersubscription.tt:38
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/newordersuggestion.tt:33
@@ -36867,7 +36890,7 @@ msgstr "translaţie "
 msgid "Library limitations: "
 msgstr "translaţie "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:765
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:773
 #, fuzzy, c-format
 msgid "Library management"
 msgstr "Taxa de Administrare a Contului"
@@ -36892,7 +36915,7 @@ msgstr ""
 msgid "Library of the patron:"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:964
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:972
 #, fuzzy, c-format
 msgid "Library setup"
 msgstr "Orice Bibliotecă "
@@ -36930,7 +36953,7 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:381
 #: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:607
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/member.tt:173
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:819
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:827
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/checkexpiration.tt:33
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/serials-search.tt:248
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/serials-search.tt:358
@@ -36939,8 +36962,8 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/subscription-renew.tt:65
 #: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:254
 #: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:545
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:61
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:137
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:43
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:119
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/letter.tt:262
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/letter.tt:268
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/stockrotation.tt:196
@@ -37273,13 +37296,13 @@ msgstr "Rubrica de la A-Z"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/edifactmsgs.tt:93
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/parcel.tt:391
-#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:168
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:181
 #: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/blinddetail-biblio-search.tt:14
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/detail.tt:974
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:217
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/merge.tt:136
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:114
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:183
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:193
 #: koha-tmpl/intranet-tmpl/prog/en/modules/common/patron_search.tt:106
 #: koha-tmpl/intranet-tmpl/prog/en/modules/patron_lists/lists.tt:103
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:107
@@ -37303,7 +37326,7 @@ msgstr ""
 msgid "Loading emoticons..."
 msgstr "Rubrica de la A-Z"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1411
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1419
 #, c-format
 msgid "Loading new messaging defaults "
 msgstr ""
@@ -37432,7 +37455,7 @@ msgstr "%s date adăugate"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:267
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:159
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:202
-#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:418
+#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:421
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:70
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/branchoverdues.tt:40
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/branchoverdues.tt:75
@@ -37734,12 +37757,12 @@ msgstr ""
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/parcel.tt:175
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/parcel.tt:341
-#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:148
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:161
 #: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/merge.tt:59
 #: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/merge.tt:60
 #: koha-tmpl/intranet-tmpl/prog/en/modules/basket/downloadcart.tt:16
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/detail.tt:117
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:163
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:173
 #: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/downloadshelf.tt:33
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/export.tt:141
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/export.tt:215
@@ -37855,13 +37878,13 @@ msgid "MARC organization code"
 msgstr "translaţie "
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/parcel.tt:388
-#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:165
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:178
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/detail.tt:971
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:137
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:192
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:96
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:111
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:163
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:173
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:161
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:415
 #, fuzzy, c-format
@@ -38032,7 +38055,7 @@ msgstr "Adăugaţi o nouă Bibliotecă/Sucursală"
 msgid "Make a payment"
 msgstr "Numele coşului"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:184
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:166
 #, c-format
 msgid ""
 "Make a single holiday on a range repeated yearly. For example, selecting "
@@ -38040,7 +38063,7 @@ msgid ""
 "10 a holiday, and will affect August 1-10 in other years."
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:179
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:161
 #, c-format
 msgid ""
 "Make a single holiday on a range. For example, selecting August 1, 2012 and "
@@ -38048,7 +38071,7 @@ msgid ""
 "will not affect August 1-10 in other years."
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:164
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:146
 #, c-format
 msgid ""
 "Make a single holiday. For example, selecting August 1, 2012 will make it a "
@@ -38076,7 +38099,7 @@ msgstr "%s %s (implicit)"
 msgid "Make payment"
 msgstr "Numele coşului"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:169
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:151
 #, c-format
 msgid ""
 "Make this weekday a holiday, every week. For example, if your library is "
@@ -38413,7 +38436,7 @@ msgstr "Perioada de graţie:"
 msgid "Manage indexes, facets, and their mappings to MARC fields and subfields"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoice.tt:315
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoice.tt:319
 #, fuzzy, c-format
 msgid "Manage invoice files"
 msgstr "Perioada de graţie:"
@@ -38477,6 +38500,11 @@ msgstr "(Creaţi eticheta lot)"
 #, fuzzy, c-format
 msgid "Manage numbering patterns "
 msgstr "(Creaţi eticheta lot)"
+
+#: koha-tmpl/intranet-tmpl/prog/en/includes/acquisitions-menu.inc:38
+#, fuzzy, c-format
+msgid "Manage order basket fields"
+msgstr "indicele tematice"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/acqui-home.tt:42
 #, c-format
@@ -38591,6 +38619,11 @@ msgstr "Făceţi clic pe 'Sugestii de administrare'"
 #, fuzzy, c-format
 msgid "Manage stockrotation operations"
 msgstr "&rsaquo; Confirmarea Suprimării"
+
+#: koha-tmpl/intranet-tmpl/prog/en/includes/serials-menu.inc:39
+#, fuzzy, c-format
+msgid "Manage subscription fields"
+msgstr "subdomeniu"
 
 #: koha-tmpl/intranet-tmpl/prog/en/includes/permissions.inc:609
 #, c-format
@@ -39285,8 +39318,8 @@ msgstr "(Parolă: "
 
 #. For the first occurrence,
 #. %1$s:  patron.category.effective_min_password_length | html 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1140
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1469
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1148
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1477
 #, c-format
 msgid "Minimum password length: %s"
 msgstr ""
@@ -39683,7 +39716,7 @@ msgid "Monday"
 msgstr ""
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:356
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:338
 #, fuzzy
 msgid "Mondays"
 msgstr "astăzi"
@@ -39700,7 +39733,7 @@ msgstr "astăzi"
 msgid "Month"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:299
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:281
 #, fuzzy, c-format
 msgid "Month/day"
 msgstr "1/Lună "
@@ -39986,7 +40019,7 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/basketgroup.tt:347
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/booksellers.tt:87
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoice-files.tt:35
-#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoice.tt:426
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoice.tt:430
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/supplier.tt:356
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/transferorder.tt:105
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/additional-fields.tt:88
@@ -40216,7 +40249,7 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/classsources.tt:262
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:84
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smtp_servers.tt:26
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1393
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1401
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/subscription-detail.tt:421
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/subscription-detail.tt:453
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/modborrowers.tt:305
@@ -40859,9 +40892,9 @@ msgid "Next open day"
 msgstr "Denumirea Fondului: "
 
 #. INPUT type=button name=changepage_next
-#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:202
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:215
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:145
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:214
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:224
 #, fuzzy
 msgid "Next page"
 msgstr "Urmărotul"
@@ -40903,10 +40936,10 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/moredetail.tt:248
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/stockrotation.tt:152
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:565
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:541
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:544
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:556
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:559
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:549
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:552
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:564
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:567
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/paycollect.tt:335
 #: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep2.tt:49
 #: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep2.tt:52
@@ -40942,12 +40975,12 @@ msgstr "Nu"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/supplier.tt:204
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/supplier.tt:211
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:896
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:905
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1317
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1322
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1331
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1336
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:904
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:913
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1325
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1330
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1339
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1344
 #, c-format
 msgid "No "
 msgstr ""
@@ -41183,8 +41216,8 @@ msgid "No comments to moderate."
 msgstr ""
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/detail.tt:209
-#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:440
-#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:450
+#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:443
+#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:453
 #, c-format
 msgid "No cover image available"
 msgstr "Nici o imagine a copertei disponibile"
@@ -41226,7 +41259,7 @@ msgstr "Acţionaţi în cazul în care se potriveşte cu înregistrarea găsită
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoice.tt:83
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoice.tt:201
-#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoice.tt:281
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoice.tt:285
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoices.tt:136
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/parcels.tt:159
 #, fuzzy, c-format
@@ -41256,7 +41289,7 @@ msgstr "Adăugaţi un nou Grup"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:918
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:962
-#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:483
+#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:486
 #: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:217
 #: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:223
 #, c-format
@@ -41288,9 +41321,9 @@ msgstr "<a1>%s %s </a> are prea multe reţineri."
 msgid "No holds on this record"
 msgstr "<a1>%s %s </a> are prea multe reţineri."
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:919
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:923
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:927
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:931
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:935
 #, c-format
 msgid "No if settings allow it"
 msgstr ""
@@ -41340,7 +41373,7 @@ msgstr ""
 msgid "No item with barcode: %s"
 msgstr "EROARE: Nici un articol cu codul de bare %s nu a fost găsit."
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:653
+#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:656
 #, c-format
 msgid "No items"
 msgstr ""
@@ -41354,7 +41387,7 @@ msgstr ""
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:277
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:321
-#: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:767
+#: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:771
 #, fuzzy, c-format
 msgid "No items are available"
 msgstr "Disponibil"
@@ -41464,7 +41497,7 @@ msgstr ""
 msgid "No order selected"
 msgstr "%s Deţin(e) mai mult de"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoice.tt:414
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoice.tt:418
 #, fuzzy, c-format
 msgid "No orders yet"
 msgstr "%s Deţin(e) mai mult de"
@@ -41598,7 +41631,7 @@ msgid "No quotes available. Please use the 'Add quote' button to add a quote."
 msgstr ""
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoice.tt:172
-#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoice.tt:259
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoice.tt:263
 #, fuzzy, c-format
 msgid "No reason"
 msgstr "%s probleme"
@@ -41606,8 +41639,8 @@ msgstr "%s probleme"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:990
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:165
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:851
-#: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:818
-#: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:968
+#: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:822
+#: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:972
 #, fuzzy, c-format
 msgid "No reason given"
 msgstr "%s probleme"
@@ -41870,17 +41903,17 @@ msgstr "Ficţiune"
 msgid "Non-musical recording"
 msgstr "Fără înregistrări muzicale"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:572
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:580
 #, fuzzy, c-format
 msgid "Non-patron guarantor"
 msgstr "Modificaţi Contact"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:604
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:612
 #, fuzzy, c-format
 msgid "Non-patron guarantor first name"
 msgstr "Modificaţi Contact"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:587
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:595
 #, c-format
 msgid "Non-patron guarantor surname"
 msgstr ""
@@ -41906,7 +41939,7 @@ msgid "Nonbreaking space"
 msgstr ""
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoice.tt:184
-#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoice.tt:270
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoice.tt:274
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/additional-fields.tt:136
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/authorised_values.tt:101
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/itemtypes.tt:122
@@ -41953,7 +41986,7 @@ msgid "None defined"
 msgstr "%s %s %s %s (%s)"
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:992
+#: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:996
 msgid "None of these items can normally be put on hold for this patron."
 msgstr ""
 
@@ -42001,7 +42034,7 @@ msgid "Normal"
 msgstr ""
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:356
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:338
 msgid "Normal day"
 msgstr ""
 
@@ -42152,7 +42185,7 @@ msgid "Not for loan: "
 msgstr "Carenţe la această bibliotecă "
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:992
+#: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:996
 #, fuzzy
 msgid "Not holdable"
 msgstr "%s disponibil:"
@@ -42272,7 +42305,7 @@ msgstr ""
 msgid "Note:"
 msgstr "%s : %s"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoice.tt:275
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoice.tt:279
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:78
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:885
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/mancredit.tt:58
@@ -42327,8 +42360,8 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:209
 #: koha-tmpl/intranet-tmpl/prog/en/modules/basket/basket.tt:153
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:242
-#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:364
-#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:365
+#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:367
+#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:368
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:63
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:118
 #: koha-tmpl/intranet-tmpl/prog/en/modules/common/patron_search.tt:84
@@ -42412,12 +42445,12 @@ msgid "Notes: %s"
 msgstr ""
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:162
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:220
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:230
 #, fuzzy, c-format
 msgid "Nothing found."
 msgstr "%s linii găsite."
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:221
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:234
 #, fuzzy, c-format
 msgid "Nothing found. "
 msgstr "%s linii găsite. "
@@ -42937,7 +42970,7 @@ msgstr ""
 msgid "OPAC tables"
 msgstr "Detaliile Catalogului"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:521
+#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:524
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/additem.tt:110
 #, fuzzy, c-format
 msgid "OPAC view"
@@ -42948,7 +42981,7 @@ msgstr "Permiteţi parolei:"
 msgid "OPAC view:"
 msgstr "Permiteţi parolei:"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1050
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1058
 #, fuzzy, c-format
 msgid "OPAC/Staff interface login"
 msgstr "Catalogare:"
@@ -43260,7 +43293,7 @@ msgid "Only patrons from the item's home library may put this book on hold."
 msgstr ""
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:992
+#: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:996
 msgid "Only pickup locations within the same hold group are allowed"
 msgstr ""
 
@@ -43666,7 +43699,7 @@ msgid "Orex Digital, Spain"
 msgstr ""
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/categories.tt:148
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:836
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:844
 #: koha-tmpl/intranet-tmpl/prog/en/modules/plugins/plugins-home.tt:69
 #, c-format
 msgid "Organization"
@@ -43766,7 +43799,7 @@ msgstr ""
 msgid "Other holdings (%s)"
 msgstr "Adăugaţi reţinerile"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:646
+#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:649
 #, fuzzy, c-format
 msgid "Other holdings:"
 msgstr "Adăugaţi reţinerile"
@@ -44149,12 +44182,12 @@ msgstr "NumărÎmprumător:"
 msgid "Password error for patron with borrowernumber %s. "
 msgstr "NumărÎmprumător:"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1138
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1146
 #, c-format
 msgid "Password has leading or trailing whitespaces"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1132
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1140
 #, c-format
 msgid "Password is too short"
 msgstr ""
@@ -44169,7 +44202,7 @@ msgid ""
 "%s, length is %s "
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1135
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1143
 #, fuzzy, c-format
 msgid "Password is too weak"
 msgstr "(Parolă: "
@@ -44241,7 +44274,7 @@ msgstr "Parolă:"
 msgid "Password: "
 msgstr "(Parolă: "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1189
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1197
 #, c-format
 msgid "Passwords do not match"
 msgstr ""
@@ -44343,7 +44376,7 @@ msgstr "Generaţi o excepţie pentru această vacanţă/sărbătoare repetată."
 msgid "Patron ID:"
 msgstr "Detaliile Catalogului "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1200
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1208
 #, c-format
 msgid "Patron account flags"
 msgstr ""
@@ -44354,7 +44387,7 @@ msgid "Patron activity"
 msgstr ""
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:992
+#: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:996
 #, fuzzy
 msgid "Patron already has hold for this item"
 msgstr ": articolul este verificat. "
@@ -44652,7 +44685,7 @@ msgstr "Anulaţi notificaţia"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:260
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:299
-#: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:750
+#: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:754
 #, fuzzy, c-format
 msgid "Patron has previously checked out this title"
 msgstr ": articolul este verificat. "
@@ -44705,14 +44738,14 @@ msgstr ""
 msgid "Patron is an adult"
 msgstr "Creaţi Lista de Rutare"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1277
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1285
 #: koha-tmpl/intranet-tmpl/prog/en/includes/borrower_debarments.inc:4
 #, c-format
 msgid "Patron is currently unrestricted."
 msgstr ""
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:992
+#: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:996
 #, fuzzy
 msgid "Patron is from different library"
 msgstr "%s %s nu are amenzi restante. "
@@ -44761,7 +44794,7 @@ msgstr "Statisticile catalogului"
 msgid "Patron lists:"
 msgstr "Statisticile catalogului"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1409
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1417
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:430
 #, c-format
 msgid "Patron messaging preferences"
@@ -44877,7 +44910,7 @@ msgstr "0 - Nici o relaţie ierarhică "
 msgid "Patron request"
 msgstr "Anulare Reţinută"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1234
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1242
 #, fuzzy, c-format
 msgid "Patron restrictions"
 msgstr "Circulaţia Mesajelor"
@@ -45673,10 +45706,10 @@ msgstr "%s %s (%s)"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:492
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:494
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:496
-#: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:787
-#: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:789
-#: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:792
-#: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:794
+#: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:791
+#: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:793
+#: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:796
+#: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:798
 #: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:152
 #: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:131
 #: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:136
@@ -45692,7 +45725,7 @@ msgstr "Anulare Reţinută "
 #. For the first occurrence,
 #. %1$s:  holdforclub_name | html 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:145
-#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:488
+#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:491
 #, fuzzy, c-format
 msgid "Place hold for %s"
 msgstr "Anulare Reţinută"
@@ -45702,7 +45735,7 @@ msgstr "Anulare Reţinută"
 #. %2$s:  holdfor_surname | html 
 #. %3$s:  holdfor_cardnumber | html 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:140
-#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:487
+#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:490
 #: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:221
 #: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:132
 #, fuzzy, c-format
@@ -45710,12 +45743,12 @@ msgid "Place hold for %s %s (%s)"
 msgstr "%s %s (%s)"
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:992
+#: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:996
 msgid "Place hold on this item?"
 msgstr ""
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:992
+#: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:996
 msgid "Place hold?"
 msgstr ""
 
@@ -45960,7 +45993,7 @@ msgid ""
 msgstr ""
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1469
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1477
 msgid "Please confirm whether this is a duplicate patron"
 msgstr ""
 
@@ -46131,7 +46164,7 @@ msgstr ""
 msgid "Please enter no more than {0} characters."
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1419
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1427
 #, c-format
 msgid ""
 "Please enter numbers only. Prefix the number with + if including the country "
@@ -46714,7 +46747,7 @@ msgstr ""
 msgid "Preferences and parameters"
 msgstr "Valute şi schimb valutar"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:936
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:944
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:577
 #, fuzzy, c-format
 msgid "Preferred language for notices: "
@@ -46757,28 +46790,28 @@ msgstr "Verificat (căutat în mod implicit): "
 msgid "Prev"
 msgstr "&lt;&lt; Anterior"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:116
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:129
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:214
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/merge.tt:133
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:180
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:190
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/letter.tt:475
 #: koha-tmpl/intranet-tmpl/prog/en/includes/str/tinymce_i18n.inc:2
 #, c-format
 msgid "Preview"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:144
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:157
 #, fuzzy, c-format
 msgid "Preview "
 msgstr ", poet liric"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:123
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:136
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:193
 #, c-format
 msgid "Preview MARC"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:123
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:136
 #, fuzzy, c-format
 msgid "Preview card"
 msgstr ", poet liric"
@@ -46843,9 +46876,9 @@ msgid "Previous checkouts"
 msgstr "<a1></a>Împrumuturile anterioare"
 
 #. INPUT type=button name=changepage_prev
-#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:198
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:211
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:141
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:210
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:220
 #, fuzzy
 msgid "Previous page"
 msgstr "&lt;&lt; Anterior"
@@ -46969,6 +47002,11 @@ msgstr "%s : %s"
 msgid "Print barcode range"
 msgstr "Introduceţi codul de bare: "
 
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/basketgroup.tt:144
+#, fuzzy, c-format
+msgid "Print basket group in PDF"
+msgstr "Grup de Coşuri n°%s "
+
 #: koha-tmpl/intranet-tmpl/prog/en/modules/patroncards/edit-layout.tt:280
 #, fuzzy, c-format
 msgid "Print card number as barcode: "
@@ -47061,11 +47099,6 @@ msgstr "&rsaquo; Confirmare"
 msgid "Print summary"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/basketgroup.tt:144
-#, fuzzy, c-format
-msgid "Print this basket group in PDF"
-msgstr "Grup de Coşuri n°%s "
-
 #: koha-tmpl/intranet-tmpl/prog/en/modules/labels/spinelabel-print.tt:28
 #, fuzzy, c-format
 msgid "Print this label"
@@ -47117,7 +47150,7 @@ msgstr "Editaţi Profilul Imprimantei"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:976
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:836
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:223
-#: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:713
+#: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:717
 #: koha-tmpl/intranet-tmpl/prog/en/includes/holds_table.inc:7
 #, c-format
 msgid "Priority"
@@ -47241,7 +47274,7 @@ msgid "Processing..."
 msgstr "Articol schimbat prelucrând opţiunea"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/categories.tt:149
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:837
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:845
 #, c-format
 msgid "Professional"
 msgstr ""
@@ -47471,7 +47504,7 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoices.tt:291
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:244
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:512
-#: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:734
+#: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:738
 #, c-format
 msgid "Publication year:"
 msgstr ""
@@ -47479,9 +47512,9 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:164
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:167
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:37
-#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:94
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:34
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:93
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:107
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:37
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:103
 #, fuzzy, c-format
 msgid "Publication year: "
 msgstr "Circulaţie: "
@@ -47570,8 +47603,8 @@ msgstr "Data publicată "
 #: koha-tmpl/intranet-tmpl/prog/en/modules/basket/basket.tt:110
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:13
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:258
-#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:362
-#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:363
+#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:365
+#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:366
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/catalogue_stats.tt:118
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/result.tt:17
 #: koha-tmpl/intranet-tmpl/prog/en/includes/search_indexes.inc:159
@@ -47663,7 +47696,7 @@ msgstr ""
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/basket.tt:408
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/basket.tt:609
-#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoice.tt:332
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoice.tt:336
 #, c-format
 msgid "Qty."
 msgstr ""
@@ -47753,7 +47786,7 @@ msgstr "Autoritate: "
 msgid "Queued request"
 msgstr "Anulare Reţinută"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1444
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1452
 #, c-format
 msgid "Quick add"
 msgstr ""
@@ -47884,13 +47917,12 @@ msgstr ""
 msgid "Rate: "
 msgstr "Data: "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:100
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:110
 #, c-format
 msgid "Raw (any): "
 msgstr ""
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoice.tt:147
-#: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:429
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:252
 #, c-format
 msgid "Reason"
@@ -47910,12 +47942,13 @@ msgstr "Făceţi clic pe 'Sugestii de administrare' "
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:58
 #: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:190
+#: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:429
 #, fuzzy, c-format
 msgid "Reason:"
 msgstr "Detaliile Catalogului "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoice.tt:257
-#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoice.tt:269
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoice.tt:261
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoice.tt:273
 #, fuzzy, c-format
 msgid "Reason: "
 msgstr "Detaliile Catalogului "
@@ -48383,11 +48416,11 @@ msgstr "Informaţie de Contact"
 msgid "Relationship:"
 msgstr "Informaţie de Contact"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:462
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:465
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:502
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:505
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:611
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:463
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:466
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:507
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:510
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:619
 #, c-format
 msgid "Relationship: "
 msgstr ""
@@ -48448,11 +48481,6 @@ msgstr "%s Carduri Unice de tip Patron"
 msgid "Remaining system parameters permissions "
 msgstr "Circulaţia Rapoartelor"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:782
-#, fuzzy, c-format
-msgid "Remember due date for next check in"
-msgstr "Făceţi clic pe 'Sugestii de administrare'"
-
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:586
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/offline.tt:134
 #, fuzzy, c-format
@@ -48463,6 +48491,11 @@ msgstr "Făceţi clic pe 'Sugestii de administrare'"
 #, c-format
 msgid "Remember memcached needs to be started before Plack."
 msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:782
+#, fuzzy, c-format
+msgid "Remember return date for next check in"
+msgstr "Făceţi clic pe 'Sugestii de administrare'"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/reserves_stats.tt:114
 #, fuzzy, c-format
@@ -48535,8 +48568,8 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/oai_sets.tt:122
 #: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/course-details.tt:258
 #: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/course.tt:159
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:482
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:522
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:486
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:530
 #: koha-tmpl/intranet-tmpl/prog/en/modules/patron_lists/list.tt:184
 #: koha-tmpl/intranet-tmpl/prog/en/modules/pos/pay.tt:189
 #: koha-tmpl/intranet-tmpl/prog/en/modules/rotating_collections/addItems.tt:110
@@ -48690,7 +48723,7 @@ msgstr "Suprimaţi Imaginile"
 msgid "Remove: "
 msgstr "Adăugaţi/Înlăturaţi Articole "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1244
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1252
 #, fuzzy, c-format
 msgid "Remove?"
 msgstr "Adăugaţi/Înlăturaţi Articole "
@@ -48857,6 +48890,17 @@ msgstr ""
 msgid "Reopen"
 msgstr ""
 
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/basket.tt:153
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/basket.tt:156
+#, fuzzy, c-format
+msgid "Reopen basket"
+msgstr "Creaţi grupul de coşuri?"
+
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/basketgroup.tt:142
+#, fuzzy, c-format
+msgid "Reopen basket group"
+msgstr "Creaţi grupul de coşuri?"
+
 #: koha-tmpl/intranet-tmpl/prog/en/includes/permissions.inc:704
 #, fuzzy, c-format
 msgid "Reopen closed invoices "
@@ -48866,17 +48910,6 @@ msgstr "Suprimaţi Înregistrarea"
 #, fuzzy, c-format
 msgid "Reopen it"
 msgstr "Adăugaţi/Înlăturaţi Articole"
-
-#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/basket.tt:153
-#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/basket.tt:156
-#, c-format
-msgid "Reopen this basket"
-msgstr ""
-
-#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/basketgroup.tt:142
-#, fuzzy, c-format
-msgid "Reopen this basket group"
-msgstr "Creaţi grupul de coşuri?"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoice.tt:105
 #, fuzzy, c-format
@@ -48975,7 +49008,7 @@ msgstr ""
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/basket.tt:407
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/basket.tt:608
-#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoice.tt:331
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoice.tt:335
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/parcel.tt:126
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/parcel.tt:241
 #: koha-tmpl/intranet-tmpl/prog/en/columns.def:73
@@ -49120,7 +49153,7 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/serials_stats.tt:18
 #: koha-tmpl/intranet-tmpl/prog/en/includes/acquisitions-menu.inc:14
 #: koha-tmpl/intranet-tmpl/prog/en/includes/header.inc:53
-#: koha-tmpl/intranet-tmpl/prog/en/includes/serials-menu.inc:40
+#: koha-tmpl/intranet-tmpl/prog/en/includes/serials-menu.inc:45
 #: koha-tmpl/intranet-tmpl/prog/en/includes/mana/mana-report-search-result.inc:20
 #, c-format
 msgid "Reports"
@@ -49163,7 +49196,7 @@ msgstr "Articole juridice"
 msgid "Request ID"
 msgstr "Articole juridice"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:503
+#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:506
 #: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:142
 #, fuzzy, c-format
 msgid "Request article"
@@ -49345,32 +49378,32 @@ msgstr "Codul regulei de depunere lipseşte"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:336
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:355
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:371
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:476
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:516
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:585
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:602
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:649
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:666
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:682
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:702
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:723
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:739
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:781
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:788
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:795
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:802
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:823
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:851
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:865
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:881
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:976
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1003
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1023
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1040
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1080
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1129
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1186
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1395
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:477
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:521
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:593
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:610
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:657
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:674
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:690
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:710
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:731
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:747
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:789
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:796
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:803
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:810
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:831
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:859
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:873
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:889
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:984
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1011
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1031
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1048
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1088
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1137
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1194
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1403
 #: koha-tmpl/intranet-tmpl/prog/en/modules/offline_circ/process_koc.tt:42
 #: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep1.tt:24
 #: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep1.tt:29
@@ -49688,13 +49721,13 @@ msgstr "Verificaţi termenul de expirare"
 msgid "Result"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:417
+#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:420
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/search-history.tt:51
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/search-history.tt:92
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/search-history.tt:135
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/search-history.tt:176
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/editor.tt:210
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:88
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:98
 #: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/batch_add_items.tt:121
 #: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/batch_rm_items.tt:39
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/merge-patrons.tt:101
@@ -50308,7 +50341,7 @@ msgstr "%s - Număr_de_card: %s "
 msgid "SMS cellular providers"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1417
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1425
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:438
 #, c-format
 msgid "SMS number:"
@@ -50319,7 +50352,7 @@ msgstr "Număr de SMS:"
 msgid "SMS provider"
 msgstr "profiluri CSV"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1423
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1431
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:442
 #, fuzzy, c-format
 msgid "SMS provider:"
@@ -50435,7 +50468,7 @@ msgid "Saturday"
 msgstr ""
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:356
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:338
 #, fuzzy
 msgid "Saturdays"
 msgstr "%s (%s zile)"
@@ -50473,7 +50506,7 @@ msgstr "%s (%s zile)"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/library_groups.tt:146
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/matching-rules.tt:395
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/matching-rules.tt:397
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/oai_set_mappings.tt:113
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/oai_set_mappings.tt:115
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/oai_sets.tt:54
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/patron-attr-types.tt:194
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/preferences.tt:205
@@ -50525,8 +50558,8 @@ msgstr "%s (%s zile)"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:445
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/automatic_item_modification_by_age.tt:36
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:357
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:123
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:193
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:105
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:175
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/letter.tt:227
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/modborrowers.tt:312
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/scheduler.tt:60
@@ -50769,7 +50802,7 @@ msgstr ""
 msgid "Scan a patron barcode to start. "
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:331
+#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:334
 #, fuzzy, c-format
 msgid "Scan index:"
 msgstr "indicele tematice"
@@ -50828,7 +50861,7 @@ msgstr "Eliberaţi Ecranul"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/histsearch.tt:161
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoices.tt:304
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/transferorder.tt:34
-#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:80
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:93
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/admin-home.tt:52
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:176
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/advsearch.tt:52
@@ -50840,7 +50873,7 @@ msgstr "Eliberaţi Ecranul"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/editor.tt:97
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/editor.tt:143
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:70
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:79
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:89
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/request-article.tt:79
 #: koha-tmpl/intranet-tmpl/prog/en/modules/common/patron_search.tt:47
 #: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:78
@@ -51102,7 +51135,7 @@ msgstr "indicele tematice"
 msgid "Search history"
 msgstr "Istoricul căutărilor"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:229
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:211
 #, c-format
 msgid "Search in the calendar the day you want to set as holiday."
 msgstr ""
@@ -51226,7 +51259,7 @@ msgid "Search reports by keyword: "
 msgstr "Introduceţi cuvintele cheie pentru căutare:"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/histsearch.tt:33
-#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:89
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:102
 #: koha-tmpl/intranet-tmpl/prog/en/modules/labels/result.tt:32
 #: koha-tmpl/intranet-tmpl/prog/en/modules/plugins/plugins-home.tt:63
 #, c-format
@@ -51293,9 +51326,9 @@ msgstr "Editaţi sugestiile de achiziţie #%s"
 msgid "Search system preferences"
 msgstr "Sistemul global de preferinţe"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:60
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:73
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:51
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:57
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:67
 #, fuzzy, c-format
 msgid "Search targets"
 msgstr "Modificând Înregistrările Autorităţilor "
@@ -51583,7 +51616,7 @@ msgstr ""
 msgid "Select CSV profile:"
 msgstr "profiluri CSV"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:44
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:57
 #, fuzzy, c-format
 msgid "Select MARC framework:"
 msgstr "Adăugaţi cadrul"
@@ -51721,7 +51754,7 @@ msgid "Select a time"
 msgstr "Suprimaţi lista"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/duplicate_orders.tt:134
-#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:62
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:75
 #: koha-tmpl/intranet-tmpl/prog/en/modules/basket/basket.tt:6
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branch_transfer_limits.tt:31
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branch_transfer_limits.tt:45
@@ -51730,7 +51763,7 @@ msgstr "Suprimaţi lista"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/detail.tt:273
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:71
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:53
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:60
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:70
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/article-requests.tt:106
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/article-requests.tt:208
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/checkout-notes.tt:58
@@ -52157,7 +52190,7 @@ msgid ""
 msgstr ""
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1469
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1477
 msgid "Separator must be / in field %s"
 msgstr ""
 
@@ -52287,7 +52320,7 @@ msgstr ""
 msgid "Serials receiving "
 msgstr "Codul regulei de depunere lipseşte"
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/serials-menu.inc:42
+#: koha-tmpl/intranet-tmpl/prog/en/includes/serials-menu.inc:47
 #, fuzzy, c-format
 msgid "Serials statistics wizard"
 msgstr "Statisticile catalogului"
@@ -52314,8 +52347,8 @@ msgstr "%s &rsaquo; Abonament modificat"
 msgid "Serials tables"
 msgstr "(Înregistrări #%s)"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:360
-#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:361
+#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:363
+#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:364
 #: koha-tmpl/intranet-tmpl/prog/en/includes/facets.inc:21
 #, c-format
 msgid "Series"
@@ -52335,9 +52368,9 @@ msgstr "subdomeniu"
 msgid "Series: "
 msgstr "subdomeniu "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:106
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:119
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:79
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:121
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:131
 #, c-format
 msgid "Server"
 msgstr ""
@@ -52515,7 +52548,7 @@ msgstr ""
 
 #. For the first occurrence,
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1469
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1477
 #: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:477
 #, fuzzy, c-format
 msgid "Set to patron"
@@ -52894,7 +52927,7 @@ msgstr "Calculaţi numărul total de articole"
 msgid "Show all debit types"
 msgstr "Calculaţi numărul total de articole"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoice.tt:321
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoice.tt:325
 #, fuzzy, c-format
 msgid "Show all details "
 msgstr "Calculaţi numărul total de articole "
@@ -52908,7 +52941,7 @@ msgstr "Calculaţi numărul total de articole"
 #. For the first occurrence,
 #. %1$s:  hiddencount | html 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/detail.tt:591
-#: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:698
+#: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:702
 #, c-format
 msgid "Show all items (%s hidden)"
 msgstr ""
@@ -52987,7 +53020,7 @@ msgstr "Împrumutat pe"
 msgid "Show checkouts to guarantor"
 msgstr "Împrumutat pe"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:538
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:546
 #, fuzzy, c-format
 msgid "Show checkouts to guarantors"
 msgstr "Împrumutat pe"
@@ -53012,7 +53045,7 @@ msgstr ""
 msgid "Show fines to guarantor"
 msgstr "Împrumutat pe"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:553
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:561
 #, fuzzy, c-format
 msgid "Show fines to guarantors"
 msgstr "Împrumutat pe"
@@ -53116,7 +53149,7 @@ msgstr "Curent este Valabil %s"
 
 #. %1$s:  current_page | html 
 #. %2$s:  total_pages | html 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:212
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:222
 #, c-format
 msgid "Showing page %s of %s"
 msgstr ""
@@ -53127,8 +53160,8 @@ msgstr ""
 msgid "Shown"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:651
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:704
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:659
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:712
 #, c-format
 msgid "Shows on transit slips"
 msgstr ""
@@ -53144,7 +53177,7 @@ msgid "Since"
 msgstr ""
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:356
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:338
 #, fuzzy
 msgid "Single holiday: %s"
 msgstr "Adăugaţi o nouă sărbătoare"
@@ -53187,8 +53220,8 @@ msgstr ""
 msgid "Slash separated text (.csv)"
 msgstr "Text separat prin virgulă"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/koha-news.tt:400
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/koha-news.tt:402
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/koha-news.tt:404
 #, c-format
 msgid "Slip"
 msgstr ""
@@ -53508,7 +53541,7 @@ msgstr ""
 msgid "Specify due date %s: "
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:232
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:214
 #, c-format
 msgid "Specify how the holiday should repeat."
 msgstr ""
@@ -53601,7 +53634,7 @@ msgid "Square"
 msgstr ""
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/categories.tt:147
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:835
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:843
 #, c-format
 msgid "Staff"
 msgstr ""
@@ -53757,10 +53790,10 @@ msgstr ""
 msgid "Standard"
 msgstr "Data:"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:43
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:54
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/sru_modmapping.tt:62
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:46
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:101
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:55
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:111
 #, c-format
 msgid "Standard ID: "
 msgstr ""
@@ -53935,7 +53968,7 @@ msgid "Statistic 2: "
 msgstr "Statisticile Catalogului "
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/categories.tt:150
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:838
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:846
 #, c-format
 msgid "Statistical"
 msgstr ""
@@ -54148,9 +54181,9 @@ msgstr ""
 
 #. For the first occurrence,
 #. %1$s:  numberpending | html 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:228
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:241
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:168
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:235
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:245
 #, c-format
 msgid "Still %s servers to search"
 msgstr ""
@@ -54309,8 +54342,8 @@ msgstr "Grup"
 msgid "Subgroup:"
 msgstr "Grup"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:356
-#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:357
+#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:359
+#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:360
 #: koha-tmpl/intranet-tmpl/prog/en/modules/labels/search.tt:45
 #: koha-tmpl/intranet-tmpl/prog/en/modules/labels/search.tt:46
 #: koha-tmpl/intranet-tmpl/prog/en/includes/search_indexes.inc:69
@@ -54319,12 +54352,12 @@ msgstr "Grup"
 msgid "Subject"
 msgstr "Subiect"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:38
-#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:98
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:39
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:111
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/sru_modmapping_auth.tt:47
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:41
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:36
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:97
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:40
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:107
 #, fuzzy, c-format
 msgid "Subject heading: "
 msgstr "Categorie "
@@ -54334,8 +54367,8 @@ msgstr "Categorie "
 msgid "Subject line:"
 msgstr "Categorie"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:358
-#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:359
+#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:361
+#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:362
 #, fuzzy, c-format
 msgid "Subject phrase"
 msgstr "Categorie"
@@ -54397,7 +54430,7 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/sms_providers.tt:86
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smtp_servers.tt:114
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smtp_servers.tt:196
-#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:372
+#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:375
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/moveitem.tt:90
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/moveitem.tt:102
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/branchtransfers.tt:165
@@ -54882,7 +54915,7 @@ msgstr "Rezumatul"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/duplicate_orders.tt:146
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/duplicate_orders.tt:267
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/histsearch.tt:45
-#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoice.tt:327
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoice.tt:331
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/parcel.tt:124
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/parcel.tt:239
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/transferorder.tt:70
@@ -54937,7 +54970,7 @@ msgid "Sunday"
 msgstr ""
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:356
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:338
 #, fuzzy
 msgid "Sundays"
 msgstr "Fonduri"
@@ -55564,7 +55597,7 @@ msgstr "Acţionaţi în cazul în care se potriveşte cu înregistrarea găsită
 msgid "Term"
 msgstr "Perioadă"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:381
+#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:384
 #, c-format
 msgid "Term/Phrase"
 msgstr "Expresie/Frază"
@@ -57119,7 +57152,7 @@ msgstr "Suprimaţi acest raport salvat"
 #. %1$s:  END 
 #. %2$s:  IF autoMemberNum 
 #. %3$s:  IF mandatorycardnumber 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:804
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:812
 #, c-format
 msgid "There is no minimum or maximum character length. %s %s %s "
 msgstr ""
@@ -57595,12 +57628,12 @@ msgid "This item must be returned to %s."
 msgstr "Colecţie '%s' Încărcarea Eşuată!"
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:992
+#: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:996
 msgid "This item normally cannot be put on hold except for patrons from %s."
 msgstr ""
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:992
+#: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:996
 msgid "This item normally cannot be put on hold."
 msgstr ""
 
@@ -57614,12 +57647,12 @@ msgstr "acestă înregistrare nu are articole ataşate. "
 msgid "This member has no email"
 msgstr "acestă înregistrare nu are articole ataşate."
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1021
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1029
 #, c-format
 msgid "This message appears on this patron's user page in the OPAC"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1038
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1046
 #, c-format
 msgid "This message displays when checking out to this patron"
 msgstr ""
@@ -57879,28 +57912,28 @@ msgstr ""
 msgid "This will delete the Mana KB token from Koha. Do you want to continue?"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:110
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:92
 #, c-format
 msgid ""
 "This will delete the exceptions inside a given range. Be careful about your "
 "scope range; if it is oversized you could slow down Koha."
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:106
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:88
 #, c-format
 msgid ""
 "This will delete the repeated holidays rules only. The repeatable holidays "
 "will be deleted but not the exceptions."
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:102
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:84
 #, c-format
 msgid ""
 "This will delete the single holidays rules only. The repeatable holidays and "
 "exceptions will not be deleted."
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:99
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:81
 #, c-format
 msgid ""
 "This will delete this holiday rule. If it is a repeatable holiday, this "
@@ -57915,7 +57948,7 @@ msgid ""
 "and delete them from the browser. Proceed?"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:114
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:96
 #, c-format
 msgid ""
 "This will save changes to the holiday's title and description. If the "
@@ -57923,7 +57956,7 @@ msgid ""
 "dates on which the holiday is repeated."
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:174
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:156
 #, c-format
 msgid ""
 "This will take this day and month as a reference to make it a holiday. "
@@ -57957,7 +57990,7 @@ msgid "Thursday"
 msgstr ""
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:356
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:338
 msgid "Thursdays"
 msgstr ""
 
@@ -58035,16 +58068,16 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:126
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/newordersubscription.tt:35
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/spent.tt:30
-#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:107
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:120
 #: koha-tmpl/intranet-tmpl/prog/en/modules/basket/basket.tt:251
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:11
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:258
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:267
-#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:350
-#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:351
+#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:353
+#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:354
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:69
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:169
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:122
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:132
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/article-requests.tt:114
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/article-requests.tt:215
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/branchoverdues.tt:38
@@ -58085,7 +58118,7 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/reserves_stats.tt:78
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/serials_stats.tt:31
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:219
-#: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:709
+#: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:713
 #: koha-tmpl/intranet-tmpl/prog/en/modules/rotating_collections/addItems.tt:100
 #: koha-tmpl/intranet-tmpl/prog/en/modules/rotating_collections/rotatingCollections.tt:29
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/checkexpiration.tt:78
@@ -58103,10 +58136,10 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:128
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:176
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:182
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:252
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:274
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:301
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:323
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:234
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:256
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:283
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:305
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/inventory.tt:198
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/koha-news.tt:124
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/stockrotation.tt:402
@@ -58162,8 +58195,8 @@ msgstr "Fişier: %s "
 msgid "Title (uniform): "
 msgstr "Formatul fişierului: "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:352
-#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:353
+#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:355
+#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:356
 #: koha-tmpl/intranet-tmpl/prog/en/modules/labels/search.tt:53
 #: koha-tmpl/intranet-tmpl/prog/en/modules/labels/search.tt:54
 #, fuzzy, c-format
@@ -58194,15 +58227,15 @@ msgstr "Titlu:"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:129
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:37
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:35
-#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:92
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:105
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/library_groups.tt:104
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/library_groups.tt:167
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/sru_modmapping.tt:22
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:30
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:91
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:31
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:101
 #: koha-tmpl/intranet-tmpl/prog/en/modules/rotating_collections/editCollections.tt:108
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:80
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:157
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:62
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:139
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/koha-news.tt:81
 #: koha-tmpl/intranet-tmpl/prog/en/includes/acquisitions-search.inc:14
 #: koha-tmpl/intranet-tmpl/prog/en/includes/filter-orders.inc:6
@@ -58310,8 +58343,8 @@ msgstr "Notă de circulaţie: "
 msgid "To create circulation rule, go to: "
 msgstr "Notă de circulaţie: "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:77
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:154
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:59
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:136
 #, fuzzy, c-format
 msgid "To date: "
 msgstr "Data: "
@@ -58476,7 +58509,7 @@ msgid "Too many checked out. %s checked out, only %s are allowed."
 msgstr ""
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:992
+#: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:996
 #, fuzzy
 msgid "Too many holds"
 msgstr "<a1>%s %s </a> are prea multe reţineri."
@@ -58589,7 +58622,7 @@ msgstr "| Ataşamente:%s,"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:18
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/csv-profiles.tt:15
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/export.tt:19
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:32
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:14
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/import_borrowers.tt:21
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/inventory.tt:15
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/koha-news.tt:28
@@ -58685,13 +58718,13 @@ msgstr "Cantitate "
 #. For the first occurrence,
 #. %1$s:  currency | html 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/basket.tt:452
-#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoice.tt:388
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoice.tt:392
 #, c-format
 msgid "Total (%s)"
 msgstr ""
 
 #. %1$s:  tf.tax_rate * 100 | html 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoice.tt:375
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoice.tt:379
 #, fuzzy, c-format
 msgid "Total (GST %s %%)"
 msgstr "Email: %s"
@@ -58709,7 +58742,7 @@ msgid "Total (GST %s)"
 msgstr "Email: %s"
 
 #. %1$s:  currency.symbol | html 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoice.tt:400
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoice.tt:404
 #, fuzzy, c-format
 msgid "Total + adjustments + shipment cost (%s)"
 msgstr "Data taxei"
@@ -58906,7 +58939,7 @@ msgstr "Cantitate"
 #. %1$s:  currency | html 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/basket.tt:409
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/basket.tt:610
-#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoice.tt:333
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoice.tt:337
 #, fuzzy, c-format
 msgid "Total tax exc. (%s)"
 msgstr "Cantitate"
@@ -58920,7 +58953,7 @@ msgstr "Cantitate"
 #. %1$s:  currency | html 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/basket.tt:410
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/basket.tt:611
-#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoice.tt:334
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoice.tt:338
 #, c-format
 msgid "Total tax inc. (%s)"
 msgstr ""
@@ -59181,10 +59214,10 @@ msgid "Try again with a different barcode"
 msgstr ""
 ". Puteţi încerca o altă căutare sau <a1>reveniţi la pasul anterior.</a>"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:221
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:234
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:150
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:163
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:227
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:237
 #, fuzzy, c-format
 msgid "Try another search"
 msgstr "(căutări apropiate:"
@@ -59199,7 +59232,7 @@ msgid "Tuesday"
 msgstr ""
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:356
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:338
 #, fuzzy
 msgid "Tuesdays"
 msgstr "astăzi"
@@ -59216,13 +59249,13 @@ msgstr ""
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/edifactmsgs.tt:35
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoice-files.tt:36
-#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoice.tt:427
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoice.tt:431
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:151
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/categories.tt:460
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/offline.tt:110
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/accountline-details.tt:122
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/files.tt:39
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1239
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1247
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/notices.tt:36
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/readingrec.tt:52
 #: koha-tmpl/intranet-tmpl/prog/en/modules/pos/register.tt:324
@@ -59511,13 +59544,13 @@ msgstr "Identificator de timp"
 msgid "Uninstall"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:238
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:356
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:220
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:338
 #, c-format
 msgid "Unique holiday"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:318
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:300
 #, fuzzy, c-format
 msgid "Unique holidays"
 msgstr "Adăugaţi o nouă sărbătoare"
@@ -59632,7 +59665,7 @@ msgstr ""
 msgid "Université de St Etienne, France"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1425
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1433
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/purchase-suggestions.tt:99
 #, fuzzy, c-format
 msgid "Unknown"
@@ -59771,7 +59804,7 @@ msgid "Update SQL"
 msgstr "Editaţi SQL"
 
 #. INPUT type=submit
-#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoice.tt:308
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoice.tt:312
 #, fuzzy
 msgid "Update adjustments"
 msgstr "Ficţiune"
@@ -59798,7 +59831,7 @@ msgid "Update existing or add new"
 msgstr "De la o înregistrare existentă:"
 
 #. INPUT type=submit name=submit
-#: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:812
+#: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:816
 msgid "Update hold(s)"
 msgstr ""
 
@@ -60113,7 +60146,7 @@ msgid "Upload transactions"
 msgstr "translaţie"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoice-files.tt:38
-#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoice.tt:429
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoice.tt:433
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/files.tt:41
 #, fuzzy, c-format
 msgid "Uploaded"
@@ -60937,6 +60970,11 @@ msgstr "Toate Bibliotecile"
 msgid "View analytics"
 msgstr "Eroare de analiză:"
 
+#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:319
+#, fuzzy, c-format
+msgid "View basket"
+msgstr "Editaţi coşul %s"
+
 #. SCRIPT
 #: koha-tmpl/intranet-tmpl/prog/en/includes/ill-list-table-strings.inc:2
 #, fuzzy
@@ -61316,18 +61354,18 @@ msgid ""
 msgstr ""
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1469
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1477
 msgid "Warning: Duplicate organization"
 msgstr ""
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1469
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1477
 #, fuzzy
 msgid "Warning: Duplicate patron"
 msgstr "Nu Poate Suprima Clientul"
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1469
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1477
 msgid "Warning: Expiration date falls before enrollment date"
 msgstr ""
 
@@ -61540,7 +61578,7 @@ msgid "Wednesday"
 msgstr ""
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:356
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:338
 msgid "Wednesdays"
 msgstr ""
 
@@ -61551,13 +61589,13 @@ msgstr ""
 msgid "Week"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:269
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:251
 #, c-format
 msgid "Weekly - Repeatable holidays"
 msgstr ""
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:356
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:338
 msgid "Weekly holiday: %s"
 msgstr ""
 
@@ -61752,7 +61790,7 @@ msgstr ""
 msgid "Words: _({0}"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:237
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:219
 #, c-format
 msgid "Working day"
 msgstr ""
@@ -61822,7 +61860,7 @@ msgstr "Aitoff"
 msgid "Writeoff amount: "
 msgstr "Suma Amenzii "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:123
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:136
 #, c-format
 msgid "X "
 msgstr ""
@@ -61853,8 +61891,8 @@ msgstr "Cadiz, Spania"
 msgid "YUI"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:109
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:124
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:122
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:134
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/acquisitions_stats.tt:109
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/acquisitions_stats.tt:131
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/bor_issues_top.tt:146
@@ -61876,13 +61914,13 @@ msgstr "Anul"
 msgid "Year: "
 msgstr "Drag(ă) %s "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:292
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:274
 #, c-format
 msgid "Yearly - Repeatable holidays"
 msgstr ""
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:356
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:338
 msgid "Yearly holiday: %s"
 msgstr ""
 
@@ -61927,10 +61965,10 @@ msgstr "Tot"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/moredetail.tt:247
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/stockrotation.tt:151
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:563
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:542
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:545
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:557
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:560
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:550
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:553
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:565
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:568
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/paycollect.tt:334
 #: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep2.tt:50
 #: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep2.tt:53
@@ -61975,12 +62013,12 @@ msgstr "Da"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/supplier.tt:201
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/supplier.tt:208
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:892
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:901
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1315
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1320
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1329
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1334
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:900
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:909
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1323
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1328
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1337
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1342
 #, c-format
 msgid "Yes "
 msgstr ""
@@ -61998,9 +62036,9 @@ msgstr "%s / %s "
 msgid "Yes and try to override system preferences"
 msgstr "Sistemul global de preferinţe"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:918
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:922
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:926
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:930
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:934
 #, fuzzy, c-format
 msgid "Yes if settings allow it"
 msgstr "Editaţi profilul existent"
@@ -62356,7 +62394,7 @@ msgstr ""
 msgid "You can help the Koha community by sharing your statistics with us. "
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:89
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:71
 #, c-format
 msgid ""
 "You can make an exception for this holiday rule. This means that you will be "
@@ -62364,7 +62402,7 @@ msgid ""
 "be an exception."
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:95
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:77
 #, fuzzy, c-format
 msgid "You can make an exception on a range of dates repeated yearly."
 msgstr "Generaţi o excepţie pentru această vacanţă/sărbătoare repetată."
@@ -62416,12 +62454,12 @@ msgstr "Adăugaţi un abonament nou"
 msgid "You cannot select an authorised value category and a MARC field"
 msgstr "Definiţi categoriile şi valorile autorizate pentru acestea."
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:319
+#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:322
 #, c-format
 msgid "You did not specify any search criteria."
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:209
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:222
 #, fuzzy, c-format
 msgid "You didn't select any external target."
 msgstr "Nu poate suprima bugetul"
@@ -62818,9 +62856,9 @@ msgstr ""
 
 #. For the first occurrence,
 #. %1$s:  IF ( title ) 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:91
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:104
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/preferences.tt:38
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:89
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:99
 #, fuzzy, c-format
 msgid "You searched for: %s"
 msgstr "%S (adjusted for %s)"
@@ -63186,7 +63224,7 @@ msgstr "Restituiţi"
 msgid "[% discount | format ("
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:332
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:314
 #, c-format
 msgid "[%% HOLIDAYS_LOO.DESCRIPTION.replace('\\\\\\r\\\\\\n', '"
 msgstr ""
@@ -63327,7 +63365,7 @@ msgstr "Eliberaţi"
 #. %17$s:  END 
 #. %18$s:  other_items_loo.count | html 
 #. %19$s:  IF item_level_itypes && other_items_loo.description 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:614
+#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:617
 #, fuzzy, c-format
 msgid ""
 "] %s %s (%s) %s %s (%s) %s %s (%s) %s %s (In transit) %s %s (On hold) %s %s "
@@ -63341,7 +63379,7 @@ msgstr "%s %s %s %s (%s) "
 #. %5$s:  END 
 #. %6$s:  onloan_items_loo.due_date | $KohaDates 
 #. %7$s:  IF item_level_itypes && onloan_items_loo.description 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:586
+#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:589
 #, fuzzy, c-format
 msgid "] %s (%s%s, %s long overdue%s) date due: %s %s "
 msgstr "%s %s %s %s (%s) "
@@ -63361,12 +63399,6 @@ msgstr "Urmărotul"
 #, c-format
 msgid "active"
 msgstr ""
-
-#. INPUT type=button
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/oai_set_mappings.tt:75
-#, fuzzy
-msgid "add"
-msgstr "Adăugaţi"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/rotating_collections/editCollections.tt:34
 #, fuzzy, c-format
@@ -63409,7 +63441,7 @@ msgstr ""
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:273
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:317
-#: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:763
+#: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:767
 #, c-format
 msgid "already has a hold"
 msgstr ""
@@ -63630,7 +63662,7 @@ msgstr ""
 msgid "biblionumber|borrowernumber"
 msgstr "NumărÎmprumător:"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoice.tt:347
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoice.tt:351
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/uncertainprice.tt:94
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/cn_browser.tt:53
 #, c-format
@@ -65052,7 +65084,7 @@ msgid "on reserve"
 msgstr "Adăugaţi comenzile"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:273
-#: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:763
+#: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:767
 #, fuzzy, c-format
 msgid "on this item "
 msgstr "Calculaţi articolele "
@@ -65725,7 +65757,7 @@ msgid "to "
 msgstr "la %S "
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:277
-#: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:767
+#: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:771
 #, c-format
 msgid "to be placed on hold"
 msgstr "care urmează să fie puse în aşteptare"
@@ -66100,7 +66132,7 @@ msgstr "%s %s %s %s (%s) "
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/basket.tt:100
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/parcel.tt:387
-#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:164
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:177
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:154
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:179
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:224
@@ -66113,12 +66145,12 @@ msgstr "%s %s %s %s (%s) "
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/editor.tt:256
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/merge.tt:132
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:110
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:179
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:189
 #: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:338
 #: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:670
 #: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:694
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:103
-#: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:956
+#: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:960
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:160
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/letter.tt:63
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:414
@@ -66176,6 +66208,13 @@ msgstr ""
 #~ msgid "Datedue"
 #~ msgstr "Data taxelor"
 
+#~ msgid "Delete this basket"
+#~ msgstr "Suprimaţi acest coş"
+
+#, fuzzy
+#~ msgid "Reopen this basket group"
+#~ msgstr "Creaţi grupul de coşuri?"
+
 #, fuzzy
 #~ msgid "Replay"
 #~ msgstr "Anulare Reţinută"
@@ -66183,6 +66222,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Status: %s "
 #~ msgstr "%s %s %s %s (%s) "
+
+#, fuzzy
+#~ msgid "add"
+#~ msgstr "Adăugaţi"
 
 #, fuzzy
 #~ msgid "connection failed"

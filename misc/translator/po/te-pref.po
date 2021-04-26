@@ -2406,9 +2406,10 @@ msgid ""
 msgstr "డిఫాల్ట్ వర్గీకరణ మూలంగా."
 
 # Cataloging > Record structure
+#, fuzzy
 msgid ""
-"cataloguing.pref#DefaultCountryField008#  Empty defaults to xxu for United "
-"States."
+"cataloguing.pref#DefaultCountryField008#  Empty defaults to ||| - No attempt "
+"to code."
 msgstr "  యునైటెడ్ స్టేట్స్ కోసం xxu కు ఖాళీ డిఫాల్ట్‌లు."
 
 # Cataloging > Record structure
@@ -3334,9 +3335,10 @@ msgid "circulation.pref#AllowItemsOnHoldCheckoutSIP# Don't allow"
 msgstr "అనుమతించవద్దు"
 
 # Circulation > Checkout policy
+#, fuzzy
 msgid ""
 "circulation.pref#AllowItemsOnHoldCheckoutSIP# If allowed do not generate "
-"RESERVE_WAITING and RESERVED warning."
+"RESERVED warning."
 msgstr "అనుమతిస్తే RESERVE_WAITING మరియు RESERVED హెచ్చరికను ఉత్పత్తి చేయవద్దు."
 
 # Circulation > Checkout policy
@@ -6002,12 +6004,13 @@ msgid "circulation.pref#finesCalendar# when calculating the period for fines."
 msgstr "సస్పెన్షన్ గడువు కోసం కాలాన్ని లెక్కించేటప్పుడు."
 
 # Circulation > Fines Policy
+#, fuzzy
 msgid ""
 "circulation.pref#finesMode# <br><strong>NOTE:</strong> If the cronjobs/fines."
 "pl cronjob is being run, accruing and final fines will be calculated when "
 "the cron runs and accruing fines will be finalized when an item is returned. "
 "If CalculateFinesOnReturn is enabled, final fines will be calculated when an "
-"item is returned."
+"item is returned.<br/>"
 msgstr ""
 "circulation.pref#finesMode# <br><strong>NOTE:</strong> If the cronjobs/fines."
 "pl cronjob is being run, accruing and final fines will be calculated when "
@@ -6020,7 +6023,17 @@ msgid "circulation.pref#finesMode# Calculate and charge"
 msgstr "లెక్కించండి మరియు వసూలు చేయండి"
 
 # Circulation > Fines Policy
+#, fuzzy
+msgid "circulation.pref#finesMode# Charge"
+msgstr "లెక్కించండి మరియు వసూలు చేయండి"
+
+# Circulation > Fines Policy
 msgid "circulation.pref#finesMode# Don't calculate"
+msgstr "లెక్కించవద్దు"
+
+# Circulation > Fines Policy
+#, fuzzy
+msgid "circulation.pref#finesMode# Don't charge"
 msgstr "లెక్కించవద్దు"
 
 # Circulation > Fines Policy
@@ -6028,6 +6041,12 @@ msgid ""
 "circulation.pref#finesMode# fines (when <code>cronjobs/fines.pl</code> is "
 "being run)."
 msgstr "జరిమానాలు (<code>misc/cronjobs/fines.pl</code> నడుస్తున్నప్పుడు)."
+
+# Circulation > Fines Policy > finesMode
+msgid ""
+"circulation.pref#finesMode# on close days. If set the fines.pl cronjob will "
+"not generate fines when run on days marked as closed in the calendar."
+msgstr ""
 
 # Circulation > Interface
 msgid "circulation.pref#itemBarcodeFallbackSearch# Don't enable"

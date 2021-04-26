@@ -15,7 +15,7 @@ msgstr ""
 "&& n%100<=10 ? 3 : n%100>=11 ? 4 : 5;\n"
 "X-Generator: Pootle 2.8\n"
 "X-POOTLE-MTIME: 1613900818.648164\n"
-"X-Pootle-Path: /ar/20.05/ar-Arab-pref.po\n"
+"X-Pootle-Path: /ar/20.11/ar-Arab-pref.po\n"
 "X-Pootle-Revision: 1\n"
 
 # Accounting
@@ -2450,9 +2450,10 @@ msgid ""
 msgstr "كمصدر التصنيف الافتراضي"
 
 # Cataloging > Record structure
+#, fuzzy
 msgid ""
-"cataloguing.pref#DefaultCountryField008#  Empty defaults to xxu for United "
-"States."
+"cataloguing.pref#DefaultCountryField008#  Empty defaults to ||| - No attempt "
+"to code."
 msgstr " الافتراضي الفارغ إلى xxu للولايات المتحدة."
 
 # Cataloging > Record structure
@@ -3426,9 +3427,10 @@ msgid "circulation.pref#AllowItemsOnHoldCheckoutSIP# Don't allow"
 msgstr "عدم السماح"
 
 # Circulation > Checkout policy
+#, fuzzy
 msgid ""
 "circulation.pref#AllowItemsOnHoldCheckoutSIP# If allowed do not generate "
-"RESERVE_WAITING and RESERVED warning."
+"RESERVED warning."
 msgstr "إذا كان مسموحاً، لا تقم بتوليد تحذير RESERVE_WAITING و RESERVED."
 
 # Circulation > Checkout policy
@@ -6203,12 +6205,13 @@ msgid "circulation.pref#finesCalendar# when calculating the period for fines."
 msgstr "عند حساب فترة الغرامات."
 
 # Circulation > Fines Policy
+#, fuzzy
 msgid ""
 "circulation.pref#finesMode# <br><strong>NOTE:</strong> If the cronjobs/fines."
 "pl cronjob is being run, accruing and final fines will be calculated when "
 "the cron runs and accruing fines will be finalized when an item is returned. "
 "If CalculateFinesOnReturn is enabled, final fines will be calculated when an "
-"item is returned."
+"item is returned.<br/>"
 msgstr ""
 "<br><strong>ملاحظة:</strong> إذا تم تشغيل الكرون cronjobs/fines.pl، سيتم "
 "حساب الغرامات المتراكمة والنهائية عند تشغيل الكرون، وسيتم إنهاء تراكم "
@@ -6220,7 +6223,17 @@ msgid "circulation.pref#finesMode# Calculate and charge"
 msgstr "حساب وتقاضي"
 
 # Circulation > Fines Policy
+#, fuzzy
+msgid "circulation.pref#finesMode# Charge"
+msgstr "حساب وتقاضي"
+
+# Circulation > Fines Policy
 msgid "circulation.pref#finesMode# Don't calculate"
+msgstr " عدم حساب"
+
+# Circulation > Fines Policy
+#, fuzzy
+msgid "circulation.pref#finesMode# Don't charge"
 msgstr " عدم حساب"
 
 # Circulation > Fines Policy
@@ -6228,6 +6241,12 @@ msgid ""
 "circulation.pref#finesMode# fines (when <code>cronjobs/fines.pl</code> is "
 "being run)."
 msgstr "الغرامات (أثناء تشغيل <code>misc/cronjobs/fines.pl</code>)."
+
+# Circulation > Fines Policy > finesMode
+msgid ""
+"circulation.pref#finesMode# on close days. If set the fines.pl cronjob will "
+"not generate fines when run on days marked as closed in the calendar."
+msgstr ""
 
 # Circulation > Interface
 msgid "circulation.pref#itemBarcodeFallbackSearch# Don't enable"

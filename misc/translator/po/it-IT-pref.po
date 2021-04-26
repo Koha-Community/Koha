@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Koha 20.11\n"
 "POT-Creation-Date: 2013-05-02 01:29-0300\n"
-"PO-Revision-Date: 2021-03-16 22:12+0000\n"
+"PO-Revision-Date: 2021-04-16 21:45+0000\n"
 "Last-Translator: ztajoli <ztajoli@gmail.com>\n"
 "Language-Team: CILEA <z.tajoli@cineca.it>\n"
 "Language: it\n"
@@ -12,10 +12,10 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.8\n"
 "X-Poedit-SourceCharset: UTF-8\n"
-"X-POOTLE-MTIME: 1615932739.804104\n"
+"X-POOTLE-MTIME: 1618609545.413543\n"
 "X-Poedit-Basepath: ../../../versioni/master/koha-tmpl\n"
 "X-Poedit-SearchPath-0: .\n"
-"X-Pootle-Path: /it/20.05/it-IT-pref.po\n"
+"X-Pootle-Path: /it/20.11/it-IT-pref.po\n"
 "X-Pootle-Revision: 1\n"
 
 # Accounting
@@ -2515,9 +2515,9 @@ msgstr "come tag che di default contiene la classificazione."
 
 # Cataloging > Record structure
 msgid ""
-"cataloguing.pref#DefaultCountryField008#  Empty defaults to xxu for United "
-"States."
-msgstr "Se vuoto, il default è xxu che indica Stati Uniti d'America."
+"cataloguing.pref#DefaultCountryField008#  Empty defaults to ||| - No attempt "
+"to code."
+msgstr "Se vuoto, il default è ||| - Nessun tentativo di codifica."
 
 # Cataloging > Record structure
 msgid ""
@@ -3517,8 +3517,8 @@ msgstr "Non consentire"
 # Circulation > Checkout policy
 msgid ""
 "circulation.pref#AllowItemsOnHoldCheckoutSIP# If allowed do not generate "
-"RESERVE_WAITING and RESERVED warning."
-msgstr "Se permesso, non generare gli avvisi RESERVE_WAITING e RESERVED."
+"RESERVED warning."
+msgstr "Se permesso, non generare l'avviso RESERVED."
 
 # Circulation > Checkout policy
 msgid ""
@@ -6415,27 +6415,44 @@ msgid ""
 "pl cronjob is being run, accruing and final fines will be calculated when "
 "the cron runs and accruing fines will be finalized when an item is returned. "
 "If CalculateFinesOnReturn is enabled, final fines will be calculated when an "
-"item is returned."
+"item is returned.<br/>"
 msgstr ""
 "<br><strong>NOTA:</strong> Se il cronjob cronjobs/fines.pl è attivo, multe "
 "in accumulo e finali verranno calcolate quando gira il cronjob, e le multe "
 "in accumulo verranno finalizzate al rientro della copia. Se "
 "CalculateFinesOnReturn è attivo, le multe finali verranno calcolate quando "
-"la copia rientra."
+"la copia rientra.<br/>"
 
 # Circulation > Fines Policy
 msgid "circulation.pref#finesMode# Calculate and charge"
 msgstr "Calcola e fai pagare"
 
 # Circulation > Fines Policy
+msgid "circulation.pref#finesMode# Charge"
+msgstr "Fai pagare"
+
+# Circulation > Fines Policy
 msgid "circulation.pref#finesMode# Don't calculate"
 msgstr "Non calcolare"
+
+# Circulation > Fines Policy
+msgid "circulation.pref#finesMode# Don't charge"
+msgstr "Non far pagare"
 
 # Circulation > Fines Policy
 msgid ""
 "circulation.pref#finesMode# fines (when <code>cronjobs/fines.pl</code> is "
 "being run)."
 msgstr "le multe (quando viene eseguito <code>misc/cronjobs/fines.pl</code> )."
+
+# Circulation > Fines Policy > finesMode
+msgid ""
+"circulation.pref#finesMode# on close days. If set the fines.pl cronjob will "
+"not generate fines when run on days marked as closed in the calendar."
+msgstr ""
+"nei giorni di chiusura. Se viene selezionato il cronjob fines.pl non "
+"genererà multe quando girerà nei giorni indicati come chiusure sul "
+"calendario."
 
 # Circulation > Interface
 msgid "circulation.pref#itemBarcodeFallbackSearch# Don't enable"
@@ -8312,7 +8329,7 @@ msgstr "Privacy"
 
 # OPAC > Restricted page
 msgid "opac.pref Restricted page"
-msgstr "Pagina ad a accesso limitato"
+msgstr "Pagina ad accesso limitato"
 
 # OPAC > Self registration and modification
 msgid "opac.pref Self registration and modification"

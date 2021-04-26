@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Koha 20.11\n"
 "POT-Creation-Date: 2013-05-07 08:52+0200\n"
-"PO-Revision-Date: 2020-12-24 10:53+0000\n"
-"Last-Translator: vfernandes <vfernandes@keep.pt>\n"
+"PO-Revision-Date: 2021-04-22 00:13+0000\n"
+"Last-Translator: Humberto <development@cm-portimao.pt>\n"
 "Language-Team: <>\n"
 "Language: pt\n"
 "MIME-Version: 1.0\n"
@@ -11,8 +11,8 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.8\n"
-"X-POOTLE-MTIME: 1608807193.527691\n"
-"X-Pootle-Path: /pt/20.05/pt-PT-pref.po\n"
+"X-POOTLE-MTIME: 1619050427.708063\n"
+"X-Pootle-Path: /pt/20.11/pt-PT-pref.po\n"
 "X-Pootle-Revision: 1\n"
 
 # Accounting
@@ -2433,9 +2433,10 @@ msgid ""
 msgstr "como fonte padrão da classificação."
 
 # Cataloging > Record structure
+#, fuzzy
 msgid ""
-"cataloguing.pref#DefaultCountryField008#  Empty defaults to xxu for United "
-"States."
+"cataloguing.pref#DefaultCountryField008#  Empty defaults to ||| - No attempt "
+"to code."
 msgstr ""
 "Se estiver vazio o valor por omissão é o xxu, valor dos Estados Unidos."
 
@@ -3389,9 +3390,10 @@ msgid "circulation.pref#AllowItemsOnHoldCheckoutSIP# Don't allow"
 msgstr "Não permitir"
 
 # Circulation > Checkout policy
+#, fuzzy
 msgid ""
 "circulation.pref#AllowItemsOnHoldCheckoutSIP# If allowed do not generate "
-"RESERVE_WAITING and RESERVED warning."
+"RESERVED warning."
 msgstr ""
 "Se a preferência estiver activa não vai gerar os avisos RESERVE_WAITING e "
 "RESERVED."
@@ -6145,12 +6147,13 @@ msgid "circulation.pref#finesCalendar# when calculating the period for fines."
 msgstr "quando calcular o período das multas."
 
 # Circulation > Fines Policy
+#, fuzzy
 msgid ""
 "circulation.pref#finesMode# <br><strong>NOTE:</strong> If the cronjobs/fines."
 "pl cronjob is being run, accruing and final fines will be calculated when "
 "the cron runs and accruing fines will be finalized when an item is returned. "
 "If CalculateFinesOnReturn is enabled, final fines will be calculated when an "
-"item is returned."
+"item is returned.<br/>"
 msgstr ""
 "<br><strong>NOTA:</strong> Se tarefa cronjobs/fines.pl estiver a ser "
 "executada, as multas correntes e finais serão calculadas quando a tarefa "
@@ -6163,7 +6166,17 @@ msgid "circulation.pref#finesMode# Calculate and charge"
 msgstr "Calcular e cobrar"
 
 # Circulation > Fines Policy
+#, fuzzy
+msgid "circulation.pref#finesMode# Charge"
+msgstr "Calcular e cobrar"
+
+# Circulation > Fines Policy
 msgid "circulation.pref#finesMode# Don't calculate"
+msgstr "Não calcular"
+
+# Circulation > Fines Policy
+#, fuzzy
+msgid "circulation.pref#finesMode# Don't charge"
 msgstr "Não calcular"
 
 # Circulation > Fines Policy
@@ -6172,6 +6185,12 @@ msgid ""
 "being run)."
 msgstr ""
 "multas (quando <code>misc/cronjobs/fines.pl</code> está a ser executado)."
+
+# Circulation > Fines Policy > finesMode
+msgid ""
+"circulation.pref#finesMode# on close days. If set the fines.pl cronjob will "
+"not generate fines when run on days marked as closed in the calendar."
+msgstr ""
 
 # Circulation > Interface
 msgid "circulation.pref#itemBarcodeFallbackSearch# Don't enable"
@@ -10908,7 +10927,7 @@ msgstr "Por omissão, mostrar"
 
 # Patrons > General
 msgid "patrons.pref#PatronsPerPage# results per page in the staff interface."
-msgstr ""
+msgstr "resultados por página no interface dos técnicos."
 
 # Patrons > Notices and notifications > PhoneNotification
 msgid ""
