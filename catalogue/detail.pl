@@ -92,15 +92,17 @@ if ( not defined $record ) {
 eval { $biblio->metadata->record };
 $template->param( decoding_error => $@ );
 
-if($query->cookie("holdfor")){ 
+if($query->cookie("holdfor")){
     my $holdfor_patron = Koha::Patrons->find( $query->cookie("holdfor") );
-    $template->param(
-        # FIXME Should pass the patron object
-        holdfor => $query->cookie("holdfor"),
-        holdfor_surname => $holdfor_patron->surname,
-        holdfor_firstname => $holdfor_patron->firstname,
-        holdfor_cardnumber => $holdfor_patron->cardnumber,
-    );
+    if ( $holdfor_patron ) {
+        $template->param(
+            # FIXME Should pass the patron object
+            holdfor => $query->cookie("holdfor"),
+            holdfor_surname => $holdfor_patron->surname,
+            holdfor_firstname => $holdfor_patron->firstname,
+            holdfor_cardnumber => $holdfor_patron->cardnumber,
+        );
+    }
 }
 
 if($query->cookie("searchToOrder")){
