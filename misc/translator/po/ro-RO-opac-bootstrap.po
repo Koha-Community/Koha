@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 18.05\n"
-"POT-Creation-Date: 2021-03-19 18:22-0300\n"
+"POT-Creation-Date: 2021-04-22 09:08-0300\n"
 "PO-Revision-Date: 2017-03-22 14:08+0000\n"
 "Last-Translator: Sorin-Alexandru <sorin@curierul.ro>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -140,6 +140,14 @@ msgstr "%s %s de %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s%s"
 msgid "%s %s %s Note: this window will close automatically in 5 seconds. %s "
 msgstr ""
 "%s %s %s Notă: această fereastră se va închide automat în 5 secunde. %s "
+
+#. %1$s:  author.firstname | html 
+#. %2$s:  author.surname | html 
+#. %3$s:  ELSE 
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:99
+#, fuzzy, c-format
+msgid "%s %s %s by "
+msgstr "%s %s de %s %s "
 
 #. %1$s: - IF account.credit_type_code -
 #. %2$s: - SWITCH account.credit_type_code -
@@ -284,7 +292,7 @@ msgstr "%s %s Nu au fost găsite rezultate. %s "
 #. %9$s:  ELSE 
 #. %10$s:  END 
 #. %11$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:110
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:115
 #, c-format
 msgid ""
 "%s %s RSS feed for %s library news %s RSS feed for library news %s %s %s RSS "
@@ -5166,7 +5174,7 @@ msgid "Don't have a password yet?"
 msgstr "Nu ai setata încă o parolă?"
 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:366
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:185
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:190
 #: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:97
 #, fuzzy, c-format
 msgid "Don't have an account? "
@@ -5714,7 +5722,7 @@ msgstr ""
 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:361
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:175
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:180
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:185
 #, fuzzy, c-format
 msgid "Forgot your password?"
 msgstr "schimbă parola"
@@ -7058,7 +7066,7 @@ msgstr "Acţiuni"
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:372
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:20
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:172
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:171
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:176
 #: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:95
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:679
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:754
@@ -7108,7 +7116,7 @@ msgstr "Intraţi în contul dvs."
 msgid "Log in to your account"
 msgstr "Intraţi în contul dvs."
 
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:167
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:172
 #: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:81
 #, fuzzy, c-format
 msgid "Log in to your account:"
@@ -7156,7 +7164,7 @@ msgstr "catalog"
 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:352
 #: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:96
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:168
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:173
 #: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:82
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:374
 #, c-format
@@ -7650,7 +7658,7 @@ msgstr "Fără limită"
 msgid "No matching records found"
 msgstr "Acţionaţi în cazul în care se potriveşte cu înregistrarea găsită"
 
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:135
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:140
 #, c-format
 msgid "No news to display."
 msgstr ""
@@ -8280,7 +8288,7 @@ msgstr "Actualizarea parolei"
 
 #: opac-tmpl/bootstrap/en/includes/overdrive-login.inc:9
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:353
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:169
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:174
 #: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:46
 #: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:88
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:376
@@ -8896,9 +8904,11 @@ msgstr "%s %s %s %s (%s) "
 
 #. %1$s:  koha_new.timestamp | $KohaDates with_hours = 1 
 #. %2$s:  IF ( (newsdisp == 'opac' || newsdisp == 'both') && koha_new.borrowernumber ) 
+#. %3$s:  IF news_item 
+#. %4$s:  SET author = koha_new.author 
 #: opac-tmpl/bootstrap/en/modules/opac-main.tt:94
 #, fuzzy, c-format
-msgid "Published on %s %s by "
+msgid "Published on %s %s %s %s by "
 msgstr "(publicat în % s)"
 
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:85
@@ -8930,7 +8940,7 @@ msgstr "Editaţi sugestiile de achiziţie #%s"
 msgid "Quantity:"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:146
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:151
 #, c-format
 msgid "Quote of the day"
 msgstr ""
@@ -9046,7 +9056,7 @@ msgid "Register a new account"
 msgstr ""
 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:366
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:185
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:190
 #: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:97
 #, c-format
 msgid "Register here."
@@ -10026,7 +10036,7 @@ msgstr ""
 msgid "Show all items"
 msgstr "Calculaţi numărul total de articole"
 
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:100
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:105
 #, fuzzy, c-format
 msgid "Show all news"
 msgstr "Calculaţi numărul total de articole"
@@ -11717,7 +11727,7 @@ msgstr ""
 msgid "Wednesday"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:195
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:200
 #, fuzzy, c-format
 msgid "Welcome, "
 msgstr "Bun venit, <a1> "
@@ -12708,7 +12718,7 @@ msgstr "numărcard"
 msgid "change your password"
 msgstr "schimbă parola"
 
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:198
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:203
 #, fuzzy, c-format
 msgid "checkout(s)"
 msgstr "Împrumuturi"
@@ -12759,7 +12769,7 @@ msgstr ""
 msgid "desired_due_date"
 msgstr "dorit de data scadenţei"
 
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:210
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:215
 #, fuzzy, c-format
 msgid "due in fines and charges"
 msgstr "Amenzi şi Taxe"
@@ -12790,12 +12800,12 @@ msgstr ""
 msgid "here"
 msgstr "aici"
 
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:204
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:209
 #, c-format
 msgid "hold(s) pending"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:207
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:212
 #, c-format
 msgid "hold(s) waiting"
 msgstr ""
@@ -12996,7 +13006,7 @@ msgstr "sau"
 msgid "out of"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:201
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:206
 #, fuzzy, c-format
 msgid "overdue(s)"
 msgstr "Întârziate "

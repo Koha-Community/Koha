@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 18.05\n"
-"POT-Creation-Date: 2021-03-19 18:10-0300\n"
+"POT-Creation-Date: 2021-04-22 08:55-0300\n"
 "PO-Revision-Date: 2013-01-14 03:10+0200\n"
 "Last-Translator: Reynir Örn Bachmann <reynir.gudmundsson@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -133,6 +133,14 @@ msgstr "%s %s %s %s (%s)"
 #, fuzzy, c-format
 msgid "%s %s %s Note: this window will close automatically in 5 seconds. %s "
 msgstr "Athugasemd: Þessi gluggi mun lokast sjálfkrafa eftir 5 sekúndur "
+
+#. %1$s:  author.firstname | html 
+#. %2$s:  author.surname | html 
+#. %3$s:  ELSE 
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:99
+#, fuzzy, c-format
+msgid "%s %s %s by "
+msgstr "%s %s %s%s"
 
 #. %1$s: - IF account.credit_type_code -
 #. %2$s: - SWITCH account.credit_type_code -
@@ -275,7 +283,7 @@ msgstr "Það fundust engar niðurstöður. "
 #. %9$s:  ELSE 
 #. %10$s:  END 
 #. %11$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:110
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:115
 #, c-format
 msgid ""
 "%s %s RSS feed for %s library news %s RSS feed for library news %s %s %s RSS "
@@ -5084,7 +5092,7 @@ msgid "Don't have a password yet?"
 msgstr "Ertu ekki mað aðgangsorð ennþá ?"
 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:366
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:185
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:190
 #: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:97
 #, fuzzy, c-format
 msgid "Don't have an account? "
@@ -5628,7 +5636,7 @@ msgstr ""
 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:361
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:175
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:180
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:185
 #, fuzzy, c-format
 msgid "Forgot your password?"
 msgstr "breyta aðgangsorðinu mínu"
@@ -6969,7 +6977,7 @@ msgstr "Staðsetning"
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:372
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:20
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:172
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:171
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:176
 #: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:95
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:679
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:754
@@ -7019,7 +7027,7 @@ msgstr "Skráðu þig inn á þínu auðkenni"
 msgid "Log in to your account"
 msgstr "Skráðu þig inn á þínu auðkenni"
 
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:167
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:172
 #: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:81
 #, fuzzy, c-format
 msgid "Log in to your account:"
@@ -7067,7 +7075,7 @@ msgstr "safnskrá"
 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:352
 #: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:96
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:168
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:173
 #: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:82
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:374
 #, c-format
@@ -7563,7 +7571,7 @@ msgid "No matching records found"
 msgstr ""
 "Færsla með samsvarandi strikamerki<b>%s</b> hefur nú þegar verið skráð."
 
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:135
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:140
 #, c-format
 msgid "No news to display."
 msgstr ""
@@ -8197,7 +8205,7 @@ msgstr "Aðgangsorð uppfært"
 
 #: opac-tmpl/bootstrap/en/includes/overdrive-login.inc:9
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:353
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:169
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:174
 #: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:46
 #: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:88
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:376
@@ -8817,9 +8825,11 @@ msgstr "%s %s %s %s (%s) "
 
 #. %1$s:  koha_new.timestamp | $KohaDates with_hours = 1 
 #. %2$s:  IF ( (newsdisp == 'opac' || newsdisp == 'both') && koha_new.borrowernumber ) 
+#. %3$s:  IF news_item 
+#. %4$s:  SET author = koha_new.author 
 #: opac-tmpl/bootstrap/en/modules/opac-main.tt:94
 #, fuzzy, c-format
-msgid "Published on %s %s by "
+msgid "Published on %s %s %s %s by "
 msgstr "(útgefið þann %s)"
 
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:85
@@ -8851,7 +8861,7 @@ msgstr "Kauptillaga"
 msgid "Quantity:"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:146
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:151
 #, c-format
 msgid "Quote of the day"
 msgstr ""
@@ -8967,7 +8977,7 @@ msgid "Register a new account"
 msgstr ""
 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:366
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:185
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:190
 #: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:97
 #, fuzzy, c-format
 msgid "Register here."
@@ -9944,7 +9954,7 @@ msgstr ""
 msgid "Show all items"
 msgstr "Sýna alla hluti"
 
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:100
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:105
 #, fuzzy, c-format
 msgid "Show all news"
 msgstr "Sýna alla hluti"
@@ -11617,7 +11627,7 @@ msgstr ""
 msgid "Wednesday"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:195
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:200
 #, fuzzy, c-format
 msgid "Welcome, "
 msgstr "Velkomin(n), <a1> "
@@ -12598,7 +12608,7 @@ msgstr "kortanúmer"
 msgid "change your password"
 msgstr "breyta aðgangsorðinu mínu"
 
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:198
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:203
 #, fuzzy, c-format
 msgid "checkout(s)"
 msgstr "Útlán"
@@ -12649,7 +12659,7 @@ msgstr ""
 msgid "desired_due_date"
 msgstr "desired_due_date"
 
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:210
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:215
 #, fuzzy, c-format
 msgid "due in fines and charges"
 msgstr "Sektir og gjöld"
@@ -12680,12 +12690,12 @@ msgstr ""
 msgid "here"
 msgstr "Annað"
 
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:204
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:209
 #, c-format
 msgid "hold(s) pending"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:207
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:212
 #, c-format
 msgid "hold(s) waiting"
 msgstr ""
@@ -12886,7 +12896,7 @@ msgstr "eða"
 msgid "out of"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:201
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:206
 #, fuzzy, c-format
 msgid "overdue(s)"
 msgstr "Runnið út af tíma "

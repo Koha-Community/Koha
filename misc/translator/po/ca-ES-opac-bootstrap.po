@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 18.05\n"
-"POT-Creation-Date: 2021-03-19 17:57-0300\n"
+"POT-Creation-Date: 2021-04-22 08:42-0300\n"
 "PO-Revision-Date: 2020-04-08 06:51+0000\n"
 "Last-Translator: hagud <hagud@orex.es>\n"
 "Language-Team: Koha Translation Team <koha-translate@lists.koha-community."
@@ -137,6 +137,14 @@ msgstr "%s %s per %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s%s"
 msgid "%s %s %s Note: this window will close automatically in 5 seconds. %s "
 msgstr ""
 "%s %s %s Nota: aquesta finestra es tancarà automàticament en 5 segons. %s "
+
+#. %1$s:  author.firstname | html 
+#. %2$s:  author.surname | html 
+#. %3$s:  ELSE 
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:99
+#, fuzzy, c-format
+msgid "%s %s %s by "
+msgstr "%s %s per %s%s "
 
 #. %1$s: - IF account.credit_type_code -
 #. %2$s: - SWITCH account.credit_type_code -
@@ -281,7 +289,7 @@ msgstr "%s %s No s'han trobat resultats. %s "
 #. %9$s:  ELSE 
 #. %10$s:  END 
 #. %11$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:110
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:115
 #, fuzzy, c-format
 msgid ""
 "%s %s RSS feed for %s library news %s RSS feed for library news %s %s %s RSS "
@@ -5194,7 +5202,7 @@ msgid "Don't have a password yet?"
 msgstr "No teniu contrasenya encara?"
 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:366
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:185
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:190
 #: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:97
 #, c-format
 msgid "Don't have an account? "
@@ -5742,7 +5750,7 @@ msgstr ""
 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:361
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:175
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:180
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:185
 #, c-format
 msgid "Forgot your password?"
 msgstr "Heu oblidat la contrasenya?"
@@ -7079,7 +7087,7 @@ msgstr "Localitzacions"
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:372
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:20
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:172
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:171
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:176
 #: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:95
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:679
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:754
@@ -7129,7 +7137,7 @@ msgstr "Inicieu sessió al vostre compte"
 msgid "Log in to your account"
 msgstr "Inicieu sessió al vostre compte"
 
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:167
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:172
 #: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:81
 #, c-format
 msgid "Log in to your account:"
@@ -7177,7 +7185,7 @@ msgstr "Pàgina d'inici de sessió"
 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:352
 #: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:96
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:168
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:173
 #: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:82
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:374
 #, c-format
@@ -7666,7 +7674,7 @@ msgstr "Sense límit"
 msgid "No matching records found"
 msgstr "No s'ha trobat registres coincidents"
 
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:135
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:140
 #, c-format
 msgid "No news to display."
 msgstr ""
@@ -8301,7 +8309,7 @@ msgstr "Contrasenya actualitzada"
 
 #: opac-tmpl/bootstrap/en/includes/overdrive-login.inc:9
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:353
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:169
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:174
 #: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:46
 #: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:88
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:376
@@ -8934,9 +8942,11 @@ msgstr "Publicat per: %s %s a %s %s %s , %s %s %s , %s %s "
 
 #. %1$s:  koha_new.timestamp | $KohaDates with_hours = 1 
 #. %2$s:  IF ( (newsdisp == 'opac' || newsdisp == 'both') && koha_new.borrowernumber ) 
+#. %3$s:  IF news_item 
+#. %4$s:  SET author = koha_new.author 
 #: opac-tmpl/bootstrap/en/modules/opac-main.tt:94
 #, fuzzy, c-format
-msgid "Published on %s %s by "
+msgid "Published on %s %s %s %s by "
 msgstr "(publicat a %s%s per "
 
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:85
@@ -8968,7 +8978,7 @@ msgstr "Suggeriments de compra"
 msgid "Quantity:"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:146
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:151
 #, fuzzy, c-format
 msgid "Quote of the day"
 msgstr "Cita del dia"
@@ -9083,7 +9093,7 @@ msgid "Register a new account"
 msgstr "Registreu-vos"
 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:366
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:185
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:190
 #: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:97
 #, c-format
 msgid "Register here."
@@ -10046,7 +10056,7 @@ msgstr "Mostra entrades _MENU_"
 msgid "Show all items"
 msgstr "Mostra tots els exemplars"
 
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:100
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:105
 #, fuzzy, c-format
 msgid "Show all news"
 msgstr "Mostra tots els exemplars"
@@ -11742,7 +11752,7 @@ msgstr "Dc."
 msgid "Wednesday"
 msgstr "Dimecres"
 
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:195
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:200
 #, c-format
 msgid "Welcome, "
 msgstr "Benvingut, "
@@ -12750,7 +12760,7 @@ msgstr "número de targeta"
 msgid "change your password"
 msgstr "canvia la meva contrasenya"
 
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:198
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:203
 #, fuzzy, c-format
 msgid "checkout(s)"
 msgstr "Préstecs"
@@ -12802,7 +12812,7 @@ msgstr ""
 msgid "desired_due_date"
 msgstr "desired_due_date"
 
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:210
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:215
 #, fuzzy, c-format
 msgid "due in fines and charges"
 msgstr "Sancions i càrrecs"
@@ -12833,12 +12843,12 @@ msgstr "per a més informació sobre com es fa i com configurar-ho."
 msgid "here"
 msgstr "aquí"
 
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:204
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:209
 #, c-format
 msgid "hold(s) pending"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:207
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:212
 #, c-format
 msgid "hold(s) waiting"
 msgstr ""
@@ -13019,7 +13029,7 @@ msgstr "o"
 msgid "out of"
 msgstr "fora de"
 
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:201
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:206
 #, fuzzy, c-format
 msgid "overdue(s)"
 msgstr "(vençut)"

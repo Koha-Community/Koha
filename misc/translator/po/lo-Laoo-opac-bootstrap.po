@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 18.05\n"
-"POT-Creation-Date: 2021-03-19 18:14-0300\n"
+"POT-Creation-Date: 2021-04-22 08:59-0300\n"
 "PO-Revision-Date: 2012-06-14 17:45+0200\n"
 "Last-Translator: Anonymous Pootle User\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -133,6 +133,14 @@ msgstr "%s %s by %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s%s"
 #, fuzzy, c-format
 msgid "%s %s %s Note: this window will close automatically in 5 seconds. %s "
 msgstr "%s %sໝາຍເຫດ: ຫນ້າຕ່າງນີ້ຈະປິດໂດຍອັດໂຕໂນມັດພາຍໃນ 5 ວິນາທີ%s "
+
+#. %1$s:  author.firstname | html 
+#. %2$s:  author.surname | html 
+#. %3$s:  ELSE 
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:99
+#, fuzzy, c-format
+msgid "%s %s %s by "
+msgstr "%s %s ໂດຍ %s%s"
 
 #. %1$s: - IF account.credit_type_code -
 #. %2$s: - SWITCH account.credit_type_code -
@@ -275,7 +283,7 @@ msgstr "%s ບໍ່ມີຂໍ້ມູນຂອງການຄົ້ນຫາ
 #. %9$s:  ELSE 
 #. %10$s:  END 
 #. %11$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:110
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:115
 #, c-format
 msgid ""
 "%s %s RSS feed for %s library news %s RSS feed for library news %s %s %s RSS "
@@ -5109,7 +5117,7 @@ msgid "Don't have a password yet?"
 msgstr "ຍັງບໍ່ມີລະຫັດພ່ານເທື່ອ ແມ່ນບໍ່?"
 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:366
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:185
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:190
 #: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:97
 #, fuzzy, c-format
 msgid "Don't have an account? "
@@ -5651,7 +5659,7 @@ msgstr ""
 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:361
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:175
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:180
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:185
 #, fuzzy, c-format
 msgid "Forgot your password?"
 msgstr "ປ່ຽນລະຫັດຂອງຂ້ອຍ"
@@ -6974,7 +6982,7 @@ msgstr "%sກຳລັງລໍຄອຍທີ່ %s "
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:372
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:20
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:172
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:171
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:176
 #: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:95
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:679
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:754
@@ -7024,7 +7032,7 @@ msgstr "ເຂົ້າລະບົບບັນຊີຂອງທ່ານ"
 msgid "Log in to your account"
 msgstr "ເຂົ້າລະບົບບັນຊີຂອງທ່ານ"
 
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:167
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:172
 #: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:81
 #, fuzzy, c-format
 msgid "Log in to your account:"
@@ -7072,7 +7080,7 @@ msgstr "ບັນຊີລາຍຊື່ປື້ມ"
 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:352
 #: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:96
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:168
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:173
 #: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:82
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:374
 #, c-format
@@ -7561,7 +7569,7 @@ msgstr "ບໍ່ຈຳກັດ"
 msgid "No matching records found"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:135
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:140
 #, c-format
 msgid "No news to display."
 msgstr ""
@@ -8196,7 +8204,7 @@ msgstr "ປັບປຸງລະຫັດຜ່ານ"
 
 #: opac-tmpl/bootstrap/en/includes/overdrive-login.inc:9
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:353
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:169
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:174
 #: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:46
 #: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:88
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:376
@@ -8811,9 +8819,11 @@ msgstr "%s %s- %s%s %s ; %s%s %s - %s%s %s : %s%s %s ; %s%s "
 
 #. %1$s:  koha_new.timestamp | $KohaDates with_hours = 1 
 #. %2$s:  IF ( (newsdisp == 'opac' || newsdisp == 'both') && koha_new.borrowernumber ) 
+#. %3$s:  IF news_item 
+#. %4$s:  SET author = koha_new.author 
 #: opac-tmpl/bootstrap/en/modules/opac-main.tt:94
 #, fuzzy, c-format
-msgid "Published on %s %s by "
+msgid "Published on %s %s %s %s by "
 msgstr "(ໄດ້ຜິມຈຳໝ່າຍໃນ %s)"
 
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:85
@@ -8845,7 +8855,7 @@ msgstr "%s%sໃນ %s"
 msgid "Quantity:"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:146
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:151
 #, c-format
 msgid "Quote of the day"
 msgstr ""
@@ -8961,7 +8971,7 @@ msgid "Register a new account"
 msgstr ""
 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:366
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:185
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:190
 #: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:97
 #, fuzzy, c-format
 msgid "Register here."
@@ -9929,7 +9939,7 @@ msgstr ""
 msgid "Show all items"
 msgstr "ສະແດງລາຍການທັງຫມົດ"
 
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:100
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:105
 #, fuzzy, c-format
 msgid "Show all news"
 msgstr "ສະແດງລາຍການທັງຫມົດ"
@@ -11598,7 +11608,7 @@ msgstr ""
 msgid "Wednesday"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:195
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:200
 #, c-format
 msgid "Welcome, "
 msgstr "ຍິນດີຕ້ອນຮຫບ, "
@@ -12567,7 +12577,7 @@ msgstr "ນາມບັດເລກທີ່"
 msgid "change your password"
 msgstr "ປ່ຽນລະຫັດຂອງຂ້ອຍ"
 
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:198
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:203
 #, fuzzy, c-format
 msgid "checkout(s)"
 msgstr "ບັນດາລາຍການຕ່າງໆທີ່ຢືມອອກ"
@@ -12615,7 +12625,7 @@ msgstr "ກຳນົດປະເພດຂອງທະບຽນບັດທີ່
 msgid "desired_due_date"
 msgstr "ກຳນົດວັນທີ່ຕາມທີ່ຕ້ອງການ"
 
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:210
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:215
 #, fuzzy, c-format
 msgid "due in fines and charges"
 msgstr "ຄ່າປັບໃຫມ ແລະ ຄ່າທຳນຽມ"
@@ -12646,12 +12656,12 @@ msgstr "ຂໍ້ມູນເພີ່ມເຕີ່ມໃນສິ່ງທີ
 msgid "here"
 msgstr "ທີ່ນີ້"
 
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:204
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:209
 #, c-format
 msgid "hold(s) pending"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:207
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:212
 #, c-format
 msgid "hold(s) waiting"
 msgstr ""
@@ -12829,7 +12839,7 @@ msgstr "ຫລື"
 msgid "out of"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:201
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:206
 #, fuzzy, c-format
 msgid "overdue(s)"
 msgstr "ກາຍກຳນົດ "

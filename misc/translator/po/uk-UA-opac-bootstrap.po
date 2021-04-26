@@ -9,8 +9,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 18.05\n"
-"POT-Creation-Date: 2021-03-19 18:31-0300\n"
-"PO-Revision-Date: 2020-10-23 12:44+0000\n"
+"POT-Creation-Date: 2021-04-22 09:16-0300\n"
+"PO-Revision-Date: 2021-04-19 13:41+0000\n"
 "Last-Translator: Serhij Dubyk <dubyk@ukr.net>\n"
 "Language-Team: Ukrainian Linux Team <translation@linux.org.ua>\n"
 "Language: uk\n"
@@ -21,7 +21,7 @@ msgstr ""
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 "X-Generator: Pootle 2.8\n"
 "X-Poedit-SourceCharset: utf-8\n"
-"X-POOTLE-MTIME: 1603457091.946517\n"
+"X-POOTLE-MTIME: 1618839696.580543\n"
 "X-Pootle-Path: /uk/18.05/uk-UA-opac-bootstrap.po\n"
 "X-Pootle-Revision: 1\n"
 
@@ -145,6 +145,14 @@ msgstr ""
 #, c-format
 msgid "%s %s %s Note: this window will close automatically in 5 seconds. %s "
 msgstr "%s %s %s Примітка: це вікно автоматично закриється через 5 секунд. %s "
+
+#. %1$s:  author.firstname | html 
+#. %2$s:  author.surname | html 
+#. %3$s:  ELSE 
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:99
+#, c-format
+msgid "%s %s %s by "
+msgstr "%s %s %s / "
 
 #. %1$s: - IF account.credit_type_code -
 #. %2$s: - SWITCH account.credit_type_code -
@@ -291,7 +299,7 @@ msgstr "%s %s Нічого не знайдено. %s "
 #. %9$s:  ELSE 
 #. %10$s:  END 
 #. %11$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:110
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:115
 #, c-format
 msgid ""
 "%s %s RSS feed for %s library news %s RSS feed for library news %s %s %s RSS "
@@ -5405,7 +5413,7 @@ msgid "Don't have a password yet?"
 msgstr "Ще не маєте пароля?"
 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:366
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:185
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:190
 #: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:97
 #, c-format
 msgid "Don't have an account? "
@@ -5954,7 +5962,7 @@ msgstr ""
 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:361
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:175
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:180
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:185
 #, c-format
 msgid "Forgot your password?"
 msgstr "Забули свій пароль?"
@@ -7325,7 +7333,7 @@ msgstr "Розташування"
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:372
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:20
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:172
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:171
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:176
 #: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:95
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:679
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:754
@@ -7374,7 +7382,7 @@ msgstr "Ввійти у свій обліковий запис OverDrive"
 msgid "Log in to your account"
 msgstr "Ввійти у Вашу облікову скриньку"
 
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:167
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:172
 #: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:81
 #, c-format
 msgid "Log in to your account:"
@@ -7421,7 +7429,7 @@ msgstr "Сторінка для входу"
 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:352
 #: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:96
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:168
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:173
 #: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:82
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:374
 #, c-format
@@ -7910,7 +7918,7 @@ msgstr "Без обмежень"
 msgid "No matching records found"
 msgstr "Відповідних записів не знайдено"
 
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:135
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:140
 #, c-format
 msgid "No news to display."
 msgstr "Немає новин."
@@ -8549,7 +8557,7 @@ msgstr "Пароль оновлено"
 
 #: opac-tmpl/bootstrap/en/includes/overdrive-login.inc:9
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:353
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:169
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:174
 #: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:46
 #: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:88
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:376
@@ -9188,10 +9196,12 @@ msgstr "Опубліковано: %s %s у %s %s %s, %s %s %s, %s %s "
 
 #. %1$s:  koha_new.timestamp | $KohaDates with_hours = 1 
 #. %2$s:  IF ( (newsdisp == 'opac' || newsdisp == 'both') && koha_new.borrowernumber ) 
+#. %3$s:  IF news_item 
+#. %4$s:  SET author = koha_new.author 
 #: opac-tmpl/bootstrap/en/modules/opac-main.tt:94
 #, c-format
-msgid "Published on %s %s by "
-msgstr "(оприлюднено %s%s, "
+msgid "Published on %s %s %s %s by "
+msgstr "оприлюднено %s %s %s %s, "
 
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:85
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:85
@@ -9222,7 +9232,7 @@ msgstr "Пропозиції на придбання"
 msgid "Quantity:"
 msgstr "Кількість: "
 
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:146
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:151
 #, c-format
 msgid "Quote of the day"
 msgstr "Цитата дня"
@@ -9339,7 +9349,7 @@ msgid "Register a new account"
 msgstr "Зареєструємо новий обліковий запис"
 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:366
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:185
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:190
 #: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:97
 #, c-format
 msgid "Register here."
@@ -10307,7 +10317,7 @@ msgstr "Виводити _MENU_ записів"
 msgid "Show all items"
 msgstr "Показати усі примірники"
 
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:100
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:105
 #, c-format
 msgid "Show all news"
 msgstr "Показати усі новини"
@@ -12025,7 +12035,7 @@ msgstr "Срд"
 msgid "Wednesday"
 msgstr "Середа"
 
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:195
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:200
 #, c-format
 msgid "Welcome, "
 msgstr "Вітання, "
@@ -13035,7 +13045,7 @@ msgstr "cardnumber"
 msgid "change your password"
 msgstr "змінити мій пароль"
 
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:198
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:203
 #, c-format
 msgid "checkout(s)"
 msgstr "(видачі)"
@@ -13090,7 +13100,7 @@ msgstr ""
 msgid "desired_due_date"
 msgstr "desired_due_date"
 
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:210
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:215
 #, c-format
 msgid "due in fines and charges"
 msgstr "(нарахування пені та сплати)"
@@ -13121,12 +13131,12 @@ msgstr " за додатковою інформацією про те, як це
 msgid "here"
 msgstr "тут"
 
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:204
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:209
 #, c-format
 msgid "hold(s) pending"
 msgstr "(замовлення у черзі)"
 
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:207
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:212
 #, c-format
 msgid "hold(s) waiting"
 msgstr "(замовлення очікують)"
@@ -13313,7 +13323,7 @@ msgstr " або "
 msgid "out of"
 msgstr " з "
 
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:201
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:206
 #, c-format
 msgid "overdue(s)"
 msgstr "(прострочення)"
