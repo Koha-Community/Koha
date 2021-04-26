@@ -187,18 +187,16 @@ if ($op eq 'add_form') {
 ################## ITEMTYPE_CREATE ##################################
 # called automatically if an unexisting  frameworkis selected
 } elsif ($op eq 'framework_create') {
-	$sth = $dbh->prepare("select count(*),marc_tag_structure.frameworkcode,frameworktext from marc_tag_structure,biblio_framework where biblio_framework.frameworkcode=marc_tag_structure.frameworkcode group by marc_tag_structure.frameworkcode");
-	$sth->execute;
-	my @existingframeworkloop;
-	while (my ($tot,$thisframeworkcode,$frameworktext) = $sth->fetchrow) {
-		if ($tot>0) {
-			push @existingframeworkloop, {
-                value => $thisframeworkcode,
-                frameworktext => $frameworktext,
-            };
-		}
-	}
-    $template->param( existingframeworkloop => \@existingframeworkloop );
+    my $frameworks = Koha::BiblioFrameworks->search(
+        {
+            'marc_tag_structure.frameworkcode' => { '!=' => undef }
+        },
+        {
+            join => 'marc_tag_structure',
+            distinct => 1
+        }
+    );
+    $template->param( existing_frameworks => $frameworks );
 
 ################## DEFAULT ##################################
 } else { # DEFAULT
