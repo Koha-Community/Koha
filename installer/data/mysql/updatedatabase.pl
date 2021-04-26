@@ -23520,6 +23520,11 @@ if( CheckVersion( $DBversion ) ) {
     NewVersion( $DBversion, 27726, "Increase field size for problem_reports.content");
 }
 
+$DBversion = '20.11.05.000';
+if( CheckVersion( $DBversion ) ) {
+    NewVersion( $DBversion, "", "Koha 20.11.05 release" );
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 my $update_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/atomicupdate/';
