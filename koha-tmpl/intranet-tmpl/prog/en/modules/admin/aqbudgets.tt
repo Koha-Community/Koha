@@ -142,7 +142,7 @@
         [% IF (value > 0) %]
             <span class="total_amount" data-parent_id="[% budget.budget_parent_id | html %]" data-self_id="[% budget.budget_id | html %]" style="color: green;">
         [% ELSIF (value < 0) %]
-            <span class="total_amount" style="color: red;">
+            <span class="total_amount" data-parent_id="[% budget.budget_parent_id | html %]" data-self_id="[% budget.budget_id | html %]" style="color: red;">
         [% ELSE %]
             <span class="totalamount">
         [% END %]
