@@ -166,7 +166,7 @@ sub enqueue {
     my $body = join('', map { $format->($_) } @{$metadata->{body}});
     $letter->{content} = $metadata->{header} . $body . $metadata->{footer};
 
-    $letter->{metadata} = Dump($metadata);
+    $letter->{metadata} = Encode::decode_utf8(Dump($metadata));
     C4::Letters::EnqueueLetter({
         letter                 => $letter,
         borrowernumber         => $borrower->{borrowernumber},
@@ -279,7 +279,7 @@ sub metadata {
         $data->{header} ||= '';
         $data->{body}   ||= [];
         $data->{footer} ||= '';
-        $self->{metadata} = Dump($data);
+        $self->{metadata} = Encode::decode_utf8(Dump($data));
         $self->content($self->render_metadata);
         return $data;
     } else {
