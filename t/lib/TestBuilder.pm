@@ -155,6 +155,8 @@ sub build_sample_biblio {
     my $marcflavour = C4::Context->preference('marcflavour');
 
     my $record = MARC::Record->new();
+    $record->encoding( 'UTF-8' );
+
     my ( $tag, $subfield ) = $marcflavour eq 'UNIMARC' ? ( 200, 'a' ) : ( 245, 'a' );
     $record->append_fields(
         MARC::Field->new( $tag, ' ', ' ', $subfield => $title ),
