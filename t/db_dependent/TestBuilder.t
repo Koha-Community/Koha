@@ -19,7 +19,9 @@
 
 use Modern::Perl;
 
-use Test::More tests => 13;
+use utf8;
+
+use Test::More tests => 14;
 use Test::Warn;
 use File::Basename qw(dirname);
 
@@ -461,3 +463,17 @@ subtest '->build parameter' => sub {
 };
 
 $schema->storage->txn_rollback;
+
+subtest 'build_sample_biblio() tests' => sub {
+
+    plan tests => 1;
+
+    $schema->storage->txn_begin;
+
+    warnings_are
+        { $builder->build_sample_biblio({ title => 'hell❤️' }); }
+        [],
+        "No encoding warnings!";
+
+    $schema->storage->txn_rollback;
+};
