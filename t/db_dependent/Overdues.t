@@ -2,6 +2,7 @@
 
 use Modern::Perl;
 use Test::More tests => 17;
+use Test::Warn;
 
 use C4::Context;
 use Koha::Database;
@@ -132,7 +133,7 @@ $schema->storage->txn_rollback;
 
 subtest 'UpdateFine tests' => sub {
 
-    plan tests => 74;
+    plan tests => 75;
 
     $schema->storage->txn_begin;
 
@@ -535,6 +536,30 @@ subtest 'UpdateFine tests' => sub {
     );
     my $refunds = Koha::Account::Lines->search({ itemnumber => $item_2->itemnumber, credit_type_code => 'OVERPAYMENT' });
     is( $refunds->count, 0, "Overpayment refund not added when the amounts are equal" );
+
+    # Adding an OVERDUE fine not linked with a checkout (possible with historical OVERDUE fines)
+    $builder->build_object(
+        {
+            class => "Koha::Account::Lines",
+            value => {
+                borrowernumber => $patron_1->borrowernumber,
+                issue_id       => undef,
+                debit_type_code => 'OVERDUE',
+            }
+        }
+    );
+    $fine->issue_id(undef)->store;
+    warnings_are {
+        UpdateFine(
+            {
+                issue_id       => $checkout_2->issue_id,
+                itemnumber     => $item_2->itemnumber,
+                borrowernumber => $patron_1->borrowernumber,
+                amount         => $amount,
+                due            => $checkout_2->date_due
+            }
+        );
+    } [], 'No warning generated if fine is not linked with a checkout';
 
     $schema->storage->txn_rollback;
 };
