@@ -119,7 +119,7 @@ sub GetAvailability {
 
     foreach my $id ( split( / /, $cgi->param('id') ) ) {
         if ( $cgi->param('id_type') eq "item" ) {
-            my ( $biblionumber, $status, $msg, $location ) = _availability($id);
+            my ( $biblionumber, $status, $msg, $location, $itemcallnumber ) = _availability($id);
 
             $out .= "  <dlf:record>\n";
             $out .= "    <dlf:bibliographic id=\"" . ( $biblionumber || $id ) . "\" />\n";
@@ -130,6 +130,7 @@ sub GetAvailability {
             $out .= "          <dlf:availabilitystatus>" . $status . "</dlf:availabilitystatus>\n";
             if ($msg)      { $out .= "          <dlf:availabilitymsg>" . $msg . "</dlf:availabilitymsg>\n"; }
             if ($location) { $out .= "          <dlf:location>" . $location . "</dlf:location>\n"; }
+            if ($itemcallnumber) { $out .= "          <dlf:itemcallnumber>" . $itemcallnumber. "</dlf:itemcallnumber>\n"; }
             $out .= "        </dlf:simpleavailability>\n";
             $out .= "      </dlf:item>\n";
             $out .= "    </dlf:items>\n";
@@ -146,13 +147,14 @@ sub GetAvailability {
                 # We loop over the items to clean them
                 while ( my $item = $items->next ) {
                     my $itemnumber = $item->itemnumber;
-                    my ( $biblionumber, $status, $msg, $location ) = _availability($itemnumber);
+                    my ( $biblionumber, $status, $msg, $location, $itemcallnumber ) = _availability($itemnumber);
                     $out .= "      <dlf:item id=\"" . $itemnumber . "\">\n";
                     $out .= "        <dlf:simpleavailability>\n";
                     $out .= "          <dlf:identifier>" . $itemnumber . "</dlf:identifier>\n";
                     $out .= "          <dlf:availabilitystatus>" . $status . "</dlf:availabilitystatus>\n";
                     if ($msg)      { $out .= "          <dlf:availabilitymsg>" . $msg . "</dlf:availabilitymsg>\n"; }
                     if ($location) { $out .= "          <dlf:location>" . $location . "</dlf:location>\n"; }
+                    if ($itemcallnumber) { $out .= "          <dlf:itemcallnumber>" . $itemcallnumber. "</dlf:itemcallnumber>\n"; }
                     $out .= "        </dlf:simpleavailability>\n";
                     $out .= "      </dlf:item>\n";
                 }
@@ -961,6 +963,7 @@ sub _availability {
     my $biblionumber = $item->biblioitemnumber;
     my $library = Koha::Libraries->find( $item->holdingbranch );
     my $location = $library ? $library->branchname : '';
+    my $itemcallnumber = $item->itemcallnumber;
 
     if ( $item->notforloan ) {
         return ( $biblionumber, 'not available', 'Not for loan', $location );
@@ -973,7 +976,7 @@ sub _availability {
     } elsif ( $item->damaged ) {
         return ( $biblionumber, 'not available', 'Item damaged', $location );
     } else {
-        return ( $biblionumber, 'available', undef, $location );
+        return ( $biblionumber, 'available', undef, $location, $itemcallnumber );
     }
 }
 
