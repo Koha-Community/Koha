@@ -869,7 +869,7 @@
                                         <th class="ci-author">Author</th>
                                         <th class="ci-barcode">Barcode</th>
                                         <th class="ci-homelibrary">Home library</th>
-                                        <th class="ci-holdinglibrary">Holding library</th>
+                                        <th class="ci-transferlibrary">Transfer to</th>
                                         <th class="ci-shelvinglocation">Shelving location</th>
                                         <th class="ci-callnumber">Call number</th>
                                         <th class="ci-dateaccessioned">Date acquired</th>
@@ -916,8 +916,8 @@
                                         <td class="ci-homelibrary">
                                             [% Branches.GetName( riloo.homebranch ) | html %]
                                         </td>
-                                        <td class="ci-holdinglibrary">
-                                            [% Branches.GetName( riloo.holdingbranch ) | html %]
+                                        <td class="ci-transferlibrary">
+                                            [% Branches.GetName( riloo.transferbranch ) | html %]
                                         </td>
                                         <td class="ci-shelvinglocation">
                                             <span class="shelvingloc">[% riloo.location | html %]</span>

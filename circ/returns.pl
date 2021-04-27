@@ -618,7 +618,7 @@ foreach ( sort { $a <=> $b } keys %returneditems ) {
         $ri{itemnumber}          = $item->itemnumber;
         $ri{barcode}             = $bar_code;
         $ri{homebranch}          = $item->homebranch;
-        $ri{holdingbranch}       = $item->holdingbranch;
+        $ri{transferbranch}      = $item->get_transfer ? $item->get_transfer->tobranch : '';
         $ri{damaged}             = $item->damaged;
 
         $ri{location} = $item->location;
