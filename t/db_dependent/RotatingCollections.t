@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 51;
+use Test::More tests => 53;
 use C4::Context;
 use C4::RotatingCollections;
 use C4::Biblio;
@@ -316,6 +316,9 @@ is( C4::RotatingCollections::isItemInThisCollection($item_id1),
 is( C4::RotatingCollections::isItemInThisCollection(),
     0, "isItemInThisCollection returns 0 if no params given" );
 
+#Re-add item to test deletion of collection
+AddItemToCollection( $collection_id1, $item_id1 );
+
 #Test DeleteCollection
 is( DeleteCollection($collection_id2), 1, "Collection2 deleted" );
 is( DeleteCollection($collection_id1), 1, "Collection1 deleted" );
@@ -330,3 +333,15 @@ is(
     $countcollection + 1,
     "Two Collections have been deleted"
 );
+
+is( C4::RotatingCollections::isItemInAnyCollection($item_id1),
+    0, "Item1 is no longer in a collection after it is deleted" );
+is(
+    C4::RotatingCollections::isItemInThisCollection(
+        $item_id1, $collection_id1
+    ),
+    0,
+    "Item1 is not in the deleted Collection1"
+);
+
+$schema->storage->txn_rollback;
