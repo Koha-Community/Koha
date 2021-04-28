@@ -91,13 +91,13 @@
         </td>
         <td data-order="[% QUEUED_MESSAGE.updated_on | html %]">[% QUEUED_MESSAGE.updated_on | $KohaDates  with_hours => 1 %]</td>
         <td data-order="[% QUEUED_MESSAGE.time_queued | html %]">[% QUEUED_MESSAGE.time_queued | $KohaDates  with_hours => 1 %]</td>
-	    <td>
-        [% IF ( QUEUED_MESSAGE.delivery_note ) %]
-            [% IF ( QUEUED_MESSAGE.delivery_note == "Invalid borrowernumber $borrowernumber" ) %]Invalid borrowernumber [% borrowernumber | html %]
-            [% ELSIF ( QUEUED_MESSAGE.delivery_note == 'Unable to find an email address for this borrower' ) %]Unable to find an email address for this borrower
-            [% ELSIF ( QUEUED_MESSAGE.delivery_note == 'Missing SMS number' ) %]Missing SMS number
-            [% ELSIF ( QUEUED_MESSAGE.delivery_note == 'Message is duplicate' ) %]Message is duplicate
-            [% ELSIF ( QUEUED_MESSAGE.delivery_note == 'No notes from SMS driver' ) %]No notes from SMS driver
+        <td>
+        [% IF ( QUEUED_MESSAGE.error_code ) %]
+            [% IF ( QUEUED_MESSAGE.error_code == "INVALID_BORNUMBER" ) %]Invalid borrowernumber [% borrowernumber | html %]
+            [% ELSIF ( QUEUED_MESSAGE.error_code == 'NO_EMAIL' ) %]Unable to find an email address for this borrower
+            [% ELSIF ( QUEUED_MESSAGE.error_code == 'MISSING_SMS' ) %]Missing SMS number
+            [% ELSIF ( QUEUED_MESSAGE.error_code == 'DUPLICATE_MESSAGE' ) %]Message is duplicate
+            [% ELSIF ( QUEUED_MESSAGE.error_code == 'NO_NOTES' ) %]No notes from SMS driver
             [% ELSE %]Error occured while sending email.
             [% END %]
         [% END %]

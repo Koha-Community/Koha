@@ -1335,7 +1335,8 @@ sub _send_message_by_email {
             warn "FAIL: No 'to_address' and INVALID borrowernumber ($message->{borrowernumber})";
             _set_message_status( { message_id => $message->{'message_id'},
                                    status     => 'failed',
-                                   delivery_note => 'Invalid borrowernumber '.$message->{borrowernumber} } );
+                                   delivery_note => 'Invalid borrowernumber '.$message->{borrowernumber},
+                                   error_code => 'INVALID_BORNUMBER' } );
             return;
         }
         $to_address = $patron->notice_email_address;
@@ -1344,7 +1345,8 @@ sub _send_message_by_email {
             # warning too verbose for this more common case?
             _set_message_status( { message_id => $message->{'message_id'},
                                    status     => 'failed',
-                                   delivery_note => 'Unable to find an email address for this borrower' } );
+                                   delivery_note => 'Unable to find an email address for this borrower',
+                                   error_code => 'NO_EMAIL' } );
             return;
         }
     }
@@ -1483,14 +1485,16 @@ sub _send_message_by_sms {
     unless ( $patron and $patron->smsalertnumber ) {
         _set_message_status( { message_id => $message->{'message_id'},
                                status     => 'failed',
-                               delivery_note => 'Missing SMS number' } );
+                               delivery_note => 'Missing SMS number',
+                               error_code => 'MISSING_SMS' } );
         return;
     }
 
     if ( _is_duplicate( $message ) ) {
         _set_message_status( { message_id => $message->{'message_id'},
                                status     => 'failed',
-                               delivery_note => 'Message is duplicate' } );
+                               delivery_note => 'Message is duplicate',
+                               error_code => 'DUPLICATE_MESSAGE' } );
         return;
     }
 
@@ -1499,7 +1503,8 @@ sub _send_message_by_sms {
                                      } );
     _set_message_status( { message_id => $message->{'message_id'},
                            status     => ($success ? 'sent' : 'failed'),
-                           delivery_note => ($success ? '' : 'No notes from SMS driver') } );
+                           delivery_note => ($success ? '' : 'No notes from SMS driver'),
+                           error_code => 'NO_NOTES' } );
 
     return $success;
 }
