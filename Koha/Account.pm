@@ -86,7 +86,6 @@ sub pay {
 
     my $userenv = C4::Context->userenv;
 
-
     my $manager_id = $userenv ? $userenv->{number} : undef;
     my $interface = $params ? ( $params->{interface} || C4::Context->interface ) : C4::Context->interface;
     my $payment = $self->payin_amount(
@@ -104,6 +103,14 @@ sub pay {
             debits        => $lines
         }
     );
+
+    # NOTE: Pay historically always applied as much credit as it could to all
+    # existing outstanding debits, whether passed specific debits or otherwise.
+    if ( $payment->amountoutstanding ) {
+        $payment =
+          $payment->apply(
+            { debits => [ $self->outstanding_debits->as_list ] } );
+    }
 
     my $patron = Koha::Patrons->find( $self->{patron_id} );
     my @account_offsets = $payment->debit_offsets;
