@@ -1136,7 +1136,7 @@ subtest 'add() tests' => sub {
 
 subtest 'PUT /holds/{hold_id}/pickup_location tests' => sub {
 
-    plan tests => 16;
+    plan tests => 20;
 
     $schema->storage->txn_begin;
 
@@ -1239,6 +1239,21 @@ subtest 'PUT /holds/{hold_id}/pickup_location tests' => sub {
       ->json_is({ error => '[The supplied pickup location is not valid]' });
 
     is( $hold->discard_changes->branchcode->branchcode, $library_1->branchcode, 'pickup library unchanged' );
+
+    t::lib::Mocks::mock_preference( 'AllowHoldPolicyOverride', 1 );
+
+    # Attempt to use an invalid pickup locations with override succeeds
+    $t->put_ok( "//$userid:$password@/api/v1/holds/"
+          . $hold->id
+          . "/pickup_location"
+          => { 'x-koha-override' => 'any' }
+          => json => { pickup_library_id => $library_2->branchcode } )
+      ->status_is(200)
+      ->json_is({ pickup_library_id => $library_2->branchcode });
+
+    is( $hold->discard_changes->branchcode->branchcode, $library_2->branchcode, 'pickup library changed' );
+
+    t::lib::Mocks::mock_preference( 'AllowHoldPolicyOverride', 0 );
 
     $libraries_query = {
         branchcode => {
