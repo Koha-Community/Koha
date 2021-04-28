@@ -20,6 +20,7 @@ use Modern::Perl;
 
 use Test::More tests => 27;
 use Test::MockModule;
+use Test::Exception;
 use Test::Warn;
 
 use t::lib::TestBuilder;
@@ -143,7 +144,7 @@ $dbh->do(q|DELETE FROM accountlines|);
 
 subtest "Koha::Account::pay tests" => sub {
 
-    plan tests => 14;
+    plan tests => 13;
 
     # Create a borrower
     my $categorycode = $builder->build({ source => 'Category' })->{ categorycode };
@@ -201,38 +202,24 @@ subtest "Koha::Account::pay tests" => sub {
     my $note = $sth->fetchrow_array;
     is($note,'$20.00 payment note', '$20.00 payment note is registered');
 
-    # We make a -$30 payment (a NEGATIVE payment)
+    # We attempt to make a -$30 payment (a NEGATIVE payment)
     $data = '-30.00';
     $payment_note = '-$30.00 payment note';
-    $account->pay( { amount => $data, note => $payment_note } );
-
-    # There is now $310 in the account
-    $sth = $dbh->prepare("SELECT amountoutstanding FROM accountlines WHERE borrowernumber=?");
-    $amountoutstanding = $dbh->selectcol_arrayref($sth, {}, $borrower->borrowernumber);
-    $amountleft = 0;
-    for my $line ( @$amountoutstanding ) {
-        $amountleft += $line;
-    }
-    is($amountleft, 310, 'The account has $310 as expected' );
-    # Is the payment note well registered
-    $sth = $dbh->prepare("SELECT note FROM accountlines WHERE borrowernumber=? ORDER BY accountlines_id DESC LIMIT 1");
-    $sth->execute($borrower->borrowernumber);
-    $note = $sth->fetchrow_array;
-    is($note,'-$30.00 payment note', '-$30.00 payment note is registered');
+    throws_ok { $account->pay( { amount => $data, note => $payment_note } ) } qr//, 'Croaked on call to pay with negative amount';
 
     #We make a $150 payment ( > 1stLine )
     $data = '150.00';
     $payment_note = '$150.00 payment note';
     $account->pay( { amount => $data, note => $payment_note } );
 
-    # There is now $160 in the account
+    # There is now $130 in the account
     $sth = $dbh->prepare("SELECT amountoutstanding FROM accountlines WHERE borrowernumber=?");
     $amountoutstanding = $dbh->selectcol_arrayref($sth, {}, $borrower->borrowernumber);
     $amountleft = 0;
     for my $line ( @$amountoutstanding ) {
         $amountleft += $line;
     }
-    is($amountleft, 160, 'The account has $160 as expected' );
+    is($amountleft, 130, 'The account has $130 as expected' );
 
     # Is the payment note well registered
     $sth = $dbh->prepare("SELECT note FROM accountlines WHERE borrowernumber=? ORDER BY accountlines_id DESC LIMIT 1");
@@ -245,14 +232,14 @@ subtest "Koha::Account::pay tests" => sub {
     $payment_note = '$200.00 payment note';
     $account->pay( { amount => $data, note => $payment_note } );
 
-    # There is now -$40 in the account
+    # There is now -$70 in the account
     $sth = $dbh->prepare("SELECT amountoutstanding FROM accountlines WHERE borrowernumber=?");
     $amountoutstanding = $dbh->selectcol_arrayref($sth, {}, $borrower->borrowernumber);
     $amountleft = 0;
     for my $line ( @$amountoutstanding ) {
         $amountleft += $line;
     }
-    is($amountleft, -40, 'The account has -$40 as expected, (credit situation)' );
+    is($amountleft, -70, 'The account has -$70 as expected, (credit situation)' );
 
     # Is the payment note well registered
     $sth = $dbh->prepare("SELECT note FROM accountlines WHERE borrowernumber=? ORDER BY accountlines_id DESC LIMIT 1");
@@ -352,7 +339,7 @@ subtest "Koha::Account::pay writeoff tests" => sub {
     my $writeoff = Koha::Account::Lines->find( $id );
 
     is( $writeoff->credit_type_code, 'WRITEOFF', 'Type is correct for WRITEOFF' );
-    is( $writeoff->description, 'Writeoff', 'Description is correct' );
+    is( $writeoff->description, '', 'Description is correct' );
     is( $writeoff->amount+0, -42, 'Amount is correct' );
 };
 
@@ -411,7 +398,7 @@ subtest "More Koha::Account::pay tests" => sub {
         is( $stat->type, 'payment', "Correct statistic type" );
         is( $stat->branch, $branch, "Correct branch logged to statistics" );
         is( $stat->borrowernumber, $borrowernumber, "Correct borrowernumber logged to statistics" );
-        is( $stat->value+0, $amount, "Correct amount logged to statistics" );
+        is( $stat->value+0, -$amount, "Correct amount logged to statistics" );
     }
 };
 
@@ -471,7 +458,7 @@ subtest "Even more Koha::Account::pay tests" => sub {
         is( $stat->type, 'payment', "Correct statistic type" );
         is( $stat->branch, $branch, "Correct branch logged to statistics" );
         is( $stat->borrowernumber, $borrowernumber, "Correct borrowernumber logged to statistics" );
-        is( $stat->value+0, $partialamount, "Correct amount logged to statistics" );
+        is( $stat->value+0, -$partialamount, "Correct amount logged to statistics" );
     }
 };
 

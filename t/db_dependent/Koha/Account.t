@@ -1395,15 +1395,15 @@ subtest 'Koha::Account::payin_amount() tests' => sub {
     is( $offset->amount * 1, -10, 'Correct offset amount recorded' );
     $offset = $offsets->next;
     is( $offset->debit_id, $debit_1->id, "Offset added against debit_1");
-    is( $offset->type,       'PAYMENT', "Payment used for offset_type" );
+    is( $offset->type,       'Payment', "Payment used for offset_type" );
     is( $offset->amount * 1, -2,      'Correct amount offset against debit_1' );
     $offset = $offsets->next;
     is( $offset->debit_id, $debit_2->id, "Offset added against debit_2");
-    is( $offset->type,       'PAYMENT', "Payment used for offset_type" );
+    is( $offset->type,       'Payment', "Payment used for offset_type" );
     is( $offset->amount * 1, -3,      'Correct amount offset against debit_2' );
     $offset = $offsets->next;
     is( $offset->debit_id, $debit_3->id, "Offset added against debit_3");
-    is( $offset->type,       'PAYMENT', "Payment used for offset_type" );
+    is( $offset->type,       'Payment', "Payment used for offset_type" );
     is( $offset->amount * 1, -5,      'Correct amount offset against debit_3' );
 
     my $debit_5 = $account->add_debit( { amount => 5, interface => 'commandline', type => 'OVERDUE' } );
@@ -1428,7 +1428,7 @@ subtest 'Koha::Account::payin_amount() tests' => sub {
     is( $offset->amount * 1, -2.50, 'Correct offset amount recorded' );
     $offset = $offsets->next;
     is( $offset->debit_id, $debit_5->id, "Offset added against debit_5");
-    is( $offset->type,       'PAYMENT', "PAYMENT used for offset_type" );
+    is( $offset->type,       'Payment', "Payment used for offset_type" );
     is( $offset->amount * 1, -2.50,      'Correct amount offset against debit_5' );
 
     $schema->storage->txn_rollback;

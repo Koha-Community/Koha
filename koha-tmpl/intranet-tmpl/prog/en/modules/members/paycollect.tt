@@ -155,11 +155,11 @@
 
     <li>
         <label for="paid">Amount being paid: </label>
-        <input name="paid" id="paid" type="text" step="0.01" value="[% amountoutstanding | $Price on_editing => 1 %]"/>
+        <input name="paid" id="paid" type="text" step="0.01" min="0" value="[% amountoutstanding | $Price on_editing => 1 %]"/>
     </li>
     <li>
         <label for="collected">Amount tendered: </label>
-        <input name="collected" id="collected" type="text" step="0.01" value="[% amountoutstanding | $Price on_editing => 1 %]"/>
+        <input name="collected" id="collected" type="text" step="0.01" min="0" value="[% amountoutstanding | $Price on_editing => 1 %]"/>
     </li>
     <li>
         <label>Change to give: </label>
@@ -285,12 +285,12 @@
         [% ELSE %]
             <label for="paid">Amount being paid: </label>
         [% END %]
-        <input name="paid" id="paid" type="text" step="0.01" value="[% total | $Price on_editing => 1 %]"/>
+        <input name="paid" id="paid" type="text" step="0.01" min="0" value="[% total | $Price on_editing => 1 %]"/>
     </li>
     [% IF type != 'WRITEOFF' %]
         <li>
             <label for="collected">Amount tendered: </label>
-            <input name="collected" id="collected" type="text" step="0.01" value="[% total | $Price on_editing => 1 %]"/>
+            <input name="collected" id="collected" type="text" step="0.01" min="0" value="[% total | $Price on_editing => 1 %]"/>
         </li>
         <li>
             <label>Change to give: </label>

@@ -81,7 +81,6 @@ sub pay {
     my $lines         = $params->{lines};
     my $type          = $params->{type} || 'PAYMENT';
     my $payment_type  = $params->{payment_type} || undef;
-    my $offset_type   = $params->{offset_type} || $type eq 'WRITEOFF' ? 'Writeoff' : 'Payment';
     my $cash_register = $params->{cash_register};
     my $item_id       = $params->{item_id};
 
@@ -358,7 +357,7 @@ sub payin_amount {
                 $credit = $credit->apply(
                     {
                         debits      => $params->{debits},
-                        offset_type => $params->{type}
+                        offset_type => $Koha::Account::offset_type->{$params->{type}}
                     }
                 );
             }
@@ -370,7 +369,7 @@ sub payin_amount {
                 $credit = $credit->apply(
                     {
                         debits      => [ $self->outstanding_debits->as_list ],
-                        offset_type => $params->{type}
+                        offset_type => $Koha::Account::offset_type->{$params->{type}}
                     }
                 );
             }
