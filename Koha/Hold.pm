@@ -47,7 +47,7 @@ Koha::Hold - Koha Hold object class
 
 =head1 API
 
-=head2 Class Methods
+=head2 Class methods
 
 =cut
 
@@ -254,10 +254,18 @@ sub is_pickup_location_valid {
 
 =head3 set_pickup_location
 
-    $hold->set_pickup_location({ library_id => $library->id });
+    $hold->set_pickup_location(
+        {
+            library_id => $library->id,
+          [ override   => 0|1 ]
+        }
+    );
 
 Updates the hold pickup location. It throws a I<Koha::Exceptions::Hold::InvalidPickupLocation> if
 the passed pickup location is not valid.
+
+Note: It is up to the caller to verify if I<AllowHoldPolicyOverride> is set when setting the
+B<override> parameter.
 
 =cut
 
@@ -267,7 +275,13 @@ sub set_pickup_location {
     Koha::Exceptions::MissingParameter->throw('The library_id parameter is mandatory')
         unless $params->{library_id};
 
-    if ( $self->is_pickup_location_valid({ library_id => $params->{library_id} }) ) {
+    if (
+        $params->{override}
+        || $self->is_pickup_location_valid(
+            { library_id => $params->{library_id} }
+        )
+      )
+    {
         # all good, set the new pickup location
         $self->branchcode( $params->{library_id} )->store;
     }
