@@ -55,6 +55,7 @@ SKIP: {
 
     my $lang = "en"; # The idea here is to loop on all languages
 
+    $driver->set_window_size(3840,1080);
     # Welcome to the Koha web installer
     $s->fill_form({userid => $db_user, password => $db_pass });
     $s->submit_form;
@@ -97,10 +98,15 @@ SKIP: {
     #}
     $s->submit_form;
 
+    for (1..20){ # FIXME This is really ugly, but for an unknown reason the next submit_form is resubmitting the same form. So waiting for the next page to be effectively loaded
+        my $title = $s->driver->get_title;
+        last if $title =~ m|Default data loaded|;
+        sleep 1;
+    }
+
     # Default data loaded
     $s->submit_form;
 
-    #$s->submit_form;
     $s->click( { href => '/installer/onboarding.pl', main => 'installer-step3' } );
 
     # Create a library
@@ -142,7 +148,7 @@ SKIP: {
     like( $s->driver->get_title, qr(Log in to Koha), 'After the onboarding process the user should have landed in the login form page');
     $s->submit_form;
 
-    is( $s->driver->get_title, 'Koha staff client', 'The credentials we created should work');
+    is( $s->driver->get_title, 'Koha staff interface', 'The credentials we created should work');
 
     $driver->quit();
 };
