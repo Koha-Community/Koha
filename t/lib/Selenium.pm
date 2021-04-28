@@ -28,12 +28,8 @@ __PACKAGE__->mk_accessors(qw(login password base_url opac_base_url selenium_addr
 sub capture {
     my ( $class, $driver ) = @_;
 
-    my $lutim_server = q|https://pic.infini.fr/|; # Thanks Infini!
-    $driver->capture_screenshot('selenium_failure.png');
-    my $from_json = from_json qx{curl -s -F "format=json" -F "file=\@selenium_failure.png" -F "delete-day=1" $lutim_server};
-    if ( $from_json ) {
-        print STDERR "\nSCREENSHOT: $lutim_server/" . $from_json->{msg}->{short} . "\n";
-    }
+   $driver->capture_screenshot('selenium_failure.png');
+
 }
 
 sub new {
