@@ -24151,6 +24151,21 @@ if ( CheckVersion($DBversion) ) {
     NewVersion( $DBversion, 26734, ["Update notices to use defaults", "WARNING - ACCOUNT_DEBIT and ACCOUNT_CREDIT slip templates have been replaced. Backups have been made to the action logs for your reference."] );
 }
 
+$DBversion = '20.12.00.042';
+if( CheckVersion( $DBversion ) ) {
+    unless( foreign_key_exists( 'collections_tracking', 'collectionst_ibfk_1' ) ) {
+        $dbh->do(q{
+            DELETE FROM collections_tracking WHERE colId NOT IN ( SELECT colId FROM collections )
+        });
+        $dbh->do(q{
+            ALTER TABLE collections_tracking
+            ADD CONSTRAINT `collectionst_ibfk_1` FOREIGN KEY (`colId`) REFERENCES `collections` (`colId`) ON DELETE CASCADE ON UPDATE CASCADE
+        });
+    }
+
+    NewVersion( $DBversion, 17202, "Add FK constraint for collection to collections_tracking");
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 my $update_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/atomicupdate/';
