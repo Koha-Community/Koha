@@ -1090,9 +1090,9 @@ VALUES ( 'tr', 'language', 'fr', 'Turc');
 INSERT INTO language_descriptions(subtag, type, lang, description)
 VALUES ( 'tr', 'language', 'de', 'Türkisch');
 
--- Ukranian
+-- Ukrainian
 INSERT INTO language_subtag_registry( subtag, type, description, added)
-VALUES ( 'uk', 'language', 'Ukranian','2005-10-16');
+VALUES ( 'uk', 'language', 'Ukrainian','2005-10-16');
 
 INSERT INTO language_rfc4646_to_iso639(rfc4646_subtag,iso639_2_code)
 VALUES ( 'uk','ukr');
@@ -1101,7 +1101,7 @@ INSERT INTO language_descriptions(subtag, type, lang, description)
 VALUES ( 'uk', 'language', 'uk', 'Українська');
 
 INSERT INTO language_descriptions(subtag, type, lang, description)
-VALUES ( 'uk', 'language', 'en', 'Ukranian');
+VALUES ( 'uk', 'language', 'en', 'Ukrainian');
 
 INSERT INTO language_descriptions(subtag, type, lang, description)
 VALUES ( 'uk', 'language', 'fr', 'Ukrainien');
