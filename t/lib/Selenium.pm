@@ -173,10 +173,15 @@ sub wait_for_element_visible {
 
     my ($visible, $elt);
     $self->remove_error_handler;
+    my $max_retries = $self->max_retries;
+    my $i;
     while ( not $visible ) {
         $elt = eval {$self->driver->find_element($xpath_selector) };
         $visible = $elt && $elt->is_displayed;
         $self->driver->pause(1000) unless $visible;
+
+        die "Cannot wait more for element '$xpath_selector' to be visible"
+            if $max_retries <= ++$i
     }
     $self->add_error_handler;
     return $elt;
