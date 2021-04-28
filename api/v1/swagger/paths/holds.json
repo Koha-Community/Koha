@@ -629,6 +629,13 @@
       "tags": ["holds"],
       "parameters": [
         {
+          "name": "x-koha-override",
+          "description": "Comma-separated list of overrides (valid values: any)",
+          "in": "header",
+          "type": "string",
+          "required": false
+        },
+        {
           "$ref": "../parameters.json#/hold_id_pp"
         },
         {

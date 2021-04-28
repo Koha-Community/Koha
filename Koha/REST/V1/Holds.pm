@@ -533,7 +533,15 @@ sub update_pickup_location {
 
     return try {
 
-        $hold->set_pickup_location({ library_id => $pickup_library_id });
+        my $overrides    = $c->stash('koha.overrides');
+        my $can_override = $overrides->{any} && C4::Context->preference('AllowHoldPolicyOverride');
+
+        $hold->set_pickup_location(
+            {
+                library_id => $pickup_library_id,
+                override   => $can_override
+            }
+        );
 
         return $c->render(
             status  => 200,
