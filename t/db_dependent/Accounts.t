@@ -205,7 +205,7 @@ subtest "Koha::Account::pay tests" => sub {
     # We attempt to make a -$30 payment (a NEGATIVE payment)
     $data = '-30.00';
     $payment_note = '-$30.00 payment note';
-    throws_ok { $account->pay( { amount => $data, note => $payment_note } ) } qr//, 'Croaked on call to pay with negative amount';
+    throws_ok { $account->pay( { amount => $data, note => $payment_note } ) } 'Koha::Exceptions::Account::AmountNotPositive', 'Croaked on call to pay with negative amount';
 
     #We make a $150 payment ( > 1stLine )
     $data = '150.00';
