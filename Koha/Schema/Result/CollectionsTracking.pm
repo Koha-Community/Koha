@@ -34,6 +34,7 @@ __PACKAGE__->table("collections_tracking");
   accessor: 'col_id'
   data_type: 'integer'
   default_value: 0
+  is_foreign_key: 1
   is_nullable: 0
 
 collections.colId
@@ -53,10 +54,11 @@ __PACKAGE__->add_columns(
   { data_type => "integer", is_auto_increment => 1, is_nullable => 0 },
   "colId",
   {
-    accessor      => "col_id",
-    data_type     => "integer",
-    default_value => 0,
-    is_nullable   => 0,
+    accessor       => "col_id",
+    data_type      => "integer",
+    default_value  => 0,
+    is_foreign_key => 1,
+    is_nullable    => 0,
   },
   "itemnumber",
   { data_type => "integer", default_value => 0, is_nullable => 0 },
@@ -74,9 +76,26 @@ __PACKAGE__->add_columns(
 
 __PACKAGE__->set_primary_key("collections_tracking_id");
 
+=head1 RELATIONS
 
-# Created by DBIx::Class::Schema::Loader v0.07039 @ 2014-08-18 13:01:05
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:s8ZFSmMJt313bz3XdlhITQ
+=head2 col
+
+Type: belongs_to
+
+Related object: L<Koha::Schema::Result::Collection>
+
+=cut
+
+__PACKAGE__->belongs_to(
+  "col",
+  "Koha::Schema::Result::Collection",
+  { colId => "colId" },
+  { is_deferrable => 1, on_delete => "CASCADE", on_update => "CASCADE" },
+);
+
+
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2021-04-29 07:54:20
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:JcoZbVCFzYkwbGjyRlH5rA
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration

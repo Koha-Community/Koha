@@ -118,9 +118,24 @@ __PACKAGE__->belongs_to(
   },
 );
 
+=head2 collections_trackings
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2021-01-21 13:39:29
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:bNonPwexORvzFUQlDKobEQ
+Type: has_many
+
+Related object: L<Koha::Schema::Result::CollectionsTracking>
+
+=cut
+
+__PACKAGE__->has_many(
+  "collections_trackings",
+  "Koha::Schema::Result::CollectionsTracking",
+  { "foreign.colId" => "self.colId" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
+
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2021-04-29 07:54:20
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:le+rc9BRLaPAApAZSZrKRg
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration
