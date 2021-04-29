@@ -14440,7 +14440,7 @@ if( CheckVersion( $DBversion ) ) {
 [% IF checkout.auto_renew_error %]
 The following item, [% biblio.title %], has not been renewed because:
 [% IF checkout.auto_renew_error == 'too_many' %]
-You have reached the maximum number of checkouts possible.
+You have reached the maximum number of renewals possible.
 [% ELSIF checkout.auto_renew_error == 'on_reserve' %]
 This item is on hold for another patron.
 [% ELSIF checkout.auto_renew_error == 'restriction' %]
@@ -22108,7 +22108,7 @@ if( CheckVersion( $DBversion ) ) {
         UPDATE letter SET
         name = REPLACE(name, "notification on auto renewing", "Notification of automatic renewal"),
         title = REPLACE(title, "Auto renewals", "Automatic renewal notice"),
-        content = REPLACE(content, "You have reach the maximum of checkouts possible.", "You have reached the maximum number of checkouts possible.")
+        content = REPLACE(content, "You have reach the maximum of checkouts possible.", "You have reached the maximum number of renewals possible.")
         WHERE code = 'AUTO_RENEWALS';
     });
     $dbh->do(q{
@@ -23698,7 +23698,7 @@ if( CheckVersion( $DBversion ) ) {
             [% IF !checkout.auto_renew_error %]
                 was renewed until [% checkout.date_due | $KohaDates as_due_date => 1%]
             [% ELSIF checkout.auto_renew_error == 'too_many' %]
-                You have reached the maximum number of checkouts possible.
+                You have reached the maximum number of renewals possible.
             [% ELSIF checkout.auto_renew_error == 'on_reserve' %]
                 This item is on hold for another patron.
             [% ELSIF checkout.auto_renew_error == 'restriction' %]
