@@ -22129,7 +22129,7 @@ if( CheckVersion( $DBversion ) ) {
     });
     $dbh->do(q{
         UPDATE letter SET
-        content = REPLACE(content, "The following item [% biblio.title %] has correctly been renewed and is now due [% checkout.date_due %]", "The following item, [% biblio.title %], has correctly been renewed and is now due on [% checkout.date_due as_due_date => 1 %]
+        content = REPLACE(content, "The following item [% biblio.title %] has correctly been renewed and is now due [% checkout.date_due %]", "The following item, [% biblio.title %], has correctly been renewed and is now due on [% checkout.date_due | $KohaDates as_due_date => 1 %]
 ")
         WHERE code = 'AUTO_RENEWALS';
     });
