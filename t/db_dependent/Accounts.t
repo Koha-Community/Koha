@@ -142,9 +142,9 @@ for my $data  (@test_data) {
 
 $dbh->do(q|DELETE FROM accountlines|);
 
-subtest "Koha::Account::pay tests" => sub {
+subtest "Koha::Account::pay - always AutoReconcile + notes tests" => sub {
 
-    plan tests => 13;
+    plan tests => 17;
 
     # Create a borrower
     my $categorycode = $builder->build({ source => 'Category' })->{ categorycode };
@@ -171,12 +171,10 @@ subtest "Koha::Account::pay tests" => sub {
 
     # There is $100 in the account
     $sth = $dbh->prepare("SELECT amountoutstanding FROM accountlines WHERE borrowernumber=?");
-    my $amountoutstanding = $dbh->selectcol_arrayref($sth, {}, $borrower->borrowernumber);
-    my $amountleft = 0;
-    for my $line ( @$amountoutstanding ) {
-        $amountleft += $line;
-    }
-    is($amountleft, 300, 'The account has 300$ as expected' );
+    my $outstanding_debt = $account->outstanding_debits->total_outstanding;
+    is($outstanding_debt, 300, 'The account has $300 outstanding debt as expected' );
+    my $outstanding_credit = $account->outstanding_credits->total_outstanding;
+    is($outstanding_credit, 0, 'The account has $0 outstanding credit as expected' );
 
     # We make a $20 payment
     my $borrowernumber = $borrower->borrowernumber;
@@ -188,72 +186,58 @@ subtest "Koha::Account::pay tests" => sub {
     is( $accountline->payment_type, "TEST_TYPE", "Payment type passed into pay is set in account line correctly" );
 
     # There is now $280 in the account
-    $sth = $dbh->prepare("SELECT amountoutstanding FROM accountlines WHERE borrowernumber=?");
-    $amountoutstanding = $dbh->selectcol_arrayref($sth, {}, $borrower->borrowernumber);
-    $amountleft = 0;
-    for my $line ( @$amountoutstanding ) {
-        $amountleft += $line;
-    }
-    is($amountleft, 280, 'The account has $280 as expected' );
+    $outstanding_debt = $account->outstanding_debits->total_outstanding;
+    is($outstanding_debt, 280, 'The account has $280 outstanding debt as expected' );
+    $outstanding_credit = $account->outstanding_credits->total_outstanding;
+    is($outstanding_credit, 0, 'The account has $0 outstanding credit as expected' );
 
     # Is the payment note well registered
-    $sth = $dbh->prepare("SELECT note FROM accountlines WHERE borrowernumber=? ORDER BY accountlines_id DESC LIMIT 1");
-    $sth->execute($borrower->borrowernumber);
-    my $note = $sth->fetchrow_array;
-    is($note,'$20.00 payment note', '$20.00 payment note is registered');
+    is($accountline->note,'$20.00 payment note', '$20.00 payment note is registered');
 
     # We attempt to make a -$30 payment (a NEGATIVE payment)
     $data = '-30.00';
     $payment_note = '-$30.00 payment note';
-    throws_ok { $account->pay( { amount => $data, note => $payment_note } ) } 'Koha::Exceptions::Account::AmountNotPositive', 'Croaked on call to pay with negative amount';
+    throws_ok { $account->pay( { amount => $data, note => $payment_note } ) }
+    'Koha::Exceptions::Account::AmountNotPositive',
+      'Croaked on call to pay with negative amount';
 
     #We make a $150 payment ( > 1stLine )
     $data = '150.00';
     $payment_note = '$150.00 payment note';
-    $account->pay( { amount => $data, note => $payment_note } );
+    $id = $account->pay( { amount => $data, note => $payment_note } )->{payment_id};
 
     # There is now $130 in the account
-    $sth = $dbh->prepare("SELECT amountoutstanding FROM accountlines WHERE borrowernumber=?");
-    $amountoutstanding = $dbh->selectcol_arrayref($sth, {}, $borrower->borrowernumber);
-    $amountleft = 0;
-    for my $line ( @$amountoutstanding ) {
-        $amountleft += $line;
-    }
-    is($amountleft, 130, 'The account has $130 as expected' );
+    $outstanding_debt = $account->outstanding_debits->total_outstanding;
+    is($outstanding_debt, 130, 'The account has $130 outstanding debt as expected' );
+    $outstanding_credit = $account->outstanding_credits->total_outstanding;
+    is($outstanding_credit, 0, 'The account has $0 outstanding credit as expected' );
 
     # Is the payment note well registered
-    $sth = $dbh->prepare("SELECT note FROM accountlines WHERE borrowernumber=? ORDER BY accountlines_id DESC LIMIT 1");
-    $sth->execute($borrower->borrowernumber);
-    $note = $sth->fetchrow_array;
-    is($note,'$150.00 payment note', '$150.00 payment note is registered');
+    $accountline = Koha::Account::Lines->find( $id );
+    is($accountline->note,'$150.00 payment note', '$150.00 payment note is registered');
 
     #We make a $200 payment ( > amountleft )
     $data = '200.00';
     $payment_note = '$200.00 payment note';
-    $account->pay( { amount => $data, note => $payment_note } );
+    $id = $account->pay( { amount => $data, note => $payment_note } )->{payment_id};
 
     # There is now -$70 in the account
-    $sth = $dbh->prepare("SELECT amountoutstanding FROM accountlines WHERE borrowernumber=?");
-    $amountoutstanding = $dbh->selectcol_arrayref($sth, {}, $borrower->borrowernumber);
-    $amountleft = 0;
-    for my $line ( @$amountoutstanding ) {
-        $amountleft += $line;
-    }
-    is($amountleft, -70, 'The account has -$70 as expected, (credit situation)' );
+    $outstanding_debt = $account->outstanding_debits->total_outstanding;
+    is($outstanding_debt, 0, 'The account has $0 outstanding debt as expected' );
+    $outstanding_credit = $account->outstanding_credits->total_outstanding;
+    is($outstanding_credit, -70, 'The account has -$70 outstanding credit as expected' );
 
     # Is the payment note well registered
-    $sth = $dbh->prepare("SELECT note FROM accountlines WHERE borrowernumber=? ORDER BY accountlines_id DESC LIMIT 1");
-    $sth->execute($borrower->borrowernumber);
-    $note = $sth->fetchrow_array;
-    is($note,'$200.00 payment note', '$200.00 payment note is registered');
+    $accountline = Koha::Account::Lines->find( $id );
+    is($accountline->note,'$200.00 payment note', '$200.00 payment note is registered');
 
     my $line3 = $account->add_debit({ type => 'ACCOUNT', amount => 42, interface => 'commandline' });
-    my $payment_id = $account->pay( { lines => [$line3], amount => 42 } )->{payment_id};
-    my $payment = Koha::Account::Lines->find( $payment_id );
-    is( $payment->amount()+0, -42, "Payment paid the specified fine" );
+    $id = $account->pay( { lines => [$line3], amount => 42 } )->{payment_id};
+    $accountline = Koha::Account::Lines->find( $id );
+    is( $accountline->amount()+0, -42, "Payment paid the specified fine" );
     $line3 = Koha::Account::Lines->find( $line3->id );
     is( $line3->amountoutstanding+0, 0, "Specified fine is paid" );
-    is( $payment->branchcode, undef, 'branchcode passed, then undef' );
+    is( $accountline->branchcode, undef, 'branchcode passed, then undef' );
 };
 
 subtest "Koha::Account::pay particular line tests" => sub {
