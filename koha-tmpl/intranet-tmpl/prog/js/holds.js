@@ -78,7 +78,7 @@ $(document).ready(function() {
                     {
                         "mDataProp": function( oObj ) {
                             if( oObj.branches.length > 1 && oObj.found !== 'W' && oObj.found !== 'T' ){
-                                var branchSelect='<select priority='+oObj.priority+' class="hold_location_select" reserve_id="'+oObj.reserve_id+'" name="pick-location">';
+                                var branchSelect='<select priority='+oObj.priority+' class="hold_location_select" data-hold-id="'+oObj.reserve_id+'" reserve_id="'+oObj.reserve_id+'" name="pick-location">';
                                 for ( var i=0; i < oObj.branches.length; i++ ){
                                     var selectedbranch;
                                     var setbranch;
@@ -219,7 +219,60 @@ $(document).ready(function() {
                     });
                 });
 
-                $(".hold_location_select").change(function(){
+                function display_pickup_location (state) {
+                    var $text;
+                    if ( state.needs_override === true ) {
+                        $text = $(
+                            '<span>' + state.text + '</span> <span style="float:right;" title="' +
+                            _("This pickup location is not allowed according to circulation rules") +
+                            '"><i class="fa fa-exclamation-circle" aria-hidden="true"></i></span>'
+                        );
+                    }
+                    else {
+                        $text = $('<span>'+state.text+'</span>');
+                    }
+
+                    return $text;
+                };
+
+                $(".hold_location_select").each( function () {
+                    var this_dropdown = $(this);
+                    var hold_id = $(this).data('hold-id');
+
+                    this_dropdown.select2({
+                        allowClear: false,
+                        ajax: {
+                            url: '/api/v1/holds/' + encodeURIComponent(hold_id) + '/pickup_locations',
+                            delay: 300, // wait 300 milliseconds before triggering the request
+                            dataType: 'json',
+                            cache: true,
+                            data: function (params) {
+                                var search_term = (params.term === undefined) ? '' : params.term;
+                                var query = {
+                                    "q": JSON.stringify({"name":{"-like":search_term+'%'}}),
+                                    "_order_by": "name"
+                                };
+                                return query;
+                            },
+                            processResults: function (data) {
+                                var results = [];
+                                data.forEach( function ( pickup_location ) {
+                                    results.push(
+                                        {
+                                            "id": pickup_location.library_id.escapeHtml(),
+                                            "text": pickup_location.name.escapeHtml(),
+                                            "needs_override": pickup_location.needs_override
+                                        }
+                                    );
+                                });
+                                return { "results": results };
+                            }
+                        },
+                        templateResult: display_pickup_location
+                    });
+                });
+
+                $(".hold_location_select").on("change", function(){
                     $(this).prop("disabled",true);
                     var cur_select = $(this);
                     var res_id = $(this).attr('reserve_id');
