@@ -175,7 +175,7 @@ subtest 'update_notes() tests' => sub {
 
 subtest 'resolve_claim() tests' => sub {
 
-    plan tests => 9;
+    plan tests => 13;
 
     $schema->storage->txn_begin;
 
@@ -192,6 +192,10 @@ subtest 'resolve_claim() tests' => sub {
     my $item = $builder->build_sample_item;
 
     t::lib::Mocks::mock_userenv( { branchcode => $item->homebranch } ); # needed by AddIssue
+
+    # Picking 1 that should exist
+    my $ClaimReturnedLostValue = 1;
+    t::lib::Mocks::mock_preference('ClaimReturnedLostValue', $ClaimReturnedLostValue);
 
     my $issue = AddIssue( $librarian->unblessed, $item->barcode, dt_from_string->add( weeks => 2 ) );
 
@@ -224,6 +228,19 @@ subtest 'resolve_claim() tests' => sub {
     is( $claim->resolved_by, $librarian->id );
     is( $claim->updated_by, $librarian->id );
     ok( $claim->resolved_on );
+
+    is( $claim->checkout->item->itemlost, $ClaimReturnedLostValue );
+
+    $claim->update({resolution => undef, resolved_by => undef, resolved_on => undef });
+    $t->put_ok(
+        "//$userid:$password@/api/v1/return_claims/$claim_id/resolve" => json => {
+            resolved_by => $librarian->id,
+            resolution  => "FOUNDINLIB",
+            new_lost_status => 0,
+        }
+    )->status_is(200);
+    is( $claim->get_from_storage->checkout->item->itemlost, 0 );
+
 
     # Make sure the claim doesn't exist on the DB anymore
     $claim->delete;

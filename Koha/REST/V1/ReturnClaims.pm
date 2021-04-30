@@ -160,8 +160,9 @@ sub resolve_claim {
 
     return try {
 
-        my $resolved_by = $body->{resolved_by};
-        my $resolution  = $body->{resolution};
+        my $resolved_by     = $body->{resolved_by};
+        my $resolution      = $body->{resolution};
+        my $new_lost_status = $body->{new_lost_status};
 
         my $user = $c->stash('koha.user');
         $resolved_by //= $user->borrowernumber;
@@ -174,6 +175,10 @@ sub resolve_claim {
                 updated_by  => $resolved_by,
             }
         )->store;
+
+        if ( defined $new_lost_status ) {
+            $claim->checkout->item->itemlost($new_lost_status)->store;
+        }
         $claim->discard_changes;
 
         return $c->render(

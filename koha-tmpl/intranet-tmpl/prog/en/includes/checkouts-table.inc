@@ -145,6 +145,15 @@
                   <option value="[% r.authorised_value | html %]">[% r.lib | html %]</option>
               [% END %]
             </select>
+
+            <label for="new_lost_status">New item lost value:</label>
+            [% SET itemlost = AuthorisedValues.GetAuthValueDropbox('LOST') %]
+            <select class="form-control" id="new_lost_status">
+              <option value="0"></option>
+              [% FOREACH lost IN itemlost %]
+                  <option value="[% lost.authorised_value | html %]">[% lost.lib | html %]</option>
+              [% END %]
+            </select>
           </div>
 
           <input type="hidden" id="claims-returned-resolved-modal-id"/>
