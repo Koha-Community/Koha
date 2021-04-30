@@ -125,9 +125,9 @@ subtest 'set_pickup_location() tests' => sub {
     $item_hold->discard_changes;
     is( $item_hold->branchcode, $library_3->branchcode, 'branchcode remains untouched' );
 
-    $item_hold->set_pickup_location({ library_id => $library_1->branchcode, override => 1 });
+    $item_hold->set_pickup_location({ library_id => $library_1->branchcode, force => 1 });
     $item_hold->discard_changes;
-    is( $item_hold->branchcode, $library_1->branchcode, 'branchcode changed because of \'override\'' );
+    is( $item_hold->branchcode, $library_1->branchcode, 'branchcode changed because of \'force\'' );
 
     $ret = $item_hold->set_pickup_location({ library_id => $library_2->id });
     is( ref($ret), 'Koha::Hold', 'self is returned' );

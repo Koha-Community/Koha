@@ -257,7 +257,7 @@ sub is_pickup_location_valid {
     $hold->set_pickup_location(
         {
             library_id => $library->id,
-          [ override   => 0|1 ]
+          [ force   => 0|1 ]
         }
     );
 
@@ -265,7 +265,7 @@ Updates the hold pickup location. It throws a I<Koha::Exceptions::Hold::InvalidP
 the passed pickup location is not valid.
 
 Note: It is up to the caller to verify if I<AllowHoldPolicyOverride> is set when setting the
-B<override> parameter.
+B<force> parameter.
 
 =cut
 
@@ -276,7 +276,7 @@ sub set_pickup_location {
         unless $params->{library_id};
 
     if (
-        $params->{override}
+        $params->{force}
         || $self->is_pickup_location_valid(
             { library_id => $params->{library_id} }
         )

@@ -539,7 +539,7 @@ sub update_pickup_location {
         $hold->set_pickup_location(
             {
                 library_id => $pickup_library_id,
-                override   => $can_override
+                force      => $can_override
             }
         );
 
