@@ -17,7 +17,7 @@ package Koha::Config;
 
 use Modern::Perl;
 
-use XML::Simple;
+use XML::LibXML ':libxml';
 
 # Default config file, if none is specified
 use constant CONFIG_FNAME => "/etc/koha/koha-conf.xml";
@@ -37,21 +37,70 @@ sub read_from_file {
 
     return if not defined $file;
 
-    my $xml;
+    my $config = {};
     eval {
-        $xml = XMLin(
-            $file,
-            keyattr => ['id'],
-            forcearray => ['listen', 'server', 'serverinfo'],
-            suppressempty => ''
-        );
+        my $dom = XML::LibXML->load_xml(location => $file);
+        foreach my $childNode ($dom->documentElement->nonBlankChildNodes) {
+            $class->_read_from_dom_node($childNode, $config);
+        }
     };
 
     if ($@) {
         die "\nError reading file $file.\nTry running this again as the koha instance user (or use the koha-shell command in debian)\n\n";
     }
 
-    return $xml;
+    return $config;
+}
+
+sub _read_from_dom_node {
+    my ($class, $node, $config) = @_;
+
+    if ($node->nodeType == XML_TEXT_NODE) {
+        $config->{content} = $node->textContent;
+    } elsif ($node->nodeType == XML_ELEMENT_NODE) {
+        my $subconfig = {};
+
+        foreach my $attribute ($node->attributes) {
+            my $key = $attribute->nodeName;
+            my $value = $attribute->value;
+            $subconfig->{$key} = $value;
+        }
+
+        foreach my $childNode ($node->nonBlankChildNodes) {
+            $class->_read_from_dom_node($childNode, $subconfig);
+        }
+
+        my $key = $node->nodeName;
+        if ($node->hasAttribute('id')) {
+            my $id = $node->getAttribute('id');
+            $config->{$key} //= {};
+            $config->{$key}->{$id} = $subconfig;
+            delete $subconfig->{id};
+        } else {
+            my @keys = keys %$subconfig;
+            if (1 == scalar @keys && $keys[0] eq 'content') {
+                # An element with no attributes and no child elements becomes its text content
+                $subconfig = $subconfig->{content};
+            } elsif (0 == scalar @keys) {
+                # An empty element becomes an empty string
+                $subconfig = '';
+            }
+
+            if (exists $config->{$key}) {
+                unless (ref $config->{$key} eq 'ARRAY') {
+                    $config->{$key} = [$config->{$key}];
+                }
+                push @{ $config->{$key} }, $subconfig;
+            } else {
+                if (grep { $_ eq $key } (qw(listen server serverinfo))) {
+                    # <listen>, <server> and <serverinfo> are always arrays
+                    $config->{$key} = [$subconfig];
+                } else {
+                    $config->{$key} = $subconfig;
+                }
+            }
+        }
+    }
 }
 
 # Koha's main configuration file koha-conf.xml
