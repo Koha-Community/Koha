@@ -24177,6 +24177,18 @@ if( CheckVersion( $DBversion ) ) {
     NewVersion( $DBversion, 28258, "Update AUTO_RENEWAL content");
 }
 
+$DBversion = '20.12.00.044';
+if( CheckVersion( $DBversion ) ) {
+    $dbh->do(q{
+        UPDATE language_subtag_registry SET description = 'Ukrainian' WHERE subtag='uk' and type='language' and description='Ukranian'
+    });
+    $dbh->do(q{
+        UPDATE language_descriptions SET description = 'Ukrainian' WHERE subtag='uk' and type='language' and lang='en' and description='Ukranian'
+    });
+
+    NewVersion( $DBversion, 28244, "Fix Ukrainian typo in English");
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 my $update_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/atomicupdate/';
