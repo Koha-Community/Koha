@@ -1,0 +1,269 @@
+<yazgfs>
+<!-- [scheme:]host[:port][/databaseName] -->
+<!-- scheme: tcp, ssl, unix, http, sru -->
+<!-- can run all servers on tcp, but the unix socket is faster -->
+
+<listen id="biblioserver" >unix:/home/koha/var/run/zebradb/bibliosocket</listen>
+<listen id="authorityserver" >unix:/home/koha/var/run/zebradb/authoritysocket</listen>
+
+<!-- Uncomment the following entry if you want to run the public Z39.50 server.
+    Also uncomment the <server> and <serverinfo> sections for id 'publicserver'
+    under PUBLICSERVER'S BIBLIOGRAPHIC RECORDS title-->
+<!--
+<listen id="publicserver" >tcp:@:9998</listen>
+-->
+
+<!-- BIBLIOGRAPHIC RECORDS -->
+<server id="biblioserver"  listenref="biblioserver">
+    <directory>/home/koha/var/lib/zebradb/biblios</directory>
+    <config>/home/koha/etc/zebradb/zebra-biblios-dom.cfg</config>
+    <cql2rpn>/home/koha/etc/zebradb/pqf.properties</cql2rpn>
+    <xi:include href="/home/koha/etc/zebradb/retrieval-info-bib-dom.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/>
+    <xi:include href="/home/koha/etc/zebradb/explain-biblios.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/>
+</server>
+<serverinfo id="biblioserver">
+        <ccl2rpn>/home/koha/etc/zebradb/ccl.properties</ccl2rpn>
+        <user>kohauser</user>
+        <password>zebrastripes</password>
+</serverinfo>
+
+<!-- AUTHORITY RECORDS -->
+<server id="authorityserver"  listenref="authorityserver" >
+    <directory>/home/koha/var/lib/zebradb/authorities</directory>
+    <config>/home/koha/etc/zebradb/zebra-authorities-dom.cfg</config>
+    <cql2rpn>/home/koha/etc/zebradb/pqf.properties</cql2rpn>
+    <xi:include href="/home/koha/etc/zebradb/retrieval-info-auth-dom.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/>
+    <xi:include href="/home/koha/etc/zebradb/explain-authorities.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/>
+</server>
+<serverinfo id="authorityserver">
+    <ccl2rpn>/home/koha/etc/zebradb/ccl.properties</ccl2rpn>
+    <user>kohauser</user>
+    <password>zebrastripes</password>
+</serverinfo>
+
+<!-- PUBLICSERVER'S BIBLIOGRAPHIC RECORDS -->
+<!--
+<server id="publicserver"  listenref="publicserver">
+    <directory>/home/koha/var/lib/zebradb/biblios</directory>
+    <config>/home/koha/etc/zebradb/zebra-biblios-dom.cfg</config>
+    <cql2rpn>/home/koha/etc/zebradb/pqf.properties</cql2rpn>
+    <xi:include href="/home/koha/etc/zebradb/retrieval-info-bib-dom.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/>
+    <xi:include href="/home/koha/etc/zebradb/explain-biblios.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/>
+</server>
+<serverinfo id="publicserver">
+        <ccl2rpn>/home/koha/etc/zebradb/ccl.properties</ccl2rpn>
+        <user>kohauser</user>
+        <password>zebrastripes</password>
+</serverinfo>
+-->
+
+<!-- ADDITIONAL KOHA CONFIGURATION DIRECTIVE -->
+<!-- db_scheme should follow the DBD driver name -->
+<!-- the DBD drivers supported by Koha are mysql and Pg -->
+<!-- port info: mysql:3306 Pg:5432 (5433 on Debian) -->
+<config>
+ <db_scheme>mysql</db_scheme>
+ <database>koha</database>
+ <hostname>localhost</hostname>
+ <port>3306</port>
+ <user>kohaadmin</user>
+ <pass>katikoan</pass>
+ <tls>no</tls>
+ <ca></ca>
+ <cert></cert>
+ <key></key>
+ <biblioserver>biblios</biblioserver>
+ <biblioservershadow>1</biblioservershadow>
+ <authorityserver>authorities</authorityserver>
+ <authorityservershadow>1</authorityservershadow>
+ <pluginsdir>/home/koha/var/lib/plugins</pluginsdir> <!-- This entry can be repeated to use multiple directories -->
+ <enable_plugins>0</enable_plugins>
+ <upload_path></upload_path>
+ <tmp_path></tmp_path>
+ <intranetdir>/home/koha/src</intranetdir>
+ <opacdir>/home/koha/src/opac</opacdir>
+ <opachtdocs>/home/koha/src/koha-tmpl/opac-tmpl</opachtdocs>
+ <intrahtdocs>/home/koha/src/koha-tmpl/intranet-tmpl</intrahtdocs>
+ <includes>/home/koha/src/koha-tmpl/intranet-tmpl/prog/en/includes/</includes>
+ <logdir>/home/koha/var/log</logdir>
+ <docdir>/home/koha/doc</docdir>
+ <backupdir>/home/koha/var/spool</backupdir>
+ <!-- URL of the mana KB server -->
+ <!-- alternative value http://mana-test.koha-community.org to query the test server -->
+ <mana_config>https://mana-kb.koha-community.org</mana_config>
+ <!-- Enable the two following to allow superlibrarians to download
+      database and configuration dumps (respectively) from the Export
+      tool -->
+ <backup_db_via_tools>0</backup_db_via_tools>
+ <backup_conf_via_tools>0</backup_conf_via_tools>
+ <!-- Uncomment the following line if you are not using packages and need to schedule reports through the web interface. supportdir should contain cronjobs/runreport.pl -->
+ <!--
+ <supportdir>/home/koha/src/misc</supportdir>
+ -->
+ <install_log>/home/koha/misc/koha-install-log</install_log>
+ <useldapserver>0</useldapserver><!-- see C4::Auth_with_ldap for extra configs you must add if you want to turn this on -->
+ <useshibboleth>0</useshibboleth><!-- see C4::Auth_with_shibboleth for extra configs you must do to turn this on -->
+ <zebra_lockdir>/home/koha/var/lock/zebradb</zebra_lockdir>
+ <lockdir>__LOCK_DIR__</lockdir>
+ <use_zebra_facets>1</use_zebra_facets>
+ <zebra_max_record_size>1024</zebra_max_record_size>
+ <log4perl_conf>/home/koha/etc/log4perl.conf</log4perl_conf>
+ <!-- Uncomment/edit next setting if you want to adjust zebra log levels.
+      Default is: none,fatal,warn.
+      You can also include: debug,log,malloc,all,request.
+      Use a comma-separated list of levels to include. -->
+ <!-- <zebra_loglevels>none,fatal,warn</zebra_loglevels> -->
+ <memcached_servers>127.0.0.1:11211</memcached_servers>
+ <memcached_namespace>KOHA</memcached_namespace>
+ <template_cache_dir>/tmp/koha</template_cache_dir>
+
+ <!-- Secret passphrase used by Mojolicious for signed cookies -->
+ <api_secret_passphrase>CHANGEME</api_secret_passphrase>
+
+ <!-- Accessible directory from the staff client, uncomment the following line and define a valid path to let the intranet user access it-->
+ <!--
+ <access_dirs>
+     <access_dir></access_dir>
+     <access_dir></access_dir>
+ </access_dirs>
+ -->
+
+ <!-- true type font mapping accoding to type from $font_types in C4/Creators/Lib.pm -->
+ <ttf>
+    <font type="TR" >/usr/share/fonts/truetype/dejavu/DejaVuSerif.ttf</font>
+    <font type="TB" >/usr/share/fonts/truetype/dejavu/DejaVuSerif-Bold.ttf</font>
+    <font type="TI" >/usr/share/fonts/truetype/dejavu/DejaVuSerif-Italic.ttf</font>
+    <font type="TBI">/usr/share/fonts/truetype/dejavu/DejaVuSerif-BoldItalic.ttf</font>
+    <font type="C"  >/usr/share/fonts/truetype/dejavu/DejaVuSansMono.ttf</font>
+    <font type="CB" >/usr/share/fonts/truetype/dejavu/DejaVuSansMono-Bold.ttf</font>
+    <font type="CO" >/usr/share/fonts/truetype/dejavu/DejaVuSansMono-Oblique.ttf</font>
+    <font type="CBO">/usr/share/fonts/truetype/dejavu/DejaVuSansMono-BoldOblique.ttf</font>
+    <font type="H"  >/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf</font>
+    <font type="HO" >/usr/share/fonts/truetype/dejavu/DejaVuSans-Oblique.ttf</font>
+    <font type="HB" >/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf</font>
+    <font type="HBO">/usr/share/fonts/truetype/dejavu/DejaVuSans-BoldOblique.ttf</font>
+ </ttf>
+
+ <!-- Path to the config file for SMS::Send -->
+ <sms_send_config>/home/koha/etc/sms_send/</sms_send_config>
+
+ <!-- Configuration for Plack -->
+ <plack_max_requests>50</plack_max_requests>
+ <plack_workers>2</plack_workers>
+
+ <!-- Configuration for X-Forwarded-For -->
+ <!--
+ <koha_trusted_proxies>1.2.3.4 2.3.4.5 3.4.5.6</koha_trusted_proxies>
+ -->
+
+ <!-- Elasticsearch Configuration -->
+ <elasticsearch>
+     <server>localhost:9200</server>
+     <index_name>koha_master</index_name>
+
+     <!-- See https://metacpan.org/pod/Search::Elasticsearch#cxn_pool -->
+     <cxn_pool>Static</cxn_pool>
+     <!-- See https://metacpan.org/pod/Search::Elasticsearch#trace_to -->
+     <!-- <trace_to>Stderr</trace_to> -->
+ </elasticsearch>
+ <!-- Uncomment the following line if you want to override the Elasticsearch default index settings -->
+ <!-- <elasticsearch_index_config>/home/koha/etc/searchengine/elasticsearch/index_config.yaml</elasticsearch_index_config> -->
+ <!-- Uncomment the following line if you want to override the Elasticsearch default field settings -->
+ <!-- <elasticsearch_field_config>/home/koha/etc/searchengine/elasticsearch/field_config.yaml</elasticsearch_field_config> -->
+ <!-- Uncomment the following line if you want to override the Elasticsearch index default settings.
+      Note that any changes made to the mappings file only take effect if you reset the mappings in
+      by visiting /cgi-bin/koha/admin/searchengine/elasticsearch/mappings.pl?op=reset&i_know_what_i_am_doing=1&reset_fields=1.
+      Resetting mappings will override any changes made in the Search engine configuration UI.
+ -->
+ <!-- <elasticsearch_index_mappings>/home/koha/etc/searchengine/elasticsearch/mappings.yaml</elasticsearch_index_mappings> -->
+
+ <interlibrary_loans>
+     <!-- Path to where Illbackends are located on the system
+          - This setting should normally not be touched -->
+     <backend_directory>/home/koha/src/Koha/Illbackends</backend_directory>
+     <!-- At least one <branch> block is required. -->
+     <branch>
+         <!-- The code of this branch -->
+         <code>CPL</code>
+         <!-- An optional prefix for all ILL request IDs for this branch -->
+         <prefix>ILL</prefix>
+     </branch>
+     <!-- How should we treat staff comments?
+          - hide: don't show in OPAC
+          - show: show in OPAC -->
+     <staff_request_comments>hide</staff_request_comments>
+     <!-- How should we treat the reply_date field?
+          - hide: don't show this field in the UI
+          - any other string: show, with this label -->
+     <reply_date>hide</reply_date>
+     <!-- Where should digital ILLs be sent?
+          - borrower: send it straight to the borrower email
+          - branch: send the ILL to the branch email -->
+     <digital_recipient>branch</digital_recipient>
+     <!-- What patron category should we use for p2p ILL requests?
+          - By default this is set to 'ILLLIBS' -->
+     <partner_code>ILLLIBS</partner_code>
+ </interlibrary_loans>
+
+ <!-- The timezone setting can let you force the timezone for this
+      instance to be something other then the local timezone of the
+      server. e.g. Antarctica/South_Pole -->
+ <timezone></timezone>
+
+ <!-- This is the bcryt settings used to generated anonymized content -->
+ <bcrypt_settings>__BCRYPT_SETTINGS__</bcrypt_settings>
+
+ <!-- flag for development purposes
+      dev_install is used to adjust some paths specific to dev installations
+      strict_sql_modes should not be used in a production environment
+      developers use it to catch bugs related to strict SQL modes -->
+ <dev_install>0</dev_install>
+ <strict_sql_modes>0</strict_sql_modes>
+ <plugin_repos>
+    <!--
+    <repo>
+        <name>ByWater Solutions</name>
+        <org_name>bywatersolutions</org_name>
+        <service>github</service>
+    </repo>
+    <repo>
+        <name>Theke Solutions</name>
+        <org_name>thekesolutions</org_name>
+        <service>gitlab</service>
+    </repo>
+    <repo>
+        <name>PTFS Europe</name>
+        <org_name>ptfs-europe</org_name>
+        <service>github</service>
+    </repo>
+    -->
+ </plugin_repos>
+
+ <koha_xslt_security>
+ <!-- Uncomment the following entry ONLY when you explicitly want the XSLT
+      parser to expand entities like <!ENTITY secret SYSTEM "/etc/secrets">.
+      This is unsafe and therefore NOT recommended!
+     <expand_entities_unsafe>1</expand_entities_unsafe>
+ -->
+ </koha_xslt_security>
+
+ <smtp_server>
+    <host>localhost</host>
+    <port>25</port>
+    <timeout>120</timeout>
+    <ssl_mode>disabled</ssl_mode>
+    <user_name></user_name>
+    <password></password>
+    <debug>0</debug>
+ </smtp_server>
+
+ <message_broker>
+   <hostname>localhost</hostname>
+   <port>61613</port>
+   <username>guest</username>
+   <password>guest</password>
+   <vhost></vhost>
+ </message_broker>
+
+</config>
+</yazgfs>
