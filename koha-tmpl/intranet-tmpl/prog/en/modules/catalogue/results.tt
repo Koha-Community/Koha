@@ -556,7 +556,7 @@
                                             <td>
                                                 <div class="availability">
                                                     [% IF ( SEARCH_RESULT.items_count ) %]
-                                                        <strong>
+                                                        <div class="results_available_count">
                                                             [% IF MaxSearchResultsItemsPerRecordStatusCheck && SEARCH_RESULT.items_count > MaxSearchResultsItemsPerRecordStatusCheck %]
                                                                 <span class="blocker inaccurate-item-statuses" title="Item statuses may be inaccurate. Please view the record details for accurate item statuses">
                                                             [% END %]
@@ -566,108 +566,74 @@
                                                             [% IF MaxSearchResultsItemsPerRecordStatusCheck && SEARCH_RESULT.items_count > MaxSearchResultsItemsPerRecordStatusCheck %]
                                                                 </span>
                                                             [% END %]
-                                                        </strong>
+                                                        </div> <!-- /.results_available_count -->
 
-                                                        [% IF ( SEARCH_RESULT.availablecount ) %]
-                                                            <ul>
-                                                                [% FOREACH available_items_loo IN SEARCH_RESULT.available_items_loop %]
-                                                                    [% IF item_level_itypes && !noItemTypeImages && available_items_loo.imageurl %]
-                                                                        <li style="list-style: none; list-style-type: none;">
-                                                                            <img src="[% available_items_loo.imageurl | html %]" title="[% available_items_loo.description | html %]" alt="[% available_items_loo.description | html %]" />
-                                                                    [% ELSE %]
-                                                                        <li>
-                                                                    [% END %]
-                                                                    [% IF ( available_items_loo.branchname ) %]
-                                                                        [% available_items_loo.branchname | html %]
-                                                                    [% END %]
-                                                                    [% IF ( available_items_loo.location ) %]
-                                                                        <span class="shelvingloc">[% available_items_loo.location | html %]</span>
-                                                                    [% END %]
-                                                                    [% IF ( available_items_loo.itemcallnumber ) %]
-                                                                        [<a href="/cgi-bin/koha/catalogue/search.pl?idx=callnum&amp;q=%22[% available_items_loo.itemcallnumber |uri %]%22">[% available_items_loo.itemcallnumber | html %]</a>]
-                                                                    [% END %]
-                                                                    ([% available_items_loo.count | html %])
-                                                                    [% IF item_level_itypes && available_items_loo.description %]
-                                                                        <br/>[% available_items_loo.description | html %]
-                                                                    [% END %]
-                                                                    </li>
-                                                                [% END # /FOREACH available_items_loo %]
-                                                            </ul>
-                                                        [% END # /IF SEARCH_RESULT.availablecount %]
-
-                                                        [% IF ( SEARCH_RESULT.onloancount ) %]
-                                                            <span class="status">[% SEARCH_RESULT.onloancount | html %] on loan:</span>
-                                                            <ul>
-                                                                [% FOREACH onloan_items_loo IN SEARCH_RESULT.onloan_items_loop %]
-                                                                    [% IF item_level_itypes && !noItemTypeImages && onloan_items_loo.imageurl %]
-                                                                        <li style="list-style: none; list-style-type: none;">
-                                                                            <img src="[% onloan_items_loo.imageurl | html %]" title="[% onloan_items_loo.description | html %]" alt="[% onloan_items_loo.description | html %]" />
-                                                                    [% ELSE %]
-                                                                        <li>
-                                                                    [% END %]
-                                                                    [% IF ( onloan_items_loo.branchname ) %]
-                                                                        [% onloan_items_loo.branchname | html %]
-                                                                    [% END %]
-                                                                    [% IF ( onloan_items_loo.location ) %]
-                                                                        <span class="shelvingloc">[% onloan_items_loo.location | html %]</span>
-                                                                    [% END %]
-                                                                    [% IF ( onloan_items_loo.itemcallnumber ) %]
-                                                                        [<a href="/cgi-bin/koha/catalogue/search.pl?idx=callnum&amp;q=%22[% onloan_items_loo.itemcallnumber |uri %]%22">[% onloan_items_loo.itemcallnumber | html %]</a>]
-                                                                    [% END %]
-                                                                    ([% onloan_items_loo.count | html %][% IF ( onloan_items_loo.longoverdue ) %], [% onloan_items_loo.longoverdue | html %] long overdue[% END %]) date due: [% onloan_items_loo.due_date | $KohaDates %]
-                                                                    [% IF item_level_itypes && onloan_items_loo.description %]
-                                                                    <br/>[% onloan_items_loo.description | html %]
+                                                        [% BLOCK search_result_items %]
+                                                            [% IF status_count == "onloancount" %]
+                                                                [% IF SEARCH_RESULT.${status_count} > 0 %]
+                                                                    <div class="results_checkedout">[% SEARCH_RESULT.${status_count} | html %] checked out:</div>
                                                                 [% END %]
-                                                                </li>
-                                                                [% END # /FOREACH onloan_items_loo %]
-                                                            </ul>
-                                                        [% END # IF SEARCH_RESULT.onloancount %]
+                                                            [% ELSIF status_count == "othercount" %]
+                                                                [% IF SEARCH_RESULT.${status_count} > 0 %]
+                                                                    <div class="results_unavailable">[% SEARCH_RESULT.${status_count} | html %] unavailable:</div>
+                                                                [% END %]
+                                                            [% END %]
+                                                            [% IF SEARCH_RESULT.${items_loop}.size > 0 %]
+                                                                <ul class="[% items_loop | html %]_items">
+                                                                    [% FOREACH items_loo IN SEARCH_RESULT.${items_loop} %]
+                                                                        [% IF item_level_itypes && !noItemTypeImages && items_loo.imageurl %]
+                                                                            <li class="result_itype_image">
+                                                                                <img src="[% items_loo.imageurl | html %]" title="[% items_loo.description | html %]" alt="[% items_loo.description | html %]" />
+                                                                        [% ELSE %]
+                                                                            <li>
+                                                                        [% END %]
+                                                                        [% IF ( items_loo.branchname ) %]
+                                                                            [% items_loo.branchname | html %]
+                                                                        [% END %]
+                                                                        [% IF ( items_loo.location ) %]
+                                                                            <span class="shelvingloc">[% items_loo.location | html %]</span>
+                                                                        [% END %]
 
-                                                        [% IF ( SEARCH_RESULT.othercount ) %]
-                                                            <span class="unavailable">[% SEARCH_RESULT.othercount | html %] unavailable:</span>
-                                                            <ul>
-                                                                [% FOREACH other_items_loo IN SEARCH_RESULT.other_items_loop %]
-                                                                    [% IF item_level_itypes && !noItemTypeImages && other_items_loo.imageurl %]
-                                                                        <li style="list-style: none; list-style-type: none;">
-                                                                            <img src="[% other_items_loo.imageurl | html %]" title="[% other_items_loo.description | html %]" alt="[% other_items_loo.description | html %]" />
-                                                                    [% ELSE %]
-                                                                        <li>
-                                                                    [% END %]
-                                                                    [% IF ( other_items_loo.branchname ) %]
-                                                                        [% other_items_loo.branchname | html %]
-                                                                    [% END %]
-                                                                    [% IF ( other_items_loo.location ) %]
-                                                                        <span class="shelvingloc">[% other_items_loo.location | html %]</span>
-                                                                    [% END %]
-                                                                    [% IF ( other_items_loo.itemcallnumber ) %]
-                                                                        [<a href="/cgi-bin/koha/catalogue/search.pl?idx=callnum&amp;q=%22[% other_items_loo.itemcallnumber |uri %]%22">[% other_items_loo.itemcallnumber | html %]</a>]
-                                                                    [% END %]
-                                                                    [% IF ( other_items_loo.withdrawn ) %]
-                                                                        ([% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.withdrawn', authorised_value => other_items_loo.withdrawn ) | html %])
-                                                                    [% END %]
-                                                                    [% IF ( other_items_loo.itemlost ) %]
-                                                                        ([% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.itemlost', authorised_value => other_items_loo.itemlost ) | html %])
-                                                                    [% END %]
-                                                                    [% IF ( other_items_loo.damaged ) %]
-                                                                        ([% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.damaged', authorised_value => other_items_loo.damaged ) | html %])
-                                                                    [% END %]
-                                                                    [% IF ( other_items_loo.intransit ) %]
-                                                                        (In transit)
-                                                                    [% END %]
-                                                                    [% IF ( other_items_loo.onhold ) %]
-                                                                        (On hold)
-                                                                    [% END %]
-                                                                    [% IF ( other_items_loo.notforloan ) %]
-                                                                        [% other_items_loo.notforloan | html %]
-                                                                    [% END %]
-                                                                    ([% other_items_loo.count | html %])
-                                                                    [% IF item_level_itypes && other_items_loo.description %]
-                                                                        <br/>[% other_items_loo.description | html %]
-                                                                    [% END %]
-                                                                    </li>
-                                                                [% END # /FOREACH other_items_loo %]
-                                                            </ul>
-                                                        [% END # /IF SEARCH_RESULT.othercount %]
+                                                                            &bull;
+                                                                            [% IF ( items_loo.itemcallnumber ) %]
+                                                                                <a href="/cgi-bin/koha/catalogue/search.pl?idx=callnum&amp;q=%22[% items_loo.itemcallnumber |uri %]%22">[% items_loo.itemcallnumber | html %]</a>
+                                                                            [% END %]
+                                                                            <div class="result_item_details">
+                                                                                [% IF ( items_loo.withdrawn ) %]
+                                                                                    ([% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.withdrawn', authorised_value => items_loo.withdrawn ) | html %])
+                                                                                [% END %]
+                                                                                [% IF ( items_loo.itemlost ) %]
+                                                                                    ([% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.itemlost', authorised_value => items_loo.itemlost ) | html %])
+                                                                                [% END %]
+                                                                                [% IF ( items_loo.damaged ) %]
+                                                                                    ([% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.damaged', authorised_value => items_loo.damaged ) | html %])
+                                                                                [% END %]
+                                                                                [% IF ( items_loo.intransit ) %]
+                                                                                    (In transit)
+                                                                                [% END %]
+                                                                                [% IF ( items_loo.onhold ) %]
+                                                                                    (On hold)
+                                                                                [% END %]
+                                                                                [% IF ( items_loo.notforloan ) %]
+                                                                                    [% items_loo.notforloan | html %]
+                                                                                [% END %]
+                                                                                <span class="item_count">[% items_loo.count | html %]</span>
+                                                                            </div> <!-- /.result_item_details -->
+                                                                            [% IF item_level_itypes && items_loo.description %]
+                                                                                <span class="item-itype-desc">[% items_loo.description | html %]</span>
+                                                                            [% END %]
+                                                                        </li>
+                                                                    [% END # /FOREACH other_items_loo %]
+                                                                </ul> <!-- /.[% items_loop | html %]_items -->
+                                                            [% END # /IF SEARCH_RESULT.${items_loop}.size %]
+                                                        [% END # /BLOCK search_result_items %]
+
+                                                        [% PROCESS search_result_items status_count="availablecount" items_loop="available_items_loop" %]
+
+                                                        [% PROCESS search_result_items status_count="onloancount" items_loop="onloan_items_loop" %]
+
+                                                        [% PROCESS search_result_items status_count="othercount" items_loop="other_items_loop" %]
+
 
                                                     [% ELSE # /IF ( SEARCH_RESULT.items_count ) %]
 
