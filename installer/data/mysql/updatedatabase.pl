@@ -24166,6 +24166,17 @@ if( CheckVersion( $DBversion ) ) {
     NewVersion( $DBversion, 17202, "Add FK constraint for collection to collections_tracking");
 }
 
+$DBversion = '20.12.00.043';
+if( CheckVersion( $DBversion ) ) {
+    $dbh->do(q{
+        UPDATE letter SET
+        content = REPLACE(content, "The following item, [% biblio.title %], has correctly been renewed and is now due on [% checkout.date_due as_due_date => 1 %]" , "The following item, [% biblio.title %], has correctly been renewed and is now due on [% checkout.date_due | $KohaDates as_due_date => 1 %]")
+        WHERE code = 'AUTO_RENEWALS';
+    });
+
+    NewVersion( $DBversion, 28258, "Update AUTO_RENEWAL content");
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 my $update_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/atomicupdate/';
