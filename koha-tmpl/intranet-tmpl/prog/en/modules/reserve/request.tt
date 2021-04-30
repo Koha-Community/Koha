@@ -443,9 +443,9 @@
                                 <label for="pickup">Pickup at:</label>
                             [% UNLESS ( multi_hold ) %]
                                 <select name="pickup" id="pickup" data-biblio-id="[% biblio.biblionumber | html %]" data-patron-id="[% patron.borrowernumber | html %]">
-                                    <option selected="selected" value="[% pickup | html %]">[% Branches.GetName(pickup) | html %]</option>
+                                    [% PROCESS options_for_libraries libraries => Branches.pickup_locations({ search_params => { biblio => biblionumber, patron => patron }, selected => pickup }) %]
                             [% ELSE %]
-                                <select name="pickup" id="pickup" data-patron-id="[% patron.borrowernumber | html %]">
+                                <select name="pickup" id="pickup_multi" data-patron-id="[% patron.borrowernumber | html %]">
                                     [% PROCESS options_for_libraries libraries => Branches.all({ selected => pickup, search_params => { pickup_location => 1 } }) %]
                             [% END %]
                                 </select>
