@@ -1142,14 +1142,16 @@ $(document).ready(function() {
 
     $(document).on('click', '#claims-returned-resolved-modal-btn-submit', function(e) {
         let resolution = $('#claims-returned-resolved-modal-resolved-code').val();
+        let new_lost_status = $('#new_lost_status').val();
         let id = $('#claims-returned-resolved-modal-id').val();
 
         $('#claims-returned-resolved-modal-btn-submit-spinner').show();
         $('#claims-returned-resolved-modal-btn-submit-icon').hide();
 
         params = {
-          resolution:  resolution,
-          resolved_by: logged_in_user_borrowernumber
+            resolution: resolution,
+            resolved_by: logged_in_user_borrowernumber,
+            new_lost_status: new_lost_status
         };
 
         $.ajax({
