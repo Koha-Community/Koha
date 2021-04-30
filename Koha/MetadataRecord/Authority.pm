@@ -191,7 +191,7 @@ sub get_all_authorities_iterator {
         };
     }
 
-    my $search_options->{columns} = [qw/ authid authtypecode marcxml /];
+    my $search_options->{columns} = [qw/ authid /];
     if ($options{desc}) {
         $search_options->{order_by} = { -desc => 'authid' };
     }
@@ -203,36 +203,20 @@ sub get_all_authorities_iterator {
         $search_terms,
         $search_options);
     my $next_func = sub {
-        my $row = $rs->next();
-        return if !$row;
-        my $authid       = $row->authid;
-        my $authtypecode = $row->authtypecode;
-        my $marcxml      = $row->marcxml;
+        # Warn and skip bad records, otherwise we break the loop
+        while (1) {
+            my $row = $rs->next();
+            return if !$row;
 
-        my $record = eval {
-            MARC::Record->new_from_xml(
-                StripNonXmlChars($marcxml),
-                'UTF-8',
-                (
-                    C4::Context->preference("marcflavour") eq "UNIMARC"
-                    ? "UNIMARCAUTH"
-                    : C4::Context->preference("marcflavour")
-                )
-            );
-        };
-        confess "$@" if ($@);
-        $record->encoding('UTF-8');
-
-        # I'm not sure why we don't use the authtypecode from the database,
-        # but this is how the original code does it.
-        require C4::AuthoritiesMarc;
-        $authtypecode = C4::AuthoritiesMarc::GuessAuthTypeCode($record);
-
-        my $auth = __PACKAGE__->new( $record, { authid => $authid, id => $authid, authtypecode => $authtypecode } );
-
-        return $auth;
-      };
-      return Koha::MetadataIterator->new($next_func);
+            my $auth = __PACKAGE__->get_from_authid($row->authid);
+            if (!$auth) {
+                warn "Something went wrong reading record for authority $row->authid: $@\n";
+                next;
+            }
+            return $auth;
+        }
+    };
+    return Koha::MetadataIterator->new($next_func);
 }
 
 1;
