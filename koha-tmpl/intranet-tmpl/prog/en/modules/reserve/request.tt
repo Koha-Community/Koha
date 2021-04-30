@@ -1238,6 +1238,10 @@
                     templateResult: display_pickup_location
                 });
             });
+            $("#pickup_multi").select2({
+                width: 'style',
+                allowClear: false
+            });
             $("#pickup").each( function () {
                 var this_dropdown = $(this);
                 var patron_id = $(this).data('patron-id');
