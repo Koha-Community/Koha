@@ -49,21 +49,19 @@ sub _new_schema {
 
     require Koha::Schema;
 
-    my $context = C4::Context->new();
+    my $db_driver = C4::Context::db_scheme2dbi(C4::Context->config('db_scheme'));;
 
-    my $db_driver = $context->{db_driver};
-
-    my $db_name   = $context->config("database");
-    my $db_host   = $context->config("hostname");
-    my $db_port   = $context->config("port") || '';
-    my $db_user   = $context->config("user");
-    my $db_passwd = $context->config("pass");
-    my $tls = $context->config("tls");
+    my $db_name   = C4::Context->config("database");
+    my $db_host   = C4::Context->config("hostname");
+    my $db_port   = C4::Context->config("port") || '';
+    my $db_user   = C4::Context->config("user");
+    my $db_passwd = C4::Context->config("pass");
+    my $tls = C4::Context->config("tls");
     my $tls_options;
     if( $tls && $tls eq 'yes' ) {
-        my $ca = $context->config('ca');
-        my $cert = $context->config('cert');
-        my $key = $context->config('key');
+        my $ca = C4::Context->config('ca');
+        my $cert = C4::Context->config('cert');
+        my $key = C4::Context->config('key');
         $tls_options = ";mysql_ssl=1;mysql_ssl_client_key=".$key.";mysql_ssl_client_cert=".$cert.";mysql_ssl_ca_file=".$ca;
     }
 

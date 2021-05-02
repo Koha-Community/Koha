@@ -34,7 +34,7 @@ sub set_lang {
     my ($self, $lang) = @_;
 
     $self->{lang} = $lang;
-    $self->{po_path_lang} = $self->{context}->config('intrahtdocs') .
+    $self->{po_path_lang} = C4::Context->config('intrahtdocs') .
                             "/prog/$lang/modules/admin/preferences";
 }
 
@@ -43,9 +43,7 @@ sub new {
 
     my $self                 = { };
 
-    my $context              = C4::Context->new();
-    $self->{context}         = $context;
-    $self->{path_pref_en}    = $context->config('intrahtdocs') .
+    $self->{path_pref_en}    = C4::Context->config('intrahtdocs') .
                                '/prog/en/modules/admin/preferences';
     set_lang( $self, $lang ) if $lang;
     $self->{pref_only}       = $pref_only;
@@ -76,17 +74,17 @@ sub new {
     $self->{langs} = \@langs;
 
     # Map for both interfaces opac/intranet
-    my $opachtdocs = $context->config('opachtdocs');
+    my $opachtdocs = C4::Context->config('opachtdocs');
     $self->{interface} = [
         {
             name   => 'Intranet prog UI',
-            dir    => $context->config('intrahtdocs') . '/prog',
+            dir    => C4::Context->config('intrahtdocs') . '/prog',
             suffix => '-staff-prog.po',
         },
     ];
 
     # OPAC themes
-    opendir my $dh, $context->config('opachtdocs');
+    opendir my $dh, C4::Context->config('opachtdocs');
     for my $theme ( grep { not /^\.|lib|xslt/ } readdir($dh) ) {
         push @{$self->{interface}}, {
             name   => "OPAC $theme",
@@ -98,8 +96,8 @@ sub new {
     # MARC flavours (hardcoded list)
     for ( "MARC21", "UNIMARC", "NORMARC" ) {
         # search for strings on staff & opac marc files
-        my $dirs = $context->config('intrahtdocs') . '/prog';
-        opendir $fh, $context->config('opachtdocs');
+        my $dirs = C4::Context->config('intrahtdocs') . '/prog';
+        opendir $fh, C4::Context->config('opachtdocs');
         for ( grep { not /^\.|\.\.|lib$|xslt/ } readdir($fh) ) {
             $dirs .= ' ' . "$opachtdocs/$_";
         }
@@ -140,7 +138,6 @@ sub po_filename {
     my $self   = shift;
     my $suffix = shift;
 
-    my $context    = C4::Context->new;
     my $trans_path = $Bin . '/po';
     my $trans_file = "$trans_path/" . $self->{lang} . $suffix;
     return $trans_file;
@@ -377,8 +374,8 @@ sub install_installer {
     my $self = shift;
     return unless ( $self->{installer} );
 
-    my $intradir  = $self->{context}->config('intranetdir');
-    my $db_scheme = $self->{context}->config('db_scheme');
+    my $intradir  = C4::Context->config('intranetdir');
+    my $db_scheme = C4::Context->config('db_scheme');
     my $langdir  = "$intradir/installer/data/$db_scheme/$self->{lang}";
     if ( -d $langdir ) {
         say "$self->{lang} installer dir $langdir already exists.\nDelete it if you want to recreate it." if $self->{verbose};
@@ -440,13 +437,13 @@ sub install_messages {
     system "$self->{msgfmt} -o $mofile $pofile";
 
     my $js_locale_data = 'var json_locale_data = {"Koha":' . `$self->{po2json} $js_pofile` . '};';
-    my $progdir = $self->{context}->config('intrahtdocs') . '/prog';
+    my $progdir = C4::Context->config('intrahtdocs') . '/prog';
     mkdir "$progdir/$self->{lang}/js";
     open my $fh, '>', "$progdir/$self->{lang}/js/locale_data.js";
     print $fh $js_locale_data;
     close $fh;
 
-    my $opachtdocs = $self->{context}->config('opachtdocs');
+    my $opachtdocs = C4::Context->config('opachtdocs');
     opendir(my $dh, $opachtdocs);
     for my $theme ( grep { not /^\.|lib|xslt/ } readdir($dh) ) {
         mkdir "$opachtdocs/$theme/$self->{lang}/js";

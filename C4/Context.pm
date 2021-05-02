@@ -177,7 +177,6 @@ that, use C<&set_context>.
 sub new {
     my $class = shift;
     my $conf_fname = shift;        # Config file to load
-    my $self = {};
 
     # check that the specified config file exists and is not empty
     undef $conf_fname unless 
@@ -191,18 +190,7 @@ sub new {
         }
     }
 
-    my $conf_cache = Koha::Caches->get_instance('config');
-    if ( $conf_cache->cache ) {
-        $self = $conf_cache->get_from_cache('koha_conf');
-    }
-    unless ( $self and %$self ) {
-        $self = Koha::Config->read_from_file($conf_fname);
-        if ( $conf_cache->memcached_cache ) {
-            # FIXME it may be better to use the memcached servers from the config file
-            # to cache it
-            $conf_cache->set_in_cache('koha_conf', $self)
-        }
-    }
+    my $self = Koha::Config->read_from_file($conf_fname);
     unless ( exists $self->{config} or defined $self->{config} ) {
         warn "The config file ($conf_fname) has not been parsed correctly";
         return;
@@ -311,7 +299,7 @@ C<C4::Config-E<gt>new> will not return it.
 sub _common_config {
 	my $var = shift;
 	my $term = shift;
-    return if !defined($context->{$term});
+    return unless defined $context and defined $context->{$term};
        # Presumably $self->{$term} might be
        # undefined if the config file given to &new
        # didn't exist, and the caller didn't bother
@@ -344,7 +332,6 @@ with this method.
 
 =cut
 
-my $syspref_cache = Koha::Caches->get_instance('syspref');
 my $use_syspref_cache = 1;
 sub preference {
     my $self = shift;
@@ -356,7 +343,7 @@ sub preference {
     $var = lc $var;
 
     if ($use_syspref_cache) {
-        $syspref_cache = Koha::Caches->get_instance('syspref') unless $syspref_cache;
+        my $syspref_cache = Koha::Caches->get_instance('syspref');
         my $cached_var = $syspref_cache->get_from_cache("syspref_$var");
         return $cached_var if defined $cached_var;
     }
@@ -366,6 +353,7 @@ sub preference {
     my $value = $syspref ? $syspref->value() : undef;
 
     if ( $use_syspref_cache ) {
+        my $syspref_cache = Koha::Caches->get_instance('syspref');
         $syspref_cache->set_in_cache("syspref_$var", $value);
     }
     return $value;
@@ -434,6 +422,7 @@ will not be seen by this process.
 
 sub clear_syspref_cache {
     return unless $use_syspref_cache;
+    my $syspref_cache = Koha::Caches->get_instance('syspref');
     $syspref_cache->flush_all;
 }
 
@@ -487,6 +476,7 @@ sub set_preference {
     }
 
     if ( $use_syspref_cache ) {
+        my $syspref_cache = Koha::Caches->get_instance('syspref');
         $syspref_cache->set_in_cache( "syspref_$variable", $value );
     }
 
@@ -508,6 +498,7 @@ sub delete_preference {
 
     if ( Koha::Config::SysPrefs->find( $var )->delete ) {
         if ( $use_syspref_cache ) {
+            my $syspref_cache = Koha::Caches->get_instance('syspref');
             $syspref_cache->clear_from_cache("syspref_$var");
         }
 

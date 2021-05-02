@@ -221,8 +221,6 @@ my $warnNoActiveCurrency = (! defined Koha::Acquisition::Currencies->get_active)
 
 my @xml_config_warnings;
 
-my $context = C4::Context->new;
-
 if (    C4::Context->config('zebra_bib_index_mode')
     and C4::Context->config('zebra_bib_index_mode') eq 'grs1' )
 {
@@ -235,9 +233,10 @@ if (    C4::Context->config('zebra_auth_index_mode')
     push @xml_config_warnings, { error => 'zebra_auth_index_mode_is_grs1' };
 }
 
+my $authorityserver = C4::Context->zebraconfig('authorityserver');
 if( (   C4::Context->config('zebra_auth_index_mode')
     and C4::Context->config('zebra_auth_index_mode') eq 'dom' )
-    && ( $context->{'server'}->{'authorityserver'}->{'config'} !~ /zebra-authorities-dom.cfg/ ) )
+    && ( $authorityserver->{config} !~ /zebra-authorities-dom.cfg/ ) )
 {
     push @xml_config_warnings, {
         error => 'zebra_auth_index_mode_mismatch_warn'

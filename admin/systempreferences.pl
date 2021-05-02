@@ -384,8 +384,7 @@ output_html_with_http_headers $input, $cookie, $template->output;
 # .pref files.
 
 sub get_prefs_from_files {
-    my $context       = C4::Context->new();
-    my $path_pref_en  = $context->config('intrahtdocs') .
+    my $path_pref_en  = C4::Context->config('intrahtdocs') .
                         '/prog/en/modules/admin/preferences';
     # Get all .pref file names
     opendir ( my $fh, $path_pref_en );

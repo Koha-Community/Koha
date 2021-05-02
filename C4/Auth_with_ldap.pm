@@ -50,7 +50,6 @@ sub ldapserver_error {
 }
 
 use vars qw($mapping @ldaphosts $base $ldapname $ldappassword);
-my $context = C4::Context->new() 	or die 'C4::Context->new failed';
 my $ldap = C4::Context->config("ldapserver") or die 'No "ldapserver" in server hash from KOHA_CONF: ' . $ENV{KOHA_CONF};
 my $prefhost  = $ldap->{hostname}	or die ldapserver_error('hostname');
 my $base      = $ldap->{base}		or die ldapserver_error('base');
