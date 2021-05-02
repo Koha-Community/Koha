@@ -30,7 +30,7 @@ use constant CONFIG_FNAME => "/etc/koha/koha-conf.xml";
 # developers should set the KOHA_CONF environment variable
 my $INSTALLED_CONFIG_FNAME = '__KOHA_CONF_DIR__/koha-conf.xml';
 
-# Should not be called outside of C4::Context or Koha::Cache
+# Should not be called outside of C4::Context
 # use C4::Context->config instead
 sub read_from_file {
     my ( $class, $file ) = @_;
