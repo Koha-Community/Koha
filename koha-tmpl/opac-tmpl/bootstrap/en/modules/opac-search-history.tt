@@ -58,10 +58,12 @@
                                 [% IF ( current_biblio_searches ) %]
                                     <h2>Current session</h2>
                                     <form action="/cgi-bin/koha/opac-search-history.pl" method="post">
+                                        <legend class="sr-only">Toolbar control</legend>
 
                                         [% INCLUDE 'toolbar_controls' %]
                                         <input type="hidden" name="action" value="delete" />
                                         <table class="historyt table table-bordered table-striped">
+                                            <caption class="sr-only">Current session</caption>
                                             <thead>
                                                 <tr>
                                                     <th></th>
@@ -101,10 +103,12 @@
                                 [% IF ( previous_biblio_searches ) %]
                                     <h2>Previous sessions</h2>
                                     <form action="/cgi-bin/koha/opac-search-history.pl" method="post">
+                                        <legend class="sr-only">Toolbar control</legend>
                                         [% INCLUDE 'toolbar_controls' %]
 
                                         <input type="hidden" name="action" value="delete" />
                                         <table class="historyt table table-bordered table-striped">
+                                            <caption class="sr-only">Previous sessions</caption>
                                             <thead>
                                                 <tr>
                                                     <th></th>
@@ -152,9 +156,11 @@
                                 [% IF ( current_authority_searches ) %]
                                     <h2>Current session</h2>
                                     <form action="/cgi-bin/koha/opac-search-history.pl" method="post">
+                                        <legend class="sr-only">Toolbar control</legend>
                                         [% INCLUDE 'toolbar_controls' %]
                                         <input type="hidden" name="action" value="delete" />
                                         <table class="historyt table table-bordered table-striped">
+                                            <caption class="sr-only">Current session</caption>
                                             <thead>
                                                 <tr>
                                                     <th></th>
@@ -187,9 +193,11 @@
                                 [% IF ( previous_authority_searches ) %]
                                     <h2>Previous sessions</h2>
                                     <form action="/cgi-bin/koha/opac-search-history.pl" method="post">
+                                        <legend class="sr-only">Toolbar control</legend>
                                         [% INCLUDE 'toolbar_controls' %]
                                         <input type="hidden" name="action" value="delete" />
                                         <table class="historyt table table-bordered table-striped">
+                                            <caption class="sr-only">Previous sessions</caption>
                                             <thead>
                                                 <tr>
                                                     <th></th>

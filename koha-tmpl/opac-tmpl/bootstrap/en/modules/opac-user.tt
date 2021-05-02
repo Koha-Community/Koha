@@ -166,6 +166,7 @@
 
                     [% IF Koha.Preference('AllowPatronToControlAutorenewal') %]
                     <form id="autorenewal_option" action="/cgi-bin/koha/opac-user.pl" method="post">
+                        <legend class="sr-only">Auto-renewal</legend>
                             <label for="yes-autorenew_checkouts">
                                 Allow auto-renewal:
                             </label>
@@ -231,6 +232,7 @@
                         <div id="opac-user-checkouts">
                             [% IF ( issues_count ) %]
                                 <form id="renewselected" action="/cgi-bin/koha/opac-renew.pl" method="post">
+                                    <legend class="sr-only">Renew selected</legend>
                                     <input type="hidden" name="borrowernumber" value="[% borrowernumber | html %]">
                                     <input type="hidden" name="from" value="opac_user" />
                                     <table id="checkoutst" class="table table-bordered table-striped">
@@ -456,6 +458,7 @@
 
                                 [% IF ( canrenew && !userdebarred && OpacRenewalAllowed && !( logged_in_user.is_expired && logged_in_user.category.effective_BlockExpiredPatronOpacActions ) ) %]
                                     <form id="renewall" class="js-hide" action="/cgi-bin/koha/opac-renew.pl" method="post">
+                                        <legend class="sr-only">Renew</legend>
                                         <input type="hidden" name="from" value="opac_user" />
                                         <input type="hidden" name="borrowernumber" value="[% borrowernumber | html %]" />
                                         [% FOREACH ISSUE IN ISSUES %]
@@ -468,6 +471,7 @@
                                 [% END %]
                             [% ELSE %]
                                 <table class="table table-bordered table-striped">
+                                    <caption class="sr-only">Checked out</caption>
                                     <tr><td>You have nothing checked out</td></tr>
                                 </table>
                             [% END # IF issues_count %]
@@ -482,8 +486,9 @@
                         [% IF ( OPACFinesTab ) %]
                             <!-- FINES BOX -->
                             [% IF ( amountoutstanding > 0 ) %]
-                                <div id="opac-user-fines"> <h2>Charges</h2>
+                                <div id="opac-user-fines">
                                     <table class="table table-bordered table-striped">
+                                        <caption>Charges</caption>
                                         <thead><tr><th colspan="2">Amount</th></tr></thead>
                                         <tbody>
                                             <tr>
@@ -496,8 +501,9 @@
                             [% END %]
 
                             [% IF ( amountoutstanding < 0 ) %]
-                                <div id="opac-user-fines">  <h2>Credits</h2>
+                                <div id="opac-user-fines">
                                     <table class="table table-bordered table-striped">
+                                        <caption>Credits</caption>
                                         <thead><tr><th colspan="2">Amount</th></tr></thead>
                                         <tbody>
                                             <tr>
@@ -509,8 +515,9 @@
                             [% END %]
 
                             [% IF relatives_with_fines %]
-                               <div id="opac-user-relative-fines"> <h2>Fines and charges</h2>
+                               <div id="opac-user-relative-fines">
                                     <table class="table table-bordered table-striped">
+                                   <caption>Fines and charges</caption>
                                         <thead>
                                             <tr>
                                                 <th colspan="2">Amount</th>
@@ -532,6 +539,7 @@
                         [% IF relatives %]
                             <div id="opac-user-relative-issues">
                                 <table id="opac-user-relative-issues-table" class="table table-bordered table-striped">
+                                    <caption class="sr-only">Relative issues</caption>
                                     <thead>
                                         <tr>
                                             <th class="anti-the">Title</th>
@@ -792,6 +800,7 @@
                                                 <td class="article-request-cancel">
                                                     <span class="tdlabel">Cancel:</span>
                                                     <form action="/cgi-bin/koha/opac-article-request-cancel.pl" id="delete_article_request_[% ar.id | html %]">
+                                                        <legend class="sr-only">Cancel article request</legend>
                                                         <input type="hidden" name="id" value="[% ar.id | html %]" />
                                                         <button data-title="[% ar.biblio.title | html %] [% ar.item.enumchron | html %]" data-article-request_id="[% ar.id | html %]" type="submit" class="btn btn-sm btn-danger btn-delete-article-request"><i class="fa fa-remove" aria-hidden="true"></i> Cancel</button>
                                                     </form>
@@ -802,6 +811,7 @@
                                 </table>
                             [% ELSE %]
                                 <table class="table table-bordered table-striped">
+                                    <caption class="sr-only">Article requests</caption>
                                     <tr><td>You have no article requests currently.</td></tr>
                                 </table>
                             [% END # IF article_requests_current.count %]

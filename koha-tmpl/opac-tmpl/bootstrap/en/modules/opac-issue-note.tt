@@ -38,6 +38,7 @@
                             Issue notes have not been enabled. Please contact the library.
                         [% ELSE %]
                             <form id="issue-note" action="/cgi-bin/koha/opac-issue-note.pl" method="post">
+                                <legend class="sr-only">Edit issue note</legend>
                                 <fieldset>
                                     <label for="note" class="required">Note:</label>
                                     <input type="text" name="note" value="[% note | html %]">

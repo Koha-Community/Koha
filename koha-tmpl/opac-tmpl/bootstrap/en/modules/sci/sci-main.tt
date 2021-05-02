@@ -75,8 +75,8 @@
                         [%# We have results from a check-in attempt %]
                         <div id="checkins" class="sci_results_list">
                             [% IF ( success && success.size > 0 || errors && errors.size > 0 ) %]
-                                <h2>Results</h2>
                                     <table id="sci_bcheckins_table" class="table table-bordered table-striped dataTable no-footer">
+                                        <caption><h2>Results</h2></caption>
                                         <thead>
                                             <th>Barcode</th>
                                             <th>Status</th>
@@ -98,6 +98,7 @@
                                     </table>
                                     <div>
                                         <form method="post" action="#" id="finish_form">
+                                            <legend class="sr-only">Finish</legend>
                                             <button id="sci_finish_button" type="submit" class="btn btn-primary"><i class="fa fa-check" aria-hidden="true"></i> Finish</button>
                                         </form>
                                     </div>
@@ -111,6 +112,7 @@
                         [%# Prompt for barcodes %]
                         <div id="new_checkins" class="sci_entry">
                             <form id="scan_form" name="scan_form" method="post" action="/cgi-bin/koha/sci/sci-main.pl">
+                                <legend class="sr-only">Scan</legend>
                                 <div class="row">
                                     <div class="col-auto">
                                         <label for="barcode_input">Scan the item or enter its barcode:</label>
@@ -128,6 +130,7 @@
                                     <div class="col">
                                         <div class="sci_input_append">
                                             <table id="sci_barcodes_table" class="table table-bordered table-striped dataTable no-footer" style="display: none;">
+                                                <caption class="sr-only">Barcodes</caption>
                                                 <thead>
                                                     <th class="barcodes_column">Barcode</th>
                                                 </thead>

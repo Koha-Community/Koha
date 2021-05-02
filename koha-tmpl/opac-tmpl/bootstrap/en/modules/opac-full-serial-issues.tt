@@ -75,7 +75,7 @@
                     <div id="searchfacetscontainer">
                         <div id="search-facets">
                             <form action="/cgi-bin/koha/opac-serial-issues.pl" id="filterform">
-                            <h2><a href="#" class="menu-collapse-toggle">Refine your search</a></h2>
+                                <legend><h2><a href="#" class="menu-collapse-toggle">Refine your search</a></h2></legend>
                             <ul class="menu-collapse">
                                 <li>
                                     <label for="libraryfilter">Library: </label>
@@ -121,6 +121,7 @@
                                 <div class="yeardata tabsub" id="show[% year.year | html %]" style="display:none">
                             [% END %]
                                 <table class="subscriptionstclass table table-bordered table-striped">
+                                    <caption class="sr-only">Subscriptions</caption>
                                     <thead>
                                         <tr>
                                             <th>Date</th>

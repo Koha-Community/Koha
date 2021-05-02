@@ -97,6 +97,7 @@
 
                             [% IF ( returnitem && Koha.Preference('SCOAllowCheckin') ) %]
                                 <form action="/cgi-bin/koha/sco/sco-main.pl" name="errorForm" class="inline" method="post">
+                                    <legend class="sr-only">Return</legend>
                                     <input type="hidden" name="op" value="returnbook" />
                                     <input type="hidden" name="patronid" value="[% patronid | html %]" />
                                     <input type="hidden" name="barcode" value="[% barcode | html %]" />
@@ -106,6 +107,7 @@
                             [% END %]
 
                             <form action="/cgi-bin/koha/sco/sco-main.pl" name="errorForm" class="inline" method="post">
+                                <legend class="sr-only">Error</legend>
                                 <input type="hidden" name="op" value="" />
                                 <input type="hidden" name="patronid" value="[% patronid | html %]" />
                                 <input type="hidden" name="barcode" value="[% barcode | html %]" />
@@ -124,6 +126,7 @@
 
                             [% IF ( renew && Koha.Preference('SCOAllowCheckin') ) %]
                                 <form action="/cgi-bin/koha/sco/sco-main.pl" name="confirmForm" class="inline" method="post">
+                                    <legend class="sr-only">Return</legend>
                                     <input type="hidden" name="op" value="returnbook" />
                                     <input type="hidden" name="patronid" value="[% patronid | html %]" />
                                     <input type="hidden" name="barcode" value="[% barcode | html %]" />
@@ -135,6 +138,7 @@
 
                             [% UNLESS ( renew ) %]
                                 <form action="/cgi-bin/koha/sco/sco-main.pl" name="confirmForm" class="inline" method="post">
+                                    <legend class="sr-only">Renew</legend>
                                     <input type="hidden" name="op" value="renew" />
                                     <input type="hidden" name="patronid" value="[% patronid | html %]" />
                                     <input type="hidden" name="barcode" value="[% barcode | html %]" />
@@ -144,6 +148,7 @@
                                   </form>
                             [% ELSE %]
                                 <form action="/cgi-bin/koha/sco/sco-main.pl" name="confirmForm" class="inline" method="post">
+                                    <legend class="sr-only">Renew</legend>
                                     <input type="hidden" name="op" value="renew" />
                                     <input type="hidden" name="patronid" value="[% patronid | html %]" />
                                     <input type="hidden" name="barcode" value="[% barcode | html %]" />
@@ -154,6 +159,7 @@
                             [% END %]
 
                             <form action="/cgi-bin/koha/sco/sco-main.pl" name="confirmForm" class="inline" method="post">
+                                <legend class="sr-only">Cancel</legend>
                                 <input type="hidden" name="op" value="" />
                                 <input type="hidden" name="patronid" value="[% patronid | html %]" />
                                 <input type="hidden" name="newissues" value="[% newissues | html %]" />
@@ -234,13 +240,13 @@
                         [% IF ( validuser ) %]
                             <div id="newcheckout" class="sco_entry">
                                 <form id="scan_form" name="scan_form" method="post" action="/cgi-bin/koha/sco/sco-main.pl" onsubmit="return checkout_confirm('[% patronid | html %]');">
-                                    <h2>
+                                    <legend><h2>
                                         [% IF ( Koha.Preference('SCOAllowCheckin') ) %]
                                             Check out, return, or renew an item:
                                         [% ELSE %]
                                             Check out or renew an item:
                                         [% END %]
-                                    </h2>
+                                        </h2></legend>
                                     <div class="row">
                                         <div class="col">
                                             <label for="barcode">Scan a new item or enter its barcode:</label>
@@ -335,6 +341,7 @@
                                                     [% END %]
                                                     <td>
                                                         <form action="/cgi-bin/koha/sco/sco-main.pl" method="post">
+                                                            <legend class="sr-only">Issue renews</legend>
                                                             <input type="hidden" name="patronid" value="[% patronid | html %]" />
                                                             <input type="hidden" name="barcode" value="[% ISSUE.barcode | html %]" />
                                                             <input type="hidden" name="newissues" value="[% newissues | html %]" />

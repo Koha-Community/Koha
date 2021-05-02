@@ -365,6 +365,7 @@
                     [% IF ( TagsInputEnabled ) %]
                         [% IF ( loggedinusername ) %]
                             <form id="tagform[% biblio.biblionumber | html %]" method="post" action="/cgi-bin/koha/opac-tags.pl" style="display:none;">
+                                <legend class="sr-only">Tags</legend>
                                 <div class="form-row">
                                     <div class="col-3">
                                         <label for="newtag[% biblio.biblionumber | html %]">New tag(s), separated by a comma:</label>
@@ -426,6 +427,7 @@
 
                     [% IF ( OpacStarRatings != 'disable' ) %]
                         <form method="post" action="/cgi-bin/koha/opac-ratings.pl">
+                            <legend class="sr-only">Star ratings</legend>
                             <div class="results_summary ratings">
 
                                 [% SET rating_avg = ratings.get_avg_rating() %]
@@ -594,6 +596,7 @@
                     [% IF ( serialcollection ) %]
                         <div id="serialcollection">
                             <table id="serialcollectiont" class="table table-bordered table-striped">
+                                <caption class="sr-only">Serial collections</caption>
                                 <thead>
                                     <tr>
                                         <th id="serial_library">Library</th>
@@ -820,6 +823,7 @@
                                 [% IF ( subscription.latestserials ) %]
                                     <p class="subscription_latestissues"> The [% subscription.opacdisplaycount | html %] latest issues for this subscription:</p>
                                     <table class="table table-bordered table-striped" id="subscriptionst">
+                                        <caption class="sr-only">Latest serials</caption>
                                         <thead>
                                             <tr>
                                                 <th id="serial_serialseq" data-colname="serial_serialseq">Issue #</th>
@@ -960,6 +964,7 @@
                             <div id="editions">
                                 <h2>Other editions of this work</h2>
                                 <table class="table table-bordered table-striped">
+                                    <caption class="sr-only">Other editions</caption>
                                     [% FOREACH XISBN IN XISBNS %]
                                         <tr>
                                             <td>
@@ -1211,6 +1216,7 @@
 
 [% BLOCK items_table %]
     <table class="table table-bordered table-striped" id="[% table_id | html %]">
+        <caption class="sr-only">Holdings</caption>
         <thead>
             <tr>
 

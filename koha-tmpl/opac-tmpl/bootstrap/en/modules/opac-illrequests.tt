@@ -87,6 +87,7 @@
                                 [% INCLUDE messages %]
                                 [% IF backends %]
                                     <form method="post" id="illrequestcreate-form" novalidate="novalidate">
+                                        <legend class="sr-only">Backends</legend>
                                         <fieldset class="rows">
                                             <label for="backend">Provider:</label>
                                             <select name="backend">
@@ -126,6 +127,7 @@
                             </div>
 
                             <table id="illrequestlist" class="table table-bordered table-striped">
+                                <caption class="sr-only">Requests</caption>
                                 <thead>
                                     <tr>
                                         <th>Request ID</th>
@@ -242,8 +244,8 @@
                         [% ELSIF method == 'availability' %]
                             <h1>Interlibrary loan item availability</h1>
                             <div id="results">
-                                <h2>Displaying availability results</h2>
                                 <form method="POST" action="/cgi-bin/koha/opac-illrequests.pl">
+                                    <legend><h2>Displaying availability results</h2></legend>
                                     [% FOREACH key IN whole.keys %]
                                         [% value = whole.$key %]
                                         [% IF key != 'custom_key' && key != 'custom_value' %]

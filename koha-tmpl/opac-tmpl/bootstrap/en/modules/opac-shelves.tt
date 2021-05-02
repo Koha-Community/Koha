@@ -735,6 +735,11 @@
 
                             [% IF shelves.count %]
                                 <table class="table">
+                                    [% IF category == PRIVATE %]
+                                    <caption class="sr-only">Your lists</caption>
+                                    [% ELSIF category == PUBLIC %]
+                                    <caption class="sr-only">Public lists</caption>
+                                    [% END %]
                                     <thead>
                                         <tr>
                                             <th>List name</th>

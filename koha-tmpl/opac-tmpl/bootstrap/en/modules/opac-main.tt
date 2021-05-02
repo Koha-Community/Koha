@@ -71,6 +71,7 @@
         [% IF Koha.Preference( 'OpacNewsLibrarySelect' ) %]
             [% UNLESS news_item %]
                 <form id="news-branch-select" class="form-inline" name="news-branch-select" method="get" action="/cgi-bin/koha/opac-main.pl">
+                    <legend class="sr-only">News</legend>
                     <label for="news-branch">Display news for: </label>
                     <select id="news-branch" name="branch">
                         [% IF ( branchcode == "" ) %]

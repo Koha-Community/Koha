@@ -39,6 +39,7 @@
                     <h1>Place article request for [% biblio.title | html %]</h1>
 
                     <form id="place-article-request" method="post" action="/cgi-bin/koha/opac-request-article.pl">
+                        <legend class="sr-only">Place article request</legend>
                         <input type="hidden" name="action" value="create" />
                         <input type="hidden" name="biblionumber" id="biblionumber" value="[% biblio.biblionumber | html %]" />
 

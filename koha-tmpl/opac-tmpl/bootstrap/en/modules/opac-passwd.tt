@@ -62,6 +62,7 @@
                     [% IF logged_in_user.category.effective_change_password %]
                         [% IF ( Ask_data ) %]
                             <form action="/cgi-bin/koha/opac-passwd.pl" name="mainform" id="mainform" method="post" autocomplete="off">
+                                <legend class="sr-only">Change your password</legend>
                                 <fieldset>
                                     [% IF ( logged_in_user.category.effective_require_strong_password ) %]
                                         <div class="alert alert-info">Your password must contain at least [% logged_in_user.category.effective_min_password_length | html %] characters, including UPPERCASE, lowercase and numbers.</div>
