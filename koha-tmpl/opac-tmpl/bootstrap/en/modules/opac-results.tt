@@ -164,6 +164,7 @@
 
                         <div class="searchresults">
                             <form action="/cgi-bin/koha/opac-search.pl" method="get" name="bookbag_form" id="bookbag_form">
+                                <legend class="sr-only">Sort</legend>
                                 [% IF ( searchdesc ) %]
                                     [% FOREACH QUERY_INPUT IN QUERY_INPUTS %]
                                         <input type="hidden" name="[% QUERY_INPUT.input_name | html %]" value="[% QUERY_INPUT.input_value | html %]"/>
@@ -301,6 +302,7 @@
 
                                 <!-- TABLE RESULTS START -->
                                 <table class="table table-striped">
+                                    <caption class="sr-only">Results</caption>
 
                                     <!-- Actual Search Results -->
                                     [% FOREACH SEARCH_RESULT IN SEARCH_RESULTS %]
@@ -647,6 +649,7 @@
                             </form> <!-- / #bookbag_form -->
 
                             <form id="hold_form" name="hold_form" method="get" action="/cgi-bin/koha/opac-reserve.pl">
+                                <legend class="sr-only">Pages</legend>
                                 <!-- The value will be set by holdBiblioNums() in basket.js -->
                                 <input id="hold_form_biblios" type="hidden" name="biblionumbers" value=""/>
                             </form>

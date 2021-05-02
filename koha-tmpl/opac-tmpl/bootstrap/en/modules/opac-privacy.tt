@@ -57,6 +57,7 @@
                         <p id="note1">Please note that information on any book still checked-out must be kept by the library no matter which privacy option you choose.</p>
                         <p id="note2">Please also note that the library staff can't update these values for you: it's your privacy!</p>
                         <form action="/cgi-bin/koha/opac-privacy.pl" method="post" id="opac-privacy-update-form">
+                            <legend class="sr-only">Privacy rule</legend>
                             <input type="hidden" name="op" value="update_privacy" />
                             <fieldset>
                                 <label for="privacy">Please choose your privacy rule:</label>
@@ -137,6 +138,7 @@
                         <h2>Immediate deletion</h2>
 
                         <form action="/cgi-bin/koha/opac-privacy.pl" method="post" id="opac-privacy-delete-form">
+                            <legend class="sr-only">Immediate deletion</legend>
                             <input type="hidden" name="op" value="delete_record" />
                             <p>Whatever your privacy rule you choose, you can delete all your checkout history immediately by clicking here. <strong>BE CAREFUL</strong>. Once you've confirmed the deletion, no one can retrieve the list!</p>
                             <fieldset class="action">

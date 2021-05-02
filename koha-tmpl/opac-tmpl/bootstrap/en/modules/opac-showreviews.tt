@@ -37,6 +37,7 @@
                    <div id="showreviews" class="searchresults maincontent">
                         <h1>Recent comments <a href="[% OPACBaseURL | url %]/cgi-bin/koha/opac-showreviews.pl?format=rss" class="rsssearchlink" aria-label="Subscribe to recent comments"><i class="fa fa-rss rsssearchicon" aria-hidden="true" title="Subscribe to recent comments"></i></a></h1>
                         <table class="table table-striped">
+                            <caption class="sr-only">Comments</caption>
                             [% SET AdlibrisEnabled = Koha.Preference('AdlibrisCoversEnabled') %]
                             [% SET AdlibrisURL = Koha.Preference('AdlibrisCoversURL') %]
                             [% FOREACH review IN reviews %]

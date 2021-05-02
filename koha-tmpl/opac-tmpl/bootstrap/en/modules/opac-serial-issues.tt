@@ -53,7 +53,7 @@
                         <form method="post" name="f">
                             [% FOREACH subscription_LOO IN subscription_LOOP %]
                                 <div id="subscriptionline[% subscription_LOO.subscriptionid | html %]" class="subscriptionline">
-                                    <h2>Subscription information for [% subscription_LOO.bibliotitle | html %]</h2>
+                                    <caption><h2>Subscription information for [% subscription_LOO.bibliotitle | html %]</h2><caption>
                                     <p>
                                         The current subscription began on [% subscription_LOO.startdate | html %] and is issued
                                         [% IF ( subscription_LOO.periodicity1 ) %]

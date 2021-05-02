@@ -157,9 +157,10 @@
                     </div>
                 [% END %]
 
-                <form action="/cgi-bin/koha/opac-reserve.pl" method="post" id="hold-request-form">
-                    <input type="hidden" name="place_reserve" value="1"/>
-                    <!-- These values are set dynamically by js -->
+            <form action="/cgi-bin/koha/opac-reserve.pl" method="post" id="hold-request-form">
+                <legend class="sr-only">Hold requests</legend>
+                <input type="hidden" name="place_reserve" value="1"/>
+                <!-- These values are set dynamically by js -->
                     <input type="hidden" name="biblionumbers" id="biblionumbers"/>
                     <input type="hidden" name="selecteditems" id="selections"/>
                     <div id="bigloop">
