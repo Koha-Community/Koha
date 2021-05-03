@@ -19,8 +19,11 @@
 
 use Modern::Perl;
 
-use Test::More tests => 5;
+use Test::More tests => 6;
+
 use Test::Exception;
+use Test::MockModule;
+
 use MARC::Field;
 
 use C4::Items;
@@ -221,3 +224,81 @@ subtest 'custom_cover_image_url' => sub {
 };
 
 $schema->storage->txn_rollback;
+
+subtest 'pickup_locations() tests' => sub {
+
+    plan tests => 1;
+
+    $schema->storage->txn_begin;
+
+    # Build 8 libraries
+    my $l_1 = $builder->build_object({ class => 'Koha::Libraries', value => { pickup_location => 1 } });
+    my $l_2 = $builder->build_object({ class => 'Koha::Libraries', value => { pickup_location => 1 } });
+    my $l_3 = $builder->build_object({ class => 'Koha::Libraries', value => { pickup_location => 1 } });
+    my $l_4 = $builder->build_object({ class => 'Koha::Libraries', value => { pickup_location => 1 } });
+    my $l_5 = $builder->build_object({ class => 'Koha::Libraries', value => { pickup_location => 1 } });
+    my $l_6 = $builder->build_object({ class => 'Koha::Libraries', value => { pickup_location => 1 } });
+    my $l_7 = $builder->build_object({ class => 'Koha::Libraries', value => { pickup_location => 1 } });
+    my $l_8 = $builder->build_object({ class => 'Koha::Libraries', value => { pickup_location => 1 } });
+
+    # Mock Koha::Item->pickup_locations so we have control on the output
+    # The $switch variable controls the output.
+    my $switch  = 0;
+    my $queries = [
+        { branchcode => [ $l_1->branchcode, $l_2->branchcode ] },
+        { branchcode => [ $l_3->branchcode, $l_4->branchcode ] },
+        { branchcode => [ $l_5->branchcode, $l_6->branchcode ] },
+        { branchcode => [ $l_7->branchcode, $l_8->branchcode ] }
+    ];
+
+    my $mock_item = Test::MockModule->new('Koha::Item');
+    $mock_item->mock(
+        'pickup_locations',
+        sub {
+            my $query = $queries->[$switch];
+            $switch++;
+            return Koha::Libraries->search($query);
+        }
+    );
+
+    # Two biblios
+    my $biblio_1 = $builder->build_sample_biblio;
+    my $biblio_2 = $builder->build_sample_biblio;
+
+    # Two items each
+    my $item_1_1 = $builder->build_sample_item({ biblionumber => $biblio_1->biblionumber });
+    my $item_1_2 = $builder->build_sample_item({ biblionumber => $biblio_1->biblionumber });
+    my $item_2_1 = $builder->build_sample_item({ biblionumber => $biblio_2->biblionumber });
+    my $item_2_2 = $builder->build_sample_item({ biblionumber => $biblio_2->biblionumber });
+
+    my $biblios = Koha::Biblios->search(
+        {
+            biblionumber => [ $biblio_1->biblionumber, $biblio_2->biblionumber ]
+        }
+    );
+
+    my $library_ids = [
+        Koha::Libraries->search(
+            {
+                branchcode => [
+                    $l_1->branchcode, $l_2->branchcode, $l_3->branchcode,
+                    $l_4->branchcode, $l_5->branchcode, $l_6->branchcode,
+                    $l_7->branchcode, $l_8->branchcode
+                ]
+            },
+            { order_by => ['branchname'] }
+        )->_resultset->get_column('branchcode')->all
+    ];
+
+    my $pickup_locations_ids = [
+        $biblios->pickup_locations->_resultset->get_column('branchcode')->all
+    ];
+
+    is_deeply(
+        $library_ids,
+        $pickup_locations_ids,
+        'The addition of all biblios+items pickup locations is returned'
+    );
+
+    $schema->storage->txn_rollback;
+};
