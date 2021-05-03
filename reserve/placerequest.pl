@@ -67,8 +67,9 @@ my %bibinfos = ();
 my @biblionumbers = split '/', $biblionumbers;
 foreach my $bibnum (@biblionumbers) {
     my %bibinfo = ();
-    $bibinfo{title} = $input->param("title_$bibnum");
-    $bibinfo{rank} = $input->param("rank_$bibnum");
+    $bibinfo{title}  = $input->param("title_$bibnum");
+    $bibinfo{rank}   = $input->param("rank_$bibnum");
+    $bibinfo{pickup} = $input->param("pickup_$bibnum");
     $bibinfos{$bibnum} = \%bibinfo;
 }
 
@@ -126,7 +127,7 @@ if ( $type eq 'str8' && $borrower ) {
             if ( $can_override || CanBookBeReserved($borrower->{'borrowernumber'}, $biblionumber)->{status} eq 'OK' ) {
                 AddReserve(
                     {
-                        branchcode       => $branch,
+                        branchcode       => $bibinfo->{pickup},
                         borrowernumber   => $borrower->{'borrowernumber'},
                         biblionumber     => $biblionumber,
                         priority         => $bibinfo->{rank},

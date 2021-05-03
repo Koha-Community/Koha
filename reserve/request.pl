@@ -286,6 +286,13 @@ $template->param(
 # FIXME launch another time GetMember perhaps until (Joubu: Why?)
 my $patron = Koha::Patrons->find( $borrowernumber_hold );
 
+if ( $patron && $multi_hold ) {
+    my @multi_pickup_locations =
+      Koha::Biblios->search( { biblionumber => \@biblionumbers } )
+      ->pickup_locations( { patron => $patron } );
+    $template->param( multi_pickup_locations => \@multi_pickup_locations );
+}
+
 my $logged_in_patron = Koha::Patrons->find( $borrowernumber );
 
 my $wants_check;
@@ -734,6 +741,13 @@ foreach my $biblionumber (@biblionumbers) {
 
     if (@reserveloop) {
         $template->param( reserveloop => \@reserveloop );
+    }
+
+    if ( $patron ) {
+        # Add the valid pickup locations
+        my @pickup_locations = $biblio->pickup_locations({ patron => $patron });
+        $biblioloopiter{pickup_locations} = \@pickup_locations;
+        $biblioloopiter{pickup_locations_codes} = [ map { $_->branchcode } @pickup_locations ];
     }
 
     push @biblioloop, \%biblioloopiter;

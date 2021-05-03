@@ -1,6 +1,7 @@
 [% USE raw %]
 [% USE To %]
 [% USE Asset %]
+[% USE JSON.Escape %]
 [% USE Koha %]
 [% USE KohaDates %]
 [% USE Branches %]
@@ -414,6 +415,7 @@
 
                         [% IF ( multi_hold ) %]
                             <input type="hidden" name="biblionumbers" id="multi_hold_bibs" value="[% biblionumbers | html %]"/>
+                            <input type="hidden" name="multi_holds" id="multi_holds" value="1" />
                             <input type="hidden" name="bad_bibs" id="bad_bibs" value=""/>
                             <input type="hidden" name="request" value="any"/>
                             [% FOREACH biblioloo IN biblioloop %]
@@ -454,7 +456,10 @@
                                     [% PROCESS options_for_libraries libraries => Branches.pickup_locations({ search_params => { biblio => biblionumber, patron => patron }, selected => pickup }) %]
                             [% ELSE %]
                                 <select name="pickup" id="pickup_multi" data-patron-id="[% patron.borrowernumber | html %]">
-                                    [% PROCESS options_for_libraries libraries => Branches.all({ selected => pickup, search_params => { pickup_location => 1 } }) %]
+                                    <option value="" selected="selected"></option>
+                                [% FOREACH pickup_location IN multi_pickup_locations %]
+                                    <option value="[% pickup_location.branchcode | html %]">[% pickup_location.branchname | html %]</option>
+                                [% END %]
                             [% END %]
                                 </select>
                             </li>
@@ -753,6 +758,7 @@
                                     [% END %]
                                     <th>Priority</th>
                                     <th>Information</th>
+                                    <th>Pickup location</th>
                                 </tr>
                                 [% FOREACH biblioloo IN biblioloop %]
                                     [% IF ( biblioloo.warn ) %]
@@ -815,6 +821,18 @@
                                                     </ul>
                                                 [% END %]
                                             [% END %]
+                                        </td>
+                                        <td>
+                                            <select name="pickup_[% biblioloo.biblionumber | html %]"
+                                                    class="multi_pickup_select"
+                                                    data-biblio-id="[% biblioloo.biblionumber | html %]"
+                                                    data-patron-id="[% patron.borrowernumber | html %]"
+                                                    data-pickup-locations='[% biblioloo.pickup_locations_codes.json | $raw %]'>
+                                                <option value=""></option>
+                                            [% FOREACH pickup_location IN biblioloo.pickup_locations %]
+                                                <option value="[% pickup_location.branchcode | html %]">[% pickup_location.branchname | html %]</option>
+                                            [% END %]
+                                            </select>
                                         </td>
                                     </tr>
                                 [% END # /FOREACH biblioloo %]
@@ -1246,10 +1264,30 @@
                     templateResult: display_pickup_location
                 });
             });
+
             $("#pickup_multi").select2({
-                width: 'style',
-                allowClear: false
+                width: '30%',
+                allowClear: true
             });
+
+            $('.multi_pickup_select').select2({
+                width: '100%',
+                allowClear: true
+            });
+
+            $("#pickup_multi").on("change", function() {
+                var selection = $(this).val();
+                if ( selection != '' ) {
+                    $(".multi_pickup_select").each(function() {
+                        var valid_pickup_locations = $(this).data('pickup-locations');
+                        if ( valid_pickup_locations.includes(selection) ) {
+                            $(this).val(selection);
+                            $(this).trigger("change");
+                        }
+                    });
+                }
+            });
+
             $("#pickup").each( function () {
                 var this_dropdown = $(this);
                 var patron_id = $(this).data('patron-id');
