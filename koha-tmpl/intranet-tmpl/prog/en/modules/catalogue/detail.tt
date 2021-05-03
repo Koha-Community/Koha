@@ -1074,7 +1074,7 @@ Note that permanent location is a code, and location may be an authval.
                             } else if ( div.attr("class") == "cover-image local-coverimg" ) {
                                 lightbox_descriptions.push(_("Local cover image (<a href='%s'>edit</a>)").format($(img).data('link')));
                             } else {
-                                console.log("Source of the image cannot be guessed.")
+                                lightbox_descriptions.push(_("Cover image source unknown"));
                             }
                         }
                     }
