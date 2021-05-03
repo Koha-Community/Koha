@@ -27,11 +27,24 @@ use C4::Koha;
 use C4::Context;
 use Koha::Libraries;
 
+sub new {
+    my ($self) = shift;
+    my (@params) = @_;
+    $self = $self->SUPER::new(@params);
+    #Initialize a cache of libraries for lookups of names,urls etc.
+    $self->{libraries} = {};
+
+    return $self;
+}
+
 sub GetName {
     my ( $self, $branchcode ) = @_;
 
-    my $l = Koha::Libraries->find($branchcode);
-    return $l ? $l->branchname : q{};
+    unless (exists $self->{libraries}->{$branchcode} ){
+        my $l = Koha::Libraries->find($branchcode);
+        $self->{libraries}->{$branchcode} = $l if $l;
+    }
+    return $self->{libraries}->{$branchcode} ? $self->{libraries}->{$branchcode}->branchname : q{};
 }
 
 sub GetLoggedInBranchcode {
@@ -49,11 +62,11 @@ sub GetLoggedInBranchname {
 sub GetURL {
     my ( $self, $branchcode ) = @_;
 
-    my $query = "SELECT branchurl FROM branches WHERE branchcode = ?";
-    my $sth   = C4::Context->dbh->prepare($query);
-    $sth->execute($branchcode);
-    my $b = $sth->fetchrow_hashref();
-    return $b->{branchurl};
+    unless (exists $self->{libraries}->{$branchcode} ){
+        my $l = Koha::Libraries->find($branchcode);
+        $self->{libraries}->{$branchcode} = $l if $l;
+    }
+    return $self->{libraries}->{$branchcode} ? $self->{libraries}->{$branchcode}->branchurl : q{};
 }
 
 sub all {
