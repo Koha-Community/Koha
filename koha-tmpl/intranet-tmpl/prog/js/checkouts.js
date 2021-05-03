@@ -1011,7 +1011,7 @@ $(document).ready(function() {
                                 ? '<li><a href="#" class="return-claim-tools-delete" data-return-claim-id="' + oObj.id + '"><i class="fa fa-trash"></i> ' + __("Delete") + '</a></li>'
                                 : "";
                             let resolve_html = ! oObj.resolution
-                                ? '<li><a href="#" class="return-claim-tools-resolve" data-return-claim-id="' + oObj.id + '"><i class="fa fa-check-square"></i> ' + __("Resolve") + '</a></li>'
+                                ? '<li><a href="#" class="return-claim-tools-resolve" data-return-claim-id="' + oObj.id + '" data-current-lost-status="' + escape_str(oObj.itemlost) + '"><i class="fa fa-check-square"></i> ' + __("Resolve") + '</a></li>'
                                 : "";
 
                             return  '<div class="btn-group">'
@@ -1135,8 +1135,10 @@ $(document).ready(function() {
     // Handle return claim resolution
     $('body').on('click', '.return-claim-tools-resolve', function() {
         let id = $(this).data('return-claim-id');
+        let current_lost_status = $(this).data('current-lost-status');
 
         $('#claims-returned-resolved-modal-id').val(id);
+        $("#new_lost_status").val(current_lost_status);
         $('#claims-returned-resolved-modal').modal()
     });
 

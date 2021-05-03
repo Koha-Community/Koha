@@ -77,7 +77,8 @@ my $sql = qq{
         biblio.author,
 
         items.enumchron,
-        items.barcode
+        items.barcode,
+        items.itemlost
     FROM return_claims
         LEFT JOIN items USING ( itemnumber )
         LEFT JOIN biblio USING ( biblionumber )

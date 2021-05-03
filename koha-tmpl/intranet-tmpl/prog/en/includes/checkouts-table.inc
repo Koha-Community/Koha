@@ -149,7 +149,7 @@
             <label for="new_lost_status">New item lost value:</label>
             [% SET itemlost = AuthorisedValues.GetAuthValueDropbox('LOST') %]
             <select class="form-control" id="new_lost_status">
-              <option value="0"></option>
+              <option value="0">(Not lost)</option>
               [% FOREACH lost IN itemlost %]
                   <option value="[% lost.authorised_value | html %]">[% lost.lib | html %]</option>
               [% END %]
