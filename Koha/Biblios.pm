@@ -24,6 +24,7 @@ use Carp;
 use Koha::Database;
 
 use Koha::Biblio;
+use Koha::Libraries;
 
 use base qw(Koha::Objects);
 
@@ -33,9 +34,38 @@ Koha::Biblios - Koha Biblio object set class
 
 =head1 API
 
-=head2 Class Methods
+=head2 Class methods
+
+=head3 pickup_locations
+
+    my $biblios = Koha::Biblios->search(...);
+    my $pickup_locations = $biblios->pickup_locations({ patron => $patron });
+
+For a given resultset, it returns all the pickup locations
 
 =cut
+
+sub pickup_locations {
+    my ( $self, $params ) = @_;
+
+    my $patron = $params->{patron};
+
+    my @pickup_locations;
+    foreach my $biblio ( $self->as_list ) {
+        push @pickup_locations,
+          $biblio->pickup_locations( { patron => $patron } )
+          ->_resultset->get_column('branchcode')->all;
+    }
+
+    return Koha::Libraries->search(
+        {
+            branchcode => \@pickup_locations
+        },
+        { order_by => ['branchname'] }
+    );
+}
+
+=head2 Internal methods
 
 =head3 type
 
