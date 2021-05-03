@@ -198,7 +198,7 @@
         [% IF !plugin %]
             <td>
                 [% IF record.public %]
-                    <a href="[% Koha.Preference('OPACBaseURL') | url %]/cgi-bin/koha/opac-retrieve-file.pl?id=[% record.hashvalue | uri %]" class="get-file" data-toggle="tooltip" title="Copy link to this file"><i class="fa fa-link" aria-hidden="true"></i> Yes</a>
+                    <a href="[% Koha.Preference('OPACBaseURL') | url %]/cgi-bin/koha/opac-retrieve-file.pl?id=[% record.hashvalue | uri %]" class="get-file" data-toggle="tooltip"><i class="fa fa-link" aria-hidden="true"></i> Yes</a>
                 [% ELSE %]
                     No
                 [% END %]
