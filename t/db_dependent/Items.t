@@ -1041,13 +1041,20 @@ subtest 'ModItemFromMarc' => sub {
     };
 
     subtest 'permanent_location' => sub {
-        plan tests => 6;
+        plan tests => 10;
 
         # Make sure items.permanent_location is not mapped
         Koha::MarcSubfieldStructures->search(
             {
                 frameworkcode => q{},
                 kohafield     => 'items.permanent_location',
+            }
+        )->delete;
+        Koha::MarcSubfieldStructures->search(
+            {
+                frameworkcode => q{},
+                tagfield     => '952',
+                tagsubfield     => 'C',
             }
         )->delete;
         Koha::Caches->get_instance->clear_from_cache( "MarcSubfieldStructure-" );
@@ -1075,7 +1082,9 @@ subtest 'ModItemFromMarc' => sub {
                 tagfield      => '952',
                 tagsubfield   => 'C',
                 kohafield     => 'items.permanent_location',
-                repeatable    => 0
+                repeatable    => 0,
+                tab           => 10,
+                hidden        => 0,
             }
         )->store;
         Koha::Caches->get_instance->clear_from_cache( "MarcSubfieldStructure-" );
@@ -1088,6 +1097,34 @@ subtest 'ModItemFromMarc' => sub {
         $item = $item->get_from_storage;
         is( $item->location, 'C', 'next new location set as expected' );
         is( $item->permanent_location, 'B', 'permanent location remains unchanged as expected' );
+
+        $item->permanent_location(undef)->more_subfields_xml(undef)->store;
+        # Clear values from the DB
+        $item = $item->get_from_storage;
+
+        # Update the location
+        $item->location('D');
+        $marc = C4::Items::Item2Marc( $item->unblessed, $item->biblionumber );
+        # Remove the permanent_location field from the form
+        $marc->field('952')->delete_subfield("C");
+        ModItemFromMarc( $marc, $item->biblionumber, $item->itemnumber );
+        $item = $item->get_from_storage;
+        is( $item->location, 'D', 'next new location set as expected' );
+        is( $item->permanent_location, 'D', 'permanent location is updated if not previously set and no value passed' );
+
+        # Clear values from the DB
+        $item->permanent_location(undef)->more_subfields_xml(undef)->store;
+        $item = $item->get_from_storage;
+
+        # This time nothing is set, but we pass an empty string
+        $item->permanent_location("");
+        $item->location('E');
+        $marc = C4::Items::Item2Marc( $item->unblessed, $item->biblionumber );
+        ModItemFromMarc( $marc, $item->biblionumber, $item->itemnumber );
+        $item = $item->get_from_storage;
+        is( $item->location, 'E', 'next new location set as expected' );
+        is( $item->permanent_location, undef, 'permanent location is not updated if previously set as blank string' );
+
     };
 
     $schema->storage->txn_rollback;
