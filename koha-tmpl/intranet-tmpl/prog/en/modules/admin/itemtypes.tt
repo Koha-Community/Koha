@@ -344,11 +344,11 @@ Item types &rsaquo; Administration &rsaquo; Koha
                 </li>
                 <li>
                     <label for="defaultreplacecost">Default replacement cost: </label>
-                    <input type="text" id="defaultreplacecost" name="defaultreplacecost" size="10" value="[% itemtype.defaultreplacecost | html %]" />
+                    <input type="text" id="defaultreplacecost" name="defaultreplacecost" size="10" value="[% itemtype.defaultreplacecost | $Price on_editing => 1 %]" />
                 </li>
                 <li>
                     <label for="processfee">Processing fee (when lost): </label>
-                    <input type="text" id="processfee" name="processfee" size="10" value="[% itemtype.processfee | html %]" />
+                    <input type="text" id="processfee" name="processfee" size="10" value="[% itemtype.processfee | $Price on_editing => 1 %]" />
                 </li>
                 <li>
                     <label for="checkinmsg">Checkin message: </label>
