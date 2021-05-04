@@ -309,25 +309,25 @@
            </span></li>
         <li><label for="quantity">Quantity received: </label>
           [% IF order.subscriptionid %]
-              <input type="text" size="20" name="quantityrec" id="quantity" value="[% order.quantity | html %]" />
+              <input type="text" inputmode="numeric" pattern="[0-9]*" size="20" name="quantityrec" id="quantity" value="[% order.quantity | html %]" />
               <input id="origquantityrec" readonly="readonly" type="hidden" name="origquantityrec" value="[% order.quantityreceived | html %]" />
           [% ELSIF AcqCreateItem == 'receiving' %]
               <input readonly="readonly" type="text" size="20" name="quantityrec" id="quantity" value="0" />
           [% ELSE %]
             [% IF ( order.quantityreceived ) %]
                 [% IF ( edit ) %]
-                    <input type="text" size="20" name="quantityrec" id="quantity" value="[% order.quantityreceived | html %]" />
+                    <input type="text" inputmode="numeric" pattern="[0-9]*" size="20" name="quantityrec" id="quantity" value="[% order.quantityreceived | html %]" />
                     <input id="origquantityrec" readonly="readonly" type="hidden" name="origquantityrec" value="[% order.quantityreceived | html %]" />
                 [% ELSE %]
                     [% IF ( order.items.count ) %]
                         <input readonly="readonly" type="text" size="20" name="quantityrec" id="quantity" value="[% order.quantityreceived + 1 | html %]" />
                     [% ELSE %]
-                        <input type="text" size="20" name="quantityrec" id="quantity" value="[% quantityreceived + 1 | html %]" />
+                        <input type="text" inputmode="numeric" pattern="[0-9]*" size="20" name="quantityrec" id="quantity" value="[% quantityreceived + 1 | html %]" />
                     [% END %]
                     <input id="origquantityrec" readonly="readonly" type="hidden" name="origquantityrec" value="[% order.quantityreceived | html %]" />
                 [% END %]
             [% ELSE %]
-                <input type="text" id="quantity" size="20" name="quantityrec" value="1" />
+                <input type="text" inputmode="numeric" pattern="[0-9]*" id="quantity" size="20" name="quantityrec" value="1" />
                 <input id="origquantityrec" readonly="readonly" type="hidden" name="origquantityrec" value="0" />
             [% END %]
             <div id="qtyrecerror" style="display:none">
