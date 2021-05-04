@@ -106,6 +106,10 @@ unless ( $patron and $patron->category->override_hidden_items ) {
         print $query->redirect('/cgi-bin/koha/errors/404.pl'); # escape early
         exit;
     }
+    if ( scalar @all_items >= 1 ) {
+        push @hiddenitems,
+          GetHiddenItemnumbers( { items => \@all_items, borcat => $patron ? $patron->categorycode : undef } );
+    }
 }
 
 my $framework = $biblio ? $biblio->frameworkcode : q{};
