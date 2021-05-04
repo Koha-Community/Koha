@@ -44,7 +44,7 @@ use Koha::Patron::Modification;
 use Koha::Patron::Modifications;
 use Koha::Patron::Categories;
 use Koha::Token;
-
+use Koha::AuthorisedValues;
 my $cgi = CGI->new;
 my $dbh = C4::Context->dbh;
 
@@ -117,6 +117,11 @@ foreach my $attr (@$attributes) {
         $conflicting_attribute = 1;
     }
 }
+
+my $roadtypes = C4::Koha::GetAuthorisedValues( 'ROADTYPE' );
+$template->param(
+    roadtypes => $roadtypes,
+);
 
 if ( $action eq 'create' ) {
 
