@@ -358,7 +358,7 @@ $schema->storage->txn_rollback;
 
 subtest 'x-koha-override and AllowHoldPolicyOverride tests' => sub {
 
-    plan tests => 16;
+    plan tests => 18;
 
     $schema->storage->txn_begin;
 
@@ -444,6 +444,12 @@ subtest 'x-koha-override and AllowHoldPolicyOverride tests' => sub {
     $t->post_ok( "//$userid:$password@/api/v1/holds" =>
           { 'x-koha-override' => 'any' } => json => $post_data )
       ->status_is(201);
+
+    t::lib::Mocks::mock_preference( 'AllowHoldPolicyOverride', 0);
+
+    $t->post_ok( "//$userid:$password@/api/v1/holds" =>
+          { 'x-koha-override' => 'any' } => json => $post_data )
+      ->status_is(400);
 
     $schema->storage->txn_rollback;
 };
@@ -1136,7 +1142,7 @@ subtest 'add() tests' => sub {
 
 subtest 'PUT /holds/{hold_id}/pickup_location tests' => sub {
 
-    plan tests => 20;
+    plan tests => 28;
 
     $schema->storage->txn_begin;
 
@@ -1250,6 +1256,24 @@ subtest 'PUT /holds/{hold_id}/pickup_location tests' => sub {
       ->json_is({ pickup_library_id => $library_2->branchcode });
 
     is( $hold->discard_changes->branchcode->branchcode, $library_2->branchcode, 'pickup library adjusted correctly' );
+
+    $t->put_ok( "//$userid:$password@/api/v1/holds/"
+          . $hold->id
+          . "/pickup_location" => json => { pickup_library_id => $library_3->branchcode } )
+      ->status_is(400)
+      ->json_is({ error => '[The supplied pickup location is not valid]' });
+
+    is( $hold->discard_changes->branchcode->branchcode, $library_2->branchcode, 'invalid pickup library not used' );
+
+    $t->put_ok( "//$userid:$password@/api/v1/holds/"
+          . $hold->id
+          . "/pickup_location"
+          => { 'x-koha-override' => 'any' }
+          => json => { pickup_library_id => $library_3->branchcode } )
+      ->status_is(400)
+      ->json_is({ error => '[The supplied pickup location is not valid]' });
+
+    is( $hold->discard_changes->branchcode->branchcode, $library_2->branchcode, 'invalid pickup library not used, even if x-koha-override is passed' );
 
     $schema->storage->txn_rollback;
 };
