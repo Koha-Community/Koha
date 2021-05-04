@@ -1,5 +1,6 @@
         [% IF item_action_ignore AND num_items == 0 %]
             No items were found during staging
+            <input type ="hidden" name="item_action" value="ignore">
         [% ELSE %]
             <select name="item_action" id="item_action">
             [% IF ( item_action_always_add ) %]
