@@ -148,6 +148,8 @@
             // then default to comma.
             strDelimiter = (strDelimiter || ",");
 
+            strData = escape_str(strData);
+
             // Create a regular expression to parse the CSV values.
             var objPattern = new RegExp(
             (
@@ -274,6 +276,7 @@
                "fnDrawCallback": function(oSettings) {
                     /* Apply the jEditable handlers to the table on all fields w/o the no_edit id */
                     $('#quotes_editor tbody td[id!="no_edit"]').editable( function(value, settings) {
+                            value = escape_str(value);
                             var cellPosition = oTable.fnGetPosition( this );
                             oTable.fnUpdate(value, cellPosition[0], cellPosition[1], false, false);
                             return(value);
