@@ -60,7 +60,7 @@ t::lib::Mocks::mock_preference( 'ThingISBN', 1 );
 my $results_thingisbn;
 eval { $results_thingisbn = C4::XISBN::get_xisbns($isbn1, $biblionumber4); };
 SKIP: {
-    skip "Problem retrieving ThingISBN", 1
+    skip "Problem retrieving ThingISBN", 2
         unless $@ eq '';
     ok( (any { $_->{'biblionumber'} eq $biblionumber1 } @$results_thingisbn),
         "Gets correct biblionumber from a book with a similar isbn using ThingISBN." );
