@@ -86,8 +86,18 @@
                 "sAjaxSource"       : "/cgi-bin/koha/tools/quotes/quotes_ajax.pl",
                 "aoColumns"         : [
                                         { "sWidth": "3%"  },
-                                        { "sWidth": "11%" },
-                                        { "sWidth": "75%" },
+                                        {
+                                            "sWidth": "11%",
+                                            "render": function(data, type, row, meta){
+                                                return escape_str(data);
+                                            }
+                                        },
+                                        {
+                                            "sWidth": "75%",
+                                            "render": function(data, type, row, meta){
+                                                return escape_str(data);
+                                            }
+                                        },
                                         { "sWidth": "11%" },
                                       ],
                "oLanguage": dataTablesDefaults.oLanguage,
