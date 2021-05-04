@@ -838,10 +838,12 @@ sub _get_match_keys {
             }
             elsif ( $field->is_control_field() ) {
                 $string = $field->data();
-            } else {
+            } elsif ( defined $component->{subfields} && keys %{$component->{subfields}} ){
                 $string = $field->as_string(
                     join('', keys %{ $component->{ subfields } }), ' ' # ' ' as separator
                 );
+            } else {
+                $string = $field->as_string();
             }
 
             if ($component->{'length'}>0) {
