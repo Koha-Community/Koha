@@ -113,11 +113,13 @@
                     </div>
                 [% END %]
                 <fieldset class="brief">
-                    <label>Search patrons or clubs</label>
+                    <label>Search patrons[% IF clubcount %] or clubs[% END %]</label>
                     <div id="circ_holds_select" class="toptabs">
                         <ul>
                             <li><a href="#holds_patronsearch_pane">Patrons</a></li>
+                            [% IF clubcount %]
                             <li><a href="#holds_clubsearch_pane">Clubs</a></li>
+                            [% END %]
                         </ul>
                         <div id="holds_patronsearch_pane">
                             <form id="holds_patronsearch" action="request.pl?biblionumbers=[% biblionumbers | html %]" method="post">
@@ -135,22 +137,24 @@
                                 [% INCLUDE 'circ-patron-search-results.inc' destination = "holds" %]
                             [% END %]
                         </div>
-                        <div id="holds_clubsearch_pane">
-                            <form id="holds_clubsearch" action="request.pl?biblionumber=[% biblionumber | html %]" method="post">
-                                <div class="hint">Enter club ID or partial name:</div>
-                                <input type="text" size="40" id="club" class="focus" name="findclub" autocomplete="off" />
-                                <input type="submit" value="Search" />
-                                [% IF multi_hold %]
-                                    <input type="hidden" name="biblionumbers" value="[% biblionumbers | html %]"/>
-                                [% ELSE %]
-                                    <input type="hidden" name="biblionumber" value="[% biblionumber | html %]" />
-                                [% END %]
+                        [% IF clubcount %]
+                            <div id="holds_clubsearch_pane">
+                                <form id="holds_clubsearch" action="request.pl?biblionumber=[% biblionumber | html %]" method="post">
+                                    <div class="hint">Enter club ID or partial name:</div>
+                                    <input type="text" size="40" id="club" class="focus" name="findclub" autocomplete="off" />
+                                    <input type="submit" value="Search" />
+                                    [% IF multi_hold %]
+                                        <input type="hidden" name="biblionumbers" value="[% biblionumbers | html %]"/>
+                                    [% ELSE %]
+                                        <input type="hidden" name="biblionumber" value="[% biblionumber | html %]" />
+                                    [% END %]
 
-                            </form> <!-- /#holds_patronsearch -->
-                            [% IF clubs %]
-                                [% INCLUDE 'clubs-table.inc' destination = "holds" %]
-                            [% END %]
-                        </div>
+                                </form> <!-- /#holds_patronsearch -->
+                                [% IF clubs %]
+                                    [% INCLUDE 'clubs-table.inc' destination = "holds" %]
+                                [% END %]
+                            </div>
+                        [% END %]
                     </div>
                 </fieldset>
             [% ELSIF club %]
