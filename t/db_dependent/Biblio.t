@@ -44,7 +44,7 @@ Koha::Caches->get_instance->clear_from_cache( "MarcSubfieldStructure-" );
 my $builder = t::lib::TestBuilder->new;
 
 subtest 'AddBiblio' => sub {
-    plan tests => 4;
+    plan tests => 5;
 
     my $marcflavour = 'MARC21';
     t::lib::Mocks::mock_preference( 'marcflavour', $marcflavour );
@@ -67,6 +67,19 @@ subtest 'AddBiblio' => sub {
     );
     is( Koha::Biblios->count, $nb_biblios,
         'No biblio should have been added if something went wrong' );
+
+    t::lib::Mocks::mock_preference( 'BiblioAddsAuthorities', $marcflavour );
+    t::lib::Mocks::mock_preference( 'AutoCreateAuthorities', $marcflavour );
+
+    my $mock_biblio = Test::MockModule->new("C4::Biblio");
+    $mock_biblio->mock( BiblioAutoLink => sub {
+        my $record = shift;
+        my $frameworkcode = shift;
+        warn "My biblionumber is ".$record->subfield('999','c')." and my frameworkcode is $frameworkcode";
+    });
+    warning_like { $builder->build_sample_biblio(); }
+        qr/My biblionumber is \d+ and my frameworkcode is /, "The biblionumber is correctly passed to BiblioAutoLink";
+
 };
 
 subtest 'GetMarcSubfieldStructureFromKohaField' => sub {
