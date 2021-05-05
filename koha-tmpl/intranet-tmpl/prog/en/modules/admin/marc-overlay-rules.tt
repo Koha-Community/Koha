@@ -19,253 +19,252 @@
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'cat-search.inc' %]
 
-<nav id="breadcrumbs" aria-label="Breadcrumb" class="breadcrumb">
-    <ol>
-        <li>
-            <a href="/cgi-bin/koha/mainpage.pl">Home</a>
-        </li>
-        <li>
-            <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a>
-        </li>
-        <li>
-            <a href="#" aria-current="page">
-                 MARC overlay rules
-            </a>
-        </li>
-    </ol>
-</nav>
+    <nav id="breadcrumbs" aria-label="Breadcrumb" class="breadcrumb">
+        <ol>
+            <li>
+                <a href="/cgi-bin/koha/mainpage.pl">Home</a>
+            </li>
+            <li>
+                <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a>
+            </li>
+            <li>
+                <a href="#" aria-current="page">
+                     MARC overlay rules
+                </a>
+            </li>
+        </ol>
+    </nav>
 
-<div class="main container-fluid">
-<div class="row">
-<div class="col-sm-10 col-sm-push-2">
+    <div class="main container-fluid">
+        <div class="row">
+            <div class="col-sm-10 col-sm-push-2">
 
-<h1>Manage MARC overlay rules</h1>
+                <h1>Manage MARC overlay rules</h1>
 
-[% FOR m IN messages %]
-  <div class="dialog [% m.type | html %]">
-    [% SWITCH m.code %]
-    [% CASE 'invalid_tag_regexp' %]
-      Invalid regular expression "[% m.tag | html %]".
-    [% CASE 'invalid_control_field_actions' %]
-      Invalid combination of actions for tag [% m.tag | html %]. Control field rules do not allow "Appended: Append" and "Removed: Skip".
-    [% CASE %]
-      [% m.code | html %]
-    [% END %]
-  </div>
-[% END %]
-
-[% UNLESS Koha.Preference( 'MARCOverlayRules' ) %]
-    <div class="dialog message">
-        The <b>MARCOverlayRules</b> preference is not set, don't forget to enable it for rules to take effect.
-    </div>
-[% END %]
-[% IF removeConfirm %]
-<div class="dialog alert">
-<h3>Remove rule?</h3>
-<p>Are you sure you want to remove the selected rule(s)?</p>
-
-<form action="[% script_name | uri %]" method="GET">
-    <button type="submit" class="deny"><i class="fa fa-fw fa-remove"></i> No, do not remove</button>
-</form>
-    <button type="button" class="approve" id="doremove"><i class="fa fa-fw fa-check"></i> Yes, remove</button>
-</div>
-[% END %]
-
-<form action="[% script_name | uri %]" method="POST" id="marc-overlay-rules-form">
-<table id="marc-overlay-rules">
-    <thead><tr>
-        <th>Rule</th>
-        <th>Module</th>
-        <th>Filter</th>
-        <th>Tag</th>
-        <th>Preset</th>
-        <th>Added <i id="info_added" data-toggle="tooltip" title="If a field matching the rule tag only exists in the incoming record" data-placement="right" class="fa fa-info-circle"></i></th>
-        <th>Appended <i id="info_appended" data-toggle="tooltip" title="If the original record has one or more fields matching with the rule tag, but one or more fields matching the rule tag differ in the incoming record" data-placement="right" class="fa fa-info-circle"></i></th>
-        <th>Removed <i id="info_removed" data-toggle="tooltip" title="If the original record has a field matching the rule tag, but the matching field is not in the incoming record" data-placement="right" class="fa fa-info-circle"></i></th>
-        <th>Deleted <i id="info_deleted" data-toggle="tooltip" title="If the original record has fields matching the rule tag, but no fields with this are found in the incoming record" data-placement="right" class="fa fa-info-circle"></i></th>
-        <th>Actions</th>
-        <th>&nbsp;</th>
-    </tr></thead>
-    [% UNLESS edit %]
-    <tfoot>
-        <tr class="rule-new">
-            <th>&nbsp;</th>
-            <th>
-                <select name="module">
-                    <option value="source">Source</option>
-                    <option value="categorycode">User category</option>
-                    <option value="userid">Username</option>
-                </select>
-            </th>
-            <th id="filter-container"></th>
-            <th><input type="text" size="5" name="tag"/></th>
-            <th>
-                <select name="preset">
-                    <option value="" selected>Custom</option>
-                    <option value="Protect">Protect</option>
-                    <option value="Overwrite">Overwrite</option>
-                    <option value="Add new">Add new</option>
-                    <option value="Add and append">Add and append</option>
-                    <option value="Protect from deletion">Protect from deletion</option>
-                </select>
-            </th>
-            <th class="rule-operation-action-edit">
-                <select name="add">
-                    <option value="0">Skip</option>
-                    <option value="1">Add</option>
-                </select>
-            </th>
-            <th class="rule-operation-action-edit">
-                <select name="append">
-                    <option value="0">Skip</option>
-                    <option value="1">Append</option>
-                </select>
-            </th>
-            <th class="rule-operation-action-edit">
-                <select name="remove">
-                    <option value="0">Skip</option>
-                    <option value="1">Remove</option>
-                </select>
-            </th>
-            <th class="rule-operation-action-edit">
-                <select name="delete">
-                    <option value="0">Skip</option>
-                    <option value="1">Delete</option>
-                </select>
-            </th>
-            <th><button class="btn btn-default btn-xs" title="Add" id="add"><i class="fa fa-plus"></i> Add rule</button></th>
-            <th><button id="btn_batchremove" disabled="disabled" class="btn btn-default btn-xs" title="Batch remove"><i class="fa fa-trash"></i> Delete selected</button></th>
-        </tr>
-    </tfoot>
-    [% END %]
-    <tbody>
-        [% FOREACH rule IN rules %]
-            <tr id="[% rule.id | html %]" class="rule[% IF rule.edit %]-edit[% END %]">
-            [% IF rule.edit %]
-                <td>[% rule.id | html %]</td>
-                <td>
-                    <select name="module">
-                        [% IF rule.module == "source" %]
-                            <option value="source" selected="selected">Source</option>
-                        [% ELSE %]
-                            <option value="source">Source</option>
-                        [% END %]
-                        [% IF rule.module == "categorycode" %]
-                            <option value="categorycode" selected="selected">User category</option>
-                        [% ELSE %]
-                            <option value="categorycode">User category</option>
-                        [% END %]
-                        [% IF rule.module == "userid" %]
-                            <option value="userid" selected="selected">Username</option>
-                        [% ELSE %]
-                            <option value="userid">Username</option>
-                        [% END %]
-                    </select>
-                </td>
-                <td id="filter-container" data-filter="[% rule.filter | html %]"></td>
-                <td><input type="text" size="3" name="tag" value="[% rule.tag | html %]"/></td>
-                <th>
-                    <select name="preset">
-                        <option value="" selected>Custom</option>
-                        <option value="Protect">Protect</option>
-                        <option value="Overwrite">Overwrite</option>
-                        <option value="Add new">Add new</option>
-                        <option value="Add and append">Add and append</option>
-                        <option value="Protect from deletion">Protect from deletion</option>
-                    </select>
-                </th>
-                <td class="rule-operation-action-edit">
-                    <select name="add">
-                        [% IF rule.add %]
-                            <option value="0">Skip</option>
-                            <option value="1" selected="selected">Add</option>
-                        [% ELSE %]
-                            <option value="0" selected="selected">Skip</option>
-                            <option value="1">Add</option>
-                        [% END %]
-                    </select>
-                </td>
-                <td class="rule-operation-action-edit">
-                    <select name="append">
-                        [% IF rule.append %]
-                            <option value="0">Skip</option>
-                            <option value="1" selected="selected">Append</option>
-                        [% ELSE %]
-                            <option value="0" selected="selected">Skip</option>
-                            <option value="1">Append</option>
-                        [% END %]
-                    </select>
-                </td>
-                <td class="rule-operation-action-edit">
-                    <select name="remove">
-                        [% IF rule.remove %]
-                            <option value="0">Skip</option>
-                            <option value="1" selected="selected">Remove</option>
-                        [% ELSE %]
-                            <option value="0" selected="selected">Skip</option>
-                            <option value="1">Remove</option>
-                        [% END %]
-                    </select>
-                </td>
-                <td class="rule-operation-action-edit">
-                    <select name="delete">
-                        [% IF rule.delete %]
-                            <option value="0">Skip</option>
-                            <option value="1" selected="selected">Delete</option>
-                        [% ELSE %]
-                            <option value="0" selected="selected">Skip</option>
-                            <option value="1">Delete</option>
-                        [% END %]
-                    </select>
-                </td>
-                <td class="actions">
-                    <button class="btn btn-default btn-xs" title="Save" id="doedit" value="[% rule.id | html %]"><i class="fa fa-check"></i> Save</button>
-                    <button type="submit" class="btn btn-default btn-xs" title="Cancel" ><i class="fa fa-times"></i> Cancel</button>
-                </td>
-                <td></td>
-            [% ELSE %]
-                <td>[% rule.id | html %]</td>
-                <td class="rule-module">[% rule.module | html %]</td>
-                <td class="rule-filter">[% rule.filter | html %]</td>
-                <td>[% rule.tag | html %]</td>
-                <td class="rule-preset"></td>
-                <td class="rule-operation-action" data-operation="add">[% IF rule.add %]Add[% ELSE %]Skip[% END %]</td>
-                <td class="rule-operation-action" data-operation="append">[% IF rule.append %]Append[% ELSE %]Skip[% END %]</td>
-                <td class="rule-operation-action" data-operation="remove">[% IF rule.remove %]Remove[% ELSE %]Skip[% END %]</td>
-                <td class="rule-operation-action" data-operation="delete">[% IF rule.delete %]Delete[% ELSE %]Skip[% END %]</td>
-                <td class="actions">
-                    <a href="?op=remove&id=[% rule.id | uri %]" title="Delete" class="btn btn-default btn-xs"><i class="fa fa-trash"></i> Delete</a>
-                    <a href="?op=edit&id=[% rule.id | uri %]" title="Edit" class="btn btn-default btn-xs"><i class="fa fa-pencil"></i> Edit</a>
-                </td>
-                <td>
-                    [% IF rule.removemarked %]
-                        <input type="checkbox" name="batchremove" value="[% rule.id | html %]" checked="checked"/>
-                    [% ELSE %]
-                        <input type="checkbox" name="batchremove" value="[% rule.id | html %]"/>
+                [% FOR m IN messages %]
+                <div class="dialog [% m.type | html %]">
+                    [% SWITCH m.code %]
+                    [% CASE 'invalid_tag_regexp' %]
+                      Invalid regular expression "[% m.tag | html %]".
+                    [% CASE 'invalid_control_field_actions' %]
+                      Invalid combination of actions for tag [% m.tag | html %]. Control field rules do not allow "Appended: Append" and "Removed: Skip".
+                    [% CASE %]
+                      [% m.code | html %]
                     [% END %]
-                </td>
-            [% END %]
-            </tr>
-        [% END %]
-    </tbody>
-</table>
-</form>
+                </div>
+                [% END %]
 
-<form action="[% script_name | uri %]" method="post">
-<input type="hidden" name="op" value="redo-matching" />
-</form>
+                [% UNLESS Koha.Preference( 'MARCOverlayRules' ) %]
+                <div class="dialog message">
+                    The <b>MARCOverlayRules</b> preference is not set, don't forget to enable it for rules to take effect.
+                </div>
+                [% END %]
+                [% IF removeConfirm %]
+                <div class="dialog alert">
+                    <h3>Remove rule?</h3>
+                    <p>Are you sure you want to remove the selected rule(s)?</p>
 
-</div>
-<!-- /.col-sm-10.col-sm-push-2 -->
+                    <form action="[% script_name | uri %]" method="GET">
+                        <button type="submit" class="deny"><i class="fa fa-fw fa-remove"></i> No, do not remove</button>
+                    </form>
+                    <button type="button" class="approve" id="doremove"><i class="fa fa-fw fa-check"></i> Yes, remove</button>
+                </div>
+                [% END %]
 
-<div class="col-sm-2 col-sm-pull-10">
-    <aside>
-        [% INCLUDE 'admin-menu.inc' %]
-    </aside>
-</div>
+                <form action="[% script_name | uri %]" method="POST" id="marc-overlay-rules-form">
+                    <table id="marc-overlay-rules">
+                        <thead><tr>
+                            <th>Rule</th>
+                            <th>Module</th>
+                            <th>Filter</th>
+                            <th>Tag</th>
+                            <th>Preset</th>
+                            <th>Added <i id="info_added" data-toggle="tooltip" title="If a field matching the rule tag only exists in the incoming record" data-placement="right" class="fa fa-info-circle"></i></th>
+                            <th>Appended <i id="info_appended" data-toggle="tooltip" title="If the original record has one or more fields matching with the rule tag, but one or more fields matching the rule tag differ in the incoming record" data-placement="right" class="fa fa-info-circle"></i></th>
+                            <th>Removed <i id="info_removed" data-toggle="tooltip" title="If the original record has a field matching the rule tag, but the matching field is not in the incoming record" data-placement="right" class="fa fa-info-circle"></i></th>
+                            <th>Deleted <i id="info_deleted" data-toggle="tooltip" title="If the original record has fields matching the rule tag, but no fields with this are found in the incoming record" data-placement="right" class="fa fa-info-circle"></i></th>
+                            <th>Actions</th>
+                            <th>&nbsp;</th>
+                        </tr></thead>
+                        [% UNLESS edit %]
+                        <tfoot>
+                            <tr class="rule-new">
+                                <th>&nbsp;</th>
+                                <th>
+                                    <select name="module">
+                                        <option value="source">Source</option>
+                                        <option value="categorycode">User category</option>
+                                        <option value="userid">Username</option>
+                                    </select>
+                                </th>
+                                <th id="filter-container"></th>
+                                <th><input type="text" size="5" name="tag"/></th>
+                                <th>
+                                    <select name="preset">
+                                        <option value="" selected>Custom</option>
+                                        <option value="Protect">Protect</option>
+                                        <option value="Overwrite">Overwrite</option>
+                                        <option value="Add new">Add new</option>
+                                        <option value="Add and append">Add and append</option>
+                                        <option value="Protect from deletion">Protect from deletion</option>
+                                    </select>
+                                </th>
+                                <th class="rule-operation-action-edit">
+                                    <select name="add">
+                                        <option value="0">Skip</option>
+                                        <option value="1">Add</option>
+                                    </select>
+                                </th>
+                                <th class="rule-operation-action-edit">
+                                    <select name="append">
+                                        <option value="0">Skip</option>
+                                        <option value="1">Append</option>
+                                    </select>
+                                </th>
+                                <th class="rule-operation-action-edit">
+                                    <select name="remove">
+                                        <option value="0">Skip</option>
+                                        <option value="1">Remove</option>
+                                    </select>
+                                </th>
+                                <th class="rule-operation-action-edit">
+                                    <select name="delete">
+                                        <option value="0">Skip</option>
+                                        <option value="1">Delete</option>
+                                    </select>
+                                </th>
+                                <th><button class="btn btn-default btn-xs" title="Add" id="add"><i class="fa fa-plus"></i> Add rule</button></th>
+                                <th><button id="btn_batchremove" disabled="disabled" class="btn btn-default btn-xs" title="Batch remove"><i class="fa fa-trash"></i> Delete selected</button></th>
+                            </tr>
+                        </tfoot>
+                        [% END %]
+                        <tbody>
+                            [% FOREACH rule IN rules %]
+                                <tr id="[% rule.id | html %]" class="rule[% IF rule.edit %]-edit[% END %]">
+                                [% IF rule.edit %]
+                                    <td>[% rule.id | html %]</td>
+                                    <td>
+                                        <select name="module">
+                                            [% IF rule.module == "source" %]
+                                                <option value="source" selected="selected">Source</option>
+                                            [% ELSE %]
+                                                <option value="source">Source</option>
+                                            [% END %]
+                                            [% IF rule.module == "categorycode" %]
+                                                <option value="categorycode" selected="selected">User category</option>
+                                            [% ELSE %]
+                                                <option value="categorycode">User category</option>
+                                            [% END %]
+                                            [% IF rule.module == "userid" %]
+                                                <option value="userid" selected="selected">Username</option>
+                                            [% ELSE %]
+                                                <option value="userid">Username</option>
+                                            [% END %]
+                                        </select>
+                                    </td>
+                                    <td id="filter-container" data-filter="[% rule.filter | html %]"></td>
+                                    <td><input type="text" size="3" name="tag" value="[% rule.tag | html %]"/></td>
+                                    <th>
+                                        <select name="preset">
+                                            <option value="" selected>Custom</option>
+                                            <option value="Protect">Protect</option>
+                                            <option value="Overwrite">Overwrite</option>
+                                            <option value="Add new">Add new</option>
+                                            <option value="Add and append">Add and append</option>
+                                            <option value="Protect from deletion">Protect from deletion</option>
+                                        </select>
+                                    </th>
+                                    <td class="rule-operation-action-edit">
+                                        <select name="add">
+                                            [% IF rule.add %]
+                                                <option value="0">Skip</option>
+                                                <option value="1" selected="selected">Add</option>
+                                            [% ELSE %]
+                                                <option value="0" selected="selected">Skip</option>
+                                                <option value="1">Add</option>
+                                            [% END %]
+                                        </select>
+                                    </td>
+                                    <td class="rule-operation-action-edit">
+                                        <select name="append">
+                                            [% IF rule.append %]
+                                                <option value="0">Skip</option>
+                                                <option value="1" selected="selected">Append</option>
+                                            [% ELSE %]
+                                                <option value="0" selected="selected">Skip</option>
+                                                <option value="1">Append</option>
+                                            [% END %]
+                                        </select>
+                                    </td>
+                                    <td class="rule-operation-action-edit">
+                                        <select name="remove">
+                                            [% IF rule.remove %]
+                                                <option value="0">Skip</option>
+                                                <option value="1" selected="selected">Remove</option>
+                                            [% ELSE %]
+                                                <option value="0" selected="selected">Skip</option>
+                                                <option value="1">Remove</option>
+                                            [% END %]
+                                        </select>
+                                    </td>
+                                    <td class="rule-operation-action-edit">
+                                        <select name="delete">
+                                            [% IF rule.delete %]
+                                                <option value="0">Skip</option>
+                                                <option value="1" selected="selected">Delete</option>
+                                            [% ELSE %]
+                                                <option value="0" selected="selected">Skip</option>
+                                                <option value="1">Delete</option>
+                                            [% END %]
+                                        </select>
+                                    </td>
+                                    <td class="actions">
+                                        <button class="btn btn-default btn-xs" title="Save" id="doedit" value="[% rule.id | html %]"><i class="fa fa-check"></i> Save</button>
+                                        <button type="submit" class="btn btn-default btn-xs" title="Cancel" ><i class="fa fa-times"></i> Cancel</button>
+                                    </td>
+                                    <td></td>
+                                [% ELSE %]
+                                    <td>[% rule.id | html %]</td>
+                                    <td class="rule-module">[% rule.module | html %]</td>
+                                    <td class="rule-filter">[% rule.filter | html %]</td>
+                                    <td>[% rule.tag | html %]</td>
+                                    <td class="rule-preset"></td>
+                                    <td class="rule-operation-action" data-operation="add">[% IF rule.add %]Add[% ELSE %]Skip[% END %]</td>
+                                    <td class="rule-operation-action" data-operation="append">[% IF rule.append %]Append[% ELSE %]Skip[% END %]</td>
+                                    <td class="rule-operation-action" data-operation="remove">[% IF rule.remove %]Remove[% ELSE %]Skip[% END %]</td>
+                                    <td class="rule-operation-action" data-operation="delete">[% IF rule.delete %]Delete[% ELSE %]Skip[% END %]</td>
+                                    <td class="actions">
+                                        <a href="?op=remove&id=[% rule.id | uri %]" title="Delete" class="btn btn-default btn-xs"><i class="fa fa-trash"></i> Delete</a>
+                                        <a href="?op=edit&id=[% rule.id | uri %]" title="Edit" class="btn btn-default btn-xs"><i class="fa fa-pencil"></i> Edit</a>
+                                    </td>
+                                    <td>
+                                        [% IF rule.removemarked %]
+                                            <input type="checkbox" name="batchremove" value="[% rule.id | html %]" checked="checked"/>
+                                        [% ELSE %]
+                                            <input type="checkbox" name="batchremove" value="[% rule.id | html %]"/>
+                                        [% END %]
+                                    </td>
+                                [% END %]
+                                </tr>
+                            [% END %]
+                        </tbody>
+                    </table>
+                </form>
 
-</div><!-- /.row -->
-</div><!-- /main container-fluid -->
+                <form action="[% script_name | uri %]" method="post">
+                    <input type="hidden" name="op" value="redo-matching" />
+                </form>
+
+            </div><!-- /.col-sm-10.col-sm-push-2 -->
+
+            <div class="col-sm-2 col-sm-pull-10">
+                <aside>
+                    [% INCLUDE 'admin-menu.inc' %]
+                </aside>
+            </div>
+
+        </div><!-- /.row -->
+    </div><!-- /main container-fluid -->
 
 [% MACRO jsinclude BLOCK %]
     <script>
