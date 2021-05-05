@@ -1,4 +1,6 @@
 [% USE raw %]
+[% USE Asset %]
+[% SET footerjs = 1 %]
 [% USE Koha %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>MARC overlay rules &rsaquo; Koha &rsaquo; Administration</title>
@@ -12,258 +14,6 @@
     }
 </style>
 
-<script>
-function doSubmit(op, id) {
-    $('<input type="hidden"/>')
-    .attr('name', 'op')
-    .attr('value', op)
-    .appendTo('#marc-overlay-rules-form');
-
-    if(id) {
-        $('<input type="hidden"/>')
-        .attr('name', 'id')
-        .attr('value', id)
-        .appendTo('#marc-overlay-rules-form');
-    }
-
-    var valid = true;
-    if (op == 'add' || op == 'edit') {
-        var validate = [
-            $('#marc-overlay-rules-form input[name="filter"]'),
-            $('#marc-overlay-rules-form input[name="tag"]')
-        ];
-        for(var i = 0; i < validate.length; i++) {
-            if (validate[i].length) {
-                if(validate[i].val().length == 0) {
-                    validate[i].addClass('required');
-                    valid = false;
-                } else {
-                    validate[i].removeClass('required');
-                }
-            }
-        }
-    }
-
-    if (valid) {
-        $('#marc-overlay-rules-form').submit();
-    }
-
-    return valid;
-}
-
-$(document).ready(function(){
-    $('#doremove').on('click', function(){
-        doSubmit('doremove');
-    });
-    $('#doedit').on('click', function(){
-        doSubmit('doedit', $("#doedit").attr('value'));
-    });
-    $('#add').on('click', function(){
-        doSubmit('add');
-        return false;
-    });
-    $('#btn_batchremove').on('click', function(){
-        doSubmit('remove');
-    });
-
-    /* Disable batch remove unless one or more checkboxes are checked */
-    $('input[name="batchremove"]').change(function() {
-        if($('input[name="batchremove"]:checked').length > 0) {
-            $('#btn_batchremove').removeAttr('disabled');
-        } else {
-            $('#btn_batchremove').attr('disabled', 'disabled');
-        }
-    });
-
-    $.fn.dataTable.ext.order['dom-input'] = function (settings, col) {
-        return this.api().column(col, { order: 'index' }).nodes()
-            .map(function (td, i) {
-                if($('input', td).val() != undefined) {
-                    return $('input', td).val();
-                } else if($('select', td).val() != undefined) {
-                    return $('option[selected="selected"]', td).val();
-                } else {
-                    return $(td).html();
-                }
-            });
-    }
-
-    $('#marc-overlay-rules').dataTable($.extend(true, {}, dataTablesDefaults, {
-        "aoColumns": [
-            {"bSearchable": false, "bSortable": false},
-            {"sSortDataType": "dom-input"},
-            {"sSortDataType": "dom-input"},
-            {"bSearchable": false, "sSortDataType": "dom-input"},
-            {"bSearchable": false, "sSortDataType": "dom-input"},
-            {"bSearchable": false, "sSortDataType": "dom-input"},
-            {"bSearchable": false, "sSortDataType": "dom-input"},
-            {"bSearchable": false, "sSortDataType": "dom-input"},
-            {"bSearchable": false, "sSortDataType": "dom-input"},
-            {"bSearchable": false, "bSortable": false},
-            {"bSearchable": false, "bSortable": false}
-        ],
-        "pagingType": "simple"
-    }));
-
-    var overlay_rules_presets = {};
-    overlay_rules_presets[_("Protect")] = {
-      'add': 0,
-      'append': 0,
-      'remove': 0,
-      'delete': 0
-    };
-    overlay_rules_presets[_("Overwrite")] = {
-      'add': 1,
-      'append': 1,
-      'remove': 1,
-      'delete': 1
-    };
-    overlay_rules_presets[_("Add new")] = {
-      'add': 1,
-      'append': 0,
-      'remove': 0,
-      'delete': 0
-    };
-    overlay_rules_presets[_("Add and append")] = {
-      'add': 1,
-      'append': 1,
-      'remove': 0,
-      'delete': 0
-    };
-    overlay_rules_presets[_("Protect from deletion")] = {
-      'add': 1,
-      'append': 1,
-      'remove': 1,
-      'delete': 0
-    };
-
-    var overlay_rules_label_to_value = {};
-    overlay_rules_label_to_value[_("Add")] = 1;
-    overlay_rules_label_to_value[_("Append")] = 1;
-    overlay_rules_label_to_value[_("Remove")] = 1;
-    overlay_rules_label_to_value[_("Delete")] = 1;
-    overlay_rules_label_to_value[_("Skip")] = 0;
-
-    function hash_config(config) {
-      return JSON.stringify(config, Object.keys(config).sort());
-    }
-
-    var overlay_rules_preset_map = {};
-    $.each(overlay_rules_presets, function(preset, config) {
-      overlay_rules_preset_map[hash_config(config)] = preset;
-    });
-
-    function operations_config_overlay_rule_preset(config) {
-      return overlay_rules_preset_map[hash_config(config)] || '';
-    }
-
-    /* Set preset values according to operation config */
-    $('.rule').each(function() {
-      var $this = $(this);
-      var operations_config = {};
-      $('.rule-operation-action', $this).each(function() {
-        var $operation = $(this);
-        operations_config[$operation.data('operation')] = overlay_rules_label_to_value[$operation.text()];
-      });
-      $('.rule-preset', $this).text(
-        operations_config_overlay_rule_preset(operations_config) || _("Custom")
-      );
-    });
-
-    /* Listen to operations config changes and set presets accordingly */
-    $('.rule-operation-action-edit select').change(function() {
-      var operations_config = {};
-      var $parent_row = $(this).closest('tr');
-      $('.rule-operation-action-edit select', $parent_row).each(function() {
-        var $this = $(this);
-        operations_config[$this.attr('name')] = parseInt($this.val());
-      });
-      $('select[name="preset"]', $parent_row).val(
-          operations_config_overlay_rule_preset(operations_config)
-      );
-    });
-
-    /* Listen to preset changes and set operations config accordingly */
-    $('select[name="preset"]').change(function() {
-      var $this = $(this);
-      var $parent_row = $this.closest('tr');
-      var preset = $this.val();
-      if (preset) {
-        $.each(overlay_rules_presets[preset], function(operation, action) {
-          $('select[name="' + operation + '"]', $parent_row).val(action);
-        });
-      }
-    });
-
-    var module_filter_options = {
-      source: {
-        '*': '*',
-        batchmod: _("Batch record modification"),
-        intranet: _("Staff client MARC editor"),
-        batchimport: _("Staged MARC import"),
-        z3950: _("Z39.50"),
-        /* bulkmarcimport: _("bulkmarcimport.pl"), */
-        import_lexile: _("import_lexile.pl")
-      },
-      categorycode: {
-        '*': '*',
-        [% FOREACH categorycode IN categorycodes %]
-          [% categorycode.categorycode | html %]: "[% categorycode.description | html %]",
-        [% END %]
-      }
-    };
-
-    //Kind of hack: Replace filter value with label when one exist
-    $('.rule-module').each(function() {
-      var $this = $(this);
-      var module = $this.text();
-      if (module in module_filter_options) {
-        let $filter = $this.siblings('.rule-filter');
-        if ($filter.text() in module_filter_options[module]) {
-          $filter.text(module_filter_options[module][$filter.text()]);
-        }
-      }
-    });
-
-    var $filter_container = $('#filter-container');
-
-    /* Listen to module changes and set filter input accordingly */
-    $('select[name="module"]').change(function() {
-      var $this = $(this);
-      var module_name = $this.val();
-
-      /* Remove current element if any */
-      $filter_container.empty();
-
-      var filter_elem = null;
-      if (module_name in module_filter_options) {
-        // Create select element
-        filter_elem = document.createElement('select');
-        for (var filter_value in module_filter_options[module_name]) {
-          var option = document.createElement('option');
-          option.value = filter_value;
-          option.text = module_filter_options[module_name][filter_value];
-          filter_elem.appendChild(option);
-        }
-      }
-      else {
-        // Create text input element
-        filter_elem = document.createElement('input');
-        filter_elem.type = 'text';
-        filter_elem.setAttribute('size', 5);
-      }
-      filter_elem.name = 'filter';
-      filter_elem.id = 'filter';
-      $filter_container.append(filter_elem);
-    }).change(); // Trigger change
-
-    // Hack: set value if editing rule
-    if ($filter_container.data('filter')) {
-      $('#filter').val($filter_container.data('filter'));
-    }
-
-});
-</script>
 </head>
 <body id="admin_marc-overlay-rules" class="admin">
 [% INCLUDE 'header.inc' %]
@@ -502,9 +252,261 @@ $(document).ready(function(){
     </aside>
 </div>
 
-</div>
-<!-- /.row>
-</div>
-<!-- /main container-fluid -->
+</div><!-- /.row -->
+</div><!-- /main container-fluid -->
 
+[% MACRO jsinclude BLOCK %]
+    <script>
+    function doSubmit(op, id) {
+        $('<input type="hidden"/>')
+        .attr('name', 'op')
+        .attr('value', op)
+        .appendTo('#marc-overlay-rules-form');
+
+        if(id) {
+            $('<input type="hidden"/>')
+            .attr('name', 'id')
+            .attr('value', id)
+            .appendTo('#marc-overlay-rules-form');
+        }
+
+        var valid = true;
+        if (op == 'add' || op == 'edit') {
+            var validate = [
+                $('#marc-overlay-rules-form input[name="filter"]'),
+                $('#marc-overlay-rules-form input[name="tag"]')
+            ];
+            for(var i = 0; i < validate.length; i++) {
+                if (validate[i].length) {
+                    if(validate[i].val().length == 0) {
+                        validate[i].addClass('required');
+                        valid = false;
+                    } else {
+                        validate[i].removeClass('required');
+                    }
+                }
+            }
+        }
+
+        if (valid) {
+            $('#marc-overlay-rules-form').submit();
+        }
+
+        return valid;
+    }
+
+    $(document).ready(function(){
+        $('#doremove').on('click', function(){
+            doSubmit('doremove');
+        });
+        $('#doedit').on('click', function(){
+            doSubmit('doedit', $("#doedit").attr('value'));
+        });
+        $('#add').on('click', function(){
+            doSubmit('add');
+            return false;
+        });
+        $('#btn_batchremove').on('click', function(){
+            doSubmit('remove');
+        });
+
+        /* Disable batch remove unless one or more checkboxes are checked */
+        $('input[name="batchremove"]').change(function() {
+            if($('input[name="batchremove"]:checked').length > 0) {
+                $('#btn_batchremove').removeAttr('disabled');
+            } else {
+                $('#btn_batchremove').attr('disabled', 'disabled');
+            }
+        });
+
+        $.fn.dataTable.ext.order['dom-input'] = function (settings, col) {
+            return this.api().column(col, { order: 'index' }).nodes()
+                .map(function (td, i) {
+                    if($('input', td).val() != undefined) {
+                        return $('input', td).val();
+                    } else if($('select', td).val() != undefined) {
+                        return $('option[selected="selected"]', td).val();
+                    } else {
+                        return $(td).html();
+                    }
+                });
+        }
+
+        $('#marc-overlay-rules').dataTable($.extend(true, {}, dataTablesDefaults, {
+            "aoColumns": [
+                {"bSearchable": false, "bSortable": false},
+                {"sSortDataType": "dom-input"},
+                {"sSortDataType": "dom-input"},
+                {"bSearchable": false, "sSortDataType": "dom-input"},
+                {"bSearchable": false, "sSortDataType": "dom-input"},
+                {"bSearchable": false, "sSortDataType": "dom-input"},
+                {"bSearchable": false, "sSortDataType": "dom-input"},
+                {"bSearchable": false, "sSortDataType": "dom-input"},
+                {"bSearchable": false, "sSortDataType": "dom-input"},
+                {"bSearchable": false, "bSortable": false},
+                {"bSearchable": false, "bSortable": false}
+            ],
+            "pagingType": "simple"
+        }));
+
+        var overlay_rules_presets = {};
+        overlay_rules_presets[_("Protect")] = {
+          'add': 0,
+          'append': 0,
+          'remove': 0,
+          'delete': 0
+        };
+        overlay_rules_presets[_("Overwrite")] = {
+          'add': 1,
+          'append': 1,
+          'remove': 1,
+          'delete': 1
+        };
+        overlay_rules_presets[_("Add new")] = {
+          'add': 1,
+          'append': 0,
+          'remove': 0,
+          'delete': 0
+        };
+        overlay_rules_presets[_("Add and append")] = {
+          'add': 1,
+          'append': 1,
+          'remove': 0,
+          'delete': 0
+        };
+        overlay_rules_presets[_("Protect from deletion")] = {
+          'add': 1,
+          'append': 1,
+          'remove': 1,
+          'delete': 0
+        };
+
+        var overlay_rules_label_to_value = {};
+        overlay_rules_label_to_value[_("Add")] = 1;
+        overlay_rules_label_to_value[_("Append")] = 1;
+        overlay_rules_label_to_value[_("Remove")] = 1;
+        overlay_rules_label_to_value[_("Delete")] = 1;
+        overlay_rules_label_to_value[_("Skip")] = 0;
+
+        function hash_config(config) {
+          return JSON.stringify(config, Object.keys(config).sort());
+        }
+
+        var overlay_rules_preset_map = {};
+        $.each(overlay_rules_presets, function(preset, config) {
+          overlay_rules_preset_map[hash_config(config)] = preset;
+        });
+
+        function operations_config_overlay_rule_preset(config) {
+          return overlay_rules_preset_map[hash_config(config)] || '';
+        }
+
+        /* Set preset values according to operation config */
+        $('.rule').each(function() {
+          var $this = $(this);
+          var operations_config = {};
+          $('.rule-operation-action', $this).each(function() {
+            var $operation = $(this);
+            operations_config[$operation.data('operation')] = overlay_rules_label_to_value[$operation.text()];
+          });
+          $('.rule-preset', $this).text(
+            operations_config_overlay_rule_preset(operations_config) || _("Custom")
+          );
+        });
+
+        /* Listen to operations config changes and set presets accordingly */
+        $('.rule-operation-action-edit select').change(function() {
+          var operations_config = {};
+          var $parent_row = $(this).closest('tr');
+          $('.rule-operation-action-edit select', $parent_row).each(function() {
+            var $this = $(this);
+            operations_config[$this.attr('name')] = parseInt($this.val());
+          });
+          $('select[name="preset"]', $parent_row).val(
+              operations_config_overlay_rule_preset(operations_config)
+          );
+        });
+
+        /* Listen to preset changes and set operations config accordingly */
+        $('select[name="preset"]').change(function() {
+          var $this = $(this);
+          var $parent_row = $this.closest('tr');
+          var preset = $this.val();
+          if (preset) {
+            $.each(overlay_rules_presets[preset], function(operation, action) {
+              $('select[name="' + operation + '"]', $parent_row).val(action);
+            });
+          }
+        });
+
+        var module_filter_options = {
+          source: {
+            '*': '*',
+            batchmod: _("Batch record modification"),
+            intranet: _("Staff client MARC editor"),
+            batchimport: _("Staged MARC import"),
+            z3950: _("Z39.50"),
+            /* bulkmarcimport: _("bulkmarcimport.pl"), */
+            import_lexile: _("import_lexile.pl")
+          },
+          categorycode: {
+            '*': '*',
+            [% FOREACH categorycode IN categorycodes %]
+              [% categorycode.categorycode | html %]: "[% categorycode.description | html %]",
+            [% END %]
+          }
+        };
+
+        //Kind of hack: Replace filter value with label when one exist
+        $('.rule-module').each(function() {
+          var $this = $(this);
+          var module = $this.text();
+          if (module in module_filter_options) {
+            let $filter = $this.siblings('.rule-filter');
+            if ($filter.text() in module_filter_options[module]) {
+              $filter.text(module_filter_options[module][$filter.text()]);
+            }
+          }
+        });
+
+        var $filter_container = $('#filter-container');
+
+        /* Listen to module changes and set filter input accordingly */
+        $('select[name="module"]').change(function() {
+          var $this = $(this);
+          var module_name = $this.val();
+
+          /* Remove current element if any */
+          $filter_container.empty();
+
+          var filter_elem = null;
+          if (module_name in module_filter_options) {
+            // Create select element
+            filter_elem = document.createElement('select');
+            for (var filter_value in module_filter_options[module_name]) {
+              var option = document.createElement('option');
+              option.value = filter_value;
+              option.text = module_filter_options[module_name][filter_value];
+              filter_elem.appendChild(option);
+            }
+          }
+          else {
+            // Create text input element
+            filter_elem = document.createElement('input');
+            filter_elem.type = 'text';
+            filter_elem.setAttribute('size', 5);
+          }
+          filter_elem.name = 'filter';
+          filter_elem.id = 'filter';
+          $filter_container.append(filter_elem);
+        }).change(); // Trigger change
+
+        // Hack: set value if editing rule
+        if ($filter_container.data('filter')) {
+          $('#filter').val($filter_container.data('filter'));
+        }
+
+    });
+    </script>
+[% END %]
 [% INCLUDE 'intranet-bottom.inc' %]
