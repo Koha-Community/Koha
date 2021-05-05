@@ -893,49 +893,6 @@ OPAC:
                 subtype: Subtypes
                 sorting: Sorting
                 location: Location and availability
-    Payments:
-        -
-            - pref: EnablePayPalOpacPayments
-              default: 1
-              choices:
-                  1: Allow
-                  0: "Don't allow"
-            - "patrons to make payments from the OPAC via PayPal in"
-            - pref: PayPalSandboxMode
-              default: 1
-              choices:
-                  1: "sandbox"
-                  0: "production"
-            - "mode."
-            - "<br/><strong>Warning</strong>: this functionality has been deprecated in favor of using payment plugins that can implement different payment services."
-        -
-            - "The email address to receive PayPal payments is "
-            - pref: PayPalUser
-              class: email
-            - "."
-        -
-            - "The password for the PayPal account to receive payments is "
-            - pref: PayPalPwd
-              class: long
-            - "."
-        -
-            - "The signature for the PayPal account to receive payments is "
-            - pref: PayPalSignature
-              class: long
-            - "."
-        -
-            - "The patron should see the charge description as "
-            - pref: PayPalChargeDescription
-              class: long
-            - "."
-        -
-            - "After payment or cancellation, PayPal should return to the "
-            - pref: PayPalReturnURL
-              default: BaseURL
-              choices:
-                  BaseURL: "OPACBaseURL"
-                  OPACAlias: "configured return URL"
-            - "."
     Authentication:
         -
             - pref: OPACShibOnly
