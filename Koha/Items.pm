@@ -37,17 +37,17 @@ Koha::Items - Koha Item object set class
 
 =cut
 
-=head3 filter_by_for_loan
+=head3 filter_by_for_hold
 
-    my $filtered_items = $items->filter_by_for_loan;
+    my $filtered_items = $items->filter_by_for_hold;
 
-Return the items of the set that are loanable
+Return the items of the set that are holdable
 
 =cut
 
-sub filter_by_for_loan {
+sub filter_by_for_hold {
     my ($self) = @_;
-    return $self->search( { notforloan => [ 0, undef ] } );
+    return $self->search( { notforloan => { '<' => 1 } } ); # items with negative or zero notforloan value are holdable
 }
 
 =head3 filter_by_visible_in_opac

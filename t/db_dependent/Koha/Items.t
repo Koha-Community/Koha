@@ -1470,15 +1470,17 @@ subtest 'can_be_transferred' => sub {
        'We get the same result also if we pass the from-library parameter.');
 };
 
-subtest 'filter_by_for_loan' => sub {
-    plan tests => 3;
+subtest 'filter_by_for_hold' => sub {
+    plan tests => 4;
 
     my $biblio = $builder->build_sample_biblio;
-    is( $biblio->items->filter_by_for_loan->count, 0, 'no item yet' );
+    is( $biblio->items->filter_by_for_hold->count, 0, 'no item yet' );
     $builder->build_sample_item( { biblionumber => $biblio->biblionumber, notforloan => 1 } );
-    is( $biblio->items->filter_by_for_loan->count, 0, 'no item for loan' );
+    is( $biblio->items->filter_by_for_hold->count, 0, 'no item for hold' );
     $builder->build_sample_item( { biblionumber => $biblio->biblionumber, notforloan => 0 } );
-    is( $biblio->items->filter_by_for_loan->count, 1, '1 item for loan' );
+    is( $biblio->items->filter_by_for_hold->count, 1, '1 item for hold' );
+    $builder->build_sample_item( { biblionumber => $biblio->biblionumber, notforloan => -1 } );
+    is( $biblio->items->filter_by_for_hold->count, 2, '2 items for hold' );
 
     $biblio->delete;
 };

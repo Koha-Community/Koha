@@ -166,9 +166,8 @@ CAN_user_serials_create_subscription ) %]
     <div class="btn-group"><a id="printbiblio" class="btn btn-default"><i class="fa fa-print"></i> Print</a></div>
 
 [% IF ( CAN_user_reserveforothers ) %]
-    [%# biblio.items.filter_by_for_loan.count %]
     [% SET items = biblio.items %]
-    [% IF Context.Scalar(Context.Scalar(items, "filter_by_for_loan"), "count") %]
+    [% IF Context.Scalar(Context.Scalar(items, "filter_by_for_hold"), "count") %]
         [% IF ( holdfor ) %]
             <div class="btn-group">
                 <button class="btn btn-default dropdown-toggle" data-toggle="dropdown">
