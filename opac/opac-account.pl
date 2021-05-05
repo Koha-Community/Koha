@@ -89,7 +89,10 @@ if ( C4::Context->config("enable_plugins") ) {
     });
     # Only pass in plugins where opac online payment is enabled
     @plugins = grep { $_->opac_online_payment } @plugins;
-    $template->param( plugins => \@plugins );
+    $template->param(
+        plugins => \@plugins,
+        payment_methods => scalar @plugins > 0
+    );
 }
 
 output_html_with_http_headers $query, $cookie, $template->output, undef, { force_no_caching => 1 };

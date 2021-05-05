@@ -34,14 +34,6 @@
                     [% IF error %]
                         <div id="error" class="alert alert-warning">
                             <p><strong>Error:</strong> there was a problem processing your payment</p>
-
-                            [% IF error == "PAYPAL_UNABLE_TO_CONNECT" %]
-                                <p>Unable to connect to PayPal.</p>
-                                <p>Please try again later.</p>
-                            [% ELSIF error == "PAYPAL_ERROR_PROCESSING" %]
-                                <p>Unable to verify payment.</p>
-                                <p>Please contact the library to verify your payment.</p>
-                            [% END %]
                         </div>
                     [% END %]
 

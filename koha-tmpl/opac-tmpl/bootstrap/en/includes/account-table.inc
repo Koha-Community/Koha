@@ -142,19 +142,6 @@
             <legend>Pay selected fines and charges</legend>
             <span class="help-block"><h2>Payment method</h2></span>
 
-            [% IF Koha.Preference('EnablePayPalOpacPayments') %]
-                <div class="control-group">
-                    <label class="radio">
-                        <input type="radio" name="payment_method" id="payment_method-paypal" value="paypal" checked="checked" />
-                        <!-- PayPal Logo -->
-                        <a href="https://www.paypal.com/webapps/mpp/paypal-popup" title="How PayPal Works" class="paypal">
-                            <img src="https://www.paypalobjects.com/webstatic/mktg/logo/AM_SbyPP_mc_vs_dc_ae.jpg" alt="PayPal Acceptance Mark" />
-                        </a>
-                        <!-- PayPal Logo -->
-                    </label>
-                </div>
-            [% END %]
-
             [% FOREACH p IN plugins %]
                 <div class="control-group">
                     <label class="radio">

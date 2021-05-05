@@ -37,18 +37,14 @@ my $cgi = CGI->new;
 my $payment_method = $cgi->param('payment_method');
 my @accountlines   = $cgi->multi_param('accountline');
 
-my $use_plugin;
-if ( $payment_method ne 'paypal' ) {
-    $use_plugin = Koha::Plugins::Handler->run(
-        {
-            class  => $payment_method,
-            method => 'opac_online_payment',
-            cgi    => $cgi,
-        }
-    );
-}
+my $use_plugin = Koha::Plugins::Handler->run(
+    {   class  => $payment_method,
+        method => 'opac_online_payment',
+        cgi    => $cgi,
+    }
+);
 
-unless ( C4::Context->preference('EnablePayPalOpacPayments') || $use_plugin ) {
+unless ( $use_plugin ) {
     print $cgi->redirect("/cgi-bin/koha/errors/404.pl");
     exit;
 }
@@ -70,84 +66,11 @@ $amount_to_pay = sprintf( "%.2f", $amount_to_pay );
 my $active_currency = Koha::Acquisition::Currencies->get_active;
 
 my $error = 0;
-if ( $payment_method eq 'paypal' ) {
-    my $ua = LWP::UserAgent->new;
 
-    my $url =
-      C4::Context->preference('PayPalSandboxMode')
-      ? 'https://api-3t.sandbox.paypal.com/nvp'
-      : 'https://api-3t.paypal.com/nvp';
-
-    my $opac_base_url =
-      C4::Context->preference('PayPalReturnURL') eq 'BaseURL'
-      ? C4::Context->preference('OPACBaseURL')
-      : $cgi->url(-base=>1);
-
-    my $return_url = URI->new( $opac_base_url . "/cgi-bin/koha/opac-account-pay-paypal-return.pl" );
-    $return_url->query_form( { amount => $amount_to_pay, accountlines => \@accountlines } );
-
-    my $cancel_url = URI->new( $opac_base_url . "/cgi-bin/koha/opac-account.pl" );
-
-    my $nvp_params = {
-        'USER'      => C4::Context->preference('PayPalUser'),
-        'PWD'       => C4::Context->preference('PayPalPwd'),
-        'SIGNATURE' => C4::Context->preference('PayPalSignature'),
-
-        # API Version and Operation
-        'METHOD'  => 'SetExpressCheckout',
-        'VERSION' => '82.0',
-
-        # API specifics for SetExpressCheckout
-        'NOSHIPPING'                            => 1,
-        'REQCONFIRMSHIPPING'                    => 0,
-        'ALLOWNOTE'                             => 0,
-        'BRANDNAME'                             => C4::Context->preference('LibraryName'),
-        'CANCELURL'                             => $cancel_url->as_string(),
-        'RETURNURL'                             => $return_url->as_string(),
-        'PAYMENTREQUEST_0_CURRENCYCODE'         => $active_currency->currency,
-        'PAYMENTREQUEST_0_AMT'                  => $amount_to_pay,
-        'PAYMENTREQUEST_0_PAYMENTACTION'        => 'Sale',
-        'PAYMENTREQUEST_0_ALLOWEDPAYMENTMETHOD' => 'InstantPaymentOnly',
-        'PAYMENTREQUEST_0_DESC'                 => C4::Context->preference('PayPalChargeDescription'),
-        'SOLUTIONTYPE'                          => 'Sole',
-    };
-
-    my $response = $ua->request( POST $url, $nvp_params );
-
-    if ( $response->is_success ) {
-
-        my $urlencoded = $response->content;
-        my %params = URI->new( "?$urlencoded" )->query_form;
-
-        if ( $params{ACK} eq "Success" ) {
-            my $token = $params{TOKEN};
-
-            my $redirect_url =
-              C4::Context->preference('PayPalSandboxMode')
-              ? "https://www.sandbox.paypal.com/cgi-bin/webscr?cmd=_express-checkout&token="
-              : "https://www.paypal.com/cgi-bin/webscr?cmd=_express-checkout&token=";
-            print $cgi->redirect( $redirect_url . $token );
-
-        }
-        else {
-            $template->param( error => "PAYPAL_ERROR_PROCESSING" );
-            $error = 1;
-        }
-
+Koha::Plugins::Handler->run(
+    {
+        class  => $payment_method,
+        method => 'opac_online_payment_begin',
+        cgi    => $cgi,
     }
-    else {
-        $template->param( error => "PAYPAL_UNABLE_TO_CONNECT" );
-        $error = 1;
-    }
-
-    output_html_with_http_headers( $cgi, $cookie, $template->output, undef, { force_no_caching => 1 } ) if $error;
-}
-else {
-    Koha::Plugins::Handler->run(
-        {
-            class  => $payment_method,
-            method => 'opac_online_payment_begin',
-            cgi    => $cgi,
-        }
-    );
-}
+);

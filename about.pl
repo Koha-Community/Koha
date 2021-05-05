@@ -421,10 +421,6 @@ if (  C4::Context->preference('WebBasedSelfCheck')
     );
 }
 
-if ( C4::Context->preference('EnablePayPalOpacPayments') ) {
-    $template->param( paypal_enabled => 1 );
-}
-
 # Test YAML system preferences
 # FIXME: This is list of current YAML formatted prefs, should by type of preference
 my @yaml_prefs = (

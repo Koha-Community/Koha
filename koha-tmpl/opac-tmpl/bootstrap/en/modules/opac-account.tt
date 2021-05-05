@@ -4,7 +4,7 @@
 [% USE KohaDates %]
 [% USE AuthorisedValues %]
 [% USE Price %]
-[% SET ENABLE_OPAC_PAYMENTS = Koha.Preference('EnablePayPalOpacPayments') || plugins %]
+[% SET ENABLE_OPAC_PAYMENTS = payment_methods %]
 [% SET DISPLAY_PAYMENT_BLOCK = 0 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Your charges &rsaquo; [% IF ( LibraryNameTitle ) %][% LibraryNameTitle | html %][% ELSE %]Koha online[% END %] catalog</title>
@@ -60,14 +60,6 @@
                     [% IF payment_error %]
                         <div id="error" class="alert alert-warning">
                             <p><strong>Error:</strong> there was a problem processing your payment</p>
-
-                            [% IF payment_error == "PAYPAL_UNABLE_TO_CONNECT" %]
-                                <p>Unable to connect to PayPal.</p>
-                                <p>Please contact a librarian to verify your payment.</p>
-                            [% ELSIF payment_error == "PAYPAL_ERROR_PROCESSING" %]
-                                <p>Unable to verify payment.</p>
-                                <p>Please contact a librarian to verify your payment.</p>
-                            [% END %]
                         </div>
                     [% ELSIF payment %]
                         <div class="alert alert-info">
@@ -118,11 +110,6 @@ $( document ).ready(function() {
 
     //Start filtered
     $('#filter_paid').click();
-
-    $(".paypal").on("click", function() {
-        window.open('https://www.paypal.com/webapps/mpp/paypal-popup','WIPaypal','toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=yes, resizable=yes, width=1060, height=700');
-        return false;
-    });
 
     $(".pay-online").removeClass("hidden");
 
