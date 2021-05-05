@@ -44,7 +44,7 @@ my $order_exc_tax = {
     tax_rate  => .1965,
     discount  => .42,
     rrp       => 16.99,
-    unitprice => 0.00,
+    unitprice => "0.00",
     quantity  => 8,
 };
 
