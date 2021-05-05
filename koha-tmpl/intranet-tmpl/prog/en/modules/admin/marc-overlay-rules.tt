@@ -1,18 +1,18 @@
 [% USE raw %]
 [% USE Koha %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Koha &rsaquo; Administration &rsaquo; MARC overlay rules</title>
+<title>MARC overlay rules &rsaquo; Koha &rsaquo; Administration</title>
 [% INCLUDE 'doc-head-close.inc' %]
 [% Asset.css("css/datatables.css") | $raw %]
 [% INCLUDE 'datatables.inc' %]
 
-<style type="text/css">
+<style>
     .required {
         background-color: #C00;
     }
 </style>
 
-<script type="text/javascript">
+<script>
 function doSubmit(op, id) {
     $('<input type="hidden"/>')
     .attr('name', 'op')
