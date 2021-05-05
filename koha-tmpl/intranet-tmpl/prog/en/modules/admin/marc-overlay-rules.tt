@@ -1,8 +1,9 @@
+[% USE raw %]
 [% USE Koha %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Administration &rsaquo; MARC overlay rules</title>
 [% INCLUDE 'doc-head-close.inc' %]
-[% Asset.css("css/datatables.css") %]
+[% Asset.css("css/datatables.css") | $raw %]
 [% INCLUDE 'datatables.inc' %]
 
 <style type="text/css">
@@ -301,14 +302,14 @@ $(document).ready(function(){
 <h3>Remove rule?</h3>
 <p>Are you sure you want to remove the selected rule(s)?</p>
 
-<form action="[% script_name %]" method="GET">
+<form action="[% script_name | uri %]" method="GET">
     <button type="submit" class="deny"><i class="fa fa-fw fa-remove"></i> No, do not remove</button>
 </form>
     <button type="button" class="approve" id="doremove"><i class="fa fa-fw fa-check"></i> Yes, remove</button>
 </div>
 [% END %]
 
-<form action="[% script_name %]" method="POST" id="marc-overlay-rules-form">
+<form action="[% script_name | uri %]" method="POST" id="marc-overlay-rules-form">
 <table id="marc-overlay-rules">
     <thead><tr>
         <th>Rule</th>
@@ -377,9 +378,9 @@ $(document).ready(function(){
     [% END %]
     <tbody>
         [% FOREACH rule IN rules %]
-            <tr id="[% rule.id %]" class="rule[% IF rule.edit %]-edit[% END %]">
+            <tr id="[% rule.id | html %]" class="rule[% IF rule.edit %]-edit[% END %]">
             [% IF rule.edit %]
-                <td>[% rule.id %]</td>
+                <td>[% rule.id | html %]</td>
                 <td>
                     <select name="module">
                         [% IF rule.module == "source" %]
@@ -471,8 +472,8 @@ $(document).ready(function(){
                 <td class="rule-operation-action" data-operation="remove">[% IF rule.remove %]Remove[% ELSE %]Skip[% END %]</td>
                 <td class="rule-operation-action" data-operation="delete">[% IF rule.delete %]Delete[% ELSE %]Skip[% END %]</td>
                 <td class="actions">
-                    <a href="?op=remove&id=[% rule.id %]" title="Delete" class="btn btn-default btn-xs"><i class="fa fa-trash"></i> Delete</a>
-                    <a href="?op=edit&id=[% rule.id %]" title="Edit" class="btn btn-default btn-xs"><i class="fa fa-pencil"></i> Edit</a>
+                    <a href="?op=remove&id=[% rule.id | uri %]" title="Delete" class="btn btn-default btn-xs"><i class="fa fa-trash"></i> Delete</a>
+                    <a href="?op=edit&id=[% rule.id | uri %]" title="Edit" class="btn btn-default btn-xs"><i class="fa fa-pencil"></i> Edit</a>
                 </td>
                 <td>
                     [% IF rule.removemarked %]
@@ -488,7 +489,7 @@ $(document).ready(function(){
 </table>
 </form>
 
-<form action="[% script_name %]" method="post">
+<form action="[% script_name | uri %]" method="post">
 <input type="hidden" name="op" value="redo-matching" />
 </form>
 
