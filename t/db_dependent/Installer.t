@@ -22,7 +22,10 @@
 # Add more tests here!!!
 
 use Modern::Perl;
-use Test::More tests => 18;
+use Test::More tests => 19;
+use File::Temp qw(tempfile);
+use utf8;
+
 use Koha::Database;
 
 BEGIN {
@@ -70,3 +73,24 @@ ok( ! foreign_key_exists( 'borrowers', 'xxx' ), 'FK xxxx does not exist' );
 
 ok( primary_key_exists( 'borrowers', 'borrowernumber'), 'Borrowers has primary key on borrowernumber');
 ok( ! primary_key_exists( 'borrowers', 'email'), 'Borrowers does not have a primary key on email');
+
+subtest 'marc_framework_sql_list' => sub {
+    plan tests => 1;
+
+    my ($fh, $filepath) = tempfile( DIR =>  C4::Context->config("intranetdir") . "/installer/data/mysql/en/marcflavour/marc21/mandatory", SUFFIX => '.yml', UNLINK => 1 );
+    print $fh Encode::encode_utf8("---\ndescription:\n    - \"Standardowe typy haseł przedmiotowych MARC21\"\n");
+    close $fh;
+
+    my $yaml_files = $installer->marc_framework_sql_list('en', 'MARC21');
+
+    my $description;
+    FILE: for my $file ( @$yaml_files ) {
+        for my $framework ( @{ $file->{frameworks}} ) {
+            if ( $framework->{fwkfile} eq $filepath ) {
+                $description = $framework->{fwkdescription}->[0];
+                last FILE;
+            }
+        }
+    }
+    is( $description, 'Standardowe typy haseł przedmiotowych MARC21' );
+};
