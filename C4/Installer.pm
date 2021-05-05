@@ -154,7 +154,7 @@ sub marc_framework_sql_list {
             my @lines;
             if ( $ext =~ /yml/ ) {
                 my $yaml = YAML::XS::LoadFile("$dir/$requirelevel/$name\.$ext");
-                @lines = map { Encode::decode('UTF-8', $_) } @{ $yaml->{'description'} };
+                @lines = @{ $yaml->{'description'} };
             } else {
                 open my $fh, "<:encoding(UTF-8)", "$dir/$requirelevel/$name.txt";
                 my $line = <$fh>;
@@ -237,7 +237,7 @@ sub sample_data_sql_list {
             my @lines;
             if ( $ext =~ /yml/ ) {
                 my $yaml = YAML::XS::LoadFile("$dir/$requirelevel/$name\.$ext");
-                @lines = map { Encode::decode('UTF-8', $_) } @{ $yaml->{'description'} };
+                @lines = @{ $yaml->{'description'} };
             } else {
                 open my $fh, "<:encoding(UTF-8)", "$dir/$requirelevel/$name.txt";
                 my $line = <$fh>;
