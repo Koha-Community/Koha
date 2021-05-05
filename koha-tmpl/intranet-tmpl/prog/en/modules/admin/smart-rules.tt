@@ -543,12 +543,12 @@
                     <th>Return policy</th>
                     <th class="noExport">Actions</th>
                 </tr>
-                [% SET patron_maxissueqty = CirculationRules.Search( current_branch, undef, undef, 'patron_maxissueqty', { want_rule = 1 } ) %]
-                [% SET patron_maxonsiteissueqty = CirculationRules.Search( current_branch, undef, undef, 'patron_maxonsiteissueqty', { want_rule = 1 } ) %]
-                [% SET rule_value = CirculationRules.Search( current_branch, undef , undef, 'max_holds', { want_rule = 1 } ) %]
-                [% SET holdallowed = CirculationRules.Search( current_branch, undef, undef, 'holdallowed', { want_rule = 1 } ) %]
-                [% SET hold_fulfillment_policy = CirculationRules.Search( current_branch, undef, undef, 'hold_fulfillment_policy', { want_rule = 1 }) %]
-                [% SET returnbranch = CirculationRules.Search( current_branch, undef, undef, 'returnbranch', { want_rule = 1 }) %]
+                [% SET patron_maxissueqty = CirculationRules.Search( current_branch, undef, undef, 'patron_maxissueqty', { want_rule => 1 } ) %]
+                [% SET patron_maxonsiteissueqty = CirculationRules.Search( current_branch, undef, undef, 'patron_maxonsiteissueqty', { want_rule => 1 } ) %]
+                [% SET rule_value = CirculationRules.Search( current_branch, undef , undef, 'max_holds', { want_rule => 1 } ) %]
+                [% SET holdallowed = CirculationRules.Search( current_branch, undef, undef, 'holdallowed', { want_rule => 1 } ) %]
+                [% SET hold_fulfillment_policy = CirculationRules.Search( current_branch, undef, undef, 'hold_fulfillment_policy', { want_rule => 1 }) %]
+                [% SET returnbranch = CirculationRules.Search( current_branch, undef, undef, 'returnbranch', { want_rule => 1 }) %]
                 [% SET default_checkout_hold_and_return_policy = ( patron_maxissueqty || patron_maxonsiteissueqty || rule_value || holdallowed || hold_fulfillment_policy || returnbranch ) %]
                 <tr>
                     <td>
