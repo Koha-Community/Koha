@@ -167,8 +167,12 @@ if ( $biblionumbers ) {
     push @biblionumbers, $input->multi_param('biblionumber');
 }
 
+my $clubcount = Koha::Clubs->search->count;
 my $multi_hold = @biblionumbers > 1;
-$template->param(multi_hold => $multi_hold);
+$template->param(
+        multi_hold => $multi_hold,
+        clubcount  => $clubcount,
+);
 
 # If we have the borrowernumber because we've performed an action, then we
 # don't want to try to place another reserve.
