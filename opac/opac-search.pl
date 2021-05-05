@@ -519,7 +519,7 @@ for ( my $i=0; $i<@limits; $i++ ) {
             my $holdingbranchlimit = $limits[$i];
             $homebranchlimit =~ s/branch/homebranch/;
             $holdingbranchlimit =~ s/branch/holdingbranch/;
-            $limits[$i] = "$homebranchlimit or $holdingbranchlimit";
+            $limits[$i] = "($homebranchlimit or $holdingbranchlimit)";
         }
     }
 }
