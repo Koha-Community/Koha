@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 2;
+use Test::More tests => 3;
 
 use t::lib::TestBuilder;
 use Test::Exception;
@@ -291,4 +291,116 @@ subtest 'type() tests' => sub {
     );
 
     $schema->storage->txn_rollback;
+};
+
+subtest 'merge_and_replace_with' => sub {
+    plan tests => 2;
+
+    my $schema = Koha::Database->new->schema;
+    $schema->storage->txn_begin;
+
+    my $patron = $builder->build_object({class=> 'Koha::Patrons'});
+
+    my $unique_attribute_type = $builder->build_object(
+        {
+            class => 'Koha::Patron::Attribute::Types',
+            value => { unique_id=> 1, repeatable => 0 }
+        }
+    );
+    my $repeatable_attribute_type = $builder->build_object(
+        {
+            class => 'Koha::Patron::Attribute::Types',
+            value => { unique_id => 0, repeatable => 1 }
+        }
+    );
+    my $normal_attribute_type = $builder->build_object(
+        {
+            class => 'Koha::Patron::Attribute::Types',
+            value => { unique_id => 0, repeatable => 0 }
+        }
+    );
+    my $non_existent_attribute_type = $builder->build_object(
+        {
+            class => 'Koha::Patron::Attribute::Types',
+        }
+    );
+    my $non_existent_attribute_type_code = $non_existent_attribute_type->code;
+    $non_existent_attribute_type->delete;
+
+    my $attributes = [
+        {
+            attribute => 'my unique attribute 1',
+            code => $unique_attribute_type->code(),
+        },
+        {
+            attribute => 'my repeatable attribute 1',
+            code => $repeatable_attribute_type->code(),
+        },
+        {
+            attribute => 'my normal attribute 1',
+            code => $normal_attribute_type->code(),
+        }
+    ];
+    $patron->extended_attributes($attributes);
+
+    my $new_attributes = [
+        {
+            attribute => 'my repeatable attribute 2',
+            code => $repeatable_attribute_type->code(),
+        },
+        {
+            attribute => 'my repeatable attribute 3',
+            code => $repeatable_attribute_type->code(),
+        },
+        {
+            attribute => 'my normal attribute 2',
+            code => $normal_attribute_type->code(),
+        },
+        {
+            attribute => 'my unique attribute 2',
+            code => $unique_attribute_type->code(),
+        }
+    ];
+
+    my $new_extended_attributes = $patron->extended_attributes->merge_and_replace_with($new_attributes);
+
+    my $expected = [
+        {
+            attribute => 'my normal attribute 2', # Attribute 1 has been replaced by attribute 2
+            code => $normal_attribute_type->code(),
+        },
+        {
+            attribute => 'my unique attribute 2', # Attribute 1 has been replaced by attribute 2
+            code => $unique_attribute_type->code(),
+        },
+        {
+            attribute => 'my repeatable attribute 1',
+            code => $repeatable_attribute_type->code(),
+        },
+        {
+            attribute => 'my repeatable attribute 2',
+            code => $repeatable_attribute_type->code(),
+        },
+        {
+            attribute => 'my repeatable attribute 3',
+            code => $repeatable_attribute_type->code(),
+        },
+    ];
+    $expected = [ sort { $a->{code} cmp $b->{code} || $a->{attribute} cmp $b->{attribute} } @$expected ];
+    is_deeply($new_extended_attributes, $expected);
+
+
+    throws_ok
+        {
+            $patron->extended_attributes->merge_and_replace_with(
+                [
+                    { code => $non_existent_attribute_type_code, attribute => 'foobar' },
+                ]
+            );
+        }
+        'Koha::Exceptions::Patron::Attribute::InvalidType',
+        'Exception thrown on invalid attribute type';
+
+    $schema->storage->txn_rollback;
+
 };

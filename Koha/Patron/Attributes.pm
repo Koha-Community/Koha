@@ -87,29 +87,24 @@ sub filter_by_branch_limitations {
     return $self->search( $or, $join );
 }
 
-=head3 merge_with
+=head3 merge_and_replace_with
 
 $new_attributes is an arrayref of hashrefs
 
 =cut
 
-sub merge_with {
+sub merge_and_replace_with {
     my ( $self, $new_attributes ) = @_;
 
     my @merged = @{$self->unblessed};
     my $attribute_types = { map { $_->code => $_->unblessed } Koha::Patron::Attribute::Types->search };
     for my $attr ( @$new_attributes ) {
-        unless ( $attr->{code} ) {
-            warn "Cannot merge element: no 'code' defined";
-            next;
-        }
 
         my $attribute_type = $attribute_types->{$attr->{code}};
-        # FIXME Do we need that here or let ->store do the job?
-        unless ( $attribute_type ) {
-            warn "Cannot merge element: unrecognized code = '$attr->{code}'";
-            next;
-        }
+
+        Koha::Exceptions::Patron::Attribute::InvalidType->throw( type => $attr->{code} )
+            unless $attribute_types->{$attr->{code}};
+
         unless ( $attribute_type->{repeatable} ) {
             # filter out any existing attributes of the same code
             @merged = grep {$attr->{code} ne $_->{code}} @merged;
@@ -117,6 +112,8 @@ sub merge_with {
 
         push @merged, $attr;
     }
+
+    @merged = map { { code => $_->{code}, attribute => $_->{attribute} } } @merged;
 
     # WARNING - we would like to return a set, but $new_attributes is not in storage yet
     # Maybe there is something obvious I (JD) am missing
