@@ -306,7 +306,7 @@ sub translate_yaml {
     my $po_file = $self->po_filename( $target->{suffix} );
     return $srcyml unless ( -e $po_file );
 
-    my $po_ref  = Locale::PO->load_file_ashash( $po_file );
+    my $po_ref  = Locale::PO->load_file_ashash( $po_file, 'utf8' );
 
     my $dstyml   = YAML::XS::LoadFile( $srcyml );
 
@@ -400,9 +400,7 @@ sub install_installer {
             for my $file ( @files ) {
                 if ( $file =~ /yml$/ ) {
                     my $translated_yaml = translate_yaml( $self, $target, "$intradir/$dir/$file" );
-                    open(my $fh, ">:encoding(UTF-8)", "$intradir/$tdir/$file");
-                    YAML::XS::DumpFile( $fh, $translated_yaml );
-                    close($fh);
+                    YAML::XS::DumpFile( "$intradir/$tdir/$file", $translated_yaml );
                 } else {
                     File::Copy::copy( "$intradir/$dir/$file", "$intradir/$tdir/$file" );
                 }
