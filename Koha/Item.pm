@@ -467,7 +467,7 @@ sub request_transfer {
         }
     )->store();
 
-    $request->cancel( { reason => $params->{reason}, force => 1 } )
+    $request->cancel( { reason => $params->{reason}, force => 1, replace => 1 } )
       if ( defined($request) && $params->{replace} );
 
     return $transfer;
