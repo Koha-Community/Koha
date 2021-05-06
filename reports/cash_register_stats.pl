@@ -166,7 +166,7 @@ if ($do_it) {
                         $row->{bfirstname} . ' ' . $row->{bsurname},
                         $row->{branchname},
                         $row->{date},
-                        $row->{credit_type},
+                        $row->{credit_type_code},
                         $row->{debit_type},
                         $row->{note},
                         $row->{amount},
