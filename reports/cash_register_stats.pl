@@ -167,7 +167,7 @@ if ($do_it) {
                         $row->{branchname},
                         $row->{date},
                         $row->{timestamp},
-                        $row->{credit_type},
+                        $row->{credit_type_code},
                         $row->{debit_type},
                         $row->{note},
                         $row->{amount},
