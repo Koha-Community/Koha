@@ -2175,6 +2175,7 @@ sub AddReturn {
             else {
                 $messages->{'WrongTransfer'}     = $transfer->tobranch;
                 $messages->{'WrongTransferItem'} = $item->itemnumber;
+                $messages->{'TransferTrigger'}   = $transfer->reason;
             }
         }
         else {
@@ -3589,19 +3590,24 @@ This function validate the line of brachtransfer but with the wrong destination 
 
 sub updateWrongTransfer {
 	my ( $itemNumber,$waitingAtLibrary,$FromLibrary ) = @_;
-	my $dbh = C4::Context->dbh;	
-# first step validate the actual line of transfert .
-	my $sth =
-        	$dbh->prepare(
-			"update branchtransfers set datearrived = now(),tobranch=?,comments='wrongtransfer' where itemnumber= ? AND datearrived IS NULL"
-          	);
-        	$sth->execute($FromLibrary,$itemNumber);
 
-# second step create a new line of branchtransfer to the right location .
-	ModItemTransfer($itemNumber, $FromLibrary, $waitingAtLibrary);
+    # first step: cancel the original transfer
+    my $item = Koha::Items->find($itemNumber);
+    my $transfer = $item->get_transfer;
+    $transfer->set({ datecancelled => dt_from_string, cancellation_reason => 'WrongTransfer' })->store();
 
-#third step changing holdingbranch of item
-    my $item = Koha::Items->find($itemNumber)->holdingbranch($FromLibrary)->store;
+    # second step: create a new transfer to the right location
+    my $new_transfer = $item->request_transfer(
+        {
+            to            => $transfer->to_library,
+            reason        => $transfer->reason,
+            comment       => $transfer->comments,
+            ignore_limits => 1,
+            enqueue       => 1
+        }
+    );
+
+    return $new_transfer;
 }
 
 =head2 CalcDateDue
