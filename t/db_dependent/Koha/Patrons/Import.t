@@ -845,7 +845,7 @@ subtest 'test_format_dates' => sub {
 
 subtest 'patron_attributes' => sub {
 
-    plan tests => 16;
+    plan tests => 17;
 
     t::lib::Mocks::mock_preference('ExtendedPatronAttributes', 1);
 
@@ -967,6 +967,84 @@ subtest 'patron_attributes' => sub {
         my $patron = Koha::Patrons->find({cardnumber => $cardnumber});
         is( $patron, undef );
     }
+
+    subtest 'update existing patron' => sub {
+        plan tests => 6;
+
+        my $patron = $builder->build_object(
+            {
+                class => 'Koha::Patrons',
+                value => { cardnumber => $cardnumber }
+            }
+        );
+
+        my $attributes = {
+            $unique_attribute_type->code => ['my unique attribute 1'],
+            $repeatable_attribute_type->code => [ 'my repeatable attribute 1', 'my repeatable attribute 2' ],
+            $normal_attribute_type->code => ['my normal attribute 1'],
+        };
+        my $fh = build_csv({ %$attributes });
+        my $result = $patrons_import->import_patrons(
+            {
+                file                         => $fh,
+                matchpoint                   => 'cardnumber',
+                overwrite_cardnumber         => 1,
+                preserve_extended_attributes => 1
+            }
+        );
+
+        is( $result->{overwritten}, 1 );
+
+        compare_patron_attributes($patron->extended_attributes->unblessed, { %$attributes } );
+
+        # Adding a new non-repeatable attribute
+        my $new_attributes = {
+            $normal_attribute_type->code => ['my normal attribute 2'],
+        };
+        $fh = build_csv({ %$new_attributes });
+        $result = $patrons_import->import_patrons(
+            {
+                file                         => $fh,
+                matchpoint                   => 'cardnumber',
+                overwrite_cardnumber         => 1,
+                preserve_extended_attributes => 1
+            }
+        );
+
+        is( $result->{overwritten}, 1 );
+
+        # The normal_attribute_type has been replaced with 'my normal attribute 2'
+        compare_patron_attributes($patron->extended_attributes->unblessed, { %$attributes, %$new_attributes } );
+
+
+        # uniqueness
+        $patron->extended_attributes->delete; # reset
+        $builder->build_object(
+            {
+                class => 'Koha::Patron::Attributes',
+                value => { code => $unique_attribute_type->code, attribute => 'unique' }
+            }
+        );
+        $attributes = {
+            $unique_attribute_type->code => ['unique'],
+            $repeatable_attribute_type->code => [ 'my repeatable attribute 1', 'my repeatable attribute 2' ],
+            $normal_attribute_type->code => ['my normal attribute 1'],
+        };
+        $fh = build_csv({ %$attributes });
+        $result = $patrons_import->import_patrons(
+            {
+                file                         => $fh,
+                matchpoint                   => 'cardnumber',
+                overwrite_cardnumber         => 1,
+                preserve_extended_attributes => 1
+            }
+        );
+
+        is( $result->{overwritten}, 0 );
+
+        compare_patron_attributes($patron->extended_attributes->unblessed, { %$attributes } );
+
+    };
 
 };
 
