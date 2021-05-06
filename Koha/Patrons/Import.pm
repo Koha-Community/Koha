@@ -331,7 +331,7 @@ sub import_patrons {
             }
             if ($extended) {
                 if ($ext_preserve) {
-                    $patron_attributes = $patron->extended_attributes->merge_with( $patron_attributes );
+                    $patron_attributes = $patron->extended_attributes->merge_and_replace_with( $patron_attributes );
                 }
                 eval {
                     # We do not want to filter by branch, maybe we should?
@@ -354,51 +354,55 @@ sub import_patrons {
             );
         }
         else {
-            my $patron = eval {
-                Koha::Patron->new(\%borrower)->store;
-            };
-            unless ( $@ ) {
-                $borrowernumber = $patron->id;
+            try {
+                $schema->storage->txn_do(sub {
+                    my $patron = Koha::Patron->new(\%borrower)->store;
+                    $borrowernumber = $patron->id;
 
-                if ( $patron->is_debarred ) {
-                    AddDebarment(
-                        {
-                            borrowernumber => $patron->borrowernumber,
-                            expiration     => $patron->debarred,
-                            comment        => $patron->debarredcomment,
-                        }
-                    );
-                }
-
-                if ($extended) {
-                    # FIXME Hum, we did not filter earlier and now we do?
-                    $patron->extended_attributes->filter_by_branch_limitations->delete;
-                    $patron->extended_attributes($patron_attributes);
-                }
-
-                if ($set_messaging_prefs) {
-                    C4::Members::Messaging::SetMessagingPreferencesFromDefaults(
-                        {
-                            borrowernumber => $patron->borrowernumber,
-                            categorycode   => $patron->categorycode,
-                        }
-                    );
-                }
-
-                $imported++;
-                push @imported_borrowers, $patron->borrowernumber; #for patronlist
-                push(
-                    @feedback,
-                    {
-                        feedback => 1,
-                        name     => 'lastimported',
-                        value    => $patron->surname . ' / ' . $patron->borrowernumber,
+                    if ( $patron->is_debarred ) {
+                        AddDebarment(
+                            {
+                                borrowernumber => $patron->borrowernumber,
+                                expiration     => $patron->debarred,
+                                comment        => $patron->debarredcomment,
+                            }
+                        );
                     }
-                );
-            }
-            else {
+
+                    if ($extended) {
+                        # FIXME Hum, we did not filter earlier and now we do?
+                        $patron->extended_attributes->filter_by_branch_limitations->delete;
+                        $patron->extended_attributes($patron_attributes);
+                    }
+
+                    if ($set_messaging_prefs) {
+                        C4::Members::Messaging::SetMessagingPreferencesFromDefaults(
+                            {
+                                borrowernumber => $patron->borrowernumber,
+                                categorycode   => $patron->categorycode,
+                            }
+                        );
+                    }
+
+                    $imported++;
+                    push @imported_borrowers, $patron->borrowernumber; #for patronlist
+                    push(
+                        @feedback,
+                        {
+                            feedback => 1,
+                            name     => 'lastimported',
+                            value    => $patron->surname . ' / ' . $patron->borrowernumber,
+                        }
+                    );
+                });
+            } catch {
                 $invalid++;
-                push @errors, { unknown_error => 1 };
+                if ( $_->isa('Koha::Exceptions::Patron::Attribute::UniqueIDConstraint') ) {
+                    my $patron_id = defined $matchpoint ? $borrower{$matchpoint} : $matchpoint_attr_type;
+                    push @errors, { patron_attribute_unique_id_constraint => 1, patron_id => $patron_id, attribute => $_->attribute };
+                } else {
+                    push @errors, { unknown_error => 1 };
+                }
                 push(
                     @errors,
                     {
@@ -406,7 +410,7 @@ sub import_patrons {
                         value => $borrower{'surname'} . ' / Create patron',
                     }
                 );
-            }
+            };
         }
 
         # Add a guarantor if we are given a relationship

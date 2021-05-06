@@ -845,7 +845,7 @@ subtest 'test_format_dates' => sub {
 
 subtest 'patron_attributes' => sub {
 
-    plan tests => 4;
+    plan tests => 6;
 
     t::lib::Mocks::mock_preference('ExtendedPatronAttributes', 1);
 
@@ -875,6 +875,8 @@ subtest 'patron_attributes' => sub {
     my $non_existent_attribute_type_code = $non_existent_attribute_type->code;
     $non_existent_attribute_type->delete;
 
+    our $cardnumber = "1042";
+
     # attributes is { code => \@attributes }
     sub build_csv {
         my ($attributes) = @_;
@@ -882,7 +884,7 @@ subtest 'patron_attributes' => sub {
         my $csv_headers = 'cardnumber,surname,firstname,branchcode,categorycode,patron_attributes';
         my @attributes_str = map { my $code = $_; map {  sprintf "%s:%s", $code, $_ } @{ $attributes->{$code} } } keys %$attributes;
         my $attributes_str = join ',', @attributes_str;
-        my $csv_line = sprintf '1042,John,D,MPL,PT,"%s"', $attributes_str;
+        my $csv_line = sprintf '%s,John,D,MPL,PT,"%s"', $cardnumber, $attributes_str;
         my $filename = make_csv( $temp_dir, $csv_headers, $csv_line );
         open( my $fh, "<:encoding(utf8)", $filename ) or die "cannot open $filename: $!";
         return $fh;
@@ -899,7 +901,7 @@ subtest 'patron_attributes' => sub {
 
         is( $result->{imported}, 1 );
 
-        my $patron = Koha::Patrons->find({cardnumber => "1042"});
+        my $patron = Koha::Patrons->find({cardnumber => $cardnumber});
         compare_patron_attributes($patron->extended_attributes->unblessed, { %$attributes } );
         $patron->delete;
     }
@@ -918,12 +920,13 @@ subtest 'patron_attributes' => sub {
         };
         my $fh = build_csv({ %$attributes });
 
-        throws_ok {
-            $patrons_import->import_patrons({file => $fh});
-        }
-        'Koha::Exceptions::Patron::Attribute::UniqueIDConstraint';
+        my $result = $patrons_import->import_patrons({file => $fh, matchpoint => 'cardnumber'});
+        my $error = $result->{errors}->[0];
+        is( $error->{patron_attribute_unique_id_constraint}, 1 );
+        is( $error->{patron_id}, $cardnumber );
+        is( $error->{attribute}->code, $unique_attribute_type->code );
 
-        my $patron = Koha::Patrons->find({cardnumber => "1042"});
+        my $patron = Koha::Patrons->find({cardnumber => $cardnumber});
         is( $patron, undef );
 
     }
