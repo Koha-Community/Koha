@@ -845,7 +845,7 @@ subtest 'test_format_dates' => sub {
 
 subtest 'patron_attributes' => sub {
 
-    plan tests => 10;
+    plan tests => 16;
 
     t::lib::Mocks::mock_preference('ExtendedPatronAttributes', 1);
 
@@ -938,6 +938,8 @@ subtest 'patron_attributes' => sub {
         my $fh = build_csv({ %$attributes });
 
         my $result = $patrons_import->import_patrons({file => $fh, matchpoint => 'cardnumber'});
+        is( $result->{imported}, 0 );
+
         my $error = $result->{errors}->[0];
         is( $error->{patron_attribute_invalid_type}, 1 );
         is( $error->{patron_id}, $cardnumber );
@@ -946,6 +948,24 @@ subtest 'patron_attributes' => sub {
         my $patron = Koha::Patrons->find({cardnumber => $cardnumber});
         is( $patron, undef );
 
+    }
+
+    { # NonRepeatable
+        my $attributes = {
+                $repeatable_attribute_type->code => ['my repeatable attribute 1', 'my repeatable attribute 2'],
+                $normal_attribute_type->code     => ['my normal attribute 1', 'my normal attribute 2'],
+            };
+        my $fh = build_csv({ %$attributes });
+        my $result = $patrons_import->import_patrons({file => $fh, matchpoint => 'cardnumber'});
+        is( $result->{imported}, 0 );
+
+        my $error = $result->{errors}->[0];
+        is( $error->{patron_attribute_non_repeatable}, 1 );
+        is( $error->{patron_id}, $cardnumber );
+        is( $error->{attribute}->code, $normal_attribute_type->code );
+
+        my $patron = Koha::Patrons->find({cardnumber => $cardnumber});
+        is( $patron, undef );
     }
 
 };

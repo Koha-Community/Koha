@@ -402,6 +402,9 @@ sub import_patrons {
                     push @errors, { patron_attribute_unique_id_constraint => 1, patron_id => $patron_id, attribute => $_->attribute };
                 } elsif ( $_->isa('Koha::Exceptions::Patron::Attribute::InvalidType') ) {
                     push @errors, { patron_attribute_invalid_type => 1, patron_id => $patron_id, attribute_type_code => $_->type };
+                } elsif ( $_->isa('Koha::Exceptions::Patron::Attribute::NonRepeatable') ) {
+                    push @errors, { patron_attribute_non_repeatable => 1, patron_id => $patron_id, attribute => $_->attribute };
+
                 } else {
                     push @errors, { unknown_error => 1 };
                 }
