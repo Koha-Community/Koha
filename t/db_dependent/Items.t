@@ -1120,11 +1120,11 @@ subtest 'ModItemFromMarc' => sub {
         $item->permanent_location("");
         $item->location('E');
         $marc = C4::Items::Item2Marc( $item->unblessed, $item->biblionumber );
+        $marc->field('952')->add_subfields( "C", "" );
         ModItemFromMarc( $marc, $item->biblionumber, $item->itemnumber );
         $item = $item->get_from_storage;
         is( $item->location, 'E', 'next new location set as expected' );
         is( $item->permanent_location, undef, 'permanent location is not updated if previously set as blank string' );
-
     };
 
     $schema->storage->txn_rollback;
