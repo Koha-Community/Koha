@@ -34,8 +34,6 @@ use C4::Labels::Batch;
 use Koha::MarcOverlayRules;
 use Koha::Patron::Categories;
 
-my $script_name = "/cgi-bin/koha/admin/marc-overlay-rules.pl";
-
 my $input = new CGI;
 my $op = $input->param('op') || '';
 my $errors = [];
@@ -69,8 +67,6 @@ my ($template, $loggedinuser, $cookie) = get_template_and_user(
         flagsrequired   => { parameters => 'manage_marc_overlay_rules' },
     }
 );
-
-$template->param(script_name => $script_name);
 
 my %cookies = parse CGI::Cookie($cookie);
 our $sessionID = $cookies{'CGISESSID'}->value;

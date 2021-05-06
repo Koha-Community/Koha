@@ -64,14 +64,14 @@
                     <h3>Remove rule?</h3>
                     <p>Are you sure you want to remove the selected rule(s)?</p>
 
-                    <form action="[% script_name | uri %]" method="GET">
+                    <form action="/cgi-bin/koha/admin/marc-overlay-rules.pl" method="GET">
                         <button type="submit" class="deny"><i class="fa fa-fw fa-remove"></i> No, do not remove</button>
                     </form>
                     <button type="button" class="approve" id="doremove"><i class="fa fa-fw fa-check"></i> Yes, remove</button>
                 </div>
                 [% END %]
 
-                <form action="[% script_name | uri %]" method="POST" id="marc-overlay-rules-form">
+                <form action="/cgi-bin/koha/admin/marc-overlay-rules.pl" method="POST" id="marc-overlay-rules-form">
                     <table id="marc-overlay-rules">
                         <thead><tr>
                             <th>Rule</th>
@@ -251,7 +251,7 @@
                     </table>
                 </form>
 
-                <form action="[% script_name | uri %]" method="post">
+                <form action="/cgi-bin/koha/admin/marc-overlay-rules.pl" method="post">
                     <input type="hidden" name="op" value="redo-matching" />
                 </form>
 
