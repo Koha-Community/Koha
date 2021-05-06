@@ -66,6 +66,20 @@ sub from_library {
     return Koha::Library->_new_from_dbic($from_library_rs);
 }
 
+=head3 to_library
+
+  my $to_library = $transfer->to_library;
+
+Returns the associated to_library for this transfer.
+
+=cut
+
+sub to_library {
+    my ($self) = @_;
+    my $to_library_rs = $self->_result->tobranch;
+    return Koha::Library->_new_from_dbic($to_library_rs);
+}
+
 =head3 transit
 
 Set the transfer as in transit by updating the datesent time.

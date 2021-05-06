@@ -55,6 +55,7 @@ use Koha::Checkouts;
 use Koha::DateUtils;
 use Koha::Holds;
 use Koha::Items;
+use Koha::Item::Transfers;
 use Koha::Patrons;
 
 my $query = CGI->new;
@@ -132,11 +133,6 @@ foreach ( $query->param ) {
 
 ############
 # Deal with the requests....
-
-if ($query->param('WT-itemNumber')){
-	updateWrongTransfer ($query->param('WT-itemNumber'),$query->param('WT-waitingAt'),$query->param('WT-From'));
-}
-
 my $itemnumber = $query->param('itemnumber');
 if ( $query->param('reserve_id') ) {
     my $borrowernumber = $query->param('borrowernumber');
@@ -190,6 +186,7 @@ if (
 my $dropboxmode = $query->param('dropboxmode');
 my $dotransfer  = $query->param('dotransfer');
 my $canceltransfer = $query->param('canceltransfer');
+my $transit = $query->param('transit');
 my $dest = $query->param('dest');
 #dropbox: get last open day (today - 1)
 my $dropboxdate = Koha::Checkouts::calculate_dropbox_date();
@@ -227,7 +224,15 @@ if ($dotransfer){
     ModItemTransfer($transferitem, $userenv_branch, $tobranch, $trigger);
 }
 
-if ($canceltransfer){
+if ($transit) {
+    my $transfer = Koha::Item::Transfers->find($transit);
+    if ( $canceltransfer ) {
+        $transfer->cancel({ reason => 'Manual', force => 1});
+        $template->param( transfercancelled => 1);
+    } else {
+        $transfer->transit;
+    }
+} elsif ($canceltransfer){
     my $item = Koha::Items->find($itemnumber);
     my $transfer = $item->get_transfer;
     $transfer->cancel({ reason => 'Manual', force => 1});
@@ -238,6 +243,7 @@ if ($canceltransfer){
         $template->param( transfercancelled => 1);
     }
 }
+
 
 # actually return book and prepare item table.....
 my $returnbranch;
@@ -389,10 +395,19 @@ if ( $messages->{'Wrongbranch'} ){
 # case of wrong transfert, if the document wasn't transferred to the right library (according to branchtransfer (tobranch) BDD)
 
 if ( $messages->{'WrongTransfer'} and not $messages->{'WasTransfered'}) {
+
+    # Trigger modal to prompt librarian
     $template->param(
         WrongTransfer  => 1,
         TransferWaitingAt => $messages->{'WrongTransfer'},
         WrongTransferItem => $messages->{'WrongTransferItem'},
+        trigger           => $messages->{'TransferTrigger'},
+    );
+
+    # Update the transfer to reflect the new item holdingbranch
+	my $new_transfer = updateWrongTransfer($messages->{'WrongTransferItem'},$messages->{'WrongTransfer'}, $userenv_branch);
+    $template->param(
+        NewTransfer => $new_transfer->id
     );
 
     my $reserve    = $messages->{'ResFound'};
@@ -402,9 +417,6 @@ if ( $messages->{'WrongTransfer'} and not $messages->{'WasTransfered'}) {
             patron => $patron,
         );
     }
-    $template->param(
-        wtransfertFrom  => $userenv_branch,
-    );
 }
 
 #
