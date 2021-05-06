@@ -538,7 +538,7 @@ sub generate_patron_attributes {
     my $ok   = $csv->parse($string);  # parse field again to get subfields!
     my @list = $csv->fields();
     my @patron_attributes =
-      sort { $a->{code} cmp $b->{code} || $a->{value} cmp $b->{value} }
+      sort { $a->{code} cmp $b->{code} || $a->{attribute} cmp $b->{attribute} }
       map {
         my @arr = split /:/, $_, 2;
         { code => $arr[0], attribute => $arr[1] }
