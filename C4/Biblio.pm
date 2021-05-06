@@ -2156,6 +2156,8 @@ sub TransformHtmlToXml {
     my ( $tags, $subfields, $values, $indicator, $ind_tag, $auth_type ) = @_;
     # NOTE: The parameter $ind_tag is NOT USED -- BZ 11247
 
+    my ( $perm_loc_tag, $perm_loc_subfield ) = C4::Biblio::GetMarcFromKohaField( "items.permanent_location" );
+
     my $xml = MARC::File::XML::header('UTF-8');
     $xml .= "<record>\n";
     $auth_type = C4::Context->preference('marcflavour') unless $auth_type;
@@ -2171,7 +2173,6 @@ sub TransformHtmlToXml {
     my $j       = -1;
     my $close_last_tag;
     for ( my $i = 0 ; $i < @$tags ; $i++ ) {
-
         if ( C4::Context->preference('marcflavour') eq 'UNIMARC' and @$tags[$i] eq "100" and @$subfields[$i] eq "a" ) {
 
             # if we have a 100 field and it's values are not correct, skip them.
@@ -2189,6 +2190,13 @@ sub TransformHtmlToXml {
         @$values[$i] =~ s/"/&quot;/g;
         @$values[$i] =~ s/'/&apos;/g;
 
+        my $skip = @$values[$i] eq q{};
+        $skip = 0
+          if $perm_loc_tag
+          && $perm_loc_subfield
+          && @$tags[$i] eq $perm_loc_tag
+          && @$subfields[$i] eq $perm_loc_subfield;
+
         if ( ( @$tags[$i] ne $prevtag ) ) {
             $close_last_tag = 0;
             $j++ unless ( @$tags[$i] eq "" );
@@ -2198,7 +2206,7 @@ sub TransformHtmlToXml {
             if ( !$first ) {
                 $xml .= "</datafield>\n";
                 if (   ( @$tags[$i] && @$tags[$i] > 10 )
-                    && ( @$values[$i] ne "" ) ) {
+                    && ( !$skip ) ) {
                     $xml .= "<datafield tag=\"@$tags[$i]\" ind1=\"$ind1\" ind2=\"$ind2\">\n";
                     $xml .= "<subfield code=\"@$subfields[$i]\">@$values[$i]</subfield>\n";
                     $first = 0;
@@ -2207,7 +2215,7 @@ sub TransformHtmlToXml {
                     $first = 1;
                 }
             } else {
-                if ( @$values[$i] ne "" ) {
+                if ( !$skip ) {
 
                     # leader
                     if ( @$tags[$i] eq "000" ) {
@@ -2227,8 +2235,7 @@ sub TransformHtmlToXml {
                 }
             }
         } else {    # @$tags[$i] eq $prevtag
-            if ( @$values[$i] eq "" ) {
-            } else {
+            if ( !$skip ) {
                 if ($first) {
                     my $str = ( $indicator->[$j] // q{} ) . '  '; # extra space prevents substr outside of string warn
                     my $ind1 = _default_ind_to_space( substr( $str, 0, 1 ) );
