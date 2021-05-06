@@ -18,8 +18,9 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use Test::More tests => 160;
+use Test::More tests => 161;
 use Test::Warn;
+use Test::Exception;
 use Encode qw( encode_utf8 );
 use utf8;
 
@@ -841,6 +842,115 @@ subtest 'test_format_dates' => sub {
     is($missing_criticals_2[2]->{line}, $line_number, 'Got the expected third line from check_branch_code with bad dates');
     is($missing_criticals_2[2]->{lineraw}, $borrowerline, 'Got the expected third lineraw from check_branch_code with bad dates');
 };
+
+subtest 'patron_attributes' => sub {
+
+    plan tests => 4;
+
+    t::lib::Mocks::mock_preference('ExtendedPatronAttributes', 1);
+
+    my $unique_attribute_type = $builder->build_object(
+        {
+            class => 'Koha::Patron::Attribute::Types',
+            value => { unique_id=> 1, repeatable => 0 }
+        }
+    );
+    my $repeatable_attribute_type = $builder->build_object(
+        {
+            class => 'Koha::Patron::Attribute::Types',
+            value => { unique_id => 0, repeatable => 1 }
+        }
+    );
+    my $normal_attribute_type = $builder->build_object(
+        {
+            class => 'Koha::Patron::Attribute::Types',
+            value => { unique_id => 0, repeatable => 0 }
+        }
+    );
+    my $non_existent_attribute_type = $builder->build_object(
+        {
+            class => 'Koha::Patron::Attribute::Types',
+        }
+    );
+    my $non_existent_attribute_type_code = $non_existent_attribute_type->code;
+    $non_existent_attribute_type->delete;
+
+    # attributes is { code => \@attributes }
+    sub build_csv {
+        my ($attributes) = @_;
+
+        my $csv_headers = 'cardnumber,surname,firstname,branchcode,categorycode,patron_attributes';
+        my @attributes_str = map { my $code = $_; map {  sprintf "%s:%s", $code, $_ } @{ $attributes->{$code} } } keys %$attributes;
+        my $attributes_str = join ',', @attributes_str;
+        my $csv_line = sprintf '1042,John,D,MPL,PT,"%s"', $attributes_str;
+        my $filename = make_csv( $temp_dir, $csv_headers, $csv_line );
+        open( my $fh, "<:encoding(utf8)", $filename ) or die "cannot open $filename: $!";
+        return $fh;
+    }
+
+    { # Everything good, we create a patron with 3 attributes
+        my $attributes = {
+            $unique_attribute_type->code => ['my unique attribute 1'],
+            $repeatable_attribute_type->code => [ 'my repeatable attribute 1', 'my repeatable attribute 2' ],
+            $normal_attribute_type->code => ['my normal attribute 1'],
+        };
+        my $fh = build_csv({ %$attributes });
+        my $result = $patrons_import->import_patrons({file => $fh});
+
+        is( $result->{imported}, 1 );
+
+        my $patron = Koha::Patrons->find({cardnumber => "1042"});
+        compare_patron_attributes($patron->extended_attributes->unblessed, { %$attributes } );
+        $patron->delete;
+    }
+
+    {
+        $builder->build_object(
+            {
+                class => 'Koha::Patron::Attributes',
+                value => { code => $unique_attribute_type->code, attribute => 'unique' }
+            }
+        );
+
+        my $attributes = {
+            $unique_attribute_type->code => ['unique'],
+            $normal_attribute_type->code => ['my normal attribute 1']
+        };
+        my $fh = build_csv({ %$attributes });
+
+        throws_ok {
+            $patrons_import->import_patrons({file => $fh});
+        }
+        'Koha::Exceptions::Patron::Attribute::UniqueIDConstraint';
+
+        my $patron = Koha::Patrons->find({cardnumber => "1042"});
+        is( $patron, undef );
+
+    }
+
+};
+
+# got is { code => $code, attribute => $attribute }
+# expected is { $code => \@attributes }
+sub compare_patron_attributes {
+    my ( $got, $expected ) = @_;
+
+    $got = [ map { { code => $_->{code}, attribute => $_->{attribute} } } @$got ];
+    $expected = [
+        map {
+            my $code = $_;
+            map { { code => $code, attribute => $_ } } @{ $expected->{$code} }
+          } keys %$expected
+    ];
+    for my $v ( $got, $expected ) {
+        $v = [
+            sort {
+                $a->{code} cmp $b->{code} || $a->{attribute} cmp $b->{attribute}
+            } @$v
+        ];
+    }
+    is_deeply($got, $expected);
+}
 
 # ###### Test utility ###########
 sub make_csv {
