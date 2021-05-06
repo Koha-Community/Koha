@@ -1042,7 +1042,7 @@ subtest 'patron_attributes' => sub {
         is( $result->{overwritten}, 0 );
         my $error = $result->{errors}->[0];
         is( $error->{patron_attribute_unique_id_constraint}, 1 );
-        is( $error->{patron_id}, $cardnumber );
+        is( $error->{borrowernumber}, $patron->borrowernumber );
         is( $error->{attribute}->code, $unique_attribute_type->code );
 
         compare_patron_attributes($patron->extended_attributes->unblessed, {},  );
@@ -1067,7 +1067,7 @@ subtest 'patron_attributes' => sub {
 
         $error = $result->{errors}->[0];
         is( $error->{patron_attribute_invalid_type}, 1 );
-        is( $error->{patron_id}, $cardnumber );
+        is( $error->{borrowernumber}, $patron->borrowernumber );
         is( $error->{attribute_type_code}, $non_existent_attribute_type_code );
 
         # NonRepeatable
@@ -1088,7 +1088,7 @@ subtest 'patron_attributes' => sub {
 
         $error = $result->{errors}->[0];
         is( $error->{patron_attribute_non_repeatable}, 1 );
-        is( $error->{patron_id}, $cardnumber );
+        is( $error->{borrowernumber}, $patron->borrowernumber );
         is( $error->{attribute}->code, $normal_attribute_type->code );
 
         # Don't preserve existing attributes

@@ -169,6 +169,33 @@
                             Password error for patron with borrowernumber [% e.borrowernumber | html %].
                         </li>
                     [% END %]
+                    [% IF e.patron_attribute_unique_id_constraint %]
+                        <li class="line_error">
+                            [% IF e.borrowernumber %]
+                                Patron attribute [% e.attribute.code | html %] must be unique for patron with borrowernumber [% e.borrowernumber | html %].
+                            [% ELSE %]
+                                Patron attribute [% e.attribute.code | html %] must be unique for patron [% e.patron_id | html %].
+                            [% END %]
+                        </li>
+                    [% END %]
+                    [% IF e.patron_attribute_invalid_type %]
+                        <li class="line_error">
+                            [% IF e.borrowernumber %]
+                                Patron attribute [% e.attribute_type_code | html %] is invalid for patron with borrowernumber [% e.borrowernumber | html %].
+                            [% ELSE %]
+                                Patron attribute [% e.attribute_type_code | html %] is invalid for patron [% e.patron_id | html %].
+                            [% END %]
+                        </li>
+                    [% END %]
+                    [% IF e.patron_attribute_non_repeatable %]
+                        <li class="line_error">
+                            [% IF e.borrowernumber %]
+                                Patron attribute [% e.attribute.code | html %] is non-repeatable for patron with borrowernumber [% e.borrowernumber | html %].
+                            [% ELSE %]
+                                Patron attribute [% e.attribute.code | html %] is non-repeatable for patron [% e.patron_id | html %].
+                            [% END %]
+                        </li>
+                    [% END %]
                 [% END %]
             </ul>
         </div>
