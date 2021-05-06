@@ -5,8 +5,6 @@
 [% INCLUDE 'doc-head-open.inc' %]
 <title>MARC overlay rules &rsaquo; Koha &rsaquo; Administration</title>
 [% INCLUDE 'doc-head-close.inc' %]
-[% Asset.css("css/datatables.css") | $raw %]
-[% INCLUDE 'datatables.inc' %]
 
 <style>
     .required {
@@ -267,46 +265,49 @@
     </div><!-- /main container-fluid -->
 
 [% MACRO jsinclude BLOCK %]
+    [% Asset.js("js/admin-menu.js") | $raw %]
+    [% INCLUDE 'datatables.inc' %]
+
     <script>
-    function doSubmit(op, id) {
-        $('<input type="hidden"/>')
-        .attr('name', 'op')
-        .attr('value', op)
-        .appendTo('#marc-overlay-rules-form');
-
-        if(id) {
+    $(document).ready(function(){
+        function doSubmit(op, id) {
             $('<input type="hidden"/>')
-            .attr('name', 'id')
-            .attr('value', id)
+            .attr('name', 'op')
+            .attr('value', op)
             .appendTo('#marc-overlay-rules-form');
-        }
 
-        var valid = true;
-        if (op == 'add' || op == 'edit') {
-            var validate = [
-                $('#marc-overlay-rules-form input[name="filter"]'),
-                $('#marc-overlay-rules-form input[name="tag"]')
-            ];
-            for(var i = 0; i < validate.length; i++) {
-                if (validate[i].length) {
-                    if(validate[i].val().length == 0) {
-                        validate[i].addClass('required');
-                        valid = false;
-                    } else {
-                        validate[i].removeClass('required');
+            if(id) {
+                $('<input type="hidden"/>')
+                .attr('name', 'id')
+                .attr('value', id)
+                .appendTo('#marc-overlay-rules-form');
+            }
+
+            var valid = true;
+            if (op == 'add' || op == 'edit') {
+                var validate = [
+                    $('#marc-overlay-rules-form input[name="filter"]'),
+                    $('#marc-overlay-rules-form input[name="tag"]')
+                ];
+                for(var i = 0; i < validate.length; i++) {
+                    if (validate[i].length) {
+                        if(validate[i].val().length == 0) {
+                            validate[i].addClass('required');
+                            valid = false;
+                        } else {
+                            validate[i].removeClass('required');
+                        }
                     }
                 }
             }
+
+            if (valid) {
+                $('#marc-overlay-rules-form').submit();
+            }
+
+            return valid;
         }
 
-        if (valid) {
-            $('#marc-overlay-rules-form').submit();
-        }
-
-        return valid;
-    }
-
-    $(document).ready(function(){
         $('#doremove').on('click', function(){
             doSubmit('doremove');
         });
