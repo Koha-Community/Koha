@@ -96,8 +96,9 @@ $new_attributes is an arrayref of hashrefs
 sub merge_and_replace_with {
     my ( $self, $new_attributes ) = @_;
 
-    my @merged = @{$self->unblessed};
+    my @existing_attributes = @{$self->unblessed};
     my $attribute_types = { map { $_->code => $_->unblessed } Koha::Patron::Attribute::Types->search };
+    my @new_attributes;
     for my $attr ( @$new_attributes ) {
 
         my $attribute_type = $attribute_types->{$attr->{code}};
@@ -107,13 +108,13 @@ sub merge_and_replace_with {
 
         unless ( $attribute_type->{repeatable} ) {
             # filter out any existing attributes of the same code
-            @merged = grep {$attr->{code} ne $_->{code}} @merged;
+            @existing_attributes = grep {$attr->{code} ne $_->{code}} @existing_attributes;
         }
 
-        push @merged, $attr;
+        push @new_attributes, $attr;
     }
 
-    @merged = map { { code => $_->{code}, attribute => $_->{attribute} } } @merged;
+    my @merged = map { { code => $_->{code}, attribute => $_->{attribute} } } ( @existing_attributes, @new_attributes );
 
     # WARNING - we would like to return a set, but $new_attributes is not in storage yet
     # Maybe there is something obvious I (JD) am missing

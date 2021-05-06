@@ -969,7 +969,7 @@ subtest 'patron_attributes' => sub {
     }
 
     subtest 'update existing patron' => sub {
-        plan tests => 6;
+        plan tests => 19;
 
         my $patron = $builder->build_object(
             {
@@ -1016,8 +1016,7 @@ subtest 'patron_attributes' => sub {
         # The normal_attribute_type has been replaced with 'my normal attribute 2'
         compare_patron_attributes($patron->extended_attributes->unblessed, { %$attributes, %$new_attributes } );
 
-
-        # uniqueness
+        # UniqueIDConstraint
         $patron->extended_attributes->delete; # reset
         $builder->build_object(
             {
@@ -1041,6 +1040,72 @@ subtest 'patron_attributes' => sub {
         );
 
         is( $result->{overwritten}, 0 );
+        my $error = $result->{errors}->[0];
+        is( $error->{patron_attribute_unique_id_constraint}, 1 );
+        is( $error->{patron_id}, $cardnumber );
+        is( $error->{attribute}->code, $unique_attribute_type->code );
+
+        compare_patron_attributes($patron->extended_attributes->unblessed, {},  );
+
+
+        #InvalidType
+        $attributes = {
+            $non_existent_attribute_type_code => ['my non-existent attribute'],
+            $normal_attribute_type->code      => ['my attribute 1'],
+        };
+        $fh = build_csv({ %$attributes });
+
+        $result = $patrons_import->import_patrons(
+            {
+                file                         => $fh,
+                matchpoint                   => 'cardnumber',
+                overwrite_cardnumber         => 1,
+                preserve_extended_attributes => 1
+            }
+        );
+        is( $result->{overwritten}, 0 );
+
+        $error = $result->{errors}->[0];
+        is( $error->{patron_attribute_invalid_type}, 1 );
+        is( $error->{patron_id}, $cardnumber );
+        is( $error->{attribute_type_code}, $non_existent_attribute_type_code );
+
+        # NonRepeatable
+        $attributes = {
+                $repeatable_attribute_type->code => ['my repeatable attribute 1', 'my repeatable attribute 2'],
+                $normal_attribute_type->code     => ['my normal attribute 1', 'my normal attribute 2'],
+            };
+        $fh = build_csv({ %$attributes });
+        $result = $patrons_import->import_patrons(
+            {
+                file                         => $fh,
+                matchpoint                   => 'cardnumber',
+                overwrite_cardnumber         => 1,
+                preserve_extended_attributes => 1
+            }
+        );
+        is( $result->{overwritten}, 0 );
+
+        $error = $result->{errors}->[0];
+        is( $error->{patron_attribute_non_repeatable}, 1 );
+        is( $error->{patron_id}, $cardnumber );
+        is( $error->{attribute}->code, $normal_attribute_type->code );
+
+        # Don't preserve existing attributes
+        $attributes = {
+                $repeatable_attribute_type->code => ['my repeatable attribute 3', 'my repeatable attribute 4'],
+                $normal_attribute_type->code     => ['my normal attribute 1'],
+            };
+        $fh = build_csv({ %$attributes });
+        $result = $patrons_import->import_patrons(
+            {
+                file                         => $fh,
+                matchpoint                   => 'cardnumber',
+                overwrite_cardnumber         => 1,
+                preserve_extended_attributes => 1
+            }
+        );
+        is( $result->{overwritten}, 1 );
 
         compare_patron_attributes($patron->extended_attributes->unblessed, { %$attributes } );
 

@@ -241,6 +241,7 @@ sub import_patrons {
               if exists $borrower{$field} and $borrower{$field} eq "";
         }
 
+        my $success = 1;
         if ($borrowernumber) {
 
             # borrower exists
@@ -270,9 +271,87 @@ sub import_patrons {
             }
 
             my $patron = Koha::Patrons->find( $borrowernumber );
-            eval { $patron->set(\%borrower)->store };
-            if ( $@ ) {
+            try {
+                $schema->storage->txn_do(sub {
+                    $patron->set(\%borrower)->store;
+                    # Don't add a new restriction if the existing 'combined' restriction matches this one
+                    if ( $borrower{debarred} && ( ( $borrower{debarred} ne $member->{debarred} ) || ( $borrower{debarredcomment} ne $member->{debarredcomment} ) ) ) {
+
+                        # Check to see if this debarment already exists
+                        my $debarrments = GetDebarments(
+                            {
+                                borrowernumber => $borrowernumber,
+                                expiration     => $borrower{debarred},
+                                comment        => $borrower{debarredcomment}
+                            }
+                        );
+
+                        # If it doesn't, then add it!
+                        unless (@$debarrments) {
+                            AddDebarment(
+                                {
+                                    borrowernumber => $borrowernumber,
+                                    expiration     => $borrower{debarred},
+                                    comment        => $borrower{debarredcomment}
+                                }
+                            );
+                        }
+                    }
+                    if ($patron->category->category_type ne 'S' && $overwrite_passwords && defined $borrower{password} && $borrower{password} ne ''){
+                        try {
+                            $patron->set_password({ password => $borrower{password} });
+                        }
+                        catch {
+                            if ( $_->isa('Koha::Exceptions::Password::TooShort') ) {
+                                push @errors, { passwd_too_short => 1, borrowernumber => $borrowernumber, length => $_->{length}, min_length => $_->{min_length} };
+                            }
+                            elsif ( $_->isa('Koha::Exceptions::Password::WhitespaceCharacters') ) {
+                                push @errors, { passwd_whitespace => 1, borrowernumber => $borrowernumber } ;
+                            }
+                            elsif ( $_->isa('Koha::Exceptions::Password::TooWeak') ) {
+                                push @errors, { passwd_too_weak => 1, borrowernumber => $borrowernumber } ;
+                            }
+                            elsif ( $_->isa('Koha::Exceptions::Password::Plugin') ) {
+                                push @errors, { passwd_plugin_err => 1, borrowernumber => $borrowernumber } ;
+                            }
+                            else {
+                                push @errors, { passwd_unknown_err => 1, borrowernumber => $borrowernumber } ;
+                            }
+                        }
+                    }
+                    if ($extended) {
+                        if ($ext_preserve) {
+                            $patron_attributes = $patron->extended_attributes->merge_and_replace_with( $patron_attributes );
+                        }
+                        # We do not want to filter by branch, maybe we should?
+                        Koha::Patrons->find($borrowernumber)->extended_attributes->delete;
+                        $patron->extended_attributes($patron_attributes);
+                    }
+                    $overwritten++;
+                    push(
+                        @feedback,
+                        {
+                            feedback => 1,
+                            name     => 'lastoverwritten',
+                            value    => $borrower{'surname'} . ' / ' . $borrowernumber
+                        }
+                    );
+                });
+            } catch {
                 $invalid++;
+                $success = 0;
+
+                my $patron_id = defined $matchpoint ? $borrower{$matchpoint} : $matchpoint_attr_type;
+                if ( $_->isa('Koha::Exceptions::Patron::Attribute::UniqueIDConstraint') ) {
+                    push @errors, { patron_attribute_unique_id_constraint => 1, patron_id => $patron_id, attribute => $_->attribute };
+                } elsif ( $_->isa('Koha::Exceptions::Patron::Attribute::InvalidType') ) {
+                    push @errors, { patron_attribute_invalid_type => 1, patron_id => $patron_id, attribute_type_code => $_->type };
+                } elsif ( $_->isa('Koha::Exceptions::Patron::Attribute::NonRepeatable') ) {
+                    push @errors, { patron_attribute_non_repeatable => 1, patron_id => $patron_id, attribute => $_->attribute };
+                } else {
+                    use Data::Printer colored => 1; warn p $_;
+                    push @errors, { unknown_error => 1 };
+                }
 
                 push(
                     @errors,
@@ -282,76 +361,7 @@ sub import_patrons {
                         value => $borrower{'surname'} . ' / ' . $borrowernumber
                     }
                 );
-                next LINE;
             }
-            # Don't add a new restriction if the existing 'combined' restriction matches this one
-            if ( $borrower{debarred} && ( ( $borrower{debarred} ne $member->{debarred} ) || ( $borrower{debarredcomment} ne $member->{debarredcomment} ) ) ) {
-
-                # Check to see if this debarment already exists
-                my $debarrments = GetDebarments(
-                    {
-                        borrowernumber => $borrowernumber,
-                        expiration     => $borrower{debarred},
-                        comment        => $borrower{debarredcomment}
-                    }
-                );
-
-                # If it doesn't, then add it!
-                unless (@$debarrments) {
-                    AddDebarment(
-                        {
-                            borrowernumber => $borrowernumber,
-                            expiration     => $borrower{debarred},
-                            comment        => $borrower{debarredcomment}
-                        }
-                    );
-                }
-            }
-            if ($patron->category->category_type ne 'S' && $overwrite_passwords && defined $borrower{password} && $borrower{password} ne ''){
-                try {
-                    $patron->set_password({ password => $borrower{password} });
-                }
-                catch {
-                    if ( $_->isa('Koha::Exceptions::Password::TooShort') ) {
-                        push @errors, { passwd_too_short => 1, borrowernumber => $borrowernumber, length => $_->{length}, min_length => $_->{min_length} };
-                    }
-                    elsif ( $_->isa('Koha::Exceptions::Password::WhitespaceCharacters') ) {
-                        push @errors, { passwd_whitespace => 1, borrowernumber => $borrowernumber } ;
-                    }
-                    elsif ( $_->isa('Koha::Exceptions::Password::TooWeak') ) {
-                        push @errors, { passwd_too_weak => 1, borrowernumber => $borrowernumber } ;
-                    }
-                    elsif ( $_->isa('Koha::Exceptions::Password::Plugin') ) {
-                        push @errors, { passwd_plugin_err => 1, borrowernumber => $borrowernumber } ;
-                    }
-                    else {
-                        push @errors, { passwd_unknown_err => 1, borrowernumber => $borrowernumber } ;
-                    }
-                }
-            }
-            if ($extended) {
-                if ($ext_preserve) {
-                    $patron_attributes = $patron->extended_attributes->merge_and_replace_with( $patron_attributes );
-                }
-                eval {
-                    # We do not want to filter by branch, maybe we should?
-                    Koha::Patrons->find($borrowernumber)->extended_attributes->delete;
-                    $patron->extended_attributes($patron_attributes);
-                };
-                if ($@) {
-                    # FIXME This is not an unknown error, we can do better here
-                    push @errors, { unknown_error => 1 };
-                }
-            }
-            $overwritten++;
-            push(
-                @feedback,
-                {
-                    feedback => 1,
-                    name     => 'lastoverwritten',
-                    value    => $borrower{'surname'} . ' / ' . $borrowernumber
-                }
-            );
         }
         else {
             try {
@@ -397,6 +407,7 @@ sub import_patrons {
                 });
             } catch {
                 $invalid++;
+                $success = 0;
                 my $patron_id = defined $matchpoint ? $borrower{$matchpoint} : $matchpoint_attr_type;
                 if ( $_->isa('Koha::Exceptions::Patron::Attribute::UniqueIDConstraint') ) {
                     push @errors, { patron_attribute_unique_id_constraint => 1, patron_id => $patron_id, attribute => $_->attribute };
@@ -406,6 +417,7 @@ sub import_patrons {
                     push @errors, { patron_attribute_non_repeatable => 1, patron_id => $patron_id, attribute => $_->attribute };
 
                 } else {
+                    use Data::Printer colored => 1; warn p $_;
                     push @errors, { unknown_error => 1 };
                 }
                 push(
@@ -417,6 +429,8 @@ sub import_patrons {
                 );
             };
         }
+
+        next LINE unless $success;
 
         # Add a guarantor if we are given a relationship
         if ( $guarantor_id ) {
