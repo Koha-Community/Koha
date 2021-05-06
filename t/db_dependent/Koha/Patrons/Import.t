@@ -845,7 +845,7 @@ subtest 'test_format_dates' => sub {
 
 subtest 'patron_attributes' => sub {
 
-    plan tests => 6;
+    plan tests => 10;
 
     t::lib::Mocks::mock_preference('ExtendedPatronAttributes', 1);
 
@@ -906,7 +906,7 @@ subtest 'patron_attributes' => sub {
         $patron->delete;
     }
 
-    {
+    { # UniqueIDConstraint
         $builder->build_object(
             {
                 class => 'Koha::Patron::Attributes',
@@ -925,6 +925,23 @@ subtest 'patron_attributes' => sub {
         is( $error->{patron_attribute_unique_id_constraint}, 1 );
         is( $error->{patron_id}, $cardnumber );
         is( $error->{attribute}->code, $unique_attribute_type->code );
+
+        my $patron = Koha::Patrons->find({cardnumber => $cardnumber});
+        is( $patron, undef, 'Patron is not created' );
+    }
+
+    { #InvalidType
+        my $attributes = {
+            $non_existent_attribute_type_code => ['my non-existent attribute'],
+            $normal_attribute_type->code      => ['my attribute 1'],
+        };
+        my $fh = build_csv({ %$attributes });
+
+        my $result = $patrons_import->import_patrons({file => $fh, matchpoint => 'cardnumber'});
+        my $error = $result->{errors}->[0];
+        is( $error->{patron_attribute_invalid_type}, 1 );
+        is( $error->{patron_id}, $cardnumber );
+        is( $error->{attribute_type_code}, $non_existent_attribute_type_code );
 
         my $patron = Koha::Patrons->find({cardnumber => $cardnumber});
         is( $patron, undef );

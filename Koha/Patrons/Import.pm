@@ -397,9 +397,11 @@ sub import_patrons {
                 });
             } catch {
                 $invalid++;
+                my $patron_id = defined $matchpoint ? $borrower{$matchpoint} : $matchpoint_attr_type;
                 if ( $_->isa('Koha::Exceptions::Patron::Attribute::UniqueIDConstraint') ) {
-                    my $patron_id = defined $matchpoint ? $borrower{$matchpoint} : $matchpoint_attr_type;
                     push @errors, { patron_attribute_unique_id_constraint => 1, patron_id => $patron_id, attribute => $_->attribute };
+                } elsif ( $_->isa('Koha::Exceptions::Patron::Attribute::InvalidType') ) {
+                    push @errors, { patron_attribute_invalid_type => 1, patron_id => $patron_id, attribute_type_code => $_->type };
                 } else {
                     push @errors, { unknown_error => 1 };
                 }
