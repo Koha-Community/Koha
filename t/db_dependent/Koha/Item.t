@@ -459,7 +459,7 @@ subtest 'pickup_locations' => sub {
 };
 
 subtest 'request_transfer' => sub {
-    plan tests => 7;
+    plan tests => 13;
     $schema->storage->txn_begin;
 
     my $library1 = $builder->build_object( { class => 'Koha::Libraries' } );
@@ -485,6 +485,7 @@ subtest 'request_transfer' => sub {
     is( ref($transfer), 'Koha::Item::Transfer',
         'Koha::Item->request_transfer should return a Koha::Item::Transfer object'
     );
+    my $original_transfer = $transfer->get_from_storage;
 
     # Transfer already in progress
     throws_ok { $item->request_transfer( { to => $library2, reason => 'Manual' } ) }
@@ -496,7 +497,27 @@ subtest 'request_transfer' => sub {
         'Koha::Item::Transfer',
         'The exception contains the found Koha::Item::Transfer' );
 
-    $transfer->datearrived(dt_from_string)->store();
+    # Queue transfer
+    my $queued_transfer = $item->request_transfer(
+        { to => $library2, reason => 'Manual', enqueue => 1 } );
+    is( ref($queued_transfer), 'Koha::Item::Transfer',
+        'Koha::Item->request_transfer allowed when enqueue is set' );
+    my $transfers = $item->get_transfers;
+    is($transfers->count, 2, "There are now 2 live transfers in the queue");
+    $transfer = $transfer->get_from_storage;
+    is_deeply($transfer->unblessed, $original_transfer->unblessed, "Original transfer unchanged");
+    $queued_transfer->datearrived(dt_from_string)->store();
+
+    # Replace transfer
+    my $replaced_transfer = $item->request_transfer(
+        { to => $library2, reason => 'Manual', replace => 1 } );
+    is( ref($replaced_transfer), 'Koha::Item::Transfer',
+        'Koha::Item->request_transfer allowed when replace is set' );
+    $original_transfer->discard_changes;
+    ok($original_transfer->datecancelled, "Original transfer cancelled");
+    $transfers = $item->get_transfers;
+    is($transfers->count, 1, "There is only 1 live transfer in the queue");
+    $replaced_transfer->datearrived(dt_from_string)->store();
 
     # BranchTransferLimits
     t::lib::Mocks::mock_preference('UseBranchTransferLimits', 1);
@@ -513,7 +534,7 @@ subtest 'request_transfer' => sub {
 
     my $forced_transfer = $item->request_transfer( { to => $library1, reason => 'Manual', ignore_limits => 1 } );
     is( ref($forced_transfer), 'Koha::Item::Transfer',
-        'Koha::Item->request_transfer allowed when forced'
+        'Koha::Item->request_transfer allowed when ignore_limits is set'
     );
 
     $schema->storage->txn_rollback;

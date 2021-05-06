@@ -159,9 +159,10 @@ sub cancel {
       ->store;
 
     # Set up return transfer if transfer was force cancelled whilst in transit
+    # and we were not notified that the transfer is being replaced.
     # NOTE: We don't catch here, as we're happy to fail if there are already
     # other transfers in the queue.
-    if ($in_transit) {
+    if ($in_transit && !$params->{replace}) {
         try {
             $self->item->request_transfer(
                 { to => $self->from_library, reason => 'TransferCancellation' } );
