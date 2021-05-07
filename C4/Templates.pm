@@ -187,9 +187,14 @@ sub badtemplatecheck {
         # This also includes two dots
         Koha::Exceptions::NoPermission->throw( 'bad template path' );
     } else {
-        # Check allowed dirs
+        # Check allowed dirs - make sure we operate on a copy of the config
         my $dirs = C4::Context->config("pluginsdir");
-        $dirs = [ $dirs ] if !ref($dirs);
+        if ( !ref($dirs) ) {
+            $dirs = [ $dirs ];
+        }
+        else {
+            $dirs = [ @$dirs ];
+        }
         unshift @$dirs, C4::Context->config('opachtdocs'), C4::Context->config('intrahtdocs');
         my $found = 0;
         foreach my $dir ( @$dirs ) {
