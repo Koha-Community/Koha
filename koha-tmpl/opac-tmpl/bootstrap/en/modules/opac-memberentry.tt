@@ -430,7 +430,7 @@
                                                 <li>
                                                     <label for="borrower_streettype" class="[% required.streettype | html %]">Street type:</label>
 
-                                                    <select name="borrower_streettype" name="borrower_streettype">
+                                                    <select name="borrower_streettype" name="borrower_streettype" class="[% required.streettype | html %]">
                                                         <option value=""></option>
                                                         [% FOR roadtype IN roadtypes %]
                                                             [% IF roadtype.authorised_value == patron.streettype %]
