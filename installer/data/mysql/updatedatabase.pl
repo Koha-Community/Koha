@@ -24198,6 +24198,17 @@ if( CheckVersion( $DBversion ) ) {
     NewVersion( $DBversion, 21249, "Adding new system preference SearchLimitLibrary" );
 }
 
+$DBversion = '20.12.00.046';
+if( CheckVersion( $DBversion ) ) {
+    unless ( column_exists('message_queue', 'delivery_note') ) {
+        $dbh->do(q{
+            ALTER TABLE message_queue ADD delivery_note mediumtext AFTER content_type
+        });
+    }
+
+    NewVersion( $DBversion, 14723, "Additional delivery notes to messages" );
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 my $update_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/atomicupdate/';
