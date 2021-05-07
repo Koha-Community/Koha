@@ -128,6 +128,9 @@ subtest 'read_from_file() tests' => sub {
             'memcached_namespace' => 'KOHA',
             'template_cache_dir' => '/tmp/koha',
             'api_secret_passphrase' => 'CHANGEME',
+            'access_dirs' => {
+                access_dir => [ '/dir_1', '/dir_2' ],
+            },
             'ttf' => {
                 'font' => [
                     {
