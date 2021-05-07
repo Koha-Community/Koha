@@ -17,20 +17,13 @@
 
 use Modern::Perl;
 
-# standard or CPAN modules used
 use CGI qw ( -utf8 );
-use CGI::Cookie;
-use MARC::File::USMARC;
 use Try::Tiny;
 
-# Koha modules used
 use C4::Context;
 use C4::Auth qw( get_template_and_user );
 use C4::Output qw( output_html_with_http_headers );
 use C4::ImportBatch;
-use C4::Matcher;
-use C4::BackgroundJob;
-use C4::Labels::Batch;
 use Koha::MarcOverlayRules;
 use Koha::Patron::Categories;
 
@@ -68,14 +61,8 @@ my ($template, $loggedinuser, $cookie) = get_template_and_user(
     }
 );
 
-my %cookies = parse CGI::Cookie($cookie);
-our $sessionID = $cookies{'CGISESSID'}->value;
-
-my $get_rules = sub {
-    # TODO: order?
-    return [map { { $_->get_columns() } } Koha::MarcOverlayRules->_resultset->all];
-};
-my $rules;
+# TODO: order?
+my $rules = Koha::MarcOverlayRules->search->unblessed;
 
 if ($op eq 'remove' || $op eq 'doremove') {
     my @remove_ids = $input->multi_param('batchremove');
@@ -83,7 +70,6 @@ if ($op eq 'remove' || $op eq 'doremove') {
     if ($op eq 'remove') {
         $template->{VARS}->{removeConfirm} = 1;
         my %remove_ids = map { $_ => undef } @remove_ids;
-        $rules = $get_rules->();
         for my $rule (@{$rules}) {
             $rule->{'removemarked'} = 1 if exists $remove_ids{$rule->{id}};
         }
@@ -92,13 +78,11 @@ if ($op eq 'remove' || $op eq 'doremove') {
         my @remove_ids = $input->multi_param('batchremove');
         push @remove_ids, scalar $input->param('id') if $input->param('id');
         Koha::MarcOverlayRules->search({ id => { in => \@remove_ids } })->delete();
-        $rules = $get_rules->();
     }
 }
 elsif ($op eq 'edit') {
-    $template->{VARS}->{edit} = 1;
+    $template->param( edit => 1 );
     my $id = $input->param('id');
-    $rules = $get_rules->();
     for my $rule(@{$rules}) {
         if ($rule->{id} == $id) {
             $rule->{'edit'} = 1;
@@ -139,14 +123,14 @@ elsif ($op eq 'doedit' || $op eq 'add') {
             $rule->set($rule_data);
             $rule->store();
         }
-        $rules = $get_rules->();
     }
-}
-else {
-    $rules = $get_rules->();
 }
 
 my $categorycodes = Koha::Patron::Categories->search_with_library_limits({}, {order_by => ['description']});
-$template->param( rules => $rules, categorycodes => $categorycodes, messages => $errors );
+$template->param(
+    rules         => $rules,
+    categorycodes => $categorycodes,
+    messages      => $errors
+);
 
 output_html_with_http_headers $input, $cookie, $template->output;
