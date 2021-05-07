@@ -24209,6 +24209,24 @@ if( CheckVersion( $DBversion ) ) {
     NewVersion( $DBversion, 14723, "Additional delivery notes to messages" );
 }
 
+$DBversion = '20.12.00.047';
+if( CheckVersion( $DBversion ) ) {
+
+    $dbh->do(q{
+        DELETE FROM systempreferences
+        WHERE variable IN
+            ('EnablePayPalOpacPayments',
+             'PayPalChargeDescription',
+             'PayPalPwd',
+             'PayPalReturnURL',
+             'PayPalSandboxMode',
+             'PayPalSignature',
+             'PayPalUser');
+    });
+
+    NewVersion( $DBversion, 23215, "Remove core PayPal support in favor of the use of plugins" );
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 my $update_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/atomicupdate/';
