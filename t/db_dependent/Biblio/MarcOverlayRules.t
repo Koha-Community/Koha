@@ -17,6 +17,7 @@
 
 use Modern::Perl;
 use Try::Tiny;
+use POSIX qw(floor);
 
 use MARC::Record;
 
@@ -36,47 +37,58 @@ $schema->storage->txn_begin;
 
 t::lib::Mocks::mock_preference('MARCOverlayRules', '1');
 
+Koha::MarcOverlayRules->search->delete;
+
+sub build_record {
+    my ( $fields ) = @_;
+    my $record = MARC::Record->new;
+    my @marc_fields;
+    for my $f ( @$fields ) {
+        my $tag = $f->[0];
+        my @subfields;
+        for my $i ( 1 .. (scalar(@$f) / 2) ) {
+            my $ii = floor($i*2);
+            push @subfields, $f->[$ii - 1], $f->[$ii];
+        }
+        push @marc_fields, MARC::Field->new($tag, '','', @subfields);
+    }
+
+    $record->append_fields(@marc_fields);
+    return $record;
+}
+
+
 # Create a record
-my $orig_record = MARC::Record->new();
-$orig_record->append_fields (
-    MARC::Field->new('250', '','', 'a' => '250 bottles of beer on the wall'),
-    MARC::Field->new('250', '','', 'a' => '256 bottles of beer on the wall'),
-    MARC::Field->new('500', '','', 'a' => 'One bottle of beer in the fridge'),
+my $orig_record = build_record([
+    [ '250', 'a', '250 bottles of beer on the wall' ],
+    [ '250', 'a', '256 bottles of beer on the wall' ],
+    [ '500', 'a', 'One bottle of beer in the fridge' ],
+]
 );
 
-my $incoming_record = MARC::Record->new();
-$incoming_record->append_fields(
-    MARC::Field->new('250', '', '', 'a' => '256 bottles of beer on the wall'), # Unchanged
-    MARC::Field->new('250', '', '', 'a' => '251 bottles of beer on the wall'), # Appended
-    # MARC::Field->new('250', '', '', 'a' => '250 bottles of beer on the wall'), # Removed
-    # MARC::Field->new('500', '', '', 'a' => 'One bottle of beer in the fridge'), # Deleted
-    MARC::Field->new('501', '', '', 'a' => 'One cold bottle of beer in the fridge'), # Added
-    MARC::Field->new('501', '', '', 'a' => 'Two cold bottles of beer in the fridge'), # Added
+my $incoming_record = build_record(
+    [
+    ['250', 'a', '256 bottles of beer on the wall'], # Unchanged
+    ['250', 'a', '251 bottles of beer on the wall'], # Appended
+    #['250', 'a', '250 bottles of beer on the wall'], # Removed
+    #['500', 'a', 'One bottle of beer in the fridge'], # Deleted
+    ['501', 'a', 'One cold bottle of beer in the fridge'], # Added
+    ['501', 'a', 'Two cold bottles of beer in the fridge'], # Added
+]
 );
 
 # Test default behavior when MARCOverlayRules is enabled, but no rules defined (overwrite)
-subtest 'Record fields has been overwritten when no merge rules are defined' => sub {
-    plan tests => 4;
+subtest 'No rule defined' => sub {
+    plan tests => 1;
 
     my $merged_record = Koha::MarcOverlayRules->merge_records($orig_record, $incoming_record, { 'source' => 'test' });
 
-    my @all_fields = $merged_record->fields();
-
-    cmp_ok(scalar @all_fields, '==', 4, "Record has the expected number of fields");
-    is_deeply(
-        [map { $_->subfield('a') } $merged_record->field('250') ],
-        ['256 bottles of beer on the wall', '251 bottles of beer on the wall'],
-        '"250" fields has been appended and removed'
+    is(
+        $merged_record->as_formatted,
+        $incoming_record->as_formatted,
+        'Incoming record used as it with no rules defined'
     );
 
-    my @fields = $merged_record->field('500');
-    cmp_ok(scalar @fields, '==', 0, '"500" field has been deleted');
-
-    is_deeply(
-        [map { $_->subfield('a') } $merged_record->field('501') ],
-        ['One cold bottle of beer in the fridge', 'Two cold bottles of beer in the fridge'],
-        '"501" fields has been added'
-    );
 };
 
 my $rule =  Koha::MarcOverlayRules->find_or_create({
@@ -90,27 +102,20 @@ my $rule =  Koha::MarcOverlayRules->find_or_create({
 });
 
 subtest 'Record fields has been protected when matched merge all rule operations are set to "0"' => sub {
-    plan tests => 3;
+    plan tests => 1;
 
     my $merged_record = Koha::MarcOverlayRules->merge_records($orig_record, $incoming_record, { 'source' => 'test' });
 
-    my @all_fields = $merged_record->fields();
-    cmp_ok(scalar @all_fields, '==', 3, "Record has the expected number of fields");
+    is(
+        $merged_record->as_formatted,
+        $orig_record->as_formatted,
+        'Record not modified if all op=0'
+    );
 
-    is_deeply(
-        [map { $_->subfield('a') } $merged_record->field('250') ],
-        ['250 bottles of beer on the wall', '256 bottles of beer on the wall'],
-        '"250" fields has retained their original value'
-    );
-    is_deeply(
-        [map { $_->subfield('a') } $merged_record->field('500') ],
-        ['One bottle of beer in the fridge'],
-        '"500" field has retained it\'s original value'
-    );
 };
 
-subtest 'Only new fields has been added when add = 1, append = 0, remove = 0, delete = 0' => sub {
-    plan tests => 4;
+subtest '"Add new" - Only new fields has been added when add = 1, append = 0, remove = 0, delete = 0' => sub {
+    plan tests => 1;
 
     $rule->set(
         {
@@ -119,35 +124,27 @@ subtest 'Only new fields has been added when add = 1, append = 0, remove = 0, de
             'remove' => 0,
             'delete' => 0,
         }
-    );
-    $rule->store();
+    )->store();
 
     my $merged_record = Koha::MarcOverlayRules->merge_records($orig_record, $incoming_record, { 'source' => 'test' });
 
-    my @all_fields = $merged_record->fields();
-    cmp_ok(scalar @all_fields, '==', 5, "Record has the expected number of fields");
-
-    is_deeply(
-        [map { $_->subfield('a') } $merged_record->field('250') ],
-        ['250 bottles of beer on the wall', '256 bottles of beer on the wall'],
-        '"250" fields retain their original value'
+    my $expected_record = build_record([
+            [ '250', 'a', '250 bottles of beer on the wall' ],        # original
+            [ '250', 'a', '256 bottles of beer on the wall' ],        # original
+            [ '500', 'a', 'One bottle of beer in the fridge' ],       # original
+            [ '501', 'a', 'One cold bottle of beer in the fridge' ],  # incoming
+            [ '501', 'a', 'Two cold bottles of beer in the fridge' ], # incoming
+    ]);
+    is(
+        $merged_record->as_formatted,
+        $expected_record->as_formatted,
+        'Add fields from the incoming record that are not in the original record'
     );
 
-    is_deeply(
-        [map { $_->subfield('a') } $merged_record->field('500') ],
-        ['One bottle of beer in the fridge'],
-        '"500" field retain it\'s original value'
-    );
-
-    is_deeply(
-        [map { $_->subfield('a') } $merged_record->field('501') ],
-        ['One cold bottle of beer in the fridge', 'Two cold bottles of beer in the fridge'],
-        '"501" fields has been added'
-    );
 };
 
 subtest 'Only appended fields has been added when add = 0, append = 1, remove = 0, delete = 0' => sub {
-    plan tests => 3;
+    plan tests => 1;
 
     $rule->set(
         {
@@ -156,30 +153,29 @@ subtest 'Only appended fields has been added when add = 0, append = 1, remove = 
             'remove' => 0,
             'delete' => 0,
         }
-    );
-    $rule->store();
+    )->store;
 
     my $merged_record = Koha::MarcOverlayRules->merge_records($orig_record, $incoming_record, { 'source' => 'test' });
 
-    my @all_fields = $merged_record->fields();
-    cmp_ok(scalar @all_fields, '==', 4, "Record has the expected number of fields");
+    my $expected_record = build_record([
+            [ '250', 'a', '250 bottles of beer on the wall' ],        # original
+            [ '250', 'a', '256 bottles of beer on the wall' ],        # original
+            # "251" field has been appended
+            [ '250', 'a', '251 bottles of beer on the wall' ],        # incoming
+            # "500" field has retained its original value
+            [ '500', 'a', 'One bottle of beer in the fridge' ],       # original
+    ]);
 
-    is_deeply(
-        [map { $_->subfield('a') } $merged_record->field('250') ],
-        ['250 bottles of beer on the wall', '256 bottles of beer on the wall', '251 bottles of beer on the wall'],
-        '"251" field has been appended'
-    );
-
-    is_deeply(
-        [map { $_->subfield('a') } $merged_record->field('500') ],
-        ['One bottle of beer in the fridge'],
-        '"500" field has retained it\'s original value'
+    is(
+        $merged_record->as_formatted,
+        $expected_record->as_formatted,
+        'Add fields from the incoming record that are in the original record'
     );
 
 };
 
-subtest 'Appended and added fields has been added when add = 1, append = 1, remove = 0, delete = 0' => sub {
-    plan tests => 4;
+subtest '"Add and append" - add = 1, append = 1, remove = 0, delete = 0' => sub {
+    plan tests => 1;
 
     $rule->set(
         {
@@ -188,35 +184,32 @@ subtest 'Appended and added fields has been added when add = 1, append = 1, remo
             'remove' => 0,
             'delete' => 0,
         }
-    );
-    $rule->store();
+    )->store;
+
+    my $expected_record = build_record([
+            [ '250', 'a', '250 bottles of beer on the wall' ],        # original
+            [ '250', 'a', '256 bottles of beer on the wall' ],        # original
+            # "251" field has been appended
+            [ '250', 'a', '251 bottles of beer on the wall' ],        # incoming
+            # "500" field has retained its original value
+            [ '500', 'a', 'One bottle of beer in the fridge' ],       # original
+            # "501" fields have been added
+            [ '501', 'a', 'One cold bottle of beer in the fridge' ],  # incoming
+            [ '501', 'a', 'Two cold bottles of beer in the fridge' ], # incoming
+    ]);
 
     my $merged_record = Koha::MarcOverlayRules->merge_records($orig_record, $incoming_record, { 'source' => 'test' });
 
-    my @all_fields = $merged_record->fields();
-    cmp_ok(scalar @all_fields, '==', 6, "Record has the expected number of fields");
-
-    is_deeply(
-        [map { $_->subfield('a') } $merged_record->field('250') ],
-        ['250 bottles of beer on the wall', '256 bottles of beer on the wall', '251 bottles of beer on the wall'],
-        '"251" field has been appended'
+    is(
+        $merged_record->as_formatted,
+        $expected_record->as_formatted,
+        'Appended and added fields have been added'
     );
 
-    is_deeply(
-        [map { $_->subfield('a') } $merged_record->field('500') ],
-        ['One bottle of beer in the fridge'],
-        '"500" field has retained it\'s original value'
-    );
-
-    is_deeply(
-        [map { $_->subfield('a') } $merged_record->field('501') ],
-        ['One cold bottle of beer in the fridge', 'Two cold bottles of beer in the fridge'],
-        '"501" fields has been added'
-    );
 };
 
 subtest 'Record fields has been only removed when add = 0, append = 0, remove = 1, delete = 0' => sub {
-    plan tests => 3;
+    plan tests => 1;
 
     $rule->set(
         {
@@ -225,28 +218,28 @@ subtest 'Record fields has been only removed when add = 0, append = 0, remove = 
             'remove' => 1,
             'delete' => 0,
         }
-    );
-    $rule->store();
+    )->store;
+
+    # Warning - not obvious as the 500 is untouched
+    my $expected_record = build_record([
+            # "250" field has been removed
+            [ '250', 'a', '256 bottles of beer on the wall' ],        # original and incoming
+            # "500" field has retained its original value
+            [ '500', 'a', 'One bottle of beer in the fridge' ],       # original
+    ]);
 
     my $merged_record = Koha::MarcOverlayRules->merge_records($orig_record, $incoming_record, { 'source' => 'test' });
 
-    my @all_fields = $merged_record->fields();
-    cmp_ok(scalar @all_fields, '==', 2, "Record has the expected number of fields");
+    is(
+        $merged_record->as_formatted,
+        $expected_record->as_formatted,
+        'Fields not in the incoming record are removed'
+    );
 
-    is_deeply(
-        [map { $_->subfield('a') } $merged_record->field('250') ],
-        ['256 bottles of beer on the wall'],
-        '"250" field has been removed'
-    );
-    is_deeply(
-        [map { $_->subfield('a') } $merged_record->field('500') ],
-        ['One bottle of beer in the fridge'],
-        '"500" field has retained it\'s original value'
-    );
 };
 
 subtest 'Record fields has been added and removed when add = 1, append = 0, remove = 1, delete = 0' => sub {
-    plan tests => 4;
+    plan tests => 1;
 
     $rule->set(
         {
@@ -255,34 +248,30 @@ subtest 'Record fields has been added and removed when add = 1, append = 0, remo
             'remove' => 1,
             'delete' => 0,
         }
-    );
-    $rule->store();
+    )->store();
+
+    my $expected_record = build_record([
+            # "250" field has been removed
+            [ '250', 'a', '256 bottles of beer on the wall' ],        # original and incoming
+            # "500" field has retained its original value
+            [ '500', 'a', 'One bottle of beer in the fridge' ],       # original
+            # "501" fields have been added
+            [ '501', 'a', 'One cold bottle of beer in the fridge' ],  # incoming
+            [ '501', 'a', 'Two cold bottles of beer in the fridge' ], # incoming
+    ]);
 
     my $merged_record = Koha::MarcOverlayRules->merge_records($orig_record, $incoming_record, { 'source' => 'test' });
 
-    my @all_fields = $merged_record->fields();
-    cmp_ok(scalar @all_fields, '==', 4, "Record has the expected number of fields");
-
-    is_deeply(
-        [map { $_->subfield('a') } $merged_record->field('250') ],
-        ['256 bottles of beer on the wall'],
-        '"250" field has been removed'
-    );
-    is_deeply(
-        [map { $_->subfield('a') } $merged_record->field('500') ],
-        ['One bottle of beer in the fridge'],
-        '"500" field has retained it\'s original value'
+    is(
+        $merged_record->as_formatted,
+        $expected_record->as_formatted,
+        'Fields not in the incoming record are removed, fields not in the original record have been added'
     );
 
-    is_deeply(
-        [map { $_->subfield('a') } $merged_record->field('501') ],
-        ['One cold bottle of beer in the fridge', 'Two cold bottles of beer in the fridge'],
-        '"501" fields has been added'
-    );
 };
 
 subtest 'Record fields has been appended and removed when add = 0, append = 1, remove = 1, delete = 0' => sub {
-    plan tests => 3;
+    plan tests => 1;
 
     $rule->set(
         {
@@ -291,28 +280,28 @@ subtest 'Record fields has been appended and removed when add = 0, append = 1, r
             'remove' => 1,
             'delete' => 0,
         }
-    );
-    $rule->store();
+    )->store();
+
+    my $expected_record = build_record([
+            # "250" field has been appended and removed
+            [ '250', 'a', '256 bottles of beer on the wall' ],        # incoming
+            [ '250', 'a', '251 bottles of beer on the wall' ],        # incoming
+            # "500" field has retained its original value
+            [ '500', 'a', 'One bottle of beer in the fridge' ],       # original
+    ]);
 
     my $merged_record = Koha::MarcOverlayRules->merge_records($orig_record, $incoming_record, { 'source' => 'test' });
 
-    my @all_fields = $merged_record->fields();
-    cmp_ok(scalar @all_fields, '==', 3, "Record has the expected number of fields");
+    is(
+        $merged_record->as_formatted,
+        $expected_record->as_formatted,
+        'Fields in the incoming record replace fields from the original record, fields only in the original record has been kept, fields not in the original record have been skipped'
+    );
 
-    is_deeply(
-        [map { $_->subfield('a') } $merged_record->field('250') ],
-        ['256 bottles of beer on the wall', '251 bottles of beer on the wall'],
-        '"250" fields has been appended and removed'
-    );
-    is_deeply(
-        [map { $_->subfield('a') } $merged_record->field('500') ],
-        ['One bottle of beer in the fridge'],
-        '"500" field has retained it\'s original value'
-    );
 };
 
 subtest 'Record fields has been added, appended and removed when add = 0, append = 1, remove = 1, delete = 0' => sub {
-    plan tests => 4;
+    plan tests => 1;
 
     $rule->set(
         {
@@ -321,35 +310,31 @@ subtest 'Record fields has been added, appended and removed when add = 0, append
             'remove' => 1,
             'delete' => 0,
         }
-    );
-    $rule->store();
+    )->store();
+
+    my $expected_record = build_record([
+            # "250" field has been appended and removed
+            [ '250', 'a', '256 bottles of beer on the wall' ],        # incoming
+            [ '250', 'a', '251 bottles of beer on the wall' ],        # incoming
+            # "500" field has retained its original value
+            [ '500', 'a', 'One bottle of beer in the fridge' ],       # original
+            # "501" fields have been added
+            [ '501', 'a', 'One cold bottle of beer in the fridge' ],  # incoming
+            [ '501', 'a', 'Two cold bottles of beer in the fridge' ], # incoming
+    ]);
 
     my $merged_record = Koha::MarcOverlayRules->merge_records($orig_record, $incoming_record, { 'source' => 'test' });
 
-    my @all_fields = $merged_record->fields();
-    cmp_ok(scalar @all_fields, '==', 5, "Record has the expected number of fields");
-
-    is_deeply(
-        [map { $_->subfield('a') } $merged_record->field('250') ],
-        ['256 bottles of beer on the wall', '251 bottles of beer on the wall'],
-        '"250" fields has been appended and removed'
+    is(
+        $merged_record->as_formatted,
+        $expected_record->as_formatted,
+        'Fields in the incoming record replace fields from the original record, fields only in the original record has been kept, fields not in the original record have been added'
     );
 
-    is_deeply(
-        [map { $_->subfield('a') } $merged_record->field('500') ],
-        ['One bottle of beer in the fridge'],
-        '"500" field has retained it\'s original value'
-    );
-
-    is_deeply(
-        [map { $_->subfield('a') } $merged_record->field('501') ],
-        ['One cold bottle of beer in the fridge', 'Two cold bottles of beer in the fridge'],
-        '"501" fields has been added'
-    );
 };
 
 subtest 'Record fields has been deleted when add = 0, append = 0, remove = 0, delete = 1' => sub {
-    plan tests => 2;
+    plan tests => 1;
 
     $rule->set(
         {
@@ -358,23 +343,29 @@ subtest 'Record fields has been deleted when add = 0, append = 0, remove = 0, de
             'remove' => 0,
             'delete' => 1,
         }
-    );
-    $rule->store();
+    )->store();
+
+    # FIXME the tooltip for delete is saying
+    # "If the original record has fields matching the rule tag, but no fields with this are found in the incoming record"
+    # But it does not seem to do that
+    my $expected_record = build_record([
+            # "250" fields have retained their original value
+            [ '250', 'a', '250 bottles of beer on the wall' ],        # original
+            [ '250', 'a', '256 bottles of beer on the wall' ],        # original
+    ]);
 
     my $merged_record = Koha::MarcOverlayRules->merge_records($orig_record, $incoming_record, { 'source' => 'test' });
 
-    my @all_fields = $merged_record->fields();
-    cmp_ok(scalar @all_fields, '==', 2, "Record has the expected number of fields");
-
-    is_deeply(
-        [map { $_->subfield('a') } $merged_record->field('250') ],
-        ['250 bottles of beer on the wall', '256 bottles of beer on the wall'],
-        '"250" fields has retained their original value'
+    is(
+        $merged_record->as_formatted,
+        $expected_record->as_formatted,
+        'Only fields in original and incoming are kept, but incoming values are ignored'
     );
+
 };
 
 subtest 'Record fields has been added and deleted when add = 1, append = 0, remove = 0, delete = 1' => sub {
-    plan tests => 3;
+    plan tests => 1;
 
     $rule->set(
         {
@@ -383,29 +374,31 @@ subtest 'Record fields has been added and deleted when add = 1, append = 0, remo
             'remove' => 0,
             'delete' => 1,
         }
-    );
-    $rule->store();
+    )->store();
+
+    # Warning - is there a use case in real-life for this combinaison?
+    my $expected_record = build_record([
+            # "250" field have retained their original value
+            [ '250', 'a', '250 bottles of beer on the wall' ],        # original
+            [ '250', 'a', '256 bottles of beer on the wall' ],        # original
+            # "500" field has been removed
+            # "501" fields have been added
+            [ '501', 'a', 'One cold bottle of beer in the fridge' ],  # incoming
+            [ '501', 'a', 'Two cold bottles of beer in the fridge' ], # incoming
+    ]);
 
     my $merged_record = Koha::MarcOverlayRules->merge_records($orig_record, $incoming_record, { 'source' => 'test' });
 
-    my @all_fields = $merged_record->fields();
-    cmp_ok(scalar @all_fields, '==', 4, "Record has the expected number of fields");
-
-    is_deeply(
-        [map { $_->subfield('a') } $merged_record->field('250') ],
-        ['250 bottles of beer on the wall', '256 bottles of beer on the wall'],
-        '"250" fields has retained their original value'
+    is(
+        $merged_record->as_formatted,
+        $expected_record->as_formatted,
+        'Fields from the incoming records are kept, but keep the value from the original record if they already existed'
     );
 
-    is_deeply(
-        [map { $_->subfield('a') } $merged_record->field('501') ],
-        ['One cold bottle of beer in the fridge', 'Two cold bottles of beer in the fridge'],
-        '"501" fields has been added'
-    );
 };
 
 subtest 'Record fields has been appended and deleted when add = 0, append = 1, remove = 0, delete = 1' => sub {
-    plan tests => 2;
+    plan tests => 1;
 
     $rule->set(
         {
@@ -414,23 +407,28 @@ subtest 'Record fields has been appended and deleted when add = 0, append = 1, r
             'remove' => 0,
             'delete' => 1,
         }
-    );
-    $rule->store();
+    )->store();
+
+    my $expected_record = build_record([
+            # "250" field has been appended
+            [ '250', 'a', '250 bottles of beer on the wall' ],        # original
+            [ '250', 'a', '256 bottles of beer on the wall' ],        # original and incoming
+            [ '250', 'a', '251 bottles of beer on the wall' ],        # incoming
+            # "500" field has been removed
+    ]);
 
     my $merged_record = Koha::MarcOverlayRules->merge_records($orig_record, $incoming_record, { 'source' => 'test' });
 
-    my @all_fields = $merged_record->fields();
-    cmp_ok(scalar @all_fields, '==', 3, "Record has the expected number of fields");
-
-    is_deeply(
-        [map { $_->subfield('a') } $merged_record->field('250') ],
-        ['250 bottles of beer on the wall', '256 bottles of beer on the wall', '251 bottles of beer on the wall'],
-        '"250" field has been appended'
+    is(
+        $merged_record->as_formatted,
+        $expected_record->as_formatted,
+        'Only fields that already existed are appended'
     );
+
 };
 
 subtest 'Record fields has been added, appended and deleted when add = 1, append = 1, remove = 0, delete = 1' => sub {
-    plan tests => 3;
+    plan tests => 1;
 
     $rule->set(
         {
@@ -439,29 +437,31 @@ subtest 'Record fields has been added, appended and deleted when add = 1, append
             'remove' => 0,
             'delete' => 1,
         }
-    );
-    $rule->store();
+    )->store();
+
+    my $expected_record = build_record([
+            # "250" field has been appended
+            [ '250', 'a', '250 bottles of beer on the wall' ],        # original
+            [ '250', 'a', '256 bottles of beer on the wall' ],        # original and incoming
+            [ '250', 'a', '251 bottles of beer on the wall' ],        # incoming
+            # "500" field has been removed
+            # "501" fields have been added
+            [ '501', 'a', 'One cold bottle of beer in the fridge' ],  # incoming
+            [ '501', 'a', 'Two cold bottles of beer in the fridge' ], # incoming
+    ]);
 
     my $merged_record = Koha::MarcOverlayRules->merge_records($orig_record, $incoming_record, { 'source' => 'test' });
 
-    my @all_fields = $merged_record->fields();
-    cmp_ok(scalar @all_fields, '==', 5, "Record has the expected number of fields");
-
-    is_deeply(
-        [map { $_->subfield('a') } $merged_record->field('250') ],
-        ['250 bottles of beer on the wall', '256 bottles of beer on the wall', '251 bottles of beer on the wall'],
-        '"250" field has been appended'
+    is(
+        $merged_record->as_formatted,
+        $expected_record->as_formatted,
+        'Fields in the incoming record are added and appended, fields not in the original record are removed'
     );
 
-    is_deeply(
-        [map { $_->subfield('a') } $merged_record->field('501') ],
-        ['One cold bottle of beer in the fridge', 'Two cold bottles of beer in the fridge'],
-        '"501" fields has been added'
-    );
 };
 
 subtest 'Record fields has been removed and deleted when add = 0, append = 0, remove = 1, delete = 1' => sub {
-    plan tests => 2;
+    plan tests => 1;
 
     $rule->set(
         {
@@ -470,23 +470,26 @@ subtest 'Record fields has been removed and deleted when add = 0, append = 0, re
             'remove' => 1,
             'delete' => 1,
         }
-    );
-    $rule->store();
+    )->store();
+
+    my $expected_record = build_record([
+            # "250" field has been removed
+            [ '250', 'a', '256 bottles of beer on the wall' ],        # original and incoming
+            # "500" field has been removed
+    ]);
 
     my $merged_record = Koha::MarcOverlayRules->merge_records($orig_record, $incoming_record, { 'source' => 'test' });
 
-    my @all_fields = $merged_record->fields();
-    cmp_ok(scalar @all_fields, '==', 1, "Record has the expected number of fields");
-
-    is_deeply(
-        [map { $_->subfield('a') } $merged_record->field('250') ],
-        ['256 bottles of beer on the wall'],
-        '"250" field has been removed'
+    is(
+        $merged_record->as_formatted,
+        $expected_record->as_formatted,
+        'Union'
     );
+
 };
 
 subtest 'Record fields has been added, removed and deleted when add = 1, append = 0, remove = 1, delete = 1' => sub {
-    plan tests => 3;
+    plan tests => 1;
 
     $rule->set(
         {
@@ -495,29 +498,29 @@ subtest 'Record fields has been added, removed and deleted when add = 1, append 
             'remove' => 1,
             'delete' => 1,
         }
-    );
-    $rule->store();
+    )->store();
+
+    my $expected_record = build_record([
+            # "250" field has been appended
+            [ '250', 'a', '256 bottles of beer on the wall' ],        # original and incoming
+            # "500" field has been removed
+            # "501" fields have been added
+            [ '501', 'a', 'One cold bottle of beer in the fridge' ],  # incoming
+            [ '501', 'a', 'Two cold bottles of beer in the fridge' ], # incoming
+    ]);
 
     my $merged_record = Koha::MarcOverlayRules->merge_records($orig_record, $incoming_record, { 'source' => 'test' });
 
-    my @all_fields = $merged_record->fields();
-    cmp_ok(scalar @all_fields, '==', 3, "Record has the expected number of fields");
-
-    is_deeply(
-        [map { $_->subfield('a') } $merged_record->field('250') ],
-        ['256 bottles of beer on the wall'],
-        '"250" field has been removed'
+    is(
+        $merged_record->as_formatted,
+        $expected_record->as_formatted,
+        'Union for existing fields, new fields are added'
     );
 
-    is_deeply(
-        [map { $_->subfield('a') } $merged_record->field('501') ],
-        ['One cold bottle of beer in the fridge', 'Two cold bottles of beer in the fridge'],
-        '"501" fields has been added'
-    );
 };
 
 subtest 'Record fields has been appended, removed and deleted when add = 0, append = 1, remove = 1, delete = 1' => sub {
-    plan tests => 2;
+    plan tests => 1;
 
     $rule->set(
         {
@@ -526,23 +529,27 @@ subtest 'Record fields has been appended, removed and deleted when add = 0, appe
             'remove' => 1,
             'delete' => 1,
         }
-    );
-    $rule->store();
+    )->store();
+
+    my $expected_record = build_record([
+            # "250" field has been appended and removed
+            [ '250', 'a', '256 bottles of beer on the wall' ],        # incoming
+            [ '250', 'a', '251 bottles of beer on the wall' ],        # incoming
+            # "500" field has been removed
+    ]);
 
     my $merged_record = Koha::MarcOverlayRules->merge_records($orig_record, $incoming_record, { 'source' => 'test' });
 
-    my @all_fields = $merged_record->fields();
-    cmp_ok(scalar @all_fields, '==', 2, "Record has the expected number of fields");
-
-    is_deeply(
-        [map { $_->subfield('a') } $merged_record->field('250') ],
-        ['256 bottles of beer on the wall', '251 bottles of beer on the wall'],
-        '"250" fields has been appended and removed'
+    is(
+        $merged_record->as_formatted,
+        $expected_record->as_formatted,
+        'Fields from incoming replace original record. Existing fields not in incoming are removed'
     );
+
 };
 
 subtest 'Record fields has been overwritten when add = 1, append = 1, remove = 1, delete = 1' => sub {
-    plan tests => 4;
+    plan tests => 1;
 
     $rule->set(
         {
@@ -551,28 +558,16 @@ subtest 'Record fields has been overwritten when add = 1, append = 1, remove = 1
             'remove' => 1,
             'delete' => 1,
         }
-    );
-    $rule->store();
+    )->store();
 
     my $merged_record = Koha::MarcOverlayRules->merge_records($orig_record, $incoming_record, { 'source' => 'test' });
 
-    my @all_fields = $merged_record->fields();
-
-    cmp_ok(scalar @all_fields, '==', 4, "Record has the expected number of fields");
-    is_deeply(
-        [map { $_->subfield('a') } $merged_record->field('250') ],
-        ['256 bottles of beer on the wall', '251 bottles of beer on the wall'],
-        '"250" fields has been appended and removed'
+    is(
+        $merged_record->as_formatted,
+        $incoming_record->as_formatted,
+        'Incoming record erase original record'
     );
 
-    my @fields = $merged_record->field('500');
-    cmp_ok(scalar @fields, '==', 0, '"500" field has been deleted');
-
-    is_deeply(
-        [map { $_->subfield('a') } $merged_record->field('501') ],
-        ['One cold bottle of beer in the fridge', 'Two cold bottles of beer in the fridge'],
-        '"501" fields has been added'
-    );
 };
 
 # Test rule tag specificity
@@ -589,91 +584,77 @@ my $skip_all_rule = Koha::MarcOverlayRules->find_or_create({
 });
 
 subtest '"500" field has been protected when rule matching on tag "500" is add = 0, append = 0, remove = 0, delete = 0' => sub {
-    plan tests => 4;
+    plan tests => 1;
+
+    my $expected_record = build_record([
+            # "250" field has been appended
+            [ '250', 'a', '256 bottles of beer on the wall' ],        # incoming
+            [ '250', 'a', '251 bottles of beer on the wall' ],        # incoming
+            # "500" field has retained its original value
+            [ '500', 'a', 'One bottle of beer in the fridge' ],       # original
+            # "501" fields have been added
+            [ '501', 'a', 'One cold bottle of beer in the fridge' ],  # incoming
+            [ '501', 'a', 'Two cold bottles of beer in the fridge' ], # incoming
+    ]);
 
     my $merged_record = Koha::MarcOverlayRules->merge_records($orig_record, $incoming_record, { 'source' => 'test' });
 
-    my @all_fields = $merged_record->fields();
-
-    cmp_ok(scalar @all_fields, '==', 5, "Record has the expected number of fields");
-    is_deeply(
-        [map { $_->subfield('a') } $merged_record->field('250') ],
-        ['256 bottles of beer on the wall', '251 bottles of beer on the wall'],
-        '"250" fields has been appended and removed'
+    is(
+        $merged_record->as_formatted,
+        $expected_record->as_formatted,
+        'All fields are erased by incoming record but 500 is protected'
     );
 
-    is_deeply(
-        [map { $_->subfield('a') } $merged_record->field('500') ],
-        ['One bottle of beer in the fridge'],
-        '"500" field has retained it\'s original value'
-    );
-
-    is_deeply(
-        [map { $_->subfield('a') } $merged_record->field('501') ],
-        ['One cold bottle of beer in the fridge', 'Two cold bottles of beer in the fridge'],
-        '"501" fields has been added'
-    );
 };
 
 # Test regexp matching
 subtest '"5XX" fields has been protected when rule matching on regexp "5\d{2}" is add = 0, append = 0, remove = 0, delete = 0' => sub {
-    plan tests => 3;
+    plan tests => 1;
 
     $skip_all_rule->set(
         {
             'tag' => '5\d{2}',
         }
-    );
-    $skip_all_rule->store();
+    )->store;
+
+    my $expected_record = build_record([
+            # "250" field has been appended
+            [ '250', 'a', '256 bottles of beer on the wall' ],        # incoming
+            [ '250', 'a', '251 bottles of beer on the wall' ],        # incoming
+            # "500" field has retained its original value
+            [ '500', 'a', 'One bottle of beer in the fridge' ],       # original
+    ]);
 
     my $merged_record = Koha::MarcOverlayRules->merge_records($orig_record, $incoming_record, { 'source' => 'test' });
 
-    my @all_fields = $merged_record->fields();
-
-    cmp_ok(scalar @all_fields, '==', 3, "Record has the expected number of fields");
-    is_deeply(
-        [map { $_->subfield('a') } $merged_record->field('250') ],
-        ['256 bottles of beer on the wall', '251 bottles of beer on the wall'],
-        '"250" fields has been appended and removed'
+    is(
+        $merged_record->as_formatted,
+        $expected_record->as_formatted,
+        'Fields are erased by incoming record but 500 is protected and 501 is not added'
     );
 
-    is_deeply(
-        [map { $_->subfield('a') } $merged_record->field('500') ],
-        ['One bottle of beer in the fridge'],
-        '"500" field has retained it\'s original value'
-    );
 };
+
+$skip_all_rule->delete();
 
 # Test module specificity, the 0 all rule should no longer be included in set of applied rules
 subtest 'Record fields has been overwritten when non wild card rule with filter match is add = 1, append = 1, remove = 1, delete = 1' => sub {
-    plan tests => 4;
+    plan tests => 1;
 
     $rule->set(
         {
             'filter' => 'test',
         }
-    );
-    $rule->store();
+    )->store();
 
     my $merged_record = Koha::MarcOverlayRules->merge_records($orig_record, $incoming_record, { 'source' => 'test' });
 
-    my @all_fields = $merged_record->fields();
-
-    cmp_ok(scalar @all_fields, '==', 4, "Record has the expected number of fields");
-    is_deeply(
-        [map { $_->subfield('a') } $merged_record->field('250') ],
-        ['256 bottles of beer on the wall', '251 bottles of beer on the wall'],
-        '"250" fields has been appended and removed'
+    is(
+        $merged_record->as_formatted,
+        $incoming_record->as_formatted,
+        'Only existing rule is not for us, erasing' # FIXME Is this comment correct?
     );
 
-    my @fields = $merged_record->field('500');
-    cmp_ok(scalar @fields, '==', 0, '"500" field has been deleted');
-
-    is_deeply(
-        [map { $_->subfield('a') } $merged_record->field('501') ],
-        ['One cold bottle of beer in the fridge', 'Two cold bottles of beer in the fridge'],
-        '"501" fields has been added'
-    );
 };
 
 subtest 'An exception is thrown when append = 1, remove = 0 is set for control field rule' => sub {
@@ -707,10 +688,10 @@ subtest 'An exception is thrown when rule tag is set to invalid regexp' => sub {
     ok($exception->isa('Koha::Exceptions::MarcOverlayRule::InvalidTagRegExp'), "Exception is of correct class");
 };
 
-$skip_all_rule->delete();
 
 subtest 'context option in ModBiblio is handled correctly' => sub {
-    plan tests => 6;
+    plan tests => 2;
+
     $rule->set(
         {
             tag => '250',
@@ -721,9 +702,9 @@ subtest 'context option in ModBiblio is handled correctly' => sub {
             'remove' => 0,
             'delete' => 0,
         }
-    );
-    $rule->store();
-    my ($biblionumber) = AddBiblio($orig_record, '');
+    )->store();
+
+    my ($biblionumber, $biblioitemnumber) = AddBiblio($orig_record, '');
 
     # Since marc merc rules are not run on save, only update
     # saved record should be identical to orig_record
@@ -731,17 +712,19 @@ subtest 'context option in ModBiblio is handled correctly' => sub {
 
     my @all_fields = $saved_record->fields();
     # Koha also adds 999c field, therefore 4 not 3
-    cmp_ok(scalar @all_fields, '==', 4, 'Saved record has the expected number of fields');
-    is_deeply(
-        [map { $_->subfield('a') } $saved_record->field('250') ],
-        ['250 bottles of beer on the wall', '256 bottles of beer on the wall'],
-        'All "250" fields of saved record are identical to original record passed to AddBiblio'
-    );
 
-    is_deeply(
-        [map { $_->subfield('a') } $saved_record->field('500') ],
-        ['One bottle of beer in the fridge'],
-        'All "500" fields of saved record are identical to original record passed to AddBiblio'
+    my $expected_record = build_record([
+            # "250" field has been appended
+            [ '250', 'a', '250 bottles of beer on the wall' ],        # original
+            [ '250', 'a', '256 bottles of beer on the wall' ],        # incoming
+            [ '500', 'a', 'One bottle of beer in the fridge' ],       # original
+            [ '999', 'c', $biblionumber, 'd', $biblioitemnumber ],    # created by AddBiblio
+    ]);
+    $expected_record->leader('00196    a2200073   4500');
+
+    is(
+        $saved_record->as_formatted,
+        $expected_record->as_formatted,
     );
 
     $saved_record->append_fields(
@@ -753,18 +736,19 @@ subtest 'context option in ModBiblio is handled correctly' => sub {
 
     my $updated_record = GetMarcBiblio({ biblionumber => $biblionumber });
 
-    @all_fields = $updated_record->fields();
-    cmp_ok(scalar @all_fields, '==', 5, 'Updated record has the expected number of fields');
-    is_deeply(
-        [map { $_->subfield('a') } $updated_record->field('250') ],
-        ['250 bottles of beer on the wall', '256 bottles of beer on the wall'],
-        '"250" fields have retained their original values'
-    );
+    $expected_record = build_record([
+            # "250" field has been appended
+            [ '250', 'a', '250 bottles of beer on the wall' ],
+            [ '250', 'a', '256 bottles of beer on the wall' ],
+            [ '500', 'a', 'One bottle of beer in the fridge' ],
+            [ '500', 'a', 'One cold bottle of beer in the fridge' ],
+            [ '999', 'c', $biblionumber, 'd', $biblioitemnumber ],    # created by AddBiblio
+    ]);
+    $expected_record->leader('00250    a2200085   4500');
 
-    is_deeply(
-        [map { $_->subfield('a') } $updated_record->field('500') ],
-        ['One bottle of beer in the fridge', 'One cold bottle of beer in the fridge'],
-        '"500" field has been appended'
+    is(
+        $updated_record->as_formatted,
+        $expected_record->as_formatted,
     );
 
     # To trigger removal from search index etc
