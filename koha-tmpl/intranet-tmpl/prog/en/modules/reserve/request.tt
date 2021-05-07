@@ -89,12 +89,16 @@
                     </div>
                 [% END %]
                 <fieldset class="brief">
-                    <label>Search patrons[% IF clubcount %] or clubs[% END %]</label>
+                    [% IF clubcount %]
+                        <label>Search patrons or clubs</label>
+                    [% ELSE %]
+                        <label>Search patrons</label>
+                    [% END %]
                     <div id="circ_holds_select" class="toptabs">
                         <ul>
                             <li><a href="#holds_patronsearch_pane">Patrons</a></li>
                             [% IF clubcount %]
-                            <li><a href="#holds_clubsearch_pane">Clubs</a></li>
+                                <li><a href="#holds_clubsearch_pane">Clubs</a></li>
                             [% END %]
                         </ul>
                         <div id="holds_patronsearch_pane">
