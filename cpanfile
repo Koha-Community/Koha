@@ -7,7 +7,7 @@ requires 'Business::ISSN', '0.91';
 requires 'Bytes::Random::Secure', '0.28';
 requires 'CGI', '3.15';
 requires 'CGI::Carp', '1.29';
-requires 'CGI::Compile', '0.17';
+requires 'CGI::Compile', '>= 0.17, != 0.24';
 requires 'CGI::Emulate::PSGI', '0.20';
 requires 'CGI::Session', '4.2';
 requires 'CGI::Session::Serialize::yaml', '4.2';
