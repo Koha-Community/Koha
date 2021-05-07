@@ -24189,6 +24189,15 @@ if( CheckVersion( $DBversion ) ) {
     NewVersion( $DBversion, 28244, "Fix Ukrainian typo in English");
 }
 
+$DBversion = '20.12.00.045';
+if( CheckVersion( $DBversion ) ) {
+    $dbh->do(q{
+        INSERT IGNORE INTO systempreferences (variable, value, options, explanation, type) VALUES ('SearchLimitLibrary', 'both', 'homebranch|holdingbranch|both', "When limiting search results with a library or library group, use the item's home library, or holding library, or both.", 'Choice')
+    });
+
+    NewVersion( $DBversion, 21249, "Adding new system preference SearchLimitLibrary" );
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 my $update_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/atomicupdate/';
