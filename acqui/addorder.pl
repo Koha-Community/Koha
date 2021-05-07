@@ -137,7 +137,7 @@ use Koha::Acquisition::Currencies qw( get_active );
 use Koha::Acquisition::Orders;
 use Koha::Acquisition::Baskets;
 use C4::Barcodes;
-use Koha::DateUtils;
+use Koha::DateUtils q( dt_from_string );
 
 ### "-------------------- addorder.pl ----------"
 

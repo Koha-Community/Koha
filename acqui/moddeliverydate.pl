@@ -43,7 +43,7 @@ my ($template, $loggedinuser, $cookie, $flags) = get_template_and_user( {
     template_name   => 'acqui/moddeliverydate.tt',
     query           => $input,
     type            => 'intranet',
-    flagsrequired   => { 'acquisition' => '*' },
+    flagsrequired   => { 'acquisition' => 'order_manage' },
     debug           => 1,
 } );
 

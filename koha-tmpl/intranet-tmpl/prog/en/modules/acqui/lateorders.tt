@@ -110,9 +110,11 @@
             <td data-order="[% estimated_delivery_date | html %]">
                 <p class="delivery_date">
                     <span id="delivery_date_[% estimated_delivery_date | html %]">[% estimated_delivery_date | $KohaDates %]</span>
-                    <a class="edit_delivery_date noExport" data-ordernumber="[% lateorder.ordernumber | html %]" href="/cgi-bin/koha/acqui/moddeliverydate.pl?ordernumber=[% lateorder.ordernumber | html %]" title="Edit delivery date">
-                        <i class="fa fa-pencil"></i> Edit
-                    </a>
+                    [% IF CAN_user_acquisition_order_manage %]
+                        <a class="edit_delivery_date noExport" data-ordernumber="[% lateorder.ordernumber | html %]" href="/cgi-bin/koha/acqui/moddeliverydate.pl?ordernumber=[% lateorder.ordernumber | html %]" title="Edit delivery date">
+                            <i class="fa fa-pencil"></i> Edit
+                        </a>
+                    [% END %]
                 </p>
             </td>
             <td>
@@ -199,7 +201,7 @@
       </tbody>
       <tfoot>
         <tr>
-            <th colspan="7">Total</th>
+            <th colspan="6">Total</th>
             <th>[% total_quantity | html %]</th>
             <th>[% total | $Price %]</th>
             <th colspan="10">&nbsp;</th>
