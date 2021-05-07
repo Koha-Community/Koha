@@ -306,7 +306,7 @@ if ( $op eq 'view' ) {
                 $art_req_itypes = Koha::CirculationRules->guess_article_requestable_itemtypes({ $patron ? ( categorycode => $patron->categorycode ) : () });
             }
 
-            my @items;
+            my @items_info;
             while ( my $content = $contents->next ) {
                 my $biblionumber = $content->biblionumber;
                 my $this_item    = GetBiblioData($biblionumber);
@@ -318,19 +318,6 @@ if ( $op eq 'view' ) {
                     frameworkcode => $framework
                 });
                 $record_processor->process($record);
-
-                if ($xslfile) {
-                    my $variables = {
-                        anonymous_session => ($loggedinuser) ? 0 : 1
-                    };
-                    $this_item->{XSLTBloc} = XSLTParse4Display(
-                        $biblionumber,          $record,
-                        "OPACXSLTListsDisplay", 1,
-                        undef,                  $sysxml,
-                        $xslfile,               $lang,
-                        $variables
-                    );
-                }
 
                 my $marcflavour = C4::Context->preference("marcflavour");
                 my $itemtype = Koha::Biblioitems->search({ biblionumber => $content->biblionumber })->next->itemtype;
@@ -354,10 +341,6 @@ if ( $op eq 'view' ) {
                     $this_item->{size} = q||;
                 }
 
-                # Getting items infos for location display
-                my @items_infos = &GetItemsLocationInfo( $biblionumber );
-                $this_item->{'ITEM_RESULTS'} = \@items_infos;
-
                 if (C4::Context->preference('TagsEnabled') and C4::Context->preference('TagsShowOnList')) {
                     $this_item->{TagLoop} = get_tags({
                         biblionumber => $biblionumber, approved=>1, 'sort'=>'-weight',
@@ -365,10 +348,35 @@ if ( $op eq 'view' ) {
                     });
                 }
 
+                my @items;
                 my $items = $biblio->items;
+                my $allow_onshelf_holds;
+                my @hidden_items;
                 while ( my $item = $items->next ) {
-                    $this_item->{allow_onshelf_holds} = Koha::CirculationRules->get_onshelfholds_policy( { item => $item, patron => $patron } );
-                    last if $this_item->{allow_onshelf_holds};
+                    if ( $item->hidden_in_opac({rules => C4::Context->yaml_preference('OpacHiddenItems')} ) ) {
+                        push @hidden_items, $item->itemnumber;
+                        next;
+                    }
+
+                    $allow_onshelf_holds ||= Koha::CirculationRules->get_onshelfholds_policy(
+                        { item => $item, patron => $patron } );
+
+                    push @items, $item; # This is for non-xslt only
+                }
+                $this_item->{allow_onshelf_holds} = $allow_onshelf_holds;
+                $this_item->{'ITEM_RESULTS'} = \@items;
+
+                if ($xslfile) {
+                    my $variables = {
+                        anonymous_session => ($loggedinuser) ? 0 : 1
+                    };
+                    $this_item->{XSLTBloc} = XSLTParse4Display(
+                        $biblionumber,          $record,
+                        "OPACXSLTListsDisplay", 1,
+                        \@hidden_items,         $sysxml,
+                        $xslfile,               $lang,
+                        $variables
+                    );
                 }
 
                 if ( grep {$_ eq $biblionumber} @cart_list) {
@@ -377,7 +385,7 @@ if ( $op eq 'view' ) {
 
                 $this_item->{biblio_object} = $biblio;
                 $this_item->{biblionumber}  = $biblionumber;
-                push @items, $this_item;
+                push @items_info, $this_item;
             }
 
             $template->param(
@@ -385,7 +393,7 @@ if ( $op eq 'view' ) {
                 can_delete_shelf   => $shelf->can_be_deleted($loggedinuser),
                 can_remove_biblios => $shelf->can_biblios_be_removed($loggedinuser),
                 can_add_biblios    => $shelf->can_biblios_be_added($loggedinuser),
-                itemsloop          => \@items,
+                itemsloop          => \@items_info,
                 sortfield          => $sortfield,
                 direction          => $direction,
                 csv_profiles => [

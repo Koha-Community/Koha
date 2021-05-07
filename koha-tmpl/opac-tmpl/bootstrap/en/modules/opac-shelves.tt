@@ -524,14 +524,15 @@
                                                             </span>
                                                             <span class="results_summary">
                                                                 <span class="label">Holdings:</span>
-                                                                [% IF ( itemsloo.ITEM_RESULTS ) %]
-                                                                    [% FOREACH ITEM_RESULT IN itemsloo.ITEM_RESULTS %]
-                                                                        [% ITEM_RESULT.homebranch | html %]
-                                                                        [% IF ( ITEM_RESULT.location_opac ) %]
-                                                                            <span class="shelvingloc">[% ITEM_RESULT.location_opac | html %]</span>
+                                                                [% IF itemsloo.ITEM_RESULTS %]
+                                                                    [% FOREACH item IN itemsloo.ITEM_RESULTS %]
+                                                                        [% item.homebranch | html %]
+                                                                        [% SET location_opac = AuthorisedValues.GetByCode( 'LOC', item.location, 1 ) %]
+                                                                        [% IF location_opac %]
+                                                                            <span class="shelvingloc">[% location_opac | html %]</span>
                                                                         [% END %]
-                                                                        [% IF ( ITEM_RESULT.itemcallnumber ) %]
-                                                                            ([% ITEM_RESULT.itemcallnumber | html %])
+                                                                        [% IF item.itemcallnumber %]
+                                                                            ([% item.itemcallnumber | html %])
                                                                                 [% IF ( loop.last ) %].[% ELSE %],[% END %]
                                                                         [% END %]
                                                                     [% END %]
