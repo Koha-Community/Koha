@@ -16,6 +16,10 @@ function formatstr(str, col) {
     });
 }
 
+function escape_str(s){
+    return s != null ? s.escapeHtml() : "";
+}
+
 var HtmlCharsToEscape = {
     '&': '&amp;',
     '<': '&lt;',
