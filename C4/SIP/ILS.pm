@@ -296,11 +296,10 @@ sub add_hold {
 
 	my $trans = C4::SIP::ILS::Transaction::Hold->new();
 
-    $patron = C4::SIP::ILS::Patron->new( $patron_id);
-    if (!$patron
-	|| (defined($patron_pwd) && !$patron->check_password($patron_pwd))) {
-		$trans->screen_msg("Invalid Patron.");
-		return $trans;
+    $patron = C4::SIP::ILS::Patron->new( $patron_id );
+    if ( !$patron ) {
+        $trans->screen_msg("Invalid patron barcode.");
+        return $trans;
     }
 
 	unless ($item = C4::SIP::ILS::Item->new($item_id || $title_id)) {
