@@ -347,9 +347,6 @@ sub cancel_hold {
     if (!$patron) {
 		$trans->screen_msg("Invalid patron barcode.");
 		return $trans;
-    } elsif (defined($patron_pwd) && !$patron->check_password($patron_pwd)) {
-		$trans->screen_msg('Invalid patron password.');
-		return $trans;
     }
 
     unless ($item = C4::SIP::ILS::Item->new($item_id || $title_id)) {
