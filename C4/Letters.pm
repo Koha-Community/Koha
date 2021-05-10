@@ -534,8 +534,9 @@ sub SendAlerts {
         return { error => $error }
             unless $success;
 
+        my $module = $action eq 'ACQUISITION ORDER' ? 'ACQUISITIONS' : 'CLAIMS';
         logaction(
-            "CLAIMS",
+            $module,
             $action,
             undef,
             "To="

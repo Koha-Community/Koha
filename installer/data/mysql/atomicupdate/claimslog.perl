@@ -2,7 +2,7 @@ $DBversion = 'XXX';    # will be replaced by the RM
 if ( CheckVersion($DBversion) ) {
     $dbh->do(q{
         UPDATE action_logs SET module = 'CLAIMS'
-        WHERE module = 'ACQUISITIONS' AND ( action = 'SERIAL CLAIM' OR action = 'ACQUISITION ORDER' OR action = 'ACQUISITION CLAIM')
+        WHERE module = 'ACQUISITIONS' AND ( action = 'SERIAL CLAIM' OR action = 'ACQUISITION CLAIM')
     });
 
     $dbh->do(q{
