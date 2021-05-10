@@ -190,7 +190,7 @@
 
                 <form method="post" action="/cgi-bin/koha/opac-memberentry.pl" id="memberentry-form" autocomplete="off">
 
-                [% FOREACH field = ['streetnumber' 'streettype'  'cardnumber' 'branchcode' 'categorycode' 'title' 'surname' 'firstname' 'dateofbirth' 'initials' 'othernames' 'address' 'address2' 'city' 'state' 'zipcode' 'country' 'phone' 'phonepro' 'mobile' 'email' 'emailpro' 'fax' 'B_address' 'B_address2' 'B_city' 'B_state' 'B_zipcode' 'B_country' 'B_phone' 'B_email' 'contactnote' 'altcontactsurname' 'altcontactfirstname' 'altcontactaddress1' 'altcontactaddress2' 'altcontactaddress3' 'altcontactstate' 'altcontactzipcode' 'altcontactcountry' 'altcontactphone' 'password' ] %]
+                [% FOREACH field = ['streetnumber' 'streettype'  'cardnumber' 'branchcode' 'categorycode' 'title' 'surname' 'firstname' 'dateofbirth' 'initials' 'othernames' 'address' 'address2' 'city' 'state' 'zipcode' 'country' 'phone' 'phonepro' 'mobile' 'email' 'emailpro' 'fax' 'B_streettype' 'B_address' 'B_address2' 'B_city' 'B_state' 'B_zipcode' 'B_country' 'B_phone' 'B_email' 'contactnote' 'altcontactsurname' 'altcontactfirstname' 'altcontactaddress1' 'altcontactaddress2' 'altcontactaddress3' 'altcontactstate' 'altcontactzipcode' 'altcontactcountry' 'altcontactphone' 'password' ] %]
                     [% IF mandatory.defined( field ) %]
                         [% SET required.$field = 'required' %]
                     [% END %]
@@ -592,6 +592,25 @@
                                     <legend id="alternateaddress_legend">Alternate address</legend>
 
                                     <ol>
+                                        [% IF roadtypes %]
+                                            [% UNLESS hidden.defined('B_streettype') %]
+                                                <li>
+                                                    <label for="borrower_B_streettype" class="[% required.B_streettype | html %]">Street type:</label>
+
+                                                    <select name="borrower_B_streettype" name="borrower_B_streettype" class="[% required.B_streettype | html %]">
+                                                        <option value=""></option>
+                                                        [% FOR roadtype IN roadtypes %]
+                                                            [% IF roadtype.authorised_value == patron.streettype %]
+                                                                <option value="[% roadtype.authorised_value | html %]" selected="selected">[% roadtype.lib | html %]</option>
+                                                            [% ELSE %]
+                                                                <option value="[% roadtype.authorised_value | html %]">[% roadtype.lib | html %]</option>
+                                                            [% END %]
+                                                        [% END %]
+                                                    </select>
+                                                    <div class="required_label [% required.B_streettype | html %]">Required</div>
+                                                </li>
+                                            [% END %]
+                                        [% END %]
                                         [% UNLESS hidden.defined('B_address') %]
                                             <li>
                                                 <label for="borrower_B_address" class="[% required.B_address | html %]">Address:</label>
