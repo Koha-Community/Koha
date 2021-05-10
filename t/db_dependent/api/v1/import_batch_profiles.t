@@ -106,7 +106,6 @@ subtest 'list profiles' => sub {
       ->json_is('/0/name', $ibp1->name)
       ->json_is('/1/name', $ibp2->name);
 
-
     $schema->storage->txn_rollback;
 
 };

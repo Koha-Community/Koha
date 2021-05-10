@@ -79,6 +79,7 @@ sub add {
     };
 
     my $club_hold = Koha::Club::Hold->new($club_params)->store();
+    $club_hold->discard_changes;
 
     @enrollments = shuffle(@enrollments);
 

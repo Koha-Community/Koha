@@ -53,6 +53,13 @@
       ],
       "description": "Account line debit type"
     },
+    "credit_type": {
+      "type": [
+          "string",
+          "null"
+      ],
+      "description": "Account line credit type"
+    },
     "payment_type": {
       "type": [
         "string",
@@ -96,6 +103,18 @@
         "null"
       ],
       "description": "Internal identifier for the library in which the transaction took place"
+    },
+    "interface": {
+      "type": [ "string", "null" ],
+      "description": "Interface in which the account line was generated (values can be: api, cron, commandline, intranet, opac and sip)"
+    },
+    "status": {
+      "type": [ "string", "null" ],
+      "description": "The credit/debit status"
+    },
+    "cash_register_id": {
+      "type": [ "integer", "null" ],
+      "description": "Internal identifier for the cash register used for the payment (if any)"
     }
   },
   "additionalProperties": false
