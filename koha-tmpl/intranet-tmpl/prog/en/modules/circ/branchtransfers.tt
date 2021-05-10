@@ -184,7 +184,6 @@
             </li>
 			</ol>
         </fieldset>
-        <input type="hidden" name="tobranchcd" value="[% tobrancd | html %]" />
         [% FOREACH trsfitemloo IN trsfitemloop %]
             <input type="hidden" name="bc-[% trsfitemloo.counter | html %]" value="[% trsfitemloo.item.barcode | html %]" />
             <input type="hidden" name="fb-[% trsfitemloo.counter | html %]" value="[% trsfitemloo.frombrcd | html %]" />
