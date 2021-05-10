@@ -18,7 +18,7 @@
 use Modern::Perl;
 
 use MARC::Record;
-use Test::More tests => 3;
+use Test::More tests => 4;
 use Test::Warn;
 use t::lib::TestBuilder;
 use t::lib::Mocks;
@@ -137,3 +137,72 @@ subtest 'buildKohaItemsNamespace status tests' => sub {
 };
 
 $schema->storage->txn_rollback;
+
+subtest 'buildKohaItemsNamespace() including/omitting items tests' => sub {
+
+    plan tests => 20;
+
+    $schema->storage->txn_begin;
+
+    my $biblio = $builder->build_sample_biblio;
+
+    # Have two known libraries for testing purposes
+    my $library_1 = $builder->build_object({ class => 'Koha::Libraries' });
+    my $library_2 = $builder->build_object({ class => 'Koha::Libraries' });
+    my $library_3 = $builder->build_object({ class => 'Koha::Libraries' });
+
+    my $item_1 = $builder->build_sample_item({ biblionumber => $biblio->biblionumber, library => $library_1->id });
+    my $item_2 = $builder->build_sample_item({ biblionumber => $biblio->biblionumber, library => $library_2->id });
+    my $item_3 = $builder->build_sample_item({ biblionumber => $biblio->biblionumber, library => $library_3->id });
+
+    my $items_rs = $biblio->items->search({ "me.itemnumber" => { '!=' => $item_3->itemnumber } });
+
+    ## Test passing items_rs only
+    my $xml = C4::XSLT::buildKohaItemsNamespace( $biblio->biblionumber, undef, $items_rs );
+
+    my $library_1_name = $library_1->branchname;
+    my $library_2_name = $library_2->branchname;
+    my $library_3_name = $library_3->branchname;
+
+    like(   $xml, qr{<homebranch>$library_1_name</homebranch>}, '$item_1 present in the XML' );
+    like(   $xml, qr{<homebranch>$library_2_name</homebranch>}, '$item_2 present in the XML' );
+    unlike( $xml, qr{<homebranch>$library_3_name</homebranch>}, '$item_3 not present in the XML' );
+    ## Test passing one item in hidden_items and items_rs
+    $xml = C4::XSLT::buildKohaItemsNamespace( $biblio->biblionumber, [ $item_1->itemnumber ], $items_rs->reset );
+
+    unlike( $xml, qr{<homebranch>$library_1_name</homebranch>}, '$item_1 not present in the XML' );
+    like(   $xml, qr{<homebranch>$library_2_name</homebranch>}, '$item_2 present in the XML' );
+    unlike( $xml, qr{<homebranch>$library_3_name</homebranch>}, '$item_3 not present in the XML' );
+
+    ## Test passing both items in hidden_items and items_rs
+    $xml = C4::XSLT::buildKohaItemsNamespace( $biblio->biblionumber, [ $item_1->itemnumber, $item_2->itemnumber ], $items_rs->reset );
+
+    unlike( $xml, qr{<homebranch>$library_1_name</homebranch>}, '$item_1 not present in the XML' );
+    unlike( $xml, qr{<homebranch>$library_2_name</homebranch>}, '$item_2 not present in the XML' );
+    unlike( $xml, qr{<homebranch>$library_3_name</homebranch>}, '$item_3 not present in the XML' );
+    is( $xml, '<items xmlns="http://www.koha-community.org/items"></items>', 'Empty XML' );
+
+    ## Test passing both items in hidden_items and no items_rs
+    $xml = C4::XSLT::buildKohaItemsNamespace( $biblio->biblionumber, [ $item_1->itemnumber, $item_2->itemnumber, $item_3->itemnumber ] );
+
+    unlike( $xml, qr{<homebranch>$library_1_name</homebranch>}, '$item_1 not present in the XML' );
+    unlike( $xml, qr{<homebranch>$library_2_name</homebranch>}, '$item_2 not present in the XML' );
+    unlike( $xml, qr{<homebranch>$library_3_name</homebranch>}, '$item_3 not present in the XML' );
+    is( $xml, '<items xmlns="http://www.koha-community.org/items"></items>', 'Empty XML' );
+
+    ## Test passing one item in hidden_items and items_rs
+    $xml = C4::XSLT::buildKohaItemsNamespace( $biblio->biblionumber, [ $item_1->itemnumber ] );
+
+    unlike( $xml, qr{<homebranch>$library_1_name</homebranch>}, '$item_1 not present in the XML' );
+    like(   $xml, qr{<homebranch>$library_2_name</homebranch>}, '$item_2 present in the XML' );
+    like(   $xml, qr{<homebranch>$library_3_name</homebranch>}, '$item_3 present in the XML' );
+
+    ## Test not passing any param
+    $xml = C4::XSLT::buildKohaItemsNamespace( $biblio->biblionumber );
+
+    like( $xml, qr{<homebranch>$library_1_name</homebranch>}, '$item_1 present in the XML' );
+    like( $xml, qr{<homebranch>$library_2_name</homebranch>}, '$item_2 present in the XML' );
+    like( $xml, qr{<homebranch>$library_3_name</homebranch>}, '$item_3 present in the XML' );
+
+    $schema->storage->txn_rollback;
+};
