@@ -72,7 +72,7 @@ is( $ils->test_cardnumber_compare( 'A1234', 'b1234' ),
     q{}, 'borrower bc test identifies difference' );
 
 subtest cancel_hold => sub {
-    plan tests => 5;
+    plan tests => 6;
 
     my $library = $builder->build_object ({ class => 'Koha::Libraries' });
     my $patron = $builder->build_object(
@@ -117,8 +117,9 @@ subtest cancel_hold => sub {
 
     my $ils = C4::SIP::ILS->new({ id => $library->branchcode });
     my $sip_patron = C4::SIP::ILS::Patron->new( $patron->cardnumber );
-    my $transaction = $ils->cancel_hold($patron->cardnumber,undef,$item->barcode,undef);
+    my $transaction = $ils->cancel_hold($patron->cardnumber,"",$item->barcode,undef);
 
+    isnt( $transaction->{screen_msg}, 'Invalid patron password.', "Empty password succeeds" );
     is( $transaction->{screen_msg},"Hold Cancelled.","We get a success message when hold cancelled");
 
     is( $item->biblio->holds->count(), 0, "Bib has 0 holds remaining");
