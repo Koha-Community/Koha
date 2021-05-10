@@ -360,14 +360,6 @@ used for children to include title (Mr., Mrs., etc) of guarantor
 
 a note on the patron/borrower's account that is only visible in the staff interface
 
-=head2 relationship
-
-  data_type: 'varchar'
-  is_nullable: 1
-  size: 100
-
-used for children to include the relationship to their guarantor
-
 =head2 sex
 
   data_type: 'varchar'
@@ -691,8 +683,6 @@ __PACKAGE__->add_columns(
   { data_type => "mediumtext", is_nullable => 1 },
   "borrowernotes",
   { data_type => "longtext", is_nullable => 1 },
-  "relationship",
-  { data_type => "varchar", is_nullable => 1, size => 100 },
   "sex",
   { data_type => "varchar", is_nullable => 1, size => 1 },
   "password",
@@ -775,8 +765,8 @@ __PACKAGE__->add_columns(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2021-01-21 13:39:29
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:ZVKapg14KPBMzgnIkXJnig
+# Created by DBIx::Class::Schema::Loader v0.07046 @ 2021-05-10 13:50:02
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:KIPkFRT1rq+Es9MdeJAvwg
 
 __PACKAGE__->add_columns(
     '+anonymized'    => { is_boolean => 1 },
