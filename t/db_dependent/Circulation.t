@@ -18,7 +18,7 @@
 use Modern::Perl;
 use utf8;
 
-use Test::More tests => 54;
+use Test::More tests => 55;
 use Test::Exception;
 use Test::MockModule;
 use Test::Deep qw( cmp_deeply );
@@ -4877,6 +4877,46 @@ subtest "Item's onloan value should be set if checked out item is checked out to
     ok( $item->get_from_storage->onloan, "Item's onloan column is set after initial checkout" );
     AddIssue( $patron_2->unblessed, $item->barcode );
     ok( $item->get_from_storage->onloan, "Item's onloan column is set after second checkout" );
+};
+
+subtest "updateWrongTransfer tests" => sub {
+    plan tests => 5;
+
+    my $library1 = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $library2 = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $library3 = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $item     = $builder->build_sample_item(
+        {
+            homebranch    => $library1->branchcode,
+            holdingbranch => $library2->branchcode,
+            datelastseen  => undef
+        }
+    );
+
+    my $transfer = $builder->build_object(
+        {
+            class => 'Koha::Item::Transfers',
+            value => {
+                itemnumber    => $item->itemnumber,
+                frombranch    => $library2->branchcode,
+                tobranch      => $library1->branchcode,
+                daterequested => dt_from_string,
+                datesent      => dt_from_string,
+                datecancelled => undef,
+                datearrived   => undef,
+                reason        => 'Manual'
+            }
+        }
+    );
+    is( ref($transfer), 'Koha::Item::Transfer', 'Mock transfer added' );
+
+    my $new_transfer = C4::Circulation::updateWrongTransfer($item->itemnumber, $library1->branchcode);
+    is(ref($new_transfer), 'Koha::Item::Transfer', "updateWrongTransfer returns a 'Koha::Item::Transfer' object");
+    ok( !$new_transfer->in_transit, "New transfer is NOT created as in transit (or cancelled)");
+
+    my $original_transfer = $transfer->get_from_storage;
+    ok( defined($original_transfer->datecancelled), "Original transfer was cancelled");
+    is( $original_transfer->cancellation_reason, 'WrongTransfer', "Original transfer cancellation reason is 'WrongTransfer'");
 };
 
 $schema->storage->txn_rollback;
