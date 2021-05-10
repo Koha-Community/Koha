@@ -24,7 +24,7 @@ use Koha::DateUtils;
 
 use t::lib::TestBuilder;
 
-use Test::More tests => 5;
+use Test::More tests => 7;
 use Test::Exception;
 
 my $schema  = Koha::Database->new->schema;
@@ -48,6 +48,50 @@ subtest 'item relation tests' => sub {
     my $transfer_item = $transfer->item;
     is( ref( $transfer_item ), 'Koha::Item', 'Koha::Item::Transfer->item should return a Koha::Item' );
     is( $transfer_item->itemnumber, $item->itemnumber, 'Koha::Item::Transfer->item should return the correct item' );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'from_library relation tests' => sub {
+    plan tests => 2;
+
+    $schema->storage->txn_begin;
+
+    my $library = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $transfer = $builder->build_object(
+        {
+            class => 'Koha::Item::Transfers',
+            value => {
+                frombranch => $library->branchcode,
+            }
+        }
+    );
+
+    my $from_library = $transfer->from_library;
+    is( ref( $from_library ), 'Koha::Library', 'Koha::Item::Transfer->from_library should return a Koha::Library' );
+    is( $from_library->branchcode, $library->branchcode, 'Koha::Item::Transfer->from_library should return the correct library' );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'to_library relation tests' => sub {
+    plan tests => 2;
+
+    $schema->storage->txn_begin;
+
+    my $library = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $transfer = $builder->build_object(
+        {
+            class => 'Koha::Item::Transfers',
+            value => {
+                tobranch => $library->branchcode,
+            }
+        }
+    );
+
+    my $to_library = $transfer->to_library;
+    is( ref( $to_library ), 'Koha::Library', 'Koha::Item::Transfer->to_library should return a Koha::Library' );
+    is( $to_library->branchcode, $library->branchcode, 'Koha::Item::Transfer->to_library should return the correct library' );
 
     $schema->storage->txn_rollback;
 };
