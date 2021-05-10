@@ -20,7 +20,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 12;
+use Test::More tests => 13;
 
 use t::lib::TestBuilder;
 use t::lib::Mocks;
@@ -70,6 +70,57 @@ is( $ils->test_cardnumber_compare( 'A1234', 'a1234' ),
 
 is( $ils->test_cardnumber_compare( 'A1234', 'b1234' ),
     q{}, 'borrower bc test identifies difference' );
+
+subtest add_hold => sub {
+    plan tests => 4;
+
+    my $library = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $patron = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => {
+                branchcode => $library->branchcode,
+            }
+        }
+    );
+    t::lib::Mocks::mock_userenv(
+        { branchcode => $library->branchcode, flags => 1 } );
+
+    my $item = $builder->build_sample_item(
+        {
+            library => $library->branchcode,
+        }
+    );
+
+    Koha::CirculationRules->set_rules(
+        {
+            categorycode => $patron->categorycode,
+            branchcode   => $library->branchcode,
+            itemtype     => $item->effective_itemtype,
+            rules        => {
+                onshelfholds     => 1,
+                reservesallowed  => 3,
+                holds_per_record => 3,
+                issuelength      => 5,
+                lengthunit       => 'days',
+            }
+        }
+    );
+
+    my $ils = C4::SIP::ILS->new( { id => $library->branchcode } );
+
+    # Send empty AD segments (i.e. empty string for patron_pwd)
+    my $transaction = $ils->add_hold( $patron->cardnumber, "", $item->barcode, undef );
+    isnt(
+        $transaction->{screen_msg},
+        'Invalid patron password.',
+        "Empty password succeeds"
+    );
+    ok( $transaction->{ok}, "Transaction returned success");
+    is( $item->biblio->holds->count(), 1, "Hold was placed on bib");
+    # FIXME: Should we not allow for item-level holds when we're passed an item barcode...
+    is( $item->holds->count(),0,"Hold was placed at bib level");
+};
 
 subtest cancel_hold => sub {
     plan tests => 6;
