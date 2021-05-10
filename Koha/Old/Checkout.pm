@@ -107,6 +107,7 @@ sub to_api_mapping {
         lastreneweddate => 'last_renewed_date',
         issuedate       => 'checkout_date',
         notedate        => 'note_date',
+        noteseen        => 'note_seen',
     };
 }
 
