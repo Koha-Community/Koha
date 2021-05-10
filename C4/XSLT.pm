@@ -84,7 +84,7 @@ sub transformMARCXML4XSLT {
                 for my $subfield ( $field->subfields() ) {
                     my ( $letter, $value ) = @$subfield;
                     # Replace the field value with the authorised value *except* for MARC21/NORMARC field 942$n (suppression in opac)
-                    if ( !( $tag eq '942' && $subfield eq 'n' ) || $marcflavour eq 'UNIMARC' ) {
+                    if ( !( $tag eq '942' && $subfield->[0] eq 'n' ) || $marcflavour eq 'UNIMARC' ) {
                         $value = GetAuthorisedValueDesc( $tag, $letter, $value, '', $tagslib )
                             if $av->{ $tag }->{ $letter };
                     }
