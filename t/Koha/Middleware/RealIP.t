@@ -100,18 +100,12 @@ subtest "Success multiple proxies" => sub {
 };
 
 subtest "Test alternative configuration styles" => sub {
-    plan tests => 3;
+    plan tests => 2;
     $remote_address = "2.2.2.2";
     $x_forwarded_for_header = "1.1.1.1";
     t::lib::Mocks::mock_config('koha_trusted_proxies', '2.2.2.0/24');
     $address = Koha::Middleware::RealIP::get_real_ip( $remote_address, $x_forwarded_for_header );
     is($address,'1.1.1.1',"Trust proxy (2.2.2.2) using CIDR notation, so use the X-Forwarded-For header for the remote address");
-
-    $remote_address = "2.2.2.2";
-    $x_forwarded_for_header = "1.1.1.1";
-    t::lib::Mocks::mock_config('koha_trusted_proxies', '2.2.2');
-    $address = Koha::Middleware::RealIP::get_real_ip( $remote_address, $x_forwarded_for_header );
-    is($address,'1.1.1.1',"Trust proxy (2.2.2.2) using abbreviated notation, so use the X-Forwarded-For header for the remote address");
 
     $remote_address = "2.2.2.2";
     $x_forwarded_for_header = "1.1.1.1";
