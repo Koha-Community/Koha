@@ -42,15 +42,15 @@ Mock the configuration I<$config_entry> with the specified I<$value>.
 =cut
 
 sub mock_config {
-    my $context = Test::MockModule->new('C4::Context');
+    my $koha_config = Test::MockModule->new('Koha::Config');
     my ( $conf, $value ) = @_;
     $configs{$conf} = $value;
-    $context->mock('config', sub {
+    $koha_config->redefine('get', sub {
         my ( $self, $conf ) = @_;
         if ( exists $configs{$conf} ) {
             return $configs{$conf}
         } else {
-            my $method = $context->original('config');
+            my $method = $koha_config->original('get');
             return $method->($self, $conf);
         }
     });

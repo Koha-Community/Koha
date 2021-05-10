@@ -16,7 +16,7 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use Test::More tests => 2;
+use Test::More tests => 3;
 use C4::Context;
 
 my $dbh = C4::Context->dbh;
@@ -24,3 +24,12 @@ my $sql_mode = $dbh->selectrow_array(q|SELECT @@SQL_MODE|);
 like( $sql_mode, qr{STRICT_TRANS_TABLES}, 'Strict SQL modes must be turned on for tests' );
 
 is( $dbh->{RaiseError}, 1, 'RaiseError must be turned on for tests' );
+
+subtest 'db_scheme2dbi' => sub {
+    plan tests => 4;
+
+    is(Koha::Database::db_scheme2dbi('mysql'), 'mysql', 'ask for mysql, get mysql');
+    is(Koha::Database::db_scheme2dbi('Pg'),    'Pg',    'ask for Pg, get Pg');
+    is(Koha::Database::db_scheme2dbi('xxx'),   'mysql', 'ask for unsupported DBMS, get mysql');
+    is(Koha::Database::db_scheme2dbi(),        'mysql', 'ask for nothing, get mysql');
+};

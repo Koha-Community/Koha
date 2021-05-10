@@ -18,7 +18,7 @@
 use Modern::Perl;
 
 use DBI;
-use Test::More tests => 35;
+use Test::More tests => 31;
 use Test::MockModule;
 use Test::Warn;
 use YAML::XS;
@@ -94,11 +94,6 @@ $userenv->{flags} = 0;
 $is_super_librarian = eval{ C4::Context::IsSuperLibrarian() };
 is ( $@, q||, "IsSuperLibrarian does not log an error if \$userenv->{flags} is equal to 0" );
 is ( $is_super_librarian, 0, "With flag=0, it is not a super librarian" );
-
-is(C4::Context::db_scheme2dbi('mysql'), 'mysql', 'ask for mysql, get mysql');
-is(C4::Context::db_scheme2dbi('Pg'),    'Pg',    'ask for Pg, get Pg');
-is(C4::Context::db_scheme2dbi('xxx'),   'mysql', 'ask for unsupported DBMS, get mysql');
-is(C4::Context::db_scheme2dbi(),        'mysql', 'ask for nothing, get mysql');
 
 # C4::Context::interface
 my $lastwarn;

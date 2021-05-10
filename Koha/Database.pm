@@ -25,20 +25,89 @@ Koha::Database
 =head1 SYNOPSIS
 
   use Koha::Database;
-  my $database = Koha::Database->new();
-  my $schema = $database->schema();
+  my $schema = Koha::Database->schema();
 
 =head1 FUNCTIONS
 
 =cut
 
 use Modern::Perl;
-use C4::Context;
-use base qw(Class::Accessor);
+use DBI;
+use Koha::Config;
 
-use vars qw($database);
+our $database;
 
-__PACKAGE__->mk_accessors(qw( ));
+# FIXME: It is useless to have a Koha::Database object since all methods
+# below act as class methods
+# Koha::Database->new->schema is exactly the same as Koha::Database->schema
+# We should use Koha::Database->schema everywhere and remove the `new` method
+sub new { bless {}, shift }
+
+sub dbh {
+    my $config = Koha::Config->get_instance;
+    my $driver = db_scheme2dbi($config->get('db_scheme'));
+    my $user = $config->get("user"),
+    my $pass = $config->get("pass"),
+    my $dsn = sprintf(
+        'dbi:%s:database=%s;host=%s;port=%s',
+        $driver,
+        $config->get("database"),
+        $config->get("hostname"),
+        $config->get("port") || '',
+    );
+
+    my $attr = {
+        RaiseError => 1,
+        PrintError => 1,
+    };
+
+    if ($driver eq 'mysql') {
+        my $tls = $config->get("tls");
+        if ($tls && $tls eq 'yes') {
+            $dsn .= sprintf(
+                ';mysql_ssl=1;mysql_ssl_client_key=%s;mysql_ssl_client_cert=%s;mysql_ssl_ca_file=%s',
+                $config->get('key'),
+                $config->get('cert'),
+                $config->get('ca'),
+            );
+        }
+
+        $attr->{mysql_enable_utf8} = 1;
+    }
+
+    my $dbh = DBI->connect($dsn, $user, $pass, $attr);
+
+    if ($dbh) {
+        my @queries;
+        my $tz = $config->timezone;
+        $tz = '' if $tz eq 'local';
+
+        if ($driver eq 'mysql') {
+            push @queries, "SET NAMES 'utf8mb4'";
+            push @queries, qq{SET time_zone = "$tz"} if $tz;
+            if (   $config->get('strict_sql_modes')
+                || ( exists $ENV{_} && $ENV{_} =~ m|prove| )
+                || $ENV{KOHA_TESTING}
+            ) {
+                push @queries, q{
+                    SET sql_mode = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION'
+                };
+            } else {
+                push @queries, q{SET sql_mode = 'IGNORE_SPACE,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION'}
+            }
+        } elsif ($driver eq 'Pg') {
+            push @queries, qq{SET TIME ZONE = "$tz"} if $tz;
+            push @queries, q{set client_encoding = 'UTF8'};
+        }
+
+        foreach my $query (@queries) {
+            $dbh->do($query);
+        }
+    }
+
+    return $dbh;
+}
+
 
 # _new_schema
 # Internal helper function (not a method!). This creates a new
@@ -48,62 +117,11 @@ sub _new_schema {
 
     require Koha::Schema;
 
-    my $db_driver = C4::Context::db_scheme2dbi(C4::Context->config('db_scheme'));;
-
-    my $db_name   = C4::Context->config("database");
-    my $db_host   = C4::Context->config("hostname");
-    my $db_port   = C4::Context->config("port") || '';
-    my $db_user   = C4::Context->config("user");
-    my $db_passwd = C4::Context->config("pass");
-    my $tls = C4::Context->config("tls");
-    my $tls_options;
-    if( $tls && $tls eq 'yes' ) {
-        my $ca = C4::Context->config('ca');
-        my $cert = C4::Context->config('cert');
-        my $key = C4::Context->config('key');
-        $tls_options = ";mysql_ssl=1;mysql_ssl_client_key=".$key.";mysql_ssl_client_cert=".$cert.";mysql_ssl_ca_file=".$ca;
-    }
-
-
-
-    my ( %encoding_attr, $encoding_query, $tz_query, $sql_mode_query );
-    my $tz = C4::Context->timezone;
-    $tz = q{} if ( $tz eq 'local' );
-    if ( $db_driver eq 'mysql' ) {
-        %encoding_attr = ( mysql_enable_utf8 => 1 );
-        $encoding_query = "set NAMES 'utf8mb4'";
-        $tz_query = qq(SET time_zone = "$tz") if $tz;
-        if (   C4::Context->config('strict_sql_modes')
-            || ( exists $ENV{_} && $ENV{_} =~ m|prove| )
-            || $ENV{KOHA_TESTING}
-        ) {
-            $sql_mode_query = q{SET sql_mode = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION'};
-        } else {
-            $sql_mode_query = q{SET sql_mode = 'IGNORE_SPACE,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION'};
-        }
-    }
-    elsif ( $db_driver eq 'Pg' ) {
-        $encoding_query = "set client_encoding = 'UTF8';";
-        $tz_query = qq(SET TIME ZONE = "$tz") if $tz;
-    }
-
-    my $schema = Koha::Schema->connect(
-        {
-            dsn => "dbi:$db_driver:database=$db_name;host=$db_host;port=$db_port".($tls_options? $tls_options : ""),
-            user => $db_user,
-            password => $db_passwd,
-            %encoding_attr,
-            RaiseError => 1,
-            PrintError => 1,
-            quote_names => 1,
-            auto_savepoint => 1,
-            on_connect_do => [
-                $encoding_query || (),
-                $tz_query || (),
-                $sql_mode_query || (),
-            ]
-        }
-    );
+    my $schema = Koha::Schema->connect({
+        dbh_maker => \&Koha::Database::dbh,
+        quote_names => 1,
+        auto_savepoint => 1,
+    });
 
     my $dbh = $schema->storage->dbh;
     eval {
@@ -126,7 +144,8 @@ sub _new_schema {
 
 =head2 schema
 
-    $schema = $database->schema;
+    $schema = Koha::Database->schema;
+    $schema = Koha::Database->schema({ new => 1 });
 
 Returns a database handle connected to the Koha database for the
 current context. If no connection has yet been made, this method
@@ -140,8 +159,7 @@ possibly C<&set_schema>.
 =cut
 
 sub schema {
-    my $self = shift;
-    my $params = shift;
+    my ($class, $params) = @_;
 
     unless ( $params->{new} ) {
         return $database->{schema} if defined $database->{schema};
@@ -240,6 +258,22 @@ sub get_schema_cached {
 sub flush_schema_cache {
     delete $database->{schema};
     return 1;
+}
+
+=head2 db_scheme2dbi
+
+    my $dbd_driver_name = Koha::Database::db_scheme2dbi($scheme);
+
+This routines translates a database type to part of the name
+of the appropriate DBD driver to use when establishing a new
+database connection.  It recognizes 'mysql' and 'Pg'; if any
+other scheme is supplied it defaults to 'mysql'.
+
+=cut
+
+sub db_scheme2dbi {
+    my $scheme = shift // '';
+    return $scheme eq 'Pg' ? $scheme : 'mysql';
 }
 
 =head2 EXPORT

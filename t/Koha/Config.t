@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 2;
+use Test::More tests => 4;
 use FindBin qw($Bin $Script);
 
 use_ok('Koha::Config');
@@ -247,3 +247,61 @@ subtest 'read_from_file() tests' => sub {
     like( $@, qr{.*Error reading file.*}, 'File failing to read raises warning');
 };
 
+subtest 'get_instance' => sub {
+    plan tests => 3;
+
+    my $config = Koha::Config->get_instance($config_filepath);
+    isa_ok($config, 'Koha::Config', 'get_instance returns a Koha::Config object');
+    my $same_config = Koha::Config->get_instance($config_filepath);
+    is($config, $same_config, '2nd call to get_instance returns the same object');
+
+    local $ENV{KOHA_CONF} = $config_filepath;
+    my $default_config = Koha::Config->get_instance;
+    is($default_config, $config, 'get_instance without parameters reads $KOHA_CONF');
+};
+
+subtest 'get' => sub {
+    plan tests => 7;
+
+    my $config = Koha::Config->get_instance($config_filepath);
+
+    is_deeply(
+        $config->get('biblioserver', 'listen'),
+        { content => 'unix:/home/koha/var/run/zebradb/bibliosocket' },
+    );
+
+    is_deeply(
+        $config->get('biblioserver', 'server'),
+        {
+            'listenref' => 'biblioserver',
+            'directory' => '/home/koha/var/lib/zebradb/biblios',
+            'config' => '/home/koha/etc/zebradb/zebra-biblios-dom.cfg',
+            'cql2rpn' => '/home/koha/etc/zebradb/pqf.properties',
+            'xi:include' => [
+                {
+                    'href' => '/home/koha/etc/zebradb/retrieval-info-bib-dom.xml',
+                    'xmlns:xi' => 'http://www.w3.org/2001/XInclude'
+                },
+                {
+                    'xmlns:xi' => 'http://www.w3.org/2001/XInclude',
+                    'href' => '/home/koha/etc/zebradb/explain-biblios.xml'
+                }
+            ],
+        },
+    );
+
+    is_deeply(
+        $config->get('biblioserver', 'serverinfo'),
+        {
+            'ccl2rpn' => '/home/koha/etc/zebradb/ccl.properties',
+            'user' => 'kohauser',
+            'password' => 'zebrastripes',
+        },
+    );
+
+    is($config->get('db_scheme'), 'mysql');
+    is($config->get('ca'), '');
+
+    is($config->get('unicorn'), undef, 'returns undef if key does not exist');
+    is_deeply([$config->get('unicorn')], [undef], 'returns undef even in list context');
+};
