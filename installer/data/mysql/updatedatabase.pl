@@ -24250,6 +24250,20 @@ if( CheckVersion( $DBversion ) ) {
     NewVersion( $DBversion, 26995, "Drop column relationship from borrower tables");
 }
 
+$DBversion = '20.12.00.049';
+if ( CheckVersion($DBversion) ) {
+    $dbh->do(q{
+        UPDATE action_logs SET module = 'CLAIMS'
+        WHERE module = 'ACQUISITIONS' AND ( action = 'SERIAL CLAIM' OR action = 'ACQUISITION CLAIM')
+    });
+
+    $dbh->do(q{
+        UPDATE systempreferences SET variable = 'ClaimsLog' WHERE variable = 'LetterLog';
+    });
+
+    NewVersion( $DBversion, 28108, "Move action logs 'SERIAL CLAIM' and 'ACQUISITION CLAIM' to a new 'CLAIMS' module" );
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 my $update_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/atomicupdate/';
