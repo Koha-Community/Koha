@@ -190,7 +190,7 @@ sub get_xslt_sysprefs {
 }
 
 sub XSLTParse4Display {
-    my ( $biblionumber, $orig_record, $xslsyspref, $fixamps, $hidden_items, $sysxml, $xslfilename, $lang, $variables ) = @_;
+    my ( $biblionumber, $orig_record, $xslsyspref, $fixamps, $hidden_items, $sysxml, $xslfilename, $lang, $variables, $items_rs ) = @_;
 
     $sysxml ||= C4::Context->preference($xslsyspref);
     $xslfilename ||= C4::Context->preference($xslsyspref);
@@ -246,7 +246,7 @@ sub XSLTParse4Display {
     if ( $xslsyspref eq "OPACXSLTDetailsDisplay" || $xslsyspref eq "XSLTDetailsDisplay" || $xslsyspref eq "XSLTResultsDisplay" ) {
         $itemsxml = ""; #We don't use XSLT for items display on these pages
     } else {
-        $itemsxml = buildKohaItemsNamespace($biblionumber, $hidden_items);
+        $itemsxml = buildKohaItemsNamespace($biblionumber, $hidden_items, $items_rs);
     }
     my $xmlrecord = $record->as_xml(C4::Context->preference('marcflavour'));
 
@@ -289,22 +289,34 @@ sub XSLTParse4Display {
 
 =head2 buildKohaItemsNamespace
 
-Returns XML for items.
+    my $items_xml = buildKohaItemsNamespace( $biblionumber, [ $hidden_items, $items ] );
+
+Returns XML for items. It accepts two optional parameters:
+- I<$hidden_items>: An arrayref of itemnumber values, for items that should be hidden
+- I<$items>: A Koha::Items resultset, for the items to be returned
+
+If both parameters are passed, I<$items> is used as the basis resultset, and I<$hidden_items>
+are filtered out of it.
+
 Is only used in this module currently.
 
 =cut
 
 sub buildKohaItemsNamespace {
-    my ($biblionumber, $hidden_items) = @_;
+    my ($biblionumber, $hidden_items, $items_rs) = @_;
 
     $hidden_items ||= [];
-    my @items = Koha::Items->search(
-        {
-            'me.biblionumber' => $biblionumber,
-            'me.itemnumber'   => { not_in => $hidden_items }
-        },
-        { prefetch => [ 'branchtransfers', 'reserves' ] }
-    );
+
+    my $query = {};
+    $query = { 'me.itemnumber' => { not_in => $hidden_items } }
+      if $hidden_items;
+
+    unless ( $items_rs && ref($items_rs) eq 'Koha::Items' ) {
+        $query->{'me.biblionumber'} = $biblionumber;
+        $items_rs = Koha::Items->new;
+    }
+
+    my $items = $items_rs->search( $query, { prefetch => [ 'branchtransfers', 'reserves' ] } );
 
     my $shelflocations =
       { map { $_->{authorised_value} => $_->{opac_description} } Koha::AuthorisedValues->get_descriptions_by_koha_field( { frameworkcode => "", kohafield => 'items.location' } ) };
@@ -318,7 +330,7 @@ sub buildKohaItemsNamespace {
     my %descs = map { $_->{authorised_value} => $_ } Koha::AuthorisedValues->get_descriptions_by_koha_field( { kohafield => 'items.notforloan' } );
     my $ref_status = C4::Context->preference('Reference_NFL_Statuses') || '1|2';
 
-    for my $item (@items) {
+    while ( my $item = $items->next ) {
         my $status;
         my $substatus = '';
 
