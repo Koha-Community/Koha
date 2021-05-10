@@ -112,7 +112,7 @@ sub startup {
 
         try {
             $validator->load_and_validate_schema(
-                $self->home->rel_file("api/v1/swagger/swagger.json"),
+                $self->home->rel_file("api/v1/swagger/swagger.yaml"),
                 {
                     allow_invalid_ref  => 1,
                     schema => ( $swagger_schema ) ? $swagger_schema : undef,
