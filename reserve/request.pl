@@ -167,11 +167,9 @@ if ( $biblionumbers ) {
     push @biblionumbers, $input->multi_param('biblionumber');
 }
 
-my $clubcount = Koha::Clubs->search->count;
 my $multi_hold = @biblionumbers > 1;
 $template->param(
-        multi_hold => $multi_hold,
-        clubcount  => $clubcount,
+    multi_hold => $multi_hold,
 );
 
 # If we have the borrowernumber because we've performed an action, then we
@@ -271,6 +269,10 @@ if ($club_hold && !$borrowernumber_hold && !$action) {
         maxreserves         => $maxreserves,
         new_reserves_count  => $new_reserves_count
     );
+}
+
+unless ( $club_hold or $borrowernumber_hold ) {
+    $template->param( clubcount => Koha::Clubs->search->count );
 }
 
 $template->param(
