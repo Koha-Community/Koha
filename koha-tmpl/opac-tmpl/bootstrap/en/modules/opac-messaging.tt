@@ -250,36 +250,27 @@
         $(document).ready(function(){
             $("#info_digests").tooltip();
 
-            // At load time, we want digest disabled if no digest using transport is enabled
-            $(".pmp_email").each(function(){
-                var rowid = $(this).attr("id");
-                id = Number(rowid.replace("email",""));
+            function toggle_digest(id){
                 if ( $("#email"+id).prop("checked") || $("#sms"+id).prop("checked") ) {
                     $("#digest"+id).attr("disabled", false).tooltip('disable');
                 } else {
-                    $("#digest"+id).attr("disabled", true).tooltip('enable');
+                    $("#digest"+id).attr("disabled", true).prop("checked",false).tooltip('enable');
                 }
+
+            }
+            // At load time, we want digest disabled if no digest using transport is enabled
+            $(".pmp_email").each(function(){
+                toggle_digest(Number($(this).attr("id").replace("email", "")));
             });
 
             // If user clears all digest using transports for a notice, disable digest checkbox
             $(".pmp_email").click(function(){
-                var rowid = $(this).attr("id");
-                id = Number(rowid.replace("email",""));
-                if ( $("#email"+id).prop("checked") || $("#sms"+id).prop("checked") ) {
-                    $("#digest"+id).attr("disabled", false).tooltip('disable');
-                } else {
-                    $("#digest"+id).attr("disabled", true).prop("checked",false).tooltip('enable');
-                }
+                toggle_digest(Number($(this).attr("id").replace("email", "")));
             });
             $(".pmp_sms").click(function(){
-                var rowid = $(this).attr("id");
-                id = Number(rowid.replace("sms",""));
-                if ( $("#email"+id).prop("checked") || $("#sms"+id).prop("checked") ) {
-                    $("#digest"+id).attr("disabled", false).tooltip('disable');
-                } else {
-                    $("#digest"+id).attr("disabled", true).prop("checked",false).tooltip('enable');
-                }
+                toggle_digest(Number($(this).attr("id").replace("sms", "")));
             });
+
         });
 
         function normalizeSMS(value){
