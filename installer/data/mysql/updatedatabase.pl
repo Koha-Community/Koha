@@ -24227,6 +24227,29 @@ if( CheckVersion( $DBversion ) ) {
     NewVersion( $DBversion, 23215, "Remove core PayPal support in favor of the use of plugins" );
 }
 
+$DBversion = '20.12.00.048';
+if( CheckVersion( $DBversion ) ) {
+    if ( column_exists( 'borrowers', 'relationship' ) ) {
+        $dbh->do(q{
+            ALTER TABLE borrowers DROP COLUMN relationship
+        });
+    }
+
+    if ( column_exists( 'deletedborrowers', 'relationship' ) ) {
+        $dbh->do(q{
+            ALTER TABLE deletedborrowers DROP COLUMN relationship
+        });
+    }
+
+    if ( column_exists( 'borrower_modifications', 'relationship' ) ) {
+        $dbh->do(q{
+            ALTER TABLE borrower_modifications DROP COLUMN relationship
+        });
+    }
+
+    NewVersion( $DBversion, 26995, "Drop column relationship from borrower tables");
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 my $update_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/atomicupdate/';
