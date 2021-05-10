@@ -205,11 +205,6 @@ $.widget.bridge('uitooltip', $.ui.tooltip);
         var query_cgi = "[% query_cgi | html %]";
     [% END %]
 
-    [% IF ( OPACAmazonCoverImages || SyndeticsCoverImages ) %]
-        $(window).load(function() {
-            verify_images();
-         });
-    [% END %]
     $(".print-large").on("click",function(){
         window.print();
         return false;

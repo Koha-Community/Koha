@@ -22,7 +22,7 @@ KOHA.LocalCover = {
             var mydiv = this;
             var message = document.createElement("span");
             $(message).attr("class","no-image");
-            $(message).html(NO_LOCAL_JACKET);
+            $(message).html( __("No cover image available") );
             $(mydiv).parent().find('.no-image').remove();
             $(mydiv).append(message);
             var img = $("<img />").attr('src',
@@ -51,7 +51,7 @@ KOHA.LocalCover = {
             var imagenumber  = $(mydiv).data("imagenumber");
             var biblionumber = $(mydiv).data("biblionumber");
             $(message).attr("class","no-image");
-            $(message).html(NO_LOCAL_JACKET);
+            $(message).html( __("No cover image available") );
             $(mydiv).parent().find('.no-image').remove();
             $(mydiv).append(message);
             var img = $("<img />").attr('src',
