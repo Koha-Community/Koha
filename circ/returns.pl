@@ -405,7 +405,7 @@ if ( $messages->{'WrongTransfer'} and not $messages->{'WasTransfered'}) {
     );
 
     # Update the transfer to reflect the new item holdingbranch
-	my $new_transfer = updateWrongTransfer($messages->{'WrongTransferItem'},$messages->{'WrongTransfer'}, $userenv_branch);
+    my $new_transfer = updateWrongTransfer($messages->{'WrongTransferItem'},$messages->{'WrongTransfer'}, $userenv_branch);
     $template->param(
         NewTransfer => $new_transfer->id
     );
