@@ -348,23 +348,18 @@ if ( $op eq 'view' ) {
                     });
                 }
 
-                my @items;
-                my $items = $biblio->items;
+                my $items = $biblio->items->filter_by_visible_in_opac({ patron => $patron });
                 my $allow_onshelf_holds;
-                my @hidden_items;
                 while ( my $item = $items->next ) {
-                    if ( $item->hidden_in_opac({rules => C4::Context->yaml_preference('OpacHiddenItems')} ) ) {
-                        push @hidden_items, $item->itemnumber;
-                        next;
-                    }
 
+                    # This method must take a Koha::Items rs
                     $allow_onshelf_holds ||= Koha::CirculationRules->get_onshelfholds_policy(
                         { item => $item, patron => $patron } );
 
-                    push @items, $item; # This is for non-xslt only
                 }
+
                 $this_item->{allow_onshelf_holds} = $allow_onshelf_holds;
-                $this_item->{'ITEM_RESULTS'} = \@items;
+                $this_item->{'ITEM_RESULTS'} = $items;
 
                 if ($xslfile) {
                     my $variables = {
@@ -373,9 +368,9 @@ if ( $op eq 'view' ) {
                     $this_item->{XSLTBloc} = XSLTParse4Display(
                         $biblionumber,          $record,
                         "OPACXSLTListsDisplay", 1,
-                        \@hidden_items,         $sysxml,
-                        $xslfile,               $lang,
-                        $variables
+                        undef,                 $sysxml,
+                        $xslfile,              $lang,
+                        $variables,            $items->reset
                     );
                 }
 
