@@ -47,7 +47,7 @@ Return the items of the set that are holdable
 
 sub filter_by_for_hold {
     my ($self) = @_;
-    return $self->search( { notforloan => { '<' => 1 } } ); # items with negative or zero notforloan value are holdable
+    return $self->search( { notforloan => { '<=' => 0 } } ); # items with negative or zero notforloan value are holdable
 }
 
 =head3 filter_by_visible_in_opac
