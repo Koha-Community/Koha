@@ -1050,10 +1050,6 @@ __END__
 
 Specifies the configuration file to read.
 
-=head1 SEE ALSO
-
-XML::Simple
-
 =head1 AUTHORS
 
 Andrew Arensburger <arensb at ooblick dot com>
