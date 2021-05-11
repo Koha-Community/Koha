@@ -1,4 +1,5 @@
 [% USE Koha %]
+[% USE AuthorisedValues %]
 [% BLOCK 'alt-address-style' %]
     <fieldset class="rows" id="memberentry_address">
         <legend id="alt_address_lgd">Alternate address</legend>
@@ -55,6 +56,7 @@
 [% END %]
 
 [% BLOCK 'alt-address-style_roadtypes' %]
+    [% SET roadtypes = AuthorisedValues.GetAuthValueDropbox('ROADTYPE') %]
     [% IF roadtypes %]
         <li>
             [% IF ( mandatoryB_streettype ) %]

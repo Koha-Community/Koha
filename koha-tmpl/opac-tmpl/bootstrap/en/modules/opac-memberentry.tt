@@ -425,6 +425,7 @@
                                     <ol>
                                         [% IF Koha.Preference('AddressFormat') != 'de' %][% INCLUDE streetnumber %][% END %]
 
+                                        [% SET roadtypes = AuthorisedValues.GetAuthValueDropbox('ROADTYPE') %]
                                         [% IF roadtypes %]
                                             [% UNLESS hidden.defined('streettype') %]
                                                 <li>

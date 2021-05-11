@@ -118,11 +118,6 @@ foreach my $attr (@$attributes) {
     }
 }
 
-my $roadtypes = C4::Koha::GetAuthorisedValues( 'ROADTYPE' );
-$template->param(
-    roadtypes => $roadtypes,
-);
-
 if ( $action eq 'create' ) {
 
     my %borrower = ParseCgiForBorrower($cgi);

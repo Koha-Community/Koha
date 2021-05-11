@@ -701,9 +701,7 @@ $template->param(
 );
 
 my $cities = Koha::Cities->search( {}, { order_by => 'city_name' } );
-my $roadtypes = C4::Koha::GetAuthorisedValues( 'ROADTYPE' );
 $template->param(
-    roadtypes => $roadtypes,
     cities    => $cities,
 );
 
