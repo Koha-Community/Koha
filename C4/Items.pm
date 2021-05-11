@@ -309,7 +309,7 @@ sub ModItemFromMarc {
     my $item = TransformMarcToKoha( $localitemmarc, $frameworkcode, 'items' );
 
     my ( $perm_loc_tag, $perm_loc_subfield ) = C4::Biblio::GetMarcFromKohaField( "items.permanent_location" );
-    my $has_permanent_location = defined $item_marc->subfield( $perm_loc_tag, $perm_loc_subfield );
+    my $has_permanent_location = defined $perm_loc_tag && defined $item_marc->subfield( $perm_loc_tag, $perm_loc_subfield );
 
     # Retrieving the values for the fields that are not linked
     my @mapped_fields = Koha::MarcSubfieldStructures->search(
