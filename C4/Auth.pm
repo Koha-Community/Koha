@@ -1850,21 +1850,21 @@ sub _get_session_params {
     my $storage_method = C4::Context->preference('SessionStorage');
     if ( $storage_method eq 'mysql' ) {
         my $dbh = C4::Context->dbh;
-        return { dsn => "driver:MySQL;serializer:yaml;id:md5", dsn_args => { Handle => $dbh } };
+        return { dsn => "driver:MySQL;id:md5", dsn_args => { Handle => $dbh } };
     }
     elsif ( $storage_method eq 'Pg' ) {
         my $dbh = C4::Context->dbh;
-        return { dsn => "driver:PostgreSQL;serializer:yaml;id:md5", dsn_args => { Handle => $dbh } };
+        return { dsn => "driver:PostgreSQL;id:md5", dsn_args => { Handle => $dbh } };
     }
     elsif ( $storage_method eq 'memcached' && Koha::Caches->get_instance->memcached_cache ) {
         my $memcached = Koha::Caches->get_instance()->memcached_cache;
-        return { dsn => "driver:memcached;serializer:yaml;id:md5", dsn_args => { Memcached => $memcached } };
+        return { dsn => "driver:memcached;id:md5", dsn_args => { Memcached => $memcached } };
     }
     else {
         # catch all defaults to tmp should work on all systems
         my $dir = C4::Context::temporary_directory;
         my $instance = C4::Context->config( 'database' ); #actually for packages not exactly the instance name, but generally safer to leave it as it is
-        return { dsn => "driver:File;serializer:yaml;id:md5", dsn_args => { Directory => "$dir/cgisess_$instance" } };
+        return { dsn => "driver:File;id:md5", dsn_args => { Directory => "$dir/cgisess_$instance" } };
     }
 }
 

@@ -243,7 +243,7 @@ sub checkauth {
     if ( $sessionID = $query->cookie("CGISESSID") ) {
         C4::Context->_new_userenv($sessionID);
         my $session =
-          CGI::Session->new( "driver:File;serializer:yaml", $sessionID,
+          CGI::Session->new( "driver:File", $sessionID,
             { Directory => $sessdir } );
         if ( $session->param('cardnumber') ) {
             C4::Context->set_userenv(
@@ -283,7 +283,7 @@ sub checkauth {
     }
     unless ($userid) {
         my $session =
-          CGI::Session->new( "driver:File;serializer:yaml", undef, { Directory => $sessdir } );
+          CGI::Session->new( "driver:File", undef, { Directory => $sessdir } );
         $sessionID = $session->id;
         $userid    = $query->param('userid');
         C4::Context->_new_userenv($sessionID);
