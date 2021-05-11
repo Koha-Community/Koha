@@ -21,7 +21,7 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use Test::More tests => 11;
+use Test::More tests => 13;
 use Test::Exception;
 use Test::MockObject;
 use Test::MockModule;
@@ -74,6 +74,24 @@ subtest 'Checkout V2' => sub {
     plan tests => 5;
     $C4::SIP::Sip::protocol_version = 2;
     test_checkout_v2();
+    $schema->storage->txn_rollback;
+};
+
+subtest 'Test checkout desensitize' => sub {
+    my $schema = Koha::Database->new->schema;
+    $schema->storage->txn_begin;
+    plan tests => 3;
+    $C4::SIP::Sip::protocol_version = 2;
+    test_checkout_desensitize();
+    $schema->storage->txn_rollback;
+};
+
+subtest 'Test renew desensitize' => sub {
+    my $schema = Koha::Database->new->schema;
+    $schema->storage->txn_begin;
+    plan tests => 3;
+    $C4::SIP::Sip::protocol_version = 2;
+    test_renew_desensitize();
     $schema->storage->txn_rollback;
 };
 
@@ -839,6 +857,137 @@ sub test_hold_patron_bcode {
 
     my $resp = C4::SIP::Sip::maybe_add( FID_CALL_NUMBER, $sip_item->hold_patron_bcode, $server );
     is( $resp, q{}, "maybe_add returns empty string for SIP item with no hold returns empty string" );
+}
+
+sub test_checkout_desensitize {
+    my $builder = t::lib::TestBuilder->new();
+    my $branchcode  = $builder->build({ source => 'Branch' })->{branchcode};
+    my ( $response, $findpatron );
+    my $mocks = create_mocks( \$response, \$findpatron, \$branchcode );
+
+    # create some data
+    my $patron1 = $builder->build({
+        source => 'Borrower',
+        value  => {
+            password => hash_password( PATRON_PW ),
+        },
+    });
+    my $card1 = $patron1->{cardnumber};
+    my $sip_patron1 = C4::SIP::ILS::Patron->new( $card1 );
+    my $patron_category = $sip_patron1->ptype();
+    $findpatron = $sip_patron1;
+    my $item_object = $builder->build_sample_item({
+        damaged => 0,
+        withdrawn => 0,
+        itemlost => 0,
+        restricted => 0,
+        homebranch => $branchcode,
+        holdingbranch => $branchcode,
+    });
+
+    my $mockILS = $mocks->{ils};
+    my $server = { ils => $mockILS, account => {} };
+    $mockILS->mock( 'institution', sub { $branchcode; } );
+    $mockILS->mock( 'supports', sub { return; } );
+    $mockILS->mock( 'checkout', sub {
+        shift;
+        return C4::SIP::ILS->checkout(@_);
+    });
+    my $today = dt_from_string;
+    t::lib::Mocks::mock_userenv({ branchcode => $branchcode, flags => 1 });
+    t::lib::Mocks::mock_preference( 'CheckPrevCheckout',  'hardyes' );
+
+    my $siprequest = CHECKOUT . 'YN' . siprequestdate($today) .
+    siprequestdate( $today->clone->add( days => 1) ) .
+    FID_INST_ID . $branchcode . '|'.
+    FID_PATRON_ID . $sip_patron1->id . '|' .
+    FID_ITEM_ID . $item_object->barcode . '|' .
+    FID_TERMINAL_PWD . 'ignored' . '|';
+
+    undef $response;
+    my $msg = C4::SIP::Sip::MsgType->new( $siprequest, 0 );
+    $server->{account}->{never_demagnitize} = "A,$patron_category,Z";
+    $msg->handle_checkout( $server );
+    my $respcode = substr( $response, 5, 1 );
+    is( $respcode, 'N', "Desensitize flag was not set for patron category in never_demagnitize" );
+
+    undef $response;
+    $server->{account}->{never_demagnitize} = "A,B,C";
+    $msg->handle_checkout( $server );
+    $respcode = substr( $response, 5, 1 );
+    is( $respcode, 'Y', "Desensitize flag was set for patron category not in never_demagnitize" );
+
+    undef $response;
+    $server->{account}->{never_demagnitize} = "";
+    $msg->handle_checkout( $server );
+    $respcode = substr( $response, 5, 1 );
+    is( $respcode, 'Y', "Desensitize flag was set for empty never_demagnitize" );
+}
+
+sub test_renew_desensitize {
+    my $builder = t::lib::TestBuilder->new();
+    my $branchcode  = $builder->build({ source => 'Branch' })->{branchcode};
+    my ( $response, $findpatron );
+    my $mocks = create_mocks( \$response, \$findpatron, \$branchcode );
+
+    # create some data
+    my $patron1 = $builder->build({
+        source => 'Borrower',
+        value  => {
+            password => hash_password( PATRON_PW ),
+        },
+    });
+    my $card1 = $patron1->{cardnumber};
+    my $sip_patron1 = C4::SIP::ILS::Patron->new( $card1 );
+    my $patron_category = $sip_patron1->ptype();
+    $findpatron = $sip_patron1;
+    my $item_object = $builder->build_sample_item({
+        damaged => 0,
+        withdrawn => 0,
+        itemlost => 0,
+        restricted => 0,
+        homebranch => $branchcode,
+        holdingbranch => $branchcode,
+    });
+
+    my $mockILS = $mocks->{ils};
+    my $server = { ils => $mockILS, account => {} };
+    $mockILS->mock( 'institution', sub { $branchcode; } );
+    $mockILS->mock( 'supports', sub { return; } );
+    $mockILS->mock( 'checkout', sub {
+        shift;
+        return C4::SIP::ILS->checkout(@_);
+    });
+    my $today = dt_from_string;
+    t::lib::Mocks::mock_userenv({ branchcode => $branchcode, flags => 1 });
+
+    my $issue = Koha::Checkout->new({ branchcode => $branchcode, borrowernumber => $patron1->{borrowernumber}, itemnumber => $item_object->itemnumber })->store;
+
+    my $siprequest = RENEW . 'YN' . siprequestdate($today) .
+    siprequestdate( $today->clone->add( days => 1) ) .
+    FID_INST_ID . $branchcode . '|'.
+    FID_PATRON_ID . $sip_patron1->id . '|' .
+    FID_ITEM_ID . $item_object->barcode . '|' .
+    FID_TERMINAL_PWD . 'ignored' . '|';
+
+    undef $response;
+    my $msg = C4::SIP::Sip::MsgType->new( $siprequest, 0 );
+    $server->{account}->{never_demagnitize} = "A,$patron_category,Z";
+    $msg->handle_checkout( $server );
+    my $respcode = substr( $response, 5, 1 );
+    is( $respcode, 'N', "Desensitize flag was not set for patron category in never_demagnitize" );
+
+    undef $response;
+    $server->{account}->{never_demagnitize} = "A,B,C";
+    $msg->handle_checkout( $server );
+    $respcode = substr( $response, 5, 1 );
+    is( $respcode, 'Y', "Desensitize flag was set for patron category not in never_demagnitize" );
+
+    undef $response;
+    $server->{account}->{never_demagnitize} = "";
+    $msg->handle_checkout( $server );
+    $respcode = substr( $response, 5, 1 );
+    is( $respcode, 'Y', "Desensitize flag was set for empty never_demagnitize" );
 }
 
 # Helper routines
