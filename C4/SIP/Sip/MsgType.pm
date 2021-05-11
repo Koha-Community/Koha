@@ -18,6 +18,7 @@ use Data::Dumper;
 use CGI qw ( -utf8 );
 use C4::Auth qw(&check_api_auth);
 
+use Koha::Patrons;
 use Koha::Patron::Attributes;
 use Koha::Items;
 
@@ -1584,13 +1585,17 @@ my @message_type_names = (
 
 sub send_acs_status {
     my ( $self, $server, $screen_msg, $print_line ) = @_;
+
     my $msg = ACS_STATUS;
     ($server) or die "send_acs_status error: no \$server argument received";
     my $account = $server->{account} or die "send_acs_status error: no 'account' in \$server object:\n" . Dumper($server);
     my $policy  = $server->{policy}  or die "send_acs_status error: no 'policy' in \$server object:\n" . Dumper($server);
     my $ils     = $server->{ils}     or die "send_acs_status error: no 'ils' in \$server object:\n" . Dumper($server);
+    my $sip_username = $server->{sip_username} or die "send_acs_status error: no 'sip_username' in \$server object:\n" . Dumper($server);
     my ( $online_status,    $checkin_ok, $checkout_ok, $ACS_renewal_policy );
     my ( $status_update_ok, $offline_ok, $timeout,     $retries );
+    my $sip_user = Koha::Patrons->find({ userid => $sip_username });
+    die "send_acs_status error: sip_username cannot be found in DB or DB cannot be reached" unless $sip_user;
 
     $online_status      = 'Y';
     $checkout_ok        = sipbool( $ils->checkout_ok );

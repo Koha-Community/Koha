@@ -21,7 +21,8 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use Test::More tests => 10;
+use Test::More tests => 11;
+use Test::Exception;
 use Test::MockObject;
 use Test::MockModule;
 use Test::Warn;
@@ -335,6 +336,44 @@ subtest 'Patron info summary > 5 should not crash server' => sub {
     }
 
     $schema->storage->txn_rollback;
+};
+
+subtest 'SC status tests' => sub {
+
+    my $schema = Koha::Database->new->schema;
+    $schema->storage->txn_begin;
+
+    plan tests => 2;
+
+    my $builder = t::lib::TestBuilder->new();
+    my $branchcode = $builder->build({ source => 'Branch' })->{branchcode};
+    my $sip_user = $builder->build_object({ class => "Koha::Patrons" });
+
+    my ( $response, $findpatron );
+    my $mocks = create_mocks( \$response, \$findpatron, \$branchcode );
+    my $mockILS = $mocks->{ils};
+    $mockILS->mock( 'checkout_ok', sub {1} );
+    $mockILS->mock( 'checkin_ok', sub {1} );
+    $mockILS->mock( 'status_update_ok', sub {1} );
+    $mockILS->mock( 'offline_ok', sub {1} );
+    $mockILS->mock( 'supports', sub {1} );
+    my $server = Test::MockObject->new();
+    $server->mock( 'get_timeout', sub {'100'});
+    $server->{ils} = $mockILS;
+    $server->{sip_username} = $sip_user->userid;
+    $server->{account} = {};
+    $server->{policy} = { renewal =>1,retries=>'000'};
+
+    my $siprequest = SC_STATUS . '0' . '030' . '2.00';
+    my $msg = C4::SIP::Sip::MsgType->new( $siprequest, 0 );
+    $msg->handle_sc_status( $server );
+
+    like( $response, qr/98YYYYYY100000[0-9 ]{19}.00AO|BXYYYYYYYYYYYYYYYY|/, 'At least we got a response.' );
+
+    $sip_user->delete;
+
+    dies_ok{ $msg->handle_sc_status( $server ) } ,"Dies if sip user cannot be found";
+
 };
 
 # Here is room for some more subtests
