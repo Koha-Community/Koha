@@ -125,6 +125,12 @@ my $handlers = {
             location_code  => $location_code,
         },
     },
+    sc_status_request => {
+        name       => 'SC Status',
+        subroutine => \&build_sc_status_command_message,
+        parameters => {
+        },
+    },
     patron_status_request => {
         name       => 'Patron Status Request',
         subroutine => \&build_patron_status_request_command_message,
@@ -358,6 +364,12 @@ sub build_login_command_message {
       . build_field( FID_LOGIN_UID,     $login_user_id )
       . build_field( FID_LOGIN_PWD,     $login_password )
       . build_field( FID_LOCATION_CODE, $location_code );
+}
+
+sub build_sc_status_command_message {
+    my ($params) = @_;
+
+    return SC_STATUS . "0" . "030" . "2.00";
 }
 
 sub build_patron_status_request_command_message {
@@ -650,6 +662,7 @@ Options:
     item_information
     patron_information
     patron_status_request
+    sc_status_request
     renew
 /
 }
