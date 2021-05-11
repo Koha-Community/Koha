@@ -341,6 +341,7 @@ __PACKAGE__->might_have(
 
 __PACKAGE__->add_columns(
     '+auto_renew'      => { is_boolean => 1 },
+    '+noteseen'        => { is_boolean => 1 },
     '+onsite_checkout' => { is_boolean => 1 }
 );
 
