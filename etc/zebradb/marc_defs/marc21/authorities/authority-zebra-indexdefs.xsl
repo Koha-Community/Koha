@@ -53,7 +53,7 @@ definition file (probably something like {biblio,authority}-koha-indexdefs.xml) 
     </z:index>
   </xslo:template>
   <xslo:template match="marc:controlfield[@tag='001']">
-    <z:index name="Local-Number:w Local-Number:n Local-Number:s Local-Number:p">
+    <z:index name="Local-Number:w Local-Number:p Local-Number:n Local-Number:s">
       <xslo:value-of select="."/>
     </z:index>
   </xslo:template>
@@ -78,6 +78,15 @@ definition file (probably something like {biblio,authority}-koha-indexdefs.xml) 
     <xslo:for-each select="marc:subfield">
       <xslo:if test="contains('az', @code)">
         <z:index name="LC-card-number:w LC-card-number:p">
+          <xslo:value-of select="."/>
+        </z:index>
+      </xslo:if>
+    </xslo:for-each>
+  </xslo:template>
+  <xslo:template mode="index_subfields" match="marc:datafield[@tag='035']">
+    <xslo:for-each select="marc:subfield">
+      <xslo:if test="contains('az', @code)">
+        <z:index name="Other-control-number:w Other-control-number:p">
           <xslo:value-of select="."/>
         </z:index>
       </xslo:if>
