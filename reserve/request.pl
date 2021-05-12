@@ -585,10 +585,14 @@ foreach my $biblionumber (@biblionumbers) {
                   )
                 {
                     # Send the pickup locations count to the UI, the pickup locations will be pulled using the API
-                    $item->{pickup_locations_count} = $item_object->pickup_locations({ patron => $patron })->count;
+                    my $pickup_locations = $item_object->pickup_locations({ patron => $patron });
+                    $item->{pickup_locations_count} = $pickup_locations->count;
                     if ( $item->{pickup_locations_count} > 0 ) {
                         $num_available++;
                         $item->{available} = 1;
+                        # pass the holding branch for use as default
+                        my $default_pickup_location = $pickup_locations->search({ branchcode => $item->{holdingbranch} })->next;
+                        $item->{default_pickup_location} = $default_pickup_location;
                     }
                     else {
                         $item->{available} = 0;
