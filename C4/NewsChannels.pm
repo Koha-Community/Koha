@@ -21,6 +21,8 @@ package C4::NewsChannels;
 use Modern::Perl;
 use C4::Context;
 use Koha::DateUtils;
+use C4::Log qw(logaction);
+use Koha::News;
 
 use vars qw(@ISA @EXPORT);
 
@@ -68,6 +70,11 @@ sub add_opac_new {
         my $sth = $dbh->prepare("INSERT INTO opac_news ( $field_string ) VALUES ( $values_string )");
         $sth->execute(@values);
         $retval = 1;
+
+        #log the NEW OPAC news entry
+        if (C4::Context->preference("NewsLog")) {
+                logaction('OPACNEWS', 'ADD' , undef, $href_entry->{lang} . ' | ' . $href_entry->{content});
+        }
     }
     return $retval;
 }
@@ -108,12 +115,26 @@ sub upd_opac_new {
         $sth->execute(@values);
         $retval = 1;
     }
+
+    #log new OPAC news modification
+    if (C4::Context->preference("NewsLog")) {
+            logaction('OPACNEWS', 'MODIFY' , undef, $href_entry->{lang} . ' | ' . $href_entry->{content});
+    }
     return $retval;
 }
 
 sub del_opac_new {
     my ($ids) = @_;
     if ($ids) {
+
+        #log new OPAC news deletion
+        if (C4::Context->preference("NewsLog")) {
+            foreach my $newsid ( split(/,/, $ids )) {
+                my $n = Koha::News->find( $newsid );
+                logaction('OPACNEWS', 'DELETE', undef, $n->unblessed->{lang} . ' | ' . $n->unblessed->{content} );
+            }
+        }
+
         my $dbh = C4::Context->dbh;
         my $sth = $dbh->prepare("DELETE FROM opac_news WHERE idnew IN ($ids)");
         $sth->execute();
@@ -121,6 +142,7 @@ sub del_opac_new {
     } else {
         return 0;
     }
+
 }
 
 sub get_opac_new {

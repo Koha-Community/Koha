@@ -348,6 +348,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('minPasswordLength','8',NULL,'Specify the minimum length of a patron/staff password','free'),
 ('NewItemsDefaultLocation','','','If set, all new items will have a location of the given Location Code ( Authorized Value type LOC )',''),
 ('NewsAuthorDisplay','none','none|opac|staff|both','Display the author name for news items.','Choice'),
+('NewsLog','0',NULL,'If ON, log OPAC news changes','YesNo'),
 ('NewsToolEditor','tinymce','tinymce|codemirror','Choose tool for editing News.', 'Choice'),
 ('noissuescharge','5','','Define maximum amount withstanding before checkouts are blocked','Integer'),
 ('NoIssuesChargeGuarantees','','','Define maximum amount withstanding before checkouts are blocked','Integer'),

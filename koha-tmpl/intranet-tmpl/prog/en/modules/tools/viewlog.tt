@@ -95,6 +95,7 @@
 [%        CASE 'SEARCHENGINE' %]Search engine
 
 [%        CASE 'NOTICES'      %]Notices[% UNLESS Koha.Preference('NoticesLog') %] <i class="fa fa-warning" title="Log not enabled"></i>[% END %]
+[%        CASE 'OPACNEWS'      %]OPAC News[% UNLESS Koha.Preference('NewsLog') %] <i class="fa fa-warning" title="Log not enabled"></i>[% END %]
 [%        CASE %][% module | html %]
 [%    END %]
 [% END %]
@@ -200,7 +201,7 @@
                                         [% ELSE %]
                                             <label for="moduleALL" class="viewlog"><input type="checkbox" id="moduleALL" name="modules" value=""> All</label>
                                         [% END %]
-                                        [% FOREACH modx IN [ 'AUTH' 'CATALOGUING' 'AUTHORITIES' 'MEMBERS' 'ACQUISITIONS' 'SERIAL' 'HOLDS' 'ILL' 'CIRCULATION' 'CLAIMS' 'FINES' 'SYSTEMPREFERENCE' 'CRONJOBS', 'REPORTS', 'SEARCHENGINE', 'NOTICES' ] %]
+                                        [% FOREACH modx IN [ 'AUTH' 'CATALOGUING' 'AUTHORITIES' 'MEMBERS' 'ACQUISITIONS' 'SERIAL' 'HOLDS' 'ILL' 'CIRCULATION' 'CLAIMS' 'FINES' 'SYSTEMPREFERENCE' 'CRONJOBS', 'REPORTS', 'SEARCHENGINE', 'NOTICES', 'OPACNEWS' ] %]
                                             [% IF modules.grep(modx).size %]
                                                 <label for="module[% modx | html %]" class="viewlog"><input type="checkbox" id="module[% modx | html %]" name="modules" value="[% modx | html %]" checked="checked"> [% PROCESS translate_log_module module=modx %]</label>
                                             [% ELSE %]
@@ -361,7 +362,7 @@
                                         [% IF ( loopro.module == 'CIRCULATION' ) %]
                                             <a href="/cgi-bin/koha/catalogue/moredetail.pl?itemnumber=[% loopro.info | uri %]&amp;biblionumber=[% loopro.biblionumber | uri %]&amp;bi=[% loopro.biblioitemnumber | uri %]#item[% loopro.info | uri %]" title="Display detail for this item">Item [% loopro.barcode | html %]</a>
                                         [% ELSE %]
-                                            [% IF loopro.module == "SYSTEMPREFERENCE" || loopro.module == "REPORTS" %]
+                                            [% IF loopro.module == "SYSTEMPREFERENCE" || loopro.module == "REPORTS" || loopro.module == "OPACNEWS" %]
                                                 <div class="loginfo" id="loginfo[% loopro.action_id | html %]">[% loopro.info | trim | html %]</div>
                                                 <div class="compare_info" id="compare_info[% loopro.action_id | html %]">
                                                     <label><input type="checkbox" name="diff" id="action_id[% loopro.action_id | html %]" data-actionid="[% loopro.action_id | html %]" data-filter="[% FOREACH info IN loopro.info.split(' \| ') %][% IF loop.first %][% info | html %][% END %][% END %]" class="compare" /> Compare</label>
