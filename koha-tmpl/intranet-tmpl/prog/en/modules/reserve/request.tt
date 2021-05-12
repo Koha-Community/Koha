@@ -731,9 +731,13 @@
                                                     </td>
                                                     <td>
                                                     [% IF (itemloo.pickup_locations_count > 0) %]
-                                                        <select name="item_pickup" class="pickup_locations"
+                                                        <select name="item_pickup_[% itemloo.itemnumber | html %]" class="pickup_locations"
                                                                 data-item-id="[% itemloo.itemnumber | html %]"
-                                                                data-patron-id="[% patron.borrowernumber | html %]"></select>
+                                                                data-patron-id="[% patron.borrowernumber | html %]">
+                                                        [% IF (itemloo.default_pickup_location) %]
+                                                            <option value="[% itemloo.default_pickup_location.branchcode | html %]" selected="selected">[% itemloo.default_pickup_location.branchname | html %]</option>
+                                                        [% END %]
+                                                        </select>
                                                     [% END %]
                                                     </td>
                                                 </tr>
