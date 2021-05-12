@@ -97,7 +97,7 @@ my $show_actual  = $input->param('show_actual');
 my $show_percent = $input->param('show_percent');
 my $output       = $input->param("output") // q{};
 our $basename     = $input->param("basename");
-our $del          = $input->param("sep");
+our $del          = C4::Context->csv_delimiter(scalar $input->param("sep"));
 
 my $show_mine       = $input->param('show_mine') ;
 
@@ -307,7 +307,7 @@ foreach my $n (@names) {
 #         DEFAULT DISPLAY BEGINS
 
 my $CGIextChoice = ( 'CSV' ); # FIXME translation
-my $CGIsepChoice = ( C4::Context->preference("CSVDelimiter") );
+my $CGIsepChoice = ( C4::Context->csv_delimiter );
 
 my ( @budget_lines, %cell_hash );
 

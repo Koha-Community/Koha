@@ -49,8 +49,7 @@ $filters[1] = eval { output_pref( { dt => dt_from_string( $filters[1]), dateonly
 
 my $output = $input->param("output");
 my $basename = $input->param("basename");
-our $sep     = $input->param("sep") || '';
-$sep = "\t" if ($sep eq 'tabulation');
+our $sep     = C4::Context->csv_delimiter(scalar $input->param("sep"));
 my ($template, $borrowernumber, $cookie)
     = get_template_and_user({template_name => $fullreportname,
                 query => $input,

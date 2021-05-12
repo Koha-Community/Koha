@@ -1,6 +1,6 @@
 [%- USE raw -%]
 [%- USE Koha -%]
-[%- SET delimiter = Koha.Preference('CSVDelimiter') || ',' -%]
+[%- SET delimiter = Koha.CSVDelimiter() -%]
 [%- BLOCK -%]
 "Title"
 [%- delimiter | $raw -%]

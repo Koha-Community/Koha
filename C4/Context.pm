@@ -478,6 +478,26 @@ sub delete_preference {
     return 0;
 }
 
+=head2 csv_delimiter
+
+    $delimiter = C4::Context->csv_delimiter;
+
+    Returns prefered CSV delimiter, using system preference 'CSVDelimiter'.
+    If this preference is missing or empty semicolon will be returned.
+    This method is needed because of special behavior for tabulation.
+
+    You can, optionally, pass a value parameter to this routine
+    in the case of existing delimiter.
+
+=cut
+
+sub csv_delimiter {
+    my ( $self, $value ) = @_;
+    my $delimiter = $value || $self->preference('CSVDelimiter') || ';';
+    $delimiter = "\t" if $delimiter eq 'tabulation';
+    return $delimiter;
+}
+
 =head2 Zconn
 
   $Zconn = C4::Context->Zconn
