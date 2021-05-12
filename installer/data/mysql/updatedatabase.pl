@@ -24264,6 +24264,16 @@ if ( CheckVersion($DBversion) ) {
     NewVersion( $DBversion, 28108, "Move action logs 'SERIAL CLAIM' and 'ACQUISITION CLAIM' to a new 'CLAIMS' module" );
 }
 
+$DBversion = '20.12.00.050';
+if ( CheckVersion($DBversion) ) {
+    $dbh->do(q{
+        INSERT IGNORE INTO systempreferences (variable, value, options, explanation, type) VALUES
+        ('OpacHiddenItemsHidesRecord','1','','Hide bibliographic record when all its items are hidden because of OpacHiddenItems','YesNo')
+    });
+
+    NewVersion( $DBversion, 28108, "Add new systempreference OpacHiddenItemsHidesRecord" );
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 my $update_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/atomicupdate/';
