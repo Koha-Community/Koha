@@ -24,6 +24,7 @@
 
 use Modern::Perl;
 use Try::Tiny;
+use URI::Escape;
 
 use C4::Auth;
 use C4::Output;
@@ -172,13 +173,15 @@ if ($add) {
             if ( $add eq 'save and pay' ) {
                 my $url = sprintf(
                     '/cgi-bin/koha/members/paycollect.pl?borrowernumber=%s&pay_individual=1&debit_type_code=%s&amount=%s&amountoutstanding=%s&description=%s&itemnumber=%s&accountlines_id=%s',
-                    $borrowernumber,
-                    $line->debit_type_code,
-                    sprintf('%.2f', $line->amount),
-                    sprintf('%.2f', $line->amountoutstanding),
-                    $line->description,
-                    $line->itemnumber,
-                    $line->id
+                    map { uri_escape_utf8($_) } (
+                        $borrowernumber,
+                        $line->debit_type_code,
+                        $line->amount,
+                        $line->amountoutstanding,
+                        $line->description,
+                        $line->itemnumber,
+                        $line->id
+                    )
                 );
 
                 print $input->redirect($url);
