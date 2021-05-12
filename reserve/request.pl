@@ -570,8 +570,7 @@ foreach my $biblionumber (@biblionumbers) {
 
                 $item->{'holdallowed'} = $branchitemrule->{'holdallowed'};
 
-                my $reserves_control_branch = $pickup || C4::Reserves::GetReservesControlBranch( $item, $patron_unblessed );
-                my $can_item_be_reserved = CanItemBeReserved( $patron->borrowernumber, $itemnumber, $reserves_control_branch )->{status};
+                my $can_item_be_reserved = CanItemBeReserved( $patron->borrowernumber, $itemnumber )->{status};
                 $item->{not_holdable} = $can_item_be_reserved unless ( $can_item_be_reserved eq 'OK' );
 
                 $item->{item_level_holds} = Koha::CirculationRules->get_opacitemholds_policy( { item => $item_object, patron => $patron } );
@@ -585,17 +584,15 @@ foreach my $biblionumber (@biblionumbers) {
                     && IsAvailableForItemLevelRequest($item_object, $patron, undef, $items_any_available)
                   )
                 {
-                    $item->{available} = 1;
-                    $num_available++;
-
-                    if ( $branchitemrule->{'hold_fulfillment_policy'} eq 'any' )
-                    {
-                        $item->{any_pickup_location} = 1;
+                    # Send the pickup locations count to the UI, the pickup locations will be pulled using the API
+                    $item->{pickup_locations_count} = $item_object->pickup_locations({ patron => $patron })->count;
+                    if ( $item->{pickup_locations_count} > 0 ) {
+                        $num_available++;
+                        $item->{available} = 1;
                     }
                     else {
-                        my @pickup_locations = $item_object->pickup_locations({ patron => $patron });
-
-                        $item->{pickup_locations} = join( ', ', map { $_->branchname } @pickup_locations );
+                        $item->{available} = 0;
+                        $item->{not_holdable} = "no_valid_pickup_location";
                     }
 
                     push( @available_itemtypes, $item->{itype} );

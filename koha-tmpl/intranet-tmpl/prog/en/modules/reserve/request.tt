@@ -631,6 +631,8 @@
                                                                         No reserves are allowed on this item
                                                                     [% ELSIF itemloo.not_holdable == 'libraryNotPickupLocation' %]
                                                                         Library is not a pickup location
+                                                                    [% ELSIF itemloo.not_holdable == 'no_valid_pickup_location' %]
+                                                                        No valid pickup location
                                                                     [% ELSE %]
                                                                         [% itemloo.not_holdable | html %]
                                                                     [% END %]
@@ -728,10 +730,10 @@
                                                         [% END %]
                                                     </td>
                                                     <td>
-                                                    [% IF itemloo.any_pickup_location %]
-                                                        Any library
-                                                    [% ELSE %]
-                                                        [% itemloo.pickup_locations | html %]
+                                                    [% IF (itemloo.pickup_locations_count > 0) %]
+                                                        <select name="item_pickup" class="pickup_locations"
+                                                                data-item-id="[% itemloo.itemnumber | html %]"
+                                                                data-patron-id="[% patron.borrowernumber | html %]"></select>
                                                     [% END %]
                                                     </td>
                                                 </tr>
@@ -1206,7 +1208,7 @@
 
             [% UNLESS ( multi_hold ) %]
                 $("#hold-request-form").on("submit", function(){
-                    return check();
+                    return check($(this));
                 });
             [% ELSE %]
                 $("#hold-request-form").on("submit", function(){
@@ -1327,33 +1329,65 @@
                     templateResult: display_pickup_location
                 });
             });
+            $(".pickup_locations").each( function () {
+                var this_dropdown = $(this);
+                var patron_id = $(this).data('patron-id');
+                var item_id   = $(this).data('item-id');
+
+                this_dropdown.select2({
+                    allowClear: true,
+                    ajax: {
+                        url: '/api/v1/items/' + encodeURIComponent(item_id) + '/pickup_locations',
+                        delay: 300, // wait 300 milliseconds before triggering the request
+                        dataType: 'json',
+                        data: function (params) {
+                            var search_term = (params.term === undefined) ? '' : params.term;
+                            var query = {
+                                "q": JSON.stringify({"name":{"-like":search_term+'%'}}),
+                                "_order_by": "name",
+                                "patron_id": patron_id
+                            };
+                            return query;
+                        },
+                        processResults: function (data) {
+                            var results = [];
+                            data.forEach( function ( pickup_location ) {
+                                results.push(
+                                    {
+                                        "id": pickup_location.library_id.escapeHtml(),
+                                        "text": pickup_location.name.escapeHtml(),
+                                        "needs_override": pickup_location.needs_override
+                                    }
+                                );
+                            });
+                            return { "results": results };
+                        }
+                    },
+                    templateResult: display_pickup_location
+                });
+            });
         });
 
-        function check() {
+        function check( table ) {
+
             var msg = "";
-            var count_reserv = 0;
 
-            // check if we have checkitem form
-            if (document.form.checkitem){
-                for (i=0;i<document.form.checkitem.length;i++){
-                    if (document.form.checkitem[i].checked == true) {
-                        count_reserv++ ;
+            if ( $("#requestany").attr("checked") !== "checked" ) {
+                // requestany not selected, go through the item-specific cases
+                if ( $('input[type="radio"]:checked').length > 0 ) {
+                    // got item-specific hold requests in the form!
+                    // verify they have a pickup location selected
+
+                    if (table.find('input[type="radio"]:checked')
+                                .closest('tr')
+                                .find(".pickup_locations").val() === null) {
+
+                        msg = _("- Please select a pickup location for the item" + "\n")
                     }
                 }
-                // for only one item, check the checkitem without consider the loop checkitem
-                if (i==0){
-                    if (document.form.checkitem.checked == true) {
-                        count_reserv++;
-                    }
+                else {
+                    msg = (_("- Please select an item to place a hold") + "\n");
                 }
-            }
-
-            if (document.form.requestany.checked == true){
-                count_reserv++ ;
-            }
-
-            if (count_reserv == "0"){
-                msg += (_("- Please select an item to place a hold") + "\n");
             }
 
             if (msg == "") {

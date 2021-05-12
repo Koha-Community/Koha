@@ -45,6 +45,7 @@ my $biblionumber   = $input->param('biblionumber');
 my $borrowernumber = $input->param('borrowernumber');
 my $notes          = $input->param('notes');
 my $branch         = $input->param('pickup');
+my $item_pickup    = $input->param('item_pickup');
 my $startdate      = $input->param('reserve_date') || '';
 my @rank           = $input->multi_param('rank-request');
 my $type           = $input->param('type');
@@ -100,12 +101,12 @@ if ( $type eq 'str8' && $borrower ) {
                 $biblionumber = $item->biblionumber;
             }
 
-            my $can_item_be_reserved = CanItemBeReserved($borrower->{'borrowernumber'}, $item->itemnumber, $branch)->{status};
+            my $can_item_be_reserved = CanItemBeReserved($borrower->{'borrowernumber'}, $item->itemnumber, $item_pickup)->{status};
 
             if ( $can_item_be_reserved eq 'OK' || ( $can_item_be_reserved ne 'itemAlreadyOnHold' && $can_override ) ) {
                 AddReserve(
                     {
-                        branchcode       => $branch,
+                        branchcode       => $item_pickup,
                         borrowernumber   => $borrower->{'borrowernumber'},
                         biblionumber     => $biblionumber,
                         priority         => $rank[0],
