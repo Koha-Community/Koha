@@ -91,8 +91,7 @@ my $sth   = $dbh->prepare($query);
 $sth->execute;
 
 unless ( $separator ) {
-    $separator = C4::Context->preference('CSVDelimiter') || ',';
-    $separator = "\t" if ($separator eq 'tabulation');
+    $separator = C4::Context->csv_delimiter;
 }
 
 my $csv = Text::CSV->new( { sep_char => $separator, binary => 1 } );

@@ -404,8 +404,7 @@ binmode( STDOUT, ':encoding(UTF-8)' );
 our $csv;       # the Text::CSV_XS object
 our $csv_fh;    # the filehandle to the CSV file.
 if ( defined $csvfilename ) {
-    my $sep_char = C4::Context->preference('CSVDelimiter') || ';';
-    $sep_char = "\t" if ($sep_char eq 'tabulation');
+    my $sep_char = C4::Context->csv_delimiter;
     $csv = Text::CSV_XS->new( { binary => 1 , sep_char => $sep_char } );
     if ( $csvfilename eq '' ) {
         $csv_fh = *STDOUT;
@@ -834,7 +833,7 @@ END_SQL
         # Generate the content of the csv with headers
         my $content;
         if ( defined $csvfilename ) {
-            my $delimiter = C4::Context->preference('CSVDelimiter') || ';';
+            my $delimiter = C4::Context->csv_delimiter;
             $content = join($delimiter, qw(title name surname address1 address2 zipcode city country email itemcount itemsinfo due_date issue_date)) . "\n";
         }
         else {

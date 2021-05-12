@@ -1,4 +1,4 @@
 [%- USE Koha -%]
-[%- SET delimiter = Koha.Preference('CSVDelimiter') || ',' -%]
+[%- SET delimiter = Koha.CSVDelimiter() -%]
 
 [%- BLOCK -%]ORDER DATE[%- delimiter | html -%]ESTIMATED DELIVERY DATE[%- delimiter | html -%]VENDOR[%- delimiter | html -%]INFORMATION[%- delimiter | html -%]TOTAL COST[%- delimiter | html -%]BASKET[%- delimiter | html -%]CLAIMS COUNT[%- delimiter | html -%]CLAIMED DATE[%- delimiter | html -%]INTERNAL NOTE[%- delimiter | html -%]VENDOR NOTE[%- delimiter | html -%]ISBN[%- END -%]

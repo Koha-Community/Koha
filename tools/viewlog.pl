@@ -229,8 +229,8 @@ if ($do_it) {
 
         # Printing to a csv file
         my $content = q{};
-        my $delimiter = C4::Context->preference('CSVDelimiter') || ',';
         if (@data) {
+            my $delimiter = C4::Context->csv_delimiter;
             my $csv = Text::CSV::Encoded->new( { encoding_out => 'utf8', sep_char => $delimiter } );
             $csv or die "Text::CSV::Encoded->new FAILED: " . Text::CSV::Encoded->error_diag();
 

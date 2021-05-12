@@ -50,8 +50,7 @@ my @filters     = $input->multi_param("Filter");
 my $cotedigits  = $input->param("cotedigits");
 my $output      = $input->param("output");
 my $basename    = $input->param("basename");
-our $sep        = $input->param("sep");
-$sep = "\t" if ($sep eq 'tabulation');
+our $sep        = C4::Context->csv_delimiter(scalar $input->param("sep"));
 my $item_itype;
 if(C4::Context->preference('item-level_itypes')) {
 	$item_itype = "items\.itype"

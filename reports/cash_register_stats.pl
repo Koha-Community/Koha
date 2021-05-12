@@ -157,7 +157,7 @@ if ($do_it) {
         my $format = 'csv';
         my $reportname = $input->param('basename');
         my $reportfilename = $reportname ? "$reportname.$format" : "reportresults.$format" ;
-        my $delimiter = C4::Context->preference('CSVDelimiter') || ',';
+        my $delimiter = C4::Context->csv_delimiter;
             my @rows;
             foreach my $row (@loopresult) {
                 my @rowValues;

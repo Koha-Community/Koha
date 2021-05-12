@@ -55,6 +55,22 @@ sub Preference {
     return C4::Context->preference( $pref );
 }
 
+=head3 CSVDelimiter
+
+The delimiter option 'tabs' is stored in the DB as 'tabulation' to avoid issues
+storing special characters in the DB. This helper function translates the value
+to the correct character when used in templates.
+
+You can, optionally, pass a value parameter to this routine in the case of delimiter
+being fetched in the scripts and still needing to be translated
+
+=cut
+
+sub CSVDelimiter {
+    my ( $self, $val ) = @_;
+    return C4::Context->csv_delimiter($val);
+}
+
 sub Version {
     my $version_string = Koha::version();
     my ( $major, $minor, $maintenance, $development ) = split( '\.', $version_string );
