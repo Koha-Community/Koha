@@ -6,7 +6,7 @@
 [%- USE AuthorisedValues -%]
 [%- SET biblio = item.biblio -%]
 [%- SET biblioitem = item.biblioitem -%]
-[%- SET delimiter = Koha.Preference( 'CSVDelimiter' ) || ',' -%]
+[%- SET delimiter = Koha.CSVDelimiter() -%]
 "[% biblio.title | replace('"', '""') | $raw %] [% IF ( Koha.Preference( 'marcflavour' ) == 'UNIMARC' && biblio.author ) %]by [% END %][% biblio.author | replace('"', '""') | $raw %]"
 [%- delimiter | $raw -%]
 "[% (biblioitem.publicationyear || biblio.copyrightdate) | replace('"', '""') | $raw %]"

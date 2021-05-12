@@ -70,8 +70,7 @@ my ($template, $borrowernumber, $cookie) = get_template_and_user({
 	type => "intranet",
 	flagsrequired => {reports => '*'},
 });
-our $sep     = $input->param("sep") // ';';
-$sep = "\t" if ($sep eq 'tabulation');
+our $sep = C4::Context->csv_delimiter(scalar $input->param("sep"));
 $template->param(do_it => $do_it,
 );
 

@@ -1,5 +1,5 @@
 [%- USE Koha -%]
-[%- SET delimiter = Koha.Preference( 'CSVDelimiter' ) || ',' -%]
+[%- SET delimiter = Koha.CSVDelimiter() -%]
 
 [%- USE KohaDates -%]
 [%- INCLUDE csv_headers/acqui/lateorders.tt -%]

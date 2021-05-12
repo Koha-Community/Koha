@@ -53,8 +53,7 @@ my $borstat = $input->param("status");
 my $borstat1 = $input->param("activity");
 my $output = $input->param("output");
 my $basename = $input->param("basename");
-our $sep     = $input->param("sep");
-$sep = "\t" if ($sep and $sep eq 'tabulation');
+our $sep     = C4::Context->csv_delimiter(scalar $input->param("sep"));
 
 my ($template, $borrowernumber, $cookie)
 	= get_template_and_user({template_name => $fullreportname,

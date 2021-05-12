@@ -1,5 +1,5 @@
 [%- USE Koha -%]
-[%- SET delimiter = Koha.Preference( 'CSVDelimiter' ) || ',' -%]
+[%- SET delimiter = Koha.CSVDelimiter() -%]
 
 [%- INCLUDE csv_headers/acqui/basket.tt -%]
 [%- INCLUDE empty_line.inc -%]

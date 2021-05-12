@@ -32,6 +32,7 @@ use C4::Auth qw( get_template_and_user );
 use C4::Output qw( output_html_with_http_headers );
 use C4::Budgets qw( GetBudgetsReport GetBudgetHierarchy );
 use C4::Acquisition qw( GetBasket get_rounded_price );
+use C4::Context;
 use Koha::Biblios;
 
 my $query = CGI->new;
@@ -128,8 +129,7 @@ if ( $get_orders ) {
     # If we are outputting to a file, create it and exit.
     else {
         my $basename = $params->{"basename"};
-        my $sep = $params->{"sep"};
-        $sep = "\t" if ($sep eq 'tabulation');
+        my $sep = C4::Context->csv_delimiter(scalar $params->{"sep"});
 
         # TODO Use Text::CSV to generate the CSV file
         print $query->header(
