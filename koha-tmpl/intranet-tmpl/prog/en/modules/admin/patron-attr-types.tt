@@ -292,13 +292,15 @@ Patron attribute types &rsaquo; Administration &rsaquo; Koha
     [% IF attribute.class %]
         <h4>[% attribute.lib | html %]</h4>
     [% END %]
-    <table class="patron_attributes_types">
+    <table class="patron_attributes_types" id="patron_attr[% attribute.class | html %]">
       <thead>
         <tr>
           <th>Code</th>
           <th>Description</th>
-          <th>Branches limitation</th>
-          <th class="noExport">Actions</th>
+          <th>Library limitation</th>
+          <th>Authorized value category</th>
+          <th>Mandatory</th>
+          <th class="NoSort noExport">Actions</th>
         </tr>
       </thead>
       <tbody>
@@ -315,13 +317,26 @@ Patron attribute types &rsaquo; Administration &rsaquo; Koha
                     [% END %]
                     <span title="[% branches_str | html %]">
                         [% IF libraries.count > 1 %]
-                            [% libraries.count | html %] branches limitations
+                            [% libraries.count | html %] library limitations
                         [% ELSE %]
-                            [% libraries.count | html %] branch limitation
+                            [% libraries.count | html %] library limitation
                         [% END %]
                     </span>
                 [% ELSE %]
                     No limitation
+                [% END %]
+            </td>
+            <td>
+                [% IF ( CAN_user_parameters_manage_auth_values ) %]
+                    <a href="/cgi-bin/koha/admin/authorised_values.pl?searchfield=[% item.authorised_value_category | uri %]">[% item.authorised_value_category | html %]</a></td>
+                [% ELSE %]
+                    [% item.authorised_value_category | html %]
+                [% END %]
+            <td>
+                [% IF ( item.mandatory ) -%]
+                   Yes
+                [% ELSE -%]
+                   No
                 [% END %]
             </td>
             <td class="actions">
@@ -353,6 +368,8 @@ Patron attribute types &rsaquo; Administration &rsaquo; Koha
 
 [% MACRO jsinclude BLOCK %]
     [% Asset.js("js/admin-menu.js") | $raw %]
+    [% INCLUDE 'datatables.inc' %]
+    [% INCLUDE 'columns_settings.inc' %]
     <script>
         $(document).ready(function() {
             if ( $("#branches option:selected").length < 1 ) {
@@ -366,6 +383,14 @@ Patron attribute types &rsaquo; Administration &rsaquo; Koha
                     $("#opac_editable").attr('disabled', true).parent().attr('aria-disabled', 'true');
                 }
             } ).change();
+
+            $(".patron_attributes_types").each(function(){
+                var tableid = $(this).attr("id");
+                KohaTable( tableid, {
+                    "bPaginate": false,
+                    'autoWidth': false,
+                }, null );
+            });
         });
     </script>
 [% END %]
