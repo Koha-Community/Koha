@@ -1,5 +1,6 @@
 [% USE raw %]
 [% USE Asset %]
+[% USE AuthorisedValues %]
 [% USE KohaDates %]
 [%- USE Branches -%]
 [%- USE Price -%]
@@ -10,9 +11,21 @@
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Circulation &rsaquo; Items overdue as of [% todaysdate | html %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
-<style>
-    .sql {display:none;}
-</style>
+[% FILTER collapse %]
+    <style>
+        .sql {display:none;}
+        .select2-container--open .select2-dropdown--below,
+        .select2-search.select2-search--dropdown {
+            border: 1px solid #AAA;
+        }
+        .select2-container--open .select2-dropdown--below,
+        .select2-search.select2-search--dropdown,
+        .select2-results {
+            background-color: #FFF;
+            width: 20em !important;
+        }
+    </style>
+[% END %]
 </head>
 
 <body id="circ_overdue" class="circ">
@@ -160,23 +173,28 @@
 		<li>
 			<label>[% patron_attr_filter_loo.description | html %]:</label>
             [% IF ( patron_attr_filter_loo.authorised_value_category ) %]
-                <script type="text/javascript" x-code="[% patron_attr_filter_loo.code | html %]">create_auto_completion_responder([% patron_attr_filter_loo.domid | html %],"[% patron_attr_filter_loo.code | html %]");</script>
-				<span id="pattrodue-getready-[% patron_attr_filter_loo.domid | html %]">
-						<div class="pattrodue-autocomplete">
-                            <input autocomplete="off" id="pattrodue-input-[% patron_attr_filter_loo.domid | html %]" name="patron_attr_filter_[% patron_attr_filter_loo.code | html %]" value="[% patron_attr_filter_loo.cgivalue | html %]"  class="pattrodue-input" type="text" />
-						</div>
-				</span>
+                [% SET authvals = AuthorisedValues.GetAuthValueDropbox( patron_attr_filter_loo.authorised_value_category ) %]
+                <select id="pattrodue-input-[% patron_attr_filter_loo.domid | html %]" name="patron_attr_filter_[% patron_attr_filter_loo.code | html %]" class="pattrodue-input">
+                    <option></option>
+                    [% FOREACH authval IN authvals %]
+                        [% IF ( patron_attr_filter_loo.cgivalue == authval.authorised_value ) -%]
+                            <option value="[% authval.authorised_value | html %]" selected="selected">[% authval.lib | html %]</option>
+                        [% ELSE -%]
+                            <option value="[% authval.authorised_value | html %]">[% authval.lib | html %]</option>
+                        [% END %]
+                    [% END %]
+                </select>
 			[% ELSE %]
                 <input type="text" name="patron_attr_filter_[% patron_attr_filter_loo.code | html %]" value="[% patron_attr_filter_loo.cgivalue | html %]"/>
 			[% END %]
 			[% IF ( patron_attr_filter_loo.repeatable ) %]
-                <a href="#" onclick="clone_parent(this); return false;">Add</a>
+                <a href="#" class="btn btn-link clone-attribute" data-original-id="pattrodue-input-[% patron_attr_filter_loo.domid | html %]"><i class="fa fa-plus"></i> Add</a>
                 [% IF ( patron_attr_filter_loo.isclone ) %]
-				    <a href="#" onclick="delete_parent(this); return false;" style="visibility: visible">Delete</a>
+                    <a href="#" class="btn btn-link delete_clone"><i class="fa fa-remove"></i> Delete</a>
                 [% ELSIF ( patron_attr_filter_loo.ismany ) %]
-				    <a href="#" onclick="delete_parent(this); return false;" style="visibility: visible">Delete</a>
+                    <a href="#" class="btn btn-link delete_clone"><i class="fa fa-remove"></i> Delete</a>
                 [% ELSE %]
-				    <a href="#" onclick="delete_parent(this); return false;" style="visibility: hidden">Delete</a>
+                    <a href="#" class="btn btn-link delete_clone" style="display:none"><i class="fa fa-remove"></i> Delete</a>
                 [% END %]
 			[% END %]
 		</li>
@@ -230,56 +248,23 @@
     [% INCLUDE 'calendar.inc' %]
     [% INCLUDE 'datatables.inc' %]
     [% INCLUDE 'columns_settings.inc' %]
+    [% INCLUDE 'select2.inc' %]
     <script>
-        function clone_parent(node) {
-            var parent = node.parentNode;
-            var clone = parent.cloneNode(true);
-            parent.parentNode.insertBefore(clone, parent.nextSibling);
-            $("a", clone).attr("style", "visibility: visible");
-            $("input", clone).attr("value", "");
-
-            var theid = $("span", clone).attr("id") || "";
-            var theid = $("span", clone).attr("id") || "";
-            var parts = theid.match(/^pattrodue-getready-(.*)$/);
-            if (parts && parts.length > 1){
-                var appendid = "-" + Math.floor(Math.random()*1000+1);
-                $("span", clone).attr("id",theid+appendid);
-
-                theid = $("input", clone).attr("id");
-                $("input", clone).attr("id",theid+appendid);
-
-                theid = $("div[id]", clone).attr("id");
-                $("div[id]", clone).attr("id",theid+appendid);
-
-                var attrcode = $("script", clone).attr("x-code");
-                var newsuffix = parts[1] + appendid;
-                create_auto_completion_responder(newsuffix,attrcode);
+        function clone_input( node, original_id ) {
+            var original = node;
+            var clone = original.clone();
+            var appendid = original_id + "-" + Math.floor(Math.random()*1000+1);
+            clone.find(".delete_clone").show();
+            if( clone.find("select").length ){
+                /* <select> element is present */
+                clone.find("select").removeClass("select2-hidden-accessible").removeAttr("data-select2-id").attr("id", appendid );
+                clone.find(".select2").remove();
+                original.after( clone );
+                $("#" + appendid ).select2();
+            } else {
+                clone.attr("id", appendid );
+                original.after( clone );
             }
-        }
-
-
-        function delete_parent(node) {
-            var parent = node.parentNode;
-            parent.parentNode.removeChild(parent);
-        }
-
-        function create_auto_completion_responder(uniqueid,attrcode) {
-            $("#pattrodue-getready-" + uniqueid).ready(function(){
-                $( "#pattrodue-input-" + uniqueid ).autocomplete({
-                    source: "/cgi-bin/koha/circ/ypattrodue-attr-search-authvalue.pl/"+attrcode,
-                    select: function( event, ui ) {
-                        $( "#pattrodue-input-"+uniqueid ).val( ui.item.description );
-                        return false;
-                    }
-                })
-                .data( "ui-autocomplete" )._renderItem = function( ul, item ) {
-                    return $( "<li></li>" )
-                    .data( "ui-autocomplete-item", item )
-                    .append( "<a>" + item.description + " (" + item.authorised_value + ")</a>" )
-                    .appendTo( ul )
-                    .css("font-size","90%").css("width","13em");
-                };
-            });
         }
 
         function update_date_due_filters_visibility(){
@@ -307,6 +292,20 @@
                 update_date_due_filters_visibility();
             });
             update_date_due_filters_visibility();
+
+            $(".pattrodue-input").each(function(){
+                $(this).select2();
+            });
+
+            $("body").on("click", ".delete_clone", function(e){
+                e.preventDefault();
+                $(this).parent().remove();
+            });
+
+            $("body").on("click", ".clone-attribute", function(e){
+                e.preventDefault();
+                clone_input( $(this).parent(), $(this).data("original-id") );
+            })
         });
   </script>
 [% END %]
