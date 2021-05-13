@@ -1365,17 +1365,32 @@
         }
 
         function checkMultiHold() {
-            var spans = $(".multi_hold_item_checkbox:checked");
-            if ($(spans).size() == 0) {
-                alert(MSG_NO_ITEMS_AVAILABLE);
-                return false;
-            }
 
             var biblionumbers = "";
-            $(spans).each(function() {
-                var bibnum = $(this).attr("title");
-                biblionumbers += bibnum + "/";
-            });
+            var selected_bibs = $(".multi_hold_item_checkbox:checked");
+            if ( selected_bibs.length > 0 ) {
+                // there are biblios selected in the form!
+                // verify they have a pickup location selected
+
+                var pickup_not_set = 0;
+                selected_bibs.each(function() {
+                    if ( $(this).closest('tr').find(".multi_pickup_select").val() === "" ) {
+                        pickup_not_set++;
+                    }
+                    else {
+                        var bibnum = $(this).attr("title");
+                        biblionumbers += bibnum + "/";
+                    }
+                });
+                if ( pickup_not_set > 0 ) {
+                    alert( _("Please make sure all selected titles have a pickup location set" + "\n") );
+                    return false;
+                }
+            }
+            else {
+                alert( _("Please select at least one title" + "\n") );
+                return false;
+            }
 
             var badSpans = $(".not_holdable");
             var badBibs = "";
