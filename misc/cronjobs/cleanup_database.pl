@@ -109,7 +109,8 @@ Usage: $0 [-h|--help] [--confirm] [--sessions] [--sessdays DAYS] [-v|--verbose] 
                                     --pseudo-transactions-from YYYY-MM-DD and/or --pseudo-transactions-to YYYY-MM-DD
    --labels DAYS           Purge item label batches last added to more than DAYS days ago.
    --cards DAY             Purge card creator batches last added to more than DAYS days ago.
-
+   --return-claims         Purge all resolved return claims older than the number of days specified in
+                           the system preference CleanUpDatabaseReturnClaims.
 USAGE
     exit $_[0];
 }
@@ -129,7 +130,7 @@ my $pZ3950;
 my $pListShareInvites;
 my $pDebarments;
 my $allDebarments;
-my $return_claims = C4::Context->preference('CleanUpDatabaseReturnClaims');
+my $return_claims;
 my $pExpSelfReg;
 my $pUnvSelfReg;
 my $fees_days;
@@ -186,6 +187,7 @@ GetOptions(
     'pseudo-transactions-to:s'   => \$pPseudoTransactionsTo,
     'labels'            => \$labels,
     'cards'             => \$cards,
+    'return-claims'     => \$return_claims,
 ) || usage(1);
 
 # Use default values
@@ -528,6 +530,7 @@ if ($pStatistics) {
     }
 }
 
+$return_claims = C4::Context->preference('CleanUpDatabaseReturnClaims') if $return_claims;
 if ($return_claims) {
     print "Purging return claims older than $return_claims days.\n" if $verbose;
 
