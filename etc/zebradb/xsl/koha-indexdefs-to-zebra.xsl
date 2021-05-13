@@ -19,6 +19,7 @@
     <xsl:key name="index_data_field_tag"    match="kohaidx:index_data_field"    use="@tag"/>
     <xsl:key name="index_heading_conditional_tag" match="kohaidx:index_heading_conditional" use="@tag"/>
     <xsl:key name="index_match_heading_tag" match="kohaidx:index_match_heading" use="@tag"/>
+    <xsl:key name="index_sort_title_tag"          match="kohaidx:index_sort_title" use="@tag"/>
 
     <xsl:template match="kohaidx:index_defs">
     <xsl:comment>
@@ -39,7 +40,7 @@ definition file (probably something like {biblio,authority}-koha-indexdefs.xml) 
             <xslo:template match="text()" mode="index_heading_conditional"/>
             <xslo:template match="text()" mode="index_match_heading"/>
             <xslo:template match="text()" mode="index_subject_thesaurus"/>
-            <xslo:template match="text()" mode="index_sort_tit"/>
+            <xslo:template match="text()" mode="index_sort_title"/>
             <xslo:template match="/">
                 <xslo:if test="marc:collection">
                     <collection>
@@ -66,7 +67,7 @@ definition file (probably something like {biblio,authority}-koha-indexdefs.xml) 
                     <xslo:apply-templates mode="index_match_heading"/>
                     <xslo:apply-templates mode="index_subject_thesaurus"/>
                     <xslo:apply-templates mode="index_all"/>
-                    <xslo:apply-templates mode="index_sort_tit"/>
+                    <xslo:apply-templates mode="index_sort_title"/>
                 </z:record>
             </xslo:template>
 
@@ -78,21 +79,11 @@ definition file (probably something like {biblio,authority}-koha-indexdefs.xml) 
             <xsl:call-template name="handle-index-heading"/>
             <xsl:call-template name="handle-index-heading-conditional"/>
             <xsl:call-template name="handle-index-match-heading"/>
+            <xsl:call-template name="handle-index-sort-title"/>
             <xsl:apply-templates/>
             <xslo:template mode="index_all" match="text()">
                 <z:index name="Any:w Any:p">
                     <xslo:value-of select="."/>
-                </z:index>
-            </xslo:template>
-            <xslo:template mode="index_sort_tit" match="marc:datafield[@tag='245']">
-                <xslo:variable name="chop">
-                    <xslo:choose>
-                        <xslo:when test="not(number(@ind2))">0</xslo:when>
-                        <xslo:otherwise><xslo:value-of select="number(@ind2)"/></xslo:otherwise>
-                    </xslo:choose>
-                </xslo:variable>
-                <z:index name="Title:s">
-                    <xslo:value-of select="substring(marc:subfield[@code='a'], $chop+1)"/>
                 </z:index>
             </xslo:template>
             <xslo:template name="chopPunctuation">
@@ -448,6 +439,31 @@ definition file (probably something like {biblio,authority}-koha-indexdefs.xml) 
             </xslo:variable>
             <xslo:value-of select="normalize-space($raw_heading)"/>
         </z:index>
+    </xsl:template>
+
+    <xsl:template name="handle-index-sort-title">
+        <xsl:for-each select="//kohaidx:index_sort_title[generate-id() = generate-id(key('index_sort_title_tag', @tag)[1])]">
+            <xslo:template mode="index_sort_title">
+                <xsl:attribute name="match">
+                    <xsl:text>marc:datafield[@tag='</xsl:text>
+                    <xsl:value-of select="@tag"/>
+                    <xsl:text>']</xsl:text>
+                </xsl:attribute>
+                <xsl:for-each select="key('index_sort_title_tag', @tag)">
+                    <xslo:variable name="chop">
+                        <xslo:choose>
+                          <xslo:when test="not(number(@ind2))">0</xslo:when>
+                          <xslo:otherwise>
+                            <xslo:value-of select="number(@ind2)"/>
+                          </xslo:otherwise>
+                        </xslo:choose>
+                    </xslo:variable>
+                    <z:index name="Title:s">
+                        <xslo:value-of select="substring(marc:subfield[@code='a'], $chop+1)"/>
+                    </z:index>
+                </xsl:for-each>
+            </xslo:template>
+        </xsl:for-each>
     </xsl:template>
 
     <xsl:template name="handle-index-match-heading">
