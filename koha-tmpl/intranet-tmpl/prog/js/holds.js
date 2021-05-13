@@ -94,6 +94,24 @@ function display_pickup_location (state) {
 
 /* global __ dataTablesDefaults borrowernumber SuspendHoldsIntranet */
 $(document).ready(function() {
+
+    function suspend_hold(hold_id, end_date) {
+        return $.ajax({
+            method: 'POST',
+            url: '/api/v1/holds/'+encodeURIComponent(hold_id)+'/suspension',
+            data: function () {
+                if ( end_date !== null ) return JSON.stringify({ "end_date": end_date })
+            }
+        });
+    }
+
+    function resume_hold(hold_id) {
+        return $.ajax({
+            method: 'DELETE',
+            url: '/api/v1/holds/'+encodeURIComponent(hold_id)+'/suspension'
+        });
+    }
+
     var holdsTable;
 
     // Don't load holds table unless it is clicked on
@@ -225,10 +243,10 @@ $(document).ready(function() {
                             if ( oObj.found ) {
                                 return "";
                             } else if ( oObj.suspend == 1 ) {
-                                return "<a class='hold-resume btn btn-default btn-xs' id='resume" + oObj.reserve_id + "'>"
+                                return "<a class='hold-resume btn btn-default btn-xs' data-hold-id='" + oObj.reserve_id + "'>"
                                      +"<i class='fa fa-play'></i> " + __("Resume") + "</a>";
                             } else {
-                                return "<a class='hold-suspend btn btn-default btn-xs' id='suspend" + oObj.reserve_id + "'>"
+                                return "<a class='hold-suspend btn btn-default btn-xs' data-hold-id='" + oObj.reserve_id + "' data-hold-title='"+ oObj.title +"'>"
                                      +"<i class='fa fa-pause'></i> " + __("Suspend") + "</a>";
                             }
                         }
@@ -291,25 +309,24 @@ $(document).ready(function() {
 
             $('#holds-table').on( 'draw.dt', function () {
                 $(".hold-suspend").on( "click", function() {
-                    var id = $(this).attr("id").replace("suspend", "");
-                    var hold = holds[id];
-                    $("#suspend-modal-title").html( hold.title );
-                    $("#suspend-modal-reserve_id").val( hold.reserve_id );
+                    var hold_id    = $(this).data('hold-id');
+                    var hold_title = $(this).data('hold-title');
+                    $("#suspend-modal-title").html( hold_title );
+                    $("#suspend-modal-submit").data( 'hold-id', hold_id );
                     $('#suspend-modal').modal('show');
                 });
 
-                $(".hold-resume").on( "click", function() {
-                    var id = $(this).attr("id").replace("resume", "");
-                    var hold = holds[id];
-                    $.post('/cgi-bin/koha/svc/hold/resume', { "reserve_id": hold.reserve_id }, function( data ){
-                      if ( data.success ) {
-                          holdsTable.api().ajax.reload();
-                      } else {
-                        if ( data.error == "HOLD_NOT_FOUND" ) {
-                            alert( __("Unable to resume, hold not found") );
+                $(".hold-resume").on("click", function () {
+                    var hold_id = $(this).data('hold-id');
+                    resume_hold(
+                        hold_id
+                    ).success(function () {
+                        holdsTable.api().ajax.reload();
+                    }).error(function (jqXHR, textStatus, errorThrown) {
+                        if (jqXHR.status === 404) {
+                            alert(__("Unable to resume, hold not found"));
                             holdsTable.api().ajax.reload();
                         }
-                      }
                     });
                 });
 
@@ -384,19 +401,21 @@ $(document).ready(function() {
 
     $("#suspend-modal-submit").on( "click", function( e ) {
         e.preventDefault();
-        $.post('/cgi-bin/koha/svc/hold/suspend', $('#suspend-modal-form').serialize(), function( data ){
-          $('#suspend-modal').modal('hide');
-          if ( data.success ) {
-              holdsTable.api().ajax.reload();
-          } else {
-            if ( data.error == "INVALID_DATE" ) {
-                alert( __("Unable to suspend hold, invalid date") );
-            }
-            else if ( data.error == "HOLD_NOT_FOUND" ) {
-                alert( __("Unable to suspend hold, hold not found") );
+        var suspend_until_date = $("#suspend-modal-until").datepicker("getDate");
+        if ( suspend_until_date !== null ) suspend_until_date = $date(suspend_until_date, {dateformat:"rfc3339"});
+        suspend_hold(
+            $(this).data('hold-id'),
+            suspend_until_date
+        ).success(function () {
+            holdsTable.api().ajax.reload();
+        }).error(function (jqXHR, textStatus, errorThrown) {
+            if (jqXHR.status === 404) {
+                alert(__("Unable to resume, hold not found"));
                 holdsTable.api().ajax.reload();
             }
-          }
+        }).done(function() {
+            $("#suspend-modal-until").val(""); // clean the input
+            $('#suspend-modal').modal('hide');
         });
     });
 });
