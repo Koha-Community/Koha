@@ -1556,7 +1556,8 @@ sub get_notice {
     );
     my $metahash = $self->metadata;
     my @metaarray = ();
-    while (my($key, $value) = each %{$metahash}) {
+    foreach my $key (sort { lc $a cmp lc $b } keys %{$metahash}) {
+        my $value = $metahash->{$key};
         push @metaarray, "- $key: $value" if $value;
     }
     my $metastring = join("\n", @metaarray);
