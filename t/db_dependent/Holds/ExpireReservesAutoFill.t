@@ -100,11 +100,11 @@ subtest 'Test automatically canceled expired waiting holds to fill the next hold
 
     CancelExpiredReserves();
 
-    my @holds = Koha::Holds->search( {}, { order_by => 'priority' } );
-    $hold_2 = $holds[0];
-    $hold_3 = $holds[1];
+    my $holds = Koha::Holds->search( {}, { order_by => 'priority' } );
+    $hold_2 = $holds->next;
+    $hold_3 = $holds->next;
 
-    is( @holds,            2,   'Found 2 holds' );
+    is( $holds->count,     2,   'Found 2 holds' );
     is( $hold_2->priority, 0,   'Next hold in line now has priority of 0' );
     is( $hold_2->found,    'W', 'Next hold in line is now set to waiting' );
 
@@ -117,10 +117,10 @@ subtest 'Test automatically canceled expired waiting holds to fill the next hold
 
     CancelExpiredReserves();
 
-    @holds = Koha::Holds->search( {}, { order_by => 'priority' } );
-    $hold_3 = $holds[0];
+    $holds = Koha::Holds->search( {}, { order_by => 'priority' } );
+    $hold_3 = $holds->next;
 
-    is( @holds,            1,   'Found 1 hold' );
+    is( $holds->count,     1,   'Found 1 hold' );
     is( $hold_3->priority, 0,   'Next hold in line now has priority of 0' );
     is( $hold_3->found,    'W', 'Next hold in line is now set to waiting' );
 
@@ -186,5 +186,5 @@ subtest 'Test automatically canceled expired waiting holds to fill the next hold
 
     my @messages = $schema->resultset('MessageQueue')
       ->search( { letter_code => 'HOLD_CHANGED' } );
-    is( @messages, 0, 'No messages in the message queue when generating transfer' );
+    is( @messages, 1, 'Nessage is generated in the message queue when generating transfer' );
 };

@@ -1243,11 +1243,13 @@ sub ModReserveAffect {
         $hold->set_processing();
     } else {
         $hold->set_waiting($desk_id);
-        _koha_notify_reserve( $hold->reserve_id, $notify_library ) unless $already_on_shelf;
+        _koha_notify_reserve( $hold->reserve_id ) unless $already_on_shelf;
         # Complete transfer if one exists
         my $transfer = $hold->item->get_transfer;
         $transfer->receive if $transfer;
     }
+
+    _koha_notify_hold_changed( $hold ) if $notify_library;
 
     _FixPriority( { biblionumber => $biblionumber } );
     my $item = Koha::Items->find($itemnumber);
@@ -1973,6 +1975,51 @@ sub _koha_notify_reserve {
             }
         );
     }
+}
+
+=head2 _koha_notify_hold_changed
+
+  _koha_notify_hold_changed( $hold_object );
+
+=cut
+
+sub _koha_notify_hold_changed {
+    my $hold = shift;
+
+    my $patron = $hold->patron;
+    my $library = $hold->branch;
+
+    my $letter = C4::Letters::GetPreparedLetter(
+        module      => 'reserves',
+        letter_code => 'HOLD_CHANGED',
+        branchcode  => $hold->branchcode,
+        substitute  => { today => output_pref( dt_from_string ) },
+        tables      => {
+            'branches'    => $library->unblessed,
+            'borrowers'   => $patron->unblessed,
+            'biblio'      => $hold->biblionumber,
+            'biblioitems' => $hold->biblionumber,
+            'reserves'    => $hold->unblessed,
+            'items'       => $hold->itemnumber,
+        },
+    );
+
+    return unless $letter;
+
+    my $email =
+         C4::Context->preference('ExpireReservesAutoFillEmail')
+      || $library->branchemail
+      || C4::Context->preference('KohaAdminEmailAddress');
+
+    C4::Letters::EnqueueLetter(
+        {
+            letter                 => $letter,
+            borrowernumber         => $patron->id,
+            message_transport_type => 'email',
+            from_address           => $email,
+            to_address             => $email,
+        }
+    );
 }
 
 =head2 _ShiftPriority
