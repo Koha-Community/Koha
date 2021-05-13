@@ -105,13 +105,13 @@
       [% IF account.amountoutstanding <= 0 %]<td class="credit" style="text-align: right;">[% ELSE %]<td class="debit" style="text-align: right;">[% END %][% account.amountoutstanding | $Price %]</td>
       <td class="actions">
         [% IF ( account.is_credit ) %]
-          <a target="_blank" href="printfeercpt.pl?action=print&amp;accountlines_id=[% account.accountlines_id | uri %]" class="btn btn-default btn-xs"><i class="fa fa-print"></i> Print</a>
+          <a target="_blank" href="printfeercpt.pl?action=print&amp;accountlines_id=[% account.accountlines_id | uri %]" class="btn btn-default btn-xs receipt-print"><i class="fa fa-print"></i> Print</a>
         [% ELSE %]
-          <a target="_blank" href="printinvoice.pl?action=print&amp;accountlines_id=[% account.accountlines_id | uri %]" class="btn btn-default btn-xs"><i class="fa fa-print"></i> Print</a>
+          <a target="_blank" href="printinvoice.pl?action=print&amp;accountlines_id=[% account.accountlines_id | uri %]" class="btn btn-default btn-xs invoice-print"><i class="fa fa-print"></i> Print</a>
         [% END %]
-        <a href="accountline-details.pl?accountlines_id=[% account.accountlines_id | uri %]" class="btn btn-default btn-xs"><i class="fa fa-list"></i> Details</a>
+        <a href="accountline-details.pl?accountlines_id=[% account.accountlines_id | uri %]" class="btn btn-default btn-xs details-action"><i class="fa fa-list"></i> Details</a>
         [% IF account.is_debit && account.amountoutstanding > 0 %]
-            <a class="btn btn-default btn-xs" href="/cgi-bin/koha/members/paycollect.pl?borrowernumber=[% account.borrowernumber | html %]&pay_individual=1&debit_type_code=[% account.debit_type_code | html %]&amount=[% account.amount | html %]&amountoutstanding=[% account.amountoutstanding | html %]&description=[% account.description | html %]&itemnumber=[% account.itemnumber | html %]&accountlines_id=[% account.accountlines_id | html %]"><i class="fa fa-money"></i> Pay</a>
+            <a class="btn btn-default btn-xs pay-action" href="/cgi-bin/koha/members/paycollect.pl?borrowernumber=[% account.borrowernumber | html %]&pay_individual=1&debit_type_code=[% account.debit_type_code | html %]&amount=[% account.amount | html %]&amountoutstanding=[% account.amountoutstanding | html %]&description=[% account.description | html %]&itemnumber=[% account.itemnumber | html %]&accountlines_id=[% account.accountlines_id | html %]"><i class="fa fa-money"></i> Pay</a>
         [% END %]
         [% IF account.is_credit && account.status != 'VOID' %]
           <a href="boraccount.pl?action=void&amp;accountlines_id=[% account.accountlines_id | uri %]&amp;borrowernumber=[% account.borrowernumber | uri %]" class="btn btn-default btn-xs void"><i class="fa fa-ban"></i> Void payment</a>
@@ -121,20 +121,20 @@
             <input type="hidden" name="csrf_token" value="[% csrf_token | html %]">
             <input type="hidden" name="borrowernumber" value="[% patron.borrowernumber | html %]">
             <input type="hidden" name="accountlines_id" value="[% account.accountlines_id | html %]">
-            <button type="submit" class="btn btn-default btn-xs">
+            <button type="submit" class="btn btn-default btn-xs cancel-action">
                 <i class="fa fa-ban"></i>
                 Cancel charge
             </button>
           </form>
         [% END %]
         [% IF CAN_user_updatecharges_payout && account.is_credit && ( account.amountoutstanding < 0 ) %]
-          <button type="button" data-toggle="modal" data-target="#issuePayoutModal" data-account="[%- PROCESS account_type_description account=account -%]" data-accountline="[% account.accountlines_id | html %]" data-amount="[% account.amountoutstanding | $Price %]" class="btn btn-default btn-xs"><i class="fa fa-money"></i> Issue payout</button>
+          <button type="button" data-toggle="modal" data-target="#issuePayoutModal" data-account="[%- PROCESS account_type_description account=account -%]" data-accountline="[% account.accountlines_id | html %]" data-amount="[% account.amountoutstanding | $Price %]" class="btn btn-default btn-xs payout-action"><i class="fa fa-money"></i> Issue payout</button>
         [% END %]
         [% IF CAN_user_updatecharges_refund && account.is_debit && ( account.amountoutstanding != account.amount ) && !(account.status == 'REFUNDED') && !(account.debit_type_code == 'PAYOUT') %]
-          <button type="button"  class="btn btn-default btn-xs" data-toggle="modal" data-target="#issueRefundModal" data-item="[%- PROCESS account_type_description account=account -%]" data-accountline="[% account.accountlines_id | html %]" data-amount="[% account.amount | $Price %]" data-amountoutstanding="[% account.amountoutstanding | $Price %]" data-member="[% account.borrowernumber | html %]"><i class="fa fa-money"></i> Issue refund</button>
+          <button type="button"  class="btn btn-default btn-xs refund-action" data-toggle="modal" data-target="#issueRefundModal" data-item="[%- PROCESS account_type_description account=account -%]" data-accountline="[% account.accountlines_id | html %]" data-amount="[% account.amount | $Price %]" data-amountoutstanding="[% account.amountoutstanding | $Price %]" data-member="[% account.borrowernumber | html %]"><i class="fa fa-money"></i> Issue refund</button>
         [% END %]
         [% IF CAN_user_updatecharges_discount && account.is_debit && ( account.amountoutstanding == account.amount ) && !(account.debit_type_code == 'PAYOUT') %]
-          <button type="button" data-toggle="modal" data-target="#applyDiscountModal" data-item="[%- PROCESS account_type_description account=account -%]" data-accountline="[% account.accountlines_id | html %]" data-amount="[% account.amount | $Price %]" data-amountoutstanding="[% account.amountoutstanding | $Price %]" class="btn btn-default btn-xs">Apply discount</button>
+          <button type="button" data-toggle="modal" data-target="#applyDiscountModal" data-item="[%- PROCESS account_type_description account=account -%]" data-accountline="[% account.accountlines_id | html %]" data-amount="[% account.amount | $Price %]" data-amountoutstanding="[% account.amountoutstanding | $Price %]" class="btn btn-default btn-xs discount-action">Apply discount</button>
         [% END %]
       </td>
     </tr>
@@ -147,7 +147,7 @@
         <td class="credit" style="text-align: right;">[% total | $Price %]</td>
         <td>
           [% IF CAN_user_updatecharges_payout %]
-          <button type="button" data-toggle="modal" data-target="#issuePayoutModal" data-amount="[% total | $Price %]" class="btn btn-default btn-xs"><i class="fa fa-money"></i> Payout amount</button>
+          <button type="button" data-toggle="modal" data-target="#issuePayoutModal" data-amount="[% total | $Price %]" class="btn btn-default btn-xs payout-amount"><i class="fa fa-money"></i> Payout amount</button>
         [% END %]
         </td>
     [% ELSE %]
