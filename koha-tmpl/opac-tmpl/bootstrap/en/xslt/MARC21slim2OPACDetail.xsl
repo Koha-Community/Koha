@@ -326,13 +326,17 @@
              <span class="results_summary publisher"><span class="label">Publication details: </span>
                  <xsl:for-each select="marc:datafield[@tag=260]">
                      <span property="publisher" typeof="Organization">
-                     <xsl:if test="marc:subfield[@code='a']">
-                        <span class="publisher_place" property="location">
-                            <xsl:call-template name="subfieldSelect">
-                                <xsl:with-param name="codes">a</xsl:with-param>
-                            </xsl:call-template>
-                        </span>
-                     </xsl:if>
+                         <xsl:for-each select="marc:subfield[@code='a']">
+                            <span class="publisher_place" property="location">
+                                <a>
+                                    <xsl:attribute name="href">/cgi-bin/koha/opac-search.pl?q=pl:"<xsl:value-of select="str:encode-uri(., true())"/>"</xsl:attribute>
+                                    <xsl:value-of select="."/>
+                                </a>
+                            </span>
+                            <xsl:if test="position() != last()">
+                                <xsl:text> </xsl:text>
+                            </xsl:if>
+                         </xsl:for-each>
                      <xsl:text> </xsl:text>
                      <xsl:if test="marc:subfield[@code='b']">
                         <span property="name" class="publisher_name">
@@ -345,12 +349,24 @@
                      </xsl:if>
                      </span>
                      <xsl:text> </xsl:text>
-                     <xsl:if test="marc:subfield[@code='c' or @code='g']">
+                     <xsl:for-each select="marc:subfield[@code='c']">
+                         <span property="datePublished" class="publisher_date">
+                             <a>
+                                 <xsl:attribute name="href">/cgi-bin/koha/opac-search.pl?q=copydate:"<xsl:value-of select="str:encode-uri(., true())"/>"</xsl:attribute>
+                                 <xsl:value-of select="."/>
+                             </a>
+                             <xsl:if test="position() != last()">
+                                 <xsl:text> </xsl:text>
+                             </xsl:if>
+                         </span>
+                     </xsl:for-each>
+                     <xsl:text> </xsl:text>
+                     <xsl:if test="marc:subfield[@code='g']">
                         <span property="datePublished" class="publisher_date">
                            <xsl:call-template name="chopPunctuation">
                                <xsl:with-param name="chopString">
                                     <xsl:call-template name="subfieldSelect">
-                                        <xsl:with-param name="codes">cg</xsl:with-param>
+                                        <xsl:with-param name="codes">g</xsl:with-param>
                                     </xsl:call-template>
                                 </xsl:with-param>
                             </xsl:call-template>
