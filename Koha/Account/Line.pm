@@ -131,8 +131,8 @@ Return the credit_offsets linked to this account line if some exist
 =cut
 
 sub credit_offsets {
-    my ( $self ) = @_;
-    my $rs = $self->_result->account_offsets_credits;
+    my ( $self, $cond, $attr ) = @_;
+    my $rs = $self->_result->search_related( 'account_offsets_credits', $cond, $attr);
     return unless $rs;
     return Koha::Account::Offsets->_new_from_dbic($rs);
 }
@@ -144,8 +144,8 @@ Return the debit_offsets linked to this account line if some exist
 =cut
 
 sub debit_offsets {
-    my ( $self ) = @_;
-    my $rs = $self->_result->account_offsets_debits;
+    my ( $self, $cond, $attr ) = @_;
+    my $rs = $self->_result->search_related( 'account_offsets_debits', $cond, $attr);
     return unless $rs;
     return Koha::Account::Offsets->_new_from_dbic($rs);
 }

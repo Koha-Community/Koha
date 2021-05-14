@@ -29,7 +29,7 @@ use t::lib::TestBuilder;
 my $schema  = Koha::Database->new->schema;
 my $builder = t::lib::TestBuilder->new;
 
-subtest 'total_outstanding() tests' => sub {
+subtest 'total() tests' => sub {
 
     plan tests => 4;
 

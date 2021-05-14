@@ -1004,17 +1004,16 @@ sub _set_found_trigger {
                     # some amount has been cancelled. collect the offsets that are not writeoffs
                     # this works because the only way to subtract from this kind of a debt is
                     # using the UI buttons 'Pay' and 'Write off'
-                    my $credits_offsets = Koha::Account::Offsets->search(
+                    my $credit_offsets = $lost_charge->debit_offsets(
                         {
-                            debit_id  => $lost_charge->id,
-                            credit_id => { '!=' => undef },     # it is not the debit itself
-                            type      => { '!=' => 'Writeoff' },
-                            amount    => { '<' => 0 }    # credits are negative on the DB
-                        }
+                            'credit_id'               => { '!=' => undef },
+                            'credit.credit_type_code' => { '!=' => 'Writeoff' }
+                        },
+                        { join => 'credit' }
                     );
 
-                    $total_to_refund = ( $credits_offsets->count > 0 )
-                      ? $credits_offsets->total * -1    # credits are negative on the DB
+                    $total_to_refund = ( $credit_offsets->count > 0 )
+                      ? $credit_offsets->total * -1    # credits are negative on the DB
                       : 0;
                 }
 

@@ -50,7 +50,7 @@ sub total {
     my $offsets = $self->search(
         {},
         {
-            select => [ { sum => 'amount' } ],
+            select => [ { sum => 'me.amount' } ],
             as     => ['total_amount'],
         }
     );
