@@ -56,17 +56,3 @@
         [%- CASE              -%]
     [%- END -%]
 [%- END -%]
-
-[%- BLOCK offset_type_description -%]
-    [%- SWITCH account_offset.type -%]
-        [%- CASE 'Credit Applied' -%]<span>Credit applied</span>
-        [%- CASE 'Payment'        -%]<span>Payment</span>
-        [%- CASE 'Manual Credit'  -%]<span>Manual credit</span>
-        [%- CASE 'Manual Debit'   -%]<span>Manual invoice</span>
-        [%- CASE 'Lost Item'      -%]<span>Lost item returned</span>
-        [%- CASE 'Writeoff'       -%]<span>Writeoff</span>
-        [%- CASE 'Void Payment'   -%]<span>Void payment</span>
-        [%- CASE 'CANCELLATION'   -%]<span>Cancelled charge</span>
-        [%- CASE                  -%][% account_offset.type | html %]
-    [%- END -%]
-[%- END -%]

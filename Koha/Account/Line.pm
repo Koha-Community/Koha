@@ -57,6 +57,19 @@ sub patron {
     return Koha::Patron->_new_from_dbic( $rs );
 }
 
+=head3 manager
+
+Return the manager linked to this account line
+
+=cut
+
+sub manager {
+    my ( $self ) = @_;
+    my $rs = $self->_result->manager;
+    return unless $rs;
+    return Koha::Patron->_new_from_dbic( $rs );
+}
+
 =head3 item
 
 Return the item linked to this account line if exists

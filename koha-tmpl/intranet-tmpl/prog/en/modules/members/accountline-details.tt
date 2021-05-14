@@ -7,7 +7,7 @@
 [% SET footerjs = 1 %]
 [% PROCESS 'accounts.inc' %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Details of fee &rsaquo; [% INCLUDE 'patron-title.inc' no_html = 1 %] &rsaquo; Patrons &rsaquo; Koha</title>
+<title>Details of [% IF type == 'credit' %]credit[% ELSE %]debit[% END %] &rsaquo; [% INCLUDE 'patron-title.inc' no_html = 1 %] &rsaquo; Patrons &rsaquo; Koha</title>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 
@@ -24,24 +24,27 @@
             <a href="/cgi-bin/koha/members/members-home.pl">Patrons</a>
         </li>
 
-        [% IF type == 'credit' %]
+
+        [% IF accountline %]
+            [% IF accountline.credit_type_code %]
             <li>
                 <a href="/cgi-bin/koha/members/boraccount.pl?borrowernumber=[% patron.borrowernumber | uri %]">Account for [% INCLUDE 'patron-title.inc' %]</a>
             </li>
             <li>
                 <a href="#" aria-current="page">
-                    Details of payment
+                    Details of credit ([% accountline.id | html %])
                 </a>
             </li>
-        [% ELSIF type == 'debit' %]
+            [% ELSIF accountline.debit_type_code %]
             <li>
                 <a href="/cgi-bin/koha/members/boraccount.pl?borrowernumber=[% patron.borrowernumber | uri %]">Account for [% INCLUDE 'patron-title.inc' %]</a>
             </li>
             <li>
                 <a href="#" aria-current="page">
-                    Details of fee
+                    Details of debit ([% accountline.id | html %])
                 </a>
             </li>
+            [% END %]
         [% ELSE %]
             <li>
                 <a href="#" aria-current="page">
@@ -60,17 +63,17 @@
             [% INCLUDE 'members-toolbar.inc' borrowernumber=patron.borrowernumber %]
 
             [% IF accountline %]
-                [% IF type == 'credit' %]
-                    <h2>Details of payment</h2>
-                [% ELSIF type == 'debit' %]
-                    <h2>Details of fee</h2>
+                [% IF accountline.credit_type_code %]
+                    <h2>Details of credit</h2>
+                [% ELSIF accountline.debit_type_code %]
+                    <h2>Details of debit</h2>
                 [% END %]
 
                 <table id="table_account_fines">
                     <thead>
                         <tr>
                             <th>Date</th>
-                            <th>Description of charges</th>
+                            <th>Description</th>
                             <th>Barcode</th>
                             <th>Due date</th>
                             <th>Return date</th>
@@ -83,7 +86,7 @@
                     <tbody>
                         <tr>
                             <td>
-                                [% accountline.date |$KohaDates %]
+                                [% accountline.date | $KohaDates %]
                             </td>
                             <td>
                                 [%- PROCESS account_type_description account=accountline -%]
@@ -134,63 +137,81 @@
                     </tbody>
                 </table>
 
-
-                [% IF type == 'credit' %]
-                    <h3>Fees paid</h3>
-                [% ELSIF type == 'debit' %]
-                    <h3>Payments</h3>
-                [% END %]
-
+                <h3>History</h3>
                 <table class="accountline-offsets-table" id="accountline-debits-table">
                     <thead>
                         <tr>
-                            <th>Date created</th>
-                            <th>Date updated</th>
-                            <th>Amount</th>
-                            <th>Amount outstanding</th>
+                            <th rowspan="2">Date</th>
+                            <th colspan="2">Change</th>
+                            <th rowspan="2">Action</th>
+                            <th colspan="4">Related transaction</th>
+                        </tr>
+                        <tr>
+                            <th>Increase</th>
+                            <th>Decrease</th>
                             <th>Type</th>
+                            <th>Amount</th>
+                            <th>Librarian</th>
                             <th>Note</th>
-                            <th>Transacting librarian</th>
-                            <th>Date/time of change</th>
-                            <th>Amount of change</th>
-                            <th>Type of change</th>
-                            <th>&nbsp;</th>
                         </tr>
                     </thead>
 
                     <tbody>
                         [% FOREACH ao IN account_offsets %]
-                            [% IF type == 'credit' %]
-                                [% SET offset_accountline = ao.debit %]
-                            [% ELSIF type == 'debit' %]
-                                [% SET offset_accountline = ao.credit %]
-                            [% END %]
+                                [% IF ao.credit_id == accountline.accountlines_id %]
+                                    [% SET offset_accountline = ao.debit %]
+                                [% ELSIF ao.debit_id == accountline.accountlines_id %]
+                                    [% SET offset_accountline = ao.credit %]
+                                [% END %]
 
-                            [% IF offset_accountline %]
+                                [%- BLOCK ao_description -%]
+                                    [%- SWITCH ao.type -%]
+                                        [%- CASE 'CREATE'           -%]<span>Created</span>
+                                        [%- CASE 'OVERDUE_INCREASE' -%]<span>Increase</span>
+                                        [%- CASE 'OVERDUE_DECREASE' -%]<span>Decrease</span>
+                                        [%- CASE 'APPLY'            -%]<span>Applied</span>
+                                        [%- CASE 'VOID'             -%]<span>Reversed</span>
+                                    [%- END -%]
+                                [%- END -%]
+
                                 <tr>
-                                    <td>[% offset_accountline.date | $KohaDates %]</td>
-                                    <td>[% offset_accountline.timestamp | $KohaDates  with_hours => 1 %]</td>
-                                    <td>[% offset_accountline.amount | $Price %]</td>
-                                    <td>[% offset_accountline.amountoutstanding | $Price %]</td>
-                                    <td>[% PROCESS account_type_description account=offset_accountline %]</td>
+                                    <td>[% ao.created_on | $KohaDates with_hours => 1%]</td>
+                                    <td>[%- IF ao.amount > 0 -%][% ao.amount | $Price %][% END %]</td>
+                                    <td>[%- IF ao.amount < 0 -%][% ao.amount | $Price %][% END %]</td>
+                                    <td>
+                                        [% PROCESS ao_description ao=ao %]
+                                    </td>
+                                    [%- IF offset_accountline -%]
+                                    <td>
+                                        [% PROCESS account_type_description account=offset_accountline %] (<a href="accountline-details.pl?accountlines_id=[% offset_accountline.id | uri %]">[% offset_accountline.id | html %]</a>)
+                                    </td>
+                                    <td>
+                                        [% offset_accountline.amount | $Price %]
+                                    </td>
+                                    <td>
+                                        [% IF offset_accountline.manager_id %]
+                                        <a href="moremember.pl?borrowernumber=[% offset_accountline.manager_id | uri %]">
+                                            [% IF offset_accountline.manager.firstname %]
+                                                [% offset_accountline.manager.firstname | html %] [% offest_accountline.manager.surname | html %]
+                                            [% ELSE %]
+                                                [% offset_accountline.manager.surname | html %]
+                                            [% END %]
+                                        </a>
+                                        [% END %]
+                                    </td>
+                                    [%- ELSE -%]
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    [%- END -%]
                                     <td>[% offset_accountline.note | html %]</td>
-                                    <td>[% IF offset_accountline.manager_id %]<a href="moremember.pl?borrowernumber=[% offset_accountline.manager_id | uri %]">[% offset_accountline.manager_id | html %]</a>[% END %]</td>
-                                    <td>[% ao.created_on | $KohaDates  with_hours => 1 %]</td>
-                                    <td>[% ao.amount | $Price %]</td>
-                                    <td>[% PROCESS offset_type_description account_offset=ao %]</td>
-                                    <td><a href="accountline-details.pl?accountlines_id=[% offset_accountline.id | uri %]" class="btn btn-default btn-xs"><i class="fa fa-list"></i> Details</a></td>
                                 </tr>
-                            [% END %]
                         [% END %]
                     </tbody>
                 </table>
             [% ELSE %]
                 <div class="dialog message">
-                    [% IF type == 'credit' %]
-                        Payment not found
-                    [% ELSIF type == 'debit' %]
-                        Fee not found
-                    [% END %]
+                    Account not found
                 </div>
             [% END %]
 
