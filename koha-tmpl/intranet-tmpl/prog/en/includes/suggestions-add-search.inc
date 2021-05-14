@@ -14,21 +14,8 @@
 	</div>
 
     [% INCLUDE 'patron-search-box.inc' %]
+    [% INCLUDE 'catalogue-search-box.inc' %]
 
-	[% IF ( CAN_user_catalogue ) %]
-    <div id="catalog_search" class="residentsearch">
-		<form action="/cgi-bin/koha/catalogue/search.pl"  method="get" id="cat-search-block">
-            [% IF ( Koha.Preference('IntranetCatalogSearchPulldown') ) %]
-                <label class="tip" for="search-form">Enter search keywords:</label>
-                [% INCLUDE 'search_indexes.inc' %]
-            [% ELSE %]
-                <label class="tip" for="search-form">Enter search keywords:</label>
-            [% END %]
-            <input type="text" name="q" id="search-form" size="40" value="" title="Enter the terms you wish to search for." class="head-searchbox form-text" />
-				<input type="submit" value="Submit"  class="submit" />
-		</form>
-	</div>
-	[% END %]
 			<ul>
             <li><a href="#suggestions_search">Search suggestions</a></li>
             [% IF ( CAN_user_circulate_circulate_remaining_permissions ) %]<li><a class="keep_text" href="#circ_search">Check out</a></li>[% END %]

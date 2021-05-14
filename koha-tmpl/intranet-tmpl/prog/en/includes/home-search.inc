@@ -30,16 +30,7 @@
         <input value="Submit" class="submit" type="submit" />
     </form>
 </div>[% END %]
-[% IF ( CAN_user_catalogue ) %]
-<div id="catalog_search" class="residentsearch">
-    <label class="tip" for="search-form">Enter search keywords:</label>
-    <form action="/cgi-bin/koha/catalogue/search.pl"  method="get" id="cat-search-block">
-        [% IF ( Koha.Preference('IntranetCatalogSearchPulldown') ) %][% INCLUDE 'search_indexes.inc' %][% END %]
-        <input type="text" name="q" id="search-form" class="head-searchbox" size="40" accesskey="q" />
-        <input type="submit" class="submit" value="Submit"/>
-    </form>
-</div>[% END %]
-
+[% INCLUDE 'catalogue-search-box.inc' %]
 <ul>
     [% IF ( CAN_user_circulate_circulate_remaining_permissions ) %]<li><a class="keep_text" href="#circ_search">Check out</a></li>[% END %]
     [% IF ( CAN_user_circulate_circulate_remaining_permissions ) %]<li><a class="keep_text" href="#checkin_search">Check in</a></li>[% END %]

@@ -29,19 +29,7 @@
         </div>
         [% END %]
 
-
-        <div id="catalog_search" class="residentsearch">
-            <form action="/cgi-bin/koha/catalogue/search.pl"  method="get" id="cat-search-block">
-                [% IF ( Koha.Preference('IntranetCatalogSearchPulldown') ) %]
-                    <label class="tip" for="search-form">Enter search keywords:</label>
-                    [% INCLUDE 'search_indexes.inc' %]
-                [% ELSE %]
-                    <label class="tip" for="search-form">Enter search keywords:</label>
-                [% END %]
-                <input type="text" name="q" id="search-form" size="40" value="" title="Enter the terms you wish to search for." class="head-searchbox form-text" />
-                <input type="submit" class="submit" value="Submit" />
-            </form>
-        </div>
+        [% INCLUDE 'catalogue-search-box.inc' %]
 
         <ul>
             <li><a class="keep_text" href="#addbooks_search">Cataloging search</a></li>
