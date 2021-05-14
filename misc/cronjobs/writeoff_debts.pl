@@ -94,8 +94,7 @@ while ( my $line = $lines->next ) {
                 # Link writeoff to charge
                 $writeoff->apply(
                     {
-                        debits      => [$line],
-                        offset_type => 'WRITEOFF'
+                        debits => [$line]
                     }
                 );
                 $writeoff->status('APPLIED')->store();
