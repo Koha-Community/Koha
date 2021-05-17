@@ -375,10 +375,10 @@ sub transferbook {
     # That'll save a database query.
     my ( $resfound, $resrec, undef ) =
       CheckReserves( $itemnumber );
-    if ( $resfound and not $ignoreRs ) {
+    if ( $resfound ) {
         $resrec->{'ResFound'} = $resfound;
         $messages->{'ResFound'} = $resrec;
-        $dotransfer = 1;
+        $dotransfer = 0 unless $ignoreRs;
     }
 
     #actually do the transfer....
