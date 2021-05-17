@@ -88,6 +88,9 @@ EOF
 generate_config_file() {
     touch "$2"
     chown "root:$username" "$2"
+    # Bug 28364: the z3950 responder needs other permissions
+    [ "$1" = "log4perl-site.conf.in" ] && chown "$username:$username" "$2"
+
     chmod 0640 "$2"
     sed -e "s/__KOHA_CONF_DIR__/\/etc\/koha\/sites\/$name/g" \
         -e "s/__KOHASITE__/$name/g" \
