@@ -677,7 +677,9 @@ ok(MARC::Record::new_from_xml($results_hashref->{biblioserver}->{RECORDS}->[0],'
     ( $error, $query, $simple_query, $query_cgi,
     $query_desc, $limit, $limit_cgi, $limit_desc,
     $query_type ) = buildQuery([], [ 0 ], [ 'su,phr' ], [], [], 0, 'en');
-    is($query, 'su,phr=(rk=(0)) ', 'buildQuery should keep 0 value');
+    is($query, 'su,phr=(rk=(0)) ', 'buildQuery should keep 0 value in query');
+    is($query_cgi, 'idx=su%2Cphr&q=0', 'buildQuery should keep 0 value in query_cgi');
+    is($query_desc, 'su,phr: 0', 'buildQuery should keep 0 value in query_desc');
 
     # Bug 23086
     ( $error, $query, $simple_query, $query_cgi,
@@ -923,7 +925,7 @@ sub run_unimarc_search_tests {
 }
 
 subtest 'MARC21 + DOM' => sub {
-    plan tests => 88;
+    plan tests => 90;
     run_marc21_search_tests();
 };
 
