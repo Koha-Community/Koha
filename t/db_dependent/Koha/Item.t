@@ -852,7 +852,7 @@ subtest 'pickup_locations() tests' => sub {
 };
 
 subtest 'request_transfer' => sub {
-    plan tests => 13;
+    plan tests => 14;
     $schema->storage->txn_begin;
 
     my $library1 = $builder->build_object( { class => 'Koha::Libraries' } );
@@ -867,15 +867,16 @@ subtest 'request_transfer' => sub {
     # Mandatory fields tests
     throws_ok { $item->request_transfer( { to => $library1 } ) }
     'Koha::Exceptions::MissingParameter',
-      'Exception thrown if `reason` parameter is missing';
+        'Exception thrown if `reason` parameter is missing';
 
     throws_ok { $item->request_transfer( { reason => 'Manual' } ) }
     'Koha::Exceptions::MissingParameter',
-      'Exception thrown if `to` parameter is missing';
+        'Exception thrown if `to` parameter is missing';
 
     # Successful request
-    my $transfer = $item->request_transfer({ to => $library1, reason => 'Manual' });
-    is( ref($transfer), 'Koha::Item::Transfer',
+    my $transfer = $item->request_transfer( { to => $library1, reason => 'Manual' } );
+    is(
+        ref($transfer), 'Koha::Item::Transfer',
         'Koha::Item->request_transfer should return a Koha::Item::Transfer object'
     );
     my $original_transfer = $transfer->get_from_storage;
@@ -883,50 +884,59 @@ subtest 'request_transfer' => sub {
     # Transfer already in progress
     throws_ok { $item->request_transfer( { to => $library2, reason => 'Manual' } ) }
     'Koha::Exceptions::Item::Transfer::InQueue',
-      'Exception thrown if transfer is already in progress';
+        'Exception thrown if transfer is already in progress';
 
     my $exception = $@;
-    is( ref( $exception->transfer ),
+    is(
+        ref( $exception->transfer ),
         'Koha::Item::Transfer',
-        'The exception contains the found Koha::Item::Transfer' );
+        'The exception contains the found Koha::Item::Transfer'
+    );
 
     # Queue transfer
-    my $queued_transfer = $item->request_transfer(
-        { to => $library2, reason => 'Manual', enqueue => 1 } );
-    is( ref($queued_transfer), 'Koha::Item::Transfer',
-        'Koha::Item->request_transfer allowed when enqueue is set' );
+    my $queued_transfer = $item->request_transfer( { to => $library2, reason => 'Manual', enqueue => 1 } );
+    is(
+        ref($queued_transfer), 'Koha::Item::Transfer',
+        'Koha::Item->request_transfer allowed when enqueue is set'
+    );
     my $transfers = $item->get_transfers;
-    is($transfers->count, 2, "There are now 2 live transfers in the queue");
+    is( $transfers->count, 2, "There are now 2 live transfers in the queue" );
     $transfer = $transfer->get_from_storage;
-    is_deeply($transfer->unblessed, $original_transfer->unblessed, "Original transfer unchanged");
+    is_deeply( $transfer->unblessed, $original_transfer->unblessed, "Original transfer unchanged" );
     $queued_transfer->datearrived(dt_from_string)->store();
 
     # Replace transfer
-    my $replaced_transfer = $item->request_transfer(
-        { to => $library2, reason => 'Manual', replace => 1 } );
-    is( ref($replaced_transfer), 'Koha::Item::Transfer',
-        'Koha::Item->request_transfer allowed when replace is set' );
+    my $replaced_transfer =
+        $item->request_transfer( { to => $library2, reason => 'Manual', replace => 'WrongTransfer' } );
+    is(
+        ref($replaced_transfer), 'Koha::Item::Transfer',
+        'Koha::Item->request_transfer allowed when replace is set'
+    );
     $original_transfer->discard_changes;
-    ok($original_transfer->datecancelled, "Original transfer cancelled");
+    ok( $original_transfer->datecancelled, "Original transfer cancelled" );
+    is( $original_transfer->cancellation_reason, "WrongTransfer", "Original cancellation_reason set correctly" );
     $transfers = $item->get_transfers;
-    is($transfers->count, 1, "There is only 1 live transfer in the queue");
+    is( $transfers->count, 1, "There is only 1 live transfer in the queue" );
     $replaced_transfer->datearrived(dt_from_string)->store();
 
     # BranchTransferLimits
-    t::lib::Mocks::mock_preference('UseBranchTransferLimits', 1);
-    t::lib::Mocks::mock_preference('BranchTransferLimitsType', 'itemtype');
-    my $limit = Koha::Item::Transfer::Limit->new({
-        fromBranch => $library2->branchcode,
-        toBranch => $library1->branchcode,
-        itemtype => $item->effective_itemtype,
-    })->store;
+    t::lib::Mocks::mock_preference( 'UseBranchTransferLimits',  1 );
+    t::lib::Mocks::mock_preference( 'BranchTransferLimitsType', 'itemtype' );
+    my $limit = Koha::Item::Transfer::Limit->new(
+        {
+            fromBranch => $library2->branchcode,
+            toBranch   => $library1->branchcode,
+            itemtype   => $item->effective_itemtype,
+        }
+    )->store;
 
     throws_ok { $item->request_transfer( { to => $library1, reason => 'Manual' } ) }
     'Koha::Exceptions::Item::Transfer::Limit',
-      'Exception thrown if transfer is prevented by limits';
+        'Exception thrown if transfer is prevented by limits';
 
     my $forced_transfer = $item->request_transfer( { to => $library1, reason => 'Manual', ignore_limits => 1 } );
-    is( ref($forced_transfer), 'Koha::Item::Transfer',
+    is(
+        ref($forced_transfer), 'Koha::Item::Transfer',
         'Koha::Item->request_transfer allowed when ignore_limits is set'
     );
 

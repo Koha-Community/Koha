@@ -107,7 +107,6 @@ BEGIN {
       transferbook
       TooMany
       GetTransfersFromTo
-      updateWrongTransfer
       CalcDateDue
       CheckValidBarcode
       IsBranchTransferAllowed
@@ -3836,36 +3835,6 @@ sub SendCirculationAlert {
     }
 
     return;
-}
-
-=head2 updateWrongTransfer
-
-  $items = updateWrongTransfer($itemNumber,$borrowernumber,$waitingAtLibrary,$FromLibrary);
-
-This function validate the line of brachtransfer but with the wrong destination (mistake from a librarian ...), and create a new line in branchtransfer from the actual library to the original library of reservation 
-
-=cut
-
-sub updateWrongTransfer {
-	my ( $itemNumber,$waitingAtLibrary,$FromLibrary ) = @_;
-
-    # first step: cancel the original transfer
-    my $item = Koha::Items->find($itemNumber);
-    my $transfer = $item->get_transfer;
-    $transfer->set({ datecancelled => dt_from_string, cancellation_reason => 'WrongTransfer' })->store();
-
-    # second step: create a new transfer to the right location
-    my $new_transfer = $item->request_transfer(
-        {
-            to            => $transfer->to_library,
-            reason        => $transfer->reason,
-            comment       => $transfer->comments,
-            ignore_limits => 1,
-            enqueue       => 1
-        }
-    );
-
-    return $new_transfer;
 }
 
 =head2 CalcDateDue

@@ -35,7 +35,7 @@ use CGI qw ( -utf8 );
 use DateTime;
 
 use C4::Auth qw( get_template_and_user get_session haspermission );
-use C4::Circulation qw( barcodedecode GetBranchItemRule AddReturn updateWrongTransfer LostItem );
+use C4::Circulation qw( barcodedecode GetBranchItemRule AddReturn LostItem );
 use C4::Context;
 use C4::Members::Messaging;
 use C4::Members;
@@ -583,7 +583,10 @@ if ( $messages->{'WrongTransfer'} and not $messages->{'WasTransfered'}) {
     );
 
     # Update the transfer to reflect the new item holdingbranch
-    my $new_transfer = updateWrongTransfer($messages->{'WrongTransferItem'},$messages->{'WrongTransfer'}, $userenv_branch);
+    my $item = Koha::Items->find($messages->{'WrongTransferItem'});
+    my $old_transfer = $item->get_transfer;
+    my $new_transfer = $item->request_transfer(
+        { to => $old_transfer->tobranch, reason => $old_transfer->reason, replace => 'WrongTransfer' } );
     $template->param(
         NewTransfer => $new_transfer->id
     );

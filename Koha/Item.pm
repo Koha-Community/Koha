@@ -759,7 +759,7 @@ sub check_booking {
     {
         to     => $to_library,
         reason => $reason,
-        [ ignore_limits => 0, enqueue => 1, replace => 1 ]
+        [ ignore_limits => 0, enqueue => 1, replace => 'reason' ]
     }
   );
 
@@ -798,8 +798,8 @@ sub request_transfer {
     Koha::Exceptions::Item::Transfer::InQueue->throw( transfer => $request )
       if ( $request && !$params->{enqueue} && !$params->{replace} );
 
-    $request->cancel( { reason => $params->{reason}, force => 1 } )
-        if ( defined($request) && $params->{replace} );
+    $request->cancel( { reason => $params->{replace}, force => 1 } )
+      if ( defined($request) && $params->{replace} );
 
     my $transfer = Koha::Item::Transfer->new(
         {

@@ -265,7 +265,7 @@ sub advance {
                         to            => $new_stage->branchcode,
                         reason        => "StockrotationAdvance",
                         ignore_limits => 1,
-                        replace       => 1
+                        replace       => "StockrotationAdvance"
                     }
                 );                                      # Replace transfer
             }

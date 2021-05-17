@@ -401,7 +401,7 @@ sub ModItemTransfer {
                         to            => $to_library,
                         reason        => $trigger,
                         ignore_limits => 1,
-                        replace       => 1
+                        replace       => $trigger
                     }
                 );
             }

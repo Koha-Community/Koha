@@ -484,7 +484,7 @@ sub TransferCollection {
                             to            => $to_library,
                             reason        => "RotatingCollection",
                             ignore_limits => 0,
-                            replace       => 1
+                            replace       => "RotatingCollection"
                         }
                     );    # Replace transfer
                           # FIXME: If we just replaced a StockRotationAdvance,
