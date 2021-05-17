@@ -1581,7 +1581,7 @@ sub _build_initial_query {
 
     $params->{query_cgi} .= "&op=".uri_escape_utf8($operator) if $operator;
     $params->{query_cgi} .= "&idx=".uri_escape_utf8($params->{index}) if $params->{index};
-    $params->{query_cgi} .= "&q=".uri_escape_utf8($params->{original_operand}) if $params->{original_operand};
+    $params->{query_cgi} .= "&q=".uri_escape_utf8($params->{original_operand}) if ( $params->{original_operand} ne '' );
 
     #e.g. " and kw,wrdl: test"
     $params->{query_desc} .= $operator . ( $params->{index_plus} // q{} ) . " " . ( $params->{original_operand} // q{} );
