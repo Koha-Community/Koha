@@ -127,7 +127,6 @@ defined $barcode and $barcode =~ s/^\s*|\s*$//g;  # FIXME: barcodeInputFilter
 if ($barcode) {
 
     ( $transferred, $messages ) =
-
         transferbook({
             from_branch => C4::Context->userenv->{'branch'},
             to_branch => $tobranchcd,
@@ -136,7 +135,7 @@ if ($barcode) {
             trigger => 'Manual'
         });
     my $item = Koha::Items->find({ barcode => $barcode });
-    $found = $messages->{'ResFound'};
+    $found = $messages->{'ResFound'} unless $settransit;
     if ($transferred) {
         my %trsfitem;
         my $frbranchcd =  C4::Context->userenv->{'branch'};

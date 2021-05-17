@@ -67,8 +67,8 @@
                     <input type="hidden" name="itemnumber" value="[% itemnumber | html %]" />
                     <input type="hidden" name="borrowernumber" value="[% borrowernumber | html %]" />
                     <input type="hidden" name="tobranchcd" value="[% tobranchcd | html %]" />
+                    <input type="hidden" name="barcode" value="[% barcode | html %]" />
                     [% IF ( waiting or transferred or processing ) %]
-                        <input type="hidden" name="barcode" value="[% barcode | html %]" />
                         <input type="hidden" name="request" value="KillWaiting" />
                         <input type="submit" value="Cancel" />
                     [% END %]
@@ -93,7 +93,6 @@
                             <input type="hidden" name="biblionumber" value="[% biblionumber | html %]" />
                             <input type="hidden" name="borrowernumber" value="[% borrowernumber | html %]" />
                             <input type="hidden" name="tobranchcd" value="[% tobranchcd | html %]" />
-                            <input type="hidden" name="barcode" value="[% barcode | html %]" />
                             <input type="hidden" name="request" value="KillReserved" />
                             <input type="submit" value="Cancel" />
                         </form>
