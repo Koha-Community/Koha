@@ -132,7 +132,7 @@ sub _autocreate {
     my %borrower = ( $config->{matchpoint} => $match );
 
     while ( my ( $key, $entry ) = each %{$config->{'mapping'}} ) {
-        if ( any { /(^psgi|^plack)/i } keys %ENV ) {
+        if ( any { /(^psgi\.|^plack\.)/i } keys %ENV ) {
             $borrower{$key} = ( $entry->{'is'} && $ENV{"HTTP_" . uc($entry->{'is'}) } ) || $entry->{'content'} || '';
         } else {
             $borrower{$key} = ( $entry->{'is'} && $ENV{ $entry->{'is'} } ) || $entry->{'content'} || '';
