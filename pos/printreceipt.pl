@@ -51,8 +51,9 @@ output_and_exit_if_error(
     }
 ) if $patron;    # Payment could have been anonymous
 
+my $lang = $patron ? $patron->lang : $template->lang;
 my $letter = C4::Letters::getletter( 'pos', 'RECEIPT',
-    C4::Context::mybranch, 'print', $patron->lang );
+    C4::Context::mybranch, 'print', $lang );
 
 $template->param(
     letter  => $letter,
