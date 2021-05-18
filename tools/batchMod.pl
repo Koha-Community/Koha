@@ -711,13 +711,21 @@ sub BuildItemsData{
       $row_data{holds}        = $row->{holds};
       $row_data{item_holds}   = $row->{item_holds};
       $row_data{item}         = $row->{item};
+      $row_data{safe_to_delete} = $row->{item}->safe_to_delete;
       my $is_on_loan = C4::Circulation::IsItemIssued( $row->{itemnumber} );
       $row_data{onloan} = $is_on_loan ? 1 : 0;
 			push(@item_value_loop,\%row_data);
 		}
 		my @header_loop=map { { header_value=> $witness{$_}} } @witnesscodessorted;
 
-	return { item_loop        => \@item_value_loop, item_header_loop => \@header_loop };
+    my @cannot_be_deleted = map {
+        $_->{safe_to_delete} == 1 ? () : $_->{item}->barcode
+    } @item_value_loop;
+    return {
+        item_loop        => \@item_value_loop,
+        cannot_be_deleted => \@cannot_be_deleted,
+        item_header_loop => \@header_loop
+    };
 }
 
 #BE WARN : it is not the general case 
