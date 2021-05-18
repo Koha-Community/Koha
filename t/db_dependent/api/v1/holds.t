@@ -155,16 +155,15 @@ my $suspended_until = DateTime->now->add(days => 10)->truncate( to => 'day' );
 my $expiration_date = DateTime->now->add(days => 10)->truncate( to => 'day' );
 
 my $post_data = {
-    patron_id => int($patron_1->borrowernumber),
-    biblio_id => int($biblio_1->biblionumber),
-    item_id => int($item_1->itemnumber),
+    patron_id         => $patron_1->borrowernumber,
+    biblio_id         => $biblio_1->biblionumber,
+    item_id           => $item_1->itemnumber,
     pickup_library_id => $branchcode,
-    expiration_date => output_pref({ dt => $expiration_date, dateformat => 'rfc3339', dateonly => 1 }),
-    priority => 2,
+    expiration_date   => output_pref( { dt => $expiration_date, dateformat => 'rfc3339', dateonly => 1 } ),
 };
-my $put_data = {
-    priority => 2,
-    suspended_until => output_pref({ dt => $suspended_until, dateformat => 'rfc3339' }),
+my $patch_data = {
+    priority        => 2,
+    suspended_until => output_pref( { dt => $suspended_until, dateformat => 'rfc3339' } ),
 };
 
 subtest "Test endpoints without authentication" => sub {
@@ -173,7 +172,7 @@ subtest "Test endpoints without authentication" => sub {
       ->status_is(401);
     $t->post_ok('/api/v1/holds')
       ->status_is(401);
-    $t->put_ok('/api/v1/holds/0')
+    $t->patch_ok('/api/v1/holds/0')
       ->status_is(401);
     $t->delete_ok('/api/v1/holds/0')
       ->status_is(401);
@@ -192,7 +191,7 @@ subtest "Test endpoints without permission" => sub {
     $t->post_ok( "//$nopermission_userid:$password@/api/v1/holds" => json => $post_data )
       ->status_is(403);
 
-    $t->put_ok( "//$nopermission_userid:$password@/api/v1/holds/0" => json => $put_data )
+    $t->patch_ok( "//$nopermission_userid:$password@/api/v1/holds/0" => json => $patch_data )
       ->status_is(403);
 
     $t->delete_ok( "//$nopermission_userid:$password@/api/v1/holds/0" )
@@ -218,7 +217,7 @@ subtest "Test endpoints with permission" => sub {
       ->status_is(204, 'SWAGGER3.2.4')
       ->content_is('', 'SWAGGER3.3.4');
 
-    $t->put_ok( "//$userid_3:$password@/api/v1/holds/$reserve_id" => json => $put_data )
+    $t->patch_ok( "//$userid_3:$password@/api/v1/holds/$reserve_id" => json => $patch_data )
       ->status_is(404)
       ->json_has('/error');
 
@@ -262,12 +261,12 @@ subtest "Test endpoints with permission" => sub {
       ->status_is(403)
       ->json_like('/error', qr/itemAlreadyOnHold/);
 
-    $post_data->{biblionumber} = int($biblio_2->biblionumber);
-    $post_data->{itemnumber}   = int($item_2->itemnumber);
+    $post_data->{biblio_id} = $biblio_2->biblionumber;
+    $post_data->{item_id}   = $item_2->itemnumber;
 
     $t->post_ok( "//$userid_3:$password@/api/v1/holds" => json => $post_data )
       ->status_is(403)
-      ->json_like('/error', qr/itemAlreadyOnHold/);
+      ->json_like('/error', qr/Hold cannot be placed. Reason: tooManyReserves/);
 
     my $to_delete_patron  = $builder->build_object({ class => 'Koha::Patrons' });
     my $deleted_patron_id = $to_delete_patron->borrowernumber;
@@ -326,13 +325,12 @@ subtest 'test AllowHoldDateInFuture' => sub {
     my $future_hold_date = DateTime->now->add(days => 10)->truncate( to => 'day' );
 
     my $post_data = {
-        patron_id => int($patron_1->borrowernumber),
-        biblio_id => int($biblio_1->biblionumber),
-        item_id => int($item_1->itemnumber),
+        patron_id         => $patron_1->borrowernumber,
+        biblio_id         => $biblio_1->biblionumber,
+        item_id           => $item_1->itemnumber,
         pickup_library_id => $branchcode,
-        expiration_date => output_pref({ dt => $expiration_date, dateformat => 'rfc3339', dateonly => 1 }),
-        hold_date => output_pref({ dt => $future_hold_date, dateformat => 'rfc3339', dateonly => 1 }),
-        priority => 2,
+        expiration_date   => output_pref( { dt => $expiration_date,  dateformat => 'rfc3339', dateonly => 1 } ),
+        hold_date         => output_pref( { dt => $future_hold_date, dateformat => 'rfc3339', dateonly => 1 } ),
     };
 
     t::lib::Mocks::mock_preference( 'AllowHoldDateInFuture', 0 );
@@ -953,10 +951,13 @@ subtest 'edit() tests' => sub {
         }
     );
 
-    my $biblio_hold_data = $biblio_hold->to_api;
-    $biblio_hold_data->{pickup_library_id} = $library_1->branchcode;
+    my $biblio_hold_api_data = $biblio_hold->to_api;
+    my $biblio_hold_data = {
+        pickup_library_id => $library_1->branchcode,
+        priority          => $biblio_hold_api_data->{priority}
+    };
 
-    $t->put_ok( "//$userid:$password@/api/v1/holds/"
+    $t->patch_ok( "//$userid:$password@/api/v1/holds/"
           . $biblio_hold->id
           => json => $biblio_hold_data )
       ->status_is(400)
@@ -965,14 +966,14 @@ subtest 'edit() tests' => sub {
     $biblio_hold->discard_changes;
     is( $biblio_hold->branchcode, $library_3->branchcode, 'branchcode remains untouched' );
 
-    $t->put_ok( "//$userid:$password@/api/v1/holds/" . $biblio_hold->id
+    $t->patch_ok( "//$userid:$password@/api/v1/holds/" . $biblio_hold->id
           => { 'x-koha-override' => 'any' }
           => json => $biblio_hold_data )
       ->status_is(200)
       ->json_has( '/pickup_library_id' => $library_1->id );
 
     $biblio_hold_data->{pickup_library_id} = $library_2->branchcode;
-    $t->put_ok( "//$userid:$password@/api/v1/holds/"
+    $t->patch_ok( "//$userid:$password@/api/v1/holds/"
           . $biblio_hold->id
           => json => $biblio_hold_data )
       ->status_is(200);
@@ -993,10 +994,13 @@ subtest 'edit() tests' => sub {
         }
     );
 
-    my $item_hold_data = $item_hold->to_api;
-    $item_hold_data->{pickup_library_id} = $library_1->branchcode;
+    my $item_hold_api_data = $item_hold->to_api;
+    my $item_hold_data = {
+        pickup_library_id => $library_1->branchcode,
+        priority          => $item_hold_api_data->{priority}
+    };
 
-    $t->put_ok( "//$userid:$password@/api/v1/holds/"
+    $t->patch_ok( "//$userid:$password@/api/v1/holds/"
           . $item_hold->id
           => json => $item_hold_data )
       ->status_is(400)
@@ -1005,14 +1009,14 @@ subtest 'edit() tests' => sub {
     $item_hold->discard_changes;
     is( $item_hold->branchcode, $library_3->branchcode, 'branchcode remains untouched' );
 
-    $t->put_ok( "//$userid:$password@/api/v1/holds/" . $item_hold->id
+    $t->patch_ok( "//$userid:$password@/api/v1/holds/" . $item_hold->id
           => { 'x-koha-override' => 'any' }
           => json => $item_hold_data )
       ->status_is(200)
       ->json_has( '/pickup_library_id' => $library_1->id );
 
     $item_hold_data->{pickup_library_id} = $library_2->branchcode;
-    $t->put_ok( "//$userid:$password@/api/v1/holds/"
+    $t->patch_ok( "//$userid:$password@/api/v1/holds/"
           . $item_hold->id
           => json => $item_hold_data )
       ->status_is(200);
@@ -1098,10 +1102,13 @@ subtest 'add() tests' => sub {
         }
     );
 
-    my $biblio_hold_data = $biblio_hold->to_api;
+    my $biblio_hold_api_data = $biblio_hold->to_api;
     $biblio_hold->delete;
-    $biblio_hold_data->{pickup_library_id} = $library_1->branchcode;
-    delete $biblio_hold_data->{hold_id};
+    my $biblio_hold_data = {
+        biblio_id         => $biblio_hold_api_data->{biblio_id},
+        patron_id         => $biblio_hold_api_data->{patron_id},
+        pickup_library_id => $library_1->branchcode,
+    };
 
     $t->post_ok( "//$userid:$password@/api/v1/holds" => json => $biblio_hold_data )
       ->status_is(400)
@@ -1124,10 +1131,14 @@ subtest 'add() tests' => sub {
         }
     );
 
-    my $item_hold_data = $item_hold->to_api;
+    my $item_hold_api_data = $item_hold->to_api;
     $item_hold->delete;
-    $item_hold_data->{pickup_library_id} = $library_1->branchcode;
-    delete $item_hold->{hold_id};
+    my $item_hold_data = {
+        biblio_id         => $item_hold_api_data->{biblio_id},
+        item_id           => $item_hold_api_data->{item_id},
+        patron_id         => $item_hold_api_data->{patron_id},
+        pickup_library_id => $library_1->branchcode,
+    };
 
     $t->post_ok( "//$userid:$password@/api/v1/holds" => json => $item_hold_data )
       ->status_is(400)
