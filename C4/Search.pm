@@ -1712,6 +1712,7 @@ sub searchResults {
 
         # Pull out the items fields
         my @fields = $marcrecord->field($itemtag);
+        $marcrecord->delete_fields( @fields ) unless C4::Context->preference('PassItemMarcToXSLT');
         my $marcflavor = C4::Context->preference("marcflavour");
 
         # adding linked items that belong to host records

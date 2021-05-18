@@ -507,6 +507,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('OverdueNoticeCalendar',0,NULL,'Take the calendar into consideration when generating overdue notices','YesNo'),
 ('OverduesBlockCirc','noblock','noblock|confirmation|block','When checking out an item should overdues block checkout, generate a confirmation dialogue, or allow checkout','Choice'),
 ('OverduesBlockRenewing','allow','allow|blockitem|block','If any of patron checked out documents is late, should renewal be allowed, blocked only on overdue items or blocked on whatever checked out document','Choice'),
+('PassItemMarcToXSLT','0',NULL,'If enabled, item fields in the MARC record will be made avaiable to XSLT sheets. Otherwise they will be removed.','YesNo'),
 ('PatronAnonymizeDelay','',NULL,'Delay for anonymizing patrons', 'Integer'),
 ('PatronAutoComplete','1','Try|Don\'t try','to guess the patron being entered while typing a patron search for circulation or patron search. Only returns the first 10 results at a time.','YesNo'),
 ('PatronDuplicateMatchingAddFields','surname|firstname|dateofbirth', NULL,'A list of fields separated by "|" to deduplicate patrons when created','Free'),
