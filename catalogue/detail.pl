@@ -261,6 +261,7 @@ if ( $showcomp eq 'both' || $showcomp eq 'staff' ) {
                     record       => $part,
                     xsl_syspref  => "XSLTResultsDisplay",
                     fix_amps     => 1,
+                    interface    => 'intranet'
                 }
               );
         }
@@ -284,6 +285,7 @@ $template->param(
         xsl_syspref    => "XSLTDetailsDisplay",
         fix_amps       => 1,
         xslt_variables => $xslt_variables,
+        interface      => 'intranet'
     }),
 );
 

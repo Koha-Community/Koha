@@ -612,6 +612,7 @@ if ( $showcomp eq 'both' || $showcomp eq 'opac' ) {
                     record       => $part,
                     xsl_syspref  => 'OPACXSLTResultsDisplay',
                     fix_amps     => 1,
+                    interface    => 'opac'
                 }
               );
         }
@@ -647,6 +648,7 @@ $template->param(
         xsl_syspref    => 'OPACXSLTDetailsDisplay',
         fix_amps       => 1,
         xslt_variables => $variables,
+        interface      => 'opac'
     }),
 );
 

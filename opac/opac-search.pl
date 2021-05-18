@@ -659,11 +659,6 @@ for (my $i=0;$i<@servers;$i++) {
                 $res->{'incart'} = 1;
             }
 
-            if (C4::Context->preference('COinSinOPACResults')) {
-                my $biblio = Koha::Biblios->find( $res->{'biblionumber'} );
-                # Catch the exception as Koha::Biblio::Metadata->record can explode if the MARCXML is invalid
-                $res->{coins} = $biblio ? eval {$biblio->get_coins} : q{}; # FIXME This should be moved at the beginning of the @newresults loop
-            }
             if ( C4::Context->preference( "Babeltheque" ) and $res->{normalized_isbn} ) {
                 if( my $isbn = Business::ISBN->new( $res->{normalized_isbn} ) ) {
                     $isbn = $isbn->as_isbn13->as_string;

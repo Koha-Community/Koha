@@ -2017,13 +2017,18 @@ sub searchResults {
                     ),
                     fix_amps       => 1,
                     hidden_items   => \@hiddenitems,
-                    xslt_variables => $xslt_variables
+                    xslt_variables => $xslt_variables,
+                    interface => $search_context->{'interface'}
                 }
             );
         }
 
         my $biblio_object = Koha::Biblios->find( $oldbiblio->{biblionumber} );
         $oldbiblio->{biblio_object} = $biblio_object;
+        $oldbiblio->{coins} = eval { $biblio_object->get_coins }
+          if $biblio_object
+          && C4::Context->preference('COinSinOPACResults')
+          && $is_opac;
 
         my $can_place_holds = 1;
         # if biblio level itypes are used and itemtype is notforloan, it can't be reserved either

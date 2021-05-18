@@ -179,6 +179,7 @@ sub XSLTParse4Display {
     my $hidden_items = $params->{hidden_items} || [];
     my $variables    = $params->{xslt_variables};
     my $items_rs     = $params->{items_rs};
+    my $interface    = $params->{interface};
 
     die "Mandatory \$params->{xsl_syspref} was not provided, called with biblionumber $params->{biblionumber}"
         if not defined $params->{xsl_syspref};
@@ -208,7 +209,7 @@ sub XSLTParse4Display {
 
     $variables ||= {};
     my $biblio;
-    if (C4::Context->preference('OPACShowOpenURL')) {
+    if ( $interface eq 'opac' && C4::Context->preference('OPACShowOpenURL')) {
         my @biblio_itemtypes;
         $biblio //= Koha::Biblios->find($biblionumber);
         if (C4::Context->preference('item-level_itypes')) {
