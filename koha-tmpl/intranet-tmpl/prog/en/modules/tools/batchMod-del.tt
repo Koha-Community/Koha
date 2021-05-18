@@ -43,11 +43,6 @@
                 [% END %]
             </tbody>
         </table>
-        [% UNLESS ( too_many_items_display ) %]
-            [% IF ( item_loop ) %]
-                    <h4>The following barcodes were found: </h4>
-            [% END %]
-        [% END %]
     [% END %] <!-- /notfoundbarcodes -->
     [% IF ( notfounditemnumbers.size ) %]
         <div class="dialog alert">
@@ -63,14 +58,27 @@
                 [% END %]
             </tbody>
         </table>
-        [% UNLESS ( too_many_items_display ) %]
-            [% IF ( item_loop ) %]
-                    <h4>The following itemnumbers were found: </h4>
-            [% END %]
-        [% END %]
     [% END %] <!-- /notfounditemnumbers -->
 
+    [% IF cannot_be_deleted.size %]
+        <div class="dialog alert">
+            <p>Warning, the following items cannot be deleted: </p>
+        </div>
+        <table style="margin:auto;">
+            <thead>
+                <tr><th>Cannot be deleted</th></tr>
+            </thead>
+            <tbody>
+                [% FOREACH barcode IN cannot_be_deleted %]
+                    <tr><td>[% barcode | html %]</td></td>
+                [% END %]
+            </tbody>
+        </table>
+    [% END %]
 
+    [% IF ( notfoundbarcodes.size || notfounditemnumbers.size || cannot_be_deleted.size ) && !too_many_items_display && item_loop %]
+        <h4>The following barcodes were found: </h4>
+    [% END %]
 
 
 <form name="f" action="batchMod.pl" method="post">
@@ -112,17 +120,16 @@
                   [% IF item_loo.nomod %]
                     <td class="error">Cannot delete</td>
                 [% ELSE %]
-                    [% SET can_be_deleted = item_loo.item.safe_to_delete %]
-                    [% IF can_be_deleted == 1 %]
+                    [% IF item_loo.safe_to_delete == 1 %]
                         <td><input type="checkbox" name="itemnumber" value="[% item_loo.itemnumber | html %]" id="row[% item_loo.itemnumber | html %]" checked="checked" /></td>
                     [% ELSE %]
-                        [% SWITCH can_be_deleted %]
+                        [% SWITCH item_loo.safe_to_delete%]
                         [% CASE "book_on_loan" %][% SET cannot_delete_reason = t("Item is checked out") %]
                         [% CASE "not_same_branch" %][% SET cannot_delete_reason = t("Item does not belong to your library") %]
                         [% CASE "book_reserved" %][% SET cannot_delete_reason = t("Item has a waiting hold") %]
                         [% CASE "linked_analytics" %][% SET cannot_delete_reason = t("Item has linked analytics") %]
                         [% CASE "last_item_for_hold" %][% SET cannot_delete_reason = t("Last item for bibliographic record with biblio-level hold on it") %]
-                        [% CASE %][% SET cannot_delete_reason = t("Unknown reason") _ '(' _ can_be_deleted _ ')' %]
+                        [% CASE %][% SET cannot_delete_reason = t("Unknown reason") _ '(' _ item_loo.safe_to_delete _ ')' %]
                         [% END %]
 
                         <td><input type="checkbox" name="itemnumber" value="[% item_loo.itemnumber | html %]" id="row[% item_loo.itemnumber | html %]" disabled="disabled" title="[% cannot_delete_reason | html %]"/></td>
