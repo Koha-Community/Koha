@@ -278,8 +278,8 @@ sub edit {
             );
         }
 
-        $pickup_library_id    //= $hold->branchcode;
-        my $priority          = $body->{priority} // $hold->priority;
+        $pickup_library_id //= $hold->branchcode;
+        my $priority         = $body->{priority} // $hold->priority;
         # suspended_until can also be set to undef
         my $suspended_until   = exists $body->{suspended_until} ? $body->{suspended_until} : $hold->suspend_until;
 

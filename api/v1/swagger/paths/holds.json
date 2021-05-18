@@ -8,7 +8,7 @@
         {
           "name": "hold_id",
           "in": "query",
-          "description": "Internal reserve identifier",
+          "description": "Internal hold identifier",
           "type": "integer"
         },
         {
@@ -120,6 +120,15 @@
         },
         {
             "$ref": "../parameters.json#/per_page"
+        },
+        {
+          "$ref": "../parameters.json#/q_param"
+        },
+        {
+          "$ref": "../parameters.json#/q_body"
+        },
+        {
+          "$ref": "../parameters.json#/q_header"
         }
       ],
       "produces": ["application/json"],
@@ -187,6 +196,11 @@
               "biblio_id": {
                 "description": "Internal biblio identifier",
                 "type": [ "integer", "null" ]
+              },
+              "hold_date": {
+                "description": "The date the hold was placed",
+                "type": [ "string", "null" ],
+                "format": "date"
               },
               "item_id": {
                 "description": "Internal item identifier",
@@ -280,7 +294,7 @@
     }
   },
   "/holds/{hold_id}": {
-    "put": {
+    "patch": {
       "x-mojo-to": "Holds#edit",
       "operationId": "editHold",
       "tags": ["holds"],
@@ -299,14 +313,14 @@
                 "type": "integer",
                 "minimum": 1
               },
-              "branchcode": {
-                "description": "Pickup location",
+              "pickup_library_id": {
+                "description": "Internal library identifier for the pickup library",
                 "type": "string"
               },
-              "suspend_until": {
-                "description": "Suspend until",
+              "suspended_until": {
+                "description": "Date until which the hold has been suspended",
                 "type": "string",
-                "format": "date"
+                "format": "date-time"
               }
             },
             "additionalProperties": false
