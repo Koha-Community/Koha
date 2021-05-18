@@ -17,14 +17,18 @@
 
 use Modern::Perl;
 
+use C4::Biblio;
 use Test::More;
+use Test::MockModule;
+use Test::Warn;
 use t::lib::Mocks;
+use t::lib::TestBuilder;
 
 use Module::Load::Conditional qw/check_install/;
 
 BEGIN {
     if ( check_install( module => 'Test::DBIx::Class' ) ) {
-        plan tests => 3;
+        plan tests => 4;
     } else {
         plan skip_all => "Need Test::DBIx::Class"
     }
@@ -169,4 +173,36 @@ subtest "_build_initial_query tests" => sub {
 
 };
 
+subtest "searchResults PassItemMarcToXSLT test" => sub {
 
+    plan tests => 2;
+
+    t::lib::Mocks::mock_preference('OPACXSLTResultsDisplay','default');
+    t::lib::Mocks::mock_preference('marcflavour','MARC21');
+    my $mock_xslt = Test::MockModule->new("C4::Search");
+    $mock_xslt->mock( XSLTParse4Display => sub {
+        my $params = shift;
+        my $record = $params->{record};
+        warn $record->field('952') ? "Item here" : "No item";
+        return;
+    });
+
+    my $builder = t::lib::TestBuilder->new;
+
+    my $item = $builder->build_sample_item();
+    my $record = $item->biblio->metadata->record;
+    C4::Biblio::EmbedItemsInMarcBiblio({ marc_record => $record, biblionumber => $item->biblionumber });
+
+    t::lib::Mocks::mock_preference('PassItemMarcToXSLT','1');
+
+    warnings_like { C4::Search::searchResults({ interface => "opac" },"test",1,1,0,0,[ $record->as_xml_record ] ,undef) }
+        [qr/Item here/],
+        "Item field returned from default XSLT if pref set";
+
+    t::lib::Mocks::mock_preference('PassItemMarcToXSLT','0');
+
+    warnings_like { C4::Search::searchResults({ interface => "opac" },"test",1,1,0,0,[ $record->as_xml_record ] ,undef) }
+        [qr/No item/],
+        "Item field returned from default XSLT if pref set";
+
+}
