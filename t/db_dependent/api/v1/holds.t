@@ -892,7 +892,7 @@ subtest 'pickup_locations() tests' => sub {
 
 subtest 'edit() tests' => sub {
 
-    plan tests => 20;
+    plan tests => 37;
 
     $schema->storage->txn_begin;
 
@@ -963,6 +963,12 @@ subtest 'edit() tests' => sub {
       ->status_is(400)
       ->json_is({ error => 'The supplied pickup location is not valid' });
 
+    $t->put_ok( "//$userid:$password@/api/v1/holds/"
+          . $biblio_hold->id
+          => json => $biblio_hold_data )
+      ->status_is(400)
+      ->json_is({ error => 'The supplied pickup location is not valid' });
+
     $biblio_hold->discard_changes;
     is( $biblio_hold->branchcode, $library_3->branchcode, 'branchcode remains untouched' );
 
@@ -972,8 +978,22 @@ subtest 'edit() tests' => sub {
       ->status_is(200)
       ->json_has( '/pickup_library_id' => $library_1->id );
 
+    $t->put_ok( "//$userid:$password@/api/v1/holds/" . $biblio_hold->id
+          => { 'x-koha-override' => 'any' }
+          => json => $biblio_hold_data )
+      ->status_is(200)
+      ->json_has( '/pickup_library_id' => $library_1->id );
+
     $biblio_hold_data->{pickup_library_id} = $library_2->branchcode;
     $t->patch_ok( "//$userid:$password@/api/v1/holds/"
+          . $biblio_hold->id
+          => json => $biblio_hold_data )
+      ->status_is(200);
+
+    $biblio_hold->discard_changes;
+    is( $biblio_hold->branchcode, $library_2->id, 'Pickup location changed correctly' );
+
+    $t->put_ok( "//$userid:$password@/api/v1/holds/"
           . $biblio_hold->id
           => json => $biblio_hold_data )
       ->status_is(200);
@@ -1006,6 +1026,12 @@ subtest 'edit() tests' => sub {
       ->status_is(400)
       ->json_is({ error => 'The supplied pickup location is not valid' });
 
+    $t->put_ok( "//$userid:$password@/api/v1/holds/"
+          . $item_hold->id
+          => json => $item_hold_data )
+      ->status_is(400)
+      ->json_is({ error => 'The supplied pickup location is not valid' });
+
     $item_hold->discard_changes;
     is( $item_hold->branchcode, $library_3->branchcode, 'branchcode remains untouched' );
 
@@ -1015,8 +1041,19 @@ subtest 'edit() tests' => sub {
       ->status_is(200)
       ->json_has( '/pickup_library_id' => $library_1->id );
 
+    $t->put_ok( "//$userid:$password@/api/v1/holds/" . $item_hold->id
+          => { 'x-koha-override' => 'any' }
+          => json => $item_hold_data )
+      ->status_is(200)
+      ->json_has( '/pickup_library_id' => $library_1->id );
+
     $item_hold_data->{pickup_library_id} = $library_2->branchcode;
     $t->patch_ok( "//$userid:$password@/api/v1/holds/"
+          . $item_hold->id
+          => json => $item_hold_data )
+      ->status_is(200);
+
+    $t->put_ok( "//$userid:$password@/api/v1/holds/"
           . $item_hold->id
           => json => $item_hold_data )
       ->status_is(200);
