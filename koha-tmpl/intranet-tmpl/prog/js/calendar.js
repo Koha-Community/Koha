@@ -192,8 +192,6 @@ $(document).ready(function () {
     }).on("change", function () {
         if (!is_valid_date($(this).val())) {
             $(this).val("");
-        } else {
-            $(this).datepicker("setDate",$(this).val());
         }
     });
     // http://jqueryui.com/demos/datepicker/#date-range
