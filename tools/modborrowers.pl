@@ -56,35 +56,53 @@ my $dbh       = C4::Context->dbh;
 
 # Show borrower informations
 if ( $op eq 'show' ) {
-    my $filefh         = $input->upload('uploadfile');
-    my $filecontent    = $input->param('filecontent');
-    my $patron_list_id = $input->param('patron_list_id');
     my @borrowers;
-    my @cardnumbers;
+    my @patronidnumbers;
     my @notfoundcardnumbers;
+    my $useborrowernumbers = 0;
 
     # Get cardnumbers from a file or the input area
-    if ($filefh) {
-        while ( my $content = <$filefh> ) {
-            $content =~ s/[\r\n]*$//g;
-            push @cardnumbers, $content if $content;
+    if( my $cardnumberlist = $input->param('cardnumberlist') ){
+        # User submitted a list of card numbers
+        push @patronidnumbers, split( /\s\n/, $cardnumberlist );
+    } elsif ( my $cardnumberuploadfile = $input->param('cardnumberuploadfile') ){
+        # User uploaded a file of card numbers
+        binmode $cardnumberuploadfile, ':encoding(UTF-8)';
+        while ( my $content = <$cardnumberuploadfile> ) {
+            next unless $content;
+            $content =~ s/[\r\n]*$//;
+            push @patronidnumbers, $content if $content;
         }
-    } elsif ( $patron_list_id ) {
+    } elsif ( my $borrowernumberlist = $input->param('borrowernumberlist') ){
+        # User submitted a list of borrowernumbers
+        $useborrowernumbers = 1;
+        push @patronidnumbers, split( /\s\n/, $borrowernumberlist );
+    } elsif ( my $borrowernumberuploadfile = $input->param('borrowernumberuploadfile') ){
+        # User uploaded a file of borrowernumbers
+        $useborrowernumbers = 1;
+        binmode $borrowernumberuploadfile, ':encoding(UTF-8)';
+        while ( my $content = <$borrowernumberuploadfile> ) {
+            next unless $content;
+            $content =~ s/[\r\n]*$//;
+            push @patronidnumbers, $content if $content;
+        }
+    } elsif ( my $patron_list_id = $input->param('patron_list_id') ){
+        # User selected a patron list
         my ($list) = GetPatronLists( { patron_list_id => $patron_list_id } );
-
-        @cardnumbers =
+        @patronidnumbers =
           $list->patron_list_patrons()->search_related('borrowernumber')
           ->get_column('cardnumber')->all();
-
-    } else {
-        if ( my $list = $input->param('cardnumberlist') ) {
-            push @cardnumbers, split( /\s\n/, $list );
-        }
     }
 
     my $max_nb_attr = 0;
-    for my $cardnumber ( @cardnumbers ) {
-        my $patron = Koha::Patrons->find( { cardnumber => $cardnumber } );
+
+    for my $patronidnumber ( @patronidnumbers ) {
+        my $patron;
+        if( $useborrowernumbers == 1 ){
+            $patron = Koha::Patrons->find( { borrowernumber => $patronidnumber } );
+        } else {
+            $patron = Koha::Patrons->find( { cardnumber => $patronidnumber } );
+        }
         if ( $patron ) {
             if ( $logged_in_user->can_see_patron_infos( $patron ) ) {
                 my $borrower = $patron->unblessed;
@@ -94,10 +112,10 @@ if ( $op eq 'show' ) {
                 $max_nb_attr = $borrower->{patron_attributes_count} if $borrower->{patron_attributes_count} > $max_nb_attr;
                 push @borrowers, $borrower;
             } else {
-                push @notfoundcardnumbers, $cardnumber;
+                push @notfoundcardnumbers, $patronidnumber;
             }
         } else {
-            push @notfoundcardnumbers, $cardnumber;
+            push @notfoundcardnumbers, $patronidnumber;
         }
     }
 
@@ -149,6 +167,7 @@ if ( $op eq 'show' ) {
     @notfoundcardnumbers = map { { cardnumber => $_ } } @notfoundcardnumbers;
     $template->param( notfoundcardnumbers => \@notfoundcardnumbers )
         if @notfoundcardnumbers;
+    $template->param( useborrowernumbers => $useborrowernumbers );
 
     # Construct drop-down list values
     my $branches = Koha::Libraries->search({}, { order_by => ['branchname'] })->unblessed;

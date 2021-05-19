@@ -36,45 +36,93 @@
 
                 [% IF ( op == 'show_form' ) %]
                 <h1>Batch patron modification</h1>
-                <form method="post" enctype="multipart/form-data" action="/cgi-bin/koha/tools/modborrowers.pl">
-                    <fieldset class="rows">
-                        <legend>Use a file</legend>
-                        <ol>
-                            <li><label for="uploadfile">File: </label> <input type="file" id="uploadfile" name="uploadfile" /></li>
-                        </ol>
-                    </fieldset>
-
-                    [% IF patron_lists %]
-                    <fieldset class="rows">
-                        <legend>Or use a patron list</legend>
-                        <ol>
-                            <li>
-                                <label for="patron_list_id">Patron list: </label>
-                                <select id="patron_list_id" name="patron_list_id">
-                                    <option value=""></option>
-                                    [% FOREACH pl IN patron_lists %]
-                                        <option value="[% pl.patron_list_id | html %]">[% pl.name | html %]</option>
-                                    [% END %]
-                                </select>
-                            </li>
-                        </ol>
-                    </fieldset>
-                    [% END %]
-
-                    <fieldset class="rows">
-                        <legend>Or list cardnumbers one by one</legend>
-                        <ol>
-                            <li>
-                              <label for="cardnumberlist">Card number list (one cardnumber per line): </label>
-                              <textarea rows="10" cols="30" id="cardnumberlist" name="cardnumberlist">[% cardnumberlist | html %]</textarea>
-                            </li>
-                        </ol>
-                    </fieldset>
+                <form id="patron_batchmod_form" method="post" enctype="multipart/form-data" action="/cgi-bin/koha/tools/modborrowers.pl">
                     <input type="hidden" name="op" value="show" />
+                    <div id="batch_patron_options" class="toptabs">
+                        <ul>
+                            <li>
+                                <a href="#usecardnumber">By card number</a>
+                            </li>
+                            <li>
+                                <a href="#useborrowernumber">By borrowernumber</a>
+                            </li>
+                            [% IF patron_lists %]
+                                <li>
+                                    <a href="#uselist">By patron list</a>
+                                </li>
+                            [% END %]
+                        </ul>
+                        <div id="usecardnumber">
+                            <fieldset class="rows">
+                                <legend>Use a file of card numbers</legend>
+                                <ol>
+                                    <li>
+                                        <label for="cardnumberuploadfile">File: </label> <input type="file" id="cardnumberuploadfile" name="cardnumberuploadfile" />
+                                        <div class="hint">File must contain one card number per line.</div>
+                                    </li>
+                                </ol>
+                            </fieldset>
+                            <fieldset class="rows">
+                                <legend>Or list card numbers one by one</legend>
+                                <ol>
+                                    <li>
+                                    <label for="cardnumberlist">Card number list (one card number per line): </label>
+                                    <textarea rows="10" cols="30" id="cardnumberlist" name="cardnumberlist">[% cardnumberlist | html %]</textarea>
+                                    </li>
+                                </ol>
+                            </fieldset>
                     <fieldset class="action">
                         <input type="submit" value="Continue" class="button" />
                         <a class="cancel" href="/cgi-bin/koha/tools/tools-home.pl">Cancel</a>
                     </fieldset>
+                        </div>
+                        <div id="useborrowernumber">
+                            <fieldset class="rows">
+                                <legend>Use a file of borrowernumbers</legend>
+                                <ol>
+                                    <li>
+                                        <label for="borrowernumberuploadfile">File: </label> <input type="file" id="borrowernumberuploadfile" name="borrowernumberuploadfile" />
+                                        <div class="hint">File must contain one borrowernumber per line.</div>
+                                    </li>
+                                </ol>
+                            </fieldset>
+                            <fieldset class="rows">
+                                <legend>List borrowernumbers one by one</legend>
+                                <ol>
+                                    <li>
+                                    <label for="borrowernumberlist">Borrowernumber list (one number per line): </label>
+                                    <textarea rows="10" cols="30" id="borrowernumberlist" name="borrowernumberlist">[% borrowernumberlist | html %]</textarea>
+                                    </li>
+                                </ol>
+                            </fieldset>
+                    <fieldset class="action">
+                        <input type="submit" value="Continue" class="button" />
+                        <a class="cancel" href="/cgi-bin/koha/tools/tools-home.pl">Cancel</a>
+                    </fieldset>
+                        </div>
+                        [% IF patron_lists %]
+                            <div id="uselist">
+                                <fieldset class="rows">
+                                    <legend>Use a patron list</legend>
+                                    <ol>
+                                        <li>
+                                            <label for="patron_list_id">Patron list: </label>
+                                            <select id="patron_list_id" name="patron_list_id">
+                                                <option value=""> -- Choose a patron list -- </option>
+                                                [% FOREACH pl IN patron_lists %]
+                                                    <option value="[% pl.patron_list_id | html %]">[% pl.name | html %]</option>
+                                                [% END %]
+                                            </select>
+                                        </li>
+                                    </ol>
+                                </fieldset>
+                    <fieldset class="action">
+                        <input type="submit" value="Continue" class="button" />
+                        <a class="cancel" href="/cgi-bin/koha/tools/tools-home.pl">Cancel</a>
+                    </fieldset>
+                            </div>
+                        [% END %]
+                    </div><!-- /#batch_patron_options -->
                 </form>
                 [% END %]
 
@@ -82,7 +130,7 @@
                     [% op = 'noshow' # Change op to prevent display in code below %]
                     <h1>Batch patrons modification</h1>
                     <div class="dialog alert">
-                        <p>No patron card numbers given.</p>
+                        <p>No patron card numbers or borrowernumbers given.</p>
                         <form action="/cgi-bin/koha/tools/modborrowers.pl" method="get">
                          <button type="submit" class="approve"><i class="fa fa-fw fa-check"></i> OK</button>
                         </form>
@@ -96,10 +144,19 @@
                         <h1>Batch patrons results</h1>
                     [% END %]
                     [% IF ( notfoundcardnumbers ) %]
-                        <div class="dialog alert"><p>Warning, the following cardnumbers were not found:</p></div>
+                        [% IF ( useborrowernumbers ) -%]
+                            <div class="dialog alert"><p>Warning, the following borrowernumbers were not found:</p></div>
+                        [% ELSE -%]
+                            <div class="dialog alert"><p>Warning, the following card numbers were not found:</p></div>
+                        [% END %]
+
                         <table style="margin:auto;">
                             <thead>
-                                <tr><th>Cardnumbers not found</th></tr>
+                                [% IF ( useborrowernumbers ) -%]
+                                    <tr><th>Borrowernumbers not found</th></tr>
+                                [% ELSE -%]
+                                    <tr><th>Card numbers not found</th></tr>
+                                [% END %]
                             </thead>
                             <tbody>
                                 [% FOREACH notfoundcardnumber IN notfoundcardnumbers %]
@@ -117,7 +174,7 @@
                             [% FOREACH error IN errors %]
                                 [% IF ( error.error == 'can_not_update' ) %]
                                     <li>Can not update patron.
-                                    [% IF ( error.cardnumber ) %] Cardnumber:  [% error.cardnumber | html %] [% END %]
+                                    [% IF ( error.cardnumber ) %] Card number:  [% error.cardnumber | html %] [% END %]
                                     (Borrowernumber: [% error.borrowernumber | html %])
                                     </li>
                                 [% ELSE %]
@@ -387,6 +444,8 @@
                     });
                     return false;
                 });
+            [% ELSE %]
+                $("#batch_patron_options").tabs();
             [% END %]
 
             var values = new Array();
@@ -420,6 +479,17 @@
             $("#cataloguing_additem_newitem").on("click",".del_attributes",function(e){
                 e.preventDefault();
                 del_attributes(this);
+            });
+            $("#patron_batchmod_form").on("submit", function(){
+                /* Reset form fields on inactive tabs */
+                var tab = $(this).find('.ui-tabs-active:first a').attr('href');
+                if ( tab == '#usecardnumber' ) {
+                    $("#borrowernumberuploadfile, #patron_list_id, #borrowernumberlist").val("");
+                } else if ( tab == '#useborrowernumber' ) {
+                    $("#cardnumberuploadfile, #cardnumberlist, #patron_list_id").val("");
+                } else { // uselist
+                    $("#borrowernumberuploadfile, #cardnumberuploadfile, #borrowernumberlist, #cardnumberlist").val("");
+                }
             });
         });
 
