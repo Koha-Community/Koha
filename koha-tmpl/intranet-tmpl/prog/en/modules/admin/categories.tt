@@ -148,7 +148,7 @@
                         <legend>Choose one</legend>
                         <ol>
                             <li>
-                                <label for="enrolmentperiod" style="width:6em;">In months: </label>
+                                <label for="enrolmentperiod">In months: </label>
                                 [% IF category.enrolmentperiod %]
                                     <input type="text" class="enrollmentperiod" name="enrolmentperiod" id="enrolmentperiod" size="3" maxlength="3" value="[% category.enrolmentperiod | html %]" /> months
                                [% ELSE %]
@@ -156,7 +156,7 @@
                                [% END %]
                             </li>
                             <li>
-                                <label for="enrolmentperioddate" style="width:6em;">Until date: </label>
+                                <label for="enrolmentperioddate">Until date: </label>
                                 <input type="text" class="enrollmentperiod" name="enrolmentperioddate" id="enrolmentperioddate" value="[% category.enrolmentperioddate | $KohaDates %]" />
                             </li>
                         </ol>
@@ -220,8 +220,8 @@
                         <option value="">All libraries</option>
                         [% PROCESS options_for_libraries libraries => Branches.all( selected => category.get_library_limits, unfiltered => 1, do_not_select_my_library => 1 ) %]
                     </select>
-                    <span>Select <em>All libraries</em> if this category type must to be displayed all the time. Otherwise select libraries you want to associate with this value.
-                    </span>
+                    <div class="hint">Select <em>All libraries</em> if this category type must to be displayed all the time. Otherwise select libraries you want to associate with this value.
+                    </div>
                 </li>
                 <li>
                     <label for="reset_password">Password reset in OPAC: </label>
@@ -290,7 +290,7 @@
                 <li>
                     <label for="min_password_length">Minimum password length:</label>
                     <input id="min_password_length" type="text" inputmode="numeric" name="min_password_length" value="[% category.min_password_length | html %]"/>
-                    <span>Leave blank to use system default ([% Koha.Preference('minPasswordLength') | html %])</span>
+                    <div class="hint">Leave blank to use system default ([% Koha.Preference('minPasswordLength') | html %])</div>
                 </li>
                 <li class="pwd_setting_wrapper">
                     <label for="require_strong_password">Require strong password:</label>
@@ -344,9 +344,9 @@
                             <option value="0"> Don't block </option>
                         [% END %]
                     </select>
-                    <span>
+                    <div class="hint">
                         Choose whether patrons of this category be blocked from public catalog actions such as renewing and placing holds when their cards have expired.
-                    </span>
+                    </div>
                 </li>
                 [% IF ( Koha.Preference('CheckPrevCheckout') == 'softyes' || Koha.Preference('CheckPrevCheckout') == 'softno' )  %]
                   <li><label for="checkprevcheckout">Check for previous checkouts: </label>
@@ -365,9 +365,9 @@
                           <option value="inherit" selected="selected">Inherit from system preferences</option>
                           [% END %]
                       </select>
-                      <span>
+                      <div class="hint">
                           Choose whether patrons of this category by default are reminded if they try to borrow an item they borrowed before.
-                      </span>
+                      </div>
                   </li>
                 [% END %]
                 <li>
@@ -390,7 +390,7 @@
                             <option value="forever">Forever</option>
                         [% END %]
                     </select>
-                    <span>Controls how long a patrons checkout history is kept for new patrons of this category. "Never" anonymizes checkouts on return, and "Forever" keeps a patron's checkout history indefinitely. When set to "Default", the amount of history kept is controlled by the cronjob <em>batch_anonymise.pl</em> which should be set up by your system administrator.</span>
+                    <div class="hint">Controls how long a patrons checkout history is kept for new patrons of this category. "Never" anonymizes checkouts on return, and "Forever" keeps a patron's checkout history indefinitely. When set to "Default", the amount of history kept is controlled by the cronjob <em>batch_anonymise.pl</em> which should be set up by your system administrator.</div>
                 </li>
                 <li>
                     <label for="exclude_from_local_holds_priority">Exclude from local holds priority:</label>
@@ -403,14 +403,14 @@
                         <option value="0" selected>No</option>
                     [% END %]
                     </select>
-                    <span>If <i>Yes</i>, holds placed by patrons of this category will not be given priority</span>
+                    <div class="hint">If <i>Yes</i>, holds placed by patrons of this category will not be given priority</div>
                 </li>
             </ol>
         </fieldset>
 
         [% IF ( EnhancedMessagingPreferences ) %]
             <fieldset class="rows">
-                <h4>Default messaging preferences for this patron category</h4>
+                <legend>Default messaging preferences for this patron category</legend>
                 [% INCLUDE 'messaging-preference-form.inc' %]
             </fieldset>
         [% END %]
