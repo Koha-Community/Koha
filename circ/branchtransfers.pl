@@ -82,6 +82,7 @@ my $settransit;
 my $request        = $query->param('request')        || '';
 my $borrowernumber = $query->param('borrowernumber') ||  0;
 my $tobranchcd     = $query->param('tobranchcd')     || '';
+my $trigger        = 'Manual';
 
 my $ignoreRs = 0;
 ############
@@ -105,6 +106,7 @@ elsif ( $request eq "SetTransit" ) {
     $ignoreRs    = 1;
     $settransit  = 1;
     $reqmessage  = 1;
+    $trigger     = 'Reserve';
 }
 elsif ( $request eq 'KillReserved' ) {
     my $biblionumber = $query->param('biblionumber');
@@ -132,7 +134,7 @@ if ($barcode) {
             to_branch => $tobranchcd,
             barcode => $barcode,
             ignore_reserves => $ignoreRs,
-            trigger => 'Manual'
+            trigger => $trigger
         });
     my $item = Koha::Items->find({ barcode => $barcode });
     $found = $messages->{'ResFound'} unless $settransit;
