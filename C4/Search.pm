@@ -1648,12 +1648,12 @@ sub searchResults {
     }
 
     # handle which records to actually retrieve
-    my $times;
+    my $times; # Times is which record to process up to
     if ( $hits && $offset + $results_per_page <= $hits ) {
         $times = $offset + $results_per_page;
     }
     else {
-        $times = $hits;	 # FIXME: if $hits is undefined, why do we want to equal it?
+        $times = $hits; # If less hits than results_per_page+offset we go to the end
     }
 
     my $marcflavour = C4::Context->preference("marcflavour");
@@ -1707,13 +1707,13 @@ sub searchResults {
                : GetFrameworkCode($marcrecord->subfield($bibliotag,$bibliosubf));
 
         SetUTF8Flag($marcrecord);
-        my $oldbiblio = TransformMarcToKoha( $marcrecord, $fw );
+        my $oldbiblio = TransformMarcToKoha( $marcrecord, $fw, 'no_items' );
         $oldbiblio->{result_number} = $i + 1;
 
 		$oldbiblio->{normalized_upc}  = GetNormalizedUPC(       $marcrecord,$marcflavour);
 		$oldbiblio->{normalized_ean}  = GetNormalizedEAN(       $marcrecord,$marcflavour);
 		$oldbiblio->{normalized_oclc} = GetNormalizedOCLCNumber($marcrecord,$marcflavour);
-		$oldbiblio->{normalized_isbn} = GetNormalizedISBN(undef,$marcrecord,$marcflavour);
+        $oldbiblio->{normalized_isbn} = GetNormalizedISBN($oldbiblio->{isbn},$marcrecord,$marcflavour); # Use existing ISBN from record if we got one
 		$oldbiblio->{content_identifier_exists} = 1 if ($oldbiblio->{normalized_isbn} or $oldbiblio->{normalized_oclc} or $oldbiblio->{normalized_ean} or $oldbiblio->{normalized_upc});
 
 		# edition information, if any

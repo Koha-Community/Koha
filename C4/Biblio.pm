@@ -2350,6 +2350,8 @@ sub TransformMarcToKoha {
     my %tables = ( biblio => 1, biblioitems => 1, items => 1 );
     if( $limit_table eq 'items' ) {
         %tables = ( items => 1 );
+    } elsif ( $limit_table eq 'no_items' ){
+        %tables = ( biblio => 1, biblioitems => 1 );
     }
 
     # The next call acknowledges Default as the authoritative framework

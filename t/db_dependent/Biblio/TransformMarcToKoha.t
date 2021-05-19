@@ -111,7 +111,7 @@ subtest 'Testing _adjust_pubyear' => sub {
 };
 
 subtest 'Test repeatable subfields' => sub {
-    plan tests => 2;
+    plan tests => 5;
 
     # Make 510x repeatable and 510y not
     Koha::MarcSubfieldStructures->search({ frameworkcode => '', tagfield => '510' })->delete;
@@ -125,6 +125,15 @@ subtest 'Test repeatable subfields' => sub {
     my $result = C4::Biblio::TransformMarcToKoha( $marc );
     is( $result->{test}, '1 | 2', 'Check 510x for two values' );
     is( $result->{norepeat}, '3 | 4 | 5', 'Check 510y too' );
+
+    Koha::MarcSubfieldStructure->new({ frameworkcode => '', tagfield => '510', tagsubfield => 'a', kohafield => 'biblio.field1' })->store;
+    Koha::Caches->get_instance->clear_from_cache( "MarcSubfieldStructure-" );
+    $marc->append_fields( MARC::Field->new( '510', '', '', a => '1' ) ); # actually, we should only have one $y (BZ 24652)
+
+    $result = C4::Biblio::TransformMarcToKoha( $marc, '', 'no_items' );
+    is( $result->{test}, undef, 'Item field not returned when "no_items" passed' );
+    is( $result->{norepeat}, undef, 'Item field not returned when "no_items" passed' );
+    is( $result->{field1}, 1, 'Biblio field returned when "no_items" passed' );
 };
 
 # Cleanup
