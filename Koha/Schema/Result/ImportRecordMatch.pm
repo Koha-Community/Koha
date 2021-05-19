@@ -57,6 +57,20 @@ __PACKAGE__->add_columns(
   { data_type => "integer", default_value => 0, is_nullable => 0 },
 );
 
+=head1 PRIMARY KEY
+
+=over 4
+
+=item * L</import_record_id>
+
+=item * L</candidate_match_id>
+
+=back
+
+=cut
+
+__PACKAGE__->set_primary_key("import_record_id", "candidate_match_id");
+
 =head1 RELATIONS
 
 =head2 import_record
@@ -75,8 +89,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2021-01-21 13:39:29
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:kWU/SGWvZBBvVwEvDysrtA
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2021-11-03 14:22:04
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:jN0xJqlL5brcUwa3bvEHHQ
 
 sub koha_object_class {
     'Koha::Import::Record::Match';
