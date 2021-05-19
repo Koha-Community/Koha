@@ -1485,7 +1485,7 @@ sub GetImportRecordMatches {
                                     JOIN import_record_matches USING (import_record_id)
                                     LEFT JOIN biblio ON (biblionumber = candidate_match_id)
                                     WHERE import_record_id = ?
-                                    ORDER BY score DESC, chosen DESC, biblionumber DESC");
+                                    ORDER BY score DESC, biblionumber DESC");
     $sth->bind_param(1, $import_record_id);
     my $results = [];
     $sth->execute();
