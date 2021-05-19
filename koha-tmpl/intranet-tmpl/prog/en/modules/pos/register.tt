@@ -129,13 +129,16 @@
                                 <td>[% accountline.accountlines_id | html %]</td>
                                 <td>{ "type": "debit", "identifier": "[%- accountline.credit_number | html -%]", "description": "[%- PROCESS account_type_description account=accountline -%] ([% AuthorisedValues.GetByCode( 'PAYMENT_TYPE', accountline.payment_type ) | html %])", "amount": "[% accountline.amount * -1 | $Price %]", "timestamp": "[% accountline.timestamp | $KohaDates with_hours => 1 %]" }</td>
                                 <td></td>
-                                <td>[%- PROCESS account_type_description account=debit.credit -%]</td>
                                 <td>
+                                    [%- PROCESS account_type_description account=debit.credit -%]
                                     [%- IF debit.credit.description %][% debit.credit.description | html %][%- END -%]
                                     [%- IF ( debit.credit.itemnumber ) -%] (<a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% debit.credit.item.biblionumber | uri %]&amp;itemnumber=[% debit.credit.itemnumber | uri %]">[% debit.credit.item.biblio.title | html %]</a>)[%- END -%]
                                 </td>
                                 <td>[% debit.credit.amount | $Price %]</td>
                                 <td></td>
+                                <td>
+                                    [%- IF debit.credit.credit_type_code == 'REFUND' -%]<a href="/cgi-bin/koha/members/accountline-details.pl?accountlines_id=[% debit.credit.accountlines_id | uri %]" class="btn btn-default btn-xs"><i class="fa fa-list"></i> Details</a>[%- END -%]
+                                </td>
                             </tr>
                             [% END %]
                             [% END %]
@@ -218,13 +221,16 @@
                                 <td>[% accountline.accountlines_id | html %]</td>
                                 <td>{ "type": "debit", "identifier": "[%- accountline.credit_number | html -%]", "description": "[%- PROCESS account_type_description account=accountline -%] ([% AuthorisedValues.GetByCode( 'PAYMENT_TYPE', accountline.payment_type ) | html %])", "amount": "[% accountline.amount * -1 | $Price %]", "timestamp": "[% accountline.timestamp | $KohaDates with_hours => 1 %]" }</td>
                                 <td></td>
-                                <td>[%- PROCESS account_type_description account=debit.credit -%]</td>
                                 <td>
+                                    [%- PROCESS account_type_description account=debit.credit -%]
                                     [%- IF debit.credit.description %][% debit.credit.description | html %][%- END -%]
                                     [%- IF ( debit.credit.itemnumber ) -%] (<a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% debit.credit.item.biblionumber | uri %]&amp;itemnumber=[% debit.credit.itemnumber | uri %]">[% debit.credit.item.biblio.title | html %]</a>)[%- END -%]
                                 </td>
                                 <td>[% debit.credit.amount | $Price %]</td>
                                 <td></td>
+                                <td>
+                                    [%- IF debit.credit.credit_type_code == 'REFUND' -%]<a href="/cgi-bin/koha/members/accountline-details.pl?accountlines_id=[% debit.credit.accountlines_id | uri %]" class="btn btn-default btn-xs"><i class="fa fa-list"></i> Details</a>[%- END -%]
+                                </td>
                             </tr>
                             [% END %]
                             [% END %]
