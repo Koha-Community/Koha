@@ -992,7 +992,7 @@ function AdjustRemark() {
     if( $("#category").length > 0 ) {
         category = $("#category").val();
     } else {
-        category = [% category | html %];
+        category = "[% category | html %]";
     }
     var perms = $("#allow_changes_from").val();
 
