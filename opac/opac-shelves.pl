@@ -434,7 +434,7 @@ $template->param(
     referer  => $referer,
     shelf    => $shelf,
     messages => \@messages,
-    category => $category,
+    category => ($category == 1 || $category == 2) ? $category : "",
     print    => scalar $query->param('print') || 0,
     listsview => 1,
 );
