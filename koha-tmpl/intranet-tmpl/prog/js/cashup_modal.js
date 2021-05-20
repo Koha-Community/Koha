@@ -19,7 +19,11 @@ $(document).ready(function() {
                 var tbody = summary_modal.find('tbody')
                 tbody.empty();
                 for (out of data.summary.payout_grouped) {
-                    tbody.append('<tr><td>' + out.credit_type.description + '</td><td>- ' + out.total.format_price() + '</td></tr>');
+                    if ( out.credit_type_code == 'REFUND' ) {
+                        tbody.append('<tr><td>' + out.credit_type.description + ' against ' + out.related_debit.debit_type.description + '</td><td>- ' + out.total + '</td></tr>');
+                    } else {
+                        tbody.append('<tr><td>' + out.credit_type.description + '</td><td>- ' + out.total + '</td></tr>');
+                    }
                 }
 
                 for (income of data.summary.income_grouped) {

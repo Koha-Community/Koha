@@ -108,7 +108,7 @@ sub summary {
                 { sum => 'me.amount' }, 'debit.debit_type_code',
                 'debit_type_code.description'
             ],
-            'as' => [ 'total', 'debit_type_code', 'debit_description' ],
+            'as'     => [ 'total', 'debit_type_code', 'debit_description' ],
             order_by => { '-asc' => 'debit_type_code.description' },
         }
     );
@@ -119,18 +119,40 @@ sub summary {
                 '-in' => $payout_transactions->_resultset->get_column(
                     'accountlines_id')->as_query
             },
-            'me.credit_id' => { '!=' => undef }
+            'me.credit_id'                     => { '!=' => undef },
+            'account_offsets_credits.debit_id' => {
+                '-not_in' => $payout_transactions->_resultset->get_column(
+                    'accountlines_id')->as_query
+            }
         },
         {
-            join => { 'credit' => 'credit_type_code' },
-            group_by =>
-              [ 'credit.credit_type_code', 'credit_type_code.description' ],
+            join => {
+                'credit' => [
+                    'credit_type_code',
+                    {
+                        'account_offsets_credits' =>
+                          { 'debit' => 'debit_type_code' }
+                    }
+                ]
+            },
+            group_by => [
+                'credit.credit_type_code', 'credit_type_code.description',
+                'debit.debit_type_code',   'debit_type_code.description'
+            ],
             'select' => [
                 { sum => 'me.amount' }, 'credit.credit_type_code',
-                'credit_type_code.description'
+                'credit_type_code.description', 'debit.debit_type_code',
+                'debit_type_code.description'
             ],
-            'as' => [ 'total', 'credit_type_code', 'credit_description' ],
-            order_by => { '-asc' => 'credit_type_code.description' },
+            'as' => [
+                'total',              'credit_type_code',
+                'credit_description', 'debit_type_code',
+                'debit_description'
+            ],
+            order_by => {
+                '-asc' =>
+                  [ 'credit_type_code.description', 'debit_type_code.description' ]
+            },
         }
     );
 
@@ -146,7 +168,12 @@ sub summary {
             total            => $_->get_column('total') * -1,
             credit_type_code => $_->get_column('credit_type_code'),
             credit_type =>
-              { description => $_->get_column('credit_description') }
+              { description => $_->get_column('credit_description') },
+            related_debit => {
+                debit_type_code => $_->get_column('debit_type_code'),
+                debit_type =>
+                  { description => $_->get_column('debit_description') }
+            }
         }
     } $payout_summary->as_list;
 
