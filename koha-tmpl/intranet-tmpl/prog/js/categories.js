@@ -21,6 +21,7 @@ jQuery.validator.addMethod( "enrollment_period", function(){
     }, __("Please choose an enrollment period in months OR by date.")
 );
 
+flatpickr.l10ns.default.firstDayOfWeek = calendarFirstDayOfWeek;
 
 $(document).ready(function() {
     KohaTable("patron_categories", {
@@ -39,9 +40,9 @@ $(document).ready(function() {
         "exportColumns": [0,1,2,3,4,5,6,7,8,9,10,11,12],
     }, columns_settings);
 
-    $("#enrolmentperioddate").datepicker({
-        minDate: 1
-    }); // Require that "until date" be in the future
+    $("#enrolmentperioddate").flatpickr({
+        minDate: new Date().fp_incr(1)
+    });
 
     if ($("#branches option:selected").length < 1) {
         $("#branches option:first").attr("selected", "selected");

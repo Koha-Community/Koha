@@ -1,5 +1,6 @@
 @import "mixins";
 @import "tables";
+@import "flatpickr";
 
 ::selection {
     background: #538200;
@@ -52,6 +53,11 @@ a {
         font-size: 90%;
         margin: 0;
         padding: 0;
+    }
+
+    &.clear_date {
+        color: #C33;
+        font-size: 130%;
     }
 
     &.close {
@@ -1808,6 +1814,10 @@ i {
 
         &[type="submit"] {
             background: #FFF none;
+        }
+
+        &.flatpickr-input {
+            padding: 3px 3px 3px 20px;
         }
     }
 
@@ -3759,10 +3769,6 @@ input.renew {
     display: block;
     font-size: .8em;
     padding: .5em;
-}
-
-.dialog input#renewonholdduedate {
-    padding: 2px;
 }
 
 .date-select {

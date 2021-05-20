@@ -147,7 +147,7 @@
                                     <input type="hidden" name="override_limit" value="1" />
                                     <input type="hidden" name="override_holds" value="1" />
                                     <div>
-                                        <label for="renewonholdduedate">Renewal due date:</label> <input type="text" size="12" id="renewonholdduedate" name="renewonholdduedate" value="" />
+                                        <label for="renewonholdduedate">Renewal due date:</label> <input type="text" size="20" id="renewonholdduedate" name="renewonholdduedate" value="" />
                                     </div>
                                     <button type="submit" class="approve"><i class="fa fa-check"></i> Override and renew</button>
                                 </form>
@@ -220,7 +220,6 @@
                             <div class="date-select" id="renew_date_override_fields">
                                 <div><label for="hard_due_date" class="hint">Renewal due date [% INCLUDE 'date-format.inc' %]:</label></div>
                                 <input type="text" size="20" id="hard_due_date" name="hard_due_date" value="[% hard_due_date | $KohaDates with_hours => 1 %]" />
-                                <button type="button" class="action btn btn-default btn-xs" id="cleardate" name="cleardate">Clear</button>
                             </div> <!-- /.date-select -->
                         </div>
                     </fieldset>
@@ -245,8 +244,6 @@
 
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'calendar.inc' %]
-    [% Asset.js("lib/jquery/plugins/jquery-ui-timepicker-addon.min.js") | $raw %]
-    [% INCLUDE 'timepicker.inc' %]
     [% IF error %]
         <script>
             $( document ).ready(function() {
@@ -256,34 +253,18 @@
     [% END %]
     <script>
         $( document ).ready(function() {
-            $("#renewonholdduedate").datetimepicker({
-                onClose: function(dateText, inst) {
-                    validate_date(dateText, inst);
-                },
-                minDate: 1, // require that renewal date is after today
-                hour: 23,
-                minute: 59
-            }).on('change', function(e) {
-                if ( ! is_valid_date( $(this).val() ) ) {$(this).val('');}
+            var renewonholdduedate = $("#renewonholdduedate").flatpickr({
+                enableTime: true,
+                dateFormat: flatpickr_dateformat_string + " " + flatpickr_timeformat_string,
+                minDate: new Date().fp_incr(1)
             });
 
             [% IF Koha.Preference('SpecifyDueDate') %]
-                $("#hard_due_date").datetimepicker({
-                    onClose: function(dateText, inst) {
-                        validate_date(dateText, inst);
-                    },
-                    hour: 23,
-                    minute: 59
-                }).on("change", function(e, value) {
-                    if ( ! is_valid_date( $(this).val() ) ) {$(this).val("");}
-                });
-                $("#cleardate").on("click",function(e){
-                    e.preventDefault();
-                    this.form.hard_due_date.value = '';
-                    this.form.barcode.focus();
+                var hard_due_date = $("#hard_due_date").flatpickr({
+                    enableTime: true,
+                    dateFormat: flatpickr_dateformat_string + " " + flatpickr_timeformat_string,
                 });
             [% END %]
-
         });
     </script>
 [% END %]

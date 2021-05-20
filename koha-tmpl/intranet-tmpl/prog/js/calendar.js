@@ -1,5 +1,5 @@
 /* global debug sentmsg __ dateformat_pref dateformat_string bidi calendarFirstDayOfWeek */
-/* exported DateTime_from_syspref */
+/* exported DateTime_from_syspref flatpickr_weekdays flatpickr_months */
 var MSG_PLEASE_ENTER_A_VALID_DATE = ( __("Please enter a valid date (should match %s).") );
 if (debug > 1) {
     alert("dateformat: " + dateformat_pref + "\ndebug is on (level " + debug + ")");
@@ -8,7 +8,6 @@ if (debug > 1) {
 function is_valid_date(date) {
     // An empty string is considered as a valid date for convenient reasons.
     if (date === '') return 1;
-
     var dateformat = dateformat_string;
     if (dateformat == 'us') {
         if (date.search(/^\d{2}\/\d{2}\/\d{4}($|\s)/) == -1) return 0;
@@ -24,7 +23,7 @@ function is_valid_date(date) {
         dateformat = 'dd.mm.yy';
     }
     try {
-        $.datepicker.parseDate(dateformat, date);
+        flatpickr.parseDate(date, dateformat);
     } catch (e) {
         return 0;
     }
@@ -49,7 +48,7 @@ function validate_date(dateText, inst) {
     if (!is_valid_date(dateText)) {
         var dateformat_str = get_dateformat_str( dateformat_pref );
         alert(MSG_PLEASE_ENTER_A_VALID_DATE.format(dateformat_str));
-        $('#' + inst.id).val('');
+        inst.clear();
     }
 }
 
@@ -161,6 +160,16 @@ jQuery.validator.addMethod("date_on_or_after",
         var to = Date_from_syspref(value);
         return to >= from;
     });
+
+var flatpickr_weekdays = {
+    shorthand: [ __("Sun"), __("Mon"), __("Tue"), __("Wed"), __("Thu"), __("Fri"), __("Sat")],
+    longhand: [ __("Sunday"), __("Monday"), __("Tuesday"), __("Wednesday"), __("Thursday"), __("Friday"), __("Saturday") ]
+};
+
+var flatpickr_months = {
+    shorthand: [ __("Jan"), __("Feb"), __("Mar"), __("Apr"), __("May"), __("Jun"), __("Jul"), __("Aug"), __("Sep"), __("Oct"), __("Nov"), __("Dec")],
+    longhand: [ __("January"), __("February"), __("March"), __("April"), __("May"), __("June"), __("July"), __("August"), __("September"), __("October"), __("November"), __("December")]
+};
 
 $(document).ready(function () {
 
