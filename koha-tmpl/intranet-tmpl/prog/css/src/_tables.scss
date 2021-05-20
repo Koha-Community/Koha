@@ -334,6 +334,10 @@ tbody {
         &:nth-child(odd):not(.dtrg-group) {
             td {
                 border-right: 1px solid $table-border-color;
+            }
+        }
+        &:nth-child(odd):not(.dtrg-group):not(.active) {
+            td {
                 &:not(.bg-danger):not(.bg-warning):not(.bg-info):not(.bg-success):not(.bg-primary) {
                     background-color: $table-odd-row;
                 }
