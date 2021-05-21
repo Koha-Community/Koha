@@ -61,13 +61,7 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user({
 my $op       = $query->param('op')       || 'list';
 my $referer  = $query->param('referer')  || $op;
 my $category = 1;
-if ( $query->param('category') && (
-            ($query->param('category') == 1) ||
-            ($query->param('category') == 2)
-        )
-    ){
-    $category = $query->param('category');
-}
+$category = 2 if $query->param('category') && $query->param('category') == 2;
 
 my ( $shelf, $shelfnumber, @messages );
 
@@ -96,7 +90,7 @@ if ( $op eq 'add_form' ) {
             $shelf = Koha::Virtualshelf->new(
                 {   shelfname          => scalar $query->param('shelfname'),
                     sortfield          => scalar $query->param('sortfield'),
-                    category           => $category || 1,
+                    category           => $category,
                     allow_change_from_owner => $allow_changes_from > 0,
                     allow_change_from_others => $allow_changes_from == ANYONE,
                     owner              => scalar $loggedinuser,
@@ -400,7 +394,7 @@ $template->param(
     referer  => $referer,
     shelf    => $shelf,
     messages => \@messages,
-    category => ($category == 1 || $category == 2) ? $category : "",
+    category => $category,
     print    => scalar $query->param('print') || 0,
     listsview => 1,
 );
