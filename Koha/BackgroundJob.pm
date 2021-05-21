@@ -25,13 +25,6 @@ use Try::Tiny qw( catch try );
 use C4::Context;
 use Koha::DateUtils qw( dt_from_string );
 use Koha::Exceptions;
-use Koha::BackgroundJob::BatchUpdateBiblio;
-use Koha::BackgroundJob::BatchUpdateAuthority;
-use Koha::BackgroundJob::BatchUpdateItem;
-use Koha::BackgroundJob::BatchDeleteBiblio;
-use Koha::BackgroundJob::BatchDeleteAuthority;
-use Koha::BackgroundJob::BatchDeleteItem;
-use Koha::BackgroundJob::BatchCancelHold;
 
 use base qw( Koha::Object );
 
@@ -246,6 +239,7 @@ sub _derived_class {
     Koha::Exceptions::Exception->throw($job_type . ' is not a valid job_type')
         unless $class;
 
+    eval "require $class";
     return $class->new;
 }
 
