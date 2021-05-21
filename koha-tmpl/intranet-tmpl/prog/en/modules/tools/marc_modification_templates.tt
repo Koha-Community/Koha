@@ -354,7 +354,9 @@
     [% Asset.js("js/tools-menu.js") | $raw %]
     [% Asset.js("js/marc_modification_templates.js") | $raw %]
     <script>
-        var mmtas = [% ActionsLoop.json | $raw %]
+        [% IF ActionsLoop %]
+            var mmtas = [% ActionsLoop.json | $raw %]
+        [% END %]
     </script>
 [% END %]
 
