@@ -13,63 +13,64 @@
 # with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use File::Slurp qw( read_file );
-use JSON qw( from_json );
-use Test::More tests => 4;
+
+use Test::More tests => 2;
+
+use Test::Mojo;
 use Data::Dumper;
 
-my $dh;
+my $t    = Test::Mojo->new('Koha::REST::V1');
+my $spec = $t->get_ok( '/api/v1/', 'Correctly fetched the spec' )->tx->res->json;
 
-my $definitions_dir = 'api/v1/swagger/definitions';
-opendir( $dh, $definitions_dir ) or die "$!";
-my @files = readdir $dh;
-my @wrong_additionalProperties;
-ok( @files, "making sure we found definitions files" );
-for my $file (@files) {
-    next unless $file =~ m|\.json$|;
-    my $spec = from_json read_file("$definitions_dir/$file");
-    if ( not exists $spec->{additionalProperties}
-        or $spec->{additionalProperties} != 0 )
-    {
-        push @wrong_additionalProperties, { file => $file, };
-    }
-}
-is( scalar @wrong_additionalProperties, 0 )
-  or diag Dumper \@wrong_additionalProperties;
+my $paths = $spec->{paths};
 
+my @missing_additionalProperties = ();
 
-my $paths_dir = 'api/v1/swagger/paths';
-opendir( $dh, $paths_dir ) or die "$!";
-@files = readdir $dh;
-@wrong_additionalProperties = ();
-ok(@files, "making sure we found paths files");
-for my $file (@files) {
-    next unless $file =~ m|\.json$|;
-    my $spec = from_json read_file("$paths_dir/$file");
-    for my $route ( keys %$spec ) {
-        for my $method ( keys %{ $spec->{$route} } ) {
-            next if $method ne 'post' && $method ne 'put';
-            for my $parameter ( @{ $spec->{$route}->{$method}->{parameters} } ) {
-                if ( exists $parameter->{schema} ) {
+foreach my $route ( keys %{$paths} ) {
+    foreach my $verb ( keys %{ $paths->{$route} } ) {
 
-                    # If it's a ref we inherit from the definition file
-                    next if exists $parameter->{schema}->{'$ref'};
+        # p($paths->{$route}->{$verb});
 
-                    if ( not exists $parameter->{schema}->{additionalProperties}
-                        or $parameter->{schema}->{additionalProperties} != 0 )
-                    {
-                        push @wrong_additionalProperties,
-                          {
-                            file   => "$paths_dir/$file",
-                            route  => $route,
-                            method => $method,
-                          };
-                    }
+        # check parameters []
+        foreach my $parameter ( @{ $paths->{$route}->{$verb}->{parameters} } ) {
+            if (   exists $parameter->{schema}
+                && exists $parameter->{schema}->{type}
+                && ref( $parameter->{schema}->{type} ) ne 'ARRAY'
+                && $parameter->{schema}->{type} eq 'object' ) {
+
+                # it is an object type definition
+                if ( not exists $parameter->{schema}->{additionalProperties} ) {
+                    push @missing_additionalProperties,
+                      { type  => 'parameter',
+                        route => $route,
+                        verb  => $verb,
+                        name  => $parameter->{name}
+                      };
+                }
+            }
+        }
+
+        # check responses  {}
+        my $responses = $paths->{$route}->{$verb}->{responses};
+        foreach my $response ( keys %{$responses} ) {
+            if (   exists $responses->{$response}->{schema}
+                && exists $responses->{$response}->{schema}->{type}
+                && ref( $responses->{$response}->{schema}->{type} ) ne 'ARRAY'
+                && $responses->{$response}->{schema}->{type} eq 'object' ) {
+
+                # it is an object type definition
+                if ( not exists $responses->{$response}->{schema}->{additionalProperties} ) {
+                    push @missing_additionalProperties,
+                      { type  => 'response',
+                        route => $route,
+                        verb  => $verb,
+                        name  => $response
+                      };
                 }
             }
         }
     }
 }
 
-is( scalar @wrong_additionalProperties, 0 )
-  or diag Dumper \@wrong_additionalProperties;
+is( scalar @missing_additionalProperties, 0 )
+  or diag Dumper \@missing_additionalProperties;
