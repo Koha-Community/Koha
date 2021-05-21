@@ -1,6 +1,7 @@
 [% USE raw %]
 [% USE JSON.Escape %]
 [% USE Asset %]
+[% USE TablesSettings %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>MARC modification templates &rsaquo; Tools &rsaquo; Koha</title>
@@ -86,13 +87,15 @@
                     <table id="templatest">
                         <thead>
                             <tr>
+                                <th>Id</th>
                                 <th>Template</th>
-                                <th class="noExport">Actions</th>
+                                <th class="NoSort noExport">Actions</th>
                             </tr>
                         </thead>
                         <tbody>
                             [% FOREACH TemplatesLoo IN TemplatesLoop %]
                                 <tr>
+                                    <td>[% TemplatesLoo.template_id | html %]</td>
                                     <td>[% TemplatesLoo.name | html %]</td>
                                     <td class="actions">
                                         <a class="btn btn-default btn-xs" href="/cgi-bin/koha/tools/marc_modification_templates.pl?template_id=[% TemplatesLoo.template_id | html %]&amp;op=select_template" ><i class="fa fa-fw fa-pencil"></i> Edit actions</a>
@@ -352,12 +355,15 @@
 
 [% MACRO jsinclude BLOCK %]
     [% Asset.js("js/tools-menu.js") | $raw %]
-    [% Asset.js("js/marc_modification_templates.js") | $raw %]
+    [% INCLUDE 'datatables.inc' %]
+    [% INCLUDE 'columns_settings.inc' %]
     <script>
+        columns_settings = [% TablesSettings.GetColumns('tools', 'marc-modification-templates', 'templatest', 'json') | $raw %];
         [% IF ActionsLoop %]
             var mmtas = [% ActionsLoop.json | $raw %]
         [% END %]
     </script>
+    [% Asset.js("js/marc_modification_templates.js") | $raw %]
 [% END %]
 
 [% INCLUDE 'intranet-bottom.inc' %]
