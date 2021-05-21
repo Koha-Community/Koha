@@ -72,14 +72,14 @@ BEGIN {
     $ldap      = C4::Context->config('useldapserver') || 0;
     $cas       = C4::Context->preference('casAuthentication');
     $caslogout = C4::Context->preference('casLogout');
-    require C4::Auth_with_cas;    # no import
 
     if ($ldap) {
         require C4::Auth_with_ldap;
         import C4::Auth_with_ldap qw(checkpw_ldap);
     }
     if ($cas) {
-        import C4::Auth_with_cas qw(check_api_auth_cas checkpw_cas login_cas logout_cas login_cas_url logout_if_required);
+        require C4::Auth_with_cas;    # no import
+        import C4::Auth_with_cas qw(check_api_auth_cas checkpw_cas login_cas logout_cas login_cas_url logout_if_required multipleAuth getMultipleAuth);
     }
 
 }
@@ -1340,8 +1340,9 @@ sub checkauth {
     if ($cas) {
 
         # Is authentication against multiple CAS servers enabled?
-        if ( C4::Auth_with_cas::multipleAuth && !$casparam ) {
-            my $casservers = C4::Auth_with_cas::getMultipleAuth();
+        require C4::Auth_with_cas;
+        if ( multipleAuth() && !$casparam ) {
+            my $casservers = getMultipleAuth();
             my @tmplservers;
             foreach my $key ( keys %$casservers ) {
                 push @tmplservers, { name => $key, value => login_cas_url( $query, $key, $type ) . "?cas=$key" };

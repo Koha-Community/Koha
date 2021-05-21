@@ -33,7 +33,7 @@ our (@ISA, @EXPORT_OK);
 BEGIN {
     require Exporter;
     @ISA   = qw(Exporter);
-    @EXPORT_OK = qw(check_api_auth_cas checkpw_cas login_cas logout_cas login_cas_url logout_if_required);
+    @EXPORT_OK = qw(check_api_auth_cas checkpw_cas login_cas logout_cas login_cas_url logout_if_required multilpleAuth getMultipleAuth);
 }
 my $defaultcasserver;
 my $casservers;
