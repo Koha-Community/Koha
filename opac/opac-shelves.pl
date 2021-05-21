@@ -78,7 +78,15 @@ if (C4::Context->preference("BakerTaylorEnabled")) {
 }
 
 my $referer  = $query->param('referer')  || $op;
-my $category = $query->param('category') || 1;
+my $category = 1;
+if ( $query->param('category') && (
+            ($query->param('category') == 1) ||
+            ($query->param('category') == 2)
+        )
+    ){
+    $category = $query->param('category');
+}
+
 my ( $shelf, $shelfnumber, @messages );
 
 if ( $op eq 'add_form' ) {
@@ -106,7 +114,7 @@ if ( $op eq 'add_form' ) {
             $shelf = Koha::Virtualshelf->new(
                 {   shelfname          => scalar $query->param('shelfname'),
                     sortfield          => scalar $query->param('sortfield'),
-                    category           => scalar $query->param('category') || 1,
+                    category           => $category || 1,
                     allow_change_from_owner => $allow_changes_from > 0,
                     allow_change_from_others => $allow_changes_from == ANYONE,
                     owner              => scalar $loggedinuser,
@@ -140,7 +148,7 @@ if ( $op eq 'add_form' ) {
             my $allow_changes_from = $query->param('allow_changes_from');
             $shelf->allow_change_from_owner( $allow_changes_from > 0 );
             $shelf->allow_change_from_others( $allow_changes_from == ANYONE );
-            $shelf->category( scalar $query->param('category') );
+            $shelf->category( $category );
             eval { $shelf->store };
 
             if ($@) {
