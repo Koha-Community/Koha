@@ -3,11 +3,9 @@
     "post": {
       "x-mojo-to": "ReturnClaims#claim_returned",
       "operationId": "claimReturned",
+      "summary": "Add a return claim",
       "tags": [
-        "claims",
-        "returned",
-        "return",
-        "claim"
+        "Return claims"
       ],
       "parameters": [
         {
@@ -103,12 +101,9 @@
     "put": {
       "x-mojo-to": "ReturnClaims#update_notes",
       "operationId": "updateClaimNotes",
+      "summary": "Update notes",
       "tags": [
-        "claims",
-        "returned",
-        "return",
-        "claim",
-        "notes"
+        "Return claims"
       ],
       "parameters": [
         {
@@ -197,13 +192,8 @@
     "delete": {
       "x-mojo-to": "ReturnClaims#delete_claim",
       "operationId": "deletedClaim",
-      "tags": [
-        "claims",
-        "returned",
-        "return",
-        "claim",
-        "delete"
-      ],
+      "summary": "Delete claim",
+      "tags": [ "Return claims" ],
       "parameters": [
         {
           "name": "claim_id",
@@ -271,13 +261,8 @@
     "put": {
       "x-mojo-to": "ReturnClaims#resolve_claim",
       "operationId": "updateClaimResolve",
-      "tags": [
-        "claims",
-        "returned",
-        "return",
-        "claim",
-        "notes"
-      ],
+      "summary": "Resolve claim",
+      "tags": [ "Return claims" ],
       "parameters": [
         {
           "name": "claim_id",
