@@ -210,9 +210,10 @@ subtest 'add_credit() tests' => sub {
 
     my $credit = { amount => 100 };
 
-    $t->post_ok("//$userid:$password@/api/v1/patrons/$patron_id/account/credits" => json => $credit)
-      ->status_is(200)
-      ->json_has('/account_line_id');
+    my $ret = $t->post_ok("//$userid:$password@/api/v1/patrons/$patron_id/account/credits" => json => $credit)
+      ->status_is(201)->tx->res->json;
+
+    is_deeply( $ret, Koha::Account::Lines->find( $ret->{account_line_id} )->to_api, 'Line returned correctly' );
 
     my $outstanding_credits = $account->outstanding_credits;
     is( $outstanding_credits->count,             1 );
@@ -244,9 +245,11 @@ subtest 'add_credit() tests' => sub {
     is( $account->outstanding_debits->total_outstanding, 25 );
     $credit->{library_id} = $library->id;
 
-    $t->post_ok("//$userid:$password@/api/v1/patrons/$patron_id/account/credits" => json => $credit)
-      ->status_is(200)
-      ->json_has('/account_line_id');
+    $ret = $t->post_ok("//$userid:$password@/api/v1/patrons/$patron_id/account/credits" => json => $credit)
+      ->status_is(201)
+      ->tx->res->json;
+
+    is_deeply( $ret, Koha::Account::Lines->find( $ret->{account_line_id} )->to_api, 'Line returned correctly' );
 
     my $account_line_id = $t->tx->res->json->{account_line_id};
     is( Koha::Account::Lines->find($account_line_id)->branchcode,
@@ -272,9 +275,11 @@ subtest 'add_credit() tests' => sub {
         account_lines_ids => [ $debit_1->id, $debit_2->id, $debit_3->id ]
     };
 
-    $t->post_ok("//$userid:$password@/api/v1/patrons/$patron_id/account/credits" => json => $credit)
-      ->status_is(200)
-      ->json_has('/account_line_id');
+    $ret = $t->post_ok("//$userid:$password@/api/v1/patrons/$patron_id/account/credits" => json => $credit)
+      ->status_is(201)
+      ->tx->res->json;
+
+    is_deeply( $ret, Koha::Account::Lines->find( $ret->{account_line_id} )->to_api, 'Line returned correctly' );
 
     my $outstanding_debits = $account->outstanding_debits;
     is( $outstanding_debits->total_outstanding, 65 );
