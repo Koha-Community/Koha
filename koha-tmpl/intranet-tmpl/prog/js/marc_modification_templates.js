@@ -1,4 +1,4 @@
-/* global __ */
+/* global __ KohaTable columns_settings */
 $(document).ready(function() {
     window.modaction_legend_innerhtml = $("#modaction_legend").text();
     window.action_submit_value = $("#action_submit").val();
@@ -49,7 +49,7 @@ $(document).ready(function() {
             }
             if ( $("#conditional_comparison").val() == '' ) {
                 alert( __("The conditional comparison operator should be filled.") );
-                return false
+                return false;
             }
             if ( $("#conditional_value").val() == '' &&
                  ( $("#conditional_comparison").val() == 'equals' || $("#conditional_comparison").val() == 'not_equals' ) ) {
@@ -108,6 +108,10 @@ $(document).ready(function() {
         editAction( mmta[0] );
         updateAllEvery();
     });
+
+    KohaTable("templatest", {
+    }, columns_settings);
+
 });
 
 function updateAllEvery(){
