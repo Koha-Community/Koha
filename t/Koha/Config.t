@@ -117,7 +117,19 @@ subtest 'read_from_file() tests' => sub {
             'backup_db_via_tools' => '0',
             'backup_conf_via_tools' => '0',
             'install_log' => '/home/koha/misc/koha-install-log',
-            'useldapserver' => '0',
+            'useldapserver' => '1',
+            'ldapserver' => {
+                ldapserver => {
+                    hostname => 'ldap://another_ldap_server:389',
+                    user     => 'user',
+                    pass     => 'password',
+                    mapping  => {
+                        firstname => {
+                            is => 'givenName'
+                        }
+                    }
+                }
+            },
             'useshibboleth' => '0',
             'zebra_lockdir' => '/home/koha/var/lock/zebradb',
             'lockdir' => '__LOCK_DIR__',

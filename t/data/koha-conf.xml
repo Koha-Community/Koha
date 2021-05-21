@@ -101,7 +101,15 @@
  <supportdir>/home/koha/src/misc</supportdir>
  -->
  <install_log>/home/koha/misc/koha-install-log</install_log>
- <useldapserver>0</useldapserver><!-- see C4::Auth_with_ldap for extra configs you must add if you want to turn this on -->
+ <useldapserver>1</useldapserver><!-- see C4::Auth_with_ldap for extra configs you must add if you want to turn this on -->
+ <ldapserver id="ldapserver">
+  <hostname>ldap://another_ldap_server:389</hostname>
+  <user>user</user>
+  <pass>password</pass>
+  <mapping>
+   <firstname is="givenName" ></firstname>
+  </mapping>
+ </ldapserver>
  <useshibboleth>0</useshibboleth><!-- see C4::Auth_with_shibboleth for extra configs you must do to turn this on -->
  <zebra_lockdir>/home/koha/var/lock/zebradb</zebra_lockdir>
  <lockdir>__LOCK_DIR__</lockdir>
