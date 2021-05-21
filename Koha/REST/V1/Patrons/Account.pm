@@ -142,7 +142,12 @@ sub add_credit {
             $credit->apply({ debits => [ $outstanding_debits->as_list ], offset_type => 'payment' });
         }
 
-        return $c->render( status => 200, openapi => { account_line_id => $credit->id } );
+        $credit->discard_changes;
+
+        return $c->render(
+            status  => 201,
+            openapi => $credit->to_api
+        );
     }
     catch {
         $c->unhandled_exception($_);
