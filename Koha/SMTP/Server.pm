@@ -21,8 +21,6 @@ use Koha::Database;
 use Koha::Exceptions::Object;
 use Koha::SMTP::Servers;
 
-use Email::Sender::Transport::SMTP;
-
 use base qw(Koha::Object);
 
 =head1 NAME
@@ -66,6 +64,7 @@ sub transport {
 
     $params->{debug} = $self->debug;
 
+    require Email::Sender::Transport::SMTP;
     my $transport = Email::Sender::Transport::SMTP->new( $params );
 
     return $transport;
