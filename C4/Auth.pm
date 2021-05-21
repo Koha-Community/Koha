@@ -546,6 +546,7 @@ sub get_template_and_user {
             && $in->{'template_name'} =~ /opac-(.+)\.(?:tt|tmpl)$/ ) {
             my $pagename = $1;
             unless ( $pagename =~ /^(?:MARC|ISBD)?detail$/
+                or $pagename =~ /^showmarc$/
                 or $pagename =~ /^addbybiblionumber$/
                 or $pagename =~ /^review$/ ) {
                 my $sessionSearch = get_session( $sessionID || $in->{'query'}->cookie("CGISESSID") );
