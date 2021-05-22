@@ -63,35 +63,29 @@ subtest 'get_balance() tests' => sub {
         }
     );
 
-    my $account_line_1 = Koha::Account::Line->new(
+    my $debit_1 = $account->add_debit(
         {
-            borrowernumber    => $patron->borrowernumber,
-            date              => \'NOW()',
-            amount            => 50,
-            description       => "A description",
-            debit_type_code   => "NEW_CARD", # New card
-            amountoutstanding => 50,
-            manager_id        => $patron->borrowernumber,
-            branchcode        => $library->id,
-            interface         => 'test',
+            amount       => 50,
+            description  => "A description",
+            type         => "NEW_CARD",
+            user_id      => $patron->borrowernumber,
+            library_id   => $library->id,
+            interface    => 'test',
         }
     )->store();
-    $account_line_1->discard_changes;
+    $debit_1->discard_changes;
 
-    my $account_line_2 = Koha::Account::Line->new(
+    my $debit_2 = $account->add_debit(
         {
-            borrowernumber    => $patron->borrowernumber,
-            date              => \'NOW()',
-            amount            => 50.01,
-            description       => "A description",
-            debit_type_code   => "NEW_CARD", # New card
-            amountoutstanding => 50.01,
-            manager_id        => $patron->borrowernumber,
-            branchcode        => $library->id,
-            interface         => 'test',
+            amount      => 50.01,
+            description => "A description",
+            type        => "NEW_CARD", # New card
+            user_id     => $patron->borrowernumber,
+            library_id  => $library->id,
+            interface   => 'test',
         }
     )->store();
-    $account_line_2->discard_changes;
+    $debit_2->discard_changes;
 
     $t->get_ok("//$userid:$password@/api/v1/patrons/$patron_id/account")
       ->status_is(200)
@@ -100,8 +94,8 @@ subtest 'get_balance() tests' => sub {
             outstanding_debits => {
                 total => 100.01,
                 lines => [
-                    $account_line_1->to_api,
-                    $account_line_2->to_api
+                    $debit_1->to_api,
+                    $debit_2->to_api
                 ]
             },
             outstanding_credits => {
@@ -152,20 +146,17 @@ subtest 'get_balance() tests' => sub {
     );
 
     # Accountline without manager_id (happens with fines.pl cron for example)
-    my $account_line_3 = Koha::Account::Line->new(
+    my $debit_3 = $account->add_debit(
         {
-            borrowernumber    => $patron->borrowernumber,
-            date              => \'NOW()',
-            amount            => 50,
-            description       => "A description",
-            debit_type_code   => "NEW_CARD", # New card
-            amountoutstanding => 50,
-            manager_id        => undef,
-            branchcode        => $library->id,
-            interface         => 'test',
+            amount      => 50,
+            description => "A description",
+            type        => "NEW_CARD", # New card
+            user_id     => undef,
+            library_id  => $library->id,
+            interface   => 'test',
         }
     )->store();
-    $account_line_3->discard_changes;
+    $debit_3->discard_changes;
 
     $t->get_ok("//$userid:$password@/api/v1/patrons/$patron_id/account")
       ->status_is(200)
@@ -174,7 +165,7 @@ subtest 'get_balance() tests' => sub {
             outstanding_debits => {
                 total => 50.00,
                 lines => [
-                    $account_line_3->to_api
+                    $debit_3->to_api
                 ]
             },
             outstanding_credits => {
@@ -219,26 +210,20 @@ subtest 'add_credit() tests' => sub {
     is( $outstanding_credits->count,             1 );
     is( $outstanding_credits->total_outstanding, -100 );
 
-    my $debit_1 = Koha::Account::Line->new(
-        {   borrowernumber    => $patron->borrowernumber,
-            date              => \'NOW()',
-            amount            => 10,
-            description       => "A description",
-            debit_type_code   => "NEW_CARD",                       # New card
-            amountoutstanding => 10,
-            manager_id        => $patron->borrowernumber,
-            interface         => 'test',
+    my $debit_1 = $account->add_debit(
+        {   amount      => 10,
+            description => "A description",
+            type        => "NEW_CARD",
+            user_id     => $patron->borrowernumber,
+            interface   => 'test',
         }
     )->store();
-    my $debit_2 = Koha::Account::Line->new(
-        {   borrowernumber    => $patron->borrowernumber,
-            date              => \'NOW()',
-            amount            => 15,
-            description       => "A description",
-            debit_type_code   => "NEW_CARD",                       # New card
-            amountoutstanding => 15,
-            manager_id        => $patron->borrowernumber,
-            interface         => 'test',
+    my $debit_2 = $account->add_debit(
+        {   amount      => 15,
+            description => "A description",
+            type        => "NEW_CARD",
+            user_id     => $patron->borrowernumber,
+            interface   => 'test',
         }
     )->store();
 
@@ -258,15 +243,12 @@ subtest 'add_credit() tests' => sub {
     is( $account->outstanding_debits->total_outstanding,
         0, "Debits have been cancelled automatically" );
 
-    my $debit_3 = Koha::Account::Line->new(
-        {   borrowernumber    => $patron->borrowernumber,
-            date              => \'NOW()',
-            amount            => 100,
-            description       => "A description",
-            debit_type_code   => "NEW_CARD",                       # New card
-            amountoutstanding => 100,
-            manager_id        => $patron->borrowernumber,
-            interface         => 'test',
+    my $debit_3 = $account->add_debit(
+        {   amount      => 100,
+            description => "A description",
+            type        => "NEW_CARD",
+            user_id     => $patron->borrowernumber,
+            interface   => 'test',
         }
     )->store();
 
