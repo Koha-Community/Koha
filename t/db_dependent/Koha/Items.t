@@ -557,10 +557,12 @@ subtest 'store' => sub {
         };
 
         subtest
-          'Test with partial payement and write off, and remaining debt' =>
+          'Test with partial payment and write off, and remaining debt' =>
           sub {
 
-            plan tests => 17;
+            plan tests => 19;
+
+            t::lib::Mocks::mock_preference( 'AccountAutoReconcile', 0 );
 
             my $patron = $builder->build_object( { class => 'Koha::Patrons' } );
             my $item = $builder->build_sample_item(
@@ -615,11 +617,11 @@ subtest 'store' => sub {
             is(
                 $account->balance,
                 $processfee_amount + $replacement_amount,
-                'Balance is PROCESSING + L'
+                'Balance is PROCESSING + LOST'
             );
 
-            # Partially pay fee
-            my $payment_amount = 27;
+            # Partially pay fee (99 - 27 = 72)
+            my $payment_amount = 24;
             my $payment        = $account->add_credit(
                 {
                     amount    => $payment_amount,
@@ -630,8 +632,8 @@ subtest 'store' => sub {
 
             $payment->apply( { debits => [$lost_fee_line] } );
 
-            # Partially write off fee
-            my $write_off_amount = 25;
+            # Partially write off fee (72 - 20 = 52)
+            my $write_off_amount = 20;
             my $write_off        = $account->add_credit(
                 {
                     amount    => $write_off_amount,
@@ -641,18 +643,64 @@ subtest 'store' => sub {
             );
             $write_off->apply( { debits => [$lost_fee_line] } );
 
+
+            my $payment_amount_2 = 3;
+            my $payment_2        = $account->add_credit(
+                {
+                    amount    => $payment_amount_2,
+                    type      => 'PAYMENT',
+                    interface => 'test',
+                }
+            );
+
+            $payment_2->apply(
+                { debits => [$lost_fee_line] } );
+
+            # Partially write off fee (52 - 5 = 47)
+            my $write_off_amount_2 = 5;
+            my $write_off_2        = $account->add_credit(
+                {
+                    amount    => $write_off_amount_2,
+                    type      => 'WRITEOFF',
+                    interface => 'test',
+                }
+            );
+
+            $write_off_2->apply(
+                { debits => [$lost_fee_line] } );
+
+            is(
+                $account->balance,
+                $processfee_amount +
+                  $replacement_amount -
+                  $payment_amount -
+                  $write_off_amount -
+                  $payment_amount_2 -
+                  $write_off_amount_2,
+                'Balance is PROCESSING + LOST - PAYMENT 1 - WRITEOFF - PAYMENT 2 - WRITEOFF 2'
+            );
+
+            # VOID payment_2 and writeoff_2
+            $payment_2->void({ interface => 'test' });
+            $write_off_2->void({ interface => 'test' });
+
             is(
                 $account->balance,
                 $processfee_amount +
                   $replacement_amount -
                   $payment_amount -
                   $write_off_amount,
-                'Payment and write off applied'
+                'Balance is PROCESSING + LOST - PAYMENT 1 - WRITEOFF (PAYMENT 2 and WRITEOFF 2 VOIDED)'
             );
 
             # Store the amountoutstanding value
             $lost_fee_line->discard_changes;
             my $outstanding = $lost_fee_line->amountoutstanding;
+            is(
+                $outstanding + 0,
+                $replacement_amount - $payment_amount - $write_off_amount,
+                "Lost Fee Outstanding is LOST - PAYMENT 1 - WRITEOFF"
+            );
 
             # Simulate item marked as found
             $item->itemlost(0)->store;
@@ -685,7 +733,7 @@ subtest 'store' => sub {
             is(
                 $credit_return->amount + 0,
                 ( $payment_amount + $outstanding ) * -1,
-'The account line of type LOST_FOUND has an amount equal to the payment + outstanding'
+'The account line of type LOST_FOUND has an amount equal to the payment 1 + outstanding'
             );
             is(
                 $credit_return->amountoutstanding + 0,
