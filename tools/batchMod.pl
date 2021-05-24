@@ -55,7 +55,6 @@ my $op           = $input->param('op');
 my $del          = $input->param('del');
 my $del_records  = $input->param('del_records');
 my $completedJobID = $input->param('completedJobID');
-my $runinbackground = $input->param('runinbackground');
 my $src          = $input->param('src');
 my $use_default_values = $input->param('use_default_values');
 my $exclude_from_local_holds_priority = $input->param('exclude_from_local_holds_priority');
@@ -150,23 +149,8 @@ if ($op eq "action") {
         $template->param( "job_completed" => 1 );
     }
 
-	# Setting the job as done
-	my $job = C4::BackgroundJob->fetch($sessionID, $completedJobID);
-
-	# Calling the template
-        add_saved_job_results_to_template($template, $completedJobID, $items_display_hashref);
-
     } else {
     # While the job is getting done
-
-	# Job size is the number of items we have to process
-	my $job_size = scalar(@itemnumbers);
-	my $job = undef;
-
-	# If we asked for background processing
-	if ($runinbackground) {
-	    $job = put_in_background($job_size);
-	}
 
 	#initializing values for updates
     my (  $itemtagfield,   $itemtagsubfield) = &GetMarcFromKohaField( "items.itemnumber" );
@@ -203,7 +187,6 @@ if ($op eq "action") {
                     my $i = 1;
                     my $extra_headers = {};
                     foreach my $itemnumber (@itemnumbers) {
-                        $job->progress($i) if $runinbackground;
                         my $item = Koha::Items->find($itemnumber);
                         next
                           unless $item
@@ -250,8 +233,6 @@ if ($op eq "action") {
                                 $item->exclude_from_local_holds_priority($exclude_from_local_holds_priority)->store;
                                 $modified_holds_priority = 1;
                             }
-                                $extra_headers->{exclude_from_local_holds_priority} = {name => 'Exclude from local holds priority', items => {}} unless defined $extra_headers->{exclude_from_local_holds_priority};
-                                $extra_headers->{exclude_from_local_holds_priority}->{items}->{$item->itemnumber} = $ynhash->{'av'.$item->exclude_from_local_holds_priority};
                             }
                             my $modified = 0;
                             if ( $values_to_modify || $values_to_blank ) {
@@ -320,17 +301,8 @@ if ($op eq "action") {
                                     push @$upd_biblionumbers, $itemdata->{'biblionumber'};
                                 }
                             }
-                            if ($runinbackground) {
-                                $modified_items++ if $modified || $modified_holds_priority;
-                                $modified_fields += $modified + $modified_holds_priority;
-                                $job->set(
-                                    {
-                                        modified_items  => $modified_items,
-                                        modified_fields => $modified_fields,
-                                        extra_headers => $extra_headers,
-                                    }
-                                );
-                            }
+                            $modified_items++ if $modified || $modified_holds_priority;
+                            $modified_fields += $modified + $modified_holds_priority;
                         }
                         $i++;
                     }
@@ -358,6 +330,13 @@ if ($op eq "action") {
         $indexer->index_records( $upd_biblionumbers, 'specialUpdate', "biblioserver", undef ) if @$upd_biblionumbers;
         $indexer->index_records( $del_biblionumbers, 'recordDelete', "biblioserver", undef ) if @$del_biblionumbers;
     }
+
+    # Calling the template
+    $template->param(
+        modified_items => $modified_items,
+        modified_fields => $modified_fields,
+    );
+
 }
 #
 #-------------------------------------------------------------------------------
@@ -789,75 +768,3 @@ sub find_value {
     }
     return($indicator,$result);
 }
-
-# ----------------------------
-# Background functions
-
-
-sub add_results_to_template {
-    my $template = shift;
-    my $results = shift;
-    $template->param(map { $_ => $results->{$_} } keys %{ $results });
-}
-
-sub add_saved_job_results_to_template {
-    my $template = shift;
-    my $completedJobID = shift;
-    my $items_display_hashref= shift;
-    my $job = C4::BackgroundJob->fetch($sessionID, $completedJobID);
-    my $results = $job->results();
-    add_results_to_template($template, $results);
-
-    my $fields = $job->get("modified_fields");
-    my $items = $job->get("modified_items");
-    my $extra_headers = $job->get("extra_headers");
-
-    foreach my $header (keys %{$extra_headers}) {
-        push @{$items_display_hashref->{item_header_loop}}, {header_value => $extra_headers->{$header}->{name}};
-        foreach my $row (@{$items_display_hashref->{item_loop}}) {
-            push @{$row->{item_value}}, {field => $extra_headers->{$header}->{items}->{$row->{itemnumber}}};
-        }
-    }
-
-    $template->param(
-        modified_items => $items,
-        modified_fields => $fields,
-    );
-}
-
-sub put_in_background {
-    my $job_size = shift;
-
-    my $job = C4::BackgroundJob->new($sessionID, "test", '/cgi-bin/koha/tools/batchMod.pl', $job_size);
-    my $jobID = $job->id();
-
-    # fork off
-    if (my $pid = fork) {
-        # parent
-        # return job ID as JSON
-
-        # prevent parent exiting from
-        # destroying the kid's database handle
-        # FIXME: according to DBI doc, this may not work for Oracle
-        $dbh->{InactiveDestroy}  = 1;
-
-        my $reply = CGI->new("");
-        print $reply->header(-type => 'text/html');
-        print '{"jobID":"' . $jobID . '"}';
-        exit 0;
-    } elsif (defined $pid) {
-        # child
-        # close STDOUT to signal to Apache that
-        # we're now running in the background
-        close STDOUT;
-        close STDERR;
-    } else {
-        # fork failed, so exit immediately
-        warn "fork failed while attempting to run tools/batchMod.pl as a background job";
-        exit 0;
-    }
-    return $job;
-}
-
-
-
