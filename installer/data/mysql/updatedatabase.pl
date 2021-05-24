@@ -22618,6 +22618,15 @@ if( CheckVersion( $DBversion ) ) {
     NewVersion( $DBversion, 26940, "Put in sync borrowers.debarredcomment with comments from borrower_debarments");
 }
 
+$DBversion = '20.05.11.002'; # will be replaced by the RM
+if( CheckVersion( $DBversion ) ) {
+
+    $dbh->do( "INSERT IGNORE INTO systempreferences (variable, value, options, explanation, type) VALUES ('casServerVersion', '2', '2|3', 'Version of the CAS server Koha will connect to.', 'Choice');");
+
+    # Always end with this (adjust the bug info)
+    NewVersion( $DBversion, 20854, "Adds a casServerVersion system preference");
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 my $update_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/atomicupdate/';
