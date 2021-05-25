@@ -2,9 +2,10 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Koha 18.05\n"
 "POT-Creation-Date: 2015-04-15 09:32-0300\n"
-"PO-Revision-Date: 2021-03-09 03:09+0000\n"
-"Last-Translator: Héctor Castro <hector.hecaxmmx@gmail.com>\n"
-"Language-Team: Koha Translation Team <koha-translate@lists.koha-community.org>\n"
+"PO-Revision-Date: 2021-05-22 12:19+0000\n"
+"Last-Translator: Bernardo Gonzalez Kriegel <bgkriegel@gmail.com>\n"
+"Language-Team: Koha Translation Team <koha-translate@lists.koha-"
+"community.org>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -12,7 +13,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.8\n"
 "X-Poedit-SourceCharset: UTF-8\n"
-"X-POOTLE-MTIME: 1615259357.145013\n"
+"X-POOTLE-MTIME: 1621685997.054134\n"
 "X-Pootle-Path: /es/18.05/es-ES-pref.po\n"
 "X-Pootle-Revision: 1\n"
 
@@ -503,6 +504,10 @@ msgstr "Restricción de Google OpenID Connect al dominio (o subdominio de este d
 # Administration > Google OpenID Connect
 msgid "admin.pref#GoogleOpenIDConnectDomain# Leave blank for all google domains"
 msgstr "Deje en blanco para todos los dominios de google"
+
+# Administration > Login options
+msgid "admin.pref#IndependentBranches# <p class='text-danger'><strong>Warning:</strong> Changing this system preference will radically alter the behavior of Koha. Changing preference on a production system is highly discouraged.</p>"
+msgstr "<p class='text-danger'><strong>Advertencia:</strong> Cambiar esta preferencia de sistema altera radicalmente el comportamiento de Koha. Cambiar ésta preferencia en un sistema en producción es totalmente desaconsejado.</p>"
 
 # Administration > Login options
 msgid "admin.pref#IndependentBranches# No"
@@ -2918,7 +2923,10 @@ msgstr "No"
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#AutoRemoveOverduesRestrictions# allow OVERDUES restrictions triggered by sent notices to be cleared automatically when all overdue items are returned by a patron."
-msgstr "circulation.pref#AutoRemoveOverduesRestrictions# permite que las restricciones de retrasos (OVERDUES) activadas por avisos enviados se borren automáticamente cuando un usuario devuelve todos los ítems atrasados."
+msgstr ""
+"permite que las restricciones de retrasos (OVERDUES) activadas por avisos "
+"enviados se borren automáticamente cuando un usuario devuelve todos los "
+"ítems atrasados."
 
 # Circulation > Holds Policy
 msgid "circulation.pref#AutoResumeSuspendedHolds# <br><strong>NOTE:</strong> This system preference requires the <code>misc/cronjobs/holds/auto_unsuspend_holds.pl</code> cronjob. Ask your system administrator to schedule it."
@@ -3779,7 +3787,7 @@ msgstr "Habilitar"
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#OnSiteCheckoutAutoCheck# onsite checkout by default if last checkout was an onsite one"
-msgstr "circulación.pref#OnSiteCheckoutAutoCheck# préstamo in situ por defecto si el último préstamo fue in situ"
+msgstr "préstamo in situ por defecto si el último préstamo fue in situ"
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#OnSiteCheckouts# Disable"
@@ -7422,7 +7430,7 @@ msgstr "La siguiente <a href='http://schema.koha-community.org/__VERSION__/table
 
 # OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationDefaultCategory# <br><strong>WARNING: Do not use a regular patron category for self registration.</strong> If the <code>misc/cronjobs/cleanup_database.pl</code> cronjob is setup to delete unverified and unfinished OPAC self registrations, it will permanently and unrecoverably delete all patrons that have registered more than PatronSelfRegistrationExpireTemporaryAccountsDelay days ago."
-msgstr ""
+msgstr "<br><strong>ADVERTENCIA: no utilice una categoría regular de usuario para el autoregistro.</strong> Si el cronjob <code>misc/cronjobs/cleanup_database.pl</code> está configurado para eliminar autorregistros de OPAC no verificados y sin terminar, eliminará de forma permanente e irrecuperable a todos los usuarios que se hayan registrado hace más de PatronSelfRegistrationExpireTemporaryAccountsDelay días atrás."
 
 # OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationDefaultCategory# Use the patron category code"
@@ -8426,19 +8434,19 @@ msgstr "biblioteca local"
 
 # Searching > Features
 msgid "searching.pref#ElasticsearchCrossFields# Disable"
-msgstr ""
+msgstr "Deshabilitar"
 
 # Searching > Features
 msgid "searching.pref#ElasticsearchCrossFields# Enable"
-msgstr ""
+msgstr "Habilitar"
 
 # Searching > Features
 msgid "searching.pref#ElasticsearchCrossFields# See documentation at https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-multi-match-query.html#type-cross-fields"
-msgstr ""
+msgstr "Ver documentación en https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-multi-match-query.html#type-cross-fields"
 
 # Searching > Features
 msgid "searching.pref#ElasticsearchCrossFields# the cross_fields option for Elasticsearch searches, supported in Elasticsearch 6.X and above."
-msgstr ""
+msgstr "la opción cross_fields para búsquedas de Elasticsearch, soportada en Elasticsearch 6.X y superior."
 
 # Searching > Features
 msgid "searching.pref#EnableSearchHistory# Don't keep"
@@ -8675,6 +8683,11 @@ msgstr "Intentar"
 # Searching > Features
 msgid "searching.pref#QueryFuzzy# to match similarly spelled words in a search (for example, a search for <cite>flang</cite> would also match <cite>flange</cite> and <cite>fang</cite>; Currently only affects Zebra searches. Any Elasticsearch term can be made fuzzy by adding a ~ directly after the term.)."
 msgstr ""
+"para coincidir con palabras similares en una búsqueda (por ejemplo, buscar "
+"<cite>flang</cite> también coincidirá con <cite>flange</cite> y "
+"<cite>fang</cite>; al momento solo afecta búsquedas con Zebra. Cualquier "
+"término en Elasticsearch puede hacerse difuso agregando directamente ~ luego "
+"del término.)"
 
 # Searching > Features
 msgid "searching.pref#QueryRegexEscapeOptions# Don't escape"
@@ -9651,4 +9664,3 @@ msgstr "Solo devolver"
 # Web services > Reporting
 msgid "web_services.pref#SvcMaxReportRows# rows of a report requested via the reports web service."
 msgstr "filas del reporte solicitado a través del web service de reportes."
-

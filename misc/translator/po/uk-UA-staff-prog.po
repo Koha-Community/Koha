@@ -9,9 +9,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 18.05\n"
-"POT-Creation-Date: 2021-04-22 09:16-0300\n"
-"PO-Revision-Date: 2021-04-19 13:30+0000\n"
-"Last-Translator: chorna <tanya.chorna@gmail.com>\n"
+"POT-Creation-Date: 2021-05-15 15:38-0300\n"
+"PO-Revision-Date: 2021-05-07 11:55+0000\n"
+"Last-Translator: Serhij Dubyk <dubyk@ukr.net>\n"
 "Language-Team: Ukrainian Linux Team <translation@linux.org.ua>\n"
 "Language: uk\n"
 "MIME-Version: 1.0\n"
@@ -21,7 +21,7 @@ msgstr ""
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 "X-Generator: Pootle 2.8\n"
 "X-Poedit-SourceCharset: utf-8\n"
-"X-POOTLE-MTIME: 1618839045.549215\n"
+"X-POOTLE-MTIME: 1620388542.765126\n"
 "X-Pootle-Path: /uk/18.05/uk-UA-staff-prog.po\n"
 "X-Pootle-Revision: 1\n"
 
@@ -2428,7 +2428,7 @@ msgstr "%s %s Не видано %s "
 #: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:121
 #, c-format
 msgid "%s %s Not for loan (%s)%s %s Waiting on hold (%s)%s "
-msgstr "%s %s не для випозичання (%s)%s %s замовлення в очікуванні (%s)%s "
+msgstr "%s %s не для видачі (%s)%s %s замовлення в очікуванні (%s)%s "
 
 #. %1$s:  END # /IF itemloo.nocancel 
 #. %2$s:  ELSE 
@@ -2499,6 +2499,10 @@ msgid ""
 "on (to) %s Vendor %s Home library %s Collection %s Item type %s Fund %s "
 "Sort1 %s Sort2 %s Unknown filter %s : %s "
 msgstr ""
+"%s %s Розміщено (від) %s Розміщено (до) %s Отримано (від) %s Отримано (до) "
+"%s Постачальник %s Джерельна бібліотека %s Зібрання %s Тип одиниці %s Стаття "
+"витрат %s Сортувальне поле № 1 %s Сортувальне поле № 2 %s Невідомий фільтр "
+"%s : %s "
 
 #. %1$s:  SWITCH plugin.name 
 #. %2$s:  CASE 'AuthorityFile' 
@@ -2599,9 +2603,9 @@ msgstr "%s %s Пропозицію не додано. Пропозиція з т
 #. %3$s:  END 
 #: intranet-tmpl/prog/en/modules/basket/basket.tt:231
 #: intranet-tmpl/prog/en/modules/basket/basket.tt:301
-#, fuzzy, c-format
+#, c-format
 msgid "%s %s This record has no items. %s "
-msgstr "%s %s цей запис немає приєднаних примірників.%s "
+msgstr "%s %s Цей запис немає примірників. %s "
 
 #. %1$s:  SWITCH m.code 
 #. %2$s:  CASE 'no_email' 
@@ -2619,6 +2623,10 @@ msgid ""
 "template with code ACQORDER defined. %s Order e-mail was sent to the vendor. "
 "%s ERROR! - %s %s "
 msgstr ""
+"%s %s Цей постачальник не має вибраного контакту для надсилання замовлень "
+"або відсутня адреса електронної пошти. %s Кошик відсутній. %s Немає шаблону "
+"повідомлення з визначеним кодом ACQORDER . %s Замовлення було відправлено "
+"постачальнику електронною поштою. %s ПОМИЛКА! — %s %s "
 
 #. %1$s:  END 
 #. %2$s:  IF defaultRefundRule 
@@ -2640,7 +2648,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/circ/circulation.tt:790
 #, c-format
 msgid "%s %s Waiting at %s %s until %s %s "
-msgstr ""
+msgstr "%s %s очікує у підрозділі „%s“ %s до %s %s "
 
 #. %1$s:  END 
 #. %2$s:  IF ( resultsloo.withdrawncount ) 
@@ -2658,9 +2666,9 @@ msgstr "%s %s вилучено (%s), "
 #. %5$s:  END 
 #: intranet-tmpl/prog/en/modules/admin/categories.tt:354
 #: intranet-tmpl/prog/en/modules/admin/categories.tt:518
-#, fuzzy, c-format
+#, c-format
 msgid "%s %s Yes %s No %s Inherit %s "
-msgstr "%s %s %s %s (%s)"
+msgstr "%s %s так %s ні %s успадковано %s "
 
 #. %1$s:  SWITCH m.code 
 #. %2$s:  CASE 'unauthorized' 
@@ -2748,7 +2756,7 @@ msgstr "%s %s / %s %s (запис № %s) "
 #: intranet-tmpl/prog/en/modules/tools/automatic_item_modification_by_age.tt:184
 #, c-format
 msgid "%s %s days %s There is no age for this rule. %s "
-msgstr ""
+msgstr "%s %s дні(-в) %s Для цього правила немає віку. %s "
 
 #. %1$s:  END 
 #. %2$s:  IF ( MEMBERS ) 
@@ -2761,9 +2769,9 @@ msgstr "%s %s для користувача — "
 #. %2$s:  holdssurname | html 
 #. %3$s:  waiting_holds | html 
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:179
-#, fuzzy, c-format
+#, c-format
 msgid "%s %s has %s hold(s) waiting for pickup."
-msgstr "%s %s %sзамовлення, що очікують на отримання користувачем"
+msgstr "%s %s має %s замовлення, що очікують на отримання користувачем."
 
 #. %1$s:  patron.firstname | html 
 #. %2$s:  patron.surname | html 
@@ -2775,9 +2783,9 @@ msgstr "%s %s не має несплаченої пені."
 #. %1$s:  END 
 #. %2$s:  IF ( suggestions_loo.place ) 
 #: intranet-tmpl/prog/en/modules/acqui/newordersuggestion.tt:52
-#, fuzzy, c-format
+#, c-format
 msgid "%s %s in "
-msgstr "%s%s; де: "
+msgstr "%s %s у "
 
 #. %1$s:  IF (modified_items) 
 #. %2$s:  modified_items | html 
@@ -2849,7 +2857,7 @@ msgstr "%s %s місяці(в) %s до %s %s "
 #: intranet-tmpl/prog/en/modules/reports/catalogue_out.tt:43
 #, c-format
 msgid "%s %s to %s %s "
-msgstr ""
+msgstr "%s %s до %s %s "
 
 #. %1$s:  END 
 #. %2$s:  IF ( ActionsLoo.to_field ) 
@@ -2878,7 +2886,7 @@ msgstr "%s %s переміщено."
 #: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:393
 #, c-format
 msgid "%s %s%s (%s remaining has been moved)%s"
-msgstr ""
+msgstr "%s %s%s (%s залишку було переміщено)%s"
 
 #. %1$s:  END 
 #. %2$s:  budget_loo.b_txt | html 
@@ -2887,7 +2895,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:356
 #, c-format
 msgid "%s %s%s (inactive)%s "
-msgstr ""
+msgstr "%s %s%s (неактивний)%s "
 
 #. %1$s:  ELSE 
 #. %2$s:  IF ( slip ) 
@@ -2971,6 +2979,9 @@ msgid ""
 "returned before marked as seen%s %s: item was on loan. couldn't be returned."
 "%s "
 msgstr ""
+"%s %s: Штрих-код не знайдено%s %s: примірник вилучено%s %s: примірник було "
+"видано. Він був повернутий до того, як був відзначений як переглянутий%s %s: "
+"примірник було видано. Не може бути повернутий.%s "
 
 #. %1$s:  END 
 #. %2$s:  IF ( suggestions_loo.isbn ) 
@@ -3023,7 +3034,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/cataloguing/moveitem.tt:43
 #, c-format
 msgid "%s %sERROR: Unable to get the item."
-msgstr ""
+msgstr "%s %sПОМИЛКА: неможливо отримати примірник."
 
 #. %1$s:  IF ( use_heading_flags_p ) 
 #. %2$s:  IF ( heading_edit_subfields_p ) 
@@ -3090,12 +3101,16 @@ msgstr ""
 #. %19$s:  END 
 #. %20$s:  END 
 #: intranet-tmpl/prog/en/modules/patroncards/print.tt:46
-#, c-format
+#, fuzzy, c-format
 msgid ""
 "%s %sExporting %s patron card%sExporting %s patron cards%s %s %sExporting %s "
 "patron card%sExporting %s patron cards%s %s Exporting from patron list %s %s"
 "%s batch to export%s%s batches to export%s %s "
 msgstr ""
+"%s %s Експорт %s читацький квиток користувача %s Експорт %s читацькі квитки "
+"користувачів %s %s %s Експорт %s читацький квиток користувача %s Експорт %s "
+"читацькі квитки користувачів %s %s Експорт зі списку користувачів %s %s%s "
+"пакетний експорт %s%s пакетний експорт %s %s "
 
 #. %1$s:  END 
 #. %2$s:  IF ( suggestions_loo.isbn ) 
@@ -3140,6 +3155,7 @@ msgstr "%s %s Нове %s Замовлено %s Часткове %s Заверш
 #, c-format
 msgid "%s %sNew %sOrdered %sPartially received %sReceived %sCancelled %s "
 msgstr ""
+"%s %s Нове %s Замовлено %s Частково отримано %s Отримано %s Скасовано %s "
 
 #. %1$s:  selected=relationship | html 
 #. %2$s:  PROCESS selectoptionopen value='' 
@@ -3198,6 +3214,8 @@ msgstr ""
 #, c-format
 msgid "%s %sReceiving items %sCataloguing items %sPlacing orders %s "
 msgstr ""
+"%s %s Отримання примірників %s Каталогізація примірників %s Розміщення "
+"замовлення комплектування %s "
 
 #. %1$s:  END 
 #. %2$s:  IF (errcode==2) 
@@ -3241,6 +3259,8 @@ msgid ""
 "%s %sSpring%s %s %sSummer%s %s %sFall%s %s %sWinter%s %s %sSpr%s %s %sSum%s "
 "%s %sFal%s %s %sWin%s %s %s %s "
 msgstr ""
+"%s %s Весна %s %s %s Літо %s %s %s Осінь %s %s %s Зима %s %s %s Весна %s %s "
+"%s Літо %s %s %s Осінь %s %s %s Зима %s %s %s %s "
 
 #. %1$s:  IF ( use_heading_flags_p ) 
 #. %2$s:  IF ( heading_edit_subfields_p ) 
@@ -3265,6 +3285,8 @@ msgid ""
 "%s %sThe file used does not have a valid format. Only csv and txt are "
 "allowed. %s%s %s "
 msgstr ""
+"%s %s Використовуваний файл має неправильний формат. Дозволено лише формати "
+"csv та txt. %s%s %s "
 
 #. %1$s:  ELSE 
 #. %2$s:  IF tablename 
@@ -3315,6 +3337,11 @@ msgid ""
 "not checked out. %sThe item or the patron does not exist. %sNo hold is "
 "placed by this patron on this bibliographic record. %s%s %s "
 msgstr ""
+"%s %s Ви не вказали дані для попереднього перегляду. %s Попередній перегляд "
+"для листів недоступний „%s“. %s Не забувайте, що випуск ще не було "
+"повернено. %s Не забувайте, що випуск ще не був виданий. %s Цей примірник не "
+"видано. %s Примірник або користувач не існує. %s На цей бібліографічний "
+"запис немає замовлення від цього користувача. %s %s %s "
 
 #. %1$s:  END 
 #. %2$s:  IF ( itemloo.waitingdate ) 
@@ -3504,9 +3531,9 @@ msgstr ""
 #. %2$s:  ELSIF query_type == 'status' 
 #. %3$s:  END 
 #: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:22
-#, fuzzy, c-format
+#, c-format
 msgid "%s &rsaquo; New request %s &rsaquo; Status %s "
-msgstr "%s &rsaquo; Нова ознака %s %s "
+msgstr "%s &rsaquo; Новий запит %s &rsaquo; Статус %s "
 
 #. %1$s:  END 
 #. %2$s:  END 
@@ -3555,7 +3582,7 @@ msgstr "%s ( %s ) не може бути продовжено до %s. "
 #: intranet-tmpl/prog/en/modules/circ/renew.tt:45
 #, c-format
 msgid "%s ( %s ) has been renewed the maximum number of times by %s %s ( "
-msgstr ""
+msgstr "%s (%s) було продовжено максимальну кількість разів %s %s ( "
 
 #. %1$s:  INCLUDE 'biblio-title.inc' biblio=item.biblio 
 #. %2$s:  item.barcode | html 
@@ -3566,6 +3593,8 @@ msgid ""
 "%s ( %s ) has been scheduled for automatic renewal and cannot be renewed "
 "anymore since %s. "
 msgstr ""
+"%s (%s) був запланований для автоматичного продовження і не може бути "
+"продовжений з %s. "
 
 #. %1$s:  INCLUDE 'biblio-title.inc' biblio=item.biblio 
 #. %2$s:  item.barcode | html 
@@ -3575,6 +3604,8 @@ msgid ""
 "%s ( %s ) has been scheduled for automatic renewal and cannot be renewed "
 "because the patron's account is expired"
 msgstr ""
+"%s (%s) був запланований для автоматичного продовження і не може бути "
+"продовжений, тому що термін дії облікового запису користувача минув "
 
 #. %1$s:  INCLUDE 'biblio-title.inc' biblio=item.biblio 
 #. %2$s:  item.barcode | html 
@@ -3593,27 +3624,27 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/circ/renew.tt:105
 #, c-format
 msgid "%s ( %s ) has been scheduled for automatic renewal. "
-msgstr ""
+msgstr "%s ( %s ) заплановано автоматичне продовження. "
 
 #. %1$s:  INCLUDE 'biblio-title.inc' biblio=item.biblio 
 #. %2$s:  item.barcode | html 
 #: intranet-tmpl/prog/en/modules/circ/renew.tt:117
-#, fuzzy, c-format
+#, c-format
 msgid "%s ( %s ): This item is on hold for another patron."
-msgstr "Цей примірник замовлено для отримання у вашій бібліотеці"
+msgstr "%s ( %s ): Цей примірник замовлено для іншого користувача."
 
 #. %1$s:  p.metadata.name | html 
 #: intranet-tmpl/prog/en/modules/tools/stage-marc-import.tt:136
 #, c-format
 msgid "%s ( other format via plugin)"
-msgstr ""
+msgstr "%s (інший формат через додаток)"
 
 #. %1$s:  lateorder.orderdate | $KohaDates 
 #. %2$s:  lateorder.latesince | html 
 #: intranet-tmpl/prog/en/modules/acqui/lateorders.tt:79
-#, fuzzy, c-format
+#, c-format
 msgid "%s (%s days)"
-msgstr "%s (%s)"
+msgstr "%s (%s дні)"
 
 #. %1$s:  patron.dateofbirth | $KohaDates 
 #. %2$s:  patron.get_age | html 
@@ -3670,9 +3701,9 @@ msgstr ""
 #. %1$s:  basketgroup.name | html 
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:321
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:357
-#, fuzzy, c-format
+#, c-format
 msgid "%s (closed)"
-msgstr "%s (прострочений)"
+msgstr "%s (закрито)"
 
 #. %1$s:  class_source.description | html 
 #: intranet-tmpl/prog/en/modules/tools/inventory.tt:89
@@ -3683,9 +3714,9 @@ msgstr "%s (типово)"
 #. %1$s:  r.budget.budget_name | html 
 #. %2$s:  r.budget.budget_id | html 
 #: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:384
-#, fuzzy, c-format
+#, c-format
 msgid "%s (id=%s)"
-msgstr "%s (%s)"
+msgstr "%s (id=%s)"
 
 #. %1$s:  r.budget.budget_name | html 
 #. %2$s:  r.budget.budget_id | html 
@@ -3696,7 +3727,7 @@ msgstr "%s (%s)"
 #: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:376
 #, c-format
 msgid "%s (id=%s) Amount=%s%s (%s remaining has been moved)%s"
-msgstr ""
+msgstr "%s (id=%s) Сума=%s%s (%s залишку було переміщено)%s"
 
 #. For the first occurrence,
 #. %1$s:  END 
@@ -3793,9 +3824,9 @@ msgstr "%s 0 %s "
 #. %1$s:  ELSE 
 #. %2$s:  END 
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:296
-#, fuzzy, c-format
+#, c-format
 msgid "%s 0 %s / "
-msgstr "%s 0 %s "
+msgstr "%s 0 %s / "
 
 #. %1$s:  ELSE 
 #. %2$s:  END 
@@ -3838,9 +3869,9 @@ msgstr ""
 #. %2$s:  ELSE 
 #. %3$s:  END 
 #: intranet-tmpl/prog/en/modules/tools/stockrotation.tt:96
-#, fuzzy, c-format
+#, c-format
 msgid "%s Activate %s Deactivate %s "
-msgstr "%s задіяний %s незадіяний %s"
+msgstr "%s Задіяти %s Знедіяти %s "
 
 #. %1$s:  IF ( active ) 
 #. %2$s:  ELSE 
@@ -3919,6 +3950,8 @@ msgid ""
 "%s Additional permissions in the acquisitions or serials modules are "
 "required for editing additional fields %s %s "
 msgstr ""
+"%s Для редагування додаткових полів потрібні додаткові привілеї в модулях "
+"надходження або серіальні видання %s %s "
 
 #. For the first occurrence,
 #. %1$s:  END 
@@ -4003,6 +4036,8 @@ msgid ""
 "%s An error occurs when generating the PDF file. Please contact the "
 "administrator to resolve this problem. %s "
 msgstr ""
+"%s Під час створення PDF-файлу виникла помилка. Будь ласка, зверніться до "
+"адміністратора, щоб вирішити цю проблему. %s "
 
 #. For the first occurrence,
 #. %1$s:  ERROR.CORERR | html 
@@ -4024,6 +4059,8 @@ msgstr "%s Трапилася невідома помилка."
 msgid ""
 "%s Approved %s Rejected %s Tested %sUnknown Operation (%s) on %s %s Term(s). "
 msgstr ""
+"%s Схвалено %s Відхилено %s Перевірено %s Невідома операція (%s) на %s %s "
+"Термін(и)."
 
 #. For the first occurrence,
 #. %1$s:  patron.article_requests_current.count | html 
@@ -4052,6 +4089,8 @@ msgid ""
 "%s Bibliographic record will be deleted too. %s Bibliographic record will "
 "not be deleted. %s "
 msgstr ""
+"%s Бібліографічний запис також буде вилучено. %s Бібліографічний запис не "
+"буде вилучено. %s "
 
 #. %1$s:  END 
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:679
@@ -4140,9 +4179,9 @@ msgstr ""
 #. %2$s:  ELSIF data.expired 
 #. %3$s:  END 
 #: intranet-tmpl/prog/en/modules/reports/serials_stats.tt:50
-#, fuzzy, c-format
+#, c-format
 msgid "%s Closed %s Expired %s "
-msgstr "%s Закрито %s Expired %s "
+msgstr "%s Закрито %s Прострочено %s "
 
 #. %1$s:  IF invoice.closedate 
 #. %2$s:  invoice.closedate | $KohaDates 
@@ -4285,7 +4324,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/serials/subscription-detail.tt:172
 #, c-format
 msgid "%s Disabled %s "
-msgstr ""
+msgstr "%s Вимкнуто %s "
 
 #. For the first occurrence,
 #. %1$s:  ELSIF batch_id 
@@ -4374,7 +4413,7 @@ msgstr "%s Ім’я та по батькові: "
 #: intranet-tmpl/prog/en/modules/tools/inventory.tt:111
 #, c-format
 msgid "%s For loan %s %s %s "
-msgstr ""
+msgstr "%s Для видачі %s %s %s "
 
 #. For the first occurrence,
 #. %1$s:  authtypecode | html 
@@ -4498,7 +4537,7 @@ msgstr "%s примірник гуляє "
 #: intranet-tmpl/prog/en/modules/tools/inventory.tt:241
 #, c-format
 msgid "%s Item may be shelved out of order"
-msgstr ""
+msgstr "%s Примірник може бути розміщений на полиці неправильно "
 
 #. %1$s:  END 
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:513
@@ -4527,6 +4566,8 @@ msgid ""
 "%s Item type is normally not for loan. %s %s Item is normally not for loan%s "
 "(%s)%s. %s %s Check out anyway? %s "
 msgstr ""
+"%s Цей тип примірника зазвичай не для видачі. %s %s Примірник зазвичай не "
+"для видачі %s (%s)%s. %s %s Видати в будь-якому випадку? %s "
 
 #. %1$s:  IF ( itemtype_notforloan ) 
 #. %2$s:  ELSIF ( item_notforloan ) 
@@ -4563,7 +4604,7 @@ msgstr "%s Списки %s %s &rsaquo; %s "
 #: intranet-tmpl/prog/en/modules/tools/inventory.tt:235
 #, c-format
 msgid "%s Missing (not scanned)"
-msgstr ""
+msgstr "%s Пропущено (не скановано)"
 
 #. %1$s:  IF ean 
 #. %2$s:  ELSE 
@@ -4697,7 +4738,7 @@ msgstr "%s Немає активних кошторисів %s "
 #: intranet-tmpl/prog/en/modules/circ/request-article.tt:212
 #, c-format
 msgid "%s No article requests can be made for this record. %s %s %s "
-msgstr ""
+msgstr "%s Запити на статті для цього запису неможливі. %s %s %s "
 
 #. %1$s:  ELSIF problem.key == 'no_barcode' 
 #: intranet-tmpl/prog/en/modules/tools/inventory.tt:239
@@ -4774,6 +4815,9 @@ msgid ""
 "%s No item with matching barcode found %s Item is already in a different "
 "rotating collection %s Item is already in this collection %s %s %s "
 msgstr ""
+"%s Примірник з відповідним штрих-кодом не знайдено %s Примірник вже "
+"знаходиться в іншому почергово переміщуваному зібранні %s Примірник вже "
+"знаходиться в цьому зібранні колекції %s %s %s "
 
 #. %1$s:  IF failureMessage == "NO_ITEM" 
 #. %2$s:  ELSIF failureMessage == "NOT_IN_COLLECTION" 
@@ -4787,7 +4831,7 @@ msgid ""
 "%s %s "
 msgstr ""
 "%s Не знайдено жодного примірника з цим штрих-кодом %s Примірника немає в "
-"цьому зібранні колекції %s %s %s "
+"цьому зібранні %s %s %s "
 
 #. %1$s:  ELSE 
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:252
