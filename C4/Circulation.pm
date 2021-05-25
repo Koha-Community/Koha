@@ -1576,6 +1576,7 @@ sub AddIssue {
                 )->store;
             }
             $issue->discard_changes;
+            C4::Auth::track_login_daily( $borrower->{userid} );
             if ( $item_object->location && $item_object->location eq 'CART'
                 && ( !$item_object->permanent_location || $item_object->permanent_location ne 'CART' ) ) {
             ## Item was moved to cart via UpdateItemLocationOnCheckin, anything issued should be taken off the cart.
