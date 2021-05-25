@@ -6,8 +6,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2021-04-22 08:32-0300\n"
-"PO-Revision-Date: 2021-04-23 01:34+0000\n"
+"POT-Creation-Date: 2021-05-15 14:54-0300\n"
+"PO-Revision-Date: 2021-05-14 16:17+0000\n"
 "Last-Translator: Alexander <alexjohn2000@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: te\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.8\n"
-"X-POOTLE-MTIME: 1619141660.676463\n"
+"X-POOTLE-MTIME: 1621009049.482966\n"
 
 #. %1$s:  data.borrowernumber | html 
 #. %2$s:  UNLESS loop.last 
@@ -212,11 +212,10 @@ msgid ""
 "number\" %s \"Not for loan status\" %s \"Lost status\" %s \"Withdrawn status"
 "\" %s \"Checkouts\" %s "
 msgstr ""
-"%s %s %s %s \"శీర్షిక\" %s \"ప్రచురణ తేదీ\" %s \"ప్రచురణకర్త\" %s \"సేకరణ\" %"
-"s \"బార్‌కోడ్\" %s \"కాల్ నంబర్\" %s \"హోమ్ లైబ్రరీ\" %s \"ప్రస్తుత లైబ్రరీ\""
-" %s \"షెల్వింగ్ స్థానం\" %s \"వస్తువు రకము\" %s \"జాబితా సంఖ్య\" %s \"రుణ "
-"స్థితి కోసం కాదు\" %s \"స్థితిని కోల్పోయింది\" %s \"ఉపసంహరించుకున్న స్థితి\" "
-"%s \"చెక్అవుట్\" %s "
+"%s %s %s %s \"శీర్షిక\" %s \"ప్రచురణ తేదీ\" %s \"ప్రచురణకర్త\" %s \"సేకరణ\" %s \"బార్‌కోడ్"
+"\" %s \"కాల్ నంబర్\" %s \"హోమ్ లైబ్రరీ\" %s \"ప్రస్తుత లైబ్రరీ\" %s \"షెల్వింగ్ స్థానం\" %s "
+"\"వస్తువు రకము\" %s \"జాబితా సంఖ్య\" %s \"రుణ స్థితి కోసం కాదు\" %s \"స్థితిని కోల్పోయింది\" %s "
+"\"ఉపసంహరించుకున్న స్థితి\" %s \"చెక్అవుట్\" %s "
 
 #. %1$s: - USE Koha -
 #. %2$s: - SET delimiter = Koha.Preference( 'delimiter' ) || ',' -
@@ -320,9 +319,9 @@ msgid ""
 "\"%s\" %s \"%s\" %s \"%s\" %s \"%s\" %s \"%s\" %s \"%s\" %s \"%s\" %s \"%s\" "
 "%s \"%s\" %s \"%s\" %s \"%s\" "
 msgstr ""
-"%s %s %s %s %s %s %s %s \"%s %sద్వారా %s%s\" %s \"%s\" %s \"%s\" %s \"%s\" %"
-"s \"%s\" %s \"%s\" %s \"%s\" %s \"%s\" %s \"%s\" %s \"%s\" %s \"%s\" %s \"%"
-"s\" %s \"%s\" %s \"%s\" %s \"%s\" "
+"%s %s %s %s %s %s %s %s \"%s %sద్వారా %s%s\" %s \"%s\" %s \"%s\" %s \"%s\" %s "
+"\"%s\" %s \"%s\" %s \"%s\" %s \"%s\" %s \"%s\" %s \"%s\" %s \"%s\" %s \"%s\" "
+"%s \"%s\" %s \"%s\" %s \"%s\" "
 
 #. %1$s: - USE raw -
 #. %2$s: - USE Koha -
@@ -603,6 +602,17 @@ msgid ""
 msgstr ""
 "%s %s %s %s %s %sలేఅవుట్ %sలేఅవుట్లో %sటెంప్లేట్ %sటెంప్లేట్స్ %sప్రొఫైల్ %sప్రొఫైల్స్ %sబ్యాచ్ "
 "%sబ్యాచ్‌లు %s %s %s "
+
+#. %1$s:  END 
+#. %2$s:  IF budget.b_active 
+#. %3$s:  budget.b_txt | html 
+#. %4$s:  ELSE 
+#. %5$s:  budget.b_txt | html 
+#. %6$s:  END 
+#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:146
+#, c-format
+msgid "%s %s %s %s %s (inactive) %s "
+msgstr "%s %s %s %s %s (క్రియారహితం) %s "
 
 #. %1$s:  INCLUDE 'header.inc' 
 #. %2$s:  INCLUDE 'serials-search.inc' 
@@ -996,7 +1006,7 @@ msgstr ""
 #. %7$s:  SET location_lang = location _ "_" _ lang_lis.language 
 #. %8$s:  END 
 #. %9$s:  IF ( location_lang == language ) 
-#: intranet-tmpl/prog/en/modules/tools/koha-news.tt:385
+#: intranet-tmpl/prog/en/modules/tools/koha-news.tt:387
 #, c-format
 msgid "%s %s %s %sOPAC news%s %s %s %s %s "
 msgstr "%s %s %s %sOPAC వార్తలు%s %s %s %s %s "
@@ -1797,7 +1807,7 @@ msgstr "%s %s (లోపం ఉంది: %s. మరింత సమాచార
 #. %1$s:  order.replacementprice | $Price 
 #. %2$s:  IF ( order.uncertainprice ) 
 #. %3$s:  END 
-#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:289
+#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:293
 #, c-format
 msgid "%s %s (Uncertain) %s"
 msgstr "%s %s (స్పష్టత లేని) %s"
@@ -2470,7 +2480,7 @@ msgstr "%s %s తప్పు స్థానంలో కనుగొనబడ�
 #. %5$s:  END # /IF SEARCH_RESULT.norequests 
 #. %6$s:  IF Koha.Preference('intranetbookbag') == 1 
 #. %7$s:  IF ( SEARCH_RESULT.incart ) 
-#: intranet-tmpl/prog/en/modules/catalogue/results.tt:485
+#: intranet-tmpl/prog/en/modules/catalogue/results.tt:488
 #, c-format
 msgid "%s %s Holds (%s) %s %s %s %s | "
 msgstr "%s %s హోల్డ్స్ (%s) %s %s %s %s | "
@@ -2508,12 +2518,10 @@ msgid ""
 "library %s Only pickup locations within the same hold group are allowed %s "
 "%s %s %s "
 msgstr ""
-"%s %s అంశం దెబ్బతింది %s వయస్సు పరిమితం %s మించిపోయిన గరిష్టంగా రికార్డుకు "
-"ఉంది %s పోషకుడికి రోజువారీ హోల్డ్ పరిమితి చేరుకుంది %s చాలా ఎక్కువ %s "
-"పట్టుకోలేనిది %s పోషకుడు వేర్వేరు లైబ్రరీకి చెందినవాడు %s పోషకుడి లైబ్రరీ "
-"నుండి పట్టు ఉంచలేరు %s ఈ అంశం కోసం పోషకుడికి ఇప్పటికే పట్టు ఉంది %s పికప్ "
-"లైబ్రరీకి బదిలీ చేయలేరు %s ఒకే హోల్డ్ సమూహంలోని పికప్ స్థానాలు మాత్రమే "
-"అనుమతించబడతాయి %s %s %s %s "
+"%s %s అంశం దెబ్బతింది %s వయస్సు పరిమితం %s మించిపోయిన గరిష్టంగా రికార్డుకు ఉంది %s పోషకుడికి "
+"రోజువారీ హోల్డ్ పరిమితి చేరుకుంది %s చాలా ఎక్కువ %s పట్టుకోలేనిది %s పోషకుడు వేర్వేరు లైబ్రరీకి చెందినవాడు "
+"%s పోషకుడి లైబ్రరీ నుండి పట్టు ఉంచలేరు %s ఈ అంశం కోసం పోషకుడికి ఇప్పటికే పట్టు ఉంది %s పికప్ "
+"లైబ్రరీకి బదిలీ చేయలేరు %s ఒకే హోల్డ్ సమూహంలోని పికప్ స్థానాలు మాత్రమే అనుమతించబడతాయి %s %s %s %s "
 
 #. %1$s:  SWITCH cn 
 #. %2$s:  CASE 'itype' 
@@ -2627,16 +2635,14 @@ msgid ""
 "renewal %s Item is an onsite checkout %s Item has an outstanding fine %s "
 "Unknown error %s "
 msgstr ""
-"%s %s సరిపోలే అంశం కనుగొనబడలేదు %s అంశం చెక్ చేయబడలేదు %s ఇంకా "
-"పునరుద్ధరించలేము %s గరిష్ట సంఖ్యలను పునరుద్ధరించారు %s స్వయంచాలక పునరుద్ధరణ "
-"కోసం షెడ్యూల్ చేయబడింది మరియు ఇంకా పునరుద్ధరించబడదు %s స్వయంచాలక పునరుద్ధరణ "
-"కోసం షెడ్యూల్ చేయబడింది మరియు ఇకపై పునరుద్ధరించబడదు %s స్వయంచాలక పునరుద్ధరణ "
-"కోసం షెడ్యూల్ చేయబడింది మరియు పోషకుడి ఖాతా గడువు ముగిసినందున పునరుద్ధరించబడదు"
-" %s స్వయంచాలక పునరుద్ధరణ కోసం షెడ్యూల్ చేయబడింది %s స్వయంచాలక పునరుద్ధరణ కోసం"
-" షెడ్యూల్ చేయబడింది మరియు పునరుద్ధరించబడదు ఎందుకంటే పోషకుడికి చాలా ఎక్కువ "
-"ఛార్జీలు ఉన్నాయి %s మరొక పోషకుడికి పట్టు %s పోషకుడు ప్రస్తుతం పరిమితం "
-"చేయబడింది %s అంశం పునరుద్ధరణకు అనుమతి లేదు %s అంశం ఆన్‌సైట్ చెక్అవుట్ %s "
-"అంశానికి అత్యుత్తమ జరిమానా ఉంది %s గుర్తించలేని పొరపాటు %s "
+"%s %s సరిపోలే అంశం కనుగొనబడలేదు %s అంశం చెక్ చేయబడలేదు %s ఇంకా పునరుద్ధరించలేము %s గరిష్ట "
+"సంఖ్యలను పునరుద్ధరించారు %s స్వయంచాలక పునరుద్ధరణ కోసం షెడ్యూల్ చేయబడింది మరియు ఇంకా "
+"పునరుద్ధరించబడదు %s స్వయంచాలక పునరుద్ధరణ కోసం షెడ్యూల్ చేయబడింది మరియు ఇకపై పునరుద్ధరించబడదు "
+"%s స్వయంచాలక పునరుద్ధరణ కోసం షెడ్యూల్ చేయబడింది మరియు పోషకుడి ఖాతా గడువు ముగిసినందున "
+"పునరుద్ధరించబడదు %s స్వయంచాలక పునరుద్ధరణ కోసం షెడ్యూల్ చేయబడింది %s స్వయంచాలక పునరుద్ధరణ "
+"కోసం షెడ్యూల్ చేయబడింది మరియు పునరుద్ధరించబడదు ఎందుకంటే పోషకుడికి చాలా ఎక్కువ ఛార్జీలు ఉన్నాయి %s "
+"మరొక పోషకుడికి పట్టు %s పోషకుడు ప్రస్తుతం పరిమితం చేయబడింది %s అంశం పునరుద్ధరణకు అనుమతి లేదు "
+"%s అంశం ఆన్‌సైట్ చెక్అవుట్ %s అంశానికి అత్యుత్తమ జరిమానా ఉంది %s గుర్తించలేని పొరపాటు %s "
 
 #. %1$s:  END 
 #. %2$s:  ELSE 
@@ -3108,7 +3114,7 @@ msgstr "%s %s%s%sస్లిప్ టెంప్లేట్ కనుగొ�
 #. %5$s:  ELSE 
 #. %6$s:  END 
 #. %7$s:  IF MaxSearchResultsItemsPerRecordStatusCheck && SEARCH_RESULT.items_count > MaxSearchResultsItemsPerRecordStatusCheck 
-#: intranet-tmpl/prog/en/modules/catalogue/results.tt:529
+#: intranet-tmpl/prog/en/modules/catalogue/results.tt:532
 #, c-format
 msgid "%s %s%s, %s available:%s, None available%s %s "
 msgstr "%s %s%s, %s అందుబాటులో:%s, ఏదీ అందుబాటులో లేదు%s %s "
@@ -3141,7 +3147,7 @@ msgstr ""
 #. %2$s:  IF ( !budget.b_active ) 
 #. %3$s:  END 
 #: intranet-tmpl/prog/en/modules/acqui/invoice.tt:57
-#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:212
+#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:216
 #, c-format
 msgid "%s %s(inactive)%s"
 msgstr "%s %s(క్రియారహితంగా)%s"
@@ -3177,7 +3183,7 @@ msgstr ""
 #. %1$s:  END 
 #. %2$s:  IF ( suggestion.isbn ) 
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:733
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:591
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:590
 #, c-format
 msgid "%s %s; ISBN:"
 msgstr "%s %s; ఐఎస్ బిఎన్:"
@@ -4006,7 +4012,7 @@ msgstr "%s (తనిఖీ చేస్తే, సబ్‌ఫీల్డ్ �
 #. %1$s:  budget_loo.b_txt | html 
 #: intranet-tmpl/prog/en/modules/acqui/duplicate_orders.tt:205
 #: intranet-tmpl/prog/en/modules/acqui/invoice.tt:61
-#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:216
+#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:220
 #: intranet-tmpl/prog/en/modules/acqui/parcels.tt:164
 #, c-format
 msgid "%s (inactive)"
@@ -4340,6 +4346,15 @@ msgstr ""
 msgid "%s An unknown error has occurred."
 msgstr "%s తెలియని లోపం సంభవించింది."
 
+#. %1$s:  IF itemloo.any_pickup_location 
+#. %2$s:  ELSE 
+#. %3$s:  itemloo.pickup_locations | html 
+#. %4$s:  END 
+#: intranet-tmpl/prog/en/modules/reserve/request.tt:679
+#, c-format
+msgid "%s Any library %s %s %s "
+msgstr "%s అన్ని గ్రంధాలయం %s %s %s "
+
 #. %1$s:  IF ( op == 'approve' ) 
 #. %2$s:  ELSIF ( op == 'reject' ) 
 #. %3$s:  ELSIF ( op == 'test' ) 
@@ -4370,9 +4385,7 @@ msgstr "%s వ్యాసం అభ్యర్థనలు"
 msgid ""
 "%s Biblio framework \"%s\" has the biblionumber field hidden at the "
 "interface %s"
-msgstr ""
-"%s బిబ్లియో ఫ్రేమ్‌వర్క్ \"%s\" ఇంటర్ఫేస్ వద్ద బిబ్లియోనంబర్ ఫీల్డ్ దాచబడింది"
-" %s"
+msgstr "%s బిబ్లియో ఫ్రేమ్‌వర్క్ \"%s\" ఇంటర్ఫేస్ వద్ద బిబ్లియోనంబర్ ఫీల్డ్ దాచబడింది %s"
 
 #. %1$s:  IF (del_biblio) 
 #. %2$s:  ELSE 
@@ -5304,7 +5317,7 @@ msgstr "%s యజమాని, వినియోగదారులు మరి
 #. %3$s:  total_pages | html 
 #. %4$s:  IF ( show_nextbutton ) 
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:141
-#: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:194
+#: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:207
 #, c-format
 msgid "%s Page %s / %s %s "
 msgstr "%s పేజీ %s / %s %s "
@@ -5356,7 +5369,7 @@ msgstr "%s చెల్లింపు కనుగొనబడలేదు %s �
 #. %9$s:  ELSE 
 #. %10$s:  END 
 #. %11$s:  IF ( suggestions_loo.reason ) 
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:619
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:618
 #, c-format
 msgid ""
 "%s Pending %s Accepted %s Ordered %s Rejected %s Checked %s Available %s %s "
@@ -5521,8 +5534,8 @@ msgstr "%s సెల్యుటేషన్: "
 
 #. For the first occurrence,
 #. %1$s:  IF ( scan_search_term_to_use ) 
-#: intranet-tmpl/prog/en/modules/catalogue/results.tt:335
-#: intranet-tmpl/prog/en/modules/catalogue/results.tt:337
+#: intranet-tmpl/prog/en/modules/catalogue/results.tt:338
+#: intranet-tmpl/prog/en/modules/catalogue/results.tt:340
 #, c-format
 msgid "%s Scan Index for: "
 msgstr "%s స్కాన్ సూచిక కోసం: "
@@ -6093,7 +6106,7 @@ msgid "%s by%s %s %s\", \"%s\", \"%s\", \"%s\", \"%s "
 msgstr "%s ద్వారా%s %s %s\", \"%s\", \"%s\", \"%s\", \"%s "
 
 #. %1$s:  Branches.GetName( branch ) | html 
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:39
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:21
 #, c-format
 msgid "%s calendar"
 msgstr "%s క్యాలెండర్"
@@ -6494,7 +6507,7 @@ msgid "%s on %s until %s"
 msgstr "%s పై %s వరకు %s"
 
 #. %1$s:  SEARCH_RESULT.onloancount | html 
-#: intranet-tmpl/prog/en/modules/catalogue/results.tt:567
+#: intranet-tmpl/prog/en/modules/catalogue/results.tt:570
 #, c-format
 msgid "%s on loan:"
 msgstr "%s అప్పుతొ:"
@@ -6609,8 +6622,8 @@ msgstr "%s కోట్స్ సేవ్ చేయబడ్డాయి."
 #. %1$s:  errcon.server | html 
 #. %2$s:  errcon.seq | html 
 #. %3$s:  PROCESS 'xslt-handler.inc' code=errcon.error 
-#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:109
-#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:110
+#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:119
+#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:120
 #, c-format
 msgid "%s record %s: %s"
 msgstr "%s రికార్డు %s: %s"
@@ -6728,7 +6741,7 @@ msgid "%s to order"
 msgstr "%s ఆజ్ఞాపించుటకు"
 
 #. %1$s:  SEARCH_RESULT.othercount | html 
-#: intranet-tmpl/prog/en/modules/catalogue/results.tt:595
+#: intranet-tmpl/prog/en/modules/catalogue/results.tt:598
 #, c-format
 msgid "%s unavailable:"
 msgstr "%s అందుబాటులో లేదు:"
@@ -6879,7 +6892,7 @@ msgstr "%s%s : %sఆలస్యంగా ఆర్డర్లు"
 #. %1$s:  END 
 #. %2$s:  IF ( suggestion.place ) 
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:734
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:592
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:591
 #, c-format
 msgid "%s%s in "
 msgstr "%s%s లో "
@@ -7109,7 +7122,7 @@ msgstr "%s%s, %s%s - %s (%s) (%s) - న అభ్యర్థించారు 
 #. %4$s:  END 
 #: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:93
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:729
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:587
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:586
 #, c-format
 msgid "%s%s, by %s%s"
 msgstr "%s%s, ద్వారా %s%s"
@@ -7121,7 +7134,7 @@ msgstr "%s%s, ద్వారా %s%s"
 #. %4$s:  END 
 #. %5$s:  IF ( suggestion.publicationyear ) 
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:734
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:592
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:591
 #, c-format
 msgid "%s%s; Published by %s %s%s in "
 msgstr "%s%s; ద్వారా ప్రచురించబడింది %s %s%s లో "
@@ -7132,7 +7145,7 @@ msgstr "%s%s; ద్వారా ప్రచురించబడింది %
 #. %3$s:  END 
 #. %4$s:  IF ( suggestion.volumedesc ) 
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:731
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:589
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:588
 #, c-format
 msgid "%s&copy; %s %s %s; Volume:"
 msgstr "%s&కాపీని; %s %s %s; వాల్యూమ్:"
@@ -8371,7 +8384,7 @@ msgstr "&nbsp;&nbsp;ఫార్మాట్(: yyyy-yyyy)"
 
 #: intranet-tmpl/prog/en/modules/acqui/duplicate_orders.tt:209
 #: intranet-tmpl/prog/en/modules/acqui/invoice.tt:65
-#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:220
+#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:224
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:363
 #: intranet-tmpl/prog/en/modules/acqui/parcels.tt:168
 #: intranet-tmpl/prog/en/modules/reports/orders_by_budget.tt:101
@@ -8557,7 +8570,7 @@ msgid "&rsaquo; %s Unknown record %s MARC details for "
 msgstr "&rsaquo; %s తెలియని రికార్డ్ %s మార్క్ వివరాలు కోసం "
 
 #. %1$s:  Branches.GetName( branch ) | html 
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:32
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:14
 #, c-format
 msgid "&rsaquo; %s calendar"
 msgstr "&rsaquo; %s క్యాలెండర్"
@@ -8684,7 +8697,7 @@ msgstr "&rsaquo; %sఅధికారం సవరించండి #%s (%s)%s�
 #. %4$s:  END 
 #. %5$s:  IF ( action_add_category ) 
 #. %6$s:  END 
-#. %7$s:  ELSIF ( loop ) 
+#. %7$s:  ELSIF ( loop || searchfield ) 
 #: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:29
 #, c-format
 msgid ""
@@ -8962,7 +8975,7 @@ msgstr "&rsaquo; ఔథొరితిఎస్"
 msgid "&rsaquo; Authority search results"
 msgstr "&rsaquo; అధికారం శోధన ఫలితాలు"
 
-#. %1$s:  category_name | html 
+#. %1$s:  category.category_name | html 
 #. %2$s:  ELSE 
 #. %3$s:  END 
 #: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:34
@@ -10048,7 +10061,7 @@ msgstr "' ~%%] %s %s [%%~ చర్య_బ్లాక్ = చర్య_బ్�
 msgid "' ~%%] [%%~ action_block = action_block _ '"
 msgstr "' ~%%] [%%~ చర్య_బ్లాక్ = చర్య_బ్లాక్ _ '"
 
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:332
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:314
 #, c-format
 msgid "') | html %%]"
 msgstr "') | హెచ్టిఎంఎల్ %%]"
@@ -10487,8 +10500,8 @@ msgstr "(మాత్రమే %s)"
 msgid "(related searches: %s%s%s)"
 msgstr "(సంబంధిత శోధనలు: %s%s%s )"
 
-#: intranet-tmpl/prog/en/modules/catalogue/results.tt:493
-#: intranet-tmpl/prog/en/modules/catalogue/results.tt:495
+#: intranet-tmpl/prog/en/modules/catalogue/results.tt:496
+#: intranet-tmpl/prog/en/modules/catalogue/results.tt:498
 #, c-format
 msgid "(remove)"
 msgstr "(తీసివేయి)"
@@ -10676,7 +10689,7 @@ msgid "- None -"
 msgstr "- ఏదీ లేదు -"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/reserve/request.tt:944
+#: intranet-tmpl/prog/en/modules/reserve/request.tt:948
 msgid "- Please select an item to place a hold"
 msgstr "- దయచేసి పట్టు ఉంచడానికి ఒక అంశాన్ని ఎంచుకోండి"
 
@@ -10693,12 +10706,12 @@ msgstr "-- ఎంచుకొను -- "
 
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:59
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:366
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:705
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:704
 #, c-format
 msgid "-- Choose a reason -- "
 msgstr "-- ఒక కారణం ఎంచుకోండి -- "
 
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:666
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:665
 #, c-format
 msgid "-- Choose a status --"
 msgstr "-- స్థితిని ఎంచుకోండి --"
@@ -11028,7 +11041,7 @@ msgid "A group with the title %s already exists. "
 msgstr "శీర్షికతో ఒక సమూహం %s ఇప్పటికే ఉన్నది. "
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/reserve/request.tt:944
+#: intranet-tmpl/prog/en/modules/reserve/request.tt:948
 msgid "A hold cannot be requested on any of these items."
 msgstr "ఈ అంశాలపై పట్టును అభ్యర్థించలేము."
 
@@ -11133,17 +11146,17 @@ msgstr "అకడమిక్"
 
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:331
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:333
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:675
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:677
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:841
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:843
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:674
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:676
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:840
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:842
 #, c-format
 msgid "Accepted"
 msgstr "ఆమోదించబడిన"
 
 #: intranet-tmpl/prog/en/modules/acqui/newordersuggestion.tt:32
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:797
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:799
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:796
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:798
 #, c-format
 msgid "Accepted by"
 msgstr "ఆమోదించబడిన చేత"
@@ -11153,12 +11166,12 @@ msgstr "ఆమోదించబడిన చేత"
 msgid "Accepted by the library"
 msgstr "లైబ్రరీ అంగీకరించింది"
 
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:896
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:895
 #, c-format
 msgid "Accepted by:"
 msgstr "అంగీకరించారు:"
 
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:900
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:899
 #, c-format
 msgid "Accepted date from:"
 msgstr "అంగీకరించిన తేదీ నుండి:"
@@ -11360,7 +11373,7 @@ msgstr "సముపార్జన వివరాలు"
 
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:217
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:443
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:913
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:912
 #, c-format
 msgid "Acquisition information"
 msgstr "సముపార్జన సమాచారం"
@@ -11494,7 +11507,7 @@ msgstr "సరిపోలిక కనిపించకపోతే చర్�
 #: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:72
 #: intranet-tmpl/prog/en/modules/patroncards/edit-batch.tt:82
 #: intranet-tmpl/prog/en/modules/patroncards/manage.tt:60
-#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:131
+#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:141
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:82
 #: intranet-tmpl/prog/en/modules/serials/checkexpiration.tt:83
 #: intranet-tmpl/prog/en/modules/serials/subscription-frequencies.tt:136
@@ -11557,7 +11570,7 @@ msgstr "చర్యలు"
 #: intranet-tmpl/prog/en/modules/rotating_collections/rotatingCollections.tt:43
 #: intranet-tmpl/prog/en/modules/authorities/searchresultlist.tt:57
 #: intranet-tmpl/prog/en/modules/patron_lists/lists.tt:57
-#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:159
+#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:169
 #: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:89
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:92
 #: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:133
@@ -11631,7 +11644,7 @@ msgstr "కార్యాచరణ"
 msgid "Actual cost"
 msgstr "అసలు ఖరీదు"
 
-#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:256
+#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:260
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:401
 #, c-format
 msgid "Actual cost tax exc."
@@ -11643,7 +11656,7 @@ msgstr "వాస్తవ వ్యయ పన్ను మినహాయిం
 msgid "Actual cost tax exc. / Actual cost tax inc."
 msgstr "వాస్తవ వ్యయ పన్ను ప్రత్యేక. / వాస్తవ వ్యయ పన్ను కలుపు."
 
-#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:257
+#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:261
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:404
 #, c-format
 msgid "Actual cost tax inc."
@@ -11673,7 +11686,8 @@ msgstr "వాస్తవ ఖర్చు: "
 #: intranet-tmpl/prog/en/modules/acqui/tables/members_results.tt:21
 #: intranet-tmpl/prog/en/modules/circ/overdue.tt:173
 #: intranet-tmpl/prog/en/modules/admin/cash_registers.tt:110
-#: intranet-tmpl/prog/en/modules/admin/oai_set_mappings.tt:104
+#: intranet-tmpl/prog/en/modules/admin/oai_set_mappings.tt:75
+#: intranet-tmpl/prog/en/modules/admin/oai_set_mappings.tt:105
 #: intranet-tmpl/prog/en/modules/admin/koha2marclinks.tt:46
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:696
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:908
@@ -11813,8 +11827,8 @@ msgstr "కొన్ని పట్టికలకు అదనపు ఫీల
 msgid "Add an SMS cellular provider"
 msgstr "SMS సెల్యులార్ ప్రొవైడర్‌ను జోడించండి"
 
-#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:171
 #: intranet-tmpl/prog/en/modules/acqui/invoice.tt:175
+#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:179
 #, c-format
 msgid "Add an adjustment"
 msgstr "సర్దుబాటును జోడించండి"
@@ -11839,8 +11853,9 @@ msgstr "నిధులను జోడించండి మరియు తొ
 msgid "Add and remove items from rotas "
 msgstr "రోటాస్ నుండి అంశాలను జోడించండి మరియు తీసివేయండి "
 
-#. INPUT type=button
+#. BUTTON
 #: intranet-tmpl/prog/en/modules/admin/oai_set_mappings.tt:75
+#: intranet-tmpl/prog/en/modules/admin/oai_set_mappings.tt:105
 msgid "Add another condition"
 msgstr "మరొక షరతును జోడించండి"
 
@@ -12094,7 +12109,7 @@ msgstr "క్రొత్త ఫీల్డ్‌ను జోడించం�
 msgid "Add new group"
 msgstr "క్రొత్త సమూహాన్ని జోడించండి"
 
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:134
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:116
 #, c-format
 msgid "Add new holiday"
 msgstr "కొత్త సెలవుదినాన్ని జోడించండి"
@@ -12116,7 +12131,7 @@ msgid "Add or remove items"
 msgstr "అంశాలను తీసివేయండి లేదా జోడించండి"
 
 #: intranet-tmpl/prog/en/includes/cat-toolbar.inc:145
-#: intranet-tmpl/prog/en/modules/catalogue/results.tt:512
+#: intranet-tmpl/prog/en/modules/catalogue/results.tt:515
 #, c-format
 msgid "Add order"
 msgstr "ఆర్డర్‌ను జోడించండి"
@@ -12280,7 +12295,7 @@ msgstr "బుట్ట జోడించండి"
 #: intranet-tmpl/prog/en/includes/js_includes.inc:40
 #: intranet-tmpl/prog/en/includes/cat-toolbar.inc:113
 #: intranet-tmpl/prog/en/modules/catalogue/results.tt:81
-#: intranet-tmpl/prog/en/modules/catalogue/results.tt:495
+#: intranet-tmpl/prog/en/modules/catalogue/results.tt:498
 #, c-format
 msgid "Add to cart"
 msgstr "బండికి జోడించండి"
@@ -12438,8 +12453,8 @@ msgstr "అదనపు కంటెంట్ రకాలు"
 
 #: intranet-tmpl/prog/en/includes/additional-fields-entry.inc:4
 #: intranet-tmpl/prog/en/includes/admin-menu.inc:151
-#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:129
-#: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:112
+#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:139
+#: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:125
 #: intranet-tmpl/prog/en/modules/admin/admin-home.tt:236
 #: intranet-tmpl/prog/en/modules/admin/additional-fields.tt:66
 #, c-format
@@ -12555,13 +12570,13 @@ msgid "Adjustments"
 msgstr "సవరింపులు"
 
 #. %1$s:  total_adj + shipmentcost | $Price 
-#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:343
+#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:347
 #, c-format
 msgid "Adjustments plus shipping: %s"
 msgstr "సర్దుబాట్లు ప్లస్ షిప్పింగ్: %s"
 
 #. IMG
-#: intranet-tmpl/prog/en/modules/catalogue/results.tt:432
+#: intranet-tmpl/prog/en/modules/catalogue/results.tt:435
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:146
 msgid "Adlibris cover image"
 msgstr "అడ్లిబ్రిస్ కవర్ చిత్రం"
@@ -12781,7 +12796,7 @@ msgid "Age required: "
 msgstr "వయస్సు అవసరం: "
 
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:318
-#: intranet-tmpl/prog/en/modules/reserve/request.tt:944
+#: intranet-tmpl/prog/en/modules/reserve/request.tt:948
 #, c-format
 msgid "Age restricted"
 msgstr "వయస్సు పరిమితం"
@@ -12875,7 +12890,7 @@ msgstr "అలింగ్స్ పబ్లిక్ లైబ్రరీ, �
 #: intranet-tmpl/prog/en/modules/tools/viewlog.tt:147
 #: intranet-tmpl/prog/en/modules/tools/viewlog.tt:175
 #: intranet-tmpl/prog/en/modules/tools/viewlog.tt:177
-#: intranet-tmpl/prog/en/modules/tools/koha-news.tt:372
+#: intranet-tmpl/prog/en/modules/tools/koha-news.tt:374
 #: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:205
 #: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:337
 #: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:44
@@ -13498,7 +13513,7 @@ msgstr "మొత్తం:"
 
 #: intranet-tmpl/prog/en/modules/members/maninvoice.tt:60
 #: intranet-tmpl/prog/en/modules/members/mancredit.tt:56
-#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:179
+#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:183
 #: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:222
 #, c-format
 msgid "Amount: "
@@ -13722,12 +13737,12 @@ msgstr "యాంటెన్నా.ఐఓ"
 #: intranet-tmpl/prog/en/modules/circ/overdue.tt:212
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:446
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:456
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:832
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:874
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:885
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:896
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:916
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:928
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:831
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:873
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:884
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:895
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:915
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:927
 #, c-format
 msgid "Any"
 msgstr "ఏ రకమైన"
@@ -13773,8 +13788,8 @@ msgstr "ఏదైనా అంశం "
 
 #: intranet-tmpl/prog/en/modules/members/holdshistory.tt:91
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:430
-#: intranet-tmpl/prog/en/modules/reserve/request.tt:858
-#: intranet-tmpl/prog/en/modules/reserve/request.tt:893
+#: intranet-tmpl/prog/en/modules/reserve/request.tt:862
+#: intranet-tmpl/prog/en/modules/reserve/request.tt:897
 #: intranet-tmpl/prog/en/modules/reports/cat_issues_top.tt:86
 #: intranet-tmpl/prog/en/modules/reports/catalogue_out.tt:99
 #: intranet-tmpl/prog/en/modules/reports/bor_issues_top.tt:109
@@ -13801,8 +13816,8 @@ msgstr "ఏదైనా లైబ్రరీ"
 msgid "Any lost item fees for this item will remain on the patron's account."
 msgstr "ఈ అంశం కోసం ఏదైనా కోల్పోయిన వస్తువు ఫీజులు పోషకుడి ఖాతాలో ఉంటాయి."
 
-#: intranet-tmpl/prog/en/modules/catalogue/results.tt:348
-#: intranet-tmpl/prog/en/modules/catalogue/results.tt:349
+#: intranet-tmpl/prog/en/modules/catalogue/results.tt:351
+#: intranet-tmpl/prog/en/modules/catalogue/results.tt:352
 #, c-format
 msgid "Any phrase"
 msgstr "ఏదైనా పదబంధం"
@@ -13822,7 +13837,7 @@ msgstr "మినహా ఏదైనా స్థితి రద్దు చ�
 msgid "Any vendor"
 msgstr "ఏదైనా విక్రేత"
 
-#: intranet-tmpl/prog/en/modules/catalogue/results.tt:347
+#: intranet-tmpl/prog/en/modules/catalogue/results.tt:350
 #, c-format
 msgid "Any word"
 msgstr "ఏదైనా పదం"
@@ -13924,7 +13939,7 @@ msgstr "ఆర్కాడియా పబ్లిక్ లైబ్రరీ,
 #: intranet-tmpl/prog/en/modules/admin/cash_registers.tt:158
 #: intranet-tmpl/prog/en/modules/admin/credit_types.tt:157
 #: intranet-tmpl/prog/en/modules/admin/debit_types.tt:182
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:648
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:647
 #, c-format
 msgid "Archive"
 msgstr "ఆర్కైవ్"
@@ -13937,7 +13952,7 @@ msgid "Archived"
 msgstr "బధ్రపరిచారు"
 
 #. %1$s:  END 
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:593
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:592
 #, c-format
 msgid "Archived%s "
 msgstr "Archived%s "
@@ -13955,7 +13970,7 @@ msgid "Are you sure you want to cancel adding this quote?"
 msgstr "మీరు ఖచ్చితంగా ఈ కోట్‌ను జోడించడాన్ని రద్దు చేయాలనుకుంటున్నారా?"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/reserve/request.tt:944
+#: intranet-tmpl/prog/en/modules/reserve/request.tt:948
 msgid "Are you sure you want to cancel this hold?"
 msgstr "మీరు ఖచ్చితంగా ఈ పట్టును రద్దు చేయాలనుకుంటున్నారా?"
 
@@ -14109,7 +14124,7 @@ msgid "Are you sure you want to delete the selected search history entry?"
 msgstr "మీరు ఎంచుకున్న నివేదికలను ఖచ్చితంగా తొలగించాలనుకుంటున్నారా?"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:1042
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:1041
 msgid "Are you sure you want to delete these suggestions?"
 msgstr "మీరు ఖచ్చితంగా ఈ సూచనలను తొలగించాలనుకుంటున్నారా?"
 
@@ -14186,7 +14201,7 @@ msgstr "మీరు ఖచ్చితంగా ఈ ఫీల్డ్‌ను
 
 #. For the first occurrence,
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:388
+#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:392
 #: intranet-tmpl/prog/en/modules/acqui/invoice-files.tt:94
 msgid "Are you sure you want to delete this file ?"
 msgstr "మీరు ఖచ్చితంగా ఈ ఫైల్‌ను తొలగించాలనుకుంటున్నారా ?"
@@ -14208,7 +14223,7 @@ msgstr "మీరు ఖచ్చితంగా ఈ చిత్రాన్న
 
 #. For the first occurrence,
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:388
+#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:392
 #: intranet-tmpl/prog/en/modules/acqui/invoices.tt:304
 msgid "Are you sure you want to delete this invoice?"
 msgstr "మీరు ఖచ్చితంగా ఈ ఇన్‌వాయిస్‌ను తొలగించాలనుకుంటున్నారా?"
@@ -14300,8 +14315,8 @@ msgstr "మీరు ఖచ్చితంగా ఈ సభ్యత్వ ఫ�
 
 #. For the first occurrence,
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:1031
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:1042
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:1030
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:1041
 msgid "Are you sure you want to delete this suggestion?"
 msgstr "మీరు ఖచ్చితంగా ఈ సూచనను తొలగించాలనుకుంటున్నారా?"
 
@@ -14703,15 +14718,15 @@ msgstr "ప్రమాణం పేరు"
 #: intranet-tmpl/prog/en/modules/tools/stockrotation.tt:403
 #: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:12
 #: intranet-tmpl/prog/en/modules/catalogue/results.tt:214
-#: intranet-tmpl/prog/en/modules/catalogue/results.tt:354
-#: intranet-tmpl/prog/en/modules/catalogue/results.tt:355
-#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:123
+#: intranet-tmpl/prog/en/modules/catalogue/results.tt:357
+#: intranet-tmpl/prog/en/modules/catalogue/results.tt:358
+#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:133
 #: intranet-tmpl/prog/en/modules/serials/result.tt:16
 #: intranet-tmpl/prog/en/modules/members/readingrec.tt:55
 #: intranet-tmpl/prog/en/modules/members/holdshistory.tt:44
 #: intranet-tmpl/prog/en/modules/members/moremember-print.tt:38
 #: intranet-tmpl/prog/en/modules/members/moremember-print.tt:79
-#: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:108
+#: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:121
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:110
 #: intranet-tmpl/prog/en/modules/circ/branchtransfers.tt:179
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:785
@@ -14810,16 +14825,16 @@ msgstr "రచయిత(s): %s%s%s %s %s; %s %s %s %s%s %s %s;%s %s %s "
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1271
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:76
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:289
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:812
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:811
 #, c-format
 msgid "Author:"
 msgstr "రచయిత:"
 
 #: intranet-tmpl/prog/en/includes/filter-orders.inc:7
-#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:32
-#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:92
+#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:34
+#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:102
 #: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:36
-#: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:93
+#: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:106
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:35
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:136
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:139
@@ -15927,8 +15942,8 @@ msgid ""
 "Because the \"UseTransportCostMatrix\" system preference is currently not "
 "enabled, the transport cost matrix is not being used. "
 msgstr ""
-"ఎందుకంటే \"యూజ్‌ట్రాన్స్‌పోర్ట్ కాస్ట్‌మాట్రిక్స్\" సిస్టమ్ ప్రాధాన్యత "
-"ప్రస్తుతం ప్రారంభించబడలేదు, రవాణా ఖర్చు మాతృక ఉపయోగించబడదు. "
+"ఎందుకంటే \"యూజ్‌ట్రాన్స్‌పోర్ట్ కాస్ట్‌మాట్రిక్స్\" సిస్టమ్ ప్రాధాన్యత ప్రస్తుతం ప్రారంభించబడలేదు, రవాణా ఖర్చు "
+"మాతృక ఉపయోగించబడదు. "
 
 #: intranet-tmpl/prog/en/modules/admin/patron-attr-types.tt:46
 #, c-format
@@ -15936,8 +15951,8 @@ msgid ""
 "Because the 'ExtendedPatronAttributes` system preference is currently not "
 "enabled, extended patron attributes cannot be given to patron records. "
 msgstr ""
-"ఎందుకంటే 'విస్తరించినపోషకగుణాలు` సిస్టమ్ ప్రాధాన్యత ప్రస్తుతం "
-"ప్రారంభించబడలేదు, పోషక రికార్డులకు పొడిగించిన పోషక లక్షణాలను ఇవ్వలేము. "
+"ఎందుకంటే 'విస్తరించినపోషకగుణాలు` సిస్టమ్ ప్రాధాన్యత ప్రస్తుతం ప్రారంభించబడలేదు, పోషక రికార్డులకు "
+"పొడిగించిన పోషక లక్షణాలను ఇవ్వలేము. "
 
 #: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:211
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:346
@@ -16045,7 +16060,7 @@ msgstr "బిబ్లియోగ్రాఫిక్ డేటాను మ�
 
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:62
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:283
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:810
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:809
 #, c-format
 msgid "Bibliographic information"
 msgstr "బిబ్లియోగ్రాఫిక్ సమాచారం"
@@ -16280,7 +16295,7 @@ msgstr "బుక్ డ్రాప్ మోడ్"
 msgid "Book drop mode. "
 msgstr "బుక్ డ్రాప్ మోడ్. "
 
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:914
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:913
 #, c-format
 msgid "Book fund:"
 msgstr "పుస్తక నిధి:"
@@ -16815,7 +16830,7 @@ msgstr "లెక్కించారు %s. నుండి %s కు %s"
 msgid "Calendar"
 msgstr "క్యాలెండర్"
 
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:207
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:189
 #, c-format
 msgid "Calendar information"
 msgstr "క్యాలెండర్ సమాచారం"
@@ -17109,8 +17124,8 @@ msgstr "కింది ఫీల్డ్ నింపబడనందున ఈ
 #: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:195
 #: intranet-tmpl/prog/en/modules/tools/automatic_item_modification_by_age.tt:39
 #: intranet-tmpl/prog/en/modules/tools/batchMod.tt:68
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:124
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:194
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:106
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:176
 #: intranet-tmpl/prog/en/modules/tools/koha-news.tt:111
 #: intranet-tmpl/prog/en/modules/tools/picture-upload.tt:132
 #: intranet-tmpl/prog/en/modules/tools/stage-marc-import.tt:84
@@ -17144,7 +17159,7 @@ msgstr "కింది ఫీల్డ్ నింపబడనందున ఈ
 #: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:326
 #: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:357
 #: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:441
-#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:79
+#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:89
 #: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:242
 #: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:252
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:70
@@ -17178,8 +17193,8 @@ msgstr "కింది ఫీల్డ్ నింపబడనందున ఈ
 #: intranet-tmpl/prog/en/modules/clubs/patron-enroll.tt:32
 #: intranet-tmpl/prog/en/modules/acqui/duplicate_orders.tt:252
 #: intranet-tmpl/prog/en/modules/acqui/transferorder.tt:123
-#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:230
-#: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:80
+#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:234
+#: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:93
 #: intranet-tmpl/prog/en/modules/acqui/basketheader.tt:141
 #: intranet-tmpl/prog/en/modules/acqui/basketheader.tt:143
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:77
@@ -17214,7 +17229,7 @@ msgstr "కింది ఫీల్డ్ నింపబడనందున ఈ
 #: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:148
 #: intranet-tmpl/prog/en/modules/admin/categories.tt:311
 #: intranet-tmpl/prog/en/modules/admin/categories.tt:387
-#: intranet-tmpl/prog/en/modules/admin/oai_set_mappings.tt:113
+#: intranet-tmpl/prog/en/modules/admin/oai_set_mappings.tt:115
 #: intranet-tmpl/prog/en/modules/admin/desks.tt:92
 #: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:231
 #: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:330
@@ -17279,7 +17294,7 @@ msgstr "కింది ఫీల్డ్ నింపబడనందున ఈ
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:383
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:494
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:502
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:714
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:713
 #: intranet-tmpl/prog/en/modules/pos/register.tt:241
 #: intranet-tmpl/prog/en/modules/pos/register.tt:291
 #: intranet-tmpl/prog/en/modules/pos/registers.tt:144
@@ -17497,7 +17512,7 @@ msgid "Cannot be toggled"
 msgstr "టోగుల్ చేయలేము"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/reserve/request.tt:944
+#: intranet-tmpl/prog/en/modules/reserve/request.tt:948
 msgid "Cannot be transferred to pickup library"
 msgstr "పికప్ లైబ్రరీకి బదిలీ చేయలేరు"
 
@@ -17599,7 +17614,7 @@ msgid "Cannot open this record in the basic editor"
 msgstr "ప్రాథమిక ఎడిటర్‌లో ఈ రికార్డ్‌ను తెరవలేరు"
 
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:307
-#: intranet-tmpl/prog/en/modules/reserve/request.tt:944
+#: intranet-tmpl/prog/en/modules/reserve/request.tt:948
 #, c-format
 msgid "Cannot place hold"
 msgstr "హోల్డ్ ఉంచలేరు"
@@ -17652,11 +17667,11 @@ msgid "Caption"
 msgstr "శీర్షిక"
 
 #: intranet-tmpl/prog/en/modules/patron_lists/list.tt:123
-#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:164
+#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:174
 #: intranet-tmpl/prog/en/modules/common/patron_search.tt:77
 #: intranet-tmpl/prog/en/modules/members/member.tt:98
 #: intranet-tmpl/prog/en/modules/members/merge-patrons.tt:61
-#: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:145
+#: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:158
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:171
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:335
 #, c-format
@@ -17753,7 +17768,7 @@ msgstr "కార్డ్ సంఖ్య కంటే ఎక్కువ ఉ�
 msgid "Card number: "
 msgstr "కార్డు సంఖ్య: "
 
-#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:164
+#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:174
 #: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:138
 #: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:193
 #, c-format
@@ -18226,7 +18241,7 @@ msgstr "ఆర్డర్ విక్రేత గమనికను మార
 msgid "Change password"
 msgstr "పాస్‌వర్డ్‌ను మార్చండి"
 
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:660
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:659
 #, c-format
 msgid "Change selected suggestions"
 msgstr "ఎంచుకున్న సూచనలను మార్చండి"
@@ -18382,7 +18397,7 @@ msgstr "చెక్ అవుట్"
 
 #: intranet-tmpl/prog/en/modules/acqui/lateorders.tt:55
 #: intranet-tmpl/prog/en/modules/offline_circ/list.tt:25
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:562
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:561
 #, c-format
 msgid "Check all"
 msgstr "అన్నీ తనిఖీ చేయండి"
@@ -18554,8 +18569,8 @@ msgid ""
 "Check to allow patrons to edit this attribute from their details page in the "
 "OPAC. (Requires above, does not work during "
 msgstr ""
-"ఒపెక్ లోని వారి వివరాల పేజీ నుండి ఈ లక్షణాన్ని సవరించడానికి పోషకులను "
-"అనుమతించడానికి తనిఖీ చేయండి. (పైన అవసరం, సమయంలో పనిచేయదు "
+"ఒపెక్ లోని వారి వివరాల పేజీ నుండి ఈ లక్షణాన్ని సవరించడానికి పోషకులను అనుమతించడానికి తనిఖీ చేయండి. (పైన "
+"అవసరం, సమయంలో పనిచేయదు "
 
 #. INPUT type=checkbox name=disable_input
 #: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:315
@@ -18619,10 +18634,10 @@ msgstr "చెక్-ఇన్ తేదీ నుండి:"
 
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:337
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:339
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:681
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:683
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:847
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:849
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:680
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:682
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:846
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:848
 #, c-format
 msgid "Checked"
 msgstr "తనిఖీ"
@@ -19494,7 +19509,7 @@ msgstr "నిశ్చితమైన"
 #: intranet-tmpl/prog/en/modules/patron_lists/list.tt:109
 #: intranet-tmpl/prog/en/modules/catalogue/results.tt:73
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:214
-#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:61
+#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:71
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:53
 #: intranet-tmpl/prog/en/modules/serials/checkexpiration.tt:66
 #: intranet-tmpl/prog/en/modules/serials/serials-search.tt:42
@@ -19502,7 +19517,7 @@ msgstr "నిశ్చితమైన"
 #: intranet-tmpl/prog/en/modules/members/member.tt:57
 #: intranet-tmpl/prog/en/modules/members/pay.tt:43
 #: intranet-tmpl/prog/en/modules/acqui/duplicate_orders.tt:135
-#: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:62
+#: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:75
 #: intranet-tmpl/prog/en/modules/basket/basket.tt:6
 #: intranet-tmpl/prog/en/modules/circ/article-requests.tt:97
 #: intranet-tmpl/prog/en/modules/circ/article-requests.tt:203
@@ -19565,9 +19580,9 @@ msgstr "రుణంపై క్లియర్"
 msgid "Clear screen"
 msgstr "స్క్రీన్ క్లియర్"
 
-#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:48
+#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:58
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:45
-#: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:52
+#: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:65
 #, c-format
 msgid "Clear search form"
 msgstr "క్లియర్ శోధన రూపం"
@@ -19597,7 +19612,7 @@ msgstr "ఉపయోగించిన ఔథొరితిఎస్ క్ల�
 msgid "Click ID to select/deselect quote"
 msgstr "కోట్ ఎంచుకోవడానికి / ఎంపికను తీసివేయడానికి ID క్లిక్ చేయండి"
 
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:233
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:215
 #, c-format
 msgid "Click Save to finish."
 msgstr "పూర్తి చేయడానికి సేవ్ క్లిక్ చేయండి."
@@ -19721,7 +19736,7 @@ msgid ""
 "quotes."
 msgstr "మొత్తం బ్యాచ్ కోట్‌లను సేవ్ చేయడానికి టూల్‌బార్‌లోని 'కోట్స్ సేవ్ చేయి' బటన్‌ను క్లిక్ చేయండి."
 
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:230
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:212
 #, c-format
 msgid "Click the date to add or edit a holiday."
 msgstr "సెలవుదినాన్ని జోడించడానికి లేదా సవరించడానికి తేదీని క్లిక్ చేయండి."
@@ -19858,7 +19873,7 @@ msgstr "సర్క్యులేషన్ మరియు జరిమాన�
 #: intranet-tmpl/prog/en/modules/members/boraccount.tt:140
 #: intranet-tmpl/prog/en/modules/members/boraccount.tt:206
 #: intranet-tmpl/prog/en/modules/members/boraccount.tt:273
-#: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:167
+#: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:180
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:387
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:769
 #: intranet-tmpl/prog/en/modules/acqui/invoices.tt:86
@@ -19903,7 +19918,7 @@ msgid "Close this basket"
 msgstr "ఈ బాస్కెట్నుమూసివేయండి"
 
 #. A
-#: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:121
+#: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:134
 msgid "Close this menu"
 msgstr "ఈ మెనూని మూసివేయండి"
 
@@ -20146,7 +20161,7 @@ msgstr "సేకరణ శీర్షిక"
 
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:106
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:294
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:816
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:815
 #, c-format
 msgid "Collection title:"
 msgstr "సేకరణ శీర్షిక:"
@@ -20615,16 +20630,16 @@ msgstr "కనెక్షన్ స్థాపించబడింది."
 
 #. For the first occurrence,
 #. %1$s:  errcon.server | html 
-#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:107
+#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:117
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:156
-#: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:211
+#: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:224
 #, c-format
 msgid "Connection failed to %s"
 msgstr "కనెక్షన్ విఫలమైంది %s"
 
 #. For the first occurrence,
 #. %1$s:  errcon.server | html 
-#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:108
+#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:118
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:157
 #, c-format
 msgid "Connection timeout to %s"
@@ -20885,14 +20900,14 @@ msgstr "సంస్థలు మరియు సంస్థలకు సహక
 msgid "Control key is \"Ctrl\""
 msgstr "నియంత్రణ కీ \"Ctrl\""
 
-#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:42
-#: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:41
+#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:49
+#: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:48
 #, c-format
 msgid "Control no.: "
 msgstr "నియంత్రణ సంఖ్య.: "
 
-#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:98
-#: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:99
+#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:108
+#: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:112
 #, c-format
 msgid "Control no: "
 msgstr "నియంత్రణ సంఖ్య: "
@@ -20947,7 +20962,7 @@ msgstr "కాపీలు:"
 #. SCRIPT
 #: intranet-tmpl/prog/en/includes/columns_settings.inc:3
 #: intranet-tmpl/prog/en/includes/str/tinymce_i18n.inc:2
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:220
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:202
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:190
 #: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:199
 #: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:186
@@ -20960,7 +20975,7 @@ msgstr "కాపీ"
 msgid "Copy and replace"
 msgstr "కాపీ మరియు భర్తీ"
 
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:117
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:99
 #, c-format
 msgid "Copy changes to all libraries"
 msgstr "అన్ని లైబ్రరీలకు మార్పులను కాపీ చేయండి"
@@ -20990,7 +21005,7 @@ msgstr "ప్రస్తుత ఉప ఫీల్డ్‌ను కాపీ
 msgid "Copy existing value"
 msgstr "ఇప్పటికే ఉన్న విలువను కాపీ చేయండి"
 
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:213
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:195
 #, c-format
 msgid "Copy holidays to:"
 msgstr "సెలవులను దీనికి కాపీ చేయండి:"
@@ -21031,7 +21046,7 @@ msgstr "అడ్డు వరుసను కాపీ చేయండి"
 msgid "Copy to %s"
 msgstr "కాపీ కు %s"
 
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:188
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:170
 #, c-format
 msgid "Copy to all libraries"
 msgstr "అన్ని లైబ్రరీలకు కాపీ చేయండి"
@@ -21053,7 +21068,7 @@ msgstr "కాపీరైట్ &కాపీ; 2012-2016 "
 
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:82
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:290
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:815
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:814
 #, c-format
 msgid "Copyright date:"
 msgstr "కాపీరైట్ తేదీ:"
@@ -21186,7 +21201,7 @@ msgstr ""
 "జట్లు చదవలేకపోయారు. ఎమ్మెల్ ఫైల్. దయచేసి సరి చూసుకో &lt;docdir&gt; సరిగ్గా నిర్వచించబడింది koha-"
 "conf.xml. "
 
-#: intranet-tmpl/prog/en/modules/catalogue/results.tt:382
+#: intranet-tmpl/prog/en/modules/catalogue/results.tt:385
 #: intranet-tmpl/prog/en/modules/reports/itemtypes.tt:32
 #, c-format
 msgid "Count"
@@ -21325,7 +21340,7 @@ msgid "Courses"
 msgstr "కోర్సులు"
 
 #. IMG
-#: intranet-tmpl/prog/en/modules/catalogue/results.tt:456
+#: intranet-tmpl/prog/en/modules/catalogue/results.tt:459
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:166
 msgid "Cover image"
 msgstr "కవర్ చిత్రం"
@@ -21931,7 +21946,7 @@ msgid "DVD video / Videodisc"
 msgstr "DVD వీడియో / వీడియోడిస్క్"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/reserve/request.tt:944
+#: intranet-tmpl/prog/en/modules/reserve/request.tt:948
 msgid "Daily hold limit reached for patron"
 msgstr "పోషకుడికి రోజువారీ హోల్డ్ పరిమితి చేరుకుంది"
 
@@ -22106,14 +22121,14 @@ msgstr "డేటాబేస్: "
 #: intranet-tmpl/prog/en/includes/patron-article-requests.inc:12
 #: intranet-tmpl/prog/en/includes/ill-availability-table.inc:10
 #: intranet-tmpl/prog/en/modules/tags/review.tt:85
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:251
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:322
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:233
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:304
 #: intranet-tmpl/prog/en/modules/tools/viewlog.tt:229
 #: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:49
 #: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:86
 #: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:129
 #: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:166
-#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:124
+#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:134
 #: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:171
 #: intranet-tmpl/prog/en/modules/members/readingrec.tt:53
 #: intranet-tmpl/prog/en/modules/members/boraccount.tt:47
@@ -22384,7 +22399,7 @@ msgstr "తేదీలు ఖాళీగా ఉండకూడదు"
 msgid "Day"
 msgstr "పగలు"
 
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:273
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:255
 #: intranet-tmpl/prog/en/modules/reports/issues_stats.tt:119
 #: intranet-tmpl/prog/en/modules/reports/acquisitions_stats.tt:107
 #: intranet-tmpl/prog/en/modules/reports/acquisitions_stats.tt:129
@@ -22392,7 +22407,7 @@ msgstr "పగలు"
 msgid "Day of week"
 msgstr "వారం రోజు"
 
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:297
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:279
 #, c-format
 msgid "Day/month"
 msgstr "డే/నెల"
@@ -22452,7 +22467,7 @@ msgstr "ఇండెంట్ తగ్గించండి"
 #: intranet-tmpl/prog/en/modules/onboarding/onboardingstep2.tt:75
 #: intranet-tmpl/prog/en/modules/onboarding/onboardingstep2.tt:79
 #: intranet-tmpl/prog/en/modules/onboarding/onboardingstep2.tt:83
-#: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:46
+#: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:59
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:9
 #: intranet-tmpl/prog/en/modules/acqui/lateorders.tt:193
 #: intranet-tmpl/prog/en/modules/admin/cash_registers.tt:134
@@ -22707,7 +22722,7 @@ msgstr ""
 msgid "Define rules to modify items by age"
 msgstr "వయస్సు ప్రకారం అంశాలను సవరించడానికి నియమాలను నిర్వచించండి"
 
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:43
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:25
 #, c-format
 msgid "Define the holidays for:"
 msgstr "దీని కోసం సెలవులను నిర్వచించండి:"
@@ -22726,7 +22741,7 @@ msgstr "శాఖల మధ్య రవాణా ఖర్చులను న�
 
 #. P
 #: intranet-tmpl/prog/en/modules/acqui/invoice.tt:134
-#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:199
+#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:203
 #, c-format
 msgid "Define values in authorised value category ADJ_REASON to enable"
 msgstr "ప్రారంభించడానికి అధీకృత విలువ వర్గంలో ADJ_REASON లో విలువలను నిర్వచించండి"
@@ -22848,7 +22863,7 @@ msgstr "చర్య ప్రారంభించబడటానికి మ�
 #: intranet-tmpl/prog/en/modules/members/apikeys.tt:74
 #: intranet-tmpl/prog/en/modules/members/housebound.tt:401
 #: intranet-tmpl/prog/en/modules/acqui/invoice.tt:88
-#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:163
+#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:167
 #: intranet-tmpl/prog/en/modules/acqui/basketgroup.tt:334
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:377
 #: intranet-tmpl/prog/en/modules/acqui/invoices.tt:89
@@ -22862,7 +22877,7 @@ msgstr "చర్య ప్రారంభించబడటానికి మ�
 #: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:187
 #: intranet-tmpl/prog/en/modules/admin/categories.tt:541
 #: intranet-tmpl/prog/en/modules/admin/oai_set_mappings.tt:78
-#: intranet-tmpl/prog/en/modules/admin/oai_set_mappings.tt:105
+#: intranet-tmpl/prog/en/modules/admin/oai_set_mappings.tt:107
 #: intranet-tmpl/prog/en/modules/admin/desks.tt:151
 #: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:318
 #: intranet-tmpl/prog/en/modules/admin/currency.tt:201
@@ -22907,8 +22922,8 @@ msgstr "చర్య ప్రారంభించబడటానికి మ�
 #: intranet-tmpl/prog/en/modules/labels/label-manage.tt:88
 #: intranet-tmpl/prog/en/modules/offline_circ/list.tt:83
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:58
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:646
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:750
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:645
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:749
 #: intranet-tmpl/prog/en/modules/intranet-main.tt:29
 #, c-format
 msgid "Delete"
@@ -23057,7 +23072,7 @@ msgstr "ప్రస్తుత సబ్‌ఫీల్డ్‌ను తొ�
 #. %1$s:  desk.desk_name | html 
 #: intranet-tmpl/prog/en/modules/admin/desks.tt:99
 #, c-format
-msgid "Delete desk \"%s?\""
+msgid "Delete desk \"%s\"?"
 msgstr "డెస్క్ తొలగించండి \"%s?\""
 
 #: intranet-tmpl/prog/en/modules/clubs/templates-add-modify.tt:213
@@ -23198,7 +23213,7 @@ msgstr "అడ్డు వరుసను తొలగించండి"
 #: intranet-tmpl/prog/en/modules/tools/koha-news.tt:189
 #: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:111
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:354
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:747
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:746
 #, c-format
 msgid "Delete selected"
 msgstr "ఎంచుకున్నవాటిని రద్దు చేయుట"
@@ -23245,17 +23260,17 @@ msgstr "సభ్యత్వాన్ని తొలగించండి"
 msgid "Delete table"
 msgstr "పట్టికను తొలగించండి"
 
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:108
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:90
 #, c-format
 msgid "Delete the exceptions on a range"
 msgstr "పరిధిలో మినహాయింపులను తొలగించండి"
 
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:104
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:86
 #, c-format
 msgid "Delete the repeated holidays on a range"
 msgstr "పరిధిలో పునరావృతమయ్యే సెలవులను తొలగించండి"
 
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:100
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:82
 #, c-format
 msgid "Delete the single holidays on a range"
 msgstr "ఒకే సెలవులను పరిధిలో తొలగించండి"
@@ -23284,18 +23299,18 @@ msgid "Delete this category"
 msgstr "ఈ వర్గాన్ని తొలగించండి"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:356
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:338
 msgid "Delete this exception."
 msgstr "ఈ మినహాయింపును తొలగించండి."
 
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:97
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:79
 #, c-format
 msgid "Delete this holiday"
 msgstr "ఈ సెలవుదినాన్ని తొలగించండి"
 
 #. For the first occurrence,
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:356
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:338
 msgid "Delete this holiday."
 msgstr "ఈ సెలవుదినాన్ని తొలగించండి."
 
@@ -23329,7 +23344,7 @@ msgstr "విక్రేతను తొలగించండి"
 msgid "Delete?"
 msgstr "తొలగించు?"
 
-#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:277
+#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:281
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:490
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:626
 #, c-format
@@ -23484,10 +23499,10 @@ msgstr "డిపా."
 #: intranet-tmpl/prog/en/includes/str/tinymce_i18n.inc:2
 #: intranet-tmpl/prog/en/includes/clubs-table.inc:6
 #: intranet-tmpl/prog/en/modules/rotating_collections/rotatingCollections.tt:30
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:253
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:275
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:302
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:324
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:235
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:257
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:284
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:306
 #: intranet-tmpl/prog/en/modules/tools/csv-profiles.tt:264
 #: intranet-tmpl/prog/en/modules/tools/stockrotation.tt:65
 #: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:101
@@ -23503,7 +23518,7 @@ msgstr "డిపా."
 #: intranet-tmpl/prog/en/modules/clubs/clubs.tt:58
 #: intranet-tmpl/prog/en/modules/clubs/patron-clubs-tab.tt:10
 #: intranet-tmpl/prog/en/modules/clubs/patron-clubs-tab.tt:43
-#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:355
+#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:359
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:357
 #: intranet-tmpl/prog/en/modules/acqui/invoice-files.tt:37
 #: intranet-tmpl/prog/en/modules/plugins/plugins-home.tt:68
@@ -23574,8 +23589,8 @@ msgstr "ఉపసంహరించబడిన అంశం యొక్క వ
 msgid "Description of charges"
 msgstr "ఛార్జీల వివరణ"
 
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:83
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:158
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:65
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:140
 #: intranet-tmpl/prog/en/modules/tools/stockrotation.tt:145
 #: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:264
 #: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:60
@@ -23783,10 +23798,10 @@ msgstr "డీవీ సంఖ్య:"
 msgid "Dewey/classification"
 msgstr "దేవెయ్/క్లాసిఫికేషన్"
 
-#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:44
-#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:99
-#: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:42
-#: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:100
+#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:52
+#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:109
+#: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:51
+#: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:113
 #: intranet-tmpl/prog/en/modules/admin/sru_modmapping.tt:58
 #, c-format
 msgid "Dewey: "
@@ -24718,7 +24733,7 @@ msgstr "ప్రారంభ హోల్డ్ తేదీ"
 #: intranet-tmpl/prog/en/modules/virtualshelves/tables/shelves_results.tt:45
 #: intranet-tmpl/prog/en/modules/labels/label-manage.tt:87
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:57
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:644
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:643
 #: intranet-tmpl/prog/en/modules/intranet-main.tt:28
 #, c-format
 msgid "Edit"
@@ -24922,7 +24937,7 @@ msgstr "అంశాన్ని సవరించండి"
 #: intranet-tmpl/prog/en/includes/serials-toolbar.inc:38
 #: intranet-tmpl/prog/en/includes/cat-toolbar.inc:39
 #: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:262
-#: intranet-tmpl/prog/en/modules/catalogue/results.tt:507
+#: intranet-tmpl/prog/en/modules/catalogue/results.tt:510
 #: intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:231
 #, c-format
 msgid "Edit items"
@@ -24990,7 +25005,7 @@ msgstr "కోట్-ఆఫ్-ది-డే ఫీచర్ కోసం కో
 #: intranet-tmpl/prog/en/includes/catalogue/itemsearch_item.json.inc:32
 #: intranet-tmpl/prog/en/includes/cat-toolbar.inc:35
 #: intranet-tmpl/prog/en/includes/authorities-toolbar.inc:30
-#: intranet-tmpl/prog/en/modules/catalogue/results.tt:504
+#: intranet-tmpl/prog/en/modules/catalogue/results.tt:507
 #: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:140
 #: intranet-tmpl/prog/en/modules/serials/subscription-add.tt:70
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:104
@@ -25075,8 +25090,8 @@ msgstr "సభ్యత్వాన్ని సవరించండి"
 msgid "Edit tag"
 msgstr "ట్యాగ్‌ను సవరించండి"
 
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:57
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:112
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:39
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:94
 #, c-format
 msgid "Edit this holiday"
 msgstr "ఈ సెలవుదినాన్ని సవరించండి"
@@ -25141,7 +25156,7 @@ msgstr "శోధన ఫలితాన్ని సవరించడం"
 #. For the first occurrence,
 #. SCRIPT
 #: intranet-tmpl/prog/en/includes/cateditor-ui.inc:42
-#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:125
+#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:135
 #: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:172
 #, c-format
 msgid "Edition"
@@ -25170,8 +25185,8 @@ msgid ""
 "Elasticsearch version 5.x is not supported in Koha 20.11 and greater. Please "
 "upgrade your Elasticsearch cluster "
 msgstr ""
-"ఎలాస్టిక్ సెర్చ్ వెర్షన్ 5.x కోహా 20.11 మరియు అంతకంటే ఎక్కువ మద్దతు లేదు. "
-"దయచేసి మీ ఎలాస్టిక్ శోధన క్లస్టర్‌ను అప్‌గ్రేడ్ చేయండి "
+"ఎలాస్టిక్ సెర్చ్ వెర్షన్ 5.x కోహా 20.11 మరియు అంతకంటే ఎక్కువ మద్దతు లేదు. దయచేసి మీ ఎలాస్టిక్ శోధన "
+"క్లస్టర్‌ను అప్‌గ్రేడ్ చేయండి "
 
 #: intranet-tmpl/prog/en/modules/about.tt:53
 #, c-format
@@ -25309,7 +25324,7 @@ msgstr "ఎన్కోడింగ్:"
 msgid "Encumber while invoice open"
 msgstr "ఇన్వాయిస్ తెరిచినప్పుడు చుట్టుముట్టండి"
 
-#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:224
+#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:228
 #, c-format
 msgid "Encumber while invoice open? "
 msgstr "ఇన్వాయిస్ తెరిచినప్పుడు చుట్టుముట్టాలా?"
@@ -25481,7 +25496,7 @@ msgid ""
 msgstr ""
 "శోధన ఫలితాల జాబితాలో డిఫాల్ట్ ఒకటి ఓవర్రైట్ చేసే సారాంశాన్ని నమోదు చేయండి. ఉదాహరణ, వెబ్‌సైట్ ఐటెమ్‌టైప్ కోసం : "
 
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:231
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:213
 #, c-format
 msgid "Enter a title and description for the holiday."
 msgstr "సెలవుదినం కోసం శీర్షిక మరియు వివరణను నమోదు చేయండి."
@@ -25778,7 +25793,7 @@ msgstr "అంశాలను సేవ్ చేయడంలో లోపం"
 msgid "Error while creating PDF file. "
 msgstr "PDF ఫైల్‌ను సృష్టించేటప్పుడు లోపం. "
 
-#: intranet-tmpl/prog/en/modules/catalogue/results.tt:325
+#: intranet-tmpl/prog/en/modules/catalogue/results.tt:328
 #: intranet-tmpl/prog/en/modules/circ/circulation.tt:503
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:111
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:116
@@ -25996,7 +26011,7 @@ msgid "Example: Personal name=200|Entry element=210$a|300|009"
 msgstr "ఉదాహరణ: వ్యక్తిగత పేరు=200|ఎంట్రీ ఎలిమెంట్=210$a|300|009"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/reserve/request.tt:944
+#: intranet-tmpl/prog/en/modules/reserve/request.tt:948
 msgid "Exceeded max holds per record"
 msgstr "మించిపోయిన గరిష్టంగా రికార్డుకు ఉంది"
 
@@ -26006,11 +26021,11 @@ msgid "Excel"
 msgstr "ఎక్సెల్"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:356
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:338
 msgid "Exception: %s"
 msgstr "మినహాయింపు: %s"
 
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:248
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:230
 #, c-format
 msgid "Exceptions"
 msgstr "ఆక్షేపణలు"
@@ -26035,7 +26050,7 @@ msgstr "మీరిన వస్తువుల నివేదికను అ
 msgid "Existing SQL"
 msgstr "ఇప్పటికే ఉన్న SQL"
 
-#: intranet-tmpl/prog/en/modules/reserve/request.tt:804
+#: intranet-tmpl/prog/en/modules/reserve/request.tt:808
 #, c-format
 msgid "Existing holds"
 msgstr "కలిగి ఉన్నది"
@@ -26925,7 +26940,7 @@ msgstr "ఫైల్ పేరు"
 msgid "Files"
 msgstr "ఫైళ్ళు"
 
-#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:349
+#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:353
 #, c-format
 msgid "Files attached to invoice"
 msgstr "ఫైల్‌లు ఇన్‌వాయిస్‌కు జోడించబడ్డాయి"
@@ -27011,7 +27026,7 @@ msgstr "బార్‌కోడ్‌ను ఫిల్టర్ చేయం�
 msgid "Filter by library"
 msgstr "లైబ్రరీ ద్వారా ఫిల్టర్ చేయండి"
 
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:807
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:806
 #, c-format
 msgid "Filter by: "
 msgstr "దీని ద్వారా ఫిల్టర్ చేయండి: "
@@ -27651,7 +27666,7 @@ msgid "Friday"
 msgstr "శుక్రవారం"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:356
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:338
 msgid "Fridays"
 msgstr "శుక్రవారాలు"
 
@@ -27746,8 +27761,8 @@ msgstr "బిబ్లియోసంఖ్య నుండి: "
 msgid "From call number:"
 msgstr "కాల్ నంబర్ నుండి:"
 
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:65
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:142
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:47
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:124
 #, c-format
 msgid "From date:"
 msgstr "తేదీ నుండి:"
@@ -27835,7 +27850,7 @@ msgstr "UNIMARC 7XX $ 4 (ఫ్రెంచ్) లో ఉపయోగించ�
 #: intranet-tmpl/prog/en/modules/acqui/duplicate_orders.tt:274
 #: intranet-tmpl/prog/en/modules/acqui/newordersuggestion.tt:34
 #: intranet-tmpl/prog/en/modules/acqui/invoice.tt:108
-#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:264
+#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:268
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:125
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:236
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:412
@@ -27844,7 +27859,7 @@ msgstr "UNIMARC 7XX $ 4 (ఫ్రెంచ్) లో ఉపయోగించ�
 #: intranet-tmpl/prog/en/modules/acqui/histsearch.tt:52
 #: intranet-tmpl/prog/en/modules/reports/orders_by_budget.tt:37
 #: intranet-tmpl/prog/en/modules/reports/acquisitions_stats.tt:201
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:575
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:574
 #, c-format
 msgid "Fund"
 msgstr "ఫండ్"
@@ -27929,7 +27944,7 @@ msgstr "ఫండ్:"
 
 #: intranet-tmpl/prog/en/includes/filter-orders.inc:80
 #: intranet-tmpl/prog/en/modules/acqui/duplicate_orders.tt:199
-#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:207
+#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:211
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:247
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:333
 #: intranet-tmpl/prog/en/modules/reports/orders_by_budget.tt:86
@@ -27960,14 +27975,14 @@ msgstr "నిధులు"
 msgid "GPL License"
 msgstr "GPL లైసెన్సు"
 
-#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:263
+#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:267
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:411
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:610
 #, c-format
 msgid "GST"
 msgstr "జిఎస్టి"
 
-#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:262
+#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:266
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:410
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:609
 #, c-format
@@ -28077,7 +28092,7 @@ msgstr "క్రొత్త క్లయింట్ ఐడి/కీ జత�
 msgid "Generate a new client id/secret pair"
 msgstr "క్రొత్త క్లయింట్ ఐడి/రహస్య జతను సృష్టించండి"
 
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:87
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:69
 #, c-format
 msgid "Generate an exception for this repeated holiday."
 msgstr "ఈ పునరావృత సెలవుదినం కోసం మినహాయింపును సృష్టించండి."
@@ -28087,7 +28102,7 @@ msgstr "ఈ పునరావృత సెలవుదినం కోసం �
 msgid "Generate discharge"
 msgstr "ఉత్సర్గ ఉత్పత్తి"
 
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:93
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:75
 #, c-format
 msgid "Generate exceptions on a range of dates."
 msgstr "తేదీల పరిధిలో మినహాయింపులను సృష్టించండి."
@@ -28145,16 +28160,16 @@ msgid "Glyphicons Free"
 msgstr "గ్లైఫికాన్లు ఉచితం"
 
 #. INPUT type=submit name=changepage_goto
-#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:216
+#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:226
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:147
-#: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:200
+#: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:213
 #: intranet-tmpl/prog/en/modules/circ/reserveratios.tt:164
 #: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:430
 #: intranet-tmpl/prog/en/modules/reports/dictionary.tt:61
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:802
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:816
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:908
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:936
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:801
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:815
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:907
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:935
 msgid "Go"
 msgstr "వెళ్ళండి"
 
@@ -28189,14 +28204,14 @@ msgstr "అంశం వివరాలకు వెళ్లండి"
 msgid "Go to item search"
 msgstr "అంశం శోధనకు వెళ్లండి"
 
-#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:216
+#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:226
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:147
-#: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:200
+#: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:213
 #, c-format
 msgid "Go to page : "
 msgstr "పేజీకు వెళ్ళు : "
 
-#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:241
+#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:245
 #, c-format
 msgid "Go to receipt page"
 msgstr "రసీదు పేజీకి వెళ్ళండి"
@@ -28760,7 +28775,7 @@ msgstr ""
 msgid "Hint:"
 msgstr "హింట్:"
 
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:227
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:209
 #, c-format
 msgid "Hints"
 msgstr "సూచనలు"
@@ -28979,7 +28994,7 @@ msgstr "పట్టుకొను"
 #. For the first occurrence,
 #. %1$s:  Biblio.HoldsCount( biblio_object_id ) | html 
 #: intranet-tmpl/prog/en/includes/biblio-view-menu.inc:28
-#: intranet-tmpl/prog/en/modules/catalogue/results.tt:483
+#: intranet-tmpl/prog/en/modules/catalogue/results.tt:486
 #, c-format
 msgid "Holds (%s)"
 msgstr "పట్టుకొను (%s)"
@@ -29117,45 +29132,45 @@ msgstr "వేచి ఉంది:: %s"
 msgid "Holds:"
 msgstr "పట్టుకొను:"
 
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:241
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:356
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:223
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:338
 #, c-format
 msgid "Holiday exception"
 msgstr "హాలిడే మినహాయింపు"
 
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:162
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:144
 #, c-format
 msgid "Holiday only on this day"
 msgstr "ఈ రోజు మాత్రమే సెలవు"
 
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:167
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:149
 #, c-format
 msgid "Holiday repeated every same day of the week"
 msgstr "వారంలోని ప్రతి రోజు సెలవుదినం పునరావృతమవుతుంది"
 
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:172
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:154
 #, c-format
 msgid "Holiday repeated yearly on the same date"
 msgstr "సెలవుదినం అదే తేదీన సంవత్సరానికి పునరావృతమవుతుంది"
 
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:239
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:356
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:221
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:338
 #, c-format
 msgid "Holiday repeating weekly"
 msgstr "వారానికి పునరావృతమయ్యే సెలవు"
 
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:240
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:356
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:222
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:338
 #, c-format
 msgid "Holiday repeating yearly"
 msgstr "సంవత్సరానికి పునరావృతమయ్యే సెలవు"
 
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:177
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:159
 #, c-format
 msgid "Holidays on a range"
 msgstr "పరిధిలో సెలవులు"
 
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:182
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:164
 #, c-format
 msgid "Holidays repeated yearly on a range"
 msgstr "సెలవులు ఒక పరిధిలో సంవత్సరానికి పునరావృతమవుతాయి"
@@ -29181,7 +29196,7 @@ msgstr "సెలవులు ఒక పరిధిలో సంవత్సర
 #: intranet-tmpl/prog/en/modules/tools/quotes.tt:14
 #: intranet-tmpl/prog/en/modules/tools/automatic_item_modification_by_age.tt:13
 #: intranet-tmpl/prog/en/modules/tools/batchMod.tt:13
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:32
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:14
 #: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:23
 #: intranet-tmpl/prog/en/modules/tools/viewlog.tt:94
 #: intranet-tmpl/prog/en/modules/tools/quotes-upload.tt:15
@@ -29739,11 +29754,11 @@ msgstr "ఇస్బ్ద్"
 #: intranet-tmpl/prog/en/includes/cateditor-ui.inc:42
 #: intranet-tmpl/prog/en/includes/ill-availability-table.inc:8
 #: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:16
-#: intranet-tmpl/prog/en/modules/catalogue/results.tt:366
-#: intranet-tmpl/prog/en/modules/catalogue/results.tt:367
-#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:126
+#: intranet-tmpl/prog/en/modules/catalogue/results.tt:369
+#: intranet-tmpl/prog/en/modules/catalogue/results.tt:370
+#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:136
 #: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:170
-#: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:109
+#: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:122
 #: intranet-tmpl/prog/en/modules/acqui/lateorders.tt:76
 #: intranet-tmpl/prog/en/modules/basket/basket.tt:82
 #: intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:168
@@ -29779,16 +29794,16 @@ msgstr "ISBN/EAN/ISSN: %s"
 #: intranet-tmpl/prog/en/modules/catalogue/moredetail.tt:41
 #: intranet-tmpl/prog/en/modules/cataloguing/editor.tt:105
 #: intranet-tmpl/prog/en/modules/cataloguing/editor.tt:148
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:813
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:812
 #, c-format
 msgid "ISBN:"
 msgstr "ఐ స్ బి న:"
 
 #: intranet-tmpl/prog/en/includes/filter-orders.inc:8
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:25
-#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:94
+#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:104
 #: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:33
-#: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:95
+#: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:108
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:39
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:173
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:176
@@ -29854,8 +29869,8 @@ msgstr "ISO కోడ్:"
 #: intranet-tmpl/prog/en/includes/cateditor-ui.inc:42
 #: intranet-tmpl/prog/en/includes/ill-availability-table.inc:9
 #: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:17
-#: intranet-tmpl/prog/en/modules/catalogue/results.tt:368
-#: intranet-tmpl/prog/en/modules/catalogue/results.tt:369
+#: intranet-tmpl/prog/en/modules/catalogue/results.tt:371
+#: intranet-tmpl/prog/en/modules/catalogue/results.tt:372
 #: intranet-tmpl/prog/en/modules/serials/checkexpiration.tt:77
 #: intranet-tmpl/prog/en/modules/serials/claims.tt:91
 #: intranet-tmpl/prog/en/modules/serials/result.tt:19
@@ -29880,9 +29895,9 @@ msgid "ISSN:"
 msgstr "ఐఎస్ఎస్ఎన్:"
 
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:28
-#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:95
+#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:105
 #: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:34
-#: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:96
+#: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:109
 #: intranet-tmpl/prog/en/modules/admin/sru_modmapping.tt:50
 #, c-format
 msgid "ISSN: "
@@ -29962,7 +29977,7 @@ msgstr ""
 "తనిఖీ చేస్తే, లక్షణం ప్రత్యేకమైన ఐడెంటిఫైయర్ అవుతుంది &mdash; ఒక పోషక రికార్డుకు విలువ ఇవ్వబడితే, "
 "అదే విలువను వేరే రికార్డుకు ఇవ్వలేము. లక్షణం నిర్వచించిన తర్వాత ఈ సెట్టింగ్ మార్చబడదు."
 
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:119
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:101
 #, c-format
 msgid ""
 "If checked, changes for this holiday will be copied to all libraries. If the "
@@ -30014,7 +30029,7 @@ msgstr ""
 "తనిఖీ చేస్తే, ఈ రకమైన అంశం జారీ చేయబడదు. తనిఖీ చేయకపోతే, ఒక నిర్దిష్ట అంశం కోసం నోట్‌ఫోర్లోన్ సెట్ చేయకపోతే "
 "ఈ రకమైన ప్రతి అంశం జారీ చేయబడుతుంది."
 
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:190
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:172
 #, c-format
 msgid ""
 "If checked, this holiday will be copied to all libraries. If the holiday "
@@ -30228,8 +30243,8 @@ msgid ""
 "If you make any change to the mappings, you must ask your administrator to "
 "run misc/batchRebuildBiblioTables.pl."
 msgstr ""
-"మీరు మ్యాపింగ్స్‌లో ఏదైనా మార్పు చేస్తే, మీరు తప్పక మీ నిర్వాహకుడిని misc/"
-"batchRebuildBiblioTables.pl ను అమలు చేయమని అడగాలి."
+"మీరు మ్యాపింగ్స్‌లో ఏదైనా మార్పు చేస్తే, మీరు తప్పక మీ నిర్వాహకుడిని misc/batchRebuildBiblioTables."
+"pl ను అమలు చేయమని అడగాలి."
 
 #: intranet-tmpl/prog/en/modules/tools/overduerules.tt:25
 #, c-format
@@ -30487,7 +30502,7 @@ msgstr "చిత్రాలు కోసం "
 #: intranet-tmpl/prog/en/includes/mana/mana-report-search-result.inc:98
 #: intranet-tmpl/prog/en/includes/cateditor-ui.inc:42
 #: intranet-tmpl/prog/en/modules/tools/import_borrowers.tt:276
-#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:165
+#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:175
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:97
 #: intranet-tmpl/prog/en/modules/installer/step3.tt:163
 #: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:146
@@ -30674,7 +30689,7 @@ msgstr "వాడుకలో ఉన్నది"
 #. For the first occurrence,
 #. SCRIPT
 #: intranet-tmpl/prog/en/includes/js_includes.inc:40
-#: intranet-tmpl/prog/en/modules/catalogue/results.tt:493
+#: intranet-tmpl/prog/en/modules/catalogue/results.tt:496
 #, c-format
 msgid "In your cart"
 msgstr "మీ బండిలో"
@@ -30702,12 +30717,12 @@ msgid "Include all rows (ignore pagination):"
 msgstr "అన్ని అడ్డు వరుసలను చేర్చండి (ignore pagination):"
 
 #. INPUT type=checkbox name=filter_archived
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:823
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:825
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:822
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:824
 msgid "Include archived suggestions in the search"
 msgstr "శోధనలో ఆర్కైవ్ చేసిన సూచనలను చేర్చండి"
 
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:821
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:820
 #, c-format
 msgid "Include archived:"
 msgstr "ఆర్కైవ్ చేయండి:"
@@ -30768,7 +30783,7 @@ msgstr "ఇండెంట్ పెంచండి"
 msgid "Indefinite"
 msgstr "నిరవధిక"
 
-#: intranet-tmpl/prog/en/modules/catalogue/results.tt:345
+#: intranet-tmpl/prog/en/modules/catalogue/results.tt:348
 #, c-format
 msgid "Indexed in:"
 msgstr "దీనిలో సూచించబడింది:"
@@ -30806,7 +30821,7 @@ msgstr "సమాచారము:"
 #: intranet-tmpl/prog/en/modules/serials/subscription-detail.tt:76
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:223
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:536
-#: intranet-tmpl/prog/en/modules/reserve/request.tt:707
+#: intranet-tmpl/prog/en/modules/reserve/request.tt:711
 #: intranet-tmpl/prog/en/modules/acqui/lateorders.tt:65
 #: intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:105
 #, c-format
@@ -31254,7 +31269,7 @@ msgstr "ఇన్వాయిస్"
 msgid "Invoice detail page"
 msgstr "ఇన్వాయిస్ వివరాలు పేజీ"
 
-#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:244
+#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:248
 #, c-format
 msgid "Invoice details"
 msgstr "ఇన్వాయిస్ వివరాలు"
@@ -31620,7 +31635,7 @@ msgid "Item count"
 msgstr "అంశం సంఖ్య"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/reserve/request.tt:944
+#: intranet-tmpl/prog/en/modules/reserve/request.tt:948
 msgid "Item damaged"
 msgstr "అంశం దెబ్బతింది"
 
@@ -31872,7 +31887,7 @@ msgid "Item sorting"
 msgstr "అంశం సార్టింగ్"
 
 #. SPAN
-#: intranet-tmpl/prog/en/modules/catalogue/results.tt:529
+#: intranet-tmpl/prog/en/modules/catalogue/results.tt:532
 msgid ""
 "Item statuses may be inaccurate. Please view the record details for accurate "
 "item statuses"
@@ -31900,7 +31915,7 @@ msgstr "అంశం ట్యాగ్‌లు ప్రస్తుతం స
 #: intranet-tmpl/prog/en/modules/members/moremember-print.tt:40
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:220
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:523
-#: intranet-tmpl/prog/en/modules/reserve/request.tt:704
+#: intranet-tmpl/prog/en/modules/reserve/request.tt:708
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:161
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:204
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:272
@@ -31931,8 +31946,8 @@ msgstr "అంశం ట్యాగ్‌లు ప్రస్తుతం స
 #: intranet-tmpl/prog/en/modules/reports/issues_avg_stats.tt:133
 #: intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:167
 #: intranet-tmpl/prog/en/modules/labels/label-edit-batch.tt:114
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:787
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:789
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:786
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:788
 #, c-format
 msgid "Item type"
 msgstr "వస్తువు రకము"
@@ -32332,7 +32347,7 @@ msgstr "ఇప్పటికే ఉన్న మేనేజర్‌ను ఉ
 msgid "Keep issue number"
 msgstr "ఇష్యూ నంబర్ ఉంచండి"
 
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:235
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:217
 #, c-format
 msgid "Key"
 msgstr "కీ"
@@ -32361,9 +32376,9 @@ msgstr "కీబోర్డ్ సత్వరమార్గాలు "
 msgid "Keyword"
 msgstr "కీలకపదాలు"
 
-#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:38
+#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:43
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:27
-#: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:39
+#: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:42
 #: intranet-tmpl/prog/en/modules/admin/sru_modmapping_auth.tt:19
 #, c-format
 msgid "Keyword (any): "
@@ -32895,10 +32910,9 @@ msgid ""
 "%sModify tag%s %s%s %sMARC frameworks &rsaquo; Confirm deletion of tag "
 "'%s'%s %sMARC frameworks &rsaquo; Data deleted%s %sMARC frameworks%s"
 msgstr ""
-"కొహ &rsaquo; అడ్మినిస్ట్రేషన్ &rsaquo; %sమార్క్ ఫ్రేమ్‌వర్క్‌లు &rsaquo; "
-"%sట్యాగ్‌ను జోడించండి%sట్యాగ్‌ను సవరించండి%s %s%s %sMARC ఫ్రేమ్‌వర్క్‌లు "
-"&rsaquo; ట్యాగ్ తొలగింపును నిర్ధారించండి '%s'%s %sMARC ఫ్రేమ్‌వర్క్‌లు "
-"&rsaquo; డేటా తొలగించబడింది%s %sMARC ఫ్రేమ్‌వర్క్‌లు%s"
+"కొహ &rsaquo; అడ్మినిస్ట్రేషన్ &rsaquo; %sమార్క్ ఫ్రేమ్‌వర్క్‌లు &rsaquo; %sట్యాగ్‌ను జోడించండి%sట్యాగ్‌ను "
+"సవరించండి%s %s%s %sMARC ఫ్రేమ్‌వర్క్‌లు &rsaquo; ట్యాగ్ తొలగింపును నిర్ధారించండి '%s'%s %sMARC "
+"ఫ్రేమ్‌వర్క్‌లు &rsaquo; డేటా తొలగించబడింది%s %sMARC ఫ్రేమ్‌వర్క్‌లు%s"
 
 #. %1$s:  IF ( op_new ) 
 #. %2$s:  ELSE 
@@ -34847,8 +34861,8 @@ msgid ""
 "Koha &rsaquo; Tools &rsaquo; Rotating collections &rsaquo; Collection %s "
 "&rsaquo; Add or remove items"
 msgstr ""
-"కొహ &rsaquo; టూల్స్ &rsaquo; భ్రమణ సేకరణలను &rsaquo; కలెక్షన్ %s &rsaquo; "
-"అంశాలను జోడించండి లేదా తీసివేయండి"
+"కొహ &rsaquo; టూల్స్ &rsaquo; భ్రమణ సేకరణలను &rsaquo; కలెక్షన్ %s &rsaquo; అంశాలను "
+"జోడించండి లేదా తీసివేయండి"
 
 #: intranet-tmpl/prog/en/modules/rotating_collections/transferCollection.tt:6
 #, c-format
@@ -35170,10 +35184,10 @@ msgstr "కొహాలా"
 msgid "LC call number:"
 msgstr "LC కాల్ నంబర్:"
 
-#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:40
-#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:96
-#: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:40
-#: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:97
+#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:46
+#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:106
+#: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:45
+#: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:110
 #: intranet-tmpl/prog/en/modules/admin/sru_modmapping.tt:30
 #, c-format
 msgid "LC call number: "
@@ -35181,8 +35195,8 @@ msgstr "LC కాల్ నంబర్: "
 
 #: intranet-tmpl/prog/en/columns.def:139
 #: intranet-tmpl/prog/en/includes/cateditor-ui.inc:42
-#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:127
-#: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:110
+#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:137
+#: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:123
 #: intranet-tmpl/prog/en/modules/basket/basket.tt:197
 #, c-format
 msgid "LCCN"
@@ -35417,7 +35431,7 @@ msgstr "చివరి జాబితా తేదీ:"
 msgid "Last location"
 msgstr "చివరి స్థానం"
 
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:572
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:571
 #, c-format
 msgid "Last modification by"
 msgstr "ద్వారా చివరి మార్పు"
@@ -35427,7 +35441,7 @@ msgstr "ద్వారా చివరి మార్పు"
 msgid "Last modification by - on"
 msgstr "చివరి మార్పు - ఆన్"
 
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:573
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:572
 #, c-format
 msgid "Last modification on"
 msgstr "చివరి మార్పు"
@@ -35677,8 +35691,8 @@ msgstr "లైబ్రేరియన్"
 msgid "Librarian identity:"
 msgstr "లైబ్రేరియన్ గుర్తింపు:"
 
-#: intranet-tmpl/prog/en/modules/tools/koha-news.tt:375
 #: intranet-tmpl/prog/en/modules/tools/koha-news.tt:377
+#: intranet-tmpl/prog/en/modules/tools/koha-news.tt:379
 #, c-format
 msgid "Librarian interface"
 msgstr "లైబ్రేరియన్ ఇంటర్ఫేస్"
@@ -35743,7 +35757,7 @@ msgstr "అన్ని గ్రంథాలయాలు: "
 #: intranet-tmpl/prog/en/modules/members/merge-patrons.tt:65
 #: intranet-tmpl/prog/en/modules/clubs/clubs.tt:61
 #: intranet-tmpl/prog/en/modules/acqui/newordersuggestion.tt:33
-#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:255
+#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:259
 #: intranet-tmpl/prog/en/modules/acqui/lateorders.tt:70
 #: intranet-tmpl/prog/en/modules/acqui/newordersubscription.tt:38
 #: intranet-tmpl/prog/en/modules/acqui/acqui-home.tt:94
@@ -35764,9 +35778,9 @@ msgstr "అన్ని గ్రంథాలయాలు: "
 #: intranet-tmpl/prog/en/modules/reports/borrowers_out.tt:79
 #: intranet-tmpl/prog/en/modules/reports/issues_avg_stats.tt:146
 #: intranet-tmpl/prog/en/modules/reports/borrowers_stats.tt:140
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:574
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:782
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:784
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:573
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:781
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:783
 #, c-format
 msgid "Library"
 msgstr "గ్రంధాలయం"
@@ -35924,8 +35938,8 @@ msgid "Library use"
 msgstr "లైబ్రరీ వాడకం"
 
 #: intranet-tmpl/prog/en/includes/subscriptions-search.inc:31
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:61
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:137
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:43
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:119
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:257
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:263
 #: intranet-tmpl/prog/en/modules/tools/stockrotation.tt:196
@@ -35949,7 +35963,7 @@ msgstr "లైబ్రరీ వాడకం"
 #: intranet-tmpl/prog/en/modules/auth.tt:76
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:220
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:444
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:926
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:925
 #, c-format
 msgid "Library:"
 msgstr "గ్రంధాలయం:"
@@ -36293,12 +36307,12 @@ msgstr "ఎక్కించడం"
 #: intranet-tmpl/prog/en/modules/authorities/blinddetail-biblio-search.tt:14
 #: intranet-tmpl/prog/en/modules/patron_lists/lists.tt:103
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:881
-#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:183
+#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:193
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:114
 #: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:217
 #: intranet-tmpl/prog/en/modules/cataloguing/merge.tt:136
 #: intranet-tmpl/prog/en/modules/common/patron_search.tt:106
-#: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:164
+#: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:177
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:384
 #: intranet-tmpl/prog/en/modules/acqui/edifactmsgs.tt:90
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:107
@@ -36439,7 +36453,7 @@ msgstr "లొకేల్: "
 #: intranet-tmpl/prog/en/modules/tags/list.tt:28
 #: intranet-tmpl/prog/en/modules/course_reserves/course-details.tt:83
 #: intranet-tmpl/prog/en/modules/tools/koha-news.tt:119
-#: intranet-tmpl/prog/en/modules/catalogue/results.tt:418
+#: intranet-tmpl/prog/en/modules/catalogue/results.tt:421
 #: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:70
 #: intranet-tmpl/prog/en/modules/serials/serials-search.tt:57
 #: intranet-tmpl/prog/en/modules/serials/subscription-batchedit.tt:37
@@ -36712,8 +36726,8 @@ msgstr "MALMARC"
 #: intranet-tmpl/prog/en/modules/authorities/merge.tt:59
 #: intranet-tmpl/prog/en/modules/authorities/merge.tt:60
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:116
-#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:163
-#: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:144
+#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:173
+#: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:157
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:170
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:334
 #: intranet-tmpl/prog/en/modules/basket/downloadcart.tt:16
@@ -36830,12 +36844,12 @@ msgstr "మార్క్ సంస్థ కోడ్"
 #: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:412
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:167
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:878
-#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:163
+#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:173
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:96
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:111
 #: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:137
 #: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:192
-#: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:161
+#: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:174
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:381
 #, c-format
 msgid "MARC preview"
@@ -37003,7 +37017,7 @@ msgstr "ప్రధాన లైబ్రరీ"
 msgid "Make a payment"
 msgstr "డబ్బులు చెల్లించండి"
 
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:184
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:166
 #, c-format
 msgid ""
 "Make a single holiday on a range repeated yearly. For example, selecting "
@@ -37014,7 +37028,7 @@ msgstr ""
 "10, 2012 ఎంచుకోవడం ఆగస్టు 1 మరియు 10 మధ్య అన్ని రోజులను సెలవుదినం చేస్తుంది మరియు ఇతర "
 "సంవత్సరాల్లో ఆగస్టు 1-10 వరకు ప్రభావితం చేస్తుంది."
 
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:179
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:161
 #, c-format
 msgid ""
 "Make a single holiday on a range. For example, selecting August 1, 2012 and "
@@ -37025,7 +37039,7 @@ msgstr ""
 "ఆగస్టు 1 మరియు 10 మధ్య అన్ని రోజులను సెలవుదినం చేస్తుంది, కానీ ఇతర సంవత్సరాల్లో ఆగస్టు 1-10ని "
 "ప్రభావితం చేయదు."
 
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:164
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:146
 #, c-format
 msgid ""
 "Make a single holiday. For example, selecting August 1, 2012 will make it a "
@@ -37055,7 +37069,7 @@ msgstr "డిఫాల్ట్ చేయండి"
 msgid "Make payment"
 msgstr "చెల్లింపు చేయండి"
 
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:169
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:151
 #, c-format
 msgid ""
 "Make this weekday a holiday, every week. For example, if your library is "
@@ -37393,7 +37407,7 @@ msgid ""
 "Manage indexes, facets, and their mappings to MARC fields and subfields."
 msgstr "మార్క్ ఫీల్డ్‌లు మరియు ఉప ఫీల్డ్‌లకు సూచికలు, కోణాలు మరియు వాటి మ్యాపింగ్‌లను నిర్వహించండి."
 
-#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:242
+#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:246
 #, c-format
 msgid "Manage invoice files"
 msgstr "ఇన్వాయిస్ ఫైళ్ళను నిర్వహించండి"
@@ -37608,9 +37622,9 @@ msgid "Manage vendors "
 msgstr "విక్రేతలను నిర్వహించండి "
 
 #: intranet-tmpl/prog/en/modules/members/purchase-suggestions.tt:41
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:570
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:792
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:794
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:569
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:791
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:793
 #, c-format
 msgid "Managed by"
 msgstr "నిర్వహించేది"
@@ -37623,7 +37637,7 @@ msgstr "నిర్వహించేది - ఆన్"
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:225
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:48
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:185
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:885
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:884
 #, c-format
 msgid "Managed by:"
 msgstr "నిర్వహించేది:"
@@ -37635,7 +37649,7 @@ msgid "Managed in tab: "
 msgstr "ట్యాబ్‌లో నిర్వహించబడుతుంది:"
 
 #: intranet-tmpl/prog/en/modules/members/purchase-suggestions.tt:42
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:571
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:570
 #, c-format
 msgid "Managed on"
 msgstr "నిర్వహించబడింది"
@@ -37656,7 +37670,7 @@ msgid ""
 "Managed staged MARC records, including completing and reversing imports "
 msgstr "దిగుమతులను పూర్తి చేయడం మరియు తిప్పికొట్టడం సహా స్టేజ్డ్ మార్క్ రికార్డులను నిర్వహించింది "
 
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:889
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:888
 #, c-format
 msgid "Management date from:"
 msgstr "నిర్వహణ తేదీ నుండి:"
@@ -37806,7 +37820,7 @@ msgstr "మార్క్ చూడండి మరియు కొనసాగ
 msgid "Mark seen and quit"
 msgstr "మార్క్ చూసి నిష్క్రమించాడు"
 
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:664
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:663
 #, c-format
 msgid "Mark selected as: "
 msgstr "మార్క్ ఇలా ఎంచుకోబడింది: "
@@ -38618,7 +38632,7 @@ msgid "Monday"
 msgstr "సోమవారం"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:356
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:338
 msgid "Mondays"
 msgstr "సోమవారాలు"
 
@@ -38636,7 +38650,7 @@ msgstr "సోమవారాలు"
 msgid "Month"
 msgstr "మాసము"
 
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:299
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:281
 #, c-format
 msgid "Month/day"
 msgstr "నెల/రోజు"
@@ -38922,7 +38936,7 @@ msgstr "NT"
 #: intranet-tmpl/prog/en/modules/clubs/patron-clubs-tab.tt:9
 #: intranet-tmpl/prog/en/modules/clubs/patron-clubs-tab.tt:42
 #: intranet-tmpl/prog/en/modules/acqui/transferorder.tt:105
-#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:353
+#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:357
 #: intranet-tmpl/prog/en/modules/acqui/basketgroup.tt:308
 #: intranet-tmpl/prog/en/modules/acqui/basketgroup.tt:347
 #: intranet-tmpl/prog/en/modules/acqui/booksellers.tt:87
@@ -39751,9 +39765,9 @@ msgid "Next issue publication date:"
 msgstr "తదుపరి సంచిక ప్రచురణ తేదీ:"
 
 #. INPUT type=button name=changepage_next
-#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:214
+#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:224
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:145
-#: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:198
+#: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:211
 msgid "Next page"
 msgstr "తరువాత పేజీ"
 
@@ -39849,8 +39863,7 @@ msgid ""
 "No (If you do not check for items while staging you may not change this "
 "option later) "
 msgstr ""
-"లేదు (స్టేజింగ్‌లో ఉన్నప్పుడు మీరు వస్తువులను తనిఖీ చేయకపోతే మీరు ఈ ఎంపికను "
-"తరువాత మార్చలేరు) "
+"లేదు (స్టేజింగ్‌లో ఉన్నప్పుడు మీరు వస్తువులను తనిఖీ చేయకపోతే మీరు ఈ ఎంపికను తరువాత మార్చలేరు) "
 
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:418
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:426
@@ -40069,8 +40082,8 @@ msgstr "మోడరేట్ చేయడానికి వ్యాఖ్య�
 #. For the first occurrence,
 #. SCRIPT
 #: intranet-tmpl/prog/en/includes/js_includes.inc:62
-#: intranet-tmpl/prog/en/modules/catalogue/results.tt:440
-#: intranet-tmpl/prog/en/modules/catalogue/results.tt:450
+#: intranet-tmpl/prog/en/modules/catalogue/results.tt:443
+#: intranet-tmpl/prog/en/modules/catalogue/results.tt:453
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:160
 #, c-format
 msgid "No cover image available"
@@ -40105,7 +40118,7 @@ msgstr "ఏ ఫైలులు కనబడలేదు."
 
 #: intranet-tmpl/prog/en/modules/acqui/invoice.tt:54
 #: intranet-tmpl/prog/en/modules/acqui/invoice.tt:141
-#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:209
+#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:213
 #: intranet-tmpl/prog/en/modules/acqui/invoices.tt:123
 #: intranet-tmpl/prog/en/modules/acqui/parcels.tt:159
 #, c-format
@@ -40132,7 +40145,7 @@ msgstr "ఈ శోధన ప్రమాణాల కోసం ప్రదర�
 msgid "No group"
 msgstr "సమూహం లేదు"
 
-#: intranet-tmpl/prog/en/modules/catalogue/results.tt:480
+#: intranet-tmpl/prog/en/modules/catalogue/results.tt:483
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:831
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:875
 #: intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:218
@@ -40226,7 +40239,7 @@ msgstr "ఆఫ్‌లైన్ డేటాబేస్‌లో బార్�
 msgid "No item with barcode: %s"
 msgstr "బార్‌కోడ్‌తో అంశం లేదు: %s"
 
-#: intranet-tmpl/prog/en/modules/catalogue/results.tt:650
+#: intranet-tmpl/prog/en/modules/catalogue/results.tt:653
 #, c-format
 msgid "No items"
 msgstr "ఏ అంశాలు లేవు"
@@ -40242,7 +40255,7 @@ msgstr ""
 
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:276
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:320
-#: intranet-tmpl/prog/en/modules/reserve/request.tt:760
+#: intranet-tmpl/prog/en/modules/reserve/request.tt:764
 #, c-format
 msgid "No items are available"
 msgstr "అంశాలు ఏవీ అందుబాటులో లేవు"
@@ -40358,7 +40371,7 @@ msgstr "ఏ ఆర్డర్ నకిలీ చేయబడలేదు. బ�
 msgid "No order selected"
 msgstr "ఆర్డర్ ఎంచుకోబడలేదు"
 
-#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:341
+#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:345
 #, c-format
 msgid "No orders yet"
 msgstr "ఇంకా ఆర్డర్లు లేవు"
@@ -40491,7 +40504,7 @@ msgid "No quotes available. Please use the 'Add quote' button to add a quote."
 msgstr "కోట్స్ అందుబాటులో లేవు. కోట్ జోడించడానికి దయచేసి 'కోట్ జోడించు' బటన్‌ను ఉపయోగించండి."
 
 #: intranet-tmpl/prog/en/modules/acqui/invoice.tt:122
-#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:187
+#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:191
 #, c-format
 msgid "No reason"
 msgstr "కారణం లేదు"
@@ -40551,7 +40564,7 @@ msgstr "ఏ ఫలితాలు కనబడలేదు."
 msgid "No results match your search %sfor "
 msgstr "ఫలితాలు మీ శోధనకు సరిపోలడం లేదు %sకోసం "
 
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:757
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:756
 #, c-format
 msgid "No results."
 msgstr "ఫలితాలు లేవు."
@@ -40786,7 +40799,7 @@ msgstr "నాన్ బ్రేకింగ్ స్పేస్"
 #: intranet-tmpl/prog/en/modules/serials/subscription-add.tt:145
 #: intranet-tmpl/prog/en/modules/serials/subscription-add.tt:163
 #: intranet-tmpl/prog/en/modules/acqui/invoice.tt:134
-#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:198
+#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:202
 #: intranet-tmpl/prog/en/modules/circ/overdue.tt:149
 #: intranet-tmpl/prog/en/modules/circ/transferstoreceive.tt:72
 #: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:255
@@ -40803,8 +40816,8 @@ msgstr "నాన్ బ్రేకింగ్ స్పేస్"
 #: intranet-tmpl/prog/en/modules/reports/acquisitions_stats.tt:128
 #: intranet-tmpl/prog/en/modules/reports/borrowers_out.tt:66
 #: intranet-tmpl/prog/en/modules/reports/borrowers_out.tt:77
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:918
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:920
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:917
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:919
 #, c-format
 msgid "None"
 msgstr "ఏమీ కాదు"
@@ -40815,7 +40828,7 @@ msgid "None defined"
 msgstr "ఏదీ నిర్వచించబడలేదు"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/reserve/request.tt:944
+#: intranet-tmpl/prog/en/modules/reserve/request.tt:948
 msgid "None of these items can normally be put on hold for this patron."
 msgstr "ఈ పోషకుడి కోసం ఈ వస్తువులు ఏవీ సాధారణంగా నిలిపివేయబడవు."
 
@@ -40863,7 +40876,7 @@ msgid "Normal"
 msgstr "సాధారణ"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:356
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:338
 msgid "Normal day"
 msgstr "సాధారణ రోజు"
 
@@ -41013,7 +41026,7 @@ msgid "Not for loan: "
 msgstr "రుణం కోసం కాదు: "
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/reserve/request.tt:944
+#: intranet-tmpl/prog/en/modules/reserve/request.tt:948
 msgid "Not holdable"
 msgstr "పట్టుకోలేనిది"
 
@@ -41138,7 +41151,7 @@ msgstr "గమనిక:"
 #: intranet-tmpl/prog/en/modules/members/maninvoice.tt:59
 #: intranet-tmpl/prog/en/modules/members/mancredit.tt:55
 #: intranet-tmpl/prog/en/modules/members/paycollect.tt:274
-#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:203
+#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:207
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:798
 #: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:78
 #, c-format
@@ -41202,8 +41215,8 @@ msgstr "గమనిక: ఈ క్రింది రెండు ఫీల్�
 #: intranet-tmpl/prog/en/includes/patron-article-requests.inc:15
 #: intranet-tmpl/prog/en/includes/checkouts-table.inc:99
 #: intranet-tmpl/prog/en/includes/patron-return-claims.inc:7
-#: intranet-tmpl/prog/en/modules/catalogue/results.tt:364
-#: intranet-tmpl/prog/en/modules/catalogue/results.tt:365
+#: intranet-tmpl/prog/en/modules/catalogue/results.tt:367
+#: intranet-tmpl/prog/en/modules/catalogue/results.tt:368
 #: intranet-tmpl/prog/en/modules/serials/serials-edit.tt:120
 #: intranet-tmpl/prog/en/modules/serials/serials-search.tt:55
 #: intranet-tmpl/prog/en/modules/serials/serials-collection.tt:77
@@ -41290,13 +41303,13 @@ msgstr "గమనికలు: %s"
 msgid "Notes: %s%s "
 msgstr "గమనికలు: %s%s "
 
-#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:220
+#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:230
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:162
 #, c-format
 msgid "Nothing found."
 msgstr "ఏదీ కనుగొనబడలేదు."
 
-#: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:217
+#: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:230
 #, c-format
 msgid "Nothing found. "
 msgstr "ఏదీ కనుగొనబడలేదు. "
@@ -41821,7 +41834,7 @@ msgstr "ఒపెక్ సమస్య నివేదికలు పెండ
 msgid "OPAC tables"
 msgstr "ఒపాక్ పట్టికలు"
 
-#: intranet-tmpl/prog/en/modules/catalogue/results.tt:518
+#: intranet-tmpl/prog/en/modules/catalogue/results.tt:521
 #: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:107
 #, c-format
 msgid "OPAC view"
@@ -42148,7 +42161,7 @@ msgid "Only patrons from the item's home library may put this book on hold."
 msgstr "అంశం యొక్క హోమ్ లైబ్రరీ నుండి పోషకులు మాత్రమే ఈ పుస్తకాన్ని నిలిపివేయవచ్చు."
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/reserve/request.tt:944
+#: intranet-tmpl/prog/en/modules/reserve/request.tt:948
 msgid "Only pickup locations within the same hold group are allowed"
 msgstr "ఒకే హోల్డ్ సమూహంలోని పికప్ స్థానాలు మాత్రమే అనుమతించబడతాయి"
 
@@ -42432,10 +42445,10 @@ msgstr "ఆర్డర్ మొత్తం (%s) అందుబాటుల�
 #: intranet-tmpl/prog/en/modules/acqui/acqui-home.tt:96
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:349
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:351
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:693
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:695
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:859
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:861
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:692
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:694
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:858
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:860
 #, c-format
 msgid "Ordered"
 msgstr "ఆదేశించారు"
@@ -42548,7 +42561,7 @@ msgstr "ఆర్గనైజషన్ #:"
 msgid "Organization name: "
 msgstr "సంస్థ పేరు: "
 
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:774
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:773
 #, c-format
 msgid "Organize by: "
 msgstr "Organize by: "
@@ -42611,7 +42624,7 @@ msgstr "ఇతర డేటా"
 msgid "Other holdings (%s)"
 msgstr "ఇతర హోల్డింగ్స్ (%s)"
 
-#: intranet-tmpl/prog/en/modules/catalogue/results.tt:643
+#: intranet-tmpl/prog/en/modules/catalogue/results.tt:646
 #, c-format
 msgid "Other holdings:"
 msgstr "ఇతర హోల్డింగ్స్:"
@@ -42646,7 +42659,7 @@ msgstr "ఇతర ఫోన్: "
 
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:68
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:374
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:709
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:708
 #, c-format
 msgid "Others..."
 msgstr "ఇతరులు..."
@@ -43176,7 +43189,7 @@ msgid "Patron activity"
 msgstr "పోషక కార్యాచరణ"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/reserve/request.tt:944
+#: intranet-tmpl/prog/en/modules/reserve/request.tt:948
 msgid "Patron already has hold for this item"
 msgstr "ఈ అంశం కోసం పోషకుడికి ఇప్పటికే పట్టు ఉంది"
 
@@ -43473,7 +43486,7 @@ msgstr "పోషకుడికి మార్పులు పెండిం�
 
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:259
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:298
-#: intranet-tmpl/prog/en/modules/reserve/request.tt:743
+#: intranet-tmpl/prog/en/modules/reserve/request.tt:747
 #, c-format
 msgid "Patron has previously checked out this title"
 msgstr "పోషకుడు గతంలో ఈ శీర్షికను తనిఖీ చేశాడు"
@@ -43531,7 +43544,7 @@ msgid "Patron is currently unrestricted."
 msgstr "పోషకుడు ప్రస్తుతం అనియంత్రిత."
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/reserve/request.tt:944
+#: intranet-tmpl/prog/en/modules/reserve/request.tt:948
 msgid "Patron is from different library"
 msgstr "పోషకుడు వేర్వేరు లైబ్రరీకి చెందినవాడు"
 
@@ -44128,10 +44141,10 @@ msgstr "పోషకులకు చెల్లింపు క్రెడి�
 #: intranet-tmpl/prog/en/modules/tags/review.tt:165
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:325
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:327
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:669
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:671
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:835
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:837
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:668
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:670
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:834
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:836
 #, c-format
 msgid "Pending"
 msgstr "పెండింగ్"
@@ -44469,10 +44482,10 @@ msgstr "వ్యాసం అభ్యర్థన ఉంచండి %s కో
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:485
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:487
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:489
-#: intranet-tmpl/prog/en/modules/reserve/request.tt:780
-#: intranet-tmpl/prog/en/modules/reserve/request.tt:782
-#: intranet-tmpl/prog/en/modules/reserve/request.tt:785
-#: intranet-tmpl/prog/en/modules/reserve/request.tt:787
+#: intranet-tmpl/prog/en/modules/reserve/request.tt:784
+#: intranet-tmpl/prog/en/modules/reserve/request.tt:786
+#: intranet-tmpl/prog/en/modules/reserve/request.tt:789
+#: intranet-tmpl/prog/en/modules/reserve/request.tt:791
 #: intranet-tmpl/prog/en/modules/basket/basket.tt:15
 #: intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:152
 #, c-format
@@ -44487,7 +44500,7 @@ msgstr "పట్టుకొను స్థలము "
 #. For the first occurrence,
 #. %1$s:  holdforclub_name | html 
 #: intranet-tmpl/prog/en/modules/catalogue/results.tt:145
-#: intranet-tmpl/prog/en/modules/catalogue/results.tt:485
+#: intranet-tmpl/prog/en/modules/catalogue/results.tt:488
 #, c-format
 msgid "Place hold for %s"
 msgstr "పట్టు ఉంచండి %s"
@@ -44498,19 +44511,19 @@ msgstr "పట్టు ఉంచండి %s"
 #. %3$s:  holdfor_cardnumber | html 
 #: intranet-tmpl/prog/en/includes/cat-toolbar.inc:129
 #: intranet-tmpl/prog/en/modules/catalogue/results.tt:140
-#: intranet-tmpl/prog/en/modules/catalogue/results.tt:484
+#: intranet-tmpl/prog/en/modules/catalogue/results.tt:487
 #: intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:222
 #, c-format
 msgid "Place hold for %s %s (%s)"
 msgstr "పట్టు ఉంచండి %s %s (%s)"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/reserve/request.tt:944
+#: intranet-tmpl/prog/en/modules/reserve/request.tt:948
 msgid "Place hold on this item?"
 msgstr "ఈ అంశంపై పట్టు ఉందా?"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/reserve/request.tt:944
+#: intranet-tmpl/prog/en/modules/reserve/request.tt:948
 msgid "Place hold?"
 msgstr "పట్టు స్థలము?"
 
@@ -45100,7 +45113,7 @@ msgid "Please select a date range to display transactions for: "
 msgstr "లావాదేవీలను ప్రదర్శించడానికి దయచేసి తేదీ పరిధిని ఎంచుకోండి: "
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:1042
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:1041
 msgid "Please select a manager to assign to the selected suggestions"
 msgstr "దయచేసి ఎంచుకున్న సూచనలకు కేటాయించడానికి నిర్వాహకుడిని ఎంచుకోండి"
 
@@ -45191,7 +45204,7 @@ msgid "Please select at least one record to process"
 msgstr "ప్రాసెస్ చేయడానికి కనీసం ఒక రికార్డ్ అయినా ఎంచుకోండి"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:1042
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:1041
 msgid "Please select at least one suggestion"
 msgstr "దయచేసి కనీసం ఒక సూచనను ఎంచుకోండి"
 
@@ -45517,27 +45530,27 @@ msgstr "మునుపటి"
 #. SCRIPT
 #: intranet-tmpl/prog/en/includes/str/tinymce_i18n.inc:2
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:458
-#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:180
+#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:190
 #: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:214
 #: intranet-tmpl/prog/en/modules/cataloguing/merge.tt:133
-#: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:114
+#: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:127
 #, c-format
 msgid "Preview"
 msgstr "ప్రత్యేక ప్రదర్శన"
 
-#: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:140
+#: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:153
 #, c-format
 msgid "Preview "
 msgstr "ముందస్తు వీక్షణ "
 
 #. A
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:199
-#: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:121
+#: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:134
 #, c-format
 msgid "Preview MARC"
 msgstr "ప్రివ్యూ మార్క్"
 
-#: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:121
+#: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:134
 #, c-format
 msgid "Preview card"
 msgstr "కార్డ్ ప్రివ్యూ"
@@ -45586,9 +45599,9 @@ msgid "Previous checkouts"
 msgstr "మునుపటి చెక్‌అవుట్‌లు"
 
 #. INPUT type=button name=changepage_prev
-#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:210
+#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:220
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:141
-#: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:194
+#: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:207
 msgid "Previous page"
 msgstr "ముందు పేజి"
 
@@ -45856,7 +45869,7 @@ msgstr "ప్రింటర్ ప్రొఫైల్స్"
 #: intranet-tmpl/prog/en/includes/holds_table.inc:5
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:810
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:222
-#: intranet-tmpl/prog/en/modules/reserve/request.tt:706
+#: intranet-tmpl/prog/en/modules/reserve/request.tt:710
 #: intranet-tmpl/prog/en/modules/circ/circulation.tt:932
 #, c-format
 msgid "Priority"
@@ -46160,16 +46173,16 @@ msgstr "ప్రచురణ సంవత్సరం"
 
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:243
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:505
-#: intranet-tmpl/prog/en/modules/reserve/request.tt:727
+#: intranet-tmpl/prog/en/modules/reserve/request.tt:731
 #: intranet-tmpl/prog/en/modules/acqui/invoices.tt:277
 #, c-format
 msgid "Publication year:"
 msgstr "ప్రచురణ సంవత్సరం:"
 
-#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:34
-#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:93
+#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:37
+#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:103
 #: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:37
-#: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:94
+#: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:107
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:164
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:167
 #, c-format
@@ -46255,8 +46268,8 @@ msgstr "ప్రచురించబడింది (టెక్స్ట్)
 #: intranet-tmpl/prog/en/includes/search_indexes.inc:161
 #: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:13
 #: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:240
-#: intranet-tmpl/prog/en/modules/catalogue/results.tt:362
-#: intranet-tmpl/prog/en/modules/catalogue/results.tt:363
+#: intranet-tmpl/prog/en/modules/catalogue/results.tt:365
+#: intranet-tmpl/prog/en/modules/catalogue/results.tt:366
 #: intranet-tmpl/prog/en/modules/serials/result.tt:17
 #: intranet-tmpl/prog/en/modules/basket/basket.tt:110
 #: intranet-tmpl/prog/en/modules/reports/catalogue_stats.tt:112
@@ -46284,7 +46297,7 @@ msgstr "ప్రచురణకర్త సంఖ్య:"
 #: intranet-tmpl/prog/en/modules/acqui/invoices.tt:273
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:94
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:292
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:814
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:813
 #, c-format
 msgid "Publisher:"
 msgstr "ప్రచురణ:"
@@ -46345,7 +46358,7 @@ msgstr "సలహాలను కొనండి"
 msgid "Purple"
 msgstr "ఫుర్ప్లే"
 
-#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:259
+#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:263
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:407
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:606
 #, c-format
@@ -46560,14 +46573,13 @@ msgstr "రేటు"
 msgid "Rate: "
 msgstr "రేటు: "
 
-#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:100
+#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:110
 #, c-format
 msgid "Raw (any): "
 msgstr "ముడి (ఏదైనా): "
 
 #: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:244
 #: intranet-tmpl/prog/en/modules/acqui/invoice.tt:106
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:364
 #, c-format
 msgid "Reason"
 msgstr "కారణం"
@@ -46585,12 +46597,13 @@ msgstr "సూచనకు కారణం: "
 
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:55
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:165
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:364
 #, c-format
 msgid "Reason:"
 msgstr "కారణం:"
 
-#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:185
-#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:197
+#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:189
+#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:201
 #, c-format
 msgid "Reason: "
 msgstr "కారణం: "
@@ -46968,10 +46981,10 @@ msgstr "తిరస్కరించు"
 #: intranet-tmpl/prog/en/modules/tags/review.tt:162
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:343
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:345
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:687
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:689
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:853
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:855
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:686
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:688
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:852
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:854
 #, c-format
 msgid "Rejected"
 msgstr "తిరస్కరించబడెను"
@@ -47552,7 +47565,7 @@ msgid "Replacement cost: "
 msgstr "తిరిగినియామక ఖర్చు: "
 
 #: intranet-tmpl/prog/en/columns.def:73
-#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:258
+#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:262
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:121
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:234
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:406
@@ -47734,7 +47747,7 @@ msgid "Request ID"
 msgstr "ID ని అభ్యర్థించండి"
 
 #: intranet-tmpl/prog/en/includes/cat-toolbar.inc:139
-#: intranet-tmpl/prog/en/modules/catalogue/results.tt:500
+#: intranet-tmpl/prog/en/modules/catalogue/results.tt:503
 #, c-format
 msgid "Request article"
 msgstr "వ్యాసం అభ్యర్థించండి"
@@ -48235,8 +48248,8 @@ msgstr "ఫలితం"
 #: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:88
 #: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:131
 #: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:168
-#: intranet-tmpl/prog/en/modules/catalogue/results.tt:417
-#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:88
+#: intranet-tmpl/prog/en/modules/catalogue/results.tt:420
+#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:98
 #: intranet-tmpl/prog/en/modules/cataloguing/editor.tt:210
 #: intranet-tmpl/prog/en/modules/members/merge-patrons.tt:97
 #, c-format
@@ -48892,7 +48905,7 @@ msgid "Saturday"
 msgstr "శనివారం"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:356
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:338
 msgid "Saturdays"
 msgstr "శనివారాలు"
 
@@ -48904,8 +48917,8 @@ msgstr "శనివారాలు"
 #: intranet-tmpl/prog/en/modules/course_reserves/add_items-step2.tt:186
 #: intranet-tmpl/prog/en/modules/tools/scheduler.tt:60
 #: intranet-tmpl/prog/en/modules/tools/automatic_item_modification_by_age.tt:36
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:123
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:193
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:105
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:175
 #: intranet-tmpl/prog/en/modules/tools/modborrowers.tt:312
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:222
 #: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:343
@@ -48956,7 +48969,7 @@ msgstr "శనివారాలు"
 #: intranet-tmpl/prog/en/modules/admin/sru_modmapping.tt:70
 #: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:148
 #: intranet-tmpl/prog/en/modules/admin/categories.tt:310
-#: intranet-tmpl/prog/en/modules/admin/oai_set_mappings.tt:113
+#: intranet-tmpl/prog/en/modules/admin/oai_set_mappings.tt:115
 #: intranet-tmpl/prog/en/modules/admin/systempreferences.tt:124
 #: intranet-tmpl/prog/en/modules/admin/systempreferences.tt:362
 #: intranet-tmpl/prog/en/modules/admin/sru_modmapping_auth.tt:67
@@ -49221,7 +49234,7 @@ msgstr "పునరుద్ధరించడానికి బార్‌�
 msgid "Scan a patron barcode to start. "
 msgstr "ప్రారంభించడానికి పోషక బార్‌కోడ్‌ను స్కాన్ చేయండి. "
 
-#: intranet-tmpl/prog/en/modules/catalogue/results.tt:331
+#: intranet-tmpl/prog/en/modules/catalogue/results.tt:334
 #, c-format
 msgid "Scan index:"
 msgstr "స్కాన్ సూచిక:"
@@ -49296,7 +49309,7 @@ msgstr "తెర"
 #: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:153
 #: intranet-tmpl/prog/en/modules/catalogue/advsearch.tt:49
 #: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:78
-#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:79
+#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:89
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:70
 #: intranet-tmpl/prog/en/modules/cataloguing/editor.tt:97
 #: intranet-tmpl/prog/en/modules/cataloguing/editor.tt:143
@@ -49312,7 +49325,7 @@ msgstr "తెర"
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:118
 #: intranet-tmpl/prog/en/modules/acqui/duplicate_orders.tt:61
 #: intranet-tmpl/prog/en/modules/acqui/transferorder.tt:34
-#: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:80
+#: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:93
 #: intranet-tmpl/prog/en/modules/acqui/invoices.tt:290
 #: intranet-tmpl/prog/en/modules/acqui/histsearch.tt:164
 #: intranet-tmpl/prog/en/modules/acqui/acqui-home.tt:45
@@ -49547,7 +49560,7 @@ msgstr "శోధన నిధులు:"
 msgid "Search history"
 msgstr "శోధన చరిత్ర"
 
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:229
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:211
 #, c-format
 msgid "Search in the calendar the day you want to set as holiday."
 msgstr "మీరు సెలవుదినం కావాలనుకునే రోజు క్యాలెండర్‌లో శోధించండి."
@@ -49665,7 +49678,7 @@ msgstr "పోషకులు లేదా క్లబ్‌లను శోధ
 msgid "Search reports by keyword: "
 msgstr "కీవర్డ్ ద్వారా నివేదికలను శోధించండి: "
 
-#: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:89
+#: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:102
 #: intranet-tmpl/prog/en/modules/acqui/histsearch.tt:33
 #: intranet-tmpl/prog/en/modules/plugins/plugins-home.tt:63
 #: intranet-tmpl/prog/en/modules/labels/result.tt:32
@@ -49730,9 +49743,9 @@ msgstr "శోధన సూచనలు"
 msgid "Search system preferences"
 msgstr "సిస్టమ్ ప్రిఫరెన్సెస్ శోధించండి"
 
-#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:57
+#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:67
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:51
-#: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:60
+#: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:73
 #, c-format
 msgid "Search targets"
 msgstr "లక్ష్యాలను శోధించండి"
@@ -50036,7 +50049,7 @@ msgstr ""
 msgid "Select CSV profile:"
 msgstr "CSV ప్రొఫైల్ ఎంచుకోండి:"
 
-#: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:44
+#: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:57
 #, c-format
 msgid "Select MARC framework:"
 msgstr "మార్క్ ఫ్రేమ్‌వర్క్‌ను ఎంచుకోండి:"
@@ -50191,7 +50204,7 @@ msgstr "సమయాన్ని ఎంచుకోండి"
 #: intranet-tmpl/prog/en/modules/patron_lists/list.tt:108
 #: intranet-tmpl/prog/en/modules/catalogue/results.tt:71
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:213
-#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:60
+#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:70
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:53
 #: intranet-tmpl/prog/en/modules/serials/checkexpiration.tt:65
 #: intranet-tmpl/prog/en/modules/serials/serials-search.tt:40
@@ -50201,7 +50214,7 @@ msgstr "సమయాన్ని ఎంచుకోండి"
 #: intranet-tmpl/prog/en/modules/members/member.tt:55
 #: intranet-tmpl/prog/en/modules/members/pay.tt:43
 #: intranet-tmpl/prog/en/modules/acqui/duplicate_orders.tt:134
-#: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:62
+#: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:75
 #: intranet-tmpl/prog/en/modules/basket/basket.tt:6
 #: intranet-tmpl/prog/en/modules/circ/article-requests.tt:97
 #: intranet-tmpl/prog/en/modules/circ/article-requests.tt:203
@@ -50274,7 +50287,7 @@ msgid "Select local databases"
 msgstr "స్థానిక డేటాబేస్‌లను ఎంచుకోండి"
 
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:430
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:736
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:735
 #, c-format
 msgid "Select manager"
 msgstr "నిర్వాహకుడిని ఎంచుకోండి"
@@ -50748,8 +50761,8 @@ msgid "Serials tables"
 msgstr "సీరియల్స్ పట్టికలు"
 
 #: intranet-tmpl/prog/en/includes/facets.inc:21
-#: intranet-tmpl/prog/en/modules/catalogue/results.tt:360
-#: intranet-tmpl/prog/en/modules/catalogue/results.tt:361
+#: intranet-tmpl/prog/en/modules/catalogue/results.tt:363
+#: intranet-tmpl/prog/en/modules/catalogue/results.tt:364
 #, c-format
 msgid "Series"
 msgstr "సిరీస్"
@@ -50770,9 +50783,9 @@ msgstr "సిరీస్ శీర్షిక"
 msgid "Series: "
 msgstr "సిరీస్: "
 
-#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:121
+#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:131
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:79
-#: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:106
+#: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:119
 #, c-format
 msgid "Server"
 msgstr "సర్వర్"
@@ -51291,7 +51304,7 @@ msgstr "అన్ని క్రెడిట్ రకాలను చూపి
 msgid "Show all debit types"
 msgstr "అన్ని డెబిట్ రకాలను చూపించు"
 
-#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:248
+#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:252
 #, c-format
 msgid "Show all details "
 msgstr "అన్ని వివరాలను చూపించు "
@@ -51305,7 +51318,7 @@ msgstr "అన్ని అంశాలను చూపించు"
 #. For the first occurrence,
 #. %1$s:  hiddencount | html 
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:500
-#: intranet-tmpl/prog/en/modules/reserve/request.tt:691
+#: intranet-tmpl/prog/en/modules/reserve/request.tt:695
 #, c-format
 msgid "Show all items (%s hidden)"
 msgstr "అన్ని అంశాలను చూపించు (%s దాగి)"
@@ -51509,7 +51522,7 @@ msgstr "అందుబాటులో ఉన్న వస్తువులన�
 
 #. %1$s:  current_page | html 
 #. %2$s:  total_pages | html 
-#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:212
+#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:222
 #, c-format
 msgid "Showing page %s of %s"
 msgstr "పేజీని చూపుతోంది %s ఆఫ్ %s"
@@ -51537,7 +51550,7 @@ msgid "Since"
 msgstr "నుండి"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:356
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:338
 msgid "Single holiday: %s"
 msgstr "ఒకే సెలవు: %s"
 
@@ -51578,8 +51591,8 @@ msgstr "రుణంపై అంశాలను దాటవేయి: "
 msgid "Slash separated text (.csv)"
 msgstr "వేరు చేసిన వచనాన్ని స్లాష్ చేయండి (.csv)"
 
-#: intranet-tmpl/prog/en/modules/tools/koha-news.tt:380
 #: intranet-tmpl/prog/en/modules/tools/koha-news.tt:382
+#: intranet-tmpl/prog/en/modules/tools/koha-news.tt:384
 #, c-format
 msgid "Slip"
 msgstr "స్లిప్"
@@ -51905,7 +51918,7 @@ msgstr "తిరిగి ప్రారంభించాల్సిన త�
 msgid "Specify due date %s: "
 msgstr "గడువు తేదీని పేర్కొనండి %s: "
 
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:232
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:214
 #, c-format
 msgid "Specify how the holiday should repeat."
 msgstr "సెలవు ఎలా పునరావృతం కావాలో పేర్కొనండి."
@@ -52149,9 +52162,9 @@ msgstr "దశలను ఉపయోగించి-ను తిరిగి �
 msgid "Standard"
 msgstr "ప్రామాణికం"
 
-#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:46
-#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:101
-#: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:43
+#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:55
+#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:111
+#: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:54
 #: intranet-tmpl/prog/en/modules/admin/sru_modmapping.tt:62
 #, c-format
 msgid "Standard ID: "
@@ -52371,9 +52384,9 @@ msgstr "గణాంకాల విజార్డ్స్"
 #: intranet-tmpl/prog/en/modules/circ/circulation.tt:935
 #: intranet-tmpl/prog/en/modules/circ/request-article.tt:236
 #: intranet-tmpl/prog/en/modules/circ/checkout-notes.tt:72
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:576
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:777
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:779
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:575
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:776
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:778
 #, c-format
 msgid "Status"
 msgstr "స్థితి"
@@ -52398,7 +52411,7 @@ msgstr "స్థితి మార్చబడింది"
 #: intranet-tmpl/prog/en/modules/acqui/invoices.tt:130
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:134
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:320
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:829
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:828
 #, c-format
 msgid "Status:"
 msgstr "స్థాయి:"
@@ -52513,9 +52526,9 @@ msgstr "స్టీఫెన్ హెడ్జెస్ (ప్రారంభ
 
 #. For the first occurrence,
 #. %1$s:  numberpending | html 
-#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:235
+#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:245
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:168
-#: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:224
+#: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:237
 #, c-format
 msgid "Still %s servers to search"
 msgstr "ఇప్పటికీ %s శోధించడానికి సర్వర్లు"
@@ -52673,19 +52686,19 @@ msgstr "సుబగ్రూప్:"
 
 #: intranet-tmpl/prog/en/includes/search_indexes.inc:69
 #: intranet-tmpl/prog/en/includes/search_indexes.inc:71
-#: intranet-tmpl/prog/en/modules/catalogue/results.tt:356
-#: intranet-tmpl/prog/en/modules/catalogue/results.tt:357
+#: intranet-tmpl/prog/en/modules/catalogue/results.tt:359
+#: intranet-tmpl/prog/en/modules/catalogue/results.tt:360
 #: intranet-tmpl/prog/en/modules/labels/search.tt:45
 #: intranet-tmpl/prog/en/modules/labels/search.tt:46
 #, c-format
 msgid "Subject"
 msgstr "పాఠ్యాంశము"
 
-#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:36
-#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:97
+#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:40
+#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:107
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:41
-#: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:38
-#: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:98
+#: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:39
+#: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:111
 #: intranet-tmpl/prog/en/modules/admin/sru_modmapping_auth.tt:47
 #, c-format
 msgid "Subject heading: "
@@ -52696,8 +52709,8 @@ msgstr "విషయం శీర్షిక: "
 msgid "Subject line:"
 msgstr "ముఖ్య ఉద్దేశ్యం:"
 
-#: intranet-tmpl/prog/en/modules/catalogue/results.tt:358
-#: intranet-tmpl/prog/en/modules/catalogue/results.tt:359
+#: intranet-tmpl/prog/en/modules/catalogue/results.tt:361
+#: intranet-tmpl/prog/en/modules/catalogue/results.tt:362
 #, c-format
 msgid "Subject phrase"
 msgstr "విషయం పదబంధం"
@@ -52794,7 +52807,7 @@ msgstr "సబ్జెక్టు:"
 #: intranet-tmpl/prog/en/modules/tools/csv-profiles.tt:227
 #: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:317
 #: intranet-tmpl/prog/en/modules/patron_lists/list.tt:88
-#: intranet-tmpl/prog/en/modules/catalogue/results.tt:372
+#: intranet-tmpl/prog/en/modules/catalogue/results.tt:375
 #: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:236
 #: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:440
 #: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:708
@@ -52848,9 +52861,9 @@ msgstr "సబ్జెక్టు:"
 #: intranet-tmpl/prog/en/modules/reports/itemtypes.tt:66
 #: intranet-tmpl/prog/en/modules/reports/issues_avg_stats.tt:220
 #: intranet-tmpl/prog/en/modules/reports/borrowers_stats.tt:284
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:720
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:729
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:741
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:719
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:728
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:740
 #, c-format
 msgid "Submit"
 msgstr "విషయం"
@@ -53117,7 +53130,7 @@ msgid "Successfully saved configuration"
 msgstr "కాన్ఫిగరేషన్ విజయవంతంగా సేవ్ చేయబడింది"
 
 #: intranet-tmpl/prog/en/modules/acqui/newordersuggestion.tt:31
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:568
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:567
 #, c-format
 msgid "Suggested by"
 msgstr "ద్వారా సూచించబడింది"
@@ -53127,7 +53140,7 @@ msgstr "ద్వారా సూచించబడింది"
 msgid "Suggested by - on"
 msgstr "సూచించబడింది - ఆన్"
 
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:874
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:873
 #, c-format
 msgid "Suggested by:"
 msgstr "సూచించినది:"
@@ -53150,13 +53163,13 @@ msgstr "సూచించినది: "
 msgid "Suggested by: %s%s, %s %s ("
 msgstr "సూచించబడింది: %s%s, %s %s ("
 
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:878
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:877
 #, c-format
 msgid "Suggested date from:"
 msgstr "దీని నుండి సూచించిన తేదీ:"
 
 #: intranet-tmpl/prog/en/modules/members/purchase-suggestions.tt:43
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:569
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:568
 #, c-format
 msgid "Suggested on"
 msgstr "సూచించబడింది"
@@ -53170,7 +53183,7 @@ msgstr "సిగ్గెస్టిల్"
 #: intranet-tmpl/prog/en/modules/acqui/newordersuggestion.tt:30
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:48
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:242
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:567
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:566
 #, c-format
 msgid "Suggestion"
 msgstr "సుగ్గెస్తిఒన్"
@@ -53185,7 +53198,7 @@ msgstr "సూచన తగ్గింది"
 msgid "Suggestion details"
 msgstr "సూచన వివరాలు"
 
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:818
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:817
 #, c-format
 msgid "Suggestion information"
 msgstr "సూచన సమాచారం"
@@ -53241,7 +53254,7 @@ msgstr "మొత్తము"
 #: intranet-tmpl/prog/en/modules/acqui/duplicate_orders.tt:146
 #: intranet-tmpl/prog/en/modules/acqui/duplicate_orders.tt:267
 #: intranet-tmpl/prog/en/modules/acqui/transferorder.tt:70
-#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:254
+#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:258
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:119
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:232
 #: intranet-tmpl/prog/en/modules/acqui/histsearch.tt:45
@@ -53289,7 +53302,7 @@ msgid "Sunday"
 msgstr "ఆదివారం"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:356
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:338
 msgid "Sundays"
 msgstr "ఆదివారాలు"
 
@@ -53902,7 +53915,7 @@ msgstr "అప్‌లోడ్‌ల కోసం తాత్కాలిక 
 msgid "Term"
 msgstr "నిబంధన"
 
-#: intranet-tmpl/prog/en/modules/catalogue/results.tt:381
+#: intranet-tmpl/prog/en/modules/catalogue/results.tt:384
 #, c-format
 msgid "Term/Phrase"
 msgstr "నిబంధన/పద సమూహము"
@@ -54834,8 +54847,8 @@ msgid ""
 "The order line you are trying to cancel was created from a partial receipt "
 "of another order line which has been deleted. Cancellation is not possible. "
 msgstr ""
-"మీరు రద్దు చేయడానికి ప్రయత్నిస్తున్న ఆర్డర్ లైన్ తొలగించబడిన మరొక ఆర్డర్ లైన్"
-" యొక్క పాక్షిక రసీదు నుండి సృష్టించబడింది. రద్దు చేయడం సాధ్యం కాదు"
+"మీరు రద్దు చేయడానికి ప్రయత్నిస్తున్న ఆర్డర్ లైన్ తొలగించబడిన మరొక ఆర్డర్ లైన్ యొక్క పాక్షిక రసీదు నుండి "
+"సృష్టించబడింది. రద్దు చేయడం సాధ్యం కాదు"
 
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:70
 #, c-format
@@ -54844,9 +54857,8 @@ msgid ""
 "of another order line which is already received. Try to cancel this one "
 "first and retry. "
 msgstr ""
-"మీరు రద్దు చేయడానికి ప్రయత్నిస్తున్న ఆర్డర్ లైన్ ఇప్పటికే అందుకున్న మరొక "
-"ఆర్డర్ లైన్ యొక్క పాక్షిక రసీదు నుండి సృష్టించబడింది. మొదట దీన్ని రద్దు "
-"చేయడానికి ప్రయత్నించండి మరియు మళ్లీ ప్రయత్నించండి. "
+"మీరు రద్దు చేయడానికి ప్రయత్నిస్తున్న ఆర్డర్ లైన్ ఇప్పటికే అందుకున్న మరొక ఆర్డర్ లైన్ యొక్క పాక్షిక రసీదు "
+"నుండి సృష్టించబడింది. మొదట దీన్ని రద్దు చేయడానికి ప్రయత్నించండి మరియు మళ్లీ ప్రయత్నించండి. "
 
 #: intranet-tmpl/prog/en/modules/acqui/duplicate_orders.tt:196
 #, c-format
@@ -55988,12 +56000,12 @@ msgid "This item must be returned to %s."
 msgstr "ఈ అంశం తప్పక తిరిగి ఇవ్వాలి %s."
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/reserve/request.tt:944
+#: intranet-tmpl/prog/en/modules/reserve/request.tt:948
 msgid "This item normally cannot be put on hold except for patrons from %s."
 msgstr "ఈ అంశాన్ని సాధారణంగా పోషకులు తప్ప నిలిపివేయలేరు %s."
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/reserve/request.tt:944
+#: intranet-tmpl/prog/en/modules/reserve/request.tt:948
 msgid "This item normally cannot be put on hold."
 msgstr "ఈ అంశం సాధారణంగా నిలిపివేయబడదు."
 
@@ -56054,9 +56066,7 @@ msgstr "ఈ పోషకుడు ప్రతి లైబ్రరీ సర�
 msgid ""
 "This patron cannot be deleted while set as AnonymousPatron in the system "
 "preferences."
-msgstr ""
-"సిస్టమ్ ప్రాధాన్యతలలో అనామక ప్యాట్రాన్‌గా సెట్ చేయబడినప్పుడు ఈ పోషకుడిని "
-"తొలగించలేరు."
+msgstr "సిస్టమ్ ప్రాధాన్యతలలో అనామక ప్యాట్రాన్‌గా సెట్ చేయబడినప్పుడు ఈ పోషకుడిని తొలగించలేరు."
 
 #: intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:281
 #, c-format
@@ -56285,7 +56295,7 @@ msgstr "ఇది తొలగిస్తుంది %sఅన్నీ%sఎం
 msgid "This will delete the Mana KB token from Koha. Do you want to continue?"
 msgstr "ఇది కోహా నుండి మన కెబి టోకెన్‌ను తొలగిస్తుంది. మీరు కొనసాగించాలనుకుంటున్నారా?"
 
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:110
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:92
 #, c-format
 msgid ""
 "This will delete the exceptions inside a given range. Be careful about your "
@@ -56294,7 +56304,7 @@ msgstr ""
 "ఇది ఇచ్చిన పరిధిలోని మినహాయింపులను తొలగిస్తుంది. మీ స్కోప్ పరిధి గురించి జాగ్రత్తగా ఉండండి; అది భారీగా ఉంటే "
 "మీరు కోహాను నెమ్మది చేయవచ్చు."
 
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:106
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:88
 #, c-format
 msgid ""
 "This will delete the repeated holidays rules only. The repeatable holidays "
@@ -56303,7 +56313,7 @@ msgstr ""
 "ఇది పునరావృతమయ్యే సెలవుల నియమాలను మాత్రమే తొలగిస్తుంది. పునరావృతమయ్యే సెలవులు తొలగించబడతాయి కాని "
 "మినహాయింపులు కాదు."
 
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:102
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:84
 #, c-format
 msgid ""
 "This will delete the single holidays rules only. The repeatable holidays and "
@@ -56311,7 +56321,7 @@ msgid ""
 msgstr ""
 "ఇది ఒకే సెలవుల నియమాలను మాత్రమే తొలగిస్తుంది. పునరావృతమయ్యే సెలవులు మరియు మినహాయింపులు తొలగించబడవు."
 
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:99
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:81
 #, c-format
 msgid ""
 "This will delete this holiday rule. If it is a repeatable holiday, this "
@@ -56331,7 +56341,7 @@ msgstr ""
 "ఇది బ్రౌజర్‌లో నిల్వ చేసిన మాక్రోలను తిరిగి పొందుతుంది, వాటిని డేటాబేస్లో సేవ్ చేస్తుంది మరియు బ్రౌజర్ నుండి వాటిని "
 "తొలగిస్తుంది. ప్రక్రియ?"
 
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:114
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:96
 #, c-format
 msgid ""
 "This will save changes to the holiday's title and description. If the "
@@ -56341,7 +56351,7 @@ msgstr ""
 "ఇది సెలవుదినం యొక్క శీర్షిక మరియు వివరణలో మార్పులను సేవ్ చేస్తుంది. పునరావృతమయ్యే సెలవుదినం యొక్క "
 "సమాచారం సవరించబడితే, ఇది సెలవుదినం పునరావృతమయ్యే అన్ని తేదీలను ప్రభావితం చేస్తుంది."
 
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:174
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:156
 #, c-format
 msgid ""
 "This will take this day and month as a reference to make it a holiday. "
@@ -56378,7 +56388,7 @@ msgid "Thursday"
 msgstr "గురువారం"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:356
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:338
 msgid "Thursdays"
 msgstr "గురువారాలు"
 
@@ -56458,10 +56468,10 @@ msgstr "TinyMCE WYSIWYG ఎడిటర్ v5.0.16 "
 #: intranet-tmpl/prog/en/modules/rotating_collections/addItems.tt:100
 #: intranet-tmpl/prog/en/modules/rotating_collections/rotatingCollections.tt:29
 #: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:142
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:252
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:274
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:301
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:323
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:234
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:256
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:283
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:305
 #: intranet-tmpl/prog/en/modules/tools/koha-news.tt:124
 #: intranet-tmpl/prog/en/modules/tools/inventory.tt:184
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:188
@@ -56473,9 +56483,9 @@ msgstr "TinyMCE WYSIWYG ఎడిటర్ v5.0.16 "
 #: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:11
 #: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:240
 #: intranet-tmpl/prog/en/modules/catalogue/results.tt:267
-#: intranet-tmpl/prog/en/modules/catalogue/results.tt:350
-#: intranet-tmpl/prog/en/modules/catalogue/results.tt:351
-#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:122
+#: intranet-tmpl/prog/en/modules/catalogue/results.tt:353
+#: intranet-tmpl/prog/en/modules/catalogue/results.tt:354
+#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:132
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/cn_browser.tt:42
 #: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:69
 #: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:169
@@ -56491,8 +56501,8 @@ msgstr "TinyMCE WYSIWYG ఎడిటర్ v5.0.16 "
 #: intranet-tmpl/prog/en/modules/members/moremember-print.tt:37
 #: intranet-tmpl/prog/en/modules/members/moremember-print.tt:78
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:218
-#: intranet-tmpl/prog/en/modules/reserve/request.tt:702
-#: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:107
+#: intranet-tmpl/prog/en/modules/reserve/request.tt:706
+#: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:120
 #: intranet-tmpl/prog/en/modules/acqui/spent.tt:30
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:126
 #: intranet-tmpl/prog/en/modules/acqui/newordersubscription.tt:35
@@ -56569,8 +56579,8 @@ msgstr "శీర్షిక (ఏదైనా): "
 msgid "Title (uniform): "
 msgstr "శీర్షిక (ఏకరీతి): "
 
-#: intranet-tmpl/prog/en/modules/catalogue/results.tt:352
-#: intranet-tmpl/prog/en/modules/catalogue/results.tt:353
+#: intranet-tmpl/prog/en/modules/catalogue/results.tt:355
+#: intranet-tmpl/prog/en/modules/catalogue/results.tt:356
 #: intranet-tmpl/prog/en/modules/labels/search.tt:53
 #: intranet-tmpl/prog/en/modules/labels/search.tt:54
 #, c-format
@@ -56593,7 +56603,7 @@ msgstr "శీర్షిక పదబంధం"
 #: intranet-tmpl/prog/en/modules/circ/request-article.tt:95
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:66
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:285
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:811
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:810
 #, c-format
 msgid "Title:"
 msgstr "శీర్షిక:"
@@ -56601,13 +56611,13 @@ msgstr "శీర్షిక:"
 #: intranet-tmpl/prog/en/includes/filter-orders.inc:6
 #: intranet-tmpl/prog/en/includes/acquisitions-search.inc:14
 #: intranet-tmpl/prog/en/modules/rotating_collections/editCollections.tt:108
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:80
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:157
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:62
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:139
 #: intranet-tmpl/prog/en/modules/tools/koha-news.tt:81
-#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:30
-#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:91
+#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:31
+#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:101
 #: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:35
-#: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:92
+#: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:105
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:34
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:129
 #: intranet-tmpl/prog/en/modules/admin/sru_modmapping.tt:22
@@ -56717,8 +56727,8 @@ msgstr "మరొక పోషకుడిని సృష్టించడా�
 msgid "To create circulation rule, go to: "
 msgstr "సర్క్యులేషన్ నియమాన్ని సృష్టించడానికి, దీనికి వెళ్లండి: "
 
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:77
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:154
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:59
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:136
 #, c-format
 msgid "To date: "
 msgstr "తేదీ వరకు: "
@@ -56819,9 +56829,9 @@ msgstr "చిత్రాన్ని నవీకరించడానిక�
 #: intranet-tmpl/prog/en/modules/circ/overdue.tt:133
 #: intranet-tmpl/prog/en/modules/reports/cat_issues_top.tt:74
 #: intranet-tmpl/prog/en/modules/labels/label-edit-range.tt:32
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:882
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:893
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:904
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:881
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:892
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:903
 #, c-format
 msgid "To:"
 msgstr "కు:"
@@ -56883,7 +56893,7 @@ msgid "Too many checked out. %s checked out, only %s are allowed."
 msgstr "చాలా మంది తనిఖీ చేశారు. %s తనిఖీ చేయబడింది, మాత్రమే %s అనుమతించబడతాయి."
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/reserve/request.tt:944
+#: intranet-tmpl/prog/en/modules/reserve/request.tt:948
 msgid "Too many holds"
 msgstr "చాలా ఎక్కువ హోల్డ్స్"
 
@@ -56975,7 +56985,7 @@ msgstr "టూల్ ప్లగిన్స్"
 #: intranet-tmpl/prog/en/modules/tools/quotes.tt:14
 #: intranet-tmpl/prog/en/modules/tools/automatic_item_modification_by_age.tt:14
 #: intranet-tmpl/prog/en/modules/tools/batchMod.tt:14
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:32
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:14
 #: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:23
 #: intranet-tmpl/prog/en/modules/tools/viewlog.tt:94
 #: intranet-tmpl/prog/en/modules/tools/quotes-upload.tt:15
@@ -57093,14 +57103,14 @@ msgstr "మొత్తం "
 
 #. For the first occurrence,
 #. %1$s:  currency.symbol | html 
-#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:315
+#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:319
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:451
 #, c-format
 msgid "Total (%s)"
 msgstr "మొత్తం (%s)"
 
 #. %1$s:  tf.tax_rate * 100 | html 
-#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:302
+#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:306
 #, c-format
 msgid "Total (GST %s %%)"
 msgstr "మొత్తం (GST%s %%)"
@@ -57118,7 +57128,7 @@ msgid "Total (GST %s)"
 msgstr "మొత్తం (GST%s)"
 
 #. %1$s:  currency.symbol | html 
-#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:327
+#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:331
 #, c-format
 msgid "Total + adjustments + shipment cost (%s)"
 msgstr "మొత్తం + సర్దుబాట్లు + రవాణా ఖర్చు (%s)"
@@ -57313,7 +57323,7 @@ msgstr "మొత్తం పన్ను మినహాయింపు."
 
 #. For the first occurrence,
 #. %1$s:  currency.symbol | html 
-#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:260
+#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:264
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:408
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:607
 #, c-format
@@ -57327,7 +57337,7 @@ msgstr "మొత్తం పన్ను ఇంక్."
 
 #. For the first occurrence,
 #. %1$s:  currency.symbol | html 
-#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:261
+#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:265
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:409
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:608
 #, c-format
@@ -57584,10 +57594,10 @@ msgid "Try again with a different barcode"
 msgstr "వేరే బార్‌కోడ్‌తో మళ్లీ ప్రయత్నించండి"
 
 #. INPUT type=submit
-#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:227
+#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:237
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:150
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:163
-#: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:217
+#: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:230
 #, c-format
 msgid "Try another search"
 msgstr "మరొక శోధనను ప్రయత్నించండి"
@@ -57599,10 +57609,10 @@ msgstr "మరొక శోధనను ప్రయత్నించండి"
 #: intranet-tmpl/prog/en/modules/reports/issues_stats.tt:128
 #, c-format
 msgid "Tuesday"
-msgstr "గురువారం"
+msgstr "మంగళవారం"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:356
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:338
 msgid "Tuesdays"
 msgstr "మంగళవారాలు"
 
@@ -57626,7 +57636,7 @@ msgstr "టర్కోయీస్"
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1258
 #: intranet-tmpl/prog/en/modules/members/notices.tt:36
 #: intranet-tmpl/prog/en/modules/members/accountline-details.tt:122
-#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:354
+#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:358
 #: intranet-tmpl/prog/en/modules/acqui/invoice-files.tt:36
 #: intranet-tmpl/prog/en/modules/acqui/edifactmsgs.tt:35
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:110
@@ -57780,7 +57790,7 @@ msgstr "చిత్రాన్ని డేటాబేస్లో సేవ�
 msgid "Unapprove"
 msgstr "ఆమోదించబడలేదు"
 
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:650
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:649
 #, c-format
 msgid "Unarchive"
 msgstr "బయటపెట్టు"
@@ -57824,7 +57834,7 @@ msgstr "మారకుండా"
 
 #: intranet-tmpl/prog/en/modules/acqui/lateorders.tt:55
 #: intranet-tmpl/prog/en/modules/offline_circ/list.tt:26
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:562
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:561
 #, c-format
 msgid "Uncheck all"
 msgstr "అన్నీ ఎంపిక చేయవద్దు"
@@ -57904,13 +57914,13 @@ msgstr "యూనిఫాం రిసోర్స్ ఐడెంటిఫై�
 msgid "Uninstall"
 msgstr "అన్ఇన్స్టాల్"
 
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:238
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:356
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:220
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:338
 #, c-format
 msgid "Unique holiday"
 msgstr "ప్రత్యేక సెలవు"
 
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:318
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:300
 #, c-format
 msgid "Unique holidays"
 msgstr "ప్రత్యేక సెలవులు"
@@ -58155,7 +58165,7 @@ msgid "Update action"
 msgstr "నవీకరణ చర్య"
 
 #. INPUT type=submit
-#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:236
+#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:240
 msgid "Update adjustments"
 msgstr "సర్దుబాట్లను నవీకరించండి"
 
@@ -58181,16 +58191,16 @@ msgid "Update existing or add new"
 msgstr "ఇప్పటికే ఉన్నదాన్ని నవీకరించండి లేదా క్రొత్తదాన్ని జోడించండి"
 
 #. INPUT type=submit name=submit
-#: intranet-tmpl/prog/en/modules/reserve/request.tt:916
+#: intranet-tmpl/prog/en/modules/reserve/request.tt:920
 msgid "Update hold(s)"
 msgstr "నవీకరణ పట్టు(s)"
 
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:725
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:724
 #, c-format
 msgid "Update item types with: "
 msgstr "దీనితో ఐటెమ్ రకాలను నవీకరించండి: "
 
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:735
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:734
 #, c-format
 msgid "Update manager"
 msgstr "నవీకరణ నిర్వాహకుడు"
@@ -58477,7 +58487,7 @@ msgid "Upload transactions"
 msgstr "లావాదేవీలను అప్‌లోడ్ చేయండి"
 
 #: intranet-tmpl/prog/en/modules/members/files.tt:41
-#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:356
+#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:360
 #: intranet-tmpl/prog/en/modules/acqui/invoice-files.tt:38
 #, c-format
 msgid "Uploaded"
@@ -59266,6 +59276,11 @@ msgstr "అన్ని ప్లగిన్‌లను వీక్షిం�
 msgid "View analytics"
 msgstr "విశ్లేషణలను చూడండి"
 
+#: intranet-tmpl/prog/en/modules/catalogue/results.tt:319
+#, c-format
+msgid "View basket"
+msgstr "బుట్ట చూడండి"
+
 #. SCRIPT
 #: intranet-tmpl/prog/en/includes/ill-list-table-strings.inc:2
 msgid "View biblio details"
@@ -59860,7 +59875,7 @@ msgid "Wednesday"
 msgstr "బుధవారం"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:356
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:338
 msgid "Wednesdays"
 msgstr "బుధవారాలు"
 
@@ -59873,13 +59888,13 @@ msgstr "బుధవారాలు"
 msgid "Week"
 msgstr "వారం"
 
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:269
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:251
 #, c-format
 msgid "Weekly - Repeatable holidays"
 msgstr "వీక్లీ - పునరావృతమయ్యే సెలవులు"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:356
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:338
 msgid "Weekly holiday: %s"
 msgstr "వారపు సెలవు: %s"
 
@@ -60057,7 +60072,7 @@ msgstr "పదాలు: _({ 0 }"
 msgid "Words: _({0}"
 msgstr "పదాలు: _({0}"
 
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:237
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:219
 #, c-format
 msgid "Working day"
 msgstr "పని దినం"
@@ -60120,7 +60135,7 @@ msgstr "రాయండి"
 msgid "Writeoff amount: "
 msgstr "మొత్తాన్ని వ్రాయండి: "
 
-#: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:121
+#: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:134
 #, c-format
 msgid "X "
 msgstr "X "
@@ -60172,13 +60187,13 @@ msgstr "సంవత్సరము"
 msgid "Year: "
 msgstr "సంవత్సరము: "
 
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:292
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:274
 #, c-format
 msgid "Yearly - Repeatable holidays"
 msgstr "వార్షిక - పునరావృత సెలవులు"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:356
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:338
 msgid "Yearly holiday: %s"
 msgstr "వార్షిక సెలవుదినం: %s"
 
@@ -60633,7 +60648,7 @@ msgstr ""
 msgid "You can help the Koha community by sharing your statistics with us. "
 msgstr "మీ గణాంకాలను మాతో పంచుకోవడం ద్వారా మీరు కోహా సంఘానికి సహాయం చేయవచ్చు. "
 
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:89
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:71
 #, c-format
 msgid ""
 "You can make an exception for this holiday rule. This means that you will be "
@@ -60643,7 +60658,7 @@ msgstr ""
 "ఈ సెలవు నియమం కోసం మీరు మినహాయింపు ఇవ్వవచ్చు. పునరావృతమయ్యే సెలవుదినం కోసం ఒక రోజు మినహాయింపు "
 "కానుందని మీరు చెప్పగలుగుతారని దీని అర్థం."
 
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:95
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:77
 #, c-format
 msgid "You can make an exception on a range of dates repeated yearly."
 msgstr "మీరు సంవత్సరానికి పునరావృతమయ్యే తేదీల పరిధిలో మినహాయింపు ఇవ్వవచ్చు."
@@ -60700,12 +60715,12 @@ msgstr "మీరు ఈ సభ్యత్వాన్ని సవరించ
 msgid "You cannot select an authorised value category and a MARC field"
 msgstr "మీరు అధీకృత విలువ వర్గాన్ని మరియు మార్క్ ఫీల్డ్‌ను ఎంచుకోలేరు"
 
-#: intranet-tmpl/prog/en/modules/catalogue/results.tt:319
+#: intranet-tmpl/prog/en/modules/catalogue/results.tt:322
 #, c-format
 msgid "You did not specify any search criteria."
 msgstr "మీరు శోధన ప్రమాణాలను పేర్కొనలేదు."
 
-#: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:205
+#: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:218
 #, c-format
 msgid "You didn't select any external target."
 msgstr "మీరు బాహ్య లక్ష్యాన్ని ఎంచుకోలేదు."
@@ -61059,8 +61074,8 @@ msgstr "మీరు శోధించారు "
 
 #. For the first occurrence,
 #. %1$s:  IF ( title ) 
-#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:89
-#: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:91
+#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:99
+#: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:104
 #: intranet-tmpl/prog/en/modules/admin/preferences.tt:37
 #, c-format
 msgid "You searched for: %s"
@@ -61445,7 +61460,7 @@ msgstr "[ క్రొత్త జాబితా ]"
 msgid "[% discount | format ("
 msgstr "[% డిస్కౌంట్ | ఫార్మాట్ ("
 
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:332
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:314
 #, c-format
 msgid "[%% HOLIDAYS_LOO.DESCRIPTION.replace('\\\\\\r\\\\\\n', '"
 msgstr "[%% HOLIDAYS_LOO.DESCRIPTION.replace('\\\\\\r\\\\\\n', '"
@@ -61622,7 +61637,7 @@ msgstr "[విస్మరించవచ్చు] "
 msgid "[Previous page]"
 msgstr "[ముందు పేజి]"
 
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:807
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:806
 #, c-format
 msgid "[clear]"
 msgstr "[స్పష్టమైన]"
@@ -61646,7 +61661,7 @@ msgstr "[స్పష్టమైన]"
 #. %17$s:  END 
 #. %18$s:  other_items_loo.count | html 
 #. %19$s:  IF item_level_itypes && other_items_loo.description 
-#: intranet-tmpl/prog/en/modules/catalogue/results.tt:611
+#: intranet-tmpl/prog/en/modules/catalogue/results.tt:614
 #, c-format
 msgid ""
 "] %s %s (%s) %s %s (%s) %s %s (%s) %s %s (In transit) %s %s (On hold) %s %s "
@@ -61662,7 +61677,7 @@ msgstr ""
 #. %5$s:  END 
 #. %6$s:  onloan_items_loo.due_date | $KohaDates 
 #. %7$s:  IF item_level_itypes && onloan_items_loo.description 
-#: intranet-tmpl/prog/en/modules/catalogue/results.tt:583
+#: intranet-tmpl/prog/en/modules/catalogue/results.tt:586
 #, c-format
 msgid "] %s (%s%s, %s long overdue%s) date due: %s %s "
 msgstr "] %s (%s%s, %s దీర్ఘకాలం%s) తేదీ గడువు: %s %s "
@@ -61682,11 +61697,6 @@ msgstr "పేజీ గురించి"
 #, c-format
 msgid "active"
 msgstr "క్రియాశీల "
-
-#. INPUT type=button
-#: intranet-tmpl/prog/en/modules/admin/oai_set_mappings.tt:75
-msgid "add"
-msgstr "జోడించడానికి"
 
 #: intranet-tmpl/prog/en/modules/rotating_collections/editCollections.tt:34
 #, c-format
@@ -61728,7 +61738,7 @@ msgstr "ప్రతి ట్యాగ్ యొక్క అన్ని ఉ�
 
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:272
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:316
-#: intranet-tmpl/prog/en/modules/reserve/request.tt:756
+#: intranet-tmpl/prog/en/modules/reserve/request.tt:760
 #, c-format
 msgid "already has a hold"
 msgstr "ఇప్పటికే పట్టు ఉంది"
@@ -61940,7 +61950,7 @@ msgid "biblionumber|borrowernumber"
 msgstr "బిబ్లియోసంఖ్య|రుణగ్రహీతసంఖ్య"
 
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/cn_browser.tt:53
-#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:274
+#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:278
 #: intranet-tmpl/prog/en/modules/acqui/uncertainprice.tt:94
 #, c-format
 msgid "by"
@@ -63353,7 +63363,7 @@ msgid "on reserve"
 msgstr "రిజర్వ్లో"
 
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:272
-#: intranet-tmpl/prog/en/modules/reserve/request.tt:756
+#: intranet-tmpl/prog/en/modules/reserve/request.tt:760
 #, c-format
 msgid "on this item "
 msgstr "ఈ అంశంపై "
@@ -63517,7 +63527,7 @@ msgstr "ఆర్డర్ ఇవ్వడం"
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:75
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:379
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:381
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:713
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:712
 msgid "please note your reason here..."
 msgstr "దయచేసి మీ కారణాన్ని ఇక్కడ గమనించండి..."
 
@@ -63887,7 +63897,7 @@ msgstr "చందా(s) %s టైటిల్ మ్యాచింగ్‌త�
 
 #. A
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:729
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:587
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:586
 msgid "suggestion"
 msgstr "సలహాలు"
 
@@ -64012,7 +64022,7 @@ msgid "to "
 msgstr "కు "
 
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:276
-#: intranet-tmpl/prog/en/modules/reserve/request.tt:760
+#: intranet-tmpl/prog/en/modules/reserve/request.tt:764
 #, c-format
 msgid "to be placed on hold"
 msgstr "హోల్డ్‌లో ఉంచాలి"
@@ -64221,7 +64231,7 @@ msgstr ""
 "డిపార్ట్మెంట్ కేటగిరీతో. %s నిర్వాహకుడు తప్పనిసరిగా కేటగిరీ విభాగంతో ఒకటి లేదా అంతకంటే ఎక్కువ అధీకృత "
 "విలువలను సృష్టించాలి. %s "
 
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:703
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:702
 #, c-format
 msgid "with this reason:"
 msgstr "ఈ కారణంగా:"
@@ -64378,14 +64388,14 @@ msgstr "| స్థితి: %s "
 #: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:334
 #: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:631
 #: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:655
-#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:179
+#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:189
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:110
 #: intranet-tmpl/prog/en/modules/cataloguing/editor.tt:128
 #: intranet-tmpl/prog/en/modules/cataloguing/editor.tt:209
 #: intranet-tmpl/prog/en/modules/cataloguing/editor.tt:256
 #: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:213
 #: intranet-tmpl/prog/en/modules/cataloguing/merge.tt:132
-#: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:160
+#: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:173
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:380
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:99
 #: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:154

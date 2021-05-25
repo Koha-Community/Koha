@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Koha 20.05\n"
 "POT-Creation-Date: 2013-05-02 01:29-0300\n"
-"PO-Revision-Date: 2021-04-22 20:12+0000\n"
+"PO-Revision-Date: 2021-05-19 17:15+0000\n"
 "Last-Translator: ztajoli <ztajoli@gmail.com>\n"
 "Language-Team: CILEA <z.tajoli@cineca.it>\n"
 "Language: it\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.8\n"
 "X-Poedit-SourceCharset: UTF-8\n"
-"X-POOTLE-MTIME: 1619122366.802560\n"
+"X-POOTLE-MTIME: 1621444546.659754\n"
 "X-Poedit-Basepath: ../../../versioni/master/koha-tmpl\n"
 "X-Poedit-SearchPath-0: .\n"
 "X-Pootle-Path: /it/20.05/it-IT-pref.po\n"
@@ -1981,8 +1981,8 @@ msgid "cataloguing.pref#DefaultClassificationSource# as the default classificati
 msgstr "come tag che di default contiene la classificazione."
 
 # Cataloging > Record structure
-msgid "cataloguing.pref#DefaultCountryField008#  Empty defaults to xxu for United States."
-msgstr "Se vuoto, il default è xxu che indica Stati Uniti d'America."
+msgid "cataloguing.pref#DefaultCountryField008#  Empty defaults to ||| - No attempt to code."
+msgstr "Se vuoto, il default è ||| - Nessun tentativo di codifica."
 
 # Cataloging > Record structure
 msgid "cataloguing.pref#DefaultCountryField008# Fill in the default country code for field 008 Range 15-17 of MARC21 - Place of publication, production, or execution. See <a href=\"http://www.loc.gov/marc/countries/countries_code.html\">MARC Code List for Countries</a>"
@@ -2699,12 +2699,15 @@ msgid "circulation.pref#AllowItemsOnHoldCheckoutSIP# Don't allow"
 msgstr "circulation.pref#AllowItemsOnHoldCheckoutSIP# Non consentire"
 
 # Circulation > Checkout policy
-msgid "circulation.pref#AllowItemsOnHoldCheckoutSIP# If allowed do not generate RESERVE_WAITING and RESERVED warning."
-msgstr "circulation.pref#AllowItemsOnHoldCheckoutSIP# Se permesso, non generare gli avvisi RESERVE_WAITING e RESERVED."
+msgid "circulation.pref#AllowItemsOnHoldCheckoutSIP# If allowed do not generate RESERVED warning."
+msgstr "Se permesso, non generare l'avviso RESERVED."
 
 # Circulation > Checkout policy
-msgid "circulation.pref#AllowItemsOnHoldCheckoutSIP# This allows self checkouts for those items. If using the holds queue items with pending holds will be marked as \"unavailable\" if this set to \"Don't Allow\"."
-msgstr "circulation.pref#AllowItemsOnHoldCheckoutSIP# Ciò permette l'autoprestito per quelle copie. Se si usa la coda delle prenotazioni, le copie con prenotazioni aperte saranno contrassegnate come \"non disponibili\" se questo è impostato a \"Non consentire\"."
+msgid "circulation.pref#AllowItemsOnHoldCheckoutSIP# This allows self checkouts for those items. If using the holds queue items with pending holds will be marked as \"unavailable\" if this set to \"Don't allow\"."
+msgstr ""
+"Ciò permette l'autoprestito per quelle copie. Se si usa la coda delle "
+"prenotazioni, le copie con prenotazioni aperte saranno contrassegnate come \""
+"non disponibili\" se questo è impostato a \"Non consentire\"."
 
 # Circulation > Checkout policy
 msgid "circulation.pref#AllowItemsOnHoldCheckoutSIP# checkouts of items reserved to someone else via SIP checkout messages."
@@ -4725,12 +4728,7 @@ msgstr "per calcolare il periodo delle multe."
 
 # Circulation > Fines policy
 msgid "circulation.pref#finesMode# <br><strong>NOTE:</strong> If the cronjobs/fines.pl cronjob is being run, accruing and final fines will be calculated when the cron runs and accruing fines will be finalized when an item is returned. If CalculateFinesOnReturn is enabled, final fines will be calculated when an item is returned.<br/>"
-msgstr ""
-"<br><strong>NOTA:</strong> Se il cronjob cronjobs/fines.pl è attivo, le "
-"multe in accumulo e finali verranno calcolate quando gira il cronjob, e le "
-"multe in accumulo verranno finalizzate al rientro della copia. Se "
-"CalculateFinesOnReturn è attivo, le multe finali verranno calcolate quando "
-"la copia rientra.<br/>"
+msgstr "<br><strong>NOTA:</strong> Se il cronjob cronjobs/fines.pl è attivo, le multe in accumulo e finali verranno calcolate quando gira il cronjob, e le multe in accumulo verranno finalizzate al rientro della copia. Se CalculateFinesOnReturn è attivo, le multe finali verranno calcolate quando la copia rientra.<br/>"
 
 # Circulation > Fines policy
 msgid "circulation.pref#finesMode# Calculate and charge"
@@ -4754,10 +4752,7 @@ msgstr "le multe (quando viene eseguito <code>misc/cronjobs/fines.pl</code> )."
 
 # Circulation > Fines policy
 msgid "circulation.pref#finesMode# on close days. If set the fines.pl cronjob will not generate fines when run on days marked as closed in the calendar."
-msgstr ""
-"nei giorni di chiusura. Se viene selezionato il cronjob fines.pl non "
-"genererà multe quando girerà nei giorni indicati come chiusure sul "
-"calendario."
+msgstr "nei giorni di chiusura. Se viene selezionato il cronjob fines.pl non genererà multe quando girerà nei giorni indicati come chiusure sul calendario."
 
 # Circulation > Interface
 msgid "circulation.pref#itemBarcodeFallbackSearch# Don't enable"
