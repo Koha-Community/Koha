@@ -46,7 +46,7 @@
 [%- BLOCK team -%]
     <ul>
 
-        [% IF v == 'release' %]
+      [% IF v == 'release' %]
             <p>This is the team who were responsible for the initial release of your currently installed Koha version.</p>
 
             <li><strong>Release manager:</strong>
@@ -67,7 +67,7 @@
             </li>
             [% END %]
 
-        [% ELSE %]
+      [% ELSE %]
             <p>This is the team who are responsible for the next release of Koha and the ongoing maintenance of your
             currently installed Koha version. They will be in these roles up until <strong>[% t.release_date | $KohaDates %]</strong>, when the next
             team will be elected.</p>
@@ -95,7 +95,7 @@
                 [% END %]
               [% END %]
             [% END %]
-        [% END %]
+      [% END %]
 
         [% IF t.qa_manager %]
         <li><strong>Quality assurance manager:</strong>
@@ -197,7 +197,21 @@
         </li>
         [% END %]
 
-        [% IF v != 'release' %]
+        [% IF t.accessibility_advocates %]
+        <li><strong>Accessibility advocates:</strong>
+            <ul>
+                [% FOREACH a IN t.accessibility_advocates %]
+                <li>[% INCLUDE person p=a %]</li>
+                [% END %]
+            </ul>
+        </li>
+        [% ELSIF t.accessibility_advocate %]
+        <li><strong>Accessibility advocate:</strong>
+           [% INCLUDE person p=t.accessibility_advocate %]
+        </li>
+        [% END %]
+
+      [% IF v != 'release' %]
 
         <li><strong>Release manager:</strong>
             [% INCLUDE person p=t.manager %]
@@ -217,22 +231,7 @@
         </li>
         [% END %]
 
-        [% IF t.accessibility_advocate %]
-        <li><strong>Accessibility advocate:</strong>
-           [% INCLUDE person p=t.accessibility_advocate %]
-        </li>
-        [% ELSIF t.accessibility_advocates %]
-        <li><strong>Accessibility advocates:</strong>
-            <ul>
-                [% FOREACH a IN t.accessibility_advocates %]
-                <li>[% INCLUDE person p=a %]</li>
-                [% END %]
-            </ul>
-        </li>
-        [% END %]
-
-
-        [% ELSE %]
+      [% ELSE %]
         <li><strong>Release maintainers:</strong>
             <ul>
                 [% FOREACH m IN t.maintainer %]
@@ -255,6 +254,6 @@
                 [% END %]
             </ul>
         </li>
-        [% END %]
+      [% END %]
     </ul>
 [%- END -%]
