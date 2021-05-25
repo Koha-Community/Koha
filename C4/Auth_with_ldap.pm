@@ -52,7 +52,9 @@ sub ldapserver_error {
 use vars qw($mapping @ldaphosts $base $ldapname $ldappassword);
 my $ldap = C4::Context->config("ldapserver") or die 'No "ldapserver" in server hash from KOHA_CONF: ' . $ENV{KOHA_CONF};
 # since Bug 28278 we need to skip id in <ldapserver id="ldapserver"> which generates additional hash level
-$ldap = $ldap->{ldapserver}         or die ldapserver_error('id="ldapserver"');
+if ( exists $ldap->{ldapserver} ) {
+    $ldap = $ldap->{ldapserver}         or die ldapserver_error('id="ldapserver"');
+}
 my $prefhost  = $ldap->{hostname}	or die ldapserver_error('hostname');
 my $base      = $ldap->{base}		or die ldapserver_error('base');
 $ldapname     = $ldap->{user}		;
