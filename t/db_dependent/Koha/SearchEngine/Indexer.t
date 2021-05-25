@@ -178,7 +178,7 @@ subtest 'Test indexer calls' => sub {
 
         warnings_are{
             $item3->move_to_biblio($biblio2);
-        } [$engine,"Koha::Item"], "index_records is called for $engine when moving an item to another biblio (Item->move_to_biblio)";
+        } [$engine,"Koha::Item",$engine,"Koha::Item"], "index_records is called twice for $engine when moving an item to another biblio (Item->move_to_biblio)";
         warnings_are{
             $item4->move_to_biblio($biblio2, { skip_record_index => 1 });
         } undef, "index_records is not called for $engine when moving an item to another biblio (Item->move_to_biblio) if skip_record_index passed";

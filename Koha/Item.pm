@@ -1214,27 +1214,33 @@ sub move_to_biblio {
 
     return unless $self->biblionumber != $to_biblio->biblionumber;
 
-    my $biblionumber = $to_biblio->biblionumber;
+    my $from_biblionumber = $self->biblionumber;
+    my $to_biblionumber = $to_biblio->biblionumber;
 
     # Own biblionumber and biblioitemnumber
     $self->set({
-        biblionumber => $biblionumber,
+        biblionumber => $to_biblionumber,
         biblioitemnumber => $to_biblio->biblioitem->biblioitemnumber
     })->store({ skip_record_index => $params->{skip_record_index} });
+
+    unless ($params->{skip_record_index}) {
+        my $indexer = Koha::SearchEngine::Indexer->new({ index => $Koha::SearchEngine::BIBLIOS_INDEX });
+        $indexer->index_records( $from_biblionumber, "specialUpdate", "biblioserver" );
+    }
 
     # Acquisition orders
     my $orders = $self->item_orders;
     if ($orders) {
-        $orders->update({ biblionumber => $biblionumber }, { no_triggers => 1 });
+        $orders->update({ biblionumber => $to_biblionumber }, { no_triggers => 1 });
     }
 
     # Holds
-    $self->holds->update({ biblionumber => $biblionumber });
+    $self->holds->update({ biblionumber => $to_biblionumber });
 
     # hold_fill_target (there's no Koha object available)
     my $hold_fill_target = $self->_result->hold_fill_target;
     if ($hold_fill_target) {
-        $hold_fill_target->update({ biblionumber => $biblionumber });
+        $hold_fill_target->update({ biblionumber => $to_biblionumber });
     }
 
     # tmp_holdsqueues - Can't update with DBIx since the table is missing a primary key
@@ -1244,16 +1250,16 @@ sub move_to_biblio {
         sub {
             my ($storage, $dbh, @cols) = @_;
 
-            $dbh->do("UPDATE tmp_holdsqueue SET biblionumber=? WHERE itemnumber=?", undef, $biblionumber, $self->itemnumber);
+            $dbh->do("UPDATE tmp_holdsqueue SET biblionumber=? WHERE itemnumber=?", undef, $to_biblionumber, $self->itemnumber);
         }
     );
 
     # linktrackers
     my $schema = Koha::Database->new()->schema();
     my $linktrackers = $schema->resultset('Linktracker')->search({ itemnumber => $self->itemnumber });
-    $linktrackers->update_all({ biblionumber => $biblionumber });
+    $linktrackers->update_all({ biblionumber => $to_biblionumber });
 
-    return $biblionumber;
+    return $to_biblionumber;
 }
 
 =head2 Internal methods
