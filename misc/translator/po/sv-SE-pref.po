@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: Koha 20.11\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-05-20 11:46-0300\n"
-"PO-Revision-Date: 2020-11-30 07:28+0000\n"
-"Last-Translator: jessica.andersson <jessica.andersson@alingsas.se>\n"
+"PO-Revision-Date: 2021-05-24 16:34+0000\n"
+"Last-Translator: Anders <anders.klevbacke@ub.gu.se>\n"
 "Language-Team: \n"
 "Language: sv\n"
 "MIME-Version: 1.0\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.8\n"
-"X-POOTLE-MTIME: 1606721282.800777\n"
+"X-POOTLE-MTIME: 1621874092.439292\n"
 "X-Pootle-Path: /sv/20.11/sv-SE-pref.po\n"
 "X-Pootle-Revision: 1\n"
 
@@ -1883,7 +1883,25 @@ msgid "admin.pref#casLogout# Yes"
 msgstr "Ja"
 
 # Administration > CAS authentication
-msgid "admin.pref#casServerUrl# URL of the CAS Authentication Server: "
+#, fuzzy
+msgid ""
+"admin.pref#casServerUrl# URL of the Central Authentication Service (CAS) "
+"server: "
+msgstr "URL till CAS Autenticeringsserver: "
+
+# Administration > CAS authentication
+#, fuzzy
+msgid "admin.pref#casServerVersion# CAS 2 or earlier"
+msgstr "URL till CAS Autenticeringsserver: "
+
+# Administration > CAS authentication > casServerVersion
+msgid "admin.pref#casServerVersion# CAS 3 or later"
+msgstr ""
+
+# Administration > CAS authentication
+#, fuzzy
+msgid ""
+"admin.pref#casServerVersion# Version of the CAS server Koha will connect to: "
 msgstr "URL till CAS Autenticeringsserver: "
 
 # Administration > Interface options
@@ -3245,17 +3263,17 @@ msgstr ""
 
 # Circulation > Holds policy
 msgid "circulation.pref#AllowHoldItemTypeSelection# Allow"
-msgstr "circulation.pref#AllowAllMessageDeletion# Tillåt "
+msgstr "Tillåt"
 
 # Circulation > Holds policy
 msgid "circulation.pref#AllowHoldItemTypeSelection# Don't allow"
-msgstr "circulation.pref#AllowAllMessageDeletion# Tillåt inte "
+msgstr "Tillåt inte"
 
 # Circulation > Holds policy
 msgid ""
 "circulation.pref#AllowHoldItemTypeSelection# hold fulfillment to be limited "
 "by item type."
-msgstr ""
+msgstr "att exemplarval vid reservationer begränsas till exemplartyp."
 
 # Circulation > Holds policy
 msgid "circulation.pref#AllowHoldPolicyOverride# Allow"
@@ -3884,7 +3902,8 @@ msgid ""
 msgstr ""
 
 # Circulation > Checkout policy
-msgid "circulation.pref#CircControl# Use the checkout and fines rules of"
+#, fuzzy
+msgid "circulation.pref#CircControl# Use the calendar and circulation rules of"
 msgstr "Använd utlånings- och bötesreglerna för"
 
 # Circulation > Checkout policy
@@ -4150,23 +4169,21 @@ msgstr "Aktivera "
 msgid ""
 "circulation.pref#DisplayMultiPlaceHold# the ability to place holds on "
 "multiple bibliographic records from the search results"
-msgstr ""
-"circulation.pref#DisplayMultiPlaceHold# möjligheten att i träfflistan välja "
-"flera poster för reservation "
+msgstr "möjligheten att i träfflistan välja flera poster för reservation"
 
 # Circulation > Holds policy
 msgid "circulation.pref#ExcludeHolidaysFromMaxPickUpDelay# Ignore the calendar"
-msgstr "circulation.pref#ExcludeHolidaysFromMaxPickUpDelay# Ignorera kalender"
+msgstr "Ignorera kalendern"
 
 # Circulation > Holds policy
 msgid "circulation.pref#ExcludeHolidaysFromMaxPickUpDelay# Use the calendar"
-msgstr "circulation.pref#ExcludeHolidaysFromMaxPickUpDelay# Använd kalender"
+msgstr "Använd kalendern"
 
 # Circulation > Holds policy
 msgid ""
 "circulation.pref#ExcludeHolidaysFromMaxPickUpDelay# when calculating the "
 "period for a hold's max pickup delay."
-msgstr ""
+msgstr "när sista hämtdatum för infångad reservation beräknas."
 
 # Circulation > Holds policy
 msgid "circulation.pref#ExpireReservesMaxPickUpDelay# Allow"
@@ -4869,15 +4886,13 @@ msgstr ""
 msgid ""
 "circulation.pref#OPACHoldsIfAvailableAtPickupExceptions# (list of patron "
 "categories separated with a pipe '|')"
-msgstr ""
-"circulation.pref#OPACHoldsIfAvailableAtPickupExceptions# (lista över "
-"låntagarkategorier separerade med '|')"
+msgstr "(lista över låntagarkategorier separerade med lodstreck, '|')"
 
 # Circulation > Holds policy
 msgid ""
 "circulation.pref#OPACHoldsIfAvailableAtPickupExceptions# Patron categories "
 "not affected by OPACHoldsIfAvailableAtPickup:"
-msgstr ""
+msgstr "Låntagarkategorier som inte omfattas av OPACHoldsIfAvailableAtPickup"
 
 # Circulation > Checkout policy
 msgid "circulation.pref#OnSiteCheckoutAutoCheck# Don't enable"
@@ -5323,13 +5338,11 @@ msgstr ""
 msgid ""
 "circulation.pref#SelfCheckInTimeout# Reset the current self check-in screen "
 "after"
-msgstr ""
-"circulation.pref#SelfCheckInTimeout# Återställ aktuell självbetjäningsskärm "
-"efter"
+msgstr "Återställ aktuell självbetjäningsskärm efter"
 
 # Circulation > Self check-in module
 msgid "circulation.pref#SelfCheckInTimeout# seconds."
-msgstr "circulation.pref#SelfCheckInTimeout# sekunder."
+msgstr "sekunder."
 
 # Circulation > Self check-in module
 msgid ""
@@ -5389,19 +5402,19 @@ msgstr ""
 
 # Circulation > Interface
 msgid "circulation.pref#ShowAllCheckins# Don't show"
-msgstr ""
+msgstr "Visa inte"
 
 # Circulation > Interface
 msgid "circulation.pref#ShowAllCheckins# Show"
-msgstr "circulation.pref#SelfCheckReceiptPrompt# Visa "
+msgstr "Visa"
 
 # Circulation > Interface
 msgid ""
 "circulation.pref#ShowAllCheckins# all items in the \"Checked-in items\" "
 "list, even items that were not checked out."
 msgstr ""
-"circulation.pref#ReturnToShelvingCart# alla exemplar till platsen VAGN när "
-"de återlämnas."
+"alla exemplar i listan över återlämnade exemplar, även sådana som inte "
+"lånats ut."
 
 # Circulation > Self check-out module
 msgid "circulation.pref#ShowPatronImageInWebBasedSelfCheck# Don't show"
@@ -6329,9 +6342,8 @@ msgid ""
 "source of cover images from below, otherwise Koha will show the images from "
 "all sources selected."
 msgstr ""
-"enhanced_content.pref## <strong>OBS!</strong> du kan bara välja en källa för "
-"omslagsbilder nedan, annars kommer Koha att visa bilder från alla valda "
-"källor."
+"<strong>OBS!</strong> Du kan bara välja en källa för omslagsbilder nedan, "
+"annars kommer Koha att visa bilder från alla valda källor."
 
 # Enhanced content > Adlibris
 msgid "enhanced_content.pref#AdlibrisCoversEnabled# Don't show"
@@ -6483,18 +6495,16 @@ msgid ""
 "MLB/actions/searchHandler.do?nextPage=bookDetails&amp;parentNum=10923&amp;"
 "key=</code>). Leave it blank to disable these links."
 msgstr ""
-"enhanced_content.pref#BakerTaylorBookstoreURL# <em>isbn</em></code> (detta "
-"ska fyllas i enligt följande format <code>ocls.mylibrarybookstore.com/MLB/"
-"actions/searchHandler.do?nextPage=bookDetails&amp;parentNum=10923&amp;key=</"
-"code>). Lämna tomt för att inaktivera dessa länkar."
+"<em>isbn</em></code> (detta ska fyllas i enligt följande format <code>ocls.my"
+"librarybookstore.com/MLB/actions/searchHandler.do?nextPage=bookDetails&amp;pa"
+"rentNum=10923&amp;key=</code>). Lämna tomt för att inaktivera dessa länkar."
 
 # Enhanced content > Baker and Taylor
 msgid ""
 "enhanced_content.pref#BakerTaylorBookstoreURL# Baker and Taylor \"My Library "
 "Bookstore\" links should be accessed at <code>https://"
 msgstr ""
-"enhanced_content.pref#BakerTaylorBookstoreURL# Baker and Taylor \"My Library "
-"Bookstore\"-länkar ska öppnas på <code>https://"
+"Baker and Taylor \"My Library Bookstore\"-länkar ska öppnas på <code>https://"
 
 # Enhanced content > Baker and Taylor
 msgid "enhanced_content.pref#BakerTaylorEnabled# Add"
@@ -6527,7 +6537,7 @@ msgstr "och lösenord "
 
 # Enhanced content > Coce cover images cache
 msgid "enhanced_content.pref#CoceHost# Coce server URL"
-msgstr "enhanced_content.pref Lokala omslagsbilder"
+msgstr "URL till Coce-servern"
 
 # Enhanced content > Coce cover images cache
 msgid "enhanced_content.pref#CoceProviders# Amazon Web Services"
@@ -6648,15 +6658,15 @@ msgstr "Filändelser för mediafiler"
 
 # Enhanced content > HTML5 media
 msgid "enhanced_content.pref#HTML5MediaYouTube# Don't embed"
-msgstr "enhanced_content.pref#Coce# Aktivera inte"
+msgstr "Lägg inte in"
 
 # Enhanced content > HTML5 media
 msgid "enhanced_content.pref#HTML5MediaYouTube# Embed"
-msgstr "enhanced_content.pref HTML5-media"
+msgstr "Lägg in"
 
 # Enhanced content > HTML5 media
 msgid "enhanced_content.pref#HTML5MediaYouTube# YouTube links as videos."
-msgstr "enhanced_content.pref#HTML5MediaEnabled# inte alls."
+msgstr "YouTube-länkar som videoklipp."
 
 # Enhanced content > Coce cover images cache
 msgid "enhanced_content.pref#IntranetCoce# Don't enable"
@@ -6994,19 +7004,17 @@ msgstr ""
 
 # Enhanced content > Open Library
 msgid "enhanced_content.pref#OpenLibrarySearch# Don't show"
-msgstr "enhanced_content.pref#OpenLibraryCovers# Lägg inte till "
+msgstr "Visa inte"
 
 # Enhanced content > Open Library
 msgid "enhanced_content.pref#OpenLibrarySearch# Show"
-msgstr "enhanced_content.pref#OpenLibraryCovers# Lägg till "
+msgstr "Visa"
 
 # Enhanced content > Open Library
 msgid ""
 "enhanced_content.pref#OpenLibrarySearch# search results from Open Library on "
 "the OPAC."
-msgstr ""
-"enhanced_content.pref#OpenLibraryCovers# omslagsbilder från Open Library i "
-"sökresultat och detaljsidor för exemplar i OPAC."
+msgstr "sökresultat från Open Library i OPAC."
 
 # Enhanced content > OverDrive
 msgid ""

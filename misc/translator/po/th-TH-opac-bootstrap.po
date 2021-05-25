@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 20.11\n"
-"POT-Creation-Date: 2021-04-22 07:41-0300\n"
+"POT-Creation-Date: 2021-05-14 08:57-0300\n"
 "PO-Revision-Date: 2018-07-11 06:57+0000\n"
 "Last-Translator: laeng <laengfx@gmail.com>\n"
 "Language-Team: Koha Translation Team <koha-translate@nongnu.org>\n"
@@ -37,7 +37,7 @@ msgstr "บอกรับอีเมลแจ้งเตือนเมื่
 #. %2$s:  END 
 #. %3$s:  INCLUDE 'biblio-title.inc' biblio=SEARCH_RESULT 
 #. %4$s:  IF ( SEARCH_RESULT.author ) 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:399
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:400
 #, fuzzy, c-format
 msgid "%s %s %s %s by "
 msgstr "%s %s %s %s (%s) "
@@ -154,7 +154,7 @@ msgstr "%s ลงรายการบรรณานุกรม &rsaquo; ค�
 #. %5$s:  IF ( library ) 
 #. %6$s:  library.branchname | html 
 #. %7$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-library.tt:5
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-library.tt:6
 #, fuzzy, c-format
 msgid "%s %s %s Koha online %s catalog &rsaquo; Libraries %s &rsaquo; %s %s "
 msgstr "%s ลงรายการบรรณานุกรม &rsaquo; ความคิดเห็นเกี่ยวกับ %s "
@@ -207,6 +207,14 @@ msgid ""
 "%s %s %s Your problem report has been sent to the Koha administrator. %s "
 "Your problem report has been sent to the library. %s %s Something wrong "
 "happened when sending the report. Please contact your library. %s "
+msgstr ""
+
+#. %1$s: ~ USE Koha ~
+#. %2$s: ~ USE raw ~
+#. %3$s: ~ BLOCK 'display-library-address' ~
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/display-library-address.inc:1
+#, c-format
+msgid "%s %s %s [%%~ SET line_break = \""
 msgstr ""
 
 #. %1$s:  author.firstname | html 
@@ -412,6 +420,16 @@ msgstr "%s %s ส่งไปยังตระกร้าจากแคตต
 #, fuzzy, c-format
 msgid "%s %s sent you from our online catalog, the list called : %s."
 msgstr "%s %s ส่งไปยังตระกร้าจากแคตตาล็อกของเรา."
+
+#. %1$s:  END 
+#. %2$s:  IF Koha.Preference('URLLinkText') 
+#. %3$s:  Koha.Preference('URLLinkText') | html 
+#. %4$s:  ELSE 
+#. %5$s:  END 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1398
+#, fuzzy, c-format
+msgid "%s %s%s%sLink to resource%s "
+msgstr "ทรัพยากรแบบออนไลน์: "
 
 #. %1$s:  r.patron.firstname | html 
 #. %2$s:  r.patron.surname | html 
@@ -638,7 +656,7 @@ msgstr ""
 #. %21$s:  IF ( SEARCH_RESULT.intransitcount ) 
 #. %22$s:  SEARCH_RESULT.intransitcount | html 
 #. %23$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:476
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:477
 #, c-format
 msgid ""
 "%s Checked out (%s), %s %s Withdrawn (%s), %s %s%s Lost (%s),%s%s %s Damaged "
@@ -691,7 +709,7 @@ msgid "%s Holds (%s) "
 msgstr "จอง "
 
 #. %1$s:  SEARCH_RESULT.num_critics | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:500
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:501
 #, c-format
 msgid "%s Internet user critics"
 msgstr ""
@@ -834,7 +852,7 @@ msgid "%s Pending %s Processing %s Completed %s Canceled %s "
 msgstr ""
 
 #. %1$s:  SEARCH_RESULT.num_critics_pro | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:503
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:504
 #, c-format
 msgid "%s Professional critics"
 msgstr ""
@@ -853,7 +871,7 @@ msgid ""
 msgstr "รายการทรัพยากร &rsaquo; ห้องสมุดหลักสำหรับ "
 
 #. %1$s:  SEARCH_RESULT.num_quotations | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:509
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:510
 #, fuzzy, c-format
 msgid "%s Quotations"
 msgstr "ไม่มีภาพประกอบ"
@@ -977,7 +995,7 @@ msgid "%s This record has no items. %s "
 msgstr "ระเบียนนี้ไม่มีรายการ "
 
 #. %1$s:  SEARCH_RESULT.num_videos | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:506
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:507
 #, c-format
 msgid "%s Video extracts"
 msgstr ""
@@ -1863,15 +1881,6 @@ msgstr "%s ลงรายการบรรณานุกรม &rsaquo; ค�
 msgid "%s%s%sLibrary catalog%s"
 msgstr "ทรัพยากรห้องสมุด"
 
-#. %1$s:  IF Koha.Preference('URLLinkText') 
-#. %2$s:  Koha.Preference('URLLinkText') | html 
-#. %3$s:  ELSE 
-#. %4$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1393
-#, fuzzy, c-format
-msgid "%s%s%sLink to resource%s"
-msgstr "ทรัพยากรแบบออนไลน์: "
-
 #. %1$s:  IF ( SEARCH_RESULT.BiblioDefaultViewmarc ) 
 #. %2$s:  OPACBaseURL | html 
 #. %3$s:  SEARCH_RESULT.biblionumber | html 
@@ -2113,7 +2122,7 @@ msgstr ""
 #. %1$s:  IF ( singleBranchMode ) 
 #. %2$s:  ELSE 
 #. %3$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-library.tt:140
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-library.tt:119
 #, c-format
 msgid "%sLibrary%sLibraries%s"
 msgstr ""
@@ -2742,7 +2751,7 @@ msgstr ""
 
 #. %1$s:  SEARCH_RESULT.score_avg | html 
 #. %2$s:  SEARCH_RESULT.num_scores | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:497
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:498
 #, fuzzy, c-format
 msgid "&nbsp;&nbsp; %s / 5 (on %s rates)"
 msgstr "%s %s (%s)"
@@ -2818,7 +2827,7 @@ msgid "&nbsp;&nbsp;&nbsp;&nbsp; Title phrase"
 msgstr "&nbsp;&nbsp;&nbsp;&nbsp; วลีของชื่อเรื่อง"
 
 #. %1$s:  SEARCH_RESULT.ratings.count | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:574
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:575
 #, fuzzy, c-format
 msgid "&nbsp;&nbsp;(%s votes)"
 msgstr "%s %s (%s)"
@@ -3065,7 +3074,7 @@ msgid "(Voided)"
 msgstr ""
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:385
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:234
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:235
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/title-actions-menu.inc:33
 #, c-format
 msgid "(done)"
@@ -3079,7 +3088,7 @@ msgstr ""
 #. For the first occurrence,
 #. %1$s:  GROUP_RESULT.timestamp | html 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:209
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:425
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:426
 #, c-format
 msgid "(modified on %s)"
 msgstr "(แก้ไขวันที่ %s)"
@@ -3104,7 +3113,7 @@ msgstr "เกินกำหนด "
 #. For the first occurrence,
 #. %1$s:  priority | html 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:640
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1408
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1416
 #, fuzzy, c-format
 msgid "(priority %s)"
 msgstr "จำนวนที่จอง ( %s ) รายการ "
@@ -3362,7 +3371,7 @@ msgstr "วันที่จัดหา: รายการเก่าสุ�
 #. INPUT type=submit name=tagsel_button
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-basket.tt:74
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:384
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:233
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:234
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:346
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/title-actions-menu.inc:32
 msgid "Add"
@@ -3422,7 +3431,7 @@ msgid "Add to your cart"
 msgstr "เพิ่มไปยังกล่องรายการที่เลือกของคุณ"
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:641
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:642
 #, fuzzy
 msgid "Add to..."
 msgstr "เพิ่มไปยัง"
@@ -3480,7 +3489,7 @@ msgid "Adlibris cover image"
 msgstr "ภาพปก"
 
 #. IMG
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:307
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:308
 msgid "Adlibris thumbnail for ISBN: %s"
 msgstr ""
 
@@ -4008,7 +4017,7 @@ msgstr "รายการที่ห้องสมุดมี: "
 #. For the first occurrence,
 #. SCRIPT
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:70
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:442
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:443
 #, c-format
 msgid "Availability:"
 msgstr "รายการที่ห้องสมุดมี:"
@@ -4033,7 +4042,7 @@ msgstr "ฉบับที่มี"
 #. %1$s:  rating_avg | html 
 #. %2$s:  ratings.count | html 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:467
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1462
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1470
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:204
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:837
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/user-star-ratings.inc:52
@@ -4293,7 +4302,7 @@ msgstr "เลขเรียกหนังสือ"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-downloadshelf.tt:75
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:238
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-issue-note.tt:50
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:230
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:234
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-passwd.tt:86
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-review.tt:53
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-sendbasketform.tt:43
@@ -4406,7 +4415,7 @@ msgstr "หมายเลขบัตรสมาชิก:"
 #. For the first occurrence,
 #. SCRIPT
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:293
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:641
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:642
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/masthead.inc:32
 #, c-format
 msgid "Cart"
@@ -4632,7 +4641,7 @@ msgstr ""
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-basket.tt:53
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:293
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:641
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:642
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-search-history.tt:63
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-search-history.tt:107
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-search-history.tt:160
@@ -5046,8 +5055,8 @@ msgstr ""
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:119
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:121
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1218
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:377
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:379
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:378
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:380
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:467
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:163
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:299
@@ -5220,7 +5229,7 @@ msgstr "วันที่คืนหนังสือ"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-request-article.tt:88
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-request-article.tt:91
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:436
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:437
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:84
 #, c-format
 msgid "Date:"
@@ -5246,7 +5255,7 @@ msgstr ""
 msgid "December"
 msgstr ""
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:203
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:207
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-privacy.tt:72
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-privacy.tt:74
 #, c-format
@@ -5849,7 +5858,7 @@ msgstr ""
 msgid "Fax:"
 msgstr "โทรสาร:"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-library.tt:57
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-library.tt:37
 #, fuzzy, c-format
 msgid "Fax: "
 msgstr "โทรสาร:"
@@ -6169,7 +6178,7 @@ msgstr ""
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:71
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:61
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:146
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:203
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:204
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:309
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/masthead.inc:264
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/masthead.inc:281
@@ -6321,7 +6330,7 @@ msgid "Hide window"
 msgstr ""
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:152
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:212
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:213
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/opac-detail-sidebar.inc:43
 #, c-format
 msgid "Highlight"
@@ -6430,7 +6439,7 @@ msgstr "สมุดรายนาม"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:22
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-imageviewer.tt:42
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-issue-note.tt:16
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-library.tt:69
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-library.tt:48
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:24
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:31
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-memberentry-update-submitted.tt:14
@@ -6818,7 +6827,7 @@ msgid "Interlibrary loan item availability"
 msgstr ""
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:279
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:614
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:615
 #, c-format
 msgid "Interlibrary loan request"
 msgstr ""
@@ -6986,7 +6995,7 @@ msgstr "มีตัวเล่มพร้อมให้บริการท
 #. For the first occurrence,
 #. SCRIPT
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:70
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:444
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:445
 #, fuzzy, c-format
 msgid "Items available:"
 msgstr "ไม่พบรายการใดๆ:"
@@ -7184,8 +7193,8 @@ msgstr ""
 msgid "Level 4: Robust/domain specific discovery platforms"
 msgstr ""
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-library.tt:73
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-library.tt:80
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-library.tt:52
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-library.tt:59
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/masthead.inc:239
 #, c-format
 msgid "Libraries"
@@ -7213,8 +7222,8 @@ msgstr "ทรัพยากรห้องสมุด"
 
 #. For the first occurrence,
 #. %1$s:  Koha.Preference('OPACnumSearchResults') | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:189
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:191
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:190
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:192
 #, fuzzy, c-format
 msgid "Library default: %s"
 msgstr "ห้องสมุด "
@@ -7319,7 +7328,7 @@ msgstr "รายการ"
 #. For the first occurrence,
 #. SCRIPT
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:293
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:534
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:535
 #, fuzzy, c-format
 msgid "Lists:"
 msgstr "รายการ"
@@ -7584,14 +7593,14 @@ msgstr ""
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:272
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:275
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:608
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:610
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:609
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:611
 #, c-format
 msgid "Make a "
 msgstr ""
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:279
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:614
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:615
 #, c-format
 msgid "Make an "
 msgstr ""
@@ -7636,7 +7645,7 @@ msgstr ""
 msgid "March"
 msgstr ""
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:548
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:549
 #, c-format
 msgid "Match:"
 msgstr "ตรงกับ:"
@@ -7731,7 +7740,7 @@ msgid "More details"
 msgstr "รายละเอียดเพิ่มเติม"
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:641
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:642
 msgid "More lists"
 msgstr ""
 
@@ -7864,7 +7873,7 @@ msgid "New tag(s), separated by a comma:"
 msgstr ""
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-basket.tt:72
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:231
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:232
 #, c-format
 msgid "New tag:"
 msgstr "แท็กใหม่:"
@@ -7952,13 +7961,13 @@ msgstr "รายการที่ยืมออก"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:122
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:130
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:139
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:315
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:323
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:331
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:340
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:348
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:357
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:369
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:316
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:324
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:332
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:341
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:349
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:358
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:370
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:400
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:412
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:421
@@ -8010,7 +8019,7 @@ msgid "No items available."
 msgstr "ไม่พบรายการใดๆ:"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:227
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:472
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:473
 #, c-format
 msgid "No items available:"
 msgstr "ไม่พบรายการใดๆ:"
@@ -8206,7 +8215,7 @@ msgid "Not checked in %s"
 msgstr "ยืมออกแล้ว"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:268
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:603
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:604
 #, fuzzy, c-format
 msgid "Not finding what you're looking for? "
 msgstr "ไม่พบสิ่งที่คุณกำลังมองหาหรือ?"
@@ -8361,7 +8370,7 @@ msgid ""
 "Nothing has been selected. Check the box for each item you want to renew"
 msgstr ""
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:173
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:177
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:64
 #, c-format
 msgid "Notice:"
@@ -8747,7 +8756,7 @@ msgstr ""
 msgid "Phone:"
 msgstr ""
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-library.tt:54
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-library.tt:34
 #, c-format
 msgid "Phone: "
 msgstr ""
@@ -8803,7 +8812,7 @@ msgstr ""
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-basket.tt:63
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:242
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:641
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:642
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:814
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-topissues.tt:124
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/opac-bottom.inc:154
@@ -8902,7 +8911,7 @@ msgstr "ข้อมูลติดต่อ"
 msgid "Please contact a librarian to verify your payment."
 msgstr "ข้อมูลติดต่อ"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:194
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:198
 #, c-format
 msgid ""
 "Please contact a library staff member if you are unsure of your mobile "
@@ -8936,7 +8945,7 @@ msgstr ""
 msgid "Please enter additional information about the requested item:"
 msgstr ""
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:178
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:182
 #, c-format
 msgid ""
 "Please enter numbers only. Prefix the number with + if including the country "
@@ -9104,7 +9113,7 @@ msgstr ""
 msgid "Preferred form: "
 msgstr "รูปแบบของสารสนเทศ "
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:201
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:205
 #, fuzzy, c-format
 msgid "Preferred language for notices: "
 msgstr "รูปแบบของสารสนเทศ "
@@ -9258,7 +9267,7 @@ msgid "Public lists "
 msgstr "สาธารณะ"
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:641
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:642
 msgid "Public lists:"
 msgstr ""
 
@@ -9290,7 +9299,7 @@ msgstr "การพิมพ์/วันที่จดลิขสิทธ�
 msgid "Publication/Copyright date: Oldest to newest"
 msgstr "การพิมพ์/วันที่จดลิขสิทธิ์: รายการเก่ากว่าไปใหม่กว่า"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:412
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:413
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:496
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:63
 #, c-format
@@ -9808,7 +9817,7 @@ msgstr "&nbsp;จะจำกัดการสืบค้น:&nbsp;'%s'"
 msgid "Results of search for '%s'"
 msgstr "ผลการค้นหา %s ถึง %s จากทั้งหมด %s รายการ"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:185
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:186
 #, c-format
 msgid "Results per page: "
 msgstr ""
@@ -9924,12 +9933,12 @@ msgstr "รายการของคุณ"
 msgid "SMS"
 msgstr ""
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:176
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:180
 #, c-format
 msgid "SMS number:"
 msgstr ""
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:183
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:187
 #, c-format
 msgid "SMS provider:"
 msgstr ""
@@ -9967,7 +9976,7 @@ msgstr ""
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-patron-consent.tt:63
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-privacy.tt:130
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:293
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:641
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:642
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:682
 #, c-format
 msgid "Save"
@@ -10076,7 +10085,7 @@ msgstr "ค้นหาชื่อเรื่องนี้ใน:"
 
 #. A
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:198
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:406
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:407
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:490
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:58
 #, fuzzy
@@ -10188,8 +10197,8 @@ msgstr "ปี"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:109
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:112
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:137
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:355
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:366
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:356
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:367
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:438
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:448
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:154
@@ -10229,7 +10238,7 @@ msgstr "จองเฉพาะเล่มที่ต้องการ"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-basket.tt:52
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1194
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:293
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:641
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:642
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-search-history.tt:62
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-search-history.tt:106
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-search-history.tt:159
@@ -10246,9 +10255,9 @@ msgid "Select none"
 msgstr ""
 
 #. INPUT type=checkbox name=biblionumber
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:258
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:261
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:265
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:259
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:262
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:266
 #, fuzzy
 msgid "Select search result: %s"
 msgstr "เอารายการที่เลือกออก "
@@ -10275,7 +10284,7 @@ msgstr "เอารายการที่เลือกออก"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-basket.tt:56
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-basket.tt:327
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:641
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:642
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:335
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:814
 #, fuzzy, c-format
@@ -10580,7 +10589,7 @@ msgstr ""
 msgid "Skip to main content"
 msgstr ""
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:173
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:177
 #, c-format
 msgid ""
 "Some charges for text messages may be incurred when using this service. "
@@ -10750,6 +10759,7 @@ msgid "Sort"
 msgstr "งานพิมพ์ขนาดใหญ่ "
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:269
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:180
 #, c-format
 msgid "Sort by:"
 msgstr ""
@@ -10924,7 +10934,7 @@ msgid "Submit and close this window"
 msgstr "ส่งข้อมูลและปิดหน้าต่างนี้"
 
 #. INPUT type=submit
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:229
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:233
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:837
 #, fuzzy
 msgid "Submit changes"
@@ -11163,7 +11173,7 @@ msgid "Table of contents provided by Syndetics"
 msgstr "หมายเหตุของผู้แต่ง ซึ่งถูกเชื่อมด้วยคำเชื่อมต่าง ๆ"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-basket.tt:66
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:228
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:229
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:341
 #, c-format
 msgid "Tag"
@@ -11185,7 +11195,7 @@ msgid "Tag status here."
 msgstr "แท็กสถานะัที่นี่"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:386
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:236
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:237
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/title-actions-menu.inc:35
 #, c-format
 msgid "Tag status here. "
@@ -11213,7 +11223,7 @@ msgstr ""
 msgid "Tags from this library:"
 msgstr "ข้อความแจ้งจากห้องสมุด"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:520
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:521
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:535
 #, c-format
 msgid "Tags:"
@@ -11995,7 +12005,7 @@ msgid "Unavailable issues"
 msgstr "ฉบับที่ห้องสมุดไม่มี"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:151
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:211
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:212
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/opac-detail-sidebar.inc:42
 #, c-format
 msgid "Unhighlight"
@@ -12019,7 +12029,7 @@ msgstr ""
 msgid "Uniform titles:"
 msgstr "ชื่อเรื่องแบบฉบับ"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:185
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:189
 #, c-format
 msgid "Unknown"
 msgstr ""
@@ -12139,9 +12149,9 @@ msgstr "เอารายการที่เลือกออก "
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:185
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:188
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:190
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:394
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:397
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:399
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:395
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:398
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:400
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:477
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:480
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:482
@@ -12296,7 +12306,7 @@ msgstr "เอารายการที่เลือกออก "
 #. For the first occurrence,
 #. SCRIPT
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-basket.tt:327
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:641
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:642
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:814
 #, fuzzy
 msgid "With selected titles: "
@@ -12446,7 +12456,7 @@ msgstr "คุณล็อกอินด้วยชื่อ %s"
 msgid "You are logging from a different IP address. Please log in again."
 msgstr "คุณกำลังล็อกอินจากที่อยู่ IP อื่น กรุณาล็อกอินอีกครั้ง"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:235
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:239
 #, fuzzy, c-format
 msgid "You are not allowed to call this page directly"
 msgstr "ไม่มีข้อเสนอแนะการสั่งซื้อที่ค้างอยู่"
@@ -12748,7 +12758,7 @@ msgstr "ล็อกอินเข้าสู่ระบบเพื่อส
 
 #. For the first occurrence,
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:641
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:642
 #, fuzzy
 msgid "You must be logged in to create or add to lists"
 msgstr "ล็อกอินเข้าสู่ระบบเพื่อสร้างรายการของคุณ"
@@ -12763,6 +12773,13 @@ msgstr ""
 msgid ""
 "You must log in if you want to subscribe to email notification on new issues"
 msgstr "บอกรับอีเมลแจ้งเตือนเมื่อมีฉบับใหม่ "
+
+#. INPUT type=checkbox name=digest
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:158
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:160
+#, fuzzy
+msgid "You must select a digestible transport to select digests"
+msgstr "คุณจะต้องเลือกอย่างน้อยหนึ่งรายการ "
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:98
 #, fuzzy, c-format
@@ -12994,7 +13011,7 @@ msgid "Your lists "
 msgstr "รายการของคุณ"
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:641
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:642
 msgid "Your lists:"
 msgstr ""
 
@@ -13095,7 +13112,7 @@ msgstr "ข้อเสนอแนะการสั่งซื้อของ
 
 #. For the first occurrence,
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1462
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1470
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:204
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:837
 #, fuzzy
@@ -13187,7 +13204,7 @@ msgstr ""
 #. For the first occurrence,
 #. SCRIPT
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:293
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:641
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:642
 msgid "[ New list ]"
 msgstr ""
 
@@ -13248,7 +13265,7 @@ msgid "bib_id"
 msgstr ""
 
 #. IMG
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:287
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:288
 #, fuzzy
 msgid "bonus"
 msgstr "en-us"
@@ -13281,7 +13298,7 @@ msgstr "หมายเลขบัตรสมาชิกของคุณ"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:19
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-imageviewer.tt:39
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-issue-note.tt:13
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-library.tt:66
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-library.tt:45
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:20
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-memberentry-update-submitted.tt:11
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:39
@@ -13680,8 +13697,8 @@ msgstr ""
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:272
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:275
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:608
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:610
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:609
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:611
 #, fuzzy, c-format
 msgid "purchase suggestion"
 msgstr "รายการแนะนำการสั่งซื้อใหม่"
