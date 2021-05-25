@@ -113,6 +113,10 @@ subtest 'Test indexer calls' => sub {
 
         my $item;
         my $item2;
+        my $item3;
+        my $item4;
+        my $item5;
+        my $item6;
         warnings_are{
             $item = $builder->build_sample_item({
                 biblionumber => $biblio->biblionumber,
@@ -126,7 +130,16 @@ subtest 'Test indexer calls' => sub {
                 datelastseen => '2020-11-11',
                 replacementprice => 0
             });
-        } [$engine,"Koha::Item",$engine,"Koha::Item"], "index_records is called for $engine when adding an item (Item->store)";
+            $item3 = $builder->build_sample_item({biblionumber => $biblio->biblionumber});
+            $item4 = $builder->build_sample_item({biblionumber => $biblio->biblionumber});
+            $item5 = $builder->build_sample_item({biblionumber => $biblio->biblionumber});
+            $item6 = $builder->build_sample_item({biblionumber => $biblio->biblionumber});
+        } [$engine,"Koha::Item",
+           $engine,"Koha::Item",
+           $engine,"Koha::Item",
+           $engine,"Koha::Item",
+           $engine,"Koha::Item",
+           $engine,"Koha::Item"], "index_records is called for $engine when adding an item (Item->store)";
         warnings_are{
             $item->store({ skip_record_index => 1 });
         } undef, "index_records is not called for $engine when adding an item (Item->store) if skip_record_index passed";
@@ -163,8 +176,6 @@ subtest 'Test indexer calls' => sub {
             AddReturn($item->barcode, $item->homebranch, 0, undef);
         } [$engine,'C4::Circulation'], "index_records is called once for $engine when calling AddReturn if item not issued";
 
-        my $item3 = $builder->build_sample_item({biblionumber => $biblio->biblionumber});
-        my $item4 = $builder->build_sample_item({biblionumber => $biblio->biblionumber});
         warnings_are{
             $item3->move_to_biblio($biblio2);
         } [$engine,"Koha::Item"], "index_records is called for $engine when moving an item to another biblio (Item->move_to_biblio)";
@@ -172,8 +183,6 @@ subtest 'Test indexer calls' => sub {
             $item4->move_to_biblio($biblio2, { skip_record_index => 1 });
         } undef, "index_records is not called for $engine when moving an item to another biblio (Item->move_to_biblio) if skip_record_index passed";
 
-        my $item5 = $builder->build_sample_item({biblionumber => $biblio->biblionumber});
-        my $item6 = $builder->build_sample_item({biblionumber => $biblio->biblionumber});
         warnings_are{
             $biblio2->adopt_items_from_biblio($biblio);
         } [$engine,"Koha::Biblio",$engine,"Koha::Biblio"], "index_records is called for both biblios for $engine when adopting items (Biblio->adopt_items_from_biblio)";
