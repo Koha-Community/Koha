@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Koha 20.11\n"
 "POT-Creation-Date: 2013-05-07 08:52+0200\n"
-"PO-Revision-Date: 2021-04-21 20:38+0000\n"
+"PO-Revision-Date: 2021-05-21 13:50+0000\n"
 "Last-Translator: ManuB. <e.betemps@ville-caluire.fr>\n"
 "Language-Team: French (France) "
 "(http://www.transifex.com/projects/p/koha/language/fr_FR/)\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Generator: Pootle 2.8\n"
-"X-POOTLE-MTIME: 1619037515.568837\n"
+"X-POOTLE-MTIME: 1621605006.708634\n"
 "X-Pootle-Path: /fr/20.11/fr-FR-pref.po\n"
 "X-Pootle-Revision: 1\n"
 
@@ -319,8 +319,7 @@ msgid ""
 "acquisitions.pref#EmailPurchaseSuggestions# Choose email address that new "
 "purchase suggestions will be sent to: "
 msgstr ""
-"Définissez le courriel auquel la nouvelle suggestion d'achat sera "
-"envoyée&nbsp;: "
+"Définissez le courriel auquel la nouvelle suggestion d'achat sera envoyée : "
 
 # Acquisitions > Policy
 msgid "acquisitions.pref#EmailPurchaseSuggestions# EmailAddressForSuggestions"
@@ -1987,8 +1986,23 @@ msgid "admin.pref#casLogout# Yes"
 msgstr "Oui"
 
 # Administration > CAS authentication
-msgid "admin.pref#casServerUrl# URL of the CAS Authentication Server: "
-msgstr "URL du serveur d'authentification CAS&nbsp;: "
+msgid ""
+"admin.pref#casServerUrl# URL of the Central Authentication Service (CAS) "
+"server: "
+msgstr "URL du serveur d'authentification CAS : "
+
+# Administration > CAS authentication
+msgid "admin.pref#casServerVersion# CAS 2 or earlier"
+msgstr "CAS 2 ou antérieure"
+
+# Administration > CAS authentication > casServerVersion
+msgid "admin.pref#casServerVersion# CAS 3 or later"
+msgstr "CAS 3 ou postérieure"
+
+# Administration > CAS authentication
+msgid ""
+"admin.pref#casServerVersion# Version of the CAS server Koha will connect to: "
+msgstr "Version du serveur CAS auquel Koha va se connecter : "
 
 # Administration > Interface options
 msgid "admin.pref#delimiter# #'s"
@@ -2197,7 +2211,7 @@ msgid ""
 "(BiblioAddsAuthorities must be set to \"allow\" for this to have any effect)."
 msgstr ""
 "les notices d'autorité manquantes (BiblioAddsAuthorities doit être "
-"positionné sur «&nbsp;créer&nbsp;» pour prendre en compte cette préférence)."
+"positionnée sur 'créer' pour prendre en compte cette préférence)."
 
 # Authorities > General
 msgid "authorities.pref#AutoCreateAuthorities# don't generate"
@@ -3258,7 +3272,7 @@ msgstr ""
 "soient pris en compte successivement. Chaque champ peut inclure plusieurs "
 "sous-champs. L'ordre des sous-champs dans la notice sera respecté. Par "
 "exemple '082ab,092ab' examinera les sous-champs 082$a et 082$b, puis les "
-"sous-champs 092$a and 092$b."
+"sous-champs 092$a et 092$b."
 
 # Cataloging > Record structure
 msgid "cataloguing.pref#marcflavour# Interpret and store MARC records in the"
@@ -4159,7 +4173,8 @@ msgstr ""
 "exemplaire sont bien présents au prêt et au retour."
 
 # Circulation > Checkout policy
-msgid "circulation.pref#CircControl# Use the checkout and fines rules of"
+#, fuzzy
+msgid "circulation.pref#CircControl# Use the calendar and circulation rules of"
 msgstr "Utiliser les règles de prêt et d'amendes de"
 
 # Circulation > Checkout policy
@@ -8024,9 +8039,9 @@ msgid ""
 "the \"Notices and slips\" interface. The language used to send a notice to a "
 "patron will be the one defined for the patron."
 msgstr ""
-"Quand activé, les notifications seront traduisibles depuis l'interface \""
-"Notifications et tickets\". La langue utilisée pour envoyer une notification "
-"à un adhérent sera celle définie pour cet adhérent."
+"Quand activé, les notifications seront traduisibles depuis l'interface "
+"\"Notifications et tickets\". La langue utilisée pour envoyer une "
+"notification à un adhérent sera celle définie pour cet adhérent."
 
 # I18N/L10N
 msgid "i18n_l10n.pref#TranslateNotices# notices to be translated."
@@ -9345,13 +9360,13 @@ msgid ""
 "file</li><li>put an URL for an external specific stylesheet.</li></"
 "ul>{langcode} will be replaced with current interface language."
 msgstr ""
-"<br />Options :<ul><li><a href=\"#\" class=\"set_syspref\" data-syspref=\""
-"OPACXSLTDetailsDisplay\" data-value=\"\">Laisser vide</a> pour \"pas de "
-"xslt\"</li><li>inscrire \"<a href=\"#\" class=\"set_syspref\" data-syspref=\""
-"OPACXSLTDetailsDisplay\" data-value=\"default\">default</a>\" pour celle par "
-"défaut</li><li>inscrire un chemin vers le fichier xslt</li><li>inscrire une "
-"URL pour une feuille de style externe spécifique.</li></ul>{langcode} sera "
-"remplacé par la langue par défaut de l'interface."
+"<br />Options :<ul><li><a href=\"#\" class=\"set_syspref\" data-syspref="
+"\"OPACXSLTDetailsDisplay\" data-value=\"\">Laisser vide</a> pour \"pas de "
+"xslt\"</li><li>inscrire \"<a href=\"#\" class=\"set_syspref\" data-syspref="
+"\"OPACXSLTDetailsDisplay\" data-value=\"default\">default</a>\" pour celle "
+"par défaut</li><li>inscrire un chemin vers le fichier xslt</li><li>inscrire "
+"une URL pour une feuille de style externe spécifique.</li></ul>{langcode} "
+"sera remplacé par la langue par défaut de l'interface."
 
 # OPAC > Appearance
 msgid ""
@@ -9386,13 +9401,13 @@ msgid ""
 "file</li><li>put an URL for an external specific stylesheet.</li></"
 "ul>{langcode} will be replaced with current interface language."
 msgstr ""
-"<br />Options :<ul><li><a href=\"#\" class=\"set_syspref\" data-syspref=\""
-"OPACXSLTResultsDisplay\" data-value=\"\">Laisser vide</a> pour \"pas de "
-"xslt\"</li><li>saisir \"<a href=\"#\" class=\"set_syspref\" data-syspref=\""
-"OPACXSLTResultsDisplay\" data-value=\"default\">default</a>\" pour celle par "
-"défaut</li><li>inscrire un chemin vers le fichier xslt</li><li>inscrire une "
-"URL pour une feuille de style externe spécifique.</li></ul>{langcode} sera "
-"remplacée par la langue par défaut de l'interface."
+"<br />Options :<ul><li><a href=\"#\" class=\"set_syspref\" data-syspref="
+"\"OPACXSLTResultsDisplay\" data-value=\"\">Laisser vide</a> pour \"pas de "
+"xslt\"</li><li>saisir \"<a href=\"#\" class=\"set_syspref\" data-syspref="
+"\"OPACXSLTResultsDisplay\" data-value=\"default\">default</a>\" pour celle "
+"par défaut</li><li>inscrire un chemin vers le fichier xslt</li><li>inscrire "
+"une URL pour une feuille de style externe spécifique.</li></ul>{langcode} "
+"sera remplacée par la langue par défaut de l'interface."
 
 # OPAC > Appearance
 msgid ""
@@ -10278,11 +10293,11 @@ msgid ""
 "PatronSelfRegistrationExpireTemporaryAccountsDelay days ago."
 msgstr ""
 "<br><strong>Avertissement : Ne pas utiliser une catégorie d'adhérent "
-"habituelle pour l'auto-inscription.</strong> Si le cron job "
-"<code>misc/cronjobs/cleanup_database.pl</code> est paramétré pour supprimer "
-"les auto-inscriptions non-vérifiées et incomplètes, il supprimera, "
-"définitivement et sans récupération possible, tous les adhérents qui se sont "
-"enregistrés depuis plus de jours que le délai défini dans "
+"habituelle pour l'auto-inscription.</strong> Si le cron job <code>misc/"
+"cronjobs/cleanup_database.pl</code> est paramétré pour supprimer les auto-"
+"inscriptions non-vérifiées et incomplètes, il supprimera, définitivement et "
+"sans récupération possible, tous les adhérents qui se sont enregistrés "
+"depuis plus de jours que le délai défini dans "
 "PatronSelfRegistrationExpireTemporaryAccountsDelay."
 
 # OPAC > Self registration and modification
@@ -11977,18 +11992,18 @@ msgstr "les noms des adhérents en majuscules."
 
 # Patrons > General
 msgid "patrons.pref#useDischarge# Allow"
-msgstr "Autoriser"
+msgstr "Permettre"
 
 # Patrons > General
 msgid "patrons.pref#useDischarge# Don't allow"
-msgstr "Interdire"
+msgstr "Ne pas permettre"
 
 # Patrons > General
 msgid ""
 "patrons.pref#useDischarge# librarians to discharge borrowers and borrowers "
 "to request a discharge."
 msgstr ""
-"bibliothécaires pour donner un quitus aux lecteurs et les lecteurs pour "
+"aux bibliothécaires de donner un quitus aux lecteurs et aux lecteurs de "
 "demander un quitus."
 
 # Searching
@@ -12123,9 +12138,8 @@ msgid ""
 "elastic.co/guide/en/elasticsearch/reference/current/query-dsl-multi-match-"
 "query.html#type-cross-fields"
 msgstr ""
-"Consulter la documentation sur "
-"https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-"
-"multi-match-query.html#type-cross-fields"
+"Consulter la documentation sur https://www.elastic.co/guide/en/elasticsearch/"
+"reference/current/query-dsl-multi-match-query.html#type-cross-fields"
 
 # Searching > Features > ElasticsearchCrossFields
 msgid ""
@@ -13032,10 +13046,10 @@ msgid ""
 "wiki'>jsPrintSetup documentation</a>:"
 msgstr ""
 "Utiliser le JavaScript suivant pour l'impression des tickets. Consulter la "
-"description complète sur le <a href='https://wiki.koha-"
-"community.org/wiki/Setting_up_slip_printer_to_print_silently'>Wiki Koha</a> "
-"et ensuite dans la <a href='https://github.com/edabg/jsprintsetup/wiki'>"
-"documentation du plugin Firefox jsPrintSetup</a> :"
+"description complète sur le <a href='https://wiki.koha-community.org/wiki/"
+"Setting_up_slip_printer_to_print_silently'>Wiki Koha</a> et ensuite dans la "
+"<a href='https://github.com/edabg/jsprintsetup/wiki'>documentation du plugin "
+"Firefox jsPrintSetup</a> :"
 
 # Staff interface > Appearance
 msgid ""
@@ -13137,10 +13151,9 @@ msgid ""
 msgstr ""
 "<br />Options : <ul><li>Saisir \"<a href=\"#\" class=\"set_syspref\" data-"
 "syspref=\"XSLTDetailsDisplay\" data-value=\"default\">default</a>\" pour la "
-"feuille par défaut.</li><li>Inscrire un chemin vers le fichier xslt.</li><li>"
-"Inscrire une URL pour une feuille de style externe "
-"spécifique.</li></ul>{langcode} sera remplacé par la langue par défaut de "
-"l'interface."
+"feuille par défaut.</li><li>Inscrire un chemin vers le fichier xslt.</"
+"li><li>Inscrire une URL pour une feuille de style externe spécifique.</li></"
+"ul>{langcode} sera remplacé par la langue par défaut de l'interface."
 
 # Staff interface > Appearance
 msgid ""
@@ -13177,10 +13190,9 @@ msgid ""
 msgstr ""
 "<br />Options :<ul><li>Saisir \"<a href=\"#\" class=\"set_syspref\" data-"
 "syspref=\"XSLTResultsDisplay\" data-value=\"default\">default</a>\" pour la "
-"feuille par défaut.</li><li>Inscrire un chemin vers le fichier xslt.</li><li>"
-"Inscrire une URL pour une feuille de style externe "
-"spécifique.</li></ul>{langcode} sera remplacée par la langue par défaut de "
-"l'interface."
+"feuille par défaut.</li><li>Inscrire un chemin vers le fichier xslt.</"
+"li><li>Inscrire une URL pour une feuille de style externe spécifique.</li></"
+"ul>{langcode} sera remplacée par la langue par défaut de l'interface."
 
 # Staff interface > Appearance
 msgid ""
@@ -13668,8 +13680,8 @@ msgid ""
 "web_services.pref#OAI-PMH# <a href=\"http://www.openarchives.org/pmh/\">OAI-"
 "PMH</a> server. (available at: /cgi-bin/koha/oai.pl?verb=Identify)"
 msgstr ""
-"<a href=\"http://www.openarchives.org/pmh/\">OAI-PMH</a> de Koha. ("
-"disponible à : /cgi-bin/koha/oai.pl?verb=Identify)"
+"<a href=\"http://www.openarchives.org/pmh/\">OAI-PMH</a> de Koha. "
+"(disponible à : /cgi-bin/koha/oai.pl?verb=Identify)"
 
 # Web services > OAI-PMH
 msgid "web_services.pref#OAI-PMH# Disable"

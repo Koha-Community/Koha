@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Koha 20.11\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-05-10 19:14+0200\n"
-"PO-Revision-Date: 2021-04-23 09:15+0000\n"
+"PO-Revision-Date: 2021-05-21 09:46+0000\n"
 "Last-Translator: Atron Chen <atron@customer-support.com.tw>\n"
 "Language-Team: koha_TW <kohataiwan@googlegroups.com>\n"
 "Language: zh_TW\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8-bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Generator: Pootle 2.8\n"
-"X-POOTLE-MTIME: 1619169346.476667\n"
+"X-POOTLE-MTIME: 1621590407.317529\n"
 "X-Pootle-Path: /zh_TW/20.11/zh-Hant-TW-pref.po\n"
 "X-Pootle-Revision: 1\n"
 
@@ -1917,8 +1917,23 @@ msgid "admin.pref#casLogout# Yes"
 msgstr "是的"
 
 # Administration > CAS authentication
-msgid "admin.pref#casServerUrl# URL of the CAS Authentication Server: "
+msgid ""
+"admin.pref#casServerUrl# URL of the Central Authentication Service (CAS) "
+"server: "
 msgstr "CAS 認證伺服器的 URL："
+
+# Administration > CAS authentication
+msgid "admin.pref#casServerVersion# CAS 2 or earlier"
+msgstr "CAS 2 或更早版本"
+
+# Administration > CAS authentication > casServerVersion
+msgid "admin.pref#casServerVersion# CAS 3 or later"
+msgstr "CAS 3 或更高版本"
+
+# Administration > CAS authentication
+msgid ""
+"admin.pref#casServerVersion# Version of the CAS server Koha will connect to: "
+msgstr "CAS 伺服器的 Koha 版本將連結到： "
 
 # Administration > Interface options
 msgid "admin.pref#delimiter# #'s"
@@ -3381,7 +3396,9 @@ msgstr "不允許"
 msgid ""
 "circulation.pref#AllowItemsOnHoldCheckoutSIP# If allowed do not generate "
 "RESERVED warning."
-msgstr "若允許，則不產生 RESERVED 警示。"
+msgstr ""
+"circulation.pref#AllowItemsOnHoldCheckoutSIP# 若允許，則不產生 RESERVED 警"
+"示。"
 
 # Circulation > Checkout policy
 msgid ""
@@ -3937,8 +3954,8 @@ msgid ""
 msgstr "circulation.pref#CircConfirmItemParts# 館員確認在還入/借出展示所有館藏"
 
 # Circulation > Checkout policy
-msgid "circulation.pref#CircControl# Use the checkout and fines rules of"
-msgstr "借出與罰款規則，採用"
+msgid "circulation.pref#CircControl# Use the calendar and circulation rules of"
+msgstr "行事曆和流通規則，採用"
 
 # Circulation > Checkout policy
 msgid "circulation.pref#CircControl# the library the item is from."
@@ -4577,7 +4594,8 @@ msgid ""
 "circulation.pref#ILLModuleUnmediated# unmediated interlibrary loan requests. "
 "If enabled and the ILL backend supports it, the newly created requests are "
 "immediately requested by backend."
-msgstr "未經檢視的館際互借。若啟用且 ILL 後台支援它，新增的請求會立即在後台處理。"
+msgstr ""
+"未經檢視的館際互借。若啟用且 ILL 後台支援它，新增的請求會立即在後台處理。"
 
 # Circulation > Interlibrary loans
 msgid ""
@@ -4597,7 +4615,8 @@ msgid ""
 "ILL_REQUEST_CANCEL|ILL_REQUEST_MODIFIED If left empty, no staff ILL notices "
 "will be sent."
 msgstr ""
-"（以 | 區隔）。例如 ILL_REQUEST_CANCEL|ILL_REQUEST_MODIFIED 如果為空，則不會發送任何館員 ILL通知。"
+"（以 | 區隔）。例如 ILL_REQUEST_CANCEL|ILL_REQUEST_MODIFIED 如果為空，則不會"
+"發送任何館員 ILL通知。"
 
 # Circulation > Interlibrary loans > ILLSendStaffNotices
 msgid ""
@@ -4647,7 +4666,8 @@ msgid ""
 "'NULL' can be used to block renewal on undefined fields, while an empty "
 "string \"\" will block on an empty (but defined) field."
 msgstr ""
-"<br /> <strong>說明：</strong> 'NULL' 用於阻止未定義欄位的更新，空集合 \"\" 用於阻止空欄位 (但已定義) 的更新。"
+"<br /> <strong>說明：</strong> 'NULL' 用於阻止未定義欄位的更新，空集合 \"\" "
+"用於阻止空欄位 (但已定義) 的更新。"
 
 # Circulation > Checkout policy
 msgid ""
@@ -4722,7 +4742,8 @@ msgstr "包括"
 msgid ""
 "circulation.pref#ManInvInNoissuesCharge# custom debit type charges when "
 "summing up charges for limit set in the noissuescharge system preference."
-msgstr "加總在 noissuescharge 系統偏好中設定的限制費用時，向讀者的借方類型收費。"
+msgstr ""
+"加總在 noissuescharge 系統偏好中設定的限制費用時，向讀者的借方類型收費。"
 
 # Circulation > Checkout policy
 msgid "circulation.pref#MarkLostItemsAsReturned# ."
@@ -4785,25 +4806,25 @@ msgid ""
 "circulation.pref#NoIssuesChargeGuarantorsWithGuarantees# Prevent a patron "
 "from checking out if the patron has guarantors and those guarantor's "
 "guarantees owing in total more than"
-msgstr ""
+msgstr "不得借出館藏如果讀者有保證人且待付款超過"
 
 # Circulation > Checkout policy
 msgid ""
 "circulation.pref#NoIssuesChargeGuarantorsWithGuarantees# [% local_currency "
 "%] in fines."
-msgstr ""
+msgstr "[% local_currency %] 的罰款。"
 
 # Circulation > Fines Policy
 msgid ""
 "circulation.pref#NoRefundOnLostReturnedItemsAge# Don't refund lost fees if a "
 "lost item is checked in more than"
-msgstr ""
+msgstr "以下情況不退還遺失的罰款：還入遺失的館藏數量超過"
 
 # Circulation > Fines Policy
 msgid ""
 "circulation.pref#NoRefundOnLostReturnedItemsAge# days after it was marked "
 "lost."
-msgstr ""
+msgstr "標記為遺失後的幾天。"
 
 # Circulation > Checkout policy
 msgid ""
@@ -4828,7 +4849,7 @@ msgstr "確切時間。"
 # Circulation > Checkout policy
 msgid ""
 "circulation.pref#NoticeBcc# Send all notices as a BCC to this email address:"
-msgstr ""
+msgstr "所有通知都以 BCC 方式送至此電子郵件地址:"
 
 # Circulation > Interface
 msgid "circulation.pref#NoticeCSS# Include the stylesheet at"
@@ -4838,7 +4859,7 @@ msgstr "包括樣式表"
 msgid ""
 "circulation.pref#NoticeCSS# on notices. (This should be a complete URL, "
 "starting with <code>http://</code>)"
-msgstr ""
+msgstr "說明。(應該是完整的 URL，以 <code>http://</code>起頭)"
 
 # Circulation > Holds policy
 msgid "circulation.pref#OPACAllowHoldDateInFuture# Allow"
@@ -4877,11 +4898,11 @@ msgstr "若讀者欠款超過 OPACFineNoRenewals 的限額，"
 
 # Circulation > Checkout policy
 msgid "circulation.pref#OPACFineNoRenewalsBlockAutoRenew# allow"
-msgstr ""
+msgstr "允許"
 
 # Circulation > Checkout policy
 msgid "circulation.pref#OPACFineNoRenewalsBlockAutoRenew# block"
-msgstr ""
+msgstr "封鎖"
 
 # Circulation > Checkout policy
 msgid "circulation.pref#OPACFineNoRenewalsBlockAutoRenew# their auto-renewals."
@@ -4899,7 +4920,7 @@ msgstr "不允許"
 msgid ""
 "circulation.pref#OPACHoldsIfAvailableAtPickup# to pickup holds at libraries "
 "where the item is available."
-msgstr ""
+msgstr "從圖書館提取預約到館館藏。"
 
 # Circulation > Holds policy
 msgid ""
@@ -4911,7 +4932,7 @@ msgstr "(讀者類型以直線 '|' 區隔)"
 msgid ""
 "circulation.pref#OPACHoldsIfAvailableAtPickupExceptions# Patron categories "
 "not affected by OPACHoldsIfAvailableAtPickup:"
-msgstr ""
+msgstr "不受 OPACHoldsIfAvailableAtPickup 影響的讀者類型:"
 
 # Circulation > Checkout policy
 msgid "circulation.pref#OnSiteCheckoutAutoCheck# Don't enable"
@@ -4925,7 +4946,7 @@ msgstr "啟用"
 msgid ""
 "circulation.pref#OnSiteCheckoutAutoCheck# on-site checkout by default if "
 "last checkout was an on-site one."
-msgstr ""
+msgstr "如果上次借出是現場借出，則預設情況下為現場借出。"
 
 # Circulation > Checkout policy
 msgid "circulation.pref#OnSiteCheckouts# Disable"
@@ -4951,21 +4972,21 @@ msgstr "啟用"
 msgid ""
 "circulation.pref#OnSiteCheckoutsForce# the on-site checkout for all cases "
 "(even if a patron is debarred, etc.)."
-msgstr ""
+msgstr "所有情況都在地處理(包括停權的讀者)。"
 
 # Circulation > Checkout policy
 msgid "circulation.pref#OverdueNoticeCalendar# Ignore calendar"
-msgstr ""
+msgstr "忽略行事曆"
 
 # Circulation > Checkout policy
 msgid "circulation.pref#OverdueNoticeCalendar# Use calendar"
-msgstr ""
+msgstr "使用行事曆"
 
 # Circulation > Checkout policy
 msgid ""
 "circulation.pref#OverdueNoticeCalendar# when working out the period for "
 "overdue notices."
-msgstr ""
+msgstr "處裡逾期通知時。"
 
 # Circulation > Checkout policy
 msgid "circulation.pref#OverduesBlockCirc# Ask for confirmation"
@@ -5047,6 +5068,8 @@ msgid ""
 "'note', table 'accountlines' when the processing fee (defined for the item "
 "type) is applied:"
 msgstr ""
+"處理費用 (設定在館藏類型) 時，要記錄在欄位 'note'、表單 'accountlines' 內的文"
+"字："
 
 # Circulation > Interface
 msgid "circulation.pref#RecordLocalUseOnReturn# Don't record"
@@ -5063,32 +5086,28 @@ msgid ""
 msgstr "還入不外借館藏，並將之納入館內使用。"
 
 # Circulation > Checkout policy
-#, fuzzy
 msgid "circulation.pref#RecordStaffUserOnCheckout# When checking out an item, "
-msgstr "借出有租金要求的館藏， "
+msgstr "借出館藏時， "
 
 # Circulation > Interface
-#, fuzzy
 msgid "circulation.pref#RecordStaffUserOnCheckout# don't record"
 msgstr "不要記錄"
 
 # Circulation > Interface
-#, fuzzy
 msgid "circulation.pref#RecordStaffUserOnCheckout# record"
 msgstr "記錄"
 
 # Circulation > Checkout policy
-#, fuzzy
 msgid ""
 "circulation.pref#RecordStaffUserOnCheckout# the user who checked out the "
 "item."
-msgstr "在地借出功能。"
+msgstr "借出該館藏的讀者。"
 
 # Circulation > Fines Policy
 msgid ""
 "circulation.pref#RefundLostOnReturnControl# If a lost item is returned, "
 "apply the refunding rules defined for the"
-msgstr ""
+msgstr "還回已報遺失的館藏時，啟用退款機制"
 
 # Circulation > Fines Policy
 msgid "circulation.pref#RefundLostOnReturnControl# check-in library."
@@ -5096,53 +5115,53 @@ msgstr "還入圖書館。"
 
 # Circulation > Fines Policy
 msgid "circulation.pref#RefundLostOnReturnControl# item's holding library."
-msgstr ""
+msgstr "館藏所在圖書館。"
 
 # Circulation > Fines Policy
 msgid "circulation.pref#RefundLostOnReturnControl# item's home library."
-msgstr ""
+msgstr "館藏所屬圖書館。"
 
 # Circulation > Checkout policy
 msgid ""
 "circulation.pref#RenewAccruingItemInOpac# If a patron pays off all fines on "
 "an overdue item that is accruing fines in the OPAC via a payment plugin,"
-msgstr ""
+msgstr "如果讀者透過付款插件還清在 OPAC 積累逾期館藏的所有罰款，"
 
 # Circulation > Checkout policy
 msgid "circulation.pref#RenewAccruingItemInOpac# don't renew"
-msgstr ""
+msgstr "不續借"
 
 # Circulation > Checkout policy
 msgid "circulation.pref#RenewAccruingItemInOpac# renew"
-msgstr ""
+msgstr "續借"
 
 # Circulation > Checkout policy
 msgid ""
 "circulation.pref#RenewAccruingItemInOpac# the item automatically. If the "
 "system preference \"RenewalPeriodBase\" is set to \"due date\", renewed "
 "items may still be overdue."
-msgstr ""
+msgstr "館藏自動地。如果系統偏好 \"RenewalPeriodBase\" 設定成 \"截止日期\"，續借的館藏還是可能會逾期。"
 
 # Circulation > Checkout policy
 msgid ""
 "circulation.pref#RenewAccruingItemWhenPaid# If a patron pays off all fines "
 "on an overdue item that is accruing fines,"
-msgstr ""
+msgstr "如果讀者還清累積逾期館藏的所有罰款，"
 
 # Circulation > Checkout policy
 msgid "circulation.pref#RenewAccruingItemWhenPaid# don't renew"
-msgstr ""
+msgstr "不續借"
 
 # Circulation > Checkout policy
 msgid "circulation.pref#RenewAccruingItemWhenPaid# renew"
-msgstr ""
+msgstr "續借"
 
 # Circulation > Checkout policy
 msgid ""
 "circulation.pref#RenewAccruingItemWhenPaid# the item automatically. If the "
 "system preference \"RenewalPeriodBase\" is set to \"due date\", renewed "
 "items may still be overdue."
-msgstr ""
+msgstr "館藏自動地。如果系統偏好 \"RenewalPeriodBase\" 設定成 \"截止日期\"，續借的館藏還是可能會逾期。"
 
 # Circulation > Checkout policy
 msgid ""
@@ -5170,7 +5189,7 @@ msgstr "送出"
 msgid ""
 "circulation.pref#RenewalSendNotice# a renewal notice according to patron's "
 "messaging preferences for 'Item checkout'."
-msgstr ""
+msgstr "根據讀者的 '館藏借出' 進行偏好續借通知。"
 
 # Circulation > Checkout policy
 msgid ""
@@ -5184,7 +5203,7 @@ msgstr "詢問"
 
 # Circulation > Checkout policy
 msgid "circulation.pref#RentalFeesCheckoutConfirmation# don't ask"
-msgstr ""
+msgstr "不詢問"
 
 # Circulation > Checkout policy
 msgid "circulation.pref#RentalFeesCheckoutConfirmation# for confirmation."
@@ -5202,7 +5221,7 @@ msgstr "包括"
 msgid ""
 "circulation.pref#RentalsInNoissuesCharge# rental charges when summing up "
 "charges for limit set in the noissuescharge system preference."
-msgstr ""
+msgstr "加總 noissuescharge 系統偏好中設定的限制費用時的續借費用。"
 
 # Circulation > Holds policy
 msgid "circulation.pref#ReservesControlBranch# Check the"
@@ -5248,15 +5267,15 @@ msgstr "找到已被借出的館藏，並預約它。"
 
 # Circulation > Checkout policy
 msgid "circulation.pref#RestrictionBlockRenewing# If a patron is restricted,"
-msgstr ""
+msgstr "若讀者被停權，"
 
 # Circulation > Checkout policy
 msgid "circulation.pref#RestrictionBlockRenewing# allow"
-msgstr ""
+msgstr "允許"
 
 # Circulation > Checkout policy
 msgid "circulation.pref#RestrictionBlockRenewing# block"
-msgstr ""
+msgstr "禁止"
 
 # Circulation > Checkout policy
 msgid "circulation.pref#RestrictionBlockRenewing# renewing of items."
@@ -5275,7 +5294,7 @@ msgid ""
 "circulation.pref#ReturnBeforeExpiry# patrons to return items before their "
 "accounts expire (by restricting due dates to before the patron's expiration "
 "date)."
-msgstr ""
+msgstr "讀者證到期前，應先還書 (到期日必須在讀者證到期日之前)。"
 
 # Circulation > Self check-out module
 msgid "circulation.pref#SCOAllowCheckin# Allow"
@@ -5314,13 +5333,13 @@ msgid ""
 "circulation.pref#SelfCheckAllowByIPRanges# (Leave blank if not used. Use "
 "ranges or simple IP addresses separated by spaces, like <code>192.168.1.1 "
 "192.168.0.0/24</code>.)"
-msgstr ""
+msgstr "(未使用則空白。以空格區隔連續或單一的 ip 位址，如 <code>192.168.1.1 192.168.0.0/24</code>。)"
 
 # Circulation > Self check-out module
 msgid ""
 "circulation.pref#SelfCheckAllowByIPRanges# Allow access to the self check "
 "from the following IP addresses:"
-msgstr ""
+msgstr "允許從以下 IP 位址自助借出："
 
 # Circulation > Self check-out module
 msgid ""
@@ -5346,7 +5365,7 @@ msgstr "啟用"
 msgid ""
 "circulation.pref#SelfCheckInModule# the standalone self check-in module "
 "(available at: /cgi-bin/koha/sci/sci-main.pl)."
-msgstr ""
+msgstr "獨立的自動還入模組 (在：/cgi-bin/koha/sci/sci-main.pl)"
 
 # Circulation > Self check-in module
 msgid ""
@@ -5382,7 +5401,7 @@ msgstr "顯示"
 msgid ""
 "circulation.pref#SelfCheckReceiptPrompt# the print receipt popup dialog when "
 "self checkout is finished."
-msgstr ""
+msgstr "自助借出完成後，彈出列印收據的對話窗。"
 
 # Circulation > Self check-out module
 msgid ""
@@ -5396,25 +5415,25 @@ msgstr "秒。"
 
 # Circulation > Self check-out module
 msgid "circulation.pref#SelfCheckoutByLogin# ."
-msgstr ""
+msgstr " ."
 
 # Circulation > Self check-out module
 msgid ""
 "circulation.pref#SelfCheckoutByLogin# Have patrons log into the web-based "
 "self checkout system with their"
-msgstr ""
+msgstr "讓讀者以自己的帳號登入自助借出系統"
 
 # Circulation > Self check-out module
 msgid "circulation.pref#SelfCheckoutByLogin# cardnumber"
-msgstr ""
+msgstr "讀者證號碼"
 
 # Circulation > Self check-out module
 msgid "circulation.pref#SelfCheckoutByLogin# username and password"
-msgstr ""
+msgstr "使用者名稱與密碼"
 
 # Circulation > Interface
 msgid "circulation.pref#ShowAllCheckins# Don't show"
-msgstr ""
+msgstr "不顯示"
 
 # Circulation > Interface
 msgid "circulation.pref#ShowAllCheckins# Show"
@@ -5487,7 +5506,7 @@ msgstr "還入時由館員指定還入的日期。"
 msgid ""
 "circulation.pref#StaffSearchResultsDisplayBranch# For search results in the "
 "staff interface, display"
-msgstr ""
+msgstr "供館員介面搜尋結果之用，顯示"
 
 # Circulation > Checkout policy
 msgid ""
@@ -5552,7 +5571,7 @@ msgstr "啟用"
 
 # Circulation > Stock rotation module
 msgid "circulation.pref#StockRotation# the stock rotation module."
-msgstr ""
+msgstr "巡迴館藏模組"
 
 # Circulation > Checkin policy
 msgid "circulation.pref#StoreLastBorrower# Don't store"
@@ -5567,7 +5586,7 @@ msgid ""
 "circulation.pref#StoreLastBorrower# the last patron to return an item. This "
 "setting is independent of the opacreadinghistory and AnonymousPatron system "
 "preferences."
-msgstr ""
+msgstr "最後一位讀者還入館藏. 這個設定是獨立於 opacreadinghistory 和 AnonymousPatron 系統偏好."
 
 # Circulation > Holds policy
 msgid "circulation.pref#SuspendHoldsIntranet# Allow"
@@ -5581,7 +5600,7 @@ msgstr "不允許"
 msgid ""
 "circulation.pref#SuspendHoldsIntranet# holds to be suspended from the staff "
 "interface."
-msgstr ""
+msgstr "暫停從館員介面的預約功能。"
 
 # Circulation > Holds policy
 msgid "circulation.pref#SuspendHoldsOpac# Allow"
@@ -5655,7 +5674,7 @@ msgstr "啟動轉移後，館員仍可操作還入作業。"
 msgid ""
 "circulation.pref#TransfersMaxDaysWarning# Show a warning on the \"Transfers "
 "to receive\" screen if the transfer has not been received"
-msgstr ""
+msgstr "在 \"轉出給它館\" 畫面顯示警告，若轉出館藏尚未被接收"
 
 # Circulation > Checkout policy
 msgid "circulation.pref#TransfersMaxDaysWarning# days after it was sent."
@@ -5676,12 +5695,10 @@ msgid ""
 msgstr "館藏不外借但可預約 ( notforloan < 0 ) 以填滿預約."
 
 # Circulation > Holds policy
-#, fuzzy
 msgid "circulation.pref#UnseenRenewals# Allow"
 msgstr "允許"
 
 # Circulation > Holds policy
-#, fuzzy
 msgid "circulation.pref#UnseenRenewals# Don't allow"
 msgstr "不允許"
 
@@ -5689,7 +5706,7 @@ msgstr "不允許"
 msgid ""
 "circulation.pref#UnseenRenewals# renewals to be recorded as \"unseen\" by "
 "the library, and count against the patrons unseen renewals limit."
-msgstr ""
+msgstr "續借將被圖書館記錄為 \"仍在續借\"，並計入讀者仍在續借的限制。"
 
 # Circulation > Checkin policy
 msgid "circulation.pref#UpdateItemLocationOnCheckin# Examples:<br/>"
@@ -5726,6 +5743,8 @@ msgid ""
 "differ, in all other cases an update will affect both. Items in the CART "
 "location will be returned to their permanent location on checkout.<br/>"
 msgstr ""
+"說明：PROC 和 CART 是特別的值，location 不同於 permanent_location，更新的時候，兩者都受影響。借出後，在 CART "
+"位置的館藏將被標記送回永久典藏地。<br/>"
 
 # Circulation > Checkin policy
 msgid ""
@@ -5782,7 +5801,7 @@ msgid ""
 "circulation.pref#UpdateItemWhenLostFromHoldList# A list of values to update "
 "an item's values with when it is marked as lost from the 'Holds to pull' "
 "page."
-msgstr ""
+msgstr "在 '預約到館待提取' 畫面中將館藏標註為遺失時用於更新館藏值的列表。"
 
 # Circulation > Holds policy
 msgid ""
@@ -5811,7 +5830,7 @@ msgid ""
 "circulation.pref#UpdateNotForLoanStatusOnCheckin# it will be updated to the "
 "right-hand value. For example, '-1: 0' will cause an item that was set to "
 "'Ordered' to now be available for loan."
-msgstr ""
+msgstr "將更新至右側的值。如 '-1: 0' 將使設定為 '已訂購' 的館藏可借出。"
 
 # Circulation > Interface
 msgid "circulation.pref#UpdateTotalIssuesOnCirc# Do"
@@ -5819,7 +5838,7 @@ msgstr "做"
 
 # Circulation > Interface
 msgid "circulation.pref#UpdateTotalIssuesOnCirc# Don't"
-msgstr ""
+msgstr "不做"
 
 # Circulation > Interface
 msgid ""
@@ -5828,6 +5847,7 @@ msgid ""
 "increases server load significantly; if performance is a concern, use the "
 "update_totalissues.pl cron job to update the total checkouts count)."
 msgstr ""
+"更新書目記錄的所有流通內容(警示！此作業增加伺服器相當負擔，若擔心其效能，使用 update_totalissues.pl 工作排程更新此流通內容)。"
 
 # Circulation > Checkout policy
 msgid "circulation.pref#UseBranchTransferLimits# ."
@@ -5877,7 +5897,7 @@ msgstr "使用"
 
 # Circulation > Course reserves
 msgid "circulation.pref#UseCourseReserves# course reserves."
-msgstr ""
+msgstr "指定參考書。"
 
 # Circulation > Checkout policy
 msgid "circulation.pref#UseTransportCostMatrix# Don't use"
@@ -5891,7 +5911,7 @@ msgstr "使用"
 msgid ""
 "circulation.pref#UseTransportCostMatrix# the transport cost matrix for "
 "calculating optimal holds filling between libraries."
-msgstr ""
+msgstr "轉移成本矩陣用於計算各館間預約的轉移費用。"
 
 # Circulation > Interface
 msgid "circulation.pref#WaitingNotifyAtCheckin# Don't notify"
@@ -5919,7 +5939,7 @@ msgstr "啟用"
 msgid ""
 "circulation.pref#WebBasedSelfCheck# the web-based self checkout system "
 "(available at: /cgi-bin/koha/sco/sco-main.pl)."
-msgstr ""
+msgstr "網頁介面的自助借出系統。(使用此程式：/cgi-bin/koha/sco/sco-main.pl)"
 
 # Circulation > Fines Policy
 msgid "circulation.pref#WhenLostChargeReplacementFee# Charge"
@@ -5927,7 +5947,7 @@ msgstr "罰款"
 
 # Circulation > Fines Policy
 msgid "circulation.pref#WhenLostChargeReplacementFee# Don't charge"
-msgstr ""
+msgstr "不罰款"
 
 # Circulation > Fines Policy
 msgid ""
@@ -5937,7 +5957,7 @@ msgstr "讀者遺失館藏時的重置價格。"
 
 # Circulation > Fines Policy
 msgid "circulation.pref#WhenLostForgiveFine# Don't forgive"
-msgstr ""
+msgstr "不豁免"
 
 # Circulation > Fines Policy
 msgid "circulation.pref#WhenLostForgiveFine# Forgive"
@@ -5947,7 +5967,7 @@ msgstr "豁免"
 msgid ""
 "circulation.pref#WhenLostForgiveFine# the fines on an item when it is marked "
 "as lost."
-msgstr ""
+msgstr "標記為遺失館藏的罰款。"
 
 # Circulation > Holds policy
 msgid "circulation.pref#canreservefromotherbranches# Allow"
@@ -5957,7 +5977,7 @@ msgstr "允許"
 msgid ""
 "circulation.pref#canreservefromotherbranches# Don't allow (with "
 "independentbranches)"
-msgstr ""
+msgstr "不允許(獨立分館)"
 
 # Circulation > Holds policy
 msgid ""
@@ -5969,7 +5989,7 @@ msgstr "讀者預約它館的館藏"
 msgid ""
 "circulation.pref#decreaseLoanHighHolds# . Ignore items with the following "
 "statuses when counting items:"
-msgstr ""
+msgstr "。不計入下列狀態的館藏："
 
 # Circulation > Holds policy
 msgid "circulation.pref#decreaseLoanHighHolds# Damaged"
@@ -5996,7 +6016,7 @@ msgid ""
 "circulation.pref#decreaseLoanHighHolds# Note: The reduced loan period can "
 "also be set up in the circulation conditions and will then overwrite the "
 "setting here."
-msgstr ""
+msgstr "說明：還可以在流通條件中設定減少的借出期限，然後在此處覆蓋設定。"
 
 # Circulation > Holds policy
 msgid "circulation.pref#decreaseLoanHighHolds# Withdrawn"
@@ -6053,7 +6073,6 @@ msgid "circulation.pref#finesCalendar# when calculating the period for fines."
 msgstr "計算罰款的日數。"
 
 # Circulation > Fines Policy
-#, fuzzy
 msgid ""
 "circulation.pref#finesMode# <br><strong>NOTE:</strong> If the cronjobs/fines."
 "pl cronjob is being run, accruing and final fines will be calculated when "
@@ -6061,27 +6080,25 @@ msgid ""
 "If CalculateFinesOnReturn is enabled, final fines will be calculated when an "
 "item is returned.<br/>"
 msgstr ""
-"<br><strong>註:</strong> 如果 cronjobs/fines.pl cronjob 被執行, 一本館藏被還"
-"入時, 應計及最後罰款會被計算. 當 CalculateFinesOnReturn 啟用, 當館藏還入, 最"
-"後罰款會被計算."
+"circulation.pref#finesMode# <br><strong>註:</strong> 如果 cronjobs/fines.pl "
+"cronjob 被執行, 一本館藏被還入時, 應計及最後罰款會被計算. 當 "
+"CalculateFinesOnReturn 啟用, 當館藏還入, 最後罰款會被計算.<br/>"
 
 # Circulation > Fines Policy
 msgid "circulation.pref#finesMode# Calculate and charge"
 msgstr "計算並收取"
 
 # Circulation > Fines Policy
-#, fuzzy
 msgid "circulation.pref#finesMode# Charge"
-msgstr "計算並收取"
+msgstr "收取"
 
 # Circulation > Fines Policy
 msgid "circulation.pref#finesMode# Don't calculate"
 msgstr "不計算"
 
 # Circulation > Fines Policy
-#, fuzzy
 msgid "circulation.pref#finesMode# Don't charge"
-msgstr "不計算"
+msgstr "不收取"
 
 # Circulation > Fines Policy
 msgid ""
@@ -6093,7 +6110,7 @@ msgstr "罰金 (當 <code>cronjobs/fines.pl</code> 正被運作)."
 msgid ""
 "circulation.pref#finesMode# on close days. If set the fines.pl cronjob will "
 "not generate fines when run on days marked as closed in the calendar."
-msgstr ""
+msgstr "在閉館日。如果設定了 fines.pl cronjob 在日曆中標記為閉館的日期執行時將不會產生罰款。"
 
 # Circulation > Interface
 msgid "circulation.pref#itemBarcodeFallbackSearch# Don't enable"
@@ -6125,7 +6142,7 @@ msgstr "不要篩選"
 # Circulation > Interface
 msgid ""
 "circulation.pref#itemBarcodeInputFilter# EAN-13 or zero-padded UPC-A form"
-msgstr ""
+msgstr "EAN-13 碼或補零的 UPC-A 碼"
 
 # Circulation > Interface
 msgid "circulation.pref#itemBarcodeInputFilter# Remove spaces from"
@@ -6163,7 +6180,7 @@ msgstr "最多的預約數。"
 msgid ""
 "circulation.pref#noissuescharge# Prevent patrons from checking out items if "
 "they have more than"
-msgstr ""
+msgstr "禁止讀者借出館藏如果超過"
 
 # Circulation > Checkout policy
 msgid "circulation.pref#noissuescharge# [% local_currency %] in fines."
@@ -6248,13 +6265,13 @@ msgstr "不使用"
 
 # Circulation > Fines Policy
 msgid "circulation.pref#useDefaultReplacementCost# Use"
-msgstr ""
+msgstr "使用"
 
 # Circulation > Fines Policy
 msgid ""
 "circulation.pref#useDefaultReplacementCost# the default replacement cost "
 "defined for the item type."
-msgstr ""
+msgstr "為館藏類型預設重置費用。"
 
 # Enhanced content
 msgid "enhanced_content.pref"
@@ -6382,7 +6399,7 @@ msgstr "不允許"
 msgid ""
 "enhanced_content.pref#AllowMultipleCovers# multiple images to be attached to "
 "each bibliographic record and item."
-msgstr ""
+msgstr "將多個影像附加到每筆書目記錄和館藏。"
 
 # Enhanced content > Amazon
 msgid "enhanced_content.pref#AmazonAssocTag# Put the associate tag"
@@ -6463,25 +6480,25 @@ msgstr "加入來自法國文學圖書館的 (書評與引文) 資訊於 OPAC。
 msgid ""
 "enhanced_content.pref#Babeltheque_url_js# (e.g. http://www.babeltheque.com/"
 "bw_XX.js)."
-msgstr ""
+msgstr "（例如http://www.babeltheque.com/bw_XX.js）。"
 
 # Enhanced content > Babelthèque
 msgid ""
 "enhanced_content.pref#Babeltheque_url_js# Use this URL for the Babelthèque "
 "javascript file: "
-msgstr ""
+msgstr "將此網址用於 Babelthèquejavascript 文件： "
 
 # Enhanced content > Babelthèque
 msgid ""
 "enhanced_content.pref#Babeltheque_url_update# (e.g. http://www.babeltheque."
 "com/.../file.csv.bz2)."
-msgstr ""
+msgstr "(例如http://www.babeltheque.com/.../file.csv.bz2)。"
 
 # Enhanced content > Babelthèque
 msgid ""
 "enhanced_content.pref#Babeltheque_url_update# Use this URL for the "
 "Babelthèque periodic update: "
-msgstr ""
+msgstr "使用此URL進行 Babelthèque 定期更新： "
 
 # Enhanced content > Baker and Taylor
 msgid ""
@@ -6509,7 +6526,7 @@ msgid ""
 "enhanced_content.pref#BakerTaylorEnabled# Baker and Taylor links and cover "
 "images to the OPAC and staff interface. This requires that you have entered "
 "in a username and password (which can be seen in image links)."
-msgstr ""
+msgstr "Baker 與 Taylor 書店及其封面資訊於 OPAC 與館員介面。此功能需輸入帳號及密碼(從前述的連結取得)。"
 
 # Enhanced content > Baker and Taylor
 msgid "enhanced_content.pref#BakerTaylorEnabled# Don't add"
@@ -6583,13 +6600,13 @@ msgstr "可以設定使用以下的模式：{isbn}、{issn}、{normalized_isbn}�
 msgid ""
 "enhanced_content.pref#CustomCoverImages# custom remote URL images at the "
 "OPAC.<br/>"
-msgstr ""
+msgstr "在 OPAC 使用客製化的遠端 URL 封面。<br/>"
 
 # Enhanced content > Local or remote cover images
 msgid ""
 "enhanced_content.pref#CustomCoverImages# custom remote URL images in the "
 "staff interface.<br/>"
-msgstr ""
+msgstr "在館員介面使用客製化的遠端 URL 封面。<br/>"
 
 # Enhanced content > All
 msgid "enhanced_content.pref#FRBRizeEditions# Don't show"
@@ -6603,7 +6620,7 @@ msgstr "顯示"
 msgid ""
 "enhanced_content.pref#FRBRizeEditions# other editions of an item on the "
 "staff interface (if found by one of the services below)."
-msgstr ""
+msgstr "館員介面上其他版本的館藏資訊 (若從以下的服務取得該資訊)。"
 
 # Enhanced content > Google
 msgid "enhanced_content.pref#GoogleJackets# Add"
@@ -6627,7 +6644,7 @@ msgstr "在欄位 856 使用 HTML5 媒體播放器顯示分頁"
 
 # Enhanced content > HTML5 media
 msgid "enhanced_content.pref#HTML5MediaEnabled# in OPAC and staff interface."
-msgstr ""
+msgstr "在 OPAC 與館員介面。"
 
 # Enhanced content > HTML5 media
 msgid "enhanced_content.pref#HTML5MediaEnabled# in the OPAC."
@@ -6635,7 +6652,7 @@ msgstr "在 OPAC。"
 
 # Enhanced content > HTML5 media
 msgid "enhanced_content.pref#HTML5MediaEnabled# in the staff interface."
-msgstr ""
+msgstr "在館員介面。"
 
 # Enhanced content > HTML5 media
 msgid "enhanced_content.pref#HTML5MediaEnabled# not at all."
@@ -6673,7 +6690,7 @@ msgstr "啟用"
 msgid ""
 "enhanced_content.pref#IntranetCoce# a Coce image cache service in the staff "
 "interface."
-msgstr ""
+msgstr "館員介面中的 Coce 封面快取服務。"
 
 # Enhanced content > Manual
 msgid ""
@@ -6810,7 +6827,7 @@ msgstr "不顯示"
 msgid ""
 "enhanced_content.pref#LocalCoverImages# local cover images on staff "
 "interface search and details pages."
-msgstr ""
+msgstr "本地封面供館員介面檢索及詳情頁面之用。"
 
 # Enhanced content > Novelist Select
 msgid "enhanced_content.pref#NovelistSelectEnabled# Add"
@@ -6860,7 +6877,7 @@ msgid ""
 "enhanced_content.pref#NovelistSelectStaffEnabled# Novelist Select content to "
 "the staff interface (requires that you have entered in a user profile and "
 "password, which can be seen in image links)."
-msgstr ""
+msgstr "在館員介面使用 Novelist Select 內容 (需輸入連結裡的使用者設定檔及密碼)。"
 
 # Enhanced content > Novelist Select
 msgid ""
@@ -6871,7 +6888,7 @@ msgstr "以使用者設定檔近用 Novelist Select"
 # Enhanced content > Novelist Select
 msgid ""
 "enhanced_content.pref#NovelistSelectStaffProfile# on the staff interface."
-msgstr ""
+msgstr "在館員介面"
 
 # Enhanced content > Novelist Select
 msgid "enhanced_content.pref#NovelistSelectStaffView# ."
@@ -6881,7 +6898,7 @@ msgstr "."
 msgid ""
 "enhanced_content.pref#NovelistSelectStaffView# Display Novelist Select staff "
 "interface content"
-msgstr ""
+msgstr "顯示 Novelist Select 館員介面內容"
 
 # Enhanced content > Novelist Select
 msgid "enhanced_content.pref#NovelistSelectStaffView# above the holdings table"
@@ -6974,7 +6991,7 @@ msgstr "啟用"
 
 # Enhanced content > Coce cover images cache
 msgid "enhanced_content.pref#OpacCoce# a Coce image cache service in the OPAC."
-msgstr "在 OPAC 使用 Coce 封面服務。"
+msgstr "在 OPAC 使用 Coce 封面快取服務。"
 
 # Enhanced content > Open Library
 msgid "enhanced_content.pref#OpenLibraryCovers# Add"
@@ -7010,6 +7027,8 @@ msgid ""
 "individual branch authname not set in the <a href=\"/cgi-bin/koha/admin/"
 "overdrive.pl\">OverDrive library authnames table</a>)."
 msgstr ""
+"(將會被退回如果獨立的分館 authname未設定在 <a href=\"/cgi-bin/koha/admin/overdrive.pl\">"
+"OverDrive 圖書館 authnames 欄位</a>)."
 
 # Enhanced content > OverDrive
 msgid ""
@@ -7405,7 +7424,7 @@ msgstr "i18n_l10n.pref"
 
 # I18N/L10N
 msgid "i18n_l10n.pref#AddressFormat# ."
-msgstr ""
+msgstr " ."
 
 # I18N/L10N
 msgid "i18n_l10n.pref#AddressFormat# Format postal addresses using"
@@ -7474,7 +7493,7 @@ msgid ""
 "i18n_l10n.pref#TimeFormat# . <br/> <strong>NOTE:</strong> Do not change this "
 "preference on a production server with overdue items that are accruing "
 "fines. Doing so will result in duplicate fines!"
-msgstr ""
+msgstr "。<br/> <strong> 附註：</strong> 不要改變此偏好。否則會重複收取已逾期館藏的罰款！"
 
 # I18N/L10N
 msgid "i18n_l10n.pref#TimeFormat# 12 hour format ( e.g. \"02:18 PM\" )"
@@ -7501,7 +7520,7 @@ msgid ""
 "i18n_l10n.pref#TranslateNotices# If set, notices will be translatable from "
 "the \"Notices and slips\" interface. The language used to send a notice to a "
 "patron will be the one defined for the patron."
-msgstr ""
+msgstr "設定後，\"通知與收條\" 介面的通知就可以翻譯。送給讀者通知的語言設定為讀者指定的語言。"
 
 # I18N/L10N
 msgid "i18n_l10n.pref#TranslateNotices# notices to be translated."
@@ -7513,6 +7532,7 @@ msgid ""
 "the 'surname' column of the 'borrowers' table is helpful to make browsing by "
 "last name work in members-home.pl when using an alphabet outside of A-Z."
 msgstr ""
+"<br/> 提示：改變資料庫 'borrowers' 表內 'surname' 欄的對照表有助於瀏覽 members-home.pl 的 A-Z 以外的姓"
 
 # I18N/L10N
 msgid "i18n_l10n.pref#alphabet# Use the alphabet"
@@ -7529,7 +7549,7 @@ msgid ""
 "i18n_l10n.pref#dateformat# . <br/> <strong>NOTE:</strong> Do not change this "
 "preference on a production server with overdue items that are accruing "
 "fines. Doing so will result in duplicate fines!"
-msgstr ""
+msgstr " . <br/> <strong>附註：</strong> 不要改變此偏好。否則會重複收取已逾期館藏的罰款！"
 
 # I18N/L10N
 msgid "i18n_l10n.pref#dateformat# Format dates like"
@@ -7610,7 +7630,7 @@ msgstr "記錄"
 
 # Logging > Logging
 msgid "logs.pref#AuthFailureLog#  authentication failures."
-msgstr ""
+msgstr "  認證失敗"
 
 # Logging > Logging
 msgid "logs.pref#AuthFailureLog# Don't log"
@@ -7622,7 +7642,7 @@ msgstr "記錄"
 
 # Logging > Logging
 msgid "logs.pref#AuthSuccessLog#  successful authentications."
-msgstr ""
+msgstr "  認證成功"
 
 # Logging > Logging
 msgid "logs.pref#AuthSuccessLog# Don't log"
@@ -7708,7 +7728,7 @@ msgstr "不做"
 msgid ""
 "logs.pref#DumpTemplateVarsIntranet# dump all Template Toolkit variables to a "
 "comment in the HTML source for the staff interface."
-msgstr ""
+msgstr "將所有 Template Toolkit 的變數下載到館員介面的 HTML 源代碼的註釋中。"
 
 # Logging > Debugging
 msgid "logs.pref#DumpTemplateVarsOpac# Do"
@@ -7722,7 +7742,7 @@ msgstr "不做"
 msgid ""
 "logs.pref#DumpTemplateVarsOpac# dump all Template Toolkit variables to a "
 "comment in the HTML source for the OPAC."
-msgstr ""
+msgstr "將所有 Template Toolkit 的變數下載到 OPAC 的 HTML 源代碼註釋中。"
 
 # Logging > Logging
 msgid "logs.pref#FinesLog# Don't log"
@@ -7760,7 +7780,7 @@ msgstr "紀錄"
 
 # Logging > Logging
 msgid "logs.pref#IllLog# when changes to ILL requests take place."
-msgstr ""
+msgstr "改變 ILL 請求時"
 
 # Logging > Logging
 msgid "logs.pref#IssueLog# Don't log"
@@ -7820,7 +7840,7 @@ msgstr "記錄"
 
 # Logging > Logging
 msgid "logs.pref#ReturnLog# when items are checked in."
-msgstr ""
+msgstr "還入館藏時。"
 
 # Logging > Logging
 msgid "logs.pref#SubscriptionLog# Don't log"
@@ -7847,9 +7867,8 @@ msgid "opac.pref Appearance"
 msgstr "外觀"
 
 # Administration > CAS authentication
-#, fuzzy
 msgid "opac.pref Authentication"
-msgstr "CAS 認證"
+msgstr "opac.pref 認證"
 
 # OPAC > Features
 msgid "opac.pref Features"
@@ -7896,7 +7915,7 @@ msgid ""
 "opac.pref#AllowPatronToSetCheckoutsVisibilityForGuarantor# patrons to choose "
 "their own privacy settings for showing the patron's checkouts to the "
 "patron's guarantor."
-msgstr ""
+msgstr "讀者選擇他們自己的隱私設定會在讀者借出時對保證人顯示。"
 
 # OPAC > Privacy
 msgid "opac.pref#AllowPatronToSetFinesVisibilityForGuarantor# Allow"
@@ -7911,7 +7930,7 @@ msgid ""
 "opac.pref#AllowPatronToSetFinesVisibilityForGuarantor# patrons to choose "
 "their own privacy settings for showing the patron's fines to the patron's "
 "guarantor."
-msgstr ""
+msgstr "讀者選擇他們自己的隱私設定會在讀者罰款時對保證人顯示"
 
 # OPAC > Privacy
 msgid "opac.pref#AnonSuggestions# Allow"
@@ -7926,7 +7945,7 @@ msgid ""
 "opac.pref#AnonSuggestions# patrons that aren't logged in to make purchase "
 "suggestions. Suggestions are connected to the AnonymousPatron system "
 "preference."
-msgstr ""
+msgstr "讀者在沒有登入的情況下提出採購建議。該建議與 AnonymousPatron 系統偏好連結"
 
 # OPAC > Privacy
 msgid "opac.pref#AnonymousPatron# Use borrowernumber"
@@ -7936,11 +7955,11 @@ msgstr "使用讀者號"
 msgid ""
 "opac.pref#AnonymousPatron# as the anonymous patron (for anonymous "
 "suggestions and checkout history)."
-msgstr ""
+msgstr "做為匿名讀者(供匿名建議與借出記錄之用)"
 
 # OPAC > Appearance
 msgid "opac.pref#BiblioDefaultView# By default, show bibliographic records"
-msgstr ""
+msgstr "預設顯示書目記錄為"
 
 # OPAC > Appearance
 msgid "opac.pref#BiblioDefaultView# as specified in the ISBD template."
@@ -7967,7 +7986,7 @@ msgid ""
 "opac.pref#BlockExpiredPatronOpacActions# expired patrons from OPAC actions "
 "such as placing a hold or renewing. Note that the setting for a patron "
 "category takes priority over this system preference."
-msgstr ""
+msgstr "到期讀者在 OPAC 辦理預約或續借作業。注意，讀者類型設定的權限優於此系統偏好。"
 
 # OPAC > Appearance
 msgid ""
@@ -8034,7 +8053,7 @@ msgid ""
 "opac.pref#EnablePayPalOpacPayments# <br/><strong>Warning</strong>: this "
 "functionality has been deprecated in favor of using payment plugins that can "
 "implement different payment services."
-msgstr ""
+msgstr "<br/><strong>警告</strong>：不建議使用此功能，推薦使用其他支付服務的外掛程式。"
 
 # OPAC > Payments
 msgid "opac.pref#EnablePayPalOpacPayments# Allow"
@@ -8056,18 +8075,18 @@ msgstr "於 OPAC 使用 PayPal 支付讀者的款項"
 
 # OPAC > Payments
 msgid "opac.pref#EnablePayPalOpacPayments# production"
-msgstr ""
+msgstr "產生"
 
 # OPAC > Payments
 msgid "opac.pref#EnablePayPalOpacPayments# sandbox"
-msgstr ""
+msgstr "砂盒"
 
 # OPAC > Appearance
 msgid ""
 "opac.pref#HighlightOwnItemsOnOPAC#  by moving the results to the front and "
 "increasing the size or highlighting the rows for those results (non-XSLT "
 "only)."
-msgstr ""
+msgstr "  將結果移至前端並加大字型或強調結果的內容。(僅限 Non-XSLT)"
 
 # OPAC > Appearance
 msgid "opac.pref#HighlightOwnItemsOnOPAC# Don't emphasize"
@@ -8079,11 +8098,11 @@ msgstr "強調"
 
 # OPAC > Appearance
 msgid "opac.pref#HighlightOwnItemsOnOPAC# OPAC's library via the URL"
-msgstr ""
+msgstr "經由 URL網址的 OPAC 分頁"
 
 # OPAC > Appearance
 msgid "opac.pref#HighlightOwnItemsOnOPAC# patron's home library"
-msgstr ""
+msgstr "讀者所屬分館"
 
 # OPAC > Appearance
 msgid "opac.pref#HighlightOwnItemsOnOPAC# results from the "
@@ -8105,7 +8124,7 @@ msgstr "限制讀者於"
 msgid ""
 "opac.pref#MaxOpenSuggestions# open suggestions. Leave empty for no limit. "
 "**Note: this setting does not affect anonymous suggestions."
-msgstr ""
+msgstr "開啟建議。空白則表示無限制。**說明：此設定不影響匿名建議"
 
 # OPAC > Policy
 msgid "opac.pref#MaxTotalSuggestions# Number of total suggestions allowed"
@@ -8149,7 +8168,7 @@ msgstr "OPAC 位於 "
 
 # OPAC > Features
 msgid "opac.pref#OPACDetailQRCode# Disable"
-msgstr ""
+msgstr "不啟用"
 
 # OPAC > Features
 msgid "opac.pref#OPACDetailQRCode# Enable"
@@ -8175,19 +8194,19 @@ msgstr "顯示欄位 856u 的 URI 連結影像："
 
 # OPAC > Appearance
 msgid "opac.pref#OPACDisplay856uAsImage# both detail and result pages"
-msgstr ""
+msgstr "詳情與結果頁面"
 
 # OPAC > Appearance
 msgid "opac.pref#OPACDisplay856uAsImage# detail page only"
-msgstr ""
+msgstr "僅詳情頁面"
 
 # OPAC > Appearance
 msgid "opac.pref#OPACDisplay856uAsImage# neither detail or result pages"
-msgstr ""
+msgstr "不包括詳情與結果頁面"
 
 # OPAC > Appearance
 msgid "opac.pref#OPACDisplay856uAsImage# result page only"
-msgstr ""
+msgstr "僅結果頁面"
 
 # OPAC > Appearance
 msgid "opac.pref#OPACFallback# Use the"
@@ -8229,7 +8248,7 @@ msgstr "包括"
 msgid ""
 "opac.pref#OPACFineNoRenewalsIncludeCredits# outstanding/unapplied credits "
 "when applying the OPACFineNoRenewals rule to patrons."
-msgstr ""
+msgstr "適用讀者 OPACFineNoRenewals 規則時，待處理/未使用的額度。"
 
 # OPAC > Features
 msgid "opac.pref#OPACFinesTab# Allow"
@@ -8243,7 +8262,7 @@ msgstr "不允許"
 msgid ""
 "opac.pref#OPACFinesTab# patrons to access the charges tab on their account "
 "page on the OPAC."
-msgstr ""
+msgstr "讀者可以存取 OPAC 帳號頁面上的費用分頁。"
 
 # OPAC > Appearance
 msgid "opac.pref#OPACHoldingsDefaultSortField# First column of the table"
@@ -8261,23 +8280,20 @@ msgstr "所屬圖書館"
 msgid ""
 "opac.pref#OPACHoldingsDefaultSortField# is the default sort field for the "
 "holdings table."
-msgstr ""
+msgstr "預約表單的預設排序欄位"
 
 # OPAC > Privacy
-#, fuzzy
 msgid "opac.pref#OPACHoldsHistory# Allow"
 msgstr "允許"
 
 # OPAC > Privacy
-#, fuzzy
 msgid "opac.pref#OPACHoldsHistory# Don't allow"
 msgstr "不允許"
 
 # OPAC > Privacy
-#, fuzzy
 msgid ""
 "opac.pref#OPACHoldsHistory# patrons to see the list of their past holds."
-msgstr "讀者檢視自己的借出記錄。"
+msgstr "讀者檢視自己的預約記錄。"
 
 # OPAC > Features
 msgid "opac.pref#OPACISBD# Use the following as the OPAC ISBD template:"
@@ -8297,7 +8313,7 @@ msgid ""
 "opac.pref#OPACMySummaryHTML# Include a \"Links\" column on the \"my summary"
 "\" and \"my checkout history\" tabs when a patron is logged in to the OPAC, "
 "with the following HTML (leave blank to disable):"
-msgstr ""
+msgstr "當讀者登錄到 OPAC 時，在 \"我的摘要\" 和 \"我的結帳紀錄\" 分頁上包括 \"連結\" 列，帶有以下 HTML（保留空白）："
 
 # OPAC > Appearance
 msgid ""
@@ -8384,7 +8400,7 @@ msgid ""
 "opac.pref#OPACPrivacy# patrons to choose their own privacy settings for "
 "their checkout history. This requires opacreadinghistory and AnonymousPatron "
 "system preferences."
-msgstr ""
+msgstr "讀者選擇其借閱紀錄的隱私設定。  需同時設定 opacreadinghistory 與 AnonymousPatron 系統偏好"
 
 # OPAC > Features
 msgid "opac.pref#OPACReportProblem# <br/>"
@@ -8408,7 +8424,7 @@ msgstr "不允許"
 msgid ""
 "opac.pref#OPACReportProblem# patrons to submit problem reports for OPAC "
 "pages to the library or Koha administrator."
-msgstr ""
+msgstr "讀者將 OPAC 的頁面問題報告提交給圖書館或 Koha 管理員。"
 
 # OPAC > Appearance
 msgid ""
@@ -8423,7 +8439,7 @@ msgstr "OPAC的搜尋結果，顯示館藏的"
 
 # OPAC > Appearance
 msgid "opac.pref#OPACResultsLibrary# current library"
-msgstr ""
+msgstr "當前圖書館"
 
 # OPAC > Appearance
 msgid "opac.pref#OPACResultsLibrary# home library"
@@ -8471,20 +8487,17 @@ msgstr ""
 "的伺服器資源，若館藏太大，應小心使用。"
 
 # OPAC > Privacy
-#, fuzzy
 msgid "opac.pref#OPACShibOnly# Allow"
 msgstr "允許"
 
 # OPAC > Privacy
-#, fuzzy
 msgid "opac.pref#OPACShibOnly# Don't allow"
 msgstr "不允許"
 
 # OPAC > Privacy
-#, fuzzy
 msgid ""
 "opac.pref#OPACShibOnly# patrons to login by means other than Shibboleth."
-msgstr "讀者檢視自己的借出記錄。"
+msgstr "讀者可以用 Shibboleth 以外的其他方式登入。"
 
 # OPAC > Appearance
 msgid "opac.pref#OPACShowCheckoutName# Don't show"
@@ -8550,7 +8563,7 @@ msgstr "在 OPAC 搜尋結果與詳情頁面顯示 OpenURL 連結。"
 
 # OPAC > Appearance
 msgid "opac.pref#OPACShowUnusedAuthorities# Don't show"
-msgstr ""
+msgstr "不顯示"
 
 # OPAC > Appearance
 msgid "opac.pref#OPACShowUnusedAuthorities# Show"
@@ -8623,58 +8636,58 @@ msgstr "題名"
 msgid ""
 "opac.pref#OPACSuggestionUnwantedFields# <br />Note: Do not make "
 "OPACSuggestionMandatoryFields unwanted fields "
-msgstr ""
+msgstr "<br />說明：不要把 OPACSuggestionMandatoryFields 設為不必要的欄位 "
 
 # OPAC > Policy
 msgid "opac.pref#OPACSuggestionUnwantedFields# Author"
-msgstr ""
+msgstr "著作"
 
 # OPAC > Policy
 msgid "opac.pref#OPACSuggestionUnwantedFields# Collection title"
-msgstr ""
+msgstr "館藏題名"
 
 # OPAC > Policy
 msgid "opac.pref#OPACSuggestionUnwantedFields# Copyright or publication date"
-msgstr ""
+msgstr "著作權或出版日期"
 
 # OPAC > Policy
 msgid ""
 "opac.pref#OPACSuggestionUnwantedFields# Fields that should be hidden for "
 "patron purchase suggestions:"
-msgstr ""
+msgstr "讀者採訪建議應該隱藏的欄位："
 
 # OPAC > Policy
 msgid ""
 "opac.pref#OPACSuggestionUnwantedFields# ISBN, ISSN or other standard number"
-msgstr ""
+msgstr "ISBN, ISSN 或其他標準號"
 
 # OPAC > Policy
 msgid "opac.pref#OPACSuggestionUnwantedFields# Item type"
-msgstr ""
+msgstr "館藏類型"
 
 # OPAC > Policy
 msgid "opac.pref#OPACSuggestionUnwantedFields# Library or branch"
-msgstr ""
+msgstr "圖書館或分館"
 
 # OPAC > Policy
 msgid "opac.pref#OPACSuggestionUnwantedFields# Note"
-msgstr ""
+msgstr "說明"
 
 # OPAC > Policy
 msgid "opac.pref#OPACSuggestionUnwantedFields# Patron reason"
-msgstr ""
+msgstr "讀者原因"
 
 # OPAC > Policy
 msgid "opac.pref#OPACSuggestionUnwantedFields# Publication place"
-msgstr ""
+msgstr "出版地"
 
 # OPAC > Policy
 msgid "opac.pref#OPACSuggestionUnwantedFields# Publisher name"
-msgstr ""
+msgstr "出版者"
 
 # OPAC > Policy
 msgid "opac.pref#OPACSuggestionUnwantedFields# Quantity"
-msgstr ""
+msgstr "數量"
 
 # OPAC > Appearance
 msgid ""
@@ -8717,7 +8730,7 @@ msgstr "顯示"
 msgid ""
 "opac.pref#OPACUserSummary# a summary of a logged in patron's checkouts, "
 "overdues, holds and charges on the OPAC start page."
-msgstr ""
+msgstr "OPAC 首頁上已登入讀者的借出、逾期、預約和收費的摘要。"
 
 # OPAC > Policy
 msgid "opac.pref#OPACViewOthersSuggestions# Don't show"
@@ -8743,6 +8756,11 @@ msgid ""
 "file</li><li>put an URL for an external specific stylesheet.</li></"
 "ul>{langcode} will be replaced with current interface language."
 msgstr ""
+"opac.pref#OPACXSLTDetailsDisplay# <br />選項：<ul><li><a href=\"#\" class=\""
+"set_syspref\" data-syspref=\"OPACXSLTDetailsDisplay\" data-value=\"\">空白</a> "
+"供 \"無 xslt\"</li><li>輸入 \"<a href=\"#\" class=\"set_syspref\" data-syspref=\""
+"OPACXSLTDetailsDisplay\" data-value=\"default\">預設</a>\" 供預設使用</li><li>置入預設 "
+"xslt 檔案路徑</li><li>置入 URL 供指定外部樣式表之用。</li></ul>{langcode} 將取代現在的介面語系"
 
 # OPAC > Appearance
 msgid ""
@@ -8760,6 +8778,11 @@ msgid ""
 "an URL for an external specific stylesheet.</li></ul>{langcode} will be "
 "replaced with current interface language."
 msgstr ""
+"<br />選項：<ul><li><a href=\"#\" class=\"set_syspref\" data-syspref=\""
+"OPACXSLTListsDisplay\" data-value=\"\">空白</a> 表示 \"no xslt\"</li><li>鍵入 \"<a "
+"href=\"#\" class=\"set_syspref\" data-syspref=\"OPACXSLTListsDisplay\" data-"
+"value=\"default\">預設</a>\" 表示該預設值</li><li> 置入 xslt 檔案的路徑</li><li>置入 URL "
+"表示外部的樣式表。</li></ul>{langcode} 將取代現在介面的語系"
 
 # OPAC > Appearance
 msgid ""
@@ -8777,6 +8800,11 @@ msgid ""
 "file</li><li>put an URL for an external specific stylesheet.</li></"
 "ul>{langcode} will be replaced with current interface language."
 msgstr ""
+"opac.pref#OPACXSLTResultsDisplay# <br />選項：<ul><li><a href=\"#\" class=\""
+"set_syspref\" data-syspref=\"OPACXSLTResultsDisplay\" data-value=\"\">空白</a> "
+"供 \"無 xslt\"</li><li>輸入 \"<a href=\"#\" class=\"set_syspref\" data-syspref=\""
+"OPACXSLTResultsDisplay\" data-value=\"default\">預設</a>\" 供預設使用</li><li> 置入預設 "
+"xslt 檔案路徑</li><li>置入 URL 供指定外部樣式表之用。</li></ul>{langcode} 將取代現在的介面語系"
 
 # OPAC > Appearance
 msgid ""
@@ -8827,6 +8855,9 @@ msgid ""
 "language within the Koha templates directory. A full local path is expected "
 "to start from your HTTP document root."
 msgstr ""
+"以預設的樣式表(空白即停用)取代現有的設定。輸入檔案名稱，以及完整路徑或完整的 URL <code>http://</code> "
+"(若該檔案在外部的伺服器裡)。只輸入檔名，表示該檔案應在樣式表的資料夾裡，包括每個佈景、語言包都在 Koha 版面的資料夾裡。建議使用完整的路徑，即 "
+"HTTP 的網址。"
 
 # OPAC > Advanced search options
 msgid "opac.pref#OpacAdvSearchMoreOptions# Item types"
@@ -8848,7 +8879,7 @@ msgstr "出版年"
 msgid ""
 "opac.pref#OpacAdvSearchMoreOptions# Show search options for the expanded "
 "view:"
-msgstr ""
+msgstr "顯示詳細搜尋選項："
 
 # OPAC > Advanced search options
 msgid "opac.pref#OpacAdvSearchMoreOptions# Sorting"
@@ -8876,7 +8907,7 @@ msgstr "出版年"
 
 # OPAC > Advanced search options
 msgid "opac.pref#OpacAdvSearchOptions# Show search options:"
-msgstr ""
+msgstr "顯示搜尋選項："
 
 # OPAC > Advanced search options
 msgid "opac.pref#OpacAdvSearchOptions# Sorting"
@@ -8897,7 +8928,7 @@ msgstr "不允許"
 # OPAC > Policy
 msgid ""
 "opac.pref#OpacAllowPublicListCreation# OPAC users to create public lists."
-msgstr ""
+msgstr "OPAC 使用者新增公共虛擬書架"
 
 # OPAC > Policy
 msgid "opac.pref#OpacAllowSharingPrivateLists# Allow"
@@ -8911,7 +8942,7 @@ msgstr "不允許"
 msgid ""
 "opac.pref#OpacAllowSharingPrivateLists# OPAC users to share private lists "
 "with other patrons."
-msgstr ""
+msgstr "OPAC 可以與其他讀者共享私人虛擬書架。"
 
 # OPAC > Features
 msgid "opac.pref#OpacAuthorities# Allow"
@@ -8951,7 +8982,7 @@ msgstr "能夠"
 msgid ""
 "opac.pref#OpacBrowseSearch# interface for browsing all holdings "
 "(Elasticsearch only)."
-msgstr ""
+msgstr "瀏覽所有館藏的介面（僅適用於 Elasticsearch）。"
 
 # OPAC > Features
 msgid ""
@@ -8973,7 +9004,7 @@ msgstr "不允許"
 # OPAC > Features
 msgid ""
 "opac.pref#OpacBrowser# patrons to browse subject authorities on the OPAC."
-msgstr ""
+msgstr "讀者在 OPAC 瀏覽主題權威"
 
 # OPAC > Features
 msgid ""
@@ -8994,7 +9025,7 @@ msgstr "顯示"
 
 # OPAC > Features
 msgid "opac.pref#OpacCloud# a subject cloud on the OPAC."
-msgstr ""
+msgstr "OPAC 的主題雲"
 
 # OPAC > Appearance
 msgid "opac.pref#OpacExportOptions# BibTeX"
@@ -9064,11 +9095,11 @@ msgstr ""
 msgid ""
 "opac.pref#OpacHiddenItemsExceptions# List of patron categories, separated by "
 "|, that can see items otherwise hidden by <code>OpacHiddenItems</code>:"
-msgstr ""
+msgstr "借閱者範疇清單，以直線 | 區隔，可查看被 <code>OpacHiddenItems</code> 隱藏的館藏："
 
 # OPAC > Appearance
 msgid "opac.pref#OpacHighlightedWords# (separate columns with |)."
-msgstr ""
+msgstr "(以 | 區隔欄位)"
 
 # OPAC > Appearance
 msgid "opac.pref#OpacHighlightedWords# Don't highlight"
@@ -9083,7 +9114,7 @@ msgid ""
 "opac.pref#OpacHighlightedWords# words the patron searched for in their "
 "search results and detail pages. To prevent certain words from ever being "
 "highlighted, enter a list of stopwords here:"
-msgstr ""
+msgstr "在搜尋結果與細節頁面顯示讀者搜尋的字詞；為了防止某些詞被突出顯示，請在此處輸入不強調的字詞列表："
 
 # OPAC > Features
 msgid "opac.pref#OpacHoldNotes# Allow"
@@ -9091,11 +9122,11 @@ msgstr "允許"
 
 # OPAC > Features
 msgid "opac.pref#OpacHoldNotes# Don't allow"
-msgstr ""
+msgstr "不允許"
 
 # OPAC > Features
 msgid "opac.pref#OpacHoldNotes# patrons to add a note when placing a hold."
-msgstr ""
+msgstr "讀者預約時新增說明。"
 
 # OPAC > Features
 msgid "opac.pref#OpacItemLocation# Show"
@@ -9119,7 +9150,7 @@ msgstr "opac.pref#OpacItemLocation# 圖書館, 位置以及索書號"
 
 # OPAC > Features
 msgid "opac.pref#OpacItemLocation# only library"
-msgstr ""
+msgstr "唯一的圖書館"
 
 # OPAC > Appearance
 msgid "opac.pref#OpacKohaUrl# 'Powered by Koha' text on OPAC footer."
@@ -9135,7 +9166,7 @@ msgstr "顯示"
 
 # OPAC > Appearance
 msgid "opac.pref#OpacLangSelectorMode# ."
-msgstr ""
+msgstr " ."
 
 # OPAC > Appearance
 msgid "opac.pref#OpacLangSelectorMode# Display language selector on "
@@ -9182,6 +9213,8 @@ msgid ""
 "<a href='/cgi-bin/koha/admin/columns_settings.pl'>configure columns</a> "
 "administration page."
 msgstr ""
+"<br />說明：若已勾選 '於獨立的欄'，仍需啟用 item_shelving_location 以顯示在管理頁面的 <a href='/cgi-"
+"bin/koha/admin/columns_settings.pl'>組態欄位</a>"
 
 # OPAC > Appearance
 msgid "opac.pref#OpacLocationOnDetail# Display the shelving location "
@@ -9238,13 +9271,13 @@ msgid ""
 "opac.pref#OpacMaxItemsToDisplay# items on the bibliographic record detail "
 "page (if the bibliographic record has more items than this, a link is "
 "displayed instead that allows the patron to choose to display all items)."
-msgstr ""
+msgstr "書目紀錄詳情的館藏資訊 (若書目紀錄有多筆館藏，則出現連結供讀者選擇顯示所有館藏)。"
 
 # OPAC > Appearance
 msgid ""
 "opac.pref#OpacMetaDescription# This description will show in search engine "
 "results (160 characters)."
-msgstr ""
+msgstr "此說明將顯示在搜尋引擎結果中（160個字元）。"
 
 # OPAC > Appearance
 msgid ""
@@ -9281,7 +9314,7 @@ msgstr "不顯示"
 msgid ""
 "opac.pref#OpacNewsLibrarySelect# a library selection list for news items in "
 "the OPAC."
-msgstr ""
+msgstr "OPAC 內的新書通報分館選項。"
 
 # OPAC > Appearance
 msgid "opac.pref#OpacNoItemTypeImages# No"
@@ -9378,11 +9411,11 @@ msgstr "讀者所屬的圖書館"
 msgid ""
 "opac.pref#OpacResetPassword#  to recover their password via e-mail in the "
 "OPAC."
-msgstr ""
+msgstr "  在 OPAC 通過電子郵件恢復他們的密碼"
 
 # OPAC > Features
 msgid "opac.pref#OpacResetPassword# Library patrons are "
-msgstr ""
+msgstr "圖書館讀者是 "
 
 # OPAC > Features
 msgid "opac.pref#OpacResetPassword# allowed"
@@ -9412,7 +9445,7 @@ msgstr "所屬圖書館"
 msgid ""
 "opac.pref#OpacSeparateHoldings# is the logged in patrons's library. The "
 "second tab will contain all other items."
-msgstr ""
+msgstr "已登錄讀者的圖書館。第二個分頁將包括所有的其他館藏。"
 
 # OPAC > Appearance
 msgid ""
@@ -9452,7 +9485,7 @@ msgstr "頁面。"
 
 # OPAC > Appearance
 msgid "opac.pref#OpacStarRatings# results, details, and patron"
-msgstr ""
+msgstr "結果、詳情和讀者"
 
 # OPAC > Appearance
 msgid "opac.pref#OpacSuggestionManagedBy# Don't show"
@@ -9591,7 +9624,7 @@ msgstr ""
 
 # OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationConfirmEmail# Don't require"
-msgstr ""
+msgstr "不需要"
 
 # OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationConfirmEmail# Require"
@@ -9601,7 +9634,7 @@ msgstr "需要"
 msgid ""
 "opac.pref#PatronSelfRegistrationConfirmEmail# patrons to confirm their email "
 "address by entering it twice."
-msgstr ""
+msgstr "讀者們透過輸入兩次來確認他們的電子郵件."
 
 # OPAC > Self registration and modification > PatronSelfRegistrationDefaultCategory
 msgid ""

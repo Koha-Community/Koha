@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: Koha 20.11\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-05-16 03:30+0200\n"
-"PO-Revision-Date: 2021-04-22 15:29+0000\n"
-"Last-Translator: Viviane <viviane.rosa@saobernardo.sp.gov.br>\n"
+"PO-Revision-Date: 2021-05-04 18:28+0000\n"
+"Last-Translator: Ricardo Quaglio <ricardoquaglio@hotmail.com>\n"
 "Language-Team: Portuguese/Brazil <koha-br@lists.koha.org>\n"
 "Language: pt_BR\n"
 "MIME-Version: 1.0\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Generator: Pootle 2.8\n"
-"X-POOTLE-MTIME: 1619105366.827917\n"
+"X-POOTLE-MTIME: 1620152882.091827\n"
 "X-Pootle-Path: /pt_BR/20.11/pt-BR-pref.po\n"
 "X-Pootle-Revision: 1\n"
 
@@ -1984,7 +1984,25 @@ msgid "admin.pref#casLogout# Yes"
 msgstr "Sim"
 
 # Administration > CAS authentication
-msgid "admin.pref#casServerUrl# URL of the CAS Authentication Server: "
+#, fuzzy
+msgid ""
+"admin.pref#casServerUrl# URL of the Central Authentication Service (CAS) "
+"server: "
+msgstr "URL do servidor de autenticação do CAS"
+
+# Administration > CAS authentication
+#, fuzzy
+msgid "admin.pref#casServerVersion# CAS 2 or earlier"
+msgstr "URL do servidor de autenticação do CAS"
+
+# Administration > CAS authentication > casServerVersion
+msgid "admin.pref#casServerVersion# CAS 3 or later"
+msgstr ""
+
+# Administration > CAS authentication
+#, fuzzy
+msgid ""
+"admin.pref#casServerVersion# Version of the CAS server Koha will connect to: "
 msgstr "URL do servidor de autenticação do CAS"
 
 # Administration > Interface options
@@ -2545,9 +2563,9 @@ msgid ""
 "html'>MARC Code List for Countries</a>):"
 msgstr ""
 "Preencha o código do país padrão para o campo 008 Faixa 15-17 de MARC21 - "
-"Local de publicação, produção ou execução. (Consulte a <a "
-"href='http://www.loc.gov/marc/countries/countries_code.html'> Lista de "
-"códigos MARC para países </a>):"
+"Local de publicação, produção ou execução. (Consulte a <a href='http://www."
+"loc.gov/marc/countries/countries_code.html'> Lista de códigos MARC para "
+"países </a>):"
 
 # Cataloging > Record structure
 msgid "cataloguing.pref#DefaultLanguageField008#  Empty defaults to eng."
@@ -2560,10 +2578,9 @@ msgid ""
 "href='http://www.loc.gov/marc/languages/language_code.html'>MARC Code List "
 "for Languages</a>):"
 msgstr ""
-"Preencha o idioma padrão para o campo 008 Faixa 35-37 dos registros MARC21 ("
-"por exemplo, eng, nor, ger, consulte <a "
-"href='http://www.loc.gov/marc/languages/language_code.html'> Código MARC "
-"Lista de idiomas </a>):"
+"Preencha o idioma padrão para o campo 008 Faixa 35-37 dos registros MARC21 "
+"(por exemplo, eng, nor, ger, consulte <a href='http://www.loc.gov/marc/"
+"languages/language_code.html'> Código MARC Lista de idiomas </a>):"
 
 # Cataloging > Interface
 msgid "cataloguing.pref#EasyAnalyticalRecords# Display"
@@ -3548,8 +3565,8 @@ msgid ""
 "marked as \"unavailable\" if this set to \"Don't allow\"."
 msgstr ""
 "Isso permite empréstimos automáticos para esses itens. Se estiver usando as "
-"retenções, os itens da fila com retenções pendentes serão marcados como \""
-"indisponíveis\" se estiver definido como \"Não permitir\"."
+"retenções, os itens da fila com retenções pendentes serão marcados como "
+"\"indisponíveis\" se estiver definido como \"Não permitir\"."
 
 # Circulation > Checkout policy
 msgid ""
@@ -3573,8 +3590,8 @@ msgid ""
 "items from the same record. (<strong>NOTE:</strong> This will only affect "
 "records without a subscription attached.)"
 msgstr ""
-"usuários para verificar vários itens do mesmo registro. (<strong> NOTA: "
-"</strong> Isso afetará apenas os registros sem uma assinatura anexada.)"
+"usuários para verificar vários itens do mesmo registro. (<strong> NOTA: </"
+"strong> Isso afetará apenas os registros sem uma assinatura anexada.)"
 
 # Circulation > Checkout policy
 msgid "circulation.pref#AllowNotForLoanOverride# Allow"
@@ -3606,9 +3623,9 @@ msgid ""
 "circulation computers. (<strong>NOTE:</strong> This system preference does "
 "not affect the Firefox add-on or the desktop application)."
 msgstr ""
-"circulação offline em computadores de circulação regular. (<strong> NOTA: "
-"</strong> Esta preferência do sistema não afeta o complemento do Firefox ou "
-"o aplicativo da área de trabalho)."
+"circulação offline em computadores de circulação regular. (<strong> NOTA: </"
+"strong> Esta preferência do sistema não afeta o complemento do Firefox ou o "
+"aplicativo da área de trabalho)."
 
 # Circulation > Holds policy
 msgid "circulation.pref#AllowRenewalIfOtherItemsAvailable# Allow"
@@ -4129,7 +4146,8 @@ msgstr ""
 "devolução / empréstimo. "
 
 # Circulation > Checkout policy
-msgid "circulation.pref#CircControl# Use the checkout and fines rules of"
+#, fuzzy
+msgid "circulation.pref#CircControl# Use the calendar and circulation rules of"
 msgstr "Use as regras de empréstimo e multas da"
 
 # Circulation > Checkout policy
@@ -4451,8 +4469,8 @@ msgstr ""
 "retém para expirar automaticamente se não tiver sido escolhido dentro do "
 "período de tempo especificado na preferência do sistema "
 "ReservesMaxPickUpDelay. <br> <strong> NOTA: </strong> Esta preferência do "
-"sistema requer <code> misc / cronjobs / hold / cancel_expired_holds. pl "
-"</code> cronjob. Peça ao administrador do sistema para agendá-lo."
+"sistema requer <code> misc / cronjobs / hold / cancel_expired_holds. pl </"
+"code> cronjob. Peça ao administrador do sistema para agendá-lo."
 
 # Circulation > Holds policy
 msgid "circulation.pref#ExpireReservesMaxPickUpDelayCharge# ."
@@ -4760,7 +4778,8 @@ msgstr "circulation.pref#ILLCheckAvailability# Não verificar"
 msgid ""
 "circulation.pref#ILLCheckAvailability# external sources for availability "
 "during the request process."
-msgstr "fontes externas para disponibilidade durante o processo de solicitação."
+msgstr ""
+"fontes externas para disponibilidade durante o processo de solicitação."
 
 # Circulation > Interlibrary loans > ILLDefaultStaffEmail
 msgid ""
@@ -5627,7 +5646,8 @@ msgstr ""
 msgid ""
 "circulation.pref#SelfCheckAllowByIPRanges# Allow access to the self check "
 "from the following IP addresses:"
-msgstr "Permita o acesso à autoverificação a partir dos seguintes endereços IP:"
+msgstr ""
+"Permita o acesso à autoverificação a partir dos seguintes endereços IP:"
 
 # Circulation > Self check-out module
 msgid ""
@@ -6299,8 +6319,8 @@ msgid ""
 "circulation.pref#WebBasedSelfCheck# the web-based self checkout system "
 "(available at: /cgi-bin/koha/sco/sco-main.pl)."
 msgstr ""
-"o sistema de autoatendimento baseado na web (disponível em: /cgi-bin/koha/sco"
-"/sco-main.pl)."
+"o sistema de autoatendimento baseado na web (disponível em: /cgi-bin/koha/"
+"sco/sco-main.pl)."
 
 # Circulation > Fines Policy
 msgid "circulation.pref#WhenLostChargeReplacementFee# Charge"
@@ -7097,7 +7117,7 @@ msgstr "Habilitar"
 msgid ""
 "enhanced_content.pref#IntranetCoce# a Coce image cache service in the staff "
 "interface."
-msgstr ""
+msgstr "um serviço de cache de imagens Coce na interface da equipe."
 
 # Enhanced content > Manual
 msgid ""
@@ -7245,6 +7265,8 @@ msgid ""
 "enhanced_content.pref#LocalCoverImages# local cover images on staff "
 "interface search and details pages."
 msgstr ""
+"imagens de capa locais nas páginas de pesquisa e detalhes da interface da "
+"equipe."
 
 # Enhanced content > Novelist Select
 msgid "enhanced_content.pref#NovelistSelectEnabled# Add"
@@ -7297,6 +7319,9 @@ msgid ""
 "the staff interface (requires that you have entered in a user profile and "
 "password, which can be seen in image links)."
 msgstr ""
+"Novelist Selecione o conteúdo para a interface da equipe (requer que você "
+"tenha inserido um perfil de usuário e uma senha, que podem ser vistos nos "
+"links das imagens)"
 
 # Enhanced content > Novelist Select
 msgid ""
@@ -7307,7 +7332,7 @@ msgstr "Acessar Novelist selecione usando o perfil do usuário"
 # Enhanced content > Novelist Select
 msgid ""
 "enhanced_content.pref#NovelistSelectStaffProfile# on the staff interface."
-msgstr ""
+msgstr "na interface da equipe."
 
 # Enhanced content > Novelist Select
 msgid "enhanced_content.pref#NovelistSelectStaffView# ."
@@ -7317,7 +7342,7 @@ msgstr "."
 msgid ""
 "enhanced_content.pref#NovelistSelectStaffView# Display Novelist Select staff "
 "interface content"
-msgstr ""
+msgstr "Exibir Novelist Selecione o conteúdo da interface da equipe"
 
 # Enhanced content > Novelist Select
 msgid "enhanced_content.pref#NovelistSelectStaffView# above the holdings table"
@@ -7452,6 +7477,9 @@ msgid ""
 "individual branch authname not set in the <a href=\"/cgi-bin/koha/admin/"
 "overdrive.pl\">OverDrive library authnames table</a>)."
 msgstr ""
+"(será usado como fallback se o nome automático do branch individual não "
+"estiver definido na <a href=\"/cgi-bin/koha/admin/overdrive.pl\"> tabela de "
+"nomes automáticos da biblioteca OverDrive </a>)."
 
 # Enhanced content > OverDrive
 msgid ""
@@ -7873,7 +7901,7 @@ msgstr "i18n_l10n.pref"
 
 # I18N/L10N
 msgid "i18n_l10n.pref#AddressFormat# ."
-msgstr ""
+msgstr "."
 
 # I18N/L10N
 msgid "i18n_l10n.pref#AddressFormat# Format postal addresses using"
@@ -7947,6 +7975,9 @@ msgid ""
 "preference on a production server with overdue items that are accruing "
 "fines. Doing so will result in duplicate fines!"
 msgstr ""
+". <br/> <strong> NOTA: </strong> Não altere esta preferência em um servidor "
+"de produção com itens vencidos que estão acumulando multas. Isso resultará "
+"em multas duplicadas!"
 
 # I18N/L10N
 msgid "i18n_l10n.pref#TimeFormat# 12 hour format ( e.g. \"02:18 PM\" )"
@@ -7974,6 +8005,9 @@ msgid ""
 "the \"Notices and slips\" interface. The language used to send a notice to a "
 "patron will be the one defined for the patron."
 msgstr ""
+"Se definido, os avisos serão traduzíveis a partir da interface \"Avisos e "
+"recibos\". A linguagem utilizada para enviar um aviso ao cliente será a "
+"definida para o cliente."
 
 # I18N/L10N
 msgid "i18n_l10n.pref#TranslateNotices# notices to be translated."
@@ -7985,6 +8019,9 @@ msgid ""
 "the 'surname' column of the 'borrowers' table is helpful to make browsing by "
 "last name work in members-home.pl when using an alphabet outside of A-Z."
 msgstr ""
+"<br/> Dica: Alterar o agrupamento no banco de dados para a coluna "
+"'sobrenome' da tabela 'devedores' é útil para fazer a navegação pelo "
+"sobrenome funcionar em members-home.pl ao usar um alfabeto fora de A-Z."
 
 # I18N/L10N
 msgid "i18n_l10n.pref#alphabet# Use the alphabet"
@@ -8004,6 +8041,9 @@ msgid ""
 "preference on a production server with overdue items that are accruing "
 "fines. Doing so will result in duplicate fines!"
 msgstr ""
+". <br/> <strong> NOTA: </strong> Não altere esta preferência em um servidor "
+"de produção com itens vencidos que estão acumulando multas. Isso resultará "
+"em multas duplicadas!"
 
 # I18N/L10N
 msgid "i18n_l10n.pref#dateformat# Format dates like"
@@ -8088,7 +8128,7 @@ msgstr "Logging"
 
 # Logging > Logging
 msgid "logs.pref#AuthFailureLog#  authentication failures."
-msgstr ""
+msgstr "  falhas de autenticação."
 
 # Logging > Logging
 msgid "logs.pref#AuthFailureLog# Don't log"
@@ -8100,7 +8140,7 @@ msgstr "Registro"
 
 # Logging > Logging
 msgid "logs.pref#AuthSuccessLog#  successful authentications."
-msgstr ""
+msgstr "  autenticações bem-sucedidas."
 
 # Logging > Logging
 msgid "logs.pref#AuthSuccessLog# Don't log"
@@ -8187,6 +8227,8 @@ msgid ""
 "logs.pref#DumpTemplateVarsIntranet# dump all Template Toolkit variables to a "
 "comment in the HTML source for the staff interface."
 msgstr ""
+"despeje todas as variáveis ​​do Template Toolkit em um comentário no código-"
+"fonte HTML para a interface da equipe."
 
 # Logging > Debugging
 msgid "logs.pref#DumpTemplateVarsOpac# Do"
@@ -8201,6 +8243,8 @@ msgid ""
 "logs.pref#DumpTemplateVarsOpac# dump all Template Toolkit variables to a "
 "comment in the HTML source for the OPAC."
 msgstr ""
+"despeje todas as variáveis ​​do Template Toolkit em um comentário no código-"
+"fonte HTML para o OPAC."
 
 # Logging > Logging
 msgid "logs.pref#FinesLog# Don't log"
@@ -8238,7 +8282,7 @@ msgstr "Logar"
 
 # Logging > Logging
 msgid "logs.pref#IllLog# when changes to ILL requests take place."
-msgstr ""
+msgstr "quando ocorrerem alterações nas solicitações de ILL."
 
 # Logging > Logging
 msgid "logs.pref#IssueLog# Don't log"
@@ -8298,7 +8342,7 @@ msgstr "Acrescente"
 
 # Logging > Logging
 msgid "logs.pref#ReturnLog# when items are checked in."
-msgstr ""
+msgstr "quando os itens são registrados."
 
 # Logging > Logging
 msgid "logs.pref#SubscriptionLog# Don't log"
@@ -8326,9 +8370,8 @@ msgid "opac.pref Appearance"
 msgstr "Aparência"
 
 # Administration > CAS authentication
-#, fuzzy
 msgid "opac.pref Authentication"
-msgstr "admin.pref Autenticação CAS "
+msgstr "Autenticação"
 
 # OPAC > Features
 msgid "opac.pref Features"
@@ -8376,6 +8419,8 @@ msgid ""
 "their own privacy settings for showing the patron's checkouts to the "
 "patron's guarantor."
 msgstr ""
+"usuários escolhem suas próprias configurações de privacidade para mostrar os "
+"empréstimos do usuário ao fiador do usuário."
 
 # OPAC > Privacy
 msgid "opac.pref#AllowPatronToSetFinesVisibilityForGuarantor# Allow"
@@ -8391,6 +8436,8 @@ msgid ""
 "their own privacy settings for showing the patron's fines to the patron's "
 "guarantor."
 msgstr ""
+"os usuários escolhem suas próprias configurações de privacidade para mostrar "
+"as multas do usuário ao fiador do usuário."
 
 # OPAC > Privacy
 msgid "opac.pref#AnonSuggestions# Allow"
@@ -8406,6 +8453,8 @@ msgid ""
 "suggestions. Suggestions are connected to the AnonymousPatron system "
 "preference."
 msgstr ""
+"clientes que não estão logados para fazer sugestões de compra. As sugestões "
+"estão conectadas à preferência do sistema AnonymousPatron."
 
 # OPAC > Privacy
 msgid "opac.pref#AnonymousPatron# Use borrowernumber"
@@ -8416,10 +8465,11 @@ msgid ""
 "opac.pref#AnonymousPatron# as the anonymous patron (for anonymous "
 "suggestions and checkout history)."
 msgstr ""
+"como o usuário anônimo (para sugestões anônimas e histórico de empréstimo)."
 
 # OPAC > Appearance
 msgid "opac.pref#BiblioDefaultView# By default, show bibliographic records"
-msgstr ""
+msgstr "Por padrão, mostra registros bibliográficos"
 
 # OPAC > Appearance
 msgid "opac.pref#BiblioDefaultView# as specified in the ISBD template."
@@ -8447,6 +8497,9 @@ msgid ""
 "such as placing a hold or renewing. Note that the setting for a patron "
 "category takes priority over this system preference."
 msgstr ""
+"clientes expirados de ações OPAC, como colocar uma suspensão ou renovação. "
+"Observe que a configuração de uma categoria de usuário tem prioridade sobre "
+"esta preferência do sistema."
 
 # OPAC > Appearance
 msgid ""
@@ -8517,6 +8570,9 @@ msgid ""
 "functionality has been deprecated in favor of using payment plugins that can "
 "implement different payment services."
 msgstr ""
+"<br/> <strong> Aviso </strong>: esta funcionalidade foi descontinuada em "
+"favor do uso de plug-ins de pagamento que podem implementar diferentes "
+"serviços de pagamento."
 
 # OPAC > Payments
 msgid "opac.pref#EnablePayPalOpacPayments# Allow"
@@ -8538,11 +8594,11 @@ msgstr "usuários podem fazer pagamentos no OPAC via PayPal em"
 
 # OPAC > Payments
 msgid "opac.pref#EnablePayPalOpacPayments# production"
-msgstr ""
+msgstr "Produção"
 
 # OPAC > Payments
 msgid "opac.pref#EnablePayPalOpacPayments# sandbox"
-msgstr ""
+msgstr "caixa"
 
 # OPAC > Appearance
 msgid ""
@@ -8550,6 +8606,8 @@ msgid ""
 "increasing the size or highlighting the rows for those results (non-XSLT "
 "only)."
 msgstr ""
+"   movendo os resultados para a frente e aumentando o tamanho ou destacando "
+"as linhas desses resultados (somente não XSLT)."
 
 # OPAC > Appearance
 msgid "opac.pref#HighlightOwnItemsOnOPAC# Don't emphasize"
@@ -8561,11 +8619,11 @@ msgstr "Realçar"
 
 # OPAC > Appearance
 msgid "opac.pref#HighlightOwnItemsOnOPAC# OPAC's library via the URL"
-msgstr ""
+msgstr "Biblioteca do OPAC por meio do URL"
 
 # OPAC > Appearance
 msgid "opac.pref#HighlightOwnItemsOnOPAC# patron's home library"
-msgstr ""
+msgstr "biblioteca da casa do usuário"
 
 # OPAC > Appearance
 msgid "opac.pref#HighlightOwnItemsOnOPAC# results from the "
@@ -8588,6 +8646,8 @@ msgid ""
 "opac.pref#MaxOpenSuggestions# open suggestions. Leave empty for no limit. "
 "**Note: this setting does not affect anonymous suggestions."
 msgstr ""
+"sugestões abertas. Deixe em branco sem limite. ** Observação: esta "
+"configuração não afeta as sugestões anônimas."
 
 # OPAC > Policy
 msgid "opac.pref#MaxTotalSuggestions# Number of total suggestions allowed"
@@ -8632,7 +8692,7 @@ msgstr "O OPAC está localizado em "
 
 # OPAC > Features
 msgid "opac.pref#OPACDetailQRCode# Disable"
-msgstr ""
+msgstr "Desabilitar"
 
 # OPAC > Features
 msgid "opac.pref#OPACDetailQRCode# Enable"
@@ -8660,19 +8720,19 @@ msgstr "Exibir a URI no campo 856u como uma imagem em: "
 
 # OPAC > Appearance
 msgid "opac.pref#OPACDisplay856uAsImage# both detail and result pages"
-msgstr ""
+msgstr "páginas de detalhes e resultados"
 
 # OPAC > Appearance
 msgid "opac.pref#OPACDisplay856uAsImage# detail page only"
-msgstr ""
+msgstr "página de detalhes apenas"
 
 # OPAC > Appearance
 msgid "opac.pref#OPACDisplay856uAsImage# neither detail or result pages"
-msgstr ""
+msgstr "nem detalhes ou páginas de resultados"
 
 # OPAC > Appearance
 msgid "opac.pref#OPACDisplay856uAsImage# result page only"
-msgstr ""
+msgstr "página de resultados apenas"
 
 # OPAC > Appearance
 msgid "opac.pref#OPACFallback# Use the"
@@ -8717,6 +8777,8 @@ msgid ""
 "opac.pref#OPACFineNoRenewalsIncludeCredits# outstanding/unapplied credits "
 "when applying the OPACFineNoRenewals rule to patrons."
 msgstr ""
+"créditos pendentes / não aplicados ao aplicar a regra OPACFineNoRenewals aos "
+"clientes."
 
 # OPAC > Features
 msgid "opac.pref#OPACFinesTab# Allow"
@@ -8730,7 +8792,7 @@ msgstr "Não permitir"
 msgid ""
 "opac.pref#OPACFinesTab# patrons to access the charges tab on their account "
 "page on the OPAC."
-msgstr ""
+msgstr "usuários acessem a guia de cobranças na página de sua conta no OPAC"
 
 # OPAC > Appearance
 msgid "opac.pref#OPACHoldingsDefaultSortField# First column of the table"
@@ -8748,23 +8810,20 @@ msgstr "biblioteca de origem"
 msgid ""
 "opac.pref#OPACHoldingsDefaultSortField# is the default sort field for the "
 "holdings table."
-msgstr ""
+msgstr "é o campo de classificação padrão para a tabela de acervos."
 
 # OPAC > Privacy
-#, fuzzy
 msgid "opac.pref#OPACHoldsHistory# Allow"
 msgstr "Permitir"
 
 # OPAC > Privacy
-#, fuzzy
 msgid "opac.pref#OPACHoldsHistory# Don't allow"
 msgstr "Não permitir"
 
 # OPAC > Privacy
-#, fuzzy
 msgid ""
 "opac.pref#OPACHoldsHistory# patrons to see the list of their past holds."
-msgstr "que usuários vejam quais materiais eles emprestaram no passado."
+msgstr "clientes para ver a lista de suas reservas anteriores."
 
 # OPAC > Features
 msgid "opac.pref#OPACISBD# Use the following as the OPAC ISBD template:"
@@ -8785,6 +8844,9 @@ msgid ""
 "\" and \"my checkout history\" tabs when a patron is logged in to the OPAC, "
 "with the following HTML (leave blank to disable):"
 msgstr ""
+"Inclua uma coluna \"Links\" nas guias \"meu resumo\" e \"meu histórico de "
+"empréstimo\" quando um usuário estiver conectado ao OPAC, com o seguinte "
+"HTML (deixe em branco para desativar):"
 
 # OPAC > Appearance
 msgid ""
@@ -8883,6 +8945,9 @@ msgid ""
 "their checkout history. This requires opacreadinghistory and AnonymousPatron "
 "system preferences."
 msgstr ""
+"usuários podem escolher suas próprias configurações de privacidade para seu "
+"histórico de empréstimo. Isso requer opacreadinghistory e preferências do "
+"sistema AnonymousPatron."
 
 # OPAC > Features
 msgid "opac.pref#OPACReportProblem# <br/>"
@@ -8909,6 +8974,8 @@ msgid ""
 "opac.pref#OPACReportProblem# patrons to submit problem reports for OPAC "
 "pages to the library or Koha administrator."
 msgstr ""
+"usuários devem enviar relatórios de problemas para as páginas OPAC à "
+"biblioteca ou ao administrador do Koha."
 
 # OPAC > Appearance
 msgid ""
@@ -8925,7 +8992,7 @@ msgstr "Para resultados de pesquisa no OPAC, mostre o item"
 
 # OPAC > Appearance
 msgid "opac.pref#OPACResultsLibrary# current library"
-msgstr ""
+msgstr "biblioteca atual"
 
 # OPAC > Appearance
 msgid "opac.pref#OPACResultsLibrary# home library"
@@ -8977,20 +9044,17 @@ msgstr ""
 "número muito grande de exemplares."
 
 # OPAC > Privacy
-#, fuzzy
 msgid "opac.pref#OPACShibOnly# Allow"
 msgstr "Permitir"
 
 # OPAC > Privacy
-#, fuzzy
 msgid "opac.pref#OPACShibOnly# Don't allow"
 msgstr "Não permitir"
 
 # OPAC > Privacy
-#, fuzzy
 msgid ""
 "opac.pref#OPACShibOnly# patrons to login by means other than Shibboleth."
-msgstr "que usuários vejam quais materiais eles emprestaram no passado."
+msgstr "usuários façam login por outros meios que não o Shibboleth."
 
 # OPAC > Appearance
 msgid "opac.pref#OPACShowCheckoutName# Don't show"
@@ -9062,7 +9126,7 @@ msgstr ""
 
 # OPAC > Appearance
 msgid "opac.pref#OPACShowUnusedAuthorities# Don't show"
-msgstr ""
+msgstr "Não exibir"
 
 # OPAC > Appearance
 msgid "opac.pref#OPACShowUnusedAuthorities# Show"
@@ -9139,57 +9203,58 @@ msgid ""
 "opac.pref#OPACSuggestionUnwantedFields# <br />Note: Do not make "
 "OPACSuggestionMandatoryFields unwanted fields "
 msgstr ""
+"<br /> Nota: Não marcar OPACSuggestionMandatoryFields campos indesejados"
 
 # OPAC > Policy
 msgid "opac.pref#OPACSuggestionUnwantedFields# Author"
-msgstr ""
+msgstr "Autor"
 
 # OPAC > Policy
 msgid "opac.pref#OPACSuggestionUnwantedFields# Collection title"
-msgstr ""
+msgstr "Título da coleção"
 
 # OPAC > Policy
 msgid "opac.pref#OPACSuggestionUnwantedFields# Copyright or publication date"
-msgstr ""
+msgstr "Copyright ou data de publicação"
 
 # OPAC > Policy
 msgid ""
 "opac.pref#OPACSuggestionUnwantedFields# Fields that should be hidden for "
 "patron purchase suggestions:"
-msgstr ""
+msgstr "Campos que devem ser ocultados para sugestões de compra do usuário:"
 
 # OPAC > Policy
 msgid ""
 "opac.pref#OPACSuggestionUnwantedFields# ISBN, ISSN or other standard number"
-msgstr ""
+msgstr "ISBN, ISSN ou outro número padrão"
 
 # OPAC > Policy
 msgid "opac.pref#OPACSuggestionUnwantedFields# Item type"
-msgstr ""
+msgstr "Tipo de item"
 
 # OPAC > Policy
 msgid "opac.pref#OPACSuggestionUnwantedFields# Library or branch"
-msgstr ""
+msgstr "Biblioteca ou filial"
 
 # OPAC > Policy
 msgid "opac.pref#OPACSuggestionUnwantedFields# Note"
-msgstr ""
+msgstr "Nota"
 
 # OPAC > Policy
 msgid "opac.pref#OPACSuggestionUnwantedFields# Patron reason"
-msgstr ""
+msgstr "Razão do usuário"
 
 # OPAC > Policy
 msgid "opac.pref#OPACSuggestionUnwantedFields# Publication place"
-msgstr ""
+msgstr "Local de publicação"
 
 # OPAC > Policy
 msgid "opac.pref#OPACSuggestionUnwantedFields# Publisher name"
-msgstr ""
+msgstr "Nome do editor"
 
 # OPAC > Policy
 msgid "opac.pref#OPACSuggestionUnwantedFields# Quantity"
-msgstr ""
+msgstr "Quantidade"
 
 # OPAC > Appearance
 msgid ""
@@ -9235,6 +9300,8 @@ msgid ""
 "opac.pref#OPACUserSummary# a summary of a logged in patron's checkouts, "
 "overdues, holds and charges on the OPAC start page."
 msgstr ""
+"um resumo de empréstimos, atrasos, reservas e cobranças de um usuário "
+"conectado na página inicial do OPAC."
 
 # OPAC > Policy
 msgid "opac.pref#OPACViewOthersSuggestions# Don't show"
@@ -9260,6 +9327,13 @@ msgid ""
 "file</li><li>put an URL for an external specific stylesheet.</li></"
 "ul>{langcode} will be replaced with current interface language."
 msgstr ""
+"<br />Opções:<ul><li><a href=\"#\" class=\"set_syspref\" data-syspref="
+"\"OPACXSLTDetailsDisplay\" data-value=\"\">deixar vazio</a> para \"o xslt\"</"
+"li><li>entrar \"<a href=\"#\" class=\"set_syspref\" data-syspref="
+"\"OPACXSLTDetailsDisplay\" data-value=\"default\">default</a>\" para o "
+"padrão</li><li>coloque um caminho para definir um arquivo xslt</"
+"li><li>coloque uma URL para uma folha de estilo específica externa.</li></"
+"ul>{langcode} será substituído pelo idioma da interface atual."
 
 # OPAC > Appearance
 msgid ""
@@ -9277,6 +9351,13 @@ msgid ""
 "an URL for an external specific stylesheet.</li></ul>{langcode} will be "
 "replaced with current interface language."
 msgstr ""
+"<br />Opções:<ul><li><a href=\"#\" class=\"set_syspref\" data-syspref="
+"\"OPACXSLTListsDisplay\" data-value=\"\">deixar vazio</a> para \"o xslt\"</"
+"li><li>entrar \"<a href=\"#\" class=\"set_syspref\" data-syspref="
+"\"OPACXSLTListsDisplay\" data-value=\"default\">default</a>\" para o padrão</"
+"li><li> coloque um caminho para definir um arquivo xslt</li><li>coloque uma "
+"URL para uma folha de estilo externa específica.</li></ul>{langcode} será "
+"substituído pelo idioma de interface atual."
 
 # OPAC > Appearance
 msgid ""
@@ -9294,6 +9375,13 @@ msgid ""
 "file</li><li>put an URL for an external specific stylesheet.</li></"
 "ul>{langcode} will be replaced with current interface language."
 msgstr ""
+"<br />Opções:<ul><li><a href=\"#\" class=\"set_syspref\" data-syspref="
+"\"OPACXSLTResultsDisplay\" data-value=\"\">deixar vazio</a> para \"o xslt\"</"
+"li><li>entrar \"<a href=\"#\" class=\"set_syspref\" data-syspref="
+"\"OPACXSLTResultsDisplay\" data-value=\"default\">default</a>\" para o "
+"padrã</li><li> coloque um caminho para definir um arquivo xslt</"
+"li><li>coloque uma URL para uma folha de estilo externa específica.</li></"
+"ul>{langcode} será substituído pelo idioma de interface atual."
 
 # OPAC > Appearance
 msgid ""
@@ -9345,6 +9433,13 @@ msgid ""
 "language within the Koha templates directory. A full local path is expected "
 "to start from your HTTP document root."
 msgstr ""
+"para substituir configurações específicas da folha de estilo padrão (deixe "
+"em branco para desativar). Insira apenas um nome de arquivo, um caminho "
+"local completo ou uma URL completa começando com <code>http://</code> (se o "
+"arquivo residir em um servidor remoto). Observe que se você apenas inserir "
+"um nome de arquivo, o arquivo deve estar no subdiretório css para cada tema "
+"e idioma ativo dentro do diretório de modelos Koha. Espera-se que um caminho "
+"local completo comece a partir da raiz do documento HTTP."
 
 # OPAC > Advanced search options
 msgid "opac.pref#OpacAdvSearchMoreOptions# Item types"
@@ -9366,7 +9461,7 @@ msgstr "Data de publicação"
 msgid ""
 "opac.pref#OpacAdvSearchMoreOptions# Show search options for the expanded "
 "view:"
-msgstr ""
+msgstr "Mostrar opções de pesquisa para a visualização expandida:"
 
 # OPAC > Advanced search options
 msgid "opac.pref#OpacAdvSearchMoreOptions# Sorting"
@@ -9394,7 +9489,7 @@ msgstr "Data de publicação"
 
 # OPAC > Advanced search options
 msgid "opac.pref#OpacAdvSearchOptions# Show search options:"
-msgstr ""
+msgstr "Mostrar opções de pesquisa:"
 
 # OPAC > Advanced search options
 msgid "opac.pref#OpacAdvSearchOptions# Sorting"
@@ -9415,7 +9510,7 @@ msgstr "Não permitir"
 # OPAC > Policy
 msgid ""
 "opac.pref#OpacAllowPublicListCreation# OPAC users to create public lists."
-msgstr ""
+msgstr "Usuários OPAC para criar listas públicas."
 
 # OPAC > Policy
 msgid "opac.pref#OpacAllowSharingPrivateLists# Allow"
@@ -9430,6 +9525,7 @@ msgid ""
 "opac.pref#OpacAllowSharingPrivateLists# OPAC users to share private lists "
 "with other patrons."
 msgstr ""
+"Os usuários do OPAC podem compartilhar listas privadas com outros usuários."
 
 # OPAC > Features
 msgid "opac.pref#OpacAuthorities# Allow"
@@ -9470,7 +9566,7 @@ msgstr "Habilitar"
 msgid ""
 "opac.pref#OpacBrowseSearch# interface for browsing all holdings "
 "(Elasticsearch only)."
-msgstr ""
+msgstr "interface para navegar em todos os acervos (apenas Elasticsearch)."
 
 # OPAC > Features
 msgid ""
@@ -9493,7 +9589,7 @@ msgstr "Não permitir"
 # OPAC > Features
 msgid ""
 "opac.pref#OpacBrowser# patrons to browse subject authorities on the OPAC."
-msgstr ""
+msgstr "usuários para navegar pelas autoridades do assunto no OPAC."
 
 # OPAC > Features
 msgid ""
@@ -9515,7 +9611,7 @@ msgstr "Exibir"
 
 # OPAC > Features
 msgid "opac.pref#OpacCloud# a subject cloud on the OPAC."
-msgstr ""
+msgstr "uma nuvem de assunto no OPAC."
 
 # OPAC > Appearance
 msgid "opac.pref#OpacExportOptions# BibTeX"
@@ -9594,10 +9690,12 @@ msgid ""
 "opac.pref#OpacHiddenItemsExceptions# List of patron categories, separated by "
 "|, that can see items otherwise hidden by <code>OpacHiddenItems</code>:"
 msgstr ""
+"Lista de categorias de usuários, separadas por |, que podem ver exemplares "
+"de outra forma, ocultos por <code>OpacHiddenItems</code>:"
 
 # OPAC > Appearance
 msgid "opac.pref#OpacHighlightedWords# (separate columns with |)."
-msgstr ""
+msgstr "(separe as colunas com |)."
 
 # OPAC > Appearance
 msgid "opac.pref#OpacHighlightedWords# Don't highlight"
@@ -9613,6 +9711,9 @@ msgid ""
 "search results and detail pages. To prevent certain words from ever being "
 "highlighted, enter a list of stopwords here:"
 msgstr ""
+"palavras que o usuário pesquisou em seus resultados de pesquisa e páginas de "
+"detalhes. Para evitar que certas palavras sejam destacadas, insira uma lista "
+"de palavras irrelevantes aqui:"
 
 # OPAC > Features
 msgid "opac.pref#OpacHoldNotes# Allow"
@@ -9620,11 +9721,11 @@ msgstr "Permitir"
 
 # OPAC > Features
 msgid "opac.pref#OpacHoldNotes# Don't allow"
-msgstr ""
+msgstr "Não permitir"
 
 # OPAC > Features
 msgid "opac.pref#OpacHoldNotes# patrons to add a note when placing a hold."
-msgstr ""
+msgstr "usuários para adicionar uma nota ao colocar uma reserva."
 
 # OPAC > Features
 msgid "opac.pref#OpacItemLocation# Show"
@@ -9636,19 +9737,19 @@ msgstr "para exemplares na tela de resultados do OPAC."
 
 # OPAC > Features
 msgid "opac.pref#OpacItemLocation# library and call number"
-msgstr ""
+msgstr "biblioteca e número de chamada"
 
 # OPAC > Features
 msgid "opac.pref#OpacItemLocation# library, collection code, and call number"
-msgstr ""
+msgstr "biblioteca, código de coleção e número de chamada"
 
 # OPAC > Features
 msgid "opac.pref#OpacItemLocation# library, location, and call number"
-msgstr ""
+msgstr "biblioteca, localização e número de chamada"
 
 # OPAC > Features
 msgid "opac.pref#OpacItemLocation# only library"
-msgstr ""
+msgstr "apenas biblioteca"
 
 # OPAC > Appearance
 msgid "opac.pref#OpacKohaUrl# 'Powered by Koha' text on OPAC footer."
@@ -9664,7 +9765,7 @@ msgstr "Exibir"
 
 # OPAC > Appearance
 msgid "opac.pref#OpacLangSelectorMode# ."
-msgstr ""
+msgstr "."
 
 # OPAC > Appearance
 msgid "opac.pref#OpacLangSelectorMode# Display language selector on "
@@ -9711,6 +9812,9 @@ msgid ""
 "<a href='/cgi-bin/koha/admin/columns_settings.pl'>configure columns</a> "
 "administration page."
 msgstr ""
+"<br />Nota: Se 'uma coluna separada' for selecionada, você ainda precisa "
+"ativar a exibição item_shelving_location no <a href='/cgi-bin/koha/admin/"
+"columns_settings.pl'>configurar colunas</a> da página de administração"
 
 # OPAC > Appearance
 msgid "opac.pref#OpacLocationOnDetail# Display the shelving location "
@@ -9771,12 +9875,17 @@ msgid ""
 "page (if the bibliographic record has more items than this, a link is "
 "displayed instead that allows the patron to choose to display all items)."
 msgstr ""
+"exemplares na página de detalhes do registro bibliográfico (se o registro "
+"bibliográfico tiver mais exemplares do que isso, será exibido um link que "
+"permite ao usuário escolher exibir todos os exemplares)."
 
 # OPAC > Appearance
 msgid ""
 "opac.pref#OpacMetaDescription# This description will show in search engine "
 "results (160 characters)."
 msgstr ""
+"Esta descrição será exibida nos resultados do mecanismo de pesquisa (160 "
+"caracteres)."
 
 # OPAC > Appearance
 msgid ""
@@ -9817,6 +9926,7 @@ msgid ""
 "opac.pref#OpacNewsLibrarySelect# a library selection list for news items in "
 "the OPAC."
 msgstr ""
+"uma lista de seleção de biblioteca para exemplares de notícias no OPAC."
 
 # OPAC > Appearance
 msgid "opac.pref#OpacNoItemTypeImages# No"
@@ -9916,11 +10026,11 @@ msgstr "a biblioteca de origem do usuário"
 msgid ""
 "opac.pref#OpacResetPassword#  to recover their password via e-mail in the "
 "OPAC."
-msgstr ""
+msgstr "para recuperar sua senha via e-mail no OPAC."
 
 # OPAC > Features
 msgid "opac.pref#OpacResetPassword# Library patrons are "
-msgstr ""
+msgstr "Os usuários da biblioteca são "
 
 # OPAC > Features
 msgid "opac.pref#OpacResetPassword# allowed"
@@ -9951,6 +10061,8 @@ msgid ""
 "opac.pref#OpacSeparateHoldings# is the logged in patrons's library. The "
 "second tab will contain all other items."
 msgstr ""
+"é a biblioteca dos usuários registrados. A segunda guia conterá todos os "
+"outros exemplares."
 
 # OPAC > Appearance
 msgid ""
@@ -9992,7 +10104,7 @@ msgstr "páginas."
 
 # OPAC > Appearance
 msgid "opac.pref#OpacStarRatings# results, details, and patron"
-msgstr ""
+msgstr "resultados, detalhes e usuário"
 
 # OPAC > Appearance
 msgid "opac.pref#OpacSuggestionManagedBy# Don't show"
@@ -10141,7 +10253,7 @@ msgstr ""
 
 # OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationConfirmEmail# Don't require"
-msgstr ""
+msgstr "Não requer"
 
 # OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationConfirmEmail# Require"
@@ -10151,7 +10263,7 @@ msgstr "Requerer"
 msgid ""
 "opac.pref#PatronSelfRegistrationConfirmEmail# patrons to confirm their email "
 "address by entering it twice."
-msgstr ""
+msgstr "usuários confirmem seu endereço de e-mail digitando-o duas vezes."
 
 # OPAC > Self registration and modification > PatronSelfRegistrationDefaultCategory
 msgid ""
@@ -10162,6 +10274,12 @@ msgid ""
 "unrecoverably delete all patrons that have registered more than "
 "PatronSelfRegistrationExpireTemporaryAccountsDelay days ago."
 msgstr ""
+"<br> <strong> AVISO: Não use uma categoria de usuário regular para "
+"autorregistro. </strong> Se o cronjob <code>misc/cronjobs/cleanup_database."
+"pl</code> estiver configurado para excluir autorregistros do OPAC não "
+"verificados e não concluídos, ele excluirá de forma permanente e "
+"irrecuperável todos os usuários que registraram mais de "
+"PatronSelfRegistrationExpireTemporaryAccountsDelay dias atrás."
 
 # OPAC > Self registration and modification
 msgid ""
@@ -10180,7 +10298,7 @@ msgstr "Considerar"
 
 # OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationEmailMustBeUnique# Don't consider"
-msgstr ""
+msgstr "Não considerar"
 
 # OPAC > Self registration and modification
 msgid ""
@@ -10239,7 +10357,7 @@ msgstr "Exibir e prefill"
 
 # OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationPrefillForm# Don't display and prefill"
-msgstr ""
+msgstr "Não exibir e preencher "
 
 # OPAC > Self registration and modification
 msgid ""
@@ -10273,7 +10391,7 @@ msgstr "que um usuário auto-cadastrante se verifique via e-mail."
 
 # OPAC > Payments
 msgid "opac.pref#PayPalChargeDescription# ."
-msgstr ""
+msgstr "."
 
 # OPAC > Payments
 msgid ""
@@ -10283,7 +10401,7 @@ msgstr "O usuário deve ver a descrição da cobrança como"
 
 # OPAC > Payments
 msgid "opac.pref#PayPalPwd# ."
-msgstr ""
+msgstr "."
 
 # OPAC > Payments
 msgid ""
@@ -10293,7 +10411,7 @@ msgstr "A senha da conta do PayPal para receber pagamentos é"
 
 # OPAC > Payments
 msgid "opac.pref#PayPalReturnURL# ."
-msgstr ""
+msgstr "."
 
 # OPAC > Payments
 msgid ""
@@ -10306,13 +10424,12 @@ msgid "opac.pref#PayPalReturnURL# OPACBaseURL"
 msgstr "URL base do OPAC"
 
 # OPAC > Payments
-#, fuzzy
 msgid "opac.pref#PayPalReturnURL# configured return URL"
-msgstr "URL base do OPAC"
+msgstr "configurar a URL de retorno"
 
 # OPAC > Payments
 msgid "opac.pref#PayPalSignature# ."
-msgstr ""
+msgstr "."
 
 # OPAC > Payments
 msgid ""
@@ -10322,7 +10439,7 @@ msgstr "A assinatura da conta do PayPal para receber pagamentos é"
 
 # OPAC > Payments
 msgid "opac.pref#PayPalUser# ."
-msgstr ""
+msgstr "."
 
 # OPAC > Payments
 msgid "opac.pref#PayPalUser# The email address to receive PayPal payments is "
@@ -10330,19 +10447,19 @@ msgstr "O endereço de e-mail para receber pagamentos do PayPal é"
 
 # OPAC > Features
 msgid "opac.pref#QuoteOfTheDay# OPAC"
-msgstr ""
+msgstr "OPAC"
 
 # OPAC > Features
 msgid "opac.pref#QuoteOfTheDay# Show quote of the day in the"
-msgstr ""
+msgstr "Mostrar citação do dia no"
 
 # OPAC > Features
 msgid "opac.pref#QuoteOfTheDay# main page."
-msgstr ""
+msgstr "página principal."
 
 # OPAC > Features
 msgid "opac.pref#QuoteOfTheDay# staff interface"
-msgstr ""
+msgstr "interface STAFF"
 
 # OPAC > Features
 msgid "opac.pref#RequestOnOpac# Allow"
@@ -10374,6 +10491,7 @@ msgid ""
 "opac.pref#RestrictedPageLocalIPs# do not need to be authenticated (comma "
 "separated - ex: '127.0.0,127.0.1')."
 msgstr ""
+"não precisa ser autenticado (separado por vírgulas - ex: '127.0.0,127.0.1')."
 
 # OPAC > Restricted page
 msgid "opac.pref#RestrictedPageTitle# Use"
@@ -10384,6 +10502,8 @@ msgid ""
 "opac.pref#RestrictedPageTitle# as title of your restricted page (appears in "
 "the breadcrumb and on the top of the restricted page)."
 msgstr ""
+"como título de sua página restrita (aparece na localização atual e no topo "
+"da página restrita)."
 
 # OPAC > Policy
 msgid "opac.pref#SearchMyLibraryFirst# Don't limit"
@@ -10519,7 +10639,7 @@ msgstr "Twitter"
 # OPAC > Features
 msgid ""
 "opac.pref#SocialNetworks# social network links on the OPAC detail pages."
-msgstr ""
+msgstr "links de redes sociais nas páginas de detalhes do OPAC."
 
 # OPAC > Privacy
 msgid "opac.pref#TrackClicks# Don't track"
@@ -10535,7 +10655,7 @@ msgstr "Rastrear anonimamente"
 
 # OPAC > Privacy
 msgid "opac.pref#TrackClicks# links that patrons click on."
-msgstr ""
+msgstr "links em que os usuários clicam."
 
 # OPAC > Appearance
 msgid "opac.pref#hidelostitems# Don't show"
@@ -10692,6 +10812,9 @@ msgid ""
 "for account. If allowed a patron will be able to update their own account to "
 "allow/disallow auto-renewal."
 msgstr ""
+"para permitir / proibir a renovação automática da conta. Se permitido, o "
+"usuário poderá atualizar sua própria conta para permitir / proibir a "
+"renovação automática."
 
 # Patrons > Patron relationships
 msgid "patrons.pref#AllowStaffToSetCheckoutsVisibilityForGuarantor# Allow"
@@ -10729,23 +10852,23 @@ msgstr ""
 
 # Patrons > General
 msgid "patrons.pref#AutoApprovePatronProfileSettings# Disable"
-msgstr ""
+msgstr "Desativar"
 
 # Patrons > General
 msgid "patrons.pref#AutoApprovePatronProfileSettings# Enable"
-msgstr ""
+msgstr "Ativar"
 
 # Patrons > General
 msgid ""
 "patrons.pref#AutoApprovePatronProfileSettings# Requires OPACPatronDetails to "
 "be activated."
-msgstr ""
+msgstr "Requer que OPACPatronDetails seja ativado."
 
 # Patrons > General
 msgid ""
 "patrons.pref#AutoApprovePatronProfileSettings# automatic approval of patron "
 "detail changes from the OPAC."
-msgstr ""
+msgstr "aprovação automática das alterações de detalhes do usuário do OPAC."
 
 # Patrons > Notices and notifications
 msgid "patrons.pref#AutoEmailOpacUser# Don't send"
@@ -10940,7 +11063,7 @@ msgstr "Endereço principal"
 
 # Patrons > Patron forms
 msgid "patrons.pref#CollapseFieldsPatronAddForm# OPAC/Staff interface login"
-msgstr ""
+msgstr "Login da interface OPAC / STAFF"
 
 # Patrons > Patron forms
 msgid ""
@@ -10950,7 +11073,7 @@ msgstr "Sinalizadores de conta de usuário (usuários existentes)"
 
 # Patrons > Patron forms
 msgid "patrons.pref#CollapseFieldsPatronAddForm# Patron identity"
-msgstr ""
+msgstr "Identidade do usuário"
 
 # Patrons > Patron forms
 msgid "patrons.pref#CollapseFieldsPatronAddForm# Patron messaging preferences"
@@ -10968,6 +11091,9 @@ msgid ""
 "existing patrons, collapse the following fields from the full form (can "
 "still be expanded later):"
 msgstr ""
+"Ao adicionar novos usuários ou editar usuários existentes, recolha os "
+"seguintes campos do formulário completo (ainda pode ser expandido "
+"posteriormente):"
 
 # Patrons > General
 msgid ""
@@ -10975,6 +11101,8 @@ msgid ""
 "default fields to be used during a patron search using the \"standard\" "
 "option:"
 msgstr ""
+"Lista separada por vírgulas que define os campos padrão a serem usados "
+"durante uma pesquisa de usuário usando a opção \"padrão\":"
 
 # Patrons > General
 msgid ""
@@ -10983,6 +11111,10 @@ msgid ""
 "to this preference will be added as search options in the dropdown menu on "
 "the patron search page."
 msgstr ""
+"Se estiver vazio, o Koha assumirá como padrão \"sobrenome, nome, outros "
+"nomes, número do cartão, ID do usuário\". Campos adicionais adicionados a "
+"esta preferência serão adicionados como opções de pesquisa no menu suspenso "
+"na página de pesquisa do usuário."
 
 # Patrons > General
 msgid "patrons.pref#EnableBorrowerFiles# Do"
@@ -11035,6 +11167,8 @@ msgid ""
 "patrons.pref#EnhancedMessagingPreferences# staff to manage which notices "
 "patrons will receive and when they will receive them."
 msgstr ""
+"equipe para gerenciar quais avisos os usuários receberão e quando eles os "
+"receberão."
 
 # Patrons > Notices and notifications
 msgid ""
@@ -11093,6 +11227,8 @@ msgid ""
 "patrons.pref#FallbackToSMSIfNoEmail# sending purchase suggestion messages by "
 "SMS if no patron email is defined."
 msgstr ""
+"envio de mensagens de sugestão de compra por SMS se nenhum e-mail do usuário "
+"for definido."
 
 # Patrons > General
 msgid "patrons.pref#FeeOnChangePatronCategory# Do"
@@ -11116,6 +11252,9 @@ msgid ""
 "Regulation. When you enforce, patrons need to give consent before using the "
 "OPAC. If you set to permissive, Koha will warn but not enforce."
 msgstr ""
+". O GDPR é o regulamento geral de proteção de dados da UE. Quando você "
+"aplica, os usuários precisam dar consentimento antes de usar o OPAC. Se você "
+"definir como permissivo, o Koha avisará, mas não obrigará."
 
 # Patrons > Privacy
 msgid ""
@@ -11129,19 +11268,19 @@ msgstr ""
 
 # Patrons > Privacy
 msgid "patrons.pref#GDPR_Policy# Set GDPR policy to:"
-msgstr ""
+msgstr "Defina a política GDPR para:"
 
 # Patrons > Privacy
 msgid "patrons.pref#GDPR_Policy# disabled"
-msgstr ""
+msgstr "desativar"
 
 # Patrons > Privacy
 msgid "patrons.pref#GDPR_Policy# enforced"
-msgstr ""
+msgstr "forçado"
 
 # Patrons > Privacy
 msgid "patrons.pref#GDPR_Policy# permissive"
-msgstr ""
+msgstr "permissiva"
 
 # Patrons > General
 msgid ""
@@ -11200,12 +11339,15 @@ msgid ""
 "schema.koha-community.org/__VERSION__/tables/borrowers.html' "
 "target='blank'>database columns</a>:"
 msgstr ""
+"As seguintes <a href='http://schema.koha-community.org/__VERSION__/tables/"
+"borrowers.html' target='blank'>colunas do banco de dados</a>:"
 
 # Patrons > Patron forms
 msgid ""
 "patrons.pref#PatronDuplicateMatchingAddFields# will be used to detect "
 "possible duplicates when adding a new patron."
 msgstr ""
+"será usado para detectar possíveis duplicatas ao adicionar um novo usuário."
 
 # Patrons > Patron forms
 msgid ""
@@ -11213,6 +11355,8 @@ msgid ""
 "community.org/__VERSION__/tables/borrowers.html' target='blank'>database "
 "columns</a>:"
 msgstr ""
+"As seguintes <a href='http://schema.koha-community.org/__VERSION__/tables/"
+"borrowers.html' target='blank'>colunas do banco de dados</a>:"
 
 # Patrons > Patron forms
 msgid ""
@@ -11221,6 +11365,10 @@ msgid ""
 "specified here. If applicable the guarantor form will be shown as well, "
 "individual fields in that form will be ignored."
 msgstr ""
+"será adicionado ao formulário de adição rápida do usuário ao inserir um novo "
+"usuário. Exibe apenas campos obrigatórios e campos especificados aqui. Se "
+"aplicável, o formulário do fiador também será mostrado, os campos "
+"individuais desse formulário serão ignorados."
 
 # Patrons > General
 msgid "patrons.pref#PatronsPerPage# By default, show"
@@ -11228,7 +11376,7 @@ msgstr "Por padrão, exiba"
 
 # Patrons > General
 msgid "patrons.pref#PatronsPerPage# results per page in the staff interface."
-msgstr ""
+msgstr "resultados por página na interface STAFF."
 
 # Patrons > Notices and notifications > PhoneNotification
 msgid ""
@@ -11236,25 +11384,25 @@ msgid ""
 "\"></i> If <code>PhoneNotification</code> is enabled, "
 "<code>TalkingTechItivaPhoneNotification</code> should be disabled."
 msgstr ""
+" <br/><i class=\"fa fa-exclamation-triangle\"></i> Se "
+"<code>PhoneNotification</code> estiver ativo, "
+"<code>TalkingTechItivaPhoneNotification</code> devera ser desabilitado."
 
 # Patrons > Notices and notifications
-#, fuzzy
 msgid "patrons.pref#PhoneNotification# Disable"
 msgstr "Desativar"
 
 # Patrons > Notices and notifications
-#, fuzzy
 msgid "patrons.pref#PhoneNotification# Enable"
 msgstr "Ativar"
 
 # Patrons > Notices and notifications
-#, fuzzy
 msgid ""
 "patrons.pref#PhoneNotification# patron phone notifications generation. A "
 "plugin will be required to process the phone notifications."
 msgstr ""
-"notificações no telefone do usuário utilizando Talking Tech i-tiva (suporte "
-"a avisos de entrega, devolução e reserva)."
+"geração de notificações no telefone do usuário. Será necessário um plug-in "
+"para processar as notificações do telefone."
 
 # Patrons > Patron relationships
 msgid "patrons.pref#PrefillGuaranteeField# Alternate address - Address"
@@ -11443,24 +11591,24 @@ msgstr " acessar / alterar privilégios administradores."
 msgid ""
 "patrons.pref#Pseudonymization# <br/> And the following fields for the "
 "transactions:"
-msgstr ""
+msgstr "<br/> E os seguintes campos para as transações:"
 
 # Patrons > Security
 msgid ""
 "patrons.pref#Pseudonymization# <br/>Use the following fields for patrons:"
-msgstr ""
+msgstr " <br/>Use os seguintes campos para usuários:"
 
 # Patrons > Security
 msgid "patrons.pref#Pseudonymization# City"
-msgstr ""
+msgstr "Cidade"
 
 # Patrons > Security
 msgid "patrons.pref#Pseudonymization# Collection code"
-msgstr ""
+msgstr "Código de coleção"
 
 # Patrons > Security
 msgid "patrons.pref#Pseudonymization# Country"
-msgstr ""
+msgstr "País"
 
 # Patrons > Security
 msgid "patrons.pref#Pseudonymization# Date and time of the transaction"
@@ -11472,23 +11620,23 @@ msgstr ""
 
 # Patrons > Security
 msgid "patrons.pref#Pseudonymization# Disable"
-msgstr ""
+msgstr "Desativar"
 
 # Patrons > Security
 msgid "patrons.pref#Pseudonymization# Enable"
-msgstr ""
+msgstr "Ativar"
 
 # Patrons > Security
 msgid "patrons.pref#Pseudonymization# Holding branch"
-msgstr ""
+msgstr "Biblioteca Atual"
 
 # Patrons > Security
 msgid "patrons.pref#Pseudonymization# Home branch"
-msgstr ""
+msgstr "Biblioteca de Origem"
 
 # Patrons > Security
 msgid "patrons.pref#Pseudonymization# Item type"
-msgstr ""
+msgstr "Tipo de item"
 
 # Patrons > Security
 msgid "patrons.pref#Pseudonymization# Item's callnumber"

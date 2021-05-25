@@ -6,8 +6,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 20.11\n"
-"POT-Creation-Date: 2021-02-15 09:21-0300\n"
-"PO-Revision-Date: 2020-12-23 06:57+0000\n"
+"POT-Creation-Date: 2021-05-14 15:03-0300\n"
+"PO-Revision-Date: 2021-05-04 13:13+0000\n"
 "Last-Translator: pknuuti <paivi.knuutinen@joensuu.fi>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: fi\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.8\n"
-"X-POOTLE-MTIME: 1608706640.613576\n"
+"X-POOTLE-MTIME: 1620133988.828910\n"
 "X-Pootle-Path: /fi/20.11/fi-FI-marc-MARC21.po\n"
 "X-Pootle-Revision: 1\n"
 
@@ -164,10 +164,14 @@ msgstr "(täytetty automaattisesti)"
 msgid "(if exact bit depth known, enter; <br />otherwise use pulldown)"
 msgstr "(syötä, jos bittitarkkuus tiedetään; <br />muulloin valitse valikosta)"
 
-#: koha-tmpl/intranet-tmpl/prog/en/xslt/MARC21slim2intranetDetail.xsl:656
 #: koha-tmpl/intranet-tmpl/prog/en/xslt/MARC21slim2intranetDetail.xsl:715
-#: koha-tmpl/opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:737
 #: koha-tmpl/opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:789
+#, fuzzy, c-format
+msgid "(index-term-genre"
+msgstr "Ei määritelty"
+
+#: koha-tmpl/intranet-tmpl/prog/en/xslt/MARC21slim2intranetDetail.xsl:656
+#: koha-tmpl/opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:737
 #, c-format
 msgid "(su"
 msgstr "(su"
@@ -298,6 +302,11 @@ msgstr "/cgi-bin/koha/catalogue/search.pl?q=au:\""
 msgid "/cgi-bin/koha/catalogue/search.pl?q=control-number:"
 msgstr "/cgi-bin/koha/catalogue/search.pl?q=control-number:"
 
+#: koha-tmpl/intranet-tmpl/prog/en/xslt/MARC21slim2intranetDetail.xsl:722
+#, fuzzy, c-format
+msgid "/cgi-bin/koha/catalogue/search.pl?q=index-term-genre"
+msgstr "/cgi-bin/koha/catalogue/search.pl?q=rcn:"
+
 #: koha-tmpl/intranet-tmpl/prog/en/xslt/MARC21slim2intranetDetail.xsl:222
 #: koha-tmpl/intranet-tmpl/prog/en/xslt/MARC21slim2intranetDetail.xsl:239
 #, c-format
@@ -305,7 +314,6 @@ msgid "/cgi-bin/koha/catalogue/search.pl?q=rcn:"
 msgstr "/cgi-bin/koha/catalogue/search.pl?q=rcn:"
 
 #: koha-tmpl/intranet-tmpl/prog/en/xslt/MARC21slim2intranetDetail.xsl:665
-#: koha-tmpl/intranet-tmpl/prog/en/xslt/MARC21slim2intranetDetail.xsl:722
 #, c-format
 msgid "/cgi-bin/koha/catalogue/search.pl?q=su"
 msgstr "/cgi-bin/koha/catalogue/search.pl?q=su"
@@ -407,6 +415,11 @@ msgstr "/cgi-bin/koha/opac-search.pl?q=au:\""
 msgid "/cgi-bin/koha/opac-search.pl?q=control-number:"
 msgstr "/cgi-bin/koha/opac-search.pl?q=control-number:"
 
+#: koha-tmpl/opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:796
+#, fuzzy, c-format
+msgid "/cgi-bin/koha/opac-search.pl?q=index-term-genre"
+msgstr "/cgi-bin/koha/opac-search.pl?q=rcn:"
+
 #: koha-tmpl/opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:257
 #: koha-tmpl/opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:274
 #, c-format
@@ -414,7 +427,6 @@ msgid "/cgi-bin/koha/opac-search.pl?q=rcn:"
 msgstr "/cgi-bin/koha/opac-search.pl?q=rcn:"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:745
-#: koha-tmpl/opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:796
 #, c-format
 msgid "/cgi-bin/koha/opac-search.pl?q=su"
 msgstr "/cgi-bin/koha/opac-search.pl?q=su"
@@ -9303,6 +9315,9 @@ msgid ""
 "material) contains code d. A fill character (|) is not allowed in this "
 "position."
 msgstr ""
+"Yksikirjaiminen koodi, joka ilmaisee karttapallon tyypin. Karttapallo on "
+"taivaankappaleen kuvaus pallon pinnalla. Ks. merkkipaikkojen 01-05 tarkemmat "
+"kuvaukset jaksosta 007--KARTTA."
 
 #: koha-tmpl/intranet-tmpl/prog/en/data/marc21_field_007.xml:424
 #, c-format
@@ -9317,6 +9332,11 @@ msgid ""
 "they may be original publications. A fill character (|) is not allowed in "
 "this position."
 msgstr ""
+"Yksikirjaiminen koodi, joka ilmaisee mikrotallenteen muodon. Mikrotallenne "
+"on läpinäkyvä tai -näkymätön viestin, joka sisältää suurennuslaitteen avulla "
+"luettavia mikrokuvia. Mikrotallenne voi olla alkuperäisjulkaisu tai kopio "
+"olemassa olevasta teksti- tai graafisesta aineistosta. Täyttömerkki | ei ole "
+"sallittu tässä merkkipaikassa."
 
 #: koha-tmpl/intranet-tmpl/prog/en/data/marc21_field_007.xml:331
 #, c-format
@@ -9327,16 +9347,21 @@ msgid ""
 "of an optical device, for example, a filmstrip, slide, or transparency. A "
 "fill character (|) is not allowed in this position."
 msgstr ""
+"Yksikirjaiminen koodi, joka ilmaisee heijastettavan kuvan tyypin. "
+"Heijastettava kuva on kaksiulotteinen liikkeetön kuva/esitys, joka on "
+"tarkoitettu heijastettavaksi optisen laitteen avulla. Täyttömerkki | ei ole "
+"sallittu tässä merkkipaikassa."
 
 #: koha-tmpl/intranet-tmpl/prog/en/data/marc21_field_007.xml:228
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "One-character alphabetic code that indicates the category of material to "
 "which the item belongs is tactile material. Used for material intended to be "
 "read by touch. A fill character (|) is not allowed in this position."
 msgstr ""
-"Sisältääkö kuvailun kohde elämäkerrallista aineistoa ja minkä tyyppistä se "
-"on."
+"Yksikirjaiminen koodi, joka ilmaisee tunnusteluaineiston tyypin. "
+"Pistekirjoitus ja muut aineistot, jotka on tarkoitettu luettaviksi "
+"tunnustelemalla. Täyttömerkki | ei ole sallittu tässä merkkipaikassa."
 
 #: koha-tmpl/intranet-tmpl/prog/en/data/marc21_field_007.xml:1196
 #, c-format
@@ -9349,6 +9374,11 @@ msgid ""
 "institution chooses not to input separate 007 fields for the various "
 "components). A fill character (|) is not allowed in this position."
 msgstr ""
+"Yksikirjaiminen koodi, joka ilmaisee materiaalin olevan tarkemmin "
+"määrittelemätön. Kohteen ulkoasu ei sovi mihinkään muuhun kentän 007 "
+"aineistoluokkaan. Tätä luokkaa käytetään myös kohteille joilla on useita "
+"ulkoasuja ja joita ei kuvailla erillisissä 007-kentissä. Täyttömerkki | ei "
+"ole sallittu tässä merkkipaikassa."
 
 #: koha-tmpl/intranet-tmpl/prog/en/data/marc21_field_007.xml:1105
 #, c-format
@@ -9359,6 +9389,10 @@ msgid ""
 "registered. It is designed for playback on a television receiver, or video "
 "monitor. A fill character (|) is not allowed in this position."
 msgstr ""
+"Yksikirjaiminen koodi, joka ilmaisee videotallenteen tyypin. Videotallenne "
+"on (liikkuvista) visuaalisista kuvista koostuva, yleensä myös ääntä "
+"sisältävä tallenne, joka on suunniteltu toistettavaksi "
+"televisiovastaanottimen tai videomonitorin kautta."
 
 #: koha-tmpl/intranet-tmpl/prog/en/data/marc21_field_006.xml:296
 #: koha-tmpl/intranet-tmpl/prog/en/data/marc21_field_008.xml:639
@@ -10046,9 +10080,8 @@ msgstr "Poistot"
 
 #. SCRIPT
 #: koha-tmpl/intranet-tmpl/prog/en/includes/cateditor-widgets-marc21.inc:73
-#, fuzzy
 msgid "Override"
-msgstr "Alkusoitot"
+msgstr "Ohita"
 
 #: koha-tmpl/intranet-tmpl/prog/en/data/marc21_field_006.xml:379
 #: koha-tmpl/intranet-tmpl/prog/en/data/marc21_field_008.xml:792
@@ -10208,9 +10241,9 @@ msgid "Pavans"
 msgstr "Pavanat"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:1439
-#, fuzzy, c-format
+#, c-format
 msgid "Pending hold ("
-msgstr "Varattu ("
+msgstr "Odottava varaus ("
 
 #: koha-tmpl/intranet-tmpl/prog/en/data/marc21_field_006.xml:421
 #: koha-tmpl/intranet-tmpl/prog/en/data/marc21_field_008.xml:834
@@ -10400,7 +10433,7 @@ msgstr "Alustan käyttötarkoitus"
 #: koha-tmpl/opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:1622
 #, c-format
 msgid "Play this sample"
-msgstr ""
+msgstr "Soita näyte"
 
 #: koha-tmpl/intranet-tmpl/prog/en/data/marc21_field_007.xml:1065
 #, c-format
@@ -10768,9 +10801,9 @@ msgstr "Julkaisuvuosi ja tekijänoikeusvuosi"
 #: koha-tmpl/opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:326
 #: koha-tmpl/opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:1044
 #: koha-tmpl/opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:1067
-#, fuzzy, c-format
+#, c-format
 msgid "Publication details: "
-msgstr "8- Ennakkotieto"
+msgstr "Julkaisutiedot: "
 
 #: koha-tmpl/intranet-tmpl/prog/en/xslt/MARC21slim2intranetDetail.xsl:849
 #: koha-tmpl/intranet-tmpl/prog/en/xslt/MARC21slim2intranetResults.xsl:885
@@ -10974,6 +11007,9 @@ msgid ""
 "use. It can be used to judge the level of quality of a file, and an "
 "institution's commitment to maintain its availability over time."
 msgstr ""
+"Elektronisen aineiston laatu ja käyttötarkoitus. Onko aineiston laatu "
+"suhteessa käyttötarkoitukseen (onko esim. alkuperäisen veroinen, "
+"pitkäaikaissäilytykseen tai nykyiseen käyttöön sopiva)."
 
 #: koha-tmpl/intranet-tmpl/prog/en/data/marc21_field_006.xml:545
 #: koha-tmpl/intranet-tmpl/prog/en/data/marc21_field_008.xml:1032
@@ -11975,6 +12011,8 @@ msgid ""
 "Special class of cartographic material to which the item belongs. Usually "
 "the class of physical object, e.g., a diagram."
 msgstr ""
+"Kartografisen aineiston (lukuunottamatta karttapalloja) tyyppi. Yleensä "
+"aineiston fyysinen tyyppi, esim. diagrammi."
 
 #: koha-tmpl/intranet-tmpl/prog/en/data/marc21_field_007.xml:83
 #, c-format
@@ -11982,6 +12020,8 @@ msgid ""
 "Special class of material (usually the class of physical object) to which an "
 "item belongs (e.g., a magnetic disk)."
 msgstr ""
+"Elektronisen aineiston materiaalin erityistyyppi (usein fyysisen objektin "
+"tyyppi), esim. magneettinauha."
 
 #: koha-tmpl/intranet-tmpl/prog/en/data/marc21_field_007.xml:185
 #, c-format
@@ -11989,31 +12029,33 @@ msgid ""
 "Special class of material (usually the class of physical object) to which an "
 "item belongs, e.g., a celestial globe."
 msgstr ""
+"Karttapallon erityispiirteet (usein fyysisen objektin tyyppi), esim. taivas-/"
+"tähtikarttapallo."
 
 #: koha-tmpl/intranet-tmpl/prog/en/data/marc21_field_007.xml:1199
 #, c-format
 msgid "Special class of material to which the item belongs"
-msgstr ""
+msgstr "Erityinen materiaalityyppi, johon aineisto kuuluu"
 
 #: koha-tmpl/intranet-tmpl/prog/en/data/marc21_field_007.xml:815
 #, c-format
 msgid ""
 "Special class of material, usually the class of physical object, to which an "
 "item belongs."
-msgstr ""
+msgstr "Kaukokartoituskuvan erityistyyppi, johon fyysinen objekti kuuluu."
 
 #: koha-tmpl/intranet-tmpl/prog/en/data/marc21_field_007.xml:427
 #, c-format
 msgid ""
 "Special class of microform to which the item belongs. (e.g., a microopaque)."
-msgstr ""
+msgstr "Mikrotallenteen erityistyyppi, esim. mikrokortti."
 
 #: koha-tmpl/intranet-tmpl/prog/en/data/marc21_field_007.xml:615
 #, c-format
 msgid ""
 "Special class of motion picture to which the item belongs., e.g., a film "
 "reel."
-msgstr ""
+msgstr "Elokuvan erityismääre, mihin aineisto kuuluu, esim. filmikela."
 
 #: koha-tmpl/intranet-tmpl/prog/en/data/marc21_field_007.xml:524
 #, c-format
@@ -12033,13 +12075,13 @@ msgstr "Heijastettavan kuvan erityismääre, esim. dia."
 msgid ""
 "Special class of sound recording to which the item belongs (e.g., a "
 "cylinder)."
-msgstr ""
+msgstr "Äänitteen erityismääre, esim. äänilieriö."
 
 #: koha-tmpl/intranet-tmpl/prog/en/data/marc21_field_007.xml:231
 #, c-format
 msgid ""
 "Special class of tactile materialspecific material to which the item belongs."
-msgstr ""
+msgstr "Tunnusteluaineiston erityismääre."
 
 #: koha-tmpl/intranet-tmpl/prog/en/data/marc21_field_007.xml:797
 #: koha-tmpl/intranet-tmpl/prog/en/data/marc21_field_007.xml:806
@@ -12412,19 +12454,19 @@ msgstr "Korvaa julkaisun:"
 #: koha-tmpl/opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:1322
 #, c-format
 msgid "Supplement to: "
-msgstr ""
+msgstr "Liittyy julkaisuun: "
 
 #: koha-tmpl/intranet-tmpl/prog/en/xslt/MARC21slim2intranetDetail.xsl:1163
 #: koha-tmpl/opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:1279
-#, fuzzy, c-format
+#, c-format
 msgid "Supplement: "
-msgstr "seuraaja"
+msgstr "Suplementti: "
 
 #: koha-tmpl/intranet-tmpl/prog/en/xslt/MARC21slim2intranetDetail.xsl:1135
 #: koha-tmpl/opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:1251
 #, c-format
 msgid "Supplements: "
-msgstr ""
+msgstr "Suplementit: "
 
 #: koha-tmpl/intranet-tmpl/prog/en/xslt/MARC21slim2intranetDetail.xsl:103
 #: koha-tmpl/intranet-tmpl/prog/en/xslt/MARC21slim2intranetResults.xsl:289
@@ -13200,27 +13242,29 @@ msgid ""
 "Type of material (other than normal museum matting) to which the primary "
 "support (007/04) is attached."
 msgstr ""
+"Kehys, tuki tai montaasi, johon kuva (materiaali ilmaistu 007/04 kohdassa) "
+"on liitetty."
 
 #: koha-tmpl/intranet-tmpl/prog/en/data/marc21_field_007.xml:356
 #, c-format
 msgid ""
 "Type of material for the base of the emulsion of a photonegative, filmstrip, "
 "slide, or transparency."
-msgstr ""
+msgstr "Heijastettavan kuvan pohjan materiaali."
 
 #: koha-tmpl/intranet-tmpl/prog/en/data/marc21_field_007.xml:409
 #, c-format
 msgid ""
 "Type of material of the mount of a slide or transparency for a projected "
 "graphic."
-msgstr ""
+msgstr "Heijastettavan kuvan kehys, tuki tai kokoonpano."
 
 #: koha-tmpl/intranet-tmpl/prog/en/data/marc21_field_007.xml:559
 #, c-format
 msgid ""
 "Type of material used for the support or base on which an image is printed "
 "or executed."
-msgstr ""
+msgstr "Kuvan pohjan ensisijainen materiaali."
 
 #. SELECT name=f6
 #: koha-tmpl/intranet-tmpl/prog/en/includes/cateditor-widgets-marc21.inc:11
@@ -14030,26 +14074,26 @@ msgid ""
 "one or more braille or Moon characters to represent common letter "
 "combinations."
 msgstr ""
+"Onko tiivistämistä käytetty. Tiivistämisessä käytetään yhden tai useamman "
+"kohokirjoitusmerkin yhdistelmää edustamaan yleistä kirjainyhdistelmää."
 
 #: koha-tmpl/intranet-tmpl/prog/en/data/marc21_field_007.xml:783
-#, fuzzy, c-format
+#, c-format
 msgid "Whether or not the item being cataloged is judged to be complete."
-msgstr ""
-"Ovatko kaikki tai osa luetteloitavasta nimekkeestä transponoitu ja/tai "
-"sovitettu toisesta työstä."
+msgstr "Onko luetteloitava elokuva katsottava täydelliseksi."
 
 #: koha-tmpl/intranet-tmpl/prog/en/data/marc21_field_007.xml:147
 #, c-format
 msgid ""
 "Whether quality assurance targets have been included appropriately at the "
 "time of reformatting/creation of the electronic resource. "
-msgstr ""
+msgstr "Onko elektronisen aineiston laadunvarmistus olemassa."
 
 #: koha-tmpl/intranet-tmpl/prog/en/data/marc21_field_007.xml:55
 #, c-format
 msgid ""
 "Whether the cartographic item is a facsimile or other type of reproduction."
-msgstr ""
+msgstr "Kartan jäljennetyyppi (näköispainos tms.)"
 
 #: koha-tmpl/intranet-tmpl/prog/en/data/marc21_field_007.xml:141
 #, c-format
@@ -14064,6 +14108,7 @@ msgid ""
 "Whether the film is part of a complete production or is a preliminary or "
 "post-production element."
 msgstr ""
+"Tuotantoprosessiin liittyviä tietoja, mistä elokuvan vaiheesta on kyse."
 
 #: koha-tmpl/intranet-tmpl/prog/en/data/marc21_field_007.xml:703
 #, c-format
@@ -14095,26 +14140,26 @@ msgstr "Elektronisen aineiston väritys (yksi- vai monivärinen)."
 msgid ""
 "Whether the production of sound is an integral part of an electronic "
 "resource."
-msgstr ""
+msgstr "Tuottaako elektroninen aineisto ääntä."
 
 #: koha-tmpl/intranet-tmpl/prog/en/data/marc21_field_007.xml:367
 #, c-format
 msgid ""
 "Whether the sound is on or is separate from the projected graphic (i.e., on "
 "the accompanying material). "
-msgstr ""
+msgstr "Onko heijastettavassa kuvassa ääni mukana tai erikseen."
 
 #: koha-tmpl/intranet-tmpl/prog/en/data/marc21_field_007.xml:1151
 #, c-format
 msgid ""
 "Whether the sound is on the item or separate from the item (i.e., on the "
 "accompanying material). "
-msgstr ""
+msgstr "Onko videotallenteessa ääni mukana tai erikseen."
 
 #: koha-tmpl/intranet-tmpl/prog/en/data/marc21_field_007.xml:647
 #, c-format
 msgid "Whether the sound is on the item or separate from the item. "
-msgstr ""
+msgstr "Onko elokuvassa ääni mukana tai erikseen."
 
 #: koha-tmpl/intranet-tmpl/prog/en/data/marc21_field_007.xml:669
 #, c-format
@@ -14140,6 +14185,8 @@ msgid ""
 "match the measurements of the item as given in the physical description "
 "should be used. If no code exactly matches, code z is used."
 msgstr ""
+"Videotallenteen nauhan leveys. Jos tarkkaa mittaa ei ole valittavissa, käytä "
+"koodia z."
 
 #: koha-tmpl/intranet-tmpl/prog/en/data/marc21_field_007.xml:389
 #, c-format
@@ -18858,7 +18905,7 @@ msgstr "lacnaf"
 #: koha-tmpl/opac-tmpl/bootstrap/en/xslt/MARC21slimUtils.xsl:356
 #, c-format
 msgid "lang_code-"
-msgstr ""
+msgstr "lang_code-"
 
 #: koha-tmpl/intranet-tmpl/prog/en/xslt/MARC21slim2MODS32.xsl:1127
 #: koha-tmpl/opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:374
@@ -18868,9 +18915,9 @@ msgstr "isoteksti"
 
 #: koha-tmpl/intranet-tmpl/prog/en/xslt/MARC21slim2intranetResults.xsl:101
 #: koha-tmpl/opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:112
-#, fuzzy, c-format
+#, c-format
 msgid "large print "
-msgstr "isoteksti"
+msgstr "isotekstinen "
 
 #: koha-tmpl/intranet-tmpl/prog/en/xslt/MARC21slim2MADS.xsl:1116
 #, c-format

@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Koha 20.11\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2021-04-22 17:48+0000\n"
-"Last-Translator: BonaSoft <koha@bonasoft.pl>\n"
+"PO-Revision-Date: 2021-05-14 13:14+0000\n"
+"Last-Translator: Urszula <matoga@biblos.pk.edu.pl>\n"
 "Language-Team: American English <kde-i18n-doc@kde.org>\n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2);\n"
 "X-Generator: Pootle 2.8\n"
-"X-POOTLE-MTIME: 1619113695.635417\n"
+"X-POOTLE-MTIME: 1620998044.830993\n"
 "X-Pootle-Path: /pl/20.11/pl-PL-pref.po\n"
 "X-Pootle-Revision: 1\n"
 
@@ -1965,8 +1965,23 @@ msgid "admin.pref#casLogout# Yes"
 msgstr "Tak"
 
 # Administration > CAS authentication
-msgid "admin.pref#casServerUrl# URL of the CAS Authentication Server: "
+msgid ""
+"admin.pref#casServerUrl# URL of the Central Authentication Service (CAS) "
+"server: "
 msgstr "Serwer autoryzacji CAS jest dostępny pod adresem: "
+
+# Administration > CAS authentication
+msgid "admin.pref#casServerVersion# CAS 2 or earlier"
+msgstr "CAS 2 lub wcześniejszym"
+
+# Administration > CAS authentication > casServerVersion
+msgid "admin.pref#casServerVersion# CAS 3 or later"
+msgstr "CAS 3 lub późniejszym"
+
+# Administration > CAS authentication
+msgid ""
+"admin.pref#casServerVersion# Version of the CAS server Koha will connect to: "
+msgstr "Serwer autoryzacji CAS w Koha połączy się z: "
 
 # Administration > Interface options
 msgid "admin.pref#delimiter# #'s"
@@ -2501,11 +2516,10 @@ msgid ""
 msgstr "jako domyślnego źródła klasyfikacji."
 
 # Cataloging > Record structure
-#, fuzzy
 msgid ""
 "cataloguing.pref#DefaultCountryField008#  Empty defaults to ||| - No attempt "
 "to code."
-msgstr "  Domyślne puste dla kodu xxu dla Stanów Zjednoczonych."
+msgstr "  Domyślnie puste dla III - Brak zamiaru kodowania."
 
 # Cataloging > Record structure
 msgid ""
@@ -2635,8 +2649,8 @@ msgid ""
 "cataloguing.pref#MarcFieldDocURL# For example <tt>http://fielddoc.example."
 "com/?marc={MARC}&field={FIELD}&language={LANG}</tt>"
 msgstr ""
-"Na przykład <tt>http://fielddoc.example.com/?marc={MARC}&field={FIELD}&langua"
-"ge={LANG}</tt>"
+"Na przykład <tt>http://fielddoc.example.com/?marc={MARC}&field={FIELD}"
+"&language={LANG}</tt>"
 
 # Cataloging > Display
 msgid ""
@@ -2653,8 +2667,8 @@ msgid ""
 "number, eg. \"000\" or \"048\"), <tt>{LANG}</tt> (user language, eg. \"en\" "
 "or \"fi-FI\")."
 msgstr ""
-"Możliwe wartości to <tt>{MARC}</tt> (format marc, np. \"MARC21\" lub \""
-"UNIMARC\"), <tt>{FIELD}</tt> (kod pola, np. \"000\" lub \"048\"), "
+"Możliwe wartości to <tt>{MARC}</tt> (format marc, np. \"MARC21\" lub "
+"\"UNIMARC\"), <tt>{FIELD}</tt> (kod pola, np. \"000\" lub \"048\"), "
 "<tt>{LANG}</tt> (język użytkownika, np. \"en\" lub \"fi-FI\")."
 
 # Cataloging > Display
@@ -3295,7 +3309,7 @@ msgstr "Moduł samoobsługowych wypożyczeń"
 
 # Circulation > Stock rotation module
 msgid "circulation.pref Stock rotation module"
-msgstr "Moduł rotacji zbiorów"
+msgstr "Moduł obiegu zbiorów"
 
 # Circulation > Checkout policy
 msgid ""
@@ -3599,7 +3613,7 @@ msgid ""
 "policy or has been scheduled for automatic renewal."
 msgstr ""
 "na ominięcie limitu prolongat i prolongatę egzemplarza, gdy limit został "
-"wyczerpany lub ustawiono na automatyczną prolongatę."
+"wyczerpany lub ustawiono automatyczne prolongowanie."
 
 # Circulation > Checkout policy
 msgid "circulation.pref#AllowRenewalOnHoldOverride# Allow"
@@ -4088,8 +4102,8 @@ msgstr ""
 "egzemplarza."
 
 # Circulation > Checkout policy
-msgid "circulation.pref#CircControl# Use the checkout and fines rules of"
-msgstr "Zastosuj zasady udostępniania i należności do"
+msgid "circulation.pref#CircControl# Use the calendar and circulation rules of"
+msgstr "Stosuj kalendarz oraz zasady udostępniania i należności z"
 
 # Circulation > Checkout policy
 msgid "circulation.pref#CircControl# the library the item is from."
@@ -4783,12 +4797,14 @@ msgid ""
 "circulation.pref#ILLOpacbackends# (separated with |). If left empty, all "
 "installed backends will be enabled."
 msgstr ""
+"(oddzielone znakiem I). Jeśli puste, wszystkie zainstalowane bazy będą "
+"włączone."
 
 # Circulation > Interlibrary loans
 msgid ""
 "circulation.pref#ILLOpacbackends# Enabled ILL backends for OPAC initiated "
 "requests:"
-msgstr ""
+msgstr "Włączone bazy modułu WM dla zamówień składanych przez OPAC:"
 
 # Circulation > Interlibrary loans > ILLSendStaffNotices
 msgid ""
@@ -5826,7 +5842,7 @@ msgstr "Włącz"
 
 # Circulation > Stock rotation module
 msgid "circulation.pref#StockRotation# the stock rotation module."
-msgstr "moduł rotacji zbiorów."
+msgstr "moduł obiegu zbiorów."
 
 # Circulation > Checkin policy
 msgid "circulation.pref#StoreLastBorrower# Don't store"
@@ -5975,7 +5991,7 @@ msgstr ""
 
 # Circulation > Checkin policy
 msgid "circulation.pref#UpdateItemLocationOnCheckin# Examples:<br/>"
-msgstr ""
+msgstr "Przykłady:<br/>"
 
 # Circulation > Checkin policy
 msgid ""
@@ -5983,12 +5999,16 @@ msgid ""
 "the Fiction location to be updated into the General stacks location on check "
 "in.<br/>"
 msgstr ""
+"FIC: GEN - powoduje zmianę lokalizacji zwracanego egzemplarza z dopuszczonej "
+"wartości FIC na wartość GEN.<br/>"
 
 # Circulation > Checkin policy
 msgid ""
 "circulation.pref#UpdateItemLocationOnCheckin# FIC: _BLANK_ - causes an item "
 "in location FIC to be updated to a blank location on check in.<br/>"
 msgstr ""
+"FIC: _BLANK_ - powoduje zmianę lokalizacji zwracanego egzemplarza z "
+"dopuszczonej wartości FIC na brak lokalizacji (wartość BLANK).<br/>"
 
 # Circulation > Checkin policy
 msgid ""
@@ -5997,6 +6017,10 @@ msgid ""
 "will be updated to match the location value on the right of the colon (:)."
 "<br/>"
 msgstr ""
+"Ogólna zasada: jeśli dopuszczona wartość lokalizacji po lewej stronie "
+"dwukropka (:) odpowiada obecnej lokalizacji egzemplarza, podczas zwrotu "
+"egzemplarza lokalizacja zostanie zmieniona na wartość z prawej strony "
+"dwukropka (:).<br/>"
 
 # Circulation > Checkin policy
 msgid ""
@@ -6005,6 +6029,11 @@ msgid ""
 "differ, in all other cases an update will affect both. Items in the CART "
 "location will be returned to their permanent location on checkout.<br/>"
 msgstr ""
+"Uwaga: PROC i CART to specjalne wartości dla lokalizacji - w ich przypadku "
+"location i permanent_location mogą się różnić (w przypadku pozostałych "
+"wartości zmiana dotyczyć będzie zarówno location jak i permanent_location). "
+"Egzemplarze oznaczone wartością CART będą zwrócone do lokalizacji, z której "
+"zostały wypożyczone.<br/>"
 
 # Circulation > Checkin policy
 msgid ""
@@ -6012,6 +6041,8 @@ msgid ""
 "the Processing Center location to be updated into the Fiction location on "
 "check in.<br/>"
 msgstr ""
+"PROC: FIC - powoduje zmianę lokalizacji zwracanego egzemplarza z "
+"dopuszczonej wartości PROC na wartość FIC.<br/>"
 
 # Circulation > Checkin policy
 msgid ""
@@ -6019,6 +6050,9 @@ msgid ""
 "that is in the Processing Center to be updated to it's permanent location."
 "<br/><br/>"
 msgstr ""
+"PROC: _PERM_ - powoduje zmianę lokalizacji zwracanego egzemplarza z "
+"dopuszczonej wartości PROC na jego stałą lokalizację (wartość PERM).<br/><br/"
+">"
 
 # Circulation > Checkin policy
 msgid ""
@@ -6026,6 +6060,9 @@ msgid ""
 "on the left side of the colon (:) to affect all items, <strong>and overrides "
 "all other rules.</strong>"
 msgstr ""
+"Specjalna wartość _ALL_ wstawiona po lewej stronie dwukropka (:) zmienia "
+"wszystkie zwracane egzemplarze, <strong>i będzie nadrzędna w stosunku do "
+"innych zasad.</strong>"
 
 # Circulation > Checkin policy
 msgid ""
@@ -6033,6 +6070,9 @@ msgid ""
 "be used on either side of a value pair to update or remove the location from "
 "items with no location assigned.<br/>"
 msgstr ""
+"Specjalna wartość _BLANK_ może być używana po każdej stronie pary, w celu "
+"zmiany lub usunięcia lokalizacji zwracanego egzemplarza, który nie ma "
+"przypisanej lokalizacji.<br/>"
 
 # Circulation > Checkin policy
 msgid ""
@@ -6040,12 +6080,16 @@ msgid ""
 "The first value is followed immediately by colon space then the second value."
 "<br/><br/>"
 msgstr ""
+"Lista par dopuszczonych wartości dla lokalizacji egzemplarza. Wartości w "
+"parze rozdzielone są dwukropkiem ze spacją.<br/><br/>"
 
 # Circulation > Checkin policy
 msgid ""
 "circulation.pref#UpdateItemLocationOnCheckin# _ALL_: FIC - causes all items "
 "to be updated into the Fiction location on check in.<br/>"
 msgstr ""
+"_ALL_: FIC - powoduje zmianę lokalizacji wszystkich zwracanych egzemplarzy "
+"na dopuszczoną wartość FIC.<br/>"
 
 # Circulation > Checkin policy
 msgid ""
@@ -6053,6 +6097,8 @@ msgid ""
 "that has no location to be updated into the Fiction location on check in.<br/"
 ">"
 msgstr ""
+"_BLANK_: FIC - powoduje zmianę zwracanego egzemplarza, który nie ma "
+"lokalizacji, na dopuszczoną wartość FIC.<br/>"
 
 # Circulation > Holds policy
 msgid ""
@@ -6145,16 +6191,16 @@ msgstr "transferów pomiędzy bibliotekami w oparciu o"
 
 # Circulation > Interface
 msgid "circulation.pref#UseCirculationDesks# Don't use"
-msgstr ""
+msgstr "Nie używaj"
 
 # Circulation > Interface
 msgid "circulation.pref#UseCirculationDesks# Use"
-msgstr ""
+msgstr "Użyj"
 
 # Circulation > Interface
 msgid ""
 "circulation.pref#UseCirculationDesks# circulation desks with circulation."
-msgstr ""
+msgstr "oddziałów udostępniania."
 
 # Circulation > Course reserves
 msgid "circulation.pref#UseCourseReserves# Don't use"
@@ -6368,22 +6414,25 @@ msgid ""
 "If CalculateFinesOnReturn is enabled, final fines will be calculated when an "
 "item is returned.<br/>"
 msgstr ""
+"<br><strong>UWAGA:</strong> Jeśli skrypt cronjobs/fines.pl jest uruchomiony, "
+"bieżące i zaległe należności będą naliczane podczas działania skryptu, a "
+"bieżące należności staną się zaległymi w momencie zwrotu egzemplarza. Jeśli "
+"opcja CalculateFinesOnReturn jest włączona, zaległe należności zostaną "
+"naliczone w momencie zwrotu egzemplarza.<br/>"
 
 # Circulation > Fines Policy
 msgid "circulation.pref#finesMode# Calculate and charge"
-msgstr "Naliczaj"
+msgstr "Oblicz i nalicz"
 
 # Circulation > Fines Policy
-#, fuzzy
 msgid "circulation.pref#finesMode# Charge"
-msgstr "Naliczaj"
+msgstr "Nalicz"
 
 # Circulation > Fines Policy
 msgid "circulation.pref#finesMode# Don't calculate"
-msgstr "Nie naliczaj"
+msgstr "Nie obliczaj"
 
 # Circulation > Fines Policy
-#, fuzzy
 msgid "circulation.pref#finesMode# Don't charge"
 msgstr "Nie naliczaj"
 
@@ -6399,6 +6448,8 @@ msgid ""
 "circulation.pref#finesMode# on close days. If set the fines.pl cronjob will "
 "not generate fines when run on days marked as closed in the calendar."
 msgstr ""
+"w dniach zamknięcia biblioteki. Jeśli skrypt fines.pl jest włączony, "
+"należności nie wygenerują się w dniach oznaczonych jako wolne w Kalendarzu."
 
 # Circulation > Interface
 msgid "circulation.pref#itemBarcodeFallbackSearch# Don't enable"
@@ -7010,7 +7061,8 @@ msgid ""
 "enhanced_content.pref#KohaManualBaseURL# If starts with '/',  the value of "
 "staffClientBaseURL will be used as a prefix."
 msgstr ""
-"Wpisana wartość, zaczynająca się od '/',  będzie traktowana jako prefiks."
+"Jeśli zaczyna się od '/',  wartość wpisana w staffClientBaseURL będzie "
+"traktowana jako prefiks."
 
 # Enhanced content > Manual
 msgid "enhanced_content.pref#KohaManualBaseURL# Location of the Koha manual"
@@ -7470,7 +7522,7 @@ msgstr "."
 msgid ""
 "enhanced_content.pref#RecordedBooksClientSecret# Include RecordedBooks "
 "availability information with the client secret"
-msgstr ""
+msgstr "Dostęp do biblioteki RecordedBooks jako anonimowy klient"
 
 # Enhanced content > RecordedBooks
 msgid "enhanced_content.pref#RecordedBooksDomain# RecordedBooks domain"
@@ -7484,7 +7536,7 @@ msgstr "."
 msgid ""
 "enhanced_content.pref#RecordedBooksLibraryID# Show items from the "
 "RecordedBooks catalog of library ID"
-msgstr ""
+msgstr "Wyświetlaj egzemplarze z katalogu RecordedBooks dla ID biblioteki"
 
 # Enhanced content > Syndetics
 msgid "enhanced_content.pref#SyndeticsAuthorNotes# Don't show"
@@ -8090,6 +8142,8 @@ msgid ""
 "logs.pref#DumpTemplateVarsIntranet# dump all Template Toolkit variables to a "
 "comment in the HTML source for the staff interface."
 msgstr ""
+"z Template Toolkit, w postaci komentarza, do pliku źródłowego HTML w "
+"interfejsie bibliotekarza."
 
 # Logging > Debugging
 msgid "logs.pref#DumpTemplateVarsOpac# Do"
@@ -8104,6 +8158,7 @@ msgid ""
 "logs.pref#DumpTemplateVarsOpac# dump all Template Toolkit variables to a "
 "comment in the HTML source for the OPAC."
 msgstr ""
+"z Template Toolkit, w postaci komentarza, do pliku źródłowego HTML w OPAC."
 
 # Logging > Logging
 msgid "logs.pref#FinesLog# Don't log"
@@ -8632,17 +8687,18 @@ msgstr ""
 
 # OPAC > Policy
 msgid "opac.pref#OPACFineNoRenewalsIncludeCredits# Don't include"
-msgstr ""
+msgstr "Nie uwzględniaj"
 
 # OPAC > Policy
 msgid "opac.pref#OPACFineNoRenewalsIncludeCredits# Include"
-msgstr ""
+msgstr "Uwzględniaj"
 
 # OPAC > Policy
 msgid ""
 "opac.pref#OPACFineNoRenewalsIncludeCredits# outstanding/unapplied credits "
 "when applying the OPACFineNoRenewals rule to patrons."
 msgstr ""
+"nadpłaty użytkownika w ustawieniach opcji systemowej OPACFineNoRenewals."
 
 # OPAC > Features
 msgid "opac.pref#OPACFinesTab# Allow"
@@ -9182,8 +9238,8 @@ msgid ""
 "file</li><li>put an URL for an external specific stylesheet.</li></"
 "ul>{langcode} will be replaced with current interface language."
 msgstr ""
-"<br />Wartości:<ul><li><a href=\"#\" class=\"set_syspref\" data-syspref=\""
-"OPACXSLTResultsDisplay\" data-value=\"\">pozostaw puste, jeśli nie chcesz "
+"<br />Wartości:<ul><li><a href=\"#\" class=\"set_syspref\" data-syspref="
+"\"OPACXSLTResultsDisplay\" data-value=\"\">pozostaw puste, jeśli nie chcesz "
 "używać</a> xslt</li><li>wpisz \"<a href=\"#\" class=\"set_syspref\" data-"
 "syspref=\"OPACXSLTResultsDisplay\" data-value=\"default\">default</a>\" dla "
 "domyślnego</li><li> dodaj ścieżkę do pliku xslt</li><li>dodaj URL do "
@@ -9231,10 +9287,10 @@ msgid ""
 "file</li><li>put an URL for an external specific stylesheet.</li></"
 "ul>{langcode} will be replaced with current interface language."
 msgstr ""
-"<br />Wartości:<ul><li><a href=\"#\" class=\"set_syspref\" data-syspref=\""
-"OPACXSLTResultsDisplay\" data-value=\"\">pozostaw puste</a> dla \"brak xslt\""
-"</li><li>wprowadź \"<a href=\"#\" class=\"set_syspref\" data-syspref=\""
-"OPACXSLTResultsDisplay\" data-value=\"default\">default</a>\" dla "
+"<br />Wartości:<ul><li><a href=\"#\" class=\"set_syspref\" data-syspref="
+"\"OPACXSLTResultsDisplay\" data-value=\"\">pozostaw puste</a> dla \"brak xslt"
+"\"</li><li>wprowadź \"<a href=\"#\" class=\"set_syspref\" data-syspref="
+"\"OPACXSLTResultsDisplay\" data-value=\"default\">default</a>\" dla "
 "domyślnego</li><li> dodaj ścieżkę do pliku xslt</li><li>dodaj URL do "
 "konkretnego zewnętrznego arkusza stylów.</li></ul>{langcode} zostanie "
 "zastąpione językiem obecnie używanym w interfejsie."
@@ -9321,9 +9377,9 @@ msgstr "Wyświetlaj opcje wyszukiwania zaawansowanego w widoku rozwiniętym:"
 msgid "opac.pref#OpacAdvSearchMoreOptions# Sorting"
 msgstr "Sortowanie"
 
-# OPAC > Advanced search options
+# To są dodatkowe opcje zawężania w wyszukiwaniu zaawansowanym, takie jak: Odbiorca, Zawartość itd. - proponuję "Inne opcje" /Ula
 msgid "opac.pref#OpacAdvSearchMoreOptions# Subtypes"
-msgstr ""
+msgstr "Inne opcje"
 
 # OPAC > Advanced search options
 msgid "opac.pref#OpacAdvSearchOptions# Item types"
@@ -9349,9 +9405,9 @@ msgstr "Wyświetlaj opcje wyszukiwania zaawansowanego:"
 msgid "opac.pref#OpacAdvSearchOptions# Sorting"
 msgstr "Sortowanie"
 
-# OPAC > Advanced search options
+# To są dodatkowe opcje zawężania w wyszukiwaniu zaawansowanym, takie jak: Odbiorca, Zawartość itd. - proponuję "Inne opcje" /Ula
 msgid "opac.pref#OpacAdvSearchOptions# Subtypes"
-msgstr ""
+msgstr "Inne opcje"
 
 # OPAC > Policy
 msgid "opac.pref#OpacAllowPublicListCreation# Allow"
@@ -11001,10 +11057,9 @@ msgid ""
 "code> and the <code>misc/cronjobs/advance_notices.pl</code> cronjob. Ask "
 "your system administrator to schedule them."
 msgstr ""
-"<br><strong>UWAGA:</strong> Opcja wymaga pracy skryptów "
-"<code>misc/cronjobs/process_message_queue.pl</code> oraz "
-"<code>misc/cronjobs/advance_notices.pl</code>. Poproś administratora systemu "
-"o ich włączenie."
+"<br><strong>UWAGA:</strong> Opcja wymaga pracy skryptów <code>misc/cronjobs/"
+"process_message_queue.pl</code> oraz <code>misc/cronjobs/advance_notices.pl</"
+"code>. Poproś administratora systemu o ich włączenie."
 
 # Patrons > Notices and notifications
 msgid "patrons.pref#EnhancedMessagingPreferences# Allow"
@@ -11596,7 +11651,7 @@ msgstr "do wysyłania wiadomości SMS."
 
 # Patrons > Notices and notifications
 msgid "patrons.pref#SMSSendUsername# . Override from address with"
-msgstr ""
+msgstr ". Użyj adresu e-mail"
 
 # Patrons > Notices and notifications
 msgid "patrons.pref#SMSSendUsername# Define a username/login"
@@ -11609,7 +11664,7 @@ msgstr "i hasło"
 # Patrons > Notices and notifications
 msgid ""
 "patrons.pref#SMSSendUsername# for emails sent using \"Email\" send driver."
-msgstr ""
+msgstr "do wysyłania SMS przez \"E-mail\"."
 
 # Patrons > General
 msgid ""
@@ -11772,8 +11827,8 @@ msgid ""
 "hold history (checkout history is still stored, regardless of staff being "
 "allowed access or not)."
 msgstr ""
-"bibliotekarzom na dostęp do historii wypożyczeń i zamówień użytkowników ("
-"historia jest przechowywana, niezależnie od zaznaczonej opcji)."
+"bibliotekarzom na dostęp do historii wypożyczeń i zamówień użytkowników "
+"(historia jest przechowywana, niezależnie od zaznaczonej opcji)."
 
 # Patrons > Security
 msgid ""
@@ -11894,8 +11949,8 @@ msgid ""
 "searching.pref#AdvancedSearchTypes# fields (separate values with |). Tabs "
 "appear in the order listed.<br/>"
 msgstr ""
-"(oddziel wartości znakiem |). Zakładki pojawiają się w podanej "
-"kolejności.<br/>"
+"(oddziel wartości znakiem |). Zakładki pojawiają się w podanej kolejności."
+"<br/>"
 
 # Searching > Results display
 msgid ""
@@ -11962,9 +12017,8 @@ msgid ""
 "elastic.co/guide/en/elasticsearch/reference/current/query-dsl-multi-match-"
 "query.html#type-cross-fields"
 msgstr ""
-"Zobacz instrukcję na "
-"https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-"
-"multi-match-query.html#type-cross-fields"
+"Zobacz instrukcję na https://www.elastic.co/guide/en/elasticsearch/reference/"
+"current/query-dsl-multi-match-query.html#type-cross-fields"
 
 # Searching > Features > ElasticsearchCrossFields
 msgid ""
@@ -12280,9 +12334,9 @@ msgid ""
 "Elasticsearch term can be made fuzzy by adding a ~ directly after the term.)."
 msgstr ""
 "podczas wyszukiwania dopasować podobne/-ych słowa/słowa (przy wyszukiwaniu "
-"np. <cite>plan</cite> można dopasować też <cite>plon</cite> i "
-"<cite>pan</cite>, WYMAGANIA: ZEBRA. Wyszukiwania Elasticsearch można "
-"dopasowywać dodając ~ po słowie)."
+"np. <cite>plan</cite> można dopasować też <cite>plon</cite> i <cite>pan</"
+"cite>, WYMAGANIA: ZEBRA. Wyszukiwania Elasticsearch można dopasowywać "
+"dodając ~ po słowie)."
 
 # Searching > Features
 msgid "searching.pref#QueryRegexEscapeOptions# Don't escape"
@@ -12640,8 +12694,8 @@ msgid ""
 "serials.pref#SubscriptionDuplicateDroppedInput# List of fields which must "
 "not be rewritten when a subscription is duplicated (separated by pipe |)"
 msgstr ""
-"Lista pól, które nie muszą być skopiowane, gdy prenumerata jest powielana, ("
-"oddziel pola separatorem |)"
+"Lista pól, które nie muszą być skopiowane, gdy prenumerata jest powielana, "
+"(oddziel pola separatorem |)"
 
 # Serials
 msgid ""
@@ -12859,11 +12913,10 @@ msgid ""
 "wiki'>jsPrintSetup documentation</a>:"
 msgstr ""
 "Uwzględnij następujący JavaScript do drukowania rewersów. Zobacz szczegóły "
-"opisu w <a href='https://wiki.koha-"
-"community.org/wiki/Setting_up_slip_printer_to_print_silently'>Koha Wiki</a> "
-"i ewentualnie Firefox PlugIn <a "
-"href='https://github.com/edabg/jsprintsetup/wiki'>dokumentacja "
-"jsPrintSetup</a>:"
+"opisu w <a href='https://wiki.koha-community.org/wiki/"
+"Setting_up_slip_printer_to_print_silently'>Koha Wiki</a> i ewentualnie "
+"Firefox PlugIn <a href='https://github.com/edabg/jsprintsetup/"
+"wiki'>dokumentacja jsPrintSetup</a>:"
 
 # Staff interface > Appearance
 msgid ""
@@ -12985,13 +13038,13 @@ msgid ""
 "file</li><li>put an URL for an external specific stylesheet.</li></"
 "ul>{langcode} will be replaced with current interface language"
 msgstr ""
-"<br />Wartości:<ul><li><a href=\"#\" class=\"set_syspref\" data-syspref=\""
-"XSLTListsDisplay\" data-value=\"\">Pozostaw puste</a> dla \"brak xslt\""
-"</li><li>wprowadź \"<a href=\"#\" class=\"set_syspref\" data-syspref=\""
-"XSLTListsDisplay\" data-value=\"default\">default</a>\" dla "
-"domyślnego</li><li> dodaj ścieżkę dostępu pliku xslt</li><li>dodaj URL do "
-"konkretnego arkusza stylów.</li></ul>{langcode} zostanie zastąpiony obecnym "
-"językiem interfejsu"
+"<br />Wartości:<ul><li><a href=\"#\" class=\"set_syspref\" data-syspref="
+"\"XSLTListsDisplay\" data-value=\"\">Pozostaw puste</a> dla \"brak xslt\"</"
+"li><li>wprowadź \"<a href=\"#\" class=\"set_syspref\" data-syspref="
+"\"XSLTListsDisplay\" data-value=\"default\">default</a>\" dla domyślnego</"
+"li><li> dodaj ścieżkę dostępu pliku xslt</li><li>dodaj URL do konkretnego "
+"arkusza stylów.</li></ul>{langcode} zostanie zastąpiony obecnym językiem "
+"interfejsu"
 
 # Staff interface > Appearance
 msgid ""
@@ -13104,7 +13157,8 @@ msgstr "Wyświetlaj"
 msgid ""
 "staff_interface.pref#showLastPatron# a link to the last searched patron in "
 "the staff interface."
-msgstr "link do ostatnio wyszukiwanego użytkownika w interfejsie bibliotekarza."
+msgstr ""
+"link do ostatnio wyszukiwanego użytkownika w interfejsie bibliotekarza."
 
 # Staff interface > Appearance
 msgid ""
@@ -13233,10 +13287,9 @@ msgid ""
 "backslash), comma, semicolon, dot, etc."
 msgstr ""
 "w modyfikowaniu grupy egzemplarzy i inwentarzu.<br/>Uwaga: Wpisz \\r dla "
-"końca linii, \\n"
-" dla nowej linii i \\s dla spacji. Możesz użyć także pionowej kreski |, "
-"łącznika (poprzedzonego wstecznym ukośnikiem), przecinka, średnika, kropki "
-"itp."
+"końca linii, \\n dla nowej linii i \\s dla spacji. Możesz użyć także "
+"pionowej kreski |, łącznika (poprzedzonego wstecznym ukośnikiem), przecinka, "
+"średnika, kropki itp."
 
 # Tools > Patron cards
 msgid ""
@@ -13468,16 +13521,16 @@ msgstr ""
 "zgłoszeń do Mana KB. Mana zbiera informacje z różnych instalacji systemu "
 "Koha w celu ułatwienia tworzenia nowych prolongat, dostawców, raportów itp. "
 "Możesz przeszukiwać, udostępniać, importować i komentować zawartość "
-"biblioteki Mana. Informacje w Mana KB są udostępniane na licencji <a href=\""
-"https://creativecommons.org/choose/zero/\">CC-0</a>"
+"biblioteki Mana. Informacje w Mana KB są udostępniane na licencji <a href="
+"\"https://creativecommons.org/choose/zero/\">CC-0</a>"
 
 # Web services > Mana KB
 msgid ""
 "web_services.pref#ManaToken# Get a security token on the <a href=\"/cgi-bin/"
 "koha/admin/share_content.pl\">Mana KB administration page</a>."
 msgstr ""
-"Uzyskaj security token na <a href=\"/cgi-bin/koha/admin/share_content.pl\">"
-"stronie administracji Mana KB</a>."
+"Uzyskaj security token na <a href=\"/cgi-bin/koha/admin/share_content.pl"
+"\">stronie administracji Mana KB</a>."
 
 # Web services > Mana KB
 msgid ""
@@ -13613,8 +13666,8 @@ msgid ""
 "web_services.pref#OAI-PMH:archiveID# <a href=\"http://www.openarchives.org/"
 "OAI/2.0/guidelines-oai-identifier.htm\">Implementation guidelines</a>. "
 msgstr ""
-"<a href=\"http://www.openarchives.org/OAI/2.0/guidelines-oai-identifier.htm\""
-">Instrukcje implementacji</a>. "
+"<a href=\"http://www.openarchives.org/OAI/2.0/guidelines-oai-identifier.htm"
+"\">Instrukcje implementacji</a>. "
 
 # Web services > OAI-PMH
 msgid ""
@@ -13633,8 +13686,8 @@ msgid ""
 "HTTP/1.0/spec.html#BasicAA\" target=\"_blank\">Basic authentication</a> for "
 "the REST API."
 msgstr ""
-"<a href=\"https://www.w3.org/Protocols/HTTP/1.0/spec.html#BasicAA\" target=\""
-"_blank\">Podstawowe uwierzytelnianie</a> dla REST API."
+"<a href=\"https://www.w3.org/Protocols/HTTP/1.0/spec.html#BasicAA\" target="
+"\"_blank\">Podstawowe uwierzytelnianie</a> dla REST API."
 
 # Web services > REST API
 msgid "web_services.pref#RESTBasicAuth# Disable"
@@ -13671,7 +13724,7 @@ msgstr "Włącz"
 
 # Web services > REST API
 msgid "web_services.pref#RESTPublicAPI# the /public namespace of the API."
-msgstr ""
+msgstr " /public namespace API."
 
 # Web services > REST API
 msgid "web_services.pref#RESTPublicAnonymousRequests# Disable"

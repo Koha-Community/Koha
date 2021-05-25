@@ -17,18 +17,18 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 20.11\n"
-"POT-Creation-Date: 2021-04-22 07:14-0300\n"
-"PO-Revision-Date: 2021-04-21 10:00+0000\n"
+"POT-Creation-Date: 2021-05-14 08:16-0300\n"
+"PO-Revision-Date: 2021-05-19 13:41+0000\n"
 "Last-Translator: ManuB. <e.betemps@ville-caluire.fr>\n"
-"Language-Team: French (France) (http://www.transifex.com/projects/p/koha/"
-"language/fr_FR/)\n"
+"Language-Team: French (France) "
+"(http://www.transifex.com/projects/p/koha/language/fr_FR/)\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Generator: Pootle 2.8\n"
-"X-POOTLE-MTIME: 1618999211.796360\n"
+"X-POOTLE-MTIME: 1621431700.396525\n"
 "X-Pootle-Path: /fr/20.11/fr-FR-marc-MARC21.po\n"
 "X-Pootle-Revision: 1\n"
 
@@ -178,10 +178,14 @@ msgstr ""
 "(si la profondeur de bit exacte est connue, entrer là; <br />sinon utiliser "
 "la liste déroulante)"
 
-#: koha-tmpl/intranet-tmpl/prog/en/xslt/MARC21slim2intranetDetail.xsl:656
 #: koha-tmpl/intranet-tmpl/prog/en/xslt/MARC21slim2intranetDetail.xsl:715
-#: koha-tmpl/opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:737
 #: koha-tmpl/opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:789
+#, fuzzy, c-format
+msgid "(index-term-genre"
+msgstr "Indéterminé"
+
+#: koha-tmpl/intranet-tmpl/prog/en/xslt/MARC21slim2intranetDetail.xsl:656
+#: koha-tmpl/opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:737
 #, c-format
 msgid "(su"
 msgstr "(su"
@@ -313,6 +317,11 @@ msgstr "/cgi-bin/koha/catalogue/search.pl?q=au:\""
 msgid "/cgi-bin/koha/catalogue/search.pl?q=control-number:"
 msgstr "/cgi-bin/koha/catalogue/search.pl?q=control-number:"
 
+#: koha-tmpl/intranet-tmpl/prog/en/xslt/MARC21slim2intranetDetail.xsl:722
+#, fuzzy, c-format
+msgid "/cgi-bin/koha/catalogue/search.pl?q=index-term-genre"
+msgstr "/cgi-bin/koha/catalogue/search.pl?q=rcn:"
+
 #: koha-tmpl/intranet-tmpl/prog/en/xslt/MARC21slim2intranetDetail.xsl:222
 #: koha-tmpl/intranet-tmpl/prog/en/xslt/MARC21slim2intranetDetail.xsl:239
 #, c-format
@@ -320,7 +329,6 @@ msgid "/cgi-bin/koha/catalogue/search.pl?q=rcn:"
 msgstr "/cgi-bin/koha/catalogue/search.pl?q=rcn:"
 
 #: koha-tmpl/intranet-tmpl/prog/en/xslt/MARC21slim2intranetDetail.xsl:665
-#: koha-tmpl/intranet-tmpl/prog/en/xslt/MARC21slim2intranetDetail.xsl:722
 #, c-format
 msgid "/cgi-bin/koha/catalogue/search.pl?q=su"
 msgstr "/cgi-bin/koha/catalogue/search.pl?q=su"
@@ -422,6 +430,11 @@ msgstr "/cgi-bin/koha/opac-search.pl?q=au:\""
 msgid "/cgi-bin/koha/opac-search.pl?q=control-number:"
 msgstr "/cgi-bin/koha/opac-search.pl?q=control-number:"
 
+#: koha-tmpl/opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:796
+#, fuzzy, c-format
+msgid "/cgi-bin/koha/opac-search.pl?q=index-term-genre"
+msgstr "/cgi-bin/koha/opac-search.pl?q=rcn:"
+
 #: koha-tmpl/opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:257
 #: koha-tmpl/opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:274
 #, c-format
@@ -429,7 +442,6 @@ msgid "/cgi-bin/koha/opac-search.pl?q=rcn:"
 msgstr "/cgi-bin/koha/opac-search.pl?q=rcn:"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:745
-#: koha-tmpl/opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:796
 #, c-format
 msgid "/cgi-bin/koha/opac-search.pl?q=su"
 msgstr "/cgi-bin/koha/opac-search.pl?q=su"
@@ -1664,7 +1676,7 @@ msgstr "; Nature du contenu: "
 #: koha-tmpl/opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:815
 #, c-format
 msgid "; Type of computer file: "
-msgstr "; Genre de fichier d'ordinateur : "
+msgstr "; Type de fichier informatique : "
 
 #: koha-tmpl/intranet-tmpl/prog/en/xslt/MARC21slim2intranetResults.xsl:527
 #: koha-tmpl/opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:710
@@ -3676,7 +3688,7 @@ msgstr "Degré d'achèvement"
 #: koha-tmpl/intranet-tmpl/prog/en/data/marc21_field_008.xml:362
 #, c-format
 msgid "Computer Files"
-msgstr "Fichiers d'ordinateur"
+msgstr "Fichiers informatiques"
 
 #: koha-tmpl/intranet-tmpl/prog/en/data/marc21_field_007.xml:247
 #, c-format
@@ -3704,12 +3716,12 @@ msgstr "Disque d'ordinateur, genre non précisé"
 #: koha-tmpl/opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:688
 #, c-format
 msgid "Computer file"
-msgstr "Fichier d'ordinateur"
+msgstr "Fichier informatique"
 
 #: koha-tmpl/intranet-tmpl/prog/en/data/marc21_field_006.xml:142
 #, c-format
 msgid "Computer file/Electronic resource"
-msgstr "Fichier d'ordinateur / Ressource électronique"
+msgstr "Fichier informatique / Ressource électronique"
 
 #: koha-tmpl/intranet-tmpl/prog/en/data/marc21_field_007.xml:86
 #, c-format
@@ -9552,8 +9564,8 @@ msgid ""
 "One-character alphabetic code that indicates the type of computer file "
 "described in the bibliographic record"
 msgstr ""
-"Code alphabétique à un caractère indiquant le type de fichier d'ordinateur "
-"décrit dans la notice bibliographique."
+"Code alphabétique à un caractère indiquant le type de fichier informatique "
+"décrit dans la notice bibliographique"
 
 #: koha-tmpl/intranet-tmpl/prog/en/data/marc21_field_006.xml:551
 #: koha-tmpl/intranet-tmpl/prog/en/data/marc21_field_008.xml:1038
@@ -9626,8 +9638,8 @@ msgid ""
 msgstr ""
 "Code alphabétique à un caractère indiquant si le fichier d'ordinateur est "
 "publié ou produit par ou pour une agence gouvernementale internationale, "
-"nationale, provinciale ou locale, ou par n'importe subdivision d'un tel "
-"organisme, et le cas échéant, le niveau de juridiction de l'agence."
+"nationale, provinciale ou locale, ou par n'importe quelle subdivision d'un "
+"tel organisme, et le cas échéant, le niveau de juridiction de l'agence."
 
 #: koha-tmpl/intranet-tmpl/prog/en/data/marc21_field_006.xml:282
 #: koha-tmpl/intranet-tmpl/prog/en/data/marc21_field_008.xml:625
@@ -13326,7 +13338,7 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/en/data/marc21_field_008.xml:435
 #, c-format
 msgid "Type of computer file"
-msgstr "Genre de fichier d'ordinateur"
+msgstr "Type de fichier informatique"
 
 #: koha-tmpl/intranet-tmpl/prog/en/data/marc21_field_007.xml:853
 #, c-format
@@ -16872,7 +16884,7 @@ msgstr "bande dessinée"
 #. IMG
 #: koha-tmpl/intranet-tmpl/prog/en/xslt/MARC21slim2intranetResults.xsl:504
 msgid "computer file"
-msgstr "fichier d'ordinateur"
+msgstr "fichier informatique"
 
 #: koha-tmpl/intranet-tmpl/prog/en/xslt/MARC21slim2MODS32.xsl:928
 #: koha-tmpl/opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:180
