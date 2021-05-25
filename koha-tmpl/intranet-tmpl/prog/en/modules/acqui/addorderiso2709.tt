@@ -12,7 +12,7 @@
 </title>
 <style>#dataPreview { width : 80%; } @media (max-width: 767px) { #dataPreview { margin: 0; width : auto; } }</style>
 [% INCLUDE 'doc-head-close.inc' %]
-[%# As long as cataloging plugins rely on <script> tags added inline, JS must be in the header %]
+[%# As long as cataloging plugins rely on 'script' tags added inline, JS must be in the header %]
 [% Asset.js("js/acquisitions-menu.js") | $raw %]
 [% INCLUDE 'datatables.inc' %]
 [% Asset.js("js/acq.js") | $raw %]
