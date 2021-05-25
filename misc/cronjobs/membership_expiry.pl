@@ -29,6 +29,18 @@ or, in crontab:
 
 0 1 * * * membership_expiry.pl -c
 
+Options:
+   --help                   brief help message
+   --man                    full documentation
+   --where <conditions>     where clause to add to the query
+   -v -verbose              verbose mode
+   -n --nomail              if supplied messages will be output to STDOUT and not sent
+   -c --confirm             commit changes to db, no action will be taken unless this switch is included
+   -b --branch <branchname> only deal with patrons from this library/branch
+   --before=X               include patrons expiring a number of days BEFORE the date set by the preference
+   --after=X                include patrons expiring a number of days AFTER  the date set by the preference
+   -l --letter <lettercode> use a specific notice rather than the default
+
 =head1 DESCRIPTION
 
 This script sends membership expiry reminder notices to patrons.
@@ -75,15 +87,24 @@ the date set by the preference.
 Optional parameter to extend the selection with a number of days AFTER
 the date set by the preference.
 
+=item B<-where>
+
+Use this option to specify a condition built with columns from the borrowers table
+
+e.g.
+--where 'lastseen IS NOT NULL'
+will only notify patrons who have been seen.
+
 =item B<-letter>
 
-Optional parameter to use another notice than the default one.
+Optional parameter to use another notice than the default: MEMBERSHIP_EXPIRY
 
 =back
 
 =head1 CONFIGURATION
 
-The content of the messages is configured in Tools -> Notices and slips. Use the MEMBERSHIP_EXPIRY notice.
+The content of the messages is configured in Tools -> Notices and slips. Use the MEMBERSHIP_EXPIRY notice or
+supply another via the parameters.
 
 Typically, messages are prepared for each patron when the memberships are going to expire.
 
@@ -141,6 +162,7 @@ my $man     = 0;
 my $before  = 0;
 my $after   = 0;
 my ( $branch, $letter_type );
+my @where;
 
 GetOptions(
     'help|?'         => \$help,
@@ -152,6 +174,7 @@ GetOptions(
     'before:i'       => \$before,
     'after:i'        => \$after,
     'letter:s'       => \$letter_type,
+    'where=s'        => \@where,
 ) or pod2usage(2);
 
 pod2usage( -verbose => 2 ) if $man;
@@ -175,6 +198,10 @@ my $upcoming_mem_expires = Koha::Patrons->search_upcoming_membership_expires(
         after  => $after,
     }
 );
+
+my $where_literal = join ' AND ', @where;
+$upcoming_mem_expires = $upcoming_mem_expires->search( \$where_literal ) if @where;
+
 warn 'found ' . $upcoming_mem_expires->count . ' soon expiring members'
     if $verbose;
 
