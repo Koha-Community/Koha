@@ -3,7 +3,7 @@
     "get": {
       "x-mojo-to": "Acquisitions::Vendors#list",
       "operationId": "listVendors",
-      "tags": ["acquisitions","vendors"],
+      "tags": ["vendors"],
       "produces": [
         "application/json"
       ],
@@ -78,7 +78,7 @@
     "post": {
       "x-mojo-to": "Acquisitions::Vendors#add",
       "operationId": "addVendor",
-      "tags": ["acquisitions","vendors"],
+      "tags": ["vendors"],
       "parameters": [{
         "name": "body",
         "in": "body",
@@ -140,7 +140,7 @@
     "get": {
       "x-mojo-to": "Acquisitions::Vendors#get",
       "operationId": "getVendor",
-      "tags": ["acquisitions","vendors"],
+      "tags": ["vendors"],
       "parameters": [{
         "$ref": "../parameters.json#/vendoridPathParam"
       }],
@@ -194,7 +194,7 @@
     "put": {
       "x-mojo-to": "Acquisitions::Vendors#update",
       "operationId": "updateVendor",
-      "tags": ["acquisitions","vendors"],
+      "tags": ["vendors"],
       "parameters": [{
         "$ref": "../parameters.json#/vendoridPathParam"
       }, {
@@ -256,7 +256,7 @@
     "delete": {
       "x-mojo-to": "Acquisitions::Vendors#delete",
       "operationId": "deleteVendor",
-      "tags": ["acquisitions","vendors"],
+      "tags": ["vendors"],
       "parameters": [{
         "$ref": "../parameters.json#/vendoridPathParam"
       }],

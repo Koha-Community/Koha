@@ -3,7 +3,7 @@
     "get": {
       "x-mojo-to": "Checkouts#list",
       "operationId": "listCheckouts",
-      "tags": ["patrons", "checkouts"],
+      "tags": ["checkouts"],
       "parameters": [{
         "$ref": "../parameters.json#/patron_id_qp"
       }, {
@@ -53,7 +53,7 @@
     "get": {
       "x-mojo-to": "Checkouts#get",
       "operationId": "getCheckout",
-      "tags": ["patrons", "checkouts"],
+      "tags": ["checkouts"],
       "parameters": [{
         "$ref": "../parameters.json#/checkout_id_pp"
       }],
@@ -86,7 +86,7 @@
     "post": {
       "x-mojo-to": "Checkouts#renew",
       "operationId": "renewCheckout",
-      "tags": ["patrons", "checkouts"],
+      "tags": ["checkouts"],
       "parameters": [
         { "$ref": "../parameters.json#/checkout_id_pp" },
         { "$ref": "../parameters.json#/seen_pp" }
@@ -117,7 +117,7 @@
     "get": {
       "x-mojo-to": "Checkouts#allows_renewal",
       "operationId": "allows_renewalCheckout",
-      "tags": ["patrons", "checkouts"],
+      "tags": ["checkouts"],
       "parameters": [{
         "$ref": "../parameters.json#/checkout_id_pp"
       }],
