@@ -421,8 +421,7 @@
                 [% END %]
             [% END # / IF expanded_options %]
 
-            [% IF ( OpacAdvSearchMoreOptions and OpacAdvSearchMoreOptions.size > 0 and expanded_options ) or
-                  ( OpacAdvSearchOptions     and OpacAdvSearchOptions.size > 0     and not expanded_options ) %]
+            [% IF ( OpacAdvSearchMoreOptions and OpacAdvSearchMoreOptions.size > 0 and expanded_options ) or ( OpacAdvSearchOptions and OpacAdvSearchOptions.size > 0 and not expanded_options ) %]
                 <div class="text-center">
                     <fieldset class="action">
                         <!-- SEARCH BUTTONS -->
