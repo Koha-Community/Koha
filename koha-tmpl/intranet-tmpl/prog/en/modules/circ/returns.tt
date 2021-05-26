@@ -456,11 +456,11 @@
 
                                                 <div class="modal-footer">
                                                     <!-- CONFIRM -->
-                                                    <button class="btn btn-default approve" type="submit"><i class="fa fa-check"></i> OK</button>
+                                                    <button class="btn btn-default approve" type="submit" accesskey="y"><i class="fa fa-check"></i> OK (Y)</button>
                                                     <!-- PRINT SLIP -->
-                                                    <button type="button" data-dismiss="modal" class="btn btn-default submit openWin" data-transfer="[% NewTransfer | html %]" data-url="transfer-slip.pl?transferitem=[% itemnumber | uri %]&amp;&amp;branchcode=[% TransferWaitingAt | uri %]&amp;op=slip"><i class="fa fa-print"></i> Print transfer slip</button>
+                                                    <button type="button" data-dismiss="modal" class="btn btn-default submit openWin" data-transfer="[% NewTransfer | html %]" data-url="transfer-slip.pl?transferitem=[% itemnumber | uri %]&amp;&amp;branchcode=[% TransferWaitingAt | uri %]&amp;op=slip" accesskey="p"><i class="fa fa-print"></i> Print transfer slip (P)</button>
                                                     <!-- CANCEL TRANSFER -->
-                                                    <button type="button" data-dismiss="modal" class="btn btn-default deny cancel"><i class="fa fa-times"></i> Cancel transfer</button>
+                                                    <button type="button" data-dismiss="modal" class="btn btn-default deny cancel" accesskey="x"><i class="fa fa-times"></i> Cancel transfer (X)</button>
                                                 </div> <!-- /.modal-footer -->
                                             </form> <!-- /wrongtransferform -->
                                         </div> <!-- /.modal-content -->
@@ -600,12 +600,12 @@
                                                 </div>
                                                 <div class="modal-footer">
                                                     [% IF !transfer %]
-                                                        <button type="submit" name="dotransfer" value="Yes" class="btn btn-default approve"><i class="fa fa-check"></i> Yes</button>
+                                                        <button type="submit" name="dotransfer" value="Yes" class="btn btn-default approve" accesskey="y"><i class="fa fa-check"></i> Yes (Y)</button>
                                                         <button type="button" name="dotransfer" class="btn btn-default print openWin" data-url="transfer-slip.pl?transferitem=[% itemnumber | uri %]&amp;&amp;branchcode=[% returnbranch | uri %]&amp;op=slip"><i class="fa fa-print"></i> Yes, print slip</button>
-                                                        <button type="button" data-dismiss="modal" class="btn btn-default deny" name="notransfer" value="No"><i class="fa fa-times"></i> No</button>
+                                                        <button type="button" data-dismiss="modal" class="btn btn-default deny" name="notransfer" value="No" accesskey="n"><i class="fa fa-times"></i> No (N)</button>
                                                     [% ELSE %]
-                                                        <button type="button" data-dismiss="modal" class="btn btn-default approve"><i class="fa fa-check"></i> OK</button>
-                                                        <button type="button" data-dismiss="modal" class="btn btn-default print openWin" data-url="transfer-slip.pl?transferitem=[% itemnumber | uri %]&amp;branchcode=[% transfer | uri %]&amp;op=slip"><i class="fa fa-print"></i> Print slip</button>
+                                                        <button type="button" data-dismiss="modal" class="btn btn-default approve" accesskey="y"><i class="fa fa-check"></i> OK (Y)</button>
+                                                        <button type="button" data-dismiss="modal" class="btn btn-default print openWin" data-url="transfer-slip.pl?transferitem=[% itemnumber | uri %]&amp;branchcode=[% transfer | uri %]&amp;op=slip" accesskey="p"><i class="fa fa-print"></i> Print slip (P)</button>
                                                     [% END %]
                                                     <input type="hidden" name="return_date_override" value="[% return_date_override | html %]" />
                                                     <input type="hidden" name="return_date_override_remember" value="[% return_date_override_remember | html %]" />
@@ -728,8 +728,8 @@
                                                         </button>
                                                     [% END %]
 
-                                                    <button data-dismiss="modal" aria-hidden="true" type="submit" class="btn btn-default deny">
-                                                        <i class="fa fa-times"></i> Ignore
+                                                    <button data-dismiss="modal" aria-hidden="true" type="submit" class="btn btn-default deny" accesskey="i">
+                                                        <i class="fa fa-times"></i> Ignore (I)
                                                     </button>
                                                 </div> <!-- /.modal-footer -->
                                             </form> <!-- /.confirm -->
