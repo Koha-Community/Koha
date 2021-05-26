@@ -361,13 +361,7 @@ sub cancel_hold {
 		return $trans;
 	}
     # Remove the hold from the patron's record first
-    $trans->ok($patron->drop_hold($item_id));	# different than the transaction drop!
-
-    unless ($trans->ok) {
-		# We didn't find it on the patron record
-		$trans->screen_msg("No such hold on patron record.");
-		return $trans;
-    }
+    $patron->drop_hold($item_id); # different than the transaction drop!
 
     # Now, remove it from the item record.  If it was on the patron
     # record but not on the item record, we'll treat that as success.
