@@ -132,10 +132,21 @@ use C4::Biblio;
 }
 
 {
-    my $frameworks = Koha::BiblioFrameworks->search;
+    my @framework_codes = Koha::BiblioFrameworks->search()->get_column('frameworkcode');
+    push @framework_codes,""; # The default is not stored in frameworks, we need to force it
+
     my $invalid_av_per_framework = {};
-    while ( my $framework = $frameworks->next ) {
-        my $msss = Koha::MarcSubfieldStructures->search({ frameworkcode => $framework->frameworkcode, authorised_value => { '!=' => [ -and => ( undef, '' ) ]} });
+    foreach my $frameworkcode ( @framework_codes ) {
+        # We are only checking fields that are mapped to DB fields
+        my $msss = Koha::MarcSubfieldStructures->search({
+            frameworkcode => $frameworkcode,
+            authorised_value => {
+                '!=' => [ -and => ( undef, '' ) ]
+            },
+            kohafield => {
+                '!=' => [ -and => ( undef, '' ) ]
+            }
+        });
         while ( my $mss = $msss->next ) {
             my $kohafield = $mss->kohafield;
             my $av = $mss->authorised_value;
@@ -143,7 +154,7 @@ use C4::Biblio;
 
             my $avs = Koha::AuthorisedValues->search_by_koha_field(
                 {
-                    frameworkcode => $framework->frameworkcode,
+                    frameworkcode => $frameworkcode,
                     kohafield     => $kohafield,
                 }
             );
@@ -154,6 +165,8 @@ use C4::Biblio;
                 $tmp_kohafield =~ s|items|me|;
             }
             # replace items.attr with me.attr
+
+            # We are only checking biblios with items
             my $items = Koha::Items->search(
                 {
                     $tmp_kohafield =>
@@ -161,12 +174,12 @@ use C4::Biblio;
                           -not_in => [ $avs->get_column('authorised_value'), '' ],
                           '!='    => undef,
                       },
-                    'biblio.frameworkcode' => $framework->frameworkcode
+                    'biblio.frameworkcode' => $frameworkcode
                 },
                 { join => [ 'biblioitem', 'biblio' ] }
             );
             if ( $items->count ) {
-                $invalid_av_per_framework->{ $framework->frameworkcode }->{$av} =
+                $invalid_av_per_framework->{ $frameworkcode }->{$av} =
                   { items => $items, kohafield => $kohafield };
             }
         }
