@@ -3,10 +3,7 @@
         "get": {
             "x-mojo-to": "Acquisitions::Orders#list",
             "operationId": "listOrders",
-            "tags": [
-                "acquisitions",
-                "orders"
-            ],
+            "tags": ["orders"],
             "produces": [
                 "application/json"
             ],
@@ -133,10 +130,7 @@
         "post": {
             "x-mojo-to": "Acquisitions::Orders#add",
             "operationId": "addOrder",
-            "tags": [
-                "acquisitions",
-                "orders"
-            ],
+            "tags": ["orders"],
             "parameters": [
                 {
                     "name": "body",
@@ -206,10 +200,7 @@
         "get": {
             "x-mojo-to": "Acquisitions::Orders#get",
             "operationId": "getOrder",
-            "tags": [
-                "acquisitions",
-                "orders"
-            ],
+            "tags": ["orders"],
             "parameters": [
                 {
                     "$ref": "../parameters.json#/order_id_pp"
@@ -280,10 +271,7 @@
         "put": {
             "x-mojo-to": "Acquisitions::Orders#update",
             "operationId": "updateOrder",
-            "tags": [
-                "acquisitions",
-                "orders"
-            ],
+            "tags": ["orders"],
             "parameters": [
                 {
                     "$ref": "../parameters.json#/order_id_pp"
@@ -348,10 +336,7 @@
         "delete": {
             "x-mojo-to": "Acquisitions::Orders#delete",
             "operationId": "deleteOrder",
-            "tags": [
-                "acquisitions",
-                "orders"
-            ],
+            "tags": ["orders"],
             "parameters": [
                 {
                     "$ref": "../parameters.json#/order_id_pp"
