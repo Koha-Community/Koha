@@ -144,7 +144,7 @@
                         </div>
                         [% IF clubcount %]
                             <div id="holds_clubsearch_pane">
-                                <form id="holds_clubsearch" action="request.pl?biblionumber=[% biblionumber | html %]" method="post">
+                                <form id="holds_clubsearch" action="request.pl?biblionumbers=[% biblionumbers | html %]" method="post">
                                     <div class="hint">Enter club ID or partial name:</div>
                                     <input type="text" size="40" id="club" class="focus" name="findclub" autocomplete="off" />
                                     <input type="submit" value="Search" />
