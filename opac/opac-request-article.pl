@@ -23,6 +23,8 @@ use CGI qw ( -utf8 );
 
 use C4::Auth;
 use C4::Output;
+use C4::Context;
+use C4::NewsChannels;
 
 use Koha::Biblios;
 use Koha::Patrons;
@@ -39,6 +41,15 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
 
 my $action = $cgi->param('action') || q{};
 my $biblionumber = $cgi->param('biblionumber');
+my $homebranch = C4::Context->userenv->{'branch'} || "";
+my $location   = 'ArticleRequestsDisclaimerText_';
+my $disclaimer;
+if ( !$action ) {
+    $disclaimer = GetNewsToDisplay( $location . $template->lang, $homebranch );
+    $disclaimer = GetNewsToDisplay( $location . "en",            $homebranch )
+      if !scalar(@$disclaimer);
+}
+
 
 if ( $action eq 'create' ) {
     my $branchcode = $cgi->param('branchcode');
@@ -80,6 +91,7 @@ my $patron = Koha::Patrons->find($borrowernumber);
 $template->param(
     biblio => $biblio,
     patron => $patron,
+    disclaimer => $disclaimer
 );
 
 output_html_with_http_headers $cgi, $cookie, $template->output, undef, { force_no_caching => 1 };

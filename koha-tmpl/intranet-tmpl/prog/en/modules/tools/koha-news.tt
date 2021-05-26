@@ -455,7 +455,7 @@
     [% END %]
     [% FOREACH lang_lis IN lang_list %]
         <optgroup label="[% lang_lis.language | html %]">
-            [% FOREACH location IN [ '', 'OpacNavRight', 'opacheader', 'OpacCustomSearch', 'OpacMainUserBlock', 'opaccredits', 'OpacLoginInstructions', 'OpacSuggestionInstructions'] %]
+            [% FOREACH location IN [ '', 'OpacNavRight', 'opacheader', 'OpacCustomSearch', 'OpacMainUserBlock', 'opaccredits', 'OpacLoginInstructions', 'OpacSuggestionInstructions', 'ArticleRequestsDisclaimerText'] %]
                 [% IF ( location == '' ) %]
                     [% SET location_lang = lang_lis.language %]
                     [% location = BLOCK %]OPAC news[% END %]
