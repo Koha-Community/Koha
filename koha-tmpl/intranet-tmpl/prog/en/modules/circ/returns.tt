@@ -545,17 +545,17 @@
                                                     <input type="hidden" name="cancel_reserve" value="0" />
                                                     <input id="confirm-hold-barcode" type="hidden" name="barcode" value="[% barcode | html %]" />
 
-                                                    <button type="submit" class="btn btn-default approve" data-dismiss="modal">
-                                                        <i class="fa fa-check"></i> Confirm hold
+                                                    <button type="submit" class="btn btn-default approve" data-dismiss="modal" accesskey="y">
+                                                        <i class="fa fa-check"></i> Confirm hold (Y)
                                                     </button>
 
                                                     <input type="hidden" name="print_slip" value="0" />
-                                                    <button type="button" class="btn btn-default print">
-                                                        <i class="fa fa-print"></i> Print slip and confirm
+                                                    <button type="button" class="btn btn-default print" accesskey="P">
+                                                        <i class="fa fa-print"></i> Print slip and confirm (P)
                                                     </button>
 
-                                                    <button type="button" class="btn btn-default deny cancel-hold">
-                                                        <i class="fa fa-times"></i> Cancel hold
+                                                    <button type="button" class="btn btn-default deny cancel-hold" accesskey="X">
+                                                        <i class="fa fa-times"></i> Cancel hold (X)
                                                     </button>
                                                 </div> <!-- /.modal-footer -->
                                             </form> <!-- /.confirm -->
@@ -713,18 +713,18 @@
 
                                                 <div class="modal-footer">
                                                     [% IF ( transfertodo ) %]
-                                                        <button type="submit" class="btn btn-default approve">
-                                                            <i class="fa fa-check"></i> Confirm hold and transfer
+                                                        <button type="submit" class="btn btn-default approve" accesskey="y">
+                                                            <i class="fa fa-check"></i> Confirm hold and transfer (Y)
                                                         </button>
-                                                        <button type="button" class="btn btn-default print">
-                                                            <i class="fa fa-print"></i> Print slip, transfer, and confirm
+                                                        <button type="button" class="btn btn-default print" accesskey="p">
+                                                            <i class="fa fa-print"></i> Print slip, transfer, and confirm (P)
                                                         </button>
                                                     [% ELSE %]
-                                                        <button type="submit" class="btn btn-default approve">
-                                                            <i class="fa fa-check"></i> Confirm hold
+                                                        <button type="submit" class="btn btn-default approve" accesskey="y">
+                                                            <i class="fa fa-check"></i> Confirm hold (Y)
                                                         </button>
-                                                        <button type="button" class="btn btn-default print">
-                                                            <i class="fa fa-print"></i> Print slip and confirm
+                                                        <button type="button" class="btn btn-default print" accesskey="p">
+                                                            <i class="fa fa-print"></i> Print slip and confirm (P)
                                                         </button>
                                                     [% END %]
 
