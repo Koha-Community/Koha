@@ -896,7 +896,7 @@ our $PERL_DEPS = {
     'CGI::Compile' => {
        usage    => 'Plack',
        required => '1',
-       min_ver  => '0.17'
+       min_ver  => '0.25'
     },
     'Clone' => {
         usage    => 'ILL, Test suite, Elasticsearch integration',
