@@ -684,6 +684,7 @@ my $contributors =
   -e "$docdir" . "/contributors.yaml"
   ? LoadFile( "$docdir" . "/contributors.yaml" )
   : {};
+delete $contributors->{_others_};
 for my $version ( sort { $a <=> $b } keys %{$teams->{team}} ) {
     for my $role ( keys %{ $teams->{team}->{$version} } ) {
         my $normalized_role = "$role";
