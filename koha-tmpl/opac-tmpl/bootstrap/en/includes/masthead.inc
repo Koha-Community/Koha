@@ -9,10 +9,10 @@
 [% SET OpacCustomSearch = KohaNews.get( location => "OpacCustomSearch", lang => lang, library => branchcode, blocktitle => 0 ) %]
 [% SET OpacLoginInstructions = KohaNews.get( location => "OpacLoginInstructions", lang => lang, library => branchcode ) %]
 
+<button id="scrolltocontent">Skip to main content</button>
 <div id="wrapper">
     <div id="header-region" class="noprint">
         <nav class="navbar navbar-expand">
-            <button id="scrolltocontent">Skip to main content</button>
             <div id="logo">
             <a class="navbar-brand" href="/cgi-bin/koha/opac-main.pl">
                 [% IF ( LibraryNameTitle ) %]
