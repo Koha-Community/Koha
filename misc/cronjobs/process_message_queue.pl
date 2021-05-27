@@ -82,7 +82,14 @@ if ( C4::Context->config("enable_plugins") ) {
     if (@plugins) {
         foreach my $plugin ( @plugins ) {
             try {
-                $plugin->before_send_messages();
+                $plugin->before_send_messages(
+                    {
+                        verbose     => $verbose,
+                        limit       => $limit,
+                        type        => $type,
+                        letter_code => $letter_code,
+                    }
+                );
             }
             catch {
                 warn "$_";
