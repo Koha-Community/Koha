@@ -4,6 +4,7 @@
     x-mojo-to: TransferLimits#list
     operationId: listTransferLimits
     description: "This resource returns a list of existing transfer limits."
+    summary: List transfer limits
     tags:
     - transfer
     parameters:
@@ -60,6 +61,7 @@
     description: "This resource accepts a new transfer limit and creates it if it does not already exist."
     tags:
     - transfer
+    summary: Add a transfer limit
     parameters:
     - name: body
       in: body
@@ -108,6 +110,7 @@
     description: "This resource deletes a transfer limit for the given limit id"
     tags:
     - transfer
+    summary: Delete transfer limit
     parameters:
     - "$ref": "../parameters.json#/transfer_limit_id_pp"
     produces:
@@ -179,6 +182,7 @@
     ```"
     tags:
     - transfer
+    summary: Batch add transfer limits
     parameters:
     - name: body
       in: body
@@ -233,6 +237,7 @@
       rather than creating them.'
     tags:
     - transfer
+    summary: Batch delete transfer limits
     parameters:
     - name: body
       in: body

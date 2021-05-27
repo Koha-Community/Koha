@@ -4,6 +4,7 @@
       "x-mojo-to": "Holds#list",
       "operationId": "listHolds",
       "tags": ["holds"],
+      "summary": "List holds",
       "parameters": [
         {
           "name": "hold_id",
@@ -180,6 +181,7 @@
       "x-mojo-to": "Holds#add",
       "operationId": "addHold",
       "tags": ["holds"],
+      "summary": "Place hold",
       "parameters": [
         {
           "name": "body",
@@ -298,6 +300,7 @@
       "x-mojo-to": "Holds#edit",
       "operationId": "editHold",
       "tags": ["holds"],
+      "summary": "Update hold",
       "parameters": [{
           "$ref": "../parameters.json#/hold_id_pp"
         }, {
@@ -383,6 +386,7 @@
       "x-mojo-to": "Holds#edit",
       "operationId": "overwriteHold",
       "tags": ["holds"],
+      "summary": "Update hold",
       "description": "This route is being deprecated and will be removed in future releases. Please migrate your project to use PATCH /holds/{hold_id} instead.",
       "parameters": [{
           "$ref": "../parameters.json#/hold_id_pp"
@@ -469,6 +473,7 @@
       "x-mojo-to": "Holds#delete",
       "operationId": "deleteHold",
       "tags": ["holds"],
+      "summary": "Cancel hold",
       "parameters": [{
           "$ref": "../parameters.json#/hold_id_pp"
         }
@@ -523,6 +528,7 @@
       "tags": [
         "holds"
       ],
+      "summary": "Update priority for the hold",
       "parameters": [
         {
           "$ref": "../parameters.json#/hold_id_pp"
@@ -596,6 +602,7 @@
       "x-mojo-to": "Holds#suspend",
       "operationId": "suspendHold",
       "tags": ["holds"],
+      "summary": "Suspend the hold",
       "parameters": [{
           "$ref": "../parameters.json#/hold_id_pp"
         }, {
@@ -669,6 +676,7 @@
       "x-mojo-to": "Holds#resume",
       "operationId": "resumeHold",
       "tags": ["holds"],
+      "summary": "Resume hold",
       "parameters": [
         {
           "$ref": "../parameters.json#/hold_id_pp"
@@ -729,6 +737,7 @@
       "x-mojo-to": "Holds#pickup_locations",
       "operationId": "getHoldPickupLocations",
       "tags": ["holds"],
+      "summary": "Get valid pickup locations for hold",
       "parameters": [
         {
           "name": "x-koha-override",
@@ -822,6 +831,8 @@
       "x-mojo-to": "Holds#update_pickup_location",
       "operationId": "updateHoldPickupLocation",
       "tags": ["holds"],
+      "summary": "Update pickup location for the hold",
+      "description": "Set a new pickup location for the hold",
       "parameters": [
         {
           "$ref": "../parameters.json#/hold_id_pp"

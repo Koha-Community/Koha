@@ -4,6 +4,7 @@
       "x-mojo-to": "Checkouts#list",
       "operationId": "listCheckouts",
       "tags": ["checkouts"],
+      "summary": "List checkouts",
       "parameters": [{
         "$ref": "../parameters.json#/patron_id_qp"
       }, {
@@ -54,6 +55,7 @@
       "x-mojo-to": "Checkouts#get",
       "operationId": "getCheckout",
       "tags": ["checkouts"],
+      "summary": "Get checkout",
       "parameters": [{
         "$ref": "../parameters.json#/checkout_id_pp"
       }],
@@ -87,6 +89,7 @@
       "x-mojo-to": "Checkouts#renew",
       "operationId": "renewCheckout",
       "tags": ["checkouts"],
+      "summary": "Renew a checkout",
       "parameters": [
         { "$ref": "../parameters.json#/checkout_id_pp" },
         { "$ref": "../parameters.json#/seen_pp" }
@@ -118,6 +121,7 @@
       "x-mojo-to": "Checkouts#allows_renewal",
       "operationId": "allows_renewalCheckout",
       "tags": ["checkouts"],
+      "summary": "Get renewability for a checkout",
       "parameters": [{
         "$ref": "../parameters.json#/checkout_id_pp"
       }],

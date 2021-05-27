@@ -1,111 +1,137 @@
 {
-    "/clubs/{club_id}/holds": {
-        "post": {
-            "x-mojo-to": "Clubs::Holds#add",
-            "operationId": "addClubHold",
-            "tags": ["clubs"],
-            "parameters": [{
-                "$ref": "../parameters.json#/club_id_pp"
-              }, {
-                "name": "body",
-                "in": "body",
-                "description": "A JSON object containing informations about the new hold",
-                "required": true,
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "biblio_id": {
-                      "description": "Internal biblio identifier",
-                      "type": [ "integer", "null" ]
-                    },
-                    "item_id": {
-                      "description": "Internal item identifier",
-                      "type": [ "integer", "null" ]
-                    },
-                    "pickup_library_id": {
-                      "description": "Internal library identifier for the pickup library",
-                      "type": "string"
-                    },
-                    "expiration_date": {
-                      "description": "Hold end date",
-                      "type": ["string", "null"],
-                      "format": "date"
-                    },
-                    "notes": {
-                      "description": "Notes related to this hold",
-                      "type": [ "string", "null" ]
-                    },
-                    "item_type": {
-                      "description": "Limit hold on one itemtype (ignored for item-level holds)",
-                      "type": [ "string", "null" ]
-                    },
-                    "default_patron_home": {
-                      "description": "For each patron, set pickup location to patron's home library if possible",
-                      "type": "integer"
-                    }
-                  },
-                  "required": [ "pickup_library_id" ],
-                  "additionalProperties": false
-                }
-              }
-            ],
-            "consumes": ["application/json"],
-            "produces": ["application/json"],
-            "responses": {
-              "201": {
-                "description": "Created hold",
-                "schema": {
-                    "$ref": "../definitions/club_hold.json"
-                }
+  "/clubs/{club_id}/holds": {
+    "post": {
+      "x-mojo-to": "Clubs::Holds#add",
+      "operationId": "addClubHold",
+      "tags": [
+        "clubs"
+      ],
+      "summary": "Add a club hold",
+      "parameters": [
+        {
+          "$ref": "../parameters.json#/club_id_pp"
+        },
+        {
+          "name": "body",
+          "in": "body",
+          "description": "A JSON object containing informations about the new hold",
+          "required": true,
+          "schema": {
+            "type": "object",
+            "properties": {
+              "biblio_id": {
+                "description": "Internal biblio identifier",
+                "type": [
+                  "integer",
+                  "null"
+                ]
               },
-              "400": {
-                "description": "Missing or wrong parameters",
-                "schema": {
-                  "$ref": "../definitions.json#/error"
-                }
+              "item_id": {
+                "description": "Internal item identifier",
+                "type": [
+                  "integer",
+                  "null"
+                ]
               },
-              "401": {
-                "description": "Authentication required",
-                "schema": {
-                  "$ref": "../definitions.json#/error"
-                }
+              "pickup_library_id": {
+                "description": "Internal library identifier for the pickup library",
+                "type": "string"
               },
-              "403": {
-                "description": "Hold not allowed",
-                "schema": {
-                  "$ref": "../definitions.json#/error"
-                }
+              "expiration_date": {
+                "description": "Hold end date",
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "format": "date"
               },
-              "404": {
-                "description": "Hold not found",
-                "schema": {
-                  "$ref": "../definitions.json#/error"
-                }
+              "notes": {
+                "description": "Notes related to this hold",
+                "type": [
+                  "string",
+                  "null"
+                ]
               },
-              "409": {
-                "description": "Hold not allowed",
-                "schema": {
-                  "$ref": "../definitions.json#/error"
-                }
+              "item_type": {
+                "description": "Limit hold on one itemtype (ignored for item-level holds)",
+                "type": [
+                  "string",
+                  "null"
+                ]
               },
-              "500": {
-                "description": "Internal server error",
-                "schema": {
-                  "$ref": "../definitions.json#/error"
-                }
-              },
-              "503": {
-                "description": "Under maintenance",
-                "schema": {
-                  "$ref": "../definitions.json#/error"
-                }
+              "default_patron_home": {
+                "description": "For each patron, set pickup location to patron's home library if possible",
+                "type": "integer"
               }
             },
-            "x-koha-authorization": {
-              "permissions": {
-                "reserveforothers": "1"
-              }
-            }
+            "required": [
+              "pickup_library_id"
+            ],
+            "additionalProperties": false
+          }
         }
+      ],
+      "consumes": [
+        "application/json"
+      ],
+      "produces": [
+        "application/json"
+      ],
+      "responses": {
+        "201": {
+          "description": "Created club hold",
+          "schema": {
+            "$ref": "../definitions/club_hold.json"
+          }
+        },
+        "400": {
+          "description": "Missing or wrong parameters",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "401": {
+          "description": "Authentication required",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "403": {
+          "description": "Hold not allowed",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "404": {
+          "description": "Club not found",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "409": {
+          "description": "Hold not allowed",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "500": {
+          "description": "Internal server error",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "503": {
+          "description": "Under maintenance",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        }
+      },
+      "x-koha-authorization": {
+        "permissions": {
+          "reserveforothers": "1"
+        }
+      }
     }
+  }
 }
