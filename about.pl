@@ -722,10 +722,15 @@ for my $version ( sort { $a <=> $b } keys %{$teams->{team}} ) {
 my @people = map {
     { name => $_, ( $contributors->{$_} ? %{ $contributors->{$_} } : () ) }
 } sort {
-    my ($alast) = ( split( /\s/, $a ) )[-1];
-    my ($blast) = ( split( /\s/, $b ) )[-1];
-    lc($alast) cmp lc($blast)
-} keys %{$contributors};
+  my ($alast) = $a =~ /(\S+)$/;
+  my ($blast) = $b =~ /(\S+)$/;
+  my $cmp = lc($alast||"") cmp lc($blast||"");
+  return $cmp if $cmp;
+
+  my ($a2last) = $a =~ /(\S+)\s\S+$/;
+  my ($b2last) = $b =~ /(\S+)\s\S+$/;
+  lc($a2last||"") cmp lc($b2last||"");
+} keys %$contributors;
 
 $template->param( contributors => \@people );
 $template->param( maintenance_team => $teams->{team}->{$dev_team} );
