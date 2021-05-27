@@ -1,8 +1,8 @@
--- MariaDB dump 10.18  Distrib 10.5.8-MariaDB, for debian-linux-gnu (x86_64)
+-- MySQL dump 10.16  Distrib 10.1.48-MariaDB, for debian-linux-gnu (x86_64)
 --
 -- Host: db    Database: koha_kohadev
 -- ------------------------------------------------------
--- Server version	10.3.27-MariaDB-1:10.3.27+maria~focal
+-- Server version	10.5.10-MariaDB-1:10.5.10+maria~focal
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -188,10 +188,10 @@ CREATE TABLE `action_logs` (
   PRIMARY KEY (`action_id`),
   KEY `timestamp_idx` (`timestamp`),
   KEY `user_idx` (`user`),
-  KEY `module_idx` (`module`(255)),
-  KEY `action_idx` (`action`(255)),
+  KEY `module_idx` (`module`(191)),
+  KEY `action_idx` (`action`(191)),
   KEY `object_idx` (`object`),
-  KEY `info_idx` (`info`(255)),
+  KEY `info_idx` (`info`(191)),
   KEY `interface` (`interface`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -399,7 +399,7 @@ CREATE TABLE `aqbooksellers` (
   PRIMARY KEY (`id`),
   KEY `listprice` (`listprice`),
   KEY `invoiceprice` (`invoiceprice`),
-  KEY `name` (`name`(255)),
+  KEY `name` (`name`(191)),
   CONSTRAINT `aqbooksellers_ibfk_1` FOREIGN KEY (`listprice`) REFERENCES `currency` (`currency`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `aqbooksellers_ibfk_2` FOREIGN KEY (`invoiceprice`) REFERENCES `currency` (`currency`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -844,7 +844,7 @@ CREATE TABLE `auth_subfield_structure` (
   `kohafield` varchar(45) COLLATE utf8mb4_unicode_ci DEFAULT '',
   `frameworkcode` varchar(10) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
   `defaultvalue` mediumtext COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `display_order` INT(2) NOT NULL DEFAULT 0,
+  `display_order` int(2) NOT NULL DEFAULT 0,
   PRIMARY KEY (`authtypecode`,`tagfield`,`tagsubfield`),
   KEY `tab` (`authtypecode`,`tab`),
   CONSTRAINT `auth_subfield_structure_ibfk_1` FOREIGN KEY (`authtypecode`) REFERENCES `auth_types` (`authtypecode`) ON DELETE CASCADE ON UPDATE CASCADE
@@ -1071,9 +1071,9 @@ CREATE TABLE `biblioitems` (
   KEY `bibinoidx` (`biblioitemnumber`),
   KEY `bibnoidx` (`biblionumber`),
   KEY `itemtype_idx` (`itemtype`),
-  KEY `isbn` (`isbn`(255)),
-  KEY `issn` (`issn`(255)),
-  KEY `ean` (`ean`(255)),
+  KEY `isbn` (`isbn`(191)),
+  KEY `issn` (`issn`(191)),
+  KEY `ean` (`ean`(191)),
   KEY `publishercode` (`publishercode`(191)),
   KEY `timestamp` (`timestamp`),
   CONSTRAINT `biblioitems_ibfk_1` FOREIGN KEY (`biblionumber`) REFERENCES `biblio` (`biblionumber`) ON DELETE CASCADE ON UPDATE CASCADE
@@ -1525,11 +1525,11 @@ CREATE TABLE `branchtransfers` (
   `datesent` datetime DEFAULT NULL COMMENT 'the date the transfer was initialized',
   `frombranch` varchar(10) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT 'the branch the transfer is coming from',
   `datearrived` datetime DEFAULT NULL COMMENT 'the date the transfer arrived at its destination',
-  `datecancelled` datetime default NULL COMMENT 'the date the transfer was cancelled',
+  `datecancelled` datetime DEFAULT NULL COMMENT 'the date the transfer was cancelled',
   `tobranch` varchar(10) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT 'the branch the transfer was going to',
   `comments` longtext COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'any comments related to the transfer',
-  `reason` enum('Manual','StockrotationAdvance','StockrotationRepatriation','ReturnToHome','ReturnToHolding','RotatingCollection','Reserve','LostReserve','CancelReserve', 'TransferCancellation') COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'what triggered the transfer',
-  `cancellation_reason` ENUM('Manual', 'StockrotationAdvance', 'StockrotationRepatriation', 'ReturnToHome', 'ReturnToHolding', 'RotatingCollection', 'Reserve', 'LostReserve', 'CancelReserve', 'ItemLost') default NULL COMMENT 'what triggered the transfer cancellation',
+  `reason` enum('Manual','StockrotationAdvance','StockrotationRepatriation','ReturnToHome','ReturnToHolding','RotatingCollection','Reserve','LostReserve','CancelReserve','TransferCancellation') COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'what triggered the transfer',
+  `cancellation_reason` enum('Manual','StockrotationAdvance','StockrotationRepatriation','ReturnToHome','ReturnToHolding','RotatingCollection','Reserve','LostReserve','CancelReserve','ItemLost') COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'what triggered the transfer cancellation',
   PRIMARY KEY (`branchtransfer_id`),
   KEY `frombranch` (`frombranch`),
   KEY `tobranch` (`tobranch`),
@@ -1979,6 +1979,7 @@ CREATE TABLE `collections_tracking` (
   `colId` int(11) NOT NULL DEFAULT 0 COMMENT 'collections.colId',
   `itemnumber` int(11) NOT NULL DEFAULT 0 COMMENT 'items.itemnumber',
   PRIMARY KEY (`collections_tracking_id`),
+  KEY `collectionst_ibfk_1` (`colId`),
   CONSTRAINT `collectionst_ibfk_1` FOREIGN KEY (`colId`) REFERENCES `collections` (`colId`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -2340,8 +2341,8 @@ CREATE TABLE `deletedbiblioitems` (
   KEY `bibinoidx` (`biblioitemnumber`),
   KEY `bibnoidx` (`biblionumber`),
   KEY `itemtype_idx` (`itemtype`),
-  KEY `isbn` (`isbn`(255)),
-  KEY `ean` (`ean`(255)),
+  KEY `isbn` (`isbn`(191)),
+  KEY `ean` (`ean`(191)),
   KEY `publishercode` (`publishercode`(191)),
   KEY `timestamp` (`timestamp`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -3706,7 +3707,7 @@ CREATE TABLE `misc_files` (
   `file_content` longblob NOT NULL COMMENT 'file content',
   `date_uploaded` timestamp NOT NULL DEFAULT current_timestamp() COMMENT 'date and time the file was added',
   PRIMARY KEY (`file_id`),
-  KEY `table_tag` (`table_tag`),
+  KEY `table_tag` (`table_tag`(191)),
   KEY `record_id` (`record_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -5337,4 +5338,4 @@ CREATE TABLE `zebraqueue` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-01-12 11:28:48
+-- Dump completed on 2021-05-27 10:16:37
