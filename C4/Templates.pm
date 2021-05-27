@@ -268,10 +268,10 @@ sub themelanguage {
     # Select a language based on cookie, syspref available languages & browser
     my $lang = C4::Languages::getlanguage($query);
 
-    return activethemes($htdocs, $tmpl, $interface, $lang);
+    return availablethemes($htdocs, $tmpl, $interface, $lang);
 }
 
-sub activethemes {
+sub availablethemes {
     my ($htdocs, $tmpl, $interface, $lang) = @_;
 
     # Get theme

@@ -1546,12 +1546,12 @@ sub _process_tt {
     my $loops = $params->{loops};
     my $substitute = $params->{substitute} || {};
     my $lang = defined($params->{lang}) && $params->{lang} ne 'default' ? $params->{lang} : 'en';
-    my ($theme, $activethemes);
+    my ($theme, $availablethemes);
 
     my $htdocs = C4::Context->config('intrahtdocs');
-    ($theme, $lang, $activethemes)= C4::Templates::activethemes( $htdocs, 'about.tt', 'intranet', $lang);
+    ($theme, $lang, $availablethemes)= C4::Templates::availablethemes( $htdocs, 'about.tt', 'intranet', $lang);
     my @includes;
-    foreach (@$activethemes) {
+    foreach (@$availablethemes) {
         push @includes, "$htdocs/$_/$lang/includes";
         push @includes, "$htdocs/$_/en/includes" unless $lang eq 'en';
     }
