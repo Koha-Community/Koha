@@ -23,6 +23,31 @@ info:
 
     This API is documented in **OpenAPI format**.
 
+    ## Authentication
+
+    The API supports the following authentication mechanisms
+
+    * HTTP Basic authentication
+    * OAuth2 (client credentials grant)
+    * Cookie-based
+
+    Both _Basic authentication_ and the _OAuth2_ flow, need to be enabled
+    by system preferences.
+
+    ## Errors
+
+    The API uses standard HTTP status codes to indicate the success or failure
+    of the API call. The body of the response will be JSON in the following format:
+
+    ```
+    {
+      "error": "patron not found"
+    }
+    ```
+
+    Note: Some routes might offer additional attributes in their error responses but that's
+    subject to change and thus not documented.
+
     ## Special headers
 
     ### x-koha-library
