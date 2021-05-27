@@ -129,7 +129,7 @@
             [% END %]
         [% END %]
         </select>
-        <input type="hidden" name="marclist" value="exact" />
+        <input type="hidden" name="marclist" value="match" />
         <select name="operator">
             [% IF ( operator == 'contains' ) %]
             <option value="contains" selected="selected">contains</option>
