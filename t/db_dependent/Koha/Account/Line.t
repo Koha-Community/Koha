@@ -175,7 +175,7 @@ subtest 'is_credit() and is_debit() tests' => sub {
 
 subtest 'apply() tests' => sub {
 
-    plan tests => 30;
+    plan tests => 31;
 
     $schema->storage->txn_begin;
 
@@ -361,6 +361,58 @@ subtest 'apply() tests' => sub {
     is( $messages[0]->payload->{itemnumber}, $item->id, 'itemnumber found in payload' );
     is( $messages[0]->payload->{due_date}, 1, 'due_date key in payload' );
     is( $messages[0]->payload->{success}, 1, "'success' key in payload" );
+
+    t::lib::Mocks::mock_preference( 'MarkLostItemsAsReturned', 'onpayment');
+    my $loser  = $builder->build_object( { class => 'Koha::Patrons' } );
+    my $loser_account = $loser->account;
+
+    my $lost_item = $builder->build_sample_item();
+    my $lost_checkout = Koha::Checkout->new(
+        {
+            borrowernumber => $loser->id,
+            itemnumber     => $lost_item->id,
+            date_due       => $five_weeks_ago,
+            branchcode     => $library->id,
+            issuedate      => $seven_weeks_ago
+        }
+    )->store();
+
+    $lost_item->itemlost(1)->store;
+    my $processing_fee = Koha::Account::Line->new(
+        {
+            issue_id       => $lost_checkout->id,
+            borrowernumber => $loser->id,
+            itemnumber     => $lost_item->id,
+            branchcode     => $library->id,
+            date           => \'NOW()',
+            debit_type_code => 'PROCESSING',
+            status         => undef,
+            interface      => 'intranet',
+            amount => '15',
+            amountoutstanding => '15',
+        }
+    )->store();
+    my $lost_fee = Koha::Account::Line->new(
+        {
+            issue_id       => $lost_checkout->id,
+            borrowernumber => $loser->id,
+            itemnumber     => $lost_item->id,
+            branchcode     => $library->id,
+            date           => \'NOW()',
+            debit_type_code => 'LOST',
+            status         => undef,
+            interface      => 'intranet',
+            amount => '12.63',
+            amountoutstanding => '12.63',
+        }
+    )->store();
+    my $pay_lost = $loser_account->add_credit({ amount => 27.630000, user_id => $loser->id, interface => 'intranet' });
+    my $pay_lines = [ $processing_fee, $lost_fee ];
+    $pay_lost->apply( { debits => $pay_lines, offset_type => 'Credit applied' } );
+
+    is( $loser->checkouts->next, undef, "Item has been returned");
+
+
 
     $schema->storage->txn_rollback;
 };
