@@ -927,6 +927,7 @@ subtest 'move_to_biblio() tests' => sub {
         class => 'Koha::Holds',
         value  => {
             biblionumber => $source_biblionumber,
+            itemnumber => undef,
         },
     });
     my $item_level_hold1 = $builder->build_object({
