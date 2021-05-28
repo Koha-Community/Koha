@@ -21,7 +21,7 @@ use Modern::Perl;
 
 use utf8;
 
-use Test::More tests => 14;
+use Test::More tests => 15;
 use Test::Warn;
 use File::Basename qw(dirname);
 
@@ -474,6 +474,27 @@ subtest 'build_sample_biblio() tests' => sub {
         { $builder->build_sample_biblio({ title => 'hell❤️' }); }
         [],
         "No encoding warnings!";
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'Existence of object is only checked using primary keys' => sub {
+
+    plan tests => 1;
+
+    $schema->storage->txn_begin;
+
+    my $biblio = $builder->build_sample_biblio();
+    my $item1 = $builder->build_sample_item({ biblionumber => $biblio->biblionumber });
+    my $item2 = $builder->build_sample_item({ biblionumber => $biblio->biblionumber });
+    warnings_are {
+      $builder->build_object({
+        class => 'Koha::Holds',
+        value  => {
+            biblionumber => $biblio->biblionumber
+        }
+      });
+    } [], "No warning about query returning more than one row";
 
     $schema->storage->txn_rollback;
 };
