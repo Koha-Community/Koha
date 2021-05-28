@@ -82,7 +82,7 @@
 
                 [% IF ( template_id == '' ) %]
 
-                    <h2>MARC modification templates [% template_id | html %]</h2>
+                    <h1>MARC modification templates [% template_id | html %]</h1>
 
                     <table id="templatest">
                         <thead>
@@ -109,7 +109,7 @@
 
                 [% ELSE %]
 
-                    <h2>Actions for <em>[% template_name | html %]</em></h2>
+                    <h1>Actions for <em>[% template_name | html %]</em></h1>
 
                     [% IF ( ActionsLoop ) %]
 
@@ -309,7 +309,7 @@
                 <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="closebtn" data-dismiss="modal" aria-hidden="true">×</button>
-                    <h3 id="LabelcreateTemplate">Create a new template</h3>
+                    <h2 id="LabelcreateTemplate">Create a new template</h2>
                 </div>
                 <form method="post" action="/cgi-bin/koha/tools/marc_modification_templates.pl" id="add_template" class="validated">
                     <div class="modal-body">
