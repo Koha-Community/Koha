@@ -599,6 +599,7 @@ sub apply {
             if ( $self->credit_type_code ne 'FORGIVEN' && $debit->is_renewable ) {
                 $debit->renew_item( { interface => $params->{interface} } );
             }
+            $debit->discard_changes; # Refresh values from DB to clear floating point remainders
 
             # Same logic exists in Koha::Account::pay
             if (
