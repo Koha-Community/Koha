@@ -231,8 +231,15 @@ sub _create_links {
     if( $cnt_scalar == @$keys ) {
         # if one or more fk cols are null, the FK constraint will not be forced
         return {} if $cnt_null > 0;
+
         # does the record exist already?
-        return {} if $self->schema->resultset($linked_tbl)->find( $fk_value );
+        my @pks = $self->schema->source( $linked_tbl )->primary_columns;
+        my %fk_pk_value;
+        for (@pks) {
+            $fk_pk_value{$_} = $fk_value->{$_} if defined $fk_value->{$_};
+        }
+        return {} if !(keys %fk_pk_value);
+        return {} if $self->schema->resultset($linked_tbl)->find( \%fk_pk_value );
     }
     # create record with a recursive build call
     my $row = $self->build({ source => $linked_tbl, value => $fk_value });
