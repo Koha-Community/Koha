@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: Koha 20.11\n"
+"Project-Id-Version: Koha 21.05\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-06-12 12:52+0000\n"
 "PO-Revision-Date: 2020-08-01 04:41+0000\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
 "X-Generator: Pootle 2.8\n"
-"X-Pootle-Path: /fa/20.05/fa-Arab-pref.po\n"
+"X-Pootle-Path: /fa/21.05/fa-Arab-pref.po\n"
 "X-Pootle-Revision: 1\n"
 "X-POOTLE-MTIME: 1596256861.238486\n"
 
@@ -73,11 +73,12 @@ msgid ""
 "numbers"
 msgstr ""
 
-# Accounting > Features
+# Accounting > Features > EnablePointOfSale
 msgid ""
 "accounting.pref#EnablePointOfSale#  the point of sale feature to allow "
-"anonymous transactions with the accounting system. (Requires "
-"UseCashRegisters)"
+"anonymous transactions with the accounting system. (Requires <a href=\"/cgi-"
+"bin/koha/admin/preferences.pl?op=search&searchfield=UseCashRegisters"
+"\">UseCashRegisters</a>)"
 msgstr ""
 
 # Accounting > Features
@@ -297,10 +298,11 @@ msgstr ""
 msgid "acquisitions.pref#EmailPurchaseSuggestions# EmailAddressForSuggestions"
 msgstr ""
 
-# Acquisitions > Policy
+# Acquisitions > Policy > EmailPurchaseSuggestions
 msgid ""
-"acquisitions.pref#EmailPurchaseSuggestions# If you choose "
-"EmailAddressForSuggestions you have to enter a valid email address: "
+"acquisitions.pref#EmailPurchaseSuggestions# If you choose <a href=\"/cgi-bin/"
+"koha/admin/preferences.pl?op=search&searchfield=EmailAddressForSuggestions"
+"\">EmailAddressForSuggestions</a> you have to enter a valid email address:"
 msgstr ""
 
 # Acquisitions > Policy
@@ -421,6 +423,27 @@ msgid ""
 msgstr ""
 
 # Acquisitions > Policy
+#, fuzzy
+msgid ""
+"acquisitions.pref#TaxRates# . Enter in numeric form, 0.12 for 12%. The first "
+"item in the list will be selected by default. For more than one value, "
+"separate with | (pipe)."
+msgstr ""
+"(به صورت عددی وارد کنید, 0.12 برای 12%. اولی پیش فرض است. چنانچه بیش از یک "
+"مقدار را می خواهید، لطفا با |  جدا کنید )"
+
+# Acquisitions > Policy > TaxRates
+msgid ""
+"acquisitions.pref#TaxRates# Please note: The database will only accept "
+"values up to 4 decimals precision, further values will be rounded."
+msgstr ""
+
+# Acquisitions > Policy
+#, fuzzy
+msgid "acquisitions.pref#TaxRates# Tax rates are"
+msgstr "نرخ های پیش فرض مالیات هستند"
+
+# Acquisitions > Policy
 msgid ""
 "acquisitions.pref#UniqueItemFields# The following <a href='http://schema."
 "koha-community.org/__VERSION__/tables/items.html' target='blank'>database "
@@ -440,25 +463,6 @@ msgstr ""
 # Acquisitions > Policy
 msgid "acquisitions.pref#UseACQFrameworkForBiblioRecords# Use"
 msgstr ""
-
-# Acquisitions > Policy
-msgid ""
-"acquisitions.pref#gist# . Enter in numeric form, 0.12 for 12%. The first "
-"item in the list will be selected by default. For more than one value, "
-"separate with | (pipe)."
-msgstr ""
-"(به صورت عددی وارد کنید, 0.12 برای 12%. اولی پیش فرض است. چنانچه بیش از یک "
-"مقدار را می خواهید، لطفا با |  جدا کنید )"
-
-# Acquisitions > Policy
-msgid ""
-"acquisitions.pref#gist# Please note: The database will only accept values up "
-"to 4 decimals precision, further values will be rounded."
-msgstr ""
-
-# Acquisitions > Policy
-msgid "acquisitions.pref#gist# Tax rates are"
-msgstr "نرخ های پیش فرض مالیات هستند"
 
 # Administration
 msgid "admin.pref"
@@ -498,11 +502,14 @@ msgid ""
 "notices are sent to: "
 msgstr ""
 
-# Administration > Interface options
+# Administration > Interface options > AddressForFailedOverdueNotices
 msgid ""
 "admin.pref#AddressForFailedOverdueNotices# If left empty then it will "
 "fallback to the first defined address in the following list: Library "
-"ReplyTo, Library Email, ReplytoDefault and KohaAdminEmailAddress"
+"ReplyTo, Library Email, <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=ReplytoDefault\">ReplytoDefault</a> and <a href=\"/cgi-"
+"bin/koha/admin/preferences.pl?op=search&searchfield=KohaAdminEmailAddress"
+"\">KohaAdminEmailAddress</a>"
 msgstr ""
 
 # Administration > SSL client certificate authentication
@@ -542,6 +549,42 @@ msgstr ""
 # Administration > Login options
 msgid "admin.pref#AutoLocation# Yes"
 msgstr ""
+
+# Administration > Interface options
+#, fuzzy
+msgid "admin.pref#CSVDelimiter# #'s"
+msgstr "'s"
+
+# Administration > Interface options > CSVDelimiter
+msgid ""
+"admin.pref#CSVDelimiter# Default separator for columns in an exported CSV "
+"file: "
+msgstr ""
+
+# Administration > Interface options
+#, fuzzy
+msgid "admin.pref#CSVDelimiter# backslashes"
+msgstr "بک اسلش"
+
+# Administration > Interface options
+#, fuzzy
+msgid "admin.pref#CSVDelimiter# commas"
+msgstr "ویرگول"
+
+# Administration > Interface options
+#, fuzzy
+msgid "admin.pref#CSVDelimiter# semicolons"
+msgstr "نقطه ویرگول"
+
+# Administration > Interface options
+#, fuzzy
+msgid "admin.pref#CSVDelimiter# slashes"
+msgstr "ممیز"
+
+# Administration > Interface options
+#, fuzzy
+msgid "admin.pref#CSVDelimiter# tabs"
+msgstr "زبانه ها"
 
 # Administration > Interface options
 msgid "admin.pref#DebugLevel# All"
@@ -703,6 +746,13 @@ msgid ""
 "domain (or subdomain of this domain): "
 msgstr ""
 
+# Administration > Login options > IndependentBranches
+msgid ""
+"admin.pref#IndependentBranches# <p class='text-danger'><strong>Warning:</"
+"strong> Changing this system preference will radically alter the behavior of "
+"Koha. Changing preference on a production system is highly discouraged.</p>"
+msgstr ""
+
 # Administration > Login options
 msgid "admin.pref#IndependentBranches# No"
 msgstr ""
@@ -843,10 +893,11 @@ msgstr ""
 msgid "admin.pref#UsageStats# ."
 msgstr ""
 
-# Administration > Share anonymous usage statistics
+# Administration > Share anonymous usage statistics > UsageStats
 msgid ""
-"admin.pref#UsageStats# <br><strong>NOTE:</strong> The other UsageStats "
-"system preferences have no effect if this system preference is set to \"No"
+"admin.pref#UsageStats# <br><strong>NOTE:</strong> The other <a href=\"/cgi-"
+"bin/koha/admin/preferences.pl?op=search&searchfield=UsageStats\">UsageStats</"
+"a> system preferences have no effect if this system preference is set to \"No"
 "\" (don't share)."
 msgstr ""
 
@@ -857,11 +908,11 @@ msgid ""
 "cronjob. Ask your system administrator to schedule it."
 msgstr ""
 
-# Administration > Share anonymous usage statistics
+# Administration > Share anonymous usage statistics > UsageStats
 msgid ""
 "admin.pref#UsageStats# <br><strong>NOTE:</strong> Use the <a href=\"/cgi-bin/"
 "koha/admin/usage_statistics.pl\">dedicated configuration page</a> to edit "
-"the statisics you share."
+"the statistics you share."
 msgstr ""
 
 # Administration > Share anonymous usage statistics
@@ -898,10 +949,12 @@ msgid ""
 "hea.koha-community.org\">Hea Koha community website</a>."
 msgstr ""
 
-# Administration > Share anonymous usage statistics
+# Administration > Share anonymous usage statistics > UsageStatsCountry
 msgid ""
 "admin.pref#UsageStatsCountry# <br><strong>NOTE:</strong> This value has no "
-"effect if the UsageStats system preference is set to \"No\" (don't share)."
+"effect if the <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=UsageStats\">UsageStats</a> system preference is set "
+"to \"No\" (don't share)."
 msgstr ""
 
 # Administration > Share anonymous usage statistics
@@ -1686,10 +1739,12 @@ msgstr ""
 msgid "admin.pref#UsageStatsCountry# Zimbabwe"
 msgstr ""
 
-# Administration > Share anonymous usage statistics
+# Administration > Share anonymous usage statistics > UsageStatsGeolocation
 msgid ""
 "admin.pref#UsageStatsGeolocation# <br><strong>NOTE:</strong> This value has "
-"no effect if the UsageStats system preference is set to \"No\" (don't share)."
+"no effect if the <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=UsageStats\">UsageStats</a> system preference is set "
+"to \"No\" (don't share)."
 msgstr ""
 
 # Administration > Share anonymous usage statistics
@@ -1703,11 +1758,12 @@ msgstr ""
 msgid "admin.pref#UsageStatsGeolocation# Geolocation of the main library: "
 msgstr ""
 
-# Administration > Share anonymous usage statistics
+# Administration > Share anonymous usage statistics > UsageStatsLibrariesInfo
 msgid ""
 "admin.pref#UsageStatsLibrariesInfo# <br><strong>NOTE:</strong> This value "
-"has no effect if the UsageStats system preference is set to \"No\" (don't "
-"share)."
+"has no effect if the <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=UsageStats\">UsageStats</a> system preference is set "
+"to \"No\" (don't share)."
 msgstr ""
 
 # Administration > Share anonymous usage statistics
@@ -1730,10 +1786,12 @@ msgid ""
 "sent anonymously."
 msgstr ""
 
-# Administration > Share anonymous usage statistics
+# Administration > Share anonymous usage statistics > UsageStatsLibraryName
 msgid ""
 "admin.pref#UsageStatsLibraryName# <br><strong>NOTE:</strong> This value has "
-"no effect if the UsageStats system preference is set to \"No\" (don't share)."
+"no effect if the <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=UsageStats\">UsageStats</a> system preference is set "
+"to \"No\" (don't share)."
 msgstr ""
 
 # Administration > Share anonymous usage statistics
@@ -1746,10 +1804,12 @@ msgstr ""
 msgid "admin.pref#UsageStatsLibraryType# "
 msgstr ""
 
-# Administration > Share anonymous usage statistics
+# Administration > Share anonymous usage statistics > UsageStatsLibraryType
 msgid ""
 "admin.pref#UsageStatsLibraryType# <br><strong>NOTE:</strong> This value has "
-"no effect if the UsageStats system preference is set to \"No\" (don't share)."
+"no effect if the <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=UsageStats\">UsageStats</a> system preference is set "
+"to \"No\" (don't share)."
 msgstr ""
 
 # Administration > Share anonymous usage statistics
@@ -1798,10 +1858,12 @@ msgstr ""
 msgid "admin.pref#UsageStatsLibraryType# subscription"
 msgstr ""
 
-# Administration > Share anonymous usage statistics
+# Administration > Share anonymous usage statistics > UsageStatsLibraryUrl
 msgid ""
 "admin.pref#UsageStatsLibraryUrl# <br><strong>NOTE:</strong> This value has "
-"no effect if the UsageStats system preference is set to \"No\" (don't share)."
+"no effect if the <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=UsageStats\">UsageStats</a> system preference is set "
+"to \"No\" (don't share)."
 msgstr ""
 
 # Administration > Share anonymous usage statistics
@@ -1834,38 +1896,24 @@ msgstr ""
 msgid "admin.pref#casLogout# Yes"
 msgstr ""
 
-# Administration > CAS authentication
-msgid "admin.pref#casServerUrl# URL of the CAS Authentication Server: "
-msgstr ""
-
-# Administration > Interface options
-msgid "admin.pref#delimiter# #'s"
-msgstr "'s"
-
-# Administration > Interface options
+# Administration > CAS authentication > casServerUrl
 msgid ""
-"admin.pref#delimiter# Default separator for columns in an exported CSV file: "
+"admin.pref#casServerUrl# URL of the Central Authentication Service (CAS) "
+"server: "
 msgstr ""
 
-# Administration > Interface options
-msgid "admin.pref#delimiter# backslashes"
-msgstr "بک اسلش"
+# Administration > CAS authentication > casServerVersion
+msgid "admin.pref#casServerVersion# CAS 2 or earlier"
+msgstr ""
 
-# Administration > Interface options
-msgid "admin.pref#delimiter# commas"
-msgstr "ویرگول"
+# Administration > CAS authentication > casServerVersion
+msgid "admin.pref#casServerVersion# CAS 3 or later"
+msgstr ""
 
-# Administration > Interface options
-msgid "admin.pref#delimiter# semicolons"
-msgstr "نقطه ویرگول"
-
-# Administration > Interface options
-msgid "admin.pref#delimiter# slashes"
-msgstr "ممیز"
-
-# Administration > Interface options
-msgid "admin.pref#delimiter# tabs"
-msgstr "زبانه ها"
+# Administration > CAS authentication > casServerVersion
+msgid ""
+"admin.pref#casServerVersion# Version of the CAS server Koha will connect to: "
+msgstr ""
 
 # Administration > Interface options
 msgid "admin.pref#noItemTypeImages# No"
@@ -2007,9 +2055,12 @@ msgid "authorities.pref#AutoCreateAuthorities# When editing records,"
 msgstr "هنگام ویرایش رکوردها."
 
 # Authorities > General
+#, fuzzy
 msgid ""
 "authorities.pref#AutoCreateAuthorities# authority records that are missing "
-"(BiblioAddsAuthorities must be set to \"allow\" for this to have any effect)."
+"(<a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=BiblioAddsAuthorities\">BiblioAddsAuthorities</a> must "
+"be set to \"allow\" for this to have any effect)."
 msgstr ""
 "رکوردهای مستند که مفقود شده اند (باید مجموعه بندی شوند به "
 "BiblioAddsAuthorities \"اجازه دادن\" برای اینکه هر تأثیری دارد."
@@ -2324,10 +2375,11 @@ msgid ""
 msgstr "مانند منبع رده بندی پیش فرض."
 
 # Cataloging > Record structure
+#, fuzzy
 msgid ""
-"cataloguing.pref#DefaultCountryField008#  Empty defaults to xxu for United "
-"States."
-msgstr ""
+"cataloguing.pref#DefaultCountryField008#  Empty defaults to ||| - No attempt "
+"to code."
+msgstr "خالی کردن پیش فرض ها به انگلیسی."
 
 # Cataloging > Record structure
 msgid ""
@@ -2348,6 +2400,28 @@ msgid ""
 "href='http://www.loc.gov/marc/languages/language_code.html'>MARC Code List "
 "for Languages</a>):"
 msgstr ""
+
+# Cataloging > Interface > DefaultSaveRecordFileID
+msgid ""
+"cataloguing.pref#DefaultSaveRecordFileID# When saving in a MARC/MARCXML file "
+"in the advanced cataloging editor or exporting from the detail page in the "
+"staff interface, use the"
+msgstr ""
+
+# Cataloging > Record structure
+#, fuzzy
+msgid "cataloguing.pref#DefaultSaveRecordFileID# bibliographic record number"
+msgstr "بارکدها هستند"
+
+# Searching > Results display
+#, fuzzy
+msgid "cataloguing.pref#DefaultSaveRecordFileID# control number"
+msgstr "شماره بازیابی"
+
+# Cataloging > Record structure
+#, fuzzy
+msgid "cataloguing.pref#DefaultSaveRecordFileID# in the file name."
+msgstr "خالی کردن پیش فرض ها به انگلیسی."
 
 # Cataloging > Interface
 msgid "cataloguing.pref#EasyAnalyticalRecords# Display"
@@ -3102,10 +3176,11 @@ msgstr "لازم نبودن"
 msgid "circulation.pref#AllFinesNeedOverride# Require"
 msgstr "لازم بودن"
 
-# Circulation > Checkout policy
+# Circulation > Checkout policy > AllFinesNeedOverride
 msgid ""
 "circulation.pref#AllFinesNeedOverride# staff to manually override all fines, "
-"even fines less than set in the noissuescharge system preference."
+"even fines less than set in the <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=noissuescharge\">noissuescharge</a> system preference."
 msgstr ""
 
 # Circulation > Interface
@@ -3144,11 +3219,12 @@ msgstr "اجازه دادن"
 msgid "circulation.pref#AllowFineOverride# Don't allow"
 msgstr "اجازه ندادن"
 
-# Circulation > Checkout policy
+# Circulation > Checkout policy > AllowFineOverride
 msgid ""
 "circulation.pref#AllowFineOverride# staff to manually override and check out "
-"items to patrons who have more in fines than set in the noissuescharge "
-"system preference."
+"items to patrons who have more in fines than set in the <a href=\"/cgi-bin/"
+"koha/admin/preferences.pl?op=search&searchfield=noissuescharge"
+"\">noissuescharge</a> system preference."
 msgstr ""
 
 # Circulation > Holds policy
@@ -3249,10 +3325,10 @@ msgstr ""
 msgid "circulation.pref#AllowItemsOnHoldCheckoutSIP# Don't allow"
 msgstr ""
 
-# Circulation > Checkout policy
+# Circulation > Checkout policy > AllowItemsOnHoldCheckoutSIP
 msgid ""
 "circulation.pref#AllowItemsOnHoldCheckoutSIP# If allowed do not generate "
-"RESERVE_WAITING and RESERVED warning."
+"RESERVED warning."
 msgstr ""
 
 # Circulation > Checkout policy
@@ -3655,12 +3731,6 @@ msgstr ""
 
 # Circulation > Batch checkout
 msgid ""
-"circulation.pref#BatchCheckoutsValidCategories# (list of patron categories "
-"separated with a pipe '|')."
-msgstr ""
-
-# Circulation > Batch checkout
-msgid ""
 "circulation.pref#BatchCheckoutsValidCategories# Patron categories allowed to "
 "checkout in a batch:"
 msgstr ""
@@ -3713,10 +3783,12 @@ msgid ""
 "are doing hourly loans then you should have this on."
 msgstr ""
 
-# Circulation > Checkin policy
+# Circulation > Checkin policy > CalculateFinesOnReturn
 msgid ""
 "circulation.pref#CalculateFinesOnReturn# <br /><strong>NOTE:</strong> This "
-"system preference requires FinesMode to be set to 'Calculate and charge.'"
+"system preference requires <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=FinesMode\">FinesMode</a> to be set to \"Calculate and "
+"charge.\""
 msgstr ""
 
 # Circulation > Checkin policy
@@ -3750,10 +3822,12 @@ msgid ""
 "circulation.pref#CanMarkHoldsToPullAsLost# Do not allow to mark items as lost"
 msgstr ""
 
-# Circulation > Holds policy
+# Circulation > Holds policy > CanMarkHoldsToPullAsLost
 msgid ""
 "circulation.pref#CanMarkHoldsToPullAsLost# from the 'Holds to pull' page. "
-"Values to be applied must be defined in UpdateItemWhenLostFromHoldList."
+"Values to be applied must be defined in <a href=\"/cgi-bin/koha/admin/"
+"preferences.pl?op=search&searchfield=UpdateItemWhenLostFromHoldList"
+"\">UpdateItemWhenLostFromHoldList</a>."
 msgstr ""
 
 # Circulation > Interface
@@ -3793,7 +3867,8 @@ msgid ""
 msgstr ""
 
 # Circulation > Checkout policy
-msgid "circulation.pref#CircControl# Use the checkout and fines rules of"
+#, fuzzy
+msgid "circulation.pref#CircControl# Use the calendar and circulation rules of"
 msgstr "به کار بردن قوانین جریمه ها و امانت برای"
 
 # Circulation > Checkout policy
@@ -3930,6 +4005,49 @@ msgstr ""
 # Circulation > Checkin policy
 msgid "circulation.pref#CumulativeRestrictionPeriods# the restriction periods."
 msgstr ""
+
+# Circulation > Holds policy
+#, fuzzy
+msgid "circulation.pref#DefaultHoldExpirationdate# Don't set"
+msgstr "انتقال ندادن"
+
+# Circulation > Interface
+#, fuzzy
+msgid ""
+"circulation.pref#DefaultHoldExpirationdate# If enabled, set expiration date"
+msgstr "جدیدترین به قدیمی ترین"
+
+# Circulation > Holds policy
+#, fuzzy
+msgid "circulation.pref#DefaultHoldExpirationdate# Set"
+msgstr "خط مشی رزروها"
+
+# Circulation > Checkout policy
+#, fuzzy
+msgid "circulation.pref#DefaultHoldExpirationdate# days"
+msgstr "تاریخ بازگشت."
+
+# Circulation > Interface
+#, fuzzy
+msgid ""
+"circulation.pref#DefaultHoldExpirationdate# default expiration date for "
+"holds automatically."
+msgstr "تعیین تاریخ  شروع پیش فرض برای رزروها در فهرست منابع برای"
+
+# Circulation > Checkout policy
+#, fuzzy
+msgid "circulation.pref#DefaultHoldExpirationdate# from reserve date."
+msgstr "تاریخ فعلی"
+
+# Circulation > Holds policy
+#, fuzzy
+msgid "circulation.pref#DefaultHoldExpirationdate# months"
+msgstr "انتقال ندادن"
+
+# Circulation > Holds policy
+#, fuzzy
+msgid "circulation.pref#DefaultHoldExpirationdate# years"
+msgstr "خط مشی رزروها"
 
 # Circulation > Checkout policy
 msgid ""
@@ -4070,25 +4188,28 @@ msgstr "اجازه دادن"
 msgid "circulation.pref#ExpireReservesMaxPickUpDelay# Don't allow"
 msgstr "اجازه ندادن"
 
-# Circulation > Holds policy
+# Circulation > Holds policy > ExpireReservesMaxPickUpDelay
 msgid ""
 "circulation.pref#ExpireReservesMaxPickUpDelay# holds to expire automatically "
-"if they have not been picked by within the time period specified in the "
-"ReservesMaxPickUpDelay system preference.<br><strong>NOTE:</strong> This "
-"system preference requires the <code>misc/cronjobs/holds/"
-"cancel_expired_holds.pl</code> cronjob. Ask your system administrator to "
-"schedule it."
+"if they have not been picked by within the time period specified in the <a "
+"href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=ReservesMaxPickUpDelay\">ReservesMaxPickUpDelay</a> "
+"system preference.<br><strong>NOTE:</strong> This system preference requires "
+"the <code>misc/cronjobs/holds/cancel_expired_holds.pl</code> cronjob. Ask "
+"your system administrator to schedule it."
 msgstr ""
 
 # Circulation > Holds policy
 msgid "circulation.pref#ExpireReservesMaxPickUpDelayCharge# ."
 msgstr ""
 
-# Circulation > Holds policy
+# Circulation > Holds policy > ExpireReservesMaxPickUpDelayCharge
 msgid ""
-"circulation.pref#ExpireReservesMaxPickUpDelayCharge# If using "
-"ExpireReservesMaxPickUpDelay, charge a patron who allows their waiting hold "
-"to expire a fee of"
+"circulation.pref#ExpireReservesMaxPickUpDelayCharge# If using <a href=\"/cgi-"
+"bin/koha/admin/preferences.pl?"
+"op=search&searchfield=ExpireReservesMaxPickUpDelay"
+"\">ExpireReservesMaxPickUpDelay</a>, charge a patron who allows their "
+"waiting hold to expire a fee of"
 msgstr ""
 
 # Circulation > Holds policy
@@ -4245,10 +4366,11 @@ msgstr "شامل نشدن"
 msgid "circulation.pref#HoldsInNoissuesCharge# Include"
 msgstr "شامل شدن"
 
-# Circulation > Checkout policy
+# Circulation > Checkout policy > HoldsInNoissuesCharge
 msgid ""
 "circulation.pref#HoldsInNoissuesCharge# hold charges when summing up charges "
-"for limit set in the noissuescharge system preference."
+"for limit set in the <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=noissuescharge\">noissuescharge</a> system preference."
 msgstr ""
 
 # Circulation > Checkin policy
@@ -4319,10 +4441,12 @@ msgid ""
 "Holds to pull list to"
 msgstr "تعیین تاریخ  شروع پیش فرض برای رزروها در فهرست منابع برای"
 
-# Circulation > Interface
+# Circulation > Interface > HoldsToPullStartDate
 msgid ""
 "circulation.pref#HoldsToPullStartDate# day(s) ago. Note that the default end "
-"date is controlled by the system preference ConfirmFutureHolds."
+"date is controlled by the system preference <a href=\"/cgi-bin/koha/admin/"
+"preferences.pl?op=search&searchfield=ConfirmFutureHolds"
+"\">ConfirmFutureHolds</a>."
 msgstr ""
 
 # Circulation > Checkout policy
@@ -4373,10 +4497,11 @@ msgid ""
 "notices to be sent to in the absence of a library address:"
 msgstr ""
 
-# Circulation > Interlibrary loans
+# Circulation > Interlibrary loans > ILLHiddenRequestStatuses
 msgid ""
 "circulation.pref#ILLHiddenRequestStatuses# (separated with |). If left "
-"empty, all ILL requests will be displayed."
+"empty, all ILL requests will be displayed. The request codes can be found in "
+"the ILLSTATUS authorized value category."
 msgstr ""
 
 # Circulation > Interlibrary loans
@@ -4559,10 +4684,12 @@ msgstr "شامل نشدن"
 msgid "circulation.pref#ManInvInNoissuesCharge# Include"
 msgstr "شامل شدن"
 
-# Circulation > Checkout policy
+# Circulation > Checkout policy > ManInvInNoissuesCharge
 msgid ""
 "circulation.pref#ManInvInNoissuesCharge# custom debit type charges when "
-"summing up charges for limit set in the noissuescharge system preference."
+"summing up charges for limit set in the <a href=\"/cgi-bin/koha/admin/"
+"preferences.pl?op=search&searchfield=noissuescharge\">noissuescharge</a> "
+"system preference."
 msgstr ""
 
 # Circulation > Checkout policy
@@ -4598,6 +4725,13 @@ msgstr ""
 # Circulation > Checkout policy
 msgid "circulation.pref#MarkLostItemsAsReturned# when cataloguing an item"
 msgstr ""
+
+# Circulation > Checkout policy
+#, fuzzy
+msgid ""
+"circulation.pref#MarkLostItemsAsReturned# when marking an item as a return "
+"claim"
+msgstr "هنگامی که یک منبع با عنوان مفقود شده مشخص شده است"
 
 # Circulation > Checkout policy
 msgid ""
@@ -4684,10 +4818,12 @@ msgid "circulation.pref#OPACAllowHoldDateInFuture# Don't allow"
 msgstr "اجازه ندادن"
 
 # Circulation > Holds policy
+#, fuzzy
 msgid ""
 "circulation.pref#OPACAllowHoldDateInFuture# patrons to place holds that "
-"don't enter the waiting list until a certain future date. "
-"(AllowHoldDateInFuture must also be enabled)."
+"don't enter the waiting list until a certain future date. (<a href=\"/cgi-"
+"bin/koha/admin/preferences.pl?op=search&searchfield=AllowHoldDateInFuture"
+"\">AllowHoldDateInFuture</a> must also be enabled)."
 msgstr ""
 "کاربرانی که رزرو می کنند و در فهرست انتظار یک تاریخ ویژه را وارد نمی کنند. . "
 "(AllowHoldDateInFuture همچنین باید فعال شود)."
@@ -4706,10 +4842,11 @@ msgid ""
 "to pick up a hold from."
 msgstr "یک کاربر برای انتخاب کتابخانه برای امانت گرفتن از موجودی آن."
 
-# Circulation > Checkout policy
+# Circulation > Checkout policy > OPACFineNoRenewalsBlockAutoRenew
 msgid ""
 "circulation.pref#OPACFineNoRenewalsBlockAutoRenew# If a patron owes more "
-"than the value of OPACFineNoRenewals,"
+"than the value of <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=OPACFineNoRenewals\">OPACFineNoRenewals</a>,"
 msgstr ""
 
 # Circulation > Checkout policy
@@ -4738,16 +4875,12 @@ msgid ""
 "where the item is available."
 msgstr ""
 
-# Circulation > Holds policy
-msgid ""
-"circulation.pref#OPACHoldsIfAvailableAtPickupExceptions# (list of patron "
-"categories separated with a pipe '|')"
-msgstr ""
-
-# Circulation > Holds policy
+# Circulation > Holds policy > OPACHoldsIfAvailableAtPickupExceptions
 msgid ""
 "circulation.pref#OPACHoldsIfAvailableAtPickupExceptions# Patron categories "
-"not affected by OPACHoldsIfAvailableAtPickup:"
+"not affected by <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=OPACHoldsIfAvailableAtPickup"
+"\">OPACHoldsIfAvailableAtPickup</a>:"
 msgstr ""
 
 # Circulation > Checkout policy
@@ -4951,11 +5084,12 @@ msgstr ""
 msgid "circulation.pref#RenewAccruingItemInOpac# renew"
 msgstr ""
 
-# Circulation > Checkout policy
+# Circulation > Checkout policy > RenewAccruingItemInOpac
 msgid ""
 "circulation.pref#RenewAccruingItemInOpac# the item automatically. If the "
-"system preference \"RenewalPeriodBase\" is set to \"due date\", renewed "
-"items may still be overdue."
+"system preference <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=RenewalPeriodBase\">RenewalPeriodBase</a> is set to "
+"\"due date\", renewed items may still be overdue."
 msgstr ""
 
 # Circulation > Checkout policy
@@ -4972,11 +5106,12 @@ msgstr ""
 msgid "circulation.pref#RenewAccruingItemWhenPaid# renew"
 msgstr ""
 
-# Circulation > Checkout policy
+# Circulation > Checkout policy > RenewAccruingItemWhenPaid
 msgid ""
 "circulation.pref#RenewAccruingItemWhenPaid# the item automatically. If the "
-"system preference \"RenewalPeriodBase\" is set to \"due date\", renewed "
-"items may still be overdue."
+"system preference <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=RenewalPeriodBase\">RenewalPeriodBase</a> is set to "
+"\"due date\", renewed items may still be overdue."
 msgstr ""
 
 # Circulation > Checkout policy
@@ -5033,10 +5168,11 @@ msgstr "شامل نشدن"
 msgid "circulation.pref#RentalsInNoissuesCharge# Include"
 msgstr "شامل شدن"
 
-# Circulation > Checkout policy
+# Circulation > Checkout policy > RentalsInNoissuesCharge
 msgid ""
 "circulation.pref#RentalsInNoissuesCharge# rental charges when summing up "
-"charges for limit set in the noissuescharge system preference."
+"charges for limit set in the <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=noissuescharge\">noissuescharge</a> system preference."
 msgstr ""
 
 # Circulation > Holds policy
@@ -5406,10 +5542,13 @@ msgstr ""
 msgid "circulation.pref#StoreLastBorrower# Store"
 msgstr ""
 
-# Circulation > Checkin policy
+# Circulation > Checkin policy > StoreLastBorrower
 msgid ""
 "circulation.pref#StoreLastBorrower# the last patron to return an item. This "
-"setting is independent of the opacreadinghistory and AnonymousPatron system "
+"setting is independent of the <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=opacreadinghistory\">opacreadinghistory</a> and <a "
+"href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=AnonymousPatron\">AnonymousPatron</a> system "
 "preferences."
 msgstr ""
 
@@ -5623,11 +5762,13 @@ msgid ""
 "page."
 msgstr ""
 
-# Circulation > Holds policy
+# Circulation > Holds policy > UpdateItemWhenLostFromHoldList
 msgid ""
 "circulation.pref#UpdateItemWhenLostFromHoldList# Example: \"itemlost: 1\" to "
-"set items.itemlost to 1 when the item is marked as lost. (Requires "
-"CanMarkHoldsToPullAsLost)"
+"set items.itemlost to 1 when the item is marked as lost. (Requires <a href="
+"\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=CanMarkHoldsToPullAsLost\">CanMarkHoldsToPullAsLost</"
+"a>)"
 msgstr ""
 
 # Circulation > Checkin policy
@@ -5893,13 +6034,14 @@ msgstr ""
 msgid "circulation.pref#finesCalendar# when calculating the period for fines."
 msgstr ""
 
-# Circulation > Fines Policy
+# Circulation > Fines Policy > finesMode
 msgid ""
 "circulation.pref#finesMode# <br><strong>NOTE:</strong> If the cronjobs/fines."
 "pl cronjob is being run, accruing and final fines will be calculated when "
 "the cron runs and accruing fines will be finalized when an item is returned. "
-"If CalculateFinesOnReturn is enabled, final fines will be calculated when an "
-"item is returned."
+"If <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=CalculateFinesOnReturn\">CalculateFinesOnReturn</a> is "
+"enabled, final fines will be calculated when an item is returned.<br/>"
 msgstr ""
 
 # Circulation > Fines Policy
@@ -5907,13 +6049,29 @@ msgid "circulation.pref#finesMode# Calculate and charge"
 msgstr "محاسبه کردن و مطالبه هزینه"
 
 # Circulation > Fines Policy
+#, fuzzy
+msgid "circulation.pref#finesMode# Charge"
+msgstr "محاسبه کردن و مطالبه هزینه"
+
+# Circulation > Fines Policy
 msgid "circulation.pref#finesMode# Don't calculate"
+msgstr "محاسبه نکردن"
+
+# Circulation > Fines Policy
+#, fuzzy
+msgid "circulation.pref#finesMode# Don't charge"
 msgstr "محاسبه نکردن"
 
 # Circulation > Fines Policy
 msgid ""
 "circulation.pref#finesMode# fines (when <code>cronjobs/fines.pl</code> is "
 "being run)."
+msgstr ""
+
+# Circulation > Fines Policy > finesMode
+msgid ""
+"circulation.pref#finesMode# on close days. If set the fines.pl cronjob will "
+"not generate fines when run on days marked as closed in the calendar."
 msgstr ""
 
 # Circulation > Interface
@@ -6497,10 +6655,12 @@ msgid ""
 "interface."
 msgstr ""
 
-# Enhanced content > Manual
+# Enhanced content > Manual > KohaManualBaseURL
 msgid ""
 "enhanced_content.pref#KohaManualBaseURL# If starts with '/',  the value of "
-"staffClientBaseURL will be used as a prefix."
+"<a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=staffClientBaseURL\">staffClientBaseURL</a> will be "
+"used as a prefix."
 msgstr ""
 
 # Enhanced content > Manual
@@ -7032,10 +7192,12 @@ msgid "enhanced_content.pref#SyndeticsEditions# Show"
 msgstr "نمایش"
 
 # Enhanced content > Syndetics
+#, fuzzy
 msgid ""
 "enhanced_content.pref#SyndeticsEditions# information about other editions of "
-"a title from Syndetics on item detail pages on the OPAC (when "
-"OPACFRBRizeEditions is on)."
+"a title from Syndetics on item detail pages on the OPAC (when <a href=\"/cgi-"
+"bin/koha/admin/preferences.pl?op=search&searchfield=OPACFRBRizeEditions"
+"\">OPACFRBRizeEditions</a> is on)."
 msgstr ""
 "اطلاعات درباره دیگر ویرایش های یک عنوان از Syndetics  در صفحات جزئیات منبع "
 "در اپک (هنگامی که OPACFRBRizeEditions راه اندازی شده باشد)."
@@ -7228,10 +7390,14 @@ msgid "enhanced_content.pref#ThingISBN# Use"
 msgstr "به کار بردن"
 
 # Enhanced content > Library Thing
+#, fuzzy
 msgid ""
 "enhanced_content.pref#ThingISBN# the ThingISBN service to show other "
-"editions of a title (when either FRBRizeEditions or OPACFRBRizeEditions is "
-"on). This is separate from Library Thing for Libraries."
+"editions of a title (when either <a href=\"/cgi-bin/koha/admin/preferences."
+"pl?op=search&searchfield=FRBRizeEditions\">FRBRizeEditions</a> or <a href=\"/"
+"cgi-bin/koha/admin/preferences.pl?op=search&searchfield=OPACFRBRizeEditions"
+"\">OPACFRBRizeEditions</a> is on). This is separate from Library Thing for "
+"Libraries."
 msgstr ""
 "خدمات ThingISBN برای نمایش ویرایش های دیگر یک عنوان (هنگامی که یا "
 "FRBRizeEditions یا OPACFRBRizeEditions فعال شده باشند). این خدمات از Library "
@@ -7310,6 +7476,21 @@ msgid ""
 "i18n_l10n.pref#CalendarFirstDayOfWeek# as the first day of week in the "
 "calendar."
 msgstr "i18n_l10n.pref#تقویم روز اول هفته# به عنوان روز اول هفته در تقویم."
+
+# I18N/L10N
+#, fuzzy
+msgid ""
+"i18n_l10n.pref#OPACLanguages# Enable the following languages on the OPAC:"
+msgstr "i18n_l10n.pref#زبان های اپک# فعال کردن زبان های زیر در رابط اپک:"
+
+# I18N/L10N
+#, fuzzy
+msgid ""
+"i18n_l10n.pref#OPACLanguages# This list can be sorted to modify the order of "
+"the languages on the interface."
+msgstr ""
+"i18n_l10n.pref#زبان# این لیست را می توان به ترتیب زبان ها در رابط طبقه بندی "
+"نمود."
 
 # I18N/L10N
 msgid ""
@@ -7411,19 +7592,6 @@ msgstr ""
 "نمود."
 
 # I18N/L10N
-msgid ""
-"i18n_l10n.pref#opaclanguages# Enable the following languages on the OPAC:"
-msgstr "i18n_l10n.pref#زبان های اپک# فعال کردن زبان های زیر در رابط اپک:"
-
-# I18N/L10N
-msgid ""
-"i18n_l10n.pref#opaclanguages# This list can be sorted to modify the order of "
-"the languages on the interface."
-msgstr ""
-"i18n_l10n.pref#زبان های اپک# این لیست را می توان به ترتیب زبان ها در رابط "
-"طبقه بندی نمود."
-
-# I18N/L10N
 msgid "i18n_l10n.pref#opaclanguagesdisplay# Allow"
 msgstr "i18n_l10n.pref#نمایش زبان های اپک# اجازه دادن"
 
@@ -7457,6 +7625,21 @@ msgstr "logs.pref اشکال زدایی"
 # Logging > Logging
 msgid "logs.pref Logging"
 msgstr "logs.pref ورود به سیستم"
+
+# Logging > Logging
+#, fuzzy
+msgid "logs.pref#AcquisitionLog# Don't log"
+msgstr "logs.pref#ثبت آبونمان# ثبت نکردن"
+
+# Logging > Logging
+#, fuzzy
+msgid "logs.pref#AcquisitionLog# Log"
+msgstr "logs.pref#ثبت آبونمان# ثبت کردن"
+
+# OPAC > Features
+#, fuzzy
+msgid "logs.pref#AcquisitionLog# when acquisition actions take place."
+msgstr "منبع مفقود شده در صفحات جستجو و جزئیات."
 
 # Logging > Logging
 msgid "logs.pref#AuthFailureLog#  authentication failures."
@@ -7520,6 +7703,24 @@ msgstr ""
 "logs.pref#ثبت فهرست نویسی# هرگونه تغییر در سوابق کتابشناسی یا ثبت اقلام."
 
 # Logging > Logging
+#, fuzzy
+msgid "logs.pref#ClaimsLog# Don't log"
+msgstr "logs.pref#ثبت جریمه ها# ثبت نکنید"
+
+# Logging > Logging
+#, fuzzy
+msgid "logs.pref#ClaimsLog# Log"
+msgstr "logs.pref#ثبت جریمه ها# ثبت کنید"
+
+# Logging > Logging
+#, fuzzy
+msgid ""
+"logs.pref#ClaimsLog# when an acquisitions claim or a serials claim notice is "
+"sent."
+msgstr ""
+"logs.pref#ثبت نامه# هنگامی که یک اعلان پیگیری بطور خودکار ارسال می شود."
+
+# Logging > Logging
 msgid "logs.pref#CronjobLog# Don't log"
 msgstr "logs.pref#CronjobLog# ثبت نکردن"
 
@@ -7540,9 +7741,12 @@ msgid "logs.pref#DumpSearchQueryTemplate# Don't"
 msgstr "logs.pref#تخلیه نمونه سوالات جستجو# انجام ندهید"
 
 # Logging > Debugging
+#, fuzzy
 msgid ""
 "logs.pref#DumpSearchQueryTemplate# dump search query as a template "
-"parameter, requires DumpTemplateVars[interface] to be visible."
+"parameter, requires <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=DumpTemplateVars\">DumpTemplateVars</a>[interface] to "
+"be visible."
 msgstr ""
 "logs.pref#تخلیه نمونه سوالات جستجو# تخلیه سوالات جستجو براساس نمونه های مشخص "
 "شده, نیاز به تخلیه زباله وارها[رابط] تا قابل مشاهده شود."
@@ -7630,17 +7834,19 @@ msgid "logs.pref#IssueLog# when items are checked out."
 msgstr "logs.pref#شماره ورود# هنگامی که منابع امانت داده می شوند."
 
 # Logging > Logging
-msgid "logs.pref#LetterLog# Don't log"
-msgstr "logs.pref#ثبت نامه# ثبت نکردن"
+#, fuzzy
+msgid "logs.pref#NoticesLog#  changes to notice templates."
+msgstr "logs.pref#مستندسازی# تغییرات در پیشینه های مستند."
 
 # Logging > Logging
-msgid "logs.pref#LetterLog# Log"
-msgstr "logs.pref#ثبت نامه# ثبت کردن"
+#, fuzzy
+msgid "logs.pref#NoticesLog# Don't log"
+msgstr "logs.pref#ثبت جریمه ها# ثبت نکنید"
 
 # Logging > Logging
-msgid "logs.pref#LetterLog# when an automatic claim notice is sent."
-msgstr ""
-"logs.pref#ثبت نامه# هنگامی که یک اعلان پیگیری بطور خودکار ارسال می شود."
+#, fuzzy
+msgid "logs.pref#NoticesLog# Log"
+msgstr "logs.pref#ثبت جریمه ها# ثبت کنید"
 
 # Logging > Logging
 msgid "logs.pref#RenewalLog# Don't log"
@@ -7705,16 +7911,17 @@ msgstr "opac.pref گزینه های جستجوی پیشرفته"
 msgid "opac.pref Appearance"
 msgstr "opac.pref نمایش"
 
+# OPAC > Appearance
+#, fuzzy
+msgid "opac.pref Authentication"
+msgstr "opac.pref نمایش"
+
 # OPAC > Features
 msgid "opac.pref Features"
 msgstr "opac.pref ویژگی ها"
 
 # OPAC > OpenURL
 msgid "opac.pref OpenURL"
-msgstr ""
-
-# OPAC > Payments
-msgid "opac.pref Payments"
 msgstr ""
 
 # OPAC > Policy
@@ -7775,11 +7982,12 @@ msgstr "اجازه دادن"
 msgid "opac.pref#AnonSuggestions# Don't allow"
 msgstr "اجازه ندادن"
 
-# OPAC > Privacy
+# OPAC > Privacy > AnonSuggestions
 msgid ""
 "opac.pref#AnonSuggestions# patrons that aren't logged in to make purchase "
-"suggestions. Suggestions are connected to the AnonymousPatron system "
-"preference."
+"suggestions. Suggestions are connected to the <a href=\"/cgi-bin/koha/admin/"
+"preferences.pl?op=search&searchfield=AnonymousPatron\">AnonymousPatron</a> "
+"system preference."
 msgstr ""
 
 # OPAC > Privacy
@@ -7823,11 +8031,17 @@ msgid ""
 "category takes priority over this system preference."
 msgstr ""
 
-# OPAC > Appearance
+# OPAC > Appearance > COinSinOPACResults
 msgid ""
-"opac.pref#COinSinOPACResults# <br/><code>OpenURLResolverURL</code>, "
-"<code>OPACShowOpenURL</code>, <code>OPACOpenURLItemTypes</code>, "
-"<code>OpenURLText</code>, <code>OpenURLImageLocation</code>"
+"opac.pref#COinSinOPACResults# <br/><a href=\"/cgi-bin/koha/admin/preferences."
+"pl?op=search&searchfield=OpenURLResolverURL\">OpenURLResolverURL</a>, <a "
+"href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=OPACShowOpenURL\">OPACShowOpenURL</a>, <a href=\"/cgi-"
+"bin/koha/admin/preferences.pl?op=search&searchfield=OPACOpenURLItemTypes"
+"\">OPACOpenURLItemTypes</a>, <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=OpenURLText\">OpenURLText</a>, <a href=\"/cgi-bin/koha/"
+"admin/preferences.pl?op=search&searchfield=OpenURLImageLocation"
+"\">OpenURLImageLocation</a>"
 msgstr ""
 
 # OPAC > Appearance
@@ -7878,39 +8092,6 @@ msgstr "نگهداری کردن"
 # OPAC > Privacy
 msgid "opac.pref#EnableOpacSearchHistory# patron search history in the OPAC."
 msgstr "تاریخچه جستجوی کاربران در اپک."
-
-# OPAC > Payments > EnablePayPalOpacPayments
-msgid ""
-"opac.pref#EnablePayPalOpacPayments# <br/><strong>Warning</strong>: this "
-"functionality has been deprecated in favor of using payment plugins that can "
-"implement different payment services."
-msgstr ""
-
-# OPAC > Payments
-msgid "opac.pref#EnablePayPalOpacPayments# Allow"
-msgstr ""
-
-# OPAC > Payments
-msgid "opac.pref#EnablePayPalOpacPayments# Don't allow"
-msgstr ""
-
-# OPAC > Payments
-msgid "opac.pref#EnablePayPalOpacPayments# mode."
-msgstr ""
-
-# OPAC > Payments
-msgid ""
-"opac.pref#EnablePayPalOpacPayments# patrons to make payments from the OPAC "
-"via PayPal in"
-msgstr ""
-
-# OPAC > Payments
-msgid "opac.pref#EnablePayPalOpacPayments# production"
-msgstr ""
-
-# OPAC > Payments
-msgid "opac.pref#EnablePayPalOpacPayments# sandbox"
-msgstr ""
 
 # OPAC > Appearance
 msgid ""
@@ -7995,6 +8176,21 @@ msgstr "(يجب تعبئة هذه بشكل صحيح لRSS، unAPI، والإضا
 msgid "opac.pref#OPACBaseURL# The OPAC is located at "
 msgstr "اپک قرار دارد در http://"
 
+# OPAC > Self registration and modification
+#, fuzzy
+msgid "opac.pref#OPACComments# Allow"
+msgstr "اجازه دادن"
+
+# OPAC > Features
+#, fuzzy
+msgid "opac.pref#OPACComments# Don't allow"
+msgstr "اجازه ندادن"
+
+# OPAC > Features
+#, fuzzy
+msgid "opac.pref#OPACComments# patrons to make comments on items on the OPAC."
+msgstr "کاربران برای درج کامنت روی منابع در اپک."
+
 # OPAC > Features
 msgid "opac.pref#OPACDetailQRCode# Disable"
 msgstr ""
@@ -8010,9 +8206,11 @@ msgid ""
 msgstr ""
 
 # OPAC > Appearance
+#, fuzzy
 msgid ""
-"opac.pref#OPACDisplay856uAsImage# . Note: The corresponding OPACXSLT option "
-"must be turned on."
+"opac.pref#OPACDisplay856uAsImage# . Note: The corresponding <a href=\"/cgi-"
+"bin/koha/admin/preferences.pl?op=search&searchfield=OPACXSLT\">OPACXSLT</a> "
+"option must be turned on."
 msgstr "توجه: گزینه متناظر  OPACXSLT باید فعال باشد.  "
 
 # OPAC > Appearance
@@ -8075,10 +8273,12 @@ msgstr ""
 msgid "opac.pref#OPACFineNoRenewalsIncludeCredits# Include"
 msgstr ""
 
-# OPAC > Policy
+# OPAC > Policy > OPACFineNoRenewalsIncludeCredits
 msgid ""
 "opac.pref#OPACFineNoRenewalsIncludeCredits# outstanding/unapplied credits "
-"when applying the OPACFineNoRenewals rule to patrons."
+"when applying the <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=OPACFineNoRenewals\">OPACFineNoRenewals</a> rule to "
+"patrons."
 msgstr ""
 
 # OPAC > Features
@@ -8126,8 +8326,7 @@ msgstr "اجازه ندادن"
 # OPAC > Privacy
 #, fuzzy
 msgid ""
-"opac.pref#OPACHoldsHistory# patrons to see what books they have place holds "
-"in the past."
+"opac.pref#OPACHoldsHistory# patrons to see the list of their past holds."
 msgstr "کاربرای برای دیدن اینکه چه کتابهایی را قبلا امانت گرفته اند."
 
 # OPAC > Features
@@ -8229,21 +8428,25 @@ msgstr "اجازه دادن"
 msgid "opac.pref#OPACPrivacy# Don't allow"
 msgstr "اجازه ندادن"
 
-# OPAC > Privacy
+# OPAC > Privacy > OPACPrivacy
 msgid ""
 "opac.pref#OPACPrivacy# patrons to choose their own privacy settings for "
-"their checkout history. This requires opacreadinghistory and AnonymousPatron "
-"system preferences."
+"their checkout history. This requires <a href=\"/cgi-bin/koha/admin/"
+"preferences.pl?op=search&searchfield=opacreadinghistory"
+"\">opacreadinghistory</a> and <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=AnonymousPatron\">AnonymousPatron</a> system "
+"preferences."
 msgstr ""
 
 # OPAC > Features
 msgid "opac.pref#OPACReportProblem# <br/>"
 msgstr ""
 
-# OPAC > Features
+# OPAC > Features > OPACReportProblem
 msgid ""
-"opac.pref#OPACReportProblem# <strong>NOTE:</strong> You must have "
-"KohaAdminEmailAddress enabled."
+"opac.pref#OPACReportProblem# <strong>NOTE:</strong> You must have <a href=\"/"
+"cgi-bin/koha/admin/preferences.pl?op=search&searchfield=KohaAdminEmailAddress"
+"\">KohaAdminEmailAddress</a> enabled."
 msgstr ""
 
 # OPAC > Features
@@ -8322,6 +8525,22 @@ msgstr ""
 "منبع موردنظرشان نزدیک تر است. توجه داشته باشید که این امکان میزان زیادی از "
 "فضای سرور شما را اشغال می کند، و چنانچه منابع مجموعه شما زیاد است باید از آن "
 "اجتناب کنید."
+
+# OPAC > Privacy
+#, fuzzy
+msgid "opac.pref#OPACShibOnly# Allow"
+msgstr "اجازه دادن"
+
+# OPAC > Privacy
+#, fuzzy
+msgid "opac.pref#OPACShibOnly# Don't allow"
+msgstr "اجازه ندادن"
+
+# OPAC > Privacy
+#, fuzzy
+msgid ""
+"opac.pref#OPACShibOnly# patrons to login by means other than Shibboleth."
+msgstr "کاربرای برای دیدن اینکه چه کتابهایی را قبلا امانت گرفته اند."
 
 # OPAC > Appearance
 msgid "opac.pref#OPACShowCheckoutName# Don't show"
@@ -8456,10 +8675,12 @@ msgstr ""
 msgid "opac.pref#OPACSuggestionMandatoryFields# Title"
 msgstr ""
 
-# OPAC > Policy
+# OPAC > Policy > OPACSuggestionUnwantedFields
 msgid ""
-"opac.pref#OPACSuggestionUnwantedFields# <br />Note: Do not make "
-"OPACSuggestionMandatoryFields unwanted fields "
+"opac.pref#OPACSuggestionUnwantedFields# <br />Note: Do not make <a href=\"/"
+"cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=OPACSuggestionMandatoryFields"
+"\">OPACSuggestionMandatoryFields</a> unwanted fields "
 msgstr ""
 
 # OPAC > Policy
@@ -8897,10 +9118,28 @@ msgid ""
 "\"_blank\">Koha wiki</a>."
 msgstr ""
 
-# OPAC > Policy
+# OPAC > Policy > OpacHiddenItemsExceptions
 msgid ""
 "opac.pref#OpacHiddenItemsExceptions# List of patron categories, separated by "
-"|, that can see items otherwise hidden by <code>OpacHiddenItems</code>:"
+"|, that can see items otherwise hidden by <a href=\"/cgi-bin/koha/admin/"
+"preferences.pl?op=search&searchfield=OpacHiddenItems\">OpacHiddenItems</a>:"
+msgstr ""
+
+# OPAC > Appearance
+#, fuzzy
+msgid "opac.pref#OpacHiddenItemsHidesRecord# Don't hide"
+msgstr "پررنگ نکردن"
+
+# OPAC > Appearance
+#, fuzzy
+msgid "opac.pref#OpacHiddenItemsHidesRecord# Hide"
+msgstr "پررنگ کردن"
+
+# OPAC > Policy > OpacHiddenItemsHidesRecord
+msgid ""
+"opac.pref#OpacHiddenItemsHidesRecord# the bibliographic record when all its "
+"items are hidden by <a href='/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=OpacHiddenItems'>OpacHiddenItems</a>."
 msgstr ""
 
 # OPAC > Appearance
@@ -9063,10 +9302,11 @@ msgstr ""
 "را در زمانی که پایگاه نیاز به به روز رسانی دارد نشان می دهد، اما بدون قید و "
 "شرط."
 
-# OPAC > Appearance
+# OPAC > Appearance > OpacMaintenanceNotice
 msgid ""
-"opac.pref#OpacMaintenanceNotice# Show the following HTML when "
-"OpacMaintenance is enabled:"
+"opac.pref#OpacMaintenanceNotice# Show the following HTML when <a href=\"/cgi-"
+"bin/koha/admin/preferences.pl?op=search&searchfield=OpacMaintenance"
+"\">OpacMaintenance</a> is enabled:"
 msgstr ""
 
 # OPAC > Appearance
@@ -9101,9 +9341,11 @@ msgstr ""
 "های راهبری):"
 
 # OPAC > Appearance
+#, fuzzy
 msgid ""
 "opac.pref#OpacNavBottom# Show the following HTML on the left hand column of "
-"the main page and patron account on the OPAC, after OpacNav, and before "
+"the main page and patron account on the OPAC, after <a href=\"/cgi-bin/koha/"
+"admin/preferences.pl?op=search&searchfield=OpacNav\">OpacNav</a>, and before "
 "patron account links if available:"
 msgstr ""
 "نمایش HTML زیر در ستون سمت چپ در صفحه اصلی و حساب کاربری اپک، بعد از  "
@@ -9165,10 +9407,12 @@ msgid ""
 "authentication before accessing the OPAC. "
 msgstr ""
 
-# OPAC > Appearance
+# OPAC > Appearance > OpacPublic
 msgid ""
-"opac.pref#OpacPublic# Note: This doesn't affect the public API, see the "
-"<code>RESTPublicAnonymousRequests</code> to control the API."
+"opac.pref#OpacPublic# Note: This does not affect the public API, see the <a "
+"href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=RESTPublicAnonymousRequests"
+"\">RESTPublicAnonymousRequests</a> to control the API."
 msgstr ""
 
 # OPAC > Policy
@@ -9362,10 +9606,11 @@ msgid ""
 "with <code>http://</code> or <code>https://</code>):"
 msgstr ""
 
-# OPAC > OpenURL
+# OPAC > OpenURL > OpenURLText
 msgid ""
-"opac.pref#OpenURLText# Text of OpenURL links (or image title if "
-"OpenURLImageLocation is defined):"
+"opac.pref#OpenURLText# Text of OpenURL links (or image title if <a href=\"/"
+"cgi-bin/koha/admin/preferences.pl?op=search&searchfield=OpenURLImageLocation"
+"\">OpenURLImageLocation</a> is defined):"
 msgstr ""
 
 # OPAC > Self registration and modification
@@ -9376,11 +9621,12 @@ msgid ""
 "modification screen:"
 msgstr ""
 
-# OPAC > Self registration and modification
+# OPAC > Self registration and modification > PatronSelfRegistration
 msgid ""
-"opac.pref#PatronSelfRegistration# <br><strong>NOTE:</strong> This needs "
-"PatronSelfRegistrationDefaultCategory to be set to a valid patron category "
-"code."
+"opac.pref#PatronSelfRegistration# <br><strong>NOTE:</strong> This needs <a "
+"href='/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=PatronSelfRegistrationDefaultCategory'>PatronSelfRegistrationDefaultCategory</"
+"a> to be set to a valid patron category code."
 msgstr ""
 
 # OPAC > Self registration and modification
@@ -9434,6 +9680,18 @@ msgid ""
 "address by entering it twice."
 msgstr ""
 
+# OPAC > Self registration and modification > PatronSelfRegistrationDefaultCategory
+msgid ""
+"opac.pref#PatronSelfRegistrationDefaultCategory# <br><strong>WARNING: Do not "
+"use a regular patron category for self registration.</strong> If the "
+"<code>misc/cronjobs/cleanup_database.pl</code> cronjob is setup to delete "
+"unverified and unfinished OPAC self registrations, it will permanently and "
+"unrecoverably delete all patrons that have registered more than <a href='/"
+"cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=PatronSelfRegistrationExpireTemporaryAccountsDelay'>PatronSelfRegistrationExpireTemporaryAccountsDelay</"
+"a> days ago."
+msgstr ""
+
 # OPAC > Self registration and modification
 msgid ""
 "opac.pref#PatronSelfRegistrationDefaultCategory# Use the patron category code"
@@ -9468,10 +9726,12 @@ msgid ""
 "to schedule it."
 msgstr ""
 
-# OPAC > Self registration and modification
+# OPAC > Self registration and modification > PatronSelfRegistrationExpireTemporaryAccountsDelay
 msgid ""
 "opac.pref#PatronSelfRegistrationExpireTemporaryAccountsDelay# Delete patrons "
-"still in the category indicated by PatronSelfRegistrationDefaultCategory"
+"still in the category indicated by <a href=\"/cgi-bin/koha/admin/preferences."
+"pl?op=search&searchfield=PatronSelfRegistrationDefaultCategory"
+"\">PatronSelfRegistrationDefaultCategory</a>"
 msgstr ""
 
 # OPAC > Self registration and modification
@@ -9532,62 +9792,6 @@ msgid ""
 "patron verify themselves via email."
 msgstr ""
 
-# OPAC > Payments
-msgid "opac.pref#PayPalChargeDescription# ."
-msgstr ""
-
-# OPAC > Payments
-msgid ""
-"opac.pref#PayPalChargeDescription# The patron should see the charge "
-"description as "
-msgstr ""
-
-# OPAC > Payments
-msgid "opac.pref#PayPalPwd# ."
-msgstr ""
-
-# OPAC > Payments
-msgid ""
-"opac.pref#PayPalPwd# The password for the PayPal account to receive payments "
-"is "
-msgstr ""
-
-# OPAC > Payments
-msgid "opac.pref#PayPalReturnURL# ."
-msgstr ""
-
-# OPAC > Payments
-msgid ""
-"opac.pref#PayPalReturnURL# After payment or cancellation, PayPal should "
-"return to the "
-msgstr ""
-
-# OPAC > Payments
-msgid "opac.pref#PayPalReturnURL# OPAC's alias"
-msgstr ""
-
-# OPAC > Payments
-msgid "opac.pref#PayPalReturnURL# OPACBaseURL"
-msgstr ""
-
-# OPAC > Payments
-msgid "opac.pref#PayPalSignature# ."
-msgstr ""
-
-# OPAC > Payments
-msgid ""
-"opac.pref#PayPalSignature# The signature for the PayPal account to receive "
-"payments is "
-msgstr ""
-
-# OPAC > Payments
-msgid "opac.pref#PayPalUser# ."
-msgstr ""
-
-# OPAC > Payments
-msgid "opac.pref#PayPalUser# The email address to receive PayPal payments is "
-msgstr ""
-
 # OPAC > Features
 msgid "opac.pref#QuoteOfTheDay# OPAC"
 msgstr ""
@@ -9602,6 +9806,16 @@ msgstr ""
 
 # OPAC > Features
 msgid "opac.pref#QuoteOfTheDay# staff interface"
+msgstr ""
+
+# OPAC > Appearance > Reference_NFL_Statuses
+msgid "opac.pref#Reference_NFL_Statuses# (Use | as delimiter.)"
+msgstr ""
+
+# OPAC > Appearance > Reference_NFL_Statuses
+msgid ""
+"opac.pref#Reference_NFL_Statuses# List the following not for loan statuses "
+"as available for reference in OPAC search results:"
 msgstr ""
 
 # OPAC > Features
@@ -9739,11 +9953,11 @@ msgstr "مخفی کردن"
 msgid "opac.pref#ShowReviewerPhoto# Show"
 msgstr "نمایش دادن"
 
-# OPAC > Features
+# OPAC > Features > ShowReviewerPhoto
 msgid ""
 "opac.pref#ShowReviewerPhoto# reviewer's avatar beside comments in OPAC. The "
-"avatar will be searched on www.libravatar.org using the patron's e-mail "
-"address."
+"avatar will be searched on <a href=\"https://www.libravatar.org\" target="
+"\"_blank\">Libravatar</a> using the patron's e-mail address."
 msgstr ""
 
 # OPAC > Features
@@ -9872,18 +10086,6 @@ msgid ""
 msgstr "کاربران برای وارد شدن به حساب کاربری خود در اپک."
 
 # OPAC > Features
-msgid "opac.pref#reviewson# Allow"
-msgstr "اجازه دادن"
-
-# OPAC > Features
-msgid "opac.pref#reviewson# Don't allow"
-msgstr "اجازه ندادن"
-
-# OPAC > Features
-msgid "opac.pref#reviewson# patrons to make comments on items on the OPAC."
-msgstr "کاربران برای درج کامنت روی منابع در اپک."
-
-# OPAC > Features
 msgid "opac.pref#suggestion# Allow"
 msgstr "اجازه دادن"
 
@@ -9980,10 +10182,11 @@ msgstr ""
 msgid "patrons.pref#AutoApprovePatronProfileSettings# Enable"
 msgstr ""
 
-# Patrons > General
+# Patrons > General > AutoApprovePatronProfileSettings
 msgid ""
-"patrons.pref#AutoApprovePatronProfileSettings# Requires OPACPatronDetails to "
-"be activated."
+"patrons.pref#AutoApprovePatronProfileSettings# Requires <a href=\"/cgi-bin/"
+"koha/admin/preferences.pl?op=search&searchfield=OPACPatronDetails"
+"\">OPACPatronDetails</a> to be activated."
 msgstr ""
 
 # Patrons > General
@@ -10036,11 +10239,34 @@ msgstr "آدرس ایمیل کاربران برای ارسال ایمیل ها."
 msgid "patrons.pref#AutoEmailPrimaryAddress# work"
 msgstr "کار"
 
-# Patrons > Patron forms
+# Patrons > Notices and notifications > AutoRenewalNotices
 msgid ""
-"patrons.pref#BorrowerMandatoryField# <strong>NOTE:</strong> If autoMemberNum "
-"is enabled, the system preference BorrowerMandatoryField must not contain "
-"the field cardnumber."
+"patrons.pref#AutoRenewalNotices# (Deprecated) according to --send-notices "
+"cron switch"
+msgstr ""
+
+# Patrons > Notices and notifications > AutoRenewalNotices
+msgid "patrons.pref#AutoRenewalNotices# Send automatic renewal notices: "
+msgstr ""
+
+# Patrons > Notices and notifications > AutoRenewalNotices
+msgid ""
+"patrons.pref#AutoRenewalNotices# according to patron messaging preferences"
+msgstr ""
+
+# Circulation > Checkout policy
+#, fuzzy
+msgid "patrons.pref#AutoRenewalNotices# never"
+msgstr "تاریخ فعلی"
+
+# Patrons > Patron forms > BorrowerMandatoryField
+msgid ""
+"patrons.pref#BorrowerMandatoryField# <strong>NOTE:</strong> If <a href=\"/"
+"cgi-bin/koha/admin/preferences.pl?op=search&searchfield=autoMemberNum"
+"\">autoMemberNum</a> is enabled, the system preference <a href=\"/cgi-bin/"
+"koha/admin/preferences.pl?op=search&searchfield=BorrowerMandatoryField"
+"\">BorrowerMandatoryField</a> must not contain the field <code>cardnumber</"
+"code>."
 msgstr ""
 
 # Patrons > Patron forms
@@ -10091,11 +10317,13 @@ msgstr "امانت گیرنده ها می توانند عناوین زیر را 
 msgid "patrons.pref#CardnumberLength# Card numbers for patrons must be"
 msgstr "رمزهای ورود برای کارکنان و کاربران باید حداقل"
 
-# Patrons > Patron forms
+# Patrons > Patron forms > CardnumberLength
 msgid ""
-"patrons.pref#CardnumberLength# If 'cardnumber' is included in the "
-"BorrowerMandatoryField list, the minimum length, if not specified here, "
-"defaults to one. Maximum cannot be bigger than the database field size of 32."
+"patrons.pref#CardnumberLength# If <code>cardnumber</code> is included in the "
+"<a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=BorrowerMandatoryField\">BorrowerMandatoryField</a> "
+"list, the minimum length, if not specified here, defaults to one. Maximum "
+"cannot be bigger than the database field size of 32."
 msgstr ""
 
 # Patrons > Patron forms
@@ -10128,6 +10356,24 @@ msgstr ""
 msgid ""
 "patrons.pref#CheckPrevCheckout# Unless overridden by patron category, do not"
 msgstr ""
+
+# Patrons > General > CheckPrevCheckoutDelay
+msgid ""
+"patrons.pref#CheckPrevCheckoutDelay# Requires <a href='/cgi-bin/koha/admin/"
+"preferences.pl?op=search&searchfield=CheckPrevCheckout'>CheckPrevCheckout</"
+"a> to be enabled. There is no time limit if 0 or empty."
+msgstr ""
+
+# Patrons > General > CheckPrevCheckoutDelay
+msgid ""
+"patrons.pref#CheckPrevCheckoutDelay# Trigger a warning if the current item "
+"has been checked out no longer than"
+msgstr ""
+
+# Circulation > Holds policy
+#, fuzzy
+msgid "patrons.pref#CheckPrevCheckoutDelay# days ago."
+msgstr "روزها."
 
 # Patrons > Patron forms
 msgid ""
@@ -10228,11 +10474,13 @@ msgid ""
 msgstr ""
 "فعال کردن قابلیت آپلود و پیوست کردن فایل های دلخواه به یک رکورد امانت گیرنده."
 
-# Patrons > Notices and notifications
+# Patrons > Notices and notifications > EnhancedMessagingPreferences
 msgid ""
 "patrons.pref#EnhancedMessagingPreferences# <br><strong>NOTE:</strong> This "
 "only applies to courtesy notices. To manage if patrons have also access to "
-"these settings, use EnhancedMessagingPreferencesOPAC."
+"these settings, use <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=EnhancedMessagingPreferencesOPAC"
+"\">EnhancedMessagingPreferencesOPAC</a>."
 msgstr ""
 
 # Patrons > Notices and notifications
@@ -10257,10 +10505,12 @@ msgid ""
 "patrons will receive and when they will receive them."
 msgstr ""
 
-# Patrons > Notices and notifications
+# Patrons > Notices and notifications > EnhancedMessagingPreferencesOPAC
 msgid ""
-"patrons.pref#EnhancedMessagingPreferencesOPAC# <br><strong>NOTE:</strong> "
-"EnhancedMessagingPreferences must be enabled."
+"patrons.pref#EnhancedMessagingPreferencesOPAC# <br><strong>NOTE:</strong> <a "
+"href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=EnhancedMessagingPreferences"
+"\">EnhancedMessagingPreferences</a> must be enabled."
 msgstr ""
 
 # Patrons > Notices and notifications
@@ -10335,11 +10585,12 @@ msgid ""
 "OPAC. If you set to permissive, Koha will warn but not enforce."
 msgstr ""
 
-# Patrons > Privacy
+# Patrons > Privacy > GDPR_Policy
 msgid ""
 "patrons.pref#GDPR_Policy# <br><strong>NOTE:</strong> If you enable this you "
-"will also have to set the URL of your public privacy policy with the "
-"PrivacyPolicyURL setting."
+"will also have to set the URL of your public privacy policy with the <a href="
+"\"/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=PrivacyPolicyURL"
+"\">PrivacyPolicyURL</a> setting."
 msgstr ""
 
 # Patrons > Privacy
@@ -10356,6 +10607,22 @@ msgstr ""
 
 # Patrons > Privacy
 msgid "patrons.pref#GDPR_Policy# permissive"
+msgstr ""
+
+# Patrons > General > LockExpiredDelay
+msgid ""
+"patrons.pref#LockExpiredDelay# <br><strong>NOTE:</strong> This system "
+"preference requires the misc/cronjobs/cleanup_database.pl cronjob. Ask your "
+"system administrator to schedule it."
+msgstr ""
+
+# Patrons > General > LockExpiredDelay
+msgid "patrons.pref#LockExpiredDelay# Lock expired patrons after"
+msgstr ""
+
+# Patrons > General > LockExpiredDelay
+msgid ""
+"patrons.pref#LockExpiredDelay# days. Leave empty to disable this behavior."
 msgstr ""
 
 # Patrons > General
@@ -10441,8 +10708,11 @@ msgstr ""
 # Patrons > Notices and notifications > PhoneNotification
 msgid ""
 "patrons.pref#PhoneNotification# <br/><i class=\"fa fa-exclamation-triangle"
-"\"></i> If <code>PhoneNotification</code> is enabled, "
-"<code>TalkingTechItivaPhoneNotification</code> should be disabled."
+"\"></i> If <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=PhoneNotification\">PhoneNotification</a> is enabled, "
+"<a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=TalkingTechItivaPhoneNotification"
+"\">TalkingTechItivaPhoneNotification</a> should be disabled."
 msgstr ""
 
 # Patrons > Notices and notifications
@@ -10599,10 +10869,11 @@ msgid ""
 "the guarantors record:"
 msgstr ""
 
-# Patrons > Privacy
+# Patrons > Privacy > PrivacyPolicyURL
 msgid ""
 "patrons.pref#PrivacyPolicyURL# <br><strong>NOTE:</strong> The URL will only "
-"be displayed if GDPR_Policy is set."
+"be displayed if <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=GDPR_Policy\">GDPR_Policy</a> is set."
 msgstr ""
 
 # Patrons > Privacy
@@ -10816,8 +11087,11 @@ msgstr "نمایش فیلدهای زیر از پایگاه منابع"
 # Patrons > Notices and notifications > TalkingTechItivaPhoneNotification
 msgid ""
 "patrons.pref#TalkingTechItivaPhoneNotification# <br/><i class=\"fa fa-"
-"exclamation-triangle\"></i> If <code>TalkingTechItivaPhoneNotification</"
-"code> is enabled, <code>PhoneNotification</code> should be disabled."
+"exclamation-triangle\"></i> If <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=TalkingTechItivaPhoneNotification"
+"\">TalkingTechItivaPhoneNotification</a> is enabled, <a href=\"/cgi-bin/koha/"
+"admin/preferences.pl?op=search&searchfield=PhoneNotification"
+"\">PhoneNotification</a> should be disabled."
 msgstr ""
 
 # Patrons > Notices and notifications
@@ -10895,11 +11169,14 @@ msgid ""
 "writeoffs."
 msgstr ""
 
-# Patrons > Patron forms
+# Patrons > Patron forms > autoMemberNum
 msgid ""
-"patrons.pref#autoMemberNum# <strong>NOTE:</strong> If autoMemberNum is "
-"enabled, the system preference BorrowerMandatoryField must not contain the "
-"field cardnumber."
+"patrons.pref#autoMemberNum# <strong>NOTE:</strong> If <a href=\"/cgi-bin/"
+"koha/admin/preferences.pl?op=search&searchfield=autoMemberNum"
+"\">autoMemberNum</a> is enabled, the system preference <a href=\"/cgi-bin/"
+"koha/admin/preferences.pl?op=search&searchfield=BorrowerMandatoryField"
+"\">BorrowerMandatoryField</a> must not contain the field <code>cardnumber</"
+"code>."
 msgstr ""
 
 # Patrons > Patron forms
@@ -11063,12 +11340,13 @@ msgid ""
 msgstr ""
 "فیلدها (جداکردن ارزش ها با | ). تب ها به ترتیب فهرست شده ظاهر می شود.<br/>"
 
-# Searching > Results display
+# Searching > Results display > BiblioItemtypeInfo
 msgid ""
 "searching.pref#BiblioItemtypeInfo#  Koha record level itemtype info on "
 "detail and result pages in the OPAC and staff interface. This info also "
-"displays if the item-level_itypes system preference is set to bibliographic "
-"record."
+"displays if the <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=item-level_itypes\">item-level_itypes</a> system "
+"preference is set to bibliographic record."
 msgstr ""
 
 # Searching > Results display
@@ -11108,6 +11386,29 @@ msgstr "نمایش"
 # Searching > Results display
 msgid "searching.pref#DisplayLibraryFacets# home library"
 msgstr "نمایش"
+
+# Searching > Features
+#, fuzzy
+msgid "searching.pref#ElasticsearchCrossFields# Disable"
+msgstr "از کار انداختن"
+
+# Searching > Features
+#, fuzzy
+msgid "searching.pref#ElasticsearchCrossFields# Enable"
+msgstr "فعال کردن"
+
+# Searching > Features > ElasticsearchCrossFields
+msgid ""
+"searching.pref#ElasticsearchCrossFields# See documentation at https://www."
+"elastic.co/guide/en/elasticsearch/reference/current/query-dsl-multi-match-"
+"query.html#type-cross-fields"
+msgstr ""
+
+# Searching > Features > ElasticsearchCrossFields
+msgid ""
+"searching.pref#ElasticsearchCrossFields# the cross_fields option for "
+"Elasticsearch searches, supported in Elasticsearch 6.X and above."
+msgstr ""
 
 # Searching > Features
 msgid "searching.pref#EnableSearchHistory# Don't keep"
@@ -11344,22 +11645,6 @@ msgid ""
 msgstr ""
 
 # Searching > Features
-msgid "searching.pref#OpacGroupResults# Don't use"
-msgstr "به کار نبردن"
-
-# Searching > Features
-msgid ""
-"searching.pref#OpacGroupResults# PazPar2 to group similar results on the "
-"OPAC. This requires that PazPar2 is set up and running."
-msgstr ""
-"PazPar2 برای دسته بندی نتایج مشابه در اپک. این مستلزم این است که PazPar2 نصب "
-"و راه اندازی شود."
-
-# Searching > Features
-msgid "searching.pref#OpacGroupResults# Use"
-msgstr "به کاربردن"
-
-# Searching > Features
 msgid ""
 "searching.pref#QueryAutoTruncate# <br />(The * character would be used like "
 "so: <cite>Har*</cite> or <cite>*logging</cite>.)"
@@ -11393,10 +11678,12 @@ msgid "searching.pref#QueryFuzzy# Try"
 msgstr "سعی کردن"
 
 # Searching > Features
+#, fuzzy
 msgid ""
 "searching.pref#QueryFuzzy# to match similarly spelled words in a search (for "
 "example, a search for <cite>flang</cite> would also match <cite>flange</"
-"cite> and <cite>fang</cite>; REQUIRES ZEBRA)."
+"cite> and <cite>fang</cite>; Currently only affects Zebra searches. Any "
+"Elasticsearch term can be made fuzzy by adding a ~ directly after the term.)."
 msgstr ""
 "برای انطباق واژه های مشابه از نظر املایی در یک جستجو (برای مثال، یک جستجو "
 "برایr <cite>flang</cite> همچنین منطبق خواهد شد با <cite>flange</cite> و "
@@ -11456,6 +11743,27 @@ msgid ""
 "(REQUIRES ZEBRA)."
 msgstr "رتبه بندی نتایج جستجو بر اساس مرتبط بودن (نیاز دارد به ZEBRA)."
 
+# Searching > Results display > SearchLimitLibrary
+msgid ""
+"searching.pref#SearchLimitLibrary# When limiting search results with a "
+"library or library group, limit by the item's"
+msgstr ""
+
+# Searching > Results display
+#, fuzzy
+msgid "searching.pref#SearchLimitLibrary# holding library."
+msgstr "نمایش"
+
+# Searching > Results display
+#, fuzzy
+msgid "searching.pref#SearchLimitLibrary# home library and holding library."
+msgstr "عدم نمایش"
+
+# Searching > Results display
+#, fuzzy
+msgid "searching.pref#SearchLimitLibrary# home library."
+msgstr "نمایش"
+
 # Searching > Results display
 msgid ""
 "searching.pref#SearchWithISBNVariations# When searching on the ISBN index,"
@@ -11510,23 +11818,19 @@ msgstr ""
 "متن زیر را به عنوان جداکننده برای چهریزه های پدیدآوران یونی مارک به کاربرید."
 
 # Searching > Features
-msgid ""
-"searching.pref#UseICU# ICU Zebra indexing. Please note: This setting will "
-"not affect Zebra indexing, it should only be used to tell Koha that you have "
-"activated ICU indexing if you have actually done so, since there is no way "
-"for Koha to figure this out on its own."
-msgstr ""
-"نمایه سازی ICU Zebra. لطفا توجه کنید: این تنظیمات بر نمایه سازی Zebra تأثیر "
-"نمی گذارد، این فقط باید برای این استفاده شود که به کوها بگوید که شما نمایه "
-"سازی ICU را فعال کرده اید چنانچه شما واقعا انجام داده اید، لذا راهی برای "
-"کوها برای حل کردن آن توط خودش وجود ندارد."
-
-# Searching > Features
-msgid "searching.pref#UseICU# Not using"
+#, fuzzy
+msgid "searching.pref#UseICUStyleQuotes# Don't use"
 msgstr "به کار نبردن"
 
+# Searching > Features > UseICUStyleQuotes
+msgid ""
+"searching.pref#UseICUStyleQuotes# ICU style quotes ({}) when tracing "
+"subjects. The default is to use standard quotes (\"\")."
+msgstr ""
+
 # Searching > Features
-msgid "searching.pref#UseICU# Using"
+#, fuzzy
+msgid "searching.pref#UseICUStyleQuotes# Use"
 msgstr "به کار بردن"
 
 # Searching > Results display
@@ -11592,10 +11896,12 @@ msgid "searching.pref#displayFacetCount# Show"
 msgstr "نمایش"
 
 # Searching > Results display
+#, fuzzy
 msgid ""
 "searching.pref#displayFacetCount# facet counts. The relevance of these "
-"numbers highly depends on the value of the maxRecordsForFacets preference. "
-"Applies to OPAC and staff interface."
+"numbers highly depends on the value of the <a href=\"/cgi-bin/koha/admin/"
+"preferences.pl?op=search&searchfield=maxRecordsForFacets"
+"\">maxRecordsForFacets</a> preference. Applies to OPAC and staff interface."
 msgstr ""
 "مرتبط بودن این تعداد به میزان زیاد به ارزش اولویت  maxRecordsForFacets  "
 "بستگی دارد.  برای اپک و رابط کاربر کارکنان به کار می رود."
@@ -11777,12 +12083,14 @@ msgstr ""
 msgid "serials.pref#makePreviousSerialAvailable# Make"
 msgstr ""
 
-# Serials
+# Serials > makePreviousSerialAvailable
 msgid ""
 "serials.pref#makePreviousSerialAvailable# previous serial automatically "
 "available when receiving a new serial issue. The previous issue can also be "
-"set to another item type when receiving a new one. Please note that the item-"
-"level_itypes system preference must be set to specific item."
+"set to another item type when receiving a new one. Please note that the <a "
+"href=\"/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=item-"
+"level_itypes\">item-level_itypes</a> system preference must be set to "
+"specific item."
 msgstr ""
 
 # Serials
@@ -11816,6 +12124,10 @@ msgstr ""
 msgid "staff_interface.pref Appearance"
 msgstr ""
 
+# Staff interface
+msgid "staff_interface.pref Authentication"
+msgstr ""
+
 # Staff interface > Options
 msgid "staff_interface.pref Options"
 msgstr ""
@@ -11828,10 +12140,11 @@ msgstr ""
 msgid "staff_interface.pref#AudioAlerts# Enable"
 msgstr ""
 
-# Staff interface > Options
+# Staff interface > Options > AudioAlerts
 msgid ""
-"staff_interface.pref#AudioAlerts# audio alerts for events defined in the "
-"audio alerts section of administration."
+"staff_interface.pref#AudioAlerts# audio alerts for events defined in the <a "
+"href=\"/cgi-bin/koha/admin/audio_alerts.pl\">audio alerts</a> section of "
+"administration."
 msgstr ""
 
 # Staff interface > Appearance
@@ -12150,6 +12463,21 @@ msgid ""
 "starting with http:// or https://. Do not include a trailing slash in the "
 "URL. (This must be filled in correctly for CAS, svc, and load_testing to "
 "work.)"
+msgstr ""
+
+# Staff interface > Authentication > staffShibOnly
+msgid "staff_interface.pref#staffShibOnly# Allow"
+msgstr ""
+
+# OPAC > Features
+#, fuzzy
+msgid "staff_interface.pref#staffShibOnly# Don't allow"
+msgstr "اجازه ندادن"
+
+# Staff interface > Authentication > staffShibOnly
+msgid ""
+"staff_interface.pref#staffShibOnly# staff to login by means other than "
+"shibboleth."
 msgstr ""
 
 # Staff interface > Appearance
@@ -12506,10 +12834,12 @@ msgid ""
 "when a bibliographic or item record is created or updated."
 msgstr ""
 
-# Web services > OAI-PMH
+# Web services > OAI-PMH > OAI-PMH:AutoUpdateSetsEmbedItemData
 msgid ""
 "web_services.pref#OAI-PMH:AutoUpdateSetsEmbedItemData# <br><strong>NOTE:</"
-"strong> This needs OAI-PMH:AutoUpdateSets syspref to be enabled."
+"strong> This needs <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=OAI-PMH:AutoUpdateSets\">OAI-PMH:AutoUpdateSets</a> "
+"syspref to be enabled."
 msgstr ""
 
 # Web services > OAI-PMH
@@ -12526,13 +12856,15 @@ msgid ""
 "data when automatically updating OAI-PMH sets."
 msgstr ""
 
-# Web services > OAI-PMH
+# Web services > OAI-PMH > OAI-PMH:ConfFile
 msgid ""
 "web_services.pref#OAI-PMH:ConfFile# . If empty, Koha OAI Server operates in "
 "normal mode, otherwise it operates in extended mode. In extended mode, it's "
-"possible to parameter other formats than marcxml or Dublin Core. OAI-PMH:"
-"ConfFile specify a YAML configuration file which list available metadata "
-"formats and XSL file used to create them from marcxml records."
+"possible to parameter other formats than marcxml or Dublin Core. <a href=\"/"
+"cgi-bin/koha/admin/preferences.pl?op=search&searchfield=OAI-PMH:ConfFile"
+"\">OAI-PMH:ConfFile</a> specify a YAML configuration file which list "
+"available metadata formats and XSL file used to create them from marcxml "
+"records."
 msgstr ""
 
 # Web services > OAI-PMH
@@ -12673,3 +13005,55 @@ msgid ""
 "web_services.pref#SvcMaxReportRows# rows of a report requested via the "
 "reports web service."
 msgstr "ردیف های یک گزارش درخواستی از طریق گزارش های خدمات وب."
+
+# I18N/L10N
+#~ msgid ""
+#~ "i18n_l10n.pref#opaclanguages# This list can be sorted to modify the order "
+#~ "of the languages on the interface."
+#~ msgstr ""
+#~ "i18n_l10n.pref#زبان های اپک# این لیست را می توان به ترتیب زبان ها در رابط "
+#~ "طبقه بندی نمود."
+
+# Logging > Logging
+#~ msgid "logs.pref#LetterLog# Don't log"
+#~ msgstr "logs.pref#ثبت نامه# ثبت نکردن"
+
+# Logging > Logging
+#~ msgid "logs.pref#LetterLog# Log"
+#~ msgstr "logs.pref#ثبت نامه# ثبت کردن"
+
+# OPAC > Features
+#~ msgid "opac.pref#reviewson# Allow"
+#~ msgstr "اجازه دادن"
+
+# OPAC > Features
+#~ msgid "opac.pref#reviewson# Don't allow"
+#~ msgstr "اجازه ندادن"
+
+# Searching > Features
+#~ msgid "searching.pref#OpacGroupResults# Don't use"
+#~ msgstr "به کار نبردن"
+
+# Searching > Features
+#~ msgid ""
+#~ "searching.pref#OpacGroupResults# PazPar2 to group similar results on the "
+#~ "OPAC. This requires that PazPar2 is set up and running."
+#~ msgstr ""
+#~ "PazPar2 برای دسته بندی نتایج مشابه در اپک. این مستلزم این است که PazPar2 "
+#~ "نصب و راه اندازی شود."
+
+# Searching > Features
+#~ msgid "searching.pref#OpacGroupResults# Use"
+#~ msgstr "به کاربردن"
+
+# Searching > Features
+#~ msgid ""
+#~ "searching.pref#UseICU# ICU Zebra indexing. Please note: This setting will "
+#~ "not affect Zebra indexing, it should only be used to tell Koha that you "
+#~ "have activated ICU indexing if you have actually done so, since there is "
+#~ "no way for Koha to figure this out on its own."
+#~ msgstr ""
+#~ "نمایه سازی ICU Zebra. لطفا توجه کنید: این تنظیمات بر نمایه سازی Zebra "
+#~ "تأثیر نمی گذارد، این فقط باید برای این استفاده شود که به کوها بگوید که "
+#~ "شما نمایه سازی ICU را فعال کرده اید چنانچه شما واقعا انجام داده اید، لذا "
+#~ "راهی برای کوها برای حل کردن آن توط خودش وجود ندارد."
