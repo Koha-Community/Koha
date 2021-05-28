@@ -666,6 +666,7 @@ sub apply {
                     }
                 ) if $outcome;
             }
+            $debit->discard_changes; # Refresh values from DB to clear floating point remainders
 
             # Same logic exists in Koha::Account::pay
             if (
