@@ -24274,6 +24274,11 @@ if ( CheckVersion($DBversion) ) {
     NewVersion( $DBversion, 28108, "Add new systempreference OpacHiddenItemsHidesRecord" );
 }
 
+$DBversion = '21.05.00.000';
+if( CheckVersion( $DBversion ) ) {
+    NewVersion( $DBversion, "", "Koha 21.05.00 release" );
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 my $update_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/atomicupdate/';
