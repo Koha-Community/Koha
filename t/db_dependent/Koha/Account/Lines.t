@@ -26,6 +26,7 @@ use C4::Circulation qw/AddIssue AddReturn/;
 use Koha::Account;
 use Koha::Account::Lines;
 use Koha::Account::Offsets;
+use Koha::DateUtils;
 use Koha::Items;
 
 use t::lib::Mocks;
@@ -209,7 +210,7 @@ subtest 'is_credit() and is_debit() tests' => sub {
 
 subtest 'apply() tests' => sub {
 
-    plan tests => 24;
+    plan tests => 25;
 
     $schema->storage->txn_begin;
 
@@ -319,6 +320,62 @@ subtest 'apply() tests' => sub {
     is( $debit_2->discard_changes->amountoutstanding * 1,  0, 'Debit cancelled' );
     is( $debit_3->discard_changes->amountoutstanding * 1, 90, 'Outstanding amount correctly calculated' );
     is( $credit_2->discard_changes->amountoutstanding * 1, 0, 'No remaining credit' );
+
+    my $loser  = $builder->build_object( { class => 'Koha::Patrons' } );
+    my $loser_account = $loser->account;
+
+
+    my $now = dt_from_string();
+    my $seven_weeks = DateTime::Duration->new(weeks => 7);
+    my $five_weeks = DateTime::Duration->new(weeks => 5);
+    my $seven_weeks_ago = $now - $seven_weeks;
+    my $five_weeks_ago = $now - $five_weeks;
+
+    my $lost_item = $builder->build_sample_item();
+    my $lost_checkout = Koha::Checkout->new(
+        {
+            borrowernumber => $loser->id,
+            itemnumber     => $lost_item->id,
+            date_due       => $five_weeks_ago,
+            branchcode     => $loser->branchcode,
+            issuedate      => $seven_weeks_ago
+        }
+    )->store();
+
+    $lost_item->itemlost(1)->store;
+    my $processing_fee = Koha::Account::Line->new(
+        {
+            issue_id       => $lost_checkout->id,
+            borrowernumber => $loser->id,
+            itemnumber     => $lost_item->id,
+            branchcode     => $loser->branchcode,
+            date           => \'NOW()',
+            debit_type_code => 'PROCESSING',
+            status         => undef,
+            interface      => 'intranet',
+            amount => '15',
+            amountoutstanding => '15',
+        }
+    )->store();
+    my $lost_fee = Koha::Account::Line->new(
+        {
+            issue_id       => $lost_checkout->id,
+            borrowernumber => $loser->id,
+            itemnumber     => $lost_item->id,
+            branchcode     => $loser->branchcode,
+            date           => \'NOW()',
+            debit_type_code => 'LOST',
+            status         => undef,
+            interface      => 'intranet',
+            amount => '12.63',
+            amountoutstanding => '12.63',
+        }
+    )->store();
+    my $pay_lost = $loser_account->add_credit({ amount => 27.630000, user_id => $loser->id, interface => 'intranet' });
+    my $pay_lines = [ $processing_fee, $lost_fee ];
+    $pay_lost->apply( { debits => $pay_lines, offset_type => 'Credit applied' } );
+
+    is( $loser->checkouts->next, undef, "Item has been returned");
 
     $schema->storage->txn_rollback;
 };
