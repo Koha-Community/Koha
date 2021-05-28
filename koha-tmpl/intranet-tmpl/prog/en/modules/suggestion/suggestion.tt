@@ -733,6 +733,7 @@
                                         <th>Managed on</th>
                                         <th>Last modification by</th>
                                         <th>Last modification on</th>
+                                        <th>Last updated</th>
                                         <th>Library</th>
                                         <th>Fund</th>
                                         <th>Status</th>
@@ -799,6 +800,9 @@
                                             </td>
                                             <td data-order="[% suggestions_loo.lastmodificationdate | html %]">
                                                 [% IF ( suggestions_loo.lastmodificationdate ) %][% suggestions_loo.lastmodificationdate | $KohaDates %][% END %]
+                                            </td>
+                                            <td>
+                                                [% suggestions_loo.date | $KohaDates %]
                                             </td>
                                             <td>
                                                 [% Branches.GetName( suggestions_loo.branchcode ) | html %]
