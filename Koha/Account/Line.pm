@@ -263,6 +263,8 @@ sub apply {
             $self->amountoutstanding( $available_credit * -1 )->store;
             $debit->amountoutstanding( $owed - $amount_to_cancel )->store;
 
+            $debit->discard_changes; # Refresh values from DB to clear floating point remainders
+
             # Same logic exists in Koha::Account::pay
             if (   $debit->amountoutstanding == 0
                 && $debit->itemnumber
