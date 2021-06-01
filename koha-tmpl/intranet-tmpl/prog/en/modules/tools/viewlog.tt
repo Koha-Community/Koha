@@ -95,7 +95,7 @@
 [%        CASE 'SEARCHENGINE' %]Search engine
 
 [%        CASE 'NOTICES'      %]Notices[% UNLESS Koha.Preference('NoticesLog') %] <i class="fa fa-warning" title="Log not enabled"></i>[% END %]
-[%        CASE 'OPACNEWS'      %]OPAC news[% UNLESS Koha.Preference('NewsLog') %] <i class="fa fa-warning" title="Log not enabled"></i>[% END %]
+[%        CASE 'NEWS'      %]News[% UNLESS Koha.Preference('NewsLog') %] <i class="fa fa-warning" title="Log not enabled"></i>[% END %]
 [%        CASE %][% module | html %]
 [%    END %]
 [% END %]
@@ -201,7 +201,7 @@
                                         [% ELSE %]
                                             <label for="moduleALL" class="viewlog"><input type="checkbox" id="moduleALL" name="modules" value=""> All</label>
                                         [% END %]
-                                        [% FOREACH modx IN [ 'AUTH' 'CATALOGUING' 'AUTHORITIES' 'MEMBERS' 'ACQUISITIONS' 'SERIAL' 'HOLDS' 'ILL' 'CIRCULATION' 'CLAIMS' 'FINES' 'SYSTEMPREFERENCE' 'CRONJOBS', 'REPORTS', 'SEARCHENGINE', 'NOTICES', 'OPACNEWS' ] %]
+                                        [% FOREACH modx IN [ 'AUTH' 'CATALOGUING' 'AUTHORITIES' 'MEMBERS' 'ACQUISITIONS' 'SERIAL' 'HOLDS' 'ILL' 'CIRCULATION' 'CLAIMS' 'FINES' 'SYSTEMPREFERENCE' 'CRONJOBS', 'REPORTS', 'SEARCHENGINE', 'NOTICES', 'NEWS' ] %]
                                             [% IF modules.grep(modx).size %]
                                                 <label for="module[% modx | html %]" class="viewlog"><input type="checkbox" id="module[% modx | html %]" name="modules" value="[% modx | html %]" checked="checked"> [% PROCESS translate_log_module module=modx %]</label>
                                             [% ELSE %]
