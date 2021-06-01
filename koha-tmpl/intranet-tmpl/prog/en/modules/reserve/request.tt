@@ -191,7 +191,7 @@
                             </li>
                             <li>
                                 <label for="pickup">Pickup at:</label>
-                                <select name="pickup" id="pickup">
+                                <select name="pickup" id="pickup_club">
                                     [% PROCESS options_for_libraries libraries => Branches.all({ selected => club.branchcode, search_params => { pickup_location => 1 } }) %]
                                 </select>
                             </li>
