@@ -71,9 +71,9 @@ sub add_opac_new {
         $sth->execute(@values);
         $retval = 1;
 
-        #log the NEW OPAC news entry
+        #Log new news entry
         if (C4::Context->preference("NewsLog")) {
-                logaction('OPACNEWS', 'ADD' , undef, $href_entry->{lang} . ' | ' . $href_entry->{content});
+                logaction('NEWS', 'ADD' , undef, $href_entry->{lang} . ' | ' . $href_entry->{content});
         }
     }
     return $retval;
@@ -116,9 +116,9 @@ sub upd_opac_new {
         $retval = 1;
     }
 
-    #log new OPAC news modification
+    #Log news entry modification
     if (C4::Context->preference("NewsLog")) {
-            logaction('OPACNEWS', 'MODIFY' , undef, $href_entry->{lang} . ' | ' . $href_entry->{content});
+            logaction('NEWS', 'MODIFY' , undef, $href_entry->{lang} . ' | ' . $href_entry->{content});
     }
     return $retval;
 }
@@ -127,11 +127,11 @@ sub del_opac_new {
     my ($ids) = @_;
     if ($ids) {
 
-        #log new OPAC news deletion
+        #Log news deletion
         if (C4::Context->preference("NewsLog")) {
             foreach my $newsid ( split(/,/, $ids )) {
                 my $n = Koha::News->find( $newsid );
-                logaction('OPACNEWS', 'DELETE', undef, $n->unblessed->{lang} . ' | ' . $n->unblessed->{content} );
+                logaction('NEWS', 'DELETE', undef, $n->unblessed->{lang} . ' | ' . $n->unblessed->{content} );
             }
         }
 
