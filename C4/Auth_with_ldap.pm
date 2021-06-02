@@ -478,6 +478,7 @@ C4::Auth - Authenticates Koha users
 		| contactfirstname    | text         | YES  |     | NULL    |                |
 		| contacttitle        | text         | YES  |     | NULL    |                |
 		| borrowernotes       | mediumtext   | YES  |     | NULL    |                |
+		| relationship        | varchar(100) | YES  |     | NULL    |                |
 		| ethnicity           | varchar(50)  | YES  |     | NULL    |                |
 		| ethnotes            | varchar(255) | YES  |     | NULL    |                |
 		| sex                 | varchar(1)   | YES  |     | NULL    |                |
