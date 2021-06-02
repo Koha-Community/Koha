@@ -24279,6 +24279,11 @@ if( CheckVersion( $DBversion ) ) {
     NewVersion( $DBversion, "", "Koha 21.05.00 release" );
 }
 
+$DBversion = '21.06.00.000';
+if( CheckVersion( $DBversion ) ) {
+    NewVersion( $DBversion, "", ["🎵 Run, rabbit run. 🎶", "Dig that hole, forget the sun,", "And when at last the work is done", "Don't sit down it's time to dig another one."] );
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 my $update_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/atomicupdate/';
