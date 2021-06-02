@@ -874,7 +874,7 @@ sub CheckReserves {
                     my $branch = GetReservesControlBranch( $item->unblessed, $patron->unblessed );
                     my $branchitemrule = C4::Circulation::GetBranchItemRule($branch,$item->effective_itemtype);
                     next if ($branchitemrule->{'holdallowed'} == 0);
-                    next if (($branchitemrule->{'holdallowed'} == 1) && ($branch ne $patron->branchcode));
+                    next if (($branchitemrule->{'holdallowed'} == 1) && ($item->homebranch ne $patron->branchcode));
                     my $library = Koha::Libraries->find({branchcode=>$item->homebranch});
                     next if (($branchitemrule->{'holdallowed'} == 3) && (!$library->validate_hold_sibling({branchcode => $patron->branchcode}) ));
                     my $hold_fulfillment_policy = $branchitemrule->{hold_fulfillment_policy};
