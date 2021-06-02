@@ -24229,25 +24229,29 @@ if( CheckVersion( $DBversion ) ) {
 
 $DBversion = '20.12.00.048';
 if( CheckVersion( $DBversion ) ) {
-    if ( column_exists( 'borrowers', 'relationship' ) ) {
-        $dbh->do(q{
-            ALTER TABLE borrowers DROP COLUMN relationship
-        });
-    }
 
-    if ( column_exists( 'deletedborrowers', 'relationship' ) ) {
-        $dbh->do(q{
-            ALTER TABLE deletedborrowers DROP COLUMN relationship
-        });
-    }
+    # This DB upgrade has been commented out because it removes
+    # actively used data, the relationship columns will be added back
 
-    if ( column_exists( 'borrower_modifications', 'relationship' ) ) {
-        $dbh->do(q{
-            ALTER TABLE borrower_modifications DROP COLUMN relationship
-        });
-    }
+    # if ( column_exists( 'borrowers', 'relationship' ) ) {
+    #     $dbh->do(q{
+    #         ALTER TABLE borrowers DROP COLUMN relationship
+    #     });
+    # }
 
-    NewVersion( $DBversion, 26995, "Drop column relationship from borrower tables");
+    # if ( column_exists( 'deletedborrowers', 'relationship' ) ) {
+    #     $dbh->do(q{
+    #         ALTER TABLE deletedborrowers DROP COLUMN relationship
+    #     });
+    # }
+
+    # if ( column_exists( 'borrower_modifications', 'relationship' ) ) {
+    #     $dbh->do(q{
+    #         ALTER TABLE borrower_modifications DROP COLUMN relationship
+    #     });
+    # }
+
+    NewVersion( $DBversion, 26995, "[SKIP] Drop column relationship from borrower tables [not executed]");
 }
 
 $DBversion = '20.12.00.049';
