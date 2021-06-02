@@ -57,7 +57,13 @@
       </tr>
     [% FOREACH resul IN result %]
     <tr data-authid="[% resul.authid | html %]">
-      <td>[% PROCESS authresult summary=resul.summary authid=resul.authid %]</td>
+      <td>
+        [% IF resul.html %]
+          [% resul.html | $raw %]
+        [% ELSE %]
+          [% PROCESS authresult summary=resul.summary authid=resul.authid %]
+        [% END %]
+      </td>
       <td>[% resul.authtype | html %]</td>
     [% UNLESS ( resul.isEDITORS ) %]
       <td>
