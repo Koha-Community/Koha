@@ -263,7 +263,7 @@
         [% IF warnRelationships %]
             <h2>Patron relationship problems</h2>
             [% IF bad_relationships_count %]
-                <p>Your database contained guarantee/guarantor pairs with no defined relationship. They have been set the value '_bad_data' in the [% "borrower_relationships.relationship" | $HtmlTags tag="strong" %] column. Fix them manually by recreating those relationships, or have your system's administrator correct the values.</p>
+                <p>Your database contained guarantee/guarantor pairs with no defined relationship. They have been set the value '_bad_data' in the [% "borrowers.relationship" | $HtmlTags tag="strong" %] and/or [% "borrower_relationships.relationship" | $HtmlTags tag="strong" %] columns. Fix them manually by recreating those relationships, or have your system's administrator correct the values.</p>
             [% END %]
 
             [% IF wrong_relationships %]
@@ -273,7 +273,7 @@
                         <li>[% rel.0 | html %]</li>
                     [% END %]
                 </ul>
-                <p>If the relationship is one you want, please add it to the 'borrowerRelationship' system preference, otherwise have your system's administrator correct the values in [% "borrower_relationships.relationship" | $HtmlTags tag="strong" %] in the database.</p>
+                <p>If the relationship is one you want, please add it to the 'borrowerRelationship' system preference, otherwise have your system's administrator correct the values in [% "borrowers.relationship" | $HtmlTags tag="strong" %] and/or [% "borrower_relationships.relationship" | $HtmlTags tag="strong" %] in the database.</p>
             [% END %]
         [% END %]
 
