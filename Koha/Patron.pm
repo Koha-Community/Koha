@@ -202,6 +202,10 @@ sub store {
             $self->surname( uc($self->surname) )
                 if C4::Context->preference("uppercasesurnames");
 
+            $self->relationship(undef) # We do not want to store an empty string in this field
+              if defined $self->relationship
+                     and $self->relationship eq "";
+
             unless ( $self->in_storage ) {    #AddMember
 
                 # Generate a valid userid/login if needed

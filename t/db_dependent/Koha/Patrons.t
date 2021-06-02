@@ -1774,7 +1774,7 @@ subtest 'Test Koha::Patrons::merge' => sub {
 };
 
 subtest '->store' => sub {
-    plan tests => 6;
+    plan tests => 7;
     my $schema = Koha::Database->new->schema;
     $schema->storage->txn_begin;
 
@@ -1812,6 +1812,10 @@ subtest '->store' => sub {
     $patron_1->surname($surname)->store;
     is( $patron_1->surname, $surname,
         'Surname remains unchanged on store.');
+
+    # Test relationship
+    $patron_1->relationship("")->store;
+    is( $patron_1->relationship, undef, );
 
     $schema->storage->dbh->{PrintError} = $print_error;
     $schema->storage->txn_rollback;
