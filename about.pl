@@ -496,13 +496,17 @@ $template->param( 'bad_yaml_prefs' => \@bad_yaml_prefs ) if @bad_yaml_prefs;
 {
     my $dbh   = C4::Context->dbh;
     my ($bad_relationships_count) = $dbh->selectall_arrayref(q{
-        SELECT COUNT(*) FROM borrower_relationships WHERE relationship='_bad_data'
+        SELECT COUNT(*)
+        FROM (
+            SELECT relationship FROM borrower_relationships WHERE relationship='_bad_data'
     });
 
     $bad_relationships_count = $bad_relationships_count->[0]->[0];
 
     my $existing_relationships = $dbh->selectall_arrayref(q{
-          SELECT DISTINCT(relationship) FROM borrower_relationships WHERE relationship IS NOT NULL
+          SELECT DISTINCT(relationship)
+          FROM (
+              SELECT relationship FROM borrower_relationships WHERE relationship IS NOT NULL
     });
 
     my %valid_relationships = map { $_ => 1 } split( /,|\|/, C4::Context->preference('borrowerRelationship') );
