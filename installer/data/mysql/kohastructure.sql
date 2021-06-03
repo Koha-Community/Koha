@@ -4580,7 +4580,7 @@ DROP TABLE IF EXISTS `sessions`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `sessions` (
   `id` varchar(32) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `a_session` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
+  `a_session` longblob NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
