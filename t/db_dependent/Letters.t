@@ -18,7 +18,7 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use Test::More tests => 86;
+use Test::More tests => 82;
 use Test::MockModule;
 use Test::Warn;
 use Test::Exception;
@@ -208,53 +208,6 @@ is( @$letters, 1, 'GetLetters returns the correct number of letters' );
 is( $letters->[0]->{module}, 'my module', 'GetLetters gets the module correctly' );
 is( $letters->[0]->{code}, 'my code', 'GetLetters gets the code correctly' );
 is( $letters->[0]->{name}, 'my name', 'GetLetters gets the name correctly' );
-
-
-# getletter
-subtest 'getletter' => sub {
-    plan tests => 16;
-    t::lib::Mocks::mock_preference('IndependentBranches', 0);
-    my $letter = C4::Letters::getletter('my module', 'my code', $library->{branchcode}, 'email');
-    is( $letter->{branchcode}, $library->{branchcode}, 'GetLetters gets the branch code correctly' );
-    is( $letter->{module}, 'my module', 'GetLetters gets the module correctly' );
-    is( $letter->{code}, 'my code', 'GetLetters gets the code correctly' );
-    is( $letter->{name}, 'my name', 'GetLetters gets the name correctly' );
-    is( $letter->{is_html}, 1, 'GetLetters gets the boolean is_html correctly' );
-    is( $letter->{title}, $title, 'GetLetters gets the title correctly' );
-    is( $letter->{content}, $content, 'GetLetters gets the content correctly' );
-    is( $letter->{message_transport_type}, 'email', 'GetLetters gets the message type correctly' );
-
-    t::lib::Mocks::mock_userenv({ branchcode => "anotherlib", flags => 1 });
-
-    t::lib::Mocks::mock_preference('IndependentBranches', 1);
-    $letter = C4::Letters::getletter('my module', 'my code', $library->{branchcode}, 'email');
-    is( $letter->{branchcode}, $library->{branchcode}, 'GetLetters gets the branch code correctly' );
-    is( $letter->{module}, 'my module', 'GetLetters gets the module correctly' );
-    is( $letter->{code}, 'my code', 'GetLetters gets the code correctly' );
-    is( $letter->{name}, 'my name', 'GetLetters gets the name correctly' );
-    is( $letter->{is_html}, 1, 'GetLetters gets the boolean is_html correctly' );
-    is( $letter->{title}, $title, 'GetLetters gets the title correctly' );
-    is( $letter->{content}, $content, 'GetLetters gets the content correctly' );
-    is( $letter->{message_transport_type}, 'email', 'GetLetters gets the message type correctly' );
-};
-
-
-
-# Regression test for Bug 14206
-$dbh->do( q|INSERT INTO letter(branchcode,module,code,name,is_html,title,content,message_transport_type) VALUES ('FFL','my module','my code','my name',1,?,?,'print')|, undef, $title, $content );
-my $letter14206_a = C4::Letters::getletter('my module', 'my code', 'FFL' );
-is( $letter14206_a->{message_transport_type}, 'print', 'Bug 14206 - message_transport_type not passed, correct mtt detected' );
-my $letter14206_b = C4::Letters::getletter('my module', 'my code', 'FFL', 'print');
-is( $letter14206_b->{message_transport_type}, 'print', 'Bug 14206 - message_transport_type passed, correct mtt detected'  );
-
-# test for overdue_notices.pl
-my $overdue_rules = {
-    letter1         => 'my code',
-};
-my $i = 1;
-my $branchcode = 'FFL';
-my $letter14206_c = C4::Letters::getletter('my module', $overdue_rules->{"letter$i"}, $branchcode);
-is( $letter14206_c->{message_transport_type}, 'print', 'Bug 14206 - correct mtt detected for call from overdue_notices.pl' );
 
 # GetPreparedLetter
 t::lib::Mocks::mock_preference('OPACBaseURL', 'http://thisisatest.com');

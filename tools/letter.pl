@@ -48,6 +48,7 @@ use C4::Output;
 use C4::Letters;
 use C4::Log;
 
+use Koha::Notice::Templates;
 use Koha::Patron::Attribute::Types;
 
 # $protected_letters = protected_letters()
@@ -303,33 +304,39 @@ sub add_validate {
         my $is_html = $input->param("is_html_$mtt\_$lang");
         my $title   = shift @title;
         my $content = shift @content;
-        my $letter = C4::Letters::getletter( $oldmodule, $code, $branchcode, $mtt, $lang );
+        my $letter = Koha::Notice::Templates->find(
+            {
+                module                 => $oldmodule,
+                code                   => $code,
+                branchcode             => $branchcode,
+                message_transport_type => $mtt,
+                lang                   => $lang
+            }
+        );
 
-        # getletter can return the default letter even if we pass a branchcode
-        # If we got the default one and we needed the specific one, we didn't get the one we needed!
-        if ( $letter and $branchcode and $branchcode ne $letter->{branchcode} ) {
-            $letter = undef;
-        }
         unless ( $title and $content ) {
             # Delete this mtt if no title or content given
             delete_confirmed( $branchcode, $oldmodule, $code, $mtt, $lang );
             next;
         }
-        elsif ( $letter and $letter->{message_transport_type} eq $mtt and $letter->{lang} eq $lang ) {
-            logaction( 'NOTICES', 'MODIFY', $letter->{id}, $content,
+        elsif ( $letter ) {
+            logaction( 'NOTICES', 'MODIFY', $letter->id, $content,
                 'Intranet' )
               if ( C4::Context->preference("NoticesLog")
-                && $content ne $letter->{content} );
-            $dbh->do(
-                q{
-                    UPDATE letter
-                    SET branchcode = ?, module = ?, name = ?, is_html = ?, title = ?, content = ?, lang = ?
-                    WHERE branchcode = ? AND module = ? AND code = ? AND message_transport_type = ? AND lang = ?
-                },
-                undef,
-                $branchcode || '', $module, $name, $is_html || 0, $title, $content, $lang,
-                $branchcode, $oldmodule, $code, $mtt, $lang
-            );
+                && $content ne $letter->content );
+
+            $letter->set(
+                {
+                    branchcode => $branchcode || '',
+                    module     => $module,
+                    name       => $name,
+                    is_html    => $is_html || 0,
+                    title      => $title,
+                    content    => $content,
+                    lang       => $lang
+                }
+            )->store;
+
         } else {
             my $letter = Koha::Notice::Template->new(
                 {
@@ -357,10 +364,10 @@ sub add_validate {
 sub delete_confirm {
     my ($branchcode, $module, $code) = @_;
     my $dbh = C4::Context->dbh;
-    my $letter = C4::Letters::getletter($module, $code, $branchcode);
-    my @values = values %$letter;
+    my $letter = Koha::Notice::Templates->search(
+        { module => $module, code => $code, branchcode => $branchcode } );
     $template->param(
-        letter => $letter,
+        letter => $letter ? $letter->next : undef,
     );
     return;
 }

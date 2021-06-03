@@ -25,6 +25,7 @@ use CGI qw ( -utf8 );
 use C4::Letters;
 use Koha::Account::Lines;
 use Koha::DateUtils;
+use Koha::Notice::Templates;
 
 my $input = CGI->new;
 
@@ -52,8 +53,15 @@ output_and_exit_if_error(
 ) if $patron;    # Payment could have been anonymous
 
 my $lang = $patron ? $patron->lang : $template->lang;
-my $letter = C4::Letters::getletter( 'pos', 'RECEIPT',
-    C4::Context::mybranch, 'print', $lang );
+my $letter = Koha::Notice::Templates->find_effective_template(
+    {
+        module                 => 'pos',
+        code                   => 'RECEIPT',
+        branchcode             => C4::Context::mybranch,
+        message_transport_type => 'print',
+        lang                   => $lang
+    }
+);
 
 $template->param(
     letter  => $letter,

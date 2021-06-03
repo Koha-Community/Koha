@@ -35,6 +35,52 @@ Koha::Notice::Templates - Koha notice template Object set class, related to the 
 
 =cut
 
+=head3
+
+my $template = Koha::Notice::Templates->find_effective_template(
+    {
+        module     => $module,
+        code       => $code,
+        branchcode => $branchcode,
+        lang       => $lang,
+    }
+);
+
+Return the notice template that must be used for a given primary key (module, code, branchcode, lang).
+
+For instance if lang="es-ES" but there is no "es-ES" template defined for this language,
+the default template will be returned.
+
+lang will default to "default" if not passed.
+
+=cut
+
+sub find_effective_template {
+    my ( $self, $params ) = @_;
+
+    $params = { %$params }; # don't modify original
+    $params->{lang} = 'default' unless C4::Context->preference('TranslateNotices');
+
+    my $only_my_library = C4::Context->only_my_library;
+    if ( $only_my_library and $params->{branchcode} ) {
+        $params->{branchcode} = C4::Context::mybranch();
+    }
+    $params->{branchcode} //= '';
+    $params->{branchcode} = [$params->{branchcode}, ''];
+
+    my $template = $self->SUPER::search( $params, { order_by => { -desc => 'branchcode' } } );
+
+    if (   !$template->count
+        && C4::Context->preference('TranslateNotices')
+        && $params->{lang} ne 'default' )
+    {
+        $params->{lang} = 'default';
+        $template = $self->SUPER::search( $params, { order_by => { -desc => 'branchcode' } } );
+    }
+
+    return $template->next if $template->count;
+}
+
 =head3 type
 
 =cut

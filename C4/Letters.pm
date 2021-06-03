@@ -205,35 +205,6 @@ sub GetLettersAvailableForALibrary {
 
 }
 
-sub getletter {
-    my ( $module, $code, $branchcode, $message_transport_type, $lang) = @_;
-    $message_transport_type //= '%';
-    $lang = 'default' unless( $lang && C4::Context->preference('TranslateNotices') );
-
-
-    my $only_my_library = C4::Context->only_my_library;
-    if ( $only_my_library and $branchcode ) {
-        $branchcode = C4::Context::mybranch();
-    }
-    $branchcode //= '';
-
-    my $dbh = C4::Context->dbh;
-    my $sth = $dbh->prepare(q{
-        SELECT *
-        FROM letter
-        WHERE module=? AND code=? AND (branchcode = ? OR branchcode = '')
-        AND message_transport_type LIKE ?
-        AND lang =?
-        ORDER BY branchcode DESC LIMIT 1
-    });
-    $sth->execute( $module, $code, $branchcode, $message_transport_type, $lang );
-    my $line = $sth->fetchrow_hashref
-      or return;
-    $line->{'content-type'} = 'text/html; charset="UTF-8"' if $line->{is_html};
-    return { %$line };
-}
-
-
 =head2 DelLetter
 
     DelLetter(
@@ -637,13 +608,23 @@ sub GetPreparedLetter {
         my $branchcode  = $params{branchcode} || '';
         my $mtt         = $params{message_transport_type} || 'email';
 
-        $letter = getletter( $module, $letter_code, $branchcode, $mtt, $lang );
+        my $template = Koha::Notice::Templates->find_effective_template(
+            {
+                module                 => $module,
+                code                   => $letter_code,
+                branchcode             => $branchcode,
+                message_transport_type => $mtt,
+                lang                   => $lang
+            }
+        );
 
-        unless ( $letter ) {
-            $letter = getletter( $module, $letter_code, $branchcode, $mtt, 'default' )
-                or warn( "No $module $letter_code letter transported by " . $mtt ),
-                    return;
+        unless ( $template ) {
+            warn( "No $module $letter_code letter transported by " . $mtt );
+            return;
         }
+
+        $letter = $template->unblessed;
+        $letter->{'content-type'} = 'text/html; charset="UTF-8"' if $letter->{is_html};
     }
 
     my $tables = $params{tables} || {};

@@ -37,6 +37,8 @@ use C4::Log;
 use Koha::DateUtils;
 use Koha::Calendar;
 use Koha::Libraries;
+use Koha::Notice::Templates;
+use Koha::Patrons;
 use Koha::Script -cron;
 
 =head1 NAME
@@ -223,8 +225,17 @@ else {
 # Loop through each branch
 foreach my $branchcode (@branchcodes) { #BEGIN BRANCH LOOP
     # Check that this branch has the letter code specified or skip this branch
-    my $letter = C4::Letters::getletter( 'reserves', $lettercode , $branchcode );
-    unless ($letter) {
+
+    # FIXME What if we don't want to default if the translated template does not exist?
+    my $template_exists = Koha::Notice::Templates->search(
+        {
+            module     => 'reserves',
+            code       => $lettercode,
+            branchcode => $branchcode,
+            lang       => 'default',
+        }
+    )->count;
+    unless ($template_exists) {
         $verbose and print qq|Message '$lettercode' content not found for $branchcode\n|;
         next;
     }
