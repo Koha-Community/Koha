@@ -196,9 +196,8 @@ sub CreateQueue {
             undef $transport_cost_matrix;
         }
     }
-    unless ($transport_cost_matrix) {
-        $branches_to_use = load_branches_to_pull_from();
-    }
+
+    $branches_to_use = load_branches_to_pull_from($use_transport_cost_matrix);
 
     my $bibs_with_pending_requests = GetBibsWithPendingHoldRequests();
 
@@ -781,11 +780,15 @@ sub _trim {
 }
 
 sub load_branches_to_pull_from {
+    my $use_transport_cost_matrix = shift;
+
     my @branches_to_use;
 
-    my $static_branch_list = C4::Context->preference("StaticHoldsQueueWeight");
-    @branches_to_use = map { _trim($_) } split( /,/, $static_branch_list )
-      if $static_branch_list;
+    unless ( $use_transport_cost_matrix ) {
+        my $static_branch_list = C4::Context->preference("StaticHoldsQueueWeight");
+        @branches_to_use = map { _trim($_) } split( /,/, $static_branch_list )
+          if $static_branch_list;
+    }
 
     @branches_to_use =
       Koha::Database->new()->schema()->resultset('Branch')
