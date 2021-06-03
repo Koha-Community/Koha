@@ -52,7 +52,13 @@
                     <i class="fa fa-print"></i>
                     Print slip
                 </a>
+                [% ELSE %]
+                <a class="ar-print-request" href="#" onclick="PrintMultipleSlip(); return false;">
+                    <i class="fa fa-print"></i>
+                    Print slip
+                </a>
                 [% END %]
+
             </li>
         </ul>
         </span>
@@ -647,6 +653,16 @@
                 });
             }, cancel_id, cancel_a)
         });
+
+        function PrintMultipleSlip() {
+            var ids = [];
+            $( active_tab + " input[type='checkbox']:checked").each(function() {
+                ids.push($(this).attr('reqid'));
+            });
+            var link = 'article-request-slip.pl?multi=1&id='+ids.join(',');
+            window.open(link, 'popup', 'width=600,height=400,resizable=1,toolbar=0,scrollbars=1,top');
+
+        }
 
         function Cancel( id, a ) {
             cancel_id = id;
