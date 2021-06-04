@@ -592,7 +592,10 @@ sub _gen_default_values {
         },
         AuthHeader => {
             marcxml => '',
-        }
+        },
+        BorrowerAttributeType => {
+            mandatory => 0,
+        },
     };
 }
 
