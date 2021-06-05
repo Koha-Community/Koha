@@ -463,6 +463,11 @@ $(document).ready(function() {
 
     [% IF ( ReturnToSearch ) %]
         if (form_serialized = jQuery.cookie("form_serialized")) {
+            // Add missing term inputs if there were more than 3
+            var count = (form_serialized.match(/&q=/g) || []).length;
+            for(var i = 3 ; i < count ; i++) {
+                $("a.ButtonPlus:last").click();
+            }
             $('#advsearch form').deserialize(form_serialized);
         }
         if (form_serialized_limits = jQuery.cookie("form_serialized_limits")) {
