@@ -16,10 +16,11 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
+use utf8;
 
 use C4::Context;
 
-use Test::More tests => 6;
+use Test::More tests => 7;
 use Test::MockModule;
 
 use C4::Context;
@@ -32,7 +33,7 @@ use t::lib::TestBuilder;
 use t::lib::Mocks;
 
 eval { require Selenium::Remote::Driver; };
-skip "Selenium::Remote::Driver is needed for selenium tests.", 1 if $@;
+skip "Selenium::Remote::Driver is needed for selenium tests.", 7 if $@;
 
 my $s = t::lib::Selenium->new;
 
@@ -254,8 +255,91 @@ subtest 'XSS vulnerabilities in pagination' => sub {
 
     push @cleanup, $patron, $patron->category, $patron->library;
 
-    $driver->quit();
 };
+
+subtest 'Encoding in session variables' => sub {
+    plan tests => 18;
+
+    my $builder = t::lib::TestBuilder->new;
+    my $library = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $patron  = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => { branchcode => $library->branchcode, flags => 0 }
+        }
+    );
+
+    my $biblio = $builder->build_sample_biblio;
+    my $item = $builder->build_sample_item(
+        {
+            biblionumber => $biblio->biblionumber,
+            library      => $library->branchcode,
+        }
+    );
+
+    my $original_SessionStorage = C4::Context->preference('SessionStorage');
+    for my $SessionStorage ( qw( memcached mysql tmp ) ) {
+        C4::Context->set_preference( 'SessionStorage', $SessionStorage );
+        for my $branchname (qw( Test1 Test2❤️ Test3ä )) {
+            my $library =
+              Koha::Libraries->find($branchname) || $builder->build_object(
+                {
+                    class => 'Koha::Libraries',
+                    value => {
+                        branchcode => $branchname,
+                        branchname => $branchname,
+                    }
+                }
+              );
+            # Make sure we are logged in
+            $driver->get( $base_url . q|mainpage.pl?logout.x=1| );
+            $s->auth;
+            # Switch to the new library
+            $driver->get( $base_url . 'circ/set-library.pl' );
+            $s->fill_form( { branch => $branchname } );
+            $s->submit_form;
+            # Check an item out
+            $driver->get( $base_url
+                  . 'circ/circulation.pl?borrowernumber='
+                  . $patron->borrowernumber );
+            # We must have the logged-in-branch-name displayed, or we got a 500
+            is(
+                $driver->find_element( '//span[@class="logged-in-branch-name"]')->get_text(),
+                $branchname,
+                sprintf( "logged-in-branch-name set - SessionStorage=%s, branchname=%s", $SessionStorage, $branchname
+                )
+            );
+
+            $driver->find_element('//input[@id="barcode"]')->send_keys( $item->barcode );
+            $driver->find_element('//fieldset[@id="circ_circulation_issue"]/button[@type="submit"]')->click;
+
+            # Display the table clicking on the "Show checkouts" button
+            $driver->find_element('//a[@id="issues-table-load-now-button"]')
+              ->click;
+
+            my @tds = $driver->find_elements(
+                '//table[@id="issues-table"]/tbody/tr[2]/td');
+
+            # Select the td for "Checked out from" (FIXME this is not robust and could be improved
+            my $td_checked_out_from = $tds[8];
+            is(
+                $td_checked_out_from->get_text(),
+                $branchname,
+                sprintf( "'Checked out from' column should contain the branchname - SessionStorage=%s, branchname=%s", $SessionStorage, $branchname )
+            );
+
+            # Remove the check in
+            Koha::Checkouts->find({ itemnumber => $item->itemnumber })->delete;
+        }
+    }
+
+    C4::Context->set_preference('SessionStorage', $original_SessionStorage);
+    push @cleanup, $item, $biblio, $patron, $patron->category, $patron->library;
+    push @cleanup, Koha::Libraries->find($_) for qw( Test1 Test2❤️ Test3ä );
+
+};
+
+$driver->quit();
 
 END {
     C4::Context->set_preference('SearchEngine', $SearchEngine_value);
