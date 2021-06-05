@@ -9,19 +9,18 @@ $INC{'CGI/Session/Serialize/yamlxs.pm'} = '1';
 
 use CGI::Session::ErrorHandler;
 use YAML::XS ();
-use Encode ();
 
 $CGI::Session::Serialize::yamlxs::VERSION = '0.1';
 @CGI::Session::Serialize::yamlxs::ISA     = ( "CGI::Session::ErrorHandler" );
 
 sub freeze {
     my ($self, $data) = @_;
-    return Encode::decode_utf8(YAML::XS::Dump($data));
+    return YAML::XS::Dump($data);
 }
 
 sub thaw {
     my ($self, $string) = @_;
-    return (YAML::XS::Load(Encode::encode_utf8($string)))[0];
+    return (YAML::XS::Load($string))[0];
 }
 # ********************************************************************
 
