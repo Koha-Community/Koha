@@ -213,8 +213,10 @@ foreach my $code ( keys %$messages ) {
                 $err{patron} = $patron;
             }
         }
-        $err{errdesteqholding} = ( $code eq 'DestinationEqualsHolding' );
-        push( @errmsgloop, \%err );
+        elsif ( $code eq 'DestinationEqualsHolding' ) {
+            $err{errdesteqholding} = 1;
+        }
+        push( @errmsgloop, \%err ) if (keys %err);
     }
 }
 
