@@ -334,6 +334,7 @@ my $target_map = {
   './koha-tmpl/opac-tmpl'       => {target => 'OPAC_TMPL_DIR', trimdir => -1},
   './kohaversion.pl'            => 'INTRANET_CGI_DIR',
   './labels'                    => 'INTRANET_CGI_DIR',
+  './lib'                       => {target => 'PERL_MODULE_LIB_DIR', trimdir => -1},
   './mainpage.pl'               => 'INTRANET_CGI_DIR',
   './Makefile.PL'               => 'NONE',
   './MANIFEST.SKIP'             => 'NONE',
@@ -1433,6 +1434,7 @@ sub get_target_directories {
         $dirmap{'OPAC_TMPL_DIR'} = File::Spec->catdir(@basedir, $package, 'opac', 'htdocs', 'opac-tmpl');
         $dirmap{'OPAC_WWW_DIR'} = File::Spec->catdir(@basedir, $package, 'opac', 'htdocs');
         $dirmap{'PERL_MODULE_DIR'} = File::Spec->catdir(@basedir, $package, 'lib');
+        $dirmap{'PERL_MODULE_LIB_DIR'} = File::Spec->catdir(@basedir, $package, 'lib');
         $dirmap{'KOHA_CONF_DIR'} = File::Spec->catdir(@basedir, $package, 'etc');
         $dirmap{'ZEBRA_CONF_DIR'} = File::Spec->catdir(@basedir, $package, 'etc', 'zebradb');
         $dirmap{'Z3950_CONF_DIR'} = File::Spec->catdir(@basedir, $package, 'etc', 'z3950');
@@ -1464,8 +1466,11 @@ sub get_target_directories {
         $skipdirs{'OPAC_TMPL_DIR'} = 1;
         $dirmap{'OPAC_WWW_DIR'} = File::Spec->catdir($curdir, 'koha-tmpl');
         $skipdirs{'OPAC_WWW_DIR'} = 1;
+        #NOTE: We're hacking the dirmap here, so that PERL_MODULE_DIR tokens get rewritten correctly for git installs
         $dirmap{'PERL_MODULE_DIR'} = File::Spec->catdir($curdir);
         $skipdirs{'PERL_MODULE_DIR'} = 1;
+        $dirmap{'PERL_MODULE_LIB_DIR'} = File::Spec->catdir($curdir,'lib');
+        $skipdirs{'PERL_MODULE_LIB_DIR'} = 1;
         $dirmap{'KOHA_CONF_DIR'} = File::Spec->catdir(@basedir, $package, 'etc');
         $dirmap{'ZEBRA_CONF_DIR'} = File::Spec->catdir(@basedir, $package, 'etc', 'zebradb');
         $dirmap{'Z3950_CONF_DIR'} = File::Spec->catdir(@basedir, $package, 'etc', 'z3950');
@@ -1494,6 +1499,7 @@ sub get_target_directories {
         $dirmap{'OPAC_TMPL_DIR'} = File::Spec->catdir(@basedir, $package, 'opac', 'htdocs', 'opac-tmpl');
         $dirmap{'OPAC_WWW_DIR'} = File::Spec->catdir(@basedir, $package, 'opac', 'htdocs');
         $dirmap{'PERL_MODULE_DIR'} = File::Spec->catdir(@basedir, $package, 'lib');
+        $dirmap{'PERL_MODULE_LIB_DIR'} = File::Spec->catdir(@basedir, $package, 'lib');
         $dirmap{'KOHA_CONF_DIR'} = File::Spec->catdir(File::Spec->rootdir(), 'etc', $package);
         $dirmap{'ZEBRA_CONF_DIR'} = File::Spec->catdir(File::Spec->rootdir(), 'etc', $package, 'zebradb');
         $dirmap{'Z3950_CONF_DIR'} = File::Spec->catdir(File::Spec->rootdir(), 'etc', $package, 'z3950');
@@ -1646,6 +1652,8 @@ sub install {
     # This means that we're completely overriding EU::MM's default
     # installation and uninstallation targets.
 
+    my $perl5lib_dirs = _build_perl5lib_string({ target_dirs => $target_directories });
+
 # If installation is on Win32, we need to do permissions different from *nix
     if ( $^O =~ /darwin|linux|cygwin|freebsd|solaris/ ) { # this value needs to be verified for each platform and modified accordingly
 	    foreach my $key (sort keys %$target_directories) {
@@ -1700,7 +1708,7 @@ install :: all install_koha set_koha_ownership set_koha_permissions warn_koha_en
     $install .= "\t\$(NOECHO) \$(ECHO) you should set the following environment variables:\n";
     $install .= "\t\$(NOECHO) \$(ECHO)\n";
     $install .= "\t\$(NOECHO) \$(ECHO) export KOHA_CONF=\$(KOHA_DEST_KOHA_CONF_DIR)/koha-conf.xml\n";
-    $install .= "\t\$(NOECHO) \$(ECHO) export PERL5LIB=$target_directories->{'PERL_MODULE_DIR'}\n";
+    $install .= "\t\$(NOECHO) \$(ECHO) export PERL5LIB=$perl5lib_dirs\n";
     $install .= "\t\$(NOECHO) \$(ECHO)\n";
     $install .= "\t\$(NOECHO) \$(ECHO) For other post-installation tasks, please consult the README.\n";
     $install .= "\t\$(NOECHO) \$(ECHO)\n";
@@ -1767,9 +1775,16 @@ sub postamble {
     # rewrite-confg.PL
 
     my $env;
+
+    #NOTE: Build __PERL5LIB_DIRS__ for rewrite-config.PL
+    my $perl5lib_dirs = _build_perl5lib_string({ target_dirs => $target_directories });
+    if ($perl5lib_dirs){
+        $env .= "export __PERL5LIB_DIRS__ := $perl5lib_dirs\n"
+    }
+
 	# Hereagain, we must alter syntax per platform...
         {
-		$env = join("\n", map { "export __${_}__ := $target_directories->{$_}" } keys %$target_directories);
+		$env .= join("\n", map { "export __${_}__ := $target_directories->{$_}" } keys %$target_directories);
 		$env .= "\n\n";
 		$env .= join("\n", map { "export __${_}__ := $config{$_}" } keys %config);
 	}
@@ -1777,6 +1792,26 @@ sub postamble {
     return "$env\n";
 }
 
+sub _build_perl5lib_string {
+    my ($args) = @_;
+    my %unique_map = ();
+    my $perl5lib_str;
+    my $target_dirs = $args->{target_dirs};
+    my @dir_codes = ("PERL_MODULE_DIR","PERL_MODULE_LIB_DIR");
+    if ($target_dirs){
+        foreach my $code (@dir_codes){
+            my $path = $target_dirs->{ $code };
+            if ($path){
+                $unique_map{$path} = 1 unless $unique_map{$path};
+            }
+        }
+        my @paths = sort keys %unique_map;
+        if (@paths){
+            $perl5lib_str = join(':',@paths);
+        }
+    }
+    return $perl5lib_str;
+}
 
 __END__
 

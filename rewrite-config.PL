@@ -159,6 +159,8 @@ my %configuration = (
   '__SMTP_USER_NAME__' => '',
   '__SMTP_PASSWORD__'  => '',
   '__SMTP_DEBUG__'     => '0',
+  '__PERL_MODULE_LIB_DIR__'  => "$prefix/lib",
+  '__PERL5LIB_DIRS__'  => "$prefix/lib",
 );
 
 # Override configuration from the environment
