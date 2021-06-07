@@ -25,8 +25,14 @@
 [% IF ( Koha.Preference('OPACUserCSS') ) %]<style>[% Koha.Preference('OPACUserCSS') | $raw %]</style>[% END %]
 [% IF ( Koha.Preference('SCOUserCSS') ) %]<style>[% Koha.Preference('SCOUserCSS') | $raw %]</style>[% END %]
 <script>
+    var Koha = {};
     function _(s) { return s } // dummy function for gettext
 </script>
+[% IF lang && lang != 'en' %]
+    [% Asset.js(lang _ '/js/locale_data.js') | $raw %]
+[% END %]
+[% Asset.js('js/Gettext.js') | $raw %]
+[% Asset.js('js/i18n.js') | $raw %]
 [% Asset.js("lib/modernizr.min.js") | $raw %]
 </head>
 <body id="sco_main" class="sco" onload="dofocus();" onunload="mungeHistory();">
