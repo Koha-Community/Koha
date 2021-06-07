@@ -1,5 +1,5 @@
-/* global shortcut delCookie delBasket Sticky */
-/* exported paramOfUrl addBibToContext delBibToContext */
+/* global shortcut delBasket Sticky AUDIO_ALERT_PATH */
+/* exported addBibToContext delBibToContext escape_str escape_price openWindow _ removeFocus toUC confirmDelete confirmClone playSound */
 if ( KOHA === undefined ) var KOHA = {};
 
 function _(s) { return s; } // dummy function for gettext
@@ -48,8 +48,8 @@ $.fn.selectTabByID = function (tabID) {
     $(this).tabs("option", "active", $( tabID ).tabIndex());
 };
 
- $(document).ready(function() {
-    $('#header_search').tabs().on( "tabsactivate", function(e, ui) { $(this).find("div:visible").find('input').eq(0).focus(); });
+$(document).ready(function() {
+    $('#header_search').tabs().on( "tabsactivate", function() { $(this).find("div:visible").find('input').eq(0).focus(); });
 
     $(".close").click(function(){ window.close(); });
 
@@ -213,7 +213,7 @@ function openHelp(){
 
 jQuery.fn.preventDoubleFormSubmit = function() {
     jQuery(this).submit(function() {
-    $("body, form input[type='submit'], form button[type='submit'], form a").addClass('waiting');
+        $("body, form input[type='submit'], form button[type='submit'], form a").addClass('waiting');
         if (this.beenSubmitted)
             return false;
         else
@@ -225,12 +225,11 @@ function openWindow(link,name,width,height) {
     name = (typeof name == "undefined")?'popup':name;
     width = (typeof width == "undefined")?'600':width;
     height = (typeof height == "undefined")?'400':height;
-    var newwin;
     //IE <= 9 can't handle a "name" with whitespace
     try {
-        newin=window.open(link,name,'width='+width+',height='+height+',resizable=yes,toolbar=false,scrollbars=yes,top');
+        window.open(link,name,'width='+width+',height='+height+',resizable=yes,toolbar=false,scrollbars=yes,top');
     } catch(e) {
-        newin=window.open(link,null,'width='+width+',height='+height+',resizable=yes,toolbar=false,scrollbars=yes,top');
+        window.open(link,null,'width='+width+',height='+height+',resizable=yes,toolbar=false,scrollbars=yes,top');
     }
 }
 
@@ -267,7 +266,7 @@ function keep_text(clicked_index) {
     var searchboxes = document.getElementsByClassName("head-searchbox");
     var persist = searchboxes[0].value;
 
-    for (i = 0; i < searchboxes.length - 1; i++) {
+    for (var i = 0; i < searchboxes.length - 1; i++) {
         if (searchboxes[i].value != searchboxes[i+1].value) {
             if (i === searchboxes.length-2) {
                 if (searchboxes[i].value != searchboxes[0].value) {
@@ -306,18 +305,6 @@ function removeByValue(arr, val) {
     }
 }
 
-function paramOfUrl( url, param ) {
-    param = param.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
-    var regexS = "[\\?&]"+param+"=([^&#]*)";
-    var regex = new RegExp( regexS );
-    var results = regex.exec( url );
-    if( results == null ) {
-        return "";
-    } else {
-        return results[1];
-    }
-}
-
 function addBibToContext( bibnum ) {
     bibnum = parseInt(bibnum, 10);
     var bibnums = getContextBiblioNumbers();
@@ -351,6 +338,8 @@ function resetSearchContext() {
 
 function saveOrClearSimpleSearchParams() {
     // Simple masthead search - pass value for display on details page
+    var pulldown_selection;
+    var searchbox_value;
     if( $("#cat-search-block select.advsearch").length ){
         pulldown_selection = $("#cat-search-block select.advsearch").val();
     } else {
