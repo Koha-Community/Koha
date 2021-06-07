@@ -13,6 +13,12 @@
     }
 
     tinyMCE.init({
+        verify_html: false,
+        force_br_newlines : false,
+        force_p_newlines : false,
+        forced_root_block : '',
+        extended_valid_elements:"style,link[href|rel]",
+        custom_elements:"style,link,~link",
         branding : false,
         relative_urls : false,
         content_css : "[% interface | html %]/[% theme | html %]/css/tinymce.css",
