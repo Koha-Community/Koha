@@ -4,7 +4,7 @@ Description=Koha Task Queue Worker
 After=syslog.target network.target
 
 [Service]
-Environment=PERL5LIB=__PERL_MODULE_DIR__
+Environment=PERL5LIB=__PERL5LIB_DIRS__
 Environment=KOHA_CONF=__KOHA_CONF_DIR__/koha-conf.xml
 ExecStart=__SCRIPT_DIR__/background_jobs_worker.pl
 Restart=on-failure

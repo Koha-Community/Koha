@@ -1,31 +1,3 @@
-package CGI::Session::Serialize::yamlxs;
-# Proof of concept: CGI::Session::Serialize::yamlxs for CGI::Session:
-
-use strict;
-use warnings;
-
-# hacky hack to trick CGI::Session loader for serializers not to die in its "require":
-$INC{'CGI/Session/Serialize/yamlxs.pm'} = '1';
-
-use CGI::Session::ErrorHandler;
-use YAML::XS ();
-
-$CGI::Session::Serialize::yamlxs::VERSION = '0.1';
-@CGI::Session::Serialize::yamlxs::ISA     = ( "CGI::Session::ErrorHandler" );
-
-sub freeze {
-    my ($self, $data) = @_;
-    return YAML::XS::Dump($data);
-}
-
-sub thaw {
-    my ($self, $string) = @_;
-    return (YAML::XS::Load($string))[0];
-}
-# ********************************************************************
-
-
-
 package C4::Auth;
 
 # Copyright 2000-2002 Katipo Communications
@@ -1899,7 +1871,11 @@ sub _get_session_params {
 sub get_session {
     my $sessionID      = shift;
     my $params = _get_session_params();
-    return CGI::Session->new( $params->{dsn}, $sessionID, $params->{dsn_args} );
+    my $session = CGI::Session->new( $params->{dsn}, $sessionID, $params->{dsn_args} );
+    if ( ! $session ){
+        die CGI::Session->errstr();
+    }
+    return $session;
 }
 
 
