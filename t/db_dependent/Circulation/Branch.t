@@ -25,7 +25,7 @@ use Koha::CirculationRules;
 
 use Koha::Patrons;
 
-use Test::More tests => 15;
+use Test::More tests => 16;
 use t::lib::Mocks;
 use t::lib::TestBuilder;
 
@@ -307,7 +307,13 @@ is( $messages->{NeedsTransfer}, $samplebranch1->{branchcode}, "AddReturn respect
 ModItemTransfer($item_id2, $samplebranch2->{branchcode}, $samplebranch1->{branchcode}, "ReturnToHolding");
 # Fulfill it
 ($doreturn, $messages, $iteminformation, $borrower) = AddReturn('barcode_2',$samplebranch1->{branchcode});
-is( $messages->{NeedsTransfer}, undef, "AddReturn does not generate a new transfer for return policy when resolving an existing transfer" );
+is( $messages->{NeedsTransfer}, undef, "AddReturn does not generate a new transfer for return policy when resolving an existing non-Reserve transfer" );
+
+# Generate a hold caused transfer which doesn't have a hold i.e. is the hold is cancelled
+ModItemTransfer($item_id2, $samplebranch2->{branchcode}, $samplebranch1->{branchcode}, "Reserve");
+# Fulfill it
+($doreturn, $messages, $iteminformation, $borrower) = AddReturn('barcode_2',$samplebranch1->{branchcode});
+is( $messages->{NeedsTransfer}, $samplebranch2->{branchcode}, "AddReturn generates a new transfer for hold transfer if the hold was cancelled" );
 
 # item3 should not trigger transfer - floating collection
 $query =
