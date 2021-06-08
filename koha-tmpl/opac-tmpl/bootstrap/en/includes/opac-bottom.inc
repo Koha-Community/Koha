@@ -196,15 +196,6 @@ $.widget.bridge('uitooltip', $.ui.tooltip);
         var MSG_MULTI_ADD_TAG_FAILED = _("Unable to add one or more tags.");
         var MSG_NO_TAG_SPECIFIED = _("No tag was specified.");
     [% END %]
-    [% IF ( Koha.Preference('OverDriveClientKey') && Koha.Preference('OverDriveClientSecret') ) %]
-        var MSG_OVERDRIVE_LOGIN = _("Log in to your OverDrive account");
-        var MSG_OVERDRIVE_LINK = _( "OverDrive account page" );
-        var MSG_OVERDRIVE_LOGOUT = _("Log out from your OverDrive account");
-        var MSG_OVERDRIVE_CHECKEDOUT_UNTIL = _( "Checked out until: " );
-        var MSG_OVERDRIVE_ACCESS_ONLINE = _("Access online");
-        var MSG_OVERDRIVE_DOWNLOAD_AS = _( "Download as: " );
-        var MSG_OVERDRIVE_CANNOT_CHECKOUT = _("Item cannot be checked out. There are no available formats");
-    [% END %]
     [% IF OpenLibraryCovers || OpenLibrarySearch %]
         var NO_OL_JACKET = _("No cover image available");
     [% END %]

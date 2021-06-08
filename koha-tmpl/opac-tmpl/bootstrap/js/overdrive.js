@@ -1,4 +1,4 @@
-/* global MSG_OVERDRIVE_LOGIN MSG_OVERDRIVE_LINK MSG_OVERDRIVE_LOGOUT MSG_OVERDRIVE_CHECKEDOUT_UNTIL MSG_DOWNLOAD MSG_OVERDRIVE_ACCESS_ONLINE MSG_OVERDRIVE_DOWNLOAD_AS MSG_CHECK_IN MSG_CHECK_OUT MSG_CHECKOUTS MSG_HOLDS MSG_ON_HOLD MSG_PLACE_HOLD MSG_CANCEL_HOLD MSG_OVERDRIVE_CANNOT_CHECKOUT MSG_CANCEL_HOLD_CONFIRM MSG_CHECK_IN_CONFIRM MSG_CHECK_OUT_CONFIRM OD_password_required */
+/* global OD_password_required __ */
 
 if ( typeof KOHA == "undefined" || !KOHA ) {
     var KOHA = {};
@@ -76,7 +76,7 @@ KOHA.OverDriveCirculation = new function() {
             if( OD_password_required ) { $("#overdrive-login").modal('show'); }
             else { login(""); }
         })
-        .text( MSG_OVERDRIVE_LOGIN );
+        .text( __("Log in to your OverDrive account") );
 
     var login_div = $('<div class="overdrive-login">').append(login_link);
 
@@ -121,7 +121,7 @@ KOHA.OverDriveCirculation = new function() {
         }
 
         var overdrive_link = $('<a href="https://www.overdrive.com/account/" target="overdrive-account" class="overdrive-link" style="float:right">')
-            .text( MSG_OVERDRIVE_LINK );
+            .text( __( "OverDrive account page" ) );
         $(container).append(overdrive_link);
 
         var logout_link = $('<a href="#logout" class="overdrive-logout" style="float:left">')
@@ -131,12 +131,12 @@ KOHA.OverDriveCirculation = new function() {
                 logout(function(data) {
                     display_account(container, data);
                 });
-            }).text( MSG_OVERDRIVE_LOGOUT );
+            }).text( __("Log out of your OverDrive account") );
         $(container).append(logout_link);
         $(container).append('<br style="clear:both;"/>');
 
         if (data.checkouts) {
-            var checkouts_div = $('<div class="overdrive-div">').html('<h3>' + MSG_CHECKOUTS + '</h3>');
+            var checkouts_div = $('<div class="overdrive-div">').html('<h3>' + __("Checkouts") + '</h3>');
             var checkouts_list = $('<ul class="overdrive-list">');
             data.checkouts.items.forEach(function(item) {
                 item_line(checkouts_list, item);
@@ -146,7 +146,7 @@ KOHA.OverDriveCirculation = new function() {
         }
 
         if (data.holds) {
-            var holds_div = $('<div class="overdrive-div">').html('<h3>' + MSG_HOLDS + '</h3>');
+            var holds_div = $('<div class="overdrive-div">').html('<h3>' + __("Holds") + '</h3>');
             var holds_list = $('<ul class="overdrive-list">');
             data.holds.items.forEach(function(item) {
                 item_line(holds_list, item);
@@ -279,13 +279,13 @@ KOHA.OverDriveCirculation = new function() {
             if (item) {
                 var expires = new Date(item.expires);
                 $('<span class="overdrive-item-status">')
-                    .text( MSG_OVERDRIVE_CHECKEDOUT_UNTIL  + " " + expires.toLocaleString())
+                    .text( __( "Checked out until: " )  + " " + expires.toLocaleString())
                     .appendTo(el);
                 $(el).append(" ");
 
                 if (item.format) {
                     var download = $('<a href="#">').appendTo(el);
-                    decorate_button(download,  MSG_DOWNLOAD  + " " + item.format);
+                    decorate_button(download, __("Download")  + " " + item.format);
                     svc_ajax('get', {action: "download-url", id: id, format: item.format}, function(data) {
                         download.attr("href", data.action);
                     });
@@ -299,7 +299,7 @@ KOHA.OverDriveCirculation = new function() {
 
                         if (item.formats[f]) {
                             var access = $('<a target="_blank">').appendTo(el);
-                            decorate_button(access,  MSG_OVERDRIVE_ACCESS_ONLINE + " " + f);
+                            decorate_button(access, __("Access online") + " " + f);
                             svc_ajax('get', {action: "download-url", id: id, format: f}, function(data) {
                                 access.attr("href", data.action);
                             });
@@ -310,7 +310,7 @@ KOHA.OverDriveCirculation = new function() {
                         }
                     }
                     if (lockable_formats.length > 0 && checkout_popup) {
-                        $(el).append( ajax_button( MSG_OVERDRIVE_DOWNLOAD_AS, function() {
+                        $(el).append( ajax_button( __("Download as:"), function() {
                             checkout_format(el, id, lockable_formats, copies_available);
                         }) ).append(" ");
                     }
@@ -318,8 +318,8 @@ KOHA.OverDriveCirculation = new function() {
 
                 if (item.format) return item;
 
-                $(el).append( ajax_button( MSG_CHECK_IN, function() {
-                    if( confirm( MSG_CHECK_IN_CONFIRM ) ) {
+                $(el).append( ajax_button( __("Check in"), function() {
+                    if( confirm( __("Are you sure you want to return this item?") ) ) {
                         item_action({action: "return", id: id}, el, copies_available + 1);
                     }
                 }) );
@@ -330,14 +330,14 @@ KOHA.OverDriveCirculation = new function() {
             item = item_is_on_hold(id);
             if (item) {
                 $('<span class="overdrive-status">')
-                    .text( MSG_ON_HOLD )
+                    .text( __("On hold") )
                     .appendTo(el);
                 $(el).append(" ");
             }
 
             if(copies_available && checkout_popup) {
-                $(el).append( ajax_button( MSG_CHECK_OUT , function() {
-                    if( confirm( MSG_CHECK_OUT_CONFIRM ) ) {
+                $(el).append( ajax_button( __("Check out") , function() {
+                    if( confirm( __("Are you sure you want to check out this item?") ) ) {
                         svc_ajax('post', {action: "checkout", id: id}, function(data) {
                             if (data.checkouts) {
                                 details.checkouts = data.checkouts;
@@ -366,14 +366,14 @@ KOHA.OverDriveCirculation = new function() {
                 }) );
             }
             else if (!item) {
-                $(el).append( ajax_button( MSG_PLACE_HOLD, function() {
+                $(el).append( ajax_button( __("Place hold"), function() {
                     item_action({action: "place-hold", id: id}, el, copies_available);
                 }) );
             }
 
             if (item) {
-                $(el).append( ajax_button( MSG_CANCEL_HOLD, function() {
-                    if( confirm( MSG_CANCEL_HOLD_CONFIRM ) ) {
+                $(el).append( ajax_button( __("Cancel"), function() {
+                    if( confirm( __("Are you sure you want to cancel this hold?") ) ) {
                         item_action({action: "remove-hold", id: id}, el, copies_available);
                     }
                 }) );
@@ -401,7 +401,7 @@ KOHA.OverDriveCirculation = new function() {
 
     function checkout_format(el, id, formats, copies_available) {
         if (formats.length == 0) {
-            alert( MSG_OVERDRIVE_CANNOT_CHECKOUT );
+            alert( __("Item cannot be checked out. There are no available formats") );
             return false;
         }
 
