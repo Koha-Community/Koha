@@ -169,7 +169,7 @@ my $cgi = CGI->new;
 my $template_name;
 my $template_type;
 my @params = $cgi->multi_param("limit");
-if ((@params>=1) || ($cgi->param("q")) || ($cgi->param('multibranchlimit')) || ($cgi->param('limit-yr')) ) {
+if ((@params>=1) || (defined $cgi->param("q")) || ($cgi->param('multibranchlimit')) || ($cgi->param('limit-yr')) ) {
     $template_name = 'catalogue/results.tt';
     $template_type = 'results';
 }
