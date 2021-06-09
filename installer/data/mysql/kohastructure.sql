@@ -4057,7 +4057,7 @@ CREATE TABLE `pending_offline_operations` (
   `cardnumber` varchar(32) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `amount` decimal(28,6) DEFAULT NULL,
   PRIMARY KEY (`operationid`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
