@@ -1,7 +1,7 @@
 [% USE KohaDates # XML declaration should have no white space before it %][% USE Koha %]<?xml version="1.0" encoding="utf-8"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
 <channel>
-     <title><![CDATA[[% IF ( LibraryNameTitle ) %][% LibraryNameTitle | html %][% ELSE %]Koha online[% END %] Catalog Recent Comments]]></title>
+     <title><![CDATA[[% IF ( LibraryNameTitle ) %][% LibraryNameTitle | html %][% ELSE %]Koha online[% END %] catalog recent comments]]></title>
      <link>[% OPACBaseURL | html %]/cgi-bin/koha/opac-showreviews.pl&amp;format=rss2</link>
      <description><![CDATA[ The most recent comments from [% IF ( LibraryNameTitle ) %][% LibraryNameTitle | html %][% ELSE %]Koha online[% END %] Catalog. Comments can be made by logged in users and are moderated by library staff.]]></description>
      <atom:link href="[% OPACBaseURL | url %]/cgi-bin/koha/opac-showreviews.pl&amp;format=rss2" rel="self" type="application/rss+xml" />

@@ -218,10 +218,10 @@
                             [% IF ( RESERVES.count ) %]<li><a href="#opac-user-holds">Holds ([% RESERVES.count | html %])</a></li>[% END %]
                             [% IF Koha.Preference('ArticleRequests') && logged_in_user.article_requests_current %]<li><a href="#opac-user-article-requests">Article requests ([% logged_in_user.article_requests_current.count | html %])</a></li>[% END %]
                             [% IF ( OverDriveCirculation ) %]
-                            <li><a href="#opac-user-overdrive">OverDrive Account</a></li>
+                            <li><a href="#opac-user-overdrive">OverDrive account</a></li>
                             [% END %]
                             [% IF ( RecordedBooksCirculation ) %]
-                            <li><a href="#opac-user-recordedbooks">RecordedBooks Account</a></li>
+                            <li><a href="#opac-user-recordedbooks">RecordedBooks account</a></li>
                             [% END %]
                         </ul>
 

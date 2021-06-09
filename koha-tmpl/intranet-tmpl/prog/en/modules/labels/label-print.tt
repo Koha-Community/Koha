@@ -34,7 +34,7 @@
 
                                     <p><a class="document xml" href="/cgi-bin/koha/labels/label-create-xml.pl?batch_id=[% batche.batch_id | html %]&amp;template_id=[% batche.template_id | html %]&amp;layout_id=[% batche.layout_id | html %][% batche.item_numbers | html %]">Download as XML</a></p>
                             [% ELSIF ( batche.batch_id) %]
-                            <legend>Label Batch Number [% batche.batch_id | html %]</legend>
+                            <legend>Label batch number [% batche.batch_id | html %]</legend>
                                     <p><a class="document pdf" href="/cgi-bin/koha/labels/label-create-pdf.pl?batch_id=[% batche.batch_id | html %]&amp;template_id=[% batche.template_id | html %]&amp;layout_id=[% batche.layout_id | html %]&amp;start_label=[% batche.start_label | html %]">Download as PDF</a>
                                 </p>
                                 <p>

@@ -135,7 +135,7 @@
                             <ul>
                              [% FOREACH errmsgloo IN errmsgloop %]
                               [% IF ( errmsgloo.errbadcode ) %]
-                                  <li>No Item with barcode: [% errmsgloo.msg | html %]</li>
+                                  <li>No item with barcode: [% errmsgloo.msg | html %]</li>
                               [% END %]
                               [% IF ( errmsgloo.errispermanent ) %]
                                   <li>Please return item to home library: [% Branches.GetName( errmsgloo.msg ) | html %]</li>

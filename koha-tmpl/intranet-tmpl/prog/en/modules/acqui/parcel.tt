@@ -59,7 +59,7 @@
     <h3>Error adding items:</h3>
     <ul>
     [% FOREACH error_loo IN error_loop %]
-        <li>[% error_loo.error_param | html %][% IF ( error_loo.error_duplicate_barcode ) %]Duplicate Barcode[% END %] <!-- todo: other error conditions come here. --></li>
+        <li>[% error_loo.error_param | html %][% IF ( error_loo.error_duplicate_barcode ) %]Duplicate barcode[% END %] <!-- todo: other error conditions come here. --></li>
     [% END %]
     </ul>
     </div>
