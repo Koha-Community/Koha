@@ -49,7 +49,7 @@
                                     [% IF number_of_public_shelves >= 10 %][% LAST %][% END %]
                                 [% END %]
                                 [% IF some_public_shelves > 10 %]
-                                    <a class="dropdown-item listmenulink" href="/cgi-bin/koha/opac-shelves.pl?op=list&amp;category=2" tabindex="-1" role="menuitem">View All</a>
+                                    <a class="dropdown-item listmenulink" href="/cgi-bin/koha/opac-shelves.pl?op=list&amp;category=2" tabindex="-1" role="menuitem">View all</a>
                                 [% END %]
                             [% END %]
                             [% IF some_public_shelves.count > 0 %]
@@ -66,7 +66,7 @@
                                             [% IF number_of_private_shelves >= 10 %][% LAST %][% END %]
                                         [% END %]
                                         [% IF some_private_shelves > 10 %]
-                                            <a class="dropdown-item listmenulink" href="/cgi-bin/koha/opac-shelves.pl?op=list&amp;category=1" tabindex="-1" role="menuitem">View All</a>
+                                            <a class="dropdown-item listmenulink" href="/cgi-bin/koha/opac-shelves.pl?op=list&amp;category=1" tabindex="-1" role="menuitem">View all</a>
                                         [% END %]
                                     [% ELSE %]
                                         <a class="dropdown-item disabled" href="#" tabindex="-1" role="menuitem">No private lists</a>
@@ -381,7 +381,7 @@
                                 <h3>Shibboleth login</h3>
                                 <p><a href="[% shibbolethLoginUrl | $raw %]">Log in using a Shibboleth account</a>.</p>
                                 [% UNLESS Koha.Preference('opacShibOnly') %]
-                                    <h3>Local Login</h3>
+                                    <h3>Local login</h3>
                                 [% END %]
                             [% END %]
                         [% END %]

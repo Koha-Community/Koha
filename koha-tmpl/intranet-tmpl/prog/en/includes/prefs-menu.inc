@@ -31,11 +31,11 @@
 
         [% IF ( authorities ) %]
             <li class="active">
-                <a title="Authority Control" href="/cgi-bin/koha/admin/preferences.pl?tab=authorities">Authorities</a>
+                <a title="Authority control" href="/cgi-bin/koha/admin/preferences.pl?tab=authorities">Authorities</a>
                 [% PROCESS subtabs  %]
         [% ELSE %]
             <li>
-                <a title="Authority Control" href="/cgi-bin/koha/admin/preferences.pl?tab=authorities">Authorities</a>
+                <a title="Authority control" href="/cgi-bin/koha/admin/preferences.pl?tab=authorities">Authorities</a>
         [% END %]
         </li>
 

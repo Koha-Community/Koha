@@ -66,7 +66,7 @@
 
         [% IF ( delete_confirm ) %]
             <li>
-                <a href="/cgi-bin/koha/admin/systempreferences.pl">System Preferences</a>
+                <a href="/cgi-bin/koha/admin/systempreferences.pl">System preferences</a>
             </li>
             <li>
                 <a href="/cgi-bin/koha/admin/systempreferences.pl?op=add_form&amp;searchfield=[% searchfield | uri %]">[% searchfield | html %]</a>
@@ -312,7 +312,7 @@
     [% IF ( delete_confirmed ) %]
         <h3>Data deleted</h3>
         <form action="[% script_name | html %]" method="post">
-            <input type="submit" value="Back to System Preferences" />
+            <input type="submit" value="Back to system preferences" />
         </form>
     [% END %]
    

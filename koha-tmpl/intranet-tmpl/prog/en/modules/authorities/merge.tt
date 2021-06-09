@@ -48,7 +48,7 @@ div#result { margin-top: 1em; }
             [% ELSIF error.code == 'DESTRUCTIVE_MERGE' %]
                 You cannot merge a record with itself. Please select two different authorities.
             [% ELSIF error.code == 'WRONG_FRAMEWORK' %]
-                The Default framework cannot be used, or the framework does not exist. Please select another framework for merging.
+                The default framework cannot be used, or the framework does not exist. Please select another framework for merging.
             [% ELSIF error.code == 'EMPTY_MARC' %]
                 Sorry, but we did not find any MARC tags in the reference record.
             [% ELSIF error.code == 'MISSING_RECORD' %]

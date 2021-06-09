@@ -18,7 +18,7 @@
                                 <a class="document pdf" href="/cgi-bin/koha/patroncards/[% batche.create_script | html %]?batch_id=[% batche.batch_id | html %]&amp;template_id=[% batche.template_id | html %]&amp;layout_id=[% batche.layout_id | html %]]&amp;layout_back_id=[% batche.layout_back_id | html %]&amp;start_card=[% batche.start_card | html %][% batche.label_ids | html %]">label_single_[% batche.card_count | html %].pdf</a>
                         </p>
                         [% ELSIF ( batche.borrower_numbers ) %]
-                        <legend>[% batche.card_count | html %] Single Patron Cards</legend>
+                        <legend>[% batche.card_count | html %] Single patron cards</legend>
                         <p>
                                 <a class="document pdf" href="/cgi-bin/koha/patroncards/[% batche.create_script | html %]?template_id=[% batche.template_id | html %]&amp;layout_id=[% batche.layout_id | html %]&amp;layout_back_id=[% batche.layout_back_id | html %]&amp;start_card=[% batche.start_card | html %][% batche.borrower_numbers | html %]">label_single_[% batche.card_count | html %].pdf</a>
                         </p>

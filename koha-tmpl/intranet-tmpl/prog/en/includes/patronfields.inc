@@ -29,7 +29,7 @@
      [%- CASE 'B_city' -%]<span>Alternate city</span>
      [%- CASE 'B_state' -%]<span>Alternate state</span>
      [%- CASE 'B_zipcode' -%]<span>Alternate zip code</span>
-     [%- CASE 'B_country' -%]<span>Alternate Country</span>
+     [%- CASE 'B_country' -%]<span>Alternate country</span>
      [%- CASE 'B_email' -%]<span>Alternate email</span>
      [%- CASE 'B_phone' -%]<span>Alternate phone</span>
      [%- CASE 'dateofbirth' -%]<span>Date of birth</span>

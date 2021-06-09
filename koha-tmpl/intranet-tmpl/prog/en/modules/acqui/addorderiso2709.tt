@@ -170,7 +170,7 @@ Batch list
                         [% IF biblio.item_error %]Item records could not be processed because the number of item fields was uneven.[% END %]
                         [% FOREACH item IN biblio.iteminfos %]
                         <fieldset>
-                        <legend>Item Record [% item.item_id | html %]</legend>
+                        <legend>Item record [% item.item_id | html %]</legend>
                         <ol>
                         <li>
                         <label for="homebranch_item_[% item.item_id | html %]">homebranch</label><select id="homebranch_item_[% item.item_id | html %]" name="homebranch_[% item.biblio_count | html %]">
