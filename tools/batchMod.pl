@@ -170,6 +170,13 @@ if ($op eq "action") {
 	    }
         }
 
+        my $yesno = Koha::AuthorisedValues->search({category => 'YES_NO'});
+        my $ynhash = {};
+
+        while(my $yn = $yesno->next) {
+            $ynhash->{'av'.$yn->authorised_value} = $yn->lib;
+        }
+
         my $upd_biblionumbers;
         my $del_biblionumbers;
         try {
@@ -178,6 +185,7 @@ if ($op eq "action") {
                 sub {
                     # For each item
                     my $i = 1;
+                    my $extra_headers = {};
                     foreach my $itemnumber (@itemnumbers) {
                         my $item = Koha::Items->find($itemnumber);
                         next
