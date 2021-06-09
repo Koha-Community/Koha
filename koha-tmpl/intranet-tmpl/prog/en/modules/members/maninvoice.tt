@@ -87,6 +87,11 @@
                             <li><label for="amount">Amount: </label><input type="text" inputmode="decimal" pattern="^\d+(\.\d{2})?$" name="amount" id="amount" required="required" min="0" value="[% amount | $Price on_editing => 1 %]" /> Example: 5.00</li>
                         </ol>
                     </fieldset>
+
+                    [% IF available_additional_fields %]
+                        [% INCLUDE 'additional-fields-entry.inc' available=available_additional_fields values=additional_field_values %]
+                    [% END %]
+
                     <fieldset class="action">
                         <button type="submit" name="add" value="save">Save</button>
                         <button type="submit" name="add" value="save and pay">Save and pay</button>

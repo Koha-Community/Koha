@@ -32,6 +32,8 @@ use Koha::Patrons;
 use Koha::Patron::Categories;
 use Koha::AuthorisedValues;
 use Koha::Account;
+use Koha::Account::Lines;
+use Koha::AdditionalFields;
 use Koha::Token;
 use Koha::DateUtils qw( output_pref );
 
@@ -170,6 +172,23 @@ if ( $total_paid and $total_paid ne '0.00' ) {
             );
             $payment_id = $pay_result->{payment_id};
 
+            my @additional_fields;
+            my $accountline_fields = Koha::AdditionalFields->search({ tablename => 'accountlines:credit' });
+            while ( my $field = $accountline_fields->next ) {
+                my $value = $input->param('additional_field_' . $field->id);
+                if (defined $value) {
+                    push @additional_fields, {
+                        id => $field->id,
+                        value => $value,
+                    };
+                }
+            }
+            if (@additional_fields) {
+                my $payment = Koha::Account::Lines->find($payment_id);
+                $payment->set_additional_fields(\@additional_fields);
+            }
+
+
             $url = "/cgi-bin/koha/members/pay.pl";
         } else {
             if ($selected_accts) {
@@ -213,6 +232,22 @@ if ( $total_paid and $total_paid ne '0.00' ) {
             }
             $payment_id = $pay_result->{payment_id};
 
+            my @additional_fields;
+            my $accountline_fields = Koha::AdditionalFields->search({ tablename => 'accountlines:credit' });
+            while ( my $field = $accountline_fields->next ) {
+                my $value = $input->param('additional_field_' . $field->id);
+                if (defined $value) {
+                    push @additional_fields, {
+                        id => $field->id,
+                        value => $value,
+                    };
+                }
+            }
+            if (@additional_fields) {
+                my $payment = Koha::Account::Lines->find($payment_id);
+                $payment->set_additional_fields(\@additional_fields);
+            }
+
             $url = "/cgi-bin/koha/members/boraccount.pl";
         }
         # It's possible renewals took place, parse any renew results
@@ -249,6 +284,7 @@ $template->param(
     total          => $total_due,
 
     csrf_token => Koha::Token->new->generate_csrf( { session_id => scalar $input->cookie('CGISESSID') } ),
+    available_additional_fields => [ Koha::AdditionalFields->search({ tablename => 'accountlines:credit' })->as_list ],
 );
 
 output_html_with_http_headers $input, $cookie, $template->output;

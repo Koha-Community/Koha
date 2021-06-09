@@ -74,6 +74,10 @@
                         </ol>
                     </fieldset>
 
+                    [% IF available_additional_fields %]
+                        [% INCLUDE 'additional-fields-entry.inc' available=available_additional_fields values=additional_field_values %]
+                    [% END %]
+
                     <fieldset class="action"><input type="submit" name="add" value="Add credit" /> <a class="cancel" href="/cgi-bin/koha/members/boraccount.pl?borrowernumber=[% patron.borrowernumber | html %]">Cancel</a></fieldset>
                 </form>
 

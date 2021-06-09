@@ -419,6 +419,22 @@ __PACKAGE__->belongs_to(
   },
 );
 
+__PACKAGE__->has_many(
+  "additional_field_values",
+  "Koha::Schema::Result::AdditionalFieldValue",
+  sub {
+    my ($args) = @_;
+
+    return {
+        "$args->{foreign_alias}.record_id" => { -ident => "$args->{self_alias}.accountlines_id" },
+
+        "$args->{foreign_alias}.field_id" =>
+            { -in => \'(SELECT id FROM additional_fields WHERE tablename LIKE "accountlines:%")' },
+    };
+  },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
 sub koha_objects_class {
     'Koha::Account::Lines';
 }

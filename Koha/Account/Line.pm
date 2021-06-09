@@ -30,7 +30,7 @@ use Koha::DateUtils qw( dt_from_string );
 use Koha::Exceptions::Account;
 use Koha::Items;
 
-use base qw(Koha::Object);
+use base qw(Koha::Object Koha::Object::Mixin::AdditionalFields);
 
 =encoding utf8
 

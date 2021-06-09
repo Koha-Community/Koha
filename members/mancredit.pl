@@ -34,6 +34,7 @@ use Koha::Items;
 use Koha::Patrons;
 use Koha::Patron::Categories;
 use Koha::Account::CreditTypes;
+use Koha::AdditionalFields;
 
 use Koha::Token;
 
@@ -90,7 +91,7 @@ if ($add) {
     my $amount      = $input->param('amount') || 0;
     my $type        = $input->param('type');
 
-    $patron->account->add_credit(
+    my $line = $patron->account->add_credit(
         {
             amount      => $amount,
             description => $description,
@@ -102,6 +103,21 @@ if ($add) {
             interface   => C4::Context->interface
         }
     );
+
+    my @additional_fields;
+    my $accountline_fields = Koha::AdditionalFields->search({ tablename => 'accountlines:credit' });
+    while ( my $field = $accountline_fields->next ) {
+        my $value = $input->param('additional_field_' . $field->id);
+        if (defined $value) {
+            push @additional_fields, {
+                id => $field->id,
+                value => $value,
+            };
+        }
+    }
+    if (@additional_fields) {
+        $line->set_additional_fields(\@additional_fields);
+    }
 
     if ( C4::Context->preference('AccountAutoReconcile') ) {
         $patron->account->reconcile_balance;
@@ -124,6 +140,7 @@ else {
         csrf_token   => Koha::Token->new->generate_csrf(
             { session_id => scalar $input->cookie('CGISESSID') }
         ),
+        available_additional_fields => [ Koha::AdditionalFields->search({ tablename => 'accountlines:credit' })->as_list ],
     );
     output_html_with_http_headers $input, $cookie, $template->output;
 }

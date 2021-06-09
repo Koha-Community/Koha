@@ -41,6 +41,7 @@ use Koha::Old::Checkouts;
 
 use Koha::Patron::Categories;
 use Koha::Account::DebitTypes;
+use Koha::AdditionalFields;
 
 my $input = CGI->new;
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
@@ -165,6 +166,21 @@ if ($add) {
                 }
             );
 
+            my @additional_fields;
+            my $accountline_fields = Koha::AdditionalFields->search({ tablename => 'accountlines:debit' });
+            while ( my $field = $accountline_fields->next ) {
+                my $value = $input->param('additional_field_' . $field->id);
+                if (defined $value) {
+                    push @additional_fields, {
+                        id => $field->id,
+                        value => $value,
+                    };
+                }
+            }
+            if (@additional_fields) {
+                $line->set_additional_fields(\@additional_fields);
+            }
+
             if ( C4::Context->preference('AccountAutoReconcile') ) {
                 $patron->account->reconcile_balance;
             }
@@ -216,5 +232,6 @@ $template->param(
   ),
   patron    => $patron,
   finesview => 1,
+  available_additional_fields => [ Koha::AdditionalFields->search({ tablename => 'accountlines:debit' })->as_list ],
   );
 output_html_with_http_headers $input, $cookie, $template->output;

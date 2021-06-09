@@ -211,6 +211,10 @@
 </ol>
 </fieldset>
 
+[% IF available_additional_fields %]
+    [% INCLUDE 'additional-fields-entry.inc' available=available_additional_fields values=additional_field_values %]
+[% END %]
+
         <div class="action">
             <input type="submit" name="submitbutton" value="Confirm" />
             <a class="cancel" href="/cgi-bin/koha/members/pay.pl?borrowernumber=[% patron.borrowernumber | html %]">Cancel</a>
@@ -263,6 +267,11 @@
                 </li>
             </ol>
         </fieldset>
+
+        [% IF available_additional_fields %]
+            [% INCLUDE 'additional-fields-entry.inc' available=available_additional_fields values=additional_field_values %]
+        [% END %]
+
         <div class="action">
             <input type="submit" value="Write off this charge" />
             <a class="cancel" href="/cgi-bin/koha/members/pay.pl?borrowernumber=[% patron.borrowernumber | html %]">Cancel</a>
@@ -346,6 +355,11 @@
     </li>
     </ol>
     </fieldset>
+
+    [% IF available_additional_fields %]
+        [% INCLUDE 'additional-fields-entry.inc' available=available_additional_fields values=additional_field_values %]
+    [% END %]
+
     <div class="action">
         <input type="submit" name="submitbutton" value="Confirm" />
         <a class="cancel" href="/cgi-bin/koha/members/pay.pl?borrowernumber=[% patron.borrowernumber | html %]">Cancel</a>

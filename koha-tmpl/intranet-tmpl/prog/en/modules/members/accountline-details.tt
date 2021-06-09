@@ -71,6 +71,7 @@
             [% INCLUDE 'members-toolbar.inc' borrowernumber=patron.borrowernumber %]
 
             [% IF accountline %]
+                [% af_values = accountline.additional_field_values %]
                 [% IF accountline.credit_type_code %]
                     <h2>Details of credit</h2>
                 [% ELSIF accountline.debit_type_code %]
@@ -86,6 +87,9 @@
                             <th>Due date</th>
                             <th>Return date</th>
                             <th>Note</th>
+                            [% FOREACH value IN af_values %]
+                                <th>[% value.field.name | html %]</th>
+                            [% END %]
                             <th>Amount</th>
                             <th>Outstanding</th>
                         </tr>
@@ -133,6 +137,16 @@
                             <td>
                                 [% accountline.note | html_line_break %]
                             </td>
+
+                            [% FOREACH value IN af_values %]
+                                <td>
+                                    [% IF value.field.authorised_value_category %]
+                                        [% AuthorisedValues.GetByCode( value.field.authorised_value_category, value.value ) | html %]
+                                    [% ELSE %]
+                                        [% value.value | html %]
+                                    [% END %]
+                                </td>
+                            [% END %]
 
                             <td>
                                 [% accountline.amount | $Price %]
