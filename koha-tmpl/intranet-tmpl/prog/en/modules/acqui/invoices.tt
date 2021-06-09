@@ -55,7 +55,7 @@
                   <th>&nbsp;</th>
                 [% END %]
                 <th>&nbsp;</th>
-                <th>Invoice no.</th>
+                <th>Invoice number</th>
                 <th>Vendor</th>
                 <th>Shipment date</th>
                 <th>Billing date</th>
@@ -160,7 +160,7 @@
                         <ol>
                         <li><h2>Merge invoices</h2></li>
                         <li><table id="merge_table">
-                            <thead><tr><th>Invoice no.</th><th>Shipment date</th><th>Billing date</th><th>Shipment cost</th></tr></thead>
+                            <thead><tr><th>Invoice number</th><th>Shipment date</th><th>Billing date</th><th>Shipment cost</th></tr></thead>
                             <tbody>
                             </tbody>
                         </table></li>
@@ -198,7 +198,7 @@
           <p>Search was:
             <ul>
               [% IF ( invoicenumber ) %]
-                <li>Invoice no.: [% invoicenumber | html %]</li>
+                <li>Invoice number: [% invoicenumber | html %]</li>
               [% END %]
               [% IF booksellerid %]
                 <li>Vendor: [% suppliername | html %]</li>
@@ -269,7 +269,7 @@
         <h3>Search filters</h3>
         <ol>
           <li>
-            <label for="invoicenumber">Invoice no:</label>
+            <label for="invoicenumber">Invoice number</label>
             <input type="text" id="invoicenumber" name="invoicenumber" value="[% invoicenumber | html %]" class="focus" />
           </li>
           <li>

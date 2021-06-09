@@ -19,7 +19,7 @@
     <input value="Submit" class="submit" type="submit" /> <a href="/cgi-bin/koha/acqui/histsearch.pl">Advanced search</a>
     <p id="filters" style="display:none">
       <label for="basket">Basket: </label><input type="text" name="basket" id="basket" />
-      <label for="booksellerinvoicenumber">Invoice no.: </label><input type="text" name="booksellerinvoicenumber" id="booksellerinvoicenumber" />
+      <label for="booksellerinvoicenumber">Invoice number: </label><input type="text" name="booksellerinvoicenumber" id="booksellerinvoicenumber" />
     </p>
 	</form>
     </div>

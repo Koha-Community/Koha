@@ -24,7 +24,7 @@
             [% PROCESS options_for_libraries libraries => Branches.all(selected => '') %]
         </select>
     </li>
-    <li><label for="booksellerinvoicenumber ">Bookseller invoice no: </label> <input type="text" name="booksellerinvoicenumber" id="booksellerinvoicenumber" value="[% filters.booksellerinvoicenumber | html %]" /></li>
+    <li><label for="booksellerinvoicenumber ">Vendor invoice number: </label> <input type="text" name="booksellerinvoicenumber" id="booksellerinvoicenumber" value="[% filters.booksellerinvoicenumber | html %]" /></li>
     <li>
         <label for="basketgroupname">Basket group:</label>
         <input type="text" name="basketgroupname" id="basketgroupname" value="[% filters.basketgroupname | html %]" />
