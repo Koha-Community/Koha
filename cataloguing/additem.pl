@@ -144,6 +144,7 @@ sub generate_subfield_form {
             foreach my $pref_itemcallnumber_part (split(/,/, $pref_itemcallnumber)){
                 my $CNtag       = substr( $pref_itemcallnumber_part, 0, 3 ); # 3-digit tag number
                 my $CNsubfields = substr( $pref_itemcallnumber_part, 3 ); # Any and all subfields
+                $CNsubfields = undef if $CNsubfields eq '';
                 my $temp2 = $temp->field($CNtag);
 
                 next unless $temp2;
