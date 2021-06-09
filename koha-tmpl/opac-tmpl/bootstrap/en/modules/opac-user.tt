@@ -13,20 +13,8 @@
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Your library home &rsaquo; [% IF ( LibraryNameTitle ) %][% LibraryNameTitle | html %][% ELSE %]Koha online[% END %] catalog</title>
 [% INCLUDE 'doc-head-close.inc' %]
-[% BLOCK cssinclude %]
-    [% FILTER collapse %]
-        <style>
-            #addNote {
-                width: 100%;
-            }
-            .checkout_note {
-                border-radius: 5px;
-                border: 1px dashed #999;
-                padding: .5em;
-            }
-        </style>
-    [% END %]
-[% END %]
+[% Asset.css("css/overdrive.css") | $raw %]
+[% BLOCK cssinclude %][% END %]
 </head>
 [% INCLUDE 'bodytag.inc' bodyid='opac-user' bodyclass='scrollto' %]
 [% INCLUDE 'masthead.inc' %]

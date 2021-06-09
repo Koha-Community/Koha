@@ -4,6 +4,7 @@
 [% INCLUDE 'doc-head-open.inc' %]
 <title>OverDrive search for '[% q | html %]' &rsaquo; [% IF ( LibraryNameTitle ) %][% LibraryNameTitle | html %][% ELSE %]Koha online[% END %] catalog</title>
 [% INCLUDE 'doc-head-close.inc' %]
+[% Asset.css("css/overdrive.css") | $raw %]
 [% BLOCK cssinclude %]
 [% END %]
 </head>
@@ -157,7 +158,7 @@
                     results.push( '<td>' );
                     if ( prod.images.thumbnail ) {
                         results.push( '<a href="', prod.contentDetails[0].href, '">' );
-                        results.push( '<img class="thumbnail" src="', prod.images.thumbnail.href, '" />' );
+                        results.push( '<img class="overdrive-thumbnail thumbnail" src="', prod.images.thumbnail.href, '" />' );
                         results.push( '</a>' );
                     }
                     results.push( '</td>' );

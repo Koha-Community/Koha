@@ -70,7 +70,7 @@ KOHA.OverDriveCirculation = new function() {
         error_div.text(error);
     }
 
-    var login_link = $('<a href="#">')
+    var login_link = $('<a class="btn btn-primary" href="#">')
         .click(function(e) {
             e.preventDefault();
             if( OD_password_required ) { $("#overdrive-login").modal('show'); }
@@ -120,24 +120,30 @@ KOHA.OverDriveCirculation = new function() {
             return;
         }
 
-        var overdrive_link = $('<a href="https://www.overdrive.com/account/" target="overdrive-account" class="overdrive-link" style="float:right">')
-            .text( __( "OverDrive account page" ) );
-        $(container).append(overdrive_link);
+        var button_toolbar = $("<div/>").addClass("btn-toolbar").attr("role","toolbar");
 
-        var logout_link = $('<a href="#logout" class="overdrive-logout" style="float:left">')
-            .click(function(e) {
-                e.preventDefault();
-                $(container).empty().append(error_div);
-                logout(function(data) {
-                    display_account(container, data);
-                });
-            }).text( __("Log out of your OverDrive account") );
-        $(container).append(logout_link);
-        $(container).append('<br style="clear:both;"/>');
+        var overdrive_link = $("<div/>").addClass("btn-group mr-2").attr("role", "group")
+            .append( $('<a href="https://www.overdrive.com/account/" target="overdrive-account" class="btn btn-sm btn-primary overdrive-link">')
+                .text( __( "OverDrive account page" ) ) );
+        button_toolbar.append(overdrive_link);
+
+        var logout_link = $("<div/>").addClass("btn-group mr-2").attr("role", "group")
+            .append( $('<a href="#logout" class="btn btn-sm btn-primary overdrive-logout">')
+                .click(function(e) {
+                    e.preventDefault();
+                    $(container).empty().append(error_div);
+                    logout(function(data) {
+                        display_account(container, data);
+                    });
+                }).text( __("Log out of your OverDrive account") ) );
+
+        button_toolbar.append(logout_link);
+
+        $(container).append( button_toolbar );
 
         if (data.checkouts) {
             var checkouts_div = $('<div class="overdrive-div">').html('<h3>' + __("Checkouts") + '</h3>');
-            var checkouts_list = $('<ul class="overdrive-list">');
+            var checkouts_list = $('<div class="overdrive-list">');
             data.checkouts.items.forEach(function(item) {
                 item_line(checkouts_list, item);
             });
@@ -147,7 +153,7 @@ KOHA.OverDriveCirculation = new function() {
 
         if (data.holds) {
             var holds_div = $('<div class="overdrive-div">').html('<h3>' + __("Holds") + '</h3>');
-            var holds_list = $('<ul class="overdrive-list">');
+            var holds_list = $('<div class="overdrive-list">');
             data.holds.items.forEach(function(item) {
                 item_line(holds_list, item);
             });
@@ -157,30 +163,32 @@ KOHA.OverDriveCirculation = new function() {
     }
 
     function item_line(ul_el, item) {
-        var line = $('<li class="overdrive-item">');
+        var line = $('<div class="overdrive-item">');
+        var image_container = $('<div class="overdrive-item-thumbnail">');
         if (item.images) {
             var thumb_url = item.images.thumbnail;
             if (thumb_url) {
-                $('<img class="overdrive-item-thumbnail">')
+                $('<img class="overdrive-thumbnail">')
                     .attr("src", thumb_url)
-                    .appendTo(line);
+                    .appendTo( image_container );
             }
         }
-        $('<div class="overdrive-item-title">')
-            .text(item.title)
+        image_container.appendTo( line );
+        var item_details = $('<div class="overdrive-item-details">')
+            .append(
+                $('<h4 class="overdrive-item-title">')
+                    .text(item.title) )
+            .append( $('<div class="overdrive-item-author">')
+                .text(item.author) )
+            .append(
+                $('<div class="overdrive-item-subtitle">')
+                    .html(item.subtitle) )
             .appendTo(line);
-        $('<div class="overdrive-item-subtitle">')
-            .html(item.subtitle)
-            .appendTo(line);
-        $('<div class="overdrive-item-author">')
-            .text(item.author)
-            .appendTo(line);
-        var actions = $('<span class="actions">');
+        var actions = $('<div class="actions">');
         display_actions(actions, item.id);
-        $('<div id="action_'+item.id+'" class="actions-menu">')
-            .append(actions)
+        item_details.append( $('<div id="action_' + item.id + '" class="actions-menu">')
+            .append(actions) )
             .appendTo(line);
-
         $(ul_el).append(line);
     }
 
@@ -278,7 +286,7 @@ KOHA.OverDriveCirculation = new function() {
             var item = item_is_checked_out(id);
             if (item) {
                 var expires = new Date(item.expires);
-                $('<span class="overdrive-item-status">')
+                $('<div class="overdrive-item-status">')
                     .text( __( "Checked out until: " )  + " " + expires.toLocaleString())
                     .appendTo(el);
                 $(el).append(" ");
@@ -329,8 +337,8 @@ KOHA.OverDriveCirculation = new function() {
 
             item = item_is_on_hold(id);
             if (item) {
-                $('<span class="overdrive-status">')
-                    .text( __("On hold") )
+                $('<span class="overdrive-item-status">')
+                    .text(__("On hold"))
                     .appendTo(el);
                 $(el).append(" ");
             }
@@ -372,7 +380,7 @@ KOHA.OverDriveCirculation = new function() {
             }
 
             if (item) {
-                $(el).append( ajax_button( __("Cancel"), function() {
+                $(el).append( ajax_button( __("Cancel hold"), function() {
                     if( confirm( __("Are you sure you want to cancel this hold?") ) ) {
                         item_action({action: "remove-hold", id: id}, el, copies_available);
                     }
@@ -394,7 +402,7 @@ KOHA.OverDriveCirculation = new function() {
 
     function decorate_button(button, label) {
         $(button)
-            .addClass("btn btn-primary btn-mini")
+            .addClass("btn btn-primary btn-sm")
             .css("color","white")
             .text(label);
     }
