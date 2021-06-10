@@ -49,9 +49,12 @@
                             <a id="useadvanced" href="/cgi-bin/koha/cataloguing/editor.pl" class="btn btn-default"><i class="fa fa-pencil"></i> Advanced editor</a>
                         [% END %]
                         <div class="btn-group">
-                            <button class="btn btn-default dropdown-toggle" data-toggle="dropdown"><i class="fa fa-plus"></i> New record <span class="caret"></span></button>
+                            <button class="btn btn-default" id="newRecord"><i class="fa fa-plus"></i> New record</button>
+                            <button class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                                <span class="caret"></span>
+                            </button>
                             <ul class="dropdown-menu">
-                                <li><a href="/cgi-bin/koha/cataloguing/addbiblio.pl?frameworkcode=">Default framework</a></li>
+                                <li><a id="newRecordDefault" href="/cgi-bin/koha/cataloguing/addbiblio.pl?frameworkcode=">Default framework</a></li>
                                 [% FOREACH framework IN frameworks %]
                                     <li><a href="/cgi-bin/koha/cataloguing/addbiblio.pl?frameworkcode=[% framework.frameworkcode | uri %]">[% framework.frameworktext | html %]</a></li>
                                 [% END %]
@@ -264,6 +267,12 @@
          $(document).ready(function() {
             //Set focus to cataloging search
             $("input[name=q]:eq(0)").focus();
+
+            $("#newRecord").click(function(){
+                var url = $("a#newRecordDefault").prop("href");
+                window.location.href = url;
+                return false;
+            });
 
             $("#z3950search").click(function(){
                 PopupZ3950("Default");
