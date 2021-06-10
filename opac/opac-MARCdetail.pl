@@ -321,7 +321,7 @@ foreach my $field (@fields) {
         }
         else {
             $item->{ $subf[$i][0] } .= GetAuthorisedValueDesc( $field->tag(), $subf[$i][0],
-                $subf[$i][1], '', $tagslib, '', 'opac' );
+                $subf[$i][1], '', $tagslib, '', 'opac' ) // q{};
         }
 
         my $kohafield = $tagslib->{ $field->tag() }->{ $subf[$i][0] }->{kohafield};
