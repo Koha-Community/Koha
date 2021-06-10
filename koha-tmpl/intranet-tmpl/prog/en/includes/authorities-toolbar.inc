@@ -4,20 +4,23 @@
     <div id="toolbar" class="btn-toolbar">
         [% IF ( CAN_user_editauthorities ) %]
             <div class="btn-group">
-                <a class="btn btn-default dropdown-toggle" data-toggle="dropdown" href="#">
+                <button class="btn btn-default dropdown-toggle" data-toggle="dropdown">
                     <i class="fa fa-plus"></i> New authority
                     <span class="caret"></span>
-                </a>
+                </button>
                 <ul class="dropdown-menu">
-                    [% IF servers.count > 0 %]
-                        <li><a id="z3950_new" href="#">New from Z39.50/SRU</a></li>
-                        <li role="separator" class="divider"></li>
-                    [% END %]
                     [% FOREACH authority_type IN authority_types %]
                         <li><a href="/cgi-bin/koha/authorities/authorities.pl?authtypecode=[% authority_type.authtypecode | uri %]">[% authority_type.authtypetext | html %]</a></li>
                     [% END %]
                 </ul>
             </div>
+            [% IF servers.count > 0 %]
+                <div class="btn-group">
+                    <button id="z3950_new" class="btn btn-default">
+                        <i class="fa fa-search"></i> New from Z39.50/SRU
+                    </button>
+                </div>
+            [% END %]
         [% END %]
 
         [% IF ( authid ) %]
