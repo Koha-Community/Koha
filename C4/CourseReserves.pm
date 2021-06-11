@@ -405,7 +405,11 @@ sub ModCourseInstructors {
 
 =head2 GetCourseItem {
 
-  $course_item = GetCourseItem( itemnumber => $itemnumber [, ci_id => $ci_id );
+  Given one of biblionumber, itenumber, or ci_id, returns hashref of the course_items values
+
+  $course_item = GetCourseItem( itemnumber => $itemnumber [, ci_id => $ci_id ] );
+  $course_item = GetCourseItem( biblionumber => $biblionumber [, ci_id => $ci_id ]);
+  $course_item = GetCourseItem( ci_id => $ci_id );
 
 =cut
 
@@ -416,7 +420,7 @@ sub GetCourseItem {
     my $itemnumber = $params{'itemnumber'};
     my $biblionumber = $params{'biblionumber'};
 
-    return unless ( $itemnumber || $biblionumber || $ci_id );
+    return unless ( $itemnumber xor $biblionumber xor $ci_id );
 
     my ( $field, $value );
     if ( $itemnumber ) {
@@ -453,7 +457,7 @@ sub GetCourseItem {
 
   ModCourseItem( %params );
 
-  Creates or modifies an existing course item.
+  Creates or modifies an existing course item. Must be passed either an itemnumber or biblionumber parameter
 
 =cut
 
@@ -463,7 +467,7 @@ sub ModCourseItem {
     my $itemnumber = $params{'itemnumber'};
     my $biblionumber = $params{'biblionumber'};
 
-    return unless ($itemnumber || $biblionumber);
+    return unless ($itemnumber xor $biblionumber);
 
     my $course_item = $itemnumber ? GetCourseItem( itemnumber => $itemnumber ) : GetCourseItem( biblionumber => $biblionumber );
 
@@ -863,8 +867,8 @@ sub GetCourseReserves {
 
     if ($include_items) {
         foreach my $cr (@$course_reserves) {
-            my $item = Koha::Items->find( $cr->{itemnumber} );
-            my $biblio = $cr->{itemnumber} ? $item->biblio : Koha::Biblios->find( $cr->{biblionumber} );
+            my $item = Koha::Items->find( $cr->{itemnumber}, { prefetch => ['biblio','biblioitem'] });
+            my $biblio = $cr->{itemnumber} ? $item->biblio : Koha::Biblios->find( $cr->{biblionumber}, { prefetch => ['biblioitem'] });
             my $biblioitem = $biblio->biblioitem;
             $cr->{'course_item'} = GetCourseItem( ci_id => $cr->{'ci_id'} );
             $cr->{'item'}        = $item;
@@ -925,7 +929,7 @@ sub DelCourseReserve {
     my $arrayref = GetItemCourseReservesInfo( itemnumber => $itemnumber );
     my $arrayref = GetItemCourseReservesInfo( biblionumber => $biblionumber );
 
-    For a given item, returns an arrayref of reserves hashrefs,
+    For a given itemnumber or biblionumber, returns an arrayref of reserves hashrefs,
     with a course hashref under the key 'course'
 
 =cut
@@ -936,7 +940,7 @@ sub GetItemCourseReservesInfo {
     my $itemnumber = $params{'itemnumber'};
     my $biblionumber = $params{'biblionumber'};
 
-    return unless ($itemnumber || $biblionumber);
+    return unless ($itemnumber xor $biblionumber);
 
     my $course_item = $itemnumber ? GetCourseItem( itemnumber => $itemnumber ) : GetCourseItem( biblionumber => $biblionumber );
 
@@ -975,9 +979,9 @@ sub CountCourseReservesForItem {
     my $enabled    = $params{'enabled'};
     my $biblionumber = $params{'biblionumber'};
 
-    return unless ( $ci_id || ( $itemnumber || $biblionumber ) );
+    return unless ( $ci_id xor $itemnumber xor $biblionumber );
 
-    my $course_item = $itemnumber ? GetCourseItem( ci_id => $ci_id, itemnumber => $itemnumber ) : GetCourseItem( ci_id => $ci_id, biblionumber => $biblionumber );
+    my $course_item = GetCourseItem( ci_id => $ci_id ) || GetCourseItem( itemnumber => $itemnumber ) || GetCourseItem( biblionumber => $biblionumber );
 
     my @params = ( $course_item->{'ci_id'} );
     push( @params, $enabled ) if ($enabled);

@@ -86,7 +86,7 @@ if ( $course_id && $course ) {
             foreach my $item (@items) {
                 my $ci_id = ModCourseItem(
                     itemnumber            => $item->id,
-                    biblionumber          => $item->biblionumber,
+                    biblionumber          => undef,
                     itype                 => $itype,
                     ccode                 => $ccode,
                     holdingbranch         => $holdingbranch,

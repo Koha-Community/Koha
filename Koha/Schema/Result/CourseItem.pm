@@ -37,11 +37,15 @@ course item id
   is_foreign_key: 1
   is_nullable: 1
 
+items.itemnumber for the item on reserve
+
 =head2 biblionumber
 
   data_type: 'integer'
   is_foreign_key: 1
   is_nullable: 0
+
+biblio.biblionumber for the bibliographic record on reserve
 
 =head2 itype
 
@@ -376,8 +380,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07046 @ 2021-02-03 10:03:26
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:kImBuor/tqSbLlPDt+d2fg
+# Created by DBIx::Class::Schema::Loader v0.07046 @ 2021-06-11 18:35:38
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:3fFJ3uJr+5pMZniZ1glIpg
 
 __PACKAGE__->add_columns(
     '+itype_enabled'         => { is_boolean => 1 },

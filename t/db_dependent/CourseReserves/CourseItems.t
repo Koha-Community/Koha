@@ -39,7 +39,6 @@ my ($biblionumber, $itemnumber) = create_bib_and_item();
 
 my $ci_id = ModCourseItem(
     itemnumber            => $itemnumber,
-    biblionumber          => $biblionumber,
     itype_enabled         => 1,
     ccode_enabled         => 1,
     homebranch_enabled    => 1,
@@ -83,7 +82,6 @@ is($item->location, 'TH', 'Item location in course should be TH');
 
 ModCourseItem(
     itemnumber            => $itemnumber,
-    biblionumber          => $biblionumber,
     itype_enabled         => 1,
     ccode_enabled         => 1,
     homebranch_enabled    => 1,
@@ -160,7 +158,6 @@ is($course_item2->{ccode_storage}, '', 'Course item ccode storage should be empt
 
 ModCourseItem(
     itemnumber            => $itemnumber,
-    biblionumber          => $biblionumber,
     itype_enabled         => 1,
     ccode_enabled         => 1,
     homebranch_enabled    => 1,
@@ -185,7 +182,6 @@ is($item->ccode, 'DVD', 'Item ccode should be DVD');
 
 ModCourseItem(
     itemnumber            => $itemnumber,
-    biblionumber          => $biblionumber,
     itype_enabled         => 1,
     ccode_enabled         => 1,
     homebranch_enabled    => 0,             # LEAVE UNCHANGED
@@ -212,7 +208,6 @@ subtest 'Ensure modifying fields on existing course items updates the item and c
     my ($biblionumber, $itemnumber) = create_bib_and_item();
     my $ci_id = ModCourseItem(
         itemnumber            => $itemnumber,
-        biblionumber          => $biblionumber,
         itype_enabled         => 0,
         ccode_enabled         => 0,
         homebranch_enabled    => 0,
@@ -304,7 +299,6 @@ subtest 'Ensure modifying fields on existing course items updates the item and c
     # Test removing fields from an active course item
     ModCourseItem(
         itemnumber            => $itemnumber,
-        biblionumber          => $biblionumber,
         itype_enabled         => 0,
         ccode_enabled         => 0,
         homebranch_enabled    => 0,
@@ -352,7 +346,6 @@ subtest 'Ensure item info is preserved' => sub {
     #Add course item but change nothing
     my $course_item_id = ModCourseItem(
         itemnumber    => $item->itemnumber,
-        biblionumber  => $biblionumber,
         itype         => '',
         ccode         => '',
         holdingbranch => '',
@@ -383,7 +376,6 @@ subtest 'Ensure item info is preserved' => sub {
     #Add course item but change nothing
     $course_item_id = ModCourseItem(
         itemnumber    => $item->itemnumber,
-        biblionumber  => $biblionumber,
         itype         => '',
         ccode         => '',
         holdingbranch => '',

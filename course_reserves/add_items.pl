@@ -54,14 +54,11 @@ if ( $barcode || $itemnumber ) {
     if ( $item ) {
         $itemnumber = $item->id;
         $biblio = $item->biblio;
-        $biblionumber = $biblio->biblionumber;
     }
 } else {
     # adding a biblio to course items
     $biblio = Koha::Biblios->find( $biblionumber );
 }
-
-my $title = $biblio->title if $biblio;
 
 my $step = ( $action eq 'lookup' && ( $item or $biblio ) ) ? '2' : '1';
 
