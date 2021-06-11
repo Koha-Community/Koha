@@ -395,15 +395,18 @@
                 $('a[name="field_regex"]').click(function() {
                     var id = $(this).attr('id');
                     var editor = $(this).parent().find("[name='field_value']");
+                    var tag_editor = $(this).parent().find(".buttonDot");
                     var regex = $(this).parent().find("[name='regex_fields']");
                     var disable_input = $(this).parent().find("[name='disable_input']");
                     if ($(this).html() == 'RegEx') {
                         $(editor).hide();
                         $(regex).show();
+                        $(tag_editor).hide();
                         $(this).html('Text');
                         $(disable_input).prop('disabled', true);
                     } else {
                         $(editor).show();
+                        $(tag_editor).show();
                         $(regex).hide();
                         $(this).html('RegEx');
                         $(disable_input).prop('disabled', false);
