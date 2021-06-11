@@ -470,6 +470,7 @@ foreach my $branchcode (@branches) {
       || $library->inbound_email_address;
     my @output_chunks;    # may be sent to mail or stdout or csv file.
 
+    $verbose and print "======================================\n";
     $verbose and warn sprintf "branchcode : '%s' using %s\n", $branchcode, $branch_email_address;
 
     my $sql2 = <<"END_SQL";
@@ -524,9 +525,10 @@ END_SQL
             next unless defined $mindays;
 
             if ( !$overdue_rules->{"letter$i"} ) {
-                $verbose and warn "No letter$i code for branch '$branchcode'";
+                $verbose and warn sprintf "No letter code found for pass %s\n", $i;
                 next PERIOD;
             }
+            $verbose and warn sprintf "Using letter code '%s' for pass %s\n", $overdue_rules->{"letter$i"}, $i;
 
             # $letter->{'content'} is the text of the mail that is sent.
             # this text contains fields that are replaced by their value. Those fields must be written between brackets
@@ -562,7 +564,12 @@ END_SQL
             my $sth = $dbh->prepare($borrower_sql);
             $sth->execute(@borrower_parameters);
 
-            $verbose and warn $borrower_sql . "\n $branchcode | " . $overdue_rules->{'categorycode'} . "\n ($mindays, $maxdays, ".  $date_to_run->datetime() .")\nreturns " . $sth->rows . " rows";
+            if ( $verbose > 1 ){
+                warn sprintf "--------Borrower SQL------\n";
+                warn $borrower_sql . "\n $branchcode | " . $overdue_rules->{'categorycode'} . "\n ($mindays, $maxdays, ".  $date_to_run->datetime() .")\n";
+                warn sprintf "--------------------------\n";
+            }
+            $verbose and warn sprintf "Found %s borrowers with overdues\n", $sth->rows;
             my $borrowernumber;
             while ( my $data = $sth->fetchrow_hashref ) {
 
@@ -602,8 +609,7 @@ END_SQL
                     $data->{'firstname'} && $data->{'surname'} ? ', ' : '',
                     $data->{'firstname'} || '',
                     $borrowernumber );
-                $verbose
-                  and warn "borrower $borr has items triggering level $i.";
+                $verbose and warn "borrower $borr has items triggering level $i.\n";
 
                 my $patron = Koha::Patrons->find( $borrowernumber );
                 @emails_to_use = ();
@@ -649,7 +655,6 @@ END_SQL
                     $verbose and warn "debarring $borr\n";
                 }
                 my @params = ($borrowernumber,$branchcode);
-                $verbose and warn "STH2 PARAMS: borrowernumber = $borrowernumber";
 
                 $sth2->execute(@params);
                 my $itemcount = 0;
