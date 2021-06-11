@@ -105,7 +105,7 @@ my $format = $cgi->param("format") || '';
 if ($format =~ /(rss|atom|opensearchdescription)/) {
     $template_name = 'opac-opensearch.tt';
 }
-elsif ((@params>=1) || (defined $cgi->param("q")) || ($cgi->param('multibranchlimit')) || ($cgi->param('limit-yr')) || @searchCategories ) {
+elsif ((@params>=1) || (defined $cgi->param("q") && $cgi->param("q") ne "") || ($cgi->param('multibranchlimit')) || ($cgi->param('limit-yr')) || @searchCategories ) {
     $template_name = 'opac-results.tt';
 }
 else {
