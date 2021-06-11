@@ -262,7 +262,7 @@ if ( defined $format ) {
 
 my @branches = map { value => $_->branchcode, label => $_->branchname }, Koha::Libraries->search( {}, { order_by => 'branchname' } );
 my @itemtypes;
-foreach my $itemtype ( Koha::ItemTypes->search ) {
+foreach my $itemtype ( Koha::ItemTypes->search_with_localization ) {
     push @itemtypes, {
         value => $itemtype->itemtype,
         label => $itemtype->translated_description,
