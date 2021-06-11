@@ -106,7 +106,7 @@ if ( Koha::MarcSubfieldStructures->search( { frameworkcode => '', kohafield => '
     $template->param( has_new_status => 1 );
 }
 
-if (scalar keys %params > 0) {
+if ( defined $format ) {
     # Parameters given, it's a search
 
     my $filter = {
