@@ -51,7 +51,10 @@ sub search_by_marc_field {
             ( defined $tagfield    ? ( 'marc_subfield_structures.tagfield'    => $tagfield )    : () ),
             ( defined $tagsubfield ? ( 'marc_subfield_structures.tagsubfield' => $tagsubfield ) : () ),
         },
-        { join => { category => 'marc_subfield_structures' } }
+        {
+            join => { category => 'marc_subfield_structures' },
+            order_by => [ 'category', 'lib', 'lib_opac' ],
+        }
     );
 }
 
@@ -70,6 +73,7 @@ sub search_by_koha_field {
         },
         {   join     => { category => 'marc_subfield_structures' },
             distinct => 1,
+            order_by => [ 'category', 'lib', 'lib_opac' ],
         }
     );
 }
