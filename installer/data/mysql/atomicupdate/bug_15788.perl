@@ -9,12 +9,10 @@ if ( CheckVersion($DBversion) ) {
     }
     );
 
-    $dbh->do(
-        qq{
+    $dbh->do(q{
         INSERT IGNORE INTO user_permissions (borrowernumber, module_bit, code)
-        SELECT borrowernumber, 4, 'delete_borrowers' FROM borrowers WHERE borrowernumber IN ( SELECT borrowernumber FROM user_permissions WHERE code = 'edit_borrowers')
-    }
-    );
+        SELECT borrowernumber, 4, 'delete_borrowers' FROM user_permissions WHERE code = 'edit_borrowers'
+    });
 
     NewVersion( $DBversion, 15788, "Split edit_borrowers permission" );
 }
