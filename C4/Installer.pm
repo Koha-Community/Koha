@@ -731,10 +731,12 @@ sub update {
 
         my $error;
 
+        my $out = '';
+        open my $outfh, '>', \$out;
         try {
             $schema->txn_do(
                 sub {
-                    $db_rev->{up}->();
+                    $db_rev->{up}->({ dbh => $schema->storage->dbh, out => $outfh });
                 }
             );
         } catch {
@@ -743,13 +745,11 @@ sub update {
 
         my $db_entry = {
             bug_number  => $db_rev->{bug_number},
-            description => ( ref $db_rev->{description} eq 'CODE' )
-              ? $db_rev->{description}->()
-              : $db_rev->{description},
+            description => $db_rev->{description},
             version     => version_from_file($file),
             time        => POSIX::strftime( "%H:%M:%S", localtime ),
         };
-        $db_entry->{output} = output_version( { %$db_entry, done => !$error } );
+        $db_entry->{output} = output_version( { %$db_entry, done => !$error, report => $out } );
 
         if ( $error ) {
             push @errors, { %$db_entry, error => $error };
@@ -766,7 +766,8 @@ sub update {
 sub output_version {
     my ( $db_entry ) = @_;
 
-    my $descriptions = $db_entry->{description};
+    my $description = $db_entry->{description};
+    my $report = $db_entry->{report};
     my $DBversion = $db_entry->{version};
     my $bug_number = $db_entry->{bug_number};
     my $time = $db_entry->{time};
@@ -776,31 +777,20 @@ sub output_version {
                     : " failed"
                 : ""; # For old versions, we don't know if we succeed or failed
 
-    unless ( ref($descriptions) ) {
-        $descriptions = [ $descriptions ];
+    my @output;
+
+    if ($bug_number) {
+        push @output, sprintf('Upgrade to %s %s [%s]: Bug %5s - %s', $DBversion, $done, $time, $bug_number, $description);
+    } else {
+        push @output, sprintf('Upgrade to %s %s [%s]: %s', $DBversion, $done, $time, $description);
     }
 
-    my $first = 1;
-    my @output;
-    for my $description ( @$descriptions ) {
-        if ( @$descriptions > 1 ) {
-            if ( $first ) {
-                unless ( $bug_number ) {
-                    push @output, sprintf "Upgrade to %s%s [%s]:", $DBversion, $done, $time;
-                } else {
-                    push @output, sprintf "Upgrade to %s%s [%s]: Bug %5s", $DBversion, $done, $time, $bug_number;
-                }
-            }
-            push @output, sprintf "\t\t\t\t\t\t   - %s", $description;
-        } else {
-            unless ( $bug_number ) {
-                push @output, sprintf "Upgrade to %s%s [%s]: %s", $DBversion, $done, $time, $description;
-            } else {
-                push @output, sprintf "Upgrade to %s%s [%s]: Bug %5s - %s", $DBversion, $done, $time, $bug_number, $description;
-            }
+    if ($report) {
+        foreach my $line (split /\n/, $report) {
+            push @output, sprintf "\t\t\t\t\t\t   - %s", $line;
         }
-        $first = 0;
     }
+
     return \@output;
 }
 
