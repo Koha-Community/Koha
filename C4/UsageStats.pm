@@ -164,6 +164,7 @@ sub BuildReport {
         WhenLostChargeReplacementFee
         WhenLostForgiveFine
         AllowHoldDateInFuture
+        AllowHoldItemTypeSelection
         AllowHoldPolicyOverride
         AllowHoldsOnDamagedItems
         AllowHoldsOnPatronsPossessions
