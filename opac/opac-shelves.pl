@@ -263,8 +263,8 @@ if ( $op eq 'view' ) {
                 $sortfield = $shelf->sortfield;
                 $direction = 'asc';
             }
-            $sortfield = 'title' unless grep $_ eq $sortfield, qw( title author copyrightdate itemcallnumber dateadded );
-            $direction = 'asc' if $direction ne 'asc' and $direction ne 'desc';
+            $sortfield = 'title' if !$sortfield or !grep { $_ eq $sortfield } qw( title author copyrightdate itemcallnumber dateadded );
+            $direction = 'asc' if !$direction or ( $direction ne 'asc' and $direction ne 'desc' );
             my ( $page, $rows );
             unless ( $query->param('print') or $query->param('rss') ) {
                 $rows = C4::Context->preference('OPACnumSearchResults') || 20;
