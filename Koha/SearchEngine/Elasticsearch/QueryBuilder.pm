@@ -939,6 +939,19 @@ sub _clean_search_term {
     }
     $term = $self->_query_regex_escape_process($term);
 
+    # save all regex contents away before escaping brackets:
+    my @saved_regexes;
+    my $rgx_i = 0;
+    while(
+            $term =~ s@(
+                (?<!\\)(?:[\\]{2})*/
+                (?:[^/]+|(?<=\\)(?:[\\]{2})*/)+
+                (?<!\\)(?:[\\]{2})*/
+            )$lookahead@~~RE$rgx_i~~@x
+    ) {
+        @saved_regexes[$rgx_i++] = $1;
+    }
+
     # remove leading and trailing colons mixed with optional slashes and spaces
     $term =~ s/^([\s\\]*:\s*)+//;
     $term =~ s/([\s\\]*:\s*)+$//;
@@ -956,6 +969,11 @@ sub _clean_search_term {
 
     # screen all brackets with backslash
     $term =~ s/(?<!\\)(?:[\\]{2})*([\{\}\[\]])$lookahead/\\$1/g;
+
+    # restore all regex contents after escaping brackets:
+    for (my $i = 0; $i < @saved_regexes; $i++) {
+        $term =~ s/~~RE$i~~/$saved_regexes[$i]/;
+    }
     return $term;
 }
 
