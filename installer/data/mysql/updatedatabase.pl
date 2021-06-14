@@ -24279,6 +24279,14 @@ if( CheckVersion( $DBversion ) ) {
     NewVersion( $DBversion, "", "Koha 21.05.00 release" );
 }
 
+$DBversion = '21.05.01.000';
+if ( CheckVersion($DBversion) ) {
+    $dbh->do('DELETE FROM sessions');
+    $dbh->do('ALTER TABLE sessions MODIFY a_session LONGBLOB NOT NULL');
+
+    NewVersion( $DBversion, '28489', 'Modify sessions.a_session from longtext to longblob' );
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 my $update_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/atomicupdate/';
