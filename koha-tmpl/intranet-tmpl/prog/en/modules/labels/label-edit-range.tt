@@ -67,27 +67,60 @@
     <script>
         function Xport() {
             var str = "";
-            str += "from=" + parseInt(document.getElementById("from-input").value) + "&";
-            str += "to=" + parseInt(document.getElementById("to-input").value);
+            str += "from=" + document.getElementById("from-input").value + "&";
+            str += "to=" + document.getElementById("to-input").value;
             return GB_showCenter('Export labels', "/cgi-bin/koha/labels/label-print.pl?" + str, 400, 800);
         }
+
+        function checkTwoValue(_from, _to, _id){
+            var result = _from.length == _to.length;
+            if (_from[0] == "0" || _to[0] == "0") {
+                switch (_id){
+                    case 'from-input':
+                        var to_inp = $("#to-input")
+                        if (to_inp.hasClass('error')){
+                            to_inp.removeClass('error').addClass('valid');
+                            $("to-input-error").remove();
+                        }
+                        if ($('#to-input-error').length){
+                            $("#to-input-error").remove();
+                        }
+                        return result;
+                    case 'to-input':
+                        var from_inp = $("#from-input")
+                        if (from_inp.hasClass('error')){
+                            from_inp.removeClass('error').addClass('valid');
+                        }
+                        if ($('#from-input-error').length){
+                            $("#from-input-error").remove();
+                        }
+                        return result;
+                    }
+                }
+                return true;
+            }
 
         $(document).ready(function () {
             $.validator.addMethod("gt", function(value, element, params) {
                 return parseInt(value) >= parseInt($(params).val());
             }, _("Must be greater or equal to the from value."));
 
+            $.validator.addMethod("eq", function(value, element, params) {
+                return checkTwoValue($("#from-input").val(), $("#to-input").val(), $(element).attr('id'));
+            }, _("From and to values must have the same length."));
+
             $("form[name=add_by_number]").validate({
                 rules: {
                     from: {
                         required: true,
-                        number: true,
-                        min: 1
+                        eq: "#from-input",
+                        eq: "#to-input",
                     },
                     to: {
                         required: true,
-                        number: true,
-                        gt: "#from-input"
+                        gt: "#from-input",
+                        eq: "#from-input",
+                        eq: "#to-input",
                     }
                 }
             });
@@ -98,6 +131,13 @@
                 }
             });
         });
+
+
+
+
+
+
+
     </script>
 [% END %]
 

@@ -51,8 +51,13 @@ my @item_numbers;
 my $output_format = $cgi->param('output_format') || 'pdf';
 my $referer = $cgi->param('referer') || undef;
 
-my $from = $cgi->param('from') || undef;
-my $to = $cgi->param('to') || undef;
+my $txt_from = $cgi->param('from') || undef;
+my $txt_to = $cgi->param('to') || undef;
+my $from = int($txt_from) || undef;
+my $to = int($txt_to) || undef;
+my $range = length($txt_from) || undef;
+
+warn ("range = " . Data::Dumper::Dumper($range));
 
 my $layouts = undef;
 my $templates = undef;
@@ -124,6 +129,7 @@ if ($op eq 'export') {
         push (@batches, {create_script   => 'label-create-pdf.pl',
                  from            => $from,
                  to              => $to,
+                 range           => $range,
                  template_id     => $template_id,
                  layout_id       => $layout_id,
                  start_label     => $start_label,
@@ -156,7 +162,10 @@ elsif ($op eq 'none') {
                     item_count                  => $item_count,
                     referer                     => $referer,
                     from                        => $from,
-                    to                          => $to
+                    to                          => $to,
+                    range                       => $range,
+                    txt_from                    => $txt_from,
+                    txt_to                      => $txt_to
                     );
 }
 output_html_with_http_headers $cgi, $cookie, $template->output;

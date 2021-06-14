@@ -45,6 +45,9 @@ my $start_label = $cgi->param('start_label') || 1;
 @item_numbers  = $cgi->multi_param('item_number') if $cgi->param('item_number');
 my $from = $cgi->param('from') || undef;
 my $to = $cgi->param('to') || undef;
+my $range = $cgi->param('range') || undef;
+
+warn ("range_pdf = " . Data::Dumper::Dumper($range));
 
 my $items = undef;
 
@@ -117,7 +120,17 @@ elsif (@item_numbers) {
 }
 elsif ($from and $to) {
     for (my $i = $from; $i <= $to; $i++) {
-        push @{$items}, {'item_number' => $i};
+        my $compare_range = $range - length($i);
+        if ($compare_range == 0){
+            push @{$items}, {'item_number' => $i};
+        } else {
+            my $a = '';
+            for (my $j = 1; $j <= $compare_range; $j++){
+                $a .= '0';
+            }
+            $a .= $i;
+            push @{$items}, {'item_number' => $a};
+        }
     }
 }
 else {

@@ -21,7 +21,7 @@
                         <fieldset>
                             [% IF ( batche.label_ids ) %]
                                 <legend>[% IF ( batche.label_count == 1 ) %][% batche.label_count | html %] single label[% ELSE %][% batche.label_count | html %] single labels[% END %]</legend>
-                                    <p><a class="document pdf" href="/cgi-bin/koha/labels/[% batche.create_script | html %]?batch_id=[% batche.batch_id | html %]&amp;template_id=[% batche.template_id | html %]&amp;layout_id=[% batche.layout_id | html %]&amp;start_label=[% batche.start_label | html %][% batche.label_ids | html %]">Download as PDF</a></p>
+                                <a class="document pdf" href="/cgi-bin/koha/labels/label-create-pdf.pl?batch_id=0&amp;template_id=[% batche.template_id | html %]&amp;layout_id=[% batche.layout_id | html %]&amp;start_label=[% batche.start_label | html %]&amp;from=[% batche.from | html %]&amp;to=[% batche.to | html %]&amp;range=[% batche.range | html %]">Download as PDF</a>
 
                                     <p><a class="document csv" href="/cgi-bin/koha/labels/label-create-csv.pl?batch_id=[% batche.batch_id | html %]&amp;template_id=[% batche.template_id | html %]&amp;layout_id=[% batche.layout_id | html %][% batche.label_ids | html %]">Download as CSV</a></p>
 
@@ -45,7 +45,7 @@
                             [% ELSIF (batche.from && batche.to) %]
                             <legend>Barcodes from [% batche.from | html %] to [% batche.to | html %]</legend>
                             <p>
-                                <a class="document pdf" href="/cgi-bin/koha/labels/label-create-pdf.pl?batch_id=0&amp;template_id=[% batche.template_id | html %]&amp;layout_id=[% batche.layout_id | html %]&amp;start_label=[% batche.start_label | html %]&amp;from=[% batche.from | html %]&amp;to=[% batche.to | html %]">Download as PDF</a>
+                                <a class="document pdf" href="/cgi-bin/koha/labels/label-create-pdf.pl?batch_id=0&amp;template_id=[% batche.template_id | html %]&amp;layout_id=[% batche.layout_id | html %]&amp;start_label=[% batche.start_label | html %]&amp;from=[% batche.from | html %]&amp;to=[% batche.to | html %]&amp;range=[% batche.range | html %]">Download as PDF</a>
                             </p>
                             [% END %]
                         </fieldset>
@@ -76,8 +76,9 @@
                 [% FOREACH item_number IN item_numbers %]
                     <input type="hidden" name="item_number" value="[% item_number.item_number | html %]" />
                 [% END %]
-                    <input type="hidden" name="from" value="[% from | html %]" />
-                    <input type="hidden" name="to" value="[% to | html %]" />
+                <input type="text" name="from" value="[% txt_from | html %]" />
+                <input type="text" name="to" value="[% txt_to | html %]" />
+                <input type="text" name="range" value="[% range | html %]" />
                 <fieldset class="rows">
                     <ol>
                         <li>
