@@ -352,6 +352,7 @@ sub mocking_systempreferences_to_a_set_value {
         AcqCreateItem
         AcqWarnOnDuplicateInvoice
         AcqViewBaskets
+        AllowHoldItemTypeSelection
         BasketConfirmations
         OrderPdfFormat
         casAuthentication
