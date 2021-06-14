@@ -24284,6 +24284,14 @@ if( CheckVersion( $DBversion ) ) {
     NewVersion( $DBversion, "", ["🎵 Run, rabbit run. 🎶", "Dig that hole, forget the sun,", "And when at last the work is done", "Don't sit down it's time to dig another one."] );
 }
 
+$DBversion = '21.06.00.001';
+if ( CheckVersion($DBversion) ) {
+    $dbh->do('DELETE FROM sessions');
+    $dbh->do('ALTER TABLE sessions MODIFY a_session LONGBLOB NOT NULL');
+
+    NewVersion( $DBversion, '28489', 'Modify sessions.a_session from longtext to longblob' );
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 my $update_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/atomicupdate/';
