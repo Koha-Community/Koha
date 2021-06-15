@@ -148,7 +148,7 @@ subtest 'transfer already at destination' => sub {
         barcode => $item->barcode,
         trigger => "Manual"
     });
-    is( $dotransfer, 1, 'Transfer of reserved item succeeded without ignore reserves' );
+    is( $dotransfer, 0, 'Transfer of reserved item doesn\'t succeed without ignore_reserves' );
     is( $messages->{ResFound}->{ResFound}, 'Reserved', "We found the reserve");
     is( $messages->{ResFound}->{itemnumber}, $item->itemnumber, "We got the reserve info");
 };
@@ -205,15 +205,16 @@ subtest 'transfer an issued item' => sub {
         barcode => $item->barcode,
         trigger => "Manual"
     });
-    is( $dotransfer, 1, 'Transfer of reserved item succeeded without ignore reserves' );
+    is( $dotransfer, 0, 'Transfer of reserved item doesn\'t succeed without ignore_reserves' );
     is( $messages->{ResFound}->{ResFound}, 'Reserved', "We found the reserve");
     is( $messages->{ResFound}->{itemnumber}, $item->itemnumber, "We got the reserve info");
     is( $messages->{WasReturned}, $patron->borrowernumber, "We got the return info");
 };
 
 subtest 'ignore_reserves flag' => sub {
-    plan tests => 10;
+    plan tests => 9;
     my $library = $builder->build_object( { class => 'Koha::Libraries' } )->store;
+    my $library2 = $builder->build_object( { class => 'Koha::Libraries' } )->store;
     t::lib::Mocks::mock_userenv( { branchcode => $library->branchcode } );
 
     my $patron = $builder->build_object(
@@ -241,42 +242,37 @@ subtest 'ignore_reserves flag' => sub {
     #   found will override all other measures that may prevent transfer and force a transfer.
     my ($dotransfer, $messages ) = transferbook({
         from_branch => $item->homebranch,
-        to_branch => $library->branchcode,
+        to_branch => $library2->branchcode,
         barcode => $item->barcode,
         trigger => "Manual"
     });
-    is( $dotransfer, 1, 'Transfer of reserved item succeeded without ignore reserves' );
+    is( $dotransfer, 0, 'Transfer of reserved item doesn\'t succeed without ignore_reserves' );
     is( $messages->{ResFound}->{ResFound}, 'Reserved', "We found the reserve");
     is( $messages->{ResFound}->{itemnumber}, $item->itemnumber, "We got the reserve info");
 
     my $ignore_reserves = 0;
     ($dotransfer, $messages ) = transferbook({
         from_branch => $item->homebranch,
-        to_branch => $library->branchcode,
+        to_branch => $library2->branchcode,
         barcode => $item->barcode,
         ignore_reserves => $ignore_reserves,
         trigger => "Manual"
     });
-    is( $dotransfer, 1, 'Transfer of reserved item succeeded with ignore reserves: false' );
+    is( $dotransfer, 0, 'Transfer of reserved item doesn\'t succeed without ignore_reserves' );
     is( $messages->{ResFound}->{ResFound}, 'Reserved', "We found the reserve");
     is( $messages->{ResFound}->{itemnumber}, $item->itemnumber, "We got the reserve info");
 
     $ignore_reserves = 1;
     ($dotransfer, $messages ) = transferbook({
         from_branch => $item->homebranch,
-        to_branch => $library->branchcode,
+        to_branch => $library2->branchcode,
         barcode => $item->barcode,
         ignore_reserves => $ignore_reserves,
         trigger => "Manual"
     });
-    is( $dotransfer, 0, 'Transfer of reserved item failed with ignore reserves: true' );
-    is_deeply(
-        $messages,
-        { 'DestinationEqualsHolding' => 1 },
-        "We got the expected failure message: DestinationEqualsHolding"
-    );
-    isnt( $messages->{ResFound}->{ResFound}, 'Reserved', "We did not return that we found a reserve");
-    isnt( $messages->{ResFound}->{itemnumber}, $item->itemnumber, "We did not return the reserve info");
+    is( $dotransfer, 1, 'Transfer of reserved item succeed with ignore reserves: true' );
+    is( $messages->{ResFound}->{ResFound}, 'Reserved', "We found the reserve");
+    is( $messages->{ResFound}->{itemnumber}, $item->itemnumber, "We got the reserve info");
 };
 
 subtest 'transferbook test from branch' => sub {
