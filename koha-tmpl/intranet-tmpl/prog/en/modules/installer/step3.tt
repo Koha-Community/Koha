@@ -244,8 +244,26 @@
 
                 [% IF ( updatestructure ) %]
                     <h2>Updating database structure</h2>
+                    [% IF has_update_succeeds || success %]
+                        <p>Update report :</p>
+                    [% END %]
+
+                    [%# Success for old versions %]
+                    [% IF has_update_succeeds %]
+                        <ul>
+                            [% FOREACH l IN update_report %]
+                                [% SET line = l.line %]
+                                [% IF line.match('^Upgrade to') %]
+                                    <li>[% line | $raw %]</li>
+                                [% ELSE %]
+                                    [% line | $raw %]<br/>
+                                [% END %]
+                            [% END %]
+                        </ul>
+                    [% END %]
+
+                    [%# Success for new versions %]
                     [% IF success %]
-                        <p>Update report:</p>
                         <ul>
                             [% FOR s IN success %]
                                 [% FOR o IN s.output %]
@@ -257,6 +275,18 @@
                             [% END %]
                         </ul>
                     [% END %]
+
+                    [%# Errors for old versions %]
+                    [% IF has_update_errors %]
+                        <p>Update errors :</p>
+                        <ul>
+                            [% FOREACH update_error IN update_errors %]
+                                <li class="update_error">[% update_error.line | html %]</li>
+                            [% END %]
+                        </ul>
+                    [% END %]
+
+                    [%# Errors for new versions %]
                     [% IF error %]
                         <p>Update error :</p>
                         <ul>
@@ -275,7 +305,7 @@
                             [% END %]
                         </ul>
                     [% END %]
-                    [% UNLESS error %]
+                    [% UNLESS error OR has_update_errors %]
                         <p>Everything went okay. Update done.</p>
                         <p><a href="install.pl?step=3&amp;op=finished" class="btn btn-primary">Continue to log in to Koha</a></p>
                     [% ELSE %]

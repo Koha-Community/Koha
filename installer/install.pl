@@ -393,13 +393,44 @@ elsif ( $step && $step == 3 ) {
             chk_log( $logdir, "updatedatabase-error_$filename_suffix" )
         );
 
-        my $updatedatabase_path = C4::Context->config("intranetdir")
-          . "/installer/data/$info{dbms}/updatedatabase.pl";
+        my $cmd = C4::Context->config("intranetdir")
+          . "/installer/data/$info{dbms}/updatedatabase.pl >> $logfilepath 2>> $logfilepath_errors";
+
+        system( $cmd );
+
+        my $fh;
+        open( $fh, "<:encoding(utf-8)", $logfilepath )
+          or die "Cannot open log file $logfilepath: $!";
+        my @report = <$fh>;
+        close $fh;
+        if (@report) {
+            $template->param( update_report =>
+                  [ map { { line => $_ =~ s/\t/&emsp;&emsp;/gr } } split( /\n/, join( '', @report ) ) ]
+            );
+            $template->param( has_update_succeeds => 1 );
+        }
+        else {
+            eval { `rm $logfilepath` };
+        }
+        open( $fh, "<:encoding(utf-8)", $logfilepath_errors )
+          or die "Cannot open log file $logfilepath_errors: $!";
+        @report = <$fh>;
+        close $fh;
+        if (@report) {
+            $template->param( update_errors =>
+                  [ map { { line => $_ } } split( /\n/, join( '', @report ) ) ]
+            );
+            $template->param( has_update_errors => 1 );
+            warn
+"The following errors were returned while attempting to run the updatedatabase.pl script:\n";
+            foreach my $line (@report) { warn "$line\n"; }
+        }
+        else {
+            eval { `rm $logfilepath_errors` };
+        }
 
         my $db_entries = get_db_entries();
         my $report = update( $db_entries );
-
-        # FIXME restore log to logfilepath and logfilepath_errors
 
         $template->param( success => $report->{success}, error => $report->{error} );
 

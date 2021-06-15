@@ -32,7 +32,7 @@ use vars qw(@ISA @EXPORT);
 BEGIN {
     require Exporter;
     @ISA = qw( Exporter );
-    push @EXPORT, qw( primary_key_exists unique_key_exists foreign_key_exists index_exists column_exists TableExists marc_framework_sql_list TransformToNum CheckVersion sanitize_zero_date update get_db_entries );
+    push @EXPORT, qw( primary_key_exists unique_key_exists foreign_key_exists index_exists column_exists TableExists marc_framework_sql_list TransformToNum CheckVersion NewVersion sanitize_zero_date update get_db_entries );
 };
 
 =head1 NAME
@@ -770,7 +770,11 @@ sub output_version {
     my $DBversion = $db_entry->{version};
     my $bug_number = $db_entry->{bug_number};
     my $time = $db_entry->{time};
-    my $done = $db_entry->{done} ? "done" : "failed";
+    my $done = defined $db_entry->{done}
+                ? $db_entry->{done}
+                    ? " done"
+                    : " failed"
+                : ""; # For old versions, we don't know if we succeed or failed
 
     unless ( ref($descriptions) ) {
         $descriptions = [ $descriptions ];
@@ -782,17 +786,17 @@ sub output_version {
         if ( @$descriptions > 1 ) {
             if ( $first ) {
                 unless ( $bug_number ) {
-                    push @output, sprintf "Upgrade to %s %s [%s]:", $DBversion, $done, $time;
+                    push @output, sprintf "Upgrade to %s%s [%s]:", $DBversion, $done, $time;
                 } else {
-                    push @output, sprintf "Upgrade to %s %s [%s]: Bug %5s", $DBversion, $done, $time, $bug_number;
+                    push @output, sprintf "Upgrade to %s%s [%s]: Bug %5s", $DBversion, $done, $time, $bug_number;
                 }
             }
             push @output, sprintf "\t\t\t\t\t\t   - %s", $description;
         } else {
             unless ( $bug_number ) {
-                push @output, sprintf "Upgrade to %s %s [%s]: %s", $DBversion, $done, $time, $description;
+                push @output, sprintf "Upgrade to %s%s [%s]: %s", $DBversion, $done, $time, $description;
             } else {
-                push @output, sprintf "Upgrade to %s %s [%s]: Bug %5s - %s", $DBversion, $done, $time, $bug_number, $description;
+                push @output, sprintf "Upgrade to %s%s [%s]: Bug %5s - %s", $DBversion, $done, $time, $bug_number, $description;
             }
         }
         $first = 0;
@@ -868,8 +872,26 @@ sub SetVersion {
     C4::Context::clear_syspref_cache(); # invalidate cached preferences
 }
 
+# DEPRECATED Don't use it!
+# Used for compatibility with older versions (from updatedatabase.pl)
 sub NewVersion {
-    # void FIXME replace me
+    my ( $DBversion, $bug_number, $descriptions ) = @_;
+
+    SetVersion($DBversion);
+
+    unless ( ref($descriptions) ) {
+        $descriptions = [ $descriptions ];
+    }
+
+    my $output = output_version( {
+            bug_number  => $bug_number,
+            description => $descriptions,
+            version     => $DBversion,
+            time        => POSIX::strftime( "%H:%M:%S", localtime ),
+    });
+
+    say join "\n", @$output;
+
 }
 
 =head2 CheckVersion
