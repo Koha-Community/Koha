@@ -24319,6 +24319,35 @@ if( CheckVersion( $DBversion ) ) {
     NewVersion( $DBversion, 28490, "Bring back accidentally deleted relationship columns");
 }
 
+$DBversion = '21.06.00.003';
+if( CheckVersion( $DBversion ) ) {
+
+    # Add 'WrongTransfer' to branchtransfers cancellation_reason enum
+    $dbh->do(
+        q{
+            ALTER TABLE
+                `branchtransfers`
+            MODIFY COLUMN
+                `cancellation_reason` enum(
+                    'Manual',
+                    'StockrotationAdvance',
+                    'StockrotationRepatriation',
+                    'ReturnToHome',
+                    'ReturnToHolding',
+                    'RotatingCollection',
+                    'Reserve',
+                    'LostReserve',
+                    'CancelReserve',
+                    'ItemLost',
+                    'WrongTransfer'
+                )
+            AFTER `comments`
+          }
+    );
+
+    NewVersion( $DBversion, 24434, "Add 'WrongTransfer' to branchtransfers.cancellation_reason enum");
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 my $update_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/atomicupdate/';
