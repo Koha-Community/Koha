@@ -186,13 +186,13 @@
                                                 [% IF ( branchcode_required ) %]
                                                     <label for="branch" class="required">Library:</label>
                                                     <select name="branchcode" id="branch" required="required">
-                                                        [% PROCESS options_for_libraries libraries => Branches.all( selected => branchcode ) %]
+                                                        [% PROCESS options_for_libraries libraries => Branches.all %]
                                                     </select>
                                                     <span class="required">Required</span>
                                                 [% ELSE %]
                                                     <label for="branch">Library:</label>
                                                     <select name="branchcode" id="branch">
-                                                        [% PROCESS options_for_libraries libraries => Branches.all( selected => branchcode ) %]
+                                                        [% PROCESS options_for_libraries libraries => Branches.all %]
                                                     </select>
                                                 [% END %]
                                             </li>
