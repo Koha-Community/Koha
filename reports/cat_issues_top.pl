@@ -298,7 +298,7 @@ sub calculate {
     my $strcalc ;
     
 # Processing average loanperiods
-    $strcalc .= "SELECT DISTINCT biblio.title, COUNT(biblio.biblionumber) AS RANK, biblio.biblionumber AS ID";
+    $strcalc .= "SELECT DISTINCT biblio.title, COUNT(biblio.biblionumber) AS `RANK`, biblio.biblionumber AS ID";
     $strcalc .= ", itemcallnumber as CALLNUM";
     $strcalc .= ", ccode as CCODE";
     $strcalc .= ", location as LOC";
@@ -346,7 +346,7 @@ sub calculate {
     
     $strcalc .= " group by biblio.biblionumber";
     $strcalc .= ", $colfield" if ($column);
-    $strcalc .= " order by RANK DESC";
+    $strcalc .= " order by `RANK` DESC";
     $strcalc .= ", $colfield " if ($colfield);
     
     my $dbcalc = $dbh->prepare($strcalc);
