@@ -350,7 +350,7 @@
                                             [% ELSE %]
                                                 <div class="hint">[% patron.title | html %] [% patron.firstname | html %] [% patron.surname | html %] does not currently have an image available. To import an image for [% patron.title | html %] [% patron.firstname | html %] [% patron.surname | html %], enter the name of an image file to upload.</div>
                                             [% END %]
-                                            <p>Only PNG, GIF, JPEG, XPM formats are supported.</p>
+                                            <p>Only PNG, GIF, JPEG, XPM formats are supported. Maximum image size is 500KB.</p>
                                             <label for="uploadfile">Select the file to upload: </label>
                                             <input type="file" id="uploadfile" name="uploadfile" required="required" />
                                             <div class="action">
