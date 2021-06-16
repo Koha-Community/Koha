@@ -777,13 +777,6 @@ sub _version_check {
     }
 }
 
-sub _session_log {
-    (@_) or return 0;
-    open my $fh, '>>', "/tmp/sessionlog" or warn "ERROR: Cannot append to /tmp/sessionlog";
-    printf $fh join( "\n", @_ );
-    close $fh;
-}
-
 sub _timeout_syspref {
     my $default_timeout = 600;
     my $timeout = C4::Context->preference('timeout') || $default_timeout;
@@ -921,7 +914,6 @@ sub checkauth {
             $session->flush;
             C4::Context->_unset_userenv($sessionID);
 
-            #_session_log(sprintf "%20s from %16s logged out at %30s (manually).\n", $userid,$ip,(strftime "%c",localtime));
             $sessionID = undef;
             $userid    = undef;
 
@@ -944,7 +936,6 @@ sub checkauth {
             }
             C4::Context->_unset_userenv($sessionID);
 
-            #_session_log(sprintf "%20s from %16s logged out at %30s (inactivity).\n", $userid,$ip,(strftime "%c",localtime));
             $userid    = undef;
             $sessionID = undef;
         }
@@ -958,7 +949,6 @@ sub checkauth {
             $session->flush;
             C4::Context->_unset_userenv($sessionID);
 
-            #_session_log(sprintf "%20s from %16s logged out at %30s (ip changed to %16s).\n", $userid,$ip,(strftime "%c",localtime), $info{'newip'});
             $sessionID = undef;
             $userid    = undef;
         }
@@ -1119,7 +1109,6 @@ sub checkauth {
             # $return: 1 = valid user
             if ($return) {
 
-                #_session_log(sprintf "%20s from %16s logged in  at %30s.\n", $userid,$ENV{'REMOTE_ADDR'},(strftime '%c', localtime));
                 if ( $flags = haspermission( $userid, $flagsrequired ) ) {
                     $loggedin = 1;
                 }
