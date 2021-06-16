@@ -27,7 +27,6 @@ use C4::Koha;
 use C4::Circulation;
 use C4::Members;
 use C4::Reports;
-use C4::Debug;
 
 use Koha::DateUtils;
 use Koha::ItemTypes;
@@ -40,8 +39,6 @@ plugin that shows a stats on borrowers
 =head1 DESCRIPTION
 
 =cut
-
-$debug and open my $debugfh, '>', '/tmp/bor_issues_top.debug.log';
 
 my $input = CGI->new;
 my $fullreportname = "reports/bor_issues_top.tt";
@@ -223,25 +220,20 @@ sub calculate {
         $strsth2 .=" GROUP BY $colfield";
         $strsth2 .=" ORDER BY $colorder";
 
-        $debug and print $debugfh "bor_issues_top (old_issues) SQL: $strsth2\n";
         my $sth2 = $dbh->prepare($strsth2);
         $sth2->execute;
-        print $debugfh "rows: ", $sth2->rows, "\n";
         while (my @row = $sth2->fetchrow) {
 			$columns{($row[0] ||'NULL')}++;
             push @loopcol, { coltitle => $row[0] || 'NULL' };
         }
 
 		$strsth2 =~ s/old_issues/issues/g;
-        $debug and print $debugfh "bor_issues_top (issues) SQL: $strsth2\n";
 		$sth2 = $dbh->prepare($strsth2);
         $sth2->execute;
-        $debug and print $debugfh "rows: ", $sth2->rows, "\n";
         while (my @row = $sth2->fetchrow) {
 			$columns{($row[0] ||'NULL')}++;
             push @loopcol, { coltitle => $row[0] || 'NULL' };
         }
-        $debug and print $debugfh "full array: ", Dumper(\%columns), "\n";
     }else{
         $columns{''} = 1;
     }
@@ -278,10 +270,8 @@ sub calculate {
     $strcalc .= ",$colfield " if ($colfield);
     $strcalc .= " LIMIT $limit" if ($limit);
 
-    $debug and print $debugfh "(old_issues) SQL : $strcalc\n";
     my $dbcalc = $dbh->prepare($strcalc);
     $dbcalc->execute;
-    $debug and print $debugfh "rows: ", $dbcalc->rows, "\n";
 	my %patrons = ();
 	# DATA STRUCTURE is going to look like this:
 	# 	(2253=> {name=>"John Doe",
@@ -300,10 +290,8 @@ sub calculate {
 	use Data::Dumper;
 
 	$strcalc =~ s/old_issues/issues/g;
-    $debug and print $debugfh "(issues) SQL : $strcalc\n";
     $dbcalc = $dbh->prepare($strcalc);
     $dbcalc->execute;
-    $debug and print $debugfh "rows: ", $dbcalc->rows, "\n";
     while (my @data = $dbcalc->fetchrow) {
         my ($row, $rank, $id, $col) = @data;
         $col = "zzEMPTY" if (!defined($col));
@@ -322,7 +310,6 @@ sub calculate {
 			$patrons{$id}->{total} += $count;
 		}
 	}
-    $debug and print $debugfh "\n\npatrons: ", Dumper(\%patrons);
     
 	my $i = 1;
 	my @cols_in_order = sort keys %columns;		# if you want to order the columns, do something here
@@ -368,6 +355,5 @@ sub calculate {
     return [\%globalline];	# reference to a 1 element array: that element is a hashref
 }
 
-$debug and close $debugfh;
 1;
 __END__
