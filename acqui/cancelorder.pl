@@ -66,7 +66,7 @@ if( $action and $action eq "confirmcancel" ) {
             if $messages[0]->message eq 'error_delbiblio';
     } else {
         # Log the cancellation of the order
-        if (C4::Context->preference("AcqLog")) {
+        if (C4::Context->preference("AcquisitionLog")) {
             logaction('ACQUISITIONS', 'CANCEL_ORDER', $ordernumber);
         }
         $template->param(success_cancelorder => 1);

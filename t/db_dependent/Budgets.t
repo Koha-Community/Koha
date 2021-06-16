@@ -24,7 +24,7 @@ use Koha::DateUtils;
 
 use t::lib::Mocks;
 t::lib::Mocks::mock_preference('OrderPriceRounding','');
-t::lib::Mocks::mock_preference('AcqLog','1');
+t::lib::Mocks::mock_preference('AcquisitionLog','1');
 
 my $schema  = Koha::Database->new->schema;
 $schema->storage->txn_begin;

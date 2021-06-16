@@ -148,7 +148,7 @@ elsif ( $op && $op eq 'del_adj' ) {
     my $adjustment_id  = $input->param('adjustment_id');
     my $del_adj = Koha::Acquisition::Invoice::Adjustments->find( $adjustment_id );
     if ($del_adj) {
-        if (C4::Context->preference("AcqLog")) {
+        if (C4::Context->preference("AcquisitionLog")) {
             my $infos = {
                 invoiceid     => $del_adj->invoiceid,
                 budget_id     => $del_adj->budget_id,
@@ -194,7 +194,7 @@ elsif ( $op && $op eq 'mod_adj' ) {
             my $new_adj = Koha::Acquisition::Invoice::Adjustment->new($adj);
             $new_adj->store();
             # Log this addition
-            if (C4::Context->preference("AcqLog")) {
+            if (C4::Context->preference("AcquisitionLog")) {
                 logaction(
                     'ACQUISITIONS',
                     'CREATE_INVOICE_ADJUSTMENT',
@@ -207,7 +207,7 @@ elsif ( $op && $op eq 'mod_adj' ) {
             my $old_adj = Koha::Acquisition::Invoice::Adjustments->find( $adjustment_id[$i] );
             unless ( $old_adj->adjustment == $adjustment[$i] && $old_adj->reason eq $reason[$i] && $old_adj->budget_id == $budget_id[$i] && $old_adj->encumber_open == $e_open{$adjustment_id[$i]} && $old_adj->note eq $note[$i] ){
                 # Log this modification
-                if (C4::Context->preference("AcqLog")) {
+                if (C4::Context->preference("AcquisitionLog")) {
                     my $infos = {
                         adjustment        => $adjustment[$i],
                         reason            => $reason[$i],

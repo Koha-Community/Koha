@@ -645,7 +645,7 @@ sub AddBudget {
     my $id = $resultset->create($budget)->id;
 
     # Log the addition
-    if (C4::Context->preference("AcqLog")) {
+    if (C4::Context->preference("AcquisitionLog")) {
         my $infos = {
             budget_amount => $budget->{budget_amount},
             budget_encumb => $budget->{budget_encumb},
@@ -669,7 +669,7 @@ sub ModBudget {
     return unless($result);
 
     # Log this modification
-    if (C4::Context->preference("AcqLog")) {
+    if (C4::Context->preference("AcquisitionLog")) {
         my $infos = {
             budget_amount_new    => $budget->{budget_amount},
             budget_encumb_new    => $budget->{budget_encumb},
@@ -701,7 +701,7 @@ sub DelBudget {
 	my $sth         = $dbh->prepare("delete from aqbudgets where budget_id=?");
 	my $rc          = $sth->execute($budget_id);
     # Log the deletion
-    if (C4::Context->preference("AcqLog")) {
+    if (C4::Context->preference("AcquisitionLog")) {
         logaction(
             'ACQUISITIONS',
             'DELETE_FUND',

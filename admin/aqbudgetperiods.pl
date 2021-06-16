@@ -120,7 +120,7 @@ elsif ( $op eq 'add_validate' ) {
         $$budget_period_hashref{$_}||=0 for qw(budget_period_active budget_period_locked);
         my $status=ModBudgetPeriod($budget_period_hashref);
         # Log the budget modification
-        if (C4::Context->preference("AcqLog")) {
+        if (C4::Context->preference("AcquisitionLog")) {
             my $diff = 0 - ($budgetperiod_old->{budget_period_total} - $budget_period_hashref->{budget_period_total});
             my $infos = {
                 budget_period_startdate     => $input->param('budget_period_startdate'),

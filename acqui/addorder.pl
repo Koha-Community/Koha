@@ -319,7 +319,7 @@ if ( $basket->{is_standing} || $orderinfo->{quantity} ne '0' ) {
     if ( $orderinfo->{ordernumber} ) {
         ModOrder($orderinfo);
         # Log the order modification
-        if (C4::Context->preference("AcqLog")) {
+        if (C4::Context->preference("AcquisitionLog")) {
             my $infos = {};
             foreach my $field(@log_order_fields) {
                 $infos->{$field} = $orderinfo->{$field};
@@ -335,7 +335,7 @@ if ( $basket->{is_standing} || $orderinfo->{quantity} ne '0' ) {
     else { # else, it's a new line
         $order->store;
         # Log the order creation
-        if (C4::Context->preference("AcqLog")) {
+        if (C4::Context->preference("AcquisitionLog")) {
             my $infos = {};
             foreach my $field(@log_order_fields) {
                 $infos->{$field} = $orderinfo->{$field};

@@ -192,7 +192,7 @@ if ($suggestion_id) {
 }
 
 # Log the receipt
-if (C4::Context->preference("AcqLog")) {
+if (C4::Context->preference("AcquisitionLog")) {
     my $infos = {
         quantityrec      => $quantityrec,
         bookfund         => $bookfund,
