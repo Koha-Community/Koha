@@ -1298,14 +1298,14 @@ subtest 'AllowHoldOnPatronPossession test' => sub {
                                           value => { branchcode => $item->homebranch }});
 
     Koha::CirculationRules->set_rules(
-        {
-            branchcode   => undef,
-            categorycode => undef,
-            itemtype     => undef,
-            rules        => {
-                onshelfholds => 1,
-            }
-        }
+	{
+	    branchcode   => undef,
+	    categorycode => undef,
+	    itemtype     => undef,
+	    rules        => {
+		onshelfholds => 1,
+	    }
+	}
     );
 
     C4::Circulation::AddIssue($patron->unblessed,
