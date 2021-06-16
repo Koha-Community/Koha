@@ -28,6 +28,7 @@ use C4::Context;
 use C4::Acquisition qw( GetInvoice GetOrder populate_order_with_prices ModReceiveOrder );
 use C4::Biblio qw( GetFrameworkCode GetMarcFromKohaField TransformHtmlToXml );
 use C4::Items qw( GetMarcItem ModItemFromMarc AddItemFromMarc );
+use C4::Log qw(logaction);
 use C4::Search;
 
 use Koha::Number::Price;
@@ -187,6 +188,23 @@ if ($suggestion_id) {
     $reason = $other_reason if $reason eq 'other';
     my $suggestion = Koha::Suggestions->find($suggestion_id);
     $suggestion->update( { reason => $reason } ) if $suggestion;
+}
+
+# Log the receipt
+if (C4::Context->preference("AcqLog")) {
+    my $infos =
+        sprintf("%010d", $quantityrec) .
+        sprintf("%010d", $bookfund) .
+        sprintf("%010.2f", $input->param("tax_rate")) .
+        sprintf("%010.2f", $replacementprice) .
+        sprintf("%010.2f", $unitprice);
+
+    logaction(
+        'ACQUISITIONS',
+        'RECEIVE_ORDER',
+        $ordernumber,
+        $infos
+    );
 }
 
 print $input->redirect("/cgi-bin/koha/acqui/parcel.pl?invoiceid=$invoiceid");

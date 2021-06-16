@@ -55,6 +55,7 @@ use C4::Auth qw( get_template_and_user );
 use C4::Output qw( output_html_with_http_headers );
 use C4::Acquisition;
 use C4::Budgets qw( GetBudgetPeriod GetBudgetPeriods ModBudgetPeriod AddBudgetPeriod GetBudgets DelBudgetPeriod CloneBudgetPeriod MoveOrders );
+use C4::Log qw(logaction);
 use Koha::Acquisition::Currencies;
 
 my $dbh = C4::Context->dbh;
@@ -112,14 +113,34 @@ elsif ( $op eq 'add_validate' ) {
 ## add or modify a budget period (confirmation)
 
     ## update budget period data
-	if ( $budget_period_id ne '' ) {
-		$$budget_period_hashref{$_}||=0 for qw(budget_period_active budget_period_locked);
-		my $status=ModBudgetPeriod($budget_period_hashref);
-	} 
-	else {    # ELSE ITS AN ADD
-		my $budget_period_id=AddBudgetPeriod($budget_period_hashref);
-	}
-	$op='else';
+    if ( $budget_period_id ne '' ) {
+        # Grab the previous values so we can log them
+        my $budgetperiod_old=GetBudgetPeriod($budget_period_id);
+        $$budget_period_hashref{$_}||=0 for qw(budget_period_active budget_period_locked);
+        my $status=ModBudgetPeriod($budget_period_hashref);
+        # Log the budget modification
+        if (C4::Context->preference("AcqLog")) {
+            my $diff = 0 - ($budgetperiod_old->{budget_period_total} - $budget_period_hashref->{budget_period_total});
+            my $infos =
+                eval { output_pref({ dt => dt_from_string( $input->param('budget_period_startdate') ), dateformat => 'iso', dateonly => 1 } ); } .
+                eval { output_pref({ dt => dt_from_string( $input->param('budget_period_enddate') ), dateformat => 'iso', dateonly => 1 } ); } .
+                sprintf("%010d", $budget_period_hashref->{budget_period_total}) .
+                eval { output_pref({ dt => dt_from_string( $budgetperiod_old->{budget_period_startdate} ), dateformat => 'iso', dateonly => 1 } ); } .
+                eval { output_pref({ dt => dt_from_string( $budgetperiod_old->{budget_period_enddate} ), dateformat => 'iso', dateonly => 1 } ); } .
+                sprintf("%010d", $budgetperiod_old->{budget_period_total}) .
+                sprintf("%010d", $diff);
+            logaction(
+                'ACQUISITIONS',
+                'MODIFY_BUDGET',
+                $budget_period_id,
+                $infos
+            );
+        }
+    }
+    else {    # ELSE ITS AN ADD
+        my $budget_period_id=AddBudgetPeriod($budget_period_hashref);
+    }
+    $op='else';
 }
 
 #--------------------------------------------------

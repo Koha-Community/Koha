@@ -34,6 +34,7 @@ use Modern::Perl;
 use CGI;
 use C4::Auth qw( get_template_and_user );
 use C4::Output qw( output_html_with_http_headers );
+use C4::Log qw(logaction);
 use Koha::Acquisition::Baskets;
 
 my $input = CGI->new;
@@ -65,6 +66,10 @@ if( $action and $action eq "confirmcancel" ) {
             if $messages[0]->message eq 'error_delbiblio';
     } else {
         $template->param(success_cancelorder => 1);
+        # Log the cancellation of the order
+        if (C4::Context->preference("AcqLog")) {
+            logaction('ACQUISITIONS', 'CANCEL_ORDER', $ordernumber);
+        }
     }
     $template->param(confirmcancel => 1);
 }

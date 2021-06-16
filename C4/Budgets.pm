@@ -23,6 +23,7 @@ use Koha::Database;
 use Koha::Patrons;
 use Koha::Acquisition::Invoice::Adjustments;
 use C4::Acquisition;
+use C4::Log qw(logaction);
 
 our (@ISA, @EXPORT_OK);
 BEGIN {
@@ -640,7 +641,22 @@ sub AddBudget {
     undef $budget->{budget_encumb}   if defined $budget->{budget_encumb}   && $budget->{budget_encumb}   eq '';
     undef $budget->{budget_owner_id} if defined $budget->{budget_owner_id} && $budget->{budget_owner_id} eq '';
     my $resultset = Koha::Database->new()->schema->resultset('Aqbudget');
-    return $resultset->create($budget)->id;
+    my $id = $resultset->create($budget)->id;
+
+    # Log the addition
+    if (C4::Context->preference("AcqLog")) {
+        my $infos =
+            sprintf("%010d", $budget->{budget_amount}) .
+            sprintf("%010d", $budget->{budget_encumb}) .
+            sprintf("%010d", $budget->{budget_expend});
+        logaction(
+            'ACQUISITIONS',
+            'CREATE_FUND',
+            $id,
+            $infos
+        );
+    }
+    return $id;
 }
 
 # -------------------------------------------------------------------
@@ -649,6 +665,24 @@ sub ModBudget {
     my ($budget) = @_;
     my $result = Koha::Database->new()->schema->resultset('Aqbudget')->find($budget);
     return unless($result);
+
+    # Log this modification
+    if (C4::Context->preference("AcqLog")) {
+        my $infos =
+            sprintf("%010d", $budget->{budget_amount}) .
+            sprintf("%010d", $budget->{budget_encumb}) .
+            sprintf("%010d", $budget->{budget_expend}) .
+            sprintf("%010d", $result->budget_amount) .
+            sprintf("%010d", $result->budget_encumb) .
+            sprintf("%010d", $result->budget_expend) .
+            sprintf("%010d", 0 - ($result->budget_amount - $budget->{budget_amount}));
+        logaction(
+            'ACQUISITIONS',
+            'MODIFY_FUND',
+            $budget->{budget_id},
+            $infos
+        );
+    }
 
     undef $budget->{budget_encumb}   if defined $budget->{budget_encumb}   && $budget->{budget_encumb}   eq '';
     undef $budget->{budget_owner_id} if defined $budget->{budget_owner_id} && $budget->{budget_owner_id} eq '';
@@ -663,6 +697,14 @@ sub DelBudget {
 	my $dbh         = C4::Context->dbh;
 	my $sth         = $dbh->prepare("delete from aqbudgets where budget_id=?");
 	my $rc          = $sth->execute($budget_id);
+    # Log the deletion
+    if (C4::Context->preference("AcqLog")) {
+        logaction(
+            'ACQUISITIONS',
+            'DELETE_FUND',
+            $budget_id
+        );
+    }
 	return $rc;
 }
 

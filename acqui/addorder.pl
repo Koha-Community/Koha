@@ -237,6 +237,23 @@ my $user     = $input->remote_user;
 my $basketno = $$orderinfo{basketno};
 my $basket   = Koha::Acquisition::Baskets->find($basketno);
 
+# Order related fields we're going to log
+my @log_order_fields = (
+    'quantity',
+    'listprice',
+    'unitprice',
+    'unitprice_tax_excluded',
+    'unitprice_tax_included',
+    'rrp',
+    'replacementprice',
+    'rrp_tax_excluded',
+    'rrp_tax_included',
+    'ecost',
+    'ecost_tax_excluded',
+    'ecost_tax_included',
+    'tax_rate_on_ordering'
+);
+
 # create, modify or delete biblio
 # create if $quantity>0 and $existing='no'
 # modify if $quantity>0 and $existing='yes'
@@ -301,9 +318,35 @@ if ( $basket->{is_standing} || $orderinfo->{quantity} ne '0' ) {
     my $order = Koha::Acquisition::Order->new($orderinfo);
     if ( $orderinfo->{ordernumber} ) {
         ModOrder($orderinfo);
+        # Log the order modification
+        if (C4::Context->preference("AcqLog")) {
+            my $infos = '';
+            foreach my $field(@log_order_fields) {
+                $infos .= sprintf("%010d", $orderinfo->{$field});
+            }
+            logaction(
+                'ACQUISITIONS',
+                'MODIFY_ORDER',
+                $orderinfo->{ordernumber},
+                $infos
+            );
+        }
     }
     else { # else, it's a new line
         $order->store;
+        # Log the order creation
+        if (C4::Context->preference("AcqLog")) {
+            my $infos = '';
+            foreach my $field(@log_order_fields) {
+                $infos .= sprintf("%010d", $orderinfo->{$field});
+            }
+            logaction(
+                'ACQUISITIONS',
+                'CREATE_ORDER',
+                $order->ordernumber,
+                $infos
+            );
+        }
     }
     my $order_users_ids = $input->param('users_ids');
     my @order_users = split( /:/, $order_users_ids );
