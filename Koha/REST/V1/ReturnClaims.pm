@@ -171,6 +171,7 @@ sub resolve_claim {
                 resolution  => $resolution,
                 resolved_by => $resolved_by,
                 resolved_on => \'NOW()',
+                updated_by  => $resolved_by,
             }
         )->store;
         $claim->discard_changes;
