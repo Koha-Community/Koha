@@ -1849,7 +1849,7 @@ sub _koha_notify_reserve {
 
     my $library = Koha::Libraries->find( $hold->branchcode )->unblessed;
 
-    my $admin_email_address = $library->{branchemail} || C4::Context->preference('KohaAdminEmailAddress');
+    my $admin_email_address = $library->from_email_address;
 
     my %letter_params = (
         module => 'reserves',

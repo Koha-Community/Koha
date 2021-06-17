@@ -1335,7 +1335,7 @@ sub generic_confirm {
             "No target email addresses found. Either select at least one partner or check your ILL partner library records.")
           if ( !$to );
         # Create the from, replyto and sender headers
-        my $from = $branch->branchemail;
+        my $from = $branch->from_email_address;
         my $replyto = $branch->inbound_ill_address;
         Koha::Exceptions::Ill::NoLibraryEmail->throw(
             "Your library has no usable email address. Please set it.")
@@ -1427,7 +1427,7 @@ sub send_patron_notice {
     # Notice should come from the library where the request was placed,
     # not the patrons home library
     my $branch = Koha::Libraries->find($self->branchcode);
-    my $from_address = $branch->branchemail;
+    my $from_address = $branch->from_email_address;
     my $reply_address = $branch->inbound_ill_address;
 
     # Send the notice to the patron via the chosen transport methods

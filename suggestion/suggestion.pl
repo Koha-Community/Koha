@@ -187,9 +187,6 @@ if ( $op =~ /save/i ) {
                 my $patron = Koha::Patrons->find( $suggestion_only->{managedby} );
                 my $email_address = $patron->notice_email_address;
                 if ($patron->notice_email_address) {
-                    my $library = $patron->library;
-                    my $admin_email_address = $library->branchemail
-                      || C4::Context->preference('KohaAdminEmailAddress');
 
                     my $letter = C4::Letters::GetPreparedLetter(
                         module      => 'suggestions',
@@ -206,8 +203,7 @@ if ( $op =~ /save/i ) {
                         {
                             letter                 => $letter,
                             borrowernumber         => $patron->borrowernumber,
-                            message_transport_type => 'email',
-                            from_address           => $admin_email_address,
+                            message_transport_type => 'email'
                         }
                     );
                 }
