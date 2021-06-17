@@ -909,11 +909,19 @@ sub _parseletter {
   my $success = EnqueueLetter( { letter => $letter, 
         borrowernumber => '12', message_transport_type => 'email' } )
 
-places a letter in the message_queue database table, which will
+Places a letter in the message_queue database table, which will
 eventually get processed (sent) by the process_message_queue.pl
 cronjob when it calls SendQueuedMessages.
 
-return message_id on success
+Return message_id on success
+
+Parameters
+* letter - required; A letter hashref as returned from GetPreparedLetter
+* message_transport_type - required; One of the available mtts
+* borrowernumber - optional if 'to_address' is passed; The borrowernumber of the patron we enqueuing the notice for
+* to_address - optional if 'borrowernumber' is passed; The destination email address for the notice (defaults to patron->notice_email_address)
+* from_address - optional; The from address for the notice, defaults to patron->library->from_email_address
+* reply_address - optional; The reply address for the notice, defaults to patron->library->reply_to
 
 =cut
 
@@ -1348,6 +1356,8 @@ sub _send_message_by_email {
         $branch_returnpath = $library->branchreturnpath;
     }
 
+    # NOTE: Patron may not be defined above so branch_email may be undefined still
+    # so we need to fallback to KohaAdminEmailAddress as a last resort.
     my $from_address =
          $message->{'from_address'}
       || $branch_email
