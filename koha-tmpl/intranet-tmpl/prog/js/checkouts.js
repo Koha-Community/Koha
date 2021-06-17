@@ -1148,8 +1148,8 @@ $(document).ready(function() {
         $('#claims-returned-resolved-modal-btn-submit-icon').hide();
 
         params = {
-          resolution: resolution,
-          updated_by: logged_in_user_borrowernumber
+          resolution:  resolution,
+          resolved_by: logged_in_user_borrowernumber
         };
 
         $.ajax({
