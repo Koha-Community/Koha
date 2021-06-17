@@ -1365,12 +1365,15 @@ sub _send_message_by_email {
 
     if ($patron) {
         $library           = $patron->library;
-        $branch_email      = $library->branchemail;
+        $branch_email      = $library->from_email_address;
         $branch_replyto    = $library->branchreplyto;
         $branch_returnpath = $library->branchreturnpath;
     }
 
-    my $from_address = $message->{'from_address'} || $library->from_email_address;
+    my $from_address =
+         $message->{'from_address'}
+      || $branch_email
+      || C4::Context->preference('KohaAdminEmailAddress');
     if( !$from_address ) {
         _set_message_status({
             message_id => $message->{'message_id'},
