@@ -212,7 +212,7 @@ if ( $send_notices && $confirm ) {
             );
 
             my $library = Koha::Libraries->find( $patron->branchcode );
-            my $admin_email_address = $library->branchemail || C4::Context->preference('KohaAdminEmailAddress');
+            my $admin_email_address = $library->from_email_address;
 
             C4::Letters::EnqueueLetter(
                 {   letter                 => $letter,
@@ -270,8 +270,6 @@ String that denote the letter code.
 sub send_digests {
     my $params = shift;
 
-    my $admin_email_address = C4::Context->preference('KohaAdminEmailAddress');
-
     PATRON: while ( my ( $borrowernumber, $digest ) = each %{$params->{digests}} ) {
         my $borrower_preferences =
             C4::Members::Messaging::GetMessagingPreferences(
@@ -285,7 +283,7 @@ sub send_digests {
 
         my $patron = Koha::Patrons->find( $borrowernumber );
         my $library = Koha::Libraries->find( $params->{branchcode} );
-        my $from_address = $library->{branchemail} || $admin_email_address;
+        my $from_address = $library->from_email_address;
 
         foreach my $transport ( keys %{ $borrower_preferences->{'transports'} } ) {
             my $letter = C4::Letters::GetPreparedLetter (
