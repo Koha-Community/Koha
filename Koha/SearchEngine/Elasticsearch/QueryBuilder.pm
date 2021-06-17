@@ -994,9 +994,6 @@ The argument should be an arrayref, and it'll return an arrayref.
 sub _fix_limit_special_cases {
     my ( $self, $limits ) = @_;
 
-    # yr is usually an alias of a search field
-    my $yrfield = ( exists $index_field_convert{'yr'} ) ? $index_field_convert{'yr'} : 'yr';
-
     my @new_lim;
     foreach my $l (@$limits) {
 
@@ -1005,13 +1002,13 @@ sub _fix_limit_special_cases {
             my ( $start, $end ) =
               ( $l =~ /^yr,st-numeric,ge=(.*) and yr,st-numeric,le=(.*)$/ );
             next unless defined($start) && defined($end);
-            push @new_lim, "$yrfield:[$start TO $end]";
+            push @new_lim, "date-of-publication:[$start TO $end]";
         }
         elsif ( $l =~ /^yr,st-numeric=/ ) {
             my ($date) = ( $l =~ /^yr,st-numeric=(.*)$/ );
             next unless defined($date);
             $date = $self->_modify_string_by_type(type => 'st-year', operand => $date);
-            push @new_lim, "$yrfield:$date";
+            push @new_lim, "date-of-publication:$date";
         }
         elsif ( $l =~ /^available$/ ) {
             push @new_lim, 'onloan:false';
