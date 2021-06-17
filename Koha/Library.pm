@@ -143,11 +143,34 @@ sub smtp_server {
     return $self;
 }
 
+=head3 from_email_address
+
+  my $from_email = Koha::Library->from_email_address;
+
+Returns the official 'from' email address for the branch.
+
+It may well be a 'noreply' or other inaccessible local domain
+address that is being used to satisfy spam protection filters.
+
+=cut
+
+sub from_email_address {
+    my ($self) = @_;
+
+    return
+         $self->branchemail
+      || C4::Context->preference('KohaAdminEmailAddress')
+      || undef;
+}
+
 =head3 inbound_email_address
 
   my $to_email = Koha::Library->inbound_email_address;
 
 Returns an effective email address which should be accessible to librarians at the branch.
+
+NOTE: This is the address to use for 'reply_to' or 'to' fields; It should not usually be
+used as the 'from' address for emails as it may lead to mail being caught by spam filters.
 
 =cut
 

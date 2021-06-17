@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 11;
+use Test::More tests => 12;
 
 use C4::Biblio;
 use C4::Context;
@@ -116,6 +116,36 @@ subtest '->get_effective_marcorgcode' => sub {
     is( $library_2->get_effective_marcorgcode, 'ThisIsACode',
        'Pick library_2 code');
 
+    $schema->storage->txn_rollback;
+};
+
+subtest '->from_email_address' => sub {
+
+    plan tests => 3;
+
+    $schema->storage->txn_begin;
+
+    my $library_1 = $builder->build_object(
+        {
+            class => 'Koha::Libraries',
+            value => {
+                branchemail   => 'from@mybranc.com',
+            }
+        }
+    );
+
+    t::lib::Mocks::mock_preference( 'KohaAdminEmailAddress', 'admin@mylibrary.com' );
+
+    is( $library_1->from_email_address, $library_1->branchemail,
+       'If defined, use branches branchemail address');
+
+    $library_1->branchemail(undef)->store();
+    is( $library_1->from_email_address, 'admin@mylibrary.com',
+       'Fallback to KohaAdminEmailAddress email address when branchemail is undefined');
+
+    t::lib::Mocks::mock_preference( 'KohaAdminEmailAddress', '' );
+    is( $library_1->from_email_address, undef,
+       'Return undef when branchemail and KohaAdminEmailAddress are both undefined');
     $schema->storage->txn_rollback;
 };
 

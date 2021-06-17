@@ -1874,7 +1874,7 @@ sub queue_notice {
     return unless exists $params->{message_name} xor $params->{message_transports}; # We only want one of these
 
     my $library = Koha::Libraries->find( $letter_params->{branchcode} );
-    my $admin_email_address = $library->inbound_email_address;
+    my $from_email_address = $library->from_email_address;
 
     my @message_transports;
     my $letter_code;
@@ -1909,7 +1909,7 @@ sub queue_notice {
         C4::Letters::EnqueueLetter({
             letter => $letter,
             borrowernumber => $self->borrowernumber,
-            from_address   => $admin_email_address,
+            from_address   => $from_email_address,
             message_transport_type => $mtt
         }) unless $test_mode;
         push @{$return{sent}}, $mtt;
