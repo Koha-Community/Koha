@@ -1348,6 +1348,15 @@ sub _send_message_by_email {
         $branch_returnpath = $library->branchreturnpath;
     }
 
+    my $from_address = $message->{'from_address'} || $library->from_email_address;
+    if( !$from_address ) {
+        _set_message_status({
+            message_id => $message->{'message_id'},
+            status     => 'failed',
+            delivery_note => 'No from address',
+        });
+        return;
+    };
     my $email = Koha::Email->create(
         {
             to => $to_address,
@@ -1356,7 +1365,7 @@ sub _send_message_by_email {
                 ? ( bcc => C4::Context->preference('NoticeBcc') )
                 : ()
             ),
-            from     => $message->{'from_address'}  || $branch_email,
+            from     => $from_address,
             reply_to => $message->{'reply_address'} || $branch_replyto,
             sender   => $branch_returnpath,
             subject  => "" . $message->{subject}

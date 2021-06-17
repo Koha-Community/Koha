@@ -168,7 +168,6 @@ if( !$expdays ) {
     exit;
 }
 
-my $admin_adress = C4::Context->preference('KohaAdminEmailAddress');
 warn 'getting upcoming membership expires' if $verbose;
 my $upcoming_mem_expires = Koha::Patrons->search_upcoming_membership_expires(
     {
@@ -183,7 +182,7 @@ warn 'found ' . $upcoming_mem_expires->count . ' soon expiring members'
 # main loop
 $letter_type = 'MEMBERSHIP_EXPIRY' if !$letter_type;
 while ( my $recent = $upcoming_mem_expires->next ) {
-    my $from_address = $recent->library->branchemail || $admin_adress;
+    my $from_address = $recent->library->from_email_address;
     my $letter =  C4::Letters::GetPreparedLetter(
         module      => 'members',
         letter_code => $letter_type,
