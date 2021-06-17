@@ -89,6 +89,7 @@ sub read_perl5lib {
     if ( $dev_install ) {
         # pick PERL5LIB from the intranetdir entry
         $result = `xmlstarlet sel -t -v "yazgfs/config/intranetdir" /etc/koha/sites/$instance/koha-conf.xml`;
+        $result = "$result:$result/lib";
     }
     return $result;
 }
