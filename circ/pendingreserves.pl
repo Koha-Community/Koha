@@ -86,13 +86,13 @@ if ( $op eq 'cancel_reserve' and $reserve_id ) {
                 },
             );
             if ( $letter ) {
-                my $admin_email_address = $library->branchemail || C4::Context->preference('KohaAdminEmailAddress');
+                my $from_address = $library->from_email_address;
 
                 C4::Letters::EnqueueLetter(
                     {   letter                 => $letter,
                         borrowernumber         => $patron->borrowernumber,
                         message_transport_type => 'email',
-                        from_address           => $admin_email_address,
+                        from_address           => $from_address,
                     }
                 );
                 unless ( $patron->notice_email_address ) {
