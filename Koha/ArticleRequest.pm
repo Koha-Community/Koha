@@ -126,7 +126,7 @@ sub notify {
                 borrowernumber         => $self->borrowernumber,
                 message_transport_type => 'email',
             }
-        ) or warn "can't enqueue letter $letter";
+        ) or warn "can't enqueue letter ". $letter->{code};
     }
 }
 
