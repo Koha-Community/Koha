@@ -175,7 +175,7 @@ subtest 'update_notes() tests' => sub {
 
 subtest 'resolve_claim() tests' => sub {
 
-    plan tests => 8;
+    plan tests => 9;
 
     $schema->storage->txn_begin;
 
@@ -204,7 +204,12 @@ subtest 'resolve_claim() tests' => sub {
 
     my $claim_id = $claim->id;
 
-    $claim->created_by(undef)->store; # resolve the claim must work even if the created_by patron has been removed
+    $claim->set(
+        {
+            created_by => undef,
+            updated_by => undef,
+        }
+    )->store; # resolve the claim must work even if the created_by patron has been removed
 
     # Resolve a claim
     $t->put_ok(
@@ -217,6 +222,7 @@ subtest 'resolve_claim() tests' => sub {
     $claim->discard_changes;
     is( $claim->resolution, "FOUNDINLIB" );
     is( $claim->resolved_by, $librarian->id );
+    is( $claim->updated_by, $librarian->id );
     ok( $claim->resolved_on );
 
     # Make sure the claim doesn't exist on the DB anymore
