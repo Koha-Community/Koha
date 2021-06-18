@@ -17,10 +17,11 @@
 
 use Modern::Perl;
 
-use Test::More tests => 1;
+use Test::More tests => 2;
 use Test::Exception;
 
 use Koha::Database;
+use Koha::DateUtils qw( dt_from_string output_pref );
 use Koha::Checkouts::ReturnClaims;
 
 use t::lib::TestBuilder;
@@ -145,6 +146,126 @@ subtest "store() tests" => sub {
 
         is( $@->broken_fk, 'issue_id', 'Exception field is correct' );
     }
+
+    $schema->storage->txn_rollback;
+};
+
+subtest "resolve() tests" => sub {
+
+    plan tests => 9;
+
+    $schema->storage->txn_begin;
+
+    my $itemlost  = 1;
+    my $librarian = $builder->build_object({ class => 'Koha::Patrons' });
+    my $patron    = $builder->build_object({ class => 'Koha::Patrons' });
+    my $item      = $builder->build_sample_item({ itemlost => $itemlost });
+
+    my $checkout = $builder->build_object(
+        {
+            class => 'Koha::Checkouts',
+            value => {
+                borrowernumber => $patron->borrowernumber,
+                itemnumber     => $item->itemnumber,
+                branchcode     => $patron->branchcode
+            }
+        }
+    );
+
+    my $claim = Koha::Checkouts::ReturnClaim->new(
+        {
+            issue_id       => $checkout->id,
+            itemnumber     => $checkout->itemnumber,
+            borrowernumber => $checkout->borrowernumber,
+            notes          => 'Some notes',
+            created_by     => $librarian->borrowernumber
+        }
+    )->store;
+
+    throws_ok
+        { $claim->resolve({ resolution => 1 }); }
+        'Koha::Exceptions::MissingParameter',
+        "Not passing 'resolved_by' makes it throw an exception";
+
+    throws_ok
+        { $claim->resolve({ resolved_by => 1 }); }
+        'Koha::Exceptions::MissingParameter',
+        "Not passing 'resolution' makes it throw an exception";
+
+    my $deleted_patron = $builder->build_object({ class => 'Koha::Patrons' });
+    my $deleted_patron_id = $deleted_patron->id;
+    $deleted_patron->delete;
+
+    {   # hide useless warnings
+        local *STDERR;
+        open STDERR, '>', '/dev/null';
+
+        throws_ok
+            { $claim->resolve({ resolution => "X", resolved_by => $deleted_patron_id }) }
+            'Koha::Exceptions::Object::FKConstraint',
+            "Exception thrown on invalid resolver";
+
+        close STDERR;
+    }
+
+    my $today    = dt_from_string;
+    my $tomorrow = dt_from_string->add( days => 1 );
+
+    $claim->resolve(
+        {
+            resolution  => "X",
+            resolved_by => $librarian->id,
+            resolved_on => $tomorrow,
+        }
+    )->discard_changes;
+
+    is( output_pref( { str => $claim->resolved_on } ), output_pref( { dt => $tomorrow } ), 'resolved_on set to the passed param' );
+    is( $claim->updated_by, $librarian->id, 'updated_by set to the passed resolved_by' );
+
+    # Make sure $item is refreshed
+    $item->discard_changes;
+    is( $item->itemlost, $itemlost, 'Item lost status remains unchanged' );
+
+    # New checkout and claim
+    $checkout->delete;
+    $checkout = $builder->build_object(
+        {
+            class => 'Koha::Checkouts',
+            value => {
+                borrowernumber => $patron->borrowernumber,
+                itemnumber     => $item->itemnumber,
+                branchcode     => $patron->branchcode
+            }
+        }
+    );
+
+    $claim = Koha::Checkouts::ReturnClaim->new(
+        {
+            issue_id       => $checkout->id,
+            itemnumber     => $checkout->itemnumber,
+            borrowernumber => $checkout->borrowernumber,
+            notes          => 'Some notes',
+            created_by     => $librarian->borrowernumber
+        }
+    )->store;
+
+    my $new_lost_status = 2;
+
+    $claim->resolve(
+        {
+            resolution      => "X",
+            resolved_by     => $librarian->id,
+            resolved_on     => $tomorrow,
+            new_lost_status => $new_lost_status,
+        }
+    )->discard_changes;
+
+    is( output_pref( { str => $claim->resolved_on } ), output_pref( { dt => $tomorrow } ), 'resolved_on set to the passed param' );
+    is( $claim->updated_by, $librarian->id, 'updated_by set to the passed resolved_by' );
+
+    # Make sure $item is refreshed
+    $item->discard_changes;
+    is( $item->itemlost, $new_lost_status, 'Item lost status is updated' );
 
     $schema->storage->txn_rollback;
 };
