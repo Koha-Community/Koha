@@ -30,7 +30,6 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
         query           => $query,
         type            => "intranet",
         flagsrequired   => { tools => '*' },
-        debug           => 1,
     }
 );
 

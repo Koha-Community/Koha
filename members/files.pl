@@ -39,7 +39,6 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
         query           => $cgi,
         type            => "intranet",
         flagsrequired   => { borrowers => 'edit_borrowers' },
-        debug           => 1,
     }
 );
 $template->param( 'borrower_files' => 1 );

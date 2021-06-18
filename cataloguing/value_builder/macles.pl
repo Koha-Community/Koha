@@ -161,7 +161,6 @@ my $launcher = sub {
                     query => $input,
                     type => "intranet",
                     flagsrequired => {editcatalogue => '*'},
-                    debug => 1,
                     });
     $template->param(BIGLOOP=>\@BIGLOOP);
 	$template->param("index"=>$index);

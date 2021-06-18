@@ -39,7 +39,6 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
         template_name   => "opac-user.tt",
         query           => $query,
         type            => "opac",
-        debug           => 1,
 	}
 ); 
 my @items = $query->multi_param('item');

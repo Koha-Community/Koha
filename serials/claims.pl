@@ -44,7 +44,6 @@ my ($template, $loggedinuser, $cookie)
             query => $input,
             type => 'intranet',
             flagsrequired => {serials => 'claim_serials'},
-            debug => 1,
             });
 
 # supplierlist is returned in name order

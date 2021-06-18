@@ -42,7 +42,6 @@ my ($template, $loggedinuser, $cookie, $flags) = get_template_and_user( {
     query           => $input,
     type            => 'intranet',
     flagsrequired   => { 'serials' => 1 },
-    debug           => 1,
 } );
 
 my $op = $input->param('op');

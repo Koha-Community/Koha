@@ -54,7 +54,6 @@ my ($template, $loggedinuser, $cookie)
                  query => $input,
                  type => "intranet",
                  flagsrequired => {tools => 'manage_staged_marc'},
-                 debug => 1,
                  });
 
 my %cookies = parse CGI::Cookie($cookie);

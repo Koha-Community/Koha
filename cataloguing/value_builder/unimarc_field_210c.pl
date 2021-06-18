@@ -95,7 +95,6 @@ my ($input) = @_;
                     query => $query,
                     type => 'intranet',
                     flagsrequired => {editcatalogue => '*'},
-                    debug => 1,
                     });
 
         # Results displayed in current page
@@ -125,7 +124,6 @@ my ($input) = @_;
                     query => $query,
                     type => 'intranet',
                     flagsrequired => {editcatalogue => '*'},
-                    debug => 1,
                     });
 
         $template->param(index => $index,

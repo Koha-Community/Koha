@@ -216,7 +216,6 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
         query           => $input,
         type            => "intranet",
         flagsrequired   => { parameters => 'manage_sysprefs' },
-        debug           => 1,
     }
 );
 my $pagesize = 100;

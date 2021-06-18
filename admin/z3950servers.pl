@@ -45,7 +45,6 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user( {
     query => $input,
     type => "intranet",
     flagsrequired => { parameters => 'manage_search_targets' },
-    debug => 1,
 });
 my $script_name = "/cgi-bin/koha/admin/z3950servers.pl";
 $template->param( script_name => $script_name );

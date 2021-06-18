@@ -84,7 +84,6 @@ if ( $op eq "do_search" && $query ) {
             query           => $input,
             type            => "intranet",
             flagsrequired   => { catalogue => 1, serials => '*' },
-            debug           => 1,
         }
     );
 
@@ -192,7 +191,6 @@ else {
             query           => $input,
             type            => "intranet",
             flagsrequired   => { catalogue => 1, serials => '*' },
-            debug           => 1,
         }
     );
 

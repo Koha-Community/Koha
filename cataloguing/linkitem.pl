@@ -41,7 +41,6 @@ my ($template, $loggedinuser, $cookie) = get_template_and_user(
         query           => $query,
         type            => "intranet",
         flagsrequired   => { editcatalogue => 'edit_catalogue' },
-        debug           => 1,
     }
 );
 

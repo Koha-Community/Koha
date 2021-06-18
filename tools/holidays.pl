@@ -35,7 +35,6 @@ my ($template, $loggedinuser, $cookie)
                              type => "intranet",
                              query => $input,
                              flagsrequired => {tools => 'edit_calendar'},
-                             debug => 1,
                            });
 
 # calendardate - date passed in url for human readability (syspref)

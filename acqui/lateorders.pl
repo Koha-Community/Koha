@@ -62,7 +62,6 @@ my ($template, $loggedinuser, $cookie) = get_template_and_user(
         query           => $input,
         type            => "intranet",
         flagsrequired   => { acquisition => 'order_receive' },
-        debug           => 1,
     }
 );
 

@@ -113,7 +113,6 @@ if ($is_ajax) {
         query           => $query,
         type            => "opac",
         authnotrequired => ($add_op ? 0 : 1), # auth required to add tags
-        debug           => 1,
 	});
 }
 

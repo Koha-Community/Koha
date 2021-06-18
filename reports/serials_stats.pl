@@ -51,7 +51,6 @@ my ($template, $borrowernumber, $cookie)
 				query => $input,
 				type => "intranet",
 				flagsrequired => {reports => '*'},
-				debug => 1,
 				});
 				
 				

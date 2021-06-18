@@ -113,7 +113,6 @@ if($ok){
 				query => $query,
 				type => "intranet",
 				flagsrequired => {serials => '*'},
-				debug => 1,
 				});
 } else {
     ($template, $loggedinuser, $cookie)
@@ -121,7 +120,6 @@ if($ok){
 				query => $query,
 				type => "intranet",
 				flagsrequired => {serials => '*'},
-				debug => 1,
 				});
 }
 

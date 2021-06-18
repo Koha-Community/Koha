@@ -430,7 +430,6 @@ my ($template, $loggedinuser, $cookie)
                  query => $input,
                  type => "intranet",
                  flagsrequired => {editcatalogue => $userflags},
-                 debug => 1,
                  });
 
 

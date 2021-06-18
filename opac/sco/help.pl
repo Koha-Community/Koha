@@ -38,7 +38,6 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
         template_name   => "sco/help.tt",
         query           => $query,
         type            => "opac",
-        debug           => 1,
         authnotrequired => 1,
         flagsrequired   => { self_check => "self_checkout_module" },
     }

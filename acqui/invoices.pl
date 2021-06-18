@@ -44,7 +44,6 @@ my ( $template, $loggedinuser, $cookie, $flags ) = get_template_and_user(
         query           => $input,
         type            => 'intranet',
         flagsrequired   => { 'acquisition' => '*' },
-        debug           => 1,
     }
 );
 

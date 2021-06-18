@@ -53,7 +53,6 @@ my ($template, $loggedinuser, $cookie)
 			     query => $input,
 			     type => "intranet",
 			     flagsrequired => {editcatalogue => '*'},
-			     debug => 1,
 			     });
  	my $f1 = substr($result,0,1);
 	$template->param(index => $index,

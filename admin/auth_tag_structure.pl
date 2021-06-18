@@ -50,7 +50,6 @@ my ($template, $loggedinuser, $cookie)
                  query => $input,
                  type => "intranet",
                  flagsrequired => {parameters => 'manage_marc_frameworks'},
-                 debug => 1,
                  });
 
 my $authority_types = Koha::Authority::Types->search( {}, { order_by => ['authtypecode'] } );

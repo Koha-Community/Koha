@@ -60,7 +60,6 @@ my ($input) = @_;
             query           => $input,
             type            => "intranet",
             flagsrequired   => { editcatalogue => '*' },
-            debug           => 1,
         }
     );
 	$template->param(index => $index,

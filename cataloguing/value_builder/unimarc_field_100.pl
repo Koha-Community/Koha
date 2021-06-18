@@ -66,7 +66,6 @@ sub plugin {
             query         => $input,
             type          => "intranet",
             flagsrequired   => { editcatalogue => '*' },
-            debug           => 1,
         }
     );
     $result = "        d        u  y0".$defaultlanguage."y50      ba" unless $result;

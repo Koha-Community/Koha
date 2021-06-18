@@ -43,7 +43,6 @@ my ($template, $loggedinuser, $cookie)
                             query => $input,
                             type => "intranet",
                             flagsrequired => {parameters => 'manage_circ_rules'},
-                            debug => 1,
                             });
 
 my $type=$input->param('type');

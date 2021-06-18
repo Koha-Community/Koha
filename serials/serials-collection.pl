@@ -45,7 +45,6 @@ my ($template, $loggedinuser, $cookie)
                             query => $query,
                             type => "intranet",
                             flagsrequired => {serials => '*'},
-                            debug => 1,
                             });
 my $biblionumber = $query->param('biblionumber');
 my @subscriptionid = $query->multi_param('subscriptionid');

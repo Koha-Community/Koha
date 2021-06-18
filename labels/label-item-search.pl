@@ -148,7 +148,6 @@ if ($show_results) {
             type            => "intranet",
             flagsrequired   => { borrowers => 'edit_borrowers' },
             flagsrequired   => { catalogue => 1 },
-            debug           => 1,
         }
     );
 
@@ -226,7 +225,6 @@ else {
             query           => $query,
             type            => "intranet",
             flagsrequired   => { catalogue => 1 },
-            debug           => 1,
         }
     );
     my $itemtypes = Koha::ItemTypes->search;

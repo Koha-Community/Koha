@@ -67,7 +67,6 @@ my ( $template, $loggedinuser, $cookie, $flags ) = get_template_and_user(
         query           => $query,
         type            => "intranet",
         flagsrequired   => { tools => 'export_catalog' },
-        debug           => 1,
     }
 );
 

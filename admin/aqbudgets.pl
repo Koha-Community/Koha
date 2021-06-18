@@ -44,7 +44,6 @@ my ($template, $borrowernumber, $cookie, $staffflags ) = get_template_and_user(
         query           => $input,
         type            => "intranet",
         flagsrequired   => { acquisition => 'budget_manage' },
-        debug           => 0,
     }
 );
 

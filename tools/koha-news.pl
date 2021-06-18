@@ -66,7 +66,6 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
         query           => $cgi,
         type            => "intranet",
         flagsrequired   => { tools => 'edit_news' },
-        debug           => 1,
     }
 );
 

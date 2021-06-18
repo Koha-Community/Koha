@@ -75,7 +75,6 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
         query           => $input,
         type            => "intranet",
         flagsrequired   => { reports => $flagsrequired },
-        debug           => 1,
     }
 );
 my $session = $cookie ? get_session($cookie->value) : undef;

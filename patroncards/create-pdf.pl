@@ -41,7 +41,6 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user({
                                                                      query           => $cgi,
                                                                      type            => "intranet",
                                                                      flagsrequired   => { tools => 'label_creator' },
-                                                                     debug           => 1,
                                                                      });
 my $batch_id    = $cgi->param('batch_id') || undef;
 my $template_id = $cgi->param('template_id') || undef;

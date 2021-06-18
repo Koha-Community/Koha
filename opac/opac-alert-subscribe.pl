@@ -44,7 +44,6 @@ my $biblionumber = $query->param('biblionumber');
         type            => "opac",
         authnotrequired => 0, # user must logged in to request
                               # subscription notifications
-        debug           => 1,
     }
 );
 

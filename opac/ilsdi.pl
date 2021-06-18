@@ -121,7 +121,6 @@ unless ( $cgi->param('service') ) {
             query           => $cgi,
             type            => "opac",
             authnotrequired => 1,
-            debug           => 1,
         }
     );
     output_html_with_http_headers $cgi, $cookie, $template->output;
@@ -143,7 +142,6 @@ if ( scalar $cgi->param('service') eq "Describe" and any { scalar $cgi->param('v
             query           => $cgi,
             type            => "opac",
             authnotrequired => 1,
-            debug           => 1,
         }
     );
     $template->param( scalar $cgi->param('verb') => 1 );

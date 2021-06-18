@@ -35,7 +35,6 @@ my ($template, $borrowernumber, $cookie)
 				query => $input,
 				type => "intranet",
 				flagsrequired => {reports => '*'},
-				debug => 1,
 				});
 $template->param(do_it => $do_it,
 		report_name => $report_name,

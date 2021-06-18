@@ -41,7 +41,6 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
         query         => $input,
         type          => "intranet",
         flagsrequired   => { plugins => '*' },
-        debug           => 1,
     }
 );
 

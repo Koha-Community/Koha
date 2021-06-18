@@ -85,7 +85,6 @@ at beginning of script. Rest of API is described below. Example of its usage is 
     url      => 'http://koha-dev:8080/cgi-bin/koha/svc',
     user     => 'svc-user',
     password => 'svc-password',
-    debug    => 0,
   );
 
 URL must point to Koha's B<intranet> address and port.

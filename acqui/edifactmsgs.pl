@@ -33,7 +33,6 @@ my ( $template, $loggedinuser, $cookie, $userflags ) = get_template_and_user(
         query           => $q,
         type            => 'intranet',
         flagsrequired   => { acquisition => 'edi_manage' },
-        debug           => 1,
     }
 );
 

@@ -46,7 +46,6 @@ my ($template, $loggedinuser, $cookie) = get_template_and_user(
         type            => "intranet",
         flagsrequired   => { borrowers     => 'edit_borrowers',
                              updatecharges => 'remaining_permissions'},
-        debug           => 1,
     }
 );
 

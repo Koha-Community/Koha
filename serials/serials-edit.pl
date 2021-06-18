@@ -123,7 +123,6 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
         query           => $query,
         type            => 'intranet',
         flagsrequired   => { serials => 'receive_serials' },
-        debug           => 1,
     }
 );
 

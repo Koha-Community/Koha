@@ -41,7 +41,6 @@ my ($template, $loggedinuser, $cookie, $flags) = get_template_and_user( {
     query           => $input,
     type            => 'intranet',
     flagsrequired   => { 'parameters' => 'manage_oai_sets' },
-    debug           => 1,
 } );
 
 my $op = $input->param('op');

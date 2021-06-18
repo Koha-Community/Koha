@@ -57,7 +57,6 @@ our ($template, $loggedinuser, $cookie)
 				query => $query,
 				type => "intranet",
 				flagsrequired => {serials => $permission},
-				debug => 1,
 				});
 
 

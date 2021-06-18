@@ -73,7 +73,6 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
         query           => $query,
         type            => "intranet",
         flagsrequired   => { serials => 'renew_subscription' },
-        debug           => 1,
     }
 );
 if ( $op eq "renew" ) {

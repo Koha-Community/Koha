@@ -63,7 +63,6 @@ sub plugin {
             query           => $input,
             type            => "intranet",
             flagsrequired   => { editcatalogue => '*' },
-            debug           => 1,
         }
     );
     my $f1  = substr( $result, 0,  1 ); $f1  = wrapper( $f1 ) if $f1;

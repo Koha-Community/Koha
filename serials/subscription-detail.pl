@@ -60,7 +60,6 @@ my ($template, $loggedinuser, $cookie)
                 query => $query,
                 type => "intranet",
                 flagsrequired => {serials => $permission},
-                debug => 1,
                 });
 
 my $subs = GetSubscription($subscriptionid);

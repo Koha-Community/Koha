@@ -78,7 +78,6 @@ sub plugin {
             query           => $input,
             type            => "intranet",
             flagsrequired   => { editcatalogue => 1 },
-            debug           => 1,
         }
     );
 

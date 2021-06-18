@@ -36,7 +36,6 @@ my ($template, $loggedinuser, $cookie)
             query => $cgi,
             type => "intranet",
             flagsrequired => { tools => 'marc_modification_templates' },
-            debug => 1,
     });
 
 if ( $op eq "create_template" ) {

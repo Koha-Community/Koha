@@ -69,7 +69,6 @@ my $launcher = sub {
         query           => $input,
         type            => "intranet",
         flagsrequired   => {editcatalogue => '*'},
-        debug           => 1,
     });
 
     my $dbh = C4::Context->dbh;

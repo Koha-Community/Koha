@@ -38,7 +38,6 @@ my ($template, $loggedinuser, $cookie)
                  query => $input,
                  type => "intranet",
                  flagsrequired => { parameters => 'manage_matching_rules' },
-                 debug => 1,
                  });
 
 $template->param(script_name => $script_name);

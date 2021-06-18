@@ -52,7 +52,6 @@ our ( $template, $loggedinuser, $cookie ) = get_template_and_user(
         query           => $input,
         type            => 'intranet',
         flagsrequired   => { borrowers => 'edit_borrowers', updatecharges => $updatecharges_permissions },
-        debug           => 1,
     }
 );
 

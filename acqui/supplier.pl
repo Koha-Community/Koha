@@ -60,7 +60,6 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
         query           => $query,
         type            => 'intranet',
         flagsrequired   => { acquisition => '*' },
-        debug           => 1,
     }
 );
 my $booksellerid       = $query->param('booksellerid');

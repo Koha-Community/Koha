@@ -62,7 +62,6 @@ else {
             query           => $query,
             type            => "opac",
             authnotrequired => 0,                    # auth required to add tags
-            debug           => 1,
         }
     );
 }

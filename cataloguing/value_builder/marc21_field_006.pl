@@ -59,7 +59,6 @@ my $launcher = sub {
             query           => $input,
             type            => "intranet",
             flagsrequired   => { editcatalogue => '*' },
-            debug           => 1,
         }
     );
     $result = "a|||||r|||| 00| 0 " unless $result;

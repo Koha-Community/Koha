@@ -63,7 +63,6 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
         query           => $input,
         type            => "intranet",
         flagsrequired   => { tools => 'edit_notice_status_triggers' },
-        debug           => 1,
     }
 );
 

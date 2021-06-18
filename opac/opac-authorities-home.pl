@@ -71,7 +71,6 @@ if ( $op eq "do_search" ) {
             query           => $query,
             type            => 'opac',
             authnotrequired => 1,
-            debug           => 1,
         }
     );
     $template->param( search_query => $search_query ) if C4::Context->preference('DumpSearchQueryTemplate');
@@ -170,7 +169,6 @@ else {
             query           => $query,
             type            => 'opac',
             authnotrequired => ( C4::Context->preference("OpacPublic") ? 1 : 0 ),
-            debug           => 1,
         }
     );
 

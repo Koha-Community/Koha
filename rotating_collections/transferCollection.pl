@@ -36,7 +36,6 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
         query           => $query,
         type            => "intranet",
         flagsrequired   => { tools => 'rotating_collections' },
-        debug           => 1,
     }
 );
 

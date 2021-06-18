@@ -81,7 +81,6 @@ my ($template, $loggedinuser, $cookie)
                  query => $input,
                  type => "intranet",
                  flagsrequired => {acquisition => 'order_receive'},
-                 debug => 1,
 });
 
 my $op = $input->param('op') // '';

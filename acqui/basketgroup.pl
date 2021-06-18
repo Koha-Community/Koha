@@ -66,7 +66,6 @@ our ($template, $loggedinuser, $cookie)
 			     query => $input,
 			     type => "intranet",
 			     flagsrequired => {acquisition => 'group_manage'},
-			     debug => 1,
                 });
 
 sub BasketTotal {

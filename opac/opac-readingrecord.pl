@@ -49,7 +49,6 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
         template_name   => "opac-readingrecord.tt",
         query           => $query,
         type            => "opac",
-        debug           => 1,
     }
 );
 

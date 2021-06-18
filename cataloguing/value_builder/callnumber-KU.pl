@@ -71,7 +71,6 @@ my $launcher = sub {
         query           => $input,
         type            => "intranet",
         flagsrequired   => {editcatalogue => '*'},
-        debug           => 1,
     });
 
     my $BASE_CALLNUMBER_RE = qr/^(\w+) (\w+)$/;

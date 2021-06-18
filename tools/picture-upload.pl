@@ -48,7 +48,6 @@ my ($template, $loggedinuser, $cookie)
 					query => $input,
 					type => "intranet",
 					flagsrequired => { tools => 'batch_upload_patron_images'},
-					debug => 0,
 					});
 
 our $filetype      = $input->param('filetype') || '';

@@ -33,7 +33,6 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
         flagsrequired   => { parameters => 'manage_itemtypes' },
         query           => $query,
         type            => "intranet",
-        debug           => 1,
     }
 );
 

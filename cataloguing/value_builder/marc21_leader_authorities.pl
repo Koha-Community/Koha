@@ -65,7 +65,6 @@ my $launcher = sub {
             query           => $input,
             type            => "intranet",
             flagsrequired   => { editcatalogue => '*' },
-            debug           => 1,
         }
     );
     $result = "     nz  a22     n  4500" unless $result;

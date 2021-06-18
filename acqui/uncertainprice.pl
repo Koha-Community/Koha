@@ -62,7 +62,6 @@ my ($template, $loggedinuser, $cookie)
 			     query => $input,
 			     type => "intranet",
 			     flagsrequired   => { acquisition => 'order_manage' },
-			     debug => 1,
                 });
 
 my $booksellerid = $input->param('booksellerid');

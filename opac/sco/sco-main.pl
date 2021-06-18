@@ -81,7 +81,6 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
         flagsrequired   => { self_check => "self_checkout_module" },
         query           => $query,
         type            => "opac",
-        debug           => 1,
     }
 );
 

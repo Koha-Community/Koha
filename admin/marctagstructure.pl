@@ -53,7 +53,6 @@ my ($template, $loggedinuser, $cookie)
 			     query => $input,
 			     type => "intranet",
                  flagsrequired => { parameters => 'manage_marc_frameworks' },
-			     debug => 1,
 			     });
 
 my $frameworks = Koha::BiblioFrameworks->search({}, { order_by => ['frameworktext'] });

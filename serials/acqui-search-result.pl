@@ -56,7 +56,6 @@ my ($template, $loggedinuser, $cookie)
                  query => $query,
                  type => "intranet",
                  flagsrequired => {serials => '*'},
-                 debug => 1,
                  });
 
 my $supplier=$query->param('supplier');

@@ -51,7 +51,6 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
         query           => $input,
         type            => "intranet",
         flagsrequired   => { parameters => 'manage_keyboard_shortcuts' },
-        debug           => 1,
     }
 );
 

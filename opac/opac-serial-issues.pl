@@ -44,7 +44,6 @@ if ( $selectview eq "full" ) {
             query           => $query,
             type            => "opac",
             authnotrequired => 1,
-            debug           => 1,
         }
     );
     my $subscriptions = GetFullSubscriptionsFromBiblionumber($biblionumber);
@@ -87,7 +86,6 @@ else {
             query           => $query,
             type            => "opac",
             authnotrequired => 1,
-            debug           => 1,
         }
     );
 

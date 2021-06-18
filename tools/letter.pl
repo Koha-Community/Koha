@@ -79,7 +79,6 @@ our ( $template, $borrowernumber, $cookie, $staffflags ) = get_template_and_user
         query           => $input,
         type            => 'intranet',
         flagsrequired   => { tools => 'edit_notices' },
-        debug           => 1,
     }
 );
 

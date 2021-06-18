@@ -581,7 +581,6 @@ my ($template, $loggedinuser, $cookie)
                             query => $input,
                             type => "intranet",
                             flagsrequired => {editauthorities => 1},
-                            debug => 1,
                             });
 $template->param(nonav   => $nonav,index=>$myindex,authtypecode=>$authtypecode,breedingid=>$breedingid);
 

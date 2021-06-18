@@ -83,7 +83,6 @@ my ($template, $borrowernumber, $cookie, $staff_flags ) = get_template_and_user(
         query           => $input,
         type            => "intranet",
         flagsrequired   => { acquisition => 'period_manage' },
-        debug           => 1,
     }
 );
 

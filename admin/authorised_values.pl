@@ -44,7 +44,6 @@ our ($template, $borrowernumber, $cookie)= get_template_and_user({
     flagsrequired => {parameters => 'manage_auth_values'},
     query => $input,
     type => "intranet",
-    debug => 1,
 });
 
 ################## ADD_FORM ##################################

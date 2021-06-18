@@ -37,7 +37,6 @@ my ($template, $loggedinuser, $cookie)
                             query => $input,
                             type => "intranet",
                             flagsrequired => { parameters => 'manage_transfers' },
-                            debug => 1,
                             });
 my $use_transport_cost_matrix = C4::Context->preference("UseTransportCostMatrix");
 

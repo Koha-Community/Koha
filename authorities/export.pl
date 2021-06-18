@@ -14,7 +14,6 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
         query           => $query,
         type            => "intranet",
         flagsrequired   => { catalogue => 1 },
-        debug           => 1,
     }
 );
 

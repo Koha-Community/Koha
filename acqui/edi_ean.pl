@@ -52,7 +52,6 @@ else {
             query           => $query,
             type            => 'intranet',
             flagsrequired   => { acquisition => 'order_manage' },
-            debug           => 1,
         }
     );
     $template->param( eans     => \@eans );

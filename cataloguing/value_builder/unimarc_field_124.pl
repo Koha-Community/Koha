@@ -55,7 +55,6 @@ my ($template, $loggedinuser, $cookie)
 			     query => $input,
 			     type => "intranet",
 			     flagsrequired => {editcatalogue => '*'},
-			     debug => 1,
 			     });
 	my $f1 = substr($result,0,8);
 	my $f2 = substr($result,8,1);

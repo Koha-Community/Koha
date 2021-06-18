@@ -38,7 +38,6 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
         type            => "intranet",
         authnotrequired => 0,
         flagsrequired   => { parameters => 'manage_libraries' },
-        debug           => 1,
     }
 );
 

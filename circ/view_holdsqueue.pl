@@ -39,7 +39,6 @@ my ( $template, $loggedinuser, $cookie, $flags ) = get_template_and_user(
         query           => $query,
         type            => "intranet",
         flagsrequired   => { circulate => "circulate_remaining_permissions" },
-        debug           => 1,
     }
 );
 

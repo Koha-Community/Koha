@@ -86,7 +86,6 @@ our ( $template, $loggedinuser, $cookie, $userflags ) = get_template_and_user(
         query           => $query,
         type            => "intranet",
         flagsrequired   => { acquisition => 'order_manage' },
-        debug           => 1,
     }
 );
 

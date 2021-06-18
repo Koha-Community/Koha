@@ -70,7 +70,6 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
         query           => $input,
         type            => "intranet",
         flagsrequired   => { borrowers => 'edit_borrowers' },
-        debug           => 1,
     }
 );
 my $borrowernumber = $input->param('borrowernumber');

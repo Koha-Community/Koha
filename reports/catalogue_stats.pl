@@ -71,7 +71,6 @@ my ($template, $borrowernumber, $cookie)
 				query => $input,
 				type => "intranet",
 				flagsrequired => {reports => '*'},
-				debug => 1,
 				});
 $template->param(do_it => $do_it);
 if ($do_it) {

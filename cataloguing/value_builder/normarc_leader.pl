@@ -63,7 +63,6 @@ my ($template, $loggedinuser, $cookie)
 			     query => $input,
 			     type => "intranet",
 			     flagsrequired => {editcatalogue => 1},
-			     debug => 1,
 			     });
 	$result = "     nam a22     1  4500" unless $result;
 	my $f5 = substr($result,5,1);

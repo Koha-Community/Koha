@@ -55,7 +55,6 @@ if ( $op eq "delete" ) {
             query           => $query,
             type            => 'intranet',
             flagsrequired   => { catalogue => 1 },
-            debug           => 1,
         }
     );
 
@@ -105,7 +104,6 @@ if ( $op eq "do_search" ) {
             query           => $query,
             type            => 'intranet',
             flagsrequired   => { catalogue => 1 },
-            debug           => 1,
         }
     );
 
@@ -203,7 +201,6 @@ if ( $op eq '' ) {
             query           => $query,
             type            => 'intranet',
             flagsrequired   => { catalogue => 1 },
-            debug           => 1,
         }
     );
 

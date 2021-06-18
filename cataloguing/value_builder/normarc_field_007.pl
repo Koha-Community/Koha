@@ -54,7 +54,6 @@ my ($template, $loggedinuser, $cookie)
 			     query => $input,
 			     type => "intranet",
 			     flagsrequired => {editcatalogue => 1},
-			     debug => 1,
 			     });
 	$result = "ta" unless $result;
 	my $f0 = substr($result,0,1);

@@ -31,7 +31,6 @@ my ($template, $loggedinuser, $cookie)
 				query => $query,
 				type => "intranet",
 				flagsrequired => {reports => '*'},
-				debug => 1,
 				});
 $template->param(intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
 		intranetstylesheet => C4::Context->preference("intranetstylesheet"),

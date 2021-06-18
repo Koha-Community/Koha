@@ -31,7 +31,6 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
         query           => $query,
         type            => 'intranet',
         authnotrequired => 1,
-        debug           => 1,
     }
 );
 $template->param (

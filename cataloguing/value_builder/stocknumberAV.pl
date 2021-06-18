@@ -79,7 +79,6 @@ my $launcher = sub {
             query           => $input,
             type            => "intranet",
             flagsrequired   => { editcatalogue => '*' },
-            debug           => 1,
         }
     );
 

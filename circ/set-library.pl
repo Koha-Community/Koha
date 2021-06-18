@@ -35,7 +35,6 @@ my ( $template, $borrowernumber, $cookie, $flags ) = get_template_and_user({
     template_name   => "circ/set-library.tt",
     query           => $query,
     type            => "intranet",
-    debug           => 1,
     flagsrequired   => { catalogue => 1, },
 });
 

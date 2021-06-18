@@ -70,7 +70,6 @@ my ( $template, $loggedinuser, $cookie, $userflags ) = get_template_and_user(
         query           => $query,
         type            => 'intranet',
         flagsrequired   => { acquisition => '*' },
-        debug           => 1,
     }
 );
 

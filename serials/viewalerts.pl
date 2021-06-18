@@ -33,7 +33,6 @@ my ($template, $loggedinuser, $cookie)
                  query => $input,
                  type => "intranet",
                  flagsrequired => {serials => '*'},
-                 debug => 1,
                  });
 
 my $subscriptionid = $input->param('subscriptionid');

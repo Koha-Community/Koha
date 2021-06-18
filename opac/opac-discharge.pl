@@ -44,7 +44,6 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user({
     template_name => "opac-discharge.tt",
     query         => $input,
     type          => "opac",
-    debug         => 1,
 });
 
 my $can_be_discharged = Koha::Patron::Discharge::can_be_discharged({ borrowernumber => $loggedinuser });

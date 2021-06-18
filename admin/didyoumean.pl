@@ -16,7 +16,6 @@ my ($template, $loggedinuser, $cookie)
             query => $input,
             type => "intranet",
             flagsrequired => {parameters => 'manage_didyoumean'},
-            debug => 1,
             });
 
 my $opacplugins = from_json(C4::Context->preference('OPACdidyoumean') || '[]');

@@ -33,7 +33,6 @@ my ($template, $loggedinuser, $cookie)
                                 type => "opac",
                                 authnotrequired => 1,
                                 flagsrequired => {borrowers => 'edit_borrowers'},
-                                debug => 1,
                                 });
 
 $template->{'VARS'}->{'q'} = $cgi->param('q');

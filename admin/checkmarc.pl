@@ -33,7 +33,6 @@ my ($template, $borrowernumber, $cookie)
 			     query => $input,
 			     type => "intranet",
                  flagsrequired => { parameters => 'manage_marc_frameworks' },
-			     debug => 1,
 			     });
 
 my $dbh = C4::Context->dbh;

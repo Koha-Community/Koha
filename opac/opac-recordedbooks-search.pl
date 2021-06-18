@@ -31,7 +31,6 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
         template_name   => "opac-recordedbooks-search.tt",
         query           => $cgi,
         type            => "opac",
-        debug           => 1,
         authnotrequired => 1,
     }
 );

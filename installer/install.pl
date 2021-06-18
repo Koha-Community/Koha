@@ -49,7 +49,6 @@ if ( defined($language) ) {
         template_name => "installer/step" . ( $step ? $step : 1 ) . ".tt",
         query         => $query,
         type          => "intranet",
-        debug           => 1,
     }
 );
 
