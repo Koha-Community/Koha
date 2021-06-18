@@ -260,7 +260,7 @@ if ($session->param('busc')) {
     # Search given the current values from the busc param
     sub searchAgain
     {
-        my ($arrParamsBusc, $offset, $results_per_page) = @_;
+        my ($arrParamsBusc, $offset, $results_per_page, $patron) = @_;
 
         my $itemtypes = { map { $_->{itemtype} => $_ } @{ Koha::ItemTypes->search_with_localization->unblessed } };
         my @servers;
@@ -341,7 +341,7 @@ if ($session->param('busc')) {
         }
         $arrParamsBusc{'count'} = $count;
         $results_per_page = $count;
-        my $newresultsRef = searchAgain(\%arrParamsBusc, $offset, $results_per_page);
+        my $newresultsRef = searchAgain(\%arrParamsBusc, $offset, $results_per_page, $patron);
         $arrParamsBusc{'listBiblios'} = buildListBiblios($newresultsRef, $results_per_page);
         delete $arrParamsBusc{'previous'} if (exists($arrParamsBusc{'previous'}));
         delete $arrParamsBusc{'next'} if (exists($arrParamsBusc{'next'}));
@@ -452,7 +452,7 @@ if ($session->param('busc')) {
         $offsetSearch = 0 if (defined($offsetSearch) && $offsetSearch < 0);
     }
     if ($searchAgain) {
-        my $newresultsRef = searchAgain(\%arrParamsBusc, $offsetSearch, $results_per_page);
+        my $newresultsRef = searchAgain(\%arrParamsBusc, $offsetSearch, $results_per_page, $patron);
         my @newresults = @$newresultsRef;
         # build the new listBiblios
         my $listBiblios = buildListBiblios(\@newresults, $results_per_page);
