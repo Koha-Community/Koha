@@ -274,7 +274,8 @@ if ( $op eq 'view' ) {
             my $contents = $shelf->get_contents->search(
                 {},
                 {
-                    prefetch => [ { 'biblionumber' => { 'biblioitems' => 'items' } } ],
+                    distinct => 'biblionumber',
+                    join     => [ { 'biblionumber' => { 'biblioitems' => 'items' } } ],
                     page     => $page,
                     rows     => $rows,
                     order_by => { "-$direction" => $order_by },
