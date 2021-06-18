@@ -285,19 +285,18 @@ if ($loggedinuser) {
         # BZ17530: 'Intelligent' guess if result can be article requested
         $tag->{artreqpossible} = ( $art_req_itypes->{ $tag->{itemtype} // q{} } || $art_req_itypes->{ '*' } ) ? 1 : q{};
 
-        my $xslfile = C4::Context->preference('OPACXSLTResultsDisplay') || "default";
-        my $lang   = C4::Languages::getlanguage();
-        my $sysxml = C4::XSLT::get_xslt_sysprefs();
-
         my $variables = {
             anonymous_session => ($loggedinuser) ? 0 : 1
         };
         $tag->{XSLTBloc} = XSLTParse4Display(
-            $tag->{biblionumber},     $record,
-            "OPACXSLTResultsDisplay", 1,
-            $hidden_items,            $sysxml,
-            $xslfile,                 $lang,
-            $variables
+            {
+                biblionumber   => $tag->{biblionumber},
+                record         => $record,
+                xsl_filename   => 'OPACXSLTResultsDisplay',
+                fix_amps       => 1,
+                hidden_items   => $hidden_items,
+                xslt_variables => $variables
+            }
         );
 
         my $date = $tag->{date_created} || '';

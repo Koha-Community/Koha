@@ -1655,10 +1655,6 @@ sub searchResults {
     my ($bibliotag,$bibliosubf)=GetMarcFromKohaField( 'biblio.biblionumber' );
 
     # set stuff for XSLT processing here once, not later again for every record we retrieved
-    my $xslsyspref = $is_opac ? 'OPACXSLTResultsDisplay' : 'XSLTResultsDisplay';
-    my $xslfile = C4::Context->preference( $xslsyspref ) || "default";
-    my $lang   = C4::Languages::getlanguage();
-    my $sysxml = C4::XSLT::get_xslt_sysprefs();
 
     my $userenv = C4::Context->userenv;
     my $logged_in_user
@@ -1955,14 +1951,28 @@ sub searchResults {
 
         # XSLT processing of some stuff
         # we fetched the sysprefs already before the loop through all retrieved record!
-        if (!$scan && $xslfile) {
+        if (!$scan) {
             $record_processor->options({
                 frameworkcode => $fw,
                 interface     => $search_context->{'interface'}
             });
 
             $record_processor->process($marcrecord);
-            $oldbiblio->{XSLTResultsRecord} = XSLTParse4Display($oldbiblio->{biblionumber}, $marcrecord, $xslsyspref, 1, \@hiddenitems, $sysxml, $xslfile, $lang, $xslt_variables);
+
+            $oldbiblio->{XSLTResultsRecord} = XSLTParse4Display(
+                {
+                    biblionumber => $oldbiblio->{biblionumber},
+                    record       => $marcrecord,
+                    xsl_syspref  => (
+                        $is_opac
+                        ? 'OPACXSLTResultsDisplay'
+                        : 'XSLTResultsDisplay'
+                    ),
+                    fix_amps       => 1,
+                    hidden_items   => \@hiddenitems,
+                    xslt_variables => $xslt_variables
+                }
+            );
         }
 
         # if biblio level itypes are used and itemtype is notforloan, it can't be reserved either

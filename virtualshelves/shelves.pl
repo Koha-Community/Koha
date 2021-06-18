@@ -258,18 +258,20 @@ if ( $op eq 'view' ) {
                 }
             );
 
-            my $xslfile = C4::Context->preference('XSLTListsDisplay');
-            my $lang   = C4::Languages::getlanguage();
-            my $sysxml = C4::XSLT::get_xslt_sysprefs();
-
             my @items;
             while ( my $content = $contents->next ) {
                 my $this_item;
                 my $biblionumber = $content->biblionumber;
                 my $record       = GetMarcBiblio({ biblionumber => $biblionumber });
 
-                $this_item->{XSLTBloc} = XSLTParse4Display( $biblionumber, $record, "XSLTListsDisplay",
-                                                            1, undef, $sysxml, $xslfile, $lang);
+                $this_item->{XSLTBloc} = XSLTParse4Display(
+                    {
+                        biblionumber => $biblionumber,
+                        record       => $record,
+                        xsl_filename => "XSLTListsDisplay",
+                        fix_amps     => 1,
+                    }
+                );
 
                 my $marcflavour = C4::Context->preference("marcflavour");
                 my $itemtype = Koha::Biblioitems->search({ biblionumber => $content->biblionumber })->next->itemtype;

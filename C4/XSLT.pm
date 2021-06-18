@@ -188,17 +188,17 @@ sub get_xslt_sysprefs {
     return $sysxml;
 }
 
-sub XSLTParse4Display {
-    my ( $biblionumber, $orig_record, $xslsyspref, $fixamps, $hidden_items, $sysxml, $xslfilename, $lang, $variables, $items_rs ) = @_;
+sub get_xsl_filename {
+    my ( $xslsyspref ) = @_;
 
-    $sysxml ||= C4::Context->preference($xslsyspref);
-    $xslfilename ||= C4::Context->preference($xslsyspref);
-    $lang ||= C4::Languages::getlanguage();
+    my $lang   = C4::Languages::getlanguage();
+
+    my $xslfilename = C4::Context->preference($xslsyspref) || "default";
 
     if ( $xslfilename =~ /^\s*"?default"?\s*$/i ) {
-        my $htdocs;
-        my $theme;
-        my $xslfile;
+
+        my ( $htdocs, $theme, $xslfile );
+
         if ($xslsyspref eq "XSLTDetailsDisplay") {
             $htdocs  = C4::Context->config('intrahtdocs');
             $theme   = C4::Context->preference("template");
@@ -239,6 +239,22 @@ sub XSLTParse4Display {
         $xslfilename =~ s/\{langcode\}/$lang/;
     }
 
+    return $xslfilename;
+}
+
+sub XSLTParse4Display {
+    my ( $params ) = @_;
+
+    my $biblionumber = $params->{biblionumber};
+    my $orig_record  = $params->{record};
+    my $xslsyspref   = $params->{xsl_syspref};
+    my $fixamps      = $params->{fix_amps};
+    my $hidden_items = $params->{hidden_items} || [];
+    my $variables    = $params->{xslt_variables};
+    my $items_rs     = $params->{items_rs};
+
+    my $xslfilename = get_xsl_filename( $xslsyspref);
+
     # grab the XML, run it through our stylesheet, push it out to the browser
     my $record = transformMARCXML4XSLT($biblionumber, $orig_record);
     my $itemsxml;
@@ -271,6 +287,7 @@ sub XSLTParse4Display {
     }
     $varxml .= "</variables>\n";
 
+    my $sysxml = get_xslt_sysprefs();
     $xmlrecord =~ s/\<\/record\>/$itemsxml$sysxml$varxml\<\/record\>/;
     if ($fixamps) { # We need to correct the ampersand entities that Zebra outputs
         $xmlrecord =~ s/\&amp;amp;/\&amp;/g;

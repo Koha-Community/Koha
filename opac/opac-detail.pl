@@ -194,12 +194,6 @@ my $marcflavour      = C4::Context->preference("marcflavour");
 my $ean = GetNormalizedEAN( $record, $marcflavour );
 
 {
-
-    # XSLT processing of some stuff
-    my $xslfile = C4::Context->preference('OPACXSLTDetailsDisplay') || "default";
-    my $lang   = C4::Languages::getlanguage();
-    my $sysxml = C4::XSLT::get_xslt_sysprefs();
-
     my $searcher = Koha::SearchEngine::Search->new(
         { index => $Koha::SearchEngine::BIBLIOS_INDEX }
     );
@@ -212,13 +206,14 @@ my $ean = GetNormalizedEAN( $record, $marcflavour );
     my ( $err, $result, $count ) = $searcher->simple_search_compat( $query, 0, 0 );
 
     warn "Warning from simple_search_compat: $err"
-        if $err;
+       if $err;
 
     my $variables = {
         anonymous_session   => ($borrowernumber) ? 0 : 1,
         show_analytics_link => $count > 0 ? 1 : 0
     };
 
+    my $lang   = C4::Languages::getlanguage();
     my @plugin_responses = Koha::Plugins->call(
         'opac_detail_xslt_variables',
         {
@@ -234,9 +229,14 @@ my $ean = GetNormalizedEAN( $record, $marcflavour );
 
     $template->param(
         XSLTBloc => XSLTParse4Display(
-            $biblionumber, $record, "OPACXSLTDetailsDisplay", 1, undef,
-            $sysxml, $xslfile, $lang, $variables
-        )
+            {
+                biblionumber   => $biblionumber,
+                record         => $record,
+                xsl_syspref    => 'OPACXSLTDetailsDisplay',
+                fix_amps       => 1,
+                xslt_variables => $variables
+            }
+        ),
     );
 }
 

@@ -124,9 +124,6 @@ my $marcflavour  = C4::Context->preference("marcflavour");
 
 {
     # XSLT processing of some stuff
-    my $xslfile = C4::Context->preference('XSLTDetailsDisplay') || "default";
-    my $lang   = C4::Languages::getlanguage();
-    my $sysxml = C4::XSLT::get_xslt_sysprefs();
 
     my $searcher = Koha::SearchEngine::Search->new(
         { index => $Koha::SearchEngine::BIBLIOS_INDEX }
@@ -148,11 +145,15 @@ my $marcflavour  = C4::Context->preference("marcflavour");
 
     $template->param(
         XSLTDetailsDisplay => '1',
-        XSLTBloc           => XSLTParse4Display(
-            $biblionumber, $record, "XSLTDetailsDisplay", 1,
-            undef,         $sysxml, $xslfile,             $lang,
-            $variables
-        )
+        XSLTBloc => XSLTParse4Display(
+            {
+                biblionumber   => $biblionumber,
+                record         => $record,
+                xsl_syspref    => "XSLTDetailsDisplay",
+                fix_amps       => 1,
+                xslt_variables => $variables
+            }
+        ),
     );
 }
 
