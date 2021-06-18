@@ -1,7 +1,7 @@
 $(document).ready(function() {
 
     var getLinks = function(row) {
-        if (row.links && row.links.length === 0) {
+        if (!row.links || row.links.length === 0) {
             return false;
         }
         return row.links.map(function(link) {
