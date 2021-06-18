@@ -319,6 +319,31 @@ if ( C4::Context->preference('ILLModule') ) {
     $template->param( warnILLConfiguration => $warnILLConfiguration );
 }
 
+{
+    # XSLT sysprefs
+    my @xslt_prefs = qw(
+        OPACXSLTDetailsDisplay
+        OPACXSLTListsDisplay
+        OPACXSLTResultsDisplay
+        XSLTDetailsDisplay
+        XSLTListsDisplay
+        XSLTResultsDisplay
+    );
+    my @warnXSLT;
+    for my $p ( @xslt_prefs ) {
+        my $xsl_filename = C4::XSLT::get_xsl_filename( $p );
+        next if -e $xsl_filename;
+        push @warnXSLT,
+          {
+            syspref  => $p,
+            value    => C4::Context->preference("$p"),
+            filename => $xsl_filename
+          };
+    }
+
+    $template->param( warnXSLT => \@warnXSLT ) if @warnXSLT;
+}
+
 if ( C4::Context->preference('SearchEngine') eq 'Elasticsearch' ) {
     # Check ES configuration health and runtime status
 
