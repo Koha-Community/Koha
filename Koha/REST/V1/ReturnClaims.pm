@@ -152,10 +152,8 @@ sub resolve_claim {
     my $claim = Koha::Checkouts::ReturnClaims->find($claim_id);
 
     return $c->render(
-            status => 404,
-            openapi => {
-                error => "Claim not found"
-            }
+        status  => 404,
+        openapi => { error => "Claim not found" }
     ) unless $claim;
 
     return try {
@@ -167,19 +165,13 @@ sub resolve_claim {
         my $user = $c->stash('koha.user');
         $resolved_by //= $user->borrowernumber;
 
-        $claim->set(
+        $claim->resolve(
             {
-                resolution  => $resolution,
-                resolved_by => $resolved_by,
-                resolved_on => \'NOW()',
-                updated_by  => $resolved_by,
+                resolution      => $resolution,
+                resolved_by     => $resolved_by,
+                new_lost_status => $new_lost_status,
             }
-        )->store;
-
-        if ( defined $new_lost_status ) {
-            $claim->checkout->item->itemlost($new_lost_status)->store;
-        }
-        $claim->discard_changes;
+        )->discard_changes;
 
         return $c->render(
             status  => 200,
