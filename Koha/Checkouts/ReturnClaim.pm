@@ -22,6 +22,7 @@ use Modern::Perl;
 use base qw(Koha::Object);
 
 use Koha::Checkouts;
+use Koha::Exceptions;
 use Koha::Exceptions::Checkouts::ReturnClaims;
 use Koha::Old::Checkouts;
 use Koha::Patrons;
@@ -77,6 +78,50 @@ sub patron {
 
     my $borrower = $self->_result->borrowernumber;
     return Koha::Patron->_new_from_dbic( $borrower ) if $borrower;
+}
+
+=head3 resolve
+
+    $claim->resolve(
+        {
+            resolution      => $resolution,
+            resolved_by     => $patron_id,
+          [ resolved_on     => $dt
+            new_lost_status => $status, ]
+        }
+    );
+
+Resolve the claim.
+
+=cut
+
+sub resolve {
+    my ( $self, $params ) = @_;
+
+    my @mandatory = ( 'resolution', 'resolved_by' );
+    for my $param (@mandatory) {
+        unless ( defined( $params->{$param} ) ) {
+            Koha::Exceptions::MissingParameter->throw( error => "The $param parameter is mandatory" );
+        }
+    }
+
+    $self->_result->result_source->schema->txn_do(
+        sub {
+            $self->set(
+                {   resolution  => $params->{resolution},
+                    resolved_by => $params->{resolved_by},
+                    resolved_on => $params->{resolved_on} // \'NOW()',
+                    updated_by  => $params->{resolved_by}
+                }
+            )->store;
+
+            if ( defined $params->{new_lost_status} ) {
+                $self->checkout->item->itemlost( $params->{new_lost_status} )->store;
+            }
+        }
+    );
+
+    return $self;
 }
 
 =head3 to_api_mapping
