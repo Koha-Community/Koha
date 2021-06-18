@@ -23,7 +23,6 @@ use C4::Context;
 use C4::Output;
 use C4::Auth;
 use C4::Koha;
-use C4::Debug;
 use Koha::DateUtils;
 use Koha::Database;
 use Koha::Logger;
@@ -72,7 +71,6 @@ $cache->clear_from_cache( Koha::CirculationRules::GUESSED_ITEMTYPES_KEY );
 if ($op eq 'delete') {
     my $itemtype     = $input->param('itemtype');
     my $categorycode = $input->param('categorycode');
-    $debug and warn "deleting $1 $2 $branch";
 
     Koha::CirculationRules->set_rules(
         {
@@ -289,7 +287,6 @@ elsif ($op eq 'add') {
     my $cap_fine_to_replacement_price = ($input->param('cap_fine_to_replacement_price') || '') eq 'on';
     my $note = $input->param('note');
     my $decreaseloanholds = $input->param('decreaseloanholds') || undef;
-    $debug and warn "Adding $br, $bor, $itemtype, $fine, $maxissueqty, $maxonsiteissueqty, $cap_fine_to_replacement_price";
 
     my $rules = {
         maxissueqty                   => $maxissueqty,

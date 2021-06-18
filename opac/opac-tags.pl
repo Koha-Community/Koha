@@ -37,7 +37,6 @@ use CGI::Cookie; # need to check cookies before having CGI parse the POST reques
 
 use C4::Auth qw(:DEFAULT check_cookie_auth);
 use C4::Context;
-use C4::Debug;
 use C4::Output qw(:html :ajax );
 use C4::Scrubber;
 use C4::Biblio;
@@ -47,6 +46,7 @@ use C4::XSLT;
 
 use Data::Dumper;
 
+use Koha::Logger;
 use Koha::Biblios;
 use Koha::CirculationRules;
 
@@ -65,16 +65,12 @@ sub ajax_auth_cgi {     # returns CGI object
 	my $input = CGI->new;
     my $sessid = $cookies{'CGISESSID'}->value;
 	my ($auth_status, $auth_sessid) = check_cookie_auth($sessid, $needed_flags);
-	$debug and
-	print STDERR "($auth_status, $auth_sessid) = check_cookie_auth($sessid," . Dumper($needed_flags) . ")\n";
 	if ($auth_status ne "ok") {
 		output_with_http_headers $input, undef,
 		"window.alert('Your CGI session cookie ($sessid) is not current.  " .
 		"Please refresh the page and try again.');\n", 'js';
 		exit 0;
 	}
-	$debug and print STDERR "AJAX request: " . Dumper($input),
-		"\n(\$auth_status,\$auth_sessid) = ($auth_status,$auth_sessid)\n";
 	return $input;
 }
 
@@ -91,7 +87,6 @@ foreach ($query->param) {
     if (/^newtag(.*)/) {
         my $biblionumber = $1;
         unless ($biblionumber =~ /^\d+$/) {
-            $debug and warn "$_ references non numerical biblionumber '$biblionumber'";
             push @errors, {+'badparam' => $_ };
             push @globalErrorIndexes, $#errors;
             next;
@@ -106,7 +101,6 @@ my $add_op = (scalar(keys %newtags) + scalar(@deltags)) ? 1 : 0;
 my ($template, $loggedinuser, $cookie);
 if ($is_ajax) {
 	$loggedinuser = C4::Context->userenv->{'number'};  # must occur AFTER auth
-	$debug and print STDERR "op: $loggedinuser\n";
 } else {
 	($template, $loggedinuser, $cookie) = get_template_and_user({
         template_name   => "opac-tags.tt",
@@ -159,7 +153,7 @@ if (scalar @newtags_keys) {
 			} else {
 				push @errors, {failed_add_tag=>$clean_tag};
 				push @{$bibResults->{errors}}, {failed_add_tag=>$clean_tag};
-				$debug and warn "add_tag($biblionumber,$clean_tag,$loggedinuser...) returned bad result (" . (defined $result ? $result : 'UNDEF') .")";
+                Koha::Logger->get->warn("add_tag($biblionumber,$clean_tag,$loggedinuser...) returned bad result (" . (defined $result ? $result : 'UNDEF') .")");
 			}
 		}
         $perBibResults->{$biblionumber} = $bibResults;

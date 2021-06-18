@@ -8,7 +8,6 @@ use Modern::Perl;
 use C4::Serials;
 use C4::Serials::Frequency;
 use C4::Serials::Numberpattern;
-use C4::Debug;
 use C4::Biblio;
 use C4::Budgets;
 use C4::Items;

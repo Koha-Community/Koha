@@ -23,7 +23,6 @@ use Storable qw(dclone);
 use autouse 'Data::Dumper' => qw(Dumper);
 
 use C4::Context;
-use C4::Debug;
 
 BEGIN {
     use base qw(Exporter);
@@ -266,7 +265,6 @@ sub get_all_image_names {
     my $image_names = [];
     my $query = "SELECT image_name FROM creator_images";
     my $sth = C4::Context->dbh->prepare($query);
-#    $sth->{'TraceLevel'} = 3 if $debug;
     $sth->execute();
     if ($sth->err) {
         warn sprintf('Database returned the following error: %s', $sth->errstr);

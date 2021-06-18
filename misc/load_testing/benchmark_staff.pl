@@ -17,7 +17,6 @@ use LWP::UserAgent;
 use Data::Dumper;
 use HTTP::Cookies;
 use C4::Context;
-use C4::Debug;
 use URI::Escape;
 use Koha::Patrons;
 
@@ -82,7 +81,6 @@ if( $resp->is_success and $resp->content =~ m|<status>ok</status>| ) {
     $cookie = $cookie_jar->as_string;
     unless ($short_print) {
         print "Authentication successful\n";
-        print "Auth:\n $resp->content" if $debug;
     }
 } elsif ( $resp->is_success ) {
     die "Authentication failure: bad login/password";

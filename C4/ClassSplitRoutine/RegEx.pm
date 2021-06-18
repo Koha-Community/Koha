@@ -19,8 +19,6 @@ package C4::ClassSplitRoutine::RegEx;
 
 use Modern::Perl;
 
-use C4::Debug;
-
 =head1 NAME
 
 C4::ClassSplitRoutine::RegEx - regex call number sorting key routine

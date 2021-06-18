@@ -6,8 +6,6 @@ use warnings;
 use autouse 'Data::Dumper' => qw(Dumper);
 
 use C4::Context;
-use C4::Debug;
-
 
 sub _check_params {
     my $given_params = {};

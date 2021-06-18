@@ -12,7 +12,6 @@ use strict;
 use C4::SIP::ILS::Transaction;
 
 use C4::Circulation;
-use C4::Debug;
 use C4::Items qw( ModItemTransfer );
 use C4::Reserves qw( ModReserveAffect );
 use Koha::DateUtils qw( dt_from_string );
@@ -90,7 +89,6 @@ sub do_checkin {
 
     my $checkin_blocked_by_holds = $holds_block_checkin && $item->biblio->holds->count;
 
-    $debug and warn "do_checkin() calling AddReturn($barcode, $branch)";
     ( $return, $messages, $issue, $borrower ) =
       AddReturn( $barcode, $branch, undef, $return_date )
       unless $human_required || $checkin_blocked_by_holds;

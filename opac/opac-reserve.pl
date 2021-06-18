@@ -31,7 +31,6 @@ use C4::Output;
 use C4::Context;
 use C4::Members;
 use C4::Overdues;
-use C4::Debug;
 
 use Koha::AuthorisedValues;
 use Koha::Biblios;

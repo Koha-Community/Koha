@@ -19,7 +19,6 @@ package C4::Auth_with_shibboleth;
 
 use Modern::Perl;
 
-use C4::Debug;
 use C4::Context;
 use Koha::AuthUtils qw(get_script_name);
 use Koha::Database;

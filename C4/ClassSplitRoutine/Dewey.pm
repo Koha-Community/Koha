@@ -19,8 +19,6 @@ package C4::ClassSplitRoutine::Dewey;
 
 use Modern::Perl;
 
-use C4::Debug;
-
 =head1 NAME
 
 C4::ClassSplitRoutine::Dewey - Dewey call number split method
@@ -66,7 +64,6 @@ sub split_callnumber {
     push @lines, split /\s+/,
       pop @lines
       ;    # split the last piece into an arbitrary number of pieces at spaces
-    $debug and print STDERR "split_ddcn array: ", join( " | ", @lines ), "\n";
     return @lines;
 }
 

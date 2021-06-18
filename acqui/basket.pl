@@ -28,7 +28,6 @@ use CGI qw ( -utf8 );
 use C4::Acquisition;
 use C4::Budgets;
 use C4::Contract;
-use C4::Debug;
 use C4::Biblio;
 use C4::Items;
 use C4::Suggestions;
@@ -313,10 +312,6 @@ if ( $op eq 'list' ) {
     # if new basket, pre-fill infos
     $basket->{creationdate} = ""            unless ( $basket->{creationdate} );
     $basket->{authorisedby} = $loggedinuser unless ( $basket->{authorisedby} );
-    $debug
-      and warn sprintf
-      "loggedinuser: $loggedinuser; creationdate: %s; authorisedby: %s",
-      $basket->{creationdate}, $basket->{authorisedby};
 
     my @basketusers_ids = GetBasketUsers($basketno);
     my @basketusers;

@@ -24,7 +24,6 @@ use C4::Context;
 use C4::Output;
 use CGI qw(-oldstyle_urls -utf8);
 use C4::Auth;
-use C4::Debug;
 use Text::CSV_XS;
 use Koha::DateUtils;
 use DateTime;
@@ -112,7 +111,6 @@ for my $attrcode (grep { /^patron_attr_filter_/ } $input->multi_param) {
     if (my @attrvalues = grep { length($_) > 0 } $input->multi_param($attrcode)) {
         $attrcode =~ s/^patron_attr_filter_//;
         $cgi_attrcode_to_attrvalues{$attrcode} = \@attrvalues;
-        print STDERR ">>>param($attrcode)[@{[scalar @attrvalues]}] = '@attrvalues'\n" if $debug;
     }
 }
 my $have_pattr_filter_data = keys(%cgi_attrcode_to_attrvalues) > 0;
@@ -179,12 +177,6 @@ if (@patron_attr_filter_loop) {
                 $keep = 0;
                 last;
             }
-        }
-        if ($debug) {
-            my $showkeep = $keep ? 'keep' : 'do NOT keep';
-            print STDERR ">>> patron $bn: $showkeep attributes: ";
-            for (sort keys %$pattrs) { my @a=map { "$_->[0]/$_->[1]  " } @{$pattrs->{$_}}; print STDERR "attrcode $_ = [@a] " }
-            print STDERR "\n";
         }
         delete $borrowernumber_to_attributes{$bn} if !$keep;
     }

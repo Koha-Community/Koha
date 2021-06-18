@@ -55,7 +55,6 @@ use C4::Context;
 use C4::Output;
 use C4::Search;
 use C4::Biblio;
-use C4::Debug;
 
 use Koha::ItemTypes;
 use Koha::SearchEngine;
@@ -93,7 +92,6 @@ if ( $op eq "do_search" && $query ) {
     my $op = 'and';
     $query .= " $op $itype_or_itemtype:$itemtypelimit" if $itemtypelimit;
     $query .= " $op ccode:$ccodelimit" if $ccodelimit;
-    $debug && warn $query;
     $resultsperpage = $input->param('resultsperpage');
     $resultsperpage = 20 if ( !defined $resultsperpage );
 

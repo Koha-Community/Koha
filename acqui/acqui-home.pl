@@ -34,7 +34,6 @@ use C4::Output;
 use C4::Acquisition;
 use C4::Budgets;
 use C4::Members;
-use C4::Debug;
 use Koha::Acquisition::Currencies;
 use Koha::Patrons;
 use Koha::Suggestions;

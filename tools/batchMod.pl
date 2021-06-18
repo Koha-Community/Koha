@@ -31,7 +31,6 @@ use C4::Context;
 use C4::Koha;
 use C4::BackgroundJob;
 use C4::ClassSource;
-use C4::Debug;
 use C4::Members;
 use MARC::File::XML;
 use List::MoreUtils qw/uniq/;

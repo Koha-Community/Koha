@@ -12,11 +12,9 @@ use Getopt::Long;
 # Koha modules
 use C4::Context;
 use C4::Items;
-use C4::Debug;
 use Data::Dumper;
 
-use vars qw($debug $dbh);
-$dbh = C4::Context->dbh;
+my $dbh = C4::Context->dbh;
 
 sub get_counts() {
 	my $query = q(
@@ -69,12 +67,10 @@ print "This operation may take a while.\n";
 print "\nAttempting to populate missing data.\n";
 
 my (@itemnumbers) = (scalar @ARGV) ? @ARGV : &itemnumber_array;
-$debug and print "itemnumbers: ", Dumper(\@itemnumbers);
 print "Number of distinct itemnumbers paired with NULL_ITEMTYPE: ", scalar(@itemnumbers), "\n";
 
 my $query = "UPDATE statistics SET itemtype = ? WHERE itemnumber = ?";
 my $update = $dbh->prepare($query);
-# $debug and print "Update Query: $query\n";
 foreach (@itemnumbers) {
     my $item = Koha::Items->find($_);
     unless ($item) {
@@ -90,7 +86,6 @@ my $old_issues = $dbh->prepare("SELECT * FROM old_issues WHERE timestamp = ? AND
 my     $issues = $dbh->prepare("SELECT * FROM     issues WHERE timestamp = ? AND itemnumber = ?");
 $update = $dbh->prepare("UPDATE statistics SET borrowernumber = ? WHERE datetime = ? AND itemnumber = ?");
 my $nullborrs = null_borrower_lines;
-$debug and print Dumper($nullborrs);
 foreach (@$nullborrs) {
 	$old_issues->execute($_->{datetime},$_->{itemnumber});
 	my $issue;

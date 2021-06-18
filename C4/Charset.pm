@@ -17,14 +17,14 @@ package C4::Charset;
 # You should have received a copy of the GNU General Public License
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
-use strict;
-use warnings;
+use Modern::Perl;
 
 use MARC::Charset qw/marc8_to_utf8/;
 use Text::Iconv;
-use C4::Debug;
 use Unicode::Normalize;
 use Encode qw( decode encode is_utf8 );
+
+use Koha::Logger;
 
 use vars qw(@ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 
@@ -353,7 +353,7 @@ sub SetMarcUnicodeFlag {
             $marc_record->insert_grouped_field( 
                 MARC::Field->new( 100, '', '', "a" => $string ) ); 
         }
-		$debug && warn "encodage: ", substr( $marc_record->subfield(100, 'a'), $encodingposition, 3 );
+        Koha::Logger->get->debug("encodage: ", substr( $marc_record->subfield(100, 'a'), $encodingposition, 3 ));
     } else {
         warn "Unrecognized marcflavour: $marc_flavour";
     }

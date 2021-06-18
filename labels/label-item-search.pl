@@ -18,7 +18,6 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use vars qw($debug $cgi_debug);
 
 use CGI qw ( -utf8 );
 use List::Util qw( max min );
@@ -30,20 +29,12 @@ use C4::Context;
 use C4::Search qw(SimpleSearch);
 use C4::Biblio qw(TransformMarcToKoha);
 use C4::Creators::Lib qw(html_table);
-use C4::Debug;
 
+use Koha::Logger;
 use Koha::DateUtils;
 use Koha::Items;
 use Koha::ItemTypes;
 use Koha::SearchEngine::Search;
-
-BEGIN {
-    $debug = $debug || $cgi_debug;
-    if ($debug) {
-        require Data::Dumper;
-        import Data::Dumper qw(Dumper);
-    }
-}
 
 my $query = CGI->new;
 
@@ -102,7 +93,7 @@ if ( $op eq "do_search" ) {
         $show_results = @{$marcresults};
     }
     else {
-        $debug and warn "ERROR label-item-search: no results from simple_search_compat";
+        Koha::Logger->get->warn("ERROR label-item-search: no results from simple_search_compat");
 
         # leave $show_results undef
     }

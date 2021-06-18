@@ -31,7 +31,7 @@ use C4::Circulation;
 use C4::Context;
 use C4::Accounts;
 use C4::Log; # logaction
-use C4::Debug;
+use Koha::Logger;
 use Koha::DateUtils;
 use Koha::Account::Lines;
 use Koha::Account::Offsets;
@@ -275,7 +275,6 @@ sub CalcFine {
 
     $amount = $item->{replacementprice} if ( $issuing_rule->{cap_fine_to_replacement_price} && $item->{replacementprice} && $amount > $item->{replacementprice} );
 
-    $debug and warn sprintf("CalcFine returning (%s, %s, %s)", $amount, $units_minus_grace, $chargeable_units);
     return ($amount, $units_minus_grace, $chargeable_units);
 }
 
@@ -522,8 +521,6 @@ sub UpdateFine {
     my $amount         = $params->{amount};
     my $due            = $params->{due} // q{};
 
-    $debug and warn "UpdateFine({ itemnumber => $itemnum, borrowernumber => $borrowernumber, due => $due, issue_id => $issue_id})";
-
     unless ( $issue_id ) {
         carp("No issue_id passed in!");
         return;
@@ -547,7 +544,7 @@ sub UpdateFine {
     while (my $overdue = $overdues->next) {
         if ( defined $overdue->issue_id && $overdue->issue_id == $issue_id && $overdue->status eq 'UNRETURNED' ) {
             if ($accountline) {
-                $debug and warn "Not a unique accountlines record for issue_id $issue_id";
+                Koha::Logger->get->debug("Not a unique accountlines record for issue_id $issue_id"); # FIXME Do we really need to log that?
                 #FIXME Should we still count this one in total_amount ??
             }
             else {
@@ -563,12 +560,12 @@ sub UpdateFine {
         if ($accountline) {
             if ( ( $amount - $accountline->amount ) > $maxIncrease ) {
                 my $new_amount = $accountline->amount + $maxIncrease;
-                $debug and warn "Reducing fine for item $itemnum borrower $borrowernumber from $amount to $new_amount - MaxFine reached";
+                Koha::Logger->get->debug("Reducing fine for item $itemnum borrower $borrowernumber from $amount to $new_amount - MaxFine reached");
                 $amount = $new_amount;
             }
         }
         elsif ( $amount > $maxIncrease ) {
-            $debug and warn "Reducing fine for item $itemnum borrower $borrowernumber from $amount to $maxIncrease - MaxFine reached";
+            Koha::Logger->get->debug("Reducing fine for item $itemnum borrower $borrowernumber from $amount to $maxIncrease - MaxFine reached");
             $amount = $maxIncrease;
         }
     }

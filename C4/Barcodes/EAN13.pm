@@ -21,13 +21,11 @@ use strict;
 use warnings;
 
 use C4::Context;
-use C4::Debug;
 
 use Algorithm::CheckDigits;
 use Carp;
 
 use vars qw(@ISA);
-use vars qw($debug $cgi_debug);	# from C4::Debug, of course
 
 BEGIN {
     @ISA = qw(C4::Barcodes);
@@ -50,7 +48,6 @@ sub process_tail {
     my $ean = CheckDigits('ean');
     my $full = $ean->complete($whole);
     my $chk  = $ean->checkdigit($full);
-    $debug && warn "# process_tail $tail -> $chk [$whole -> $full] $specific";
     return $chk;
 }
 

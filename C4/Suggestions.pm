@@ -23,7 +23,6 @@ use CGI qw ( -utf8 );
 
 use C4::Context;
 use C4::Output;
-use C4::Debug;
 use C4::Letters;
 use C4::Biblio qw( GetMarcFromKohaField );
 use Koha::DateUtils;
@@ -210,7 +209,6 @@ sub SearchSuggestion {
         push @query, q{ AND suggestions.archived = 0 };
     }
 
-    $debug && warn "@query";
     my $sth = $dbh->prepare("@query");
     $sth->execute(@sql_params);
     my @results;

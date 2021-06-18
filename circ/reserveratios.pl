@@ -27,7 +27,6 @@ use POSIX qw( ceil );
 use C4::Context;
 use C4::Output;
 use C4::Auth;
-use C4::Debug;
 use C4::Acquisition qw/GetOrdersByBiblionumber/;
 use Koha::DateUtils;
 use Koha::Acquisition::Baskets;
@@ -84,7 +83,6 @@ if ($ratio <= 0) {
 
 my $dbh    = C4::Context->dbh;
 my $sqldatewhere = "";
-$debug and warn output_pref({ dt => $startdate, dateformat => 'iso', dateonly => 1 }) . "\n" . output_pref({ dt => $enddate, dateformat => 'iso', dateonly => 1 });
 my @query_params = ();
 
 $sqldatewhere .= " AND reservedate >= ?";

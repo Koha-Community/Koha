@@ -22,7 +22,6 @@ use C4::Context;
 use Koha::Database;
 use Koha::Patrons;
 use Koha::Acquisition::Invoice::Adjustments;
-use C4::Debug;
 use C4::Acquisition;
 use vars qw(@ISA @EXPORT);
 
@@ -510,7 +509,6 @@ sub GetBudgetHierarchy {
         }
     }
 	$query.=" WHERE ".join(' AND ', @where_strings) if @where_strings;
-	$debug && warn $query,join(",",@bind_params);
 	my $sth = $dbh->prepare($query);
 	$sth->execute(@bind_params);
 

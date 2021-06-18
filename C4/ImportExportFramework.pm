@@ -27,8 +27,7 @@ use Text::CSV_XS;
 use List::MoreUtils qw(indexes);
 
 use C4::Context;
-use C4::Debug;
-
+use Koha::Logger;
 
 use vars qw(@ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 
@@ -226,7 +225,7 @@ sub ExportFramework
                 }
             };
             if ($@) {
-                $debug and warn "Error ExportFramework $@\n";
+                Koha::Logger->get->warn("Error ExportFramework $@");
                 return 0;
             }
         }
@@ -298,7 +297,7 @@ sub _export_table_csv
         $$strCSV .= chr(10);
     };
     if ($@) {
-        $debug and warn "Error _export_table_csv $@\n";
+        Koha::Logger->get->warn("Error _export_table_csv $@");
         return 0;
     }
     return 1;
@@ -364,7 +363,7 @@ sub _export_table_ods
         }
     };
     if ($@) {
-        $debug and warn "Error _export_table_ods $@\n";
+        Koha::Logger->get->warn("Error _export_table_ods $@");
         return 0;
     }
     return 1;
@@ -429,7 +428,7 @@ sub _export_table_excel
         }
     };
     if ($@) {
-        $debug and warn "Error _export_table_excel $@\n";
+        Koha::Logger->get->warn("Error _export_table_excel $@");
         return 0;
     }
     return 1;
@@ -551,7 +550,7 @@ sub createODS
             }
         };
         if ($@) {
-            $debug and warn "Error createODS $@\n";
+            Koha::Logger->get->warn("Error createODS $@");
         } else {
             # create ods file from tempdir directory
             eval {
@@ -676,11 +675,11 @@ sub ImportFramework
                         }
                     }
                 } else {
-                    $debug and warn "Error ImportFramework couldn't create dom\n";
+                    Koha::Logger->get->warn("Error ImportFramework couldn't create dom");
                 }
             };
             if ($@) {
-                $debug and warn "Error ImportFramework $@\n";
+                Koha::Logger->get->warn("Error ImportFramework $@");
             } else {
                 if ($extension eq 'csv') {
                     close($dom) if ($dom);
@@ -689,7 +688,7 @@ sub ImportFramework
         }
         unlink ($filename) if ($deleteFilename); # remove temporary file
     } else {
-        $debug and warn "Error ImportFramework no conex to database or not readeable $filename\n";
+        Koha::Logger->get->warn("Error ImportFramework no conex to database or not readeable $filename");
     }
     if ($deleteFilename && $tempdir && -d $tempdir && -w $tempdir) {
         eval {
@@ -860,8 +859,7 @@ sub _processRow_DB
         $sth->execute((@$dataFields, @$dataFields));
     };
     if ($@) {
-        warn $@;
-        $debug and warn "Error _processRow_DB $@\n";
+        Koha::Logger->get->warn("Error _processRow_DB $@");
     } else {
         $ok = 1;
     }
@@ -1011,7 +1009,7 @@ sub _import_table_ods
         my $nodeR = $nodes[0]->firstChild;
         return _processRows_Table($dbh, $frameworkcode, $nodeR, $table, $PKArray, 'ods', $fields2Delete);
     } else {
-        $debug and warn "Error _import_table_ods there's not worksheet for $table\n";
+        Koha::Logger->get->warn("Error _import_table_ods there's not worksheet for $table");
     }
     return 0;
 }#_import_table_ods
@@ -1037,7 +1035,7 @@ sub _import_table_excel
             }
         }
     } else {
-        $debug and warn "Error _import_table_excel there's not worksheet for $table\n";
+        Koha::Logger->get->warn("Error _import_table_excel there's not worksheet for $table");
     }
     return 0;
 }#_import_table_excel

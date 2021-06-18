@@ -19,7 +19,6 @@ use C4::SIP::Sip qw(add_field);
 use C4::Biblio;
 use C4::Circulation;
 use C4::Context;
-use C4::Debug;
 use C4::Items;
 use C4::Members;
 use C4::Reserves;
@@ -372,7 +371,6 @@ sub available {
 	my ($self, $for_patron) = @_;
 	my $count  = (defined $self->{pending_queue}) ? scalar @{$self->{pending_queue}} : 0;
     my $count2 = (defined $self->{hold_attached}   ) ? scalar @{$self->{hold_attached}   } : 0;
-    $debug and print STDERR "availability check: pending_queue size $count, hold_attached size $count2\n";
     if (defined($self->{borrowernumber})) {
         ($self->{borrowernumber} eq $for_patron) or return 0;
 		return ($count ? 0 : 1);

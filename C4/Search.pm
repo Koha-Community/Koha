@@ -26,8 +26,8 @@ use Lingua::Stem;
 use XML::Simple;
 use C4::XSLT;
 use C4::Reserves;    # GetReserveStatus
-use C4::Debug;
 use C4::Charset;
+use Koha::Logger;
 use Koha::AuthorisedValues;
 use Koha::ItemTypes;
 use Koha::Libraries;
@@ -37,11 +37,7 @@ use URI::Escape;
 use Business::ISBN;
 use MARC::Record;
 use MARC::Field;
-use vars qw(@ISA @EXPORT @EXPORT_OK %EXPORT_TAGS $DEBUG);
-
-BEGIN {
-    $DEBUG = ($ENV{DEBUG}) ? 1 : 0;
-}
+use vars qw(@ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 
 =head1 NAME
 
@@ -323,8 +319,7 @@ sub getRecords {
 # if this is a local search, use the $koha-query, if it's a federated one, use the federated-query
         my $query_to_use = ($servers[$i] =~ /biblioserver/) ? $koha_query : $simple_query;
 
-        #$query_to_use = $simple_query if $scan;
-        warn $simple_query if ( $scan and $DEBUG );
+        Koha::Logger->get->debug($simple_query) if $scan;
 
         # Check if we've got a query_type defined, if so, use it
         eval {
@@ -869,7 +864,8 @@ sub _build_stemmed_operand {
           unless ( $stem =~ /(and$|or$|not$)/ ) || ( length($stem) < 3 );
         $stemmed_operand .= " ";
     }
-    warn "STEMMED OPERAND: $stemmed_operand" if $DEBUG;
+
+    Koha::Logger->get->debug("STEMMED OPERAND: $stemmed_operand");
     return $stemmed_operand;
 }
 
@@ -1186,7 +1182,6 @@ See verbose embedded documentation.
 
 sub buildQuery {
     my ( $operators, $operands, $indexes, $limits, $sort_by, $scan, $lang) = @_;
-    warn "---------\nEnter buildQuery\n---------" if $DEBUG;
 
     my $query_desc;
 
@@ -1351,7 +1346,6 @@ sub buildQuery {
 						$operand=join(" ",map{
 											(index($_,"*")>0?"$_":"$_*")
 											 }split (/\s+/,$operand));
-						warn $operand if $DEBUG;
 					}
 				}
 
@@ -1360,9 +1354,9 @@ sub buildQuery {
                 my( $nontruncated, $righttruncated, $lefttruncated,
                     $rightlefttruncated, $regexpr
                 ) = _detect_truncation( $operand, $index );
-                warn
-"TRUNCATION: NON:>@$nontruncated< RIGHT:>@$righttruncated< LEFT:>@$lefttruncated< RIGHTLEFT:>@$rightlefttruncated< REGEX:>@$regexpr<"
-                  if $DEBUG;
+
+                Koha::Logger->get->debug(
+                    "TRUNCATION: NON:>@$nontruncated< RIGHT:>@$righttruncated< LEFT:>@$lefttruncated< RIGHTLEFT:>@$rightlefttruncated< REGEX:>@$regexpr<");
 
                 # Apply Truncation
                 if (
@@ -1395,14 +1389,14 @@ sub buildQuery {
                     }
                 }
                 $operand = $truncated_operand if $truncated_operand;
-                warn "TRUNCATED OPERAND: >$truncated_operand<" if $DEBUG;
+                Koha::Logger->get->debug("TRUNCATED OPERAND: >$truncated_operand<");
 
                 # Handle Stemming
                 my $stemmed_operand;
                 $stemmed_operand = _build_stemmed_operand($operand, $lang)
 										if $stemming;
 
-                warn "STEMMED OPERAND: >$stemmed_operand<" if $DEBUG;
+                Koha::Logger->get->debug("STEMMED OPERAND: >$stemmed_operand<");
 
                 # Handle Field Weighting
                 my $weighted_operand;
@@ -1412,7 +1406,7 @@ sub buildQuery {
                     $indexes_set = 1;
                 }
 
-                warn "FIELD WEIGHTED OPERAND: >$weighted_operand<" if $DEBUG;
+                Koha::Logger->get->debug("FIELD WEIGHTED OPERAND: >$weighted_operand<");
 
                 #Use relevance ranking when not using a weighted query (which adds relevance ranking of its own)
 
@@ -1437,7 +1431,7 @@ sub buildQuery {
             }    #/if $operands
         }    # /for
     }
-    warn "QUERY BEFORE LIMITS: >$query<" if $DEBUG;
+    Koha::Logger->get->debug("QUERY BEFORE LIMITS: >$query<");
 
     # add limits
     my %group_OR_limits;
@@ -1532,16 +1526,9 @@ sub buildQuery {
     # append the limit to the query
     $query .= " " . $limit;
 
-    # Warnings if DEBUG
-    if ($DEBUG) {
-        warn "QUERY:" . $query;
-        warn "QUERY CGI:" . $query_cgi;
-        warn "QUERY DESC:" . $query_desc;
-        warn "LIMIT:" . $limit;
-        warn "LIMIT CGI:" . $limit_cgi;
-        warn "LIMIT DESC:" . $limit_desc;
-        warn "---------\nLeave buildQuery\n---------";
-    }
+    Koha::Logger->get->debug(
+        sprintf "buildQuery returns\nQUERY:%s\nQUERY CGI:%s\nQUERY DESC:%s\nLIMIT:%s\nLIMIT CGI:%s\nLIMIT DESC:%s",
+        $query, $query_cgi, $query_desc, $limit, $limit_cgi, $limit_desc );
 
     return (
         undef,              $query, $simple_query, $query_cgi,
@@ -2198,7 +2185,6 @@ sub GetDistinctValues {
     if ($fieldname=~/\./){
 			my ($table,$column)=split /\./, $fieldname;
 			my $dbh = C4::Context->dbh;
-			warn "select DISTINCT($column) as value, count(*) as cnt from $table group by lib order by $column " if $DEBUG;
 			my $sth = $dbh->prepare("select DISTINCT($column) as value, count(*) as cnt from $table ".($string?" where $column like \"$string%\"":"")."group by value order by $column ");
 			$sth->execute;
 			my $elements=$sth->fetchall_arrayref({});

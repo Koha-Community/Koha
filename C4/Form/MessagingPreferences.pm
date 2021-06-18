@@ -23,7 +23,6 @@ use warnings;
 use CGI qw ( -utf8 );
 use C4::Context;
 use C4::Members::Messaging;
-use C4::Debug;
 
 use constant MAX_DAYS_IN_ADVANCE => 30;
 

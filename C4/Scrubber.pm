@@ -25,9 +25,6 @@ use Carp;
 use HTML::Scrubber;
 
 use C4::Context;
-use C4::Debug;
-
-
 
 my %scrubbertypes = (
     default => {}, # place holder, default settings are below as fallbacks in call to constructor
@@ -46,7 +43,6 @@ sub new {
     if ( !exists $scrubbertypes{$type} ) {
         croak "New called with unrecognized type '$type'";
     }
-    $debug and carp "Building new Scrubber of type '$type'";
     my $settings = $scrubbertypes{$type};
     my $scrubber = HTML::Scrubber->new(
         allow   => exists $settings->{allow} ? $settings->{allow} : [],
@@ -65,7 +61,6 @@ __END__
 =head1 C4::Sanitize
 
 Standardized wrapper with settings for building HTML::Scrubber tailored to various koha inputs.
-More verbose debugging messages are sent in the presence of non-zero $ENV{"DEBUG"}.
 
 The default is to scrub everything, leaving no markup at all.  This is compatible with the expectations
 for Tags.

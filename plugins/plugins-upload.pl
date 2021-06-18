@@ -28,7 +28,7 @@ use C4::Context;
 use C4::Auth;
 use C4::Output;
 use C4::Members;
-use C4::Debug;
+use Koha::Logger;
 use Koha::Plugins;
 
 my $plugins_enabled = C4::Context->config("enable_plugins");
@@ -58,13 +58,10 @@ if ($plugins_enabled) {
         $plugins_dir = ref($plugins_dir) eq 'ARRAY' ? $plugins_dir->[0] : $plugins_dir;
 
         my $dirname = File::Temp::tempdir( CLEANUP => 1 );
-        $debug and warn "dirname = $dirname";
 
         my $filesuffix;
         $filesuffix = $1 if $uploadfilename =~ m/(\..+)$/i;
         ( $tfh, $tempfile ) = File::Temp::tempfile( SUFFIX => $filesuffix, UNLINK => 1 );
-
-        $debug and warn "tempfile = $tempfile";
 
         $errors{'NOTKPZ'} = 1 if ( $uploadfilename !~ /\.kpz$/i );
         $errors{'NOWRITETEMP'}    = 1 unless ( -w $dirname );

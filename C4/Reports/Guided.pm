@@ -30,11 +30,11 @@ use Koha::DateUtils;
 use Koha::Patrons;
 use Koha::Reports;
 use C4::Output;
-use C4::Debug;
 use C4::Log;
 use Koha::Notice::Templates;
 use C4::Letters;
 
+use Koha::Logger;
 use Koha::AuthorisedValues;
 use Koha::Patron::Categories;
 use Koha::SharedContent;
@@ -550,7 +550,8 @@ sub execute_query {
     }
     $offset = 0    unless $offset;
     $limit  = 999999 unless $limit;
-    $debug and print STDERR "execute_query($sql, $offset, $limit)\n";
+
+    Koha::Logger->get->debug("Report - execute_query($sql, $offset, $limit)");
 
     my ( $is_sql_valid, $errors ) = Koha::Report->new({ savedsql => $sql })->is_sql_valid;
     return (undef, @{$errors}[0]) unless $is_sql_valid;
@@ -571,9 +572,11 @@ sub execute_query {
 
     # Grab offset/limit from user supplied LIMIT and drop the LIMIT so we can control pagination
     ($sql, $useroffset, $userlimit) = strip_limit($sql);
-    $debug and warn sprintf "User has supplied (OFFSET,) LIMIT = %s, %s",
-        $useroffset,
-        (defined($userlimit ) ? $userlimit  : 'UNDEF');
+
+    Koha::Logger->get->debug(
+        sprintf "User has supplied (OFFSET,) LIMIT = %s, %s",
+        $useroffset, ( defined($userlimit) ? $userlimit : 'UNDEF' ) );
+
     $offset += $useroffset;
     if (defined($userlimit)) {
         if ($offset + $limit > $userlimit ) {

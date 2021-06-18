@@ -23,7 +23,6 @@ use LWP::Simple;
 use HTTP::Request::Common;
 
 use C4::Context;
-use C4::Debug;
 
 use Modern::Perl;
 
@@ -91,9 +90,7 @@ sub availability {
 	($user and $pass) or return;
 	$isbn =~ s/(p|-)//g;	# sanitize
     my $url = "https://contentcafe2.btol.com/ContentCafe/InventoryAvailability.asmx/CheckInventory?UserID=$user&Password=$pass&Value=$isbn";
-	$debug and warn __PACKAGE__ . " request:\n$url\n";
 	my $content = get($url);
-	$debug and print STDERR $content, "\n";
 	warn "could not retrieve $url" unless $content;
 	my $xmlsimple = XML::Simple->new();
 	my $result = $xmlsimple->XMLin($content);

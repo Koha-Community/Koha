@@ -27,7 +27,6 @@ use LWP::Simple qw(get);
 use Koha::Plugins;
 use C4::Auth;
 use C4::Output;
-use C4::Debug;
 use C4::Context;
 
 my $plugins_enabled = C4::Context->config("enable_plugins");

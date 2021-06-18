@@ -44,7 +44,6 @@ use POSIX ();
 use YAML::XS;
 use ZOOM;
 
-use C4::Debug;
 use Koha::Caches;
 use Koha::Config::SysPref;
 use Koha::Config::SysPrefs;

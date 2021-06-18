@@ -22,7 +22,6 @@ use CGI qw ( -utf8 );
 
 use C4::Auth;
 use C4::Context;
-use C4::Debug;
 use C4::Output;
 # use Date::Manip;  # TODO: add not borrowed since date X criteria
 use Data::Dumper;
@@ -102,7 +101,6 @@ sub calculate {
         }
         $strsth2 .= " GROUP BY $column ORDER BY $column ";    # needed for count
         push @loopfilter, { crit => 'SQL', sql => 1, filter => $strsth2 };
-        $debug and warn "catalogue_out SQL: " . $strsth2;
         my $sth2 = $dbh->prepare($strsth2);
         $sth2->execute;
 
@@ -151,9 +149,7 @@ sub calculate {
     }
     $query .= " ORDER BY items.itemcallnumber DESC, barcode";
     $query .= " LIMIT 0,$limit" if ($limit);
-    $debug and warn "SQL : $query";
 
-    # warn "SQL : $query";
     push @loopfilter, { crit => 'SQL', sql => 1, filter => $query };
     my $dbcalc = $dbh->prepare($query);
 
@@ -185,12 +181,6 @@ sub calculate {
         my (@temptable);
         my $i = 0;
         foreach my $cell ( @{ $tables{$tablename} } ) {
-            if ( 0 == $i++ and $debug ) {
-                my $dump = Dumper($cell);
-                $dump =~ s/\n/ /gs;
-                $dump =~ s/\s+/ /gs;
-                print STDERR "first cell for $tablename: $dump";
-            }
             push @temptable, $cell;
         }
         my $count    = scalar(@temptable);

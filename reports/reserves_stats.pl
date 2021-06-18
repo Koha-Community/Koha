@@ -22,7 +22,6 @@ use Modern::Perl;
 use CGI qw ( -utf8 );
 
 use C4::Auth;
-use C4::Debug;
 use C4::Context;
 use C4::Koha;
 use C4::Output;
@@ -45,7 +44,6 @@ Plugin that shows reserve stats
 
 =cut
 
-# my $debug = 1;	# override for now.
 my $input = CGI->new;
 my $fullreportname = "reports/reserves_stats.tt";
 my $do_it    = $input->param('do_it');
@@ -248,7 +246,6 @@ sub calculate {
 	$strcalc .= " WHERE ".join(" AND ",@sqlwhere) if (@sqlwhere);
 	$strcalc .= " AND (".join(" OR ",@sqlor).")" if (@sqlor);
 	$strcalc .= " GROUP BY line, col )";
-	($debug) and print STDERR $strcalc;
 	my $dbcalc = $dbh->prepare($strcalc);
 	push @loopfilter, {crit=>'SQL =', sql=>1, filter=>$strcalc};
 	@sqlparams=(@sqlparams,@sqlorparams);
@@ -284,7 +281,6 @@ sub calculate {
 		my $total = 0;
 		foreach my $row (@loopline) {
 			$total += $data->{$row}{$col}{calculation} if $data->{$row}{$col}{calculation};
-			$debug and warn "value added ".$$data{$row}{$col}{calculation}. "for line ".$row;
 		}
 		push @loopfooter, {'totalcol' => $total};
 		push @loopcol, {'coltitle' => $col,

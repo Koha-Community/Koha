@@ -22,14 +22,12 @@ use Modern::Perl;
 use Carp;
 
 use C4::Context;
-use C4::Debug;
 
 use Koha::DateUtils qw( dt_from_string output_pref );
 
 use constant WIDTH => 4; # FIXME: too small for sizeable or multi-branch libraries?
 
 use vars qw(@ISA);
-use vars qw($debug $cgi_debug);	# from C4::Debug, of course
 
 BEGIN {
     @ISA = qw(C4::Barcodes);
@@ -42,7 +40,6 @@ sub db_max {
 	my $self = shift;
     my $width = WIDTH;
     my $query = "SELECT SUBSTRING(barcode,-$width) AS chunk, barcode FROM items WHERE barcode REGEXP ? ORDER BY chunk DESC LIMIT 1";
-	$debug and print STDERR "(hbyymmincr) db_max query: $query\n";
 	my $sth = C4::Context->dbh->prepare($query);
 	my ($iso);
         if (@_) {
@@ -64,7 +61,6 @@ sub db_max {
 	}
 	my ($row) = $sth->fetchrow_hashref;
 	my $max = $row->{barcode};
-	warn "barcode max (hbyymmincr format): $max" if $debug;
 	return ($max || 0);
 }
 
@@ -85,7 +81,6 @@ sub parse {   # return 3 parts of barcode: non-incrementing, incrementing, non-i
 		carp "Barcode '$barcode' has no incrementing part!";
 		return ($barcode,undef,undef);
 	}
-	$debug and warn "Barcode '$barcode' parses into: '$1', '$2', ''";
 	return ($1,$2,'');  # the third part is in anticipation of barcodes that include checkdigits
 }
 
@@ -111,7 +106,6 @@ sub process_head {	# (self,head,whole,specific)
 }
 
 sub new_object {
-    $debug and warn "hbyymmincr: new_object called";
     my $class_or_object = shift;
 
     my $type = ref($class_or_object) || $class_or_object;
@@ -126,10 +120,6 @@ sub new_object {
 
     $self->branch( @_ ? shift : $from_obj ? $class_or_object->branch : '' );
     warn "HBYYMM Barcode created with no branchcode, default is blank" if ( $self->branch() eq '' );
-
-    # take the branch from argument, or existing object, or default
-    use Data::Dumper;
-    $debug and print STDERR "(hbyymmincr) new_object: ", Dumper($self), "\n";
 
     return $self;
 }

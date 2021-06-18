@@ -27,7 +27,6 @@ use C4::Reports::Guided;
 use Koha::Reports;
 use C4::Auth qw/:DEFAULT get_session/;
 use C4::Output;
-use C4::Debug;
 use C4::Context;
 use Koha::Caches;
 use C4::Log;

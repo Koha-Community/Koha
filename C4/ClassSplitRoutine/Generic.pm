@@ -19,8 +19,6 @@ package C4::ClassSplitRoutine::Generic;
 
 use Modern::Perl;
 
-use C4::Debug;
-
 =head1 NAME
 
 C4::ClassSplitRoutine::Generic - generic call number sorting key routine
@@ -58,7 +56,6 @@ sub split_callnumber {
         warn sprintf( 'regexp failed to match string: %s', $cn_item );
         push( @lines, $cn_item );
     }
-    $debug and print STDERR "split_ccn array: ", join( " | ", @lines ), "\n";
 
     return @lines;
 }

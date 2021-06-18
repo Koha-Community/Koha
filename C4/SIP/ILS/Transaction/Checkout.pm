@@ -18,13 +18,9 @@ use C4::Context;
 use C4::Circulation;
 use C4::Members;
 use C4::Reserves qw(ModReserveFill);
-use C4::Debug;
 use Koha::DateUtils;
 
 use parent qw(C4::SIP::ILS::Transaction);
-
-our $debug;
-
 
 # Most fields are handled by the Transaction superclass
 my %fields = (
@@ -40,8 +36,6 @@ sub new {
         $self->{_permitted}->{$element} = $fields{$element};
     }
     @{$self}{keys %fields} = values %fields;
-#    $self->{'due'} = time() + (60*60*24*14); # two weeks hence
-    $debug and warn "new ILS::Transaction::Checkout : " . Dumper $self;
     return bless $self, $class;
 }
 
@@ -54,7 +48,6 @@ sub do_checkout {
     my $patron         = Koha::Patrons->find($self->{patron}->{borrowernumber});
     my $overridden_duedate; # usually passed as undef to AddIssue
     my $prevcheckout_block_checkout  = $account->{prevcheckout_block_checkout};
-    $debug and warn "do_checkout borrower: . " . $patron->borrowernumber;
     my ($issuingimpossible, $needsconfirmation) = _can_we_issue($patron, $barcode, 0);
 
     my $noerror=1;  # If set to zero we block the issue
@@ -77,7 +70,6 @@ sub do_checkout {
             } elsif ($confirmation eq 'RESERVE_WAITING'
                       or $confirmation eq 'TRANSFERRED'
                       or $confirmation eq 'PROCESSING') {
-               $debug and warn "Item is on hold for another patron.";
                $self->screen_msg("Item is on hold for another patron.");
                $noerror = 0;
             } elsif ($confirmation eq 'ISSUED_TO_ANOTHER') {
@@ -123,13 +115,10 @@ sub do_checkout {
         }
     }
 	unless ($noerror) {
-		$debug and warn "cannot issue: " . Dumper($issuingimpossible) . "\n" . Dumper($needsconfirmation);
 		$self->ok(0);
 		return $self;
 	}
 	# can issue
-    $debug and warn sprintf("do_checkout: calling AddIssue(%s, %s, %s, 0)\n", $patron->borrowernumber, $barcode, $overridden_duedate)
-		. "w/ C4::Context->userenv: " . Dumper(C4::Context->userenv);
     my $issue = AddIssue( $patron->unblessed, $barcode, $overridden_duedate, 0 );
     $self->{due} = $self->duedatefromissue($issue, $itemnumber);
 

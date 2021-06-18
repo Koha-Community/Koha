@@ -20,10 +20,7 @@ package C4::Patroncards::Lib;
 use strict;
 use warnings;
 
-use autouse 'Data::Dumper' => qw(Dumper);
-
 use C4::Context;
-use C4::Debug;
 
 BEGIN {
     use base qw(Exporter);

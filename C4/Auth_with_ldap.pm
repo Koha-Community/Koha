@@ -20,7 +20,6 @@ package C4::Auth_with_ldap;
 use Modern::Perl;
 use Carp;
 
-use C4::Debug;
 use C4::Context;
 use C4::Members::Messaging;
 use C4::Auth qw(checkpw_internal);

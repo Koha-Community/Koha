@@ -43,7 +43,6 @@ use C4::Circulation;
 use C4::Overdues;
 use C4::Calendar qw();    # don't need any exports from Calendar
 use C4::Biblio;
-use C4::Debug;            # supplying $debug and $cgi_debug
 use C4::Log;
 use Getopt::Long;
 use List::MoreUtils qw/none/;

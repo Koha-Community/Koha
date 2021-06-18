@@ -21,11 +21,13 @@
 use Modern::Perl;
 use Koha::Script;
 use C4::Context;
-use C4::Debug;
 use C4::Log;
 use Getopt::Long;
 use Pod::Usage;
 use YAML::XS;
+
+use Koha::Logger;
+
 our %NOT_SET_PREFS = map { $_, 1 } qw( Version );
 
 =head1 NAME
@@ -48,16 +50,10 @@ sub print_usage {
     }
 }
 
-sub _debug {
-    my ( $message ) = @_;
-
-    print STDERR $message . "\n" if ( $C4::Debug::debug );
-}
-
 sub _set_preference {
     my ( $preference, $value ) = @_;
 
-    _debug( "Setting $preference to $value" );
+    Koha::Logger->get->debug($message);
 
     if (   $preference->{type} eq 'YesNo'
         && $value ne '0'

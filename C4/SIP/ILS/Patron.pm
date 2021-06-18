@@ -17,7 +17,6 @@ use Data::Dumper;
 
 use C4::SIP::Sip qw(add_field maybe_add);
 
-use C4::Debug;
 use C4::Context;
 use C4::Koha;
 use C4::Members;
@@ -53,7 +52,6 @@ sub new {
             || Koha::Patrons->find( { userid => $patron_id } );
     }
 
-    $debug and warn "new Patron: " . Dumper($patron->unblessed) if $patron;
     unless ($patron) {
         siplog("LOG_DEBUG", "new ILS::Patron(%s): no such patron", $patron_id);
         return;
@@ -62,7 +60,6 @@ sub new {
     my $pw        = $kp->{password};
     my $flags     = C4::Members::patronflags( $kp );
     my $debarred  = $patron->is_debarred;
-    $debug and warn sprintf("Debarred = %s : ", ($debarred||'undef')); # Do we need more debug info here?
     my ($day, $month, $year) = (localtime)[3,4,5];
     my $today    = sprintf '%04d-%02d-%02d', $year+1900, $month+1, $day;
     my $expired  = ($today gt $kp->{dateexpiry}) ? 1 : 0;
@@ -134,7 +131,6 @@ sub new {
         userid          => $kp->{userid},
     );
     }
-    $debug and warn "patron fines: $ilspatron{fines} ... amountoutstanding: $kp->{amountoutstanding} ... CHARGES->amount: $flags->{CHARGES}->{amount}";
 
     if ( $patron->is_debarred and $patron->debarredcomment ) {
         $ilspatron{screen_msg} .= " -- " . $patron->debarredcomment;
@@ -165,7 +161,6 @@ sub new {
     $ilspatron{items} = \@barcodes;
 
     $self = \%ilspatron;
-    $debug and warn Dumper($self);
     siplog("LOG_DEBUG", "new ILS::Patron(%s): found patron '%s'", $patron_id,$self->{id});
     bless $self, $type;
     return $self;

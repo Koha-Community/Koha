@@ -20,7 +20,6 @@ package C4::Auth_with_cas;
 use strict;
 use warnings;
 
-use C4::Debug;
 use C4::Context;
 use Koha::AuthUtils qw(get_script_name);
 use Authen::CAS::Client;

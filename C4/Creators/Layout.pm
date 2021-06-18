@@ -6,9 +6,7 @@ use warnings;
 use autouse 'Data::Dumper' => qw(Dumper);
 
 use C4::Context;
-use C4::Debug;
 use C4::Creators::PDF;
-
 
 # FIXME: Consider this style parameter verification instead...
 #  my %param = @_;

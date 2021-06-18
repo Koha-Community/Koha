@@ -34,7 +34,6 @@ use C4::Members;
 use C4::Accounts;
 use C4::ItemCirculationAlertPreference;
 use C4::Message;
-use C4::Debug;
 use C4::Log; # logaction
 use C4::Overdues qw(CalcFine UpdateFine get_chargeable_units);
 use C4::RotatingCollections qw(GetCollectionItemBranches);
@@ -2293,8 +2292,6 @@ sub AddReturn {
             (C4::Context->preference("UseBranchTransferLimits") and
              ! IsBranchTransferAllowed($branch, $returnbranch, $item->$BranchTransferLimitsType )
            )) {
-            $debug and warn sprintf "about to call ModItemTransfer(%s, %s, %s, %s)", $item->itemnumber,$branch, $returnbranch, $transfer_trigger;
-            $debug and warn "item: " . Dumper($item->unblessed);
             ModItemTransfer($item->itemnumber, $branch, $returnbranch, $transfer_trigger, { skip_record_index => 1 });
             $messages->{'WasTransfered'} = $returnbranch;
             $messages->{'TransferTrigger'} = $transfer_trigger;

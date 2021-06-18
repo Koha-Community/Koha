@@ -30,7 +30,6 @@ BEGIN {
 
 use Koha::Script -cron;
 use C4::Context;
-use C4::Debug;
 use C4::Serials;
 use C4::Log;
 use Koha::DateUtils;

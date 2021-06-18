@@ -27,7 +27,6 @@ use C4::Koha;
 use C4::Budgets;
 use C4::Search;
 use C4::Members;
-use C4::Debug;
 use Koha::DateUtils qw( dt_from_string );
 use Koha::AuthorisedValues;
 use Koha::Acquisition::Currencies;

@@ -28,7 +28,6 @@ use C4::Context;
 use C4::Output;
 use CGI qw ( -utf8 );
 use C4::Auth;
-use C4::Debug;
 use C4::Items qw( ModItemTransfer );
 use C4::Reserves qw( ModReserveCancelAll );
 use Koha::Biblios;

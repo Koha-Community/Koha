@@ -6,7 +6,6 @@ use POSIX qw(ceil);
 use autouse 'Data::Dumper' => qw(Dumper);
 
 use C4::Context;
-use C4::Debug;
 use C4::Creators::Profile;
 use C4::Creators::Lib qw(get_unit_values);
 

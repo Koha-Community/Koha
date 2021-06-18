@@ -27,7 +27,6 @@ use Date::Calc qw(:all);
 use POSIX qw(strftime);
 use C4::Biblio;
 use C4::Log;    # logaction
-use C4::Debug;
 use C4::Serials::Frequency;
 use C4::Serials::Numberpattern;
 use Koha::AdditionalFieldValues;
@@ -197,7 +196,6 @@ sub GetSerialInformation {
 
                 #It is ASSUMED that GetMarcItem ALWAYS WORK...
                 #Maybe GetMarcItem should return values on failure
-                $debug and warn "itemnumber :$itemnum->[0], bibnum :" . $data->{'biblionumber'};
                 my $itemprocessed = C4::Items::PrepareItemrecordDisplay( $data->{'biblionumber'}, $itemnum->[0], $data );
                 $itemprocessed->{'itemnumber'}   = $itemnum->[0];
                 $itemprocessed->{'itemid'}       = $itemnum->[0];
@@ -266,7 +264,6 @@ sub GetSubscription {
        WHERE subscription.subscriptionid = ?
     );
 
-    $debug and warn "query : $query\nsubsid :$subscriptionid";
     my $sth = $dbh->prepare($query);
     $sth->execute($subscriptionid);
     my $subscription = $sth->fetchrow_hashref;
@@ -320,7 +317,6 @@ sub GetFullSubscription {
           IF(serial.publisheddate IS NULL,serial.planneddate,serial.publisheddate) DESC,
           serial.subscriptionid
           |;
-    $debug and warn "GetFullSubscription query: $query";
     my $sth = $dbh->prepare($query);
     $sth->execute($subscriptionid);
     my $subscriptions = $sth->fetchall_arrayref( {} );
@@ -732,7 +728,6 @@ sub GetSerials2 {
             . q|
                  ORDER BY publisheddate,serialid DESC
     |;
-    $debug and warn "GetSerials2 query: $query";
     my $sth = $dbh->prepare($query);
     $sth->execute( $subscription, @$statuses );
     my @serials;
@@ -1575,7 +1570,6 @@ sub ReNewSubscription {
     $sth = $dbh->prepare($query);
     $sth->execute( $startdate, $numberlength, $weeklength, $monthlength, $subscriptionid );
     my $enddate = GetExpirationDate($subscriptionid);
-	$debug && warn "enddate :$enddate";
     $query = qq|
         UPDATE subscription
         SET    enddate=?

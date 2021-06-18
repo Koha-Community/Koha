@@ -100,8 +100,6 @@ sub pagination_bar {
 	$base_url =~ s/$delim*\b$startfrom_name=(\d+)//g; # remove previous pagination var
     unless (defined $current_page and $current_page > 0 and $current_page <= $nb_pages) {
         $current_page = ($1) ? $1 : 1;	# pull current page from param in URL, else default to 1
-		# $debug and	# FIXME: use C4::Debug;
-		# warn "with QUERY_STRING:" .$ENV{QUERY_STRING}. "\ncurrent_page:$current_page\n1:$1  2:$2  3:$3";
     }
 	$base_url =~ s/($delim)+/$1/g;	# compress duplicate delims
 	$base_url =~ s/$delim;//g;		# remove empties

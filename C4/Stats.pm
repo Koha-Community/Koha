@@ -22,15 +22,12 @@ use Modern::Perl;
 require Exporter;
 use Carp;
 use C4::Context;
-use C4::Debug;
 
 use Koha::DateUtils qw( dt_from_string );
 use Koha::Statistics;
 use Koha::PseudonymizedTransactions;
 
 use vars qw(@ISA @EXPORT);
-
-our $debug;
 
 BEGIN {
 	@ISA    = qw(Exporter);

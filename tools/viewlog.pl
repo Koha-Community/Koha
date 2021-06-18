@@ -28,7 +28,6 @@ use C4::Koha;
 use C4::Output;
 use C4::Items;
 use C4::Serials;
-use C4::Debug;
 use C4::Search;    # enabled_staff_search_views
 
 use Koha::ActionLogs;
@@ -37,7 +36,6 @@ use Koha::DateUtils;
 use Koha::Items;
 use Koha::Patrons;
 
-use vars qw($debug $cgi_debug);
 
 =head1 viewlog.pl
 
@@ -47,7 +45,6 @@ plugin that shows stats
 
 my $input = CGI->new;
 
-$debug or $debug = $cgi_debug;
 my $do_it    = $input->param('do_it');
 my @modules  = $input->multi_param("modules");
 my $user     = $input->param("user") // '';
@@ -87,7 +84,6 @@ if ( $src eq 'circ' ) {
 }
 
 $template->param(
-    debug => $debug,
     C4::Search::enabled_staff_search_views,
     subscriptionsnumber => ( $object ? CountSubscriptionFromBiblionumber($object) : 0 ),
     object => $object,

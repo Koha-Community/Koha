@@ -24,7 +24,6 @@ use C4::Koha;
 use C4::Output;
 use C4::Biblio;
 use C4::Scrubber;
-use C4::Debug;
 
 use Koha::Biblios;
 use Koha::DateUtils;
@@ -93,7 +92,6 @@ if( !@errors && defined $review ) {
 	}
 }
 (@errors   ) and $template->param(   ERRORS=>\@errors);
-($cgi_debug) and $template->param(cgi_debug=>1       );
 $review = $clean;
 $review ||= $savedreview->review if $savedreview;
 $template->param(

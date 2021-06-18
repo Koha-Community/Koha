@@ -23,14 +23,12 @@ use warnings;
 use Carp;
 
 use C4::Context;
-use C4::Debug;
 use C4::Barcodes::hbyymmincr;
 use C4::Barcodes::annual;
 use C4::Barcodes::incremental;
 use C4::Barcodes::EAN13;
 
 use vars qw(@ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
-use vars qw($debug $cgi_debug);	# from C4::Debug, of course
 use vars qw($max $prefformat);
 
 BEGIN {
@@ -73,11 +71,8 @@ sub value {
 	my $self = shift;
 	if (@_) {
 		my $value = shift;
-		if (defined $value) {
-			$debug and print STDERR "    setting barcode value to $value\n";
-		} else {
-			warn "Error: UNDEF argument to value";
-		}
+        warn "Error: UNDEF argument to value"
+            unless defined $value;
 		$self->{value} = $value;
 	}
 	return $self->{value};
@@ -96,16 +91,13 @@ sub parse {	# return 3 parts of barcode: non-incrementing, incrementing, non-inc
 		carp "Barcode '$barcode' has no incrementing part!";
 		return ($barcode,undef,undef);
 	}
-	$debug and warn "Barcode '$barcode' parses into: '$1', '$2', ''";
 	return ($1,$2,'');	# the third part is in anticipation of barcodes that include checkdigits
 }
 sub max {
 	my $self = shift;
 	if ($self->{is_max}) {
-		$debug and print STDERR "max taken from Barcodes value $self->value\n";
 		return $self->value;
 	}
-	$debug and print STDERR "Retrieving max database query.\n";
 	return $self->db_max;
 }
 sub db_max {
@@ -123,7 +115,6 @@ sub next_value {
 		warn "No max barcode ($self->autoBarcode format) found.  Using initial value.";
 		return $self->initial;
 	}
-	$debug and print STDERR "(current) max barcode found: $max\n";
 	my ($head,$incr,$tail) = $self->parse($max);	# for incremental, you'd get ('',the_whole_barcode,'')
 	unless (defined $incr) {
 		warn "No incrementing part of barcode ($max) returned by parse.";
@@ -135,11 +126,9 @@ sub next_value {
 		# Those should override next_value() to work accordingly.
 	$incr++;
 
-	$debug and warn "$incr";
 	$head = $self->process_head($head,$max,$specific);
     $tail = $self->process_tail($tail,$incr,$specific); # XXX use $incr and not $max!
 	my $next_value = $head . $incr . $tail;
-	$debug and print STDERR "(  next ) max barcode found: $next_value\n";
 	return $next_value;
 }
 sub next {
@@ -183,9 +172,6 @@ sub new {
 	my $class_or_object = shift;
 	my $type = ref($class_or_object) || $class_or_object;
 	my $from_obj = ref($class_or_object) ? 1 : 0;	# are we building off another Barcodes object?
-	if ($from_obj) {
-		$debug and print STDERR "Building new(@_) from old Barcodes object\n"; 
-	}
 	my $autoBarcodeType = (@_) ? shift : $from_obj ? $class_or_object->autoBarcode : _prefformat;
 	$autoBarcodeType =~ s/^.*:://;	# in case we get C4::Barcodes::incremental, we just want 'incremental'
 	unless ($autoBarcodeType) {
@@ -196,7 +182,6 @@ sub new {
 		carp "The autoBarcode format '$autoBarcodeType' is unrecognized.";
 		return;
 	}
-	carp "autoBarcode format = $autoBarcodeType" if $debug;
 	my $self;
 	if ($autoBarcodeType eq 'OFF') {
  		$self = $class_or_object->default_self($autoBarcodeType);
@@ -207,7 +192,6 @@ sub new {
 		$self = $class_or_object->new_object(@_);
 		$self->serial($class_or_object->serial + 1);
 		if ($class_or_object->is_max) {
-			$debug and print STDERR "old object was max: ", $class_or_object->value, "\n";
 			$self->previous($class_or_object);
 			$class_or_object->next($self);
 			$self->value($self->next_value($class_or_object->value));
@@ -216,7 +200,6 @@ sub new {
 			$self->value($self->next_value);
 		}
 	} else {
-		$debug and print STDERR "trying to create new $autoBarcodeType\n";
 		$self = &{$types->{$autoBarcodeType}} (@_);
 		$self->value($self->next_value) and $self->is_max(1);
 		$self->serial(1);

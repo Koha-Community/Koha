@@ -30,7 +30,6 @@ use C4::Context;
 use Koha::DateUtils;
 # use C4::Koha;
 use C4::Output qw(:html :ajax pagination_bar);
-use C4::Debug;
 use C4::Tags qw(get_tags get_approval_rows approval_counts whitelist blacklist is_approved);
 
 my $script_name = "/cgi-bin/koha/tags/review.pl";
@@ -42,23 +41,18 @@ sub ajax_auth_cgi { # returns CGI object
     my $input = CGI->new;
     my $sessid = $cookies{'CGISESSID'}->value;
     my ($auth_status, $auth_sessid) = check_cookie_auth($sessid, $needed_flags);
-    $debug and
-    print STDERR "($auth_status, $auth_sessid) = check_cookie_auth($sessid," . Dumper($needed_flags) . ")\n";
     if ($auth_status ne "ok") {
         output_with_http_headers $input, undef,
             "window.alert('Your CGI session cookie ($sessid) is not current.  " .
             "Please refresh the page and try again.');\n", 'js';
         exit 0;
     }
-    $debug and print STDERR "AJAX request: " . Dumper($input),
-        "\n(\$auth_status,\$auth_sessid) = ($auth_status,$auth_sessid)\n";
     return $input;
 }
 
 if (is_ajax()) {
     my $input = &ajax_auth_cgi($needed_flags);
     my $operator = C4::Context->userenv->{'number'};  # must occur AFTER auth
-    $debug and print STDERR "op: " . Dumper($operator) . "\n";
     my ($tag, $js_reply);
     if ($tag = $input->param('test')) {
         my $check = is_approved($tag);
@@ -200,13 +194,11 @@ if ($filter = $input->param('approved_by')) {   # borrowernumber from link
         push @errors, {approved_by=>$filter};
     }
 }
-$debug and print STDERR "filters: " . Dumper(\%filters);
 my $tagloop = get_approval_rows(\%filters);
 my $qstring = $input->query_string;
 $qstring =~ s/([&;])*\blimit=\d+//;         # remove pagination var
 $qstring =~ s/^;+//;                        # remove leading delims
 $qstring = "limit=$pagesize" . ($qstring ? '&amp;' . $qstring : '');
-$debug and print STDERR "number of approval_rows: " . scalar(@$tagloop) . "rows\n";
 (scalar @errors) and $template->param(message_loop=>\@errors);
 $template->param(
     offset => $offset,  # req'd for EXPR

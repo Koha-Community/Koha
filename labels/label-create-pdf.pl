@@ -22,7 +22,6 @@ use Modern::Perl;
 
 use CGI qw ( -utf8 );
 use C4::Auth;
-use C4::Debug;
 use C4::Creators;
 use C4::Labels;
 

@@ -24,7 +24,6 @@ use Carp;
 use Exporter;
 
 use C4::Context;
-use C4::Debug;
 use Module::Load::Conditional qw/check_install/;
 #use Data::Dumper;
 use constant TAG_FIELDS => qw(tag_id borrowernumber biblionumber term language date_created);
@@ -55,22 +54,14 @@ BEGIN {
         warn "Ignoring TagsExternalDictionary, because Lingua::Ispell is not installed.";
         $ext_dict = q{};
     }
-	if ($debug) {
-		require Data::Dumper;
-		import Data::Dumper qw(:DEFAULT);
-		print STDERR __PACKAGE__ . " external dictionary = " . ($ext_dict||'none') . "\n";
-	}
 	if ($ext_dict) {
 		require Lingua::Ispell;
         import Lingua::Ispell qw(spellcheck add_word_lc);
         $Lingua::Ispell::path = $ext_dict;
-        $debug and print STDERR "\$Lingua::Ispell::path = $Lingua::Ispell::path\n";
 	}
 }
 
 =head1 C4::Tags.pm - Support for user tagging of biblios.
-
-More verose debugging messages are sent in the presence of non-zero $ENV{"DEBUG"}.
 
 =cut
 
@@ -100,7 +91,6 @@ sub approval_counts {
 	$sth->execute;
 	my $result = $sth->fetchrow_hashref();
 	$result->{approved_total} = $result->{approved_count} + $result->{rejected_count} + $result->{unapproved_count};
-	$debug and warn "counts returned: " . Dumper $result;
 	return $result;
 }
 
@@ -134,9 +124,6 @@ sub remove_tag {
 	($tag_id == $row->{tag_id}) or return 0;
 	my $tags = get_tags({term=>$row->{term}, biblionumber=>$row->{biblionumber}});
 	my $index = shift(@$tags);
-	$debug and print STDERR
-		sprintf "remove_tag: tag_id=>%s, biblionumber=>%s, weight=>%s, weight_total=>%s\n",
-			$row->{tag_id}, $row->{biblionumber}, $index->{weight}, $index->{weight_total};
 	if ($index->{weight} <= 1) {
 		delete_tag_index($row->{term},$row->{biblionumber});
 	} else {
@@ -187,7 +174,6 @@ sub get_tag_rows {
 	my $limit  = "";
 	my @exe_args = ();
 	foreach my $key (keys %$hash) {
-		$debug and print STDERR "get_tag_rows arg. '$key' = ", $hash->{$key}, "\n";
 		unless (length $key) {
 			carp "Empty argument key to get_tag_rows: ignoring!";
 			next;
@@ -209,8 +195,6 @@ sub get_tag_rows {
 		}
 	}
     my $query = TAG_SELECT . ($wheres||'') . $limit;
-	$debug and print STDERR "get_tag_rows query:\n $query\n",
-							"get_tag_rows query args: ", join(',', @exe_args), "\n";
 	my $sth = C4::Context->dbh->prepare($query);
 	if (@exe_args) {
 		$sth->execute(@exe_args);
@@ -228,7 +212,6 @@ sub get_tags {		# i.e., from tags_index
 	my $order  = "";
 	my @exe_args = ();
 	foreach my $key (keys %$hash) {
-		$debug and print STDERR "get_tags arg. '$key' = ", $hash->{$key}, "\n";
 		unless (length $key) {
 			carp "Empty argument key to get_tags: ignoring!";
 			next;
@@ -278,8 +261,6 @@ sub get_tags {		# i.e., from tags_index
 	LEFT JOIN tags_approval 
 	ON        tags_index.term = tags_approval.term
 	" . ($wheres||'') . $order . $limit;
-	$debug and print STDERR "get_tags query:\n $query\n",
-							"get_tags query args: ", join(',', @exe_args), "\n";
 	my $sth = C4::Context->dbh->prepare($query);
 	if (@exe_args) {
 		$sth->execute(@exe_args);
@@ -297,7 +278,6 @@ sub get_approval_rows {		# i.e., from tags_approval
 	my $order  = "";
 	my @exe_args = ();
 	foreach my $key (keys %$hash) {
-		$debug and print STDERR "get_approval_rows arg. '$key' = ", $hash->{$key}, "\n";
 		unless (length $key) {
 			carp "Empty argument key to get_approval_rows: ignoring!";
 			next;
@@ -353,8 +333,6 @@ sub get_approval_rows {		# i.e., from tags_approval
 	LEFT JOIN borrowers
 	ON      tags_approval.approved_by = borrowers.borrowernumber ";
 	$query .= ($wheres||'') . $order . $limit;
-	$debug and print STDERR "get_approval_rows query:\n $query\n",
-							"get_approval_rows query args: ", join(',', @exe_args), "\n";
 	my $sth = C4::Context->dbh->prepare($query);
 	if (@exe_args) {
 		$sth->execute(@exe_args);
@@ -442,7 +420,6 @@ sub remove_filter {
 }
 
 sub add_tag_approval {	# or disapproval
-	$debug and warn "add_tag_approval(" . join(", ",map {defined($_) ? $_ : 'UNDEF'} @_) . ")";
 	my $term = shift or return;
 	my $query = "SELECT * FROM tags_approval WHERE term = ?";
 	my $sth = C4::Context->dbh->prepare($query);
@@ -460,7 +437,6 @@ sub add_tag_approval {	# or disapproval
 	} else {
 		$query = "INSERT INTO tags_approval (term,date_approved) VALUES (?,NOW())";
 	}
-	$debug and print STDERR "add_tag_approval query: $query\nadd_tag_approval args: (" . join(", ", @exe_args) . ")\n";
 	$sth = C4::Context->dbh->prepare($query);
 	$sth->execute(@exe_args);
 	return $sth->rows;
@@ -472,7 +448,6 @@ sub mod_tag_approval {
 	my $term     = shift or return;
 	my $approval = (scalar @_ ? shift : 1);	# default is to approve
 	my $query = "UPDATE tags_approval SET approved_by=?, approved=?, date_approved=NOW() WHERE term = ?";
-	$debug and print STDERR "mod_tag_approval query: $query\nmod_tag_approval args: ($operator,$approval,$term)\n";
 	my $sth = C4::Context->dbh->prepare($query);
 	$sth->execute($operator,$approval,$term);
 }
@@ -485,7 +460,6 @@ sub add_tag_index {
 	$sth->execute($term,$biblionumber);
 	($sth->rows) and return increment_weight($term,$biblionumber);
 	$query = "INSERT INTO tags_index (term,biblionumber) VALUES (?,?)";
-	$debug and print STDERR "add_tag_index query: $query\nadd_tag_index args: ($term,$biblionumber)\n";
 	$sth = C4::Context->dbh->prepare($query);
 	$sth->execute($term,$biblionumber);
 	return $sth->rows;
@@ -548,10 +522,7 @@ sub add_tag {	# biblionumber,term,[borrowernumber,approvernumber]
 	my $query = "INSERT INTO tags_all
 	(borrowernumber,biblionumber,term,date_created)
 	VALUES (?,?,?,NOW())";
-	$debug and print STDERR "add_tag query: $query\n",
-							"add_tag query args: ($borrowernumber,$biblionumber,$term)\n";
 	if (scalar @$rows) {
-		$debug and carp "Duplicate tag detected.  Tag not added.";	
 		return;
 	}
 	# add to tags_all regardless of approaval
@@ -561,15 +532,12 @@ sub add_tag {	# biblionumber,term,[borrowernumber,approvernumber]
 	# then 
 	if (scalar @_) { 	# if arg remains, it is the borrowernumber of the approver: tag is pre-approved.
 		my $approver = shift;
-		$debug and print STDERR "term '$term' pre-approved by borrower #$approver\n";
 		add_tag_approval($term,$approver,1);
 		add_tag_index($term,$biblionumber,$approver);
 	} elsif (is_approved($term) >= 1) {
-		$debug and print STDERR "term '$term' approved by whitelist\n";
 		add_tag_approval($term,0,1);
 		add_tag_index($term,$biblionumber,1);
 	} else {
-		$debug and print STDERR "term '$term' NOT approved (yet)\n";
 		add_tag_approval($term);
 		add_tag_index($term,$biblionumber);
 	}

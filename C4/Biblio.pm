@@ -92,8 +92,8 @@ use C4::ClassSource;
 use C4::Charset;
 use C4::Linker;
 use C4::OAI::Sets;
-use C4::Debug;
 
+use Koha::Logger;
 use Koha::Caches;
 use Koha::Authority::Types;
 use Koha::Acquisition::Currencies;
@@ -105,9 +105,6 @@ use Koha::SearchEngine;
 use Koha::SearchEngine::Indexer;
 use Koha::Libraries;
 use Koha::Util::MARC;
-
-use vars qw($debug $cgi_debug);
-
 
 =head1 NAME
 
@@ -2498,7 +2495,7 @@ $server is authorityserver or biblioserver
 
 sub ModZebra {
     my ( $record_number, $op, $server ) = @_;
-    $debug && warn "ModZebra: updates requested for: $record_number $op $server\n";
+    Koha::Logger->get->debug("ModZebra: updates requested for: $record_number $op $server");
     my $dbh = C4::Context->dbh;
 
     # true ModZebra commented until indexdata fixes zebraDB crashes (it seems they occur on multiple updates

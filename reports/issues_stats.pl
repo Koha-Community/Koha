@@ -23,7 +23,6 @@ use CGI qw ( -utf8 );
 use Date::Manip;
 
 use C4::Auth;
-use C4::Debug;
 use C4::Context;
 use C4::Koha;
 use C4::Output;
@@ -46,7 +45,6 @@ Plugin that shows circulation stats
 
 =cut
 
-# my $debug = 1;	# override for now.
 my $input = CGI->new;
 my $fullreportname = "reports/issues_stats.tt";
 my $do_it    = $input->param('do_it');
@@ -245,7 +243,6 @@ sub calculate {
     push @loopfilter, { crit => "Select Month", filter => $monthsel } if ($monthsel);
 
     my @linefilter;
-    $debug and warn "filtres " . join "|", @$filters;
     my ( $colsource, $linesource ) = ('', '');
     $linefilter[1] = @$filters[1] if ( $line =~ /datetime/ );
     $linefilter[0] =
@@ -337,7 +334,6 @@ sub calculate {
         $strsth .= " AND $line LIKE ? ";
     }
     $strsth .= " group by $linefield order by $lineorder ";
-    $debug and warn $strsth;
     push @loopfilter, { crit => 'SQL =', sql => 1, filter => $strsth };
     my $sth = $dbh->prepare($strsth);
     if ( (@linefilter) and ($linefilter[0]) and ($linefilter[1]) ) {
@@ -427,7 +423,6 @@ sub calculate {
     }
 
     $strsth2 .= " group by $colfield order by $colorder ";
-    $debug and warn $strsth2;
     push @loopfilter, { crit => 'SQL =', sql => 1, filter => $strsth2 };
     my $sth2 = $dbh->prepare($strsth2);
     if ( (@colfilter) and ($colfilter[0]) and ($colfilter[1]) ) {
@@ -470,7 +465,6 @@ sub calculate {
     my %table;
     foreach my $row (@loopline) {
         foreach my $col (@loopcol) {
-            $debug and warn " init table : $row->{rowtitle} ( $row->{rowtitle_display} ) / $col->{coltitle} ( $col->{coltitle_display} )  ";
             table_set(\%table, $row->{rowtitle}, $col->{coltitle}, 0);
         }
         table_set(\%table, $row->{rowtitle}, 'totalrow', 0);
@@ -568,13 +562,11 @@ sub calculate {
         $strcalc .= " $colorder ";
     }
 
-    ($debug) and warn $strcalc;
     my $dbcalc = $dbh->prepare($strcalc);
     push @loopfilter, { crit => 'SQL =', sql => 1, filter => $strcalc };
     $dbcalc->execute;
     my ( $emptycol, $emptyrow );
     while ( my ( $row, $col, $value ) = $dbcalc->fetchrow ) {
-        ($debug) and warn "filling table $row / $col / $value ";
         unless ( defined $col ) {
             $emptycol = 1;
         }
@@ -608,7 +600,6 @@ sub calculate {
         my $total = 0;
         foreach my $row (@looprow) {
             $total += table_get(\%table, $row->{rowtitle}, $col->{coltitle}) || 0;
-            $debug and warn "value added " . table_get(\%table, $row->{rowtitle}, $col->{coltitle}) . "for line " . $row->{rowtitle};
         }
         push @loopfooter, { 'totalcol' => $total };
     }

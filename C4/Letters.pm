@@ -32,7 +32,6 @@ use C4::Members;
 use C4::Log;
 use C4::SMS;
 use C4::Templates;
-use C4::Debug;
 use Koha::DateUtils;
 use Koha::SMS::Providers;
 
@@ -928,7 +927,7 @@ sub EnqueueLetter {
     my $content = $params->{letter}->{content};
     $content =~ s/\s+//g if(defined $content);
     if ( not defined $content or $content eq '' ) {
-        warn "Trying to add an empty message to the message queue" if $debug;
+        Koha::Logger->get->info("Trying to add an empty message to the message queue");
         return;
     }
 
@@ -1013,7 +1012,7 @@ sub SendQueuedMessages {
         warn sprintf( 'sending %s message to patron: %s',
                       $message->{'message_transport_type'},
                       $message->{'borrowernumber'} || 'Admin' )
-          if $params->{'verbose'} or $debug;
+          if $params->{'verbose'};
         # This is just begging for subclassing
         next MESSAGE if ( lc($message->{'message_transport_type'}) eq 'rss' );
         if ( lc( $message->{'message_transport_type'} ) eq 'email' ) {
@@ -1024,13 +1023,13 @@ sub SendQueuedMessages {
                 my $patron = Koha::Patrons->find( $message->{borrowernumber} );
                 my $sms_provider = Koha::SMS::Providers->find( $patron->sms_provider_id );
                 unless ( $sms_provider ) {
-                    warn sprintf( "Patron %s has no sms provider id set!", $message->{'borrowernumber'} ) if $params->{'verbose'} or $debug;
+                    warn sprintf( "Patron %s has no sms provider id set!", $message->{'borrowernumber'} ) if $params->{'verbose'};
                     _set_message_status( { message_id => $message->{'message_id'}, status => 'failed' } );
                     next MESSAGE;
                 }
                 unless ( $patron->smsalertnumber ) {
                     _set_message_status( { message_id => $message->{'message_id'}, status => 'failed' } );
-                    warn sprintf( "No smsalertnumber found for patron %s!", $message->{'borrowernumber'} ) if $params->{'verbose'} or $debug;
+                    warn sprintf( "No smsalertnumber found for patron %s!", $message->{'borrowernumber'} ) if $params->{'verbose'};
                     next MESSAGE;
                 }
                 $message->{to_address}  = $patron->smsalertnumber; #Sometime this is set to email - sms should always use smsalertnumber
@@ -1299,8 +1298,6 @@ sub _get_unsent_messages {
         }
     }
 
-    $debug and warn "_get_unsent_messages SQL: $statement";
-    $debug and warn "_get_unsent_messages params: " . join(',',@query_params);
     my $sth = $dbh->prepare( $statement );
     my $result = $sth->execute( @query_params );
     return $sth->fetchall_arrayref({});

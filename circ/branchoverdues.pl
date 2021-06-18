@@ -24,7 +24,6 @@ use C4::Auth;
 use C4::Overdues;
 use C4::Biblio;
 use C4::Koha;
-use C4::Debug;
 use Koha::DateUtils;
 use Koha::BiblioFrameworks;
 use Data::Dumper;
@@ -62,7 +61,6 @@ my $location       = $input->param('location');
 
 my @overduesloop;
 my @getoverdues = GetOverduesForBranch( $default, $location );
-$debug and warn "HERE : $default / $location" . Dumper(@getoverdues);
 # search for location authorised value
 my ($tag,$subfield) = GetMarcFromKohaField( 'items.location' );
 my $tagslib = &GetMarcStructure(1,'');

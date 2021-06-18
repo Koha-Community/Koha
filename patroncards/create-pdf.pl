@@ -26,7 +26,6 @@ use POSIX qw(ceil);
 use Storable qw(dclone);
 use autouse 'Data::Dumper' => qw(Dumper);
 
-use C4::Debug;
 use C4::Context;
 use C4::Creators;
 use C4::Patroncards;

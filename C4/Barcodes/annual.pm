@@ -23,12 +23,10 @@ use warnings;
 use Carp;
 
 use C4::Context;
-use C4::Debug;
 
 use Koha::DateUtils qw( output_pref dt_from_string );
 
 use vars qw(@ISA);
-use vars qw($debug $cgi_debug);	# from C4::Debug, of course
 use vars qw($width);
 
 BEGIN {
@@ -55,7 +53,6 @@ sub db_max {
 	my $year = substr($iso,0,4);	# YYYY
 	$sth->execute("$year-%");
 	my $row = $sth->fetchrow_hashref;
-	warn "barcode db_max (annual format, year $year): $row->{barcode}" if $debug;
 	return $row->{barcode};
 }
 
@@ -71,7 +68,6 @@ sub parse {
 		carp "Barcode '$barcode' has no incrementing part!";
 		return ($barcode,undef,undef);
 	}
-	$debug and warn "Barcode '$barcode' parses into: '$1', '$2', ''";
 	return ($1,$2,'');  # the third part is in anticipation of barcodes that include checkdigits
 }
 sub width {

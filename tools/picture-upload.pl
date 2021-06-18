@@ -29,8 +29,8 @@ use C4::Context;
 use C4::Auth;
 use C4::Output;
 use C4::Members;
-use C4::Debug;
 
+use Koha::Logger;
 use Koha::Patrons;
 use Koha::Patron::Images;
 use Koha::Token;
@@ -61,7 +61,8 @@ my $op             = $input->param('op') || '';
 #       Other parts of this code could be optimized as well, I think. Perhaps the file upload could be done with YUI's upload
 #       coded. -fbcit
 
-$debug and warn "Params are: filetype=$filetype, cardnumber=$cardnumber, borrowernumber=$borrowernumber, uploadfile=$uploadfilename";
+our $logger = Koha::Logger->get;
+$logger->debug("Params are: filetype=$filetype, cardnumber=$cardnumber, borrowernumber=$borrowernumber, uploadfile=$uploadfilename");
 
 =head1 NAME
 
@@ -78,8 +79,6 @@ Files greater than 100K will be refused. Images should be 140x200 pixels. If the
 
 =cut
 
-$debug and warn "Operation requested: $op";
-
 my ( $total, $handled, $tempfile, $tfh );
 our @counts = ();
 our %errors = ();
@@ -94,14 +93,12 @@ if ( ( $op eq 'Upload' ) && $uploadfile ) {
         });
 
     my $dirname = File::Temp::tempdir( CLEANUP => 1 );
-    $debug and warn "dirname = $dirname";
     my $filesuffix;
     if ( $uploadfilename =~ m/(\..+)$/i ) {
         $filesuffix = $1;
     }
     ( $tfh, $tempfile ) =
       File::Temp::tempfile( SUFFIX => $filesuffix, UNLINK => 1 );
-    $debug and warn "tempfile = $tempfile";
     my ( @directories, $results );
 
     $errors{'NOTZIP'} = 1
@@ -134,7 +131,6 @@ if ( ( $op eq 'Upload' ) && $uploadfile ) {
             while ( my $entry = readdir RECDIR ) {
                 push @directories, "$recursive_dir/$entry"
                   if ( -d "$recursive_dir/$entry" and $entry !~ /^\./ );
-                $debug and warn "$recursive_dir/$entry";
             }
             closedir RECDIR;
         }
@@ -158,8 +154,8 @@ if ( ( $op eq 'Upload' ) && $uploadfile ) {
     else {
         my $filecount;
         map { $filecount += $_->{count} } @counts;
-        $debug and warn "Total directories processed: $total";
-        $debug and warn "Total files processed: $filecount";
+        $logger->debug("Total directories processed: $total");
+        $logger->debug("Total files processed: $filecount");
         $template->param(
             TOTAL   => $total,
             HANDLED => $handled,
@@ -205,12 +201,12 @@ else {
 sub handle_dir {
     my ( $dir, $suffix, $template, $cardnumber, $source ) = @_;
     my ( %counts, %direrrors );
-    $debug and warn "Entering sub handle_dir; passed \$dir=$dir, \$suffix=$suffix";
+    $logger->debug("Entering sub handle_dir; passed \$dir=$dir, \$suffix=$suffix");
     if ( $suffix =~ m/zip/i ) {
         # If we were sent a zip file, process any included data/idlink.txt files
         my ( $file, $filename );
         undef $cardnumber;
-        $debug and warn "Passed a zip file.";
+        $logger->debug("Passed a zip file.");
         opendir DIR, $dir;
         while ( my $filename = readdir DIR ) {
             $file = "$dir/$filename"
@@ -227,11 +223,11 @@ sub handle_dir {
         }
 
         while ( my $line = <$fh> ) {
-            $debug and warn "Reading contents of $file";
+            $logger->debug("Reading contents of $file");
             chomp $line;
-            $debug and warn "Examining line: $line";
+            $logger->debug("Examining line: $line");
             my $delim = ( $line =~ /\t/ ) ? "\t" : ( $line =~ /,/ ) ? "," : "";
-            $debug and warn "Delimeter is \'$delim\'";
+            $logger->debug("Delimeter is \'$delim\'");
             unless ( $delim eq "," || $delim eq "\t" ) {
                 warn "Unrecognized or missing field delimeter. Please verify that you are using either a ',' or a 'tab'";
                 $direrrors{'DELERR'} = 1;
@@ -242,7 +238,7 @@ sub handle_dir {
             ( $cardnumber, $filename ) = split $delim, $line;
             $cardnumber =~ s/[\"\r\n]//g; # remove offensive characters
             $filename   =~ s/[\"\r\n\s]//g;
-            $debug and warn "Cardnumber: $cardnumber Filename: $filename";
+            $logger->debug("Cardnumber: $cardnumber Filename: $filename");
             $source = "$dir/$filename";
             %counts = handle_file( $cardnumber, $source, $template, %counts );
         }
@@ -258,7 +254,7 @@ sub handle_dir {
 
 sub handle_file {
     my ( $cardnumber, $source, $template, %count ) = @_;
-    $debug and warn "Entering sub handle_file; passed \$cardnumber=$cardnumber, \$source=$source";
+    $logger->debug("Entering sub handle_file; passed \$cardnumber=$cardnumber, \$source=$source");
     $count{filenames} = ()      if !$count{filenames};
     $count{source}    = $source if !$count{source};
     $count{count}     = 0       unless exists $count{count};
@@ -272,7 +268,7 @@ sub handle_file {
     }
     if ( $cardnumber && $source ) {
         # Now process any imagefiles
-        $debug and warn "Source: $source";
+        $logger->debug("Source: $source");
         my $size = ( stat($source) )[7];
         if ( $size > 550000 ) {
             # This check is necessary even with image resizing to avoid possible security/performance issues...
@@ -299,10 +295,10 @@ sub handle_file {
                 # we will convert all to PNG which is lossless...
                 # Check the pixel size of the image we are about to import...
                 my ( $width, $height ) = $srcimage->getBounds();
-                $debug and warn "$filename is $width pix X $height pix.";
+                $logger->debug("$filename is $width pix X $height pix.");
                 if ( $width > 200 || $height > 300 ) {
                     # MAX pixel dims are 200 X 300...
-                    $debug and warn "$filename exceeds the maximum pixel dimensions of 200 X 300. Resizing...";
+                    $logger->debug("$filename exceeds the maximum pixel dimensions of 200 X 300. Resizing...");
                     # Percent we will reduce the image dimensions by...
                     my $percent_reduce;
                     if ( $width > 200 ) {
@@ -317,31 +313,28 @@ sub handle_file {
                       sprintf( "%.0f", ( $width * $percent_reduce ) );
                     my $height_reduce =
                       sprintf( "%.0f", ( $height * $percent_reduce ) );
-                    $debug
-                      and warn "Reducing $filename by "
+                      $logger->debug("Reducing $filename by "
                       . ( $percent_reduce * 100 )
-                      . "\% or to $width_reduce pix X $height_reduce pix";
+                      . "\% or to $width_reduce pix X $height_reduce pix");
                     #'1' creates true color image...
                     $image = GD::Image->new( $width_reduce, $height_reduce, 1 );
                     $image->copyResampled( $srcimage, 0, 0, 0, 0, $width_reduce,
                         $height_reduce, $width, $height );
                     $imgfile = $image->png();
-                    $debug
-                      and warn "$filename is "
+                    $logger->debug("$filename is "
                       . length($imgfile)
-                      . " bytes after resizing.";
+                      . " bytes after resizing.");
                     undef $image;
                     undef $srcimage; # This object can get big...
                 }
                 else {
                     $image   = $srcimage;
                     $imgfile = $image->png();
-                    $debug
-                      and warn "$filename is " . length($imgfile) . " bytes.";
+                    $logger->debug("$filename is " . length($imgfile) . " bytes.");
                     undef $image;
                     undef $srcimage; # This object can get big...
                 }
-                $debug and warn "Image is of mimetype $mimetype";
+                $logger->debug("Image is of mimetype $mimetype");
                 if ($mimetype) {
                     my $patron = Koha::Patrons->find({ cardnumber => $cardnumber });
                     if ( $patron ) {
