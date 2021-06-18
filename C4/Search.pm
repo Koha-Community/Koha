@@ -1655,17 +1655,10 @@ sub searchResults {
     my ($bibliotag,$bibliosubf)=GetMarcFromKohaField( 'biblio.biblionumber' );
 
     # set stuff for XSLT processing here once, not later again for every record we retrieved
-    my $xslfile;
-    my $xslsyspref;
-    if( $is_opac ){
-        $xslsyspref = "OPACXSLTResultsDisplay";
-        $xslfile = C4::Context->preference( $xslsyspref );
-    } else {
-        $xslsyspref = "XSLTResultsDisplay";
-        $xslfile = C4::Context->preference( $xslsyspref ) || "default";
-    }
-    my $lang   = $xslfile ? C4::Languages::getlanguage()  : undef;
-    my $sysxml = $xslfile ? C4::XSLT::get_xslt_sysprefs() : undef;
+    my $xslsyspref = $is_opac ? 'OPACXSLTResultsDisplay' : 'XSLTResultsDisplay';
+    my $xslfile = C4::Context->preference( $xslsyspref ) || "default";
+    my $lang   = C4::Languages::getlanguage();
+    my $sysxml = C4::XSLT::get_xslt_sysprefs();
 
     my $userenv = C4::Context->userenv;
     my $logged_in_user
@@ -1718,50 +1711,6 @@ sub searchResults {
         $oldbiblio->{imageurl} = $itemtype ? getitemtypeimagelocation( $search_context->{'interface'}, $itemtype->{imageurl} ) : q{};
         # Build summary if there is one (the summary is defined in the itemtypes table)
         $oldbiblio->{description} = $itemtype ? $itemtype->{translated_description} : q{};
-
-        # FIXME: this is only used in the deprecated non-XLST opac results
-        if ( !$xslfile && $is_opac && $itemtype && $itemtype->{summary} ) {
-            my $summary = $itemtypes{ $oldbiblio->{itemtype} }->{summary};
-            my @fields  = $marcrecord->fields();
-
-            my $newsummary;
-            foreach my $line ( "$summary\n" =~ /(.*)\n/g ){
-                my $tags = {};
-                foreach my $tag ( $line =~ /\[(\d{3}[\w|\d])\]/ ) {
-                    $tag =~ /(.{3})(.)/;
-                    if($marcrecord->field($1)){
-                        my @abc = $marcrecord->field($1)->subfield($2);
-                        $tags->{$tag} = $#abc + 1 ;
-                    }
-                }
-
-                # We catch how many times to repeat this line
-                my $max = 0;
-                foreach my $tag (keys(%$tags)){
-                    $max = $tags->{$tag} if($tags->{$tag} > $max);
-                 }
-
-                # we replace, and repeat each line
-                for (my $i = 0 ; $i < $max ; $i++){
-                    my $newline = $line;
-
-                    foreach my $tag ( $newline =~ /\[(\d{3}[\w|\d])\]/g ) {
-                        $tag =~ /(.{3})(.)/;
-
-                        if($marcrecord->field($1)){
-                            my @repl = $marcrecord->field($1)->subfield($2);
-                            my $subfieldvalue = $repl[$i];
-                            $newline =~ s/\[$tag\]/$subfieldvalue/g;
-                        }
-                    }
-                    $newsummary .= "$newline\n";
-                }
-            }
-
-            $newsummary =~ s/\[(.*?)]//g;
-            $newsummary =~ s/\n/<br\/>/g;
-            $oldbiblio->{summary} = $newsummary;
-        }
 
         # Pull out the items fields
         my @fields = $marcrecord->field($itemtag);

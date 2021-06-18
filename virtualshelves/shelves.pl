@@ -259,8 +259,8 @@ if ( $op eq 'view' ) {
             );
 
             my $xslfile = C4::Context->preference('XSLTListsDisplay');
-            my $lang   = $xslfile ? C4::Languages::getlanguage()  : undef;
-            my $sysxml = $xslfile ? C4::XSLT::get_xslt_sysprefs() : undef;
+            my $lang   = C4::Languages::getlanguage();
+            my $sysxml = C4::XSLT::get_xslt_sysprefs();
 
             my @items;
             while ( my $content = $contents->next ) {
@@ -268,10 +268,8 @@ if ( $op eq 'view' ) {
                 my $biblionumber = $content->biblionumber;
                 my $record       = GetMarcBiblio({ biblionumber => $biblionumber });
 
-                if ( $xslfile ) {
-                    $this_item->{XSLTBloc} = XSLTParse4Display( $biblionumber, $record, "XSLTListsDisplay",
-                                                                1, undef, $sysxml, $xslfile, $lang);
-                }
+                $this_item->{XSLTBloc} = XSLTParse4Display( $biblionumber, $record, "XSLTListsDisplay",
+                                                            1, undef, $sysxml, $xslfile, $lang);
 
                 my $marcflavour = C4::Context->preference("marcflavour");
                 my $itemtype = Koha::Biblioitems->search({ biblionumber => $content->biblionumber })->next->itemtype;

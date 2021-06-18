@@ -33,10 +33,8 @@
                             </div>
                             <h1 class="title">[% bibliotitle | html %] (Record no. [% biblio.biblionumber | html %])</h1>
 
-                            [% IF ( OPACXSLTDetailsDisplay ) %]
-                                <div id="switchview_div">[ <a id="switchview" href="/cgi-bin/koha/opac-showmarc.pl?id=[% biblio.biblionumber | html %]&amp;viewas=html">view plain</a> ]</div>
-                                <div id="plainmarc"></div>
-                            [% END %]
+                            <div id="switchview_div">[ <a id="switchview" href="/cgi-bin/koha/opac-showmarc.pl?id=[% biblio.biblionumber | html %]&amp;viewas=html">view plain</a> ]</div>
+                            <div id="plainmarc"></div>
 
                             <div id="labeledmarc">
                                 <table id="marc" class="table table-bordered table-striped">
@@ -178,7 +176,6 @@
 [% INCLUDE 'opac-bottom.inc' %]
 [% BLOCK jsinclude %]
 <script>
-[% IF ( OPACXSLTDetailsDisplay ) %]
     $(document).ready(function(){
         var loaded = 0;
         var toggle = 0;
@@ -211,6 +208,5 @@
             }
         });
     });
-[% END %]
 </script>
 [% END %]

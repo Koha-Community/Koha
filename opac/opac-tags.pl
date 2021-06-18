@@ -285,22 +285,20 @@ if ($loggedinuser) {
         # BZ17530: 'Intelligent' guess if result can be article requested
         $tag->{artreqpossible} = ( $art_req_itypes->{ $tag->{itemtype} // q{} } || $art_req_itypes->{ '*' } ) ? 1 : q{};
 
-        my $xslfile = C4::Context->preference('OPACXSLTResultsDisplay');
-        my $lang   = $xslfile ? C4::Languages::getlanguage()  : undef;
-        my $sysxml = $xslfile ? C4::XSLT::get_xslt_sysprefs() : undef;
+        my $xslfile = C4::Context->preference('OPACXSLTResultsDisplay') || "default";
+        my $lang   = C4::Languages::getlanguage();
+        my $sysxml = C4::XSLT::get_xslt_sysprefs();
 
-        if ($xslfile) {
-            my $variables = {
-                anonymous_session => ($loggedinuser) ? 0 : 1
-            };
-            $tag->{XSLTBloc} = XSLTParse4Display(
-                $tag->{biblionumber},     $record,
-                "OPACXSLTResultsDisplay", 1,
-                $hidden_items,            $sysxml,
-                $xslfile,                 $lang,
-                $variables
-            );
-        }
+        my $variables = {
+            anonymous_session => ($loggedinuser) ? 0 : 1
+        };
+        $tag->{XSLTBloc} = XSLTParse4Display(
+            $tag->{biblionumber},     $record,
+            "OPACXSLTResultsDisplay", 1,
+            $hidden_items,            $sysxml,
+            $xslfile,                 $lang,
+            $variables
+        );
 
         my $date = $tag->{date_created} || '';
         $date =~ /\s+(\d{2}\:\d{2}\:\d{2})/;

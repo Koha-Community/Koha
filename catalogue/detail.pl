@@ -122,12 +122,11 @@ my $fw           = GetFrameworkCode($biblionumber);
 my $showallitems = $query->param('showallitems');
 my $marcflavour  = C4::Context->preference("marcflavour");
 
-# XSLT processing of some stuff
-my $xslfile = C4::Context->preference('XSLTDetailsDisplay') || "default";
-my $lang   = $xslfile ? C4::Languages::getlanguage()  : undef;
-my $sysxml = $xslfile ? C4::XSLT::get_xslt_sysprefs() : undef;
-
-if ( $xslfile ) {
+{
+    # XSLT processing of some stuff
+    my $xslfile = C4::Context->preference('XSLTDetailsDisplay') || "default";
+    my $lang   = C4::Languages::getlanguage();
+    my $sysxml = C4::XSLT::get_xslt_sysprefs();
 
     my $searcher = Koha::SearchEngine::Search->new(
         { index => $Koha::SearchEngine::BIBLIOS_INDEX }

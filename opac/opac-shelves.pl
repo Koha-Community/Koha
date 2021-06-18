@@ -304,9 +304,9 @@ if ( $op eq 'view' ) {
             }
 
             # Lists display falls back to search results configuration
-            my $xslfile = C4::Context->preference('OPACXSLTListsDisplay');
-            my $lang   = $xslfile ? C4::Languages::getlanguage()  : undef;
-            my $sysxml = $xslfile ? C4::XSLT::get_xslt_sysprefs() : undef;
+            my $xslfile = C4::Context->preference('OPACXSLTListsDisplay') || "default";
+            my $lang   = C4::Languages::getlanguage();
+            my $sysxml = C4::XSLT::get_xslt_sysprefs();
 
             my $record_processor = Koha::RecordProcessor->new({ filters => 'ViewPolicy' });
 
@@ -370,18 +370,16 @@ if ( $op eq 'view' ) {
                 $this_item->{allow_onshelf_holds} = $allow_onshelf_holds;
                 $this_item->{'ITEM_RESULTS'} = $items;
 
-                if ($xslfile) {
-                    my $variables = {
-                        anonymous_session => ($loggedinuser) ? 0 : 1
-                    };
-                    $this_item->{XSLTBloc} = XSLTParse4Display(
-                        $biblionumber,          $record,
-                        "OPACXSLTListsDisplay", 1,
-                        undef,                 $sysxml,
-                        $xslfile,              $lang,
-                        $variables,            $items->reset
-                    );
-                }
+                my $variables = {
+                    anonymous_session => ($loggedinuser) ? 0 : 1
+                };
+                $this_item->{XSLTBloc} = XSLTParse4Display(
+                    $biblionumber,          $record,
+                    "OPACXSLTListsDisplay", 1,
+                    undef,                 $sysxml,
+                    $xslfile,              $lang,
+                    $variables,            $items->reset
+                );
 
                 if ( grep {$_ eq $biblionumber} @cart_list) {
                     $this_item->{incart} = 1;

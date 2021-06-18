@@ -480,67 +480,8 @@
                                                             [% END %]
 
                                                         </div>
-                                                        [% IF ( itemsloo.XSLTBloc ) %]
-                                                            [% itemsloo.XSLTBloc | $raw %]
-                                                        [% ELSE %]
 
-                                                            [% IF ( itemsloo.BiblioDefaultViewmarc ) %]
-                                                                <a class="title" href="/cgi-bin/koha/opac-MARCdetail.pl?biblionumber=[% itemsloo.biblionumber |url %]" title="View details for this title">
-                                                            [% ELSE %]
-                                                                [% IF ( itemsloo.BiblioDefaultViewisbd ) %]
-                                                                    <a class="title" href="/cgi-bin/koha/opac-ISBDdetail.pl?biblionumber=[% itemsloo.biblionumber |url %]" title="View details for this title">
-                                                                [% ELSE %]
-                                                                    <a class="title" href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% itemsloo.biblionumber |url %]" title="View details for this title">
-                                                                [% END %]
-                                                            [% END %]
-
-                                                            [% INCLUDE 'biblio-title.inc' biblio=itemsloo %]
-                                                            </a>
-
-                                                            [% IF ( itemsloo.author ) %]
-                                                                by <a href="/cgi-bin/koha/opac-search.pl?q=au:[% itemsloo.author |url %]" title="Search for works by this author" class="author">[% itemsloo.author | html %]</a>
-                                                            [% ELSE %]
-                                                                &nbsp;
-                                                            [% END %]
-
-                                                            <span class="results_summary">
-                                                                <span class="label">Publication:</span>
-                                                                [% IF ( itemsloo.place ) %]
-                                                                    [% itemsloo.place | html %]
-                                                                [% END %]
-                                                                [% IF ( itemsloo.publishercode ) %]
-                                                                    [% itemsloo.publishercode | html %]
-                                                                [% END %]
-                                                                [% IF ( itemsloo.publicationyear ) %]
-                                                                    [% itemsloo.publicationyear | html %]
-                                                                [% ELSE %]
-                                                                    [% IF ( itemsloo.copyrightdate ) %]
-                                                                        [% itemsloo.copyrightdate | html %]
-                                                                    [% END %]
-                                                                [% END %]
-                                                                [% IF ( itemsloo.pages ) %]. [% itemsloo.pages | html %][% END %]
-                                                                [% IF ( itemsloo.notes ) %], [% itemsloo.notes | html %][% END %]
-                                                                [% IF ( itemsloo.item('size') ) %] [% itemsloo.item('size') | html %][% END %]
-                                                            </span>
-                                                            <span class="results_summary">
-                                                                <span class="label">Holdings:</span>
-                                                                [% IF itemsloo.ITEM_RESULTS %]
-                                                                    [% FOREACH item IN itemsloo.ITEM_RESULTS %]
-                                                                        [% item.homebranch | html %]
-                                                                        [% SET location_opac = AuthorisedValues.GetByCode( 'LOC', item.location, 1 ) %]
-                                                                        [% IF location_opac %]
-                                                                            <span class="shelvingloc">[% location_opac | html %]</span>
-                                                                        [% END %]
-                                                                        [% IF item.itemcallnumber %]
-                                                                            ([% item.itemcallnumber | html %])
-                                                                                [% IF ( loop.last ) %].[% ELSE %],[% END %]
-                                                                        [% END %]
-                                                                    [% END %]
-                                                                [% ELSE %]
-                                                                    This record has no items.
-                                                                [% END %]
-                                                            </span>
-                                                        [% END # / IF itemsloo.XSLTBloc %]
+                                                        [% itemsloo.XSLTBloc | $raw %]
 
                                                         [% IF ( TagsShowEnabled && itemsloo.TagLoop.size ) %]
                                                             <div class="results_summary tags">

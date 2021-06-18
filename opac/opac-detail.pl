@@ -193,12 +193,12 @@ SetUTF8Flag($record);
 my $marcflavour      = C4::Context->preference("marcflavour");
 my $ean = GetNormalizedEAN( $record, $marcflavour );
 
-# XSLT processing of some stuff
-my $xslfile = C4::Context->preference('OPACXSLTDetailsDisplay');
-my $lang   = $xslfile ? C4::Languages::getlanguage()  : undef;
-my $sysxml = $xslfile ? C4::XSLT::get_xslt_sysprefs() : undef;
+{
 
-if ( $xslfile ) {
+    # XSLT processing of some stuff
+    my $xslfile = C4::Context->preference('OPACXSLTDetailsDisplay') || "default";
+    my $lang   = C4::Languages::getlanguage();
+    my $sysxml = C4::XSLT::get_xslt_sysprefs();
 
     my $searcher = Koha::SearchEngine::Search->new(
         { index => $Koha::SearchEngine::BIBLIOS_INDEX }
@@ -782,23 +782,6 @@ if (scalar(@itemloop) == 0 || scalar(@otheritemloop) == 0) {
     if (scalar(@itemloop) == 0) {
         @itemloop = @otheritemloop;
     }
-}
-
-## get notes and subjects from MARC record
-if (!C4::Context->preference("OPACXSLTDetailsDisplay") ) {
-    my $marcisbnsarray   = GetMarcISBN    ($record,$marcflavour);
-    my $marcauthorsarray = GetMarcAuthors ($record,$marcflavour);
-    my $marcsubjctsarray = GetMarcSubjects($record,$marcflavour);
-    my $marcseriesarray  = GetMarcSeries  ($record,$marcflavour);
-    my $marcurlsarray    = GetMarcUrls    ($record,$marcflavour);
-
-    $template->param(
-        MARCSUBJCTS => $marcsubjctsarray,
-        MARCAUTHORS => $marcauthorsarray,
-        MARCSERIES  => $marcseriesarray,
-        MARCURLS    => $marcurlsarray,
-        MARCISBNS   => $marcisbnsarray,
-    );
 }
 
 my $marcnotesarray = $biblio->get_marc_notes({ marcflavour => $marcflavour, opac => 1 });
