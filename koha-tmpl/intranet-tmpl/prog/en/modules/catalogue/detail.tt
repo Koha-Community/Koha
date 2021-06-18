@@ -107,11 +107,7 @@
     [% END %]
 
     [% IF ( AmazonCoverImages  || LocalCoverImages || AdlibrisEnabled || IntranetCoce || (Koha.Preference('CustomCoverImages') && Koha.Preference('CustomCoverImagesURL')) ) %]
-        [% IF ( XSLTDetailsDisplay ) %]
-            <div id="catalogue_detail_biblio" class="col-xs-9">
-        [% ELSE %]
-            <div id="catalogue_detail_biblio" class="col-xs-9">
-        [% END %]
+        <div id="catalogue_detail_biblio" class="col-xs-9">
     [% ELSE %]
         <div id="catalogue_detail_biblio" class="col-xs-12">
     [% END %]

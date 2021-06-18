@@ -578,40 +578,6 @@ if ($hideitems) {
     @items = @all_items;
 }
 
-my $branch = '';
-if (C4::Context->userenv){
-    $branch = C4::Context->userenv->{branch};
-}
-if ( C4::Context->preference('HighlightOwnItemsOnOPAC') ) {
-    if (
-        ( ( C4::Context->preference('HighlightOwnItemsOnOPACWhich') eq 'PatronBranch' ) && $branch )
-        ||
-        C4::Context->preference('HighlightOwnItemsOnOPACWhich') eq 'OpacURLBranch'
-    ) {
-        my $branchcode;
-        if ( C4::Context->preference('HighlightOwnItemsOnOPACWhich') eq 'PatronBranch' ) {
-            $branchcode = $branch;
-        }
-        elsif (  C4::Context->preference('HighlightOwnItemsOnOPACWhich') eq 'OpacURLBranch' ) {
-            $branchcode = $ENV{'BRANCHCODE'};
-        }
-
-        my @our_items;
-        my @other_items;
-
-        foreach my $item ( @items ) {
-           if ( $item->{branchcode} eq $branchcode ) {
-               $item->{'this_branch'} = 1;
-               push( @our_items, $item );
-           } else {
-               push( @other_items, $item );
-           }
-        }
-
-        @items = ( @our_items, @other_items );
-    }
-}
-
 my $dat = &GetBiblioData($biblionumber);
 my $HideMARC = $record_processor->filters->[0]->should_hide_marc(
     {

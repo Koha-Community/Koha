@@ -43,17 +43,6 @@ OPAC:
             - "Koha OPAC as public. Private OPAC requires authentication before accessing the OPAC. "
             - 'Note: This does not affect the public API, see the <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=RESTPublicAnonymousRequests">RESTPublicAnonymousRequests</a> to control the API.'
         -
-            - pref: HighlightOwnItemsOnOPAC
-              choices:
-                  1: Emphasize
-                  0: "Don't emphasize"
-            - "results from the "
-            - pref: HighlightOwnItemsOnOPACWhich
-              choices:
-                  PatronBranch: "patron's home library"
-                  OpacURLBranch: "OPAC's library via the URL"
-            - " by moving the results to the front and increasing the size or highlighting the rows for those results (non-XSLT only)."
-        -
             - "Show star-ratings on"
             - pref: OpacStarRatings
               choices:

@@ -1269,11 +1269,7 @@
         </thead>
         <tbody>
             [% FOREACH ITEM_RESULT IN items %]
-                [% IF ITEM_RESULT.this_branch %]
-                  <tr class="highlight-row-detail" vocab="http://schema.org/" typeof="Offer">
-                [% ELSE %]
-                  <tr vocab="http://schema.org/" typeof="Offer">
-                [% END %]
+                <tr vocab="http://schema.org/" typeof="Offer">
 
                 [% IF Koha.Preference('OPACLocalCoverImages') && ( tab == 'holdings' && itemloop_has_images || tab == 'otherholdings' && otheritemloop_has_images ) %]
                     <td class="cover">

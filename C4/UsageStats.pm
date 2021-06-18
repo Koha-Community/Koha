@@ -275,7 +275,6 @@ sub _shared_preferences {
         COinSinOPACResults
         DisplayOPACiconsXSLT
         hidelostitems
-        HighlightOwnItemsOnOPAC
         OpacAddMastheadLibraryPulldown
         OPACDisplay856uAsImage
         OpacHighlightedWords

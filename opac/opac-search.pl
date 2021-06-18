@@ -833,41 +833,6 @@ for (my $i=0;$i<@servers;$i++) {
             }
             $template->param(results_per_page =>  $results_per_page);
             my $hide = ($hidingrules) ? 1 : 0;
-            my $branch = '';
-            if (C4::Context->userenv){
-                $branch = C4::Context->userenv->{branch};
-            }
-            if ( C4::Context->preference('HighlightOwnItemsOnOPAC') ) {
-                if (
-                    ( ( C4::Context->preference('HighlightOwnItemsOnOPACWhich') eq 'PatronBranch' ) && $branch )
-                    ||
-                    C4::Context->preference('HighlightOwnItemsOnOPACWhich') eq 'OpacURLBranch'
-                ) {
-                    my $branchcode;
-                    if ( C4::Context->preference('HighlightOwnItemsOnOPACWhich') eq 'PatronBranch' ) {
-                        $branchcode = $branch;
-                    }
-                    elsif (  C4::Context->preference('HighlightOwnItemsOnOPACWhich') eq 'OpacURLBranch' ) {
-                        $branchcode = $ENV{'BRANCHCODE'};
-                    }
-
-                    foreach my $res ( @newresults ) {
-                        my @new_loop;
-                        my @top_loop;
-                        my @old_loop = @{$res->{'available_items_loop'}};
-                        foreach my $item ( @old_loop ) {
-                            if ( $item->{'branchcode'} eq $branchcode ) {
-                                $item->{'this_branch'} = 1;
-                                push( @top_loop, $item );
-                            } else {
-                                push( @new_loop, $item );
-                            }
-                        }
-                        my @complete_loop = ( @top_loop, @new_loop );
-                        $res->{'available_items_loop'} = \@complete_loop;
-                    }
-                }
-            }
 
             $template->param(
                 SEARCH_RESULTS => \@newresults,
