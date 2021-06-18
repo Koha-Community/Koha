@@ -893,9 +893,6 @@ sub checkauth {
                 $session->param('desk_id'),      $session->param('desk_name'),
                 $session->param('register_id'),  $session->param('register_name')
             );
-            C4::Context::set_shelves_userenv( 'bar', $session->param('barshelves') );
-            C4::Context::set_shelves_userenv( 'pub', $session->param('pubshelves') );
-            C4::Context::set_shelves_userenv( 'tot', $session->param('totshelves') );
             $debug and printf STDERR "AUTH_SESSION: (%s)\t%s %s - %s\n", map { $session->param($_) } qw(cardnumber firstname surname branch);
             $ip          = $session->param('ip');
             $lasttime    = $session->param('lasttime');

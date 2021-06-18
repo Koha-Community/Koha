@@ -775,26 +775,6 @@ sub set_userenv {
     return $cell;
 }
 
-sub set_shelves_userenv {
-	my ($type, $shelves) = @_ or return;
-	my $activeuser = $context->{activeuser} or return;
-	$context->{userenv}->{$activeuser}->{barshelves} = $shelves if $type eq 'bar';
-	$context->{userenv}->{$activeuser}->{pubshelves} = $shelves if $type eq 'pub';
-	$context->{userenv}->{$activeuser}->{totshelves} = $shelves if $type eq 'tot';
-}
-
-sub get_shelves_userenv {
-	my $active;
-	unless ($active = $context->{userenv}->{$context->{activeuser}}) {
-		$debug and warn "get_shelves_userenv cannot retrieve context->{userenv}->{context->{activeuser}}";
-		return;
-	}
-	my $totshelves = $active->{totshelves} or undef;
-	my $pubshelves = $active->{pubshelves} or undef;
-	my $barshelves = $active->{barshelves} or undef;
-	return ($totshelves, $pubshelves, $barshelves);
-}
-
 =head2 _new_userenv
 
   C4::Context->_new_userenv($session);  # FIXME: This calling style is wrong for what looks like an _internal function
