@@ -220,7 +220,7 @@ subtest 'apply() tests' => sub {
     is( $offsets->count, 1, 'Only one offset is generated' );
     my $THE_offset = $offsets->next;
     is( $THE_offset->amount * 1, -10, 'Amount was calculated correctly (less than the available credit)' );
-    is( $THE_offset->type, 'Manual Credit', 'Passed type stored correctly' );
+    is( $THE_offset->type, 'APPLY', 'Passed type stored correctly' );
 
     $debits = Koha::Account::Lines->search({ accountlines_id => $debit_2->id });
     $credit = $credit->apply( { debits => [ $debits->as_list ] } );
@@ -266,7 +266,7 @@ subtest 'apply() tests' => sub {
 
     $debits = Koha::Account::Lines->search({ accountlines_id => { -in => [ $debit_1->id, $debit_2->id, $debit_3->id, $credit->id ] } });
     throws_ok {
-        $credit_2->apply( { debits => [ $debits->as_list ] }
+        $credit_2->apply( { debits => [ $debits->as_list ] }); }
         'Koha::Exceptions::Account::IsNotDebit',
         '->apply() rolls back if any of the passed lines is not a debit';
 
