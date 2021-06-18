@@ -938,13 +938,19 @@ sub _clean_search_term {
     if ($count % 2 == 1) {
         $term = $unquoted;
     }
-
-    # Remove unquoted colons that have whitespace on either side of them
-    $term =~ s/(:+)(\s+)$lookahead/$2/g;
-    $term =~ s/(\s+)(:+)$lookahead/$1/g;
-    $term =~ s/^://;
-
     $term = $self->_query_regex_escape_process($term);
+
+    # remove leading and trailing colons mixed with optional slashes and spaces
+    $term =~ s/^([\s\\]*:\s*)+//;
+    $term =~ s/([\s\\]*:\s*)+$//;
+    # remove unquoted colons that have whitespace on either side of them
+    $term =~ s/([\s\\]*:\s*)+(\s+)$lookahead/$2/g;
+    $term =~ s/(\s+)([\s\\]*:\s*)+$lookahead/$1/g;
+    # replace with spaces all repeated colons no matter how they surrounded with spaces and slashes
+    $term =~ s/([\s\\]*:\s*){2,}$lookahead/ /g;
+    # screen all followups for colons after first colon,
+    # and correctly ignore unevenly backslashed:
+    $term =~ s/((?<!\\)(?:[\\]{2})*:[^:\s]+(?<!\\)(?:[\\]{2})*)(?=:)/$1\\/g;
 
     return $term;
 }
