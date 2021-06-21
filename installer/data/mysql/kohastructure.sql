@@ -87,19 +87,6 @@ CREATE TABLE `account_debit_types_branches` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Table structure for table `account_offset_types`
---
-
-DROP TABLE IF EXISTS `account_offset_types`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `account_offset_types` (
-  `type` varchar(16) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'The type of offset this is',
-  PRIMARY KEY (`type`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
 -- Table structure for table `account_offsets`
 --
 
@@ -110,16 +97,14 @@ CREATE TABLE `account_offsets` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'unique identifier for each offset',
   `credit_id` int(11) DEFAULT NULL COMMENT 'The id of the accountline the increased the patron''s balance',
   `debit_id` int(11) DEFAULT NULL COMMENT 'The id of the accountline that decreased the patron''s balance',
-  `type` varchar(16) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'The type of offset this is',
+  `type` enum('CREATE','APPLY','VOID','OVERDUE_INCREASE','OVERDUE_DECREASE') COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'The type of offset this is',
   `amount` decimal(26,6) NOT NULL COMMENT 'The amount of the change',
   `created_on` timestamp NOT NULL DEFAULT current_timestamp(),
   PRIMARY KEY (`id`),
   KEY `account_offsets_ibfk_p` (`credit_id`),
   KEY `account_offsets_ibfk_f` (`debit_id`),
-  KEY `account_offsets_ibfk_t` (`type`),
   CONSTRAINT `account_offsets_ibfk_f` FOREIGN KEY (`debit_id`) REFERENCES `accountlines` (`accountlines_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `account_offsets_ibfk_p` FOREIGN KEY (`credit_id`) REFERENCES `accountlines` (`accountlines_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `account_offsets_ibfk_t` FOREIGN KEY (`type`) REFERENCES `account_offset_types` (`type`) ON DELETE CASCADE ON UPDATE CASCADE
+  CONSTRAINT `account_offsets_ibfk_p` FOREIGN KEY (`credit_id`) REFERENCES `accountlines` (`accountlines_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
