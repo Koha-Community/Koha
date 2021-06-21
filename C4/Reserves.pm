@@ -1847,9 +1847,9 @@ sub _koha_notify_reserve {
             message_name => 'Hold_Filled'
     } );
 
-    my $library = Koha::Libraries->find( $hold->branchcode )->unblessed;
-
+    my $library = Koha::Libraries->find( $hold->branchcode );
     my $admin_email_address = $library->from_email_address;
+    $library = $library->unblessed;
 
     my %letter_params = (
         module => 'reserves',
