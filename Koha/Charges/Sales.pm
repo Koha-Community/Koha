@@ -196,7 +196,7 @@ sub purchase {
     my $schema     = Koha::Database->new->schema;
     my $dt         = dt_from_string();
     my $total_owed = 0;
-    my $credit;
+    my $payment;
 
     $schema->txn_do(
         sub {
@@ -213,7 +213,7 @@ sub purchase {
                     {
                         amount            => $amount,
                         debit_type_code   => $item->{code},
-                        amountoutstanding => 0,
+                        amountoutstanding => $amount,
                         note              => $item->{quantity},
                         manager_id        => $self->{staff_id},
                         interface         => 'intranet',
@@ -227,19 +227,19 @@ sub purchase {
                 my $account_offset = Koha::Account::Offset->new(
                     {
                         debit_id => $debit->id,
-                        type     => 'Purchase',
+                        type     => 'CREATE',
                         amount   => $amount
                     }
                 )->store();
             }
 
             # Add accountline for payment
-            $credit = Koha::Account::Line->new(
+            $payment = Koha::Account::Line->new(
                 {
                     amount            => 0 - $total_owed,
                     credit_type_code  => 'PURCHASE',
                     payment_type      => $self->{payment_type},
-                    amountoutstanding => 0,
+                    amountoutstanding => 0 - $total_owed,
                     manager_id        => $self->{staff_id},
                     interface         => 'intranet',
                     branchcode        => $self->{cash_register}->branch,
@@ -250,29 +250,21 @@ sub purchase {
             )->store();
 
             # Record the account offset
-            my $credit_offset = Koha::Account::Offset->new(
+            my $payment_offset = Koha::Account::Offset->new(
                 {
-                    credit_id => $credit->id,
-                    type      => 'Purchase',
-                    amount    => $credit->amount
+                    credit_id => $payment->id,
+                    type      => 'CREATE',
+                    amount    => $payment->amount
                 }
             )->store();
 
-            # Link payment to debits
-            for my $debit ( @{$debits} ) {
-                Koha::Account::Offset->new(
-                    {
-                        credit_id => $credit->accountlines_id,
-                        debit_id  => $debit->id,
-                        amount    => $debit->amount * -1,
-                        type      => 'Payment',
-                    }
-                )->store();
-            }
+            # Link payment to charges
+            $payment->apply( { debits => $debits } );
+            $payment->discard_changes;
         }
     );
 
-    return $credit;
+    return $payment;
 }
 
 =head1 AUTHOR
