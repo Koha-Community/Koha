@@ -208,14 +208,13 @@ foreach my $item (@items){
         );
 
         if ( my $accountline = $accountlines->next ) {
-            my $payment_offsets = Koha::Account::Offsets->search(
+            my $payment_offsets = $accountline->debit_offsets(
                 {
-                    debit_id  => $accountline->id,
                     credit_id => { '!=' => undef }, # it is not the debit itself
-                    type => { '!=' => [ 'Writeoff', 'Forgiven' ] },
-                    amount => { '<' => 0 }    # credits are negative on the DB
+                    'credit.credit_type_code' =>
+                      { '!=' => [ 'Writeoff', 'Forgiven' ] },
                 },
-                { order_by => { '-desc' => 'created_on' } }
+                { join => 'credit', order_by => { '-desc' => 'created_on' } }
             );
 
             if ($payment_offsets->count) {
