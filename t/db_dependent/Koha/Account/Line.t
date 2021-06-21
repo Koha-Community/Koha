@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 14;
+use Test::More tests => 15;
 use Test::Exception;
 use Test::MockModule;
 
@@ -62,6 +62,34 @@ subtest 'patron() tests' => sub {
 
     $line->borrowernumber(undef)->store;
     is( $line->patron, undef, 'Koha::Account::Line->patron should return undef if no patron linked' );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'manager() tests' => sub {
+
+    plan tests => 3;
+
+    $schema->storage->txn_begin;
+
+    my $library = $builder->build( { source => 'Branch' } );
+    my $manager = $builder->build( { source => 'Borrower' } );
+
+    my $line = Koha::Account::Line->new(
+    {
+        manager_id      => $manager->{borrowernumber},
+        debit_type_code => "OVERDUE",
+        status          => "RETURNED",
+        amount          => 10,
+        interface       => 'commandline',
+    })->store;
+
+    my $account_line_manager = $line->manager;
+    is( ref( $account_line_manager ), 'Koha::Patron', 'Koha::Account::Line->manager should return a Koha::Patron' );
+    is( $line->manager_id, $account_line_manager->borrowernumber, 'Koha::Account::Line->manager should return the correct staff' );
+
+    $line->manager_id(undef)->store;
+    is( $line->manager, undef, 'Koha::Account::Line->manager should return undef if no staff linked' );
 
     $schema->storage->txn_rollback;
 };
