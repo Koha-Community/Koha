@@ -3411,7 +3411,7 @@ subtest '_FixOverduesOnReturn' => sub {
     C4::Circulation::_FixOverduesOnReturn( $patron->{borrowernumber}, $item->itemnumber, 1, 'RETURNED' );
 
     $accountline->_result()->discard_changes();
-    $offset = Koha::Account::Offsets->search({ debit_id => $accountline->id, type => 'Forgiven' })->next();
+    $offset = Koha::Account::Offsets->search({ debit_id => $accountline->id, type => 'CREATE' })->next();
     is( $offset, undef, "No offset created when trying to forgive fine with no outstanding balance" );
     isnt( $accountline->status, 'UNRETURNED', 'Open fine ( account type OVERDUE ) has been closed out ( status not UNRETURNED )');
     is( $accountline->status, 'RETURNED', 'Passed status has been used to set as RETURNED )');

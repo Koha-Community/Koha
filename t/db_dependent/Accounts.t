@@ -950,7 +950,7 @@ subtest "Koha::Account::non_issues_charges tests" => sub {
         {
             credit_id => $credit->id,
             debit_id  => $debit->id,
-            type      => 'Payment',
+            type      => 'APPLY',
             amount    => 0
         }
     )->store();
@@ -983,7 +983,7 @@ subtest "Koha::Account::non_issues_charges tests" => sub {
         {
             credit_id => $credit->id,
             debit_id  => $debit->id,
-            type      => 'Payment',
+            type      => 'APPLY',
             amount    => 0
         }
     )->store();
@@ -1017,7 +1017,7 @@ subtest "Koha::Account::non_issues_charges tests" => sub {
         {
             credit_id => $credit->id,
             debit_id  => $debit->id,
-            type      => 'Payment',
+            type      => 'APPLY',
             amount    => 0
         }
     )->store();
@@ -1084,7 +1084,7 @@ subtest "Koha::Account::Offset credit & debit tests" => sub {
         {
             credit_id => undef,
             debit_id  => undef,
-            type      => 'Payment',
+            type      => 'CREATE',
             amount    => 0,
         }
     )->store();
