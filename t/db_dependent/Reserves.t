@@ -1174,7 +1174,7 @@ subtest 'CheckReserves additional tests' => sub {
         branchcode => undef,
         itemtype   => $item_A->itype,
         rule_name  => 'holdallowed',
-        rule_value => 'from_home_library'
+        rule_value => 1
     });
     my $reserve_id = AddReserve(
         {
@@ -1194,7 +1194,7 @@ subtest 'CheckReserves additional tests' => sub {
         branchcode => $item_A->homebranch,
         itemtype   => $item_A->itype,
         rule_name  => 'holdallowed',
-        rule_value => 'from_any_library'
+        rule_value => 2
     });
     ( $status, $matched_reserve, $possible_reserves ) = CheckReserves( $item_A->itemnumber );
     is( $status, "Reserved", "We fill the hold with item A because item's branch rule says allow any");
@@ -1208,7 +1208,7 @@ subtest 'CheckReserves additional tests' => sub {
         branchcode   => $patron_B->branchcode,
         itemtype   => $item_A->itype,
         rule_name  => 'holdallowed',
-        rule_value => 'from_any_library'
+        rule_value => 2
     });
     ( $status, $matched_reserve, $possible_reserves ) = CheckReserves( $item_A->itemnumber );
     is( $status, "Reserved", "We fill the hold with item A because patron's branch rule says allow any");
