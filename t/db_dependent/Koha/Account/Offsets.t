@@ -38,7 +38,7 @@ subtest 'total() tests' => sub {
     my $line = $builder->build_object(
         {
             class => 'Koha::Account::Lines',
-            value => { debit_type_code => undef }
+            value => { debit_type_code => 'OVERDUE', credit_type_code => undef }
         }
     );
 
@@ -49,26 +49,26 @@ subtest 'total() tests' => sub {
     my $amount_5 = 500;
 
     my $offset_1 = Koha::Account::Offset->new(
-        { type => 'OVERDUE', amount => $amount_1, credit_id => $line->id } )->store;
+        { type => 'OVERDUE_INCREASE', amount => $amount_1, debit_id => $line->id } )->store;
     my $offset_2 = Koha::Account::Offset->new(
-        { type => 'OVERDUE', amount => $amount_2, credit_id => $line->id } )->store;
+        { type => 'OVERDUE_INCREASE', amount => $amount_2, debit_id => $line->id } )->store;
     my $offset_3 = Koha::Account::Offset->new(
-        { type => 'Payment', amount => $amount_3, credit_id => $line->id } )->store;
+        { type => 'OVERDUE_DECREASE', amount => $amount_3, debit_id => $line->id } )->store;
     my $offset_4 = Koha::Account::Offset->new(
-        { type => 'Payment', amount => $amount_4, credit_id => $line->id } )->store;
+        { type => 'OVERDUE_DECREASE', amount => $amount_4, debit_id => $line->id } )->store;
     my $offset_5 = Koha::Account::Offset->new(
-        { type => 'OVERDUE', amount => $amount_5, credit_id => $line->id } )->store;
+        { type => 'OVERDUE_INCREASE', amount => $amount_5, debit_id => $line->id } )->store;
 
-    my $debits = Koha::Account::Offsets->search( { type => 'OVERDUE', credit_id => $line->id } );
+    my $debits = Koha::Account::Offsets->search( { type => 'OVERDUE_INCREASE', debit_id => $line->id } );
     is( $debits->total, $amount_1 + $amount_2 + $amount_5 );
 
-    my $credits = Koha::Account::Offsets->search( { type => 'Payment', credit_id => $line->id } );
+    my $credits = Koha::Account::Offsets->search( { type => 'OVERDUE_DECREASE', debit_id => $line->id } );
     is( $credits->total, $amount_3 + $amount_4 );
 
-    my $all = Koha::Account::Offsets->search( { credit_id => $line->id } );
+    my $all = Koha::Account::Offsets->search( { debit_id => $line->id } );
     is( $all->total, $amount_1 + $amount_2 + $amount_3 + $amount_4 + $amount_5 );
 
-    my $none = Koha::Account::Offsets->search( { credit_id => $line->id + 1 } );
+    my $none = Koha::Account::Offsets->search( { debit_id => $line->id + 1 } );
     is( $none->total, 0, 'No offsets, returns 0' );
 
     $schema->storage->txn_rollback;
