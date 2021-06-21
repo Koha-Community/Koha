@@ -592,6 +592,7 @@
                                     <legend id="alternateaddress_legend">Alternate address</legend>
 
                                     <ol>
+                                        [% SET roadtypes = AuthorisedValues.GetAuthValueDropbox('ROADTYPE') %]
                                         [% IF roadtypes %]
                                             [% UNLESS hidden.defined('B_streettype') %]
                                                 <li>
