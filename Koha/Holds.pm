@@ -130,26 +130,13 @@ sub get_items_that_can_fill {
           }
       );
 
-    my @hold_not_allowed_itypes = Koha::CirculationRules->search(
-        {
-            rule_name    => 'holdallowed',
-            branchcode   => undef,
-            categorycode => undef,
-            rule_value   => 'not_allowed',
-        }
-    )->get_column('itemtype');
-
     return Koha::Items->search(
         {
             biblionumber => { in => \@biblionumbers },
-            itemlost     => 0,
-            withdrawn    => 0,
-            notforloan   => 0,
-            onloan       => undef,
             itemnumber   => { -not_in => [ @branchtransfers, @waiting_holds ] },
-            itype        => { -not_in => \@hold_not_allowed_itypes },
+            onloan       => undef,
         }
-    );
+    )->filter_by_for_hold();
 }
 
 =head3 type
