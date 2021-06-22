@@ -1312,15 +1312,11 @@ subtest 'ModReserveAffect logging' => sub {
     $hold = Koha::Holds->find($reserve_id);
     is( $hold->timestamp, $previous_timestamp, 'Make sure the previous timestamp has been used' );
 
-    # Avoid warnings
-    my $reserve_mock = Test::MockModule->new('C4::Reserves');
-    $reserve_mock->mock( '_koha_notify_reserve', undef );
-
     # Mark it waiting
     ModReserveAffect( $item->itemnumber, $patron->borrowernumber );
 
-    $hold->discard_changes;
-    ok( $hold->is_waiting, 'Hold has been set waiting' );
+    $hold = Koha::Holds->find($reserve_id);
+    is( $hold->found, 'W', 'Hold has been set waiting' );
     isnt( $hold->timestamp, $previous_timestamp, 'The timestamp has been modified' );
 
     my $log = Koha::ActionLogs->search({ module => 'HOLDS', action => 'MODIFY', object => $hold->reserve_id })->next;
