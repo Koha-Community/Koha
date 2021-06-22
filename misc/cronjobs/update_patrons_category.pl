@@ -47,7 +47,6 @@ update_patrons_category.pl -f=categorycode -t=categorycode
 update_patrons_category.pl --help | --man
 
 Options:
-
    --help                   brief help message
    --man                    full documentation
    -too_old                 update if over  maximum age for current category
