@@ -165,12 +165,12 @@
 
                 [% SET mv = ite.marc_value %]
                 [% IF ( mv.type == 'hidden' ) %]
-                    <input type="hidden" id="[%- mv.id | html -%]" name="field_value" class="input_marceditor" size="50" maxlength="[%- mv.maxlength | html -%]" value="[%- mv.value | html -%]">
+                    <input type="hidden" id="[%- mv.id | html -%]" name="field_value" class="input_marceditor" maxlength="[%- mv.maxlength | html -%]" value="[%- mv.value | html -%]">
                 [% ELSIF ( mv.type == 'select' ) %]
                     [% IF ( mv.readonly || ite.IS_RETURN_CLAIM ) %]
-                        <select name="field_value" id="[%- mv.id | html -%]" class="input_marceditor" readonly="readonly" disabled="disabled">
+                        <select name="field_value" id="[%- mv.id | html -%]" class="input_marceditor" readonly="readonly" disabled="disabled" data-width="50%">
                     [% ELSE %]
-                        <select name="field_value" id="[%- mv.id | html -%]" class="input_marceditor" data-category="[% mv.category | html %]">
+                        <select name="field_value" id="[%- mv.id | html -%]" class="input_marceditor" data-category="[% mv.category | html %]"  data-width="50%">
                     [% END %]
                     [% FOREACH aval IN mv.values %]
                         [% IF aval == mv.default %]
@@ -186,17 +186,17 @@
                     </select>
                 [% ELSIF ( mv.type == 'text_auth' ) %]
                     [% IF mv.readonly %]
-                        <input type="text" id="[%- mv.id | html -%]" name="field_value" class="input_marceditor" size="50" maxlength="[%- mv.maxlength | html -%]" value="[%- mv.value | html -%]" readonly="readonly" />
+                        <input type="text" id="[%- mv.id | html -%]" name="field_value" class="input_marceditor" maxlength="[%- mv.maxlength | html -%]" value="[%- mv.value | html -%]" readonly="readonly" />
                     [% ELSE %]
-                        <input type="text" id="[%- mv.id | html -%]" name="field_value" class="input_marceditor" size="50" maxlength="[%- mv.maxlength | html -%]" value="[%- mv.value | html -%]" />
+                        <input type="text" id="[%- mv.id | html -%]" name="field_value" class="input_marceditor" maxlength="[%- mv.maxlength | html -%]" value="[%- mv.value | html -%]" />
                         [% SET dopop = "Dopop('/cgi-bin/koha/authorities/auth_finder.pl?authtypecode=\"${mv.authtypecode}\"&index=${mv.id}','${mv.id}')" %]
                         <a href="#" class="buttonDot"  onclick="[%- dopop | html -%]; return false;" title="Tag editor">...</a>
                     [% END %]
                 [% ELSIF ( mv.type == 'text_plugin' ) %]
                     [% IF mv.readonly %]
-                        <input type="text" id="[%- mv.id | html -%]" name="field_value" class="input_marceditor" size="50" maxlength="[%- mv.maxlength | html -%]" value="[%- mv.value | html -%]" readonly="readonly" />
+                        <input type="text" id="[%- mv.id | html -%]" name="field_value" class="input_marceditor" maxlength="[%- mv.maxlength | html -%]" value="[%- mv.value | html -%]" readonly="readonly" />
                     [% ELSE %]
-                        <input type="text" id="[%- mv.id | html -%]" name="field_value" class="input_marceditor" size="50" maxlength="[%- mv.maxlength | html -%]" value="[%- mv.value | html -%]" />
+                        <input type="text" id="[%- mv.id | html -%]" name="field_value" class="input_marceditor" maxlength="[%- mv.maxlength | html -%]" value="[%- mv.value | html -%]" />
                         [% IF ( mv.nopopup ) %]
                             <a href="#" id="buttonDot_[%- mv.id | html -%]" class="[%- mv.class | html -%]" title="No popup">...</a>
                         [% ELSE  %]
@@ -206,9 +206,9 @@
                     [% END %]
                 [% ELSIF ( mv.type == 'text' ) %]
                     [% IF mv.readonly %]
-                        <input type="text" id="[%- mv.id | html -%]" name="field_value" class="input_marceditor" size="50" maxlength="[%- mv.maxlength | html -%]" value="[%- mv.value | html -%]" readonly="readonly" />
+                        <input type="text" id="[%- mv.id | html -%]" name="field_value" class="input_marceditor" maxlength="[%- mv.maxlength | html -%]" value="[%- mv.value | html -%]" readonly="readonly" />
                     [% ELSE %]
-                        <input type="text" id="[%- mv.id | html -%]" name="field_value" class="input_marceditor" size="50" maxlength="[%- mv.maxlength | html -%]" value="[%- mv.value | html -%]" />
+                        <input type="text" id="[%- mv.id | html -%]" name="field_value" class="input_marceditor" maxlength="[%- mv.maxlength | html -%]" value="[%- mv.value | html -%]" />
                     [% END %]
                 [% ELSIF ( mv.type == 'textarea' ) %]
                     [% IF mv.readonly %]
