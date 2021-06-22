@@ -53,7 +53,7 @@ sub print_usage {
 sub _set_preference {
     my ( $preference, $value ) = @_;
 
-    Koha::Logger->get->debug($message);
+    Koha::Logger->get->debug("Setting $preference to $value");
 
     if (   $preference->{type} eq 'YesNo'
         && $value ne '0'
