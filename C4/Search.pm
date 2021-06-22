@@ -1197,7 +1197,7 @@ sub buildQuery {
     my $weight_fields    = C4::Context->preference("QueryWeightFields")    || 0;
     my $fuzzy_enabled    = C4::Context->preference("QueryFuzzy")           || 0;
 
-    my $query        = $operands[0];
+    my $query        = $operands[0] // "";
     my $simple_query = $operands[0];
 
     # initialize the variables we're passing back
@@ -1350,7 +1350,7 @@ sub buildQuery {
 				}
 
                 # Detect Truncation
-                my $truncated_operand;
+                my $truncated_operand = q{};
                 my( $nontruncated, $righttruncated, $lefttruncated,
                     $rightlefttruncated, $regexpr
                 ) = _detect_truncation( $operand, $index );
@@ -1392,14 +1392,14 @@ sub buildQuery {
                 Koha::Logger->get->debug("TRUNCATED OPERAND: >$truncated_operand<");
 
                 # Handle Stemming
-                my $stemmed_operand;
+                my $stemmed_operand = q{};
                 $stemmed_operand = _build_stemmed_operand($operand, $lang)
 										if $stemming;
 
                 Koha::Logger->get->debug("STEMMED OPERAND: >$stemmed_operand<");
 
                 # Handle Field Weighting
-                my $weighted_operand;
+                my $weighted_operand = q{};
                 if ($weight_fields) {
                     $weighted_operand = _build_weighted_query( $operand, $stemmed_operand, $index );
                     $operand = $weighted_operand;
@@ -1506,11 +1506,13 @@ sub buildQuery {
     $query =~ s/(?<=(st-date-normalized)):/=/g;
 
     # Removing warnings for later substitutions
-    $query      //= q{};
-    $query_desc //= q{};
-    $query_cgi  //= q{};
-    $limit      //= q{};
-    $limit_desc //= q{};
+    $query        //= q{};
+    $query_desc   //= q{};
+    $query_cgi    //= q{};
+    $limit        //= q{};
+    $limit_desc   //= q{};
+    $limit_cgi    //= q{};
+    $simple_query //= q{};
     $limit =~ s/:/=/g;
     for ( $query, $query_desc, $limit, $limit_desc ) {
         s/  +/ /g;    # remove extra spaces
