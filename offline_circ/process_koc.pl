@@ -266,7 +266,7 @@ sub kocIssueItem {
                 undef,                         # branch
                 undef,                         # datedue - let AddRenewal calculate it automatically
                 $circ->{'date'},               # issuedate
-            ) unless ($DEBUG);
+            ) unless (DEBUG);
 
             push @output, {
                 renew => 1,

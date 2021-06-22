@@ -30,7 +30,7 @@ if ( $#ARGV >= 3 && ! caller ) { # process command-line params only if not calle
         url      => $url,
         user     => $user,
         password => $password,
-        debug    => $ENV{DEBUG},
+        debug    => 0,
     );
 
     if ( ! $file ) {

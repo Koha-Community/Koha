@@ -49,14 +49,7 @@ use Koha::Token;
 use Email::Valid;
 use Koha::SMS::Providers;
 
-use vars qw($debug);
-
-BEGIN {
-	$debug = $ENV{DEBUG} || 0;
-}
-	
 my $input = CGI->new;
-($debug) or $debug = $input->param('debug') || 0;
 my %data;
 
 my $dbh = C4::Context->dbh;
@@ -66,7 +59,6 @@ my ($template, $loggedinuser, $cookie)
            query => $input,
            type => "intranet",
            flagsrequired => {borrowers => 'edit_borrowers'},
-           debug => ($debug) ? 1 : 0,
        });
 
 my $borrowernumber = $input->param('borrowernumber');
@@ -319,8 +311,7 @@ if ( ( defined $newdata{'userid'} && $newdata{'userid'} eq '' ) || $check_Borrow
         $newdata{'userid'} = $data{'userid'};
     }
 }
-  
-$debug and warn join "\t", map {"$_: $newdata{$_}"} qw(dateofbirth dateenrolled dateexpiry);
+
 my $extended_patron_attributes;
 if ($op eq 'save' || $op eq 'insert'){
 
@@ -363,7 +354,6 @@ if ($op eq 'save' || $op eq 'insert'){
   
   if (C4::Context->preference("IndependentBranches")) {
     unless ( C4::Context->IsSuperLibrarian() ){
-      $debug and print STDERR "  $newdata{'branchcode'} : ".$userenv->{flags}.":".$userenv->{branch};
       unless (!$newdata{'branchcode'} || $userenv->{branch} eq $newdata{'branchcode'}){
         push @errors, "ERROR_branch";
       }
@@ -444,7 +434,6 @@ if ( defined $sms ) {
 ###  Error checks should happen before this line.
 $nok = $nok || scalar(@errors);
 if ((!$nok) and $nodouble and ($op eq 'insert' or $op eq 'save')){
-	$debug and warn "$op dates: " . join "\t", map {"$_: $newdata{$_}"} qw(dateofbirth dateenrolled dateexpiry);
     my $success;
 	if ($op eq 'insert'){
 		# we know it's not a duplicate borrowernumber or there would already be an error
@@ -818,7 +807,6 @@ if (C4::Context->preference('EnhancedMessagingPreferences')) {
 }
 
 $template->param( "show_guarantor" => ( $category_type =~ /A|I|S|X/ ) ? 0 : 1 ); # associate with step to know where you are
-$debug and warn "memberentry step: $step";
 $template->param(%data);
 $template->param( "step_$step"  => 1) if $step;	# associate with step to know where u are
 $template->param(  step  => $step   ) if $step;	# associate with step to know where u are

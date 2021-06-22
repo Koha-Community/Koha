@@ -26,12 +26,6 @@ use CGI qw ( -utf8 );
 use C4::Output;
 use Koha::DateUtils;;
 
-use vars qw($debug);
-
-BEGIN {
-    $debug = $ENV{DEBUG} || 0;
-}
-
 my $input = CGI->new;
 my $base;
 
@@ -115,7 +109,4 @@ $template->param( 'savedreports' => $reports );
 $template->param( JOBS           => \@jobloop );
 my $time = localtime(time);
 $template->param( 'time' => $time );
-$template->param(
-    debug                    => $debug,
-);
 output_html_with_http_headers $input, $cookie, $template->output;

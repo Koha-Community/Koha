@@ -51,8 +51,6 @@ use Koha::Items;
 use Koha::UploadedFiles;
 use C4::Log;
 
-my $debug = 1;
-
 my $input = CGI->new;
 
 my $fileID = $input->param('uploadedfileid');
@@ -161,7 +159,6 @@ if ($fileID) {
                           : ( $line =~ /,/ )  ? ","
                           :                     "";
 
-                        #$debug and warn "Delimeter is \'$delim\'";
                         unless ( $delim eq "," || $delim eq "\t" ) {
                             warn
 "Unrecognized or missing field delimeter. Please verify that you are using either a ',' or a 'tab'";

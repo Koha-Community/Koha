@@ -41,20 +41,10 @@ use C4::Members;
 use C4::Koha;
 use Koha::DateUtils;
 
-#use Smart::Comments;
-#use Data::Dumper;
-
-use vars qw($debug);
-
-BEGIN {
-	$debug = $ENV{DEBUG} || 0;
-}
-
 my $input = CGI->new;
 my $sessionID = $input->cookie("CGISESSID");
 my $session = get_session($sessionID);
 
-$debug or $debug = $input->param('debug') || 0;
 my $print = $input->param('print');
 my $error = $input->param('error');
 

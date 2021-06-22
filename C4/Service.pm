@@ -47,12 +47,6 @@ use C4::Output qw( :ajax );
 use C4::Output::JSONStream;
 use JSON;
 
-our $debug;
-
-BEGIN {
-    $debug = $ENV{DEBUG} || 0;
-}
-
 our ( $query, $cookie );
 
 sub _output {
@@ -257,7 +251,6 @@ sub dispatch {
             next ROUTE if ( !defined( $query->param ( $param ) ) );
         }
 
-        $debug and warn "Using $path";
         $handler->( @match );
         return;
     }

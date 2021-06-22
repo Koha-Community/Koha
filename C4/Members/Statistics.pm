@@ -26,10 +26,9 @@ use Modern::Perl;
 
 use C4::Context;
 
-our ( @ISA, @EXPORT, @EXPORT_OK, $debug );
+our ( @ISA, @EXPORT, @EXPORT_OK );
 
 BEGIN {
-    $debug = $ENV{DEBUG} || 0;
     require Exporter;
     @ISA = qw(Exporter);
 

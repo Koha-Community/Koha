@@ -6,7 +6,6 @@ use warnings;
 
 our @ISA = qw(Exporter);
 our @EXPORT_OK = qw(checksum verify_cksum);
-our $debug = 0;
 
 sub checksum {
     my $pkt = shift;
@@ -18,9 +17,7 @@ sub verify_cksum {
     my $cksum;
     my $shortsum;
 
-	if ($pkt =~ /AZ(....)$/) {
-		$debug and warn "verify_cksum: sum ($1) detected";
-	} else {
+    unless ($pkt =~ /AZ(....)$/) {
 		warn "verify_cksum: no sum detected";
 		return 0; # No checksum at end
 	}

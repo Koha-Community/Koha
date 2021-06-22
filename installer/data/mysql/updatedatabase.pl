@@ -50,8 +50,6 @@ use File::Slurp;
 # FIXME - The user might be installing a new database, so can't rely
 # on /etc/koha.conf anyway.
 
-my $debug = 0;
-
 my (
     $sth,
     $query,

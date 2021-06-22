@@ -44,9 +44,6 @@ if ( $ENV{KOHA_PROVE_CPUS} ) {
     $ncpu = Sys::CPU::cpu_count();
 }
 
-print "Using $ncpu CPUs...\n"
-    if $ENV{DEBUG};
-
 my $pm   = Parallel::ForkManager->new($ncpu);
 
 foreach my $d (@dirs) {

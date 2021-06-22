@@ -28,8 +28,6 @@ use Koha::DateUtils;
 
 use vars qw(@ISA @EXPORT);
 
-use constant DEBUG => 0;
-
 BEGIN {
     @ISA = qw(Exporter);
     @EXPORT = qw(
@@ -75,7 +73,6 @@ files telling Koha what fields to insert data into.
 
 sub GetModificationTemplates {
   my ( $template_id ) = @_;
-  warn("C4::MarcModificationTemplates::GetModificationTemplates( $template_id )") if DEBUG;
 
   my $dbh = C4::Context->dbh;
   my $sth = $dbh->prepare("SELECT * FROM marc_modification_templates ORDER BY name");
@@ -182,8 +179,6 @@ sub GetModificationTemplateAction {
 sub GetModificationTemplateActions {
   my ( $template_id ) = @_;
 
-  warn( "C4::MarcModificationTemplates::GetModificationTemplateActions( $template_id )" ) if DEBUG;
-
   my $dbh = C4::Context->dbh;
   my $sth = $dbh->prepare("SELECT * FROM marc_modification_template_actions WHERE template_id = ? ORDER BY ordering");
   $sth->execute( $template_id );
@@ -192,8 +187,6 @@ sub GetModificationTemplateActions {
   while ( my $action = $sth->fetchrow_hashref() ) {
     push( @actions, $action );
   }
-
-  warn( Data::Dumper::Dumper( @actions ) ) if DEBUG > 4;
 
   return @actions;
 }
@@ -235,11 +228,6 @@ sub AddModificationTemplateAction {
     $conditional_regex,
     $description
   ) = @_;
-
-  warn( "C4::MarcModificationTemplates::AddModificationTemplateAction( $template_id, $action,
-                    $field_number, $from_field, $from_subfield, $field_value, $to_field, $to_subfield,
-                    $to_regex_search, $to_regex_replace, $to_regex_modifiers, $conditional, $conditional_field, $conditional_subfield, $conditional_comparison,
-                    $conditional_value, $conditional_regex, $description )" ) if DEBUG;
 
   $conditional ||= undef;
   $conditional_comparison ||= undef;
@@ -481,7 +469,6 @@ sub MoveModificationTemplateAction {
 
 sub ModifyRecordsWithTemplate {
   my ( $template_id, $batch ) = @_;
-  warn( "C4::MarcModificationTemplates::ModifyRecordsWithTemplate( $template_id, $batch )" ) if DEBUG;
 
   while ( my $record = $batch->next() ) {
     ModifyRecordWithTemplate( $template_id, $record );
@@ -499,8 +486,6 @@ sub ModifyRecordsWithTemplate {
 
 sub ModifyRecordWithTemplate {
     my ( $template_id, $record ) = @_;
-    warn( "C4::MarcModificationTemplates::ModifyRecordWithTemplate( $template_id, $record )" ) if DEBUG;
-    warn( "Unmodified Record:\n" . $record->as_formatted() ) if DEBUG >= 10;
 
     my $current_date = dt_from_string()->ymd();
     my $branchcode = '';
@@ -705,8 +690,6 @@ sub ModifyRecordWithTemplate {
                 });
             }
         }
-
-        warn( $record->as_formatted() ) if DEBUG >= 10;
     }
 
     return;

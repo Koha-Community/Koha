@@ -29,7 +29,7 @@ use List::MoreUtils qw( any );
 use Net::LDAP;
 use Net::LDAP::Filter;
 
-use vars qw(@ISA @EXPORT @EXPORT_OK %EXPORT_TAGS $debug);
+use vars qw(@ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 
 BEGIN {
 	require Exporter;
@@ -60,9 +60,9 @@ $ldapname     = $ldap->{user}		;
 $ldappassword = $ldap->{pass}		;
 our %mapping  = %{$ldap->{mapping}}; # FIXME dpavlin -- don't die because of || (); from 6eaf8511c70eb82d797c941ef528f4310a15e9f9
 my @mapkeys = keys %mapping;
-$debug and print STDERR "Got ", scalar(@mapkeys), " ldap mapkeys (  total  ): ", join ' ', @mapkeys, "\n";
+#warn "Got ", scalar(@mapkeys), " ldap mapkeys (  total  ): ", join ' ', @mapkeys, "\n";
 @mapkeys = grep {defined $mapping{$_}->{is}} @mapkeys;
-$debug and print STDERR "Got ", scalar(@mapkeys), " ldap mapkeys (populated): ", join ' ', @mapkeys, "\n";
+#warn "Got ", scalar(@mapkeys), " ldap mapkeys (populated): ", join ' ', @mapkeys, "\n";
 
 my %categorycode_conversions;
 my $default_categorycode;
@@ -119,7 +119,6 @@ sub checkpw_ldap {
         return 0;
     }
 
-	#$debug and $db->debug(5);
     my $userldapentry;
 
     # first, LDAP authentication
@@ -208,7 +207,7 @@ sub checkpw_ldap {
     if (( $borrowernumber and $config{update}   ) or
         (!$borrowernumber and $config{replicate})   ) {
         %borrower = ldap_entry_2_hash($userldapentry,$userid);
-        $debug and print STDERR "checkpw_ldap received \%borrower w/ " . keys(%borrower), " keys: ", join(' ', keys %borrower), "\n";
+        #warn "checkpw_ldap received \%borrower w/ " . keys(%borrower), " keys: ", join(' ', keys %borrower), "\n";
     }
 
     if ($borrowernumber) {
@@ -265,21 +264,18 @@ sub ldap_entry_2_hash {
 	my %borrower = ( cardnumber => shift );
 	my %memberhash;
 	$userldapentry->exists('uid');	# This is bad, but required!  By side-effect, this initializes the attrs hash. 
-	if ($debug) {
-		foreach (keys %$userldapentry) {
-			print STDERR "\n\nLDAP key: $_\t", sprintf('(%s)', ref $userldapentry->{$_}), "\n";
-		}
-	}
+    #foreach (keys %$userldapentry) {
+    #    print STDERR "\n\nLDAP key: $_\t", sprintf('(%s)', ref $userldapentry->{$_}), "\n";
+    #}
 	my $x = $userldapentry->{attrs} or return;
 	foreach (keys %$x) {
 		$memberhash{$_} = join ' ', @{$x->{$_}};	
-		$debug and print STDERR sprintf("building \$memberhash{%s} = ", $_, join(' ', @{$x->{$_}})), "\n";
+        #warn sprintf("building \$memberhash{%s} = ", $_, join(' ', @{$x->{$_}})), "\n";
 	}
-	$debug and print STDERR "Finsihed \%memberhash has ", scalar(keys %memberhash), " keys\n",
-					"Referencing \%mapping with ", scalar(keys %mapping), " keys\n";
+    #warn "Finished \%memberhash has ", scalar(keys %memberhash), " keys\n", "Referencing \%mapping with ", scalar(keys %mapping), " keys\n";
 	foreach my $key (keys %mapping) {
 		my  $data = $memberhash{ lc($mapping{$key}->{is}) }; # Net::LDAP returns all names in lowercase
-		$debug and printf STDERR "mapping %20s ==> %-20s (%s)\n", $key, $mapping{$key}->{is}, $data;
+        #warn "mapping %20s ==> %-20s (%s)\n", $key, $mapping{$key}->{is}, $data;
 		unless (defined $data) { 
             $data = $mapping{$key}->{content} || undef;
 		}
@@ -304,7 +300,7 @@ sub ldap_entry_2_hash {
 	$sth->execute( uc($borrower{'categorycode'}) );
 	unless ( my $row = $sth->fetchrow_hashref ) {
 		my $default = $mapping{'categorycode'}->{content};
-		$debug && warn "Can't find ", $borrower{'categorycode'}, " default to: $default for ", $borrower{userid};
+        #warn "Can't find ", $borrower{'categorycode'}, " default to: $default for ", $borrower{userid};
 		$borrower{'categorycode'} = $default
 	}
 
@@ -318,12 +314,12 @@ sub exists_local {
 
 	my $sth = $dbh->prepare("$select WHERE userid=?");	# was cardnumber=?
 	$sth->execute($arg);
-	$debug and printf STDERR "Userid '$arg' exists_local? %s\n", $sth->rows;
+    #warn "Userid '$arg' exists_local? %s\n", $sth->rows;
 	($sth->rows == 1) and return $sth->fetchrow;
 
 	$sth = $dbh->prepare("$select WHERE cardnumber=?");
 	$sth->execute($arg);
-	$debug and printf STDERR "Cardnumber '$arg' exists_local? %s\n", $sth->rows;
+    #warn "Cardnumber '$arg' exists_local? %s\n", $sth->rows;
 	($sth->rows == 1) and return $sth->fetchrow;
 	return 0;
 }
@@ -358,7 +354,7 @@ sub _do_changepassword {
     }
 
     my $digest = hash_password($password);
-    $debug and print STDERR "changing local password for borrowernumber=$borrowerid to '$digest'\n";
+    #warn "changing local password for borrowernumber=$borrowerid to '$digest'\n";
     Koha::Patrons->find($borrowerid)->set_password({ password => $password, skip_validation => 1 });
 
     my ($ok, $cardnum) = checkpw_internal(C4::Context->dbh, $userid, $password);
@@ -382,7 +378,7 @@ sub update_local {
         while ( my $attribute_type = $attribute_types->next ) {
            my $code = $attribute_type->code;
            @keys = grep { $_ ne $code } @keys;
-           $debug and printf STDERR "ignoring extended patron attribute '%s' in update_local()\n", $code;
+           #warn "ignoring extended patron attribute '%s' in update_local()\n", $code;
         }
     }
 
@@ -391,11 +387,8 @@ sub update_local {
         join(',', map {"$_=?"} @keys) .
         "\nWHERE   borrowernumber=? ";
     my $sth = $dbh->prepare($query);
-    if ($debug) {
-        print STDERR $query, "\n",
-            join "\n", map {"$_ = '" . $borrower->{$_} . "'"} @keys;
-        print STDERR "\nuserid = $userid\n";
-    }
+    #warn $query, "\n", join "\n", map {"$_ = '" . $borrower->{$_} . "'"} @keys;
+    #warn "\nuserid = $userid\n";
     $sth->execute(
         ((map {$borrower->{$_}} @keys), $borrowerid)
     );

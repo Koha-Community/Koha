@@ -25,12 +25,6 @@ use CGI qw ( -utf8 );
 use C4::Auth qw/:DEFAULT get_session/;
 use C4::Reserves;
 
-use vars qw($debug);
-
-BEGIN {
-    $debug = $ENV{DEBUG} || 0;
-}
-
 my $input = CGI->new;
 my $sessionID = $input->cookie("CGISESSID");
 my $session = get_session($sessionID);
@@ -43,7 +37,6 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
         query           => $input,
         type            => "intranet",
         flagsrequired   => { circulate => "circulate_remaining_permissions" },
-        debug           => $debug,
     }
 );
 

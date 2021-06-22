@@ -20,7 +20,6 @@
 
 
 use Modern::Perl;
-use vars qw($debug);
 
 use CGI qw ( -utf8 );
 use autouse 'Data::Dumper' => qw(Dumper);

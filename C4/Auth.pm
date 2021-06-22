@@ -32,6 +32,7 @@ use C4::Templates;    # to get the template
 use C4::Languages;
 use C4::Search::History;
 use Koha;
+use Koha::Logger;
 use Koha::Caches;
 use Koha::AuthUtils qw(get_script_name hash_password);
 use Koha::Checkouts;
@@ -50,7 +51,7 @@ use Net::CIDR;
 use C4::Log qw/logaction/;
 
 # use utf8;
-use vars qw(@ISA @EXPORT @EXPORT_OK %EXPORT_TAGS $debug $ldap $cas $caslogout);
+use vars qw(@ISA @EXPORT @EXPORT_OK %EXPORT_TAGS $ldap $cas $caslogout);
 
 BEGIN {
     sub psgi_env { any { /^psgi\./ } keys %ENV }
@@ -62,7 +63,6 @@ BEGIN {
 
     C4::Context->set_remote_address;
 
-    $debug     = $ENV{DEBUG};
     @ISA       = qw(Exporter);
     @EXPORT    = qw(&checkauth &get_template_and_user &haspermission &get_user_subpermissions);
     @EXPORT_OK = qw(&check_api_auth &get_session &check_cookie_auth &checkpw &checkpw_internal &checkpw_hash
@@ -763,7 +763,7 @@ sub _version_check {
 
     # remove the 3 last . to have a Perl number
     $kohaversion =~ s/(.*\..*)\.(.*)\.(.*)/$1$2$3/;
-    $debug and print STDERR "kohaversion : $kohaversion\n";
+    Koha::Logger->get->debug("kohaversion : $kohaversion");
     if ( $version < $kohaversion ) {
         my $warning = "Database update needed, redirecting to %s. Database is $version and Koha is $kohaversion";
         if ( $type ne 'opac' ) {
@@ -806,7 +806,6 @@ sub _timeout_syspref {
 
 sub checkauth {
     my $query = shift;
-    $debug and warn "Checking Auth";
 
     # Get shibboleth login attribute
     my $shib = C4::Context->config('useshibboleth') && shib_ok();
@@ -893,7 +892,7 @@ sub checkauth {
                 $session->param('desk_id'),      $session->param('desk_name'),
                 $session->param('register_id'),  $session->param('register_name')
             );
-            $debug and printf STDERR "AUTH_SESSION: (%s)\t%s %s - %s\n", map { $session->param($_) } qw(cardnumber firstname surname branch);
+            Koha::Logger->get->debug(sprintf "AUTH_SESSION: (%s)\t%s %s - %s", map { $session->param($_) } qw(cardnumber firstname surname branch));
             $ip          = $session->param('ip');
             $lasttime    = $session->param('lasttime');
             $userid      = $s_userid;
@@ -906,7 +905,6 @@ sub checkauth {
 
             #if a user enters an id ne to the id in the current session, we need to log them in...
             #first we need to clear the anonymous session...
-            $debug and warn "query id = $q_userid but session id = $s_userid";
             $anon_search_history = $session->param('search_history');
             $session->delete();
             $session->flush;
@@ -1143,25 +1141,16 @@ sub checkauth {
                     my $sth = $dbh->prepare("$select where userid=?");
                     $sth->execute($userid);
                     unless ( $sth->rows ) {
-                        $debug and print STDERR "AUTH_1: no rows for userid='$userid'\n";
                         $sth = $dbh->prepare("$select where cardnumber=?");
                         $sth->execute($cardnumber);
 
                         unless ( $sth->rows ) {
-                            $debug and print STDERR "AUTH_2a: no rows for cardnumber='$cardnumber'\n";
                             $sth->execute($userid);
-                            unless ( $sth->rows ) {
-                                $debug and print STDERR "AUTH_2b: no rows for userid='$userid' AS cardnumber\n";
-                            }
                         }
                     }
                     if ( $sth->rows ) {
                         ( $borrowernumber, $firstname, $surname, $userflags,
                             $branchcode, $branchname, $emailaddress ) = $sth->fetchrow;
-                        $debug and print STDERR "AUTH_3 results: " .
-                          "$cardnumber,$borrowernumber,$userid,$firstname,$surname,$userflags,$branchcode,$emailaddress\n";
-                    } else {
-                        print STDERR "AUTH_3: no results for userid='$userid', cardnumber='$cardnumber'.\n";
                     }
 
                     # launch a sequence to check if we have a ip for the branch, i
@@ -1236,7 +1225,6 @@ sub checkauth {
                     $session->param( 'shibboleth',   $shibSuccess );
                     $session->param( 'register_id',  $register_id );
                     $session->param( 'register_name',  $register_name );
-                    $debug and printf STDERR "AUTH_4: (%s)\t%s %s - %s\n", map { $session->param($_) } qw(cardnumber firstname surname branch);
                 }
                 $session->param('cas_ticket', $cas_ticket) if $cas_ticket;
                 C4::Context->set_userenv(
@@ -1253,7 +1241,6 @@ sub checkauth {
             # $return: 0 = invalid user
             # reset to anonymous session
             else {
-                $debug and warn "Login failed, resetting anonymous session...";
                 if ($userid) {
                     $info{'invalid_username_or_password'} = 1;
                     C4::Context->_unset_userenv($sessionID);
@@ -1266,9 +1253,7 @@ sub checkauth {
         }    # END if ( $q_userid
         elsif ( $type eq "opac" ) {
 
-            # if we are here this is an anonymous session; add public lists to it and a few other items...
             # anonymous sessions are created only for the OPAC
-            $debug and warn "Initiating an anonymous session...";
 
             # setting a couple of other session vars...
             $session->param( 'ip',          $session->remote_addr() );
@@ -1589,7 +1574,6 @@ sub check_api_auth {
         # Proxy CAS auth
         if ( $cas && $query->param('PT') ) {
             my $retuserid;
-            $debug and print STDERR "## check_api_auth - checking CAS\n";
 
             # In case of a CAS authentication, we use the ticket instead of the password
             my $PT = $query->param('PT');
@@ -1905,7 +1889,6 @@ sub checkpw {
     if ( $patron and $patron->account_locked ) {
         # Nothing to check, account is locked
     } elsif ($ldap && defined($password)) {
-        $debug and print STDERR "## checkpw - checking LDAP\n";
         my ( $retval, $retcard, $retuserid ) = checkpw_ldap(@_);    # EXTERNAL AUTH
         if ( $retval == 1 ) {
             @return = ( $retval, $retcard, $retuserid );
@@ -1914,7 +1897,6 @@ sub checkpw {
         $check_internal_as_fallback = 1 if $retval == 0;
 
     } elsif ( $cas && $query && $query->param('ticket') ) {
-        $debug and print STDERR "## checkpw - checking CAS\n";
 
         # In case of a CAS authentication, we use the ticket instead of the password
         my $ticket = $query->param('ticket');
@@ -1932,8 +1914,6 @@ sub checkpw {
     # Check for password to asertain whether we want to be testing against shibboleth or another method this
     # time around.
     elsif ( $shib && $shib_login && !$password ) {
-
-        $debug and print STDERR "## checkpw - checking Shibboleth\n";
 
         # In case of a Shibboleth authentication, we expect a shibboleth user attribute
         # (defined under shibboleth mapping in koha-conf.xml) to contain the login of the
@@ -2240,7 +2220,7 @@ sub in_iprange {
     if (scalar @allowedipranges > 0) {
         my @rangelist;
         eval { @rangelist = Net::CIDR::range2cidr(@allowedipranges); }; return 0 if $@;
-        eval { $result = Net::CIDR::cidrlookup($ENV{'REMOTE_ADDR'}, @rangelist) } || ( $ENV{DEBUG} && warn 'cidrlookup failed for ' . join(' ',@rangelist) );
+        eval { $result = Net::CIDR::cidrlookup($ENV{'REMOTE_ADDR'}, @rangelist) } || Koha::Logger->get->warn('cidrlookup failed for ' . join(' ',@rangelist) );
      }
      return $result ? 1 : 0;
 }

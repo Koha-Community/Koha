@@ -27,7 +27,7 @@ use Koha::Course::Instructors;
 use Koha::Course::Items;
 use Koha::Course::Reserves;
 
-use vars qw(@ISA @EXPORT @EXPORT_OK %EXPORT_TAGS $DEBUG @FIELDS);
+use vars qw(@ISA @EXPORT @EXPORT_OK %EXPORT_TAGS @FIELDS);
 
 BEGIN {
     require Exporter;
@@ -55,7 +55,6 @@ BEGIN {
     );
     %EXPORT_TAGS = ( 'all' => \@EXPORT_OK );
 
-    $DEBUG = 0;
     @FIELDS = ( 'itype', 'ccode', 'homebranch', 'holdingbranch', 'location' );
 }
 
@@ -81,7 +80,6 @@ This module deals with course reserves.
 
 sub GetCourse {
     my ($course_id) = @_;
-    warn whoami() . "( $course_id )" if $DEBUG;
 
     my $course = Koha::Courses->find( $course_id );
     return unless $course;
@@ -108,7 +106,6 @@ sub GetCourse {
 
 sub ModCourse {
     my (%params) = @_;
-    warn identify_myself(%params) if $DEBUG;
 
     my $dbh = C4::Context->dbh;
 
@@ -158,7 +155,6 @@ sub ModCourse {
 
 sub GetCourses {
     my (%params) = @_;
-    warn identify_myself(%params) if $DEBUG;
 
     my @query_keys;
     my @query_values;
@@ -241,7 +237,6 @@ sub DelCourse {
 
 sub EnableOrDisableCourseItems {
     my (%params) = @_;
-    warn identify_myself(%params) if $DEBUG;
 
     my $course_id = $params{'course_id'};
     my $enabled = $params{'enabled'} || 0;
@@ -290,7 +285,6 @@ sub EnableOrDisableCourseItems {
 
 sub EnableOrDisableCourseItem {
     my (%params) = @_;
-    warn identify_myself(%params) if $DEBUG;
 
     my $ci_id   = $params{'ci_id'};
 
@@ -329,8 +323,6 @@ sub EnableOrDisableCourseItem {
 
 sub GetCourseInstructors {
     my ($course_id) = @_;
-    warn "C4::CourseReserves::GetCourseInstructors( $course_id )"
-      if $DEBUG;
 
     my $query = "
         SELECT * FROM borrowers
@@ -359,7 +351,6 @@ sub GetCourseInstructors {
 
 sub ModCourseInstructors {
     my (%params) = @_;
-    warn identify_myself(%params) if $DEBUG;
 
     my $course_id       = $params{'course_id'};
     my $mode            = $params{'mode'};
@@ -420,7 +411,6 @@ sub ModCourseInstructors {
 
 sub GetCourseItem {
     my (%params) = @_;
-    warn identify_myself(%params) if $DEBUG;
 
     my $ci_id      = $params{'ci_id'};
     my $itemnumber = $params{'itemnumber'};
@@ -459,7 +449,6 @@ sub GetCourseItem {
 
 sub ModCourseItem {
     my (%params) = @_;
-    warn identify_myself(%params) if $DEBUG;
 
     my $itemnumber = $params{'itemnumber'};
 
@@ -493,7 +482,6 @@ sub ModCourseItem {
 
 sub _AddCourseItem {
     my (%params) = @_;
-    warn identify_myself(%params) if $DEBUG;
 
     $params{homebranch} ||= undef; # Can't be empty string, FK constraint
     $params{holdingbranch} ||= undef; # Can't be empty string, FK constraint
@@ -520,7 +508,6 @@ sub _AddCourseItem {
 
 sub _UpdateCourseItem {
     my (%params) = @_;
-    warn identify_myself(%params) if $DEBUG;
 
     my $ci_id         = $params{'ci_id'};
     my $course_item   = $params{'course_item'};
@@ -581,7 +568,6 @@ sub _UpdateCourseItem {
 
 sub _RevertFields {
     my (%params) = @_;
-    warn identify_myself(%params) if $DEBUG;
 
     my $ci_id = $params{'ci_id'};
 
@@ -617,7 +603,6 @@ sub _RevertFields {
 
 sub _SwapAllFields {
     my ( $ci_id, $enabled ) = @_;
-    warn "C4::CourseReserves::_SwapFields( $ci_id )" if $DEBUG;
 
     my $course_item = Koha::Course::Items->find( $ci_id );
     my $item = Koha::Items->find( $course_item->itemnumber );
@@ -675,7 +660,6 @@ sub _SwapAllFields {
 
 sub GetCourseItems {
     my (%params) = @_;
-    warn identify_myself(%params) if $DEBUG;
 
     my $course_id  = $params{'course_id'};
     my $itemnumber = $params{'itemnumber'};
@@ -714,7 +698,6 @@ sub GetCourseItems {
 
 sub DelCourseItem {
     my (%params) = @_;
-    warn identify_myself(%params) if $DEBUG;
 
     my $ci_id = $params{'ci_id'};
 
@@ -740,7 +723,6 @@ sub DelCourseItem {
 
 sub GetCourseReserve {
     my (%params) = @_;
-    warn identify_myself(%params) if $DEBUG;
 
     my $cr_id     = $params{'cr_id'};
     my $course_id = $params{'course_id'};
@@ -779,7 +761,6 @@ sub GetCourseReserve {
 
 sub ModCourseReserve {
     my (%params) = @_;
-    warn identify_myself(%params) if $DEBUG;
 
     my $course_id   = $params{'course_id'};
     my $ci_id       = $params{'ci_id'};
@@ -836,7 +817,6 @@ sub ModCourseReserve {
 
 sub GetCourseReserves {
     my (%params) = @_;
-    warn identify_myself(%params) if $DEBUG;
 
     my $course_id       = $params{'course_id'};
     my $ci_id           = $params{'ci_id'};
@@ -897,7 +877,6 @@ sub GetCourseReserves {
 
 sub DelCourseReserve {
     my (%params) = @_;
-    warn identify_myself(%params) if $DEBUG;
 
     my $cr_id = $params{'cr_id'};
 
@@ -932,7 +911,6 @@ sub DelCourseReserve {
 
 sub GetItemCourseReservesInfo {
     my (%params) = @_;
-    warn identify_myself(%params) if $DEBUG;
 
     my $itemnumber = $params{'itemnumber'};
 
@@ -967,7 +945,6 @@ sub GetItemCourseReservesInfo {
 
 sub CountCourseReservesForItem {
     my (%params) = @_;
-    warn identify_myself(%params) if $DEBUG;
 
     my $ci_id      = $params{'ci_id'};
     my $itemnumber = $params{'itemnumber'};
@@ -1005,7 +982,6 @@ sub CountCourseReservesForItem {
 
 sub SearchCourses {
     my (%params) = @_;
-    warn identify_myself(%params) if $DEBUG;
 
     my $term = $params{'term'};
 
@@ -1074,12 +1050,6 @@ sub stringify_params {
     }
 
     return "( $string )";
-}
-
-sub identify_myself {
-    my (%params) = @_;
-
-    return whowasi() . stringify_params(%params);
 }
 
 1;

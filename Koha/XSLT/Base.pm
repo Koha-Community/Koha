@@ -66,8 +66,7 @@ Koha::XSLT::Base - Facilitate use of XSLT transformations
 
 =head2 print_warns
 
-    If set, print error messages to STDERR. False by default. Looks at the
-    DEBUG environment variable too.
+    If set, print error messages to STDERR. False by default.
 
 =head1 ERROR CODES
 

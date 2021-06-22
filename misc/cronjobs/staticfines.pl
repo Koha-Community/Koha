@@ -59,7 +59,7 @@ my $delay;
 my $useborrowerlibrary;
 my $borrowernumberlimit;
 my $borrowersalreadyapplied; # hashref of borrowers for whom we already applied the fine, so it's only applied once
-my $debug = $ENV{'DEBUG'} || 0;
+my $debug = 0;
 my $bigdebug = 0;
 
 GetOptions(

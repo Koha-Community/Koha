@@ -30,7 +30,7 @@ use Koha::MarcSubfieldStructures;
 use Business::ISBN;
 use Business::ISSN;
 use autouse 'Data::cselectall_arrayref' => qw(Dumper);
-use vars qw(@ISA @EXPORT @EXPORT_OK $DEBUG);
+use vars qw(@ISA @EXPORT @EXPORT_OK);
 
 BEGIN {
 	require Exporter;
@@ -57,9 +57,7 @@ BEGIN {
         &GetVariationsOfISSNs
         &NormalizeISSN
 
-		$DEBUG
 	);
-	$DEBUG = 0;
 }
 
 =head1 NAME
@@ -249,7 +247,6 @@ sub getImageSets {
     my @imagesets = (); # list of hasrefs of image set data to pass to template
     my @subdirectories = _getSubdirectoryNames( $paths->{'staff'}{'filesystem'} );
     foreach my $imagesubdir ( @subdirectories ) {
-    warn $imagesubdir if $DEBUG;
         my @imagelist     = (); # hashrefs of image info
         my @imagenames = _getImagesFromDirectory( File::Spec->catfile( $paths->{'staff'}{'filesystem'}, $imagesubdir ) );
         my $imagesetactive = 0;

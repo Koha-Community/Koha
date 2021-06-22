@@ -27,12 +27,12 @@ use CGI qw ( -utf8 );
 use FindBin;
 use YAML::XS;
 
+use Koha::Logger;
 
-use vars qw(@ISA @EXPORT @EXPORT_OK %EXPORT_TAGS $debug);
+use vars qw(@ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 
 BEGIN {
     require Exporter;
-    $debug = $ENV{DEBUG};
     @ISA   = qw(Exporter);
     @EXPORT = qw(check_api_auth_cas checkpw_cas login_cas logout_cas login_cas_url logout_if_required);
 }
@@ -99,14 +99,12 @@ sub login_cas_url {
 # Checks for password correctness
 # In our case : is there a ticket, is it valid and does it match one of our users ?
 sub checkpw_cas {
-    $debug and warn "checkpw_cas";
     my ($dbh, $ticket, $query, $type) = @_;
     my $retnumber;
     my ( $cas, $uri ) = _get_cas_and_service($query, undef, $type);
 
     # If we got a ticket
     if ($ticket) {
-        $debug and warn "Got ticket : $ticket";
 
         # We try to validate it
         my $val = $cas->service_validate($uri, $ticket );
@@ -115,7 +113,6 @@ sub checkpw_cas {
         if ( $val->is_success() ) {
 
             my $userid = $val->user();
-            $debug and warn "User CAS authenticated as: $userid";
 
             # we should store the CAS ticekt too, we need this for single logout https://apereo.github.io/cas/4.2.x/protocol/CAS-Protocol-Specification.html#233-single-logout
 
@@ -134,13 +131,14 @@ sub checkpw_cas {
             }
 
             # If we reach this point, then the user is a valid CAS user, but not a Koha user
-            $debug and warn "User $userid is not a valid Koha user";
+            Koha::Logger->get->info("User $userid is not a valid Koha user");
 
         } else {
-            $debug and warn "Problem when validating ticket : $ticket";
-            $debug and warn "Authen::CAS::Client::Response::Error: " . $val->error() if $val->is_error();
-            $debug and warn "Authen::CAS::Client::Response::Failure: " . $val->message() if $val->is_failure();
-            $debug and warn Data::Dumper::Dumper($@) if $val->is_error() or $val->is_failure();
+            my $logger = Koha::Logger->get;
+            $logger->debug("Problem when validating ticket : $ticket");
+            $logger->debug("Authen::CAS::Client::Response::Error: " . $val->error()) if $val->is_error();
+            $logger->debug("Authen::CAS::Client::Response::Failure: " . $val->message()) if $val->is_failure();
+            $logger->debug(Data::Dumper::Dumper($@)) if $val->is_error() or $val->is_failure();
             return 0;
         }
     }
@@ -149,7 +147,6 @@ sub checkpw_cas {
 
 # Proxy CAS auth
 sub check_api_auth_cas {
-    $debug and warn "check_api_auth_cas";
     my ($dbh, $PT, $query, $type) = @_;
     my $retnumber;
     my ( $cas, $uri ) = _get_cas_and_service($query, undef, $type);
@@ -162,10 +159,6 @@ sub check_api_auth_cas {
         if ( $r->is_success ) {
 
             # We've got a username !
-            $debug and warn "User authenticated as: ", $r->user, "\n";
-            $debug and warn "Proxied through:\n";
-            $debug and warn "  $_\n" for $r->proxies;
-
             my $userid = $r->user;
 
             # we should store the CAS ticket too, we need this for single logout https://apereo.github.io/cas/4.2.x/protocol/CAS-Protocol-Specification.html#233-single-logout
@@ -186,10 +179,10 @@ sub check_api_auth_cas {
             }
 
             # If we reach this point, then the user is a valid CAS user, but not a Koha user
-            $debug and warn "User $userid is not a valid Koha user";
+            Koha::Logger->get->info("User $userid is not a valid Koha user");
 
         } else {
-            $debug and warn "Proxy Ticket authentication failed";
+            Koha::Logger->get->debug("Proxy Ticket authentication failed");
             return 0;
         }
     }

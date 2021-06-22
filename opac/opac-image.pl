@@ -32,7 +32,6 @@ use Koha::CoverImages;
 
 $| = 1;
 
-my $DEBUG = 0;
 my $data  = CGI->new;
 my $imagenumber;
 
@@ -72,8 +71,6 @@ if ( C4::Context->preference("OPACLocalCoverImages") ) {
         my $cover_images = $biblio->cover_images;
         if ( $cover_images->count ) {
             $image = $cover_images->next;
-        } else {
-            warn "No images for this biblio" if $DEBUG;
         }
     }
 }

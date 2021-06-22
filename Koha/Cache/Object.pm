@@ -81,10 +81,6 @@ sub TIESCALAR {
 sub FETCH {
     my ( $self, $index ) = @_;
 
-    $ENV{DEBUG}
-      && $index
-      && carp "Retrieving cached hash member $index of $self->{'key'}";
-
     my $now = time;
 
     if ( !( $self->{'inprocess'} && defined( $self->{'value'} ) )

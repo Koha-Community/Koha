@@ -44,15 +44,7 @@ use Koha::Patron::Files;
 use Koha::Token;
 use Koha::Checkouts;
 
-use vars qw($debug);
-
-BEGIN {
-    $debug = $ENV{DEBUG} || 0;
-}
-
 my $input = CGI->new;
-$debug or $debug = $input->param('debug') || 0;
-
 
 my $print = $input->param('print');
 

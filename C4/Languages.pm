@@ -28,7 +28,7 @@ use List::MoreUtils qw( any );
 use C4::Context;
 use Koha::Caches;
 use Koha::Cache::Memory::Lite;
-use vars qw(@ISA @EXPORT @EXPORT_OK %EXPORT_TAGS $DEBUG);
+use vars qw(@ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 
 BEGIN {
     require Exporter;
@@ -40,7 +40,6 @@ BEGIN {
         &getAllLanguages
     );
     @EXPORT_OK = qw(getFrameworkLanguages getTranslatedLanguages getAllLanguages getLanguages get_bidi regex_lang_subtags language_get_description accept_language getlanguage);
-    $DEBUG = 0;
 }
 
 =head1 NAME

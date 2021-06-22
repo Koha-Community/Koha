@@ -632,7 +632,6 @@ if ($tag) {
     my $taglist = get_tags({term=>$tag, approved=>1});
     $results_hashref->{biblioserver}->{hits} = scalar (@$taglist);
     my @marclist = map { C4::Biblio::GetXmlBiblio( $_->{biblionumber} ) } @$taglist;
-    $DEBUG and printf STDERR "taglist (%s biblionumber)\nmarclist (%s records)\n", scalar(@$taglist), scalar(@marclist);
     $results_hashref->{biblioserver}->{RECORDS} = \@marclist;
     # FIXME: tag search and standard search should work together, not exclusively
     # FIXME: Because search and standard search don't work together OpacHiddenItems

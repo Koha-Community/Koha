@@ -42,8 +42,6 @@ our @EXPORT = qw(
 );
 
 
-our $debug = 0;
-
 =head1 NAME
 
 SimpleMARC - Perl module for making simple MARC record alterations.

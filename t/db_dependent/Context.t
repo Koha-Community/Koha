@@ -4,13 +4,12 @@ use Modern::Perl;
 
 use Test::More;
 use Test::MockModule;
-use vars qw($debug $koha $dbh $config $ret);
+use vars qw($koha $dbh $config $ret);
 use t::lib::Mocks;
 
 use Koha::Database;
 
 BEGIN {
-    $debug = $ENV{DEBUG} || 0;
 
     # Note: The overall number of tests may vary by configuration.
     # First we need to check your environmental variables
@@ -55,7 +54,6 @@ my @keys = keys %$koha;
 my $width = 0;
 if (ok(@keys)) { 
     $width = (sort {$a <=> $b} map {length} @keys)[-1];
-    $debug and diag "widest key is $width";
 }
 foreach (sort @keys) {
 	ok(exists $koha->{$_}, 

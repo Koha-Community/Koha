@@ -28,11 +28,12 @@ use Carp;
 use CGI;
 use List::MoreUtils qw(any);
 
-use vars qw(@ISA @EXPORT @EXPORT_OK %EXPORT_TAGS $debug);
+use Koha::Logger;
+
+use vars qw(@ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 
 BEGIN {
     require Exporter;
-    $debug   = $ENV{DEBUG};
     @ISA     = qw(Exporter);
     @EXPORT =
       qw(shib_ok logout_shib login_shib_url checkpw_shib get_login_shib);
@@ -83,10 +84,8 @@ sub get_login_shib {
     my $matchAttribute = $config->{mapping}->{ $config->{matchpoint} }->{is};
 
     if ( any { /(^psgi\.|^plack\.)/i } keys %ENV ) {
-      $debug and warn $matchAttribute . " value: " . $ENV{"HTTP_".uc($matchAttribute)};
       return $ENV{"HTTP_".uc($matchAttribute)} || '';
     } else {
-      $debug and warn $matchAttribute . " value: " . $ENV{$matchAttribute};
       return $ENV{$matchAttribute} || '';
     }
 }
@@ -94,18 +93,16 @@ sub get_login_shib {
 # Checks for password correctness
 # In our case : does the given attribute match one of our users ?
 sub checkpw_shib {
-    $debug and warn "checkpw_shib";
 
     my ( $match ) = @_;
     my $config = _get_shib_config();
-    $debug and warn "User Shibboleth-authenticated as: $match";
 
     # Does the given shibboleth attribute value ($match) match a valid koha user ?
     my $borrowers = Koha::Patrons->search( { $config->{matchpoint} => $match } );
     if ( $borrowers->count > 1 ){
         # If we have more than 1 borrower the matchpoint is not unique
         # we cannot know which patron is the correct one, so we should fail
-         $debug and warn "There are several users with $config->{matchpoint} of $match, matchpoints must be unique";
+        Koha::Logger->get->warn("There are several users with $config->{matchpoint} of $match, matchpoints must be unique");
         return 0;
     }
     my $borrower = $borrowers->next;
@@ -120,7 +117,7 @@ sub checkpw_shib {
         return _autocreate( $config, $match );
     } else {
         # If we reach this point, the user is not a valid koha user
-         $debug and warn "User with $config->{matchpoint} of $match is not a valid Koha user";
+        Koha::Logger->get->info("There are several users with $config->{matchpoint} of $match, matchpoints must be unique");
         return 0;
     }
 }
@@ -163,28 +160,20 @@ sub _get_uri {
 
     my $protocol = "https://";
     my $interface = C4::Context->interface;
-    $debug and warn "shibboleth interface: " . $interface;
 
-    my $uri;
-    if ( $interface eq 'intranet' ) {
+    my $uri =
+      $interface eq 'intranet'
+      ? C4::Context->preference('staffClientBaseURL')
+      : C4::Context->preference('OPACBaseURL');
 
-        $uri = C4::Context->preference('staffClientBaseURL') // '';
-        if ($uri eq '') {
-            $debug and warn 'staffClientBaseURL not set!';
-        }
-    } else {
-        $uri = C4::Context->preference('OPACBaseURL') // '';
-        if ($uri eq '') {
-            $debug and warn 'OPACBaseURL not set!';
-        }
-    }
+    $uri or Koha::Logger->get->warn("Syspref staffClientBaseURL or OPACBaseURL not set!"); # FIXME We should die here
+
+    $uri ||= "";
 
     if ($uri =~ /(.*):\/\/(.*)/) {
         my $oldprotocol = $1;
         if ($oldprotocol ne 'https') {
-            $debug
-                and warn
-                  'Shibboleth requires OPACBaseURL/staffClientBaseURL to use the https protocol!';
+            Koha::Logger->get->warn('Shibboleth requires OPACBaseURL/staffClientBaseURL to use the https protocol!');
         }
         $uri = $2;
     }
@@ -217,18 +206,16 @@ sub _get_shib_config {
     my $config = C4::Context->config('shibboleth');
 
     if ( !$config ) {
-        carp 'shibboleth config not defined' if $debug;
+        Koha::Logger->get->warn('shibboleth config not defined');
         return 0;
     }
 
     if ( $config->{matchpoint}
         && defined( $config->{mapping}->{ $config->{matchpoint} }->{is} ) )
     {
-        if ($debug) {
-            warn "koha borrower field to match: " . $config->{matchpoint};
-            warn "shibboleth attribute to match: "
-              . $config->{mapping}->{ $config->{matchpoint} }->{is};
-        }
+        my $logger = Koha::Logger->get;
+        $logger->debug("koha borrower field to match: " . $config->{matchpoint});
+        $logger->debug("shibboleth attribute to match: " . $config->{mapping}->{ $config->{matchpoint} }->{is});
         return $config;
     }
     else {

@@ -30,7 +30,6 @@ use Koha::Patron::Images;
 
 $|=1;
 
-my $DEBUG = 0;
 my $query = CGI->new;
 my $borrowernumber;
 
@@ -62,9 +61,6 @@ if ($query->param('borrowernumber')) {
 } else {
     $borrowernumber = shift;
 }
-
-
-warn "Borrowernumber passed in: $borrowernumber" if $DEBUG;
 
 my $patron_image = Koha::Patron::Images->find($borrowernumber);
 

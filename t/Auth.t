@@ -16,7 +16,7 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use Test::More tests => 13;
+use Test::More tests => 12;
 use Test::Warn;
 
 use C4::Auth qw / in_iprange /;
@@ -35,7 +35,3 @@ ok(!in_iprange("127.0.0.1 8.8.8.8 192.168.2.1/24 192.168.3.1/24 192.168.1.1-192.
 ok(in_iprange(""), "blank list given, no preference set - implies everything goes through.");
 ok(in_iprange(), "no list given, no preference set - implies everything goes through.");
 ok(in_iprange("192.168.1.1/36"), 'simple invalid ip range/36 with remote ip in it');
-$ENV{DEBUG} = 1;
-warning_like { in_iprange("192.168.1.1/36") }
-    qr/cidrlookup failed for/,
-    'noisy simple invalid ip range/36 with remote ip in it';

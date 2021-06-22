@@ -38,7 +38,7 @@ GetOptions(
     'date-created-marc|c:s'  => \$date_created_marc,
     'date-modified-marc|m:s' => \$date_modified_marc,
 );
-my $debug = $ENV{DEBUG};
+my $debug = 0; # FIXME pass an option for that?
 $verbose = 1 if $debug;
 
 # display help ?

@@ -44,10 +44,9 @@ use Koha::List::Patron;
 use Koha::Patrons;
 use Koha::Patron::Categories;
 
-our (@ISA,@EXPORT,@EXPORT_OK,$debug);
+our (@ISA,@EXPORT,@EXPORT_OK);
 
 BEGIN {
-    $debug = $ENV{DEBUG} || 0;
     require Exporter;
     @ISA = qw(Exporter);
     #Get data
@@ -449,8 +448,6 @@ sub GetBorrowersToExpunge {
         $query .= q{ AND borrowernumber != ? };
         push( @query_params, $anonymous_patron );
     }
-
-    warn $query if $debug;
 
     my $sth = $dbh->prepare($query);
     if (scalar(@query_params)>0){

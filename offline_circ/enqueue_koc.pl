@@ -37,8 +37,6 @@ use Koha::Items;
 
 use Date::Calc qw( Add_Delta_Days Date_to_Days );
 
-use constant DEBUG => 0;
-
 # this is the file version number that we're coded against.
 my $FILE_VERSION = '1.0';
 

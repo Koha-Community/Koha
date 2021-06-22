@@ -502,8 +502,6 @@ $template->param(
     searchid            => scalar $query->param('searchid'),
 );
 
-# $debug and $template->param(debug_display => 1);
-
 # Lists
 
 if (C4::Context->preference("virtualshelves") ) {

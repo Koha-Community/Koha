@@ -19,8 +19,6 @@ use C4::SIP::ILS::Transaction::Hold;
 use C4::SIP::ILS::Transaction::Renew;
 use C4::SIP::ILS::Transaction::RenewAll;
 
-my $debug = 0;
-
 my %supports = (
     'magnetic media'        => 1,
     'security inhibit'      => 0,
@@ -46,7 +44,6 @@ sub new {
     my ($class, $institution) = @_;
     my $type = ref($class) || $class;
     my $self = {};
-	$debug and warn "new ILS: INSTITUTION: " . Dumper($institution);
     siplog("LOG_DEBUG", "new ILS '%s'", $institution->{id});
     $self->{institution} = $institution;
     return bless $self, $type;
@@ -54,13 +51,11 @@ sub new {
 
 sub find_patron {
     my $self = shift;
- 	$debug and warn "ILS: finding patron";
     return C4::SIP::ILS::Patron->new(@_);
 }
 
 sub find_item {
     my $self = shift;
-	$debug and warn "ILS: finding item";
     return C4::SIP::ILS::Item->new(@_);
 }
 
@@ -155,7 +150,6 @@ sub checkout {
     else {
         $circ->do_checkout($account);
         if ( $circ->ok ) {
-            $debug and warn "circ is ok";
 
             # If the item is already associated with this patron, then
             # we're renewing it.

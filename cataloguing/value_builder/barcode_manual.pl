@@ -27,8 +27,6 @@ use C4::Barcodes::ValueBuilder;
 use C4::Biblio qw/GetMarcFromKohaField/;
 use Koha::DateUtils;
 
-my $DEBUG = 0;
-
 my $builder = sub {
     my ( $params ) = @_;
     my $function_name = $params->{id};
@@ -45,7 +43,6 @@ my $builder = sub {
     my $nextnum;
     my $scr;
     my $autoBarcodeType = C4::Context->preference("autoBarcode");
-    warn "Barcode type = $autoBarcodeType" if $DEBUG;
     if ((not $autoBarcodeType) or $autoBarcodeType eq 'OFF') {
 # don't return a value unless we have the appropriate syspref set
         return q|<script></script>|;
