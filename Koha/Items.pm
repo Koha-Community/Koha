@@ -24,6 +24,7 @@ use Carp;
 use Koha::Database;
 
 use Koha::Item;
+use Koha::CirculationRules;
 
 use base qw(Koha::Objects);
 
@@ -48,6 +49,15 @@ Return the items of the set that are holdable
 sub filter_by_for_hold {
     my ($self) = @_;
 
+    my @hold_not_allowed_itypes = Koha::CirculationRules->search(
+        {
+            rule_name    => 'holdallowed',
+            branchcode   => undef,
+            categorycode => undef,
+            rule_value   => 'not_allowed',
+        }
+    )->get_column('itemtype');
+
     return $self->search(
         {
             itemlost   => 0,
@@ -55,6 +65,7 @@ sub filter_by_for_hold {
             notforloan => { '<=' => 0 }
             ,    # items with negative or zero notforloan value are holdable
             ( C4::Context->preference('AllowHoldsOnDamagedItems') ? ( damaged => 0 ) : () ),
+            itype        => { -not_in => \@hold_not_allowed_itypes },
         }
     );
 }
