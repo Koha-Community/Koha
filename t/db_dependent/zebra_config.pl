@@ -48,8 +48,10 @@ $ENV{'__DB_PORT__'} = C4::Context->config('port')      // '3306';
 $ENV{'__DB_USER__'} = C4::Context->config('user')      // 'kohaadmin';
 $ENV{'__DB_PASS__'} = C4::Context->config('pass')      // 'katikoan';
 
-my @files = ( "$source/etc/koha-conf.xml",
-            );
+my @files = (
+    "$source/etc/koha-conf.xml",
+    "$source/etc/log4perl.conf",
+);
 
 find(sub { push @files, $File::Find::name if ( -f $File::Find::name ); }, "$source/etc/zebradb");
 
@@ -57,6 +59,7 @@ foreach my $file (@files) {
     my $target = "$file";
     $target =~ s#$source#$destination#;
     $target =~ s#etc/zebradb#etc/koha/zebradb#;
+    $target =~ s#etc/log4perl\.conf#etc/koha/log4perl.conf#;
     unlink($target);
     make_path(dirname($target));
     copy("$file", "$target");
