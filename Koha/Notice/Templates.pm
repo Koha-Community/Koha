@@ -59,7 +59,9 @@ sub find_effective_template {
     my ( $self, $params ) = @_;
 
     $params = { %$params }; # don't modify original
-    $params->{lang} = 'default' unless C4::Context->preference('TranslateNotices');
+
+    $params->{lang} = 'default'
+      unless C4::Context->preference('TranslateNotices') && $params->{lang};
 
     my $only_my_library = C4::Context->only_my_library;
     if ( $only_my_library and $params->{branchcode} ) {
