@@ -69,9 +69,10 @@ if ( $op eq 'new' ) {
     }
 
     $template->param(
-        mode    => 'report',
-        msg     => $msg,
-        uploads => $uploads,
+        mode           => 'report',
+        msg            => $msg,
+        uploads        => $uploads,
+        browsecategory => $browsecategory,
     );
     output_html_with_http_headers $input, $cookie, $template->output;
 

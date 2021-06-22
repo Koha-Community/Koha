@@ -120,10 +120,15 @@
         <ol>
             <li>
                 <label for="browsecategory">Category: </label>
-                <select id="browsecategory" name="browsecategory">
-                [% FOREACH cat IN uploadcategories %]
-                    <option value="[% cat.code | html %]">[% cat.name | html %]</option>
-                [% END %]
+                <select id="browsecategory" name="browsecategory" required="required">
+                    <option value="">Choose</option>
+                    [% FOREACH cat IN uploadcategories %]
+                        [% IF cat.code == browsecategory %]
+                            <option value="[% cat.code | html %]" selected="selected">[% cat.name | html %]</option>
+                        [% ELSE -%]
+                            <option value="[% cat.code | html %]">[% cat.name | html %]</option>
+                        [% END %]
+                    [% END %]
                 </select>
             </li>
         </ol>
