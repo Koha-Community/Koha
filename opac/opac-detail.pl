@@ -689,7 +689,6 @@ if ( $show_holds_count || $show_priority) {
 }
 $template->param( show_priority => $has_hold ) ;
 
-my $norequests = 1;
 my %itemfields;
 my (@itemloop, @otheritemloop);
 my $currentbranch = C4::Context->userenv ? C4::Context->userenv->{branch} : undef;
@@ -733,13 +732,6 @@ if ( not $viewallitems and @items > $max_items_to_display ) {
     my $item = Koha::Items->find( $itm->{itemnumber} );
     $itm->{holds_count} = $item_reserves{ $itm->{itemnumber} };
     $itm->{priority} = $priority{ $itm->{itemnumber} };
-    $norequests = 0
-      if $norequests
-        && !$itm->{'withdrawn'}
-        && !$itm->{'itemlost'}
-        && ($itm->{'itemnotforloan'}<0 || not $itm->{'itemnotforloan'})
-        && !$itemtypes->{$itm->{'itype'}}->{notforloan}
-        && $itm->{'itemnumber'};
 
     $allow_onshelf_holds = Koha::CirculationRules->get_onshelfholds_policy( { item => $item, patron => $patron } )
       unless $allow_onshelf_holds;
@@ -843,6 +835,7 @@ if( C4::Context->preference('ArticleRequests') ) {
     $template->param( artreqpossible => $artreqpossible );
 }
 
+my $norequests = ! $biblio->items->filter_by_for_hold->count;
     $template->param(
                      MARCNOTES               => $marcnotesarray,
                      norequests              => $norequests,

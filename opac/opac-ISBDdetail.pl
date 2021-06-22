@@ -159,7 +159,6 @@ $template->param(
     subscriptionsnumber => $subscriptionsnumber,
 );
 
-my $norequests = 1;
 my $allow_onshelf_holds;
 my $res = GetISBDView({
     'record'    => $record,
@@ -169,13 +168,6 @@ my $res = GetISBDView({
 
 my $items = $biblio->items;
 while ( my $item = $items->next ) {
-    $norequests = 0
-      if $norequests
-        && !$item->withdrawn
-        && !$item->itemlost
-        && ($item->notforloan < 0 || not $item->notforloan )
-        && !Koha::ItemTypes->find($item->effective_itemtype)->notforloan
-        && $item->itemnumber;
 
     $allow_onshelf_holds = Koha::CirculationRules->get_onshelfholds_policy( { item => $item, patron => $patron } )
       unless $allow_onshelf_holds;
@@ -184,6 +176,8 @@ while ( my $item = $items->next ) {
 if( $allow_onshelf_holds || CountItemsIssued($biblionumber) || $biblio->has_items_waiting_or_intransit ) {
     $template->param( ReservableItems => 1 );
 }
+
+my $norequests = ! $items->filter_by_for_hold->count;
 
 $template->param(
     RequestOnOpac       => C4::Context->preference("RequestOnOpac"),

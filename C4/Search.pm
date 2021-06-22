@@ -1842,7 +1842,6 @@ sub searchResults {
         my $itembinding_count     = 0;
         my $itemdamaged_count     = 0;
         my $item_in_transit_count = 0;
-        my $can_place_holds       = 0;
         my $item_onhold_count     = 0;
         my $notforloan_count      = 0;
         my $items_count           = scalar(@fields);
@@ -1913,9 +1912,6 @@ sub searchResults {
                     $onloan_items->{$key}->{longoverdue}++;
                     $longoverdue_count++;
                 }
-                else {    # can place holds as long as item isn't lost
-                    $can_place_holds = 1;
-                }
             }
 
          # items not on loan, but still unavailable ( lost, withdrawn, damaged )
@@ -1977,18 +1973,6 @@ sub searchResults {
                     $item_onhold_count++     if $reservestatus eq 'Waiting';
                     $item->{status} = ($item->{withdrawn}//q{}) . "-" . ($item->{itemlost}//q{}) . "-" . ($item->{damaged}//q{}) . "-" . ($item->{notforloan}//q{});
 
-                    # can place a hold on a item if
-                    # not lost nor withdrawn
-                    # not damaged unless AllowHoldsOnDamagedItems is true
-                    # item is either for loan or on order (notforloan < 0)
-                    $can_place_holds = 1
-                      if (
-                           !$item->{itemlost}
-                        && !$item->{withdrawn}
-                        && ( !$item->{damaged} || C4::Context->preference('AllowHoldsOnDamagedItems') )
-                        && ( !$item->{notforloan} || $item->{notforloan} < 0 )
-                      );
-
                     $other_count++;
 
                     my $key = $prefix . $item->{status};
@@ -2005,7 +1989,6 @@ sub searchResults {
                 }
                 # item is available
                 else {
-                    $can_place_holds = 1;
                     $available_count++;
                     $available_items->{$prefix}->{count}++ if $item->{$hbranch};
                     foreach (qw(branchname itemcallnumber description)) {
@@ -2048,11 +2031,17 @@ sub searchResults {
             $oldbiblio->{XSLTResultsRecord} = XSLTParse4Display($oldbiblio->{biblionumber}, $marcrecord, $xslsyspref, 1, \@hiddenitems, $sysxml, $xslfile, $lang, $xslt_variables);
         }
 
+        my $biblio_object = Koha::Biblios->find( $oldbiblio->{biblionumber} );
+        $oldbiblio->{biblio_object} = $biblio_object;
+
+        my $can_place_holds = 1;
         # if biblio level itypes are used and itemtype is notforloan, it can't be reserved either
         if (!C4::Context->preference("item-level_itypes")) {
             if ($itemtype && $itemtype->{notforloan}) {
                 $can_place_holds = 0;
             }
+        } else {
+            $can_place_holds = $biblio_object->items->filter_by_for_hold()->count;
         }
         $oldbiblio->{norequests} = 1 unless $can_place_holds;
         $oldbiblio->{items_count}          = $items_count;
@@ -2100,8 +2089,6 @@ sub searchResults {
             $oldbiblio->{'ALTERNATEHOLDINGS'} = \@alternateholdingsinfo;
             $oldbiblio->{'alternateholdings_count'} = $alternateholdingscount;
         }
-
-        $oldbiblio->{biblio_object} = Koha::Biblios->find( $oldbiblio->{biblionumber} );
 
         push( @newresults, $oldbiblio );
     }

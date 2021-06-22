@@ -138,19 +138,10 @@ $template->param(
 ) if $tagslib->{$bt_tag}->{$bt_subtag}->{hidden} <= 0 && # <=0 OPAC visible.
      $tagslib->{$bt_tag}->{$bt_subtag}->{hidden} > -8;   # except -8;
 
-my $norequests = 1;
 my $allow_onshelf_holds;
 my $items = $biblio->items;
 
 while ( my $item = $items->next ) {
-    $norequests = 0
-      if $norequests
-        && !$item->withdrawn
-        && !$item->itemlost
-        && ($item->notforloan < 0 || not $item->notforloan )
-        && !Koha::ItemTypes->find($item->effective_itemtype)->notforloan
-        && $item->itemnumber;
-
     $allow_onshelf_holds = Koha::CirculationRules->get_onshelfholds_policy( { item => $item, patron => $patron } )
       unless $allow_onshelf_holds;
 }
@@ -386,6 +377,7 @@ if( C4::Context->preference('ArticleRequests') ) {
     $template->param( artreqpossible => $artreqpossible );
 }
 
+my $norequests = ! $biblio->items->filter_by_for_hold->count;
 $template->param(
     item_loop           => \@item_loop,
     item_header_loop    => \@item_header_loop,
