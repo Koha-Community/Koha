@@ -36,6 +36,7 @@ make_path("$destination/var/lib/zebradb/authorities/key");
 make_path("$destination/var/lib/zebradb/authorities/register");
 make_path("$destination/var/lib/zebradb/authorities/shadow");
 make_path("$destination/var/lib/zebradb/authorities/tmp");
+make_path("$destination/var/log/koha");
 make_path("$destination/var/run/zebradb");
 
 $ENV{'INSTALL_BASE'} = $destination;
@@ -47,6 +48,8 @@ $ENV{'__DB_HOST__'} = C4::Context->config('hostname')  // 'localhost';
 $ENV{'__DB_PORT__'} = C4::Context->config('port')      // '3306';
 $ENV{'__DB_USER__'} = C4::Context->config('user')      // 'kohaadmin';
 $ENV{'__DB_PASS__'} = C4::Context->config('pass')      // 'katikoan';
+
+$ENV{'__LOG_DIR__'} = "$destination/var/log/koha";
 
 my @files = (
     "$source/etc/koha-conf.xml",
