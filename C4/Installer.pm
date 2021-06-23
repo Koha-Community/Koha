@@ -869,13 +869,19 @@ sub NewVersion {
 
     SetVersion($DBversion);
 
-    unless ( ref($descriptions) ) {
-        $descriptions = [ $descriptions ];
+    my ( $description, $report );
+    if ( ref($descriptions) ) {
+        $description = shift @$descriptions;
+        $report      = join( "\n", @{$descriptions} );
+    }
+    else {
+        $description = $descriptions;
     }
 
     my $output = output_version( {
             bug_number  => $bug_number,
-            description => $descriptions,
+            description => $description,
+            report      => $report,
             version     => $DBversion,
             time        => POSIX::strftime( "%H:%M:%S", localtime ),
     });
