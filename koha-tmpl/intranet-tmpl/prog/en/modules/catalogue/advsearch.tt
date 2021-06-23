@@ -287,7 +287,7 @@
         <p><label for="branchloop">Individual libraries:</label><select name="limit" id="branchloop">
         <option value="">All libraries</option>
         [%# FIXME Should not we filter the libraries displayed? %]
-        [% PROCESS options_for_libraries prefix => "branch:" libraries => Branches.all( selected => selected_branchcode, unfiltered => 1 ) %]
+        [% PROCESS options_for_libraries prefix => "branch:" libraries => Branches.all( unfiltered => 1, do_not_select_my_library => 1 ) %]
         </select></p>
     <!-- <input type="hidden" name="limit" value="branch: MAIN" /> -->
         [% IF search_groups %]
