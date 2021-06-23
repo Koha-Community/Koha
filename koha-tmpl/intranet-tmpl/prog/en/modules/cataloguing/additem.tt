@@ -125,7 +125,7 @@
                     [% END %]
                 [% FOREACH header IN item_header_loop %]
                     [% SET attribute = header.attribute %]
-                    [% IF header.attribute AND date_fields.grep(attribute).size %]
+                    [% IF header.attribute AND date_fields.grep('^' _ attribute _ '$').size %]
                         <td data-order="[% item.$attribute | html %]">[% item.$attribute | $KohaDates %]</td>
                     [% ELSE %]
                         <td>[% item.$attribute | html %]</td>
