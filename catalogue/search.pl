@@ -235,7 +235,6 @@ my @search_groups =
 @search_groups = sort { $a->title cmp $b->title } @search_groups;
 
 $template->param(
-    selected_branchcode => ( C4::Context->IsSuperLibrarian ? C4::Context->userenv : '' ),
     search_groups    => \@search_groups,
 );
 
