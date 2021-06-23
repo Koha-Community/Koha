@@ -24365,6 +24365,16 @@ if ( CheckVersion($DBversion) ) {
     NewVersion( $DBversion, 15788, "Split edit_borrowers permission" );
 }
 
+$DBversion = '21.06.00.005';
+if( CheckVersion( $DBversion ) ) {
+    $dbh->do( q{
+        INSERT IGNORE INTO systempreferences (variable, value, explanation, options, type)
+        VALUES ('NewsLog', '0', 'If enabled, log OPAC News changes', '', 'YesNo')
+    });
+
+    NewVersion( $DBversion, 26205, "Add new system preference NewsLog to log news changes");
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 my $update_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/atomicupdate/';
