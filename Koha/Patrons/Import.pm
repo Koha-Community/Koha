@@ -349,7 +349,7 @@ sub import_patrons {
                 } elsif ( $_->isa('Koha::Exceptions::Patron::Attribute::NonRepeatable') ) {
                     push @errors, { patron_attribute_non_repeatable => 1, borrowernumber => $borrowernumber, attribute => $_->attribute };
                 } else {
-                    use Data::Printer colored => 1; warn p $_;
+                    warn $_;
                     push @errors, { unknown_error => 1 };
                 }
 
@@ -417,7 +417,7 @@ sub import_patrons {
                     push @errors, { patron_attribute_non_repeatable => 1, patron_id => $patron_id, attribute => $_->attribute };
 
                 } else {
-                    use Data::Printer colored => 1; warn p $_;
+                    warn $_;
                     push @errors, { unknown_error => 1 };
                 }
                 push(
