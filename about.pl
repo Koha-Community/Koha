@@ -55,9 +55,6 @@ use Koha::Filter::MARC::ViewPolicy;
 
 use C4::Members::Statistics;
 
-
-#use Smart::Comments '####';
-
 my $query = CGI->new;
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {

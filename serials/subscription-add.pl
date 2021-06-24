@@ -38,8 +38,6 @@ use Koha::Subscription::Numberpattern;
 use Koha::Subscription::Frequency;
 use Koha::SharedContent;
 
-#use Smart::Comments;
-
 our $query = CGI->new;
 my $op = $query->param('op') || '';
 my $dbh = C4::Context->dbh;

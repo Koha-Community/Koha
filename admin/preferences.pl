@@ -33,9 +33,6 @@ use YAML::XS;
 use Encode;
 use List::MoreUtils qw( any );
 
-# use Smart::Comments;
-#
-
 sub GetTab {
     my ( $input, $tab ) = @_;
 

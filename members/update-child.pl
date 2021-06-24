@@ -35,8 +35,6 @@ use Koha::Patrons;
 use Koha::Patron::Categories;
 use Koha::Patrons;
 
-# use Smart::Comments;
-
 my $dbh   = C4::Context->dbh;
 my $input = CGI->new;
 
