@@ -237,7 +237,7 @@ subtest 'XSS vulnerabilities in pagination' => sub {
     is( $alert_text, undef, 'No alert box displayed, even if evil intent' );
 
     my $second_page = $driver->find_element('//div[@class="pages"]/span[@class="currentPage"]/following-sibling::a');
-    like( $second_page->get_attribute('href'), qr{category=2%22%3E%3Cscript%3Ealert%28%27booh%21%27%29%3C%2Fscript%3E}, 'The second page should display the variables and attributes correctly URI escaped' );
+    like( $second_page->get_attribute('href'), qr{(?|&)category=2(&|$)}, 'The second page should display category without the invalid value' );
 
     push @cleanup, $patron, $patron->category, $patron->library;
 
