@@ -420,7 +420,7 @@
             });
 
             // Initialize format(s)
-            var supported_formats = "[% Koha.Preference('ArticleRequestsSupportedFormats') %]";
+            var supported_formats = "[% Koha.Preference('ArticleRequestsSupportedFormats') | $raw %]";
             if( !supported_formats.match(/PHOTOCOPY/) )
                 $('#format option[value="PHOTOCOPY"]').remove();
             if( !supported_formats.match(/SCAN/) )

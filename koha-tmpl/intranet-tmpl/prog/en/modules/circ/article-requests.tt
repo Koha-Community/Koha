@@ -25,7 +25,7 @@
                 </a>
 
                 [% IF id_arg && format=='SCAN' %]
-                <a class="ar-edit-urls" href="#" onclick="HandleMulti( EditURLs, [% id_arg %], $(this) ); return false;">
+                <a class="ar-edit-urls" href="#" onclick="HandleMulti( EditURLs, [% id_arg | html %], $(this) ); return false;">
                     <i class="fa fa-edit"></i>
                     Edit URLs
                 </a>
@@ -219,7 +219,7 @@
                                         <td class="ar-enumchron">[% ar.item.enumchron | html %]</td>
                                         <td class="ar-barcode">[% ar.item.barcode | html %]</td>
                                         <td class="ar-format">[% IF ar.format == 'PHOTOCOPY' %]Copy[% ELSIF ar.format == 'SCAN' %]Scan[% END %]</td>
-                                        <td class="ar-urls">[% IF ar.format == 'SCAN' %]<span id="url_yesno_[% ar.id %]">[% IF ar.urls %]Yes[% ELSE %]No[% END%]</span><span id="url_[% ar.id%]" style="display:none;">[% ar.urls %]</span>[% END %]</td>
+                                        <td class="ar-urls">[% IF ar.format == 'SCAN' %]<span id="url_yesno_[% ar.id | html %]">[% IF ar.urls %]Yes[% ELSE %]No[% END%]</span><span id="url_[% ar.id | html %]" style="display:none;">[% ar.urls | url %]</span>[% END %]</td>
                                         <td class="ar-patron">
                                             <p>
                                                 <a href="/cgi-bin/koha/circ/circulation.pl?findborrower=[% ar.borrower.cardnumber | uri %]">
@@ -322,7 +322,7 @@
                                         <td class="ar-enumchron">[% ar.item.enumchron | html %]</td>
                                         <td class="ar-barcode">[% ar.item.barcode | html %]</td>
                                         <td class="ar-format">[% IF ar.format == 'PHOTOCOPY' %]Copy[% ELSIF ar.format == 'SCAN' %]Scan[% END %]</td>
-                                        <td class="ar-urls">[% IF ar.format == 'SCAN' %]<span id="url_yesno_[% ar.id %]">[% IF ar.urls %]Yes[% ELSE %]No[% END%]</span><span id="url_[% ar.id%]" style="display:none;">[% ar.urls %]</span>[% END %]</td>
+                                        <td class="ar-urls">[% IF ar.format == 'SCAN' %]<span id="url_yesno_[% ar.id | html %]">[% IF ar.urls %]Yes[% ELSE %]No[% END%]</span><span id="url_[% ar.id | html %]" style="display:none;">[% ar.urls | url %]</span>[% END %]</td>
                                         <td class="ar-patron">
                                             <p>
                                                 <a href="/cgi-bin/koha/circ/circulation.pl?findborrower=[% ar.borrower.cardnumber | uri %]">
