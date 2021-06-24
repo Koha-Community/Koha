@@ -46,9 +46,9 @@ GetOptions(
 pod2usage(1) if $help || ( !$confirm && !$test_parameter );
 print "### Database will not be modified ###\n" if $test_parameter;
 
-#dbh
 my $dbh = C4::Context->dbh;
-$dbh->{AutoCommit} = 0;
+my $schema = Koha::Database->schema;
+$schema->txn_begin;
 
 #sysprefs
 C4::Context->disable_syspref_cache() if ( defined( C4::Context->disable_syspref_cache() ) );
@@ -56,7 +56,10 @@ my $CataloguingLog = C4::Context->preference('CataloguingLog');
 my $mergelimit     = C4::Context->preference('AuthorityMergeLimit');
 $dbh->do("UPDATE systempreferences SET value=0 WHERE variable='CataloguingLog'");
 $dbh->do("UPDATE systempreferences SET value=0 where variable='AuthorityMergeLimit'");
-$dbh->commit() unless $test_parameter;
+unless ($test_parameter){
+    $schema->txn_commit;
+    $schema->txn_begin;
+}
 my ( $itemfield, $itemnumbersubfield ) = &GetMarcFromKohaField( "items.itemnumber" );
 
 #dbh query init
@@ -93,8 +96,10 @@ while ( my ( $biblionumber, $biblioitemnumber, $frameworkcode ) = $sth->fetchrow
             if ($@) { warn "Problem with : $biblionumber : $@"; warn $record->as_formatted; }
         }
     }
-    unless ($test_parameter) {
-        $dbh->commit() unless $count % 1000;
+
+    unless ($test_parameter || $count % 1000) {
+        $schema->txn_commit;
+        $schema->txn_begin;
     }
 }
 
@@ -102,7 +107,7 @@ my $sthCataloguingLog = $dbh->prepare("UPDATE systempreferences SET value=? WHER
 $sthCataloguingLog->execute($CataloguingLog);
 my $sthmergelimit = $dbh->prepare("UPDATE systempreferences SET value=? WHERE variable='AuthorityMergeLimit'");
 $sthmergelimit->execute($mergelimit);
-$dbh->commit() unless $test_parameter;
+$schema->txn_commit unless $test_parameter;
 my $timeneeded = time() - $starttime;
 print "$count MARC record done in $timeneeded seconds\n";
 if ( scalar(@errors) > 0 ) {
