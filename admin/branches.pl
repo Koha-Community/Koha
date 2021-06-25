@@ -91,7 +91,12 @@ if ( $op eq 'add_form' ) {
     if ($is_a_modif) {
         my $library = Koha::Libraries->find($branchcode);
         for my $field (@fields) {
-            $library->$field( scalar $input->param($field) );
+            if ( $field eq 'pickup_location' ) {
+                # Don't fallback to undef/NULL, default is 1 in DB
+                $library->$field( scalar $input->param($field) );
+            } else {
+                $library->$field( scalar $input->param($field) || undef );
+            }
         }
 
         try {
@@ -119,12 +124,19 @@ if ( $op eq 'add_form' ) {
         }
         catch {
             push @messages, { type => 'alert', code => 'error_on_update' };
-        }
+        };
     } else {
         $branchcode =~ s|\s||g;
         my $library = Koha::Library->new(
-            {   branchcode => $branchcode,
-                ( map { $_ => scalar $input->param($_) || undef } @fields )
+            {
+                branchcode => $branchcode,
+                (
+                    map {
+                        $_ eq 'pickup_location' # Don't fallback to undef/NULL, default is 1 in DB
+                          ? ( $_ => scalar $input->param($_) )
+                          : ( $_ => scalar $input->param($_) || undef )
+                    } @fields
+                )
             }
         );
 
