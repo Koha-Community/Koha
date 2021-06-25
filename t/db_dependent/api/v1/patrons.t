@@ -33,6 +33,8 @@ use Koha::Exceptions::Patron::Attribute;
 use Koha::Patron::Attributes;
 use Koha::Patron::Debarments qw/AddDebarment/;
 
+use JSON qw(encode_json);
+
 my $schema  = Koha::Database->new->schema;
 my $builder = t::lib::TestBuilder->new;
 
@@ -87,7 +89,7 @@ subtest 'list() tests' => sub {
 
         subtest 'searching date and date-time fields' => sub {
 
-            plan tests => 6;
+            plan tests => 12;
 
             my $date_of_birth = '1980-06-18';
             my $last_seen     = '2021-06-25 14:05:35';
@@ -109,6 +111,28 @@ subtest 'list() tests' => sub {
               ->json_is( '/0/patron_id' => $patron->id, 'Filtering by date works' );
 
             $t->get_ok("//$userid:$password@/api/v1/patrons?last_seen=" . $last_seen_rfc3339 . "&cardnumber=" . $patron->cardnumber)
+              ->status_is(200)
+              ->json_is( '/0/patron_id' => $patron->id, 'Filtering by date-time works' );
+
+            my $q = encode_json(
+                {
+                    date_of_birth => $date_of_birth,
+                    cardnumber    => $patron->cardnumber,
+                }
+            );
+
+            $t->get_ok("//$userid:$password@/api/v1/patrons?q=$q")
+              ->status_is(200)
+              ->json_is( '/0/patron_id' => $patron->id, 'Filtering by date works' );
+
+            $q = encode_json(
+                {
+                    last_seen  => $last_seen_rfc3339,
+                    cardnumber => $patron->cardnumber,
+                }
+            );
+
+            $t->get_ok("//$userid:$password@/api/v1/patrons?q=$q")
               ->status_is(200)
               ->json_is( '/0/patron_id' => $patron->id, 'Filtering by date-time works' );
         };
