@@ -694,6 +694,7 @@ sub attributes_from_api {
 
     my $params;
     my $columns_info = $self->_result->result_source->columns_info;
+    my $dtf          = $self->_result->result_source->storage->datetime_parser;
 
     while (my ($key, $value) = each %{ $from_api_params } ) {
         my $koha_field_name =
@@ -708,7 +709,12 @@ sub attributes_from_api {
         }
         elsif ( _date_or_datetime_column_type( $columns_info->{$koha_field_name}->{data_type} ) ) {
             try {
-                $value = dt_from_string($value, 'rfc3339');
+                if ( $columns_info->{$koha_field_name}->{data_type} eq 'date' ) {
+                    $value = $dtf->format_date(dt_from_string($value, 'rfc3339'));
+                }
+                else {
+                    $value = $dtf->format_datetime(dt_from_string($value, 'rfc3339'));
+                }
             }
             catch {
                 Koha::Exceptions::BadParameter->throw( parameter => $key );
