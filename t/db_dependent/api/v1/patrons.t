@@ -28,6 +28,7 @@ use t::lib::Dates;
 
 use C4::Auth;
 use Koha::Database;
+use Koha::DateUtils qw(dt_from_string output_pref);
 use Koha::Exceptions::Patron;
 use Koha::Exceptions::Patron::Attribute;
 use Koha::Patron::Attributes;
@@ -47,7 +48,7 @@ subtest 'list() tests' => sub {
     $schema->storage->txn_rollback;
 
     subtest 'librarian access tests' => sub {
-        plan tests => 16;
+        plan tests => 17;
 
         $schema->storage->txn_begin;
 
@@ -84,6 +85,34 @@ subtest 'list() tests' => sub {
           ->json_has('/0/restricted')
           ->json_is( '/0/restricted' => Mojo::JSON->true )
           ->json_hasnt('/1');
+
+        subtest 'searching date and date-time fields' => sub {
+
+            plan tests => 6;
+
+            my $date_of_birth = '1980-06-18';
+            my $last_seen     = '2021-06-25 14:05:35';
+
+            my $patron = $builder->build_object(
+                {
+                    class => 'Koha::Patrons',
+                    value => {
+                        dateofbirth => $date_of_birth,
+                        lastseen    => $last_seen,
+                    }
+                }
+            );
+
+            my $last_seen_rfc3339 = $last_seen . "z";
+
+            $t->get_ok("//$userid:$password@/api/v1/patrons?date_of_birth=" . $date_of_birth . "&cardnumber=" . $patron->cardnumber)
+              ->status_is(200)
+              ->json_is( '/0/patron_id' => $patron->id, 'Filtering by date works' );
+
+            $t->get_ok("//$userid:$password@/api/v1/patrons?last_seen=" . $last_seen_rfc3339 . "&cardnumber=" . $patron->cardnumber)
+              ->status_is(200)
+              ->json_is( '/0/patron_id' => $patron->id, 'Filtering by date-time works' );
+        };
 
         $schema->storage->txn_rollback;
     };
