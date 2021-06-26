@@ -7,8 +7,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 18.05\n"
-"POT-Creation-Date: 2021-05-15 15:10-0300\n"
-"PO-Revision-Date: 2021-05-17 08:32+0000\n"
+"POT-Creation-Date: 2021-06-20 02:20-0300\n"
+"PO-Revision-Date: 2021-05-27 05:20+0000\n"
 "Last-Translator: shahab.bohlooli@gmail.com <shahab.bohlooli@gmail.com>\n"
 "Language-Team: Pendar <ebrahimi_info@yahoo.com>\n"
 "Language: fa\n"
@@ -19,7 +19,7 @@ msgstr ""
 "X-Generator: Pootle 2.8\n"
 "X-Pootle-Path: /fa/18.05/fa-Arab-staff-prog.po\n"
 "X-Pootle-Revision: 1\n"
-"X-POOTLE-MTIME: 1621240344.101822\n"
+"X-POOTLE-MTIME: 1622092811.143307\n"
 
 #. %1$s:  data.borrowernumber | html 
 #. %2$s:  UNLESS loop.last 
@@ -110,12 +110,16 @@ msgstr ""
 #. %17$s: ~ type        = type | html ~
 #. %18$s: ~ IF can_manage_shelf ~
 #: intranet-tmpl/prog/en/modules/virtualshelves/tables/shelves_results.tt:20
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "\", \"dt_sortby\": %s\"Author\"%s\"Year\"%s\"Call number\"%s\"Date added\"%s"
 "\"Title\"%s, \"dt_created_on\": \"%s\", \"dt_modification_time\": \"%s\", "
 "\"dt_action\": \"%s\" }%s,%s %s ] } %s %s %s %s %s %s [%%~ action_block = '"
-msgstr "عنوان"
+msgstr ""
+"\", \"dt_مرتب سازی براساس\": %s\"نویسنده\"%s\"سال\"%s\"شماره بازیابی\"%s"
+"\"افزودن تاریخ\"%s\"عنوان\"%s, \"dt_ایجاد شده در\": \"%s\", \"dt_اصلاح آیتم"
+"\": \"%s\", \"dt_گزارش\": \"%s\" }%s,%s %s ] } %s %s %s %s %s %s [%%~ اقدام "
+"به مسدود کردن = ' "
 
 #. %1$s:  END 
 #. %2$s:  data.cardnumber | html | $To 
@@ -1462,6 +1466,10 @@ msgid ""
 "number &lt; %sPatron sort1 = %sPatron sort2 = %sHome library = %sHolding "
 "library = %sPatron library = %sIssuing library = %s%s = %s %s "
 msgstr ""
+"%s %s %sدوره از %sدوره به %sفهرست اعضا = %sنوع منبع = %sکتابخانه توزیع کننده "
+"= %sمجموعه = %sمحل = %sشماره بازیابی منبع &gt;= %sشماره بازیابی منبع &lt; "
+"%sترتیب اعضا 1 = %sترتیب اعضا 2 = %sکتابخانه خانگی = %sامانت کتابخانه ای = "
+"%sاعضای کتابخانه = %sکتابخانه توزیع کننده = %s%s = %s %s "
 
 #. %1$s: - BLOCK role -
 #. %2$s: - SWITCH role.key -
@@ -3415,7 +3423,7 @@ msgstr "%s ‏(%s سال)"
 #: intranet-tmpl/prog/en/modules/serials/serials-collection.tt:28
 #, c-format
 msgid "%s (%s) %s %scallnumber: %s%s"
-msgstr ""
+msgstr "%s (%s) %s %sشماره بازیابی: %s%s"
 
 #. %1$s:  IF location 
 #. %2$s:  AuthorisedValues.GetByCode('LOC', location) | html 
@@ -3426,7 +3434,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/serials/serials-edit.tt:95
 #, c-format
 msgid "%s (%s)%s %s callnumber: %s%s"
-msgstr "%s ‏(%s)%s %s شماره فراخوانی: %s%s "
+msgstr "%s (%s)%s %s شماره بازیابی: %s%s"
 
 #. %1$s:  issue.item.biblio.title | html 
 #. %2$s:  issue.item.barcode | html 
@@ -5457,12 +5465,6 @@ msgid ""
 "CAN_user_tools_upload_local_cover_images ) %%] "
 msgstr ""
 
-#. %1$s:  INCLUDE 'doc-head-close.inc' 
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:13
-#, c-format
-msgid "%s [%%# As long as cataloging plugins rely on "
-msgstr ""
-
 #. %1$s:  ELSIF ( rule.hardduedateafter ) 
 #. %2$s:  rule.hardduedate | html 
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:172
@@ -6514,9 +6516,9 @@ msgstr "%s لا يوجد باركود %s "
 #. %3$s:  ELSE 
 #. %4$s:  END 
 #: intranet-tmpl/prog/en/modules/reports/catalogue_out.tt:72
-#, fuzzy, c-format
+#, c-format
 msgid "%s%s%sNo call number%s"
-msgstr "%s (%s ) %s %sرقم الإستدعاء: %s%s"
+msgstr "%s%s%sبدون شماره بازیابی%s"
 
 #. %1$s:  IF ( slip ) 
 #. %2$s:  slip | html 
@@ -7461,6 +7463,9 @@ msgid ""
 "library, Current location, Shelving location, Itemtype, Inventory number, "
 "Not for loan status, Lost status, Withdrawn status, Checkouts%s "
 msgstr ""
+"%sعنوان, تاریخ انتشار, ناشر, مجموعه, بارکد, شماره بازیابی, کتابخانه خانگی, "
+"محل فعلی, محل قفسه بندی, نوع منبع, شماره موجودی, وضعیت برای امانت نیست, "
+"وضعیت گمشده, وضعیت پس گرفته شده, امانت ها%s "
 
 #. %1$s:  CASE 
 #. %2$s:  message.error | html 
@@ -7839,7 +7844,7 @@ msgstr "&nbsp;&nbsp;&nbsp;&nbsp; المؤلف كعبارة"
 #: intranet-tmpl/prog/en/includes/search_indexes.inc:138
 #, c-format
 msgid "&nbsp;&nbsp;&nbsp;&nbsp; Call number"
-msgstr "&nbsp;&nbsp;&nbsp;&nbsp; شماره بازیابی"
+msgstr "&nbsp;&nbsp;&nbsp;&nbsp; شماره بازیابی "
 
 #: intranet-tmpl/prog/en/includes/search_indexes.inc:29
 #: intranet-tmpl/prog/en/includes/search_indexes.inc:31
@@ -10060,7 +10065,7 @@ msgstr "( هو %s)"
 #: intranet-tmpl/prog/en/modules/tools/inventory.tt:81
 #, c-format
 msgid "(items.itemcallnumber) "
-msgstr "(المواد.رقم طلب الأوعية)"
+msgstr "(منبع.شماره بازیابی منبع) "
 
 #. %1$s:  resultsloo.timestamp | html 
 #: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:97
@@ -14678,7 +14683,7 @@ msgstr "دسترسی"
 #: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:60
 #, c-format
 msgid "Available call numbers"
-msgstr "أرقام الاتصال المتاحة"
+msgstr "شماره بازیابی موجود"
 
 #. INPUT type=text
 #: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:188
@@ -16396,7 +16401,7 @@ msgstr "شماره بازیابی"
 #: intranet-tmpl/prog/en/modules/catalogue/results.tt:222
 #, c-format
 msgid "Call number (0-9 to A-Z)"
-msgstr "شماره بازیابی (0-9 به الف تا ی)"
+msgstr "شماره بازیابی (0-9 تا الف تا ی)"
 
 #: intranet-tmpl/prog/en/includes/resort_form.inc:42
 #: intranet-tmpl/prog/en/includes/resort_form.inc:44
@@ -16404,18 +16409,18 @@ msgstr "شماره بازیابی (0-9 به الف تا ی)"
 #: intranet-tmpl/prog/en/modules/catalogue/results.tt:228
 #, c-format
 msgid "Call number (Z-A to 9-0)"
-msgstr "شماره بازیابی (ی-الف به 9-0)"
+msgstr "شماره بازیابی (ی-الف تا 9-0)"
 
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/cn_browser.tt:15
-#, fuzzy, c-format
+#, c-format
 msgid "Call number browser"
-msgstr "متوسط عدد الطلب"
+msgstr "جستجوی شماره بازیابی"
 
 #: intranet-tmpl/prog/en/modules/tools/export.tt:81
 #: intranet-tmpl/prog/en/modules/reports/catalogue_out.tt:39
 #, c-format
 msgid "Call number range"
-msgstr "متوسط عدد الطلب"
+msgstr "محدوده شماره بازیابی"
 
 #: intranet-tmpl/prog/en/modules/serials/subscription-add.tt:116
 #: intranet-tmpl/prog/en/modules/serials/serials-search.tt:236
@@ -16423,39 +16428,39 @@ msgstr "متوسط عدد الطلب"
 #: intranet-tmpl/prog/en/modules/serials/subscription-detail.tt:126
 #, c-format
 msgid "Call number:"
-msgstr "رقم الطلب:"
+msgstr "شماره بازیابی:"
 
 #: intranet-tmpl/prog/en/modules/reports/cat_issues_top.tt:93
-#, fuzzy, c-format
+#, c-format
 msgid "Call number: "
-msgstr "رقم الطلب:"
+msgstr "شماره بازیابی: "
 
 #: intranet-tmpl/prog/en/modules/circ/reserveratios.tt:50
-#, fuzzy, c-format
+#, c-format
 msgid "Call numbers"
-msgstr "أرقام الطلب"
+msgstr "شماره های بازیابی"
 
 #: intranet-tmpl/prog/en/modules/catalogue/stockrotation.tt:32
 #: intranet-tmpl/prog/en/modules/circ/on-site_checkouts.tt:36
-#, fuzzy, c-format
+#, c-format
 msgid "Callnumber"
 msgstr "شماره بازیابی"
 
 #: intranet-tmpl/prog/en/modules/tools/inventory.tt:85
-#, fuzzy, c-format
+#, c-format
 msgid "Callnumber classification scheme"
-msgstr "مصدر تصنيف جديد"
+msgstr "برنامه رده بندی شماره بازیابی"
 
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/cn_browser.tt:25
-#, fuzzy, c-format
+#, c-format
 msgid "Callnumber classification scheme:"
-msgstr "مصدر تصنيف جديد"
+msgstr "برنامه رده بندی شماره بازیابی:"
 
 #. %1$s:  subscription.callnumber | html 
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:546
-#, fuzzy, c-format
+#, c-format
 msgid "Callnumber: %s "
-msgstr "أرقام الطلب"
+msgstr "شماره بازیابی: %s "
 
 #: intranet-tmpl/prog/en/modules/about.tt:517
 #, c-format
@@ -22093,14 +22098,15 @@ msgid "Define cities and towns that your patrons live in."
 msgstr "عرف المدن والبلاد التى يعيش فيها المستفيد."
 
 #: intranet-tmpl/prog/en/modules/admin/admin-home.tt:151
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Define classification sources (i.e. call number schemes) used by your "
 "collection. Also define filing rules used for sorting call numbers and "
 "splitting rules for splitting them."
 msgstr ""
-"عرِّف مصادر التصنيف (مثال: الخطط ،رقم الإستدعاء) المستخدمة بواسطة مجموعتك. "
-"أيضاً عرِّف قواعد التصنيف المستخدمة لترتيب أرقام الإستدعاء."
+"طبقه بندی منابع تعیین شده (ترتیب شماره بازیابی) که در مجموعه شما استفاده می "
+"شود. هم چنین فایل قوانین ترتیب شماره های بازیابی و قوانین تقسیم برای جداسازی "
+"آن ها تعریف کنید."
 
 #: intranet-tmpl/prog/en/modules/admin/admin-home.tt:177
 #, c-format
@@ -27140,9 +27146,9 @@ msgid "From biblionumber: "
 msgstr "من الرقم الببليوجرافي:"
 
 #: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:174
-#, fuzzy, c-format
+#, c-format
 msgid "From call number:"
-msgstr "من رقم الإستدعاء للمادة:"
+msgstr "از شماره بازیابی:"
 
 #: intranet-tmpl/prog/en/modules/tools/holidays.tt:65
 #: intranet-tmpl/prog/en/modules/tools/holidays.tt:141
@@ -27169,7 +27175,7 @@ msgstr "من المكتبة الرئيسية :"
 #: intranet-tmpl/prog/en/modules/tools/export.tt:84
 #, c-format
 msgid "From item call number: "
-msgstr "من رقم الإستدعاء للمادة:"
+msgstr "از شماره بازیابی منبع: "
 
 #: intranet-tmpl/prog/en/includes/acquisitions-add-to-basket.inc:22
 #, c-format
@@ -30815,17 +30821,17 @@ msgstr "إدخال الباركود:"
 #: intranet-tmpl/prog/en/modules/reports/issues_stats.tt:211
 #, c-format
 msgid "Item call number"
-msgstr "رقم طلب مادة"
+msgstr "شماره بازیابی منبع"
 
 #: intranet-tmpl/prog/en/modules/tools/inventory.tt:80
-#, fuzzy, c-format
+#, c-format
 msgid "Item callnumber between: "
-msgstr "رقم إستدعاء المادة بينَ:"
+msgstr "شماره بازیابی آیتم بین: "
 
 #: intranet-tmpl/prog/en/modules/catalogue/moredetail.tt:70
 #, c-format
 msgid "Item callnumber:"
-msgstr "رقم إستدعاء المادة:"
+msgstr "شماره بازیابی منبع:"
 
 #: intranet-tmpl/prog/en/modules/circ/renew.tt:138
 #, fuzzy, c-format
@@ -32920,9 +32926,9 @@ msgid "Koha &rsaquo; Cataloging &rsaquo; Attach an item to %s"
 msgstr "كوها &rsaquo; الفهرسة &rsaquo; إستيراد مارك"
 
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/cn_browser.tt:4
-#, fuzzy, c-format
+#, c-format
 msgid "Koha &rsaquo; Cataloging &rsaquo; Call number browser"
-msgstr "كوها &rsaquo; الفهرسة &rsaquo; إستيراد مارك"
+msgstr "کوها &rsaquo; فهرست نویسی &rsaquo; مرور شماره بازیابی"
 
 #: intranet-tmpl/prog/en/modules/cataloguing/editor.tt:4
 #, fuzzy, c-format
@@ -34308,7 +34314,7 @@ msgstr "حقل كوها:"
 #: intranet-tmpl/prog/en/modules/reports/catalogue_stats.tt:80
 #, c-format
 msgid "Koha full call number"
-msgstr "رقم الإستدعاء الكامل في كوها"
+msgstr "شماره بازیابی کامل کوها"
 
 #: intranet-tmpl/prog/en/modules/about.tt:790
 #, c-format
@@ -34421,9 +34427,9 @@ msgid "Kohala"
 msgstr "Kohala"
 
 #: intranet-tmpl/prog/en/modules/cataloguing/editor.tt:168
-#, fuzzy, c-format
+#, c-format
 msgid "LC call number:"
-msgstr "رقم تصنيف مكتبة الكونغرس: "
+msgstr "شماره بازیابی ال. سی:"
 
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:38
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:93
@@ -34432,7 +34438,7 @@ msgstr "رقم تصنيف مكتبة الكونغرس: "
 #: intranet-tmpl/prog/en/modules/admin/sru_modmapping.tt:30
 #, c-format
 msgid "LC call number: "
-msgstr "رقم تصنيف مكتبة الكونغرس: "
+msgstr "شماره بازیابی ال. سی: "
 
 #: intranet-tmpl/prog/en/columns.def:139
 #: intranet-tmpl/prog/en/includes/cateditor-ui.inc:41
@@ -35499,7 +35505,7 @@ msgstr "فهرست‌هایی که شامل این عنوان می‌شوند: "
 #: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:224
 #: intranet-tmpl/prog/en/modules/cataloguing/merge.tt:185
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:458
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:15
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:21
 #: intranet-tmpl/prog/en/modules/acqui/neworderbiblio.tt:112
 #: intranet-tmpl/prog/en/modules/acqui/edifactmsgs.tt:118
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1093
@@ -48618,12 +48624,12 @@ msgstr "البحث من خلال اسم فئة المستفيد:"
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/cn_browser.tt:19
 #, c-format
 msgid "Search call number:"
-msgstr "جستجوی شماره فراخوانی:"
+msgstr "جستجوی شماره بازیابی:"
 
 #. INPUT type=text
 #: intranet-tmpl/prog/en/modules/serials/serials-search.tt:76
 msgid "Search callnumber"
-msgstr "جستجوی شماره فراخوانی"
+msgstr "جستجوی شماره بازیابی"
 
 #: intranet-tmpl/prog/en/modules/admin/itemtypes.tt:126
 #: intranet-tmpl/prog/en/modules/admin/itemtypes.tt:356
@@ -50838,7 +50844,7 @@ msgid "Some Perl modules are missing. "
 msgstr "بعض وحدات بيرل مفقودة. الوحدات باللون الأحمر "
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:15
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:21
 #, fuzzy
 msgid "Some budgets are not defined in item records"
 msgstr "استلام الدورية لا ينشئ تسجيلة مادة"
@@ -51194,9 +51200,9 @@ msgid "Spine label"
 msgstr "لصاقات كعب الكتاب"
 
 #: intranet-tmpl/prog/en/modules/labels/label-edit-layout.tt:130
-#, fuzzy, c-format
+#, c-format
 msgid "Split call numbers: "
-msgstr "تقسيم رقم الاستدعاء"
+msgstr "تقسیم شماره های بازیابی: "
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/includes/str/tinymce_i18n.inc:1
@@ -52161,9 +52167,9 @@ msgid "Subscription begin"
 msgstr "ابدأ الاشتراك"
 
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:607
-#, fuzzy, c-format
+#, c-format
 msgid "Subscription callnumber"
-msgstr "رقم الإشتراك."
+msgstr "شماره بازیابی اشتراک"
 
 #. %1$s:  END 
 #: intranet-tmpl/prog/en/modules/serials/serials-collection.tt:62
@@ -54746,7 +54752,7 @@ msgid "There is no record of any messages that have been sent to this patron."
 msgstr "لا يوجد تسجيلة في أي الرسائل التي تم إرسالها إلى هذا المستفيد."
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:15
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:21
 #, fuzzy
 msgid "There is no record selected"
 msgstr "عدد التسجيلات التى تم حذفها"
@@ -55876,9 +55882,9 @@ msgid "To biblionumber: "
 msgstr "إلى الرقم الببليوجرافي:"
 
 #: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:179
-#, fuzzy, c-format
+#, c-format
 msgid "To call number:"
-msgstr "رقم تصنيف مكتبة الكونغرس: "
+msgstr "تا شماره بازیابی:"
 
 #: intranet-tmpl/prog/en/modules/onboarding/onboardingstep4.tt:39
 #, c-format
@@ -55916,7 +55922,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/tools/export.tt:88
 #, c-format
 msgid "To item call number: "
-msgstr "إلى رقم طلب المادة: "
+msgstr "تا شماره بازیابی منبع: "
 
 #: intranet-tmpl/prog/en/modules/about.tt:202
 #, c-format
@@ -61198,7 +61204,7 @@ msgid "call.ogg"
 msgstr ""
 
 #: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:257
-#, fuzzy, c-format
+#, c-format
 msgid "callnumber"
 msgstr "شماره بازیابی"
 
@@ -61568,7 +61574,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/labels/label-edit-layout.tt:114
 #, c-format
 msgid "ex: barcode, itemcallnumber, title, \"050a 050b\", 300a "
-msgstr "مثال: الباركود ، رقم الإستدعاء للمادة، العنوان، \"050a 050b\", 300a "
+msgstr "ex: بارکد, شماره بازیابی منبع, عنوان, \"050a 050b\", 300a "
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/includes/str/tinymce_i18n.inc:1
@@ -62676,7 +62682,7 @@ msgid "published by: %s %s %s in "
 msgstr "نشر من قبل:%s %s %s في "
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:15
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:21
 msgid "quantity values are not filled in or are not numbers"
 msgstr ""
 
