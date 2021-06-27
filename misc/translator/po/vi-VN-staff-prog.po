@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 20.11\n"
-"POT-Creation-Date: 2021-05-14 15:31-0300\n"
+"POT-Creation-Date: 2021-06-20 01:17-0300\n"
 "PO-Revision-Date: 2021-01-06 16:41+0000\n"
 "Last-Translator: vudoquynh <quynhvd@thanglong.edu.vn>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1121,7 +1121,7 @@ msgstr "Biểu ghi thư mục"
 #. %6$s:  ELSE 
 #. %7$s:  END 
 #. %8$s:  IF ( itemloo.canreservefromotherbranches ) 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:646
+#: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:648
 #, c-format
 msgid ""
 "%s %s %s Can't be cancelled when item is in transit %s %sWaiting%sOn hold%s "
@@ -2388,10 +2388,11 @@ msgstr "%s %s Đã đặt (%s) %s %s %s %s | "
 #. %10$s:  ELSIF itemloo.not_holdable == 'itemAlreadyOnHold' 
 #. %11$s:  ELSIF itemloo.not_holdable == 'cannotBeTransferred' 
 #. %12$s:  ELSIF itemloo.not_holdable == 'pickupNotInHoldGroup' 
-#. %13$s:  ELSE 
-#. %14$s:  itemloo.not_holdable | html 
-#. %15$s:  END 
+#. %13$s:  ELSIF itemloo.not_holdable == 'libraryNotPickupLocation' 
+#. %14$s:  ELSE 
+#. %15$s:  itemloo.not_holdable | html 
 #. %16$s:  END 
+#. %17$s:  END 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:573
 #, c-format
 msgid ""
@@ -2400,7 +2401,7 @@ msgid ""
 "Patron is from different library %s Cannot place hold from patron's library "
 "%s Patron already has hold for this item %s Cannot be transferred to pickup "
 "library %s Only pickup locations within the same hold group are allowed %s "
-"%s %s %s "
+"Library is not a pickup location %s %s %s %s "
 msgstr ""
 
 #. %1$s:  SWITCH cn 
@@ -2534,7 +2535,7 @@ msgstr "%s %s Không có ghi mượn %s "
 #. %2$s:  ELSE 
 #. %3$s:  END # /IF itemloo.reservedate 
 #. %4$s:  IF itemloo.item_level_holds == "N" 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:666
+#: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:668
 #, c-format
 msgid "%s %s Not on hold %s %s "
 msgstr "%s %s Không có đặt mượn %s %s "
@@ -3072,7 +3073,7 @@ msgstr "%s %s Trước ngày %s "
 #. %5$s:  IF ( overdueloo.enumchron ) 
 #. %6$s:  overdueloo.enumchron | html 
 #. %7$s:  END 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/overdue.tt:82
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/overdue.tt:95
 #, fuzzy, c-format
 msgid "%s %s, by %s%s%s, %s%s"
 msgstr "%s, Tác giả: %s%s%s, %s%s "
@@ -3314,7 +3315,7 @@ msgstr "Thủ thư"
 #. %4$s:  END 
 #. %5$s:  todaysdate | html 
 #. %6$s:  IF ( isfiltered ) 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/overdue.tt:36
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/overdue.tt:49
 #, c-format
 msgid "%s %sItems%sItem%s overdue as of %s%s "
 msgstr "%s %sTài liệu%sTài liệu%s quá hạn ngày %s%s "
@@ -3680,7 +3681,7 @@ msgstr ""
 #. %10$s:  itemloo.reservedate | html 
 #. %11$s:  END 
 #. %12$s:  END 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:655
+#: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:657
 #, fuzzy, c-format
 msgid "%s %sat%sexpected at%s %s since %s %s %s %s %s %s %s. "
 msgstr ""
@@ -4158,7 +4159,10 @@ msgid ""
 msgstr "%s (Nếu bạn tích vào ô, trường con này sẽ thành một URL)"
 
 #. For the first occurrence,
-#. %1$s:  budget_loo.b_txt | html 
+#. %1$s:  budget.b_txt | html 
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:147
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:151
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:357
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/duplicate_orders.tt:205
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoice.tt:90
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoice.tt:292
@@ -4477,7 +4481,7 @@ msgstr "%s Một lỗi không xác định đã xảy ra."
 #. %2$s:  ELSE 
 #. %3$s:  itemloo.pickup_locations | html 
 #. %4$s:  END 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:694
+#: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:696
 #, fuzzy, c-format
 msgid "%s Any library %s %s %s "
 msgstr "%s Tất cả thư viện %s%s %s"
@@ -4957,7 +4961,7 @@ msgstr "Tệp tin ảnh %s"
 #. %3$s:  Branches.GetName( itemloo.transfertto ) | html 
 #. %4$s:  itemloo.transfertwhen | html 
 #. %5$s:  END 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:641
+#: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:643
 #, fuzzy, c-format
 msgid "%s In transit from %s, to %s, since %s %s "
 msgstr "Đang chuyển từ thư viện %s tới thư viện %s từ ngày %s"
@@ -5298,6 +5302,22 @@ msgstr "%s Không giới hạn %s "
 #, c-format
 msgid "%s No limitation %s "
 msgstr "%s Không giới hạn %s "
+
+#. %1$s:  IF ( biblio_lis.overlay_status == 'no_match' ) 
+#. %2$s:  ELSIF ( biblio_lis.overlay_status == 'match_applied' ) 
+#. %3$s:  ELSIF ( biblio_lis.overlay_status == 'auto_match' ) 
+#. %4$s:  ELSE 
+#. %5$s:  biblio_lis.overlay_status | html 
+#. %6$s:  END 
+#. %7$s:  IF ( biblio.match_biblionumber ) 
+#. %8$s:  biblio.match_biblionumber | uri 
+#. %9$s:  biblio.match_score | html 
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:101
+#, c-format
+msgid ""
+"%s No match %s Match applied %s Match found %s %s %s %s Matches biblio %s "
+"(score = %s): "
+msgstr ""
 
 #. %1$s:  ELSE 
 #. %2$s:  END 
@@ -6132,12 +6152,6 @@ msgid ""
 "|| CAN_user_tools_marc_modification_templates || "
 "CAN_user_tools_stage_marc_import || CAN_user_tools_manage_staged_marc || "
 "CAN_user_tools_upload_local_cover_images ) %%] "
-msgstr ""
-
-#. %1$s:  INCLUDE 'doc-head-close.inc' 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:13
-#, c-format
-msgid "%s [%%# As long as cataloging plugins rely on "
 msgstr ""
 
 #. %1$s:  ELSIF ( hardduedatecompare == '1' ) 
@@ -7671,6 +7685,16 @@ msgstr ""
 "%sTài liệu quá hạn %sThông báo nâng cao %sSự kiện tiếp theo %sĐặt mượn được "
 "đáp ứng %sTài liệu ghi trả %sTài liệu ghi mượn %sKhông rõ %s"
 
+#. %1$s:  IF biblio.item_error 
+#. %2$s:  END 
+#. %3$s:  FOREACH item IN biblio.iteminfos 
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:169
+#, c-format
+msgid ""
+"%sItem records could not be processed because the number of item fields was "
+"uneven.%s %s "
+msgstr ""
+
 #. %1$s:  IF ( advsearchloo.advanced_search_type == 'itemtypes' ) 
 #. %2$s:  ELSIF ( advsearchloo.advanced_search_type == 'ccode' ) 
 #. %3$s:  ELSIF ( advsearchloo.advanced_search_type == 'loc' ) 
@@ -7832,7 +7856,7 @@ msgstr "%sQuá hạn!%s&nbsp;%s"
 
 #. %1$s: - BLOCK subject -
 #. %2$s: - END -
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/overdue.tt:68
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/overdue.tt:81
 #, fuzzy, c-format
 msgid "%sOverdue:%s "
 msgstr "Quá hạn"
@@ -8403,6 +8427,12 @@ msgstr "&nbsp;&nbsp;&nbsp;&nbsp; Cụm từ nhan đề"
 msgid "&nbsp;&nbsp;(format: yyyy-yyyy)"
 msgstr "&nbsp;&nbsp;(định dạng: yyyy-yyyy)"
 
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:75
+#, fuzzy, c-format
+msgid "&nbsp;Show inactive funds:"
+msgstr "&nbsp;Hiển thị tất cả:"
+
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:361
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/duplicate_orders.tt:209
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoice.tt:94
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoice.tt:296
@@ -9012,6 +9042,11 @@ msgstr "&rsaquo; Tạo đơn hàng từ ấn phẩm định kỳ"
 msgid "&rsaquo; Add order from a suggestion"
 msgstr "&rsaquo; Tạo đơn hàng từ đề xuất mua"
 
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:26
+#, fuzzy, c-format
+msgid "&rsaquo; Add orders from MARC file"
+msgstr "&rsaquo; Tạo đơn hàng từ đề xuất mua"
+
 #: koha-tmpl/intranet-tmpl/prog/en/modules/patron_lists/list.tt:30
 #, fuzzy, c-format
 msgid "&rsaquo; Add patrons"
@@ -9603,7 +9638,7 @@ msgid "&rsaquo; Overdue notice/status triggers"
 msgstr "Thông báo quá hạn"
 
 #. %1$s:  todaysdate | html 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/overdue.tt:22
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/overdue.tt:35
 #, c-format
 msgid "&rsaquo; Overdues as of %s"
 msgstr "&rsaquo; Tài liệu quá hạn ngày %s"
@@ -10323,7 +10358,7 @@ msgstr "(Lỗi)"
 msgid "(Example: \"001,245ab,600\")"
 msgstr "Ví dụ như: 5.00"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/overdue.tt:36
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/overdue.tt:49
 #, c-format
 msgid "(Filtered. "
 msgstr "(Dữ liệu đã được lọc. "
@@ -10847,7 +10882,7 @@ msgid "- None -"
 msgstr "%s Không giới hạn "
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:1004
+#: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:1006
 msgid "- Please select an item to place a hold"
 msgstr "- Vui lòng lựa chọn tài liệu để đặt mượn"
 
@@ -11054,7 +11089,7 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/holdshistory.tt:76
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/holdshistory.tt:83
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/readingrec.tt:107
-#: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:641
+#: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:643
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/claims.tt:149
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/claims.tt:157
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/serials-search.tt:122
@@ -11223,7 +11258,7 @@ msgid "A group with the title %s already exists. "
 msgstr "Mẫu đánh số ÂPĐK với tên bạn khai báo đã tồn tại trong hệ thống."
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:1004
+#: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:1006
 msgid "A hold cannot be requested on any of these items."
 msgstr "Một đặt mượn không thể được yêu cầu trên bất kỳ tài liệu nào."
 
@@ -11518,6 +11553,7 @@ msgstr "Số tiền: "
 msgid "Accounting"
 msgstr "Thông tin tiền phạt"
 
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:328
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/duplicate_orders.tt:181
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:299
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:244
@@ -11595,6 +11631,7 @@ msgstr "Thông tin bổ sung"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/intranet-main.tt:113
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/acqui-home.tt:25
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:26
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/basket.tt:39
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/basketgroup.tt:126
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/basketheader.tt:23
@@ -11733,10 +11770,10 @@ msgstr "Xử lý nếu không tìm thấy: "
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/z3950servers.tt:165
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:82
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:141
+#: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/clubs.tt:62
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/article-requests.tt:125
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/article-requests.tt:226
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/checkout-notes.tt:73
-#: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/clubs.tt:62
 #: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/course-details.tt:95
 #: koha-tmpl/intranet-tmpl/prog/en/modules/labels/label-manage.tt:70
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/apikeys.tt:58
@@ -11887,7 +11924,7 @@ msgstr "Giá thanh toán:"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:758
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:995
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/additem.tt:249
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/overdue.tt:173
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/overdue.tt:191
 #: koha-tmpl/intranet-tmpl/prog/en/modules/labels/result.tt:86
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:325
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:384
@@ -12347,6 +12384,7 @@ msgstr "Thêm dữ liệu lưu thông ngoại tuyến"
 msgid "Add or remove items"
 msgstr "Thêm/Loại bỏ tài liệu"
 
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:95
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:518
 #: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:147
 #, c-format
@@ -12367,6 +12405,14 @@ msgstr "Tạo đơn hàng tới giỏ đặt hàng %s"
 #, c-format
 msgid "Add orders"
 msgstr "Tạo đơn hàng"
+
+#. %1$s:  comments | html 
+#. %2$s:  file_name | html 
+#. %3$s:  upload_timestamp | $KohaDates  with_hours => 1 
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:37
+#, fuzzy, c-format
+msgid "Add orders from %s (%s staged on %s) "
+msgstr "Đăng ký cá biệt  %s %s%s %s"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/patron-attr-types.tt:54
 #, c-format
@@ -12744,8 +12790,8 @@ msgstr "Địa chỉ 2"
 msgid "Address 2: "
 msgstr "Địa chỉ 2: "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/overdue.tt:150
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/overdue.tt:151
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/overdue.tt:163
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/overdue.tt:164
 #, c-format
 msgid "Address in question"
 msgstr "Chưa có địa chỉ"
@@ -13020,7 +13066,7 @@ msgid "Age required: "
 msgstr "Giới hạn từ: "
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:327
-#: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:1004
+#: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:1006
 #, fuzzy, c-format
 msgid "Age restricted"
 msgstr "Bị khóa tài khoản"
@@ -14009,11 +14055,11 @@ msgstr "Mẫu đánh số ÂPĐK khác với tên tương tự đã tồn tại.
 msgid "Antenna.io"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/overdue.tt:140
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/overdue.tt:185
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/overdue.tt:196
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/overdue.tt:204
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/overdue.tt:212
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/overdue.tt:153
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/overdue.tt:203
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/overdue.tt:214
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/overdue.tt:222
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/overdue.tt:230
 #: koha-tmpl/intranet-tmpl/prog/en/modules/common/patron_search.tt:27
 #: koha-tmpl/intranet-tmpl/prog/en/modules/common/patron_search.tt:38
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/housebound.tt:75
@@ -14087,8 +14133,8 @@ msgstr "Tài liệu duy nhất "
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/cat_issues_top.tt:86
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/catalogue_out.tt:99
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:439
-#: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:891
-#: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:925
+#: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:893
+#: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:927
 #, c-format
 msgid "Any item type"
 msgstr "Tất cả"
@@ -14200,7 +14246,7 @@ msgid "Apply field weights to search"
 msgstr ""
 
 #. INPUT type=submit
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/overdue.tt:219
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/overdue.tt:237
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1281
 msgid "Apply filter"
 msgstr "Tìm kiếm"
@@ -14280,7 +14326,7 @@ msgstr "Bạn có chắc chắn muốn xóa ảnh đại diện của bạn đ�
 msgid "Are you sure you want to cancel adding this quote?"
 msgstr "Bạn chắc chắn muốn hủy việc tạo trích dẫn này?"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:973
+#: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:975
 #, c-format
 msgid "Are you sure you want to cancel this hold?"
 msgstr "Bạn chắc chắn muốn hủy bỏ đặt mượn này?"
@@ -15693,7 +15739,7 @@ msgstr "Mar"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/offline.tt:154
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/offline.tt:172
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/on-site_checkouts.tt:36
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/overdue.tt:62
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/overdue.tt:75
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/request-article.tt:157
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:834
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:59
@@ -15903,7 +15949,8 @@ msgid "Basket"
 msgstr "Giỏ đặt hàng"
 
 #. For the first occurrence,
-#. %1$s:  basket.basketno | html 
+#. %1$s:  basketno | html 
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:26
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/duplicate_orders.tt:29
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:18
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/neworderempty_duplicate.tt:10
@@ -17261,7 +17308,7 @@ msgstr "Ký hiệu phân loại"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/branchtransfers.tt:186
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:972
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/offline.tt:110
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/overdue.tt:63
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/overdue.tt:76
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:209
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/request-article.tt:159
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:838
@@ -17601,14 +17648,14 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/additem.tt:259
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:70
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:89
+#: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/clubs-add-modify.tt:123
+#: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/patron-enroll.tt:32
+#: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/templates-add-modify.tt:182
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/branchoverdues.tt:76
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/branchtransfers.tt:56
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/branchtransfers.tt:80
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:492
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/set-library.tt:119
-#: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/clubs-add-modify.tt:123
-#: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/patron-enroll.tt:32
-#: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/templates-add-modify.tt:182
 #: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/add_items-step1.tt:41
 #: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/add_items-step2.tt:191
 #: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/batch_add_items.tt:115
@@ -17652,7 +17699,7 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/en/modules/pos/registers.tt:178
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1110
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1219
-#: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:991
+#: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:993
 #: koha-tmpl/intranet-tmpl/prog/en/modules/rotating_collections/editCollections.tt:128
 #: koha-tmpl/intranet-tmpl/prog/en/modules/rotating_collections/transferCollection.tt:50
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/acqui-search-result.tt:37
@@ -17777,7 +17824,7 @@ msgstr "Hủy bộ lọc"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:250
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:259
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:176
-#: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:666
+#: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:668
 #: koha-tmpl/intranet-tmpl/prog/en/includes/holds_table.inc:199
 #: koha-tmpl/intranet-tmpl/prog/en/includes/waiting_holds.inc:55
 #, c-format
@@ -17888,8 +17935,8 @@ msgstr "Ngày hủy"
 msgid "Cancellation reason:"
 msgstr "Ngày hủy"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:828
-#: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:978
+#: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:830
+#: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:980
 #, fuzzy, c-format
 msgid "Cancellation reason: "
 msgstr "Ngày hủy"
@@ -17953,7 +18000,7 @@ msgid "Cannot be toggled"
 msgstr "Không thể tạo đơn hàng"
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:1004
+#: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:1006
 #, fuzzy
 msgid "Cannot be transferred to pickup library"
 msgstr "Tài liệu được trả lại thư viện cho mượn"
@@ -18063,7 +18110,7 @@ msgid "Cannot open this record in the basic editor"
 msgstr ""
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:316
-#: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:1004
+#: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:1006
 #, c-format
 msgid "Cannot place hold"
 msgstr "Không thể đặt mượn tài liệu"
@@ -18118,6 +18165,7 @@ msgstr "Giá thay thế"
 msgid "Caption"
 msgstr "Trích dẫn"
 
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:95
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/parcel.tt:176
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/parcel.tt:342
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:162
@@ -19690,7 +19738,7 @@ msgstr "Ghi chú"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:31
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:24
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/on-site_checkouts.tt:17
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/overdue.tt:22
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/overdue.tt:35
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:20
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/renew.tt:17
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/reserveratios.tt:25
@@ -20036,6 +20084,7 @@ msgstr "Đã xóa dữ liệu lô dữ liệu số %s"
 msgid "Clear"
 msgstr "Xóa"
 
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:53
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/duplicate_orders.tt:135
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:75
 #: koha-tmpl/intranet-tmpl/prog/en/modules/basket/basket.tt:6
@@ -20380,7 +20429,7 @@ msgstr "Sao chép chính sách lưu thông %s %s từ \"%s\"%s %s tới \"%s\"%s
 msgid "Cloning of circulation and fine rules failed!"
 msgstr "Việc sao chép chính sách lưu thông bị lỗi!"
 
-#. BUTTON
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:268
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/basket.tt:772
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/edifactmsgs.tt:96
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoices.tt:95
@@ -21091,7 +21140,7 @@ msgstr "Xác nhận"
 msgid "Confirm ILL request"
 msgstr "Xác nhận xóa"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:990
+#: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:992
 #, fuzzy, c-format
 msgid "Confirm cancellation"
 msgstr "Xác nhận xóa"
@@ -21110,7 +21159,7 @@ msgstr "Xác nhận tùy chỉnh báo cáo"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/basket.tt:101
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:124
-#: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:969
+#: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:971
 #, c-format
 msgid "Confirm deletion"
 msgstr "Xác nhận xóa"
@@ -22362,6 +22411,7 @@ msgstr "Tiền tệ"
 msgid "Currency = %s"
 msgstr "Tiền tệ = %s"
 
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:340
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/duplicate_orders.tt:185
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:367
 #: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:266
@@ -22588,7 +22638,7 @@ msgid "DVD video / Videodisc"
 msgstr "Đĩa DVD"
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:1004
+#: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:1006
 msgid "Daily hold limit reached for patron"
 msgstr ""
 
@@ -22851,7 +22901,7 @@ msgstr "Xóa tài liệu được chọn"
 msgid "Date due"
 msgstr "Ngày hết hạn"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/overdue.tt:117
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/overdue.tt:130
 #, c-format
 msgid "Date due:"
 msgstr "Ngày hết hạn:"
@@ -23162,6 +23212,11 @@ msgstr "Mặc định"
 #, fuzzy, c-format
 msgid "Default "
 msgstr "Mặc định"
+
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:45
+#, fuzzy, c-format
+msgid "Default accounting details"
+msgstr "Thông tin tài khoản"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/debit_types.tt:138
 #, fuzzy, c-format
@@ -23599,9 +23654,9 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:884
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/additem.tt:106
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:871
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/overdue.tt:175
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/overdue.tt:177
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/overdue.tt:179
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/overdue.tt:193
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/overdue.tt:195
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/overdue.tt:197
 #: koha-tmpl/intranet-tmpl/prog/en/modules/labels/label-edit-batch.tt:133
 #: koha-tmpl/intranet-tmpl/prog/en/modules/labels/label-manage.tt:88
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/apikeys.tt:74
@@ -24725,6 +24780,7 @@ msgstr "Tìm bạn đọc"
 msgid "Discount to apply: "
 msgstr "Giảm giá: "
 
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:130
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:415
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/supplier.tt:266
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/supplier.tt:314
@@ -24893,6 +24949,7 @@ msgstr "Không tạo tài liệu đính kèm tới biểu ghi thư mục khi nh�
 msgid "Do not create an item record when receiving this serial "
 msgstr "Không tạo tài liệu đính kèm tới biểu ghi thư mục khi nhận ÂPĐK "
 
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:59
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:134
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/stage-marc-import.tt:178
 #, c-format
@@ -25099,12 +25156,12 @@ msgstr "Tải cơ sở dữ liệu"
 msgid "Download directory: "
 msgstr "Tải cơ sở dữ liệu"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/overdue.tt:46
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/overdue.tt:59
 #, c-format
 msgid "Download file of all overdues"
 msgstr "Tải thông tin của tất cả tài liệu quá hạn"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/overdue.tt:44
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/overdue.tt:57
 #, c-format
 msgid "Download file of displayed overdues"
 msgstr "Tải thông tin tài liệu quá hạn đang được hiển thị"
@@ -25178,7 +25235,7 @@ msgid "Duchesne County Library, USA"
 msgstr "Crawford County Federated Library System"
 
 #. %1$s:  itemloo.date_due | $KohaDates  as_due_date => 1 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:639
+#: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:641
 #, c-format
 msgid "Due %s"
 msgstr "Ngày hết hạn: %s"
@@ -25187,7 +25244,7 @@ msgstr "Ngày hết hạn: %s"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:276
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/offline.tt:152
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/offline.tt:170
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/overdue.tt:55
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/overdue.tt:68
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:831
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/accountline-details.tt:46
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/boraccount.tt:54
@@ -26177,8 +26234,8 @@ msgid "End date is not consistent with subscription length."
 msgstr "Ngày kết thúc không phù hợp với chiều dài ấn phẩm định kỳ."
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/aqcontract.tt:91
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/reserveratios.tt:159
 #: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/clubs-add-modify.tt:64
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/reserveratios.tt:159
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/subscription-detail.tt:360
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/export.tt:102
 #, c-format
@@ -26852,7 +26909,7 @@ msgid "Example: Personal name=200|Entry element=210$a|300|009"
 msgstr "Ví dụ như: Tên cá nhân=200|Thành tố=210$a|300|009"
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:1004
+#: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:1006
 msgid "Exceeded max holds per record"
 msgstr ""
 
@@ -26904,7 +26961,7 @@ msgstr "Báo cáo tài liệu quá hạn"
 msgid "Existing SQL"
 msgstr "Danh sách đặt mượn hiện tại"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:822
+#: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:824
 #, c-format
 msgid "Existing holds"
 msgstr "Danh sách đặt mượn hiện tại"
@@ -27922,7 +27979,7 @@ msgstr "Bộ lọc kho tài liệu"
 msgid "Filter location"
 msgstr "Bộ lọc kho tài liệu"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/overdue.tt:116
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/overdue.tt:129
 #, c-format
 msgid "Filter on:"
 msgstr "Bộ lọc dữ liệu:"
@@ -28709,7 +28766,7 @@ msgstr "Nhà cung cấp: "
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoices.tt:249
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoices.tt:264
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/parcels.tt:189
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/overdue.tt:129
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/overdue.tt:142
 #: koha-tmpl/intranet-tmpl/prog/en/modules/labels/label-edit-range.tt:28
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/claims.tt:70
 #, c-format
@@ -28840,6 +28897,10 @@ msgstr "Tổng số"
 msgid "Fund:"
 msgstr "Nguồn thanh toán:"
 
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:136
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:139
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:336
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:352
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/duplicate_orders.tt:199
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoice.tt:283
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:333
@@ -29868,7 +29929,7 @@ msgstr "Thư viện sở hữu"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:264
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:156
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/offline.tt:110
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/overdue.tt:61
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/overdue.tt:74
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:836
 #: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/course-details.tt:88
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/issues_stats.tt:252
@@ -30103,6 +30164,7 @@ msgstr "Kỳ nghỉ dài theo năm"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:13
 #: koha-tmpl/intranet-tmpl/prog/en/modules/intranet-main.tt:15
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/acqui-home.tt:16
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:26
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/basket.tt:38
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/basketgroup.tt:126
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/basketheader.tt:22
@@ -30206,6 +30268,10 @@ msgstr "Kỳ nghỉ dài theo năm"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/linkitem.tt:8
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/merge.tt:20
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/moveitem.tt:9
+#: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/club-enrollments.tt:15
+#: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/clubs-add-modify.tt:20
+#: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/clubs.tt:16
+#: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/templates-add-modify.tt:24
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/article-requests.tt:60
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/bookcount.tt:15
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/branchoverdues.tt:11
@@ -30216,7 +30282,7 @@ msgstr "Kỳ nghỉ dài theo năm"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:24
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/offline.tt:25
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/on-site_checkouts.tt:17
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/overdue.tt:22
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/overdue.tt:35
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:20
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/renew.tt:17
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/request-article.tt:19
@@ -30226,10 +30292,6 @@ msgstr "Kỳ nghỉ dài theo năm"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/transferstoreceive.tt:16
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:21
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/waitingreserves.tt:17
-#: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/club-enrollments.tt:15
-#: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/clubs-add-modify.tt:20
-#: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/clubs.tt:16
-#: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/templates-add-modify.tt:24
 #: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/add_items-step1.tt:10
 #: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/add_items-step2.tt:13
 #: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/batch_add_items.tt:16
@@ -30389,7 +30451,7 @@ msgstr "Thư viện chính"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:258
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/bookcount.tt:29
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/offline.tt:110
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/overdue.tt:60
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/overdue.tt:73
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/request-article.tt:158
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:835
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/transferstoreceive.tt:43
@@ -31009,6 +31071,11 @@ msgstr ""
 msgid "If empty, English is used"
 msgstr "Nếu bỏ trống, hệ thống mặc định sử dụng tiếng Anh"
 
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:132
+#, c-format
+msgid "If empty, discount rate from vendor will be used"
+msgstr ""
+
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/basket.tt:122
 #, c-format
 msgid ""
@@ -31509,6 +31576,19 @@ msgstr ""
 "Nhập cấu trúc khung mẫu biên mục %s (các trường và trường con) từ một tệp "
 "tin (.csv, .xml, .ods)"
 
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:326
+#, c-format
+msgid ""
+"Import all the checked items in the basket with the following accounting "
+"details (used only if no information is filled for the item):"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:277
+#, c-format
+msgid ""
+"Import all the checked items in the basket with the following parameters:"
+msgstr ""
+
 #. BUTTON
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/editor.tt:42
 msgid "Import an MARC (ISO 2709) or MARCXML record"
@@ -31814,7 +31894,7 @@ msgstr "Thông tin:"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:121
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:232
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:551
-#: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:726
+#: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:728
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/subscription-detail.tt:76
 #, c-format
 msgid "Information"
@@ -32108,6 +32188,7 @@ msgstr "Ghi chú nội bộ:"
 msgid "Internal note:"
 msgstr "Ghi chú nội bộ:"
 
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:367
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/basket.tt:507
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/basketheader.tt:83
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/duplicate_orders.tt:214
@@ -32574,6 +32655,7 @@ msgstr ""
 msgid "Italic"
 msgstr ""
 
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:281
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:284
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:177
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/request-article.tt:235
@@ -32602,6 +32684,12 @@ msgstr "Tài liệu "
 #, c-format
 msgid "Item %s"
 msgstr "Bản tài liệu %s"
+
+#. %1$s:  item.item_id | html 
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:173
+#, fuzzy, c-format
+msgid "Item Record %s"
+msgstr "Số bản ghi"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/course-details.tt:220
 #, fuzzy, c-format
@@ -32668,7 +32756,7 @@ msgid "Item count"
 msgstr "Số tài liệu"
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:1004
+#: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:1006
 #, fuzzy
 msgid "Item damaged"
 msgstr "Trường tài liệu"
@@ -32710,7 +32798,7 @@ msgstr "Tài liệu bị rút khỏi lưu thông (Giao dịch vẫn được lư
 msgid "Item has been withdrawn."
 msgstr "Tài liệu bị loại khỏi quá trình lưu thông"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/overdue.tt:202
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/overdue.tt:220
 #, c-format
 msgid "Item holding library:"
 msgstr "Thư viện sở hữu:"
@@ -32723,10 +32811,16 @@ msgstr "Thư viện sở hữu:"
 msgid "Item holds / Total holds"
 msgstr "Đặt mượn"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/overdue.tt:194
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/overdue.tt:212
 #, c-format
 msgid "Item home library:"
 msgstr "Thư viện chính:"
+
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:44
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:276
+#, fuzzy, c-format
+msgid "Item information"
+msgstr "System information"
 
 #. %1$s:  IF ( CAN_user_editcatalogue_edit_catalogue ) 
 #. %2$s:  UNLESS ( ITEM_DAT.nomod ) 
@@ -32776,13 +32870,13 @@ msgstr "Tài liệu bị hạn chế"
 
 #. %1$s:  END 
 #. %2$s:  IF ( itemloo.itemlost ) 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:675
+#: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:677
 #, fuzzy, c-format
 msgid "Item level hold forced from OPAC %s %s "
 msgstr "Đặt mượn"
 
 #. %1$s:  ELSIF itemloo.item_level_holds == "F" 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:673
+#: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:675
 #, c-format
 msgid "Item level hold not allowed from OPAC %s "
 msgstr ""
@@ -32960,7 +33054,7 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/branchtransfers.tt:187
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/offline.tt:155
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/offline.tt:173
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/overdue.tt:64
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/overdue.tt:77
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/request-article.tt:156
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:841
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:55
@@ -32980,7 +33074,7 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/reserves_stats.tt:150
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:229
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:538
-#: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:723
+#: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:725
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/subscription-batchedit.tt:39
 #: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:957
 #: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:959
@@ -33023,7 +33117,7 @@ msgstr "Không tìm thấy tài liệu."
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:203
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/moredetail.tt:37
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/moredetail.tt:84
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/overdue.tt:185
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/overdue.tt:203
 #: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/add_items-step2.tt:42
 #: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/batch_add_items.tt:39
 #: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:177
@@ -33484,6 +33578,11 @@ msgstr "Từ khóa:"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:16
 #, c-format
 msgid "Koha"
+msgstr "Koha"
+
+#: koha-tmpl/intranet-tmpl/prog/en/includes/doc-head-close.inc:9
+#, fuzzy
+msgid "Koha %s"
 msgstr "Koha"
 
 #. %1$s:  short_version | html 
@@ -34951,7 +35050,7 @@ msgid "Koha &rsaquo; Circulation &rsaquo; Holds to pull"
 msgstr "Koha &rsaquo; Phân hệ lưu thông &rsaquo; Đặt mượn chờ đáp ứng"
 
 #. %1$s:  todaysdate | html 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/overdue.tt:11
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/overdue.tt:12
 #, c-format
 msgid "Koha &rsaquo; Circulation &rsaquo; Items overdue as of %s"
 msgstr "Koha &rsaquo; Phân hệ lưu thông &rsaquo; Tài liệu quá hạn ngày %s"
@@ -36983,10 +37082,10 @@ msgstr "Thư viện"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/edi_ean_accounts.tt:137
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/overdrive.tt:32
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/detail.tt:815
+#: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/clubs.tt:61
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/bookcount.tt:39
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/on-site_checkouts.tt:36
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/request-article.tt:52
-#: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/clubs.tt:61
 #: koha-tmpl/intranet-tmpl/prog/en/modules/common/patron_search.tt:81
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/discharges.tt:27
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/holdshistory.tt:46
@@ -37149,7 +37248,7 @@ msgstr "Thư viện của bạn đọc:"
 msgid "Library of the Józef Piłsudski Institute of America, USA"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/overdue.tt:210
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/overdue.tt:228
 #, c-format
 msgid "Library of the patron:"
 msgstr "Thư viện của bạn đọc:"
@@ -37539,6 +37638,7 @@ msgstr "Giá sách ảo chứa nhan đề này: "
 msgid "Loading"
 msgstr "Đang tải"
 
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:265
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/edifactmsgs.tt:93
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/parcel.tt:391
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:181
@@ -37865,8 +37965,8 @@ msgstr "Nelsonville Public Library, Ohio, USA"
 msgid "Lost"
 msgstr "Bị mất thẻ"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/overdue.tt:154
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/overdue.tt:155
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/overdue.tt:167
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/overdue.tt:168
 #: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:41
 #, c-format
 msgid "Lost card"
@@ -38001,6 +38101,7 @@ msgstr "MADS (XML)"
 msgid "MALMARC"
 msgstr "MALMARC"
 
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:95
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/parcel.tt:175
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/parcel.tt:341
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:161
@@ -38123,6 +38224,7 @@ msgstr "Mẫu chỉnh sửa biểu ghi MARC"
 msgid "MARC organization code"
 msgstr "Cơ quan, tổ chức"
 
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:262
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/parcel.tt:388
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:178
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/detail.tt:974
@@ -39248,6 +39350,11 @@ msgstr "Thiếu mã quy tắc kiểm soát biểu ghi"
 msgid "Matching rule code: "
 msgstr "Mã quy tắc kiểm soát: "
 
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:56
+#, fuzzy, c-format
+msgid "Matching:"
+msgstr "Điểm kiểm soát "
+
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/matching-rules.tt:168
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/matching-rules.tt:218
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/matching-rules.tt:477
@@ -40276,11 +40383,11 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/items_search_fields.tt:63
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/sms_providers.tt:31
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smtp_servers.tt:226
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/request-article.tt:49
 #: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/club-enrollments.tt:27
 #: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/clubs.tt:57
 #: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/patron-clubs-tab.tt:9
 #: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/patron-clubs-tab.tt:42
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/request-article.tt:49
 #: koha-tmpl/intranet-tmpl/prog/en/modules/common/patron_search.tt:80
 #: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/course-reserves.tt:38
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/files.tt:38
@@ -40370,7 +40477,7 @@ msgstr ""
 "Tên hoặc số thẻ của bạn đọc không chính xác. Bạn vui lòng kiểm tra và tìm "
 "kiếm lại "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/overdue.tt:139
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/overdue.tt:152
 #, c-format
 msgid "Name or cardnumber:"
 msgstr "Tên/Số thẻ bạn đọc"
@@ -41258,6 +41365,7 @@ msgstr ""
 msgid "No (default)"
 msgstr "Không (mặc định)"
 
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:283
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:286
 #, c-format
 msgid ""
@@ -41652,7 +41760,7 @@ msgstr ""
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:285
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:329
-#: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:779
+#: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:781
 #, fuzzy, c-format
 msgid "No items are available"
 msgstr "Không có tài liệu sẵn sàng"
@@ -41912,11 +42020,20 @@ msgstr "Tên cho mùa"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:990
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:165
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:851
-#: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:830
-#: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:980
+#: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:832
+#: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:982
 #, fuzzy, c-format
 msgid "No reason given"
 msgstr "Tên cho mùa"
+
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:31
+#, fuzzy, c-format
+msgid ""
+"No record have been imported because they all match an existing record in "
+"your catalog."
+msgstr ""
+"Bạn đã lựa chọn một biểu ghi từ một nguồn dữ liệu bên ngoài giống với một "
+"biểu ghi thư mục hiện có trong cơ sở dữ liệu của bạn: %s"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:114
 #, fuzzy, c-format
@@ -41933,6 +42050,11 @@ msgstr "Không có bản ghi được kiểm duyệt."
 #, c-format
 msgid "No records have been staged."
 msgstr "Không có bản ghi được kiểm duyệt."
+
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:31
+#, fuzzy, c-format
+msgid "No records imported"
+msgstr "Số bản ghi đã bị từ chối"
 
 #. %1$s:  IF recordtype != 'biblio' 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:234
@@ -42193,7 +42315,7 @@ msgstr "Alternate contact: Tên"
 msgid "Non-patron guarantor surname"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/overdue.tt:66
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/overdue.tt:79
 #, fuzzy, c-format
 msgid "Non-public note"
 msgstr "Ghi chú nội bộ:"
@@ -42221,7 +42343,7 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/itemtypes.tt:150
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/itemtypes.tt:175
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:204
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/overdue.tt:149
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/overdue.tt:162
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:269
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/transferstoreceive.tt:72
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/acquisitions_stats.tt:106
@@ -42261,7 +42383,7 @@ msgid "None defined"
 msgstr "%s %sBất kỳ"
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:1004
+#: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:1006
 msgid "None of these items can normally be put on hold for this patron."
 msgstr "Bạn đọc này không được phép đặt mượn các tài liệu này."
 
@@ -42439,7 +42561,7 @@ msgid "Not for loan %s "
 msgstr "Không cho mượn: "
 
 #. %1$s:  AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.notforloan', authorised_value => itemloo.notforloan ) | html 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:691
+#: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:693
 #, fuzzy, c-format
 msgid "Not for loan (%s)"
 msgstr "Không cho mượn: "
@@ -42464,7 +42586,7 @@ msgid "Not for loan: "
 msgstr "Không cho mượn: "
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:1004
+#: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:1006
 #, fuzzy
 msgid "Not holdable"
 msgstr "Không sẵn sàng"
@@ -43590,7 +43712,7 @@ msgstr ""
 "Chỉ thư viện từ thư viện quản lý tài liệu mới có thể đặt mượn tài liệu."
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:1004
+#: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:1006
 msgid "Only pickup locations within the same hold group are allowed"
 msgstr ""
 
@@ -44238,8 +44360,8 @@ msgstr "Thông báo quá hạn: "
 msgid "Overdue notice/status triggers"
 msgstr "Thông báo quá hạn"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/overdue.tt:30
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/overdue.tt:98
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/overdue.tt:43
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/overdue.tt:111
 #, c-format
 msgid "Overdue report"
 msgstr "Báo cáo tài liệu quá hạn"
@@ -44650,7 +44772,7 @@ msgstr "Tài liệu sáng chế"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/article-requests.tt:224
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/branchoverdues.tt:39
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/on-site_checkouts.tt:36
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/overdue.tt:56
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/overdue.tt:69
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/request-article.tt:226
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:843
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:60
@@ -44693,7 +44815,7 @@ msgid "Patron activity"
 msgstr "Tình trạng hoạt động"
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:1004
+#: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:1006
 #, fuzzy
 msgid "Patron already has hold for this item"
 msgstr "Bạn muốn đặt mượn tài liệu này?"
@@ -44766,7 +44888,7 @@ msgstr "để kiểm tra lại."
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:94
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:471
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:698
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/overdue.tt:57
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/overdue.tt:70
 #: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep3.tt:61
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/borrowers_out.tt:78
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/borrowers_stats.tt:79
@@ -44789,7 +44911,7 @@ msgstr "Mẫu đánh số ÂPĐK này đã tồn tại. Bạn muốn chỉnh s�
 msgid "Patron category created!"
 msgstr "Kiểu bạn đọc: "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/overdue.tt:140
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/overdue.tt:153
 #, c-format
 msgid "Patron category:"
 msgstr "Kiểu bạn đọc:"
@@ -44839,7 +44961,7 @@ msgstr "Danh sách bạn đọc"
 msgid "Patron fines are over limit: %s"
 msgstr "Tiền phạt bạn đọc quá giới hạn: "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/overdue.tt:147
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/overdue.tt:160
 #, c-format
 msgid "Patron flags:"
 msgstr "Tình trạng bạn đọc:"
@@ -44995,7 +45117,7 @@ msgstr "Bạn đọc yêu cầu thay đổi thông tin"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:268
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:307
-#: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:762
+#: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:764
 #, fuzzy, c-format
 msgid "Patron has previously checked out this title"
 msgstr "(%s) đang được mượn bởi bạn đọc này. Bạn có muốn gia hạn cho bạn đọc?"
@@ -45053,7 +45175,7 @@ msgid "Patron is currently unrestricted."
 msgstr "Bạn đọc hiện tại không bị hạn chế tài khoản."
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:1004
+#: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:1006
 #, fuzzy
 msgid "Patron is from different library"
 msgstr "Bạn đọc không thuộc về thư viện của bạn (%s)"
@@ -45074,7 +45196,7 @@ msgstr "Bạn đọc bị KHÓA THẺ"
 msgid "Patron is restricted."
 msgstr "Bạn đọc bị KHÓA THẺ"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/overdue.tt:58
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/overdue.tt:71
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/issues_stats.tt:262
 #, fuzzy, c-format
 msgid "Patron library"
@@ -46008,10 +46130,10 @@ msgstr "Hiển thị từ %s tới %s  trong tổng số %skết quả được 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:500
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:502
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:504
-#: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:799
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:801
-#: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:804
+#: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:803
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:806
+#: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:808
 #: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:152
 #: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:130
 #: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:135
@@ -46045,12 +46167,12 @@ msgid "Place hold for %s %s (%s)"
 msgstr "Đặt mượn cho bạn đọc: %s %s (%s)"
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:1004
+#: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:1006
 msgid "Place hold on this item?"
 msgstr "Bạn muốn đặt mượn tài liệu này?"
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:1004
+#: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:1006
 msgid "Place hold?"
 msgstr "Bạn vẫn muốn đặt mượn cho bạn đọc?"
 
@@ -46223,7 +46345,7 @@ msgstr "Bạn hãy chọn một nhà cung cấp."
 msgid "Please choose an enrollment period in months OR by date."
 msgstr "Sử dụng bộ lọc phía bên trái giao diện để tìm kiếm dữ liệu của bạn."
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/overdue.tt:31
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/overdue.tt:44
 #, c-format
 msgid "Please choose one or more filters to proceed."
 msgstr "Sử dụng bộ lọc phía bên trái giao diện để tìm kiếm dữ liệu của bạn."
@@ -47205,7 +47327,7 @@ msgstr "Phiên trước đây"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/newordersuggestion.tt:35
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/uncertainprice.tt:82
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/detail.tt:727
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/overdue.tt:65
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/overdue.tt:78
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember-print.tt:45
 #: koha-tmpl/intranet-tmpl/prog/en/modules/pos/register.tt:82
 #: koha-tmpl/intranet-tmpl/prog/en/modules/pos/register.tt:171
@@ -47232,6 +47354,11 @@ msgstr "Đơn giá::"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:589
 #, c-format
 msgid "Price:"
+msgstr "Đơn giá::"
+
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:122
+#, fuzzy, c-format
+msgid "Price: "
 msgstr "Đơn giá::"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/advsearch.tt:205
@@ -47463,7 +47590,7 @@ msgstr "Mẫu in"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:976
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:836
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:231
-#: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:725
+#: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:727
 #: koha-tmpl/intranet-tmpl/prog/en/includes/holds_table.inc:7
 #, c-format
 msgid "Priority"
@@ -47814,7 +47941,7 @@ msgstr "Năm xuất bản"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoices.tt:291
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:252
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:520
-#: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:746
+#: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:748
 #, c-format
 msgid "Publication year:"
 msgstr "Năm xuất bản:"
@@ -48085,6 +48212,7 @@ msgstr "Số lượng nhận: "
 msgid "Quantity search"
 msgstr "Tìm kiếm số lượng"
 
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:117
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:302
 #, c-format
 msgid "Quantity: "
@@ -49348,6 +49476,11 @@ msgstr "Giá thay thế"
 msgid "Replacement price:"
 msgstr "Giá thay thế:"
 
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:126
+#, fuzzy, c-format
+msgid "Replacement price: "
+msgstr "Giá thay thế:"
+
 #: koha-tmpl/intranet-tmpl/prog/en/includes/ill-list-table.inc:27
 #, c-format
 msgid "Replied"
@@ -49597,6 +49730,10 @@ msgstr "Hãy nhập đúng địa chỉ thư điện tử."
 msgid "Require.js JS module system"
 msgstr "Required module missing"
 
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:119
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:156
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:247
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:315
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/basketheader.tt:54
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoice.tt:47
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoices.tt:124
@@ -49905,8 +50042,8 @@ msgstr "Nhập tài liệu"
 msgid "Reset"
 msgstr "Đặt lại"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/overdue.tt:36
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/overdue.tt:100
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/overdue.tt:49
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/overdue.tt:113
 #, c-format
 msgid "Reset filter"
 msgstr "thiết lập lại"
@@ -49988,8 +50125,8 @@ msgstr "Giới hạn truy cập: "
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:266
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:158
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:201
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/overdue.tt:152
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/overdue.tt:153
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/overdue.tt:165
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/overdue.tt:166
 #: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:42
 #, c-format
 msgid "Restricted"
@@ -52025,6 +52162,17 @@ msgstr "Chọn quỹ thanh toán"
 msgid "Select a fund"
 msgstr "Chọn quỹ thanh toán"
 
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:354
+#, c-format
+msgid "Select a fund (will populate orders/items if set)"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:141
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:240
+#, c-format
+msgid "Select a fund (will use default if set)"
+msgstr ""
+
 #: koha-tmpl/intranet-tmpl/prog/en/modules/installer/step1.tt:35
 #, fuzzy, c-format
 msgid "Select a language: "
@@ -52099,6 +52247,7 @@ msgstr "Chọn hình thức nhãn: "
 msgid "Select a time"
 msgstr "Xóa mẫu"
 
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:51
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/duplicate_orders.tt:134
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:75
 #: koha-tmpl/intranet-tmpl/prog/en/modules/basket/basket.tt:6
@@ -52345,6 +52494,11 @@ msgstr ""
 #, c-format
 msgid "Select to display or not:"
 msgstr "Lựa chọn để hiển thị hoặc không:"
+
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:43
+#, fuzzy, c-format
+msgid "Select to import"
+msgstr "Chọn tệp tin: "
 
 #. SCRIPT
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:258
@@ -53295,7 +53449,7 @@ msgstr "Hiển thị toàn bộ tài liệu"
 #. For the first occurrence,
 #. %1$s:  hiddencount | html 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/detail.tt:594
-#: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:710
+#: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:712
 #, c-format
 msgid "Show all items (%s hidden)"
 msgstr "Hiển thị tất cả tài liệu (%s tài liệu ẩn)"
@@ -53321,7 +53475,7 @@ msgstr "Tài lên giao dịch"
 msgid "Show all vendors"
 msgstr "Tất cả"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/overdue.tt:120
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/overdue.tt:133
 #, c-format
 msgid "Show any items currently checked out:"
 msgstr "Hiển thị tất cả các tài liệu hiện tại đang được ghi mượn:"
@@ -54210,8 +54364,8 @@ msgid "Start date"
 msgstr "Ngày bắt đầu"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/aqcontract.tt:86
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/reserveratios.tt:154
 #: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/clubs-add-modify.tt:59
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/reserveratios.tt:154
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/subscription-detail.tt:359
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/export.tt:98
 #, c-format
@@ -54313,6 +54467,7 @@ msgstr "Bang: "
 msgid "Statistic 1 done on: "
 msgstr "Thống kê 1:  "
 
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:160
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:376
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/duplicate_orders.tt:227
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:452
@@ -54325,6 +54480,7 @@ msgstr "Thống kê 1: "
 msgid "Statistic 2 done on: "
 msgstr "Thống kê 2: "
 
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:164
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:380
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/duplicate_orders.tt:234
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:455
@@ -57438,12 +57594,12 @@ msgstr "Hiện tại không có giỏ đặt hàng mở cho nhà cung cấp này
 msgid "There are no overdues for today%s at the selected location%s."
 msgstr "Hôm nay không có tài liệu nào bị quá hạn%s tại thư viện bạn chọn%s."
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/overdue.tt:100
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/overdue.tt:113
 #, fuzzy, c-format
 msgid "There are no overdues matching your search. "
 msgstr "Không có quy tắc kiểm soát biểu ghi nào được lưu lại."
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/overdue.tt:102
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/overdue.tt:115
 #, fuzzy, c-format
 msgid "There are no overdues."
 msgstr "Bạn không có đơn hàng chậm."
@@ -58070,12 +58226,12 @@ msgid "This item must be returned to %s."
 msgstr "Tài liệu này cần được chuyển tới thư viện %s"
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:1004
+#: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:1006
 msgid "This item normally cannot be put on hold except for patrons from %s."
 msgstr "Thông thường tài liệu này không thể đặt mượn cho bạn đọc từ %s."
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:1004
+#: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:1006
 msgid "This item normally cannot be put on hold."
 msgstr "Thông thường tài liệu này không thể đặt mượn."
 
@@ -58557,7 +58713,7 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/offline.tt:153
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/offline.tt:171
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/on-site_checkouts.tt:36
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/overdue.tt:59
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/overdue.tt:72
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:58
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:206
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/request-article.tt:227
@@ -58585,7 +58741,7 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/reserves_stats.tt:78
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/serials_stats.tt:31
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:227
-#: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:721
+#: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:723
 #: koha-tmpl/intranet-tmpl/prog/en/modules/rotating_collections/addItems.tt:100
 #: koha-tmpl/intranet-tmpl/prog/en/modules/rotating_collections/rotatingCollections.tt:29
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/checkexpiration.tt:78
@@ -58661,6 +58817,11 @@ msgstr "Nhan đề (Bất kỳ): "
 #, c-format
 msgid "Title (uniform): "
 msgstr "Nhan đề (Thống nhất): "
+
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:58
+#, fuzzy, c-format
+msgid "Title and author"
+msgstr "Thành phố"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:355
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:356
@@ -58915,7 +59076,7 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoices.tt:253
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoices.tt:268
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/parcels.tt:190
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/overdue.tt:133
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/overdue.tt:146
 #: koha-tmpl/intranet-tmpl/prog/en/modules/labels/label-edit-range.tt:32
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/cat_issues_top.tt:74
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/claims.tt:72
@@ -58985,7 +59146,7 @@ msgstr ""
 "tối đa %s tài liệu."
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:1004
+#: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:1006
 #, fuzzy
 msgid "Too many holds"
 msgstr "Quá nhiều đặt mượn: "
@@ -60298,7 +60459,7 @@ msgid "Update existing or add new"
 msgstr "Sử dụng biểu ghi hiện tại"
 
 #. INPUT type=submit name=submit
-#: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:824
+#: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:826
 msgid "Update hold(s)"
 msgstr "Cập nhật đặt mượn"
 
@@ -63426,6 +63587,11 @@ msgstr ""
 msgid "You will need to save the report before you can execute it"
 msgstr "Bạn cần lưu lại trước khi bạn muốn chạy báo cáo này"
 
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:32
+#, c-format
+msgid "You'll have to treat them individually. "
+msgstr ""
+
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/share_content.tt:51
 #, fuzzy, c-format
 msgid "Your Mana KB server is currently: "
@@ -63982,7 +64148,7 @@ msgstr ""
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:281
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:325
-#: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:775
+#: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:777
 #, c-format
 msgid "already has a hold"
 msgstr "đã có một đặt mượn"
@@ -64203,6 +64369,11 @@ msgstr "Các trường biblionumber và biblioitemnumber đã được ánh xạ
 msgid "biblionumber|borrowernumber"
 msgstr "biblio và biblionumber"
 
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:239
+#, fuzzy, c-format
+msgid "budget_code"
+msgstr "Ngân sách"
+
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoice.tt:351
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/uncertainprice.tt:94
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/cn_browser.tt:53
@@ -64376,6 +64547,11 @@ msgstr "Người liên quan"
 msgid "call.ogg"
 msgstr ""
 
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:251
+#, fuzzy, c-format
+msgid "callnumber"
+msgstr "Ký hiệu phân loại"
+
 #. For the first occurrence,
 #. %1$s:  max_holds_for_record | html 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:321
@@ -64419,6 +64595,11 @@ msgstr "Báo cáo phân hệ biên mục"
 #, fuzzy, c-format
 msgid "cataloging the record"
 msgstr "Tìm tài liệu"
+
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:218
+#, fuzzy, c-format
+msgid "ccode"
+msgstr "Đăng ký cá biệt"
 
 #. SCRIPT
 #: koha-tmpl/intranet-tmpl/prog/en/includes/str/tinymce_i18n.inc:2
@@ -64523,6 +64704,11 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:724
 #, c-format
 msgid "controls for column visiblity in DataTables"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:238
+#, c-format
+msgid "copyno"
 msgstr ""
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/itemslost.tt:52
@@ -64729,7 +64915,7 @@ msgstr "Giá sau thuế (Đã giảm giá)"
 msgid "edit items"
 msgstr "Bản tài liệu"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/overdue.tt:77
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/overdue.tt:90
 #, c-format
 msgid "email"
 msgstr "Thư điện tử"
@@ -64956,6 +65142,11 @@ msgstr "tại đây"
 msgid "history"
 msgstr "Lịch sử tài liệu"
 
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:187
+#, fuzzy, c-format
+msgid "holdingbranch"
+msgstr "holdingbranch đã được định nghĩa"
+
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/checkmarc.tt:97
 #, c-format
 msgid "holdingbranch NOT mapped"
@@ -64965,6 +65156,11 @@ msgstr "holdingbranch không được ánh xạ"
 #, c-format
 msgid "holdingbranch defined"
 msgstr "holdingbranch đã được định nghĩa"
+
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:176
+#, fuzzy, c-format
+msgid "homebranch"
+msgstr "homebranch đã được định nghĩa"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/checkmarc.tt:83
 #, c-format
@@ -65263,6 +65459,11 @@ msgstr ""
 msgid "itemtype NOT mapped"
 msgstr "itemtype không được ánh xạ"
 
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:197
+#, fuzzy, c-format
+msgid "itype"
+msgstr "Kiểu tài liệu"
+
 #: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:680
 #, c-format
 msgid "jQuery"
@@ -65451,6 +65652,11 @@ msgstr "Đang tải..."
 msgid "loading_2.ogg"
 msgstr "Đang tải..."
 
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:210
+#, fuzzy, c-format
+msgid "loc"
+msgstr "Khóa "
+
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/borrowers_stats.tt:94
 #, c-format
 msgid "lost"
@@ -65563,6 +65769,11 @@ msgstr "noItemTypeImages"
 msgid "none"
 msgstr "Bất kỳ"
 
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:208
+#, fuzzy, c-format
+msgid "nonpublic_note"
+msgstr "Ghi chú nội bộ"
+
 #. SCRIPT
 #: koha-tmpl/intranet-tmpl/prog/en/includes/str/tinymce_i18n.inc:2
 msgid "nordic mark sign"
@@ -65601,6 +65812,11 @@ msgstr "Không có chủ sở hữu"
 msgid "not running"
 msgstr "No warnings"
 
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:226
+#, fuzzy, c-format
+msgid "notforloan"
+msgstr "Không cho mượn"
+
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:489
 #, fuzzy, c-format
 msgid "number"
@@ -65634,7 +65850,7 @@ msgid "on reserve"
 msgstr "Thêm tài liệu"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:281
-#: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:775
+#: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:777
 #, c-format
 msgid "on this item "
 msgstr "trên tài liệu này "
@@ -65818,12 +66034,22 @@ msgstr ""
 msgid "previous"
 msgstr "Sau"
 
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:249
+#, fuzzy, c-format
+msgid "price"
+msgstr "Giá tiền"
+
 #: koha-tmpl/intranet-tmpl/prog/en/modules/patroncards/edit-layout.tt:119
 #: koha-tmpl/intranet-tmpl/prog/en/modules/patroncards/edit-layout.tt:173
 #: koha-tmpl/intranet-tmpl/prog/en/modules/patroncards/edit-layout.tt:227
 #, c-format
 msgid "pt"
 msgstr "pt"
+
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:209
+#, fuzzy, c-format
+msgid "public_note"
+msgstr "Ghi chú"
 
 #. %1$s:  suggestions_loo.publishercode | html 
 #. %2$s:  END 
@@ -65875,6 +66101,11 @@ msgstr "Hình ảnh được tải lên cơ sở dữ liệu thành công"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/basketgroup.tt:89
 msgid "reopen basketgroup"
 msgstr "Mở lại nhóm giỏ đặt hàng"
+
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:250
+#, fuzzy, c-format
+msgid "replacement price"
+msgstr "Giá thay thế"
 
 #. INPUT
 #: koha-tmpl/intranet-tmpl/prog/en/includes/reports-toolbar.inc:75
@@ -66298,7 +66529,7 @@ msgid "to "
 msgstr "đến "
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:285
-#: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:779
+#: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:781
 #, c-format
 msgid "to be placed on hold"
 msgstr "cho bạn đọc đặt mượn."
@@ -66365,6 +66596,11 @@ msgstr "tới ngày"
 #, fuzzy, c-format
 msgid "updated successfully"
 msgstr "Bộ sưu tập '%s' được cập nhật thành công!"
+
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:237
+#, c-format
+msgid "uri"
+msgstr ""
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/basketheader.tt:121
 #, fuzzy, c-format
@@ -66676,6 +66912,7 @@ msgstr "Ghi chú: "
 msgid "| Status: %s "
 msgstr "%s %s tới %s %s "
 
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:261
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/basket.tt:100
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/parcel.tt:387
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:177
@@ -66696,7 +66933,7 @@ msgstr "%s %s tới %s %s "
 #: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:670
 #: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:694
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:103
-#: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:968
+#: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:970
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:160
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/letter.tt:63
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:414

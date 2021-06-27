@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Koha 20.11\n"
 "POT-Creation-Date: 2013-05-07 08:52+0200\n"
-"PO-Revision-Date: 2021-05-21 13:50+0000\n"
-"Last-Translator: ManuB. <e.betemps@ville-caluire.fr>\n"
+"PO-Revision-Date: 2021-06-07 09:06+0000\n"
+"Last-Translator: Axelle Clarisse <axelle.clarisse@univ-amu.fr>\n"
 "Language-Team: French (France) "
 "(http://www.transifex.com/projects/p/koha/language/fr_FR/)\n"
 "Language: fr\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Generator: Pootle 2.8\n"
-"X-POOTLE-MTIME: 1621605006.708634\n"
+"X-POOTLE-MTIME: 1623056789.176247\n"
 "X-Pootle-Path: /fr/20.11/fr-FR-pref.po\n"
 "X-Pootle-Revision: 1\n"
 
@@ -2556,11 +2556,12 @@ msgid ""
 msgstr "comme source de classification par défaut (MARC21)."
 
 # Cataloging > Record structure
-#, fuzzy
 msgid ""
 "cataloguing.pref#DefaultCountryField008#  Empty defaults to ||| - No attempt "
 "to code."
-msgstr "  Si ce champ est vierge, le code par défaut sera xxu (États-Unis)."
+msgstr ""
+" Si ce champ est vierge, le code par défaut sera ||| - Aucune tentative de "
+"coder."
 
 # Cataloging > Record structure
 msgid ""
@@ -4173,21 +4174,20 @@ msgstr ""
 "exemplaire sont bien présents au prêt et au retour."
 
 # Circulation > Checkout policy
-#, fuzzy
 msgid "circulation.pref#CircControl# Use the calendar and circulation rules of"
-msgstr "Utiliser les règles de prêt et d'amendes de"
+msgstr "Utiliser le calendrier et les règles de circulation de"
 
 # Circulation > Checkout policy
 msgid "circulation.pref#CircControl# the library the item is from."
-msgstr "la bibliothèque de l'exemplaire"
+msgstr "la bibliothèque de l'exemplaire."
 
 # Circulation > Checkout policy
 msgid "circulation.pref#CircControl# the library the patron is from."
-msgstr "la bibliothèque de l'adhérent"
+msgstr "la bibliothèque de l'adhérent."
 
 # Circulation > Checkout policy
 msgid "circulation.pref#CircControl# the library you are logged in at."
-msgstr "la bibliothèque à laquelle le bibliothécaire est connecté"
+msgstr "la bibliothèque à laquelle le bibliothécaire est connecté."
 
 # Circulation > Interface
 msgid "circulation.pref#CircSidebar# Activate"
@@ -4834,7 +4834,7 @@ msgid ""
 "finished and should not be displayed in the ILL module: "
 msgstr ""
 "Les statuts pour les demandes PEB considérées comme closes ne doivent pas "
-"s'afficher dans le module PEB :"
+"s'afficher dans le module PEB : "
 
 # Circulation > Interlibrary loans
 msgid "circulation.pref#ILLModule# Disable"
@@ -7385,7 +7385,7 @@ msgstr "."
 msgid ""
 "enhanced_content.pref#NovelistSelectStaffView# Display Novelist Select staff "
 "interface content"
-msgstr ""
+msgstr "Afficher le contenu interface professionnelle de Novelist Select"
 
 # Enhanced content > Novelist Select
 msgid "enhanced_content.pref#NovelistSelectStaffView# above the holdings table"
@@ -7520,12 +7520,16 @@ msgid ""
 "individual branch authname not set in the <a href=\"/cgi-bin/koha/admin/"
 "overdrive.pl\">OverDrive library authnames table</a>)."
 msgstr ""
+"(sera utilisé comme solution de secours si le nom d'identification "
+"individuelle de la bibliothèque n'est pas défini dans la <a href=\"/cgi-"
+"bin/koha/admin/overdrive.pl\">table des noms d'identification de "
+"bibliothèque OverDrive</a>)"
 
 # Enhanced content > OverDrive
 msgid ""
 "enhanced_content.pref#OverDriveAuthName# Authenticate using OverDrive "
 "Authname"
-msgstr "Authentifier avec le nom de l'OverDrive"
+msgstr "Authentifier avec le nom d'identification OverDrive"
 
 # Enhanced content > OverDrive
 msgid "enhanced_content.pref#OverDriveCirculation# A password is"
@@ -8012,6 +8016,9 @@ msgid ""
 "preference on a production server with overdue items that are accruing "
 "fines. Doing so will result in duplicate fines!"
 msgstr ""
+"<br/> <strong>NOTE :</strong> Ne changez pas cette préférence sur un serveur "
+"en production qui a des exemplaires en retard pour lesquels des amendes "
+"s'accumulent. Dans ce cas, il y aurait des amendes en double !"
 
 # I18N/L10N
 msgid "i18n_l10n.pref#TimeFormat# 12 hour format ( e.g. \"02:18 PM\" )"
@@ -8053,6 +8060,10 @@ msgid ""
 "the 'surname' column of the 'borrowers' table is helpful to make browsing by "
 "last name work in members-home.pl when using an alphabet outside of A-Z."
 msgstr ""
+"<br/> Conseil : La modification de la collation dans la base de données pour "
+"la colonne 'surname' de la table 'borrowers' est utile pour faire "
+"fonctionner la navigation par nom de famille dans members-home.pl lors de "
+"l'utilisation un alphabet non latin."
 
 # I18N/L10N
 msgid "i18n_l10n.pref#alphabet# Use the alphabet"
@@ -8233,17 +8244,19 @@ msgstr "les informations en provenance des cron jobs."
 
 # Logging > Debugging
 msgid "logs.pref#DumpSearchQueryTemplate# Do"
-msgstr ""
+msgstr "Copier"
 
 # Logging > Debugging
 msgid "logs.pref#DumpSearchQueryTemplate# Don't"
-msgstr ""
+msgstr "Ne pas copier"
 
 # Logging > Debugging
 msgid ""
 "logs.pref#DumpSearchQueryTemplate# dump search query as a template "
 "parameter, requires DumpTemplateVars[interface] to be visible."
 msgstr ""
+"les critères de recherche comme paramètre modèle. Nécessite que "
+"DumpTemplateVars[interface] soit visible."
 
 # Logging > Debugging
 msgid "logs.pref#DumpTemplateVarsIntranet# Do"
@@ -8274,6 +8287,8 @@ msgid ""
 "logs.pref#DumpTemplateVarsOpac# dump all Template Toolkit variables to a "
 "comment in the HTML source for the OPAC."
 msgstr ""
+"toutes les variables du Template Toolkit dans un commentaire des sources "
+"HTML de l'OPAC."
 
 # Logging > Logging
 msgid "logs.pref#FinesLog# Don't log"
@@ -8312,7 +8327,7 @@ msgstr "Journaliser"
 
 # Logging > Logging
 msgid "logs.pref#IllLog# when changes to ILL requests take place."
-msgstr ""
+msgstr "lorsque des changements sont apportés aux demandes de PEB."
 
 # Logging > Logging
 msgid "logs.pref#IssueLog# Don't log"
@@ -8691,7 +8706,7 @@ msgstr "jours."
 
 # OPAC > Policy
 msgid "opac.pref#MaxTotalSuggestions# in"
-msgstr ""
+msgstr "sur"
 
 # OPAC > Features
 msgid "opac.pref#OPACAcquisitionDetails# Display"
@@ -8812,6 +8827,8 @@ msgid ""
 "opac.pref#OPACFineNoRenewalsIncludeCredits# outstanding/unapplied credits "
 "when applying the OPACFineNoRenewals rule to patrons."
 msgstr ""
+"les crédits impayés/non appliqués lors de l'application de la règle "
+"OPACFineNoRenewals aux adhérents."
 
 # OPAC > Features
 msgid "opac.pref#OPACFinesTab# Allow"
@@ -8826,6 +8843,8 @@ msgid ""
 "opac.pref#OPACFinesTab# patrons to access the charges tab on their account "
 "page on the OPAC."
 msgstr ""
+"les adhérents à avoir accès à l'onglet Amendes sur leur page Mon compte à "
+"l'OPAC."
 
 # OPAC > Appearance
 msgid "opac.pref#OPACHoldingsDefaultSortField# First column of the table"
@@ -8877,6 +8896,9 @@ msgid ""
 "\" and \"my checkout history\" tabs when a patron is logged in to the OPAC, "
 "with the following HTML (leave blank to disable):"
 msgstr ""
+"Inclure une colonne \"Liens\" dans les onglets \"Mon résumé\" et \"Mon "
+"historique de prêt\" lorsqu’un adhérent est connecté à l’OPAC, avec le code "
+"HTML suivant (laisser vide pour désactiver) :"
 
 # OPAC > Appearance
 msgid ""
@@ -9384,6 +9406,13 @@ msgid ""
 "an URL for an external specific stylesheet.</li></ul>{langcode} will be "
 "replaced with current interface language."
 msgstr ""
+"<br />Options :<ul><li><a href=\"#\" class=\"set_syspref\" data-syspref=\""
+"OPACXSLTListsDisplay\" data-value=\"\">laisser vide</a> pour \"pas de xslt\""
+"</li><li>entrer \"<a href=\"#\" class=\"set_syspref\" data-syspref=\""
+"OPACXSLTListsDisplay\" data-value=\"default\">default</a>\" pour celui par "
+"défaut</li><li>mettre un chemin pour définir un fichier xslt</li><li>mettre "
+"une url pour une feuille de style extérieure spécifique.</li></ul>{langcode} "
+"sera remplacé par la langue actuelle de l'interface"
 
 # OPAC > Appearance
 msgid ""
@@ -9783,11 +9812,11 @@ msgstr "Montrer"
 
 # OPAC > Appearance
 msgid "opac.pref#OpacLangSelectorMode# ."
-msgstr ""
+msgstr "."
 
 # OPAC > Appearance
 msgid "opac.pref#OpacLangSelectorMode# Display language selector on "
-msgstr "Afficher le sélecteur de langue sur "
+msgstr "Afficher le sélecteur de langue "
 
 # OPAC > Appearance
 msgid "opac.pref#OpacLangSelectorMode# both top and footer"
@@ -10636,7 +10665,7 @@ msgid ""
 "avatar will be searched on www.libravatar.org using the patron's e-mail "
 "address."
 msgstr ""
-"L'avatar du critique à côté des commentaires de l'OPAC. L'avatar sera "
+"l'avatar du critique à côté des commentaires de l'OPAC. L'avatar sera "
 "recherché sur www.libravatar.org en utilisant l'adresse électronique de "
 "l'adhérent."
 
