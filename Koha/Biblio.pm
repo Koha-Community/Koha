@@ -891,11 +891,11 @@ sub to_api_mapping {
     };
 }
 
-=head3 host_record
+=head3 get_marc_host
 
-    $host = $biblio->host_record;
+    $host = $biblio->get_marc_host;
     # OR:
-    ( $host, $relatedparts ) = $biblio->host_record;
+    ( $host, $relatedparts ) = $biblio->get_marc_host;
 
     Returns host biblio record from MARC21 773 (undef if no 773 present).
     It looks at the first 773 field with MARCorgCode or only a control
@@ -906,7 +906,7 @@ sub to_api_mapping {
 
 =cut
 
-sub host_record {
+sub get_marc_host {
     my ($self, $params) = @_;
     my $no_items = $params->{no_items};
     return if C4::Context->preference('marcflavour') eq 'UNIMARC'; # TODO

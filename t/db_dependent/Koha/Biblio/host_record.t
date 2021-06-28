@@ -35,7 +35,7 @@ my $schema = Koha::Database->new->schema;
 $schema->storage->txn_begin;
 our $builder = t::lib::TestBuilder->new;
 
-subtest 'host_record' => sub {
+subtest 'get_marc_host' => sub {
     plan tests => 11;
 
     t::lib::Mocks::mock_preference( 'marcflavour', 'MARC21' );
@@ -58,40 +58,40 @@ subtest 'host_record' => sub {
     $search_mod->mock( 'new', sub { return $engine; } );
 
     # Case 1: Search engine does not return any results on controlnumber
-    is( $bib1->host_record, undef, 'Empty MARC record' );
+    is( $bib1->get_marc_host, undef, 'Empty MARC record' );
     $marc->append_fields(
         MARC::Field->new( '773', '', '', g => 'relpart', w => '(xyz)123' ),
     );
-    is( $bib1->host_record, undef, '773 looks fine, but no search results' );
+    is( $bib1->get_marc_host, undef, '773 looks fine, but no search results' );
 
     # Case 2: Search engine returns (at maximum) one result
     $results = [ $bib1->biblionumber ]; # will be found because 773w is in shape
-    my $host = $bib1->host_record;
+    my $host = $bib1->get_marc_host;
     is( ref( $host ), 'Koha::Biblio', 'Correct object returned' );
     is( $host->biblionumber, $bib1->biblionumber, 'Check biblionumber' );
     $marc->field('773')->update( w => '(xyz) bad data' ); # causes no results
-    $host = $bib1->host_record;
-    is( $bib1->host_record, undef, 'No results for bad 773' );
+    $host = $bib1->get_marc_host;
+    is( $bib1->get_marc_host, undef, 'No results for bad 773' );
     # Add second 773
     $marc->append_fields( MARC::Field->new( '773', '', '', g => 'relpart2', w => '234' ) );
-    $host = $bib1->host_record;
+    $host = $bib1->get_marc_host;
     is( $host->biblionumber, $bib1->biblionumber, 'Result triggered by second 773' );
     # Replace orgcode
     ($marc->field('773'))[1]->update( w => '(abc)345' );
-    is( $bib1->host_record, undef, 'No results for two 773s' );
+    is( $bib1->get_marc_host, undef, 'No results for two 773s' );
     # Test no_items flag
     ($marc->field('773'))[1]->update( w => '234' ); # restore
-    $host = $bib1->host_record({ no_items => 1 });
+    $host = $bib1->get_marc_host({ no_items => 1 });
     is( $host->biblionumber, $bib1->biblionumber, 'Record found with no_items' );
     $builder->build({ source => 'Item', value => { biblionumber => $bib1->biblionumber } });
-    is( $bib1->host_record({ no_items => 1 }), undef, 'Record not found with no_items flag after adding one item' );
+    is( $bib1->get_marc_host({ no_items => 1 }), undef, 'Record not found with no_items flag after adding one item' );
     # Test list context
-    my @temp = $bib1->host_record;
+    my @temp = $bib1->get_marc_host;
     is( $temp[1], 'relpart2', 'Return $g in list context' );
 
     # Case 3: Search engine returns more results
     $results = [ 1, 2 ];
-    is( $bib1->host_record, undef, 'host_record returns undef for non-unique control number' );
+    is( $bib1->get_marc_host, undef, 'get_marc_host returns undef for non-unique control number' );
 };
 
 sub mocked_search {

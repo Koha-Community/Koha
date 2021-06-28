@@ -81,7 +81,7 @@ if ( $action eq 'create' ) {
 }
 elsif ( !$action && C4::Context->preference('ArticleRequestsHostRedirection') ) {
   # Conditions: no items, host item entry (MARC21 773)
-  my ( $host, $pageinfo ) = $biblio->host_record( { no_items => 1 } );
+  my ( $host, $pageinfo ) = $biblio->get_marc_host( { no_items => 1 } );
   if ($host) {
       $template->param(
           pageinfo => $pageinfo,
