@@ -77,14 +77,19 @@ if ( $action eq 'create' ) {
 
     print $cgi->redirect("/cgi-bin/koha/opac-user.pl#opac-user-article-requests");
     exit;
-} elsif ( !$action ) {
-    # Should we redirect?
-    # Conditions: no items, host item entry (MARC21 773)
-    my ( $host, $pageinfo ) = $biblio->host_record({ no_items => 1 });
-    if( $host ) {
-        $template->param( pageinfo => $pageinfo, title => $biblio->title, author => $biblio->author );
-        $biblio = $host;
-    }
+# Should we redirect?
+}
+elsif ( !$action && C4::Context->preference('ArticleRequestsHostRedirection') ) {
+  # Conditions: no items, host item entry (MARC21 773)
+  my ( $host, $pageinfo ) = $biblio->host_record( { no_items => 1 } );
+  if ($host) {
+      $template->param(
+          pageinfo => $pageinfo,
+          title    => $biblio->title,
+          author   => $biblio->author
+      );
+      $biblio = $host;
+  }
 }
 
 my $patron = Koha::Patrons->find($borrowernumber);

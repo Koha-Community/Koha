@@ -40,7 +40,6 @@ subtest 'host_record' => sub {
 
     t::lib::Mocks::mock_preference( 'marcflavour', 'MARC21' );
     t::lib::Mocks::mock_preference( 'MARCOrgCode', 'xyz' );
-    t::lib::Mocks::mock_preference( 'ArticleRequestsHostRedirection', 1 );
 
     my $bib1 = $builder->build_object({ class => 'Koha::Biblios' });
     my $bib2 = $builder->build_object({ class => 'Koha::Biblios' });
