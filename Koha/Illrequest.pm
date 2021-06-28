@@ -1346,11 +1346,17 @@ sub generic_confirm {
         my $to = $params->{partners};
         if ( defined $to ) {
             $to =~ s/^\x00//;       # Strip leading NULLs
-            $to =~ s/\x00/; /;      # Replace others with '; '
         }
         Koha::Exceptions::Ill::NoTargetEmail->throw(
             "No target email addresses found. Either select at least one partner or check your ILL partner library records.")
           if ( !$to );
+
+        # Take the null delimited string that we receive and create
+        # an array of associated patron objects
+        my @to_patrons = map {
+            Koha::Patrons->find({ borrowernumber => $_ })
+        } split(/\x00/, $to);
+
         # Create the from, replyto and sender headers
         my $from = $branch->from_email_address;
         my $replyto = $branch->inbound_ill_address;
@@ -1367,25 +1373,36 @@ sub generic_confirm {
         $letter->{title} = $params->{subject};
         $letter->{content} = $params->{body};
 
-        # Queue the notice
-        my $params = {
-            letter                 => $letter,
-            borrowernumber         => $self->borrowernumber,
-            message_transport_type => 'email',
-            to_address             => $to,
-            from_address           => $from,
-            reply_address          => $replyto
-        };
-
         if ($letter) {
-            my $result = C4::Letters::EnqueueLetter($params);
-            if ( $result ) {
+
+            # Keep track of who received this notice
+            my @queued = ();
+            # Iterate our array of recipient patron objects
+            foreach my $patron(@to_patrons) {
+                # Create the params we pass to the notice
+                my $params = {
+                    letter                 => $letter,
+                    borrowernumber         => $patron->borrowernumber,
+                    message_transport_type => 'email',
+                    to_address             => $patron->email,
+                    from_address           => $from,
+                    reply_address          => $replyto
+                };
+                my $result = C4::Letters::EnqueueLetter($params);
+                if ( $result ) {
+                    push @queued, $patron->email;
+                }
+            }
+
+            # If all notices were queued successfully,
+            # store that
+            if (scalar @queued == scalar @to_patrons) {
                 $self->status("GENREQ")->store;
                 $self->_backend_capability(
                     'set_requested_partners',
                     {
                         request => $self,
-                        to => $to
+                        to => join("; ", @queued)
                     }
                 );
                 return {
@@ -1397,6 +1414,7 @@ sub generic_confirm {
                     next    => 'illview',
                 };
             }
+
         }
         return {
             error   => 1,

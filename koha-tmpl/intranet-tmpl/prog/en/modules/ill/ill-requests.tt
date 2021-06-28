@@ -323,7 +323,7 @@
                                         <select size="5" multiple="true" id="partners" name="partners" required="required">
                                             [% FOREACH partner IN whole.value.partners %]
                                                 [% IF partner.email && partner.email.length > 0 %]
-                                                    <option data-partner-id="[% partner.id | html %]" value=[% partner.email | html %]>
+                                                    <option data-partner-id="[% partner.id | html %]" value=[% partner.borrowernumber | html %]>
                                                         [% partner.branchcode _ " - " _ partner.surname %]
                                                     </option>
                                                 [% END %]
