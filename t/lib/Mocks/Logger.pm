@@ -20,7 +20,7 @@ use Modern::Perl;
 use base 'Test::Builder::Module';
 use base qw(Class::Accessor);
 
-use Test::MockModule qw(strict);
+use Test::MockModule;
 use Test::MockObject;
 
 my $CLASS = __PACKAGE__;
@@ -48,7 +48,7 @@ sub new {
     my $mocked_logger_class = Test::MockModule->new("Koha::Logger");
     my $mocked_logger = Test::MockObject->new();
 
-    $mocked_logger_class->redefine(
+    $mocked_logger_class->mock(
         'get',
         sub {
             return $mocked_logger;
