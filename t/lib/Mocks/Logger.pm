@@ -48,7 +48,7 @@ sub new {
     my $mocked_logger_class = Test::MockModule->new("Koha::Logger");
     my $mocked_logger = Test::MockObject->new();
 
-    $mocked_logger_class->mock(
+    $mocked_logger_class->redefine(
         'get',
         sub {
             return $mocked_logger;
