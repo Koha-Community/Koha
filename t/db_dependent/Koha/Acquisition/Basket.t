@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 12;
+use Test::More tests => 13;
 use Test::Exception;
 
 use t::lib::TestBuilder;
@@ -299,6 +299,46 @@ subtest 'orders' => sub {
     $orders = $basket->orders;
     is( ref($orders), 'Koha::Acquisition::Orders', 'Type is correct with no attached orders' );
     is( $orders->count, 3, '3 orders attached, count 3' );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'edi_order' => sub {
+
+    plan tests => 3;
+
+    $schema->storage->txn_begin;
+
+    my $basket = $builder->build_object(
+        {
+            class => 'Koha::Acquisition::Baskets'
+        }
+    );
+
+    is( $basket->edi_order, undef,
+        'edi_order returns undefined if there are no edi_messages of type "ORDER" attached' );
+
+    my $order_message_1 = $builder->build(
+        {
+            source => 'EdifactMessage',
+            value  => { basketno => $basket->basketno, message_type => 'ORDERS', transfer_date => '2019-07-30' }
+        }
+    );
+
+    my $edi_message = $basket->edi_order;
+    is( ref($edi_message), 'Koha::Schema::Result::EdifactMessage',
+        'edi_order returns an EdifactMessage if one is attached' );
+
+    my $order_message_2 = $builder->build(
+        {
+            source => 'EdifactMessage',
+            value  => { basketno => $basket->basketno, message_type => 'ORDERS' }
+        }
+    );
+
+    $edi_message = $basket->edi_order;
+    is( $edi_message->id, $order_message_2->{id},
+        'edi_order returns the most recently associated ORDERS EdifactMessage' );
 
     $schema->storage->txn_rollback;
 };
