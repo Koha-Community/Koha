@@ -314,6 +314,20 @@
                         [% IF ( closedate ) %]
                             <li><span class="label">Closed on:</span> [% closedate | $KohaDates %]</li>
                         [% END %]
+                        [% IF ( ediaccount ) %]
+                            [%- BLOCK edi_status -%]
+                                [%- SWITCH edi_order.status -%]
+                                    [%- CASE 'Pending'   -%]Pending
+                                    [%- CASE 'Sent'      -%]Sent
+                                    [%- CASE 'Processed' -%]Processed
+                                [%- END -%]
+                            [%- END -%]
+                            [% IF ( edi_order ) %]
+                            <li><span class="label">EDI status:</span> [%- PROCESS edi_status edi_order=edi_order -%] ([% edi_order.transfer_date | $KohaDates %])</li>
+                            [% ELSE %]
+                            <li><span class="label">EDI status:</span> Not ordered</li>
+                            [% END %]
+                        [% END %]
                         [% IF ( estimateddeliverydate ) %]
                             <li><span class="label">Estimated delivery date:</span> [% estimateddeliverydate | $KohaDates %]</li>
                         [% END %]

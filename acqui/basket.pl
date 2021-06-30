@@ -377,6 +377,9 @@ if ( $op eq 'list' ) {
         last;
     }
 
+    my $basket_obj = Koha::Acquisition::Baskets->find($basketno);
+    my $edi_order = $basket_obj->edi_order;
+
     $template->param(
         basketno             => $basketno,
         basket               => $basket,
@@ -388,6 +391,7 @@ if ( $op eq 'list' ) {
         basketcontractname   => $contract->{contractname},
         branches_loop        => \@branches_loop,
         creationdate         => $basket->{creationdate},
+        edi_order            => $edi_order,
         authorisedby         => $basket->{authorisedby},
         authorisedbyname     => $basket->{authorisedbyname},
         users_ids            => join(':', @basketusers_ids),
