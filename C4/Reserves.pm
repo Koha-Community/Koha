@@ -602,7 +602,7 @@ sub CanReserveBeCanceledFromOpac {
     my ($reserve_id, $borrowernumber) = @_;
 
     return unless $reserve_id and $borrowernumber;
-    my $reserve = Koha::Holds->find($reserve_id);
+    my $reserve = Koha::Holds->find($reserve_id) or return;
 
     return 0 unless $reserve->borrowernumber == $borrowernumber;
     return $reserve->is_cancelable_from_opac;

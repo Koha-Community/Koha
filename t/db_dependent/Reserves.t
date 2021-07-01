@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 67;
+use Test::More tests => 68;
 use Test::MockModule;
 use Test::Warn;
 
@@ -555,6 +555,9 @@ $cancancel = CanReserveBeCanceledFromOpac($canres->{reserve_id}, $requesters{$br
 is($cancancel, 0, 'Reserve in transfer status cant be canceled');
 
 $dbh->do('DELETE FROM reserves', undef, ($bibnum));
+is( CanReserveBeCanceledFromOpac($canres->{resserve_id}, $requesters{$branch_1}), undef,
+    'Cannot cancel a deleted hold' );
+
 AddReserve(
     {
         branchcode     => $branch_1,
