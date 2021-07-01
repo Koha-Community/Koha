@@ -321,7 +321,12 @@ subtest 'edi_order' => sub {
     my $order_message_1 = $builder->build(
         {
             source => 'EdifactMessage',
-            value  => { basketno => $basket->basketno, message_type => 'ORDERS', transfer_date => '2019-07-30' }
+            value  => {
+                basketno      => $basket->basketno,
+                message_type  => 'ORDERS',
+                transfer_date => '2019-07-30',
+                deleted       => 0,
+            }
         }
     );
 
@@ -332,7 +337,11 @@ subtest 'edi_order' => sub {
     my $order_message_2 = $builder->build(
         {
             source => 'EdifactMessage',
-            value  => { basketno => $basket->basketno, message_type => 'ORDERS' }
+            value  => {
+                basketno     => $basket->basketno,
+                message_type => 'ORDERS',
+                deleted      => 0
+            }
         }
     );
 
