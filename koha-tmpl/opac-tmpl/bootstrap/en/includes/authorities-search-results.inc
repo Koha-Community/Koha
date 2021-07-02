@@ -61,6 +61,12 @@
                 <span class="authorizedheading">[% authorize.heading | html %]</span>
                 [% UNLESS loop.last %] | [% END %]
             [% END %]
+            [% IF summary.equalterm.size %]
+                [% FOREACH term IN summary.equalterm %]
+                        <span class="label">=</span>
+                        <span class="authorized">[% term.heading %]</span>
+                [% END %]
+            [% END %]
         </div>
         [% IF ( marcflavour == 'UNIMARC' ) %]
             [% IF summary.notes %]

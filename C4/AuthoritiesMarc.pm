@@ -936,6 +936,8 @@ sub BuildSummary {
     my @seefrom;
     my @seealso;
     my @otherscript;
+    my @equalterm;
+
     if (C4::Context->preference('marcflavour') eq 'UNIMARC') {
 # construct UNIMARC summary, that is quite different from MARC21 one
 # accepted form
@@ -989,6 +991,8 @@ sub BuildSummary {
         use C4::Heading::MARC21;
         my $handler = C4::Heading::MARC21->new();
         my $subfields_to_report;
+        my $subfields_to_subdivision="";
+        my $delimiter = " -- ";
         foreach my $field ($record->field('1..')) {
             my $tag = $field->tag();
             next if "152" eq $tag;
@@ -1065,6 +1069,80 @@ sub BuildSummary {
         foreach my $field ($record->field('6..')) {
             push @notes, { note => $field->as_string(), field => $field->tag() };
         }
+
+        foreach my $field ($record->field('7..'))
+        {
+            my $tag = $field->tag();
+
+            if ($tag eq '700') {
+                $subfields_to_report = 'abcdefghjklmnopqrst';
+                $subfields_to_subdivision='vxyz';
+                $delimiter=" -- ";
+            } elsif ($tag eq '710') {
+                $subfields_to_report = 'abcdefghklmnoprst';
+                $subfields_to_subdivision='vxyz';
+                $delimiter=" -- ";
+            } elsif ($tag eq '711') {
+                $subfields_to_report = 'acdefghklnpqst';
+                $subfields_to_subdivision='vxyz';
+                $delimiter=" -- ";
+            } elsif ($tag eq '730') {
+                $subfields_to_report = 'adfghklmnoprst';
+                $subfields_to_subdivision='vxyz';
+                $delimiter=" -- ";
+            } elsif ($tag eq '748') {
+                $subfields_to_report = 'ab';
+                $subfields_to_subdivision='vxyz';
+                $delimiter=" -- ";
+            } elsif ($tag eq '750') {
+                $subfields_to_report = 'ab';
+                $subfields_to_subdivision='vxyz';
+                $delimiter=" -- ";
+            } elsif ($tag eq '751') {
+                $subfields_to_report = 'a';
+                $subfields_to_subdivision='vxyz';
+                $delimiter=" -- ";
+            } elsif ($tag eq '755') {
+                $subfields_to_report = 'abvxyz';
+                $subfields_to_subdivision='vxyz';
+                $delimiter=" -- ";
+            } elsif ($tag eq '780') {
+                $subfields_to_report = 'vxyz';
+                $delimiter=" ";
+            } elsif ($tag eq '781') {
+                $subfields_to_report = 'vxyz';
+                $delimiter=" ";
+            } elsif ($tag eq '782') {
+                $subfields_to_report = 'vxyz';
+                $delimiter=" ";
+            } elsif ($tag eq '785') {
+               $subfields_to_report = 'vxyz';
+                $delimiter=" ";
+            }
+
+            my $heading = $field->as_string($subfields_to_report);
+
+            my $subheading = $field->as_string($subfields_to_subdivision,$delimiter);
+            if(length $subheading > 0 )
+            {
+                $heading.=$delimiter.$subheading;
+            }
+
+            if ($subfields_to_report) {
+                push @equalterm, {
+                    heading => $heading,
+                    hemain  => ( $field->subfield( substr($subfields_to_report, 0, 1) ) // undef ),
+                    field   => $tag,
+                };
+            } else {
+                push @equalterm, {
+                    heading => $field->as_string(),
+                    hemain  => ( $field->subfield( 'a' ) // undef ),
+                    field   => $tag,
+                };
+            }
+        }
+
         foreach my $field ($record->field('880')) {
             my $linkage = $field->subfield('6');
             my $category = substr $linkage, 0, 1;
@@ -1092,6 +1170,7 @@ sub BuildSummary {
     $summary{seefrom} = \@seefrom;
     $summary{seealso} = \@seealso;
     $summary{otherscript} = \@otherscript;
+    $summary{equalterm} = \@equalterm;
     return \%summary;
 }
 
