@@ -1,7 +1,8 @@
 [% USE Koha %]
-[% USE raw %]
 [% USE Branches %]
 [% USE ItemTypes %]
+[% USE KohaNews %]
+[% USE raw %]
 [% INCLUDE 'doc-head-open.inc' %]
 
 <title>Request article &rsaquo; [% IF ( LibraryNameTitle ) %][% LibraryNameTitle | html %][% ELSE %]Koha online[% END %] catalog</title>
@@ -11,6 +12,8 @@
 
 [% INCLUDE 'bodytag.inc' bodyid='opac-request-article' %]
 [% INCLUDE 'masthead.inc' %]
+
+[% SET disclaimer = KohaNews.get( location => "ArticleRequestsDisclaimerText", lang => lang, library => branchcode ) %]
 
 <div class="main">
     <nav aria-label="breadcrumb">
@@ -32,14 +35,9 @@
             <div class="col">
                 [% IF biblio.can_article_request( patron ) %]
                     <h1>Place article request for [% biblio.title | html %]</h1>
-                    [% IF disclaimer %]
+                    [% IF ( disclaimer && !action) %]
                         <div class="alert alert-warning">
-                            [% FOREACH disc IN disclaimer %]
-                            <h3>[% disc.title | html %]</h3>
-                            <p>
-                                [% disc.content | $raw %]
-                            </p>
-                            [% END %]
+                            [% PROCESS koha_news_block news => disclaimer %]
                             <a href="/cgi-bin/koha/opac-request-article.pl?biblionumber=[% biblio.biblionumber | uri %]&amp;action=accept"
                             class="btn btn-sm btn-primary"><i class="fa fa-check" aria-hidden="true"></i> Accept</a>
                         </div>
@@ -52,7 +50,7 @@
 
 
                         <form id="place-article-request" method="post" action="/cgi-bin/koha/opac-request-article.pl">
-                        <legend class="sr-only">Place article request</legend>
+                            <legend class="sr-only">Place article request</legend>
                             <input type="hidden" name="action" value="create" />
                             <input type="hidden" name="biblionumber" id="biblionumber" value="[% biblio.biblionumber | html %]" />
 
