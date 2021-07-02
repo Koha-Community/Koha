@@ -2022,7 +2022,10 @@ sub AddReturn {
         if (defined $update_loc_rules->{_ALL_}) {
             if ($update_loc_rules->{_ALL_} eq '_PERM_') { $update_loc_rules->{_ALL_} = $item->permanent_location; }
             if ($update_loc_rules->{_ALL_} eq '_BLANK_') { $update_loc_rules->{_ALL_} = ''; }
-            if ( defined $item->location && $item->location ne $update_loc_rules->{_ALL_}) {
+            if (
+                ( defined $item->location && $item->location ne $update_loc_rules->{_ALL_}) ||
+                (!defined $item->location && $update_loc_rules->{_ALL_} ne "")
+               ) {
                 $messages->{'ItemLocationUpdated'} = { from => $item->location, to => $update_loc_rules->{_ALL_} };
                 $item->location($update_loc_rules->{_ALL_})->store({skip_record_index=>1});
             }
