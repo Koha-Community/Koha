@@ -97,6 +97,14 @@ can owner change contents?
 
 can others change contents?
 
+=head2 allow_change_from_staff
+
+  data_type: 'tinyint'
+  default_value: 0
+  is_nullable: 1
+
+can staff change contents?
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -131,6 +139,8 @@ __PACKAGE__->add_columns(
   "allow_change_from_owner",
   { data_type => "tinyint", default_value => 1, is_nullable => 1 },
   "allow_change_from_others",
+  { data_type => "tinyint", default_value => 0, is_nullable => 1 },
+  "allow_change_from_staff",
   { data_type => "tinyint", default_value => 0, is_nullable => 1 },
 );
 
@@ -199,8 +209,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2021-09-07 11:08:02
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:QH2/kScjb+lwTwrChjem1Q
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2022-04-12 10:03:27
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:dzF83u6fWMs2YRrG2yBD8w
 
 sub koha_object_class {
     'Koha::Virtualshelf';
@@ -209,8 +219,5 @@ sub koha_objects_class {
     'Koha::Virtualshelves';
 }
 
-__PACKAGE__->add_columns(
-    '+public' => { is_boolean => 1 },
-);
-
+# You can replace this text with custom code or comments, and it will be preserved on regeneration
 1;
