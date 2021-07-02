@@ -249,6 +249,10 @@ $(document).ready(function() {
         return false;
     });
 
+    $('#RenewCheckinChecked').on('click', function(){
+        RefreshIssuesTable();
+    });
+
     if ( Cookies.get("issues-table-load-immediately-" + script) == "true" ) {
         LoadIssuesTable();
         $('#issues-table-load-immediately').prop('checked', true);
@@ -256,6 +260,11 @@ $(document).ready(function() {
     $('#issues-table-load-immediately').on( "change", function(){
         Cookies.set("issues-table-load-immediately-" + script, $(this).is(':checked'), { expires: 365 });
     });
+
+    function RefreshIssuesTable() {
+        var table = $('#issues-table').DataTable();
+        table.ajax.reload();
+    }
 
     function LoadIssuesTable() {
         $('#issues-table-loading-message').hide();
@@ -293,7 +302,6 @@ $(document).ready(function() {
                     "iDataSort": 2, // Sort on hidden unformatted date due column
                     "mDataProp": function( oObj ) {
                         var due = oObj.date_due_formatted;
-
                         if ( oObj.date_due_overdue ) {
                             due = "<span class='overdue'>" + due + "</span>";
                         }
