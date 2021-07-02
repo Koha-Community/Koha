@@ -13,7 +13,7 @@
 [% INCLUDE 'bodytag.inc' bodyid='opac-request-article' %]
 [% INCLUDE 'masthead.inc' %]
 
-[% SET disclaimer = KohaNews.get( location => "ArticleRequestsDisclaimerText", lang => lang, library => branchcode ) %]
+[% SET disclaimer = KohaNews.get( location => "ArticleRequestsDisclaimerText", lang => lang, library => Branches.GetLoggedInBranchcode ) %]
 
 <div class="main">
     <nav aria-label="breadcrumb">
