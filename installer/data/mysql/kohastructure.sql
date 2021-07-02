@@ -5340,6 +5340,7 @@ CREATE TABLE `virtualshelves` (
   `created_on` datetime NOT NULL COMMENT 'creation time',
   `allow_change_from_owner` tinyint(1) DEFAULT 1 COMMENT 'can owner change contents?',
   `allow_change_from_others` tinyint(1) DEFAULT 0 COMMENT 'can others change contents?',
+  `allow_change_from_staff` tinyint(1) DEFAULT 0 COMMENT 'can staff change contents?',
   PRIMARY KEY (`shelfnumber`),
   KEY `virtualshelves_ibfk_1` (`owner`),
   CONSTRAINT `virtualshelves_ibfk_1` FOREIGN KEY (`owner`) REFERENCES `borrowers` (`borrowernumber`) ON DELETE SET NULL ON UPDATE SET NULL
