@@ -479,6 +479,85 @@ sub filter_by_attribute_value {
     return Koha::Patrons->_new_from_dbic($rs);
 }
 
+=head3 filter_by_amount_owed
+
+    Koha::Patrons->filter_by_amount_owed(
+        {
+            less_than  => '2.00',
+            more_than  => '0.50',
+            debit_type => $debit_type_code,
+            library    => $branchcode
+        }
+    );
+
+Returns patrons filtered by how much money they owe, between passed limits.
+
+Optionally limit to debts of a particular debit_type or/and owed to a particular library.
+
+=head4 arguments hashref
+
+=over 4
+
+=item less_than (optional)  - filter out patrons who owe less than Amount
+
+=item more_than (optional)  - filter out patrons who owe more than Amount
+
+=item debit_type (optional) - filter the amount owed by debit type
+
+=item library (optional)    - filter the amount owed to a particular branch
+
+=back
+
+=cut
+
+sub filter_by_amount_owed {
+    my ( $self, $options ) = @_;
+
+    return $self
+      unless (
+        defined($options)
+        && (   defined( $options->{less_than} )
+            || defined( $options->{more_than} ) )
+      );
+
+    my $where = {};
+    my $group_by =
+      [ map { 'me.' . $_ } $self->_resultset->result_source->columns ];
+
+    my $attrs = {
+        join     => 'accountlines',
+        group_by => $group_by,
+        '+select' =>
+          { sum => 'accountlines.amountoutstanding', '-as' => 'outstanding' },
+        '+as' => 'outstanding'
+    };
+
+    $where->{'accountlines.debit_type_code'} = $options->{debit_type}
+      if defined( $options->{debit_type} );
+
+    $where->{'accountlines.branchcode'} = $options->{library}
+      if defined( $options->{library} );
+
+    $attrs->{'having'} = [
+        { 'outstanding' => { '<' => $options->{less_than} } },
+        { 'outstanding' => undef }
+      ]
+      if ( defined( $options->{less_than} )
+        && !defined( $options->{more_than} ) );
+
+    $attrs->{'having'} = { 'outstanding' => { '>' => $options->{more_than} } }
+      if (!defined( $options->{less_than} )
+        && defined( $options->{more_than} ) );
+
+    $attrs->{'having'}->{'-and'} = [
+        { 'outstanding' => { '>' => $options->{more_than} } },
+        { 'outstanding' => { '<' => $options->{less_than} } }
+      ]
+      if ( defined( $options->{less_than} )
+        && defined( $options->{more_than} ) );
+
+    return $self->search( $where, $attrs );
+}
 
 =head3 _type
 

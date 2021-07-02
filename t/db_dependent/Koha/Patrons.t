@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 42;
+use Test::More tests => 43;
 use Test::Warn;
 use Test::Exception;
 use Test::MockModule;
@@ -2182,6 +2182,150 @@ subtest 'queue_notice' => sub {
         {sent => ['email'] }, "Report that email sent when using borrower preferences in test_mode"
     );
     is( Koha::Notice::Messages->search({borrowernumber => $patron->borrowernumber })->count, $counter,"Count of queued notices not increased in test mode");
+};
+
+subtest 'filter_by_amount_owed' => sub {
+    plan tests => 6;
+
+    my $library = $builder->build({source => 'Branch' });
+    my $category = $builder->build({source => 'Category' });
+
+    my $new_patron_cf_1 = Koha::Patron->new(
+        {
+            cardnumber   => 'test_cn_cf_1',
+            branchcode   => $library->{branchcode},
+            categorycode => $category->{categorycode},
+            surname      => 'surname for patron1',
+            firstname    => 'firstname for patron1',
+            userid       => 'a_nonexistent_userid_cf_1',
+        }
+    )->store;
+    my $new_patron_cf_2 = Koha::Patron->new(
+        {
+            cardnumber   => 'test_cn_cf_2',
+            branchcode   => $library->{branchcode},
+            categorycode => $category->{categorycode},
+            surname      => 'surname for patron2',
+            firstname    => 'firstname for patron2',
+            userid       => 'a_nonexistent_userid_cf_2',
+        }
+    )->store;
+    my $new_patron_cf_3 = Koha::Patron->new(
+        {
+            cardnumber   => 'test_cn_cf_3',
+            branchcode   => $library->{branchcode},
+            categorycode => $category->{categorycode},
+            surname      => 'surname for patron3',
+            firstname    => 'firstname for patron3',
+            userid       => 'a_nonexistent_userid_cf_3',
+        }
+    )->store;
+
+    my $results = Koha::Patrons->search(
+        {
+            'me.borrowernumber' => [
+                $new_patron_cf_1->borrowernumber,
+                $new_patron_cf_2->borrowernumber,
+                $new_patron_cf_3->borrowernumber
+            ]
+        }
+    );
+
+    my $fine1 = $builder->build(
+        {
+            source => 'Accountline',
+            value  => {
+                borrowernumber    => $new_patron_cf_1->borrowernumber,
+                amountoutstanding => 12.00,
+                amount            => 12.00,
+                debit_type_code   => 'OVERDUE',
+                branchcode        => $library->{branchcode}
+            },
+        }
+    );
+    my $fine2 = $builder->build(
+        {
+            source => 'Accountline',
+            value  => {
+                borrowernumber    => $new_patron_cf_2->borrowernumber,
+                amountoutstanding => 8.00,
+                amount            => 8.00,
+                debit_type_code   => 'OVERDUE',
+                branchcode        => $library->{branchcode}
+
+            },
+        }
+    );
+    my $fine3 = $builder->build(
+        {
+            source => 'Accountline',
+            value  => {
+                borrowernumber    => $new_patron_cf_2->borrowernumber,
+                amountoutstanding => 10.00,
+                amount            => 10.00,
+                debit_type_code   => 'OVERDUE',
+                branchcode        => $library->{branchcode}
+            },
+        }
+    );
+
+    my $filtered = $results->filter_by_amount_owed();
+    is( ref($filtered), 'Koha::Patrons',
+'Koha::Patrons->filter_by_amount_owed should return a Koha::Patrons result set in a scalar context'
+    );
+
+    my $lower_limit = 12.00;
+    my $upper_limit = 16.00;
+
+    # Catch user with 1 x 12.00 fine and user with no fines.
+    $filtered =
+      $results->filter_by_amount_owed( { less_than => $upper_limit } );
+    is( $filtered->_resultset->as_subselect_rs->count, 2,
+"filter_by_amount_owed({ less_than => $upper_limit }) found two patrons"
+    );
+
+    # Catch user with 1 x 8.00 and 1 x 10.00 fine
+    $filtered =
+      $results->filter_by_amount_owed( { more_than => $lower_limit } );
+    is( $filtered->_resultset->as_subselect_rs->count, 1,
+"filter_by_amount_owed({ more_than => $lower_limit }) found two patrons"
+    );
+
+    # User with 2 fines falls above upper limit - Excluded,
+    # user with 1 fine falls below lower limit - Excluded
+    # and user with no fines falls below lower limit - Excluded.
+    $filtered = $results->filter_by_amount_owed(
+        { more_than => $lower_limit, less_than => $upper_limit } );
+    is( $filtered->_resultset->as_subselect_rs->count, 0,
+"filter_by_amount_owed({ more_than => $lower_limit, less_than => $upper_limit }) found zero patrons"
+    );
+
+    my $library2 = $builder->build({source => 'Branch' });
+    my $fine4 = $builder->build(
+        {
+            source => 'Accountline',
+            value  => {
+                borrowernumber    => $new_patron_cf_2->borrowernumber,
+                amountoutstanding => 10.00,
+                amount            => 10.00,
+                debit_type_code   => 'HOLD',
+                branchcode        => $library2->{branchcode}
+            },
+        }
+    );
+
+    # Catch only the user with a HOLD fee over 6.00
+    $filtered = $results->filter_by_amount_owed( { more_than => 6.00, debit_type => 'HOLD' } );
+    is( $filtered->_resultset->as_subselect_rs->count, 1,
+"filter_by_amount_owed({ more_than => 6.00, debit_type => 'HOLD' }) found one patron"
+    );
+
+    # Catch only the user with a fee over 6.00 at the specified library
+    $filtered = $results->filter_by_amount_owed( { more_than => 6.00, library => $library2->{branchcode} } );
+    is( $filtered->_resultset->as_subselect_rs->count, 1,
+"filter_by_amount_owed({ more_than => 6.00, library => $library2->{branchcode} }) found one patron"
+    );
+
 };
 
 $schema->storage->txn_rollback;
