@@ -76,9 +76,9 @@
                 [% FOREACH item_number IN item_numbers %]
                     <input type="hidden" name="item_number" value="[% item_number.item_number | html %]" />
                 [% END %]
-                <input type="text" name="from" value="[% txt_from | html %]" />
-                <input type="text" name="to" value="[% txt_to | html %]" />
-                <input type="text" name="range" value="[% range | html %]" />
+                <input type="hidden" name="from" value="[% txt_from | html %]" />
+                <input type="hidden" name="to" value="[% txt_to | html %]" />
+                <input type="hidden" name="range" value="[% range | html %]" />
                 <fieldset class="rows">
                     <ol>
                         <li>

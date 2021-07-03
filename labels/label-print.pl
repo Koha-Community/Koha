@@ -57,8 +57,6 @@ my $from = int($txt_from) || undef;
 my $to = int($txt_to) || undef;
 my $range = length($txt_from) || undef;
 
-warn ("range = " . Data::Dumper::Dumper($range));
-
 my $layouts = undef;
 my $templates = undef;
 my $output_formats = undef;

@@ -47,8 +47,6 @@ my $from = $cgi->param('from') || undef;
 my $to = $cgi->param('to') || undef;
 my $range = $cgi->param('range') || undef;
 
-warn ("range_pdf = " . Data::Dumper::Dumper($range));
-
 my $items = undef;
 
 my $pdf_file = (@label_ids || @item_numbers ? "label_single_" . scalar(@label_ids || @item_numbers) : "label_batch_$batch_id");
