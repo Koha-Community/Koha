@@ -201,7 +201,7 @@ subtest 'outstanding_credits() tests' => sub {
 
 subtest 'add_credit() tests' => sub {
 
-    plan tests => 17;
+    plan tests => 21;
 
     $schema->storage->txn_begin;
 
@@ -219,7 +219,8 @@ subtest 'add_credit() tests' => sub {
 
     throws_ok {
         $account->add_credit(
-            {   amount      => 25,
+            {
+                amount      => 25,
                 description => 'Payment of 25',
                 library_id  => $patron->branchcode,
                 note        => 'not really important',
@@ -231,7 +232,8 @@ subtest 'add_credit() tests' => sub {
     'Koha::Exceptions::MissingParameter', 'Exception thrown if interface parameter missing';
 
     my $line_1 = $account->add_credit(
-        {   amount      => 25,
+        {
+            amount      => 25,
             description => 'Payment of 25',
             library_id  => $patron->branchcode,
             note        => 'not really important',
@@ -245,6 +247,7 @@ subtest 'add_credit() tests' => sub {
     is( $schema->resultset('ActionLog')->count(), $action_logs + 0, 'No log was added' );
     is( $schema->resultset('Statistic')->count(), $statistics + 1, 'Action added to statistics' );
     is( $line_1->credit_type_code, 'PAYMENT', 'Account type is correctly set' );
+    ok( $line_1->amount < 0, 'Credit amount is stored as a negative' );
 
     # Enable logs
     t::lib::Mocks::mock_preference( 'FinesLog', 1 );
@@ -263,6 +266,7 @@ subtest 'add_credit() tests' => sub {
     is( $schema->resultset('ActionLog')->count(), $action_logs + 1, 'Log was added' );
     is( $schema->resultset('Statistic')->count(), $statistics + 2, 'Action added to statistics' );
     is( $line_2->credit_type_code, 'PAYMENT', 'Account type is correctly set' );
+    ok( $line_1->amount < 0, 'Credit amount is stored as a negative' );
 
     # offsets have the credit_id set to accountlines_id, and debit_id is undef
     my $offset_1 = Koha::Account::Offsets->search({ credit_id => $line_1->id })->next;
@@ -270,8 +274,10 @@ subtest 'add_credit() tests' => sub {
 
     is( $offset_1->credit_id, $line_1->id, 'No debit_id is set for credits' );
     is( $offset_1->debit_id, undef, 'No debit_id is set for credits' );
+    ok( $offset_1->amount > 0, 'Credit creation offset is a positive' );
     is( $offset_2->credit_id, $line_2->id, 'No debit_id is set for credits' );
     is( $offset_2->debit_id, undef, 'No debit_id is set for credits' );
+    ok( $offset_2->amount > 0, 'Credit creation offset is a positive' );
 
     my $line_3 = $account->add_credit(
         {
@@ -1392,7 +1398,7 @@ subtest 'Koha::Account::payin_amount() tests' => sub {
     is( $offsets->count, 4, 'Four offsets generated' );
     my $offset = $offsets->next;
     is( $offset->type, 'CREATE', 'CREATE offset added for payin line' );
-    is( $offset->amount * 1, -10, 'Correct offset amount recorded' );
+    is( $offset->amount * 1, 10, 'Correct offset amount recorded' );
     $offset = $offsets->next;
     is( $offset->debit_id, $debit_1->id, "Offset added against debit_1");
     is( $offset->type,       'APPLY', "APPLY used for offset_type" );
@@ -1425,7 +1431,7 @@ subtest 'Koha::Account::payin_amount() tests' => sub {
     is( $offsets->count, 2, 'Two offsets generated' );
     $offset = $offsets->next;
     is( $offset->type, 'CREATE', 'CREATE offset added for payin line' );
-    is( $offset->amount * 1, -2.50, 'Correct offset amount recorded' );
+    is( $offset->amount * 1, 2.50, 'Correct offset amount recorded' );
     $offset = $offsets->next;
     is( $offset->debit_id, $debit_5->id, "Offset added against debit_5");
     is( $offset->type,       'APPLY', "APPLY used for offset_type" );

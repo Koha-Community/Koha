@@ -376,7 +376,7 @@ subtest "More Koha::Account::pay tests" => sub {
     is( $offsets->count, 2, 'Two offsets recorded');
     my $offset = $offsets->next;
     is( $offset->type(), 'CREATE', 'First offset type is CREATE' );
-    is( $offset->amount+0, -100, 'First offset amount is -100.00' );
+    is( $offset->amount+0, 100, 'First offset amount is 100.00' );
     $offset = $offsets->next;
     is( $offset->type(), 'APPLY', 'Second offset type is APPLY' );
     is( $offset->amount+0, -100, 'Second offset amount is -100.00' );
@@ -449,7 +449,7 @@ subtest "Even more Koha::Account::pay tests" => sub {
     is( $offsets->count, 2, 'Two offsets recorded');
     my $offset = $offsets->next;
     is( $offset->type(), 'CREATE', 'First offset type is CREATE' );
-    is( $offset->amount+0, -60, 'First offset amount is -60.00' );
+    is( $offset->amount+0, 60, 'First offset amount is 60.00' );
     $offset = $offsets->next;
     is( $offset->type(), 'APPLY', 'Second offset type is APPLY' );
     is( $offset->amount+0, -60, 'Second offset amount is -60.00' );

@@ -242,7 +242,7 @@ sub add_credit {
                     {
                         credit_id => $line->id,
                         type      => 'CREATE',
-                        amount    => $amount
+                        amount    => $amount * -1
                     }
                 )->store();
 

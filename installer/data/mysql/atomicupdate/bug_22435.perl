@@ -10,6 +10,7 @@ if( CheckVersion( $DBversion ) ) {
 
     # Update offset_types to 'CREATE' where appropriate
     $dbh->do( "UPDATE account_offsets SET type = 'CREATE' WHERE type != 'OVERDUE_INCREASE' AND type != 'OVERDUE_DECREASE' AND ( debit_id IS NULL OR credit_id IS NULL)" );
+    $dbh->do( "UPDATE account_offsets SET amount = ABS(amount) WHERE type = 'CREATE'" );
 
     # Update offset_types to 'APPLY' where appropriate
     $dbh->do( "UPDATE account_offsets SET type = 'APPLY' WHERE type != 'OVERDUE_INCREASE' AND type != 'OVERDUE_DECREASE' AND type != 'CREATE' AND type != 'VOID'" );
