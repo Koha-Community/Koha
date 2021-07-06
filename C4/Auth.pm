@@ -1080,7 +1080,14 @@ sub checkauth {
                 else {
                     my $retuserid;
                     my $request_method = $query->request_method();
-                    if ($request_method eq 'POST'){
+
+                    if (
+                        $request_method eq 'POST'
+                        || ( C4::Context->preference('AutoSelfCheckID')
+                            && $q_userid eq C4::Context->preference('AutoSelfCheckID') )
+                      )
+                    {
+
                         ( $return, $cardnumber, $retuserid, $cas_ticket ) =
                           checkpw( $dbh, $q_userid, $password, $query, $type );
                         $userid = $retuserid if ($retuserid);
