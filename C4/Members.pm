@@ -33,7 +33,7 @@ use Koha::Database;
 use Koha::DateUtils qw( dt_from_string output_pref );
 use Koha::Database;
 use Koha::Holds;
-use Koha::News;
+use Koha::AdditionalContents;
 use Koha::Patrons;
 use Koha::Patron::Categories;
 
@@ -490,7 +490,7 @@ sub GetBorrowersToExpunge {
       </overdue>
 
       <news>
-         <<opac_news.*>>
+         <<additional_contents.*>>
       </news>
 
   ISSUEQSLIP:
@@ -582,10 +582,14 @@ sub IssueSlip {
                 issues      => $all,
             };
         }
-        my $news = Koha::News->search_for_display({
-                location => 'slip',
+        my $news = Koha::AdditionalContents->search_for_display(
+            {
+                category   => 'news',
+                location   => 'slip',
+                lang       => $patron->lang,
                 library_id => $branch,
-            });
+            }
+        );
         my @news;
         while ( my $n = $news->next ) {
             my $all = $n->unblessed_all_relateds;
@@ -597,7 +601,7 @@ sub IssueSlip {
             $all->{timestamp} = $published_on_dt;
 
             push @news, {
-                opac_news => $all,
+                additional_contents => $all,
             };
         }
         $letter_code = 'ISSUESLIP';
@@ -609,7 +613,8 @@ sub IssueSlip {
         %loops = (
             issues => [ map { $_->{issues}{itemnumber} } @checkouts ],
             overdues   => [ map { $_->{issues}{itemnumber} } @overdues ],
-            opac_news => [ map { $_->{opac_news}{idnew} } @news ],
+            opac_news => [ map { $_->{additional_contents}{idnew} } @news ],
+            additional_contents => [ map { $_->{additional_contents}{idnew} } @news ],
         );
     }
 

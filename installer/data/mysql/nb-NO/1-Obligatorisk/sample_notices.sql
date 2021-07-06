@@ -118,9 +118,9 @@ Innleveringsfrist: <<issues.date_due>><br />
 <h4 style="text-align: center; font-style:italic;">Nyheter</h4>
 <news>
 <div class="newsitem">
-<h5 style="margin-bottom: 1px; margin-top: 1px"><b><<opac_news.title>></b></h5>
-<p style="margin-bottom: 1px; margin-top: 1px"><<opac_news.content>></p>
-<p class="newsfooter" style="font-size: 8pt; font-style:italic; margin-bottom: 1px; margin-top: 1px">Publisert <<opac_news.published_on>></p>
+<h5 style="margin-bottom: 1px; margin-top: 1px"><b><<additional_contents.title>></b></h5>
+<p style="margin-bottom: 1px; margin-top: 1px"><<additional_contents.content>></p>
+<p class="newsfooter" style="font-size: 8pt; font-style:italic; margin-bottom: 1px; margin-top: 1px">Publisert <<additional_contents.published_on>></p>
 <hr />
 </div>
 </news>', 1),

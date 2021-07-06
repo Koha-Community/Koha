@@ -3891,28 +3891,32 @@ CREATE TABLE `old_reserves` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Table structure for table `opac_news`
+-- Table structure for table `additional_contents`
 --
 
-DROP TABLE IF EXISTS `opac_news`;
+DROP TABLE IF EXISTS `additional_contents`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `opac_news` (
-  `idnew` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'unique identifier for the news article',
-  `branchcode` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'branch code users to create branch specific news, NULL is every branch.',
-  `title` varchar(250) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT 'title of the news article',
-  `content` mediumtext COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'the body of your news article',
-  `lang` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT 'location for the article (koha is the staff interface, slip is the circulation receipt and language codes are for the opac)',
+CREATE TABLE `additional_contents` (
+  `idnew` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'unique identifier for the additional content',
+  `category` varchar(20) NOT NULL COMMENT 'category for the additional content',
+  `code` varchar(20) NOT NULL COMMENT 'code to group content per lang',
+  `location` varchar(255) NOT NULL COMMENT 'location of the additional content',
+  `branchcode` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'branch code users to create branch specific additional content, NULL is every branch.',
+  `title` varchar(250) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT 'title of the additional content',
+  `content` mediumtext COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'the body of your additional content',
+  `lang` varchar(25) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT 'location for the additional content(koha is the staff interface, slip is the circulation receipt and language codes are for the opac)',
   `published_on` date DEFAULT NULL COMMENT 'publication date',
   `updated_on` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp() COMMENT 'last modification',
-  `expirationdate` date DEFAULT NULL COMMENT 'date the article is set to expire or no longer be visible',
-  `number` int(11) DEFAULT NULL COMMENT 'the order in which this article appears in that specific location',
-  `borrowernumber` int(11) DEFAULT NULL COMMENT 'The user who created the news article',
+  `expirationdate` date DEFAULT NULL COMMENT 'date the additional content is set to expire or no longer be visible',
+  `number` int(11) DEFAULT NULL COMMENT 'the order in which this additional content appears in that specific location',
+  `borrowernumber` int(11) DEFAULT NULL COMMENT 'The user who created the additional content',
   PRIMARY KEY (`idnew`),
-  KEY `borrowernumber_fk` (`borrowernumber`),
-  KEY `opac_news_branchcode_ibfk` (`branchcode`),
+  UNIQUE KEY `additional_contents_uniq` (`category`,`code`,`branchcode`,`lang`),
+  KEY `additional_contents_borrowernumber_fk` (`borrowernumber`),
+  KEY `additional_contents_branchcode_ibfk` (`branchcode`),
   CONSTRAINT `borrowernumber_fk` FOREIGN KEY (`borrowernumber`) REFERENCES `borrowers` (`borrowernumber`) ON DELETE SET NULL ON UPDATE CASCADE,
-  CONSTRAINT `opac_news_branchcode_ibfk` FOREIGN KEY (`branchcode`) REFERENCES `branches` (`branchcode`) ON DELETE CASCADE ON UPDATE CASCADE
+  CONSTRAINT `additional_contents_branchcode_ibfk` FOREIGN KEY (`branchcode`) REFERENCES `branches` (`branchcode`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 

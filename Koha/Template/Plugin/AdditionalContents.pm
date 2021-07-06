@@ -1,4 +1,4 @@
-package Koha::Template::Plugin::KohaNews;
+package Koha::Template::Plugin::AdditionalContents;
 
 # Copyright ByWater Solutions 2012
 # Copyright BibLibre 2014
@@ -26,31 +26,32 @@ use base qw( Template::Plugin );
 
 use C4::Koha;
 use C4::Context;
-use Koha::News;
+use Koha::AdditionalContents;
 
 sub get {
     my ( $self, $params ) = @_;
 
-    my $display_location = $params->{location};
+    my $category   = $params->{category};
+    my $location   = $params->{location};
     my $blocktitle = $params->{blocktitle};
-    my $lang = $params->{lang} || 'en';
-    my $library = $params->{library};
+    my $lang       = $params->{lang} || 'default';
+    my $library    = $params->{library};
 
-    my $content = Koha::News->search_for_display({
-            location => $display_location,
-            lang => $lang,
+    my $content = Koha::AdditionalContents->search_for_display(
+        {
+            category   => $category,
+            location   => $location,
+            lang       => $lang,
             library_id => $library,
-    });
+        }
+    );
 
-
-    if( $content->count ){
+    if ( $content->count ) {
         return {
-            content => $content,
-            location => $display_location,
+            content    => $content,
+            location   => $location,
             blocktitle => $blocktitle
         };
-    } else {
-        return;
     }
 }
 
@@ -58,20 +59,20 @@ sub get {
 
 =head1 NAME
 
-Koha::Template::Plugin::KohaNews - TT Plugin for displaying Koha news
+Koha::Template::Plugin::AdditionalContents - TT Plugin for displaying additional contents
 
 =head1 SYNOPSIS
 
-[% USE KohaNews %]
+[% USE AdditionalContents %]
 
-[% KohaNews.get() %]
+[% AdditionalContents.get() %]
 
 =head1 ROUTINES
 
 =head2 get
 
 In a template, you can get the all categories with
-the following TT code: [% KohaNews.get() %]
+the following TT code: [% AdditionalContents.get() %]
 
 =head1 AUTHOR
 

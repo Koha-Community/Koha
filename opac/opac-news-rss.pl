@@ -22,7 +22,7 @@ use Modern::Perl;
 use CGI;
 use C4::Auth qw( get_template_and_user );
 use C4::Output qw( output_html_with_http_headers );
-use Koha::News;
+use Koha::AdditionalContents;
 
 my $input = CGI->new;
 my $dbh   = C4::Context->dbh;
@@ -42,11 +42,14 @@ my ($theme, $news_lang, $availablethemes) = C4::Templates::themelanguage(C4::Con
 
 my $branchcode = $input->param('branchcode');
 
-my $koha_news = Koha::News->search_for_display({
-        location => 'opac',
-        lang => $news_lang,
+my $koha_news = Koha::AdditionalContents->search_for_display(
+    {
+        category   => 'news',
+        location   => ['opac_only', 'staff_and_opac'],
+        lang       => $news_lang,
         library_id => $branchcode,
-    });
+    }
+);
 
 $template->param( koha_news => $koha_news );
 

@@ -25,7 +25,7 @@ use C4::Output qw( output_html_with_http_headers );
 use C4::Auth qw( get_template_and_user );
 use C4::Koha;
 use C4::Tags qw( get_count_by_tag_status );
-use Koha::News;
+use Koha::AdditionalContents;
 use Koha::Patron::Modifications;
 use Koha::Patron::Discharge;
 use Koha::Reviews;
@@ -49,10 +49,14 @@ my $homebranch;
 if (C4::Context->userenv) {
     $homebranch = C4::Context->userenv->{'branch'};
 }
-my $koha_news = Koha::News->search_for_display({
-        location => 'koha',
+my $koha_news = Koha::AdditionalContents->search_for_display(
+    {
+        category   => 'news',
+        location   => [ 'staff_only', 'staff_and_opac' ],
+        lang       => $template->lang,
         library_id => $homebranch
-    });
+    }
+);
 
 $template->param(
     koha_news   => $koha_news,

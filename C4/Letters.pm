@@ -794,12 +794,12 @@ sub _parseletter_sth {
     ($table eq 'aqorders'     )    ? "SELECT * FROM $table WHERE    ordernumber = ?"                                  :
     ($table eq 'aqbasket'     )    ? "SELECT * FROM $table WHERE       basketno = ?"                                  :
     ($table eq 'illrequests'  )    ? "SELECT * FROM $table WHERE  illrequest_id = ?"                                  :
-    ($table eq 'opac_news'    )    ? "SELECT * FROM $table WHERE          idnew = ?"                                  :
     ($table eq 'article_requests') ? "SELECT * FROM $table WHERE             id = ?"                                  :
     ($table eq 'borrower_modifications') ? "SELECT * FROM $table WHERE verification_token = ?" :
     ($table eq 'subscription') ? "SELECT * FROM $table WHERE subscriptionid = ?" :
     ($table eq 'serial') ? "SELECT * FROM $table WHERE serialid = ?" :
     ($table eq 'problem_reports') ? "SELECT * FROM $table WHERE reportid = ?" :
+    ($table eq 'additional_contents' || $table eq 'opac_news') ? "SELECT * FROM additional_contents WHERE idnew = ?" :
     undef ;
     unless ($query) {
         warn "ERROR: No _parseletter_sth query for table '$table'";
@@ -1682,8 +1682,14 @@ sub _get_tt_params {
             plural   => 'items',
             pk       => 'itemnumber',
         },
+        additional_contents => {
+            module   => 'Koha::AdditionalContents',
+            singular => 'additional_content',
+            plural   => 'additional_contents',
+            pk       => 'idnew',
+        },
         opac_news => {
-            module   => 'Koha::News',
+            module   => 'Koha::AdditionalContents',
             singular => 'news',
             plural   => 'news',
             pk       => 'idnew',

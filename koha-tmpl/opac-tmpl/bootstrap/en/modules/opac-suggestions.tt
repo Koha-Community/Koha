@@ -4,8 +4,8 @@
 [% USE Branches %]
 [% USE AuthorisedValues %]
 [% USE KohaDates %]
-[% USE KohaNews %]
-[% SET opacsuggestion = KohaNews.get( location => "OpacSuggestioninstructions", lang => lang, library => Branches.GetLoggedInBranchcode ) %]
+[% USE AdditionalContents %]
+[% SET opacsuggestion = AdditionalContents.get( location => "OpacSuggestioninstructions", lang => lang, library => Branches.GetLoggedInBranchcode ) %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>[% IF ( op_add ) %]Enter a new purchase suggestion[% END %]
 [% IF ( op_else ) %]Purchase Suggestions[% END %] &rsaquo;

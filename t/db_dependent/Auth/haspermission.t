@@ -141,13 +141,13 @@ subtest 'hashref top level AND tests' => sub {
     is( $r, 0, 'Borrower2/serials granular * should fail' );
 
     # Check granular permission with one or more specific subperms
-    $r = haspermission( $borr1->{userid}, { tools => 'edit_news' } );
-    is( ref($r), 'HASH', 'Superlibrarian/tools edit_news' );
+    $r = haspermission( $borr1->{userid}, { tools => 'edit_additional_contents' } );
+    is( ref($r), 'HASH', 'Superlibrarian/tools edit_additional_contents' );
     $r = haspermission( $borr2->{userid}, { acquisition => 'budget_manage' } );
     is( ref($r), 'HASH', 'Borrower2/acq budget_manage' );
     $r = haspermission( $borr2->{userid},
-        { acquisition => 'budget_manage', tools => 'edit_news' } );
-    is( $r, 0, 'Borrower2 (/acquisition|budget_manage AND /tools|edit_news) should fail' );
+        { acquisition => 'budget_manage', tools => 'edit_additional_contents' } );
+    is( $r, 0, 'Borrower2 (/acquisition|budget_manage AND /tools|edit_additional_contents) should fail' );
     $r = haspermission(
         $borr2->{userid},
         {
@@ -173,18 +173,18 @@ subtest 'hashref top level AND tests' => sub {
         {
             tools => {
                 'upload_local_cover_images'  => 1,
-                'edit_news' => 1
+                'edit_additional_contents' => 1
             },
         }
     );
-    is( $r, 0, 'Borrower2 (/tools|upload_local_cover_image AND /tools|edit_news) granular' );
+    is( $r, 0, 'Borrower2 (/tools|upload_local_cover_image AND /tools|edit_additional_contents) granular' );
     $r = haspermission(
         $borr2->{userid},
         {
-            tools => [ 'upload_local_cover_images', 'edit_news'],
+            tools => [ 'upload_local_cover_images', 'edit_additional_contents'],
         }
     );
-    is( ref($r), 'HASH', 'Borrower2 (/tools|upload_local_cover_image OR /tools|edit_news) granular' );
+    is( ref($r), 'HASH', 'Borrower2 (/tools|upload_local_cover_image OR /tools|edit_additional_contents) granular' );
 };
 
 subtest 'arrayref top level OR tests' => sub {
@@ -219,19 +219,19 @@ subtest 'arrayref top level OR tests' => sub {
     is( $r, 0, 'Borrower2/serials granular * should fail' );
 
     # Check granular permission with one or more specific subperms
-    $r = haspermission( $borr1->{userid}, [ { tools => 'edit_news' } ] );
-    is( ref($r), 'HASH', 'Superlibrarian/tools edit_news' );
+    $r = haspermission( $borr1->{userid}, [ { tools => 'edit_additional_contents' } ] );
+    is( ref($r), 'HASH', 'Superlibrarian/tools edit_additional_contents' );
     $r =
       haspermission( $borr2->{userid}, [ { acquisition => 'budget_manage' } ] );
     is( ref($r), 'HASH', 'Borrower2/acq budget_manage' );
     $r = haspermission( $borr2->{userid},
-        [ { acquisition => 'budget_manage'}, { tools => 'edit_news' } ] );
+        [ { acquisition => 'budget_manage'}, { tools => 'edit_additional_contents' } ] );
     is( ref($r), 'HASH', 'Borrower2/two granular OR should pass' );
     $r = haspermission(
         $borr2->{userid},
         [
             { tools => ['upload_local_cover_images'] },
-            { tools => ['edit_news'] }
+            { tools => ['edit_additional_contents'] }
         ]
     );
     is( ref($r), 'HASH', 'Borrower2/tools granular OR subperms' );

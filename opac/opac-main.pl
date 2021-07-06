@@ -27,7 +27,7 @@ use C4::Members;
 use C4::Overdues qw( checkoverdues );
 use Koha::Checkouts;
 use Koha::Holds;
-use Koha::News;
+use Koha::AdditionalContents;
 use Koha::Patron::Messages;
 
 my $input = CGI->new;
@@ -62,18 +62,21 @@ my $news_id = $input->param('news_id');
 my $koha_news;
 
 if (defined $news_id){
-    $koha_news = Koha::News->search({ idnew => $news_id, lang => { '!=', 'koha' } }); # get news that is not staff-only news
+    $koha_news = Koha::AdditionalContents->search({ idnew => $news_id, location => ['opac_only', 'staff_and_opac'] }); # get news that is not staff-only news
     if ( $koha_news->count > 0){
         $template->param( news_item => $koha_news->next );
     } else {
         $template->param( single_news_error => 1 );
     }
 } else {
-    $koha_news = Koha::News->search_for_display({
-            location => 'opac',
-            lang => $template->lang,
+    $koha_news = Koha::AdditionalContents->search_for_display(
+        {
+            category   => 'news',
+            location   => ['opac_only', 'staff_and_opac'],
+            lang       => $template->lang,
             library_id => $homebranch,
-        });
+        }
+    );
 }
 
 # For dashboard

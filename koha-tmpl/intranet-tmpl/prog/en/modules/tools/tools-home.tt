@@ -95,7 +95,7 @@
 
 
 <div class="col-sm-4 col-sm-push-4">
-[% IF ( CAN_user_tools_edit_calendar || CAN_user_tools_manage_csv_profiles || CAN_user_tools_view_system_logs || CAN_user_tools_edit_news  || CAN_user_tools_schedule_tasks || CAN_user_tools_edit_quotes || ( Koha.ArePluginsEnabled() && CAN_user_plugins_tool )  || CAN_user_tools_upload_general_files || CAN_user_tools_access_files ) %]
+[% IF ( CAN_user_tools_edit_calendar || CAN_user_tools_manage_csv_profiles || CAN_user_tools_view_system_logs || CAN_user_tools_edit_additional_contents  || CAN_user_tools_schedule_tasks || CAN_user_tools_edit_quotes || ( Koha.ArePluginsEnabled() && CAN_user_plugins_tool )  || CAN_user_tools_upload_general_files || CAN_user_tools_access_files ) %]
 <h3>Additional tools</h3>
 [% END %]
 <dl>
@@ -114,9 +114,12 @@
     <dd>Browse the system logs</dd>
     [% END %]
 
-    [% IF ( CAN_user_tools_edit_news ) %]
-    <dt><a href="/cgi-bin/koha/tools/koha-news.pl">News</a></dt>
+    [% IF ( CAN_user_tools_edit_additional_contents ) %]
+    <dt><a href="/cgi-bin/koha/tools/additional-contents.pl?category=news">News</a></dt>
     <dd>Write news for the OPAC and staff interfaces</dd>
+
+    <dt><a href="/cgi-bin/koha/tools/additional-contents.pl?category=html_customizations">HTML customizations</a></dt>
+    <dd>Write HTML customizations</dd>
     [% END %]
 
     [% IF ( CAN_user_tools_schedule_tasks ) %]

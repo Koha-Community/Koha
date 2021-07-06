@@ -1,4 +1,4 @@
-package Koha::NewsItem;
+package Koha::AdditionalContent;
 
 # Copyright ByWater Solutions 2015
 #
@@ -29,9 +29,7 @@ use base qw(Koha::Object);
 
 =head1 NAME
 
-Koha::NewsItem - Koha News Item object class
-
-Koha::NewsItem represents a single piece of news from the opac_news table
+Koha::AdditionalContent - Koha Additional content object class
 
 =head1 API
 
@@ -41,9 +39,9 @@ Koha::NewsItem represents a single piece of news from the opac_news table
 
 =head3 author
 
-    $newsitem->author;
+    $additional_content->author;
 
-Return the Koha::Patron object for the patron who authored this news item
+Return the Koha::Patron object for the patron who authored this additional content
 
 =cut
 
@@ -56,9 +54,9 @@ sub author {
 
 =head3 is_expired
 
-my $is_expired = $news_item->is_expired;
+my $is_expired = $additional_content->is_expired;
 
-Returns 1 if the news item is expired or 0;
+Returns 1 if the additional content is expired or 0;
 
 =cut
 
@@ -72,7 +70,7 @@ sub is_expired {
 
 =head3 library
 
-my $library = $news_item->library;
+my $library = $additional_content->library;
 
 Returns Koha::Library object or undef
 
@@ -92,7 +90,7 @@ sub library {
 =cut
 
 sub _type {
-    return 'OpacNews';
+    return 'AdditionalContent';
 }
 
 =head1 AUTHOR

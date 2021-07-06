@@ -74,7 +74,7 @@ INSERT INTO permissions (module_bit, code, description) VALUES
    (11, 'merge_invoices', 'Merge invoices'),
    (11, 'delete_baskets', 'Delete baskets'),
    (12, 'suggestions_manage', 'Manage purchase suggestions'),
-   (13, 'edit_news', 'Write news for the OPAC and staff interfaces'),
+   (13, 'edit_additional_contents', 'Write additional contents for the OPAC and staff interfaces (news and HTML customizations)'),
    (13, 'label_creator', 'Create printable labels and barcodes from catalog and patron data'),
    (13, 'edit_calendar', 'Define days when the library is closed'),
    (13, 'moderate_comments', 'Moderate patron comments'),

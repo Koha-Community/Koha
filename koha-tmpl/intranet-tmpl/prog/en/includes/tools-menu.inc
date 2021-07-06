@@ -94,7 +94,7 @@
     [% END %]
 </ul>
 [% END %]
-[% IF ( CAN_user_tools_edit_calendar || CAN_user_tools_manage_csv_profiles || CAN_user_tools_view_system_logs || CAN_user_tools_edit_news  || CAN_user_tools_schedule_tasks || CAN_user_tools_edit_quotes || ( Koha.ArePluginsEnabled() && CAN_user_plugins_tool )  || CAN_user_tools_upload_general_files || CAN_user_tools_access_files ) %]
+[% IF ( CAN_user_tools_edit_calendar || CAN_user_tools_manage_csv_profiles || CAN_user_tools_view_system_logs || CAN_user_tools_edit_additional_contents  || CAN_user_tools_schedule_tasks || CAN_user_tools_edit_quotes || ( Koha.ArePluginsEnabled() && CAN_user_plugins_tool )  || CAN_user_tools_upload_general_files || CAN_user_tools_access_files ) %]
 <h5>Additional tools</h5>
 <ul>
     [% IF ( CAN_user_tools_edit_calendar ) %]
@@ -106,8 +106,9 @@
     [% IF ( CAN_user_tools_view_system_logs ) %]
 	<li><a href="/cgi-bin/koha/tools/viewlog.pl">Log viewer</a></li>
     [% END %]
-    [% IF ( CAN_user_tools_edit_news ) %]
-	<li><a href="/cgi-bin/koha/tools/koha-news.pl">News</a></li>
+    [% IF ( CAN_user_tools_edit_additional_contents ) %]
+    <li><a href="/cgi-bin/koha/tools/additional-contents.pl?category=news">News</a></li>
+    <li><a href="/cgi-bin/koha/tools/additional-contents.pl?category=html_customizations">HTML customizations</a></li>
     [% END %]
     [% IF ( CAN_user_tools_schedule_tasks ) %]
 	<li><a href="/cgi-bin/koha/tools/scheduler.pl">Task scheduler</a></li>
