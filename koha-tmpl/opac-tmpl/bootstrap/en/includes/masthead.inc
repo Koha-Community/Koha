@@ -93,6 +93,7 @@
                                     <i class="fa fa-user fa-icon-black fa-fw" aria-hidden="true"></i>
                                     <span class="userlabel">Welcome, [% INCLUDE 'patron-title.inc' patron = logged_in_user no_html = 1 %]</span>
                                 </a>
+                                <a tabindex="-1" role="menuitem" class="logout js-hide" href="/cgi-bin/koha/opac-main.pl?logout.x=1"><i class="fa fa-fw fa-sign-out" aria-hidden="true"></i> Log out</a>
                             [% ELSE %]
                                 [% IF Koha.Preference('casAuthentication') %]
                                     [%# CAS authentication is too complicated for modal window %]
