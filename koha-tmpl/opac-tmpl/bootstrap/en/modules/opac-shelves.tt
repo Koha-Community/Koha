@@ -706,7 +706,7 @@
                             <ul class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">
                                 [% IF Koha.Preference( 'opacuserlogin' ) == 1 %]
                                     [% IF category == PRIVATE %]
-                                        <li id="privateshelves_tab" class="ui-state-default ui-corner-top ui-tabs-active ui-state-active"><a class="ui-tabs-anchor" href="/cgi-bin/koha/opac-shelves.pl?op=listamp;category=[% PRIVATE | html %]">Your lists</a></li>
+                                        <li id="privateshelves_tab" class="ui-state-default ui-corner-top ui-tabs-active ui-state-active"><a class="ui-tabs-anchor" href="/cgi-bin/koha/opac-shelves.pl?op=list&amp;category=[% PRIVATE | html %]">Your lists</a></li>
                                     [% ELSE %]
                                         <li id="privateshelves_tab" class="ui-state-default ui-corner-top"><a class="ui-tabs-anchor" href="/cgi-bin/koha/opac-shelves.pl?op=list&amp;category=[% PRIVATE | html %]">Your lists</a></li>
                                     [% END %]
