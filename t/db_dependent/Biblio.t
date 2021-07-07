@@ -167,7 +167,7 @@ subtest "GetMarcFromKohaField" => sub {
 };
 
 subtest "Authority creation with default linker" => sub {
-    plan tests => 2;
+    plan tests => 4;
     # Automatic authority creation
     t::lib::Mocks::mock_preference('LinkerModule', 'Default');
     t::lib::Mocks::mock_preference('BiblioAddsAuthorities', 1);
@@ -188,6 +188,10 @@ subtest "Authority creation with default linker" => sub {
     my ($num_changed,$results) = LinkBibHeadingsToAuthorities($linker, $marc_record, "",undef);
     is( $num_changed, 0, "We shouldn't link or create a new record");
     ok( !defined $results->{added}, "If we have multiple matches, we shouldn't create a new record");
+
+    ($num_changed,$results) = LinkBibHeadingsToAuthorities($linker, $marc_record, "",undef);
+    is( $num_changed, 0, "We shouldn't link or create a new record using cached result");
+    ok( !defined $results->{added}, "If we have multiple matches, we shouldn't create a new record on second instance");
 };
 
 
