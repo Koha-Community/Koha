@@ -38,6 +38,7 @@ sub get_link {
     if ( $self->{'cache'}->{$search_form.$auth_type}->{'cached'} ) {
         $authid = $self->{'cache'}->{$search_form.$auth_type}->{'authid'};
         $fuzzy  = $self->{'cache'}->{$search_form.$auth_type}->{'fuzzy'};
+        $match_count = $self->{'cache'}->{$search_form.$auth_type}->{'match_count'};
     }
     else {
 
@@ -78,6 +79,7 @@ sub get_link {
         $self->{'cache'}->{$search_form.$auth_type}->{'cached'} = 1;
         $self->{'cache'}->{$search_form.$auth_type}->{'authid'} = $authid;
         $self->{'cache'}->{$search_form.$auth_type}->{'fuzzy'}  = $fuzzy;
+        $self->{'cache'}->{$search_form.$auth_type}->{'match_count'} = $match_count;
     }
     return $self->SUPER::_handle_auth_limit($authid), $fuzzy, $match_count;
 }
