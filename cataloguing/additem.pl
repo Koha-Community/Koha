@@ -681,9 +681,9 @@ if ($op eq "additem") {
         if ( $c eq 'more_subfields_xml' ) {
             my @more_subfields_xml = $input->multi_param("items.more_subfields_xml");
             my @unlinked_item_subfields;
-            for my $subfield ( @more_subfields_xml ) {
-                my $v = $input->param('items.more_subfields_xml_' . $subfield);
-                push @unlinked_item_subfields, $subfield, $v;
+            for my $subfield ( uniq @more_subfields_xml ) {
+                my @v = $input->multi_param('items.more_subfields_xml_' . $subfield);
+                push @unlinked_item_subfields, $subfield, $_ for @v;
             }
             if ( @unlinked_item_subfields ) {
                 my $marc = MARC::Record->new();
