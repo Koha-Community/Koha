@@ -557,7 +557,7 @@ function CloneItemSubfield(original){
 function CheckMandatorySubfields(p){
     var total = 0;
     $(p).find(".subfield_line input[name='mandatory'][value='1']").each(function(){
-        var editor = $(this).siblings("[name='field_value']");
+        var editor = $(this).siblings(".input_marceditor");
         if (!editor.val()) {
             editor.addClass("missing");
             total++;
@@ -569,7 +569,7 @@ function CheckMandatorySubfields(p){
 function CheckImportantSubfields(p){
     var total = 0;
     $(p).find(".subfield_line input[name='important'][value='1']").each(function(i){
-        var editor = $(this).siblings("[name='field_value']");
+        var editor = $(this).siblings(".input_marceditor");
         if (!editor.val()) {
             editor.addClass("missing");
             total++;
