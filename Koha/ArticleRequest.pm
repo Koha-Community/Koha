@@ -26,6 +26,7 @@ use Koha::Biblios;
 use Koha::Items;
 use Koha::Libraries;
 use Koha::DateUtils qw( dt_from_string );
+use Koha::ArticleRequest::Status;
 
 use base qw(Koha::Object);
 
