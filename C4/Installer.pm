@@ -743,6 +743,8 @@ sub update {
             $error = $_;
         };
 
+        close $outfh;
+
         my $db_entry = {
             bug_number  => $db_rev->{bug_number},
             description => $db_rev->{description},
