@@ -20,7 +20,7 @@ package C4::Installer;
 use Modern::Perl;
 
 use Try::Tiny;
-use Encode qw( encode is_utf8 );
+use Encode qw( encode decode is_utf8 );
 use DBIx::RunSQL;
 use YAML::XS;
 use C4::Context;
@@ -744,6 +744,7 @@ sub update {
         };
 
         close $outfh;
+        $out = decode('UTF-8', $out);
 
         my $db_entry = {
             bug_number  => $db_rev->{bug_number},
