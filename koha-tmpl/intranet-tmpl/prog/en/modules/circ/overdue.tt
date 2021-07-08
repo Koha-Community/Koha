@@ -86,6 +86,7 @@
           <th class="anti-the">Title</th>
           <th>Home library</th>
           <th>Holding library</th>
+          <th>Shelving location</th>
           <th>Barcode</th>
           <th>Call number</th>
           <th>Item type</th>
@@ -109,6 +110,7 @@
           <td>[% INCLUDE 'biblio-title.inc' biblio=overdueloo link = 1 %] [% IF ( overdueloo.author ) %], by [% overdueloo.author | html %][% END %][% IF ( overdueloo.enumchron ) %], [% overdueloo.enumchron | html %][% END %]</td>
             <td>[% Branches.GetName( overdueloo.homebranchcode ) | html %]</td>
             <td>[% Branches.GetName( overdueloo.holdingbranchcode ) | html %]</td>
+            <td>[% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.location', authorised_value => overdueloo.location ) | html %]</td>
           <td><a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% overdueloo.biblionumber | uri %]&amp;itemnumber=[% overdueloo.itemnum | uri %]#item[% overdueloo.itemnum | uri %]">[% overdueloo.barcode | html %]</a></td>
           <td>[% overdueloo.itemcallnumber | html %]</td>
             <td>[% ItemTypes.GetDescription( overdueloo.itemtype ) | html %]</td>
