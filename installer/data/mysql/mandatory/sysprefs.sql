@@ -56,7 +56,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('AnonSuggestions','0',NULL,'Set to enable Anonymous suggestions to AnonymousPatron borrowernumber','YesNo'),
 ('AnonymousPatron','0',NULL,'Set the identifier (borrowernumber) of the anonymous patron. Used for suggestion and checkout history privacy',''),
 ('ArticleRequests', '0', NULL, 'Enables the article request feature', 'YesNo'),
-('ArticleRequestsHostRedirection', '0', NULL, 'Enables redirection from child to host', 'YesNo'),
+('ArticleRequestsOpacHostRedirection', '0', NULL, 'Enables redirection from child to host when requesting articles on the Opac', 'YesNo'),
 ('ArticleRequestsLinkControl', 'calc', 'always|calc', 'Control display of article request link on search results', 'Choice'),
 ('ArticleRequestsMandatoryFields', '', NULL, 'Comma delimited list of required fields for bibs where article requests rule = ''yes''', 'multiple'),
 ('ArticleRequestsMandatoryFieldsItemOnly', '', NULL, 'Comma delimited list of required fields for bibs where article requests rule = ''item_only''', 'multiple'),

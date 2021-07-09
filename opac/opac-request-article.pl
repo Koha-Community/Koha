@@ -79,7 +79,7 @@ if ( $action eq 'create' ) {
     exit;
 # Should we redirect?
 }
-elsif ( !$action && C4::Context->preference('ArticleRequestsHostRedirection') ) {
+elsif ( !$action && C4::Context->preference('ArticleRequestsOpacHostRedirection') ) {
   # Conditions: no items, host item entry (MARC21 773)
   my ( $host, $pageinfo ) = $biblio->get_marc_host( { no_items => 1 } );
   if ($host) {
