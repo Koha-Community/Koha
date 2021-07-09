@@ -69,6 +69,7 @@ if ( $op eq 'add_form' ) {
                 }
             )
         };
+        $category = $additional_content->category;
     }
     $template->param(
         additional_content => $additional_content,
