@@ -291,12 +291,12 @@ sub XSLTParse4Display {
             my $biblio = Koha::Biblios->find( $biblionumber );
             my $max_results = 300;
 
-            if ( $biblio->components($max_results) ) {
+            if ( $biblio->get_marc_components($max_results) ) {
                 my $search_query = Koha::Util::Search::get_component_part_query($biblionumber);
                 $variables->{ComponentPartQuery} = $search_query;
 
                 my @componentPartRecordXML = ('<componentPartRecords>');
-                for my $cb ( @{ $biblio->components($max_results) } ) {
+                for my $cb ( @{ $biblio->get_marc_components($max_results) } ) {
                     if( ref $cb eq 'MARC::Record'){
                         $cb = $cb->as_xml_record();
                     } else {

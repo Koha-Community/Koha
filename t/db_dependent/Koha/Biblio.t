@@ -507,7 +507,7 @@ subtest 'suggestions() tests' => sub {
     $schema->storage->txn_rollback;
 };
 
-subtest 'components() tests' => sub {
+subtest 'get_marc_components() tests' => sub {
 
     plan tests => 3;
 
@@ -519,13 +519,13 @@ subtest 'components() tests' => sub {
     my $search_mod = Test::MockModule->new( 'Koha::SearchEngine::Zebra::Search' );
     $search_mod->mock( 'simple_search_compat', \&search_component_record2 );
 
-    my @components = $host_biblio->components;
+    my @components = $host_biblio->get_marc_components;
     is( ref(\@components), 'ARRAY', 'Return type is correct' );
 
     is_deeply(
         [@components],
         [()],
-        '->components returns an empty ARRAY'
+        '->get_marc_components returns an empty ARRAY'
     );
 
     $search_mod->unmock( 'simple_search_compat');
@@ -533,9 +533,9 @@ subtest 'components() tests' => sub {
     my $component_record = component_record1()->as_xml();
 
     is_deeply(
-        $host_biblio->components,
+        $host_biblio->get_marc_components,
         [($component_record)],
-        '->components returns the related component part record'
+        '->get_marc_components returns the related component part record'
     );
     $search_mod->unmock( 'simple_search_compat');
 

@@ -479,16 +479,16 @@ sub suggestions {
     return Koha::Suggestions->_new_from_dbic( $suggestions_rs );
 }
 
-=head3 components
+=head3 get_marc_components
 
-my $components = $self->components();
+  my $components = $self->get_marc_components();
 
 Returns an array of MARCXML data, which are component parts of
 this object (MARC21 773$w points to this)
 
 =cut
 
-sub components {
+sub get_marc_components {
     my ($self, $max_results) = @_;
 
     return if (C4::Context->preference('marcflavour') ne 'MARC21');
