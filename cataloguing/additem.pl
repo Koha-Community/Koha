@@ -331,6 +331,26 @@ sub generate_subfield_form {
         return \%subfield_data;
 }
 
+sub get_item_from_cookie {
+    my ( $input ) = @_;
+
+    my $item_from_cookie;
+    my $lastitemcookie = $input->cookie('LastCreatedItem');
+    if ($lastitemcookie) {
+        $lastitemcookie = decode_base64url($lastitemcookie);
+        eval {
+            if ( thaw($lastitemcookie) ) {
+                $item_from_cookie = thaw($lastitemcookie);
+            }
+        };
+        if ($@) {
+            $lastitemcookie ||= 'undef';
+            warn "Storable::thaw failed to thaw LastCreatedItem-cookie. Cookie value '".encode_base64url($lastitemcookie)."'. Caught error follows: '$@'";
+        }
+    }
+    return $item_from_cookie;
+}
+
 my $input        = CGI->new;
 my $error        = $input->param('error');
 
@@ -399,22 +419,6 @@ my @errors; # store errors found while checking data BEFORE saving item.
 
 # Getting last created item cookie
 my $prefillitem = C4::Context->preference('PrefillItem');
-my $item_from_cookie;
-if ($prefillitem) {
-    my $lastitemcookie = $input->cookie('LastCreatedItem');
-    if ($lastitemcookie) {
-        $lastitemcookie = decode_base64url($lastitemcookie);
-        eval {
-            if ( thaw($lastitemcookie) ) {
-                $item_from_cookie = thaw($lastitemcookie);
-            }
-        };
-        if ($@) {
-            $lastitemcookie = 'undef' unless $lastitemcookie;
-            warn "Storable::thaw failed to thaw LastCreatedItem-cookie. Cookie value '".encode_base64url($lastitemcookie)."'. Caught error follows: '$@'";
-        }
-    }
-}
 
 #-------------------------------------------------------------------------------
 if ($op eq "additem") {
@@ -476,10 +480,9 @@ if ($op eq "additem") {
             # force the use of "add and duplicate" feature, so the form will be filled with
             # correct values.
 
-            # FIXME This need to be rewritten, we must store $item->unblessed instead
             # Pushing the last created item cookie back
             if ( $prefillitem ) {
-                $item_from_cookie = $input->cookie(
+                my $last_created_item_cookie = $input->cookie(
                     -name => 'LastCreatedItem',
                     # We encode_base64url the whole freezed structure so we're sure we won't have any encoding problems
                     -value   => encode_base64url( freeze( { %{$item->unblessed}, itemnumber => undef } ) ),
@@ -487,7 +490,7 @@ if ($op eq "additem") {
                     -expires => ''
                 );
 
-                $cookie = [ $cookie, $item_from_cookie ];
+                $cookie = [ $cookie, $last_created_item_cookie ];
             }
 
         }
@@ -497,6 +500,9 @@ if ($op eq "additem") {
 
     # If we have to add & duplicate
     if ($prefillitem) {
+
+        $current_item = $item->unblessed;
+
         if (C4::Context->preference('autoBarcode') eq 'incremental') {
             my ( $barcode ) = C4::Barcodes::ValueBuilder::incremental::get_barcode;
             $current_item->{barcode} = $barcode;
@@ -794,11 +800,13 @@ for my $library ( @$libraries ) {
 
 
 # Using last created item if it exists
-$current_item = $item_from_cookie
-  if $item_from_cookie
-  && $prefillitem
-  && $op ne "additem"
-  && $op ne "edititem";
+if (   $prefillitem
+    && $op ne "additem"
+    && $op ne "edititem" )
+{
+    my $item_from_cookie = get_item_from_cookie($input);
+    $current_item = $item_from_cookie if $item_from_cookie;
+}
 
 my @subfields_to_prefill = split ' ', C4::Context->preference('SubfieldsToUseWhenPrefill');
 
