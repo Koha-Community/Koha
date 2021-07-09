@@ -583,7 +583,6 @@ if ($op eq "additem") {
                         { skip_record_index => 1 } );
                     $current_item->discard_changes; # Cannot chain discard_changes
                     $current_item = $current_item->unblessed;
-                    set_item_default_location($current_item->{itemnumber});
 
 # We count the item only if it was really added
 # That way, all items are added, even if there was some already existing barcodes
