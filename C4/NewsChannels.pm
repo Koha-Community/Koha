@@ -226,13 +226,14 @@ sub GetNewsToDisplay {
         OR    expirationdate IS NULL
      )
      AND   published_on <= CURDATE()
-     AND   (opac_news.lang = '' OR opac_news.lang = ?)
+     AND   (opac_news.lang = ? OR opac_news.lang = ?)
      AND   (opac_news.branchcode IS NULL OR opac_news.branchcode = ?)
      ORDER BY number
     };
     my $sth = $dbh->prepare($query);
-    $lang = $lang // q{};
-    $sth->execute($lang,$branch);
+    my $lang1 = ( $lang =~ /_/ ) ? $lang : q{}; # lang contains also location
+    my $lang2 = $lang // q{};
+    $sth->execute($lang1,$lang2,$branch);
     my @results;
     while ( my $row = $sth->fetchrow_hashref ){
         $row->{newdate} = output_pref({ dt => dt_from_string( $row->{newdate} ), dateonly => 1 });
