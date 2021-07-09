@@ -74,6 +74,9 @@
     <script>
         var oTable; /* oTable needs to be global */
         var sEmptyTable = _("No quotes available. Please use the 'Add quote' button to add a quote."); /* override the default message in datatables.inc */
+
+        var quoteSource = '<input id="quoteSource" type="text" style="height:14px; width:99%" onkeydown="fnClickAddQuote(event,this.parentNode.parentNode)"/>';
+        var quoteText = '<input id="quoteText" type="text" style="height:14px; width:99%" onkeydown="fnClickAddQuote(event,this.parentNode.parentNode)"/>';
         $(document).ready(function() {
             /* NOTE: This is an ajax-source datatable and *not* a server-side sourced datatable. */
             /* See the datatable docs if you don't understand this difference. */
@@ -89,12 +92,18 @@
                                         {
                                             "sWidth": "11%",
                                             "render": function(data, type, row, meta){
+                                                if ( data == quoteSource ) {
+                                                    return data;
+                                                }
                                                 return escape_str(data);
                                             }
                                         },
                                         {
                                             "sWidth": "75%",
                                             "render": function(data, type, row, meta){
+                                                if ( data == quoteText ) {
+                                                    return data;
+                                                }
                                                 return escape_str(data);
                                             }
                                         },
@@ -216,8 +225,8 @@
             var aRow = oTable.fnAddData(
                 [
                     'NA', // this is hackish to fool the datatable sort routine into placing this row at the end of the list...
-                    '<input id="quoteSource" type="text" style="height:14px; width:99%" onkeydown="fnClickAddQuote(event,this.parentNode.parentNode)"/>',
-                    '<input id="quoteText" type="text" style="height:14px; width:99%" onkeydown="fnClickAddQuote(event,this.parentNode.parentNode)"/>',
+                    quoteSource,
+                    quoteText,
                     '0000-00-00 00:00:00',
                 ],
                 false
