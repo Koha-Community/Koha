@@ -24411,6 +24411,15 @@ if( CheckVersion( $DBversion ) ) {
     NewVersion( $DBversion, 11879, "Add a new field to patron record: main contact method");
 }
 
+$DBversion = '21.06.00.008';
+if( CheckVersion( $DBversion ) ) {
+    $dbh->do(q{
+        INSERT IGNORE INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `type` ) VALUES
+            ('ArticleRequestsOpacHostRedirection', '0', NULL, 'Enables redirection from child to host when requesting article on OPAC', 'YesNo')
+    });
+    NewVersion( $DBversion, 20310, "Add pref ArticleRequestsOpacHostRedirection");
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 my $update_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/atomicupdate/';
