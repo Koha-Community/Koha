@@ -23,7 +23,6 @@ use CGI qw ( -utf8 );
 
 use C4::Auth;
 use C4::Output;
-use C4::Context;
 
 use Koha::Biblios;
 use Koha::Patrons;
@@ -40,7 +39,6 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
 
 my $action = $cgi->param('action') || q{};
 my $biblionumber = $cgi->param('biblionumber');
-my $homebranch = C4::Context->userenv->{'branch'} || "";
 
 if ( $action eq 'create' ) {
     my $branchcode = $cgi->param('branchcode');
