@@ -24394,6 +24394,23 @@ if( CheckVersion( $DBversion ) ){
     NewVersion( $DBversion, 14237, ["Add course_items.biblionumber column", "Add fk_course_items_biblionumber constraint", "Change course_items.itemnumber to allow NULL values"] );
 }
 
+$DBversion = '21.06.00.007';
+if( CheckVersion( $DBversion ) ) {
+    if( !column_exists( 'borrowers', 'primary_contact_method' ) ) {
+        $dbh->do( "ALTER TABLE `borrowers` ADD COLUMN `primary_contact_method` VARCHAR(45) DEFAULT NULL AFTER `autorenew_checkouts`" );
+    }
+
+    if( !column_exists( 'deletedborrowers', 'primary_contact_method' ) ) {
+        $dbh->do( "ALTER TABLE `deletedborrowers` ADD COLUMN `primary_contact_method` VARCHAR(45) DEFAULT NULL AFTER `autorenew_checkouts`" );
+    }
+
+    if( !column_exists( 'borrower_modifications', 'primary_contact_method' ) ) {
+        $dbh->do( "ALTER TABLE `borrower_modifications` ADD COLUMN `primary_contact_method` VARCHAR(45) DEFAULT NULL AFTER `gdpr_proc_consent`" );
+    }
+
+    NewVersion( $DBversion, 11879, "Add a new field to patron record: main contact method");
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 my $update_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/atomicupdate/';
