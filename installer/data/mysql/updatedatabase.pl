@@ -24437,6 +24437,15 @@ if( CheckVersion( $DBversion ) ) {
     NewVersion( $DBversion, 20472, "Add columns format and urls in article_requests table");
 }
 
+$DBversion = '21.06.00.010';
+if( CheckVersion( $DBversion ) ) {
+    $dbh->do(q{
+        INSERT IGNORE INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `type` ) VALUES
+        ('ArticleRequestsSupportedFormats', 'PHOTOCOPY', 'PHOTOCOPY|SCAN', 'List supported formats between vertical bars', 'free')
+    });
+    NewVersion( $DBversion, 20472, "Add syspref ArticleRequestsSupportedFormats");
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 my $update_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/atomicupdate/';
