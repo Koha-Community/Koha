@@ -55,7 +55,7 @@ my $txt_from = $cgi->param('from') || undef;
 my $txt_to = $cgi->param('to') || undef;
 my $from = int($txt_from) || undef;
 my $to = int($txt_to) || undef;
-my $range = length($txt_from) || undef;
+my $barcode_length = length($txt_from) || undef;
 
 my $layouts = undef;
 my $templates = undef;
@@ -127,7 +127,7 @@ if ($op eq 'export') {
         push (@batches, {create_script   => 'label-create-pdf.pl',
                  from            => $from,
                  to              => $to,
-                 range           => $range,
+                 barcode_length  => $barcode_length,
                  template_id     => $template_id,
                  layout_id       => $layout_id,
                  start_label     => $start_label,
@@ -161,7 +161,7 @@ elsif ($op eq 'none') {
                     referer                     => $referer,
                     from                        => $from,
                     to                          => $to,
-                    range                       => $range,
+                    barcode_length              => $barcode_length,
                     txt_from                    => $txt_from,
                     txt_to                      => $txt_to
                     );
