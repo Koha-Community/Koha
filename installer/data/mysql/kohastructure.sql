@@ -766,6 +766,8 @@ CREATE TABLE `article_requests` (
   `patron_notes` mediumtext COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `status` enum('PENDING','PROCESSING','COMPLETED','CANCELED') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'PENDING',
   `notes` mediumtext COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `format` enum('PHOTOCOPY', 'SCAN') NOT NULL DEFAULT 'PHOTOCOPY',
+  `urls` MEDIUMTEXT,
   `created_on` timestamp NULL DEFAULT NULL COMMENT 'Be careful with two timestamps in one table not allowing NULL',
   `updated_on` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   PRIMARY KEY (`id`),
