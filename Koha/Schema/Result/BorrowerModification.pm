@@ -423,6 +423,14 @@ __PACKAGE__->table("borrower_modifications");
 
 data processing consent
 
+=head2 primary_contact_method
+
+  data_type: 'varchar'
+  is_nullable: 1
+  size: 45
+
+useful for reporting purposes
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -595,6 +603,8 @@ __PACKAGE__->add_columns(
     datetime_undef_if_invalid => 1,
     is_nullable => 1,
   },
+  "primary_contact_method",
+  { data_type => "varchar", is_nullable => 1, size => 45 },
 );
 
 =head1 PRIMARY KEY
@@ -612,8 +622,8 @@ __PACKAGE__->add_columns(
 __PACKAGE__->set_primary_key("verification_token", "borrowernumber");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2021-06-07 05:28:03
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:JZ6vS5nH8EPc0OL3LQRG+Q
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2021-07-12 13:40:00
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:6giYT5URks8+6VnAs/rtkg
 
 sub koha_object_class {
     'Koha::Patron::Modification';

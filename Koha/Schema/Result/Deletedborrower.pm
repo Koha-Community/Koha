@@ -598,6 +598,14 @@ flag for data anonymization
 
 flag for allowing auto-renewal
 
+=head2 primary_contact_method
+
+  data_type: 'varchar'
+  is_nullable: 1
+  size: 45
+
+useful for reporting purposes
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -772,11 +780,13 @@ __PACKAGE__->add_columns(
   { data_type => "tinyint", default_value => 0, is_nullable => 0 },
   "autorenew_checkouts",
   { data_type => "tinyint", default_value => 1, is_nullable => 0 },
+  "primary_contact_method",
+  { data_type => "varchar", is_nullable => 1, size => 45 },
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2021-06-07 05:28:04
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:/9VjUuilKGDwV/pLlf/4ew
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2021-07-12 13:40:00
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:9q8LmKrfO6bAAFaJ4Z3Jrg
 
 __PACKAGE__->add_columns(
     '+anonymized'    => { is_boolean => 1 },

@@ -601,6 +601,14 @@ flag for data anonymization
 
 flag for allowing auto-renewal
 
+=head2 primary_contact_method
+
+  data_type: 'varchar'
+  is_nullable: 1
+  size: 45
+
+useful for reporting purposes
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -787,6 +795,8 @@ __PACKAGE__->add_columns(
   { data_type => "tinyint", default_value => 0, is_nullable => 0 },
   "autorenew_checkouts",
   { data_type => "tinyint", default_value => 1, is_nullable => 0 },
+  "primary_contact_method",
+  { data_type => "varchar", is_nullable => 1, size => 45 },
 );
 
 =head1 PRIMARY KEY
@@ -1865,8 +1875,8 @@ Composing rels: L</aqorder_users> -> ordernumber
 __PACKAGE__->many_to_many("ordernumbers", "aqorder_users", "ordernumber");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2021-06-07 05:28:03
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:CgLzd4URQdNSXTgd7QnFFg
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2021-07-12 13:40:00
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:IKPb4912o8oCHtmFAi6FPQ
 
 __PACKAGE__->add_columns(
     '+anonymized'    => { is_boolean => 1 },
