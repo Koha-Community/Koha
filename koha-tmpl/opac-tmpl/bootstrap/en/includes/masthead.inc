@@ -98,7 +98,7 @@
                                     [%# CAS authentication is too complicated for modal window %]
                                         <a class="nav-link login-link" href="/cgi-bin/koha/opac-user.pl"><i class="fa fa-user fa-icon-black fa-fw" aria-hidden="true"></i> <span class="userlabel">Log in to your account</span></a>
                                 [% ELSIF ( Koha.Preference('GoogleOpenIDConnect') == 1 ) %]
-                                    <a class="nav-link login-link" href="/cgi-bin/koha/svc/auth/googleopenidconnect" role="button" data-toggle="modal"><i class="fa fa-user fa-icon-black fa-fw" aria-hidden="true"></i> <span class="userlabel">Log in to your account</span></a>
+                                    <a class="nav-link login-link" href="/cgi-bin/koha/svc/auth/googleopenidconnect"><i class="fa fa-user fa-icon-black fa-fw" aria-hidden="true"></i> <span class="userlabel">Log in to your account</span></a>
                                 [% ELSE %]
                                     <a href="/cgi-bin/koha/opac-user.pl" class="nav-link login-link loginModal-trigger"><i class="fa fa-user fa-icon-black fa-fw" aria-hidden="true"></i> <span class="userlabel">Log in to your account</span></a>
                                 [% END %]
