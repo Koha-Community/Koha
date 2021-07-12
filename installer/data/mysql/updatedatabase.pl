@@ -24420,6 +24420,23 @@ if( CheckVersion( $DBversion ) ) {
     NewVersion( $DBversion, 20310, "Add pref ArticleRequestsOpacHostRedirection");
 }
 
+$DBversion = '21.06.00.009';
+if( CheckVersion( $DBversion ) ) {
+    unless ( column_exists('article_requests', 'format') ) {
+        $dbh->do(q|
+            ALTER TABLE article_requests
+            ADD COLUMN `format` enum('PHOTOCOPY', 'SCAN') NOT NULL DEFAULT 'PHOTOCOPY' AFTER notes
+        |);
+    }
+    unless ( column_exists('article_requests', 'urls') ) {
+        $dbh->do(q|
+            ALTER TABLE article_requests
+            ADD COLUMN `urls` MEDIUMTEXT AFTER format
+        |);
+    }
+    NewVersion( $DBversion, 20472, "Add columns format and urls in article_requests table");
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 my $update_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/atomicupdate/';
