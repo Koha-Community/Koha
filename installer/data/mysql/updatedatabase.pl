@@ -24373,6 +24373,27 @@ if( CheckVersion( $DBversion ) ) {
     NewVersion( $DBversion, 26205, "Add new system preference NewsLog to log news changes");
 }
 
+$DBversion = '21.06.00.006';
+if( CheckVersion( $DBversion ) ){
+    unless( column_exists( 'course_items', 'biblionumber') ) {
+        $dbh->do(q{ ALTER TABLE course_items ADD `biblionumber` int(11) AFTER `itemnumber` });
+
+        $dbh->do(q{
+            UPDATE course_items
+            LEFT JOIN items ON items.itemnumber=course_items.itemnumber
+            SET course_items.biblionumber=items.biblionumber
+            WHERE items.itemnumber IS NOT NULL
+        });
+
+        $dbh->do(q{ ALTER TABLE course_items MODIFY COLUMN `biblionumber` INT(11) NOT NULL });
+
+        $dbh->do(q{ ALTER TABLE course_items ADD CONSTRAINT `fk_course_items_biblionumber` FOREIGN KEY (`biblionumber`) REFERENCES `biblio` (`biblionumber`) ON DELETE CASCADE ON UPDATE CASCADE });
+        $dbh->do(q{ ALTER TABLE course_items CHANGE `itemnumber` `itemnumber` int(11) DEFAULT NULL });
+    }
+
+    NewVersion( $DBversion, 14237, ["Add course_items.biblionumber column", "Add fk_course_items_biblionumber constraint", "Change course_items.itemnumber to allow NULL values"] );
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 my $update_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/atomicupdate/';
