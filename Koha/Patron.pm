@@ -1842,7 +1842,8 @@ sub to_api_mapping {
         altcontactphone     => 'altcontact_phone',
         altcontactsurname   => 'altcontact_surname',
         altcontactstate     => 'altcontact_state',
-        altcontactzipcode   => 'altcontact_postal_code'
+        altcontactzipcode   => 'altcontact_postal_code',
+        primary_contact_method => undef,
     };
 }
 
