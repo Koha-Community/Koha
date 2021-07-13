@@ -930,7 +930,6 @@ sub _clean_search_term {
     $term =~ s/=/:/g;
 
     $term = $self->_convert_index_strings_freeform($term);
-    $term =~ s/[{}]/"/g;
 
     # Remove unbalanced quotes
     my $unquoted = $term;
@@ -952,6 +951,8 @@ sub _clean_search_term {
     # and correctly ignore unevenly backslashed:
     $term =~ s/((?<!\\)(?:[\\]{2})*:[^:\s]+(?<!\\)(?:[\\]{2})*)(?=:)/$1\\/g;
 
+    # screen all brackets with backslash
+    $term =~ s/(?<!\\)(?:[\\]{2})*([\{\}\[\]])$lookahead/\\$1/g;
     return $term;
 }
 
