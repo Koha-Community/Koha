@@ -885,7 +885,7 @@ sub checkauth {
                 $session->param('desk_id'),      $session->param('desk_name'),
                 $session->param('register_id'),  $session->param('register_name')
             );
-            Koha::Logger->get->debug(sprintf "AUTH_SESSION: (%s)\t%s %s - %s", map { $session->param($_) } qw(cardnumber firstname surname branch));
+            Koha::Logger->get->debug(sprintf "AUTH_SESSION: (%s)\t%s %s - %s", map { $session->param($_) || q{} } qw(cardnumber firstname surname branch));
             $ip          = $session->param('ip');
             $lasttime    = $session->param('lasttime');
             $userid      = $s_userid;
