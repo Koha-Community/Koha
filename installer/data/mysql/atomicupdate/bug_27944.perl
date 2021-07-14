@@ -10,7 +10,7 @@ if ( CheckVersion($DBversion) ) {
         q{
         UPDATE  `letter`
         SET     `code` = 'AR_REQUESTED',
-                `name` = 'Article requested'
+                `name` = REPLACE(name, '- open', '- new')
         WHERE   `module` = 'circulation'
                 AND `code` = 'AR_PENDING'
     }
@@ -19,7 +19,7 @@ if ( CheckVersion($DBversion) ) {
     $dbh->do(
         q{
         INSERT IGNORE INTO `letter` (`module`, `code`, `branchcode`, `name`, `is_html`, `title`, `content`, `message_transport_type`) VALUES
-        ('circulation', 'AR_PENDING', '', 'Article request - open', 0, 'Pending article request', 'Dear <<borrowers.firstname>> <<borrowers.surname>> (<<borrowers.cardnumber>>)\r\n\r\nYour request for an article from <<biblio.title>> (<<items.barcode>>) is now in pending state.\r\n\r\nArticle requested:\r\nTitle: <<article_requests.title>>\r\nAuthor: <<article_requests.author>>\r\nVolume: <<article_requests.volume>>\r\nIssue: <<article_requests.issue>>\r\nDate: <<article_requests.date>>\r\nPages: <<article_requests.pages>>\r\nChapters: <<article_requests.chapters>>\r\nNotes: <<article_requests.patron_notes>>\r\n\r\n\r\nThank you!', 'email')
+        ('circulation', 'AR_PENDING', '', 'Article request - pending', 0, 'Pending article request', 'Dear <<borrowers.firstname>> <<borrowers.surname>> (<<borrowers.cardnumber>>)\r\n\r\nYour request for an article from <<biblio.title>> (<<items.barcode>>) is now in pending state.\r\n\r\nArticle requested:\r\nTitle: <<article_requests.title>>\r\nAuthor: <<article_requests.author>>\r\nVolume: <<article_requests.volume>>\r\nIssue: <<article_requests.issue>>\r\nDate: <<article_requests.date>>\r\nPages: <<article_requests.pages>>\r\nChapters: <<article_requests.chapters>>\r\nNotes: <<article_requests.patron_notes>>\r\n\r\n\r\nThank you!', 'email')
     }
     );
 
