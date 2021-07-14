@@ -5,6 +5,7 @@ if ( CheckVersion($DBversion) ) {
     $dbh->do(
 "ALTER TABLE `article_requests` MODIFY `status` enum('REQUESTED', 'PENDING','PROCESSING','COMPLETED','CANCELED') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'REQUESTED'"
     );
+    $dbh->do(q|UPDATE article_requests SET status='REQUESTED' WHERE status='PENDING'|);
 
     $dbh->do(
         q{
@@ -14,7 +15,7 @@ if ( CheckVersion($DBversion) ) {
         WHERE   `module` = 'circulation'
                 AND `code` = 'AR_PENDING'
     }
-    );
+    ) if ( $dbh->selectrow_array('SELECT COUNT(*) FROM letter WHERE code=?', undef, 'AR_REQUESTED') )[0] == 0; # Check to make idempotent
 
     $dbh->do(
         q{
