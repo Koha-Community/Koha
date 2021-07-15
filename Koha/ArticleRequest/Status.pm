@@ -19,37 +19,16 @@ package Koha::ArticleRequest::Status;
 
 use Modern::Perl;
 
+use constant Requested  => 'REQUESTED';
+use constant Pending    => 'PENDING';
+use constant Processing => 'PROCESSING';
+use constant Completed  => 'COMPLETED';
+use constant Canceled   => 'CANCELED';
+
 =head1 AUTHOR
 
 Kyle M Hall <kyle@bywatersolutions.com>
 
 =cut
-
-=head2 Requested
-
-    returns constant string 'REQUESTED'
-
-=cut
-
-sub Requested {
-    return 'REQUESTED';
-}
-
-sub Pending {
-    return 'PENDING';
-}
-
-sub Processing {
-    return 'PROCESSING';
-}
-
-sub Completed {
-    return 'COMPLETED';
-}
-
-sub Canceled {
-    return 'CANCELED';
-}
-
 
 1;
