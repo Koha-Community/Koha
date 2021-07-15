@@ -82,6 +82,12 @@
                         [% IF ( verbose ) %]
                             <form action="opac-basket.pl" method="get" name="bookbag_form" id="bookbag_form">
                                 [% FOREACH BIBLIO_RESULT IN BIBLIO_RESULTS %]
+                                    [% IF BIBLIO_RESULT.title %]
+                                        [% check_title = BIBLIO_RESULT.title %]
+                                    [% ELSE %]
+                                        [% check_title = BIBLIO_RESULT.biblionumber %]
+                                    [% END %]
+                                    <label for="bib[% BIBLIO_RESULT.biblionumber | html %]" class="sr-only">[% check_title | html %]</label>
                                     <h2>
                                                 <input type="checkbox" class="cb" value="[% BIBLIO_RESULT.biblionumber | html %]" name="bib[% BIBLIO_RESULT.biblionumber | html %]" id="bib[% BIBLIO_RESULT.biblionumber | html %]">
                                                 [% INCLUDE 'biblio-title.inc' biblio=BIBLIO_RESULT %]
@@ -271,6 +277,12 @@
                                     [% FOREACH BIBLIO_RESULT IN BIBLIO_RESULTS %]
                                         <tr>
                                                 <td class="noprint selectcol">
+                                                    [% IF BIBLIO_RESULT.title %]
+                                                        [% check_title = BIBLIO_RESULT.title %]
+                                                    [% ELSE %]
+                                                        [% check_title = BIBLIO_RESULT.biblionumber %]
+                                                    [% END %]
+                                                    <label for="bib[% BIBLIO_RESULT.biblionumber | html %]" class="sr-only">[% check_title | html %]</label>
                                                 <input type="checkbox" class="cb" value="[% BIBLIO_RESULT.biblionumber | html %]" name="bib[% BIBLIO_RESULT.biblionumber | html %]" id="bib[% BIBLIO_RESULT.biblionumber | html %]">
                                                 </td>
                                             <td>
