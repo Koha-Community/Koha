@@ -86,7 +86,7 @@ function Check(f) {
     } else {
         alertString2 = MSG_FORM_NOT_SUBMITTED;
         alertString2 += "\n------------------------------------------------------------------------------------\n";
-        alertString2 += "\n- " + "%s " + MSG_MANDATORY_FIELDS_EMPTY.format(total_mandatory);
+        alertString2 += "\n- " + MSG_MANDATORY_FIELDS_EMPTY.format(total_mandatory);
     }
     if(total_important > 0){
         if( !alertString2 ){
