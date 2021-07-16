@@ -1027,7 +1027,6 @@ sub ModReserve {
     my $biblionumber = $params->{'biblionumber'};
     my $cancellation_reason = $params->{'cancellation_reason'};
 
-    return if $rank eq "W";
     return if $rank eq "n";
 
     return unless ( $reserve_id || ( $borrowernumber && ( $biblionumber || $itemnumber ) ) );
@@ -1044,6 +1043,16 @@ sub ModReserve {
 
     if ( $rank eq "del" ) {
         $hold->cancel({ cancellation_reason => $cancellation_reason });
+    }
+    elsif ($hold->found && $hold->priority eq '0') {
+        logaction( 'HOLDS', 'MODIFY', $hold->reserve_id, Dumper($hold->unblessed) )
+            if C4::Context->preference('HoldsLog');
+
+        # The only column that can be updated for a found hold is the expiration date
+        my $date = $params->{expirationdate};
+        if ($date) {
+            $hold->expirationdate(dt_from_string($date))->store();
+        }
     }
     elsif ($rank =~ /^\d+/ and $rank > 0) {
         logaction( 'HOLDS', 'MODIFY', $hold->reserve_id, Dumper($hold->unblessed) )
