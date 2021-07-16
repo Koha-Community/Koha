@@ -3,7 +3,7 @@
         <h5>Serials</h5>
         <ul>
         [% IF ( subscriptionid ) %]
-                <li><a href="serials-collection.pl?subscriptionid=[% subscriptionid | uri %]">Serial collection</a></li>
+                <li><a href="/cgi-bin/koha/serials/serials-collection.pl?subscriptionid=[% subscriptionid | uri %]">Serial collection</a></li>
                 [% UNLESS closed %]
                     [% IF ( routing && CAN_user_serials_routing ) %]
                         [% IF ( hasRouting ) %]
