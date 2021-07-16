@@ -30,7 +30,7 @@ use Encode;
 use C4::Context;
 use C4::Auth qw( get_template_and_user );
 use C4::Output qw( output_html_with_http_headers );
-use C4::ImportBatch qw( GetImportRecordsRange GetImportRecordMarc GetImportRecordMatches sub SetImportRecordStatus SetMatchedBiblionumber SetImportBatchStatus GetImportBatch GetImportBatchRangeDesc GetNumberOfNonZ3950ImportBatches GetImportBatchOverlayAction GetImportBatchNoMatchAction GetImportBatchItemAction );
+use C4::ImportBatch qw( GetImportRecordsRange GetImportRecordMarc GetImportRecordMatches SetImportRecordStatus SetMatchedBiblionumber SetImportBatchStatus GetImportBatch GetImportBatchRangeDesc GetNumberOfNonZ3950ImportBatches GetImportBatchOverlayAction GetImportBatchNoMatchAction GetImportBatchItemAction );
 use C4::Matcher;
 use C4::Search qw( FindDuplicate );
 use C4::Acquisition qw( populate_order_with_prices );
@@ -41,7 +41,7 @@ use C4::Biblio qw(
     GetMarcQuantity
     TransformHtmlToXml
 );
-use C4::Items qw( PrepareItemrecordDisplay sub AddItemFromMarc );
+use C4::Items qw( PrepareItemrecordDisplay AddItemFromMarc );
 use C4::Budgets qw( GetBudget GetBudgets GetBudgetHierarchy CanUserUseBudget GetBudgetByCode );
 use C4::Acquisition qw( populate_order_with_prices );
 use C4::Suggestions;    # GetSuggestion

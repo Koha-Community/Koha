@@ -22,12 +22,12 @@ BEGIN {
     require Exporter;
     @ISA = qw(Exporter);
     @EXPORT_OK = qw(
-        &pedantic_p
-        &warn_additional
-        &warn_normal
-        &warn_pedantic
-        &error_additional
-        &error_normal
+        pedantic_p
+        warn_additional
+        warn_normal
+        warn_pedantic
+        error_additional
+        error_normal
     );
 }
 

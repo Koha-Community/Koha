@@ -20,7 +20,7 @@ use File::Basename qw( fileparse );
 use Getopt::Long qw( GetOptions );
 use Locale::PO;
 use TmplTokenizer;
-use VerboseWarnings qw( :warn :die );
+use VerboseWarnings qw( pedantic_p warn_additional warn_normal warn_pedantic error_additional error_normal );
 
 ###############################################################################
 

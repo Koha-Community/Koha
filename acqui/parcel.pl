@@ -58,7 +58,7 @@ use Modern::Perl;
 
 use C4::Auth qw( get_template_and_user );
 use C4::Acquisition qw( CancelReceipt GetInvoice GetInvoiceDetails get_rounded_price );
-use C4::Budgets qw( _round GetBudget GetBudgetByOrderNumber GetBudgetName );
+use C4::Budgets qw( GetBudget GetBudgetByOrderNumber GetBudgetName );
 use CGI qw ( -utf8 );
 use C4::Output qw( output_html_with_http_headers );
 use C4::Suggestions qw( GetSuggestion GetSuggestionInfoFromBiblionumber GetSuggestionInfo );

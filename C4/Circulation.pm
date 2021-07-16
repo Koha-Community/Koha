@@ -790,7 +790,7 @@ sub CanBookBeIssued {
     #
     if ( $patron->category->category_type eq 'X' && (  $item_object->barcode  )) {
     	# stats only borrower -- add entry to statistics table, and return issuingimpossible{STATS} = 1  .
-        &UpdateStats({
+        C4::Stats::UpdateStats({
                      branch => C4::Context->userenv->{'branch'},
                      type => 'localuse',
                      itemnumber => $item_object->itemnumber,
@@ -1631,7 +1631,7 @@ sub AddIssue {
             }
 
             # Record the fact that this book was issued.
-            &UpdateStats(
+            C4::Stats::UpdateStats(
                 {
                     branch => C4::Context->userenv->{'branch'},
                     type => ( $onsite_checkout ? 'onsite_checkout' : 'issue' ),
@@ -2229,7 +2229,7 @@ sub AddReturn {
     }
 
     # Record the fact that this book was returned.
-    UpdateStats({
+    C4::Stats::UpdateStats({
         branch         => $branch,
         type           => $stat_type,
         itemnumber     => $itemnumber,
@@ -3117,7 +3117,7 @@ sub AddRenewal {
         }
 
         # Add the renewal to stats
-        UpdateStats(
+        C4::Stats::UpdateStats(
             {
                 branch         => $item_object->renewal_branchcode({branch => $branch}),
                 type           => 'renew',

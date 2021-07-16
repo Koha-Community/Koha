@@ -19,7 +19,6 @@ package C4::Stats;
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-require Exporter;
 use Carp qw( croak );
 use C4::Context;
 
@@ -27,11 +26,11 @@ use Koha::DateUtils qw( dt_from_string );
 use Koha::Statistics;
 use Koha::PseudonymizedTransactions;
 
-use vars qw(@ISA @EXPORT);
-
+our (@ISA, @EXPORT_OK);
 BEGIN {
+    require Exporter;
     @ISA    = qw(Exporter);
-    @EXPORT = qw(
+    @EXPORT_OK = qw(
       UpdateStats
     );
 }
