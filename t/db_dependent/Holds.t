@@ -7,7 +7,7 @@ use t::lib::TestBuilder;
 
 use C4::Context;
 
-use Test::More tests => 72;
+use Test::More tests => 73;
 use MARC::Record;
 
 use C4::Biblio;
@@ -1407,6 +1407,61 @@ subtest 'CanItemBeReserved rule precedence tests' => sub {
         { status => 'OK' },
         'Patron of specified category can place 1 hold on specified itemtype if library rule for all types and categories set to 2'
     );
+
+    $schema->storage->txn_rollback;
+
+};
+
+subtest 'CanItemBeReserved rule precedence tests' => sub {
+    plan tests => 2;
+
+    $schema->storage->txn_begin;
+
+    my $category = $builder->build({ source => 'Category' });
+    my $branch = $builder->build({ source => 'Branch' })->{ branchcode };
+    my $biblio = $builder->build_sample_biblio( { itemtype => 'DUMMY' } );
+    my $itemnumber = $builder->build_sample_item(
+        { library => $branch, biblionumber => $biblio->biblionumber } )
+      ->itemnumber;
+
+    my $borrowernumber = Koha::Patron->new(
+        {
+            firstname    => 'my firstname',
+            surname      => 'my surname ' . $_,
+            categorycode => $category->{categorycode},
+            branchcode   => $branch,
+        }
+    )->store->borrowernumber;
+
+    my $reserve_id = AddReserve(
+        {
+            branchcode     => $branch,
+            borrowernumber => $borrowernumber,
+            biblionumber   => $biblio->biblionumber,
+            priority       =>
+              C4::Reserves::CalculatePriority( $biblio->biblionumber ),
+            itemnumber => $itemnumber,
+        }
+    );
+
+    my $hold = Koha::Holds->find($reserve_id);
+
+    $hold->set( { priority => 0, found => 'W' } )->store();
+
+    ModReserve(
+        {
+            reserve_id     => $hold->id,
+            expirationdate => '1981-06-10',
+            priority       => 99,
+            rank           => 0,
+        }
+    );
+
+    $hold = Koha::Holds->find($reserve_id);
+
+    is( $hold->expirationdate, '1981-06-10',
+        'Found hold expiration date updated correctly' );
+    is( $hold->priority, '0', 'Found hold priority was not updated' );
 
     $schema->storage->txn_rollback;
 
