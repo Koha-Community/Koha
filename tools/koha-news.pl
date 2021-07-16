@@ -138,7 +138,7 @@ elsif ( $op eq 'edit' ) {
 }
 elsif ( $op eq 'del' ) {
     my @ids = $cgi->multi_param('ids');
-    Koha::News->search({ idnew => @ids })->delete;
+    Koha::News->search({ idnew => \@ids })->delete;
     print $cgi->redirect("/cgi-bin/koha/tools/koha-news.pl");
 }
 
