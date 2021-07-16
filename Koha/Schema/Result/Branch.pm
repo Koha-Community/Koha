@@ -301,6 +301,21 @@ __PACKAGE__->has_many(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
+=head2 additional_contents
+
+Type: has_many
+
+Related object: L<Koha::Schema::Result::AdditionalContent>
+
+=cut
+
+__PACKAGE__->has_many(
+  "additional_contents",
+  "Koha::Schema::Result::AdditionalContent",
+  { "foreign.branchcode" => "self.branchcode" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
 =head2 aqbaskets
 
 Type: has_many
@@ -721,21 +736,6 @@ __PACKAGE__->might_have(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
-=head2 opac_news
-
-Type: has_many
-
-Related object: L<Koha::Schema::Result::OpacNews>
-
-=cut
-
-__PACKAGE__->has_many(
-  "opac_news",
-  "Koha::Schema::Result::OpacNews",
-  { "foreign.branchcode" => "self.branchcode" },
-  { cascade_copy => 0, cascade_delete => 0 },
-);
-
 =head2 problem_reports
 
 Type: has_many
@@ -887,8 +887,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2021-01-21 13:39:29
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:Uu8m3hyDhM50oTSeNTJbdg
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2021-07-16 07:12:03
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:EZYvCbpv41QSEhHRPVFImA
 
 __PACKAGE__->add_columns(
     '+pickup_location' => { is_boolean => 1 }

@@ -1,12 +1,12 @@
 use utf8;
-package Koha::Schema::Result::OpacNews;
+package Koha::Schema::Result::AdditionalContent;
 
 # Created by DBIx::Class::Schema::Loader
 # DO NOT MODIFY THE FIRST PART OF THIS FILE
 
 =head1 NAME
 
-Koha::Schema::Result::OpacNews
+Koha::Schema::Result::AdditionalContent
 
 =cut
 
@@ -15,11 +15,11 @@ use warnings;
 
 use base 'DBIx::Class::Core';
 
-=head1 TABLE: C<opac_news>
+=head1 TABLE: C<additional_contents>
 
 =cut
 
-__PACKAGE__->table("opac_news");
+__PACKAGE__->table("additional_contents");
 
 =head1 ACCESSORS
 
@@ -30,7 +30,31 @@ __PACKAGE__->table("opac_news");
   is_auto_increment: 1
   is_nullable: 0
 
-unique identifier for the news article
+unique identifier for the additional content
+
+=head2 category
+
+  data_type: 'varchar'
+  is_nullable: 0
+  size: 20
+
+category for the additional content
+
+=head2 code
+
+  data_type: 'varchar'
+  is_nullable: 0
+  size: 20
+
+code to group content per lang
+
+=head2 location
+
+  data_type: 'varchar'
+  is_nullable: 0
+  size: 255
+
+location of the additional content
 
 =head2 branchcode
 
@@ -39,7 +63,7 @@ unique identifier for the news article
   is_nullable: 1
   size: 10
 
-branch code users to create branch specific news, NULL is every branch.
+branch code users to create branch specific additional content, NULL is every branch.
 
 =head2 title
 
@@ -48,23 +72,23 @@ branch code users to create branch specific news, NULL is every branch.
   is_nullable: 0
   size: 250
 
-title of the news article
+title of the additional content
 
 =head2 content
 
   data_type: 'mediumtext'
   is_nullable: 0
 
-the body of your news article
+the body of your additional content
 
 =head2 lang
 
   data_type: 'varchar'
   default_value: (empty string)
   is_nullable: 0
-  size: 50
+  size: 25
 
-location for the article (koha is the staff interface, slip is the circulation receipt and language codes are for the opac)
+location for the additional content(koha is the staff interface, slip is the circulation receipt and language codes are for the opac)
 
 =head2 published_on
 
@@ -89,14 +113,14 @@ last modification
   datetime_undef_if_invalid: 1
   is_nullable: 1
 
-date the article is set to expire or no longer be visible
+date the additional content is set to expire or no longer be visible
 
 =head2 number
 
   data_type: 'integer'
   is_nullable: 1
 
-the order in which this article appears in that specific location
+the order in which this additional content appears in that specific location
 
 =head2 borrowernumber
 
@@ -104,7 +128,7 @@ the order in which this article appears in that specific location
   is_foreign_key: 1
   is_nullable: 1
 
-The user who created the news article
+The user who created the additional content
 
 =cut
 
@@ -116,6 +140,12 @@ __PACKAGE__->add_columns(
     is_auto_increment => 1,
     is_nullable => 0,
   },
+  "category",
+  { data_type => "varchar", is_nullable => 0, size => 20 },
+  "code",
+  { data_type => "varchar", is_nullable => 0, size => 20 },
+  "location",
+  { data_type => "varchar", is_nullable => 0, size => 255 },
   "branchcode",
   { data_type => "varchar", is_foreign_key => 1, is_nullable => 1, size => 10 },
   "title",
@@ -123,7 +153,7 @@ __PACKAGE__->add_columns(
   "content",
   { data_type => "mediumtext", is_nullable => 0 },
   "lang",
-  { data_type => "varchar", default_value => "", is_nullable => 0, size => 50 },
+  { data_type => "varchar", default_value => "", is_nullable => 0, size => 25 },
   "published_on",
   { data_type => "date", datetime_undef_if_invalid => 1, is_nullable => 1 },
   "updated_on",
@@ -152,6 +182,29 @@ __PACKAGE__->add_columns(
 =cut
 
 __PACKAGE__->set_primary_key("idnew");
+
+=head1 UNIQUE CONSTRAINTS
+
+=head2 C<additional_contents_uniq>
+
+=over 4
+
+=item * L</category>
+
+=item * L</code>
+
+=item * L</branchcode>
+
+=item * L</lang>
+
+=back
+
+=cut
+
+__PACKAGE__->add_unique_constraint(
+  "additional_contents_uniq",
+  ["category", "code", "branchcode", "lang"],
+);
 
 =head1 RELATIONS
 
@@ -196,14 +249,9 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2021-01-21 13:39:29
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:Edd8K7ANL49fG7FKjwyRVQ
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2021-07-16 07:12:03
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:0HtqQpArwFtGrsivukyG1Q
 
-sub koha_object_class {
-    'Koha::NewsItem';
-}
-sub koha_objects_class {
-    'Koha::News';
-}
 
+# You can replace this text with custom code or comments, and it will be preserved on regeneration
 1;

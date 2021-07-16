@@ -869,6 +869,21 @@ __PACKAGE__->has_many(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
+=head2 additional_contents
+
+Type: has_many
+
+Related object: L<Koha::Schema::Result::AdditionalContent>
+
+=cut
+
+__PACKAGE__->has_many(
+  "additional_contents",
+  "Koha::Schema::Result::AdditionalContent",
+  { "foreign.borrowernumber" => "self.borrowernumber" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
 =head2 advanced_editor_macros
 
 Type: has_many
@@ -1439,21 +1454,6 @@ __PACKAGE__->has_many(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
-=head2 opac_news
-
-Type: has_many
-
-Related object: L<Koha::Schema::Result::OpacNews>
-
-=cut
-
-__PACKAGE__->has_many(
-  "opac_news",
-  "Koha::Schema::Result::OpacNews",
-  { "foreign.borrowernumber" => "self.borrowernumber" },
-  { cascade_copy => 0, cascade_delete => 0 },
-);
-
 =head2 patron_consents
 
 Type: has_many
@@ -1875,8 +1875,8 @@ Composing rels: L</aqorder_users> -> ordernumber
 __PACKAGE__->many_to_many("ordernumbers", "aqorder_users", "ordernumber");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2021-07-12 13:40:00
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:IKPb4912o8oCHtmFAi6FPQ
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2021-07-16 07:12:03
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:SWOGE6/WDsjzXcgfxmVQ4A
 
 __PACKAGE__->add_columns(
     '+anonymized'    => { is_boolean => 1 },
