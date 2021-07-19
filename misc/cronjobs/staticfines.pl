@@ -27,14 +27,6 @@
 
 use Modern::Perl;
 
-BEGIN {
-
-    # find Koha's Perl modules
-    # test carefully before changing this
-    use FindBin ();
-    eval { require "$FindBin::Bin/kohalib.pl" };
-}
-
 use Date::Calc qw( Date_to_Days );
 
 use Koha::Script -cron;

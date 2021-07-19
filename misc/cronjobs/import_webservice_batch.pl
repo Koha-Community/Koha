@@ -21,14 +21,6 @@ use strict;
 use warnings;
 use utf8;
 
-BEGIN {
-
-    # find Koha's Perl modules
-    # test carefully before changing this
-    use FindBin ();
-    eval { require "$FindBin::Bin/../kohalib.pl" };
-}
-
 use Getopt::Long qw( GetOptions );
 use Koha::Script -cron;
 use C4::ImportBatch qw( BatchCommitRecords );

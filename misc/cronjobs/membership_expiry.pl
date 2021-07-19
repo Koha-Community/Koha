@@ -139,12 +139,6 @@ any field from the branches table
 use Modern::Perl;
 use Getopt::Long qw( GetOptions );
 use Pod::Usage qw( pod2usage );
-BEGIN {
-    # find Koha's Perl modules
-    # test carefully before changing this
-    use FindBin ();
-    eval { require "$FindBin::Bin/../kohalib.pl" };
-}
 
 use Koha::Script -cron;
 use C4::Context;

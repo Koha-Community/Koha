@@ -18,13 +18,6 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-BEGIN {
-    # find Koha's Perl modules
-    # test carefully before changing this
-    use FindBin ();
-    my $lib = "$FindBin::Bin/../kohalib.pl";
-    eval { require $lib };
-}
 
 use Getopt::Long qw( GetOptions );
 use Pod::Usage qw( pod2usage );

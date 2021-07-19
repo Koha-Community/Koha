@@ -4,12 +4,6 @@
 # scraped from updatedatabase for dev week by chris@katipo.co.nz
 use strict;
 #use warnings; FIXME - Bug 2505
-BEGIN {
-    # find Koha's Perl modules
-    # test carefully before changing this
-    use FindBin ();
-    eval { require "$FindBin::Bin/../../kohalib.pl" };
-}
 use C4::Context;
 use C4::AuthoritiesMarc;
 use MARC::Record;

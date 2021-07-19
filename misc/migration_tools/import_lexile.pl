@@ -41,14 +41,6 @@ use Koha::Database;
 
 binmode STDOUT, ':encoding(UTF-8)';
 
-BEGIN {
-
-    # find Koha's Perl modules
-    # test carefully before changing this
-    use FindBin ();
-    eval { require "$FindBin::Bin/../kohalib.pl" };
-}
-
 my $help;
 my $confirm;
 my $test;

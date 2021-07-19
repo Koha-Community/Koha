@@ -23,11 +23,6 @@ use File::Find;
 
 use Test::More;
 
-BEGIN {
-    use FindBin;
-    eval { require "$FindBin::Bin/../misc/kohalib.pl" };
-}
-
 my $filebase = "$FindBin::Bin/../koha-tmpl/intranet-tmpl/prog/en/modules/admin/preferences";
 
 my @files;

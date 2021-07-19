@@ -17,11 +17,6 @@
 
 use Modern::Perl;
 
-BEGIN {
-    use FindBin ();
-    eval { require "$FindBin::Bin/../kohalib.pl" };
-}
-
 use Koha::Script;
 
 use Getopt::Long qw( GetOptions );

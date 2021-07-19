@@ -27,12 +27,6 @@ longoverdue.pl  cron script to set lost statuses on overdue materials.
 
 use strict;
 use warnings;
-BEGIN {
-    # find Koha's Perl modules
-    # test carefully before changing this
-    use FindBin ();
-    eval { require "$FindBin::Bin/../kohalib.pl" };
-}
 
 use Getopt::Long qw( GetOptions );
 use Pod::Usage qw( pod2usage );

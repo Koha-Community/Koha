@@ -17,13 +17,6 @@
 
 use Modern::Perl;
 
-BEGIN {
-    # find Koha's Perl modules
-    # test carefully before changing this
-    use FindBin ();
-    eval { require "$FindBin::Bin/../kohalib.pl" };
-}
-
 use C4::Context;
 use Getopt::Long qw( GetOptions );
 use Pod::Usage qw( pod2usage );

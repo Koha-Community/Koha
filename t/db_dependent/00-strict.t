@@ -35,7 +35,6 @@ my @dirs = (
 );
 
 $Test::Strict::TEST_STRICT = 0;
-$Test::Strict::TEST_SKIP = [ 'misc/kohalib.pl' ];
 
 my $ncpu;
 if ( $ENV{KOHA_PROVE_CPUS} ) {

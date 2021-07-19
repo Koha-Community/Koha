@@ -28,13 +28,6 @@ use constant DEFAULT_SEARCHHISTORY_PURGEDAYS      => 30;
 use constant DEFAULT_SHARE_INVITATION_EXPIRY_DAYS => 14;
 use constant DEFAULT_DEBARMENTS_PURGEDAYS         => 30;
 
-BEGIN {
-    # find Koha's Perl modules
-    # test carefully before changing this
-    use FindBin ();
-    eval { require "$FindBin::Bin/../kohalib.pl" };
-}
-
 use Koha::Script -cron;
 use C4::Context;
 use C4::Search;

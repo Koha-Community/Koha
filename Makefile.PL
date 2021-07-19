@@ -693,7 +693,6 @@ $config{'BIB_RETRIEVAL_CFG'}  = 'retrieval-info-bib-dom.xml';
 if ($config{'INSTALL_MODE'} ne "dev") {
     push @{ $pl_files->{'rewrite-config.PL'} }, (
         'blib/PERL_MODULE_DIR/C4/Context.pm',
-        'blib/SCRIPT_NONDEV_DIR/kohalib.pl'
     );
 }
 

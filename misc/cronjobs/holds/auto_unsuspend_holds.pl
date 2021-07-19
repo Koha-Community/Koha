@@ -20,13 +20,6 @@
 use strict;
 use warnings;
 
-BEGIN {
-    # find Koha's Perl modules
-    # test carefully before changing this
-    use FindBin ();
-    eval { require "$FindBin::Bin/../kohalib.pl" };
-}
-
 # cancel all expired hold requests
 
 use Koha::Script -cron;

@@ -2,13 +2,6 @@
 
 use Modern::Perl;
 
-BEGIN {
-    # find Koha's Perl modules
-    # test carefully before changing this
-    use FindBin ();
-    eval { require "$FindBin::Bin/../kohalib.pl" };
-}
-
 use CGI; # NOT a CGI script, this is just to keep C4::Templates::gettemplate happy
 use Koha::Script -cron;
 use C4::Context;

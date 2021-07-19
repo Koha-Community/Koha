@@ -38,13 +38,6 @@ use Encode qw( decode );
 use JSON qw( to_json );
 use Try::Tiny qw( catch try );
 
-BEGIN {
-    # find Koha's Perl modules
-    # test carefully before changing this
-    use FindBin ();
-    eval { require "$FindBin::Bin/../kohalib.pl" };
-}
-
 =head1 NAME
 
 runreport.pl - Run pre-existing saved reports
