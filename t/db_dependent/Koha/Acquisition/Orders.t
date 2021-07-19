@@ -149,7 +149,7 @@ subtest 'filter_by_id_including_transfers() tests' => sub {
 
     $orders_rs = $orders_rs->filter_by_id_including_transfers({ ordernumber => $order_1->ordernumber });
 
-    is_deeply( [ sort $orders_rs->get_column('ordernumber') ], [$order_1->ordernumber, $order_2->ordernumber ], 'The 2 orders are returned' );
+    is_deeply( [ sort { $a <=> $b } $orders_rs->get_column('ordernumber') ], [$order_1->ordernumber, $order_2->ordernumber ], 'The 2 orders are returned' );
 
     $orders_rs = $orders_rs->filter_by_id_including_transfers({ ordernumber => $order_2->ordernumber });
 
