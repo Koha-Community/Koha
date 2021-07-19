@@ -227,6 +227,14 @@ Circulation:
             - If allowed do not generate RESERVED warning.
             - This allows self checkouts for those items. If using the holds queue items with pending holds will be marked as "unavailable" if this set to "Don't allow".
         -
+            - pref: AllowItemsOnLoanCheckoutSIP
+              choices:
+                  1: Allow
+                  0: "Don't allow"
+            - checkouts of items already checked out to someone else via SIP checkout messages.
+            - If allowed do not generate ISSUED_TO_ANOTHER warning.
+            - This allows self checkouts for those items.
+        -
             - pref: AllowItemsOnHoldCheckoutSCO
               choices:
                   1: Allow

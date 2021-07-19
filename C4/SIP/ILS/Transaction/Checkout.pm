@@ -88,7 +88,9 @@ sub do_checkout {
             {
                 $self->screen_msg("Item is on hold for another patron.");
                 $noerror = 0;
-            } elsif ( $confirmation eq 'ISSUED_TO_ANOTHER' ) {
+            } elsif ($confirmation eq 'ISSUED_TO_ANOTHER' and C4::Context->preference("AllowItemsOnLoanCheckoutSIP")) { #BZ 18317
+                next;
+            } elsif ($confirmation eq 'ISSUED_TO_ANOTHER' and ! C4::Context->preference("AllowItemsOnLoanCheckoutSIP")) { #BZ 18317
                 $self->screen_msg("Item already checked out to another patron.  Please return item for check-in.");
                 $noerror = 0;
                 last;
