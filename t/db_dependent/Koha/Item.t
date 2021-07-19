@@ -820,6 +820,8 @@ subtest 'get_transfers' => sub {
 subtest 'Tests for relationship between item and item_orders via aqorders_item' => sub {
     plan tests => 2;
 
+    $schema->storage->txn_begin;
+
     my $biblio = $builder->build_sample_biblio();
     my $item = $builder->build_sample_item({ biblionumber => $biblio->biblionumber });
     my $aq_budget = $builder->build({
