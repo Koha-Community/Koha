@@ -25,17 +25,13 @@ use CGI qw ( -utf8 );
 use C4::Auth qw( get_template_and_user haspermission );
 use C4::Output qw( output_and_exit_if_error output_and_exit output_html_with_http_headers );
 use C4::Biblio qw(
-    GetAuthorisedValueDesc
     GetFrameworkCode
     GetMarcBiblio
     GetMarcFromKohaField
     GetMarcStructure
     IsMarcStructureInternal
     ModBiblio
-    TransformHtmlToXml
-    TransformMarcToKoha
 );
-use C4::Items qw( AddItemFromMarc ModItemFromMarc );
 use C4::Context;
 use C4::Circulation qw( LostItem );
 use C4::Koha qw( GetAuthorisedValues );
@@ -412,7 +408,6 @@ my $record = GetMarcBiblio({ biblionumber => $biblionumber });
 output_and_exit_if_error( $input, $cookie, $template,
     { module => 'cataloguing', record => $record } );
 
-my $oldrecord = TransformMarcToKoha($record);
 my $current_item;
 my $nextop="additem";
 my @errors; # store errors found while checking data BEFORE saving item.
@@ -901,9 +896,7 @@ foreach my $tag ( keys %{$tagslib} ) {
 
 # what's the next op ? it's what we are not in : an add if we're editing, otherwise, and edit.
 $template->param(
-    biblionumber => $biblionumber,
-    title        => $oldrecord->{title},
-    author       => $oldrecord->{author},
+    biblio       => $biblio,
     items        => \@items,
     item_header_loop => \@header_value_loop,
     subfields    => \@subfields,
