@@ -404,15 +404,10 @@ if ($op eq "show"){
         # Even if we do not display the items, we need the itemnumbers
         $template->param(itemnumbers_array => \@itemnumbers);
     }
+
     # now, build the item form for entering a new item
     my @loop_data =();
     my $branch_limit = C4::Context->userenv ? C4::Context->userenv->{"branch"} : "";
-
-    my $libraries = Koha::Libraries->search({}, { order_by => ['branchname'] })->unblessed;# build once ahead of time, instead of multiple times later.
-
-    # Adding a default choice, in case the user does not want to modify the branch
-    my $nochange_branch = { branchname => '', value => '', selected => 1 };
-    unshift (@$libraries, $nochange_branch);
 
     my $pref_itemcallnumber = C4::Context->preference('itemcallnumber');
 
@@ -429,10 +424,9 @@ if ($op eq "show"){
             ),
             subfields_to_ignore         => ['items.barcode'],
             prefill_with_default_values => $use_default_values,
+            default_branches_empty      => 1,
         }
     );
-
-
 
     # what's the next op ? it's what we are not in : an add if we're editing, otherwise, and edit.
     $template->param(

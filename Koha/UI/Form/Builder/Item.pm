@@ -81,6 +81,7 @@ sub generate_subfield_form {
     my $restricted_edition = $params->{restricted_editition};
     my $prefill_with_default_values = $params->{prefill_with_default_values};
     my $branch_limit = $params->{branch_limit};
+    my $default_branches_empty = $params->{default_branches_empty};
 
     my $item         = $self->{item};
     my $subfield     = $tagslib->{$tag}{$subfieldtag};
@@ -190,6 +191,7 @@ sub generate_subfield_form {
             }
         }
         elsif ( $subfield->{authorised_value} eq "branches" ) {
+            push @authorised_values, "" if $default_branches_empty;
             foreach my $thisbranch (@$libraries) {
                 push @authorised_values, $thisbranch->{branchcode};
                 $authorised_lib{ $thisbranch->{branchcode} } =
@@ -471,6 +473,7 @@ sub edit_form {
     my $subfields_to_ignore= $params->{subfields_to_ignore} || [];
     my $prefill_with_default_values = $params->{prefill_with_default_values};
     my $branch_limit = $params->{branch_limit};
+    my $default_branches_empty = $params->{default_branches_empty};
 
     my $libraries =
       Koha::Libraries->search( {}, { order_by => ['branchname'] } )->unblessed;
@@ -542,6 +545,7 @@ sub edit_form {
                         restricted_edition => $restricted_edition,
                         prefill_with_default_values => $prefill_with_default_values,
                         branch_limit       => $branch_limit,
+                        default_branches_empty => $default_branches_empty,
                     }
                 );
                 push @subfields, $subfield_data;
