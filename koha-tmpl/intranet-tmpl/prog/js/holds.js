@@ -118,7 +118,7 @@ $(document).ready(function() {
                             title = "<a href='/cgi-bin/koha/reserve/request.pl?biblionumber="
                                   + oObj.biblionumber
                                   + "'>"
-                                  + oObj.title.escapeHtml();
+                                  + (oObj.title ? oObj.title.escapeHtml() : __('No title'));
 
                             $.each(oObj.subtitle, function( index, value ) {
                                 title += " " + value.escapeHtml();
