@@ -532,7 +532,7 @@ foreach my $tag (sort keys %{$tagslib}) {
         });
         my $temp;
         my $pars= { dbh => $dbh, record => $temp, tagslib => $tagslib,
-            id => $subfield_data{id}, tabloop => \@loop_data };
+            id => $subfield_data{id} };
         $plugin->build( $pars );
         if( !$plugin->errstr ) {
             $subfield_data{marc_value} = {

@@ -155,7 +155,7 @@ sub new {
     Generate html and javascript by calling the builder sub of the plugin.
 
     Params is a hashref supporting keys: id (=html id for the input field),
-    record (MARC record or undef), dbh (database handle), tagslib, tabloop.
+    record (MARC record or undef), dbh (database handle), tagslib.
     Note that some of these parameters are not used in most (if not all)
     plugins and may be obsoleted in the future (kept for now to provide
     backward compatibility).
@@ -276,7 +276,7 @@ sub _generate_js {
 
     my @params = $self->{oldschool}//0 ?
         ( $params->{dbh}, $params->{record}, $params->{tagslib},
-            $params->{id}, $params->{tabloop} ):
+            $params->{id} ):
         ( $params );
     my @rv = &$sub( @params );
     return $self->_error( 'Builder sub failed: ' . $@ ) if $@;

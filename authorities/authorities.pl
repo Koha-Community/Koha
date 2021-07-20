@@ -133,8 +133,8 @@ builds the <input ...> entry for a subfield.
 =cut
 
 sub create_input {
-    my ( $tag, $subfield, $value, $index_tag, $tabloop, $rec, $authorised_values_sth,$cgi ) = @_;
-    
+    my ( $tag, $subfield, $value, $index_tag, $rec, $authorised_values_sth,$cgi ) = @_;
+
     my $index_subfield = CreateKey(); # create a specifique key for each subfield
 
     # determine maximum length; 9999 bytes per ISO 2709 except for leader and MARC21 008
@@ -213,7 +213,7 @@ sub create_input {
             name => $tagslib->{$tag}->{$subfield}->{'value_builder'},
         });
         my $pars=  { dbh => $dbh, record => $rec, tagslib =>$tagslib,
-            id => $subfield_data{id}, tabloop => $tabloop };
+            id => $subfield_data{id} };
         $plugin->build( $pars );
         if( !$plugin->errstr ) {
             $subfield_data{marc_value} = {
@@ -410,7 +410,7 @@ sub build_tabs {
                         push(
                             @subfields_data,
                             &create_input(
-                                $tag, $subfield, $value, $index_tag, $tabloop, $record,
+                                $tag, $subfield, $value, $index_tag, $record,
                                 $authorised_values_sth,$input
                             )
                         );
@@ -426,7 +426,7 @@ sub build_tabs {
                             push(
                                 @subfields_data,
                                 &create_input(
-                                    $tag, $subfield, $value, $index_tag, $tabloop,
+                                    $tag, $subfield, $value, $index_tag,
                                     $record, $authorised_values_sth,$input
                                 )
                             );
@@ -444,7 +444,7 @@ sub build_tabs {
                         push(
                             @subfields_data,
                             &create_input(
-                                $tag, $subfield, '', $index_tag, $tabloop, $record,
+                                $tag, $subfield, '', $index_tag, $record,
                                 $authorised_values_sth,$input
                             )
                         );
@@ -486,7 +486,7 @@ sub build_tabs {
                     push(
                         @subfields_data,
                         &create_input(
-                            $tag, $subfield->{subfield}, '', $index_tag, $tabloop, $record,
+                            $tag, $subfield->{subfield}, '', $index_tag, $record,
                             $authorised_values_sth,$input
                         )
                     );

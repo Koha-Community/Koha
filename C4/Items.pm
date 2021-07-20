@@ -1757,7 +1757,7 @@ sub PrepareItemrecordDisplay {
                         name => $subfield->{value_builder},
                         item_style => 1,
                     });
-                    my $pars = { dbh => $dbh, record => undef, tagslib =>$tagslib, id => $subfield_data{id}, tabloop => undef };
+                    my $pars = { dbh => $dbh, record => undef, tagslib =>$tagslib, id => $subfield_data{id} };
                     $plugin->build( $pars );
                     if ( $itemrecord and my $field = $itemrecord->field($tag) ) {
                         $defaultvalue = $field->subfield($subfield->{subfield}) || q{};

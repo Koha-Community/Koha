@@ -59,7 +59,7 @@ use List::MoreUtils qw( any uniq );
 our $dbh = C4::Context->dbh;
 
 sub generate_subfield_form {
-        my ($tag, $subfieldtag, $value, $tagslib,$subfieldlib, $branches, $biblionumber, $temp, $subfields, $i, $restrictededition, $item) = @_;
+        my ($tag, $subfieldtag, $value, $tagslib,$subfieldlib, $branches, $biblionumber, $temp, $i, $restrictededition, $item) = @_;
   
         my $frameworkcode = &GetFrameworkCode($biblionumber);
 
@@ -241,7 +241,7 @@ sub generate_subfield_form {
                 item_style => 1,
             });
             my $pars=  { dbh => $dbh, record => $temp, tagslib =>$tagslib,
-                id => $subfield_data{id}, tabloop => $subfields };
+                id => $subfield_data{id} };
             $plugin->build( $pars );
             if( !$plugin->errstr ) {
                 my $class= 'buttonDot'. ( $plugin->noclick? ' disabled': '' );
@@ -889,7 +889,7 @@ foreach my $tag ( keys %{$tagslib} ) {
                 $value,                      $tagslib,
                 $subfield,                   $libraries,
                 $biblionumber,               $temp,
-                \@subfields,                 $i,
+                $i,
                 $restrictededition,          $current_item,
             );
             push @subfields, $subfield_data;

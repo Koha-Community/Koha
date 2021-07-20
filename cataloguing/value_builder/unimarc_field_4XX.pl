@@ -36,12 +36,12 @@ use Koha::SearchEngine;
 use Koha::SearchEngine::Search;
 
 sub plugin_parameters {
-    my ( $dbh, $record, $tagslib, $i, $tabloop ) = @_;
+    my ( $dbh, $record, $tagslib, $i ) = @_;
     return "";
 }
 
 sub plugin_javascript {
-    my ( $dbh, $record, $tagslib, $field_number, $tabloop ) = @_;
+    my ( $dbh, $record, $tagslib, $field_number ) = @_;
     my $function_name = $field_number;
     my $res           = "
     <script>

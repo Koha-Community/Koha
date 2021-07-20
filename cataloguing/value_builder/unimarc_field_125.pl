@@ -34,7 +34,7 @@ plugin_parameters : other parameters added when the plugin is called by the dopo
 =cut
 
 sub plugin_javascript {
-my ($dbh,$record,$tagslib,$field_number,$tabloop) = @_;
+my ($dbh,$record,$tagslib,$field_number) = @_;
 my $function_name= $field_number;
 my $res="
 <script>

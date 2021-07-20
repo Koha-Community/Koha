@@ -48,7 +48,7 @@ use C4::Auth qw( get_template_and_user );
 use C4::Output qw( output_html_with_http_headers );
 
 sub plugin_javascript {
-    my ( $dbh, $record, $tagslib, $field_number, $tabloop ) = @_;
+    my ( $dbh, $record, $tagslib, $field_number ) = @_;
     my $function_name = $field_number;
     my $res           = "
     <script>

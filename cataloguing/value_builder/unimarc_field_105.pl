@@ -30,7 +30,7 @@ use C4::Search;
 use C4::Output qw( output_html_with_http_headers );
 
 sub plugin_javascript {
-    my ($dbh,$record,$tagslib,$field_number,$tabloop) = @_;
+    my ($dbh,$record,$tagslib,$field_number) = @_;
     my $res="
     <script>
         function Clic$field_number() {
