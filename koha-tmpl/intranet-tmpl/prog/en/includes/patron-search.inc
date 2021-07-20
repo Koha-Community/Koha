@@ -56,6 +56,16 @@
                                 [% END %]
                             </select>
                         </li>
+                    [% CASE 'sort1' %]
+                        <li>
+                            <label for="sort1_filter">Sort1:</label>
+                            [% PROCESS 'av-build-dropbox.inc' name="sort1_filter", category="Bsort1", empty=1, size = 20 %]
+                        </li>
+                    [% CASE 'sort2' %]
+                        <li>
+                            <label for="sort2_filter">Sort2:</label>
+                            [% PROCESS 'av-build-dropbox.inc' name="sort2_filter", category="Bsort2", empty=1, size = 20 %]
+                        </li>
                     [% CASE 'search_field' %]
                         <li>
                             [% INCLUDE patron_fields_dropdown %]
@@ -197,6 +207,8 @@
     [% IF redirect_if_one_result && !redirect_url %]
         <script>console.log("Wrong call of patron_searh_js - missing redirect_url");</script>
     [% END %]
+
+    [% INCLUDE 'select2.inc' %]
     <script>
         let categories = [% To.json(categories) | $raw %].map(e => {
             e['_id'] = e.categorycode.toLowerCase();
@@ -221,6 +233,10 @@
             let extended_attribute_types = [% To.json(extended_attribute_types || []) | $raw %];
         [% END %]
 
+        $(document).ready(function() {
+            $('select#sort1_filter').select2({allowClear:true});
+            $('select#sort2_filter').select2({allowClear:true});
+        });
     </script>
 
     [% INCLUDE 'datatables.inc' %]
@@ -298,11 +314,31 @@
                     return { "like": start_with + "%" }
                 },
                 "-and": function(){
+                    let filters = [];
+                    let f_sort1 = $("#sort1_filter").val();
+                    if ( f_sort1 ) {
+                        filters.push({
+                            "me.sort1": f_sort1
+                        });
+                    }
+                    let f_sort2 = $("#sort2_filter").val();
+                    if ( f_sort2 ) {
+                        filters.push({
+                            "me.sort2": f_sort2
+                        });
+                    }
+
                     let pattern = $("#search_patron_filter").val();
-                    if (!pattern) return "";
+                    if (!pattern) {
+                        if ( filters.length == 0 ) {
+                            return "";
+                        }
+                        else {
+                            return filters;
+                        }
+                    }
                     let patterns = pattern.split(/[\s,]+/).filter(function(s){ return s.length });
 
-                    let filters = [];
                     let search_type = $("#searchtype_filter").val() || "contain";
                     let search_fields = $("#searchfieldstype_filter").val();
                     if ( !search_fields ) {
@@ -738,6 +774,24 @@
             if ( $("#branchcode_filter").val() ) {
                 searched += _(" in library ") + $("#branchcode_filter").find("option:selected").text();
             }
+            if ( $("#sort1_filter").val() ) {
+                searched += _(" with sort1 ")
+                if ( $("select#sort1_filter") ) {
+                    searched += $("select#sort1_filter").find("option:selected").text();
+                }
+                else {
+                    searched += $("#sort1_filter").val();
+                }
+            }
+            if ( $("#sort2_filter").val() ) {
+                searched += _(" with sort2 ");
+                if ( $("select#sort2_filter") ) {
+                    searched += $("select#sort2_filter").find("option:selected").text();
+                }
+                else {
+                    searched += $("#sort2_filter").val();
+                }
+            }
             $("#searchpattern").text(searched);
             $("#searchpattern").parent().show();
         }
@@ -795,6 +849,8 @@
             $("#searchtype_filter option[value='contain']").prop("selected", true);
             $("#categorycode_filter option:first").prop("selected", true);
             $("#branchcode_filter option:first").prop("selected", true);
+            $("#sort1_filter").val('').trigger("change");
+            $("#sort2_filter").val('').trigger("change");
             $("#firstletter_filter").val('');
             $("#search_patron_filter").val('');
             /* remove any search string added by firstletter search */
