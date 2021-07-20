@@ -17,10 +17,24 @@
 <div id="patron_search">
     <div class="container-fluid">
 
-        [% PROCESS patron_search_filters categories => categories, libraries => libraries, filters => ['branch', 'category'], search_filter => searchmember %]
+        [% PROCESS patron_search_filters categories => categories, libraries => libraries, filters => ['branch','category','sort1','sort2'], search_filter => searchmember %]
         </form>
 
+        <div id="searchresults">
+            <div class="searchheader fh-fixedHeader" id="searchheader" style="display:none;">
+                <div>
+                [% IF columns.grep('checkbox').size %]
+                    <a href="#" class="btn btn-link" id="select_all"><i class="fa fa-check"></i> Select all</a>
+                    |
+                    <a href="#" class="btn btn-link" id="clear_all"><i class="fa fa-remove"></i> Clear all</a>
+                    [% IF selection_type == 'add' %]
+                    <button id="add-selected" class="btn btn-sm btn-default" type="submit">Add selected patrons</button>
+                    [% END %]
+                [% END %]
+                </div>
+            </div>
         [% PROCESS patron_search_table table_id => 'memberresultst' columns => columns %]
+        </div>
 
         <div id="closewindow"><a href="#" class="btn btn-default btn-default close">Close</a></div>
 
@@ -28,6 +42,35 @@
 </div>
 
 [% MACRO jsinclude BLOCK %]
+<script>
+    $(document).ready(function() {
+        $("#select_all").on("click",function(e){
+            e.preventDefault();
+            $(".selection").prop("checked", true).change();
+        });
+        $("#clear_all").on("click",function(e){
+            e.preventDefault();
+            $(".selection").prop("checked", false).change();
+        });
+        $("#searchheader").hide();
+        $("#patron_search_form").on('submit', function(){$("#searchheader").show();});
+        $("#clear_search").on("click",function(e){$("#searchheader").hide();});
+
+        $('#add-selected').on('click', function(e) {
+            e.preventDefault();
+            var counter = 0;
+            $('tr:has(.selection:checked) .add_user').each(function(){
+                var borrowernumber = $(this).data('borrowernumber');
+                var firstname = $(this).data('firstname');
+                var surname = $(this).data('surname');
+                add_user( borrowernumber, firstname + ' ' + surname );
+                counter++;
+            });
+            $('#info').html(_("%s Patrons added.").format(counter));
+        });
+    });
+</script>
+
     [% PROCESS patron_search_js table_id => 'memberresultst', categories => categories, libraries => libraries, extended_attribute_types => attribute_type_codes, columns => columns, filter => filter, actions => [selection_type], preview_on_name_click => 1, callback => callback %]
 [% END %]
 
