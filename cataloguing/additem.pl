@@ -457,7 +457,7 @@ if ($op eq "additem") {
     }
 
     # if autoBarcode is set to 'incremental', calculate barcode...
-    if ( not $item->barcode && C4::Context->preference('autoBarcode') eq 'incremental' ) {
+    if ( ! defined $item->barcode && C4::Context->preference('autoBarcode') eq 'incremental' ) {
         my ( $barcode ) = C4::Barcodes::ValueBuilder::incremental::get_barcode;
         $item->barcode($barcode);
     }
@@ -466,7 +466,9 @@ if ($op eq "additem") {
     if ( $add_submit || $prefillitem) {
 
         # check for item barcode # being unique
-        if ( Koha::Items->search({ barcode => $item->barcode })->count ) {
+        if ( defined $item->barcode
+            && Koha::Items->search( { barcode => $item->barcode } )->count )
+        {
             # if barcode exists, don't create, but report The problem.
             push @errors, "barcode_not_unique";
 
@@ -713,7 +715,16 @@ if ($op eq "additem") {
     }
 
     # check that the barcode don't exist already
-    if ( Koha::Items->search({ barcode => $item->barcode, itemnumber => { '!=' => $item->itemnumber } })->count ) {
+    if (
+        defined $item->barcode
+        && Koha::Items->search(
+            {
+                barcode    => $item->barcode,
+                itemnumber => { '!=' => $item->itemnumber }
+            }
+        )->count
+      )
+    {
         # FIXME We shouldn't need that, ->store would explode as there is a unique constraint on items.barcode
         push @errors,"barcode_not_unique";
         $current_item = $item->unblessed; # Restore edit form for the same item
