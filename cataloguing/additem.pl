@@ -450,9 +450,13 @@ if ($op eq "additem") {
             }
             $item->more_subfields_xml(undef);
         } else {
-            my @v = $input->multi_param("items.".$c);
-            next unless @v;
-            $item->$c(join ' | ', uniq @v);
+            my @v = grep { $_ ne "" }
+                uniq $input->multi_param( "items." . $c );
+
+            next if !@v
+                && $c ne 'permanent_location'; # See 27837
+
+            $item->$c(join ' | ', @v);
         }
     }
 
