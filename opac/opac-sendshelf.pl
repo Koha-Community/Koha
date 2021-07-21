@@ -28,7 +28,6 @@ use C4::Auth qw( get_template_and_user );
 use C4::Biblio qw(
     GetBiblioData
     GetFrameworkCode
-    GetMarcAuthors
     GetMarcBiblio
     GetMarcISBN
     GetMarcSubjects

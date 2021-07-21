@@ -24,7 +24,6 @@ use Try::Tiny qw( catch try );
 
 use C4::Biblio qw(
     GetBiblioData
-    GetMarcAuthors
     GetMarcBiblio
     GetMarcSubjects
 );

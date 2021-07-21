@@ -38,7 +38,6 @@ use C4::Output qw( parametrized_url output_html_with_http_headers );
 use C4::Biblio qw(
     CountItemsIssued
     GetBiblioData
-    GetMarcAuthors
     GetMarcBiblio
     GetMarcControlnumber
     GetMarcISBN

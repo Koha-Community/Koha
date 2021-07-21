@@ -21,7 +21,6 @@ use CGI qw ( -utf8 );
 use C4::Koha;
 use C4::Biblio qw(
     GetBiblioData
-    GetMarcAuthors
     GetMarcBiblio
     GetMarcSeries
     GetMarcSubjects

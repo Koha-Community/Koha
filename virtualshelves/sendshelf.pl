@@ -27,7 +27,6 @@ use Try::Tiny qw( catch try );
 use C4::Auth qw( get_template_and_user );
 use C4::Biblio qw(
     GetBiblioData
-    GetMarcAuthors
     GetMarcBiblio
     GetMarcISBN
     GetMarcSubjects

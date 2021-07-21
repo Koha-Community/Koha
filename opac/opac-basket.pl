@@ -23,7 +23,6 @@ use C4::Koha;
 use C4::Biblio qw(
     GetBiblioData
     GetFrameworkCode
-    GetMarcAuthors
     GetMarcBiblio
     GetMarcSeries
     GetMarcSubjects
