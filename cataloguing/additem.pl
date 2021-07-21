@@ -51,6 +51,7 @@ use C4::Members;
 
 use MARC::File::XML;
 use URI::Escape qw( uri_escape_utf8 );
+use Encode qw( encode_utf8 );
 use MIME::Base64 qw( decode_base64url encode_base64url );
 use List::Util qw( first );
 use List::MoreUtils qw( any uniq );
@@ -693,7 +694,7 @@ if ($op eq "additem") {
             my @more_subfields_xml = $input->multi_param("items.more_subfields_xml");
             my @unlinked_item_subfields;
             for my $subfield ( uniq @more_subfields_xml ) {
-                my @v = $input->multi_param('items.more_subfields_xml_' . $subfield);
+                my @v = $input->multi_param('items.more_subfields_xml_' . encode_utf8($subfield));
                 push @unlinked_item_subfields, $subfield, $_ for @v;
             }
             if ( @unlinked_item_subfields ) {
