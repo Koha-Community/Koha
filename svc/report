@@ -20,8 +20,8 @@
 
 use Modern::Perl;
 
-use C4::Auth;
-use C4::Reports::Guided;
+use C4::Auth qw( get_template_and_user );
+use C4::Reports::Guided qw( execute_query );
 use Koha::Reports;
 use JSON;
 use CGI qw ( -utf8 );
