@@ -24,6 +24,7 @@ use URI;
 use URI::Escape qw( uri_escape_utf8 );
 
 use C4::Koha qw( GetNormalizedISBN );
+use C4::XSLT qw( transformMARCXML4XSLT );
 
 use Koha::Database;
 use Koha::DateUtils qw( dt_from_string );
@@ -829,7 +830,10 @@ sub get_marc_notes {
 
     my %hiddenlist = map { $_ => 1 }
         split( /,/, C4::Context->preference('NotesToHide'));
-    foreach my $field ( $self->metadata->record->field($scope) ) {
+    my $record = $self->metadata->record;
+    $record = transformMARCXML4XSLT( $self->biblionumber, $record, $opac );
+
+    foreach my $field ( $record->field($scope) ) {
         my $tag = $field->tag();
         next if $hiddenlist{ $tag };
         next if $opac && $maybe_private{$tag} && !$field->indicator(1);

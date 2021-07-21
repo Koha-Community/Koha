@@ -31,8 +31,6 @@ use Koha::ItemTypes;
 use Koha::XSLT::Base;
 use Koha::Libraries;
 
-
-
 my $engine; #XSLT Handler object
 my %authval_per_framework;
     # Cache for tagfield-tagsubfield to decode per framework.
@@ -60,12 +58,11 @@ C4::XSLT - Functions for displaying XSLT-generated content
 =head2 transformMARCXML4XSLT
 
 Replaces codes with authorized values in a MARC::Record object
-Is only used in this module currently.
 
 =cut
 
 sub transformMARCXML4XSLT {
-    my ($biblionumber, $record) = @_;
+    my ($biblionumber, $record, $opac) = @_;
     my $frameworkcode = GetFrameworkCode($biblionumber) || '';
     my $tagslib = &GetMarcStructure(1, $frameworkcode, { unsafe => 1 });
     my @fields;
@@ -84,7 +81,7 @@ sub transformMARCXML4XSLT {
                     my ( $letter, $value ) = @$subfield;
                     # Replace the field value with the authorised value *except* for MARC21/NORMARC field 942$n (suppression in opac)
                     if ( !( $tag eq '942' && $subfield->[0] eq 'n' ) || $marcflavour eq 'UNIMARC' ) {
-                        $value = GetAuthorisedValueDesc( $tag, $letter, $value, '', $tagslib )
+                        $value = GetAuthorisedValueDesc( $tag, $letter, $value, '', $tagslib, undef, $opac )
                             if $av->{ $tag }->{ $letter };
                     }
                     push( @new_subfields, $letter, $value );
@@ -397,13 +394,13 @@ sub buildKohaItemsNamespace {
         else {
             $status = "available";
         }
-        my $homebranch     = xml_escape($branches{$item->homebranch});
-        my $holdingbranch  = xml_escape($branches{$item->holdingbranch});
+        my $homebranch     = C4::Koha::xml_escape($branches{$item->homebranch});
+        my $holdingbranch  = C4::Koha::xml_escape($branches{$item->holdingbranch});
         my $resultbranch   = C4::Context->preference('OPACResultsLibrary') eq 'homebranch' ? $homebranch : $holdingbranch;
-        my $location       = xml_escape($item->location && exists $shelflocations->{$item->location} ? $shelflocations->{$item->location} : $item->location);
-        my $ccode          = xml_escape($item->ccode    && exists $ccodes->{$item->ccode}            ? $ccodes->{$item->ccode}            : $item->ccode);
-        my $itemcallnumber = xml_escape($item->itemcallnumber);
-        my $stocknumber    = xml_escape($item->stocknumber);
+        my $location       = C4::Koha::xml_escape($item->location && exists $shelflocations->{$item->location} ? $shelflocations->{$item->location} : $item->location);
+        my $ccode          = C4::Koha::xml_escape($item->ccode    && exists $ccodes->{$item->ccode}            ? $ccodes->{$item->ccode}            : $item->ccode);
+        my $itemcallnumber = C4::Koha::xml_escape($item->itemcallnumber);
+        my $stocknumber    = C4::Koha::xml_escape($item->stocknumber);
         $xml .=
             "<item>"
           . "<homebranch>$homebranch</homebranch>"

@@ -22,6 +22,9 @@ use Test::More tests => 14;
 use C4::Biblio qw( AddBiblio ModBiblio );
 use Koha::Database;
 use Koha::Acquisition::Orders;
+use Koha::AuthorisedValueCategories;
+use Koha::AuthorisedValues;
+use Koha::MarcSubfieldStructures;
 
 use t::lib::TestBuilder;
 use t::lib::Mocks;
@@ -580,7 +583,7 @@ subtest 'subscriptions() tests' => sub {
 };
 
 subtest 'get_marc_notes() MARC21 tests' => sub {
-    plan tests => 11;
+    plan tests => 13;
 
     $schema->storage->txn_begin;
 
@@ -594,22 +597,32 @@ subtest 'get_marc_notes() MARC21 tests' => sub {
         MARC::Field->new( '520', '', '', a => 'Note3 skipped' ),
         MARC::Field->new( '541', '0', '', a => 'Note4 skipped on opac' ),
         MARC::Field->new( '541', '', '', a => 'Note5' ),
+        MARC::Field->new( '590', '', '', a => 'CODE' ),
     );
+
+    Koha::AuthorisedValueCategory->new({ category_name => 'TEST' })->store;
+    Koha::AuthorisedValue->new({ category => 'TEST', authorised_value => 'CODE', lib => 'Description should show', lib_opac => 'Description should show OPAC' })->store;
+    my $mss = Koha::MarcSubfieldStructures->find({tagfield => "590", tagsubfield => "a", frameworkcode => $biblio->frameworkcode });
+    $mss->update({ authorised_value => "TEST" });
+
     C4::Biblio::ModBiblio( $record, $biblio->biblionumber );
     $biblio = Koha::Biblios->find( $biblio->biblionumber);
+
     my $notes = $biblio->get_marc_notes({ marcflavour => 'MARC21' });
     is( $notes->[0]->{marcnote}, 'Note1', 'First note' );
     is( $notes->[1]->{marcnote}, 'Note2', 'Second note' );
     is( $notes->[2]->{marcnote}, 'http://someserver.com', 'URL separated' );
     is( $notes->[3]->{marcnote}, 'Note4 skipped on opac',"Not shows if not opac" );
     is( $notes->[4]->{marcnote}, 'Note5', 'Fifth note' );
-    is( @$notes, 5, 'No more notes' );
+    is( $notes->[5]->{marcnote}, 'Description should show', 'Authorised value is correctly parsed to show description rather than code' );
+    is( @$notes, 6, 'No more notes' );
     $notes = $biblio->get_marc_notes({ marcflavour => 'MARC21', opac => 1 });
     is( $notes->[0]->{marcnote}, 'Note1', 'First note' );
     is( $notes->[1]->{marcnote}, 'Note2', 'Second note' );
     is( $notes->[2]->{marcnote}, 'http://someserver.com', 'URL separated' );
     is( $notes->[3]->{marcnote}, 'Note5', 'Fifth note shows after fourth skipped' );
-    is( @$notes, 4, 'No more notes' );
+    is( $notes->[4]->{marcnote}, 'Description should show OPAC', 'Authorised value is correctly parsed for OPAC to show description rather than code' );
+    is( @$notes, 5, 'No more notes' );
 
     $schema->storage->txn_rollback;
 };
