@@ -72,7 +72,7 @@ foreach my $biblionumber ( @bibs ) {
     my $biblio           = Koha::Biblios->find( $biblionumber );
     my $record           = &GetMarcBiblio({ biblionumber => $biblionumber });
     my $marcnotesarray   = $biblio->get_marc_notes({ marcflavour => $marcflavour });
-    my $marcauthorsarray = $biblio->get_authors_from_MARC;
+    my $marcauthorsarray = $biblio->get_marc_authors;
     my $marcsubjctsarray = GetMarcSubjects( $record, $marcflavour );
     my $marcseriesarray  = GetMarcSeries  ($record,$marcflavour);
     my $marcurlsarray    = GetMarcUrls    ($record,$marcflavour);

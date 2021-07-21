@@ -78,7 +78,7 @@ if ( $email_add ) {
         my $record           = GetMarcBiblio({
             biblionumber => $biblionumber,
             embed_items => 1 });
-        my $marcauthorsarray = $biblio->get_authors_from_MARC;
+        my $marcauthorsarray = $biblio->get_marc_authors;
         my $marcsubjctsarray = GetMarcSubjects( $record, $marcflavour );
 
         my @items = GetItemsInfo( $biblionumber );

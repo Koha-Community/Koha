@@ -96,7 +96,7 @@ if ( $email ) {
         my $fw               = GetFrameworkCode($biblionumber);
         my $dat              = GetBiblioData($biblionumber);
 
-        my $marcauthorsarray = $biblio->get_authors_from_MARC;
+        my $marcauthorsarray = $biblio->get_marc_authors;
         my $marcsubjctsarray = GetMarcSubjects( $record, $marcflavour );
 
         my @items = GetItemsInfo( $biblionumber );

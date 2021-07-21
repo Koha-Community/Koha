@@ -859,7 +859,7 @@ subtest 'current_checkouts() and old_checkouts() tests' => sub {
     $schema->storage->txn_rollback;
 };
 
-subtest 'get_authors_from_MARC() tests' => sub {
+subtest 'get_marc_authors() tests' => sub {
 
     plan tests => 1;
 
@@ -882,7 +882,7 @@ subtest 'get_authors_from_MARC() tests' => sub {
     C4::Biblio::ModBiblio( $record, $biblio->biblionumber );
     $biblio = Koha::Biblios->find( $biblio->biblionumber );
 
-    is( 4, @{$biblio->get_authors_from_MARC}, 'get_authors_from_MARC retrieves correct number of author subfields' );
+    is( 4, @{$biblio->get_marc_authors}, 'get_marc_authors retrieves correct number of author subfields' );
 
     $schema->storage->txn_rollback;
 };

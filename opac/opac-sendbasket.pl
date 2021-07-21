@@ -87,7 +87,7 @@ if ( $email_add ) {
             embed_items  => 1,
             opac         => 1,
             borcat       => $borcat });
-        my $marcauthorsarray = $biblio->get_authors_from_MARC;
+        my $marcauthorsarray = $biblio->get_marc_authors;
         my $marcsubjctsarray = GetMarcSubjects( $record, $marcflavour );
 
         my @items = GetItemsInfo( $biblionumber );

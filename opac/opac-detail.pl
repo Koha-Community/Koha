@@ -784,7 +784,7 @@ if (scalar(@itemloop) == 0 || scalar(@otheritemloop) == 0) {
 }
 
 my $marcnotesarray = $biblio->get_marc_notes({ marcflavour => $marcflavour, opac => 1 });
-my $marcauthorsarray = $biblio->get_authors_from_MARC;
+my $marcauthorsarray = $biblio->get_marc_authors;
 
 if( C4::Context->preference('ArticleRequests') ) {
     my $patron = $borrowernumber ? Koha::Patrons->find($borrowernumber) : undef;
