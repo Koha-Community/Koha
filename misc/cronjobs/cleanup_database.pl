@@ -80,6 +80,8 @@ Usage: $0 [-h|--help] [--confirm] [--sessions] [--sessdays DAYS] [-v|--verbose] 
                       amountoutstanding is 0 or NULL.
                       In the case of --fees, DAYS must be greater than
                       or equal to 1.
+   --log_modules      Specify which action log modules to trim. Repeatable.
+   --preserve_logs    Specify which action logs to exclude. Repeatable.
    --logs DAYS        purge entries from action_logs older than DAYS days.
                       Defaults to 180 days if no days specified.
    --searchhistory DAYS  purge entries from search_history older than DAYS days.
@@ -150,6 +152,8 @@ my $pMessages;
 my $lock_days = C4::Context->preference('LockExpiredDelay');
 my $labels;
 my $cards;
+my @log_modules;
+my @preserve_logs;
 
 GetOptions(
     'h|help'            => \$help,
@@ -163,6 +167,8 @@ GetOptions(
     'import:i'          => \$pImport,
     'z3950'             => \$pZ3950,
     'logs:i'            => \$pLogs,
+    'log_module:s'      => \@log_modules,
+    'preserve_log:s'    => \@preserve_logs,
     'messages:i'        => \$pMessages,
     'fees:i'            => \$fees_days,
     'searchhistory:i'   => \$pSearchhistory,
@@ -343,14 +349,22 @@ if ($pZ3950) {
 
 if ($pLogs) {
     print "Purging records from action_logs.\n" if $verbose;
-    $sth = $dbh->prepare(
-        q{
+    my $log_query = q{
             DELETE FROM action_logs
             WHERE timestamp < date_sub(curdate(), INTERVAL ? DAY)
-        }
-    );
+    };
+    my @query_params = ();
+    if( @preserve_logs ){
+        $log_query .= " AND module NOT IN (" . join(',',('?') x @preserve_logs ) . ")";
+        push @query_params, @preserve_logs;
+    }
+    if( @log_modules ){
+        $log_query .= " AND module IN (" . join(',',('?') x @log_modules ) . ")";
+        push @query_params, @log_modules;
+    }
+    $sth = $dbh->prepare( $log_query );
     if ( $confirm ) {
-        $sth->execute($pLogs) or die $dbh->errstr;
+        $sth->execute($pLogs, @query_params) or die $dbh->errstr;
     }
     print "Done with purging action_logs.\n" if $verbose;
 }
