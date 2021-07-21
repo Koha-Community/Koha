@@ -71,7 +71,7 @@ subtest 'Testing Patron Info Request V2' => sub {
 subtest 'Checkout V2' => sub {
     my $schema = Koha::Database->new->schema;
     $schema->storage->txn_begin;
-    plan tests => 3;
+    plan tests => 5;
     $C4::SIP::Sip::protocol_version = 2;
     test_checkout_v2();
     $schema->storage->txn_rollback;
@@ -614,6 +614,15 @@ sub test_checkout_v2 {
     $msg->handle_checkout( $server );
     $respcode = substr( $response, 0, 2 );
     is( Koha::Checkouts->search({ itemnumber => $item_object->id })->count, 1, "Item was checked out (prevcheckout_block_checkout disabled)");
+
+    $msg->handle_checkout( $server );
+    ok( $response =~ m/AH\d{8}    \d{6}/, "Found AH field as timestamp in response");
+    $server->{account}->{format_due_date} = 1;
+    t::lib::Mocks::mock_preference( 'dateFormat',  'sql' );
+    undef $response;
+    $msg->handle_checkout( $server );
+    ok( $response =~ m/AH\d{4}-\d{2}-\d{2}/, "Found AH field as SQL date in response");
+
 }
 
 sub test_checkin_v2 {
