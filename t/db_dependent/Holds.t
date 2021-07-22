@@ -1611,7 +1611,7 @@ subtest 'CanItemBeReserved rule precedence tests' => sub {
 
 };
 
-subtest 'CanItemBeReserved rule precedence tests' => sub {
+subtest 'ModReserve can only update expirationdate for found holds' => sub {
     plan tests => 2;
 
     $schema->storage->txn_begin;
