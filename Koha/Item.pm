@@ -1212,7 +1212,7 @@ sub move_to_biblio {
 
     $params //= {};
 
-    return unless $self->biblionumber != $to_biblio->biblionumber;
+    return if $self->biblionumber == $to_biblio->biblionumber;
 
     my $from_biblionumber = $self->biblionumber;
     my $to_biblionumber = $to_biblio->biblionumber;
