@@ -50,6 +50,7 @@ use Koha::Patrons;
 use Koha::Virtualshelves;
 use Koha::Plugins;
 use Koha::SearchEngine::Search;
+use Koha::SearchEngine::QueryBuilder;
 
 my $query = CGI->new();
 
@@ -127,8 +128,13 @@ if ( $xslfile ) {
     my $searcher = Koha::SearchEngine::Search->new(
         { index => $Koha::SearchEngine::BIBLIOS_INDEX }
     );
+    my $builder = Koha::SearchEngine::QueryBuilder->new(
+        { index => $Koha::SearchEngine::BIBLIOS_INDEX } );
+
     my $cleaned_title = $biblio->title;
     $cleaned_title =~ tr|/||;
+    $cleaned_title = $builder->clean_search_term($cleaned_title);
+
     my $query =
       ( C4::Context->preference('UseControlNumber') and $record->field('001') )
       ? 'rcn:'. $record->field('001')->data . ' AND (bib-level:a OR bib-level:b)'
