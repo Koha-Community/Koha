@@ -32,6 +32,8 @@ use Koha::Patron;
 use Koha::Library::Group;
 use Koha::CirculationRules;
 use Koha::Caches;
+use Koha::DateUtils qw( dt_from_string );
+use Try::Tiny;
 
 BEGIN {
     use_ok('Koha::ArticleRequest');
@@ -248,6 +250,97 @@ subtest 'may_article_request' => sub {
 
     # Cleanup
     $cache->clear_from_cache( Koha::CirculationRules::GUESSED_ITEMTYPES_KEY );
+};
+
+
+subtest 'article request limit' => sub {
+  plan tests => 12;
+
+  t::lib::Mocks::mock_preference('ArticleRequests', 1);
+
+  my $item = $builder->build_sample_item;
+
+  my $category = $builder->build_object(
+    {
+      class => 'Koha::Patron::Categories',
+      value => {
+        article_request_limit => 1
+      }
+    }
+  );
+  my $patron   = $builder->build_object(
+    {
+      class => 'Koha::Patrons',
+      value => {
+        categorycode => $category->categorycode
+      },
+    }
+  );
+  $patron->article_requests->delete();
+
+  is($patron->can_request_article, 1, 'Patron can request more articles');
+
+  my $article_request_1 = Koha::ArticleRequest->new(
+    {
+      borrowernumber => $patron->id,
+      biblionumber   => $item->biblionumber,
+      itemnumber     => $item->itemnumber,
+      title          => 'an article request',
+    }
+  )->store();
+
+  is($patron->can_request_article, 0, 'Patron cannot request more articles');
+  is($patron->article_requests->count, 1, 'There is one current article request');
+
+  try {
+    Koha::ArticleRequest->new(
+      {
+        borrowernumber => $patron->id,
+        biblionumber   => $item->biblionumber,
+        itemnumber     => $item->itemnumber,
+        title          => 'an second article request',
+      }
+    )->store();
+  }
+  catch {
+    is(ref($_), 'Koha::Exceptions::ArticleRequest::LimitReached', 'Limit reached thrown');
+  };
+
+  is($patron->can_request_article, 0, 'Patron cannot request more articles');
+  is($patron->article_requests->count, 1, 'There is still one article request');
+
+  $article_request_1->created_on(dt_from_string->add(days => -1))->store();
+
+  is($patron->can_request_article, 1, 'Patron can request more articles');
+
+  my $article_request_3 = Koha::ArticleRequest->new(
+    {
+      borrowernumber => $patron->id,
+      biblionumber   => $item->biblionumber,
+      itemnumber     => $item->itemnumber,
+      title          => 'an third article request',
+    }
+  )->store();
+
+  is($patron->can_request_article, 0, 'Patron cannot request more articles');
+  is($patron->article_requests->count, 2, 'There are 2 article requests');
+
+  $article_request_3->cancel();
+
+  is($patron->can_request_article, 1, 'Patron can request more articles');
+
+  Koha::ArticleRequest->new(
+    {
+      borrowernumber => $patron->id,
+      biblionumber   => $item->biblionumber,
+      itemnumber     => $item->itemnumber,
+      title          => 'an fourth article request',
+    }
+  )->store();
+
+  is($patron->can_request_article, 0, 'Patron cannot request more articles');
+  is($patron->article_requests->count, 3, 'There are 3 current article requests');
+
 };
 
 $schema->storage->txn_rollback();
