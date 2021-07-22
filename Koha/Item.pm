@@ -1192,7 +1192,7 @@ sub orders {
 
   $item->move_to_biblio($to_biblio[, $params]);
 
-Move the item to another biblio and update any references also in other tables.
+Move the item to another biblio and update any references in other tables.
 
 The final optional parameter, C<$params>, is expected to contain the
 'skip_record_index' key, which is relayed down to Koha::Item->store.
@@ -1237,7 +1237,7 @@ sub move_to_biblio {
     # Holds
     $self->holds->update({ biblionumber => $to_biblionumber });
 
-    # hold_fill_target (there's no Koha object available)
+    # hold_fill_target (there's no Koha object available yet)
     my $hold_fill_target = $self->_result->hold_fill_target;
     if ($hold_fill_target) {
         $hold_fill_target->update({ biblionumber => $to_biblionumber });
@@ -1254,7 +1254,8 @@ sub move_to_biblio {
         }
     );
 
-    # linktrackers
+    # linktrackers (there's no Koha object set available yet)
+    # direct lookup as there's no foreign key relationship yet
     my $schema = Koha::Database->new()->schema();
     my $linktrackers = $schema->resultset('Linktracker')->search({ itemnumber => $self->itemnumber });
     $linktrackers->update_all({ biblionumber => $to_biblionumber });
