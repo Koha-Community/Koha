@@ -26,6 +26,8 @@ use Koha::Item;
 
 use base qw(Koha::Objects);
 
+use Koha::SearchEngine::Indexer;
+
 =head1 NAME
 
 Koha::Items - Koha Item object set class
@@ -107,6 +109,26 @@ sub filter_out_lost {
 
     return $self->search( $params );
 }
+
+=head3 move_to_biblio
+
+ $items->move_to_biblio($to_biblio);
+
+Move items to a given biblio.
+
+=cut
+
+sub move_to_biblio {
+    my ( $self, $to_biblio ) = @_;
+
+    while (my $item = $self->next()) {
+        $item->move_to_biblio($to_biblio, { skip_record_index => 1 });
+    }
+    my $indexer = Koha::SearchEngine::Indexer->new({ index => $Koha::SearchEngine::BIBLIOS_INDEX });
+    $indexer->index_records( $self->biblionumber, "specialUpdate", "biblioserver" );
+    $indexer->index_records( $from_biblio->biblionumber, "specialUpdate", "biblioserver" );
+}
+
 
 =head2 Internal methods
 

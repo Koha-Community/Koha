@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 14;
+use Test::More tests => 15;
 
 use Test::MockModule;
 use Test::Exception;
@@ -1725,3 +1725,25 @@ subtest 'filter_out_lost() tests' => sub {
     $schema->storage->txn_rollback;
 };
 
+subtest 'move_to_biblio() tests' => sub {
+
+    plan tests => 2;
+
+    $schema->storage->txn_begin;
+
+    my $biblio1 = $builder->build_sample_biblio;
+    my $biblio2 = $builder->build_sample_biblio;
+    my $item1 = $builder->build_sample_item({ biblionumber => $biblio1->biblionumber });
+    my $item2 = $builder->build_sample_item({ biblionumber => $biblio1->biblionumber });
+
+    $biblio1->items->move_to_biblio($biblio2);
+
+    $item1->discard_changes;
+    $item2->discard_changes;
+
+    is($item1->biblionumber, $biblio2->biblionumber, "Item 1 moved");
+    is($item2->biblionumber, $biblio2->biblionumber, "Item 2 moved");
+
+    $schema->storage->txn_rollback;
+
+};

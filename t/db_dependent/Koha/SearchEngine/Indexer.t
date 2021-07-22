@@ -184,8 +184,8 @@ subtest 'Test indexer calls' => sub {
         } undef, "index_records is not called for $engine when moving an item to another biblio (Item->move_to_biblio) if skip_record_index passed";
 
         warnings_are{
-            $biblio2->adopt_items_from_biblio($biblio);
-        } [$engine,"Koha::Biblio",$engine,"Koha::Biblio"], "index_records is called for both biblios for $engine when adopting items (Biblio->adopt_items_from_biblio)";
+            $biblio->items->move_to_biblio($biblio2);
+        } [$engine,"Koha::Biblio",$engine,"Koha::Biblio"], "index_records is called for both biblios for $engine when adopting items (Biblio->items->move_to_biblio(Biblio)";
 
         $builder->build({
             source => 'Issue',
