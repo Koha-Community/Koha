@@ -984,8 +984,7 @@ sub get_marc_authors {
     # tagslib useful only for UNIMARC author responsibilities
     my $tagslib;
     if ( $marcflavour eq "UNIMARC" ) {
-        # FIXME : we don't have the framework available, we take the default framework. May be buggy on some setups, will be usually correct.
-        $tagslib = C4::Biblio::GetMarcStructure( 1, '', { unsafe => 1 });
+        $tagslib = C4::Biblio::GetMarcStructure( 1, $self->frameworkcode, { unsafe => 1 });
         $mintag = "700";
         $maxtag = "712";
         $fields_filter = '7..';
