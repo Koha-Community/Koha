@@ -1255,9 +1255,7 @@ sub move_to_biblio {
     );
 
     # linktrackers (there's no Koha object set available yet)
-    # direct lookup as there's no foreign key relationship yet
-    my $schema = Koha::Database->new()->schema();
-    my $linktrackers = $schema->resultset('Linktracker')->search({ itemnumber => $self->itemnumber });
+    my $linktrackers = $self->_result->linktrackers;
     $linktrackers->update_all({ biblionumber => $to_biblionumber });
 
     return $to_biblionumber;
