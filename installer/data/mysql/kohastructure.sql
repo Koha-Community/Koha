@@ -3339,7 +3339,10 @@ CREATE TABLE `linktracker` (
   KEY `bibidx` (`biblionumber`),
   KEY `itemidx` (`itemnumber`),
   KEY `borridx` (`borrowernumber`),
-  KEY `dateidx` (`timeclicked`)
+  KEY `dateidx` (`timeclicked`),
+  CONSTRAINT `linktracker_biblio_ibfk` FOREIGN KEY (`biblionumber`) REFERENCES `biblio` (`biblionumber`) ON DELETE SET NULL ON UPDATE SET NULL,
+  CONSTRAINT `linktracker_item_ibfk` FOREIGN KEY (`itemnumber`) REFERENCES `items` (`itemnumber`) ON DELETE SET NULL ON UPDATE SET NULL,
+  CONSTRAINT `linktracker_borrower_ibfk` FOREIGN KEY (`borrowernumber`) REFERENCES `borrowers` (`borrowernumber`) ON DELETE SET NULL ON UPDATE SET NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
