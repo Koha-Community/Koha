@@ -44,6 +44,7 @@ use Koha::Plugins;
 use Koha::Libraries;
 use Koha::StockRotationItem;
 use Koha::StockRotationRotas;
+use Koha::TrackedLinks;
 
 use base qw(Koha::Object);
 
@@ -1188,6 +1189,21 @@ sub orders {
     return Koha::Acquisition::Orders->_new_from_dbic($orders);
 }
 
+=head3 tracked_links
+
+  my $tracked_links = $item->tracked_links();
+
+Returns a Koha::TrackedLinks object
+
+=cut
+
+sub tracked_links {
+    my ( $self ) = @_;
+
+    my $tracked_links = $self->_result->linktrackers;
+    return Koha::TrackedLinks->_new_from_dbic($tracked_links);
+}
+
 =head3 move_to_biblio
 
   $item->move_to_biblio($to_biblio[, $params]);
@@ -1254,9 +1270,9 @@ sub move_to_biblio {
         }
     );
 
-    # linktrackers (there's no Koha object set available yet)
-    my $linktrackers = $self->_result->linktrackers;
-    $linktrackers->update_all({ biblionumber => $to_biblionumber });
+    # tracked_links
+    my $tracked_links = $self->tracked_links;
+    $tracked_links->update({ biblionumber => $to_biblionumber });
 
     return $to_biblionumber;
 }

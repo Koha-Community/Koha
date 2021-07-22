@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 11;
+use Test::More tests => 12;
 use Test::Exception;
 
 use C4::Biblio qw( GetMarcSubfieldStructure );
@@ -37,6 +37,22 @@ use t::lib::Mocks;
 
 my $schema  = Koha::Database->new->schema;
 my $builder = t::lib::TestBuilder->new;
+
+subtest 'tracked_links relationship' => sub {
+    plan tests => 3;
+
+    my $biblio = $builder->build_sample_biblio();
+    my $item   = $builder->build_sample_item({
+        biblionumber => $biblio->biblionumber,
+    });
+    my $tracked_links = $item->tracked_links;
+    is( ref($tracked_links), 'Koha::TrackedLinks', 'tracked_links returns a Koha::TrackedLinks object set' );
+    is($item->tracked_links->count, 0, "Empty Koha::TrackedLinks set returned if no tracked_links");
+    my $link1 = $builder->build({ source => 'Linktracker', value => { itemnumber => $item->itemnumber }});
+    my $link2 = $builder->build({ source => 'Linktracker', value => { itemnumber => $item->itemnumber }});
+
+    is($item->tracked_links()->count,2,"Two tracked links found");
+};
 
 subtest 'hidden_in_opac() tests' => sub {
 
@@ -1034,8 +1050,8 @@ subtest 'move_to_biblio() tests' => sub {
 
     my $get_linktracker1 = $schema->resultset('Linktracker')->search({ itemnumber => $linktracker1->{itemnumber} })->single;
     my $get_linktracker2 = $schema->resultset('Linktracker')->search({ itemnumber => $linktracker2->{itemnumber} })->single;
-    is($get_linktracker1->biblionumber, $target_biblionumber, 'move_to_biblio moves linktracker for item 1');
-    is($get_linktracker2->biblionumber, $source_biblionumber, 'move_to_biblio does not move linktracker for item 2');
+    is($get_linktracker1->biblionumber->biblionumber, $target_biblionumber, 'move_to_biblio moves linktracker for item 1');
+    is($get_linktracker2->biblionumber->biblionumber, $source_biblionumber, 'move_to_biblio does not move linktracker for item 2');
 
     $schema->storage->txn_rollback;
 };
