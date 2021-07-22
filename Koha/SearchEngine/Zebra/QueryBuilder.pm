@@ -73,4 +73,17 @@ sub build_authorities_query_compat {
     build_authorities_query(@_);
 }
 
+
+=head2 clean_search_term
+
+    my $term = $self->clean_search_term($term);
+
+=cut
+
+sub clean_search_term {
+    my ( $self, $term ) = @_;
+
+    return $term;
+}
+
 1;
