@@ -198,14 +198,26 @@ sub get_template_and_user {
     }
 
     if ( $in->{type} eq 'opac' && $user ) {
+        my $is_sco_user;
+        if ($sessionID){
+            my $session = get_session($sessionID);
+            if ($session){
+                $is_sco_user = $session->param('sco_user');
+            }
+        }
         my $kick_out;
 
         if (
 # If the user logged in is the SCO user and they try to go out of the SCO module,
 # log the user out removing the CGISESSID cookie
             $in->{template_name} !~ m|sco/| && $in->{template_name} !~ m|errors/errorpage.tt|
-            && C4::Context->preference('AutoSelfCheckID')
-            && $user eq C4::Context->preference('AutoSelfCheckID')
+            && (
+                $is_sco_user ||
+                (
+                    C4::Context->preference('AutoSelfCheckID')
+                    && $user eq C4::Context->preference('AutoSelfCheckID')
+                )
+            )
           )
         {
             $kick_out = 1;
@@ -1173,6 +1185,12 @@ sub checkauth {
                             $branchname    = $branches->{$br}->{'branchname'};
                         }
                     }
+
+                    my $is_sco_user = 0;
+                    if ( $query->param('sco_user_login') && ( $query->param('sco_user_login') eq '1' ) ){
+                        $is_sco_user = 1;
+                    }
+
                     $session->param( 'number',       $borrowernumber );
                     $session->param( 'id',           $userid );
                     $session->param( 'cardnumber',   $cardnumber );
@@ -1190,6 +1208,7 @@ sub checkauth {
                     $session->param( 'shibboleth',   $shibSuccess );
                     $session->param( 'register_id',  $register_id );
                     $session->param( 'register_name',  $register_name );
+                    $session->param( 'sco_user', $is_sco_user );
                 }
                 $session->param('cas_ticket', $cas_ticket) if $cas_ticket;
                 C4::Context->set_userenv(
