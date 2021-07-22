@@ -126,7 +126,7 @@ sub move_to_biblio {
     }
     my $indexer = Koha::SearchEngine::Indexer->new({ index => $Koha::SearchEngine::BIBLIOS_INDEX });
     $indexer->index_records( $self->biblionumber, "specialUpdate", "biblioserver" );
-    $indexer->index_records( $from_biblio->biblionumber, "specialUpdate", "biblioserver" );
+    $indexer->index_records( $to_biblio->biblionumber, "specialUpdate", "biblioserver" );
 }
 
 
