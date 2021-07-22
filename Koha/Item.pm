@@ -1172,15 +1172,15 @@ sub itemtype {
     return Koha::ItemTypes->find( $self->effective_itemtype );
 }
 
-=head3 item_orders
+=head3 orders
 
-my $orders = $item->item_orders();
+  my $orders = $item->orders();
 
 Returns a Koha::Acquisition::Orders object
 
 =cut
 
-sub item_orders {
+sub orders {
     my ( $self ) = @_;
 
     my $orders = $self->_result->item_orders;
@@ -1229,7 +1229,7 @@ sub move_to_biblio {
     }
 
     # Acquisition orders
-    my $orders = $self->item_orders;
+    my $orders = $self->orders;
     if ($orders) {
         $orders->update({ biblionumber => $to_biblionumber }, { no_triggers => 1 });
     }

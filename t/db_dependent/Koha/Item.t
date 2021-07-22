@@ -856,7 +856,7 @@ subtest 'Tests for relationship between item and item_orders via aqorders_item' 
         },
     });
 
-    my $orders = $item->item_orders;
+    my $orders = $item->orders;
     is ($orders->count, 1, 'One order found by item with the relationship');
     is ($orders->next->order_internalnote, $order_note, 'Correct order found by item with the relationship');
 };
