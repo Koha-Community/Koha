@@ -35,7 +35,7 @@ sub new {
     my $sets = GetOAISets;
     my $pos = 0;
     foreach my $set (@$sets) {
-        if ($pos < $token->{offset}) {
+        if ($pos < $token->{cursor}) {
             $pos++;
             next;
         }
@@ -50,15 +50,16 @@ sub new {
             )
         );
         $pos++;
-        last if ($pos + 1 - $token->{offset}) > $repository->{koha_max_count};
+        last if ($pos + 1 - $token->{cursor}) > $repository->{koha_max_count};
     }
 
     $self->resumptionToken(
         Koha::OAI::Server::ResumptionToken->new(
             metadataPrefix => $token->{metadata_prefix},
-            offset         => $pos
+            cursor         => $pos,
+            next_id        => $pos + 1
         )
-    ) if ( $pos > $token->{offset} );
+    ) if ( $pos < scalar @$sets );
 
     return $self;
 }
