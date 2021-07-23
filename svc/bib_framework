@@ -54,7 +54,7 @@ exit 0;
 sub fetch_bib_framework {
     my $query = shift;
     my $biblionumber = shift;
-    my $frameworkcode = GetFrameworkCode( $biblionumber );
+    my $frameworkcode = C4::Biblio::GetFrameworkCode( $biblionumber );
     my $result = {
         'frameworkcode' => $frameworkcode
     };
