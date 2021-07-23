@@ -1429,18 +1429,21 @@
                     var ch;
 
                     if (stream.match("<<")) {
-                        while ((ch = stream.next()) != null)
-                        if (ch == ">" && stream.next() == ">") {
-                            stream.eat(">");
-                            return "sqlParams";
+                        while ((ch = stream.next()) != null) {
+                            if (ch == ">" && stream.next() == ">") {
+                                stream.eat(">");
+                                return "sqlParams";
+                            }
                         }
                     }
 
                     if (stream.match("[[")) {
-                        while ((ch = stream.next()) != null)
-                            if (ch == "]" && stream.next() == "]") break;
-                        stream.eat("]");
-                        return "columnPlaceholder";
+                        while ((ch = stream.next()) != null) {
+                            if (ch == "]" && stream.next() == "]") {
+                                stream.eat("]");
+                                return "columnPlaceholder";
+                            }
+                        }
                     }
 
                     else if (stream.next() != null) {
