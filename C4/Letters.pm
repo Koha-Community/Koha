@@ -588,12 +588,13 @@ sub GetPreparedLetter {
         $letter->{'content-type'} = 'text/html; charset="UTF-8"' if $letter->{is_html};
     }
 
+    my $objects = $params{objects} || {};
     my $tables = $params{tables} || {};
     my $substitute = $params{substitute} || {};
     my $loops  = $params{loops} || {}; # loops is not supported for historical notices syntax
     my $repeat = $params{repeat};
-    %$tables || %$substitute || $repeat || %$loops
-      or carp( "ERROR: nothing to substitute - both 'tables', 'loops' and 'substitute' are empty" ),
+    %$tables || %$substitute || $repeat || %$loops || %$objects
+      or carp( "ERROR: nothing to substitute - all of 'objects', 'tables', 'loops' and 'substitute' are empty" ),
          return;
     my $want_librarian = $params{want_librarian};
 
@@ -669,20 +670,23 @@ sub GetPreparedLetter {
 
     $letter->{content} = _process_tt(
         {
-            content => $letter->{content},
-            tables  => $tables,
-            loops  => $loops,
+            content    => $letter->{content},
+            lang       => $lang,
+            loops      => $loops,
+            objects    => $objects,
             substitute => $substitute,
-            lang => $lang
+            tables     => $tables,
         }
     );
 
     $letter->{title} = _process_tt(
         {
-            content => $letter->{title},
-            tables  => $tables,
-            loops  => $loops,
+            content    => $letter->{title},
+            lang       => $lang,
+            loops      => $loops,
+            objects    => $objects,
             substitute => $substitute,
+            tables     => $tables,
         }
     );
 
@@ -1569,9 +1573,10 @@ sub _set_message_status {
 sub _process_tt {
     my ( $params ) = @_;
 
-    my $content = $params->{content};
-    my $tables = $params->{tables};
-    my $loops = $params->{loops};
+    my $content    = $params->{content};
+    my $tables     = $params->{tables};
+    my $loops      = $params->{loops};
+    my $objects    = $params->{objects};
     my $substitute = $params->{substitute} || {};
     my $lang = defined($params->{lang}) && $params->{lang} ne 'default' ? $params->{lang} : 'en';
     my ($theme, $availablethemes);
@@ -1598,7 +1603,7 @@ sub _process_tt {
         }
     ) or die Template->error();
 
-    my $tt_params = { %{ _get_tt_params( $tables ) }, %{ _get_tt_params( $loops, 'is_a_loop' ) }, %$substitute };
+    my $tt_params = { %{ _get_tt_params( $tables ) }, %{ _get_tt_params( $loops, 'is_a_loop' ) }, %$substitute, %$objects };
 
     $content = add_tt_filters( $content );
     $content = qq|[% USE KohaDates %][% USE Remove_MARC_punctuation %]$content|;

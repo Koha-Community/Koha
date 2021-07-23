@@ -19,7 +19,7 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use Test::More tests => 28;
+use Test::More tests => 29;
 use Test::MockModule;
 use Test::Warn;
 
@@ -44,6 +44,7 @@ use Koha::Serial;
 use Koha::Subscription;
 use Koha::Suggestion;
 use Koha::Checkout;
+use Koha::Patrons;
 use Koha::Notice::Messages;
 use Koha::Notice::Templates;
 use Koha::Patron::Modification;
@@ -138,6 +139,17 @@ $prepared_letter = GetPreparedLetter(
 );
 is( $prepared_letter->{content}, $patron->{borrowernumber}, 'Patron object used correctly with arrayref for content' );
 is( $prepared_letter->{title}, $patron->{firstname}, 'Patron object used correctly with arrayref for title' );
+
+$prepared_letter = GetPreparedLetter(
+    (
+        module      => 'test',
+        letter_code => 'TEST_PATRON',
+        objects      => {
+            borrower => scalar Koha::Patrons->find( $patron->{borrowernumber} ),
+        },
+    )
+);
+is( $prepared_letter->{content}, $patron->{borrowernumber}, 'Patron object used correctly as object' );
 
 $sth->execute( "TEST_BIBLIO", "[% biblio.title %]", "[% biblio.id %]" );
 $prepared_letter = GetPreparedLetter(
