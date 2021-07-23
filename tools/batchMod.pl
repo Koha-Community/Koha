@@ -54,7 +54,6 @@ my $biblionumber = $input->param('biblionumber');
 my $op           = $input->param('op');
 my $del          = $input->param('del');
 my $del_records  = $input->param('del_records');
-my $completedJobID = $input->param('completedJobID');
 my $src          = $input->param('src');
 my $use_default_values = $input->param('use_default_values');
 my $exclude_from_local_holds_priority = $input->param('exclude_from_local_holds_priority');
@@ -124,9 +123,178 @@ if ($op eq "action") {
 
     my $marcitem;
 
+    #initializing values for updates
+    my (  $itemtagfield,   $itemtagsubfield) = &GetMarcFromKohaField( "items.itemnumber" );
+    if ($values_to_modify){
+        my $xml = TransformHtmlToXml(\@tags,\@subfields,\@values,\@indicator,\@ind_tag, 'ITEM');
+        $marcitem = MARC::Record::new_from_xml($xml, 'UTF-8');
+    }
+    if ($values_to_blank){
+        foreach my $disabledsubf (@disabled){
+            if ($marcitem && $marcitem->field($itemtagfield)){
+                $marcitem->field($itemtagfield)->update( $disabledsubf => "" );
+            }
+            else {
+                $marcitem = MARC::Record->new();
+                $marcitem->append_fields( MARC::Field->new( $itemtagfield, '', '', $disabledsubf => "" ) );
+            }
+        }
+    }
+
+    my $upd_biblionumbers;
+    my $del_biblionumbers;
+    try {
+        my $schema = Koha::Database->new->schema;
+        $schema->txn_do(
+            sub {
+                # For each item
+                my $i = 1;
+                foreach my $itemnumber (@itemnumbers) {
+                    my $item = Koha::Items->find($itemnumber);
+                    next
+                      unless $item
+                      ; # Should have been tested earlier, but just in case...
+                    my $itemdata = $item->unblessed;
+                    if ($del) {
+                        my $return = $item->safe_delete;
+                        if ( ref( $return ) ) {
+                            $deleted_items++;
+                            push @$upd_biblionumbers, $itemdata->{'biblionumber'};
+                        }
+                        else {
+                            $not_deleted_items++;
+                            push @not_deleted,
+                              {
+                                biblionumber => $itemdata->{'biblionumber'},
+                                itemnumber   => $itemdata->{'itemnumber'},
+                                barcode      => $itemdata->{'barcode'},
+                                title        => $itemdata->{'title'},
+                                reason       => $return,
+                              };
+                        }
+
+                        # If there are no items left, delete the biblio
+                        if ($del_records) {
+                            my $itemscount = Koha::Biblios->find( $itemdata->{'biblionumber'} )->items->count;
+                            if ( $itemscount == 0 ) {
+                                my $error = DelBiblio( $itemdata->{'biblionumber'}, { skip_record_index => 1 } );
+                                unless ($error) {
+                                    $deleted_records++;
+                                    push @$del_biblionumbers, $itemdata->{'biblionumber'};
+                                    if ( $src eq 'CATALOGUING' ) {
+                                        # We are coming catalogue/detail.pl, there were items from a single bib record
+                                        $template->param( biblio_deleted => 1 );
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    else {
+                        my $modified_holds_priority = 0;
+                        if ( defined $exclude_from_local_holds_priority && $exclude_from_local_holds_priority ne "" ) {
+                            if(!defined $item->exclude_from_local_holds_priority || $item->exclude_from_local_holds_priority != $exclude_from_local_holds_priority) {
+                            $item->exclude_from_local_holds_priority($exclude_from_local_holds_priority)->store;
+                            $modified_holds_priority = 1;
+                        }
+                        }
+                        my $modified = 0;
+                        if ( $values_to_modify || $values_to_blank ) {
+                            my $localmarcitem = Item2Marc($itemdata);
+
+                            for ( my $i = 0 ; $i < @tags ; $i++ ) {
+                                my $search = $searches[$i];
+                                next unless $search;
+
+                                my $tag = $tags[$i];
+                                my $subfield = $subfields[$i];
+                                my $replace = $replaces[$i];
+
+                                my $value = $localmarcitem->field( $tag )->subfield( $subfield );
+                                my $old_value = $value;
+
+                                my @available_modifiers = qw( i g );
+                                my $retained_modifiers = q||;
+                                for my $modifier ( split //, $modifiers[$i] ) {
+                                    $retained_modifiers .= $modifier
+                                        if grep {/$modifier/} @available_modifiers;
+                                }
+                                if ( $retained_modifiers =~ m/^(ig|gi)$/ ) {
+                                    $value =~ s/$search/$replace/ig;
+                                }
+                                elsif ( $retained_modifiers eq 'i' ) {
+                                    $value =~ s/$search/$replace/i;
+                                }
+                                elsif ( $retained_modifiers eq 'g' ) {
+                                    $value =~ s/$search/$replace/g;
+                                }
+                                else {
+                                    $value =~ s/$search/$replace/;
+                                }
+
+                                my @fields_to = $localmarcitem->field($tag);
+                                foreach my $field_to_update ( @fields_to ) {
+                                    unless ( $old_value eq $value ) {
+                                        $modified++;
+                                        $field_to_update->update( $subfield => $value );
+                                    }
+                                }
+                            }
+
+                            $modified += UpdateMarcWith( $marcitem, $localmarcitem );
+                            if ($modified) {
+                                eval {
+                                    if (
+                                        my $item = ModItemFromMarc(
+                                            $localmarcitem,
+                                            $itemdata->{biblionumber},
+                                            $itemnumber,
+                                            { skip_record_index => 1 },
+                                        )
+                                      )
+                                    {
+                                        LostItem(
+                                            $itemnumber,
+                                            'batchmod',
+                                            undef,
+                                            { skip_record_index => 1 }
+                                        ) if $item->{itemlost}
+                                          and not $itemdata->{itemlost};
+                                    }
+                                };
+                                push @$upd_biblionumbers, $itemdata->{'biblionumber'};
+                            }
+                        }
+                        $modified_items++ if $modified || $modified_holds_priority;
+                        $modified_fields += $modified + $modified_holds_priority;
+                    }
+                    $i++;
+                }
+                if (@not_deleted) {
+                    Koha::Exceptions::Exception->throw(
+                        'Some items have not been deleted, rolling back');
+                }
+            }
+        );
+    }
+    catch {
+        if ( $_->isa('Koha::Exceptions::Exception') ) {
+            $template->param( deletion_failed => 1 );
+        }
+        die "Something terrible has happened!"
+            if ($_ =~ /Rollback failed/); # Rollback failed
+    };
+    $upd_biblionumbers = [ uniq @$upd_biblionumbers ]; # Only update each bib once
+
+    # Don't send specialUpdate for records we are going to delete
+    my %del_bib_hash = map{ $_ => undef } @$del_biblionumbers;
+    @$upd_biblionumbers = grep( ! exists( $del_bib_hash{$_} ), @$upd_biblionumbers );
+
+    my $indexer = Koha::SearchEngine::Indexer->new({ index => $Koha::SearchEngine::BIBLIOS_INDEX });
+    $indexer->index_records( $upd_biblionumbers, 'specialUpdate', "biblioserver", undef ) if @$upd_biblionumbers;
+    $indexer->index_records( $del_biblionumbers, 'recordDelete', "biblioserver", undef ) if @$del_biblionumbers;
+
     # Once the job is done
-    if ($completedJobID) {
-	# If we have a reasonable amount of items, we display them
+    # If we have a reasonable amount of items, we display them
     my $max_items = $del ? C4::Context->preference("MaxItemsToDisplayForBatchDel") : C4::Context->preference("MaxItemsToDisplayForBatchMod");
     if (scalar(@itemnumbers) <= $max_items ){
         if (scalar(@itemnumbers) <= 1000 ) {
@@ -147,180 +315,6 @@ if ($op eq "action") {
     } else {
         $template->param( "too_many_items_display" => scalar(@itemnumbers) );
         $template->param( "job_completed" => 1 );
-    }
-
-    } else {
-    # While the job is getting done
-
-	#initializing values for updates
-    my (  $itemtagfield,   $itemtagsubfield) = &GetMarcFromKohaField( "items.itemnumber" );
-	if ($values_to_modify){
-	    my $xml = TransformHtmlToXml(\@tags,\@subfields,\@values,\@indicator,\@ind_tag, 'ITEM');
-	    $marcitem = MARC::Record::new_from_xml($xml, 'UTF-8');
-        }
-        if ($values_to_blank){
-	    foreach my $disabledsubf (@disabled){
-		if ($marcitem && $marcitem->field($itemtagfield)){
-		    $marcitem->field($itemtagfield)->update( $disabledsubf => "" );
-		}
-		else {
-		    $marcitem = MARC::Record->new();
-		    $marcitem->append_fields( MARC::Field->new( $itemtagfield, '', '', $disabledsubf => "" ) );
-		}
-	    }
-        }
-
-        my $upd_biblionumbers;
-        my $del_biblionumbers;
-        try {
-            my $schema = Koha::Database->new->schema;
-            $schema->txn_do(
-                sub {
-                    # For each item
-                    my $i = 1;
-                    foreach my $itemnumber (@itemnumbers) {
-                        my $item = Koha::Items->find($itemnumber);
-                        next
-                          unless $item
-                          ; # Should have been tested earlier, but just in case...
-                        my $itemdata = $item->unblessed;
-                        if ($del) {
-                            my $return = $item->safe_delete;
-                            if ( ref( $return ) ) {
-                                $deleted_items++;
-                                push @$upd_biblionumbers, $itemdata->{'biblionumber'};
-                            }
-                            else {
-                                $not_deleted_items++;
-                                push @not_deleted,
-                                  {
-                                    biblionumber => $itemdata->{'biblionumber'},
-                                    itemnumber   => $itemdata->{'itemnumber'},
-                                    barcode      => $itemdata->{'barcode'},
-                                    title        => $itemdata->{'title'},
-                                    reason       => $return,
-                                  };
-                            }
-
-                            # If there are no items left, delete the biblio
-                            if ($del_records) {
-                                my $itemscount = Koha::Biblios->find( $itemdata->{'biblionumber'} )->items->count;
-                                if ( $itemscount == 0 ) {
-                                    my $error = DelBiblio( $itemdata->{'biblionumber'}, { skip_record_index => 1 } );
-                                    unless ($error) {
-                                        $deleted_records++;
-                                        push @$del_biblionumbers, $itemdata->{'biblionumber'};
-                                        if ( $src eq 'CATALOGUING' ) {
-                                            # We are coming catalogue/detail.pl, there were items from a single bib record
-                                            $template->param( biblio_deleted => 1 );
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                        else {
-                            my $modified_holds_priority = 0;
-                            if ( defined $exclude_from_local_holds_priority && $exclude_from_local_holds_priority ne "" ) {
-                                if(!defined $item->exclude_from_local_holds_priority || $item->exclude_from_local_holds_priority != $exclude_from_local_holds_priority) {
-                                $item->exclude_from_local_holds_priority($exclude_from_local_holds_priority)->store;
-                                $modified_holds_priority = 1;
-                            }
-                            }
-                            my $modified = 0;
-                            if ( $values_to_modify || $values_to_blank ) {
-                                my $localmarcitem = Item2Marc($itemdata);
-
-                                for ( my $i = 0 ; $i < @tags ; $i++ ) {
-                                    my $search = $searches[$i];
-                                    next unless $search;
-
-                                    my $tag = $tags[$i];
-                                    my $subfield = $subfields[$i];
-                                    my $replace = $replaces[$i];
-
-                                    my $value = $localmarcitem->field( $tag )->subfield( $subfield );
-                                    my $old_value = $value;
-
-                                    my @available_modifiers = qw( i g );
-                                    my $retained_modifiers = q||;
-                                    for my $modifier ( split //, $modifiers[$i] ) {
-                                        $retained_modifiers .= $modifier
-                                            if grep {/$modifier/} @available_modifiers;
-                                    }
-                                    if ( $retained_modifiers =~ m/^(ig|gi)$/ ) {
-                                        $value =~ s/$search/$replace/ig;
-                                    }
-                                    elsif ( $retained_modifiers eq 'i' ) {
-                                        $value =~ s/$search/$replace/i;
-                                    }
-                                    elsif ( $retained_modifiers eq 'g' ) {
-                                        $value =~ s/$search/$replace/g;
-                                    }
-                                    else {
-                                        $value =~ s/$search/$replace/;
-                                    }
-
-                                    my @fields_to = $localmarcitem->field($tag);
-                                    foreach my $field_to_update ( @fields_to ) {
-                                        unless ( $old_value eq $value ) {
-                                            $modified++;
-                                            $field_to_update->update( $subfield => $value );
-                                        }
-                                    }
-                                }
-
-                                $modified += UpdateMarcWith( $marcitem, $localmarcitem );
-                                if ($modified) {
-                                    eval {
-                                        if (
-                                            my $item = ModItemFromMarc(
-                                                $localmarcitem,
-                                                $itemdata->{biblionumber},
-                                                $itemnumber,
-                                                { skip_record_index => 1 },
-                                            )
-                                          )
-                                        {
-                                            LostItem(
-                                                $itemnumber,
-                                                'batchmod',
-                                                undef,
-                                                { skip_record_index => 1 }
-                                            ) if $item->{itemlost}
-                                              and not $itemdata->{itemlost};
-                                        }
-                                    };
-                                    push @$upd_biblionumbers, $itemdata->{'biblionumber'};
-                                }
-                            }
-                            $modified_items++ if $modified || $modified_holds_priority;
-                            $modified_fields += $modified + $modified_holds_priority;
-                        }
-                        $i++;
-                    }
-                    if (@not_deleted) {
-                        Koha::Exceptions::Exception->throw(
-                            'Some items have not been deleted, rolling back');
-                    }
-                }
-            );
-        }
-        catch {
-            if ( $_->isa('Koha::Exceptions::Exception') ) {
-                $template->param( deletion_failed => 1 );
-            }
-            die "Something terrible has happened!"
-                if ($_ =~ /Rollback failed/); # Rollback failed
-        };
-        $upd_biblionumbers = [ uniq @$upd_biblionumbers ]; # Only update each bib once
-
-        # Don't send specialUpdate for records we are going to delete
-        my %del_bib_hash = map{ $_ => undef } @$del_biblionumbers;
-        @$upd_biblionumbers = grep( ! exists( $del_bib_hash{$_} ), @$upd_biblionumbers );
-
-        my $indexer = Koha::SearchEngine::Indexer->new({ index => $Koha::SearchEngine::BIBLIOS_INDEX });
-        $indexer->index_records( $upd_biblionumbers, 'specialUpdate', "biblioserver", undef ) if @$upd_biblionumbers;
-        $indexer->index_records( $del_biblionumbers, 'recordDelete', "biblioserver", undef ) if @$del_biblionumbers;
     }
 
     # Calling the template
