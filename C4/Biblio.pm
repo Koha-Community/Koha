@@ -91,7 +91,7 @@ use Module::Load::Conditional qw( can_load );
 use C4::Koha;
 use C4::Log qw( logaction );    # logaction
 use C4::Budgets;
-use C4::ClassSource qw( GetClassSort );
+use C4::ClassSource qw( GetClassSort GetClassSource );
 use C4::Charset qw(
     nsb_clean
     SetMarcUnicodeFlag
@@ -1424,6 +1424,11 @@ sub GetAuthorisedValueDesc {
         if ( $tagslib->{$tag}->{$subfield}->{'authorised_value'} eq "itemtypes" ) {
             my $itemtype = Koha::ItemTypes->find( $value );
             return $itemtype ? $itemtype->translated_description : q||;
+        }
+
+        if ( $tagslib->{$tag}->{$subfield}->{'authorised_value'} eq "cn_source" ) {
+            my $source = GetClassSource($value);
+            return $source ? $source->{description} : q||;
         }
 
         #---- "true" authorized value
