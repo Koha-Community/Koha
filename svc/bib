@@ -65,7 +65,7 @@ exit 0;
 sub fetch_bib {
     my $query = shift;
     my $biblionumber = shift;
-    my $record = GetMarcBiblio({
+    my $record = C4::Biblio::GetMarcBiblio({
         biblionumber => $biblionumber,
         embed_items  => scalar $query->param('items') });
     if  (defined $record) {
@@ -79,7 +79,7 @@ sub fetch_bib {
 sub update_bib {
     my $query = shift;
     my $biblionumber = shift;
-    my $old_record = GetMarcBiblio({ biblionumber => $biblionumber });
+    my $old_record = C4::Biblio::GetMarcBiblio({ biblionumber => $biblionumber });
     my $frameworkcode = $query->url_param('frameworkcode') // GetFrameworkCode($biblionumber);
     unless  (defined $old_record) {
         print $query->header(-type => 'text/xml', -status => '404 Not Found');
@@ -98,7 +98,7 @@ sub update_bib {
     } else {
         my $fullrecord = $record->clone();
         my ( $itemtag, $itemsubfield ) =
-          GetMarcFromKohaField( "items.itemnumber" );
+          C4::Biblio::GetMarcFromKohaField( "items.itemnumber" );
 
         # delete any item tags
         foreach my $field ( $record->field($itemtag) ) {
@@ -109,13 +109,13 @@ sub update_bib {
             foreach my $field ( $fullrecord->field($itemtag) ) {
                 my $one_item_record = $record->clone();
                 $one_item_record->add_fields($field);
-                ModItemFromMarc( $one_item_record, $biblionumber,
+                C4::Items::ModItemFromMarc( $one_item_record, $biblionumber,
                     $field->subfield($itemsubfield) );
             }
         }
 
-        ModBiblio( $record, $biblionumber, $frameworkcode );
-        my $new_record = GetMarcBiblio({
+        C4::Biblio::ModBiblio( $record, $biblionumber, $frameworkcode );
+        my $new_record = C4::Biblio::GetMarcBiblio({
             biblionumber => $biblionumber,
             embed_items  => scalar $query->url_param('items') });
 
@@ -133,7 +133,7 @@ sub update_bib {
 sub delete_bib {
     my $query = shift;
     my $biblionumber = shift;
-    my $error = DelBiblio($biblionumber);
+    my $error = C4::Biblio::DelBiblio($biblionumber);
 
     if (defined $error) {
         print $query->header(-type => 'text/xml', -status => '400 Bad request');

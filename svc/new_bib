@@ -63,28 +63,28 @@ sub add_bib {
         # fix character set
         if ($record->encoding() eq 'MARC-8') {
             my ($guessed_charset, $charset_errors);
-            ($record, $guessed_charset, $charset_errors) = MarcToUTF8Record($record, $marcflavour);
+            ($record, $guessed_charset, $charset_errors) = C4::Charset::MarcToUTF8Record($record, $marcflavour);
         }
 
         my $fullrecord = $record->clone();
 
         # delete any item tags
         my ( $itemtag, $itemsubfield ) =
-          GetMarcFromKohaField( "items.itemnumber" );
+          C4::Biblio::GetMarcFromKohaField( "items.itemnumber" );
         foreach my $field ( $record->field($itemtag) ) {
             $record->delete_field($field);
         }
-        my ( $biblionumber, $biblioitemnumber ) = AddBiblio( $record, $frameworkcode );
-        my $new_record = GetMarcBiblio({ biblionumber => $biblionumber });
+        my ( $biblionumber, $biblioitemnumber ) = C4::Biblio::AddBiblio( $record, $frameworkcode );
+        my $new_record = C4::Biblio::GetMarcBiblio({ biblionumber => $biblionumber });
         if ( $query->url_param('items') ) {
             foreach my $field ( $fullrecord->field($itemtag) ) {
                 my $one_item_record = $new_record->clone();
                 $one_item_record->add_fields($field);
-                AddItemFromMarc( $one_item_record, $biblionumber );
+                C4::Items::AddItemFromMarc( $one_item_record, $biblionumber );
             }
         }
 
-        $new_record = GetMarcBiblio({
+        $new_record = C4::Biblio::GetMarcBiblio({
             biblionumber => $biblionumber,
             embed_items  => scalar $query->url_param('items') });
         $result->{'status'} = "ok";
