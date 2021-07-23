@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: compendium-nl_NL\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-05-10 19:14+0200\n"
-"PO-Revision-Date: 2021-05-19 08:43+0000\n"
+"PO-Revision-Date: 2021-07-16 11:13+0000\n"
 "Last-Translator: Ronald Wijlens <r.j.wijlens@saxion.nl>\n"
 "Language-Team: Koha Translation Team\n"
 "Language: nl_NL\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.8\n"
-"X-POOTLE-MTIME: 1621413810.336005\n"
+"X-POOTLE-MTIME: 1626434011.261497\n"
 
 # Accounting
 msgid "accounting.pref"
@@ -577,6 +577,8 @@ msgid ""
 "admin.pref#AddressForFailedOverdueNotices# Email address failed overdue "
 "notices are sent to: "
 msgstr ""
+"admin.pref#AddressForFailedOverdueNotices# E-mailadres waar mislukte te laat "
+"berichten naartoe worden gestuurd: "
 
 # Administration > Interface options
 msgid ""
@@ -584,6 +586,9 @@ msgid ""
 "fallback to the first defined address in the following list: Library "
 "ReplyTo, Library Email, ReplytoDefault and KohaAdminEmailAddress"
 msgstr ""
+"admin.pref#AddressForFailedOverdueNotices# Indien leeg wordt het eerst "
+"gedefinieerde adres in deze lijst gebruikt: Library ReplyTo, Library Email, "
+"ReplytoDefault en KohaAdminEmailAddress"
 
 # Administration > SSL client certificate authentication
 msgid "admin.pref#AllowPKIAuth# Common Name"
@@ -674,8 +679,8 @@ msgid ""
 "admin.pref#DefaultToLoggedInLibraryNoticesSlips# Default view when editing "
 "notices and slips: "
 msgstr ""
-"admin.pref#DefaultToLoggedInLibraryNoticesSlips# Standaard weergave bij "
-"bewerken van bonnen: "
+"admin.pref#DefaultToLoggedInLibraryNoticesSlips# Standaardweergave bij "
+"bewerken van berichten en bonnen: "
 
 # Administration > Interface options
 msgid "admin.pref#DefaultToLoggedInLibraryNoticesSlips# The logged-in library"
@@ -753,7 +758,6 @@ msgid "admin.pref#GoogleOpenIDConnect# Yes"
 msgstr "admin.pref#GoogleOpenIDConnect# Ja"
 
 # Administration > Google OpenID Connect
-#, fuzzy
 msgid ""
 "admin.pref#GoogleOpenIDConnect# You will need to select OAuth2 when creating "
 "an app in the Google cloud console, and set the web origin to your_opac_url "
@@ -769,12 +773,10 @@ msgid "admin.pref#GoogleOpenIDConnectAutoRegister# Allow"
 msgstr "admin.pref#GoogleOpenIDConnectAutoRegister# Toestaan dat"
 
 # Administration > Google OpenID Connect
-#, fuzzy
 msgid "admin.pref#GoogleOpenIDConnectAutoRegister# Don't allow"
 msgstr "admin.pref#GoogleOpenIDConnectAutoRegister# Niet toestaan dat"
 
 # Administration > Google OpenID Connect
-#, fuzzy
 msgid ""
 "admin.pref#GoogleOpenIDConnectAutoRegister# patrons logging in with Google "
 "Open ID to automatically register."
@@ -783,42 +785,36 @@ msgstr ""
 "Open ID om automatisch te registreren."
 
 # Administration > Google OpenID Connect
-#, fuzzy
 msgid "admin.pref#GoogleOpenIDConnectDefaultBranch# ."
-msgstr "admin.pref#GoogleOpenIDConnect# Nee"
+msgstr "admin.pref#GoogleOpenIDConnectDefaultBranch# ."
 
 # Administration > Google OpenID Connect
-#, fuzzy
 msgid ""
 "admin.pref#GoogleOpenIDConnectDefaultBranch# Use this branch code when "
 "automatically registering a Google Open ID patron: "
 msgstr ""
 "admin.pref#GoogleOpenIDConnectDefaultBranch# Gebruik deze branch code bij "
-"het automatisch registeren van een Google Open ID lener."
+"het automatisch registeren van een Google Open ID lener: "
 
 # Administration > Google OpenID Connect
-#, fuzzy
 msgid "admin.pref#GoogleOpenIDConnectDefaultCategory# ."
-msgstr "admin.pref#GoogleOpenIDConnect# Nee"
+msgstr "admin.pref#GoogleOpenIDConnectDefaultCategory# ."
 
 # Administration > Google OpenID Connect
-#, fuzzy
 msgid ""
 "admin.pref#GoogleOpenIDConnectDefaultCategory# Use this category code when "
 "automatically registering a Google Open ID patron: "
 msgstr ""
 "admin.pref#GoogleOpenIDConnectDefaultCategory# Gebruik deze categoriecode "
-"bij het automatisch registreren van een Google Open ID lener."
+"bij het automatisch registreren van een Google Open ID lener: "
 
 # Administration > Google OpenID Connect
-#, fuzzy
 msgid ""
 "admin.pref#GoogleOpenIDConnectDomain# . Leave blank for all Google domains."
 msgstr ""
-"admin.pref#GoogleOpenIDConnectDomain# Laat leeg voor alle Google domeinen"
+"admin.pref#GoogleOpenIDConnectDomain#  Laat leeg voor alle Google domeinen."
 
 # Administration > Google OpenID Connect
-#, fuzzy
 msgid ""
 "admin.pref#GoogleOpenIDConnectDomain# Restrict Google OpenID Connect to this "
 "domain (or subdomain of this domain): "
@@ -832,6 +828,10 @@ msgid ""
 "strong> Changing this system preference will radically alter the behavior of "
 "Koha. Changing preference on a production system is highly discouraged.</p>"
 msgstr ""
+"admin.pref#IndependentBranches# <p class='text-"
+"danger'><strong>Waarschuwing:</strong> Aanpassen van deze systeemvoorkeur "
+"wijzigt de werking van Koha radicaal. Een voorkeur wijzigen in productie "
+"wordt sterk afgeraden.</p>"
 
 # Administration > Login options
 msgid "admin.pref#IndependentBranches# No"
@@ -856,15 +856,14 @@ msgid "admin.pref#IndependentBranchesPatronModifications# No"
 msgstr "admin.pref#IndependentBranchesPatronModifications# Nee"
 
 # Administration > Login options
-#, fuzzy
 msgid ""
 "admin.pref#IndependentBranchesPatronModifications# Prevent staff (but not "
 "superlibrarians) from viewing and approving/denying patron modification "
 "requests for patrons belonging to other libraries: "
 msgstr ""
-"admin.pref#IndependentBranchesPatronModifications# Voorkom dat medewerkers "
-"(behalve superbibliothecarissen) lenerwijzigingsverzoeken kunnen zien en "
-"goed- of afkeuren van leners van een andere bibliotheek."
+"admin.pref#IndependentBranchesPatronModifications# Voorkom dat medewerkers ("
+"behalve superbibliothecarissen) lenerwijzigingsverzoeken kunnen zien en goed-"
+" of afkeuren van leners van een andere bibliotheek: "
 
 # Administration > Login options
 msgid "admin.pref#IndependentBranchesPatronModifications# Yes"
@@ -875,13 +874,12 @@ msgid "admin.pref#IndependentBranchesTransfers# No"
 msgstr "admin.pref#IndependentBranchesTransfers# Nee"
 
 # Administration > Login options
-#, fuzzy
 msgid ""
 "admin.pref#IndependentBranchesTransfers# Prevent staff (but not "
 "superlibrarians) from transfering items to other libraries: "
 msgstr ""
 "admin.pref#IndependentBranchesTransfers# Voorkom dat medewerkers (behalve "
-"superbibliothecarissen) exemplaren naar andere bibliotheken kunnen sturen."
+"superbibliothecarissen) exemplaren naar andere bibliotheken kunnen sturen: "
 
 # Administration > Login options
 msgid "admin.pref#IndependentBranchesTransfers# Yes"
@@ -940,13 +938,12 @@ msgid "admin.pref#SearchEngine# Zebra"
 msgstr "admin.pref#SearchEngine# Zebra"
 
 # Administration > Interface options
-#, fuzzy
 msgid ""
 "admin.pref#SendAllEmailsTo# (Leave this field empty to send messages to "
 "their normal recipient.)"
 msgstr ""
 "admin.pref#SendAllEmailsTo# (Laat dit veld leeg om berichten te sturen naar "
-"de vaste ontvanger)"
+"de vaste ontvanger.)"
 
 # Administration > Interface options
 msgid "admin.pref#SendAllEmailsTo# Email to redirect all messages to: "
@@ -999,19 +996,18 @@ msgid "admin.pref#SessionStorage# Temporary files"
 msgstr "admin.pref#SessionStorage# Tijdelijke bestanden"
 
 # Administration > Share anonymous usage statistics
-#, fuzzy
 msgid "admin.pref#UsageStats# ."
-msgstr "admin.pref#UsageStats# Nee"
+msgstr "admin.pref#UsageStats# ."
 
 # Administration > Share anonymous usage statistics
-#, fuzzy
 msgid ""
 "admin.pref#UsageStats# <br><strong>NOTE:</strong> The other UsageStats "
 "system preferences have no effect if this system preference is set to \"No"
 "\" (don't share)."
 msgstr ""
 "admin.pref#UsageStats# <br><strong>LET OP:</strong> De andere \"UsageStats\" "
-"voorkeuren hebben geen effect als deze voorkeur op \"nee\" staat."
+"systeemvoorkeuren hebben geen effect als deze voorkeur op \"Nee\" (niet "
+"delen) staat."
 
 # Administration > Share anonymous usage statistics
 msgid ""
@@ -1024,15 +1020,14 @@ msgstr ""
 "cronjob. Vraag de systeembeheerder deze in te plannen."
 
 # Administration > Share anonymous usage statistics
-#, fuzzy
 msgid ""
 "admin.pref#UsageStats# <br><strong>NOTE:</strong> Use the <a href=\"/cgi-bin/"
 "koha/admin/usage_statistics.pl\">dedicated configuration page</a> to edit "
 "the statistics you share."
 msgstr ""
-"admin.pref#UsageStats# <br><strong>LET OP:</strong> Gebruik de <a href=\"/"
-"cgi-bin/koha/admin/usage_statistics.pl\">toegewijde admin configuratie "
-"pagina</a> voor het bewerken van de voorkeur gerelateerd aan Hea."
+"admin.pref#UsageStats# <br><strong>LET OP:</strong> Gebruik de <a href"
+"=\"/cgi-bin/koha/admin/usage_statistics.pl\">toegewijde configuratie "
+"pagina</a> voor het bewerken van de gedeelde statistieken."
 
 # Administration > Share anonymous usage statistics
 msgid ""
@@ -1076,13 +1071,13 @@ msgstr ""
 "hea.koha-community.org\">Hea Koha gemeenschapswebsite</a>."
 
 # Administration > Share anonymous usage statistics
-#, fuzzy
 msgid ""
 "admin.pref#UsageStatsCountry# <br><strong>NOTE:</strong> This value has no "
 "effect if the UsageStats system preference is set to \"No\" (don't share)."
 msgstr ""
 "admin.pref#UsageStatsCountry# <br><strong>LET OP:</strong> Deze waarde heeft "
-"geen effect als de UsageStats systeemvoorkeur is ingesteld op \"Deel niet\""
+"geen effect als de UsageStats systeemvoorkeur is ingesteld op \"Nee\" (niet "
+"delen)."
 
 # Administration > Share anonymous usage statistics
 msgid "admin.pref#UsageStatsCountry# Afghanistan"
@@ -1869,43 +1864,39 @@ msgid "admin.pref#UsageStatsCountry# Zimbabwe"
 msgstr "admin.pref#UsageStatsCountry# Zimbabwe"
 
 # Administration > Share anonymous usage statistics
-#, fuzzy
 msgid ""
 "admin.pref#UsageStatsGeolocation# <br><strong>NOTE:</strong> This value has "
 "no effect if the UsageStats system preference is set to \"No\" (don't share)."
 msgstr ""
 "admin.pref#UsageStatsGeolocation# <br><strong>LET OP:</strong> Deze waarde "
-"heeft geen effect als de UsageStats systeemvoorkeur is ingesteld op \"Deel "
-"niet\""
+"heeft geen effect als de UsageStats systeemvoorkeur is ingesteld op \"Nee\" ("
+"niet delen)."
 
 # Administration > Share anonymous usage statistics
-#, fuzzy
 msgid ""
 "admin.pref#UsageStatsGeolocation# <br><strong>NOTE:</strong> You must use "
 "the <a href=\"/cgi-bin/koha/admin/usage_statistics.pl\">dedicated "
 "configuration page</a> to set and edit this system preference."
 msgstr ""
-"admin.pref#UsageStatsGeolocation# <br><strong>NOTE:</strong> Gebruik de <a "
-"href=\"/cgi-bin/koha/admin/usage_statistics.pl\">toegewijde admin "
-"configuratie pagina</a> om deze voorkeur te bewerken."
+"admin.pref#UsageStatsGeolocation# <br><strong>LET OP:</strong> Gebruik de <a "
+"href=\"/cgi-bin/koha/admin/usage_statistics.pl\">toegewijde configuratie "
+"pagina</a> om deze voorkeur te configureren."
 
 # Administration > Share anonymous usage statistics
 msgid "admin.pref#UsageStatsGeolocation# Geolocation of the main library: "
 msgstr "admin.pref#UsageStatsGeolocation# Geolocatie van de hoofdvestiging: "
 
 # Administration > Share anonymous usage statistics
-#, fuzzy
 msgid ""
 "admin.pref#UsageStatsLibrariesInfo# <br><strong>NOTE:</strong> This value "
 "has no effect if the UsageStats system preference is set to \"No\" (don't "
 "share)."
 msgstr ""
 "admin.pref#UsageStatsLibrariesInfo# <br><strong>LET OP:</strong> Deze waarde "
-"heeft geen effect als de UsageStats systeemvoorkeur is ingesteld op \"Deel "
-"niet\""
+"heeft geen effect als de UsageStats systeemvoorkeur is ingesteld op \"Nee\" ("
+"niet delen)."
 
 # Administration > Share anonymous usage statistics
-#, fuzzy
 msgid "admin.pref#UsageStatsLibrariesInfo# Don't share"
 msgstr "admin.pref#UsageStatsLibrariesInfo# Deel niet"
 
@@ -1914,31 +1905,28 @@ msgid "admin.pref#UsageStatsLibrariesInfo# Share"
 msgstr "admin.pref#UsageStatsLibrariesInfo# Deel"
 
 # Administration > Share anonymous usage statistics
-#, fuzzy
 msgid ""
 "admin.pref#UsageStatsLibrariesInfo# libraries information (name, URL, "
 "country)."
 msgstr ""
-"admin.pref#UsageStatsLibrariesInfo# bibliotheekinformatie (naam, url, land)"
+"admin.pref#UsageStatsLibrariesInfo# bibliotheekinformatie (naam, url, land)."
 
 # Administration > Share anonymous usage statistics
-#, fuzzy
 msgid ""
 "admin.pref#UsageStatsLibraryName# . If this field is empty the data will be "
 "sent anonymously."
 msgstr ""
-"admin.pref#UsageStatsLibraryName# Als dit veld leeg is, wordt data anoniem "
-"verstuurd."
+"admin.pref#UsageStatsLibraryName#. Als dit veld leeg is, wordt de data "
+"anoniem verstuurd."
 
 # Administration > Share anonymous usage statistics
-#, fuzzy
 msgid ""
 "admin.pref#UsageStatsLibraryName# <br><strong>NOTE:</strong> This value has "
 "no effect if the UsageStats system preference is set to \"No\" (don't share)."
 msgstr ""
 "admin.pref#UsageStatsLibraryName# <br><strong>LET OP:</strong> Deze waarde "
-"heeft geen effect als de UsageStats systeemvoorkeur is ingesteld op \"Deel "
-"niet\""
+"heeft geen effect als de UsageStats systeemvoorkeur is ingesteld op \"Nee\" ("
+"deel niet)."
 
 # Administration > Share anonymous usage statistics
 msgid ""
@@ -1953,14 +1941,13 @@ msgid "admin.pref#UsageStatsLibraryType# "
 msgstr "admin.pref#UsageStatsLibraryType# "
 
 # Administration > Share anonymous usage statistics
-#, fuzzy
 msgid ""
 "admin.pref#UsageStatsLibraryType# <br><strong>NOTE:</strong> This value has "
 "no effect if the UsageStats system preference is set to \"No\" (don't share)."
 msgstr ""
 "admin.pref#UsageStatsLibraryType# <br><strong>LET OP:</strong> Deze waarde "
-"heeft geen effect als de UsageStats systeemvoorkeur is ingesteld op \"Deel "
-"niet\""
+"heeft geen effect als de UsageStats systeemvoorkeur is ingesteld op \"Nee\" ("
+"deel niet)."
 
 # Administration > Share anonymous usage statistics
 msgid ""
@@ -2011,14 +1998,13 @@ msgid "admin.pref#UsageStatsLibraryType# subscription"
 msgstr "admin.pref#UsageStatsLibraryType# abonnement"
 
 # Administration > Share anonymous usage statistics
-#, fuzzy
 msgid ""
 "admin.pref#UsageStatsLibraryUrl# <br><strong>NOTE:</strong> This value has "
 "no effect if the UsageStats system preference is set to \"No\" (don't share)."
 msgstr ""
 "admin.pref#UsageStatsLibraryUrl# <br><strong>LET OP:</strong> Deze waarde "
-"heeft geen effect als de UsageStats systeemvoorkeur is ingesteld op \"Deel "
-"niet\""
+"heeft geen effect als de UsageStats systeemvoorkeur is ingesteld op \"Nee\" ("
+"deel niet)."
 
 # Administration > Share anonymous usage statistics
 msgid ""
@@ -2053,26 +2039,25 @@ msgid "admin.pref#casLogout# Yes"
 msgstr "admin.pref#casLogout# Ja"
 
 # Administration > CAS authentication
-#, fuzzy
 msgid ""
 "admin.pref#casServerUrl# URL of the Central Authentication Service (CAS) "
 "server: "
 msgstr "admin.pref#casServerUrl# URL van de CAS Authenticatie Server: "
 
 # Administration > CAS authentication
-#, fuzzy
 msgid "admin.pref#casServerVersion# CAS 2 or earlier"
-msgstr "admin.pref#casServerUrl# URL van de CAS Authenticatie Server: "
+msgstr "admin.pref#casServerVersion# CAS 2 of ouder"
 
 # Administration > CAS authentication > casServerVersion
 msgid "admin.pref#casServerVersion# CAS 3 or later"
-msgstr ""
+msgstr "admin.pref#casServerVersion# CAS 3 of nieuwer"
 
 # Administration > CAS authentication
-#, fuzzy
 msgid ""
 "admin.pref#casServerVersion# Version of the CAS server Koha will connect to: "
-msgstr "admin.pref#casServerUrl# URL van de CAS Authenticatie Server: "
+msgstr ""
+"admin.pref#casServerVersion# Versie van de CAS server waar Koha mee verbindt:"
+" "
 
 # Administration > Interface options
 msgid "admin.pref#delimiter# #'s"
@@ -2110,10 +2095,10 @@ msgid "admin.pref#noItemTypeImages# No"
 msgstr "admin.pref#noItemTypeImages# Nee"
 
 # Administration > Interface options
-#, fuzzy
 msgid ""
 "admin.pref#noItemTypeImages# Show itemtype icons in the staff interface: "
-msgstr "admin.pref#noItemTypeImages# Toon itemtype iconen in de catalogus: "
+msgstr ""
+"admin.pref#noItemTypeImages# Toon itemtype iconen in de staf interface: "
 
 # Administration > Interface options
 msgid "admin.pref#noItemTypeImages# Yes"
@@ -2180,7 +2165,6 @@ msgstr ""
 "bij het bekijken van thesaurustermen."
 
 # Authorities > General
-#, fuzzy
 msgid ""
 "authorities.pref#AuthorityControlledIndicators# Here auth1 and auth2 refer "
 "to the indicators of the authority record, tag is a bibliographic field "
@@ -2188,9 +2172,9 @@ msgid ""
 "<br>"
 msgstr ""
 "authorities.pref#AuthorityControlledIndicators# Auth1 en auth2 verwijzen "
-"hier naar de indicatoren van het thesaurusrecord, tag is een biblio "
-"veldnummer of een asterisk (*), en some_value is ene vaste waarde (1 teken)."
-"<br>"
+"hier naar de indicatoren van het thesaurusrecord, tag is een bibliografisch "
+"veldnummer of een asterisk (*), en some_value is ene vaste waarde (1 "
+"teken).<br>"
 
 # Authorities > General
 msgid ""
@@ -2214,15 +2198,14 @@ msgstr ""
 "040$f."
 
 # Authorities > General
-#, fuzzy
 msgid ""
 "authorities.pref#AuthorityControlledIndicators# Use the following text to "
 "edit how authority records control indicators of attached bibliographic "
 "fields (and possibly subfield $2).<br>"
 msgstr ""
 "authorities.pref#AuthorityControlledIndicators# Gebruik de volgende tekst om "
-"te bewerken hoe thesaurusrecords de indicatoren van aanhangende bibliovelden "
-"beheren (en mogelijk subveld $2).<br>"
+"te bewerken hoe thesaurusrecords de indicatoren van aanhangende "
+"bibliografische velden beheren (en mogelijk subveld $2).<br>"
 
 # Authorities > General
 msgid ""
@@ -2293,7 +2276,6 @@ msgstr ""
 "zijn (BiblioAddsAuthorities moet op \"toestaan\" staan om effect te hebben)."
 
 # Authorities > General
-#, fuzzy
 msgid "authorities.pref#AutoCreateAuthorities# don't generate"
 msgstr "authorities.pref#AutoCreateAuthorities# niet aanmaken"
 
@@ -2328,7 +2310,6 @@ msgid "authorities.pref#CatalogModuleRelink# Do"
 msgstr "authorities.pref#CatalogModuleRelink# Wel"
 
 # Authorities > Linker
-#, fuzzy
 msgid "authorities.pref#CatalogModuleRelink# Don't"
 msgstr "authorities.pref#CatalogModuleRelink# Niet"
 
@@ -2345,7 +2326,6 @@ msgid "authorities.pref#LinkerKeepStale# Do"
 msgstr "authorities.pref#LinkerKeepStale# Wel"
 
 # Authorities > Linker
-#, fuzzy
 msgid "authorities.pref#LinkerKeepStale# Don't"
 msgstr "authorities.pref#LinkerKeepStale# Niet"
 
@@ -2362,19 +2342,16 @@ msgid "authorities.pref#LinkerModule# Use the"
 msgstr "authorities.pref#LinkerModule# Gebruik de"
 
 # Authorities > Linker
-#, fuzzy
 msgid "authorities.pref#LinkerModule# default"
-msgstr "authorities.pref#LinkerModule# Standaard"
+msgstr "authorities.pref#LinkerModule# standaard"
 
 # Authorities > Linker
-#, fuzzy
 msgid "authorities.pref#LinkerModule# first match"
-msgstr "authorities.pref#LinkerModule# Eerste overeenkomst"
+msgstr "authorities.pref#LinkerModule# eerste overeenkomst"
 
 # Authorities > Linker
-#, fuzzy
 msgid "authorities.pref#LinkerModule# last match"
-msgstr "authorities.pref#LinkerModule# Laatste overeenkomst"
+msgstr "authorities.pref#LinkerModule# laatste overeenkomst"
 
 # Authorities > Linker
 msgid ""
@@ -2385,25 +2362,22 @@ msgstr ""
 "naar thesaurusrecords."
 
 # Authorities > Linker
-#, fuzzy
 msgid "authorities.pref#LinkerOptions# (separate options with |)."
-msgstr "authorities.pref#LinkerOptions# (opties scheiden met |)"
+msgstr "authorities.pref#LinkerOptions# (opties scheiden door |)."
 
 # Authorities > Linker
-#, fuzzy
 msgid ""
 "authorities.pref#LinkerOptions# Set the following options for the authority "
 "linker:"
 msgstr ""
 "authorities.pref#LinkerOptions# Stel de volgende opties in voor de "
-"thesauruslinker"
+"thesauruslinker:"
 
 # Authorities > Linker
 msgid "authorities.pref#LinkerRelink# Do"
 msgstr "authorities.pref#LinkerRelink# Wel"
 
 # Authorities > Linker
-#, fuzzy
 msgid "authorities.pref#LinkerRelink# Don't"
 msgstr "authorities.pref#LinkerRelink# Niet"
 
@@ -2416,7 +2390,6 @@ msgstr ""
 "waren aan thesaurusrecords."
 
 # Authorities > General
-#, fuzzy
 msgid ""
 "authorities.pref#MARCAuthorityControlField008# Use the following text for "
 "the contents of MARC21 authority control field 008 position 06-39 (fixed "
@@ -2424,10 +2397,9 @@ msgid ""
 msgstr ""
 "authorities.pref#MARCAuthorityControlField008# Gebruik de volgende tekst "
 "voor de inhoud van MARC21 thesaurus controleveld 008 positie 06-39 (vaste "
-"lengte data elementen). Geef GEEN datum op (positie 00-05)."
+"lengte data elementen). Geef GEEN datum op (positie 00-05):"
 
 # Authorities > General
-#, fuzzy
 msgid ""
 "authorities.pref#UNIMARCAuthorityField100# Use the following text for the "
 "contents of UNIMARC authority field 100 position 08-35 (fixed length data "
@@ -2435,7 +2407,7 @@ msgid ""
 msgstr ""
 "authorities.pref#UNIMARCAuthorityField100# Gebruik de volgende tekst voor de "
 "inhoud van UNIMARC thesaurusveld 100 positie 08-35 (vaste lengte data "
-"elementen). Geef GEEN datum op (positie 00-07)."
+"elementen). Geef GEEN datum op (positie 00-07):"
 
 # Authorities > General
 msgid "authorities.pref#UseAuthoritiesForTracings# Don't use"
@@ -2474,12 +2446,10 @@ msgid "cataloguing.pref Interface"
 msgstr "cataloguing.pref Interface"
 
 # Cataloging > Record Structure
-#, fuzzy
 msgid "cataloguing.pref Record structure"
 msgstr "cataloguing.pref Recordstructuur"
 
 # Cataloging > Spine Labels
-#, fuzzy
 msgid "cataloguing.pref Spine labels"
 msgstr "cataloguing.pref Rugetiketten"
 
@@ -2526,7 +2496,6 @@ msgstr ""
 "van de record importeertool,"
 
 # Cataloging > Importing
-#, fuzzy
 msgid ""
 "cataloguing.pref#AggressiveMatchOnISBN# attempt to match aggressively by "
 "trying all variations of the ISBNs in the imported record as a phrase in the "
@@ -2534,8 +2503,7 @@ msgid ""
 msgstr ""
 "cataloguing.pref#AggressiveMatchOnISBN# proberen agressief te matchen door "
 "alle variaties van de ISBN's in het geïmporteerde record als een zin in de "
-"ISBN-velden van bestaande records.  Deze voorkeur heeft geen effect wanneer "
-"UseQueryParser aan staat."
+"ISBN-velden van bestaande records."
 
 # Cataloging > Importing
 msgid "cataloguing.pref#AggressiveMatchOnISBN# do"
@@ -2554,7 +2522,6 @@ msgstr ""
 "van de record importeertool,"
 
 # Cataloging > Importing
-#, fuzzy
 msgid ""
 "cataloguing.pref#AggressiveMatchOnISSN# attempt to match aggressively by "
 "trying all variations of the ISSNs in the imported record as a phrase in the "
@@ -2562,8 +2529,7 @@ msgid ""
 msgstr ""
 "cataloguing.pref#AggressiveMatchOnISSN# proberen agressief te matchen door "
 "alle variaties van de ISSN's in het geïmporteerde record als een zin in de "
-"ISSN-velden van bestaande records.  Deze voorkeur heeft geen effect wanneer "
-"UseQueryParser aan staat."
+"ISSN-velden van bestaande records."
 
 # Cataloging > Importing
 msgid "cataloguing.pref#AggressiveMatchOnISSN# do"
@@ -2582,7 +2548,6 @@ msgid "cataloguing.pref#AlternateHoldingsField# Display MARC subfield"
 msgstr "cataloguing.pref#AlternateHoldingsField# Toon MARC subveld"
 
 # Cataloging > Record Structure
-#, fuzzy
 msgid ""
 "cataloguing.pref#AlternateHoldingsField# as holdings information for records "
 "that do not have items (this can contain multiple subfields to look in, for "
@@ -2590,23 +2555,20 @@ msgid ""
 "with the subfields separated by"
 msgstr ""
 "cataloguing.pref#AlternateHoldingsField# als exemplaarinformatie voor "
-"records die geen items hebben (Dit kan meerdere subvelden bevatten om te "
-"doorzoeken; bijvoorbeeld <code>852abhi</code> zoekt in 852 subvelden a, b, "
-"h, en i.), waarbij de subvelden gescheiden worden door"
+"records die geen items hebben (dit kan meerdere subvelden bevatten om te "
+"doorzoeken, bijvoorbeeld <code>852abhi</code> zoekt in 852 subvelden a, b, "
+"h, en i), waarbij de subvelden gescheiden worden door"
 
 # Cataloging > Display
-#, fuzzy
 msgid "cataloguing.pref#AuthoritySeparator# (non-XSLT view only)."
-msgstr "cataloguing.pref#AuthoritySeparator# ."
+msgstr "cataloguing.pref#AuthoritySeparator# (alleen non-XSLT weergave)."
 
 # Cataloging > Display
-#, fuzzy
 msgid ""
 "cataloguing.pref#AuthoritySeparator# Separate main entry and subdivisions "
 "with "
 msgstr ""
-"cataloguing.pref#AuthoritySeparator# Scheid meerdere getoonde auteurs, "
-"series of onderwerpen met "
+"cataloguing.pref#AuthoritySeparator# Scheid hoofdinvoer en subinvoer door "
 
 # Cataloging > Exporting
 # Cataloging > Exporting
@@ -2623,16 +2585,14 @@ msgstr ""
 "tags en subvelden worden afgedruk met de gegeven BibTeX tag."
 
 # Cataloging > Exporting
-#, fuzzy
 msgid ""
 "cataloguing.pref#BibtexExportAdditionalFields# Include the following fields "
 "when exporting BibTeX:"
 msgstr ""
 "cataloguing.pref#BibtexExportAdditionalFields# De volgende velden bijvoegen "
-"bij exporteren van BibTeX,"
+"bij exporteren van BibTeX:"
 
 # Cataloging > Exporting
-#, fuzzy
 msgid ""
 "cataloguing.pref#BibtexExportAdditionalFields# To specify multiple marc tags/"
 "subfields as targets for a repeating BibTex tag, use the following format: "
@@ -2640,8 +2600,8 @@ msgid ""
 msgstr ""
 "cataloguing.pref#BibtexExportAdditionalFields# Gebruik om meerdere marc tags/"
 "subvelden te specificeren voor een herhalende BibTex tag, het volgende "
-"format: BT_TAG: [TAG2$SUBFIELD1, TAG2$SUBFIELD2] ( bv. notes: [501$a, "
-"505$g] )"
+"format: BT_TAG: [TAG2$SUBFIELD1, TAG2$SUBFIELD2] ( bv. notes: [501$a, 505$g] "
+")."
 
 # Cataloging > Exporting
 msgid ""
@@ -2654,13 +2614,12 @@ msgstr ""
 "een zelfgekozen veldwaarde."
 
 # Cataloging > Exporting
-#, fuzzy
 msgid ""
 "cataloguing.pref#BibtexExportAdditionalFields# Use one line per tag in the "
 "format BT_TAG: TAG$SUBFIELD ( e.g. lccn: 010$a )."
 msgstr ""
 "cataloguing.pref#BibtexExportAdditionalFields# Gebruik een regel per tag in "
-"het format BT_TAG: TAG$SUBFIELD ( bv. lccn: 010$a )"
+"het format BT_TAG: TAG$SUBFIELD ( bv. lccn: 010$a )."
 
 # Cataloging > Interface
 msgid "cataloguing.pref#DefaultClassificationSource# Use"
@@ -2675,13 +2634,12 @@ msgstr ""
 "classificatiebron."
 
 # Cataloging > Record Structure
-#, fuzzy
 msgid ""
 "cataloguing.pref#DefaultCountryField008#  Empty defaults to ||| - No attempt "
 "to code."
 msgstr ""
-"cataloguing.pref#DefaultCountryField008#  Zet standaarden op xxu voor "
-"Verenigde Staten."
+"cataloguing.pref#DefaultCountryField008#  Zet standaarden op ||| - Niet "
+"coderen."
 
 # Cataloging > Record Structure
 msgid ""
@@ -2720,13 +2678,12 @@ msgid "cataloguing.pref#EasyAnalyticalRecords# Don't display"
 msgstr "cataloguing.pref#EasyAnalyticalRecords# Toon geen"
 
 # Cataloging > Interface
-#, fuzzy
 msgid ""
 "cataloguing.pref#EasyAnalyticalRecords# easy ways to create analytical "
 "record relationships."
 msgstr ""
 "cataloguing.pref#EasyAnalyticalRecords# makkelijke manieren om analytical "
-"record relaties aan te maken"
+"record relaties aan te maken."
 
 # Cataloging > Interface
 msgid ""
@@ -2760,11 +2717,12 @@ msgstr ""
 "catalogiseer editor."
 
 # Cataloging > Display
-#, fuzzy
 msgid ""
 "cataloguing.pref#ISBD# Use the following as the staff interface ISBD "
 "template:"
-msgstr "cataloguing.pref#ISBD# Gebruik het volgende als de staf ISBD sjabloon:"
+msgstr ""
+"cataloguing.pref#ISBD# Gebruik het volgende als het staf interface ISBD "
+"sjabloon:"
 
 # Cataloging > Display
 msgid ""
@@ -2783,9 +2741,8 @@ msgid "cataloguing.pref#IntranetBiblioDefaultView# MARC form."
 msgstr "cataloguing.pref#IntranetBiblioDefaultView# MARC stijl."
 
 # Cataloging > Display
-#, fuzzy
 msgid "cataloguing.pref#IntranetBiblioDefaultView# labelled MARC form."
-msgstr "cataloguing.pref#IntranetBiblioDefaultView# Gelabelde MARC stijl"
+msgstr "cataloguing.pref#IntranetBiblioDefaultView# gelabelde MARC stijl."
 
 # Cataloging > Display
 msgid "cataloguing.pref#IntranetBiblioDefaultView# normal form."
@@ -2862,9 +2819,8 @@ msgstr ""
 "cataloguing.pref#MarcFieldDocURL# als de URL voor MARC velddocumentatie."
 
 # Cataloging > Display
-#, fuzzy
 msgid "cataloguing.pref#MarcFieldForCreatorId# ."
-msgstr "cataloguing.pref#MarcFieldDocURL# Gebruik"
+msgstr "cataloguing.pref#MarcFieldForCreatorId# ."
 
 # Cataloging > Record Structure
 msgid ""
@@ -2906,9 +2862,9 @@ msgstr ""
 "subveld"
 
 # Cataloging > Display
-#, fuzzy
 msgid "cataloguing.pref#MergeReportFields# .<br />For example: '001,245ab,600'"
-msgstr "cataloguing.pref#MergeReportFields# <br />voorbeeld: '001,245ab,600'"
+msgstr ""
+"cataloguing.pref#MergeReportFields# <br /> Bijvoorbeeld: '001,245ab,600'"
 
 # Cataloging > Display
 msgid ""
@@ -2931,13 +2887,12 @@ msgid "cataloguing.pref#MergeReportFields# <ul>"
 msgstr "cataloguing.pref#MergeReportFields# <ul>"
 
 # Cataloging > Display
-#, fuzzy
 msgid ""
 "cataloguing.pref#MergeReportFields# Show the following fields for deleted "
 "records after a merge:"
 msgstr ""
-"cataloguing.pref#MergeReportFields# velden om te tonen voor verwijderde "
-"records na samenvoeging"
+"cataloguing.pref#MergeReportFields# Velden om te tonen voor verwijderde "
+"records na samenvoeging:"
 
 # Cataloging > Display
 msgid "cataloguing.pref#MergeReportFields# displays:"
@@ -2998,13 +2953,12 @@ msgstr ""
 "een bereik als <code>192.168.</code>.)"
 
 # Cataloging > Display
-#, fuzzy
 msgid ""
 "cataloguing.pref#OpacSuppression# <br />Display the following message on the "
 "redirect page for suppressed bibliographic records:"
 msgstr ""
-"cataloguing.pref#OpacSuppression# <br />Toon het volgende bericht op de "
-"doorverwijspagina voor onderdrukte bibliografische records"
+"cataloguing.pref#OpacSuppression# <br />Toon de volgende tekst op de "
+"doorverwijspagina voor onderdrukte bibliografische records:"
 
 # Cataloging > Display
 msgid ""
@@ -3087,24 +3041,22 @@ msgstr ""
 "en subvelden worden afgedruk met de gegeven RIS tag."
 
 # Cataloging > Exporting
-#, fuzzy
 msgid ""
 "cataloguing.pref#RisExportAdditionalFields# Include the following fields "
 "when exporting RIS:"
 msgstr ""
 "cataloguing.pref#RisExportAdditionalFields# De volgende velden bijvoegen bij "
-"exporteren van RIS"
+"exporteren van RIS:"
 
 # Cataloging > Exporting
-#, fuzzy
 msgid ""
 "cataloguing.pref#RisExportAdditionalFields# To specify multiple MARC tags/"
 "subfields as targets for a repeating RIS tag, use the following format: "
 "RIS_TAG: [TAG2$SUBFIELD1, TAG2$SUBFIELD2] ( e.g. NT: [501$a, 505$g] )."
 msgstr ""
-"cataloguing.pref#RisExportAdditionalFields# Gebruik om meerdere marc tags/"
+"cataloguing.pref#RisExportAdditionalFields# Gebruik om meerdere MARC tags/"
 "subvelden te specificeren voor een herhalende RIS tag, het volgende format: "
-"RIS_TAG: [TAG2$SUBFIELD1, TAG2$SUBFIELD2] ( bv. NT: [501$a, 505$g] )"
+"RIS_TAG: [TAG2$SUBFIELD1, TAG2$SUBFIELD2] ( bv. NT: [501$a, 505$g] )."
 
 # Cataloging > Exporting
 msgid ""
@@ -3116,13 +3068,12 @@ msgstr ""
 "als sleutel <em>vervangt</em> de standaard TY door de gekozen veldwaarde."
 
 # Cataloging > Exporting
-#, fuzzy
 msgid ""
 "cataloguing.pref#RisExportAdditionalFields# Use one line per tag in the "
 "format RIS_TAG: TAG$SUBFIELD ( e.g. LC: 010$a )."
 msgstr ""
 "cataloguing.pref#RisExportAdditionalFields# Gebruik een regel per tag in het "
-"format RIS_TAG: TAG$SUBFIELD ( bv. LC: 010$a )"
+"format RIS_TAG: TAG$SUBFIELD ( bv. LC: 010$a )."
 
 # Cataloging > Display
 msgid "cataloguing.pref#SeparateHoldings# Don't separate"
@@ -3205,37 +3156,34 @@ msgid "cataloguing.pref#SpineLabelShowPrintOnBibDetails# Don't display"
 msgstr "cataloguing.pref#SpineLabelShowPrintOnBibDetails# Verberg"
 
 # Cataloging > Spine Labels
-#, fuzzy
 msgid ""
 "cataloguing.pref#SpineLabelShowPrintOnBibDetails# buttons on the "
 "bibliographic details page to print item spine labels."
 msgstr ""
-"cataloguing.pref#SpineLabelShowPrintOnBibDetails# knoppen op de bib "
-"detailpagina voor het printen van rugetiketten."
+"cataloguing.pref#SpineLabelShowPrintOnBibDetails# knoppen op de "
+"bibliografisch detailpagina voor het printen van rugetiketten."
 
 # Cataloging > Record Structure
 msgid "cataloguing.pref#SubfieldsToAllowForRestrictedBatchmod# Examples:"
 msgstr "cataloguing.pref#SubfieldsToAllowForRestrictedBatchmod# Voorbeelden:"
 
 # Cataloging > Record Structure
-#, fuzzy
 msgid ""
 "cataloguing.pref#SubfieldsToAllowForRestrictedBatchmod# If the system "
 "preference is empty, no fields are restricted."
 msgstr ""
-"cataloguing.pref#SubfieldsToAllowForRestrictedBatchmod# Als de voorkeur leeg "
-"is, zijn er geen velden afgeschermd."
+"cataloguing.pref#SubfieldsToAllowForRestrictedBatchmod# Als de "
+"systeemvoorkeur leeg is, zijn er geen velden afgeschermd."
 
 # Cataloging > Record Structure
-#, fuzzy
 msgid ""
 "cataloguing.pref#SubfieldsToAllowForRestrictedBatchmod# List of subfields "
 "for which editing is authorized when the items_batchmod_restricted "
 "permission is enabled, separated by spaces:"
 msgstr ""
-"cataloguing.pref#SubfieldsToAllowForRestrictedBatchmod# Definieer een lijst "
-"van subvelden waarvan bewerken is toegestaan als items_batchmod_restricted "
-"toestemming geactiveerd is, gescheiden door spaties."
+"cataloguing.pref#SubfieldsToAllowForRestrictedBatchmod# Lijst van subvelden "
+"waarvan bewerken is toegestaan als items_batchmod_restricted toestemming "
+"geactiveerd is, gescheiden door spaties:"
 
 # Cataloging > Record Structure
 msgid ""
@@ -3266,24 +3214,22 @@ msgid "cataloguing.pref#SubfieldsToAllowForRestrictedEditing# Examples:"
 msgstr "cataloguing.pref#SubfieldsToAllowForRestrictedEditing# Voorbeelden:"
 
 # Cataloging > Record Structure
-#, fuzzy
 msgid ""
 "cataloguing.pref#SubfieldsToAllowForRestrictedEditing# If the system "
 "preference is empty, no fields are restricted."
 msgstr ""
-"cataloguing.pref#SubfieldsToAllowForRestrictedEditing# Als de voorkeur leeg "
-"is, zijn er geen velden afgeschermd."
+"cataloguing.pref#SubfieldsToAllowForRestrictedEditing# Als de "
+"systeemvoorkeur leeg is, zijn er geen velden afgeschermd."
 
 # Cataloging > Record Structure
-#, fuzzy
 msgid ""
 "cataloguing.pref#SubfieldsToAllowForRestrictedEditing# List of subfields for "
 "which editing is authorized when the edit_items_restricted permission is "
 "enabled, separated by spaces:"
 msgstr ""
-"cataloguing.pref#SubfieldsToAllowForRestrictedEditing# Definieer een lijst "
-"van subvelden waarvan bewerken is toegestaan als edit_items_restricted "
-"toestemming geactiveerd is, gescheiden door spaties."
+"cataloguing.pref#SubfieldsToAllowForRestrictedEditing# Lijst van subvelden "
+"waarvan bewerken is toegestaan als de edit_items_restricted toestemming "
+"geactiveerd is, gescheiden door spaties:"
 
 # Cataloging > Record Structure
 msgid ""
@@ -3310,14 +3256,12 @@ msgstr ""
 "995$h 995$j\""
 
 # Cataloging > Record Structure
-#, fuzzy
 msgid ""
 "cataloguing.pref#SubfieldsToUseWhenPrefill# Define a list of subfields to "
 "use when prefilling items (separated by space):"
 msgstr ""
 "cataloguing.pref#SubfieldsToUseWhenPrefill# Definieer een lijst van "
-"subvelden om te gebruiken bij het voorvullen van exemplaren (gescheiden door "
-"spaties)"
+"subvelden voor het vooraf vullen van exemplaren (gescheiden door spaties):"
 
 # Cataloging > Record Structure
 msgid "cataloguing.pref#UNIMARCField100Language# Use the languague (ISO 690-2)"
@@ -3336,12 +3280,12 @@ msgid "cataloguing.pref#URLLinkText# Show"
 msgstr "cataloguing.pref#URLLinkText# Gebruik"
 
 # Cataloging > Display
-#, fuzzy
 msgid ""
 "cataloguing.pref#URLLinkText# as the text of links embedded in MARC records "
 "and items."
 msgstr ""
-"cataloguing.pref#URLLinkText# als de tekst van links ingebed in MARC records."
+"cataloguing.pref#URLLinkText# als de tekst van links ingebed in MARC records "
+"en exemplaren."
 
 # Cataloging > Display
 msgid "cataloguing.pref#UseControlNumber# Don't use"
@@ -3397,9 +3341,8 @@ msgstr ""
 "<year>-0002."
 
 # Cataloging > Record Structure
-#, fuzzy
 msgid "cataloguing.pref#autoBarcode# incremental EAN-13 barcodes."
-msgstr "cataloguing.pref#autoBarcode# incrementele EAN-13 barcodes"
+msgstr "cataloguing.pref#autoBarcode# incrementele EAN-13 barcodes."
 
 # Cataloging > Record Structure
 msgid "cataloguing.pref#autoBarcode# not generated automatically."
@@ -3449,11 +3392,13 @@ msgid ""
 "LOC: 050ab,090ab; from the Koha record: 942hi. Examples for UNIMARC: Dewey: "
 "676a; LOC: 680ab."
 msgstr ""
+"cataloguing.pref#itemcallnumber# Voorbeelden voor MARC21: Dewey: 082ab,092ab;"
+" LOC: 050ab,090ab; vanuit het Koha record: 942hi. Voorbeelden voor UNIMARC: "
+"Dewey: 676a; LOC: 680ab."
 
 # Cataloging > Record Structure
-#, fuzzy
 msgid "cataloguing.pref#itemcallnumber# Map the MARC subfields"
-msgstr "cataloguing.pref#itemcallnumber# Map het MARC subveld"
+msgstr "cataloguing.pref#itemcallnumber# Map de MARC subvelden"
 
 # Cataloging > Record structure
 msgid ""
@@ -3463,6 +3408,11 @@ msgid ""
 "preserved. For example: '082ab,092ab' will look in the 082$a and 082$b, then "
 "the 092$a and 092$b."
 msgstr ""
+"cataloguing.pref#itemcallnumber# naar een exemplaar standplaats. Geef "
+"meerdere kommagescheiden velden op om ze opvolgend te controleren. Elk veld "
+"kan meerdere subvelden bevatten. De volgorde van de subvelden in het record "
+"wordt bewaard. Bijvoorbeeld: '082ab,092ab' kijkt in de 082$a en 082$b, "
+"daarna de 092$a en 092$b."
 
 # Cataloging > Record Structure
 msgid "cataloguing.pref#marcflavour# Interpret and store MARC records in the"
@@ -3509,7 +3459,6 @@ msgid "circulation.pref"
 msgstr "circulation.pref"
 
 # Circulation > Article Requests
-#, fuzzy
 msgid "circulation.pref Article requests"
 msgstr "circulation.pref Artikelaanvragen"
 
@@ -3518,17 +3467,14 @@ msgid "circulation.pref Batch checkout"
 msgstr "circulation.pref Batchuitleen"
 
 # Circulation > Checkin Policy
-#, fuzzy
 msgid "circulation.pref Checkin policy"
 msgstr "circulation.pref Innameregels"
 
 # Circulation > Checkout Policy
-#, fuzzy
 msgid "circulation.pref Checkout policy"
 msgstr "circulation.pref Uitleenregels"
 
 # Circulation > Course Reserves
-#, fuzzy
 msgid "circulation.pref Course reserves"
 msgstr "circulation.pref Literatuurlijsten"
 
@@ -3537,7 +3483,6 @@ msgid "circulation.pref Fines Policy"
 msgstr "circulation.pref Boeteregels"
 
 # Circulation > Holds Policy
-#, fuzzy
 msgid "circulation.pref Holds policy"
 msgstr "circulation.pref Aanvraagregels"
 
@@ -3550,12 +3495,10 @@ msgid "circulation.pref Interface"
 msgstr "circulation.pref Interface"
 
 # Circulation > Interlibrary Loans
-#, fuzzy
 msgid "circulation.pref Interlibrary loans"
 msgstr "circulation.pref IBL aanvragen"
 
 # Circulation > Return Claims
-#, fuzzy
 msgid "circulation.pref Return claims"
 msgstr "circulation.pref Inleverclaims"
 
@@ -3564,17 +3507,14 @@ msgid "circulation.pref Self check-in module"
 msgstr "circulation.pref Zelfinnamemodule"
 
 # Circulation > Self check-in module
-#, fuzzy
 msgid "circulation.pref Self check-out module"
-msgstr "circulation.pref Zelfinnamemodule"
+msgstr "circulation.pref Zelfuitleenmodule"
 
 # Circulation > Stockrotation module
-#, fuzzy
 msgid "circulation.pref Stock rotation module"
 msgstr "circulation.pref Voorraadroulatiemodule"
 
 # Circulation > Checkout Policy
-#, fuzzy
 msgid ""
 "circulation.pref#AgeRestrictionMarker# . For example, enter target audience "
 "keyword(s) split by | (bar) FSK|PEGI|Age| (No white space near |). Be sure "
@@ -3582,7 +3522,7 @@ msgid ""
 "value of FSK 12 or PEGI 12 would mean: Borrower must be 12 years old. Leave "
 "empty to not apply an age restriction."
 msgstr ""
-"circulation.pref#AgeRestrictionMarker# Bv voer doelpubliek trefwoorden in, "
+"circulation.pref#AgeRestrictionMarker# . Bv voer doelpubliek trefwoorden in, "
 "gescheiden door | (balk) FSK|PEGI|Age| (Geen spaties). Zorg dat "
 "leeftijdsrestricties in Koha worden gemapt naar MARC mapping (bv. 521$a). "
 "Een MARC veldwaarde van FSK 12 of PEGI 12 betekent: lener moet 12 jaar zijn. "
@@ -3621,13 +3561,12 @@ msgid "circulation.pref#AllFinesNeedOverride# Require"
 msgstr "circulation.pref#AllFinesNeedOverride# Vereis"
 
 # Circulation > Checkout Policy
-#, fuzzy
 msgid ""
 "circulation.pref#AllFinesNeedOverride# staff to manually override all fines, "
 "even fines less than set in the noissuescharge system preference."
 msgstr ""
 "circulation.pref#AllFinesNeedOverride# dat staf handmatig boetes negeert, "
-"zelfs boetes lager dan noissuescharge."
+"zelfs boetes lager dan ingesteld in de noissuescharge systeemvoorkeur."
 
 # Circulation > Interface
 msgid "circulation.pref#AllowAllMessageDeletion# Allow"
@@ -3670,14 +3609,14 @@ msgid "circulation.pref#AllowFineOverride# Don't allow"
 msgstr "circulation.pref#AllowFineOverride# Niet toestaan"
 
 # Circulation > Checkout Policy
-#, fuzzy
 msgid ""
 "circulation.pref#AllowFineOverride# staff to manually override and check out "
 "items to patrons who have more in fines than set in the noissuescharge "
 "system preference."
 msgstr ""
 "circulation.pref#AllowFineOverride# dat staf handmatig uitleent aan leners "
-"die meer dan noissuescharge aan boetes hebben."
+"die meer aan boetes hebben dan ingesteld in de noissuescharge "
+"systeemvoorkeur."
 
 # Circulation > Holds Policy
 msgid "circulation.pref#AllowHoldDateInFuture# Allow"
@@ -3704,7 +3643,6 @@ msgid "circulation.pref#AllowHoldItemTypeSelection# Don't allow"
 msgstr "circulation.pref#AllowHoldItemTypeSelection# Niet toestaan"
 
 # Circulation > Holds Policy
-#, fuzzy
 msgid ""
 "circulation.pref#AllowHoldItemTypeSelection# hold fulfillment to be limited "
 "by item type."
@@ -3789,16 +3727,14 @@ msgid "circulation.pref#AllowItemsOnHoldCheckoutSIP# Don't allow"
 msgstr "circulation.pref#AllowItemsOnHoldCheckoutSIP# Niet toestaan"
 
 # Circulation > Checkout Policy
-#, fuzzy
 msgid ""
 "circulation.pref#AllowItemsOnHoldCheckoutSIP# If allowed do not generate "
 "RESERVED warning."
 msgstr ""
 "circulation.pref#AllowItemsOnHoldCheckoutSIP# Indien toegestaan, genereer "
-"geen RESERVE_WAITING en RESERVED waarschuwing."
+"geen RESERVED waarschuwing."
 
 # Circulation > Checkout Policy
-#, fuzzy
 msgid ""
 "circulation.pref#AllowItemsOnHoldCheckoutSIP# This allows self checkouts for "
 "those items. If using the holds queue items with pending holds will be "
@@ -3806,7 +3742,7 @@ msgid ""
 msgstr ""
 "circulation.pref#AllowItemsOnHoldCheckoutSIP# Dit staat zelfuitleen van deze "
 "exemplaren toe. In de aanvraagwachtrij worden exemplaren met aanvragen "
-"gemarkeerd als \"onbeschikbaar\" indien ingesteld als \"Niet toestaan\"."
+"gemarkeerd als \"niet beschikbaar\" indien ingesteld als \"Niet toestaan\"."
 
 # Circulation > Checkout Policy
 msgid ""
@@ -3825,7 +3761,6 @@ msgid "circulation.pref#AllowMultipleIssuesOnABiblio# Don't allow"
 msgstr "circulation.pref#AllowMultipleIssuesOnABiblio# Niet toestaan"
 
 # Circulation > Checkout Policy
-#, fuzzy
 msgid ""
 "circulation.pref#AllowMultipleIssuesOnABiblio# patrons to check out multiple "
 "items from the same record. (<strong>NOTE:</strong> This will only affect "
@@ -3852,7 +3787,6 @@ msgstr ""
 "exemplaren kan uitlenen."
 
 # Circulation > Interface
-#, fuzzy
 msgid "circulation.pref#AllowOfflineCirculation# Don't enable"
 msgstr "circulation.pref#AllowOfflineCirculation# Niet inschakelen"
 
@@ -3861,7 +3795,6 @@ msgid "circulation.pref#AllowOfflineCirculation# Enable"
 msgstr "circulation.pref#AllowOfflineCirculation# Inschakelen"
 
 # Circulation > Interface
-#, fuzzy
 msgid ""
 "circulation.pref#AllowOfflineCirculation# offline circulation on regular "
 "circulation computers. (<strong>NOTE:</strong> This system preference does "
@@ -3869,7 +3802,7 @@ msgid ""
 msgstr ""
 "circulation.pref#AllowOfflineCirculation# van offline uitleen op reguliere "
 "uitleencomputers. (<strong>LET OP:</strong> Deze systeemvoorkeur heeft geen "
-"effect op de Firefox-plugin of de desktopapplicatie)"
+"effect op de Firefox-extensie of de desktopapplicatie)"
 
 # Circulation > Holds Policy
 msgid "circulation.pref#AllowRenewalIfOtherItemsAvailable# Allow"
@@ -3897,7 +3830,6 @@ msgid "circulation.pref#AllowRenewalLimitOverride# Don't allow"
 msgstr "circulation.pref#AllowRenewalLimitOverride# Niet toestaan"
 
 # Circulation > Checkout Policy
-#, fuzzy
 msgid ""
 "circulation.pref#AllowRenewalLimitOverride# staff to manually override "
 "renewal blocks and renew a checkout when it would go over the renewal limit "
@@ -3927,34 +3859,29 @@ msgstr ""
 "van een handmatige inleverdatum, exemplaren verlengen die aangevraagd zijn."
 
 # Circulation > Checkout Policy
-#, fuzzy
 msgid "circulation.pref#AllowReturnToBranch# Allow items to be checked in"
 msgstr ""
-"circulation.pref#AllowReturnToBranch# Toestaan dat materialen worden "
-"ingeleverd bij"
+"circulation.pref#AllowReturnToBranch# Toestaan dat er kan worden ingeleverd "
+"bij"
 
 # Circulation > Checkout Policy
-#, fuzzy
 msgid "circulation.pref#AllowReturnToBranch# at any library."
 msgstr "circulation.pref#AllowReturnToBranch# elke bibliotheek."
 
 # Circulation > Checkout Policy
-#, fuzzy
 msgid ""
 "circulation.pref#AllowReturnToBranch# either at the library the item is from "
 "or the library it was checked out from."
 msgstr ""
-"circulation.pref#AllowReturnToBranch# zowel de thuisbibliotheek als de "
+"circulation.pref#AllowReturnToBranch# ofwel de thuisbibliotheek of de "
 "uitlenende bibliotheek."
 
 # Circulation > Checkout Policy
-#, fuzzy
 msgid ""
 "circulation.pref#AllowReturnToBranch# only at the library the item is from."
 msgstr "circulation.pref#AllowReturnToBranch# alleen de thuisbibliotheek."
 
 # Circulation > Checkout Policy
-#, fuzzy
 msgid ""
 "circulation.pref#AllowReturnToBranch# only at the library the item was "
 "checked out from."
@@ -4002,12 +3929,11 @@ msgstr ""
 "verbergen"
 
 # Circulation > Article Requests
-#, fuzzy
 msgid ""
 "circulation.pref#ArticleRequestsLinkControl# article request links on search "
 "results."
 msgstr ""
-"circulation.pref#ArticleRequestsLinkControl# van de artikelaanvraag-link bij "
+"circulation.pref#ArticleRequestsLinkControl# van artikelaanvraag-links bij "
 "zoekresultaten."
 
 # Circulation > Article Requests
@@ -4023,13 +3949,12 @@ msgid "circulation.pref#ArticleRequestsMandatoryFields# Date"
 msgstr "circulation.pref#ArticleRequestsMandatoryFields# Datum"
 
 # Circulation > Article Requests
-#, fuzzy
 msgid ""
 "circulation.pref#ArticleRequestsMandatoryFields# For records that are record "
 "level or item level requestable, make the following fields mandatory:"
 msgstr ""
 "circulation.pref#ArticleRequestsMandatoryFields# Maak de volgende velden "
-"verplicht voor records die op record- of exemplaarniveau aanvraagbaar zijn"
+"verplicht voor records die op record- of exemplaarniveau aanvraagbaar zijn:"
 
 # Circulation > Article Requests
 msgid "circulation.pref#ArticleRequestsMandatoryFields# Issue"
@@ -4060,14 +3985,13 @@ msgid "circulation.pref#ArticleRequestsMandatoryFieldsItemOnly# Date"
 msgstr "circulation.pref#ArticleRequestsMandatoryFieldsItemOnly# Datum"
 
 # Circulation > Article Requests
-#, fuzzy
 msgid ""
 "circulation.pref#ArticleRequestsMandatoryFieldsItemOnly# For records that "
 "are only item level requestable, make the following fields mandatory:"
 msgstr ""
 "circulation.pref#ArticleRequestsMandatoryFieldsItemOnly# Maak de volgende "
-"velden verplicht voor records die op record- of exemplaarniveau aanvraagbaar "
-"zijn"
+"velden verplicht voor records die alleen op exemplaarniveau aanvraagbaar "
+"zijn:"
 
 # Circulation > Article Requests
 msgid "circulation.pref#ArticleRequestsMandatoryFieldsItemOnly# Issue"
@@ -4099,14 +4023,12 @@ msgid "circulation.pref#ArticleRequestsMandatoryFieldsRecordOnly# Date"
 msgstr "circulation.pref#ArticleRequestsMandatoryFieldsRecordOnly# Datum"
 
 # Circulation > Article Requests
-#, fuzzy
 msgid ""
 "circulation.pref#ArticleRequestsMandatoryFieldsRecordOnly# For records that "
 "are only record level requestable, make the following fields mandatory:"
 msgstr ""
 "circulation.pref#ArticleRequestsMandatoryFieldsRecordOnly# Maak de volgende "
-"velden verplicht voor records die op record- of exemplaarniveau aanvraagbaar "
-"zijn"
+"velden verplicht voor records die alleen op recordniveau aanvraagbaar zijn:"
 
 # Circulation > Article Requests
 msgid "circulation.pref#ArticleRequestsMandatoryFieldsRecordOnly# Issue"
@@ -4129,9 +4051,8 @@ msgid "circulation.pref#AutoRemoveOverduesRestrictions# Do"
 msgstr "circulation.pref#AutoRemoveOverduesRestrictions# Sta toe dat"
 
 # Circulation > Checkout Policy
-#, fuzzy
 msgid "circulation.pref#AutoRemoveOverduesRestrictions# Don't"
-msgstr "circulation.pref#AutoRemoveOverduesRestrictions# Sta niet toe dat"
+msgstr "circulation.pref#AutoRemoveOverduesRestrictions# Niet toestaan dat"
 
 # Circulation > Checkout Policy
 msgid ""
@@ -4201,18 +4122,18 @@ msgid "circulation.pref#AutoSelfCheckAllowed# Don't allow"
 msgstr "circulation.pref#AutoSelfCheckAllowed# Niet toestaan"
 
 # Circulation > Self Checkout
-#, fuzzy
 msgid ""
 "circulation.pref#AutoSelfCheckAllowed# Note: Any patron entered here will be "
 "unable to log into the OPAC."
-msgstr "circulation.pref#AutoSelfCheckAllowed# Niet toestaan"
+msgstr ""
+"circulation.pref#AutoSelfCheckAllowed# Let op: Leners die hier ingevoerd "
+"worden kunnen niet in de OPAC inloggen."
 
 # Circulation > Self Checkout
 msgid "circulation.pref#AutoSelfCheckAllowed# and this password"
 msgstr "circulation.pref#AutoSelfCheckAllowed# en dit wachtwoord"
 
 # Circulation > Self Checkout
-#, fuzzy
 msgid ""
 "circulation.pref#AutoSelfCheckAllowed# the web-based self checkout system to "
 "automatically log in with this staff login"
@@ -4253,13 +4174,12 @@ msgid "circulation.pref#AutomaticItemReturn# Don't"
 msgstr "circulation.pref#AutomaticItemReturn# Niet"
 
 # Circulation > Checkout Policy
-#, fuzzy
 msgid ""
 "circulation.pref#AutomaticItemReturn# automatically transfer items to their "
 "home library when they are checked in."
 msgstr ""
 "circulation.pref#AutomaticItemReturn# automatisch exemplaren doorsturen naar "
-"hun thuisbibliotheek bij inlevering."
+"hun thuisbibliotheek na inlevering."
 
 # Circulation > Batch checkout
 msgid "circulation.pref#BatchCheckouts# Allow"
@@ -4270,27 +4190,24 @@ msgid "circulation.pref#BatchCheckouts# Don't allow"
 msgstr "circulation.pref#BatchCheckouts# Niet toestaan"
 
 # Circulation > Batch checkout
-#, fuzzy
 msgid "circulation.pref#BatchCheckouts# batch checkouts."
-msgstr "circulation.pref#BatchCheckouts# van batch uitleningen"
+msgstr "circulation.pref#BatchCheckouts# van batch uitleningen."
 
 # Circulation > Batch checkout
-#, fuzzy
 msgid ""
 "circulation.pref#BatchCheckoutsValidCategories# (list of patron categories "
 "separated with a pipe '|')."
 msgstr ""
 "circulation.pref#BatchCheckoutsValidCategories# (lijst met lenercategorieën "
-"gescheiden door een '|')"
+"gescheiden door een '|')."
 
 # Circulation > Batch checkout
-#, fuzzy
 msgid ""
 "circulation.pref#BatchCheckoutsValidCategories# Patron categories allowed to "
 "checkout in a batch:"
 msgstr ""
-"circulation.pref#BatchCheckoutsValidCategories# Lenercategorieën die wel "
-"mogen uitlenen in batch"
+"circulation.pref#BatchCheckoutsValidCategories# Lenercategorieën die wel in "
+"batch mogen lenen:"
 
 # Circulation > Checkin Policy
 msgid "circulation.pref#BlockReturnOfLostItems# Block"
@@ -4325,32 +4242,28 @@ msgstr ""
 "exemplaren."
 
 # Circulation > Checkin Policy
-#, fuzzy
 msgid "circulation.pref#CalculateFinesOnBackdate# Do"
-msgstr "circulation.pref#CalculateFinesOnReturn# Wel"
+msgstr "circulation.pref#CalculateFinesOnBackdate# Wel"
 
 # Circulation > Checkin Policy
-#, fuzzy
 msgid "circulation.pref#CalculateFinesOnBackdate# Don't"
-msgstr "circulation.pref#CalculateFinesOnReturn# Niet"
+msgstr "circulation.pref#CalculateFinesOnBackdate# Niet"
 
 # Circulation > Checkin Policy
-#, fuzzy
 msgid ""
 "circulation.pref#CalculateFinesOnBackdate# calculate and update overdue "
 "charges when an item is returned with a backdated return date."
 msgstr ""
-"circulation.pref#CalculateFinesOnReturn# berekenen en actualiseren van te "
-"laat boetes bij inlevering."
+"circulation.pref#CalculateFinesOnBackdate# berekenen en actualiseren van te "
+"laat boetes bij inlevering met een teruggedateerde inleverdatum."
 
 # Circulation > Checkin Policy
-#, fuzzy
 msgid ""
 "circulation.pref#CalculateFinesOnReturn# <br /><strong>NOTE:</strong> If you "
 "are doing hourly loans then you should have this on."
 msgstr ""
-"circulation.pref#CalculateFinesOnReturn# <br /><strong>LET OP: Bij "
-"uitleningen per uur moet dit ingeschakeld zijn.</strong>"
+"circulation.pref#CalculateFinesOnReturn# <br /><strong>LET OP:</strong> Bij "
+"uitleningen per uur moet dit ingeschakeld zijn."
 
 # Circulation > Fines Policy
 msgid ""
@@ -4398,13 +4311,13 @@ msgstr ""
 "toestaan"
 
 # Circulation > Holds Policy
-#, fuzzy
 msgid ""
 "circulation.pref#CanMarkHoldsToPullAsLost# from the 'Holds to pull' page. "
 "Values to be applied must be defined in UpdateItemWhenLostFromHoldList."
 msgstr ""
 "circulation.pref#CanMarkHoldsToPullAsLost# vanaf het 'Op te halen aanvragen' "
-"scherm"
+"scherm. Toe te passen waarden moeten gedefinieerd zijn in "
+"UpdateItemWhenLostFromHoldList."
 
 # Circulation > Interface
 msgid "circulation.pref#CircAutoPrintQuickSlip# ."
@@ -4433,28 +4346,24 @@ msgid "circulation.pref#CircAutoPrintQuickSlip# open a print slip window"
 msgstr "circulation.pref#CircAutoPrintQuickSlip# open een print bon venster"
 
 # Circulation > Checkout Policy
-#, fuzzy
 msgid "circulation.pref#CircConfirmItemParts# Don't require"
-msgstr "circulation.pref#ReturnBeforeExpiry# Niet vereisen"
+msgstr "circulation.pref#CircConfirmItemParts# Niet vereisen"
 
 # Circulation > Checkout Policy
-#, fuzzy
 msgid "circulation.pref#CircConfirmItemParts# Require"
-msgstr "circulation.pref#ReturnBeforeExpiry# Vereisen"
+msgstr "circulation.pref#CircConfirmItemParts# Vereisen"
 
 # Circulation > Interface
-#, fuzzy
 msgid ""
 "circulation.pref#CircConfirmItemParts# staff to confirm that all parts of an "
 "item are present at checkin/checkout."
 msgstr ""
-"circulation.pref#SpecifyDueDate# dat medewerkers zelf een uitleendatum "
-"opgeven."
+"circulation.pref#CircConfirmItemParts# dat medewerkers bevestigen dat alle "
+"delen van een werk uitgeleend of ingeleverd zijn."
 
 # Circulation > Checkout Policy
-#, fuzzy
 msgid "circulation.pref#CircControl# Use the calendar and circulation rules of"
-msgstr "circulation.pref#CircControl# Gebruik de uitleen- en boeteregels van"
+msgstr "circulation.pref#CircControl# Gebruik de kalender en uitleenregels van"
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#CircControl# the library the item is from."
@@ -4477,7 +4386,6 @@ msgid "circulation.pref#CircSidebar# Deactivate"
 msgstr "circulation.pref#CircSidebar# Deactiveer"
 
 # Circulation > Interface
-#, fuzzy
 msgid ""
 "circulation.pref#CircSidebar# the navigation sidebar on all circulation "
 "pages."
@@ -4485,19 +4393,18 @@ msgstr ""
 "circulation.pref#CircSidebar# de zij-navigatiebalk op alle uitleenpagina's."
 
 # Circulation > Interlibrary Loans
-#, fuzzy
 msgid "circulation.pref#CirculateILL# Disable"
-msgstr "circulation.pref#ILLModule# Uitschakelen"
+msgstr "circulation.pref#CirculateILL# Uitschakelen"
 
 # Circulation > Interlibrary Loans
-#, fuzzy
 msgid "circulation.pref#CirculateILL# Enable"
-msgstr "circulation.pref#ILLModule# Inschakelen"
+msgstr "circulation.pref#CirculateILL# Inschakelen"
 
 # Circulation > Checkout Policy
-#, fuzzy
 msgid "circulation.pref#CirculateILL# the circulation of ILL requested items."
-msgstr "circulation.pref#CircControl# de thuisbibliotheek van het exemplaar."
+msgstr ""
+"circulation.pref#CirculateILL# van de uitleen van per IBL aangevraagde "
+"exemplaren."
 
 # Circulation > Return Claims
 msgid "circulation.pref#ClaimReturnedChargeFee# ."
@@ -4533,12 +4440,11 @@ msgstr ""
 "waarde"
 
 # Circulation > Return Claims
-#, fuzzy
 msgid ""
 "circulation.pref#ClaimReturnedLostValue# to represent 'claims returned'."
 msgstr ""
-"circulation.pref#ClaimReturnedLostValue# om ingeleverd claims mee weer te "
-"geven"
+"circulation.pref#ClaimReturnedLostValue# om 'ingeleverd' claims mee weer te "
+"geven."
 
 # Circulation > Return Claims
 msgid ""
@@ -4562,7 +4468,6 @@ msgstr ""
 "(vanaf niet later dan"
 
 # Circulation > Holds Policy
-#, fuzzy
 msgid ""
 "circulation.pref#ConfirmFutureHolds# days from now) at checkin time. Note "
 "that this number of days will be used too in calculating the default end "
@@ -4572,7 +4477,7 @@ msgstr ""
 "circulation.pref#ConfirmFutureHolds# dagen vanaf nu) op het inlevermoment. "
 "Dit aantal dagen wordt ook gebruikt in het berekenen van de standaard "
 "inleverdatum voor het Op te halen aanvragen-overzicht. Het heeft geen "
-"invloed op de uitgifte, verlenging of het versturen van boeken."
+"invloed op de uitgifte, verlenging of het versturen van materialen."
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#ConsiderOnSiteCheckoutsAsNormalCheckouts# Consider"
@@ -4594,7 +4499,6 @@ msgstr ""
 "uitgeschakeld worden beide waarden apart gecontroleerd."
 
 # Circulation > Checkout Policy
-#, fuzzy
 msgid ""
 "circulation.pref#ConsiderOnSiteCheckoutsAsNormalCheckouts# If enabled, on-"
 "site checkouts will count toward the checkout limit for regular checkouts. "
@@ -4602,7 +4506,8 @@ msgid ""
 msgstr ""
 "circulation.pref#ConsiderOnSiteCheckoutsAsNormalCheckouts# Indien "
 "ingeschakeld bestaat het aantal toegestane uitleningen uit normale "
-"uitleningen + uitleningen ter plekke."
+"uitleningen. De limiet voor uitleningen ter plekke blijft gelden voor "
+"uitleningen ter plekke."
 
 # Circulation > Checkout Policy
 msgid ""
@@ -4643,7 +4548,6 @@ msgstr ""
 "cronjob. Vraag de systeembeheerder deze in te plannen."
 
 # Circulation > Checkout Policy
-#, fuzzy
 msgid ""
 "circulation.pref#DefaultLongOverdueChargeValue# <br>Leave this field empty "
 "if you don't want to charge the patron for lost items."
@@ -4652,7 +4556,6 @@ msgstr ""
 "leners geen kosten voor zoeke boeken te geven."
 
 # Circulation > Checkout Policy
-#, fuzzy
 msgid ""
 "circulation.pref#DefaultLongOverdueChargeValue# Charge a lost item to the "
 "patron's account when the LOST value of the item changes to:"
@@ -4787,13 +4690,12 @@ msgstr ""
 "circulation.pref#ExcludeHolidaysFromMaxPickUpDelay# Gebruik de kalender"
 
 # Circulation > Holds Policy
-#, fuzzy
 msgid ""
 "circulation.pref#ExcludeHolidaysFromMaxPickUpDelay# when calculating the "
 "period for a hold's max pickup delay."
 msgstr ""
 "circulation.pref#ExcludeHolidaysFromMaxPickUpDelay# bij bereking van de "
-"uiterste afhaaldatum van reserveringen."
+"uiterste afhaaldatum van aanvragen."
 
 # Circulation > Holds Policy
 msgid "circulation.pref#ExpireReservesMaxPickUpDelay# Allow"
@@ -4804,7 +4706,6 @@ msgid "circulation.pref#ExpireReservesMaxPickUpDelay# Don't allow"
 msgstr "circulation.pref#ExpireReservesMaxPickUpDelay# Sta niet toe"
 
 # Circulation > Holds Policy
-#, fuzzy
 msgid ""
 "circulation.pref#ExpireReservesMaxPickUpDelay# holds to expire automatically "
 "if they have not been picked by within the time period specified in the "
@@ -4820,12 +4721,10 @@ msgstr ""
 "de systeembeheerder deze in te plannen."
 
 # Circulation > Holds Policy
-#, fuzzy
 msgid "circulation.pref#ExpireReservesMaxPickUpDelayCharge# ."
-msgstr "circulation.pref#ExpireReservesMaxPickUpDelay# Sta toe"
+msgstr "circulation.pref#ExpireReservesMaxPickUpDelayCharge# ."
 
 # Circulation > Holds Policy
-#, fuzzy
 msgid ""
 "circulation.pref#ExpireReservesMaxPickUpDelayCharge# If using "
 "ExpireReservesMaxPickUpDelay, charge a patron who allows their waiting hold "
@@ -4868,23 +4767,21 @@ msgstr ""
 "uitleengeschiedenis van lener."
 
 # Circulation > Interface
-#, fuzzy
 msgid ""
 "circulation.pref#ExportRemoveFields# (separate fields with space, e.g. 100a "
 "200b 300c)."
 msgstr ""
 "circulation.pref#ExportRemoveFields# (scheid velden met spatie, bv. 100a "
-"200b 300c)"
+"200b 300c)."
 
 # Circulation > Interface
-#, fuzzy
 msgid ""
 "circulation.pref#ExportRemoveFields# The following fields should be excluded "
 "from the patron checkout history CSV or MARC (ISO 2709) export:"
 msgstr ""
 "circulation.pref#ExportRemoveFields# De volgende velden moeten worden "
-"uitgesloten van de uitleengeschiedenisexport van de lener in CSV of MARC "
-"(ISO 2709)"
+"uitgesloten van de export van de uitleengeschiedenis van leners in CSV of "
+"MARC (ISO 2709):"
 
 # Circulation > Interface
 msgid "circulation.pref#FilterBeforeOverdueReport# Don't require"
@@ -4943,7 +4840,6 @@ msgid "circulation.pref#HidePersonalPatronDetailOnCirculation# Hide"
 msgstr "circulation.pref#HidePersonalPatronDetailOnCirculation# Verberg"
 
 # Circulation > Checkin Policy
-#, fuzzy
 msgid ""
 "circulation.pref#HidePersonalPatronDetailOnCirculation# a patron's phone "
 "number, email address, street address and city on the circulation page."
@@ -5014,37 +4910,35 @@ msgid "circulation.pref#HoldsInNoissuesCharge# Include"
 msgstr "circulation.pref#HoldsInNoissuesCharge# Wel"
 
 # Circulation > Checkout Policy
-#, fuzzy
 msgid ""
 "circulation.pref#HoldsInNoissuesCharge# hold charges when summing up charges "
 "for limit set in the noissuescharge system preference."
 msgstr ""
 "circulation.pref#HoldsInNoissuesCharge# aanvraagkosten meenemen bij het "
-"opsommen van kosten voor noissuecharge."
+"opsommen van kosten voor de limiet ingesteld in de noissuecharge "
+"systeemvoorkeur."
 
 # Circulation > Holds Policy
-#, fuzzy
 msgid "circulation.pref#HoldsNeedProcessingSIP# Don't fulfill"
-msgstr "circulation.pref#AllowHoldsOnPatronsPossessions# Niet toestaan"
+msgstr "circulation.pref#HoldsNeedProcessingSIP# Niet"
 
 # Circulation > Holds Policy
-#, fuzzy
 msgid "circulation.pref#HoldsNeedProcessingSIP# Fulfill"
-msgstr "circulation.pref#AllowHoldsOnPatronsPossessions# Toestaan"
+msgstr "circulation.pref#HoldsNeedProcessingSIP# Wel"
 
 # Circulation > Checkin policy
 msgid ""
 "circulation.pref#HoldsNeedProcessingSIP# holds automatically if matching "
 "item is returned via SIP protocol."
 msgstr ""
+"circulation.pref#HoldsNeedProcessingSIP# automatisch aanvragen vervullen als "
+"overeenkomstig exemplaar ingeleverd wordt via SIP protocol."
 
 # Circulation > Holds Policy
-#, fuzzy
 msgid "circulation.pref#HoldsSplitQueue# ."
-msgstr "circulation.pref#HoldsSplitQueue# niets"
+msgstr "circulation.pref#HoldsSplitQueue# ."
 
 # Circulation > Holds Policy
-#, fuzzy
 msgid ""
 "circulation.pref#HoldsSplitQueue# In the staff interface, split the holds "
 "queue into separate tables by"
@@ -5053,7 +4947,6 @@ msgstr ""
 "aanvraagwachtrij op in aparte tabellen op"
 
 # Circulation > Holds Policy
-#, fuzzy
 msgid "circulation.pref#HoldsSplitQueue# hold item type"
 msgstr "circulation.pref#HoldsSplitQueue# aanvraag itemtype"
 
@@ -5066,9 +4959,8 @@ msgid "circulation.pref#HoldsSplitQueue# pickup library"
 msgstr "circulation.pref#HoldsSplitQueue# afhaalbibliotheek"
 
 # Circulation > Holds Policy
-#, fuzzy
 msgid "circulation.pref#HoldsSplitQueue# pickup library and item type"
-msgstr "circulation.pref#HoldsSplitQueue# afhaalbibliotheek & itemtype"
+msgstr "circulation.pref#HoldsSplitQueue# afhaalbibliotheek en itemtype"
 
 # Circulation > Holds Policy
 msgid ""
@@ -5079,9 +4971,8 @@ msgstr ""
 "elke groep apart genummerd is"
 
 # Circulation > Holds Policy
-#, fuzzy
 msgid "circulation.pref#HoldsSplitQueueNumbering# ."
-msgstr "circulation.pref#HoldsSplitQueue# niets"
+msgstr "circulation.pref#HoldsSplitQueueNumbering# ."
 
 # Circulation > Holds Policy
 msgid ""
@@ -5108,13 +4999,12 @@ msgstr ""
 "Op te halen aanvragen lijst in op"
 
 # Circulation > Interface
-#, fuzzy
 msgid ""
 "circulation.pref#HoldsToPullStartDate# day(s) ago. Note that the default end "
 "date is controlled by the system preference ConfirmFutureHolds."
 msgstr ""
 "circulation.pref#HoldsToPullStartDate# dag(en) geleden. Let op dat de "
-"standaard einddatum wordt beheerd door voorkeur ConfirmFutureHolds."
+"standaard einddatum wordt bepaald door de systeemvoorkeur ConfirmFutureHolds."
 
 # Circulation > Checkout Policy
 msgid ""
@@ -5146,46 +5036,48 @@ msgid "circulation.pref#HouseboundModule# Enable"
 msgstr "circulation.pref#HouseboundModule# Inschakelen van"
 
 # Circulation > Housebound module
-#, fuzzy
 msgid "circulation.pref#HouseboundModule# the housebound module."
-msgstr "circulation.pref#HouseboundModule# thuisbezorgmodule"
+msgstr "circulation.pref#HouseboundModule# thuisbezorgmodule."
 
 # Circulation > Checkin Policy
-#, fuzzy
 msgid "circulation.pref#ILLCheckAvailability# Check"
-msgstr "circulation.pref Innameregels"
+msgstr "circulation.pref#ILLCheckAvailability# Checken"
 
 # Circulation > Holds Policy
-#, fuzzy
 msgid "circulation.pref#ILLCheckAvailability# Don't check"
-msgstr "circulation.pref#LocalHoldsPriority# Geef geen"
+msgstr "circulation.pref#ILLCheckAvailability# Niet checken"
 
 # Circulation > Interlibrary loans
 msgid ""
 "circulation.pref#ILLCheckAvailability# external sources for availability "
 "during the request process."
 msgstr ""
+"circulation.pref#ILLCheckAvailability# van externe bronnen op "
+"beschikbaarheid tijdens het aanvraagproces."
 
 # Circulation > Interlibrary loans > ILLDefaultStaffEmail
 msgid ""
 "circulation.pref#ILLDefaultStaffEmail# Fallback email address for staff ILL "
 "notices to be sent to in the absence of a library address:"
 msgstr ""
+"circulation.pref#ILLDefaultStaffEmail# Terugvaladres om IBL-berichten "
+"naartoe te sturen als er geen e-mailadres van de bibliotheek is:"
 
 # Circulation > Interlibrary Loans
-#, fuzzy
 msgid ""
 "circulation.pref#ILLHiddenRequestStatuses# (separated with |). If left "
 "empty, all ILL requests will be displayed."
 msgstr ""
-"circulation.pref#ILLOpacbackends# (gescheiden door |). Indien leeg, worden "
-"alle geïnstalleerde toepassingen ingeschakeld."
+"circulation.pref#ILLHiddenRequestStatuses# (gescheiden door |). Indien leeg, "
+"worden alle IBL aanvragen getoond."
 
 # Circulation > Interlibrary loans
 msgid ""
 "circulation.pref#ILLHiddenRequestStatuses# ILL statuses that are considered "
 "finished and should not be displayed in the ILL module: "
 msgstr ""
+"circulation.pref#ILLHiddenRequestStatuses# IBL statussen die als afgerond "
+"beschouwd worden en niet weergegeven moeten worden in de IBL module: "
 
 # Circulation > Interlibrary Loans
 msgid "circulation.pref#ILLModule# Disable"
@@ -5219,7 +5111,6 @@ msgid "circulation.pref#ILLModuleUnmediated# Enable"
 msgstr "circulation.pref#ILLModuleUnmediated# Inschakelen"
 
 # Circulation > Interlibrary Loans
-#, fuzzy
 msgid ""
 "circulation.pref#ILLModuleUnmediated# unmediated interlibrary loan requests. "
 "If enabled and the ILL backend supports it, the newly created requests are "
@@ -5246,23 +5137,22 @@ msgstr ""
 "aanvragen vanuit OPAC:"
 
 # Circulation > Interlibrary Loans
-#, fuzzy
 msgid ""
 "circulation.pref#ILLSendStaffNotices# (separated with |). e.g. "
 "ILL_REQUEST_CANCEL|ILL_REQUEST_MODIFIED If left empty, no staff ILL notices "
 "will be sent."
 msgstr ""
-"circulation.pref#ILLOpacbackends# (gescheiden door |). Indien leeg, worden "
-"alle geïnstalleerde toepassingen ingeschakeld."
+"circulation.pref#ILLSendStaffNotices# (gescheiden door |). e.g. "
+"ILL_REQUEST_CANCEL|ILL_REQUEST_MODIFIED Indien leeg, worden er geen IBL-"
+"berichten gestuurd."
 
 # Circulation > Checkout Policy
-#, fuzzy
 msgid ""
 "circulation.pref#ILLSendStaffNotices# Send these ILL notices to staff when "
 "appropriate:"
 msgstr ""
-"circulation.pref#NoticeBcc# Verstuur alle berichten als BCC naar dit e-"
-"mailadres"
+"circulation.pref#ILLSendStaffNotices# Stuur deze IBL-berichten naar de staf "
+"indien van toepassing:"
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#IssueLostItem# ."
@@ -5534,7 +5424,6 @@ msgid "circulation.pref#NoRenewalBeforePrecision# exact time."
 msgstr "circulation.pref#NoRenewalBeforePrecision# exacte tijd."
 
 # Circulation > Checkout Policy
-#, fuzzy
 msgid ""
 "circulation.pref#NoticeBcc# Send all notices as a BCC to this email address:"
 msgstr ""
@@ -5546,12 +5435,11 @@ msgid "circulation.pref#NoticeCSS# Include the stylesheet at"
 msgstr "circulation.pref#NoticeCSS# De stylesheet insluiten bij"
 
 # Circulation > Interface
-#, fuzzy
 msgid ""
 "circulation.pref#NoticeCSS# on notices. (This should be a complete URL, "
 "starting with <code>http://</code>)"
 msgstr ""
-"circulation.pref#NoticeCSS# op Berichten. (Dit dient een volledige URL te "
+"circulation.pref#NoticeCSS# op berichten. (Dit dient een volledige URL te "
 "zijn, beginnend met <code>http://</code>)"
 
 # Circulation > Holds Policy
@@ -5694,23 +5582,20 @@ msgstr ""
 "gevallen (Zelfs als een gebruiker uitgesloten o.i.d. is)."
 
 # Circulation > Checkout Policy
-#, fuzzy
 msgid "circulation.pref#OverdueNoticeCalendar# Ignore calendar"
 msgstr "circulation.pref#OverdueNoticeCalendar# Kalender negeren"
 
 # Circulation > Checkout Policy
-#, fuzzy
 msgid "circulation.pref#OverdueNoticeCalendar# Use calendar"
 msgstr "circulation.pref#OverdueNoticeCalendar# Kalender gebruiken"
 
 # Circulation > Checkout Policy
-#, fuzzy
 msgid ""
 "circulation.pref#OverdueNoticeCalendar# when working out the period for "
 "overdue notices."
 msgstr ""
-"circulation.pref#OverdueNoticeCalendar# bij berekenen van het schema voor te "
-"laat berichten"
+"circulation.pref#OverdueNoticeCalendar# bij berekenen van de periodes voor "
+"te laat berichten."
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#OverduesBlockCirc# Ask for confirmation"
@@ -5786,10 +5671,9 @@ msgstr ""
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#PrintNoticesMaxLines# Include up to"
-msgstr "circulation.pref#PrintNoticesMaxLines# Neem tot maximaal"
+msgstr "circulation.pref#PrintNoticesMaxLines# Gebruik maximaal"
 
 # Circulation > Checkout Policy
-#, fuzzy
 msgid ""
 "circulation.pref#PrintNoticesMaxLines# item lines in a printed overdue "
 "notice. If the number of items is greater than this number, the notice will "
@@ -5950,7 +5834,6 @@ msgid "circulation.pref#RenewalSendNotice# Send"
 msgstr "circulation.pref#RenewalSendNotice# Versturen"
 
 # Circulation > Checkout Policy
-#, fuzzy
 msgid ""
 "circulation.pref#RenewalSendNotice# a renewal notice according to patron's "
 "messaging preferences for 'Item checkout'."
@@ -8695,14 +8578,13 @@ msgid "i18n_l10n.pref#TranslateNotices# Don't allow"
 msgstr "i18n_l10n.pref#TranslateNotices# Niet toestaan"
 
 # I18N/L10N
-#, fuzzy
 msgid ""
 "i18n_l10n.pref#TranslateNotices# If set, notices will be translatable from "
 "the \"Notices and slips\" interface. The language used to send a notice to a "
 "patron will be the one defined for the patron."
 msgstr ""
 "i18n_l10n.pref#TranslateNotices# Indien actief kunnen berichten vertaald "
-"worden op het \"Berichten \"& Bonnen\" scherm . De taal van het bericht aan "
+"worden op het \"Berichten en bonnen\" scherm . De taal van het bericht aan "
 "de lener is degene die ingesteld is bij de lener."
 
 # I18N/L10N
@@ -11716,9 +11598,8 @@ msgstr "authorities.pref Algemeen"
 msgid "patrons.pref Membership expiry"
 msgstr ""
 
-#, fuzzy
 msgid "patrons.pref Notices and notifications"
-msgstr "Leners die vragen om wijziging"
+msgstr "patrons.pref Berichten en berichtgevingen"
 
 #, fuzzy
 msgid "patrons.pref Patron forms"
@@ -12123,6 +12004,9 @@ msgid ""
 "only applies to courtesy notices. To manage if patrons have also access to "
 "these settings, use EnhancedMessagingPreferencesOPAC."
 msgstr ""
+"patrons.pref#EnhancedMessagingPreferences# <br><strong>NOTE:</strong> Dit is "
+"alleen van toepassing op serviceberichten. Om te regelen dat leners deze "
+"instelling mogen aanpassen, gebruik EnhancedMessagingPreferencesOPAC."
 
 # Authorities > General
 msgid ""
@@ -12151,6 +12035,8 @@ msgid ""
 "patrons.pref#EnhancedMessagingPreferences# staff to manage which notices "
 "patrons will receive and when they will receive them."
 msgstr ""
+"patrons.pref#EnhancedMessagingPreferences# dat stafleden beheren welke "
+"berichten leners ontvangen en wanneer."
 
 # Patrons > Notices and notifications
 msgid ""
@@ -12274,31 +12160,34 @@ msgid "patrons.pref#MaxFine# [% local_currency %]."
 msgstr "circulation.pref#maxoutstanding# [% local_currency %] in boetes."
 
 # Circulation > Fines Policy
-#, fuzzy
 msgid ""
 "patrons.pref#MembershipExpiryDaysNotice# <br><strong>NOTE:</strong> This "
 "system preference requires the <code>misc/cronjobs/membership_expiry.pl</"
 "code> cronjob. Ask your system administrator to schedule it."
 msgstr ""
-"circulation.pref#finesMode# <br><strong>NOTE:</strong> Deze systeemvoorkeur "
-"vereist de <code>misc/cronjobs/fines.pl</code> cronjob. Vraag de "
-"systeembeheerder om deze in te plannen."
+"patrons.pref#MembershipExpiryDaysNotice# <br><strong>LET OP:</strong> Deze "
+"systeemvoorkeur vereist de <code>misc/cronjobs/membership_expiry.pl</code> "
+"cronjob. Vraag de systeembeheerder om deze in te plannen."
 
 # Patrons > Membership expiry
 msgid ""
 "patrons.pref#MembershipExpiryDaysNotice# Send an account expiration notice "
 "when a patron's card will expire in"
 msgstr ""
+"patrons.pref#MembershipExpiryDaysNotice# Stuur een bericht over verloop van "
+"een account wanneer deze verloopt binnen"
 
 # Patrons > Membership expiry
 msgid "patrons.pref#MembershipExpiryDaysNotice# days."
-msgstr ""
+msgstr "patrons.pref#MembershipExpiryDaysNotice# dagen."
 
 # Patrons > Membership expiry
 msgid ""
 "patrons.pref#NotifyBorrowerDeparture# Show a notice if the patron is about "
 "to expire or has expired"
 msgstr ""
+"patrons.pref#NotifyBorrowerDeparture# Geef een melding wanneer de lener "
+"bijna verloopt of verlopen is"
 
 # Patrons > General
 #, fuzzy
@@ -12777,6 +12666,9 @@ msgid ""
 "using Talking Tech i-tiva (overdues, predues and holds notices currently "
 "supported)."
 msgstr ""
+"patrons.pref#TalkingTechItivaPhoneNotification# lener telefoonberichten via "
+"Talking Tech i-tiva (momenteel alleen te laat berichten, vooraankondigingen "
+"en reserveringsberichten)."
 
 # Patrons > General
 msgid "patrons.pref#TrackLastPatronActivity# Do"
