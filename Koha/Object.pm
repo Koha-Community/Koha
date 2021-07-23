@@ -638,7 +638,8 @@ sub from_api_mapping {
 
     my $to_api_mapping = $self->to_api_mapping;
 
-    unless ( $self->{_from_api_mapping} ) {
+    unless ( defined $self->{_from_api_mapping} ) {
+        $self->{_from_api_mapping} = {};
         while (my ($key, $value) = each %{ $to_api_mapping } ) {
             $self->{_from_api_mapping}->{$value} = $key
                 if defined $value;
