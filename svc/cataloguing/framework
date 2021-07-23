@@ -15,7 +15,7 @@ my ( $query, $response ) = C4::Service->init( editcatalogue => 'edit_catalogue' 
 
 my $frameworkcode = $query->param( 'frameworkcode' ) // '';
 
-my $tagslib = GetMarcStructure( 1, $frameworkcode );
+my $tagslib = C4::Biblio::GetMarcStructure( 1, $frameworkcode );
 
 my @tags;
 
@@ -42,7 +42,7 @@ $authorised_values->{itemtypes} = [ $schema->resultset( "Itemtype" )->search( un
     result_class => 'DBIx::Class::ResultClass::HashRefInflator'
 } ) ];
 
-my $class_sources = GetClassSources();
+my $class_sources = C4::ClassSource::GetClassSources();
 
 my $default_source = C4::Context->preference("DefaultClassificationSource");
 
