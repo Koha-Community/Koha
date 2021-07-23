@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 20.05\n"
-"POT-Creation-Date: 2021-06-20 01:41-0300\n"
-"PO-Revision-Date: 2021-05-19 17:16+0000\n"
+"POT-Creation-Date: 2021-07-16 09:29-0300\n"
+"PO-Revision-Date: 2021-07-20 20:28+0000\n"
 "Last-Translator: ztajoli <ztajoli@gmail.com>\n"
 "Language-Team: CILEA <z.tajoli@cineca.it>\n"
 "Language: it\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.8\n"
 "X-Poedit-SourceCharset: UTF-8\n"
-"X-POOTLE-MTIME: 1621444602.737043\n"
+"X-POOTLE-MTIME: 1626812899.419046\n"
 "X-Poedit-Basepath: ../../versioni/master/koha-tmpl\n"
 "X-Poedit-SearchPath-0: .\n"
 "X-Pootle-Path: /it/20.05/it-IT-staff-prog.po\n"
@@ -1668,10 +1668,12 @@ msgstr ""
 #. %25$s: - CASE 'vm'                    -
 #. %26$s: - CASE 'database'              -
 #. %27$s: - CASE 'live_cd'               -
-#. %28$s: - END -
-#. %29$s: - END -
-#. %30$s: - BLOCK person -
-#. %31$s:  IF p.openhub 
+#. %28$s: - CASE 'accessibility_advocate'-
+#. %29$s: - CASE 'meeting_facilitator'   -
+#. %30$s: - END -
+#. %31$s: - END -
+#. %32$s: - BLOCK person -
+#. %33$s:  IF p.openhub 
 #: intranet-tmpl/prog/en/includes/about-team.inc:1
 #, c-format
 msgid ""
@@ -1683,18 +1685,18 @@ msgid ""
 "curator %sContinuous integration manager %sPackaging manager %sPackaging "
 "manager assistant %sMeetings chairperson %sNewsletter editor %sModule "
 "maintainer %sVirtual machine maintainer %sDocumentation specialist %sLive CD "
-"maintainer %s %s %s %s"
+"maintainer %sAccessibility advocate %sMeeting facilitator %s %s %s %s"
 msgstr ""
 "%s %s %sRelease manager %sAssistente del Release manager %sRelease manager "
 "mentor %sQuality assurance manager %sTeam del Quality assurance %sManager "
-"della documentazione %sTeam della documentazione %sManager delle traduzione "
-"%sManager delle traduzione %sAssistente del manager delle traduzione %sTopic "
+"della documentazione %sTeam della documentazione %sManager delle traduzione %"
+"sManager delle traduzione %sAssistente del manager delle traduzione %sTopic "
 "expert %sBug wrangler %sRelease maintainer %sAssistente del Release "
 "maintainer %sRelease maintainer mentor %sWiki curator %sContinuous "
-"integration manager %sPackaging manager %sPackaging manager assistant "
-"%sMeetings chairperson %sCuratore della Newsletter %sModule maintainer "
-"%sVirtual machine maintainer %sSpecialista della documentazione %sLive CD "
-"maintainer %s %s %s %s"
+"integration manager %sPackaging manager %sPackaging manager assistant %"
+"sMeetings chairperson %sCuratore della Newsletter %sModule maintainer %"
+"sVirtual machine maintainer %sSpecialista della documentazione %sLive CD "
+"maintainer %sManager accessbilità %sFacilitatore incontri %s %s %s %s"
 
 #. %1$s:  FOR e IN log4perl_errors 
 #. %2$s:  SWITCH e 
@@ -5115,9 +5117,9 @@ msgstr "%s No "
 #. %1$s:  ELSE 
 #. %2$s:  END 
 #: intranet-tmpl/prog/en/modules/tools/upload.tt:175
-#, fuzzy, c-format
+#, c-format
 msgid "%s No %s "
-msgstr "%s il %s "
+msgstr "%s No %s "
 
 #. %1$s:  ELSE 
 #. %2$s:  END 
@@ -5263,6 +5265,8 @@ msgid ""
 "%s No match %s Match applied %s Match found %s %s %s %s Matches biblio %s "
 "(score = %s): "
 msgstr ""
+"%s Non corrisponde %s Corrispondenza applicata %s Corrispondenza trovata %s "
+"%s %s %s Corrisponde record %s (score = %s): "
 
 #. %1$s:  ELSE 
 #. %2$s:  END 
@@ -7791,6 +7795,8 @@ msgid ""
 "%sItem records could not be processed because the number of item fields was "
 "uneven.%s %s "
 msgstr ""
+"%s I record di copia non sono stati processati perché il numero di campi di "
+"copia era irregolare.%s %s "
 
 #. %1$s:  IF ( advsearchloo.advanced_search_type == 'itemtypes' ) 
 #. %2$s:  ELSIF ( advsearchloo.advanced_search_type == 'ccode' ) 
@@ -8277,7 +8283,7 @@ msgstr "%st - Ente superiore immediato"
 msgid "%s✓%s"
 msgstr "%s✓%s"
 
-#: intranet-tmpl/prog/en/modules/about.tt:755
+#: intranet-tmpl/prog/en/modules/about.tt:758
 #, c-format
 msgid ""
 "&#1041;&#1098;&#1083;&#1075;&#1072;&#1088;&#1089;&#1082;&#1080; (Bulgarian) "
@@ -8286,7 +8292,7 @@ msgstr ""
 "&#1041;&#1098;&#1083;&#1075;&#1072;&#1088;&#1089;&#1082;&#1080; (Bulgaro) "
 "Radoslav Kolev"
 
-#: intranet-tmpl/prog/en/modules/about.tt:789
+#: intranet-tmpl/prog/en/modules/about.tt:792
 #, c-format
 msgid ""
 "&#1056;&#1091;&#1089;&#1089;&#1082;&#1080;&#1081; (Russian) Victor Titarchuk "
@@ -8295,7 +8301,7 @@ msgstr ""
 "&#1056;&#1091;&#1089;&#1089;&#1082;&#1080;&#1081; (Russo) Victor Titarchuk "
 "and Serhij Dubyk"
 
-#: intranet-tmpl/prog/en/modules/about.tt:796
+#: intranet-tmpl/prog/en/modules/about.tt:799
 #, c-format
 msgid ""
 "&#1059;&#1082;&#1088;&#1072;&#1111;&#1085;&#1089;&#1100;&#1082;&#1072; "
@@ -8304,64 +8310,64 @@ msgstr ""
 "&#1059;&#1082;&#1088;&#1072;&#1111;&#1085;&#1089;&#1100;&#1082;&#1072; "
 "(Ucraino) Victor Titarchuk and Serhij Dubyk"
 
-#: intranet-tmpl/prog/en/modules/about.tt:770
+#: intranet-tmpl/prog/en/modules/about.tt:773
 #, c-format
 msgid "&#1506;&#1489;&#1512;&#1497;&#1514; (Hebrew)"
 msgstr "&#1506;&#1489;&#1512;&#1497;&#1514; (Ebraico)"
 
-#: intranet-tmpl/prog/en/modules/about.tt:795
+#: intranet-tmpl/prog/en/modules/about.tt:798
 #, c-format
 msgid "&#1575;&#1585;&#1583;&#1608;(Urdu) Ata ur Rehman"
 msgstr "&#1575;&#1585;&#1583;&#1608;(Urdu) Ata ur Rehman"
 
-#: intranet-tmpl/prog/en/modules/about.tt:784
+#: intranet-tmpl/prog/en/modules/about.tt:787
 #, c-format
 msgid "&#1601;&#1575;&#1585;&#1587;&#1609; (Persian)"
 msgstr "&#1601;&#1575;&#1585;&#1587;&#1609; (Persiano)"
 
-#: intranet-tmpl/prog/en/modules/about.tt:758
+#: intranet-tmpl/prog/en/modules/about.tt:761
 #, c-format
 msgid "&#20013;&#25991; (Chinese)"
 msgstr "&#20013;&#25991; (Cinese)"
 
-#: intranet-tmpl/prog/en/modules/about.tt:771
+#: intranet-tmpl/prog/en/modules/about.tt:774
 #, c-format
 msgid "&#2361;&#2367;&#2344;&#2381;&#2342;&#2368; (Hindi)"
 msgstr "&#2361;&#2367;&#2344;&#2381;&#2342;&#2368; (Hindi)"
 
-#: intranet-tmpl/prog/en/modules/about.tt:757
+#: intranet-tmpl/prog/en/modules/about.tt:760
 #, c-format
 msgid ""
 "&#2476;&#2494;&#2434;&#2482;&#2494; (Bengali) Parthasarathi Mukhopadhyay"
 msgstr ""
 "&#2476;&#2494;&#2434;&#2482;&#2494; (Bengalese) Parthasarathi Mukhopadhyay"
 
-#: intranet-tmpl/prog/en/modules/about.tt:777
+#: intranet-tmpl/prog/en/modules/about.tt:780
 #, c-format
 msgid "&#26085;&#26412;&#35486; (Japanese)"
 msgstr "&#26085;&#26412;&#35486; (Giapponese)"
 
-#: intranet-tmpl/prog/en/modules/about.tt:785
+#: intranet-tmpl/prog/en/modules/about.tt:788
 #, c-format
 msgid "&#2835;&#2908;&#2879;&#2822; (&#x014D;&#7771;iy&#257;)"
 msgstr "&#2835;&#2908;&#2879;&#2822; (&#x014D;&#7771;iy&#257;)"
 
-#: intranet-tmpl/prog/en/modules/about.tt:779
+#: intranet-tmpl/prog/en/modules/about.tt:782
 #, c-format
 msgid "&#3221;&#3240;&#3277;&#3240;&#3233; (kanna&#7693;a)"
 msgstr "&#3221;&#3240;&#3277;&#3240;&#3233; (kanna&#7693;a)"
 
-#: intranet-tmpl/prog/en/modules/about.tt:783
+#: intranet-tmpl/prog/en/modules/about.tt:786
 #, c-format
 msgid "&#3374;&#3378;&#3375;&#3390;&#3379;&#3330; (Malayalam)"
 msgstr "&#3374;&#3378;&#3375;&#3390;&#3379;&#3330; (Malayalam)"
 
-#: intranet-tmpl/prog/en/modules/about.tt:793
+#: intranet-tmpl/prog/en/modules/about.tt:796
 #, c-format
 msgid "&#3616;&#3634;&#3625;&#3634;&#3652;&#3607;&#3618; (Thai)"
 msgstr "&#3616;&#3634;&#3625;&#3634;&#3652;&#3607;&#3618; (Thailandese)"
 
-#: intranet-tmpl/prog/en/modules/about.tt:753
+#: intranet-tmpl/prog/en/modules/about.tt:756
 #, c-format
 msgid ""
 "&#4768;&#4635;&#4653;&#4763; (Amharic) Getway II Ethiopia Co. (Yohannes "
@@ -8370,12 +8376,12 @@ msgstr ""
 "&#4768;&#4635;&#4653;&#4763; (Amharic) Getway II Ethiopia Co. (Yohannes "
 "Mulugeta (Team Leader), Tegene Assefa, Abiyot Bayou)"
 
-#: intranet-tmpl/prog/en/modules/about.tt:778
+#: intranet-tmpl/prog/en/modules/about.tt:781
 #, c-format
 msgid "&#54620;&#44397;&#50612; (Korean)"
 msgstr "&#54620;&#44397;&#50612; (Coreano)"
 
-#: intranet-tmpl/prog/en/modules/about.tt:769
+#: intranet-tmpl/prog/en/modules/about.tt:772
 #, c-format
 msgid ""
 "&#949;&#955;&#955;&#951;&#957;&#953;&#954;&#940; (Greek, Modern [1453- ]) "
@@ -8385,7 +8391,7 @@ msgstr ""
 "&#949;&#955;&#955;&#951;&#957;&#953;&#954;&#940; (Greek, Modern [1453- ]) "
 "Georgia Katsarou, Panoraia Gaitanou and Kiriaki Roditi"
 
-#: intranet-tmpl/prog/en/modules/about.tt:760
+#: intranet-tmpl/prog/en/modules/about.tt:763
 #, c-format
 msgid "&#x010D;e&#353;tina (Czech)"
 msgstr "&#x010D;e&#353;tina (Ceco)"
@@ -8516,9 +8522,9 @@ msgid "&nbsp;&nbsp;(format: yyyy-yyyy)"
 msgstr "&nbsp;&nbsp;(formato: aaaa-aaaa)"
 
 #: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:75
-#, fuzzy, c-format
+#, c-format
 msgid "&nbsp;Show inactive funds:"
-msgstr "&nbsp;Mostra inattivo:"
+msgstr "&nbsp;Mostra i fondi inattivi:"
 
 #: intranet-tmpl/prog/en/modules/acqui/duplicate_orders.tt:209
 #: intranet-tmpl/prog/en/modules/acqui/invoice.tt:65
@@ -9072,9 +9078,9 @@ msgid "&rsaquo; Add order from a suggestion"
 msgstr "&rsaquo; Aggiungi un ordine da suggerimento"
 
 #: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:26
-#, fuzzy, c-format
+#, c-format
 msgid "&rsaquo; Add orders from MARC file"
-msgstr "&rsaquo; Aggiungi un ordine da suggerimento"
+msgstr "&rsaquo; Aggiungi ordini da file iso2709"
 
 #: intranet-tmpl/prog/en/modules/patron_lists/list.tt:30
 #, c-format
@@ -10406,7 +10412,7 @@ msgstr ""
 "(Inclusi, il default è %s giorni fa fino  a oggi. Indica un altro intervallo "
 "se necessario.)"
 
-#: intranet-tmpl/prog/en/modules/about.tt:775
+#: intranet-tmpl/prog/en/modules/about.tt:778
 #, c-format
 msgid "(Indonesian)"
 msgstr "(Indonesiano)"
@@ -10810,7 +10816,7 @@ msgstr ""
 msgid ", PA, USA (Koha 3.0 Zebra Integration sponsorship)"
 msgstr ", PA, USA (finanziamenti per l'integrazione tra Koha 3.0 e Zebra)"
 
-#: intranet-tmpl/prog/en/modules/about.tt:766
+#: intranet-tmpl/prog/en/modules/about.tt:769
 #, c-format
 msgid ", Pascale Nalon (ENSMP), and many more "
 msgstr ", Pascale Nalon (ENSMP), e molti altri "
@@ -10819,6 +10825,11 @@ msgstr ", Pascale Nalon (ENSMP), e molti altri "
 #, c-format
 msgid ", Please transfer this item. "
 msgstr ", per favore, trasferisci questa copia. "
+
+#: intranet-tmpl/prog/en/modules/about.tt:704
+#, fuzzy, c-format
+msgid ", by the "
+msgstr "Vai a "
 
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:489
 #, c-format
@@ -10831,7 +10842,7 @@ msgid ", please ask an administrator to check your configuration. "
 msgstr ""
 ", per favore contatta l'amministratore per controllare la tua configurazione."
 
-#: intranet-tmpl/prog/en/includes/about-team.inc:70
+#: intranet-tmpl/prog/en/includes/about-team.inc:72
 #, c-format
 msgid ", when the next team will be elected."
 msgstr ", quando verrà eletto il prossimo team."
@@ -11097,9 +11108,9 @@ msgid "1/2"
 msgstr "1/2"
 
 #: intranet-tmpl/prog/en/modules/admin/authtypes.tt:76
-#, fuzzy, c-format
+#, c-format
 msgid "10 characters maximum"
-msgstr "caratteri"
+msgstr "massimo 10 caratteri"
 
 #: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:206
 #, c-format
@@ -11436,6 +11447,16 @@ msgstr "Accesso a tutte le funzioni del sistema"
 #, c-format
 msgid "Access to the files stored on the server "
 msgstr "Accesso ai file contenuti nel server"
+
+#: intranet-tmpl/prog/en/includes/about-team.inc:209
+#, fuzzy, c-format
+msgid "Accessibility advocate:"
+msgstr "Data di accesso:"
+
+#: intranet-tmpl/prog/en/includes/about-team.inc:201
+#, fuzzy, c-format
+msgid "Accessibility advocates:"
+msgstr "Data di accesso:"
 
 #: intranet-tmpl/prog/en/modules/labels/result.tt:68
 #, c-format
@@ -12376,9 +12397,9 @@ msgstr "Aggiungi ordini"
 #. %2$s:  file_name | html 
 #. %3$s:  upload_timestamp | $KohaDates  with_hours => 1 
 #: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:37
-#, fuzzy, c-format
+#, c-format
 msgid "Add orders from %s (%s staged on %s) "
-msgstr "%s Ordini trovati: %s %s Nessun ordine trovato %s"
+msgstr "Aggiungi ordini da %s (%s preparati il %s) "
 
 #: intranet-tmpl/prog/en/modules/admin/patron-attr-types.tt:53
 #, c-format
@@ -14006,13 +14027,14 @@ msgid "Any category code"
 msgstr "Qualsiasi codice di categoria"
 
 #: intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:91
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Any changes to the configuration will only take effect after a full reindex. "
 "Until then searching may not work correctly. "
 msgstr ""
 "Attenzione: modifiche a queste configurazioni richiedono di indicizzare "
-"nuovamente tutto. Fino a quel momento la ricerca potrebbe funzionare male. "
+"nuovamente tutto. Fino a quel momento la ricerca può non funzionare "
+"correttamente."
 
 #. For the first occurrence,
 #. SCRIPT
@@ -14106,6 +14128,11 @@ msgstr "Ogni: "
 #, c-format
 msgid "Anyone seeing this list"
 msgstr "Chiunque vede questa lista"
+
+#: intranet-tmpl/prog/en/modules/about.tt:704
+#, fuzzy, c-format
+msgid "Apache License, Version 2.0"
+msgstr "la Apache License, Version 2.0"
 
 #: intranet-tmpl/prog/en/modules/about.tt:47
 #, c-format
@@ -14792,7 +14819,7 @@ msgstr "Area"
 msgid "Area:"
 msgstr "Area:"
 
-#: intranet-tmpl/prog/en/modules/about.tt:754
+#: intranet-tmpl/prog/en/modules/about.tt:757
 #, c-format
 msgid "Armenian Tigran Zargaryan"
 msgstr "Armenian Tigran Zargaryan"
@@ -14862,8 +14889,8 @@ msgstr ""
 msgid "Asked "
 msgstr "Richiesta "
 
-#: intranet-tmpl/prog/en/includes/about-team.inc:84
-#: intranet-tmpl/prog/en/includes/about-team.inc:226
+#: intranet-tmpl/prog/en/includes/about-team.inc:86
+#: intranet-tmpl/prog/en/includes/about-team.inc:242
 #, c-format
 msgid "Assistant:"
 msgstr "Assistente:"
@@ -15512,15 +15539,15 @@ msgstr "Durata media del prestito"
 msgid "BIBTEX"
 msgstr "BIBTEX"
 
-#: intranet-tmpl/prog/en/modules/about.tt:719
+#: intranet-tmpl/prog/en/modules/about.tt:722
 #, c-format
 msgid "BSD 3-clause Licence"
 msgstr "BSD 3-clause Licence"
 
 #: intranet-tmpl/prog/en/modules/about.tt:633
 #: intranet-tmpl/prog/en/modules/about.tt:701
-#: intranet-tmpl/prog/en/modules/about.tt:710
-#: intranet-tmpl/prog/en/modules/about.tt:725
+#: intranet-tmpl/prog/en/modules/about.tt:713
+#: intranet-tmpl/prog/en/modules/about.tt:728
 #, c-format
 msgid "BSD License"
 msgstr "Licenza BSD"
@@ -16878,7 +16905,7 @@ msgstr "Budgets"
 msgid "Budgets administration"
 msgstr "Gestione dei budgets"
 
-#: intranet-tmpl/prog/en/includes/about-team.inc:189
+#: intranet-tmpl/prog/en/includes/about-team.inc:191
 #, c-format
 msgid "Bug wranglers:"
 msgstr "Bug wranglers:"
@@ -16950,12 +16977,12 @@ msgstr "Bytes"
 msgid "C &amp; P Bibliography Services, USA"
 msgstr "C &amp; P Bibliography Services, USA"
 
-#: intranet-tmpl/prog/en/modules/about.tt:721
+#: intranet-tmpl/prog/en/modules/about.tt:724
 #, c-format
 msgid "C3.js"
 msgstr "C3.js"
 
-#: intranet-tmpl/prog/en/modules/about.tt:722
+#: intranet-tmpl/prog/en/modules/about.tt:725
 #, c-format
 msgid "C3.js v0.4.11"
 msgstr "C3.js v0.4.11"
@@ -21384,9 +21411,8 @@ msgstr "Copia i giorni di chiusura in:"
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/tools/upload.tt:266
-#, fuzzy
 msgid "Copy link to this file"
-msgstr "Note su questo file: "
+msgstr "Copia link su questo file"
 
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:145
 #, c-format
@@ -21563,7 +21589,7 @@ msgstr ""
 "Non è possibile leggere il file contributors.yaml. Per favore assicurati che "
 "&lt;docdir&gt; sia correttamente definita in koha-conf.xml. "
 
-#: intranet-tmpl/prog/en/modules/about.tt:821
+#: intranet-tmpl/prog/en/modules/about.tt:824
 #, c-format
 msgid ""
 "Could not read the history.txt file. Please make sure &lt;docdir&gt; is "
@@ -22288,17 +22314,17 @@ msgstr "Ciclico"
 msgid "Cyclical:"
 msgstr "Ciclico:"
 
-#: intranet-tmpl/prog/en/modules/about.tt:761
+#: intranet-tmpl/prog/en/modules/about.tt:764
 #, c-format
 msgid "D&aelig;nsk (Danish)"
 msgstr "D&aelig;nsk (Danese)"
 
-#: intranet-tmpl/prog/en/modules/about.tt:718
+#: intranet-tmpl/prog/en/modules/about.tt:721
 #, c-format
 msgid "D3.js"
 msgstr "D3.js"
 
-#: intranet-tmpl/prog/en/modules/about.tt:719
+#: intranet-tmpl/prog/en/modules/about.tt:722
 #, c-format
 msgid "D3.js v3.5.17"
 msgstr "D3.js v3.5.17"
@@ -22536,7 +22562,7 @@ msgstr "Database: "
 #: intranet-tmpl/prog/en/modules/circ/checkout-notes.tt:70
 #: intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:147
 #: intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:149
-#: intranet-tmpl/prog/en/modules/about.tt:807
+#: intranet-tmpl/prog/en/modules/about.tt:810
 #: intranet-tmpl/prog/en/modules/offline_circ/list.tt:33
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:172
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:388
@@ -22881,9 +22907,9 @@ msgid "Default "
 msgstr "Default"
 
 #: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:45
-#, fuzzy, c-format
+#, c-format
 msgid "Default accounting details"
-msgstr "Dettagli economici"
+msgstr "Dettagli economici (quelli di default)"
 
 #: intranet-tmpl/prog/en/modules/admin/debit_types.tt:138
 #, c-format
@@ -23972,7 +23998,7 @@ msgstr "Dipart."
 #: intranet-tmpl/prog/en/modules/admin/checkmarc.tt:167
 #: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:149
 #: intranet-tmpl/prog/en/modules/reports/dictionary.tt:68
-#: intranet-tmpl/prog/en/modules/about.tt:808
+#: intranet-tmpl/prog/en/modules/about.tt:811
 #: intranet-tmpl/prog/en/modules/labels/label-manage.tt:69
 #: intranet-tmpl/prog/en/modules/pos/register.tt:72
 #: intranet-tmpl/prog/en/modules/pos/register.tt:161
@@ -24199,7 +24225,7 @@ msgstr "Dettagli di multa"
 msgid "Details of payment"
 msgstr "Dettagli del pagamento"
 
-#: intranet-tmpl/prog/en/modules/about.tt:768
+#: intranet-tmpl/prog/en/modules/about.tt:771
 #, c-format
 msgid ""
 "Deutsch (German) Friedrich zur Hellen, Robert Hillig, Katrin Fischer, Beda "
@@ -24589,17 +24615,17 @@ msgstr "Proprietà documento"
 msgid "Document type:"
 msgstr "Tipo di documento:"
 
-#: intranet-tmpl/prog/en/includes/about-team.inc:116
+#: intranet-tmpl/prog/en/includes/about-team.inc:118
 #, c-format
 msgid "Documentation manager:"
 msgstr "Manager della documentazione:"
 
-#: intranet-tmpl/prog/en/includes/about-team.inc:120
+#: intranet-tmpl/prog/en/includes/about-team.inc:122
 #, c-format
 msgid "Documentation managers:"
 msgstr "Team per la documentazione:"
 
-#: intranet-tmpl/prog/en/includes/about-team.inc:131
+#: intranet-tmpl/prog/en/includes/about-team.inc:133
 #, c-format
 msgid "Documentation team:"
 msgstr "Team per la documentazione:"
@@ -25686,7 +25712,7 @@ msgstr "Email: "
 msgid "Embed"
 msgstr "Incorpora"
 
-#: intranet-tmpl/prog/en/modules/about.tt:713
+#: intranet-tmpl/prog/en/modules/about.tt:716
 #, c-format
 msgid "Emojiarea plug-in for jQuery"
 msgstr "Emojiarea plug-in per jQuery"
@@ -25817,7 +25843,7 @@ msgstr "Fine del periodo "
 msgid "End of interval"
 msgstr "Fine del periodo"
 
-#: intranet-tmpl/prog/en/modules/about.tt:764
+#: intranet-tmpl/prog/en/modules/about.tt:767
 #, c-format
 msgid "English"
 msgstr "Inglese"
@@ -26354,7 +26380,7 @@ msgstr "Si sono verificati degli errori:"
 msgid "Escuela de Orientacion Lacaniana, Argentina"
 msgstr "Escuela de Orientación Lacaniana, Argentina"
 
-#: intranet-tmpl/prog/en/modules/about.tt:790
+#: intranet-tmpl/prog/en/modules/about.tt:793
 #, c-format
 msgid ""
 "Espa&ntilde;ol (Spanish) Bernardo González Kriegel, Héctor Castro and Tomás "
@@ -27820,8 +27846,8 @@ msgstr "I seguenti sottocampi richiesti sono mancanti:"
 msgid "Font Awesome"
 msgstr "Font Awesome"
 
-#: intranet-tmpl/prog/en/modules/about.tt:724
-#: intranet-tmpl/prog/en/modules/about.tt:725
+#: intranet-tmpl/prog/en/modules/about.tt:727
+#: intranet-tmpl/prog/en/modules/about.tt:728
 #, c-format
 msgid "Font Face Observer"
 msgstr "Font Face Observer"
@@ -28046,7 +28072,7 @@ msgstr "Codice della griglia di catalogazione: "
 msgid "Framework description"
 msgstr "Descrizione della griglia di catalogazione"
 
-#: intranet-tmpl/prog/en/modules/about.tt:766
+#: intranet-tmpl/prog/en/modules/about.tt:769
 #, c-format
 msgid "Fran&ccedil;ais (French) "
 msgstr "Fran&ccedil;ais (Francese) "
@@ -28466,7 +28492,7 @@ msgstr "IVA %%"
 msgid "GST:"
 msgstr "IVA:"
 
-#: intranet-tmpl/prog/en/modules/about.tt:767
+#: intranet-tmpl/prog/en/modules/about.tt:770
 #, c-format
 msgid "Galego (Galician) Ignacio Javier"
 msgstr "Galego (Galician) Ignacio Javier"
@@ -28885,8 +28911,8 @@ msgstr "Wizard dei reports guidati"
 msgid "H Align"
 msgstr "Allineamento orizzontale"
 
-#: intranet-tmpl/prog/en/modules/about.tt:730
-#: intranet-tmpl/prog/en/modules/about.tt:731
+#: intranet-tmpl/prog/en/modules/about.tt:733
+#: intranet-tmpl/prog/en/modules/about.tt:734
 #, c-format
 msgid "HC Sticky"
 msgstr "HC Sticky"
@@ -29397,9 +29423,9 @@ msgid "Hold ratio"
 msgstr "Distribuzione delle prenotazioni"
 
 #: intranet-tmpl/prog/en/modules/circ/reserveratios.tt:130
-#, fuzzy, c-format
+#, c-format
 msgid "Hold ratio (greater than or equal to):"
-msgstr ", maggiore di oppure uguale a 1"
+msgstr "Ratio prenotazione (maggiore di oppure uguale a):"
 
 #: intranet-tmpl/prog/en/includes/circ-nav.inc:33
 #: intranet-tmpl/prog/en/modules/circ/circulation-home.tt:70
@@ -30119,7 +30145,7 @@ msgstr "Come dovranno essere cancellati gli utenti?"
 msgid "How to process items: "
 msgstr "Come elaborare le copie: "
 
-#: intranet-tmpl/prog/en/modules/about.tt:759
+#: intranet-tmpl/prog/en/modules/about.tt:762
 #, c-format
 msgid "Hrvatski (Croatian)"
 msgstr "Hrvatski (Croato)"
@@ -30555,7 +30581,7 @@ msgstr "Se vuoto, verrà utilizzata l'inglese"
 #: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:132
 #, c-format
 msgid "If empty, discount rate from vendor will be used"
-msgstr ""
+msgstr "Se vuoto, sarà usata la percentuale di sconto del fornitore"
 
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:121
 #, c-format
@@ -31059,12 +31085,15 @@ msgid ""
 "Import all the checked items in the basket with the following accounting "
 "details (used only if no information is filled for the item):"
 msgstr ""
+"Importa tutte le copie con il check nel basket con i seguenti dettagli (da "
+"usare solo se non vi sono informazioni sulla copia):"
 
 #: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:277
 #, c-format
 msgid ""
 "Import all the checked items in the basket with the following parameters:"
 msgstr ""
+"Importa tutte le copie selezionate del raccoglitore con i seguenti parametri:"
 
 #. BUTTON
 #: intranet-tmpl/prog/en/modules/cataloguing/editor.tt:42
@@ -32084,7 +32113,7 @@ msgstr ""
 "Si consiglia di controllare e risolvere prenotazioni duplicate a causa del "
 "merge."
 
-#: intranet-tmpl/prog/en/modules/about.tt:776
+#: intranet-tmpl/prog/en/modules/about.tt:779
 #, c-format
 msgid ""
 "Italiano (Italian) for 3.2: Zeno Tajoli, Pietro Gozzetti and Paolo Pozzan; "
@@ -32128,9 +32157,9 @@ msgstr "Copia %s"
 
 #. %1$s:  item.item_id | html 
 #: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:173
-#, fuzzy, c-format
+#, c-format
 msgid "Item Record %s"
-msgstr "Records di copia"
+msgstr "Record di copia %s"
 
 #: intranet-tmpl/prog/en/modules/course_reserves/course-details.tt:217
 #, c-format
@@ -32254,9 +32283,9 @@ msgstr "Biblioteca di appartenenza:"
 
 #: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:44
 #: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:276
-#, fuzzy, c-format
+#, c-format
 msgid "Item information"
-msgstr "Informazioni sul sistema"
+msgstr "Informazioni sulla copia"
 
 #. %1$s:  IF ( CAN_user_editcatalogue_edit_catalogue ) 
 #. %2$s:  UNLESS ( ITEM_DAT.nomod ) 
@@ -32803,8 +32832,8 @@ msgstr "Tipo di copia"
 msgid "JSON URL"
 msgstr "JSON URL"
 
-#: intranet-tmpl/prog/en/modules/about.tt:715
-#: intranet-tmpl/prog/en/modules/about.tt:716
+#: intranet-tmpl/prog/en/modules/about.tt:718
+#: intranet-tmpl/prog/en/modules/about.tt:719
 #, c-format
 msgid "JSZip"
 msgstr "JSZip"
@@ -32814,18 +32843,18 @@ msgstr "JSZip"
 msgid "January"
 msgstr "Gennaio"
 
-#: intranet-tmpl/prog/en/modules/about.tt:742
-#: intranet-tmpl/prog/en/modules/about.tt:743
+#: intranet-tmpl/prog/en/modules/about.tt:745
+#: intranet-tmpl/prog/en/modules/about.tt:746
 #, c-format
 msgid "JavaScript Cookie"
 msgstr "JavaScript Cookie"
 
-#: intranet-tmpl/prog/en/modules/about.tt:710
+#: intranet-tmpl/prog/en/modules/about.tt:713
 #, c-format
 msgid "JavaScript library by Vladimir Agafonkinis licensed under the "
 msgstr "JavaScript library di Vladimir Agafonkinis rilasciato con licenza  "
 
-#: intranet-tmpl/prog/en/modules/about.tt:716
+#: intranet-tmpl/prog/en/modules/about.tt:719
 #, c-format
 msgid "JavaScript library is licensed under both the "
 msgstr "JavaScript library ha la licenza "
@@ -32836,12 +32865,12 @@ msgstr "JavaScript library ha la licenza "
 msgid "Javascript Diff Algorithm"
 msgstr "Javascript Diff Algorithm"
 
-#: intranet-tmpl/prog/en/includes/about-team.inc:174
+#: intranet-tmpl/prog/en/includes/about-team.inc:176
 #, c-format
 msgid "Jenkins maintainer:"
 msgstr "Manutentore di Jenkins:"
 
-#: intranet-tmpl/prog/en/includes/about-team.inc:178
+#: intranet-tmpl/prog/en/includes/about-team.inc:180
 #, c-format
 msgid "Jenkins maintainers:"
 msgstr "Manutentore di Jenkins:"
@@ -35737,7 +35766,7 @@ msgstr "Campo Koha:"
 msgid "Koha full call number"
 msgstr "Collocazione Koha"
 
-#: intranet-tmpl/prog/en/modules/about.tt:802
+#: intranet-tmpl/prog/en/modules/about.tt:805
 #, c-format
 msgid "Koha history timeline"
 msgstr "Storia di Koha"
@@ -35842,7 +35871,7 @@ msgstr "Koha-Suomi Oy, Finlandia"
 msgid "KohaAloha, New Zealand"
 msgstr "KohaAloha, New Zealand"
 
-#: intranet-tmpl/prog/en/modules/about.tt:766
+#: intranet-tmpl/prog/en/modules/about.tt:769
 #, c-format
 msgid "Kohala"
 msgstr "Kohala"
@@ -35889,7 +35918,7 @@ msgstr "LCCN: %s "
 msgid "LGPL v2.1"
 msgstr "LGPL v2.1"
 
-#: intranet-tmpl/prog/en/modules/about.tt:737
+#: intranet-tmpl/prog/en/modules/about.tt:740
 #, c-format
 msgid "LGPL v3.0"
 msgstr "LGPL v3.0"
@@ -36021,7 +36050,7 @@ msgstr "Lingua: "
 msgid "Languages"
 msgstr "Lingue"
 
-#: intranet-tmpl/prog/en/modules/about.tt:781
+#: intranet-tmpl/prog/en/modules/about.tt:784
 #, c-format
 msgid "Lao Anousak Anthony Souphavanh"
 msgstr "Lao Anousak Anthony Souphavanh"
@@ -36197,7 +36226,7 @@ msgstr "In ritardo"
 msgid "Late orders"
 msgstr "Ordini in ritardo"
 
-#: intranet-tmpl/prog/en/modules/about.tt:780
+#: intranet-tmpl/prog/en/modules/about.tt:783
 #, c-format
 msgid "Latina (Latin)"
 msgstr "Latina (Latin)"
@@ -36240,8 +36269,8 @@ msgstr "Layout: "
 msgid "Layouts"
 msgstr "Layouts"
 
-#: intranet-tmpl/prog/en/modules/about.tt:709
-#: intranet-tmpl/prog/en/modules/about.tt:710
+#: intranet-tmpl/prog/en/modules/about.tt:712
+#: intranet-tmpl/prog/en/modules/about.tt:713
 #, c-format
 msgid "Leaflet"
 msgstr "Opuscolo"
@@ -36808,9 +36837,8 @@ msgstr "Link"
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/tools/upload.tt:266
-#, fuzzy
 msgid "Link copied to the clipboard"
-msgstr "Collega il campo all'authorities"
+msgstr "Link copiato negli appunti"
 
 #: intranet-tmpl/prog/en/includes/keyboard_shortcuts.inc:7
 #, c-format
@@ -37388,7 +37416,7 @@ msgstr "Lucida Console"
 msgid "Lund University Library, Sweden"
 msgstr "Lund University Library, Sweden"
 
-#: intranet-tmpl/prog/en/modules/about.tt:782
+#: intranet-tmpl/prog/en/modules/about.tt:785
 #, c-format
 msgid "M&#257;ori"
 msgstr "M&#257;ori (Maori)"
@@ -37628,17 +37656,17 @@ msgstr "MARCXML"
 #: intranet-tmpl/prog/en/modules/about.tt:680
 #: intranet-tmpl/prog/en/modules/about.tt:683
 #: intranet-tmpl/prog/en/modules/about.tt:689
-#: intranet-tmpl/prog/en/modules/about.tt:707
+#: intranet-tmpl/prog/en/modules/about.tt:710
 #, c-format
 msgid "MIT License"
 msgstr "Licenza MIT"
 
-#: intranet-tmpl/prog/en/modules/about.tt:716
+#: intranet-tmpl/prog/en/modules/about.tt:719
 #, c-format
 msgid "MIT and GPLv3 Licenses"
 msgstr "MIT and GPLv3 Licenses"
 
-#: intranet-tmpl/prog/en/modules/about.tt:722
+#: intranet-tmpl/prog/en/modules/about.tt:725
 #, c-format
 msgid "MIT licence"
 msgstr "Licenza MIT"
@@ -37648,11 +37676,11 @@ msgstr "Licenza MIT"
 #: intranet-tmpl/prog/en/modules/about.tt:692
 #: intranet-tmpl/prog/en/modules/about.tt:695
 #: intranet-tmpl/prog/en/modules/about.tt:698
-#: intranet-tmpl/prog/en/modules/about.tt:731
 #: intranet-tmpl/prog/en/modules/about.tt:734
-#: intranet-tmpl/prog/en/modules/about.tt:740
+#: intranet-tmpl/prog/en/modules/about.tt:737
 #: intranet-tmpl/prog/en/modules/about.tt:743
 #: intranet-tmpl/prog/en/modules/about.tt:746
+#: intranet-tmpl/prog/en/modules/about.tt:749
 #, c-format
 msgid "MIT license"
 msgstr "Licenza MIT"
@@ -37683,7 +37711,7 @@ msgstr "Macros"
 msgid "Macros..."
 msgstr "Macros..."
 
-#: intranet-tmpl/prog/en/modules/about.tt:772
+#: intranet-tmpl/prog/en/modules/about.tt:775
 #, c-format
 msgid "Magyar (Hungarian)Agnes Imecs"
 msgstr "Magyar (Hungarian)Agnes Imecs"
@@ -38658,9 +38686,9 @@ msgid "Matching rule code: "
 msgstr "Codice della regola di corrispondenza: "
 
 #: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:56
-#, fuzzy, c-format
+#, c-format
 msgid "Matching:"
-msgstr "Corrispondenza "
+msgstr "Corrispondenza:"
 
 #: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:154
 #: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:216
@@ -38789,8 +38817,8 @@ msgstr "Memcached:"
 msgid "Men"
 msgstr "Uomini"
 
-#: intranet-tmpl/prog/en/includes/about-team.inc:92
-#: intranet-tmpl/prog/en/includes/about-team.inc:234
+#: intranet-tmpl/prog/en/includes/about-team.inc:94
+#: intranet-tmpl/prog/en/includes/about-team.inc:250
 #, c-format
 msgid "Mentor:"
 msgstr "Mentore:"
@@ -39335,8 +39363,8 @@ msgstr "E' necessario aggiornare il modulo"
 msgid "Modules:"
 msgstr "Moduli:"
 
-#: intranet-tmpl/prog/en/modules/about.tt:745
-#: intranet-tmpl/prog/en/modules/about.tt:746
+#: intranet-tmpl/prog/en/modules/about.tt:748
+#: intranet-tmpl/prog/en/modules/about.tt:749
 #, c-format
 msgid "Moment.js"
 msgstr "Moment.js"
@@ -39835,12 +39863,12 @@ msgstr ""
 "Mancano packages necessary a Elasticsearch. Chiedi l'intervento del tuo "
 "system manager"
 
-#: intranet-tmpl/prog/en/modules/about.tt:763
+#: intranet-tmpl/prog/en/modules/about.tt:766
 #, c-format
 msgid "Nederlands-Belgi&euml; (Dutch-Belgium)"
 msgstr "Nederlands-Belgi&euml; (Dutch-Belgium)"
 
-#: intranet-tmpl/prog/en/modules/about.tt:762
+#: intranet-tmpl/prog/en/modules/about.tt:765
 #, c-format
 msgid "Nederlands-Nederland (Dutch-The Netherlands) Sponsored by Rijksmuseum"
 msgstr "Nederlands-Nederland (Dutch-The Netherlands) Sponsored by Rijksmuseum"
@@ -41255,13 +41283,13 @@ msgid "No reason"
 msgstr "Nessun motivo"
 
 #: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:31
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "No record have been imported because they all match an existing record in "
 "your catalog."
 msgstr ""
-"Alcuni record non sono stati caricati in automatico perchè corrispondono a "
-"record già esistenti nel tuo catalogo:"
+"Nessun record è stato importato perche tutti corrispondono a record già "
+"esistente nel tuo catalogo."
 
 #: intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:114
 #, c-format
@@ -41279,9 +41307,9 @@ msgid "No records have been staged."
 msgstr "Nessus record è stato preparato"
 
 #: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:31
-#, fuzzy, c-format
+#, c-format
 msgid "No records imported"
-msgstr "Nessun record rimossp"
+msgstr "Nessun record importato"
 
 #. %1$s:  IF recordtype != 'biblio' 
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:247
@@ -41657,12 +41685,12 @@ msgstr "Testo normale"
 msgid "Normalization rule: "
 msgstr "Regola di normalizzazione: "
 
-#: intranet-tmpl/prog/en/modules/about.tt:773
+#: intranet-tmpl/prog/en/modules/about.tt:776
 #, c-format
 msgid "Norsk Bokmål (Norwegian) Axel Bojer and Thomas Gramstad"
 msgstr "Norsk Bokmål (Norwegian) Axel Bojer and Thomas Gramstad"
 
-#: intranet-tmpl/prog/en/modules/about.tt:774
+#: intranet-tmpl/prog/en/modules/about.tt:777
 #, c-format
 msgid "Norsk Nynorsk (Norwegian) Unni Knutsen and Marit Kristine Ådland"
 msgstr "Norsk Nynorsk (Norwegian) Unni Knutsen and Marit Kristine Ådland"
@@ -42133,12 +42161,12 @@ msgstr "Data di notifica"
 msgid "Notify manager:"
 msgstr "Informa il manager:"
 
-#: intranet-tmpl/prog/en/modules/about.tt:728
+#: intranet-tmpl/prog/en/modules/about.tt:731
 #, c-format
 msgid "Noto"
 msgstr "Noto"
 
-#: intranet-tmpl/prog/en/modules/about.tt:727
+#: intranet-tmpl/prog/en/modules/about.tt:730
 #, c-format
 msgid "Noto fonts"
 msgstr "Noto fonts"
@@ -42958,9 +42986,10 @@ msgstr ""
 "Sono permesse solo posizioni di prelievo dello stesso gruppo di prenotazione"
 
 #: intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:96
-#, fuzzy, c-format
+#, c-format
 msgid "Only search fields mapped with biblios can be weighted"
-msgstr "solo i campi mappati nella tabella biblios possono avere un peso"
+msgstr ""
+"Solo i campi di ricerca mappati nella tabella biblios possono avere un peso"
 
 #: intranet-tmpl/prog/en/modules/common/patron_search.tt:53
 #, c-format
@@ -43039,6 +43068,16 @@ msgstr "Apri il link in..."
 #, c-format
 msgid "Open on:"
 msgstr "Aperto il:"
+
+#: intranet-tmpl/prog/en/modules/about.tt:703
+#, c-format
+msgid "OpenAPI 2.0 schema"
+msgstr ""
+
+#: intranet-tmpl/prog/en/modules/about.tt:704
+#, c-format
+msgid "OpenAPI Initiative (OAI)"
+msgstr ""
 
 #: intranet-tmpl/prog/en/modules/about.tt:662
 #, c-format
@@ -43661,12 +43700,12 @@ msgstr "PTFS Europe Ltd, United Kingdom"
 msgid "PTFS, Maryland, USA"
 msgstr "PTFS, Maryland, USA"
 
-#: intranet-tmpl/prog/en/includes/about-team.inc:158
+#: intranet-tmpl/prog/en/includes/about-team.inc:160
 #, c-format
 msgid "Packaging manager:"
 msgstr "Packaging manager:"
 
-#: intranet-tmpl/prog/en/includes/about-team.inc:162
+#: intranet-tmpl/prog/en/includes/about-team.inc:164
 #, c-format
 msgid "Packaging team:"
 msgstr "Packaging team:"
@@ -45561,7 +45600,7 @@ msgstr "Conferma la cancellazione dell'abbonamento"
 
 #. %1$s:  bankable | $Price 
 #: intranet-tmpl/prog/en/modules/pos/registers.tt:159
-#, fuzzy, c-format
+#, c-format
 msgid "Please confirm that you have received %s to cashup."
 msgstr "Per favore, conferma che hai ricevuto %s da incassare."
 
@@ -46195,7 +46234,7 @@ msgstr "Punto vendita"
 msgid "Policy for %s: %s"
 msgstr "Politica per %s: %s"
 
-#: intranet-tmpl/prog/en/modules/about.tt:786
+#: intranet-tmpl/prog/en/modules/about.tt:789
 #, c-format
 msgid "Polski (Polish)"
 msgstr "Polski (Polacco)"
@@ -46240,7 +46279,7 @@ msgstr "Popola una tendina di metodi di pagamento per pagare le multe"
 msgid "Port: "
 msgstr "Porta: "
 
-#: intranet-tmpl/prog/en/modules/about.tt:787
+#: intranet-tmpl/prog/en/modules/about.tt:790
 #, c-format
 msgid "Portugu&ecirc;s (Portuguese)"
 msgstr "Portugu&ecirc;s (Portoghese)"
@@ -46490,9 +46529,9 @@ msgid "Price:"
 msgstr "Prezzo:"
 
 #: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:122
-#, fuzzy, c-format
+#, c-format
 msgid "Price: "
-msgstr "Prezzo:"
+msgstr "Prezzo: "
 
 #: intranet-tmpl/prog/en/modules/catalogue/advsearch.tt:192
 #, c-format
@@ -47233,12 +47272,12 @@ msgstr "Qualificatore:"
 msgid "Qualifier: "
 msgstr "Qualificatore:"
 
-#: intranet-tmpl/prog/en/includes/about-team.inc:99
+#: intranet-tmpl/prog/en/includes/about-team.inc:101
 #, c-format
 msgid "Quality assurance manager:"
 msgstr "Quality assurance manager:"
 
-#: intranet-tmpl/prog/en/includes/about-team.inc:105
+#: intranet-tmpl/prog/en/includes/about-team.inc:107
 #, c-format
 msgid "Quality assurance team:"
 msgstr "Quality assurance team:"
@@ -47875,30 +47914,30 @@ msgstr "Informazioni sulla relazione"
 msgid "Relationship: "
 msgstr "Relazione: "
 
-#: intranet-tmpl/prog/en/includes/about-team.inc:75
+#: intranet-tmpl/prog/en/includes/about-team.inc:77
 #, c-format
 msgid "Release maintainer:"
 msgstr "Release Maintainer:"
 
-#: intranet-tmpl/prog/en/includes/about-team.inc:219
+#: intranet-tmpl/prog/en/includes/about-team.inc:235
 #, c-format
 msgid "Release maintainers:"
 msgstr "Release Maintainer:"
 
-#: intranet-tmpl/prog/en/includes/about-team.inc:63
-#: intranet-tmpl/prog/en/includes/about-team.inc:213
+#: intranet-tmpl/prog/en/includes/about-team.inc:65
+#: intranet-tmpl/prog/en/includes/about-team.inc:229
 #, c-format
 msgid "Release manager assistant:"
 msgstr "Assistente del Release Manager:"
 
-#: intranet-tmpl/prog/en/includes/about-team.inc:55
-#: intranet-tmpl/prog/en/includes/about-team.inc:205
+#: intranet-tmpl/prog/en/includes/about-team.inc:57
+#: intranet-tmpl/prog/en/includes/about-team.inc:221
 #, c-format
 msgid "Release manager assistants:"
 msgstr "Assistenti del Release Manager:"
 
-#: intranet-tmpl/prog/en/includes/about-team.inc:50
-#: intranet-tmpl/prog/en/includes/about-team.inc:200
+#: intranet-tmpl/prog/en/includes/about-team.inc:52
+#: intranet-tmpl/prog/en/includes/about-team.inc:216
 #, c-format
 msgid "Release manager:"
 msgstr "Release Manager:"
@@ -48448,9 +48487,9 @@ msgid "Replacement price:"
 msgstr "Costo di sostituzione:"
 
 #: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:126
-#, fuzzy, c-format
+#, c-format
 msgid "Replacement price: "
-msgstr "Costo di sostituzione:"
+msgstr "Costo di sostituzione: "
 
 #: intranet-tmpl/prog/en/includes/ill-list-table.inc:27
 #, c-format
@@ -48998,7 +49037,7 @@ msgid "Reset filter"
 msgstr "Resetta filtro"
 
 #: intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:409
-#, fuzzy, c-format
+#, c-format
 msgid "Reset mappings"
 msgstr "Resetta la configurazione"
 
@@ -49443,7 +49482,7 @@ msgstr "Ciclo:"
 msgid "Rollover:"
 msgstr "Ciclo:"
 
-#: intranet-tmpl/prog/en/modules/about.tt:788
+#: intranet-tmpl/prog/en/modules/about.tt:791
 #, c-format
 msgid "Rom&acirc;n&#259; (Romanian)"
 msgstr "Rom&acirc;n&#259; (Rumeno)"
@@ -49674,7 +49713,7 @@ msgstr "SI Millimetri"
 msgid "SIL OFL 1.1"
 msgstr "SIL OFL 1.1"
 
-#: intranet-tmpl/prog/en/modules/about.tt:728
+#: intranet-tmpl/prog/en/modules/about.tt:731
 #, c-format
 msgid "SIL Open Font License (OFL) v1.1"
 msgstr "SIL Open Font License (OFL) v1.1"
@@ -50720,9 +50759,9 @@ msgid "Search was: "
 msgstr "La ricerca era: "
 
 #: intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:97
-#, fuzzy, c-format
+#, c-format
 msgid "Search will boost/increase weighted field(s) relevancy"
-msgstr "la ricerca darà maggior rilevanza ai campi con peso"
+msgstr "La ricerca darà maggior rilevanza ai campi con peso"
 
 #: intranet-tmpl/prog/en/modules/common/patron_search.tt:21
 #: intranet-tmpl/prog/en/modules/members/member.tt:125
@@ -51008,13 +51047,13 @@ msgstr "Seleziona un fondo"
 #: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:354
 #, c-format
 msgid "Select a fund (will populate orders/items if set)"
-msgstr ""
+msgstr "Seleziona un fondo (sarà riempito din ordini/copie se definito)"
 
 #: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:141
 #: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:240
 #, c-format
 msgid "Select a fund (will use default if set)"
-msgstr ""
+msgstr "Seleziona un fondo (verrà usato il default se presente)"
 
 #: intranet-tmpl/prog/en/modules/installer/step1.tt:35
 #, c-format
@@ -51331,7 +51370,7 @@ msgid "Select to display or not:"
 msgstr "Seleziona se visualizzare o no:"
 
 #: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:43
-#, fuzzy, c-format
+#, c-format
 msgid "Select to import"
 msgstr "Seleziona il file da importare: "
 
@@ -51355,8 +51394,8 @@ msgstr "Seleziona senza copie"
 msgid "Select your MARC flavor"
 msgstr "Seleziona il tipo di MARC"
 
-#: intranet-tmpl/prog/en/modules/about.tt:703
-#: intranet-tmpl/prog/en/modules/about.tt:704
+#: intranet-tmpl/prog/en/modules/about.tt:706
+#: intranet-tmpl/prog/en/modules/about.tt:707
 #, c-format
 msgid "Select2"
 msgstr "Select2"
@@ -54311,7 +54350,7 @@ msgstr "Intervallo di addebito della multa"
 msgid "Suspension in days (day)"
 msgstr "Giorni di sospensione (n. di giorni)"
 
-#: intranet-tmpl/prog/en/modules/about.tt:791
+#: intranet-tmpl/prog/en/modules/about.tt:794
 #, c-format
 msgid "Svenska (Swedish)"
 msgstr "Svenska (Svedese)"
@@ -54489,7 +54528,7 @@ msgstr "Ricerca preferenza di sistema:"
 msgid "System preferences"
 msgstr "Preferenze di sistema"
 
-#: intranet-tmpl/prog/en/modules/about.tt:794
+#: intranet-tmpl/prog/en/modules/about.tt:797
 #, c-format
 msgid ""
 "T&uuml;rk&ccedil;e (Turkish) pre-3.8: Selma Aslan; for 3.8+, Suleyman "
@@ -54585,7 +54624,7 @@ msgstr "Indice"
 msgid "Table properties"
 msgstr "Proprietà tabella"
 
-#: intranet-tmpl/prog/en/modules/about.tt:707
+#: intranet-tmpl/prog/en/modules/about.tt:710
 #, c-format
 msgid "TableDnD plug-in for jQuery"
 msgstr "Plugin TableDnD per jQuery"
@@ -54920,7 +54959,7 @@ msgstr "Non rimuovere alcun utente (lancia un test)"
 msgid "Test the regular expressions:"
 msgstr "Controllo delle espressioni regolari:"
 
-#: intranet-tmpl/prog/en/modules/about.tt:792
+#: intranet-tmpl/prog/en/modules/about.tt:795
 #, c-format
 msgid "Tetun (Tetum) Karen Myers"
 msgstr "Tetun (Tetum) Karen Myers"
@@ -55024,11 +55063,11 @@ msgstr "Questo budget non esiste! Seleziona un badget per continuare"
 #: intranet-tmpl/prog/en/modules/about.tt:692
 #: intranet-tmpl/prog/en/modules/about.tt:695
 #: intranet-tmpl/prog/en/modules/about.tt:698
-#: intranet-tmpl/prog/en/modules/about.tt:704
 #: intranet-tmpl/prog/en/modules/about.tt:707
 #: intranet-tmpl/prog/en/modules/about.tt:710
 #: intranet-tmpl/prog/en/modules/about.tt:713
 #: intranet-tmpl/prog/en/modules/about.tt:716
+#: intranet-tmpl/prog/en/modules/about.tt:719
 #, c-format
 msgid "The "
 msgstr "Il "
@@ -55679,6 +55718,11 @@ msgstr ""
 msgid "The import id number "
 msgstr "L'import con id "
 
+#: intranet-tmpl/prog/en/modules/about.tt:704
+#, c-format
+msgid "The included "
+msgstr ""
+
 #: intranet-tmpl/prog/en/modules/about.tt:701
 #, c-format
 msgid "The included OAI.xslt file by the "
@@ -56299,7 +56343,7 @@ msgstr "Non ci sono contratti con questo fornitore. %s "
 #: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:184
 #, c-format
 msgid "There are no defined actions for this template."
-msgstr "Non ci sono sazioni per questo template."
+msgstr "Non ci sono azioni per questo template."
 
 #: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:282
 #, c-format
@@ -56878,7 +56922,7 @@ msgstr ""
 msgid "This is the anonymous patron, so no holds history is displayed."
 msgstr "Questo è l'utente anonimo, perciò non c'è storico delle prenotazioni."
 
-#: intranet-tmpl/prog/en/includes/about-team.inc:69
+#: intranet-tmpl/prog/en/includes/about-team.inc:71
 #, c-format
 msgid ""
 "This is the team who are responsible for the next release of Koha and the "
@@ -56888,7 +56932,7 @@ msgstr ""
 "Questo è il team responsabile della prossima release di Koha e del "
 "mantenimento della tua attuale versione di Koha. Rimarranno fino al "
 
-#: intranet-tmpl/prog/en/includes/about-team.inc:48
+#: intranet-tmpl/prog/en/includes/about-team.inc:50
 #, c-format
 msgid ""
 "This is the team who were responsible for the initial release of your "
@@ -57640,9 +57684,9 @@ msgid "Title (uniform): "
 msgstr "Titolo (uniforme): "
 
 #: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:58
-#, fuzzy, c-format
+#, c-format
 msgid "Title and author"
-msgstr "Città e paesi"
+msgstr "Titolo e autore"
 
 #: intranet-tmpl/prog/en/modules/catalogue/results.tt:355
 #: intranet-tmpl/prog/en/modules/catalogue/results.tt:356
@@ -58612,7 +58656,7 @@ msgid "Translate item type %s"
 msgstr "Traduci tipo di copia %s"
 
 #: intranet-tmpl/prog/en/modules/admin/localization.tt:67
-#: intranet-tmpl/prog/en/modules/about.tt:750
+#: intranet-tmpl/prog/en/modules/about.tt:753
 #, c-format
 msgid "Translation"
 msgstr "Traduzioni"
@@ -58622,12 +58666,12 @@ msgstr "Traduzioni"
 msgid "Translation (id %s) has been added successfully"
 msgstr "La traduzione (id %s) è stata aggiunta con successo"
 
-#: intranet-tmpl/prog/en/includes/about-team.inc:141
+#: intranet-tmpl/prog/en/includes/about-team.inc:143
 #, c-format
 msgid "Translation manager:"
 msgstr "Traduzioni:"
 
-#: intranet-tmpl/prog/en/includes/about-team.inc:147
+#: intranet-tmpl/prog/en/includes/about-team.inc:149
 #, c-format
 msgid "Translation managers:"
 msgstr "Traduzioni:"
@@ -60266,12 +60310,12 @@ msgstr "Verifica se vuoi cancellare degli utenti"
 msgid "Vermont Organization of Koha Automated Libraries (VOKAL), USA"
 msgstr "Vermont Organization of Koha Automated Libraries (VOKAL), USA"
 
-#: intranet-tmpl/prog/en/modules/about.tt:736
+#: intranet-tmpl/prog/en/modules/about.tt:739
 #, c-format
 msgid "Verovio"
 msgstr "Verovio"
 
-#: intranet-tmpl/prog/en/modules/about.tt:737
+#: intranet-tmpl/prog/en/modules/about.tt:740
 #, c-format
 msgid ""
 "Verovio is developed by the Swiss RISM Office with the support of the Swiss "
@@ -61012,9 +61056,9 @@ msgid "Weight"
 msgstr "Peso"
 
 #: intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:93
-#, fuzzy, c-format
+#, c-format
 msgid "Weight:"
-msgstr "Peso"
+msgstr "Peso:"
 
 #. %1$s: - Koha.Version.release | html -
 #: intranet-tmpl/prog/en/modules/installer/auth.tt:37
@@ -62287,7 +62331,7 @@ msgstr "Devi salvare il report prima di eseguirlo"
 #: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:32
 #, c-format
 msgid "You'll have to treat them individually. "
-msgstr ""
+msgstr "Devi trattarli individualmente."
 
 #: intranet-tmpl/prog/en/modules/admin/share_content.tt:51
 #, c-format
@@ -62990,6 +63034,11 @@ msgstr "qualsiasi biblioteca"
 msgid "any library "
 msgstr "qualsiasi biblioteca."
 
+#: intranet-tmpl/prog/en/modules/about.tt:704
+#, c-format
+msgid "api/swagger-v2-schema.json"
+msgstr ""
+
 #: intranet-tmpl/prog/en/modules/tags/review.tt:207
 #: intranet-tmpl/prog/en/modules/tags/review.tt:208
 #, c-format
@@ -63130,9 +63179,9 @@ msgid "biblionumber|borrowernumber"
 msgstr "biblionumber|borrowernumber"
 
 #: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:239
-#, fuzzy, c-format
+#, c-format
 msgid "budget_code"
-msgstr "Budget"
+msgstr "budget_code"
 
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/cn_browser.tt:53
 #: intranet-tmpl/prog/en/modules/acqui/invoice.tt:278
@@ -63208,7 +63257,7 @@ msgstr "di Allan Jardine è rilasciato con licenza BSD 3 e GPL v2."
 msgid "by Binny V A is licensed under the BSD license."
 msgstr "by Binny V A è distribuito con la licenza BSD."
 
-#: intranet-tmpl/prog/en/modules/about.tt:713
+#: intranet-tmpl/prog/en/modules/about.tt:716
 #, c-format
 msgid "by DIY Co is licensed under the "
 msgstr "di DIY Co è sotto la licenza "
@@ -63218,7 +63267,7 @@ msgstr "di DIY Co è sotto la licenza "
 msgid "by Dave Gandy is licensed under the "
 msgstr "di Dave Gandy è sotto la licenza "
 
-#: intranet-tmpl/prog/en/modules/about.tt:707
+#: intranet-tmpl/prog/en/modules/about.tt:710
 #, c-format
 msgid "by Denis Howlett is licensed under the "
 msgstr "di Dave Gandy è sotto la licenza "
@@ -63228,12 +63277,12 @@ msgstr "di Dave Gandy è sotto la licenza "
 msgid "by Eli Grey is licensed under an "
 msgstr "di Eli Grey è sotto la licenza "
 
-#: intranet-tmpl/prog/en/modules/about.tt:728
+#: intranet-tmpl/prog/en/modules/about.tt:731
 #, c-format
 msgid "by Google is a family of fonts licensed under the "
 msgstr "by Google è una famiglia di of fonts rilasciati sotto la "
 
-#: intranet-tmpl/prog/en/modules/about.tt:740
+#: intranet-tmpl/prog/en/modules/about.tt:743
 #, c-format
 msgid ""
 "by Klaus Hartl is a jQuery plugin for setting, reading, and deleting browser "
@@ -63242,7 +63291,7 @@ msgstr ""
 "di Klaus Hartl è un plugin jQuery per l'impostazione, la lettura e "
 "l'eliminazione dei cookie del browser, concesso in licenza con il "
 
-#: intranet-tmpl/prog/en/modules/about.tt:734
+#: intranet-tmpl/prog/en/modules/about.tt:737
 #, c-format
 msgid ""
 "by Lars Jung is a JavaScript library that generates QR codes, licensed under "
@@ -63260,7 +63309,7 @@ msgstr "di Marijn Haverbeke è sotto la licenza "
 msgid "by Moxiecode (Ephox) is licensed under the "
 msgstr "da Moxiecode (Ephox) ed è sotto la licenza "
 
-#: intranet-tmpl/prog/en/modules/about.tt:731
+#: intranet-tmpl/prog/en/modules/about.tt:734
 #, c-format
 msgid ""
 "by Some Web Media is a JavaScript library that makes any element on your "
@@ -63313,9 +63362,9 @@ msgid "call.ogg"
 msgstr "call.ogg"
 
 #: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:251
-#, fuzzy, c-format
+#, c-format
 msgid "callnumber"
-msgstr "Collocazione"
+msgstr "callnumber"
 
 #. For the first occurrence,
 #. %1$s:  max_holds_for_record | html 
@@ -63363,9 +63412,9 @@ msgid "cataloging the record"
 msgstr "catalogando il record"
 
 #: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:218
-#, fuzzy, c-format
+#, c-format
 msgid "ccode"
-msgstr "Codice a barre"
+msgstr "ccode"
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/includes/str/tinymce_i18n.inc:2
@@ -63473,7 +63522,7 @@ msgstr "controlli per la visibilità delle colonne in DataTables"
 #: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:238
 #, c-format
 msgid "copyno"
-msgstr ""
+msgstr "copyno"
 
 #: intranet-tmpl/prog/en/modules/reports/itemslost.tt:52
 #, c-format
@@ -63573,13 +63622,13 @@ msgid "define a notice"
 msgstr "definisci un avviso"
 
 #: intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:93
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "define weight as a positive number. Higher numbers indicate increased "
 "relevancy. "
 msgstr ""
-"Pesi: definisci i pesi usando numeri positivi. Numeri alti indicano "
-"rilevanza maggiore."
+"definisci i pesi usando numeri positivi. Numeri alti indicano rilevanza "
+"maggiore."
 
 #: intranet-tmpl/prog/en/includes/holds_table.inc:72
 #, c-format
@@ -63697,7 +63746,7 @@ msgstr "ending.ogg"
 msgid "euro-currency sign"
 msgstr "valuta euro"
 
-#: intranet-tmpl/prog/en/modules/about.tt:756
+#: intranet-tmpl/prog/en/modules/about.tt:759
 #, c-format
 msgid ""
 "euskara (Basque) Fernando Berrizbeitia, the librarians of Eima Katalogoa, "
@@ -63760,6 +63809,11 @@ msgstr "campo "
 #, c-format
 msgid "field(s) "
 msgstr "campo(i) "
+
+#: intranet-tmpl/prog/en/modules/about.tt:704
+#, fuzzy, c-format
+msgid "file is licensed under the "
+msgstr "è sotto la licenza "
 
 #: intranet-tmpl/prog/en/modules/members/members-update.tt:171
 #, c-format
@@ -63911,9 +63965,9 @@ msgid "history"
 msgstr "cronologia"
 
 #: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:187
-#, fuzzy, c-format
+#, c-format
 msgid "holdingbranch"
-msgstr "sottobiblioteca per le copie definita"
+msgstr "holdingbranch"
 
 #: intranet-tmpl/prog/en/modules/admin/checkmarc.tt:97
 #, c-format
@@ -63926,9 +63980,9 @@ msgid "holdingbranch defined"
 msgstr "sottobiblioteca per le copie definita"
 
 #: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:176
-#, fuzzy, c-format
+#, c-format
 msgid "homebranch"
-msgstr "sottobiblioteca definita"
+msgstr "homebranch"
 
 #: intranet-tmpl/prog/en/modules/admin/checkmarc.tt:83
 #, c-format
@@ -64024,7 +64078,7 @@ msgstr "tipi di authority non validi"
 msgid "is"
 msgstr "è"
 
-#: intranet-tmpl/prog/en/modules/about.tt:743
+#: intranet-tmpl/prog/en/modules/about.tt:746
 #, c-format
 msgid ""
 "is a \"simple, lightweight JavaScript API for handling cookies,\" licensed "
@@ -64032,17 +64086,17 @@ msgid ""
 msgstr ""
 "è una semplice e leggera API JavaScript per gestire cookie\", con licenza"
 
-#: intranet-tmpl/prog/en/modules/about.tt:722
+#: intranet-tmpl/prog/en/modules/about.tt:725
 #, c-format
 msgid "is a D3-based reusable chart library under the "
 msgstr "è una libreria per grafici basata su D3 e sotto la "
 
-#: intranet-tmpl/prog/en/modules/about.tt:725
+#: intranet-tmpl/prog/en/modules/about.tt:728
 #, c-format
 msgid "is a JavaScript library by Bram Stein licensed under the "
 msgstr "è una libreria JavaScript fatta da Bram Stein rilasciata sotto "
 
-#: intranet-tmpl/prog/en/modules/about.tt:719
+#: intranet-tmpl/prog/en/modules/about.tt:722
 #, c-format
 msgid ""
 "is a JavaScript library for manipulating documents based on data. It is "
@@ -64225,9 +64279,9 @@ msgstr "tipo di copia non definito"
 # Stefano Bargioni va tradotta?
 # Tajoli: si
 #: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:197
-#, fuzzy, c-format
+#, c-format
 msgid "itype"
-msgstr "Tipo di copia"
+msgstr "itype"
 
 #: intranet-tmpl/prog/en/modules/about.tt:628
 #, c-format
@@ -64294,8 +64348,8 @@ msgstr "jQuery treetable Plugin 3.1.0"
 msgid "jQueryUI"
 msgstr "jQueryUI"
 
-#: intranet-tmpl/prog/en/modules/about.tt:739
-#: intranet-tmpl/prog/en/modules/about.tt:740
+#: intranet-tmpl/prog/en/modules/about.tt:742
+#: intranet-tmpl/prog/en/modules/about.tt:743
 #, c-format
 msgid "jquery.cookie"
 msgstr "jquery.cookie"
@@ -64306,7 +64360,7 @@ msgstr "jquery.cookie"
 msgid "jquery.dataTables.grouping.js"
 msgstr "jquery.dataTables.grouping.js"
 
-#: intranet-tmpl/prog/en/modules/about.tt:712
+#: intranet-tmpl/prog/en/modules/about.tt:715
 #, c-format
 msgid "jquery.emojiarea.js"
 msgstr "jquery.emojiarea.js"
@@ -64316,7 +64370,7 @@ msgstr "jquery.emojiarea.js"
 msgid "jquery.multiple.select.js"
 msgstr "jquery.multiple.select.js"
 
-#: intranet-tmpl/prog/en/modules/about.tt:706
+#: intranet-tmpl/prog/en/modules/about.tt:709
 #, c-format
 msgid "jquery.tablednd.js"
 msgstr "jquery.tablednd.js"
@@ -64326,8 +64380,8 @@ msgstr "jquery.tablednd.js"
 msgid "kip sign"
 msgstr "simbolo kip"
 
-#: intranet-tmpl/prog/en/modules/about.tt:733
-#: intranet-tmpl/prog/en/modules/about.tt:734
+#: intranet-tmpl/prog/en/modules/about.tt:736
+#: intranet-tmpl/prog/en/modules/about.tt:737
 #, c-format
 msgid "kjua"
 msgstr "kjua"
@@ -64376,7 +64430,7 @@ msgstr "ultimo prestito il: %s"
 msgid "let blank for the entire field"
 msgstr "lascia vuoto l'intero campo"
 
-#: intranet-tmpl/prog/en/modules/about.tt:704
+#: intranet-tmpl/prog/en/modules/about.tt:707
 #, c-format
 msgid "library is licensed under "
 msgstr "la libreria è sotto la licenza "
@@ -64387,7 +64441,7 @@ msgid "library not defined"
 msgstr "biblioteca non definita"
 
 #: intranet-tmpl/prog/en/modules/about.tt:630
-#: intranet-tmpl/prog/en/modules/about.tt:746
+#: intranet-tmpl/prog/en/modules/about.tt:749
 #, c-format
 msgid "licensed under the "
 msgstr "è sotto la licenza "
@@ -64418,9 +64472,9 @@ msgid "loading_2.ogg"
 msgstr "loading_2.ogg"
 
 #: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:210
-#, fuzzy, c-format
+#, c-format
 msgid "loc"
-msgstr "Blocco"
+msgstr "loc"
 
 #: intranet-tmpl/prog/en/modules/reports/borrowers_stats.tt:94
 #, c-format
@@ -64540,9 +64594,9 @@ msgid "none"
 msgstr "nessuno"
 
 #: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:208
-#, fuzzy, c-format
+#, c-format
 msgid "nonpublic_note"
-msgstr "Nota privata:"
+msgstr "nonpublic_note"
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/includes/str/tinymce_i18n.inc:2
@@ -64583,9 +64637,9 @@ msgid "not running"
 msgstr "non in esecuzione"
 
 #: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:226
-#, fuzzy, c-format
+#, c-format
 msgid "notforloan"
-msgstr "Escluso dal prestito"
+msgstr "notforloan"
 
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:489
 #, c-format
@@ -64807,9 +64861,9 @@ msgid "previous"
 msgstr "precedente"
 
 #: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:249
-#, fuzzy, c-format
+#, c-format
 msgid "price"
-msgstr "Prezzo"
+msgstr "price"
 
 #: intranet-tmpl/prog/en/modules/patroncards/edit-layout.tt:119
 #: intranet-tmpl/prog/en/modules/patroncards/edit-layout.tt:173
@@ -64819,9 +64873,9 @@ msgid "pt"
 msgstr "pt"
 
 #: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:209
-#, fuzzy, c-format
+#, c-format
 msgid "public_note"
-msgstr "Nota pubblica"
+msgstr "public_note"
 
 #. %1$s:  suggestions_loo.publishercode | html 
 #. %2$s:  END 
@@ -64875,9 +64929,9 @@ msgid "reopen basketgroup"
 msgstr "Riaapri l'ordine d'acquisto"
 
 #: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:250
-#, fuzzy, c-format
+#, c-format
 msgid "replacement price"
-msgstr "Costo di sostituzione:"
+msgstr "replacement price"
 
 #. INPUT
 #: intranet-tmpl/prog/en/includes/reports-toolbar.inc:75
@@ -65177,7 +65231,7 @@ msgstr "Suggerimento"
 msgid "suggestion #%s"
 msgstr "suggerimento #%s"
 
-#: intranet-tmpl/prog/en/modules/about.tt:765
+#: intranet-tmpl/prog/en/modules/about.tt:768
 #, c-format
 msgid "suomi, suomen kieli (Finnish) Pasi Korkalo"
 msgstr "suomi, suomen kieli (Finnish) Pasi Korkalo"
@@ -65221,12 +65275,12 @@ msgstr "simbolo tenge"
 msgid "text/html; charset=utf-8"
 msgstr "text/html; charset=utf-8"
 
-#: intranet-tmpl/prog/en/modules/about.tt:713
+#: intranet-tmpl/prog/en/modules/about.tt:716
 #, c-format
 msgid "the Apache License, Version 2.0"
 msgstr "la Apache License, Version 2.0"
 
-#: intranet-tmpl/prog/en/modules/about.tt:704
+#: intranet-tmpl/prog/en/modules/about.tt:707
 #, c-format
 msgid ""
 "the Apache License, Version 2.0 (the \"Apache License\") or the GNU General "
@@ -65363,7 +65417,7 @@ msgstr "Aggiornata con successo"
 #: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:237
 #, c-format
 msgid "uri"
-msgstr ""
+msgstr "uri"
 
 #: intranet-tmpl/prog/en/modules/acqui/basketheader.tt:121
 #, c-format
@@ -65684,7 +65738,7 @@ msgstr "| Status: %s "
 msgid "×"
 msgstr "×"
 
-#: intranet-tmpl/prog/en/modules/about.tt:752
+#: intranet-tmpl/prog/en/modules/about.tt:755
 #, c-format
 msgid ""
 "العربية (Arabic) Version 3.2 to 3.4, 3.16 & 3.18 by KnowledgeWare "
