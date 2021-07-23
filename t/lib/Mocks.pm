@@ -45,7 +45,7 @@ sub mock_config {
     my $koha_config = Test::MockModule->new('Koha::Config');
     my ( $conf, $value ) = @_;
     $configs{$conf} = $value;
-    $koha_config->redefine('get', sub {
+    $koha_config->mock('get', sub {
         my ( $self, $conf ) = @_;
         if ( exists $configs{$conf} ) {
             return $configs{$conf}
