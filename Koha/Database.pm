@@ -37,11 +37,24 @@ use Koha::Config;
 
 our $database;
 
-# FIXME: It is useless to have a Koha::Database object since all methods
-# below act as class methods
-# Koha::Database->new->schema is exactly the same as Koha::Database->schema
-# We should use Koha::Database->schema everywhere and remove the `new` method
+=head2 new
+
+    $schema = Koha::Database->new->schema;
+
+    FIXME: It is useless to have a Koha::Database object since all methods
+    below act as class methods
+    Koha::Database->new->schema is exactly the same as Koha::Database->schema
+    We should use Koha::Database->schema everywhere and remove the `new` method
+
+=cut
+
 sub new { bless {}, shift }
+
+=head2 dbh
+
+    Returns a database handler without loading the DBIx::Class schema.
+
+=cut
 
 sub dbh {
     my $config = Koha::Config->get_instance;
