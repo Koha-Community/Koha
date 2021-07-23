@@ -1861,7 +1861,7 @@ VALUES ('iu', 'language', 'Inuktitut', now());
 INSERT INTO language_rfc4646_to_iso639 (rfc4646_subtag, iso639_2_code)
 VALUES ('iu', 'iku');
 
---Inupiaq
+-- Inupiaq
 
 INSERT INTO language_descriptions (subtag, type, lang, description)
 VALUES ('ik', 'language', 'en', 'Inupiaq');

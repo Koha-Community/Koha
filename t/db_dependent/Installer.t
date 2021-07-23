@@ -22,14 +22,14 @@
 # Add more tests here!!!
 
 use Modern::Perl;
-use Test::More tests => 19;
+use Test::More tests => 21;
 use File::Temp qw(tempfile);
 use utf8;
 
 use Koha::Database;
 
 BEGIN {
-    use_ok('C4::Installer', qw( column_exists index_exists foreign_key_exists primary_key_exists marc_framework_sql_list ));
+    use_ok('C4::Installer', qw( column_exists index_exists unique_key_exists foreign_key_exists primary_key_exists marc_framework_sql_list ));
 }
 
 ok( my $installer = C4::Installer->new(), 'Testing NewInstaller' );
@@ -69,6 +69,9 @@ ok( ! index_exists( 'borrowers', 'xxx'), 'Constraint xxx does not exist' );
 
 ok( foreign_key_exists( 'borrowers', 'borrowers_ibfk_1' ), 'FK borrowers_ibfk_1 exists' );
 ok( ! foreign_key_exists( 'borrowers', 'xxx' ), 'FK xxxx does not exist' );
+
+ok( unique_key_exists( 'items', 'itembarcodeidx' ), 'UNIQUE KEY itembarcodeidx exists' );
+ok( ! unique_key_exists( 'borrowers', 'xxx' ), 'UNIQUE KEY xxxx does not exist' );
 
 
 ok( primary_key_exists( 'borrowers', 'borrowernumber'), 'Borrowers has primary key on borrowernumber');

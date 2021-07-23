@@ -30,7 +30,7 @@ use vars qw(@ISA @EXPORT);
 BEGIN {
     require Exporter;
     @ISA = qw( Exporter );
-    push @EXPORT, qw( primary_key_exists foreign_key_exists index_exists column_exists TableExists marc_framework_sql_list);
+    push @EXPORT, qw( primary_key_exists unique_key_exists foreign_key_exists index_exists column_exists TableExists marc_framework_sql_list);
 };
 
 =head1 NAME
@@ -644,6 +644,13 @@ sub foreign_key_exists {
     my $dbh = C4::Context->dbh;
     my (undef, $infos) = $dbh->selectrow_array(qq|SHOW CREATE TABLE $table_name|);
     return $infos =~ m|CONSTRAINT `$constraint_name` FOREIGN KEY|;
+}
+
+sub unique_key_exists {
+    my ( $table_name, $constraint_name ) = @_;
+    my $dbh = C4::Context->dbh;
+    my (undef, $infos) = $dbh->selectrow_array(qq|SHOW CREATE TABLE $table_name|);
+    return $infos =~ m|UNIQUE KEY `$constraint_name`|;
 }
 
 sub index_exists {
