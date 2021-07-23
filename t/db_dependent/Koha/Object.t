@@ -390,7 +390,7 @@ subtest "to_api_mapping() tests" => sub {
 
 subtest "from_api_mapping() tests" => sub {
 
-    plan tests => 3;
+    plan tests => 5;
 
     $schema->storage->txn_begin;
 
@@ -447,6 +447,28 @@ subtest "from_api_mapping() tests" => sub {
             postal_code => 'city_zipcode'
         },
         'Fresh mapping loaded'
+    );
+
+    $city_class->unmock( 'to_api_mapping');
+    $city_class->mock( 'to_api_mapping', undef );
+
+    # Get a fresh object
+    $city = $builder->build_object({ class => 'Koha::Cities' });
+    is_deeply(
+        $city->from_api_mapping,
+        {},
+        'No to_api_mapping then empty hashref'
+    );
+
+    $city_class->unmock( 'to_api_mapping');
+    $city_class->mock( 'to_api_mapping', sub { return; } );
+
+    # Get a fresh object
+    $city = $builder->build_object({ class => 'Koha::Cities' });
+    is_deeply(
+        $city->from_api_mapping,
+        {},
+        'Empty to_api_mapping then empty hashref'
     );
 
     $schema->storage->txn_rollback;
