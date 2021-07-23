@@ -1636,9 +1636,9 @@ sub _FixPriority {
 
     # if index exists in array then move it to new position
     if ( $key > -1 && $rank ne 'del' && $rank > 0 ) {
-        my $new_rank = $rank -
-          1;    # $new_rank is what you want the new index to be in the array
+        my $new_rank = $rank - 1; # $new_rank is what you want the new index to be in the array
         my $moving_item = splice( @priority, $key, 1 );
+        $new_rank = scalar @priority if $new_rank > scalar @priority;
         splice( @priority, $new_rank, 0, $moving_item );
     }
 
@@ -1656,10 +1656,9 @@ sub _FixPriority {
         );
     }
 
-    $sth = $dbh->prepare( "SELECT reserve_id FROM reserves WHERE lowestPriority = 1 ORDER BY priority" );
-    $sth->execute();
-
     unless ( $ignoreSetLowestRank ) {
+        $sth = $dbh->prepare( "SELECT reserve_id FROM reserves WHERE lowestPriority = 1 AND biblionumber = ? ORDER BY priority" );
+        $sth->execute($biblionumber);
       while ( my $res = $sth->fetchrow_hashref() ) {
         _FixPriority({
             reserve_id => $res->{'reserve_id'},
