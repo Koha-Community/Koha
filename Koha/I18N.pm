@@ -27,12 +27,13 @@ use List::Util qw( first );
 use Locale::Messages qw(
     bindtextdomain
     gettext
+    LC_MESSAGES
     ngettext
     npgettext
     pgettext
     textdomain
 );
-use POSIX;
+use POSIX qw();
 use Koha::Cache::Memory::Lite;
 
 use parent 'Exporter';
