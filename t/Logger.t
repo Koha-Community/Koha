@@ -41,7 +41,7 @@ log4perl.appender.INTRANET=Log::Log4perl::Appender::File
 log4perl.appender.INTRANET.filename=$log
 log4perl.appender.INTRANET.mode=append
 log4perl.appender.INTRANET.layout=PatternLayout
-log4perl.appender.INTRANET.layout.ConversionPattern=[%d] [%p] %m %l %n
+log4perl.appender.INTRANET.layout.ConversionPattern=[%d] [%p] %m %l%n
 HERE
     );
 
