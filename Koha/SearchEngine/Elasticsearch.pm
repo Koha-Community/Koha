@@ -1218,7 +1218,7 @@ sub process_error {
     warn $msg; # simple logging
 
     # This is super-primitive
-    return "Unable to understand your search query, please rephrase and try again.\n" if $msg =~ /ParseException/;
+    return "Unable to understand your search query, please rephrase and try again.\n" if $msg =~ /ParseException|parse_exception/;
 
     return "Unable to perform your search. Please try again.\n";
 }
