@@ -35,7 +35,7 @@ our (@ISA, @EXPORT_OK);
 BEGIN {
     require Exporter;
     @ISA    = qw(Exporter);
-    @EXPORT = qw(
+    @EXPORT_OK = qw(
       GetPatronLists
 
       DelPatronList
