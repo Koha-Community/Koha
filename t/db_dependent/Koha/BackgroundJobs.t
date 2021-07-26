@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 11;
+use Test::More tests => 12;
 use Test::MockModule;
 use JSON qw( decode_json );
 
@@ -39,6 +39,10 @@ t::lib::Mocks::mock_userenv;
 
 my $net_stomp = Test::MockModule->new('Net::Stomp');
 $net_stomp->mock( 'send_with_receipt', sub { return 1 } );
+
+my $background_job_module = Test::MockModule->new('Koha::BackgroundJob');
+$background_job_module->mock( '_derived_class',
+    sub { t::lib::Koha::BackgroundJob::BatchTest->new } );
 
 my $data     = { a => 'aaa', b => 'bbb' };
 my $job_size = 10;
@@ -79,5 +83,7 @@ is_deeply(
     { total_records => 10, total_success => 10 },
     'Correct number of records processed'
 );
+
+is_deeply( $new_job->additional_report(), {} );
 
 $schema->storage->txn_rollback;

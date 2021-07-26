@@ -20,6 +20,9 @@ use JSON qw( decode_json encode_json );
 
 use Koha::BackgroundJobs;
 use Koha::DateUtils qw( dt_from_string );
+use Koha::Virtualshelves;
+
+use C4::Context;
 use C4::Biblio;
 use C4::MarcModificationTemplates;
 
@@ -138,6 +141,26 @@ sub enqueue {
         job_size => scalar @record_ids,
         job_args => {mmtid => $mmtid, record_ids => \@record_ids,}
     });
+}
+
+=head3 additional_report
+
+Pass the list of lists/virtual shelves the logged in user has write permissions.
+
+It will enable the "add modified records to list" feature.
+
+=cut
+
+sub additional_report {
+    my ($self) = @_;
+
+    my $loggedinuser = C4::Context->userenv ? C4::Context->userenv->{'number'} : undef;
+    return {
+        lists => scalar Koha::Virtualshelves->search(
+            [ { category => 1, owner => $loggedinuser }, { category => 2 } ]
+        ),
+    };
+
 }
 
 1;

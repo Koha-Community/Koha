@@ -51,14 +51,8 @@ if ( $op eq 'view' ) {
         }
         else {
             $template->param( job => $job, );
-            $template->param(
-                lists => scalar Koha::Virtualshelves->search(
-                    [
-                        { category => 1, owner => $loggedinuser },
-                        { category => 2 }
-                    ]
-                )
-            ) if $job->type eq 'batch_biblio_record_modification';
+            my $report = $job->additional_report() || {};
+            $template->param( %$report );
         }
     } else {
         $op = 'list';

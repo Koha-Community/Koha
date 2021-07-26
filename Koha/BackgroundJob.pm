@@ -152,16 +152,14 @@ Process the job!
 sub process {
     my ( $self, $args ) = @_;
 
-    my $job_type = $self->type;
-    return $job_type eq 'batch_biblio_record_modification'
-      ? Koha::BackgroundJob::BatchUpdateBiblio->process($args)
-      : $job_type eq 'batch_authority_record_modification'
-      ? Koha::BackgroundJob::BatchUpdateAuthority->process($args)
-      : $job_type eq 'batch_biblio_record_deletion'
-      ? Koha::BackgroundJob::BatchDeleteBiblio->process($args)
-      : $job_type eq 'batch_authority_record_deletion'
-      ? Koha::BackgroundJob::BatchDeleteAuthority->process($args)
-      : Koha::Exceptions::Exception->throw('->process called without valid job_type');
+    return {} if ref($self) ne 'Koha::BackgroundJob';
+
+    my $derived_class = $self->_derived_class;
+
+    $args ||= {};
+
+    return $derived_class->process({job_id => $self->id, %$args});
+
 }
 
 =head3 job_type
@@ -203,6 +201,22 @@ sub report {
     return $data_dump->{report};
 }
 
+=head3 additional_report
+
+Build additional variables for the job detail view.
+
+=cut
+
+sub additional_report {
+    my ( $self ) = @_;
+
+    return {} if ref($self) ne 'Koha::BackgroundJob';
+
+    my $derived_class = $self->_derived_class;
+
+    return $derived_class->additional_report({job_id => $self->id});
+}
+
 =head3 cancel
 
 Cancel a job.
@@ -212,6 +226,20 @@ Cancel a job.
 sub cancel {
     my ( $self ) = @_;
     $self->status('cancelled')->store;
+}
+
+sub _derived_class {
+    my ( $self ) = @_;
+    my $job_type = $self->type;
+    return $job_type eq 'batch_biblio_record_modification'
+      ? Koha::BackgroundJob::BatchUpdateBiblio->new
+      : $job_type eq 'batch_authority_record_modification'
+      ? Koha::BackgroundJob::BatchUpdateAuthority->new
+      : $job_type eq 'batch_biblio_record_deletion'
+      ? Koha::BackgroundJob::BatchDeleteBiblio->new
+      : $job_type eq 'batch_authority_record_deletion'
+      ? Koha::BackgroundJob::BatchDeleteAuthority->new
+      : Koha::Exceptions::Exception->throw($job_type . ' is not a valid job_type')
 }
 
 sub _type {
