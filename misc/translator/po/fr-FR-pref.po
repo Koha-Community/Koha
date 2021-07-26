@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Koha 21.05\n"
 "POT-Creation-Date: 2013-05-07 08:52+0200\n"
-"PO-Revision-Date: 2021-06-07 10:15+0000\n"
-"Last-Translator: Aurélie B <aurelie.berut@enssib.fr>\n"
+"PO-Revision-Date: 2021-07-06 13:39+0000\n"
+"Last-Translator: ManuB. <e.betemps@ville-caluire.fr>\n"
 "Language-Team: French (France) (http://www.transifex.com/projects/p/koha/"
 "language/fr_FR/)\n"
 "Language: fr\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Generator: Pootle 2.8\n"
-"X-POOTLE-MTIME: 1623060904.430681\n"
+"X-POOTLE-MTIME: 1625578767.889663\n"
 "X-Pootle-Path: /fr/21.05/fr-FR-pref.po\n"
 "X-Pootle-Revision: 1\n"
 
@@ -7536,7 +7536,7 @@ msgstr "."
 msgid ""
 "enhanced_content.pref#NovelistSelectStaffView# Display Novelist Select staff "
 "interface content"
-msgstr ""
+msgstr "Afficher le contenu professionnel de la Sélection NoveList"
 
 # Enhanced content > Novelist Select
 msgid "enhanced_content.pref#NovelistSelectStaffView# above the holdings table"
@@ -7544,7 +7544,7 @@ msgstr "au-dessus du tableau des exemplaires"
 
 # Enhanced content > Novelist Select
 msgid "enhanced_content.pref#NovelistSelectStaffView# below the holdings table"
-msgstr "En dessous du tableau des exemplaires"
+msgstr "en dessous du tableau des exemplaires"
 
 # Enhanced content > Novelist Select
 msgid "enhanced_content.pref#NovelistSelectStaffView# in a tab"
@@ -8184,14 +8184,9 @@ msgstr ""
 "dans l'interface."
 
 # I18N/L10N
-msgid ""
-"i18n_l10n.pref#TimeFormat# . <br/> <strong>NOTE:</strong> Do not change this "
-"preference on a production server with overdue items that are accruing "
-"fines. Doing so will result in duplicate fines!"
-msgstr ""
-"<br/><strong>Note :</strong> Ne changez pas cette préférence sur un serveur "
-"en production qui a des exemplaires en retard pour lesquels des amendes "
-"s'accumulent. Dans ce cas, il y aurait des amendes en double !"
+#, fuzzy
+msgid "i18n_l10n.pref#TimeFormat# ."
+msgstr "."
 
 # I18N/L10N
 msgid "i18n_l10n.pref#TimeFormat# 12 hour format ( e.g. \"02:18 PM\" )"
@@ -8251,14 +8246,9 @@ msgstr ""
 "lettres majuscules séparées par un espace."
 
 # I18N/L10N
-msgid ""
-"i18n_l10n.pref#dateformat# . <br/> <strong>NOTE:</strong> Do not change this "
-"preference on a production server with overdue items that are accruing "
-"fines. Doing so will result in duplicate fines!"
-msgstr ""
-"<br/> <strong>NOTE:</strong> Ne changez pas cette préférence sur un serveur "
-"en production qui a des exemplaires en retard pour lesquels des amendes "
-"s'accumulent. Dans ce cas, il y aurait des amendes en double !"
+#, fuzzy
+msgid "i18n_l10n.pref#dateformat# ."
+msgstr "dd.mm.yyyy"
 
 # I18N/L10N
 msgid "i18n_l10n.pref#dateformat# Format dates like"
@@ -8529,6 +8519,23 @@ msgstr "Journaliser"
 # Logging > Logging
 msgid "logs.pref#IssueLog# when items are checked out."
 msgstr "les prêts."
+
+# Logging > Logging
+#, fuzzy
+msgid ""
+"logs.pref#NewsLog#  changes to news entries and other contents managed in "
+"the news tool."
+msgstr " les modifications aux modèles de notification."
+
+# Logging > Logging
+#, fuzzy
+msgid "logs.pref#NewsLog# Don't log"
+msgstr "Ne pas journaliser"
+
+# Logging > Logging
+#, fuzzy
+msgid "logs.pref#NewsLog# Log"
+msgstr "Journaliser"
 
 # Logging > Logging
 msgid "logs.pref#NoticesLog#  changes to notice templates."
@@ -12125,8 +12132,8 @@ msgstr "Non"
 #, fuzzy
 msgid ""
 "patrons.pref#TrackLastPatronActivity# The first time each day that a patron "
-"either logs into the OPAC or connects to Koha via SIP, borrowers.lastseen "
-"will update with the current date and time."
+"either logs into the OPAC, connects to Koha via SIP, or checks an item out, "
+"borrowers.lastseen will update with the current date and time."
 msgstr ""
 "Chaque fois qu'un adhérent se connectera, le borrowers.lastseen sera mis à "
 "jour avec l'heure actuelle."
@@ -14217,6 +14224,24 @@ msgstr ""
 "colonnes d'un rapport demandé par l'intermédiaire du Web service des "
 "rapports."
 
+# Circulation > Article requests
+#, fuzzy
+#~ msgid "circulation.pref#ArticleRequestsOpacHostRedirection# Disable"
+#~ msgstr "Permettre"
+
+# Circulation > Article requests
+#, fuzzy
+#~ msgid "circulation.pref#ArticleRequestsOpacHostRedirection# Enable"
+#~ msgstr "Permettre"
+
+# Circulation > Article requests
+#, fuzzy
+#~ msgid ""
+#~ "circulation.pref#ArticleRequestsSupportedFormats# The following article "
+#~ "request formats are supported:"
+#~ msgstr ""
+#~ "les liens vers la demande d'article dans les résultats de la recherche."
+
 # Circulation > Batch checkout
 #~ msgid ""
 #~ "circulation.pref#BatchCheckoutsValidCategories# (list of patron "
@@ -14228,6 +14253,26 @@ msgstr ""
 #~ "circulation.pref#OPACHoldsIfAvailableAtPickupExceptions# (list of patron "
 #~ "categories separated with a pipe '|')"
 #~ msgstr "(liste des catégories d'adhérents séparées par un pipe '|')"
+
+# I18N/L10N
+#~ msgid ""
+#~ "i18n_l10n.pref#TimeFormat# . <br/> <strong>NOTE:</strong> Do not change "
+#~ "this preference on a production server with overdue items that are "
+#~ "accruing fines. Doing so will result in duplicate fines!"
+#~ msgstr ""
+#~ "<br/><strong>Note :</strong> Ne changez pas cette préférence sur un "
+#~ "serveur en production qui a des exemplaires en retard pour lesquels des "
+#~ "amendes s'accumulent. Dans ce cas, il y aurait des amendes en double !"
+
+# I18N/L10N
+#~ msgid ""
+#~ "i18n_l10n.pref#dateformat# . <br/> <strong>NOTE:</strong> Do not change "
+#~ "this preference on a production server with overdue items that are "
+#~ "accruing fines. Doing so will result in duplicate fines!"
+#~ msgstr ""
+#~ "<br/> <strong>NOTE:</strong> Ne changez pas cette préférence sur un "
+#~ "serveur en production qui a des exemplaires en retard pour lesquels des "
+#~ "amendes s'accumulent. Dans ce cas, il y aurait des amendes en double !"
 
 # I18N/L10N
 #~ msgid ""

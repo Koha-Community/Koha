@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 21.05\n"
-"POT-Creation-Date: 2021-06-20 00:38-0300\n"
+"POT-Creation-Date: 2021-07-19 08:43-0300\n"
 "PO-Revision-Date: 2021-01-06 16:41+0000\n"
 "Last-Translator: vudoquynh <quynhvd@thanglong.edu.vn>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -868,7 +868,7 @@ msgstr "%s%s %s %sKhông được ghi mượn %s "
 #. %19$s:  END 
 #. %20$s:  IF ( ActionsLoo.conditional_regex ) 
 #. %21$s:  END 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:172
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:175
 #, fuzzy, c-format
 msgid ""
 "%s %s %s %s if %s %s unless %s %s%s$%s%s %s exists %s %s does not exist %s "
@@ -3364,7 +3364,7 @@ msgstr "%s %s ngày %s Không có thời hạn cho quy định này. %s "
 
 #. %1$s:  END 
 #. %2$s:  IF ( MEMBERS ) 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:390
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:391
 #, c-format
 msgid "%s %s for "
 msgstr "%s %s với "
@@ -3445,7 +3445,7 @@ msgstr "%s %s tới %s %s "
 #. %5$s:  ActionsLoo.to_subfield | html 
 #. %6$s:  END 
 #. %7$s:  IF ( ActionsLoo.to_regex_search ) 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:165
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:168
 #, fuzzy, c-format
 msgid "%s %s to %s%s$%s%s %s using RegEx s"
 msgstr "%s %s tới %s%s$%s%s %s sử dụng RegEx s"
@@ -3510,7 +3510,7 @@ msgstr "%s %s được chuyển."
 #. %51$s:  log_interface | html 
 #. %52$s:     END 
 #. %53$s:  END 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:97
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:98
 #, fuzzy, c-format
 msgid ""
 "%s %s%s %s %s %s %s %sAdd %sDelete %sModify %sCheckout %sReturn %sCreate "
@@ -3652,7 +3652,7 @@ msgstr "%s, Tác giả: %s%s%s, %s%s "
 #. %3$s:  checkout_info.biblio.author | html 
 #. %4$s:  END 
 #. %5$s:  IF ( checkout_info.item.itemnotes ) 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:156
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:157
 #, fuzzy, c-format
 msgid "%s %s, by %s%s%s- "
 msgstr "%s, Tác giả: %s%s "
@@ -4067,6 +4067,14 @@ msgid ""
 "%s %sNew %sOrdered %sPartially received %sReceived %sCancelled %s "
 "%s(standing order)%s "
 msgstr "%s %sTạo mới %sDự kiến %sNhận một phần %sTừ chối %sBị hủy bỏ %s "
+
+#. %1$s:  END 
+#. %2$s:         CASE 'NEWS'      
+#. %3$s:  UNLESS Koha.Preference('NewsLog') 
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:97
+#, fuzzy, c-format
+msgid "%s %sNews%s "
+msgstr "%s%s Nơi xuất bản: "
 
 #. %1$s:  selected=relationship | html 
 #. %2$s:  PROCESS selectoptionopen value='' 
@@ -4943,6 +4951,14 @@ msgid ""
 "Koha "
 msgstr "&rsaquo; Lô %s %s &rsaquo; Quản lý các bản ghi đã được kiểm duyệt %s "
 
+#. %1$s:  IF patron 
+#. %2$s:  INCLUDE 'patron-title.inc' invert_name = 1 no_html = 1 
+#. %3$s:  END 
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:11
+#, fuzzy, c-format
+msgid "%s Batch check out to %s &rsaquo; %s Circulation &rsaquo; Koha "
+msgstr "Koha &rsaquo; Phân hệ lưu thông &rsaquo; Ghi trả %s"
+
 #. %1$s:  FOR w IN warnHiddenBiblionumbers 
 #. %2$s:  w.frameworkcode | html 
 #. %3$s:  w.interface | html 
@@ -5292,7 +5308,7 @@ msgstr ""
 #. %19$s:  ActionsLoo.from_subfield | html 
 #. %20$s:  END 
 #. %21$s:  IF ( ActionsLoo.field_value ) 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:146
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:149
 #, fuzzy, c-format
 msgid ""
 "%s Delete %s %s Add new %s %s Update existing or add new %s %s Move %s %s "
@@ -5614,18 +5630,6 @@ msgstr ""
 #, c-format
 msgid "%s Initials: "
 msgstr "%sTên viết tắt: "
-
-#. %1$s:  IF patron 
-#. %2$s:  INCLUDE 'patron-title.inc' invert_name = 1 no_html = 1 
-#. %3$s:  END 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:11
-#, fuzzy, c-format
-msgid ""
-"%s Issuing items to %s &rsaquo; Batch check out &rsaquo; %s Circulation "
-"&rsaquo; Koha "
-msgstr ""
-"Koha &rsaquo; Phân hệ lưu thông %s &rsaquo; Ghi mượn tài liệu tới bạn đọc %s "
-"%s "
 
 #. %1$s:  ELSIF (hold.inprocessing) 
 #: koha-tmpl/intranet-tmpl/prog/en/includes/holds_table.inc:127
@@ -6312,7 +6316,7 @@ msgstr "%sĐang phân tích tệp tin tải lên "
 #. %3$s:  END 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/member-password.tt:29
 #, fuzzy, c-format
-msgid "%s Password Updated %s Change username and/or password %s "
+msgid "%s Password updated %s Change username and/or password %s "
 msgstr ""
 "&rsaquo; %sMật khẩu được cập nhật thành công!%sĐổi tên và mật khẩu đăng nhập"
 "%s"
@@ -7256,32 +7260,6 @@ msgstr "%s%s %s Bạn tìm kiếm %s"
 msgid "%s ZIP/Postal code: "
 msgstr "%s Mã bưu chính: "
 
-#. %1$s:  END 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/tools-menu.inc:102
-#, c-format
-msgid ""
-"%s [%% IF ( CAN_user_tools_edit_calendar || "
-"CAN_user_tools_manage_csv_profiles || CAN_user_tools_view_system_logs || "
-"CAN_user_tools_edit_news || CAN_user_tools_schedule_tasks || "
-"CAN_user_tools_edit_quotes || ( Koha.ArePluginsEnabled() && "
-"CAN_user_plugins_tool ) || CAN_user_tools_upload_general_files || "
-"CAN_user_tools_access_files ) %%] "
-msgstr ""
-
-#. %1$s:  END 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/tools-menu.inc:49
-#, c-format
-msgid ""
-"%s [%% IF ( CAN_user_tools_items_batchdel || CAN_user_tools_items_batchmod "
-"|| CAN_user_tools_records_batchdel || CAN_user_tools_records_batchmod || "
-"CAN_user_tools_export_catalog || CAN_user_tools_inventory || "
-"CAN_user_tools_label_creator || CAN_user_tools_rotating_collections || "
-"( CAN_user_stockrotation_manage_rotas && Koha.Preference('StockRotation') ) "
-"|| CAN_user_tools_marc_modification_templates || "
-"CAN_user_tools_stage_marc_import || CAN_user_tools_manage_staged_marc || "
-"CAN_user_tools_upload_local_cover_images ) %%] "
-msgstr ""
-
 #. %1$s:  ELSIF ( hardduedatecompare == '1' ) 
 #. %2$s:  hardduedate | $KohaDates 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:256
@@ -7571,7 +7549,7 @@ msgid "%s item records found and staged"
 msgstr "Tìm thấy %s bản tài liệu và đã được duyệt"
 
 #. A
-#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:71
+#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:70
 msgid ""
 "%s item(s) are attached to this record. You must delete all items before "
 "deleting this record."
@@ -7746,31 +7724,31 @@ msgid "%s overwritten %s(last was %s)%s"
 msgstr "%s tài khoản bạn đọc được ghi đè %s(bạn đọc cuối cùng %s)%s"
 
 #. %1$s:  TotalDel | html 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:251
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:252
 #, c-format
 msgid "%s patrons have been successfully deleted"
 msgstr "Bạn đã xóa vĩnh viễn %s tài khoản bạn đọc"
 
 #. %1$s:  TotalDel | html 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:249
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:250
 #, c-format
 msgid "%s patrons have been successfully moved to trash"
 msgstr "Bạn đã chuyển%s  tài khoản bạn đọc tới thùng rác"
 
 #. %1$s:  patrons_to_delete.size || 0 | html 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:186
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:187
 #, fuzzy, c-format
 msgid "%s patrons will be deleted"
 msgstr "%s%s %s0 %s tài khoản bạn đọc sẽ bị xóa"
 
 #. %1$s:  TotalDel | html 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:244
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:245
 #, c-format
 msgid "%s patrons would have been removed (if it wasn't a test run)"
 msgstr "%s tài khoản bạn đọc sẽ bị loại bỏ (nếu nó không được sử dụng)"
 
 #. %1$s:  patrons_to_anonymize.count || 0 | html 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:187
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:188
 #, fuzzy, c-format
 msgid "%s patrons' checkout histories will be anonymized"
 msgstr "%s%s %s0 %s lịch sử ghi mượn sẽ bị loại bỏ"
@@ -8106,7 +8084,7 @@ msgstr "%sIn %s nhãn gáy tài liệu%sIn %s nhãn gáy tài liệu%s"
 #. %7$s:  loopro.object | html 
 #. %8$s:  END 
 #. %9$s:  END 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:333
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:334
 #, fuzzy, c-format
 msgid "%s%s%s %s (%s) %sMember %s%s%s "
 msgstr "%s%s%s %s (%s) %sThành viên %s%s%s "
@@ -10750,7 +10728,7 @@ msgid "-- Choose one -- "
 msgstr "-- Lựa chọn mẫu --"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/set-library.tt:117
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:325
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:328
 #, fuzzy, c-format
 msgid "-- None --"
 msgstr "%s Không giới hạn "
@@ -10930,7 +10908,7 @@ msgstr "1/2"
 msgid "10 characters maximum"
 msgstr "ký tự"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:224
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:227
 #, c-format
 msgid "1st"
 msgstr "1st"
@@ -11271,8 +11249,8 @@ msgstr "Tệp tin chứa đăng ký cá biệt: "
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/access_files.tt:6
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/access_files.tt:34
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:156
-#: koha-tmpl/intranet-tmpl/prog/en/includes/tools-menu.inc:134
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:152
+#: koha-tmpl/intranet-tmpl/prog/en/includes/tools-menu.inc:125
 #, fuzzy, c-format
 msgid "Access files"
 msgstr "Tệp tin chứa đăng ký cá biệt: "
@@ -11282,7 +11260,7 @@ msgstr "Tệp tin chứa đăng ký cá biệt: "
 msgid "Access files "
 msgstr "Tệp tin chứa đăng ký cá biệt: "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:157
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:153
 #, c-format
 msgid "Access files stored on the server, like log files or reports"
 msgstr ""
@@ -11567,7 +11545,7 @@ msgstr "Báo cáo phân hệ bổ sung"
 msgid "Acquisitions statistics "
 msgstr "Báo cáo phân hệ bổ sung "
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/acquisitions-menu.inc:16
+#: koha-tmpl/intranet-tmpl/prog/en/includes/acquisitions-menu.inc:17
 #, fuzzy, c-format
 msgid "Acquisitions statistics wizard"
 msgstr "Báo cáo phân hệ bổ sung "
@@ -11583,9 +11561,9 @@ msgstr "Báo cáo phân hệ bổ sung "
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/dictionary.tt:135
 #: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:494
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:355
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:118
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:121
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/scheduler.tt:81
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:311
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:312
 #: koha-tmpl/intranet-tmpl/prog/en/includes/str/tinymce_i18n.inc:2
 #, c-format
 msgid "Action"
@@ -11670,7 +11648,7 @@ msgstr "Xử lý nếu không tìm thấy: "
 #: koha-tmpl/intranet-tmpl/prog/en/modules/plugins/plugins-home.tt:124
 #: koha-tmpl/intranet-tmpl/prog/en/modules/pos/register.tt:97
 #: koha-tmpl/intranet-tmpl/prog/en/modules/pos/register.tt:186
-#: koha-tmpl/intranet-tmpl/prog/en/modules/pos/register.tt:248
+#: koha-tmpl/intranet-tmpl/prog/en/modules/pos/register.tt:252
 #: koha-tmpl/intranet-tmpl/prog/en/modules/pos/registers.tt:81
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:286
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/checkexpiration.tt:107
@@ -11681,7 +11659,7 @@ msgstr "Xử lý nếu không tìm thấy: "
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/csv-profiles.tt:305
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/koha-news.tt:156
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/letter.tt:183
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:90
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:92
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/problem-reports.tt:82
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/quotes-upload.tt:83
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/quotes.tt:113
@@ -11720,12 +11698,12 @@ msgstr "Thao tác"
 msgid "Actions "
 msgstr "Thao tác "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:109
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:112
 #, fuzzy, c-format
 msgid "Actions for "
 msgstr "Thao tác "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:217
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:218
 #, fuzzy, c-format
 msgid "Actions:"
 msgstr "Thao tác"
@@ -11894,7 +11872,7 @@ msgstr "Tạo bộ OAI"
 msgid "Add a new OAI set "
 msgstr "Tạo bộ OAI"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:208
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:211
 #, c-format
 msgid "Add a new action"
 msgstr "Tạo thao tác mới"
@@ -11965,7 +11943,7 @@ msgid "Add a substitution"
 msgstr "Nhan đề ấn phẩm"
 
 #. INPUT type=submit
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:290
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:293
 msgid "Add action"
 msgstr "Tạo thao tác"
 
@@ -12270,7 +12248,7 @@ msgstr "Chỉnh sửa biểu ghi bằng các mẫu sau đây: "
 msgid "Add multiple copies of this item"
 msgstr "Tạo nhiều bản tài liệu"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:214
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:217
 #, fuzzy, c-format
 msgid "Add new"
 msgstr "Tạo "
@@ -12358,7 +12336,7 @@ msgstr ""
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:95
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:544
-#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:196
+#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:195
 #, c-format
 msgid "Add order"
 msgstr "Tạo đơn hàng"
@@ -12564,8 +12542,8 @@ msgstr "Tạo giỏ đặt hàng"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:92
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:527
-#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:106
-#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:113
+#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:105
+#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:112
 #, c-format
 msgid "Add to cart"
 msgstr "Thêm vào giỏ tài liệu"
@@ -12576,7 +12554,7 @@ msgid "Add to list"
 msgstr "Thêm vào giá sách ảo"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:99
-#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:124
+#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:123
 #, fuzzy, c-format
 msgid "Add to list "
 msgstr "Thêm vào giá sách ảo"
@@ -12781,8 +12759,8 @@ msgstr "Trường con bổ sung (XML)"
 msgid "Additional thanks to..."
 msgstr "Sự đóng góp của các cá nhân..."
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:101
-#: koha-tmpl/intranet-tmpl/prog/en/includes/tools-menu.inc:107
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:97
+#: koha-tmpl/intranet-tmpl/prog/en/includes/tools-menu.inc:98
 #, c-format
 msgid "Additional tools"
 msgstr "Công cụ bổ trợ"
@@ -12941,7 +12919,7 @@ msgstr "Thêm ảnh bìa cho biểu ghi"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/usage_statistics.tt:23
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/z3950servers.tt:36
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:25
-#: koha-tmpl/intranet-tmpl/prog/en/includes/acquisitions-menu.inc:21
+#: koha-tmpl/intranet-tmpl/prog/en/includes/acquisitions-menu.inc:26
 #: koha-tmpl/intranet-tmpl/prog/en/includes/header.inc:65
 #: koha-tmpl/intranet-tmpl/prog/en/includes/pos-menu.inc:11
 #: koha-tmpl/intranet-tmpl/prog/en/includes/prefs-menu.inc:24
@@ -13144,7 +13122,7 @@ msgstr "Tài liệu không phù hợp với lứa tuổi %s."
 #. For the first occurrence,
 #. %1$s:  AGE_RESTRICTION | html 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:433
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:163
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:164
 #, c-format
 msgid "Age restriction %s."
 msgstr "Tài liệu không phù hợp với lứa tuổi %s."
@@ -13267,13 +13245,13 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/subscription-bib-search.tt:25
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/subscription-bib-search.tt:37
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/koha-news.tt:446
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:223
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:199
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:201
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:220
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:222
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:250
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:252
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:226
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:200
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:202
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:221
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:223
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:251
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:253
 #: koha-tmpl/intranet-tmpl/prog/en/includes/additional-fields-entry.inc:12
 #: koha-tmpl/intranet-tmpl/prog/en/includes/av-build-dropbox.inc:16
 #: koha-tmpl/intranet-tmpl/prog/en/includes/subscriptions-search.inc:33
@@ -13307,7 +13285,7 @@ msgstr "Tất cả ngân sách"
 
 #. %1$s:  do_anonym | html 
 #. %2$s:  last_issue_date | $KohaDates 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:258
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:259
 #, fuzzy, c-format
 msgid "All checkouts (%s) older than %s have been anonymized"
 msgstr ""
@@ -13843,7 +13821,6 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/acqui-home.tt:115
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoice.tt:162
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/offline.tt:202
-#: koha-tmpl/intranet-tmpl/prog/en/modules/offline_circ/list.tt:51
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/accountline-details.tt:78
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/accountline-details.tt:149
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/boraccount.tt:75
@@ -13851,7 +13828,8 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/pay.tt:72
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/paycollect.tt:137
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/paycollect.tt:215
-#: koha-tmpl/intranet-tmpl/prog/en/modules/pos/register.tt:247
+#: koha-tmpl/intranet-tmpl/prog/en/modules/offline_circ/list.tt:51
+#: koha-tmpl/intranet-tmpl/prog/en/modules/pos/register.tt:251
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/cash_register_stats.tt:167
 #, c-format
 msgid "Amount"
@@ -13883,7 +13861,7 @@ msgid "Amount outstanding"
 msgstr "Còn nợ"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/boraccount.tt:251
-#: koha-tmpl/intranet-tmpl/prog/en/modules/pos/register.tt:298
+#: koha-tmpl/intranet-tmpl/prog/en/modules/pos/register.tt:302
 #, fuzzy, c-format
 msgid "Amount paid: "
 msgstr "Số tiền: "
@@ -14095,7 +14073,7 @@ msgstr ""
 msgid "Analytics"
 msgstr "Tài liệu chủ"
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:22
+#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:21
 #, c-format
 msgid "Analyze items"
 msgstr "Sửa tài liệu chủ"
@@ -14121,7 +14099,7 @@ msgstr "Tác giả"
 msgid "Animals and Nature"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:154
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:155
 #, c-format
 msgid "Anonymize checkout history"
 msgstr "Xóa lịch sử ghi mượn"
@@ -14156,7 +14134,7 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:1124
 #: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:1145
 #: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:1177
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:131
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:132
 #: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:58
 #: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:68
 #, c-format
@@ -15111,7 +15089,7 @@ msgstr "Koha &rsaquo; Phân hệ biên mục &rsaquo; Nhập biểu ghi MARC"
 msgid "Attach another item"
 msgstr "Chuyển tài liệu khác"
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:59
+#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:58
 #, c-format
 msgid "Attach item"
 msgstr "Lấy tài liệu từ biểu ghi khác"
@@ -15451,7 +15429,7 @@ msgid "Authority #%s (%s)"
 msgstr "Biểu ghi nhất quán số %s (%s)"
 
 #. %1$s:  loopro.object | html 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:349
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:350
 #, c-format
 msgid "Authority %s"
 msgstr "Dữ liệu kiểm soát %s"
@@ -15706,8 +15684,8 @@ msgstr "Tổng số gia hạn"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/automatic_item_modification_by_age.tt:24
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/automatic_item_modification_by_age.tt:61
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:204
-#: koha-tmpl/intranet-tmpl/prog/en/includes/tools-menu.inc:72
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:195
+#: koha-tmpl/intranet-tmpl/prog/en/includes/tools-menu.inc:65
 #, fuzzy, c-format
 msgid "Automatic item modifications by age"
 msgstr "Chỉnh sửa bản tài liệu theo lô"
@@ -15819,7 +15797,7 @@ msgstr "Thời gian ghi mượn trung bình"
 msgid "Average loan time &rsaquo; Reports &rsaquo; Koha"
 msgstr "Koha &rsaquo; Báo cáo &rsaquo; Tài liệu bị mất"
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:92
+#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:91
 #, c-format
 msgid "BIBTEX"
 msgstr "BibTex"
@@ -15937,7 +15915,7 @@ msgstr "Mar"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/branchtransfers.tt:200
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:486
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:1056
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:140
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:141
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/offline.tt:120
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/offline.tt:164
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/offline.tt:182
@@ -15952,7 +15930,6 @@ msgstr "Mar"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/labels/result.tt:70
 #: koha-tmpl/intranet-tmpl/prog/en/modules/labels/search.tt:60
 #: koha-tmpl/intranet-tmpl/prog/en/modules/labels/search.tt:61
-#: koha-tmpl/intranet-tmpl/prog/en/modules/offline_circ/list.tt:49
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/accountline-details.tt:74
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/boraccount.tt:68
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/holdshistory.tt:59
@@ -15960,6 +15937,7 @@ msgstr "Mar"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:852
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/pay.tt:66
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/readingrec.tt:71
+#: koha-tmpl/intranet-tmpl/prog/en/modules/offline_circ/list.tt:49
 #: koha-tmpl/intranet-tmpl/prog/en/modules/patroncards/edit-layout.tt:296
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/cash_register_stats.tt:169
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/catalogue_out.tt:78
@@ -16010,7 +15988,7 @@ msgstr "Tệp tin chứa đăng ký cá biệt: "
 msgid "Barcode file: "
 msgstr "Tệp tin chứa đăng ký cá biệt: "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:105
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:106
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batchMod.tt:59
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/inventory.tt:79
 #, c-format
@@ -16374,13 +16352,13 @@ msgstr "Phù hợp"
 msgid "Batch add reserves"
 msgstr "Thêm tài liệu"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:36
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:37
 #: koha-tmpl/intranet-tmpl/prog/en/includes/circ-menu.inc:129
 #, fuzzy, c-format
 msgid "Batch check out"
 msgstr "Kiểm tra độ phù hợp "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:45
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:46
 #, fuzzy, c-format
 msgid "Batch check out "
 msgstr "Kiểm tra độ phù hợp "
@@ -16388,7 +16366,7 @@ msgstr "Kiểm tra độ phù hợp "
 #. %1$s:  IF patron 
 #. %2$s:  INCLUDE 'patron-title.inc' invert_name = 1 
 #. %3$s:  END 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:129
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:130
 #, fuzzy, c-format
 msgid "Batch checkout confirmation %s for %s %s"
 msgstr "Chính sách mượn tài liệu, đặt mượn, trả tài liệu mặc định%s cho %s%s"
@@ -16397,7 +16375,7 @@ msgstr "Chính sách mượn tài liệu, đặt mượn, trả tài liệu mặ
 #. %2$s:  INCLUDE 'patron-title.inc' invert_name = 1 
 #. %3$s:  batch | html 
 #. %4$s:  END 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:132
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:133
 #, fuzzy, c-format
 msgid "Batch checkout information %s for %s |%s|%s"
 msgstr "Thông tin tài liệu %s%s %s "
@@ -16413,7 +16391,7 @@ msgstr "Giỏ đặt hàng đã bị xóa"
 msgid "Batch delete patrons "
 msgstr "Không thể xóa tài khoản bạn đọc"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:70
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:68
 #, c-format
 msgid "Batch delete patrons and delete patron circulation history"
 msgstr "Xóa bạn đọc theo lô và lịch sử ghi mượn của bạn đọc"
@@ -16446,8 +16424,8 @@ msgstr "Nhập thẻ bạn đọc"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:29
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:39
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:79
-#: koha-tmpl/intranet-tmpl/prog/en/includes/tools-menu.inc:41
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:77
+#: koha-tmpl/intranet-tmpl/prog/en/includes/tools-menu.inc:39
 #, fuzzy, c-format
 msgid "Batch extend due dates"
 msgstr "Ngày hết hạn"
@@ -16468,8 +16446,8 @@ msgstr "%sXóa%sChỉnh sửa%s bản tài liệu theo lô"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1032
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:25
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:32
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:184
-#: koha-tmpl/intranet-tmpl/prog/en/includes/tools-menu.inc:60
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:175
+#: koha-tmpl/intranet-tmpl/prog/en/includes/tools-menu.inc:53
 #, c-format
 msgid "Batch item deletion"
 msgstr "Xóa bản tài liệu theo lô"
@@ -16492,8 +16470,8 @@ msgstr "Kết quả xóa bản tài liệu theo lô"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1029
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:27
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:35
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:189
-#: koha-tmpl/intranet-tmpl/prog/en/includes/tools-menu.inc:63
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:180
+#: koha-tmpl/intranet-tmpl/prog/en/includes/tools-menu.inc:56
 #, c-format
 msgid "Batch item modification"
 msgstr "Chỉnh sửa bản tài liệu theo lô"
@@ -16530,8 +16508,8 @@ msgstr ""
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:39
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:68
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:69
-#: koha-tmpl/intranet-tmpl/prog/en/includes/tools-menu.inc:35
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:67
+#: koha-tmpl/intranet-tmpl/prog/en/includes/tools-menu.inc:33
 #, fuzzy, c-format
 msgid "Batch patron deletion and anonymization"
 msgstr "Xóa bạn đọc theo lô/Lịch sử ghi mượn"
@@ -16552,8 +16530,8 @@ msgstr "Xóa bạn đọc theo lô/Lịch sử ghi mượn"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1041
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/modborrowers.tt:27
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/modborrowers.tt:38
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:74
-#: koha-tmpl/intranet-tmpl/prog/en/includes/tools-menu.inc:38
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:72
+#: koha-tmpl/intranet-tmpl/prog/en/includes/tools-menu.inc:36
 #, c-format
 msgid "Batch patron modification"
 msgstr "Thay đổi nhóm bạn đọc theo lô"
@@ -16577,8 +16555,8 @@ msgstr "Hiện thị nhóm bạn đọc"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1017
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:23
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:33
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:194
-#: koha-tmpl/intranet-tmpl/prog/en/includes/tools-menu.inc:66
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:185
+#: koha-tmpl/intranet-tmpl/prog/en/includes/tools-menu.inc:59
 #, fuzzy, c-format
 msgid "Batch record deletion"
 msgstr "Xóa bản tài liệu theo lô"
@@ -16591,8 +16569,8 @@ msgstr "Koha &rsaquo; Công cụ bổ trợ &rsaquo; Nhập ảnh bìa cho biể
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1014
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:24
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:34
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:199
-#: koha-tmpl/intranet-tmpl/prog/en/includes/tools-menu.inc:69
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:190
+#: koha-tmpl/intranet-tmpl/prog/en/includes/tools-menu.inc:62
 #, fuzzy, c-format
 msgid "Batch record modification"
 msgstr "Thay đổi nhóm bạn đọc theo lô"
@@ -16708,8 +16686,8 @@ msgstr "BibTex"
 
 #. For the first occurrence,
 #. %1$s:  loopro.biblionumber | html 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:340
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:342
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:341
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:343
 #, c-format
 msgid "Biblio %s"
 msgstr "Biểu ghi %s"
@@ -16776,7 +16754,7 @@ msgid "Bibliographic record"
 msgstr "Biểu ghi thư mục"
 
 #. %1$s:  object | html 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:390
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:391
 #, c-format
 msgid "Bibliographic record %s"
 msgstr "biểu ghi thư mục %s"
@@ -17080,7 +17058,7 @@ msgstr "Số thẻ"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember-brief.tt:71
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:485
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:236
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:237
 #, c-format
 msgid "Borrowernumber: "
 msgstr "Số bạn đọc: "
@@ -17226,7 +17204,7 @@ msgstr "Giới hạn thư viện"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/checkout-notes.tt:17
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation-home.tt:12
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:29
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:25
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:26
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/offline.tt:26
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/on-site_checkouts.tt:17
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/overdue.tt:35
@@ -17261,9 +17239,6 @@ msgstr "Giới hạn thư viện"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/labels/label-home.tt:12
 #: koha-tmpl/intranet-tmpl/prog/en/modules/labels/label-manage.tt:25
 #: koha-tmpl/intranet-tmpl/prog/en/modules/labels/spinelabel-home.tt:12
-#: koha-tmpl/intranet-tmpl/prog/en/modules/offline_circ/enqueue_koc.tt:9
-#: koha-tmpl/intranet-tmpl/prog/en/modules/offline_circ/list.tt:13
-#: koha-tmpl/intranet-tmpl/prog/en/modules/offline_circ/process_koc.tt:13
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/accountline-details.tt:18
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/apikeys.tt:13
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/boraccount.tt:25
@@ -17289,6 +17264,9 @@ msgstr "Giới hạn thư viện"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/readingrec.tt:18
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/routing-lists.tt:16
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/statistics.tt:20
+#: koha-tmpl/intranet-tmpl/prog/en/modules/offline_circ/enqueue_koc.tt:9
+#: koha-tmpl/intranet-tmpl/prog/en/modules/offline_circ/list.tt:13
+#: koha-tmpl/intranet-tmpl/prog/en/modules/offline_circ/process_koc.tt:13
 #: koha-tmpl/intranet-tmpl/prog/en/modules/patron_lists/add-modify.tt:19
 #: koha-tmpl/intranet-tmpl/prog/en/modules/patron_lists/list.tt:31
 #: koha-tmpl/intranet-tmpl/prog/en/modules/patron_lists/lists.tt:14
@@ -17365,7 +17343,7 @@ msgstr "Giới hạn thư viện"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/koha-news.tt:28
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/letter.tt:32
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:23
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:33
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:34
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/modborrowers.tt:18
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/overduerules.tt:15
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/picture-upload.tt:14
@@ -17379,7 +17357,7 @@ msgstr "Giới hạn thư viện"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:11
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload-images.tt:16
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:22
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:150
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:151
 #: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:48
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:19
 msgid "Breadcrumb"
@@ -17444,12 +17422,12 @@ msgstr ""
 msgid "Browse selected records"
 msgstr "Xóa tài liệu được chọn"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:182
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:183
 #, c-format
 msgid "Browse system logs"
 msgstr "Chọn nhật ký hệ thống"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:116
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:112
 #, c-format
 msgid "Browse the system logs"
 msgstr "Xem nhật ký hệ thống"
@@ -17538,7 +17516,7 @@ msgstr "Giá thanh toán: "
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:153
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:27
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/aqplan.tt:25
-#: koha-tmpl/intranet-tmpl/prog/en/includes/acquisitions-menu.inc:24
+#: koha-tmpl/intranet-tmpl/prog/en/includes/acquisitions-menu.inc:29
 #: koha-tmpl/intranet-tmpl/prog/en/includes/admin-menu.inc:107
 #, c-format
 msgid "Budgets"
@@ -17773,8 +17751,8 @@ msgid "CSV profile: "
 msgstr "Mẫu CSV"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/csv-profiles.tt:293
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:110
-#: koha-tmpl/intranet-tmpl/prog/en/includes/tools-menu.inc:113
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:106
+#: koha-tmpl/intranet-tmpl/prog/en/includes/tools-menu.inc:104
 #, c-format
 msgid "CSV profiles"
 msgstr "Mẫu CSV"
@@ -17820,8 +17798,8 @@ msgstr "Bộ nhớ đệm hết hạn:"
 msgid "Calculated on %s. From %s to %s"
 msgstr "Thống kê vào ngày %s. Kết quả thống kê từ ngày %s đến ngày %s"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:105
-#: koha-tmpl/intranet-tmpl/prog/en/includes/tools-menu.inc:110
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:101
+#: koha-tmpl/intranet-tmpl/prog/en/includes/tools-menu.inc:101
 #, c-format
 msgid "Calendar"
 msgstr "Lập lịch làm việc"
@@ -18131,6 +18109,8 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:122
 #: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:256
 #: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:258
+#: koha-tmpl/intranet-tmpl/prog/en/modules/basket/downloadcart.tt:28
+#: koha-tmpl/intranet-tmpl/prog/en/modules/basket/sendbasketform.tt:34
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/additional-fields.tt:202
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:237
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:312
@@ -18189,8 +18169,6 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/transport-cost-matrix.tt:99
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/usage_statistics.tt:249
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/z3950servers.tt:187
-#: koha-tmpl/intranet-tmpl/prog/en/modules/basket/downloadcart.tt:28
-#: koha-tmpl/intranet-tmpl/prog/en/modules/basket/sendbasketform.tt:34
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:864
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:868
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:872
@@ -18245,8 +18223,8 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/en/modules/patroncards/edit-template.tt:163
 #: koha-tmpl/intranet-tmpl/prog/en/modules/patroncards/print.tt:106
 #: koha-tmpl/intranet-tmpl/prog/en/modules/pos/pay.tt:154
-#: koha-tmpl/intranet-tmpl/prog/en/modules/pos/register.tt:275
-#: koha-tmpl/intranet-tmpl/prog/en/modules/pos/register.tt:313
+#: koha-tmpl/intranet-tmpl/prog/en/modules/pos/register.tt:279
+#: koha-tmpl/intranet-tmpl/prog/en/modules/pos/register.tt:317
 #: koha-tmpl/intranet-tmpl/prog/en/modules/pos/registers.tt:165
 #: koha-tmpl/intranet-tmpl/prog/en/modules/pos/registers.tt:188
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1164
@@ -18272,14 +18250,14 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:121
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:167
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:147
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:233
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:234
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/csv-profiles.tt:264
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:120
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:190
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/koha-news.tt:140
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/letter.tt:269
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:291
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:336
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:294
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:339
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/modborrowers.tt:76
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/modborrowers.tt:328
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/picture-upload.tt:157
@@ -18300,7 +18278,7 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/EXAMPLE.tt:18
 #: koha-tmpl/intranet-tmpl/prog/en/includes/auth-finder-search.inc:161
 #: koha-tmpl/intranet-tmpl/prog/en/includes/borrower_debarments.inc:66
-#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:231
+#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:230
 #: koha-tmpl/intranet-tmpl/prog/en/includes/checkouts-table.inc:125
 #: koha-tmpl/intranet-tmpl/prog/en/includes/checkouts-table.inc:158
 #: koha-tmpl/intranet-tmpl/prog/en/includes/circ-menu.inc:192
@@ -18608,7 +18586,7 @@ msgstr "Hủy bỏ ghi mượn"
 #. %2$s:  INCLUDE 'blocked-fines.inc' fines = chargesamount 
 #. %3$s:  END 
 #. %4$s:  IF ( charges_guarantors_guarantees ) 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:69
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:70
 #, fuzzy, c-format
 msgid "Cannot check out! %s %s %s %s "
 msgstr "Hủy bỏ ghi mượn"
@@ -19005,7 +18983,7 @@ msgstr "Báo cáo phân hệ biên mục"
 msgid "Cash registers for "
 msgstr "Báo cáo phân hệ biên mục"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/pos/register.tt:246
+#: koha-tmpl/intranet-tmpl/prog/en/modules/pos/register.tt:250
 #, fuzzy, c-format
 msgid "Cashier"
 msgstr "Báo cáo phân hệ biên mục"
@@ -19022,12 +19000,12 @@ msgstr "Koha &rsaquo; Giới thiệu về Koha"
 msgid "Cashup all"
 msgstr "Thu gọn tất cả"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/pos/register.tt:241
+#: koha-tmpl/intranet-tmpl/prog/en/modules/pos/register.tt:245
 #, fuzzy, c-format
 msgid "Cashup history"
 msgstr "Lịch sử phát hành"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:161
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:157
 #, fuzzy, c-format
 msgid "Cashup registers"
 msgstr "Báo cáo phân hệ biên mục"
@@ -19064,10 +19042,10 @@ msgstr "Băng Cassette"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/letter.tt:200
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/letter.tt:326
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/letter.tt:328
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:180
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:171
 #: koha-tmpl/intranet-tmpl/prog/en/includes/admin-menu.inc:71
 #: koha-tmpl/intranet-tmpl/prog/en/includes/reports-menu.inc:24
-#: koha-tmpl/intranet-tmpl/prog/en/includes/tools-menu.inc:57
+#: koha-tmpl/intranet-tmpl/prog/en/includes/tools-menu.inc:50
 #, c-format
 msgid "Catalog"
 msgstr "Tìm kiếm"
@@ -19408,7 +19386,7 @@ msgid "Change messaging preferences to default for this category?"
 msgstr "Thiết lập các tin nhắn gửi tới kiểu bạn đọc."
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:105
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:116
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:119
 #, c-format
 msgid "Change order"
 msgstr "Đổi thứ tự"
@@ -19564,8 +19542,8 @@ msgstr "Ảnh bìa"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:846
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:854
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:76
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:84
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:77
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:85
 #: koha-tmpl/intranet-tmpl/prog/en/includes/blocked-fines.inc:5
 #, fuzzy, c-format
 msgid "Charges:"
@@ -19701,7 +19679,7 @@ msgid "Check logs for more details."
 msgstr ""
 "Bạn vui lòng kiểm tra lại nhật ký lỗi hệ thống để có thông tin chi tiết."
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:302
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:303
 #, fuzzy, c-format
 msgid "Check none"
 msgstr "Ngày ghi trả"
@@ -19709,7 +19687,7 @@ msgstr "Ngày ghi trả"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation-home.tt:34
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:530
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:616
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:122
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:123
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/offline.tt:58
 #: koha-tmpl/intranet-tmpl/prog/en/includes/adv-search.inc:37
 #: koha-tmpl/intranet-tmpl/prog/en/includes/budgets-admin-search.inc:40
@@ -20041,7 +20019,7 @@ msgstr "Ghi mượn tới bạn đọc "
 #. %1$s:  INCLUDE 'patron-title.inc' 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:602
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:742
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:94
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:95
 #, c-format
 msgid "Checking out to %s"
 msgstr "Ghi mượn tài liệu tới bạn đọc %s"
@@ -20141,7 +20119,7 @@ msgid "Checkout history for %s &rsaquo; Catalog &rsaquo; Koha"
 msgstr "Koha &rsaquo; Phân hệ biên mục &rsaquo; Nhập biểu ghi MARC"
 
 #. %1$s:  patrons_to_anonymize.count | html 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:217
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:218
 #, fuzzy, c-format
 msgid "Checkout history for %s patrons will be anonymized "
 msgstr "%s %s Lịch sử ghi mượn của bạn đọc %s sẽ bị loại bỏ "
@@ -20174,7 +20152,7 @@ msgid "Checkout on"
 msgstr "Ngày ghi mượn"
 
 #. INPUT type=submit
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:319
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:320
 #, fuzzy
 msgid "Checkout or renew"
 msgstr "Ngày ghi mượn"
@@ -20206,8 +20184,8 @@ msgstr "Ghi mượn"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:848
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:856
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:78
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:86
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:79
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:87
 #: koha-tmpl/intranet-tmpl/prog/en/includes/blocked-fines.inc:8
 #, fuzzy, c-format
 msgid "Checkouts are BLOCKED because fine balance is OVER THE LIMIT."
@@ -20215,7 +20193,7 @@ msgstr ""
 "Chức năng ghi mượn tới bạn đọc bị tạm khóa vì bạn đọc có tài liệu quá hạn"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:461
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:287
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:288
 #, fuzzy, c-format
 msgid "Checkouts are BLOCKED because patron has overdue items."
 msgstr ""
@@ -20482,7 +20460,7 @@ msgstr "Ghi chú"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/checkout-notes.tt:23
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation-home.tt:30
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:35
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:31
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:32
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/on-site_checkouts.tt:23
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/overdue.tt:41
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:26
@@ -20923,10 +20901,10 @@ msgstr "Xóa"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:53
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/duplicate_orders.tt:145
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:104
+#: koha-tmpl/intranet-tmpl/prog/en/modules/basket/basket.tt:6
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branch_transfer_limits.tt:49
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branch_transfer_limits.tt:66
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/preferences.tt:213
-#: koha-tmpl/intranet-tmpl/prog/en/modules/basket/basket.tt:6
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/detail.tt:298
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:84
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:54
@@ -21249,8 +21227,8 @@ msgstr "Việc sao chép chính sách lưu thông bị lỗi!"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/boraccount.tt:293
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/merge-patrons.tt:199
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/merge-patrons.tt:275
-#: koha-tmpl/intranet-tmpl/prog/en/modules/pos/register.tt:267
-#: koha-tmpl/intranet-tmpl/prog/en/modules/pos/register.tt:288
+#: koha-tmpl/intranet-tmpl/prog/en/modules/pos/register.tt:271
+#: koha-tmpl/intranet-tmpl/prog/en/modules/pos/register.tt:292
 #: koha-tmpl/intranet-tmpl/prog/en/modules/pos/registers.tt:157
 #: koha-tmpl/intranet-tmpl/prog/en/modules/pos/registers.tt:176
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:153
@@ -21270,8 +21248,8 @@ msgstr "Việc sao chép chính sách lưu thông bị lỗi!"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/stockrotation.tt:405
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:167
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:188
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:423
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:439
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:424
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:440
 #: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:455
 #: koha-tmpl/intranet-tmpl/prog/en/includes/chart.inc:5
 #: koha-tmpl/intranet-tmpl/prog/en/includes/chart.inc:106
@@ -21781,9 +21759,9 @@ msgstr "Bạn đọc bình luận "
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reviews/reviewswaiting.tt:21
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reviews/reviewswaiting.tt:40
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:349
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:44
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:42
 #: koha-tmpl/intranet-tmpl/prog/en/includes/ill-list-table.inc:32
-#: koha-tmpl/intranet-tmpl/prog/en/includes/tools-menu.inc:20
+#: koha-tmpl/intranet-tmpl/prog/en/includes/tools-menu.inc:18
 #, c-format
 msgid "Comments"
 msgstr "Bình luận"
@@ -21824,8 +21802,8 @@ msgstr "Thông tin nhà cung cấp"
 msgid "Company name: "
 msgstr "Tên nhà cung cấp: "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:367
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:372
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:368
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:373
 #, fuzzy, c-format
 msgid "Compare"
 msgstr "Hiển thị tổng quát"
@@ -21859,12 +21837,12 @@ msgstr "Nhập bạn đọc theo lô"
 msgid "Compare patrons for merging"
 msgstr "Nhập số thẻ bạn đọc:"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:424
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:425
 #, fuzzy, c-format
 msgid "Compare preference values"
 msgstr "Các thông số được lưu lại"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:303
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:304
 #, fuzzy, c-format
 msgid "Compare selected"
 msgstr "Bạn chưa có đơn hàng liên quan đến hóa đơn này."
@@ -21975,8 +21953,8 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/paycollect.tt:184
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/paycollect.tt:320
 #: koha-tmpl/intranet-tmpl/prog/en/modules/pos/pay.tt:153
-#: koha-tmpl/intranet-tmpl/prog/en/modules/pos/register.tt:274
-#: koha-tmpl/intranet-tmpl/prog/en/modules/pos/register.tt:312
+#: koha-tmpl/intranet-tmpl/prog/en/modules/pos/register.tt:278
+#: koha-tmpl/intranet-tmpl/prog/en/modules/pos/register.tt:316
 #: koha-tmpl/intranet-tmpl/prog/en/modules/pos/registers.tt:164
 #: koha-tmpl/intranet-tmpl/prog/en/modules/pos/registers.tt:187
 #, c-format
@@ -21998,7 +21976,7 @@ msgstr "Xác nhận xóa"
 msgid "Confirm cancellation"
 msgstr "Xác nhận xóa"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/pos/register.tt:268
+#: koha-tmpl/intranet-tmpl/prog/en/modules/pos/register.tt:272
 #: koha-tmpl/intranet-tmpl/prog/en/modules/pos/registers.tt:158
 #: koha-tmpl/intranet-tmpl/prog/en/modules/pos/registers.tt:177
 #, fuzzy, c-format
@@ -22582,14 +22560,14 @@ msgstr "Số lượng bổ sung:"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/z3950servers.tt:225
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:216
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/letter.tt:229
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:217
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:220
 #: koha-tmpl/intranet-tmpl/prog/en/includes/columns_settings.inc:4
 #: koha-tmpl/intranet-tmpl/prog/en/includes/str/tinymce_i18n.inc:2
 #, c-format
 msgid "Copy"
 msgstr "Sao chép"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:218
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:221
 #, c-format
 msgid "Copy and replace"
 msgstr ""
@@ -23099,7 +23077,7 @@ msgstr "Tạo biểu ghi thư mục từ nguồn dữ liệu bên ngoài."
 msgid "Create a new subscription "
 msgstr "Tạo ÂPĐK"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:309
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:312
 #, c-format
 msgid "Create a new template"
 msgstr "Tạo mẫu mới"
@@ -23295,12 +23273,12 @@ msgstr "tạo tài khoản bạn đọc"
 msgid "Create printable labels and barcodes from catalog and patron data "
 msgstr "Thiết kế và in nhãn gáy tài liệu có trong cơ sở dữ liệu"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:220
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:211
 #, c-format
 msgid "Create printable labels and barcodes from catalog data"
 msgstr "Thiết kế và in nhãn gáy tài liệu có trong cơ sở dữ liệu"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:65
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:63
 #, c-format
 msgid "Create printable patron cards"
 msgstr "Tạo và xuất dữ liệu thẻ bạn đọc cho thư viện"
@@ -23443,7 +23421,7 @@ msgstr ""
 msgid "Ctrl-S"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/acquisitions-menu.inc:30
+#: koha-tmpl/intranet-tmpl/prog/en/includes/acquisitions-menu.inc:35
 #, c-format
 msgid "Currencies"
 msgstr "Tiền tệ"
@@ -23922,13 +23900,13 @@ msgstr "Cơ sở dữ liệu: "
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/request-article.tt:243
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:85
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:136
-#: koha-tmpl/intranet-tmpl/prog/en/modules/offline_circ/list.tt:47
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/accountline-details.tt:72
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/housebound.tt:393
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember-print.tt:103
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/pay.tt:65
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/readingrec.tt:67
-#: koha-tmpl/intranet-tmpl/prog/en/modules/pos/register.tt:245
+#: koha-tmpl/intranet-tmpl/prog/en/modules/offline_circ/list.tt:47
+#: koha-tmpl/intranet-tmpl/prog/en/modules/pos/register.tt:249
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1392
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:2240
 #: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:236
@@ -23936,7 +23914,7 @@ msgstr "Cơ sở dữ liệu: "
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tags/review.tt:99
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:251
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:332
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:308
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:309
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:179
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:181
 #: koha-tmpl/intranet-tmpl/prog/en/includes/holds_table.inc:14
@@ -24501,7 +24479,7 @@ msgstr ""
 "Thiết lập các loại tiền tệ và tỷ giá quy đổi được sử dụng trong phân hệ bổ "
 "sung."
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:106
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:102
 #, c-format
 msgid "Define days when the library is closed"
 msgstr "Thiết lập ngày nghỉ, ngày làm việc cho thư viện"
@@ -24555,7 +24533,7 @@ msgstr "Xác định ánh xạ"
 msgid "Define notices "
 msgstr "khai báo một mẫu thông báo phù hợp"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:55
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:53
 #, c-format
 msgid ""
 "Define notices (print and email notification messages for overdues, etc.)"
@@ -24575,7 +24553,7 @@ msgstr ""
 "Thiết lập thông báo mượn, trả tài liệu theo thư viện, kiểu bạn đọc, kiểu tài "
 "liệu."
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:205
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:196
 #, c-format
 msgid "Define rules to modify items by age"
 msgstr ""
@@ -24763,12 +24741,12 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/overdue.tt:211
 #: koha-tmpl/intranet-tmpl/prog/en/modules/labels/label-edit-batch.tt:168
 #: koha-tmpl/intranet-tmpl/prog/en/modules/labels/label-manage.tt:101
-#: koha-tmpl/intranet-tmpl/prog/en/modules/offline_circ/list.tt:97
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/apikeys.tt:82
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/files.tt:67
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/housebound.tt:411
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:124
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:364
+#: koha-tmpl/intranet-tmpl/prog/en/modules/offline_circ/list.tt:97
 #: koha-tmpl/intranet-tmpl/prog/en/modules/patroncards/edit-batch.tt:112
 #: koha-tmpl/intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:97
 #: koha-tmpl/intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:108
@@ -24794,9 +24772,9 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/koha-news.tt:227
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/letter.tt:238
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:399
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:100
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:195
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:213
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:103
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:198
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:216
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/modborrowers.tt:356
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/quotes.tt:132
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/quotes.tt:155
@@ -24850,12 +24828,12 @@ msgstr "Xóa hình ảnh"
 msgid "Delete SQL reports "
 msgstr "Tạo báo cáo SQL"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:185
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:176
 #, c-format
 msgid "Delete a batch of items"
 msgstr "Thực hiện xóa nhiều bản tài liệu đồng thời"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:195
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:186
 #, c-format
 msgid "Delete a batch of records (bibliographic or authority)"
 msgstr ""
@@ -24865,8 +24843,8 @@ msgstr ""
 msgid "Delete all"
 msgstr "Xoá tất cả"
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:79
-#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:81
+#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:78
+#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:80
 #, c-format
 msgid "Delete all items"
 msgstr "Xóa tất cả bản tài liệu"
@@ -25040,8 +25018,8 @@ msgstr "Xóa kiểu tài liệu '%s'?"
 msgid "Delete item type '%s'? "
 msgstr "Xóa kiểu tài liệu '%s'?"
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:53
-#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:55
+#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:52
+#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:54
 #, c-format
 msgid "Delete items in a batch"
 msgstr "Xóa bản tài liệu theo lô"
@@ -25084,19 +25062,19 @@ msgstr "Xóa tài khoản bạn đọc"
 msgid "Delete patron %s %s &rsaquo; Koha"
 msgstr "&rsaquo; Xóa quỹ? %s "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:106
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:107
 #, c-format
 msgid "Delete patrons"
 msgstr "Xóa tài khoản bạn đọc"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:197
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:198
 #, c-format
 msgid ""
 "Delete patrons directly from the database. Patron data will not be "
 "recoverable. "
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:109
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:110
 #, c-format
 msgid "Delete patrons who meet the following criteria:"
 msgstr "Xóa tài khoản bạn đọc thỏa mãn các tiêu chí sau:"
@@ -25111,9 +25089,9 @@ msgstr "Xóa giá sách ảo"
 msgid "Delete quote"
 msgstr "Xóa trích dẫn"
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/authorities-toolbar.inc:36
-#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:71
-#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:73
+#: koha-tmpl/intranet-tmpl/prog/en/includes/authorities-toolbar.inc:39
+#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:70
+#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:72
 #, c-format
 msgid "Delete record"
 msgstr "Xóa biểu ghi"
@@ -25198,7 +25176,7 @@ msgstr "Xóa ÂPĐK"
 msgid "Delete table"
 msgstr "Xoá tất cả"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:70
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:71
 #, fuzzy, c-format
 msgid "Delete template"
 msgstr "Xóa mẫu"
@@ -25488,7 +25466,7 @@ msgstr "Đơn vị"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:279
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:306
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:334
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:119
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:122
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/stockrotation.tt:107
 #: koha-tmpl/intranet-tmpl/prog/en/includes/clubs-table.inc:6
 #: koha-tmpl/intranet-tmpl/prog/en/includes/str/tinymce_i18n.inc:2
@@ -25548,7 +25526,7 @@ msgstr "Thông tin khoản tiền phạt."
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:86
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:79
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:154
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:282
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:285
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/stockrotation.tt:187
 #: koha-tmpl/intranet-tmpl/prog/en/includes/modals/cataloguing_create_av.inc:23
 #, c-format
@@ -25702,8 +25680,8 @@ msgstr "Tin nhắn ghi trả: "
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/edifactmsgs.tt:47
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoices.tt:99
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:423
 #: koha-tmpl/intranet-tmpl/prog/en/modules/basket/basket.tt:118
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:423
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/accountline-details.tt:181
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/boraccount.tt:112
 #: koha-tmpl/intranet-tmpl/prog/en/includes/circ-menu.inc:133
@@ -26026,22 +26004,22 @@ msgid "Display children too."
 msgstr "Hiển thị cho nhóm bạn đọc trẻ em"
 
 #. A
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:349
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:350
 msgid "Display detail for this authority"
 msgstr "Hiển thị thông tin biểu ghi nhất quán"
 
 #. A
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:340
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:342
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:341
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:343
 msgid "Display detail for this biblio"
 msgstr "Hiển thị thông tin biểu ghi"
 
 #. A
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:362
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:363
 msgid "Display detail for this item"
 msgstr "Hiển thị thông tin bản tài liệu"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:264
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:265
 #, c-format
 msgid "Display from: "
 msgstr "Từ ngày: "
@@ -26069,7 +26047,7 @@ msgid "Display location:"
 msgstr "Giao diện hiển thị"
 
 #. A
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:333
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:334
 msgid "Display member details."
 msgstr "Hiển thị thông tin bạn đọc."
 
@@ -26109,7 +26087,7 @@ msgstr ""
 msgid "Display them"
 msgstr "Đến ngày: "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:268
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:269
 #, c-format
 msgid "Display to: "
 msgstr "Đến ngày: "
@@ -26406,6 +26384,11 @@ msgstr "Tải giá sách ảo"
 msgid "Download list "
 msgstr "Tải giá sách ảo "
 
+#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/downloadshelf.tt:2
+#, fuzzy, c-format
+msgid "Download list &rsaquo; Koha"
+msgstr "Tải giỏ tài liệu"
+
 #. INPUT type=submit name=save
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/detail.tt:980
 #, fuzzy
@@ -26421,11 +26404,6 @@ msgstr "Tải cơ sở dữ liệu"
 #, c-format
 msgid "Download selected claims"
 msgstr "Tải về các khiếu nại được chọn"
-
-#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/downloadshelf.tt:2
-#, fuzzy, c-format
-msgid "Download shelf &rsaquo; Koha"
-msgstr "Koha &rsaquo; Giới thiệu về Koha"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/offline.tt:22
 #, c-format
@@ -26459,7 +26437,7 @@ msgid "Drop default"
 msgstr "Không (mặc định)"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/detail.tt:976
-#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:93
+#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:92
 #, fuzzy, c-format
 msgid "Dublin Core"
 msgstr "Dublin Core (XML)"
@@ -26515,7 +26493,7 @@ msgstr "Ngày hết hạn"
 msgid "Due date:"
 msgstr "Ngày hết hạn"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:112
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:113
 #, fuzzy, c-format
 msgid "Due date: "
 msgstr "Ngày hết hạn"
@@ -26526,7 +26504,7 @@ msgid "Due dates have been modified! "
 msgstr "Không có kiểu bạn đọc được định nghĩa. "
 
 #. %1$s:  checkout_info.issue.date_due | $KohaDates as_due_date => 1 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:302
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:303
 #, fuzzy, c-format
 msgid "Due on %s"
 msgstr "Ngày hết hạn: %s"
@@ -26535,7 +26513,7 @@ msgstr "Ngày hết hạn: %s"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/additem.tt:109
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:382
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1392
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:99
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:102
 #: koha-tmpl/intranet-tmpl/prog/en/includes/cateditor-ui.inc:42
 #: koha-tmpl/intranet-tmpl/prog/en/includes/members-toolbar.inc:17
 #, c-format
@@ -26547,7 +26525,7 @@ msgstr "Sao chép"
 msgid "Duplicate "
 msgstr "Sao chép"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:323
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:326
 #, fuzzy, c-format
 msgid "Duplicate a template:"
 msgstr "Sao chép mẫu"
@@ -26691,7 +26669,7 @@ msgstr "EAN: "
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/admin-home.tt:205
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:33
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:51
-#: koha-tmpl/intranet-tmpl/prog/en/includes/acquisitions-menu.inc:33
+#: koha-tmpl/intranet-tmpl/prog/en/includes/acquisitions-menu.inc:38
 #: koha-tmpl/intranet-tmpl/prog/en/includes/admin-menu.inc:113
 #, fuzzy, c-format
 msgid "EDI accounts"
@@ -26857,7 +26835,7 @@ msgstr "Đặt mượn đầu tiên"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/csv-profiles.tt:318
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/koha-news.tt:213
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/letter.tt:235
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:192
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:195
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/quotes.tt:155
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/tables/members_results.tt:37
 #: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/tables/shelves_results.tt:45
@@ -26882,9 +26860,9 @@ msgstr "Chỉnh sửa"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/rotating_collections/editCollections.tt:41
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/stockrotation.tt:122
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/stockrotation.tt:291
-#: koha-tmpl/intranet-tmpl/prog/en/includes/authorities-toolbar.inc:27
+#: koha-tmpl/intranet-tmpl/prog/en/includes/authorities-toolbar.inc:30
 #: koha-tmpl/intranet-tmpl/prog/en/includes/budgets-admin-toolbar.inc:21
-#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:33
+#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:32
 #: koha-tmpl/intranet-tmpl/prog/en/includes/clubs-table.inc:88
 #: koha-tmpl/intranet-tmpl/prog/en/includes/reports-toolbar.inc:21
 #: koha-tmpl/intranet-tmpl/prog/en/includes/serials-toolbar.inc:16
@@ -26956,7 +26934,7 @@ msgstr "Sửa SQL"
 msgid "Edit SQL report"
 msgstr "Chỉnh sửa báo cáo SQL"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:98
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:101
 #, fuzzy, c-format
 msgid "Edit actions"
 msgstr "Sửa thao tác"
@@ -26971,8 +26949,8 @@ msgstr "Chỉnh sửa giỏ đặt hàng"
 msgid "Edit an existing subscription "
 msgstr "Chỉnh sửa ÂPĐK"
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/authorities-toolbar.inc:31
-#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:65
+#: koha-tmpl/intranet-tmpl/prog/en/includes/authorities-toolbar.inc:34
+#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:64
 #: koha-tmpl/intranet-tmpl/prog/en/includes/serials-toolbar.inc:26
 #, c-format
 msgid "Edit as new (duplicate)"
@@ -27107,7 +27085,7 @@ msgstr "Bản tài liệu"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:539
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:248
 #: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:288
-#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:40
+#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:39
 #: koha-tmpl/intranet-tmpl/prog/en/includes/serials-toolbar.inc:38
 #, c-format
 msgid "Edit items"
@@ -27118,8 +27096,8 @@ msgstr "Bản tài liệu"
 msgid "Edit items "
 msgstr "Bản tài liệu"
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:45
-#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:47
+#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:44
+#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:46
 #, c-format
 msgid "Edit items in batch"
 msgstr "Sửa bản tài liệu theo lô"
@@ -27189,7 +27167,7 @@ msgstr "Chỉnh sửa mẫu in"
 msgid "Edit purchase suggestion #%s"
 msgstr "Chỉnh sửa đề xuất mua số%s"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:130
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:126
 #, c-format
 msgid "Edit quotes for QOTD feature"
 msgstr "Lập trích dẫn trên OPAC"
@@ -27204,8 +27182,8 @@ msgstr "Cho phép thủ thư tạo các trích dẫn, thông báo nhanh trên OP
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:169
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/subscription-add.tt:99
 #: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:285
-#: koha-tmpl/intranet-tmpl/prog/en/includes/authorities-toolbar.inc:30
-#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:36
+#: koha-tmpl/intranet-tmpl/prog/en/includes/authorities-toolbar.inc:33
+#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:35
 #: koha-tmpl/intranet-tmpl/prog/en/includes/serials-toolbar.inc:32
 #: koha-tmpl/intranet-tmpl/prog/en/includes/catalogue/itemsearch_item.json.inc:32
 #, c-format
@@ -27710,7 +27688,7 @@ msgstr "Phí tạo tài khoản"
 msgid "Enrolment period: "
 msgstr "Thời hạn tài khoản: "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:225
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:216
 #, c-format
 msgid ""
 "Enter a barcode to generate a printable spine label. For use with dedicated "
@@ -28165,7 +28143,7 @@ msgstr ""
 msgid "Error: _(No form element found."
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:76
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:77
 #, c-format
 msgid "Error: no field value specified."
 msgstr "Lỗi: Chưa khai báo giá trị của trường."
@@ -28495,8 +28473,8 @@ msgstr "Mô tả: "
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/orders_by_budget.tt:131
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/reserves_stats.tt:286
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/serials_stats.tt:119
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:283
-#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:230
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:284
+#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:229
 #: koha-tmpl/intranet-tmpl/prog/en/includes/checkouts-table.inc:84
 #: koha-tmpl/intranet-tmpl/prog/en/includes/columns_settings.inc:4
 #, c-format
@@ -28562,7 +28540,7 @@ msgstr "Xuất biểu ghi thư mục"
 msgid "Export bibliographic records"
 msgstr "Xuất biểu ghi thư mục"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:210
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:201
 #, c-format
 msgid "Export bibliographic, holdings, and authority records"
 msgstr ""
@@ -28584,8 +28562,8 @@ msgstr "Xuất dữ liệu ghi mượn theo định dạng:"
 msgid "Export configuration"
 msgstr "Kết xuất cấu hình CSDL"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:209
-#: koha-tmpl/intranet-tmpl/prog/en/includes/tools-menu.inc:75
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:200
+#: koha-tmpl/intranet-tmpl/prog/en/includes/tools-menu.inc:68
 #, c-format
 msgid "Export data"
 msgstr "Xuất dữ liệu"
@@ -28721,7 +28699,7 @@ msgstr "Xuất dữ liệu sang định dạng mở"
 msgid "Export today's checked in barcodes"
 msgstr "Xuất dữ liệu ghi mượn trong ngày"
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:213
+#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:212
 #, c-format
 msgid "Exporting to Dublin Core..."
 msgstr ""
@@ -29253,7 +29231,7 @@ msgstr "Kiểu tệp tin"
 msgid "File:"
 msgstr "Tệp tin:"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:98
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:99
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batchMod.tt:52
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:87
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:88
@@ -29487,7 +29465,7 @@ msgstr ""
 msgid "Find and replace..."
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:325
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:326
 #, fuzzy, c-format
 msgid "Find another patron?"
 msgstr "Thêm điều kiện khác"
@@ -29543,7 +29521,7 @@ msgstr "Miễn tiền phạt quá hạn."
 
 #. INPUT type=submit name=submit
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:742
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:233
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:234
 #: koha-tmpl/intranet-tmpl/prog/en/includes/str/tinymce_i18n.inc:2
 msgid "Finish"
 msgstr "Hoàn thành"
@@ -30362,7 +30340,7 @@ msgstr "Quỹ thanh toán: %s"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:48
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:68
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/aqplan.tt:28
-#: koha-tmpl/intranet-tmpl/prog/en/includes/acquisitions-menu.inc:27
+#: koha-tmpl/intranet-tmpl/prog/en/includes/acquisitions-menu.inc:32
 #: koha-tmpl/intranet-tmpl/prog/en/includes/admin-menu.inc:110
 #, c-format
 msgid "Funds"
@@ -30849,7 +30827,7 @@ msgid "Hard due date"
 msgstr "Ngày hết hạn"
 
 #. %1$s:  INCLUDE 'date-format.inc' 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:113
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:114
 #, fuzzy, c-format
 msgid "Hard due date %s:"
 msgstr "Ngày hết hạn"
@@ -31158,7 +31136,7 @@ msgstr ""
 
 #. %1$s:  checkout_info.HIGHHOLDS.duration | html 
 #. %2$s:  checkout_info.HIGHHOLDS.returndate | html 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:207
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:208
 #, fuzzy, c-format
 msgid "High demand item. Loan period shortened to %s days (due %s)."
 msgstr ""
@@ -31348,6 +31326,7 @@ msgid "Hold ratio (greater than or equal to):"
 msgstr "Hãy nhập giá trị lớn hơn hoặc bằng {0}."
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation-home.tt:85
+#: koha-tmpl/intranet-tmpl/prog/en/includes/acquisitions-menu.inc:21
 #: koha-tmpl/intranet-tmpl/prog/en/includes/circ-nav.inc:40
 #, c-format
 msgid "Hold ratios"
@@ -31789,7 +31768,7 @@ msgstr "Kỳ nghỉ dài theo năm"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/checkout-notes.tt:20
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation-home.tt:15
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:32
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:28
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:29
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/offline.tt:29
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/on-site_checkouts.tt:20
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/overdue.tt:38
@@ -31825,9 +31804,6 @@ msgstr "Kỳ nghỉ dài theo năm"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/labels/label-home.tt:15
 #: koha-tmpl/intranet-tmpl/prog/en/modules/labels/label-manage.tt:28
 #: koha-tmpl/intranet-tmpl/prog/en/modules/labels/spinelabel-home.tt:15
-#: koha-tmpl/intranet-tmpl/prog/en/modules/offline_circ/enqueue_koc.tt:12
-#: koha-tmpl/intranet-tmpl/prog/en/modules/offline_circ/list.tt:16
-#: koha-tmpl/intranet-tmpl/prog/en/modules/offline_circ/process_koc.tt:16
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/accountline-details.tt:21
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/apikeys.tt:16
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/boraccount.tt:28
@@ -31854,6 +31830,9 @@ msgstr "Kỳ nghỉ dài theo năm"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/readingrec.tt:21
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/routing-lists.tt:19
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/statistics.tt:23
+#: koha-tmpl/intranet-tmpl/prog/en/modules/offline_circ/enqueue_koc.tt:12
+#: koha-tmpl/intranet-tmpl/prog/en/modules/offline_circ/list.tt:16
+#: koha-tmpl/intranet-tmpl/prog/en/modules/offline_circ/process_koc.tt:16
 #: koha-tmpl/intranet-tmpl/prog/en/modules/patron_lists/add-modify.tt:22
 #: koha-tmpl/intranet-tmpl/prog/en/modules/patron_lists/list.tt:34
 #: koha-tmpl/intranet-tmpl/prog/en/modules/patron_lists/lists.tt:17
@@ -31930,7 +31909,7 @@ msgstr "Kỳ nghỉ dài theo năm"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/koha-news.tt:31
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/letter.tt:35
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:26
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:36
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:37
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/modborrowers.tt:21
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/overduerules.tt:18
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/picture-upload.tt:17
@@ -31944,7 +31923,7 @@ msgstr "Kỳ nghỉ dài theo năm"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:14
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload-images.tt:19
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:25
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:153
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:154
 #: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:51
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:22
 #: koha-tmpl/intranet-tmpl/prog/en/includes/mana/mana-report-search-result.inc:19
@@ -32139,7 +32118,7 @@ msgstr ""
 msgid "How many issues do you want to receive?"
 msgstr "Bạn muốn nhận bao nhiêu ấn phẩm?"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:193
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:194
 #, fuzzy, c-format
 msgid "How should patrons be deleted?"
 msgstr "%s%s %s0 %s tài khoản bạn đọc sẽ bị xóa"
@@ -32469,6 +32448,7 @@ msgstr "Biểu tượng"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoice.tt:161
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/localization.tt:63
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:90
 #: koha-tmpl/intranet-tmpl/prog/en/includes/str/tinymce_i18n.inc:2
 #, c-format
 msgid "Id"
@@ -33200,7 +33180,7 @@ msgstr ""
 msgid "Import into the borrowers table"
 msgstr "Nhập bạn đọc theo lô"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:50
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:48
 #, c-format
 msgid "Import patron data"
 msgstr "Nhập dữ liệu bạn đọc theo lô"
@@ -33212,8 +33192,8 @@ msgstr "Nhập dữ liệu bạn đọc theo lô"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/import_borrowers.tt:35
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/import_borrowers.tt:60
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:49
-#: koha-tmpl/intranet-tmpl/prog/en/includes/tools-menu.inc:23
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:47
+#: koha-tmpl/intranet-tmpl/prog/en/includes/tools-menu.inc:21
 #, c-format
 msgid "Import patrons"
 msgstr "Nhập bạn đọc theo lô"
@@ -33466,18 +33446,18 @@ msgstr "Bắt buộc: "
 msgid "Individual libraries:"
 msgstr "Thư viện:"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:313
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:314
 #, c-format
 msgid "Info"
 msgstr "Thông tin"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:244
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:245
 #, c-format
 msgid "Info:"
 msgstr "Thông tin:"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/lateorders.tt:78
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:142
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:143
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:256
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:584
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:768
@@ -33778,12 +33758,12 @@ msgstr "Bạn không được phân quyền."
 msgid "Integer"
 msgstr "Số nguyên"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:314
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:315
 #, fuzzy, c-format
 msgid "Interface"
 msgstr "Ghi chú nội bộ:"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:248
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:249
 #, fuzzy, c-format
 msgid "Interface:"
 msgstr "Ghi chú nội bộ:"
@@ -33963,8 +33943,8 @@ msgstr "Giá trị năm không hợp lệ được nhập vào trường thông 
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/inventory.tt:26
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/inventory.tt:48
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:214
-#: koha-tmpl/intranet-tmpl/prog/en/includes/tools-menu.inc:78
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:205
+#: koha-tmpl/intranet-tmpl/prog/en/includes/tools-menu.inc:71
 #, c-format
 msgid "Inventory"
 msgstr "Kiểm kê kho"
@@ -34230,11 +34210,12 @@ msgstr "Kỳ "
 #: koha-tmpl/intranet-tmpl/prog/en/modules/pos/register.tt:117
 #: koha-tmpl/intranet-tmpl/prog/en/modules/pos/register.tt:119
 #: koha-tmpl/intranet-tmpl/prog/en/modules/pos/register.tt:206
+#: koha-tmpl/intranet-tmpl/prog/en/modules/pos/register.tt:208
 #, fuzzy, c-format
 msgid "Issue refund"
 msgstr "Kỳ "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/pos/register.tt:289
+#: koha-tmpl/intranet-tmpl/prog/en/modules/pos/register.tt:293
 #, fuzzy, c-format
 msgid "Issue refund from "
 msgstr "Quỹ cho %s"
@@ -34337,8 +34318,8 @@ msgstr "Tài liệu "
 
 #. For the first occurrence,
 #. %1$s:  loopro.object | html 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:339
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:362
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:340
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:363
 #, c-format
 msgid "Item %s"
 msgstr "Bản tài liệu %s"
@@ -34480,7 +34461,7 @@ msgstr "Tài liệu bị loại khỏi quá trình lưu thông"
 msgid "Item has been withdrawn (transaction recorded anyway)"
 msgstr "Tài liệu bị rút khỏi lưu thông (Giao dịch vẫn được lưu lại)"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:260
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:261
 #, fuzzy, c-format
 msgid "Item has been withdrawn."
 msgstr "Tài liệu bị loại khỏi quá trình lưu thông"
@@ -34530,7 +34511,7 @@ msgstr "Tài liệu không được ghi mượn."
 #. %1$s:  IF item_notforloan_lib 
 #. %2$s:  item_notforloan_lib | html 
 #. %3$s:  END 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:197
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:198
 #, fuzzy, c-format
 msgid "Item is normally not for loan %s(%s)%s."
 msgstr "Thông tin tài liệu %s%s %s "
@@ -34556,7 +34537,7 @@ msgstr "Tài liệu bị hạn chế"
 msgid "Item is restricted (transaction recorded anyway)"
 msgstr "Tài liệu bị hạn chế (Giao dịch vẫn được lưu lại)"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:263
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:264
 #, fuzzy, c-format
 msgid "Item is restricted."
 msgstr "Tài liệu bị hạn chế"
@@ -34587,7 +34568,7 @@ msgstr "Tài liệu không được ghi mượn."
 #. %1$s:  IF item_notforloan_lib 
 #. %2$s:  item_notforloan_lib | html 
 #. %3$s:  END 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:256
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:257
 #, fuzzy, c-format
 msgid "Item not for loan %s(%s)%s."
 msgstr "%s %s Không có đặt mượn %s "
@@ -34751,11 +34732,11 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:301
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:196
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:239
+#: koha-tmpl/intranet-tmpl/prog/en/modules/basket/basket.tt:252
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/itemtypes.tt:413
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:110
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:487
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:919
-#: koha-tmpl/intranet-tmpl/prog/en/modules/basket/basket.tt:252
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/detail.tt:317
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:23
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/article-requests.tt:124
@@ -34815,12 +34796,12 @@ msgstr ""
 "Ảnh đại diện của kiểu tài liệu không được kích hoạt. Để kích hoạt chúng, bạn "
 "hãy kích hoạt thông số "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:194
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:195
 #, c-format
 msgid "Item type is normally not for loan."
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:253
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:254
 #, fuzzy, c-format
 msgid "Item type not for loan."
 msgstr "Không tìm thấy tài liệu."
@@ -34894,7 +34875,7 @@ msgstr "Kiểu tài liệu"
 #. For the first occurrence,
 #. %1$s:  INCLUDE 'patron-title.inc' patron = alert.RETURNED_FROM_ANOTHER.patron 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:93
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:242
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:243
 #, c-format
 msgid "Item was checked out to %s and was returned automatically."
 msgstr ""
@@ -34938,7 +34919,7 @@ msgstr "Tài liệu này đã được thêm vào giỏ tài liệu của bạn"
 msgid "Item(s) not removed from batch %s."
 msgstr "và chúng bị loại bỏ khỏi lô thẻ số %s. "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/pos/register.tt:295
+#: koha-tmpl/intranet-tmpl/prog/en/modules/pos/register.tt:299
 #, fuzzy, c-format
 msgid "Item: "
 msgstr "Tài liệu: "
@@ -35600,8 +35581,8 @@ msgstr "Quản lý lô nhãn gáy"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/labels/label-edit-range.tt:20
 #: koha-tmpl/intranet-tmpl/prog/en/modules/labels/label-edit-template.tt:21
 #: koha-tmpl/intranet-tmpl/prog/en/modules/labels/label-manage.tt:34
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:219
-#: koha-tmpl/intranet-tmpl/prog/en/includes/tools-menu.inc:81
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:210
+#: koha-tmpl/intranet-tmpl/prog/en/includes/tools-menu.inc:74
 #, c-format
 msgid "Label creator"
 msgstr "Tạo nhãn gáy"
@@ -36077,7 +36058,7 @@ msgstr "Hiển thị cho thư viện"
 msgid "LibLime, USA"
 msgstr "LibLime, USA"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:309
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:310
 #, c-format
 msgid "Librarian"
 msgstr "Thủ thư"
@@ -36093,7 +36074,7 @@ msgstr "Thủ thư tạo ÂPĐK:"
 msgid "Librarian interface"
 msgstr "Giao diện nhân viên"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:191
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:192
 #, c-format
 msgid "Librarian:"
 msgstr "Thủ thư:"
@@ -36211,7 +36192,7 @@ msgstr "Mã thư viện: "
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/edi_ean_accounts.tt:33
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/edi_ean_accounts.tt:47
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/edi_ean_accounts.tt:160
-#: koha-tmpl/intranet-tmpl/prog/en/includes/acquisitions-menu.inc:34
+#: koha-tmpl/intranet-tmpl/prog/en/includes/acquisitions-menu.inc:39
 #: koha-tmpl/intranet-tmpl/prog/en/includes/admin-menu.inc:114
 #, fuzzy, c-format
 msgid "Library EANs"
@@ -36583,7 +36564,7 @@ msgstr "Sửa biểu ghi nhất quán"
 msgid "Link list"
 msgstr "In"
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:61
+#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:60
 #, fuzzy, c-format
 msgid "Link to host record"
 msgstr "Tài liệu chủ"
@@ -36893,7 +36874,7 @@ msgstr "Thông tin nội bộ sử dụng được ghi lại"
 msgid "Local use recorded "
 msgstr "Thông tin nội bộ sử dụng được ghi lại"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:248
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:249
 #, fuzzy, c-format
 msgid "Local use recorded."
 msgstr "Thông tin nội bộ sử dụng được ghi lại"
@@ -36993,7 +36974,7 @@ msgstr "Khóa"
 msgid "Locked%s"
 msgstr "Khóa"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:300
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:301
 #, c-format
 msgid "Log entries"
 msgstr ""
@@ -37032,6 +37013,7 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:91
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:93
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:97
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:98
 #, fuzzy
 msgid "Log not enabled"
 msgstr "%s Kích hoạt "
@@ -37041,8 +37023,8 @@ msgstr "%s Kích hoạt "
 msgid "Log out"
 msgstr "Đăng xuất"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:115
-#: koha-tmpl/intranet-tmpl/prog/en/includes/tools-menu.inc:116
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:111
+#: koha-tmpl/intranet-tmpl/prog/en/includes/tools-menu.inc:107
 #, c-format
 msgid "Log viewer"
 msgstr "Nhật ký"
@@ -37062,14 +37044,14 @@ msgstr ""
 msgid "Login"
 msgstr "Đăng nhập"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:160
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:161
 #: koha-tmpl/intranet-tmpl/prog/en/includes/prefs-menu.inc:94
 #: koha-tmpl/intranet-tmpl/prog/en/includes/prefs-menu.inc:98
 #, c-format
 msgid "Logs"
 msgstr "Nhật ký hệ thống"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:169
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:170
 #, fuzzy, c-format
 msgid "Logs "
 msgstr "Nhật ký hệ thống"
@@ -37226,7 +37208,7 @@ msgstr ""
 msgid "M&#257;ori"
 msgstr "M&#257;ori"
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/authorities-toolbar.inc:47
+#: koha-tmpl/intranet-tmpl/prog/en/includes/authorities-toolbar.inc:50
 #, c-format
 msgid "MADS (XML)"
 msgstr "MADS (XML)"
@@ -37259,20 +37241,20 @@ msgid "MARC"
 msgstr "Hiển thị MARC"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/detail.tt:979
-#: koha-tmpl/intranet-tmpl/prog/en/includes/authorities-toolbar.inc:50
-#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:96
+#: koha-tmpl/intranet-tmpl/prog/en/includes/authorities-toolbar.inc:53
+#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:95
 #, c-format
 msgid "MARC (Unicode/UTF-8)"
 msgstr "MARC (Unicode/UTF-8)"
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:97
+#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:96
 #, c-format
 msgid "MARC (Unicode/UTF-8, Standard)"
 msgstr "MARC (Unicode/UTF-8, Standard)"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/detail.tt:978
-#: koha-tmpl/intranet-tmpl/prog/en/includes/authorities-toolbar.inc:49
-#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:95
+#: koha-tmpl/intranet-tmpl/prog/en/includes/authorities-toolbar.inc:52
+#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:94
 #, c-format
 msgid "MARC (non-Unicode/MARC-8)"
 msgstr "MARC (non-Unicode/MARC-8)"
@@ -37385,24 +37367,24 @@ msgstr "Khung mẫu MARC: %s"
 msgid "MARC import &rsaquo; Cataloging &rsaquo; Koha"
 msgstr "Koha &rsaquo; Phân hệ biên mục &rsaquo; Nhập biểu ghi MARC"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:44
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:239
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:45
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:230
 #, c-format
 msgid "MARC modification templates"
 msgstr "Mẫu chỉnh sửa biểu ghi MARC"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:53
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:54
 #, fuzzy, c-format
 msgid "MARC modification templates "
 msgstr "Mẫu chỉnh sửa biểu ghi MARC"
 
 #. %1$s:  template_id | html 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:84
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:85
 #, fuzzy, c-format
 msgid "MARC modification templates %s"
 msgstr "Mẫu chỉnh sửa biểu ghi MARC"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:6
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:7
 #, fuzzy, c-format
 msgid "MARC modification templates &rsaquo; Tools &rsaquo; Koha"
 msgstr "Mẫu chỉnh sửa biểu ghi MARC"
@@ -37505,8 +37487,8 @@ msgstr ""
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/detail.tt:977
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/stage-marc-import.tt:175
-#: koha-tmpl/intranet-tmpl/prog/en/includes/authorities-toolbar.inc:48
-#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:94
+#: koha-tmpl/intranet-tmpl/prog/en/includes/authorities-toolbar.inc:51
+#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:93
 #, c-format
 msgid "MARCXML"
 msgstr "MARCXML"
@@ -37546,7 +37528,7 @@ msgid "MIT license"
 msgstr "MIT license"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/detail.tt:975
-#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:98
+#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:97
 #, c-format
 msgid "MODS (XML)"
 msgstr "MODS (XML)"
@@ -37770,7 +37752,7 @@ msgstr "Người quản lý"
 msgid "Manage API keys"
 msgstr "Quản lý các nhóm OAI"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:111
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:107
 #, c-format
 msgid "Manage CSV export profiles"
 msgstr "Quản lý các trường CSV"
@@ -37805,7 +37787,7 @@ msgstr ""
 msgid "Manage MARC bibliographic and authority frameworks and test them "
 msgstr "Kiểm tra khung mẫu biên mục MARC"
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/tools-menu.inc:91
+#: koha-tmpl/intranet-tmpl/prog/en/includes/tools-menu.inc:84
 #, c-format
 msgid "Manage MARC modification templates"
 msgstr "Mẫu chỉnh sửa biểu ghi MARC"
@@ -37830,7 +37812,7 @@ msgstr "Quản lý các nhóm OAI"
 msgid "Manage OPAC problem reports "
 msgstr "Quản lý các nhóm OAI"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:167
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:163
 #, c-format
 msgid "Manage OPAC problem reports submitted by patrons"
 msgstr ""
@@ -37845,7 +37827,7 @@ msgstr "&rsaquo; Mẫu CSV "
 msgid "Manage SMTP servers "
 msgstr "Quản lý đơn hàng"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:235
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:226
 #, c-format
 msgid "Manage Stock rotation rotas, rota stages and rota items"
 msgstr ""
@@ -38071,7 +38053,7 @@ msgstr ""
 msgid "Manage library transfer limits and transport cost matrix "
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:35
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:33
 #, fuzzy, c-format
 msgid "Manage lists of patrons"
 msgstr "Quản lý danh sách bạn đọc."
@@ -38086,7 +38068,7 @@ msgstr "Mẫu chỉnh sửa biểu ghi MARC"
 msgid "Manage numbering patterns "
 msgstr "Quản lý mẫu đánh số ÂPĐK "
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/acquisitions-menu.inc:38
+#: koha-tmpl/intranet-tmpl/prog/en/includes/acquisitions-menu.inc:43
 #, fuzzy, c-format
 msgid "Manage order basket fields"
 msgstr "Tìm kiếm theo trường:"
@@ -38101,7 +38083,7 @@ msgstr "Quản lý đơn hàng"
 msgid "Manage patron categories "
 msgstr "Kiểu bạn đọc"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:40
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:38
 #, fuzzy, c-format
 msgid "Manage patron clubs"
 msgstr "Quản lý ảnh đại diện bạn đọc"
@@ -38148,7 +38130,7 @@ msgstr "Quản lý tần suất "
 msgid "Manage restrictions for accounts "
 msgstr "Quản lý nội dung thẻ bạn đọc"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:230
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:221
 #, fuzzy, c-format
 msgid "Manage rotating collections"
 msgstr "Bộ sưu tập luân phiên"
@@ -38234,7 +38216,7 @@ msgstr ""
 msgid "Manage suggestions: "
 msgstr "Quản lý đề xuất mua"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:240
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:231
 #, fuzzy, c-format
 msgid "Manage templates for modifying MARC records during import"
 msgstr ""
@@ -38299,7 +38281,7 @@ msgstr "Người quản lý"
 msgid "Managed on:"
 msgstr "Người quản lý"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:250
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:241
 #, c-format
 msgid "Managed staged MARC records, including completing and reversing imports"
 msgstr ""
@@ -39080,7 +39062,7 @@ msgstr "Số di động"
 msgid "Modal title"
 msgstr "Kiểu biểu ghi"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:45
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:43
 #, fuzzy, c-format
 msgid "Moderate patron comments"
 msgstr "Quản lý bình luận của bạn đọc. "
@@ -39090,7 +39072,7 @@ msgstr "Quản lý bình luận của bạn đọc. "
 msgid "Moderate patron comments "
 msgstr "Quản lý bình luận của bạn đọc. "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:85
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:83
 #, c-format
 msgid "Moderate patron tags"
 msgstr "Quản lý các từ khóa bạn đọc gán cho tài liệu của thư viện"
@@ -39160,7 +39142,7 @@ msgstr "Tìm kiếm theo trường:"
 msgid "Modify a CSV profile"
 msgstr "Chỉnh sửa hoặc xóa một mẫu CSV"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:200
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:191
 #, c-format
 msgid "Modify a batch of records (biblios or authorities)"
 msgstr ""
@@ -39312,7 +39294,7 @@ msgstr "Chỉnh sửa kiểu tài liệu"
 msgid "Modify item type '%s' "
 msgstr "Chỉnh sửa kiểu tài liệu"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:190
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:181
 #, c-format
 msgid "Modify items in a batch"
 msgstr "Chỉnh sửa nhiều bản tài liệu đồng thời"
@@ -39338,7 +39320,7 @@ msgstr "&rsaquo; %sChỉnh sửa đơn hàng (Số %s)%sTạo đơn hàng%s"
 msgid "Modify patron attribute type"
 msgstr "Chỉnh sửa thuộc tính bạn đọc"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:75
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:73
 #, c-format
 msgid "Modify patrons in batch"
 msgstr "Sửa nhiều bạn đọc đồng thời"
@@ -39398,7 +39380,7 @@ msgstr "%s Chỉnh sửa ấn phẩm định kỳ "
 msgid "Modify tag "
 msgstr "Chỉnh sửa địa chỉ thành phố"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:80
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:78
 #, fuzzy, c-format
 msgid "Modify the due date checkouts in batch"
 msgstr "Sửa nhiều bạn đọc đồng thời"
@@ -39416,7 +39398,7 @@ msgstr "Quản lý mẫu đánh số ÂPĐK "
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/letter.tt:178
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/letter.tt:543
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:310
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:311
 #, c-format
 msgid "Module"
 msgstr "Phân hệ áp dụng"
@@ -39433,7 +39415,7 @@ msgstr "Module current"
 msgid "Module upgrade needed"
 msgstr "Module upgrade needed"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:196
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:197
 #, fuzzy, c-format
 msgid "Modules:"
 msgstr "Phân hệ áp dụng:"
@@ -39514,7 +39496,7 @@ msgstr ""
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:131
 #: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:506
-#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:156
+#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:155
 #, c-format
 msgid "More lists"
 msgstr "Thêm giá sách ảo"
@@ -39561,28 +39543,28 @@ msgid ""
 "Most-circulated items%s &rsaquo; Results%s &rsaquo; Reports &rsaquo; Koha"
 msgstr "Koha &rsaquo; Báo cáo &rsaquo; Hướng dẫn tạo báo cáo &rsaquo; Từ điển"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:216
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:219
 #, c-format
 msgid "Move"
 msgstr "Di chuyển"
 
 #. A
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:140
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:143
 msgid "Move action down"
 msgstr "Chuyển thao tác xuống dưới"
 
 #. A
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:136
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:139
 msgid "Move action to bottom"
 msgstr "Chuyển thao tác xuống dưới cùng"
 
 #. A
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:132
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:135
 msgid "Move action to top"
 msgstr "Chuyển thao tác lên trên cùng"
 
 #. A
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:128
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:131
 msgid "Move action up"
 msgstr "Chuyển thao tác lên trên"
 
@@ -39630,7 +39612,7 @@ msgstr "Lên trên cùng"
 msgid "Move hold up"
 msgstr "Di chuyển lên"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:204
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:205
 #, c-format
 msgid ""
 "Move patrons to the deleted patrons table. They can be deleted permanently "
@@ -39642,7 +39624,7 @@ msgstr ""
 msgid "Move remaining unspent funds"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:203
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:204
 #, c-format
 msgid "Move these patrons to the trash"
 msgstr "Di chuyển các tài khoản bạn đọc này vào thùng rác"
@@ -39913,7 +39895,7 @@ msgstr "Tên:"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smtp_servers.tt:154
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:302
 #: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep1.tt:27
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:315
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:318
 #: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:332
 #: koha-tmpl/intranet-tmpl/prog/en/includes/admin-items-search-field-form.inc:5
 #: koha-tmpl/intranet-tmpl/prog/en/includes/admin-items-search-field-form.inc:9
@@ -39922,7 +39904,7 @@ msgstr "Tên:"
 msgid "Name: "
 msgstr "Tên tệp tin: "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:282
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:283
 #, c-format
 msgid "Named:"
 msgstr "Tên:"
@@ -40017,7 +39999,7 @@ msgstr "Tạo mới"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smtp_servers.tt:33
 #: koha-tmpl/intranet-tmpl/prog/en/includes/acquisitions-toolbar.inc:13
 #: koha-tmpl/intranet-tmpl/prog/en/includes/budgets-admin-toolbar.inc:5
-#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:8
+#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:7
 #: koha-tmpl/intranet-tmpl/prog/en/includes/labels-toolbar.inc:4
 #: koha-tmpl/intranet-tmpl/prog/en/includes/patroncards-toolbar.inc:4
 #, c-format
@@ -40119,7 +40101,7 @@ msgstr ""
 msgid "New account "
 msgstr "Thông tin tiền phạt"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:69
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:70
 #, fuzzy, c-format
 msgid "New action"
 msgstr "Tạo bạn đọc "
@@ -40216,7 +40198,7 @@ msgstr "Tạo kiểu bạn đọc"
 msgid "New category "
 msgstr "Tạo kiểu bạn đọc"
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:25
+#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:24
 #, c-format
 msgid "New child record"
 msgstr "Sao chép biểu ghi"
@@ -40357,9 +40339,13 @@ msgid "New frequency"
 msgstr "Tạo tần suất"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:62
-#: koha-tmpl/intranet-tmpl/prog/en/includes/authorities-toolbar.inc:13
 #, fuzzy, c-format
 msgid "New from Z39.50/SRU"
+msgstr "Tìm kiếm qua Z39.50"
+
+#: koha-tmpl/intranet-tmpl/prog/en/includes/authorities-toolbar.inc:20
+#, fuzzy, c-format
+msgid "New from Z39.50/SRU "
 msgstr "Tìm kiếm qua Z39.50"
 
 #. For the first occurrence,
@@ -40376,7 +40362,7 @@ msgstr "Quỹ cho %s"
 msgid "New guided report"
 msgstr "Theo hướng dẫn"
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:15
+#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:14
 #, c-format
 msgid "New item"
 msgstr "Tạo bản tài liệu"
@@ -40440,7 +40426,7 @@ msgid "New line (\\n)"
 msgstr "New line (\\n)"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:135
-#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:160
+#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:159
 #: koha-tmpl/intranet-tmpl/prog/en/includes/virtualshelves-toolbar.inc:4
 #, c-format
 msgid "New list"
@@ -40515,7 +40501,7 @@ msgid "New quote"
 msgstr "Tạo bản tài liệu"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/editor.tt:47
-#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:11
+#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:10
 #, c-format
 msgid "New record"
 msgstr "Tạo biểu ghi"
@@ -40576,7 +40562,7 @@ msgstr "Tạo bộ OAI"
 msgid "New splitting rule"
 msgstr "Tạo quy tắc phân loại"
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:18
+#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:17
 #: koha-tmpl/intranet-tmpl/prog/en/includes/serials-toolbar.inc:9
 #: koha-tmpl/intranet-tmpl/prog/en/includes/serials-toolbar.inc:98
 #, c-format
@@ -40605,7 +40591,7 @@ msgstr "Tạo trường mới"
 msgid "New tag "
 msgstr "Tạo trường mới"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:67
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:68
 #, fuzzy, c-format
 msgid "New template"
 msgstr "Hình thức nhãn gáy"
@@ -40660,7 +40646,7 @@ msgstr "Thoát"
 msgid "Newcastle City Council, United Kingdom"
 msgstr "software.coop, United Kingdom"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:433
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:434
 #, fuzzy, c-format
 msgid "Newer version"
 msgstr "Perl version: "
@@ -40669,8 +40655,8 @@ msgstr "Perl version: "
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/koha-news.tt:39
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/koha-news.tt:75
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/koha-news.tt:155
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:120
-#: koha-tmpl/intranet-tmpl/prog/en/includes/tools-menu.inc:119
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:116
+#: koha-tmpl/intranet-tmpl/prog/en/includes/tools-menu.inc:110
 #, c-format
 msgid "News"
 msgstr "Tin tức"
@@ -40730,7 +40716,7 @@ msgstr "Trang sau &gt;&gt;"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:579
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:666
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:704
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:172
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:173
 msgid "Next >>"
 msgstr "Tiếp tục >>"
 
@@ -41340,7 +41326,7 @@ msgid "No limit"
 msgstr "Tất cả"
 
 #. %1$s:  IF ( CATALOGUING ) 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:387
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:388
 #, c-format
 msgid "No log found %s for "
 msgstr "Không tìm thấy sự kiện nào liên quan %s với "
@@ -41401,7 +41387,7 @@ msgstr "Không tìm thấy ấn phẩm định kỳ cần gửi khiếu nại."
 msgid "No more renewals possible"
 msgstr "Bạn không thể gia hạn thêm"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:275
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:276
 #, fuzzy, c-format
 msgid "No more renewals possible."
 msgstr "Bạn không thể gia hạn thêm"
@@ -41466,17 +41452,17 @@ msgstr "Không tìm thấy bạn đọc phù hợp "
 msgid "No patron may put this book on hold."
 msgstr " Bạn đọc không thể đặt mượn tài liệu."
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:245
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:246
 #, fuzzy, c-format
 msgid "No patron records have been actually removed"
 msgstr "Không có biểu ghi bạn đọc nào bị loại bỏ"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:260
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:261
 #, c-format
 msgid "No patron records have been anonymized"
 msgstr "Không có lịch sử ghi mượn của bạn đọc được loại bỏ"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:254
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:255
 #, c-format
 msgid "No patron records have been removed"
 msgstr "Không có biểu ghi bạn đọc nào bị xóa"
@@ -42319,8 +42305,8 @@ msgstr "Ghi chú: Một trong hai trường sau đây phải có giá trị là 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:303
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:198
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:241
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:330
 #: koha-tmpl/intranet-tmpl/prog/en/modules/basket/basket.tt:153
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:330
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:378
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:379
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:86
@@ -42430,7 +42416,7 @@ msgstr "Thông báo"
 
 #. %1$s:  loopro.notice.title | html 
 #. %2$s:  loopro.notice.code | html 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:352
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:353
 #, fuzzy, c-format
 msgid "Notice %s (%s)"
 msgstr "%s %s tới %s %s "
@@ -42450,8 +42436,8 @@ msgstr "Thông báo"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/letter.tt:64
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/letter.tt:74
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/letter.tt:125
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:54
-#: koha-tmpl/intranet-tmpl/prog/en/includes/tools-menu.inc:26
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:52
+#: koha-tmpl/intranet-tmpl/prog/en/includes/tools-menu.inc:24
 #, c-format
 msgid "Notices &amp; slips"
 msgstr "Thông báo &amp; Phiếu in"
@@ -42822,7 +42808,7 @@ msgstr "Cấu hình bộ OAI"
 msgid "OAI xslt stylesheet"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:222
+#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:221
 #, c-format
 msgid "OAI-DC"
 msgstr ""
@@ -42950,8 +42936,8 @@ msgid "OPAC notes"
 msgstr "Ghi chú OPAC:"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/problem-reports.tt:37
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:166
-#: koha-tmpl/intranet-tmpl/prog/en/includes/tools-menu.inc:137
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:162
+#: koha-tmpl/intranet-tmpl/prog/en/includes/tools-menu.inc:128
 #, c-format
 msgid "OPAC problem reports"
 msgstr ""
@@ -43028,12 +43014,12 @@ msgstr "Hoặc chọn các trường bạn muốn cung cấp từ danh sách sau
 msgid "OS version ('uname -a'): "
 msgstr "OS version ('uname -a'): "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:312
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:313
 #, c-format
 msgid "Object"
 msgstr "Đối tượng"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:239
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:240
 #, c-format
 msgid "Object: "
 msgstr "Đối tượng: "
@@ -43166,7 +43152,7 @@ msgstr ""
 msgid "Older transactions"
 msgstr "Tài lên giao dịch"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:429
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:430
 #, fuzzy, c-format
 msgid "Older version"
 msgstr "Perl version: "
@@ -43523,7 +43509,7 @@ msgstr "Số hóa đơn"
 msgid "Or enter a list of record numbers"
 msgstr "Nhập số thẻ bạn đọc:"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:102
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:103
 #, fuzzy, c-format
 msgid "Or list barcodes one by one"
 msgstr "Hoặc liệt kê lần lượt thẻ bạn đọc"
@@ -43750,7 +43736,7 @@ msgstr "%s Kích hoạt "
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/orders_by_budget.tt:24
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/orders_by_budget.tt:48
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/reports-home.tt:93
-#: koha-tmpl/intranet-tmpl/prog/en/includes/acquisitions-menu.inc:17
+#: koha-tmpl/intranet-tmpl/prog/en/includes/acquisitions-menu.inc:18
 #: koha-tmpl/intranet-tmpl/prog/en/includes/reports-menu.inc:54
 #, fuzzy, c-format
 msgid "Orders by fund"
@@ -43976,7 +43962,7 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/orders_by_budget.tt:126
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/reserves_stats.tt:279
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/serials_stats.tt:112
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:274
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:275
 #, c-format
 msgid "Output"
 msgstr "Hiển thị báo cáo"
@@ -44051,8 +44037,8 @@ msgstr "Số tiền phạt quá hạn"
 msgid "Overdue notice required: "
 msgstr "Thông báo quá hạn: "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:59
-#: koha-tmpl/intranet-tmpl/prog/en/includes/tools-menu.inc:29
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:57
+#: koha-tmpl/intranet-tmpl/prog/en/includes/tools-menu.inc:27
 #, c-format
 msgid "Overdue notice/status triggers"
 msgstr "Thông báo quá hạn"
@@ -44326,11 +44312,6 @@ msgstr ""
 msgid "Password"
 msgstr "Mật khẩu"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/member-password.tt:48
-#, c-format
-msgid "Password Updated"
-msgstr "Mật khẩu được cập nhật thành công!"
-
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/categories.tt:259
 #, fuzzy, c-format
 msgid "Password change in OPAC: "
@@ -44429,6 +44410,11 @@ msgstr "Số thẻ bạn đọc %s không hợp lệ %s (với bạn đọc có 
 #, fuzzy, c-format
 msgid "Password reset in OPAC: "
 msgstr "Hiển thị trong OPAC: "
+
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/member-password.tt:48
+#, fuzzy, c-format
+msgid "Password updated"
+msgstr "Mật khẩu được cập nhật thành công!"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/auth.tt:74
 #: koha-tmpl/intranet-tmpl/prog/en/modules/installer/auth.tt:54
@@ -44614,8 +44600,8 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/en/modules/patroncards/edit-template.tt:22
 #: koha-tmpl/intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:19
 #: koha-tmpl/intranet-tmpl/prog/en/modules/patroncards/manage.tt:43
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:64
-#: koha-tmpl/intranet-tmpl/prog/en/includes/tools-menu.inc:32
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:62
+#: koha-tmpl/intranet-tmpl/prog/en/includes/tools-menu.inc:30
 #, c-format
 msgid "Patron card creator"
 msgstr "Tạo thẻ bạn đọc"
@@ -44704,9 +44690,9 @@ msgstr "Kiểu bạn đọc: "
 #: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/clubs-add-modify.tt:30
 #: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/clubs.tt:38
 #: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/templates-add-modify.tt:34
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:39
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:37
 #: koha-tmpl/intranet-tmpl/prog/en/includes/permissions.inc:61
-#: koha-tmpl/intranet-tmpl/prog/en/includes/tools-menu.inc:17
+#: koha-tmpl/intranet-tmpl/prog/en/includes/tools-menu.inc:15
 #, fuzzy, c-format
 msgid "Patron clubs"
 msgstr "Thông tin khác"
@@ -44782,7 +44768,7 @@ msgid "Patron has %s item(s) checked out."
 msgstr "Hiện tại bạn đọc này đang mượn %s tài liệu của thư viện."
 
 #. %1$s:  checkout_info.USERBLOCKEDOVERDUE | html 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:201
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:202
 #, fuzzy, c-format
 msgid "Patron has %s overdue item(s)."
 msgstr "Hiện tại bạn đọc này còn nợ thư viện khoản tiền phạt: %s"
@@ -44841,7 +44827,7 @@ msgid "Patron has an indefinite restriction."
 msgstr "Tài khoản bạn đọc bị hạn chế tới ngày %s"
 
 #. %1$s:  checkout_info.USERBLOCKEDREMAINING | html 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:284
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:285
 #, fuzzy, c-format
 msgid "Patron has had overdue items and is blocked for %s day(s)."
 msgstr "Bạn đọc có tài liệu quá hạn và bị khóa tài khoản tới ngày: "
@@ -44983,7 +44969,7 @@ msgstr "Không tìm thấy bạn đọc."
 msgid "Patron is restricted"
 msgstr "Bạn đọc bị KHÓA THẺ"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:272
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:273
 #, fuzzy, c-format
 msgid "Patron is restricted."
 msgstr "Bạn đọc bị KHÓA THẺ"
@@ -45003,9 +44989,9 @@ msgstr "Danh sách bạn đọc: "
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/patron_lists/add-modify.tt:28
 #: koha-tmpl/intranet-tmpl/prog/en/modules/patron_lists/list.tt:40
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:34
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:32
 #: koha-tmpl/intranet-tmpl/prog/en/includes/patron-toolbar.inc:23
-#: koha-tmpl/intranet-tmpl/prog/en/includes/tools-menu.inc:14
+#: koha-tmpl/intranet-tmpl/prog/en/includes/tools-menu.inc:12
 #, c-format
 msgid "Patron lists"
 msgstr "Danh sách bạn đọc"
@@ -45232,7 +45218,7 @@ msgstr "Địa chỉ bạn đọc chưa chính xác"
 msgid "Patron's address is in doubt (proceeding anyway)"
 msgstr "Địa chỉ bạn đọc không chính xác (Hệ thống tiếp tục xử lý)"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:266
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:267
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:166
 #, c-format
 msgid "Patron's address is in doubt."
@@ -45278,7 +45264,7 @@ msgstr "Thẻ bạn đọc đã hết hạn"
 msgid "Patron's card is expired (%s)"
 msgstr "Thẻ bạn đọc đã hết hạn"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:278
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:279
 #, fuzzy, c-format
 msgid "Patron's card is expired."
 msgstr "Thẻ bạn đọc đã hết hạn"
@@ -45290,7 +45276,7 @@ msgstr "Thẻ bạn đọc đã hết hạn"
 msgid "Patron's card is lost"
 msgstr "Bạn đọc bị mất thẻ"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:269
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:270
 #, fuzzy, c-format
 msgid "Patron's card is lost."
 msgstr "Bạn đọc bị mất thẻ"
@@ -45307,7 +45293,7 @@ msgstr "Tài khoản bạn đọc sắp hết hạn. Tài khoản bạn đọc h
 #. %1$s:  chargesamount_guarantees | $Price 
 #. %2$s:  IF noissues 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:854
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:84
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:85
 #, c-format
 msgid "Patron's guarantees collectively owe %s. %s "
 msgstr ""
@@ -45316,7 +45302,7 @@ msgstr ""
 #. %1$s:  charges_guarantors_guarantees | $Price 
 #. %2$s:  IF noissues 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:846
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:76
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:77
 #, c-format
 msgid "Patron's guarantors and their other guarantees collectively owe %s. %s "
 msgstr ""
@@ -45424,9 +45410,9 @@ msgid "Patrons &rsaquo; New patron"
 msgstr "&rsaquo; Tạo bạn đọc"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/admin-home.tt:90
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:30
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:28
 #: koha-tmpl/intranet-tmpl/prog/en/includes/admin-menu.inc:33
-#: koha-tmpl/intranet-tmpl/prog/en/includes/tools-menu.inc:11
+#: koha-tmpl/intranet-tmpl/prog/en/includes/tools-menu.inc:9
 #, c-format
 msgid "Patrons and circulation"
 msgstr "Bạn đọc và lưu thông"
@@ -45771,12 +45757,12 @@ msgstr "Quay lại"
 msgid "Perform cash register cashup action "
 msgstr "Không có thư viện được khai báo. "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:162
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:158
 #, fuzzy, c-format
 msgid "Perform cashup actions on cash registers"
 msgstr "Thiết lập các thư viện và nhóm thư viện trong hệ thống."
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:215
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:206
 #, fuzzy, c-format
 msgid "Perform inventory of your catalog"
 msgstr "Kiểm kê tài liệu trong kho"
@@ -45847,12 +45833,12 @@ msgstr "Thư viện thường trực"
 msgid "Permanent shelving location"
 msgstr "Tất cả"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:162
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:163
 #, c-format
 msgid "Permanently delete checkout history older than"
 msgstr "Xóa lịch sử ghi mượn của thư viện trước ngày"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:196
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:197
 #, c-format
 msgid "Permanently delete these patrons"
 msgstr "Xóa vĩnh viễn các tài khoản bạn đọc"
@@ -46026,13 +46012,13 @@ msgstr "Hiển thị từ %s tới %s  trong tổng số %skết quả được 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:859
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:861
 #: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:210
-#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:179
-#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:184
+#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:178
+#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:183
 #, c-format
 msgid "Place hold"
 msgstr "Đặt mượn"
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:174
+#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:173
 #, c-format
 msgid "Place hold "
 msgstr "Đặt mượn "
@@ -46052,7 +46038,7 @@ msgstr "Đặt mượn tài liệu: %s%s"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:151
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:516
 #: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:279
-#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:180
+#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:179
 #, c-format
 msgid "Place hold for %s %s (%s)"
 msgstr "Đặt mượn cho bạn đọc: %s %s (%s)"
@@ -46200,7 +46186,7 @@ msgstr ""
 "không nhớ đăng ký cá biệt."
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:280
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:281
 msgid "Please check at least one action"
 msgstr "Bạn vui lòng lựa chọn một thao tác"
 
@@ -46283,7 +46269,7 @@ msgid "Please confirm checkin"
 msgstr "Xác nhận ghi mượn cho bạn đọc"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:103
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:312
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:313
 #, c-format
 msgid "Please confirm checkout"
 msgstr "Xác nhận ghi mượn cho bạn đọc"
@@ -46317,7 +46303,7 @@ msgstr "Xác nhận ghi mượn cho bạn đọc"
 
 #. %1$s:  accountlines.total( payment_type => 'CASH') * -1 | $Price 
 #. %2$s:  register.starting_float | $Price 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/pos/register.tt:270
+#: koha-tmpl/intranet-tmpl/prog/en/modules/pos/register.tt:274
 #, c-format
 msgid ""
 "Please confirm that you have removed %s from the cash register and left a "
@@ -46381,7 +46367,7 @@ msgid "Please enter a "
 msgstr "Vui lòng nhập ngày căn cứ!"
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:280
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:281
 #, fuzzy
 msgid "Please enter a date!"
 msgstr "Vui lòng nhập ngày căn cứ!"
@@ -46470,7 +46456,7 @@ msgid "Please enter a value less than or equal to {0}."
 msgstr "Hãy nhập giá trị nhỏ hơn hoặc bằng {0}."
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:280
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:281
 msgid "Please enter at least one criterion for deletion!"
 msgstr "Vui lòng nhập tiêu chí xóa!"
 
@@ -47335,7 +47321,7 @@ msgstr "Thư điện tử chỉnh"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/boraccount.tt:108
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/boraccount.tt:110
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/routing-preview-slip.tt:39
-#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:166
+#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:165
 #: koha-tmpl/intranet-tmpl/prog/en/includes/columns_settings.inc:4
 #: koha-tmpl/intranet-tmpl/prog/en/includes/modals/cashup_summary.inc:29
 #: koha-tmpl/intranet-tmpl/prog/en/includes/str/tinymce_i18n.inc:2
@@ -47428,7 +47414,7 @@ msgstr "In nhãn gáy"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/pos/pay.tt:52
 #: koha-tmpl/intranet-tmpl/prog/en/modules/pos/printreceipt.tt:10
-#: koha-tmpl/intranet-tmpl/prog/en/modules/pos/register.tt:328
+#: koha-tmpl/intranet-tmpl/prog/en/modules/pos/register.tt:332
 #, fuzzy, c-format
 msgid "Print receipt"
 msgstr "In biên lai cho bạn đọc %s"
@@ -47793,7 +47779,7 @@ msgstr "Ghi chú"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/addbybiblionumber.tt:60
 #: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:82
 #: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:395
-#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:141
+#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:140
 #, c-format
 msgid "Public lists"
 msgstr "Giá sách ảo cộng đồng"
@@ -48199,8 +48185,8 @@ msgid "Quick add new patron "
 msgstr "Không thể tạo tài khoản bạn đọc"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/labels/spinelabel-home.tt:33
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:224
-#: koha-tmpl/intranet-tmpl/prog/en/includes/tools-menu.inc:82
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:215
+#: koha-tmpl/intranet-tmpl/prog/en/includes/tools-menu.inc:75
 #, c-format
 msgid "Quick spine label creator"
 msgstr "Tạo nhanh nhãn gáy"
@@ -48234,7 +48220,7 @@ msgid "Quote #%s deleted successfully."
 msgstr "Bộ sưu tập '%s' được cập nhật thành công!"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/quotes-upload.tt:24
-#: koha-tmpl/intranet-tmpl/prog/en/includes/tools-menu.inc:125
+#: koha-tmpl/intranet-tmpl/prog/en/includes/tools-menu.inc:116
 #, c-format
 msgid "Quote editor"
 msgstr "Chỉnh sửa trích dẫn trên OPAC"
@@ -48249,7 +48235,7 @@ msgstr "Chỉnh sửa trích dẫn trên OPAC"
 msgid "Quote editor &rsaquo; Tools &rsaquo; Koha"
 msgstr "Koha &rsaquo; Công cụ bổ trợ &rsaquo; Nhập ảnh bìa cho biểu ghi"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:131
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:127
 #, c-format
 msgid "Quote editor for Quote-of-the-day feature in OPAC"
 msgstr "Cho phép thủ thư tạo các trích dẫn, thông báo nhanh trên OPAC"
@@ -48293,7 +48279,7 @@ msgstr "R&eacute;initialiser"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/basket/basket.tt:54
 #: koha-tmpl/intranet-tmpl/prog/en/modules/basket/downloadcart.tt:17
 #: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/downloadshelf.tt:34
-#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:99
+#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:98
 #: koha-tmpl/intranet-tmpl/prog/en/includes/virtualshelves-toolbar.inc:29
 #, c-format
 msgid "RIS"
@@ -48329,7 +48315,7 @@ msgstr "Rachel Hamilton-Williams (Kaitiaki from 2004 to present)"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/z3950servers.tt:204
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/bor_issues_top.tt:87
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/routing.tt:77
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:117
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:120
 #, c-format
 msgid "Rank"
 msgstr "Thứ tự"
@@ -48808,8 +48794,8 @@ msgid "Refund payments to patrons "
 msgstr "Xem chi tiết bạn đọc"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:306
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:239
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:273
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:242
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:276
 #, c-format
 msgid "RegEx"
 msgstr "RegEx"
@@ -49080,13 +49066,13 @@ msgstr "Hình ảnh khác:"
 #. SCRIPT
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/duplicate_orders.tt:317
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/histsearch.tt:153
+#: koha-tmpl/intranet-tmpl/prog/en/modules/basket/basket.tt:8
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:326
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:494
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/koha2marclinks.tt:59
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/library_groups.tt:260
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/oai_sets.tt:87
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/oai_sets.tt:163
-#: koha-tmpl/intranet-tmpl/prog/en/modules/basket/basket.tt:8
 #: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/course-details.tt:272
 #: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/course.tt:173
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:502
@@ -49143,8 +49129,8 @@ msgstr "Xóa tài liệu trùng"
 msgid "Remove facet %s"
 msgstr "Bỏ từ khóa"
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:109
-#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:116
+#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:108
+#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:115
 #, fuzzy, c-format
 msgid "Remove from cart"
 msgstr "Nhóm báo cáo:"
@@ -49527,8 +49513,8 @@ msgid ""
 "ignored)"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/authorities-toolbar.inc:33
-#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:66
+#: koha-tmpl/intranet-tmpl/prog/en/includes/authorities-toolbar.inc:36
+#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:65
 #, fuzzy, c-format
 msgid "Replace record via Z39.50/SRU"
 msgstr "Thay thế qua Z39.50"
@@ -49761,7 +49747,7 @@ msgid "Request ID"
 msgstr "Bắt buộc"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:532
-#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:190
+#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:189
 #, fuzzy, c-format
 msgid "Request article"
 msgstr "Bắt buộc"
@@ -49941,7 +49927,6 @@ msgstr "Required module missing"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:766
 #: koha-tmpl/intranet-tmpl/prog/en/modules/installer/step1.tt:63
 #: koha-tmpl/intranet-tmpl/prog/en/modules/installer/step1.tt:75
-#: koha-tmpl/intranet-tmpl/prog/en/modules/offline_circ/process_koc.tt:68
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/boraccount.tt:199
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/boraccount.tt:256
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/boraccount.tt:308
@@ -49983,6 +49968,7 @@ msgstr "Required module missing"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1153
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1210
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1419
+#: koha-tmpl/intranet-tmpl/prog/en/modules/offline_circ/process_koc.tt:68
 #: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep1.tt:24
 #: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep1.tt:29
 #: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep2.tt:36
@@ -50007,7 +49993,7 @@ msgstr "Required module missing"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:110
 #: koha-tmpl/intranet-tmpl/prog/en/modules/pos/pay.tt:130
 #: koha-tmpl/intranet-tmpl/prog/en/modules/pos/pay.tt:146
-#: koha-tmpl/intranet-tmpl/prog/en/modules/pos/register.tt:303
+#: koha-tmpl/intranet-tmpl/prog/en/modules/pos/register.tt:307
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:779
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1111
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1157
@@ -50032,7 +50018,7 @@ msgstr "Required module missing"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/koha-news.tt:111
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/letter.tt:386
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/letter.tt:396
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:317
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:320
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/picture-upload.tt:144
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/picture-upload.tt:149
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/quotes.tt:71
@@ -50338,7 +50324,7 @@ msgstr "Kết quả"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/import_borrowers.tt:38
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/inventory.tt:29
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/picture-upload.tt:27
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:163
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:164
 #, fuzzy, c-format
 msgid "Results "
 msgstr "Kết quả"
@@ -50581,7 +50567,7 @@ msgstr "Quay lại: "
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/boraccount.tt:197
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/boraccount.tt:254
-#: koha-tmpl/intranet-tmpl/prog/en/modules/pos/register.tt:301
+#: koha-tmpl/intranet-tmpl/prog/en/modules/pos/register.tt:305
 #, fuzzy, c-format
 msgid "Returned to patron: "
 msgstr "Xem chi tiết bạn đọc"
@@ -50742,8 +50728,8 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/en/modules/rotating_collections/editCollections.tt:27
 #: koha-tmpl/intranet-tmpl/prog/en/modules/rotating_collections/rotatingCollections.tt:37
 #: koha-tmpl/intranet-tmpl/prog/en/modules/rotating_collections/transferCollection.tt:22
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:229
-#: koha-tmpl/intranet-tmpl/prog/en/includes/tools-menu.inc:85
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:220
+#: koha-tmpl/intranet-tmpl/prog/en/includes/tools-menu.inc:78
 #, c-format
 msgid "Rotating collections"
 msgstr "Bộ sưu tập luân phiên"
@@ -51068,7 +51054,7 @@ msgstr "Tìm kiếm theo trường:"
 msgid "SRU search fields mapping for bibliographic records &rsaquo; Koha"
 msgstr "Tìm kiếm theo trường:"
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:225
+#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:224
 #, c-format
 msgid "SRW-DC"
 msgstr ""
@@ -51162,6 +51148,7 @@ msgstr "Thứ 7"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/supplier.tt:309
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/uncertainprice.tt:153
 #: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:246
+#: koha-tmpl/intranet-tmpl/prog/en/modules/basket/downloadcart.tt:28
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/additional-fields.tt:201
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:236
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:310
@@ -51195,7 +51182,6 @@ msgstr "Thứ 7"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/systempreferences.tt:446
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/transport-cost-matrix.tt:99
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/z3950servers.tt:187
-#: koha-tmpl/intranet-tmpl/prog/en/modules/basket/downloadcart.tt:28
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:791
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:795
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:808
@@ -51251,8 +51237,8 @@ msgstr "Thứ 7"
 msgid "Save"
 msgstr "Lưu"
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/authorities-toolbar.inc:43
-#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:90
+#: koha-tmpl/intranet-tmpl/prog/en/includes/authorities-toolbar.inc:46
+#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:89
 #, c-format
 msgid "Save "
 msgstr "Lưu "
@@ -51502,7 +51488,7 @@ msgstr "Lập lịch báo cáo"
 msgid "Schedule "
 msgstr "Lập lịch báo cáo"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:126
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:122
 #, c-format
 msgid "Schedule tasks to run"
 msgstr "Thiết lập thời gian tự động gửi các báo cáo mặc định"
@@ -52565,11 +52551,11 @@ msgstr "Xóa mẫu"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:51
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/duplicate_orders.tt:144
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:104
+#: koha-tmpl/intranet-tmpl/prog/en/modules/basket/basket.tt:6
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branch_transfer_limits.tt:47
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branch_transfer_limits.tt:66
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/preferences.tt:211
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/preferences.tt:245
-#: koha-tmpl/intranet-tmpl/prog/en/modules/basket/basket.tt:6
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/detail.tt:297
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:82
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:54
@@ -53443,7 +53429,7 @@ msgstr "&rsaquo; Thiết lập chính sách chuyển tài liệu giữa các th�
 msgid "Set library, desk and register"
 msgstr "Chọn thư viện"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:60
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:58
 #, c-format
 msgid "Set notice/status triggers for overdue items"
 msgstr ""
@@ -54150,7 +54136,7 @@ msgstr "Hiển thị"
 msgid "Shows on transit slips"
 msgstr "Hiển thị trên phiếu vận chuyển"
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:219
+#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:218
 #, c-format
 msgid "Simple DC-RDF"
 msgstr ""
@@ -54727,7 +54713,7 @@ msgstr "Ghi chú thủ thư:"
 msgid "Staff patron"
 msgstr "Tìm kiếm"
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/tools-menu.inc:94
+#: koha-tmpl/intranet-tmpl/prog/en/includes/tools-menu.inc:87
 #, c-format
 msgid "Stage MARC for import"
 msgstr "Duyệt biểu ghi MARC tải lên"
@@ -54740,7 +54726,7 @@ msgstr "Quản lý các bản ghi đã được kiểm duyệt"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:88
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/stage-marc-import.tt:29
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/stage-marc-import.tt:58
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:244
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:235
 #, c-format
 msgid "Stage MARC records for import"
 msgstr "Kiểm duyệt các bản ghi nhập theo lô"
@@ -54755,7 +54741,7 @@ msgstr "Kiểm duyệt các bản ghi nhập theo lô"
 msgid "Stage MARC records for import &rsaquo; Tools &rsaquo; Koha"
 msgstr "Kiểm duyệt các bản ghi nhập theo lô"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:245
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:236
 #, fuzzy, c-format
 msgid "Stage MARC records into the reservoir"
 msgstr ""
@@ -54786,12 +54772,12 @@ msgstr "Duyệt biểu ghi trước khi nhập vào CSDL"
 msgid "Staged"
 msgstr "Đã kiểm duyệt"
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/tools-menu.inc:97
+#: koha-tmpl/intranet-tmpl/prog/en/includes/tools-menu.inc:90
 #, c-format
 msgid "Staged MARC management"
 msgstr "Quản lý biểu ghi MARC được duyệt"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:249
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:240
 #, c-format
 msgid "Staged MARC record management"
 msgstr "Quản lý biểu ghi MARC được duyệt"
@@ -55243,8 +55229,8 @@ msgstr "Hiện tại vẫn còn tìm kiếm trên %s máy chủ"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/stockrotation.tt:34
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/stockrotation.tt:98
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:234
-#: koha-tmpl/intranet-tmpl/prog/en/includes/tools-menu.inc:88
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:225
+#: koha-tmpl/intranet-tmpl/prog/en/includes/tools-menu.inc:81
 #, fuzzy, c-format
 msgid "Stock rotation"
 msgstr "Kho tài liệu"
@@ -55549,9 +55535,9 @@ msgstr "Chủ đề:"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/csv-profiles.tt:263
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/inventory.tt:221
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/koha-news.tt:140
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:335
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:338
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/quotes.tt:82
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:294
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:295
 #: koha-tmpl/intranet-tmpl/prog/en/includes/acquisitions-add-to-basket.inc:10
 #: koha-tmpl/intranet-tmpl/prog/en/includes/acquisitions-search.inc:8
 #: koha-tmpl/intranet-tmpl/prog/en/includes/acquisitions-search.inc:19
@@ -55632,7 +55618,7 @@ msgid "Subscription #%s"
 msgstr "ÂPĐK số %s"
 
 #. %1$s:  loopro.object | html 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:347
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:348
 #, fuzzy, c-format
 msgid "Subscription %s "
 msgstr "Ấn phẩm định kỳ %s "
@@ -56560,7 +56546,7 @@ msgstr ", editor"
 msgid "Tag has no subfields"
 msgstr "Cấu trúc trường con của trường %s "
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/tools-menu.inc:44
+#: koha-tmpl/intranet-tmpl/prog/en/includes/tools-menu.inc:42
 #, c-format
 msgid "Tag moderation"
 msgstr "Từ khóa"
@@ -56600,7 +56586,7 @@ msgstr "Được gán từ khóa:"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tags/list.tt:25
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tags/review.tt:44
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:84
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:82
 #, c-format
 msgid "Tags"
 msgstr "Từ khóa"
@@ -56644,8 +56630,8 @@ msgid "Target (database) record check field"
 msgstr "Trường được kiểm tra trên biểu ghi đích (cơ sở dữ liệu)"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/scheduler.tt:42
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:125
-#: koha-tmpl/intranet-tmpl/prog/en/includes/tools-menu.inc:122
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:121
+#: koha-tmpl/intranet-tmpl/prog/en/includes/tools-menu.inc:113
 #, c-format
 msgid "Task scheduler"
 msgstr "Lập lịch báo cáo"
@@ -56688,7 +56674,7 @@ msgstr "Thuế suất: "
 msgid "Technical reports"
 msgstr "Báo cáo kỹ thuật"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:89
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:91
 #: koha-tmpl/intranet-tmpl/prog/en/includes/clubs-table.inc:5
 #: koha-tmpl/intranet-tmpl/prog/en/includes/str/tinymce_i18n.inc:2
 #, fuzzy, c-format
@@ -56814,7 +56800,7 @@ msgstr "Kiểm tra mẫu đánh số"
 msgid "Test prediction pattern"
 msgstr "Kiểm tra cách đánh số"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:210
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:211
 #, fuzzy, c-format
 msgid "Test run: Do not remove any patrons."
 msgstr "Không loại bỏ bất kỳ bạn đọc này (đã từng hoạt động)"
@@ -56994,7 +56980,7 @@ msgid ""
 msgstr ""
 "Hai dữ liệu sau đây có thể được sử dụng cho mục đích thống kê của bạn. "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:156
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:157
 #, c-format
 msgid ""
 "The AnonymousPatron system preference is not defined. You can use this "
@@ -57130,7 +57116,7 @@ msgid "The barcode %s was not found."
 msgstr "Không tìm thấy đăng ký cá biệt %s."
 
 #. %1$s:  checkout_info.barcode | html 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:293
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:294
 #, fuzzy, c-format
 msgid "The barcode was not found %s."
 msgstr "Không tìm thấy đăng ký cá biệt %s."
@@ -57716,7 +57702,7 @@ msgstr "Không có thư viện được khai báo. "
 #. For the first occurrence,
 #. %1$s:  DEBT | $Price 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:120
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:296
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:297
 #, fuzzy, c-format
 msgid "The patron has a debt of %s."
 msgstr "Bạn đọc có khoản tiền phạt vượt quá giới hạn của thư viện.  %s"
@@ -57752,7 +57738,7 @@ msgid "The patron has unpaid charges for holds, rentals etc of %s"
 msgstr "Bạn đọc chưa thanh toán các khoản phí của %s"
 
 #. %1$s:  checkout_info.alert.OTHER_CHARGES | $Price 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:236
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:237
 #, fuzzy, c-format
 msgid "The patron has unpaid charges for holds, rentals etc of %s."
 msgstr "Bạn đọc chưa thanh toán các khoản phí của %s"
@@ -58114,12 +58100,12 @@ msgstr "%s Hiện tại chưa có bộ sưu tập nào được định nghĩa. 
 msgid "There are no contracts with this vendor. %s "
 msgstr "Hiện tại không có hợp đồng liên quan đến nhà cung cấp này."
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:202
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:205
 #, c-format
 msgid "There are no defined actions for this template."
 msgstr "Hiện tại chưa có thao tác nào được định nghĩa cho mẫu này."
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:300
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:303
 #, c-format
 msgid "There are no defined templates. Please create a template first."
 msgstr ""
@@ -58507,7 +58493,7 @@ msgid "These items have a hold ratio &ge; %s."
 msgstr "Tài liệu có tỷ lệ đặt mượn &ge; %s."
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:280
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:281
 msgid ""
 "These patrons will be permanently removed from the database and cannot be "
 "recovered"
@@ -58537,6 +58523,11 @@ msgstr ""
 #, fuzzy, c-format
 msgid "They have items currently checked out."
 msgstr "Hiển thị tất cả các tài liệu hiện tại đang được ghi mượn:"
+
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:101
+#, fuzzy, c-format
+msgid "They have permissions assigned to them."
+msgstr "%s Chưa có tài liệu trong bộ sưu tập này. %s "
 
 #. SCRIPT
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/overduerules.tt:183
@@ -58624,7 +58615,7 @@ msgid "This fee is charged once per checkout/renewal per item"
 msgstr ""
 
 #. INPUT type=text name=object
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:237
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:238
 msgid "This field cannot be modified from the circulation module."
 msgstr ""
 
@@ -58736,7 +58727,7 @@ msgstr ""
 #. For the first occurrence,
 #. %1$s:  Branches.GetName( itemhomebranch ) | html 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:445
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:281
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:282
 #, c-format
 msgid "This item belongs to %s and cannot be checked out from this location."
 msgstr ""
@@ -58783,13 +58774,13 @@ msgstr ""
 
 #. For the first occurrence,
 #. %1$s:  checkout_info.ITEM_LOST | html 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:204
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:233
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:205
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:234
 #, fuzzy, c-format
 msgid "This item has been lost with a status of \"%s.\""
 msgstr "Tài liệu hiện tại đang bị mất với trạng thái \"%s\"."
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:224
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:225
 #, fuzzy, c-format
 msgid "This item has previously been checked out to this patron."
 msgstr "(%s) đang được mượn bởi bạn đọc này. Bạn có muốn gia hạn cho bạn đọc?"
@@ -58801,33 +58792,33 @@ msgstr "Tài liệu này đã có trong giỏ tài liệu của bạn"
 
 #. %1$s:  IF CAN_user_circulate_force_checkout 
 #. %2$s:  END 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:178
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:179
 #, c-format
 msgid ""
 "This item is checked out to another patron. %s Check in and check out? %s"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:166
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:167
 #, fuzzy, c-format
 msgid "This item is currently checked out to this patron. Renew?"
 msgstr "(%s) đang được mượn bởi bạn đọc này. Bạn có muốn gia hạn cho bạn đọc?"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:175
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:176
 #, fuzzy, c-format
 msgid "This item is on hold and being processed for another patron."
 msgstr "Tài liệu này đang được bạn đọc khác đặt mượn."
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:172
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:173
 #, fuzzy, c-format
 msgid "This item is on hold and being transferred for another patron."
 msgstr "Tài liệu này đang được bạn đọc khác đặt mượn."
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:220
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:221
 #, c-format
 msgid "This item is on hold for another patron."
 msgstr "Tài liệu này đang được bạn đọc khác đặt mượn."
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:218
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:219
 #, fuzzy, c-format
 msgid ""
 "This item is on hold for another patron. The hold will be overridden, but "
@@ -58852,7 +58843,7 @@ msgstr ""
 "Bản tài liệu này thuộc về bộ sưu tập luân phiên, bạn cần chuyển tài liệu "
 "tới  %s"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:169
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:170
 #, fuzzy, c-format
 msgid "This item is waiting for another patron."
 msgstr "Tài liệu này đang được bạn đọc khác đặt mượn."
@@ -58920,7 +58911,7 @@ msgid "This order has been claimed %s times. On %s%s%s, %s%s "
 msgstr "Tài liệu này đã được thêm vào giỏ tài liệu của bạn"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:176
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:190
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:191
 #, fuzzy, c-format
 msgid "This patron can't check out this item per library circulation policy."
 msgstr ""
@@ -58933,7 +58924,7 @@ msgid ""
 "preferences."
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:325
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:326
 #, fuzzy, c-format
 msgid "This patron does not exist. "
 msgstr "Bạn đọc này không tồn tại"
@@ -58979,7 +58970,7 @@ msgid "This patron is from a different library (%s)"
 msgstr "Bạn đọc không thuộc về thư viện của bạn (%s)"
 
 #. %1$s:  Branches.GetName( checkout_info.BORRNOTSAMEBRANCH ) | html 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:187
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:188
 #, fuzzy, c-format
 msgid "This patron is from a different library (%s)."
 msgstr "Bạn đọc không thuộc về thư viện của bạn (%s)"
@@ -59029,9 +59020,9 @@ msgid "This record cannot be transferred to the advanced editor. Continue?"
 msgstr ""
 
 #. A
-#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:47
-#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:55
-#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:81
+#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:46
+#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:54
+#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:80
 #, fuzzy
 msgid "This record has no items"
 msgstr "Biểu ghi này không có tài liệu đính kèm"
@@ -59352,7 +59343,7 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/checkout-notes.tt:79
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:485
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:1054
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:141
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:142
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/offline.tt:120
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/offline.tt:163
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/offline.tt:181
@@ -59565,7 +59556,7 @@ msgstr "đến "
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/orders_by_budget.tt:128
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/reserves_stats.tt:285
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/serials_stats.tt:118
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:280
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:281
 #, c-format
 msgid "To a file:"
 msgstr "Xuất ra tệp tin:"
@@ -59685,7 +59676,7 @@ msgid ""
 "Administrator. "
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:277
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:278
 #, c-format
 msgid "To screen in the browser:"
 msgstr "Hiển thị trên màn hình:"
@@ -59773,8 +59764,8 @@ msgstr "Đổi cho đặt mượn cuối"
 msgid "Toggle set to lowest priority"
 msgstr "Chuyển thành đặt mượn có mức ưu tiên thấp nhất"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:184
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:290
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:185
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:291
 #, fuzzy, c-format
 msgid "Too many checked out."
 msgstr "Tài liệu không được ghi mượn."
@@ -59857,8 +59848,8 @@ msgstr ""
 "Hiện tại bạn đọc đã mượn %s tài liệu cùng loại. Bạn đọc chỉ được phép mượn "
 "tối đa %s tài liệu."
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:135
-#: koha-tmpl/intranet-tmpl/prog/en/includes/tools-menu.inc:128
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:131
+#: koha-tmpl/intranet-tmpl/prog/en/includes/tools-menu.inc:119
 #, fuzzy, c-format
 msgid "Tool plugins"
 msgstr "Công cụ bổ trợ"
@@ -59912,7 +59903,7 @@ msgstr "Công cụ bổ trợ"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/koha-news.tt:34
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/letter.tt:38
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:29
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:39
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:40
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/modborrowers.tt:24
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/overduerules.tt:21
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/picture-upload.tt:20
@@ -59925,7 +59916,7 @@ msgstr "Công cụ bổ trợ"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/stockrotation.tt:23
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload-images.tt:22
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:28
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:156
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:157
 #: koha-tmpl/intranet-tmpl/prog/en/includes/cateditor-ui.inc:42
 #: koha-tmpl/intranet-tmpl/prog/en/includes/header.inc:59
 #: koha-tmpl/intranet-tmpl/prog/en/includes/prefs-menu.inc:154
@@ -60164,7 +60155,7 @@ msgid "Total income (cash): %s (%s)"
 msgstr ""
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/pos/register.tt:147
-#: koha-tmpl/intranet-tmpl/prog/en/modules/pos/register.tt:232
+#: koha-tmpl/intranet-tmpl/prog/en/modules/pos/register.tt:236
 #, fuzzy, c-format
 msgid "Total income: "
 msgstr "Tổng giá trị"
@@ -61203,7 +61194,7 @@ msgstr "Cập nhật Trẻ em - Người lớn"
 msgid "Update errors :"
 msgstr "Update errors :"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:215
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:218
 #, fuzzy, c-format
 msgid "Update existing or add new"
 msgstr "Sử dụng biểu ghi hiện tại"
@@ -61327,7 +61318,7 @@ msgstr "Updating database structure"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:63
 #: koha-tmpl/intranet-tmpl/prog/en/modules/plugins/plugins-upload.tt:55
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/picture-upload.tt:156
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:151
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:147
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:31
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:97
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:264
@@ -61401,7 +61392,7 @@ msgstr "Tải ảnh đại diện bạn đọc lên cơ sở dữ liệu"
 msgid "Upload another KOC file"
 msgstr "Tải lên tệp tin .koc khác"
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/tools-menu.inc:131
+#: koha-tmpl/intranet-tmpl/prog/en/includes/tools-menu.inc:122
 #, fuzzy, c-format
 msgid "Upload any file"
 msgstr "Tải lên"
@@ -61411,7 +61402,7 @@ msgstr "Tải lên"
 msgid "Upload any file "
 msgstr "Tải lên"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:152
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:148
 #, c-format
 msgid "Upload any type of file, manage uploads"
 msgstr ""
@@ -61438,9 +61429,9 @@ msgstr "Áp dụng trực tiếp"
 msgid "Upload directory: "
 msgstr "Tiến trình tải lên: "
 
-#. INPUT type=button
-#: koha-tmpl/intranet-tmpl/prog/en/modules/offline_circ/process_koc.tt:70
+#. INPUT type=submit name=upload
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/files.tt:92
+#: koha-tmpl/intranet-tmpl/prog/en/modules/offline_circ/process_koc.tt:70
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/stage-marc-import.tt:109
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload-images.tt:124
 #, c-format
@@ -61454,7 +61445,7 @@ msgid "Upload file:"
 msgstr "Tải lên:"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/detail.tt:584
-#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:62
+#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:61
 #, c-format
 msgid "Upload image"
 msgstr "Thêm ảnh bìa"
@@ -61469,12 +61460,12 @@ msgstr "Chọn tệp tin tải lên"
 msgid "Upload images &rsaquo; Tools &rsaquo; Koha"
 msgstr "Koha &rsaquo; Công cụ bổ trợ &rsaquo; Nhập ảnh bìa cho biểu ghi"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:254
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:245
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload-images.tt:27
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload-images.tt:36
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload-images.tt:45
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload-images.tt:97
-#: koha-tmpl/intranet-tmpl/prog/en/includes/tools-menu.inc:100
+#: koha-tmpl/intranet-tmpl/prog/en/includes/tools-menu.inc:93
 #, c-format
 msgid "Upload local cover image"
 msgstr "Thêm ảnh bìa cho biểu ghi"
@@ -61533,8 +61524,8 @@ msgstr "Nhập ảnh bạn đọc"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/picture-upload.tt:24
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/picture-upload.tt:112
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:89
-#: koha-tmpl/intranet-tmpl/prog/en/includes/tools-menu.inc:47
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:87
+#: koha-tmpl/intranet-tmpl/prog/en/includes/tools-menu.inc:45
 #, c-format
 msgid "Upload patron images"
 msgstr "Nhập ảnh bạn đọc"
@@ -61549,7 +61540,7 @@ msgstr "Nhập ảnh bạn đọc"
 msgid "Upload patron images &rsaquo; Tools &rsaquo; Koha"
 msgstr "Koha &rsaquo; Công cụ bổ trợ &rsaquo; Nhập ảnh bìa cho biểu ghi"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:90
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:88
 #, c-format
 msgid "Upload patron images in a batch or one at a time"
 msgstr "Tải ảnh đại diện bạn đọc lên cơ sở dữ liệu"
@@ -61707,7 +61698,7 @@ msgstr ""
 msgid "Use a barcode file"
 msgstr "Sử dụng một tệp tin chứa ĐKCB"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:96
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:97
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batchMod.tt:45
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:85
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:86
@@ -61887,7 +61878,7 @@ msgstr ""
 msgid "Use the toolbar above to create a new %s."
 msgstr "Sử dụng thanh công cụ bên trên để tạo %s thẻ bạn đọc mới."
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:136
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:132
 #: koha-tmpl/intranet-tmpl/prog/en/includes/permissions.inc:659
 #, fuzzy, c-format
 msgid "Use tool plugins "
@@ -62063,7 +62054,7 @@ msgstr "Sử dụng khung mẫu biên mục:"
 msgid "Using the following CSV profile: "
 msgstr "Chỉnh sửa biểu ghi bằng các mẫu sau đây: "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:255
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:246
 #, c-format
 msgid "Utility to upload scanned cover images for display in OPAC"
 msgstr "Tải lên hình ảnh bìa của các biểu ghi tài liệu"
@@ -62352,12 +62343,12 @@ msgstr "Nhà cung cấp: "
 msgid "Vendor: %s"
 msgstr "Nhà cung cấp: %s"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:158
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:159
 #, c-format
 msgid "Verify you want to anonymize patron checkout history"
 msgstr "Xác nhận bạn muốn xóa lịch sử ghi mượn"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:107
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:108
 #, c-format
 msgid "Verify you want to delete patrons"
 msgstr "Xác nhận bạn muốn xóa tài khoản bạn đọc"
@@ -62764,7 +62755,7 @@ msgstr "Warning"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:472
 #: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:480
 #: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:496
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:184
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:185
 #, c-format
 msgid "Warning"
 msgstr "Warning"
@@ -63313,7 +63304,7 @@ msgstr ""
 msgid "Working day"
 msgstr "Ngày làm việc"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:121
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:117
 #, c-format
 msgid "Write news for the OPAC and staff interfaces"
 msgstr "Soạn thảo các bản tin trên OPAC và giao diện nhân viên"
@@ -63802,7 +63793,7 @@ msgid ""
 "preference for the file upload plugin to work. "
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:67
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:68
 #, fuzzy, c-format
 msgid "You are not allowed to use batch checkout for this patron"
 msgstr "Xác nhận bạn muốn xóa lịch sử ghi mượn"
@@ -64112,7 +64103,7 @@ msgid ""
 "process..."
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:209
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:212
 #, c-format
 msgid ""
 "You have chosen a condition on the same field as the original field. If your "
@@ -64591,7 +64582,7 @@ msgstr "Giá sách ảo của bạn: %s "
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:103
 #: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:69
 #: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:394
-#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:128
+#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:127
 #, c-format
 msgid "Your lists"
 msgstr "Giá sách ảo của bạn"
@@ -64840,64 +64831,6 @@ msgstr "[% discount | định dạng ("
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:346
 #, c-format
 msgid "[%% HOLIDAYS_LOO.DESCRIPTION.replace('\\\\\\r\\\\\\n', '"
-msgstr ""
-
-#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:3
-#, c-format
-msgid ""
-"[%% IF ( CAN_user_editcatalogue_edit_catalogue || "
-"CAN_user_editcatalogue_edit_items || CAN_user_serials_create_subscription ) "
-"%%] "
-msgstr ""
-"[%% IF ( CAN_user_editcatalogue_edit_catalogue || "
-"CAN_user_editcatalogue_edit_items || CAN_user_serials_create_subscription ) "
-"%%] "
-
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:97
-#, c-format
-msgid ""
-"[%% IF ( CAN_user_tools_edit_calendar || CAN_user_tools_manage_csv_profiles "
-"|| CAN_user_tools_view_system_logs || CAN_user_tools_edit_news || "
-"CAN_user_tools_schedule_tasks || CAN_user_tools_edit_quotes || ( Koha."
-"ArePluginsEnabled() && CAN_user_plugins_tool ) || "
-"CAN_user_tools_upload_general_files || CAN_user_tools_access_files ) %%] "
-msgstr ""
-
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:173
-#, c-format
-msgid ""
-"[%% IF ( CAN_user_tools_items_batchdel || CAN_user_tools_items_batchmod || "
-"CAN_user_tools_records_batchdel || CAN_user_tools_records_batchmod || "
-"CAN_user_tools_export_catalog || CAN_user_tools_inventory || "
-"CAN_user_tools_label_creator || CAN_user_tools_rotating_collections || "
-"( CAN_user_stockrotation_manage_rotas && Koha.Preference('StockRotation') ) "
-"|| CAN_user_tools_marc_modification_templates || "
-"CAN_user_tools_stage_marc_import || CAN_user_tools_manage_staged_marc || "
-"CAN_user_tools_upload_local_cover_images ) %%] "
-msgstr ""
-
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:26
-#, c-format
-msgid ""
-"[%% IF ( CAN_user_tools_manage_patron_lists || CAN_user_clubs || "
-"CAN_user_tools_moderate_comments || CAN_user_tools_import_patrons || "
-"CAN_user_tools_edit_notices || CAN_user_tools_edit_notice_status_triggers || "
-"CAN_user_tools_label_creator || CAN_user_tools_delete_anonymize_patrons || "
-"CAN_user_tools_edit_patrons || CAN_user_tools_batch_extend_due_dates || "
-"CAN_user_tools_moderate_tags || ( CAN_user_tools_batch_upload_patron_images "
-"&& Koha.Preference('patronimages') ) ) %%] "
-msgstr ""
-
-#: koha-tmpl/intranet-tmpl/prog/en/includes/tools-menu.inc:7
-#, c-format
-msgid ""
-"[%% IF ( CAN_user_tools_manage_patron_lists || CAN_user_clubs || "
-"CAN_user_tools_moderate_comments || CAN_user_tools_import_patrons || "
-"CAN_user_tools_edit_notices || CAN_user_tools_edit_notice_status_triggers || "
-"CAN_user_tools_label_creator || CAN_user_tools_delete_anonymize_patrons || "
-"CAN_user_tools_edit_patrons || CAN_user_tools_moderate_tags || "
-"( CAN_user_tools_batch_upload_patron_images && Koha."
-"Preference('patronimages') ) ) %%] "
 msgstr ""
 
 #: koha-tmpl/intranet-tmpl/prog/en/includes/country-list.inc:1
@@ -65549,7 +65482,7 @@ msgstr "ký tự"
 msgid "check to delete this field"
 msgstr "Chọn để xóa trường"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:205
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:206
 #, fuzzy, c-format
 msgid "cleanup_database"
 msgstr "Tải CSDL"
@@ -65771,7 +65704,7 @@ msgid "disabling the 'Mana' system preference"
 msgstr "Thông số chung của hệ thống"
 
 #. A
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:323
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:324
 msgid "display detail for this librarian."
 msgstr "Hiển thị thông tin cho thủ thư."
 
@@ -65785,12 +65718,12 @@ msgstr "Tìm kiếm biểu ghi thư mục"
 msgid "doXulting"
 msgstr "Danh sách nhận"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:263
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:266
 #, c-format
 msgid "doesn't exist"
 msgstr "không tồn tại"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:265
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:268
 #, c-format
 msgid "doesn't match"
 msgstr "không phù hợp"
@@ -65879,7 +65812,7 @@ msgstr "VD: barcode, itemcallnumber, title, \"050a 050b\", 300a "
 msgid "example"
 msgstr "Ví dụ như: 5.00"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:262
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:265
 #, c-format
 msgid "exists"
 msgstr "tồn tại"
@@ -65915,12 +65848,12 @@ msgstr "%s có lỗi khi giải nén tệp tin."
 msgid "famfamfam.com"
 msgstr "famfamfam.com"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:257
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:260
 #, c-format
 msgid "field "
 msgstr "trường "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:226
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:229
 #, c-format
 msgid "field(s) "
 msgstr "trường "
@@ -65961,7 +65894,7 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/library_groups.tt:257
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:609
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:617
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:339
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:340
 #, c-format
 msgid "from "
 msgstr "Từ "
@@ -66105,7 +66038,7 @@ msgstr "homebranch đã được định nghĩa"
 msgid "hryvnia sign"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:253
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:256
 #, c-format
 msgid "if"
 msgstr "nếu"
@@ -66126,7 +66059,7 @@ msgstr ""
 
 #. INPUT type=text name=regex_modifiers
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:296
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:243
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:246
 msgid "ig"
 msgstr "ig"
 
@@ -66540,8 +66473,8 @@ msgid "last on: %s"
 msgstr "lần cuối vào ngày: %s"
 
 #. INPUT type=text name=from_subfield
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:228
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:235
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:231
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:238
 msgid "let blank for the entire field"
 msgstr ""
 
@@ -66598,7 +66531,7 @@ msgstr "Khóa "
 msgid "lost"
 msgstr "Bị mất thẻ"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:270
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:273
 #, c-format
 msgid "m/"
 msgstr "m/"
@@ -66608,7 +66541,7 @@ msgstr "m/"
 msgid "manat sign"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:264
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:267
 #, c-format
 msgid "matches"
 msgstr "Phù hợp"
@@ -67023,13 +66956,13 @@ msgstr "  "
 
 #. INPUT type=text name=regex_search
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:294
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:243
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:246
 msgid "regex pattern"
 msgstr "Mẫu thông dụng"
 
 #. INPUT type=text name=regex_replace
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:295
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:243
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:246
 msgid "regex replacement"
 msgstr "Thay thế thông thường"
 
@@ -67093,7 +67026,7 @@ msgid "s&eacute;lection au moyen d'une liste de descripteurs"
 msgstr "s&eacute;lection au moyen d'une liste de descripteurs"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:293
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:242
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:245
 #, c-format
 msgid "s/"
 msgstr "s/"
@@ -67118,7 +67051,7 @@ msgstr "Cùng thư viện, cùng kiểu bạn đọc, tất cả các kiểu tà
 msgid "same library, same patron category, same item type"
 msgstr "Cùng thư viện, cùng kiểu bạn đọc, cùng kiểu tài liệu"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:205
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:206
 #, fuzzy, c-format
 msgid "script. "
 msgstr "Thông tin mô tả: "
@@ -67511,7 +67444,7 @@ msgstr "cho bạn đọc đặt mượn."
 msgid "to create"
 msgstr "Tạo mới"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:234
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:237
 #, c-format
 msgid "to field "
 msgstr "tới trường "
@@ -67542,7 +67475,7 @@ msgstr "Không xác định"
 msgid "unknown"
 msgstr "(Không rõ)"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:254
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:257
 #, c-format
 msgid "unless"
 msgstr "trừ khi"
@@ -67667,27 +67600,27 @@ msgstr ""
 "Tính năng ảnh bìa của biểu ghi chưa được kích hoạt. Bạn vui lòng liên hệ với "
 "cán bộ quản trị."
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:141
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:142
 #, fuzzy, c-format
 msgid "who are in patron list: "
 msgstr "Danh sách bạn đọc của bạn"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:123
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:124
 #, fuzzy, c-format
 msgid "who have not been connected since:"
 msgstr "Bạn đọc không được ghi mượn từ ngày:"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:112
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:113
 #, c-format
 msgid "who have not borrowed since:"
 msgstr "Bạn đọc không được ghi mượn từ ngày:"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:117
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:118
 #, c-format
 msgid "whose expiration date is before:"
 msgstr "Bạn đọc có ngày hết hạn tài khoản trước ngày:"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:129
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:130
 #, c-format
 msgid "whose patron category is:"
 msgstr "Bạn đọc thuộc kiểu bạn đọc:"
@@ -67728,7 +67661,7 @@ msgstr ""
 msgid "with this reason:"
 msgstr "với lí do sau đây:"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:230
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:233
 #, c-format
 msgid "with value "
 msgstr "với giá trị "
@@ -67831,7 +67764,7 @@ msgstr ""
 #. %3$s:  AuthorisedValues.GetByCode( 'PAYMENT_TYPE', accountline.payment_type ) | html 
 #. %4$s:  accountline.amount * -1 | $Price 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/pos/register.tt:130
-#: koha-tmpl/intranet-tmpl/prog/en/modules/pos/register.tt:217
+#: koha-tmpl/intranet-tmpl/prog/en/modules/pos/register.tt:219
 #, c-format
 msgid ""
 "{ \"type\": \"debit\", \"identifier\": \"%s\", \"description\": \"%s (%s)\", "
@@ -67904,7 +67837,7 @@ msgstr "%s %s tới %s %s "
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:168
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/letter.tt:97
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:431
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:308
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:311
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/quotes.tt:125
 #: koha-tmpl/intranet-tmpl/prog/en/includes/mana/mana-subscription-search-result.inc:97
 #: koha-tmpl/intranet-tmpl/prog/en/includes/modals/cataloguing_create_av.inc:5
@@ -68022,6 +67955,14 @@ msgstr ""
 #, fuzzy
 #~ msgid "%s In transit from %s, to %s, since %s %s "
 #~ msgstr "Đang chuyển từ thư viện %s tới thư viện %s từ ngày %s"
+
+#, fuzzy
+#~ msgid ""
+#~ "%s Issuing items to %s &rsaquo; Batch check out &rsaquo; %s Circulation "
+#~ "&rsaquo; Koha "
+#~ msgstr ""
+#~ "Koha &rsaquo; Phân hệ lưu thông %s &rsaquo; Ghi mượn tài liệu tới bạn đọc "
+#~ "%s %s "
 
 #, fuzzy
 #~ msgid "%s Lists %s %s &rsaquo; %s "
@@ -68928,6 +68869,10 @@ msgstr ""
 
 #~ msgid "Delete this basket"
 #~ msgstr "Xóa giỏ đặt hàng"
+
+#, fuzzy
+#~ msgid "Download shelf &rsaquo; Koha"
+#~ msgstr "Koha &rsaquo; Giới thiệu về Koha"
 
 #~ msgid "EAN :"
 #~ msgstr "EAN :"
@@ -70195,6 +70140,15 @@ msgstr ""
 #~ msgstr ""
 #~ "Bạn nên kích hoạt thông số TalkingTechItivaPhoneNotification để sử dụng "
 #~ "các mẫu thông báo qua điện thoại."
+
+#~ msgid ""
+#~ "[%% IF ( CAN_user_editcatalogue_edit_catalogue || "
+#~ "CAN_user_editcatalogue_edit_items || "
+#~ "CAN_user_serials_create_subscription ) %%] "
+#~ msgstr ""
+#~ "[%% IF ( CAN_user_editcatalogue_edit_catalogue || "
+#~ "CAN_user_editcatalogue_edit_items || "
+#~ "CAN_user_serials_create_subscription ) %%] "
 
 #, fuzzy
 #~ msgid "add"

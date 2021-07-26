@@ -3,17 +3,17 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Koha 21.05\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2021-06-21 18:38+0000\n"
+"PO-Revision-Date: 2021-07-16 11:58+0000\n"
 "Last-Translator: Serhij Dubyk <dubyk@ukr.net>\n"
 "Language-Team: Koha Translation Team\n"
 "Language: uk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
-"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 "X-Generator: Pootle 2.8\n"
-"X-POOTLE-MTIME: 1624300689.927203\n"
+"X-POOTLE-MTIME: 1626436731.395926\n"
 "X-Pootle-Path: /uk/21.05/uk-UA-pref.po\n"
 "X-Pootle-Revision: 1\n"
 
@@ -1068,15 +1068,16 @@ msgstr ""
 "спільноти Hea Koha</a>."
 
 # Administration > Share anonymous usage statistics
-#, fuzzy
 msgid ""
 "admin.pref#UsageStatsCountry# <br><strong>NOTE:</strong> This value has no "
 "effect if the <a href=\"/cgi-bin/koha/admin/preferences.pl?"
 "op=search&searchfield=UsageStats\">UsageStats</a> system preference is set "
 "to \"No\" (don't share)."
 msgstr ""
-"<br><strong>Примітка:</strong> це значення не впливає, якщо системний "
-"параметр „UsageStats“ встановлено у значення „Не ділитися“."
+"<br><strong>Примітка</strong>: це значення не має впливу, якщо системний "
+"параметр „<a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=UsageStats\">UsageStats</a>“ встановлено у значення "
+"„Ні“ (не ділитися статистикою)."
 
 # Administration > Share anonymous usage statistics
 msgid "admin.pref#UsageStatsCountry# Afghanistan"
@@ -2162,13 +2163,12 @@ msgid ""
 msgstr ""
 
 # Authorities > General
-#, fuzzy
 msgid ""
 "authorities.pref#AuthorityMergeLimit# <br><strong>NOTE:</strong> This system "
 "preference requires the <code>misc/cronjobs/merge_authorities.pl</code> "
 "cronjob. Ask your system administrator to schedule it."
 msgstr ""
-"<br><strong>ПРИМІТКА:</strong> Цей системний параметр вимагає періодичного "
+"<br><strong>Примітка:</strong> цей системний параметр вимагає періодичного "
 "сценарію <code>misc/cronjobs/merge_authority.pl</code>. Попросіть системного "
 "адміністратора запланувати його."
 
@@ -2177,12 +2177,16 @@ msgid ""
 "authorities.pref#AuthorityMergeLimit# When modifying an authority record, do "
 "not update attached bibliographic records if the number exceeds"
 msgstr ""
+"При зміні авторитетного запису, не оновлювати приєднані бібліографічні "
+"записи, якщо їх кількість перевищує"
 
 # Authorities > General
 msgid ""
 "authorities.pref#AuthorityMergeLimit# records. (Above this limit, the "
 "merge_authority cron job will merge them.)"
 msgstr ""
+"записів (понад цю межу лише періодичне завдання „merge_authority“ обʼєднає "
+"їх)."
 
 # Authorities > General
 msgid ""
@@ -2213,21 +2217,20 @@ msgid "authorities.pref#AutoCreateAuthorities# When editing records,"
 msgstr "При редагуванні записів, "
 
 # Authorities > General
-#, fuzzy
 msgid ""
 "authorities.pref#AutoCreateAuthorities# authority records that are missing "
 "(<a href=\"/cgi-bin/koha/admin/preferences.pl?"
 "op=search&searchfield=BiblioAddsAuthorities\">BiblioAddsAuthorities</a> must "
 "be set to \"allow\" for this to have any effect)."
 msgstr ""
-" авторитетні записи, які відсутні (щоб з цього був хоча би який небудь ефект "
-"також повинен бути встановлений параметр „BiblioAddsAuthorities“ у "
-"„дозволити“)."
+" авторитетні записи, які відсутні (щоб з цього був хоча би який-небудь ефект "
+"також повинен бути встановлений параметр „<a href=\"/cgi-bin/koha/admin/"
+"preferences.pl?op=search&searchfield=BiblioAddsAuthorities"
+"\">BiblioAddsAuthorities</a>“ у „задіяти“)."
 
 # Authorities > General
-#, fuzzy
 msgid "authorities.pref#AutoCreateAuthorities# don't generate"
-msgstr "не створювати "
+msgstr "не створювати"
 
 # Authorities > General
 msgid "authorities.pref#AutoCreateAuthorities# generate"
@@ -2283,8 +2286,8 @@ msgid ""
 "authorities.pref#LinkerKeepStale# keep existing links to authority records "
 "for headings where the linker is unable to find a match."
 msgstr ""
-" збереження існуючих зв’язків з авторитетними записами для заголовків, де зв’"
-"язувач не може знайти відповідність."
+" збереження існуючих зв’язків з авторитетними записами для заголовків, де "
+"зв’язувач не може знайти відповідність."
 
 # Authorities > Linker
 msgid "authorities.pref#LinkerModule# Use the"
@@ -2431,13 +2434,15 @@ msgid ""
 "fields' column of Z39.50 search results (use comma as delimiter e.g.: "
 "\"<code>001, 082$ab, 090$ab</code>\")"
 msgstr ""
+"у стовпчику „Додаткові поля“ результатів пошуку по Z39.50 (використовуйте "
+"кому як роздільник, наприклад: „<code>001, 082$ab, 090$ab</code>“ (MARC21) "
+"або „<code>200$eghi, 210$ac, 225$a, 675$a, 700, 942$chv</code>“ (UNIMARC))"
 
 # Cataloging > Record structure
-#, fuzzy
 msgid ""
 "cataloguing.pref#AdditionalFieldsInZ3950ResultSearch# Display the MARC field/"
 "subfields"
-msgstr "Відображати MARC-підполя "
+msgstr "Відображати МАРК-поля/підполя "
 
 # Cataloging > Importing
 msgid ""
@@ -2526,9 +2531,8 @@ msgid ""
 msgstr ""
 
 # Cataloging > Record Structure
-#, fuzzy
 msgid "cataloguing.pref#BibtexExportAdditionalFields# <br/>"
-msgstr "."
+msgstr "<br/>"
 
 # Cataloging > Exporting
 msgid ""
@@ -2823,9 +2827,8 @@ msgid "cataloguing.pref#MergeReportFields# <li>value of 001</li>"
 msgstr ""
 
 # Cataloging > Record Structure
-#, fuzzy
 msgid "cataloguing.pref#MergeReportFields# <ul>"
-msgstr "."
+msgstr "<ul>"
 
 # Cataloging > Display
 msgid ""
@@ -2852,9 +2855,8 @@ msgid ""
 msgstr "Коли створюються примірники, надавати їм тимчасове розташування "
 
 # Cataloging > Display
-#, fuzzy
 msgid "cataloguing.pref#NotesToHide# <br />"
-msgstr "Приховувати"
+msgstr "<br />"
 
 # Cataloging > Display
 #, fuzzy
@@ -2950,9 +2952,8 @@ msgstr ""
 " він буде вже заповнений значеннями з останнього створеного примірника."
 
 # Cataloging > Display
-#, fuzzy
 msgid "cataloguing.pref#RisExportAdditionalFields# <br/>"
-msgstr "Показувати "
+msgstr "<br/>"
 
 # Cataloging > Exporting
 msgid ""
@@ -3215,13 +3216,11 @@ msgid "cataloguing.pref#autoBarcode# generated in the form 1, 2, 3."
 msgstr " формуються послідовно — 1, 2, 3, …."
 
 # Cataloging > Record Structure
-#, fuzzy
 msgid ""
 "cataloguing.pref#autoBarcode# generated in the form <branchcode>yymm0001."
 msgstr " формуються за схемою &lt;кодпідрозділу&gt;ррмм0001."
 
 # Cataloging > Record Structure
-#, fuzzy
 msgid ""
 "cataloguing.pref#autoBarcode# generated in the form <year>-0001, <year>-0002."
 msgstr " формуються за схемою &lt;рік&gt;-0001, &lt;рік&gt;-0002."
@@ -3437,14 +3436,14 @@ msgid "circulation.pref#AllFinesNeedOverride# Require"
 msgstr "Потрібно"
 
 # Circulation > Checkout Policy
-#, fuzzy
 msgid ""
 "circulation.pref#AllFinesNeedOverride# staff to manually override all fines, "
 "even fines less than set in the <a href=\"/cgi-bin/koha/admin/preferences.pl?"
 "op=search&searchfield=noissuescharge\">noissuescharge</a> system preference."
 msgstr ""
 " працівникам самостійно відхиляти усі штрафи, навіть якщо штрафи менші, аніж "
-"визначено змінною „noissuescharge“."
+"визначено змінною „<a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=noissuescharge\">noissuescharge</a>“."
 
 # Circulation > Interface
 msgid "circulation.pref#AllowAllMessageDeletion# Allow"
@@ -3483,7 +3482,6 @@ msgid "circulation.pref#AllowFineOverride# Don't allow"
 msgstr "Не дозволяти"
 
 # Circulation > Checkout Policy
-#, fuzzy
 msgid ""
 "circulation.pref#AllowFineOverride# staff to manually override and check out "
 "items to patrons who have more in fines than set in the <a href=\"/cgi-bin/"
@@ -3491,7 +3489,8 @@ msgid ""
 "\">noissuescharge</a> system preference."
 msgstr ""
 " працівникам ігнорувати штрафи при видачі примірника користувачу, в якого "
-"сума штрафу більша, аніж визначено змінною „noissuescharge“."
+"сума штрафу більша, аніж визначено змінною „<a href=\"/cgi-bin/koha/admin/"
+"preferences.pl?op=search&searchfield=noissuescharge\">noissuescharge</a>“."
 
 # Circulation > Holds policy
 msgid "circulation.pref#AllowHoldDateInFuture# Allow"
@@ -4134,7 +4133,7 @@ msgid ""
 "op=search&searchfield=FinesMode\">FinesMode</a> to be set to \"Calculate and "
 "charge.\""
 msgstr ""
-"<br><strong>ПРИМІТКА:</strong> Цей системний параметр вимагає періодичного "
+"<br><strong>Примітка:</strong> цей системний параметр вимагає періодичного "
 "сценарію <code>misc/cronjobs/fines.pl</code>. Попросіть системного "
 "адміністратора запланувати його."
 
@@ -4612,7 +4611,6 @@ msgid "circulation.pref#ExpireReservesMaxPickUpDelayCharge# ."
 msgstr "Дозволити"
 
 # Circulation > Holds Policy
-#, fuzzy
 msgid ""
 "circulation.pref#ExpireReservesMaxPickUpDelayCharge# If using <a href=\"/cgi-"
 "bin/koha/admin/preferences.pl?"
@@ -4620,8 +4618,10 @@ msgid ""
 "\">ExpireReservesMaxPickUpDelay</a>, charge a patron who allows their "
 "waiting hold to expire a fee of"
 msgstr ""
-"Якщо задіяний параметр „ExpireReserveMaxPickUpDelay“, стягувати з "
-"користувача, який протермінував своє замовлення, плату у розмірі"
+"Якщо задіяний параметр „<a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=ExpireReservesMaxPickUpDelay"
+"\">ExpireReserveMaxPickUpDelay</a>“, стягувати з користувача, який "
+"протермінував своє замовлення, плату у розмірі"
 
 # Circulation > Holds policy
 msgid "circulation.pref#ExpireReservesOnHolidays# Allow"
@@ -4790,14 +4790,14 @@ msgid "circulation.pref#HoldsInNoissuesCharge# Include"
 msgstr "Включати"
 
 # Circulation > Checkout Policy
-#, fuzzy
 msgid ""
 "circulation.pref#HoldsInNoissuesCharge# hold charges when summing up charges "
 "for limit set in the <a href=\"/cgi-bin/koha/admin/preferences.pl?"
 "op=search&searchfield=noissuescharge\">noissuescharge</a> system preference."
 msgstr ""
 " плату за замовлення при обрахунку сумарної заборгованості для співставлення "
-"зі змінною „noissuescharge“."
+"зі змінною „<a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=noissuescharge\">noissuescharge</a>“."
 
 # Circulation > Holds policy
 #, fuzzy
@@ -5135,7 +5135,6 @@ msgid "circulation.pref#ManInvInNoissuesCharge# Include"
 msgstr "Включати"
 
 # Circulation > Checkout policy
-#, fuzzy
 msgid ""
 "circulation.pref#ManInvInNoissuesCharge# custom debit type charges when "
 "summing up charges for limit set in the <a href=\"/cgi-bin/koha/admin/"
@@ -5143,7 +5142,8 @@ msgid ""
 "system preference."
 msgstr ""
 " користувацькі дебетові сплати при обрахунку сумарної заборгованості для "
-"співставлення зі змінною „noissuescharge“."
+"співставлення зі змінною „<a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=noissuescharge\">noissuescharge</a>“."
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#MarkLostItemsAsReturned# ."
@@ -5286,7 +5286,6 @@ msgid "circulation.pref#OPACAllowHoldDateInFuture# Don't allow"
 msgstr "Не дозволяти"
 
 # Circulation > Holds policy
-#, fuzzy
 msgid ""
 "circulation.pref#OPACAllowHoldDateInFuture# patrons to place holds that "
 "don't enter the waiting list until a certain future date. (<a href=\"/cgi-"
@@ -5294,8 +5293,9 @@ msgid ""
 "\">AllowHoldDateInFuture</a> must also be enabled)."
 msgstr ""
 " користувачам розміщувати замовлення, що не входять у список очікування до "
-"певної майбутньої дати (параметр „AllowHoldDateInFuture“ також повинен бути "
-"задіяний)."
+"певної майбутньої дати (параметр „<a href=\"/cgi-bin/koha/admin/preferences."
+"pl?op=search&searchfield=AllowHoldDateInFuture\">AllowHoldDateInFuture</a>“ "
+"також повинен бути задіяний)."
 
 # Circulation > Holds policy
 msgid "circulation.pref#OPACAllowUserToChooseBranch# Allow"
@@ -5312,12 +5312,14 @@ msgid ""
 msgstr "користувачеві вибирати бібліотеку, щоб отримати з неї замовлення."
 
 # Circulation > Checkout policy
-#, fuzzy
 msgid ""
 "circulation.pref#OPACFineNoRenewalsBlockAutoRenew# If a patron owes more "
 "than the value of <a href=\"/cgi-bin/koha/admin/preferences.pl?"
 "op=search&searchfield=OPACFineNoRenewals\">OPACFineNoRenewals</a>,"
-msgstr "Якщо користувач заборгував більше, ніж значення „OPACFineNoRenewals“, "
+msgstr ""
+"Якщо користувач заборгував більше, ніж значення „<a href=\"/cgi-bin/koha/"
+"admin/preferences.pl?op=search&searchfield=OPACFineNoRenewals"
+"\">OPACFineNoRenewals</a>“, "
 
 # Circulation > Checkout Policy
 #, fuzzy
@@ -5351,15 +5353,15 @@ msgstr ""
 "отримувати замовлення у бібліотеках/підрозділах, де цей примірник доступний."
 
 # Circulation > Holds policy
-#, fuzzy
 msgid ""
 "circulation.pref#OPACHoldsIfAvailableAtPickupExceptions# Patron categories "
 "not affected by <a href=\"/cgi-bin/koha/admin/preferences.pl?"
 "op=search&searchfield=OPACHoldsIfAvailableAtPickup"
 "\">OPACHoldsIfAvailableAtPickup</a>:"
 msgstr ""
-"Категорії користувачів, на які не впливає параметр "
-"„OPACHoldsIfAvailableAtPickup“"
+"Категорії користувачів, на які не впливає параметр „<a href=\"/cgi-bin/koha/"
+"admin/preferences.pl?op=search&searchfield=OPACHoldsIfAvailableAtPickup"
+"\">OPACHoldsIfAvailableAtPickup</a>“"
 
 # Circulation > Checkout policy
 msgid "circulation.pref#OnSiteCheckoutAutoCheck# Don't enable"
@@ -6253,9 +6255,8 @@ msgid ""
 msgstr ""
 
 # Circulation > Stockrotation module
-#, fuzzy
 msgid "circulation.pref#UpdateItemLocationOnCheckin# Examples:<br/>"
-msgstr "Увімкнути"
+msgstr "Приклади: <br/>"
 
 # Circulation > Checkin policy
 msgid ""
@@ -6716,11 +6717,10 @@ msgid "circulation.pref#itemBarcodeInputFilter# Remove spaces from"
 msgstr "Вилучити пробіли"
 
 # Circulation > Interface
-#, fuzzy
 msgid ""
 "circulation.pref#itemBarcodeInputFilter# Remove the first number from T-"
 "prefix style"
-msgstr "Вилучити пробіли"
+msgstr "Вилучити перше число зі стилю Т-префікса"
 
 # Circulation > Interface
 msgid "circulation.pref#itemBarcodeInputFilter# scanned item barcodes."
@@ -7203,11 +7203,10 @@ msgid ""
 msgstr ""
 
 # Enhanced Content > Local Cover Images
-#, fuzzy
 msgid ""
 "enhanced_content.pref#CustomCoverImages# custom remote URL images at the "
 "OPAC.<br/>"
-msgstr "Не відображати"
+msgstr ""
 
 # Enhanced content > Local or remote cover images
 #, fuzzy
@@ -7216,7 +7215,7 @@ msgid ""
 "staff interface.<br/>"
 msgstr ""
 " локальні зображення обкладинок на сторінках пошуку та подробиць у "
-"бібліотечному інтерфейсі. "
+"бібліотечному інтерфейсі. <br/>"
 
 # Enhanced content > All
 msgid "enhanced_content.pref#FRBRizeEditions# Don't show"
@@ -8172,24 +8171,24 @@ msgid ""
 "i18n_l10n.pref#AddressFormat# French style ([Street number] [Address] - [ZIP/"
 "Postal Code] [City] - [Country])"
 msgstr ""
-"французький стиль ([номер будинку, квартири] [адреса] - [поштовий індекс] ["
-"населений пункт] - [країна])"
+"французький стиль ([номер будинку, квартири] [адреса] - [поштовий індекс] "
+"[населений пункт] - [країна])"
 
 # I18N/L10N
 msgid ""
 "i18n_l10n.pref#AddressFormat# German style ([Address] [Street number] - [ZIP/"
 "Postal Code] [City] - [Country])"
 msgstr ""
-"німецький стиль ([адреса] [номер будинку, квартири] - [поштовий індекс] ["
-"населений пункт] - [країна])"
+"німецький стиль ([адреса] [номер будинку, квартири] - [поштовий індекс] "
+"[населений пункт] - [країна])"
 
 # I18N/L10N
 msgid ""
 "i18n_l10n.pref#AddressFormat# US style ([Street number], [Address] - [City], "
 "[ZIP/Postal Code], [Country])"
 msgstr ""
-"стиль США ([номер будинку, квартири], [адреса] - [населений пункт], ["
-"поштовий індекс], [країна])"
+"стиль США ([номер будинку, квартири], [адреса] - [населений пункт], "
+"[поштовий індекс], [країна])"
 
 # I18N/L10N
 msgid "i18n_l10n.pref#CalendarFirstDayOfWeek# Friday"
@@ -8244,14 +8243,8 @@ msgstr "Цей список можна сортувати, щоб змінити
 
 # I18N/L10N
 #, fuzzy
-msgid ""
-"i18n_l10n.pref#TimeFormat# . <br/> <strong>NOTE:</strong> Do not change this "
-"preference on a production server with overdue items that are accruing "
-"fines. Doing so will result in duplicate fines!"
-msgstr ""
-". <b>Примітка:</b> не змінюйте це налаштування на робочому сервері з "
-"простроченими примірниками, для яких нараховується пеня. Це призведе до "
-"дублювання пені!"
+msgid "i18n_l10n.pref#TimeFormat# ."
+msgstr "дд.мм.рррр"
 
 # I18N/L10N
 msgid "i18n_l10n.pref#TimeFormat# 12 hour format ( e.g. \"02:18 PM\" )"
@@ -8314,14 +8307,8 @@ msgstr ""
 
 # I18N/L10N
 #, fuzzy
-msgid ""
-"i18n_l10n.pref#dateformat# . <br/> <strong>NOTE:</strong> Do not change this "
-"preference on a production server with overdue items that are accruing "
-"fines. Doing so will result in duplicate fines!"
-msgstr ""
-". <b>Примітка:</b> не змінюйте це налаштування на робочому сервері з "
-"простроченими примірниками, для яких нараховується пеня. Це призведе до "
-"дублювання пені! "
+msgid "i18n_l10n.pref#dateformat# ."
+msgstr "дд.мм.рррр"
 
 # I18N/L10N
 msgid "i18n_l10n.pref#dateformat# Format dates like"
@@ -8479,11 +8466,10 @@ msgid "logs.pref#ClaimsLog# Log"
 msgstr "Записувати у журнал "
 
 # Logging > Logging
-#, fuzzy
 msgid ""
 "logs.pref#ClaimsLog# when an acquisitions claim or a serials claim notice is "
 "sent."
-msgstr " коли надсилається автоматичне повідомлення з претензією."
+msgstr " коли надсилається автоматичне повідомлення зі скаргою."
 
 # Logging > Logging
 msgid "logs.pref#CronjobLog# Don't log"
@@ -8599,6 +8585,23 @@ msgstr "Записувати у журнал "
 # Logging > Logging
 msgid "logs.pref#IssueLog# when items are checked out."
 msgstr " коли примірники видаються."
+
+# Logging > Logging
+#, fuzzy
+msgid ""
+"logs.pref#NewsLog#  changes to news entries and other contents managed in "
+"the news tool."
+msgstr " зміни в авторитетних записах."
+
+# Logging > Logging
+#, fuzzy
+msgid "logs.pref#NewsLog# Don't log"
+msgstr "Не записувати у журнал "
+
+# Logging > Logging
+#, fuzzy
+msgid "logs.pref#NewsLog# Log"
+msgstr "Записувати у журнал "
 
 # Logging > Logging
 #, fuzzy
@@ -9129,10 +9132,9 @@ msgid "opac.pref#OPACHoldsHistory# Don't allow"
 msgstr "Не дозволяти"
 
 # OPAC > Features
-#, fuzzy
 msgid ""
 "opac.pref#OPACHoldsHistory# patrons to see the list of their past holds."
-msgstr "користувачам додавати примітку під час розміщення замовлення."
+msgstr " користувачам бачити, які книги вони замовляли раніше."
 
 # OPAC > Features
 msgid "opac.pref#OPACISBD# Use the following as the OPAC ISBD template:"
@@ -9445,7 +9447,6 @@ msgstr ""
 "електронному каталозі."
 
 # OPAC > Appearance
-#, fuzzy
 msgid "opac.pref#OPACShowUnusedAuthorities# Don't show"
 msgstr "Не показувати"
 
@@ -9454,11 +9455,12 @@ msgid "opac.pref#OPACShowUnusedAuthorities# Show"
 msgstr "Показувати"
 
 # OPAC > Appearance
-#, fuzzy
 msgid ""
 "opac.pref#OPACShowUnusedAuthorities# unused authorities in the OPAC "
 "authority browser."
-msgstr "Не показувати"
+msgstr ""
+"невикористовувані авторитетні джерела в переглядачі авторитетних джерел "
+"електронного каталогу."
 
 # OPAC > Policy
 msgid ""
@@ -10241,7 +10243,6 @@ msgstr ""
 "обліковому записі користувача в ЕК (зазвичай це навігаційні посилання): "
 
 # OPAC > Appearance
-#, fuzzy
 msgid ""
 "opac.pref#OpacNavBottom# Show the following HTML on the left hand column of "
 "the main page and patron account on the OPAC, after <a href=\"/cgi-bin/koha/"
@@ -10249,7 +10250,8 @@ msgid ""
 "patron account links if available:"
 msgstr ""
 "Показувати наступний HTML-код у лівій колонці на головній сторінці та у "
-"обліковому записі відвідувача в ЕК, після блоку „OpacNav“ і перед "
+"обліковому записі користувача в ЕК, після блоку „<a href=\"/cgi-bin/koha/"
+"admin/preferences.pl?op=search&searchfield=OpacNav\">OpacNav</a>“ і перед "
 "посиланнями облікового запису (за доступності): "
 
 # OPAC > Appearance
@@ -11288,21 +11290,22 @@ msgid ""
 "patrons.pref#BorrowerRenewalPeriodBase# When renewing borrowers, base the "
 "new expiry date on"
 msgstr ""
+"При перереєстрації користувачів, використовувати для нового терміну дії "
+"реєстрації"
 
 # Patrons > General
-#, fuzzy
 msgid "patrons.pref#BorrowerRenewalPeriodBase# current date."
-msgstr " (відокремлювати стовпці з допомогою знаку „|“)"
+msgstr "поточну дату."
 
 # Patrons > Membership expiry
 msgid "patrons.pref#BorrowerRenewalPeriodBase# current membership expiry date."
-msgstr ""
+msgstr "поточну дату закінчення терміну реєстрації."
 
 # Patrons > Membership expiry
 msgid ""
 "patrons.pref#BorrowerRenewalPeriodBase# the latter of the current and expiry "
 "date."
-msgstr ""
+msgstr "останню з поточної дати і дати завершення терміну реєстрації."
 
 # Patrons > Patron forms
 msgid ""
@@ -11776,9 +11779,8 @@ msgid ""
 msgstr ""
 
 # Patrons > Privacy
-#, fuzzy
 msgid "patrons.pref#PhoneNotification# Disable"
-msgstr "вимкнено"
+msgstr "Вимкнути"
 
 # Circulation > Stock rotation module
 #, fuzzy
@@ -12239,8 +12241,8 @@ msgstr "Не задіювати"
 #, fuzzy
 msgid ""
 "patrons.pref#TrackLastPatronActivity# The first time each day that a patron "
-"either logs into the OPAC or connects to Koha via SIP, borrowers.lastseen "
-"will update with the current date and time."
+"either logs into the OPAC, connects to Koha via SIP, or checks an item out, "
+"borrowers.lastseen will update with the current date and time."
 msgstr ""
 "Щоразу, коли користувач підключатимиться, значення „borrowers.lastseen“ буде "
 "оновлено поточним часом."
@@ -14075,17 +14077,18 @@ msgid "web_services.pref#IdRef# Enable"
 msgstr "Задіяти "
 
 # OPAC > Appearance
-#, fuzzy
 msgid ""
 "web_services.pref#IdRef# Please note that this feature is available only for "
 "UNIMARC."
-msgstr "Зверніть увагу, що ця функція наразі доступна для MARC21 та UNIMARC."
+msgstr "Зверніть увагу, що ця функція доступна лише для UNIMARC."
 
 # Web services > IdRef
 msgid ""
 "web_services.pref#IdRef# the IdRef web service from the OPAC detail page. "
 "IdRef allows requests for authorities from the Sudoc database."
 msgstr ""
+"веб-сервіс IdRef зі сторінки подробиць електронного катлогу. IdRef дозволяє "
+"запитувати авторитетні джерела з бази даних Sudoc."
 
 # Web services > OAI-PMH
 #, fuzzy
@@ -14352,3 +14355,25 @@ msgid ""
 "web_services.pref#SvcMaxReportRows# rows of a report requested via the "
 "reports web service."
 msgstr " рядків у повідомленні, яке було запитане через службу веб-звітів."
+
+# I18N/L10N
+#, fuzzy
+#~ msgid ""
+#~ "i18n_l10n.pref#TimeFormat# . <br/> <strong>NOTE:</strong> Do not change "
+#~ "this preference on a production server with overdue items that are "
+#~ "accruing fines. Doing so will result in duplicate fines!"
+#~ msgstr ""
+#~ ". <b>Примітка:</b> не змінюйте це налаштування на робочому сервері з "
+#~ "простроченими примірниками, для яких нараховується пеня. Це призведе до "
+#~ "дублювання пені!"
+
+# I18N/L10N
+#, fuzzy
+#~ msgid ""
+#~ "i18n_l10n.pref#dateformat# . <br/> <strong>NOTE:</strong> Do not change "
+#~ "this preference on a production server with overdue items that are "
+#~ "accruing fines. Doing so will result in duplicate fines!"
+#~ msgstr ""
+#~ ". <b>Примітка:</b> не змінюйте це налаштування на робочому сервері з "
+#~ "простроченими примірниками, для яких нараховується пеня. Це призведе до "
+#~ "дублювання пені! "

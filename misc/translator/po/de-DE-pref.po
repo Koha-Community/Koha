@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Koha 21.05\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-05-16 03:26+0200\n"
-"PO-Revision-Date: 2021-06-17 07:10+0000\n"
+"PO-Revision-Date: 2021-07-25 22:22+0000\n"
 "Last-Translator: Katrin Fischer <katrin.fischer@bsz-bw.de>\n"
 "Language-Team: \n"
 "Language: de\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.8\n"
 "X-Poedit-SourceCharset: utf-8\n"
-"X-POOTLE-MTIME: 1623913814.939943\n"
+"X-POOTLE-MTIME: 1627251737.335807\n"
 "X-Pootle-Path: /de/21.05/de-DE-pref.po\n"
 "X-Pootle-Revision: 1\n"
 
@@ -3753,7 +3753,7 @@ msgstr ""
 # Circulation > Checkout policy
 msgid ""
 "circulation.pref#AllowReturnToBranch# only at the library the item is from."
-msgstr "nur in der Heimatbibliothek des Exemplars."
+msgstr "nur in der Bibliothek, aus der das Exemplar kommt."
 
 # Circulation > Checkout policy
 msgid ""
@@ -4213,7 +4213,7 @@ msgstr "Verwende den Kalender und die Ausleihkonditionen "
 
 # Circulation > Checkout policy
 msgid "circulation.pref#CircControl# the library the item is from."
-msgstr "der Bibliothek, die das Exemplar besitzt."
+msgstr "die Bibliothek, aus der das Exemplar kommt."
 
 # Circulation > Checkout policy
 msgid "circulation.pref#CircControl# the library the patron is from."
@@ -4221,7 +4221,7 @@ msgstr "der Bibliothek, bei welcher der Benutzer angemeldet ist."
 
 # Circulation > Checkout policy
 msgid "circulation.pref#CircControl# the library you are logged in at."
-msgstr "der Bibliothek, in der das Exemplar entliehen wurde."
+msgstr "die Bibliothek, unter der Sie angemeldet sind."
 
 # Circulation > Interface
 msgid "circulation.pref#CircSidebar# Activate"
@@ -5968,7 +5968,7 @@ msgstr "In der Trefferliste in der Dienstoberfläche, zeige"
 msgid ""
 "circulation.pref#StaffSearchResultsDisplayBranch# the library the item is "
 "from."
-msgstr "die Heimatbibliothek des Exemplars."
+msgstr "die Bibliothek, aus der das Exemplar kommt."
 
 # Circulation > Checkout policy
 msgid ""
@@ -6638,8 +6638,8 @@ msgid ""
 "circulation.pref#finesMode# on close days. If set the fines.pl cronjob will "
 "not generate fines when run on days marked as closed in the calendar."
 msgstr ""
-"an Schließtagen. Wenn gesetzt, generiert der fines.pl-Cronjob keine Gebühren "
-"an Tagen, die im Kalender als Schließtage markiert wurden."
+"Mahngebühren an Schließtagen. Wenn gesetzt, generiert der fines.pl-Cronjob "
+"keine Gebühren an Tagen, die im Kalender als Schließtage markiert wurden."
 
 # Circulation > Interface
 msgid "circulation.pref#itemBarcodeFallbackSearch# Don't enable"
@@ -7154,14 +7154,13 @@ msgstr ""
 msgid ""
 "enhanced_content.pref#CustomCoverImages# custom remote URL images at the "
 "OPAC.<br/>"
-msgstr "benutzerdefinierte URLs für die Coveranzeige im OPAC.<br/>"
+msgstr "Cover über benutzerdefinierte URLs im OPAC.<br/>"
 
 # Enhanced content > Local or remote cover images
 msgid ""
 "enhanced_content.pref#CustomCoverImages# custom remote URL images in the "
 "staff interface.<br/>"
-msgstr ""
-"benutzerdefinierte URLs für die Coveranzeige in der Dienstoberfläche.<br/>"
+msgstr "Cover über benutzerdefinierte URLs in der Dienstoberfläche.<br/>"
 
 # Enhanced content > All
 msgid "enhanced_content.pref#FRBRizeEditions# Don't show"
@@ -8113,14 +8112,8 @@ msgstr ""
 "verändern."
 
 # I18N/L10N
-msgid ""
-"i18n_l10n.pref#TimeFormat# . <br/> <strong>NOTE:</strong> Do not change this "
-"preference on a production server with overdue items that are accruing "
-"fines. Doing so will result in duplicate fines!"
-msgstr ""
-"<br/> <strong>HINWEIS:</strong> Verändern Sie diesen Parameter nicht auf "
-"einem produktiven Server mit überfälligen Medien und Mahngebühren. Sonst "
-"werden die Mahngebühren verdoppelt!"
+msgid "i18n_l10n.pref#TimeFormat# ."
+msgstr "."
 
 # I18N/L10N
 msgid "i18n_l10n.pref#TimeFormat# 12 hour format ( e.g. \"02:18 PM\" )"
@@ -8180,14 +8173,8 @@ msgstr ""
 "Leerzeichen an."
 
 # I18N/L10N
-msgid ""
-"i18n_l10n.pref#dateformat# . <br/> <strong>NOTE:</strong> Do not change this "
-"preference on a production server with overdue items that are accruing "
-"fines. Doing so will result in duplicate fines!"
-msgstr ""
-"<br/><strong>HINWEIS:</strong> Ändern Sie diesen Parameter nicht auf einem "
-"produktiven Server mit überfälligen Exemplaren und Mahngebühren, da sonst "
-"die Gebühren doppelt berechnet werden!"
+msgid "i18n_l10n.pref#dateformat# ."
+msgstr "."
 
 # I18N/L10N
 msgid "i18n_l10n.pref#dateformat# Format dates like"
@@ -8458,6 +8445,22 @@ msgstr "Aufzeichnung"
 # Logging > Logging
 msgid "logs.pref#IssueLog# when items are checked out."
 msgstr "von Ausleihvorgängen."
+
+# Logging > Logging
+msgid ""
+"logs.pref#NewsLog#  changes to news entries and other contents managed in "
+"the news tool."
+msgstr ""
+" von Änderungen an Nachrichteneinträgen und anderen Inhalten, die über das "
+"Nachrichten-Werkzeug verwaltet werden."
+
+# Logging > Logging
+msgid "logs.pref#NewsLog# Don't log"
+msgstr "Keine Aufzeichnung"
+
+# Logging > Logging
+msgid "logs.pref#NewsLog# Log"
+msgstr "Aufzeichnung"
 
 # Logging > Logging
 msgid "logs.pref#NoticesLog#  changes to notice templates."
@@ -10085,8 +10088,8 @@ msgid ""
 "opac.pref#OpacMoreSearches# Add additional elements to the \"More Searches\" "
 "bar on the OPAC, with the following HTML (leave blank to disable):"
 msgstr ""
-"Verwende das folgende HTML um weitere Elemente zur \"Weitere Suchen\"-Leiste "
-"im OPAC hinzuzufügen: "
+"Verwende das folgende HTML, um weitere Elemente zur Navigationsleiste im "
+"OPAC hinzuzufügen: "
 
 # OPAC > Appearance
 msgid ""
@@ -12081,8 +12084,8 @@ msgstr "Keine Speicherung"
 # Patrons > General
 msgid ""
 "patrons.pref#TrackLastPatronActivity# The first time each day that a patron "
-"either logs into the OPAC or connects to Koha via SIP, borrowers.lastseen "
-"will update with the current date and time."
+"either logs into the OPAC, connects to Koha via SIP, or checks an item out, "
+"borrowers.lastseen will update with the current date and time."
 msgstr ""
 "Das erste Mal an einem Tag, wenn ein Benutzer sich im OPAC oder über SIP2 "
 "anmeldet, wird der Zeitstempel in borrowers.lastseen aktualisiert."
@@ -14156,6 +14159,42 @@ msgid ""
 msgstr ""
 "Zeilen für einen Report, der über den Reports Web Service ausgeführt wird."
 
+# Circulation > Article requests > ArticleRequestsOpacHostRedirection
+#~ msgid ""
+#~ "circulation.pref#ArticleRequestsOpacHostRedirection#  redirection from "
+#~ "child to host based on MARC21 773$w when the child has no items when "
+#~ "requesting articles on the Opac."
+#~ msgstr ""
+#~ "die Weiterleitung von untergeordnetem zu übergeordnetem Datensatz "
+#~ "basierend auf MARC21 773$w, bei einer Artikelbestellung im OPAC, wenn der "
+#~ "untergeordnete Datensatz keine Exemplare hat."
+
+# Circulation > Article requests
+#~ msgid "circulation.pref#ArticleRequestsOpacHostRedirection# Disable"
+#~ msgstr "Deaktiviere"
+
+# Circulation > Article requests
+#~ msgid "circulation.pref#ArticleRequestsOpacHostRedirection# Enable"
+#~ msgstr "Aktiviere"
+
+# Circulation > Article requests > ArticleRequestsSupportedFormats
+#~ msgid ""
+#~ "circulation.pref#ArticleRequestsSupportedFormats# (Valid choices are "
+#~ "currently: PHOTOCOPY and SCAN. Separate the supported formats by a "
+#~ "vertical bar. The first listed format is selected by default when you "
+#~ "request via the OPAC.)"
+#~ msgstr ""
+#~ "(Gültige Formate sind: PHOTOCOPY und SCAN. Trennen Sie die unterstützten "
+#~ "Formate mit Pipe (|). Das erste angegebene Format wird voreingestellt, "
+#~ "wenn über den OPAC bestellt wird.)"
+
+# Circulation > Article requests
+#~ msgid ""
+#~ "circulation.pref#ArticleRequestsSupportedFormats# The following article "
+#~ "request formats are supported:"
+#~ msgstr ""
+#~ "Die folgenden Lieferformate für Artikelbestellungen werden unterstützt:"
+
 # Circulation > Batch checkout
 #~ msgid ""
 #~ "circulation.pref#BatchCheckoutsValidCategories# (list of patron "
@@ -14167,6 +14206,26 @@ msgstr ""
 #~ "circulation.pref#OPACHoldsIfAvailableAtPickupExceptions# (list of patron "
 #~ "categories separated with a pipe '|')"
 #~ msgstr "(Mit Pipe-Symbol '|' separierte Liste von Benutzertypen)"
+
+# I18N/L10N
+#~ msgid ""
+#~ "i18n_l10n.pref#TimeFormat# . <br/> <strong>NOTE:</strong> Do not change "
+#~ "this preference on a production server with overdue items that are "
+#~ "accruing fines. Doing so will result in duplicate fines!"
+#~ msgstr ""
+#~ "<br/> <strong>HINWEIS:</strong> Verändern Sie diesen Parameter nicht auf "
+#~ "einem produktiven Server mit überfälligen Medien und Mahngebühren. Sonst "
+#~ "werden die Mahngebühren verdoppelt!"
+
+# I18N/L10N
+#~ msgid ""
+#~ "i18n_l10n.pref#dateformat# . <br/> <strong>NOTE:</strong> Do not change "
+#~ "this preference on a production server with overdue items that are "
+#~ "accruing fines. Doing so will result in duplicate fines!"
+#~ msgstr ""
+#~ "<br/><strong>HINWEIS:</strong> Ändern Sie diesen Parameter nicht auf "
+#~ "einem produktiven Server mit überfälligen Exemplaren und Mahngebühren, da "
+#~ "sonst die Gebühren doppelt berechnet werden!"
 
 # I18N/L10N
 #~ msgid ""

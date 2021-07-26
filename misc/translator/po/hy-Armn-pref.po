@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Koha 21.05\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-05-10 19:14+0200\n"
-"PO-Revision-Date: 2021-06-21 10:01+0000\n"
+"PO-Revision-Date: 2021-07-16 12:43+0000\n"
 "Last-Translator: tigran <tigran@flib.sci.am>\n"
 "Language-Team: Koha Translation Team <koha-translate@nongnu.org>\n"
 "Language: hy\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Generator: Pootle 2.8\n"
 "X-Poedit-Bookmarks: 1755,-1,-1,-1,-1,-1,-1,-1,-1,-1\n"
-"X-POOTLE-MTIME: 1624269689.953480\n"
+"X-POOTLE-MTIME: 1626439413.565879\n"
 "X-Pootle-Path: /hy/21.05/hy-Armn-pref.po\n"
 "X-Pootle-Revision: 1\n"
 
@@ -8649,14 +8649,8 @@ msgstr ""
 "օգտագործվող լեզուների տեսակավորման թարմացման համար։"
 
 # I18N/L10N
-msgid ""
-"i18n_l10n.pref#TimeFormat# . <br/> <strong>NOTE:</strong> Do not change this "
-"preference on a production server with overdue items that are accruing "
-"fines. Doing so will result in duplicate fines!"
-msgstr ""
-"i18n_l10n.pref#TimeFormat# . <br/> <strong>ՆՇՈՒՄ:</strong> Մի փոխեք այս "
-"նախապատվությունը թողարկող կայանում ժամկետանց նյութերով, որոնք տուգանքներ են "
-"կուտակում։ Փոփոխությունը կհանգեցնի կրկնվող տուգանքների։"
+msgid "i18n_l10n.pref#TimeFormat# ."
+msgstr "i18n_l10n.pref#TimeFormat# ."
 
 # I18N/L10N
 msgid "i18n_l10n.pref#TimeFormat# 12 hour format ( e.g. \"02:18 PM\" )"
@@ -8716,14 +8710,8 @@ msgstr ""
 "մեծատառերից կազմված և բացատով տարանջատված ցուցակ։"
 
 # I18N/L10N
-msgid ""
-"i18n_l10n.pref#dateformat# . <br/> <strong>NOTE:</strong> Do not change this "
-"preference on a production server with overdue items that are accruing "
-"fines. Doing so will result in duplicate fines!"
-msgstr ""
-"i18n_l10n.pref#dateformat# . <br/> <strong>ՆՇՈՒՄ:</strong> Մի փոխիր այս "
-"նախապատվությունը ժամկետանց նյութերով թողարկող կայանում որոնք տուգանքներ են "
-"կուտակում։ Փոփոխությունը կհանգեցնի կրկնվող տուգանքների։"
+msgid "i18n_l10n.pref#dateformat# ."
+msgstr "i18n_l10n.pref#dateformat# ."
 
 # I18N/L10N
 msgid "i18n_l10n.pref#dateformat# Format dates like"
@@ -9003,6 +8991,22 @@ msgstr "logs.pref#IssueLog# Գրանցվի"
 # Logging > Logging
 msgid "logs.pref#IssueLog# when items are checked out."
 msgstr "logs.pref#IssueLog# երբ նյութերը դուրս են տրված։"
+
+# Logging > Logging
+msgid ""
+"logs.pref#NewsLog#  changes to news entries and other contents managed in "
+"the news tool."
+msgstr ""
+"logs.pref#NewsLog#  նորությունների գործիքի մեջ նորությունների գրառումների և "
+"այլ բովանդակության փոփոխություններ:"
+
+# Logging > Logging
+msgid "logs.pref#NewsLog# Don't log"
+msgstr "logs.pref#NewsLog# Մի գրանցվիր"
+
+# Logging > Logging
+msgid "logs.pref#NewsLog# Log"
+msgstr "logs.pref#NewsLog# Գրանցվիր"
 
 # Logging > Logging
 msgid "logs.pref#NoticesLog#  changes to notice templates."
@@ -12845,12 +12849,12 @@ msgstr "patrons.pref#TrackLastPatronActivity# Մի արա"
 # Patrons > General
 msgid ""
 "patrons.pref#TrackLastPatronActivity# The first time each day that a patron "
-"either logs into the OPAC or connects to Koha via SIP, borrowers.lastseen "
-"will update with the current date and time."
+"either logs into the OPAC, connects to Koha via SIP, or checks an item out, "
+"borrowers.lastseen will update with the current date and time."
 msgstr ""
-"patrons.pref#TrackLastPatronActivity# Ամեն օր առաջին անգամ երբ հաճախորդը "
-"մուտք է գործում ՀՕԱՔ կամ միանում է Կոհային SIP- ով, borrowers.lastseen "
-"կթարմացվի ընթացիկ ամսաթվով և ժամով։"
+"atrons.pref#TrackLastPatronActivity# Ամեն օր առաջին անգամ երբ հաճախորդը "
+"մուտք է գործում ՀՕԱՔ կամ միանում է Կոհային SIP- ով, կամ նյութ է սպասարկվում՝ "
+"borrowers.lastseen կթարմացվի ընթացիկ ամսաթվով և ժամով։"
 
 # Patrons > General
 msgid "patrons.pref#TrackLastPatronActivity# track last patron activity."
@@ -15072,6 +15076,44 @@ msgstr ""
 "web_services.pref#SvcMaxReportRows# հաշվետվության տողերը պահանջվում են "
 "հաշվետվության վեբ ծառայության միջոցով։"
 
+# Circulation > Article requests > ArticleRequestsOpacHostRedirection
+#~ msgid ""
+#~ "circulation.pref#ArticleRequestsOpacHostRedirection#  redirection from "
+#~ "child to host based on MARC21 773$w when the child has no items when "
+#~ "requesting articles on the Opac."
+#~ msgstr ""
+#~ "circulation.pref#ArticleRequestsOpacHostRedirection#  վերահասցեավորում "
+#~ "երեխայից դեպի հյուրընկալող՝ հիմնվելով MARC21 773$w -ի վրա, երբ երեխան "
+#~ "չունի նյութեր ՀՕԱՔ-ից հոդվածներ պատվիրելիս"
+
+# Circulation > Article requests
+#~ msgid "circulation.pref#ArticleRequestsOpacHostRedirection# Disable"
+#~ msgstr "circulation.pref#ArticleRequestsOpacHostRedirection# Մի թույլատրեք"
+
+# Circulation > Article requests
+#~ msgid "circulation.pref#ArticleRequestsOpacHostRedirection# Enable"
+#~ msgstr "circulation.pref#ArticleRequestsOpacHostRedirection# Թույլատրեք"
+
+# Circulation > Article requests > ArticleRequestsSupportedFormats
+#~ msgid ""
+#~ "circulation.pref#ArticleRequestsSupportedFormats# (Valid choices are "
+#~ "currently: PHOTOCOPY and SCAN. Separate the supported formats by a "
+#~ "vertical bar. The first listed format is selected by default when you "
+#~ "request via the OPAC.)"
+#~ msgstr ""
+#~ "circulation.pref#ArticleRequestsSupportedFormats# (Ներկայիս գործող "
+#~ "ընտրանքներն են՝ ՖՈՏՈՊԱՏՃԵՆ և ՍՔԱՆ: Առանձնացրեք աջակցվող ձևաչափերն "
+#~ "ուղղահայաց գծիկով: Առաջին թվարկված ձևաչափը ընտրվում է լռելյայն, երբ դուք "
+#~ "հարցում եք կատարում ՀՕԱՔ-ով:)"
+
+# Circulation > Article requests
+#~ msgid ""
+#~ "circulation.pref#ArticleRequestsSupportedFormats# The following article "
+#~ "request formats are supported:"
+#~ msgstr ""
+#~ "circulation.pref#ArticleRequestsSupportedFormats# Հոդվածի հարցման հետևյալ "
+#~ "ձևաչափերը աջակցվում են."
+
 # Circulation > Batch checkout
 #~ msgid ""
 #~ "circulation.pref#BatchCheckoutsValidCategories# (list of patron "
@@ -15087,6 +15129,26 @@ msgstr ""
 #~ msgstr ""
 #~ "circulation.pref#OPACHoldsIfAvailableAtPickupExceptions# (ընթերցողական "
 #~ "դասերի ցուցակը բաժանված '|')"
+
+# I18N/L10N
+#~ msgid ""
+#~ "i18n_l10n.pref#TimeFormat# . <br/> <strong>NOTE:</strong> Do not change "
+#~ "this preference on a production server with overdue items that are "
+#~ "accruing fines. Doing so will result in duplicate fines!"
+#~ msgstr ""
+#~ "i18n_l10n.pref#TimeFormat# . <br/> <strong>ՆՇՈՒՄ:</strong> Մի փոխեք այս "
+#~ "նախապատվությունը թողարկող կայանում ժամկետանց նյութերով, որոնք տուգանքներ "
+#~ "են կուտակում։ Փոփոխությունը կհանգեցնի կրկնվող տուգանքների։"
+
+# I18N/L10N
+#~ msgid ""
+#~ "i18n_l10n.pref#dateformat# . <br/> <strong>NOTE:</strong> Do not change "
+#~ "this preference on a production server with overdue items that are "
+#~ "accruing fines. Doing so will result in duplicate fines!"
+#~ msgstr ""
+#~ "i18n_l10n.pref#dateformat# . <br/> <strong>ՆՇՈՒՄ:</strong> Մի փոխիր այս "
+#~ "նախապատվությունը ժամկետանց նյութերով թողարկող կայանում որոնք տուգանքներ "
+#~ "են կուտակում։ Փոփոխությունը կհանգեցնի կրկնվող տուգանքների։"
 
 # I18N/L10N
 #~ msgid ""

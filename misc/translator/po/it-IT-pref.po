@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Koha 21.05\n"
 "POT-Creation-Date: 2013-05-02 01:29-0300\n"
-"PO-Revision-Date: 2021-06-15 09:24+0000\n"
+"PO-Revision-Date: 2021-06-30 12:36+0000\n"
 "Last-Translator: bargioni <bargioni@pusc.it>\n"
 "Language-Team: CILEA <z.tajoli@cineca.it>\n"
 "Language: it\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.8\n"
 "X-Poedit-SourceCharset: UTF-8\n"
-"X-POOTLE-MTIME: 1623749092.912167\n"
+"X-POOTLE-MTIME: 1625056563.098432\n"
 "X-Poedit-Basepath: ../../../versioni/master/koha-tmpl\n"
 "X-Poedit-SearchPath-0: .\n"
 "X-Pootle-Path: /it/21.05/it-IT-pref.po\n"
@@ -8109,14 +8109,9 @@ msgstr ""
 "nell'interfaccia."
 
 # I18N/L10N
-msgid ""
-"i18n_l10n.pref#TimeFormat# . <br/> <strong>NOTE:</strong> Do not change this "
-"preference on a production server with overdue items that are accruing "
-"fines. Doing so will result in duplicate fines!"
-msgstr ""
-" . <br/><strong>Nota:</strong> Non cambiare questa preferenza in produzione "
-"se hai copie in ritardo e hai attivato le multe. Gli utenti riceverebbero "
-"doppie multe!"
+#, fuzzy
+msgid "i18n_l10n.pref#TimeFormat# ."
+msgstr "."
 
 # I18N/L10N
 msgid "i18n_l10n.pref#TimeFormat# 12 hour format ( e.g. \"02:18 PM\" )"
@@ -8177,14 +8172,9 @@ msgstr ""
 "maiuscole separate da spazio."
 
 # I18N/L10N
-msgid ""
-"i18n_l10n.pref#dateformat# . <br/> <strong>NOTE:</strong> Do not change this "
-"preference on a production server with overdue items that are accruing "
-"fines. Doing so will result in duplicate fines!"
-msgstr ""
-"<br/><strong>Nota:</strong> Non cambiare questa preferenza in produzione se "
-"hai copie in ritardo e hai attivato le multe. Gli utenti riceverebbero "
-"doppie multe!\""
+#, fuzzy
+msgid "i18n_l10n.pref#dateformat# ."
+msgstr "dd.mm.yyyy"
 
 # I18N/L10N
 msgid "i18n_l10n.pref#dateformat# Format dates like"
@@ -8460,6 +8450,23 @@ msgstr "Registra"
 # Logging > Logging
 msgid "logs.pref#IssueLog# when items are checked out."
 msgstr "i prestiti effettuati."
+
+# Logging > Logging
+#, fuzzy
+msgid ""
+"logs.pref#NewsLog#  changes to news entries and other contents managed in "
+"the news tool."
+msgstr "i cambiamenti ai record di autorità"
+
+# Logging > Logging
+#, fuzzy
+msgid "logs.pref#NewsLog# Don't log"
+msgstr "Non registrare"
+
+# Logging > Logging
+#, fuzzy
+msgid "logs.pref#NewsLog# Log"
+msgstr "Registra"
 
 # Logging > Logging
 #, fuzzy
@@ -11175,7 +11182,6 @@ msgid "patrons.pref#CardnumberLength# Card numbers for patrons must be"
 msgstr "Il codice della tessera per gli utenti deve essere lungo almeno "
 
 # Patrons > Patron forms
-#, fuzzy
 msgid ""
 "patrons.pref#CardnumberLength# If <code>cardnumber</code> is included in the "
 "<a href=\"/cgi-bin/koha/admin/preferences.pl?"
@@ -11183,10 +11189,11 @@ msgid ""
 "list, the minimum length, if not specified here, defaults to one. Maximum "
 "cannot be bigger than the database field size of 32."
 msgstr ""
-"Se il 'cardnumber' è incluso nell'elenco BorrowerMandatoryField, la "
-"lunghezza minima, se non specificata qui, è impostata su un valore "
-"predefinito. Il massimo non può essere più grande della dimensione del campo "
-"nel database, 32 caratteri."
+"Se il <code>cardnumber</code> è incluso nell'elenco <a href=\"/cgi-bin/koha/"
+"admin/preferences.pl?op=search&searchfield=BorrowerMandatoryField"
+"\">BorrowerMandatoryField</a>, la lunghezza minima, se non specificata qui, "
+"è impostata su un valore predefinito. Il massimo non può essere più grande "
+"della dimensione del campo nel database, 32 caratteri."
 
 # Patrons > Patron forms
 msgid ""
@@ -11354,7 +11361,6 @@ msgid ""
 msgstr "i caricare filese arbitrari collegati ai record degli utenti."
 
 # Patrons > Notices and notifications
-#, fuzzy
 msgid ""
 "patrons.pref#EnhancedMessagingPreferences# <br><strong>NOTE:</strong> This "
 "only applies to courtesy notices. To manage if patrons have also access to "
@@ -11364,7 +11370,9 @@ msgid ""
 msgstr ""
 "<br><strong>NOTA:</strong> Si applica solo ai messaggi di cortesia. Per "
 "controllare se gli utenti hanno accesso a queste impostazioni, usa la "
-"preferenza di sistema EnhancedMessagingPreferencesOPAC."
+"preferenza di sistema <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=EnhancedMessagingPreferencesOPAC"
+"\">EnhancedMessagingPreferencesOPAC</a>."
 
 # Patrons > Notices and notifications
 msgid ""
@@ -11393,14 +11401,15 @@ msgid ""
 msgstr "allo staff di gestire quando e quali avvisi riceveranno gli utenti."
 
 # Patrons > Notices and notifications
-#, fuzzy
 msgid ""
 "patrons.pref#EnhancedMessagingPreferencesOPAC# <br><strong>NOTE:</strong> <a "
 "href=\"/cgi-bin/koha/admin/preferences.pl?"
 "op=search&searchfield=EnhancedMessagingPreferences"
 "\">EnhancedMessagingPreferences</a> must be enabled."
 msgstr ""
-"<br><strong>NOTA:</strong> EnhancedMessagingPreferences deve essere attiva."
+"<br><strong>NOTA:</strong> <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=EnhancedMessagingPreferences"
+"\">EnhancedMessagingPreferences</a> deve essere attiva."
 
 # Patrons > Notices and notifications
 msgid "patrons.pref#EnhancedMessagingPreferencesOPAC# Don't show"
@@ -11484,7 +11493,6 @@ msgstr ""
 "imposta su permissivo, Koha avviserà ma non imporrà."
 
 # Patrons > Privacy
-#, fuzzy
 msgid ""
 "patrons.pref#GDPR_Policy# <br><strong>NOTE:</strong> If you enable this you "
 "will also have to set the URL of your public privacy policy with the <a href="
@@ -11492,7 +11500,8 @@ msgid ""
 "\">PrivacyPolicyURL</a> setting."
 msgstr ""
 "<br><strong>NOTA:</strong> Se lo attivi, dovrai anche impostare l'URL della "
-"tua public privacy policy con l'impostazione PrivacyPolicyURL."
+"tua public privacy policy con l'impostazione<a href=\"/cgi-bin/koha/admin/"
+"preferences.pl?op=search&searchfield=PrivacyPolicyURL\">PrivacyPolicyURL</a>."
 
 # Patrons > Privacy
 msgid "patrons.pref#GDPR_Policy# Set GDPR policy to:"
@@ -11792,14 +11801,14 @@ msgstr ""
 "form del tutelato a partire dal record del garante:"
 
 # Patrons > Privacy
-#, fuzzy
 msgid ""
 "patrons.pref#PrivacyPolicyURL# <br><strong>NOTE:</strong> The URL will only "
 "be displayed if <a href=\"/cgi-bin/koha/admin/preferences.pl?"
 "op=search&searchfield=GDPR_Policy\">GDPR_Policy</a> is set."
 msgstr ""
-"<br><strong>NOTA:</strong> L'URL sarà visibile solo se è impostata la "
-"GDPR_Policy."
+"<br><strong>NOTA:</strong> L'URL sarà visibile solo se è impostata la <a "
+"href=\"/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=GDPR_Policy"
+"\">GDPR_Policy</a>."
 
 # Patrons > Privacy
 msgid "patrons.pref#PrivacyPolicyURL# Use the following URL"
@@ -12065,8 +12074,8 @@ msgstr "Non tracciare"
 #, fuzzy
 msgid ""
 "patrons.pref#TrackLastPatronActivity# The first time each day that a patron "
-"either logs into the OPAC or connects to Koha via SIP, borrowers.lastseen "
-"will update with the current date and time."
+"either logs into the OPAC, connects to Koha via SIP, or checks an item out, "
+"borrowers.lastseen will update with the current date and time."
 msgstr ""
 "Ad ogni connessione utente, il campo borrowers.lastseen sarà aggiornato con "
 "data e ora di adesso."
@@ -14119,6 +14128,23 @@ msgid ""
 msgstr ""
 "linee di un report se richiesto attraverso il web service per i reports."
 
+# Circulation > Article requests
+#, fuzzy
+#~ msgid "circulation.pref#ArticleRequestsOpacHostRedirection# Disable"
+#~ msgstr "Abilita"
+
+# Circulation > Article requests
+#, fuzzy
+#~ msgid "circulation.pref#ArticleRequestsOpacHostRedirection# Enable"
+#~ msgstr "Abilita"
+
+# Circulation > Article requests
+#, fuzzy
+#~ msgid ""
+#~ "circulation.pref#ArticleRequestsSupportedFormats# The following article "
+#~ "request formats are supported:"
+#~ msgstr "un link alla copia richiesta nei risultati della ricerca."
+
 # Circulation > Batch checkout
 #~ msgid ""
 #~ "circulation.pref#BatchCheckoutsValidCategories# (list of patron "
@@ -14130,6 +14156,26 @@ msgstr ""
 #~ "circulation.pref#OPACHoldsIfAvailableAtPickupExceptions# (list of patron "
 #~ "categories separated with a pipe '|')"
 #~ msgstr "(lista di categorie utente separate da barra verticale '|')"
+
+# I18N/L10N
+#~ msgid ""
+#~ "i18n_l10n.pref#TimeFormat# . <br/> <strong>NOTE:</strong> Do not change "
+#~ "this preference on a production server with overdue items that are "
+#~ "accruing fines. Doing so will result in duplicate fines!"
+#~ msgstr ""
+#~ " . <br/><strong>Nota:</strong> Non cambiare questa preferenza in "
+#~ "produzione se hai copie in ritardo e hai attivato le multe. Gli utenti "
+#~ "riceverebbero doppie multe!"
+
+# I18N/L10N
+#~ msgid ""
+#~ "i18n_l10n.pref#dateformat# . <br/> <strong>NOTE:</strong> Do not change "
+#~ "this preference on a production server with overdue items that are "
+#~ "accruing fines. Doing so will result in duplicate fines!"
+#~ msgstr ""
+#~ "<br/><strong>Nota:</strong> Non cambiare questa preferenza in produzione "
+#~ "se hai copie in ritardo e hai attivato le multe. Gli utenti riceverebbero "
+#~ "doppie multe!\""
 
 # I18N/L10N
 #~ msgid ""

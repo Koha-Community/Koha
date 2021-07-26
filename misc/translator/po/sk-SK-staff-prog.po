@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Koha 21.05\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-06-20 00:32-0300\n"
+"POT-Creation-Date: 2021-07-19 08:34-0300\n"
 "PO-Revision-Date: 2021-04-27 09:55+0000\n"
 "Last-Translator: Viliam <viliam.polonec@gmail.com>\n"
 "Language-Team: SVK\n"
@@ -903,7 +903,7 @@ msgstr "%s %s %s %s Nevypožičaný %s %s"
 #. %19$s:  END 
 #. %20$s:  IF ( ActionsLoo.conditional_regex ) 
 #. %21$s:  END 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:172
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:175
 #, c-format
 msgid ""
 "%s %s %s %s if %s %s unless %s %s%s$%s%s %s exists %s %s does not exist %s "
@@ -3560,7 +3560,7 @@ msgstr "%s %s dní %s Pre toto pravidlo nie je žiadny vek. %s "
 
 #. %1$s:  END 
 #. %2$s:  IF ( MEMBERS ) 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:390
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:391
 #, c-format
 msgid "%s %s for "
 msgstr "%s %s pre "
@@ -3641,7 +3641,7 @@ msgstr "%s %s do %s %s "
 #. %5$s:  ActionsLoo.to_subfield | html 
 #. %6$s:  END 
 #. %7$s:  IF ( ActionsLoo.to_regex_search ) 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:165
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:168
 #, c-format
 msgid "%s %s to %s%s$%s%s %s using RegEx s"
 msgstr "%s %s do %s%s$%s%s %s pomocou RegEx s"
@@ -3706,7 +3706,7 @@ msgstr "%s %s prenesených."
 #. %51$s:  log_interface | html 
 #. %52$s:     END 
 #. %53$s:  END 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:97
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:98
 #, fuzzy, c-format
 msgid ""
 "%s %s%s %s %s %s %s %sAdd %sDelete %sModify %sCheckout %sReturn %sCreate "
@@ -3847,7 +3847,7 @@ msgstr "%s %s, od %s %s %s, %s %s"
 #. %3$s:  checkout_info.biblio.author | html 
 #. %4$s:  END 
 #. %5$s:  IF ( checkout_info.item.itemnotes ) 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:156
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:157
 #, c-format
 msgid "%s %s, by %s%s%s- "
 msgstr "%s %s, od %s %s %s- "
@@ -4260,6 +4260,14 @@ msgid ""
 msgstr ""
 "%s %s Nová %s Objednaná %s Čiastočne prijatá %s Prijatá %s Zrušená %s %s "
 "(trvalý príkaz) %s"
+
+#. %1$s:  END 
+#. %2$s:         CASE 'NEWS'      
+#. %3$s:  UNLESS Koha.Preference('NewsLog') 
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:97
+#, fuzzy, c-format
+msgid "%s %sNews%s "
+msgstr "%s %s Pokuty %s"
 
 #. %1$s:  selected=relationship | html 
 #. %2$s:  PROCESS selectoptionopen value='' 
@@ -5157,6 +5165,14 @@ msgid ""
 "Koha "
 msgstr "&rsaquo; Dávka %s %s &rsaquo; Spracovať pripravené záznamy MARC %s "
 
+#. %1$s:  IF patron 
+#. %2$s:  INCLUDE 'patron-title.inc' invert_name = 1 no_html = 1 
+#. %3$s:  END 
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:11
+#, fuzzy, c-format
+msgid "%s Batch check out to %s &rsaquo; %s Circulation &rsaquo; Koha "
+msgstr "Koha &rsaquo; Výpožičný proces &rsaquo; Vrátenie %s"
+
 #. %1$s:  FOR w IN warnHiddenBiblionumbers 
 #. %2$s:  w.frameworkcode | html 
 #. %3$s:  w.interface | html 
@@ -5509,7 +5525,7 @@ msgstr ""
 #. %19$s:  ActionsLoo.from_subfield | html 
 #. %20$s:  END 
 #. %21$s:  IF ( ActionsLoo.field_value ) 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:146
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:149
 #, c-format
 msgid ""
 "%s Delete %s %s Add new %s %s Update existing or add new %s %s Move %s %s "
@@ -5839,18 +5855,6 @@ msgstr ""
 #, c-format
 msgid "%s Initials: "
 msgstr "%s Iniciálky: "
-
-#. %1$s:  IF patron 
-#. %2$s:  INCLUDE 'patron-title.inc' invert_name = 1 no_html = 1 
-#. %3$s:  END 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:11
-#, fuzzy, c-format
-msgid ""
-"%s Issuing items to %s &rsaquo; Batch check out &rsaquo; %s Circulation "
-"&rsaquo; Koha "
-msgstr ""
-"Koha &rsaquo; Výpožičný proces %s &rsaquo; Hromadná výpožička &rsaquo;Výdaj "
-"exemplárov pre %s %s "
 
 #. %1$s:  ELSIF (hold.inprocessing) 
 #: koha-tmpl/intranet-tmpl/prog/en/includes/holds_table.inc:127
@@ -6550,7 +6554,7 @@ msgstr "%s Spracováva sa načítaný súbor "
 #. %3$s:  END 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/member-password.tt:29
 #, fuzzy, c-format
-msgid "%s Password Updated %s Change username and/or password %s "
+msgid "%s Password updated %s Change username and/or password %s "
 msgstr ""
 "&rsaquo; %sHeslo bolo aktualizované%sZmeňte prihlasovacie meno a/alebo heslo"
 "%s"
@@ -7508,46 +7512,6 @@ msgstr "%s Hľadali ste záznam %s %s Hľadali ste %s %s "
 msgid "%s ZIP/Postal code: "
 msgstr "%s PSČ: "
 
-#. %1$s:  END 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/tools-menu.inc:102
-#, c-format
-msgid ""
-"%s [%% IF ( CAN_user_tools_edit_calendar || "
-"CAN_user_tools_manage_csv_profiles || CAN_user_tools_view_system_logs || "
-"CAN_user_tools_edit_news || CAN_user_tools_schedule_tasks || "
-"CAN_user_tools_edit_quotes || ( Koha.ArePluginsEnabled() && "
-"CAN_user_plugins_tool ) || CAN_user_tools_upload_general_files || "
-"CAN_user_tools_access_files ) %%] "
-msgstr ""
-"%s [%% IF ( CAN_user_tools_edit_calendar || "
-"CAN_user_tools_manage_csv_profiles || CAN_user_tools_view_system_logs || "
-"CAN_user_tools_edit_news || CAN_user_tools_schedule_tasks || "
-"CAN_user_tools_edit_quotes || ( Koha.ArePluginsEnabled() && "
-"CAN_user_plugins_tool ) || CAN_user_tools_upload_general_files || "
-"CAN_user_tools_access_files ) %%] "
-
-#. %1$s:  END 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/tools-menu.inc:49
-#, c-format
-msgid ""
-"%s [%% IF ( CAN_user_tools_items_batchdel || CAN_user_tools_items_batchmod "
-"|| CAN_user_tools_records_batchdel || CAN_user_tools_records_batchmod || "
-"CAN_user_tools_export_catalog || CAN_user_tools_inventory || "
-"CAN_user_tools_label_creator || CAN_user_tools_rotating_collections || "
-"( CAN_user_stockrotation_manage_rotas && Koha.Preference('StockRotation') ) "
-"|| CAN_user_tools_marc_modification_templates || "
-"CAN_user_tools_stage_marc_import || CAN_user_tools_manage_staged_marc || "
-"CAN_user_tools_upload_local_cover_images ) %%] "
-msgstr ""
-"%s [%% IF ( CAN_user_tools_items_batchdel || CAN_user_tools_items_batchmod "
-"|| CAN_user_tools_records_batchdel || CAN_user_tools_records_batchmod || "
-"CAN_user_tools_export_catalog || CAN_user_tools_inventory || "
-"CAN_user_tools_label_creator || CAN_user_tools_rotating_collections || "
-"( CAN_user_stockrotation_manage_rotas && Koha.Preference('StockRotation') ) "
-"|| CAN_user_tools_marc_modification_templates || "
-"CAN_user_tools_stage_marc_import || CAN_user_tools_manage_staged_marc || "
-"CAN_user_tools_upload_local_cover_images ) %%] "
-
 #. %1$s:  ELSIF ( hardduedatecompare == '1' ) 
 #. %2$s:  hardduedate | $KohaDates 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:256
@@ -7836,7 +7800,7 @@ msgid "%s item records found and staged"
 msgstr "%s nájdených a pripravených záznamov exemplárov"
 
 #. A
-#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:71
+#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:70
 msgid ""
 "%s item(s) are attached to this record. You must delete all items before "
 "deleting this record."
@@ -8013,31 +7977,31 @@ msgid "%s overwritten %s(last was %s)%s"
 msgstr "%s prepísaný %s(posledný bol %s)%s"
 
 #. %1$s:  TotalDel | html 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:251
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:252
 #, c-format
 msgid "%s patrons have been successfully deleted"
 msgstr "%s čitateľov bolo úspešne odstránených"
 
 #. %1$s:  TotalDel | html 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:249
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:250
 #, c-format
 msgid "%s patrons have been successfully moved to trash"
 msgstr "%s čitateľov bolo úspešne presunutých do koša"
 
 #. %1$s:  patrons_to_delete.size || 0 | html 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:186
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:187
 #, c-format
 msgid "%s patrons will be deleted"
 msgstr "%s čitateľov bude odstránených"
 
 #. %1$s:  TotalDel | html 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:244
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:245
 #, c-format
 msgid "%s patrons would have been removed (if it wasn't a test run)"
 msgstr "%s čitateľov by bolo úspešne odstránených (keby nešlo o test)"
 
 #. %1$s:  patrons_to_anonymize.count || 0 | html 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:187
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:188
 #, c-format
 msgid "%s patrons' checkout histories will be anonymized"
 msgstr "%s čitateľove histórie výpožičiek budú utajené"
@@ -8374,7 +8338,7 @@ msgstr "%s%s jednotlivá etiketa%s%s jednotlivých etikiet%s"
 #. %7$s:  loopro.object | html 
 #. %8$s:  END 
 #. %9$s:  END 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:333
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:334
 #, c-format
 msgid "%s%s%s %s (%s) %sMember %s%s%s "
 msgstr "%s%s%s %s (%s) %sČlen %s%s%s "
@@ -11021,7 +10985,7 @@ msgid "-- Choose one -- "
 msgstr "-- Zvoliť jeden -- "
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/set-library.tt:117
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:325
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:328
 #, c-format
 msgid "-- None --"
 msgstr "-- Žiaden --"
@@ -11206,7 +11170,7 @@ msgstr "1/2"
 msgid "10 characters maximum"
 msgstr "znaky"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:224
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:227
 #, c-format
 msgid "1st"
 msgstr "1."
@@ -11559,8 +11523,8 @@ msgstr "Prístupová adresa URL"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/access_files.tt:6
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/access_files.tt:34
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:156
-#: koha-tmpl/intranet-tmpl/prog/en/includes/tools-menu.inc:134
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:152
+#: koha-tmpl/intranet-tmpl/prog/en/includes/tools-menu.inc:125
 #, c-format
 msgid "Access files"
 msgstr "Prístupové súbory"
@@ -11570,7 +11534,7 @@ msgstr "Prístupové súbory"
 msgid "Access files "
 msgstr "Prístupové súbory"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:157
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:153
 #, c-format
 msgid "Access files stored on the server, like log files or reports"
 msgstr ""
@@ -11856,7 +11820,7 @@ msgstr "Štatistika akvizícií"
 msgid "Acquisitions statistics "
 msgstr "Štatistika akvizícií "
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/acquisitions-menu.inc:16
+#: koha-tmpl/intranet-tmpl/prog/en/includes/acquisitions-menu.inc:17
 #, fuzzy, c-format
 msgid "Acquisitions statistics wizard"
 msgstr "Štatistika akvizícií "
@@ -11872,9 +11836,9 @@ msgstr "Štatistika akvizícií "
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/dictionary.tt:135
 #: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:494
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:355
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:118
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:121
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/scheduler.tt:81
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:311
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:312
 #: koha-tmpl/intranet-tmpl/prog/en/includes/str/tinymce_i18n.inc:2
 #, c-format
 msgid "Action"
@@ -11959,7 +11923,7 @@ msgstr "Akcia pri nenájdení zhody: "
 #: koha-tmpl/intranet-tmpl/prog/en/modules/plugins/plugins-home.tt:124
 #: koha-tmpl/intranet-tmpl/prog/en/modules/pos/register.tt:97
 #: koha-tmpl/intranet-tmpl/prog/en/modules/pos/register.tt:186
-#: koha-tmpl/intranet-tmpl/prog/en/modules/pos/register.tt:248
+#: koha-tmpl/intranet-tmpl/prog/en/modules/pos/register.tt:252
 #: koha-tmpl/intranet-tmpl/prog/en/modules/pos/registers.tt:81
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:286
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/checkexpiration.tt:107
@@ -11971,7 +11935,7 @@ msgstr "Akcia pri nenájdení zhody: "
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/csv-profiles.tt:305
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/koha-news.tt:156
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/letter.tt:183
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:90
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:92
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/problem-reports.tt:82
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/quotes-upload.tt:83
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/quotes.tt:113
@@ -12009,12 +11973,12 @@ msgstr "Akcie"
 msgid "Actions "
 msgstr "Akcie "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:109
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:112
 #, c-format
 msgid "Actions for "
 msgstr "Akcie pre "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:217
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:218
 #, c-format
 msgid "Actions:"
 msgstr "Akcie:"
@@ -12181,7 +12145,7 @@ msgstr "Pridať novú sadu OAI"
 msgid "Add a new OAI set "
 msgstr "Pridať novú sadu OAI"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:208
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:211
 #, c-format
 msgid "Add a new action"
 msgstr "Pridať novú akciu"
@@ -12249,7 +12213,7 @@ msgid "Add a substitution"
 msgstr "Pridať náhradu"
 
 #. INPUT type=submit
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:290
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:293
 msgid "Add action"
 msgstr "Pridať akciu"
 
@@ -12553,7 +12517,7 @@ msgstr "Pridať upravené záznamy do nasledujúceho zoznamu:  "
 msgid "Add multiple copies of this item"
 msgstr "Pridať viac kópií tohto exemplára"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:214
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:217
 #, c-format
 msgid "Add new"
 msgstr "Pridať novú"
@@ -12641,7 +12605,7 @@ msgstr ""
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:95
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:544
-#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:196
+#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:195
 #, c-format
 msgid "Add order"
 msgstr "Pridať objednávku"
@@ -12845,8 +12809,8 @@ msgstr "Pridať do košíka"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:92
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:527
-#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:106
-#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:113
+#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:105
+#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:112
 #, c-format
 msgid "Add to cart"
 msgstr "Pridať do košíka"
@@ -12857,7 +12821,7 @@ msgid "Add to list"
 msgstr "Pridať do zoznamu"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:99
-#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:124
+#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:123
 #, c-format
 msgid "Add to list "
 msgstr "Pridať do zoznamu "
@@ -13061,8 +13025,8 @@ msgstr "Dodatočné podpolia (XML)"
 msgid "Additional thanks to..."
 msgstr "Dodatočné poďakovanie pre..."
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:101
-#: koha-tmpl/intranet-tmpl/prog/en/includes/tools-menu.inc:107
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:97
+#: koha-tmpl/intranet-tmpl/prog/en/includes/tools-menu.inc:98
 #, c-format
 msgid "Additional tools"
 msgstr "Dodatočné nástroje"
@@ -13221,7 +13185,7 @@ msgstr "Obrázok obálky Adlibris"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/usage_statistics.tt:23
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/z3950servers.tt:36
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:25
-#: koha-tmpl/intranet-tmpl/prog/en/includes/acquisitions-menu.inc:21
+#: koha-tmpl/intranet-tmpl/prog/en/includes/acquisitions-menu.inc:26
 #: koha-tmpl/intranet-tmpl/prog/en/includes/header.inc:65
 #: koha-tmpl/intranet-tmpl/prog/en/includes/pos-menu.inc:11
 #: koha-tmpl/intranet-tmpl/prog/en/includes/prefs-menu.inc:24
@@ -13423,7 +13387,7 @@ msgstr "Vekové obmedzenie"
 #. For the first occurrence,
 #. %1$s:  AGE_RESTRICTION | html 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:433
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:163
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:164
 #, c-format
 msgid "Age restriction %s."
 msgstr "Vekové obmedzenie %s."
@@ -13542,13 +13506,13 @@ msgstr "Alingsås Public Library, Sweden"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/subscription-bib-search.tt:25
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/subscription-bib-search.tt:37
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/koha-news.tt:446
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:223
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:199
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:201
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:220
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:222
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:250
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:252
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:226
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:200
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:202
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:221
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:223
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:251
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:253
 #: koha-tmpl/intranet-tmpl/prog/en/includes/additional-fields-entry.inc:12
 #: koha-tmpl/intranet-tmpl/prog/en/includes/av-build-dropbox.inc:16
 #: koha-tmpl/intranet-tmpl/prog/en/includes/subscriptions-search.inc:33
@@ -13582,7 +13546,7 @@ msgstr "Všetky rozpočty"
 
 #. %1$s:  do_anonym | html 
 #. %2$s:  last_issue_date | $KohaDates 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:258
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:259
 #, c-format
 msgid "All checkouts (%s) older than %s have been anonymized"
 msgstr "Všetky výpožičky (%s) staršie ako %s boli utajené"
@@ -14128,7 +14092,7 @@ msgstr "American Numismatic Society, USA"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/pay.tt:72
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/paycollect.tt:137
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/paycollect.tt:215
-#: koha-tmpl/intranet-tmpl/prog/en/modules/pos/register.tt:247
+#: koha-tmpl/intranet-tmpl/prog/en/modules/pos/register.tt:251
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/cash_register_stats.tt:167
 #, c-format
 msgid "Amount"
@@ -14160,7 +14124,7 @@ msgid "Amount outstanding"
 msgstr "Neuhradená čiastka"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/boraccount.tt:251
-#: koha-tmpl/intranet-tmpl/prog/en/modules/pos/register.tt:298
+#: koha-tmpl/intranet-tmpl/prog/en/modules/pos/register.tt:302
 #, c-format
 msgid "Amount paid: "
 msgstr "Vyplatená suma: "
@@ -14367,7 +14331,7 @@ msgstr "Došlo k pokusu o nepodporovanú operáciu. "
 msgid "Analytics"
 msgstr "Analytika"
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:22
+#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:21
 #, c-format
 msgid "Analyze items"
 msgstr "Analytické exempláre"
@@ -14392,7 +14356,7 @@ msgstr "Kotvy"
 msgid "Animals and Nature"
 msgstr "Zvieratá a príroda"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:154
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:155
 #, c-format
 msgid "Anonymize checkout history"
 msgstr "Utajiť výpis výpožičiek"
@@ -14427,7 +14391,7 @@ msgstr "Antenna.io"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:1124
 #: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:1145
 #: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:1177
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:131
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:132
 #: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:58
 #: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:68
 #, c-format
@@ -15360,7 +15324,7 @@ msgstr "Koha &rsaquo; Katalogizácia &rsaquo; "
 msgid "Attach another item"
 msgstr "Pripísať ďalší exemplár"
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:59
+#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:58
 #, c-format
 msgid "Attach item"
 msgstr "Pridať exemplár"
@@ -15700,7 +15664,7 @@ msgid "Authority #%s (%s)"
 msgstr "Autorita #%s (%s)"
 
 #. %1$s:  loopro.object | html 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:349
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:350
 #, c-format
 msgid "Authority %s"
 msgstr "Autorita %s"
@@ -15959,8 +15923,8 @@ msgstr "Automatické objednávanie: "
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/automatic_item_modification_by_age.tt:24
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/automatic_item_modification_by_age.tt:61
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:204
-#: koha-tmpl/intranet-tmpl/prog/en/includes/tools-menu.inc:72
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:195
+#: koha-tmpl/intranet-tmpl/prog/en/includes/tools-menu.inc:65
 #, c-format
 msgid "Automatic item modifications by age"
 msgstr "Automatická úprava exemplára podľa veku"
@@ -16072,7 +16036,7 @@ msgstr "Priemerný čas výpožičky"
 msgid "Average loan time &rsaquo; Reports &rsaquo; Koha"
 msgstr "Koha &rsaquo; Výkazy &rsaquo; Stratené exempláre"
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:92
+#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:91
 #, c-format
 msgid "BIBTEX"
 msgstr "BIBTEX"
@@ -16191,7 +16155,7 @@ msgstr "Stĺpec"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/branchtransfers.tt:200
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:486
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:1056
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:140
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:141
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/offline.tt:120
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/offline.tt:164
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/offline.tt:182
@@ -16264,7 +16228,7 @@ msgstr "Súbor čiarových kódov:"
 msgid "Barcode file: "
 msgstr "Súbor čiarových kódov: "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:105
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:106
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batchMod.tt:59
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/inventory.tt:79
 #, c-format
@@ -16628,13 +16592,13 @@ msgstr "ID dávky"
 msgid "Batch add reserves"
 msgstr "Pridať rezervácie dávkovo"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:36
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:37
 #: koha-tmpl/intranet-tmpl/prog/en/includes/circ-menu.inc:129
 #, c-format
 msgid "Batch check out"
 msgstr "Hromadná výpožička"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:45
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:46
 #, fuzzy, c-format
 msgid "Batch check out "
 msgstr "Hromadná výpožička"
@@ -16642,7 +16606,7 @@ msgstr "Hromadná výpožička"
 #. %1$s:  IF patron 
 #. %2$s:  INCLUDE 'patron-title.inc' invert_name = 1 
 #. %3$s:  END 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:129
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:130
 #, c-format
 msgid "Batch checkout confirmation %s for %s %s"
 msgstr "Hromadné potvrdenie o výpožičke %s pre %s %s"
@@ -16651,7 +16615,7 @@ msgstr "Hromadné potvrdenie o výpožičke %s pre %s %s"
 #. %2$s:  INCLUDE 'patron-title.inc' invert_name = 1 
 #. %3$s:  batch | html 
 #. %4$s:  END 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:132
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:133
 #, c-format
 msgid "Batch checkout information %s for %s |%s|%s"
 msgstr "Hromadná informácia o výpožičke %s pre %s |%s|%s"
@@ -16667,7 +16631,7 @@ msgstr "Hromadné odstránenie"
 msgid "Batch delete patrons "
 msgstr "Hromadné odstránenie čitateľov "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:70
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:68
 #, c-format
 msgid "Batch delete patrons and delete patron circulation history"
 msgstr "Hromadne odstrániť čitateľov a odstrániť históriu výpožičiek čitateľov"
@@ -16700,8 +16664,8 @@ msgstr "Hromadná úprava čitateľov "
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:29
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:39
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:79
-#: koha-tmpl/intranet-tmpl/prog/en/includes/tools-menu.inc:41
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:77
+#: koha-tmpl/intranet-tmpl/prog/en/includes/tools-menu.inc:39
 #, c-format
 msgid "Batch extend due dates"
 msgstr "Hromadná zmena termínu vrátenia"
@@ -16722,8 +16686,8 @@ msgstr "Hromadné %sodstránenie%szmena%s exemplárov"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1032
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:25
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:32
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:184
-#: koha-tmpl/intranet-tmpl/prog/en/includes/tools-menu.inc:60
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:175
+#: koha-tmpl/intranet-tmpl/prog/en/includes/tools-menu.inc:53
 #, c-format
 msgid "Batch item deletion"
 msgstr "Hromadné odstránenie exemplárov"
@@ -16746,8 +16710,8 @@ msgstr "Výsledky hromadného odstránenia exemplárov"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1029
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:27
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:35
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:189
-#: koha-tmpl/intranet-tmpl/prog/en/includes/tools-menu.inc:63
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:180
+#: koha-tmpl/intranet-tmpl/prog/en/includes/tools-menu.inc:56
 #, c-format
 msgid "Batch item modification"
 msgstr "Hromadná zmena exemplárov"
@@ -16784,8 +16748,8 @@ msgstr "Dávkové operácie s %s%s%s%s%s viditeľnými záznamami "
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:39
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:68
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:69
-#: koha-tmpl/intranet-tmpl/prog/en/includes/tools-menu.inc:35
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:67
+#: koha-tmpl/intranet-tmpl/prog/en/includes/tools-menu.inc:33
 #, c-format
 msgid "Batch patron deletion and anonymization"
 msgstr "Hromadné odstránenie/utajenie čitateľov"
@@ -16806,8 +16770,8 @@ msgstr "Hromadné odstránenie/utajenie čitateľov pre %s"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1041
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/modborrowers.tt:27
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/modborrowers.tt:38
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:74
-#: koha-tmpl/intranet-tmpl/prog/en/includes/tools-menu.inc:38
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:72
+#: koha-tmpl/intranet-tmpl/prog/en/includes/tools-menu.inc:36
 #, c-format
 msgid "Batch patron modification"
 msgstr "Hromadná zmena čitateľov"
@@ -16831,8 +16795,8 @@ msgstr "Hromadné výsledky u čitateľov"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1017
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:23
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:33
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:194
-#: koha-tmpl/intranet-tmpl/prog/en/includes/tools-menu.inc:66
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:185
+#: koha-tmpl/intranet-tmpl/prog/en/includes/tools-menu.inc:59
 #, c-format
 msgid "Batch record deletion"
 msgstr "Hromadné odstránenie záznamov"
@@ -16845,8 +16809,8 @@ msgstr "Koha &rsaquo; Nástroje &rsaquo; Načítať"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1014
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:24
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:34
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:199
-#: koha-tmpl/intranet-tmpl/prog/en/includes/tools-menu.inc:69
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:190
+#: koha-tmpl/intranet-tmpl/prog/en/includes/tools-menu.inc:62
 #, c-format
 msgid "Batch record modification"
 msgstr "Hromadná zmena záznamov"
@@ -16963,8 +16927,8 @@ msgstr "BibTex"
 
 #. For the first occurrence,
 #. %1$s:  loopro.biblionumber | html 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:340
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:342
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:341
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:343
 #, c-format
 msgid "Biblio %s"
 msgstr "Biblio %s"
@@ -17031,7 +16995,7 @@ msgid "Bibliographic record"
 msgstr "Knižničný záznam"
 
 #. %1$s:  object | html 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:390
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:391
 #, c-format
 msgid "Bibliographic record %s"
 msgstr "Knižničný záznam %s"
@@ -17328,7 +17292,7 @@ msgstr "Číslo čitateľa"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember-brief.tt:71
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:485
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:236
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:237
 #, c-format
 msgid "Borrowernumber: "
 msgstr "Číslo čitateľa: "
@@ -17473,7 +17437,7 @@ msgstr "Obmedzenie pobočiek"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/checkout-notes.tt:17
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation-home.tt:12
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:29
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:25
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:26
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/offline.tt:26
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/on-site_checkouts.tt:17
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/overdue.tt:35
@@ -17613,7 +17577,7 @@ msgstr "Obmedzenie pobočiek"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/koha-news.tt:28
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/letter.tt:32
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:23
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:33
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:34
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/modborrowers.tt:18
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/overduerules.tt:15
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/picture-upload.tt:14
@@ -17627,7 +17591,7 @@ msgstr "Obmedzenie pobočiek"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:11
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload-images.tt:16
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:22
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:150
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:151
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:19
 msgid "Breadcrumb"
 msgstr ""
@@ -17690,12 +17654,12 @@ msgstr "Vyhľadať obrázok"
 msgid "Browse selected records"
 msgstr "Prezerať zvolené záznamy"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:182
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:183
 #, c-format
 msgid "Browse system logs"
 msgstr "Prehľadať denníky systému"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:116
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:112
 #, c-format
 msgid "Browse the system logs"
 msgstr "Prehľadať denníky systému"
@@ -17784,7 +17748,7 @@ msgstr "Rozpočtové náklady: "
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:153
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:27
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/aqplan.tt:25
-#: koha-tmpl/intranet-tmpl/prog/en/includes/acquisitions-menu.inc:24
+#: koha-tmpl/intranet-tmpl/prog/en/includes/acquisitions-menu.inc:29
 #: koha-tmpl/intranet-tmpl/prog/en/includes/admin-menu.inc:107
 #, c-format
 msgid "Budgets"
@@ -18019,8 +17983,8 @@ msgid "CSV profile: "
 msgstr "Profil CSV: "
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/csv-profiles.tt:293
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:110
-#: koha-tmpl/intranet-tmpl/prog/en/includes/tools-menu.inc:113
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:106
+#: koha-tmpl/intranet-tmpl/prog/en/includes/tools-menu.inc:104
 #, c-format
 msgid "CSV profiles"
 msgstr "Profily CSV"
@@ -18066,8 +18030,8 @@ msgstr "Vypršanie cache:"
 msgid "Calculated on %s. From %s to %s"
 msgstr "Vypočítané dňa %s. Od %s po %s"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:105
-#: koha-tmpl/intranet-tmpl/prog/en/includes/tools-menu.inc:110
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:101
+#: koha-tmpl/intranet-tmpl/prog/en/includes/tools-menu.inc:101
 #, c-format
 msgid "Calendar"
 msgstr "Kalendár"
@@ -18371,6 +18335,8 @@ msgstr "Nemožno uložiť tento záznam, pretože nasledujúce pole nie je vypln
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:122
 #: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:256
 #: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:258
+#: koha-tmpl/intranet-tmpl/prog/en/modules/basket/downloadcart.tt:28
+#: koha-tmpl/intranet-tmpl/prog/en/modules/basket/sendbasketform.tt:34
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/additional-fields.tt:202
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:237
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:312
@@ -18429,8 +18395,6 @@ msgstr "Nemožno uložiť tento záznam, pretože nasledujúce pole nie je vypln
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/transport-cost-matrix.tt:99
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/usage_statistics.tt:249
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/z3950servers.tt:187
-#: koha-tmpl/intranet-tmpl/prog/en/modules/basket/downloadcart.tt:28
-#: koha-tmpl/intranet-tmpl/prog/en/modules/basket/sendbasketform.tt:34
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:864
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:868
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:872
@@ -18485,8 +18449,8 @@ msgstr "Nemožno uložiť tento záznam, pretože nasledujúce pole nie je vypln
 #: koha-tmpl/intranet-tmpl/prog/en/modules/patroncards/edit-template.tt:163
 #: koha-tmpl/intranet-tmpl/prog/en/modules/patroncards/print.tt:106
 #: koha-tmpl/intranet-tmpl/prog/en/modules/pos/pay.tt:154
-#: koha-tmpl/intranet-tmpl/prog/en/modules/pos/register.tt:275
-#: koha-tmpl/intranet-tmpl/prog/en/modules/pos/register.tt:313
+#: koha-tmpl/intranet-tmpl/prog/en/modules/pos/register.tt:279
+#: koha-tmpl/intranet-tmpl/prog/en/modules/pos/register.tt:317
 #: koha-tmpl/intranet-tmpl/prog/en/modules/pos/registers.tt:165
 #: koha-tmpl/intranet-tmpl/prog/en/modules/pos/registers.tt:188
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1164
@@ -18519,14 +18483,14 @@ msgstr "Nemožno uložiť tento záznam, pretože nasledujúce pole nie je vypln
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:121
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:167
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:147
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:233
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:234
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/csv-profiles.tt:264
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:120
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:190
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/koha-news.tt:140
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/letter.tt:269
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:291
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:336
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:294
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:339
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/modborrowers.tt:76
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/modborrowers.tt:328
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/picture-upload.tt:157
@@ -18540,7 +18504,7 @@ msgstr "Nemožno uložiť tento záznam, pretože nasledujúce pole nie je vypln
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/EXAMPLE.tt:18
 #: koha-tmpl/intranet-tmpl/prog/en/includes/auth-finder-search.inc:161
 #: koha-tmpl/intranet-tmpl/prog/en/includes/borrower_debarments.inc:66
-#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:231
+#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:230
 #: koha-tmpl/intranet-tmpl/prog/en/includes/checkouts-table.inc:125
 #: koha-tmpl/intranet-tmpl/prog/en/includes/checkouts-table.inc:158
 #: koha-tmpl/intranet-tmpl/prog/en/includes/circ-menu.inc:192
@@ -18840,7 +18804,7 @@ msgstr "Nemožno vypožičať! %s "
 #. %2$s:  INCLUDE 'blocked-fines.inc' fines = chargesamount 
 #. %3$s:  END 
 #. %4$s:  IF ( charges_guarantors_guarantees ) 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:69
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:70
 #, c-format
 msgid "Cannot check out! %s %s %s %s "
 msgstr "Nemožno vypožičať! %s %s %s %s "
@@ -19235,7 +19199,7 @@ msgstr "Pokladne"
 msgid "Cash registers for "
 msgstr "Pokladňa pre "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/pos/register.tt:246
+#: koha-tmpl/intranet-tmpl/prog/en/modules/pos/register.tt:250
 #, fuzzy, c-format
 msgid "Cashier"
 msgstr "Pokladňa"
@@ -19252,12 +19216,12 @@ msgstr "Koha &rsaquo; O Kohe"
 msgid "Cashup all"
 msgstr "Zbaliť všetko"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/pos/register.tt:241
+#: koha-tmpl/intranet-tmpl/prog/en/modules/pos/register.tt:245
 #, fuzzy, c-format
 msgid "Cashup history"
 msgstr "Výpis čísiel"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:161
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:157
 #, c-format
 msgid "Cashup registers"
 msgstr "Registračná pokladňa"
@@ -19294,10 +19258,10 @@ msgstr "Kazetový záznam"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/letter.tt:200
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/letter.tt:326
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/letter.tt:328
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:180
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:171
 #: koha-tmpl/intranet-tmpl/prog/en/includes/admin-menu.inc:71
 #: koha-tmpl/intranet-tmpl/prog/en/includes/reports-menu.inc:24
-#: koha-tmpl/intranet-tmpl/prog/en/includes/tools-menu.inc:57
+#: koha-tmpl/intranet-tmpl/prog/en/includes/tools-menu.inc:50
 #, c-format
 msgid "Catalog"
 msgstr "Katalóg"
@@ -19636,7 +19600,7 @@ msgstr ""
 "predvolené?"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:105
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:116
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:119
 #, c-format
 msgid "Change order"
 msgstr "Zmeniť poradie"
@@ -19792,8 +19756,8 @@ msgstr "Poplatky (%s)"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:846
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:854
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:76
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:84
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:77
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:85
 #: koha-tmpl/intranet-tmpl/prog/en/includes/blocked-fines.inc:5
 #, c-format
 msgid "Charges:"
@@ -19928,7 +19892,7 @@ msgstr "Kontrolné zoznamy"
 msgid "Check logs for more details."
 msgstr "Pre podrobnosti, prezrite si prosím denník chýb."
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:302
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:303
 #, fuzzy, c-format
 msgid "Check none"
 msgstr "Vrátenie dňa"
@@ -19936,7 +19900,7 @@ msgstr "Vrátenie dňa"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation-home.tt:34
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:530
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:616
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:122
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:123
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/offline.tt:58
 #: koha-tmpl/intranet-tmpl/prog/en/includes/adv-search.inc:37
 #: koha-tmpl/intranet-tmpl/prog/en/includes/budgets-admin-search.inc:40
@@ -20275,7 +20239,7 @@ msgstr "Výpožička pre "
 #. %1$s:  INCLUDE 'patron-title.inc' 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:602
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:742
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:94
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:95
 #, c-format
 msgid "Checking out to %s"
 msgstr "Výpožička pre %s"
@@ -20373,7 +20337,7 @@ msgid "Checkout history for %s &rsaquo; Catalog &rsaquo; Koha"
 msgstr "Koha &rsaquo; Katalóg &rsaquo; Váš košík"
 
 #. %1$s:  patrons_to_anonymize.count | html 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:217
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:218
 #, c-format
 msgid "Checkout history for %s patrons will be anonymized "
 msgstr "História výpožičiek pre %s čitateľov bude anonymizovaná "
@@ -20406,7 +20370,7 @@ msgid "Checkout on"
 msgstr "Výpožička dňa"
 
 #. INPUT type=submit
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:319
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:320
 msgid "Checkout or renew"
 msgstr "Vypožičať alebo obnoviť"
 
@@ -20437,15 +20401,15 @@ msgstr "Výpožičky"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:848
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:856
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:78
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:86
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:79
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:87
 #: koha-tmpl/intranet-tmpl/prog/en/includes/blocked-fines.inc:8
 #, c-format
 msgid "Checkouts are BLOCKED because fine balance is OVER THE LIMIT."
 msgstr "Výpožičky sú ZABLOKOVANÉ, pretože výška pokút PRESAHUJE LIMIT."
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:461
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:287
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:288
 #, c-format
 msgid "Checkouts are BLOCKED because patron has overdue items."
 msgstr "Výpožičky sú ZABLOKOVANÉ, pretože výška pokút je nad rámec."
@@ -20714,7 +20678,7 @@ msgstr "Kruh"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/checkout-notes.tt:23
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation-home.tt:30
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:35
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:31
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:32
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/on-site_checkouts.tt:23
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/overdue.tt:41
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:26
@@ -21154,10 +21118,10 @@ msgstr "Vymazať"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:53
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/duplicate_orders.tt:145
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:104
+#: koha-tmpl/intranet-tmpl/prog/en/modules/basket/basket.tt:6
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branch_transfer_limits.tt:49
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branch_transfer_limits.tt:66
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/preferences.tt:213
-#: koha-tmpl/intranet-tmpl/prog/en/modules/basket/basket.tt:6
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/detail.tt:298
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:84
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:54
@@ -21479,8 +21443,8 @@ msgstr "Klonovanie pravidiel výpožičiek a pokút zlyhalo!"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/boraccount.tt:293
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/merge-patrons.tt:199
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/merge-patrons.tt:275
-#: koha-tmpl/intranet-tmpl/prog/en/modules/pos/register.tt:267
-#: koha-tmpl/intranet-tmpl/prog/en/modules/pos/register.tt:288
+#: koha-tmpl/intranet-tmpl/prog/en/modules/pos/register.tt:271
+#: koha-tmpl/intranet-tmpl/prog/en/modules/pos/register.tt:292
 #: koha-tmpl/intranet-tmpl/prog/en/modules/pos/registers.tt:157
 #: koha-tmpl/intranet-tmpl/prog/en/modules/pos/registers.tt:176
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:153
@@ -21501,8 +21465,8 @@ msgstr "Klonovanie pravidiel výpožičiek a pokút zlyhalo!"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/stockrotation.tt:405
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:167
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:188
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:423
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:439
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:424
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:440
 #: koha-tmpl/intranet-tmpl/prog/en/includes/chart.inc:5
 #: koha-tmpl/intranet-tmpl/prog/en/includes/chart.inc:106
 #: koha-tmpl/intranet-tmpl/prog/en/includes/circ-menu.inc:185
@@ -22006,9 +21970,9 @@ msgstr "Recenzent "
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reviews/reviewswaiting.tt:21
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reviews/reviewswaiting.tt:40
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:349
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:44
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:42
 #: koha-tmpl/intranet-tmpl/prog/en/includes/ill-list-table.inc:32
-#: koha-tmpl/intranet-tmpl/prog/en/includes/tools-menu.inc:20
+#: koha-tmpl/intranet-tmpl/prog/en/includes/tools-menu.inc:18
 #, c-format
 msgid "Comments"
 msgstr "Recenzie"
@@ -22049,8 +22013,8 @@ msgstr "Detaily o firme"
 msgid "Company name: "
 msgstr "Názov firmy: "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:367
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:372
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:368
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:373
 #, fuzzy, c-format
 msgid "Compare"
 msgstr "Dokončený"
@@ -22084,12 +22048,12 @@ msgstr "Import čitateľov"
 msgid "Compare patrons for merging"
 msgstr "Neboli udané žiadne čísla čitateľských preukazov."
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:424
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:425
 #, c-format
 msgid "Compare preference values"
 msgstr "Porovnajte uložené nastavenie "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:303
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:304
 #, fuzzy, c-format
 msgid "Compare selected"
 msgstr "Nie je zvolený žiadny dátum"
@@ -22200,8 +22164,8 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/paycollect.tt:184
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/paycollect.tt:320
 #: koha-tmpl/intranet-tmpl/prog/en/modules/pos/pay.tt:153
-#: koha-tmpl/intranet-tmpl/prog/en/modules/pos/register.tt:274
-#: koha-tmpl/intranet-tmpl/prog/en/modules/pos/register.tt:312
+#: koha-tmpl/intranet-tmpl/prog/en/modules/pos/register.tt:278
+#: koha-tmpl/intranet-tmpl/prog/en/modules/pos/register.tt:316
 #: koha-tmpl/intranet-tmpl/prog/en/modules/pos/registers.tt:164
 #: koha-tmpl/intranet-tmpl/prog/en/modules/pos/registers.tt:187
 #, c-format
@@ -22223,7 +22187,7 @@ msgstr "Potvrdiť žiadosť o MKV"
 msgid "Confirm cancellation"
 msgstr "Potvrdiť odstránenie"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/pos/register.tt:268
+#: koha-tmpl/intranet-tmpl/prog/en/modules/pos/register.tt:272
 #: koha-tmpl/intranet-tmpl/prog/en/modules/pos/registers.tt:158
 #: koha-tmpl/intranet-tmpl/prog/en/modules/pos/registers.tt:177
 #, c-format
@@ -22806,14 +22770,14 @@ msgstr "Kópie:"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/z3950servers.tt:225
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:216
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/letter.tt:229
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:217
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:220
 #: koha-tmpl/intranet-tmpl/prog/en/includes/columns_settings.inc:4
 #: koha-tmpl/intranet-tmpl/prog/en/includes/str/tinymce_i18n.inc:2
 #, c-format
 msgid "Copy"
 msgstr "Kopírovať"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:218
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:221
 #, c-format
 msgid "Copy and replace"
 msgstr "Kopírovať a nahradiť"
@@ -23319,7 +23283,7 @@ msgstr "Vytvoriť nový záznam importovaním externého (duplicitného) záznam
 msgid "Create a new subscription "
 msgstr "Vytvoriť nové predplatné"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:309
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:312
 #, c-format
 msgid "Create a new template"
 msgstr "Vytvoriť novú šablónu"
@@ -23516,12 +23480,12 @@ msgid "Create printable labels and barcodes from catalog and patron data "
 msgstr ""
 "Vytvoriť tlačiteľné etikety a čiarové kódy katalógu a z údajov čitateľa "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:220
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:211
 #, c-format
 msgid "Create printable labels and barcodes from catalog data"
 msgstr "Vytvoriť tlačiteľné etikety a čiarové kódy z údajov v katalógu"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:65
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:63
 #, c-format
 msgid "Create printable patron cards"
 msgstr "Vytvoriť tlačiteľné čitateľské preukazy"
@@ -23664,7 +23628,7 @@ msgstr "Orezať"
 msgid "Ctrl-S"
 msgstr "Ctrl-S"
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/acquisitions-menu.inc:30
+#: koha-tmpl/intranet-tmpl/prog/en/includes/acquisitions-menu.inc:35
 #, c-format
 msgid "Currencies"
 msgstr "Meny"
@@ -24143,7 +24107,7 @@ msgstr "Databáza: "
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember-print.tt:103
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/pay.tt:65
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/readingrec.tt:67
-#: koha-tmpl/intranet-tmpl/prog/en/modules/pos/register.tt:245
+#: koha-tmpl/intranet-tmpl/prog/en/modules/pos/register.tt:249
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1392
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:2240
 #: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:236
@@ -24151,7 +24115,7 @@ msgstr "Databáza: "
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tags/review.tt:99
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:251
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:332
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:308
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:309
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:179
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:181
 #: koha-tmpl/intranet-tmpl/prog/en/includes/holds_table.inc:14
@@ -24713,7 +24677,7 @@ msgstr "Definujte typy kreditu."
 msgid "Define currencies and exchange rates used for acquisitions"
 msgstr "Definujte meny a kurzy použité pri akvizíciách."
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:106
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:102
 #, c-format
 msgid "Define days when the library is closed"
 msgstr "Definujte dni kedy je Vaša knižnica zatvorená"
@@ -24767,7 +24731,7 @@ msgstr "Definujte priradenia"
 msgid "Define notices "
 msgstr "Definujte oznámenia "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:55
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:53
 #, c-format
 msgid ""
 "Define notices (print and email notification messages for overdues, etc.)"
@@ -24788,7 +24752,7 @@ msgstr ""
 "Definujte pravidlá pre oznámenia o vrátení a výpožičkách pre kombinácie "
 "knižníc, kategórií čitateľov a typy exemplárov"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:205
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:196
 #, c-format
 msgid "Define rules to modify items by age"
 msgstr "Definujte pravidlá pre zmenu exemplárov podľa veku"
@@ -25005,9 +24969,9 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/koha-news.tt:227
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/letter.tt:238
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:399
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:100
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:195
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:213
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:103
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:198
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:216
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/modborrowers.tt:356
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/quotes.tt:132
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/quotes.tt:155
@@ -25061,12 +25025,12 @@ msgstr "Odstrániť obrázky"
 msgid "Delete SQL reports "
 msgstr "Odstrániť výkazy SQL "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:185
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:176
 #, c-format
 msgid "Delete a batch of items"
 msgstr "Odstrániť dávku exemplárov"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:195
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:186
 #, c-format
 msgid "Delete a batch of records (bibliographic or authority)"
 msgstr "Odstrániť dávku záznamov (knižničných alebo autorít)"
@@ -25076,8 +25040,8 @@ msgstr "Odstrániť dávku záznamov (knižničných alebo autorít)"
 msgid "Delete all"
 msgstr "Odstrániť všetko"
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:79
-#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:81
+#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:78
+#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:80
 #, c-format
 msgid "Delete all items"
 msgstr "Odstrániť všetky exempláre"
@@ -25249,8 +25213,8 @@ msgstr "Odstrániť typ exemplára '%s'?"
 msgid "Delete item type '%s'? "
 msgstr "Odstrániť typ exemplára '%s'?"
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:53
-#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:55
+#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:52
+#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:54
 #, c-format
 msgid "Delete items in a batch"
 msgstr "Odstrániť exempláre hromadne"
@@ -25295,12 +25259,12 @@ msgstr "Odstrániť čitateľov"
 msgid "Delete patron %s %s &rsaquo; Koha"
 msgstr "&rsaquo; Odstrániť čitateľa %s %s"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:106
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:107
 #, c-format
 msgid "Delete patrons"
 msgstr "Odstrániť čitateľov"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:197
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:198
 #, c-format
 msgid ""
 "Delete patrons directly from the database. Patron data will not be "
@@ -25309,7 +25273,7 @@ msgstr ""
 "Vymazať čitateľov priamo z databázy. Údaje čitateľa sa už nebudú dať "
 "obnoviť. "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:109
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:110
 #, c-format
 msgid "Delete patrons who meet the following criteria:"
 msgstr "Odstrániť čitateľov, ktorí spĺňajú nasledovné podmienky:"
@@ -25324,9 +25288,9 @@ msgstr "Odstrániť verejné zoznamy"
 msgid "Delete quote"
 msgstr "Odstrániť citát(y)"
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/authorities-toolbar.inc:36
-#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:71
-#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:73
+#: koha-tmpl/intranet-tmpl/prog/en/includes/authorities-toolbar.inc:39
+#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:70
+#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:72
 #, c-format
 msgid "Delete record"
 msgstr "Odstrániť záznam"
@@ -25406,7 +25370,7 @@ msgstr "Odstrániť predplatné"
 msgid "Delete table"
 msgstr "Odstrániť tabuľku"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:70
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:71
 #, fuzzy, c-format
 msgid "Delete template"
 msgstr "Zvoliť šablónu"
@@ -25700,7 +25664,7 @@ msgstr "Katd."
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:279
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:306
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:334
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:119
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:122
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/stockrotation.tt:107
 #: koha-tmpl/intranet-tmpl/prog/en/includes/clubs-table.inc:6
 #: koha-tmpl/intranet-tmpl/prog/en/includes/str/tinymce_i18n.inc:2
@@ -25761,7 +25725,7 @@ msgstr "Popis poplatku"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:86
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:79
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:154
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:282
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:285
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/stockrotation.tt:187
 #: koha-tmpl/intranet-tmpl/prog/en/includes/modals/cataloguing_create_av.inc:23
 #, c-format
@@ -25919,8 +25883,8 @@ msgstr "Hlásenie o vrátení: "
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/edifactmsgs.tt:47
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoices.tt:99
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:423
 #: koha-tmpl/intranet-tmpl/prog/en/modules/basket/basket.tt:118
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:423
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/accountline-details.tt:181
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/boraccount.tt:112
 #: koha-tmpl/intranet-tmpl/prog/en/includes/circ-menu.inc:133
@@ -26233,22 +26197,22 @@ msgid "Display children too."
 msgstr "Zobraziť aj deti."
 
 #. A
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:349
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:350
 msgid "Display detail for this authority"
 msgstr "Zobraziť detail pre túto autoritu"
 
 #. A
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:340
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:342
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:341
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:343
 msgid "Display detail for this biblio"
 msgstr "Zobraziť detaily pre toto biblio"
 
 #. A
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:362
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:363
 msgid "Display detail for this item"
 msgstr "Zobraziť detail pre tento exemplár"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:264
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:265
 #, c-format
 msgid "Display from: "
 msgstr "Zobraziť od: "
@@ -26276,7 +26240,7 @@ msgid "Display location:"
 msgstr "Zobraziť lokáciu:"
 
 #. A
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:333
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:334
 msgid "Display member details."
 msgstr "Zobraziť detaily o členovi."
 
@@ -26316,7 +26280,7 @@ msgstr "Zobraziť metadáta dodávateľa "
 msgid "Display them"
 msgstr "Zobraziť ich"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:268
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:269
 #, c-format
 msgid "Display to: "
 msgstr "Zobraziť do: "
@@ -26611,6 +26575,11 @@ msgstr "Stiahnuť zoznam"
 msgid "Download list "
 msgstr "Stiahnuť zoznam "
 
+#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/downloadshelf.tt:2
+#, fuzzy, c-format
+msgid "Download list &rsaquo; Koha"
+msgstr "Stiahnuť košík"
+
 #. INPUT type=submit name=save
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/detail.tt:980
 msgid "Download record"
@@ -26625,11 +26594,6 @@ msgstr "Stiahnuť záznamy"
 #, c-format
 msgid "Download selected claims"
 msgstr "Stiahnuť zvolené reklamácie"
-
-#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/downloadshelf.tt:2
-#, fuzzy, c-format
-msgid "Download shelf &rsaquo; Koha"
-msgstr "Koha &rsaquo; O Kohe"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/offline.tt:22
 #, c-format
@@ -26662,7 +26626,7 @@ msgid "Drop default"
 msgstr "Zrušiť predvolené"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/detail.tt:976
-#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:93
+#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:92
 #, c-format
 msgid "Dublin Core"
 msgstr "Dublin Core"
@@ -26718,7 +26682,7 @@ msgstr "Termín vrátenia do:"
 msgid "Due date:"
 msgstr "Termín vrátenia:"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:112
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:113
 #, fuzzy, c-format
 msgid "Due date: "
 msgstr "Termín vrátenia:"
@@ -26729,7 +26693,7 @@ msgid "Due dates have been modified! "
 msgstr "Termín vrátenia bol zmenený!"
 
 #. %1$s:  checkout_info.issue.date_due | $KohaDates as_due_date => 1 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:302
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:303
 #, c-format
 msgid "Due on %s"
 msgstr "Termín %s"
@@ -26738,7 +26702,7 @@ msgstr "Termín %s"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/additem.tt:109
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:382
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1392
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:99
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:102
 #: koha-tmpl/intranet-tmpl/prog/en/includes/cateditor-ui.inc:42
 #: koha-tmpl/intranet-tmpl/prog/en/includes/members-toolbar.inc:17
 #, c-format
@@ -26750,7 +26714,7 @@ msgstr "Duplikovať"
 msgid "Duplicate "
 msgstr "Duplikovať "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:323
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:326
 #, c-format
 msgid "Duplicate a template:"
 msgstr "Duplikovať šablónu:"
@@ -26890,7 +26854,7 @@ msgstr "EAN: "
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/admin-home.tt:205
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:33
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:51
-#: koha-tmpl/intranet-tmpl/prog/en/includes/acquisitions-menu.inc:33
+#: koha-tmpl/intranet-tmpl/prog/en/includes/acquisitions-menu.inc:38
 #: koha-tmpl/intranet-tmpl/prog/en/includes/admin-menu.inc:113
 #, c-format
 msgid "EDI accounts"
@@ -27056,7 +27020,7 @@ msgstr "Najskorší dátum rezervácií"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/csv-profiles.tt:318
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/koha-news.tt:213
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/letter.tt:235
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:192
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:195
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/quotes.tt:155
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/tables/members_results.tt:37
 #: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/tables/shelves_results.tt:45
@@ -27081,9 +27045,9 @@ msgstr "Upraviť"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/rotating_collections/editCollections.tt:41
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/stockrotation.tt:122
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/stockrotation.tt:291
-#: koha-tmpl/intranet-tmpl/prog/en/includes/authorities-toolbar.inc:27
+#: koha-tmpl/intranet-tmpl/prog/en/includes/authorities-toolbar.inc:30
 #: koha-tmpl/intranet-tmpl/prog/en/includes/budgets-admin-toolbar.inc:21
-#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:33
+#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:32
 #: koha-tmpl/intranet-tmpl/prog/en/includes/clubs-table.inc:88
 #: koha-tmpl/intranet-tmpl/prog/en/includes/reports-toolbar.inc:21
 #: koha-tmpl/intranet-tmpl/prog/en/includes/serials-toolbar.inc:16
@@ -27155,7 +27119,7 @@ msgstr "Upraviť SQL"
 msgid "Edit SQL report"
 msgstr "Upraviť výkaz SQL"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:98
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:101
 #, c-format
 msgid "Edit actions"
 msgstr "Upraviť akcie"
@@ -27170,8 +27134,8 @@ msgstr "Upraviť signál"
 msgid "Edit an existing subscription "
 msgstr "Upraviť jestvujúce predplatné "
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/authorities-toolbar.inc:31
-#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:65
+#: koha-tmpl/intranet-tmpl/prog/en/includes/authorities-toolbar.inc:34
+#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:64
 #: koha-tmpl/intranet-tmpl/prog/en/includes/serials-toolbar.inc:26
 #, c-format
 msgid "Edit as new (duplicate)"
@@ -27305,7 +27269,7 @@ msgstr "Upraviť exemplár"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:539
 #: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:288
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:248
-#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:40
+#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:39
 #: koha-tmpl/intranet-tmpl/prog/en/includes/serials-toolbar.inc:38
 #, c-format
 msgid "Edit items"
@@ -27316,8 +27280,8 @@ msgstr "Upraviť exempláre"
 msgid "Edit items "
 msgstr "Upraviť exempláre "
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:45
-#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:47
+#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:44
+#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:46
 #, c-format
 msgid "Edit items in batch"
 msgstr "Upraviť exempláre hromadne"
@@ -27386,7 +27350,7 @@ msgstr "Upraviť profil tlačiarne"
 msgid "Edit purchase suggestion #%s"
 msgstr "Upraviť návrh na nákup #%s"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:130
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:126
 #, c-format
 msgid "Edit quotes for QOTD feature"
 msgstr "Upravte citáty pre QOTD"
@@ -27401,8 +27365,8 @@ msgstr "Upraviť citáty pre funkciu Citát dňa "
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:169
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/subscription-add.tt:99
 #: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:285
-#: koha-tmpl/intranet-tmpl/prog/en/includes/authorities-toolbar.inc:30
-#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:36
+#: koha-tmpl/intranet-tmpl/prog/en/includes/authorities-toolbar.inc:33
+#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:35
 #: koha-tmpl/intranet-tmpl/prog/en/includes/serials-toolbar.inc:32
 #: koha-tmpl/intranet-tmpl/prog/en/includes/catalogue/itemsearch_item.json.inc:32
 #, c-format
@@ -27904,7 +27868,7 @@ msgstr "Zápisné "
 msgid "Enrolment period: "
 msgstr "Doba zápisu: "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:225
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:216
 #, c-format
 msgid ""
 "Enter a barcode to generate a printable spine label. For use with dedicated "
@@ -28358,7 +28322,7 @@ msgstr "Chyba: _(Form submit field collision."
 msgid "Error: _(No form element found."
 msgstr "Chyba: _ (Nenašiel sa žiaden prvok formulára."
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:76
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:77
 #, c-format
 msgid "Error: no field value specified."
 msgstr "Chyba: nebola určená žiadna hodnota poľa."
@@ -28687,8 +28651,8 @@ msgstr "Vysvetlenie: "
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/orders_by_budget.tt:131
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/reserves_stats.tt:286
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/serials_stats.tt:119
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:283
-#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:230
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:284
+#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:229
 #: koha-tmpl/intranet-tmpl/prog/en/includes/checkouts-table.inc:84
 #: koha-tmpl/intranet-tmpl/prog/en/includes/columns_settings.inc:4
 #, c-format
@@ -28751,7 +28715,7 @@ msgstr "Exportovať holdingové a bibliografické údaje "
 msgid "Export bibliographic records"
 msgstr "Exportovať kniž. záznamy"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:210
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:201
 #, c-format
 msgid "Export bibliographic, holdings, and authority records"
 msgstr "Exportovať bibliografické, holdingové záznamy a záznamy autorít"
@@ -28771,8 +28735,8 @@ msgstr "Exportovať výpožičky vo formáte:"
 msgid "Export configuration"
 msgstr "Exportovať konfiguráciu"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:209
-#: koha-tmpl/intranet-tmpl/prog/en/includes/tools-menu.inc:75
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:200
+#: koha-tmpl/intranet-tmpl/prog/en/includes/tools-menu.inc:68
 #, c-format
 msgid "Export data"
 msgstr "Exportovať údaje"
@@ -28898,7 +28862,7 @@ msgstr "Export do formátu hárka OpenDocument"
 msgid "Export today's checked in barcodes"
 msgstr "Exportovať dnes vrátené čiarové kódy"
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:213
+#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:212
 #, c-format
 msgid "Exporting to Dublin Core..."
 msgstr "Exportujem do Dublin Core..."
@@ -29420,7 +29384,7 @@ msgstr "Typ súboru"
 msgid "File:"
 msgstr "Súbor:"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:98
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:99
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batchMod.tt:52
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:87
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:88
@@ -29655,7 +29619,7 @@ msgstr "Nájsť a nahradiť"
 msgid "Find and replace..."
 msgstr "Nájsť a nahradiť..."
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:325
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:326
 #, c-format
 msgid "Find another patron?"
 msgstr "Nájsť ďalšieho čitateľa?"
@@ -29711,7 +29675,7 @@ msgstr "Pokuty za vrátené exempláre sú odpustené."
 
 #. INPUT type=submit name=submit
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:742
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:233
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:234
 #: koha-tmpl/intranet-tmpl/prog/en/includes/str/tinymce_i18n.inc:2
 msgid "Finish"
 msgstr "Dokončiť"
@@ -30528,7 +30492,7 @@ msgstr "Fond: %s"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:48
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:68
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/aqplan.tt:28
-#: koha-tmpl/intranet-tmpl/prog/en/includes/acquisitions-menu.inc:27
+#: koha-tmpl/intranet-tmpl/prog/en/includes/acquisitions-menu.inc:32
 #: koha-tmpl/intranet-tmpl/prog/en/includes/admin-menu.inc:110
 #, c-format
 msgid "Funds"
@@ -31013,7 +30977,7 @@ msgid "Hard due date"
 msgstr "Fixný termín vrátenia"
 
 #. %1$s:  INCLUDE 'date-format.inc' 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:113
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:114
 #, c-format
 msgid "Hard due date %s:"
 msgstr "Fixný termín vrátenia %s: "
@@ -31311,7 +31275,7 @@ msgstr "Veľmi žiadaný exemplár. "
 
 #. %1$s:  checkout_info.HIGHHOLDS.duration | html 
 #. %2$s:  checkout_info.HIGHHOLDS.returndate | html 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:207
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:208
 #, c-format
 msgid "High demand item. Loan period shortened to %s days (due %s)."
 msgstr ""
@@ -31499,6 +31463,7 @@ msgid "Hold ratio (greater than or equal to):"
 msgstr ", väčšiu ako alebo rovnú 1"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation-home.tt:85
+#: koha-tmpl/intranet-tmpl/prog/en/includes/acquisitions-menu.inc:21
 #: koha-tmpl/intranet-tmpl/prog/en/includes/circ-nav.inc:40
 #, c-format
 msgid "Hold ratios"
@@ -31936,7 +31901,7 @@ msgstr "Sviatky opakované ročne v rozpätí"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/checkout-notes.tt:20
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation-home.tt:15
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:32
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:28
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:29
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/offline.tt:29
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/on-site_checkouts.tt:20
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/overdue.tt:38
@@ -32078,7 +32043,7 @@ msgstr "Sviatky opakované ročne v rozpätí"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/koha-news.tt:31
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/letter.tt:35
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:26
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:36
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:37
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/modborrowers.tt:21
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/overduerules.tt:18
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/picture-upload.tt:17
@@ -32092,7 +32057,7 @@ msgstr "Sviatky opakované ročne v rozpätí"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:14
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload-images.tt:19
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:25
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:153
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:154
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:22
 #: koha-tmpl/intranet-tmpl/prog/en/includes/mana/mana-report-search-result.inc:19
 #, c-format
@@ -32284,7 +32249,7 @@ msgstr "Roly viazaného na doma"
 msgid "How many issues do you want to receive?"
 msgstr "Koľko čísiel seriálov chcete dostať?"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:193
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:194
 #, c-format
 msgid "How should patrons be deleted?"
 msgstr "Ako by sa mali vymazávať čitatelia?"
@@ -32613,6 +32578,7 @@ msgstr "Ikona"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoice.tt:161
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/localization.tt:63
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:90
 #: koha-tmpl/intranet-tmpl/prog/en/includes/str/tinymce_i18n.inc:2
 #, c-format
 msgid "Id"
@@ -33365,7 +33331,7 @@ msgstr ""
 msgid "Import into the borrowers table"
 msgstr "Importovať do tabuľky čitateľov"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:50
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:48
 #, c-format
 msgid "Import patron data"
 msgstr "Import údajov čitateľa"
@@ -33377,8 +33343,8 @@ msgstr "Importovať údaje čitateľa "
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/import_borrowers.tt:35
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/import_borrowers.tt:60
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:49
-#: koha-tmpl/intranet-tmpl/prog/en/includes/tools-menu.inc:23
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:47
+#: koha-tmpl/intranet-tmpl/prog/en/includes/tools-menu.inc:21
 #, c-format
 msgid "Import patrons"
 msgstr "Import čitateľov"
@@ -33639,18 +33605,18 @@ msgstr "Indikátor 2"
 msgid "Individual libraries:"
 msgstr "Jednotlivé knižnice:"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:313
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:314
 #, c-format
 msgid "Info"
 msgstr "Informácia"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:244
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:245
 #, c-format
 msgid "Info:"
 msgstr "Informácia:"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/lateorders.tt:78
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:142
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:143
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:256
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:584
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:768
@@ -33942,12 +33908,12 @@ msgstr "Nedostatočné oprávnenia."
 msgid "Integer"
 msgstr "Celé číslo"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:314
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:315
 #, c-format
 msgid "Interface"
 msgstr "Rozhranie"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:248
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:249
 #, c-format
 msgid "Interface:"
 msgstr "Rozhranie:"
@@ -34120,8 +34086,8 @@ msgstr "Neplatný rok zadaný v poli %s"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/inventory.tt:26
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/inventory.tt:48
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:214
-#: koha-tmpl/intranet-tmpl/prog/en/includes/tools-menu.inc:78
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:205
+#: koha-tmpl/intranet-tmpl/prog/en/includes/tools-menu.inc:71
 #, c-format
 msgid "Inventory"
 msgstr "Inventarizácia"
@@ -34385,11 +34351,12 @@ msgstr "Vydanie platby"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/pos/register.tt:117
 #: koha-tmpl/intranet-tmpl/prog/en/modules/pos/register.tt:119
 #: koha-tmpl/intranet-tmpl/prog/en/modules/pos/register.tt:206
+#: koha-tmpl/intranet-tmpl/prog/en/modules/pos/register.tt:208
 #, c-format
 msgid "Issue refund"
 msgstr "Vrátenie platby"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/pos/register.tt:289
+#: koha-tmpl/intranet-tmpl/prog/en/modules/pos/register.tt:293
 #, c-format
 msgid "Issue refund from "
 msgstr "Vrátenie platby od "
@@ -34494,8 +34461,8 @@ msgstr "Exemplár "
 
 #. For the first occurrence,
 #. %1$s:  loopro.object | html 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:339
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:362
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:340
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:363
 #, c-format
 msgid "Item %s"
 msgstr "Exemplár %s"
@@ -34635,7 +34602,7 @@ msgstr "Exemplár bol odstavený"
 msgid "Item has been withdrawn (transaction recorded anyway)"
 msgstr "Exemplár bol odstavený (transakcia bola jednako zaznamenaná)"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:260
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:261
 #, c-format
 msgid "Item has been withdrawn."
 msgstr "Exemplár bol odstavený."
@@ -34684,7 +34651,7 @@ msgstr "Exemplár sa stratil, nedá sa vrátiť."
 #. %1$s:  IF item_notforloan_lib 
 #. %2$s:  item_notforloan_lib | html 
 #. %3$s:  END 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:197
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:198
 #, c-format
 msgid "Item is normally not for loan %s(%s)%s."
 msgstr "Exemplár zvyčajne nie je vypožičateľný %s(%s)%s."
@@ -34710,7 +34677,7 @@ msgstr "Exemplár má obmedzenia"
 msgid "Item is restricted (transaction recorded anyway)"
 msgstr "Exemplár má obmedzenia (transakcia bola jednako zaznamenaná)"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:263
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:264
 #, c-format
 msgid "Item is restricted."
 msgstr "Exemplár má obmedzenia."
@@ -34741,7 +34708,7 @@ msgstr "Exemplár nie je vypožičaný."
 #. %1$s:  IF item_notforloan_lib 
 #. %2$s:  item_notforloan_lib | html 
 #. %3$s:  END 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:256
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:257
 #, c-format
 msgid "Item not for loan %s(%s)%s."
 msgstr "Nevypožičateľný exemplár %s(%s)%s."
@@ -34906,11 +34873,11 @@ msgstr "Značky exemplára sa momentálne nedajú uložiť"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:301
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:196
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:239
+#: koha-tmpl/intranet-tmpl/prog/en/modules/basket/basket.tt:252
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/itemtypes.tt:413
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:110
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:487
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:919
-#: koha-tmpl/intranet-tmpl/prog/en/modules/basket/basket.tt:252
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/detail.tt:317
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:23
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/article-requests.tt:124
@@ -34968,12 +34935,12 @@ msgstr "Kód typu exemplára: "
 msgid "Item type images are disabled. To enable them, turn off the "
 msgstr "Typy obrázkov exemplárov sú neaktivované. Pre ich aktiváciu, vypnite "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:194
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:195
 #, c-format
 msgid "Item type is normally not for loan."
 msgstr "Typ exemplára zvyčajne nie je vypožičateľný."
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:253
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:254
 #, c-format
 msgid "Item type not for loan."
 msgstr "Typ exemplára, ktorý je nevypožičateľný."
@@ -35049,7 +35016,7 @@ msgstr "Typy exemplára "
 #. For the first occurrence,
 #. %1$s:  INCLUDE 'patron-title.inc' patron = alert.RETURNED_FROM_ANOTHER.patron 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:93
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:242
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:243
 #, c-format
 msgid "Item was checked out to %s and was returned automatically."
 msgstr "Exemplár bol rezervovaný do %s a bol automaticky vrátený."
@@ -35092,7 +35059,7 @@ msgstr "Exemplár(e) nebol pridaný do dávky %s."
 msgid "Item(s) not removed from batch %s."
 msgstr "Exemplár(e) nebol(i) odobratý(é) z dávky %s."
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/pos/register.tt:295
+#: koha-tmpl/intranet-tmpl/prog/en/modules/pos/register.tt:299
 #, c-format
 msgid "Item: "
 msgstr "Exemplár: "
@@ -35751,8 +35718,8 @@ msgstr "Dávky etikiet"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/labels/label-edit-range.tt:20
 #: koha-tmpl/intranet-tmpl/prog/en/modules/labels/label-edit-template.tt:21
 #: koha-tmpl/intranet-tmpl/prog/en/modules/labels/label-manage.tt:34
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:219
-#: koha-tmpl/intranet-tmpl/prog/en/includes/tools-menu.inc:81
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:210
+#: koha-tmpl/intranet-tmpl/prog/en/includes/tools-menu.inc:74
 #, c-format
 msgid "Label creator"
 msgstr "Tvorba etikiet"
@@ -36227,7 +36194,7 @@ msgstr "Lib"
 msgid "LibLime, USA"
 msgstr "LibLime, USA"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:309
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:310
 #, c-format
 msgid "Librarian"
 msgstr "Knihovník"
@@ -36243,7 +36210,7 @@ msgstr "Identita knihovníka:"
 msgid "Librarian interface"
 msgstr "Intranet"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:191
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:192
 #, c-format
 msgid "Librarian:"
 msgstr "Knihovník:"
@@ -36361,7 +36328,7 @@ msgstr "Knižnica (kód)"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/edi_ean_accounts.tt:33
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/edi_ean_accounts.tt:47
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/edi_ean_accounts.tt:160
-#: koha-tmpl/intranet-tmpl/prog/en/includes/acquisitions-menu.inc:34
+#: koha-tmpl/intranet-tmpl/prog/en/includes/acquisitions-menu.inc:39
 #: koha-tmpl/intranet-tmpl/prog/en/includes/admin-menu.inc:114
 #, c-format
 msgid "Library EANs"
@@ -36743,7 +36710,7 @@ msgstr "Prepojiť pole na autority"
 msgid "Link list"
 msgstr "Zoznam odkazov"
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:61
+#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:60
 #, c-format
 msgid "Link to host record"
 msgstr "Odkaz na záznam hostiteľa"
@@ -37052,7 +37019,7 @@ msgstr "Miestne použitie bolo zaznamenané"
 msgid "Local use recorded "
 msgstr "Miestne použitie bolo zaznamenané "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:248
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:249
 #, c-format
 msgid "Local use recorded."
 msgstr "Miestne použitie bolo zaznamenané."
@@ -37152,7 +37119,7 @@ msgstr "Zamknutý"
 msgid "Locked%s"
 msgstr "Zamknutý %s"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:300
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:301
 #, c-format
 msgid "Log entries"
 msgstr ""
@@ -37193,6 +37160,7 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:91
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:93
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:97
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:98
 #, fuzzy
 msgid "Log not enabled"
 msgstr "Citáty zapnuté: "
@@ -37202,8 +37170,8 @@ msgstr "Citáty zapnuté: "
 msgid "Log out"
 msgstr "Odhlásiť sa"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:115
-#: koha-tmpl/intranet-tmpl/prog/en/includes/tools-menu.inc:116
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:111
+#: koha-tmpl/intranet-tmpl/prog/en/includes/tools-menu.inc:107
 #, c-format
 msgid "Log viewer"
 msgstr "Zobrazovač denníkov"
@@ -37223,14 +37191,14 @@ msgstr "Systém prihlásenia sa nespráva správne"
 msgid "Login"
 msgstr "Prihlásiť sa"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:160
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:161
 #: koha-tmpl/intranet-tmpl/prog/en/includes/prefs-menu.inc:94
 #: koha-tmpl/intranet-tmpl/prog/en/includes/prefs-menu.inc:98
 #, c-format
 msgid "Logs"
 msgstr "Denníky"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:169
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:170
 #, fuzzy, c-format
 msgid "Logs "
 msgstr "Denníky"
@@ -37387,7 +37355,7 @@ msgstr "Lund University Library, Švédsko"
 msgid "M&#257;ori"
 msgstr "M&#257;ori"
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/authorities-toolbar.inc:47
+#: koha-tmpl/intranet-tmpl/prog/en/includes/authorities-toolbar.inc:50
 #, c-format
 msgid "MADS (XML)"
 msgstr "MADS (XML)"
@@ -37420,20 +37388,20 @@ msgid "MARC"
 msgstr "MARC"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/detail.tt:979
-#: koha-tmpl/intranet-tmpl/prog/en/includes/authorities-toolbar.inc:50
-#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:96
+#: koha-tmpl/intranet-tmpl/prog/en/includes/authorities-toolbar.inc:53
+#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:95
 #, c-format
 msgid "MARC (Unicode/UTF-8)"
 msgstr "MARC (Unicode/UTF-8)"
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:97
+#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:96
 #, c-format
 msgid "MARC (Unicode/UTF-8, Standard)"
 msgstr "MARC (Unicode/UTF-8, Standard)"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/detail.tt:978
-#: koha-tmpl/intranet-tmpl/prog/en/includes/authorities-toolbar.inc:49
-#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:95
+#: koha-tmpl/intranet-tmpl/prog/en/includes/authorities-toolbar.inc:52
+#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:94
 #, c-format
 msgid "MARC (non-Unicode/MARC-8)"
 msgstr "MARC (non-Unicode/MARC-8)"
@@ -37542,24 +37510,24 @@ msgstr "MARC šablóny: %s"
 msgid "MARC import &rsaquo; Cataloging &rsaquo; Koha"
 msgstr "Koha &rsaquo; Katalogizácia &rsaquo; "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:44
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:239
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:45
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:230
 #, c-format
 msgid "MARC modification templates"
 msgstr "Šablóny úprav MARCu"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:53
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:54
 #, fuzzy, c-format
 msgid "MARC modification templates "
 msgstr "Šablóny úprav MARCu"
 
 #. %1$s:  template_id | html 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:84
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:85
 #, c-format
 msgid "MARC modification templates %s"
 msgstr "Šablóny úprav MARCu %s"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:6
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:7
 #, fuzzy, c-format
 msgid "MARC modification templates &rsaquo; Tools &rsaquo; Koha"
 msgstr "Šablóny úprav MARCu %s"
@@ -37664,8 +37632,8 @@ msgstr ""
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/detail.tt:977
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/stage-marc-import.tt:175
-#: koha-tmpl/intranet-tmpl/prog/en/includes/authorities-toolbar.inc:48
-#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:94
+#: koha-tmpl/intranet-tmpl/prog/en/includes/authorities-toolbar.inc:51
+#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:93
 #, c-format
 msgid "MARCXML"
 msgstr "MARCXML"
@@ -37705,7 +37673,7 @@ msgid "MIT license"
 msgstr "MIT licencia"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/detail.tt:975
-#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:98
+#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:97
 #, c-format
 msgid "MODS (XML)"
 msgstr "MODS (XML)"
@@ -37934,7 +37902,7 @@ msgstr "Spracovať "
 msgid "Manage API keys"
 msgstr "Spravovať kľúče API"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:111
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:107
 #, c-format
 msgid "Manage CSV export profiles"
 msgstr "Spravovať profily exportu CSV"
@@ -37970,7 +37938,7 @@ msgid "Manage MARC bibliographic and authority frameworks and test them "
 msgstr ""
 "Správa šablón pre bibliografické a autoritatívne záznamy a ich testovanie "
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/tools-menu.inc:91
+#: koha-tmpl/intranet-tmpl/prog/en/includes/tools-menu.inc:84
 #, c-format
 msgid "Manage MARC modification templates"
 msgstr "Spravovať šablóny úprav MARCu"
@@ -37995,7 +37963,7 @@ msgstr "Spravovať sady OAI "
 msgid "Manage OPAC problem reports "
 msgstr "Spravovať hlásenia problémov OPAC "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:167
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:163
 #, c-format
 msgid "Manage OPAC problem reports submitted by patrons"
 msgstr "Spravujte správy o probléme OPACu odoslané čitateľmi"
@@ -38010,7 +37978,7 @@ msgstr "Spravovať SMS operátorov "
 msgid "Manage SMTP servers "
 msgstr "Spravovať predajcov "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:235
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:226
 #, c-format
 msgid "Manage Stock rotation rotas, rota stages and rota items"
 msgstr "Spravovať rozpisy cirkulačnej služby, úrovne a exempláre"
@@ -38247,7 +38215,7 @@ msgid "Manage library transfer limits and transport cost matrix "
 msgstr ""
 "Spravujte limity prenosu medzi knižnicami a maticu prepravných nákladov "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:35
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:33
 #, c-format
 msgid "Manage lists of patrons"
 msgstr "Spravovať zoznamy čitateľov."
@@ -38262,7 +38230,7 @@ msgstr "Spravovať šablóny na úpravu MARC "
 msgid "Manage numbering patterns "
 msgstr "Spravovať schémy číslovania "
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/acquisitions-menu.inc:38
+#: koha-tmpl/intranet-tmpl/prog/en/includes/acquisitions-menu.inc:43
 #, fuzzy, c-format
 msgid "Manage order basket fields"
 msgstr "Spravovať polia vyhľadávania exemplárov "
@@ -38277,7 +38245,7 @@ msgstr "Spravovať objednávky"
 msgid "Manage patron categories "
 msgstr "Spravovať kategórie čitateľov "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:40
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:38
 #, c-format
 msgid "Manage patron clubs"
 msgstr "Spravovať čitateľské kluby"
@@ -38323,7 +38291,7 @@ msgstr "Spravovať žiadosť"
 msgid "Manage restrictions for accounts "
 msgstr "Spravovať obmedzenia účtov "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:230
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:221
 #, c-format
 msgid "Manage rotating collections"
 msgstr "Spravovať zbierky cirkulačnej služby"
@@ -38411,7 +38379,7 @@ msgstr ""
 msgid "Manage suggestions: "
 msgstr "Spracovať návrhy"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:240
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:231
 #, c-format
 msgid "Manage templates for modifying MARC records during import"
 msgstr "Spravovať šablóny na úpravu MARC záznamov počas importu"
@@ -38474,7 +38442,7 @@ msgstr "Spravuje"
 msgid "Managed on:"
 msgstr "Spravuje:"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:250
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:241
 #, c-format
 msgid "Managed staged MARC records, including completing and reversing imports"
 msgstr ""
@@ -39245,7 +39213,7 @@ msgstr "Telefónne číslo mobilu"
 msgid "Modal title"
 msgstr "Formálny názov"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:45
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:43
 #, c-format
 msgid "Moderate patron comments"
 msgstr "Moderovať recenzie čitateľov"
@@ -39255,7 +39223,7 @@ msgstr "Moderovať recenzie čitateľov"
 msgid "Moderate patron comments "
 msgstr "Moderovanie komentárov čitateľov "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:85
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:83
 #, c-format
 msgid "Moderate patron tags"
 msgstr "Moderovať menovky čitateľa"
@@ -39325,7 +39293,7 @@ msgstr "Upraviť mapovanie vyhľadávacích polí SRU pre bibliografické zázna
 msgid "Modify a CSV profile"
 msgstr "Zmeniť profil CSV"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:200
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:191
 #, c-format
 msgid "Modify a batch of records (biblios or authorities)"
 msgstr "Zmeniť dávku záznamov (knižničných alebo autorít)"
@@ -39478,7 +39446,7 @@ msgstr "Zmeniť typ exemplára"
 msgid "Modify item type '%s' "
 msgstr "Zmeniť typ exemplára"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:190
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:181
 #, c-format
 msgid "Modify items in a batch"
 msgstr "Zmeniť exemplár(e) v dávke"
@@ -39504,7 +39472,7 @@ msgstr "&rsaquo; %sUpraviť detaily o objednávke (línia #%s)%sNová objednávk
 msgid "Modify patron attribute type"
 msgstr "Zmeniť typ vlastností čitateľa"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:75
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:73
 #, c-format
 msgid "Modify patrons in batch"
 msgstr "Zmeniť čitateľov v dávke"
@@ -39562,7 +39530,7 @@ msgstr "%s Upraviť predplatné pre "
 msgid "Modify tag "
 msgstr "Zmeniť mesto"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:80
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:78
 #, c-format
 msgid "Modify the due date checkouts in batch"
 msgstr "Hromadná zmena termínu vrátenia výpožičiek"
@@ -39580,7 +39548,7 @@ msgstr "Spravovať schémy číslovania "
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/letter.tt:178
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/letter.tt:543
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:310
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:311
 #, c-format
 msgid "Module"
 msgstr "Modul"
@@ -39597,7 +39565,7 @@ msgstr "Aktuálny modul"
 msgid "Module upgrade needed"
 msgstr "Treba aktualizovať modul"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:196
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:197
 #, c-format
 msgid "Modules:"
 msgstr "Moduly:"
@@ -39678,7 +39646,7 @@ msgstr "Ďalšia dokumentácia o definovaní máp kľúčov"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:131
 #: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:506
-#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:156
+#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:155
 #, c-format
 msgid "More lists"
 msgstr "Viac zoznamov"
@@ -39725,28 +39693,28 @@ msgid ""
 "Most-circulated items%s &rsaquo; Results%s &rsaquo; Reports &rsaquo; Koha"
 msgstr "Koha &rsaquo; Výkazy &rsaquo; Tvorba výkazov &rsaquo; Slovník"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:216
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:219
 #, c-format
 msgid "Move"
 msgstr "Posunúť"
 
 #. A
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:140
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:143
 msgid "Move action down"
 msgstr "Posunúť akciu nadol"
 
 #. A
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:136
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:139
 msgid "Move action to bottom"
 msgstr "Posunúť akciu na spodok"
 
 #. A
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:132
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:135
 msgid "Move action to top"
 msgstr "Posunúť akciu na vrch"
 
 #. A
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:128
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:131
 msgid "Move action up"
 msgstr "Posunúť akciu nahor"
 
@@ -39790,7 +39758,7 @@ msgstr "Posunúť rezerváciu na vrch"
 msgid "Move hold up"
 msgstr "Posunúť rezerváciu nahor"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:204
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:205
 #, c-format
 msgid ""
 "Move patrons to the deleted patrons table. They can be deleted permanently "
@@ -39804,7 +39772,7 @@ msgstr ""
 msgid "Move remaining unspent funds"
 msgstr "Presunúť zvyšné neminuté fondy"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:203
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:204
 #, c-format
 msgid "Move these patrons to the trash"
 msgstr "Presunúť týchto čitateľov do koša"
@@ -40073,7 +40041,7 @@ msgstr "Meno:"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:302
 #: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep1.tt:27
 #: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:332
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:315
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:318
 #: koha-tmpl/intranet-tmpl/prog/en/includes/admin-items-search-field-form.inc:5
 #: koha-tmpl/intranet-tmpl/prog/en/includes/admin-items-search-field-form.inc:9
 #: koha-tmpl/intranet-tmpl/prog/en/includes/mana/mana-share-report.inc:21
@@ -40081,7 +40049,7 @@ msgstr "Meno:"
 msgid "Name: "
 msgstr "Meno: "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:282
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:283
 #, c-format
 msgid "Named:"
 msgstr "Pod názvom:"
@@ -40179,7 +40147,7 @@ msgstr "Nový"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smtp_servers.tt:33
 #: koha-tmpl/intranet-tmpl/prog/en/includes/acquisitions-toolbar.inc:13
 #: koha-tmpl/intranet-tmpl/prog/en/includes/budgets-admin-toolbar.inc:5
-#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:8
+#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:7
 #: koha-tmpl/intranet-tmpl/prog/en/includes/labels-toolbar.inc:4
 #: koha-tmpl/intranet-tmpl/prog/en/includes/patroncards-toolbar.inc:4
 #, c-format
@@ -40281,7 +40249,7 @@ msgstr "New Zealand Ministry of Education Library, New Zealand"
 msgid "New account "
 msgstr "Nový účet "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:69
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:70
 #, c-format
 msgid "New action"
 msgstr "Nová akcia"
@@ -40378,7 +40346,7 @@ msgstr "Nová kategória"
 msgid "New category "
 msgstr "Nová kategória"
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:25
+#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:24
 #, c-format
 msgid "New child record"
 msgstr "Nový analytický záznam"
@@ -40517,9 +40485,13 @@ msgid "New frequency"
 msgstr "Nová opakovanosť"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:62
-#: koha-tmpl/intranet-tmpl/prog/en/includes/authorities-toolbar.inc:13
 #, c-format
 msgid "New from Z39.50/SRU"
+msgstr "Nový zo Z39.50/SRU"
+
+#: koha-tmpl/intranet-tmpl/prog/en/includes/authorities-toolbar.inc:20
+#, fuzzy, c-format
+msgid "New from Z39.50/SRU "
 msgstr "Nový zo Z39.50/SRU"
 
 #. For the first occurrence,
@@ -40536,7 +40508,7 @@ msgstr "Nový fond pre %s"
 msgid "New guided report"
 msgstr "Nová tvorba výkazov"
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:15
+#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:14
 #, c-format
 msgid "New item"
 msgstr "Nový exemplár"
@@ -40600,7 +40572,7 @@ msgid "New line (\\n)"
 msgstr "Nový riadok (\\n)"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:135
-#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:160
+#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:159
 #: koha-tmpl/intranet-tmpl/prog/en/includes/virtualshelves-toolbar.inc:4
 #, c-format
 msgid "New list"
@@ -40674,7 +40646,7 @@ msgid "New quote"
 msgstr "Nový exemplár"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/editor.tt:47
-#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:11
+#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:10
 #, c-format
 msgid "New record"
 msgstr "Nový záznam"
@@ -40734,7 +40706,7 @@ msgstr "Nová sada"
 msgid "New splitting rule"
 msgstr "Nové pravidlo rozdelenia"
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:18
+#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:17
 #: koha-tmpl/intranet-tmpl/prog/en/includes/serials-toolbar.inc:9
 #: koha-tmpl/intranet-tmpl/prog/en/includes/serials-toolbar.inc:98
 #, c-format
@@ -40763,7 +40735,7 @@ msgstr "Nová menovka"
 msgid "New tag "
 msgstr "Nová menovka"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:67
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:68
 #, c-format
 msgid "New template"
 msgstr "Nová šablóna"
@@ -40819,7 +40791,7 @@ msgstr "Nové okno"
 msgid "Newcastle City Council, United Kingdom"
 msgstr "Newcastle City Council, United Kingdom"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:433
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:434
 #, fuzzy, c-format
 msgid "Newer version"
 msgstr "Verzia Perlu: "
@@ -40828,8 +40800,8 @@ msgstr "Verzia Perlu: "
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/koha-news.tt:39
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/koha-news.tt:75
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/koha-news.tt:155
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:120
-#: koha-tmpl/intranet-tmpl/prog/en/includes/tools-menu.inc:119
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:116
+#: koha-tmpl/intranet-tmpl/prog/en/includes/tools-menu.inc:110
 #, c-format
 msgid "News"
 msgstr "Novinky"
@@ -40891,7 +40863,7 @@ msgstr "Ďalej &gt;&gt;"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:579
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:666
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:704
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:172
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:173
 msgid "Next >>"
 msgstr "Ďalej >>"
 
@@ -41495,7 +41467,7 @@ msgid "No limit"
 msgstr "Bez obmedzenia"
 
 #. %1$s:  IF ( CATALOGUING ) 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:387
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:388
 #, c-format
 msgid "No log found %s for "
 msgstr "Nenašiel sa denník %s pre "
@@ -41555,7 +41527,7 @@ msgstr "Nenašli sa žiadne chýbajúce čísla."
 msgid "No more renewals possible"
 msgstr "Ďalšie predĺženia nie sú možné"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:275
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:276
 #, c-format
 msgid "No more renewals possible."
 msgstr "Ďalšie predĺženia nie sú možné."
@@ -41621,17 +41593,17 @@ msgstr "Nezodpovedá žiadnemu čitateľovi "
 msgid "No patron may put this book on hold."
 msgstr "Žiaden čitateľ nesmie rezervovať túto knihu."
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:245
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:246
 #, c-format
 msgid "No patron records have been actually removed"
 msgstr "V skutočnosti neboli odstránené žiadne záznamy o čitateľoch"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:260
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:261
 #, c-format
 msgid "No patron records have been anonymized"
 msgstr "Neboli utajené žiadne záznamy o čitateľoch"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:254
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:255
 #, c-format
 msgid "No patron records have been removed"
 msgstr "Neboli odobraté žiadne záznamy o čitateľoch"
@@ -42482,8 +42454,8 @@ msgstr "Poznámka: jeden alebo dve nasledovné polia musia byť rovné 1"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:303
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:198
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:241
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:330
 #: koha-tmpl/intranet-tmpl/prog/en/modules/basket/basket.tt:153
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:330
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:378
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:379
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:86
@@ -42593,7 +42565,7 @@ msgstr "Oznámenie"
 
 #. %1$s:  loopro.notice.title | html 
 #. %2$s:  loopro.notice.code | html 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:352
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:353
 #, fuzzy, c-format
 msgid "Notice %s (%s)"
 msgstr "%s Bez názvu %s %s "
@@ -42613,8 +42585,8 @@ msgstr "Oznámenia"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/letter.tt:64
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/letter.tt:74
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/letter.tt:125
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:54
-#: koha-tmpl/intranet-tmpl/prog/en/includes/tools-menu.inc:26
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:52
+#: koha-tmpl/intranet-tmpl/prog/en/includes/tools-menu.inc:24
 #, c-format
 msgid "Notices &amp; slips"
 msgstr "Oznámenia &amp; potvrdenky"
@@ -42985,7 +42957,7 @@ msgstr "Nastavenie sád OAI"
 msgid "OAI xslt stylesheet"
 msgstr "OAI xslt stylesheet"
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:222
+#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:221
 #, c-format
 msgid "OAI-DC"
 msgstr "OAI-DC"
@@ -43113,8 +43085,8 @@ msgid "OPAC notes"
 msgstr "Poznámka OPAC"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/problem-reports.tt:37
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:166
-#: koha-tmpl/intranet-tmpl/prog/en/includes/tools-menu.inc:137
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:162
+#: koha-tmpl/intranet-tmpl/prog/en/includes/tools-menu.inc:128
 #, c-format
 msgid "OPAC problem reports"
 msgstr "Správy o probléme OPAC"
@@ -43191,12 +43163,12 @@ msgstr "ALEBO si zvolte, ktoré polia chcete použiť z nasledovného zoznamu: "
 msgid "OS version ('uname -a'): "
 msgstr "Verzia OS ('uname -a'): "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:312
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:313
 #, c-format
 msgid "Object"
 msgstr "Objekt"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:239
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:240
 #, c-format
 msgid "Object: "
 msgstr "Objekt: "
@@ -43329,7 +43301,7 @@ msgstr ""
 msgid "Older transactions"
 msgstr "Staršie transakcie"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:429
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:430
 #, fuzzy, c-format
 msgid "Older version"
 msgstr "Verzia Perlu: "
@@ -43692,7 +43664,7 @@ msgstr "Alebo pridajte počet dní:"
 msgid "Or enter a list of record numbers"
 msgstr "Alebo zadajte zoznam čísel záznamov"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:102
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:103
 #, c-format
 msgid "Or list barcodes one by one"
 msgstr "Alebo po jednom uveďte čiarové kódy"
@@ -43916,7 +43888,7 @@ msgstr "Objednávky stoja:"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/orders_by_budget.tt:24
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/orders_by_budget.tt:48
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/reports-home.tt:93
-#: koha-tmpl/intranet-tmpl/prog/en/includes/acquisitions-menu.inc:17
+#: koha-tmpl/intranet-tmpl/prog/en/includes/acquisitions-menu.inc:18
 #: koha-tmpl/intranet-tmpl/prog/en/includes/reports-menu.inc:54
 #, c-format
 msgid "Orders by fund"
@@ -44141,7 +44113,7 @@ msgstr "Náklad (hotovosť)"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/orders_by_budget.tt:126
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/reserves_stats.tt:279
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/serials_stats.tt:112
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:274
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:275
 #, c-format
 msgid "Output"
 msgstr "Výstup"
@@ -44216,8 +44188,8 @@ msgstr "Strop pokút z omeškania (suma)"
 msgid "Overdue notice required: "
 msgstr "Povinné oznámenie o omeškaní: "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:59
-#: koha-tmpl/intranet-tmpl/prog/en/includes/tools-menu.inc:29
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:57
+#: koha-tmpl/intranet-tmpl/prog/en/includes/tools-menu.inc:27
 #, c-format
 msgid "Overdue notice/status triggers"
 msgstr "Oznámenie o omeškaní/spúšťače stavov"
@@ -44491,11 +44463,6 @@ msgstr "Partneri k dispozícii na vyhľadávanie: "
 msgid "Password"
 msgstr "Heslo"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/member-password.tt:48
-#, c-format
-msgid "Password Updated"
-msgstr "Heslo bolo zaktualizované"
-
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/categories.tt:259
 #, c-format
 msgid "Password change in OPAC: "
@@ -44598,6 +44565,11 @@ msgstr "Chyba pluginu hesla pre čitateľa číslo %s. "
 #, c-format
 msgid "Password reset in OPAC: "
 msgstr "Obnovenie hesla v OPAC: "
+
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/member-password.tt:48
+#, fuzzy, c-format
+msgid "Password updated"
+msgstr "Heslo bolo zaktualizované"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/auth.tt:74
 #: koha-tmpl/intranet-tmpl/prog/en/modules/installer/auth.tt:54
@@ -44779,8 +44751,8 @@ msgstr "Čitateľ si môže zarezervovať maximálne %s celkových rezervácií.
 #: koha-tmpl/intranet-tmpl/prog/en/modules/patroncards/edit-template.tt:22
 #: koha-tmpl/intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:19
 #: koha-tmpl/intranet-tmpl/prog/en/modules/patroncards/manage.tt:43
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:64
-#: koha-tmpl/intranet-tmpl/prog/en/includes/tools-menu.inc:32
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:62
+#: koha-tmpl/intranet-tmpl/prog/en/includes/tools-menu.inc:30
 #, c-format
 msgid "Patron card creator"
 msgstr "Tvorba čitateľských preukazov"
@@ -44869,9 +44841,9 @@ msgstr "Kategória čitateľov: "
 #: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/clubs-add-modify.tt:30
 #: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/clubs.tt:38
 #: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/templates-add-modify.tt:34
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:39
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:37
 #: koha-tmpl/intranet-tmpl/prog/en/includes/permissions.inc:61
-#: koha-tmpl/intranet-tmpl/prog/en/includes/tools-menu.inc:17
+#: koha-tmpl/intranet-tmpl/prog/en/includes/tools-menu.inc:15
 #, c-format
 msgid "Patron clubs"
 msgstr "Kluby čitateľov"
@@ -44947,7 +44919,7 @@ msgid "Patron has %s item(s) checked out."
 msgstr "Čitateľ má vypožičaných %s exemplár(ov)."
 
 #. %1$s:  checkout_info.USERBLOCKEDOVERDUE | html 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:201
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:202
 #, c-format
 msgid "Patron has %s overdue item(s)."
 msgstr "Čitateľ má %s omeškaných exemplárov."
@@ -45004,7 +44976,7 @@ msgid "Patron has an indefinite restriction."
 msgstr "Čitateľ je zablokovaný neobmedzene."
 
 #. %1$s:  checkout_info.USERBLOCKEDREMAINING | html 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:284
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:285
 #, c-format
 msgid "Patron has had overdue items and is blocked for %s day(s)."
 msgstr "Čitateľ má omeškané exempláre a je zablokovaný na %s dní."
@@ -45144,7 +45116,7 @@ msgstr "Čitateľ nie je upovedomený."
 msgid "Patron is restricted"
 msgstr "Čitateľ má obmedzenia"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:272
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:273
 #, c-format
 msgid "Patron is restricted."
 msgstr "Čitateľ má obmedzenia."
@@ -45164,9 +45136,9 @@ msgstr "Zoznam čitateľov: "
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/patron_lists/add-modify.tt:28
 #: koha-tmpl/intranet-tmpl/prog/en/modules/patron_lists/list.tt:40
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:34
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:32
 #: koha-tmpl/intranet-tmpl/prog/en/includes/patron-toolbar.inc:23
-#: koha-tmpl/intranet-tmpl/prog/en/includes/tools-menu.inc:14
+#: koha-tmpl/intranet-tmpl/prog/en/includes/tools-menu.inc:12
 #, c-format
 msgid "Patron lists"
 msgstr "Zoznamy čitateľov"
@@ -45395,7 +45367,7 @@ msgstr "Adresa čitateľa je neistá"
 msgid "Patron's address is in doubt (proceeding anyway)"
 msgstr "Adresa čitateľa je neistá (jednako pokračujeme)"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:266
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:267
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:166
 #, c-format
 msgid "Patron's address is in doubt."
@@ -45438,7 +45410,7 @@ msgstr "Čitateľský preukaz prestal platiť"
 msgid "Patron's card is expired (%s)"
 msgstr "Čitateľský preukaz prestal platiť (%s)"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:278
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:279
 #, c-format
 msgid "Patron's card is expired."
 msgstr "Čitateľský preukaz prestal platiť."
@@ -45450,7 +45422,7 @@ msgstr "Čitateľský preukaz prestal platiť."
 msgid "Patron's card is lost"
 msgstr "Čitateľský preukaz sa stratil"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:269
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:270
 #, c-format
 msgid "Patron's card is lost."
 msgstr "Čitateľský preukaz sa stratil."
@@ -45469,7 +45441,7 @@ msgstr ""
 #. %1$s:  chargesamount_guarantees | $Price 
 #. %2$s:  IF noissues 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:854
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:84
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:85
 #, c-format
 msgid "Patron's guarantees collectively owe %s. %s "
 msgstr "Ručitelia čitateľa súhrnne dlžia %s. %s "
@@ -45478,7 +45450,7 @@ msgstr "Ručitelia čitateľa súhrnne dlžia %s. %s "
 #. %1$s:  charges_guarantors_guarantees | $Price 
 #. %2$s:  IF noissues 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:846
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:76
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:77
 #, fuzzy, c-format
 msgid "Patron's guarantors and their other guarantees collectively owe %s. %s "
 msgstr "Ručitelia čitateľa súhrnne dlžia %s. %s "
@@ -45586,9 +45558,9 @@ msgid "Patrons &rsaquo; New patron"
 msgstr "Ćitatelia &rsaquo; Nový čitateľ"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/admin-home.tt:90
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:30
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:28
 #: koha-tmpl/intranet-tmpl/prog/en/includes/admin-menu.inc:33
-#: koha-tmpl/intranet-tmpl/prog/en/includes/tools-menu.inc:11
+#: koha-tmpl/intranet-tmpl/prog/en/includes/tools-menu.inc:9
 #, c-format
 msgid "Patrons and circulation"
 msgstr "Čitatelia a výpožičky"
@@ -45933,12 +45905,12 @@ msgstr "Vykonať hromadné zmeny záznamov (bibliografických alebo autorít) "
 msgid "Perform cash register cashup action "
 msgstr "Vykonať výdaj z pokladne"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:162
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:158
 #, c-format
 msgid "Perform cashup actions on cash registers"
 msgstr "Vykonajte hotovostnú operáciu na registračnej pokladni"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:215
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:206
 #, c-format
 msgid "Perform inventory of your catalog"
 msgstr "Vykonať inventarizáciu vášho katalógu"
@@ -46011,12 +45983,12 @@ msgstr "Permanentná knižnica"
 msgid "Permanent shelving location"
 msgstr "Permanentná lokácia v poličke"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:162
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:163
 #, c-format
 msgid "Permanently delete checkout history older than"
 msgstr "Natrvalo odstrániť výpis výpižičiek starších ako"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:196
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:197
 #, c-format
 msgid "Permanently delete these patrons"
 msgstr "Natrvalo odstrániť týchto čitateľov"
@@ -46188,13 +46160,13 @@ msgstr "Vyžiadať článok od %s pre %s %s ( %s )"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:859
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:861
 #: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:210
-#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:179
-#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:184
+#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:178
+#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:183
 #, c-format
 msgid "Place hold"
 msgstr "Zarezervovať"
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:174
+#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:173
 #, c-format
 msgid "Place hold "
 msgstr "Zarezervovať "
@@ -46214,7 +46186,7 @@ msgstr "Zarezervovať pre %s"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:151
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:516
 #: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:279
-#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:180
+#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:179
 #, c-format
 msgid "Place hold for %s %s (%s)"
 msgstr "Zarezervovať %s %s (%s)"
@@ -46361,7 +46333,7 @@ msgstr ""
 "alebo hľadaním exemplára."
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:280
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:281
 msgid "Please check at least one action"
 msgstr "Zaškrtnite prosím aspoň jednu akciu"
 
@@ -46445,7 +46417,7 @@ msgid "Please confirm checkin"
 msgstr "Potvrďte prosím výpožičku"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:103
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:312
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:313
 #, c-format
 msgid "Please confirm checkout"
 msgstr "Potvrďte prosím výpožičku"
@@ -46479,7 +46451,7 @@ msgstr "Potvrďte, že ste odstránili "
 
 #. %1$s:  accountlines.total( payment_type => 'CASH') * -1 | $Price 
 #. %2$s:  register.starting_float | $Price 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/pos/register.tt:270
+#: koha-tmpl/intranet-tmpl/prog/en/modules/pos/register.tt:274
 #, c-format
 msgid ""
 "Please confirm that you have removed %s from the cash register and left a "
@@ -46545,7 +46517,7 @@ msgid "Please enter a "
 msgstr "Zadajte prosím "
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:280
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:281
 msgid "Please enter a date!"
 msgstr "Zadajte prosím dátum!"
 
@@ -46632,7 +46604,7 @@ msgid "Please enter a value less than or equal to {0}."
 msgstr "Zadajte prosím hodnotu menšiu ako alebo rovnú {0}."
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:280
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:281
 msgid "Please enter at least one criterion for deletion!"
 msgstr "Zadajte prosím aspoň jednu podmienku pre odstránenie!"
 
@@ -47474,7 +47446,7 @@ msgstr "Primárny kontakt pre periodiká:"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/boraccount.tt:108
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/boraccount.tt:110
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/routing-preview-slip.tt:39
-#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:166
+#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:165
 #: koha-tmpl/intranet-tmpl/prog/en/includes/columns_settings.inc:4
 #: koha-tmpl/intranet-tmpl/prog/en/includes/modals/cashup_summary.inc:29
 #: koha-tmpl/intranet-tmpl/prog/en/includes/str/tinymce_i18n.inc:2
@@ -47567,7 +47539,7 @@ msgstr "Tlačiť rozsah"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/pos/pay.tt:52
 #: koha-tmpl/intranet-tmpl/prog/en/modules/pos/printreceipt.tt:10
-#: koha-tmpl/intranet-tmpl/prog/en/modules/pos/register.tt:328
+#: koha-tmpl/intranet-tmpl/prog/en/modules/pos/register.tt:332
 #, c-format
 msgid "Print receipt"
 msgstr "Tlačiť pokladničný blok"
@@ -47929,7 +47901,7 @@ msgstr "Verejný zápis"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/addbybiblionumber.tt:60
 #: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:82
 #: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:395
-#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:141
+#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:140
 #, c-format
 msgid "Public lists"
 msgstr "Verejné zoznamy"
@@ -48333,8 +48305,8 @@ msgid "Quick add new patron "
 msgstr "Rýchle pridanie nového čitateľa "
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/labels/spinelabel-home.tt:33
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:224
-#: koha-tmpl/intranet-tmpl/prog/en/includes/tools-menu.inc:82
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:215
+#: koha-tmpl/intranet-tmpl/prog/en/includes/tools-menu.inc:75
 #, c-format
 msgid "Quick spine label creator"
 msgstr "Rýchla tvorba chrbtových etikiet"
@@ -48368,7 +48340,7 @@ msgid "Quote #%s deleted successfully."
 msgstr "Server '%s' bol úspešne odstránený."
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/quotes-upload.tt:24
-#: koha-tmpl/intranet-tmpl/prog/en/includes/tools-menu.inc:125
+#: koha-tmpl/intranet-tmpl/prog/en/includes/tools-menu.inc:116
 #, c-format
 msgid "Quote editor"
 msgstr "Editor citátov"
@@ -48383,7 +48355,7 @@ msgstr "Editor citátov"
 msgid "Quote editor &rsaquo; Tools &rsaquo; Koha"
 msgstr "Koha &rsaquo; Nástroje &rsaquo; Načítať"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:131
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:127
 #, c-format
 msgid "Quote editor for Quote-of-the-day feature in OPAC"
 msgstr "Editor citátov pre Citát dňa v OPACu"
@@ -48427,7 +48399,7 @@ msgstr "R&eacute;initialiser"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/basket/basket.tt:54
 #: koha-tmpl/intranet-tmpl/prog/en/modules/basket/downloadcart.tt:17
 #: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/downloadshelf.tt:34
-#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:99
+#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:98
 #: koha-tmpl/intranet-tmpl/prog/en/includes/virtualshelves-toolbar.inc:29
 #, c-format
 msgid "RIS"
@@ -48463,7 +48435,7 @@ msgstr "Rachel Hamilton-Williams (Kaitiaki from 2004 to present)"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/z3950servers.tt:204
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/bor_issues_top.tt:87
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/routing.tt:77
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:117
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:120
 #, c-format
 msgid "Rank"
 msgstr "Zaradenie"
@@ -48940,8 +48912,8 @@ msgid "Refund payments to patrons "
 msgstr "Vrátiť platby čitateľom "
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:306
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:239
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:273
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:242
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:276
 #, c-format
 msgid "RegEx"
 msgstr "RegEx"
@@ -49214,13 +49186,13 @@ msgstr "Vzdialený obrázok:"
 #. SCRIPT
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/duplicate_orders.tt:317
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/histsearch.tt:153
+#: koha-tmpl/intranet-tmpl/prog/en/modules/basket/basket.tt:8
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:326
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:494
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/koha2marclinks.tt:59
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/library_groups.tt:260
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/oai_sets.tt:87
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/oai_sets.tt:163
-#: koha-tmpl/intranet-tmpl/prog/en/modules/basket/basket.tt:8
 #: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/course-details.tt:272
 #: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/course.tt:173
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:502
@@ -49275,8 +49247,8 @@ msgstr "Odstrániť duplikáty"
 msgid "Remove facet %s"
 msgstr "Odstrániť fazetu %s"
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:109
-#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:116
+#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:108
+#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:115
 #, fuzzy, c-format
 msgid "Remove from cart"
 msgstr "Odstrániť z rozpisu cirkulačnej služby "
@@ -49657,8 +49629,8 @@ msgid ""
 msgstr ""
 "Nahraďte heslá čitateľa za heslá v súbore (prázdne heslá budú ignorované)"
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/authorities-toolbar.inc:33
-#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:66
+#: koha-tmpl/intranet-tmpl/prog/en/includes/authorities-toolbar.inc:36
+#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:65
 #, c-format
 msgid "Replace record via Z39.50/SRU"
 msgstr "Nahradiť záznam cez Z39.50/SRU"
@@ -49892,7 +49864,7 @@ msgid "Request ID"
 msgstr "Číslo žiadosti"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:532
-#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:190
+#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:189
 #, c-format
 msgid "Request article"
 msgstr "Vyžiadať článok"
@@ -50137,7 +50109,7 @@ msgstr "Require.js JS module system"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:110
 #: koha-tmpl/intranet-tmpl/prog/en/modules/pos/pay.tt:130
 #: koha-tmpl/intranet-tmpl/prog/en/modules/pos/pay.tt:146
-#: koha-tmpl/intranet-tmpl/prog/en/modules/pos/register.tt:303
+#: koha-tmpl/intranet-tmpl/prog/en/modules/pos/register.tt:307
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:779
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1111
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1157
@@ -50163,7 +50135,7 @@ msgstr "Require.js JS module system"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/koha-news.tt:111
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/letter.tt:386
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/letter.tt:396
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:317
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:320
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/picture-upload.tt:144
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/picture-upload.tt:149
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/quotes.tt:71
@@ -50470,7 +50442,7 @@ msgstr "Výsledky"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/import_borrowers.tt:38
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/inventory.tt:29
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/picture-upload.tt:27
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:163
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:164
 #, fuzzy, c-format
 msgid "Results "
 msgstr "Výsledky"
@@ -50713,7 +50685,7 @@ msgstr "Adresa pre odpovede: "
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/boraccount.tt:197
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/boraccount.tt:254
-#: koha-tmpl/intranet-tmpl/prog/en/modules/pos/register.tt:301
+#: koha-tmpl/intranet-tmpl/prog/en/modules/pos/register.tt:305
 #, c-format
 msgid "Returned to patron: "
 msgstr "Vrátené čitateľovi: "
@@ -50872,8 +50844,8 @@ msgstr "Otočiť proti smeru hodinových ručičiek"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/rotating_collections/editCollections.tt:27
 #: koha-tmpl/intranet-tmpl/prog/en/modules/rotating_collections/rotatingCollections.tt:37
 #: koha-tmpl/intranet-tmpl/prog/en/modules/rotating_collections/transferCollection.tt:22
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:229
-#: koha-tmpl/intranet-tmpl/prog/en/includes/tools-menu.inc:85
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:220
+#: koha-tmpl/intranet-tmpl/prog/en/includes/tools-menu.inc:78
 #, c-format
 msgid "Rotating collections"
 msgstr "Zbierky cirkulačnej služby"
@@ -51194,7 +51166,7 @@ msgstr "Upraviť mapovanie vyhľadávacích polí SRU pre autority"
 msgid "SRU search fields mapping for bibliographic records &rsaquo; Koha"
 msgstr "Upraviť mapovanie vyhľadávacích polí SRU pre bibliografické záznamy"
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:225
+#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:224
 #, c-format
 msgid "SRW-DC"
 msgstr "SRW-DC"
@@ -51288,6 +51260,7 @@ msgstr "Soboty"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/supplier.tt:309
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/uncertainprice.tt:153
 #: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:246
+#: koha-tmpl/intranet-tmpl/prog/en/modules/basket/downloadcart.tt:28
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/additional-fields.tt:201
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:236
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:310
@@ -51321,7 +51294,6 @@ msgstr "Soboty"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/systempreferences.tt:446
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/transport-cost-matrix.tt:99
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/z3950servers.tt:187
-#: koha-tmpl/intranet-tmpl/prog/en/modules/basket/downloadcart.tt:28
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:791
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:795
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:808
@@ -51377,8 +51349,8 @@ msgstr "Soboty"
 msgid "Save"
 msgstr "Uložiť"
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/authorities-toolbar.inc:43
-#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:90
+#: koha-tmpl/intranet-tmpl/prog/en/includes/authorities-toolbar.inc:46
+#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:89
 #, c-format
 msgid "Save "
 msgstr "Uložiť "
@@ -51624,7 +51596,7 @@ msgstr "Rozvrh"
 msgid "Schedule "
 msgstr "Rozvrh "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:126
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:122
 #, c-format
 msgid "Schedule tasks to run"
 msgstr "Rozvrhnúť úlohy na spustenie"
@@ -52670,11 +52642,11 @@ msgstr "Zvoliť čas"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:51
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/duplicate_orders.tt:144
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:104
+#: koha-tmpl/intranet-tmpl/prog/en/modules/basket/basket.tt:6
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branch_transfer_limits.tt:47
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branch_transfer_limits.tt:66
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/preferences.tt:211
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/preferences.tt:245
-#: koha-tmpl/intranet-tmpl/prog/en/modules/basket/basket.tt:6
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/detail.tt:297
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:82
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:54
@@ -53541,7 +53513,7 @@ msgstr "&rsaquo; Nastaviť pravidlá knižnice pre vrátenie a presun"
 msgid "Set library, desk and register"
 msgstr "Nastaviť knižnicu"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:60
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:58
 #, c-format
 msgid "Set notice/status triggers for overdue items"
 msgstr "Nastaviť oznámenie/spúšťače stavov pre omeškané exempláre"
@@ -54239,7 +54211,7 @@ msgstr "Zobrazený"
 msgid "Shows on transit slips"
 msgstr "Zobrazuje sa na tranzitných potvrdenkách"
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:219
+#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:218
 #, c-format
 msgid "Simple DC-RDF"
 msgstr "Jednoduché DC-RDF"
@@ -54821,7 +54793,7 @@ msgstr "Poznámky knihovníka:"
 msgid "Staff patron"
 msgstr "Nastaviť na čitateľa"
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/tools-menu.inc:94
+#: koha-tmpl/intranet-tmpl/prog/en/includes/tools-menu.inc:87
 #, c-format
 msgid "Stage MARC for import"
 msgstr "Pripraviť MARC na import"
@@ -54834,7 +54806,7 @@ msgstr "Pripraviť záznamy MARC"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:88
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/stage-marc-import.tt:29
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/stage-marc-import.tt:58
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:244
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:235
 #, c-format
 msgid "Stage MARC records for import"
 msgstr "Pripraviť záznamy MARC na import"
@@ -54849,7 +54821,7 @@ msgstr "Pripraviť záznamy MARC na import"
 msgid "Stage MARC records for import &rsaquo; Tools &rsaquo; Koha"
 msgstr "Pripraviť záznamy MARC na import"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:245
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:236
 #, c-format
 msgid "Stage MARC records into the reservoir"
 msgstr "Pripraviť záznamy MARC do zásobníka"
@@ -54876,12 +54848,12 @@ msgstr "Pripraviť záznamy do zásobníka"
 msgid "Staged"
 msgstr "Pripravený"
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/tools-menu.inc:97
+#: koha-tmpl/intranet-tmpl/prog/en/includes/tools-menu.inc:90
 #, c-format
 msgid "Staged MARC management"
 msgstr "Spracovanie pripravených MARC"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:249
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:240
 #, c-format
 msgid "Staged MARC record management"
 msgstr "Spracovanie pripravených záznamov MARC"
@@ -55333,8 +55305,8 @@ msgstr "Zostáva prehľadať %s serverov"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/stockrotation.tt:34
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/stockrotation.tt:98
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:234
-#: koha-tmpl/intranet-tmpl/prog/en/includes/tools-menu.inc:88
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:225
+#: koha-tmpl/intranet-tmpl/prog/en/includes/tools-menu.inc:81
 #, c-format
 msgid "Stock rotation"
 msgstr "Cirkulačná služba"
@@ -55638,9 +55610,9 @@ msgstr "Predmety:"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/csv-profiles.tt:263
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/inventory.tt:221
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/koha-news.tt:140
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:335
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:338
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/quotes.tt:82
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:294
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:295
 #: koha-tmpl/intranet-tmpl/prog/en/includes/acquisitions-add-to-basket.inc:10
 #: koha-tmpl/intranet-tmpl/prog/en/includes/acquisitions-search.inc:8
 #: koha-tmpl/intranet-tmpl/prog/en/includes/acquisitions-search.inc:19
@@ -55720,7 +55692,7 @@ msgid "Subscription #%s"
 msgstr "Predplatné #%s"
 
 #. %1$s:  loopro.object | html 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:347
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:348
 #, c-format
 msgid "Subscription %s "
 msgstr "Predplatné %s "
@@ -56641,7 +56613,7 @@ msgstr "Editor značiek"
 msgid "Tag has no subfields"
 msgstr "Značka nemá podpolia"
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/tools-menu.inc:44
+#: koha-tmpl/intranet-tmpl/prog/en/includes/tools-menu.inc:42
 #, c-format
 msgid "Tag moderation"
 msgstr "Moderovanie menoviek"
@@ -56681,7 +56653,7 @@ msgstr "Označený s:"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tags/list.tt:25
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tags/review.tt:44
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:84
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:82
 #, c-format
 msgid "Tags"
 msgstr "Menovky"
@@ -56725,8 +56697,8 @@ msgid "Target (database) record check field"
 msgstr "Pole kontroly cieľového záznamu"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/scheduler.tt:42
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:125
-#: koha-tmpl/intranet-tmpl/prog/en/includes/tools-menu.inc:122
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:121
+#: koha-tmpl/intranet-tmpl/prog/en/includes/tools-menu.inc:113
 #, c-format
 msgid "Task scheduler"
 msgstr "Plánovač úloh"
@@ -56769,7 +56741,7 @@ msgstr "Kurz dane: "
 msgid "Technical reports"
 msgstr "Technické výkazy"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:89
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:91
 #: koha-tmpl/intranet-tmpl/prog/en/includes/clubs-table.inc:5
 #: koha-tmpl/intranet-tmpl/prog/en/includes/str/tinymce_i18n.inc:2
 #, c-format
@@ -56897,7 +56869,7 @@ msgstr "Testovať schému"
 msgid "Test prediction pattern"
 msgstr "Testovať schému predpovede"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:210
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:211
 #, c-format
 msgid "Test run: Do not remove any patrons."
 msgstr "Testovací mód: Neodstraňujte žiadnych čitateľov."
@@ -57084,7 +57056,7 @@ msgstr ""
 "Dve nasledujúce polia sú dostupné pre Vaše vlastné použitie. Môžu byť "
 "užitočné pre štatistické účely"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:156
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:157
 #, c-format
 msgid ""
 "The AnonymousPatron system preference is not defined. You can use this "
@@ -57243,7 +57215,7 @@ msgid "The barcode %s was not found."
 msgstr "Čiarový kód %s sa nenašiel."
 
 #. %1$s:  checkout_info.barcode | html 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:293
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:294
 #, c-format
 msgid "The barcode was not found %s."
 msgstr "Čiarový kód %s sa nenašiel."
@@ -57861,7 +57833,7 @@ msgstr "Čitateľ nemá zadefinovanú emailovú adresu."
 #. For the first occurrence,
 #. %1$s:  DEBT | $Price 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:120
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:296
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:297
 #, c-format
 msgid "The patron has a debt of %s."
 msgstr "Čitateľ má dlh vo výške €%s."
@@ -57901,7 +57873,7 @@ msgstr ""
 "Čitateľ má nezaplatené poplatky za rezervácie, prenájom atď vo výške %s"
 
 #. %1$s:  checkout_info.alert.OTHER_CHARGES | $Price 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:236
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:237
 #, c-format
 msgid "The patron has unpaid charges for holds, rentals etc of %s."
 msgstr ""
@@ -58279,12 +58251,12 @@ msgstr "Momentálne nie sú definované žiadne zbierky."
 msgid "There are no contracts with this vendor. %s "
 msgstr "Neexistujú žiadne zmluvy s týmto predajcom. %s "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:202
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:205
 #, c-format
 msgid "There are no defined actions for this template."
 msgstr "Nie sú určené žiadne akcie pre túto šablónu."
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:300
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:303
 #, c-format
 msgid "There are no defined templates. Please create a template first."
 msgstr "Nejestvujú žiadne určené šablóny. Vytvorte prosím najprv šablónu."
@@ -58680,7 +58652,7 @@ msgid "These items have a hold ratio &ge; %s."
 msgstr "Tieto exempláre majú pomer rezervácie &ge; %s."
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:280
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:281
 msgid ""
 "These patrons will be permanently removed from the database and cannot be "
 "recovered"
@@ -58711,6 +58683,11 @@ msgstr "Majú nenulový zostatok na účte."
 #, c-format
 msgid "They have items currently checked out."
 msgstr "V súčasnosti majú exempláre vypožičané."
+
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:101
+#, fuzzy, c-format
+msgid "They have permissions assigned to them."
+msgstr "K tomuto rozpisu cirkulačnej služby nie sú priradené žiadne položky."
 
 #. SCRIPT
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/overduerules.tt:183
@@ -58810,7 +58787,7 @@ msgid "This fee is charged once per checkout/renewal per item"
 msgstr "Tento poplatok sa účtuje raz za výpožičku/predĺženie za exemplár"
 
 #. INPUT type=text name=object
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:237
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:238
 msgid "This field cannot be modified from the circulation module."
 msgstr "Toto pole nie je možné zmeniť z modulu výpožičiek."
 
@@ -58920,7 +58897,7 @@ msgstr ""
 #. For the first occurrence,
 #. %1$s:  Branches.GetName( itemhomebranch ) | html 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:445
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:281
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:282
 #, c-format
 msgid "This item belongs to %s and cannot be checked out from this location."
 msgstr "Tento exemplár patrí do %s a nemožno ho vydať z tejto lokácie."
@@ -58966,13 +58943,13 @@ msgstr ""
 
 #. For the first occurrence,
 #. %1$s:  checkout_info.ITEM_LOST | html 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:204
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:233
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:205
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:234
 #, c-format
 msgid "This item has been lost with a status of \"%s.\""
 msgstr "Tento exemplár sa stratil v stave \"%s.\""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:224
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:225
 #, c-format
 msgid "This item has previously been checked out to this patron."
 msgstr "Tento exemplár bol predtým vypožičaný tomuto čitateľovi."
@@ -58984,34 +58961,34 @@ msgstr "Tento exemplár už je vo vašom rozpise cirkulačnej služby"
 
 #. %1$s:  IF CAN_user_circulate_force_checkout 
 #. %2$s:  END 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:178
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:179
 #, c-format
 msgid ""
 "This item is checked out to another patron. %s Check in and check out? %s"
 msgstr ""
 "Tento exemplár je vypožičaný inému čitateľovi. %s Vrátiť a vypožičať? %s"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:166
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:167
 #, c-format
 msgid "This item is currently checked out to this patron. Renew?"
 msgstr "Tento exemplár je momentálne vypožičaný tomuto čitateľovi. Predĺžiť?"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:175
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:176
 #, fuzzy, c-format
 msgid "This item is on hold and being processed for another patron."
 msgstr "Tento exemplár je rezervovaný inému čitateľovi."
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:172
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:173
 #, fuzzy, c-format
 msgid "This item is on hold and being transferred for another patron."
 msgstr "Tento exemplár je rezervovaný inému čitateľovi."
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:220
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:221
 #, c-format
 msgid "This item is on hold for another patron."
 msgstr "Tento exemplár je rezervovaný inému čitateľovi."
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:218
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:219
 #, c-format
 msgid ""
 "This item is on hold for another patron. The hold will be overridden, but "
@@ -59036,7 +59013,7 @@ msgstr "Tento exemplár je rezervovaný na vyzdvihnutie vo vašej knižnici"
 msgid "This item is part of a rotating collection."
 msgstr "Tento exemplár je súčasťou zbierky cirkulačnej služby."
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:169
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:170
 #, c-format
 msgid "This item is waiting for another patron."
 msgstr "Tento exemplár čaká na iného čitateľa."
@@ -59107,7 +59084,7 @@ msgid "This order has been claimed %s times. On %s%s%s, %s%s "
 msgstr "Táto objednávka bola odoslaná %s krát. Na %s%s%s, %s%s "
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:176
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:190
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:191
 #, c-format
 msgid "This patron can't check out this item per library circulation policy."
 msgstr ""
@@ -59121,7 +59098,7 @@ msgid ""
 "preferences."
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:325
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:326
 #, c-format
 msgid "This patron does not exist. "
 msgstr "Tento čitateľ neexistuje. "
@@ -59169,7 +59146,7 @@ msgid "This patron is from a different library (%s)"
 msgstr "Tento čitateľ pochádza z inej knižnice (%s)"
 
 #. %1$s:  Branches.GetName( checkout_info.BORRNOTSAMEBRANCH ) | html 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:187
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:188
 #, c-format
 msgid "This patron is from a different library (%s)."
 msgstr "Tento čitateľ pochádza z inej knižnice (%s)."
@@ -59229,9 +59206,9 @@ msgstr ""
 "Tento záznam sa nedá presunúť do pokročilého editora. Chcete pokračovať?"
 
 #. A
-#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:47
-#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:55
-#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:81
+#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:46
+#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:54
+#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:80
 msgid "This record has no items"
 msgstr "Tento záznam nemá žiadne exempláre"
 
@@ -59553,7 +59530,7 @@ msgstr "TinyMCE WYSIWYG editor v5.0.16 "
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/checkout-notes.tt:79
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:485
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:1054
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:141
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:142
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/offline.tt:120
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/offline.tt:163
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/offline.tt:181
@@ -59766,7 +59743,7 @@ msgstr "Pre "
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/orders_by_budget.tt:128
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/reserves_stats.tt:285
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/serials_stats.tt:118
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:280
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:281
 #, c-format
 msgid "To a file:"
 msgstr "Do súboru:"
@@ -59895,7 +59872,7 @@ msgstr ""
 "Ak chcete nahlásiť nefunkčný odkaz alebo akýkoľvek iný problém, kontaktujte "
 "administrátora Koha. "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:277
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:278
 #, c-format
 msgid "To screen in the browser:"
 msgstr "Na zobrazenie v prehliadači:"
@@ -59983,8 +59960,8 @@ msgstr "Prepnúť najnižšiu prednosť"
 msgid "Toggle set to lowest priority"
 msgstr "Prepnutím nastaviť najnižšiu prednosť"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:184
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:290
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:185
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:291
 #, c-format
 msgid "Too many checked out."
 msgstr "Priveľa výpožičiek."
@@ -60070,8 +60047,8 @@ msgstr ""
 "Priveľa miestnych výpožičiek. %s je vypožičaných miestne, dovolených je iba "
 "%s."
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:135
-#: koha-tmpl/intranet-tmpl/prog/en/includes/tools-menu.inc:128
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:131
+#: koha-tmpl/intranet-tmpl/prog/en/includes/tools-menu.inc:119
 #, c-format
 msgid "Tool plugins"
 msgstr "Nástrojové pluginy"
@@ -60125,7 +60102,7 @@ msgstr "Nástrojové pluginy"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/koha-news.tt:34
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/letter.tt:38
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:29
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:39
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:40
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/modborrowers.tt:24
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/overduerules.tt:21
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/picture-upload.tt:20
@@ -60138,7 +60115,7 @@ msgstr "Nástrojové pluginy"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/stockrotation.tt:23
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload-images.tt:22
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:28
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:156
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:157
 #: koha-tmpl/intranet-tmpl/prog/en/includes/cateditor-ui.inc:42
 #: koha-tmpl/intranet-tmpl/prog/en/includes/header.inc:59
 #: koha-tmpl/intranet-tmpl/prog/en/includes/prefs-menu.inc:154
@@ -60376,7 +60353,7 @@ msgid "Total income (cash): %s (%s)"
 msgstr "Celkový príjem (hotovosť): %s (%s)"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/pos/register.tt:147
-#: koha-tmpl/intranet-tmpl/prog/en/modules/pos/register.tt:232
+#: koha-tmpl/intranet-tmpl/prog/en/modules/pos/register.tt:236
 #, c-format
 msgid "Total income: "
 msgstr "Celkový príjem: "
@@ -61404,7 +61381,7 @@ msgstr "Aktualizovať dieťa na dospelého čitateľa"
 msgid "Update errors :"
 msgstr "Chyby aktualizácie :"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:215
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:218
 #, c-format
 msgid "Update existing or add new"
 msgstr "Aktualizujte existujúce alebo pridajte nové"
@@ -61527,7 +61504,7 @@ msgstr "Aktualizovať štruktúru databázy"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:63
 #: koha-tmpl/intranet-tmpl/prog/en/modules/plugins/plugins-upload.tt:55
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/picture-upload.tt:156
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:151
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:147
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:31
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:97
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:264
@@ -61598,7 +61575,7 @@ msgstr "Nahrajte súbor s obrázkom: %sNahrať%s"
 msgid "Upload another KOC file"
 msgstr "Načítať ďalší súbor KOC"
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/tools-menu.inc:131
+#: koha-tmpl/intranet-tmpl/prog/en/includes/tools-menu.inc:122
 #, c-format
 msgid "Upload any file"
 msgstr "Načítať ľubovoľný súbor"
@@ -61608,7 +61585,7 @@ msgstr "Načítať ľubovoľný súbor"
 msgid "Upload any file "
 msgstr "Nahrajte akýkoľvek súbor "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:152
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:148
 #, c-format
 msgid "Upload any type of file, manage uploads"
 msgstr "Načítať ľubovoľný typ súboru, spravovať načítané súbory"
@@ -61651,7 +61628,7 @@ msgid "Upload file:"
 msgstr "Načítať súbor:"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/detail.tt:584
-#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:62
+#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:61
 #, c-format
 msgid "Upload image"
 msgstr "Načítať obrázok"
@@ -61666,12 +61643,12 @@ msgstr "Načítať obrázky"
 msgid "Upload images &rsaquo; Tools &rsaquo; Koha"
 msgstr "Koha &rsaquo; Nástroje &rsaquo; Načítať"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:254
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:245
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload-images.tt:27
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload-images.tt:36
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload-images.tt:45
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload-images.tt:97
-#: koha-tmpl/intranet-tmpl/prog/en/includes/tools-menu.inc:100
+#: koha-tmpl/intranet-tmpl/prog/en/includes/tools-menu.inc:93
 #, c-format
 msgid "Upload local cover image"
 msgstr "Načítať obrázok obálky"
@@ -61730,8 +61707,8 @@ msgstr "Načítať obrázok čitateľa"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/picture-upload.tt:24
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/picture-upload.tt:112
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:89
-#: koha-tmpl/intranet-tmpl/prog/en/includes/tools-menu.inc:47
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:87
+#: koha-tmpl/intranet-tmpl/prog/en/includes/tools-menu.inc:45
 #, c-format
 msgid "Upload patron images"
 msgstr "Načítať obrázky čitateľa"
@@ -61746,7 +61723,7 @@ msgstr "Načítať obrázky čitateľa"
 msgid "Upload patron images &rsaquo; Tools &rsaquo; Koha"
 msgstr "Koha &rsaquo; Nástroje &rsaquo; Načítať"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:90
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:88
 #, c-format
 msgid "Upload patron images in a batch or one at a time"
 msgstr "Načítať obrázky čitateľov v dávke alebo po jednom"
@@ -61898,7 +61875,7 @@ msgstr "Na zdieľanie obsahu použite Mana KB: "
 msgid "Use a barcode file"
 msgstr "Použiť súbor s čiarovými kódmi"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:96
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:97
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batchMod.tt:45
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:85
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:86
@@ -62075,7 +62052,7 @@ msgstr ""
 msgid "Use the toolbar above to create a new %s."
 msgstr "Použite nástrojovú lištu hore pre vytvorenie nového %s."
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:136
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:132
 #: koha-tmpl/intranet-tmpl/prog/en/includes/permissions.inc:659
 #, c-format
 msgid "Use tool plugins "
@@ -62251,7 +62228,7 @@ msgstr "Použitá šablóna:"
 msgid "Using the following CSV profile: "
 msgstr "Používa sa nasledovná šablóna CSV: "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:255
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:246
 #, c-format
 msgid "Utility to upload scanned cover images for display in OPAC"
 msgstr ""
@@ -62543,12 +62520,12 @@ msgstr "Predajca: "
 msgid "Vendor: %s"
 msgstr "Predajca: %s"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:158
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:159
 #, c-format
 msgid "Verify you want to anonymize patron checkout history"
 msgstr "Potvrďte, či chcete utajiť výpis výpožičiek čitateľa"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:107
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:108
 #, c-format
 msgid "Verify you want to delete patrons"
 msgstr "Potvrďte, že chcete odstrániť čitateľov"
@@ -62955,7 +62932,7 @@ msgstr "Upozornenie"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:472
 #: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:480
 #: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:496
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:184
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:185
 #, c-format
 msgid "Warning"
 msgstr "Upozornenie"
@@ -63502,7 +63479,7 @@ msgstr "Slová: _({0}"
 msgid "Working day"
 msgstr "Pracovný deň"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:121
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:117
 #, c-format
 msgid "Write news for the OPAC and staff interfaces"
 msgstr "Napíšte novinky pre OPAC a intranet"
@@ -64005,7 +63982,7 @@ msgstr ""
 "inštalácii Kohy. Všimnite si tiež, že musíte mať správne nastavené "
 "OPACBaseURL pre správne fungovanie modulu načítania súborov. "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:67
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:68
 #, c-format
 msgid "You are not allowed to use batch checkout for this patron"
 msgstr "Nemáte povolenie použiť hromadnú výpožičku tomuto čitateľovi"
@@ -64303,7 +64280,7 @@ msgid ""
 msgstr ""
 "Už ste odoslali čiarový kód, čakajte, prosím, na spracovanie výpožičky..."
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:209
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:212
 #, c-format
 msgid ""
 "You have chosen a condition on the same field as the original field. If your "
@@ -64795,7 +64772,7 @@ msgstr "Váš zoznam: %s "
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:103
 #: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:69
 #: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:394
-#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:128
+#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:127
 #, c-format
 msgid "Your lists"
 msgstr "Zoznamy"
@@ -65048,91 +65025,6 @@ msgstr "[% discount | format ("
 #, c-format
 msgid "[%% HOLIDAYS_LOO.DESCRIPTION.replace('\\\\\\r\\\\\\n', '"
 msgstr "[%% HOLIDAYS_LOO.DESCRIPTION.replace('\\\\\\r\\\\\\n', '"
-
-#: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:3
-#, c-format
-msgid ""
-"[%% IF ( CAN_user_editcatalogue_edit_catalogue || "
-"CAN_user_editcatalogue_edit_items || CAN_user_serials_create_subscription ) "
-"%%] "
-msgstr ""
-"[%% IF ( CAN_user_editcatalogue_edit_catalogue || "
-"CAN_user_editcatalogue_edit_items || CAN_user_serials_create_subscription ) "
-"%%] "
-
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:97
-#, c-format
-msgid ""
-"[%% IF ( CAN_user_tools_edit_calendar || CAN_user_tools_manage_csv_profiles "
-"|| CAN_user_tools_view_system_logs || CAN_user_tools_edit_news || "
-"CAN_user_tools_schedule_tasks || CAN_user_tools_edit_quotes || ( Koha."
-"ArePluginsEnabled() && CAN_user_plugins_tool ) || "
-"CAN_user_tools_upload_general_files || CAN_user_tools_access_files ) %%] "
-msgstr ""
-"[%% IF ( CAN_user_tools_edit_calendar || CAN_user_tools_manage_csv_profiles "
-"|| CAN_user_tools_view_system_logs || CAN_user_tools_edit_news || "
-"CAN_user_tools_schedule_tasks || CAN_user_tools_edit_quotes || ( Koha."
-"ArePluginsEnabled() && CAN_user_plugins_tool ) || "
-"CAN_user_tools_upload_general_files || CAN_user_tools_access_files ) %%] "
-
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:173
-#, c-format
-msgid ""
-"[%% IF ( CAN_user_tools_items_batchdel || CAN_user_tools_items_batchmod || "
-"CAN_user_tools_records_batchdel || CAN_user_tools_records_batchmod || "
-"CAN_user_tools_export_catalog || CAN_user_tools_inventory || "
-"CAN_user_tools_label_creator || CAN_user_tools_rotating_collections || "
-"( CAN_user_stockrotation_manage_rotas && Koha.Preference('StockRotation') ) "
-"|| CAN_user_tools_marc_modification_templates || "
-"CAN_user_tools_stage_marc_import || CAN_user_tools_manage_staged_marc || "
-"CAN_user_tools_upload_local_cover_images ) %%] "
-msgstr ""
-"[%% IF ( CAN_user_tools_items_batchdel || CAN_user_tools_items_batchmod || "
-"CAN_user_tools_records_batchdel || CAN_user_tools_records_batchmod || "
-"CAN_user_tools_export_catalog || CAN_user_tools_inventory || "
-"CAN_user_tools_label_creator || CAN_user_tools_rotating_collections || "
-"( CAN_user_stockrotation_manage_rotas && Koha.Preference('StockRotation') ) "
-"|| CAN_user_tools_marc_modification_templates || "
-"CAN_user_tools_stage_marc_import || CAN_user_tools_manage_staged_marc || "
-"CAN_user_tools_upload_local_cover_images ) %%] "
-
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:26
-#, c-format
-msgid ""
-"[%% IF ( CAN_user_tools_manage_patron_lists || CAN_user_clubs || "
-"CAN_user_tools_moderate_comments || CAN_user_tools_import_patrons || "
-"CAN_user_tools_edit_notices || CAN_user_tools_edit_notice_status_triggers || "
-"CAN_user_tools_label_creator || CAN_user_tools_delete_anonymize_patrons || "
-"CAN_user_tools_edit_patrons || CAN_user_tools_batch_extend_due_dates || "
-"CAN_user_tools_moderate_tags || ( CAN_user_tools_batch_upload_patron_images "
-"&& Koha.Preference('patronimages') ) ) %%] "
-msgstr ""
-"[%% IF ( CAN_user_tools_manage_patron_lists || CAN_user_clubs || "
-"CAN_user_tools_moderate_comments || CAN_user_tools_import_patrons || "
-"CAN_user_tools_edit_notices || CAN_user_tools_edit_notice_status_triggers || "
-"CAN_user_tools_label_creator || CAN_user_tools_delete_anonymize_patrons || "
-"CAN_user_tools_edit_patrons || CAN_user_tools_batch_extend_due_dates || "
-"CAN_user_tools_moderate_tags || ( CAN_user_tools_batch_upload_patron_images "
-"&& Koha.Preference('patronimages') ) ) %%] "
-
-#: koha-tmpl/intranet-tmpl/prog/en/includes/tools-menu.inc:7
-#, c-format
-msgid ""
-"[%% IF ( CAN_user_tools_manage_patron_lists || CAN_user_clubs || "
-"CAN_user_tools_moderate_comments || CAN_user_tools_import_patrons || "
-"CAN_user_tools_edit_notices || CAN_user_tools_edit_notice_status_triggers || "
-"CAN_user_tools_label_creator || CAN_user_tools_delete_anonymize_patrons || "
-"CAN_user_tools_edit_patrons || CAN_user_tools_moderate_tags || "
-"( CAN_user_tools_batch_upload_patron_images && Koha."
-"Preference('patronimages') ) ) %%] "
-msgstr ""
-"[%% IF ( CAN_user_tools_manage_patron_lists || CAN_user_clubs || "
-"CAN_user_tools_moderate_comments || CAN_user_tools_import_patrons || "
-"CAN_user_tools_edit_notices || CAN_user_tools_edit_notice_status_triggers || "
-"CAN_user_tools_label_creator || CAN_user_tools_delete_anonymize_patrons || "
-"CAN_user_tools_edit_patrons || CAN_user_tools_moderate_tags || "
-"( CAN_user_tools_batch_upload_patron_images && Koha."
-"Preference('patronimages') ) ) %%] "
 
 #: koha-tmpl/intranet-tmpl/prog/en/includes/country-list.inc:1
 #, c-format
@@ -65820,7 +65712,7 @@ msgstr "znaky"
 msgid "check to delete this field"
 msgstr "zaškrtnúť pre odstránenie tohto poľa"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:205
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:206
 #, c-format
 msgid "cleanup_database"
 msgstr "cleanup_database"
@@ -66049,7 +65941,7 @@ msgid "disabling the 'Mana' system preference"
 msgstr "vypnutie systémových nastavení „Mana“"
 
 #. A
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:323
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:324
 msgid "display detail for this librarian."
 msgstr "zobraziť detail pre tohto knihovníka."
 
@@ -66063,12 +65955,12 @@ msgstr "hľadajte v katalógu"
 msgid "doXulting"
 msgstr "doXulting"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:263
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:266
 #, c-format
 msgid "doesn't exist"
 msgstr "neexistuje"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:265
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:268
 #, c-format
 msgid "doesn't match"
 msgstr "nezhoduje sa"
@@ -66153,7 +66045,7 @@ msgstr "napr.: čiarový kód, itemcallnumber, titul, \"050a 050b\", 300a "
 msgid "example"
 msgstr "príklad"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:262
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:265
 #, c-format
 msgid "exists"
 msgstr "existuje"
@@ -66188,12 +66080,12 @@ msgstr "nepodarilo sa spustiť"
 msgid "famfamfam.com"
 msgstr "famfamfam.com"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:257
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:260
 #, c-format
 msgid "field "
 msgstr "pole "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:226
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:229
 #, c-format
 msgid "field(s) "
 msgstr "pole(ia) "
@@ -66235,7 +66127,7 @@ msgstr "značka francuzskeho franku"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/library_groups.tt:257
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:609
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:617
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:339
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:340
 #, c-format
 msgid "from "
 msgstr "od "
@@ -66379,7 +66271,7 @@ msgstr "domovská pobočka je definovaná"
 msgid "hryvnia sign"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:253
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:256
 #, c-format
 msgid "if"
 msgstr "ak"
@@ -66400,7 +66292,7 @@ msgstr ""
 
 #. INPUT type=text name=regex_modifiers
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:296
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:243
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:246
 msgid "ig"
 msgstr "ig"
 
@@ -66815,8 +66707,8 @@ msgid "last on: %s"
 msgstr "naposledy dňa: %s"
 
 #. INPUT type=text name=from_subfield
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:228
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:235
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:231
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:238
 msgid "let blank for the entire field"
 msgstr "nechať prázdne pre celé pole"
 
@@ -66873,7 +66765,7 @@ msgstr "Zablokovať"
 msgid "lost"
 msgstr "stratený"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:270
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:273
 #, c-format
 msgid "m/"
 msgstr "m/"
@@ -66883,7 +66775,7 @@ msgstr "m/"
 msgid "manat sign"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:264
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:267
 #, c-format
 msgid "matches"
 msgstr "je zhodný"
@@ -67305,13 +67197,13 @@ msgstr "záznamy v rozličných formátoch. Zvoľte jeden): "
 
 #. INPUT type=text name=regex_search
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:294
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:243
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:246
 msgid "regex pattern"
 msgstr "schéma regex"
 
 #. INPUT type=text name=regex_replace
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:295
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:243
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:246
 msgid "regex replacement"
 msgstr "náhrada regex"
 
@@ -67373,7 +67265,7 @@ msgid "s&eacute;lection au moyen d'une liste de descripteurs"
 msgstr "s&eacute;lection au moyen d'une liste de descripteurs"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:293
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:242
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:245
 #, c-format
 msgid "s/"
 msgstr "s/"
@@ -67398,7 +67290,7 @@ msgstr "rovnaká knižnica, rovnaká kategória čitateľov, všetky typy exempl
 msgid "same library, same patron category, same item type"
 msgstr "rovnaká knižnica, rovnaká kategória čitateľov, rovnaký typ exemplára"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:205
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:206
 #, c-format
 msgid "script. "
 msgstr "script. "
@@ -67782,7 +67674,7 @@ msgstr "bude zarezervovaný."
 msgid "to create"
 msgstr "vytvoriť"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:234
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:237
 #, c-format
 msgid "to field "
 msgstr "do poľa "
@@ -67813,7 +67705,7 @@ msgstr "nedefinovaný"
 msgid "unknown"
 msgstr "neznámy"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:254
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:257
 #, c-format
 msgid "unless"
 msgstr "pokiaľ"
@@ -67932,27 +67824,27 @@ msgstr "ktorý by mal byť nastavený vaším správcom systému."
 msgid "which should be set up by your system administrator. "
 msgstr "ktorý by mal byť nastavený vaším správcom systému. "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:141
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:142
 #, c-format
 msgid "who are in patron list: "
 msgstr "ktorí sú v zozname čitateľov: "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:123
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:124
 #, c-format
 msgid "who have not been connected since:"
 msgstr "ktorí neboli pripojení od:"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:112
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:113
 #, c-format
 msgid "who have not borrowed since:"
 msgstr "ktorí nepožičiavali od:"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:117
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:118
 #, c-format
 msgid "whose expiration date is before:"
 msgstr "ktorých dátum vypršania je pred:"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:129
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:130
 #, c-format
 msgid "whose patron category is:"
 msgstr "ktorého kategória čitateľa je:"
@@ -67992,7 +67884,7 @@ msgstr ""
 msgid "with this reason:"
 msgstr "z tohto dôvodu:"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:230
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:233
 #, c-format
 msgid "with value "
 msgstr "s hodnotou "
@@ -68097,7 +67989,7 @@ msgstr ""
 #. %3$s:  AuthorisedValues.GetByCode( 'PAYMENT_TYPE', accountline.payment_type ) | html 
 #. %4$s:  accountline.amount * -1 | $Price 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/pos/register.tt:130
-#: koha-tmpl/intranet-tmpl/prog/en/modules/pos/register.tt:217
+#: koha-tmpl/intranet-tmpl/prog/en/modules/pos/register.tt:219
 #, c-format
 msgid ""
 "{ \"type\": \"debit\", \"identifier\": \"%s\", \"description\": \"%s (%s)\", "
@@ -68172,7 +68064,7 @@ msgstr "| Stav: %s"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:168
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/letter.tt:97
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:431
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:308
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:311
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/quotes.tt:125
 #: koha-tmpl/intranet-tmpl/prog/en/includes/mana/mana-subscription-search-result.inc:97
 #: koha-tmpl/intranet-tmpl/prog/en/includes/modals/cataloguing_create_av.inc:5
@@ -68299,6 +68191,14 @@ msgstr ""
 #~ msgid "%s In transit from %s, to %s, since %s %s "
 #~ msgstr "%s Na ceste z %s do %s od %s %s "
 
+#, fuzzy
+#~ msgid ""
+#~ "%s Issuing items to %s &rsaquo; Batch check out &rsaquo; %s Circulation "
+#~ "&rsaquo; Koha "
+#~ msgstr ""
+#~ "Koha &rsaquo; Výpožičný proces %s &rsaquo; Hromadná výpožička &rsaquo;"
+#~ "Výdaj exemplárov pre %s %s "
+
 #~ msgid "%s Lists %s %s &rsaquo; %s "
 #~ msgstr "%s Zoznamy %s %s &rsaquo; %s "
 
@@ -68319,6 +68219,44 @@ msgstr ""
 
 #~ msgid "%s ZIP/Postal code:"
 #~ msgstr "%s PSČ:"
+
+#~ msgid ""
+#~ "%s [%% IF ( CAN_user_tools_edit_calendar || "
+#~ "CAN_user_tools_manage_csv_profiles || CAN_user_tools_view_system_logs || "
+#~ "CAN_user_tools_edit_news || CAN_user_tools_schedule_tasks || "
+#~ "CAN_user_tools_edit_quotes || ( Koha.ArePluginsEnabled() && "
+#~ "CAN_user_plugins_tool ) || CAN_user_tools_upload_general_files || "
+#~ "CAN_user_tools_access_files ) %%] "
+#~ msgstr ""
+#~ "%s [%% IF ( CAN_user_tools_edit_calendar || "
+#~ "CAN_user_tools_manage_csv_profiles || CAN_user_tools_view_system_logs || "
+#~ "CAN_user_tools_edit_news || CAN_user_tools_schedule_tasks || "
+#~ "CAN_user_tools_edit_quotes || ( Koha.ArePluginsEnabled() && "
+#~ "CAN_user_plugins_tool ) || CAN_user_tools_upload_general_files || "
+#~ "CAN_user_tools_access_files ) %%] "
+
+#~ msgid ""
+#~ "%s [%% IF ( CAN_user_tools_items_batchdel || "
+#~ "CAN_user_tools_items_batchmod || CAN_user_tools_records_batchdel || "
+#~ "CAN_user_tools_records_batchmod || CAN_user_tools_export_catalog || "
+#~ "CAN_user_tools_inventory || CAN_user_tools_label_creator || "
+#~ "CAN_user_tools_rotating_collections || "
+#~ "( CAN_user_stockrotation_manage_rotas && Koha."
+#~ "Preference('StockRotation') ) || "
+#~ "CAN_user_tools_marc_modification_templates || "
+#~ "CAN_user_tools_stage_marc_import || CAN_user_tools_manage_staged_marc || "
+#~ "CAN_user_tools_upload_local_cover_images ) %%] "
+#~ msgstr ""
+#~ "%s [%% IF ( CAN_user_tools_items_batchdel || "
+#~ "CAN_user_tools_items_batchmod || CAN_user_tools_records_batchdel || "
+#~ "CAN_user_tools_records_batchmod || CAN_user_tools_export_catalog || "
+#~ "CAN_user_tools_inventory || CAN_user_tools_label_creator || "
+#~ "CAN_user_tools_rotating_collections || "
+#~ "( CAN_user_stockrotation_manage_rotas && Koha."
+#~ "Preference('StockRotation') ) || "
+#~ "CAN_user_tools_marc_modification_templates || "
+#~ "CAN_user_tools_stage_marc_import || CAN_user_tools_manage_staged_marc || "
+#~ "CAN_user_tools_upload_local_cover_images ) %%] "
 
 #~ msgid "%s [%%# As long as cataloging plugins rely on "
 #~ msgstr "%s [%%# Pokiaľ sa katalogizačné doplnky spoliehajú na "
@@ -69098,6 +69036,10 @@ msgstr ""
 
 #~ msgid "Delete this basket"
 #~ msgstr "Odstrániť tento košík"
+
+#, fuzzy
+#~ msgid "Download shelf &rsaquo; Koha"
+#~ msgstr "Koha &rsaquo; O Kohe"
 
 #~ msgid "EAN :"
 #~ msgstr "EAN :"
@@ -70234,6 +70176,89 @@ msgstr ""
 #~ msgstr ""
 #~ "Mali by ste aktivovať nastavenie TalkingTechItivaPhoneNotification pre "
 #~ "použitie šablón telefónu."
+
+#~ msgid ""
+#~ "[%% IF ( CAN_user_editcatalogue_edit_catalogue || "
+#~ "CAN_user_editcatalogue_edit_items || "
+#~ "CAN_user_serials_create_subscription ) %%] "
+#~ msgstr ""
+#~ "[%% IF ( CAN_user_editcatalogue_edit_catalogue || "
+#~ "CAN_user_editcatalogue_edit_items || "
+#~ "CAN_user_serials_create_subscription ) %%] "
+
+#~ msgid ""
+#~ "[%% IF ( CAN_user_tools_edit_calendar || "
+#~ "CAN_user_tools_manage_csv_profiles || CAN_user_tools_view_system_logs || "
+#~ "CAN_user_tools_edit_news || CAN_user_tools_schedule_tasks || "
+#~ "CAN_user_tools_edit_quotes || ( Koha.ArePluginsEnabled() && "
+#~ "CAN_user_plugins_tool ) || CAN_user_tools_upload_general_files || "
+#~ "CAN_user_tools_access_files ) %%] "
+#~ msgstr ""
+#~ "[%% IF ( CAN_user_tools_edit_calendar || "
+#~ "CAN_user_tools_manage_csv_profiles || CAN_user_tools_view_system_logs || "
+#~ "CAN_user_tools_edit_news || CAN_user_tools_schedule_tasks || "
+#~ "CAN_user_tools_edit_quotes || ( Koha.ArePluginsEnabled() && "
+#~ "CAN_user_plugins_tool ) || CAN_user_tools_upload_general_files || "
+#~ "CAN_user_tools_access_files ) %%] "
+
+#~ msgid ""
+#~ "[%% IF ( CAN_user_tools_items_batchdel || CAN_user_tools_items_batchmod "
+#~ "|| CAN_user_tools_records_batchdel || CAN_user_tools_records_batchmod || "
+#~ "CAN_user_tools_export_catalog || CAN_user_tools_inventory || "
+#~ "CAN_user_tools_label_creator || CAN_user_tools_rotating_collections || "
+#~ "( CAN_user_stockrotation_manage_rotas && Koha."
+#~ "Preference('StockRotation') ) || "
+#~ "CAN_user_tools_marc_modification_templates || "
+#~ "CAN_user_tools_stage_marc_import || CAN_user_tools_manage_staged_marc || "
+#~ "CAN_user_tools_upload_local_cover_images ) %%] "
+#~ msgstr ""
+#~ "[%% IF ( CAN_user_tools_items_batchdel || CAN_user_tools_items_batchmod "
+#~ "|| CAN_user_tools_records_batchdel || CAN_user_tools_records_batchmod || "
+#~ "CAN_user_tools_export_catalog || CAN_user_tools_inventory || "
+#~ "CAN_user_tools_label_creator || CAN_user_tools_rotating_collections || "
+#~ "( CAN_user_stockrotation_manage_rotas && Koha."
+#~ "Preference('StockRotation') ) || "
+#~ "CAN_user_tools_marc_modification_templates || "
+#~ "CAN_user_tools_stage_marc_import || CAN_user_tools_manage_staged_marc || "
+#~ "CAN_user_tools_upload_local_cover_images ) %%] "
+
+#~ msgid ""
+#~ "[%% IF ( CAN_user_tools_manage_patron_lists || CAN_user_clubs || "
+#~ "CAN_user_tools_moderate_comments || CAN_user_tools_import_patrons || "
+#~ "CAN_user_tools_edit_notices || CAN_user_tools_edit_notice_status_triggers "
+#~ "|| CAN_user_tools_label_creator || "
+#~ "CAN_user_tools_delete_anonymize_patrons || CAN_user_tools_edit_patrons || "
+#~ "CAN_user_tools_batch_extend_due_dates || CAN_user_tools_moderate_tags || "
+#~ "( CAN_user_tools_batch_upload_patron_images && Koha."
+#~ "Preference('patronimages') ) ) %%] "
+#~ msgstr ""
+#~ "[%% IF ( CAN_user_tools_manage_patron_lists || CAN_user_clubs || "
+#~ "CAN_user_tools_moderate_comments || CAN_user_tools_import_patrons || "
+#~ "CAN_user_tools_edit_notices || CAN_user_tools_edit_notice_status_triggers "
+#~ "|| CAN_user_tools_label_creator || "
+#~ "CAN_user_tools_delete_anonymize_patrons || CAN_user_tools_edit_patrons || "
+#~ "CAN_user_tools_batch_extend_due_dates || CAN_user_tools_moderate_tags || "
+#~ "( CAN_user_tools_batch_upload_patron_images && Koha."
+#~ "Preference('patronimages') ) ) %%] "
+
+#~ msgid ""
+#~ "[%% IF ( CAN_user_tools_manage_patron_lists || CAN_user_clubs || "
+#~ "CAN_user_tools_moderate_comments || CAN_user_tools_import_patrons || "
+#~ "CAN_user_tools_edit_notices || CAN_user_tools_edit_notice_status_triggers "
+#~ "|| CAN_user_tools_label_creator || "
+#~ "CAN_user_tools_delete_anonymize_patrons || CAN_user_tools_edit_patrons || "
+#~ "CAN_user_tools_moderate_tags || "
+#~ "( CAN_user_tools_batch_upload_patron_images && Koha."
+#~ "Preference('patronimages') ) ) %%] "
+#~ msgstr ""
+#~ "[%% IF ( CAN_user_tools_manage_patron_lists || CAN_user_clubs || "
+#~ "CAN_user_tools_moderate_comments || CAN_user_tools_import_patrons || "
+#~ "CAN_user_tools_edit_notices || CAN_user_tools_edit_notice_status_triggers "
+#~ "|| CAN_user_tools_label_creator || "
+#~ "CAN_user_tools_delete_anonymize_patrons || CAN_user_tools_edit_patrons || "
+#~ "CAN_user_tools_moderate_tags || "
+#~ "( CAN_user_tools_batch_upload_patron_images && Koha."
+#~ "Preference('patronimages') ) ) %%] "
 
 #~ msgid "add"
 #~ msgstr "pridať"
