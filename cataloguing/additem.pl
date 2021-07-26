@@ -34,8 +34,6 @@ use C4::Biblio qw(
 );
 use C4::Context;
 use C4::Circulation qw( barcodedecode LostItem );
-use C4::Koha qw( GetAuthorisedValues );
-use C4::ClassSource qw( GetClassSources GetClassSource );
 use C4::Barcodes;
 use C4::Barcodes::ValueBuilder;
 use Koha::DateUtils qw( dt_from_string );
@@ -48,6 +46,7 @@ use C4::Search qw( enabled_staff_search_views );
 use Storable qw( freeze thaw );
 use URI::Escape qw( uri_escape_utf8 );
 use C4::Members;
+use Koha::UI::Form::Builder::Item;
 
 use MARC::File::XML;
 use URI::Escape qw( uri_escape_utf8 );
@@ -57,276 +56,6 @@ use List::Util qw( first );
 use List::MoreUtils qw( any uniq );
 
 our $dbh = C4::Context->dbh;
-
-sub generate_subfield_form {
-        my ($tag, $subfieldtag, $value, $tagslib,$subfieldlib, $branches, $biblionumber, $temp, $i, $restrictededition, $item) = @_;
-  
-        my $frameworkcode = &GetFrameworkCode($biblionumber);
-
-        $item //= {};
-
-        my %subfield_data;
-        my $dbh = C4::Context->dbh;
-        
-        my $index_subfield = int(rand(1000000)); 
-        if ($subfieldtag eq '@'){
-            $subfield_data{id} = "tag_".$tag."_subfield_00_".$index_subfield;
-        } else {
-            $subfield_data{id} = "tag_".$tag."_subfield_".$subfieldtag."_".$index_subfield;
-        }
-        
-        $subfield_data{tag}        = $tag;
-        $subfield_data{subfield}   = $subfieldtag;
-        $subfield_data{marc_lib}   ="<span id=\"error$i\" title=\"".$subfieldlib->{lib}."\">".$subfieldlib->{lib}."</span>";
-        $subfield_data{mandatory}  = $subfieldlib->{mandatory};
-        $subfield_data{important}  = $subfieldlib->{important};
-        $subfield_data{repeatable} = $subfieldlib->{repeatable};
-        $subfield_data{maxlength}  = $subfieldlib->{maxlength};
-        $subfield_data{display_order} = $subfieldlib->{display_order};
-        $subfield_data{kohafield}  = $subfieldlib->{kohafield} || 'items.more_subfields_xml';
-        
-        if ( ! defined( $value ) || $value eq '')  {
-            $value = $subfieldlib->{defaultvalue};
-            if ( $value ) {
-                # get today date & replace <<YYYY>>, <<YY>>, <<MM>>, <<DD>> if provided in the default value
-                my $today_dt = dt_from_string;
-                my $year = $today_dt->strftime('%Y');
-                my $shortyear = $today_dt->strftime('%y');
-                my $month = $today_dt->strftime('%m');
-                my $day = $today_dt->strftime('%d');
-                $value =~ s/<<YYYY>>/$year/g;
-                $value =~ s/<<YY>>/$shortyear/g;
-                $value =~ s/<<MM>>/$month/g;
-                $value =~ s/<<DD>>/$day/g;
-                # And <<USER>> with surname (?)
-                my $username=(C4::Context->userenv?C4::Context->userenv->{'surname'}:"superlibrarian");
-                $value=~s/<<USER>>/$username/g;
-            }
-        }
-
-        $subfield_data{visibility} = "display:none;" if (($subfieldlib->{hidden} > 4) || ($subfieldlib->{hidden} <= -4));
-
-        my $pref_itemcallnumber = C4::Context->preference('itemcallnumber');
-        if (!$value && $subfieldlib->{kohafield} eq 'items.itemcallnumber' && $pref_itemcallnumber) {
-            foreach my $pref_itemcallnumber_part (split(/,/, $pref_itemcallnumber)){
-                my $CNtag       = substr( $pref_itemcallnumber_part, 0, 3 ); # 3-digit tag number
-                my $CNsubfields = substr( $pref_itemcallnumber_part, 3 ); # Any and all subfields
-                $CNsubfields = undef if $CNsubfields eq '';
-                my $temp2 = $temp->field($CNtag);
-
-                next unless $temp2;
-                $value = $temp2->as_string( $CNsubfields, ' ' );
-                last if $value;
-            }
-        }
-
-        my $default_location = C4::Context->preference('NewItemsDefaultLocation');
-        if ( !$value && $subfieldlib->{kohafield} eq 'items.location' && $default_location ) {
-            $value = $default_location;
-        }
-
-        if ($frameworkcode eq 'FA' && $subfieldlib->{kohafield} eq 'items.barcode' && !$value){
-	    my $input = CGI->new;
-	    $value = $input->param('barcode');
-	}
-
-        if ( $subfieldlib->{authorised_value} ) {
-            my @authorised_values;
-            my %authorised_lib;
-            # builds list, depending on authorised value...
-            if ( $subfieldlib->{authorised_value} eq "LOST" ) {
-                my $ClaimReturnedLostValue = C4::Context->preference('ClaimReturnedLostValue');
-                my $item_is_return_claim = $ClaimReturnedLostValue && exists $item->{itemlost} && $ClaimReturnedLostValue eq $item->{itemlost};
-                $subfield_data{IS_RETURN_CLAIM} = $item_is_return_claim;
-
-                $subfield_data{IS_LOST_AV} = 1;
-
-                push @authorised_values, qq{};
-                my $av = GetAuthorisedValues( $subfieldlib->{authorised_value} );
-                for my $r ( @$av ) {
-                    push @authorised_values, $r->{authorised_value};
-                    $authorised_lib{$r->{authorised_value}} = $r->{lib};
-                }
-            }
-            elsif ( $subfieldlib->{authorised_value} eq "branches" ) {
-                foreach my $thisbranch (@$branches) {
-                    push @authorised_values, $thisbranch->{branchcode};
-                    $authorised_lib{$thisbranch->{branchcode}} = $thisbranch->{branchname};
-                    $value = $thisbranch->{branchcode} if $thisbranch->{selected} && !$value;
-                }
-            }
-            elsif ( $subfieldlib->{authorised_value} eq "itemtypes" ) {
-                  push @authorised_values, "";
-                  my $branch_limit = C4::Context->userenv && C4::Context->userenv->{"branch"};
-                  my $itemtypes;
-                  if($branch_limit) {
-                      $itemtypes = Koha::ItemTypes->search_with_localization({branchcode => $branch_limit});
-                  } else {
-                      $itemtypes = Koha::ItemTypes->search_with_localization;
-                  }
-                  while ( my $itemtype = $itemtypes->next ) {
-                      push @authorised_values, $itemtype->itemtype;
-                      $authorised_lib{$itemtype->itemtype} = $itemtype->translated_description;
-                  }
-
-                  unless ( $value ) {
-                      my $itype_sth = $dbh->prepare("SELECT itemtype FROM biblioitems WHERE biblionumber = ?");
-                      $itype_sth->execute( $biblionumber );
-                      ( $value ) = $itype_sth->fetchrow_array;
-                  }
-          
-                  #---- class_sources
-            }
-            elsif ( $subfieldlib->{authorised_value} eq "cn_source" ) {
-                  push @authorised_values, "";
-                    
-                  my $class_sources = GetClassSources();
-                  my $default_source = C4::Context->preference("DefaultClassificationSource");
-                  
-                  foreach my $class_source (sort keys %$class_sources) {
-                      next unless $class_sources->{$class_source}->{'used'} or
-                                  ($value and $class_source eq $value)      or
-                                  ($class_source eq $default_source);
-                      push @authorised_values, $class_source;
-                      $authorised_lib{$class_source} = $class_sources->{$class_source}->{'description'};
-                  }
-        		  $value = $default_source unless ($value);
-        
-                  #---- "true" authorised value
-            }
-            else {
-                  push @authorised_values, qq{};
-                  my $av = GetAuthorisedValues( $subfieldlib->{authorised_value} );
-                  for my $r ( @$av ) {
-                      push @authorised_values, $r->{authorised_value};
-                      $authorised_lib{$r->{authorised_value}} = $r->{lib};
-                  }
-            }
-
-            if ( $subfieldlib->{hidden} > 4 or $subfieldlib->{hidden} <= -4 ) {
-                $subfield_data{marc_value} = {
-                    type        => 'hidden',
-                    id          => $subfield_data{id},
-                    maxlength   => $subfield_data{maxlength},
-                    value       => $value,
-                    ( ( grep { $_ eq $subfieldlib->{authorised_value}} ( qw(branches itemtypes cn_source) ) ) ? () : ( category => $subfieldlib->{authorised_value}) ),
-                };
-            }
-            else {
-                $subfield_data{marc_value} = {
-                    type     => 'select',
-                    id       => "tag_".$tag."_subfield_".$subfieldtag."_".$index_subfield,
-                    values   => \@authorised_values,
-                    labels   => \%authorised_lib,
-                    default  => $value,
-                    ( ( grep { $_ eq $subfieldlib->{authorised_value}} ( qw(branches itemtypes cn_source) ) ) ? () : ( category => $subfieldlib->{authorised_value}) ),
-                };
-            }
-        }
-            # it's a thesaurus / authority field
-        elsif ( $subfieldlib->{authtypecode} ) {
-                $subfield_data{marc_value} = {
-                    type         => 'text_auth',
-                    id           => $subfield_data{id},
-                    maxlength    => $subfield_data{maxlength},
-                    value        => $value,
-                    authtypecode => $subfieldlib->{authtypecode},
-                };
-        }
-            # it's a plugin field
-        elsif ( $subfieldlib->{value_builder} ) { # plugin
-            require Koha::FrameworkPlugin;
-            my $plugin = Koha::FrameworkPlugin->new({
-                name => $subfieldlib->{'value_builder'},
-                item_style => 1,
-            });
-            my $pars=  { dbh => $dbh, record => $temp, tagslib =>$tagslib,
-                id => $subfield_data{id} };
-            $plugin->build( $pars );
-            if( !$plugin->errstr ) {
-                my $class= 'buttonDot'. ( $plugin->noclick? ' disabled': '' );
-                $subfield_data{marc_value} = {
-                    type        => 'text_plugin',
-                    id          => $subfield_data{id},
-                    maxlength   => $subfield_data{maxlength},
-                    value       => $value,
-                    class       => $class,
-                    nopopup     => $plugin->noclick,
-                    javascript  => $plugin->javascript,
-                };
-            } else {
-                warn $plugin->errstr;
-                $subfield_data{marc_value} = {
-                    type        => 'text',
-                    id          => $subfield_data{id},
-                    maxlength   => $subfield_data{maxlength},
-                    value       => $value,
-                }; # supply default input form
-            }
-        }
-        elsif ( $tag eq '' ) {       # it's an hidden field
-            $subfield_data{marc_value} = {
-                type        => 'hidden',
-                id          => $subfield_data{id},
-                maxlength   => $subfield_data{maxlength},
-                value       => $value,
-            };
-        }
-        elsif ( $subfieldlib->{'hidden'} ) {   # FIXME: shouldn't input type be "hidden" ?
-            $subfield_data{marc_value} = {
-                type        => 'text',
-                id          => $subfield_data{id},
-                maxlength   => $subfield_data{maxlength},
-                value       => $value,
-            };
-        }
-        elsif (
-                (
-                    $value and length($value) > 100
-                )
-                or (
-                    C4::Context->preference("marcflavour") eq "UNIMARC"
-                    and 300 <= $tag && $tag < 400 && $subfieldtag eq 'a'
-                )
-                or (
-                    C4::Context->preference("marcflavour") eq "MARC21"
-                    and 500 <= $tag && $tag < 600
-                )
-              ) {
-            # oversize field (textarea)
-            $subfield_data{marc_value} = {
-                type        => 'textarea',
-                id          => $subfield_data{id},
-                value       => $value,
-            };
-        } else {
-            # it's a standard field
-            $subfield_data{marc_value} = {
-                type        => 'text',
-                id          => $subfield_data{id},
-                maxlength   => $subfield_data{maxlength},
-                value       => $value,
-            };
-        }
-
-        # Getting list of subfields to keep when restricted editing is enabled
-        my $subfieldsToAllowForRestrictedEditing = C4::Context->preference('SubfieldsToAllowForRestrictedEditing');
-        my $allowAllSubfields = (
-            not defined $subfieldsToAllowForRestrictedEditing
-              or $subfieldsToAllowForRestrictedEditing eq q||
-        ) ? 1 : 0;
-        my @subfieldsToAllow = split(/ /, $subfieldsToAllowForRestrictedEditing);
-
-        # If we're on restricted editing, and our field is not in the list of subfields to allow,
-        # then it is read-only
-        $subfield_data{marc_value}->{readonly} = (
-            not $allowAllSubfields
-            and $restrictededition
-            and !grep { $tag . '$' . $subfieldtag  eq $_ } @subfieldsToAllow
-        ) ? 1: 0;
-
-        return \%subfield_data;
-}
 
 sub get_item_from_cookie {
     my ( $input ) = @_;
@@ -808,14 +537,6 @@ my @header_value_loop = map {
     }
 } sort keys %$subfieldcode_attribute_mappings;
 
-# now, build the item form for entering a new item
-my $branch = $input->param('branch') || C4::Context->userenv->{branch};
-my $libraries = Koha::Libraries->search({}, { order_by => ['branchname'] })->unblessed;# build once ahead of time, instead of multiple times later.
-for my $library ( @$libraries ) {
-    $library->{selected} = 1 if $library->{branchcode} eq $branch
-}
-
-
 # Using last created item if it exists
 if (   $prefillitem
     && $op ne "additem"
@@ -826,85 +547,46 @@ if (   $prefillitem
     $current_item = $item_from_cookie if $item_from_cookie;
 }
 
-my @subfields_to_prefill = split ' ', C4::Context->preference('SubfieldsToUseWhenPrefill');
-
 if ( $current_item->{more_subfields_xml} ) {
+    # FIXME Use Maybe MARC::Record::new_from_xml if encoding issues on subfield (??)
     $current_item->{marc_more_subfields_xml} = MARC::Record->new_from_xml($current_item->{more_subfields_xml}, 'UTF-8');
 }
 
-# We generate form, and fill with values if defined
-my $temp = GetMarcBiblio({ biblionumber => $biblionumber });
-my $i = 0;
-my @subfields;
-foreach my $tag ( keys %{$tagslib} ) {
-    foreach my $subtag ( keys %{ $tagslib->{$tag} } ) {
+my $branchcode = $input->param('branch') || C4::Context->userenv->{branch};
 
-        my $subfield = $tagslib->{$tag}{$subtag};
-
-        next if IsMarcStructureInternal( $subfield );
-        next if ( $subfield->{tab} ne "10" );
-
-        my @values = ();
-
-        my $subfield_data;
-
-        # If we are not adding a new item
-        # OR
-        # If the subfield must be prefilled with last catalogued item
-        if (
-            $nextop ne 'additem'
-            || $op eq 'dupeitem'
-            || (
-                !$prefillitem
-                || ( $prefillitem && grep { $_ eq $subtag }
-                    @subfields_to_prefill )
-            )
-          )
-        {
-            my $kohafield = $subfield->{kohafield};
-            if ($kohafield) {
-
-                # This is a mapped field
-                ( my $attribute = $kohafield ) =~ s|^items\.||;
-                push @values, $subfield->{repeatable}
-                    ? split '\s\|\s', $current_item->{$attribute}
-                    : $current_item->{$attribute}
-                  if defined $current_item->{$attribute};
-            } else {
-                # Not mapped, picked the values from more_subfields_xml's MARC
-                my $marc_more = $current_item->{marc_more_subfields_xml};
-                if ( $marc_more ) {
-                    for my $f ( $marc_more->fields($tag) ) {
-                        push @values, $f->subfield($subtag);
-                    }
-                }
-            }
-        }
-
-        @values = ('') unless @values;
-
-        for my $value (@values) {
-            my $subfield_data = generate_subfield_form(
-                $tag,                        $subtag,
-                $value,                      $tagslib,
-                $subfield,                   $libraries,
-                $biblionumber,               $temp,
-                $i,
-                $restrictededition,          $current_item,
-            );
-            push @subfields, $subfield_data;
-            $i++;
-        }
-    }
+# If we are not adding a new item
+# OR
+# If the subfield must be prefilled with last catalogued item
+my @subfields_to_prefill;
+if ( $nextop eq 'additem' && $prefillitem ) {
+    # Setting to 1 element if SubfieldsToUseWhenPrefill is empty to prevent all the subfields to be prefilled
+    @subfields_to_prefill = split(' ', C4::Context->preference('SubfieldsToUseWhenPrefill')) || ("");
 }
-@subfields = sort { $a->{display_order} <=> $b->{display_order} || $a->{subfield} cmp $b->{subfield} } @subfields;
+my $subfields =
+  Koha::UI::Form::Builder::Item->new(
+    { biblionumber => $biblionumber, item => $current_item } )->edit_form(
+    {
+        branchcode           => $branchcode,
+        restricted_editition => $restrictededition,
+        (
+            @subfields_to_prefill
+            ? ( subfields_to_prefill => \@subfields_to_prefill )
+            : ()
+        )
+    }
+    );
+
+if( my $default_location = C4::Context->preference('NewItemsDefaultLocation') ) {
+    my ( $location_field ) = grep {$_->{kohafield} eq 'items.location'} @$subfields;
+    $location_field->{marc_value}->{value} ||= $default_location;
+}
 
 # what's the next op ? it's what we are not in : an add if we're editing, otherwise, and edit.
 $template->param(
     biblio       => $biblio,
     items        => \@items,
     item_header_loop => \@header_value_loop,
-    subfields    => \@subfields,
+    subfields        => $subfields,
     itemnumber       => $itemnumber,
     barcode          => $current_item->{barcode},
     itemtagfield     => $itemtagfield,
