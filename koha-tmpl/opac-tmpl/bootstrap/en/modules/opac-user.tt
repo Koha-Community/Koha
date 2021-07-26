@@ -14,7 +14,20 @@
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Your library home &rsaquo; [% IF ( LibraryNameTitle ) %][% LibraryNameTitle | html %][% ELSE %]Koha online[% END %] catalog</title>
 [% INCLUDE 'doc-head-close.inc' %]
-[% BLOCK cssinclude %][% END %]
+[% BLOCK cssinclude %]
+    [% FILTER collapse %]
+        <style>
+            #addNote {
+                width: 100%;
+            }
+            .checkout_note {
+                border-radius: 5px;
+                border: 1px dashed #999;
+                padding: .5em;
+            }
+        </style>
+    [% END %]
+[% END %]
 </head>
 [% INCLUDE 'bodytag.inc' bodyid='opac-user' bodyclass='scrollto' %]
 [% INCLUDE 'masthead.inc' %]
@@ -440,10 +453,15 @@
                                                 [% END %]
                                                 [% IF ( Koha.Preference('AllowCheckoutNotes') ) %]
                                                     <td class="note">
-                                                        <input type="text" name="note" data-issue_id="[% ISSUE.issue_id | html %]" data-origvalue="[% ISSUE.note | html %]" value="[% ISSUE.note | html %]" maxlength="255" readonly>
-                                                        <div class="hint">255 characters maximum</div>
-                                                        <button type="button" class="btn btn-primary btn-sm js_submitnote" id="save_[% ISSUE.issue_id | html %]" style="display:none;">Submit note</button>
-                                                        <button type="button" class="btn btn-primary btn-sm nonjs_submitnote" href="/cgi-bin/koha/opac-issue-note.pl?issue_id=[% ISSUE.issue_id | url %]">Edit / Create note</button>
+                                                        [% IF ( ISSUE.note ) -%]
+                                                           [% SET note_action = "Edit note" %]
+                                                        [% ELSE -%]
+                                                           [% SET note_action = "Add note" %]
+                                                        [% END %]
+                                                        <a id="save_[% ISSUE.issue_id | html %]" href="/cgi-bin/koha/opac-issue-note.pl?issue_id=[% ISSUE.issue_id | html %]" class="btn btn-primary btn-sm btn-add-note" data-title="[% ISSUE.title | html %] [% FOREACH subtitle IN ISSUE.subtitle.split(' \| ') %][% IF Koha.Preference('marcflavour')=='UNIMARC' %],[% END %][% subtitle | html %][% END %]" data-issueid="[% ISSUE.issue_id | html %]" id="save_[% ISSUE.issue_id | html %]" data-note="[% ISSUE.note | html %]" data-origvalue="[% ISSUE.note | html %]">
+                                                            [% note_action | html %]
+                                                        </button>
+                                                        <input type="hidden" name="note" value="[% ISSUE.note | html %]" data-origvalue="[% ISSUE.note | html %]" />
                                                     </td>
                                                 [% END %]
                                             </tr>
@@ -475,6 +493,33 @@
                                     <tr><td>You have nothing checked out</td></tr>
                                 </table>
                             [% END # IF issues_count %]
+
+                            <!-- Add note modal -->
+                            <div class="modal" id="addNoteModal" tabindex="-1" aria-labelledby="addNoteLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <form action="#" id="addNoteForm">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="addNoteLabel">Report a problem</h5>
+                                                <button type="button" class="closebtn" data-dismiss="modal" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body" id="addNoteBody">
+                                                <h6 id="addNoteTitle"></h6>
+                                                <input type="hidden" id="addNoteIssueId" name="issue_id" value="" />
+                                                <textarea name="note" id="addNote" rows="4"></textarea>
+                                                <div class="hint">Your note will be shown to the librarian when the item is checked in.</div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="submit" class="btn btn-primary">Submit note</button>
+                                                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+
                         </div> <!-- / .opac-user-checkouts -->
 
                         [% IF borrower_club_enrollments.count || borrower_enrollable_clubs.count %]
@@ -981,58 +1026,6 @@
                     }
                 });
 
-                $(".js_submitnote").click(function(e){
-                    var $self = $(this);
-                    var title = $(this).parent().parent().find('a.title')[0].outerHTML;
-                    var $noteinput = $(this).siblings('input[name="note"]').first();
-
-                    var ajaxData = {
-                        'action': 'issuenote',
-                        'issue_id': $noteinput.data('issue_id'),
-                        'note': $noteinput.val(),
-                    };
-
-                    $.ajax({
-                        url: '/cgi-bin/koha/svc/checkout_notes/',
-                        type: 'POST',
-                        dataType: 'json',
-                        data: ajaxData,
-                    })
-                    .done(function(data) {
-                        var message = "";
-                        if(data.status == 'saved') {
-                            $("#notesaved").removeClass("alert-error");
-                            $("#notesaved").addClass("alert-info");
-                            $noteinput.data('origvalue', data.note);
-                            $noteinput.val(data.note);
-                            message = "<p>" + _("Your note about %s has been saved and sent to the library.").format(title) + "</p>";
-                            message += "<p style=\"font-style:italic;\">" + data.note + "</p>";
-                            $self.hide();
-                        } else if(data.status == 'removed') {
-                            $("#notesaved").removeClass("alert-error");
-                            $("#notesaved").addClass("alert-info");
-                            $noteinput.data('origvalue', "");
-                            $noteinput.val("");
-                            message = "<p>" + _("Your note about %s was removed.").format(title) + "</p>";
-                            $self.hide();
-                        } else {
-                            $("#notesaved").removeClass("alert-info");
-                            $("#notesaved").addClass("alert-error");
-                            message =  "<p>" + _("Your note about %s could not be saved.").format(title) + "</p>";
-                            message += "<p style=\"font-weight:bold;\">" + _("Something went wrong. The note has not been saved") + "</p>";
-                        }
-                        $("#notesaved").html(message);
-                    })
-                    .fail(function(data) {
-                        $("#notesaved").removeClass("alert-info");
-                        $("#notesaved").addClass("alert-error");
-                        var message = "<p style=\"font-weight:bold;\">" + _("Something went wrong. The note has not been saved") + "</p>";
-                        $("#notesaved").html(message);
-                    })
-                    .always(function() {
-                        $("#notesaved").show();
-                    });
-                });
             [% END %]
 
             $(".suspend-until").datepicker({
@@ -1057,7 +1050,92 @@
                     $('#opac-user-clubs').load('/cgi-bin/koha/clubs/clubs-tab.pl?borrowernumber=[% borrowernumber | html %]');
                 });
             }
+
+            $("body").on("click", ".btn-add-note", function(e){
+                e.preventDefault();
+                var title = $(this).data("title");
+                var issue_id = $(this).data("issueid");
+                var note = $(this).data("note");
+                var origvalue = $(this).data("origvalue");
+                $("#addNote").val( note );
+                $("#addNoteIssueId").val( issue_id );
+                $("#addNoteTitle").text( title );
+                $("#addNoteModal").modal("show");
+            });
+
+            $("#addNoteForm").on("submit", function(e){
+                e.preventDefault();
+                var title = $("#addNoteTitle").text();
+                var issue_id = $("#addNoteIssueId").val();
+                var note = $("#addNote").val();
+                submitNote( title, issue_id, note );
+            });
+
+            $("#addNoteModal").on("hidden.bs.modal", function(){
+                $("#addNoteTitle").text("");
+                $("#addNote").val("");
+            });
         });
+
+        function submitNote( title, issue_id, note ){
+            var self = $("#addNoteModal");
+            var noteinput = $("#save_" + issue_id );
+
+            var ajaxData = {
+                'action': 'issuenote',
+                'issue_id': issue_id,
+                'note': note
+            };
+
+            $.ajax({
+                url: '/cgi-bin/koha/svc/checkout_notes/',
+                type: 'POST',
+                dataType: 'json',
+                data: ajaxData,
+            })
+            .done(function(data) {
+                var message = "";
+                if(data.status == 'saved') {
+                    $("#notesaved").removeClass("alert-error");
+                    $("#notesaved").addClass("alert-info");
+                    noteinput.data('origvalue', data.note)
+                        .data('note', data.note)
+                        .text( _("Edit note" ) );
+                    message = "<p>" + _("Your note about %s has been saved and sent to the library.").format( em(title) ) + "</p>";
+                    message += "<p class=\"checkout_note\">" + data.note;
+                    message += "<a href=\"/cgi-bin/koha/opac-issue-note.pl?issue_id=" + issue_id + "\" class=\"btn btn-link btn-sm btn-add-note\" data-title=\"" + title + "\" data-issueid=\"" + issue_id + "\" data-note=\"" + data.note + "\" data-origvalue=\"" + data.note + "\"><i class=\"fa fa-pencil\" aria-hidden=\"true\"></i> " + _("Edit note") + "</a>";
+                    message += "</p>";
+                } else if(data.status == 'removed') {
+                    $("#notesaved").removeClass("alert-error");
+                    $("#notesaved").addClass("alert-info");
+                    noteinput.data('origvalue', "")
+                        .data("note", "")
+                        .text( _("Add note") );
+                    message = "<p>" + _("Your note about %s was removed.").format( em(title) ) + "</p>";
+                } else {
+                    $("#notesaved").removeClass("alert-info");
+                    $("#notesaved").addClass("alert-error");
+                    message =  "<p>" + _("Your note about %s could not be saved.").format( em(title) ) + "</p>";
+                    noteinput.text( _("Add note") );
+                    message += "<p style=\"font-weight:bold;\">" + _("Something went wrong. The note has not been saved") + "</p>";
+                }
+                self.modal("hide");
+                $("#notesaved").html(message);
+            })
+            .fail(function(data) {
+                $("#notesaved").removeClass("alert-info");
+                $("#notesaved").addClass("alert-error");
+                var message = "<p style=\"font-weight:bold;\">" + _("Something went wrong. The note has not been saved") + "</p>";
+                $("#notesaved").html(message);
+            })
+            .always(function() {
+                $("#notesaved").show();
+            });
+        }
+
+        function em( title ){
+            return "<em>" + title + "</em>";
+        }
 
         var borrowernumber = "[% borrowernumber | html %]";
         var MSG_YOUR_RATING = _("Your rating: %s, ");
