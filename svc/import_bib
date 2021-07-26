@@ -23,7 +23,7 @@ use Modern::Perl;
 use CGI qw ( -utf8 );
 use C4::Auth qw/check_api_auth/;
 use C4::Context;
-use C4::ImportBatch;
+use C4::ImportBatch qw( GetWebserviceBatchId AddBiblioToBatch AddItemsToImportBiblio BatchFindDuplicates BatchCommitRecords );
 use C4::Matcher;
 use XML::Simple;
 # use Carp::Always;

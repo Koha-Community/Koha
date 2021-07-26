@@ -23,7 +23,7 @@ use Modern::Perl;
 use C4::Auth qw( get_template_and_user );
 use C4::Reports::Guided qw( execute_query );
 use Koha::Reports;
-use JSON;
+use JSON qw( encode_json decode_json );
 use CGI qw ( -utf8 );
 
 use Koha::Caches;

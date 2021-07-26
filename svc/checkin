@@ -23,7 +23,7 @@ use Modern::Perl;
 use CGI;
 use JSON qw(to_json);
 
-use C4::Circulation;
+use C4::Circulation qw( AddReturn );
 use C4::Context;
 use C4::Auth qw(check_cookie_auth);
 use Koha::Checkouts;
