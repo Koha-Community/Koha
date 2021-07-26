@@ -25,7 +25,7 @@ use Data::Dumper qw/Dumper/;
 use C4::Context;
 use Koha::Database;
 use Koha::Holds;
-use Koha::List::Patron;
+use Koha::List::Patron qw( AddPatronList AddPatronsToList );
 use Koha::Patrons;
 use Koha::Patron::Relationship;
 
