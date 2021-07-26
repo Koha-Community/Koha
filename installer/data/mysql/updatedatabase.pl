@@ -24348,7 +24348,7 @@ if( CheckVersion( $DBversion ) ) {
     NewVersion( $DBversion, "", "Koha 21.05.01 release" );
 }
 
-$DBversion = '21.05.00.004';
+$DBversion = '21.05.01.004';
 if( CheckVersion( $DBversion ) ) {
     $dbh->do( q{
         INSERT IGNORE INTO systempreferences (variable, value, explanation, options, type)
@@ -24356,6 +24356,11 @@ if( CheckVersion( $DBversion ) ) {
     });
 
     NewVersion( $DBversion, 26205, "Add new system preference NewsLog to log news changes");
+}
+
+$DBversion = '21.05.02.000';
+if( CheckVersion( $DBversion ) ) {
+    NewVersion( $DBversion, "", "Koha 21.05.02 release" );
 }
 
 # SEE bug 13068
