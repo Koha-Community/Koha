@@ -116,7 +116,9 @@
                             [% ELSE  %]
                                 <a href="#" id="buttonDot_[%- mv.id | html -%]" class="[%- mv.class | html -%]" title="Tag editor">...</a>
                             [% END %]
-                            [%- mv.javascript | $raw -%]
+                            [% UNLESS no_plugin %][%# FIXME - from batchMod-edit, jQuery is included at the end of the template and cataloguing plugins are not working in this situation %]
+                                [%- mv.javascript | $raw -%]
+                            [% END %]
                         [% END %]
                     [% ELSIF ( mv.type == 'text' ) %]
                         [% IF mv.readonly %]
@@ -142,9 +144,9 @@
 
                     [% IF add_regex %]
                         <span name="regex_fields" style="display: none;">
-                            s/<input type="text" id="[% mv.id | html %]" name="regex_search" placeholder="regex pattern" />/
-                            <input type="text" id="[% mv.id | html %]" name="regex_replace" placeholder="regex replacement" />/
-                            <input type="text" id="[% mv.id | html %]" name="regex_modifiers" placeholder="ig" size="3" />
+                            s/<input type="text" name="[% kohafield | html %]_regex_search" class="regex_search" placeholder="regex pattern" />/
+                            <input type="text" name="[% kohafield | html %]_regex_replace" class="regex_replace" placeholder="regex replacement" />/
+                            <input type="text" name="[% kohafield | html %]_regex_modifiers" class="regex_modifiers" placeholder="ig" size="3" />
                         </span>
                     [% END %]
 
@@ -162,7 +164,7 @@
 
                     [% IF add_regex %]
                         [% IF (mv.type == 'text' || mv.type == 'text2' || mv.type == 'textarea' ) %]
-                            <a href="#" name="field_regex" id="[% subfield.id | html %]" >RegEx</a>
+                            <a href="#" name="[% kohafield | html %]_field_regex" class="field_regex" id="[% subfield.id | html %]" >RegEx</a>
                         [% END %]
                     [% END %]
 

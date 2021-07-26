@@ -248,7 +248,8 @@
                         <h2>Edit items</h2>
                         <div class="hint">Checking the box right next to the subfield label will disable the entry and delete the subfield on all selected items. Leave fields blank to make no change.</div>
                         <fieldset class="rows">
-                            [% PROCESS subfields_for_item subfields => subfields, add_regex => 1, add_delete_checkbox => 1 %]
+                            [%# no_plugin from batchMod-edit, jQuery is included at the end of the template and cataloguing plugins are not working in this situation %]
+                            [% PROCESS subfields_for_item subfields => subfields, add_regex => 1, add_delete_checkbox => 1, no_plugin => 1 %]
                         </fieldset>
 
                         <fieldset class="rows">
@@ -310,8 +311,8 @@
                 $("input[name='disable_input']").click(function() {
                     var row = $(this).attr("id");
                     row = row.replace("row","hint");
-                    var todisable = $(this).parent().find("[name='field_value'],[name='tag'],[name='subfield'],[name='mandatory']");
-                    var regex_link = $(this).parent().find("[name='field_regex']");
+                    var todisable = $(this).parent().find(".input_marceditor,.tag,.subfield,.mandatory");
+                    var regex_link = $(this).parent().find(".field_regex");
                     if ($(this).is(":checked")) {
                         $(todisable).prop('disabled', true);
                         $("#"+row).html(_("This subfield will be deleted"));
@@ -322,12 +323,11 @@
                         $(regex_link).show();
                     }
                 });
-                $('a[name="field_regex"]').click(function() {
-                    var id = $(this).attr('id');
-                    var editor = $(this).parent().find("[name='field_value']");
+                $('a.field_regex').click(function() {
+                    var editor = $(this).parent().find(".input_marceditor");
                     var tag_editor = $(this).parent().find(".buttonDot");
                     var regex = $(this).parent().find("[name='regex_fields']");
-                    var disable_input = $(this).parent().find("[name='disable_input']");
+                    var disable_input = $(this).parent().find(".disable_input");
                     if ($(this).html() == 'RegEx') {
                         $(editor).hide();
                         $(regex).show();
@@ -348,10 +348,10 @@
         [% IF ( show ) %]
             [%- # Loop over fields which may have plugin JavaScript -%]
             [%- UNLESS (too_many_items_process) -%]
-                [%- FOREACH ite IN item -%]
-                    [% SET mv = ite.marc_value %]
+                [%- FOREACH subfield IN subfields -%]
+                    [% SET mv = subfield.marc_value %]
                     [%- IF ( mv.type == 'text2' ) -%]
-                        <!-- subfield[% ite.tag | html %][% ite.subfield | html %][% ite.random | html %] -->
+                        <!-- subfield[% subfield.tag | html %][% subfield.subfield | html %][% subfield.random | html %] -->
                         [% mv.javascript | $raw %]
                     [%- END -%]
                 [%- END -%]

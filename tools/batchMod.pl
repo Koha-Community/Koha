@@ -117,48 +117,20 @@ if ($op eq "action") {
     my @searches  = $input->multi_param('regex_search');
     my @replaces  = $input->multi_param('regex_replace');
     my @modifiers = $input->multi_param('regex_modifiers');
-    my @disabled  = $input->multi_param('disable_input');
-
-    # Is there something to modify ?
-    # TODO : We shall use this var to warn the user in case no modification was done to the items
-    my $values_to_modify = scalar(grep {!/^$/} @values) || scalar(grep {!/^$/} @searches);
-    my $values_to_blank  = scalar(@disabled);
-
-    my $marcitem;
-
-    #initializing values for updates
-    my (  $itemtagfield,   $itemtagsubfield) = &GetMarcFromKohaField( "items.itemnumber" );
-    if ($values_to_modify){
-        my $xml = TransformHtmlToXml(\@tags,\@subfields,\@values,undef,undef, 'ITEM');
-        $marcitem = MARC::Record::new_from_xml($xml, 'UTF-8');
-    }
-    if ($values_to_blank){
-        foreach my $disabledsubf (@disabled){
-            if ($marcitem && $marcitem->field($itemtagfield)){
-                $marcitem->field($itemtagfield)->update( $disabledsubf => "" );
-            }
-            else {
-                $marcitem = MARC::Record->new();
-                $marcitem->append_fields( MARC::Field->new( $itemtagfield, '', '', $disabledsubf => "" ) );
-            }
-        }
-    }
 
     my $upd_biblionumbers;
     my $del_biblionumbers;
-    try {
-        my $schema = Koha::Database->new->schema;
-        $schema->txn_do(
-            sub {
-                # For each item
-                my $i = 1;
-                foreach my $itemnumber (@itemnumbers) {
-                    my $item = Koha::Items->find($itemnumber);
-                    next
-                      unless $item
-                      ; # Should have been tested earlier, but just in case...
-                    my $itemdata = $item->unblessed;
-                    if ($del) {
+    if ( $del ) {
+        try {
+            my $schema = Koha::Database->new->schema;
+            $schema->txn_do(
+                sub {
+                    foreach my $itemnumber (@itemnumbers) {
+                        my $item = Koha::Items->find($itemnumber);
+                        next
+                          unless $item
+                          ; # Should have been tested earlier, but just in case...
+                        my $itemdata = $item->unblessed;
                         my $return = $item->safe_delete;
                         if ( ref( $return ) ) {
                             $deleted_items++;
@@ -192,100 +164,137 @@ if ($op eq "action") {
                             }
                         }
                     }
-                    else {
+                    if (@not_deleted) {
+                        Koha::Exceptions::Exception->throw(
+                            'Some items have not been deleted, rolling back');
+                    }
+                }
+            );
+        }
+        catch {
+            warn $_;
+            if ( $_->isa('Koha::Exceptions::Exception') ) {
+                $template->param( deletion_failed => 1 );
+            }
+            die "Something terrible has happened!"
+                if ($_ =~ /Rollback failed/); # Rollback failed
+        };
+    }
+
+    else { # modification
+
+        my @columns = Koha::Items->columns;
+
+        my $new_item_data;
+        my @columns_with_regex;
+        for my $c ( @columns ) {
+            if ( $c eq 'more_subfields_xml' ) {
+                my @more_subfields_xml = $input->multi_param("items.more_subfields_xml");
+                my @unlinked_item_subfields;
+                for my $subfield ( @more_subfields_xml ) {
+                    my $v = $input->param('items.more_subfields_xml_' . $subfield);
+                    push @unlinked_item_subfields, $subfield, $v;
+                }
+                if ( @unlinked_item_subfields ) {
+                    my $marc = MARC::Record->new();
+                    # use of tag 999 is arbitrary, and doesn't need to match the item tag
+                    # used in the framework
+                    $marc->append_fields(MARC::Field->new('999', ' ', ' ', @unlinked_item_subfields));
+                    $marc->encoding("UTF-8");
+                    # FIXME This is WRONG! We need to use the values that haven't been modified by the batch tool!
+                    $new_item_data->{more_subfields_xml} = $marc->as_xml("USMARC");
+                    next;
+                }
+                $new_item_data->{more_subfields_xml} = undef;
+                # FIXME deal with more_subfields_xml and @subfields_to_blank
+            } elsif ( grep { $c eq $_ } @subfields_to_blank ) {
+                # Empty this column
+                $new_item_data->{$c} = undef
+            } else {
+
+                my @v = grep { $_ ne "" }
+                    uniq $input->multi_param( "items." . $c );
+
+                next unless @v;
+
+                $new_item_data->{$c} = join ' | ', @v;
+            }
+
+            if ( my $regex_search = $input->param('items.'.$c.'_regex_search') ) {
+                push @columns_with_regex, $c;
+            }
+        }
+
+        try {
+            my $schema = Koha::Database->new->schema;
+            $schema->txn_do(
+                sub {
+
+                    foreach my $itemnumber (@itemnumbers) {
+                        my $item = Koha::Items->find($itemnumber);
+                        next
+                          unless $item
+                          ; # Should have been tested earlier, but just in case...
+                        my $itemdata = $item->unblessed;
+
                         my $modified_holds_priority = 0;
                         if ( defined $exclude_from_local_holds_priority && $exclude_from_local_holds_priority ne "" ) {
                             if(!defined $item->exclude_from_local_holds_priority || $item->exclude_from_local_holds_priority != $exclude_from_local_holds_priority) {
-                            $item->exclude_from_local_holds_priority($exclude_from_local_holds_priority)->store;
-                            $modified_holds_priority = 1;
+                                $item->exclude_from_local_holds_priority($exclude_from_local_holds_priority)->store;
+                                $modified_holds_priority = 1;
+                            }
                         }
-                        }
+
                         my $modified = 0;
-                        if ( $values_to_modify || $values_to_blank ) {
-                            my $localmarcitem = Item2Marc($itemdata);
+                        for my $c ( @columns_with_regex ) {
+                            my $regex_search = $input->param('items.'.$c.'_regex_search');
+                            my $old_value = $item->$c;
 
-                            for ( my $i = 0 ; $i < @tags ; $i++ ) {
-                                my $search = $searches[$i];
-                                next unless $search;
-
-                                my $tag = $tags[$i];
-                                my $subfield = $subfields[$i];
-                                my $replace = $replaces[$i];
-
-                                my $value = $localmarcitem->field( $tag )->subfield( $subfield );
-                                my $old_value = $value;
-
-                                my @available_modifiers = qw( i g );
-                                my $retained_modifiers = q||;
-                                for my $modifier ( split //, $modifiers[$i] ) {
-                                    $retained_modifiers .= $modifier
-                                        if grep {/$modifier/} @available_modifiers;
+                            my $value = apply_regex(
+                                {
+                                    search  => $regex_search,
+                                    replace => $input->param(
+                                        'items' . $c . '_regex_replace'
+                                    ),
+                                    modifiers => $input->param(
+                                        'items' . $c . '_regex_modifiers'
+                                    ),
+                                    value => $old_value,
                                 }
-                                if ( $retained_modifiers =~ m/^(ig|gi)$/ ) {
-                                    $value =~ s/$search/$replace/ig;
-                                }
-                                elsif ( $retained_modifiers eq 'i' ) {
-                                    $value =~ s/$search/$replace/i;
-                                }
-                                elsif ( $retained_modifiers eq 'g' ) {
-                                    $value =~ s/$search/$replace/g;
-                                }
-                                else {
-                                    $value =~ s/$search/$replace/;
-                                }
-
-                                my @fields_to = $localmarcitem->field($tag);
-                                foreach my $field_to_update ( @fields_to ) {
-                                    unless ( $old_value eq $value ) {
-                                        $modified++;
-                                        $field_to_update->update( $subfield => $value );
-                                    }
-                                }
-                            }
-
-                            $modified += UpdateMarcWith( $marcitem, $localmarcitem );
-                            if ($modified) {
-                                eval {
-                                    if (
-                                        my $item = ModItemFromMarc(
-                                            $localmarcitem,
-                                            $itemdata->{biblionumber},
-                                            $itemnumber,
-                                            { skip_record_index => 1 },
-                                        )
-                                      )
-                                    {
-                                        LostItem(
-                                            $itemnumber,
-                                            'batchmod',
-                                            undef,
-                                            { skip_record_index => 1 }
-                                        ) if $item->{itemlost}
-                                          and not $itemdata->{itemlost};
-                                    }
-                                };
-                                push @$upd_biblionumbers, $itemdata->{'biblionumber'};
+                            );
+                            unless ( $old_value eq $value ) {
+                                $modified++;
+                                $item->$c($value);
                             }
                         }
+
+                        $modified += scalar(keys %$new_item_data); # FIXME This is incorrect if old value == new value. Should we loop of the keys and compare the before/after values?
+                        if ( $modified) {
+                            my $itemlost_pre = $item->itemlost;
+                            $item->set($new_item_data)->store({skip_record_index => 1});
+
+                            push @$upd_biblionumbers, $itemdata->{'biblionumber'};
+
+                            LostItem(
+                                $item->itemnumber, 'batchmod', undef,
+                                { skip_record_index => 1 }
+                            ) if $item->itemlost
+                                  and not $itemlost_pre;
+                        }
+
                         $modified_items++ if $modified || $modified_holds_priority;
                         $modified_fields += $modified + $modified_holds_priority;
                     }
-                    $i++;
                 }
-                if (@not_deleted) {
-                    Koha::Exceptions::Exception->throw(
-                        'Some items have not been deleted, rolling back');
-                }
-            }
-        );
-    }
-    catch {
-        if ( $_->isa('Koha::Exceptions::Exception') ) {
-            $template->param( deletion_failed => 1 );
+            );
         }
-        die "Something terrible has happened!"
-            if ($_ =~ /Rollback failed/); # Rollback failed
-    };
+        catch {
+            warn $_;
+            die "Something terrible has happened!"
+                if ($_ =~ /Rollback failed/); # Rollback failed
+        };
+    }
+
     $upd_biblionumbers = [ uniq @$upd_biblionumbers ]; # Only update each bib once
 
     # Don't send specialUpdate for records we are going to delete
@@ -319,6 +328,7 @@ if ($op eq "action") {
         $template->param( "too_many_items_display" => scalar(@itemnumbers) );
         $template->param( "job_completed" => 1 );
     }
+
 
     # Calling the template
     $template->param(
@@ -587,4 +597,33 @@ sub UpdateMarcWith {
         }
     }
     return $modified;
+}
+
+sub apply_regex {
+    my ($params) = @_;
+    my $search   = $params->{search};
+    my $replace  = $params->{replace};
+    my $modifiers = $params->{modifiers} || [];
+    my $value = $params->{value};
+
+    my @available_modifiers = qw( i g );
+    my $retained_modifiers  = q||;
+    for my $modifier ( split //, @$modifiers ) {
+        $retained_modifiers .= $modifier
+          if grep { /$modifier/ } @available_modifiers;
+    }
+    if ( $retained_modifiers =~ m/^(ig|gi)$/ ) {
+        $value =~ s/$search/$replace/ig;
+    }
+    elsif ( $retained_modifiers eq 'i' ) {
+        $value =~ s/$search/$replace/i;
+    }
+    elsif ( $retained_modifiers eq 'g' ) {
+        $value =~ s/$search/$replace/g;
+    }
+    else {
+        $value =~ s/$search/$replace/;
+    }
+
+    return $value;
 }
