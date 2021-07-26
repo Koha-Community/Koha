@@ -757,19 +757,3 @@ sub UpdateMarcWith {
     }
     return $modified;
 }
-
-sub find_value {
-    my ($tagfield,$insubfield,$record) = @_;
-    my $result;
-    my $indicator;
-    foreach my $field ($record->field($tagfield)) {
-        my @subfields = $field->subfields();
-        foreach my $subfield (@subfields) {
-            if (@$subfield[0] eq $insubfield) {
-                $result .= @$subfield[1];
-                $indicator = $field->indicator(1).$field->indicator(2);
-            }
-        }
-    }
-    return($indicator,$result);
-}
