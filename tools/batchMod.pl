@@ -50,6 +50,7 @@ use Koha::Items;
 use Koha::ItemTypes;
 use Koha::Patrons;
 use Koha::SearchEngine::Indexer;
+use Koha::UI::Form::Builder::Item;
 
 my $input = CGI->new;
 my $dbh = C4::Context->dbh;
@@ -393,209 +394,39 @@ if ($op eq "show"){
         # Even if we do not display the items, we need the itemnumbers
         $template->param(itemnumbers_array => \@itemnumbers);
     }
-# now, build the item form for entering a new item
-my @loop_data =();
-my $i=0;
-my $branch_limit = C4::Context->userenv ? C4::Context->userenv->{"branch"} : "";
+    # now, build the item form for entering a new item
+    my @loop_data =();
+    my $branch_limit = C4::Context->userenv ? C4::Context->userenv->{"branch"} : "";
 
-my $libraries = Koha::Libraries->search({}, { order_by => ['branchname'] })->unblessed;# build once ahead of time, instead of multiple times later.
+    my $libraries = Koha::Libraries->search({}, { order_by => ['branchname'] })->unblessed;# build once ahead of time, instead of multiple times later.
 
-# Adding a default choice, in case the user does not want to modify the branch
-my $nochange_branch = { branchname => '', value => '', selected => 1 };
-unshift (@$libraries, $nochange_branch);
+    # Adding a default choice, in case the user does not want to modify the branch
+    my $nochange_branch = { branchname => '', value => '', selected => 1 };
+    unshift (@$libraries, $nochange_branch);
 
-my $pref_itemcallnumber = C4::Context->preference('itemcallnumber');
+    my $pref_itemcallnumber = C4::Context->preference('itemcallnumber');
 
-# Getting list of subfields to keep when restricted batchmod edit is enabled
-my $subfieldsToAllowForBatchmod = C4::Context->preference('SubfieldsToAllowForRestrictedBatchmod');
-my $allowAllSubfields = (
-    not defined $subfieldsToAllowForBatchmod
-      or $subfieldsToAllowForBatchmod eq q||
-) ? 1 : 0;
-my @subfieldsToAllow = split(/ /, $subfieldsToAllowForBatchmod);
+    # Getting list of subfields to keep when restricted batchmod edit is enabled
+    my @subfields_to_allow = $restrictededition ? split ' ', C4::Context->preference('SubfieldsToAllowForRestrictedBatchmod') : ();
 
-foreach my $tag (sort keys %{$tagslib}) {
-    # loop through each subfield
-    foreach my $subfield (sort keys %{$tagslib->{$tag}}) {
-        next if IsMarcStructureInternal( $tagslib->{$tag}{$subfield} );
-        next if (not $allowAllSubfields and $restrictededition && !grep { $tag . '$' . $subfield eq $_ } @subfieldsToAllow );
-    	next if ($tagslib->{$tag}->{$subfield}->{'tab'} ne "10");
-        # barcode is not meant to be batch-modified
-        next if $tagslib->{$tag}->{$subfield}->{'kohafield'} eq 'items.barcode';
-	my %subfield_data;
- 
-	my $index_subfield = int(rand(1000000)); 
-	if ($subfield eq '@'){
-	    $subfield_data{id} = "tag_".$tag."_subfield_00_".$index_subfield;
-	} else {
-	    $subfield_data{id} = "tag_".$tag."_subfield_".$subfield."_".$index_subfield;
-	}
-	$subfield_data{tag}        = $tag;
-	$subfield_data{subfield}   = $subfield;
-	$subfield_data{marc_lib}   ="<span id=\"error$i\" title=\"".$tagslib->{$tag}->{$subfield}->{lib}."\">".$tagslib->{$tag}->{$subfield}->{lib}."</span>";
-	$subfield_data{mandatory}  = $tagslib->{$tag}->{$subfield}->{mandatory};
-	$subfield_data{repeatable} = $tagslib->{$tag}->{$subfield}->{repeatable};
-    my $value;
-    if ( $use_default_values) {
-	    $value = $tagslib->{$tag}->{$subfield}->{defaultvalue};
-	    # get today date & replace YYYY, MM, DD if provided in the default value
-            my $today = dt_from_string;
-            my $year  = $today->year;
-            my $month = $today->month;
-            my $day   = $today->day;
-            $value =~ s/YYYY/$year/g;
-            $value =~ s/MM/$month/g;
-            $value =~ s/DD/$day/g;
-	}
-	$subfield_data{visibility} = "display:none;" if (($tagslib->{$tag}->{$subfield}->{hidden} > 4) || ($tagslib->{$tag}->{$subfield}->{hidden} < -4));
-    # testing branch value if IndependentBranches.
-
-	if ( $tagslib->{$tag}->{$subfield}->{authorised_value} ) {
-	my @authorised_values;
-	my %authorised_lib;
-	# builds list, depending on authorised value...
-
-    if ( $tagslib->{$tag}->{$subfield}->{authorised_value} eq "branches" ) {
-        foreach my $library (@$libraries) {
-            push @authorised_values, $library->{branchcode};
-            $authorised_lib{$library->{branchcode}} = $library->{branchname};
+    my $subfields = Koha::UI::Form::Builder::Item->new->edit_form(
+        {
+            restricted_editition => $restrictededition,
+            (
+                @subfields_to_allow
+                ? ( subfields_to_allow => \@subfields_to_allow )
+                : ()
+            ),
+            subfields_to_ignore         => ['items.barcode'],
+            prefill_with_default_values => $use_default_values,
         }
-        $value = "";
-    }
-    elsif ( $tagslib->{$tag}->{$subfield}->{authorised_value} eq "itemtypes" ) {
-        push @authorised_values, "";
-        my $itemtypes = Koha::ItemTypes->search_with_localization;
-        while ( my $itemtype = $itemtypes->next ) {
-            push @authorised_values, $itemtype->itemtype;
-            $authorised_lib{$itemtype->itemtype} = $itemtype->translated_description;
-        }
-        $value = "";
-
-          #---- class_sources
-      }
-      elsif ( $tagslib->{$tag}->{$subfield}->{authorised_value} eq "cn_source" ) {
-          push @authorised_values, "" unless ( $tagslib->{$tag}->{$subfield}->{mandatory} );
-            
-          my $class_sources = GetClassSources();
-          my $default_source = C4::Context->preference("DefaultClassificationSource");
-          
-          foreach my $class_source (sort keys %$class_sources) {
-              next unless $class_sources->{$class_source}->{'used'} or
-                          ($value and $class_source eq $value)      or
-                          ($class_source eq $default_source);
-              push @authorised_values, $class_source;
-              $authorised_lib{$class_source} = $class_sources->{$class_source}->{'description'};
-          }
-		  $value = '';
-
-          #---- "true" authorised value
-      }
-      else {
-          push @authorised_values, ""; # unless ( $tagslib->{$tag}->{$subfield}->{mandatory} );
-
-          my @avs = Koha::AuthorisedValues->search_with_library_limits(
-              {
-                  category   => $tagslib->{$tag}->{$subfield}->{authorised_value}
-              },
-              { order_by => 'lib' },
-              $branch_limit
-          );
-          for my $av ( @avs ) {
-              push @authorised_values, $av->authorised_value;
-              $authorised_lib{$av->authorised_value} = $av->lib;
-          }
-          $value="";
-      }
-        $subfield_data{marc_value} = {
-            type    => 'select',
-            id      => "tag_".$tag."_subfield_".$subfield."_".$index_subfield,
-            name    => "field_value",
-            values  => \@authorised_values,
-            labels  => \%authorised_lib,
-            default => $value,
-        };
-    # it's a thesaurus / authority field
-    }
-    elsif ( $tagslib->{$tag}->{$subfield}->{authtypecode} ) {
-        $subfield_data{marc_value} = {
-            type         => 'text1',
-            id           => $subfield_data{id},
-            value        => $value,
-            authtypecode => $tagslib->{$tag}->{$subfield}->{authtypecode},
-        }
-    }
-    elsif ( $tagslib->{$tag}->{$subfield}->{value_builder} ) { # plugin
-        require Koha::FrameworkPlugin;
-        my $plugin = Koha::FrameworkPlugin->new( {
-            name => $tagslib->{$tag}->{$subfield}->{'value_builder'},
-            item_style => 1,
-        });
-        my $temp;
-        my $pars= { dbh => $dbh, record => $temp, tagslib => $tagslib,
-            id => $subfield_data{id} };
-        $plugin->build( $pars );
-        if( !$plugin->errstr ) {
-            $subfield_data{marc_value} = {
-                type       => 'text2',
-                id         => $subfield_data{id},
-                value      => $value,
-                javascript => $plugin->javascript,
-                noclick    => $plugin->noclick,
-            };
-        } else {
-            warn $plugin->errstr;
-            $subfield_data{marc_value} = { # supply default input form
-                type       => 'text',
-                id         => $subfield_data{id},
-                value      => $value,
-            };
-        }
-    }
-    elsif ( $tag eq '' ) {       # it's an hidden field
-            $subfield_data{marc_value} = {
-                type       => 'hidden',
-                id         => $subfield_data{id},
-                value      => $value,
-            };
-    }
-    elsif ( $tagslib->{$tag}->{$subfield}->{'hidden'} ) {   # FIXME: shouldn't input type be "hidden" ?
-        $subfield_data{marc_value} = {
-                type       => 'text',
-                id         => $subfield_data{id},
-                value      => $value,
-        };
-    }
-    elsif ( length($value) > 100
-            or (C4::Context->preference("marcflavour") eq "UNIMARC" and
-                  300 <= $tag && $tag < 400 && $subfield eq 'a' )
-            or (C4::Context->preference("marcflavour") eq "MARC21"  and
-                  500 <= $tag && $tag < 600                     )
-          ) {
-        # oversize field (textarea)
-        $subfield_data{marc_value} = {
-                type       => 'textarea',
-                id         => $subfield_data{id},
-                value      => $value,
-        };
-    } else {
-        # it's a standard field
-        $subfield_data{marc_value} = {
-                type       => 'text',
-                id         => $subfield_data{id},
-                value      => $value,
-        };
-    }
-#   $subfield_data{marc_value}="<input type=\"text\" name=\"field_value\">";
-    push (@loop_data, \%subfield_data);
-    $i++
-  }
-} # -- End foreach tag
+    );
 
 
 
     # what's the next op ? it's what we are not in : an add if we're editing, otherwise, and edit.
     $template->param(
-        item                => \@loop_data,
+        subfields           => $subfields,
         notfoundbarcodes    => \@notfoundbarcodes,
         notfounditemnumbers => \@notfounditemnumbers
     );

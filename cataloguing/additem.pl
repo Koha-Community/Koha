@@ -572,9 +572,16 @@ my $subfields =
             @subfields_to_prefill
             ? ( subfields_to_prefill => \@subfields_to_prefill )
             : ()
-        )
+        ),
+        prefill_with_default_values => 1,
+        branch_limit => C4::Context->userenv->{"branch"},
     }
-    );
+);
+
+if (   $frameworkcode eq 'FA' ) {
+    my ( $barcode_field ) = grep {$_->{kohafield} eq 'items.barcode'} @$subfields;
+    $barcode_field->{marc_value}->{value} ||= $input->param('barcode');
+}
 
 if( my $default_location = C4::Context->preference('NewItemsDefaultLocation') ) {
     my ( $location_field ) = grep {$_->{kohafield} eq 'items.location'} @$subfields;

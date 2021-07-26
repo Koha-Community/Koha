@@ -248,77 +248,7 @@
                         <h2>Edit items</h2>
                         <div class="hint">Checking the box right next to the subfield label will disable the entry and delete the subfield on all selected items. Leave fields blank to make no change.</div>
                         <fieldset class="rows">
-                            <ol>
-                                [% FOREACH ite IN item %]
-                                    <li>
-                                        <div class="subfield_line" style="[% ite.visibility | html %]" id="subfield[% ite.tag | html %][% ite.subfield | html %][% ite.random | html %]">
-                                            [% SET mv = ite.marc_value %]
-                                            [% IF ( ite.mandatory ) %]
-                                                <label class="required" for="[%- mv.id | html -%]">
-                                            [% ELSE %]
-                                                <label for="[%- mv.id | html -%]">
-                                            [% END %]
-                                                [% ite.subfield | html %] - [% ite.marc_lib | $raw %]
-                                            </label>
-
-                                            [% IF ( mv.type == 'select' ) -%]
-                                                <select name="[%- mv.name | html -%]" id="[%- mv.id | html -%]" tabindex="1" class="input_marceditor select2">
-                                                    [%- FOREACH aval IN mv.values %]
-                                                        [% ite.subfield | html %] -
-                                                        [% IF aval == mv.default %]
-                                                            <option value="[%- aval | html -%]" selected="selected">[%- mv.labels.$aval | html -%]</option>
-                                                        [% ELSE %]
-                                                            <option value="[%- aval | html -%]">[%- mv.labels.$aval | html -%]</option>
-                                                        [% END %]
-                                                    [%- END -%]
-                                                </select>
-                                            [% ELSIF ( mv.type == 'text1' ) %]
-                                                <input type="text" tabindex="1" id="[%- mv.id | html -%]" name="field_value" class="input_marceditor" size="50" maxlength="255" value="[%- mv.value | html -%]" />
-                                                <a href="#" class="buttonDot" onclick="Dopop('/cgi-bin/koha/authorities/auth_finder.pl?authtypecode=[%- mv.authtypecode | uri -%]&index=[%- mv.id | uri -%]','[%- mv.id | uri -%]'); return false;" title="Tag editor">...</a>
-                                            [% ELSIF ( mv.type == 'text2' ) %]
-                                                <input type="text" id="[%- mv.id | html -%]" name="field_value" class="input_marceditor" size="50" maxlength="255" value="[%- mv.value | html -%]" />
-                                                [% IF mv.noclick %]
-                                                    <a href="#" class="buttonDot disabled" title="No popup">...</a>
-                                                [% ELSE %]
-                                                    <a href="#" id="buttonDot_[% mv.id | html %]" class="buttonDot" title="Tag editor">...</a>
-                                                [% END %]
-                                            [% ELSIF ( mv.type == 'text' ) %]
-                                                <input type="text" tabindex="1" id="[%- mv.id | html -%]" name="field_value" class="input_marceditor" size="50" maxlength="255" value="[%- mv.value | html -%]" />
-                                            [% ELSIF ( mv.type == 'hidden' ) %]
-                                                <input type="hidden" tabindex="1" id="[%- mv.id | html -%]" name="field_value" class="input_marceditor" size="50" maxlength="255" value="[%- mv.value | html -%]" />
-                                            [% ELSIF ( mv.type == 'textarea' ) %]
-                                                <textarea tabindex="1" id="[%- mv.id | html -%]" name="field_value" class="input_marceditor" size="50" maxlength="255">[%- mv.value | html -%]"</textarea>
-                                            [%- END # /IF mv.type == ... -%]
-
-                                            <span name="regex_fields" style="display: none;">
-                                                s/<input type="text" id="[% mv.id | html %]" name="regex_search" placeholder="regex pattern" />/
-                                                <input type="text" id="[% mv.id | html %]" name="regex_replace" placeholder="regex replacement" />/
-                                                <input type="text" id="[% mv.id | html %]" name="regex_modifiers" placeholder="ig" size="3" />
-                                            </span>
-
-                                            [% UNLESS ( ite.mandatory ) %]
-                                                <input type="checkbox" id="row[% ite.tag | html %][% ite.subfield | html %][% ite.random | html %]" title="Check to delete subfield [% ite.subfield | html %]" name="disable_input" value="[% ite.subfield | html %]" />
-                                            [% ELSE %]
-                                                <span class="required">Required</span>
-                                            [% END %]
-
-                                            [% IF (mv.type == 'text' || mv.type == 'text2' || mv.type == 'textarea' ) %]
-                                                <a href="#" name="field_regex" id="[% ite.id | html %]" >RegEx</a>
-                                            [% END %]
-
-                                            <input type="hidden" name="tag" value="[% ite.tag | html %]" />
-                                            <input type="hidden" name="subfield" value="[% ite.subfield | html %]" />
-                                            <input type="hidden" name="mandatory" value="[% ite.mandatory | html %]" />
-                                            [% IF ( ite.repeatable ) %]
-                                                <a href="#" class="buttonPlus" onclick="CloneItemSubfield(this.parentNode.parentNode); return false;">
-                                                    <img src="[% interface | html %]/[% theme | html %]/img/clone-subfield.png" alt="Clone" title="Clone this subfield" />
-                                                </a>
-                                            [% END %]
-                                            <span class="hint" id="hint[% ite.tag | html %][% ite.subfield | html %][% ite.random | html %]"></span>
-                                        </div> <!-- /.subfield_line -->
-                                    </li>
-                                [% END # /FOREACH ite %]
-                            </ol>
+                            [% PROCESS subfields_for_item subfields => subfields, add_regex => 1, add_delete_checkbox => 1 %]
                         </fieldset>
 
                         <fieldset class="rows">

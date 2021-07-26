@@ -24,6 +24,34 @@ use C4::ClassSource qw( GetClassSources );
 use Koha::DateUtils qw( dt_from_string );
 use Koha::Libraries;
 
+=head1 NAME
+
+Koha::UI::Form::Builder::Item
+
+Helper to build a form to add or edit a new item.
+
+=head1 API
+
+=head2 Class methods
+
+=cut
+
+=head3 new
+
+    my $form = Koha::UI::Form::Builder::Item->new(
+        {
+            biblionumber => $biblionumber,
+            item => $current_item,
+        }
+    );
+
+Constructor.
+biblionumber should be passed if we are creating a new item.
+For edition, an hashref representing the item to edit item must be passed.
+
+=cut
+
+
 sub new {
     my ( $class, $params ) = @_;
 
@@ -35,6 +63,12 @@ sub new {
     return $self;
 }
 
+=head3 generate_subfield_form
+
+Generate subfield's info for given tag, subfieldtag, etc.
+
+=cut
+
 sub generate_subfield_form {
 
     my ($self, $params)    = @_;
@@ -45,8 +79,10 @@ sub generate_subfield_form {
     my $libraries   = $params->{libraries};
     my $marc_record = $params->{marc_record};
     my $restricted_edition = $params->{restricted_editition};
+    my $prefill_with_default_values = $params->{prefill_with_default_values};
+    my $branch_limit = $params->{branch_limit};
 
-    my $item = $self->{item};
+    my $item         = $self->{item};
     my $subfield     = $tagslib->{$tag}{$subfieldtag};
     my $biblionumber = $self->{biblionumber};
 
@@ -79,7 +115,7 @@ sub generate_subfield_form {
     $subfield_data{kohafield} =
       $subfield->{kohafield} || 'items.more_subfields_xml';
 
-    if ( !defined($value) || $value eq '' ) {
+    if ( $prefill_with_default_values && ( !defined($value) || $value eq '' ) ) {
         $value = $subfield->{defaultvalue};
         if ($value) {
 
@@ -108,7 +144,9 @@ sub generate_subfield_form {
       if ( ( $subfield->{hidden} > 4 ) || ( $subfield->{hidden} <= -4 ) );
 
     my $pref_itemcallnumber = C4::Context->preference('itemcallnumber');
-    if (  !$value
+    if (  $prefill_with_default_values
+        && !$value
+        && $subfield->{kohafield}
         && $subfield->{kohafield} eq 'items.itemcallnumber'
         && $pref_itemcallnumber )
     {
@@ -126,22 +164,6 @@ sub generate_subfield_form {
             $value = $temp2->as_string( $CNsubfields, ' ' );
             last if $value;
         }
-    }
-
-    my $default_location = C4::Context->preference('NewItemsDefaultLocation');
-    if (  !$value
-        && $subfield->{kohafield} eq 'items.location'
-        && $default_location )
-    {
-        $value = $default_location;
-    }
-
-    if (   $frameworkcode eq 'FA'
-        && $subfield->{kohafield} eq 'items.barcode'
-        && !$value )
-    {
-        my $input = CGI->new;
-        $value = $input->param('barcode');
     }
 
     if ( $subfield->{authorised_value} ) {
@@ -178,8 +200,6 @@ sub generate_subfield_form {
         }
         elsif ( $subfield->{authorised_value} eq "itemtypes" ) {
             push @authorised_values, "";
-            my $branch_limit =
-              C4::Context->userenv && C4::Context->userenv->{"branch"};
             my $itemtypes;
             if ($branch_limit) {
                 $itemtypes = Koha::ItemTypes->search_with_localization(
@@ -194,7 +214,7 @@ sub generate_subfield_form {
                   $itemtype->translated_description;
             }
 
-            unless ($value) {
+            if (!$value && $biblionumber) {
                 my $itype_sth = $dbh->prepare(
                     "SELECT itemtype FROM biblioitems WHERE biblionumber = ?");
                 $itype_sth->execute($biblionumber);
@@ -219,7 +239,7 @@ sub generate_subfield_form {
                 $authorised_lib{$class_source} =
                   $class_sources->{$class_source}->{'description'};
             }
-            $value = $default_source unless ($value);
+            $value = $default_source if !$value && $prefill_with_default_values;
 
             #---- "true" authorised value
         }
@@ -380,16 +400,82 @@ sub generate_subfield_form {
     return \%subfield_data;
 }
 
+    my $subfields =
+      Koha::UI::Form::Builder::Item->new(
+        { biblionumber => $biblionumber, item => $current_item } )->edit_form(
+        {
+            branchcode           => $branchcode,
+            restricted_editition => $restrictededition,
+            (
+                @subfields_to_prefill
+                ? ( subfields_to_prefill => \@subfields_to_prefill )
+                : ()
+            ),
+            prefill_with_default_values => 1,
+            branch_limit => C4::Context->userenv->{"branch"},
+        }
+    );
+
+Returns the list of subfields to display on the add/edit item form.
+
+Use it in the view with:
+  [% PROCESS subfields_for_item subfields => subfields %]
+
+Parameters:
+
+=over
+
+=item branchcode
+
+Pre-select a library (for logged in user)
+
+=item restricted_editition
+
+Flag to restrict the edition if the user does not have necessary permissions.
+
+=item subfields_to_prefill
+
+List of subfields to prefill (value of syspref SubfieldsToUseWhenPrefill)
+
+=item subfields_to_allow
+
+List of subfields to allow (value of syspref SubfieldsToAllowForRestrictedBatchmod)
+
+=item subfields_to_ignore
+
+List of subfields to ignore/skip
+
+=item prefill_with_default_values
+
+Flag to prefill with the default values defined in the framework.
+
+=item branch_limit
+
+Limit info depending on the library (so far only item types).
+
+=item default_branches_empty
+
+Flag to add an empty option to the library list.
+
+=back
+
+=cut
+
 sub edit_form {
     my ( $self, $params ) = @_;
 
     my $branchcode         = $params->{branchcode};
     my $restricted_edition = $params->{restricted_editition};
     my $subfields_to_prefill = $params->{subfields_to_prefill} || [];
+    my $subfields_to_allow = $params->{subfields_to_allow} || [];
+    my $subfields_to_ignore= $params->{subfields_to_ignore} || [];
+    my $prefill_with_default_values = $params->{prefill_with_default_values};
+    my $branch_limit = $params->{branch_limit};
+
     my $libraries =
       Koha::Libraries->search( {}, { order_by => ['branchname'] } )->unblessed;
     for my $library (@$libraries) {
-        $library->{selected} = 1 if $library->{branchcode} eq $branchcode;
+        $library->{selected} = 1 if $branchcode && $library->{branchcode} eq $branchcode;
     }
 
     my $item           = $self->{item};
@@ -405,7 +491,11 @@ sub edit_form {
             my $subfield = $tagslib->{$tag}{$subfieldtag};
 
             next if IsMarcStructureInternal($subfield);
-            next if ( $subfield->{tab} ne "10" );
+            next if $subfield->{tab} ne "10";
+            next if @$subfields_to_allow && !grep { $subfield->{kohafield} eq $_ } @$subfields_to_allow;
+            next
+              if grep { $subfield->{kohafield} && $subfield->{kohafield} eq $_ }
+              @$subfields_to_ignore;
 
             my @values = ();
 
@@ -442,12 +532,19 @@ sub edit_form {
 
             for my $value (@values) {
                 my $subfield_data = $self->generate_subfield_form(
-                    {tag => $tag,          subfieldtag => $subfieldtag,      value => $value,
-                    tagslib => $tagslib,      libraries => $libraries,
-                    marc_record => $marc_record, restricted_edition => $restricted_edition,
-                });
+                    {
+                        tag                => $tag,
+                        subfieldtag        => $subfieldtag,
+                        value              => $value,
+                        tagslib            => $tagslib,
+                        libraries          => $libraries,
+                        marc_record        => $marc_record,
+                        restricted_edition => $restricted_edition,
+                        prefill_with_default_values => $prefill_with_default_values,
+                        branch_limit       => $branch_limit,
+                    }
+                );
                 push @subfields, $subfield_data;
-                $i++;
             }
         }
     }
