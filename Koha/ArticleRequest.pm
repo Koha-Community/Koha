@@ -27,6 +27,7 @@ use Koha::Items;
 use Koha::Libraries;
 use Koha::DateUtils qw( dt_from_string );
 use Koha::ArticleRequest::Status;
+use Koha::Exceptions::ArticleRequest;
 
 use base qw(Koha::Object);
 
@@ -50,6 +51,10 @@ Marks the article as requested. Send a notification if appropriate.
 
 sub request {
     my ($self) = @_;
+
+    Koha::Exceptions::ArticleRequest::LimitReached->throw(
+        error => 'Patron cannot request more articles for today'
+    ) unless $self->borrower->can_request_article;
 
     $self->status(Koha::ArticleRequest::Status::Requested);
     $self->SUPER::store();

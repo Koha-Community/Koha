@@ -19,12 +19,13 @@
 
 use Modern::Perl;
 
-use Test::More tests => 8;
+use Test::More tests => 9;
 use Test::Exception;
 use Test::Warn;
 
 use Koha::Database;
 use Koha::DateUtils qw(dt_from_string);
+use Koha::ArticleRequests;
 use Koha::Patrons;
 use Koha::Patron::Relationships;
 
@@ -713,6 +714,120 @@ subtest 'can_log_into() tests' => sub {
     $patron->set({ flags => undef })->store->discard_changes;
     ok( $patron->can_log_into( $patron->library ), 'Patron can log into its own library' );
     ok( $patron->can_log_into( $library ), 'Patron can log into any library' );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'can_request_article() tests' => sub {
+
+    plan tests => 13;
+
+    $schema->storage->txn_begin;
+
+    t::lib::Mocks::mock_preference( 'ArticleRequests', 1 );
+
+    my $item = $builder->build_sample_item;
+
+    my $category = $builder->build_object(
+        {
+            class => 'Koha::Patron::Categories',
+            value => {
+                article_request_limit => 1
+            }
+        }
+    );
+    my $patron = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => {
+                categorycode => $category->categorycode
+            },
+        }
+    );
+
+    is( $patron->can_request_article,
+        1, 'There are no AR, so patron can request more articles' );
+
+    my $article_request_1 = Koha::ArticleRequest->new(
+        {
+            borrowernumber => $patron->id,
+            biblionumber   => $item->biblionumber,
+            itemnumber     => $item->itemnumber,
+            title          => 'an article request',
+        }
+    )->request;
+
+    is( $patron->can_request_article,
+        0, 'Limit is 1, so patron cannot request more articles' );
+    is( $patron->article_requests->count,
+        1, 'There is one current article request' );
+
+    throws_ok {
+        Koha::ArticleRequest->new(
+            {
+                borrowernumber => $patron->id,
+                biblionumber   => $item->biblionumber,
+                itemnumber     => $item->itemnumber,
+                title          => 'a second article request',
+            }
+        )->request;
+    }
+    'Koha::Exceptions::ArticleRequest::LimitReached',
+      'When limit was reached and we ask for a new AR, Limit reached is thrown';
+
+    is( $patron->can_request_article,
+        0, 'There is still an AR, so patron cannot request more articles' );
+    is( $patron->article_requests->count,
+        1, 'There is still one article request' );
+
+    $article_request_1->complete();
+
+    is( $patron->can_request_article, 0,
+'AR was completed but within one day, so patron cannot request more articles'
+    );
+
+    $article_request_1->updated_on( dt_from_string->add( days => -2 ) )
+      ->store();
+
+    is( $patron->can_request_article, 1,
+'There are no completed AR within one day, so patron can request more articles'
+    );
+
+    my $article_request_3 = Koha::ArticleRequest->new(
+        {
+            borrowernumber => $patron->id,
+            biblionumber   => $item->biblionumber,
+            itemnumber     => $item->itemnumber,
+            title          => 'a third article request',
+        }
+    )->request;
+
+    is( $patron->can_request_article,
+        0, 'A new AR was created, so patron cannot request more articles' );
+    is( $patron->article_requests->count, 2, 'There are 2 article requests' );
+
+    $article_request_3->cancel();
+
+    is( $patron->can_request_article,
+        1, 'New AR was cancelled, so patron can request more articles' );
+
+    my $article_request_4 = Koha::ArticleRequest->new(
+        {
+            borrowernumber => $patron->id,
+            biblionumber   => $item->biblionumber,
+            itemnumber     => $item->itemnumber,
+            title          => 'an fourth article request',
+        }
+    )->request;
+
+    $article_request_4->updated_on( dt_from_string->add( days => -30 ) )
+      ->store();
+
+    is( $patron->can_request_article, 0,
+'There is an old AR but not completed or cancelled, so patron cannot request more articles'
+    );
+    is( $patron->article_requests->count,
+        3, 'There are 3 current article requests' );
 
     $schema->storage->txn_rollback;
 };

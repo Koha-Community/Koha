@@ -27,6 +27,7 @@ use C4::Serials qw( CountSubscriptionFromBiblionumber );
 use Koha::Biblios;
 use Koha::Patrons;
 use Koha::ArticleRequests;
+use Try::Tiny;
 
 my $cgi = CGI->new;
 
@@ -68,23 +69,29 @@ if ( $action eq 'create' ) {
     my $patron_notes = $cgi->param('patron_notes') || undef;
     my $format       = $cgi->param('format')       || undef;
 
-    my $ar = Koha::ArticleRequest->new(
-        {
-            borrowernumber => $borrowernumber,
-            biblionumber   => $biblionumber,
-            branchcode     => $branchcode,
-            itemnumber     => $itemnumber,
-            title          => $title,
-            author         => $author,
-            volume         => $volume,
-            issue          => $issue,
-            date           => $date,
-            pages          => $pages,
-            chapters       => $chapters,
-            patron_notes   => $patron_notes,
-            format         => $format,
-        }
-    )->store();
+    try {
+        my $ar = Koha::ArticleRequest->new(
+            {
+                borrowernumber => $borrowernumber,
+                biblionumber   => $biblionumber,
+                branchcode     => $branchcode,
+                itemnumber     => $itemnumber,
+                title          => $title,
+                author         => $author,
+                volume         => $volume,
+                issue          => $issue,
+                date           => $date,
+                pages          => $pages,
+                chapters       => $chapters,
+                patron_notes   => $patron_notes,
+                format         => $format,
+            }
+        )->store();
+    } catch {
+        $template->param(
+            error_message => $_->{message}
+        );
+    };
 
 }
 
@@ -107,6 +114,13 @@ if ( !$patron && $patron_cardnumber ) {
     else {
         $template->param( no_patrons_found => $patron_cardnumber );
     }
+}
+
+if( $patron && !$patron->can_request_article) {
+    $patron = undef;
+    $template->param(
+        error_message => 'Patron cannot request more articles for today'
+    );
 }
 
 $template->param(

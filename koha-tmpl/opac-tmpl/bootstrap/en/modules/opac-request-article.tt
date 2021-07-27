@@ -33,7 +33,7 @@
     <div class="container-fluid maincontent">
         <div class="row">
             <div class="col">
-                [% IF biblio.can_article_request( patron ) %]
+                [% IF !error_message && biblio.can_article_request( patron ) %]
                     <h1>Place article request for [% biblio.title | html %]</h1>
                     [% IF ( disclaimer && !action) %]
                         <div class="alert alert-warning">
@@ -216,6 +216,11 @@
                             <input type="submit" class="btn btn-primary" value="Place request" />
                         </form>
                     [% END %]
+                [% ELSIF error_message %]
+                    <h1 class="title">[% biblio.title | html %]</h1>
+                    <div class="alert alert-info">
+                        [% error_message | html %]
+                    </div>
                 [% ELSE %]
                     <h1 class="title">[% biblio.title | html %]</h1>
                     <div class="alert alert-info">

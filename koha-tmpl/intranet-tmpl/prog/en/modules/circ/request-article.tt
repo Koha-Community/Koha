@@ -46,6 +46,11 @@
             <main>
 
                     <h1>Request article from [% INCLUDE 'biblio-title.inc' link = 1 %]</h1>
+                    [% IF error_message %]
+                        <div class="dialog alert">
+                            <p>[% error_message | html %]</p>
+                        </div>
+                    [% END %]
                     [% IF no_patrons_found %]
                         <div class="dialog alert">
                             <h3>Patron not found</h3>

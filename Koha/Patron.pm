@@ -958,6 +958,29 @@ sub move_to_deleted {
     return Koha::Database->new->schema->resultset('Deletedborrower')->create($patron_infos);
 }
 
+=head3 can_request_article
+
+my $can_request = $borrower->can_request_article
+
+Returns true if patron can request articles
+
+=cut
+
+sub can_request_article {
+    my ($self) = @_;
+    my $limit = $self->category->article_request_limit;
+
+    return 1 unless defined $limit;
+
+    my $dtf = Koha::Database->new->schema->storage->datetime_parser;
+    my $compdate = dt_from_string->add( days => -1 );
+    my $count = Koha::ArticleRequests->search([
+        { borrowernumber => $self->borrowernumber, status => ['REQUESTED','PENDING','PROCESSING'] },
+        { borrowernumber => $self->borrowernumber, status => 'COMPLETED', updated_on => { '>', $dtf->format_date($compdate) }},
+    ])->count;
+    return $count < $limit ? 1 : 0;
+}
+
 =head3 article_requests
 
 my @requests = $borrower->article_requests();

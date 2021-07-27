@@ -26,6 +26,7 @@ use C4::Output qw( output_html_with_http_headers );
 
 use Koha::Biblios;
 use Koha::Patrons;
+use Try::Tiny;
 
 my $cgi = CGI->new;
 
@@ -59,26 +60,33 @@ if ( $action eq 'create' ) {
     my $patron_notes = $cgi->param('patron_notes') || undef;
     my $format       = $cgi->param('format')       || undef;
 
-    my $ar = Koha::ArticleRequest->new(
-        {
-            borrowernumber => $borrowernumber,
-            biblionumber   => $biblionumber,
-            branchcode     => $branchcode,
-            itemnumber     => $itemnumber,
-            title          => $title,
-            author         => $author,
-            volume         => $volume,
-            issue          => $issue,
-            date           => $date,
-            pages          => $pages,
-            chapters       => $chapters,
-            patron_notes   => $patron_notes,
-            format         => $format,
-        }
-    )->store();
+    try {
+        my $ar = Koha::ArticleRequest->new(
+            {
+                borrowernumber => $borrowernumber,
+                biblionumber   => $biblionumber,
+                branchcode     => $branchcode,
+                itemnumber     => $itemnumber,
+                title          => $title,
+                author         => $author,
+                volume         => $volume,
+                issue          => $issue,
+                date           => $date,
+                pages          => $pages,
+                chapters       => $chapters,
+                patron_notes   => $patron_notes,
+                format         => $format,
+            }
+        )->store();
 
-    print $cgi->redirect("/cgi-bin/koha/opac-user.pl#opac-user-article-requests");
-    exit;
+        print $cgi->redirect("/cgi-bin/koha/opac-user.pl#opac-user-article-requests");
+        exit;
+    } catch {
+        exit unless $_->[0] && $_->[0] eq 'EXIT';
+        $template->param(
+            error_message => $_->{message}
+        );
+    };
 # Should we redirect?
 }
 elsif ( !$action && C4::Context->preference('ArticleRequestsOpacHostRedirection') ) {
@@ -95,6 +103,12 @@ elsif ( !$action && C4::Context->preference('ArticleRequestsOpacHostRedirection'
 }
 
 my $patron = Koha::Patrons->find($borrowernumber);
+
+if(!$patron->can_request_article) {
+    $template->param(
+        error_message => 'You cannot request more articles for today'
+    );
+}
 
 $template->param(
     biblio => $biblio,
