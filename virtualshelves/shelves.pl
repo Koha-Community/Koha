@@ -30,7 +30,7 @@ use C4::Koha qw(
 use C4::Items qw( GetItemsLocationInfo );
 use C4::Members;
 use C4::Output qw( pagination_bar output_html_with_http_headers );
-use C4::XSLT;
+use C4::XSLT qw( XSLTParse4Display );
 
 use Koha::Biblios;
 use Koha::Biblioitems;
