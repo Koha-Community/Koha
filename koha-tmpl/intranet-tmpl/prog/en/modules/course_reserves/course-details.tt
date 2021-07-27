@@ -292,13 +292,7 @@
                                     </td>
 
                                     <td class="status">
-                                        <span>
-                                        [% IF cr.item.onloan %]
-                                            <span>Checked out</span>
-                                        [% ELSE %]
-                                            <span>Available</span>
-                                        [% END %]
-                                        </span>
+                                        [% INCLUDE 'item-status.inc' item=cr.item issue=cr.issue %]
                                     </td>
 
                                     [% IF CAN_user_coursereserves_add_reserves || CAN_user_coursereserves_delete_reserves %]
