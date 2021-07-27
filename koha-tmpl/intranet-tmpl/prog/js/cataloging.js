@@ -543,6 +543,14 @@ function CloneItemSubfield(original){
     var new_id = original.getAttribute('id')+new_key;
     clone.setAttribute('id',new_id);
 
+    // Don't clone "RegEx". We don't handle it for repeatable subfields
+    var links = clone.getElementsByTagName('a');
+    for( i = 0 ,len = links.length ; i < len ; i++){
+        if( $(links[i]).hasClass('field_regex') ) {
+            $(links[i]).remove();
+        }
+    }
+
     // insert this line on the page
     original.parentNode.insertBefore(clone,original.nextSibling);
     Select2Utils.initSelect2($(original).find('select'));

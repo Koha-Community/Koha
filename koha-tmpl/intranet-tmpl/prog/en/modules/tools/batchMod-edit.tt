@@ -260,6 +260,13 @@
                         $(tag_editor).hide();
                         $(this).html('Text');
                         $(disable_input).prop('disabled', true);
+                        let input_name = $(editor).attr('name');
+                        let cloned = $("input[name='"+input_name+"']");
+                        if ( cloned.length > 1 ) {
+                            for( i = 1 ; i < cloned.length ; i++){
+                                $(cloned[i]).parent().remove();
+                            }
+                        }
                     } else {
                         $(editor).show();
                         $(tag_editor).show();
