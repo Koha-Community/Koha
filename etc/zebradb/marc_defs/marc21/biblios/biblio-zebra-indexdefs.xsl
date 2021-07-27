@@ -56,6 +56,9 @@ definition file (probably something like {biblio,authority}-koha-indexdefs.xml) 
     <z:index name="Bib-level:w">
       <xslo:value-of select="substring(., 8, 1)"/>
     </z:index>
+    <z:index name="Multipart-resource-level:w">
+      <xslo:value-of select="substring(., 20, 1)"/>
+    </z:index>
   </xslo:template>
   <xslo:template match="marc:controlfield[@tag='001']">
     <z:index name="Control-number:w">

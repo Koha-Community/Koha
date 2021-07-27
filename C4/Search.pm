@@ -1065,6 +1065,7 @@ sub getIndexes{
                     'mc-itemtype',
                     'mc-rtype',
                     'mus',
+                    'Multipart-resource-level',
                     'name',
                     'Music-number',
                     'Name-geographic',
