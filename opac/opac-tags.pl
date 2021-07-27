@@ -48,7 +48,7 @@ use C4::Tags qw(
     remove_tag
     stratify_tags
 );
-use C4::XSLT;
+use C4::XSLT qw( XSLTParse4Display );
 
 
 use Koha::Logger;
