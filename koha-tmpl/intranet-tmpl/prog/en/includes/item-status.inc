@@ -62,17 +62,14 @@
     [% END %]
 [% END %]
 
-
-[% IF NOT ( item.isa('Koha::Item') ) AND item.itemnotforloan %]
+[% IF ( item.notforloan ) %]
     [% SET itemavailable = 0 %]
-    [% IF ( item.notforloanvalueopac ) %]
-        <span class="item-status notforloan">[% item.notforloanvalueopac | html %]</span>
+    [% av_lib_include = AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.notforloan', authorised_value => item.notforloan ) %]
+    [% IF av_lib_include %]
+        <span class="item-status notforloan">[% av_lib_include | html %]</span>
     [% ELSE %]
         <span class="item-status notforloan">Not for loan</span>
     [% END %]
-[% ELSIF NOT ( item.isa('Koha::Item') ) AND item.notforloan_per_itemtype %]
-    [% SET itemavailable = 0 %]
-    <span class="item-status notforloan">Not for loan</span>
 [% END %]
 
 [% IF ( item.damaged ) %]
