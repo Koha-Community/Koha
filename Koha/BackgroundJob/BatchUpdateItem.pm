@@ -17,6 +17,7 @@ package Koha::BackgroundJob::BatchUpdateItem;
 
 use Modern::Perl;
 use JSON qw( encode_json decode_json );
+use Encode qw( encode_utf8 );
 use List::MoreUtils qw( uniq );
 use Try::Tiny;
 
@@ -138,7 +139,7 @@ sub process {
           if ( $_ =~ /Rollback failed/ );    # Rollback failed
     };
 
-    my $job_data = decode_json $job->data;
+    my $job_data = decode_json encode_utf8 $job->data;
     $job_data->{report} = $report;
 
     $job->ended_on(dt_from_string)->data( encode_json $job_data);

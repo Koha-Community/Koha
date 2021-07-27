@@ -17,6 +17,7 @@ package Koha::BackgroundJob;
 
 use Modern::Perl;
 use JSON qw( decode_json encode_json );
+use Encode qw( encode_utf8 );
 use Carp qw( croak );
 use Net::Stomp;
 use Try::Tiny qw( catch try );
@@ -182,7 +183,7 @@ sub messages {
     my ( $self ) = @_;
 
     my @messages;
-    my $data_dump = decode_json $self->data;
+    my $data_dump = decode_json encode_utf8 $self->data;
     if ( exists $data_dump->{messages} ) {
         @messages = @{ $data_dump->{messages} };
     }
@@ -199,7 +200,7 @@ Report of the job.
 sub report {
     my ( $self ) = @_;
 
-    my $data_dump = decode_json $self->data;
+    my $data_dump = decode_json encode_utf8 $self->data;
     return $data_dump->{report} || {};
 }
 
