@@ -263,6 +263,7 @@ if ( $op eq 'view' ) {
                 $sortfield = $shelf->sortfield;
                 $direction = 'asc';
             }
+            if( defined( $query->param('direction') ) ){ $direction = $query->param('direction'); }
             $sortfield = 'title' if !$sortfield or !grep { $_ eq $sortfield } qw( title author copyrightdate itemcallnumber dateadded );
             $direction = 'asc' if !$direction or ( $direction ne 'asc' and $direction ne 'desc' );
             my ( $page, $rows );
