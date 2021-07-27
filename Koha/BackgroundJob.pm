@@ -26,8 +26,10 @@ use Koha::DateUtils qw( dt_from_string );
 use Koha::Exceptions;
 use Koha::BackgroundJob::BatchUpdateBiblio;
 use Koha::BackgroundJob::BatchUpdateAuthority;
+use Koha::BackgroundJob::BatchUpdateItem;
 use Koha::BackgroundJob::BatchDeleteBiblio;
 use Koha::BackgroundJob::BatchDeleteAuthority;
+use Koha::BackgroundJob::BatchDeleteItem;
 use Koha::BackgroundJob::BatchCancelHold;
 
 use base qw( Koha::Object );
@@ -198,7 +200,7 @@ sub report {
     my ( $self ) = @_;
 
     my $data_dump = decode_json $self->data;
-    return $data_dump->{report};
+    return $data_dump->{report} || {};
 }
 
 =head3 additional_report
@@ -256,6 +258,8 @@ sub type_to_class_mapping {
         batch_authority_record_modification => 'Koha::BackgroundJob::BatchUpdateAuthority',
         batch_biblio_record_deletion        => 'Koha::BackgroundJob::BatchDeleteBiblio',
         batch_biblio_record_modification    => 'Koha::BackgroundJob::BatchUpdateBiblio',
+        batch_item_record_deletion          => 'Koha::BackgroundJob::BatchDeleteItem',
+        batch_item_record_modification      => 'Koha::BackgroundJob::BatchUpdateItem',
         batch_hold_cancel                   => 'Koha::BackgroundJob::BatchCancelHold',
     };
 }

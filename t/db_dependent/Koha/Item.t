@@ -109,11 +109,12 @@ subtest 'has_pending_hold() tests' => sub {
 subtest "as_marc_field() tests" => sub {
 
     my $mss = C4::Biblio::GetMarcSubfieldStructure( '' );
+    my ( $itemtag, $itemtagsubfield) = C4::Biblio::GetMarcFromKohaField( "items.itemnumber" );
 
     my @schema_columns = $schema->resultset('Item')->result_source->columns;
     my @mapped_columns = grep { exists $mss->{'items.'.$_} } @schema_columns;
 
-    plan tests => 2 * (scalar @mapped_columns + 1) + 2;
+    plan tests => 2 * (scalar @mapped_columns + 1) + 3;
 
     $schema->storage->txn_begin;
 
@@ -126,7 +127,7 @@ subtest "as_marc_field() tests" => sub {
 
     is(
         $marc_field->tag,
-        $mss->{'items.itemnumber'}[0]->{tagfield},
+        $itemtag,
         'Generated field set the right tag number'
     );
 
@@ -141,7 +142,7 @@ subtest "as_marc_field() tests" => sub {
 
     is(
         $marc_field->tag,
-        $mss->{'items.itemnumber'}[0]->{tagfield},
+        $itemtag,
         'Generated field set the right tag number'
     );
 
@@ -154,25 +155,36 @@ subtest "as_marc_field() tests" => sub {
     my $unmapped_subfield = Koha::MarcSubfieldStructure->new(
         {
             frameworkcode => '',
-            tagfield      => $mss->{'items.itemnumber'}[0]->{tagfield},
+            tagfield      => $itemtag,
             tagsubfield   => 'X',
         }
     )->store;
 
-    $mss = C4::Biblio::GetMarcSubfieldStructure( '' );
     my @unlinked_subfields;
     push @unlinked_subfields, X => 'Something weird';
     $item->more_subfields_xml( C4::Items::_get_unlinked_subfields_xml( \@unlinked_subfields ) )->store;
 
+    Koha::Caches->get_instance->clear_from_cache( "MarcStructure-1-" );
+    Koha::MarcSubfieldStructures->search(
+        { frameworkcode => '', tagfield => $itemtag } )
+      ->update( { display_order => \['FLOOR( 1 + RAND( ) * 10 )'] } );
+
     $marc_field = $item->as_marc_field;
 
+    my $tagslib = C4::Biblio::GetMarcStructure(1, '');
     my @subfields = $marc_field->subfields;
     my $result = all { defined $_->[1] } @subfields;
     ok( $result, 'There are no undef subfields' );
+    my @ordered_subfields = sort {
+            $tagslib->{$itemtag}->{ $a->[0] }->{display_order}
+        <=> $tagslib->{$itemtag}->{ $b->[0] }->{display_order}
+    } @subfields;
+    is_deeply(\@subfields, \@ordered_subfields);
 
     is( scalar $marc_field->subfield('X'), 'Something weird', 'more_subfield_xml is considered' );
 
     $schema->storage->txn_rollback;
+    Koha::Caches->get_instance->clear_from_cache( "MarcStructure-1-" );
 };
 
 subtest 'pickup_locations' => sub {

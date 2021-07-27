@@ -31,8 +31,10 @@ try {
 my @job_types = qw(
     batch_biblio_record_modification
     batch_authority_record_modification
+    batch_item_record_modification
     batch_biblio_record_deletion
     batch_authority_record_deletion
+    batch_item_record_deletion
     batch_hold_cancel
 );
 

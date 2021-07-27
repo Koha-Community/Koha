@@ -1,4 +1,5 @@
 [% USE raw %]
+[% USE KohaDates %]
 [% USE Asset %]
 [% USE KohaDates %]
 [% SET footerjs = 1 %]
@@ -19,16 +20,24 @@
     [% END -%]
 [% END %]
 [% BLOCK show_job_type %]
-    [% SWITCH job.type %]
-        [% CASE "batch_biblio_record_modification" %]
-            Batch bibliographic record modification
-        [% CASE "batch_authority_record_modification" %]
-            Batch authority record modification
-        [% CASE "batch_hold_cancel" %]
-            Batch hold cancellation
-        [% CASE # Default case %]
-            [% job.type | html %]
+    [% SWITCH job_type %]
+    [% CASE 'batch_biblio_record_modification' %]
+        Batch bibliographic record modification
+    [% CASE 'batch_biblio_record_deletion' %]
+        Batch bibliographic record record deletion
+    [% CASE 'batch_authority_record_modification' %]
+        Batch authority record modification
+    [% CASE 'batch_authority_record_deletion' %]
+        Batch authority record deletion
+    [% CASE 'batch_item_record_modification' %]
+        Batch item record modification
+    [% CASE 'batch_item_record_deletion' %]
+        Batch item record deletion
+    [% CASE "batch_hold_cancel" %]
+        Batch hold cancellation
+    [% CASE %]Unknown job type '[% job_type | html %]'
     [% END %]
+
 [% END %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>
@@ -107,7 +116,7 @@
             <li><label for="job_progress">Progress: </label>[% job.progress || 0 | html %] / [% job.size | html %]</li>
             <li>
                 <label for="job_type">Type: </label>
-                [% PROCESS show_job_type %]
+                [% PROCESS show_job_type job_type => job.type %]
             </li>
             <li>
                 <label for="job_enqueued_on">Queued: </label>
@@ -164,14 +173,7 @@
                     </td>
                     <td>[% job.progress || 0 | html %] / [% job.size | html %]</td>
                     <td>
-                        [% SWITCH job.type %]
-                        [% CASE 'batch_biblio_record_modification' %]Batch bibliographic record modification
-                        [% CASE 'batch_biblio_record_deletion' %]Batch bibliographic record record deletion
-                        [% CASE 'batch_authority_record_modification' %]Batch authority record modification
-                        [% CASE 'batch_authority_record_deletion' %]Batch authority record deletion
-                        [% CASE "batch_hold_cancel" %]Batch hold cancellation
-                        [% CASE %][% job.type | html %]
-                        [% END %]
+                        [% PROCESS show_job_type job_type => job.type %]
                     </td>
                     <td>[% job.enqueued_on | $KohaDates with_hours = 1 %]</td>
                     <td>[% job.started_on| $KohaDates with_hours = 1 %]</td>
@@ -217,10 +219,11 @@
                 "sPaginationType": "full_numbers"
             }));
 
-            [% IF op == 'view' %]
-                [% PROCESS 'js' %]
-            [% END %]
         });
     </script>
+    [% IF op == 'view' %]
+        [% PROCESS 'js' %]
+    [% END %]
 [% END %]
+
 [% INCLUDE 'intranet-bottom.inc' %]

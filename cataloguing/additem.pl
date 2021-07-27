@@ -509,7 +509,7 @@ my @witness_attributes = uniq map {
     map { defined $item->{$_} && $item->{$_} ne "" ? $_ : () } keys %$item
 } @items;
 
-our ( $itemtagfield, $itemtagsubfield ) = &GetMarcFromKohaField("items.itemnumber");
+our ( $itemtagfield, $itemtagsubfield ) = GetMarcFromKohaField("items.itemnumber");
 
 my $subfieldcode_attribute_mappings;
 for my $subfield_code ( keys %{ $tagslib->{$itemtagfield} } ) {
@@ -562,12 +562,21 @@ if ( $nextop eq 'additem' && $prefillitem ) {
     # Setting to 1 element if SubfieldsToUseWhenPrefill is empty to prevent all the subfields to be prefilled
     @subfields_to_prefill = split(' ', C4::Context->preference('SubfieldsToUseWhenPrefill')) || ("");
 }
+
+# Getting list of subfields to keep when restricted editing is enabled
+my @subfields_to_allow = $restrictededition ? split ' ', C4::Context->preference('SubfieldsToAllowForRestrictedEditing') : ();
+
 my $subfields =
   Koha::UI::Form::Builder::Item->new(
     { biblionumber => $biblionumber, item => $current_item } )->edit_form(
     {
         branchcode           => $branchcode,
         restricted_editition => $restrictededition,
+        (
+            @subfields_to_allow
+            ? ( subfields_to_allow => \@subfields_to_allow )
+            : ()
+        ),
         (
             @subfields_to_prefill
             ? ( subfields_to_prefill => \@subfields_to_prefill )
@@ -596,8 +605,6 @@ $template->param(
     subfields        => $subfields,
     itemnumber       => $itemnumber,
     barcode          => $current_item->{barcode},
-    itemtagfield     => $itemtagfield,
-    itemtagsubfield  => $itemtagsubfield,
     op      => $nextop,
     popup => scalar $input->param('popup') ? 1: 0,
     C4::Search::enabled_staff_search_views,

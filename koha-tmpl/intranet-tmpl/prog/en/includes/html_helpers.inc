@@ -181,3 +181,133 @@
         [% END %]
     </ol>
 [% END %]
+
+[% BLOCK items_table_batchmod %]
+
+    [% IF display_columns_selection %][%# Needs js/pages/batchMod.js %]
+        [% IF checkboxes_edit OR checkboxes_delete %]
+            <div id="toolbar">
+                <a id="selectallbutton" href="#"><i class="fa fa-check"></i> Select all</a> | <a id="clearallbutton" href="#"><i class="fa fa-remove"></i> Clear all</a> | <a id="clearonloanbutton" href="#">Clear on loan</a>
+            </div>
+        [% END %]
+
+        <div id="cataloguing_additem_itemlist">
+
+            <p id="selections">
+                <strong>Show/hide columns:</strong>
+                <span class="selected">
+                    <input type="checkbox" checked="checked" id="showall" />
+                    <label for="showall">Show all columns</label>
+                </span>
+                <span>
+                    <input type="checkbox" id="hideall" />
+                    <label for="hideall">Hide all columns</label>
+                </span>
+
+                [% FOREACH header IN item_header_loop %]
+                    <span class="selected">
+                        <input id="checkheader[% loop.count | html %]" type="checkbox" checked="checked" />
+                        <label for="checkheader[% loop.count | html %]">[% header.header_value | html %]</label>
+                    </span>
+                [% END %]
+            </p> <!-- /#selections -->
+        </div>
+    [% END %]
+    [% SET date_fields = [ 'dateaccessioned', 'onloan', 'datelastseen', 'datelastborrowed', 'replacementpricedate' ] %]
+    <table id="itemst">
+        <thead>
+            <tr>
+                [% IF checkboxes_edit OR checkboxes_delete %]
+                    <th></th>
+                [% END %]
+                <th class="anti-the">Title</th>
+                <th class="holds_count" title="Item holds / Total holds">Holds</th>
+                [% FOREACH item_header IN headers %]
+                    [% IF item_header.column_name %]
+                        <th data-colname="[% item_header.column_name | html %]">
+                    [% ELSE %]
+                        <th>
+                    [% END %]
+                        [% item_header.header_value | html %]
+                    </th>
+                [% END %]
+            </tr>
+        </thead>
+        <tbody>
+            [% FOREACH item IN items %]
+                [% SET can_be_edited = ! ( Koha.Preference('IndependentBranches') && ! logged_in_user && item.homebranch != Branches.GetLoggedInBranchcode() ) %]
+
+                <tr>
+                    [% IF checkboxes_edit %]
+                        [% UNLESS can_be_edited%]
+                            <td class="error">Cannot edit</td>
+                        [% ELSE %]
+                            <td>
+                                <input type="checkbox" name="itemnumber" value="[% item.itemnumber | html %]" id="row[% item.itemnumber | html %]" checked="checked" data-is-onloan="[% item.is_checked_out | html %]" />
+                            </td>
+                        [% END %]
+                    [% ELSIF checkboxes_delete %]
+                        [% UNLESS can_be_edited %]
+                            <td class="error">Cannot delete</td>
+                        [% ELSE %]
+                            [% IF item.safe_to_delete == 1 %]
+                                <td><input type="checkbox" name="itemnumber" value="[% item.itemnumber | html %]" id="row[% item.itemnumber | html %]" checked="checked" /></td>
+                            [% ELSE %]
+                                [% SWITCH item.safe_to_delete%]
+                                [% CASE "book_on_loan" %][% SET cannot_delete_reason = t("Item is checked out") %]
+                                [% CASE "not_same_branch" %][% SET cannot_delete_reason = t("Item does not belong to your library") %]
+                                [% CASE "book_reserved" %][% SET cannot_delete_reason = t("Item has a waiting hold") %]
+                                [% CASE "linked_analytics" %][% SET cannot_delete_reason = t("Item has linked analytics") %]
+                                [% CASE "last_item_for_hold" %][% SET cannot_delete_reason = t("Last item for bibliographic record with biblio-level hold on it") %]
+                                [% CASE %][% SET cannot_delete_reason = t("Unknown reason") _ '(' _ item.safe_to_delete _ ')' %]
+                                [% END %]
+
+                                <td><input type="checkbox" name="itemnumber" value="[% item.itemnumber | html %]" id="row[% item.itemnumber | html %]" disabled="disabled" title="[% cannot_delete_reason | html %]"/></td>
+                            [% END %]
+
+                        [% END %]
+                    [% END %]
+                    <td>
+                        <label for="row[% item.itemnumber | html %]">
+                            <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% item.biblionumber | uri %]">
+                                [% item.biblio.title | html %]
+                            </a>
+                            [% IF ( item.biblio.author ) %], by [% item.biblio.author | html %][% END %]
+                        </label>
+                    </td>
+                    <td class="holds_count">
+                        [% IF item.holds %]
+                            [% IF item.item_holds %]
+                                <a href="/cgi-bin/koha/reserve/request.pl?biblionumber=[% item.biblionumber | uri %]" title="Holds on this item: [% item.item_holds | html %] / Total holds on this record: [% item.holds | html -%]" >
+                            [% ELSE %]
+                                <a href="/cgi-bin/koha/reserve/request.pl?biblionumber=[% item.biblionumber | uri %]" title="No holds on this item / Total holds on this record: [% item.holds | html -%]" >
+                            [% END %]
+                        [% ELSE %]
+                            [% IF item.holds %]
+                                <a href="/cgi-bin/koha/reserve/request.pl?biblionumber=[% item.biblionumber | uri %]" title="Holds on this record: [% item.holds | html -%]" >
+                            [% ELSE %]
+                                <a href="/cgi-bin/koha/reserve/request.pl?biblionumber=[% item.biblionumber | uri %]" title="No holds on this record" >
+                            [% END %]
+                        [% END # /IF item.holds %]
+                        [% IF item.holds %]
+                            [% item.item_holds | html %]/[% item.holds | html %]
+                        [% ELSE %]
+                            [% item.holds | html %]
+                        [% END %]
+                        </a>
+                    </td>
+                    [% FOREACH header IN headers %]
+                        [% SET attribute = header.attribute %]
+                        [% IF header.attribute AND date_fields.grep('^' _ attribute _ '$').size %]
+                            <td data-order="[% item.$attribute | html %]">[% item.$attribute | $KohaDates %]</td>
+                        [% ELSE %]
+                            <td>[% item.$attribute | html %]</td>
+                        [% END %]
+                    [% END %]
+
+                </tr>
+            [% END # /FOREACH items %]
+        </tbody>
+    </table> <!-- /#itemst -->
+
+[% END %]

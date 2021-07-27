@@ -38,6 +38,7 @@ use Koha::SearchEngine::Indexer;
 use Koha::Exceptions::Item::Transfer;
 use Koha::Item::Transfer::Limits;
 use Koha::Item::Transfers;
+use Koha::Item::Attributes;
 use Koha::ItemTypes;
 use Koha::Patrons;
 use Koha::Plugins;
@@ -850,8 +851,7 @@ sub has_pending_hold {
 
 =head3 as_marc_field
 
-    my $mss   = C4::Biblio::GetMarcSubfieldStructure( '', { unsafe => 1 } );
-    my $field = $item->as_marc_field({ [ mss => $mss ] });
+    my $field = $item->as_marc_field;
 
 This method returns a MARC::Field object representing the Koha::Item object
 with the current mappings configuration.
@@ -859,37 +859,54 @@ with the current mappings configuration.
 =cut
 
 sub as_marc_field {
-    my ( $self, $params ) = @_;
+    my ( $self ) = @_;
 
-    my $mss = $params->{mss} // C4::Biblio::GetMarcSubfieldStructure( '', { unsafe => 1 } );
-    my $item_tag = $mss->{'items.itemnumber'}[0]->{tagfield};
+    my ( $itemtag, $itemtagsubfield) = C4::Biblio::GetMarcFromKohaField( "items.itemnumber" );
+
+    my $tagslib = C4::Biblio::GetMarcStructure( 1, $self->biblio->frameworkcode, { unsafe => 1 });
 
     my @subfields;
 
-    my @columns = $self->_result->result_source->columns;
+    my $item_field = $tagslib->{$itemtag};
 
-    foreach my $item_field ( @columns ) {
-        my $mapping = $mss->{ "items.$item_field"}[0];
-        my $tagfield    = $mapping->{tagfield};
-        my $tagsubfield = $mapping->{tagsubfield};
-        next if !$tagfield; # TODO: Should we raise an exception instead?
-                            # Feels like safe fallback is better
+    my $more_subfields = $self->additional_attributes->to_hashref;
+    foreach my $subfield (
+        sort {
+               $a->{display_order} <=> $b->{display_order}
+            || $a->{subfield} cmp $b->{subfield}
+        } grep { ref($_) && %$_ } values %$item_field
+    ){
 
-        push @subfields, $tagsubfield => $self->$item_field
-            if defined $self->$item_field and $item_field ne '';
+        my $kohafield = $subfield->{kohafield};
+        my $tagsubfield = $subfield->{tagsubfield};
+        my $value;
+        if ( defined $kohafield ) {
+            next if $kohafield !~ m{^items\.}; # That would be weird!
+            ( my $attribute = $kohafield ) =~ s|^items\.||;
+            $value = $self->$attribute # This call may fail if a kohafield is not a DB column but we don't want to add extra work for that there
+                if defined $self->$attribute and $self->$attribute ne '';
+        } else {
+            $value = $more_subfields->{$tagsubfield}
+        }
+
+        next unless defined $value
+            and $value ne q{};
+
+        if ( $subfield->{repeatable} ) {
+            my @values = split '\|', $value;
+            push @subfields, ( $tagsubfield => $_ ) for @values;
+        }
+        else {
+            push @subfields, ( $tagsubfield => $value );
+        }
+
     }
 
-    my $unlinked_item_subfields = C4::Items::_parse_unlinked_item_subfields_from_xml($self->more_subfields_xml);
-    push( @subfields, @{$unlinked_item_subfields} )
-        if defined $unlinked_item_subfields and $#$unlinked_item_subfields > -1;
+    return unless @subfields;
 
-    my $field;
-
-    $field = MARC::Field->new(
-        "$item_tag", ' ', ' ', @subfields
-    ) if @subfields;
-
-    return $field;
+    return MARC::Field->new(
+        "$itemtag", ' ', ' ', @subfields
+    );
 }
 
 =head3 renewal_branchcode
@@ -1017,6 +1034,25 @@ sub columns_to_str {
     }
 
     return $values;
+}
+
+=head3 additional_attributes
+
+    my $attributes = $item->additional_attributes;
+    $attributes->{k} = 'new k';
+    $item->update({ more_subfields => $attributes->to_marcxml });
+
+Returns a Koha::Item::Attributes object that represents the non-mapped
+attributes for this item.
+
+=cut
+
+sub additional_attributes {
+    my ($self) = @_;
+
+    return Koha::Item::Attributes->new_from_marcxml(
+        $self->more_subfields_xml,
+    );
 }
 
 =head3 _set_found_trigger

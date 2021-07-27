@@ -82,6 +82,7 @@ sub generate_subfield_form {
     my $prefill_with_default_values = $params->{prefill_with_default_values};
     my $branch_limit = $params->{branch_limit};
     my $default_branches_empty = $params->{default_branches_empty};
+    my $readonly = $params->{readonly};
 
     my $item         = $self->{item};
     my $subfield     = $tagslib->{$tag}{$subfieldtag};
@@ -380,27 +381,14 @@ sub generate_subfield_form {
         };
     }
 
-    # Getting list of subfields to keep when restricted editing is enabled
-    # FIXME Improve the following block, no need to do it for every subfields
-    my $subfieldsToAllowForRestrictedEditing =
-      C4::Context->preference('SubfieldsToAllowForRestrictedEditing');
-    my $allowAllSubfields = (
-        not defined $subfieldsToAllowForRestrictedEditing
-          or $subfieldsToAllowForRestrictedEditing eq q||
-    ) ? 1 : 0;
-    my @subfieldsToAllow = split( / /, $subfieldsToAllowForRestrictedEditing );
-
-# If we're on restricted editing, and our field is not in the list of subfields to allow,
-# then it is read-only
-    $subfield_data{marc_value}->{readonly} =
-      (       not $allowAllSubfields
-          and $restricted_edition
-          and !grep { $tag . '$' . $subfieldtag eq $_ } @subfieldsToAllow )
-      ? 1
-      : 0;
+    # If we're on restricted editing, and our field is not in the list of subfields to allow,
+    # then it is read-only
+    $subfield_data{marc_value}->{readonly} = $readonly;
 
     return \%subfield_data;
 }
+
+=head3 edit_form
 
     my $subfields =
       Koha::UI::Form::Builder::Item->new(
@@ -441,9 +429,14 @@ List of subfields to prefill (value of syspref SubfieldsToUseWhenPrefill)
 
 =item subfields_to_allow
 
-List of subfields to allow (value of syspref SubfieldsToAllowForRestrictedBatchmod)
+List of subfields to allow (value of syspref SubfieldsToAllowForRestrictedBatchmod or SubfieldsToAllowForRestrictedEditing)
 
-=item subfields_to_ignore
+=item ignore_not_allowed_subfields
+
+If set, the subfields in subfields_to_allow will be ignored (ie. they will not be part of the subfield list.
+If not set, the subfields in subfields_to_allow will be marked as readonly.
+
+=item kohafields_to_ignore
 
 List of subfields to ignore/skip
 
@@ -470,7 +463,8 @@ sub edit_form {
     my $restricted_edition = $params->{restricted_editition};
     my $subfields_to_prefill = $params->{subfields_to_prefill} || [];
     my $subfields_to_allow = $params->{subfields_to_allow} || [];
-    my $subfields_to_ignore= $params->{subfields_to_ignore} || [];
+    my $ignore_not_allowed_subfields = $params->{ignore_not_allowed_subfields};
+    my $kohafields_to_ignore = $params->{kohafields_to_ignore} || [];
     my $prefill_with_default_values = $params->{prefill_with_default_values};
     my $branch_limit = $params->{branch_limit};
     my $default_branches_empty = $params->{default_branches_empty};
@@ -495,10 +489,21 @@ sub edit_form {
 
             next if IsMarcStructureInternal($subfield);
             next if $subfield->{tab} ne "10";
-            next if @$subfields_to_allow && !grep { $subfield->{kohafield} eq $_ } @$subfields_to_allow;
             next
               if grep { $subfield->{kohafield} && $subfield->{kohafield} eq $_ }
-              @$subfields_to_ignore;
+              @$kohafields_to_ignore;
+
+            my $readonly;
+            if (
+                @$subfields_to_allow && !grep {
+                    sprintf( "%s\$%s", $subfield->{tagfield}, $subfield->{tagsubfield} ) eq $_
+                } @$subfields_to_allow
+              )
+            {
+
+                next if $ignore_not_allowed_subfields;
+                $readonly = 1 if $restricted_edition;
+            }
 
             my @values = ();
 
@@ -546,6 +551,7 @@ sub edit_form {
                         prefill_with_default_values => $prefill_with_default_values,
                         branch_limit       => $branch_limit,
                         default_branches_empty => $default_branches_empty,
+                        readonly           => $readonly
                     }
                 );
                 push @subfields, $subfield_data;
