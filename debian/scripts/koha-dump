@@ -73,6 +73,7 @@ dump_instance()
     backupdir="$( xmlstarlet sel -t -v 'yazgfs/config/backupdir' $kohaconfig || true )"
     [ -z "$backupdir" ] && backupdir="/var/spool/koha/$name"
     dbdump="$backupdir/$name-$date.sql.gz"
+    dbflag="--databases"
     [ "$without_db_name" = "yes" ] && dbflag=""
     if [ "$schema_only" = "yes" ]
     then
