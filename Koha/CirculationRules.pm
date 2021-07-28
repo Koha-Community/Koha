@@ -156,6 +156,7 @@ our $RULE_KINDS = {
     },
     rentaldiscount => {
         scope => [ 'branchcode', 'categorycode', 'itemtype' ],
+        can_be_blank => 0,
     },
     reservesallowed => {
         scope => [ 'branchcode', 'categorycode', 'itemtype' ],
