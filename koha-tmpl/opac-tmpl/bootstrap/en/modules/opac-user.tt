@@ -1245,6 +1245,12 @@
 
             [% END %]
 
+            $(".change_pickup").on("click", function(){
+                var hold_id = $(this).data("hold-id");
+                $(this).hide();
+                $("#change-pickup-location" + hold_id ).show();
+            });
+
             if ( $('#opac-user-clubs').length ) {
                 $('#opac-user-clubs-tab-link').on('click', function() {
                     $('#opac-user-clubs').text(_("Loading..."));

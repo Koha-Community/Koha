@@ -85,7 +85,7 @@ function confirmModal(message, title, yes_label, no_label, callback) {
                     <div class="modal-header" style="min-height:40px;">\
                         <h4 class="modal-title"></h4>\
                         <button type="button" class="closebtn" data-dismiss="modal" aria-label="Close">\
-                        <span aria-hidden="true">×</span>\
+                        <span aria-hidden="true">&times;</span>\
                     </button>\
                     </div>\
                     <div class="modal-body"><p></p></div>\

@@ -82,16 +82,39 @@
                         [% UNLESS( singleBranchMode) %]
                             <td class="branch">
                                 <span class="tdlabel">Pick up location:</span>
+                                [% HOLD.branch.branchname | html %]
                                 [% IF ( HOLD.can_change_branch_opac ) %]
-                                    <form class="change_branch" action="/cgi-bin/koha/opac-modrequest.pl" method="post">
-                                        <select name="new_branch" >
-                                            [% PROCESS options_for_libraries libraries = Branches.pickup_locations({    search_params => { biblio => HOLD.biblionumber, patron => HOLD.borrower }, selected => HOLD.branchcode }) %]
-                                       </select>
-                                       <input type="hidden" name="new_branch_reserveid" value="[% HOLD.reserve_id | html %]" />
-                                       <button class="btn btn-primary" type="submit" name="change_branch" value="1">Change</button>
-                                    </form>
-                                [% ELSE %]
-                                    [% HOLD.branch.branchname | html %]
+                                    <button type="button" class="btn btn-sm btn-link" data-toggle="modal" data-target="#changePickup[% HOLD.reserve_id | html %]">
+                                        <i class="fa fa-pencil" aria-hidden="true"></i> Change
+                                    </button>
+                                    <!-- Change pickup location modal -->
+                                    <div class="modal" id="changePickup[% HOLD.reserve_id | html %]" tabindex="-1" aria-labelledby="changePickup[% HOLD.reserve_id | html %]Label" aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <form id="change_branch_form[% HOLD.reserve_id | html %]" action="/cgi-bin/koha/opac-modrequest.pl" method="post">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="changePickup[% HOLD.reserve_id | html %]Label">Change pickup location for <em>[% INCLUDE 'biblio-title.inc' biblio=HOLD.biblio %]</em></h5>
+                                                        <button type="button" class="closebtn" data-dismiss="modal" aria-label="Close">
+                                                            <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <div class="form-group">
+                                                        <label for="new_branch[% HOLD.reserve_id | html %]">New pickup location:</label>
+                                                        <select name="new_pickup_location" id="new_branch[% HOLD.reserve_id | html %]" class="form-control">
+                                                            [% PROCESS options_for_libraries libraries = Branches.pickup_locations({ search_params => { biblio => HOLD.biblionumber, patron => HOLD.borrower }, selected => HOLD.branchcode }) %]
+                                                        </select>
+                                                        </div>
+                                                        <input type="hidden" name="reserve_id" value="[% HOLD.reserve_id | html %]" />
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="submit" name="change_branch" value="1" class="btn btn-primary"><i class="fa fa-check" aria-hidden="true"></i> Save</button>
+                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="fa fa-remove" aria-hidden="true"></i> Cancel</button>
+                                                    </div>
+                                                </div> <!-- /.modal-content -->
+                                            </form>
+                                        </div> <!-- /.modal-dialog -->
+                                    </div> <!-- /.modal -->
                                 [% END  %]
                             </td>
                         [% END %]
