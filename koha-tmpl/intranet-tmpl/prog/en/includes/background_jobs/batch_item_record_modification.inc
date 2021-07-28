@@ -30,7 +30,9 @@
         </div>
     [% END %]
 
-    [% PROCESS items_table_batchmod headers => item_header_loop, items => items, display_columns_selection => 1 %]
+    [% IF items.size %]
+        [% PROCESS items_table_batchmod headers => item_header_loop, items => items, display_columns_selection => 1 %]
+    [% END %]
 [% END %]
 
 [% BLOCK js %]
