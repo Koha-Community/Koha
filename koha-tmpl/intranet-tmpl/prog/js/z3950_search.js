@@ -126,9 +126,9 @@ $( document ).ready( function() {
 
     $( "#resultst" ).on("click", ".chosen", function(e) {
         e.preventDefault();
-        var title = $(this).attr('title');
-        ChangeLastAction( title, 0 );
-        if( title == 'Order' ) window.location = $(this).attr('href');
+        var action = $(this).data('action');
+        ChangeLastAction( action, 0 );
+        if( action == 'order' ) window.location = $(this).attr('href');
         else {
             opener.document.location = $(this).attr('href');
             window.close();
@@ -140,15 +140,17 @@ function InitLastAction() {
     if( $("#resultst").length == 0 ) return;
     try { last_action = localStorage.getItem('z3950search_last_action'); } catch (err) {}
     if( last_action ) {
-        var linkcount = $(".z3950actions:eq(0)").siblings(".dropdown-menu").find("a[title='"+last_action+"']").length;
-        if( linkcount == 0 ) return;
-        if( last_action != 'MARC' ) $( ".z3950actions" ).text( last_action );
+        var z3950_action_li = $(".z3950actions:eq(0)").siblings(".dropdown-menu").find("a[data-action='"+last_action+"']");
+        if( z3950_action_li.length == 0 ) return;
+        if( last_action != 'show_marc' ) {
+            $( ".z3950actions" ).text($(z3950_action_li).text()).data('action', last_action);
+        }
     }
 }
 
-function ChangeLastAction(title, change_text) {
-    if( last_action && last_action == title ) return;
-    last_action = title;
+function ChangeLastAction(action, change_text) {
+    if( last_action && last_action == action ) return;
+    last_action = action;
     if( change_text ) $( ".z3950actions" ).text( last_action );
     if( previewed == 0 || change_text == 1 )
         try { localStorage.setItem('z3950search_last_action', last_action); } catch(err) {}
