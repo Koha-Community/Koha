@@ -3367,19 +3367,19 @@ sub GetIssuingCharges {
     if ( my $item_data = $sth->fetchrow_hashref ) {
         $item_type = $item_data->{itemtype};
         $charge    = $item_data->{rentalcharge};
-        # FIXME This should follow CircControl
-        my $branch = C4::Context::mybranch();
-        my $patron = Koha::Patrons->find( $borrowernumber );
-        my $discount = Koha::CirculationRules->get_effective_rule({
-            categorycode => $patron->categorycode,
-            branchcode   => $branch,
-            itemtype     => $item_type,
-            rule_name    => 'rentaldiscount'
-        });
-        if ($discount) {
-            $charge = ( $charge * ( 100 - $discount->rule_value ) ) / 100;
-        }
         if ($charge) {
+            # FIXME This should follow CircControl
+            my $branch = C4::Context::mybranch();
+            my $patron = Koha::Patrons->find( $borrowernumber );
+            my $discount = Koha::CirculationRules->get_effective_rule({
+                categorycode => $patron->categorycode,
+                branchcode   => $branch,
+                itemtype     => $item_type,
+                rule_name    => 'rentaldiscount'
+            });
+            if ($discount) {
+                $charge = ( $charge * ( 100 - $discount->rule_value ) ) / 100;
+            }
             $charge = sprintf '%.2f', $charge; # ensure no fractions of a penny returned
         }
     }
