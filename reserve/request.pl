@@ -410,7 +410,7 @@ foreach my $biblionumber (@biblionumbers) {
             ( $biblioitem->{biblioitemnumber} => $biblioitem )
           } @{ Koha::Biblioitems->search(
                 { biblioitemnumber => { -in => \@biblioitemnumbers } },
-                { select => ['biblioitemnumber', 'publicationyear', 'itemtype']}
+                { select => ['biblionumber', 'biblioitemnumber', 'publicationyear', 'itemtype']}
             )->unblessed
           }
     };
@@ -448,7 +448,6 @@ foreach my $biblionumber (@biblionumbers) {
         # it's complicated logic to analyse.
         # (before this loop was inside that sub loop so it was O(n^2) )
         my $items_any_available;
-
         $items_any_available = ItemsAnyAvailableAndNotRestricted( { biblionumber => $biblioitem->{biblionumber}, patron => $patron })
             if $patron;
 
