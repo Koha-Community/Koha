@@ -270,6 +270,7 @@ $(document).ready(function() {
                         },
                         templateResult: display_pickup_location
                     });
+                    $('.select2-container').css('width','100%');
                 });
 
                 $(".hold_location_select").on("change", function(){
