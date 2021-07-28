@@ -122,7 +122,7 @@
                                     [% ELSE %]
                                         <input type="checkbox" name="credit_number_enabled" id="credit_number_enabled" value="1" />
                                     [% END %]
-                                    <span>Enable automatic generation of credit number (see <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=AutoCreditNumber">AutoCreditNumber</a>)</span>
+                                    <span class="hint">Enable automatic generation of credit number (see <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=AutoCreditNumber">AutoCreditNumber</a>)</span>
                                 </li>
                                 <li>
                                     <label for="branches">Libraries limitation: </label>
@@ -139,7 +139,7 @@
                                             [% END %]
                                             [% END %]
                                         </select>
-                                        <span>Select 'All libraries' if this credit type should be available at all libraries. Otherwise select libraries you want to associate credit type with.</span>
+                                        <div class="hint">Select 'All libraries' if this credit type should be available at all libraries. Otherwise select libraries you want to associate credit type with.</div>
                                     [% END %]
                                 </li>
                             </ol>

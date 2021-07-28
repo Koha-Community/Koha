@@ -182,7 +182,7 @@ Item types &rsaquo; Administration &rsaquo; Koha
                     <input type="text" id="parent_type" value="[% parent_type | html %]" name="parent_type" size="10" maxlength="10" disabled/>
                     <p>No available parent types</p>
                     [% END %]
-                    <span class="hint">Defining a parent type will apply checkout limits for all children as described on the circulation rules page.</span>
+                    <div class="hint">Defining a parent type will apply checkout limits for all children as described on the circulation rules page.</div>
                 </li>
                 <li>
                     <label for="description" class="required">Description: </label>
@@ -192,7 +192,7 @@ Item types &rsaquo; Administration &rsaquo; Koha
                     [% END %]
                 </li>
                 <li>
-                    <span class="label">Search category</span>
+                    <label for="searchcategory">Search category: </label>
                     <select id="searchcategory" name="searchcategory">
                     <option value="">None</option>
                         [% FOREACH cat IN searchcategory %]
@@ -207,7 +207,13 @@ Item types &rsaquo; Administration &rsaquo; Koha
                             [% END %]
                         [% END %]
                     </select>
-                    <span class="hint">Options are defined as the authorized values for the ITEMTYPECAT category.</span>
+                    <div class="hint">
+                        [% IF ( CAN_user_parameters_manage_auth_values ) %]
+                            Options are defined by the authorized value <a target="_blank" href="/cgi-bin/koha/admin/authorised_values.pl?searchfield=ITEMTYPECAT">ITEMTYPECAT</a>.
+                        [% ELSE %]
+                            Options are defined by the authorized value ITEMTYPECAT.
+                        [% END %]
+                    </div>
                 </li>
                 [% IF ( Koha.Preference('noItemTypeImages') && Koha.Preference('OpacNoItemTypeImages') ) %]
                     <li>
@@ -312,12 +318,12 @@ Item types &rsaquo; Administration &rsaquo; Koha
                 <li>
                     <label for="rentalcharge">Rental charge: </label>
                     <input type="text" id="rentalcharge" name="rentalcharge" size="10" value="[% itemtype.rentalcharge | $Price on_editing => 1 %]" min="0" />
-                    <span class="hint">This fee is charged once per checkout/renewal per item</span>
+                    <div class="hint">This fee is charged once per checkout/renewal per item</div>
                 </li>
                 <li>
                     <label for="rentalcharge_daily">Daily rental charge: </label>
                     <input type="text" id="rentalcharge_daily" name="rentalcharge_daily" size="10" value="[% itemtype.rentalcharge_daily | $Price on_editing => 1 %]" min="0" />
-                    <span class="hint">This fee is charged at checkout/renewal time for each day between the checkout/renewal date and due date for loans specified in days.</span>
+                    <div class="hint">This fee is charged at checkout/renewal time for each day between the checkout/renewal date and due date for loans specified in days.</div>
                 </li>
                 <li>
                     <label for="rentalcharge_daily_calendar">Daily rentals use calendar: </label>
@@ -331,7 +337,7 @@ Item types &rsaquo; Administration &rsaquo; Koha
                 <li>
                     <label for="rentalcharge_hourly">Hourly rental charge: </label>
                     <input type="text" id="rentalcharge_hourly" name="rentalcharge_hourly" size="10" value="[% itemtype.rentalcharge_hourly | $Price on_editing => 1 %]" min="0" />
-                    <span class="hint">This fee is charged at checkout/renewal time for each hour between the checkout/renewal date and due date for loans specified in hours.</span>
+                    <div class="hint">This fee is charged at checkout/renewal time for each hour between the checkout/renewal date and due date for loans specified in hours.</div>
                 </li>
                 <li>
                     <label for="rentalcharge_hourly_calendar">Hourly rentals use calendar: </label>
@@ -387,13 +393,13 @@ Item types &rsaquo; Administration &rsaquo; Koha
                         <option value="">All libraries</option>
                         [% PROCESS options_for_libraries libraries => Branches.all( selected => itemtype.get_library_limits, unfiltered => 1, do_not_select_my_library => 1 ) %]
                     </select>
-                    <span class="hint">Select 'All libraries' if all libraries use this item type. Otherwise, select the specific libraries that use this item type.</span>
+                    <div class="hint">Select 'All libraries' if all libraries use this item type. Otherwise, select the specific libraries that use this item type.</div>
                 </li>
                 <li>
                     <label for="summary">Summary: </label>
                    <textarea id="summary" name="summary" cols="55" rows="5">[% itemtype.summary | html %]</textarea>
-                    <p>Enter a summary that will overwrite the default one in search results lists. Example, for a website itemtype : </p>
-                    <p><strong>&lt;a href="[856u]"&gt;open site&lt;/a&gt;</strong> will show the link just below the title</p>
+                    <div class="hint">Enter a summary that will overwrite the default one in search results lists. Example, for a website itemtype : </div>
+                    <div class="hint"><strong>&lt;a href="[856u]"&gt;open site&lt;/a&gt;</strong> will show the link just below the title</div>
                 </li>
             </ol>
         </fieldset>

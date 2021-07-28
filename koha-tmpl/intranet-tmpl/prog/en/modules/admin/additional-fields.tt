@@ -125,7 +125,7 @@
                 <thead>
                     <tr>
                         <th>Name</th>
-                        <th>Authorised value category</th>
+                        <th>Authorized value category</th>
                         [% IF show_marcfield %]
                             <th>MARC field</th>
                         [% END %]
@@ -170,8 +170,8 @@
                         <span class="required">Required</span>
                     </li>
                     <li>
-                        <label for="av">Authorised value category: </label>
-                        <select name="authorised_value_category">
+                        <label for="av">Authorized value category: </label>
+                        <select id="av" name="authorised_value_category">
                             <option value="">None</option>
                             [% PROCESS options_for_authorised_value_categories authorised_value_categories = AuthorisedValues.GetCategories({selected => field.authorised_value_category}) %]
                         </select>

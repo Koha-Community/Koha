@@ -111,21 +111,30 @@
         </li>
         <li><label for="password">Password: </label> <input type="text" name="password" id="password" value="[% server.password | html %]" />
         </li>
-        <li><label for="checked">Preselected (searched by default): </label>
+        <li>
+            <label for="checked">Preselected: </label>
         [% IF ( server.checked ) %]
             <input type="checkbox" name="checked" id="checked" value="1" checked="checked" />
         [% ELSE %]
             <input type="checkbox" name="checked" id="checked" value="1" />
         [% END %]
+            <span class="hint">Searched by default.</span>
         </li>
-        <li><label for="rank">Rank (display order): </label> <input type="text" name="rank" id="rank" size="4" value="[% server.rank | html %]" />
+        <li>
+            <label for="rank">Rank: </label>
+            <input type="text" name="rank" id="rank" size="4" value="[% server.rank | html %]" />
+            <div class="hint">Display order.</div>
         </li>
         [% IF (server.servertype||type) == 'zed' %]
-        <li><label for="attributes">Attributes (additional PQF attributes added to each query): </label><input type="text" name="attributes" id="attributes" size="30" value="[% server.attributes | html %]" />
+        <li>
+            <label for="attributes">Attributes: </label>
+            <input type="text" name="attributes" id="attributes" size="30" value="[% server.attributes | html %]" />
+            <div class="hint">Additional PQF attributes added to each query.</div>
         </li>
         [% END %]
 
-        <li><label for="syntax">Syntax (z3950 can send<br /> records in various format. Choose one): </label>
+        <li>
+            <label for="syntax">Syntax: </label>
         <select name="syntax" id="syntax">
             <option value="UNIMARC">UNIMARC</option>
             <option value="INTERMARC">INTERMARC</option>
@@ -144,18 +153,23 @@
             <option value="CATMARC">CATMARC</option>
             <option value="MALMARC">MALMARC</option>
         </select>
+            <div class="hint">Z39.50 can send records in various formats. Choose one.</div>
         </li>
 
-        <li><label for="encoding">Encoding (z3950 can send<br /> records in various encodings. Choose one): </label>
+        <li>
+            <label for="encoding">Encoding: </label>
         <select name="encoding" id="encoding">
             [% FOREACH enc IN [ 'utf8' 'EUC-KR' 'ISO_5426' 'ISO_6937' 'ISO_8859-1' 'MARC-8' ] %]
                 <option value="[% enc | html %]">[% enc | html %]</option>
             [% END %]
         </select>
+            <div class="hint">Z39.50 can send records in various encodings. Choose one.</div>
         </li>
 
-        <li><label for="timeout">Timeout (0 its like not set): </label>
+        <li>
+            <label for="timeout">Timeout: </label>
         <input type="text" name="timeout" id="timeout" size="4" value="[% server.timeout | html %]" /> seconds
+            <div class="hint">Enter 0 to disable.</div>
         </li>
         <li><label for="recordtype">Record type: </label>
         <select name="recordtype" id="recordtype">

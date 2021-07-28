@@ -149,7 +149,7 @@
                         [%- END -%]
                     [%- END -%]
                     </select>
-                    (ignore means that the subfield does not display in the record editor)
+                    <div class="hint">Ignore means that the subfield does not display in the record editor</div>
                 </li>
                 <li>
                     <fieldset>
@@ -181,7 +181,7 @@
                                 [% ELSE %]
                                     <input type="checkbox" id="isurl[% loo.row | html %]" name="isurl[% loo.row | html %]" value="1" />
                                 [% END %]
-                                (if checked, it means that the subfield is a URL and can be clicked)
+                                <span class="hint">If checked, it means that the subfield is a URL and can be clicked.</span>
                             </li>
                             <li>
                                 <label for="defaultvalue[% loo.row | html %]">Default value:</label>
