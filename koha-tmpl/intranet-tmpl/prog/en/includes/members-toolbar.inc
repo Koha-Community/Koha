@@ -52,6 +52,10 @@
                     <li class="disabled"><a data-toggle="tooltip" data-placement="left" title="You are not authorized to set permissions" id="patronflags" href="#">Set permissions</a></li>
                 [% END %]
 
+                [% IF Koha.Preference('TwoFactorAuthentication') && logged_in_user.borrowernumber == patron.borrowernumber %]
+                    <li><a id="twofa" href="/cgi-bin/koha/members/two_factor_auth.pl">Enable Two-Factor Authentication</a></li>
+                [% END %]
+
                 [% IF CAN_user_borrowers_edit_borrowers && useDischarge %]
                     <li><a href="/cgi-bin/koha/members/discharge.pl?borrowernumber=[% patron.borrowernumber | uri %]">Discharge</a></li>
                 [% END %]

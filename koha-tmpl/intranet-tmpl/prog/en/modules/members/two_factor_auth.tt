@@ -1,0 +1,115 @@
+[% USE raw %]
+[% USE Koha %]
+[% USE Asset %]
+[% SET footerjs = 1 %]
+[% INCLUDE 'doc-head-open.inc' %]
+<title>Two-Factor Authentication &rsaquo; Patrons &rsaquo; Koha</title>
+[% INCLUDE 'doc-head-close.inc' %]
+</head>
+<body id="pat_two_factor_auth" class="pat">
+[% INCLUDE 'header.inc' %]
+[% INCLUDE 'patron-search.inc' %]
+
+<nav id="breadcrumbs" aria-label="Breadcrumb" class="breadcrumb">
+    <ol>
+        <li>
+            <a href="/cgi-bin/koha/mainpage.pl">Home</a>
+        </li>
+        <li>
+            <a href="/cgi-bin/koha/members/members-home.pl">Patrons</a>
+        </li>
+        <li>
+            <a href="#" aria-current="page">
+                Manage two-factor authentication
+            </a>
+        </li>
+    </ol>
+</nav>
+
+<div class="main container-fluid">
+    <div class="row">
+        <div class="col-sm-10 col-sm-push-2">
+            <main>
+
+                [% INCLUDE 'members-toolbar.inc' %]
+
+                [% IF op == 'register' %]
+                    <h1>Register Two-Factor Authenticator</h1>
+                    <div class="dialog message">
+                        <p>We recommend cloud-based mobile authenticator apps such as Authy, Duo Mobile, and LastPass. They can restore access if you lose your hardware device.</p>
+                        <p>Can't scan the code?</p>
+                        <p>To add the entry manually, provide the following details to the application on your phone.</p>
+                        <p>Account: [% issuer %]</p>
+                        <p>Key: [% key_id %]</p>
+                        <p>Time based: Yes</p>
+                    </div>
+
+                    [% IF invalid_pin %]
+                        <div class="dialog error">Invalid pin code</div>
+                    [% END %]
+                    <form id="two-factor-auth" action="/cgi-bin/koha/members/two_factor_auth.pl" method="post">
+                        <fieldset class="rows">
+                            <input type="hidden" name="csrf_token" value="[% csrf_token | html %]" />
+                            <input type="hidden" name="op" value="register-2FA" />
+                            <input type="hidden" name="secret32" value="[% secret32 %]" />
+                            <ol>
+                                <li>
+                                    <label for="qr_code">QR code: </label>
+                                    <img id="qr_code" src="[% qr_code_url %]" />
+                                </li>
+                                <li>
+                                    <label for="pin_code">Pin code: </label>
+                                    <input type="text" id="pin_code" name="pin_code" value="" />
+                                </li>
+                            </ol>
+                        </fieldset>
+                        <fieldset class="action">
+                            <input type="submit" value="Register with two-factor app" />
+                            <a class="cancel" href="/cgi-bin/koha/members/two_factor_auth.pl">Cancel</a>
+                        </fieldset>
+                    </form>
+                [% ELSE %]
+                    <h1>Two-Factor Authentication</h1>
+                    [% IF patron.auth_method == "two-factor" %]
+                        <div class="two-factor-status">Status: Enabled</div>
+
+                        <form id="two-factor-auth" action="/cgi-bin/koha/members/two_factor_auth.pl" method="post">
+                            <input type="hidden" name="csrf_token" value="[% csrf_token | html %]" />
+                            <input type="hidden" name="op" value="disable-2FA" />
+                            <input type="submit" value="Disable Two-Factor Authentication" />
+                        </form>
+                    [% ELSE %]
+                        <div class="two-factor-status">Status: Disabled</div>
+
+                        <form id="two-factor-auth" action="/cgi-bin/koha/members/two_factor_auth.pl" method="post">
+                            <input type="hidden" name="csrf_token" value="[% csrf_token | html %]" />
+                            <input type="hidden" name="op" value="enable-2FA" />
+                            <input type="submit" value="Enable Two-Factor Authentication" />
+                        </form>
+
+                    [% END %]
+                [% END %]
+            </main>
+        </div> <!-- /.col-sm-10.col-sm-push-2 -->
+
+        <div class="col-sm-2 col-sm-pull-10">
+            <aside>
+                [% INCLUDE 'circ-menu.inc' %]
+            </aside>
+        </div> <!-- /.col-sm-2.col-sm-pull-10 -->
+    </div> <!-- /.row -->
+
+
+[% MACRO jsinclude BLOCK %]
+    [% INCLUDE 'str/members-menu.inc' %]
+    [% Asset.js("js/members-menu.js") | $raw %]
+    <script>
+        $(document).ready(function(){
+            $(".delete").on("click", function(e){
+                return confirmDelete(_("Are you sure you want to delete this key?"));
+            });
+        });
+    </script>
+[% END %]
+
+[% INCLUDE 'intranet-bottom.inc' %]
