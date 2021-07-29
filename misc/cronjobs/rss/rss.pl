@@ -31,7 +31,7 @@ use Template;
 
 use Koha::Script -cron;
 use C4::Context;
-use POSIX qw( close localtime open strftime );
+use POSIX;
 
 my $dbh     = C4::Context->dbh;
 my $file    = $ARGV[0];

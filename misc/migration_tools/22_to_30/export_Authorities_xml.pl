@@ -9,7 +9,7 @@ BEGIN {
 use C4::Context;
 use MARC::File::XML(BinaryEncoding=>"utf8");
 use C4::AuthoritiesMarc;
-use POSIX qw( close localtime open sprintf time );
+use POSIX;
 MARC::File::XML::default_record_format("UNIMARCAUTH");
 my $dbh = C4::Context->dbh;
 my $rq= $dbh->prepare(qq|

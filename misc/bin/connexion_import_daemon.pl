@@ -90,7 +90,7 @@ use Carp qw( croak );
 use IO::Socket::INET qw( SOCK_STREAM );
 # use IO::Socket::IP;
 use IO::Select;
-use POSIX qw( close exit fork localtime open printf sprintf );
+use POSIX;
 use HTTP::Status qw( HTTP_FORBIDDEN HTTP_UNAUTHORIZED );
 use strict;
 use warnings;

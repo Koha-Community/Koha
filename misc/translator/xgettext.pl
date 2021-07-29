@@ -27,7 +27,7 @@ use lib $FindBin::Bin;
 use strict;
 use warnings;
 use Getopt::Long qw( GetOptions );
-use POSIX qw( close exit localtime open printf time );
+use POSIX;
 use Locale::PO;
 use TmplTokenizer;
 use VerboseWarnings;
