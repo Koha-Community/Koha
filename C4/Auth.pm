@@ -864,109 +864,83 @@ sub checkauth {
     elsif ( $emailaddress) {
         # the Google OpenID Connect passes an email address
     }
-    elsif ( $sessionID = $query->cookie("CGISESSID") )
-    {    # assignment, not comparison
-        $session = get_session($sessionID);
-        C4::Context->_new_userenv($sessionID);
-        my ( $ip, $lasttime, $sessiontype );
-        my $s_userid = '';
-        if ($session) {
-            $s_userid = $session->param('id') // '';
-            C4::Context->set_userenv(
-                $session->param('number'),       $s_userid,
-                $session->param('cardnumber'),   $session->param('firstname'),
-                $session->param('surname'),      $session->param('branch'),
-                $session->param('branchname'),   $session->param('flags'),
-                $session->param('emailaddress'), $session->param('shibboleth'),
-                $session->param('desk_id'),      $session->param('desk_name'),
-                $session->param('register_id'),  $session->param('register_name')
-            );
+    elsif ( $sessionID = $query->cookie("CGISESSID") ) {    # assignment, not comparison
+        my ( $return, $more_info );
+        ( $return, $session, $more_info ) = check_cookie_auth( $sessionID, $flags,
+            { remote_addr => $ENV{REMOTE_ADDR} }
+        );
+
+        if ( $return eq 'ok' ) {
             Koha::Logger->get->debug(sprintf "AUTH_SESSION: (%s)\t%s %s - %s", map { $session->param($_) || q{} } qw(cardnumber firstname surname branch));
-            $ip          = $session->param('ip');
-            $lasttime    = $session->param('lasttime');
+
+            my $s_userid = $session->param('id');
             $userid      = $s_userid;
-            $sessiontype = $session->param('sessiontype') || '';
-        }
-        if ( ( $query->param('koha_login_context') && ( $q_userid ne $s_userid ) )
-            || ( $cas && $query->param('ticket') && !C4::Context->userenv->{'id'} )
-            || ( $shib && $shib_login && !$logout && !C4::Context->userenv->{'id'} )
-        ) {
 
-            #if a user enters an id ne to the id in the current session, we need to log them in...
-            #first we need to clear the anonymous session...
-            $anon_search_history = $session->param('search_history');
-            $session->delete();
-            $session->flush;
-            C4::Context->_unset_userenv($sessionID);
-            $sessionID = undef;
-            $userid    = undef;
-        }
-        elsif ($logout) {
+            if ( ( $query->param('koha_login_context') && ( $q_userid ne $s_userid ) )
+                || ( $cas && $query->param('ticket') && !C4::Context->userenv->{'id'} )
+                || ( $shib && $shib_login && !$logout && !C4::Context->userenv->{'id'} )
+            ) {
 
-            # voluntary logout the user
-            # check wether the user was using their shibboleth session or a local one
-            my $shibSuccess = C4::Context->userenv->{'shibboleth'};
-            $session->delete();
-            $session->flush;
-            C4::Context->_unset_userenv($sessionID);
-
-            $sessionID = undef;
-            $userid    = undef;
-
-            if ($cas and $caslogout) {
-                logout_cas($query, $type);
-            }
-
-            # If we are in a shibboleth session (shibboleth is enabled, a shibboleth match attribute is set and matches koha matchpoint)
-            if ( $shib and $shib_login and $shibSuccess) {
-                logout_shib($query);
-            }
-        }
-        elsif ( !$lasttime || ( $lasttime < time() - $timeout ) ) {
-
-            # timed logout
-            $info{'timed_out'} = 1;
-            if ($session) {
+                #if a user enters an id ne to the id in the current session, we need to log them in...
+                #first we need to clear the anonymous session...
+                $anon_search_history = $session->param('search_history');
                 $session->delete();
                 $session->flush;
+                C4::Context->_unset_userenv($sessionID);
             }
-            C4::Context->_unset_userenv($sessionID);
+            elsif ($logout) {
 
-            $userid    = undef;
-            $sessionID = undef;
-        }
-        elsif ( C4::Context->preference('SessionRestrictionByIP') && $ip ne $ENV{'REMOTE_ADDR'} ) {
+                # voluntary logout the user
+                # check wether the user was using their shibboleth session or a local one
+                my $shibSuccess = C4::Context->userenv->{'shibboleth'};
+                $session->delete();
+                $session->flush;
+                C4::Context->_unset_userenv($sessionID);
 
-            # Different ip than originally logged in from
-            $info{'oldip'}        = $ip;
-            $info{'newip'}        = $ENV{'REMOTE_ADDR'};
-            $info{'different_ip'} = 1;
-            $session->delete();
-            $session->flush;
-            C4::Context->_unset_userenv($sessionID);
-
-            $sessionID = undef;
-            $userid    = undef;
-        }
-        else {
-            $cookie = $query->cookie(
-                -name     => 'CGISESSID',
-                -value    => $session->id,
-                -HttpOnly => 1,
-                -secure => ( C4::Context->https_enabled() ? 1 : 0 ),
-            );
-            $session->param( 'lasttime', time() );
-            unless ( $sessiontype && $sessiontype eq 'anon' ) {    #if this is an anonymous session, we want to update the session, but not behave as if they are logged in...
-                $flags = haspermission( $userid, $flagsrequired );
-                if ($flags) {
-                    $loggedin = 1;
-                } else {
-                    $info{'nopermission'} = 1;
+                if ($cas and $caslogout) {
+                    logout_cas($query, $type);
                 }
+
+                # If we are in a shibboleth session (shibboleth is enabled, a shibboleth match attribute is set and matches koha matchpoint)
+                if ( $shib and $shib_login and $shibSuccess) {
+                    logout_shib($query);
+                }
+            } else {
+
+                $cookie = $query->cookie(
+                    -name     => 'CGISESSID',
+                    -value    => $session->id,
+                    -HttpOnly => 1,
+                    -secure => ( C4::Context->https_enabled() ? 1 : 0 ),
+                );
+
+                my $sessiontype = $session->param('sessiontype') || '';
+                unless ( $sessiontype && $sessiontype eq 'anon' ) {    #if this is an anonymous session, we want to update the session, but not behave as if they are logged in...
+                    $flags = haspermission( $userid, $flagsrequired );
+                    if ($flags) {
+                        $loggedin = 1;
+                    } else {
+                        $info{'nopermission'} = 1;
+                    }
+                }
+            }
+        } elsif ( !$logout ) {
+            if ( $return eq 'expired' ) {
+                $info{timed_out} = 1;
+            } elsif ( $return eq 'restricted' ) {
+                $info{oldip}        = $more_info->{old_ip};
+                $info{newip}        = $more_info->{new_ip};
+                $info{different_ip} = 1;
             }
         }
     }
-    unless ( $userid || $sessionID ) {
+
+    unless ( $loggedin ) {
+        $sessionID = undef;
+        $userid    = undef;
+    }
+
+    unless ( $userid ) {
         #we initiate a session prior to checking for a username to allow for anonymous sessions...
         my $session = get_session("") or die "Auth ERROR: Cannot get_session()";
 
@@ -981,7 +955,7 @@ sub checkauth {
         C4::Context->_new_userenv($sessionID);
         $cookie = $query->cookie(
             -name     => 'CGISESSID',
-            -value    => $session->id,
+            -value    => $sessionID,
             -HttpOnly => 1,
             -secure => ( C4::Context->https_enabled() ? 1 : 0 ),
         );
@@ -1313,8 +1287,8 @@ sub checkauth {
         script_name                           => get_script_name(),
         casAuthentication                     => C4::Context->preference("casAuthentication"),
         shibbolethAuthentication              => $shib,
-        SessionRestrictionByIP                => C4::Context->preference("SessionRestrictionByIP"),
         suggestion                            => C4::Context->preference("suggestion"),
+        SessionRestrictionByIP                => C4::Context->preference("SessionRestrictionByIP"),
         virtualshelves                        => C4::Context->preference("virtualshelves"),
         LibraryName                           => "" . C4::Context->preference("LibraryName"),
         LibraryNameTitle                      => "" . $LibraryNameTitle,
@@ -1456,6 +1430,8 @@ Possible return values in C<$status> are:
 
 =item "expired -- session cookie has expired; API user should resubmit userid and password
 
+=item "restricted" -- The IP has changed (if SessionRestrictionByIP)
+
 =back
 
 =cut
@@ -1482,80 +1458,27 @@ sub check_api_auth {
         return ( "maintenance", undef, undef );
     }
 
-    # FIXME -- most of what follows is a copy-and-paste
-    # of code from checkauth.  There is an obvious need
-    # for refactoring to separate the various parts of
-    # the authentication code, but as of 2007-11-19 this
-    # is deferred so as to not introduce bugs into the
-    # regular authentication code for Koha 3.0.
-
-    # see if we have a valid session cookie already
-    # however, if a userid parameter is present (i.e., from
-    # a form submission, assume that any current cookie
-    # is to be ignored
-    my $sessionID = undef;
+    my ( $sessionID, $session );
     unless ( $query->param('userid') ) {
         $sessionID = $query->cookie("CGISESSID");
     }
     if ( $sessionID && not( $cas && $query->param('PT') ) ) {
-        my $session = get_session($sessionID);
-        C4::Context->_new_userenv($sessionID);
-        if ($session) {
-            C4::Context->interface($session->param('interface'));
-            C4::Context->set_userenv(
-                $session->param('number'),       $session->param('id'),
-                $session->param('cardnumber'),   $session->param('firstname'),
-                $session->param('surname'),      $session->param('branch'),
-                $session->param('branchname'),   $session->param('flags'),
-                $session->param('emailaddress'), $session->param('shibboleth'),
-                $session->param('desk_id'),      $session->param('desk_name'),
-                $session->param('register_id'),  $session->param('register_name')
-            );
 
-            my $ip       = $session->param('ip');
-            my $lasttime = $session->param('lasttime');
-            my $userid   = $session->param('id');
-            if ( $lasttime < time() - $timeout ) {
+        my $return;
+        ( $return, $session, undef ) = check_cookie_auth(
+            $sessionID, $flagsrequired, { remote_addr => $ENV{REMOTE_ADDR} } );
 
-                # time out
-                $session->delete();
-                $session->flush;
-                C4::Context->_unset_userenv($sessionID);
-                $userid    = undef;
-                $sessionID = undef;
-                return ( "expired", undef, undef );
-            } elsif ( C4::Context->preference('SessionRestrictionByIP') && $ip ne $ENV{'REMOTE_ADDR'} ) {
+        return ( $return, undef, undef ) # Cookie auth failed
+            if $return ne "ok";
 
-                # IP address changed
-                $session->delete();
-                $session->flush;
-                C4::Context->_unset_userenv($sessionID);
-                $userid    = undef;
-                $sessionID = undef;
-                return ( "expired", undef, undef );
-            } else {
-                my $cookie = $query->cookie(
-                    -name     => 'CGISESSID',
-                    -value    => $session->id,
-                    -HttpOnly => 1,
-                    -secure => ( C4::Context->https_enabled() ? 1 : 0 ),
-                );
-                $session->param( 'lasttime', time() );
-                my $flags = haspermission( $userid, $flagsrequired );
-                if ($flags) {
-                    return ( "ok", $cookie, $sessionID );
-                } else {
-                    $session->delete();
-                    $session->flush;
-                    C4::Context->_unset_userenv($sessionID);
-                    $userid    = undef;
-                    $sessionID = undef;
-                    return ( "failed", undef, undef );
-                }
-            }
-        } else {
-            return ( "expired", undef, undef );
-        }
+        my $cookie = $query->cookie(
+            -name     => 'CGISESSID',
+            -value    => $session->id,
+            -HttpOnly => 1,
+            -secure => ( C4::Context->https_enabled() ? 1 : 0 ),
+        );
+        return ( $return, undef, $session );
+
     } else {
 
         # new login
@@ -1708,18 +1631,18 @@ Possible return values in C<$status> are:
 
 =item "expired -- session cookie has expired; API user should resubmit userid and password
 
+=item "restricted" -- The IP has changed (if SessionRestrictionByIP)
+
 =back
 
 =cut
 
 sub check_cookie_auth {
-    my $cookie        = shift;
+    my $sessionID     = shift;
     my $flagsrequired = shift;
     my $params        = shift;
 
     my $remote_addr = $params->{remote_addr} || $ENV{REMOTE_ADDR};
-    my $dbh     = C4::Context->dbh;
-    my $timeout = _timeout_syspref();
 
     unless ( C4::Context->preference('Version') ) {
 
@@ -1736,27 +1659,19 @@ sub check_cookie_auth {
         return ( "maintenance", undef );
     }
 
-    # FIXME -- most of what follows is a copy-and-paste
-    # of code from checkauth.  There is an obvious need
-    # for refactoring to separate the various parts of
-    # the authentication code, but as of 2007-11-23 this
-    # is deferred so as to not introduce bugs into the
-    # regular authentication code for Koha 3.0.
-
     # see if we have a valid session cookie already
     # however, if a userid parameter is present (i.e., from
     # a form submission, assume that any current cookie
     # is to be ignored
-    unless ( defined $cookie and $cookie ) {
+    unless ( defined $sessionID and $sessionID ) {
         return ( "failed", undef );
     }
-    my $sessionID = $cookie;
     my $session   = get_session($sessionID);
     C4::Context->_new_userenv($sessionID);
     if ($session) {
         C4::Context->interface($session->param('interface'));
         C4::Context->set_userenv(
-            $session->param('number'),       $session->param('id'),
+            $session->param('number'),       $session->param('id') // '',
             $session->param('cardnumber'),   $session->param('firstname'),
             $session->param('surname'),      $session->param('branch'),
             $session->param('branchname'),   $session->param('flags'),
@@ -1765,17 +1680,17 @@ sub check_cookie_auth {
             $session->param('register_id'),  $session->param('register_name')
         );
 
+        my $userid   = $session->param('id');
         my $ip       = $session->param('ip');
         my $lasttime = $session->param('lasttime');
-        my $userid   = $session->param('id');
-        if ( $lasttime < time() - $timeout ) {
+        my $timeout = _timeout_syspref();
+
+        if ( !$lasttime || ( $lasttime < time() - $timeout ) ) {
 
             # time out
             $session->delete();
             $session->flush;
             C4::Context->_unset_userenv($sessionID);
-            $userid    = undef;
-            $sessionID = undef;
             return ("expired", undef);
         } elsif ( C4::Context->preference('SessionRestrictionByIP') && $ip ne $remote_addr ) {
 
@@ -1783,20 +1698,16 @@ sub check_cookie_auth {
             $session->delete();
             $session->flush;
             C4::Context->_unset_userenv($sessionID);
-            $userid    = undef;
-            $sessionID = undef;
-            return ( "expired", undef );
+            return ( "restricted", undef, { old_ip => $ip, new_ip => $remote_addr});
         } else {
             $session->param( 'lasttime', time() );
             my $flags = defined($flagsrequired) ? haspermission( $userid, $flagsrequired ) : 1;
             if ($flags) {
-                return ( "ok", $sessionID );
+                return ( "ok", $session );
             } else {
                 $session->delete();
                 $session->flush;
                 C4::Context->_unset_userenv($sessionID);
-                $userid    = undef;
-                $sessionID = undef;
                 return ( "failed", undef );
             }
         }
