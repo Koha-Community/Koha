@@ -6,5 +6,17 @@ if( CheckVersion( $DBversion ) ) {
         ('TwoFactorAuthentication', '0', 'NULL', 'Enables two-factor authentication', 'YesNo')
     });
 
+    if( !column_exists( 'borrowers', 'secret' ) ) {
+      $dbh->do(q{
+          ALTER TABLE borrowers ADD COLUMN `secret` MEDIUMTEXT COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'Secret for 2FA' AFTER `password`
+      });
+    }
+
+    if( !column_exists( 'deletedborrowers', 'secret' ) ) {
+      $dbh->do(q{
+          ALTER TABLE deletedborrowers ADD COLUMN `secret` MEDIUMTEXT COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'Secret for 2FA' AFTER `password`
+      });
+    }
+
     NewVersion( $DBversion, 28786, "Add new syspref TwoFactorAuthentication");
 }
