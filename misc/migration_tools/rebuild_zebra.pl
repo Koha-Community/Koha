@@ -24,7 +24,7 @@ use Fcntl qw( LOCK_EX LOCK_NB LOCK_UN );
 use File::Temp qw( tempdir );
 use File::Path qw( mkpath rmtree );
 use C4::Biblio qw( GetXmlBiblio );
-use C4::AuthoritiesMarc;
+use C4::AuthoritiesMarc qw( GetAuthority );
 use C4::Items qw( GetItemsInfo Item2Marc );
 use Koha::RecordProcessor;
 use Koha::Caches;
