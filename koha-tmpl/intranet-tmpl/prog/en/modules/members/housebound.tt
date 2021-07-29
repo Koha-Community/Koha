@@ -14,6 +14,58 @@
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'patron-search.inc' %]
 
+[% BLOCK 'homebound-details' %]
+    <div class="rows">
+        <ol>
+          <li>
+            <span class="label" class="required"> Delivery day:</span>
+            [% hpd = housebound_profile.day %]
+            [% IF hpd == 'any' %]
+              Any
+            [% ELSIF hpd == 'monday' %]
+              Monday
+            [% ELSIF hpd == 'tuesday' %]
+              Tuesday
+            [% ELSIF hpd == 'wednesday' %]
+              Wednesday
+            [% ELSIF hpd == 'thursday' %]
+              Thursday
+            [% ELSIF hpd == 'friday' %]
+              Friday
+            [% ELSIF hpd == 'saturday' %]
+              Saturday
+            [% ELSIF hpd == 'sunday' %]
+              Sunday
+            [% END %]
+          </li>
+          <li>
+            <span class="label" class="required">Frequency:</span>
+            [% AuthorisedValues.GetByCode( 'HSBND_FREQ', housebound_profile.frequency, 0 ) || housebound_profile.frequency | html %]
+          </li>
+          <li>
+            <span class="label">Material:</span><br />
+            [% housebound_profile.fav_itemtypes | html | html_line_break %]
+          </li>
+          <li>
+            <span class="label">Subjects:</span><br />
+            [% housebound_profile.fav_subjects | html | html_line_break %]
+          </li>
+          <li>
+            <span class="label">Authors:</span><br />
+            [% housebound_profile.fav_authors | html | html_line_break %]
+          </li>
+          <li>
+            <span class="label">Referral:</span><br />
+            [% housebound_profile.referral | html | html_line_break %]
+          </li>
+          <li>
+            <span class="label">Notes:</span><br />
+            [% housebound_profile.notes | html | html_line_break %]
+          </li>
+        </ol>
+    </div>
+[% END %]
+
 <nav id="breadcrumbs" aria-label="Breadcrumb" class="breadcrumb">
     <ol>
         <li>
@@ -324,61 +376,14 @@
                   </a>
                 </fieldset>
               </form>
-
+              <h3>Housebound details</h3>
+              [% PROCESS 'homebound-details' %]
             <!-- Display a housebound_profile -->
             [% ELSIF ( housebound_profile ) %]
-              <div class="rows">
-                <ol>
-                  <li>
-                    <span class="label" class="required"> Delivery day:</span>
-                    [% hpd = housebound_profile.day %]
-                    [% IF hpd == 'any' %]
-                      Any
-                    [% ELSIF hpd == 'monday' %]
-                      Monday
-                    [% ELSIF hpd == 'tuesday' %]
-                      Tuesday
-                    [% ELSIF hpd == 'wednesday' %]
-                      Wednesday
-                    [% ELSIF hpd == 'thursday' %]
-                      Thursday
-                    [% ELSIF hpd == 'friday' %]
-                      Friday
-                    [% ELSIF hpd == 'saturday' %]
-                      Saturday
-                    [% ELSIF hpd == 'sunday' %]
-                      Sunday
-                    [% END %]
-                  </li>
-                  <li>
-                    <span class="label" class="required">Frequency:</span>
-                    [% AuthorisedValues.GetByCode( 'HSBND_FREQ', housebound_profile.frequency, 0 ) || housebound_profile.frequency | html %]
-                  </li>
-                  <li>
-                    <span class="label">Material:</span><br />
-                    [% housebound_profile.fav_itemtypes | html | html_line_break %]
-                  </li>
-                  <li>
-                    <span class="label">Subjects:</span><br />
-                    [% housebound_profile.fav_subjects | html | html_line_break %]
-                  </li>
-                  <li>
-                    <span class="label">Authors:</span><br />
-                    [% housebound_profile.fav_authors | html | html_line_break %]
-                  </li>
-                  <li>
-                    <span class="label">Referral:</span><br />
-                    [% housebound_profile.referral | html | html_line_break %]
-                  </li>
-                  <li>
-                    <span class="label">Notes:</span><br />
-                    [% housebound_profile.notes | html | html_line_break %]
-                  </li>
-                </ol>
+                [% PROCESS 'homebound-details' %]
                 <div class="action">
                   <a class="btn btn-default btn-xs" href="/cgi-bin/koha/members/housebound.pl?borrowernumber=[% patron.borrowernumber | html %]&method=update_or_create"><i class="fa fa-pencil"></i> Edit</a>
                 </div>
-              </div>
               <div>
                 <h3>Deliveries</h3>
                 [% housebound_visits = housebound_profile.housebound_visits %]
