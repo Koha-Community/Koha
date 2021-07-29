@@ -307,6 +307,11 @@ foreach my $biblionumber (@biblionumbers) {
     my %biblioloopiter = ();
 
     my $biblio = Koha::Biblios->find( $biblionumber );
+    unless ($biblio) {
+        $biblioloopiter{noitems} = 1;
+        $template->param('noitems' => 1);
+        next;
+    }
 
     my $force_hold_level;
     if ( $patron ) {
