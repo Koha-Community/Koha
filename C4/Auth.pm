@@ -867,7 +867,7 @@ sub checkauth {
     elsif ( $sessionID = $query->cookie("CGISESSID") ) {    # assignment, not comparison
         my ( $return, $more_info );
         ( $return, $session, $more_info ) = check_cookie_auth( $sessionID, $flags,
-            { remote_addr => $ENV{REMOTE_ADDR} }
+            { remote_addr => $ENV{REMOTE_ADDR}, skip_version_check => 1 }
         );
 
         if ( $return eq 'ok' ) {
@@ -1644,19 +1644,23 @@ sub check_cookie_auth {
 
     my $remote_addr = $params->{remote_addr} || $ENV{REMOTE_ADDR};
 
-    unless ( C4::Context->preference('Version') ) {
+    my $skip_version_check = $params->{skip_version_check}; # Only for checkauth
 
-        # database has not been installed yet
-        return ( "maintenance", undef );
-    }
-    my $kohaversion = Koha::version();
-    $kohaversion =~ s/(.*\..*)\.(.*)\.(.*)/$1$2$3/;
-    if ( C4::Context->preference('Version') < $kohaversion ) {
+    unless ( $skip_version_check ) {
+        unless ( C4::Context->preference('Version') ) {
 
-        # database in need of version update; assume that
-        # no API should be called while databsae is in
-        # this condition.
-        return ( "maintenance", undef );
+            # database has not been installed yet
+            return ( "maintenance", undef );
+        }
+        my $kohaversion = Koha::version();
+        $kohaversion =~ s/(.*\..*)\.(.*)\.(.*)/$1$2$3/;
+        if ( C4::Context->preference('Version') < $kohaversion ) {
+
+            # database in need of version update; assume that
+            # no API should be called while databsae is in
+            # this condition.
+            return ( "maintenance", undef );
+        }
     }
 
     # see if we have a valid session cookie already
