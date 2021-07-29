@@ -24,6 +24,7 @@
 use Modern::Perl;
 
 use CGI qw ( -utf8 );
+use URI;
 use C4::Reserves qw( CanItemBeReserved AddReserve CanBookBeReserved );
 use C4::Auth qw( checkauth );
 
@@ -35,7 +36,7 @@ my $input = CGI->new();
 checkauth($input, 0, { reserveforothers => 'place_holds' }, 'intranet');
 
 my @reqbib         = $input->multi_param('reqbib');
-my $biblionumber   = $input->param('biblionumber');
+my @biblionumbers   = $input->multi_param('biblionumber');
 my $borrowernumber = $input->param('borrowernumber');
 my $notes          = $input->param('notes');
 my $branch         = $input->param('pickup');
@@ -50,14 +51,11 @@ my $non_priority   = $input->param('non_priority');
 
 my $patron = Koha::Patrons->find( $borrowernumber );
 
-my $biblionumbers = $input->param('biblionumbers');
-$biblionumbers ||= $biblionumber . '/';
-
-my $bad_bibs = $input->param('bad_bibs');
+my $bad_bibs_param = $input->param('bad_bibs');
+my @bad_bibs = split '/', $bad_bibs_param;
 my $holds_to_place_count = $input->param('holds_to_place_count') || 1;
 
 my %bibinfos = ();
-my @biblionumbers = split '/', $biblionumbers;
 foreach my $bibnum (@biblionumbers) {
     my %bibinfo = ();
     $bibinfo{title}  = $input->param("title_$bibnum");
@@ -150,10 +148,12 @@ if ( $type eq 'str8' && $patron ) {
         }
     }
 
-    if ($bad_bibs) {
-        $biblionumbers .= $bad_bibs;
+    if (@bad_bibs) {
+        push @biblionumbers, @bad_bibs;
     }
-    print $input->redirect("request.pl?biblionumbers=$biblionumbers");
+    my $redirect_url = URI->new("request.pl");
+    $redirect_url->query_form( biblionumber => @biblionumbers);
+    print $input->redirect($redirect_url);
 }
 elsif ( $borrowernumber eq '' ) {
     print $input->header();

@@ -435,8 +435,7 @@
 [% END %]
 
 <form id="hold_form" method="get" action="/cgi-bin/koha/reserve/request.pl">
-    <!-- Value will be set here by placeHold() -->
-    <input id="hold_form_biblios" type="hidden" name="biblionumbers" value="" />
+    <!-- Values will be set here by placeHold() -->
 </form>
 
             </main>
@@ -762,11 +761,10 @@
                 alert(MSG_NO_ITEM_SELECTED);
                 return false;
             }
-            var bibs = "";
             $(checkedItems).each(function() {
-                bibs += $(this).val() + "/";
+                var bib_param = $("<input>").attr("type", "hidden").attr("name", "biblionumber").val($(this).val());
+                $('#hold_form').append(bib_param);
             });
-            $("#hold_form_biblios").val(bibs);
             $("#hold_form").submit();
             return false;
         }

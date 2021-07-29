@@ -24,6 +24,7 @@
 
 use Modern::Perl;
 use CGI qw ( -utf8 );
+use URI;
 use List::MoreUtils qw( uniq );
 use Try::Tiny;
 
@@ -104,7 +105,7 @@ if ( $from eq 'borrower'){
 } elsif ( $from eq 'circ'){
     print $query->redirect("/cgi-bin/koha/circ/circulation.pl?borrowernumber=$borrower[0]");
 } else {
-     my $url = "/cgi-bin/koha/reserve/request.pl?";
-     $url .= "biblionumbers=" . join('/', @biblionumber);
+     my $url = URI->new("/cgi-bin/koha/reserve/request.pl");
+     $url->query_form( biblionumber => @biblionumber);
      print $query->redirect($url);
 }

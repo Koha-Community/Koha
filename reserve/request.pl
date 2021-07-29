@@ -184,22 +184,12 @@ if($findclub) {
     }
 }
 
-my @biblionumbers = ();
-my $biblionumber = $input->param('biblionumber');
-my $biblionumbers = $input->param('biblionumbers');
-if ( $biblionumbers ) {
-    @biblionumbers = split '/', $biblionumbers;
-} else {
-    push @biblionumbers, $input->multi_param('biblionumber');
-}
+my @biblionumbers = $input->multi_param('biblionumber');
 
 my $multi_hold = @biblionumbers > 1;
 $template->param(
     multi_hold => $multi_hold,
 );
-
-# If we are coming from the search result and only 1 is selected
-$biblionumber ||= $biblionumbers[0] unless $multi_hold;
 
 # If we have the borrowernumber because we've performed an action, then we
 # don't want to try to place another reserve.
@@ -706,17 +696,13 @@ if (   ( $findborrower && $borrowernumber_hold || $findclub && $club_hold )
     $template->param( no_reserves_allowed => $no_reserves_allowed );
     $template->param( exceeded_maxreserves => $exceeded_maxreserves );
     $template->param( exceeded_holds_per_record => $exceeded_holds_per_record );
-    $template->param( subscriptionsnumber => CountSubscriptionFromBiblionumber($biblionumber));
+    # FIXME: getting just the first bib's result doesn't seem right
+    $template->param( subscriptionsnumber => CountSubscriptionFromBiblionumber($biblionumbers[0]));
 } elsif ( ! $multi_hold ) {
-    my $biblio = Koha::Biblios->find( $biblionumber );
+    my $biblio = Koha::Biblios->find( $biblionumbers[0] );
     $template->param( biblio => $biblio );
 }
-
-if ( $multi_hold ) {
-    $template->param( biblionumbers => join('/', @biblionumbers) );
-} else {
-    $template->param( biblionumber => $biblionumber || $biblionumbers[0] );
-}
+$template->param( biblionumbers => \@biblionumbers );
 
 # pass the userenv branch if no pickup location selected
 $template->param( pickup => $pickup || C4::Context->userenv->{branch} );

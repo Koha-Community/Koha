@@ -7,22 +7,17 @@ function placeHold () {
         return false;
     }
 
-    var newloc;
+    var bib_params = [];
+    $(checkedItems).each(function() {
+        var bib = $(this).val();
+        bib_params.push("biblionumber=" + bib);
+    });
 
-    if ($(checkedItems).size() > 1) {
-        var bibs = "";
-        $(checkedItems).each(function() {
-            var bib = $(this).val();
-            bibs += bib + "/";
-        });
-
-        newloc = "/cgi-bin/koha/reserve/request.pl?biblionumbers=" + bibs + "&multi_hold=1";
-    } else {
-        var bib = checkedItems[0].value;
-        newloc = "/cgi-bin/koha/reserve/request.pl?biblionumber=" + bib;
+    if (bib_params.length > 1) {
+        bib_params.push('multi_hold=1');
     }
 
-    window.opener.location = newloc;
+    window.opener.location = "/cgi-bin/koha/reserve/request.pl?" + bib_params.join('&');
     window.close();
 }
 

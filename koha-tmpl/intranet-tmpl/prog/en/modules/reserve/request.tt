@@ -163,14 +163,12 @@
                             [% END %]
                         </ul>
                         <div id="holds_patronsearch_pane">
-                            <form id="holds_patronsearch" action="request.pl?biblionumbers=[% biblionumbers | html %]" method="post">
+                            <form id="holds_patronsearch" action="request.pl" method="post">
                                 <div class="hint">Enter patron card number or partial name:</div>
                                 <input type="text" size="40" id="patron" class="focus" name="findborrower" autocomplete="off" />
                                 <input type="submit" value="Search" />
-                                [% IF multi_hold %]
-                                    <input type="hidden" name="biblionumbers" value="[% biblionumbers | html %]"/>
-                                [% ELSE %]
-                                    <input type="hidden" name="biblionumber" value="[% biblionumber | html %]" />
+                                [% FOREACH biblionumber IN biblionumbers %]
+                                <input type="hidden" name="biblionumber" value="[% biblionumber | html %]"/>
                                 [% END %]
 
                             </form> <!-- /#holds_patronsearch -->
@@ -180,14 +178,12 @@
                         </div>
                         [% IF clubcount %]
                             <div id="holds_clubsearch_pane">
-                                <form id="holds_clubsearch" action="request.pl?biblionumbers=[% biblionumbers | html %]" method="post">
+                                <form id="holds_clubsearch" action="request.pl" method="post">
                                     <div class="hint">Enter club ID or partial name:</div>
                                     <input type="text" size="40" id="club" class="focus" name="findclub" autocomplete="off" />
                                     <input type="submit" value="Search" />
-                                    [% IF multi_hold %]
-                                        <input type="hidden" name="biblionumbers" value="[% biblionumbers | html %]"/>
-                                    [% ELSE %]
-                                        <input type="hidden" name="biblionumber" value="[% biblionumber | html %]" />
+                                    [% FOREACH biblionumber IN biblionumbers %]
+                                    <input type="hidden" name="biblionumber" value="[% biblionumber | html %]"/>
                                     [% END %]
 
                                 </form> <!-- /#holds_patronsearch -->
@@ -206,7 +202,6 @@
                     <form action="/api/v1/clubs/[% club.id | html %]/holds" method="post" name="form" id="club-request-form">
 
                         [% IF ( multi_hold ) %]
-                            <input type="hidden" name="biblionumbers" id="multi_hold_bibs" value="[% biblionumbers | html %]"/>
                             <input type="hidden" name="bad_bibs" id="bad_bibs" value=""/>
                             <input type="hidden" name="request" value="any"/>
                             [% FOREACH biblioloo IN biblioloop %]
@@ -214,7 +209,6 @@
                                 <input type="hidden" name="rank_[% biblioloo.biblionumber | html %]" value="[% biblioloo.rank | html %]"/>
                             [% END %]
                         [% ELSE %]
-                            <input type="hidden" name="biblionumber" value="[% biblionumber | html %]" />
                             <input type="hidden" name="title" value="[% biblio.title | html %]" />
                             <input type="hidden" name="rank-request" value="[% fixedRank | html %]" />
                         [% END # /IF multi_hold %]
@@ -449,8 +443,10 @@
                         <input type="hidden" name="borrowernumber" value="[% patron.borrowernumber | html %]" />
                         <input type="hidden" name="type" value="str8" />
 
+                        [% FOREACH biblionumber IN biblionumbers %]
+                        <input type="hidden" name="biblionumber" value="[% biblionumber | html %]"/>
+                        [% END %]
                         [% IF ( multi_hold ) %]
-                            <input type="hidden" name="biblionumbers" id="multi_hold_bibs" value="[% biblionumbers | html %]"/>
                             <input type="hidden" name="multi_holds" id="multi_holds" value="1" />
                             <input type="hidden" name="bad_bibs" id="bad_bibs" value=""/>
                             <input type="hidden" name="request" value="any"/>
@@ -459,7 +455,6 @@
                                 <input type="hidden" name="rank_[% biblioloo.biblionumber | html %]" value="[% biblioloo.rank | html %]"/>
                             [% END %]
                         [% ELSE %]
-                            <input type="hidden" name="biblionumber" value="[% biblionumber | html %]" />
                             <input type="hidden" name="title" value="[% biblio.title | html %]" />
                             <input type="hidden" name="rank-request" value="[% fixedRank | html %]" />
                         [% END # /IF multi_hold %]
@@ -923,7 +918,9 @@
                 [% IF ( reserveloop ) %]
                     <form id="existing_holds" name="T[% time | html %]" action="modrequest.pl" method="post" style="display:block">
                         [% IF ( multi_hold ) %]
-                            <input type = "hidden" name="biblionumbers" value="[% biblionumbers | html %]"/>
+                            [% FOREACH biblionumber IN biblionumbers %]
+                            <input type="hidden" name="biblionumber" value="[% biblionumber | html %]"/>
+                            [% END %]
                         [% END %]
 
                         [% IF enqueued %]
@@ -1154,7 +1151,7 @@
     [% Asset.js("js/holds.js") | $raw%]
     <script>
         var Sticky;
-        var biblionumber = "[% biblionumber | $raw %]";
+        var biblionumbers = [[% biblionumbers.join(', ') | $raw %]];
         var borrowernumber = "[% patron.borrowernumber | $raw %]";
         var patron_homebranch = "[% To.json( Branches.GetName( patron.branchcode ) ) | $raw %]";
         var override_items = {[% FOREACH biblio IN biblioloop %][% FOREACH itemloo IN biblio.itemloop %][% IF ( itemloo.override ) %]
@@ -1220,7 +1217,7 @@
                     var pickup = $("#pickup").val();
                     var url = "?pickup=" + pickup;
                     url += "&borrowernumber=" + borrowernumber;
-                    url += "&biblionumber=" + biblionumber;
+                    url += "&biblionumber=" + biblionumbers[0];
                     window.location.replace(url);
                 });
             [% END %]
@@ -1240,8 +1237,6 @@
             $("#club-request-form").on("submit", function() {
                 let $t = $(this);
                 $('.clubalert, .holdalert').addClass('hide');
-                let biblionumbers = [biblionumber];
-                let biblionumbers_text;
                 const data = {
                     pickup_library_id: $('select[name="pickup"]').val()
                 };
@@ -1257,12 +1252,13 @@
                 if($('input[name="default_patron_home"]:checked').length) {
                     data.default_patron_home = 1;
                 }
-                if($('input[name="biblionumbers"]').length) {
-                    biblionumbers_text = $('input[name="biblionumbers"]').val();
-                    biblionumbers = biblionumbers_text.replace(/\/$/, '').split('/')
-                }
 
                 const count = $('input[name="holds_to_place_count"]').length?$('input[name="holds_to_place_count"]').val():1;
+                var newloc = 'request.pl?';
+                biblionumbers.forEach(function (biblionumber) {
+                    newloc += '&biblionumber=' + biblionumber;
+                });
+
                 biblionumbers.forEach(function(biblionumber) {
                     data.biblio_id = biblionumber;
                     let options = {
@@ -1274,11 +1270,7 @@
                     for(let i = 0; i < count; i++) {
                         $.ajax(options)
                         .then(function(result) {
-                            let url = 'request.pl?biblionumber='+biblionumber;
-                            if(biblionumbers_text) {
-                                url = 'request.pl?biblionumbers='+biblionumbers_text;
-                            }
-                            document.location = url;
+                            document.location = newloc;
                         })
                         .fail(function(err) {
                             var message = err.responseJSON.error;
@@ -1373,7 +1365,6 @@
 
         function checkMultiHold() {
 
-            var biblionumbers = "";
             var selected_bibs = $(".multi_hold_item_checkbox:checked");
             if ( selected_bibs.length > 0 ) {
                 // there are biblios selected in the form!
@@ -1386,7 +1377,6 @@
                     }
                     else {
                         var bibnum = $(this).attr("title");
-                        biblionumbers += bibnum + "/";
                     }
                 });
                 if ( pickup_not_set > 0 ) {
@@ -1406,7 +1396,6 @@
                 badBibs += bibnum + "/";
             });
 
-            $("#multi_hold_bibs").val(biblionumbers);
             $("#bad_bibs").val(badBibs);
 
             $('#hold-request-form').preventDoubleFormSubmit();

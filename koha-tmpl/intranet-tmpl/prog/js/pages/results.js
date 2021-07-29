@@ -337,12 +337,15 @@ function placeHold () {
         alert( __("Nothing is selected") );
         return false;
     }
-    var bibs = "";
+    var bibs = [];
     $(checkedItems).each(function() {
         var bib = $(this).val();
-        bibs += bib + "/";
+        bibs.push(bib);
     });
-    $("#hold_form_biblios").val(bibs);
+    bibs.forEach(function (bib) {
+        var bib_param = $("<input>").attr("type", "hidden").attr("name", "biblionumber").val(bib);
+	$('#hold_form').append(bib_param);
+    });
     $("#hold_form").submit();
     return false;
 }
