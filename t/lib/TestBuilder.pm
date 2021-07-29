@@ -553,6 +553,7 @@ sub _gen_default_values {
             lost           => undef,
             debarred       => undef,
             borrowernotes  => '',
+            secret         => undef,
         },
         Item => {
             notforloan         => 0,

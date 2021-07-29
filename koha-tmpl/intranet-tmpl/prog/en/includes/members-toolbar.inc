@@ -53,7 +53,7 @@
                 [% END %]
 
                 [% IF Koha.Preference('TwoFactorAuthentication') && logged_in_user.borrowernumber == patron.borrowernumber %]
-                    <li><a id="twofa" href="/cgi-bin/koha/members/two_factor_auth.pl">Enable Two-Factor Authentication</a></li>
+                    <li><a id="twofa" href="/cgi-bin/koha/members/two_factor_auth.pl">Manage two-factor authentication</a></li>
                 [% END %]
 
                 [% IF CAN_user_borrowers_edit_borrowers && useDischarge %]

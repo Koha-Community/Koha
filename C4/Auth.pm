@@ -35,6 +35,7 @@ use Koha;
 use Koha::Logger;
 use Koha::Caches;
 use Koha::AuthUtils qw( get_script_name hash_password );
+use Koha::Auth::TwoFactorAuth;
 use Koha::Checkouts;
 use Koha::DateUtils qw( dt_from_string );
 use Koha::Library::Groups;
@@ -857,6 +858,9 @@ sub checkauth {
     my $q_userid = $query->param('userid') // '';
 
     my $session;
+    my $invalid_otp_token;
+    my $require_2FA = ( C4::Context->preference('TwoFactorAuthentication') && $type ne "OPAC" ) ? 1 : 0;
+    my $auth_challenge_complete;
 
     # Basic authentication is incompatible with the use of Shibboleth,
     # as Shibboleth may return REMOTE_USER as a Shibboleth attribute,
@@ -889,13 +893,43 @@ sub checkauth {
             { remote_addr => $ENV{REMOTE_ADDR}, skip_version_check => 1 }
         );
 
+        if ( $return eq 'ok' || $return eq 'additional-auth-needed' ) {
+            $userid = $session->param('id');
+        }
+
+        $additional_auth_needed = ( $return eq 'additional-auth-needed' ) ? 1 : 0;
+
+        # We are at the second screen if the waiting-for-2FA is set in session
+        # and otp_token param has been passed
+        if (   $require_2FA
+            && $additional_auth_needed
+            && ( my $otp_token = $query->param('otp_token') ) )
+        {
+            my $patron    = Koha::Patrons->find( { userid => $userid } );
+            my $auth      = Koha::Auth::TwoFactorAuth::get_auth( { patron => $patron } );
+            my $verified = $auth->verify($otp_token);
+            $auth->clear;
+            if ( $verified ) {
+                # The token is correct, the user is fully logged in!
+                $additional_auth_needed = 0;
+                $session->param( 'waiting-for-2FA', 0 );
+                $return = "ok";
+                $auth_challenge_complete = 1;
+
+               # This is an ugly trick to pass the test
+               # $query->param('koha_login_context') && ( $q_userid ne $userid )
+               # few lines later
+                $q_userid = $userid;
+            }
+            else {
+                $invalid_otp_token = 1;
+            }
+        }
+
         if ( $return eq 'ok' ) {
             Koha::Logger->get->debug(sprintf "AUTH_SESSION: (%s)\t%s %s - %s", map { $session->param($_) || q{} } qw(cardnumber firstname surname branch));
 
-            my $s_userid = $session->param('id');
-            $userid      = $s_userid;
-
-            if ( ( $query->param('koha_login_context') && ( $q_userid ne $s_userid ) )
+            if ( ( $query->param('koha_login_context') && ( $q_userid ne $userid ) )
                 || ( $cas && $query->param('ticket') && !C4::Context->userenv->{'id'} )
                 || ( $shib && $shib_login && !$logout && !C4::Context->userenv->{'id'} )
             ) {
@@ -905,29 +939,10 @@ sub checkauth {
                 $anon_search_history = $session->param('search_history');
                 $session->delete();
                 $session->flush;
-                C4::Context::_unset_userenv($sessionID);
-                $sessionID = undef;
-            }
-            elsif ($logout) {
-
-                # voluntary logout the user
-                # check wether the user was using their shibboleth session or a local one
-                my $shibSuccess = C4::Context->userenv->{'shibboleth'};
-                $session->delete();
-                $session->flush;
                 $cookie = $cookie_mgr->clear_unless( $query->cookie, @$cookie );
                 C4::Context::_unset_userenv($sessionID);
                 $sessionID = undef;
-
-                if ($cas and $caslogout) {
-                    logout_cas($query, $type);
-                }
-
-                # If we are in a shibboleth session (shibboleth is enabled, a shibboleth match attribute is set and matches koha matchpoint)
-                if ( $shib and $shib_login and $shibSuccess) {
-                    logout_shib($query);
-                }
-            } else {
+            } elsif (!$logout) {
 
                 $cookie = $cookie_mgr->replace_in_list( $cookie, $query->cookie(
                     -name     => 'CGISESSID',
@@ -955,8 +970,34 @@ sub checkauth {
         }
     }
 
-    unless ( $loggedin ) {
+    if ( ( !$loggedin && !$additional_auth_needed ) || $logout ) {
+        $sessionID = undef;
         $userid    = undef;
+    }
+
+    if ($logout) {
+
+        # voluntary logout the user
+        # check wether the user was using their shibboleth session or a local one
+        my $shibSuccess = C4::Context->userenv->{'shibboleth'};
+        if ( $session ) {
+            $session->delete();
+            $session->flush;
+        }
+        C4::Context::_unset_userenv($sessionID);
+        $cookie = $cookie_mgr->clear_unless( $query->cookie, @$cookie );
+
+        if ($cas and $caslogout) {
+            logout_cas($query, $type);
+        }
+
+        # If we are in a shibboleth session (shibboleth is enabled, a shibboleth match attribute is set and matches koha matchpoint)
+        if ( $shib and $shib_login and $shibSuccess) {
+            logout_shib($query);
+        }
+
+        $session   = undef;
+        $additional_auth_needed = 0;
     }
 
     unless ( $userid ) {
@@ -1260,9 +1301,18 @@ sub checkauth {
         $session->flush;
     }    # END unless ($userid)
 
+    if ( $require_2FA && ( $loggedin && !$auth_challenge_complete)) {
+        my $patron = Koha::Patrons->find({userid => $userid});
+        if ( $patron->auth_method eq 'two-factor' ) {
+            # Ask for the OTP token
+            $additional_auth_needed = 1;
+            $session->param('waiting-for-2FA', 1);
+            %info = ();# We remove the warnings/errors we may have set incorrectly before
+        }
+    }
+
     # finished authentification, now respond
-    if ( $loggedin || $authnotrequired )
-    {
+    if ( ( $loggedin || $authnotrequired ) && !$additional_auth_needed ) {
         # successful login
         unless (@$cookie) {
             $cookie = $cookie_mgr->replace_in_list( $cookie, $query->cookie(
@@ -1297,15 +1347,16 @@ sub checkauth {
     #
     #
 
+    my $patron = Koha::Patrons->find({ userid => $q_userid }); # Not necessary logged in!
+
     # get the inputs from the incoming query
     my @inputs = ();
+    my @inputs_to_clean = qw( userid password ticket logout.x otp_token );
     foreach my $name ( param $query) {
-        (next) if ( $name eq 'userid' || $name eq 'password' || $name eq 'ticket' );
+        next if grep { $name eq $_ } @inputs_to_clean;
         my @value = $query->multi_param($name);
         push @inputs, { name => $name, value => $_ } for @value;
     }
-
-    my $patron = Koha::Patrons->find({ userid => $q_userid }); # Not necessary logged in!
 
     my $LibraryNameTitle = C4::Context->preference("LibraryName");
     $LibraryNameTitle =~ s/<(?:\/?)(?:br|p)\s*(?:\/?)>/ /sgi;
@@ -1354,6 +1405,12 @@ sub checkauth {
     $template->param( SCI_login => 1 ) if ( $query->param('sci_user_login') );
     $template->param( OpacPublic => C4::Context->preference("OpacPublic") );
     $template->param( loginprompt => 1 ) unless $info{'nopermission'};
+    if ( $additional_auth_needed ) {
+        $template->param(
+            TwoFA_prompt => 1,
+            invalid_otp_token => $invalid_otp_token,
+        );
+    }
 
     if ( $type eq 'opac' ) {
         require Koha::Virtualshelves;
@@ -1462,6 +1519,8 @@ Possible return values in C<$status> are:
 =item "expired -- session cookie has expired; API user should resubmit userid and password
 
 =item "restricted" -- The IP has changed (if SessionRestrictionByIP)
+
+=item "additional-auth-needed -- User is in an authentication process that is not finished
 
 =back
 
@@ -1740,6 +1799,9 @@ sub check_cookie_auth {
                     $session->param('desk_id'),      $session->param('desk_name'),
                     $session->param('register_id'),  $session->param('register_name')
                 );
+                return ( "additional-auth-needed", $session )
+                    if $session->param('waiting-for-2FA');
+
                 return ( "ok", $session );
             } else {
                 $session->delete();

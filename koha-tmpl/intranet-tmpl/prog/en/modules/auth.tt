@@ -8,6 +8,7 @@
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>
+    [% IF TwoFA_prompt %]Two-factor authentication[% END %]
     [% IF ( loginprompt ) %]Log in to Koha[% END %]
     [% IF too_many_login_attempts %]This account has been locked.
     [% ELSIF invalid_username_or_password %]Invalid username or password[% END %]
@@ -61,7 +62,7 @@
 <p>If you have a shibboleth account, please <a href="[% shibbolethLoginUrl | $raw %]">click here</a> to login.</p>
 [% END %]
 
-[% UNLESS Koha.Preference('staffShibOnly') %]
+[% IF !TwoFA_prompt && !Koha.Preference('staffShibOnly') %]
     <!-- login prompt time-->
     <form action="[% script_name | html %]" method="post" name="loginform" id="loginform">
         <input type="hidden" name="koha_login_context" value="intranet" />
@@ -135,6 +136,22 @@
             [% END %]
         [% END %]
     [% END %]
+[% ELSIF TwoFA_prompt %]
+    <form action="[% script_name | html %]" method="post" name="loginform" id="loginform">
+        <input type="hidden" name="koha_login_context" value="intranet" />
+        [% FOREACH INPUT IN INPUTS %]
+            <input type="hidden" name="[% INPUT.name | html %]" value="[% INPUT.value | html %]" />
+        [% END %]
+        [% IF invalid_otp_token %]
+            <div class="dialog error">Invalid two-factor code</div>
+        [% END %]
+
+        <p><label for="otp_token">Two-factor authentication code:</label>
+        <input type="text" name="otp_token" id="otp_token" class="input focus" value="" size="20" tabindex="1" />
+        <p class="submit"><input id="submit-button" type="submit" value="Verify code" /></p>
+        <a class="logout" id="logout" href="/cgi-bin/koha/mainpage.pl?logout.x=1">Log out</a>
+
+    </form>
 [% END %]
 
 [% IF ( nopermission ) %]

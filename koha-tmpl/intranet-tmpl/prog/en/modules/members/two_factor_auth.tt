@@ -3,7 +3,7 @@
 [% USE Asset %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Two-Factor Authentication &rsaquo; Patrons &rsaquo; Koha</title>
+<title>Two-factor authentication &rsaquo; Patrons &rsaquo; Koha</title>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 <body id="pat_two_factor_auth" class="pat">
@@ -34,7 +34,7 @@
                 [% INCLUDE 'members-toolbar.inc' %]
 
                 [% IF op == 'register' %]
-                    <h1>Register Two-Factor Authenticator</h1>
+                    <h1>Register two-factor authenticator</h1>
                     <div class="dialog message">
                         <p>We recommend cloud-based mobile authenticator apps such as Authy, Duo Mobile, and LastPass. They can restore access if you lose your hardware device.</p>
                         <p>Can't scan the code?</p>
@@ -69,14 +69,14 @@
                         </fieldset>
                     </form>
                 [% ELSE %]
-                    <h1>Two-Factor Authentication</h1>
+                    <h1>Two-factor authentication</h1>
                     [% IF patron.auth_method == "two-factor" %]
                         <div class="two-factor-status">Status: Enabled</div>
 
                         <form id="two-factor-auth" action="/cgi-bin/koha/members/two_factor_auth.pl" method="post">
                             <input type="hidden" name="csrf_token" value="[% csrf_token | html %]" />
                             <input type="hidden" name="op" value="disable-2FA" />
-                            <input type="submit" value="Disable Two-Factor Authentication" />
+                            <input type="submit" value="Disable two-factor authentication" />
                         </form>
                     [% ELSE %]
                         <div class="two-factor-status">Status: Disabled</div>
@@ -84,7 +84,7 @@
                         <form id="two-factor-auth" action="/cgi-bin/koha/members/two_factor_auth.pl" method="post">
                             <input type="hidden" name="csrf_token" value="[% csrf_token | html %]" />
                             <input type="hidden" name="op" value="enable-2FA" />
-                            <input type="submit" value="Enable Two-Factor Authentication" />
+                            <input type="submit" value="Enable two-factor authentication" />
                         </form>
 
                     [% END %]
