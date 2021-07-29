@@ -32,6 +32,7 @@ use CGI qw ( -utf8 );
 use DateTime;
 use C4::Auth;
 use Koha::DateUtils qw( dt_from_string );
+use C4::AuthoritiesMarc qw( GetAuthorityXML );
 
 use Koha::Biblios;
 use Koha::Checkouts;

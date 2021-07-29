@@ -31,6 +31,7 @@ use C4::MarcModificationTemplates qw(
     GetModificationTemplates
     ModifyRecordWithTemplate
 );
+use C4::C4::AuthoritiesMarc qw( GuessAuthTypeCode GuessAuthId GetAuthority ModAuthority AddAuthority );
 
 use YAML::XS;
 use Time::HiRes qw( gettimeofday );
@@ -389,7 +390,6 @@ RECORD: while (  ) {
     }
     unless ($test_parameter) {
         if ($authorities){
-            use C4::AuthoritiesMarc;
             my $authtypecode=GuessAuthTypeCode($record, $heading_fields);
             my $authid= ($id?$id:GuessAuthId($record));
             if ($authid && GetAuthority($authid) && $update ){

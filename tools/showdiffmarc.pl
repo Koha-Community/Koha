@@ -31,6 +31,7 @@ use C4::Auth qw( get_template_and_user );
 use C4::Biblio qw( GetMarcBiblio );
 use C4::Auth qw( get_template_and_user );
 use C4::ImportBatch qw( GetRecordFromImportBiblio GetImportBiblios );
+use C4::AuthoritiesMarc qw( GetAuthority );
 
 use Koha::Biblios;
 

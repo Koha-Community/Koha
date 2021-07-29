@@ -26,6 +26,7 @@ use C4::Output qw( pagination_bar output_html_with_http_headers );
 use CGI qw ( -utf8 );
 use C4::Search;
 use C4::Koha qw( getnbpages );
+use C4::AuthoritiesMarc qw( GetAuthority SearchAuthorities );
 
 ###TODO To rewrite in order to use SearchAuthorities
 
