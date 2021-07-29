@@ -40,7 +40,7 @@ use Koha::SearchEngine::QueryBuilder;
 
 my $query = CGI->new;
 
-my ( $auth_status, $sessionID ) = check_cookie_auth( $query->cookie('CGISESSID'), { catalogue => 1 } );
+my ( $auth_status) = check_cookie_auth( $query->cookie('CGISESSID'), { catalogue => 1 } );
 
 if ( $auth_status ne "ok" ) {
     # send empty response

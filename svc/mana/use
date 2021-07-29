@@ -32,7 +32,7 @@ my $input = CGI->new;
 binmode STDOUT, ":encoding(UTF-8)";
 print $input->header( -type => 'text/plain', -charset => 'UTF-8' );
 
-my ( $auth_status, $sessionID ) =
+my ( $auth_status ) =
   check_cookie_auth( $input->cookie('CGISESSID'),
     { serials => 'create_subscription' } );
 

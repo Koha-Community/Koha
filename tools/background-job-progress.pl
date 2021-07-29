@@ -30,7 +30,7 @@ use CGI::Cookie; # need to check cookies before
 
 my $input = CGI->new;
 my %cookies = CGI::Cookie->fetch;
-my ($auth_status, $sessionID) = check_cookie_auth($cookies{'CGISESSID'}->value, { tools => '*' });
+my ($auth_status, $session) = check_cookie_auth($cookies{'CGISESSID'}->value, { tools => '*' });
 if ($auth_status ne "ok") {
     my $reply = CGI->new("");
     print $reply->header(-type => 'text/html');
@@ -38,6 +38,7 @@ if ($auth_status ne "ok") {
     exit 0;
 }
 
+my $sessionID = $session->id;
 my $jobID = $input->param('jobID');
 my $job = C4::BackgroundJob->fetch($sessionID, $jobID);
 my $reported_progress = 0;

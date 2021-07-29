@@ -54,7 +54,7 @@ $results_per_page = undef if $results_per_page && $results_per_page == -1;
 binmode STDOUT, ":encoding(UTF-8)";
 print $input->header( -type => 'text/plain', -charset => 'UTF-8' );
 
-my ( $auth_status, $sessionID ) =
+my ( $auth_status ) =
   check_cookie_auth( $input->cookie('CGISESSID'), { tools => 'manage_staged_marc' } );
 if ( $auth_status ne "ok" ) {
     exit 0;

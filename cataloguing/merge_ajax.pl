@@ -11,7 +11,7 @@ use C4::Biblio qw( GetMarcStructure );
 use C4::Auth qw( check_cookie_auth );
 
 my %cookies = CGI::Cookie->fetch;
-my ( $auth_status, $sessionID ) = check_cookie_auth(
+my ( $auth_status ) = check_cookie_auth(
     $cookies{'CGISESSID'}->value, { editcatalogue => 'edit_catalogue' },
 );
 my $reply = CGI->new;

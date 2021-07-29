@@ -22,7 +22,7 @@ use Modern::Perl;
 use CGI;
 use JSON qw(to_json);
 
-use C4::Auth qw(check_cookie_auth haspermission get_session);
+use C4::Auth qw(check_cookie_auth haspermission);
 use C4::Circulation qw(GetIssuingCharges CanBookBeRenewed GetRenewCount GetSoonestRenewDate);
 use C4::Overdues qw(GetFine);
 use C4::Context;
@@ -33,10 +33,9 @@ use Koha::ItemTypes;
 
 my $input = CGI->new;
 
-my ( $auth_status, $sessionID ) =
+my ( $auth_status, $session ) =
   check_cookie_auth( $input->cookie('CGISESSID'));
 
-my $session   = get_session($sessionID);
 my $userid   = $session->param('id');
 
 unless (haspermission($userid, { circulate => 'circulate_remaining_permissions' })

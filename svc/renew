@@ -31,7 +31,7 @@ use Koha::DateUtils qw(output_pref dt_from_string);
 
 my $input = CGI->new;
 
-my ( $auth_status, $sessionID ) =
+my ( $auth_status ) =
   check_cookie_auth( $input->cookie('CGISESSID'),
     { circulate => 'circulate_remaining_permissions' } );
 

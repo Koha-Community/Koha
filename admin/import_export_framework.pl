@@ -27,9 +27,9 @@ use C4::ImportExportFramework qw( createODS ExportFramework ImportFramework );
 
 my %cookies = CGI::Cookie->fetch();
 my $authenticated = 0;
-my ($auth_status, $sessionID);
+my ($auth_status);
 if (exists $cookies{'CGISESSID'}) {
-    ($auth_status, $sessionID) = check_cookie_auth(
+    ($auth_status, undef) = check_cookie_auth(
         $cookies{'CGISESSID'}->value,
         { parameters => 'manage_marc_frameworks' },
     );

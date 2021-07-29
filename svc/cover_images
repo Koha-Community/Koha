@@ -27,7 +27,7 @@ use JSON qw/to_json/;
 
 my $input = CGI->new;
 
-my ( $auth_status, $sessionID ) =
+my ( $auth_status ) =
         check_cookie_auth(
             $input->cookie('CGISESSID'),
             { tools => 'upload_local_cover_images' } );

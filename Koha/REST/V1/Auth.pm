@@ -216,11 +216,10 @@ sub authenticate_api_request {
         # Mojo doesn't use %ENV the way CGI apps do
         # Manually pass the remote_address to check_auth_cookie
         my $remote_addr = $c->tx->remote_address;
-        my ($status, $sessionID) = check_cookie_auth(
+        my ($status, $session) = check_cookie_auth(
                                                 $cookie, undef,
                                                 { remote_addr => $remote_addr });
         if ($status eq "ok") {
-            my $session = get_session($sessionID);
             $user = Koha::Patrons->find( $session->param('number') )
               unless $session->param('sessiontype')
                  and $session->param('sessiontype') eq 'anon';

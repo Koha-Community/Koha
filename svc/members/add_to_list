@@ -26,7 +26,7 @@ use Koha::List::Patron qw( AddPatronList GetPatronLists AddPatronsToList );
 
 my $input = CGI->new;
 
-my ( $auth_status, $sessionID ) = check_cookie_auth(
+my ( $auth_status ) = check_cookie_auth(
     $input->cookie('CGISESSID'),
     { tools => 'manage_patron_lists' },
 );

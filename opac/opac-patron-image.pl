@@ -35,7 +35,7 @@ unless (C4::Context->preference('OPACpatronimages')) {
 my $needed_flags;
 my %cookies = CGI::Cookie->fetch;
 my $sessid = $cookies{'CGISESSID'}->value;
-my ($auth_status, $auth_sessid) = check_cookie_auth($sessid, $needed_flags);
+my ($auth_status) = check_cookie_auth($sessid, $needed_flags);
 my $borrowernumber = C4::Context->userenv->{'number'};
 
 my $patron_image = Koha::Patron::Images->find($borrowernumber);

@@ -91,7 +91,7 @@ below the scannable barcode.
 
 my $input = CGI->new;
 
-my ( $auth_status, $sessionID ) = check_cookie_auth( $input->cookie('CGISESSID'), { catalogue => '*' } );
+my ( $auth_status ) = check_cookie_auth( $input->cookie('CGISESSID'), { catalogue => '*' } );
 
 if ( $auth_status ne "ok" ) {
     exit 0;

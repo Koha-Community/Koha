@@ -28,7 +28,7 @@ use C4::Auth qw( check_cookie_auth );
 
 my $input = CGI->new;
 
-my ($auth_status, $sessionID) = check_cookie_auth($input->cookie('CGISESSID'), { serials => '*' });
+my ($auth_status) = check_cookie_auth($input->cookie('CGISESSID'), { serials => '*' });
 if ($auth_status ne "ok") {
     print $input->header(-type => 'text/plain', -status => '403 Forbidden');
     exit 0;

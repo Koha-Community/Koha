@@ -110,7 +110,7 @@ sub ajax_auth_cgi {
     my %cookies      = CGI::Cookie->fetch;
     my $input        = CGI->new;
     my $sessid = $cookies{'CGISESSID'}->value || $input->param('CGISESSID');
-    my ( $auth_status, $auth_sessid ) =
+    my ( $auth_status ) =
       check_cookie_auth( $sessid, $needed_flags );
     return $input, $auth_status;
 }

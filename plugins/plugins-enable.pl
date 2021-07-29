@@ -27,7 +27,7 @@ die("Koha plugins are disabled!") unless C4::Context->config("enable_plugins");
 
 my $input = CGI->new;
 
-my ( $auth_status, $sessionID ) =
+my ( $auth_status ) =
   check_cookie_auth( $input->cookie('CGISESSID'), { plugins => 'manage' } );
 
 my $class = $input->param('class');
