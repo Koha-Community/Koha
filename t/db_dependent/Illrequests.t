@@ -714,7 +714,7 @@ subtest 'Backend core methods' => sub {
 
 subtest 'Helpers' => sub {
 
-    plan tests => 20;
+    plan tests => 21;
 
     $schema->storage->txn_begin;
 
@@ -881,6 +881,12 @@ subtest 'Helpers' => sub {
     ok(
         $not->{title} eq 'Interlibrary loan request cancelled',
         'Correct title return from get_notice'
+    );
+    $not->{content} =~ s/\s//g;
+
+    is(
+        $not->{content},"Thepatronforinterlibraryloansrequest" . $illrq_obj->id . ",withthefollowingdetails,hasrequestedcancellationofthisILLrequest:-author:myauthor-title:mytitle",
+        'Correct content returned from get_notice with metadata correctly ordered'
     );
 
     $schema->storage->txn_rollback;
