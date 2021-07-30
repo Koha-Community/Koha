@@ -1,7 +1,7 @@
 /* global __ total_pages */
 //z3950_search.js for Authorities, Bib records and Acquisitions module
 
-var last_action, previewed = 0;
+var last_action;
 
 function validate_goto_page() {
     var page = $('#goto_page').val();
@@ -108,28 +108,27 @@ $( document ).ready( function() {
         }
     });
 
-    $( "#resultst" ).on("click", ".previewData", function(e) {
-        e.preventDefault();
-        previewed = 1;
-        ChangeLastAction( $(this).attr('title'), 1 );
-        var ltitle = $( this ).text();
-        var page = $( this ).attr( "href" );
-        $( "#dataPreviewLabel" ).text( ltitle );
-        $( "#dataPreview .modal-body" ).load( page + " div" );
-        $( '#dataPreview' ).modal( {show:true} );
-    });
-
     $( "#dataPreview" ).on( "hidden", function() {
         $( "#dataPreviewLabel" ).html( "" );
         $( "#dataPreview .modal-body" ).html( "<div id='loading'><img src='" + interface + "/" + theme + "/img/spinner-small.gif' alt='' /> " + __("Loading") + "</div>" );
     });
 
+    $( "#resultst" ).on("click", ".previewData", function(e) {
+        e.preventDefault();
+        ChangeLastAction( $(this).data('action'), $(this).attr('title') );
+        var long_title = $( this ).text();
+        var page = $( this ).attr( "href" );
+        $( "#dataPreviewLabel" ).text( long_title );
+        $( "#dataPreview .modal-body" ).load( page + " div" );
+        $( '#dataPreview' ).modal( {show:true} );
+    });
+
     $( "#resultst" ).on("click", ".chosen", function(e) {
         e.preventDefault();
         var action = $(this).data('action');
-        ChangeLastAction( action, 0 );
+        ChangeLastAction( action );
         if( action == 'order' ) window.location = $(this).attr('href');
-        else {
+        else { // import
             opener.document.location = $(this).attr('href');
             window.close();
         }
@@ -140,18 +139,19 @@ function InitLastAction() {
     if( $("#resultst").length == 0 ) return;
     try { last_action = localStorage.getItem('z3950search_last_action'); } catch (err) {}
     if( last_action ) {
-        var z3950_action_li = $(".z3950actions:eq(0)").siblings(".dropdown-menu").find("a[data-action='"+last_action+"']");
-        if( z3950_action_li.length == 0 ) return;
-        if( last_action != 'show_marc' ) {
-            $( ".z3950actions" ).text($(z3950_action_li).text()).data('action', last_action);
+        // get short title from attr
+        var short_title = $(".z3950actions:eq(0)").siblings(".dropdown-menu").find("a[data-action='"+last_action+"']").attr('title');
+        if( short_title && last_action != 'show_marc' ) {
+            $( ".z3950actions" ).text( short_title );
         }
     }
 }
 
-function ChangeLastAction(action, change_text) {
+function ChangeLastAction( action, short_title ) {
     if( last_action && last_action == action ) return;
     last_action = action;
-    if( change_text ) $( ".z3950actions" ).text( last_action );
-    if( previewed == 0 || change_text == 1 )
-        try { localStorage.setItem('z3950search_last_action', last_action); } catch(err) {}
+    if( short_title ) { // Save choice for preview (MARC or Card)
+        $( ".z3950actions" ).text( short_title );
+        try { localStorage.setItem('z3950search_last_action', last_action ); } catch(err) {}
+    }
 }
