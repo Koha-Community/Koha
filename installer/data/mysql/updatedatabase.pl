@@ -24446,6 +24446,41 @@ if( CheckVersion( $DBversion ) ) {
     NewVersion( $DBversion, 20472, "Add syspref ArticleRequestsSupportedFormats");
 }
 
+$DBversion = '21.06.00.011';
+if( CheckVersion( $DBversion ) ) {
+
+    my @fields = qw(
+      branchname
+      branchaddress1
+      branchaddress2
+      branchaddress3
+      branchzip
+      branchcity
+      branchstate
+      branchcountry
+      branchphone
+      branchfax
+      branchemail
+      branchillemail
+      branchreplyto
+      branchreturnpath
+      branchurl
+      branchip
+      branchnotes
+      opac_info
+      marcorgcode
+    );
+    for my $f ( @fields ) {
+        $dbh->do(qq{
+            UPDATE branches
+            SET $f = NULL
+            WHERE $f = ""
+        });
+    }
+
+    NewVersion( $DBversion, 28567, "Set to NULL empty branches fields");
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 my $update_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/atomicupdate/';
