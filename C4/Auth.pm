@@ -845,6 +845,7 @@ sub checkauth {
 
     # state variables
     my $loggedin = 0;
+    my $auth_state = 'failed';
     my %info;
     my ( $userid, $cookie, $sessionID, $flags );
     $cookie = [];
@@ -860,7 +861,6 @@ sub checkauth {
     my $session;
     my $invalid_otp_token;
     my $require_2FA = ( C4::Context->preference('TwoFactorAuthentication') && $type ne "OPAC" ) ? 1 : 0;
-    my $auth_challenge_complete;
 
     # Basic authentication is incompatible with the use of Shibboleth,
     # as Shibboleth may return REMOTE_USER as a Shibboleth attribute,
@@ -897,12 +897,15 @@ sub checkauth {
             $userid = $session->param('id');
         }
 
-        $additional_auth_needed = ( $return eq 'additional-auth-needed' ) ? 1 : 0;
+        $auth_state =
+            $return eq 'ok'                     ? 'completed'
+          : $return eq 'additional-auth-needed' ? 'additional-auth-needed'
+          :                                       'failed';
 
         # We are at the second screen if the waiting-for-2FA is set in session
         # and otp_token param has been passed
         if (   $require_2FA
-            && $additional_auth_needed
+            && $auth_state eq 'additional-auth-needed'
             && ( my $otp_token = $query->param('otp_token') ) )
         {
             my $patron    = Koha::Patrons->find( { userid => $userid } );
@@ -911,10 +914,8 @@ sub checkauth {
             $auth->clear;
             if ( $verified ) {
                 # The token is correct, the user is fully logged in!
-                $additional_auth_needed = 0;
+                $auth_state = 'completed';
                 $session->param( 'waiting-for-2FA', 0 );
-                $return = "ok";
-                $auth_challenge_complete = 1;
 
                # This is an ugly trick to pass the test
                # $query->param('koha_login_context') && ( $q_userid ne $userid )
@@ -926,7 +927,7 @@ sub checkauth {
             }
         }
 
-        if ( $return eq 'ok' ) {
+        if ( $auth_state eq 'completed' ) {
             Koha::Logger->get->debug(sprintf "AUTH_SESSION: (%s)\t%s %s - %s", map { $session->param($_) || q{} } qw(cardnumber firstname surname branch));
 
             if ( ( $query->param('koha_login_context') && ( $q_userid ne $userid ) )
@@ -953,9 +954,8 @@ sub checkauth {
                 ));
 
                 $flags = haspermission( $userid, $flagsrequired );
-                if ($flags) {
-                    $loggedin = 1;
-                } else {
+                unless ( $flags ) {
+                    $auth_state = 'failed';
                     $info{'nopermission'} = 1;
                 }
             }
@@ -970,7 +970,7 @@ sub checkauth {
         }
     }
 
-    if ( ( !$loggedin && !$additional_auth_needed ) || $logout ) {
+    if ( $auth_state eq 'failed' || $logout ) {
         $sessionID = undef;
         $userid    = undef;
     }
@@ -997,7 +997,7 @@ sub checkauth {
         }
 
         $session   = undef;
-        $additional_auth_needed = 0;
+        $auth_state = 'logout';
     }
 
     unless ( $userid ) {
@@ -1150,7 +1150,7 @@ sub checkauth {
             if ($return) {
 
                 if ( $flags = haspermission( $userid, $flagsrequired ) ) {
-                    $loggedin = 1;
+                    $auth_state = "logged_in";
                 }
                 else {
                     $info{'nopermission'} = 1;
@@ -1301,18 +1301,24 @@ sub checkauth {
         $session->flush;
     }    # END unless ($userid)
 
-    if ( $require_2FA && ( $loggedin && !$auth_challenge_complete)) {
-        my $patron = Koha::Patrons->find({userid => $userid});
-        if ( $patron->auth_method eq 'two-factor' ) {
-            # Ask for the OTP token
-            $additional_auth_needed = 1;
-            $session->param('waiting-for-2FA', 1);
-            %info = ();# We remove the warnings/errors we may have set incorrectly before
+
+    if ( $auth_state eq 'logged_in' ) {
+        $auth_state = 'completed';
+
+        # Auth is completed unless an additional auth is needed
+        if ( $require_2FA ) {
+            my $patron = Koha::Patrons->find({userid => $userid});
+            if ( $patron->auth_method eq 'two-factor' ) {
+                # Ask for the OTP token
+                $auth_state = 'additional-auth-needed';
+                $session->param('waiting-for-2FA', 1);
+                %info = ();# We remove the warnings/errors we may have set incorrectly before
+            }
         }
     }
 
     # finished authentification, now respond
-    if ( ( $loggedin || $authnotrequired ) && !$additional_auth_needed ) {
+    if ( $auth_state eq 'completed' || $authnotrequired ) {
         # successful login
         unless (@$cookie) {
             $cookie = $cookie_mgr->replace_in_list( $cookie, $query->cookie(
@@ -1405,7 +1411,7 @@ sub checkauth {
     $template->param( SCI_login => 1 ) if ( $query->param('sci_user_login') );
     $template->param( OpacPublic => C4::Context->preference("OpacPublic") );
     $template->param( loginprompt => 1 ) unless $info{'nopermission'};
-    if ( $additional_auth_needed ) {
+    if ( $auth_state eq 'additional-auth-needed' ) {
         $template->param(
             TwoFA_prompt => 1,
             invalid_otp_token => $invalid_otp_token,
