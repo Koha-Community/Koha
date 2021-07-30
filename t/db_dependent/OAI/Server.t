@@ -21,7 +21,7 @@ use Modern::Perl;
 use Test::Deep qw( cmp_deeply re );
 use Test::MockTime qw/set_fixed_time restore_time/;
 
-use Test::More tests => 31;
+use Test::More tests => 32;
 use DateTime;
 use File::Basename;
 use File::Spec;
@@ -34,6 +34,7 @@ use t::lib::Mocks;
 
 use C4::Biblio;
 use C4::Context;
+use C4::OAI::Sets qw(AddOAISet);
 
 use Koha::Biblio::Metadatas;
 use Koha::Database;
@@ -430,3 +431,82 @@ subtest 'Bug 20665: OAI-PMH Provider should reset the MySQL connection time zone
 
 
 $schema->storage->txn_rollback;
+
+subtest 'ListSets tests' => sub {
+
+    plan tests => 3;
+
+    t::lib::Mocks::mock_preference( 'OAI::PMH'         => 1 );
+    t::lib::Mocks::mock_preference( 'OAI-PMH:MaxCount' => 3 );
+
+    $schema->storage->txn_begin;
+
+    $dbh->do('DELETE FROM oai_sets');
+
+    # Add a bunch of sets
+    my @first_page_sets = ();
+    for my $i ( 1 .. 3 ) {
+
+        AddOAISet(
+            {   'spec' => "setSpec_$i",
+                'name' => "setName_$i",
+            }
+        );
+        push @first_page_sets, { setSpec => "setSpec_$i", setName => "setName_$i" };
+    }
+
+    # Add more to force pagination
+    my @second_page_sets = ();
+    for my $i ( 4 .. 6 ) {
+
+        AddOAISet(
+            {   'spec' => "setSpec_$i",
+                'name' => "setName_$i",
+            }
+        );
+        push @second_page_sets, { setSpec => "setSpec_$i", setName => "setName_$i" };
+    }
+
+    AddOAISet(
+        {   'spec' => "setSpec_7",
+            'name' => "setName_7",
+        }
+    );
+
+    test_query(
+        'ListSets',
+        { verb => 'ListSets' },
+        { ListSets => {
+            resumptionToken => {
+                content => re( qr{^/3////1/0/4$} ),
+                cursor => 3,
+            },
+            set => \@first_page_sets
+          }
+        }
+    );
+
+    test_query(
+        'ListSets',
+        { verb => 'ListSets', resumptionToken => '/3////1/0/4' },
+        { ListSets => {
+            resumptionToken => {
+                content => re( qr{^/6////1/0/7$} ),
+                cursor => 6,
+            },
+            set => \@second_page_sets
+          }
+        }
+    );
+
+    test_query(
+        'ListSets',
+        { verb => 'ListSets', resumptionToken => "/6////1/0/7" },
+        { ListSets => {
+            set => { setSpec => "setSpec_7", setName => "setName_7" }
+          }
+        }
+    );
+
+    $schema->storage->txn_rollback;
+};
