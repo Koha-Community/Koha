@@ -1689,6 +1689,7 @@ sub PrepareItemrecordDisplay {
                         my $CNtag      = substr( $itemcn_pref, 0, 3 );
                         next unless my $field = $itemrecord->field($CNtag);
                         my $CNsubfields = substr( $itemcn_pref, 3 );
+                        $CNsubfields = undef if $CNsubfields eq '';
                         $defaultvalue = $field->as_string( $CNsubfields, ' ');
                         last if $defaultvalue;
                     }
