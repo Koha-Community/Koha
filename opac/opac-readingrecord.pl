@@ -53,8 +53,6 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
     }
 );
 
-my $borr = Koha::Patrons->find( $borrowernumber )->unblessed;
-
 my $itemtypes = { map { $_->{itemtype} => $_ } @{ Koha::ItemTypes->search_with_localization->unblessed } };
 
 # get the record
