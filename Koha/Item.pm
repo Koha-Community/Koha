@@ -940,6 +940,16 @@ sub cover_images {
     return Koha::CoverImages->_new_from_dbic($cover_image_rs);
 }
 
+=head3 columns_to_str
+
+    my $values = $items->columns_to_str;
+
+Return a hashref with the string representation of the different attribute of the item.
+
+This is meant to be used for display purpose only.
+
+=cut
+
 sub columns_to_str {
     my ( $self ) = @_;
 

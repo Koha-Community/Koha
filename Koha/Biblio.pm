@@ -421,6 +421,14 @@ sub items {
     return Koha::Items->_new_from_dbic( $items_rs );
 }
 
+=head3 host_items
+
+my $host_items = $biblio->host_items();
+
+Return the host items (easy analytical record)
+
+=cut
+
 sub host_items {
     my ($self) = @_;
 
