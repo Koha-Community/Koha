@@ -1288,7 +1288,6 @@ sub checkauth {
         casAuthentication                     => C4::Context->preference("casAuthentication"),
         shibbolethAuthentication              => $shib,
         suggestion                            => C4::Context->preference("suggestion"),
-        SessionRestrictionByIP                => C4::Context->preference("SessionRestrictionByIP"),
         virtualshelves                        => C4::Context->preference("virtualshelves"),
         LibraryName                           => "" . C4::Context->preference("LibraryName"),
         LibraryNameTitle                      => "" . $LibraryNameTitle,

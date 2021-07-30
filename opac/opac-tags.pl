@@ -69,7 +69,7 @@ sub ajax_auth_cgi {     # returns CGI object
     my %cookies = CGI::Cookie->fetch;
 	my $input = CGI->new;
     my $sessid = $cookies{'CGISESSID'}->value;
-	my ($auth_status) = check_cookie_auth($sessid, $needed_flags);
+    my ($auth_status) = check_cookie_auth($sessid, $needed_flags);
 	if ($auth_status ne "ok") {
 		output_with_http_headers $input, undef,
 		"window.alert('Your CGI session cookie ($sessid) is not current.  " .
