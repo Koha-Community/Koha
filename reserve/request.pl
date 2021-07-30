@@ -309,8 +309,8 @@ foreach my $biblionumber (@biblionumbers) {
     my $biblio = Koha::Biblios->find( $biblionumber );
     unless ($biblio) {
         $biblioloopiter{noitems} = 1;
-        $template->param('noitems' => 1);
-        next;
+        $template->param('nobiblio' => 1);
+        last;
     }
 
     my $force_hold_level;

@@ -64,7 +64,7 @@
 
 <div class="main container-fluid">
     <div class="row">
-        [% IF ( multi_hold ) # No sidebar menu when placing multiple holds %]
+        [% IF ( multi_hold || nobiblio ) # No sidebar menu when placing multiple holds or biblio not found %]
             <div class="col-md-10 col-md-offset-1">
         [% ELSE %]
             <div class="col-sm-10 col-sm-push-2">
@@ -72,6 +72,15 @@
 
         <main>
 
+            [% IF ( nobiblio ) %]
+                <div class="dialog alert">
+                [%IF (multi_hold) %]
+                    <strong>Cannot place hold:</strong> one or more records cannot be found.
+                [% ELSE %]
+                    <strong>Cannot place hold:</strong> this record cannot be found.
+                [% END %]
+                </div>
+            [% END %]
             [% IF ( noitems ) %]
                 <div class="dialog alert">
                 [%IF (multi_hold) %]
@@ -93,13 +102,15 @@
                 </div>
             [% END %]
 
-            [% UNLESS ( multi_hold ) %]
-                <h1>Place a hold on [% INCLUDE 'biblio-title.inc' link = 1 %]</h1>
-            [% ELSE %]
-                <h1>Confirm holds</h1>
+            [% UNLESS ( nobiblio ) %]
+                [% UNLESS ( multi_hold ) %]
+                        <h1>Place a hold on [% INCLUDE 'biblio-title.inc' link = 1 %]</h1>
+                [% ELSE %]
+                    <h1>Confirm holds</h1>
+                [% END %]
             [% END %]
 
-            [% UNLESS club OR patron OR patron.borrowernumber OR noitems %]
+            [% UNLESS club OR patron OR patron.borrowernumber OR noitems OR nobiblio %]
                 [% IF ( messageborrower ) %]
                     <div class="dialog alert">
                         <h3>Patron not found</h3>
@@ -323,7 +334,7 @@
                         [% END %]
                     </form>
                 </fieldset>
-            [% ELSIF NOT noitems # /UNLESS patron %]
+            [% ELSIF NOT ( noitems || nobiblio ) # /UNLESS patron %]
 
                 [% IF ( checked_previously && !multi_hold ) %]
                     <div class="dialog alert">
@@ -1004,7 +1015,7 @@
 
         </main>
 
-        [% IF ( multi_hold ) # No sidebar menu when placing multiple holds %]
+        [% IF ( multi_hold || nobiblio ) # No sidebar menu when placing multiple holds or biblio not found %]
             </div> <!-- /.col-md-10.col-md-offset-1 -->
         [% ELSE %]
             </div> <!-- /.col-sm-10.col-sm-push-2 -->
@@ -1537,7 +1548,7 @@
                 return false;
             });
 
-            [% UNLESS ( patron || patron.borrowernumber || borrowers || noitems ) %]
+            [% UNLESS ( patron || patron.borrowernumber || borrowers || noitems || nobiblio ) %]
                 [% IF ( PatronAutoComplete ) %]
                 $( "#patron" ).autocomplete({
                     source: "/cgi-bin/koha/circ/ysearch.pl",
