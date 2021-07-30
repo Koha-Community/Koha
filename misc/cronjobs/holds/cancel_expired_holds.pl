@@ -80,4 +80,4 @@ pod2usage(1) if $help;
 
 cronlogaction();
 
-CancelExpiredReserves($reason);
+C4::Reserves::CancelExpiredReserves($reason);
