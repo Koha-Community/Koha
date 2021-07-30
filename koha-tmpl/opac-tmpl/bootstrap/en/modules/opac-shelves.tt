@@ -265,62 +265,62 @@
                                             <option value="">Default sorting</option>
                                             <optgroup label="Author">
                                                 [% IF sortfield == 'author' && direction == 'asc' %]
-                                                    <option value="author:asc" selected="selected">Author (A-Z)</option>
+                                                    <option value="author" data-direction="asc" selected="selected">Author (A-Z)</option>
                                                 [% ELSE %]
-                                                    <option value="author:asc">Author (A-Z)</option>
+                                                    <option value="author" data-direction="asc">Author (A-Z)</option>
                                                 [% END %]
                                                 [% IF sortfield == 'author' && direction == 'desc' %]
-                                                    <option value="author:desc" selected="selected">Author (Z-A)</option>
+                                                    <option value="author" data-direction="desc" selected="selected">Author (Z-A)</option>
                                                 [% ELSE %]
-                                                    <option value="author:desc">Author (Z-A)</option>
+                                                    <option value="author" data-direction="desc">Author (Z-A)</option>
                                                 [% END %]
                                             </optgroup>
                                             <optgroup label="Title">
                                                 [% IF sortfield == 'title' && direction == 'asc' %]
-                                                    <option value="title:asc" selected="selected">Title (A-Z)</option>
+                                                    <option value="title" data-direction="asc" selected="selected">Title (A-Z)</option>
                                                 [% ELSE %]
-                                                    <option value="title:asc">Title (A-Z)</option>
+                                                    <option value="title" data-direction="asc">Title (A-Z)</option>
                                                 [% END %]
                                                 [% IF sortfield == 'title' && direction == 'desc' %]
-                                                    <option value="title:desc" selected="selected">Title (Z-A)</option>
+                                                    <option value="title" data-direction="desc" selected="selected">Title (Z-A)</option>
                                                 [% ELSE %]
-                                                    <option value="title:desc">Title (Z-A)</option>
+                                                    <option value="title" data-direction="desc">Title (Z-A)</option>
                                                 [% END %]
                                             </optgroup>
                                             <optgroup label="Call number">
                                                 [% IF sortfield == 'itemcallnumber' && direction == 'asc' %]
-                                                    <option value="itemcallnumber:asc" selected="selected">Call number (A-Z)</option>
+                                                    <option value="itemcallnumber" data-direction="asc" selected="selected">Call number (A-Z)</option>
                                                 [% ELSE %]
-                                                    <option value="itemcallnumber:asc">Call number (A-Z)</option>
+                                                    <option value="itemcallnumber" data-direction="asc">Call number (A-Z)</option>
                                                 [% END %]
                                                 [% IF sortfield == 'itemcallnumber' && direction == 'desc' %]
-                                                    <option value="itemcallnumber:desc" selected="selected">Call number (Z-A)</option>
+                                                    <option value="itemcallnumber" data-direction="desc" selected="selected">Call number (Z-A)</option>
                                                 [% ELSE %]
-                                                    <option value="itemcallnumber:desc">Call number (Z-A)</option>
+                                                    <option value="itemcallnumber" data-direction="desc">Call number (Z-A)</option>
                                                 [% END %]
                                             </optgroup>
                                             <optgroup label="Copyright date">
                                                 [% IF sortfield == 'copyrightdate' && direction == 'asc' %]
-                                                    <option value="copyrightdate:desc" selected="selected">Copyright date (newest to oldest)</option>
+                                                    <option value="copyrightdate" data-direction="desc" selected="selected">Copyright date (newest to oldest)</option>
                                                 [% ELSE %]
-                                                    <option value="copyrightdate:desc">Copyright date (newest to oldest)</option>
+                                                    <option value="copyrightdate" data-direction="desc">Copyright date (newest to oldest)</option>
                                                 [% END %]
                                                 [% IF sortfield == 'copyrightdate' && direction == 'desc' %]
-                                                    <option value="copyrightdate:asc" selected="selected">Copyright date (oldest to newest)</option>
+                                                    <option value="copyrightdate" data-direction="asc" selected="selected">Copyright date (oldest to newest)</option>
                                                 [% ELSE %]
-                                                    <option value="copyrightdate:asc">Copyright date (oldest to newest)</option>
+                                                    <option value="copyrightdate" data-direction="asc">Copyright date (oldest to newest)</option>
                                                 [% END %]
                                             </optgroup>
                                             <optgroup label="Date added">
                                                 [% IF sortfield == "dateadded" && direction == 'asc' %]
-                                                    <option value="dateadded:desc" selected="selected">Date added (newest to oldest)</option>
+                                                    <option value="dateadded" data-direction="desc" selected="selected">Date added (newest to oldest)</option>
                                                 [% ELSE %]
-                                                    <option value="dateadded:desc">Date added (newest to oldest)</option>
+                                                    <option value="dateadded" data-direction="desc">Date added (newest to oldest)</option>
                                                 [% END %]
                                                 [% IF sortfield == "dateadded" && direction == 'desc' %]
-                                                    <option value="dateadded:asc" selected="selected">Date added (oldest to newest)</option>
+                                                    <option value="dateadded" data-direction="asc" selected="selected">Date added (oldest to newest)</option>
                                                 [% ELSE %]
-                                                    <option value="dateadded:asc">Date added (oldest to newest)</option>
+                                                    <option value="dateadded" data-direction="asc">Date added (oldest to newest)</option>
                                                 [% END %]
                                             </optgroup>
                                         </select>
@@ -1083,7 +1083,7 @@ function sortMenu( sorting_form ){
             menu += "<span class=\"dropdown-header\">" + $(this).attr("label") + "</span>";
             $(this).children().each(function(){
                 if( $(this)[0].tagName.toUpperCase() == "OPTION" ){
-                    menu += "<a class=\"dropdown-item\" href=\"" + sort_link + $(this).val() + "\">" + $(this).text() + "</a>";
+                    menu += "<a class=\"dropdown-item\" href=\"" + sort_link + $(this).val() + "&direction=" + $(this).data('direction') + "\">" + $(this).text() + "</a>";
                 }
             });
         }
