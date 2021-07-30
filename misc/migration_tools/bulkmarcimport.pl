@@ -31,7 +31,7 @@ use C4::MarcModificationTemplates qw(
     GetModificationTemplates
     ModifyRecordWithTemplate
 );
-use C4::C4::AuthoritiesMarc qw( GuessAuthTypeCode GuessAuthId GetAuthority ModAuthority AddAuthority );
+use C4::AuthoritiesMarc qw( GuessAuthTypeCode GuessAuthId GetAuthority ModAuthority AddAuthority );
 
 use YAML::XS;
 use Time::HiRes qw( gettimeofday );
