@@ -798,8 +798,7 @@ sub cancel {
                         rule_name    => 'expire_reserves_charge',
                     }
                 );
-                my $rule_value = $rule && $rule->rule_value // '';
-                $charge = $rule_value ne '' ? $rule_value : C4::Context->preference("ExpireReservesMaxPickUpDelayCharge");
+                $charge = $rule ? $rule->rule_value : C4::Context->preference("ExpireReservesMaxPickUpDelayCharge");
 
                 my $account =
                   Koha::Account->new( { patron_id => $self->borrowernumber } );

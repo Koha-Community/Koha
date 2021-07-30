@@ -98,6 +98,7 @@ our $RULE_KINDS = {
     },
     expire_reserves_charge => {
         scope => [ 'branchcode', 'categorycode', 'itemtype' ],
+        can_be_blank => 0,
     },
     chargeperiod => {
         scope => [ 'branchcode', 'categorycode', 'itemtype' ],
