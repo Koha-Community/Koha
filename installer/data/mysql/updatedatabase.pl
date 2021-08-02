@@ -46,7 +46,6 @@ use MARC::Record;
 use MARC::File::XML ( BinaryEncoding => 'utf8' );
 
 use File::Path qw[remove_tree]; # perl core module
-use File::Slurp;
 
 # FIXME - The user might be installing a new database, so can't rely
 # on /etc/koha.conf anyway.
@@ -24284,7 +24283,7 @@ if( CheckVersion( $DBversion ) ) {
 }
 
 unless ( $ENV{HTTP_HOST} ) { # Is that correct?
-    my $files = C4::Installer::get_db_entries;
+    my $files = get_db_entries;
     my $report = update( $files, { force => $force } );
 
     for my $s ( @{ $report->{success} } ) {
@@ -24294,24 +24293,18 @@ unless ( $ENV{HTTP_HOST} ) { # Is that correct?
         say Encode::encode_utf8(join "\n", @{$e->{output}});
         say Encode::encode_utf8("ERROR - " . $e->{error});
     }
-}
 
-# SEE bug 13068
-# if there is anything in the atomicupdate, read and execute it.
-my $update_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/atomicupdate/';
-opendir( my $dirh, $update_dir );
-foreach my $file ( sort readdir $dirh ) {
-    next if $file !~ /\.(sql|perl)$/;  #skip other files
-    next if $file eq 'skeleton.perl'; # skip the skeleton file
-    print "DEV atomic update: $file\n";
-    if ( $file =~ /\.sql$/ ) {
-        my $installer = C4::Installer->new();
-        my $rv = $installer->load_sql( $update_dir . $file ) ? 0 : 1;
-    } elsif ( $file =~ /\.perl$/ ) {
-        my $code = read_file( $update_dir . $file );
-        eval $code; ## no critic (StringyEval)
-        say "Atomic update generated errors: $@" if $@;
+    my $atomic_update_files = get_atomic_updates;
+    $report = run_atomic_updates($atomic_update_files);
+    for my $s ( @{ $report->{success} } ) {
+        say Encode::encode_utf8(join "\n", @{$s->{output}});
     }
+    for my $e ( @{ $report->{error} } ) {
+        say Encode::encode_utf8(join "\n", @{$e->{output}});
+        say Encode::encode_utf8("ERROR - " . $e->{error});
+    }
+
+
 }
 
 exit;

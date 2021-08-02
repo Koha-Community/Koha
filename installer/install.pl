@@ -431,8 +431,17 @@ elsif ( $step && $step == 3 ) {
 
         my $db_entries = get_db_entries();
         my $report = update( $db_entries );
+        my $atomic_update_files = get_atomic_updates;
+        my $atomic_update_report = run_atomic_updates( $atomic_update_files );
 
-        $template->param( success => $report->{success}, error => $report->{error} );
+        $template->param(
+            success        => $report->{success},
+            error          => $report->{error},
+            atomic_updates => {
+                success => $atomic_update_report->{success},
+                error   => $atomic_update_report->{error}
+            }
+        );
 
         #warn "The following errors were returned while attempting to run the updatedatabase.pl script:\n"; #FIXME restore this
         $template->param( $op => 1 );

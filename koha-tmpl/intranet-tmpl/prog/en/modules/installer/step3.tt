@@ -263,7 +263,7 @@
                     [% END %]
 
                     [%# Success for new versions %]
-                    [% IF success %]
+                    [% IF success.size %]
                         <ul>
                             [% FOR s IN success %]
                                 [% FOR o IN s.output %]
@@ -276,21 +276,55 @@
                         </ul>
                     [% END %]
 
-                    [%# Errors for old versions %]
-                    [% IF has_update_errors %]
-                        <p>Update errors :</p>
+                    [% IF atomic_updates.success.size %]
+                        <p>Atomic updates:</p>
                         <ul>
-                            [% FOREACH update_error IN update_errors %]
-                                <li class="update_error">[% update_error.line | html %]</li>
+                            [% FOR s IN atomic_updates.success %]
+                                [% FOR o IN s.output %]
+                                    <li>[% o | html %]</li>
+                                    [% IF s.output.size > 1 %]
+                                        [% IF loop.first %]<ul>[% ELSIF loop.last %]</ul>[% END %]
+                                    [% END %]
+                                [% END %]
                             [% END %]
                         </ul>
                     [% END %]
 
-                    [%# Errors for new versions %]
-                    [% IF error %]
-                        <p>Update error :</p>
+                    [% IF has_update_errors OR error.size %]
+                        <p>Update errors :</p>
+                        [%# Errors for old versions %]
+                        [% IF has_update_errors %]
+                            <ul>
+                                [% FOREACH update_error IN update_errors %]
+                                    <li class="update_error">[% update_error.line | html %]</li>
+                                [% END %]
+                            </ul>
+                        [% END %]
+
+                        [%# Errors for new versions %]
+                        [% IF error.size %]
+                            <ul>
+                                [% FOR e IN error %]
+                                    [% FOR o IN e.output %]
+                                        <li class="update_error">
+                                            [% o | html %]
+                                            <br/>
+                                            ERROR: [% e.error | html %]
+
+                                            [% IF e.output.size > 1 %]
+                                                [% IF loop.first %]<ul>[% ELSIF loop.last %]</ul>[% END %]
+                                            [% END %]
+                                        </li>
+                                    [% END %]
+                                [% END %]
+                            </ul>
+                        [% END %]
+                    [% END %]
+
+                    [% IF atomic_updates.error.size %]
+                        <p>Atomic update error :</p>
                         <ul>
-                            [% FOR e IN error %]
+                            [% FOR e IN atomic_updates.error %]
                                 [% FOR o IN e.output %]
                                     <li class="update_error">
                                         [% o | html %]
@@ -305,6 +339,7 @@
                             [% END %]
                         </ul>
                     [% END %]
+
                     [% UNLESS error OR has_update_errors %]
                         <p>Everything went okay. Update done.</p>
                         <p><a href="install.pl?step=3&amp;op=finished" class="btn btn-primary">Continue to log in to Koha</a></p>

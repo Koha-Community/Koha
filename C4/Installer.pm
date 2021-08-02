@@ -23,16 +23,18 @@ use Try::Tiny;
 use Encode qw( encode decode is_utf8 );
 use DBIx::RunSQL;
 use YAML::XS;
+use File::Slurp qw( read_file );
+use DBI;
+
 use C4::Context;
 use Koha::Schema;
-use DBI;
 use Koha;
 
 use vars qw(@ISA @EXPORT);
 BEGIN {
     require Exporter;
     @ISA = qw( Exporter );
-    push @EXPORT, qw( primary_key_exists unique_key_exists foreign_key_exists index_exists column_exists TableExists marc_framework_sql_list TransformToNum CheckVersion NewVersion sanitize_zero_date update get_db_entries );
+    push @EXPORT, qw( primary_key_exists unique_key_exists foreign_key_exists index_exists column_exists TableExists marc_framework_sql_list TransformToNum CheckVersion NewVersion SetVersion sanitize_zero_date update get_db_entries get_atomic_updates run_atomic_updates );
 };
 
 =head1 NAME
@@ -718,44 +720,54 @@ sub get_db_entries {
     return \@need_update;
 }
 
+sub run_db_rev {
+    my ($file) = @_;
+
+    my $db_rev = do $file;
+
+    my $error;
+    my $out = '';
+    open my $outfh, '>', \$out;
+    try {
+        my $schema = Koha::Database->new->schema;
+        $schema->txn_do(
+            sub {
+                $db_rev->{up}->( { dbh => $schema->storage->dbh, out => $outfh } );
+            }
+        );
+    }
+    catch {
+        $error = $_;
+    };
+
+    close $outfh;
+    $out = decode( 'UTF-8', $out );
+
+    my $db_entry = {
+        filepath    => $file,
+        bug_number  => $db_rev->{bug_number},
+        description => $db_rev->{description},
+        exec_output => $out,
+        version     => scalar version_from_file($file),
+        time        => POSIX::strftime( "%H:%M:%S", localtime ),
+        error       => $error
+    };
+    $db_entry->{output} = generate_output_db_entry($db_entry, $out);
+    return $db_entry;
+}
+
 sub update {
     my ( $files, $params ) = @_;
 
     my $force = $params->{force} || 0;
 
-    my $schema = Koha::Database->new->schema;
     my ( @done, @errors );
     for my $file ( @$files ) {
 
-        my $db_rev = do $file;
+        my $db_entry = run_db_rev($file);
 
-        my $error;
-
-        my $out = '';
-        open my $outfh, '>', \$out;
-        try {
-            $schema->txn_do(
-                sub {
-                    $db_rev->{up}->({ dbh => $schema->storage->dbh, out => $outfh });
-                }
-            );
-        } catch {
-            $error = $_;
-        };
-
-        close $outfh;
-        $out = decode('UTF-8', $out);
-
-        my $db_entry = {
-            bug_number  => $db_rev->{bug_number},
-            description => $db_rev->{description},
-            version     => version_from_file($file),
-            time        => POSIX::strftime( "%H:%M:%S", localtime ),
-        };
-        $db_entry->{output} = output_version( { %$db_entry, done => !$error, report => $out } );
-
-        if ( $error ) {
-            push @errors, { %$db_entry, error => $error };
+        if ( $db_entry->{error} ) {
+            push @errors, $db_entry;
             $force ? next : last ;
                 # We stop the update if an error occurred!
         }
@@ -766,35 +778,113 @@ sub update {
     return { success => \@done, error => \@errors };
 }
 
-sub output_version {
+sub generate_output_db_entry {
     my ( $db_entry ) = @_;
 
     my $description = $db_entry->{description};
-    my $report = $db_entry->{report};
-    my $DBversion = $db_entry->{version};
-    my $bug_number = $db_entry->{bug_number};
-    my $time = $db_entry->{time};
-    my $done = defined $db_entry->{done}
-                ? $db_entry->{done}
-                    ? " done"
-                    : " failed"
-                : ""; # For old versions, we don't know if we succeed or failed
+    my $output      = $db_entry->{output};
+    my $DBversion   = $db_entry->{version};
+    my $bug_number  = $db_entry->{bug_number};
+    my $time        = $db_entry->{time};
+    my $exec_output = $db_entry->{exec_output};
+    my $done        = defined $db_entry->{done}
+                       ? $db_entry->{done}
+                           ? " done"
+                           : " failed"
+                       : ""; # For old versions, we don't know if we succeed or failed
 
     my @output;
 
-    if ($bug_number) {
-        push @output, sprintf('Upgrade to %s %s [%s]: Bug %5s - %s', $DBversion, $done, $time, $bug_number, $description);
-    } else {
-        push @output, sprintf('Upgrade to %s %s [%s]: %s', $DBversion, $done, $time, $description);
+    if ( $DBversion ) {
+        if ($bug_number) {
+            push @output, sprintf('Upgrade to %s %s [%s]: Bug %5s - %s', $DBversion, $done, $time, $bug_number, $description);
+        } else {
+            push @output, sprintf('Upgrade to %s %s [%s]: %s', $DBversion, $done, $time, $description);
+        }
+    } else { # Atomic update
+        if ($bug_number) {
+            push @output, sprintf('DEV atomic update %s %s [%s]: Bug %5s - %s', $db_entry->{filepath}, $done, $time, $bug_number, $description);
+        } else { # Old atomic update syntax
+            push @output, sprintf('DEV atomic update %s %s [%s]', $db_entry->{filepath}, $done, $time);
+        }
     }
 
-    if ($report) {
-        foreach my $line (split /\n/, $report) {
+    if ($exec_output) {
+        foreach my $line (split /\n/, $exec_output) {
             push @output, sprintf "\t\t\t\t\t\t   - %s", $line;
         }
     }
 
     return \@output;
+}
+
+sub get_atomic_updates {
+    my @atomic_upate_files;
+    # if there is anything in the atomicupdate, read and execute it.
+    my $update_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/atomicupdate/';
+    opendir( my $dirh, $update_dir );
+    foreach my $file ( sort readdir $dirh ) {
+        next if $file !~ /\.(perl|pl)$/;  #skip other files
+        next if $file eq 'skeleton.perl' || $file eq 'skeleton.pl'; # skip the skeleton files
+
+        push @atomic_upate_files, $file;
+    }
+    return \@atomic_upate_files;
+}
+
+sub run_atomic_updates {
+    my ( $files ) = @_;
+
+    my $update_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/atomicupdate/';
+    my ( @done, @errors );
+    for my $file ( @$files ) {
+        my $filepath = $update_dir . $file;
+
+        my $atomic_update;
+        if ( $file =~ m{\.perl$} ) {
+            my $code = read_file( $filepath );
+            my ( $out, $err ) = ('', '');
+            {
+                open my $oldout, ">&STDOUT";
+                close STDOUT;
+                open STDOUT,'>:encoding(utf8)', \$out;
+                my $DBversion = Koha::version; # We need $DBversion and $dbh for the eval
+                my $dbh = C4::Context->dbh;
+                eval $code; ## no critic (StringyEval)
+                $err = $@;
+                warn $err if $err;
+                close STDOUT;
+                open STDOUT, ">&", $oldout;
+            }
+
+            $atomic_update = {
+                filepath    => $filepath,
+                description => '',
+                version     => undef,
+                time        => POSIX::strftime( "%H:%M:%S", localtime ),
+            };
+
+
+            $atomic_update->{output} =
+              $out
+              ? [ split "\n", $out ]
+              : generate_output_db_entry($atomic_update); # There wad an error, we didn't reach NewVersion)
+
+            $atomic_update->{error} = $err if $err;
+        } elsif ( $file =~ m{\.pl$} ) {
+            $atomic_update = run_db_rev($filepath);
+        } else {
+            warn "Atomic update must be .perl or .pl ($file)";
+        }
+
+        if ( $atomic_update->{error} ) {
+            push @errors, $atomic_update;
+        } else {
+            push @done, $atomic_update;
+        }
+    }
+
+    return { success => \@done, error => \@errors };
 }
 
 =head2 DropAllForeignKeys($table)
@@ -881,7 +971,7 @@ sub NewVersion {
         $description = $descriptions;
     }
 
-    my $output = output_version( {
+    my $output = generate_output_db_entry( {
             bug_number  => $bug_number,
             description => $description,
             report      => $report,
