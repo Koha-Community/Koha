@@ -190,7 +190,7 @@ elsif ( $op && $op eq 'mod_adj' ) {
                 note => $note[$i],
                 budget_id => $budget_id[$i] || undef,
                 encumber_open => defined $e_open{ $adjustment_id[$i] } ? 1 : 0,
-            });
+            };
             my $new_adj = Koha::Acquisition::Invoice::Adjustment->new($adj);
             $new_adj->store();
             # Log this addition

@@ -195,7 +195,7 @@ if ($suggestion_id) {
 if (C4::Context->preference("AcquisitionLog")) {
     my $infos = {
         quantityrec      => $quantityrec,
-        bookfund         => $bookfund,
+        bookfund         => $bookfund || 'unchanged',
         tax_rate         => $input->param("tax_rate"),
         replacementprice => $replacementprice,
         unitprice        => $unitprice
