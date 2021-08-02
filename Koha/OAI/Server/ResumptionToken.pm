@@ -61,6 +61,9 @@ sub new {
         $next_id = $args{ next_id } // 0;
     }
 
+    # metadata_prefix can be undef (e.g. listSets)
+    $metadata_prefix //= '';
+
     $self->{ metadata_prefix } = $metadata_prefix;
     $self->{ cursor          } = $cursor;
     $self->{ from            } = $from;
