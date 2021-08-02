@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 14;
+use Test::More tests => 15;
 
 use C4::Biblio qw( AddBiblio ModBiblio );
 use Koha::Database;
@@ -649,4 +649,41 @@ subtest 'get_marc_notes() UNIMARC tests' => sub {
     is( @$notes, 2, 'No more notes' );
 
     $schema->storage->txn_rollback;
+};
+
+subtest 'host_items' => sub {
+    plan tests => 6;
+
+    my $biblio = $builder->build_sample_biblio( { frameworkcode => '' } );
+
+    t::lib::Mocks::mock_preference( 'EasyAnalyticalRecords', 1 );
+    my $host_items = $biblio->host_items;
+    is( ref($host_items),   'Koha::Items' );
+    is( $host_items->count, 0 );
+
+    my $item_1 =
+      $builder->build_sample_item( { biblionumber => $biblio->biblionumber } );
+    my $host_item_1 = $builder->build_sample_item;
+    my $host_item_2 = $builder->build_sample_item;
+
+    my $record = $biblio->metadata->record;
+    $record->append_fields(
+        MARC::Field->new(
+            '773', '', '',
+            9 => $host_item_1->itemnumber,
+            9 => $host_item_2->itemnumber
+        ),
+    );
+    C4::Biblio::ModBiblio( $record, $biblio->biblionumber );
+    $biblio = $biblio->get_from_storage;
+    $host_items = $biblio->host_items;
+    is( $host_items->count, 2 );
+    is_deeply( [ $host_items->get_column('itemnumber') ],
+        [ $host_item_1->itemnumber, $host_item_2->itemnumber ] );
+
+    t::lib::Mocks::mock_preference( 'EasyAnalyticalRecords', 0 );
+    $host_items = $biblio->host_items;
+    is( ref($host_items),   'Koha::Items' );
+    is( $host_items->count, 0 );
+
 };

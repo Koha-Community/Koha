@@ -965,12 +965,8 @@ sub columns_to_str {
 
         next if $column eq 'more_subfields_xml';
 
-        my $value;
-        if ( Koha::Object::_datetime_column_type( $columns_info->{$column}->{data_type} ) ) {
-            $value = output_pref({ dateformat => 'rfc3339', dt => dt_from_string($value, 'sql')});
-        } else {
-            $value = $self->$column;
-        }
+        my $value = $self->$column;
+        # Maybe we need to deal with datetime columns here, but so far we have damaged_on, itemlost_on and withdrawn_on, and they are not linked with kohafield
 
         if ( not defined $value or $value eq "" ) {
             $values->{$column} = $value;

@@ -18,13 +18,15 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
+use utf8;
 
-use Test::More tests => 12;
+use Test::More tests => 13;
 use Test::Exception;
 
 use C4::Biblio qw( GetMarcSubfieldStructure );
 use C4::Circulation qw( AddIssue AddReturn );
 
+use Koha::Caches;
 use Koha::Items;
 use Koha::Database;
 use Koha::DateUtils;
@@ -1049,4 +1051,100 @@ subtest 'move_to_biblio() tests' => sub {
     is($get_linktracker2->biblionumber->biblionumber, $source_biblionumber, 'move_to_biblio does not move linktracker for item 2');
 
     $schema->storage->txn_rollback;
+};
+
+subtest 'columns_to_str' => sub {
+    plan tests => 4;
+
+    $schema->storage->txn_begin;
+
+    my ( $itemtag, $itemsubfield ) = C4::Biblio::GetMarcFromKohaField( "items.itemnumber" );
+
+    my $cache = Koha::Caches->get_instance();
+    $cache->clear_from_cache("MarcStructure-0-");
+    $cache->clear_from_cache("MarcStructure-1-");
+    $cache->clear_from_cache("default_value_for_mod_marc-");
+    $cache->clear_from_cache("MarcSubfieldStructure-");
+
+    # Creating subfields 'é', 'è' that are not linked with a kohafield
+    Koha::MarcSubfieldStructures->search(
+        {
+            frameworkcode => '',
+            tagfield => $itemtag,
+            tagsubfield => ['é', 'è'],
+        }
+    )->delete;    # In case it exist already
+
+    # é is not linked with a AV
+    # è is linked with AV branches
+    Koha::MarcSubfieldStructure->new(
+        {
+            frameworkcode => '',
+            tagfield      => $itemtag,
+            tagsubfield   => 'é',
+            kohafield     => undef,
+            repeatable    => 1,
+            defaultvalue  => 'ééé',
+            tab           => 10,
+        }
+    )->store;
+    Koha::MarcSubfieldStructure->new(
+        {
+            frameworkcode    => '',
+            tagfield         => $itemtag,
+            tagsubfield      => 'è',
+            kohafield        => undef,
+            repeatable       => 1,
+            defaultvalue     => 'èèè',
+            tab              => 10,
+            authorised_value => 'branches',
+        }
+    )->store;
+
+    my $biblio = $builder->build_sample_biblio({ frameworkcode => '' });
+    my $item = $builder->build_sample_item({ biblionumber => $biblio->biblionumber });
+    my $itemlost = Koha::AuthorisedValues->search({ category => 'LOST' })->next->authorised_value;
+    my $dateaccessioned = '2020-12-15';
+    my $library = Koha::Libraries->search->next;
+    my $branchcode = $library->branchcode;
+
+    my $some_marc_xml = qq{<?xml version="1.0" encoding="UTF-8"?>
+<collection
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.loc.gov/MARC21/slim http://www.loc.gov/standards/marcxml/schema/MARC21slim.xsd"
+  xmlns="http://www.loc.gov/MARC21/slim">
+
+<record>
+  <leader>         a              </leader>
+  <datafield tag="999" ind1=" " ind2=" ">
+    <subfield code="é">value é</subfield>
+    <subfield code="è">$branchcode</subfield>
+  </datafield>
+</record>
+
+</collection>};
+
+    $item->update(
+        {
+            itemlost           => $itemlost,
+            dateaccessioned    => $dateaccessioned,
+            more_subfields_xml => $some_marc_xml,
+        }
+    );
+
+    $item = $item->get_from_storage;
+
+    my $s = $item->columns_to_str;
+    is( $s->{itemlost}, 'Lost' );
+    is( $s->{dateaccessioned}, '2020-12-15');
+    is( $s->{é}, 'value é');
+    is( $s->{è}, $library->branchname );
+
+    $cache->clear_from_cache("MarcStructure-0-");
+    $cache->clear_from_cache("MarcStructure-1-");
+    $cache->clear_from_cache("default_value_for_mod_marc-");
+    $cache->clear_from_cache("MarcSubfieldStructure-");
+
+    $schema->storage->txn_rollback;
+
 };
