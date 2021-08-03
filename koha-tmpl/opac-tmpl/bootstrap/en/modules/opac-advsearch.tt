@@ -35,11 +35,11 @@
                             [% ELSE %]
                                 <div class="advanced-search-terms">
                             [% END # /IF ( expanded_options ) %]
-                                [% FOREACH search_box IN search_boxes_loop %]
+                                [% FOREACH search_box IN [ 1, 2, 3] %]
                                     <div class="search-term-row">
                                         <div class="search-term-input">
                                             [% IF ( expanded_options ) %]
-                                                [% IF ( search_box.boolean ) %]
+                                                [% IF ( !loop.first ) %]
                                                     <select name="op" class="form-control">
                                                         <option value="and" selected="selected">and</option>
                                                         <option value="or">or</option>
