@@ -481,7 +481,6 @@ $(document).ready(function() {
         //Clear all form cookies
         jQuery.removeCookie("form_serialized", { path: '/'});
         jQuery.removeCookie("form_serialized_limits", { path: '/'});
-        jQuery.removeCookie("num_paragraph", { path: '/'});
         jQuery.removeCookie("search_path_code", { path: '/'});
     [% END %]
     $('#advsearch form').submit(function() {
@@ -507,16 +506,9 @@ $(document).ready(function() {
         ];
         jQuery.cookie("form_serialized_limits", form_serialized_limits,{ path: '/'});
         [% IF ( expanded_options ) %]
-        var numPar = $("#booleansearch fieldset p").size();
-        if (numPar > [% search_boxes_count | html %]){
-            jQuery.cookie("num_paragraph", numPar,{ path: '/'});
-        }else{
-            jQuery.removeCookie("num_paragraph", { path: '/'});
-        }
         jQuery.cookie("search_path_code", 'exs',{ path: '/'});
         [% ELSE %]
         jQuery.cookie("search_path_code", 'ads',{ path: '/'});
-        jQuery.removeCookie("num_paragraph", { path: '/'});
         [% END %]
     });
 
