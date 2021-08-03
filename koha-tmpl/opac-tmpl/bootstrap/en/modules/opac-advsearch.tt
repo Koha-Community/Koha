@@ -24,10 +24,10 @@
                     <div id="booleansearch" class="maincontent">
                         <fieldset>
                             <legend>Search for:</legend>
-                            [% FOREACH search_box IN search_boxes_loop %]
+                            [% FOREACH search_box IN [ 1, 2, 3] %]
                                 <p>
                                     [% IF ( expanded_options ) %]
-                                        [% IF ( search_box.boolean ) %]
+                                        [% IF ( !loop.first ) %]
                                             <select name="op">
                                                 <option value="and" selected="selected">and</option>
                                                 <option value="or">or</option>
