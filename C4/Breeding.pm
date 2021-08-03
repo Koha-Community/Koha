@@ -27,7 +27,7 @@ use C4::Charset qw( MarcToUTF8Record SetUTF8Flag );
 use MARC::File::USMARC;
 use MARC::Field;
 use C4::ImportBatch qw( GetZ3950BatchId AddBiblioToBatch AddAuthToBatch );
-use C4::AuthoritiesMarc; #GuessAuthTypeCode, FindDuplicateAuthority
+use C4::AuthoritiesMarc qw( GuessAuthTypeCode );
 use C4::Languages;
 use Koha::Database;
 use Koha::XSLT::Base;
