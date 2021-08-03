@@ -42,7 +42,7 @@ subtest 'list() tests' => sub {
     $schema->storage->txn_rollback;
 
     subtest 'librarian access tests' => sub {
-        plan tests => 16;
+        plan tests => 13;
 
         $schema->storage->txn_begin;
 
@@ -60,10 +60,6 @@ subtest 'list() tests' => sub {
           ->status_is(200);
 
         $t->get_ok("//$userid:$password@/api/v1/patrons?cardnumber=" . $librarian->cardnumber)
-          ->status_is(200)
-          ->json_is('/0/cardnumber' => $librarian->cardnumber);
-
-        $t->get_ok("//$userid:$password@/api/v1/patrons?q={\"cardnumber\":\"" . $librarian->cardnumber ."\"}")
           ->status_is(200)
           ->json_is('/0/cardnumber' => $librarian->cardnumber);
 
