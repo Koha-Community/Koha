@@ -19,7 +19,7 @@ package Koha::Util::Search;
 
 use Modern::Perl;
 
-use C4::Biblio;
+use C4::Biblio qw( GetMarcBiblio );
 
 =head1 NAME
 
@@ -36,22 +36,38 @@ Returns a query which can be used to search for all component parts of MARC21 bi
 sub get_component_part_query {
     my ($biblionumber) = @_;
 
-    my $marc = C4::Biblio::GetMarcBiblio({ biblionumber => $biblionumber });
-    my $pf001 = $marc->field('001') || undef;
+    my $marc = GetMarcBiblio( { biblionumber => $biblionumber } );
 
-    if (defined($pf001)) {
-        my $pf003 = $marc->field('003') || undef;
-        my $searchstr;
+    my $searchstr;
+    if ( C4::Context->preference('UseControlNumber') ) {
+        my $pf001 = $marc->field('001') || undef;
 
-        if (!defined($pf003)) {
-            # search for 773$w='Host001'
-            $searchstr = "rcn=\"".$pf001->data()."\"";
-        } else {
-            # search for (773$w='Host001' and 003='Host003') or 773$w='Host003 Host001')
-            $searchstr = "(rcn=\"".$pf001->data()."\" AND cni=\"".$pf003->data()."\")";
-            $searchstr .= " OR rcn=\"".$pf003->data()." ".$pf001->data()."\"";
+        if ( defined($pf001) ) {
+            my $pf003 = $marc->field('003') || undef;
+
+            if ( !defined($pf003) ) {
+                # search for 773$w='Host001'
+                $searchstr = "rcn:" . $pf001->data();
+            }
+            else {
+                $searchstr  = "(";
+                # search for (773$w='Host001' and 003='Host003') or 773$w='Host003 Host001')
+                $searchstr .= "(rcn:" . $pf001->data() . " AND cni:" . $pf003->data() . ")";
+                $searchstr .= " OR rcn:" . $pf003->data() . " " . $pf001->data();
+                $searchstr .= ")";
+            }
+
+            # limit to monograph and serial component part records
+            $searchstr .= " AND (bib-level:a OR bib-level:b)";
         }
     }
+    else {
+        my $cleaned_title = $marc->title;
+        $cleaned_title =~ tr|/||;
+        $searchstr = "Host-item:($cleaned_title)";
+    }
+
+    return $searchstr;
 }
 
 1;

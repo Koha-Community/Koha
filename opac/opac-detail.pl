@@ -195,37 +195,8 @@ my $marcflavour      = C4::Context->preference("marcflavour");
 my $ean = GetNormalizedEAN( $record, $marcflavour );
 
 {
-    my $searcher = Koha::SearchEngine::Search->new(
-        { index => $Koha::SearchEngine::BIBLIOS_INDEX }
-    );
-    my $builder = Koha::SearchEngine::QueryBuilder->new(
-        { index => $Koha::SearchEngine::BIBLIOS_INDEX }
-    );
-
-    my $cleaned_title = $biblio->title;
-    $cleaned_title =~ tr|/||;
-    $cleaned_title = $builder->clean_search_term($cleaned_title);
-
-    my $query =
-      ( C4::Context->preference('UseControlNumber') and $record->field('001') )
-      ? 'rcn:'. $record->field('001')->data . ' AND (bib-level:a OR bib-level:b)'
-      : "Host-item:($cleaned_title)";
-    my ( $err, $result, $count );
-    eval {
-        ( $err, $result, $count ) =
-          $searcher->simple_search_compat( $query, 0, 0 );
-
-    };
-    if ($err || $@){
-        my $error = q{};
-        $error .= $err if $err;
-        $error .= $@ if $@;
-        warn "Warning from simple_search_compat: $error";
-    }
-
     my $variables = {
         anonymous_session   => ($borrowernumber) ? 0 : 1,
-        show_analytics_link => defined $count && $count > 0 ? 1 : 0
     };
 
     my $lang   = C4::Languages::getlanguage();

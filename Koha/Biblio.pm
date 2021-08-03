@@ -491,7 +491,7 @@ this object (MARC21 773$w points to this)
 sub get_marc_components {
     my ($self, $max_results) = @_;
 
-    return if (C4::Context->preference('marcflavour') ne 'MARC21');
+    return [] if (C4::Context->preference('marcflavour') ne 'MARC21');
 
     my $searchstr = Koha::Util::Search::get_component_part_query($self->id);
 
@@ -501,7 +501,7 @@ sub get_marc_components {
         $self->{_components} = $results if ( defined($results) && scalar(@$results) );
     }
 
-    return $self->{_components} || ();
+    return $self->{_components} || [];
 }
 
 =head3 subscriptions

@@ -126,38 +126,6 @@ my $marcflavour  = C4::Context->preference("marcflavour");
 {
     # XSLT processing of some stuff
 
-    my $searcher = Koha::SearchEngine::Search->new(
-        { index => $Koha::SearchEngine::BIBLIOS_INDEX }
-    );
-    my $builder = Koha::SearchEngine::QueryBuilder->new(
-        { index => $Koha::SearchEngine::BIBLIOS_INDEX } );
-
-    my $cleaned_title = $biblio->title;
-    $cleaned_title =~ tr|/||;
-    $cleaned_title = $builder->clean_search_term($cleaned_title);
-
-    my $query =
-      ( C4::Context->preference('UseControlNumber') and $record->field('001') )
-      ? 'rcn:'. $record->field('001')->data . ' AND (bib-level:a OR bib-level:b)'
-      : "Host-item:($cleaned_title)";
-    my ( $err, $result, $count );
-    eval {
-        ( $err, $result, $count ) =
-          $searcher->simple_search_compat( $query, 0, 0 );
-
-    };
-    if ($err || $@){
-        my $error = q{};
-        $error .= $err if $err;
-        $error .= $@ if $@;
-        warn "Warning from simple_search_compat: $error";
-        $template->param( analytics_error => 1 );
-    }
-
-    my $variables = {
-        show_analytics_link => defined $count && $count > 0 ? 1 : 0
-    };
-
     $template->param(
         XSLTDetailsDisplay => '1',
         XSLTBloc => XSLTParse4Display(
@@ -166,7 +134,6 @@ my $marcflavour  = C4::Context->preference("marcflavour");
                 record         => $record,
                 xsl_syspref    => "XSLTDetailsDisplay",
                 fix_amps       => 1,
-                xslt_variables => $variables
             }
         ),
     );

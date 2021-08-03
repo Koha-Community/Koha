@@ -284,31 +284,37 @@ sub XSLTParse4Display {
     my $partsxml = '';
     # possibly insert component records into Detail views
     if ( $xslsyspref eq "OPACXSLTDetailsDisplay" || $xslsyspref eq "XSLTDetailsDisplay" ) {
+        my $biblio = Koha::Biblios->find( $biblionumber );
+        my $components = $biblio->get_marc_components(300);
+        $variables->{show_analytics_link} = ( scalar @{$components} == 0 ) ? 0 : 1;
+
         my $showcomp = C4::Context->preference('ShowComponentRecords');
-        if ( $showcomp eq 'both' ||
-             ($showcomp eq 'staff' && $xslsyspref !~ m/OPAC/ ) ||
-             ($showcomp eq 'opac' && $xslsyspref =~ m/OPAC/  ) ) {
-            my $biblio = Koha::Biblios->find( $biblionumber );
-            my $max_results = 300;
+        if (
+            $variables->{show_analytics_link}
+            && (   $showcomp eq 'both'
+                || ( $showcomp eq 'staff' && $xslsyspref !~ m/OPAC/ )
+                || ( $showcomp eq 'opac'  && $xslsyspref =~ m/OPAC/ ) )
+          )
+        {
 
-            if ( $biblio->get_marc_components($max_results) ) {
-                my $search_query = Koha::Util::Search::get_component_part_query($biblionumber);
-                $variables->{ComponentPartQuery} = $search_query;
+             $variables->{show_analytics_link} = 0;
 
-                my @componentPartRecordXML = ('<componentPartRecords>');
-                for my $cb ( @{ $biblio->get_marc_components($max_results) } ) {
-                    if( ref $cb eq 'MARC::Record'){
-                        $cb = $cb->as_xml_record();
-                    } else {
-                        $cb = decode('utf8', $cb);
-                    }
-                    # Remove the xml header
-                    $cb =~ s/^<\?xml.*?\?>//;
-                    push @componentPartRecordXML,$cb;
-                }
-                push @componentPartRecordXML, '</componentPartRecords>';
-                $partsxml = join "\n", @componentPartRecordXML;
-            }
+             my $search_query = Koha::Util::Search::get_component_part_query($biblionumber);
+             $variables->{ComponentPartQuery} = $search_query;
+
+             my @componentPartRecordXML = ('<componentPartRecords>');
+             for my $cb ( @{ $components } ) {
+                 if( ref $cb eq 'MARC::Record'){
+                     $cb = $cb->as_xml_record();
+                 } else {
+                     $cb = decode('utf8', $cb);
+                 }
+                 # Remove the xml header
+                 $cb =~ s/^<\?xml.*?\?>//;
+                 push @componentPartRecordXML,$cb;
+             }
+             push @componentPartRecordXML, '</componentPartRecords>';
+             $partsxml = join "\n", @componentPartRecordXML;
         }
     }
 
