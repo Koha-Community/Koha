@@ -151,46 +151,41 @@
                     <li>
                       <label for="fav_itemtypes">Preferred materials:</label>
                       [% IF ( housebound_profile ) %]
-                        <input id="fav_itemtypes" type="text" size="50" name="fav_itemtypes"
-                               value="[% housebound_profile.fav_itemtypes | html %]">
+                        <textarea id="fav_itemtypes" name="fav_itemtypes" cols="110" rows="10">[% housebound_profile.fav_itemtypes | html  %]</textarea>
                       [% ELSE %]
-                        <input id="fav_itemtypes" type="text" value="" size="50" name="fav_itemtypes">
+                        <textarea id="fav_itemtypes" name="fav_itemtypes" cols="110" rows="10"></textarea>
                       [% END %]
                     </li>
                     <li>
                       <label for="fav_subjects">Subjects:</label>
                       [% IF ( housebound_profile ) %]
-                        <input id="fav_subjects" type="text" size="50" name="fav_subjects"
-                               value="[% housebound_profile.fav_subjects | html %]">
+                        <textarea id="fav_subjects" name="fav_subjects" cols="110" rows="10">[% housebound_profile.fav_subjects | html %]</textarea>
                       [% ELSE %]
-                        <input id="fav_subjects" type="text" value="" size="50" name="fav_subjects">
+                        <textarea id="fav_subjects" name="fav_subjects" cols="110" rows="10"></textarea>
                       [% END %]
                     </li>
                     <li>
                       <label for="fav_authors">Authors:</label>
                       [% IF ( housebound_profile ) %]
-                        <input id="fav_authors" type="text" size="50" name="fav_authors"
-                               value="[% housebound_profile.fav_authors | html %]">
+                        <textarea id="fav_authors" name="fav_authors" cols="110" rows="10">[% housebound_profile.fav_authors | html %]</textarea>
                       [% ELSE %]
-                        <input id="fav_authors" type="text" value="" size="50" name="fav_authors">
+                        <textarea id="fav_authors" name="fav_authors" cols="110" rows="10"></textarea>
                       [% END %]
                     </li>
                     <li>
                       <label for="referral">Referral:</label>
                       [% IF ( housebound_profile ) %]
-                        <input id="referral" type="text" size="50" name="referral"
-                               value="[% housebound_profile.referral | html %]">
+                        <textarea id="referral" name="referral" cols="110" rows="10">[% housebound_profile.referral | html %]</textarea>
                       [% ELSE %]
-                        <input id="referral" type="text" value="" size="50" name="referral">
+                        <textarea id="referral" name="referral" cols="110" rows="10"></textarea>
                       [% END %]
                     </li>
                     <li>
                       <label for="notes">Notes:</label>
                       [% IF ( housebound_profile ) %]
-                        <input id="notes" type="text" size="50" name="notes"
-                               value="[% housebound_profile.notes | html %]">
+                        <textarea id="notes" name="notes" cols="110" rows="10">[% housebound_profile.notes | html %]</textarea>
                       [% ELSE %]
-                        <input id="notes" type="text" value="" size="50" name="notes">
+                        <textarea id="notes" name="notes" cols="110" rows="10"></textarea>
                       [% END %]
                     </li>
                   </ol>
@@ -360,24 +355,24 @@
                     [% AuthorisedValues.GetByCode( 'HSBND_FREQ', housebound_profile.frequency, 0 ) || housebound_profile.frequency | html %]
                   </li>
                   <li>
-                    <span class="label">Material:</span>
-                    [% housebound_profile.fav_itemtypes | html %]
+                    <span class="label">Material:</span><br />
+                    [% housebound_profile.fav_itemtypes | html | html_line_break %]
                   </li>
                   <li>
-                    <span class="label">Subjects:</span>
-                    [% housebound_profile.fav_subjects | html %]
+                    <span class="label">Subjects:</span><br />
+                    [% housebound_profile.fav_subjects | html | html_line_break %]
                   </li>
                   <li>
-                    <span class="label">Authors:</span>
-                    [% housebound_profile.fav_authors | html %]
+                    <span class="label">Authors:</span><br />
+                    [% housebound_profile.fav_authors | html | html_line_break %]
                   </li>
                   <li>
-                    <span class="label">Referral:</span>
-                    [% housebound_profile.referral | html %]
+                    <span class="label">Referral:</span><br />
+                    [% housebound_profile.referral | html | html_line_break %]
                   </li>
                   <li>
-                    <span class="label">Notes:</span>
-                    [% housebound_profile.notes | html %]
+                    <span class="label">Notes:</span><br />
+                    [% housebound_profile.notes | html | html_line_break %]
                   </li>
                 </ol>
                 <div class="action">
