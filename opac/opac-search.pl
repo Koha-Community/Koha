@@ -322,50 +322,12 @@ if ( $template_type && $template_type eq 'advsearch' ) {
         $template->param( sort_by => $default_sort_by );
     }
 
-    # determine what to display next to the search boxes (ie, boolean option
-    # shouldn't appear on the first one, scan indexes should, adding a new
-    # box should only appear on the last, etc.
-    my @search_boxes_array;
-    my $search_boxes_count = 3; # begin with 3 boxes
-    $template->param( search_boxes_count => $search_boxes_count );
-
-    if ($cgi->cookie("num_paragraph")){
-        $search_boxes_count = $cgi->cookie("num_paragraph");
-    }
-
-    for (my $i=1;$i<=$search_boxes_count;$i++) {
-        # if it's the first one, don't display boolean option, but show scan indexes
-        if ($i==1) {
-            push @search_boxes_array,
-                {
-                scan_index => 1,
-                };
-        
-        }
-        # if it's the last one, show the 'add field' box
-        elsif ($i==$search_boxes_count) {
-            push @search_boxes_array,
-                {
-                boolean => 1,
-                add_field => 1,
-                };
-        }
-        else {
-            push @search_boxes_array,
-                {
-                boolean => 1,
-                };
-        }
-
-    }
-
     my @advsearch_limits = split /,/, C4::Context->preference('OpacAdvSearchOptions');
     my @advsearch_more_limits = split /,/,
       C4::Context->preference('OpacAdvSearchMoreOptions');
     $template->param(
         uc( C4::Context->preference("marcflavour") ) => 1,    # we already did this for UNIMARC
         advsearch         => 1,
-        search_boxes_loop => \@search_boxes_array,
         OpacAdvSearchOptions     => \@advsearch_limits,
         OpacAdvSearchMoreOptions => \@advsearch_more_limits,
     );
