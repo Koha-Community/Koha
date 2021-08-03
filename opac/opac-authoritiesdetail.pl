@@ -42,7 +42,7 @@ use C4::Auth qw( get_template_and_user );
 use C4::Biblio qw( GetMarcUrls );
 use C4::Context;
 use C4::Output qw( output_html_with_http_headers );
-use C4::AuthoritiesMarc qw( GetAuthority BuildSummary );
+use C4::AuthoritiesMarc qw( GetAuthority BuildSummary GetTagsLabels );
 use CGI qw ( -utf8 );
 use C4::Koha;
 
@@ -98,7 +98,7 @@ $template->param(
 
 # find the marc field/subfield used in biblio by this authority
 if ($show_marc) {
-    my $tagslib = &GetTagsLabels( 0, $authtypecode );
+    my $tagslib = GetTagsLabels( 0, $authtypecode );
     my $sth =
         $dbh->prepare(
                 "select distinct tagfield from marc_subfield_structure where authtypecode=?"

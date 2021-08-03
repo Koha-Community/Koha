@@ -23,7 +23,7 @@ use Modern::Perl;
 use CGI qw ( -utf8 );
 use C4::Auth qw( get_template_and_user );
 use C4::Output qw( output_html_with_http_headers );
-use C4::AuthoritiesMarc qw( GetAuthority );
+use C4::AuthoritiesMarc qw( GetAuthority GetTagsLabels GetAuthMARCFromKohaField );
 use C4::ImportBatch qw( GetImportRecordMarc );
 use C4::Context;
 use Date::Calc qw( Today );
@@ -600,8 +600,8 @@ my ($oldauthtypetagfield,$oldauthtypetagsubfield);
 $is_a_modif=0;
 if ($authid) {
     $is_a_modif=1;
-    ($oldauthnumtagfield,$oldauthnumtagsubfield) = &GetAuthMARCFromKohaField("auth_header.authid",$authtypecode);
-    ($oldauthtypetagfield,$oldauthtypetagsubfield) = &GetAuthMARCFromKohaField("auth_header.authtypecode",$authtypecode);
+    ($oldauthnumtagfield,$oldauthnumtagsubfield) = GetAuthMARCFromKohaField("auth_header.authid",$authtypecode);
+    ($oldauthtypetagfield,$oldauthtypetagsubfield) = GetAuthMARCFromKohaField("auth_header.authtypecode",$authtypecode);
 }
 $op ||= q{};
 #------------------------------------------------------------------------------------------------------------------------------
