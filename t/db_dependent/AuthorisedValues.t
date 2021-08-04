@@ -159,9 +159,9 @@ subtest 'search_by_*_field + find_by_koha_field + get_description' => sub {
     Koha::MarcSubfieldStructure->new( { tagfield => 952, tagsubfield => 'c', frameworkcode => 'ACQ', authorised_value => 'TEST', kohafield => 'items.location' } )->store;
     Koha::MarcSubfieldStructure->new( { tagfield => 952, tagsubfield => 'd', frameworkcode => '', authorised_value => 'ANOTHER_4_TESTS', kohafield => 'items.another_field' } )->store;
     Koha::MarcSubfieldStructure->new( { tagfield => 952, tagsubfield => '5', frameworkcode => '', authorised_value => 'restricted_for_testing', kohafield => 'items.restricted' } )->store;
-    Koha::AuthorisedValue->new( { category => 'TEST', authorised_value => 'location_1' } )->store;
-    Koha::AuthorisedValue->new( { category => 'TEST', authorised_value => 'location_2' } )->store;
-    Koha::AuthorisedValue->new( { category => 'TEST', authorised_value => 'location_3' } )->store;
+    Koha::AuthorisedValue->new( { category => 'TEST', authorised_value => 'location_1', lib => 'location_1' } )->store;
+    Koha::AuthorisedValue->new( { category => 'TEST', authorised_value => 'location_2', lib => 'location_2' } )->store;
+    Koha::AuthorisedValue->new( { category => 'TEST', authorised_value => 'location_3', lib => 'location_3' } )->store;
     Koha::AuthorisedValue->new( { category => 'ANOTHER_4_TESTS', authorised_value => 'an_av' } )->store;
     Koha::AuthorisedValue->new( { category => 'ANOTHER_4_TESTS', authorised_value => 'another_av' } )->store;
     subtest 'search_by_marc_field' => sub {
@@ -180,7 +180,7 @@ subtest 'search_by_*_field + find_by_koha_field + get_description' => sub {
         my $avs;
         $avs = Koha::AuthorisedValues->search_by_koha_field();
         is ( $avs, undef );
-        $avs = Koha::AuthorisedValues->search_by_koha_field( { kohafield => 'items.location', tagfield => 952, tagsubfield => 'c' } );
+        $avs = Koha::AuthorisedValues->search_by_koha_field( { kohafield => 'items.location' } );
         is( $avs->count,                  3, );
         is( $avs->next->authorised_value, 'location_1', );
 
@@ -237,14 +237,14 @@ subtest 'search_by_*_field + find_by_koha_field + get_description' => sub {
             \@descriptions,
             [
                 {
-                    authorised_value => '',
-                    lib              => $av_empty_string->lib,
-                    opac_description => $av_empty_string->lib_opac
-                },
-                {
                     authorised_value => $av_0->authorised_value,
                     lib              => $av_0->lib,
                     opac_description => $av_0->lib_opac
+                },
+                {
+                    authorised_value => '',
+                    lib              => $av_empty_string->lib,
+                    opac_description => $av_empty_string->lib_opac
                 }
             ],
         );
