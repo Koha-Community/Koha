@@ -134,74 +134,65 @@ subtest 'cancel' => sub {
     is( $third_hold->discard_changes->priority, 2, 'Third hold should now be second' );
 
     subtest 'charge_cancel_fee parameter' => sub {
-        plan tests => 15;
-        my $library1 = $builder->build({
-            source => 'Branch',
-        });
-        my $library2 = $builder->build({
-            source => 'Branch',
-        });
+        plan tests => 18;
+        my $library1 = $builder->build_object( { class => 'Koha::Libraries' } );
+        my $library2 = $builder->build_object( { class => 'Koha::Libraries' } );
+        my $library3 = $builder->build_object( { class => 'Koha::Libraries' } );
 
         my $bib_title = "Test Title";
 
-        my $borrower = $builder->build({
-            source => 'Borrower',
-            value => {
-                branchcode => $library1->{branchcode},
-            }
-        });
+        my $borrower = $builder->build_object({ class => "Koha::Patrons", value => { branchcode => $library1->branchcode } });
 
-        my $itemtype1 = $builder->build({
-            source => 'Itemtype',
-            value => {}
-        });
-        my $itemtype2 = $builder->build({
-            source => 'Itemtype',
-            value => {}
-        });
-        my $itemtype3 = $builder->build({
-            source => 'Itemtype',
-            value => {}
-        });
-        my $itemtype4 = $builder->build({
-            source => 'Itemtype',
-            value => {}
-        });
+        my $itemtype1 = $builder->build_object( { class => 'Koha::ItemTypes', value => {} } );
+        my $itemtype2 = $builder->build_object( { class => 'Koha::ItemTypes', value => {} } );
+        my $itemtype3 = $builder->build_object( { class => 'Koha::ItemTypes', value => {} } );
+        my $itemtype4 = $builder->build_object( { class => 'Koha::ItemTypes', value => {} } );
 
-        my $borrowernumber = $borrower->{borrowernumber};
+        my $borrowernumber = $borrower->borrowernumber;
 
-        my $library_A_code = $library1->{branchcode};
+        my $library_A_code = $library1->branchcode;
 
-        my $biblio = $builder->build_sample_biblio({itemtype => $itemtype1->{itemtype}});
+        my $biblio = $builder->build_sample_biblio({itemtype => $itemtype1->itemtype});
         my $biblionumber = $biblio->biblionumber;
         my $item1 = $builder->build_sample_item({
             biblionumber => $biblionumber,
-            itype => $itemtype1->{itemtype},
+            itype => $itemtype1->itemtype,
             homebranch => $library_A_code,
             holdingbranch => $library_A_code
         });
         my $item2 = $builder->build_sample_item({
             biblionumber => $biblionumber,
-            itype => $itemtype2->{itemtype},
+            itype => $itemtype2->itemtype,
             homebranch => $library_A_code,
             holdingbranch => $library_A_code
         });
         my $item3 = $builder->build_sample_item({
             biblionumber => $biblionumber,
-            itype => $itemtype3->{itemtype},
+            itype => $itemtype3->itemtype,
             homebranch => $library_A_code,
             holdingbranch => $library_A_code
         });
 
-        my $library_B_code = $library2->{branchcode};
+        my $library_B_code = $library2->branchcode;
 
-        my $biblio2 = $builder->build_sample_biblio({itemtype => $itemtype4->{itemtype}});
+        my $biblio2 = $builder->build_sample_biblio({itemtype => $itemtype4->itemtype});
         my $biblionumber2 = $biblio2->biblionumber;
         my $item4 = $builder->build_sample_item({
             biblionumber => $biblionumber2,
-            itype => $itemtype4->{itemtype},
+            itype => $itemtype4->itemtype,
             homebranch => $library_B_code,
             holdingbranch => $library_B_code
+        });
+
+        my $library_C_code = $library3->branchcode;
+
+        my $biblio3 = $builder->build_sample_biblio({itemtype => $itemtype4->itemtype});
+        my $biblionumber3 = $biblio3->biblionumber;
+        my $item5 = $builder->build_sample_item({
+            biblionumber => $biblionumber3,
+            itype => $itemtype4->itemtype,
+            homebranch => $library_C_code,
+            holdingbranch => $library_C_code
         });
 
         Koha::CirculationRules->set_rules(
@@ -216,7 +207,7 @@ subtest 'cancel' => sub {
         );
         Koha::CirculationRules->set_rules(
             {
-                itemtype     => $itemtype1->{itemtype},
+                itemtype     => $itemtype1->itemtype,
                 categorycode => undef,
                 branchcode   => undef,
                 rules        => {
@@ -226,7 +217,7 @@ subtest 'cancel' => sub {
         );
         Koha::CirculationRules->set_rules(
             {
-                itemtype     => $itemtype2->{itemtype},
+                itemtype     => $itemtype2->itemtype,
                 categorycode => undef,
                 branchcode   => undef,
                 rules        => {
@@ -244,6 +235,16 @@ subtest 'cancel' => sub {
                 }
             }
         );
+        Koha::CirculationRules->set_rules(
+            {
+                itemtype     => undef,
+                categorycode => undef,
+                branchcode   => $library_C_code,
+                rules        => {
+                    expire_reserves_charge => '0'
+                }
+            }
+        );
 
         t::lib::Mocks::mock_preference('ReservesControlBranch', 'ItemHomeLibrary');
 
@@ -252,7 +253,7 @@ subtest 'cancel' => sub {
         my $status;
         my $start_balance;
 
-# TEST: Hold itemtype1 item
+        # TEST: Hold itemtype1 item
         $reserve_id = AddReserve(
             {
                 branchcode       => $library_A_code,
@@ -277,7 +278,7 @@ subtest 'cancel' => sub {
 
         is( $account->balance() - $start_balance, 111, "Used circulation rule for itemtype1" );
 
-# TEST: circulation rule for itemtype2 has 'expire_reserves_charge' set undef, so it should use ExpireReservesMaxPickUpDelayCharge preference
+        # TEST: circulation rule for itemtype2 has 'expire_reserves_charge' set undef, so it should use ExpireReservesMaxPickUpDelayCharge preference
         t::lib::Mocks::mock_preference('ExpireReservesMaxPickUpDelayCharge', 222);
 
         $reserve_id = AddReserve(
@@ -304,7 +305,7 @@ subtest 'cancel' => sub {
 
         is( $account->balance() - $start_balance, 222, "Used ExpireReservesMaxPickUpDelayCharge preference as expire_reserves_charge set to undef" );
 
-# TEST: no circulation rules for itemtype3, it should use ExpireReservesMaxPickUpDelayCharge preference
+        # TEST: no circulation rules for itemtype3, it should use ExpireReservesMaxPickUpDelayCharge preference
         t::lib::Mocks::mock_preference('ExpireReservesMaxPickUpDelayCharge', 333);
 
         $reserve_id = AddReserve(
@@ -331,7 +332,7 @@ subtest 'cancel' => sub {
 
         is( $account->balance() - $start_balance, 333, "Used ExpireReservesMaxPickUpDelayCharge preference as there's no circulation rules for itemtype3" );
 
-# TEST: circulation rule for itemtype4 with library_B_code
+        # TEST: circulation rule for itemtype4 with library_B_code
         t::lib::Mocks::mock_preference('ExpireReservesMaxPickUpDelayCharge', 555);
 
         $reserve_id = AddReserve(
@@ -358,6 +359,34 @@ subtest 'cancel' => sub {
 
         is( $account->balance() - $start_balance, 444, "Used circulation rule for itemtype4 with library_B_code" );
 
+        # TEST: circulation rule for library_C_code that has expire_reserves_charge = 0
+        t::lib::Mocks::mock_preference('ExpireReservesMaxPickUpDelayCharge', 777);
+
+        $reserve_id = AddReserve(
+            {
+                branchcode       => $library_C_code,
+                borrowernumber   => $borrowernumber,
+                biblionumber     => $biblionumber3,
+                priority         => 1,
+                itemnumber       => $item5->itemnumber,
+            }
+        );
+
+        $account = Koha::Account->new({ patron_id => $borrowernumber });
+
+        ( $status ) = CheckReserves($item5->id);
+        is( $status, 'Reserved', "Hold for the itemtype5 created" );
+
+        $start_balance = $account->balance();
+
+        Koha::Holds->find( $reserve_id )->cancel({ charge_cancel_fee => 1 });
+
+        ( $status ) = CheckReserves($item5->id);
+        is( $status, '', "Hold for the itemtype5 cancelled" );
+
+        is( $account->balance() - $start_balance, 0, "Used circulation rule for itemtype4 with library_C_code even though it's 0" );
+
+        # TEST: charge_cancel_fee is 0
         $reserve_id = AddReserve(
             {
                 branchcode       => $library_B_code,
