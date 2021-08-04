@@ -182,6 +182,4 @@
     [% ELSE %]
         <option value="acqdate,st-date-normalized">Acquisition date (yyyy-mm-dd)</option>
     [% END %]
-
-    <option value="Multipart-resource-level">Multipart resource record level</option>
 </select>
