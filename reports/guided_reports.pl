@@ -822,10 +822,11 @@ elsif ($phase eq 'Run this report'){
             my ($sql,$header_types) = $report->prep_report( \@param_names, \@sql_params );
             $template->param(header_types => $header_types);
             my ( $sth, $errors ) = execute_query( $sql, $offset, $limit, undef, $report_id );
-            my $total = nb_rows($sql) || 0;
-            unless ($sth) {
+            my $total;
+            if (!$sth) {
                 die "execute_query failed to return sth for report $report_id: $sql";
-            } else {
+            } elsif ( !$errors ) {
+                $total = nb_rows($sql) || 0;
                 my $headers = header_cell_loop($sth);
                 $template->param(header_row => $headers);
                 while (my $row = $sth->fetchrow_arrayref()) {
@@ -839,31 +840,33 @@ elsif ($phase eq 'Run this report'){
                         push @allrows, { cells => \@cells };
                     }
                 }
-            }
 
-            my $totpages = int($total/$limit) + (($total % $limit) > 0 ? 1 : 0);
-            my $url = "/cgi-bin/koha/reports/guided_reports.pl?reports=$report_id&amp;phase=Run%20this%20report&amp;limit=$limit&amp;want_full_chart=$want_full_chart";
-            if (@param_names) {
-                $url = join('&amp;param_name=', $url, map { URI::Escape::uri_escape_utf8($_) } @param_names);
-            }
-            if (@sql_params) {
-                $url = join('&amp;sql_params=', $url, map { URI::Escape::uri_escape_utf8($_) } @sql_params);
-            }
+                my $totpages = int($total/$limit) + (($total % $limit) > 0 ? 1 : 0);
+                my $url = "/cgi-bin/koha/reports/guided_reports.pl?reports=$report_id&amp;phase=Run%20this%20report&amp;limit=$limit&amp;want_full_chart=$want_full_chart";
+                if (@param_names) {
+                    $url = join('&amp;param_name=', $url, map { URI::Escape::uri_escape_utf8($_) } @param_names);
+                }
+                if (@sql_params) {
+                    $url = join('&amp;sql_params=', $url, map { URI::Escape::uri_escape_utf8($_) } @sql_params);
+                }
 
+                $template->param(
+                    'results'        => \@rows,
+                    'allresults'     => \@allrows,
+                    'pagination_bar' => pagination_bar($url, $totpages, scalar $input->param('page')),
+                    'unlimited_total' => $total,
+                );
+            }
             $template->param(
-                'results' => \@rows,
-                'allresults' => \@allrows,
-                'sql'     => $sql,
-                original_sql => $original_sql,
-                'id'      => $report_id,
-                'execute' => 1,
-                'name'    => $name,
-                'notes'   => $notes,
-                'errors'  => defined($errors) ? [ $errors ] : undef,
-                'pagination_bar'  => pagination_bar($url, $totpages, scalar $input->param('page')),
-                'unlimited_total' => $total,
-                'sql_params'      => \@sql_params,
-                'param_names'     => \@param_names,
+                'sql'         => $sql,
+                original_sql  => $original_sql,
+                'id'          => $report_id,
+                'execute'     => 1,
+                'name'        => $name,
+                'notes'       => $notes,
+                'errors'      => defined($errors) ? [$errors] : undef,
+                'sql_params'  => \@sql_params,
+                'param_names' => \@param_names,
             );
         }
     }
