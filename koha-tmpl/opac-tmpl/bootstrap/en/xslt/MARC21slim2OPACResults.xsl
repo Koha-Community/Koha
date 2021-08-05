@@ -5,14 +5,13 @@
   xmlns:marc="http://www.loc.gov/MARC21/slim"
   xmlns:items="http://www.koha-community.org/items"
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+  xmlns:exsl="http://exslt.org/common"
   xmlns:str="http://exslt.org/strings"
-  exclude-result-prefixes="marc items str">
+  exclude-result-prefixes="marc items str" extension-element-prefixes="exsl">
     <xsl:import href="MARC21slimUtils.xsl"/>
     <xsl:output method = "html" indent="yes" omit-xml-declaration = "yes" encoding="UTF-8"/>
+
     <xsl:key name="item-by-status" match="items:item" use="items:status"/>
-    <xsl:key name="item-by-status-and-branch-home" match="items:item" use="concat(items:status, ' ', items:homebranch)"/>
-    <xsl:key name="item-by-status-and-branch-holding" match="items:item" use="concat(items:status, ' ', items:holdingbranch)"/>
-    <xsl:key name="item-by-substatus-and-branch" match="items:item" use="concat(items:substatus, ' ', items:homebranch)"/>
 
     <xsl:template match="/">
             <xsl:apply-templates/>
@@ -24,6 +23,8 @@
         <!-- Option: Display Alternate Graphic Representation (MARC 880)  -->
         <xsl:variable name="display880" select="boolean(marc:datafield[@tag=880])"/>
 
+    <xsl:variable name="resultsMaxItems" select="number(marc:sysprefs/marc:syspref[@name='resultsMaxItems']+0)"/>
+    <xsl:variable name="resultsMaxItemsUnavailable" select="number(marc:sysprefs/marc:syspref[@name='resultsMaxItemsUnavailable']+0)"/>
     <xsl:variable name="UseControlNumber" select="marc:sysprefs/marc:syspref[@name='UseControlNumber']"/>
     <xsl:variable name="UseAuthoritiesForTracings" select="marc:sysprefs/marc:syspref[@name='UseAuthoritiesForTracings']"/>
     <xsl:variable name="OPACResultsLibrary" select="marc:sysprefs/marc:syspref[@name='OPACResultsLibrary']"/>
@@ -36,7 +37,6 @@
     <xsl:variable name="AlternateHoldingsSubfields" select="substring(marc:sysprefs/marc:syspref[@name='AlternateHoldingsField'], 4)"/>
     <xsl:variable name="AlternateHoldingsSeparator" select="marc:sysprefs/marc:syspref[@name='AlternateHoldingsSeparator']"/>
     <xsl:variable name="OPACItemLocation" select="marc:sysprefs/marc:syspref[@name='OPACItemLocation']"/>
-    <xsl:variable name="singleBranchMode" select="marc:sysprefs/marc:syspref[@name='singleBranchMode']"/>
     <xsl:variable name="OPACTrackClicks" select="marc:sysprefs/marc:syspref[@name='TrackClicks']"/>
     <xsl:variable name="BiblioDefaultView" select="marc:sysprefs/marc:syspref[@name='BiblioDefaultView']"/>
         <xsl:variable name="leader" select="marc:leader"/>
@@ -1250,257 +1250,122 @@
         <!-- Availability line -->
         <span class="results_summary availability">
             <span class="label">Availability: </span>
-            <xsl:variable name="sumAv" select="count(key('item-by-status', 'available'))"/>
-            <xsl:variable name="sumRef" select="count(key('item-by-status', 'reference'))"/>
 
             <xsl:choose>
+                <!-- When there are no items, try alternate holdings -->
                 <xsl:when test="$itemcount=0">
-                        <xsl:choose>
-                            <xsl:when test="string-length($AlternateHoldingsField)=3 and marc:datafield[@tag=$AlternateHoldingsField]">
-                            <xsl:variable name="AlternateHoldingsCount" select="count(marc:datafield[@tag=$AlternateHoldingsField])"/>
-                            <xsl:for-each select="marc:datafield[@tag=$AlternateHoldingsField][1]">
-                                <xsl:call-template name="subfieldSelect">
-                                    <xsl:with-param name="codes"><xsl:value-of select="$AlternateHoldingsSubfields"/></xsl:with-param>
-                                    <xsl:with-param name="delimeter"><xsl:value-of select="$AlternateHoldingsSeparator"/></xsl:with-param>
-                                </xsl:call-template>
-                            </xsl:for-each>
-                            (<xsl:value-of select="$AlternateHoldingsCount"/>)
-                            </xsl:when>
-                            <xsl:otherwise><span class="noitems">No items available.</span> </xsl:otherwise>
-                        </xsl:choose>
+                    <xsl:choose>
+                        <xsl:when test="string-length($AlternateHoldingsField)=3 and marc:datafield[@tag=$AlternateHoldingsField]">
+                        <xsl:variable name="AlternateHoldingsCount" select="count(marc:datafield[@tag=$AlternateHoldingsField])"/>
+                        <xsl:for-each select="marc:datafield[@tag=$AlternateHoldingsField][1]">
+                            <xsl:call-template name="subfieldSelect">
+                                <xsl:with-param name="codes"><xsl:value-of select="$AlternateHoldingsSubfields"/></xsl:with-param>
+                                <xsl:with-param name="delimeter"><xsl:value-of select="$AlternateHoldingsSeparator"/></xsl:with-param>
+                            </xsl:call-template>
+                        </xsl:for-each>
+                        (<xsl:value-of select="$AlternateHoldingsCount"/>)
+                        </xsl:when>
+                        <xsl:otherwise><span class="noitems">No items available.</span> </xsl:otherwise>
+                    </xsl:choose>
                 </xsl:when>
-                <xsl:when test="$sumAv>0">
-                   <span class="available reallyavailable">
-                       <span class="AvailabilityLabel"><strong><xsl:text>Items available for loan: </xsl:text></strong></span>
-                       <xsl:variable name="available_items"
-                           select="key('item-by-status', 'available')"/>
-                   <xsl:choose>
-                   <xsl:when test="$singleBranchMode=1">
-                        <xsl:for-each select="$available_items[generate-id() = generate-id(key('item-by-status-and-branch-home', concat(items:status, ' ', items:homebranch))[1])]">
-                           <span class="ItemSummary">
-                               <xsl:value-of select="count(key('item-by-status-and-branch-home', concat(items:status, ' ', items:homebranch)))"/><xsl:text> </xsl:text>
-                               <xsl:if test="items:itemcallnumber != '' and items:itemcallnumber and $OPACItemLocation='callnum'">
-                                   <span class="CallNumberAndLabel">
-                                        <span class="LabelCallNumber">Call number: </span>
-                                        <span class="CallNumber"><xsl:value-of select="items:itemcallnumber"/><xsl:if test="count(key('item-by-status-and-branch-home', concat(items:status, ' ', items:homebranch)))>1"><xsl:text>, ..</xsl:text></xsl:if></span>
-                                   </span>
-                               </xsl:if>
-                               <xsl:choose>
-                                   <xsl:when test="position()=last()"><xsl:text>. </xsl:text></xsl:when>
-                                   <xsl:otherwise><xsl:text>, </xsl:text></xsl:otherwise>
-                               </xsl:choose>
+
+                <xsl:otherwise>
+                    <xsl:variable name="sumAv" select="count(key('item-by-status', 'available'))"/>
+                    <xsl:variable name="sumRef" select="count(key('item-by-status', 'reference'))"/>
+
+                    <!-- Availability part 1: ITEMS FOR LOAN -->
+                    <xsl:if test="$sumAv>0"><span class="available reallyavailable">
+                        <span class="AvailabilityLabel"><strong><xsl:text>Items available for loan: </xsl:text></strong></span>
+                        <xsl:variable name="available_items" select="key('item-by-status', 'available')"/>
+                        <!-- group by branch, see also pref OPACResultsLibrary -->
+                        <xsl:for-each select="$available_items[not(items:resultbranch=preceding-sibling::*[items:status='available']/items:resultbranch)]">
+                            <xsl:sort select="items:resultbranch"/>
+                            <xsl:variable name="currentbranch" select="items:resultbranch"/>
+                            <span class="ItemSummary">
+                            <xsl:call-template name="listCallNumbers">
+                                <xsl:with-param name="items" select="$available_items[items:resultbranch=$currentbranch]"/>
+                                <xsl:with-param name="max" select="$resultsMaxItems"/>
+                                <xsl:with-param name="status_text" select="$currentbranch"/>
+                                <xsl:with-param name="class_status" select="ItemBranch"/>
+                                <xsl:with-param name="OPACItemLocation" select="$OPACItemLocation"/>
+                            </xsl:call-template>
                             </span>
                         </xsl:for-each>
-                   </xsl:when>
-                   <xsl:otherwise>
-                       <xsl:choose>
-                            <xsl:when test="$OPACResultsLibrary='homebranch'">
-                               <xsl:for-each select="$available_items[generate-id() = generate-id(key('item-by-status-and-branch-home', concat(items:status, ' ', items:homebranch))[1])]">
-                                   <span class="ItemSummary">
-                                       <span class="ItemBranch"><xsl:value-of select="items:homebranch"/> </span>
-                                       <xsl:text> (</xsl:text>
-                                           <xsl:value-of select="count(key('item-by-status-and-branch-home', concat(items:status, ' ', items:homebranch)))"/>
-                                       <xsl:text>) </xsl:text>
-                                       <xsl:if test="items:itemcallnumber != '' and items:itemcallnumber and $OPACItemLocation='callnum'">
-                                           <span class="CallNumberAndLabel">
-                                                <span class="LabelCallNumber">Call number: </span>
-                                                <span class="CallNumber"><xsl:value-of select="items:itemcallnumber"/><xsl:if test="count(key('item-by-status-and-branch-holding', concat(items:status, ' ', items:holdingbranch)))>1"><xsl:text>, ..</xsl:text></xsl:if></span>
-                                           </span>
-                                       </xsl:if>
-                                       <xsl:choose>
-                                           <xsl:when test="position()=last()"><xsl:text>. </xsl:text></xsl:when>
-                                           <xsl:otherwise><xsl:text>, </xsl:text></xsl:otherwise>
-                                       </xsl:choose>
-                                   </span>
-                               </xsl:for-each>
-                            </xsl:when>
-                            <xsl:otherwise>
-                               <xsl:for-each select="$available_items[generate-id() = generate-id(key('item-by-status-and-branch-holding', concat(items:status, ' ', items:holdingbranch))[1])]">
-                                   <span class="ItemSummary">
-                                       <span class="ItemBranch"><xsl:value-of select="items:holdingbranch"/> </span>
-                                       <xsl:text> (</xsl:text>
-                                           <xsl:value-of select="count(key('item-by-status-and-branch-holding', concat(items:status, ' ', items:holdingbranch)))"/>
-                                       <xsl:text>) </xsl:text>
-                                       <xsl:if test="items:itemcallnumber != '' and items:itemcallnumber and $OPACItemLocation='callnum'">
-                                           <span class="CallNumberAndLabel">
-                                                <span class="LabelCallNumber">Call number: </span>
-                                                <span class="CallNumber"><xsl:value-of select="items:itemcallnumber"/><xsl:if test="count(key('item-by-status-and-branch-home', concat(items:status, ' ', items:homebranch)))>1"><xsl:text>, ..</xsl:text></xsl:if></span>
-                                           </span>
-                                       </xsl:if>
-                                       <xsl:choose>
-                                           <xsl:when test="position()=last()"><xsl:text>. </xsl:text></xsl:when>
-                                           <xsl:otherwise><xsl:text>, </xsl:text></xsl:otherwise>
-                                       </xsl:choose>
-                                   </span>
-                               </xsl:for-each>
-                            </xsl:otherwise>
-                        </xsl:choose>
-                    </xsl:otherwise>
-                </xsl:choose>
-                </span>
-                </xsl:when>
-            </xsl:choose>
+                    </span></xsl:if>
 
-            <xsl:choose>
-                <xsl:when test="$sumRef>0">
-                    <span class="available reference">
-                       <span class="AvailabilityLabel"><strong><xsl:text>Items available for reference: </xsl:text></strong></span>
+                    <!-- Availability part 2: ITEMS FOR REFERENCE (see also pref Reference_NFL_Statuses) -->
+                    <xsl:if test="$sumRef>0"><span class="available reference">
+                        <span class="AvailabilityLabel"><strong><xsl:text>Items available for reference: </xsl:text></strong></span>
                         <xsl:variable name="reference_items" select="key('item-by-status', 'reference')"/>
-                        <xsl:for-each select="$reference_items[generate-id() = generate-id(key('item-by-substatus-and-branch', concat(items:substatus, ' ', items:homebranch))[1])]">
-                            <span>
-                                <xsl:attribute name="class">
-                                    ItemSummary
-                                    <xsl:value-of select="translate(items:substatus,' ','_')"/>
-                                </xsl:attribute>
-                                <xsl:if test="$singleBranchMode=0">
-                                    <span class="ItemBranch"><xsl:value-of select="items:homebranch"/><xsl:text> </xsl:text></span>
-                                </xsl:if>
-                                <span class='notforloandesc'><xsl:value-of select="items:substatus"/></span>
-                                <xsl:text> (</xsl:text>
-                                <xsl:value-of select="count(key('item-by-substatus-and-branch', concat(items:substatus, ' ', items:homebranch)))"/>
-                                <xsl:text>) </xsl:text>
-                                <xsl:if test="items:itemcallnumber != '' and items:itemcallnumber and $OPACItemLocation='callnum'">
-                                    <span class="CallNumberAndLabel">
-                                        <span class="LabelCallNumber">Call number: </span>
-                                        <span class="CallNumber"><xsl:value-of select="items:itemcallnumber"/><xsl:if test="count(key('item-by-substatus-and-branch', concat(items:substatus, ' ', items:homebranch)))>1"><xsl:text>, ..</xsl:text></xsl:if></span>
-                                    </span>
-                                </xsl:if>
-                                <xsl:choose><xsl:when test="position()=last()"><xsl:text>. </xsl:text></xsl:when><xsl:otherwise><xsl:text>, </xsl:text></xsl:otherwise></xsl:choose>
-                            </span>
+                        <!-- group by branch, then by substatus -->
+                        <xsl:for-each select="$reference_items[not(items:resultbranch=preceding-sibling::*[items:status='reference']/items:resultbranch)]">
+                            <xsl:sort select="items:resultbranch"/>
+                            <xsl:variable name="currentbranch" select="items:resultbranch"/>
+                            <xsl:for-each select="$reference_items[not(items:substatus=preceding-sibling::*[items:status='reference']/items:substatus)]">
+                                <xsl:sort select="items:substatus"/>
+                                <xsl:variable name="current_substatus" select="items:substatus"/>
+                                <span class="ItemSummary">
+                                <xsl:call-template name="listCallNumbers">
+                                    <xsl:with-param name="items" select="$reference_items[items:resultbranch=$currentbranch and items:substatus=$current_substatus]"/>
+                                    <xsl:with-param name="max" select="$resultsMaxItems"/>
+                                    <xsl:with-param name="status_text" select="concat($currentbranch,': ',$current_substatus)"/>
+                                    <xsl:with-param name="class_block" select="concat('notforloandesc_',$current_substatus)"/>
+                                    <xsl:with-param name="class_status" select="ItemBranch"/>
+                                    <xsl:with-param name="OPACItemLocation" select="$OPACItemLocation"/>
+                                </xsl:call-template>
+                                </span>
+                            </xsl:for-each>
                         </xsl:for-each>
-                    </span>
-                </xsl:when>
-            </xsl:choose>
+                    </span></xsl:if>
 
-            <xsl:choose>
-                <xsl:when test="number($sumAv+$sumRef) &lt; number($itemcount)">
-                    <span class="unavailable">
+                    <!-- Availability part 3: UNAVAILABLE ITEMS (see also pref Reference_NFL_Statuses); status reallynotforloan or status other -->
+                    <xsl:if test="number($sumAv+$sumRef) &lt; number($itemcount)"><span class="unavailable">
                         <span class="AvailabilityLabel"><strong><xsl:text>Not available: </xsl:text></strong></span>
-
-                        <!-- First the remaining not for loan categories -->
-                        <xsl:variable name="unavailable_items" select="key('item-by-status', 'reallynotforloan')"/>
-                        <xsl:for-each select="$unavailable_items[not(./items:substatus=preceding-sibling::*/items:substatus)]">
+                        <xsl:variable name="other_status_list">
+                            <status english="Checked out">Checked out</status>
+                            <status english="Withdrawn">Withdrawn</status>
+                            <status english="Lost">Lost</status>
+                            <status english="Damaged">Damaged</status>
+                            <status english="Pending hold">Pending hold</status>
+                            <status english="In transit">In transit</status>
+                            <status english="Waiting">On hold</status>
+                        </xsl:variable>
+                        <xsl:variable name="unavailable_items" select="key('item-by-status', 'reallynotforloan')|key('item-by-status', 'other')"/>
+                        <!-- First group by branch -->
+                        <xsl:for-each select="items:items/items:item[not(items:resultbranch=preceding-sibling::*/items:resultbranch)]">
+                            <xsl:sort select="items:resultbranch"/>
+                            <xsl:variable name="currentbranch" select="items:resultbranch"/>
                             <span class="ItemSummary unavailable">
-                                <span class='notforloandesc'><xsl:value-of select="items:substatus"/></span>
-                                <xsl:text> (</xsl:text>
-                                <xsl:value-of select="count(parent::*/items:item/items:substatus[ text() = current()/items:substatus  ])"/>
-                                <xsl:text>)</xsl:text>
-                                <xsl:choose><xsl:when test="position()=last()"><xsl:text>. </xsl:text></xsl:when><xsl:otherwise><xsl:text>, </xsl:text></xsl:otherwise></xsl:choose>
+                            <!-- Within same branch, group by substatus -->
+                            <xsl:for-each select="$unavailable_items[not(items:substatus=preceding-sibling::*[items:status='reallynotforloan' or items:status='other']/items:substatus)]">
+                                <xsl:sort select="items:substatus"/>
+                                <xsl:variable name="current_substatus" select="items:substatus"/>
+                                    <xsl:call-template name="listCallNumbers">
+                                        <xsl:with-param name="items" select="$unavailable_items[items:resultbranch=$currentbranch and items:substatus=$current_substatus]"/>
+                                        <xsl:with-param name="max" select="$resultsMaxItemsUnavailable"/>
+                                        <xsl:with-param name="status_text">
+                                            <xsl:value-of select="$currentbranch"/>
+                                            <xsl:text>: </xsl:text>
+                                            <xsl:if test="items:status='other'">
+                                                <xsl:value-of select="exsl:node-set($other_status_list)/status[@english=$current_substatus]"/>
+                                            </xsl:if>
+                                            <xsl:if test="items:status='reallynotforloan'">
+                                                <xsl:value-of select="$current_substatus"/>
+                                            </xsl:if>
+                                        </xsl:with-param>
+                                        <xsl:with-param name="class_block" select="concat('unavailable_',items:substatus)"/>
+                                        <xsl:with-param name="class_status" select="ItemBranch"/>
+                                        <xsl:with-param name="OPACItemLocation" select="$OPACItemLocation"/>
+                                    </xsl:call-template>
+                            </xsl:for-each>
                             </span>
                         </xsl:for-each>
+                    </span></xsl:if>
 
-                        <!-- Followed by other statuses -->
-                        <xsl:if test="count(key('item-by-status', 'Checked out'))>0">
-                            <span class="unavailable">
-                                <xsl:text>Checked out (</xsl:text>
-                                <xsl:value-of select="count(key('item-by-status', 'Checked out'))"/>
-                                <xsl:text>). </xsl:text>
-                            </span>
-                        </xsl:if>
-                        <xsl:if test="count(key('item-by-status', 'Withdrawn'))>0">
-                            <span class="unavailable">
-                                <xsl:text>Withdrawn (</xsl:text>
-                                <xsl:value-of select="count(key('item-by-status', 'Withdrawn'))"/>
-                                <xsl:text>). </xsl:text>
-                            </span>
-                        </xsl:if>
-                        <xsl:if test="$hidelostitems='0' and count(key('item-by-status', 'Lost'))>0">
-                            <span class="unavailable">
-                                <xsl:text>Lost (</xsl:text>
-                                <xsl:value-of select="count(key('item-by-status', 'Lost'))"/>
-                                <xsl:text>). </xsl:text>
-                            </span>
-                        </xsl:if>
-                        <xsl:if test="count(key('item-by-status', 'Damaged'))>0">
-                            <span class="unavailable">
-                                <xsl:text>Damaged (</xsl:text>
-                                <xsl:value-of select="count(key('item-by-status', 'Damaged'))"/>
-                                <xsl:text>). </xsl:text>
-                            </span>
-                        </xsl:if>
-                        <xsl:if test="count(key('item-by-status', 'Pending hold'))>0">
-                            <span class="unavailable">
-                                <xsl:text>Pending hold (</xsl:text>
-                                <xsl:value-of select="count(key('item-by-status', 'Pending hold'))"/>
-                                <xsl:text>). </xsl:text>
-                            </span>
-                        </xsl:if>
-                        <xsl:if test="count(key('item-by-status', 'In transit'))>0">
-                            <span class="unavailable">
-                                <xsl:text>In transit (</xsl:text>
-                                <xsl:value-of select="count(key('item-by-status', 'In transit'))"/>
-                                <xsl:text>). </xsl:text>
-                            </span>
-                        </xsl:if>
-                        <xsl:if test="count(key('item-by-status', 'Waiting'))>0">
-                            <span class="unavailable">
-                                <xsl:text>On hold (</xsl:text>
-                                <xsl:value-of select="count(key('item-by-status', 'Waiting'))"/>
-                                <xsl:text>). </xsl:text>
-                            </span>
-                        </xsl:if>
-                    </span>
-                </xsl:when>
+                </xsl:otherwise>
             </xsl:choose>
         </span>
         <!-- End of Availability line -->
-
-        <!-- Location line -->
-        <xsl:choose>
-            <xsl:when test="($OPACItemLocation='location' or $OPACItemLocation='ccode') and (count(key('item-by-status', 'available'))!=0 or count(key('item-by-status', 'reference'))!=0)">
-                <span class="results_summary location">
-
-                <xsl:choose>
-                    <xsl:when test="$OPACItemLocation='location'">
-                        <span class="label">Location(s): </span>
-                    </xsl:when>
-                    <xsl:when test="$OPACItemLocation='ccode'">
-                        <span class="label">Collection(s): </span>
-                    </xsl:when>
-                </xsl:choose>
-
-                <xsl:choose>
-                <xsl:when test="count(key('item-by-status', 'available'))>0">
-                    <span class="available">
-                        <xsl:variable name="available_items" select="key('item-by-status', 'available')"/>
-                        <xsl:for-each select="$available_items[generate-id() = generate-id(key('item-by-status-and-branch-home', concat(items:status, ' ', items:homebranch))[1])]">
-                            <xsl:choose>
-                                <xsl:when test="$OPACItemLocation='location'"><strong><xsl:value-of select="concat(items:location,' ')"/></strong></xsl:when>
-                                <xsl:when test="$OPACItemLocation='ccode'"><strong><xsl:value-of select="concat(items:ccode,' ')"/></strong></xsl:when>
-                            </xsl:choose>
-                            <xsl:if test="items:itemcallnumber != '' and items:itemcallnumber">
-                                <span class="CallNumberAndLabel">
-                                    <span class="LabelCallNumber">Call number: </span>
-                                    <span class="CallNumber"><xsl:value-of select="items:itemcallnumber"/></span>
-                                </span>
-                            </xsl:if>
-                            <xsl:choose><xsl:when test="position()=last()"><xsl:text>. </xsl:text></xsl:when><xsl:otherwise><xsl:text>, </xsl:text></xsl:otherwise></xsl:choose>
-                        </xsl:for-each>
-                    </span>
-                </xsl:when>
-                <xsl:when test="count(key('item-by-status', 'reference'))>0">
-                    <span class="available">
-                        <xsl:variable name="reference_items" select="key('item-by-status', 'reference')"/>
-                        <xsl:for-each select="$reference_items[generate-id() = generate-id(key('item-by-status-and-branch-home', concat(items:status, ' ', items:homebranch))[1])]">
-                            <xsl:choose>
-                                <xsl:when test="$OPACItemLocation='location'"><strong><xsl:value-of select="concat(items:location,' ')"/></strong></xsl:when>
-                                <xsl:when test="$OPACItemLocation='ccode'"><strong><xsl:value-of select="concat(items:ccode,' ')"/></strong></xsl:when>
-                            </xsl:choose>
-                            <xsl:if test="items:itemcallnumber != '' and items:itemcallnumber">
-                                <span class="CallNumberAndLabel">
-                                    <span class="LabelCallNumber">Call number: </span>
-                                    <span class="CallNumber"><xsl:value-of select="items:itemcallnumber"/></span>
-                                </span>
-                            </xsl:if>
-                            <xsl:choose><xsl:when test="position()=last()"><xsl:text>. </xsl:text></xsl:when><xsl:otherwise><xsl:text>, </xsl:text></xsl:otherwise></xsl:choose>
-                        </xsl:for-each>
-                    </span>
-                </xsl:when>
-                </xsl:choose>
-                </span>
-            </xsl:when>
-        </xsl:choose>
-        <!-- End of Location line -->
 
     </xsl:template>
 
@@ -1597,5 +1462,45 @@
             <xsl:value-of select="$string"></xsl:value-of>
         </xsl:if>
     </xsl:template>
+
+    <xsl:template name="listCallNumbers">
+        <xsl:param name="items"/>
+        <xsl:param name="max"/>
+        <xsl:param name="status_text"/>
+        <xsl:param name="class_block"/>
+        <xsl:param name="class_status"/>
+        <xsl:param name="OPACItemLocation"/>
+        <xsl:if test="count($items)>0">
+            <span class="$class_block">
+                <span class="$class_status"><xsl:value-of select="$status_text"/></span>
+                <xsl:text> (</xsl:text>
+                <xsl:value-of select="count($items)"/>
+                <xsl:text>)</xsl:text>
+                <xsl:if test="$max>0 and $OPACItemLocation!='library'">
+                    <span class="CallNumberAndLabel">
+                    <span class="LabelCallNumber">
+                        <xsl:if test="$OPACItemLocation='callnum'">Call number: </xsl:if>
+                        <xsl:if test="$OPACItemLocation='ccode'">Collection code, call number: </xsl:if>
+                        <xsl:if test="$OPACItemLocation='location'">Location, call number: </xsl:if>
+                    </span>
+                    <span class="CallNumber">
+                    <xsl:for-each select="$items[position() &lt;= $max]">
+                        <xsl:if test="$OPACItemLocation='location'">
+                            <strong><xsl:value-of select="concat(items:location,' ')"/></strong>
+                        </xsl:if>
+                        <xsl:if test="$OPACItemLocation='ccode'">
+                            <strong><xsl:value-of select="concat(items:ccode,' ')"/></strong>
+                        </xsl:if>
+                        <xsl:value-of select="items:itemcallnumber"/><xsl:if test="position()!=last()"><xsl:text>, </xsl:text></xsl:if>
+                    </xsl:for-each>
+                    <xsl:if test="count($items)>$max"><xsl:text>, ..</xsl:text></xsl:if>
+                    </span>
+                    </span>
+                </xsl:if>
+                <xsl:text>. </xsl:text>
+            </span>
+        </xsl:if>
+    </xsl:template>
+
 
 </xsl:stylesheet>
