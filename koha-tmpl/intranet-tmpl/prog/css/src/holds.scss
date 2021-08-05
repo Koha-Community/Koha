@@ -1,0 +1,36 @@
+.hold_title {
+    border: 1px solid #b9d8d9;
+    border-bottom-color: darken( #b9d8d9, 15% );
+    border-top-color: lighten( #b9d8d9, 10% );
+    border-radius: 5px;
+    margin: .5em 0;
+    padding-bottom: 1em;
+    padding: 1em;
+}
+
+.holds_table {
+    margin-bottom: 1em;
+    width: 100%;
+}
+
+.holds_by_library,
+.holds_by_itemtype {
+    margin-bottom: 1em;
+    margin-left: 1em;
+
+    &:last-child {
+        .holds_table {
+            margin-bottom: 0;
+        }
+    }
+}
+
+.holds_by_library {
+    .itemtype_holds {
+        color: #5D6A8A;
+    }
+
+    &:last-child {
+        margin-bottom: 0;
+    }
+}

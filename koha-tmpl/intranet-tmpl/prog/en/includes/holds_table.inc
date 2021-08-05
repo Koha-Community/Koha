@@ -190,15 +190,22 @@
         [%- END -%]
             [%- END -%]
             <td>
-                <a class="cancel-hold" title="Cancel hold" data-borrowernumber="[% hold.borrowernumber | html %]" data-biblionumber="[% hold.biblionumber | html %]" data-id="[% hold.reserve_id | html %]" href="request.pl?action=cancel&amp;borrowernumber=[% hold.borrowernumber | html %]&amp;biblionumber=[% hold.biblionumber | html %]&amp;reserve_id=[% hold.reserve_id | html %]&amp;date=[% hold.date | html %]">
-                    <img src="[% interface | html %]/[% theme | html %]/img/x.png" alt="Cancel" />
+                <a class="btn btn-default btn-xs cancel-hold" data-borrowernumber="[% hold.borrowernumber | html %]" data-biblionumber="[% hold.biblionumber | html %]" data-id="[% hold.reserve_id | html %]" href="request.pl?action=cancel&amp;borrowernumber=[% hold.borrowernumber | html %]&amp;biblionumber=[% hold.biblionumber | html %]&amp;reserve_id=[% hold.reserve_id | html %]&amp;date=[% hold.date | html %]">
+                    <i class="fa fa-trash" aria-hidden="true"></i> Cancel
                 </a>
             </td>
             <td>
-                [%- IF Koha.Preference('SuspendHoldsIntranet') -%]
-                    [%- UNLESS ( hold.found ) -%]
-                        <input type="button" value="[% IF ( hold.suspend ) %]Unsuspend[% ELSE %]Suspend[% END %]" onclick="window.location.href='request.pl?action=toggleSuspend&amp;reserve_id=[% hold.reserve_id | html %]&amp;borrowernumber=[% hold.borrowernumber | html %]&amp;biblionumber=[% hold.biblionumber | html %]&amp;date=[% hold.date | html %]&amp;suspend_until=' + $('#suspend_until_[% hold.reserve_id | html %]').val()" />
-                        [%- IF Koha.Preference('AutoResumeSuspendedHolds') -%]
+                [% IF Koha.Preference('SuspendHoldsIntranet') %]
+                    [% UNLESS ( hold.found ) %]
+                        <button class="btn btn-default btn-xs" onclick="window.location.href='request.pl?action=toggleSuspend&amp;reserve_id=[% hold.reserve_id | html %]&amp;borrowernumber=[% hold.borrowernumber | html %]&amp;biblionumber=[% hold.biblionumber | html %]&amp;date=[% hold.date | html %]&amp;suspend_until=' + $('#suspend_until_[% hold.reserve_id | html %]').val()">
+                            [% IF ( hold.suspend ) %]
+                                <i class="fa fa-play" aria-hidden="true"></i> Unsuspend
+                            [% ELSE %]
+                                <i class="fa fa-pause" aria-hidden="true"></i> Suspend
+                            [% END %]
+                        </button>
+
+                        [% IF Koha.Preference('AutoResumeSuspendedHolds') %]
                             <label for="suspend_until_[% hold.reserve_id | html %]">[% IF ( hold.suspend ) %] on [% ELSE %] until [% END %]</label>
                             <input type="text" name="suspend_until_[% hold.reserve_id | html %]" id="suspend_until_[% hold.reserve_id | html %]" size="10" value="[% hold.suspend_until | $KohaDates %]" class="suspend_until_datepicker" />
                         [%- ELSE -%]
