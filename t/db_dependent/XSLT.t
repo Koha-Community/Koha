@@ -23,6 +23,8 @@ use Test::Warn;
 use t::lib::TestBuilder;
 use t::lib::Mocks;
 
+use Koha::Database;
+use Koha::Libraries;
 use Koha::ItemTypes;
 
 BEGIN {
@@ -46,13 +48,17 @@ subtest 'transformMARCXML4XSLT tests' => sub {
 };
 
 subtest 'buildKohaItemsNamespace status tests' => sub {
-    plan tests => 14;
+    plan tests => 16;
 
     t::lib::Mocks::mock_preference('Reference_NFL_Statuses', '1|2');
+    t::lib::Mocks::mock_preference( 'OPACResultsLibrary', 'holdingbranch' );
+    t::lib::Mocks::mock_preference( 'resultsMaxItems', '2' );
 
     my $itype = $builder->build_object({ class => 'Koha::ItemTypes' });
     my $itemtype = $builder->build_object({ class => 'Koha::ItemTypes' });
-    my $item  = $builder->build_sample_item({ itype => $itype->itemtype });
+    my $holdinglibrary = $builder->build_object({ class => 'Koha::Libraries' });
+    my $item = $builder->build_sample_item({ itype => $itype->itemtype });
+    $item->holdingbranch( $holdinglibrary->branchcode )->store;
     $item->biblioitem->itemtype($itemtype->itemtype)->store;
 
     my $xml = C4::XSLT::buildKohaItemsNamespace( $item->biblionumber,[]);
@@ -93,19 +99,20 @@ subtest 'buildKohaItemsNamespace status tests' => sub {
 
     $item->onloan('2001-01-01')->store;
     $xml = C4::XSLT::buildKohaItemsNamespace( $item->biblionumber,[]);
-    like($xml,qr{<status>Checked out</status>},"Checked out status takes precedence over Not for loan");
+    like( $xml, qr/<status>other<\/status>/, "Checked out is part of other statuses" );
+    like($xml,qr{<substatus>Checked out</substatus>},"Checked out status takes precedence over Not for loan");
 
     $item->withdrawn(1)->store;
     $xml = C4::XSLT::buildKohaItemsNamespace( $item->biblionumber,[]);
-    like($xml,qr{<status>Withdrawn</status>},"Withdrawn status takes precedence over Checked out");
+    like($xml,qr{<substatus>Withdrawn</substatus>},"Withdrawn status takes precedence over Checked out");
 
     $item->itemlost(1)->store;
     $xml = C4::XSLT::buildKohaItemsNamespace( $item->biblionumber,[]);
-    like($xml,qr{<status>Lost</status>},"Lost status takes precedence over Withdrawn");
+    like($xml,qr{<substatus>Lost</substatus>},"Lost status takes precedence over Withdrawn");
 
     $item->damaged(1)->store;
     $xml = C4::XSLT::buildKohaItemsNamespace( $item->biblionumber,[]);
-    like($xml,qr{<status>Damaged</status>},"Damaged status takes precedence over Lost");
+    like($xml,qr{<substatus>Damaged</substatus>},"Damaged status takes precedence over Lost");
 
     $builder->build({ source => "Branchtransfer", value => {
         itemnumber  => $item->itemnumber,
@@ -114,7 +121,7 @@ subtest 'buildKohaItemsNamespace status tests' => sub {
         }
     });
     $xml = C4::XSLT::buildKohaItemsNamespace( $item->biblionumber,[]);
-    like($xml,qr{<status>In transit</status>},"In-transit status takes precedence over Damaged");
+    like($xml,qr{<substatus>In transit</substatus>},"In-transit status takes precedence over Damaged");
 
     my $hold = $builder->build_object({ class => 'Koha::Holds', value => {
         biblionumber => $item->biblionumber,
@@ -124,16 +131,16 @@ subtest 'buildKohaItemsNamespace status tests' => sub {
         }
     });
     $xml = C4::XSLT::buildKohaItemsNamespace( $item->biblionumber,[]);
-    like($xml,qr{<status>Waiting</status>},"Waiting status takes precedence over In transit");
+    like($xml,qr{<substatus>Waiting</substatus>},"Waiting status takes precedence over In transit");
 
     $builder->build({ source => "TmpHoldsqueue", value => {
         itemnumber => $item->itemnumber
         }
     });
     $xml = C4::XSLT::buildKohaItemsNamespace( $item->biblionumber,[]);
-    like($xml,qr{<status>Pending hold</status>},"Pending status takes precedence over all");
-
-
+    like($xml,qr{<substatus>Pending hold</substatus>},"Pending status takes precedence over all");
+    my $library_name = $holdinglibrary->branchname;
+    like($xml,qr{<resultbranch>${library_name}</resultbranch>}, "Found resultbranch / holding branch" );
 };
 
 $schema->storage->txn_rollback;
