@@ -172,6 +172,7 @@ sub get_xslt_sysprefs {
                               TrackClicks opacthemes IdRef OpacSuppression
                               OPACResultsLibrary OPACShowOpenURL
                               OpenURLResolverURL OpenURLImageLocation
+                              resultsMaxItems resultsMaxItemsUnavailable
                               OpenURLText OPACShowMusicalInscripts OPACPlayMusicalInscripts / )
     {
         my $sp = C4::Context->preference( $syspref );
@@ -351,25 +352,32 @@ sub buildKohaItemsNamespace {
         my $substatus = '';
 
         if ($item->has_pending_hold) {
-            $status = 'Pending hold';
+            $status = 'other';
+            $substatus = 'Pending hold';
         }
         elsif ( $item->holds->waiting->count ) {
-            $status = 'Waiting';
+            $status = 'other';
+            $substatus = 'Waiting';
         }
         elsif ($item->get_transfer) {
-            $status = 'In transit';
+            $status = 'other';
+            $substatus = 'In transit';
         }
         elsif ($item->damaged) {
-            $status = "Damaged";
+            $status = 'other';
+            $substatus = "Damaged";
         }
         elsif ($item->itemlost) {
-            $status = "Lost";
+            $status = 'other';
+            $substatus = "Lost";
         }
         elsif ( $item->withdrawn) {
-            $status = "Withdrawn";
+            $status = 'other';
+            $substatus = "Withdrawn";
         }
         elsif ($item->onloan) {
-            $status = "Checked out";
+            $status = 'other';
+            $substatus = "Checked out";
         }
         elsif ( $item->notforloan ) {
             $status = $item->notforloan =~ /^($ref_status)$/
@@ -391,6 +399,7 @@ sub buildKohaItemsNamespace {
         }
         my $homebranch     = xml_escape($branches{$item->homebranch});
         my $holdingbranch  = xml_escape($branches{$item->holdingbranch});
+        my $resultbranch   = C4::Context->preference('OPACResultsLibrary') eq 'homebranch' ? $homebranch : $holdingbranch;
         my $location       = xml_escape($item->location && exists $shelflocations->{$item->location} ? $shelflocations->{$item->location} : $item->location);
         my $ccode          = xml_escape($item->ccode    && exists $ccodes->{$item->ccode}            ? $ccodes->{$item->ccode}            : $item->ccode);
         my $itemcallnumber = xml_escape($item->itemcallnumber);
@@ -399,6 +408,7 @@ sub buildKohaItemsNamespace {
             "<item>"
           . "<homebranch>$homebranch</homebranch>"
           . "<holdingbranch>$holdingbranch</holdingbranch>"
+          . "<resultbranch>$resultbranch</resultbranch>"
           . "<location>$location</location>"
           . "<ccode>$ccode</ccode>"
           . "<status>".( $status // q{} )."</status>"
