@@ -121,12 +121,15 @@ Move items to a given biblio.
 sub move_to_biblio {
     my ( $self, $to_biblio ) = @_;
 
-    while (my $item = $self->next()) {
-        $item->move_to_biblio($to_biblio, { skip_record_index => 1 });
+    my $biblionumbers = { $to_biblio->biblionumber => 1 };
+    while ( my $item = $self->next() ) {
+        $biblionumbers->{ $item->biblionumber } = 1;
+        $item->move_to_biblio( $to_biblio, { skip_record_index => 1 } );
     }
     my $indexer = Koha::SearchEngine::Indexer->new({ index => $Koha::SearchEngine::BIBLIOS_INDEX });
-    $indexer->index_records( $self->biblionumber, "specialUpdate", "biblioserver" );
-    $indexer->index_records( $to_biblio->biblionumber, "specialUpdate", "biblioserver" );
+    for my $biblionumber ( keys %{$biblionumbers} ) {
+        $indexer->index_records( $biblionumber, "specialUpdate", "biblioserver" );
+    }
 }
 
 
