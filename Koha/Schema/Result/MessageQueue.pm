@@ -103,7 +103,7 @@ __PACKAGE__->table("message_queue");
   data_type: 'mediumtext'
   is_nullable: 1
 
-=head2 delivery_note
+=head2 failure_code
 
   data_type: 'mediumtext'
   is_nullable: 1
@@ -153,7 +153,7 @@ __PACKAGE__->add_columns(
   { data_type => "longtext", is_nullable => 1 },
   "content_type",
   { data_type => "mediumtext", is_nullable => 1 },
-  "delivery_note",
+  "failure_code",
   { data_type => "mediumtext", is_nullable => 1 },
 );
 
@@ -207,8 +207,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07046 @ 2021-05-07 12:13:54
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:YufQVvbtEj4pIJI1iw9Omg
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2021-08-05 08:57:36
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:NwbN8wPMAlucrw6iQ2XQ5g
 
 sub koha_object_class {
     'Koha::Notice::Message';
