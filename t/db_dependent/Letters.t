@@ -18,7 +18,7 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use Test::More tests => 86;
+use Test::More tests => 87;
 use Test::MockModule;
 use Test::Warn;
 use Test::Exception;
@@ -146,7 +146,7 @@ is( $messages->[0]->{message_transport_type}, $my_message->{message_transport_ty
 is( $messages->[0]->{status}, 'pending', 'EnqueueLetter stores the status pending correctly' );
 isnt( $messages->[0]->{time_queued}, undef, 'Time queued inserted by default in message_queue table' );
 is( $messages->[0]->{updated_on}, $messages->[0]->{time_queued}, 'Time status changed equals time queued when created in message_queue table' );
-is( $messages->[0]->{delivery_note}, '', 'Delivery note for successful message correctly empty');
+is( $messages->[0]->{failure_code}, '', 'Failure code for successful message correctly empty');
 
 # Setting time_queued to something else than now
 my $yesterday = dt_from_string->subtract( days => 1 );
@@ -163,6 +163,11 @@ is(
     'failed',
     'message marked failed if tried to send SMS message for borrower with no smsalertnumber set (bug 11208)'
 );
+is(
+    $messages->[0]->{failure_code},
+    'MISSING_SMS',
+    'Correct failure code set for borrower with no smsalertnumber set'
+);
 isnt($messages->[0]->{updated_on}, $messages->[0]->{time_queued}, 'Time status changed differs from time queued when status changes' );
 is(dt_from_string($messages->[0]->{time_queued}), $yesterday, 'Time queued remaines inmutable' );
 
@@ -177,9 +182,7 @@ $resent = C4::Letters::ResendMessage();
 is( $resent, undef, 'ResendMessage should return undef if not message_id given' );
 
 # Delivery notes
-is($messages->[0]->{delivery_note}, 'Missing SMS number',
-   'Delivery note for no smsalertnumber correctly set');
-
+is( $messages->[0]->{failure_code}, 'MISSING_SMS', 'Failure code set correctly for no smsalertnumber correctly set' );
 
 # GetLetters
 my $letters = C4::Letters::GetLetters();
