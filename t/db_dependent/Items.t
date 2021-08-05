@@ -19,7 +19,7 @@ use Modern::Perl;
 use Data::Dumper;
 
 use MARC::Record;
-use C4::Items qw( ModItemTransfer SearchItems AddItemFromMarc ModItemFromMarc get_hostitemnumbers_of Item2Marc );
+use C4::Items qw( ModItemTransfer SearchItems AddItemFromMarc ModItemFromMarc get_hostitemnumbers_of Item2Marc ModDateLastSeen );
 use C4::Biblio qw( GetMarcFromKohaField AddBiblio );
 use C4::Circulation qw( AddIssue );
 use Koha::Items;
@@ -34,7 +34,7 @@ use Koha::AuthorisedValues;
 use t::lib::Mocks;
 use t::lib::TestBuilder;
 
-use Test::More tests => 11;
+use Test::More tests => 12;
 
 use Test::Warn;
 
@@ -931,4 +931,28 @@ subtest 'ModItemFromMarc' => sub {
 
     $schema->storage->txn_rollback;
     Koha::Caches->get_instance->clear_from_cache( "MarcSubfieldStructure-" );
-}
+};
+
+subtest 'ModDateLastSeen' => sub {
+    plan tests => 5;
+    $schema->storage->txn_begin;
+
+    my $builder = t::lib::TestBuilder->new;
+    my $item = $builder->build_sample_item;
+    t::lib::Mocks::mock_preference('CataloguingLog', '1');
+    my $logs_before = Koha::ActionLogs->search({ module => 'CATALOGUING', action => 'MODIFY', object => $item->itemnumber })->count;
+    ModDateLastSeen($item->itemnumber);
+    my $logs_after = Koha::ActionLogs->search({ module => 'CATALOGUING', action => 'MODIFY', object => $item->itemnumber })->count;
+    is( $logs_after, $logs_before, "ModDateLastSeen doesn't log if item not lost");
+    $item->itemlost(1)->store({ log_action => 0 });
+    ModDateLastSeen($item->itemnumber, 1);
+    $item->discard_changes;
+    $logs_after = Koha::ActionLogs->search({ module => 'CATALOGUING', action => 'MODIFY', object => $item->itemnumber })->count;
+    is( $item->itemlost, 1, "Item left lost when parameter is passed");
+    is( $logs_after, $logs_before, "ModDateLastSeen doesn't log if item not lost");
+    ModDateLastSeen($item->itemnumber);
+    $item->discard_changes;
+    $logs_after = Koha::ActionLogs->search({ module => 'CATALOGUING', action => 'MODIFY', object => $item->itemnumber })->count;
+    is( $item->itemlost, 0, "Item no longer lost when no parameter is passed");
+    is( $logs_after, $logs_before + 1, "ModDateLastSeen logs if item was lost and now found");
+};
