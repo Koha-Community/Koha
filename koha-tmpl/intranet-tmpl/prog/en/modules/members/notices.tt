@@ -95,6 +95,7 @@
         [% IF ( QUEUED_MESSAGE.failure_code ) %]
             [% IF ( QUEUED_MESSAGE.failure_code == "INVALID_BORNUMBER" ) %]Invalid borrowernumber [% borrowernumber | html %]
             [% ELSIF ( QUEUED_MESSAGE.failure_code == 'NO_EMAIL' ) %]Unable to find an email address for this borrower
+            [% ELSIF ( QUEUED_MESSAGE.failure_code == "INVALID_EMAIL" ) %]Invalid email address found [% borrowernumber | html %]
             [% ELSIF ( QUEUED_MESSAGE.failure_code == 'NO_FROM' ) %]Missing from email address
             [% ELSIF ( QUEUED_MESSAGE.failure_code == 'MISSING_SMS' ) %]Missing SMS number
             [% ELSIF ( QUEUED_MESSAGE.failure_code == 'DUPLICATE_MESSAGE' ) %]Message is duplicate

@@ -1389,20 +1389,33 @@ sub _send_message_by_email {
         );
         return;
     };
-    my $email = Koha::Email->create(
-        {
-            to => $to_address,
-            (
-                C4::Context->preference('NoticeBcc')
-                ? ( bcc => C4::Context->preference('NoticeBcc') )
-                : ()
-            ),
-            from     => $from_address,
-            reply_to => $message->{'reply_address'} || $branch_replyto,
-            sender   => $branch_returnpath,
-            subject  => "" . $message->{subject}
-        }
-    );
+    my $email = try {
+        Koha::Email->create(
+            {
+                to => $to_address,
+                (
+                    C4::Context->preference('NoticeBcc')
+                    ? ( bcc => C4::Context->preference('NoticeBcc') )
+                    : ()
+                ),
+                from     => $from_address,
+                reply_to => $message->{'reply_address'} || $branch_replyto,
+                sender   => $branch_returnpath,
+                subject  => "" . $message->{subject}
+            }
+        );
+    }
+    catch {
+        _set_message_status(
+            {
+                message_id   => $message->{'message_id'},
+                status       => 'failed',
+                failure_code => 'INVALID_EMAIL'
+            }
+        );
+        return 0;
+    };
+    return unless $email;
 
     if ( $is_html ) {
         $email->html_body(
