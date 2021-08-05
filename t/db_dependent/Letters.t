@@ -971,7 +971,7 @@ subtest 'Test limit parameter for SendQueuedMessages' => sub {
 
 subtest 'Test message_id parameter for SendQueuedMessages' => sub {
 
-    plan tests => 6;
+    plan tests => 7;
 
     my $dbh = C4::Context->dbh;
 
@@ -999,13 +999,11 @@ subtest 'Test message_id parameter for SendQueuedMessages' => sub {
         'from_address'           => 'root@localhost.' # invalid KohaAdminEmailAddress
     };
     my $message_id = C4::Letters::EnqueueLetter($my_message);
-    throws_ok {
-        C4::Letters::SendQueuedMessages( { message_id => $message_id } );
-    } 'Koha::Exceptions::BadParameter',
-    'Exception thrown if invalid email is passed';
+    my $processed = C4::Letters::SendQueuedMessages( { message_id => $message_id } );
+    is( $processed, 1, 'Processed 1 message when one message_id passed' );
     my $message_1 = C4::Letters::GetMessage($message_id);
-    # FIXME must be 'failed'
-    is( $message_1->{status}, 'pending', 'Invalid KohaAdminEmailAddress => status pending' );
+    is( $message_1->{status}, 'failed', 'Invalid KohaAdminEmailAddress => status failed' );
+    is( $message_1->{failure_code}, 'INVALID_EMAIL', 'Failure code set correctly for invalid email parameter');
 
     $my_message->{from_address} = 'root@example.org'; # valid KohaAdminEmailAddress
     $message_id = C4::Letters::EnqueueLetter($my_message);
@@ -1014,6 +1012,6 @@ subtest 'Test message_id parameter for SendQueuedMessages' => sub {
         "SendQueuedMessages is using the mocked send_or_die routine";
     $message_1 = C4::Letters::GetMessage($message_1->{message_id});
     my $message_2 = C4::Letters::GetMessage($message_id);
-    is( $message_1->{status}, 'pending', 'Message 1 status is unchanged' ); # Must be 'failed'
+    is( $message_1->{status}, 'failed', 'Message 1 status is unchanged' );
     is( $message_2->{status}, 'sent', 'Valid KohaAdminEmailAddress => status sent' );
 };
