@@ -586,7 +586,10 @@ sub getRecords {
     # This sorts the facets into alphabetical order
     if (@facets_loop) {
         foreach my $f (@facets_loop) {
-            $f->{facets} = [ sort { uc($a->{facet_label_value}) cmp uc($b->{facet_label_value}) } @{ $f->{facets} } ];
+            if( C4::Context->preference('FacetOrder') eq 'Alphabetical' ){
+                $f->{facets} =
+                    [ sort { uc($a->{facet_label_value}) cmp uc($b->{facet_label_value}) } @{ $f->{facets} } ];
+            }
         }
     }
 
