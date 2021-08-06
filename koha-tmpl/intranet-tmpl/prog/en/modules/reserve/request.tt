@@ -305,7 +305,7 @@
                                             [% IF ( biblioloo.alreadyres ) %]
                                                 <ul>
                                             [% ELSE %]
-                                                [% IF ( biblioloo.none_avail ) %]
+                                                [% IF ( biblioloo.none_avail || biblioloo.noitems ) %]
                                                     <ul>
                                                 [% END %]
                                             [% END %]
@@ -316,14 +316,14 @@
                                                     <strong>already has a hold</strong> on this item
                                                 </li>
                                             [% END %]
-                                            [% IF ( biblioloo.none_avail ) %]
+                                            [% IF ( biblioloo.none_avail || biblioloo.noitems ) %]
                                                 <li> <strong>No items are available</strong> to be placed on hold</li>
                                             [% END %]
 
                                             [% IF ( biblioloo.alreadyres ) %]
                                                 </ul>
                                             [% ELSE %]
-                                                [% IF ( biblioloo.none_avail ) %]
+                                                [% IF ( biblioloo.none_avail || biblioloo.noitems ) %]
                                                     </ul>
                                                 [% END %]
                                             [% END %]
@@ -818,7 +818,7 @@
                                             [% IF ( biblioloo.alreadyres ) %]
                                                 <ul>
                                             [% ELSE %]
-                                                [% IF ( biblioloo.none_avail ) %]
+                                                [% IF ( biblioloo.none_avail || biblioloo.noitems ) %]
                                                     <ul>
                                                 [% END %]
                                             [% END %]
@@ -829,20 +829,20 @@
                                                     <strong>already has a hold</strong> on this item
                                                 </li>
                                             [% END %]
-                                            [% IF ( biblioloo.none_avail ) %]
+                                            [% IF ( biblioloo.none_avail || biblioloo.noitems ) %]
                                                 <li> <strong>No items are available</strong> to be placed on hold</li>
                                             [% END %]
 
                                             [% IF ( biblioloo.alreadyres ) %]
                                                 </ul>
                                             [% ELSE %]
-                                                [% IF ( biblioloo.none_avail ) %]
+                                                [% IF ( biblioloo.none_avail || biblioloo.noitems ) %]
                                                     </ul>
                                                 [% END %]
                                             [% END %]
                                         </td>
                                         <td>
-                                            [% UNLESS ( biblioloo.none_avail ) %]
+                                            [% UNLESS ( biblioloo.none_avail || biblioloo.noitems ) %]
                                                 <select name="pickup_[% biblioloo.biblionumber | html %]"
                                                         class="multi_pickup_select"
                                                         data-biblio-id="[% biblioloo.biblionumber | html %]"
