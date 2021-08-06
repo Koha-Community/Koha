@@ -283,7 +283,6 @@ $(document).ready(function() {
         $(document).on("click", '#searchsubmit', function(e) {
             jQuery.removeCookie("form_serialized", { path: '/'});
             jQuery.removeCookie("form_serialized_limits", { path: '/'});
-            jQuery.removeCookie("num_paragraph", { path: '/'});
             jQuery.removeCookie("search_path_code", { path: '/'});
         });
     }
