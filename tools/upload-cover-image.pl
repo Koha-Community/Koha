@@ -75,13 +75,30 @@ my $sessionID = $cookies{'CGISESSID'}->value;
 
 my $error;
 
+my $biblio;
+my $cover_images;
+my $item;
+
+if ( $itemnumber ) {
+    $item = Koha::Items->find($itemnumber);
+    $biblionumber = $item->biblionumber;
+    $biblio = Koha::Biblios->find( $biblionumber );
+    $cover_images = $item->cover_images->as_list;
+} elsif ( $biblionumber ){
+    $biblio = Koha::Biblios->find( $biblionumber );
+    $cover_images = $biblio->cover_images->as_list;
+}
+
 $template->param(
     filetype     => $filetype,
+    biblio       => $biblio,
     biblionumber => $biblionumber,
     itemnumber   => $itemnumber,
+    cover_images => $cover_images,
 );
 
 my $total = 0;
+my @results;
 
 if ($fileID) {
     my $upload = Koha::UploadedFiles->find( $fileID );
@@ -175,16 +192,36 @@ if ($fileID) {
                                 logaction('CATALOGUING', 'MODIFY', $biblionumber, "biblio cover image: $filename");
                             }
                             my $srcimage = GD::Image->new("$dir/$filename");
+                            my $biblio;
+                            my $item;
                             if ( defined $srcimage ) {
                                 $total++;
                                 eval {
                                     if ( $replace ) {
                                         if ( $biblionumber ) {
-                                            Koha::Biblios->find($biblionumber)->cover_images->delete;
+                                            $biblio = Koha::Biblios->find( $biblionumber );
+                                            $biblio->cover_images->delete;
                                         } elsif ( $itemnumber ) {
-                                            Koha::Items->find($itemnumber)->cover_images->delete;
+                                            $item = Koha::Items->find($itemnumber);
+                                            $item->cover_images->delete;
+                                            $biblio = Koha::Biblios->find( $item->{biblionumber} );
+                                        }
+                                    } else {
+                                        if( $biblionumber ){
+                                            $biblio = Koha::Biblios->find( $biblionumber );
+                                        } elsif ( $itemnumber ){
+                                            $item = Koha::Items->find($itemnumber);
+                                            $biblio = Koha::Biblios->find( $item->{biblionumber} );
+                                        } else {
+                                            warn "Problem.";
                                         }
                                     }
+
+                                    push @results, {
+                                        biblionumber => $biblionumber,
+                                        itemnumber => $itemnumber,
+                                        title => $biblio->title
+                                    };
 
                                     Koha::CoverImage->new(
                                         {
@@ -213,14 +250,23 @@ if ($fileID) {
             }
         }
     }
-
-    $template->param(
-        total        => $total,
-        uploadimage  => 1,
-        error        => $error,
-        biblionumber => $biblionumber || Koha::Items->find($itemnumber)->biblionumber,
-        itemnumber   => $itemnumber,
-    );
+    if( $error ){
+        $template->param(
+            total        => $total,
+            uploadimage  => 1,
+            error        => $error,
+            biblionumber => $biblionumber || Koha::Items->find($itemnumber)->biblionumber,
+            itemnumber   => $itemnumber,
+        );
+    } elsif ( @results ){
+        $template->param(
+            total        => $total,
+            uploadimage  => 1,
+            results      => \@results
+        );
+    } else {
+        print $input->redirect("/cgi-bin/koha/tools/upload-cover-image.pl?biblionumber=$biblionumber&itemnumber=$itemnumber");
+    }
 }
 
 output_html_with_http_headers $input, $cookie, $template->output;
