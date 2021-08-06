@@ -338,19 +338,10 @@ function placeHold () {
         return false;
     }
     var bibs = "";
-    var badBibs = false;
     $(checkedItems).each(function() {
         var bib = $(this).val();
-        if ($("#reserve_" + bib).size() == 0) {
-            alert( __("One or more selected items cannot be placed on hold.") );
-            badBibs = true;
-            return false;
-        }
         bibs += bib + "/";
     });
-    if (badBibs) {
-        return false;
-    }
     $("#hold_form_biblios").val(bibs);
     $("#hold_form").submit();
     return false;
