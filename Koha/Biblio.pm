@@ -519,22 +519,24 @@ sub get_components_query {
         my $pf001 = $marc->field('001') || undef;
 
         if ( defined($pf001) ) {
+            $searchstr = "(";
             my $pf003 = $marc->field('003') || undef;
 
             if ( !defined($pf003) ) {
                 # search for 773$w='Host001'
-                $searchstr = "rcn:" . $pf001->data();
+                $searchstr .= "rcn:" . $pf001->data();
             }
             else {
-                $searchstr  = "(";
-                # search for (773$w='Host001' and 003='Host003') or 773$w='Host003 Host001')
+                $searchstr .= "(";
+                # search for (773$w='Host001' and 003='Host003') or 773$w='(Host003)Host001'
                 $searchstr .= "(rcn:" . $pf001->data() . " AND cni:" . $pf003->data() . ")";
-                $searchstr .= " OR rcn:" . $pf003->data() . " " . $pf001->data();
+                $searchstr .= " OR rcn:\"" . $pf003->data() . " " . $pf001->data() . "\"";
                 $searchstr .= ")";
             }
 
             # limit to monograph and serial component part records
             $searchstr .= " AND (bib-level:a OR bib-level:b)";
+            $searchstr .= ")";
         }
     }
     else {

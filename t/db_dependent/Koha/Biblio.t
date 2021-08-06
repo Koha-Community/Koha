@@ -558,14 +558,14 @@ subtest 'get_components_query' => sub {
     C4::Biblio::ModBiblio( $record, $biblio->biblionumber );
     $biblio = Koha::Biblios->find( $biblio->biblionumber);
 
-    is($biblio->get_components_query, "rcn:$biblionumber AND (bib-level:a OR bib-level:b)", "UseControlNumber enabled without MarcOrgCode");
+    is($biblio->get_components_query, "(rcn:$biblionumber AND (bib-level:a OR bib-level:b))", "UseControlNumber enabled without MarcOrgCode");
 
     my $marc_003_field = MARC::Field->new('003', 'OSt');
     $record->append_fields($marc_003_field);
     C4::Biblio::ModBiblio( $record, $biblio->biblionumber );
     $biblio = Koha::Biblios->find( $biblio->biblionumber);
 
-    is($biblio->get_components_query, "((rcn:$biblionumber AND cni:OSt) OR rcn:OSt $biblionumber) AND (bib-level:a OR bib-level:b)", "UseControlNumber enabled with MarcOrgCode");
+    is($biblio->get_components_query, "(((rcn:$biblionumber AND cni:OSt) OR rcn:\"OSt $biblionumber\") AND (bib-level:a OR bib-level:b))", "UseControlNumber enabled with MarcOrgCode");
 };
 
 subtest 'orders() and active_orders() tests' => sub {
