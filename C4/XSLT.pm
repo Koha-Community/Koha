@@ -264,9 +264,10 @@ sub XSLTParse4Display {
     my $xmlrecord = $record->as_xml(C4::Context->preference('marcflavour'));
 
     $variables ||= {};
+    my $biblio;
     if (C4::Context->preference('OPACShowOpenURL')) {
         my @biblio_itemtypes;
-        my $biblio = Koha::Biblios->find($biblionumber);
+        $biblio //= Koha::Biblios->find($biblionumber);
         if (C4::Context->preference('item-level_itypes')) {
             @biblio_itemtypes = $biblio->items->get_column("itype");
         } else {
@@ -283,7 +284,7 @@ sub XSLTParse4Display {
     my $partsxml = '';
     # possibly insert component records into Detail views
     if ( $xslsyspref eq "OPACXSLTDetailsDisplay" || $xslsyspref eq "XSLTDetailsDisplay" ) {
-        my $biblio = Koha::Biblios->find( $biblionumber );
+        my $biblio //= Koha::Biblios->find( $biblionumber );
         my $components = $biblio->get_marc_components(300);
         $variables->{show_analytics_link} = ( scalar @{$components} == 0 ) ? 0 : 1;
 
