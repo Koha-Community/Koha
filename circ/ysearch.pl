@@ -30,6 +30,7 @@ use C4::Context;
 use C4::Auth qw( check_cookie_auth );
 use Koha::Patrons;
 use Koha::DateUtils qw( format_sqldatetime );
+use Koha::Libraries;
 
 use JSON qw( to_json );
 
@@ -79,6 +80,7 @@ my $borrowers_rs = Koha::Patrons->search_limited(
 
 my @borrowers;
 while ( my $b = $borrowers_rs->next ) {
+    my $library = Koha::Libraries->find( $b->branchcode );
     push @borrowers,
       { borrowernumber => $b->borrowernumber,
         surname        => $b->surname    // '',
@@ -91,6 +93,7 @@ while ( my $b = $borrowers_rs->next ) {
         zipcode        => $b->zipcode    // '',
         country        => $b->country    // '',
         branchcode     => $b->branchcode // '',
+        branchname     => $library->branchname // '',
       };
 }
 

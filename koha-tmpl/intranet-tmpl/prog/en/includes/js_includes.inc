@@ -105,7 +105,7 @@
                                     + ( item.zipcode ? item.zipcode.escapeHtml() : "" ) + " "
                                     + ( item.country ? item.country.escapeHtml() : "" )
                                     + "</small></a>";
-                        itemString += " <span class=\"ac-library\">" + item.branchcode + "</span> " + "</a>";
+                        itemString += " <span class=\"ac-library\">" + item.branchname + "</span> " + "</a>";
                         return $( "<li></li>" )
                         .addClass( loggedInClass )
                         .data( "ui-autocomplete-item", item )
