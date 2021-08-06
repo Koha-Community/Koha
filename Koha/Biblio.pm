@@ -43,7 +43,6 @@ use Koha::Suggestions;
 use Koha::Subscriptions;
 use Koha::SearchEngine;
 use Koha::SearchEngine::Search;
-use Koha::Util::Search;
 
 =head1 NAME
 
@@ -493,7 +492,7 @@ sub get_marc_components {
 
     return [] if (C4::Context->preference('marcflavour') ne 'MARC21');
 
-    my $searchstr = Koha::Util::Search::get_component_part_query($self->id);
+    my $searchstr = $self->get_components_query;
 
     if (defined($searchstr)) {
         my $searcher = Koha::SearchEngine::Search->new({index => $Koha::SearchEngine::BIBLIOS_INDEX});
@@ -502,6 +501,49 @@ sub get_marc_components {
     }
 
     return $self->{_components} || [];
+}
+
+=head2 get_components_query
+
+Returns a query which can be used to search for all component parts of MARC21 biblios
+
+=cut
+
+sub get_components_query {
+    my ($self) = @_;
+
+    my $marc = $self->metadata->record;
+
+    my $searchstr;
+    if ( C4::Context->preference('UseControlNumber') ) {
+        my $pf001 = $marc->field('001') || undef;
+
+        if ( defined($pf001) ) {
+            my $pf003 = $marc->field('003') || undef;
+
+            if ( !defined($pf003) ) {
+                # search for 773$w='Host001'
+                $searchstr = "rcn:" . $pf001->data();
+            }
+            else {
+                $searchstr  = "(";
+                # search for (773$w='Host001' and 003='Host003') or 773$w='Host003 Host001')
+                $searchstr .= "(rcn:" . $pf001->data() . " AND cni:" . $pf003->data() . ")";
+                $searchstr .= " OR rcn:" . $pf003->data() . " " . $pf001->data();
+                $searchstr .= ")";
+            }
+
+            # limit to monograph and serial component part records
+            $searchstr .= " AND (bib-level:a OR bib-level:b)";
+        }
+    }
+    else {
+        my $cleaned_title = $marc->title;
+        $cleaned_title =~ tr|/||;
+        $searchstr = "Host-item:($cleaned_title)";
+    }
+
+    return $searchstr;
 }
 
 =head3 subscriptions

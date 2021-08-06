@@ -28,7 +28,6 @@ use C4::Koha qw( xml_escape );
 use C4::Biblio qw( GetAuthorisedValueDesc GetFrameworkCode GetMarcStructure );
 use Koha::AuthorisedValues;
 use Koha::ItemTypes;
-use Koha::Util::Search;
 use Koha::XSLT::Base;
 use Koha::Libraries;
 
@@ -299,7 +298,7 @@ sub XSLTParse4Display {
 
              $variables->{show_analytics_link} = 0;
 
-             my $search_query = Koha::Util::Search::get_component_part_query($biblionumber);
+             my $search_query = $biblio->get_analytics_query;
              $variables->{ComponentPartQuery} = $search_query;
 
              my @componentPartRecordXML = ('<componentPartRecords>');

@@ -17,9 +17,9 @@
 
 use Modern::Perl;
 
-use Test::More tests => 17;
+use Test::More tests => 18;
 
-use C4::Biblio qw( AddBiblio ModBiblio );
+use C4::Biblio qw( AddBiblio ModBiblio ModBiblioMarc );
 use Koha::Database;
 use Koha::Caches;
 use Koha::Acquisition::Orders;
@@ -524,7 +524,7 @@ subtest 'get_marc_components() tests' => sub {
 
     is_deeply(
         [@components],
-        [()],
+        [[]],
         '->get_marc_components returns an empty ARRAY'
     );
 
@@ -540,6 +540,32 @@ subtest 'get_marc_components() tests' => sub {
     $search_mod->unmock( 'simple_search_compat');
 
     $schema->storage->txn_rollback;
+};
+
+subtest 'get_components_query' => sub {
+    plan tests => 3;
+
+    my $biblio = $builder->build_sample_biblio();
+    my $biblionumber = $biblio->biblionumber;
+    my $record = $biblio->metadata->record;
+
+    t::lib::Mocks::mock_preference( 'UseControlNumber', '0' );
+    is($biblio->get_components_query, "Host-item:(Some boring read)", "UseControlNumber disabled");
+
+    t::lib::Mocks::mock_preference( 'UseControlNumber', '1' );
+    my $marc_001_field = MARC::Field->new('001', $biblionumber);
+    $record->append_fields($marc_001_field);
+    C4::Biblio::ModBiblio( $record, $biblio->biblionumber );
+    $biblio = Koha::Biblios->find( $biblio->biblionumber);
+
+    is($biblio->get_components_query, "rcn:$biblionumber AND (bib-level:a OR bib-level:b)", "UseControlNumber enabled without MarcOrgCode");
+
+    my $marc_003_field = MARC::Field->new('003', 'OSt');
+    $record->append_fields($marc_003_field);
+    C4::Biblio::ModBiblio( $record, $biblio->biblionumber );
+    $biblio = Koha::Biblios->find( $biblio->biblionumber);
+
+    is($biblio->get_components_query, "((rcn:$biblionumber AND cni:OSt) OR rcn:OSt $biblionumber) AND (bib-level:a OR bib-level:b)", "UseControlNumber enabled with MarcOrgCode");
 };
 
 subtest 'orders() and active_orders() tests' => sub {
