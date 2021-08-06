@@ -500,8 +500,13 @@ sub _convert_facets {
                 type_link_value => $type,
             };
         }
+        if( C4::Context->preference('FacetOrder') eq 'Alphabetical' ){
+            @{ $facet->{facets} } =
+                sort { $a->{facet_label_value} cmp $b->{facet_label_value} } @{ $facet->{facets} };
+        }
         push @facets, $facet if exists $facet->{facets};
     }
+
 
     @facets = sort { $a->{order} <=> $b->{order} } @facets;
     return \@facets;
