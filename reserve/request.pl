@@ -405,7 +405,7 @@ foreach my $biblionumber (@biblionumbers) {
 
     unless ( $items->count ) {
         # FIXME Then why do we continue?
-        $template->param('noitems' => 1);
+        $template->param('noitems' => 1) unless ( $multi_hold );
         $biblioloopiter{noitems} = 1;
     }
 
