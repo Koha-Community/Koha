@@ -201,6 +201,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('ExtendedPatronAttributes','1',NULL,'Use extended patron IDs and attributes','YesNo'),
 ('FacetLabelTruncationLength','20',NULL,'Specify the facet max length in OPAC','Integer'),
 ('FacetMaxCount','20',NULL,'Specify the max facet count for each category','Integer'),
+('FacetOrder','Alphabetical','Alphabetical|Usage','Specify the order of facets within each category','Choice'),
 ('FailedLoginAttempts','','','Number of login attempts before lockout the patron account','Integer'),
 ('FallbackToSMSIfNoEmail', 0, 'Enable|Disable', 'Send messages by SMS if no patron email is defined', 'YesNo'),
 ('FeeOnChangePatronCategory','1','','If set, when a patron changes to a category with enrolment fee, a fee is charged','YesNo'),
