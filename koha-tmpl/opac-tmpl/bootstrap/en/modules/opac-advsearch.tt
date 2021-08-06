@@ -40,13 +40,11 @@
                                     <div class="search-term-row">
                                         <div class="search-term-input">
                                             [% IF ( expanded_options ) %]
-                                                [% IF ( !loop.first ) %]
                                                     <select name="op" class="form-control">
                                                         <option value="and" selected="selected">and</option>
                                                         <option value="or">or</option>
                                                         <option value="not">not</option>
                                                     </select>
-                                                [% END %]
                                             [% ELSE %]
                                                 <label for="search-field_[% loop.index | html %]">
                                                     [% IF loop.index == 0 %]
@@ -118,14 +116,12 @@
                                         </div> <!-- .search-term-input -->
                                         [% IF ( expanded_options ) %]
                                             <div class="search-term-input">
-                                                [% IF ( !loop.first ) %]
                                                     <a class="ButtonPlus" title="Add another field" href="#">
                                                         <i class="fa fa-plus-square" aria-hidden="true"></i>
                                                     </a>
                                                     <a class="ButtonLess" title="Remove field" href="#">
                                                         <i class="fa fa-minus-square" aria-hidden="true"></i>
                                                     </a>
-                                                [% END %]
                                             </div> <!-- .search-term-input -->
                                         [% END %]
                                     </div> <!-- /.search-term-row -->
@@ -477,7 +473,8 @@ $(document).ready(function() {
 
     $('#advsearches').tabs();
     jQuery.cookie.json = true;
-    //$('#advsearches > ul').tabs();
+
+    $('.search-term-row .search-term-input select[name="op"]').first().prop("disabled",true).hide();
 
     [% IF ( ReturnToSearch ) %]
         if (form_serialized = jQuery.cookie("form_serialized")) {
@@ -540,16 +537,18 @@ $(document).ready(function() {
         $('.ButtonLess').show();
         var thisLine = $(this).parent().parent();
         var newLine = thisLine.clone();
+        $(newLine).find('.search-term-input select[name="op"]').first().prop("disabled",false).show();
         newLine.find('input').val('');
         thisLine.after(newLine);
     });
 
     $(document).on("click", '.ButtonLess', function(e) {
         e.preventDefault();
-        if($(this).parent().parent().siblings().length <= 3 ) {
+        if($(this).parent().parent().siblings().length < 2 ) {
            $('.ButtonLess').hide();
         }
         $(this).parent().parent().remove();
+        $('.search-term-row .search-term-input select[name="op"]').first().prop("disabled",true).hide();
     });
 
 </script>
