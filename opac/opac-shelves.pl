@@ -256,16 +256,19 @@ if ( $op eq 'view' ) {
     if ( $shelf ) {
         if ( $shelf->can_be_viewed( $loggedinuser ) ) {
             $category = $shelf->category;
+
+            # Sortfield param may still include sort order with :asc or :desc, but direction overrides it
             my( $sortfield, $direction );
-            if( defined( $query->param('sortfield') ) ){ # Passed in sorting overrides default sorting
+            if( $query->param('sortfield') ){
                 ( $sortfield, $direction ) = split /:/, $query->param('sortfield');
             } else {
                 $sortfield = $shelf->sortfield;
                 $direction = 'asc';
             }
-            if( defined( $query->param('direction') ) ){ $direction = $query->param('direction'); }
-            $sortfield = 'title' if !$sortfield or !grep { $_ eq $sortfield } qw( title author copyrightdate itemcallnumber dateadded );
+            $direction = $query->param('direction') if $query->param('direction');
             $direction = 'asc' if !$direction or ( $direction ne 'asc' and $direction ne 'desc' );
+            $sortfield = 'title' if !$sortfield or !grep { $_ eq $sortfield } qw( title author copyrightdate itemcallnumber dateadded );
+
             my ( $page, $rows );
             unless ( $query->param('print') or $query->param('rss') ) {
                 $rows = C4::Context->preference('OPACnumSearchResults') || 20;
