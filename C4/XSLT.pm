@@ -281,11 +281,10 @@ sub XSLTParse4Display {
         }
     }
 
-    my $partsxml = '';
-    # possibly insert component records into Detail views
+    # possibly show analytics link in Detail views
     if ( $xslsyspref eq "OPACXSLTDetailsDisplay" || $xslsyspref eq "XSLTDetailsDisplay" ) {
-        my $biblio //= Koha::Biblios->find( $biblionumber );
-        my $components = $biblio->get_marc_components(300);
+        $biblio //= Koha::Biblios->find( $biblionumber );
+        my $components = $biblio->get_marc_components();
         $variables->{show_analytics_link} = ( scalar @{$components} == 0 ) ? 0 : 1;
 
         my $showcomp = C4::Context->preference('ShowComponentRecords');
@@ -296,25 +295,7 @@ sub XSLTParse4Display {
                 || ( $showcomp eq 'opac'  && $xslsyspref =~ m/OPAC/ ) )
           )
         {
-
              $variables->{show_analytics_link} = 0;
-
-             my $search_query = $biblio->get_analytics_query;
-             $variables->{ComponentPartQuery} = $search_query;
-
-             my @componentPartRecordXML = ('<componentPartRecords>');
-             for my $cb ( @{ $components } ) {
-                 if( ref $cb eq 'MARC::Record'){
-                     $cb = $cb->as_xml_record();
-                 } else {
-                     $cb = decode('utf8', $cb);
-                 }
-                 # Remove the xml header
-                 $cb =~ s/^<\?xml.*?\?>//;
-                 push @componentPartRecordXML,$cb;
-             }
-             push @componentPartRecordXML, '</componentPartRecords>';
-             $partsxml = join "\n", @componentPartRecordXML;
         }
     }
 
@@ -325,7 +306,7 @@ sub XSLTParse4Display {
     $varxml .= "</variables>\n";
 
     my $sysxml = get_xslt_sysprefs();
-    $xmlrecord =~ s/\<\/record\>/$itemsxml$sysxml$varxml$partsxml\<\/record\>/;
+    $xmlrecord =~ s/\<\/record\>/$itemsxml$sysxml$varxml\<\/record\>/;
     if ($fixamps) { # We need to correct the ampersand entities that Zebra outputs
         $xmlrecord =~ s/\&amp;amp;/\&amp;/g;
         $xmlrecord =~ s/\&amp\;lt\;/\&lt\;/g;

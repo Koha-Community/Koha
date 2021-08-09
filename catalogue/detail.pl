@@ -211,6 +211,28 @@ foreach my $subscription (@subscriptions) {
     push @subs, \%cell;
 }
 
+# Get component parts details
+my $showcomp = C4::Context->preference('ShowComponentRecords');
+if ( $showcomp eq 'both' || $showcomp eq 'staff' ) {
+    if ( my $components = $biblio->get_marc_components(300) ) {
+        my $parts;
+        for my $part ( @{$components} ) {
+            $part = MARC::Record->new_from_xml( $part, 'UTF-8' );
+
+            push @{$parts},
+              XSLTParse4Display(
+                {
+                    biblionumber => $biblionumber,
+                    record       => $part,
+                    xsl_syspref  => "XSLTResultsDisplay",
+                    fix_amps     => 1,
+                }
+              );
+        }
+        $template->param( ComponentParts => $parts );
+    }
+}
+
 # Get acquisition details
 if ( C4::Context->preference('AcquisitionDetails') ) {
     my $orders = Koha::Acquisition::Orders->search(

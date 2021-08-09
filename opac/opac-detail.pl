@@ -657,6 +657,28 @@ my $separatebranch = C4::Context->preference('OpacSeparateHoldingsBranch');
 my $viewallitems = $query->param('viewallitems');
 my $max_items_to_display = C4::Context->preference('OpacMaxItemsToDisplay') // 50;
 
+# Get component parts details
+my $showcomp = C4::Context->preference('ShowComponentRecords');
+if ( $showcomp eq 'both' || $showcomp eq 'opac' ) {
+    if ( my $components = $biblio->get_marc_components(300) ) {
+        my $parts;
+        for my $part ( @{$components} ) {
+            $part = MARC::Record->new_from_xml( $part, 'UTF-8' );
+
+            push @{$parts},
+              XSLTParse4Display(
+                {
+                    biblionumber => $biblionumber,
+                    record       => $part,
+                    xsl_syspref  => 'OPACXSLTResultsDisplay',
+                    fix_amps     => 1,
+                }
+              );
+        }
+        $template->param( ComponentParts => $parts );
+    }
+}
+
 # Get items on order
 my ( @itemnumbers_on_order );
 if ( C4::Context->preference('OPACAcquisitionDetails' ) ) {

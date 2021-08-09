@@ -115,8 +115,6 @@
             </h1>
         </xsl:if>
 
-    <xsl:call-template name="showComponentParts"/>
-
         <!--Bug 13381 -->
         <xsl:if test="marc:datafield[@tag=245]">
             <h1 class="title" property="name">
