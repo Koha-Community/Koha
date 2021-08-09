@@ -123,6 +123,15 @@ if ($op eq "action") {
     my $values_to_modify = scalar(grep {!/^$/} @values) || scalar(grep {!/^$/} @searches);
     my $values_to_blank  = scalar(@disabled);
 
+    # Clear the fields we are not editing, leave fields we are blanking
+    foreach( my $i = 0; $i < scalar @values; $i++ ){
+        unless( $values[$i] || grep { $subfields[$i] } @disabled ){
+            splice(@values,$i,1);
+            splice(@subfields,$i,1);
+            splice(@tags,$i,1);
+        }
+    }
+
     my $marcitem;
 
     # Once the job is done
