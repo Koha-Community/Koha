@@ -75,6 +75,11 @@ Circulation:
               class: integer
             - day(s) ago. Note that the default end date is controlled by the system preference <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=ConfirmFutureHolds">ConfirmFutureHolds</a>.
         -
+            - When building the holds queue, calculate hold matches using
+            - pref: HoldsQueueParallelLoopsCount
+              class: integer
+            - parallel loop(s). The more loops used, the faster it will calculate and the more computing resources it will use.
+        -
             - pref: AllowAllMessageDeletion
               choices:
                   1: Allow

@@ -170,6 +170,7 @@ Top level function that turns reserves into tmp_holdsqueue and hold_fill_targets
 sub CreateQueue {
     my $params      = shift;
     my $unallocated = $params->{unallocated};
+    my $loops       = $params->{loops} || 1;
     my $dbh         = C4::Context->dbh;
 
     unless ($unallocated) {
@@ -187,7 +188,7 @@ sub CreateQueue {
     my $use_transport_cost_matrix = C4::Context->preference("UseTransportCostMatrix");
     if ($use_transport_cost_matrix) {
         $transport_cost_matrix = TransportCostMatrix();
-        unless (keys %$transport_cost_matrix) {
+        unless ( keys %$transport_cost_matrix ) {
             warn "UseTransportCostMatrix set to yes, but matrix not populated";
             undef $transport_cost_matrix;
         }
@@ -197,24 +198,50 @@ sub CreateQueue {
 
     my $bibs_with_pending_requests = GetBibsWithPendingHoldRequests();
 
-    foreach my $biblionumber (@$bibs_with_pending_requests) {
+    # Split the list of bibs into chunks to run in parallel
+    my @chunks;
+    if ( $loops > 1 ) {
+        my $i = 0;
+        while (@$bibs_with_pending_requests) {
+            push( @{ $chunks[$i] }, pop(@$bibs_with_pending_requests) );
 
-        $total_bibs++;
+            $i++;
+            $i = 0 if $i >= $loops;
+        }
 
-        my $result = update_queue_for_biblio(
-            {
-                biblio_id             => $biblionumber,
-                branches_to_use       => $branches_to_use,
-                transport_cost_matrix => $transport_cost_matrix,
-                unallocated           => $unallocated
+        my $pm = Parallel::ForkManager->new($loops);
+
+    DATA_LOOP:
+        foreach my $chunk (@chunks) {
+            my $pid = $pm->start and next DATA_LOOP;
+            foreach my $biblionumber (@$chunk) {
+                update_queue_for_biblio(
+                    {
+                        biblio_id             => $biblionumber,
+                        branches_to_use       => $branches_to_use,
+                        transport_cost_matrix => $transport_cost_matrix,
+                        unallocated           => $unallocated
+                    }
+                );
             }
-        );
+            $pm->finish;
+        }
 
-        $total_requests        += $result->{requests};
-        $total_available_items += $result->{available_items};
-        $num_items_mapped      += $result->{mapped_items};
+        $pm->wait_all_children;
+    } else {
+        foreach my $biblionumber (@$bibs_with_pending_requests) {
+            update_queue_for_biblio(
+                {
+                    biblio_id             => $biblionumber,
+                    branches_to_use       => $branches_to_use,
+                    transport_cost_matrix => $transport_cost_matrix,
+                    unallocated           => $unallocated
+                }
+            );
+        }
     }
 }
+
 
 =head2 GetBibsWithPendingHoldRequests
 

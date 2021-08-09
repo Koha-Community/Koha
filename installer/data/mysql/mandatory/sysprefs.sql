@@ -302,6 +302,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('HoldsAutoFillPrintSlip','0',NULL,'If on, hold slip print dialog will be displayed automatically','YesNo'),
 ('HoldsLog','0',NULL,'If ON, log create/cancel/suspend/resume actions on holds.','YesNo'),
 ('HoldsNeedProcessingSIP', '0', NULL, 'Require staff to check-in before hold is set to waiting state', 'YesNo' ),
+('HoldsQueueParallelLoopsCount', '1', NULL, 'Number of parallel loops to use when running the holds queue builder', 'Integer'),
 ('HoldsQueuePrioritizeBranch','homebranch','holdingbranch|homebranch','Decides if holds queue builder patron home library match to home or holding branch','Choice'),
 ('HoldsQueueSkipClosed', '0', NULL, 'If enabled, any libraries that are closed when the holds queue is built will be ignored for the purpose of filling holds.', 'YesNo'),
 ('HoldsSplitQueue','nothing','nothing|branch|itemtype|branch_itemtype','In the staff interface, split the holds view by the given criteria','Choice'),
