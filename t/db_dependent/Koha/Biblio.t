@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 29;
+use Test::More tests => 30;
 use Test::Exception;
 use Test::Warn;
 
@@ -613,6 +613,39 @@ subtest 'get_components_query' => sub {
         is($comp_sort, "title_asc", "$engine: UseControlNumber enabled with MarcOrgCode sort if correct");
         $record->delete_field($marc_003_field);
     }
+};
+
+subtest 'get_volumes_query' => sub {
+    plan tests => 3;
+
+    my $biblio       = $builder->build_sample_biblio();
+    my $biblionumber = $biblio->biblionumber;
+    my $record       = $biblio->metadata->record;
+
+    t::lib::Mocks::mock_preference( 'UseControlNumber', '0' );
+    is( $biblio->get_volumes_query, "ti,phr:(Some boring read)", "UseControlNumber disabled" );
+
+    t::lib::Mocks::mock_preference( 'UseControlNumber', '1' );
+    my $marc_001_field = MARC::Field->new( '001', $biblionumber );
+    $record->append_fields($marc_001_field);
+    C4::Biblio::ModBiblio( $record, $biblio->biblionumber );
+    $biblio = Koha::Biblios->find( $biblio->biblionumber );
+
+    is(
+        $biblio->get_volumes_query, "rcn:$biblionumber NOT (bib-level:a OR bib-level:b)",
+        "UseControlNumber enabled without MarcOrgCode"
+    );
+
+    my $marc_003_field = MARC::Field->new( '003', 'OSt' );
+    $record->append_fields($marc_003_field);
+    C4::Biblio::ModBiblio( $record, $biblio->biblionumber );
+    $biblio = Koha::Biblios->find( $biblio->biblionumber );
+
+    is(
+        $biblio->get_volumes_query,
+        "((rcn:$biblionumber AND cni:OSt) OR rcn:OSt $biblionumber) NOT (bib-level:a OR bib-level:b)",
+        "UseControlNumber enabled with MarcOrgCode"
+    );
 };
 
 subtest 'orders() and active_orders() tests' => sub {

@@ -224,6 +224,14 @@ sub XSLTParse4Display {
         }
     }
 
+    # possibly show volumes link in Detail views
+    if ($xslsyspref =~ m/Details/) {
+        $biblio //= Koha::Biblios->find( $biblionumber );
+        my $volumes = $biblio->get_marc_volumes();
+        $variables->{show_volumes_link} = ( scalar @{$volumes} == 0 ) ? 0 : 1;
+    }
+
+    # embed variables
     my $varxml = "<variables>\n";
     while (my ($key, $value) = each %$variables) {
         $value //= q{};

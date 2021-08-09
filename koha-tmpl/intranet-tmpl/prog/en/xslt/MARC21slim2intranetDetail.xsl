@@ -231,7 +231,8 @@
         </xsl:if>
 
         <!-- Volumes of sets and traced series -->
-        <xsl:if test="$materialTypeCode='ST' or substring($controlField008,22,1)='m'">
+        <xsl:variable name="show_volumes_link" select="marc:variables/marc:variable[@name='show_volumes_link']" />
+        <xsl:if test="$show_volumes_link='1' and ($materialTypeCode='ST' or substring($controlField008,22,1)='m')">
         <span class="results_summary volumes"><span class="label">Volumes: </span>
             <a>
             <xsl:choose>
