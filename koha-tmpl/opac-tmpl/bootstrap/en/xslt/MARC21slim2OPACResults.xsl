@@ -1476,7 +1476,7 @@
                 <xsl:text> (</xsl:text>
                 <xsl:value-of select="count($items)"/>
                 <xsl:text>)</xsl:text>
-                <xsl:if test="$max>0 and $OPACItemLocation!='library'">
+                <xsl:if test="$max>0 and count($items[items:itemcallnumber!=''])>0 and $OPACItemLocation!='library'">
                     <span class="CallNumberAndLabel">
                     <span class="LabelCallNumber">
                         <xsl:if test="$OPACItemLocation='callnum'">Call number: </xsl:if>
@@ -1484,16 +1484,21 @@
                         <xsl:if test="$OPACItemLocation='location'">Location, call number: </xsl:if>
                     </span>
                     <span class="CallNumber">
-                    <xsl:for-each select="$items[position() &lt;= $max]">
+                    <xsl:for-each select="$items[items:itemcallnumber!=''][position() &lt;= $max]">
                         <xsl:if test="$OPACItemLocation='location'">
                             <strong><xsl:value-of select="concat(items:location,' ')"/></strong>
                         </xsl:if>
                         <xsl:if test="$OPACItemLocation='ccode'">
                             <strong><xsl:value-of select="concat(items:ccode,' ')"/></strong>
                         </xsl:if>
-                        <xsl:value-of select="items:itemcallnumber"/><xsl:if test="position()!=last()"><xsl:text>, </xsl:text></xsl:if>
+                        <xsl:value-of select="items:itemcallnumber"/>
+                        <xsl:if test="position()!=last()">
+                            <xsl:text>, </xsl:text>
+                        </xsl:if>
+                        <xsl:if test="position()=last() and (count($items)>$max or count($items[items:itemcallnumber=''])>0)">
+                            <xsl:text>, ..</xsl:text>
+                        </xsl:if>
                     </xsl:for-each>
-                    <xsl:if test="count($items)>$max"><xsl:text>, ..</xsl:text></xsl:if>
                     </span>
                     </span>
                 </xsl:if>
