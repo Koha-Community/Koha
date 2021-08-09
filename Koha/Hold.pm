@@ -786,19 +786,14 @@ sub cancel {
 
             # and, if desired, charge a cancel fee
             if ( $params->{'charge_cancel_fee'} ) {
-                my $charge;
                 my $item = $self->item;
-                my $branchcode = C4::Reserves::GetReservesControlBranch($item->unblessed, $self->borrower->unblessed);
-
-                my $rule = Koha::CirculationRules->get_effective_rule(
+                my $charge = Koha::CirculationRules->get_effective_expire_reserves_charge(
                     {
+                        itemtype => $item->effective_itemtype,
+                        branchcode => Koha::Policy::Holds->holds_control_library( $item, $self->borrower ),
                         categorycode => $self->borrower->categorycode,
-                        itemtype     => $item->effective_itemtype,
-                        branchcode   => $branchcode,
-                        rule_name    => 'expire_reserves_charge',
                     }
                 );
-                $charge = $rule ? $rule->rule_value : C4::Context->preference("ExpireReservesMaxPickUpDelayCharge");
 
                 my $account =
                   Koha::Account->new( { patron_id => $self->borrowernumber } );

@@ -20,7 +20,7 @@
 use Modern::Perl;
 
 use Benchmark;
-use Test::More tests => 7;
+use Test::More tests => 8;
 use Test::Deep qw( cmp_methods );
 use Test::Exception;
 
@@ -724,6 +724,98 @@ subtest 'get_effective_daysmode' => sub {
         ),
         'Datedue',
         'daysmode default to pref value if the rule exists but set to""'
+    );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'get_effective_expire_reserves_charge' => sub {
+    plan tests => 4;
+
+    $schema->storage->txn_begin;
+
+    Koha::CirculationRules->search({ rule_name => 'expire_reserves_charge' })->delete;
+
+    t::lib::Mocks::mock_preference( 'ExpireReservesMaxPickUpDelayCharge', 10 );
+
+    is(
+        Koha::CirculationRules->get_effective_expire_reserves_charge(
+            {
+                itemtype     => undef,
+                branchcode   => undef,
+                categorycode => undef,
+            }
+        ),
+        '10',
+        'use the default pref value as the circ rule does not exist'
+    );
+
+    Koha::CirculationRules->set_rule(
+        {
+            branchcode   => '*',
+            categorycode => '*',
+            itemtype     => '*',
+            rule_name    => 'expire_reserves_charge',
+            rule_value   => '20'
+        }
+    );
+
+    is(
+        Koha::CirculationRules->get_effective_expire_reserves_charge(
+            {
+                categorycode => undef,
+                itemtype     => undef,
+                branchcode   => undef
+            }
+        ),
+        '20',
+        "use the value from the circ rules"
+    );
+
+    t::lib::Mocks::mock_preference( 'ExpireReservesMaxPickUpDelayCharge', 30 );
+
+    Koha::CirculationRules->set_rule(
+        {
+            branchcode   => '*',
+            categorycode => '*',
+            itemtype     => '*',
+            rule_name    => 'expire_reserves_charge',
+            rule_value   => undef
+        }
+    );
+
+    is(
+        Koha::CirculationRules->get_effective_expire_reserves_charge(
+            {
+                categorycode => undef,
+                itemtype     => undef,
+                branchcode   => undef
+            }
+        ),
+        '30',
+        "use the default pref value for as the circ rule has undefined value"
+    );
+
+    Koha::CirculationRules->set_rule(
+        {
+            branchcode   => '*',
+            categorycode => '*',
+            itemtype     => '*',
+            rule_name    => 'expire_reserves_charge',
+            rule_value   => '0'
+        }
+    );
+
+    is(
+        Koha::CirculationRules->get_effective_expire_reserves_charge(
+            {
+                categorycode => undef,
+                itemtype     => undef,
+                branchcode   => undef
+            }
+        ),
+        '0',
+        "use the value from the circ rules for even though it's 0"
     );
 
     $schema->storage->txn_rollback;
