@@ -11,6 +11,8 @@
             [% END %]
     <li><label for="name">Vendor: </label> <input type="text" name="name" id="name" value="[% filters.name | html %]" /></li>
     <li><label for="basket">Basket: </label> <input type="text" name="basket" id="basket" value="[% filters.basket | html %]" /></li>
+    <li><label for="internalnote">Internal note: </label> <input type="text" name="internalnote" id="internalnote" value="[% filters.internalnote | html %]" /></li>
+    <li><label for="vendornote">Vendor note: </label> <input type="text" name="vendornote" id="vendornote" value="[% filters.vendornote | html %]" /></li>
     <li><label for="basket_creators">Basket created by: </label>
         <input autocomplete="off" id="find_patron" type="text" class="noEnterSubmit" />
         <div>

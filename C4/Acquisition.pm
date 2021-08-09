@@ -2085,6 +2085,8 @@ sub GetHistory {
     my $isbn   = $params{isbn};
     my $ean    = $params{ean};
     my $name = $params{name};
+    my $internalnote = $params{internalnote};
+    my $vendornote = $params{vendornote};
     my $from_placed_on = $params{from_placed_on};
     my $to_placed_on = $params{to_placed_on};
     my $basket = $params{basket};
@@ -2150,6 +2152,8 @@ sub GetHistory {
             aqorders.biblionumber,
             aqorders.orderstatus,
             aqorders.parent_ordernumber,
+            aqorders.order_internalnote,
+            aqorders.order_vendornote,
             aqbudgets.budget_name
             ";
     $query .= ", aqbudgets.budget_id AS budget" if defined $budget;
@@ -2240,6 +2244,16 @@ sub GetHistory {
             $query .= " AND aqbasket.basketname LIKE ? ";
             push @query_params, "%$basket%";
         }
+    }
+
+    if ( $internalnote ) {
+        $query .= " AND aqorders.order_internalnote LIKE ? ";
+        push @query_params, "%$internalnote%";
+    }
+
+    if ( $vendornote ) {
+        $query .= " AND aqorders.order_vendornote LIKE ?";
+        push @query_params, "%$vendornote%";
     }
 
     if ($booksellerinvoicenumber) {

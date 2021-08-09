@@ -76,6 +76,8 @@
                 <th>Quantity ordered</th>
 				<th>Unit cost</th>
                 <th>Fund</th>
+                <th>Internal note</th>
+                <th>Vendor note</th>
 			</tr>
             </thead>
             <tbody>
@@ -124,6 +126,8 @@
                     <td>[% order.quantity | html %]</td>
                     <td>[% order.ecost | html %]</td>
                     <td>[% order.budget_name | html %]</td>
+                    <td>[% order.order_internalnote | html %]</td>
+                    <td>[% order.order_vendornote | html %]</td>
                 </tr>
             [% END %]
             </tbody>
