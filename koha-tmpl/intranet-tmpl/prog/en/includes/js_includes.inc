@@ -157,7 +157,7 @@
                             + ( item.zipcode     ? item.zipcode.escapeHtml() : "" )     + " "
                             + ( item.country     ? item.country.escapeHtml() : "" ) + " "
                             + "<span class=\"ac-library\">"
-                            + ( item.branchcode  ? item.branchcode.escapeHtml() : "" )
+                            + ( item.branchname  ? item.branchname.escapeHtml() : "" )
                             + "</span>"
                         + "</small>"
                     + "</a>" )
