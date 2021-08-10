@@ -60,39 +60,39 @@
 
                             <p>
                                 [% IF ( circ_error_UNKNOWN_BARCODE ) %]
-                                    The system does not recognize this barcode.
+                                    <span id="ce_unknown_barcode">The system does not recognize this barcode.</span>
                                 [% ELSIF ( circ_error_max_loans_allowed ) %]
-                                    You have checked out too many items and can't check out any more.
+                                    <span id="ce_max_loans_allowed">You have checked out too many items and can't check out any more.</span>
                                 [% ELSIF ( circ_error_ISSUED_TO_ANOTHER ) %]
-                                    This item is checked out to someone else.
+                                    <span id="ce_issued_to_another">This item is checked out to someone else.</span>
                                 [% ELSIF ( circ_error_NO_MORE_RENEWALS ) %]
-                                    You cannot renew this item again.
+                                    <span id="ce_no_more_renewals">You cannot renew this item again.</span>
                                 [% ELSIF ( circ_error_NOT_FOR_LOAN ) %]
-                                    This item is not for loan.
+                                    <span id="ce_not_for_loan">This item is not for loan.</span>
                                 [% ELSIF ( circ_error_DEBT ) %]
-                                    You owe the library [% DEBT | $Price %] and cannot check out.
+                                    <span id="ce_too_much_debt">You owe the library [% DEBT | $Price %] and cannot check out.</span>
                                 [% ELSIF ( circ_error_WTHDRAWN ) %]
-                                    This item has been withdrawn from the collection.
+                                    <span id="ce_wthdrawn">This item has been withdrawn from the collection.</span>
                                 [% ELSIF ( circ_error_RESTRICTED ) %]
-                                    This item is restricted.
+                                    <span id="ce_restricted">This item is restricted.</span>
                                 [% ELSIF ( circ_error_RESERVED ) %]
-                                    This item is on hold for another patron.
+                                    <span id="ce_reserved">This item is on hold for another patron.</span>
                                 [% ELSIF ( circ_error_ITEMNOTSAMEBRANCH ) %]
-                                    This item belongs to another branch.
+                                    <span id="ce_itemnotsamebranch">This item belongs to another branch.</span>
                                 [% ELSIF ( circ_error_EXPIRED ) %]
-                                    Your account has expired.
+                                    <span id="ce_expired">Your account has expired.</span>
                                 [% ELSIF ( circ_error_DEBARRED ) %]
-                                    Your account has been suspended.
+                                    <span id="ce_debarred">Your account has been suspended.</span>
                                 [% ELSIF ( circ_error_CARD_LOST ) %]
-                                    This card has been declared lost.
+                                    <span id="ce_card_lost">This card has been declared lost.</span>
                                 [% ELSIF ( circ_error_GNA ) %]
-                                    Your contact information seems to be incomplete.
+                                    <span id="ce_gna">Your contact information seems to be incomplete.</span>
                                 [% ELSIF ( circ_error_INVALID_DATE ) %]
-                                    Due date is not valid.
+                                    <span id="ce_invalid_date">Due date is not valid.</span>
                                 [% ELSIF ( circ_error_ADDITIONAL_MATERIALS ) %]
-                                    Item must be checked out at a circulation desk.
+                                    <span id="ce_addtional_materials">Item must be checked out at a circulation desk.</span>
                                 [% END %]
-                                Please see a member of the library staff.
+                                <span id ="ce_see_staff">Please see a member of the library staff.</span>
                             </p>
 
                             [% IF ( returnitem && Koha.Preference('SCOAllowCheckin') ) %]
