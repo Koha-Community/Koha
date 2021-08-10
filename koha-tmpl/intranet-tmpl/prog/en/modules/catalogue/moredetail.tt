@@ -89,11 +89,11 @@
         <div class="listgroup">
         <h3 id="item[% ITEM_DAT.itemnumber | html %]">Barcode [% ITEM_DAT.barcode | html %]  [% IF ( ITEM_DAT.notforloantext ) %][% ITEM_DAT.notforloantext | html %] [% END %]</h3>
 
-        <h4>Item information [% IF ( CAN_user_editcatalogue_edit_items ) %][% UNLESS ( ITEM_DAT.nomod ) %]
+        <h4>Item information [% UNLESS ( ITEM_DAT.nomod ) %]
          [% IF ( CAN_user_editcatalogue_edit_items ) %]
             <a href="/cgi-bin/koha/cataloguing/additem.pl?op=edititem&amp;biblionumber=[% ITEM_DAT.biblionumber | uri %]&amp;itemnumber=[% ITEM_DAT.itemnumber | uri %]"><i class="fa fa-pencil"></i> Edit item</a>
          [% END %]
-         [% END %][% END %]</h4>
+         [% END %]</h4>
             <div class="rows">
             <ol class="bibliodetails">
             <li><span class="label">Home library:</span> [% Branches.GetName( ITEM_DAT.homebranch ) | html %]&nbsp;</li>
