@@ -52,6 +52,12 @@ if ( not defined $patron or
     exit;
 }
 
+if( $patron_id != $loggedinuser && !C4::Context->IsSuperLibrarian() ) {
+    # not the owner of the account viewing/editing own API keys, nor superlibrarian -> exit
+    print $cgi->redirect("/cgi-bin/koha/errors/403.pl"); # escape early
+    exit;
+}
+
 my $op = $cgi->param('op') // '';
 
 if ( $op eq 'generate' or
