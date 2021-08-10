@@ -93,7 +93,7 @@ my $pending_borrower_modifications = Koha::Patron::Modifications->pending_count(
 my $pending_discharge_requests = Koha::Patron::Discharge::count({ pending => 1 });
 my $pending_article_requests = Koha::ArticleRequests->search_limited(
     {
-        status => Koha::ArticleRequest::Status::Pending,
+        status => Koha::ArticleRequest::Status::Requested,
         $branch ? ( 'me.branchcode' => $branch ) : (),
     }
 )->count;
