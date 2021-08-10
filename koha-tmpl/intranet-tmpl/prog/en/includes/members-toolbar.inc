@@ -56,7 +56,7 @@
                 [% END %]
 
                 [% IF Koha.Preference('RESTOAuth2ClientCredentials') %]
-                    [% IF CAN_user_borrowers_edit_borrowers %]
+                    [% IF CAN_user_superlibrarian OR loggedinusernumber == patron.borrowernumber %]
                         <li><a id="apikeys" href="/cgi-bin/koha/members/apikeys.pl?patron_id=[% patron.borrowernumber | html %]">Manage API keys</a></li>
                     [% ELSE %]
                         <li class="disabled"><a data-toggle="tooltip" data-placement="left" title="You are not authorized to manage API keys" id="apikeys" href="#">Manage API keys</a></li>
