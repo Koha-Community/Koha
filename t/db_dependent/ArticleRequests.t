@@ -76,13 +76,13 @@ my $article_request = Koha::ArticleRequest->new(
 )->store();
 
 my $notify_message = Koha::Notice::Messages->search->next;
-is( $notify_message->letter_code, "AR_".Koha::ArticleRequest::Status::Pending);
+is( $notify_message->letter_code, "AR_".Koha::ArticleRequest::Status::Requested);
 # Default AR_PROCESSING template content "Title: <<article_requests.title>>"
 like( $notify_message->content, qr{Title: $article_request_title}, 'Values from article_requests table must be fetched for the notification' );
 
 $article_request = Koha::ArticleRequests->find( $article_request->id );
 ok( $article_request->id, 'Koha::ArticleRequest created' );
-is( $article_request->status, Koha::ArticleRequest::Status::Pending, 'New article request has status of Open' );
+is( $article_request->status, Koha::ArticleRequest::Status::Requested, 'New article request has status of Open' );
 isnt( $article_request->created_on, undef, 'New article request has created_on date set' );
 isnt( $article_request->updated_on, undef, 'New article request has updated_on date set' );
 
