@@ -97,20 +97,21 @@
 </ul>
 <form method="post" action="[% SCRIPT_NAME | html %]" id="uploadfile" enctype="multipart/form-data">
 <fieldset class="rows" id="uploadform">
-<legend>Stage records into the reservoir</legend>
+<legend>Upload a file to stage</legend>
 <ol>
-	<li>
+    <li>
         <div id="fileuploadform">
-		<label for="fileToUpload">Select the file to stage: </label>
-		<input type="file" id="fileToUpload" name="fileToUpload" />
-        </div>	</li>
+            <label for="fileToUpload">File: </label>
+            <input type="file" id="fileToUpload" name="fileToUpload" />
+        </div>
+    </li>
 </ol>
     <fieldset class="action">
         <button id="fileuploadbutton">Upload file</button>
         <button id="fileuploadcancel">Cancel</button>
     </fieldset>
 </fieldset>
-		
+
     <div id="fileuploadpanel">
         <div id="fileuploadstatus" class="progress_panel">Upload progress:
             <progress id="fileuploadprogress" max="100" value="0">
@@ -122,10 +123,10 @@
 </form>
 
 <fieldset class="rows" id="profile_fieldset">
-    <legend>Profile settings</legend>
+    <legend>Pre-fill values with profile?</legend>
     <ol>
         <li>
-            <label for="profile">Pre-fill values with profile</label>
+            <label for="profile">Profile: </label>
             <select name="profile" id="profile">
                 <option value="">Do not use profile</option>
             </select>
@@ -145,6 +146,7 @@
         <input type="hidden" name="uploadedfileid" id="uploadedfileid" value="" />
         <input type="hidden" name="runinbackground" id="runinbackground" value="" />
         <input type="hidden" name="completedJobID" id="completedJobID" value="" />
+    <legend>Settings</legend>
 	<ol><li>
 		<label for="comments">Comments about this file: </label>
 		<input type="text" id="comments" name="comments" />
@@ -182,12 +184,12 @@
 
   [% IF MarcModificationTemplatesLoop %]
     <fieldset class="rows">
-      <legend>Use MARC Modification Template:</legend>
+      <legend>Modify records using a MARC modification template?</legend>
       <ol>
         <li>
-          <label for="comments">Modify record using the following template: </label>
+          <label for="comments">Template: </label>
           <select name="marc_modification_template_id" id="marc_modification_template_id">
-            <option value="">Do not use.</option>
+            <option value="">Do not use template</option>
               [% FOREACH mmt IN MarcModificationTemplatesLoop %]
                 <option value="[% mmt.template_id | html %]">[% mmt.name | html %]</option>
               [% END %]
