@@ -217,6 +217,7 @@
     [% Asset.js("lib/hc-sticky.js") | $raw %]
     [% Asset.js("js/members-menu.js") | $raw %]
     <script>
+        var singleBranchMode = '[% singleBranchMode | html %]';
         $(document).ready(function() {
             $('#merge-patrons').prop('disabled', true);
             $('#memberresultst').on('change', 'input.selection', function() {
@@ -467,7 +468,7 @@
                     { 'mDataProp': 'dt_category' },
                     {
                         'mDataProp': function ( oObj ) {
-                            if( oObj.dt_branch == "[% Branches.GetLoggedInBranchname | html %]" ){
+                            if( !singleBranchMode &&  oObj.dt_branch == "[% Branches.GetLoggedInBranchname | html %]" ){
                                 return "<span class=\"currentlibrary\">" + oObj.dt_branch + "</span>";
                             } else {
                                 return oObj.dt_branch;

@@ -105,7 +105,9 @@
                                     + ( item.zipcode ? item.zipcode.escapeHtml() : "" ) + " "
                                     + ( item.country ? item.country.escapeHtml() : "" )
                                     + "</small></a>";
-                        itemString += " <span class=\"ac-library\">" + item.branchname + "</span> " + "</a>";
+                        [% UNLESS ( singleBranchMode ) %]
+                            itemString += " <span class=\"ac-library\">" + item.branchname + "</span> " + "</a>";
+                        [% END %]
                         return $( "<li></li>" )
                         .addClass( loggedInClass )
                         .data( "ui-autocomplete-item", item )
@@ -156,9 +158,11 @@
                             + ( item.city        ? item.city.escapeHtml() : "" )        + " "
                             + ( item.zipcode     ? item.zipcode.escapeHtml() : "" )     + " "
                             + ( item.country     ? item.country.escapeHtml() : "" ) + " "
-                            + "<span class=\"ac-library\">"
-                            + ( item.branchname  ? item.branchname.escapeHtml() : "" )
-                            + "</span>"
+                            [% UNLESS ( singleBranchMode ) %]
+                                + "<span class=\"ac-library\">"
+                                + ( item.branchname  ? item.branchname.escapeHtml() : "" )
+                                + "</span>"
+                            [% END %]
                         + "</small>"
                     + "</a>" )
                 .appendTo( ul );

@@ -29,7 +29,7 @@
                 <td data-order="[% borrower.dateofbirth | html %]">[% INCLUDE 'patron-age.inc' patron = borrower %]</td>
                 <td>[% Categories.GetName( borrower.categorycode ) | html %]</td>
                 <td>
-                    [% IF ( Branches.GetLoggedInBranchcode == borrower.branchcode ) %]
+                    [% IF ( Branches.GetLoggedInBranchcode == borrower.branchcode && !singleBranchMode ) %]
                         <span class="currentlibrary">[% Branches.GetName( borrower.branchcode ) | html %]</span>
                     [% ELSE %]
                         [% Branches.GetName( borrower.branchcode ) | html %]
