@@ -81,6 +81,12 @@ if ( $op eq 'form' ) {
     # Display the form
     $template->param(
         view => 'form',
+        lists => scalar Koha::Virtualshelves->search(
+            [
+                { category => 1, owner => $loggedinuser },
+                { category => 2 }
+            ]
+        )
     );
 } elsif ( $op eq 'list' ) {
     # List all records to process
