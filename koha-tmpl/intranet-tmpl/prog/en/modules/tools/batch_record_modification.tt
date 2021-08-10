@@ -78,12 +78,11 @@
                                 <ul>
                                     <li><a href="#uploadfile_tab">Upload a file</a></li>
                                         [% IF lists.count %]<li id="show_list_option"><a href="#shelves_tab">Select a list of records</a></li>[% END %]
-                                    <li><a href="#enterlist_tab">Enter a list of record numbers</a></li>
+                                    <li><a href="#enterlist_tab">Enter a list of record ids</a></li>
                                 </ul>
 
                                 <div id="uploadfile_tab">
                                     <fieldset class="rows">
-                                        <legend>Use a file</legend>
                                         <ol>
                                             <li><label for="uploadfile">File: </label> <input type="file" id="uploadfile" name="uploadfile" /></li>
                                         </ol>
@@ -94,10 +93,9 @@
                                 [% IF lists.count %]
                                     <div id="shelves_tab">
                                         <fieldset class="rows">
-                                            <legend>Or select a list of records</legend>
                                             <ol>
                                                 <li>
-                                                    <label for="shelf_number">Use records from the following list: </label>
+                                                    <label for="shelf_number">List: </label>
                                                     <select name="shelf_number" id="shelf_number">
                                                         <option value="">Select a list</option>
                                                         [% FOREACH list IN lists %]
@@ -114,11 +112,11 @@
 
                                 <div id="enterlist_tab">
                                     <fieldset class="rows">
-                                        <legend>Or enter a list of record numbers</legend>
                                         <ol>
                                             <li>
-                                                <label for="recordnumber_list">List of biblionumbers or authority ids (one per line): </label>
+                                                <label for="recordnumber_list">Ids: </label>
                                                 <textarea rows="10" cols="30" id="recordnumber_list" name="recordnumber_list"></textarea>
+                                                <div class="hint">Enter a list of biblionumbers or authority ids, one per line.</div>
                                             </li>
                                         </ol>
                                     </fieldset>
@@ -128,10 +126,10 @@
                             </div> <!-- /#batch_mod_form -->
 
                             <fieldset class="rows">
-                                <legend>Use MARC modification template:</legend>
+                                <legend>MARC modification template</legend>
                                 <ol>
                                     <li>
-                                        <label for="marc_modification_template_id" class="required">Modify record using the following template: </label>
+                                        <label for="marc_modification_template_id" class="required">Template: </label>
                                         <select name="marc_modification_template_id" id="marc_modification_template_id" required="required">
                                             <option value="">Select a template</option>
                                             [% FOREACH mmt IN MarcModificationTemplatesLoop %]
