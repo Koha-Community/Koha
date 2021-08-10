@@ -231,7 +231,7 @@
                         [% IF language.lang == 'default' %]
                             <li><a href="#lang_default">Default</a></li>
                         [% ELSE %]
-                            <li><a href="#lang_[% language.lang | uri %]">[% language.description %]</a></li>
+                            <li><a href="#lang_[% language.lang | uri %]">[% language.description | html %]</a></li>
                         [% END %]
                     [% END %]
                 </ul>
@@ -249,7 +249,7 @@
                                     <li style="list-style: none;">
                                         <label for="content_[% language.lang | html %]">Content: </label>
                                         <textarea name="content" id="content_[% language.lang | html %]"  cols="75" rows="10">[% translated_contents.item(language.lang).content | html %]</textarea>
-                                        <input type="hidden" name="lang" value="[% language.lang %]" />
+                                        <input type="hidden" name="lang" value="[% language.lang | html %]" />
                                     </li>
                                 </ol>
                             </fieldset>
@@ -309,10 +309,10 @@
                                 [% ELSIF c.location == 'staff_only' %]Librarian interface
                                 [% ELSIF c.location == 'opac_only' %]OPAC
                                 [% ELSIF c.location == 'slip' %]Slip
-                                [% ELSE %]Unknown ('[% location %]')
+                                [% ELSE %]Unknown ('[% location | html %]')
                                 [% END %]
                             [% ELSE %]
-                                [% c.location %]
+                                [% c.location | html %]
                             [% END %]
                         </td>
                         <td>
