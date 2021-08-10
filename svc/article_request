@@ -50,8 +50,8 @@ if ($ar) {
     elsif ( $action eq 'process' ) {
         $ar = $ar->process();
     }
-    elsif ( $action eq 'open' ) {
-        $ar = $ar->open();
+    elsif ( $action eq 'pending' ) {
+        $ar = $ar->set_pending();
     }
     elsif ( $action eq 'complete' ) {
         $ar = $ar->complete();

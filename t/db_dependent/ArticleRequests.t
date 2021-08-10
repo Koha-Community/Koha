@@ -19,7 +19,8 @@ use Modern::Perl;
 
 use POSIX qw(strftime);
 
-use Test::More tests => 54;
+use Test::More tests => 55;
+use Test::MockModule;
 
 use t::lib::TestBuilder;
 use t::lib::Mocks;
@@ -101,8 +102,7 @@ is( $article_request->status, Koha::ArticleRequest::Status::Completed, '$ar->com
 # cancel
 $article_request->cancel();
 is( $article_request->status, Koha::ArticleRequest::Status::Canceled, '$ar->complete() changes status to Canceled' );
-$article_request->status(Koha::ArticleRequest::Status::Pending);
-$article_request->store();
+$article_request->set_pending();
 
 is( $article_request->biblio->id,   $biblio->id, '$ar->biblio() gets corresponding Koha::Biblio object' );
 is( $article_request->item->id,     $item->id,   '$ar->item() gets corresponding Koha::Item object' );
@@ -120,8 +120,7 @@ is( $patron->article_requests_current()->count(), 0, 'Completed request not retu
 $article_request->cancel();
 is( $patron->article_requests_current()->count(), 0, 'Canceled request not returned for article_requests_current' );
 
-$article_request->status(Koha::ArticleRequest::Status::Pending);
-$article_request->store();
+$article_request->set_pending();
 
 is( $patron->article_requests_finished()->count(), 0, 'Open request returned for article_requests_finished' );
 $article_request->process();
@@ -130,8 +129,7 @@ $article_request->complete();
 $article_request->cancel();
 is( $patron->article_requests_finished()->count(), 1, 'Canceled request not returned for article_requests_finished' );
 
-$article_request->status(Koha::ArticleRequest::Status::Pending);
-$article_request->store();
+$article_request->set_pending();
 
 $ar = $biblio->article_requests();
 is( ref($ar),      'Koha::ArticleRequests', '$biblio->article_requests returns Koha::ArticleRequests object' );
@@ -253,3 +251,26 @@ subtest 'may_article_request' => sub {
 };
 
 $schema->storage->txn_rollback();
+
+subtest 'set_pending() tests' => sub {
+
+    plan tests => 2;
+
+    $schema->storage->txn_begin;
+
+    my $ar_mock = Test::MockModule->new('Koha::ArticleRequest');
+    $ar_mock->mock( 'notify', sub { ok( 1, '->notify() called' ); } );
+
+    my $ar = $builder->build_object(
+        {
+            class => 'Koha::ArticleRequests',
+            value => { status => Koha::ArticleRequest::Status::Requested }
+        }
+    );
+
+    $ar->set_pending()->discard_changes;
+
+    is( $ar->status, Koha::ArticleRequest::Status::Pending );
+
+    $schema->storage->txn_rollback;
+};

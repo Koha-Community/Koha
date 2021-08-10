@@ -36,7 +36,7 @@ Koha::ArticleRequest - Koha Article Request Object class
 
 =head1 API
 
-=head2 Class Methods
+=head2 Class methods
 
 =cut
 
@@ -53,11 +53,11 @@ sub request {
     return $self;
 }
 
-=head3 open
+=head3 set_pending
 
 =cut
 
-sub open {
+sub set_pending {
     my ($self) = @_;
 
     $self->status(Koha::ArticleRequest::Status::Pending);
@@ -215,6 +215,8 @@ sub store {
         return $self->request;
     }
 }
+
+=head2 Internal methods
 
 =head3 _type
 
