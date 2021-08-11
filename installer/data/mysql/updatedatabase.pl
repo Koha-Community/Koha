@@ -24580,6 +24580,23 @@ if( CheckVersion( $DBversion ) ) {
     NewVersion( $DBversion, 22435, "Update existing offsets");
 }
 
+$DBversion = '21.06.00.014';
+if( CheckVersion( $DBversion ) ) {
+    if ( column_exists('message_queue', 'delivery_note') ) {
+        $dbh->do(q{
+            ALTER TABLE message_queue CHANGE COLUMN delivery_note failure_code MEDIUMTEXT
+        });
+    }
+
+    if( !column_exists( 'message_queue', 'failure_code' ) ) {
+        $dbh->do(q{
+            ALTER TABLE message_queue ADD failure_code mediumtext AFTER content_type
+        });
+    }
+
+    NewVersion( $DBversion, 28813, "Update delivery_note to failure_code in message_queue");
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 my $update_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/atomicupdate/';
