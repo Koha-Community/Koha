@@ -46,6 +46,7 @@ KOHA.coce = {
             },
 
         });
+        this.done = 1;
     }
 
 };

@@ -1398,7 +1398,7 @@
                     var img = div.find("img")[0];
                     if( img && $(img).length > 0 ){
                         var description = "";
-                        if( (img.complete != null) && (!img.complete) || img.naturalHeight == 0 ){
+                        if( (( img.complete != null && !img.complete) || img.naturalHeight == 0 ) && div.attr("id") != "googlejacket-coverimg" ){
                             // No image loaded in the container. Remove the slide
                             div.remove();
                         } else {
@@ -1515,8 +1515,37 @@
             });
         } /* /verify_images */
 
+        function wait_for_images(cb){
+
+            var loaded = 1;
+
+            [% IF GoogleJackets %]
+                if ( loaded ) {
+                    loaded = KOHA.Google.done;
+                }
+            [% END %]
+
+            [% IF OpenLibraryCovers %]
+                if ( loaded ) {
+                    loaded = KOHA.OpenLibrary.done;
+                }
+            [% END %]
+
+            [% IF ( Koha.Preference('OpacCoce') && Koha.Preference('CoceProviders') ) %]
+                if ( loaded ) {
+                    loaded = KOHA.coce.done;
+                }
+            [% END %]
+
+            if (!loaded) {
+                window.setTimeout(function(){wait_for_images(cb);}, 100);
+            } else {
+                cb();
+            }
+        }
+
         $(window).load(function() {
-            verify_cover_images();
+            wait_for_images(verify_cover_images);
         });
 
         $(document).ready(function() {

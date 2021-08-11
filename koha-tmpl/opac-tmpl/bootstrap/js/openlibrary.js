@@ -65,6 +65,7 @@ KOHA.OpenLibrary = new function() {
                 }
             });
         }
+        this.done = 1;
     }
 
     var search_url = 'https://openlibrary.org/search?';

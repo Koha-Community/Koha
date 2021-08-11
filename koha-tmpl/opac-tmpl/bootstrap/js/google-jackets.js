@@ -78,7 +78,7 @@ KOHA.Google = {
                      $(this).empty().append(message);
                  }
              });
-         }
-
-     }
+        }
+        this.done = 1;
+    }
 };
