@@ -27,7 +27,7 @@ BEGIN {
 }
 
 subtest "MARC21 tests" => sub {
-    plan tests => 9;
+    plan tests => 8;
 
     t::lib::Mocks::mock_preference('marcflavour', 'MARC21');
 
@@ -35,7 +35,6 @@ subtest "MARC21 tests" => sub {
     ok(!C4::Heading::valid_heading_subfield('100', 'e'), '100e not valid for bib');
 
     ok(C4::Heading::valid_heading_subfield('100', 'a', 1), '100a valid for authority');
-    ok(C4::Heading::valid_heading_subfield('100', 'e', 1), '100e valid for authority');
 
     ok(C4::Heading::valid_heading_subfield('110', 'a'), '110a valid for bib');
     ok(!C4::Heading::valid_heading_subfield('110', 'e'), '110e not valid for bib');
