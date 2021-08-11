@@ -1423,10 +1423,10 @@
                                     // Remove the container
                                     div.remove();
                                 } else {
-                                    lightbox_descriptions.push("Custom cover image");
+                                    lightbox_descriptions.push(_("Custom cover image"));
                                 }
                             } else if( div.attr("id") == "syndetics-coverimg" ){
-                                lightbox_descriptions.push("Image from Syndetics")
+                                lightbox_descriptions.push(_("Image from Syndetics"))
                             } else if( div.attr("id") == "googlejacket-coverimg" ){
                                 lightbox_descriptions.push(_("Image from Google Books (<a href='%s'>see the original image</a>)").format($(img).data('link')));
                             } else if( div.attr("id") == "openlibrary-coverimg" ){
@@ -1435,7 +1435,7 @@
                                 // Identify which service's image is being loaded by Coce
                                 var coce_description;
                                 if( $(img).attr("src").indexOf('amazon.com') >= 0 ){
-                                    coce_description = ("Coce image from Amazon.com");
+                                    coce_description = _("Coce image from Amazon.com");
                                 } else if( $(img).attr("src").indexOf('google.com') >= 0 ){
                                     coce_description = _("Coce image from Google Books");
                                 } else if( $(img).attr("src").indexOf('openlibrary.org') >= 0 ){
