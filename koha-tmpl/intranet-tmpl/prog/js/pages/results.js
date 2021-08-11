@@ -1,6 +1,6 @@
 /* global KOHA biblionumber new_results_browser addMultiple vShelfAdd openWindow search_result SEARCH_RESULTS PREF_LocalCoverImages PREF_IntranetCoce PREF_CoceProviders CoceHost CoceProviders addRecord delSingleRecord PREF_BrowseResultSelection resetSearchContext addBibToContext delBibToContext getContextBiblioNumbers holdfor_cardnumber holdforclub strQuery PREF_NotHighlightedWords __ */
 
-function verify_images() {
+function verify_cover_images() {
     /* Loop over each container in the template which contains covers */
     var coverSlides = $(".cover-slides"); /* One coverSlides for each search result */
     coverSlides.each( function( index ){
@@ -101,7 +101,7 @@ function verify_images() {
 }
 
 $(window).load(function() {
-    verify_images();
+    verify_cover_images();
 });
 
 var Sticky;

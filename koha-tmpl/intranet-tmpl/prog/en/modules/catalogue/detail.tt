@@ -1018,7 +1018,7 @@ Note that permanent location is a code, and location may be an authval.
         var interface = "[% interface | html %]";
         var theme = "[% theme | html %]";
         // http://www.oreillynet.com/pub/a/javascript/2003/10/21/amazonhacks.html
-        function verify_images() {
+        function verify_cover_images() {
             // Loop over each container in the template which contains covers
             $(".cover-slider").each(function(){
                 var lightbox_descriptions = [];
@@ -1293,7 +1293,7 @@ Note that permanent location is a code, and location may be an authval.
         });
 
         $(window).load(function() {
-            verify_images();
+            verify_cover_images();
         });
     </script>
     [% IF ( Koha.Preference('NovelistSelectStaffEnabled') && Koha.Preference('NovelistSelectStaffProfile') && ( normalized_isbn || normalized_upc ) ) %]
