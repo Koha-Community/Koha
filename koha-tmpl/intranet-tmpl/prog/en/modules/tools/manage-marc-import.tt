@@ -508,6 +508,11 @@
                         [% ELSE %]
                             var record_details_url = "/cgi-bin/koha/catalogue/detail.pl?biblionumber=";
                         [% END %]
+                        [% IF(record_type == 'auth') %]
+                            var record_edit_url = "/cgi-bin/koha/authorities/authorities.pl?authid=";
+                        [% ELSE %]
+                            var record_edit_url = "/cgi-bin/koha/cataloguing/addbiblio.pl?biblionumber=";
+                        [% END %]
 
                         var additional_details = "";
                         if( aData['author'] ){
@@ -559,10 +564,16 @@
                                 '<a href="' + aData['diff_url'] + '">' + _("View") + '</a>'
                             );
                         }
-                        $('td:eq(6)', nRow).html(
-                            '<a target="_blank" href="' + record_details_url
-                            + aData['matched'] + '">' + aData['matched'] + '</a>'
-                        );
+                        if (aData['matched']) {
+                            $('td:eq(6)', nRow).html(
+                                '<a class="btn btn-default btn-xs" target="_blank" href="' + record_details_url
+                                + aData['matched'] + '"><i class="fa fa-eye"></i> ' + _("View") + '</a> '
+                                [% IF ( CAN_user_editcatalogue_edit_catalogue ) %]
+                                    + '<a class="btn btn-default btn-xs" target="_blank" href="' + record_edit_url
+                                    + aData['matched'] + '"><i class="fa fa-pencil"></i> ' + _("Edit") + '</a>'
+                                [% END %]
+                            );
+                        }
                     },
                 }));
                 $("#import_batch_form").on("submit", function() {
