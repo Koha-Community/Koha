@@ -251,7 +251,7 @@
                                                             </optgroup>
                                                             <optgroup label="Groups">
                                                                 [% FOREACH lsg IN LibrarySearchGroups %]
-                                                                    [% IF lsg.id == opac_name %]
+                                                                    [% IF 'multibranchlimit-' _ lsg.id == opac_name %]
                                                                         <option selected="selected" value="multibranchlimit-[% lsg.id | html %]">[% lsg.title | html %]</option>
                                                                     [% ELSE %]
                                                                         <option value="multibranchlimit-[% lsg.id | html %]">[% lsg.title | html %]</option>
