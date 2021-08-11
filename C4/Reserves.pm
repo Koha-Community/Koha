@@ -995,7 +995,7 @@ sub AutoUnsuspendReserves {
 Change a hold request's priority or cancel it.
 
 C<$rank> specifies the effect of the change.  If C<$rank>
-is 'W' or 'n', nothing happens.  This corresponds to leaving a
+is 'n', nothing happens.  This corresponds to leaving a
 request alone when changing its priority in the holds queue
 for a bib.
 
