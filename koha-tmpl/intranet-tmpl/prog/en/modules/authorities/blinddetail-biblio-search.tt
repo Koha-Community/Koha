@@ -99,12 +99,14 @@
                     // Add the new values to those subfields, empty the additional fields
                     var i=0;
                     subfields.each(function() {
-                        if(i in values) {
-                            this.getElementsByTagName('input')[1].value = values[i];
+                        var new_value;
+                        if (i in values) {
+                            new_value = values[i];
                         }
                         else {
-                            this.getElementsByTagName('input')[1].value = "";
+                            new_value = "";
                         }
+                        $(this).find('.input_marceditor').val(new_value);
                         i++;
                     });
                 }
