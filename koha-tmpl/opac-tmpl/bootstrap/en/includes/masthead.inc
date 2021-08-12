@@ -234,7 +234,7 @@
 
                                             [% IF ( Koha.Preference( 'OpacAddMastheadLibraryPulldown' ) == 1 ) %]
                                                 <div class="col-sm col-md-3 col-lg-2 order-3 order-sm-4">
-                                                    <select name="branch_group_limit" id="select_library" class="form-control">
+                                                    <select name="limit" id="select_library" class="form-control">
                                                         <option value="">All libraries</option>
 
                                                         [% IF LibrarySearchGroups %]<optgroup label="Libraries">[% END %]
@@ -252,9 +252,9 @@
                                                             <optgroup label="Groups">
                                                                 [% FOREACH lsg IN LibrarySearchGroups %]
                                                                     [% IF 'multibranchlimit-' _ lsg.id == opac_name || lsg.id == opac_name %]
-                                                                        <option selected="selected" value="multibranchlimit-[% lsg.id | html %]">[% lsg.title | html %]</option>
+                                                                        <option selected="selected" value="multibranchlimit:[% lsg.id | html %]">[% lsg.title | html %]</option>
                                                                     [% ELSE %]
-                                                                        <option value="multibranchlimit-[% lsg.id | html %]">[% lsg.title | html %]</option>
+                                                                        <option value="multibranchlimit:[% lsg.id | html %]">[% lsg.title | html %]</option>
                                                                     [% END # / bc.selected %]
                                                                 [% END %]
                                                             </optgroup>
@@ -267,8 +267,8 @@
                                             [% ELSE %]
                                                 [% IF ( opac_limit_override ) %]
                                                     [% IF ( opac_search_limit ) %]
-                                                        [% IF ( multibranchlimit = opac_search_limit.match( 'branch:(multibranchlimit-\d+)' ) ) %]
-                                                            <input name="branch_group_limit" value="[% multibranchlimit.0 | html %]" type="hidden" />
+                                                        [% IF ( multibranchlimit = opac_search_limit.match( 'branch:multibranchlimit-(\d+)' ) ) %]
+                                                            <input name="limit" value="multibranchlimit:[% multibranchlimit.0 | html %]" type="hidden" />
                                                         [% ELSE %]
                                                             <input name="limit" value="[% opac_search_limit | html %]" type="hidden" />
                                                         [% END %]
