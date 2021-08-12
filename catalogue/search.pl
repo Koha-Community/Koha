@@ -168,8 +168,15 @@ my $cgi = CGI->new;
 # decide which template to use
 my $template_name;
 my $template_type;
-my @params = $cgi->multi_param("limit");
-if ((@params>=1) || (defined $cgi->param("q") && $cgi->param("q") ne "" ) || ($cgi->param('multibranchlimit')) || ($cgi->param('limit-yr')) ) {
+# limits are used to limit to results to a pre-defined category such as branch or language
+my @limits = map uri_unescape($_), $cgi->multi_param("limit");
+my @nolimits = map uri_unescape($_), $cgi->multi_param('nolimit');
+my %is_nolimit = map { $_ => 1 } @nolimits;
+@limits = grep { not $is_nolimit{$_} } @limits;
+if  (
+        !$cgi->param('edit_search') &&
+        ( (@limits>=1) || (defined $cgi->param("q") && $cgi->param("q") ne "" ) || ($cgi->param('limit-yr')) )
+    ) {
     $template_name = 'catalogue/results.tt';
     $template_type = 'results';
 }
@@ -247,6 +254,32 @@ $template->param( searchid => scalar $cgi->param('searchid'), );
 # The following should only be loaded if we're bringing up the advanced search template
 if ( $template_type eq 'advsearch' ) {
 
+    my $expanded = $cgi->param('expanded_options');
+    if( $cgi->param('edit_search') ){
+        my @operators = $cgi->multi_param('op');
+        my @indexes   = $cgi->multi_param('idx');
+        my %limit_hash;
+        foreach my $limit (@limits){
+            if ( $limit eq 'available' ){
+                $template->param( limit_available => 1 );
+            } else {
+                my ($index,$value) = split(':',$limit);
+                $value =~ s/"//g;
+                if ( $index =~ /mc-/ ){
+                    $limit_hash{$index . "_" . $value} = 1;
+                } else {
+                    push @{$limit_hash{$index}}, $value;
+                }
+            }
+        };
+        $expanded = 1 if scalar @operators || scalar @limits;
+        $template->param( operators => \@operators );
+        $template->param( limits => \%limit_hash );
+        $template->param(
+           indexes   => \@indexes,
+           sort      => $cgi->param('sort_by'),
+        );
+    }
     # load the servers (used for searching -- to do federated searching, etc.)
     my $primary_servers_loop;# = displayPrimaryServers();
     $template->param(outer_servers_loop =>  $primary_servers_loop,);
@@ -263,44 +296,21 @@ if ( $template_type eq 'advsearch' ) {
         $template->param( sort_by => $default_sort_by  );
     }
 
-    # determine what to display next to the search boxes (ie, boolean option
-    # shouldn't appear on the first one, scan indexes should, adding a new
-    # box should only appear on the last, etc.
-    my @search_boxes_array;
-    my $search_boxes_count = 3; # begin with 3 boxes
-    # FIXME: all this junk can be done in TMPL using __first__ and __last__
-    for (my $i=1;$i<=$search_boxes_count;$i++) {
-        # if it's the first one, don't display boolean option, but show scan indexes
-        if ($i==1) {
-            push @search_boxes_array, {scan_index => 1};
-        }
-        # if it's the last one, show the 'add field' box
-        elsif ($i==$search_boxes_count) {
-            push @search_boxes_array,
-                {
-                boolean => 1,
-                add_field => 1,
-                };
-        }
-        else {
-            push @search_boxes_array,
-                {
-                boolean => 1,
-                };
-        }
-
+    # determine what to display next to the search boxes
+    my @queries = $cgi->multi_param('q');
+    while( scalar @queries < 3 ){
+        push @queries, "";
     }
-    $template->param(uc(C4::Context->preference("marcflavour")) => 1,
-                      search_boxes_loop => \@search_boxes_array);
+    $template->param(uc(C4::Context->preference("marcflavour")) =>1 );
 
     # load the language limits (for search)
     my $languages_limit_loop = getLanguages($lang, 1);
     $template->param(search_languages_loop => $languages_limit_loop,);
+    $template->param(       queries   => \@queries );
 
     # Expanded search options in advanced search:
     # use the global setting by default, but let the user override it
     {
-        my $expanded = $cgi->param('expanded_options');
         $expanded = C4::Context->preference("expandedSearchOption") || 0
             if !defined($expanded) || $expanded !~ /^0|1$/;
         $template->param( expanded_options => $expanded );
@@ -373,12 +383,6 @@ if ($operands[0] && !$operands[1]) {
     $basic_search=1;
 }
 
-# limits are use to limit to results to a pre-defined category such as branch or language
-my @limits = map uri_unescape($_), $cgi->multi_param('limit');
-my @nolimits = map uri_unescape($_), $cgi->multi_param('nolimit');
-my %is_nolimit = map { $_ => 1 } @nolimits;
-@limits = grep { not $is_nolimit{$_} } @limits;
-
 my $available;
 foreach my $limit(@limits) {
     if ($limit =~/available/) {
@@ -392,7 +396,7 @@ my $limit_yr;
 my $limit_yr_value;
 if ($params->{'limit-yr'}) {
     if ($params->{'limit-yr'} =~ /\d{4}/) {
-        $limit_yr = "yr,st-numeric=$params->{'limit-yr'}";
+        $limit_yr = "yr,st-numeric:$params->{'limit-yr'}";
         $limit_yr_value = $params->{'limit-yr'};
     }
     push @limits,$limit_yr;
@@ -596,6 +600,11 @@ for (my $i=0;$i<@servers;$i++) {
         # set up parameters if user wishes to re-run the search
         # as a Z39.50 search
         $template->param (z3950_search_params => C4::Search::z3950_search_args($z3950par || $query_desc));
+        $template->param(limit_cgi => $limit_cgi);
+        $template->param(query_cgi => $query_cgi);
+        $template->param(query_desc => $query_desc);
+        $template->param(limit_desc => $limit_desc);
+        $template->param(offset     => $offset);
 
         if ($hits) {
             $template->param(total => $hits);
@@ -604,11 +613,6 @@ for (my $i=0;$i<@servers;$i++) {
                 $limit_cgi_not_availablity =~ s/&limit=available//g;
                 $template->param(limit_cgi_not_availablity => $limit_cgi_not_availablity);
             }
-            $template->param(limit_cgi => $limit_cgi);
-            $template->param(query_cgi => $query_cgi);
-            $template->param(query_desc => $query_desc);
-            $template->param(limit_desc => $limit_desc);
-            $template->param(offset     => $offset);
             $template->param(DisplayMultiPlaceHold => $DisplayMultiPlaceHold);
             if ($query_desc || $limit_desc) {
                 $template->param(searchdesc => 1);

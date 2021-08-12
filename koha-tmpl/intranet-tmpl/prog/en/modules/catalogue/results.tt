@@ -74,6 +74,7 @@
                     <h3>
                         [% total | html %] result(s) found [% IF ( query_desc ) %]for <span class="results_query_desc">'[% query_desc | html %]'</span>[% END %][% IF limit_desc  %]&nbsp;with limit(s): <span class="results_limit_desc">'[% limit_desc | html %]'</span>[% END %][% IF ( LibraryName ) %] in [% LibraryName | html %] Catalog[% END %].
                     </h3>
+                    <a href="/cgi-bin/koha/catalogue/search.pl?advsearch=1&edit_search=1&[% query_cgi | $raw %]&[% limit_cgi | $raw %]&sort_by=[% sort_by | $raw %]">Edit this search</a>
 
                     <div class="searchheader" id="searchheader">
                         <div id="selection_ops">
@@ -331,6 +332,7 @@
                             [% IF CAN_user_acquisition_order_manage && searchtoorder_basketno && searchtoorder_vendorid %][%# Coming from the basket or vendor view %]
                                 <p><a href="/cgi-bin/koha/acqui/basket.pl?basketno=[% searchtoorder_basketno | uri %]">View basket<a></p>
                             [% END %]
+                            <a href="/cgi-bin/koha/catalogue/search.pl?advsearch=1&edit_search=1&[% query_cgi | $raw %]&[% limit_cgi | $raw %]&sort_by=[% sort_by | $raw %]">Edit this search</a>
                         [% ELSE %]
                             <p>You did not specify any search criteria.</p>
                         [% END %]
@@ -739,7 +741,6 @@
             query_desc: "[% To.json( query_desc ) | html %]",
             query_cgi: "[% query_cgi | html %]",
             limit_cgi: "[% limit_cgi | html %]",
-            sort_cgi: "[% sort_cgi | html %]",
             sort_by: "[% sort_by | html %]",
             gotoPage: "[% gotoPage | html %]",
             gotoNumber: "[% gotoNumber | html %]",
