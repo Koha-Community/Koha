@@ -289,17 +289,16 @@
         [%# FIXME Should not we filter the libraries displayed? %]
         [% PROCESS options_for_libraries prefix => "branch:" libraries => Branches.all( unfiltered => 1, do_not_select_my_library => 1 ) %]
         </select></p>
-    <!-- <input type="hidden" name="limit" value="branch: MAIN" /> -->
         [% IF search_groups %]
-            <p>OR</p> <!-- should addjs to grey out group pulldown if a library is selected. -->
+            <p>OR</p>
 
             <p>
                 <label for="categoryloop">Groups of libraries: </label>
-                <select name="multibranchlimit" id="categoryloop">
+                <select name="limit" id="categoryloop">
                     <option value=""> -- none -- </option>
                     [% FOREACH sg IN search_groups %]
                         [% UNLESS sg.branchcode %]
-                            <option value="[% sg.id | html %]">[% sg.title | html %]</option>
+                            <option value="multibranchlimit:[% sg.id | html %]">[% sg.title | html %]</option>
                         [% END %]
                     [% END %]
                 </select>
@@ -338,6 +337,7 @@
             dad.appendChild(line.cloneNode(true));
             line.removeChild(ButtonPlus);
         }
+
         var Sticky;
         $(document).ready(function() {
             $("input[name=q]:eq(0)").focus();
@@ -347,13 +347,24 @@
                 stickTo: ".main",
                 stickyClass: "floating"
             });
-            $("#branchloop").on("change",function(){
-                if( this.value != ""){
-                    document.getElementById("categoryloop").disabled=true;
-                } else {
-                    document.getElementById("categoryloop").disabled=false;
+            [% IF search_groups %]
+                function branch_limit() {
+                    if( $("#branchloop").val() != "" ){
+                        $("#categoryloop").val("").prop('disabled',true);
+                    } else {
+                        $("#categoryloop").prop('disabled',false);
+                    }
+                    if ( $("#categoryloop").val() != "" ){
+                        $("#branchloop").val("").prop('disabled',true);
+                    } else {
+                        $("#branchloop").prop('disabled',false);
+                    }
                 }
-            });
+                branch_limit();
+                $("#branchloop,#categoryloop").on("change",function(){
+                    branch_limit();
+                });
+            [% END %]
 
             [% IF searchid %]
                 browser = KOHA.browser('[% searchid | html %]');
