@@ -446,45 +446,6 @@ if (@searchCategories > 0) {
 
 @limits = map { uri_unescape($_) } @limits;
 
-if ( $params->{'multibranchlimit'} || ( $branch_group_limit && $branch_group_limit =~ /^multibranchlimit-/ ) ) {
-    my $branchfield  = C4::Context->preference('SearchLimitLibrary');
-    my $search_group = Koha::Library::Groups->find( $params->{multibranchlimit} );
-
-    my @branchcodes  = map { $_->branchcode } $search_group->all_libraries;
-
-    if (@branchcodes) {
-        if ( $branchfield eq "homebranch" ) {
-            push @limits, sprintf "(%s)", join " or ", map { 'homebranch: ' . $_ } @branchcodes;
-        }
-        elsif ( $branchfield eq "holdingbranch" ) {
-            push @limits, sprintf "(%s)", join " or ", map { 'holdingbranch: ' . $_ } @branchcodes;
-        }
-        else {
-            push @limits, sprintf "(%s or %s)",
-              join( " or ", map { 'homebranch: ' . $_ } @branchcodes ),
-              join( " or ", map { 'holdingbranch: ' . $_ } @branchcodes );
-        }
-    }
-}
-
-for ( my $i=0; $i<@limits; $i++ ) {
-    if ( $limits[$i] =~ /^branch:/ ) {
-        my $branchfield  = C4::Context->preference('SearchLimitLibrary');
-        if ( $branchfield eq "homebranch" ) {
-            $limits[$i] =~ s/branch/homebranch/;
-        }
-        elsif ( $branchfield eq "holdingbranch" ) {
-            $limits[$i] =~ s/branch/holdingbranch/;
-        }
-        else {
-            my $homebranchlimit = $limits[$i];
-            my $holdingbranchlimit = $limits[$i];
-            $homebranchlimit =~ s/branch/homebranch/;
-            $holdingbranchlimit =~ s/branch/holdingbranch/;
-            $limits[$i] = "($homebranchlimit or $holdingbranchlimit)";
-        }
-    }
-}
 
 my $available;
 foreach my $limit(@limits) {
