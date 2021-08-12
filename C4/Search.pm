@@ -1474,6 +1474,36 @@ sub buildQuery {
             $limit_cgi       .= "&limit=" . uri_escape_utf8($this_limit);
             $limit_desc      .= " $this_limit";
         }
+        elsif ( $this_limit =~ 'multibranchlimit|^branch' ) {
+            $limit_cgi  .= "&limit=" . uri_escape_utf8($this_limit);
+            $limit .= " and " if $limit || $query;
+            my $branchfield  = C4::Context->preference('SearchLimitLibrary');
+            my @branchcodes;
+            if(  $this_limit =~ 'multibranchlimit' ){
+                my ($group_id) = ( $this_limit =~ /^multibranchlimit:(.*)$/ );
+                my $search_group = Koha::Library::Groups->find( $group_id );
+                @branchcodes  = map { $_->branchcode } $search_group->all_libraries;
+                @branchcodes = sort { $a cmp $b } @branchcodes;
+            } else {
+                @branchcodes = ( $this_limit =~ /^branch:(.*)$/ );
+            }
+
+            if (@branchcodes) {
+                if ( $branchfield eq "homebranch" ) {
+                    $this_limit = sprintf "(%s)", join " or ", map { 'homebranch: ' . $_ } @branchcodes;
+                }
+                elsif ( $branchfield eq "holdingbranch" ) {
+                    $this_limit = sprintf "(%s)", join " or ", map { 'holdingbranch: ' . $_ } @branchcodes;
+                }
+                else {
+                    $this_limit =  sprintf "(%s or %s)",
+                      join( " or ", map { 'homebranch: ' . $_ } @branchcodes ),
+                      join( " or ", map { 'holdingbranch: ' . $_ } @branchcodes );
+                }
+            }
+            $limit .= "$this_limit";
+            $limit_desc .= " $this_limit";
+        }
 
         # Regular old limits
         else {

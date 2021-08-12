@@ -1065,6 +1065,32 @@ sub _fix_limit_special_cases {
             $date = $self->_modify_string_by_type(type => 'st-year', operand => $date);
             push @new_lim, "date-of-publication:$date";
         }
+        elsif ( $l =~ 'multibranchlimit|^branch' ) {
+            my $branchfield  = C4::Context->preference('SearchLimitLibrary');
+            my @branchcodes;
+            if( $l =~ 'multibranchlimit' ) {
+                my ($group_id) = ( $l =~ /^multibranchlimit:(.*)$/ );
+                my $search_group = Koha::Library::Groups->find( $group_id );
+                @branchcodes = map { $_->branchcode } $search_group->all_libraries;
+                @branchcodes = sort { $a cmp $b } @branchcodes;
+            } else {
+                @branchcodes = ( $l =~ /^branch:(.*)$/ );
+            }
+
+            if (@branchcodes) {
+                if ( $branchfield eq "homebranch" ) {
+                    push @new_lim, sprintf "(%s)", join " OR ", map { 'homebranch: ' . $_ } @branchcodes;
+                }
+                elsif ( $branchfield eq "holdingbranch" ) {
+                    push @new_lim, sprintf "(%s)", join " OR ", map { 'holdingbranch: ' . $_ } @branchcodes;
+                }
+                else {
+                    push @new_lim, sprintf "(%s OR %s)",
+                      join( " OR ", map { 'homebranch: ' . $_ } @branchcodes ),
+                      join( " OR ", map { 'holdingbranch: ' . $_ } @branchcodes );
+                }
+            }
+        }
         elsif ( $l =~ /^available$/ ) {
             push @new_lim, 'onloan:false';
         }
