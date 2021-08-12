@@ -22,7 +22,7 @@ use Test::Exception;
 use Test::Warn;
 use t::lib::Mocks;
 use t::lib::TestBuilder;
-use Test::More tests => 6;
+use Test::More tests => 7;
 
 use List::Util qw( all );
 
@@ -687,6 +687,79 @@ subtest 'build_query with weighted fields tests' => sub {
     undef, undef, undef, { weighted_fields => 1, is_opac => 1 });
     $fields = $query->{query}{query_string}{fields};
     is_deeply($fields,['headingmain'],'Only opac authorities fields retrieved for authorities index is is_opac');
+
+};
+
+subtest 'build_query_compat() SearchLimitLibrary tests' => sub {
+
+    plan tests => 18;
+
+    $schema->storage->txn_begin;
+
+    my $builder = t::lib::TestBuilder->new;
+
+    my $branch_1 = $builder->build_object({ class => 'Koha::Libraries' });
+    my $branch_2 = $builder->build_object({ class => 'Koha::Libraries' });
+    my $group    = $builder->build_object({ class => 'Koha::Library::Groups', value => {
+            ft_search_groups_opac => 1,
+            ft_search_groups_staff => 1,
+            parent_id => undef,
+            branchcode => undef
+        }
+    });
+    my $group_1  = $builder->build_object({ class => 'Koha::Library::Groups', value => {
+            parent_id => $group->id,
+            branchcode => $branch_1->id
+        }
+    });
+    my $group_2  = $builder->build_object({ class => 'Koha::Library::Groups', value => {
+            parent_id => $group->id,
+            branchcode => $branch_2->id
+        }
+    });
+    my $groupid = $group->id;
+    my @branchcodes = sort { $a cmp $b } ( $branch_1->id, $branch_2->id );
+
+
+    my $query_builder = Koha::SearchEngine::Elasticsearch::QueryBuilder->new({index => $Koha::SearchEngine::BIBLIOS_INDEX});
+    t::lib::Mocks::mock_preference('SearchLimitLibrary', 'both');
+    diag(" SearchLimitLibrary set to 'both'");
+    my ( undef, undef, undef, undef, undef, $limit, $limit_cgi, $limit_desc, undef ) =
+        $query_builder->build_query_compat( undef, undef, undef, [ "branch:CPL" ], undef, undef, undef, undef );
+    is( $limit, "(homebranch: CPL OR holdingbranch: CPL)", "Branch limit expanded to home/holding branch");
+    is( $limit_desc, "(homebranch: CPL OR holdingbranch: CPL)", "Limit description correctly expanded");
+    is( $limit_cgi, "&limit=branch%3ACPL", "Limit cgi does not get expanded");
+    ( undef, undef, undef, undef, undef, $limit, $limit_cgi, $limit_desc, undef ) =
+        $query_builder->build_query_compat( undef, undef, undef, [ "multibranchlimit:$groupid" ], undef, undef, undef, undef );
+    is( $limit, "(homebranch: $branchcodes[0] OR homebranch: $branchcodes[1] OR holdingbranch: $branchcodes[0] OR holdingbranch: $branchcodes[1])", "Multibranch limit expanded to home/holding branches");
+    is( $limit_desc, "(homebranch: $branchcodes[0] OR homebranch: $branchcodes[1] OR holdingbranch: $branchcodes[0] OR holdingbranch: $branchcodes[1])", "Multibranch limit description correctly expanded");
+    is( $limit_cgi, "&limit=multibranchlimit%3A$groupid", "Multibranch limit cgi does not get expanded");
+
+    t::lib::Mocks::mock_preference('SearchLimitLibrary', 'homebranch');
+    diag(" SearchLimitLibrary set to 'homebranch'");
+    ( undef, undef, undef, undef, undef, $limit, $limit_cgi, $limit_desc, undef ) =
+        $query_builder->build_query_compat( undef, undef, undef, [ "branch:CPL" ], undef, undef, undef, undef );
+    is( $limit, "(homebranch: CPL)", "branch limit expanded to home branch");
+    is( $limit_desc, "(homebranch: CPL)", "limit description correctly expanded");
+    is( $limit_cgi, "&limit=branch%3ACPL", "limit cgi does not get expanded");
+    ( undef, undef, undef, undef, undef, $limit, $limit_cgi, $limit_desc, undef ) =
+        $query_builder->build_query_compat( undef, undef, undef, [ "multibranchlimit:$groupid" ], undef, undef, undef, undef );
+    is( $limit, "(homebranch: $branchcodes[0] OR homebranch: $branchcodes[1])", "branch limit expanded to home branch");
+    is( $limit_desc, "(homebranch: $branchcodes[0] OR homebranch: $branchcodes[1])", "limit description correctly expanded");
+    is( $limit_cgi, "&limit=multibranchlimit%3A$groupid", "Limit cgi does not get expanded");
+
+    t::lib::Mocks::mock_preference('SearchLimitLibrary', 'holdingbranch');
+    diag(" SearchLimitLibrary set to 'homebranch'");
+    ( undef, undef, undef, undef, undef, $limit, $limit_cgi, $limit_desc, undef ) =
+        $query_builder->build_query_compat( undef, undef, undef, [ "branch:CPL" ], undef, undef, undef, undef );
+    is( $limit, "(holdingbranch: CPL)", "branch limit expanded to holding branch");
+    is( $limit_desc, "(holdingbranch: CPL)", "Limit description correctly expanded");
+    is( $limit_cgi, "&limit=branch%3ACPL", "Limit cgi does not get expanded");
+    ( undef, undef, undef, undef, undef, $limit, $limit_cgi, $limit_desc, undef ) =
+        $query_builder->build_query_compat( undef, undef, undef, [ "multibranchlimit:$groupid" ], undef, undef, undef, undef );
+    is( $limit, "(holdingbranch: $branchcodes[0] OR holdingbranch: $branchcodes[1])", "branch limit expanded to holding branch");
+    is( $limit_desc, "(holdingbranch: $branchcodes[0] OR holdingbranch: $branchcodes[1])", "Limit description correctly expanded");
+    is( $limit_cgi, "&limit=multibranchlimit%3A$groupid", "Limit cgi does not get expanded");
 
 };
 
