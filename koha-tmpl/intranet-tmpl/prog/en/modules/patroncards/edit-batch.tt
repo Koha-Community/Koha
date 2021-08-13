@@ -245,6 +245,21 @@
         };
 
         $(document).ready(function() {
+            // Prepare DataTables settings
+            var aLengthMenu = [10, 20, 50, 100, -1];
+            var aLengthMenuLabel = [10, 20, 50, 100, _("All")];
+            var patronsPerPage = [% Koha.Preference('PatronsPerPage') | html %];
+            for ( var i = 0; i < aLengthMenu.length; i++ ) {
+                if ( aLengthMenu[i] == patronsPerPage ) {
+                    break;
+                }
+                if ( aLengthMenu[i] > patronsPerPage || aLengthMenu[i] == -1 ) {
+                    aLengthMenu.splice(i, 0, patronsPerPage);
+                    aLengthMenuLabel.splice(i, 0, patronsPerPage);
+                    break;
+                }
+            }
+
             [% IF table_loop %]
                 $("#description").show();
             [% ELSE %]
@@ -256,6 +271,8 @@
                 ],
                 "aaSorting": [[ 0, "asc" ]],
                 "sPaginationType": "full",
+                "aLengthMenu": [aLengthMenu, aLengthMenuLabel],
+                "pageLength": patronsPerPage,
                 "autoWidth": false
             }));
             $("#additems").click(function(){
