@@ -455,23 +455,25 @@
 [% Asset.js("lib/jquery/plugins/jquery.deserialize.min.js") | $raw %]
 [% Asset.js("lib/jquery/plugins/jquery.cookie.min.js") | $raw %]
 <script>
-    function branch_limit() {
-        if( $("#branchloop").val() != "" ){
-            $("#categoryloop").val("").prop('disabled',true);
-        } else {
-            $("#categoryloop").prop('disabled',false);
-        }
-        if ( $("#categoryloop").val() != "" ){
-            $("#branchloop").val("").prop('disabled',true);
-        } else {
-            $("#branchloop").prop('disabled',false);
-        }
-    }
 $(document).ready(function() {
-    branch_limit();
-    $("#branchloop,#categoryloop").on("change",function(){
+    [% IF search_groups %]
+        function branch_limit() {
+            if( $("#branchloop").val() != "" ){
+                $("#categoryloop").val("").prop('disabled',true);
+            } else {
+                $("#categoryloop").prop('disabled',false);
+            }
+            if ( $("#categoryloop").val() != "" ){
+                $("#branchloop").val("").prop('disabled',true);
+            } else {
+                $("#branchloop").prop('disabled',false);
+            }
+        }
         branch_limit();
-    });
+        $("#branchloop,#categoryloop").on("change",function(){
+            branch_limit();
+        });
+    [% END %]
 
     $('#advsearches').tabs();
     jQuery.cookie.json = true;
