@@ -3,6 +3,7 @@
 [% USE Branches %]
 [% USE KohaDates %]
 [% USE TablesSettings %]
+[% USE ItemTypes %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Your holds history &rsaquo; [% IF ( LibraryNameTitle ) %][% LibraryNameTitle | html %][% ELSE %]Koha online[% END %] catalog</title>
 [% INCLUDE 'doc-head-close.inc' %]
@@ -66,6 +67,7 @@
                     [% IF !holds %]
                         You have never placed a hold from this library.
                     [% ELSE %]
+                        [% SET show_itemtype_column = Koha.Preference('AllowHoldItemTypeSelection') %]
                         <div id="opac-user-holdsrec">
                             <div id="tabs-container">
                                 <div class="controls">
