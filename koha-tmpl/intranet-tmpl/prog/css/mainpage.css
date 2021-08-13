@@ -75,11 +75,9 @@ ul.biglinks-list li a.icon_general {
     display: block;
     box-sizing: content-box;
     max-width : 320px;
-    height: 46px;
+    min-height: 2em;
     margin: 0 1em 14px 0;
-    padding-left:57px;
-    padding-top:5px;
-
+    padding: 5px;
     border: solid 2px #b9d8d9;
     border-radius: 6px;
 
@@ -90,8 +88,6 @@ ul.biglinks-list li a.icon_general {
     color: #000000;
 
     background-color:#f4f8f9;
-    background-position: 5px 3px;
-    background-repeat:no-repeat;
 }
 
 ul.biglinks-list li a:hover.icon_general {
@@ -100,16 +96,28 @@ ul.biglinks-list li a:hover.icon_general {
     border-color: #538200;
 }
 
-/* CSS Font Awesome */
-ul.biglinks-list .fa, ul.biglinks-list img {
-    position: absolute;
-    left: 1em;
+ul.biglinks-list li a.icon_general .fa-fw {
     font-size: 1.5em;
+    margin-right:.2em;
+}
+
+ul.biglinks-list li a.icon_general .fa-stack-2x {
+    font-size: 1.3em;
+}
+
+ul.biglinks-list li a.icon_general .fa-stack-1x {
+    color: #999;
+    font-size: .9em;
+    left: -5px;
+    top: -1px;
+}
+
+/* CSS Font Awesome */
+ul.biglinks-list img {
     width: 35px;
 }
 
 /* ==== MODULE LINKS - End ==== */
-
 
 /* ==== PENDING - Start ==== */
 #area-pending {
