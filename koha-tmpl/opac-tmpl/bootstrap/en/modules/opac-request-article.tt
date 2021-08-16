@@ -1,7 +1,7 @@
 [% USE Koha %]
 [% USE Branches %]
 [% USE ItemTypes %]
-[% USE KohaNews %]
+[% USE AdditionalContents %]
 [% USE raw %]
 [% INCLUDE 'doc-head-open.inc' %]
 
@@ -13,7 +13,7 @@
 [% INCLUDE 'bodytag.inc' bodyid='opac-request-article' %]
 [% INCLUDE 'masthead.inc' %]
 
-[% SET disclaimer = KohaNews.get( location => "ArticleRequestsDisclaimerText", lang => lang, library => Branches.GetLoggedInBranchcode ) %]
+[% SET disclaimer = AdditionalContents.get( location => "ArticleRequestsDisclaimerText", lang => lang, library => Branches.GetLoggedInBranchcode ) %]
 
 <div class="main">
     <nav aria-label="breadcrumb">
