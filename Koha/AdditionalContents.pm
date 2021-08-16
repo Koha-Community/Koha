@@ -72,8 +72,8 @@ sub search_for_display {
     my $search_params;
     $search_params->{location} = $params->{location};
     $search_params->{branchcode} = [ $params->{library_id}, undef ] if $params->{library_id};
-    $search_params->{published_on} = { '<=' => \'NOW()' };
-    $search_params->{-or} = [ expirationdate => { '>=' => \'NOW()' },
+    $search_params->{published_on} = { '<=' => \'CAST(NOW() AS DATE)' };
+    $search_params->{-or} = [ expirationdate => { '>=' => \'CAST(NOW() AS DATE)' },
                               expirationdate => undef ];
 
     if ( $params->{lang} ) {

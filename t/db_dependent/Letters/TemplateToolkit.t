@@ -39,7 +39,7 @@ use Koha::Biblio;
 use Koha::Biblioitem;
 use Koha::Item;
 use Koha::Hold;
-use Koha::AdditionalContent;
+use Koha::AdditionalContents;
 use Koha::Serial;
 use Koha::Subscription;
 use Koha::Suggestion;
@@ -631,16 +631,21 @@ EOF
         my $branchcode = $library->{branchcode};
 
         Koha::AdditionalContents->delete;
-        my $news_item = Koha::AdditionalContent->new(
+        my $news_item = $builder->build_object(
             {
-                branchcode      => $branchcode,
-                title           => "A wonderful news",
-                content         => "This is the wonderful news.",
-                lang            => "slip",
-                expiration_date => undef,
-                published_on    => $one_minute_ago
+                class => 'Koha::AdditionalContents',
+                value => {
+                    category        => 'news',
+                    location        => "slip",
+                    branchcode      => $branchcode,
+                    lang            => 'default',
+                    title           => "A wonderful news",
+                    content         => "This is the wonderful news.",
+                    expiration_date => undef,
+                    published_on    => $one_minute_ago
+                }
             }
-        )->store;
+        );
 
         # historic syntax
         my $template = <<EOF;
