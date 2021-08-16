@@ -75,12 +75,12 @@ my $borrowers_rs = Koha::Patrons->search_limited(
         page     => 1,
         rows     => 10,
         order_by => [ 'surname', 'firstname' ],
+        prefetch => 'branchcode',
     },
 );
 
 my @borrowers;
 while ( my $b = $borrowers_rs->next ) {
-    my $library = Koha::Libraries->find( $b->branchcode );
     push @borrowers,
       { borrowernumber => $b->borrowernumber,
         surname        => $b->surname    // '',
@@ -93,7 +93,7 @@ while ( my $b = $borrowers_rs->next ) {
         zipcode        => $b->zipcode    // '',
         country        => $b->country    // '',
         branchcode     => $b->branchcode // '',
-        branchname     => $library->branchname // '',
+        branchname     => $b->library->branchname // '',
       };
 }
 
