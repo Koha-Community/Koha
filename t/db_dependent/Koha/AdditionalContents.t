@@ -39,16 +39,26 @@ subtest 'Koha::AdditionalContents basic test' => sub {
 
     my $library = $builder->build({ source => 'Branch'});
     my $nb_of_news = Koha::AdditionalContents->search->count;
-    my $new_news_item_1 = Koha::AdditionalContent->new({
-        branchcode => $library->{branchcode},
-        title => 'a news',
-        content => 'content for news 1',
-    })->store;
-    my $new_news_item_2 = Koha::AdditionalContent->new({
-        branchcode => $library->{branchcode},
-        title => 'another news',
-        content => 'content for news 2',
-    })->store;
+    my $new_news_item_1 = Koha::AdditionalContent->new(
+        {
+            category   => 'news',
+            code       => 'news_1',
+            location   => 'staff_only',
+            branchcode => $library->{branchcode},
+            title      => 'a news',
+            content    => 'content for news 1',
+        }
+    )->store;
+    my $new_news_item_2 = Koha::AdditionalContent->new(
+        {
+            category   => 'news',
+            code       => 'news_2',
+            location   => 'staff_only',
+            branchcode => $library->{branchcode},
+            title      => 'another news',
+            content    => 'content for news 2',
+        }
+    )->store;
 
     like( $new_news_item_1->idnew, qr|^\d+$|, 'Adding a new news_item should have set the idnew');
     is( Koha::AdditionalContents->search->count, $nb_of_news + 2, 'The 2 news should have been added' );
@@ -130,6 +140,8 @@ subtest '->library' => sub {
 subtest '->author' => sub {
     plan tests => 3;
 
+    $schema->storage->txn_begin;
+
     my $news_item = $builder->build_object({ class => 'Koha::AdditionalContents' });
     my $author = $news_item->author;
     is( ref($author), 'Koha::Patron', 'Koha::AdditionalContent->author returns a Koha::Patron object' );
@@ -139,11 +151,13 @@ subtest '->author' => sub {
     $news_item = Koha::AdditionalContents->find($news_item->idnew);
     is( ref($news_item), 'Koha::AdditionalContent', 'News are not deleted alongwith the author' );
     is( $news_item->author, undef, '->author returns undef is the author has been deleted' );
+
+    $schema->storage->txn_rollback;
 };
 
 subtest '->search_for_display' => sub {
 
-    plan tests => 13;
+    plan tests => 3;
 
     $schema->storage->txn_begin;
 
@@ -227,9 +241,17 @@ subtest '->search_for_display' => sub {
             number => 5,
         }
     });
-    my $news = Koha::AdditionalContents->search_for_display;
 
-    # FIXME Rewrite tests here
+    my $news = Koha::AdditionalContents->search_for_display({ location => 'staff_only' });
+    is($news->count, 3, "There are 3 news for staff");
+
+    $news = Koha::AdditionalContents->search_for_display({ location => 'opac_only' });
+    is($news->count, 0, "There are 0 news for OPAC");
+
+    $news = Koha::AdditionalContents->search_for_display({ location => 'staff_and_opac' });
+    is($news->count, 1, "There is 1 news for staff and OPAC");
+
+    # TODO We should add more tests here
 
     $schema->storage->txn_rollback;
 };
