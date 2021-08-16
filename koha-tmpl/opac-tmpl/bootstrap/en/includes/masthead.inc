@@ -155,7 +155,7 @@
             [% UNLESS ( advsearch ) %]
                 <div class="row">
                     <div class="col">
-                            <div id="opac-main-search">
+                            <div id="opac-main-search" class="mastheadsearch">
                                 [% IF ( OpacCustomSearch ) %]
                                     [% PROCESS koha_news_block news => OpacCustomSearch %]
                                 [% ELSE %]
