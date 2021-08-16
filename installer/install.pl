@@ -416,10 +416,12 @@ elsif ( $step && $step == 3 ) {
           or die "Cannot open log file $logfilepath_errors: $!";
         @report = <$fh>;
         close $fh;
+        my $update_errors;
         if (@report) {
             $template->param( update_errors =>
                   [ map { { line => $_ } } split( /\n/, join( '', @report ) ) ]
             );
+            $update_errors = 1;
             $template->param( has_update_errors => 1 );
             warn
 "The following errors were returned while attempting to run the updatedatabase.pl script:\n";
@@ -429,21 +431,22 @@ elsif ( $step && $step == 3 ) {
             eval { `rm $logfilepath_errors` };
         }
 
-        my $db_entries = get_db_entries();
-        my $report = update( $db_entries );
-        my $atomic_update_files = get_atomic_updates;
-        my $atomic_update_report = run_atomic_updates( $atomic_update_files );
+        unless ( $update_errors ) {
+            my $db_entries = get_db_entries();
+            my $report = update( $db_entries );
+            my $atomic_update_files = get_atomic_updates;
+            my $atomic_update_report = run_atomic_updates( $atomic_update_files );
 
-        $template->param(
-            success        => $report->{success},
-            error          => $report->{error},
-            atomic_updates => {
-                success => $atomic_update_report->{success},
-                error   => $atomic_update_report->{error}
-            }
-        );
+            $template->param(
+                success        => $report->{success},
+                error          => $report->{error},
+                atomic_updates => {
+                    success => $atomic_update_report->{success},
+                    error   => $atomic_update_report->{error}
+                }
+            );
+        }
 
-        #warn "The following errors were returned while attempting to run the updatedatabase.pl script:\n"; #FIXME restore this
         $template->param( $op => 1 );
     }
     else {
