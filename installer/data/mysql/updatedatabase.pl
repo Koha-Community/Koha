@@ -24597,6 +24597,14 @@ if( CheckVersion( $DBversion ) ) {
     NewVersion( $DBversion, 28813, "Update delivery_note to failure_code in message_queue");
 }
 
+$DBversion = '21.06.00.015';
+if( CheckVersion( $DBversion ) ) {
+
+    $dbh->do( q{ DELETE FROM systempreferences WHERE variable IN ('HighlightOwnItemsOnOPAC', 'HighlightOwnItemsOnOPACWhich')} );
+
+    NewVersion( $DBversion, 12561, "Remove system preferences HighlightOwnItemsOnOPAC and HighlightOwnItemsOnOPACWhich");
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 my $update_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/atomicupdate/';
