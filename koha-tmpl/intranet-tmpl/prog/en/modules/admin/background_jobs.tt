@@ -4,6 +4,8 @@
 [% SET footerjs = 1 %]
 [% BLOCK show_job_status %]
     [% SWITCH job.status %]
+        [% CASE "new" %]
+            New
         [% CASE "cancelled" %]
             Cancelled
         [% CASE "finished" %]
