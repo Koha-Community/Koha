@@ -788,7 +788,7 @@ subtest 'is_valid_age' => sub {
     my $patron = $builder->build({
         source => 'Borrower',
         value => {
-            categorycode        => 'AGE_5_10'
+            categorycode        => $category->categorycode
         }
     });
     $patron = Koha::Patrons->find( $patron->{borrowernumber} );
@@ -805,17 +805,17 @@ subtest 'is_valid_age' => sub {
             add_m3_m6_m1 =>
               { date => '2016-08-27', expected_age => 3, valid => 0 },
             add_m7_m6_m1 =>
-              { date => '2015-02-28', expected_age => 7, valid => 1 },
+              { date => '2013-02-28', expected_age => 7, valid => 1 },
             add_m5_0_0 =>
               { date => '2015-02-28', expected_age => 5, valid => 1 },
             add_m5_0_p1 =>
-              { date => '2015-03-01', expected_age => 5, valid => 0 },
+              { date => '2015-03-01', expected_age => 4, valid => 0 },
             add_m5_0_m1 =>
               { date => '2015-02-27', expected_age => 5, valid => 1 },
             add_m11_0_0 =>
               { date => '2009-02-28', expected_age => 11, valid => 0 },
             add_m11_0_p1 =>
-              { date => '2009-03-01', expected_age => 11, valid => 1 },
+              { date => '2009-03-01', expected_age => 10, valid => 1 },
             add_m11_0_m1 =>
               { date => '2009-02-27', expected_age => 11, valid => 0 },
         },
@@ -827,7 +827,7 @@ subtest 'is_valid_age' => sub {
 
         Time::Fake->offset( $dt->epoch );
 
-        for my $k ( keys %$date ) {
+        for my $k ( sort keys %$date ) {
             next if $k eq 'today';
 
             my $dob = $date->{$k};
@@ -836,8 +836,8 @@ subtest 'is_valid_age' => sub {
                 $patron->is_valid_age,
                 $dob->{valid},
                 sprintf(
-                    "Today=%s, dob=%s, is %s, should be valid=%s",
-                    $date->{today}, $dob->{date}, $dob->{expected_age}, $dob->{valid}
+                    "Today=%s, dob=%s, is %s, should be valid=%s in category %s",
+                    $date->{today}, $dob->{date}, $dob->{expected_age}, $dob->{valid}, $category->categorycode
                 )
             );
         }
