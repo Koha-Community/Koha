@@ -273,7 +273,8 @@
                                                     <th class="nosort">Links</th>
                                                 [% END %]
                                                 [% IF ( Koha.Preference('AllowCheckoutNotes') ) %]
-                                                    <th id="checkout-notes" class="nosort" title="Use this to report any problems with your currently checked out items">Report a problem</th>
+                                                    <th class="hidden">Checkout note</th>
+                                                    <th id="checkout-notes" class="nosort noExport" title="Use this to report any problems with your currently checked out items">Report a problem</th>
                                                 [% END %]
                                             </tr>
                                         </thead>
@@ -452,16 +453,21 @@
                                                     <td class="links">[% ISSUE.MySummaryHTML | $raw %]</td>
                                                 [% END %]
                                                 [% IF ( Koha.Preference('AllowCheckoutNotes') ) %]
+                                                    <td>
+                                                        [% ISSUE.note | html %]
+                                                    </td>
                                                     <td class="note">
-                                                        [% IF ( ISSUE.note ) -%]
-                                                           [% SET note_action = "Edit note" %]
-                                                        [% ELSE -%]
-                                                           [% SET note_action = "Add note" %]
-                                                        [% END %]
-                                                        <a id="save_[% ISSUE.issue_id | html %]" href="/cgi-bin/koha/opac-issue-note.pl?issue_id=[% ISSUE.issue_id | html %]" class="btn btn-primary btn-sm btn-add-note" data-title="[% ISSUE.title | html %] [% FOREACH subtitle IN ISSUE.subtitle.split(' \| ') %][% IF Koha.Preference('marcflavour')=='UNIMARC' %],[% END %][% subtitle | html %][% END %]" data-issueid="[% ISSUE.issue_id | html %]" id="save_[% ISSUE.issue_id | html %]" data-note="[% ISSUE.note | html %]" data-origvalue="[% ISSUE.note | html %]">
-                                                            [% note_action | html %]
-                                                        </button>
-                                                        <input type="hidden" name="note" value="[% ISSUE.note | html %]" data-origvalue="[% ISSUE.note | html %]" />
+                                                        <div id="viewnote_[% ISSUE.issue_id | html %]">
+                                                            [% ISSUE.note | html %]
+                                                        </div>
+                                                        <a id="save_[% ISSUE.issue_id | html %]" href="/cgi-bin/koha/opac-issue-note.pl?issue_id=[% ISSUE.issue_id | html %]" class="btn btn-primary btn-sm btn-add-note noprint" data-title="[% ISSUE.title | html %] [% FOREACH subtitle IN ISSUE.subtitle.split(' \| ') %][% IF Koha.Preference('marcflavour')=='UNIMARC' %],[% END %][% subtitle | html %][% END %]" data-issueid="[% ISSUE.issue_id | html %]" id="save_[% ISSUE.issue_id | html %]">
+                                                            [% IF ( ISSUE.note ) -%]
+                                                                <span>Edit note</span>
+                                                            [% ELSE -%]
+                                                                <span>Add note</span>
+                                                            [% END %]
+                                                        </a>
+                                                        <input type="hidden" id="note_[% ISSUE.issue_id | html %]" name="note" value="[% ISSUE.note | html %]" data-origvalue="[% ISSUE.note | html %]" />
                                                     </td>
                                                 [% END %]
                                             </tr>
@@ -960,13 +966,32 @@
                     "dom": '<"top"<"table_entries"><"table_controls"fB>>t',
                     "columnDefs": [
                         { "targets": [ "nosort" ],"sortable": false,"searchable": false },
-                        { "type": "anti-the", "targets" : [ "anti-the" ] }
+                        { "type": "anti-the", "targets" : [ "anti-the" ] },
+                        { "visible": false, "targets" : [ "hidden" ] }
                     ],
                     "language": {
                         "search": "_INPUT_",
                         "searchPlaceholder": _("Search")
                     },
-                    "autoWidth": false
+                    "autoWidth": false,
+                    buttons: [
+                        /* Override default button set so that we can extend the options of print and csv */
+                        'clearFilter', 'copy',
+                        {
+                            extend: "print",
+                            exportOptions: {
+                                /* Print view should show all columns (even invisible ones) unless they are .noExport */
+                                columns: ":not(.noExport)"
+                            }
+                        },
+                        {
+                            extend: "csv",
+                            exportOptions: {
+                                /* CSV export should include all columns (even invisible ones) unless they are .noExport */
+                                columns: ":not(.noExport)"
+                            }
+                        }
+                    ]
                 }));
             });
 
@@ -1055,8 +1080,8 @@
                 e.preventDefault();
                 var title = $(this).data("title");
                 var issue_id = $(this).data("issueid");
-                var note = $(this).data("note");
-                var origvalue = $(this).data("origvalue");
+                var note = $("#note_" + issue_id ).val();
+                var origvalue = $("#note_" + issue_id ).data("origvalue");
                 $("#addNote").val( note );
                 $("#addNoteIssueId").val( issue_id );
                 $("#addNoteTitle").text( title );
@@ -1079,7 +1104,8 @@
 
         function submitNote( title, issue_id, note ){
             var self = $("#addNoteModal");
-            var noteinput = $("#save_" + issue_id );
+            var notebutton = $("#save_" + issue_id );
+            var noteinput = $("#note_" + issue_id );
 
             var ajaxData = {
                 'action': 'issuenote',
@@ -1099,27 +1125,29 @@
                     $("#notesaved").removeClass("alert-error");
                     $("#notesaved").addClass("alert-info");
                     noteinput.data('origvalue', data.note)
-                        .data('note', data.note)
-                        .text( _("Edit note" ) );
+                        .val(data.note);
+                    notebutton.text( _("Edit note" ) );
+                    $("#viewnote_" + issue_id ).text( data.note );
                     message = "<p>" + _("Your note about %s has been saved and sent to the library.").format( em(title) ) + "</p>";
                     message += "<p class=\"checkout_note\">" + data.note;
-                    message += "<a href=\"/cgi-bin/koha/opac-issue-note.pl?issue_id=" + issue_id + "\" class=\"btn btn-link btn-sm btn-add-note\" data-title=\"" + title + "\" data-issueid=\"" + issue_id + "\" data-note=\"" + data.note + "\" data-origvalue=\"" + data.note + "\"><i class=\"fa fa-pencil\" aria-hidden=\"true\"></i> " + _("Edit note") + "</a>";
+                    message += "<a href=\"/cgi-bin/koha/opac-issue-note.pl?issue_id=" + issue_id + "\" class=\"btn btn-link btn-sm btn-add-note\" data-title=\"" + title + "\" data-issueid=\"" + issue_id + "\"><i class=\"fa fa-pencil\" aria-hidden=\"true\"></i> " + _("Edit note") + "</a>";
                     message += "</p>";
                 } else if(data.status == 'removed') {
                     $("#notesaved").removeClass("alert-error");
                     $("#notesaved").addClass("alert-info");
                     noteinput.data('origvalue', "")
-                        .data("note", "")
-                        .text( _("Add note") );
+                        .val("")
+                    notebutton.text( _("Add note") );
+                    $("#viewnote_" + issue_id ).text( data.note );
                     message = "<p>" + _("Your note about %s was removed.").format( em(title) ) + "</p>";
                 } else {
                     $("#notesaved").removeClass("alert-info");
                     $("#notesaved").addClass("alert-error");
                     message =  "<p>" + _("Your note about %s could not be saved.").format( em(title) ) + "</p>";
-                    noteinput.text( _("Add note") );
+                    notebutton.text( _("Add note") );
+                    $("#viewnote_" + issue_id ).text( data.note );
                     message += "<p style=\"font-weight:bold;\">" + _("Something went wrong. The note has not been saved") + "</p>";
                 }
-                self.modal("hide");
                 $("#notesaved").html(message);
             })
             .fail(function(data) {
@@ -1129,6 +1157,7 @@
                 $("#notesaved").html(message);
             })
             .always(function() {
+                self.modal("hide");
                 $("#notesaved").show();
             });
         }
