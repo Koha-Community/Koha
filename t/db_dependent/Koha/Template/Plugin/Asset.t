@@ -32,7 +32,7 @@ is($output, "/intranet-tmpl/prog/js/staff-global_$version.js");
 
 $output = '';
 $template->process(url_template("js/browser.js"), $intranet_vars, \$output);
-is($output, "/intranet-tmpl/js/browser_$version.js");
+is($output, "/intranet-tmpl/prog/js/browser_$version.js");
 
 $output = '';
 $template->process(url_template("css/staff-global.css"), $intranet_vars, \$output);
