@@ -27,6 +27,7 @@ use CGI qw ( -utf8 );
 use C4::Auth qw(get_template_and_user);
 use C4::Koha;
 use C4::Context;
+use C4::Log qw( logaction );
 use C4::Output qw(output_html_with_http_headers);
 use C4::Languages qw(getTranslatedLanguages);
 use Koha::DateUtils;
@@ -118,11 +119,17 @@ elsif ( $op eq 'add_validate' ) {
         );
         # Delete if title or content is empty
         unless ( $title and $content ) {
-            $additional_content->delete if $additional_content;
+            if ( $additional_content ) {
+                eval { $additional_content->delete };
+                unless ($@) {
+                    logaction('NEWS', 'DELETE' , undef, sprintf("%s|%s|%s|%s", $additional_content->code, $additional_content->title, $additional_content->lang, $additional_content->content));
+                }
+            }
             next;
         } elsif ( $additional_content ) {
+            my $updated;
             eval {
-                $additional_content->update(
+                $additional_content->set(
                     {
                         category       => $category,
                         code           => $code,
@@ -137,12 +144,17 @@ elsif ( $op eq 'add_validate' ) {
                         borrowernumber => $borrowernumber,
                     }
                 );
+                $updated = $additional_content->_result->get_dirty_columns;
+                $additional_content->store;
             };
             if ($@) {
                 $success = 0;
                 push @messages, { type => 'error', code => 'error_on_update' };
                 last;
             }
+
+            logaction('NEWS', 'MODIFY' , undef, sprintf("%s|%s|%s|%s", $code, $title, $lang, $content))
+                if C4::Context->preference("NewsLog") && $updated;
         }
         else {
             my $additional_content = Koha::AdditionalContent->new(
@@ -166,6 +178,9 @@ elsif ( $op eq 'add_validate' ) {
                 push @messages, { type => 'error', code => 'error_on_insert' };
                 last;
             }
+
+            logaction('NEWS', 'ADD' , undef, sprintf("%s|%s|%s|%s", $code, $title, $lang, $content))
+                if C4::Context->preference("NewsLog");
         }
 
     }
@@ -173,8 +188,23 @@ elsif ( $op eq 'add_validate' ) {
 }
 elsif ( $op eq 'delete_confirmed' ) {
     my @ids = $cgi->multi_param('ids');
-    my $deleted =
-        eval { Koha::AdditionalContents->search( { idnew => \@ids } )->delete; };
+    my $deleted = eval {
+
+        my $schema = Koha::Database->new->schema;
+        $schema->txn_do(
+            sub {
+                my $contents =
+                  Koha::AdditionalContents->search( { idnew => \@ids } );
+
+                if ( C4::Context->preference("NewsLog") ) {
+                    while ( my $c = $contents->next ) {
+                        logaction('NEWS', 'DELETE' , undef, sprintf("%s|%s|%s|%s", $c->code, $c->title, $c->lang, $c->content));
+                    }
+                }
+                $contents->delete;
+            }
+        );
+    };
 
     if ( $@ or not $deleted ) {
         push @messages, { type => 'error', code => 'error_on_delete' };
