@@ -1,6 +1,6 @@
 use Modern::Perl;
 
-{
+return {
     bug_number => "20310",
     description => "Add new system preference ArticleRequestsOpacHostRedirection",
     up => sub {

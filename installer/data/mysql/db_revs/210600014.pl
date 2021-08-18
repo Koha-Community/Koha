@@ -1,6 +1,6 @@
 use Modern::Perl;
 
-{
+return {
     bug_number => "28813",
     description => "Update delivery_note to failure_code in message_queue",
     up => sub {

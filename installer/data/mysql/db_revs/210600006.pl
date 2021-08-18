@@ -1,6 +1,6 @@
 use Modern::Perl;
 
-{
+return {
     bug_number => "14237",
     description => "Add individual bibliographic records to course reserves",
     up => sub {

@@ -1,6 +1,6 @@
 use Modern::Perl;
 
-{
+return {
     bug_number => "12561",
     description => "Remove system preferences HighlightOwnItemsOnOPAC and HighlightOwnItemsOnOPACWhich",
     up => sub {

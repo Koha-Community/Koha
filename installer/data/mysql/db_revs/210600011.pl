@@ -1,6 +1,6 @@
 use Modern::Perl;
 
-{
+return {
     bug_number => "28567",
     description => "Set to NULL empty branches fields",
     up => sub {

@@ -1,6 +1,6 @@
 use Modern::Perl;
 
-{
+return {
     bug_number => "26205",
     description => "Add new system preference NewsLog to log news changes",
     up => sub {

@@ -1,6 +1,6 @@
 use Modern::Perl;
 
-{
+return {
     bug_number => "15788",
     description => "Split edit_borrowers permission",
     up => sub {

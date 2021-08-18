@@ -1,6 +1,6 @@
 use Modern::Perl;
 
-{
+return {
     bug_number => "24387",
     description => "Rename opac_news with additional_contents",
     up => sub {

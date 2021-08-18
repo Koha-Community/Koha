@@ -1,6 +1,6 @@
 use Modern::Perl;
 
-{
+return {
     bug_number => "28490",
     description => "Bring back accidentally deleted relationship columns",
     up => sub {

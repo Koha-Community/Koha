@@ -1,6 +1,6 @@
 use Modern::Perl;
 
-{
+return {
     bug_number => "28489",
     description => "Modify sessions.a_session from longtext to longblob",
     up => sub {

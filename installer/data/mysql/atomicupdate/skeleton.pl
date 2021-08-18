@@ -1,6 +1,6 @@
 use Modern::Perl;
 
-{
+return {
     bug_number => "BUG_NUMBER",
     description => "A single line description",
     up => sub {

@@ -1,6 +1,6 @@
 use Modern::Perl;
 
-{
+return {
     bug_number => "22435",
     description => "Update existing offsets",
     up => sub {

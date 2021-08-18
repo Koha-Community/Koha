@@ -1,6 +1,6 @@
 use Modern::Perl;
 
-{
+return {
     bug_number => "11879",
     description => "Add a new field to patron record: main contact method",
     up => sub {

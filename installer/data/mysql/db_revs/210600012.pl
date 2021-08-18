@@ -1,6 +1,6 @@
 use Modern::Perl;
 
-{
+return {
     bug_number => "15067",
     description => "Add missing languages",
     up => sub {

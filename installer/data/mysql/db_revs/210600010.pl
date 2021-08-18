@@ -1,6 +1,6 @@
 use Modern::Perl;
 
-{
+return {
     bug_number => "20472",
     description => "Add new system preference ArticleRequestsSupportedFormats",
     up => sub {
