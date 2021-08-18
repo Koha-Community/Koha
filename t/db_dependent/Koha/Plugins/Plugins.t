@@ -25,7 +25,7 @@ use File::Temp qw( tempdir tempfile );
 use FindBin qw($Bin);
 use Module::Load::Conditional qw(can_load);
 use Test::MockModule;
-use Test::More tests => 53;
+use Test::More tests => 55;
 
 use C4::Context;
 use Koha::Database;
@@ -263,11 +263,12 @@ for my $pass ( 1 .. 2 ) {
     ok( -f $plugins_dir . "/Koha/Plugin/Com/ByWaterSolutions/KitchenSink.pm", "KitchenSink plugin installed successfully" );
     $INC{$pm_path} = $full_pm_path; # FIXME I do not really know why, but if this is moved before the $plugin constructor, it will fail with Can't locate object method "new" via package "Koha::Plugin::Com::ByWaterSolutions::KitchenSink"
     Koha::Plugins->new( { enable_plugins => 1 } )->InstallPlugins();
+    ok( -f $full_pm_path, "Koha::Plugins::Handler::delete works correctly (pass $pass)" );
     Koha::Plugins::Handler->delete({ class => "Koha::Plugin::Com::ByWaterSolutions::KitchenSink", enable_plugins => 1 });
     my $sth = C4::Context->dbh->table_info( undef, undef, $table, 'TABLE' );
     my $info = $sth->fetchall_arrayref;
     is( @$info, 0, "Table $table does no longer exist" );
-    ok( !( -f $full_pm_path ), "Koha::Plugins::Handler::delete works correctly." );
+    ok( !( -f $full_pm_path ), "Koha::Plugins::Handler::delete works correctly (pass $pass)" );
 }
 
 subtest 'output and output_html tests' => sub {
