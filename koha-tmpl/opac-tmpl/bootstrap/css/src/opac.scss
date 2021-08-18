@@ -2486,6 +2486,39 @@ nav {
         display: block;
     }
 
+    div.rows span.label {
+        float: inherit;
+        width: inherit;
+        text-align: inherit;
+        margin-right: 0;
+    }
+
+    #ill-supplier-metadata {
+        display: flex;
+        flex-flow: column nowrap;
+        flex: 1 1 auto;
+    }
+
+    div[class^='requestattr-'] {
+        width: 100%;
+        display: flex;
+        flex-flow: row nowrap;
+        padding: 5px;
+        &:nth-of-type(even) {
+            background-color: #f2f2f2;
+        }
+        &:nth-of-type(odd) {
+            background-color: #ffffff;
+        }
+    }
+
+    #ill-supplier-metadata > div > span {
+        display: flex;
+        flex-flow: row nowrap;
+        flex-grow: 1;
+        flex-basis: 0;
+    }
+
 }
 
 .ill_availability_sourcename {

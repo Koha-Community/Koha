@@ -220,12 +220,12 @@
                                         </li>
                                     </ol>
                                 </fieldset>
-                                <div class="rows">
+                                <div id="ill-supplier-metadata" class="rows">
                                     <legend id="backend_legend">Details from [% request.backend | html %]</legend>
                                     [% FOREACH meta IN request.metadata %]
-                                        <div class="requestattr-[% meta.key | html %]">
+                                        <div class="requestattr-[% meta.key | replace(' ', '_') | html %]">
                                             <span class="label">[% meta.key | html %]:</span>
-                                            [% IF meta.value %][% meta.value | html %][% ELSE %]<span>N/A</span>[% END %]
+                                            <span class="value">[% IF meta.value %][% meta.value | html %][% ELSE %]N/A[% END %]</span>
                                         </div>
                                     [% END %]
                                 </div>
