@@ -8,7 +8,7 @@
 [% USE TablesSettings %]
 [% PROCESS 'i18n.inc' %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Course reserves for [% course.course_name | html %] &rsaquo; [% IF ( LibraryNameTitle ) %][% LibraryNameTitle | html %][% ELSE %]Koha online[% END %] catalog</title>
+<title>Course reserves for [% course.course_name | html %][%- IF course.section -%] - [% course.section | html %][%- END -%] &rsaquo; [% IF ( LibraryNameTitle ) %][% LibraryNameTitle | html %][% ELSE %]Koha online[% END %] catalog</title>
 [% INCLUDE 'doc-head-close.inc' %]
 [% BLOCK cssinclude %]
     [% Asset.css("css/datatables.css") | $raw %]
@@ -24,7 +24,7 @@
             <a href="/cgi-bin/koha/opac-course-reserves.pl">Course reserves</a>
         [% END %]
         [% WRAPPER breadcrumb_item bc_active= 1 %]
-            <span>Course reserves for &nbsp;<em>[% course.course_name | html %]</em></span>
+            <span>Course reserves for &nbsp;<em>[% course.course_name | html %][%- IF course.section -%] - [% course.section | html %][%- END -%]</em></span>
         [% END %]
     [% END #/ WRAPPER breadcrumbs %]
 
@@ -33,7 +33,7 @@
             <div class="col">
                 <div id="course_reserves" class="maincontent">
 
-                    <h1>Course reserves for <em>[% course.course_name | html %]</em></h1>
+                    <h1>Course reserves for <em>[% course.course_name | html %][%- IF course.section -%] - [% course.section | html %][%- END -%]</em></h1>
                     <div class="rows">
                         <ol>
                             [% IF ( course.term ) %]<li><span class="label">[% tp('Semester', 'Term:') | html %]</span> [% AuthorisedValues.GetByCode( 'TERM', course.term, 1 ) | html %]</li>[% END %]

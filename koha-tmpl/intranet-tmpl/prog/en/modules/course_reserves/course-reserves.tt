@@ -64,7 +64,7 @@
                             <tbody>
                                 [% FOREACH c IN courses %]
                                     <tr>
-                                        <td><a href="course-details.pl?course_id=[% c.course_id | uri %]">[% c.course_name | html %]</a></td>
+                                        <td><a href="course-details.pl?course_id=[% c.course_id | uri %]">[% c.course_name | html %][%- IF c.section -%] - [% c.section | html %][%- END -%]</a></td>
                                         <td>[% AuthorisedValues.GetByCode( 'DEPARTMENT', c.department ) | html %]</td>
                                         <td>[% c.course_number | html %]</td>
                                         <td>[% c.section | html %]</td>

@@ -5,7 +5,7 @@
 [% INCLUDE 'doc-head-open.inc' %]
 <title>[% FILTER collapse %]
     [% IF ( course_name ) %]
-        [% tx("Edit {course_name}", { course_name = course_name }) | html %]
+        [% tx("Edit {course_name}", { course_name = course_name }) | html %][% IF course.section %] - [% course.section | html %][% END %]
     [% ELSE %]
         [% t("New course") | html %]
     [% END %] &rsaquo;
@@ -36,7 +36,7 @@
         [% END %]
         [% WRAPPER breadcrumb_item bc_active= 1 %]
             [% IF course_name %]
-                <span>Edit [% course_name | html | $HtmlTags tag="em" %]</span>
+                <span>Edit [% course_name | html | $HtmlTags tag="em" %][%- IF course.section -%] - [% course.section | html | $HtmlTags tag="em" %][%- END -%]</span>
             [% ELSE %]
                 <span>New course</span>
             [% END %]

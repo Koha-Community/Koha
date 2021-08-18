@@ -29,7 +29,7 @@
             <a href="/cgi-bin/koha/course_reserves/course-reserves.pl">Course reserves</a>
         [% END %]
         [% WRAPPER breadcrumb_item %]
-            <a href="/cgi-bin/koha/course_reserves/course-details.pl?course_id=[% course.course_id | uri %]">[% course.course_name | html %]</a>
+            <a href="/cgi-bin/koha/course_reserves/course-details.pl?course_id=[% course.course_id | uri %]">[% course.course_name | html %][%- IF course.section -%] - [% course.section | html %][%- END -%]</a>
         [% END %]
         [% WRAPPER breadcrumb_item bc_active= 1 %]
             [% IF is_edit || course_reserve %]
@@ -69,9 +69,9 @@
 
             <fieldset class="rows">
                 [% IF is_edit || course_reserve %]
-                    <legend>Edit <em>[% biblio.title | html %]</em> in <em>[% course.course_name | html %]</em></legend>
+                    <legend>Edit <em>[% biblio.title | html %]</em> in <em>[% course.course_name | html %][%- IF course.section -%] - [% course.section | html %][%- END -%]</em></legend>
                 [% ELSE %]
-                    <legend>Add <em>[% biblio.title | html %]</em> to <em>[% course.course_name | html %]</em></legend>
+                    <legend>Add <em>[% biblio.title | html %]</em> to <em>[% course.course_name | html %][%- IF course.section -%] - [% course.section | html %][%- END -%]</em></legend>
                 [% END %]
                 <ol>
                     <li>
