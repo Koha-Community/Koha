@@ -62,6 +62,8 @@
         var h4_result;
 
         function loadXmlValues(){
+            $("#result").val( fix_field_008( $("#result").val() ) ); // fix field before loading elements
+
             [% IF ( errorXml ) %]
                 alert("[% errorXml | html %]");
             [% ELSE %]
@@ -94,6 +96,20 @@
             return false;
         }
 
+        function fix_field_008( myfield ) {
+            // If field length < 40, append from default008 starting at last complete data element
+
+            var j, position = [ 6, 7, 11, 15, 18, 35, 38, 39, 40 ], defaultvalue = '[% default008 | $raw %]';
+            for( j=0; j<position.length; j++ ) {
+                if( myfield.length < position[j] ) break;
+            }
+            if( j == 0 ) {
+                return defaultvalue;
+            } else if( j < position.length ) {
+                return myfield.substring( 0, position[j-1] ) + defaultvalue.substring( position[j-1] );
+            }
+            return myfield;
+        }
     </script>
 [% END %]
 
