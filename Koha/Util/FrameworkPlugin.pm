@@ -22,12 +22,14 @@ package Koha::Util::FrameworkPlugin;
 
 use Modern::Perl;
 
+use constant DEFAULT_008_POS_6_39 => 'b        |||||||| |||| 00| 0 eng d';
+
 our ( @ISA, @EXPORT, @EXPORT_OK );
 BEGIN {
     require Exporter;
     @ISA = qw( Exporter );
     @EXPORT = qw( );
-    @EXPORT_OK = qw( wrapper date_entered );
+    @EXPORT_OK = qw( wrapper date_entered biblio_008 );
 }
 
 =head1 NAME
@@ -64,6 +66,24 @@ sub date_entered {
     $year +=1900;
     $mon +=1;
     return substr($year,2,2).sprintf ("%0.2d", $mon).sprintf ("%0.2d",$mday);
+}
+
+=head2 biblio_008
+
+    Returns a default value for MARC21 field 008 for biblio records.
+    Depends on prefs DefaultCountryField008, DefaultLanguageField008.
+
+=cut
+
+sub biblio_008 {
+    my $result = date_entered() . DEFAULT_008_POS_6_39;
+    if( C4::Context->preference('DefaultCountryField008') ) {
+        substr( $result, 15, 3 ) = pack( "A3", C4::Context->preference('DefaultCountryField008') );
+    }
+    if( C4::Context->preference('DefaultLanguageField008') ) {
+        substr( $result, 35, 3 ) = pack( "A3", C4::Context->preference('DefaultLanguageField008' ) );
+    }
+    return $result;
 }
 
 1;
