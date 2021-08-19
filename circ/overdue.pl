@@ -27,6 +27,7 @@ use C4::Auth;
 use C4::Debug;
 use Text::CSV_XS;
 use Koha::DateUtils;
+use Koha::Patron::Attribute::Types;
 use DateTime;
 use DateTime::Format::MySQL;
 
@@ -120,13 +121,23 @@ my $have_pattr_filter_data = keys(%cgi_attrcode_to_attrvalues) > 0;
 
 my @patron_attr_filter_loop;   # array of [ domid cgivalue ismany isclone ordinal code description repeatable authorised_value_category ]
 
-my $sth = $dbh->prepare('SELECT code,description,repeatable,authorised_value_category
-    FROM borrower_attribute_types
-    WHERE staff_searchable <> 0
-    ORDER BY description');
-$sth->execute();
+my $patron_attrs = Koha::Patron::Attribute::Types->search_with_library_limits(
+    {
+        staff_searchable => 1,
+    },
+    {},
+    C4::Context->userenv->{'branch'}
+);
+
 my $ordinal = 0;
-while (my $row = $sth->fetchrow_hashref) {
+while (my $attr = $patron_attrs->next ) {
+    warn $attr->code;
+    my $row = {
+        code => $attr->code,
+        description => $attr->description,
+        repeatable => $attr->repeatable,
+        authorised_value_category => $attr->authorised_value_category,
+    };
     $row->{ordinal} = $ordinal;
     my $code = $row->{code};
     my $cgivalues = $cgi_attrcode_to_attrvalues{$code} || [ '' ];
