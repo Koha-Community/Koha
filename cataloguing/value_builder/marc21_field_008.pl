@@ -28,29 +28,20 @@ use C4::Search;
 use C4::Output;
 
 use XML::LibXML;
-use Koha::Util::FrameworkPlugin qw|date_entered|;
+use Koha::Util::FrameworkPlugin qw( biblio_008 );
 
 my $builder = sub {
     my ( $params ) = @_;
 
-    my $lang = C4::Context->preference('DefaultLanguageField008' );
-    $lang = "eng" unless $lang;
-    $lang = pack("A3", $lang);
-    my $country = C4::Context->preference('DefaultCountryField008');
-    $country = "|||" unless $country;
-    $country = pack("A3", $country);
-
     my $function_name = $params->{id};
-    my $dateentered = date_entered();
+    my $default008 = biblio_008();
     my $res           = "
 <script>
 
 function Focus$function_name(event) {
-    if ( document.getElementById(event.data.id).value ) {
-	}
-	else {
-        document.getElementById(event.data.id).value='$dateentered' + 'b        $country||||| |||| 00| 0 $lang d';
-	}
+    if( !document.getElementById(event.data.id).value ) {
+        document.getElementById(event.data.id).value='$default008';
+    }
     return 1;
 }
 
@@ -75,14 +66,9 @@ function Click$function_name(event) {
 my $launcher = sub {
     my ( $params ) = @_;
     my $input = $params->{cgi};
-    my $lang = C4::Context->preference('DefaultLanguageField008' );
-    $lang = "eng" unless $lang;
-    $lang = pack("A3", $lang);
-    my $country = C4::Context->preference('DefaultCountryField008') // "xxu";
-    $country = pack("A3", $country);
 
     my $index   = $input->param('index');
-    my $result  = $input->param('result');
+    my $result  = $input->param('result') || biblio_008();
     my $leader  = $input->param('leader');
 
     my $material_configuration;
@@ -143,8 +129,6 @@ my $launcher = sub {
         }
     );
 
-    my $dateentered = date_entered();
-    $result = "$dateentered" . "b        $country||||| |||| 00| 0 $lang d" unless $result;
     my $errorXml = '';
     # Check if the xml, xsd exists and is validated
     my $dir = C4::Context->config('intrahtdocs') . '/prog/' . $template->{lang} . '/data/';
