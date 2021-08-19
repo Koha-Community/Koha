@@ -69,14 +69,14 @@
                 [% END %]
                 [% IF ( loo.checked ) %]
                     [% IF disable_superlibrarian_privs && loo.bit == 0 %]
-                        <input type="checkbox" disabled="disabled" data-bit="[% loo.bit | html %]" id="flag-[% loo.bit | html %]_disabled" class="parent flag superlib" name="flag" value="[% loo.flag | html %]" checked="checked" title="The system preference ProtectSuperlibrarianPrivileges is enabled" />
-                        <input type="hidden" id="flag-[% loo.bit | html %]" name="flag" value="[% loo.flag | html %]" >
+                        <input type="checkbox" disabled="disabled" data-bit="0" id="flag-0" class="parent flag superlib" name="flag" value="[% loo.flag | html %]" checked="checked" title="The system preference ProtectSuperlibrarianPrivileges is enabled" />
+                        <input type="hidden" id="flag-0" name="flag" value="[% loo.flag | html %]" >
                     [% ELSE %]
                           <input type="checkbox" data-bit="[% loo.bit | html %]" id="flag-[% loo.bit | html %]" class="parent flag" name="flag" value="[% loo.flag | html %]" checked="checked" />
                     [% END %]
                 [% ELSE %]
                     [% IF disable_superlibrarian_privs && loo.bit == 0 %]
-                        <input type="checkbox" disabled="disabled" class="flag parent" data-bit="[% loo.bit | html %]" id="flag-[% loo.bit | html %]_disabled" name="flag" value="[% loo.flag | html %]" title="The system preference ProtectSuperlibrarianPrivileges is enabled" />
+                        <input type="checkbox" disabled="disabled" class="flag parent" data-bit="0" id="flag-0" name="flag" value="[% loo.flag | html %]" title="The system preference ProtectSuperlibrarianPrivileges is enabled" />
                     [% ELSE %]
                         <input type="checkbox" class="flag parent" data-bit="[% loo.bit | html %]" id="flag-[% loo.bit | html %]" name="flag" value="[% loo.flag | html %]" />
                     [% END %]
@@ -131,10 +131,16 @@
                 $(".flag").attr("disabled", false);
                 $(".flag").prop("checked", true);
                 $("#flag-0").prop("checked", false);
+                [% IF disable_superlibrarian_privs %]
+                    $("#flag-0").prop("disabled", true);
+                [% END %]
                 return false;
             });
             $("#UncheckAllFlags").on("click",function(){
                 $(".flag").attr("disabled", false);
+                [% IF disable_superlibrarian_privs %]
+                    $("#flag-0").prop("disabled", true);
+                [% END %]
                 $(".flag").prop("checked", false);
                 return false;
             });
