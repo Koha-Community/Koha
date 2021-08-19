@@ -67,8 +67,9 @@ my $launcher = sub {
     my ( $params ) = @_;
     my $input = $params->{cgi};
 
+    my $default008 = biblio_008();
     my $index   = $input->param('index');
-    my $result  = $input->param('result') || biblio_008();
+    my $result  = $input->param('result') || $default008;
     my $leader  = $input->param('leader');
 
     my $material_configuration;
@@ -149,6 +150,7 @@ my $launcher = sub {
             result => $result,
             errorXml => $errorXml,
             material_configuration => $material_configuration,
+            default008 => $default008,
     );
     output_html_with_http_headers $input, $cookie, $template->output;
 };
