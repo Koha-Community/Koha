@@ -506,6 +506,7 @@ if ($session->param('busc')) {
     for (my $j = 0; $j < @arrBiblios; $j++) {
         next unless ($arrBiblios[$j]);
         $dataBiblioPaging = Koha::Biblios->find( $arrBiblios[$j] ) if ($arrBiblios[$j] != $biblionumber);
+        next unless $dataBiblioPaging;
         push @listResults, {index => $j + 1 + $offset, biblionumber => $arrBiblios[$j], title => ($arrBiblios[$j] == $biblionumber)?'':$dataBiblioPaging->title, author => ($arrBiblios[$j] != $biblionumber && $dataBiblioPaging->author)?$dataBiblioPaging->author:'', url => ($arrBiblios[$j] == $biblionumber)?'':'opac-detail.pl?biblionumber=' . $arrBiblios[$j]};
     }
     $template->param('listResults' => \@listResults) if (@listResults);
