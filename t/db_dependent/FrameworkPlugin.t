@@ -4,14 +4,16 @@ use CGI;
 use File::Temp qw/tempfile/;
 use Getopt::Long;
 use Test::MockModule;
-use Test::More tests => 5;
+use Test::More tests => 6;
 
+use t::lib::Mocks;
 use t::lib::TestBuilder;
 
 use C4::Auth;
 use C4::Output;
 use Koha::Database;
 use Koha::FrameworkPlugin;
+use Koha::Util::FrameworkPlugin qw( biblio_008 );
 
 our @includes;
 GetOptions( 'include=s{,}' => \@includes ); #not used by default !
@@ -39,6 +41,23 @@ subtest 'Test04 -- tests with new style plugin' => sub {
 subtest 'Test05 -- tests with build and launch for default plugins' => sub {
     test05( \@includes );
 };
+
+subtest 'Test06 -- test biblio_008' => sub {
+    plan tests => 5;
+    t::lib::Mocks::mock_preference('DefaultCountryField008', 'nl' ); # deliberately shorter than 3 pos
+    t::lib::Mocks::mock_preference('DefaultLanguageField008', 'dutch' ); # deliberately too long
+    my $field = biblio_008();
+    is( length($field), 40, 'Check length' );
+    is( substr($field, 15, 3), 'nl ', 'Check country right padded' );
+    is( substr($field, 35, 3), 'dut', 'Check language' );
+    t::lib::Mocks::mock_preference('DefaultCountryField008', '' );
+    $field = biblio_008();
+    is( substr($field, 15, 3), '|||', 'Check country fallback for empty string' );
+    t::lib::Mocks::mock_preference('DefaultCountryField008', undef );
+    $field = biblio_008();
+    is( substr($field, 15, 3), '|||', 'Check country fallback for undefined' );
+};
+
 $schema->storage->txn_rollback;
 
 sub test01 {
