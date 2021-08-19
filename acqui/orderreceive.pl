@@ -167,7 +167,7 @@ $template->param(
     gst_values            => \@gst_values,
 );
 
-my $suggestion = GetSuggestionInfoFromBiblionumber($order->{biblionumber});
+my $suggestion = GetSuggestionInfoFromBiblionumber($order->biblionumber);
 if ( $suggestion ) {
     $template->param( suggestion => $suggestion );
 }
@@ -191,7 +191,7 @@ foreach my $period (@$periods) {
           {
             b_id  => $r->{budget_id},
             b_txt => $r->{budget_name},
-            b_sel => ( $r->{budget_id} == $order->{budget_id} ) ? 1 : 0,
+            b_sel => ( $r->{budget_id} == $order->budget_id ) ? 1 : 0,
           };
     }
 
