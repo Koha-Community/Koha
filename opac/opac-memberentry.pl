@@ -34,7 +34,7 @@ use Koha::Patron::Consent;
 use Koha::Patron::Modification;
 use Koha::Patron::Modifications;
 use C4::Scrubber;
-use Email::Valid;
+use Email::Address;
 use Koha::DateUtils qw( dt_from_string output_pref );
 use Koha::Libraries;
 use Koha::Patron::Attribute::Types;
@@ -439,7 +439,7 @@ sub CheckForInvalidFields {
     my $borrower = shift;
     my @invalidFields;
     if ($borrower->{'email'}) {
-        unless ( Email::Valid->address($borrower->{'email'}) ) {
+        unless ( $borrower->{'email'} =~ m/$Email::Address::mailbox/ ) {
             push(@invalidFields, "email");
         } elsif ( C4::Context->preference("PatronSelfRegistrationEmailMustBeUnique") ) {
             my $patrons_with_same_email = Koha::Patrons->search( # FIXME Should be search_limited?
@@ -465,10 +465,10 @@ sub CheckForInvalidFields {
         delete $borrower->{'repeat_email'};
     }
     if ($borrower->{'emailpro'}) {
-        push(@invalidFields, "emailpro") if (!Email::Valid->address($borrower->{'emailpro'}));
+        push(@invalidFields, "emailpro") if ($borrower->{'emailpro'} !~ m/$Email::Address::mailbox/);
     }
     if ($borrower->{'B_email'}) {
-        push(@invalidFields, "B_email") if (!Email::Valid->address($borrower->{'B_email'}));
+        push(@invalidFields, "B_email") if ($borrower->{'B_email'} !~ m/$Email::Address::mailbox/);
     }
     if ( defined $borrower->{'password'}
         and $borrower->{'password'} ne $borrower->{'password2'} )

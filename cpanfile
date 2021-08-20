@@ -39,7 +39,6 @@ requires 'Email::Date', '1.103';
 requires 'Email::MessageID', '1.406';
 requires 'Email::Sender', '1.300030';
 requires 'Email::Stuffer', '0.014';
-requires 'Email::Valid', '0.190';
 requires 'Exception::Class', '1.38';
 requires 'File::Slurp', '9999.13';
 requires 'Font::TTF', '0.45';
