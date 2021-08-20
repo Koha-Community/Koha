@@ -753,6 +753,7 @@ CREATE TABLE `article_requests` (
   `notes` mediumtext COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `format` enum('PHOTOCOPY', 'SCAN') NOT NULL DEFAULT 'PHOTOCOPY',
   `urls` MEDIUMTEXT,
+  `cancellation_reason` varchar(80) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'optional authorised value AR_CANCELLATION',
   `created_on` timestamp NULL DEFAULT NULL COMMENT 'Be careful with two timestamps in one table not allowing NULL',
   `updated_on` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   PRIMARY KEY (`id`),

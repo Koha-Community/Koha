@@ -18,7 +18,8 @@ INSERT IGNORE INTO authorised_value_categories( category_name, is_system )
     ('PAYMENT_TYPE', 0),
     ('PA_CLASS', 0),
     ('HOLD_CANCELLATION', 0),
-    ('ROADTYPE', 0);
+    ('ROADTYPE', 0),
+    ('AR_CANCELLATION', 0);
 
 INSERT IGNORE INTO authorised_value_categories( category_name, is_system )
     VALUES
