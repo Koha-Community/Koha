@@ -24,6 +24,7 @@ use Modern::Perl;
 
 use CGI qw ( -utf8 );
 use DateTime::TimeZone;
+use Email::Address;
 use File::Spec;
 use File::Slurp;
 use List::MoreUtils qw/ any /;
@@ -199,7 +200,7 @@ my $warnPrefAnonymousPatronAnonSuggestions_PatronDoesNotExist = ( $AnonymousPatr
 
 my $warnPrefAnonymousPatronOPACPrivacy_PatronDoesNotExist = ( not $anonymous_patron and Koha::Patrons->search({ privacy => 2 })->count );
 
-my $warnPrefKohaAdminEmailAddress = not Email::Valid->address(C4::Context->preference('KohaAdminEmailAddress'));
+my $warnPrefKohaAdminEmailAddress = C4::Context->preference('KohaAdminEmailAddress') !~ m/$Email::Address::mailbox/;
 
 my $c = Koha::Items->filter_by_visible_in_opac->count;
 my @warnings = C4::Context->dbh->selectrow_array('SHOW WARNINGS');
