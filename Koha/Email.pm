@@ -20,7 +20,7 @@ package Koha::Email;
 
 use Modern::Perl;
 
-use Email::Valid;
+use Email::Address;
 use Email::MessageID;
 use List::Util qw(pairs);
 
@@ -78,7 +78,7 @@ sub create {
     my $args = {};
     $args->{from} = $params->{from} || C4::Context->preference('KohaAdminEmailAddress');
     Koha::Exceptions::BadParameter->throw("Invalid 'from' parameter: ".$args->{from})
-        unless Email::Valid->address( -address => $args->{from}, -fqdn => 0 ); # from is mandatory
+        unless $args->{from} =~ m/$Email::Address::mailbox/; # from is mandatory
 
     $args->{subject} = $params->{subject} // '';
 
@@ -90,7 +90,7 @@ sub create {
     }
 
     Koha::Exceptions::BadParameter->throw("Invalid 'to' parameter: ".$args->{to})
-        unless Email::Valid->address( -address => $args->{to}, -fqdn => 0 ); # to is mandatory
+        unless $args->{to} =~ m/$Email::Address::mailbox/; # to is mandatory
 
     my $addresses = {};
     $addresses->{reply_to} = $params->{reply_to};
@@ -111,10 +111,8 @@ sub create {
     foreach my $address ( keys %{$addresses} ) {
         Koha::Exceptions::BadParameter->throw(
             "Invalid '$address' parameter: " . $addresses->{$address} )
-          if $addresses->{$address} and !Email::Valid->address(
-            -address => $addresses->{$address},
-            -fqdn    => 0
-          );
+          if $addresses->{$address}
+            and $addresses->{$address} !~ m/$Email::Address::mailbox/;
     }
 
     $args->{cc} = $addresses->{cc}
