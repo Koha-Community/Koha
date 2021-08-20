@@ -25,7 +25,7 @@ use constant SHELVES_URL =>
   '/cgi-bin/koha/opac-shelves.pl?display=privateshelves&viewshelf=';
 
 use CGI qw ( -utf8 );
-use Email::Valid;
+use Email::Address;
 
 use C4::Auth;
 use C4::Context;
@@ -196,7 +196,7 @@ sub process_addrlist {
     foreach my $a (@temp) {
         $a =~ s/^\s+//;
         $a =~ s/\s+$//;
-        if ( IsEmailAddress($a) ) {
+        if ( $a =~ m/$Email::Address::mailbox/ ) {
             push @appr_addr, $a;
         }
         else {
@@ -295,12 +295,6 @@ sub load_template_vars {
         approvedaddress => $appr,
         failaddress     => $fail,
     );
-}
-
-sub IsEmailAddress {
-
-    #TODO candidate for a module?
-    return Email::Valid->address( $_[0] ) ? 1 : 0;
 }
 
 sub randomlist {
