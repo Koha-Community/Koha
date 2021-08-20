@@ -24414,6 +24414,14 @@ if( CheckVersion( $DBversion ) ) {
     NewVersion( $DBversion, 28813, "Update delivery_note to failure_code in message_queue");
 }
 
+$DBversion = '21.05.02.003';
+if( CheckVersion( $DBversion ) ) {
+    $dbh->do(q{update systempreferences set value=1 where variable in ('AcquisitionLog', 'NewsLog', 'NoticesLog') and value='on'});
+    $dbh->do(q{update systempreferences set value=0 where variable in ('AcquisitionLog', 'NewsLog', 'NoticesLog') and value='off'});
+
+    NewVersion( $DBversion, 28872, "Update syspref values from on and off to 1 and 0");
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 my $update_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/atomicupdate/';
