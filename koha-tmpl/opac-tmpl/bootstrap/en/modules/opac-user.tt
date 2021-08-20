@@ -5,6 +5,7 @@
 [% USE Branches %]
 [% USE ItemTypes %]
 [% USE Price %]
+[% USE AuthorisedValues %]
 [% SET AdlibrisEnabled = Koha.Preference('AdlibrisCoversEnabled') %]
 [% SET AdlibrisURL = Koha.Preference('AdlibrisCoversURL') %]
 
@@ -766,7 +767,7 @@
                             <div id="opac-user-article-requests">
                                 [% IF logged_in_user.article_requests_current.count %]
                                     <table id="article-requests-table" class="table table-bordered table-striped">
-                                        <caption>Article requests <span class="count">([% logged_in_user.article_requests_current.count | html %] total)</span></caption>
+                                        <caption>Article requests <span class="count"></span></caption>
                                         <thead>
                                             <tr>
                                                 <th class="anti-the article-request-record-title">Record title</th>
@@ -854,12 +855,7 @@
                                                 </td>
 
                                                 <td class="article-request-cancel">
-                                                    <span class="tdlabel">Cancel:</span>
-                                                    <form action="/cgi-bin/koha/opac-article-request-cancel.pl" id="delete_article_request_[% ar.id | html %]">
-                                                        <legend class="sr-only">Cancel article request</legend>
-                                                        <input type="hidden" name="id" value="[% ar.id | html %]" />
-                                                        <button data-title="[% ar.biblio.title | html %] [% ar.item.enumchron | html %]" data-article-request_id="[% ar.id | html %]" type="submit" class="btn btn-sm btn-danger btn-delete-article-request"><i class="fa fa-remove" aria-hidden="true"></i> Cancel</button>
-                                                    </form>
+                                                    <button data-title="[% ar.biblio.title | html %] [% ar.item.enumchron | html %]" data-article-request_id="[% ar.id | html %]" class="btn btn-sm btn-danger btn-delete-article-request"><i class="fa fa-remove" aria-hidden="true"></i> Cancel</button>
                                                 </td>
                                             </tr>
                                         [% END %]
@@ -896,6 +892,9 @@
     [% INCLUDE 'calendar.inc' %]
     [% INCLUDE 'datatables.inc' %]
     <script>
+        var AR_CAPTION_COUNT = _("(%s total)");
+
+
         function tableInit( tableId ){
             if( tableId == "checkoutst" ){
                 $(".dt-buttons").append("<button type=\"button\" class=\"dt-button buttons-ical\" id=\"buttons-ics\">iCal</button> ");
@@ -905,6 +904,7 @@
             }
         }
         $(document).ready(function(){
+            $('#opac-user-article-requests caption .count').html(AR_CAPTION_COUNT.format('[% logged_in_user.article_requests_current.count | html %]'));
             $('#opac-user-views').tabs();
             $(".modal-nojs").addClass("modal").addClass("hide").removeClass("modal-nojs");
             $(".suspend-until").prop("readonly",1);
@@ -914,6 +914,7 @@
                 var hold_title = $(this).data("title");
                 var reserve_id = $(this).data("reserve_id");
                 confirmModal( hold_title, _("Are you sure you want to cancel this hold?"), _("Yes, cancel hold"), _("No, do not cancel hold"), function( result ){
+                        $("#bootstrap-confirm-box-modal").remove()
                         if( result ){
                             $("#delete_hold_" + reserve_id ).submit();
                         }
@@ -925,12 +926,32 @@
                 e.preventDefault();
                 var article_request = $(this).data("title");
                 var article_request_id = $(this).data("article-request_id");
-                confirmModal( article_request, _("Are you sure you want to cancel this article request?"), _("Yes, cancel article request"), _("No, do not cancel article request"), function( result ){
+                (function(row){
+                    var doCancel = function( result ){
+                        $("#bootstrap-confirm-box-modal").remove();
                         if( result ){
-                            $("#delete_article_request_" + article_request_id ).submit();
+                            $.ajax({
+                                type: "DELETE",
+                                url: '/api/v1/public/patrons/'+borrowernumber+'/article_requests/'+article_request_id,
+                                success: function( data ) {
+                                    row.parents('tr').hide({
+                                        duration: 'slow',
+                                        complete: function() {
+                                            var ar_tab = $('a[href="#opac-user-article-requests"');
+                                            var ar_table = $('#article-requests-table');
+                                            var ar_length = $('tbody tr:visible', ar_table).length;
+                                            var ar_count = $('caption .count', ar_table);
+
+                                            ar_tab.html(ar_tab.html().replace(/\(\d+\)/, '('+ar_length+')'));
+                                            ar_count.html(AR_CAPTION_COUNT.format(ar_length));
+                                        }
+                                    });
+                                }
+                            });
                         }
-                    }
-                );
+                    };
+                    confirmModal( article_request, _("Are you sure you want to cancel this article request?"), _("Yes, cancel article request"), _("No, do not cancel article request"), doCancel);
+                })($(this))
             });
 
             $("#suspend_all_submit").on("click", function(e){
@@ -938,6 +959,7 @@
                 var title = _("Are you sure you want to suspend all holds?");
                 var body = _("All holds will be suspended.");
                 confirmModal( body, title, _("Yes, suspend all holds"), "", function( result ){
+                        $("#bootstrap-confirm-box-modal").remove()
                         if( result ){
                             $("#suspend_all_holds").submit();
                         }
@@ -950,6 +972,7 @@
                 var title = _("Are you sure you want to resume all suspended holds?");
                 var body = _("All holds will resume.");
                 confirmModal( body, title, _("Yes, resume all holds"), _("No, do not resume holds"), function( result ){
+                        $("#bootstrap-confirm-box-modal").remove()
                         if( result ){
                             $("#resume_all_holds").submit();
                         }

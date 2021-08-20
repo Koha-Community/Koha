@@ -122,9 +122,10 @@ Marks the article as cancelled. Send a notification if appropriate.
 =cut
 
 sub cancel {
-    my ( $self, $notes ) = @_;
+    my ( $self, $cancellation_reason, $notes ) = @_;
 
     $self->status(Koha::ArticleRequest::Status::Canceled);
+    $self->cancellation_reason($cancellation_reason) if $cancellation_reason;
     $self->notes($notes) if $notes;
     $self->store();
     $self->notify();
@@ -219,6 +220,16 @@ sub notify {
     my ($self) = @_;
 
     my $status = $self->status;
+    my $reason = $self->notes;
+    if ( !defined $reason && $self->cancellation_reason ) {
+        my $av = Koha::AuthorisedValues->search(
+            {
+                category            => 'AR_CANCELLATION',
+                authorised_value    => $self->cancellation_reason
+            }
+        )->next;
+        $reason = $av->lib_opac ? $av->lib_opac : $av->lib if $av;
+    }
 
     require C4::Letters;
     if (
@@ -235,6 +246,9 @@ sub notify {
                 items            => $self->itemnumber,
                 branches         => $self->branchcode,
             },
+            substitute => {
+                reason => $reason,
+            },
         )
       )
     {
@@ -244,7 +258,7 @@ sub notify {
                 borrowernumber         => $self->borrowernumber,
                 message_transport_type => 'email',
             }
-        ) or warn "can't enqueue letter ". $letter->{code};
+        ) or warn "can't enqueue letter " . $letter->{code};
     }
 }
 

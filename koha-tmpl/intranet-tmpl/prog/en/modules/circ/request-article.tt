@@ -3,6 +3,7 @@
 [% USE KohaDates %]
 [% USE Branches %]
 [% USE ItemTypes %]
+[% USE AuthorisedValues %]
 [% SET footerjs = 1 %]
 [% SET article_requests_view = 1 %]
 [% SET biblionumber = biblio.biblionumber %]
@@ -10,6 +11,45 @@
 <title>Request article &rsaquo; Circulation &rsaquo; Koha</title>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
+
+[% BLOCK cancel_modal %]
+    <div id="cancelModal" class="modal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="closebtn" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h3>Confirm deletion</h3>
+                </div>
+
+                <div class="modal-body">
+                    <p>Are you sure you want to cancel this article request?</p>
+
+                    <fieldset class="action">
+                        [% SET ar_cancellation = AuthorisedValues.GetAuthValueDropbox('AR_CANCELLATION') %]
+                        [% IF ar_cancellation %]
+                            <label for="cancellation-reason" class="col-sm-4">Cancellation reason: </label>
+                            <select class="cancellation-reason col-sm-8" name="cancellation-reason" id="modal-cancellation-reason">
+                                <option value="" selected>Other reasons</option>
+                                [% FOREACH reason IN ar_cancellation %]
+                                    <option value="[% reason.authorised_value | html %]">[% reason.lib | html %]</option>
+                                [% END %]
+                            </select>
+                        [% END %]
+                    </fieldset>
+                    <fieldset class="action">
+                        <div class="hint col-sm-offset-4">Enter reason</div>
+                        <input type="text" class="notes col-sm-offset-4 col-sm-8" name="notes" id="modal-notes"/>
+                    </fieldset>
+                </div>
+
+                <div class="modal-footer">
+                    <button id="cancelModalConfirmBtn" type="button" class="btn btn-danger" data-dismiss="modal">Confirm cancellation</button>
+                    <a href="#" data-dismiss="modal">Cancel</a>
+                </div>
+            </div>
+        </div>
+    </div>
+[% END %]
 
 <body id="circ_request-article" class="circ">
     [% INCLUDE 'header.inc' %]
@@ -320,6 +360,7 @@
                                 [% END %]
                             </table>
                         </fieldset>
+                        [% PROCESS cancel_modal %]
                     [% END %]
 
             </main>
@@ -404,29 +445,34 @@
                 }
             });
 
+            $('#modal-cancellation-reason').on('change', function(e) {
+                let reason = $(this).val();
+                $('#modal-notes').attr('disabled', !!reason);
+            })
+
+            let cancel_a;
+            $("#cancelModalConfirmBtn").on("click",function(e) {
+                var id = cancel_a.attr('id').split("cancel-")[1];
+                $("#cancel-processing-" + id ).hide('slow');
+                $("#cancel-processing-spinner-" + id ).show('slow');
+
+                let reason = $("#modal-cancellation-reason").val();
+                let notes = $("#modal-notes").val();
+                let query = '?'+(reason?'cancellation_reason='+reason:'notes='+notes)
+
+                $.ajax({
+                    type: "DELETE",
+                    url: '/api/v1/article_requests/'+id+query,
+                    success: function( data ) {
+                        cancel_a.parents('tr').hide('slow');
+                    }
+                });
+            });
+
+
             $(".ar-cancel-request").on("click", function(){
-                var a = $(this);
-                var notes = prompt(_("Reason for cancellation:"));
-
-                if ( notes != null ) {
-                    var id = this.id.split("cancel-")[1];
-                    $("#cancel-processing-" + id ).hide('slow');
-                    $("#cancel-processing-spinner-" + id ).show('slow');
-
-                    $.ajax({
-                        type: "POST",
-                        url: '/cgi-bin/koha/svc/article_request',
-                        data: {
-                            action: 'cancel',
-                            id: id,
-                            notes: notes
-                        },
-                        success: function( data ) {
-                            a.parents('tr').hide('slow');
-                        },
-                        dataType: 'json'
-                    });
-                }
+                cancel_a = $(this);
+                $('#cancelModal').modal();
             });
 
             // Initialize format(s)

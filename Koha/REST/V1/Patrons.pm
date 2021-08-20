@@ -419,4 +419,53 @@ sub guarantors_can_see_checkouts {
     };
 }
 
+=head3 cancel_article_request
+
+Controller function that handles cancelling a patron's Koha::ArticleRequest object
+
+=cut
+
+sub cancel_article_request {
+    my $c = shift->openapi->valid_input or return;
+
+    my $patron = Koha::Patrons->find( $c->validation->param('patron_id') );
+
+    unless ( $patron ) {
+        return $c->render(
+            status  => 404,
+            openapi => { error => "Patron not found" }
+        );
+    }
+
+    my $ar = $patron->article_requests->find( $c->validation->param('ar_id') );
+
+    unless ( $ar ) {
+        return $c->render(
+            status  => 404,
+            openapi => { error => "Article request not found" }
+        );
+    }
+
+    my $reason = $c->validation->param('cancellation_reason');
+    my $notes = $c->validation->param('notes');
+
+    return try {
+
+        $ar->cancel($reason, $notes);
+        return $c->render(
+            status  => 204,
+            openapi => q{}
+        );
+    } catch {
+        if ( blessed $_ && $_->isa('Koha::Exceptions::ArticleRequests::FailedCancel') ) {
+            return $c->render(
+                status  => 403,
+                openapi => { error => "Article request cannot be canceled" }
+            );
+        }
+
+        $c->unhandled_exception($_);
+    };
+}
+
 1;

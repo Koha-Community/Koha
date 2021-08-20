@@ -242,5 +242,75 @@
                 "allow-owner": true
             }
         }
+    },
+    "/public/patrons/{patron_id}/article_requests/{ar_id}": {
+        "delete": {
+            "x-mojo-to": "Patrons#cancel_article_request",
+            "operationId": "cancelPatronArticleRequest",
+            "tags": [
+                "patrons",
+                "article_requests"
+            ],
+            "summary": "Cancel patron's article requests",
+            "parameters": [
+                {
+                    "$ref": "../parameters.json#/patron_id_pp"
+                },
+                {
+                    "$ref": "../parameters.json#/ar_id_pp"
+                },
+                {
+                    "$ref": "../parameters.json#/ar_reason_qp"
+                },
+                {
+                    "$ref": "../parameters.json#/ar_notes_qp"
+                }
+            ],
+            "produces": ["application/json"],
+            "responses": {
+                "204": {
+                    "description": "Patron's article request canceled"
+                },
+                "400": {
+                    "description": "Bad request",
+                    "schema": {
+                        "$ref": "../definitions.json#/error"
+                    }
+                },
+                "401": {
+                    "description": "Authentication required",
+                    "schema": {
+                        "$ref": "../definitions.json#/error"
+                    }
+                },
+                "403": {
+                    "description": "Access forbidden",
+                    "schema": {
+                        "$ref": "../definitions.json#/error"
+                    }
+                },
+                "404": {
+                    "description": "Patron not found",
+                    "schema": {
+                        "$ref": "../definitions.json#/error"
+                    }
+                },
+                "500": {
+                    "description": "Internal server error",
+                    "schema": {
+                        "$ref": "../definitions.json#/error"
+                    }
+                },
+                "503": {
+                    "description": "Under maintenance",
+                    "schema": {
+                        "$ref": "../definitions.json#/error"
+                    }
+                }
+            },
+            "x-koha-authorization": {
+                "allow-owner": true
+            }
+        }
     }
 }

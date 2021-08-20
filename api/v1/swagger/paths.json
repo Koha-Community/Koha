@@ -17,6 +17,9 @@
   "/acquisitions/funds": {
     "$ref": "paths/acquisitions_funds.json#/~1acquisitions~1funds"
   },
+  "/article_requests/{ar_id}": {
+    "$ref": "paths/article_requests.json#/~1article_requests~1{ar_id}"
+  },
   "/biblios/{biblio_id}": {
     "$ref": "paths/biblios.json#/~1biblios~1{biblio_id}"
   },
@@ -134,7 +137,7 @@
   "/patrons/{patron_id}/extended_attributes/{extended_attribute_id}": {
     "$ref": "paths/patrons_extended_attributes.json#/~1patrons~1{patron_id}~1extended_attributes~1{extended_attribute_id}"
   },
-   "/patrons/{patron_id}/holds": {
+  "/patrons/{patron_id}/holds": {
     "$ref": "paths/patrons_holds.json#/~1patrons~1{patron_id}~1holds"
   },
   "/patrons/{patron_id}/password": {
@@ -169,6 +172,9 @@
   },
   "/public/patrons/{patron_id}/guarantors/can_see_checkouts": {
     "$ref": "paths/public_patrons.json#/~1public~1patrons~1{patron_id}~1guarantors~1can_see_checkouts"
+  },
+  "/public/patrons/{patron_id}/article_requests/{ar_id}": {
+    "$ref": "paths/public_patrons.json#/~1public~1patrons~1{patron_id}~1article_requests~1{ar_id}"
   },
   "/quotes": {
     "$ref": "paths/quotes.json#/~1quotes"
