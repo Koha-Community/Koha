@@ -37,8 +37,8 @@ subtest 'create() tests' => sub {
 
     my $email = Koha::Email->create(
         {
-            from        => 'from@example.com',
-            to          => 'to@example.com',
+            from        => 'Fróm <from@example.com>',
+            to          => 'Tö <to@example.com>',
             cc          => 'cc@example.com',
             bcc         => 'bcc@example.com',
             reply_to    => 'reply_to@example.com',
@@ -49,8 +49,8 @@ subtest 'create() tests' => sub {
         }
     );
 
-    is( $email->email->header('From'), 'from@example.com', 'Value set correctly' );
-    is( $email->email->header('To'), 'to@example.com', 'Value set correctly' );
+    is( $email->email->header('From'), 'Fróm <from@example.com>', 'Value set correctly' );
+    is( $email->email->header('To'), 'Tö <to@example.com>', 'Value set correctly' );
     is( $email->email->header('Cc'), 'cc@example.com', 'Value set correctly' );
     is( $email->email->header('Bcc'), 'bcc@example.com', 'Value set correctly' );
     is( $email->email->header('Reply-To'), 'reply_to@example.com', 'Value set correctly' );
