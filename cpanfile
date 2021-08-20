@@ -34,6 +34,7 @@ requires 'DateTime::Format::MySQL', '0.04';
 requires 'DateTime::TimeZone', '1.20';
 requires 'Digest::MD5', '2.36';
 requires 'Digest::SHA', '5.43';
+requires 'Email::Address', '>= 1.908';
 requires 'Email::Date', '1.103';
 requires 'Email::MessageID', '1.406';
 requires 'Email::Sender', '1.300030';
