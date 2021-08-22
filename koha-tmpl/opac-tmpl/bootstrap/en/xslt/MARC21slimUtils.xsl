@@ -459,10 +459,10 @@
                                 </xsl:with-param>
                             </xsl:call-template>
                         </a>
-                        <xsl:call-template name="part"/>
                     </xsl:otherwise>
                 </xsl:choose>
-                <xsl:text>: </xsl:text>
+                <xsl:call-template name="part"/>
+                <xsl:text> ; </xsl:text>
                 <xsl:value-of  select="marc:subfield[@code='v']" />
             <xsl:choose><xsl:when test="position()=last()"><xsl:text></xsl:text></xsl:when><xsl:otherwise><span class="separator"> | </span></xsl:otherwise></xsl:choose>
             </xsl:for-each>
@@ -501,9 +501,9 @@
                                 </xsl:with-param>
                             </xsl:call-template>
                         </a>
-                        <xsl:call-template name="part"/>
                     </xsl:otherwise>
                 </xsl:choose>
+                <xsl:call-template name="part"/>
                 <xsl:if test="marc:subfield[@code='v']">
                     <xsl:text> ; </xsl:text><xsl:value-of select="marc:subfield[@code='v']" />
                 </xsl:if>
@@ -530,15 +530,15 @@
                 <xsl:with-param name="afterCodes">fghkdlmor</xsl:with-param>
             </xsl:call-template>
         </xsl:variable>
-        <xsl:if test="string-length(normalize-space($partNumber))">
-                <xsl:call-template name="chopPunctuation">
-                    <xsl:with-param name="chopString" select="$partNumber"/>
-                </xsl:call-template>
+        <xsl:if test="$partNumber != '' or $partName != ''" >
+            <xsl:text>. </xsl:text>
         </xsl:if>
+        <xsl:if test="string-length(normalize-space($partNumber))">
+            <xsl:value-of select="$partNumber" />
+        </xsl:if>
+        <xsl:if test="$partNumber != ''"><xsl:text> </xsl:text></xsl:if>
         <xsl:if test="string-length(normalize-space($partName))">
-                <xsl:call-template name="chopPunctuation">
-                    <xsl:with-param name="chopString" select="$partName"/>
-                </xsl:call-template>
+            <xsl:value-of select="$partName" />
         </xsl:if>
     </xsl:template>
 
