@@ -23,7 +23,7 @@
     "dt_dateofbirth":
         "[% INCLUDE 'patron-age.inc' patron = data %]",
                 "dt_category":
-                    "[% data.category_description | html | $To %] ([% data.category_type | html | $To %])",
+                    "[% data.category_description | html | $To %] <span class=\"patron_category_type\">([% data.category_type | html | $To %])</span>",
                 "dt_branch":
                     "[% data.branchname | html | $To %]",
                 "dt_dateexpiry":
