@@ -1086,8 +1086,9 @@
                             </a>
                         </xsl:when>
                         <xsl:otherwise>
-                            <a><xsl:attribute name="href">/cgi-bin/koha/catalogue/search.pl?q=ti,phr:<xsl:value-of select="str:encode-uri(translate($f773, '()', ''), true())"/></xsl:attribute>
-                            <xsl:value-of select="$f773"/>
+                            <a>
+                                <xsl:attribute name="href">/cgi-bin/koha/catalogue/search.pl?q=ti,phr:<xsl:value-of select="str:encode-uri(translate(marc:subfield[@code='t'], '()', ''), true())"/><xsl:if test="marc:subfield[@code='a']">+AND+au:<xsl:value-of select="str:encode-uri(translate(marc:subfield[@code='a'], '()', ''), true())"/></xsl:if></xsl:attribute>
+                                <xsl:value-of select="$f773"/>
                             </a>
                         </xsl:otherwise>
                     </xsl:choose>
