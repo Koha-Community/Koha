@@ -138,7 +138,11 @@
             [% END %]
             var table = KohaTable("table_issues", {
                 "sDom": 'C<"top pager"ilpfB><"#filter_c">tr<"bottom pager"ip>',
+            [% IF Koha.Preference('RecordStaffUserOnCheckout') %]
+                "aaSorting": [[ 5, "desc" ]],
+            [% ELSE %]
                 "aaSorting": [[ 4, "desc" ]],
+            [% END %]
                 "sPaginationType": "full_numbers"
             }, columns_settings);
         });
