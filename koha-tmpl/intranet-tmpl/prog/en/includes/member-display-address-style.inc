@@ -23,10 +23,10 @@
             <li class="patronaddress2">[%~ patron.address2 |html  ~%]</li>
         [%~ END ~%]
     [%~ END ~%]
-    [%~ IF ( patron.city ) ~%]
+    [%~ IF ( patron.city || patron.zipcode || patron.state || patron.country ) ~%]
         <li class="patroncity">
-            [%~ patron.city |html  ~%][%~ IF ( patron.state ) %], [% patron.state |html  ~%][%~ END ~%]
-            [%~ " " _ patron.zipcode |html  ~%][%~ IF ( patron.country ) %], [% patron.country |html  ~%][%~ END ~%]
+            [%~ patron.city |html  ~%][%~ IF ( patron.state ) %][%~ IF ( patron.city ) ~%], [% END ~%][% patron.state |html  ~%][%~ END ~%]
+            [%~ IF ( patron.zipcode ) %][%~ " " _ patron.zipcode |html  ~%][% END %][%~ IF ( patron.country ) %][%~ IF ( patron.zipcode || patron.state ) ~%], [% END ~%][% patron.country |html  ~%][%~ END ~%]
         </li>
     [%~ END ~%]
 [%~ END ~%]
@@ -44,7 +44,7 @@
             <li class="patronaddress2">[%~ patron.address2 | html ~%]</li>
         [%~ END ~%]
     [%~ END ~%]
-    [%~ IF ( patron.city ) ~%]
+    [%~ IF ( patron.city || patron.zipcode || patron.state || patron.country ) ~%]
         <li class="patroncity">
             [%~ IF ( patron.zipcode ) ~%][%~ patron.zipcode | html %] [% END ~%][%~ patron.city | html ~%][%~ IF ( patron.state ) ~%][% line_break | $raw %][%~ patron.state | html ~%][%~ END ~%]
             [%~ IF ( patron.country ) ~%][% line_break | $raw %][%~ patron.country | html ~%][%~ END ~%]
@@ -68,7 +68,7 @@
             <li class="patronaddress2">[%~ patron.address2 | html ~%]</li>
         [%~ END ~%]
     [%~ END ~%]
-    [%~ IF ( patron.city ) ~%]
+    [%~ IF ( patron.city || patron.zipcode || patron.state || patron.country ) ~%]
         <li class="patroncity">
             [%~ IF ( patron.zipcode ) ~%][%~ patron.zipcode | html %] [% END ~%][%~ patron.city | html ~%][%~ IF ( patron.state ) ~%][% line_break | $raw %][%~ patron.state | html ~%][%~ END ~%]
             [%~ IF ( patron.country ) ~%][% line_break | $raw %][%~ patron.country | html ~%][%~ END ~%]
