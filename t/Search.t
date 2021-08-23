@@ -181,9 +181,10 @@ subtest "searchResults PassItemMarcToXSLT test" => sub {
     t::lib::Mocks::mock_preference('marcflavour','MARC21');
     my $mock_xslt = Test::MockModule->new("C4::Search");
     $mock_xslt->mock( XSLTParse4Display => sub {
-       my (undef, $record) = @_;
+        my $params = shift;
+        my $record = $params->{record};
         warn $record->field('952') ? "Item here" : "No item";
-        return undef;
+        return;
     });
 
     my $builder = t::lib::TestBuilder->new;
@@ -194,13 +195,13 @@ subtest "searchResults PassItemMarcToXSLT test" => sub {
 
     t::lib::Mocks::mock_preference('PassItemMarcToXSLT','1');
 
-    warnings_like { searchResults({ interface => "opac" },"test",1,1,0,0,[ $record->as_xml_record ] ,undef) }
+    warnings_like { C4::Search::searchResults({ interface => "opac" },"test",1,1,0,0,[ $record->as_xml_record ] ,undef) }
         [qr/Item here/],
         "Item field returned from default XSLT if pref set";
 
     t::lib::Mocks::mock_preference('PassItemMarcToXSLT','0');
 
-    warnings_like { searchResults({ interface => "opac" },"test",1,1,0,0,[ $record->as_xml_record ] ,undef) }
+    warnings_like { C4::Search::searchResults({ interface => "opac" },"test",1,1,0,0,[ $record->as_xml_record ] ,undef) }
         [qr/No item/],
         "Item field returned from default XSLT if pref set";
 
