@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Koha 21.05\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-06-12 12:52+0000\n"
-"PO-Revision-Date: 2021-06-25 12:18+0000\n"
+"PO-Revision-Date: 2021-08-23 10:51+0000\n"
 "Last-Translator: Onur Erdem <onurerdem@sdu.edu.tr>\n"
 "Language-Team: Koha Translation Team\n"
 "Language: tr\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.8\n"
-"X-POOTLE-MTIME: 1624623529.708241\n"
+"X-POOTLE-MTIME: 1629715865.169814\n"
 "X-Pootle-Path: /tr/21.05/tr-TR-pref.po\n"
 "X-Pootle-Revision: 1\n"
 
@@ -4529,6 +4529,12 @@ msgid ""
 "the <code>misc/cronjobs/holds/cancel_expired_holds.pl</code> cronjob. Ask "
 "your system administrator to schedule it."
 msgstr ""
+"<a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=ReservesMaxPickUpDelay\">ReservesMaxPickUpDelay</a> "
+"sistem tercihinde belirtilen zaman sürecinde alınmamışlar ise sona "
+"erdirilecek ayırtma işlemleri.<br><strong>NOT:</strong> Bu sistem tercihi "
+"<code>misc/cronjobs/holds/cancel_expired_holds.pl</code> cronjob gerektirir. "
+"Sistem yöneticinizden zamanlamasını isteyin."
 
 # Circulation > Holds policy
 msgid "circulation.pref#ExpireReservesMaxPickUpDelayCharge# ."
@@ -5605,9 +5611,8 @@ msgstr ""
 "belirlenen limit için ücretleri toplarken kiralama ücretleri. "
 
 # Circulation > Holds policy
-#, fuzzy
 msgid "circulation.pref#ReservesControlBranch# Check the rule from the"
-msgstr "Kontrol et"
+msgstr "Kuralı şuradan kontrol edin"
 
 # Circulation > Holds policy
 msgid "circulation.pref#ReservesControlBranch# item's home library"
@@ -5663,8 +5668,10 @@ msgid "circulation.pref#RestrictionBlockRenewing# block"
 msgstr "engelle"
 
 # Circulation > Checkout policy
-msgid "circulation.pref#RestrictionBlockRenewing# renewing of items."
-msgstr "materyallerin süresinin uzatılması."
+msgid ""
+"circulation.pref#RestrictionBlockRenewing# renewing of items from the staff "
+"interface."
+msgstr "personel arayüzünden materyal sürelerinin uzatılması."
 
 # Circulation > Checkout policy
 msgid "circulation.pref#ReturnBeforeExpiry# Don't require"
@@ -8060,7 +8067,6 @@ msgid ""
 msgstr "Bu liste, arayüzdeki dillerin sırasını değiştirmek için sıralanabilir."
 
 # I18N/L10N
-#, fuzzy
 msgid "i18n_l10n.pref#TimeFormat# ."
 msgstr " ."
 
@@ -8121,9 +8127,8 @@ msgstr ""
 "listesinin olmasını gerektirir."
 
 # I18N/L10N
-#, fuzzy
 msgid "i18n_l10n.pref#dateformat# ."
-msgstr "gg.aa.yyyy"
+msgstr " ."
 
 # I18N/L10N
 msgid "i18n_l10n.pref#dateformat# Format dates like"
@@ -8272,11 +8277,11 @@ msgid "logs.pref#ClaimsLog# Log"
 msgstr "Sistem günlüğüne kaydet"
 
 # Logging > Logging
-#, fuzzy
 msgid ""
 "logs.pref#ClaimsLog# when an acquisitions claim or a serials claim notice is "
 "sent."
-msgstr "Otomatik claim mesajı gönderildiğinde."
+msgstr ""
+"bir satın alma talebi veya bir süreli yayın talebi bildirimi gönderildiğinde."
 
 # Logging > Logging
 msgid "logs.pref#CronjobLog# Don't log"
@@ -8322,6 +8327,8 @@ msgid ""
 "logs.pref#DumpTemplateVarsIntranet# dump all Template Toolkit variables to a "
 "comment in the HTML source for the staff interface."
 msgstr ""
+"personel arayüzü için HTML kaynağındaki bir yoruma tüm Şablon Araç Seti "
+"değişkenlerini döker."
 
 # Logging > Debugging
 msgid "logs.pref#DumpTemplateVarsOpac# Do"
@@ -8377,7 +8384,7 @@ msgstr "Sistem günlüğüne kaydet"
 
 # Logging > Logging
 msgid "logs.pref#IllLog# when changes to ILL requests take place."
-msgstr ""
+msgstr "ILL isteklerinde değişiklik yapıldığında."
 
 # Logging > Logging
 msgid "logs.pref#IssueLog# Don't log"
@@ -8392,21 +8399,20 @@ msgid "logs.pref#IssueLog# when items are checked out."
 msgstr "Materyaller ödünç verildiğinde."
 
 # Logging > Logging
-#, fuzzy
 msgid ""
 "logs.pref#NewsLog#  changes to news entries and other contents managed in "
 "the news tool."
-msgstr "bildirim şablonlarında değişiklikler."
+msgstr ""
+"haber aracında yönetilen haber girişlerinde ve diğer içeriklerde yapılan "
+"değişiklikler."
 
 # Logging > Logging
-#, fuzzy
 msgid "logs.pref#NewsLog# Don't log"
 msgstr "Sistem günlüğüne kaydetme"
 
 # Logging > Logging
-#, fuzzy
 msgid "logs.pref#NewsLog# Log"
-msgstr "Sistem günlüğüne kaydet"
+msgstr "Sistem günlüğüne kaydet "
 
 # Logging > Logging
 msgid "logs.pref#NoticesLog#  changes to notice templates."
@@ -8561,6 +8567,10 @@ msgid ""
 "preferences.pl?op=search&searchfield=AnonymousPatron\">AnonymousPatron</a> "
 "system preference."
 msgstr ""
+"satın alma önerileri yapmak için giriş yapmamış kullanıcılar. Öneriler, <a "
+"href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=AnonymousPatron\">AnonymousPatron</a> sistem tercihine "
+"bağlıdır."
 
 # OPAC > Privacy
 msgid "opac.pref#AnonymousPatron# Use borrowernumber"
@@ -8602,6 +8612,9 @@ msgid ""
 "such as placing a hold or renewing. Note that the setting for a patron "
 "category takes priority over this system preference."
 msgstr ""
+"ayırtma yapma veya süre uzatma gibi OPAC işlemleri için süreleri dolmuş olan "
+"kullanıcılar. Bir kullanıcı kategori ayarının bu sistem tercihleri üzerinde "
+"öncelik kazanacağını unutmayın."
 
 # OPAC > Appearance > COinSinOPACResults
 msgid ""
@@ -8683,6 +8696,8 @@ msgid ""
 "increasing the size or highlighting the rows for those results (non-XSLT "
 "only)."
 msgstr ""
+"sonuçları öne taşıyarak ve boyutu artırarak veya bu sonuçlar için satırları "
+"vurgulayarak (yalnızca XSLT olmayan)."
 
 # OPAC > Appearance
 msgid "opac.pref#HighlightOwnItemsOnOPAC# Don't emphasize"
@@ -8694,7 +8709,7 @@ msgstr "Vurgulayınız"
 
 # OPAC > Appearance
 msgid "opac.pref#HighlightOwnItemsOnOPAC# OPAC's library via the URL"
-msgstr ""
+msgstr "URL aracılığıyla OPAC'ın kütüphanesi"
 
 # OPAC > Appearance
 msgid "opac.pref#HighlightOwnItemsOnOPAC# patron's home library"
@@ -8937,6 +8952,9 @@ msgid ""
 "\" and \"my checkout history\" tabs when a patron is logged in to the OPAC, "
 "with the following HTML (leave blank to disable):"
 msgstr ""
+"Aşağıdaki HTML ile bir kullanıcı OPAC'da oturum açtığında \"özetim\" ve "
+"\"ödünç alma geçmişim\" sekmelerine bir \"Bağlantılar\" sütunu ekleyin "
+"(devre dışı bırakmak için boş bırakın):"
 
 # OPAC > Appearance
 msgid ""
@@ -9035,6 +9053,11 @@ msgid ""
 "op=search&searchfield=AnonymousPatron\">AnonymousPatron</a> system "
 "preferences."
 msgstr ""
+"kullanıcıların ödünç alma geçmişleri için kendi gizlilik ayarları. Bu, <a "
+"href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=opacreadinghistory\">opacreadinghistory</a> ve <a href="
+"\"/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=AnonymousPatron"
+"\">AnonymousPatron</a> sistem tercihlerini gerektirir."
 
 # OPAC > Features
 msgid "opac.pref#OPACReportProblem# <br/>"
@@ -9132,20 +9155,17 @@ msgstr ""
 "çok sayıda ise kaçınılması gerektiğini unutmayın."
 
 # OPAC > Privacy
-#, fuzzy
 msgid "opac.pref#OPACShibOnly# Allow"
 msgstr "İzin ver"
 
 # OPAC > Privacy
-#, fuzzy
 msgid "opac.pref#OPACShibOnly# Don't allow"
 msgstr "İzin verme"
 
 # OPAC > Privacy
-#, fuzzy
 msgid ""
 "opac.pref#OPACShibOnly# patrons to login by means other than Shibboleth."
-msgstr "Kullanıcıların kendi ayırtma geçmişlerinin listesini görebilmeleri."
+msgstr "kullanıcıların Shibboleth dışındaki yollarla giriş yapmaları."
 
 # OPAC > Appearance
 msgid "opac.pref#OPACShowCheckoutName# Don't show"
@@ -9332,7 +9352,7 @@ msgstr "Not"
 
 # OPAC > Policy
 msgid "opac.pref#OPACSuggestionUnwantedFields# Patron reason"
-msgstr ""
+msgstr "Kullanıcı nedeni"
 
 # OPAC > Policy
 msgid "opac.pref#OPACSuggestionUnwantedFields# Publication place"
@@ -9781,16 +9801,18 @@ msgid ""
 "|, that can see items otherwise hidden by <a href=\"/cgi-bin/koha/admin/"
 "preferences.pl?op=search&searchfield=OpacHiddenItems\">OpacHiddenItems</a>:"
 msgstr ""
+"<a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=OpacHiddenItems\">OpacHiddenItems</a> tarafından "
+"gizlenen materyalleri görebilen | ile ayrılmış kullanıcı kategorilerinin "
+"listesi:"
 
 # OPAC > Appearance
-#, fuzzy
 msgid "opac.pref#OpacHiddenItemsHidesRecord# Don't hide"
-msgstr "İşaretleme"
+msgstr "Gizlemeyin"
 
 # OPAC > Appearance
-#, fuzzy
 msgid "opac.pref#OpacHiddenItemsHidesRecord# Hide"
-msgstr "İşaretle"
+msgstr "Gizleyin"
 
 # OPAC > Appearance
 msgid ""
@@ -9804,7 +9826,7 @@ msgstr ""
 
 # OPAC > Appearance
 msgid "opac.pref#OpacHighlightedWords# (separate columns with |)."
-msgstr ""
+msgstr "(sütunları | ile ayırın)."
 
 # OPAC > Appearance
 msgid "opac.pref#OpacHighlightedWords# Don't highlight"
@@ -9820,6 +9842,9 @@ msgid ""
 "search results and detail pages. To prevent certain words from ever being "
 "highlighted, enter a list of stopwords here:"
 msgstr ""
+"kullanıcının arama sonuçlarında ve detay sayfalarında aradığı kelimeler. "
+"Belirli kelimelerin vurgulanmasını önlemek için buraya bir engellenecek "
+"kelimeler listesi girin:"
 
 # OPAC > Features
 msgid "opac.pref#OpacHoldNotes# Allow"
@@ -9827,7 +9852,7 @@ msgstr "İzin ver"
 
 # OPAC > Features
 msgid "opac.pref#OpacHoldNotes# Don't allow"
-msgstr ""
+msgstr "İzin verme"
 
 # OPAC > Features
 msgid "opac.pref#OpacHoldNotes# patrons to add a note when placing a hold."
@@ -9918,6 +9943,9 @@ msgid ""
 "<a href='/cgi-bin/koha/admin/columns_settings.pl'>configure columns</a> "
 "administration page."
 msgstr ""
+"<br />Not: 'Ayrı bir sütun üzerinde' seçilmişse, <a href='/cgi-bin/koha/"
+"admin/columns_settings.pl'>sütunları yapılandır</a> yönetim sayfasındaki "
+"item_shelving_location görüntülemeyi yine de etkinleştirmeniz gerekir."
 
 # OPAC > Appearance
 msgid "opac.pref#OpacLocationOnDetail# Display the shelving location "
@@ -9981,6 +10009,9 @@ msgid ""
 "page (if the bibliographic record has more items than this, a link is "
 "displayed instead that allows the patron to choose to display all items)."
 msgstr ""
+"bibliyografik kayıt ayrıntıları sayfasındaki materyaller (eğer bibliyografik "
+"kayıt bundan daha fazla materyale sahipse, kullanıcıların tüm materyallerin "
+"gösterilmesini seçebileceği bir link ekranda görünecektir)."
 
 # OPAC > Appearance
 msgid ""
@@ -10028,7 +10059,7 @@ msgstr "Görüntüleme"
 msgid ""
 "opac.pref#OpacNewsLibrarySelect# a library selection list for news items in "
 "the OPAC."
-msgstr ""
+msgstr "OPAC'taki haberler için bir kütüphane seçim listesi."
 
 # OPAC > Appearance
 msgid "opac.pref#OpacNoItemTypeImages# No"
@@ -10209,7 +10240,7 @@ msgstr "sayfalar."
 
 # OPAC > Appearance
 msgid "opac.pref#OpacStarRatings# results, details, and patron"
-msgstr ""
+msgstr "sonuçlar, ayrıntılar, ve kullanıcı"
 
 # OPAC > Appearance
 msgid "opac.pref#OpacSuggestionManagedBy# Don't show"
@@ -10362,7 +10393,7 @@ msgstr ""
 
 # OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationConfirmEmail# Don't require"
-msgstr ""
+msgstr "Gerektirme"
 
 # OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationConfirmEmail# Require"
@@ -10372,7 +10403,7 @@ msgstr "Gerektir"
 msgid ""
 "opac.pref#PatronSelfRegistrationConfirmEmail# patrons to confirm their email "
 "address by entering it twice."
-msgstr ""
+msgstr "Kullanıcıların e-posta adreslerini iki kez girerek onaylamalarını."
 
 # OPAC > Self registration and modification > PatronSelfRegistrationDefaultCategory
 msgid ""
@@ -10385,6 +10416,13 @@ msgid ""
 "op=search&searchfield=PatronSelfRegistrationExpireTemporaryAccountsDelay'>PatronSelfRegistrationExpireTemporaryAccountsDelay</"
 "a> days ago."
 msgstr ""
+"<br><strong>UYARI: Kendi kendine kayıt için normal bir kullanıcı kategorisi "
+"kullanmayın.</strong> <code>misc/cronjobs/cleanup_database.pl</code> "
+"cronjob, doğrulanmamış ve tamamlanmamış OPAC kendi kendine kayıtlarını "
+"silmek için ayarlanmışsa, <a href='/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=PatronSelfRegistrationExpireTemporaryAccountsDelay'>PatronSelfRegistrationExpireTemporaryAccountsDelay</"
+"a> günden daha uzun süre önce kaydolmuş tüm kullanıcıları kalıcı ve "
+"kurtarılamaz bir şekilde siler."
 
 # OPAC > Self registration and modification
 msgid ""
@@ -10405,7 +10443,7 @@ msgstr "Dikkate alın"
 
 # OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationEmailMustBeUnique# Don't consider"
-msgstr ""
+msgstr "Dikkate almayın"
 
 # OPAC > Self registration and modification
 msgid ""
@@ -10520,13 +10558,15 @@ msgstr "personel arayüzünde göster"
 
 # OPAC > Appearance > Reference_NFL_Statuses
 msgid "opac.pref#Reference_NFL_Statuses# (Use | as delimiter.)"
-msgstr ""
+msgstr "(Sınırlayıcı olarak | kullanın.)"
 
 # OPAC > Appearance > Reference_NFL_Statuses
 msgid ""
 "opac.pref#Reference_NFL_Statuses# List the following not for loan statuses "
 "as available for reference in OPAC search results:"
 msgstr ""
+"Aşağıdaki ödünç verilmez durumlarını OPAC arama sonuçlarında referans için "
+"mevcut olarak listeleyin:"
 
 # OPAC > Features
 msgid "opac.pref#RequestOnOpac# Allow"
@@ -10979,23 +11019,20 @@ msgstr "iş"
 msgid ""
 "patrons.pref#AutoRenewalNotices# (Deprecated) according to --send-notices "
 "cron switch"
-msgstr ""
+msgstr "(Kullanımdan kaldırıldı) --send-notices cron anahtarına göre"
 
 # Patrons > Notices and notifications
-#, fuzzy
 msgid "patrons.pref#AutoRenewalNotices# Send automatic renewal notices: "
-msgstr "Bildirimler ve uyarılar"
+msgstr "Otomatik süre uzatımı bildirimleri gönderin:"
 
 # Patrons > Patron forms
-#, fuzzy
 msgid ""
 "patrons.pref#AutoRenewalNotices# according to patron messaging preferences"
-msgstr "Kullanıcı mesajlaşma tercihleri"
+msgstr "kullanıcı mesajlaşma tercihlerine göre"
 
 # Circulation > Checkout policy
-#, fuzzy
 msgid "patrons.pref#AutoRenewalNotices# never"
-msgstr "Gönder"
+msgstr "asla"
 
 # Patrons > Patron forms
 msgid ""
@@ -11122,20 +11159,22 @@ msgid ""
 "preferences.pl?op=search&searchfield=CheckPrevCheckout'>CheckPrevCheckout</"
 "a> to be enabled. There is no time limit if 0 or empty."
 msgstr ""
+"<a href='/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=CheckPrevCheckout'>CheckPrevCheckout</a> sistem "
+"tercihinin etkinleştilmiş olmasını gerektirir. 0 veya boş ise zaman sınırı "
+"yoktur."
 
 # Patrons > General
-#, fuzzy
 msgid ""
 "patrons.pref#CheckPrevCheckoutDelay# Trigger a warning if the current item "
 "has been checked out no longer than"
 msgstr ""
-"Mevcut materyalin daha önce ödünç verilip verilmediğini görmek için "
-"okuyucunun ödünç alma geçmişini kontrol edin."
+"Geçerli materyal şu tarihten daha uzun süre kontrol edilmediyse bir uyarı "
+"tetikleyin"
 
 # Patrons > General
-#, fuzzy
 msgid "patrons.pref#CheckPrevCheckoutDelay# days ago."
-msgstr "Gerçekleştir"
+msgstr "gün önce."
 
 # Patrons > Patron forms
 msgid ""
@@ -11413,14 +11452,13 @@ msgstr ""
 "isteyin."
 
 # Patrons > Privacy
-#, fuzzy
 msgid "patrons.pref#LockExpiredDelay# Lock expired patrons after"
-msgstr "gün sonra, kilitlenmiş/süresi dolmuş hesapları anonimleştir"
+msgstr "Süresi dolan kullanıcıları şu tarihten sonra kilitle"
 
 # Patrons > General > LockExpiredDelay
 msgid ""
 "patrons.pref#LockExpiredDelay# days. Leave empty to disable this behavior."
-msgstr ""
+msgstr "Bu davranışı devre dışı bırakmak için boş bırakın."
 
 # Patrons > General
 msgid ""
@@ -11741,7 +11779,7 @@ msgstr "<br/>Ve işlemler için aşağıdaki alanlar:"
 # Patrons > Security
 msgid ""
 "patrons.pref#Pseudonymization# <br/>Use the following fields for patrons:"
-msgstr ""
+msgstr "<br/>Kullanıcılar için aşağıdaki alanları kullanın:"
 
 # Patrons > Security
 msgid "patrons.pref#Pseudonymization# City"
@@ -11847,13 +11885,13 @@ msgstr "Posta kodu"
 msgid ""
 "patrons.pref#Pseudonymization# pseudonymization to comply with GDPR for "
 "personal information."
-msgstr ""
+msgstr "Kişisel bilgiler için GDPR'ye uygun olması için takma ad."
 
 # Patrons > Security
 msgid ""
 "patrons.pref#RequireStrongPassword# (must contain at least one digit, one "
 "lowercase and one uppercase)."
-msgstr ""
+msgstr "(en az bir rakam, bir küçük harf ve bir büyük harf içermelidir)."
 
 # Patrons > Security
 msgid "patrons.pref#RequireStrongPassword# Don't require"
@@ -11904,7 +11942,7 @@ msgstr "\"E-posta\" gönderme sürücüsü kullanılarak gönderilen e-postalar 
 # Patrons > General
 msgid ""
 "patrons.pref#StatisticsFields# If empty, defaults to: location|itype|ccode"
-msgstr ""
+msgstr "Boşsa, varsayılan olarak: location|itype|ccode"
 
 # Patrons > General
 msgid ""
@@ -11957,14 +11995,14 @@ msgid "patrons.pref#TrackLastPatronActivity# Don't"
 msgstr "Gerçekleştirme"
 
 # Patrons > General
-#, fuzzy
 msgid ""
 "patrons.pref#TrackLastPatronActivity# The first time each day that a patron "
-"either logs into the OPAC, connects to Koha via SIP, or checks an item out, "
-"borrowers.lastseen will update with the current date and time."
+"logs into the OPAC, connects to Koha via SIP or ILS-DI, or checks an item "
+"out the borrowers.lastseen will update with the current date and time."
 msgstr ""
-"Bir kullanıcı her bağlandığında, borrowers.lastseen mevcut zaman ile "
-"güncellenecektir."
+"Bir kullanıcı her gün OPAC'a ilk kez giriş yaptığında, SIP veya ILS-DI "
+"aracılığıyla Koha'ya bağlandığında veya bir materyal ödünç aldığında, "
+"borrowers.lastseen geçerli tarih ve saat ile güncellenecektir."
 
 # Patrons > General
 msgid "patrons.pref#TrackLastPatronActivity# track last patron activity."
@@ -12080,6 +12118,9 @@ msgid ""
 "hold history (checkout history is still stored, regardless of staff being "
 "allowed access or not)."
 msgstr ""
+"personelin bir kullanıcının ödünç alma ve ayırtma geçmişine erişmesine "
+"(personelin erişimine izin verip vermeyeceğine bakılmaksızın, okuma geçmişi "
+"hala saklanmaktadır)."
 
 # Patrons > Security
 msgid ""
@@ -12104,6 +12145,7 @@ msgid ""
 "patrons.pref#patronimages# images to be uploaded and shown for patrons on "
 "the staff interface."
 msgstr ""
+"personel arayüzünde kullanıcılar için yüklenecek ve gösterilecek resimler."
 
 # Patrons > Patron forms
 msgid "patrons.pref#uppercasesurnames# Do"
@@ -12317,6 +12359,9 @@ msgid ""
 "form) headings in bibliographic searches. Please note: you will need to "
 "reindex your bibliographic database when changing this preference."
 msgstr ""
+"Bibliyografik aramalarda <em>bakınız</em> (tercih edilmeyen form) "
+"başlıkları. Lütfen unutmayın: Bu tercihi değiştirirken bibliyografik "
+"veritabanınızı yeniden indekslemeniz gerekecektir."
 
 # Searching > Features
 msgid "searching.pref#IncludeSeeFromInSearches# Don't include"
@@ -12339,6 +12384,7 @@ msgid ""
 "searching.pref#IntranetNumbersPreferPhrase# the operator \"phr\" in the "
 "callnumber and standard number staff interface searches."
 msgstr ""
+"yer numarası ve standart numara personel istemci aramalarda \"phr\" operatörü"
 
 # Searching > Search form
 msgid "searching.pref#IntranetNumbersPreferPhrase# use"
@@ -12382,6 +12428,7 @@ msgid ""
 "searching.pref#LoadSearchHistoryToTheFirstLoggedUser# search history of the "
 "unlogged user to the next patron logging in."
 msgstr ""
+"oturum açmamış kullanıcının arama geçmişi, oturum açan sonraki kullanıcıya."
 
 # Searching > Results display
 msgid ""
@@ -12553,16 +12600,17 @@ msgid "searching.pref#QueryFuzzy# Try"
 msgstr "Dene"
 
 # Searching > Features
-#, fuzzy
 msgid ""
 "searching.pref#QueryFuzzy# to match similarly spelled words in a search (for "
 "example, a search for <cite>flang</cite> would also match <cite>flange</"
 "cite> and <cite>fang</cite>; Currently only affects Zebra searches. Any "
 "Elasticsearch term can be made fuzzy by adding a ~ directly after the term.)."
 msgstr ""
-"bir aramada benzer harflerden kelimeleri eşleştirmek için (örneğin, "
-"<cite>flang</cite> - <cite>flange</cite> ve <cite>fang</cite>; ZEBRA "
-"GEREKLİDİR."
+"bir aramada benzer şekilde yazılmış sözcükleri eşleştirmek için (örneğin, "
+"<cite>flang</cite> için yapılan bir arama, <cite>flange</cite> ve "
+"<cite>fang</cite> ile de eşleşir; Şu anda yalnızca Zebra aramalarını "
+"etkiler. Herhangi bir Elasticsearch terimi, terimden hemen sonra bir ~ "
+"eklenerek bulanık hale getirilebilir.)."
 
 # Searching > Features
 msgid "searching.pref#QueryRegexEscapeOptions# Don't escape"
@@ -12629,21 +12677,20 @@ msgid ""
 "searching.pref#SearchLimitLibrary# When limiting search results with a "
 "library or library group, limit by the item's"
 msgstr ""
+"Arama sonuçlarını bir kütüphane veya kütüphane grubuyla sınırlarken, "
+"materyalin şu öğesiyle bir sınırlama koyun"
 
 # Searching > Results display
-#, fuzzy
 msgid "searching.pref#SearchLimitLibrary# holding library."
-msgstr "ayırma kütüphanesi"
+msgstr "bulunduran kütüphane."
 
 # Searching > Results display
-#, fuzzy
 msgid "searching.pref#SearchLimitLibrary# home library and holding library."
-msgstr "Hem ana kütüphane hem de ayırma kütüphanesi"
+msgstr "ana kütüphane ve bulunduran kütüphane."
 
 # Searching > Results display
-#, fuzzy
 msgid "searching.pref#SearchLimitLibrary# home library."
-msgstr "ana kütüphane"
+msgstr "ana kütüphane."
 
 # Searching > Results display
 msgid ""
@@ -12700,20 +12747,20 @@ msgstr ""
 "UNIMARC yazarlar fasetleri için aşağıdaki metni ayraç olarak kullanınız"
 
 # Searching > Features
-#, fuzzy
 msgid "searching.pref#UseICUStyleQuotes# Don't use"
-msgstr "Kullanılmıyor"
+msgstr "Kullanmayın"
 
 # Searching > Features > UseICUStyleQuotes
 msgid ""
 "searching.pref#UseICUStyleQuotes# ICU style quotes ({}) when tracing "
 "subjects. The default is to use standard quotes (\"\")."
 msgstr ""
+"Konuları takip ederken ICU stili tırnak işaretleri ({}). Varsayılan, "
+"standart tırnak (\"\") kullanmaktır."
 
 # Searching > Features
-#, fuzzy
 msgid "searching.pref#UseICUStyleQuotes# Use"
-msgstr "Kullanılıyor"
+msgstr "Kullanın"
 
 # Searching > Results display
 msgid "searching.pref#defaultSortField# ,"
@@ -12724,6 +12771,8 @@ msgid ""
 "searching.pref#defaultSortField# By default, sort search results in the "
 "staff interface by"
 msgstr ""
+"Varsayılan olarak, personel arayüzündeki arama sonuçlarını yandaki öğeye "
+"göre sıralayın"
 
 # Searching > Results display
 msgid "searching.pref#defaultSortField# ascending."
@@ -13004,7 +13053,7 @@ msgstr ""
 
 # Serials
 msgid "serials.pref#opacSerialDefaultTab# holdings tab"
-msgstr ""
+msgstr "holdings sekmesi"
 
 # Serials
 msgid "serials.pref#opacSerialDefaultTab# serial collection tab"
@@ -13023,9 +13072,8 @@ msgid "staff_interface.pref Appearance"
 msgstr "Görünüm"
 
 # Staff interface > Options
-#, fuzzy
 msgid "staff_interface.pref Authentication"
-msgstr "Seçenekler"
+msgstr "Kimlik doğrulama"
 
 # Staff interface > Options
 msgid "staff_interface.pref Options"
@@ -13066,11 +13114,11 @@ msgstr "Yalnızca ayrıntı sayfası"
 msgid ""
 "staff_interface.pref#Display856uAsImage# Display the URI in the 856u field "
 "as an image on: "
-msgstr ""
+msgstr "856u alanındaki URI'yi şu konumda bir resim olarak görüntüleyin:"
 
 # Staff interface > Appearance
 msgid "staff_interface.pref#Display856uAsImage# Neither detail or result pages"
-msgstr ""
+msgstr "Ne ayrıntı ne de sonuç sayfalarında"
 
 # Staff interface > Appearance
 msgid "staff_interface.pref#Display856uAsImage# Result page"
@@ -13106,6 +13154,8 @@ msgid ""
 "staff_interface.pref#HidePatronName# the names of patrons that have items "
 "checked out or on hold on detail pages or the \"Place Hold\" screen."
 msgstr ""
+"Ayrıntı sayfalarında veya \"Ayırma Yap\" ekranında ödünç alınmış veya "
+"ayırtılmış materyalleri olan kullanıcıların adları."
 
 # Staff interface > Options
 msgid "staff_interface.pref#IntranetCatalogSearchPulldown# Don't show"
@@ -13262,12 +13312,19 @@ msgid ""
 "define a xslt file</li><li>Put an URL for an external specific stylesheet.</"
 "li></ul>{langcode} will be replaced with current interface language"
 msgstr ""
+"<br />Seçenekler:<ul><li>Enter\"<a href=\"#\" class=\"set_syspref\" data-"
+"syspref=\"XSLTDetailsDisplay\" data-value=\"default\">varsayılan</a>\" "
+"varsayılan için</li><li>Bir xslt dosyası tanımlamak için bir yol "
+"yerleştirin</li><li>Harici bir özel stil sayfası için bir URL yerleştirin.</"
+"li></ul>{langcode} geçerli arayüz dili ile değiştirilecektir"
 
 # Staff interface > Appearance
 msgid ""
 "staff_interface.pref#XSLTDetailsDisplay# Display details in the staff "
 "interface using XSLT stylesheet at: "
 msgstr ""
+"Personel arayüzünde XSLT stil sayfasını kullanarak ayrıntıları şu adreste "
+"görüntüleyin:"
 
 # Staff interface > Appearance
 msgid ""
@@ -13279,6 +13336,13 @@ msgid ""
 "file</li><li>put an URL for an external specific stylesheet.</li></"
 "ul>{langcode} will be replaced with current interface language"
 msgstr ""
+"<br />Seçenekler:<ul><li><a href=\"#\" class=\"set_syspref\" data-syspref="
+"\"XSLTListsDisplay\" data-value=\"\">Boş bırak</a> for \"no xslt\"</"
+"li><li>giriş \"<a href=\"#\" class=\"set_syspref\" data-syspref="
+"\"XSLTListsDisplay\" data-value=\"default\">varsayılan</a>\" varsayılan "
+"için</li><li> bir xslt dosyası koymak için yol belirleyin</li><li>harici bir "
+"özel stil sayfası için bir URL yerleştirin.</li></ul>{langcode} geçerli "
+"arabirim diliyle değiştirilecektir"
 
 # Staff interface > Appearance
 msgid ""
@@ -13296,22 +13360,31 @@ msgid ""
 "define a xslt file</li><li>Put an URL for an external specific stylesheet.</"
 "li></ul>{langcode} will be replaced with current interface language"
 msgstr ""
+"<br />Seçenekler:<ul><li>Enter \"<a href=\"#\" class=\"set_syspref\" data-"
+"syspref=\"XSLTResultsDisplay\" data-value=\"default\">varsayılan</a>\" "
+"varsayılan için</li><li>Bir xslt dosyası tanımlamak için bir yol "
+"yerleştirin</li><li>Harici bir özel stil sayfası için bir URL yerleştirin.</"
+"li></ul>{langcode} geçerli arayüz dili ile değiştirilecektir"
 
 # Staff interface > Appearance
 msgid ""
 "staff_interface.pref#XSLTResultsDisplay# Display results in the staff "
 "interface using XSLT stylesheet at: "
 msgstr ""
+"Personel arayüzünde XSLT stil sayfasını kullanarak sonuçları şu adreste "
+"görüntüleyin:"
 
 # Staff interface > Appearance
 msgid "staff_interface.pref#intranet_includes# Use include files from the"
-msgstr ""
+msgstr "yanda belirtilen öğeden dosya eklemeyi kullanın"
 
 # Staff interface > Appearance
 msgid ""
 "staff_interface.pref#intranet_includes# directory in the template directory, "
 "instead of <code>includes/</code>. (Leave blank to disable)"
 msgstr ""
+"<code>includes/</code> yerine, şablon dizinindeki dizin. (Devre dışı "
+"bırakmak için boşluk bırakınız)"
 
 # Staff interface > Options
 msgid "staff_interface.pref#intranetbookbag# Don't show"
@@ -13404,7 +13477,6 @@ msgstr ""
 "şekilde doldurulmalıdır.)"
 
 # Staff interface > Options
-#, fuzzy
 msgid "staff_interface.pref#staffShibOnly# Allow"
 msgstr "İzin ver"
 
