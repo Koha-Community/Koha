@@ -4,6 +4,8 @@
 [% USE ItemTypes %]
 [% USE Branches %]
 [% USE TablesSettings %]
+[%# USE the plugin and define some macros %]
+[% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Course details for [% course.course_name | html %] &rsaquo; Course reserves &rsaquo; Koha</title>
@@ -65,7 +67,7 @@
             <div class="rows">
               <ol>
                 <li><span class="label">Course name</span> [% course.course_name | html %]</li>
-                <li><span class="label">Term</span> [% AuthorisedValues.GetByCode( 'TERM', course.term ) | html %]</li>
+                <li><span class="label">[% tp('Semester', 'Term') | html %]</span> [% AuthorisedValues.GetByCode( 'TERM', course.term ) | html %]</li>
                 <li><span class="label">Department</span> [% AuthorisedValues.GetByCode( 'DEPARTMENT', course.department ) | html %]</li>
                 <li><span class="label">Course number</span> [% course.course_number | html %]</li>
                 <li><span class="label">Section</span> [% course.section | html %]</li>

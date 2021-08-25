@@ -3,6 +3,8 @@
 [% USE AuthorisedValues %]
 [% USE TablesSettings %]
 [% SET footerjs = 1 %]
+[%# USE the plugin and define some macros %]
+[% PROCESS 'i18n.inc' %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Course reserves &rsaquo; Koha</title>
 [% INCLUDE 'doc-head-close.inc' %]
@@ -48,7 +50,7 @@
                                 <th>Dept.</th>
                                 <th>Course #</th>
                                 <th>Section</th>
-                                <th>Term</th>
+                                <th>[% tp('Semester', 'Term') | html %]</th>
                                 <th>Instructors</th>
                                 <th>Staff note</th>
                                 <th>Public note</th>
