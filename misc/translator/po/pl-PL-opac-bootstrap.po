@@ -5,8 +5,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 20.11\n"
-"POT-Creation-Date: 2021-07-16 08:49-0300\n"
-"PO-Revision-Date: 2021-07-20 08:35+0000\n"
+"POT-Creation-Date: 2021-08-20 15:52-0300\n"
+"PO-Revision-Date: 2021-08-24 11:53+0000\n"
 "Last-Translator: Ilona <szczudlo@biblos.pk.edu.pl>\n"
 "Language-Team: American English <kde-i18n-doc@kde.org>\n"
 "Language: pl\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2);\n"
 "X-Generator: Pootle 2.8\n"
-"X-POOTLE-MTIME: 1626770106.038531\n"
+"X-POOTLE-MTIME: 1629805984.619863\n"
 "X-Pootle-Path: /pl/20.11/pl-PL-opac-bootstrap.po\n"
 "X-Pootle-Revision: 1\n"
 
@@ -135,7 +135,7 @@ msgstr ""
 "przetwarzanie zagubionego egzemplarza %sOpłata za wynajem %sDzienna opłata "
 "za wynajem %sOdnowienie wynajmu %sOdnowienie o dzień wynajmu %sOpłata za "
 "rezerwację %sZamówienie oczekuje zbyt długo %sWypłata %s%s %s %s %s %s "
-"%sPłatność %sWycofaj %sAnuluj %sKredyt %sZwrot opłaty za utraconą pozycję "
+"%sPłatność %sWycofaj %sAnuluj %sZasilenie %sZwrot opłaty za utraconą pozycję "
 "%sZwrot opłaty %sZwrot %sOpłata anulowana %s%s %s %s %s %s %s"
 
 #. For the first occurrence,
@@ -405,19 +405,6 @@ msgid ""
 "%s %s You must log in if you want to subscribe to email notification on new "
 "issues %s %s "
 msgstr "%s %s Będziesz otrzymywać powiadomienia o nowych numerach %s %s "
-
-#. %1$s:  END 
-#. %2$s:  END # / IF expanded_options 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:419
-#, c-format
-msgid ""
-"%s %s [%% IF ( OpacAdvSearchMoreOptions and OpacAdvSearchMoreOptions.size > "
-"0 and expanded_options ) or ( OpacAdvSearchOptions and OpacAdvSearchOptions."
-"size > 0 and not expanded_options ) %%] "
-msgstr ""
-"%s %s [%% IF ( OpacAdvSearchMoreOptions and OpacAdvSearchMoreOptions.size > "
-"0 and expanded_options ) or ( OpacAdvSearchOptions and OpacAdvSearchOptions."
-"size > 0 and not expanded_options ) %%] "
 
 #. %1$s:  END # / IF GROUP_RESULT.BiblioDefaultViewmarc 
 #. %2$s:  IF ( GROUP_RESULT.author ) 
@@ -6010,7 +5997,7 @@ msgstr "Opłata dla typu dokumentu '%s': %s"
 msgid "Female:"
 msgstr "Kobieta:"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:444
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:443
 #, c-format
 msgid "Fewer options"
 msgstr "Mniej opcji"
@@ -7890,7 +7877,7 @@ msgstr "Więcej szczegółów"
 msgid "More lists"
 msgstr "Więcej list"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:446
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:445
 #, c-format
 msgid "More options"
 msgstr "Więcej opcji"
@@ -8007,7 +7994,7 @@ msgstr "Nowe hasło:"
 msgid "New purchase suggestion"
 msgstr "Nowa propozycja zakupu"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:450
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:449
 #, c-format
 msgid "New search"
 msgstr "Nowe wyszukiwanie"
@@ -10209,7 +10196,7 @@ msgid "Scan the item or enter its barcode:"
 msgstr "Wczytaj egzemplarz lub wprowadź jego kod kreskowy:"
 
 #. INPUT type=submit name=do
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:440
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:439
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-browse.tt:81
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1200
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-search-history.tt:76
@@ -10375,12 +10362,12 @@ msgstr "Zobacz też:"
 #. A
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1082
 msgid "See: %s%s%snext biblio%s"
-msgstr "Zobacz: %s%s%snext biblio%s"
+msgstr "Zobacz: %s%s%snastępny rekord%s"
 
 #. A
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1071
 msgid "See: %s%s%sprevious biblio%s"
-msgstr "Zobacz: %s%s%sprevious biblio%s"
+msgstr "Zobacz: %s%s%spoprzedni rekord%s"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-addbybiblionumber.tt:29
 #, c-format
@@ -10484,7 +10471,7 @@ msgstr "Wyślij zgłoszenie problemu do: "
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/opac-detail-sidebar.inc:50
 #, c-format
 msgid "Send to device"
-msgstr "Wyślij na urządzenie"
+msgstr "Kod QR"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-sendbasketform.tt:30
 #, c-format
@@ -10618,7 +10605,7 @@ msgstr "Login Shibboleth"
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/masthead.inc:380
 #, c-format
 msgid "Shibboleth login"
-msgstr "Logowanie do Shibboleth"
+msgstr "Logowanie Shibboleth"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-tags_subject.tt:41
 #, c-format
@@ -10738,7 +10725,7 @@ msgstr "Podobne egzemplarze"
 msgid "Simple DC-RDF"
 msgstr "Simple DC-RDF"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/masthead.inc:15
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/masthead.inc:12
 #, c-format
 msgid "Skip to main content"
 msgstr "Przejdź to głównej treści"
@@ -10858,7 +10845,7 @@ msgid ""
 "Sorry, this self check-in station has lost authentication. Please contact "
 "the administrator to resolve this problem."
 msgstr ""
-"Przepraszamy, stanowisko Samoobsługowe wypożyczenia wymaga uwierzytelnienia. "
+"Przepraszamy, stanowisko Samoobsługowe zwroty wymaga uwierzytelnienia. "
 "Skontaktuj się z administratorem, aby rozwiązać ten problem."
 
 # authentication = uwierzytelnienie, authorization = autoryzacja
@@ -11991,7 +11978,7 @@ msgstr "Tytuł (Z-A)"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:530
 #, c-format
 msgid "Title notes ( %s )"
-msgstr "Uwagi do tytułu ( %s )"
+msgstr "Uwagi ( %s )"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:84
 #, c-format
@@ -14308,6 +14295,15 @@ msgstr "Tagi"
 #, c-format
 msgid "×"
 msgstr "×"
+
+#~ msgid ""
+#~ "%s %s [%% IF ( OpacAdvSearchMoreOptions and OpacAdvSearchMoreOptions.size "
+#~ "> 0 and expanded_options ) or ( OpacAdvSearchOptions and "
+#~ "OpacAdvSearchOptions.size > 0 and not expanded_options ) %%] "
+#~ msgstr ""
+#~ "%s %s [%% IF ( OpacAdvSearchMoreOptions and OpacAdvSearchMoreOptions.size "
+#~ "> 0 and expanded_options ) or ( OpacAdvSearchOptions and "
+#~ "OpacAdvSearchOptions.size > 0 and not expanded_options ) %%] "
 
 #~ msgid "%s Not renewable %s Not allowed "
 #~ msgstr "%s Brak możliwości prolongowania %s Niedozwolone "

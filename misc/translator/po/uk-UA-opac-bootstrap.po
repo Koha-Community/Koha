@@ -9,8 +9,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 20.11\n"
-"POT-Creation-Date: 2021-07-16 09:00-0300\n"
-"PO-Revision-Date: 2021-07-18 14:06+0000\n"
+"POT-Creation-Date: 2021-08-20 16:03-0300\n"
+"PO-Revision-Date: 2021-08-24 18:16+0000\n"
 "Last-Translator: Serhij Dubyk <dubyk@ukr.net>\n"
 "Language-Team: Ukrainian Linux Team <translation@linux.org.ua>\n"
 "Language: uk\n"
@@ -21,7 +21,7 @@ msgstr ""
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 "X-Generator: Pootle 2.8\n"
 "X-Poedit-SourceCharset: utf-8\n"
-"X-POOTLE-MTIME: 1626617176.371887\n"
+"X-POOTLE-MTIME: 1629828993.340719\n"
 "X-Pootle-Path: /uk/20.11/uk-UA-opac-bootstrap.po\n"
 "X-Pootle-Revision: 1\n"
 
@@ -418,19 +418,6 @@ msgid ""
 msgstr ""
 "%s %s Ви повинні увійти в систему, якщо хочете підписатися на повідомлення "
 "електронною поштою про нові випуски %s %s "
-
-#. %1$s:  END 
-#. %2$s:  END # / IF expanded_options 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:419
-#, c-format
-msgid ""
-"%s %s [%% IF ( OpacAdvSearchMoreOptions and OpacAdvSearchMoreOptions.size > "
-"0 and expanded_options ) or ( OpacAdvSearchOptions and OpacAdvSearchOptions."
-"size > 0 and not expanded_options ) %%] "
-msgstr ""
-"%s %s [%% IF ( OpacAdvSearchMoreOptions and OpacAdvSearchMoreOptions.size > "
-"0 and expanded_options ) or ( OpacAdvSearchOptions and OpacAdvSearchOptions."
-"size > 0 and not expanded_options ) %%] "
 
 #. %1$s:  END # / IF GROUP_RESULT.BiblioDefaultViewmarc 
 #. %2$s:  IF ( GROUP_RESULT.author ) 
@@ -863,7 +850,7 @@ msgstr "%s Без результатів, спробуйте змінити фі
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/biblio-title.inc:2
 #, c-format
 msgid "%s No title %s %s%s,%s "
-msgstr "%s Немає назви %s %s%s,%s "
+msgstr "%s Немає назви %s %s%s : %s "
 
 #. %1$s:  ELSIF ( OVERDUE.norenew_overdue ) 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:682
@@ -2240,8 +2227,8 @@ msgid ""
 "%sBrowsing %s shelves%s %s, %s %sShelving location: %s%s %s, %s "
 "%sCollection: %s%s "
 msgstr ""
-"%s Огляд полиць бібліотеки/підрозділу „%s“%s %s, %s %sзагальне розташування "
-"полиці: %s%s %s, %s %sзібрання: %s%s "
+"%s Огляд полиць бібліотеки/підрозділу „%s“%s %s, %s %sполичне розташування: "
+"%s%s %s, %s %sзібрання: %s%s "
 
 #. %1$s:  IF ( ccodesearch ) 
 #. %2$s:  ELSE 
@@ -2320,7 +2307,7 @@ msgstr ""
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:166
 #, c-format
 msgid "%sItem type %sCollection %sShelving location %sSomething else %s "
-msgstr "%sТип одиниці %sЗібрання %sЗагальне розташування полиці %sЩось ще %s "
+msgstr "%sТип одиниці %sЗібрання %sПоличне розташування %sЩось ще %s "
 
 #. %1$s:  IF ( singleBranchMode ) 
 #. %2$s:  ELSE 
@@ -3984,9 +3971,9 @@ msgid "An error occurred while processing your request."
 msgstr "Трапилася помилка при обробці Вашого запиту."
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-browse.tt:86
-#, fuzzy, c-format
+#, c-format
 msgid "An error occurred, please try again. "
-msgstr "При створенні цього списку сталася помилка."
+msgstr "Сталася помилка, будь ласка, спробуйте ще раз. "
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/errors/errorpage.tt:58
 #, c-format
@@ -5082,7 +5069,7 @@ msgstr "Закрити це вікно"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-addbybiblionumber.tt:108
 #, c-format
 msgid "Close this window."
-msgstr "Закрити це вікно"
+msgstr "Закрити це вікно."
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-sendbasketform.tt:20
 #, c-format
@@ -6228,7 +6215,7 @@ msgstr "Плата за тип примірника „%s“: %s"
 msgid "Female:"
 msgstr "жінка:"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:444
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:443
 #, c-format
 msgid "Fewer options"
 msgstr "Менше параметрів"
@@ -7533,7 +7520,7 @@ msgstr "Останнє"
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/page-numbers.inc:32
 #, c-format
 msgid "Last "
-msgstr "Останнє"
+msgstr "Останнє "
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:354
 #, c-format
@@ -8146,7 +8133,7 @@ msgstr "Докладніше"
 msgid "More lists"
 msgstr "Більше списків"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:446
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:445
 #, c-format
 msgid "More options"
 msgstr "Більше параметрів"
@@ -8263,7 +8250,7 @@ msgstr "Новий пароль: "
 msgid "New purchase suggestion"
 msgstr "Нова пропозиція на придбання "
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:450
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:449
 #, c-format
 msgid "New search"
 msgstr "Новий пошук"
@@ -9134,9 +9121,9 @@ msgid "PayPal Acceptance Mark"
 msgstr "Знак прийняття PayPal"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/accounts.inc:63
-#, fuzzy, c-format
+#, c-format
 msgid "Payment"
-msgstr "Спосіб сплати"
+msgstr "Оплата"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-account.tt:73
 #, c-format
@@ -10492,7 +10479,7 @@ msgid "Scan the item or enter its barcode:"
 msgstr "Проскануйте новий примірник або введіть його штрих-код: "
 
 #. INPUT type=submit name=do
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:440
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:439
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-browse.tt:81
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1200
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-search-history.tt:76
@@ -11027,7 +11014,7 @@ msgstr "Подібні примірники"
 msgid "Simple DC-RDF"
 msgstr "Простий DC-RDF"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/masthead.inc:15
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/masthead.inc:12
 #, fuzzy, c-format
 msgid "Skip to main content"
 msgstr "в головному записі"
@@ -13172,9 +13159,9 @@ msgid "You have no pending purchase suggestions."
 msgstr "У Вас немає пропозицій для придбання, що очікують на розгляд."
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:435
-#, fuzzy, c-format
+#, c-format
 msgid "You have no pending purchase suggestions. "
-msgstr "Немає жодних, очікуючих на рішення, пропозицій для придбання."
+msgstr "У Вас немає пропозицій для придбання, що очікують на розгляд. "
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:83
 #, c-format
@@ -13720,10 +13707,10 @@ msgid "Your tags"
 msgstr "Мої мітки"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-memberentry-update-submitted.tt:37
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Your updates have been submitted and your patron account has been modified."
-msgstr "Ваші оновлення надіслано, а Ваш обліковий запис змінено."
+msgstr "Ваші оновлення прийняті, а Ваш обліковий запис змінено."
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-memberentry-update-submitted.tt:39
 #, c-format
@@ -14686,6 +14673,15 @@ msgstr "мітки"
 #, c-format
 msgid "×"
 msgstr "×"
+
+#~ msgid ""
+#~ "%s %s [%% IF ( OpacAdvSearchMoreOptions and OpacAdvSearchMoreOptions.size "
+#~ "> 0 and expanded_options ) or ( OpacAdvSearchOptions and "
+#~ "OpacAdvSearchOptions.size > 0 and not expanded_options ) %%] "
+#~ msgstr ""
+#~ "%s %s [%% IF ( OpacAdvSearchMoreOptions and OpacAdvSearchMoreOptions.size "
+#~ "> 0 and expanded_options ) or ( OpacAdvSearchOptions and "
+#~ "OpacAdvSearchOptions.size > 0 and not expanded_options ) %%] "
 
 #~ msgid "%s Not renewable %s Not allowed "
 #~ msgstr "%s Не продовжуване %s Не дозволяється "

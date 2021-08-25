@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Koha 20.11\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-07-16 08:55-0300\n"
-"PO-Revision-Date: 2021-06-23 09:46+0000\n"
+"POT-Creation-Date: 2021-08-20 15:58-0300\n"
+"PO-Revision-Date: 2021-08-12 10:16+0000\n"
 "Last-Translator: Tomas.jiglind <tomas.jiglind@mariestad.se>\n"
 "Language-Team: \n"
 "Language: sv\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.8\n"
-"X-POOTLE-MTIME: 1624441578.778746\n"
+"X-POOTLE-MTIME: 1628763411.447939\n"
 "X-Pootle-Path: /sv/20.11/sv-SE-opac-bootstrap.po\n"
 "X-Pootle-Revision: 1\n"
 
@@ -403,19 +403,6 @@ msgid ""
 msgstr ""
 "%s %s Du måste logga in om du vill prenumerera på e-postnotiser om nya "
 "nummer %s %s "
-
-#. %1$s:  END 
-#. %2$s:  END # / IF expanded_options 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:419
-#, c-format
-msgid ""
-"%s %s [%% IF ( OpacAdvSearchMoreOptions and OpacAdvSearchMoreOptions.size > "
-"0 and expanded_options ) or ( OpacAdvSearchOptions and OpacAdvSearchOptions."
-"size > 0 and not expanded_options ) %%] "
-msgstr ""
-"%s %s [%% IF ( OpacAdvSearchMoreOptions and OpacAdvSearchMoreOptions.size > "
-"0 and expanded_options ) or ( OpacAdvSearchOptions and OpacAdvSearchOptions."
-"size > 0 and not expanded_options ) %%] "
 
 #. %1$s:  END # / IF GROUP_RESULT.BiblioDefaultViewmarc 
 #. %2$s:  IF ( GROUP_RESULT.author ) 
@@ -864,6 +851,8 @@ msgid ""
 "%s Not renewable %s Item must be renewed at the library. %s renewals "
 "remaining %s Not allowed "
 msgstr ""
+"%s Kan inte lånas om %s Exemplaret måste lånas om på biblioteket. %s omlån "
+"kvarstår %s Inte tillåtet "
 
 #. %1$s:  ELSIF ( OVERDUE.onreserve ) 
 #. %2$s:  ELSE 
@@ -2974,6 +2963,8 @@ msgid ""
 "( %s of %s renewals remaining %s / %s of %s renewals left before the item "
 "must be seen by the library %s )"
 msgstr ""
+"( %s of %s omlån återstår %s / %s av %s omlån kvar innan exemplaret måste "
+"visas upp på biblioteket %s )"
 
 #. %1$s:  LEVEL_LOO.number | html 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-browser.tt:63
@@ -4317,9 +4308,9 @@ msgstr "Bläddra per hierarki "
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1348
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1350
-#, fuzzy, c-format
+#, c-format
 msgid "Browse shelf "
-msgstr "Liknande titlar"
+msgstr "Liknande titlar "
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth.tt:101
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth.tt:126
@@ -6003,7 +5994,7 @@ msgstr "Avgift för exemplarkategori '%s': %s"
 msgid "Female:"
 msgstr "Kvinna: "
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:444
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:443
 #, c-format
 msgid "Fewer options"
 msgstr "Färre alternativ "
@@ -7890,7 +7881,7 @@ msgstr "Mer detaljer "
 msgid "More lists"
 msgstr "Fler listor "
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:446
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:445
 #, c-format
 msgid "More options"
 msgstr "Fler alternativ "
@@ -8007,7 +7998,7 @@ msgstr "Nytt lösenord: "
 msgid "New purchase suggestion"
 msgstr "Nytt inköpsförslag "
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:450
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:449
 #, c-format
 msgid "New search"
 msgstr "Ny sökning "
@@ -10210,7 +10201,7 @@ msgid "Scan the item or enter its barcode:"
 msgstr "Skanna exemplar eller ange streckkod: "
 
 #. INPUT type=submit name=do
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:440
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:439
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-browse.tt:81
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1200
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-search-history.tt:76
@@ -10739,7 +10730,7 @@ msgstr "Liknande artiklar"
 msgid "Simple DC-RDF"
 msgstr "Enkel DC-RDF"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/masthead.inc:15
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/masthead.inc:12
 #, fuzzy, c-format
 msgid "Skip to main content"
 msgstr "i huvudport"
@@ -12885,11 +12876,13 @@ msgstr "Du har nått gränsen för hur många förslag du kan göra just nu."
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:99
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:351
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "You have renewed this item the maximum number of consecutive times without "
 "it being seen by the library."
-msgstr "Du har nått gränsen för max antal omlån för detta exemplar. "
+msgstr ""
+"Du har lånat om det här exemplaret maximalt antal gånger i rad utan att det "
+"ha visats upp för biblioteket."
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:97
 #, c-format
@@ -14328,6 +14321,15 @@ msgstr "dina taggar "
 #, c-format
 msgid "×"
 msgstr "×"
+
+#~ msgid ""
+#~ "%s %s [%% IF ( OpacAdvSearchMoreOptions and OpacAdvSearchMoreOptions.size "
+#~ "> 0 and expanded_options ) or ( OpacAdvSearchOptions and "
+#~ "OpacAdvSearchOptions.size > 0 and not expanded_options ) %%] "
+#~ msgstr ""
+#~ "%s %s [%% IF ( OpacAdvSearchMoreOptions and OpacAdvSearchMoreOptions.size "
+#~ "> 0 and expanded_options ) or ( OpacAdvSearchOptions and "
+#~ "OpacAdvSearchOptions.size > 0 and not expanded_options ) %%] "
 
 #~ msgid "%s Not renewable %s Not allowed "
 #~ msgstr "%s Kan inte lånas om %s Inte tillåtet "
