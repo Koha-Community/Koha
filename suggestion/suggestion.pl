@@ -180,6 +180,9 @@ if ( $op =~ /save/i ) {
 
             $suggestion_only->{lastmodificationdate} = dt_from_string;
             $suggestion_only->{lastmodificationby}   = C4::Context->userenv->{number};
+            $suggestion_only->{branchcode} = undef
+              if exists $suggestion_only->{branchcode}
+              && $suggestion_only->{branchcode} eq "";
 
             &ModSuggestion($suggestion_only);
 
