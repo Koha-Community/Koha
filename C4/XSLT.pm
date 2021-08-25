@@ -63,7 +63,7 @@ Replaces codes with authorized values in a MARC::Record object
 =cut
 
 sub transformMARCXML4XSLT {
-    my ($biblionumber, $record, $opac) = @_;
+    my ($biblionumber, $record, $opac, $branches, $itemtypes, $av) = @_;
     my $frameworkcode = GetFrameworkCode($biblionumber) || '';
     my $tagslib = &GetMarcStructure(1, $frameworkcode, { unsafe => 1 });
     my @fields;
@@ -73,26 +73,40 @@ sub transformMARCXML4XSLT {
     };
     if ($@) { warn "PROBLEM WITH RECORD"; next; }
     my $marcflavour = C4::Context->preference('marcflavour');
-    my $av = getAuthorisedValues4MARCSubfields($frameworkcode);
     foreach my $tag ( keys %$av ) {
         foreach my $field ( $record->field( $tag ) ) {
-            if ( $av->{ $tag } ) {
+            if ( defined $av->{ $tag } ) {
                 my @new_subfields = ();
+                my $updated = 0;
                 for my $subfield ( $field->subfields() ) {
                     my ( $letter, $value ) = @$subfield;
-                    # Replace the field value with the authorised value *except* for MARC21 field 942$n (suppression in opac)
-                    if ( !( $tag eq '942' && $subfield->[0] eq 'n' ) || $marcflavour eq 'UNIMARC' ) {
-                        $value = GetAuthorisedValueDesc( $tag, $letter, $value, '', $tagslib, undef, $opac )
-                            if $av->{ $tag }->{ $letter };
+                    if( defined $av->{ $tag }->{ $letter } ){
+                        my $category = $av->{$tag}->{$letter}->{category};
+                        # Replace the field value with the authorised value *except* for MARC21/NORMARC field 942$n (suppression in opac)
+                        if( $category eq 'branches' ){
+                            $value = defined $branches->{$value} ? $branches->{$value}: q{} ;
+                            $updated = 1;
+                        }
+                        elsif( $category eq 'itemtypes' ){
+                            $value = defined $itemtypes->{$value}->{translated_description} ? $itemtypes->{$value}->{translated_description} : q{};
+                            $updated = 1;
+                        }
+                        elsif ( !( $tag eq '942' && $subfield->[0] eq 'n' ) || $marcflavour eq 'UNIMARC' ) {
+                            my $desc_field = $opac ? "lib_opac" : "lib";
+                            if ( defined $av->{$tag}->{$letter}->{$category}->{$value}->{$desc_field} ) {
+                                $value = $av->{$tag}->{$letter}->{$category}->{$value}->{$desc_field} || $value;
+                                $updated = 1;
+                            }
+                        }
                     }
                     push( @new_subfields, $letter, $value );
-                } 
+                }
                 $field ->replace_with( MARC::Field->new(
                     $tag,
                     $field->indicator(1),
                     $field->indicator(2),
                     @new_subfields
-                ) );
+                ) ) if $updated;
             }
         }
     }
@@ -110,15 +124,17 @@ sub getAuthorisedValues4MARCSubfields {
     my ($frameworkcode) = @_;
     unless ( $authval_per_framework{ $frameworkcode } ) {
         my $dbh = C4::Context->dbh;
-        my $sth = $dbh->prepare("SELECT DISTINCT tagfield, tagsubfield
+        my $sth = $dbh->prepare("SELECT DISTINCT tagfield, tagsubfield, authorised_value
                                  FROM marc_subfield_structure
                                  WHERE authorised_value IS NOT NULL
                                    AND authorised_value!=''
                                    AND frameworkcode=?");
         $sth->execute( $frameworkcode );
         my $av = { };
-        while ( my ( $tag, $letter ) = $sth->fetchrow() ) {
-            $av->{ $tag }->{ $letter } = 1;
+        while ( my ( $tag, $letter, $category ) = $sth->fetchrow() ) {
+            my $authorised_values = { map { $_->{authorised_value} => $_ } @{ Koha::AuthorisedValues->search({ category => $category })->unblessed } };
+            $av->{ $tag }->{ $letter }->{category} = $category;
+            $av->{ $tag }->{ $letter }->{$category} = $authorised_values unless ( $category eq 'itemtypes' || $category eq 'branches' );
         }
         $authval_per_framework{ $frameworkcode } = $av;
     }
@@ -251,6 +267,11 @@ sub XSLTParse4Display {
     my $hidden_items = $params->{hidden_items} || [];
     my $variables    = $params->{xslt_variables};
     my $items_rs     = $params->{items_rs};
+    my $branches     = $params->{branches};
+    my $itemtypes    = $params->{itemtypes};
+
+    $branches = { map { $_->branchcode => $_->branchname } Koha::Libraries->search({}, { order_by => 'branchname' })->as_list } unless $branches;
+    $itemtypes = { map { $_->{itemtype} => $_ } @{ Koha::ItemTypes->search_with_localization->unblessed } } unless $itemtypes;
 
     die "Mandatory \$params->{xsl_syspref} was not provided, called with biblionumber $params->{biblionumber}"
         if not defined $params->{xsl_syspref};
@@ -258,12 +279,13 @@ sub XSLTParse4Display {
     my $xslfilename = get_xsl_filename( $xslsyspref);
 
     # grab the XML, run it through our stylesheet, push it out to the browser
-    my $record = transformMARCXML4XSLT($biblionumber, $orig_record);
+    my $authorised_values = getAuthorisedValues4MARCSubfields("");
+    my $record = transformMARCXML4XSLT($biblionumber, $orig_record, undef, $branches, $itemtypes, $authorised_values );
     my $itemsxml;
     if ( $xslsyspref eq "OPACXSLTDetailsDisplay" || $xslsyspref eq "XSLTDetailsDisplay" || $xslsyspref eq "XSLTResultsDisplay" ) {
         $itemsxml = ""; #We don't use XSLT for items display on these pages
     } else {
-        $itemsxml = buildKohaItemsNamespace($biblionumber, $hidden_items, $items_rs);
+        $itemsxml = buildKohaItemsNamespace($biblionumber, $hidden_items, $items_rs, $branches, $itemtypes);
     }
     my $xmlrecord = $record->as_xml(C4::Context->preference('marcflavour'));
 
@@ -324,7 +346,7 @@ Is only used in this module currently.
 =cut
 
 sub buildKohaItemsNamespace {
-    my ($biblionumber, $hidden_items, $items_rs) = @_;
+    my ($biblionumber, $hidden_items, $items_rs, $branches, $itemtypes) = @_;
 
     $hidden_items ||= [];
 
@@ -344,9 +366,6 @@ sub buildKohaItemsNamespace {
     my $ccodes =
       { map { $_->{authorised_value} => $_->{opac_description} } Koha::AuthorisedValues->get_descriptions_by_koha_field( { frameworkcode => "", kohafield => 'items.ccode' } ) };
 
-    my %branches = map { $_->branchcode => $_->branchname } Koha::Libraries->search({}, { order_by => 'branchname' })->as_list;
-
-    my $itemtypes = { map { $_->{itemtype} => $_ } @{ Koha::ItemTypes->search->unblessed } };
     my $xml = '';
     my %descs = map { $_->{authorised_value} => $_ } Koha::AuthorisedValues->get_descriptions_by_koha_field( { kohafield => 'items.notforloan' } );
     my $ref_status = C4::Context->preference('Reference_NFL_Statuses') || '1|2';
@@ -411,8 +430,8 @@ sub buildKohaItemsNamespace {
         else {
             $status = "available";
         }
-        my $homebranch     = C4::Koha::xml_escape($branches{$item->homebranch});
-        my $holdingbranch  = C4::Koha::xml_escape($branches{$item->holdingbranch});
+        my $homebranch     = C4::Koha::xml_escape($branches->{$item->homebranch});
+        my $holdingbranch  = C4::Koha::xml_escape($branches->{$item->holdingbranch});
         my $resultbranch   = C4::Context->preference('OPACResultsLibrary') eq 'homebranch' ? $homebranch : $holdingbranch;
         my $location       = C4::Koha::xml_escape($item->location && exists $shelflocations->{$item->location} ? $shelflocations->{$item->location} : $item->location);
         my $ccode          = C4::Koha::xml_escape($item->ccode    && exists $ccodes->{$item->ccode}            ? $ccodes->{$item->ccode}            : $item->ccode);
