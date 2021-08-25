@@ -127,28 +127,35 @@
         var Sticky;
         $(document).ready(function() {
 
-            $("#CheckAllFlags").on("click",function(){
-                $(".flag").attr("disabled", false);
-                $(".flag").prop("checked", true);
-                $("#flag-0").prop("checked", false);
-                [% IF disable_superlibrarian_privs %]
-                    $("#flag-0").prop("disabled", true);
-                [% END %]
-                return false;
-            });
-            $("#UncheckAllFlags").on("click",function(){
-                $(".flag").attr("disabled", false);
-                [% IF disable_superlibrarian_privs %]
-                    $("#flag-0").prop("disabled", true);
-                [% END %]
-                $(".flag").prop("checked", false);
-                return false;
-            });
-            $(".flag").change(function(){
-                if(!$(this).is(':checked')){
-                    $("input#flag-0").prop("checked", false);
-                }
-            });
+            [% IF disable_superlibrarian_privs && patron.is_superlibrarian %]
+                $("#CheckAllFlags,#UncheckAllFlags")
+                    .attr("disabled", true)
+                    .attr("title", _("The system preference ProtectSuperlibrarian is enabled"))
+                    .on("click", function(e){e.preventDefault()});
+            [% ELSE %]
+                $("#CheckAllFlags").on("click",function(){
+                    $(".flag").attr("disabled", false);
+                    $(".flag").prop("checked", true);
+                    $("#flag-0").prop("checked", false);
+                    [% IF disable_superlibrarian_privs %]
+                        $("#flag-0").prop("disabled", true);
+                    [% END %]
+                    return false;
+                });
+                $("#UncheckAllFlags").on("click",function(){
+                    $(".flag").attr("disabled", false);
+                    [% IF disable_superlibrarian_privs %]
+                        $("#flag-0").prop("disabled", true);
+                    [% END %]
+                    $(".flag").prop("checked", false);
+                    return false;
+                });
+                $(".flag").change(function(){
+                    if(!$(this).is(':checked')){
+                        $("input#flag-0").prop("checked", false);
+                    }
+                });
+            [% END %]
 
             Sticky = $("#permissions_toolbar");
             Sticky.hcSticky({
