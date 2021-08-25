@@ -37,14 +37,54 @@ my $builder = t::lib::TestBuilder->new;
 $schema->storage->txn_begin;
 
 subtest 'transformMARCXML4XSLT tests' => sub {
-    plan tests => 1;
-    my $mock_xslt =  Test::MockModule->new("C4::XSLT");
-    $mock_xslt->mock( getAuthorisedValues4MARCSubfields => sub { return { 942 => { 'n' => 1 } } } );
-    $mock_xslt->mock( GetAuthorisedValueDesc => sub { warn "called"; });
+    plan tests => 8;
+    my $itemtype = $builder->build_object({ class => 'Koha::ItemTypes' });
+    my $itemtype_2 = $builder->build_object({ class => 'Koha::ItemTypes' });
+    my $branch = $builder->build_object({ class => 'Koha::Libraries' });
+    my $branch_2 = $builder->build_object({ class => 'Koha::Libraries' });
+    $itemtype_2->delete;
+    $branch_2->delete;
+
+    my $branches = { map { $_->branchcode => $_->branchname } Koha::Libraries->search({}, { order_by => 'branchname' })->as_list };
+    my $itemtypes = { map { $_->{itemtype} => $_ } @{ Koha::ItemTypes->search_with_localization->unblessed } };
+    my $auth_val = $builder->build_object({ class => 'Koha::AuthorisedValues' });
+    my $av = {
+        942 => { 'n' => { category => "SUPPRESS", SUPPRESS => { 1 => 'banana' } } },
+        952 => {
+            'a' => { category => $auth_val->category, $auth_val->category => {
+                $auth_val->authorised_value => $auth_val->unblessed
+            }},
+            'b' => { category => $auth_val->category, $auth_val->category => {
+                $auth_val->authorised_value => $auth_val->unblessed
+            }},
+            'c' => { category => "branches" },
+            'd' => { category => "itemtypes" }
+        }
+    };
     my $record = MARC::Record->new();
     my $suppress_field = MARC::Field->new( 942, ' ', ' ', n => '1' );
-    $record->append_fields($suppress_field);
-    warning_is { C4::XSLT::transformMARCXML4XSLT( 3,$record ) } undef, "942n auth value not translated";
+    my $mapped_field = MARC::Field->new( 952, ' ', ' ',
+        a => $auth_val->authorised_value,
+        b => "POTATO",
+        c => $branch->branchcode,
+        d => $itemtype->itemtype
+    );
+    $record->append_fields( ($suppress_field, $mapped_field ) );
+    C4::XSLT::transformMARCXML4XSLT( 3, $record, 0, $branches, $itemtypes, $av );
+    is($record->subfield( '942', 'n' ),1,'942$n is not transformed');
+    is($record->subfield( '952', 'a' ),$auth_val->lib,'952$a is transformed when value found');
+    is($record->subfield( '952', 'b' ),'POTATO','952$b is not transformed when value not found');
+    is($record->subfield( '952', 'c' ),$branch->branchname,'952$c is transformed when valid branchcode');
+    is($record->subfield( '952', 'd' ),$itemtype->translated_description,'952$d is transformed when valid itemtype');
+
+    $av->{952}->{a}->{$auth_val->category}->{$auth_val->authorised_value}->{lib} = "";
+    $record->field(952)->update( a => $auth_val->authorised_value, c => $branch_2->branchcode, d => $itemtype_2->itemtype );
+    C4::XSLT::transformMARCXML4XSLT( 3, $record, $branches, $itemtypes, $av );
+    is($record->subfield( '952', 'a' ),$auth_val->authorised_value,'952$a is not transformed when value found but blank');
+    is($record->subfield( '952', 'c' ),$branch_2->branchcode,'952$c is returned unaltered invalid branchcode');
+    is($record->subfield( '952', 'd' ),$itemtype_2->itemtype,'952$d is returned unaltered when invalid itemtype');
+
+
 };
 
 subtest 'buildKohaItemsNamespace status tests' => sub {
@@ -61,7 +101,9 @@ subtest 'buildKohaItemsNamespace status tests' => sub {
     $item->holdingbranch( $holdinglibrary->branchcode )->store;
     $item->biblioitem->itemtype($itemtype->itemtype)->store;
 
-    my $xml = C4::XSLT::buildKohaItemsNamespace( $item->biblionumber,[]);
+    my $branches = { map { $_->branchcode => $_->branchname } Koha::Libraries->search({}, { order_by => 'branchname' })->as_list };
+    my $itemtypes = { map { $_->{itemtype} => $_ } @{ Koha::ItemTypes->search->unblessed } };
+    my $xml = C4::XSLT::buildKohaItemsNamespace( $item->biblionumber,[], undef, undef, $branches, $itemtypes);
     like($xml,qr{<status>available</status>},"Item is available when no other status applied");
 
     # notforloan
@@ -70,48 +112,50 @@ subtest 'buildKohaItemsNamespace status tests' => sub {
         $item->notforloan(0)->store;
         Koha::ItemTypes->find($item->itype)->notforloan(0)->store;
         Koha::ItemTypes->find($item->biblioitem->itemtype)->notforloan(1)->store;
-        $xml = C4::XSLT::buildKohaItemsNamespace( $item->biblionumber,[]);
+        $itemtypes = { map { $_->{itemtype} => $_ } @{ Koha::ItemTypes->search->unblessed } };
+        $xml = C4::XSLT::buildKohaItemsNamespace( $item->biblionumber,[], undef, $branches, $itemtypes);
         like($xml,qr{<status>reference</status>},"reference if positive itype notforloan value");
 
         t::lib::Mocks::mock_preference('item-level_itypes', 1);
         Koha::ItemTypes->find($item->itype)->notforloan(1)->store;
         Koha::ItemTypes->find($item->biblioitem->itemtype)->notforloan(0)->store;
-        $xml = C4::XSLT::buildKohaItemsNamespace( $item->biblionumber,[]);
+        $itemtypes = { map { $_->{itemtype} => $_ } @{ Koha::ItemTypes->search->unblessed } };
+        $xml = C4::XSLT::buildKohaItemsNamespace( $item->biblionumber,[], undef, $branches, $itemtypes);
         like($xml,qr{<status>reference</status>},"reference if positive itemtype notforloan value");
         Koha::ItemTypes->find($item->itype)->notforloan(0)->store;
 
         my $substatus = Koha::AuthorisedValues->search({ category => 'NOT_LOAN', authorised_value => -1 })->next->lib;
         $item->notforloan(-1)->store;
-        $xml = C4::XSLT::buildKohaItemsNamespace( $item->biblionumber,[]);
+        $xml = C4::XSLT::buildKohaItemsNamespace( $item->biblionumber,[], undef, $branches, $itemtypes);
         like($xml,qr{<status>reallynotforloan</status>},"reallynotforloan if negative notforloan value");
         like($xml,qr{<substatus>$substatus</substatus>},"substatus set if negative notforloan value");
 
         $item->notforloan(1)->store;
-        $xml = C4::XSLT::buildKohaItemsNamespace( $item->biblionumber,[]);
+        $xml = C4::XSLT::buildKohaItemsNamespace( $item->biblionumber,[], undef, $branches, $itemtypes);
         like($xml,qr{<status>reference</status>},"reference if positive notforloan value");
 
         # But now make status notforloan==1 count under Not available
         t::lib::Mocks::mock_preference('Reference_NFL_Statuses', '2');
-        $xml = C4::XSLT::buildKohaItemsNamespace( $item->biblionumber,[]);
+        $xml = C4::XSLT::buildKohaItemsNamespace( $item->biblionumber,[], undef, $branches, $itemtypes);
         like($xml,qr{<status>reallynotforloan</status>},"reallynotforloan when we change Reference_NFL_Statuses");
         t::lib::Mocks::mock_preference('Reference_NFL_Statuses', '1|2');
     }
 
     $item->onloan('2001-01-01')->store;
-    $xml = C4::XSLT::buildKohaItemsNamespace( $item->biblionumber,[]);
+    $xml = C4::XSLT::buildKohaItemsNamespace( $item->biblionumber,[], undef, $branches, $itemtypes);
     like( $xml, qr/<status>other<\/status>/, "Checked out is part of other statuses" );
     like($xml,qr{<substatus>Checked out</substatus>},"Checked out status takes precedence over Not for loan");
 
     $item->withdrawn(1)->store;
-    $xml = C4::XSLT::buildKohaItemsNamespace( $item->biblionumber,[]);
+    $xml = C4::XSLT::buildKohaItemsNamespace( $item->biblionumber,[], undef, $branches, $itemtypes);
     like($xml,qr{<substatus>Withdrawn</substatus>},"Withdrawn status takes precedence over Checked out");
 
     $item->itemlost(1)->store;
-    $xml = C4::XSLT::buildKohaItemsNamespace( $item->biblionumber,[]);
+    $xml = C4::XSLT::buildKohaItemsNamespace( $item->biblionumber,[], undef, $branches, $itemtypes);
     like($xml,qr{<substatus>Lost</substatus>},"Lost status takes precedence over Withdrawn");
 
     $item->damaged(1)->store;
-    $xml = C4::XSLT::buildKohaItemsNamespace( $item->biblionumber,[]);
+    $xml = C4::XSLT::buildKohaItemsNamespace( $item->biblionumber,[], undef, $branches, $itemtypes);
     like($xml,qr{<substatus>Damaged</substatus>},"Damaged status takes precedence over Lost");
 
     $builder->build({ source => "Branchtransfer", value => {
@@ -120,7 +164,7 @@ subtest 'buildKohaItemsNamespace status tests' => sub {
         datecancelled => undef,
         }
     });
-    $xml = C4::XSLT::buildKohaItemsNamespace( $item->biblionumber,[]);
+    $xml = C4::XSLT::buildKohaItemsNamespace( $item->biblionumber,[], undef, $branches, $itemtypes);
     like($xml,qr{<substatus>In transit</substatus>},"In-transit status takes precedence over Damaged");
 
     my $hold = $builder->build_object({ class => 'Koha::Holds', value => {
@@ -130,15 +174,16 @@ subtest 'buildKohaItemsNamespace status tests' => sub {
         priority     => 0,
         }
     });
-    $xml = C4::XSLT::buildKohaItemsNamespace( $item->biblionumber,[]);
-    like($xml,qr{<substatus>Hold waiting</substatus>},"Waiting status takes precedence over In transit (holds)");
+    $xml = C4::XSLT::buildKohaItemsNamespace( $item->biblionumber,[], undef, $branches, $itemtypes);
+    like($xml,qr{<substatus>Hold waiting</substatus>},"Waiting status takes precedence over In transit");
     $hold->cancel;
 
     $builder->build({ source => "TmpHoldsqueue", value => {
         itemnumber => $item->itemnumber
         }
     });
-    $xml = C4::XSLT::buildKohaItemsNamespace( $item->biblionumber,[]);
+
+    $xml = C4::XSLT::buildKohaItemsNamespace( $item->biblionumber,[], undef, $branches, $itemtypes);
     like($xml,qr{<substatus>Pending hold</substatus>},"Pending status takes precedence over all");
     my $library_name = $holdinglibrary->branchname;
     like($xml,qr{<resultbranch>${library_name}</resultbranch>}, "Found resultbranch / holding branch" );
@@ -178,8 +223,11 @@ subtest 'buildKohaItemsNamespace() including/omitting items tests' => sub {
 
     my $items_rs = $biblio->items->search({ "me.itemnumber" => { '!=' => $item_3->itemnumber } });
 
+    my $branches = { map { $_->branchcode => $_->branchname } Koha::Libraries->search({}, { order_by => 'branchname' })->as_list };
+    my $itemtypes = { map { $_->{itemtype} => $_ } @{ Koha::ItemTypes->search->unblessed } };
+
     ## Test passing items_rs only
-    my $xml = C4::XSLT::buildKohaItemsNamespace( $biblio->biblionumber, undef, $items_rs );
+    my $xml = C4::XSLT::buildKohaItemsNamespace( $biblio->biblionumber, undef, $items_rs, $branches, $itemtypes );
 
     my $library_1_name = $library_1->branchname;
     my $library_2_name = $library_2->branchname;
@@ -191,20 +239,20 @@ subtest 'buildKohaItemsNamespace() including/omitting items tests' => sub {
 
     t::lib::Mocks::mock_preference('OpacHiddenItems', 'biblionumber: ['.$biblio2->biblionumber.']');
     my $hid_rs = $biblio->items->search({ "me.itemnumber" => { '!=' => $item_3->itemnumber } })->filter_by_visible_in_opac();
-    $xml = C4::XSLT::buildKohaItemsNamespace( $biblio->biblionumber, undef, $hid_rs );
+    $xml = C4::XSLT::buildKohaItemsNamespace( $biblio->biblionumber, undef, $hid_rs, $branches, $itemtypes );
     like(   $xml, qr{<homebranch>$library_1_name</homebranch>}, '$item_1 present in the XML' );
     like(   $xml, qr{<homebranch>$library_2_name</homebranch>}, '$item_2 present in the XML' );
     unlike( $xml, qr{<homebranch>$library_3_name</homebranch>}, '$item_3 not present in the XML' );
 
     ## Test passing one item in hidden_items and items_rs
-    $xml = C4::XSLT::buildKohaItemsNamespace( $biblio->biblionumber, [ $item_1->itemnumber ], $items_rs->reset );
+    $xml = C4::XSLT::buildKohaItemsNamespace( $biblio->biblionumber, [ $item_1->itemnumber ], $items_rs->reset, $branches, $itemtypes );
 
     unlike( $xml, qr{<homebranch>$library_1_name</homebranch>}, '$item_1 not present in the XML' );
     like(   $xml, qr{<homebranch>$library_2_name</homebranch>}, '$item_2 present in the XML' );
     unlike( $xml, qr{<homebranch>$library_3_name</homebranch>}, '$item_3 not present in the XML' );
 
     ## Test passing both items in hidden_items and items_rs
-    $xml = C4::XSLT::buildKohaItemsNamespace( $biblio->biblionumber, [ $item_1->itemnumber, $item_2->itemnumber ], $items_rs->reset );
+    $xml = C4::XSLT::buildKohaItemsNamespace( $biblio->biblionumber, [ $item_1->itemnumber, $item_2->itemnumber ], $items_rs->reset, $branches, $itemtypes );
 
     unlike( $xml, qr{<homebranch>$library_1_name</homebranch>}, '$item_1 not present in the XML' );
     unlike( $xml, qr{<homebranch>$library_2_name</homebranch>}, '$item_2 not present in the XML' );
@@ -212,7 +260,7 @@ subtest 'buildKohaItemsNamespace() including/omitting items tests' => sub {
     is( $xml, '<items xmlns="http://www.koha-community.org/items"></items>', 'Empty XML' );
 
     ## Test passing both items in hidden_items and no items_rs
-    $xml = C4::XSLT::buildKohaItemsNamespace( $biblio->biblionumber, [ $item_1->itemnumber, $item_2->itemnumber, $item_3->itemnumber ] );
+    $xml = C4::XSLT::buildKohaItemsNamespace( $biblio->biblionumber, [ $item_1->itemnumber, $item_2->itemnumber, $item_3->itemnumber ], $branches, $itemtypes );
 
     unlike( $xml, qr{<homebranch>$library_1_name</homebranch>}, '$item_1 not present in the XML' );
     unlike( $xml, qr{<homebranch>$library_2_name</homebranch>}, '$item_2 not present in the XML' );
@@ -220,14 +268,14 @@ subtest 'buildKohaItemsNamespace() including/omitting items tests' => sub {
     is( $xml, '<items xmlns="http://www.koha-community.org/items"></items>', 'Empty XML' );
 
     ## Test passing one item in hidden_items and items_rs
-    $xml = C4::XSLT::buildKohaItemsNamespace( $biblio->biblionumber, [ $item_1->itemnumber ] );
+    $xml = C4::XSLT::buildKohaItemsNamespace( $biblio->biblionumber, [ $item_1->itemnumber ], undef, $branches, $itemtypes );
 
     unlike( $xml, qr{<homebranch>$library_1_name</homebranch>}, '$item_1 not present in the XML' );
     like(   $xml, qr{<homebranch>$library_2_name</homebranch>}, '$item_2 present in the XML' );
     like(   $xml, qr{<homebranch>$library_3_name</homebranch>}, '$item_3 present in the XML' );
 
     ## Test not passing any param
-    $xml = C4::XSLT::buildKohaItemsNamespace( $biblio->biblionumber );
+    $xml = C4::XSLT::buildKohaItemsNamespace( $biblio->biblionumber, undef, undef, $branches, $itemtypes );
 
     like( $xml, qr{<homebranch>$library_1_name</homebranch>}, '$item_1 present in the XML' );
     like( $xml, qr{<homebranch>$library_2_name</homebranch>}, '$item_2 present in the XML' );
