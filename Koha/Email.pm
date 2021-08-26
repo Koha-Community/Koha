@@ -195,7 +195,8 @@ Return true is the email address passed in parameter is valid following RFC 2822
 
 sub is_valid {
     my ( $class, $email ) = @_;
-    return ($email =~ m{$Email::Address::mailbox}) ? 1 : 0;
+    my @addrs = Email::Address->parse($email);
+    return @addrs ? 1 : 0;
 }
 
 1;
