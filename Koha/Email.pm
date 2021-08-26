@@ -78,7 +78,7 @@ sub create {
     my $args = {};
     $args->{from} = $params->{from} || C4::Context->preference('KohaAdminEmailAddress');
     Koha::Exceptions::BadParameter->throw("Invalid 'from' parameter: ".$args->{from})
-        unless $args->{from} =~ m/$Email::Address::mailbox/; # from is mandatory
+        unless Koha::Email->is_valid($args->{from}); # from is mandatory
 
     $args->{subject} = $params->{subject} // '';
 
@@ -90,7 +90,7 @@ sub create {
     }
 
     Koha::Exceptions::BadParameter->throw("Invalid 'to' parameter: ".$args->{to})
-        unless $args->{to} =~ m/$Email::Address::mailbox/; # to is mandatory
+        unless Koha::Email->is_valid($args->{to}); # to is mandatory
 
     my $addresses = {};
     $addresses->{reply_to} = $params->{reply_to};
@@ -112,7 +112,7 @@ sub create {
         Koha::Exceptions::BadParameter->throw(
             "Invalid '$address' parameter: " . $addresses->{$address} )
           if $addresses->{$address}
-            and $addresses->{$address} !~ m/$Email::Address::mailbox/;
+            and !Koha::Email->is_valid($addresses->{$address});
     }
 
     $args->{cc} = $addresses->{cc}
@@ -183,6 +183,19 @@ sub send_or_die {
     }
 
     $self->SUPER::send_or_die($args);
+}
+
+=head3 is_valid
+
+    my $is_valid = Koha::Email->is_valid($email_address);
+
+Return true is the email address passed in parameter is valid following RFC 2822.
+
+=cut
+
+sub is_valid {
+    my ( $class, $email ) = @_;
+    return ($email =~ m{$Email::Address::mailbox}) ? 1 : 0;
 }
 
 1;

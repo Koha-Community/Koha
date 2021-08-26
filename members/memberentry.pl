@@ -36,6 +36,7 @@ use C4::Letters;
 use C4::Form::MessagingPreferences;
 use Koha::AuthUtils;
 use Koha::AuthorisedValues;
+use Koha::Email;
 use Koha::Patron::Debarments;
 use Koha::Cities;
 use Koha::DateUtils;
@@ -46,7 +47,6 @@ use Koha::Patron::Categories;
 use Koha::Patron::HouseboundRole;
 use Koha::Patron::HouseboundRoles;
 use Koha::Token;
-use Email::Address;
 use Koha::SMS::Providers;
 
 use vars qw($debug);
@@ -400,13 +400,13 @@ if ($op eq 'save' || $op eq 'insert'){
   my $emailalt = $input->param('B_email');
 
   if ($emailprimary) {
-      push (@errors, "ERROR_bad_email") if ($emailprimary !~ m/$Email::Address::mailbox/);
+      push (@errors, "ERROR_bad_email") unless Koha::Email->is_valid($emailprimary);
   }
   if ($emailsecondary) {
-      push (@errors, "ERROR_bad_email_secondary") if ($emailsecondary !~ m/$Email::Address::mailbox/);
+      push (@errors, "ERROR_bad_email_secondary") unless Koha::Email->is_valid($emailsecondary);
   }
   if ($emailalt) {
-      push (@errors, "ERROR_bad_email_alternative") if ($emailalt !~ m/$Email::Address::mailbox/);
+      push (@errors, "ERROR_bad_email_alternative") unless Koha::Email->is_valid($emailalt);
   }
 
   if (C4::Context->preference('ExtendedPatronAttributes') and $input->param('setting_extended_patron_attributes')) {

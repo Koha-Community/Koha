@@ -25,7 +25,6 @@ use constant SHELVES_URL =>
   '/cgi-bin/koha/opac-shelves.pl?display=privateshelves&viewshelf=';
 
 use CGI qw ( -utf8 );
-use Email::Address;
 
 use C4::Auth;
 use C4::Context;
@@ -33,6 +32,7 @@ use C4::Letters;
 use C4::Members ();
 use C4::Output;
 
+use Koha::Email;
 use Koha::Patrons;
 use Koha::Virtualshelves;
 use Koha::Virtualshelfshares;
@@ -196,7 +196,7 @@ sub process_addrlist {
     foreach my $a (@temp) {
         $a =~ s/^\s+//;
         $a =~ s/\s+$//;
-        if ( $a =~ m/$Email::Address::mailbox/ ) {
+        if ( Koha::Email->is_valid($a) ) {
             push @appr_addr, $a;
         }
         else {
