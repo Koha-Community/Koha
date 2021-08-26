@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 3;
+use Test::More tests => 4;
 
 use Test::MockModule;
 use Test::Exception;
@@ -251,4 +251,18 @@ subtest 'send_or_die() tests' => sub {
     my $from = $args->{from};
     is( $from, 'sender@example.com', 'If "from" is not explicitly passed, extract from Sender header' );
     is( $email->header_str('Sender'), undef, 'The Sender header is unset' );
+};
+
+subtest 'is_valid' => sub {
+    plan tests => 8;
+
+    is(Koha::Email->is_valid('Fróm <from@example.com>'), 1);
+    is(Koha::Email->is_valid('from@example.com'), 1);
+    is(Koha::Email->is_valid('<from@example.com>'), 1);
+
+    is(Koha::Email->is_valid('<from@fróm.com>'), 0); # "In accordance with RFC 822 and its descendants, this module demands that email addresses be ASCII only"
+    isnt(Koha::Email->is_valid('@example.com'), 1);
+    isnt(Koha::Email->is_valid('example.com'), 1);
+    isnt(Koha::Email->is_valid('root@localhost'), 1);
+    isnt(Koha::Email->is_valid('from'), 1);
 };
