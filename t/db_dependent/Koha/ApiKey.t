@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 2;
+use Test::More tests => 4;
 use Test::MockModule;
 use Test::Exception;
 
@@ -30,12 +30,9 @@ BEGIN {
 my $schema  = Koha::Database->new->schema;
 my $builder = t::lib::TestBuilder->new;
 
-my $uuid_gen_client_id_counter = 0;
-my $uuid_gen_secret_counter    = 0;
-
 subtest 'store() tests' => sub {
 
-    plan tests => 13;
+    plan tests => 16;
 
     $schema->storage->txn_begin;
 
@@ -46,7 +43,13 @@ subtest 'store() tests' => sub {
 
     my $patron_1 = $builder->build_object( { class => 'Koha::Patrons' } );
     my $description = 'Coral API key';
-    my $api_key = Koha::ApiKey->new({ patron_id => $patron_1->id, description => $description })->store;
+
+    my $api_key = Koha::ApiKey->new(
+        {
+            patron_id   => $patron_1->id,
+            description => $description
+        }
+    )->store;
 
     # re-read from DB
     $api_key->discard_changes;
@@ -75,6 +78,21 @@ subtest 'store() tests' => sub {
     is( $api_key->patron_id, $original_api_key->{patron_id}, '->store() preserves the patron_id' );
     is( $api_key->active, 0, '->store() preserves the active value' );
 
+    $api_key->set({ client_id => 'NewID!' });
+
+    throws_ok {
+        $api_key->store
+    }
+    'Koha::Exceptions::Object::ReadOnlyProperty',
+        'Read-only attribute overwrite attempt raises exception';
+
+    is( $@->property, 'client_id', 'Correct attribute reported back' );
+
+    $api_key->discard_changes;
+    # set a writeable attribute
+    $api_key->set({ description => 'Hey' });
+    lives_ok { $api_key->store } 'Updating a writeable attribute works';
+
     my $patron_to_delete = $builder->build_object( { class => 'Koha::Patrons' } );
     my $deleted_id = $patron_to_delete->id;
     $patron_to_delete->delete;
@@ -85,6 +103,44 @@ subtest 'store() tests' => sub {
         'Invalid patron ID raises exception';
     is( $@->message,   'Broken FK constraint', 'Exception message is correct' );
     is( $@->broken_fk, 'patron_id',            'Exception field is correct' );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'validate_secret() tests' => sub {
+
+    plan tests => 2;
+
+    $schema->storage->txn_begin;
+
+    my $patron  = $builder->build_object( { class => 'Koha::Patrons' } );
+    my $api_key = Koha::ApiKey->new(
+        {   patron_id   => $patron->id,
+            description => 'The description'
+        }
+    )->store;
+
+    my $secret = $api_key->plain_text_secret;
+
+    ok( $api_key->validate_secret( $secret ), 'Valid secret returns true' );
+    ok( !$api_key->validate_secret( 'Wrong secret' ), 'Invalid secret returns true' );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'plain_text_secret() tests' => sub {
+
+    plan tests => 2;
+
+    $schema->storage->txn_begin;
+
+    my $patron = $builder->build_object({ class => 'Koha::Patrons' });
+    # generate a fresh API key
+    my $api_key = Koha::ApiKey->new({ description => 'blah', patron_id => $patron->id })->store;
+    my $plain_text_secret = $api_key->plain_text_secret;
+
+    ok( defined $plain_text_secret, 'A fresh API key carries its plain text secret' );
+    ok( $plain_text_secret ne q{}, 'Plain text secret is not an empty string' );
 
     $schema->storage->txn_rollback;
 };
