@@ -20,9 +20,10 @@ package Koha::ApiKey;
 use Modern::Perl;
 
 
-use Koha::Database;
-use Koha::Exceptions;
+use Koha::AuthUtils qw(hash_password);
+use Koha::Exceptions::Object;
 
+use List::MoreUtils qw(any);
 use UUID;
 
 use base qw(Koha::Object);
@@ -46,12 +47,60 @@ Overloaded I<store> method.
 sub store {
     my ($self) = @_;
 
-    $self->client_id($self->_generate_unused_uuid('client_id'))
-        unless $self->client_id;
-    $self->secret($self->_generate_unused_uuid('secret'))
-        unless $self->secret;
+    if ( $self->in_storage ) {
+        my %dirty_columns = $self->_result->get_dirty_columns;
+
+        # only allow 'description' and 'active' to be updated
+        for my $property ( keys %dirty_columns ) {
+            Koha::Exceptions::Object::ReadOnlyProperty->throw( property => $property )
+              if $property ne 'description' and $property ne 'active';
+        }
+    } else {
+        $self->{_plain_text_secret} = $self->_generate_unused_uuid('secret');
+        $self->set(
+            {   secret    => Koha::AuthUtils::hash_password( $self->{_plain_text_secret} ),
+                client_id => $self->_generate_unused_uuid('client_id'),
+            }
+        );
+    }
 
     return $self->SUPER::store();
+}
+
+=head3 validate_secret
+
+    if ( $api_key->validate_secret( $secret ) ) { ... }
+
+Returns a boolean that tells if the passed secret matches the one on the DB.
+
+=cut
+
+sub validate_secret {
+    my ( $self, $secret ) = @_;
+
+    my $digest = Koha::AuthUtils::hash_password( $secret, $self->secret );
+
+    return $self->secret eq $digest;
+}
+
+=head3 plain_text_secret
+
+    my $generated_secret = $api_key->store->plain_text_secret;
+
+Returns the generated I<secret> so it can be displayed to  the end user.
+This is only accessible when the object is new and has just been stored.
+
+Returns I<undef> if the object was retrieved from the database.
+
+=cut
+
+sub plain_text_secret {
+    my ($self) = @_;
+
+    return $self->{_plain_text_secret}
+        if $self->{_plain_text_secret};
+
+    return;
 }
 
 =head2 Internal methods
