@@ -255,10 +255,10 @@ subtest 'is_valid' => sub {
     is(Koha::Email->is_valid('Fróm <from@example.com>'), 1);
     is(Koha::Email->is_valid('from@example.com'), 1);
     is(Koha::Email->is_valid('<from@example.com>'), 1);
+    is(Koha::Email->is_valid('root@localhost'), 1); # See bug 28017
 
     is(Koha::Email->is_valid('<from@fróm.com>'), 0); # "In accordance with RFC 822 and its descendants, this module demands that email addresses be ASCII only"
     isnt(Koha::Email->is_valid('@example.com'), 1);
     isnt(Koha::Email->is_valid('example.com'), 1);
-    isnt(Koha::Email->is_valid('root@localhost'), 1);
     isnt(Koha::Email->is_valid('from'), 1);
 };
