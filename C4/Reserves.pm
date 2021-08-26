@@ -1003,6 +1003,9 @@ that the item is not waiting on the hold shelf, setting the
 priority to a non-zero value also sets the request's found
 status and waiting date to NULL.
 
+If the hold is 'found' (waiting, in-transit, processing) the
+only field that can be updated is the expiration date.
+
 The optional C<$itemnumber> parameter is used only when
 C<$rank> is a non-zero integer; if supplied, the itemnumber
 of the hold request is set accordingly; if omitted, the itemnumber
@@ -1026,6 +1029,7 @@ sub ModReserve {
     my $borrowernumber = $params->{'borrowernumber'};
     my $biblionumber = $params->{'biblionumber'};
     my $cancellation_reason = $params->{'cancellation_reason'};
+    my $date = $params->{expirationdate};
 
     return if $rank eq "n";
 
@@ -1044,15 +1048,12 @@ sub ModReserve {
     if ( $rank eq "del" ) {
         $hold->cancel({ cancellation_reason => $cancellation_reason });
     }
-    elsif ($hold->found && $hold->priority eq '0') {
+    elsif ($hold->found && $hold->priority eq '0' && $date) {
         logaction( 'HOLDS', 'MODIFY', $hold->reserve_id, Dumper($hold->unblessed) )
             if C4::Context->preference('HoldsLog');
 
         # The only column that can be updated for a found hold is the expiration date
-        my $date = $params->{expirationdate};
-        if ($date) {
-            $hold->expirationdate(dt_from_string($date))->store();
-        }
+        $hold->expirationdate(dt_from_string($date))->store();
     }
     elsif ($rank =~ /^\d+/ and $rank > 0) {
         logaction( 'HOLDS', 'MODIFY', $hold->reserve_id, Dumper($hold->unblessed) )
