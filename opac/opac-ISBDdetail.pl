@@ -98,18 +98,18 @@ unless ( $patron and $patron->category->override_hidden_items ) {
     }
 }
 
-my $record      = $biblio->metadata->record;
-my @items = grep { !$_->hidden_in_opac({ rules => $opachiddenitems_rules }) } @{$biblio->items->as_list} ;
-my $marcflavour = C4::Context->preference("marcflavour");
+my $record = $biblio->metadata->record;
+my @items  = $biblio->items->filter_by_visible_in_opac({ patron => $patron })->as_list;
 
-my $record_processor = Koha::RecordProcessor->new({
-    filters => [ 'ViewPolicy', 'EmbedItems' ],
-    options => {
-        interface => 'opac',
-        frameworkcode => $biblio->frameworkcode,
-        items => \@items
+my $record_processor = Koha::RecordProcessor->new(
+    {   filters => [ 'EmbedItems', 'ViewPolicy' ],
+        options => {
+            interface     => 'opac',
+            frameworkcode => $biblio->frameworkcode,
+            items         => \@items
+        }
     }
-});
+);
 $record_processor->process($record);
 
 # get biblionumbers stored in the cart
@@ -120,6 +120,7 @@ if(my $cart_list = $query->cookie("bib_list")){
     }
 }
 
+my $marcflavour = C4::Context->preference("marcflavour");
 # some useful variables for enhanced content;
 # in each case, we're grabbing the first value we find in
 # the record and normalizing it
