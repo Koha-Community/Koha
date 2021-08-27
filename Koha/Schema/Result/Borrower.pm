@@ -1364,6 +1364,21 @@ __PACKAGE__->has_many(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
+=head2 linktrackers
+
+Type: has_many
+
+Related object: L<Koha::Schema::Result::Linktracker>
+
+=cut
+
+__PACKAGE__->has_many(
+  "linktrackers",
+  "Koha::Schema::Result::Linktracker",
+  { "foreign.borrowernumber" => "self.borrowernumber" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
 =head2 message_queues
 
 Type: has_many
@@ -1875,8 +1890,8 @@ Composing rels: L</aqorder_users> -> ordernumber
 __PACKAGE__->many_to_many("ordernumbers", "aqorder_users", "ordernumber");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2021-07-16 07:12:03
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:SWOGE6/WDsjzXcgfxmVQ4A
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2021-08-27 08:42:21
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:AyU2Z+V4O3ZWV8VhYqXyVg
 
 __PACKAGE__->add_columns(
     '+anonymized'    => { is_boolean => 1 },

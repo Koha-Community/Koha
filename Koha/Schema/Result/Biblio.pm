@@ -330,6 +330,21 @@ __PACKAGE__->has_many(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
+=head2 linktrackers
+
+Type: has_many
+
+Related object: L<Koha::Schema::Result::Linktracker>
+
+=cut
+
+__PACKAGE__->has_many(
+  "linktrackers",
+  "Koha::Schema::Result::Linktracker",
+  { "foreign.biblionumber" => "self.biblionumber" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
 =head2 old_reserves
 
 Type: has_many
@@ -496,8 +511,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07046 @ 2021-02-03 10:03:26
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:YVZN5K/K1v7Kj2yYGwT2CQ
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2021-08-27 08:42:21
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:fsBT6f/ma1fDlGQoauO7Uw
 
 __PACKAGE__->has_many(
   "biblioitem",
