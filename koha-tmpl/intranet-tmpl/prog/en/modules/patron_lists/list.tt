@@ -219,17 +219,15 @@
                 patron_input_name: 'patrons_to_add'
             });
 
-            var checkBoxes = $("input[type='checkbox']","#patron-list-table");
-
-            $("#CheckAll").click(function(e){
+            $("body").on("click", "#CheckAll", function(e){
                 e.preventDefault();
-                checkBoxes.each(function(){
+                $("input[type='checkbox']","#patron-list-table").each(function(){
                     $(this).prop("checked",1);
                 });
             });
-            $("#CheckNone").click(function(e){
+            $("body").on("click", "#CheckNone", function(e){
                 e.preventDefault();
-                checkBoxes.each(function(){
+                $("input[type='checkbox']","#patron-list-table").each(function(){
                     $(this).prop("checked",0);
                 });
             });
