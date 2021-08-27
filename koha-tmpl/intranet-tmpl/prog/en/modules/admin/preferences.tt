@@ -114,7 +114,11 @@
                             <input type="[%IF CHUNK.input_type %][% CHUNK.input_type | html %][% ELSE %]text[% END %]" name="pref_[% CHUNK.name | html %]" id="pref_[% CHUNK.name | html %]" class="preference preference-[% CHUNK.class or "short" | html %]" value="[% CHUNK.value | html %]" autocomplete="off" /> [% IF ( CHUNK.dateinput ) %]<span class="hint">[% INCLUDE 'date-format.inc' %]</span>[% END %]
                         [% END %]
                     [% ELSIF ( CHUNK.type_select ) %]
-                    <select name="pref_[% CHUNK.name | html %]" id="pref_[% CHUNK.name | html %]" class="preference preference-[% CHUNK.class or "choice" | html %]">
+                        [% IF CHUNK.disabled %]
+                        <select name="pref_[% CHUNK.name | html %]" id="pref_[% CHUNK.name | html %]" disabled="disabled" class="preference preference-[% CHUNK.class or "choice" | html %]">
+                        [% ELSE %]
+                        <select name="pref_[% CHUNK.name | html %]" id="pref_[% CHUNK.name | html %]" class="preference preference-[% CHUNK.class or "choice" | html %]">
+                        [% END %]
                         [% FOREACH CHOICE IN CHUNK.CHOICES.sort('value') %]
                         [% IF ( CHOICE.selected ) %]
                         <option value="[% CHOICE.value | html %]" selected="selected">
@@ -177,6 +181,16 @@
                             [% END # FOREACH language %]
                         </ul> <!-- / ul.sortable -->
                     [% END %]
+                    [% END %]
+                    [% IF LINE.WARNINGS.size %]
+                        [% FOR w IN LINE.WARNINGS %]
+                            <div class="dialog alert">
+                                [% SWITCH w %]
+                                [% CASE "bcrypt_config_not_set" %]Pseudonymization must only be turned on if the 'bcrypt_settings' configuration entry exists and is correctly filled in the Koha configuration file.
+                                [% CASE %]Unknown warning "[% w | html %]"
+                                [% END %]
+                            </div>
+                        [% END %]
                     [% END %]
                 </div></td>
             </tr>
