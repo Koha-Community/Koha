@@ -834,18 +834,15 @@ subtest 'get_transfers' => sub {
 };
 
 subtest 'Tests for relationship between item and item_orders via aqorders_item' => sub {
-    plan tests => 2;
+    plan tests => 3;
 
     $schema->storage->txn_begin;
 
     my $biblio = $builder->build_sample_biblio();
     my $item = $builder->build_sample_item({ biblionumber => $biblio->biblionumber });
-    my $aq_budget = $builder->build({
-        source => 'Aqbudget',
-        value  => {
-            budget_notes => 'test',
-        },
-    });
+
+    my $orders = $item->orders;
+    is ($orders->count, 0, 'No order on this item yet');
 
     my $order_note = 'Order for ' . $item->itemnumber;
 
@@ -853,7 +850,6 @@ subtest 'Tests for relationship between item and item_orders via aqorders_item' 
         class => 'Koha::Acquisition::Orders',
         value  => {
             biblionumber => $biblio->biblionumber,
-            budget_id => $aq_budget->{budget_id},
             order_internalnote => $order_note,
         },
     });
@@ -861,7 +857,6 @@ subtest 'Tests for relationship between item and item_orders via aqorders_item' 
         class => 'Koha::Acquisition::Orders',
         value  => {
             biblionumber => $biblio->biblionumber,
-            budget_id => $aq_budget->{budget_id},
         },
     });
     my $aq_order_item1 = $builder->build({
@@ -872,7 +867,7 @@ subtest 'Tests for relationship between item and item_orders via aqorders_item' 
         },
     });
 
-    my $orders = $item->orders;
+    $orders = $item->orders;
     is ($orders->count, 1, 'One order found by item with the relationship');
     is ($orders->next->order_internalnote, $order_note, 'Correct order found by item with the relationship');
 };

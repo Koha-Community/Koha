@@ -64,7 +64,6 @@ use Koha::AuthorisedValues;
 use Koha::DateUtils qw( dt_from_string output_pref );
 use Koha::Database;
 
-use Koha::Biblios;
 use Koha::Biblioitems;
 use Koha::Items;
 use Koha::ItemTypes;

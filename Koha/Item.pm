@@ -1185,7 +1185,6 @@ sub orders {
     my ( $self ) = @_;
 
     my $orders = $self->_result->item_orders;
-    return unless $orders;
     return Koha::Acquisition::Orders->_new_from_dbic($orders);
 }
 
@@ -1245,13 +1244,10 @@ sub move_to_biblio {
     }
 
     # Acquisition orders
-    my $orders = $self->orders;
-    if ($orders) {
-        $orders->update({ biblionumber => $to_biblionumber }, { no_triggers => 1 });
-    }
+    $self->orders->update({ biblionumber => $to_biblionumber }, { no_triggers => 1 });
 
     # Holds
-    $self->holds->update({ biblionumber => $to_biblionumber });
+    $self->holds->update({ biblionumber => $to_biblionumber }, { no_triggers => 1 });
 
     # hold_fill_target (there's no Koha object available yet)
     my $hold_fill_target = $self->_result->hold_fill_target;
@@ -1271,8 +1267,7 @@ sub move_to_biblio {
     );
 
     # tracked_links
-    my $tracked_links = $self->tracked_links;
-    $tracked_links->update({ biblionumber => $to_biblionumber });
+    $self->tracked_links->update({ biblionumber => $to_biblionumber }, { no_triggers => 1 });
 
     return $to_biblionumber;
 }
