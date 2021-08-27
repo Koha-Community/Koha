@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 9;
+use Test::More tests => 11;
 use t::lib::TestBuilder;
 use t::lib::Mocks;
 
@@ -79,6 +79,13 @@ is(
       $list2->patron_list_patrons()->search_related('borrowernumber')->all(),
     'AddPatronsToList works for borrowernumbers'
 );
+
+my $deleted_patron = $builder->build_object({ class => 'Koha::Patrons' });
+$deleted_patron->delete;
+my @result = AddPatronsToList({list => $list2,borrowernumbers => [ $deleted_patron->borrowernumber ]});
+is( scalar @result, 0,'Invalid borrowernumber not added');
+@result = AddPatronsToList({list => $list2,cardnumbers => [ $deleted_patron->cardnumber ]});
+is( scalar @result, 0,'Invalid cardnumber not added');
 
 my @ids =
   $list1->patron_list_patrons()->get_column('patron_list_patron_id')->all();

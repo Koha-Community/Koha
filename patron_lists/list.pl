@@ -46,22 +46,27 @@ my ($list) =
 
 my @existing = $list->patron_list_patrons;
 
-my $cardnumbers = $cgi->param('patrons_by_barcode');
-my @patrons_by_barcode;
+my $patrons_by_id = $cgi->param('patrons_by_id');
+my $id_column = $cgi->param('id_column');
 
-if ( $cardnumbers ){
-    push my @patrons_by_barcode, uniq( split(/\s\n/, $cardnumbers) );
-    my @results = AddPatronsToList( { list => $list, cardnumbers => \@patrons_by_barcode } );
-    my %found = map { $_->borrowernumber->cardnumber => 1 } @results;
-    my %exist = map { $_->borrowernumber->cardnumber => 1 } @existing;
+if ( $patrons_by_id ){
+    push my @patrons_list, uniq( split(/\s\n/, $patrons_by_id) );
+    my %add_params;
+    $add_params{list} = $list;
+    $add_params{ $id_column } = \@patrons_list;
+    my @results = AddPatronsToList(\%add_params);
+    my $id = $id_column eq 'borrowernumbers' ? 'borrowernumber' : 'cardnumber';
+    my %found = map { $_->borrowernumber->$id => 1 } @results;
+    my %exist = map { $_->borrowernumber->$id => 1 } @existing;
     my (@not_found, @existed);
-    foreach my $barcode ( @patrons_by_barcode ){
-        push (@not_found, $barcode) unless defined $found{$barcode};
-        push (@existed, $barcode) if defined $exist{$barcode};
+    foreach my $patron ( @patrons_list ){
+        push (@not_found, $patron) unless defined $found{$patron};
+        push (@existed, $patron) if defined $exist{$patron};
     }
     $template->param(
         not_found => \@not_found,
         existed   => \@existed,
+        id_column => $id_column,
     );
 }
 

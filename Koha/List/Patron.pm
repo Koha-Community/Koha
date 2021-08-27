@@ -173,16 +173,18 @@ sub AddPatronsToList {
 
     my @borrowernumbers;
 
+    my %search_param;
     if ($cardnumbers) {
-        @borrowernumbers =
-          Koha::Database->new()->schema()->resultset('Borrower')->search(
-            { cardnumber => { 'IN' => $cardnumbers } },
-            { columns    => [qw/ borrowernumber /] }
-          )->get_column('borrowernumber')->all();
+        $search_param{cardnumber} = { 'IN' => $cardnumbers };
+    } else {
+        $search_param{borrowernumber} = { 'IN' => $borrowernumbers };
     }
-    else {
-        @borrowernumbers = @$borrowernumbers;
-    }
+
+    @borrowernumbers =
+      Koha::Database->new()->schema()->resultset('Borrower')->search(
+        \%search_param,
+        { columns    => [qw/ borrowernumber /] }
+      )->get_column('borrowernumber')->all();
 
     my $patron_list_id = $list->patron_list_id();
 
