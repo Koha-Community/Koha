@@ -97,6 +97,12 @@ if ( $backends_available ) {
                 ( tran_success => $params->{tran_success} ) : () ),
         );
 
+        my $backend_result = $request->backend_illview($params);
+        $template->param(
+            whole      => $backend_result,
+        ) if $backend_result;
+
+
     } elsif ( $op eq 'create' ) {
         # We're in the process of creating a request
         my $request = Koha::Illrequest->new->load_backend( $params->{backend} );

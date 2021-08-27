@@ -712,6 +712,23 @@ sub mark_completed {
     };
 }
 
+=head2 backend_illview
+
+View and manage an ILL request
+
+=cut
+
+sub backend_illview {
+    my ( $self, $params ) = @_;
+
+    my $response = $self->_backend_capability('illview',{
+            request    => $self,
+            other      => $params,
+        });
+    return $self->expandTemplate($response) if $response;
+    return $response;
+}
+
 =head2 backend_migrate
 
 Migrate a request from one backend to another.

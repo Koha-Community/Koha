@@ -636,7 +636,7 @@ subtest 'Backend testing (mocks)' => sub {
 
 subtest 'Backend core methods' => sub {
 
-    plan tests => 18;
+    plan tests => 19;
 
     $schema->storage->txn_begin;
 
@@ -773,6 +773,11 @@ subtest 'Backend core methods' => sub {
                   opac_template => "/tmp/Mock/opac-includes/cancel.inc",
               },
               "Backend cancel: arbitrary stage.");
+
+    # backend_illview
+    $backend->set_series('illview', { stage => '', method => 'illview' });
+    is_deeply($illrq->backend_illview({test => 1}), 0,
+              "Backend illview optional method.");
 
     # backend_update_status
     $backend->set_series('update_status', { stage => 'bar', method => 'update_status' });
