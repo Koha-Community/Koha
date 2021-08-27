@@ -184,6 +184,7 @@ sub TransformPrefsToHTML {
         foreach my $line ( @{ $tab->{ $group } } ) {
             my @chunks;
             my @names;
+            my @warnings;
 
             foreach my $piece ( @$line ) {
                 if ( ref ( $piece ) eq 'HASH' ) {
@@ -202,6 +203,10 @@ sub TransformPrefsToHTML {
                         # No highlighting of inputs yet, but would be useful
                         $chunk->{'highlighted'} = 1 if ( $searchfield && $name =~ /^$searchfield$/i );
 
+                        if ( $name eq 'Pseudonymization' && ! C4::Context->config('bcrypt_settings')) {
+                            push @warnings, 'bcrypt_config_not_set';
+                            $chunk->{disabled} = 1 unless $value; # Let disable if enabled
+                        }
                         push @chunks, $chunk;
 
                         my $name_entry = { name => $name };
@@ -213,6 +218,7 @@ sub TransformPrefsToHTML {
                             }
                         }
                         $name_entry->{'overridden'} = 1 if ( any { $name eq $_ } @override_syspref_names );
+
                         push @names, $name_entry;
                     } else {
                         push @chunks, $piece;
@@ -230,7 +236,7 @@ sub TransformPrefsToHTML {
                     push @chunks, { type_text => 1, contents => $piece };
                 }
             }
-            push @lines, { CHUNKS => \@chunks, NAMES => \@names, is_group_title => 0 };
+            push @lines, { CHUNKS => \@chunks, NAMES => \@names, WARNINGS => \@warnings, is_group_title => 0 };
         }
     }
 
