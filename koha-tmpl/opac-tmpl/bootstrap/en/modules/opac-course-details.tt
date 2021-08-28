@@ -6,6 +6,7 @@
 [% USE ItemTypes %]
 [% USE Branches %]
 [% USE TablesSettings %]
+[% PROCESS 'i18n.inc' %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Course reserves for [% course.course_name | html %] &rsaquo; [% IF ( LibraryNameTitle ) %][% LibraryNameTitle | html %][% ELSE %]Koha online[% END %] catalog</title>
 [% INCLUDE 'doc-head-close.inc' %]
@@ -40,7 +41,7 @@
                     <h1>Course reserves for <em>[% course.course_name | html %]</em></h1>
                     <div class="rows">
                         <ol>
-                            [% IF ( course.term ) %]<li><span class="label">Term:</span> [% AuthorisedValues.GetByCode( 'TERM', course.term, 1 ) | html %]</li>[% END %]
+                            [% IF ( course.term ) %]<li><span class="label">[% tp('Semester', 'Term:') | html %]</span> [% AuthorisedValues.GetByCode( 'TERM', course.term, 1 ) | html %]</li>[% END %]
                             <li><span class="label">Department:</span> [% AuthorisedValues.GetByCode( 'DEPARTMENT', course.department, 1 ) | html %]</li>
                             [% IF ( course.course_number ) %]<li><span class="label">Course number:</span> [% course.course_number | html %]</li>[% END %]
                             [% IF ( course.section ) %]<li><span class="label">Section:</span> [% course.section | html %]</li>[% END %]

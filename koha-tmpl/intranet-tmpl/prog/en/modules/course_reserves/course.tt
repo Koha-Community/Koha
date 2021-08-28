@@ -1,3 +1,4 @@
+[% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>[% IF course_name %] Edit [% course_name | html %] [% ELSE %] New course [% END %] &rsaquo; Course reserves &rsaquo; Koha</title>
@@ -79,7 +80,7 @@
 
                         <li>
                             [% IF terms %]
-                                <label for="term">Term:</label>
+                                <label for="term">[% tp('Semester', 'Term:') | html %]</label>
                                 <select id="term" name="term">
                                     <option value=""></option>
 
@@ -92,7 +93,7 @@
                                     [% END %]
                                 </select>
                             [% ELSE %]
-                                <span class="label">Term: </span>
+                                <span class="label">[% tp('Semester', 'Term:') | html %] </span>
                                 <span id="term">No TERM authorised values found! Please create one or more authorised values with the category TERM.</span>
                             [% END %]
                         </li>
