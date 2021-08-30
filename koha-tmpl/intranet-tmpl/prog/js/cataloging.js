@@ -44,7 +44,7 @@ function openAuth(tagsubfieldid,authtype,source) {
     var mainmainstring=element.value;
     var mainstring = new Array();
 
-    var inputs = element.parentNode.parentNode.parentNode.getElementsByTagName("input");
+    var inputs = element.closest('ul').getElementsByTagName('input');
     for (var myindex =0; myindex<inputs.length;myindex++){
         if (inputs[myindex].name && inputs[myindex].name.match(tagsubfield)){
             var subfieldcode=getSubfieldCode(inputs[myindex].name);
