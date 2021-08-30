@@ -2,7 +2,7 @@ use Modern::Perl;
 
 return {
     bug_number => "26302",
-    description => "Add system preferences OPACResultsMaxItems and OPACResultsMaxItemsUnavailable");
+    description => "Add system preferences OPACResultsMaxItems and OPACResultsMaxItemsUnavailable",
     up => sub {
         my ($args) = @_;
         my ($dbh, $out) = @$args{qw(dbh out)};
