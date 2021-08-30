@@ -23,8 +23,8 @@
         <!-- Option: Display Alternate Graphic Representation (MARC 880)  -->
         <xsl:variable name="display880" select="boolean(marc:datafield[@tag=880])"/>
 
-    <xsl:variable name="resultsMaxItems" select="number(marc:sysprefs/marc:syspref[@name='resultsMaxItems']+0)"/>
-    <xsl:variable name="resultsMaxItemsUnavailable" select="number(marc:sysprefs/marc:syspref[@name='resultsMaxItemsUnavailable']+0)"/>
+    <xsl:variable name="ResultsMaxItems" select="number(marc:sysprefs/marc:syspref[@name='resultsMaxItems']+0)"/>
+    <xsl:variable name="ResultsMaxItemsUnavailable" select="number(marc:sysprefs/marc:syspref[@name='ResultsMaxItemsUnavailable']+0)"/>
     <xsl:variable name="UseControlNumber" select="marc:sysprefs/marc:syspref[@name='UseControlNumber']"/>
     <xsl:variable name="UseAuthoritiesForTracings" select="marc:sysprefs/marc:syspref[@name='UseAuthoritiesForTracings']"/>
     <xsl:variable name="OPACResultsLibrary" select="marc:sysprefs/marc:syspref[@name='OPACResultsLibrary']"/>
@@ -1284,7 +1284,7 @@
                             <span class="ItemSummary">
                             <xsl:call-template name="listCallNumbers">
                                 <xsl:with-param name="items" select="$available_items[items:resultbranch=$currentbranch]"/>
-                                <xsl:with-param name="max" select="$resultsMaxItems"/>
+                                <xsl:with-param name="max" select="$ResultsMaxItems"/>
                                 <xsl:with-param name="status_text" select="$currentbranch"/>
                                 <xsl:with-param name="class_status" select="ItemBranch"/>
                                 <xsl:with-param name="OPACItemLocation" select="$OPACItemLocation"/>
@@ -1307,7 +1307,7 @@
                                 <span class="ItemSummary">
                                 <xsl:call-template name="listCallNumbers">
                                     <xsl:with-param name="items" select="$reference_items[items:resultbranch=$currentbranch and items:substatus=$current_substatus]"/>
-                                    <xsl:with-param name="max" select="$resultsMaxItems"/>
+                                    <xsl:with-param name="max" select="$ResultsMaxItems"/>
                                     <xsl:with-param name="status_text" select="concat($currentbranch,': ',$current_substatus)"/>
                                     <xsl:with-param name="class_block" select="concat('notforloandesc_',$current_substatus)"/>
                                     <xsl:with-param name="class_status" select="ItemBranch"/>
@@ -1342,7 +1342,7 @@
                                 <xsl:variable name="current_substatus" select="items:substatus"/>
                                     <xsl:call-template name="listCallNumbers">
                                         <xsl:with-param name="items" select="$unavailable_items[items:resultbranch=$currentbranch and items:substatus=$current_substatus]"/>
-                                        <xsl:with-param name="max" select="$resultsMaxItemsUnavailable"/>
+                                        <xsl:with-param name="max" select="$ResultsMaxItemsUnavailable"/>
                                         <xsl:with-param name="status_text">
                                             <xsl:value-of select="$currentbranch"/>
                                             <xsl:text>: </xsl:text>
