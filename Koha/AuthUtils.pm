@@ -51,9 +51,15 @@ user passwords.
 
     my $hash = Koha::AuthUtils::hash_password($password, $settings);
 
+Hash I<$password> using Bcrypt. Accepts an extra I<$settings> parameter for salt.
+If I<$settings> is not passed, a new salt is generated.
+
+WARNING: If this method implementation is changed in the future, as of
+bug 28772 there's at least one DBRev that uses this code and should
+be taken care of.
+
 =cut
 
-# Using Bcrypt method for hashing. This can be changed to something else in future, if needed.
 sub hash_password {
     my $password = shift;
     $password = Encode::encode( 'UTF-8', $password )
