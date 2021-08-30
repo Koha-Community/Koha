@@ -58,10 +58,18 @@
         <h1>[% list.name | html %]</h1>
 
         [% IF ( not_found.size > 0 ) %]
-        <div class="dialog alert"><p>Warning, the following [% id_column | html %] were not found:</p></div>
+        [% IF id_column == 'borrowernumbers' %]
+            <div class="dialog alert"><p>Warning, the following borrowernumbers were not found:</p></div>
+        [% ELSE %]
+            <div class="dialog alert"><p>Warning, the following cardnumbers were not found:</p></div>
+        [% END %]
         <table style="margin:auto;">
             <thead>
-                <tr><th>[% id_column | html FILTER ucfirst %] not found</th></tr>
+                [% IF id_column == 'borrowernumbers' %]
+                    <tr><th>Borrowernumbers not found</th></tr>
+                [% ELSE %]
+                    <tr><th>Cardnumbers not found</th></tr>
+                [% END %]
             </thead>
             <tbody>
             [% FOREACH nf IN not_found %]
@@ -72,10 +80,18 @@
         [% END %]
 
         [% IF ( existed.size > 0 ) %]
-        <div class="dialog alert"><p>Warning, the following [% id_column | html %] were already in this list:</p></div>
+        [% IF id_column == 'borrowernumbers' %]
+            <div class="dialog alert"><p>Warning, the following borrowernumbers were already in this list:</p></div>
+        [% ELSE %]
+            <div class="dialog alert"><p>Warning, the following cardnumbers were already in this list:</p></div>
+        [% END %]
         <table style="margin:auto;">
             <thead>
-                <tr><th>[% id_column | html FILTER ucfirst %] already in list</th></tr>
+                [% IF id_column == 'borrowernumbers' %]
+                    <tr><th>Borrowernumbers already in list</th></tr>
+                [% ELSE %]
+                    <tr><th>Cardnumbers already in list</th></tr>
+                [% END %]
             </thead>
             <tbody>
             [% FOREACH ed IN existed %]
@@ -99,23 +115,23 @@
                     <li id="add_patrons_by_id"><a href="#">
                         <span class="label">&nbsp;</span>
                         <i class="fa fa-plus"></i> Add multiple patrons</a></li>
-                    <li id="patron_ids_line">
-                    <fieldset class="rows">
-                        <legend>Choose type of ID to enter</legend>
-                        <span class="radio">
-                            <label for "cardnumbers">
+                    <span id="patron_ids_line">
+                        <li><strong>Choose type of IDs to enter:</strong></li>
+                        <li class="radio">
+                            <label class="id_choice" for="add_by_cardnumbers">
                                 <input id="add_by_cardnumbers" type="radio" name="id_column" value="cardnumbers" checked="checked">
                                 <span class="add_by_cardnumbers">Cardnumbers</span>
                             </label>
-                            <label for "borrowernumbers">
+                            <label class="id_choice" for="add_by_borrowernumbers">
                                 <input id="add_by_borrwernumbers" type="radio" name="id_column" value="borrowernumbers">
                                 <span class="add_by_borrowernumbers">Borrowernumbers</span>
                             </label>
-                        </span>
-                    </fieldset>
-                        <label for="patrons_by_id">List (one barcode per line):</label>
-                        <textarea id="patrons_by_id" name="patrons_by_id" id="" cols="30" rows="10"></textarea>
-                    </li>
+                        </li>
+                        <li>
+                            <label for="patrons_by_id">List (one ID per line):</label>
+                            <textarea id="patrons_by_id" name="patrons_by_id" id="" cols="30" rows="10"></textarea>
+                        </li>
+                    </span>
                 </ol>
             </fieldset>
             <fieldset id="patron_ids_submit" class="action">
