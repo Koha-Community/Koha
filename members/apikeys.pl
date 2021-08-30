@@ -81,8 +81,11 @@ if ($op) {
             }
         );
         $api_key->store;
-        print $cgi->redirect( '/cgi-bin/koha/members/apikeys.pl?patron_id=' . $patron_id );
-        exit;
+
+        $template->param(
+            fresh_api_key => $api_key,
+            api_keys      => scalar Koha::ApiKeys->search({ patron_id => $patron_id }),
+        );
     }
 
     if ( $op eq 'delete' ) {
