@@ -172,7 +172,7 @@ sub get_xslt_sysprefs {
                               TrackClicks opacthemes IdRef OpacSuppression
                               OPACResultsLibrary OPACShowOpenURL
                               OpenURLResolverURL OpenURLImageLocation
-                              ResultsMaxItems ResultsMaxItemsUnavailable
+                              OPACResultsMaxItems OPACResultsMaxItemsUnavailable
                               OpenURLText OPACShowMusicalInscripts OPACPlayMusicalInscripts / )
     {
         my $sp = C4::Context->preference( $syspref );

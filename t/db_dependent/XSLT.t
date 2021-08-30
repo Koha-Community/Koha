@@ -52,7 +52,7 @@ subtest 'buildKohaItemsNamespace status tests' => sub {
 
     t::lib::Mocks::mock_preference('Reference_NFL_Statuses', '1|2');
     t::lib::Mocks::mock_preference( 'OPACResultsLibrary', 'holdingbranch' );
-    t::lib::Mocks::mock_preference( 'ResultsMaxItems', '2' );
+    t::lib::Mocks::mock_preference( 'OPACResultsMaxItems', '2' );
 
     my $itype = $builder->build_object({ class => 'Koha::ItemTypes' });
     my $itemtype = $builder->build_object({ class => 'Koha::ItemTypes' });
