@@ -30,8 +30,8 @@ use List::MoreUtils qw( any );
 
 my $cgi = CGI->new;
 my $uri = $cgi->param('uri') || '';
-my $biblionumber = $cgi->param('biblionumber') || 0;
-my $itemnumber   = $cgi->param('itemnumber')   || 0;
+my $biblionumber = $cgi->param('biblionumber');;
+my $itemnumber   = $cgi->param('itemnumber');
 
 my $tracking_method = C4::Context->preference('TrackClicks');
 unless ( $tracking_method ) {
@@ -41,7 +41,7 @@ unless ( $tracking_method ) {
 my $tracker = Koha::Linktracker->new(
     { trackingmethod => $tracking_method } );
 if ($uri && ($biblionumber || $itemnumber) ) {
-    my $borrowernumber = 0;
+    my $borrowernumber;
 
     # we have a uri and we want to track
     if ( $tracker->trackingmethod() eq 'track' ) {
