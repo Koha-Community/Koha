@@ -811,7 +811,7 @@ sub generate_output_db_entry {
 
     if ($exec_output) {
         foreach my $line (split /\n/, $exec_output) {
-            push @output, sprintf "\t\t\t\t\t\t   - %s", $line;
+            push @output, sprintf "\t%s", $line;
         }
     }
 
