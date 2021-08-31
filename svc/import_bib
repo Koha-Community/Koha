@@ -79,6 +79,10 @@ sub import_bib {
         $result->{'error'} = $@;
         return $result;
     }
+    if(C4::Context->preference('autoControlNumber') eq 'biblionumber'){
+        my @control_num = $record->field('001');
+        $marc_record->delete_fields(@control_num);
+    }
 
     my $import_record_id = AddBiblioToBatch($batch_id, 0, $marc_record, "utf8", 1);
     my @import_items_ids = AddItemsToImportBiblio($batch_id, $import_record_id, $marc_record, 'UPDATE COUNTS');

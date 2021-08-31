@@ -82,6 +82,10 @@ sub MARCfindbreeding {
     # remove the - in isbn, koha store isbn without any -
     if ($marc) {
         my $record = MARC::Record->new_from_usmarc($marc);
+        if(C4::Context->preference('autoControlNumber') eq 'biblionumber'){
+            my @control_num = $record->field('001');
+            $record->delete_fields(@control_num);
+        }
         my ($isbnfield,$isbnsubfield) = GetMarcFromKohaField( 'biblioitems.isbn' );
         if ( $record->field($isbnfield) ) {
             foreach my $field ( $record->field($isbnfield) ) {

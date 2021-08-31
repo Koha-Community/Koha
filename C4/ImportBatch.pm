@@ -584,6 +584,10 @@ sub BatchCommitRecords {
             foreach my $item_field ($marc_record->field($item_tag)) {
                 $marc_record->delete_field($item_field);
             }
+            if(C4::Context->preference('autoControlNumber') eq 'biblionumber'){
+                my @control_num = $marc_record->field('001');
+                $marc_record->delete_fields(@control_num);
+            }
         }
 
         my ($record_result, $item_result, $record_match) =

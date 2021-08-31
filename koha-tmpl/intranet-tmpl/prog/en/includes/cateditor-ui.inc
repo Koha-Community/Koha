@@ -412,6 +412,8 @@ require( [ 'koha-backend', 'search', 'macros', 'marc-editor', 'marc-record', 'pr
 
         backends[ parts[0] ].get( parts[1], function( record ) {
             if ( !record.error ) {
+                var remove_control_num = [% IF Koha.Preference('autoControlNumber') == 'OFF' %] 0 [% ELSE %] 1 [% END %];
+                if( remove_control_num ){ record.removeField("001"); }
                 editor.displayRecord( record );
                 editor.focus();
             }
