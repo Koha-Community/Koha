@@ -331,16 +331,18 @@
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'calendar.inc' %]
     <script>
-        var startPicker = $("#from").flatpickr({
-            onClose: function( selectedDates, dateText, instance) {
-                validate_date( selectedDates, instance );
-                endPicker.set('minDate', selectedDates[0]);
-            }
-        });
-        var endPicker = $("#to").flatpickr({
-            onClose: function( selectedDates, dateText, instance) {
-                validate_date( selectedDates, instance );
-            },
+        $(document).ready(function(){
+            var startPicker = $("#from").flatpickr({
+                onClose: function( selectedDates, dateText, instance) {
+                    validate_date( selectedDates, instance );
+                    endPicker.set('minDate', selectedDates[0]);
+                }
+            });
+            var endPicker = $("#to").flatpickr({
+                onClose: function( selectedDates, dateText, instance) {
+                    validate_date( selectedDates, instance );
+                },
+            });
         });
     </script>
 [% END %]

@@ -21,8 +21,6 @@ jQuery.validator.addMethod( "enrollment_period", function(){
     }, __("Please choose an enrollment period in months OR by date.")
 );
 
-flatpickr.l10ns.default.firstDayOfWeek = calendarFirstDayOfWeek;
-
 $(document).ready(function() {
     KohaTable("patron_categories", {
         "aoColumnDefs": [{

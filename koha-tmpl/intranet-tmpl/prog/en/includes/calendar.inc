@@ -35,7 +35,8 @@
                 .after( $("<a/>")
                     .attr("href","#")
                     .addClass("clear_date")
-                    .on("click", function(){
+                    .on("click", function(e){
+                        e.preventDefault();
                         instance.clear();
                     })
                     .addClass("fa fa-fw fa-remove")
