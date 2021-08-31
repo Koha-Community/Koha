@@ -621,7 +621,7 @@ subtest 'objects.search helper, search_limited() tests' => sub {
 };
 
 subtest 'objects.find helper with expanded authorised values' => sub {
-    plan tests => 10;
+    plan tests => 14;
 
     $schema->storage->txn_begin;
 
@@ -708,6 +708,10 @@ subtest 'objects.find helper with expanded authorised values' => sub {
       ->json_has('/_authorised_values')
       ->json_is( '/_authorised_values/country/lib' => $ar->lib );
 
+    $t->get_ok( '/cities/' . $manuel->cityid => { 'x-koha-av-expand' => 0 } )
+      ->status_is(200)->json_is( '/name' => 'Manuel' )
+      ->json_hasnt('/_authorised_values');
+
     $t->get_ok( '/cities/' . $manuela->cityid => { 'x-koha-av-expand' => 1 } )
       ->status_is(200)->json_is( '/name' => 'Manuela' )
       ->json_has('/_authorised_values')
@@ -718,7 +722,7 @@ subtest 'objects.find helper with expanded authorised values' => sub {
 
 subtest 'objects.search helper with expanded authorised values' => sub {
 
-    plan tests => 11;
+    plan tests => 20;
 
     my $t = Test::Mojo->new;
 
@@ -801,12 +805,21 @@ subtest 'objects.search helper with expanded authorised values' => sub {
     );
 
     $t->get_ok( '/cities?name=manuel&_per_page=4&_page=1&_match=starts_with' =>
-          { 'x-koha-av-expand' => 1 } )->status_is(200)->json_has('/0')
-      ->json_has('/1')->json_hasnt('/2')->json_is( '/0/name' => 'Manuel' )
+          { 'x-koha-av-expand' => 1 } )->status_is(200)
+      ->json_has('/0')->json_has('/1')->json_hasnt('/2')
+      ->json_is( '/0/name' => 'Manuel' )
       ->json_has('/0/_authorised_values')
       ->json_is( '/0/_authorised_values/country/lib' => $ar->lib )
-      ->json_is( '/1/name' => 'Manuela' )->json_has('/1/_authorised_values')
+      ->json_is( '/1/name' => 'Manuela' )
+      ->json_has('/1/_authorised_values')
       ->json_is( '/1/_authorised_values/country/lib' => $us->lib );
+
+    $t->get_ok( '/cities?name=manuel&_per_page=4&_page=1&_match=starts_with' =>
+          { 'x-koha-av-expand' => 0 } )->status_is(200)
+      ->json_has('/0')->json_has('/1')->json_hasnt('/2')
+      ->json_is( '/0/name' => 'Manuel' )->json_hasnt('/0/_authorised_values')
+      ->json_is( '/1/name' => 'Manuela' )->json_hasnt('/1/_authorised_values');
+
 
     $schema->storage->txn_rollback;
 };
