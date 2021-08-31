@@ -523,6 +523,7 @@ sub ParseCgiForBorrower {
     # Replace checkbox 'agreed' by datetime in gdpr_proc_consent
     $borrower{gdpr_proc_consent} = dt_from_string if  $borrower{gdpr_proc_consent} && $borrower{gdpr_proc_consent} eq 'agreed';
 
+    delete $borrower{flags};
     return %borrower;
 }
 
