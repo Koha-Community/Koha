@@ -206,7 +206,7 @@
                                                 [% ELSE %]
                                                     <label for="borrower_cardnumber">Library card number:</label>
                                                 [% END %]
-                                                [% IF borrower && !(cardnumber_wrong_length || cardnumber_already_exists) %]
+                                                [% IF borrower && !(cardnumber_wrong_length || cardnumber_already_exists) && action == 'edit' %]
                                                     [% borrower.cardnumber | html %]
                                                 [% ELSE %]
                                                     [% IF minlength_cardnumber == maxlength_cardnumber %]
