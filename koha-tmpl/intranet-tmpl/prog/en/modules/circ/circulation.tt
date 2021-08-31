@@ -636,7 +636,6 @@
                                                                 [% ELSE %]
                                                                     <input type="checkbox" id="stickyduedate" onclick="this.form.barcode.focus();" name="stickyduedate" />
                                                                 [% END %]
-                                                                <button class="btn btn-default btn-xs action" id="cleardate" name="cleardate" onclick="this.checked = false; this.form.duedatespec.value = ''; this.form.stickyduedate.checked = false; this.form.barcode.focus(); return false;" >Clear</button>
                                                             </div>
                                                         [% END %]
                                                     [% END %]
@@ -884,7 +883,7 @@
 
                                             [% IF Koha.Preference('AutoResumeSuspendedHolds') %]
                                             <label for="suspend_until">until</label>
-                                            <input type="text" size="10" id="suspend_until" name="suspend_until" class="datepicker futuredate"/>
+                                            <input type="text" size="10" id="suspend_until" name="suspend_until" class="flatpickr futuredate"/>
                                             <span class="hint">Specify date on which to resume [% INCLUDE 'date-format.inc' %]: </span>
                                              [% END %]
                                         </form>
@@ -1013,21 +1012,6 @@
         function toggle_onsite_checkout(){
             if ( $("#onsite_checkout").prop('checked') ) {
                 $("#duedatespec").val("[% todaysdate | $KohaDates  with_hours => 1 %]")
-                [% IF !Koha.Preference('SpecifyDueDate') %]
-                    $("#duedatespec").datetimepicker('destroy');
-                [% END %]
-            } else {
-                $("#duedatespec").datetimepicker({
-                    onClose: function(dateText, inst) {
-                        if (validate_date(dateText, inst) ) {
-                            $("#barcode").focus();
-                        }
-                    },
-                    hour: 23,
-                    minute: 59
-                }).on("change", function(e, value) {
-                    if ( ! is_valid_date( $(this).val() ) ) {$(this).val("");}
-                });
             }
         }
 

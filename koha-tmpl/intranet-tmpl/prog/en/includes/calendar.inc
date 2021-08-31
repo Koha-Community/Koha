@@ -31,7 +31,12 @@
         },
         onReady: function( selectedDates, dateStr, instance ){
             /* When flatpickr instance is created, automatically append a "clear date" link */
+            if( $(instance.input).hasClass("futuredate") ){
+                instance.set("minDate", new Date().fp_incr(1));
+            }
             $(instance.input)
+                /* Add a wrapper element so that we can prevent the clear button from wrapping */
+                .wrap("<span class='flatpickr_wrapper'></span>")
                 .after( $("<a/>")
                     .attr("href","#")
                     .addClass("clear_date")
@@ -47,6 +52,20 @@
         onClose: function( selectedDates, dateText, instance) {
             validate_date( selectedDates, instance );
         },
+    });
+    $(document).ready(function(){
+        $(".flatpickr").flatpickr();
+        var startPicker = $(".flatpickrfrom").flatpickr({
+            onClose: function( selectedDates, dateText, instance) {
+                validate_date( selectedDates, instance );
+                endPicker.set('minDate', selectedDates[0]);
+            }
+        });
+        var endPicker = $(".flatpickrto").flatpickr({
+            onClose: function( selectedDates, dateText, instance) {
+                validate_date( selectedDates, instance );
+            },
+        });
     });
 </script>
 [% END %]

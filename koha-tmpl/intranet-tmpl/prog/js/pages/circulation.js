@@ -1,3 +1,4 @@
+/* global flatpickr_dateformat_string flatpickr_timeformat_string */
 $(document).ready(function() {
     $("#CheckAllExports").on("click",function(){
         $(".export:visible").prop("checked", true);
@@ -38,17 +39,19 @@ $(document).ready(function() {
     }).on("change", function(e) {
         if ( ! is_valid_date( $(this).val() ) ) {$(this).val("");}
     });
-    $("#duedatespec").datetimepicker({
-        onClose: function(dateText, inst) {
-            if ( validate_date(dateText, inst) ) {
-                $("#barcode").focus();
-            }
-        },
-        hour: 23,
-        minute: 59
-    }).on("change", function(e, value) {
-        if ( ! is_valid_date( $(this).val() ) ) {$(this).val("");}
+
+    $("#duedatespec").flatpickr({
+        enableTime: true,
+        dateFormat: flatpickr_dateformat_string + " " + flatpickr_timeformat_string,
+        onClose: function() {
+            $("#barcode").focus();
+        }
     });
+
+    $(".clear_date").on("click", function(){
+        $("#stickyduedate").prop( "checked", false );
+    });
+
     $("#export_submit").on("click",function(){
         export_checkouts($("#issues-table-output-format").val());
         return false;
@@ -135,13 +138,4 @@ function export_checkouts(format) {
 
     document.getElementById("output_format").value = format;
     document.issues.submit();
-}
-
-function validate1(date) {
-    var today = new Date();
-    if ( date < today ) {
-        return true;
-     } else {
-        return false;
-     }
 }

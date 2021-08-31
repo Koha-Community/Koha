@@ -60,8 +60,10 @@
                 <legend>Add manual restriction</legend>
                 <ol>
                     <li><label for="rcomment">Comment:</label> <input type="text" id="rcomment" name="comment" /></li>
-                    <li><label for="rexpiration">Expiration:</label> <input name="expiration" id="rexpiration" size="20" value="" class="datepicker" type="text" />
-                        <a href="#" class="clear-date" id="clear-date-rexpiration">Clear date</a></li>
+                    <li>
+                        <label for="rexpiration">Expiration:</label>
+                        <input name="expiration" id="rexpiration" size="20" value="" class="flatpickr futuredate" type="text" />
+                    </li>
                 </ol>
             <fieldset class="action"><input type="submit" value="Add restriction" /> <a href="#" class="cancel" id="cancel_manual_restriction">Cancel</a></fieldset>
             </fieldset>

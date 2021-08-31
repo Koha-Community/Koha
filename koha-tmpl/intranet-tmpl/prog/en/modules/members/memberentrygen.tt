@@ -347,7 +347,7 @@ legend:hover {
                                                         [% END %]
                                                         Date of birth:
                                                         </label>
-                                                        <input type="text" id="dateofbirth" name="dateofbirth" size="20" value="[% dateofbirth | html UNLESS opduplicate %]" class="datepicker" />
+                                                        <input type="text" id="dateofbirth" name="dateofbirth" size="20" value="[% dateofbirth | html UNLESS opduplicate %]" class="flatpickr" />
                                                          [% IF ( mandatorydateofbirth ) %]
                                                             <span class="required">Required</span>
                                                         [% END %]
@@ -1055,7 +1055,7 @@ legend:hover {
                                                 [% END %]
                                                     Registration date:
                                                 </label>
-                                                <input type="text" id="from" name="dateenrolled"  maxlength="10" size="10" value="[% dateenrolled | html %]" class="datepickerfrom" />
+                                                <input type="text" id="from" name="dateenrolled"  maxlength="10" size="10" value="[% dateenrolled | html %]" class="flatpickrfrom" />
                                                 [% IF ( mandatorydateenrolled ) %]
                                                     <span class="required">Required</span>
                                                 [% END %]
@@ -1079,9 +1079,9 @@ legend:hover {
                                                     Expiry date (leave blank for auto calc):
                                                 </label>
                                                 [% UNLESS ( opadd ) %]
-                                                    <input type="text" id="to" name="dateexpiry" maxlength="10"  size="10" value="[% dateexpiry | html UNLESS opduplicate %]" class="datepickerto" />
+                                                    <input type="text" id="to" name="dateexpiry" maxlength="10"  size="10" value="[% dateexpiry | html UNLESS opduplicate %]" class="flatpickrto" />
                                                 [% ELSE %]
-                                                    <input type="text" id="to" name="dateexpiry" maxlength="10"  size="10" value="[% dateexpiry | html %]" class="datepickerto" />
+                                                    <input type="text" id="to" name="dateexpiry" maxlength="10"  size="10" value="[% dateexpiry | html %]" class="flatpickrto" />
                                                 [% END %]
                                                 [% IF ( mandatorydateexpiry ) %]
                                                     <span class="required">Required</span>
@@ -1373,7 +1373,7 @@ legend:hover {
                                                     </li>
                                                     <li>
                                                         <label for="debarred_expiration">Expiration: </label>
-                                                        <input name="debarred_expiration" id="debarred_expiration" size="10" value="" class="datepicker" type="text" />
+                                                        <input name="debarred_expiration" id="debarred_expiration" size="10" value="" class="flatpickr" type="text" />
                                                         <a href="#" id="clear_debarred_expiration">Clear date</a>
                                                     </li>
                                                 </ol>

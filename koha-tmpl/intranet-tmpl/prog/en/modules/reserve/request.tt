@@ -492,17 +492,15 @@
                             [% IF ( reserve_in_future ) %]
                                 <li>
                                     <label for="from">Hold starts on date:</label>
-                                    <input name="reserve_date" id="from" size="10" class="datepickerfrom" type="text" >
+                                    <input id="reserve_date" name="reserve_date" id="from" size="10" type="text" >
                                     <input type="hidden" class="datepickerfrom_hidden" />
-                                    <a href="#" id="clear-date-from" class="clear-date">Clear date</a>
                                 </li>
                             [% END %]
 
                             <li>
                                 <label for="to">Hold expires on date:</label>
-                                <input name="expiration_date" id="to" size="10" class="datepickerto" type="text" />
+                                <input id="expiration_date" name="expiration_date" id="to" size="10" type="text" />
                                 <input type="hidden" class="datepickerto_hidden" />
-                                <a href="#" id="clear-date-to" class="clear-date">Clear date</a>
                             </li>
 
                             [% UNLESS ( multi_hold ) %]
@@ -1141,14 +1139,34 @@
             [% END %]
 
             [% IF AutoResumeSuspendedHolds %]
-                $(".suspend_until_datepicker, .datepickerfrom, .datepickerto").datepicker("option", "minDate", 1);
+                $(".suspend_until_datepicker").flatpickr({
+                    minDate: new Date().fp_incr(1) /* Require that "until date" be in the future */
+                });
             [% END %]
 
-            $(".datepickerto").datepicker("option", "altField", ".datepickerto_hidden");
-            $(".datepickerto").datepicker("option", "altFormat", "yy-mm-dd");
 
-            $(".datepickerfrom").datepicker("option", "altField", ".datepickerfrom_hidden");
-            $(".datepickerfrom").datepicker("option", "altFormat", "yy-mm-dd");
+            var startPicker = $("#reserve_date").flatpickr({
+                minDate: new Date().fp_incr(1), /* Require that "Hold starts on date" be in the future */
+                onChange: function(selectedDates, dateStr, instance) {
+                    altFormat = instance.formatDate(selectedDates[0], "Y-m-d");
+                    $(".datepickerfrom_hidden").val( altFormat ); /* Populate hidden field with ISO-formatted date */
+                },
+                onClose: function( selectedDates, dateText, instance) {
+                    validate_date( selectedDates, instance );
+                    endPicker.set('minDate', selectedDates[0]);
+                }
+            });
+
+            var endPicker = $("#expiration_date").flatpickr({
+                minDate: new Date().fp_incr(1), // Require that "Hold expires on date" be in the future
+                onChange: function(selectedDates, dateStr, instance) {
+                    altFormat = instance.formatDate(selectedDates[0], "Y-m-d");
+                    $(".datepickerto_hidden").val( altFormat ); /* Populate hidden field with ISO-formatted date */
+                },
+                onClose: function( selectedDates, dateText, instance) {
+                    validate_date( selectedDates, instance );
+                },
+            });
 
             var my_table = $("#requestspecific").dataTable($.extend(true, {}, dataTablesDefaults, {
                 'bPaginate': false,

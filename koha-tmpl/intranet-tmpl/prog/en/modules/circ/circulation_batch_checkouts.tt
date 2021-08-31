@@ -359,14 +359,10 @@
             }));
 
             [% IF Koha.Preference('SpecifyDueDate') %]
-                $("#duedatespec").datetimepicker({
-                    onClose: function(dateText, inst) {
-                        validate_date(dateText, inst);
-                    },
-                    hour: 23,
-                    minute: 59
-                }).on("change", function(e, value) {
-                    if ( ! is_valid_date( $(this).val() ) ) {$(this).val("");}
+               $("#duedatespec").flatpickr({
+                    enableTime: true,
+                    dateFormat: flatpickr_dateformat_string + " " + flatpickr_timeformat_string,
+                    defaultDate: new Date().setHours(23, 59, 0, 0) /* Today a 11:59PM */
                 });
             [% END %]
         });

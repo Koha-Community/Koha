@@ -217,11 +217,11 @@
                     <li>
                       <label for="date" class="required">Date: </label>
                       [% IF ( visit ) %]
-                        <input type="text" id="date" class="datepicker required"
+                        <input type="text" id="date" class="flatpickr required"
                                value="[% visit.appointment_date | $KohaDates %]"
                                name="date" size="20" required="required"/>
                       [% ELSE %]
-                        <input type="text" id="date" class="datepicker required"
+                        <input type="text" id="date" class="flatpickr required"
                                value="" name="date" size="20" required="required"/>
                       [% END %]
                       <span class="required">Required</span>

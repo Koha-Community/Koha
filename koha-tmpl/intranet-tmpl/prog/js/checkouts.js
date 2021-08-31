@@ -233,7 +233,7 @@ $(document).ready(function() {
         return false;
     });
 
-    var ymd = $.datepicker.formatDate('yy-mm-dd', new Date());
+    var ymd = flatpickr.formatDate(new Date(), "Y-m-d");
 
     $('#issues-table').hide();
     $('#issues-table-actions').hide();
@@ -349,7 +349,7 @@ $(document).ready(function() {
 
                         if ( oObj.itemnotes ) {
                             var span_class = "text-muted";
-                            if ( $.datepicker.formatDate('yy-mm-dd', new Date(oObj.issuedate) ) == ymd ) {
+                            if ( flatpickr.formatDate( new Date(oObj.issuedate), "Y-m-d" ) == ymd ){
                                 span_class = "circ-hlt";
                             }
                             title += " - <span class='" + span_class + " item-note-public'>" + oObj.itemnotes.escapeHtml() + "</span>";
@@ -357,7 +357,7 @@ $(document).ready(function() {
 
                         if ( oObj.itemnotes_nonpublic ) {
                             var span_class = "text-danger";
-                            if ( $.datepicker.formatDate('yy-mm-dd', new Date(oObj.issuedate) ) == ymd ) {
+                            if ( flatpickr.formatDate( new Date(oObj.issuedate), "Y-m-d" ) == ymd ){
                                 span_class = "circ-hlt";
                             }
                             title += " - <span class='" + span_class + " item-note-nonpublic'>" + oObj.itemnotes_nonpublic.escapeHtml() + "</span>";
@@ -740,7 +740,7 @@ $(document).ready(function() {
 
                             if ( oObj.itemnotes ) {
                                 var span_class = "";
-                                if ( $.datepicker.formatDate('yy-mm-dd', new Date(oObj.issuedate) ) == ymd ) {
+                                if ( flatpickr.formatDate( new Date(oObj.issuedate), "Y-m-d" ) == ymd ){
                                     span_class = "circ-hlt";
                                 }
                                 title += " - <span class='" + span_class + "'>" + oObj.itemnotes.escapeHtml() + "</span>"
@@ -748,7 +748,7 @@ $(document).ready(function() {
 
                             if ( oObj.itemnotes_nonpublic ) {
                                 var span_class = "";
-                                if ( $.datepicker.formatDate('yy-mm-dd', new Date(oObj.issuedate) ) == ymd ) {
+                                if ( flatpickr.formatDate( new Date(oObj.issuedate), "Y-m-d" ) == ymd ){
                                     span_class = "circ-hlt";
                                 }
                                 title += " - <span class='" + span_class + "'>" + oObj.itemnotes_nonpublic.escapeHtml() + "</span>"

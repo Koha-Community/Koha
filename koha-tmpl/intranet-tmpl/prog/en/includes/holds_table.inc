@@ -106,12 +106,14 @@
             <td>[% hold.notes | html | html_line_break %]</td>
             <td>
                 [% IF Koha.Preference('AllowHoldDateInFuture') %]
-                    <input type="text" class="datepicker" value="[% hold.date | $KohaDates %]" required="required" size="10" name="reservedate" />
+                    <input type="text" class="flatpickr" value="[% hold.date | $KohaDates %]" required="required" size="10" name="reservedate" />
                 [% ELSE %]
                     [% hold.date | $KohaDates %]
                 [% END %]
             </td>
-            <td><input type="text" class="datepicker futuredate" value="[% hold.expirationdate | $KohaDates %]" size="10" name="expirationdate" /></td>
+            <td>
+                <input type="text" class="flatpickr futuredate" value="[% hold.expirationdate | $KohaDates %]" size="10" name="expirationdate" />
+            </td>
             <td>
                 [%- IF ( hold.found ) -%]
                     [%- IF ( hold.atdestination ) -%]
@@ -196,8 +198,7 @@
                         <input type="button" value="[% IF ( hold.suspend ) %]Unsuspend[% ELSE %]Suspend[% END %]" onclick="window.location.href='request.pl?action=toggleSuspend&amp;reserve_id=[% hold.reserve_id | html %]&amp;borrowernumber=[% hold.borrowernumber | html %]&amp;biblionumber=[% hold.biblionumber | html %]&amp;date=[% hold.date | html %]&amp;suspend_until=' + $('#suspend_until_[% hold.reserve_id | html %]').val()" />
                         [%- IF Koha.Preference('AutoResumeSuspendedHolds') -%]
                             <label for="suspend_until_[% hold.reserve_id | html %]">[% IF ( hold.suspend ) %] on [% ELSE %] until [% END %]</label>
-                            <input type="text" name="suspend_until_[% hold.reserve_id | html %]" id="suspend_until_[% hold.reserve_id | html %]" size="10" value="[% hold.suspend_until | $KohaDates %]" class="datepicker suspend_until_datepicker" />
-                            <a href='#' onclick="document.getElementById('suspend_until_[% hold.reserve_id | html %]').value='';">Clear date</a>
+                            <input type="text" name="suspend_until_[% hold.reserve_id | html %]" id="suspend_until_[% hold.reserve_id | html %]" size="10" value="[% hold.suspend_until | $KohaDates %]" class="suspend_until_datepicker" />
                         [%- ELSE -%]
                             <input type="hidden" name="suspend_until_[% hold.reserve_id | html %]" id="suspend_until_[% hold.reserve_id | html %]" value=""/>
                         [%- END -%]

@@ -44,7 +44,7 @@ $(document).ready(function() {
 
                             if ( oObj.itemnotes ) {
                                 var span_class = "";
-                                if ( $.datepicker.formatDate('yy-mm-dd', new Date(oObj.issuedate) ) == ymd ) {
+                                if ( flatpickr.formatDate( new Date(oObj.issuedate), "Y-m-d" ) == ymd ){
                                     span_class = "circ-hlt";
                                 }
                                 title += " - <span class='" + span_class + "'>" + oObj.itemnotes.escapeHtml() + "</span>"
@@ -335,7 +335,9 @@ $(document).ready(function() {
         </div>\
     ");
 
-    $("#suspend-modal-until").datepicker({ minDate: 1 }); // Require that "until date" be in the future
+    $("#suspend-modal-until").flatpickr({
+        minDate: new Date().fp_incr(1) // Require that "until date" be in the future
+    });
     $("#suspend-modal-clear-date").on( "click", function() { $("#suspend-modal-until").val(""); } );
 
     $("#suspend-modal-submit").on( "click", function( e ) {
