@@ -484,7 +484,9 @@
                     </div>
 
                 [% ELSIF query_type == 'illview' %]
+                    [% IF whole.template.length > 0 %]
                     [% PROCESS $whole.template %]
+                    [% END %]
                     [% req_status = request.status %]
 
                     [% IF error %]
