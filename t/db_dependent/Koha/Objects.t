@@ -24,6 +24,8 @@ use Test::Exception;
 use Test::MockModule;
 use Test::Warn;
 
+use C4::Context;
+
 use Koha::Authority::Types;
 use Koha::Cities;
 use Koha::Biblios;
