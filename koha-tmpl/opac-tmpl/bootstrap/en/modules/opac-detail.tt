@@ -628,84 +628,86 @@
                             <h2>This is a serial</h2>
                             <p class="subscription_count">There are [% subscriptionsnumber | html %] subscription(s) associated with this title.</p>
                             [% FOREACH subscription IN subscriptions %]
-                                [% IF ( subscription.branchcode ) %]
-                                    <h3>At library: [% Branches.GetName( subscription.branchcode ) | html %]</h3>
-                                [% ELSE %]
+                                <div class="subscription">
                                     [% IF ( subscription.branchcode ) %]
-                                        <h3>At library: [% subscription.branchcode | html %]</h3>
-                                    [% END %]
-                                [% END %]
-                                [% IF ( subscription.closed ) %]
-                                    <p class="subscription_closed">This subscription is closed.</p>
-                                [% END %]
-                                [% IF ( subscription.location ) %]
-                                    <p class="subscription_location">Location: [% AuthorisedValues.GetByCode( 'LOC', subscription.location, 1 ) | html %]
-                                [% END %]
-                                [% IF ( subscription.callnumber ) %]
-                                    <p class="subscription_callnumber">Call number: [% subscription.callnumber | html %]</p>
-                                [% END %]
-                                [% IF ( subscription.subscriptionnotes ) %]
-                                    <p class="subscription_notes">[% subscription.subscriptionnotes | html | html_line_break %] </p>
-                                [% END %]
-                                <p class="subscription_dates">Subscription from: [% subscription.histstartdate | $KohaDates %] to:[% IF ( subscription.histenddate ) %] [% subscription.histenddate | $KohaDates %] [% ELSE %] now (current)[% END %]</p>
-                                [% IF ( subscription.letter ) %]
-                                    <span class="email_notifications">
-                                        [% IF ( loggedinusername ) %]
-                                            [% IF ( subscription.hasalert ) %]
-                                                <span>You have subscribed to email notification on new issues. </span><a class="btn btn-secondary" title="Cancel email notification" href="/cgi-bin/koha/opac-alert-subscribe.pl?op=cancel&amp;subscriptionid=[% subscription.subscriptionid | html %]&amp;biblionumber=[% subscription.biblionumber | html %]">Cancel email notification</a>
-                                            [% ELSE %]
-                                                <a class="btn btn-secondary" title="Subscribe to email notification on new issues" href="/cgi-bin/koha/opac-alert-subscribe.pl?subscriptionid=[% subscription.subscriptionid | html %]&amp;biblionumber=[% subscription.biblionumber | html %]">Subscribe to email notification on new issues</a>
-                                            [% END %]
-                                        [% ELSE %]
-                                            <span>You must log in if you want to subscribe to email notification on new issues</span>
+                                        <h3>At library: [% Branches.GetName( subscription.branchcode ) | html %]</h3>
+                                    [% ELSE %]
+                                        [% IF ( subscription.branchcode ) %]
+                                            <h3>At library: [% subscription.branchcode | html %]</h3>
                                         [% END %]
-                                    </span>
-                                [% END %]
-                                [% IF ( subscription.missinglist ) %]
-                                    <p class="subscription_missing">Missing issues: [% subscription.missinglist | html | html_line_break %] </p>
-                                [% END %]
-                                [% IF ( subscription.opacnote ) %]
-                                    <p class="subscription_opacnote">[% subscription.opacnote | html | html_line_break %]</p>
-                                [% END %]
-                                [% IF ( subscription.latestserials ) %]
-                                    <p class="subscription_latestissues"> The [% subscription.opacdisplaycount | html %] latest issues for this subscription:</p>
-                                    <table class="table table-bordered table-striped" id="subscriptionst">
-                                        <caption class="sr-only">Latest serials</caption>
-                                        <thead>
-                                            <tr>
-                                                <th id="serial_serialseq" data-colname="serial_serialseq">Issue #</th>
-                                                <th id="serial_publisheddate" data-colname="serial_publisheddate">Publication date</th>
-                                                <th id="serial_planneddate" data-colname="serial_planneddate">Received date</th>
-                                                <th id="serial_status" data-colname="serial_status">Status</th>
-                                                <th id="serial_notes" data-colname="serial_notes">Note</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            [% FOREACH latestserial IN subscription.latestserials %]
+                                    [% END %]
+                                    [% IF ( subscription.closed ) %]
+                                        <p class="subscription_closed">This subscription is closed.</p>
+                                    [% END %]
+                                    [% IF ( subscription.location ) %]
+                                        <p class="subscription_location">Location: [% AuthorisedValues.GetByCode( 'LOC', subscription.location, 1 ) | html %]
+                                    [% END %]
+                                    [% IF ( subscription.callnumber ) %]
+                                        <p class="subscription_callnumber">Call number: [% subscription.callnumber | html %]</p>
+                                    [% END %]
+                                    [% IF ( subscription.subscriptionnotes ) %]
+                                        <p class="subscription_notes">[% subscription.subscriptionnotes | html | html_line_break %] </p>
+                                    [% END %]
+                                    <p class="subscription_dates">Subscription from: [% subscription.histstartdate | $KohaDates %] to:[% IF ( subscription.histenddate ) %] [% subscription.histenddate | $KohaDates %] [% ELSE %] now (current)[% END %]</p>
+                                    [% IF ( subscription.letter ) %]
+                                        <span class="email_notifications">
+                                            [% IF ( loggedinusername ) %]
+                                                [% IF ( subscription.hasalert ) %]
+                                                    <span>You have subscribed to email notification on new issues. </span><a class="btn btn-secondary" title="Cancel email notification" href="/cgi-bin/koha/opac-alert-subscribe.pl?op=cancel&amp;subscriptionid=[% subscription.subscriptionid | html %]&amp;biblionumber=[% subscription.biblionumber | html %]">Cancel email notification</a>
+                                                [% ELSE %]
+                                                    <a class="btn btn-secondary" title="Subscribe to email notification on new issues" href="/cgi-bin/koha/opac-alert-subscribe.pl?subscriptionid=[% subscription.subscriptionid | html %]&amp;biblionumber=[% subscription.biblionumber | html %]">Subscribe to email notification on new issues</a>
+                                                [% END %]
+                                            [% ELSE %]
+                                                <span>You must log in if you want to subscribe to email notification on new issues</span>
+                                            [% END %]
+                                        </span>
+                                    [% END %]
+                                    [% IF ( subscription.missinglist ) %]
+                                        <p class="subscription_missing">Missing issues: [% subscription.missinglist | html | html_line_break %] </p>
+                                    [% END %]
+                                    [% IF ( subscription.opacnote ) %]
+                                        <p class="subscription_opacnote">[% subscription.opacnote | html | html_line_break %]</p>
+                                    [% END %]
+                                    [% IF ( subscription.latestserials ) %]
+                                        <p class="subscription_latestissues"> The [% subscription.opacdisplaycount | html %] latest issues for this subscription:</p>
+                                        <table class="table table-bordered table-striped" id="subscriptionst">
+                                            <caption class="sr-only">Latest serials</caption>
+                                            <thead>
                                                 <tr>
-                                                    <td class="serialseq">[% latestserial.serialseq | html %]</td>
-                                                    <td class="publisheddate" data-order="[% latestserial.publisheddate | html %]">[% latestserial.publisheddate | $KohaDates %]</td>
-                                                    <td class="planneddate" data-order="[% latestserial.planneddate | html %]">[% latestserial.planneddate | $KohaDates %]</td>
-                                                    <td class="serial_status">
-                                                        [% IF (latestserial.status1 ) %]<span>Expected</span>[% END %]
-                                                        [% IF (latestserial.status2 ) %]<span>Arrived</span>[% END %]
-                                                        [% IF (latestserial.status3 ) %]<span>Late</span>[% END %]
-                                                        [% IF (latestserial.status4 ) %]<span>Missing</span>[% END %]
-                                                            [% IF (latestserial.status41 ) %]<span>Missing (never received)</span>[% END %]
-                                                            [% IF (latestserial.status42 ) %]<span>Missing (sold out)</span>[% END %]
-                                                            [% IF (latestserial.status43 ) %]<span>Missing (damaged)</span>[% END %]
-                                                            [% IF (latestserial.status44 ) %]<span>Missing (lost)</span>[% END %]
-                                                        [% IF (latestserial.status5 ) %]<span>Not issued</span>[% END %]
-                                                        [% IF (latestserial.status6 ) %]<span>Delete</span>[% END %]
-                                                        [% IF (latestserial.status7 ) %]<span>Claimed</span>[% END %]
-                                                        [% IF (latestserial.status8 ) %]<span>Stopped</span>[% END %]
-                                                    </td>
-                                                    <td class="serial_notes">[% latestserial.notes | html %]</td>
+                                                    <th id="serial_serialseq" data-colname="serial_serialseq">Issue #</th>
+                                                    <th id="serial_publisheddate" data-colname="serial_publisheddate">Publication date</th>
+                                                    <th id="serial_planneddate" data-colname="serial_planneddate">Received date</th>
+                                                    <th id="serial_status" data-colname="serial_status">Status</th>
+                                                    <th id="serial_notes" data-colname="serial_notes">Note</th>
                                                 </tr>
-                                            [% END # / FOREACH latestserials %]
-                                        </tbody>
-                                    </table>
-                                [% END # / IF subscription.latestserials %]
+                                            </thead>
+                                            <tbody>
+                                                [% FOREACH latestserial IN subscription.latestserials %]
+                                                    <tr>
+                                                        <td class="serialseq">[% latestserial.serialseq | html %]</td>
+                                                        <td class="publisheddate" data-order="[% latestserial.publisheddate | html %]">[% latestserial.publisheddate | $KohaDates %]</td>
+                                                        <td class="planneddate" data-order="[% latestserial.planneddate | html %]">[% latestserial.planneddate | $KohaDates %]</td>
+                                                        <td class="serial_status">
+                                                            [% IF (latestserial.status1 ) %]<span>Expected</span>[% END %]
+                                                            [% IF (latestserial.status2 ) %]<span>Arrived</span>[% END %]
+                                                            [% IF (latestserial.status3 ) %]<span>Late</span>[% END %]
+                                                            [% IF (latestserial.status4 ) %]<span>Missing</span>[% END %]
+                                                                [% IF (latestserial.status41 ) %]<span>Missing (never received)</span>[% END %]
+                                                                [% IF (latestserial.status42 ) %]<span>Missing (sold out)</span>[% END %]
+                                                                [% IF (latestserial.status43 ) %]<span>Missing (damaged)</span>[% END %]
+                                                                [% IF (latestserial.status44 ) %]<span>Missing (lost)</span>[% END %]
+                                                            [% IF (latestserial.status5 ) %]<span>Not issued</span>[% END %]
+                                                            [% IF (latestserial.status6 ) %]<span>Delete</span>[% END %]
+                                                            [% IF (latestserial.status7 ) %]<span>Claimed</span>[% END %]
+                                                            [% IF (latestserial.status8 ) %]<span>Stopped</span>[% END %]
+                                                        </td>
+                                                        <td class="serial_notes">[% latestserial.notes | html %]</td>
+                                                    </tr>
+                                                [% END # / FOREACH latestserials %]
+                                            </tbody>
+                                        </table>
+                                    [% END # / IF subscription.latestserials %]
+                                </div>
                             [% END # / FOREACH subscriptions %]
                             <p class="subscription_moredetails"><a href="opac-serial-issues.pl?biblionumber=[% biblio.biblionumber | uri %]">More details</a></p>
                         </div> <!-- / #subscriptions -->
