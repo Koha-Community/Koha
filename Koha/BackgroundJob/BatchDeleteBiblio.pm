@@ -9,9 +9,31 @@ use C4::Biblio;
 
 use base 'Koha::BackgroundJob';
 
+=head1 NAME
+
+Koha::BackgroundJob::BatchDeleteBiblio - Batch delete bibliographic records
+
+This is a subclass of Koha::BackgroundJob.
+
+=head1 API
+
+=head2 Class methods
+
+=head3 job_type
+
+Define the job type of this job: batch_biblio_record_deletion
+
+=cut
+
 sub job_type {
     return 'batch_biblio_record_deletion';
 }
+
+=head3 process
+
+Process the job.
+
+=cut
 
 sub process {
     my ( $self, $args ) = @_;
@@ -140,6 +162,12 @@ sub process {
     $job->status('finished') if $job->status ne 'cancelled';
     $job->store;
 }
+
+=head3 enqueue
+
+Enqueue the new job
+
+=cut
 
 sub enqueue {
     my ( $self, $args) = @_;
