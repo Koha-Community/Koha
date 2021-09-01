@@ -186,7 +186,7 @@ subtest '_split_query() tests' => sub {
     is_deeply(\@res, \@exp, 'quoted search terms surrounded by spaces correctly');
 };
 
-subtest '_clean_search_term() tests' => sub {
+subtest 'clean_search_term() tests' => sub {
     plan tests => 24;
 
     my $qb;
@@ -197,77 +197,77 @@ subtest '_clean_search_term() tests' => sub {
 
     t::lib::Mocks::mock_preference('QueryAutoTruncate', 0);
 
-    my $res = $qb->_clean_search_term('an=123');
+    my $res = $qb->clean_search_term('an=123');
     is($res, 'koha-auth-number:123', 'equals sign replaced with colon');
 
-    $res = $qb->_clean_search_term('"balanced quotes"');
+    $res = $qb->clean_search_term('"balanced quotes"');
     is($res, '"balanced quotes"', 'balanced quotes returned correctly');
 
-    $res = $qb->_clean_search_term('unbalanced quotes"');
+    $res = $qb->clean_search_term('unbalanced quotes"');
     is($res, 'unbalanced quotes ', 'unbalanced quotes removed');
 
-    $res = $qb->_clean_search_term('"unbalanced "quotes"');
+    $res = $qb->clean_search_term('"unbalanced "quotes"');
     is($res, ' unbalanced  quotes ', 'unbalanced quotes removed');
 
-    $res = $qb->_clean_search_term(':test query');
+    $res = $qb->clean_search_term(':test query');
     is($res, 'test query', 'remove colon at the start');
 
-    $res = $qb->_clean_search_term('test query\:');
+    $res = $qb->clean_search_term('test query\:');
     is($res, 'test query', 'remove colon at the end');
 
-    $res = $qb->_clean_search_term('test : query');
+    $res = $qb->clean_search_term('test : query');
     is($res, 'test query', 'dangling colon removed');
 
-    $res = $qb->_clean_search_term('test :: query');
+    $res = $qb->clean_search_term('test :: query');
     is($res, 'test query', 'dangling double colon removed');
 
-    $res = $qb->_clean_search_term('test "another : query"');
+    $res = $qb->clean_search_term('test "another : query"');
     is($res, 'test "another : query"', 'quoted dangling colon not removed');
 
-    $res = $qb->_clean_search_term('host-item:test:n');
+    $res = $qb->clean_search_term('host-item:test:n');
     is($res, 'host-item:test\:n', 'screen colons properly');
 
-    $res = $qb->_clean_search_term('host-item:test:n:test:and more');
+    $res = $qb->clean_search_term('host-item:test:n:test:and more');
     is($res, 'host-item:test\:n\:test\:and more', 'screen multiple colons properly');
 
-    $res = $qb->_clean_search_term('host-item:te st:n');
+    $res = $qb->clean_search_term('host-item:te st:n');
     is($res, 'host-item:te st:n', 'leave colons as they are');
 
-    $res = $qb->_clean_search_term('test!');
+    $res = $qb->clean_search_term('test!');
     is($res, 'test', 'remove exclamation sign at the end of the line');
 
-    $res = $qb->_clean_search_term('test! and more');
+    $res = $qb->clean_search_term('test! and more');
     is($res, 'test and more', 'remove exclamation sign at with space after it');
 
-    $res = $qb->_clean_search_term('!test');
+    $res = $qb->clean_search_term('!test');
     is($res, '!test', 'exclamation sign left untouched');
 
-    $res = $qb->_clean_search_term('test [123 TO 345]');
+    $res = $qb->clean_search_term('test [123 TO 345]');
     is($res, 'test [123 TO 345]', 'keep inculsive range untouched');
 
-    $res = $qb->_clean_search_term('test [test TO TEST} [and] {123 TO 456]');
+    $res = $qb->clean_search_term('test [test TO TEST} [and] {123 TO 456]');
     is($res, 'test [test TO TEST} \[and\] {123 TO 456]', 'keep exclusive range untouched');
 
-    $res = $qb->_clean_search_term('test [test TO TEST} ["[and] {123 TO 456]" "[balanced]"]');
+    $res = $qb->clean_search_term('test [test TO TEST} ["[and] {123 TO 456]" "[balanced]"]');
     is($res, 'test [test TO TEST} \["[and] {123 TO 456]" "[balanced]"\]', 'keep exclusive range untouched');
 
-    $res = $qb->_clean_search_term('test[]test TO TEST] [ {123 to 345}}');
+    $res = $qb->clean_search_term('test[]test TO TEST] [ {123 to 345}}');
     is($res, 'test\[\]test TO TEST\] \[ \{123 to 345\}\}', 'screen all square and curly brackets');
 
     t::lib::Mocks::mock_preference('QueryRegexEscapeOptions', 'escape');
 
-    $res = $qb->_clean_search_term('test inside regexps /this [a-z]/ and \/not [a-z]\/ and that [a-z] [a TO z]');
+    $res = $qb->clean_search_term('test inside regexps /this [a-z]/ and \/not [a-z]\/ and that [a-z] [a TO z]');
     is($res, 'test inside regexps \/this \[a-z\]\/ and \/not \[a-z\]\/ and that \[a-z\] [a TO z]', 'behaviour with QueryRegexEscapeOptions set to "escape"');
 
     t::lib::Mocks::mock_preference('QueryRegexEscapeOptions', 'dont_escape');
 
-    $res = $qb->_clean_search_term('test inside regexps /this [a-z]/ /this2 [a-z]/ [but] /this3 [a-z]/ and \/not [a-z]\/ and that [a-z] [a TO z]');
+    $res = $qb->clean_search_term('test inside regexps /this [a-z]/ /this2 [a-z]/ [but] /this3 [a-z]/ and \/not [a-z]\/ and that [a-z] [a TO z]');
     is($res, 'test inside regexps /this [a-z]/ /this2 [a-z]/ \[but\] /this3 [a-z]/ and \/not \[a-z\]\/ and that \[a-z\] [a TO z]', 'behaviour with QueryRegexEscapeOptions set to "dont_escape"');
 
-    $res = $qb->_clean_search_term('ti:test AND kw:test');
+    $res = $qb->clean_search_term('ti:test AND kw:test');
     is($res, 'title:test AND test', 'ti converted to title, kw converted to empty string, dangling colon removed with space preserved');
 
-    $res = $qb->_clean_search_term('kw:test');
+    $res = $qb->clean_search_term('kw:test');
     is($res, 'test', 'kw converted to empty string, dangling colon is removed');
 };
 
