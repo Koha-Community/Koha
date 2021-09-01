@@ -27,7 +27,7 @@
             [% END %]
             [% SWITCH m.code %]
             [% CASE 'authority_not_modified' %]
-                Authority record <a href="/cgi-bin/koha/authorities/detail.pl?authid=[% m.authid | uri %]">[% m.authid | html %]</a> has not been modified. An error occurred on modifying it[% IF m.error %] ([% m.error %])[% END %].
+                Authority record <a href="/cgi-bin/koha/authorities/detail.pl?authid=[% m.authid | uri %]">[% m.authid | html %]</a> has not been modified. An error occurred on modifying it[% IF m.error %] ([% m.error | html %])[% END %].
             [% CASE 'authority_modified' %]
                 Authority record <a href="/cgi-bin/koha/authorities/detail.pl?authid=[% m.authid | uri %]">[% m.authid | html %]</a> has successfully been modified..
             [% END %]
