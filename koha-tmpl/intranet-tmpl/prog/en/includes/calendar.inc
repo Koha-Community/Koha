@@ -11,7 +11,7 @@
     var sentmsg = 0;
     var bidi = [% IF(bidi) %] true[% ELSE %] false[% END %];
     var calendarFirstDayOfWeek = '[% Koha.Preference('CalendarFirstDayOfWeek') | html %]';
-    var flatpickr_timeformat_string = [% IF Koha.Preference('TimeFormat') == '12hr' %]"h:i K"[% ELSE %]"H:i"[% END %];
+    var flatpickr_timeformat_string = [% IF Koha.Preference('TimeFormat') == '12hr' %]"G:i K"[% ELSE %]"H:i"[% END %];
     var flatpickr_timeformat = [% IF Koha.Preference('TimeFormat') == '12hr' %]false[% ELSE %]true[% END %];
 </script>
 <!-- / calendar.inc -->
