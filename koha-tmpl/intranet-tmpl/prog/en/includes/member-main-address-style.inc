@@ -49,25 +49,27 @@
 [% BLOCK 'address-style_roadtypes' %]
     [% SET roadtypes = AuthorisedValues.GetAuthValueDropbox('ROADTYPE') %]
     [% IF roadtypes %]
-        <li>
-            [% IF ( mandatorystreettype ) %]
-                <label for="streettype" class="required">
-            [% ELSE %]
-                <label for="streettype">
-            [% END %]
-            Street type: </label>
-            <select name="streettype">
-                <option value=""></option>
-                [% FOR roadtype IN roadtypes %]
-                    [% IF roadtype.authorised_value == patron.streettype %]
-                        <option value="[% roadtype.authorised_value | html %]" selected="selected">[% roadtype.lib | html %]</option>
-                    [% ELSE %]
-                        <option value="[% roadtype.authorised_value | html %]">[% roadtype.lib | html %]</option>
-                    [% END %]
+        [% UNLESS nostreettype %]
+            <li>
+                [% IF ( mandatorystreettype ) %]
+                    <label for="streettype" class="required">
+                [% ELSE %]
+                    <label for="streettype">
                 [% END %]
-            </select>
-            [% IF ( mandatorystreettype ) %]<span class="required">Required</span>[% END %]
-        </li>
+                Street type: </label>
+                <select name="streettype">
+                    <option value=""></option>
+                    [% FOR roadtype IN roadtypes %]
+                        [% IF roadtype.authorised_value == patron.streettype %]
+                            <option value="[% roadtype.authorised_value | html %]" selected="selected">[% roadtype.lib | html %]</option>
+                        [% ELSE %]
+                            <option value="[% roadtype.authorised_value | html %]">[% roadtype.lib | html %]</option>
+                        [% END %]
+                    [% END %]
+                </select>
+                [% IF ( mandatorystreettype ) %]<span class="required">Required</span>[% END %]
+            </li>
+        [% END %]
     [% END %]
 [% END %]
 

@@ -58,25 +58,27 @@
 [% BLOCK 'alt-address-style_roadtypes' %]
     [% SET roadtypes = AuthorisedValues.GetAuthValueDropbox('ROADTYPE') %]
     [% IF roadtypes %]
-        <li>
-            [% IF ( mandatoryB_streettype ) %]
-                <label for="B_streettype" class="required">
-            [% ELSE %]
-                <label for="B_streettype">
-            [% END %]
-            Street type: </label>
-            <select name="B_streettype">
-                <option value=""></option>
-                [% FOR roadtype IN roadtypes %]
-                    [% IF roadtype.authorised_value == patron.B_streettype %]
-                        <option value="[% roadtype.authorised_value | html %]" selected="selected">[% roadtype.lib | html %]</option>
-                    [% ELSE %]
-                        <option value="[% roadtype.authorised_value | html %]">[% roadtype.lib | html %]</option>
-                    [% END %]
+        [% UNLESS noB_streettype %]
+            <li>
+                [% IF ( mandatoryB_streettype ) %]
+                    <label for="B_streettype" class="required">
+                [% ELSE %]
+                    <label for="B_streettype">
                 [% END %]
-            </select>
-            [% IF ( mandatoryB_streettype ) %]<span class="required">Required</span>[% END %]
-        </li>
+                Street type: </label>
+                <select name="B_streettype">
+                    <option value=""></option>
+                    [% FOR roadtype IN roadtypes %]
+                        [% IF roadtype.authorised_value == patron.B_streettype %]
+                            <option value="[% roadtype.authorised_value | html %]" selected="selected">[% roadtype.lib | html %]</option>
+                        [% ELSE %]
+                            <option value="[% roadtype.authorised_value | html %]">[% roadtype.lib | html %]</option>
+                        [% END %]
+                    [% END %]
+                </select>
+                [% IF ( mandatoryB_streettype ) %]<span class="required">Required</span>[% END %]
+            </li>
+        [% END %]
     [% END %]
 [% END %]
 
