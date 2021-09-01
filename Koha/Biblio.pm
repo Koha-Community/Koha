@@ -43,6 +43,7 @@ use Koha::Suggestions;
 use Koha::Subscriptions;
 use Koha::SearchEngine;
 use Koha::SearchEngine::Search;
+use Koha::SearchEngine::QueryBuilder;
 
 =head1 NAME
 
@@ -512,6 +513,8 @@ Returns a query which can be used to search for all component parts of MARC21 bi
 sub get_components_query {
     my ($self) = @_;
 
+    my $builder = Koha::SearchEngine::QueryBuilder->new(
+        { index => $Koha::SearchEngine::BIBLIOS_INDEX } );
     my $marc = $self->metadata->record;
 
     my $searchstr;
@@ -542,6 +545,7 @@ sub get_components_query {
     else {
         my $cleaned_title = $marc->title;
         $cleaned_title =~ tr|/||;
+        $cleaned_title = $builder->clean_search_term($cleaned_title);
         $searchstr = "Host-item:($cleaned_title)";
     }
 
