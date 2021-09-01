@@ -292,7 +292,7 @@ sub build_query_compat {
         my $ea = each_array( @$operands, @$operators, @index_params );
         while ( my ( $oand, $otor, $index ) = $ea->() ) {
             next if ( !defined($oand) || $oand eq '' );
-            $oand = $self->_clean_search_term($oand);
+            $oand = $self->clean_search_term($oand);
             $oand = $self->_truncate_terms($oand) if ($truncate);
             push @search_params, {
                 operand => $oand,      # the search terms
@@ -445,7 +445,7 @@ sub build_authorities_query {
             my @tokens = $self->_split_query( $val );
             foreach my $token ( @tokens ) {
                 $token = $self->_truncate_terms(
-                    $self->_clean_search_term( $token )
+                    $self->clean_search_term( $token )
                 );
             }
             my $query = $self->_join_queries( @tokens );
@@ -644,7 +644,7 @@ sub _build_scan_query {
             terms => {
                 field => $index . '__facet',
                 order => { '_term' => 'asc' },
-                include => $self->_create_regex_filter($self->_clean_search_term($term)) . '.*'
+                include => $self->_create_regex_filter($self->clean_search_term($term)) . '.*'
             }
         }
     };
@@ -909,9 +909,9 @@ sub _create_query_string {
     } @queries;
 }
 
-=head2 _clean_search_term
+=head2 clean_search_term
 
-    my $term = $self->_clean_search_term($term);
+    my $term = $self->clean_search_term($term);
 
 This cleans a search term by removing any funny characters that may upset
 ES and give us an error. It also calls L<_convert_index_strings_freeform>
@@ -919,7 +919,7 @@ to ensure those parts are correct.
 
 =cut
 
-sub _clean_search_term {
+sub clean_search_term {
     my ( $self, $term ) = @_;
 
     # Lookahead for checking if we are inside quotes
