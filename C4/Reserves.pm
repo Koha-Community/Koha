@@ -344,6 +344,37 @@ sub CanBookBeReserved{
         return { status =>'alreadypossession' };
     }
 
+    if ( $params->{itemtype} ) {
+
+        # biblio-level, item type-contrained
+        my $patron          = Koha::Patrons->find($borrowernumber);
+        my $reservesallowed = Koha::CirculationRules->get_effective_rule(
+            {
+                itemtype     => $params->{itemtype},
+                categorycode => $patron->categorycode,
+                branchcode   => $pickup_branchcode,
+                rule_name    => 'reservesallowed',
+            }
+        )->rule_value;
+
+        $reservesallowed = ( $reservesallowed eq '' ) ? undef : $reservesallowed;
+
+        my $count = $patron->holds->search(
+            {
+                '-or' => [
+                    { 'me.itemtype' => $params->{itemtype} },
+                    { 'item.itype'  => $params->{itemtype} }
+                ]
+            },
+            {
+                join => ['item']
+            }
+        )->count;
+
+        return { status => '' }
+          if defined $reservesallowed and $reservesallowed < $count + 1;
+    }
+
     my $items;
     #get items linked via host records
     my @hostitemnumbers = get_hostitemnumbers_of($biblionumber);
@@ -524,16 +555,25 @@ sub CanItemBeReserved {
 
             # If using item-level itypes, fall back to the record
             # level itemtype if the hold has no associated item
-            $querycount .=
-              C4::Context->preference('item-level_itypes')
-              ? " AND COALESCE( items.itype, biblioitems.itemtype ) = ?"
-              : " AND biblioitems.itemtype = ?"
-              if defined $ruleitemtype;
+            if ( defined $ruleitemtype ) {
+                if ( C4::Context->preference('item-level_itypes') ) {
+                    $querycount .= q{
+                        AND ( COALESCE( items.itype, biblioitems.itemtype ) = ?
+                           OR reserves.itemtype = ? )
+                    };
+                }
+                else {
+                    $querycount .= q{
+                        AND ( biblioitems.itemtype = ?
+                           OR reserves.itemtype = ? )
+                    };
+                }
+            }
 
             my $sthcount = $dbh->prepare($querycount);
 
             if ( defined $ruleitemtype ) {
-                $sthcount->execute( $patron->borrowernumber, $reserves_control_branch, $ruleitemtype );
+                $sthcount->execute( $patron->borrowernumber, $reserves_control_branch, $ruleitemtype, $ruleitemtype );
             }
             else {
                 $sthcount->execute( $patron->borrowernumber, $reserves_control_branch );

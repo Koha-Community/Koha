@@ -274,13 +274,17 @@ if ( $query->param('place_reserve') ) {
 
         my $patron_expiration_date = $query->param("expiration_date_$biblioNum");
 
+        my $itemtype = $query->param('itemtype') || undef;
+        $itemtype = undef if $itemNum;
+
         my $rank = $biblioData->{rank};
         my $patron = Koha::Patrons->find( $borrowernumber );
         if ( $item ) {
             $canreserve = 1 if CanItemBeReserved( $patron, $item, $branch )->{status} eq 'OK';
         }
         else {
-            $canreserve = 1 if CanBookBeReserved( $borrowernumber, $biblioNum, $branch )->{status} eq 'OK';
+            $canreserve = 1
+              if CanBookBeReserved( $borrowernumber, $biblioNum, $branch, { itemtype => $itemtype } )->{status} eq 'OK';
 
             # Inserts a null into the 'itemnumber' field of 'reserves' table.
             $itemNum = undef;
@@ -301,9 +305,6 @@ if ( $query->param('place_reserve') ) {
                 $canreserve = 0
             }
         }
-
-        my $itemtype = $query->param('itemtype') || undef;
-        $itemtype = undef if $itemNum;
 
         # Here we actually do the reserveration. Stage 3.
         if ($canreserve) {
@@ -632,6 +633,22 @@ foreach my $biblioNum (@biblionumbers) {
     my $status = CanBookBeReserved( $borrowernumber, $biblioNum )->{status};
     $biblioLoopIter{holdable} &&= $status eq 'OK';
     $biblioLoopIter{already_patron_possession} = $status eq 'alreadypossession';
+
+    if ( $biblioLoopIter{holdable} and C4::Context->preference('AllowHoldItemTypeSelection') ) {
+        # build the allowed item types loop
+        my $rs = $biblio->items->search(
+            undef,
+            {   select => [ { distinct => 'itype' } ],
+                as     => 'item_type'
+            }
+        );
+
+        my @item_types =
+          grep { CanBookBeReserved( $borrowernumber, $biblioNum, $branch, { itemtype => $_ } )->{status} eq 'OK' }
+          $rs->get_column('item_type');
+
+        $biblioLoopIter{allowed_item_types} = \@item_types;
+    }
 
     if ( $status eq 'recall' ) {
         $biblioLoopIter{recall} = 1;
