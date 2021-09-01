@@ -35,7 +35,6 @@
     [% INCLUDE 'slip-print.inc' #printThenClose %]
 [% END %]
 <script>
-    [% IntranetUserJS | $raw %]
     $(document).ready(function(){
         $(".print-label").on("click", function(e){
             e.preventDefault();
