@@ -1692,6 +1692,8 @@ Returns a query which can be used to search for all component parts of MARC21 bi
 sub get_volumes_query {
     my ($self) = @_;
 
+    my $builder = Koha::SearchEngine::QueryBuilder->new(
+        { index => $Koha::SearchEngine::BIBLIOS_INDEX } );
     my $marc = $self->metadata->record;
 
     my $searchstr;
@@ -1722,6 +1724,7 @@ sub get_volumes_query {
     else {
         my $cleaned_title = $marc->title;
         $cleaned_title =~ tr|/||;
+        $cleaned_title = $builder->clean_search_term($cleaned_title);
         $searchstr = "ti,phr:($cleaned_title)";
     }
 
