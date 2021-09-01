@@ -499,7 +499,10 @@ sub ParseCgiForBorrower {
     # Replace checkbox 'agreed' by datetime in gdpr_proc_consent
     $borrower{gdpr_proc_consent} = dt_from_string if  $borrower{gdpr_proc_consent} && $borrower{gdpr_proc_consent} eq 'agreed';
 
-    delete $borrower{flags};
+    delete $borrower{$_} for qw/borrowernumber date_renewed debarred debarredcomment flags privacy privacy_guarantor_fines privacy_guarantor_checkouts checkprevcheckout updated_on lastseen lang login_attempts overdrive_auth_token anonymized/; # See also members/memberentry.pl
+    delete $borrower{$_} for qw/dateenrolled dateexpiry borrowernotes opacnote sort1 sort2 sms_provider_id autorenew_checkouts gonenoaddress lost relationship/; # On OPAC only
+    delete $borrower{$_} for split( /\s*\|\s*/, C4::Context->preference('PatronSelfRegistrationBorrowerUnwantedField') || q{} );
+
     return %borrower;
 }
 

@@ -224,7 +224,7 @@ if ( $op eq 'insert' || $op eq 'modify' || $op eq 'save' || $op eq 'duplicate' )
 # remove keys from %newdata that is not part of patron's attributes
 {
     my @keys_to_delete = (
-        qr/^flags$/,
+        qr/^(borrowernumber|date_renewed|debarred|debarredcomment|flags|privacy|privacy_guarantor_fines|privacy_guarantor_checkouts|checkprevcheckout|updated_on|lastseen|lang|login_attempts|overdrive_auth_token|anonymized)$/, # Bug 28935
         qr/^BorrowerMandatoryField$/,
         qr/^category_type$/,
         qr/^check_member$/,
@@ -251,6 +251,7 @@ if ( $op eq 'insert' || $op eq 'modify' || $op eq 'save' || $op eq 'duplicate' )
         qr/^guarantor_surname$/,
         qr/^delete_guarantor$/,
     );
+    push @keys_to_delete, map { qr/^$_$/ } split( /\s*\|\s*/, C4::Context->preference('PatronSelfRegistrationBorrowerUnwantedField') || q{} );
     for my $regexp (@keys_to_delete) {
         for (keys %newdata) {
             delete($newdata{$_}) if /$regexp/;
@@ -334,7 +335,7 @@ if ($op eq 'save' || $op eq 'insert'){
     # If the cardnumber is blank, treat it as null.
     $newdata{'cardnumber'} = undef if $newdata{'cardnumber'} =~ /^\s*$/;
 
-    if (my $error_code = checkcardnumber($newdata{cardnumber},$newdata{borrowernumber})){
+    if (my $error_code = checkcardnumber( $newdata{cardnumber}, $borrowernumber )){
         push @errors, $error_code == 1
             ? 'ERROR_cardnumber_already_exists'
             : $error_code == 2
