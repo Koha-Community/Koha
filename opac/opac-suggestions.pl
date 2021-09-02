@@ -43,11 +43,25 @@ use Koha::DateUtils qw( dt_from_string output_pref );
 my $input           = CGI->new;
 my $op              = $input->param('op') || 'else';
 my $biblionumber    = $input->param('biblionumber');
-my $suggestion      = $input->Vars;
 my $negcaptcha      = $input->param('negcap');
 my $suggested_by_anyone = $input->param('suggested_by_anyone') || 0;
 my $title_filter    = $input->param('title_filter');
 my $need_confirm    = 0;
+
+my $suggestion = {
+    title           => scalar $input->param('title'),
+    author          => scalar $input->param('author'),
+    copyrightdate   => scalar $input->param('copyrightdate'),
+    isbn            => scalar $input->param('isbn'),
+    publishercode   => scalar $input->param('publishercode'),
+    collectiontitle => scalar $input->param('collectiontitle'),
+    place           => scalar $input->param('place'),
+    quantity        => scalar $input->param('quantity'),
+    itemtype        => scalar $input->param('itemtype'),
+    branchcode      => scalar $input->param('branchcode'),
+    patronreason    => scalar $input->param('patronreason'),
+    note            => scalar $input->param('note'),
+};
 
 # If a spambot accidentally populates the 'negcap' field in the sugesstions form, then silently skip and return.
 if ($negcaptcha ) {
@@ -84,11 +98,6 @@ else {
         }
     );
 }
-
-# don't pass 'negcap' column to DB, else DBI::Class will error
-# DBIx::Class::Row::store_column(): No such column 'negcap' on Koha::Schema::Result::Suggestion at  Koha/C4/Suggestions.pm
-delete $suggestion->{negcap};
-delete $suggestion->{$_} foreach qw<op suggested_by_anyone confirm>;
 
 if ( $op eq 'else' ) {
     if ( C4::Context->preference("OPACViewOthersSuggestions") ) {
@@ -157,12 +166,12 @@ if ( $op eq "add_confirm" ) {
     elsif ( @$suggestions_loop >= 1 ) {
 
         #some suggestion are answering the request Donot Add
-        for my $suggestion (@$suggestions_loop) {
+        for my $s (@$suggestions_loop) {
             push @messages,
               {
                 type => 'error',
                 code => 'already_exists',
-                id   => $suggestion->{suggestionid}
+                id   => $s->{suggestionid}
               };
             last;
         }
@@ -177,6 +186,7 @@ if ( $op eq "add_confirm" ) {
         }
         $suggestion->{suggesteddate} = dt_from_string;
         $suggestion->{branchcode} = $input->param('branchcode') || C4::Context->userenv->{"branch"};
+        $suggestion->{STATUS} = 'ASKED';
 
         &NewSuggestion($suggestion);
         $patrons_pending_suggestions_count++;
