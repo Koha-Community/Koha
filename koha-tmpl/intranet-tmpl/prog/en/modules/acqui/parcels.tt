@@ -163,7 +163,7 @@
         </li> -->
          <li>
             <label for="shipmentdate">Shipment date: </label>
-            <input type="text" id="shipmentdate" name="shipmentdate" maxlength="10" size="10" value="[% shipmentdate_today | $KohaDates %]" class="datepicker" />
+            <input type="text" id="shipmentdate" name="shipmentdate" maxlength="10" size="10" value="[% shipmentdate_today | $KohaDates %]" class="flatpickr" />
             <div class="hint">[% INCLUDE 'date-format.inc' %]</div>
         </li>
         <li>
@@ -203,8 +203,16 @@
         <ol>
             <li> <input type="hidden" name="booksellerid" value="[% booksellerid | html %]" /></li>
             <li><label for="filter">Invoice number:</label><input type="text" size="20" name="filter" value="[% filter | html %]" id="filter" /></li>
-            <li><label for="datefrom">From:</label><input type="text" size="9" id="datefrom" name="datefrom" value="[% datefrom | html %]" class="datepicker" /><br />
-                <label for="dateto">To:</label><input type="text" size="9" id="dateto" name="dateto" value="[% dateto | html %]" class="datepicker" /></li>
+            <li>
+                <label for="datefrom">From:</label>
+                <input type="text" size="9" id="datefrom" name="datefrom" value="[% datefrom | html %]" class="flatpickr" />
+                <div class="hint">[% INCLUDE 'date-format.inc' %]</div>
+            </li>
+            <li>
+                <label for="dateto">To:</label>
+                <input type="text" size="9" id="dateto" name="dateto" value="[% dateto | html %]" class="flatpickr" />
+                <div class="hint">[% INCLUDE 'date-format.inc' %]</div>
+            </li>
             <li><label for="orderby">Sort by :</label><select name="orderby" id="orderby">
                 <option value="invoicenumber">Invoice number</option>
                 <option value="shipmentdate">Shipment date</option>

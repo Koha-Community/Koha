@@ -103,11 +103,11 @@
     </li>
 
     <li><label for="from">From: </label>
-    <input type="text" size="10" id="from" name="from" value="[% filters.from_placed_on | $KohaDates %]" class="datepickerfrom" />
-            <div class="hint">[% INCLUDE 'date-format.inc' %]</div>
+        <input type="text" size="10" id="from" name="from" value="[% filters.from_placed_on | $KohaDates %]" class="flatpickrfrom" />
+        <div class="hint">[% INCLUDE 'date-format.inc' %]</div>
     </li>
     <li><label for="to">To: </label>
-    <input type="text" size="10" id="to" name="to" value="[% filters.to_placed_on | $KohaDates %]" class="datepickerto" />
-            <div class="hint">[% INCLUDE 'date-format.inc' %]</div>
+        <input type="text" size="10" id="to" name="to" value="[% filters.to_placed_on | $KohaDates %]" class="flatpickrto" />
+        <div class="hint">[% INCLUDE 'date-format.inc' %]</div>
     </li>
 </ol>
