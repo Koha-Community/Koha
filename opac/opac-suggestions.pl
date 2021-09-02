@@ -34,11 +34,26 @@ use Koha::Patrons;
 
 use Koha::DateUtils qw( dt_from_string );
 
-my $input           = new CGI;
-my $op              = $input->param('op');
-my $suggestion      = $input->Vars;
+my $input           = CGI->new;
+my $op              = $input->param('op') || 'else';
+my $biblionumber    = $input->param('biblionumber');
 my $negcaptcha      = $input->param('negcap');
 my $suggested_by_anyone = $input->param('suggested_by_anyone') || 0;
+
+my $suggestion = {
+    title           => scalar $input->param('title'),
+    author          => scalar $input->param('author'),
+    copyrightdate   => scalar $input->param('copyrightdate'),
+    isbn            => scalar $input->param('isbn'),
+    publishercode   => scalar $input->param('publishercode'),
+    collectiontitle => scalar $input->param('collectiontitle'),
+    place           => scalar $input->param('place'),
+    quantity        => scalar $input->param('quantity'),
+    itemtype        => scalar $input->param('itemtype'),
+    branchcode      => scalar $input->param('branchcode'),
+    patronreason    => scalar $input->param('patronreason'),
+    note            => scalar $input->param('note'),
+};
 
 # If a spambot accidentally populates the 'negcap' field in the sugesstions form, then silently skip and return.
 if ($negcaptcha ) {
@@ -127,12 +142,12 @@ if ( $op eq "add_confirm" ) {
     elsif ( @$suggestions_loop >= 1 ) {
 
         #some suggestion are answering the request Donot Add
-        for my $suggestion (@$suggestions_loop) {
+        for my $s (@$suggestions_loop) {
             push @messages,
               {
                 type => 'error',
                 code => 'already_exists',
-                id   => $suggestion->{suggestionid}
+                id   => $s->{suggestionid}
               };
             last;
         }
@@ -147,6 +162,7 @@ if ( $op eq "add_confirm" ) {
         }
         $suggestion->{suggesteddate} = dt_from_string;
         $suggestion->{branchcode} = $input->param('branchcode') || C4::Context->userenv->{"branch"};
+        $suggestion->{STATUS} = 'ASKED';
 
         &NewSuggestion($suggestion);
         $patrons_pending_suggestions_count++;
