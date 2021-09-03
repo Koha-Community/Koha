@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 73;
+use Test::More tests => 76;
 use Test::MockModule;
 use Test::Warn;
 
@@ -31,7 +31,7 @@ use C4::Circulation qw( AddReturn AddIssue );
 use C4::Items;
 use C4::Biblio qw( GetMarcBiblio GetMarcFromKohaField ModBiblio );
 use C4::Members;
-use C4::Reserves qw( AddReserve CheckReserves GetReservesControlBranch ModReserve ModReserveAffect ReserveSlip CalculatePriority CanReserveBeCanceledFromOpac CanBookBeReserved IsAvailableForItemLevelRequest MoveReserve ChargeReserveFee RevertWaitingStatus CanItemBeReserved MergeHolds );
+use C4::Reserves qw( AddReserve AlterPriority CheckReserves GetReservesControlBranch ModReserve ModReserveAffect ReserveSlip CalculatePriority CanReserveBeCanceledFromOpac CanBookBeReserved IsAvailableForItemLevelRequest MoveReserve ChargeReserveFee RevertWaitingStatus CanItemBeReserved MergeHolds );
 use Koha::ActionLogs;
 use Koha::Caches;
 use Koha::DateUtils qw( dt_from_string output_pref );
@@ -1456,6 +1456,193 @@ subtest 'IsAvailableForItemLevelRequest() tests' => sub {
         C4::Reserves::IsAvailableForItemLevelRequest( $item, $patron ),
         "Item not available for item-level hold because no effective item type"
     );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'AlterPriorty() tests' => sub {
+
+    plan tests => 1;
+
+    $schema->storage->txn_begin;
+
+    my $library = $builder->build_object({ class => 'Koha::Libraries' });
+    my $patron_1  = $builder->build_object({ class => 'Koha::Patrons' });
+    my $patron_2  = $builder->build_object({ class => 'Koha::Patrons' });
+    my $patron_3  = $builder->build_object({ class => 'Koha::Patrons' });
+    my $biblio  = $builder->build_sample_biblio;
+
+    my $reserve_id = AddReserve(
+        {
+            branchcode     => $library->branchcode,
+            borrowernumber => $patron_1->id,
+            biblionumber   => $biblio->id,
+        }
+    );
+    AddReserve(
+        {
+            branchcode     => $library->branchcode,
+            borrowernumber => $patron_2->id,
+            biblionumber   => $biblio->id,
+        }
+    );
+    AddReserve(
+        {
+            branchcode     => $library->branchcode,
+            borrowernumber => $patron_3->id,
+            biblionumber   => $biblio->id,
+        }
+    );
+
+    AlterPriority( "bottom", $reserve_id, 1, 2, 1, 3 );
+
+    my $hold = Koha::Holds->find($reserve_id);
+
+    is($hold->priority,3,'Successfully altered priority to bottom');
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'CanBookBeReserved() tests' => sub {
+
+    plan tests => 2;
+
+    $schema->storage->txn_begin;
+
+    my $library = $builder->build_object(
+        { class => 'Koha::Libraries', value => { pickup_location => 1 } } );
+    my $patron = $builder->build_object( { class => 'Koha::Patrons' } );
+    my $itype  = $builder->build_object( { class => 'Koha::ItemTypes' } );
+
+    my $biblio = $builder->build_sample_biblio();
+    my $item_1 = $builder->build_sample_item(
+        { biblionumber => $biblio->id, itype => $itype->id } );
+    my $item_2 = $builder->build_sample_item(
+        { biblionumber => $biblio->id, itype => $itype->id } );
+
+    Koha::CirculationRules->delete;
+    Koha::CirculationRules->set_rules(
+        {
+            branchcode   => undef,
+            categorycode => undef,
+            itemtype     => undef,
+            rules        => {
+                holds_per_record => 100,
+            }
+        }
+    );
+    Koha::CirculationRules->set_rules(
+        {
+            branchcode   => undef,
+            categorycode => undef,
+            itemtype     => $itype->id,
+            rules        => {
+                reservesallowed => 2,
+            }
+        }
+    );
+
+    C4::Reserves::AddReserve(
+        {
+            branchcode     => $library->id,
+            borrowernumber => $patron->id,
+            biblionumber   => $biblio->id,
+            title          => $biblio->title,
+            itemnumber     => $item_1->id
+        }
+    );
+
+    ## Limit on item type is 2, only one hold, success tests
+
+    my $res = CanBookBeReserved( $patron->id, $biblio->id, $library->id,
+        { itemtype => $itype->id } );
+    is_deeply( $res, { status => 'OK' },
+        'Holds on itemtype limit not reached' );
+
+    # Add a second hold, biblio-level and item type-constrained
+    C4::Reserves::AddReserve(
+        {
+            branchcode     => $library->id,
+            borrowernumber => $patron->id,
+            biblionumber   => $biblio->id,
+            title          => $biblio->title,
+            itemtype       => $itype->id,
+        }
+    );
+
+    ## Limit on item type is 2, two holds, one of them biblio-level/item type-constrained
+
+    $res = CanBookBeReserved( $patron->id, $biblio->id, $library->id,
+        { itemtype => $itype->id } );
+    is_deeply( $res, { status => '' }, 'Holds on itemtype limit reached' );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'CanItemBeReserved() tests' => sub {
+
+    plan tests => 2;
+
+    $schema->storage->txn_begin;
+
+    my $library = $builder->build_object( { class => 'Koha::Libraries', value => { pickup_location => 1 } } );
+    my $patron  = $builder->build_object( { class => 'Koha::Patrons' } );
+    my $itype   = $builder->build_object( { class => 'Koha::ItemTypes' } );
+
+    my $biblio = $builder->build_sample_biblio();
+    my $item_1 = $builder->build_sample_item({ biblionumber => $biblio->id, itype => $itype->id });
+    my $item_2 = $builder->build_sample_item({ biblionumber => $biblio->id, itype => $itype->id });
+
+    Koha::CirculationRules->delete;
+    Koha::CirculationRules->set_rules(
+        {   branchcode   => undef,
+            categorycode => undef,
+            itemtype     => undef,
+            rules        => {
+                holds_per_record => 100,
+            }
+        }
+    );
+    Koha::CirculationRules->set_rules(
+        {   branchcode   => undef,
+            categorycode => undef,
+            itemtype     => $itype->id,
+            rules        => {
+                reservesallowed => 2,
+            }
+        }
+    );
+
+    C4::Reserves::AddReserve(
+        {
+            branchcode     => $library->id,
+            borrowernumber => $patron->id,
+            biblionumber   => $biblio->id,
+            title          => $biblio->title,
+            itemnumber     => $item_1->id
+        }
+    );
+
+    ## Limit on item type is 2, only one hold, success tests
+
+    my $res = CanItemBeReserved( $patron->id, $item_2->id, $library->id );
+    is_deeply( $res, { status => 'OK' }, 'Holds on itemtype limit not reached' );
+
+    # Add a second hold, biblio-level and item type-constrained
+    C4::Reserves::AddReserve(
+        {
+            branchcode     => $library->id,
+            borrowernumber => $patron->id,
+            biblionumber   => $biblio->id,
+            title          => $biblio->title,
+            itemtype       => $itype->id,
+        }
+    );
+
+    ## Limit on item type is 2, two holds, one of them biblio-level/item type-constrained
+
+    $res = CanItemBeReserved( $patron->id, $item_2->id, $library->id );
+    is_deeply( $res, { status => 'tooManyReserves', limit => 2 }, 'Holds on itemtype limit reached' );
 
     $schema->storage->txn_rollback;
 };
