@@ -119,11 +119,12 @@
                 <td>Placed on</td>
 				<td><input type="radio" name="Line" value="aqbasket.closedate" /></td>
 				<td><input type="radio" checked="checked" name="Column" value="aqbasket.closedate" /> </td>
-				<td> From <input type="text" size="10" id="from" name="Filter" value="" />
-				<span class="hint">[% INCLUDE 'date-format.inc' %]</span>
-					To <input size="10" id="to" name="Filter" type="text" value="" />
-				<span class="hint">[% INCLUDE 'date-format.inc' %]</span>
-				</td>
+                <td>
+                    From <input type="text" size="10" id="placedonfrom" name="Filter" value="" />
+                    <span class="hint">[% INCLUDE 'date-format.inc' %]</span>
+                    To <input size="10" id="placedonto" name="Filter" type="text" value="" />
+                    <span class="hint">[% INCLUDE 'date-format.inc' %]</span>
+                </td>
 			</tr>
 			<tr class="hilighted">
 				<td>&nbsp;</td>
@@ -141,11 +142,12 @@
                 <td>Received on</td>
 				<td><input type="radio" name="Line" value="aqorders.datereceived" /></td>
 				<td><input type="radio" name="Column" value="aqorders.datereceived" /></td>
-				<td> From <input type="text" size="10" id="fromRO" name="Filter" value="" />
-				<span class="hint">[% INCLUDE 'date-format.inc' %]</span>
-					To <input type="text" size="10" id="toRO" name="Filter" value="" />
-				<span class="hint">[% INCLUDE 'date-format.inc' %]</span>
-				</td>
+                <td>
+                    From <input type="text" size="10" id="receivedonfrom" name="Filter" value="" />
+                    <span class="hint">[% INCLUDE 'date-format.inc' %]</span>
+                    To <input type="text" size="10" id="receivedonto" name="Filter" value="" />
+                    <span class="hint">[% INCLUDE 'date-format.inc' %]</span>
+                </td>
 			</tr>
 			<tr>
 				<td>&nbsp;</td>
@@ -339,32 +341,28 @@
     [% INCLUDE 'calendar.inc' %]
     <script>
         $(document).ready(function() {
-            // http://jqueryui.com/demos/datepicker/#date-range
-            var dates = $( "#from, #to" ).datepicker({
-                changeMonth: true,
-                numberOfMonths: 1,
-                onSelect: function( selectedDate ) {
-                    var option = this.id == "from" ? "minDate" : "maxDate",
-                        instance = $( this ).data( "datepicker" );
-                        date = $.datepicker.parseDate(
-                            instance.settings.dateFormat ||
-                            $.datepicker._defaults.dateFormat,
-                            selectedDate, instance.settings );
-                    dates.not( this ).datepicker( "option", option, date );
+            var placedonfrom = $("#placedonfrom").flatpickr({
+                onClose: function( selectedDates, dateText, instance) {
+                    validate_date( selectedDates, instance );
+                    placedonto.set('minDate', selectedDates[0]);
                 }
             });
-            var datesRO = $( "#fromRO, #toRO" ).datepicker({
-                changeMonth: true,
-                numberOfMonths: 1,
-                onSelect: function( selectedDate ) {
-                    var option = this.id == "fromRO" ? "minDate" : "maxDate",
-                        instance = $( this ).data( "datepicker" );
-                        date = $.datepicker.parseDate(
-                            instance.settings.dateFormat ||
-                            $.datepicker._defaults.dateFormat,
-                            selectedDate, instance.settings );
-                    datesRO.not( this ).datepicker( "option", option, date );
+            var placedonto = $("#placedonto").flatpickr({
+                onClose: function( selectedDates, dateText, instance) {
+                    validate_date( selectedDates, instance );
+                },
+            });
+
+            var receivedonfrom = $("#receivedonfrom").flatpickr({
+                onClose: function( selectedDates, dateText, instance) {
+                    validate_date( selectedDates, instance );
+                    receivedonto.set('minDate', selectedDates[0]);
                 }
+            });
+            var receivedonto = $("#receivedonto").flatpickr({
+                onClose: function( selectedDates, dateText, instance) {
+                    validate_date( selectedDates, instance );
+                },
             });
         });
     </script>

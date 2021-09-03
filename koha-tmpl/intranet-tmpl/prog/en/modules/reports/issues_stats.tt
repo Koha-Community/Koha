@@ -126,11 +126,14 @@
                 <td>Period</td>
                 <td><input type="radio" name="Line" value="datetime" /></td>
                 <td><input type="radio" name="Column" value="datetime" /></td>
-                <td><label for="from">From</label> <input type="text" size="10" id="from" name="Filter" class="datepickerfrom" />
-                    <label for="to">To</label> <input size="10" id="to" name="Filter" value="" type="text" class="datepickerto" />
+                <td>
+                    <label for="from">From</label>
+                    <input type="text" size="10" id="from" name="Filter" class="flatpickrfrom" />
+                    <label for="to">To</label>
+                    <input size="10" id="to" name="Filter" value="" type="text" class="flatpickrto" />
                     <span class="hint">[% INCLUDE 'date-format.inc' %]</span>
-                    </td>
-                </tr>
+                </td>
+            </tr>
             <tr>
                 <td><label for="PeriodTypeSel">Type:</label><select name="PeriodTypeSel" id="PeriodTypeSel">
                     <option value ="issue">Checkout</option>

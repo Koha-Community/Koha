@@ -123,41 +123,56 @@
                 <td>Hold date</td>
                 <td><input type="radio" name="Line" value="reservedate" /></td>
                 <td><input type="radio" name="Column" value="reservedate" /></td>
-                <td><label for="filter_reservedate_begin">From</label> <input type="text"  size="10" id="filter_reservedate_begin" name="filter_reservedate_begin" />
-                    <label for="filter_reservedate_end">To</label> <input size="10" id="filter_reservedate_end" name="filter_reservedate_end" value="" type="text" />
-                    </td>
-                </tr>
+                <td>
+                    <label for="filter_reservedate_begin">From</label>
+                    <input type="text" size="10" id="filter_reservedate_begin" name="filter_reservedate_begin" />
+                    <label for="filter_reservedate_end">To</label>
+                    <input size="10" id="filter_reservedate_end" name="filter_reservedate_end" value="" type="text" />
+                </td>
+            </tr>
             <tr>
                 <td>Notification date</td>
                 <td><input type="radio" name="Line" value="notificationdate" /></td>
                 <td><input type="radio" name="Column" value="notificationdate" /></td>
-                <td><label for="filter_notificationdate_begin">From</label> <input type="text"  size="10" id="filter_notificationdate_begin" name="filter_notificationdate_begin" />
-                    <label for="filter_notificationdate_end">To</label> <input  size="10" id="filter_notificationdate_end" name="filter_notificationdate_end" value="" type="text" />
-                    </td>
+                <td>
+                    <label for="filter_notificationdate_begin">From</label>
+                    <input type="text" size="10" id="filter_notificationdate_begin" name="filter_notificationdate_begin" />
+                    <label for="filter_notificationdate_end">To</label>
+                    <input  size="10" id="filter_notificationdate_end" name="filter_notificationdate_end" value="" type="text" />
+                </td>
              </tr>
             <tr>
                 <td>Reminder date</td>
                 <td><input type="radio" name="Line" value="reminderdate" /></td>
                 <td><input type="radio" name="Column" value="reminderdate" /></td>
-                <td><label for="filter_reminderdate_begin">From</label> <input type="text"  size="10" id="filter_reminderdate_begin" name="Filter" />
-                    <label for="filter_reminderdate_end">To</label> <input size="10" id="filter_reminderdate_end" name="filter_reminderdate_end" value="" type="text" />
-                    </td>
+                <td>
+                    <label for="filter_reminderdate_begin">From</label>
+                    <input type="text" size="10" id="filter_reminderdate_begin" name="Filter" />
+                    <label for="filter_reminderdate_end">To</label>
+                    <input size="10" id="filter_reminderdate_end" name="filter_reminderdate_end" value="" type="text" />
+                </td>
              </tr>
             <tr>
                 <td>Waiting date</td>
                 <td><input type="radio" name="Line" value="waitingdate" /></td>
                 <td><input type="radio" name="Column" value="waitingdate" /></td>
-                <td><label for="filter_waitingdate_begin">From</label> <input type="text"  size="10" id="filter_waitingdate_begin" name="filter_waitingdate_begin" />
-                    <label for="filter_waitingdate_end">To</label> <input  size="10" id="filter_waitingdate_end" name="filter_waitingdate_end" value="" type="text" />
-                    </td>
+                <td>
+                    <label for="filter_waitingdate_begin">From</label>
+                    <input type="text" size="10" id="filter_waitingdate_begin" name="filter_waitingdate_begin" />
+                    <label for="filter_waitingdate_end">To</label>
+                    <input  size="10" id="filter_waitingdate_end" name="filter_waitingdate_end" value="" type="text" />
+                </td>
              </tr>
 			 <tr>
                 <td>Cancellation date</td>
                 <td><input type="radio" name="Line" value="cancellationdate" /></td>
                 <td><input type="radio" name="Column" value="cancellationdate" /></td>
-                <td><label for="filter_cancellationdate_begin">From</label> <input type="text"  size="10" id="filter_cancellationdate_begin" name="filter_cancellationdate_begin" />
-                    <label for="filter_cancellationdate_end">To</label> <input  size="10" id="filter_cancellationdate_end" name="filter_cancellationdate_end" value="" type="text" />
-                    </td>
+                <td>
+                    <label for="filter_cancellationdate_begin">From</label>
+                    <input type="text" size="10" id="filter_cancellationdate_begin" name="filter_cancellationdate_begin" />
+                    <label for="filter_cancellationdate_end">To</label>
+                    <input  size="10" id="filter_cancellationdate_end" name="filter_cancellationdate_end" value="" type="text" />
+                </td>
              </tr>
         <tr>
             <td>Patron category</td>
@@ -325,71 +340,64 @@
     [% INCLUDE 'calendar.inc' %]
     <script>
         $(document).ready(function() {
-            // http://jqueryui.com/demos/datepicker/#date-range
-            var dates = $( "#filter_reservedate_begin, #filter_reservedate_end" ).datepicker({
-                changeMonth: true,
-                numberOfMonths: 1,
-                onSelect: function( selectedDate ) {
-                    var option = this.id == "filter_reservedate_begin" ? "minDate" : "maxDate",
-                        instance = $( this ).data( "datepicker" );
-                        date = $.datepicker.parseDate(
-                            instance.settings.dateFormat ||
-                            $.datepicker._defaults.dateFormat,
-                            selectedDate, instance.settings );
-                    dates.not( this ).datepicker( "option", option, date );
+            var filter_reservedate_begin = $("#filter_reservedate_begin").flatpickr({
+                onClose: function( selectedDates, dateText, instance) {
+                    validate_date( selectedDates, instance );
+                    filter_reservedate_end.set('minDate', selectedDates[0]);
                 }
             });
-            var datesND = $( "#filter_notificationdate_begin, #filter_notificationdate_end" ).datepicker({
-                changeMonth: true,
-                numberOfMonths: 1,
-                onSelect: function( selectedDate ) {
-                    var option = this.id == "filter_notificationdate_begin" ? "minDate" : "maxDate",
-                        instance = $( this ).data( "datepicker" );
-                        date = $.datepicker.parseDate(
-                            instance.settings.dateFormat ||
-                            $.datepicker._defaults.dateFormat,
-                            selectedDate, instance.settings );
-                    datesND.not( this ).datepicker( "option", option, date );
+            var filter_reservedate_end = $("#filter_reservedate_end").flatpickr({
+                onClose: function( selectedDates, dateText, instance) {
+                    validate_date( selectedDates, instance );
+                },
+            });
+
+            var filter_notificationdate_begin = $("#filter_notificationdate_begin").flatpickr({
+                onClose: function( selectedDates, dateText, instance) {
+                    validate_date( selectedDates, instance );
+                    filter_notificationdate_end.set('minDate', selectedDates[0]);
                 }
             });
-            var datesRD = $( "#filter_reminderdate_begin, #filter_reminderdate_end" ).datepicker({
-                changeMonth: true,
-                numberOfMonths: 1,
-                onSelect: function( selectedDate ) {
-                    var option = this.id == "filter_reminderdate_begin" ? "minDate" : "maxDate",
-                        instance = $( this ).data( "datepicker" );
-                        date = $.datepicker.parseDate(
-                            instance.settings.dateFormat ||
-                            $.datepicker._defaults.dateFormat,
-                            selectedDate, instance.settings );
-                    datesRD.not( this ).datepicker( "option", option, date );
+            var filter_notificationdate_end = $("#filter_notificationdate_end").flatpickr({
+                onClose: function( selectedDates, dateText, instance) {
+                    validate_date( selectedDates, instance );
+                },
+            });
+
+            var filter_reminderdate_begin = $("#filter_reminderdate_begin").flatpickr({
+                onClose: function( selectedDates, dateText, instance) {
+                    validate_date( selectedDates, instance );
+                    filter_reminderdate_end.set('minDate', selectedDates[0]);
                 }
             });
-            var datesWD = $( "#filter_waitingdate_begin, #filter_waitingdate_end" ).datepicker({
-                changeMonth: true,
-                numberOfMonths: 1,
-                onSelect: function( selectedDate ) {
-                    var option = this.id == "filter_waitingdate_begin" ? "minDate" : "maxDate",
-                        instance = $( this ).data( "datepicker" );
-                        date = $.datepicker.parseDate(
-                            instance.settings.dateFormat ||
-                            $.datepicker._defaults.dateFormat,
-                            selectedDate, instance.settings );
-                    datesWD.not( this ).datepicker( "option", option, date );
+            var filter_reminderdate_end = $("#filter_reminderdate_end").flatpickr({
+                onClose: function( selectedDates, dateText, instance) {
+                    validate_date( selectedDates, instance );
+                },
+            });
+
+            var filter_waitingdate_begin = $("#filter_waitingdate_begin").flatpickr({
+                onClose: function( selectedDates, dateText, instance) {
+                    validate_date( selectedDates, instance );
+                    filter_waitingdate_end.set('minDate', selectedDates[0]);
                 }
             });
-            var datesCD = $( "#filter_cancellationdate_begin, #filter_cancellationdate_end" ).datepicker({
-                changeMonth: true,
-                numberOfMonths: 1,
-                onSelect: function( selectedDate ) {
-                    var option = this.id == "filter_cancellationdate_begin" ? "minDate" : "maxDate",
-                        instance = $( this ).data( "datepicker" );
-                        date = $.datepicker.parseDate(
-                            instance.settings.dateFormat ||
-                            $.datepicker._defaults.dateFormat,
-                            selectedDate, instance.settings );
-                    datesCD.not( this ).datepicker( "option", option, date );
+            var filter_waitingdate_end = $("#filter_waitingdate_end").flatpickr({
+                onClose: function( selectedDates, dateText, instance) {
+                    validate_date( selectedDates, instance );
+                },
+            });
+
+            var filter_cancellationdate_begin = $("#filter_cancellationdate_begin").flatpickr({
+                onClose: function( selectedDates, dateText, instance) {
+                    validate_date( selectedDates, instance );
+                    filter_cancellationdate_end.set('minDate', selectedDates[0]);
                 }
+            });
+            var filter_cancellationdate_end = $("#filter_cancellationdate_end").flatpickr({
+                onClose: function( selectedDates, dateText, instance) {
+                    validate_date( selectedDates, instance );
+                },
             });
         });
     </script>

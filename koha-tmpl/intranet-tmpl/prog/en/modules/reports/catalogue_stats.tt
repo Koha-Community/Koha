@@ -252,9 +252,9 @@
                 <td><input type="radio" name="Column" value="items.dateaccessioned" /></td>
                 <td>
                     <label for="acqdateFrom">From</label>
-                    <input type="text" name="Filter" id="acqdateFrom" class="datepicker" />
+                    <input type="text" name="Filter" id="acqdateFrom" />
                     <label for="acqdateTo">To</label>
-                    <input type="text" name="Filter" id="acqdateTo" class="datepicker" />
+                    <input type="text" name="Filter" id="acqdateTo" />
                 </td>
             </tr>
             <tr id="removeddatetr">
@@ -263,9 +263,9 @@
                 <td><input type="radio" name="Column" value="deleteditems.timestamp" /></td>
                 <td>
                     <label for="deldateFrom">From</label>
-                    <input type="text" name="Filter" id="deldateFrom" class="datepicker" />
+                    <input type="text" name="Filter" id="deldateFrom" />
                     <label for="deldateTo">To</label>
-                    <input type="text" name="Filter" id="deldateTo" class="datepicker"/>
+                    <input type="text" name="Filter" id="deldateTo" />
                 </td>
             </tr>
 		</tbody>
@@ -353,16 +353,30 @@
         }
 
         $(document).ready(function() {
-            $('#acqdateFrom, #deldateFrom')
-              .datepicker('option', 'onSelect', function(selectedDate) {
-                var id = $(this).attr('id').replace('From', 'To');
-                $('#' + id).datepicker('option', 'minDate', selectedDate);
-              });
-            $('#acqdateTo, #deldateTo')
-              .datepicker('option', 'onSelect', function(selectedDate) {
-                var id = $(this).attr('id').replace('To', 'From');
-                $('#' + id).datepicker('option', 'maxDate', selectedDate);
-              });
+
+            var acqdateFrom = $("#acqdateFrom").flatpickr({
+                onClose: function( selectedDates, dateText, instance) {
+                    validate_date( selectedDates, instance );
+                    acqdateTo.set('minDate', selectedDates[0]);
+                }
+            });
+            var acqdateTo = $("#acqdateTo").flatpickr({
+                onClose: function( selectedDates, dateText, instance) {
+                    validate_date( selectedDates, instance );
+                },
+            });
+
+            var deldateFrom = $("#deldateFrom").flatpickr({
+                onClose: function( selectedDates, dateText, instance) {
+                    validate_date( selectedDates, instance );
+                    deldateTo.set('minDate', selectedDates[0]);
+                }
+            });
+            var deldateTo = $("#deldateTo").flatpickr({
+                onClose: function( selectedDates, dateText, instance) {
+                    validate_date( selectedDates, instance );
+                },
+            });
 
             $("input[name='Cellvalue']").change(function() {
                 changeRemovedDateTrStatus();

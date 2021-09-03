@@ -95,12 +95,20 @@
 	<form method="post" action="/cgi-bin/koha/reports/cat_issues_top.pl">
 	<fieldset class="rows">
 	<ol>
-        <li><label for="from">Checkout date from: </label> <input type="text" size="10" id="from" name="Filter" />
-        <label for="to" class="inline">To:</label> <input size="10" id="to" name="Filter" value="" type="text" />
-                    <span class="hint">[% INCLUDE 'date-format.inc' %]</span></li>
-        <li><label for="fromRO">Check-in date from</label> <input type="text" size="10" id="fromRO" name="Filter" />
-        <label for="toRO" class="inline">To: </label> <input type="text" size="10" id="toRO" name="Filter" value="" />
-                    <span class="hint">[% INCLUDE 'date-format.inc' %]</span></li>
+        <li>
+            <label for="checkoutfrom">Checkout date from: </label>
+            <input type="text" size="10" id="checkoutfrom" name="Filter" />
+            <label for="checkoutto" class="inline">To:</label>
+            <input size="10" id="checkoutto" name="Filter" value="" type="text" />
+            <span class="hint">[% INCLUDE 'date-format.inc' %]</span>
+        </li>
+        <li>
+            <label for="checkinfrom">Check-in date from</label>
+            <input type="text" size="10" id="checkinfrom" name="Filter" />
+            <label for="checkinto" class="inline">To: </label>
+            <input type="text" size="10" id="checkinto" name="Filter" value="" />
+            <span class="hint">[% INCLUDE 'date-format.inc' %]</span>
+        </li>
         <li>
             <label for="branch">Library: </label>
             <select name="Filter" id="branch"><option value="" > Any library</option>
@@ -220,32 +228,28 @@
     <script>
         [% UNLESS ( do_it ) %]
             $(document).ready(function() {
-                // http://jqueryui.com/demos/datepicker/#date-range
-                var dates = $( "#from, #to" ).datepicker({
-                    changeMonth: true,
-                    numberOfMonths: 1,
-                    onSelect: function( selectedDate ) {
-                        var option = this.id == "from" ? "minDate" : "maxDate",
-                            instance = $( this ).data( "datepicker" );
-                            date = $.datepicker.parseDate(
-                                instance.settings.dateFormat ||
-                                $.datepicker._defaults.dateFormat,
-                                selectedDate, instance.settings );
-                        dates.not( this ).datepicker( "option", option, date );
+                var checkoutfrom = $("#checkoutfrom").flatpickr({
+                    onClose: function( selectedDates, dateText, instance) {
+                        validate_date( selectedDates, instance );
+                        checkoutto.set('minDate', selectedDates[0]);
                     }
                 });
-                var datesRO = $( "#fromRO, #toRO" ).datepicker({
-                    changeMonth: true,
-                    numberOfMonths: 1,
-                    onSelect: function( selectedDate ) {
-                        var option = this.id == "fromRO" ? "minDate" : "maxDate",
-                            instance = $( this ).data( "datepicker" );
-                            date = $.datepicker.parseDate(
-                                instance.settings.dateFormat ||
-                                $.datepicker._defaults.dateFormat,
-                                selectedDate, instance.settings );
-                        datesRO.not( this ).datepicker( "option", option, date );
+                var checkoutto = $("#checkoutto").flatpickr({
+                    onClose: function( selectedDates, dateText, instance) {
+                        validate_date( selectedDates, instance );
+                    },
+                });
+
+                var checkinfrom = $("#checkinfrom").flatpickr({
+                    onClose: function( selectedDates, dateText, instance) {
+                        validate_date( selectedDates, instance );
+                        checkinto.set('minDate', selectedDates[0]);
                     }
+                });
+                var checkinto = $("#checkinto").flatpickr({
+                    onClose: function( selectedDates, dateText, instance) {
+                        validate_date( selectedDates, instance );
+                    },
                 });
             });
         [% END %]

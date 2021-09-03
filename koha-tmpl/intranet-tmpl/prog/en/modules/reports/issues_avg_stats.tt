@@ -103,8 +103,11 @@
 				<td>Checkout date</td>
 				<td><input type="radio" name="Line" value="timestamp" /></td>
                 <td><input type="radio" checked="checked" name="Column" value="timestamp" /></td>
-				<td > <label for="from">From</label> <input type="text" size="10" id="from" name="Filter" />
-					<label for="to">To</label> <input size="10" id="to" name="Filter" value="" type="text" />
+                <td>
+                    <label for="checkoutfrom">From</label>
+                    <input type="text" size="10" id="checkoutfrom" name="Filter" />
+                    <label for="checkouto">To</label>
+                    <input size="10" id="checkouto" name="Filter" value="" type="text" />
                     <span class="hint">[% INCLUDE 'date-format.inc' %]</span>
 				</td>
 			</tr>
@@ -124,8 +127,11 @@
 				<td>Returns</td>
 				<td><input type="radio" name="Line" value="returndate" /></td>
 				<td><input type="radio" name="Column" value="returndate" /></td>
-				<td > <label for="fromRO">From</label> <input type="text" size="10" id="fromRO" name="Filter" />
-					<label for="toRO">To</label> <input type="text" size="10" id="toRO" name="Filter" value="" />
+                <td>
+                    <label for="checkinfrom">From</label>
+                    <input type="text" size="10" id="checkinfrom" name="Filter" />
+                    <label for="checkinto">To</label>
+                    <input type="text" size="10" id="checkinto" name="Filter" value="" />
                     <span class="hint">[% INCLUDE 'date-format.inc' %]</span>
 				</td>
 			</tr>
@@ -262,32 +268,28 @@
     [% INCLUDE 'calendar.inc' %]
     <script>
         $(document).ready(function() {
-            // http://jqueryui.com/demos/datepicker/#date-range
-            var dates = $( "#from, #to" ).datepicker({
-                changeMonth: true,
-                numberOfMonths: 1,
-                onSelect: function( selectedDate ) {
-                    var option = this.id == "from" ? "minDate" : "maxDate",
-                        instance = $( this ).data( "datepicker" );
-                        date = $.datepicker.parseDate(
-                            instance.settings.dateFormat ||
-                            $.datepicker._defaults.dateFormat,
-                            selectedDate, instance.settings );
-                    dates.not( this ).datepicker( "option", option, date );
+            var checkoutfrom = $("#checkoutfrom").flatpickr({
+                onClose: function( selectedDates, dateText, instance) {
+                    validate_date( selectedDates, instance );
+                    checkouto.set('minDate', selectedDates[0]);
                 }
             });
-            var datesRO = $( "#fromRO, #toRO" ).datepicker({
-                changeMonth: true,
-                numberOfMonths: 1,
-                onSelect: function( selectedDate ) {
-                    var option = this.id == "fromRO" ? "minDate" : "maxDate",
-                        instance = $( this ).data( "datepicker" );
-                        date = $.datepicker.parseDate(
-                            instance.settings.dateFormat ||
-                            $.datepicker._defaults.dateFormat,
-                            selectedDate, instance.settings );
-                    datesRO.not( this ).datepicker( "option", option, date );
+            var checkouto = $("#checkouto").flatpickr({
+                onClose: function( selectedDates, dateText, instance) {
+                    validate_date( selectedDates, instance );
+                },
+            });
+
+            var checkinfrom = $("#checkinfrom").flatpickr({
+                onClose: function( selectedDates, dateText, instance) {
+                    validate_date( selectedDates, instance );
+                    checkinto.set('minDate', selectedDates[0]);
                 }
+            });
+            var checkinto = $("#checkinto").flatpickr({
+                onClose: function( selectedDates, dateText, instance) {
+                    validate_date( selectedDates, instance );
+                },
             });
         });
     </script>

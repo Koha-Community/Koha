@@ -603,7 +603,7 @@
                                         </td>
                                         [% IF ( criteri.date ) %]
                                             <td>
-                                                <input type="text" size="10" id="[% criteri.name | html %]_value" name="[% criteri.name | html %]_value" value="" class="datepicker" />
+                                                <input type="text" size="10" id="[% criteri.name | html %]_value" name="[% criteri.name | html %]_value" value="" class="flatpickr" />
                                                 <span class="hint">[% INCLUDE 'date-format.inc' %]</span>
                                             </td>
                                         </tr>
@@ -619,9 +619,9 @@
                                                 [% IF ( criteri.daterange ) %]
                                                     <td>
                                                         from
-                                                        <input type="text" size="10" id="from_[% criteri.name | html %]_value" name="from_[% criteri.name | html %]_value" value="" class="datepickerfrom" />
+                                                        <input type="text" size="10" id="from_[% criteri.name.remove('\.') | html %]_value" name="from_[% criteri.name | html %]_value" value="" />
                                                         to
-                                                        <input type="text" size="10" id="to_[% criteri.name | html %]_value" name="to_[% criteri.name | html %]_value" value="" class="datepickerto" />
+                                                        <input type="text" size="10" id="to_[% criteri.name.remove('\.') | html %]_value" name="to_[% criteri.name | html %]_value" value="" />
                                                         <span class="hint">[% INCLUDE 'date-format.inc' %]</span>
                                                     </td>
                                                 </tr>
@@ -858,7 +858,7 @@
                                         <input name="param_name" value="[% sql_param.name | html %]" type="hidden" />
                                         [% IF sql_param.input == 'date' %]
                                             <li>
-                                                <label for="date_[% sql_param_entry | html %][% loop.count | html %]">[% sql_param.entry | html %]:</label> <input id="date_[% sql_param_entry | html %][% loop.count | html %]" type="text" value="" size="10" name="sql_params" class="datepicker" />
+                                                <label for="date_[% sql_param_entry | html %][% loop.count | html %]">[% sql_param.entry | html %]:</label> <input id="date_[% sql_param_entry | html %][% loop.count | html %]" type="text" value="" size="10" name="sql_params" class="flatpickr" />
                                             </li>
                                         [% ELSIF ( sql_param.input == 'text' ) %]
                                             <li>
@@ -1320,7 +1320,7 @@
                                 <ol>
                                     <li>
                                         <label for="filter_date">Date:</label>
-                                        <input type="text" id="filter_date" name="filter_date" size="10" value="[% filters.date | html %]" class="datepicker" />
+                                        <input type="text" id="filter_date" name="filter_date" size="10" value="[% filters.date | html %]" class="flatpickr" />
                                         <div class="hint">[% INCLUDE 'date-format.inc' %]</div>
                                     </li>
                                     <li>
@@ -2189,6 +2189,23 @@
                 readOnly: true
             });
         }
+        [% IF ( build4 ) %]
+            [% FOREACH criteri IN criteria %]
+                [% IF ( criteri.daterange ) %]
+                    var from_[% criteri.name.remove('\.') | html %]_value = $("#from_[% criteri.name.remove('\.') | html %]_value").flatpickr({
+                        onClose: function( selectedDates, dateText, instance) {
+                            validate_date( selectedDates, instance );
+                            to_[% criteri.name.remove('\.') | html %]_value.set('minDate', selectedDates[0]);
+                        }
+                    });
+                    var to_[% criteri.name.remove('\.') | html %]_value = $("#to_[% criteri.name.remove('\.') | html %]_value").flatpickr({
+                        onClose: function( selectedDates, dateText, instance) {
+                            validate_date( selectedDates, instance );
+                        },
+                    });
+                [% END %]
+            [% END %]
+        [% END %]
     </script>
 [% END %]
 
