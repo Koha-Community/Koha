@@ -23648,6 +23648,15 @@ if( CheckVersion( $DBversion ) ) {
     NewVersion( $DBversion, "", "Koha 20.11.09 release" );
 }
 
+$DBversion = '20.11.09.001';
+if( CheckVersion( $DBversion ) ) {
+        $dbh->do(q{
+            DELETE FROM circulation_rules
+            WHERE rule_name = 'rentaldiscount' AND rule_value=''
+        });
+    NewVersion( $DBversion, "28774", "Delete blank rental discounts" );
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 my $update_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/atomicupdate/';
