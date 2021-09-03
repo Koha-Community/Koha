@@ -226,57 +226,6 @@ sub cash_registers {
     return Koha::Cash::Registers->_new_from_dbic( $rs );
 }
 
-=head3 to_api_mapping
-
-This method returns the mapping for representing a Koha::Library object
-on the API.
-
-=cut
-
-sub to_api_mapping {
-    return {
-        branchcode       => 'library_id',
-        branchname       => 'name',
-        branchaddress1   => 'address1',
-        branchaddress2   => 'address2',
-        branchaddress3   => 'address3',
-        branchzip        => 'postal_code',
-        branchcity       => 'city',
-        branchstate      => 'state',
-        branchcountry    => 'country',
-        branchphone      => 'phone',
-        branchfax        => 'fax',
-        branchemail      => 'email',
-        branchillemail   => 'illemail',
-        branchreplyto    => 'reply_to_email',
-        branchreturnpath => 'return_path_email',
-        branchurl        => 'url',
-        issuing          => undef,
-        branchip         => 'ip',
-        branchnotes      => 'notes',
-        marcorgcode      => 'marc_org_code',
-    };
-}
-
-=head3 api_privileged_attrs
-
-This method returns the list of privileged access-only attributes. This is used
-by $library->to_api($params) to render the object correctly, based on the passed I<$params>.
-
-=cut
-
-sub api_privileged_attrs {
-    return [
-        'illemail',
-        'reply_to_email',
-        'return_path_email',
-        'ip',
-        'notes',
-        'marc_org_code'
-    ];
-}
-
-
 =head3 get_hold_libraries
 
 Return all libraries (including self) that belong to the same hold groups
@@ -315,6 +264,53 @@ sub validate_hold_sibling {
     my $branchcode = $params->{branchcode};
     return $self->get_hold_libraries->search( { branchcode => $branchcode } )
       ->count > 0;
+}
+
+=head3 public_read_list
+
+This method returns the list of publicly readable database fields for both API and UI output purposes
+
+=cut
+
+sub public_read_list {
+    return [
+        'branchcode',     'branchname',     'branchaddress1',
+        'branchaddress2', 'branchaddress3', 'branchzip',
+        'branchcity',     'branchstate',    'branchcountry',
+        'branchfax',      'branchemail',    'branchurl'
+    ];
+}
+
+=head3 to_api_mapping
+
+This method returns the mapping for representing a Koha::Library object
+on the API.
+
+=cut
+
+sub to_api_mapping {
+    return {
+        branchcode       => 'library_id',
+        branchname       => 'name',
+        branchaddress1   => 'address1',
+        branchaddress2   => 'address2',
+        branchaddress3   => 'address3',
+        branchzip        => 'postal_code',
+        branchcity       => 'city',
+        branchstate      => 'state',
+        branchcountry    => 'country',
+        branchphone      => 'phone',
+        branchfax        => 'fax',
+        branchemail      => 'email',
+        branchillemail   => 'illemail',
+        branchreplyto    => 'reply_to_email',
+        branchreturnpath => 'return_path_email',
+        branchurl        => 'url',
+        issuing          => undef,
+        branchip         => 'ip',
+        branchnotes      => 'notes',
+        marcorgcode      => 'marc_org_code',
+    };
 }
 
 =head2 Internal methods

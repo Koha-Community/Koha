@@ -400,24 +400,24 @@ subtest "to_api() tests" => sub {
 
     subtest 'unprivileged request tests' => sub {
 
-        my @privileged_attrs = @{ Koha::Library->api_privileged_attrs };
+        my @all_attrs = Koha::Libraries->columns();
+        my $public_attrs = { map { $_ => 1 } @{ Koha::Library->public_read_list() } };
+        my $mapping = Koha::Library->to_api_mapping;
 
         # Create sample libraries
         my $library_1 = $builder->build_object({ class => 'Koha::Libraries' });
         my $library_2 = $builder->build_object({ class => 'Koha::Libraries' });
-        my $library_3 = $builder->build_object({ class => 'Koha::Libraries' });
         my $libraries = Koha::Libraries->search(
             {
                 branchcode => {
                     '-in' => [
-                        $library_1->branchcode, $library_2->branchcode,
-                        $library_3->branchcode
+                        $library_1->branchcode, $library_2->branchcode
                     ]
                 }
             }
         );
 
-        plan tests => scalar @privileged_attrs * 2 * $libraries->count;
+        plan tests => scalar @all_attrs * 2 * $libraries->count;
 
         my $libraries_unprivileged_representation = $libraries->to_api({ public => 1 });
         my $libraries_privileged_representation   = $libraries->to_api();
@@ -425,11 +425,36 @@ subtest "to_api() tests" => sub {
         for (my $i = 0; $i < $libraries->count; $i++) {
             my $privileged_representation   = $libraries_privileged_representation->[$i];
             my $unprivileged_representation = $libraries_unprivileged_representation->[$i];
-            foreach my $privileged_attr ( @privileged_attrs ) {
-                ok( exists $privileged_representation->{$privileged_attr},
-                    "Attribute $privileged_attr' is present" );
-                ok( !exists $unprivileged_representation->{$privileged_attr},
-                    "Attribute '$privileged_attr' is not present" );
+            foreach my $attr (@all_attrs) {
+                my $mapped = exists $mapping->{$attr} ? $mapping->{$attr} : $attr;
+                if ( defined($mapped) ) {
+                    ok(
+                        exists $privileged_representation->{$mapped},
+                        "Attribute '$attr' is present when privileged"
+                    );
+                    if ( exists $public_attrs->{$attr} ) {
+                        ok(
+                            exists $unprivileged_representation->{$mapped},
+                            "Attribute '$attr' is present when public"
+                        );
+                    }
+                    else {
+                        ok(
+                            !exists $unprivileged_representation->{$mapped},
+                            "Attribute '$attr' is not present when public"
+                        );
+                    }
+                }
+                else {
+                    ok(
+                        !exists $privileged_representation->{$attr},
+                        "Unmapped attribute '$attr' is not present when privileged"
+                    );
+                    ok(
+                        !exists $unprivileged_representation->{$attr},
+                        "Unmapped attribute '$attr' is not present when public"
+                    );
+                }
             }
         }
     };

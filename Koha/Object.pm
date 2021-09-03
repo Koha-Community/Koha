@@ -24,6 +24,7 @@ use Carp qw( croak );
 use Mojo::JSON;
 use Scalar::Util qw( blessed looks_like_number );
 use Try::Tiny qw( catch try );
+use List::MoreUtils qw( any );
 
 use Koha::Database;
 use Koha::Exceptions::Object;
@@ -552,6 +553,16 @@ sub to_api {
     my ( $self, $params ) = @_;
     my $json_object = $self->TO_JSON;
 
+    # Remove forbidden attributes if required
+    # FIXME: We should eventually require public_read_list in all objects and drop the conditional here.
+    if (    $params->{public}
+        and $self->can('public_read_list') )
+    {
+        for my $field ( keys %{$json_object} ) {
+            delete $json_object->{$field} unless any { $_ eq $field } @{$self->public_read_list};
+        }
+    }
+
     my $to_api_mapping = $self->to_api_mapping;
 
     # Rename attributes if there's a mapping
@@ -570,15 +581,6 @@ sub to_api {
                 # key == undef
                 delete $json_object->{$column};
             }
-        }
-    }
-
-    # Remove forbidden attributes if required
-    if (    $params->{public}
-        and $self->can('api_privileged_attrs') )
-    {
-        foreach my $privileged_attr ( @{ $self->api_privileged_attrs } ) {
-            delete $json_object->{$privileged_attr};
         }
     }
 

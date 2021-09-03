@@ -375,9 +375,11 @@ subtest "to_api() tests" => sub {
 
     subtest 'unprivileged request tests' => sub {
 
-        my @privileged_attrs = @{ Koha::Library->api_privileged_attrs };
+        my @all_attrs = Koha::Libraries->columns();
+        my $public_attrs = { map { $_ => 1 } @{ Koha::Library->public_read_list() } };
+        my $mapping = Koha::Library->to_api_mapping;
 
-        plan tests => scalar @privileged_attrs * 2;
+        plan tests => scalar @all_attrs * 2;
 
         # Create a sample library
         my $library = $builder->build_object( { class => 'Koha::Libraries' } );
@@ -385,11 +387,36 @@ subtest "to_api() tests" => sub {
         my $unprivileged_representation = $library->to_api({ public => 1 });
         my $privileged_representation   = $library->to_api;
 
-        foreach my $privileged_attr ( @privileged_attrs ) {
-            ok( exists $privileged_representation->{$privileged_attr},
-                "Attribute $privileged_attr' is present" );
-            ok( !exists $unprivileged_representation->{$privileged_attr},
-                "Attribute '$privileged_attr' is not present" );
+        foreach my $attr (@all_attrs) {
+            my $mapped = exists $mapping->{$attr} ? $mapping->{$attr} : $attr;
+            if ( defined($mapped) ) {
+                ok(
+                    exists $privileged_representation->{$mapped},
+                    "Attribute '$attr' is present when privileged"
+                );
+                if ( exists $public_attrs->{$attr} ) {
+                    ok(
+                        exists $unprivileged_representation->{$mapped},
+                        "Attribute '$attr' is present when public"
+                    );
+                }
+                else {
+                    ok(
+                        !exists $unprivileged_representation->{$mapped},
+                        "Attribute '$attr' is not present when public"
+                    );
+                }
+            }
+            else {
+                ok(
+                    !exists $privileged_representation->{$attr},
+                    "Unmapped attribute '$attr' is not present when privileged"
+                );
+                ok(
+                    !exists $unprivileged_representation->{$attr},
+                    "Unmapped attribute '$attr' is not present when public"
+                );
+            }
         }
     };
 
