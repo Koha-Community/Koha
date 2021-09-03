@@ -64,6 +64,11 @@ unless ( C4::Context->preference('PatronSelfRegistration') || $borrowernumber )
 }
 
 my $action = $cgi->param('action') || q{};
+if ( $borrowernumber && ( $action eq 'create' || $action eq 'new' ) ) {
+    print $cgi->redirect("/cgi-bin/koha/opac-main.pl");
+    exit;
+}
+
 if ( $action eq q{} ) {
     if ($borrowernumber) {
         $action = 'edit';
