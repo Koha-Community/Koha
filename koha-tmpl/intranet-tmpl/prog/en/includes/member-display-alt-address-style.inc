@@ -23,7 +23,7 @@
     [% IF ( patron.B_city || patron.B_state || patron.B_country || patron.B_zipcode ) %]
         <li class="patroncity">
             [% patron.B_city | html %][% IF ( patron.B_state ) %][% IF ( patron.B_city ) %], [% END %][%~ patron.B_state | html ~%][%~ END ~%]
-            [% IF ( patron.B_zipcode ) %][%~ " " _ patron.B_zipcode |html  ~%][% END %][% IF ( patron.B_country ) %][% IF ( patron.B_zipcode || patron.B_state ) %], [% END %][% patron.B_country | html %][% END %]
+            [% IF ( patron.B_zipcode ) %][%~ " " _ patron.B_zipcode |html  ~%][% END %][% IF ( patron.B_country ) %][% IF ( patron.B_zipcode || patron.B_state || patron.B_city ) %], [% END %][% patron.B_country | html %][% END %]
         </li>
     [% END %]
 [% END %]
