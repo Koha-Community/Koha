@@ -530,13 +530,13 @@
                 <xsl:with-param name="afterCodes">fghkdlmor</xsl:with-param>
             </xsl:call-template>
         </xsl:variable>
-        <xsl:if test="$partNumber != '' or $partName != ''" >
+        <xsl:if test="string-length(normalize-space($partNumber)) or string-length(normalize-space($partName))" >
             <xsl:text>. </xsl:text>
         </xsl:if>
         <xsl:if test="string-length(normalize-space($partNumber))">
             <xsl:value-of select="$partNumber" />
         </xsl:if>
-        <xsl:if test="$partNumber != ''"><xsl:text> </xsl:text></xsl:if>
+        <xsl:if test="string-length(normalize-space($partNumber))"><xsl:text> </xsl:text></xsl:if>
         <xsl:if test="string-length(normalize-space($partName))">
             <xsl:value-of select="$partName" />
         </xsl:if>
