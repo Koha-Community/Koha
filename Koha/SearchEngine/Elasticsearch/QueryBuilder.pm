@@ -939,7 +939,28 @@ sub _clean_search_term {
     }
     $term = $self->_query_regex_escape_process($term);
 
+    # because of _truncate_terms and if QueryAutoTruncate enabled
+    # we will have any special operators ruined by _truncate_terms:
+    # for ex. search for "test [6 TO 7]" will be converted to "test* [6* TO* 7]"
+    # so no reason to keep ranges in QueryAutoTruncate==true case:
+    my $truncate = C4::Context->preference("QueryAutoTruncate") || 0;
+    unless($truncate) {
+        # replace all ranges with any square/curly brackets combinations to temporary substitutions (ex: "{a TO b]"" -> "~~LC~~a TO b~~RS~~")
+        # (where L is for left and C is for Curly and so on)
+        $term =~ s/
+            (?<!\\)
+            (?<backslashes>(?:[\\]{2})*)
+            (?<leftbracket>\{|\[)
+            (?<ranges>
+                [^\s\[\]\{\}]+\ TO\ [^\s\[\]\{\}]+
+                (?<!\\)
+                (?:[\\]{2})*
+            )
+            (?<rightbracket>\}|\])
+        /$+{backslashes}.'~~L'.($+{leftbracket} eq '[' ? 'S':'C').'~~'.$+{ranges}.'~~R'.($+{rightbracket} eq ']' ? 'S':'C').'~~'/gex;
+    }
     # save all regex contents away before escaping brackets:
+    # (same trick as with brackets above, just RE for 'RegularExpression')
     my @saved_regexes;
     my $rgx_i = 0;
     while(
@@ -973,6 +994,10 @@ sub _clean_search_term {
     # restore all regex contents after escaping brackets:
     for (my $i = 0; $i < @saved_regexes; $i++) {
         $term =~ s/~~RE$i~~/$saved_regexes[$i]/;
+    }
+    unless($truncate) {
+        # restore temporary weird substitutions back to normal brackets
+        $term =~ s/~~L(C|S)~~([^\s\[\]\{\}]+ TO [^\s\[\]\{\}]+)~~R(C|S)~~/($1 eq 'S' ? '[':'{').$2.($3 eq 'S' ? ']':'}')/ge;
     }
     return $term;
 }
