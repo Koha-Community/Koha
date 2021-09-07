@@ -5292,7 +5292,7 @@ CREATE TABLE `virtualshelves` (
   `shelfnumber` int(11) NOT NULL AUTO_INCREMENT COMMENT 'unique identifier assigned by Koha',
   `shelfname` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'name of the list',
   `owner` int(11) DEFAULT NULL COMMENT 'foreign key linking to the borrowers table (using borrowernumber) for the creator of this list (changed from varchar(80) to int)',
-  `category` varchar(1) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'type of list (private [1], public [2])',
+  `public` TINYINT(1) NOT NULL DEFAULT 0 COMMENT 'If the list is public',
   `sortfield` varchar(16) COLLATE utf8mb4_unicode_ci DEFAULT 'title' COMMENT 'the field this list is sorted on',
   `lastmodified` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp() COMMENT 'date and time the list was last modified',
   `created_on` datetime NOT NULL COMMENT 'creation time',
