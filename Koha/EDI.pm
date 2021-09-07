@@ -430,7 +430,7 @@ sub receipt_items {
                 "Cannot find aqorder item for $i :Order:$ordernumber");
             next;
         }
-        my $b = $item->homebranch->branchcode;
+        my $b = $item->get_column('homebranch');
         if ( !exists $branch_map{$b} ) {
             $branch_map{$b} = [];
         }
@@ -527,7 +527,7 @@ sub transfer_items {
     foreach my $ilink (@item_links) {
         my $ino      = $ilink->itemnumber;
         my $item     = $schema->resultset('Item')->find( $ilink->itemnumber );
-        my $i_branch = $item->homebranch;
+        my $i_branch = $item->get_column('homebranch');
         if ( exists $mapped_by_branch{$i_branch}
             && $mapped_by_branch{$i_branch} > 0 )
         {
