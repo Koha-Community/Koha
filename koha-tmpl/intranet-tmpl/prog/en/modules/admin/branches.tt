@@ -291,6 +291,61 @@
                     <div class="hint">Set to 'yes' to show this library as a search option and on the libraries page in the OPAC.</div>
                 </li>
                 <li>
+                    <label for="opening_hours">Opening hours: </label>
+                    <table id="opening_hours_table">
+                        <thead>
+                            <tr>
+                                <th>Day</th>
+                                <th>Open time</th>
+                                <th>Close time</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            [% IF opening_hours # Existing library %]
+                                [% daycount = 0 %]
+                                [% FOREACH hr IN opening_hours %]
+                                <tr id="hours_[% daycount %]">
+                                    <td>
+                                        [% PROCESS dayname day=daycount %]
+                                        <input type="hidden" value="[% daycount %]" name="day">
+                                    </td>
+                                    <td>
+                                        [% IF hr.day == daycount && hr.open_time %]
+                                        <input type="time" value="[% hr.open_time %]" name="open_time">
+                                        [% ELSE %]
+                                        <input type="time" value="" name="open_time">
+                                        [% END %]
+                                    </td>
+                                    <td>
+                                        [% IF hr.day == daycount && hr.close_time %]
+                                        <input type="time" value="[% hr.close_time %]" name="close_time">
+                                        [% ELSE %]
+                                        <input type="time" value="" name="close_time">
+                                        [% END %]
+                                    </td>
+                                </tr>
+                                [% daycount = daycount+1 %]
+                                [% END %]
+                            [% ELSE # New library %]
+                                [% FOREACH daycount IN [0..6] %]
+                                <tr id="hours_[% day %]">
+                                    <td>
+                                        [% PROCESS dayname day=daycount %]
+                                        <input type="hidden" value="[% daycount %]" name="day">
+                                    </td>
+                                    <td>
+                                        <input type="time" value="" name="open_time">
+                                    </td>
+                                    <td>
+                                        <input type="time" value="" name="close_time">
+                                    </td>
+                                </tr>
+                                [% END %]
+                            [% END %]
+                        </tbody>
+                    </table>
+                </li>
+                <li>
                     <label for="opacuserjs">Specific OPAC JS: </label>
                     <div style="display:flex; flex-direction:column;">
                         <a class="expand-textarea" id="expand_opacuserjs" data-target="opacuserjs" data-syntax="javascript" href="#">Edit</a>
@@ -306,7 +361,6 @@
                         <a class="collapse-textarea" id="collapse_opacusercss" data-target="opacusercss" data-syntax="css" style="display:none" href="#">Collapse</br></a>
                     </div>
                 </li>
-                </li>
             </ol>
         </fieldset>
         <fieldset class="action">
@@ -314,6 +368,24 @@
             <a class="cancel" href="/cgi-bin/koha/admin/branches.pl">Cancel</a>
         </fieldset>
     </form>
+[% END %]
+
+[% BLOCK dayname %]
+    [% IF day == 0 %]
+    <span>Monday</span>
+    [% ELSIF day == 1 %]
+    <span>Tuesday</span>
+    [% ELSIF day == 2 %]
+    <span>Wednesday</span>
+    [% ELSIF day == 3 %]
+    <span>Thursday</span>
+    [% ELSIF day == 4 %]
+    <span>Friday</span>
+    [% ELSIF day == 5 %]
+    <span>Saturday</span>
+    [% ELSE %]
+    <span>Sunday</span>
+    [% END %]
 [% END %]
 
 [% IF op == 'delete_confirm' and not ( items_count or patrons_count )%]

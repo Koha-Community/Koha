@@ -4271,6 +4271,19 @@ CREATE TABLE `letter` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Table structure for table `library_hours`
+--
+DROP TABLE IF EXISTS library_hours;
+CREATE TABLE library_hours (
+    library_id varchar(10) COLLATE utf8mb4_unicode_ci NOT NULL,
+    day enum('0','1','2','3','4','5','6') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0',
+    open_time time COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+    close_time time COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+    PRIMARY KEY (library_id, day),
+    CONSTRAINT library_hours_ibfk_1 FOREIGN KEY (library_id) REFERENCES branches (branchcode) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
 -- Table structure for table `library_groups`
 --
 
