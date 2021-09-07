@@ -111,18 +111,18 @@
         <ul>
                 <li>
                     <label for="date1">who have not borrowed since:</label>
-                    <input size="10" id="date1" name="not_borrowed_since" type="text" class="datepicker" />
+                    <input size="10" id="date1" name="not_borrowed_since" type="text" class="flatpickr" />
                     <span class="hint">[% INCLUDE 'date-format.inc' %]</span>
                 </li>
                 <li>
                     <label for="borrower_dateexpiry">whose expiration date is before:</label>
-                    <input size="10" id="borrower_dateexpiry" name="borrower_dateexpiry" type="text" class="datepicker" />
+                    <input size="10" id="borrower_dateexpiry" name="borrower_dateexpiry" type="text" class="flatpickr" />
                     <span class="hint">[% INCLUDE 'date-format.inc' %]</span>
                 </li>
                 [% IF Koha.Preference('TrackLastPatronActivity') %]
                     <li>
                         <label for="borrower_lastseen">who have not been connected since:</label>
-                        <input size="10" id="borrower_lastseen" name="borrower_lastseen" type="text" class="datepicker" />
+                        <input size="10" id="borrower_lastseen" name="borrower_lastseen" type="text" class="flatpickr" />
                         <span class="hint">[% INCLUDE 'date-format.inc' %]</span>
                     </li>
                 [% END %]
@@ -161,7 +161,7 @@
         <ul>
             <li>
                 <label for="date2">Permanently delete checkout history older than</label>
-                <input size="10" id="date2" name="last_issue_date" type="text" class="datepicker" />
+                <input size="10" id="date2" name="last_issue_date" type="text" class="flatpickr" />
                 <span class="hint">[% INCLUDE 'date-format.inc' %]</span>
             </li>
         </ul>
