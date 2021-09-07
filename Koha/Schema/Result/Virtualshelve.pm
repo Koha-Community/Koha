@@ -47,13 +47,13 @@ name of the list
 
 foreign key linking to the borrowers table (using borrowernumber) for the creator of this list (changed from varchar(80) to int)
 
-=head2 category
+=head2 public
 
-  data_type: 'varchar'
-  is_nullable: 1
-  size: 1
+  data_type: 'tinyint'
+  default_value: 0
+  is_nullable: 0
 
-type of list (private [1], public [2])
+If the list is public
 
 =head2 sortfield
 
@@ -106,8 +106,8 @@ __PACKAGE__->add_columns(
   { data_type => "varchar", is_nullable => 1, size => 255 },
   "owner",
   { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
-  "category",
-  { data_type => "varchar", is_nullable => 1, size => 1 },
+  "public",
+  { data_type => "tinyint", default_value => 0, is_nullable => 0 },
   "sortfield",
   {
     data_type => "varchar",
@@ -199,8 +199,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2021-01-21 13:39:29
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:6ZQ6kL/0DzyOMymz+4+LhA
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2021-09-07 11:08:02
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:QH2/kScjb+lwTwrChjem1Q
 
 sub koha_object_class {
     'Koha::Virtualshelf';
@@ -208,5 +208,9 @@ sub koha_object_class {
 sub koha_objects_class {
     'Koha::Virtualshelves';
 }
+
+__PACKAGE__->add_columns(
+    '+public' => { is_boolean => 1 },
+);
 
 1;
