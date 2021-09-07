@@ -577,6 +577,13 @@ Circulation:
             - This is a list of value pairs. When an item is checked out, if the not for loan value on the left matches the items not for loan value
             - "it will be updated to the right-hand value. For example, '-1: 0' will cause an item that was set to 'Ordered' to now be available for loan."
             - Each pair of values should be on a separate line.
+        -
+            - When checking out an hourly loan that will be due after the library closes,
+            - pref: ConsiderLibraryHoursInCirculation
+              choices:
+                  open: "extend the loan period and set the checkout to be due at the library's open time."
+                  close: "shorten the loan period and set the checkout to be due at the library's close time."
+                  ignore: "do not consider the library's opening hours."
     Checkin policy:
         -
             - pref: TrapHoldsOnOrder
