@@ -398,6 +398,38 @@ sub transfer_ownership {
     return $self;
 }
 
+=head3 to_api_mapping
+
+This method returns the mapping for representing a Koha::Virtualshelf object
+on the API.
+
+=cut
+
+sub to_api_mapping {
+    return {
+        created_on   => 'creation_date',
+        lastmodified => 'updated_on_date',
+        owner        => 'owner_id',
+        shelfname    => 'name',
+        shelfnumber  => 'list_id',
+        sortfield    => 'default_sort_field',
+    };
+}
+
+=head3 public_read_list
+
+This method returns the list of publicly readable database fields for both API and UI output purposes
+
+=cut
+
+sub public_read_list {
+    return [
+        'created_on',  'lastmodified', 'shelfname',
+        'shelfnumber', 'public',       'sortfield',
+        'allow_change_from_owner', 'allow_change_from_others'
+    ];
+}
+
 =head2 Internal methods
 
 =head3 _type

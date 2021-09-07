@@ -230,7 +230,9 @@ sub koha_objects_class {
 }
 
 __PACKAGE__->add_columns(
-    '+public' => { is_boolean => 1 },
+    '+allow_change_from_others' => { is_boolean => 1 },
+    '+allow_change_from_owner'  => { is_boolean => 1 },
+    '+public'                   => { is_boolean => 1 },
 );
 
 __PACKAGE__->add_columns(

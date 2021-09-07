@@ -132,6 +132,8 @@ definitions:
     $ref: ./definitions/job.yaml
   library:
     $ref: ./definitions/library.yaml
+  list:
+    $ref: ./definitions/list.yaml
   merge_biblios:
     $ref: ./definitions/merge_biblios.yaml
   order:
@@ -509,6 +511,8 @@ paths:
     $ref: ./paths/libraries.yaml#/~1public~1libraries
   "/public/libraries/{library_id}":
     $ref: "./paths/libraries.yaml#/~1public~1libraries~1{library_id}"
+  "/public/lists":
+    $ref: "./paths/lists.yaml#/~1public~1lists"
   "/public/oauth/login/{provider_code}/{interface}":
     $ref: ./paths/public_oauth.yaml#/~1public~1oauth~1login~1{provider_code}~1{interface}
   "/public/patrons/{patron_id}/article_requests/{article_request_id}":
@@ -1232,6 +1236,9 @@ tags:
   - description: "Manage libraries\n"
     name: libraries
     x-displayName: Libraries
+  - description: "Manage lists"
+    name: "lists"
+    x-displayName: Lists
   - description: "Manage macros\n"
     name: macros
     x-displayName: Macros

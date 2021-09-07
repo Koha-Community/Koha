@@ -1,0 +1,41 @@
+---
+type: object
+properties:
+    list_id:
+        description: Interal identifier for the list
+        type: integer
+    name:
+        description: List name
+        type: string
+    creation_date:
+        description: Date the list was created
+        type: string
+        format: date-time
+    updated_on_date:
+        description: Date the list was last updated
+        type: string
+        format: date-time
+    owner_id:
+        description: Internal identifier for the owning patron
+        type: integer
+    allow_change_from_owner:
+        description: If the owner can change the contents
+        type: boolean
+    allow_change_from_others:
+        description: If others can change the contents
+        type: boolean
+    public:
+        description: If the list is public
+        type: boolean
+    default_sort_field:
+        description: The field this list is sorted on by default
+        type: string
+additionalProperties: false
+required:
+    - list_id
+    - name
+    - creation_date
+    - updated_on_date
+    - allow_change_from_owner
+    - allow_change_from_others
+    - public

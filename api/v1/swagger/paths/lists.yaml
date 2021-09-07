@@ -1,0 +1,60 @@
+---
+"/public/lists":
+  get:
+    x-mojo-to: Lists#list_public
+    operationId: listListsPublic
+    description: "This resource returns a list of existing bibliographic lists."
+    summary: List bibliographic lists
+    tags:
+      - lists
+    parameters:
+      - name: only_mine
+        in: query
+        description: Only return the users' lists
+        required: false
+        type: string
+      - name: only_public
+        in: query
+        description: Only return public lists
+        required: false
+        type: string
+      - $ref: "../swagger.yaml#/parameters/match"
+      - $ref: "../swagger.yaml#/parameters/order_by"
+      - $ref: "../swagger.yaml#/parameters/page"
+      - $ref: "../swagger.yaml#/parameters/per_page"
+      - $ref: "../swagger.yaml#/parameters/q_param"
+      - $ref: "../swagger.yaml#/parameters/q_body"
+      - $ref: "../swagger.yaml#/parameters/request_id_header"
+    produces:
+      - application/json
+    responses:
+      "200":
+        description: A list of lists
+        schema:
+          type: array
+          items:
+            $ref: "../swagger.yaml#/definitions/list"
+      "400":
+        description: |
+          Bad request. Possible `error_code` attribute values:
+
+            * `bad_request`
+            * `invalid_query`
+            * `only_mine_forbidden`
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "403":
+        description: Access forbidden
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "500":
+        description: |
+          Internal server error. Possible `error_code` attribute values:
+
+          * `internal_server_error`
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "503":
+        description: Under maintenance
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
