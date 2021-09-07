@@ -1,7 +1,24 @@
 #!/usr/bin/perl
 
+# This file is part of Koha.
+#
+# Koha is free software; you can redistribute it and/or modify it
+# under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 3 of the License, or
+# (at your option) any later version.
+#
+# Koha is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with Koha; if not, see <http://www.gnu.org/licenses>.
+
 use Modern::Perl;
 use Test::More tests => 7;
+use Test::Exception;
+
 use DateTime::Duration;
 
 use C4::Context;
@@ -762,6 +779,111 @@ subtest 'cannot_be_transferred' => sub {
 };
 
 $schema->storage->txn_rollback;
+
+subtest 'filter_by_public() tests' => sub {
+
+    plan tests => 4;
+
+    $schema->storage->txn_begin;
+
+    my $list_1 = $builder->build_object(
+        {
+            class => 'Koha::Virtualshelves',
+            value => { public => 0 }
+        }
+    );
+    my $list_2 = $builder->build_object(
+        {
+            class => 'Koha::Virtualshelves',
+            value => { public => 1 }
+        }
+    );
+    my $list_3 = $builder->build_object(
+        {
+            class => 'Koha::Virtualshelves',
+            value => { public => 1 }
+        }
+    );
+
+    my $lists = Koha::Virtualshelves->search( { shelfnumber => [ $list_1->id, $list_2->id, $list_3->id ] } );
+
+    is( $lists->count, 3, 'Our three lists are returned' );
+    $lists = $lists->filter_by_public;
+
+    is( $lists->count, 2, 'Our two public lists are returned' );
+
+    while ( my $list = $lists->next ) {
+        ok( $list->public, 'Only public lists in the resultset' );
+    }
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'filter_by_readable() tests' => sub {
+
+    plan tests => 6;
+
+    $schema->storage->txn_begin;
+
+    my $patron_1 = $builder->build_object( { class => 'Koha::Patrons' } );
+    my $patron_2 = $builder->build_object( { class => 'Koha::Patrons' } );
+
+    my $list_1 = $builder->build_object(
+        {
+            class => 'Koha::Virtualshelves',
+            value => {
+                public => 0,
+                owner  => $patron_1->id,
+            }
+        }
+    );
+    my $list_2 = $builder->build_object(
+        {
+            class => 'Koha::Virtualshelves',
+            value => {
+                public => 1,
+                owner  => $patron_1->id,
+            }
+        }
+    );
+    my $list_3 = $builder->build_object(
+        {
+            class => 'Koha::Virtualshelves',
+            value => {
+                public => 0,
+                owner  => $patron_2->id,
+            }
+        }
+    );
+    my $list_4 = $builder->build_object(
+        {
+            class => 'Koha::Virtualshelves',
+            value => {
+                public => 1,
+                owner  => $patron_2->id,
+            }
+        }
+    );
+
+    my $lists =
+        Koha::Virtualshelves->search( { shelfnumber => [ $list_1->id, $list_2->id, $list_3->id, $list_4->id ] } );
+
+    is( $lists->count, 4, 'Our four lists are returned' );
+
+    throws_ok { $lists->filter_by_readable; }
+    'Koha::Exceptions::MissingParameter',
+        'Exception thrown on missing';
+
+    $lists = $lists->filter_by_readable( { patron_id => $patron_1->id } );
+
+    is( $lists->count, 3, 'Three lists are returned' );
+
+    while ( my $list = $lists->next ) {
+        ok( $list->owner == $patron_1->id || $list->public, 'Only public or self lists in the resultset' );
+    }
+
+    $schema->storage->txn_rollback;
+};
 
 sub teardown {
     $dbh->do(q|DELETE FROM virtualshelfshares|);

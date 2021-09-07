@@ -17,8 +17,8 @@ package Koha::Virtualshelves;
 
 use Modern::Perl;
 
-
 use Koha::Database;
+use Koha::Exceptions;
 
 use Koha::Patrons;
 use Koha::Virtualshelf;
@@ -245,6 +245,40 @@ sub get_shelves_containing_record {
         }
     );
 }
+
+=head3 filter_by_public
+
+    my $public_lists = $lists->filter_by_public;
+
+Returns a resultset of lists marked as public.
+
+=cut
+
+sub filter_by_public {
+    my ($self) = @_;
+
+    return $self->search({ public => 1 });
+}
+
+=head3 filter_by_readable
+
+    my $readable_lists = $lists->filter_by_readable({ patron_id => $patron->id });
+
+Returns a resultset of lists marked as public.
+
+=cut
+
+sub filter_by_readable {
+    my ( $self, $params ) = @_;
+
+    Koha::Exceptions::MissingParameter->throw("Mandatory patron_id parameter missing")
+      unless $params->{patron_id};
+
+    return $self->search( { '-or' => { public => 1, owner => $params->{patron_id} } } );
+}
+
+
+=head2 Internal methods
 
 =head3 _type
 
