@@ -84,7 +84,7 @@ KOHA_CRON_PATH = /usr/share/koha/bin/cronjobs
 */10 * * * *  __KOHA_USER__  $KOHA_CRON_PATH/../migration_tools/rebuild_zebra.pl -b -a -z >/dev/null
 
 # clean up databases nightly.  Be sure not to run this with --sessions during a time when the system is in use!
-16 1 * * * __KOHA_USER__ $KOHA_CRON_PATH/cleanup_database.pl --confirm --sessions --zebraqueue 10 --list-invites --temp-uploads
+16 1 * * * __KOHA_USER__ $KOHA_CRON_PATH/cleanup_database.pl --confirm --sessions --zebraqueue 10 --list-invites --temp-uploads --del-unv-selfreg 14
 
 # delete old purchase suggestions weekly. Replace XX with a number to define the age of suggestions to delete.
 @weekly	__KOHA_USER__  $KOHA_CRON_PATH/purge_suggestions.pl --confirm --days XX > /dev/null 2>&1

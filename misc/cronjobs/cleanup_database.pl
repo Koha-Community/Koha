@@ -170,7 +170,7 @@ GetOptions(
     'restrictions:i'    => \$pDebarments,
     'all-restrictions'  => \$allDebarments,
     'del-exp-selfreg'   => \$pExpSelfReg,
-    'del-unv-selfreg'   => \$pUnvSelfReg,
+    'del-unv-selfreg:i' => \$pUnvSelfReg,
     'unique-holidays:i' => \$special_holidays_days,
     'temp-uploads'      => \$temp_uploads,
     'temp-uploads-days:i' => \$temp_uploads_days,

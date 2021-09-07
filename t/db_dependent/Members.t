@@ -411,6 +411,9 @@ subtest 'purgeSelfRegistration' => sub {
     foreach(1..3) {
         $dbh->do("INSERT INTO borrower_modifications (timestamp, borrowernumber, verification_token, changed_fields) VALUES ('2014-01-01 01:02:03',0,?,'firstname,surname')", undef, (scalar localtime)."_$_");
     }
+    # Add a record with a borrowernumber which should not be deleted by DeleteUnverifiedOpacRegistrations
+    # NOTE: We are using the borrowernumber from the last test outside this subtest
+    $dbh->do( "INSERT INTO borrower_modifications (timestamp, borrowernumber, verification_token, changed_fields) VALUES ('2014-01-01 01:02:03', ?, '', 'firstname,surname' )", undef, $borrowernumber );
     is( C4::Members::DeleteUnverifiedOpacRegistrations($d), 3, 'Test for DeleteUnverifiedOpacRegistrations' );
 
     #purge members in temporary category
