@@ -46,7 +46,7 @@ sub get_private_shelves {
 
     $self->search(
         {
-            category => 1,
+            public => 0,
             -or => {
                 'virtualshelfshares.borrowernumber' => $borrowernumber,
                 'me.owner' => $borrowernumber,
@@ -69,7 +69,7 @@ sub get_public_shelves {
 
     $self->search(
         {
-            category => 2,
+            public => 1,
         },
         {
             distinct => 'shelfnumber',
@@ -82,7 +82,7 @@ sub get_public_shelves {
 sub get_some_shelves {
     my ( $self, $params ) = @_;
     my $borrowernumber = $params->{borrowernumber} || 0;
-    my $category = $params->{category} || 1;
+    my $public = $params->{public} || 0;
     my $add_allowed = $params->{add_allowed};
 
     my @conditions;
@@ -98,7 +98,7 @@ sub get_some_shelves {
             ]
         };
     }
-    if ( $category == 1 ) {
+    if ( !$public ) {
         push @conditions, {
             -or =>
             {
@@ -110,7 +110,7 @@ sub get_some_shelves {
 
     $self->search(
         {
-            category => $category,
+            public => $public,
             ( @conditions ? ( -and => \@conditions ) : () ),
         },
         {
@@ -132,7 +132,7 @@ sub get_shelves_containing_record {
           {
               -or => [
                 {
-                    category => 1,
+                    public => 0,
                     -or      => {
                         'me.owner' => $borrowernumber,
                         -or        => {
@@ -140,11 +140,11 @@ sub get_shelves_containing_record {
                         },
                     }
                 },
-                { category => 2 },
+                { public => 1 },
             ]
           };
     } else {
-        push @conditions, { category => 2 };
+        push @conditions, { public => 1 };
     }
 
     return Koha::Virtualshelves->search(

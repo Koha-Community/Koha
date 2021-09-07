@@ -11,11 +11,9 @@ sub search {
     my $count = $params->{count};
     my $owner = $params->{owner};
     my $sortby = $params->{sortby};
-    my $type = $params->{type};
+    my $public = $params->{public} // 1;
+    $public = $public ? 1 : 0;
     my $dt_params = $params->{dt_params};
-
-    # public is default
-    $type = 2 if not $type or $type != 1;
 
     # If not logged in user, be carreful and set the borrowernumber to 0
     # to prevent private lists lack
@@ -28,7 +26,7 @@ sub search {
     # FIXME refactore the following queries
     # We should call Koha::Virtualshelves
     my $select = q|
-        SELECT vs.shelfnumber, vs.shelfname, vs.owner, vs.category AS type,
+        SELECT vs.shelfnumber, vs.shelfname, vs.owner, vs.public AS public,
         vs.created_on, vs.lastmodified as modification_time,
         bo.surname, bo.firstname, vs.sortfield as sortby,
         count(vc.biblionumber) as count
@@ -45,7 +43,7 @@ sub search {
 
     my @args;
     # private
-    if ( $type == 1 ) {
+    if ( !$public ) {
         my $join_vs .= q|
             LEFT JOIN virtualshelfshares sh ON sh.shelfnumber = vs.shelfnumber
             AND sh.borrowernumber = ?
@@ -71,10 +69,10 @@ sub search {
         push @args, $sortby;
     }
 
-    push @where_strs, 'category = ?';
-    push @args, $type;
+    push @where_strs, 'public = ?';
+    push @args, $public;
 
-    if ( $type == 1 ) {
+    if ( !$public ) {
         push @where_strs, '(vs.owner = ? OR sh.borrowernumber = ?)';
         push @args, $loggedinuser, $loggedinuser;
     }
@@ -95,7 +93,7 @@ sub search {
         $limit = "LIMIT $dt_params->{iDisplayStart},$dt_params->{iDisplayLength}";
     }
 
-    my $group_by = " GROUP BY vs.shelfnumber, vs.shelfname, vs.owner, vs.category,
+    my $group_by = " GROUP BY vs.shelfnumber, vs.shelfname, vs.owner, vs.public,
         vs.created_on, vs.lastmodified, bo.surname, bo.firstname, vs.sortfield ";
 
     my $query = join(
@@ -114,9 +112,9 @@ sub search {
     ($iTotalDisplayRecords) = $dbh->selectrow_array( $query, undef, @args );
 
     # Get the iTotalRecords DataTable variable
-    $query = q|SELECT COUNT(vs.shelfnumber)| . $from_total . q| WHERE category = ?|;
-    $query .= q| AND (vs.owner = ? OR sh.borrowernumber = ?)| if $type == 1;
-    @args = $type == 1 ? ( $loggedinuser, $type, $loggedinuser, $loggedinuser ) : ( $type );
+    $query = q|SELECT COUNT(vs.shelfnumber)| . $from_total . q| WHERE public = ?|;
+    $query .= q| AND (vs.owner = ? OR sh.borrowernumber = ?)| if !$public;
+    @args = !$public ? ( $loggedinuser, $public, $loggedinuser, $loggedinuser ) : ( $public );
     ( $iTotalRecords ) = $dbh->selectrow_array( $query, undef, @args );
 
     for my $shelf ( @$shelves ) {

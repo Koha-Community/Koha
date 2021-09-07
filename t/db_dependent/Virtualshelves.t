@@ -34,7 +34,7 @@ subtest 'CRUD' => sub {
     my $shelf = Koha::Virtualshelf->new({
             shelfname => "my first shelf",
             owner => $patron->{borrowernumber},
-            category => 1,
+            public => 0,
         }
     )->store;
 
@@ -61,7 +61,7 @@ subtest 'CRUD' => sub {
         $shelf = Koha::Virtualshelf->new({
                 shelfname => "my first shelf",
                 owner => $patron->{borrowernumber},
-                category => 1,
+                public => 0,
             }
         )->store;
     };
@@ -77,7 +77,7 @@ subtest 'CRUD' => sub {
     $shelf = Koha::Virtualshelf->new({
             shelfname => "my first shelf",
             owner => $another_patron->{borrowernumber},
-            category => 1,
+            public => 0,
         }
     )->store;
     $number_of_shelves = Koha::Virtualshelves->search->count;
@@ -109,14 +109,14 @@ subtest 'Sharing' => sub {
     my $shelf_to_share = Koha::Virtualshelf->new({
             shelfname => "my first shelf",
             owner => $patron_wants_to_share->{borrowernumber},
-            category => 1,
+            public => 0,
         }
     )->store;
 
     my $shelf_not_to_share = Koha::Virtualshelf->new({
             shelfname => "my second shelf",
             owner => $patron_wants_to_share->{borrowernumber},
-            category => 1,
+            public => 0,
         }
     )->store;
 
@@ -186,7 +186,7 @@ subtest 'Shelf content' => sub {
     my $shelf = Koha::Virtualshelf->new(
         {   shelfname    => "my first shelf",
             owner        => $patron1->{borrowernumber},
-            category     => 1,
+            public       => 0,
             lastmodified => $dt_yesterday,
         }
     )->store;
@@ -263,7 +263,7 @@ subtest 'Shelf permissions' => sub {
     my $public_shelf = Koha::Virtualshelf->new(
         {   shelfname    => "my first shelf",
             owner        => $patron1->{borrowernumber},
-            category     => 2,
+            public       => 1,
             allow_change_from_owner => 0,
             allow_change_from_others => 0,
         }
@@ -307,7 +307,7 @@ subtest 'Shelf permissions' => sub {
     my $private_shelf = Koha::Virtualshelf->new(
         {   shelfname    => "my first shelf",
             owner        => $patron1->{borrowernumber},
-            category     => 1,
+            public       => 0,
             allow_change_from_owner => 0,
             allow_change_from_others => 0,
         }
@@ -363,31 +363,31 @@ subtest 'Get shelves' => sub {
     my $private_shelf1_1 = Koha::Virtualshelf->new({
             shelfname => "private shelf 1 for patron 1",
             owner => $patron1->{borrowernumber},
-            category => 1,
+            public => 0,
         }
     )->store;
     my $private_shelf1_2 = Koha::Virtualshelf->new({
             shelfname => "private shelf 2 for patron 1",
             owner => $patron1->{borrowernumber},
-            category => 1,
+            public => 0,
         }
     )->store;
     my $private_shelf2_1 = Koha::Virtualshelf->new({
             shelfname => "private shelf 1 for patron 2",
             owner => $patron2->{borrowernumber},
-            category => 1,
+            public => 0,
         }
     )->store;
     my $public_shelf1_1 = Koha::Virtualshelf->new({
             shelfname => "public shelf 1 for patron 1",
             owner => $patron1->{borrowernumber},
-            category => 2,
+            public => 1,
         }
     )->store;
     my $public_shelf1_2 = Koha::Virtualshelf->new({
             shelfname => "public shelf 2 for patron 1",
             owner => $patron1->{borrowernumber},
-            category => 2,
+            public => 1,
         }
     )->store;
 
@@ -419,19 +419,19 @@ subtest 'Get shelves containing biblios' => sub {
     my $shelf1 = Koha::Virtualshelf->new(
         {   shelfname    => "my first shelf",
             owner        => $patron1->{borrowernumber},
-            category     => 1,
+            public       => 0,
         }
     )->store;
     my $shelf2 = Koha::Virtualshelf->new(
         {   shelfname    => "my x second shelf", # 'x' to make it sorted after 'third'
             owner        => $patron2->{borrowernumber},
-            category     => 1,
+            public       => 0,
         }
     )->store;
     my $shelf3 = Koha::Virtualshelf->new(
         {   shelfname    => "my third shelf",
             owner        => $patron1->{borrowernumber},
-            category     => 2,
+            public       => 1,
         }
     )->store;
 

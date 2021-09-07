@@ -52,9 +52,9 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     }
 );
 
-my $op       = $query->param('op')       || 'list';
-my $referer  = $query->param('referer')  || $op;
-my $category = $query->param('category') || 1;
+my $op       = $query->param('op')      || 'list';
+my $referer  = $query->param('referer') || $op;
+my $public   = $query->param('public') ? 1 : 0;
 my ( $shelf, $shelfnumber, @messages );
 
 if ( $op eq 'add_form' ) {
@@ -65,7 +65,7 @@ if ( $op eq 'add_form' ) {
     $shelf       = Koha::Virtualshelves->find($shelfnumber);
 
     if ( $shelf ) {
-        $category = $shelf->category;
+        $public = $shelf->public;
         my $patron = Koha::Patrons->find( $shelf->owner )->unblessed;
         $template->param( owner => $patron, );
         unless ( $shelf->can_be_managed( $loggedinuser ) ) {
@@ -81,7 +81,7 @@ if ( $op eq 'add_form' ) {
         $shelf = Koha::Virtualshelf->new(
             {   shelfname          => scalar $query->param('shelfname'),
                 sortfield          => scalar $query->param('sortfield'),
-                category           => scalar $query->param('category'),
+                public             => $public,
                 allow_change_from_owner => $allow_changes_from > 0,
                 allow_change_from_others => $allow_changes_from == ANYONE,
                 owner              => scalar $query->param('owner'),
@@ -113,7 +113,7 @@ if ( $op eq 'add_form' ) {
             my $allow_changes_from = $query->param('allow_changes_from');
             $shelf->allow_change_from_owner( $allow_changes_from > 0 );
             $shelf->allow_change_from_others( $allow_changes_from == ANYONE );
-            $shelf->category( scalar $query->param('category') );
+            $shelf->public( scalar $query->param('public') );
             eval { $shelf->store };
 
             if ($@) {
@@ -310,14 +310,14 @@ if ( $op eq 'view' ) {
                 {
                     borrowernumber => $loggedinuser,
                     add_allowed    => 1,
-                    category       => 1,
+                    public         => 0,
                 }
             );
             my $some_public_shelves = Koha::Virtualshelves->get_some_shelves(
                 {
                     borrowernumber => $loggedinuser,
                     add_allowed    => 1,
-                    category       => 2,
+                    public         => 1,
                 }
             );
 
@@ -356,7 +356,7 @@ $template->param(
     referer  => $referer,
     shelf    => $shelf,
     messages => \@messages,
-    category => $category,
+    public   => $public,
     print    => scalar $query->param('print') || 0,
     csv_profiles => [ Koha::CsvProfiles->search({ type => 'marc', used_for => 'export_records' }) ],
 );

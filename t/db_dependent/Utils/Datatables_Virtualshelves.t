@@ -87,7 +87,7 @@ $john_smith{borrowernumber} = Koha::Patron->new( \%john_smith )->store->borrower
 my $shelf1 = Koha::Virtualshelf->new(
     {
         shelfname => 'my first private list (empty)',
-        category  => 1, # private
+        public    => 0,
         sortfield => 'author',
         owner     => $john_doe{borrowernumber},
     }
@@ -96,7 +96,7 @@ my $shelf1 = Koha::Virtualshelf->new(
 my $shelf2 = Koha::Virtualshelf->new(
     {
         shelfname => 'my second private list',
-        category  => 1, # private
+        public    => 0,
         sortfield => 'title',
         owner     => $john_doe{borrowernumber},
     }
@@ -115,7 +115,7 @@ $shelf2->add_biblio( $biblionumber5, $john_doe{borrowernumber} );
 my $shelf3 = Koha::Virtualshelf->new(
     {
         shelfname => 'The first public list',
-        category  => 2, # public
+        public    => 1,
         sortfield => 'author',
         owner     => $jane_doe{borrowernumber},
     }
@@ -130,7 +130,7 @@ $shelf3->add_biblio( $biblionumber8, $jane_doe{borrowernumber} );
 my $shelf4 = Koha::Virtualshelf->new(
     {
         shelfname => 'my second public list',
-        category  => 2, # public
+        public    => 1,
         sortfield => 'title',
         owner     => $jane_doe{borrowernumber},
     }
@@ -147,7 +147,7 @@ $shelf3->add_biblio( $biblionumber12, $jane_doe{borrowernumber} );
 my $shelf5 = Koha::Virtualshelf->new(
     {
         shelfname => 'my third private list',
-        category  => 1, # private
+        public    => 0,
         sortfield => 'title',
         owner     => $jane_doe{borrowernumber},
     }
@@ -169,7 +169,7 @@ for my $i ( 6 .. 15 ) {
     Koha::Virtualshelf->new(
         {
             shelfname => "another public list $i",
-            category  => 2,
+            public    => 1,
             owner     => $john_smith{borrowernumber},
         }
     )->store;
@@ -188,7 +188,7 @@ t::lib::Mocks::mock_userenv({ patron => $john_doe_patron });
 $search_results = C4::Utils::DataTables::VirtualShelves::search({
     shelfname => "ist",
     dt_params => \%dt_params,
-    type => 1,
+    public    => 0,
 });
 
 is( $search_results->{ iTotalRecords }, 2,
@@ -203,7 +203,7 @@ is( @{ $search_results->{ shelves } }, 2,
 # Search by type only
 $search_results = C4::Utils::DataTables::VirtualShelves::search({
     dt_params => \%dt_params,
-    type => 2,
+    public    => 1,
 });
 is( $search_results->{ iTotalRecords }, 12,
     "There should be 12 public shelves in total" );
@@ -218,7 +218,7 @@ is( @{ $search_results->{ shelves } }, 10,
 $search_results = C4::Utils::DataTables::VirtualShelves::search({
     owner => "jane",
     dt_params => \%dt_params,
-    type => 2,
+    public    => 1,
 });
 is( $search_results->{ iTotalRecords }, 12,
     "There should be 12 public shelves in total" );
@@ -234,7 +234,7 @@ $search_results = C4::Utils::DataTables::VirtualShelves::search({
     owner => "smith",
     shelfname => "public list 1",
     dt_params => \%dt_params,
-    type => 2,
+    public    => 1,
 });
 is( $search_results->{ iTotalRecords }, 12,
     "There should be 12 public shelves in total" );

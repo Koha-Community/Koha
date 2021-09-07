@@ -2,8 +2,6 @@
 [% USE Asset %]
 [% USE Koha %]
 [% USE KohaDates %]
-[% SET PRIVATE = 1 %]
-[% SET PUBLIC = 2 %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>
@@ -66,7 +64,7 @@
         [% IF shelf AND shelf.is_private %]
             [% IF op == 'view' OR op == 'edit_form' %]
                 <li>
-                    <a href="/cgi-bin/koha/virtualshelves/shelves.pl?op=list&amp;category=[% PRIVATE | uri %]">Your lists</a>
+                    <a href="/cgi-bin/koha/virtualshelves/shelves.pl?op=list&amp;public=0">Your lists</a>
                 </li>
             [% ELSE %]
                 <li>
@@ -79,7 +77,7 @@
         [% ELSIF shelf AND shelf.is_public %]
             [% IF op == 'view' %]
                 <li>
-                    <a href="/cgi-bin/koha/virtualshelves/shelves.pl?op=list&amp;category=[% PUBLIC | uri %]">Public lists</a>
+                    <a href="/cgi-bin/koha/virtualshelves/shelves.pl?op=list&amp;public=1">Public lists</a>
                 </li>
             [% ELSE %]
                 <li>
@@ -352,17 +350,17 @@
             [% IF shelf.sortfield == "itemcallnumber" %]<option value="itemcallnumber" selected="selected">Call number</option>[% ELSE %]<option value="itemcallnumber">Call number</option>[% END %]
             [% IF shelf.sortfield == "dateadded" %]<option value="dateadded" selected="selected">Date added</option>[% ELSE %]<option value="dateadded">Date added</option>[% END %]
             </select></li>
-            <li><label for="category">Category: </label>
-                <select id="category" name="category" onchange="AdjustRemark()">
+            <li><label for="public">Public: </label>
+                <select id="public" name="public" onchange="AdjustRemark()">
                 [% IF shelf.is_private %]
-                    <option value="1" selected="selected">Private</option>
+                    <option value="0" selected="selected">Private</option>
                 [% ELSE %]
-                    <option value="1">Private</option>
+                    <option value="0">Private</option>
                 [% END %]
                 [% IF shelf.is_public %]
-                    <option value="2" selected="selected">Public</option>
+                    <option value="1" selected="selected">Public</option>
                 [% ELSE %]
-                    <option value="2">Public</option>
+                    <option value="1">Public</option>
                 [% END %]
                            </select></li>
 
@@ -376,10 +374,10 @@
         [% IF referer == 'view' %]
            <a href="/cgi-bin/koha/virtualshelves/shelves.pl?op=view&amp;shelfnumber=[% shelf.shelfnumber | uri %]" class="cancel">Cancel</a>
        [% ELSE %]
-            [% IF category == PUBLIC %]
-                <a href="/cgi-bin/koha/virtualshelves/shelves.pl?op=list&amp;category=[% PUBLIC | uri %]" class="cancel">Cancel</a>
+            [% IF public %]
+                <a href="/cgi-bin/koha/virtualshelves/shelves.pl?op=list&amp;public=1" class="cancel">Cancel</a>
             [% ELSE %]
-                <a href="/cgi-bin/koha/virtualshelves/shelves.pl?op=list&amp;category=[% PRIVATE | uri %]" class="cancel">Cancel</a>
+                <a href="/cgi-bin/koha/virtualshelves/shelves.pl?op=list&amp;public=0" class="cancel">Cancel</a>
             [% END %]
         [% END %]
     </fieldset>
@@ -510,11 +508,7 @@
 
         [% IF op == 'list' %]
             $(document).ready(function(){
-                [% IF category == PUBLIC %]
-                    var type = [% PUBLIC | html %];
-                [% ELSE %]
-                    var type = [% PRIVATE | html %];
-                [% END %]
+                var public = [% public | html %];
 
                 var dtListResults = $("#listresultst").dataTable($.extend(true, {}, dataTablesDefaults, {
                 "aaSorting": [[ 5, "asc" ]],
@@ -522,8 +516,8 @@
                     'sAjaxSource': "/cgi-bin/koha/svc/virtualshelves/search",
                     'fnServerData': function(sSource, aoData, fnCallback) {
                         aoData.push({
-                            'name': 'type',
-                            'value': type,
+                            'name': 'public',
+                            'value': public,
                         },{
                             'name': 'shelfname',
                             'value': $("#searchshelfname_filter").val(),
@@ -541,7 +535,7 @@
                             'value': 'vs.shelfname',
                         },{
                             'name': 'is_shared_sorton',
-                            'value': 'vs.category',
+                            'value': 'vs.public',
                         },{
                             'name': 'owner_sorton',
                             'value': 'vs.owner',
@@ -566,7 +560,7 @@
                         });
                     },
                     'aoColumns':[
-                        { 'mDataProp': 'dt_type' },
+                        { 'mDataProp': 'dt_public' },
                         { 'mDataProp': 'dt_shelfname' },
                         { 'mDataProp': 'dt_count' },
                         { 'mDataProp': 'dt_is_shared' },
@@ -589,7 +583,7 @@
                 dtListResults.fnAddFilters("filter", 750);
 
                 var tabs = $("#tabs").tabs({
-                    [% IF category == PUBLIC %]
+                    [% IF public %]
                         active: 1,
                     [% ELSE %]
                         active: 0,
@@ -597,10 +591,10 @@
                     activate: function(e, ui) {
                         var active = tabs.tabs("option", "active" );
                         if ( active == 0 ) {
-                            type = [% PRIVATE | html %];
+                            public = 0;
                             dtListResults.fnDraw();
                         } else if ( active == 1 ) {
-                            type = [% PUBLIC | html %];
+                            public = 1;
                             dtListResults.fnDraw();
                         }
                     }
@@ -804,12 +798,12 @@
         }
 
         function AdjustRemark() {
-            var category = $("#category").val();
+            var public = $("#public").val();
             var perms = $("#allow_changes_from").val();
 
             if( perms < 2 ) {
                 $("#anyone_remark").hide();
-            } else if( category==1 ) {
+            } else if( public==0 ) {
                 // If we move to Private (without shares), show Anyone remark
                 // Note: the number of shares is not tested real-time
                 [% IF !shelf.is_shared %]
@@ -817,7 +811,7 @@
                 [% ELSE %]
                     $("#anyone_remark").hide();
                 [% END %]
-            } else { // category==2
+            } else { // public==1
                 $("#anyone_remark").hide();
             }
         }

@@ -83,8 +83,8 @@ if (C4::Context->preference("BakerTaylorEnabled")) {
 }
 
 my $referer  = $query->param('referer')  || $op;
-my $category = 1;
-$category = 2 if $query->param('category') && $query->param('category') == 2;
+my $public = 0;
+$public = 1 if $query->param('public') && $query->param('public') == 1;
 
 my ( $shelf, $shelfnumber, @messages );
 
@@ -96,7 +96,7 @@ if ( $op eq 'add_form' ) {
     $shelf       = Koha::Virtualshelves->find($shelfnumber);
 
     if ( $shelf ) {
-        $category = $shelf->category;
+        $public = $shelf->public;
         my $patron = Koha::Patrons->find( $shelf->owner );
         $template->param( owner => $patron, );
         unless ( $shelf->can_be_managed( $loggedinuser ) ) {
@@ -113,7 +113,7 @@ if ( $op eq 'add_form' ) {
             $shelf = Koha::Virtualshelf->new(
                 {   shelfname          => scalar $query->param('shelfname'),
                     sortfield          => scalar $query->param('sortfield'),
-                    category           => $category,
+                    public             => $public,
                     allow_change_from_owner => $allow_changes_from > 0,
                     allow_change_from_others => $allow_changes_from == ANYONE,
                     owner              => scalar $loggedinuser,
@@ -147,7 +147,7 @@ if ( $op eq 'add_form' ) {
             my $allow_changes_from = $query->param('allow_changes_from');
             $shelf->allow_change_from_owner( $allow_changes_from > 0 );
             $shelf->allow_change_from_others( $allow_changes_from == ANYONE );
-            $shelf->category( $category );
+            $shelf->public( $public );
             eval { $shelf->store };
 
             if ($@) {
@@ -259,7 +259,7 @@ if ( $op eq 'view' ) {
     $shelf = Koha::Virtualshelves->find($shelfnumber);
     if ( $shelf ) {
         if ( $shelf->can_be_viewed( $loggedinuser ) ) {
-            $category = $shelf->category;
+            $public = $shelf->public;
 
             # Sortfield param may still include sort order with :asc or :desc, but direction overrides it
             my( $sortfield, $direction );
@@ -424,7 +424,7 @@ if ( $op eq 'view' ) {
 if ( $op eq 'list' ) {
     my $shelves;
     my ( $page, $rows ) = ( $query->param('page') || 1, 20 );
-    if ( $category == 1 ) {
+    if ( !$public ) {
         $shelves = Koha::Virtualshelves->get_private_shelves({ page => $page, rows => $rows, borrowernumber => $loggedinuser, });
     } else {
         $shelves = Koha::Virtualshelves->get_public_shelves({ page => $page, rows => $rows, });
@@ -435,7 +435,7 @@ if ( $op eq 'list' ) {
         shelves => $shelves,
         pagination_bar => pagination_bar(
             q||, $pager->last_page - $pager->first_page + 1,
-            $page, "page", { op => 'list', category => $category, }
+            $page, "page", { op => 'list', public => $public, }
         ),
     );
 }
@@ -445,7 +445,7 @@ $template->param(
     referer  => $referer,
     shelf    => $shelf,
     messages => \@messages,
-    category => $category,
+    public   => $public,
     print    => scalar $query->param('print') || 0,
     listsview => 1,
 );

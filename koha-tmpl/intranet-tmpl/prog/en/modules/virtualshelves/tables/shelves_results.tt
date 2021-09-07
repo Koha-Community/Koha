@@ -8,14 +8,14 @@
     "aaData": [
         [% FOREACH data IN aaData %]
             {
-                "dt_type":
-                    "[% data.type | html %]",
+                "dt_public":
+                    "[% data.public | html %]",
                 "dt_shelfname":
                     "<a href='/cgi-bin/koha/virtualshelves/shelves.pl?op=view&shelfnumber=[% data.shelfnumber | html %]'>[% data.shelfname | html | $To %]</a>",
                 "dt_count":
                     "[% data.count | html %] item(s)",
                 "dt_is_shared":
-                    "[% IF data.type == 2 %]Public[% ELSIF data.is_shared %]Shared[% ELSE %]Private[% END %]",
+                    "[% IF data.public %]Public[% ELSIF data.is_shared %]Shared[% ELSE %]Private[% END %]",
                 "dt_owner":
                     "<a href='/cgi-bin/koha/members/moremember.pl?borrowernumber=[% data.owner | html %]'>[% data.firstname | html | $To %] [% data.surname | html | $To %]</a>",
                 "dt_sortby":
@@ -35,12 +35,12 @@
 [%~ SET action_block = '' ~%]
 [%~ IF can_manage_shelf OR can_delete_shelf ~%]
     [%~ shelfnumber = shelfnumber | html ~%]
-    [%~ type        = type | html ~%]
+    [%~ public      = public | html ~%]
     [%~ IF can_manage_shelf ~%]
         [%~ action_block =                '<form action="shelves.pl" method="get">' ~%]
         [%~ action_block = action_block _ '<input type="hidden" name="shelfnumber" value="' _ shelfnumber  _ '" />' ~%]
         [%~ action_block = action_block _ '<input type="hidden" name="op" value="edit_form" />' ~%]
-        [%~ action_block = action_block _ '<input type="hidden" name="category" value="' _ type _ '" />' ~%]
+        [%~ action_block = action_block _ '<input type="hidden" name="public" value="' _ public _ '" />' ~%]
         [%~ action_block = action_block _ '<input type="hidden" name="referer" value="list" />' ~%]
         [%~ action_block = action_block _ '<button class="editshelf btn btn-default btn-xs"><i class="fa fa-pencil"></i> Edit</button>' ~%]
         [%~ action_block = action_block _ '</form> ' ~%]
@@ -50,7 +50,7 @@
         [%~ action_block = action_block _ '<input type="hidden" name="shelves" value="1" />' ~%]
         [%~ action_block = action_block _ '<input type="hidden" name="op" value="delete" />' ~%]
         [%~ action_block = action_block _ '<input type="hidden" name="shelfnumber" value="' _ shelfnumber  _ '" />' ~%]
-        [%~ action_block = action_block _ '<input type="hidden" name="category" value="' _ type _ '" />' ~%]
+        [%~ action_block = action_block _ '<input type="hidden" name="public" value="' _ public _ '" />' ~%]
         [%~ action_block = action_block _ '<input type="hidden" name="referer" value="list" />' ~%]
         [%~ action_block = action_block _ '<button type="submit" class="deleteshelf btn btn-default btn-xs"><i class="fa fa-trash"></i> Delete</button>' ~%]
         [%~ action_block = action_block _ '</form>' ~%]

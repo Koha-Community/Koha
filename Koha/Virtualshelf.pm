@@ -37,16 +37,9 @@ Koha::Virtualshelf - Koha Virtualshelf Object class
 
 =head1 API
 
-=head2 Class Methods
+=head2 Class methods
 
 =cut
-
-=head3 type
-
-=cut
-
-our $PRIVATE = 1;
-our $PUBLIC = 2;
 
 sub store {
     my ( $self ) = @_;
@@ -72,12 +65,12 @@ sub store {
 
 sub is_public {
     my ( $self ) = @_;
-    return $self->category == $PUBLIC;
+    return $self->public;
 }
 
 sub is_private {
     my ( $self ) = @_;
-    return $self->category == $PRIVATE;
+    return !$self->public;
 }
 
 sub is_shelfname_valid {
@@ -93,14 +86,14 @@ sub is_shelfname_valid {
             "virtualshelfshares.borrowernumber" => $self->owner,
             "me.owner" => $self->owner,
         };
-        $conditions->{category} = $PRIVATE;
+        $conditions->{public} = 0;
     }
     elsif ( $self->is_private and not defined $self->owner ) {
         $conditions->{owner} = undef;
-        $conditions->{category} = $PRIVATE;
+        $conditions->{public} = 0;
     }
     else {
-        $conditions->{category} = $PUBLIC;
+        $conditions->{public} = 1;
     }
 
     my $count = Koha::Virtualshelves->search(
@@ -261,6 +254,12 @@ sub can_biblios_be_removed {
     return $self->can_biblios_be_added( $borrowernumber );
     # Same answer since bug 18228
 }
+
+=head2 Internal methods
+
+=head3 _type
+
+=cut
 
 sub _type {
     return 'Virtualshelve';
