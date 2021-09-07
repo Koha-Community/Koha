@@ -62,6 +62,7 @@ use Koha::SearchEngine::Indexer;
 use Koha::Exceptions::Checkout;
 use Koha::Plugins;
 use Koha::Recalls;
+use Koha::Library::Hours;
 use Carp qw( carp );
 use List::MoreUtils qw( any );
 use Scalar::Util qw( looks_like_number blessed );
@@ -3887,11 +3888,44 @@ sub CalcDateDue {
         }
     );
 
+    my $considerlibraryhours = C4::Context->preference('ConsiderLibraryHoursInCirculation');
+
+    # starter vars so don't do calculations directly to $datedue
+    my $potential_datedue = $datedue->clone;
+    my $library_close = $datedue->clone;
+    my $dayofweek = $datedue->local_day_of_week - 1;
+    my $todayhours = Koha::Library::Hours->find({ library_id => $branch, day => $dayofweek });
+    my @close = undef;
+    my $tomorrowhours = Koha::Library::Hours->find({ library_id => $branch, day => $dayofweek+1 }); # get open hours of next day
+    my @open = undef;
+    if ( $todayhours->close_time and $tomorrowhours->open_time ) {
+        @close = split( ":", $todayhours->close_time );
+        $library_close = $library_close->set( hour => $close[0], minute => $close[1] );
+        $potential_datedue = $potential_datedue->add( hours => $loanlength->{$length_key} ); # datedue without consideration for open hours
+        @open = split( ":", $tomorrowhours->open_time );
+    }
+
     # calculate the datedue as normal
     if ( $daysmode eq 'Days' )
     {    # ignoring calendar
         if ( $loanlength->{lengthunit} eq 'hours' ) {
-            $datedue->add( hours => $loanlength->{$length_key} );
+            if ( $potential_datedue > $library_close and $todayhours->close_time and $tomorrowhours->open_time ) {
+                if ( $considerlibraryhours eq 'close' ) {
+                    # datedue will be after the library closes on that day
+                    # shorten loan period to end when library closes
+                    $datedue->set( hour => $close[0], minute => $close[1] );
+                } elsif ( $considerlibraryhours eq 'open' ) {
+                    # datedue will be after the library closes on that day
+                    # extend loan period to when library opens following day
+                    $datedue->add( days => 1 )->set( hour => $open[0], minute => $open[1] );
+                } else {
+                    # ignore library open hours
+                    $datedue->add( hours => $loanlength->{$length_key} );
+                }
+            } else {
+                # due time doesn't conflict with library open hours, don't need to check
+                $datedue->add( hours => $loanlength->{$length_key} );
+            }
         } else {    # days
             $datedue->add( days => $loanlength->{$length_key} );
             $datedue->set_hour(23);
@@ -3899,17 +3933,43 @@ sub CalcDateDue {
         }
     } else {
         my $dur;
+        my $sethours;
         if ($loanlength->{lengthunit} eq 'hours') {
-            $dur = DateTime::Duration->new( hours => $loanlength->{$length_key});
+            if ( $potential_datedue > $library_close and $todayhours->close_time and $tomorrowhours->open_time ) {
+                if ( $considerlibraryhours eq 'close' ) {
+                    # datedue will be after the library closes on that day
+                    # shorten loan period to end when library closes
+                    $dur = $potential_datedue->delta_ms( $library_close );
+                    $sethours = $considerlibraryhours;
+                } elsif ( $considerlibraryhours eq 'open' ) {
+                    # datedue will be after the library closes on that day
+                    # extend loan period to when library opens following day
+                    my $library_open = $datedue->clone->set( hour => $open[0], minute => $open[1] );
+                    $dur = $potential_datedue->delta_ms( $library_open )->add( days => 1 );
+                    $sethours = $considerlibraryhours;
+                } else {
+                    # ignore library open hours
+                    $dur = DateTime::Duration->new( hours => $loanlength->{$length_key} );
+                }
+            } else {
+                # due time doesn't conflict with library open hours, don't need to check
+                $dur = DateTime::Duration->new( hours => $loanlength->{$length_key} );
+            }
         }
         else { # days
-            $dur = DateTime::Duration->new( days => $loanlength->{$length_key});
+            $dur = DateTime::Duration->new( days => $loanlength->{$length_key} );
         }
         my $calendar = Koha::Calendar->new( branchcode => $branch, days_mode => $daysmode );
         $datedue = $calendar->addDuration( $datedue, $dur, $loanlength->{lengthunit} );
         if ($loanlength->{lengthunit} eq 'days') {
             $datedue->set_hour(23);
             $datedue->set_minute(59);
+        } else {
+            if ( $sethours and $sethours eq 'close' ) {
+                $datedue->set( hour => $close[0], minute => $close[1] );
+            } elsif ( $sethours and $sethours eq 'open' ) {
+                $datedue->set( hour => $open[0], minute => $open[1] );
+            }
         }
     }
 
