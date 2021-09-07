@@ -403,7 +403,7 @@ $borrower = Koha::Patrons->find( $borrowernumber )->unblessed;
 ok( $borrower->{userid},  'A userid should have been generated correctly' );
 
 subtest 'purgeSelfRegistration' => sub {
-    plan tests => 5;
+    plan tests => 8;
 
     #purge unverified
     my $d=360;
@@ -417,7 +417,6 @@ subtest 'purgeSelfRegistration' => sub {
     my $c= 'XYZ';
     $dbh->do("INSERT IGNORE INTO categories (categorycode) VALUES ('$c')");
     t::lib::Mocks::mock_preference('PatronSelfRegistrationDefaultCategory', $c );
-    t::lib::Mocks::mock_preference('PatronSelfRegistrationExpireTemporaryAccountsDelay', 360);
     C4::Members::DeleteExpiredOpacRegistrations();
     my $self_reg = $builder->build_object({
         class => 'Koha::Patrons',
@@ -426,6 +425,18 @@ subtest 'purgeSelfRegistration' => sub {
             categorycode => $c
         }
     });
+
+    # First test if empty PatronSelfRegistrationExpireTemporaryAccountsDelay returns zero
+    t::lib::Mocks::mock_preference('PatronSelfRegistrationExpireTemporaryAccountsDelay', q{} );
+    is( C4::Members::DeleteExpiredOpacRegistrations(), 0, "DeleteExpiredOpacRegistrations with empty delay" );
+    # Test zero too
+    t::lib::Mocks::mock_preference('PatronSelfRegistrationExpireTemporaryAccountsDelay', 0 );
+    is( C4::Members::DeleteExpiredOpacRegistrations(), 0, "DeleteExpiredOpacRegistrations with delay 0" );
+    # Also check empty category
+    t::lib::Mocks::mock_preference('PatronSelfRegistrationDefaultCategory', q{} );
+    t::lib::Mocks::mock_preference('PatronSelfRegistrationExpireTemporaryAccountsDelay', 360 );
+    is( C4::Members::DeleteExpiredOpacRegistrations(), 0, "DeleteExpiredOpacRegistrations with empty category" );
+    t::lib::Mocks::mock_preference('PatronSelfRegistrationDefaultCategory', $c );
 
     my $checkout     = $builder->build_object({
         class=>'Koha::Checkouts',
