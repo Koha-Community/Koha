@@ -654,7 +654,7 @@ if ($op eq "additem") {
            .'borrowernumber='.$fa_circborrowernumber
            .'&barcode='.uri_escape_utf8($fa_barcode)
            .'&duedatespec='.$fa_duedatespec
-           .'&stickyduedate=1'
+           .'&stickyduedate='.$fa_stickyduedate
         );
         exit;
     }
