@@ -98,7 +98,5 @@
 [% END %]
 
 [% IF ( itemavailable ) %]
-    [% IF NOT item.isa('Koha::Item') %]
     <span class="item-status available">Available</span>
-    [% END %]
 [% END %]
