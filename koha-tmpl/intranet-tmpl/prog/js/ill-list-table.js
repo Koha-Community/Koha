@@ -335,6 +335,32 @@ $(document).ready(function() {
         $('#addcomment').toggleClass('content_hidden');
     });
 
+    var illfilter_dateplaced_start = $("#illfilter_dateplaced_start").flatpickr({
+        onClose: function( selectedDates, dateText, instance) {
+            validate_date( selectedDates, instance );
+            illfilter_dateplaced_end.set('minDate', selectedDates[0]);
+        }
+    });
+
+    var illfilter_dateplaced_end = $("#illfilter_dateplaced_end").flatpickr({
+        onClose: function( selectedDates, dateText, instance) {
+            validate_date( selectedDates, instance );
+        },
+    });
+
+    var illfilter_datemodified_start = $("#illfilter_datemodified_start").flatpickr({
+        onClose: function( selectedDates, dateText, instance) {
+            validate_date( selectedDates, instance );
+            illfilter_datemodified_end.set('minDate', selectedDates[0]);
+        }
+    });
+
+    var illfilter_datemodified_end = $("#illfilter_datemodified_end").flatpickr({
+        onClose: function( selectedDates, dateText, instance) {
+            validate_date( selectedDates, instance );
+        },
+    });
+
     // Filter partner list
     // Record the list of all options
     var ill_partner_options = $('#partners > option');
@@ -498,10 +524,10 @@ $(document).ready(function() {
 
             // Custom date range filtering
             $.fn.dataTable.ext.search.push(function(settings, data, dataIndex) {
-                var placedStart = $('#illfilter_dateplaced_start').datepicker('getDate');
-                var placedEnd = $('#illfilter_dateplaced_end').datepicker('getDate');
-                var modifiedStart = $('#illfilter_datemodified_start').datepicker('getDate');
-                var modifiedEnd = $('#illfilter_datemodified_end').datepicker('getDate');
+                var placedStart = illfilter_dateplaced_start.selectedDates[0];
+                var placedEnd = illfilter_dateplaced_end.selectedDates[0];
+                var modifiedStart = illfilter_datemodified_start.selectedDates[0];
+                var modifiedEnd = illfilter_datemodified_end.selectedDates[0];
                 var rowPlaced = data[14] ? new Date(data[14]) : null;
                 var rowModified = data[16] ? new Date(data[16]) : null;
                 var placedPassed = true;
