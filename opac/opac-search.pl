@@ -854,14 +854,14 @@ my $some_private_shelves = Koha::Virtualshelves->get_some_shelves(
     {
         borrowernumber => $borrowernumber,
         add_allowed    => 1,
-        category       => 1,
+        public         => 0,
     }
 );
 my $some_public_shelves = Koha::Virtualshelves->get_some_shelves(
     {
         borrowernumber => $borrowernumber,
         add_allowed    => 1,
-        category       => 2,
+        public         => 1,
     }
 );
 

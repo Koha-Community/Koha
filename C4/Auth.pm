@@ -287,12 +287,12 @@ sub get_template_and_user {
             my $some_private_shelves = Koha::Virtualshelves->get_some_shelves(
                 {
                     borrowernumber => $borrowernumber,
-                    category       => 1,
+                    public         => 0,
                 }
             );
             my $some_public_shelves = Koha::Virtualshelves->get_some_shelves(
                 {
-                    category       => 2,
+                    public => 1,
                 }
             );
             $template->param(
@@ -431,7 +431,7 @@ sub get_template_and_user {
             require Koha::Virtualshelves;
             my $some_public_shelves = Koha::Virtualshelves->get_some_shelves(
                 {
-                    category       => 2,
+                    public => 1,
                 }
             );
             $template->param(
@@ -1329,7 +1329,7 @@ sub checkauth {
         require Koha::Virtualshelves;
         my $some_public_shelves = Koha::Virtualshelves->get_some_shelves(
             {
-                category       => 2,
+                public => 1,
             }
         );
         $template->param(
