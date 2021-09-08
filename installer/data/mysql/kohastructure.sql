@@ -5103,7 +5103,9 @@ CREATE TABLE `tmp_holdsqueue` (
   `notes` mediumtext COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `item_level_request` tinyint(4) NOT NULL DEFAULT 0,
   KEY `tmp_holdsqueue_ibfk_1` (`itemnumber`),
-  CONSTRAINT `tmp_holdsqueue_ibfk_1` FOREIGN KEY (`itemnumber`) REFERENCES `items` (`itemnumber`) ON DELETE CASCADE ON UPDATE CASCADE
+  CONSTRAINT `tmp_holdsqueue_ibfk_1` FOREIGN KEY (`itemnumber`) REFERENCES `items` (`itemnumber`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `tmp_holdsqueue_ibfk_2` FOREIGN KEY (`biblionumber`) REFERENCES `biblio` (`biblionumber`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `tmp_holdsqueue_ibfk_3` FOREIGN KEY (`borrowernumber`) REFERENCES `borrowers` (`borrowernumber`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
