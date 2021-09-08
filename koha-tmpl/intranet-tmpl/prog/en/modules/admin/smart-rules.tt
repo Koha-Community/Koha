@@ -771,6 +771,13 @@
                                         [% END %]
                                             Item floats
                                         </option>
+                                        [% IF returnbranch.rule_value == 'returnbylibrarygroup' %]
+                                        <option value="returnbylibrarygroup" selected="selected">
+                                        [% ELSE %]
+                                        <option value="returnbylibrarygroup">
+                                        [% END %]
+                                            Item floats by library group
+                                        </option>
                                     </select>
                                 </td>
                                 <td class="actions">
@@ -1323,6 +1330,8 @@
                                                 <span>Item returns to issuing branch</span>
                                             [% ELSIF returnbranch == 'noreturn' %]
                                                 <span>Item floats</span>
+                                            [% ELSIF returnbranch == 'returnbylibrarygroup'%]
+                                                <span>Item floats by library group</span>
                                             [% END %]
                                         </td>
                                         <td class="actions">
@@ -1375,6 +1384,7 @@
                                         <option value="homebranch">Item returns home</option>
                                         <option value="holdingbranch">Item returns to issuing library</option>
                                         <option value="noreturn">Item floats</option>
+                                        <option value="returnbylibrarygroup">Item floats by library group</option>
                                     </select>
                                 </td>
                                 <td class="actions"><button type="submit" class="btn btn-default btn-xs"><i class="fa fa-plus"></i> Add</button></td>

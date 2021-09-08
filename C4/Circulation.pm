@@ -2128,8 +2128,19 @@ sub AddReturn {
 
         # full item data, but no borrowernumber or checkout info (no issue)
     my $hbr = Koha::CirculationRules->get_return_branch_policy($item);
+        # check if returnbranch and homebranch belong to the same float group
+    my $validate_float = Koha::Libraries->find( $item->homebranch )->validate_float_sibling({ branchcode => $branch });
         # get the proper branch to which to return the item
-    my $returnbranch = $hbr ne 'noreturn' ? $item->$hbr : $branch;
+    my $returnbranch;
+    if($hbr eq 'noreturn'){
+        $returnbranch = $branch;
+    }elsif($hbr eq 'returnbylibrarygroup'){
+            # if library isn't in same the float group, transfer item to homebranch
+        $hbr = 'homebranch';
+        $returnbranch = $validate_float ? $branch : $item->$hbr;
+    }else{
+        $returnbranch = $item->$hbr;
+    }
         # if $hbr was "noreturn" or any other non-item table value, then it should 'float' (i.e. stay at this branch)
     my $transfer_trigger = $hbr eq 'homebranch' ? 'ReturnToHome' : $hbr eq 'holdingbranch' ? 'ReturnToHolding' : undef;
 
