@@ -48,6 +48,7 @@ BEGIN {
     @ISA = qw(Exporter);
     @EXPORT = qw(
         &XSLTParse4Display
+        &transformMARCXML4XSLT
     );
     $engine=Koha::XSLT::Base->new( { do_not_return_source => 1 } );
 }
