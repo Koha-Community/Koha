@@ -25,6 +25,7 @@
 
     <xsl:variable name="OPACResultsMaxItems" select="number(marc:sysprefs/marc:syspref[@name='OPACResultsMaxItems']+0)"/>
     <xsl:variable name="OPACResultsMaxItemsUnavailable" select="number(marc:sysprefs/marc:syspref[@name='OPACResultsMaxItemsUnavailable']+0)"/>
+    <xsl:variable name="OPACResultsUnavailableGroupingBy" select="marc:sysprefs/marc:syspref[@name='OPACResultsUnavailableGroupingBy']"/>
     <xsl:variable name="UseControlNumber" select="marc:sysprefs/marc:syspref[@name='UseControlNumber']"/>
     <xsl:variable name="UseAuthoritiesForTracings" select="marc:sysprefs/marc:syspref[@name='UseAuthoritiesForTracings']"/>
     <xsl:variable name="OPACResultsLibrary" select="marc:sysprefs/marc:syspref[@name='OPACResultsLibrary']"/>
@@ -1332,35 +1333,41 @@
                             <status english="Waiting">On hold</status>
                         </xsl:variable>
                         <xsl:variable name="unavailable_items" select="key('item-by-status', 'reallynotforloan')|key('item-by-status', 'other')"/>
-                        <!-- First group by branch -->
-                        <xsl:for-each select="items:items/items:item[not(items:resultbranch=preceding-sibling::*/items:resultbranch)]">
-                            <xsl:sort select="items:resultbranch"/>
-                            <xsl:variable name="currentbranch" select="items:resultbranch"/>
-                            <span class="ItemSummary unavailable">
-                            <!-- Within same branch, group by substatus -->
-                            <xsl:for-each select="$unavailable_items[not(items:substatus=preceding-sibling::*[items:status='reallynotforloan' or items:status='other']/items:substatus)]">
-                                <xsl:sort select="items:substatus"/>
-                                <xsl:variable name="current_substatus" select="items:substatus"/>
-                                    <xsl:call-template name="listCallNumbers">
-                                        <xsl:with-param name="items" select="$unavailable_items[items:resultbranch=$currentbranch and items:substatus=$current_substatus]"/>
-                                        <xsl:with-param name="max" select="$OPACResultsMaxItemsUnavailable"/>
-                                        <xsl:with-param name="status_text">
-                                            <xsl:value-of select="$currentbranch"/>
-                                            <xsl:text>: </xsl:text>
-                                            <xsl:if test="items:status='other'">
-                                                <xsl:value-of select="exsl:node-set($other_status_list)/status[@english=$current_substatus]"/>
-                                            </xsl:if>
-                                            <xsl:if test="items:status='reallynotforloan'">
-                                                <xsl:value-of select="$current_substatus"/>
-                                            </xsl:if>
-                                        </xsl:with-param>
-                                        <xsl:with-param name="class_block" select="concat('unavailable_',items:substatus)"/>
-                                        <xsl:with-param name="class_status" select="'ItemBranch'"/>
-                                        <xsl:with-param name="OPACItemLocation" select="$OPACItemLocation"/>
-                                    </xsl:call-template>
-                            </xsl:for-each>
-                            </span>
-                        </xsl:for-each>
+                        <xsl:choose>
+                            <xsl:when test="$OPACResultsUnavailableGroupingBy='branch'">
+                                <!-- First group by branch -->
+                                <xsl:for-each select="items:items/items:item[not(items:resultbranch=preceding-sibling::*/items:resultbranch)]">
+                                    <xsl:sort select="items:resultbranch"/>
+                                    <xsl:variable name="currentbranch" select="items:resultbranch"/>
+                                    <span class="ItemSummary unavailable">
+                                    <!-- Within same branch, group by substatus -->
+                                    <xsl:for-each select="$unavailable_items[not(items:substatus=preceding-sibling::*[items:status='reallynotforloan' or items:status='other']/items:substatus)]">
+                                        <xsl:sort select="items:substatus"/>
+                                        <xsl:variable name="current_substatus" select="items:substatus"/>
+                                            <xsl:call-template name="listCallNumbers">
+                                                <xsl:with-param name="items" select="$unavailable_items[items:resultbranch=$currentbranch and items:substatus=$current_substatus]"/>
+                                                <xsl:with-param name="max" select="$OPACResultsMaxItemsUnavailable"/>
+                                                <xsl:with-param name="status_text">
+                                                    <xsl:value-of select="$currentbranch"/>
+                                                    <xsl:text>: </xsl:text>
+                                                    <xsl:if test="items:status='other'">
+                                                        <xsl:value-of select="exsl:node-set($other_status_list)/status[@english=$current_substatus]"/>
+                                                    </xsl:if>
+                                                    <xsl:if test="items:status='reallynotforloan'">
+                                                        <xsl:value-of select="$current_substatus"/>
+                                                    </xsl:if>
+                                                </xsl:with-param>
+                                                <xsl:with-param name="class_block" select="concat('unavailable_',items:substatus)"/>
+                                                <xsl:with-param name="class_status" select="'ItemBranch'"/>
+                                                <xsl:with-param name="OPACItemLocation" select="$OPACItemLocation"/>
+                                            </xsl:call-template>
+                                    </xsl:for-each>
+                                    </span>
+                                </xsl:for-each>
+                            </xsl:when>
+                            <xsl:when test="$OPACResultsUnavailableGroupingBy='substatus'">
+                            </xsl:when>
+                        </xsl:choose>
                     </span></xsl:if>
 
                 </xsl:otherwise>
