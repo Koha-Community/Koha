@@ -61,8 +61,25 @@ $(document).ready(function() {
          toUC(this);
     });
 
-    $("#enrolmentperioddate").datepicker({
-        minDate: 1
+    $("#enrolmentperioddate").flatpickr({
+        /* Default Flatpickr configuration uses Font Awesome icons for arrows. Onboarding doesn't include Font Awesome, so we redefine these arrows with some SVG icons */
+        nextArrow: '<svg width="17" height="17" viewBox="0 0 4.498 4.498" xmlns="http://www.w3.org/2000/svg"><path d="M3.761 2.491c.158.17.47.12.566-.09.085-.158.02-.356-.116-.461L2.562.292C2.445.17 2.3.282 2.217.382c-.087.102-.255.193-.195.35.107.149.254.265.378.399l1.361 1.36zm.496.017c.17-.157.12-.47-.091-.566-.158-.085-.355-.02-.46.117L2.057 3.707c-.12.118-.01.263.091.345.101.087.193.255.35.195.148-.106.264-.254.398-.378l1.36-1.36zm-.746.095c.206.006.457-.124.462-.353-.005-.23-.256-.36-.462-.354-1.054 0-2.109-.002-3.163 0-.174-.003-.234.166-.212.308.01.128-.043.3.104.369.157.056.33.02.493.03h2.778z"/></svg>',
+        prevArrow: '<svg width="17" height="17" viewBox="0 0 4.498 4.498" xmlns="http://www.w3.org/2000/svg"><path d="M.737 2.008c-.158-.17-.47-.12-.566.09-.085.158-.02.356.116.461l1.649 1.648c.117.121.263.01.345-.09.087-.102.255-.193.195-.35-.107-.149-.254-.265-.378-.399L.737 2.008zM.241 1.99c-.17.157-.12.47.091.566.158.085.355.02.46-.117L2.441.792C2.56.674 2.45.53 2.35.447 2.249.36 2.157.192 2 .252c-.148.106-.264.254-.398.378L.242 1.99zm.746-.095C.781 1.89.53 2.02.525 2.249c.005.23.256.36.462.354 1.054 0 2.109.002 3.163 0 .174.003.234-.166.212-.308-.01-.128.043-.3-.104-.369-.157-.056-.33-.02-.493-.03H.987z"/></svg>',
+        minDate: new Date().fp_incr(1),
+        onReady: function( selectedDates, dateStr, instance ){
+            $(instance.input)
+                /* Add a wrapper element so that we can prevent the clear button from wrapping */
+                .wrap("<span class='flatpickr_wrapper'></span>")
+                .after( $("<a/>")
+                    .attr("href","#")
+                    .addClass("clear_date")
+                    .on("click", function(e){
+                        e.preventDefault();
+                        instance.clear();
+                    })
+                    .attr("aria-hidden", true)
+                );
+        }
     }); // Require that "until date" be in the future
 
     $("#category_form").validate({

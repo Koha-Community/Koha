@@ -1,3 +1,5 @@
+@import "flatpickr";
+
 body {
     background-color: #EEE;
     font-family: arial, verdana, helvetica, sans-serif;
@@ -189,99 +191,15 @@ span.required {
     padding: .4em 2em;
 }
 
-
-/* Override core jQueryUI widgets */
-.ui-widget-content {
-    border: 1px solid #B9D8D9;
-    background: #ffffff none;
-    color: #222222;
-}
-
-.ui-widget-header {
-    border: 1px solid #B9D8D9;
-    background: #E6F0F2 none;
-    color: #222222;
-    font-weight: bold;
-}
-
-.ui-state-default,
-.ui-widget-content .ui-state-default,
-.ui-widget-header .ui-state-default {
-    border: 1px solid #B9D8D9;
-    background: #F4F8F9 none;
-    font-weight: normal;
-    color: #555555;
-}
-
-.ui-state-hover,
-.ui-widget-content .ui-state-hover,
-.ui-widget-header .ui-state-hover,
-.ui-state-focus,
-.ui-widget-content .ui-state-focus,
-.ui-widget-header .ui-state-focus {
-    border: 1px solid #B9D8D9;
-    background: #E6F0F2 none;
-    font-weight: normal;
-    color: #212121;
-}
-
-.ui-state-active,
-.ui-widget-content .ui-state-active,
-.ui-widget-header .ui-state-active {
-    border: 1px solid #aaaaaa;
-    background: #ffffff none;
-    font-weight: normal;
-    color: #212121;
-}
-
-.ui-state-highlight,
-.ui-widget-content .ui-state-highlight,
-.ui-widget-header .ui-state-highlight {
-    border: 1px solid #FED22F;
-    background: #FFF4C6;
-    color: #363636;
-}
-
-.ui-state-error,
-.ui-widget-content .ui-state-error,
-.ui-widget-header .ui-state-error {
-    border: 1px solid #cd0a0a;
-    background: #fef1ec;
-    color: #cd0a0a;
-}
-
-.ui-widget,
-.ui-widget input,
-.ui-widget select,
-.ui-widget textarea,
-.ui-widget button {
-    font-family : inherit;
-    font-size : inherit;
-}
-
-/* jQuery UI Datepicker */
-.ui-datepicker table {
-    width: 100%;
-    font-size: .9em;
-    border : 0;
-    border-collapse: collapse;
-    margin:0 0 .4em;
-}
-
-.ui-datepicker th {
-    background : transparent none;
-    padding: .7em .3em;
-    text-align: center;
-    font-weight: bold;
-    border: 0;
-}
-
-.ui-datepicker-trigger {
-    vertical-align: middle;
-    margin : 0 3px;
-}
-.ui-datepicker {
-    box-shadow: 1px 1px 3px 0 #666;
+/* Font Awesome isn't used in the installer, so add custom X icon */
+.clear_date {
+    background-image: url("data:image/svg+xml,%3Csvg width='12' height='12' viewBox='0 0 3.175 3.175' xmlns='http://www.w3.org/2000/svg'%3E%3Cg transform='translate(-74.712 -91.722)'%3E%3Cpath d='M75.321 94.571a.207.207 0 0 0 .293 0l.686-.685.685.685a.207.207 0 0 0 .293 0l.284-.283a.207.207 0 0 0 0-.294l-.686-.685.686-.685a.207.207 0 0 0 0-.294l-.284-.283a.207.207 0 0 0-.293 0l-.685.685-.686-.685a.207.207 0 0 0-.293 0l-.283.283a.207.207 0 0 0 0 .294l.685.685-.685.685a.207.207 0 0 0 0 .294z' fill='%23c33'/%3E%3Cimage x='-117.25' y='-204.6' width='196.44' height='175.61' preserveAspectRatio='none'/%3E%3C/g%3E%3C/svg%3E");
+    background-position: 5px 5px;
+    background-repeat: no-repeat;
+    content: "";
+    display: inline-block;
+    width: 16px;
+    height: 16px;
 }
 
 span.breadcrumbs {
