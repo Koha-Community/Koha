@@ -1366,6 +1366,25 @@
                                 </xsl:for-each>
                             </xsl:when>
                             <xsl:when test="$OPACResultsUnavailableGroupingBy='substatus'">
+                                <!-- Only group by substatus, do not list branch names and individual call numbers. Meant for large consortia -->
+                                <xsl:for-each select="$unavailable_items[not(items:substatus=preceding-sibling::*[items:status='reallynotforloan' or items:status='other']/items:substatus)]">
+                                    <xsl:sort select="items:substatus"/>
+                                    <xsl:variable name="current_substatus" select="items:substatus"/>
+                                    <xsl:call-template name="listCallNumbers">
+                                        <xsl:with-param name="items" select="$unavailable_items[items:substatus=$current_substatus]"/>
+                                        <xsl:with-param name="max" select="0"/>
+                                        <xsl:with-param name="status_text">
+                                            <xsl:if test="items:status='other'">
+                                                <xsl:value-of select="exsl:node-set($other_status_list)/status[@english=$current_substatus]"/>
+                                            </xsl:if>
+                                            <xsl:if test="items:status='reallynotforloan'">
+                                                <xsl:value-of select="$current_substatus"/>
+                                            </xsl:if>
+                                        </xsl:with-param>
+                                        <xsl:with-param name="class_block" select="concat('unavailable_',$current_substatus)"/>
+                                        <xsl:with-param name="class_status" select="UnavailableSubstatus"/>
+                                    </xsl:call-template>
+                                </xsl:for-each>
                             </xsl:when>
                         </xsl:choose>
                     </span></xsl:if>
