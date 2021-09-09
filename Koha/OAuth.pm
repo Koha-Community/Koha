@@ -65,7 +65,7 @@ sub _verify_client_cb {
     # client_id mandatory and exists on the DB
     return (0, 'unauthorized_client') unless $api_key && $api_key->active;
 
-    return (0, 'access_denied') unless $api_key->secret eq $client_secret;
+    return (0, 'access_denied') unless $api_key->validate_secret( $client_secret );
 
     return (1, undef, []);
 }
