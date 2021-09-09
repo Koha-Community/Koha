@@ -97,7 +97,7 @@ subtest 'Net::OAuth2::AuthorizationServer missing tests' => sub {
     my $form_data = {
         grant_type    => 'client_credentials',
         client_id     => $api_key->client_id,
-        client_secret => $api_key->secret
+        client_secret => $api_key->plain_text_secret
     };
 
     $t->post_ok( '/api/v1/oauth/token', form => $form_data )->status_is(200)
@@ -138,7 +138,7 @@ sub run_oauth_tests {
 
     my $formData;
     my $client_id     = $api_key->client_id;
-    my $client_secret = $api_key->secret;
+    my $client_secret = $api_key->plain_text_secret;
 
     if ( $test_case eq 'header' ) {
 
@@ -154,7 +154,7 @@ sub run_oauth_tests {
         $formData = {
             grant_type    => 'client_credentials',
             client_id     => $api_key->client_id,
-            client_secret => $api_key->secret
+            client_secret => $api_key->plain_text_secret
         };
 
         $t->post_ok('/api/v1/oauth/token', form => $formData)
