@@ -137,9 +137,9 @@
                                         <input type="submit" name="submit" value="Save" />
                                         <a href="#" class="cancel hidePanel showHoliday">Cancel</a>
                                     </fieldset>
-                                </fieldset>
+                                </fieldset> <!-- /.brief -->
                             </form>
-                        </div>
+                        </div> <!-- /#showHoliday -->
 
                         <!-- ***************************** Panel to deal with new holidays **********************  -->
                         <div class="panel" id="newHoliday">
@@ -224,9 +224,9 @@
                                         <input type="submit" name="submit" value="Save" />
                                         <a href="#" class="cancel hidePanel newHoliday">Cancel</a>
                                     </fieldset>
-                                </fieldset>
+                                </fieldset> <!-- /.brief -->
                             </form>
-                        </div>
+                        </div> <!-- /#newHoliday -->
 
                         <!-- *************************************************************************************** -->
                         <!-- ******                          END OF FLAT PANELS                               ****** -->
@@ -250,7 +250,7 @@
                                 <input type="submit" value="Copy" />
                             </form>
                         </div>
-                    </div>
+                    </div> <!-- /.col-sm-6 -->
 
                     <div class="col-sm-6">
                         <div class="help">
@@ -270,7 +270,7 @@
                                 <span class="key repeatableyearly">Holiday repeating yearly</span>
                                 <span class="key exception">Holiday exception</span>
                             </p>
-                        </div>
+                        </div> <!-- /#help -->
 
                         <div id="holiday-list">
                             <!-- Exceptions First -->
@@ -302,8 +302,8 @@
                                             </tr>
                                         [% END %]
                                     </tbody>
-                                </table>
-                            [% END %]
+                                </table> <!-- /#holidayexceptions -->
+                            [% END # /IF ( EXCEPTION_HOLIDAYS_LOOP ) %]
 
                             [% IF ( WEEK_DAYS_LOOP ) %]
                                 <h3>Weekly - Repeatable holidays</h3>
@@ -324,8 +324,8 @@
                                             </tr>
                                         [% END %]
                                     </tbody>
-                                </table>
-                            [% END %]
+                                </table> <!-- /#holidayweeklyrepeatable -->
+                            [% END # / IF ( WEEK_DAYS_LOOP ) %]
 
                             [% IF ( DAY_MONTH_HOLIDAYS_LOOP ) %]
                                 <h3>Yearly - Repeatable holidays</h3>
@@ -352,8 +352,8 @@
                                             </tr>
                                         [% END %]
                                     </tbody>
-                                </table>
-                            [% END %]
+                                </table> <!-- /#holidaysyearlyrepeatable -->
+                            [% END # /IF ( DAY_MONTH_HOLIDAYS_LOOP ) %]
 
                             [% IF ( HOLIDAYS_LOOP ) %]
                                 <h3>Unique holidays</h3>
@@ -382,11 +382,11 @@
                                             </tr>
                                         [% END %]
                                     </tbody>
-                                </table>
-                            [% END %]
-                        </div>
-                    </div>
-                </div>
+                                </table> <!-- #holidaysunique -->
+                            [% END # /IF ( HOLIDAYS_LOOP ) %]
+                        </div> <!-- /#holiday-list -->
+                    </div> <!-- /.col-sm-6 -->
+                </div> <!-- /.row -->
             </main>
         </div> <!-- /.col-sm-10.col-sm-push-2 -->
 
