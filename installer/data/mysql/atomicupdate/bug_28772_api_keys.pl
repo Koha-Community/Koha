@@ -25,8 +25,10 @@ return {
         });
 
         foreach my $api_key (@$results) {
-            my $digest = Koha::AuthUtils::hash_password( $api_key->{secret} );
-            $sth->execute( $digest, $api_key->{client_id} );
+            unless ( $api_key->{secret} =~ m/^\$2a\$08\$/ ) {
+                my $digest = Koha::AuthUtils::hash_password( $api_key->{secret} );
+                $sth->execute( $digest, $api_key->{client_id} );
+            }
         }
     },
 }
