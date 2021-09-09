@@ -131,7 +131,7 @@ subtest 'validate_secret() tests' => sub {
     my $secret = $api_key->plain_text_secret;
 
     ok( $api_key->validate_secret( $secret ), 'Valid secret returns true' );
-    ok( !$api_key->validate_secret( 'Wrong secret' ), 'Invalid secret returns true' );
+    ok( !$api_key->validate_secret( 'Wrong secret' ), 'Invalid secret returns false' );
 
     $schema->storage->txn_rollback;
 };
