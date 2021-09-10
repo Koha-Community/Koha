@@ -218,6 +218,7 @@ subtest 'read_from_file() tests' => sub {
             },
             'timezone' => '',
             'bcrypt_settings' => '__BCRYPT_SETTINGS__',
+            'encryption_key' => '__ENCRYPTION_KEY__',
             'dev_install' => '0',
             'strict_sql_modes' => '0',
             'plugin_repos' => '',
