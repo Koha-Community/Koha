@@ -651,7 +651,7 @@
                         [% END %]
                     [% END # /UNLESS circborrowernumber %]
                     <div class="toolbar-tabs-container">
-                        [% IF ( BIG_LOOP.size > 1 ) %]
+                        [% IF ( BIG_LOOP && BIG_LOOP.size > 1 ) %]
                             <ul class="toolbar-tabs">
                                 [%- FOREACH BIG_LOO IN BIG_LOOP -%]
                                     [% IF loop.first %]
