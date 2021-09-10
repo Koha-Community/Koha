@@ -49,7 +49,7 @@ my $search_patrons_with_suggestion_perm_only =
     ( $permissions && $permissions eq 'suggestions.suggestions_manage' )
         ? 1 : 0;
 
-my $patron_categories = Koha::Patron::Categories->search_limited;
+my $patron_categories = Koha::Patron::Categories->search_with_library_limits({}, {order_by => ['description']});;
 $template->param(
     patrons_with_suggestion_perm_only => $search_patrons_with_suggestion_perm_only,
     view => ( $input->request_method() eq "GET" ) ? "show_form" : "show_results",
