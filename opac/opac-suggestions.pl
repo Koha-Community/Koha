@@ -172,6 +172,10 @@ if ( $op eq "add_confirm" ) {
         }
     }
     else {
+        for my $f ( split(/\s*\,\s*/, C4::Context->preference("OPACSuggestionUnwantedFields") ) ) {
+            delete $suggestion->{$f};
+        }
+
         my $scrubber = C4::Scrubber->new();
         foreach my $suggest ( keys %$suggestion ) {
 
