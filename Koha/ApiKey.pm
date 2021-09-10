@@ -80,7 +80,7 @@ sub validate_secret {
 
     my $digest = Koha::AuthUtils::hash_password( $secret, $self->secret );
 
-    return $self->secret eq $digest;
+    return ( $self->secret eq $digest ) ? 1 : 0;
 }
 
 =head3 plain_text_secret
