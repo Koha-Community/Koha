@@ -73,7 +73,7 @@ mysqluser="koha_$name"
 mysqlpwd="$( xmlstarlet sel -t -v 'yazgfs/config/pass' /etc/koha/sites/$name/koha-conf.xml )"
 zcat "$sqldump" | mysql --defaults-extra-file=/etc/mysql/koha-common.cnf
 mysql --defaults-extra-file=/etc/mysql/koha-common.cnf <<eof || true
-DROP USER '$mysqluser';
+DROP USER IF EXISTS '$mysqluser';
 eof
 mysql --defaults-extra-file=/etc/mysql/koha-common.cnf << eof || true
 CREATE USER '$mysqluser' IDENTIFIED BY '$mysqlpwd';
