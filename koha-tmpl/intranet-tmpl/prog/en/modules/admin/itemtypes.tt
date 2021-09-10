@@ -311,12 +311,12 @@ Item types &rsaquo; Administration &rsaquo; Koha
                 </li>
                 <li>
                     <label for="rentalcharge">Rental charge: </label>
-                    <input type="text" id="rentalcharge" name="rentalcharge" size="10" value="[% itemtype.rentalcharge | $Price on_editing => 1 %]" />
+                    <input type="text" id="rentalcharge" name="rentalcharge" size="10" value="[% itemtype.rentalcharge | $Price on_editing => 1 %]" min="0" />
                     <span class="hint">This fee is charged once per checkout/renewal per item</span>
                 </li>
                 <li>
                     <label for="rentalcharge_daily">Daily rental charge: </label>
-                    <input type="text" id="rentalcharge_daily" name="rentalcharge_daily" size="10" value="[% itemtype.rentalcharge_daily | $Price on_editing => 1 %]" />
+                    <input type="text" id="rentalcharge_daily" name="rentalcharge_daily" size="10" value="[% itemtype.rentalcharge_daily | $Price on_editing => 1 %]" min="0" />
                     <span class="hint">This fee is charged at checkout/renewal time for each day between the checkout/renewal date and due date for loans specified in days.</span>
                 </li>
                 <li>
@@ -330,7 +330,7 @@ Item types &rsaquo; Administration &rsaquo; Koha
                 </li>
                 <li>
                     <label for="rentalcharge_hourly">Hourly rental charge: </label>
-                    <input type="text" id="rentalcharge_hourly" name="rentalcharge_hourly" size="10" value="[% itemtype.rentalcharge_hourly | $Price on_editing => 1 %]" />
+                    <input type="text" id="rentalcharge_hourly" name="rentalcharge_hourly" size="10" value="[% itemtype.rentalcharge_hourly | $Price on_editing => 1 %]" min="0" />
                     <span class="hint">This fee is charged at checkout/renewal time for each hour between the checkout/renewal date and due date for loans specified in hours.</span>
                 </li>
                 <li>
@@ -344,11 +344,11 @@ Item types &rsaquo; Administration &rsaquo; Koha
                 </li>
                 <li>
                     <label for="defaultreplacecost">Default replacement cost: </label>
-                    <input type="text" id="defaultreplacecost" name="defaultreplacecost" size="10" value="[% itemtype.defaultreplacecost | $Price on_editing => 1 %]" />
+                    <input type="text" id="defaultreplacecost" name="defaultreplacecost" size="10" value="[% itemtype.defaultreplacecost | $Price on_editing => 1 %]" min="0" />
                 </li>
                 <li>
                     <label for="processfee">Processing fee (when lost): </label>
-                    <input type="text" id="processfee" name="processfee" size="10" value="[% itemtype.processfee | $Price on_editing => 1 %]" />
+                    <input type="text" id="processfee" name="processfee" size="10" value="[% itemtype.processfee | $Price on_editing => 1 %]" min="0" />
                 </li>
                 <li>
                     <label for="checkinmsg">Checkin message: </label>
@@ -601,7 +601,10 @@ Item types &rsaquo; Administration &rsaquo; Koha
                 rules: {
                     itemtype: { required: true },
                     description: { required: true },
-                    rentalcharge: { number: true }
+                    rentalcharge: { number: true },
+                    rentalcharge_hourly: { number: true },
+                    defaultreplacecost: { number: true },
+                    processfee: { number: true }
                 }
             });
             $("#itemtype").on("blur",function(){
