@@ -80,7 +80,7 @@ SKIP: {
         $s->submit_form;
         is( $driver->find_element('//div[@class="two-factor-status"]')->get_text(), 'Status: Enabled', '2FA is enabled' );
         $patron = $patron->get_from_storage;
-        is( $patron->secret, $secret32, 'secret is set in DB' );
+        is( $patron->decoded_secret, $secret32, 'encrypted secret is set in DB' );
 
     };
 
@@ -89,6 +89,7 @@ SKIP: {
 
         my $mainpage = $s->base_url . q|mainpage.pl|;
 
+        my $secret32 = $patron->decoded_secret;
         { # ok first try
             $driver->get($mainpage . q|?logout.x=1|);
             $driver->get($s->base_url . q|circ/circulation.pl?borrowernumber=|.$patron->borrowernumber);
@@ -98,7 +99,8 @@ SKIP: {
             like( $driver->get_title, qr(Two-factor authentication), 'Must be on the second auth screen' );
             is( login_error($s), undef );
 
-            my $auth = Koha::Auth::TwoFactorAuth->new({patron => $patron});
+            my $auth = Koha::Auth::TwoFactorAuth->new(
+                { patron => $patron, secret32 => $secret32 } );
             my $code = $auth->code();
             $auth->clear;
             $driver->find_element('//form[@id="loginform"]//input[@id="otp_token"]')->send_keys($code);
@@ -138,7 +140,8 @@ SKIP: {
             $driver->find_element('//input[@type="submit"]')->click;
             is( login_error($s), "Invalid two-factor code" );
 
-            my $auth = Koha::Auth::TwoFactorAuth->new({patron => $patron});
+            my $auth = Koha::Auth::TwoFactorAuth->new(
+                { patron => $patron, secret32 => $secret32 } );
             my $code = $auth->code();
             $auth->clear;
             $driver->find_element('//form[@id="loginform"]//input[@id="otp_token"]')->send_keys($code);
