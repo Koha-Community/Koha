@@ -39,7 +39,7 @@ use C4::Items qw( ModItemTransfer );
 use C4::Log;
 use C4::Reserves qw( AddReserve ModReserve ModReserveCancelAll ModReserveAffect CheckReserves GetOtherReserves );
 use C4::Overdues qw( CalcFine UpdateFine get_chargeable_units );
-use Koha::DateUtils;
+use Koha::DateUtils qw( dt_from_string output_pref );
 use Koha::Database;
 use Koha::Items;
 use Koha::Item::Transfers;

@@ -24,7 +24,7 @@ use Test::More tests => 3;
 use Koha::Item::Transfer;
 use Koha::Item::Transfers;
 use Koha::Database;
-use Koha::DateUtils;
+use Koha::DateUtils qw( dt_from_string );
 
 use t::lib::TestBuilder;
 use t::lib::Dates;

@@ -40,7 +40,7 @@ use C4::Context;
 use C4::Installer;
 use Koha::Database;
 use Koha;
-use Koha::DateUtils;
+use Koha::DateUtils qw( dt_from_string output_pref );
 
 use MARC::Record;
 use MARC::File::XML ( BinaryEncoding => 'utf8' );

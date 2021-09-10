@@ -32,7 +32,7 @@ use C4::Reserves qw( AddReserve CanItemBeReserved CanBookBeReserved );
 use C4::Items;
 
 use Koha::Database;
-use Koha::DateUtils;
+use Koha::DateUtils qw( dt_from_string output_pref );
 use Koha::Biblios;
 use Koha::Biblioitems;
 use Koha::Items;

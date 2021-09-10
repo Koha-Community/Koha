@@ -3,7 +3,7 @@
 use Modern::Perl;
 
 use C4::Context;
-use Koha::DateUtils;
+use Koha::DateUtils qw( dt_from_string output_pref );
 
 use Test::MockModule;
 use Test::More tests => 9;

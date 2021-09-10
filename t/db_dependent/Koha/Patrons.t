@@ -42,7 +42,7 @@ use Koha::Patron::Attribute::Types;
 use Koha::Patron::Categories;
 use Koha::Patron::Relationship;
 use Koha::Database;
-use Koha::DateUtils;
+use Koha::DateUtils qw( dt_from_string output_pref );
 use Koha::Virtualshelves;
 use Koha::Notice::Messages;
 

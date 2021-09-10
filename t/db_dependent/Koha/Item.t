@@ -29,7 +29,7 @@ use C4::Circulation qw( AddIssue AddReturn );
 use Koha::Caches;
 use Koha::Items;
 use Koha::Database;
-use Koha::DateUtils;
+use Koha::DateUtils qw( dt_from_string );
 use Koha::Old::Items;
 
 use List::MoreUtils qw(all);

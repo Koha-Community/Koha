@@ -12,8 +12,7 @@ use t::lib::TestBuilder;
 
 use C4::Context;
 use Koha::Database;
-use Koha::DateUtils;
-use Koha::UploadedFile;
+use Koha::DateUtils qw( dt_from_string );
 use Koha::UploadedFiles;
 use Koha::Uploader;
 

@@ -38,7 +38,7 @@ use C4::OAI::Sets qw(AddOAISet);
 
 use Koha::Biblio::Metadatas;
 use Koha::Database;
-use Koha::DateUtils;
+use Koha::DateUtils qw( dt_from_string );
 
 BEGIN {
     use_ok('Koha::OAI::Server::DeletedRecord');

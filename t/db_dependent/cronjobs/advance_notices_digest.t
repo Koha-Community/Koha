@@ -25,7 +25,7 @@ use t::lib::Mocks;
 use File::Spec;
 use File::Basename;
 
-use Koha::DateUtils;
+use Koha::DateUtils qw( dt_from_string );
 
 my $scriptDir = dirname(File::Spec->rel2abs( __FILE__ ));
 

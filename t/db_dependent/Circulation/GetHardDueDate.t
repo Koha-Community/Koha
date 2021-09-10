@@ -4,7 +4,7 @@ use Modern::Perl;
 use C4::Context;
 use DateTime;
 use Koha::Database;
-use Koha::DateUtils;
+use Koha::DateUtils qw( dt_from_string );
 use Koha::CirculationRules;
 use Koha::Library;
 

@@ -20,7 +20,7 @@ use Modern::Perl;
 use C4::Context;
 use C4::Letters qw( GetQueuedMessages );
 use Koha::Database;
-use Koha::DateUtils;
+use Koha::DateUtils qw( dt_from_string );
 use Koha::Patrons;
 
 use t::lib::TestBuilder;

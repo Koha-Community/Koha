@@ -6,7 +6,7 @@ use DateTime::Duration;
 
 use C4::Context;
 use Koha::Database;
-use Koha::DateUtils;
+use Koha::DateUtils qw( dt_from_string );
 use Koha::Virtualshelves;
 use Koha::Virtualshelfshares;
 use Koha::Virtualshelfcontents;

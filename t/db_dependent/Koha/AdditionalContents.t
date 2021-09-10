@@ -24,7 +24,7 @@ use Test::Exception;
 
 use Koha::AdditionalContents;
 use Koha::Database;
-use Koha::DateUtils;
+use Koha::DateUtils qw( dt_from_string );
 
 use t::lib::TestBuilder;
 

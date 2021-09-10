@@ -30,7 +30,7 @@ use C4::Items;
 use C4::Biblio qw( AddBiblio );
 use Koha::Database;
 use Koha::Account::Lines;
-use Koha::DateUtils;
+use Koha::DateUtils qw( dt_from_string );
 use Koha::Items;
 use Koha::Patrons;
 

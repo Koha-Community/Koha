@@ -21,7 +21,7 @@ use Modern::Perl;
 use File::Basename;
 use File::Path;
 use DateTime;
-use Koha::DateUtils;
+use Koha::DateUtils qw( dt_from_string );
 use Test::MockModule;
 use Test::More tests => 16;
 use Carp qw/croak carp/;

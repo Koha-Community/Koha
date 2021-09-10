@@ -25,7 +25,7 @@ use t::lib::TestBuilder;
 
 use DateTime;
 use Koha::Caches;
-use Koha::DateUtils;
+use Koha::DateUtils qw( dt_from_string );
 
 use_ok('Koha::Calendar');
 

@@ -16,7 +16,7 @@ use C4::Context;
 use C4::Members;
 use C4::Circulation qw( AddIssue AddReturn );
 use Koha::Database;
-use Koha::DateUtils;
+use Koha::DateUtils qw( dt_from_string );
 use Koha::Items;
 use Koha::Holds;
 use Koha::CirculationRules;

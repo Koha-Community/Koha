@@ -4,7 +4,7 @@ use Modern::Perl;
 use C4::Members;
 use C4::Circulation qw( AddIssue AddReturn CanBookBeIssued );
 use Koha::Database;
-use Koha::DateUtils;
+use Koha::DateUtils qw( dt_from_string );
 use Koha::Patrons;
 
 use Test::More tests => 61;

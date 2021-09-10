@@ -25,7 +25,7 @@ use Test::Exception;
 use Koha::Suggestion;
 use Koha::Suggestions;
 use Koha::Database;
-use Koha::DateUtils;
+use Koha::DateUtils qw( dt_from_string output_pref );
 
 use t::lib::TestBuilder;
 

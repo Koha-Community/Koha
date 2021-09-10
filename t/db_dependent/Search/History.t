@@ -17,7 +17,7 @@ use URI::Escape;
 use List::Util qw( shuffle );
 
 use C4::Context;
-use Koha::DateUtils;
+use Koha::DateUtils qw( dt_from_string output_pref );
 
 my $schema = Koha::Database->new->schema;
 $schema->storage->txn_begin;

@@ -23,7 +23,7 @@ use Test::More tests => 10;
 
 use C4::Context;
 use Koha::Database;
-use Koha::DateUtils;
+use Koha::DateUtils qw( dt_from_string );
 use Koha::Patron::Category;
 use Koha::Patron::Categories;
 use t::lib::Dates;

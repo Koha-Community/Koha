@@ -21,7 +21,7 @@ use DateTime;
 use Time::HiRes qw/gettimeofday time/;
 use Test::More tests => 2;
 use C4::Members;
-use Koha::DateUtils;
+use Koha::DateUtils qw( dt_from_string output_pref );
 use Koha::Database;
 
 use t::lib::TestBuilder;

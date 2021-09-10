@@ -22,7 +22,7 @@ use Test::More tests => 1;
 use C4::Circulation qw( AddReturn );
 use C4::Context;
 use Koha::Database;
-use Koha::DateUtils;
+use Koha::DateUtils qw( dt_from_string );
 use Koha::Items;
 
 use t::lib::Mocks;

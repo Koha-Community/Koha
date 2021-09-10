@@ -23,7 +23,7 @@ use Test::MockModule;
 use DateTime;
 use DateTime::Duration;
 use Koha::Caches;
-use Koha::DateUtils;
+use Koha::DateUtils qw( dt_from_string );
 
 use t::lib::Mocks;
 

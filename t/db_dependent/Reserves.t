@@ -34,7 +34,7 @@ use C4::Members;
 use C4::Reserves qw( AddReserve CheckReserves GetReservesControlBranch ModReserve ModReserveAffect ReserveSlip CalculatePriority CanReserveBeCanceledFromOpac CanBookBeReserved IsAvailableForItemLevelRequest MoveReserve ChargeReserveFee RevertWaitingStatus CanItemBeReserved MergeHolds );
 use Koha::ActionLogs;
 use Koha::Caches;
-use Koha::DateUtils;
+use Koha::DateUtils qw( dt_from_string output_pref );
 use Koha::Holds;
 use Koha::Items;
 use Koha::Libraries;

@@ -30,7 +30,8 @@ use C4::Context;
 use C4::Log qw( logaction );
 use C4::Output qw(output_html_with_http_headers);
 use C4::Languages qw(getTranslatedLanguages);
-use Koha::DateUtils;
+use Koha::DateUtils qw( dt_from_string output_pref );
+
 use Koha::AdditionalContents;
 
 my $cgi = CGI->new;

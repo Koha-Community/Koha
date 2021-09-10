@@ -9,7 +9,7 @@ use t::lib::TestBuilder;
 use C4::Members;
 use C4::Reserves qw( CancelExpiredReserves );
 use Koha::Database;
-use Koha::DateUtils;
+use Koha::DateUtils qw( dt_from_string );
 use Koha::Holds;
 
 my $schema = Koha::Database->new->schema;

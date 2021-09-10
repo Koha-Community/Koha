@@ -4,16 +4,16 @@ use DateTime::TimeZone;
 
 use C4::Context;
 
-use Test::More tests => 79;
+use Test::More tests => 78;
 
 use Test::MockModule;
 use Test::Warn;
 use Time::HiRes qw/ gettimeofday /;
 use Try::Tiny;
 
-use t::lib::Mocks;
+use Koha::DateUtils qw( dt_from_string output_pref format_sqldatetime );
 
-BEGIN { use_ok('Koha::DateUtils'); }
+use t::lib::Mocks;
 
 t::lib::Mocks::mock_preference('dateformat', 'us');
 t::lib::Mocks::mock_preference('TimeFormat', 'This_is_not_used_but_called');

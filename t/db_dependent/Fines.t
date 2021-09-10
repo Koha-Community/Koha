@@ -5,7 +5,7 @@ use Modern::Perl;
 use C4::Context;
 use C4::Overdues qw( CalcFine );
 use Koha::Database;
-use Koha::DateUtils;
+use Koha::DateUtils qw( dt_from_string );
 
 use Test::More tests => 5;
 

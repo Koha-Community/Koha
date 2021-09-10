@@ -26,7 +26,7 @@ use Koha::Biblios;
 use Koha::Checkouts::ReturnClaims;
 use Koha::Checkouts;
 use Koha::Database;
-use Koha::DateUtils;
+use Koha::DateUtils qw( dt_from_string );
 use Koha::Holds;
 use Koha::Items;
 use Koha::Patrons;

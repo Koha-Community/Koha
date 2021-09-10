@@ -21,11 +21,17 @@ use DateTime;
 use C4::Context;
 use Koha::Exceptions;
 
-use base 'Exporter';
+use vars qw(@ISA @EXPORT_OK);
+BEGIN {
+    require Exporter;
+    @ISA = qw(Exporter);
 
-our @EXPORT = (
-    qw( dt_from_string output_pref format_sqldatetime )
-);
+    @EXPORT_OK = qw(
+        dt_from_string
+        output_pref
+        format_sqldatetime
+    );
+}
 
 =head1 DateUtils
 

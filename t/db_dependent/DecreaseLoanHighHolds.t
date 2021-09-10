@@ -20,7 +20,7 @@ use DateTime;
 
 use C4::Circulation qw( CalcDateDue checkHighHolds CanBookBeIssued );
 use Koha::Database;
-use Koha::DateUtils;
+use Koha::DateUtils qw( dt_from_string );
 use Koha::Patrons;
 use Koha::Biblio;
 use Koha::Item;

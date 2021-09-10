@@ -28,7 +28,7 @@ use C4::Serials qw( NewSubscription SearchSubscriptions );
 
 use Koha::Acquisition::Booksellers;
 use Koha::Database;
-use Koha::DateUtils;
+use Koha::DateUtils qw( dt_from_string output_pref );
 
 my $schema  = Koha::Database->schema();
 my $builder = t::lib::TestBuilder->new;

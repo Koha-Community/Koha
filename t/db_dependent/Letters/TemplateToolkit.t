@@ -33,7 +33,7 @@ use C4::Letters qw( GetPreparedLetter );
 use C4::Members qw( IssueSlip );
 use C4::Biblio;
 use Koha::Database;
-use Koha::DateUtils;
+use Koha::DateUtils qw( dt_from_string output_pref );
 use Koha::ArticleRequests;
 use Koha::Biblio;
 use Koha::Biblioitem;

@@ -29,7 +29,7 @@ use C4::Items qw( ModItemTransfer );
 use C4::Circulation qw( AddIssue );
 
 use Koha::AuthUtils;
-use Koha::DateUtils;
+use Koha::DateUtils qw( dt_from_string );
 
 BEGIN {
     use_ok('C4::ILSDI::Services', qw( AuthenticatePatron GetPatronInfo LookupPatron HoldTitle HoldItem GetRecords RenewLoan ));

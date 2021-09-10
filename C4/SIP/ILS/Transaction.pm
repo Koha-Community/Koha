@@ -8,7 +8,7 @@ use Carp;
 use strict;
 use warnings;
 use C4::Context;
-use Koha::DateUtils;
+use Koha::DateUtils qw( dt_from_string );
 use Koha::Checkouts;
 
 my %fields = (

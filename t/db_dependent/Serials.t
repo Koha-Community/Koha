@@ -12,7 +12,7 @@ use C4::Biblio qw( AddBiblio GetMarcFromKohaField );
 use C4::Budgets qw( AddBudgetPeriod AddBudget );
 use C4::Items qw( AddItemFromMarc );
 use Koha::Database;
-use Koha::DateUtils;
+use Koha::DateUtils qw( dt_from_string output_pref );
 use Koha::Acquisition::Booksellers;
 use t::lib::Mocks;
 use t::lib::TestBuilder;

@@ -10,7 +10,7 @@ use DateTime::Duration;
 use C4::Items qw( GetMarcItem ToggleNewStatus );
 use C4::Biblio qw( AddBiblio GetMarcFromKohaField );
 use C4::Context;
-use Koha::DateUtils;
+use Koha::DateUtils qw( dt_from_string );
 use Koha::Items;
 use t::lib::Mocks;
 use t::lib::TestBuilder;

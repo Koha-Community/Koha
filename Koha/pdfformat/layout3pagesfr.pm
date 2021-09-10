@@ -29,7 +29,7 @@ use utf8;
 
 use C4::Acquisition;
 use Koha::Number::Price;
-use Koha::DateUtils;
+use Koha::DateUtils qw( dt_from_string output_pref );
 use Koha::Libraries;
 
 BEGIN {

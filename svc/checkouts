@@ -28,7 +28,7 @@ use C4::Overdues qw(GetFine);
 use C4::Context;
 
 use Koha::AuthorisedValues;
-use Koha::DateUtils;
+use Koha::DateUtils qw( dt_from_string output_pref );
 use Koha::ItemTypes;
 
 my $input = CGI->new;

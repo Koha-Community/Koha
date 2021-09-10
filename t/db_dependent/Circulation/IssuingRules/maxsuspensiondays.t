@@ -8,7 +8,7 @@ use C4::Context;
 use C4::Circulation qw( AddIssue AddReturn );
 use C4::Biblio qw( AddBiblio );
 use Koha::Database;
-use Koha::DateUtils;
+use Koha::DateUtils qw( dt_from_string output_pref );
 use Koha::Patron::Debarments qw( GetDebarments DelDebarment );
 use Koha::Patrons;
 

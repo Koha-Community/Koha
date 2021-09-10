@@ -3,7 +3,7 @@
 use Modern::Perl;
 
 use C4::Reserves qw( ModReserve ModReserveAffect );
-use Koha::DateUtils;
+use Koha::DateUtils qw( dt_from_string );
 
 use t::lib::Mocks;
 use t::lib::TestBuilder;

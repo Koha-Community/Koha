@@ -21,7 +21,7 @@
 use Modern::Perl;
 
 use DateTime;
-use Koha::DateUtils;
+use Koha::DateUtils qw( dt_from_string );
 use Test::More tests => 8;
 use Test::Warn;
 

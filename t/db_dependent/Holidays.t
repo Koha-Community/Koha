@@ -25,8 +25,7 @@ use DateTime::TimeZone;
 use t::lib::TestBuilder;
 use C4::Context;
 use Koha::Database;
-use Koha::DateUtils;
-
+use Koha::DateUtils qw( dt_from_string );
 
 BEGIN {
     use_ok('Koha::Calendar');

@@ -25,7 +25,7 @@ use JSON qw( decode_json );
 
 use Koha::Database;
 use Koha::BackgroundJobs;
-use Koha::DateUtils;
+use Koha::DateUtils qw( dt_from_string );
 
 use t::lib::TestBuilder;
 use t::lib::Mocks;
