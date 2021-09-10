@@ -19,6 +19,7 @@ requires 'Class::Accessor', '0.3';
 requires 'Class::Factory::Util', '1.6';
 requires 'Class::Inspector', '1.31';
 requires 'Clone', '0.37';
+requires 'Crypt::CBC', '2.33';
 requires 'Crypt::Eksblowfish::Bcrypt', '0.008';
 requires 'DBD::Mock', '1.39';
 requires 'DBD::mysql', '4.004';
