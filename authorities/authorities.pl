@@ -322,7 +322,7 @@ sub GetMandatoryFieldZ3950 {
     }else{
         return {
             '200a' => 'authorpersonal',
-            '210a' => 'authormeetingcon', #210 in UNIMARC is used for both corporation and meeting
+            '210a' => 'authorcorp', #210 in UNIMARC is used for both corporation and meeting
             '230a' => 'uniformtitle',
         };
     }
