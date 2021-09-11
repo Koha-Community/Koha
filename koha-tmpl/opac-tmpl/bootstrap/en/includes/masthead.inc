@@ -41,7 +41,7 @@
                         </a>
                         <div aria-labelledby="listsmenu" role="menu" class="dropdown-menu">
                             [% IF some_public_shelves.count %]
-                                <a class="dropdown-item" href="/cgi-bin/koha/opac-shelves.pl?op=list&amp;category=2" tabindex="-1" role="menuitem"><strong>Public lists</strong></a>
+                                <a class="dropdown-item" href="/cgi-bin/koha/opac-shelves.pl?op=list&amp;public=1" tabindex="-1" role="menuitem"><strong>Public lists</strong></a>
                                 [% SET number_of_public_shelves = 0 %]
                                 [% FOREACH s IN some_public_shelves %]
                                     <a class="dropdown-item" href="/cgi-bin/koha/opac-shelves.pl?op=view&amp;shelfnumber=[% s.shelfnumber | uri %]&amp;sortfield=[% s.sortfield | uri %]" tabindex="-1" role="menuitem">[% s.shelfname | html %]</a>
@@ -49,14 +49,14 @@
                                     [% IF number_of_public_shelves >= 10 %][% LAST %][% END %]
                                 [% END %]
                                 [% IF some_public_shelves > 10 %]
-                                    <a class="dropdown-item listmenulink" href="/cgi-bin/koha/opac-shelves.pl?op=list&amp;category=2" tabindex="-1" role="menuitem">View all</a>
+                                    <a class="dropdown-item listmenulink" href="/cgi-bin/koha/opac-shelves.pl?op=list&amp;public=1" tabindex="-1" role="menuitem">View all</a>
                                 [% END %]
                             [% END %]
                             [% IF some_public_shelves.count > 0 %]
                                 <div class="dropdown-divider"></div>
                             [% END %]
                             [% IF Koha.Preference( 'opacuserlogin' ) == 1 %]
-                                <a class="dropdown-item" href="/cgi-bin/koha/opac-shelves.pl?op=list&amp;category=1" tabindex="-1" role="menuitem"><strong>Your lists</strong></a>
+                                <a class="dropdown-item" href="/cgi-bin/koha/opac-shelves.pl?op=list&amp;public=0" tabindex="-1" role="menuitem"><strong>Your lists</strong></a>
                                 [% IF loggedinusername %]
                                     [% IF some_private_shelves.count %]
                                         [% SET number_of_private_shelves = 0 %]
@@ -66,7 +66,7 @@
                                             [% IF number_of_private_shelves >= 10 %][% LAST %][% END %]
                                         [% END %]
                                         [% IF some_private_shelves > 10 %]
-                                            <a class="dropdown-item listmenulink" href="/cgi-bin/koha/opac-shelves.pl?op=list&amp;category=1" tabindex="-1" role="menuitem">View all</a>
+                                            <a class="dropdown-item listmenulink" href="/cgi-bin/koha/opac-shelves.pl?op=list&amp;public=0" tabindex="-1" role="menuitem">View all</a>
                                         [% END %]
                                     [% ELSE %]
                                         <a class="dropdown-item disabled" href="#" tabindex="-1" role="menuitem">No private lists</a>

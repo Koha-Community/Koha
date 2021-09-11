@@ -630,7 +630,7 @@
                                 [% IF referer == 'view' %]
                                     <a href="/cgi-bin/koha/opac-shelves.pl?op=view&amp;shelfnumber=[% shelf.shelfnumber | uri %]" class="cancel">Cancel</a>
                                 [% ELSE %]
-                                    <a href="/cgi-bin/koha/opac-shelves.pl?op=list&amp;public=0" class="cancel">Cancel</a>
+                                    <a href="/cgi-bin/koha/opac-shelves.pl?op=list" class="cancel">Cancel</a>
                                 [% END %]
                             </fieldset>
                         </form>
@@ -1047,7 +1047,7 @@ function AdjustRemark() {
         [% ELSE %]
             $("#anyone_remark").hide();
         [% END %]
-    } else { // category==2
+    } else { // public==1
         $("#anyone_remark").hide();
     }
 }
