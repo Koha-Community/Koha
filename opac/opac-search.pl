@@ -79,12 +79,13 @@ my $cgi = CGI->new;
 my $branch_group_limit = $cgi->param("branch_group_limit");
 if ( $branch_group_limit ) {
     if ( $branch_group_limit =~ /^multibranchlimit-/ ) {
+        # branch_group_limit is deprecated, it should no longer be used
         # For search groups we are going to convert this branch_group_limit CGI
-        # parameter into a multibranchlimit CGI parameter for the purposes of
+        # parameter into a multibranchlimit limit CGI parameter for the purposes of
         # actually performing the query
         $cgi->param(
-            -name => 'multibranchlimit',
-            -values => substr($branch_group_limit, 17)
+            -name => 'limit',
+            -values => 'multibranchlimit:' . substr($branch_group_limit, 17)
         );
     } else {
         $cgi->append(
