@@ -1392,19 +1392,21 @@
             // Loop over each container in the template which contains covers
             $(".cover-slider").each(function( index ){
                 var lightbox_descriptions = [];
+                var first_shown = 0;
                 $(this).find(".cover-image").each( function( index ){
                     var div = $(this);
                     // Find the image in the container
                     var img = div.find("img")[0];
                     if( img && $(img).length > 0 ){
                         var description = "";
-                        if( (( img.complete != null && !img.complete) || img.naturalHeight == 0 ) && div.attr("id") != "googlejacket-coverimg" ){
+                        if( img.naturalHeight == 0 && div.attr("id") != "googlejacket-coverimg" ){
                             // No image loaded in the container. Remove the slide
                             div.remove();
                         } else {
                             // All slides start hidden. If this is the first one, show it.
-                            if( index == 0 ){
+                            if( first_shown == 0 ){
                                 div.show();
+                                first_shown = 1;
                             }
                             // Check if Amazon image is present
                             if ( div.attr("id") == "amazon-bookcoverimg"  ) {
