@@ -20,6 +20,7 @@ use C4::Members;
 use Koha::AuthUtils qw/hash_password/;
 use Koha::Database;
 use Koha::Patrons;
+use Koha::Auth::TwoFactorAuth;
 
 BEGIN {
     use_ok('C4::Auth', qw( checkauth haspermission track_login_daily checkpw get_template_and_user checkpw_hash ));
@@ -38,7 +39,7 @@ $schema->storage->txn_begin;
 
 subtest 'checkauth() tests' => sub {
 
-    plan tests => 4;
+    plan tests => 5;
 
     my $patron = $builder->build_object({ class => 'Koha::Patrons', value => { flags => undef } });
 
@@ -106,6 +107,86 @@ subtest 'checkauth() tests' => sub {
         $cgi->mock( 'request_method', sub { return 'GET' } );
         ( $userid, $cookie, $sessionID, $flags ) = C4::Auth::checkauth( $cgi, 'authrequired' );
         is( $userid, undef, 'If librarian user is used and password with GET, they should not be logged in' );
+    };
+
+    subtest 'Two-factor authentication' => sub {
+
+        my $patron = $builder->build_object(
+            { class => 'Koha::Patrons', value => { flags => 1 } } );
+        my $password = 'password';
+        $patron->set_password( { password => $password } );
+        $cgi = Test::MockObject->new();
+
+        my $otp_token;
+        our ( $logout, $sessionID, $verified );
+        $cgi->mock(
+            'param',
+            sub {
+                my ( $self, $param ) = @_;
+                if    ( $param eq 'userid' )    { return $patron->userid; }
+                elsif ( $param eq 'password' )  { return $password; }
+                elsif ( $param eq 'otp_token' ) { return $otp_token; }
+                elsif ( $param eq 'logout.x' )  { return $logout; }
+                else                            { return; }
+            }
+        );
+        $cgi->mock( 'request_method', sub { return 'POST' } );
+        $cgi->mock( 'cookie', sub { return $sessionID } );
+
+        my $two_factor_auth = Test::MockModule->new( 'Koha::Auth::TwoFactorAuth' );
+        $two_factor_auth->mock( 'verify', sub {$verified} );
+
+        my ( $userid, $cookie, $flags );
+        ( $userid, $cookie, $sessionID, $flags ) = C4::Auth::checkauth( $cgi, 'authrequired', undef, 'intranet' );
+
+        sub logout {
+            my $cgi = shift;
+            $logout = 1;
+            undef $sessionID;
+            C4::Auth::checkauth( $cgi, 'authrequired', undef, 'intranet' );
+            $logout = 0;
+        }
+
+        t::lib::Mocks::mock_preference( 'TwoFactorAuthentication', 0 );
+        $patron->auth_method('password')->store;
+        ( $userid, $cookie, $sessionID, $flags ) = C4::Auth::checkauth( $cgi, 'authrequired', undef, 'intranet' );
+        is( $userid, $patron->userid, 'Succesful login' );
+        is( C4::Auth::get_session($sessionID)->param('waiting-for-2FA'), undef, 'Second auth not required' );
+        logout($cgi);
+
+        $patron->auth_method('two-factor')->store;
+        ( $userid, $cookie, $sessionID, $flags ) = C4::Auth::checkauth( $cgi, 'authrequired', undef, 'intranet' );
+        is( $userid, $patron->userid, 'Succesful login' );
+        is( C4::Auth::get_session($sessionID)->param('waiting-for-2FA'), undef, 'Second auth not required' );
+        logout($cgi);
+
+        t::lib::Mocks::mock_preference( 'TwoFactorAuthentication', 1 );
+        $patron->auth_method('password')->store;
+        ( $userid, $cookie, $sessionID, $flags ) = C4::Auth::checkauth( $cgi, 'authrequired', undef, 'intranet' );
+        is( $userid, $patron->userid, 'Succesful login' );
+        is( C4::Auth::get_session($sessionID)->param('waiting-for-2FA'), undef, 'Second auth not required' );
+        logout($cgi);
+
+        $patron->auth_method('two-factor')->store;
+        ( $userid, $cookie, $sessionID, $flags ) = C4::Auth::checkauth( $cgi, 'authrequired', undef, 'intranet' );
+        is( $userid, $patron->userid, 'Succesful login' );
+        my $session = C4::Auth::get_session($sessionID);
+        is( C4::Auth::get_session($sessionID)->param('waiting-for-2FA'), 1, 'Second auth required' );
+
+        # Wrong OTP token
+        $otp_token = "wrong";
+        $verified = 0;
+        $patron->auth_method('two-factor')->store;
+        ( $userid, $cookie, $sessionID, $flags ) = C4::Auth::checkauth( $cgi, 'authrequired', undef, 'intranet' );
+        is( $userid, $patron->userid, 'Succesful login' );
+        is( C4::Auth::get_session($sessionID)->param('waiting-for-2FA'), 1, 'Second auth still required after wrong OTP token' );
+
+        $otp_token = "good";
+        $verified = 1;
+        ( $userid, $cookie, $sessionID, $flags ) = C4::Auth::checkauth( $cgi, 'authrequired', undef, 'intranet' );
+        is( $userid, $patron->userid, 'Succesful login' );
+        is( C4::Auth::get_session($sessionID)->param('waiting-for-2FA'), 0, 'Second auth no longer required if OTP token has been verified' );
+
     };
 
     C4::Context->_new_userenv; # For next tests
