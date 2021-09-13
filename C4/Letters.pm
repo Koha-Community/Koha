@@ -1406,13 +1406,23 @@ sub _send_message_by_email {
         );
     }
     catch {
-        _set_message_status(
-            {
-                message_id   => $message->{'message_id'},
-                status       => 'failed',
-                failure_code => 'INVALID_EMAIL'
-            }
-        );
+        if ( ref($_) eq 'Koha::Exceptions::BadParameter' ) {
+            _set_message_status(
+                {
+                    message_id   => $message->{'message_id'},
+                    status       => 'failed',
+                    failure_code => "INVALID_EMAIL:".$_->parameter
+                }
+            );
+        } else {
+            _set_message_status(
+                {
+                    message_id   => $message->{'message_id'},
+                    status       => 'failed',
+                    failure_code => 'UNKNOWN_ERROR'
+                }
+            );
+        }
         return 0;
     };
     return unless $email;
