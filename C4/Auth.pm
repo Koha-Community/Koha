@@ -909,7 +909,7 @@ sub checkauth {
             && ( my $otp_token = $query->param('otp_token') ) )
         {
             my $patron    = Koha::Patrons->find( { userid => $userid } );
-            my $auth      = Koha::Auth::TwoFactorAuth::get_auth( { patron => $patron } );
+            my $auth      = Koha::Auth::TwoFactorAuth->new( { patron => $patron } );
             my $verified = $auth->verify($otp_token);
             $auth->clear;
             if ( $verified ) {

@@ -48,7 +48,7 @@ my $op = $cgi->param('op') // '';
 if ( $op eq 'register-2FA' ) {
     my $pin_code = $cgi->param('pin_code');
     my $secret32 = $cgi->param('secret32');
-    my $auth     = Koha::Auth::TwoFactorAuth::get_auth(
+    my $auth     = Koha::Auth::TwoFactorAuth->new(
         { patron => $logged_in_user, secret32 => $secret32 } );
 
     my $verified = $auth->verify(
@@ -75,7 +75,7 @@ if ( $op eq 'register-2FA' ) {
 if ( $op eq 'enable-2FA' ) {
 
     my $secret = Koha::AuthUtils::generate_salt( 'weak', 16 );
-    my $auth = Koha::Auth::TwoFactorAuth::get_auth(
+    my $auth = Koha::Auth::TwoFactorAuth->new(
         { patron => $logged_in_user, secret => $secret } );
 
     my $secret32 = $auth->generate_secret32;

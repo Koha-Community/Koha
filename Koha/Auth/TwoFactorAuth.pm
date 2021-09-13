@@ -38,8 +38,8 @@ It's based on Auth::GoogleAuth
 
 =cut
 
-sub get_auth {
-    my ($params) = @_;
+sub new {
+    my ($class, $params) = @_;
     my $patron   = $params->{patron};
     my $secret   = $params->{secret};
     my $secret32 = $params->{secret32};
@@ -52,7 +52,7 @@ sub get_auth {
     my $key_id = sprintf "%s_%s",
       $issuer, ( $patron->email || $patron->userid );
 
-    return Auth::GoogleAuth->new(
+    return $class->SUPER::new(
         {
             ( $secret   ? ( secret   => $secret )   : () ),
             ( $secret32 ? ( secret32 => $secret32 ) : () ),
