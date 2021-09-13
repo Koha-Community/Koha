@@ -99,7 +99,7 @@
                                     [%# CAS authentication is too complicated for modal window %]
                                         <a class="nav-link login-link" href="/cgi-bin/koha/opac-user.pl"><i class="fa fa-user fa-icon-black fa-fw" aria-hidden="true"></i> <span class="userlabel">Log in to your account</span></a>
                                 [% ELSIF ( Koha.Preference('GoogleOpenIDConnect') == 1 ) %]
-                                    <a class="nav-link login-link" href="/cgi-bin/koha/svc/auth/googleopenidconnect"><i class="fa fa-user fa-icon-black fa-fw" aria-hidden="true"></i> <span class="userlabel">Log in to your account</span></a>
+                                    <a href="/cgi-bin/koha/svc/auth/googleopenidconnect" class="nav-link login-link loginModal-trigger"><i class="fa fa-user fa-icon-black fa-fw" aria-hidden="true"></i> <span class="userlabel">Log in to your account</span></a>
                                 [% ELSE %]
                                     <a href="/cgi-bin/koha/opac-user.pl" class="nav-link login-link loginModal-trigger"><i class="fa fa-user fa-icon-black fa-fw" aria-hidden="true"></i> <span class="userlabel">Log in to your account</span></a>
                                 [% END %]
@@ -371,6 +371,10 @@
                 <form action="/cgi-bin/koha/opac-user.pl" method="post" name="auth" id="modalAuth">
                     <input type="hidden" name="has-search-query" id="has-search-query" value="" />
                     <div class="modal-body">
+                        [% IF ( Koha.Preference('GoogleOpenIDConnect') == 1 ) %]
+                            <a href="/cgi-bin/koha/svc/auth/googleopenidconnect" class="btn btn-light" id="openid_connect"><i class="fa fa-google" aria-hidden="true"></i> Log in with Google</a>
+                            <p>If you do not have a Google account, but do have a local account, you can still log in: </p>
+                        [% END # /IF GoogleOpenIDConnect %]
                         [% IF ( shibbolethAuthentication ) %]
                             [% IF ( invalidShibLogin ) %]
                                 <!-- This is what is displayed if shibboleth login has failed to match a koha user -->
