@@ -249,7 +249,7 @@ if ( $op eq 'insert' || $op eq 'modify' || $op eq 'save' || $op eq 'duplicate' )
         qr/^guarantor_surname$/,
         qr/^delete_guarantor$/,
     );
-    push @keys_to_delete, map { qr/^$_$/ } split( /\s*\|\s*/, C4::Context->preference('PatronSelfRegistrationBorrowerUnwantedField') || q{} );
+    push @keys_to_delete, map { qr/^$_$/ } split( /\s*\|\s*/, C4::Context->preference('BorrowerUnwantedField') || q{} );
     for my $regexp (@keys_to_delete) {
         for (keys %newdata) {
             delete($newdata{$_}) if /$regexp/;
