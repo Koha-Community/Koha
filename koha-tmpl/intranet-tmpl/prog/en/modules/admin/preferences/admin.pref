@@ -165,37 +165,39 @@ Administration:
                   emailAddress: emailAddress
     Google OpenID Connect:
         -
-            - "Use Google OpenID Connect login: "
+            - "Use Google OpenID Connect login in the OPAC: "
             - pref: GoogleOpenIDConnect
               choices:
                 1: "Yes"
                 0: "No"
-            - You will need to select OAuth2 when creating an app in the Google cloud console, and set the web origin to your_opac_url and the redirect url to your_opac_url/cgi-bin/koha/svc/auth/googleopenidconnect .
+            - You will need to select OAuth2 when creating an app in the Google cloud console, and set the web origin to your_opac_url and the redirect url to your_opac_url/cgi-bin/koha/svc/auth/googleopenidconnect. Requires <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=GoogleOAuth2ClientID">GoogleOAuth2ClientID</a> and <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=GoogleOAuth2ClientSecret">GoogleOAuth2ClientSecret</a> to be set.
         -
             - "Google OAuth2 Client ID: "
             - pref: GoogleOAuth2ClientID
+            -  Along with <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=GoogleOAuth2ClientSecret">GoogleOAuth2ClientSecret</a>, enables <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=GoogleOpenIDConnect">GoogleOpenIDConnect.</a>
         -
             - "Google OAuth2 Client Secret: "
             - pref: GoogleOAuth2ClientSecret
+            -  Along with <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=GoogleOAuth2ClientID">GoogleOAuth2ClientID</a>, enables <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=GoogleOpenIDConnect">GoogleOpenIDConnect.</a>
         -
             - "Restrict Google OpenID Connect to this domain (or subdomain of this domain): "
             - pref: GoogleOpenIDConnectDomain
-            - . Leave blank for all Google domains.
+            - Leave blank for all Google domains. Requires <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=GoogleOpenIDConnect">GoogleOpenIDConnect</a>.
         -
             - pref: GoogleOpenIDConnectAutoRegister
               choices:
                 1: Allow
                 0: "Don't allow"
-            - patrons logging in with Google Open ID to automatically register.
+            - patrons logging in with Google Open ID to automatically register. Requires <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=GoogleOpenIDConnect">GoogleOpenIDConnect</a>.
         -
             - "Use this category code when automatically registering a Google Open ID patron: "
             - pref: GoogleOpenIDConnectDefaultCategory
               choices: patron-categories
-            - "."
+            - Requires <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=GoogleOpenIDConnect">GoogleOpenIDConnect</a>.
         -
             - "Use this branch code when automatically registering a Google Open ID patron: "
             - pref: GoogleOpenIDConnectDefaultBranch
-            - "."
+            - Requires <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=GoogleOpenIDConnect">GoogleOpenIDConnect</a>.
     Share anonymous usage statistics:
         -
             - "Share anonymous Koha usage data with the Koha community: "
