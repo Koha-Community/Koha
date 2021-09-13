@@ -77,8 +77,10 @@ sub create {
 
     my $args = {};
     $args->{from} = $params->{from} || C4::Context->preference('KohaAdminEmailAddress');
-    Koha::Exceptions::BadParameter->throw("Invalid 'from' parameter: ".$args->{from})
-        unless Koha::Email->is_valid($args->{from}); # from is mandatory
+    Koha::Exceptions::BadParameter->throw(
+        error     => "Invalid 'from' parameter: " . $args->{from},
+        parameter => 'from'
+    ) unless Koha::Email->is_valid( $args->{from} );    # from is mandatory
 
     $args->{subject} = $params->{subject} // '';
 
@@ -89,8 +91,10 @@ sub create {
         $args->{to} = $params->{to};
     }
 
-    Koha::Exceptions::BadParameter->throw("Invalid 'to' parameter: ".$args->{to})
-        unless Koha::Email->is_valid($args->{to}); # to is mandatory
+    Koha::Exceptions::BadParameter->throw(
+        error     => "Invalid 'to' parameter: " . $args->{to},
+        parameter => 'to'
+    ) unless Koha::Email->is_valid( $args->{to} );    # to is mandatory
 
     my $addresses = {};
     $addresses->{reply_to} = $params->{reply_to};
@@ -110,9 +114,11 @@ sub create {
 
     foreach my $address ( keys %{$addresses} ) {
         Koha::Exceptions::BadParameter->throw(
-            "Invalid '$address' parameter: " . $addresses->{$address} )
+            error => "Invalid '$address' parameter: " . $addresses->{$address},
+            parameter => $address
+          )
           if $addresses->{$address}
-            and !Koha::Email->is_valid($addresses->{$address});
+          and !Koha::Email->is_valid( $addresses->{$address} );
     }
 
     $args->{cc} = $addresses->{cc}
