@@ -1474,12 +1474,12 @@ sub buildQuery {
             $limit_cgi       .= "&limit=" . uri_escape_utf8($this_limit);
             $limit_desc      .= " $this_limit";
         }
-        elsif ( $this_limit =~ 'multibranchlimit|^branch' ) {
+        elsif ( $this_limit =~ '^multibranchlimit:|^branch:' ) {
             $limit_cgi  .= "&limit=" . uri_escape_utf8($this_limit);
             $limit .= " and " if $limit || $query;
             my $branchfield  = C4::Context->preference('SearchLimitLibrary');
             my @branchcodes;
-            if(  $this_limit =~ 'multibranchlimit' ){
+            if(  $this_limit =~ '^multibranchlimit:' ){
                 my ($group_id) = ( $this_limit =~ /^multibranchlimit:(.*)$/ );
                 my $search_group = Koha::Library::Groups->find( $group_id );
                 @branchcodes  = map { $_->branchcode } $search_group->all_libraries;
@@ -1510,17 +1510,7 @@ sub buildQuery {
             $limit .= " and " if $limit || $query;
             $limit      .= "$this_limit";
             $limit_cgi  .= "&limit=" . uri_escape_utf8($this_limit);
-            if ($this_limit =~ /^branch:(.+)/) {
-                my $branchcode = $1;
-                my $library = Koha::Libraries->find( $branchcode );
-                if (defined $library) {
-                    $limit_desc .= " branch:" . $library->branchname;
-                } else {
-                    $limit_desc .= " $this_limit";
-                }
-            } else {
-                $limit_desc .= " $this_limit";
-            }
+            $limit_desc .= " $this_limit";
         }
     }
     foreach my $k (keys (%group_OR_limits)) {
