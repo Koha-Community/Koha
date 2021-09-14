@@ -132,8 +132,8 @@ return {
 
             my $idnew = $parent_idnew || $c->{idnew};
             my $code = ( grep {$_ eq $location} qw( staff_and_opac staff_only opac_only slip ) ) ? "${location}_$idnew" : "News_$idnew";
-            $dbh->do(q|UPDATE additional_contents SET code=? WHERE idnew = ?|, undef, $code, $idnew) if $parent_idnew;
-            $dbh->do(q|UPDATE additional_contents SET code=? WHERE idnew = ?|, undef, $code, $idnew);
+            $dbh->do(q|UPDATE additional_contents SET code=? WHERE idnew = ?|, undef, $code, $parent_idnew) if $parent_idnew;
+            $dbh->do(q|UPDATE additional_contents SET code=? WHERE idnew = ?|, undef, $code, $c->{idnew});
         }
 
         $dbh->do(q|
