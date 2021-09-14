@@ -47,6 +47,16 @@
     [% END %]
 [% END %]
 
+[% BLOCK options_for_authorised_values %]
+    [% FOREACH av IN authorised_values %]
+        [% IF av.authorised_value == selected_av %]
+            <option value="[% av.authorised_value | html %]" selected="selected">[% av.lib | html %]</option>
+        [% ELSE %]
+            <option value="[% av.authorised_value | html %]">[% av.lib | html %]</option>
+        [% END %]
+    [% END %]
+[% END %]
+
 [% BLOCK options_for_item_types %]
     [% FOREACH itemtype IN itemtypes %]
         [% IF itemtype.itemtype == selected_itemtype %]

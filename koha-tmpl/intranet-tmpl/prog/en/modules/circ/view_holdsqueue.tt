@@ -65,6 +65,9 @@
     [% IF ( total ) %]
         <div class="results">[% total | html %] items found for
             [% IF ( branchlimit ) %][% Branches.GetName( branchlimit ) | html %][% ELSE %]All libraries[% END %]
+            [% IF ( itemtypeslimit ) %] and item type:([% ItemTypes.GetDescription( itemtypeslimit ) | html %])[% END %]
+            [% IF ( ccodeslimit ) %] and collection code:([% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.ccode' authorised_value = ccodeslimit ) | html %])[% END %]
+            [% IF ( locationslimit ) %] and shelving location:([% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.location' authorised_value = locationslimit ) | html %])[% END %]
         </div>
     [% ELSE %]
         <div class="dialog message">No items found.</div>
@@ -200,7 +203,7 @@
 	[% END %]
 
 [% UNLESS ( total ) %]
-<form name="f" action="/cgi-bin/koha/circ/view_holdsqueue.pl" method="post">
+<form name="f" action="/cgi-bin/koha/circ/view_holdsqueue.pl">
 	<fieldset class="rows">
 	<ol>
         <li>
@@ -208,6 +211,27 @@
             <select name="branchlimit" id="branchlimit">
                 <option value="">All</option>
                 [% PROCESS options_for_libraries libraries => Branches.all( only_from_group => 1 ) %]
+            </select>
+        </li>
+        <li>
+            <label for="itemtypeslimit">Item type: </label>
+            <select name="itemtypeslimit" id="itemtypeslimit">
+                <option value="">All</option>
+                [% PROCESS options_for_item_types itemtypes => ItemTypes.Get() %]
+            </select>
+        </li>
+        <li>
+            <label for="ccodeslimit">Collection code: </label>
+            <select name="ccodeslimit" id="ccodeslimit">
+                <option value="">All</option>
+                [% PROCESS options_for_authorised_values authorised_values => AuthorisedValues.GetAuthValueDropbox( 'CCODE' ) %]
+            </select>
+        </li>
+        <li>
+            <label for="locationsslimit">Shelving location: </label>
+            <select name="locationslimit" id="ccodeslimit">
+                <option value="">All</option>
+                [% PROCESS options_for_authorised_values authorised_values => AuthorisedValues.GetAuthValueDropbox( 'LOC' ) %]
             </select>
         </li>
     </ol></fieldset>

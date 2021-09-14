@@ -44,15 +44,24 @@ my $params = $query->Vars;
 my $run_report     = $params->{'run_report'};
 my $branchlimit    = $params->{'branchlimit'};
 my $itemtypeslimit = $params->{'itemtypeslimit'};
+my $ccodeslimit = $params->{'ccodeslimit'};
+my $locationslimit = $params->{'locationslimit'};
 
 if ( $run_report ) {
-    # XXX GetHoldsQueueItems() does not support $itemtypeslimit!
-    my $items = GetHoldsQueueItems($branchlimit, $itemtypeslimit);
+    my $items = GetHoldsQueueItems({
+        branchlimit => $branchlimit,
+        itemtypeslimit => $itemtypeslimit,
+        ccodeslimit => $ccodeslimit,
+        locationslimit => $locationslimit
+    });
     for my $item ( @$items ) {
         $item->{patron} = Koha::Patrons->find( $item->{borrowernumber} );
     }
     $template->param(
         branchlimit     => $branchlimit,
+        itemtypeslimit     => $itemtypeslimit,
+        ccodeslimit     => $ccodeslimit,
+        locationslimit     => $locationslimit,
         total      => scalar @$items,
         itemsloop  => $items,
         run_report => $run_report,

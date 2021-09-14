@@ -114,14 +114,14 @@ sub UpdateTransportCostMatrix {
 
 =head2 GetHoldsQueueItems
 
-  GetHoldsQueueItems($branch);
+  GetHoldsQueueItems({ branchlimit => $branch, itemtypeslimit =>  $itype, ccodeslimit => $ccode, locationslimit => $location );
 
 Returns hold queue for a holding branch. If branch is omitted, then whole queue is returned
 
 =cut
 
 sub GetHoldsQueueItems {
-    my ($branchlimit) = @_;
+    my $params = shift;
     my $dbh   = C4::Context->dbh;
 
     my @bind_params = ();
@@ -135,10 +135,23 @@ sub GetHoldsQueueItems {
                        JOIN biblio      USING (biblionumber)
                   LEFT JOIN biblioitems USING (biblionumber)
                   LEFT JOIN items       USING (  itemnumber)
+                  WHERE 1=1
                 /;
-    if ($branchlimit) {
-        $query .=" WHERE tmp_holdsqueue.holdingbranch = ?";
-        push @bind_params, $branchlimit;
+    if ($params->{branchlimit}) {
+        $query .="AND tmp_holdsqueue.holdingbranch = ? ";
+        push @bind_params, $params->{branchlimit};
+    }
+    if( $params->{itemtypeslimit} ) {
+        $query .=" AND items.itype = ? ";
+        push @bind_params, $params->{itemtypeslimit};
+    }
+    if( $params->{ccodeslimit} ) {
+        $query .=" AND items.ccode = ? ";
+        push @bind_params, $params->{ccodeslimit};
+    }
+    if( $params->{locationslimit} ) {
+        $query .=" AND items.location = ? ";
+        push @bind_params, $params->{locationslimit};
     }
     $query .= " ORDER BY ccode, location, cn_sort, author, title, pickbranch, reservedate";
     my $sth = $dbh->prepare($query);
