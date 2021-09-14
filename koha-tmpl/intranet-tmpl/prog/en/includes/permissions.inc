@@ -213,6 +213,11 @@
             Manage item search fields
         </span>
         <span class="permissioncode">([% name | html %])</span>
+    [%- CASE 'manage_search_filters' -%]
+        <span class="sub_permission manage_search_filters_subpermission">
+            Manage saved search filters
+        </span>
+        <span class="permissioncode">([% name | html %])</span>
     [%- CASE 'manage_search_engine_config' -%]
         <span class="sub_permission manage_search_engine_config_subpermission">
             Manage search engine configuration

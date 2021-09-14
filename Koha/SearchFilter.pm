@@ -1,0 +1,92 @@
+package Koha::SearchFilter;
+
+# This file is part of Koha.
+#
+# Koha is free software; you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation; either version 3 of the License, or (at your option) any later
+# version.
+#
+# Koha is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+# A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with Koha; if not, see <http://www.gnu.org/licenses>.
+
+use Modern::Perl;
+
+
+use Koha::Database;
+
+use base qw(Koha::Object);
+
+=head1 NAME
+
+Koha::SearchFilter - Koha Search filter object class
+
+=head1 API
+
+=head2 Class methods
+
+=head3 to_api_mapping
+
+=cut
+
+sub to_api_mapping {
+    return {
+        id                  => 'search_filter_id',
+        query               => 'filter_query',
+        limits              => 'filter_limits',
+    };
+}
+
+=head3 expand_filter
+
+    my $expanded_filter = $filter->expand_filter;
+
+    Returns the filter as an arrayref of limit queries suitable to
+    be passed to QueryBuilder
+
+=cut
+
+sub expand_filter {
+    my $self = shift;
+
+    my $query_part = $self->query;
+    my $limits_part = $self->limits;
+
+    my $limits = decode_json($limits_part)->{limits};
+
+    my $query = decode_json($query_part);
+    my $operators = $query->{operators};
+    my $operands = $query->{operands};
+    my $indexes = $query->{indexes};
+
+    my $query_limit;
+    for( my $i = 0; $i < scalar @$operands; $i++ ){
+        next unless @$operands[$i];
+        my $index = @$indexes[$i] ? @$indexes[$i] . "=" : "";
+        my $query = "(" . @$operands[$i] . ")";
+        my $operator = "";
+        $operator = @$operators[$i-1] ? " " . @$operators[$i-1] . " " : scalar @$operands > $i ? " AND " : "" if $i > 0;
+        my $limit = $operator . $index . $query;
+        $query_limit .= $limit;
+    }
+
+    push @$limits, "(".$query_limit.")" if $query_limit;
+
+    return $limits;
+}
+
+=head2 Internal methods
+
+=head3 _type
+
+=cut
+
+sub _type {
+    return 'SearchFilter';
+}
+
+1;
