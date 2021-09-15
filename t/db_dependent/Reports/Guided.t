@@ -365,7 +365,7 @@ count(h.reservedate) AS 'holds'
 
 subtest 'Email report test' => sub {
 
-    plan tests => 12;
+    plan tests => 14;
     my $dbh = C4::Context->dbh;
 
     my $id1 = $builder->build({ source => 'Borrower',value => { surname => 'mailer', email => 'a@b.com', emailpro => 'b@c.com' } })->{ borrowernumber };
@@ -379,7 +379,8 @@ subtest 'Email report test' => sub {
             value => {
                 content => "[% surname %]",
                 branchcode => "",
-                message_transport_type => 'email'
+                message_transport_type => 'email',
+                is_html => undef
             }
         });
     my $letter2 = $builder->build({
@@ -387,7 +388,18 @@ subtest 'Email report test' => sub {
             value => {
                 content => "[% firstname %]",
                 branchcode => "",
-                message_transport_type => 'email'
+                message_transport_type => 'email',
+                is_html => 0
+            }
+        });
+
+    my $letter3 = $builder->build({
+            source => 'Letter',
+            value => {
+                content => "[% surname %]",
+                branchcode => "",
+                message_transport_type => 'email',
+                is_html => 1
             }
         });
 
@@ -416,11 +428,15 @@ subtest 'Email report test' => sub {
     ($emails, $errors ) = C4::Reports::Guided::EmailReport({report_id => $report1, module => $letter1->{module} , code => $letter1->{code}, from => 'the@future.ooh' });
     is( $emails->[0]{letter}->{content}, "mailer", "Message has expected content");
     is( $emails->[1]{letter}->{content}, "norman", "Message has expected content");
+    is( $emails->[0]{letter}->{'content-type'}, undef, "Message content type is not set for plain text mail");
 
     ($emails, $errors ) = C4::Reports::Guided::EmailReport({report_id => $report1, module => $letter1->{module} , code => $letter1->{code}, from => 'the@future.ooh', email => 'emailpro' });
     is_deeply( $errors, [{'NO_EMAIL_COL'=>3}],"We report missing email in emailpro column");
     is( $emails->[0]->{to_address}, 'b@c.com', "Message uses correct email");
     is( $emails->[1]->{to_address}, 'd@e.com', "Message uses correct email");
+
+    ($emails) = C4::Reports::Guided::EmailReport({report_id => $report1, module => $letter3->{module} , code => $letter3->{code}, from => 'the@future.ooh' });
+    is( $emails->[0]{letter}->{'content-type'}, 'text/html; charset="UTF-8"', "Message has expected content type");
 
 };
 
