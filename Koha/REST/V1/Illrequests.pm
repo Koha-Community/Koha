@@ -71,6 +71,15 @@ sub list {
         : ()
     })->as_list;
 
+    my $fetch_backends = {};
+    foreach my $request (@requests) {
+        $fetch_backends->{ $request->backend } ||=
+          Koha::Illrequest->new->load_backend( $request->backend );
+    }
+
+    # Pre-load the backend object to avoid useless backend lookup/loads
+    @requests = map { $_->_backend( $fetch_backends->{ $_->backend } ); $_ } @requests;
+
     # Identify patrons & branches that
     # we're going to need and get them
     my $to_fetch = {
@@ -78,7 +87,7 @@ sub list {
         branches     => {},
         capabilities => {}
     };
-    foreach my $req(@requests) {
+    foreach my $req (@requests) {
         $to_fetch->{patrons}->{$req->borrowernumber} = 1 if $embed{patron};
         $to_fetch->{branches}->{$req->branchcode} = 1 if $embed{library};
         $to_fetch->{capabilities}->{$req->backend} = 1 if $embed{capabilities};
@@ -113,8 +122,7 @@ sub list {
         my @backends = keys %{$to_fetch->{capabilities}};
         if (scalar @backends > 0) {
             foreach my $bc(@backends) {
-                my $backend = Koha::Illrequest->new->load_backend($bc);
-                $to_fetch->{$bc} = $backend->capabilities;
+                $to_fetch->{$bc} = $fetch_backends->{$bc}->capabilities;
             }
         }
     }
