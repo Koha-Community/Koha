@@ -1124,9 +1124,9 @@ legend:hover {
                                                             [% END %]
                                                         [% ELSE %]
                                                             [% IF ( opduplicate ) %]
-                                                                <input type="password" id="password" name="password" size="20" />
+                                                                <input type="password" id="password" name="password" size="20" autocomplete="new-password" />
                                                             [% ELSE %]
-                                                                <input type="password" id="password" name="password" size="20" value="[% password | html %]" />
+                                                                <input type="password" id="password" name="password" size="20" autocomplete="new-password" value="[% password | html %]" />
                                                             [% END %]
                                                         [% END # /IF ( NoUpdateLogin ) %]
                                                     [% ELSE # IF ( opadd ) %]
@@ -1136,7 +1136,7 @@ legend:hover {
                                                                 <input type="password" id="password" name="password" size="20"  disabled="disabled" value="****" />
                                                             [% ELSE %]
                                                                 [% IF ( opduplicate ) %]
-                                                                    <input type="password" id="password" name="password" size="20" />
+                                                                    <input type="password" id="password" name="password" autocomplete="new-password" size="20" />
                                                                 [% ELSE %]
                                                                     <input type="password" id="password" name="password" size="20" value="****" />
                                                                 [% END %]
@@ -1145,7 +1145,7 @@ legend:hover {
                                                             [% IF ( NoUpdateLogin ) %]
                                                                 <input type="password" id="password" name="password" size="20"  disabled="disabled" value="" />
                                                             [% ELSE %]
-                                                                <input type="password" id="password" name="password" size="20" value="" />
+                                                                <input type="password" id="password" name="password" size="20" autocomplete="new-password" value="" />
                                                             [% END %]
                                                         [% END # /IF ( password ) %]
                                                     [% END # /IF ( opadd )  %]
