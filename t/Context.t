@@ -18,7 +18,7 @@
 use Modern::Perl;
 
 use DBI;
-use Test::More tests => 34;
+use Test::More tests => 35;
 use Test::MockModule;
 use Test::Warn;
 use YAML::XS;
@@ -56,6 +56,20 @@ subtest 'yaml_preference() tests' => sub {
     is( $pref, undef, 'Returned undef' );
 
     $context->unmock( 'preference' );
+};
+
+subtest 'multivalue_preference() tests' => sub {
+
+    plan tests => 3;
+
+    t::lib::Mocks::mock_preference( 'MultiValuedSyspref', '' );
+    is_deeply( C4::Context->multivalue_preference('MultiValuedSyspref'), [] );
+
+    t::lib::Mocks::mock_preference( 'MultiValuedSyspref', 'some' );
+    is_deeply( C4::Context->multivalue_preference('MultiValuedSyspref'), ['some'] );
+
+    t::lib::Mocks::mock_preference( 'MultiValuedSyspref', 'some|more|values' );
+    is_deeply( C4::Context->multivalue_preference('MultiValuedSyspref'), [ 'some', 'more', 'values' ] );
 };
 
 subtest 'needs_install() tests' => sub {
