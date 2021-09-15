@@ -8,7 +8,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 57;
+use Test::More tests => 58;
 use Data::Dumper;
 
 use C4::Calendar qw( new insert_single_holiday );
@@ -163,7 +163,7 @@ $dbh->do("DELETE FROM items WHERE holdingbranch = '$borrower_branchcode'");
 # Frst branch from StaticHoldsQueueWeight
 test_queue ('take from lowest cost branch', 0, $borrower_branchcode, $other_branches[0]);
 test_queue ('take from lowest cost branch', 1, $borrower_branchcode, $least_cost_branch_code);
-my $queue = C4::HoldsQueue::GetHoldsQueueItems($least_cost_branch_code) || [];
+my $queue = C4::HoldsQueue::GetHoldsQueueItems({ branchlmit => $least_cost_branch_code}) || [];
 my $queue_item = $queue->[0];
 ok( $queue_item
  && $queue_item->{pickbranch} eq $borrower_branchcode
@@ -1734,6 +1734,86 @@ subtest 'Remove holds on check-in match' => sub {
 
     is( $count_2, 0,
         "Holds queue has no elements, even when queue was not rebuilt" );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest "GetHoldsQueueItems" => sub {
+    plan tests => 4;
+
+    $schema->storage->txn_begin;
+
+    my $ccode = $builder->build_object(
+        {
+            class => 'Koha::AuthorisedValues',
+            value => {
+                category => 'CCODE'
+            }
+        }
+    );
+    my $location = $builder->build_object(
+        {
+            class => 'Koha::AuthorisedValues',
+            value => {
+                category => 'LOC'
+            }
+        }
+    );
+    my $item_1 = $builder->build_sample_item();
+    my $item_2 = $builder->build_sample_item(
+        {
+            itype => $item_1->itype,
+            ccode => $ccode->authorised_value
+        }
+    );
+    my $item_3 = $builder->build_sample_item(
+        {
+            itype    => $item_1->itype,
+            ccode    => $item_2->ccode,
+            location => $location->authorised_value
+        }
+    );
+
+    my $itemnumber_1 = $item_1->itemnumber;
+    my $itemnumber_2 = $item_2->itemnumber;
+    my $itemnumber_3 = $item_3->itemnumber;
+
+    my $biblionumber_1 = $item_1->biblionumber;
+    my $biblionumber_2 = $item_2->biblionumber;
+    my $biblionumber_3 = $item_3->biblionumber;
+
+    my $sth = $dbh->prepare(q{ SELECT  COUNT(*) FROM tmp_holdsqueue });
+    $sth->execute();
+    my ($count) = $sth->fetchrow_array;
+
+    $dbh->do( "
+        INSERT INTO tmp_holdsqueue (itemnumber,biblionumber,surname,firstname,phone,borrowernumber,title,notes) VALUES
+        ($itemnumber_1,$biblionumber_1,'','','',22,'',''),
+        ($itemnumber_2,$biblionumber_2,'','','',32,'',''),
+        ($itemnumber_3,$biblionumber_3,'','','',42,'','')
+     " );
+
+    my $queue_items = GetHoldsQueueItems();
+    is( scalar @$queue_items, $count + 3, 'Three items added to queue' );
+
+    $queue_items = GetHoldsQueueItems( { itemtypeslimit => $item_1->itype } );
+    is( scalar @$queue_items,
+        3, 'Three items of same itemtype found when itemtypeslimit passed' );
+
+    $queue_items = GetHoldsQueueItems(
+        { itemtypeslimit => $item_1->itype, ccodeslimit => $item_2->ccode } );
+    is( scalar @$queue_items,
+        2, 'Two items of same collection found when ccodeslimit passed' );
+
+    @$queue_items = GetHoldsQueueItems(
+        {
+            itemtypeslimit => $item_1->itype,
+            ccodeslimit    => $item_2->ccode,
+            locationslimit => $item_3->location
+        }
+    );
+    is( scalar @$queue_items,
+        1, 'One item of shleving location found when locationslimit passed' );
 
     $schema->storage->txn_rollback;
 };
