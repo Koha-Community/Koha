@@ -602,6 +602,21 @@ __PACKAGE__->belongs_to(
   { is_deferrable => 1, on_delete => "CASCADE", on_update => "CASCADE" },
 );
 
+=head2 bookings
+
+Type: has_many
+
+Related object: L<Koha::Schema::Result::Booking>
+
+=cut
+
+__PACKAGE__->has_many(
+  "bookings",
+  "Koha::Schema::Result::Booking",
+  { "foreign.item_id" => "self.itemnumber" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
 =head2 branchtransfers
 
 Type: has_many

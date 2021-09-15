@@ -255,6 +255,21 @@ __PACKAGE__->has_many(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
+=head2 bookings
+
+Type: has_many
+
+Related object: L<Koha::Schema::Result::Booking>
+
+=cut
+
+__PACKAGE__->has_many(
+  "bookings",
+  "Koha::Schema::Result::Booking",
+  { "foreign.biblio_id" => "self.biblionumber" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
 =head2 club_holds
 
 Type: has_many
@@ -601,8 +616,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2023-05-05 12:10:09
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:xDa15D5QckMdwVzVy4FX2g
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2023-05-09 07:11:30
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:AZgt+4mVV/QYtSsdhxmaBQ
 
 __PACKAGE__->has_many(
   "biblioitem",
