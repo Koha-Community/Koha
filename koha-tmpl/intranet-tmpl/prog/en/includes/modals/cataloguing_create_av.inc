@@ -3,11 +3,10 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="closebtn" data-dismiss="modal" aria-hidden="true">×</button>
-                <h3 id="avCreateLabel">Create a new authorised value</h3>
+                <h3 id="avCreateLabel">Create a new authorized value</h3>
             </div>
             <form id="add_new_av" method="post">
                 <div class="modal-body">
-                    <div class="error"></div>
                     <fieldset class="rows">
                         <ol>
                             <li>
@@ -16,24 +15,27 @@
                                 <span id="new_av_category"></span>
                             </li>
                             <li>
-                                <span class="label" for="value">Authorised value:</span>
-                                <input type="text" id="value" name="value" />
+                                <label for="value" class="required">Authorized value:</label>
+                                <input class="required" required="required" type="text" id="value" name="value" />
+                                <span class="required">Required</span>
                             </li>
                             <li>
-                                <span class="label" for="description">Description:</span>
-                                <input type="text" id="description" name="description" />
+                                <label for="description" class="required">Description:</label>
+                                <input class="required" required="required" type="text" id="description" name="description" />
+                                <span class="required">Required</span>
                             </li>
                             <li>
-                                <span class="label" for="opac_description">Description (OPAC):</span>
+                                <label for="opac_description">Description (OPAC):</label>
                                 <input type="text" id="opac_description" name="opac_description" />
                             </li>
                         </ol>
                     </fieldset>
+                    <div class="avCreate_error dialog alert" style="display:none;"></div>
                 </div>
                 <div class="modal-footer">
-                    <button class="btn btn-default" data-dismiss="modal" aria-hidden="true">Close</button>
                     <input type="hidden" name="select2" value="" />
-                    <input type="submit" class="btn btn-primary" value="Save">
+                    <button type="submit" class="btn btn-default">Save</button>
+                    <button class="btn btn-default" data-dismiss="modal" aria-hidden="true">Cancel</button>
                 </div>
             </form>
         </div> <!-- /.modal-content -->

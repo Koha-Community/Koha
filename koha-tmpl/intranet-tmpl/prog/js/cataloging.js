@@ -1,3 +1,4 @@
+/* global __ */
 /* exported openAuth ExpandField CloneField CloneSubfield UnCloneField CloneItemSubfield CheckMandatorySubfields */
 
 /*
@@ -588,30 +589,39 @@ $(document).ready(function() {
         Select2Utils.initSelect2($('.subfield_line select[data-category!=""]'));
     }
 
-    $("#add_new_av").on("submit", function(){
-        var category         = $(this).find('input[name="category"]').val();
-        var value            = $(this).find('input[name="value"]').val();
-        var description      = $(this).find('input[name="description"]').val();
-        var opac_description = $(this).find('input[name="opac_description"]').val();
-
-        var data = "category="+encodeURIComponent(category)
-            +"&value="+encodeURIComponent(value)
-            +"&description="+encodeURIComponent(description)
-            +"&opac_description="+encodeURIComponent(opac_description);
-
-        $.ajax({
-            type: "POST",
-            url: "/cgi-bin/koha/svc/authorised_values",
-            data: data,
-            success: function(response) {
-                $('#avCreate').modal('hide');
-
-                $(current_select2).append('<option selected value="'+response.value+'">'+response.description+'</option>');
-            },
-            error: function(err) {
-                $("#avCreate .error").html(_("Something went wrong, maybe the value already exists?"))
-            }
-        });
-        return false;
+    $("#avCreate").on("hidden.bs.modal", function(){
+        add_new_av.resetForm(); /* resets form state for jQuery Validate plugin */
+        $("#add_new_av")[0].reset();
+        $(".avCreate_error").hide();
     });
+
+    var add_new_av = $("#add_new_av").validate({
+        submitHandler: function(form) {
+            var category         = form.category.value;
+            var value            = form.value.value;
+            var description      = form.description.value;
+            var opac_description = form.opac_description.value;
+
+            var data = "category="+encodeURIComponent(category)
+                +"&value="+encodeURIComponent(value)
+                +"&description="+encodeURIComponent(description)
+                +"&opac_description="+encodeURIComponent(opac_description);
+            $.ajax({
+                type: "POST",
+                url: "/cgi-bin/koha/svc/authorised_values",
+                data: data,
+                success: function(response) {
+                    $('#avCreate').modal('hide');
+
+                    $(current_select2).append('<option selected value="'+response.value+'">'+response.description+'</option>');
+                    $("#avCreate").modal("hide");
+                },
+                error: function() {
+                    $(".avCreate_error").html(__("Something went wrong. Maybe the value already exists?")).show();
+                }
+            });
+            return false;
+        }
+    });
+
 });
