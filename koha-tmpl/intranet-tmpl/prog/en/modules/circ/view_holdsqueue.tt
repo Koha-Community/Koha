@@ -203,6 +203,7 @@
 	[% END %]
 
                         [% UNLESS ( total ) %]
+                            [% branchlimit = Branches.GetLoggedInBranchcode %]
                             [% PROCESS filter_form %]
                         [% END %]
 
