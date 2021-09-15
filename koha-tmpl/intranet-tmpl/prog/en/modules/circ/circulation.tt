@@ -1051,14 +1051,17 @@
                 });
             }
 
-            [% IF !( CircAutoPrintQuickSlip == 'clear' ) %]
-                // listen submit to trigger qslip on empty checkout
-                $('#mainform').bind('submit',function() {
-                    if ($('#barcode').val() == '') {
+            // listen submit to trigger qslip on empty checkout
+            $('#mainform').bind('submit',function() {
+                if ($('#barcode').val() == '') {
+                    [% IF ( CircAutoPrintQuickSlip == 'clear' ) %]
+                        window.location='/cgi-bin/koha/circ/circulation.pl';
+                        return false;
+                    [% ELSE %]
                         return printx_window( '[% CircAutoPrintQuickSlip | html %]' );
-                    }
-                });
-            [% END %]
+                    [% END %]
+                }
+            });
             toggle_onsite_checkout();
             $("#onsite_checkout").click(function(){
                 toggle_onsite_checkout();
