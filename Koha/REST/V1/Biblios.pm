@@ -246,6 +246,40 @@ sub get_public {
     };
 }
 
+=head3 get_bookings
+
+Controller function that handles retrieving biblio's bookings
+
+=cut
+
+sub get_bookings {
+    my $c = shift->openapi->valid_input or return;
+
+    my $biblio = Koha::Biblios->find( { biblionumber => $c->validation->param('biblio_id') }, { prefetch => ['bookings'] } );
+
+    unless ( $biblio ) {
+        return $c->render(
+            status  => 404,
+            openapi => {
+                error => "Object not found."
+            }
+        );
+    }
+
+    return try {
+
+        my $bookings_rs = $biblio->bookings;
+        my $bookings    = $c->objects->search( $bookings_rs );
+        return $c->render(
+            status  => 200,
+            openapi => $bookings
+        );
+    }
+    catch {
+        $c->unhandled_exception($_);
+    };
+}
+
 =head3 get_items
 
 Controller function that handles retrieving biblio's items

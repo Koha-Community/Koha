@@ -512,6 +512,111 @@ sub holds {
     return Koha::Holds->_new_from_dbic( $holds_rs );
 }
 
+=head3 bookings
+
+  my $bookings = $item->bookings();
+
+Returns the bookings attached to this item.
+
+=cut
+
+sub bookings {
+    my ( $self, $params ) = @_;
+    my $bookings_rs = $self->_result->bookings->search($params);
+    return Koha::Bookings->_new_from_dbic( $bookings_rs );
+}
+
+=head3 check_booking
+
+  my $bookable =
+    $item->check_booking( { start_date => $datetime, end_date => $datetime, [ booking_id => $booking_id ] } );
+
+Returns a boolean denoting whether the passed booking can be made without clashing.
+
+Optionally, you may pass a booking id to exclude from the checks; This is helpful when you are updating an existing booking.
+
+=cut
+
+sub check_booking {
+    my ($self, $params) = @_;
+
+    my $start_date = dt_from_string( $params->{start_date} );
+    my $end_date   = dt_from_string( $params->{end_date} );
+    my $booking_id = $params->{booking_id};
+
+    my $dtf = Koha::Database->new->schema->storage->datetime_parser;
+    my $existing_bookings = $self->bookings(
+        [
+            start_date => {
+                '-between' => [
+                    $dtf->format_datetime($start_date),
+                    $dtf->format_datetime($end_date)
+                ]
+            },
+            end_date => {
+                '-between' => [
+                    $dtf->format_datetime($start_date),
+                    $dtf->format_datetime($end_date)
+                ]
+            },
+            {
+                start_date => { '<' => $dtf->format_datetime($start_date) },
+                end_date   => { '>' => $dtf->format_datetime($end_date) }
+            }
+        ]
+    );
+
+    my $bookings_count =
+      defined($booking_id)
+      ? $existing_bookings->search( { booking_id => { '!=' => $booking_id } } )
+      ->count
+      : $existing_bookings->count;
+
+    return $bookings_count ? 0 : 1;
+}
+
+=head3 place_booking
+
+  my $booking = $item->place_booking(
+    {
+        patron     => $patron,
+        start_date => $datetime,
+        end_date   => $datetime
+    }
+  );
+
+Add a booking for this item for the dates passed.
+
+Returns the Koha::Booking object or throws an exception if the item cannot be booked for the given dates.
+
+=cut
+
+sub place_booking {
+    my ( $self, $params ) = @_;
+
+    # check for mandatory params
+    my @mandatory = ( 'start_date', 'end_date', 'patron' );
+    for my $param (@mandatory) {
+        unless ( defined( $params->{$param} ) ) {
+            Koha::Exceptions::MissingParameter->throw(
+                error => "The $param parameter is mandatory" );
+        }
+    }
+    my $patron = $params->{patron};
+
+    # New booking object
+    my $booking = Koha::Booking->new(
+        {
+            start_date     => $params->{start_date},
+            end_date       => $params->{end_date},
+            borrowernumber => $patron->borrowernumber,
+            biblionumber   => $self->biblionumber,
+            itemnumber     => $self->itemnumber,
+        }
+    )->store();
+    return $booking;
+}
+
 =head3 request_transfer
 
   my $transfer = $item->request_transfer(

@@ -336,6 +336,60 @@
     x-koha-authorization:
       permissions:
         catalogue: 1
+/items/{item_id}/bookings:
+  get:
+    x-mojo-to: Items#bookings
+    operationId: getItemBookings
+    summary: Get existing bookings for an item
+    tags:
+      - items
+    parameters:
+      - $ref: "../swagger.yaml#/parameters/item_id_pp"
+      - $ref: "../swagger.yaml#/parameters/match"
+      - $ref: "../swagger.yaml#/parameters/order_by"
+      - $ref: "../swagger.yaml#/parameters/page"
+      - $ref: "../swagger.yaml#/parameters/per_page"
+      - $ref: "../swagger.yaml#/parameters/q_param"
+      - $ref: "../swagger.yaml#/parameters/q_body"
+      - $ref: "../swagger.yaml#/parameters/q_header"
+    consumes:
+      - application/json
+    produces:
+      - application/json
+    responses:
+      "200":
+        description: Item bookings
+        schema:
+          type: array
+          items:
+            $ref: ../swagger.yaml#/definitions/booking
+      "400":
+        description: Missing or wrong parameters
+        schema:
+          $ref: ../swagger.yaml#/definitions/error
+      "401":
+        description: Authentication required
+        schema:
+          $ref: ../swagger.yaml#/definitions/error
+      "403":
+        description: Access forbidden
+        schema:
+          $ref: ../swagger.yaml#/definitions/error
+      "404":
+        description: Item not found
+        schema:
+          $ref: ../swagger.yaml#/definitions/error
+      "500":
+        description: Internal server error
+        schema:
+          $ref: ../swagger.yaml#/definitions/error
+      "503":
+        description: Under maintenance
+        schema:
+          $ref: ../swagger.yaml#/definitions/error
+    x-koha-authorization:
+      permissions:
+        circulation: 1
 "/items/{item_id}/pickup_locations":
   get:
     x-mojo-to: Items#pickup_locations

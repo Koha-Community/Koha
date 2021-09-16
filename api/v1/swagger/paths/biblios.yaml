@@ -274,6 +274,74 @@
     x-koha-authorization:
       permissions:
         editcatalogue: edit_catalogue
+"/biblios/{biblio_id}/bookings":
+  get:
+    x-mojo-to: Biblios#get_bookings
+    operationId: getBiblioBookings
+    tags:
+      - bookings
+    summary: Get bookings for a biblio
+    parameters:
+      - $ref: "../swagger.yaml#/parameters/biblio_id_pp"
+      - $ref: "../swagger.yaml#/parameters/match"
+      - $ref: "../swagger.yaml#/parameters/order_by"
+      - $ref: "../swagger.yaml#/parameters/page"
+      - $ref: "../swagger.yaml#/parameters/per_page"
+      - $ref: "../swagger.yaml#/parameters/q_param"
+      - $ref: "../swagger.yaml#/parameters/q_body"
+      - $ref: "../swagger.yaml#/parameters/q_header"
+      - name: x-koha-embed
+        in: header
+        required: false
+        description: Embed list sent as a request header
+        type: array
+        items:
+          type: string
+          enum:
+            - item
+            - patron
+        collectionFormat: csv
+    consumes:
+      - application/json
+    produces:
+      - application/json
+    responses:
+      "200":
+        description: A list of the bookings attached to the record
+        schema:
+          type: array
+          items:
+            $ref: ../swagger.yaml#/definitions/booking
+      "401":
+        description: Authentication required
+        schema:
+          $ref: ../swagger.yaml#/definitions/error
+      "403":
+        description: Access forbidden
+        schema:
+          $ref: ../swagger.yaml#/definitions/error
+      "404":
+        description: Biblio not found
+        schema:
+          $ref: ../swagger.yaml#/definitions/error
+      "406":
+        description: Not acceptable
+        schema:
+          type: array
+          description: Accepted content-types
+          items:
+            type: string
+      "500":
+        description: Internal server error
+        schema:
+          $ref: ../swagger.yaml#/definitions/error
+      "503":
+        description: Under maintenance
+        schema:
+          $ref: ../swagger.yaml#/definitions/error
+    x-koha-authorization:
+      permissions:
+        circulation: "1"
 "/biblios/{biblio_id}/checkouts":
   get:
     x-mojo-to: Biblios#get_checkouts

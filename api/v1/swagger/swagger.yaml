@@ -13,11 +13,13 @@ definitions:
   authorised_value_category:
     $ref: ./definitions/authorised_value_category.yaml
   identity_provider:
-    "$ref": ./definitions/identity_provider.yaml
+    $ref: ./definitions/identity_provider.yaml
   identity_provider_domain:
-    "$ref": ./definitions/identity_provider_domain.yaml
+    $ref: ./definitions/identity_provider_domain.yaml
   basket:
     $ref: ./definitions/basket.yaml
+  booking:
+    $ref: ./definitions/booking.yaml
   bundle_link:
     $ref: ./definitions/bundle_link.yaml
   cashup:
@@ -160,13 +162,13 @@ definitions:
     $ref: ./definitions/vendor_issue.yaml
 paths:
   /acquisitions/baskets/managers:
-    $ref: paths/acquisitions_baskets.yaml#/~1acquisitions~1baskets~1managers
+    $ref: ./paths/acquisitions_baskets.yaml#/~1acquisitions~1baskets~1managers
   /acquisitions/funds:
     $ref: ./paths/acquisitions_funds.yaml#/~1acquisitions~1funds
   /acquisitions/funds/owners:
-    $ref: paths/acquisitions_funds.yaml#/~1acquisitions~1funds~1owners
+    $ref: ./paths/acquisitions_funds.yaml#/~1acquisitions~1funds~1owners
   /acquisitions/funds/users:
-    $ref: paths/acquisitions_funds.yaml#/~1acquisitions~1funds~1users
+    $ref: ./paths/acquisitions_funds.yaml#/~1acquisitions~1funds~1users
   /acquisitions/orders:
     $ref: ./paths/acquisitions_orders.yaml#/~1acquisitions~1orders
   "/acquisitions/orders/{order_id}":
@@ -181,6 +183,10 @@ paths:
     $ref: ./paths/advancededitormacros.yaml#/~1advanced_editor~1macros
   /advanced_editor/macros/shared:
     $ref: ./paths/advancededitormacros.yaml#/~1advanced_editor~1macros~1shared
+  /bookings:
+    $ref: ./paths/bookings.yaml#/~1bookings
+  "/bookings/{booking_id}":
+    $ref: ./paths/bookings.yaml#/~1bookings~1{booking_id}
   /search_filters:
     $ref: ./paths/search_filters.yaml#/~1search_filters
   "/search_filters/{search_filter_id}":
@@ -192,33 +198,35 @@ paths:
   "/article_requests/{article_request_id}":
     $ref: "./paths/article_requests.yaml#/~1article_requests~1{article_request_id}"
   /auth/otp/token_delivery:
-    $ref: paths/auth.yaml#/~1auth~1otp~1token_delivery
+    $ref: "./paths/auth.yaml#/~1auth~1otp~1token_delivery"
   "/auth/password/validation":
     $ref: "./paths/auth.yaml#/~1auth~1password~1validation"
   /auth/two-factor/registration:
-    $ref: paths/auth.yaml#/~1auth~1two-factor~1registration
+    $ref: ./paths/auth.yaml#/~1auth~1two-factor~1registration
   /auth/two-factor/registration/verification:
-    $ref: paths/auth.yaml#/~1auth~1two-factor~1registration~1verification
+    $ref: ./paths/auth.yaml#/~1auth~1two-factor~1registration~1verification
   /auth/identity_providers:
-    $ref: paths/auth.yaml#/~1auth~1identity_providers
+    $ref: ./paths/auth.yaml#/~1auth~1identity_providers
   "/auth/identity_providers/{identity_provider_id}":
-    $ref: paths/auth.yaml#/~1auth~1identity_providers~1{identity_provider_id}
+    $ref: ./paths/auth.yaml#/~1auth~1identity_providers~1{identity_provider_id}
   "/auth/identity_providers/{identity_provider_id}/domains":
-    $ref: paths/auth.yaml#/~1auth~1identity_providers~1{identity_provider_id}~1domains
+    $ref: ./paths/auth.yaml#/~1auth~1identity_providers~1{identity_provider_id}~1domains
   "/auth/identity_providers/{identity_provider_id}/domains/{identity_provider_domain_id}":
-    $ref: paths/auth.yaml#/~1auth~1identity_providers~1{identity_provider_id}~1domains~1{identity_provider_domain_id}
+    $ref: ./paths/auth.yaml#/~1auth~1identity_providers~1{identity_provider_id}~1domains~1{identity_provider_domain_id}
   /authorised_value_categories:
-    $ref: paths/authorised_value_categories.yaml#/~1authorised_value_categories
+    $ref: ./paths/authorised_value_categories.yaml#/~1authorised_value_categories
   "/authorised_value_categories/{authorised_value_category_name}/authorised_values":
     $ref: "./paths/authorised_values.yaml#/~1authorised_value_categories~1{authorised_value_category_name}~1authorised_values"
   "/authorities":
     $ref: paths/authorities.yaml#/~1authorities
   "/authorities/{authority_id}":
-    $ref: paths/authorities.yaml#/~1authorities~1{authority_id}
+    $ref: "./paths/authorities.yaml#/~1authorities~1{authority_id}"
   "/biblios":
     $ref: "./paths/biblios.yaml#/~1biblios"
   "/biblios/{biblio_id}":
     $ref: "./paths/biblios.yaml#/~1biblios~1{biblio_id}"
+  "/biblios/{biblio_id}/bookings":
+    $ref: "./paths/biblios.yaml#/~1biblios~1{biblio_id}~1bookings"
   "/biblios/{biblio_id}/checkouts":
     $ref: "./paths/biblios.yaml#/~1biblios~1{biblio_id}~1checkouts"
   "/biblios/{biblio_id}/items":
@@ -375,6 +383,8 @@ paths:
     $ref: ./paths/items.yaml#/~1items
   "/items/{item_id}":
     $ref: "./paths/items.yaml#/~1items~1{item_id}"
+  "/items/{item_id}/bookings":
+    $ref: "./paths/items.yaml#/~1items~1{item_id}~1bookings"
   "/items/{item_id}/bundled_items":
     $ref: ./paths/items.yaml#/~1items~1{item_id}~1bundled_items
   "/items/{item_id}/bundled_items/{bundled_item_id}":
@@ -484,7 +494,7 @@ paths:
   "/suggestions/{suggestion_id}":
     $ref: "./paths/suggestions.yaml#/~1suggestions~1{suggestion_id}"
   /suggestions/managers:
-    $ref: paths/suggestions.yaml#/~1suggestions~1managers
+    $ref: "./paths/suggestions.yaml#/~1suggestions~1managers"
   "/tickets":
     $ref: "./paths/tickets.yaml#/~1tickets"
   "/tickets/{ticket_id}":
@@ -534,6 +544,12 @@ parameters:
     in: header
     required: false
     type: string
+  booking_id_pp:
+    description: Booking identifier
+    in: path
+    name: booking_id
+    required: true
+    type: integer
   framework_id_header:
     description: Framework id. Use when content type is not application/json
     name: x-framework-id

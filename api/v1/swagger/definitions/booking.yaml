@@ -1,0 +1,45 @@
+---
+additionalProperties: false
+properties:
+  biblio_id:
+    description: Internal identifier for the parent bibliographic record
+    type: integer
+  biblio:
+    description: Embedable biblio representation
+    type: object
+  booking_id:
+    description: Internal booking identifier
+    type: integer
+  end_date:
+    description: Start date and time of this booking
+    format: date-time
+    type: string
+  item_id:
+    description: Internal item identifier
+    type:
+      - integer
+      - "null"
+  item:
+    description: Embedable item representation
+    type:
+      - object
+      - "null"
+  patron_id:
+    description: Internal patron identifier
+    type: integer
+  patron:
+    description: Embedable patron representation
+    type:
+      - object
+      - "null"
+  start_date:
+    description: Start date and time of this booking
+    format: date-time
+    type: string
+required:
+  - biblio_id
+  - item_id
+  - patron_id
+  - start_date
+  - end_date
+type: object

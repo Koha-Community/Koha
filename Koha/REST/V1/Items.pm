@@ -174,6 +174,40 @@ sub delete {
     };
 }
 
+=head3 get_bookings
+
+Controller function that handles retrieving item's bookings
+
+=cut
+
+sub get_bookings {
+    my $c = shift->openapi->valid_input or return;
+
+    my $item = Koha::Items->find( { itemnumber => $c->validation->param('item_id') }, { prefetch => ['bookings'] } );
+
+    unless ( $item ) {
+        return $c->render(
+            status  => 404,
+            openapi => {
+                error => "Object not found."
+            }
+        );
+    }
+
+    return try {
+
+        my $bookings_rs = $item->bookings;
+        my $bookings    = $c->objects->search( $bookings_rs );
+        return $c->render(
+            status  => 200,
+            openapi => $bookings
+        );
+    }
+    catch {
+        $c->unhandled_exception($_);
+    };
+}
+
 =head3 pickup_locations
 
 Method that returns the possible pickup_locations for a given item
