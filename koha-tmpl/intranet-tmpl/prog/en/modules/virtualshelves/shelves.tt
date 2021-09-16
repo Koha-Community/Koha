@@ -204,6 +204,7 @@
                 <h1>Transfer ownership of public list [% shelf.shelfname | html %]</h1>
 
                 <form action="/cgi-bin/koha/virtualshelves/shelves.pl" id="transferform" method="post">
+                    [% INCLUDE 'csrf-token.inc' %]
                     <fieldset>
                         <input type="hidden" name="op" value="transfer" />
                         <input type="hidden" name="public" value="1" />
@@ -238,6 +239,7 @@
                     [% IF ( contents.count ) %]<p>This list contains [% contents.count | html %] titles</p>[% END %]
                     <div class="pages">[% pagination_bar | $raw %]</div>
                     <form action="/cgi-bin/koha/virtualshelves/shelves.pl" id="listform" method="post">
+                        [% INCLUDE 'csrf-token.inc' %]
                         <input type="hidden" name="op" value="remove_biblios" />
                         <input type="hidden" name="referer" value="view" />
                         <input type="hidden" name="shelfnumber" value="[% shelf.shelfnumber | html %]" />
@@ -389,6 +391,7 @@
             [% IF op == 'add_form' OR op == 'edit_form' %]
 
                 <form method="post" action="/cgi-bin/koha/virtualshelves/shelves.pl" class="validated">
+                    [% INCLUDE 'csrf-token.inc' %]
                     <fieldset class="rows">
                         [% IF op == 'add_form' %]
                             <legend><h1>Create a new list</h1></legend>
@@ -546,6 +549,7 @@
     <div class="modal" id="addToList" tabindex="-1" role="dialog" aria-labelledby="addToListLabel">
         <div class="modal-dialog" role="document">
             <form action="/cgi-bin/koha/virtualshelves/shelves.pl" method="post">
+                [% INCLUDE 'csrf-token.inc' %]
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="closebtn" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
