@@ -628,6 +628,10 @@ sub _gen_default_values {
             status => 'staged',
             import_error => undef
         },
+        SearchFilter => {
+            opac => 1,
+            staff_client => 1
+        },
     };
 }
 

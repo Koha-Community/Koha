@@ -1,0 +1,33 @@
+---
+type: object
+properties:
+  search_filter_id:
+    type: integer
+    description: internally assigned search filter identifier
+    readOnly: true
+  name:
+    description: filter name
+    type: string
+  filter_query:
+    description: filter query part
+    type:
+    - string
+    - 'null'
+  filter_limits:
+    description: filter limits part
+    type:
+    - string
+    - 'null'
+  opac:
+    description: visible on opac
+    type:
+    - boolean
+    - 'null'
+  staff_client:
+    description: visible in staff client
+    type:
+    - boolean
+    - 'null'
+additionalProperties: false
+required:
+- name

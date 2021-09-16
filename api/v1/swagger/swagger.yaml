@@ -68,6 +68,8 @@ definitions:
     $ref: ./definitions/renewals.yaml
   return_claim:
     $ref: ./definitions/return_claim.yaml
+  search_filter:
+    $ref: ./definitions/search_filter.yaml
   smtp_server:
     $ref: ./definitions/smtp_server.yaml
   suggestion:
@@ -97,6 +99,10 @@ paths:
     $ref: ./paths/advancededitormacros.yaml#/~1advanced_editor~1macros
   /advanced_editor/macros/shared:
     $ref: ./paths/advancededitormacros.yaml#/~1advanced_editor~1macros~1shared
+  /search_filters:
+    $ref: ./paths/search_filters.yaml#/~1search_filters
+  "/search_filters/{search_filter_id}":
+    $ref: "./paths/search_filters.yaml#/~1search_filters~1{search_filter_id}"
   "/advanced_editor/macros/shared/{advancededitormacro_id}":
     $ref: "./paths/advancededitormacros.yaml#/~1advanced_editor~1macros~1shared~1{advancededitormacro_id}"
   "/advanced_editor/macros/{advancededitormacro_id}":
@@ -426,6 +432,12 @@ parameters:
     in: header
     name: x-koha-request-id
     required: false
+    type: integer
+  search_filter_id_pp:
+    name: search_filter_id
+    in: path
+    description: Search filter internal identifier
+    required: true
     type: integer
   seen_pp:
     description: Item was seen flag

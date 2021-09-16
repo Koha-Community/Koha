@@ -1,0 +1,226 @@
+---
+"/search_filters":
+  get:
+    x-mojo-to: SearchFilter#list
+    operationId: listFilters
+    tags:
+      - search_filters
+    summary: List search filters
+    produces:
+      - application/json
+    parameters:
+      - name: name
+        in: query
+        description: Case insensitive search on filter name
+        required: false
+        type: string
+      - name: filter_query
+        in: query
+        description: Search on filter query part
+        required: false
+        type: string
+      - name: filter_limits
+        in: query
+        description: Search on filter limits
+        required: false
+        type: string
+      - name: opac
+        in: query
+        description: Display in OPAC
+        required: false
+        type: boolean
+      - name: staff_client
+        in: query
+        description: Display on staff client
+        required: false
+        type: boolean
+      - $ref: "../swagger.yaml#/parameters/match"
+      - $ref: "../swagger.yaml#/parameters/order_by"
+      - $ref: "../swagger.yaml#/parameters/page"
+      - $ref: "../swagger.yaml#/parameters/per_page"
+      - $ref: "../swagger.yaml#/parameters/q_param"
+      - $ref: "../swagger.yaml#/parameters/q_body"
+      - $ref: "../swagger.yaml#/parameters/q_header"
+      - $ref: "../swagger.yaml#/parameters/request_id_header"
+    responses:
+      '200':
+        description: A list of search filters
+        schema:
+          type: array
+          items:
+            $ref: "../swagger.yaml#/definitions/search_filter"
+      '403':
+        description: Access forbidden
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      '500':
+        description: Internal error
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      '503':
+        description: Under maintenance
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+    x-koha-authorization:
+      permissions:
+        parameters: manage_search_filters
+  post:
+    x-mojo-to: SearchFilter#add
+    operationId: addSearchFilter
+    tags:
+      - search_filters
+    summary: Add search filter
+    parameters:
+      - name: body
+        in: body
+        description: A JSON object containing informations about the new search filter
+        required: true
+        schema:
+          $ref: "../swagger.yaml#/definitions/search_filter"
+    produces:
+      - application/json
+    responses:
+      '201':
+        description: Search filter added
+        schema:
+          $ref: "../swagger.yaml#/definitions/search_filter"
+      '401':
+        description: Authentication required
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      '403':
+        description: Access forbidden
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "409":
+        description: Conflict in creating the resource
+        schema:
+          $ref: ../swagger.yaml#/definitions/error
+      '500':
+        description: Internal error
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      '503':
+        description: Under maintenance
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+    x-koha-authorization:
+      permissions:
+        parameters: manage_search_filters
+"/search_filters/{search_filter_id}":
+  get:
+    x-mojo-to: SearchFilter#get
+    operationId: getSearchFilter
+    tags:
+    - search_filters
+    summary: Get search filter
+    parameters:
+    - $ref: "../swagger.yaml#/parameters/search_filter_id_pp"
+    produces:
+    - application/json
+    responses:
+      '200':
+        description: A search filter
+        schema:
+          $ref: "../swagger.yaml#/definitions/search_filter"
+      '403':
+        description: Access forbidden
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      '404':
+        description: SearchFilter not found
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      '500':
+        description: Internal error
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      '503':
+        description: Under maintenance
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+    x-koha-authorization:
+      permissions:
+        parameters: manage_search_filters
+  put:
+    x-mojo-to: SearchFilter#update
+    operationId: updateSearchFilter
+    tags:
+    - search_filters
+    summary: Update search filter
+    parameters:
+    - $ref: "../swagger.yaml#/parameters/search_filter_id_pp"
+    - name: body
+      in: body
+      description: A search filter object
+      required: true
+      schema:
+        $ref: "../swagger.yaml#/definitions/search_filter"
+    produces:
+    - application/json
+    responses:
+      '200':
+        description: An search_filter
+        schema:
+          $ref: "../swagger.yaml#/definitions/search_filter"
+      '401':
+        description: Authentication required
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      '403':
+        description: Access forbidden
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      '404':
+        description: Search filter not found
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      '500':
+        description: Internal error
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      '503':
+        description: Under maintenance
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+    x-koha-authorization:
+      permissions:
+        parameters: manage_search_filters
+  delete:
+    x-mojo-to: SearchFilter#delete
+    operationId: deleteSearchFilter
+    tags:
+    - macros
+    summary: Delete search filter
+    parameters:
+    - $ref: "../swagger.yaml#/parameters/search_filter_id_pp"
+    produces:
+    - application/json
+    responses:
+      '204':
+        description: Searc filter deleted
+        schema:
+          type: string
+      '401':
+        description: Authentication required
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      '403':
+        description: Access forbidden
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      '404':
+        description: Search filter not found
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      '500':
+        description: Internal error
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      '503':
+        description: Under maintenance
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+    x-koha-authorization:
+      permissions:
+        parameters: manage_search_filters
