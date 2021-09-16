@@ -205,7 +205,7 @@
                 [% UNLESS languages.size %]
                     <li>
                         <label for="title" class="required">Title: </label>
-                        <input id="title" size="30" type="text" name="title" value="[% additional_content.title | html %]" required="required" class="required" /> <span class="required">Required</span>
+                        <input id="title" size="100" maxlength="250" type="text" name="title" value="[% additional_content.title | html %]" required="required" class="required" /> <span class="required">Required</span>
                     </li>
                 [% END %]
                 <li>
@@ -248,29 +248,26 @@
                 </ul>
 
                 [% FOR language IN languages %]
-                    <div id="lang_[% language.lang | uri %]" class="lang" data-lang="[% language.description | html %]">
-                        <div style="clear:both;">
-
-                            <fieldset>[%# FIXME We should remove list-style:none; and use class="rows" here but it does not work. Owen please help! %]
-                                <ol>
-                                    <li style="list-style: none;">
-                                        <label for="title_[% language.lang | html %]">Title: </label>
-                                        <input id="title_[% language.lang| html %]" size="30" type="text" name="title" value="[% translated_contents.item(language.lang).title | html %]"></span>
-                                    </li>
-                                    <li style="list-style: none;">
-                                        <label for="content_[% language.lang | html %]">Content: </label>
-                                        <textarea name="content" id="content_[% language.lang | html %]"  cols="75" rows="10">[% translated_contents.item(language.lang).content | html %]</textarea>
-                                        <input type="hidden" name="lang" value="[% language.lang | html %]" />
-                                    </li>
-                                </ol>
-                            </fieldset>
-                        </div>
+                    <div id="lang_[% language.lang | uri %]" class="lang clearfix" data-lang="[% language.description | html %]">
+                        <fieldset class="rows">
+                            <ol>
+                                <li style="list-style: none;">
+                                    <label for="title_[% language.lang | html %]">Title: </label>
+                                    <input id="title_[% language.lang| html %]" size="100" maxlength="250" type="text" name="title" value="[% translated_contents.item(language.lang).title | html %]">
+                                </li>
+                                <li style="list-style: none;">
+                                    <label for="content_[% language.lang | html %]">Content: </label>
+                                    <textarea name="content" id="content_[% language.lang | html %]"  cols="75" rows="10">[% translated_contents.item(language.lang).content | html %]</textarea>
+                                    <input type="hidden" name="lang" value="[% language.lang | html %]" />
+                                </li>
+                            </ol>
+                        </fieldset>
                     </div>
                 [% END %]
             </div>
         [% ELSE %]
             <div id="lang_default">
-                <div style="clear:both;">
+                <div class="clearfix">
                     <textarea name="content" id="content_default"  cols="75" rows="10">[% additional_content.content | html %]</textarea>
                 </div>
             </div>
