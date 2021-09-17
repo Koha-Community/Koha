@@ -661,17 +661,6 @@ foreach my $biblionumber (@biblionumbers) {
     {
         my $priority = $res->priority();
         my %reserve;
-        my @optionloop;
-        for ( my $i = 1 ; $i <= $totalcount ; $i++ ) {
-            push(
-                @optionloop,
-                {
-                    num      => $i,
-                    selected => ( $i == $priority ),
-                }
-            );
-        }
-
         if ( $res->is_found() ) {
             $reserve{'holdingbranch'} = $res->item()->holdingbranch();
             $reserve{'biblionumber'}  = $res->item()->biblionumber();
@@ -704,7 +693,6 @@ foreach my $biblionumber (@biblionumbers) {
         $reserve{'barcode'}        = $res->item() ? $res->item()->barcode() : undef;
         $reserve{'priority'}       = $res->priority();
         $reserve{'lowestPriority'} = $res->lowestPriority();
-        $reserve{'optionloop'}     = \@optionloop;
         $reserve{'suspend'}        = $res->suspend();
         $reserve{'suspend_until'}  = $res->suspend_until();
         $reserve{'reserve_id'}     = $res->reserve_id();
