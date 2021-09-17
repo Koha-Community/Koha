@@ -48,13 +48,13 @@ subtest 'cancel() tests' => sub {
         { password => $password, skip_validation => 1 } );
     my $userid = $authorized_patron->userid;
 
-    my $deleted_article_requet =
+    my $deleted_article_request =
       $builder->build_object( { class => 'Koha::ArticleRequests' } );
-    my $deleted_article_requet_id = $deleted_article_requet->id;
-    $deleted_article_requet->delete;
+    my $deleted_article_request_id = $deleted_article_request->id;
+    $deleted_article_request->delete;
 
     $t->delete_ok(
-"//$userid:$password@/api/v1/article_requests/$deleted_article_requet_id"
+"//$userid:$password@/api/v1/article_requests/$deleted_article_request_id"
     )->status_is(404)->json_is( { error => "Article request not found" } );
 
     my $article_request =
@@ -80,7 +80,7 @@ subtest 'cancel() tests' => sub {
 
 subtest 'patron_cancel() tests' => sub {
 
-    plan tests => 10;
+    plan tests => 12;
 
     t::lib::Mocks::mock_preference( 'RESTPublicAPI', 1 );
     t::lib::Mocks::mock_preference( 'RESTBasicAuth', 1 );
@@ -98,19 +98,30 @@ subtest 'patron_cancel() tests' => sub {
     my $userid    = $patron->userid;
     my $patron_id = $patron->borrowernumber;
 
-    my $deleted_article_requet = $builder->build_object( { class => 'Koha::ArticleRequests' } );
-    my $deleted_article_requet_id = $deleted_article_requet->id;
-    $deleted_article_requet->delete;
+    my $deleted_article_request = $builder->build_object( { class => 'Koha::ArticleRequests', value => { borrowernumber => $patron_id } } );
+    my $deleted_article_request_id = $deleted_article_request->id;
+    $deleted_article_request->delete;
 
     my $another_patron = $builder->build_object({ class => 'Koha::Patrons' });
     my $another_patron_id = $another_patron->id;
 
-    $t->delete_ok("//$userid:$password@/api/v1/public/patrons/$another_patron_id/article_requests/$deleted_article_requet_id")
+    $t->delete_ok("//$userid:$password@/api/v1/public/patrons/$another_patron_id/article_requests/$deleted_article_request_id")
       ->status_is(403);
 
-    $t->delete_ok("//$userid:$password@/api/v1/public/patrons/$patron_id/article_requests/$deleted_article_requet_id")
+    $t->delete_ok("//$userid:$password@/api/v1/public/patrons/$patron_id/article_requests/$deleted_article_request_id")
       ->status_is(404)
       ->json_is( { error => "Article request not found" } );
+
+    my $another_article_request = $builder->build_object(
+        {
+            class => 'Koha::ArticleRequests',
+            value => { borrowernumber => $another_patron->id }
+        }
+    );
+
+    $t->delete_ok("//$userid:$password@/api/v1/public/patrons/$patron_id/article_requests/$another_article_request")
+      ->status_is(403);
+
 
     my $article_request = $builder->build_object(
         {
