@@ -42,9 +42,9 @@ Controller function that handles cancelling a Koha::ArticleRequest object
 sub cancel {
     my $c = shift->openapi->valid_input or return;
 
-    my $ar = Koha::ArticleRequests->find( $c->validation->param('ar_id') );
+    my $article_request = Koha::ArticleRequests->find( $c->validation->param('article_request_id') );
 
-    unless ( $ar ) {
+    unless ( $article_request ) {
         return $c->render(
             status  => 404,
             openapi => { error => "Article request not found" }
@@ -56,19 +56,55 @@ sub cancel {
 
     return try {
 
-        $ar->cancel($reason, $notes);
+        $article_request->cancel($reason, $notes);
         return $c->render(
             status  => 204,
             openapi => q{}
         );
     } catch {
-        if ( blessed $_ && $_->isa('Koha::Exceptions::ArticleRequests::FailedCancel') ) {
-            return $c->render(
-                status  => 403,
-                openapi => { error => "Article request cannot be canceled" }
-            );
-        }
+        $c->unhandled_exception($_);
+    };
+}
 
+=head3 patron_cancel
+
+Controller function that handles cancelling a patron's Koha::ArticleRequest object
+
+=cut
+
+sub patron_cancel {
+    my $c = shift->openapi->valid_input or return;
+
+    my $patron = Koha::Patrons->find( $c->validation->param('patron_id') );
+
+    unless ( $patron ) {
+        return $c->render(
+            status  => 404,
+            openapi => { error => "Patron not found" }
+        );
+    }
+
+    my $article_request = $patron->article_requests->find( $c->validation->param('article_request_id') );
+
+    unless ( $article_request ) {
+        return $c->render(
+            status  => 404,
+            openapi => { error => "Article request not found" }
+        );
+    }
+
+    my $reason = $c->validation->param('cancellation_reason');
+    my $notes = $c->validation->param('notes');
+
+    return try {
+
+        $article_request->cancel( $reason, $notes );
+        return $c->render(
+            status  => 204,
+            openapi => q{}
+        );
+    }
+    catch {
         $c->unhandled_exception($_);
     };
 }

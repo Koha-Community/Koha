@@ -1,0 +1,111 @@
+---
+"/article_requests/{article_request_id}":
+  delete:
+    x-mojo-to: ArticleRequests#cancel
+    operationId: cancelArticleRequest
+    tags:
+      - article_requests
+    summary: Cancel article requests
+    parameters:
+      - name: article_request_id
+        in: path
+        description: Article request identifier
+        required: true
+        type: integer
+      - name: cancellation_reason
+        in: query
+        description: Article request cancellation reason
+        required: false
+        type: string
+      - name: notes
+        in: query
+        description: Article request custom cancellation reason
+        required: false
+        type: string
+    produces:
+      - application/json
+    responses:
+      "204":
+        description: Article request canceled
+      "400":
+        description: Bad request
+        schema:
+          $ref: ../definitions.json#/error
+      "401":
+        description: Authentication required
+        schema:
+          $ref: ../definitions.json#/error
+      "403":
+        description: Access forbidden
+        schema:
+          $ref: ../definitions.json#/error
+      "404":
+        description: Patron not found
+        schema:
+          $ref: ../definitions.json#/error
+      "500":
+        description: Internal server error
+        schema:
+          $ref: ../definitions.json#/error
+      "503":
+        description: Under maintenance
+        schema:
+          $ref: ../definitions.json#/error
+    x-koha-authorization:
+      permissions:
+        reserveforothers: "1"
+"/public/patrons/{patron_id}/article_requests/{article_request_id}":
+  delete:
+    x-mojo-to: ArticleRequests#patron_cancel
+    operationId: publicCancelPatronArticleRequest
+    tags:
+      - article_requests
+    summary: Cancel patron's article requests
+    parameters:
+      - $ref: ../parameters.json#/patron_id_pp
+      - name: article_request_id
+        in: path
+        description: Article request identifier
+        required: true
+        type: integer
+      - name: cancellation_reason
+        in: query
+        description: Article request cancellation reason
+        required: false
+        type: string
+      - name: notes
+        in: query
+        description: Article request custom cancellation reason
+        required: false
+        type: string
+    produces:
+      - application/json
+    responses:
+      "204":
+        description: Patron's article request canceled
+      "400":
+        description: Bad request
+        schema:
+          $ref: ../definitions.json#/error
+      "401":
+        description: Authentication required
+        schema:
+          $ref: ../definitions.json#/error
+      "403":
+        description: Access forbidden
+        schema:
+          $ref: ../definitions.json#/error
+      "404":
+        description: Patron not found
+        schema:
+          $ref: ../definitions.json#/error
+      "500":
+        description: Internal server error
+        schema:
+          $ref: ../definitions.json#/error
+      "503":
+        description: Under maintenance
+        schema:
+          $ref: ../definitions.json#/error
+    x-koha-authorization:
+      allow-owner: true
