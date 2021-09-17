@@ -40,7 +40,7 @@ subtest 'cancel() tests' => sub {
     my $authorized_patron = $builder->build_object(
         {
             class => 'Koha::Patrons',
-            value => { flags => 1 }
+            value => { flags => 2 ** 1 } # circulate flag = 1
         }
     );
     my $password = 'thePassword123';
@@ -80,7 +80,7 @@ subtest 'cancel() tests' => sub {
 
 subtest 'patron_cancel() tests' => sub {
 
-    plan tests => 12;
+    plan tests => 14;
 
     t::lib::Mocks::mock_preference( 'RESTPublicAPI', 1 );
     t::lib::Mocks::mock_preference( 'RESTBasicAuth', 1 );
@@ -90,7 +90,7 @@ subtest 'patron_cancel() tests' => sub {
     my $patron = $builder->build_object(
         {
             class => 'Koha::Patrons',
-            value => { privacy_guarantor_checkouts => 0 }
+            value => { flags => 0 }
         }
     );
     my $password = 'thePassword123';
@@ -102,15 +102,20 @@ subtest 'patron_cancel() tests' => sub {
     my $deleted_article_request_id = $deleted_article_request->id;
     $deleted_article_request->delete;
 
-    my $another_patron = $builder->build_object({ class => 'Koha::Patrons' });
-    my $another_patron_id = $another_patron->id;
-
-    $t->delete_ok("//$userid:$password@/api/v1/public/patrons/$another_patron_id/article_requests/$deleted_article_request_id")
-      ->status_is(403);
-
+    # delete non existent article request
     $t->delete_ok("//$userid:$password@/api/v1/public/patrons/$patron_id/article_requests/$deleted_article_request_id")
       ->status_is(404)
       ->json_is( { error => "Article request not found" } );
+
+    my $another_patron = $builder->build_object({ class => 'Koha::Patrons' });
+    my $another_patron_id = $another_patron->id;
+
+    my $article_request_2 = $builder->build_object({ class => 'Koha::ArticleRequests', value => { borrowernumber => $another_patron_id } });
+
+    # delete another patron's request
+    $t->delete_ok("//$userid:$password@/api/v1/public/patrons/$another_patron_id/article_requests/" . $article_request_2->id)
+      ->status_is(403)
+      ->json_is( '/error' => 'Authorization failure. Missing required permission(s).' );
 
     my $another_article_request = $builder->build_object(
         {
@@ -119,9 +124,9 @@ subtest 'patron_cancel() tests' => sub {
         }
     );
 
-    $t->delete_ok("//$userid:$password@/api/v1/public/patrons/$patron_id/article_requests/$another_article_request")
-      ->status_is(403);
-
+    $t->delete_ok("//$userid:$password@/api/v1/public/patrons/$patron_id/article_requests/" . $another_article_request->id)
+      ->status_is(404)
+      ->json_is( { error => 'Article request not found' } );
 
     my $article_request = $builder->build_object(
         {

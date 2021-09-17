@@ -51,6 +51,9 @@
         description: Under maintenance
         schema:
           $ref: ../definitions.json#/error
+    x-koha-authorization:
+      permissions:
+        circulate: circulate_remaining_permissions
 "/public/patrons/{patron_id}/article_requests/{article_request_id}":
   delete:
     x-mojo-to: ArticleRequests#patron_cancel
