@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 47;
+use Test::More tests => 48;
 use DateTime::Duration;
 
 use t::lib::Mocks;
@@ -467,6 +467,23 @@ $item2 = Koha::Items->find( $itemnumber2 );
 ok( $item2->location eq '' , q{UpdateItemLocationOnCheckin updates location value from 'PROC' to '' with setting "PROC: _PERM_" } );
 ok( $item2->permanent_location eq '' , q{UpdateItemLocationOnCheckin does not update permanent_location from '' with setting "PROC: _PERM_" } );
 
+# Bug 28472
+my $itemnumber3 = Koha::Item->new(
+    {
+        biblionumber   => $biblionumber,
+        barcode        => 'barcode_5',
+        itemcallnumber => 'callnumber5',
+        homebranch     => $branchcode_1,
+        holdingbranch  => $branchcode_1,
+        location       => undef,
+        itype          => $itemtype
+    }
+)->store->itemnumber;
+
+t::lib::Mocks::mock_preference( 'UpdateItemLocationOnCheckin', '_ALL_: CART' );
+AddReturn( 'barcode_5', $branchcode_1 );
+my $item3 = Koha::Items->find( $itemnumber3 );
+is( $item3->location, 'CART', q{UpdateItemLocationOnCheckin updates location value from NULL (i.e. the item has no shelving location set) to 'CART' with setting "_ALL_: CART"} );
 
 
 
