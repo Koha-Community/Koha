@@ -932,7 +932,7 @@
                         if( result ){
                             $.ajax({
                                 type: "DELETE",
-                                url: '/api/v1/public/patrons/'+borrowernumber+'/article_requests/'+article_request_id,
+                                url: '/api/v1/public/patrons/'+borrowernumber+'/article_requests/'+article_request_id+'?cancellation_reason=OPAC',
                                 success: function( data ) {
                                     row.parents('tr').hide({
                                         duration: 'slow',

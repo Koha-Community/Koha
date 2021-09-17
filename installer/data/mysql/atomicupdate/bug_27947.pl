@@ -13,10 +13,10 @@ return {
         say $out "Add AR_CANCELLATION category for authorised values";
 
         $dbh->do(q{
-            INSERT IGNORE INTO authorised_values (category, authorised_value, lib) VALUES ('AR_CANCELLATION','NOT_FOUND','Item could not be located on shelves');
-        });
-        $dbh->do(q{
-            INSERT IGNORE INTO authorised_values (category, authorised_value, lib) VALUES ('AR_CANCELLATION','DAMAGED','Item was found to be too damaged to fill article request');
+            INSERT IGNORE INTO authorised_values (category, authorised_value, lib) VALUES
+                ('AR_CANCELLATION','NOT_FOUND','Item could not be located on shelves'),
+                ('AR_CANCELLATION','DAMAGED','Item was found to be too damaged to fill article request'),
+                ('AR_CANCELLATION','OPAC','Cancelled from the OPAC user page')
         });
         say $out "Add AR_CANCELLATION authorised values";
 

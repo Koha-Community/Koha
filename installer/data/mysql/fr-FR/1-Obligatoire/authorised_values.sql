@@ -728,3 +728,4 @@ INSERT INTO authorised_values (category, authorised_value, lib) VALUES ('HOLD_CA
 -- article request cancellation
 INSERT INTO authorised_values (category, authorised_value, lib) VALUES ('AR_CANCELLATION','NOT_FOUND','Item could not be located on shelves');
 INSERT INTO authorised_values (category, authorised_value, lib) VALUES ('AR_CANCELLATION','DAMAGED','Item was found to be too damaged to fill article request');
+INSERT INTO authorised_values (category, authorised_value, lib) VALUES ('AR_CANCELLATION','OPAC','Cancelled from the OPAC user page');
