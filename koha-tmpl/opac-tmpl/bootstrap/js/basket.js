@@ -1,20 +1,21 @@
 /* global __ __p */
-
+/* exported addMultiple delSingleRecord vShelfAdd openBiblio addSelToShelf delBasket sendBasket showMore showLess delSelRecords holdSel selRecord */
 //////////////////////////////////////////////////////////////////////////////
 // BASIC FUNCTIONS FOR COOKIE MANAGEMENT //
 //////////////////////////////////////////////////////////////////////////////
 
 function basketCount(){
     var valCookie = readCookie("bib_list");
+    var basketcount = 0;
     if(valCookie){
         var arrayRecords = valCookie.split("/");
         if(arrayRecords.length > 0){
-            var basketcount = arrayRecords.length-1;
+            basketcount = arrayRecords.length-1;
         } else {
-            var basketcount = 0;
+            basketcount = 0;
         }
     } else {
-            var basketcount = 0;
+        basketcount = 0;
     }
     return basketcount;
 }
@@ -28,16 +29,8 @@ function writeCookie(name, val, wd) {
     }
 }
 
-function readCookieValue (str, val_beg) {
-    var val_end = str.indexOf(";", val_end);
-    if (val_end == -1)
-        val_end = str.length;
-    return str.substring(val_beg, val_end);
-}
-
 function readCookie(name, wd) {
     var str_name = name + "=";
-    var str_len = str_name.length;
     var str_cookie = "";
     if (wd) {
         str_cookie = parent.opener.document.cookie;
@@ -45,13 +38,13 @@ function readCookie(name, wd) {
     else {
         str_cookie = parent.document.cookie;
     }
-        // fixed - getting the part of the basket that is bib_list
-        var cookie_parts = str_cookie.split(";");
-            for(var i=0;i < cookie_parts.length;i++) {
-                var c = cookie_parts[i];
-                    while (c.charAt(0)==' ') c = c.substring(1,c.length);
-            if(c.indexOf(str_name) == 0) return c.substring(str_name.length,c.length);
-            }
+    // fixed - getting the part of the basket that is bib_list
+    var cookie_parts = str_cookie.split(";");
+    for(var i=0;i < cookie_parts.length;i++) {
+        var c = cookie_parts[i];
+        while (c.charAt(0)==' ') c = c.substring(1,c.length);
+        if(c.indexOf(str_name) == 0) return c.substring(str_name.length,c.length);
+    }
     return null;
 }
 
@@ -83,7 +76,7 @@ function openBasket() {
         var optWin = "status=yes,scrollbars=yes,resizable=yes,toolbar=no,location=yes,height="+iH+",width="+iW;
         var loc = "/cgi-bin/koha/opac-basket.pl?" + strCookie;
         var basket = open(loc, "basket", optWin);
-        if (window.focus) {basket.focus()}
+        if (window.focus) { basket.focus(); }
     }
     else {
         showCartUpdate( __("Your cart is currently empty") );
@@ -139,25 +132,6 @@ function addRecord(val, selection,NoMsgAlert) {
     }
 }
 
-function AllAreChecked(s){
-    if (! s.length) { return false;}
-    var l = s.length;
-    for (var i=0; i < l; i++) {
-        if(! s[i].checked) { return false; }
-    }
-    return true;
-}
-
-function SelectAll(){
-    if(document.bookbag_form.biblionumber.length > 0) {
-        var checky = AllAreChecked(document.bookbag_form.biblionumber);
-        var l = document.bookbag_form.biblionumber.length;
-        for (var i=0; i < l; i++) {
-            document.bookbag_form.biblionumber[i].checked = (checky) ? false : true;
-        }
-    }
-}
-
 function addMultiple(){
     var c_value = "";
     if(document.bookbag_form.biblionumber.length > 0) {
@@ -173,8 +147,8 @@ function addMultiple(){
     }
 }
 
-function addSelRecords(valSel) { // function for adding a selection of biblios to the basket
-                                                // from the results list
+/* function for adding a selection of biblios to the basket from the results list */
+function addSelRecords(valSel) {
     var arrayRecords = valSel.split("/");
     var i = 0;
     var nbAdd = 0;
@@ -214,12 +188,12 @@ function showCartUpdate(msg){
 }
 
 function showListsUpdate(msg){
-       // set body of popup window
-       alert(msg);
+    // set body of popup window
+    alert(msg);
 }
 
 function selRecord(num, status) {
-    var str = document.myform.records.value
+    var str = document.myform.records.value;
     if (status){
         str += num+"/";
     }
@@ -255,9 +229,9 @@ function delSelRecords() {
             recordsSel = 1;
             var str2 = valCookie;
             while (!end){
-                s = str.indexOf("/");
+                var s = str.indexOf("/");
                 if (s>0){
-                    num = str.substring(0, s);
+                    var num = str.substring(0, s);
                     str = delRecord(num,str);
                     str2 = delRecord(num,str2);
                     updateLink(num,"del",top.opener);
@@ -285,8 +259,7 @@ function delSelRecords() {
 
     if (recordsSel) {
         var strCookie = "";
-        var nameCookie = "bib_list";
-        var valCookie = readCookie(nameCookie, 1);
+        valCookie = readCookie(nameCookie, 1);
         strCookie = nameCookie + "=" + valCookie;
         var arrayRecords = valCookie.split("/");
         updateBasket(arrayRecords.length-1,top.opener);
@@ -334,19 +307,6 @@ function delBasket() {
     }
 }
 
-
-function quit() {
-    if (document.myform.records.value) {
-        var rep = false;
-        rep = confirm( __p("Bibliographic records", "Are you sure you want to remove the selected items?") );
-        if (rep) {
-            delSelRecords();
-        }
-    }
-    updateBasket(arrayRecords.length-1,top.opener);
-    window.close();
-}
-
 function sendBasket() {
     var nameCookie = "bib_list";
     var valCookie = readCookie(nameCookie);
@@ -355,7 +315,7 @@ function sendBasket() {
     var loc = "/cgi-bin/koha/opac-sendbasket.pl?" + strCookie;
 
     var optWin="scrollbars=yes,resizable=yes,height=600,width=900,top=50,left=100";
-    var win_form = open(loc,"win_form",optWin);
+    open(loc,"win_form",optWin);
 }
 
 function showMore() {
@@ -393,10 +353,9 @@ function holdSel() {
 }
 
 function updateBasket(updated_value,target) {
+    var bcount = "";
     if(updated_value > 0){
         bcount = "<span>"+updated_value+"</span>";
-    } else {
-        bcount = "";
     }
     if(target){
         target.$('#basketcount').html(bcount);
@@ -406,7 +365,7 @@ function updateBasket(updated_value,target) {
 }
 
 function openBiblio(dest,biblionumber) {
-    openerURL=dest+"?biblionumber="+biblionumber;
+    var openerURL = dest + "?biblionumber=" + biblionumber;
     opener.document.location = openerURL;
     opener.focus();
 }
@@ -418,7 +377,7 @@ function addSelToShelf() {
         var iH = 450;
         var optWin = "status=yes,scrollbars=yes,resizable=yes,toolbar=no,location=yes,height="+iH+",width="+iW;
         var loc = "/cgi-bin/koha/opac-addbybiblionumber.pl?biblionumber="+items;
-        var shelf = open(loc, "shelf", optWin);
+        open(loc, "shelf", optWin);
     } else {
         alert( __p("Bibliographic record", "No item was selected") );
     }
@@ -427,20 +386,22 @@ function addSelToShelf() {
 ///  vShelfAdd()  builds url string for multiple-biblio adds.
 
 function vShelfAdd() {
-        bibs= new Array;
-        if(document.bookbag_form.biblionumber.length > 0) {
-                for (var i=0; i < document.bookbag_form.biblionumber.length; i++) {
-                        if (document.bookbag_form.biblionumber[i].checked) {
-                                bibs.push("biblionumber=" +  document.bookbag_form.biblionumber[i].value);
-                        }
-                }
-        if (bibs.length == 0) { showListsUpdate( __p("Bibliographic record", "No item was selected") ); }
-            return bibs.join("&");
-        } else {
-            if (document.bookbag_form.biblionumber.checked) {
-                return "biblionumber=" + document.bookbag_form.biblionumber.value;
+    var bibs = new Array;
+    if(document.bookbag_form.biblionumber.length > 0) {
+        for (var i=0; i < document.bookbag_form.biblionumber.length; i++) {
+            if (document.bookbag_form.biblionumber[i].checked) {
+                bibs.push("biblionumber=" +  document.bookbag_form.biblionumber[i].value);
             }
         }
+        if (bibs.length == 0) {
+            showListsUpdate( __p("Bibliographic record", "No item was selected") );
+        }
+        return bibs.join("&");
+    } else {
+        if (document.bookbag_form.biblionumber.checked) {
+            return "biblionumber=" + document.bookbag_form.biblionumber.value;
+        }
+    }
 }
 
 function showCart(){
@@ -450,10 +411,7 @@ function showCart(){
     if( scrolld > top ){
         top = scrolld + 15;
     }
-    var menuWidth = 200;
-    var buttonWidth = $("#cartmenulink").innerWidth();
-    var buttonOffset = menuWidth - buttonWidth;
-    var left = position.left -  0 // buttonOffset;
+    var left = position.left -  0;
     $("#cartDetails")
         .css({"position":"absolute", "top":top, "left":left})
         .fadeIn("fast");
