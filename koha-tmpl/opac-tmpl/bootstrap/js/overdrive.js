@@ -413,13 +413,14 @@ KOHA.OverDriveCirculation = new function() {
             return false;
         }
 
-        var checkout_format_list = checkout_popup.find("ul.overdrive-format-list").empty();
+        var checkout_format_list = checkout_popup.find("#overdrive-format-list").empty();
         formats.forEach(function (item) {
-            var li = $('<li>').appendTo(checkout_format_list);
-            $('<input name="checkout-format" type="radio">')
-                .val(item)
-                .appendTo(li);
-            li.append(item);
+            var line = $("<div/>").addClass("form-check");
+            var input = '<input id="' + item + '" class="form-check-input" value="' + item + '" name="checkout-format" type="radio" /> ';
+            var label = '<label for="' + item + '">' + item + '</label>"';
+            $(input).appendTo( line );
+            $(label).appendTo( line );
+            line.appendTo( checkout_format_list );
         });
         checkout_popup.modal("show");
         checkout_popup.find(".overdrive-checkout-submit").click(function(e) {
