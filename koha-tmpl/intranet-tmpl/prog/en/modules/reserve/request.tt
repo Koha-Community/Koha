@@ -24,7 +24,71 @@
     <title>Confirm holds &rsaquo; Holds &rsaquo; Circulation &rsaquo; Koha</title>
 [% END %]
 [% INCLUDE 'doc-head-close.inc' %]
-[% Asset.css("css/holds.css") | $raw %]
+[% FILTER collapse %]
+    <style>
+        a.hold-arrow {
+            display:inline-block;
+            padding:3px;
+        }
+        a.hold-arrow:link,
+        a.hold-arrow:visited {
+            color: #538200;
+        }
+
+        a.hold-arrow:hover,
+        a.hold-arrow:active{
+            color: #75b700;
+        }
+
+        .hold-arrow:hover i,
+        .hold-arrow:active i {
+            border-color: #75b700;
+        }
+
+        a.cancel-hold {
+            display:inline-block;
+            padding:3px;
+        }
+
+        a.cancel-hold:link,
+        a.cancel-hold:visited{
+            color:#c00;
+            font-size:130%
+        }
+
+        .icon-move-hold-up::before {
+            content: "\f062";
+        }
+
+        .icon-move-hold-top {
+            border-top: 3px solid #538200;
+        }
+
+        .icon-move-hold-top::before {
+            content: "\f062";
+        }
+
+        .icon-move-hold-bottom {
+            border-bottom: 3px solid #538200;
+        }
+
+        .icon-move-hold-bottom::before {
+            content: "\f063";
+        }
+
+        .icon-move-hold-down::before {
+            content: "\f063";
+        }
+
+        .icon-unset-lowest::before {
+            content: "\f050";
+        }
+
+        .icon-set-lowest::before {
+            content: "\f04e";
+        }
+    </style>
+[% END %]
 </head>
 
 <body id="circ_request" class="catalog">

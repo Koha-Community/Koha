@@ -17,7 +17,9 @@
         <th>Pickup library</th>
         <th>Details</th>
         [% IF ( CAN_user_reserveforothers_modify_holds_priority ) %]
-            <th><img src="[% interface | html %]/[% theme | html %]/img/go-bottom.png" alt="Toggle set to lowest priority" /></th>
+            <th>
+                <i class="fa fa-lg fa-rotate-90 fa-fast-forward" title="Toggle set to lowest priority"></i>
+            </th>
         [% END %]
         <th>&nbsp;</th>
         <th>&nbsp;</th>
@@ -86,17 +88,20 @@
                     [%- SET prev_priority  = loop.prev.priority -%]
                     [%- SET next_priority  = loop.next.priority -%]
                     <td style="white-space:nowrap;">
-                        <a title="Move hold up" href="request.pl?action=move&amp;where=up&amp;first_priority=[% first_priority | html %]&amp;last_priority=[% last_priority | html %]&amp;prev_priority=[% prev_priority | html %]&amp;next_priority=[% next_priority | html %]&amp;borrowernumber=[% hold.borrowernumber | html %]&amp;biblionumber=[% hold.biblionumber | html %]&amp;reserve_id=[% hold.reserve_id | html %]&amp;date=[% hold.date | html %]">
-                            <img src="[% interface | html %]/[% theme | html %]/img/go-up.png" alt="Go up" />
+                        <a class="hold-arrow" title="Move hold up" href="request.pl?action=move&amp;where=up&amp;first_priority=[% first_priority | html %]&amp;last_priority=[% last_priority | html %]&amp;prev_priority=[% prev_priority | html %]&amp;next_priority=[% next_priority | html %]&amp;borrowernumber=[% hold.borrowernumber | html %]&amp;biblionumber=[% hold.biblionumber | html %]&amp;reserve_id=[% hold.reserve_id | html %]&amp;date=[% hold.date | html %]">
+                            <i class="fa fa-lg icon-move-hold-up" aria-hidden="true"></i>
                         </a>
-                        <a title="Move hold to top" href="request.pl?action=move&amp;where=top&amp;first_priority=[% first_priority | html %]&amp;last_priority=[% last_priority | html %]&amp;prev_priority=[% prev_priority | html %]&amp;next_priority=[% next_priority | html %]&amp;borrowernumber=[% hold.borrowernumber | html %]&amp;biblionumber=[% hold.biblionumber | html %]&amp;reserve_id=[% hold.reserve_id | html %]&amp;date=[% hold.date | html %]">
-                            <img src="[% interface | html %]/[% theme | html %]/img/go-top.png" alt="Go top" />
+
+                        <a class="hold-arrow" title="Move hold to top" href="request.pl?action=move&amp;where=top&amp;first_priority=[% first_priority | html %]&amp;last_priority=[% last_priority | html %]&amp;prev_priority=[% prev_priority | html %]&amp;next_priority=[% next_priority | html %]&amp;borrowernumber=[% hold.borrowernumber | html %]&amp;biblionumber=[% hold.biblionumber | html %]&amp;reserve_id=[% hold.reserve_id | html %]&amp;date=[% hold.date | html %]">
+                            <i class="fa fa-lg icon-move-hold-top" aria-hidden="true"></i>
                         </a>
-                        <a title="Move hold to bottom" href="request.pl?action=move&amp;where=bottom&amp;first_priority=[% first_priority | html %]&amp;last_priority=[% last_priority | html %]&amp;prev_priority=[% prev_priority | html %]&amp;next_priority=[% next_priority | html %]&amp;borrowernumber=[% hold.borrowernumber | html %]&amp;biblionumber=[% hold.biblionumber | html %]&amp;reserve_id=[% hold.reserve_id | html %]&amp;date=[% hold.date | html %]">
-                            <img src="[% interface | html %]/[% theme | html %]/img/go-bottom.png" alt="Go bottom" />
+
+                        <a class="hold-arrow" title="Move hold to bottom" href="request.pl?action=move&amp;where=bottom&amp;first_priority=[% first_priority | html %]&amp;last_priority=[% last_priority | html %]&amp;prev_priority=[% prev_priority | html %]&amp;next_priority=[% next_priority | html %]&amp;borrowernumber=[% hold.borrowernumber | html %]&amp;biblionumber=[% hold.biblionumber | html %]&amp;reserve_id=[% hold.reserve_id | html %]&amp;date=[% hold.date | html %]">
+                            <i class="fa fa-lg icon-move-hold-bottom" aria-hidden="true"></i>
                         </a>
-                        <a title="Move hold down" href="request.pl?action=move&amp;where=down&amp;first_priority=[% first_priority | html %]&amp;last_priority=[% last_priority | html %]&amp;prev_priority=[% prev_priority | html %]&amp;next_priority=[% next_priority | html %]&amp;borrowernumber=[% hold.borrowernumber | html %]&amp;biblionumber=[% hold.biblionumber | html %]&amp;reserve_id=[% hold.reserve_id | html %]&amp;date=[% hold.date | html %]">
-                            <img src="[% interface | html %]/[% theme | html %]/img/go-down.png" alt="Go down" />
+
+                        <a class="hold-arrow" title="Move hold down" href="request.pl?action=move&amp;where=down&amp;first_priority=[% first_priority | html %]&amp;last_priority=[% last_priority | html %]&amp;prev_priority=[% prev_priority | html %]&amp;next_priority=[% next_priority | html %]&amp;borrowernumber=[% hold.borrowernumber | html %]&amp;biblionumber=[% hold.biblionumber | html %]&amp;reserve_id=[% hold.reserve_id | html %]&amp;date=[% hold.date | html %]">
+                            <i class="fa fa-lg icon-move-hold-down" aria-hidden="true"></i>
                         </a>
                     </td>
         [%- ELSE -%]
@@ -185,12 +190,13 @@
             [%- IF ( CAN_user_reserveforothers_modify_holds_priority ) -%]
             [%- UNLESS hold.found -%]
                     <td>
-                        <a title="Toggle lowest priority" href="request.pl?action=setLowestPriority&amp;borrowernumber=[% hold.borrowernumber | html %]&amp;biblionumber=[% hold.biblionumber | html %]&amp;reserve_id=[% hold.reserve_id | html %]&amp;date=[% hold.date | html %]">
-                            [%- IF ( hold.lowestPriority ) -%]
-                                <img src="[% interface | html %]/[% theme | html %]/img/go-bottom.png" alt="Unset lowest priority" />
-                            [%- ELSE -%]
-                                <img src="[% interface | html %]/[% theme | html %]/img/go-down.png" alt="Set to lowest priority" />
-                            [%- END -%]
+                            [% IF ( hold.lowestPriority ) %]
+                                <a class="hold-arrow" title="Remove lowest priority" href="request.pl?action=setLowestPriority&amp;borrowernumber=[% hold.borrowernumber | html %]&amp;biblionumber=[% hold.biblionumber | html %]&amp;reserve_id=[% hold.reserve_id | html %]&amp;date=[% hold.date | html %]">
+                                    <i class="fa fa-lg fa-rotate-90 icon-unset-lowest" aria-hidden="true"></i>
+                            [% ELSE %]
+                                <a class="hold-arrow" title="Set lowest priority" href="request.pl?action=setLowestPriority&amp;borrowernumber=[% hold.borrowernumber | html %]&amp;biblionumber=[% hold.biblionumber | html %]&amp;reserve_id=[% hold.reserve_id | html %]&amp;date=[% hold.date | html %]">
+                                    <i class="fa fa-lg fa-rotate-90 icon-set-lowest" aria-hidden="true"></i>
+                            [% END %]
                         </a>
                     </td>
         [%- ELSE -%]
@@ -198,8 +204,8 @@
         [%- END -%]
             [%- END -%]
             <td>
-                <a class="btn btn-default btn-xs cancel-hold" data-borrowernumber="[% hold.borrowernumber | html %]" data-biblionumber="[% hold.biblionumber | html %]" data-id="[% hold.reserve_id | html %]" href="request.pl?action=cancel&amp;borrowernumber=[% hold.borrowernumber | html %]&amp;biblionumber=[% hold.biblionumber | html %]&amp;reserve_id=[% hold.reserve_id | html %]&amp;date=[% hold.date | html %]">
-                    <i class="fa fa-trash" aria-hidden="true"></i> Cancel
+                <a class="cancel-hold" title="Cancel hold" data-borrowernumber="[% hold.borrowernumber | html %]" data-biblionumber="[% hold.biblionumber | html %]" data-id="[% hold.reserve_id | html %]" href="request.pl?action=cancel&amp;borrowernumber=[% hold.borrowernumber | html %]&amp;biblionumber=[% hold.biblionumber | html %]&amp;reserve_id=[% hold.reserve_id | html %]&amp;date=[% hold.date | html %]">
+                    <i class="fa fa-trash" aria-label="Cancel hold"></i>
                 </a>
             </td>
             <td>
