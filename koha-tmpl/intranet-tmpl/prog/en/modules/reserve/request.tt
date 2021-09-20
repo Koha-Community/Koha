@@ -3,6 +3,7 @@
 [% USE Asset %]
 [% USE JSON.Escape %]
 [% USE Koha %]
+[% USE Biblio %]
 [% USE KohaDates %]
 [% USE Branches %]
 [% USE Categories %]
@@ -904,6 +905,16 @@
             [% END %]
 
             [% UNLESS ( patron ) %]
+                [% SET hold_count = Biblio.HoldsCount( biblio.biblionumber ) | html %]
+                [% IF hold_count %]
+                    <label for ="always_show_holds">Always show holds</label>
+                    [% IF always_show_holds == 'DONT' %]
+                        <input type="checkbox" name="always_show_holds" id="always_show_holds" value="DO">
+                        <a class="btn btn-default" value="Show holds" id="show_holds_now" href="/cgi-bin/koha/reserve/request.pl?biblionumber=[% biblio.biblionumber %]&show_holds_now=1">Show holds ([% hold_count %])</a>
+                    [% ELSE %]
+                        <input type="checkbox" name="always_show_holds" value="DO" id="always_show_holds" checked="checked">
+                    [% END %]
+                [% END %]
                 [% IF ( reserveloop ) %]
                     <form id="existing_holds" name="T[% time | html %]" action="modrequest.pl" method="post" style="display:block">
                         [% IF ( multi_hold ) %]
@@ -1399,6 +1410,13 @@
         }
 
          $(document).ready(function() {
+            $("#always_show_holds").change(function(){
+                if( $(this).prop('checked') ){
+                    document.cookie = 'always_show_holds=DO';
+                } else {
+                    document.cookie = 'always_show_holds=DONT';
+                }
+            });
             $("input.needsoverride").click(function() { // This must be before the radio button/checkbox switch logic
                 var itemnumber = this.value;
                 var msg = '';

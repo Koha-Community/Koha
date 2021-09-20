@@ -678,57 +678,62 @@ if (   ( $findborrower && $borrowernumber_hold || $findclub && $club_hold )
 
         # existingreserves building
         my @reserveloop;
-        my @reserves = Koha::Holds->search( { biblionumber => $biblionumber }, { order_by => 'priority' } );
-        foreach my $res (
-            sort {
-                my $a_found = $a->found() || '';
-                my $b_found = $a->found() || '';
-                $a_found cmp $b_found;
-            } @reserves
-          )
-        {
-            my %reserve;
-            if ( $res->is_found() ) {
-                $reserve{'holdingbranch'} = $res->item()->holdingbranch();
-                $reserve{'biblionumber'}  = $res->item()->biblionumber();
-                $reserve{'barcodenumber'} = $res->item()->barcode();
-                $reserve{'wbrcode'}       = $res->branchcode();
-                $reserve{'itemnumber'}    = $res->itemnumber();
-                $reserve{'wbrname'}       = $res->branch()->branchname();
-                $reserve{'atdestination'} = $res->is_at_destination();
-                $reserve{'desk_name'}     = ( $res->desk() ) ? $res->desk()->desk_name() : '' ;
-                $reserve{'found'}     = $res->is_found();
-                $reserve{'inprocessing'} = $res->is_in_processing();
-                $reserve{'intransit'} = $res->is_in_transit();
-            }
-            elsif ( $res->priority() > 0 ) {
-                if ( my $item = $res->item() )  {
-                    $reserve{'itemnumber'}      = $item->id();
-                    $reserve{'barcodenumber'}   = $item->barcode();
-                    $reserve{'item_level_hold'} = 1;
+        my $always_show_holds = $input->cookie('always_show_holds');
+        $template->param( always_show_holds => $always_show_holds );
+        my $show_holds_now = $input->param('show_holds_now');
+        unless( (defined $always_show_holds && $always_show_holds eq 'DONT') && !$show_holds_now ){
+            my @reserves = Koha::Holds->search( { biblionumber => $biblionumber }, { order_by => 'priority' } );
+            foreach my $res (
+                sort {
+                    my $a_found = $a->found() || '';
+                    my $b_found = $a->found() || '';
+                    $a_found cmp $b_found;
+                } @reserves
+              )
+            {
+                my %reserve;
+                if ( $res->is_found() ) {
+                    $reserve{'holdingbranch'} = $res->item()->holdingbranch();
+                    $reserve{'biblionumber'}  = $res->item()->biblionumber();
+                    $reserve{'barcodenumber'} = $res->item()->barcode();
+                    $reserve{'wbrcode'}       = $res->branchcode();
+                    $reserve{'itemnumber'}    = $res->itemnumber();
+                    $reserve{'wbrname'}       = $res->branch()->branchname();
+                    $reserve{'atdestination'} = $res->is_at_destination();
+                    $reserve{'desk_name'}     = ( $res->desk() ) ? $res->desk()->desk_name() : '' ;
+                    $reserve{'found'}     = $res->is_found();
+                    $reserve{'inprocessing'} = $res->is_in_processing();
+                    $reserve{'intransit'} = $res->is_in_transit();
                 }
+                elsif ( $res->priority() > 0 ) {
+                    if ( my $item = $res->item() )  {
+                        $reserve{'itemnumber'}      = $item->id();
+                        $reserve{'barcodenumber'}   = $item->barcode();
+                        $reserve{'item_level_hold'} = 1;
+                    }
+                }
+
+                $reserve{'expirationdate'} = $res->expirationdate;
+                $reserve{'date'}           = $res->reservedate;
+                $reserve{'borrowernumber'} = $res->borrowernumber();
+                $reserve{'biblionumber'}   = $res->biblionumber();
+                $reserve{'patron'}         = $res->borrower;
+                $reserve{'notes'}          = $res->reservenotes();
+                $reserve{'waiting_date'}   = $res->waitingdate();
+                $reserve{'ccode'}          = $res->item() ? $res->item()->ccode() : undef;
+                $reserve{'barcode'}        = $res->item() ? $res->item()->barcode() : undef;
+                $reserve{'priority'}       = $res->priority();
+                $reserve{'lowestPriority'} = $res->lowestPriority();
+                $reserve{'suspend'}        = $res->suspend();
+                $reserve{'suspend_until'}  = $res->suspend_until();
+                $reserve{'reserve_id'}     = $res->reserve_id();
+                $reserve{itemtype}         = $res->itemtype();
+                $reserve{branchcode}       = $res->branchcode();
+                $reserve{non_priority}     = $res->non_priority();
+                $reserve{object}           = $res;
+
+                push( @reserveloop, \%reserve );
             }
-
-            $reserve{'expirationdate'} = $res->expirationdate;
-            $reserve{'date'}           = $res->reservedate;
-            $reserve{'borrowernumber'} = $res->borrowernumber();
-            $reserve{'biblionumber'}   = $res->biblionumber();
-            $reserve{'patron'}         = $res->borrower;
-            $reserve{'notes'}          = $res->reservenotes();
-            $reserve{'waiting_date'}   = $res->waitingdate();
-            $reserve{'ccode'}          = $res->item() ? $res->item()->ccode() : undef;
-            $reserve{'barcode'}        = $res->item() ? $res->item()->barcode() : undef;
-            $reserve{'priority'}       = $res->priority();
-            $reserve{'lowestPriority'} = $res->lowestPriority();
-            $reserve{'suspend'}        = $res->suspend();
-            $reserve{'suspend_until'}  = $res->suspend_until();
-            $reserve{'reserve_id'}     = $res->reserve_id();
-            $reserve{itemtype}         = $res->itemtype();
-            $reserve{branchcode}       = $res->branchcode();
-            $reserve{non_priority}     = $res->non_priority();
-            $reserve{object}           = $res;
-
-            push( @reserveloop, \%reserve );
         }
 
         # get the time for the form name...
