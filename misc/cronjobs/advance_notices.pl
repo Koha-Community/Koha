@@ -213,7 +213,7 @@ pod2usage( -verbose => 2 ) if $man;
 # Since advance notice options are not visible in the web-interface
 # unless EnhancedMessagingPreferences is on, let the user know that
 # this script probably isn't going to do much
-if ( ! C4::Context->preference('EnhancedMessagingPreferences') ) {
+if ( ! C4::Context->preference('EnhancedMessagingPreferences') && $verbose ) {
     warn <<'END_WARN';
 
 The "EnhancedMessagingPreferences" syspref is off.
