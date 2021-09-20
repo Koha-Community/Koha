@@ -64,10 +64,8 @@ Used to set a single system preference.
 sub set_preference {
     my ( $preference ) = @_;
 
-    unless ( C4::Context->config('demo') ) {
-        my $value = join( ',', $query->param( 'value' ) );
-        C4::Context->set_preference( $preference, $value );
-    }
+    my $value = join( ',', $query->param( 'value' ) );
+    C4::Context->set_preference( $preference, $value );
 
     C4::Service->return_success( $response );
 }
@@ -95,16 +93,14 @@ pref_virtualshelves=0
 =cut
 
 sub set_preferences {
-    unless ( C4::Context->config( 'demo' ) ) {
-        foreach my $param ( $query->param() ) {
-            my ( $pref ) = ( $param =~ /pref_(.*)/ );
+    foreach my $param ( $query->param() ) {
+        my ( $pref ) = ( $param =~ /pref_(.*)/ );
 
-            next if ( !defined( $pref ) );
+        next if ( !defined( $pref ) );
 
-            my $value = join( ',', $query->multi_param( $param ) );
+        my $value = join( ',', $query->multi_param( $param ) );
 
-            C4::Context->set_preference( $pref, $value );
-        }
+        C4::Context->set_preference( $pref, $value );
     }
 
     C4::Service->return_success( $response );
