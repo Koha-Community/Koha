@@ -26,7 +26,6 @@ use Test::MockModule;
 use Time::Fake;
 use DateTime;
 use JSON;
-use Data::Dumper;
 use utf8;
 
 use C4::Circulation qw( AddIssue AddReturn );
@@ -1676,7 +1675,7 @@ subtest 'Test Koha::Patrons::merge' => sub {
     is( Koha::Patrons->search( { borrowernumber => $keeper->id } )->count, 1, "Patron from attempted merge with AnonymousPatron still exists" );
 
     subtest 'extended attributes' => sub {
-        plan tests => 5;
+        plan tests => 8;
 
         my $keep_patron =
           $builder->build_object( { class => 'Koha::Patrons' } );
@@ -1763,7 +1762,7 @@ subtest 'Test Koha::Patrons::merge' => sub {
         $keep_patron->delete;
         $merge_patron->delete;
 
-        # Recreate but expect an exception because 2 "normal" attributes will be in the resulting patron
+        # Recreate but don't expect an exception if 2 non-repeatable attributes exist, pick the one from the patron we keep
         $keep_patron =
           $builder->build_object( { class => 'Koha::Patrons' } );
         $merge_patron =
@@ -1780,11 +1779,25 @@ subtest 'Test Koha::Patrons::merge' => sub {
             ]
         );
 
-        throws_ok {
-            $keep_patron->merge_with( [ $merge_patron->borrowernumber ] );
-        }
-        'Koha::Exceptions::Patron::Attribute::NonRepeatable',
-            'Exception thrown trying to merge several non-repeatable attributes';
+        $keep_patron->merge_with( [ $merge_patron->borrowernumber ] );
+        $merged_attributes = $keep_patron->extended_attributes;
+        is( $merged_attributes->count, 4 );
+        compare_attributes(
+            $merged_attributes,
+            ['from attr 1'],
+            $attribute_type_normal_1->code
+        );
+        compare_attributes(
+            $merged_attributes,
+            ['to attr 2'],
+            $attribute_type_normal_2->code
+        );
+        compare_attributes(
+            $merged_attributes,
+            [ 'from attr repeatable', 'to attr repeatable' ],
+            $attribute_type_repeatable->code
+        );
+
     };
 
     t::lib::Mocks::mock_preference( 'AnonymousPatron', '' );

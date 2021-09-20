@@ -23,6 +23,7 @@ use Modern::Perl;
 use List::MoreUtils qw( any uniq );
 use JSON qw( to_json );
 use Unicode::Normalize qw( NFKD );
+use Try::Tiny;
 
 use C4::Context;
 use C4::Log qw( logaction );
@@ -646,7 +647,14 @@ sub merge_with {
             ];
             $attributes->delete; # We need to delete before trying to merge them to prevent exception on unique and repeatable
             for my $attribute ( @$new_attributes ) {
-                $self->add_extended_attribute($attribute);
+                try {
+                    $self->add_extended_attribute($attribute);
+                } catch {
+                    # Don't block the merge if there is a non-repeatable attribute that cannot be added to the current patron.
+                    unless ( $_->isa('Koha::Exceptions::Patron::Attribute::NonRepeatable') ) {
+                        $_->rethrow;
+                    }
+                };
             }
 
             while (my ($r, $field) = each(%$RESULTSET_PATRON_ID_MAPPING)) {
