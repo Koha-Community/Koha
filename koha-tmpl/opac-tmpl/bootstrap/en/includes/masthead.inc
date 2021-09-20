@@ -164,13 +164,13 @@
                                     <form name="searchform" method="get" action="/cgi-bin/koha/opac-search.pl" id="searchform">
                                         <div class="form-row align-items-center">
                                             <div class="col-sm-auto order-1 order-sm-1">
-                                                <label for="masthead_search"> Search
-                                                    [% UNLESS ( Koha.Preference( 'OpacAddMastheadLibraryPulldown' ) == 1 ) %]
-                                                        [% IF ( mylibraryfirst ) %]
-                                                            (in [% Branches.GetName( mylibraryfirst ) | html %] only)
-                                                        [% END %]
+                                                [% UNLESS ( Koha.Preference( 'OpacAddMastheadLibraryPulldown' ) == 1 ) %]
+                                                    [% IF ( mylibraryfirst ) %]
+                                                        <span title="Search in [% Branches.GetName( mylibraryfirst ) | html %] only">
+                                                            <i class="fa fa-question-circle-o"></i>
+                                                        </span>
                                                     [% END %]
-                                                </label>
+                                                [% END %]
                                             </div>
                                             <div class="col-sm-auto order-2 order-sm-2">
                                                 <select name="idx" id="masthead_search" class="form-control">
@@ -262,9 +262,6 @@
                                                         [% END # / BranchCategoriesLoop %]
                                                     </select> <!-- /#select_library -->
                                                 </div> <!-- /.col-sm-auto -->
-                                                <div class="col-sm-auto order-5">
-                                                    <button type="submit" id="searchsubmit" class="btn btn-primary">Go</button>
-                                                </div>
                                             [% ELSE %]
                                                 [% IF ( opac_limit_override ) %]
                                                     [% IF ( opac_search_limit ) %]
@@ -279,10 +276,14 @@
                                                         <input name="limit" value="branch:[% mylibraryfirst | html %]" type="hidden" />
                                                     [% END %]
                                                 [% END # / opac_limit_override %]
-                                                <div class="order-5 col-sm-auto">
-                                                    <button type="submit" id="searchsubmit" class="btn btn-primary">Go</button>
-                                                </div>
                                             [% END # / OpacAddMastheadLibraryPulldown %]
+
+                                            <div class="order-5 col-sm-auto">
+                                                <button type="submit" id="searchsubmit" class="btn btn-primary" title="Search">
+                                                    <i class="fa fa-search"></i>
+                                                </button>
+                                            </div>
+
                                         </div> <!-- /.form-row -->
                                         <input type="hidden" name="weight_search" value="1">
                                     </form>
