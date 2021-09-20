@@ -978,7 +978,7 @@ subtest "Test Local Holds Priority - Bib level" => sub {
     is( $queue_rs->count(), 1,
         "Hold queue contains one hold" );
     is(
-        $queue_rs->next->borrowernumber,
+        $queue_rs->next->borrowernumber->borrowernumber,
         $local_patron->borrowernumber,
         "We should pick the local hold over the next available"
     );
@@ -1048,7 +1048,7 @@ subtest "Test Local Holds Priority - Item level" => sub {
     is( $queue_rs->count(), 1,
         "Hold queue contains one hold" );
     is(
-        $q->borrowernumber,
+        $q->borrowernumber->borrowernumber,
         $local_patron->borrowernumber,
         "We should pick the local hold over the next available"
     );
@@ -1116,7 +1116,7 @@ subtest "Test Local Holds Priority - Item level hold over Record level hold (Bug
     is( $queue_rs->count(), 1,
         "Hold queue contains one hold" );
     is(
-        $q->borrowernumber,
+        $q->borrowernumber->borrowernumber,
         $local_patron->borrowernumber,
         "We should pick the local hold over the next available"
     );
@@ -1193,7 +1193,7 @@ subtest "Test Local Holds Priority - Get correct item for item level hold" => su
     is( $queue_rs->count(), 1,
         "Hold queue contains one hold" );
     is(
-        $q->borrowernumber,
+        $q->borrowernumber->borrowernumber,
         $local_patron->borrowernumber,
         "We should pick the local hold over the next available"
     );
@@ -1444,7 +1444,7 @@ subtest 'Excludes from local holds priority' => sub {
     my $queue_rs = $schema->resultset('TmpHoldsqueue');
     my $next = $queue_rs->next;
     is($queue_rs->count, 1, 'Only 1 patron queueud' );
-    is($next->borrowernumber, $local_patron_not_excluded->borrowernumber, 'Not excluded local patron is queued');
+    is($next->borrowernumber->borrowernumber, $local_patron_not_excluded->borrowernumber, 'Not excluded local patron is queued');
 
     my $item2  = $builder->build_sample_item(
         {
@@ -1458,9 +1458,9 @@ subtest 'Excludes from local holds priority' => sub {
     $queue_rs = $schema->resultset('TmpHoldsqueue');
     is( $queue_rs->count, 2, '2 patrons queued' );
     $next = $queue_rs->next;
-    is($next->borrowernumber, $local_patron_not_excluded->borrowernumber, 'Not excluded local patron is queued');
+    is($next->borrowernumber->borrowernumber, $local_patron_not_excluded->borrowernumber, 'Not excluded local patron is queued');
     $next = $queue_rs->next;
-    is($next->borrowernumber, $other_patron->borrowernumber, 'Other patron is queued');
+    is($next->borrowernumber->borrowernumber, $other_patron->borrowernumber, 'Other patron is queued');
 
     $item1->exclude_from_local_holds_priority(1)->store;
 
@@ -1469,9 +1469,9 @@ subtest 'Excludes from local holds priority' => sub {
     $queue_rs = $schema->resultset('TmpHoldsqueue');
     is( $queue_rs->count, 2, '2 patrons queued' );
     $next = $queue_rs->next;
-    is($next->borrowernumber, $other_patron->borrowernumber, 'Other patron is queued');
+    is($next->borrowernumber->borrowernumber, $other_patron->borrowernumber, 'Other patron is queued');
     $next = $queue_rs->next;
-    is($next->borrowernumber, $local_patron_excluded->borrowernumber, 'Excluded local patron is queued');
+    is($next->borrowernumber->borrowernumber, $local_patron_excluded->borrowernumber, 'Excluded local patron is queued');
 };
 # Cleanup
 $schema->storage->txn_rollback;

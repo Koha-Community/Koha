@@ -1034,8 +1034,8 @@ subtest 'move_to_biblio() tests' => sub {
 
     my $get_tmp_holdsqueue1 = $schema->resultset('TmpHoldsqueue')->search({ itemnumber => $tmp_holdsqueue1->{itemnumber} })->single;
     my $get_tmp_holdsqueue2 = $schema->resultset('TmpHoldsqueue')->search({ itemnumber => $tmp_holdsqueue2->{itemnumber} })->single;
-    is($get_tmp_holdsqueue1->biblionumber, $target_biblionumber, 'move_to_biblio moves tmp_holdsqueue for item 1');
-    is($get_tmp_holdsqueue2->biblionumber, $source_biblionumber, 'move_to_biblio does not move tmp_holdsqueue for item 2');
+    is($get_tmp_holdsqueue1->biblionumber->biblionumber, $target_biblionumber, 'move_to_biblio moves tmp_holdsqueue for item 1');
+    is($get_tmp_holdsqueue2->biblionumber->biblionumber, $source_biblionumber, 'move_to_biblio does not move tmp_holdsqueue for item 2');
 
     my $get_hold_fill_target1 = $schema->resultset('HoldFillTarget')->search({ itemnumber => $hold_fill_target1->{itemnumber} })->single;
     my $get_hold_fill_target2 = $schema->resultset('HoldFillTarget')->search({ itemnumber => $hold_fill_target2->{itemnumber} })->single;
