@@ -75,7 +75,7 @@ sub get {
                 mij => {
                     status => 200,
                     format => 'mij',
-                    data   => $record->to_mij
+                    text   => $record->to_mij
                 },
                 marc => {
                     status => 200,
@@ -220,7 +220,7 @@ sub get_public {
             mij => {
                 status => 200,
                 format => 'mij',
-                data   => $record->to_mij
+                text   => $record->to_mij
             },
             marc => {
                 status => 200,
