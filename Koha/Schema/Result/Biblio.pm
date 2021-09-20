@@ -495,6 +495,21 @@ __PACKAGE__->has_many(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
+=head2 tmp_holdsqueues
+
+Type: has_many
+
+Related object: L<Koha::Schema::Result::TmpHoldsqueue>
+
+=cut
+
+__PACKAGE__->has_many(
+  "tmp_holdsqueues",
+  "Koha::Schema::Result::TmpHoldsqueue",
+  { "foreign.biblionumber" => "self.biblionumber" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
 =head2 virtualshelfcontents
 
 Type: has_many
@@ -511,8 +526,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2021-08-27 08:42:21
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:fsBT6f/ma1fDlGQoauO7Uw
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2021-09-20 12:00:15
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:troBZEbpX+2RhgH2jptVZQ
 
 __PACKAGE__->has_many(
   "biblioitem",

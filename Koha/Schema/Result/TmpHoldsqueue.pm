@@ -26,6 +26,7 @@ __PACKAGE__->table("tmp_holdsqueue");
 =head2 biblionumber
 
   data_type: 'integer'
+  is_foreign_key: 1
   is_nullable: 1
 
 =head2 itemnumber
@@ -58,6 +59,7 @@ __PACKAGE__->table("tmp_holdsqueue");
 =head2 borrowernumber
 
   data_type: 'integer'
+  is_foreign_key: 1
   is_nullable: 0
 
 =head2 cardnumber
@@ -110,7 +112,7 @@ __PACKAGE__->table("tmp_holdsqueue");
 
 __PACKAGE__->add_columns(
   "biblionumber",
-  { data_type => "integer", is_nullable => 1 },
+  { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
   "itemnumber",
   { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
   "barcode",
@@ -122,7 +124,7 @@ __PACKAGE__->add_columns(
   "phone",
   { data_type => "mediumtext", is_nullable => 1 },
   "borrowernumber",
-  { data_type => "integer", is_nullable => 0 },
+  { data_type => "integer", is_foreign_key => 1, is_nullable => 0 },
   "cardnumber",
   { data_type => "varchar", is_nullable => 1, size => 32 },
   "reservedate",
@@ -142,6 +144,41 @@ __PACKAGE__->add_columns(
 );
 
 =head1 RELATIONS
+
+=head2 biblionumber
+
+Type: belongs_to
+
+Related object: L<Koha::Schema::Result::Biblio>
+
+=cut
+
+__PACKAGE__->belongs_to(
+  "biblionumber",
+  "Koha::Schema::Result::Biblio",
+  { biblionumber => "biblionumber" },
+  {
+    is_deferrable => 1,
+    join_type     => "LEFT",
+    on_delete     => "CASCADE",
+    on_update     => "CASCADE",
+  },
+);
+
+=head2 borrowernumber
+
+Type: belongs_to
+
+Related object: L<Koha::Schema::Result::Borrower>
+
+=cut
+
+__PACKAGE__->belongs_to(
+  "borrowernumber",
+  "Koha::Schema::Result::Borrower",
+  { borrowernumber => "borrowernumber" },
+  { is_deferrable => 1, on_delete => "CASCADE", on_update => "CASCADE" },
+);
 
 =head2 itemnumber
 
@@ -164,8 +201,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07046 @ 2019-05-14 18:14:09
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:tzgAgf+OVO+IncaTr7SZuQ
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2021-09-20 12:00:15
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:ytvFiixR/AIAgTV/5sewcQ
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration

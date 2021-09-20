@@ -1789,6 +1789,21 @@ __PACKAGE__->has_many(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
+=head2 tmp_holdsqueues
+
+Type: has_many
+
+Related object: L<Koha::Schema::Result::TmpHoldsqueue>
+
+=cut
+
+__PACKAGE__->has_many(
+  "tmp_holdsqueues",
+  "Koha::Schema::Result::TmpHoldsqueue",
+  { "foreign.borrowernumber" => "self.borrowernumber" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
 =head2 user_permissions
 
 Type: has_many
@@ -1890,8 +1905,8 @@ Composing rels: L</aqorder_users> -> ordernumber
 __PACKAGE__->many_to_many("ordernumbers", "aqorder_users", "ordernumber");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2021-08-27 08:42:21
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:AyU2Z+V4O3ZWV8VhYqXyVg
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2021-09-20 12:00:15
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:9g9WsdsdPINi2NP4H2A+CA
 
 __PACKAGE__->add_columns(
     '+anonymized'    => { is_boolean => 1 },
