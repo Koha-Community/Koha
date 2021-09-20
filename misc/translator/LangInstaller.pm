@@ -19,7 +19,7 @@ package LangInstaller;
 
 use Modern::Perl;
 
-use C4::Context qw( config preference new interface );
+use C4::Context;
 # WARNING: Any other tested YAML library fails to work properly in this
 # script content
 # FIXME Really?

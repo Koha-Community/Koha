@@ -23,7 +23,7 @@ use Modern::Perl;
 use Data::Dumper qw( Dumper );
 use List::MoreUtils qw( any );
 
-use C4::Context qw(preference);
+use C4::Context;
 use C4::Letters qw( GetPreparedLetter EnqueueLetter );
 use C4::Log qw( logaction );
 

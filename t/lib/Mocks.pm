@@ -16,7 +16,7 @@ package t::lib::Mocks;
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use C4::Context qw( config new preference userenv _new_userenv set_userenv );
+use C4::Context;
 
 use Test::MockModule;
 use Test::MockObject;
