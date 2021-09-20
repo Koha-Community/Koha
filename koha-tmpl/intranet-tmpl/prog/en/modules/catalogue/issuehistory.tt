@@ -86,7 +86,7 @@
                 [% IF Koha.Preference('RecordStaffUserOnCheckout') %]
                 <td>[% IF checkout.issuer_id %]
                     <a href="/cgi-bin/koha/circ/circulation.pl?borrowernumber=[% checkout.issuer_id | uri %]">
-                    [% INCLUDE 'patron-title.inc' patron=checkout.issuer_id %]
+                    [% INCLUDE 'patron-title.inc' patron=checkout.issuer %]
                     </a>
                     [% END %]</td>
                 [% END %]
