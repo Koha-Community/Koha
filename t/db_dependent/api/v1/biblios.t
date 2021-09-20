@@ -17,9 +17,6 @@
 
 use Modern::Perl;
 
-use utf8;
-use Encode;
-
 use Test::More tests => 3;
 use Test::MockModule;
 use Test::Mojo;
@@ -41,7 +38,7 @@ my $t = Test::Mojo->new('Koha::REST::V1');
 
 subtest 'get() tests' => sub {
 
-    plan tests => 22;
+    plan tests => 21;
 
     $schema->storage->txn_begin;
 
@@ -103,28 +100,6 @@ subtest 'get() tests' => sub {
       ->status_is(404)
       ->json_is( '/error', 'Object not found.' );
 
-    subtest 'marc-in-json encoding tests' => sub {
-
-        plan tests => 3;
-
-        my $title_with_diacritics = "L'insoutenable légèreté de l'être";
-
-        my $biblio = $builder->build_sample_biblio(
-            {
-                title  => $title_with_diacritics,
-                author => "Milan Kundera"
-            }
-        );
-
-        my $result = $t->get_ok( "//$userid:$password@/api/v1/biblios/" . $biblio->biblionumber
-                    => { Accept => 'application/marc-in-json' } )
-          ->status_is(200)->tx->res->body;
-
-        my $encoded_title  = Encode::encode( "UTF-8", $title_with_diacritics );
-
-        like( $result, qr/\Q$encoded_title/, "The title is not double encoded" );
-    };
-
     $schema->storage->txn_rollback;
 };
 
@@ -182,7 +157,7 @@ subtest 'delete() tests' => sub {
 
 subtest 'get_public() tests' => sub {
 
-    plan tests => 26;
+    plan tests => 25;
 
     $schema->storage->txn_begin;
 
@@ -263,28 +238,6 @@ subtest 'get_public() tests' => sub {
                     => { Accept => 'text/plain' } )
         ->status_is(200)
         ->content_is($biblio->metadata->record->as_formatted);
-    };
-
-    subtest 'marc-in-json encoding tests' => sub {
-
-        plan tests => 3;
-
-        my $title_with_diacritics = "L'insoutenable légèreté de l'être";
-
-        my $biblio = $builder->build_sample_biblio(
-            {
-                title  => $title_with_diacritics,
-                author => "Milan Kundera"
-            }
-        );
-
-        my $result = $t->get_ok( "/api/v1/public/biblios/" . $biblio->biblionumber
-                    => { Accept => 'application/marc-in-json' } )
-          ->status_is(200)->tx->res->body;
-
-        my $encoded_title  = Encode::encode( "UTF-8", $title_with_diacritics );
-
-        like( $result, qr/\Q$encoded_title/, "The title is not double encoded" );
     };
 
     # Hide author in OPAC
