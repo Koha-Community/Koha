@@ -2499,16 +2499,11 @@ sub _adjust_pubyear {
         $retval = $1;
     } elsif( $retval =~ m/(\d\d\d\d)/ && $1 > 0 ) {
         $retval = $1;
-    } elsif( $retval =~ m/
-             (?<year>\d)[-]?[.Xx?]{3}
-            |(?<year>\d{2})[.Xx?]{2}
-            |(?<year>\d{3})[.Xx?]
-            |(?<year>\d)[-]{1,3}\??
-            |(?<year>\d\d)[-]{1,2}\??
-            |(?<year>\d{3})[-]\??
-    /xms ) { # the form 198-? occurred in Dutch ISBD rules
-        my $digits = $+{year};
-        $retval = $digits * ( 10 ** ( 4 - length($digits) ));
+    } elsif( $retval =~ m/(?<year>\d{1,3})[.Xx?-]/ ) {
+        # See also bug 24674: enough to look at one unknown year char like .Xx-?
+        # At this point in code 1234? or 1234- already passed the earlier regex
+        # Things like 2-, 1xx, 1??? are now converted to a four positions-year.
+        $retval = $+{year} * ( 10 ** (4-length($+{year})) );
     } else {
         $retval = undef;
     }
