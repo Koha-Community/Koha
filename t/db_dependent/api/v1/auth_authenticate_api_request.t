@@ -64,7 +64,7 @@ subtest 'token-based tests' => sub {
     my $formData = {
         grant_type    => 'client_credentials',
         client_id     => $api_key->client_id,
-        client_secret => $api_key->secret
+        client_secret => $api_key->plain_text_secret
     };
     $t->post_ok('/api/v1/oauth/token', form => $formData)
         ->status_is(200)
