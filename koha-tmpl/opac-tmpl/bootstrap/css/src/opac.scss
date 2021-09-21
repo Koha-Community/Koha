@@ -699,6 +699,13 @@ fieldset {
             font-weight: bold;
         }
 
+        div.label {
+            display: inline-block;
+            width: 9rem;
+            margin-right: 1rem;
+            float: none;
+        }
+
         label,
         .label {
             float: left;
@@ -708,10 +715,19 @@ fieldset {
             width: 9rem;
         }
 
+        label.checkbox-label {
+            float: none;
+            margin-right: 0;
+            font-weight: normal;
+            text-align: left;
+            width: auto;
+        }
+
         label {
             &.error {
                 color: #C00;
                 float: none;
+                display: inline;
                 font-style: italic;
                 font-weight: normal;
                 margin-left: 1rem;
@@ -749,6 +765,7 @@ fieldset {
             }
         }
 
+
         li {
             clear: left;
             float: left;
@@ -757,13 +774,15 @@ fieldset {
             width: 100%;
 
             &.lradio {
-                padding-left: 8.5em;
                 width: auto;
 
                 label {
                     float: none;
-                    margin: 0 0 0 1em;
+                    margin: 0;
                     width: auto;
+                }
+                input {
+                    margin-right: 1rem;
                 }
             }
         }
