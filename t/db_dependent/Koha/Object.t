@@ -32,7 +32,7 @@ use Koha::Acquisition::Orders;
 use Koha::DateUtils qw( dt_from_string );
 use Koha::Libraries;
 use Koha::Patrons;
-use Koha::ApiKeys;
+use Koha::Library::Groups;
 
 use JSON;
 use Scalar::Util qw( isvstring );
@@ -606,24 +606,29 @@ subtest 'store() tests' => sub {
 
     plan tests => 16;
 
-    # Using Koha::ApiKey to test Koha::Object>-store
+    # Using Koha::Library::Groups to test Koha::Object>-store
     # Simple object with foreign keys and unique key
 
     $schema->storage->txn_begin;
 
-    # Create a patron to make sure its ID doesn't exist on the DB
-    my $patron = $builder->build_object({ class => 'Koha::Patrons' });
-    my $patron_id = $patron->id;
-    $patron->delete;
+    # Create a library to make sure its ID doesn't exist on the DB
+    my $library = $builder->build_object({ class => 'Koha::Libraries' });
+    my $branchcode = $library->branchcode;
+    $library->delete;
 
-    my $api_key = Koha::ApiKey->new({ patron_id => $patron_id, secret => 'a secret', description => 'a description' });
+    my $library_group = Koha::Library::Group->new(
+        {
+            branchcode      => $library->branchcode,
+            title => 'a title',
+        }
+    );
 
     my $dbh = $schema->storage->dbh;
     {
         local $dbh->{PrintError} = 0;
         local $dbh->{RaiseError} = 0;
         throws_ok
-            { $api_key->store }
+            { $library_group->store }
             'Koha::Exceptions::Object::FKConstraint',
             'Exception is thrown correctly';
         is(
@@ -633,21 +638,21 @@ subtest 'store() tests' => sub {
         );
         is(
             $@->broken_fk,
-            'patron_id',
+            'branchcode',
             'Exception field is correct'
         );
 
-        $patron = $builder->build_object({ class => 'Koha::Patrons' });
-        $api_key = $builder->build_object({ class => 'Koha::ApiKeys' });
+        $library_group = $builder->build_object({ class => 'Koha::Library::Groups' });
 
-        my $new_api_key = Koha::ApiKey->new({
-            patron_id => $patron_id,
-            secret => $api_key->secret,
-            description => 'a description',
-        });
+        my $new_library_group = Koha::Library::Group->new(
+            {
+                branchcode      => $library_group->branchcode,
+                title        => $library_group->title,
+            }
+        );
 
         throws_ok
-            { $new_api_key->store }
+            { $new_library_group->store }
             'Koha::Exceptions::Object::DuplicateID',
             'Exception is thrown correctly';
 
@@ -659,17 +664,17 @@ subtest 'store() tests' => sub {
 
         like(
            $@->duplicate_id,
-           qr/(api_keys\.)?secret/,
+           qr/(library_groups\.)?title/,
            'Exception field is correct (note that MySQL 8 is displaying the tablename)'
         );
     }
 
     # Successful test
-    $api_key->set({ secret => 'Manuel' });
-    my $ret = $api_key->store;
-    is( ref($ret), 'Koha::ApiKey', 'store() returns the object on success' );
+    $library_group->set({ title => 'Manuel' });
+    my $ret = $library_group->store;
+    is( ref($ret), 'Koha::Library::Group', 'store() returns the object on success' );
 
-    my $library = $builder->build_object( { class => 'Koha::Libraries' } );
+    $library = $builder->build_object( { class => 'Koha::Libraries' } );
     my $patron_category = $builder->build_object(
         {
             class => 'Koha::Patron::Categories',
@@ -677,7 +682,7 @@ subtest 'store() tests' => sub {
         }
     );
 
-    $patron = eval {
+    my $patron = eval {
         Koha::Patron->new(
             {
                 categorycode    => $patron_category->categorycode,
