@@ -101,6 +101,7 @@
             [% ELSIF ( QUEUED_MESSAGE.failure_code == 'DUPLICATE_MESSAGE' ) %]Message is duplicate
             [% ELSIF ( QUEUED_MESSAGE.failure_code == 'NO_NOTES' ) %]No notes from SMS driver
             [% ELSIF ( QUEUED_MESSAGE.failure_code == 'SENDMAIL' ) %]Unhandled email failure, check the logs for further details
+            [% ELSIF ( QUEUED_MESSAGE.failure_code == "UNKNOWN_ERROR" ) %]Unknown error
             [% ELSE %]Error occurred while sending email.
             [% END %]
         [% END %]
