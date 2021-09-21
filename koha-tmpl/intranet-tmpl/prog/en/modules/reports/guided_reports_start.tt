@@ -849,7 +849,7 @@
                             <input type="hidden" name="reportname" value="[% reportname | html %]" />
                             <input type="hidden" name="group" value="[% group | html %]" />
                             <input type="hidden" name="subgroup" value="[% subgroup | html %]" />
-                            <input type="hidden" name="notes" value="[% notes | html %]" />
+                            <input type="hidden" name="notes" value="[% notes | $raw %]" />
                             <input type="hidden" name="cache_expiry" value="[% cache_expiry | html %]" />
                             <input type="hidden" name="cache_expiry_units" value="[% cache_expiry_units | html %]" />
                             <input type="hidden" name="public" value="[% public | html %]" />
@@ -883,7 +883,7 @@
                             <input type="hidden" name="id" value="[% id | html %]" />
                             <h1>Enter parameters for report [% name | html %]:</h1>
                             [% IF ( notes ) %]
-                                <p>[% notes | html %]</p>
+                                <p>[% notes | $raw %]</p>
                             [% END %]
                             <fieldset class="rows">
                                 <ol>
@@ -943,7 +943,7 @@
                     >
                     <div class="page-section">
                         [% IF ( notes ) %]
-                            <p><span class="label">Notes:</span> [% notes | html %]</p>
+                            <p><span class="label">Notes:</span> [% notes | $raw %]</p>
                         [% END %]
                         [% IF ( unlimited_total ) %]
                             <p>
@@ -1415,7 +1415,7 @@
                                 [% END # /IF (usecache) %]
                                 <li>
                                     <label for="notes">Notes:</label>
-                                    <textarea id="notes" name="notes" cols="50" rows="2">[% notes | html %]</textarea>
+                                    <textarea id="notes" name="notes" cols="50" rows="2">[% notes | $raw %]</textarea>
                                 </li>
                             </ol>
                         </fieldset>
@@ -1445,7 +1445,7 @@
                 [% IF saved_results %]
                     <h1>Saved report results</h1>
                     <h2>[% name | html %]</h2>
-                    <p>[% notes | html %]</p>
+                    <p>[% notes | $raw %]</p>
                     <table>
                         [% FOREACH rows IN saved_results %]
                             <tr>
@@ -1465,7 +1465,7 @@
                             [% IF ( notes ) %]
                                 <li>
                                     <span class="label">Notes:</span>
-                                    [% notes | html %]
+                                    [% notes | $raw %]
                                 </li>
                             [% ELSE %]
 
@@ -1533,7 +1533,7 @@
                                 [% END %]
                                 <li>
                                     <label for="notes">Notes:</label>
-                                    <textarea id="notes" name="notes" cols="50" rows="2">[% notes | html %]</textarea>
+                                    <textarea id="notes" name="notes" cols="50" rows="2">[% notes | $raw %]</textarea>
                                 </li>
                             </ol>
                         </fieldset>
