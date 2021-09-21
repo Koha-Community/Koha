@@ -373,6 +373,7 @@
 
                                         [% UNLESS hidden.defined('sex') %]
                                             <li class="lradio">
+                                                <div class="label"></div>
                                                 <label for="sex-female" class="radio inline"><span class="patronsex-female">Female:</span></label>
                                                 [% IF borrower.sex == 'F' %]
                                                     <input type="radio" name="borrower_sex" id="sex-female" value="F" checked="checked" />
@@ -871,11 +872,11 @@
                                     </div>
 
                                     <ol>
-                                        <li><label for="borrower_password" class="[% required.password | html %]">Password</label>
+                                        <li><label for="password" class="[% required.password | html %]">Password:</label>
                                             <input type="password" name="borrower_password" id="password" class="[% required.password | html %]" />
                                             <div class="required_label [% required.password | html %]">Required</div>
                                         </li>
-                                        <li><label for="borrower_password2" class="[% required.password | html %]">Confirm password</label>
+                                        <li><label for="password2" class="[% required.password | html %]">Confirm password:</label>
                                             <input type="password" name="borrower_password2" id="password2" />
                                             <div class="required_label [% required.password | html %]">Required</div>
                                         </li>
@@ -958,7 +959,13 @@
                                     <legend>GDPR consent</legend>
                                     <ol>
                                     <li>
-                                        <label></label><span><input type="checkbox" name="borrower_gdpr_proc_consent" value="agreed"> I agree with your processing of my personal data as outlined in the <a target="_blank" href="[% Koha.Preference('PrivacyPolicyURL') | url %]">privacy policy</a>. <div class="required">Required</div></span>
+                                        <div class="label"></div>
+                                        <label class="checkbox-label" for="borrower_gdpr_proc_consent">
+                                            <input type="checkbox" name="borrower_gdpr_proc_consent" id="borrower_gdpr_proc_consent" class="required" value="agreed">
+                                            I agree with your processing of my personal data as outlined in the <a target="_blank" href="[% Koha.Preference('PrivacyPolicyURL') | url %]">privacy policy</a>.
+                                        </label>
+                                        <label class="error" for="borrower_gdpr_proc_consent" style="display: none;"></label>
+                                        <div class="required_label required">Required</div>
                                     </li>
                                     </ol>
                                 </fieldset>
