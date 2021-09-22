@@ -32,7 +32,6 @@ use Koha::DateUtils qw( dt_from_string );
 use base qw(Koha::Object);
 
 use Koha::Acquisition::Orders;
-use Koha::ArticleRequest::Status;
 use Koha::ArticleRequests;
 use Koha::Biblio::Metadatas;
 use Koha::Biblioitems;
