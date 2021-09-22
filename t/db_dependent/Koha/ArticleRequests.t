@@ -17,14 +17,15 @@
 
 use Modern::Perl;
 
-use Test::More tests => 1;
+use Test::More tests => 3;
 use Test::MockModule;
 
-use t::lib::TestBuilder;
-use t::lib::Mocks;
-
+use Koha::ArticleRequest::Status;
 use Koha::ArticleRequests;
 use Koha::Database;
+
+use t::lib::Mocks;
+use t::lib::TestBuilder;
 
 my $schema  = Koha::Database->new->schema;
 my $builder = t::lib::TestBuilder->new;
@@ -74,6 +75,112 @@ subtest 'requested() tests' => sub {
     my $requested_branch = Koha::ArticleRequests->requested( $library_1->id );
     is( $requested_branch->count, 1, 'One article request with the REQUESTED status, for the selected branchcode' );
     is( $requested_branch->next->status, Koha::ArticleRequest::Status::Requested, 'Status is correct' );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'filter_by_current() tests' => sub {
+
+    plan tests => 1;
+
+    $schema->storage->txn_begin;
+
+    my $ar_requested = $builder->build_object(
+        {
+            class => 'Koha::ArticleRequests',
+            value => { status => Koha::ArticleRequest::Status::Requested }
+        }
+    );
+    my $ar_pending = $builder->build_object(
+        {
+            class => 'Koha::ArticleRequests',
+            value => { status => Koha::ArticleRequest::Status::Pending }
+        }
+    );
+    my $ar_processing = $builder->build_object(
+        {
+            class => 'Koha::ArticleRequests',
+            value => { status => Koha::ArticleRequest::Status::Processing }
+        }
+    );
+    my $ar_completed = $builder->build_object(
+        {
+            class => 'Koha::ArticleRequests',
+            value => { status => Koha::ArticleRequest::Status::Completed }
+        }
+    );
+    my $ar_cancelled = $builder->build_object(
+        {
+            class => 'Koha::ArticleRequests',
+            value => { status => Koha::ArticleRequest::Status::Canceled }
+        }
+    );
+
+    my $article_requests = Koha::ArticleRequests->search(
+        {
+            id => [
+                $ar_requested->id, $ar_pending->id, $ar_processing->id,
+                $ar_completed->id, $ar_cancelled->id
+            ]
+        }
+    );
+
+    my $current_article_requests = $article_requests->filter_by_current;
+
+    is( $current_article_requests->count, 3, 'Count is correct' );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'filter_by_current() tests' => sub {
+
+    plan tests => 1;
+
+    $schema->storage->txn_begin;
+
+    my $ar_requested = $builder->build_object(
+        {
+            class => 'Koha::ArticleRequests',
+            value => { status => Koha::ArticleRequest::Status::Requested }
+        }
+    );
+    my $ar_pending = $builder->build_object(
+        {
+            class => 'Koha::ArticleRequests',
+            value => { status => Koha::ArticleRequest::Status::Pending }
+        }
+    );
+    my $ar_processing = $builder->build_object(
+        {
+            class => 'Koha::ArticleRequests',
+            value => { status => Koha::ArticleRequest::Status::Processing }
+        }
+    );
+    my $ar_completed = $builder->build_object(
+        {
+            class => 'Koha::ArticleRequests',
+            value => { status => Koha::ArticleRequest::Status::Completed }
+        }
+    );
+    my $ar_cancelled = $builder->build_object(
+        {
+            class => 'Koha::ArticleRequests',
+            value => { status => Koha::ArticleRequest::Status::Canceled }
+        }
+    );
+
+    my $article_requests = Koha::ArticleRequests->search(
+        {
+            id => [
+                $ar_requested->id, $ar_pending->id, $ar_processing->id,
+                $ar_completed->id, $ar_cancelled->id
+            ]
+        }
+    );
+
+    my $finished_article_requests = $article_requests->filter_by_finished;
+
+    is( $finished_article_requests->count, 2, 'Count is correct' );
 
     $schema->storage->txn_rollback;
 };

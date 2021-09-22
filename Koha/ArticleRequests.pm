@@ -33,7 +33,7 @@ Koha::ArticleRequests - Koha ArticleRequests Object class
 
 =head1 API
 
-=head2 Class Methods
+=head2 Class methods
 
 =cut
 
@@ -58,6 +58,49 @@ sub search_limited {
     $params->{'borrowernumber.branchcode'} = { -in => \@restricted_branchcodes } if @restricted_branchcodes;
     $attributes->{join} = 'borrowernumber';
     return $self->search( $params, $attributes );
+}
+
+=head3 filter_by_current
+
+    my $current_article_requests = $article_requests->filter_by_current;
+
+Returns a new resultset, filtering out finished article requests.
+
+=cut
+
+sub filter_by_current {
+    my ($self) = @_;
+
+    return $self->search(
+        {
+            status => [
+                Koha::ArticleRequest::Status::Requested,
+                Koha::ArticleRequest::Status::Pending,
+                Koha::ArticleRequest::Status::Processing,
+            ]
+        }
+    );
+}
+
+=head3 filter_by_finished
+
+    my $finished_article_requests = $article_requests->filter_by_finished;
+
+Returns a new resultset, filtering out current article requests.
+
+=cut
+
+sub filter_by_finished {
+    my ($self) = @_;
+
+    return $self->search(
+        {
+            status => [
+                Koha::ArticleRequest::Status::Completed,
+                Koha::ArticleRequest::Status::Canceled,
+            ]
+        }
+    );
 }
 
 =head3 requested
