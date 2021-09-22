@@ -84,11 +84,11 @@ if ( $print eq 'checkinslip' ) {
     my $checkinslip_branch = $session->param('branch') ? $session->param('branch') : $branch;
 
     # get today's checkins
-    my @itemnumbers = $patron->old_checkouts->search( { branchcode => $checkinslip_branch } )
-      ->filter_by_todays_checkins->get_column('itemnumber');
+    my @issue_ids = $patron->old_checkouts->search( { branchcode => $checkinslip_branch } )
+      ->filter_by_todays_checkins->get_column('issue_id');
 
     my %loops = (
-        old_issues => \@itemnumbers,
+        old_issues => \@issue_ids,
     );
 
     my $letter = C4::Letters::GetPreparedLetter(

@@ -794,7 +794,7 @@ sub _parseletter_sth {
     ($table eq 'debits'       )    ? "SELECT * FROM accountlines WHERE   accountlines_id = ?"                         :
     ($table eq 'items'        )    ? "SELECT * FROM $table WHERE     itemnumber = ?"                                  :
     ($table eq 'issues'       )    ? "SELECT * FROM $table WHERE     itemnumber = ?"                                  :
-    ($table eq 'old_issues'   )    ? "SELECT * FROM $table WHERE     itemnumber = ? ORDER BY timestamp DESC LIMIT 1"  :
+    ($table eq 'old_issues'   )    ? "SELECT * FROM $table WHERE     issue_id = ?"  :
     ($table eq 'reserves'     )    ? "SELECT * FROM $table WHERE borrowernumber = ? and biblionumber = ?"             :
     ($table eq 'borrowers'    )    ? "SELECT * FROM $table WHERE borrowernumber = ?"                                  :
     ($table eq 'branches'     )    ? "SELECT * FROM $table WHERE     branchcode = ?"                                  :
@@ -1739,7 +1739,7 @@ sub _get_tt_params {
             module   => 'Koha::Old::Checkouts',
             singular => 'old_checkout',
             plural   => 'old_checkouts',
-            fk       => 'itemnumber',
+            pk       => 'issue_id',
         },
         overdues => {
             module   => 'Koha::Checkouts',
