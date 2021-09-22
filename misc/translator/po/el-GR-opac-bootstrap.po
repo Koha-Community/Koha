@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 20.11\n"
-"POT-Creation-Date: 2021-08-20 15:30-0300\n"
+"POT-Creation-Date: 2021-09-13 00:31-0300\n"
 "PO-Revision-Date: 2021-07-23 08:51+0000\n"
 "Last-Translator: svozana <svozana@uom.edu.gr>\n"
 "Language-Team: Koha Translation Team <koha-translate@nongnu.org>\n"
@@ -739,7 +739,7 @@ msgstr "%s Διαγραφή %s Διαγραφή λίστας %s "
 #. %4$s:  ELSIF hold.found == 'T' 
 #. %5$s:  ELSE 
 #. %6$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:140
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:142
 #, c-format
 msgid "%s Fulfilled %s Cancelled %s Waiting %s In transit %s Pending %s "
 msgstr ""
@@ -1145,9 +1145,10 @@ msgstr "%s Δεν έχετε δανειστεί τίποτα από αυτή τ�
 
 #. %1$s:  IF !holds 
 #. %2$s:  ELSE 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:55
-#, c-format
-msgid "%s You have never placed a hold from this library. %s "
+#. %3$s:  SET show_itemtype_column = Koha.Preference('AllowHoldItemTypeSelection') 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:56
+#, fuzzy, c-format
+msgid "%s You have never placed a hold from this library. %s %s "
 msgstr "%s Δεν έχετε κάνει κράτηση πότε από αυτή τη βιβλιοθήκη. %s "
 
 #. %1$s:  IF Koha.Preference('HoldFeeMode') == 'any_time_is_collected' 
@@ -1913,7 +1914,7 @@ msgstr "%s%s%sKoha%s κατάλογος &rsaquo; Συγκαταθέσεις"
 #. %2$s:  LibraryNameTitle | html 
 #. %3$s:  ELSE 
 #. %4$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:6
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:7
 #, c-format
 msgid "%s%s%sKoha online%s catalog &rsaquo; Your holds history"
 msgstr "%s%s%sKoha%s κατάλογος &rsaquo; Ιστορικό κρατήσεων"
@@ -3345,9 +3346,9 @@ msgid "000 "
 msgstr "000 "
 
 #. SPAN
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:114
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:121
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:128
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:116
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:123
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:130
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:76
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:82
 msgid "0000-00-00"
@@ -3838,7 +3839,7 @@ msgstr "Οποιαδήποτε μορφή"
 msgid "Any item "
 msgstr "Οποιοδήποτε τεκμήριο "
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:136
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:138
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:301
 #, c-format
 msgid "Any item type"
@@ -4058,7 +4059,7 @@ msgstr ""
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-basket.tt:263
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-browse.tt:52
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-course-details.tt:65
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:89
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:91
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:131
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:85
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:265
@@ -4239,7 +4240,7 @@ msgstr "Πίσω στη λίστα αποτελεσμάτων αναζήτηση
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:112
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1253
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:90
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:92
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-request-article.tt:143
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:351
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:247
@@ -4524,7 +4525,7 @@ msgstr "ΑκύρωσηΚράτησης"
 msgid "CancelRecall "
 msgstr "ΑκύρωσηΑνάκλησης "
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:95
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:97
 #, c-format
 msgid "Cancellation date"
 msgstr "Ημερομηνία ακύρωσης"
@@ -5958,7 +5959,7 @@ msgstr "Αναμένεται"
 msgid "Expecting a specific item selection."
 msgstr "Αναμένοντας την επιλογή ενός συγκεκριμένου αντιτύπου."
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:93
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:95
 #, c-format
 msgid "Expiration date"
 msgstr "Ημερομηνία λήξης"
@@ -6343,7 +6344,7 @@ msgstr ""
 #. INPUT type=submit name=save
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-downloadcart.tt:26
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-downloadshelf.tt:74
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:71
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:73
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:61
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:146
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:204
@@ -6498,7 +6499,7 @@ msgstr "Απόκρυψη παραθύρου"
 msgid "Highlight"
 msgstr "Τονισμός"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:92
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:94
 #, c-format
 msgid "Hold date"
 msgstr "Ημερομηνία κράτησης"
@@ -6570,7 +6571,7 @@ msgstr "Κρατήσεις "
 msgid "Holds (%s)"
 msgstr "Κρατήσεις (%s)"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:55
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:56
 #, c-format
 msgid "Holds history"
 msgstr "Ιστορικό κρατήσεων"
@@ -6596,7 +6597,7 @@ msgstr "Ιστορικό κρατήσεων"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-discharge.tt:14
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-downloadshelf.tt:13
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:61
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:41
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:42
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:22
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-imageviewer.tt:42
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-issue-note.tt:16
@@ -7387,7 +7388,7 @@ msgstr "Βιβλιοθήκες"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:599
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:127
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:91
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:93
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:200
 #, c-format
 msgid "Library"
@@ -8684,19 +8685,19 @@ msgstr ""
 msgid "Only items currently available for loan or reference"
 msgstr "Μόνο τεκμήρια διαθέσιμα για δανεισμό ή αναφορά"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:69
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:71
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:59
 #, c-format
 msgid "Order by author"
 msgstr "Ταξινόμηση με βάση τον συγγραφέα"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:67
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:69
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:57
 #, c-format
 msgid "Order by date"
 msgstr "Ταξινόμηση με βάση την ημερομηνία"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:68
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:70
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:58
 #, c-format
 msgid "Order by title"
@@ -9929,7 +9930,7 @@ msgstr "Αιτήθηκε από"
 msgid "Requested from:"
 msgstr "Αιτήθηκε από:"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:97
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:99
 #, c-format
 msgid "Requested item type"
 msgstr "Αιτούμενος τύπος τεκμηρίου"
@@ -10695,7 +10696,7 @@ msgstr "Shibboleth σύνδεση"
 msgid "Show"
 msgstr "Εμφάνιση"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:81
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:83
 #, c-format
 msgid "Show 50 items"
 msgstr "Εμφάνιση 50 τεκμηρίων"
@@ -10706,7 +10707,7 @@ msgid "Show _MENU_ entries"
 msgstr "Προβολή _MENU_ εγγραφών"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:624
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:77
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:79
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:67
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/opac-facets.inc:12
 #, c-format
@@ -10766,7 +10767,7 @@ msgstr "Εμφάνιση έτους: "
 msgid "Showing %s of about %s results"
 msgstr "Εμφάνιση %s από %s αποτελέσματα"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:76
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:78
 #, c-format
 msgid "Showing 50 items. "
 msgstr "Εμφάνιση 50 τεκμηρίων. "
@@ -10776,7 +10777,7 @@ msgstr "Εμφάνιση 50 τεκμηρίων. "
 msgid "Showing _START_ to _END_ of _TOTAL_"
 msgstr "Εμφάνιση _START_ έως _END_ από _TOTAL_"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:80
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:82
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:70
 #, c-format
 msgid "Showing all items. "
@@ -11060,7 +11061,7 @@ msgstr "Στατιστικά"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:828
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1248
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:131
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:99
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:101
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:135
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:349
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:728
@@ -12041,7 +12042,7 @@ msgstr "Πέμπτη"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-basket.tt:262
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-browse.tt:54
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-course-details.tt:64
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:88
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:90
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:132
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:89
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:83
@@ -12504,7 +12505,7 @@ msgstr "Τόμος"
 msgid "Volume:"
 msgstr "Τόμος:"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:94
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:96
 #, c-format
 msgid "Waiting date"
 msgstr "Ημερομηνία αναμονής"
@@ -13310,7 +13311,7 @@ msgstr "Η ξεχρέωσή σας θα προβάλλεται σε αυτή τ�
 msgid "Your download should begin automatically."
 msgstr "Η λήψη σας θα ξεκινήσει αυτόματα."
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:43
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:44
 #, c-format
 msgid "Your holds history"
 msgstr "Ιστορικό κρατήσεων σας"
