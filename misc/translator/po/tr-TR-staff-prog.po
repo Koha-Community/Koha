@@ -3,7 +3,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 20.11\n"
-"POT-Creation-Date: 2021-08-20 16:02-0300\n"
+"POT-Creation-Date: 2021-09-17 23:13-0300\n"
 "PO-Revision-Date: 2021-08-23 10:49+0000\n"
 "Last-Translator: Onur Erdem <onurerdem@sdu.edu.tr>\n"
 "Language-Team: Koha Translation Team\n"
@@ -164,7 +164,7 @@ msgid "# Subs"
 msgstr "# Altlar"
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/preferences.tt:231
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/preferences.tt:245
 msgid "# of % selected"
 msgstr "Seçilen % # kadarı"
 
@@ -965,7 +965,7 @@ msgstr "%s %s %s %s&amp;sql_params=%s%s %s&amp;param_name=%s%s %s "
 #. %37$s: - SWITCH account.status -
 #. %38$s: - CASE 'UNRETURNED' -
 #: koha-tmpl/intranet-tmpl/prog/en/includes/accounts.inc:9
-#, c-format, fuzzy
+#, c-format
 msgid ""
 "%s %s %s %sAccount creation fee %sAccount renewal fee %sLost item %sManual "
 "fee %sNew card %sFine %sLost item processing fee %sRental fee %sDaily rental "
@@ -980,7 +980,7 @@ msgstr ""
 "kiralama materyalinin yenilenmesi %sAyırtma bedeli %sÇok uzun süredir "
 "bekleyen ayırtılmış materyal %sÖdeme %s%s %s %s %s %s %s %sÖdeme %sİrsaliye "
 "%sAffedildi %sKredi %sKayıp materyal ücret iadesi %sFazla ödeme iadesi "
-"%sGeri Ödeme %sİptal edilen ücret %s%s %s %s %s %s %s"
+"%sGeri Ödeme %sİptal edilen ücret %s%s %s %s % s %s %s"
 
 #. %1$s:  INCLUDE 'doc-head-close.inc' 
 #. %2$s:  BLOCK norms_text 
@@ -3700,6 +3700,19 @@ msgstr ""
 "%sSipariş edildi %sDurumu bilinmiyor %sHerhangi %s%s%s %s %s %s %s İsimsiz "
 "%s %s (%s)"
 
+#. %1$s:  SWITCH w 
+#. %2$s:  CASE "bcrypt_config_not_set" 
+#. %3$s:  CASE 
+#. %4$s:  w | html 
+#. %5$s:  END 
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/preferences.tt:173
+#, c-format
+msgid ""
+"%s %sPseudonymization must only be turned on if the 'bcrypt_settings' "
+"configuration entry exists and is correctly filled in the Koha configuration "
+"file. %sUnknown warning \"%s\" %s "
+msgstr ""
+
 #. %1$s:  SWITCH basket.create_items 
 #. %2$s:  CASE 'receiving' 
 #. %3$s:  CASE 'cataloguing' 
@@ -4669,18 +4682,18 @@ msgstr ""
 
 #. For the first occurrence,
 #. %1$s:  END 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/member-alt-address-style.inc:117
+#: koha-tmpl/intranet-tmpl/prog/en/includes/member-alt-address-style.inc:119
 #: koha-tmpl/intranet-tmpl/prog/en/includes/member-alt-contact-style.inc:102
-#: koha-tmpl/intranet-tmpl/prog/en/includes/member-main-address-style.inc:108
+#: koha-tmpl/intranet-tmpl/prog/en/includes/member-main-address-style.inc:110
 #, c-format
 msgid "%s Address 2: "
 msgstr "%s Adres 2: "
 
 #. For the first occurrence,
 #. %1$s:  END 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/member-alt-address-style.inc:87
+#: koha-tmpl/intranet-tmpl/prog/en/includes/member-alt-address-style.inc:89
 #: koha-tmpl/intranet-tmpl/prog/en/includes/member-alt-contact-style.inc:87
-#: koha-tmpl/intranet-tmpl/prog/en/includes/member-main-address-style.inc:78
+#: koha-tmpl/intranet-tmpl/prog/en/includes/member-main-address-style.inc:80
 #, c-format
 msgid "%s Address: "
 msgstr "%s Adres: "
@@ -4781,7 +4794,7 @@ msgstr "%s Ödünç verilebilir. %s"
 #. %1$s:  FOR w IN warnHiddenBiblionumbers 
 #. %2$s:  w.frameworkcode | html 
 #. %3$s:  w.interface | html 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:387
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:382
 #, c-format
 msgid ""
 "%s Biblio framework \"%s\" has the biblionumber field hidden at the "
@@ -4852,9 +4865,9 @@ msgstr "%s Dolaşım notu: "
 
 #. For the first occurrence,
 #. %1$s:  END 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/member-alt-address-style.inc:147
+#: koha-tmpl/intranet-tmpl/prog/en/includes/member-alt-address-style.inc:149
 #: koha-tmpl/intranet-tmpl/prog/en/includes/member-alt-contact-style.inc:132
-#: koha-tmpl/intranet-tmpl/prog/en/includes/member-main-address-style.inc:138
+#: koha-tmpl/intranet-tmpl/prog/en/includes/member-main-address-style.inc:140
 #, c-format
 msgid "%s City: "
 msgstr "%s İl: "
@@ -4904,16 +4917,16 @@ msgid "%s Confirm password: "
 msgstr "%s Şifreyi onaylayın: "
 
 #. %1$s:  END 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/member-alt-address-style.inc:241
+#: koha-tmpl/intranet-tmpl/prog/en/includes/member-alt-address-style.inc:243
 #, c-format
 msgid "%s Contact note: "
 msgstr "%s İrtibat notu: "
 
 #. For the first occurrence,
 #. %1$s:  END 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/member-alt-address-style.inc:192
+#: koha-tmpl/intranet-tmpl/prog/en/includes/member-alt-address-style.inc:194
 #: koha-tmpl/intranet-tmpl/prog/en/includes/member-alt-contact-style.inc:177
-#: koha-tmpl/intranet-tmpl/prog/en/includes/member-main-address-style.inc:183
+#: koha-tmpl/intranet-tmpl/prog/en/includes/member-main-address-style.inc:185
 #, c-format
 msgid "%s Country: "
 msgstr "%s Ülke: "
@@ -5040,7 +5053,7 @@ msgid "%s Editing "
 msgstr "%s Düzenleniyor "
 
 #. %1$s:  END 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/member-alt-address-style.inc:222
+#: koha-tmpl/intranet-tmpl/prog/en/includes/member-alt-address-style.inc:224
 #, c-format
 msgid "%s Email: "
 msgstr "%s Eposta: "
@@ -5840,7 +5853,7 @@ msgstr "%s Beklemede %s İşleniyor %s Tamamlandı %s İptal edildi %s"
 
 #. For the first occurrence,
 #. %1$s:  END 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/member-alt-address-style.inc:207
+#: koha-tmpl/intranet-tmpl/prog/en/includes/member-alt-address-style.inc:209
 #: koha-tmpl/intranet-tmpl/prog/en/includes/member-alt-contact-style.inc:192
 #, c-format
 msgid "%s Phone: "
@@ -6051,9 +6064,9 @@ msgstr "%s Sırala 2: "
 
 #. For the first occurrence,
 #. %1$s:  END 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/member-alt-address-style.inc:177
+#: koha-tmpl/intranet-tmpl/prog/en/includes/member-alt-address-style.inc:179
 #: koha-tmpl/intranet-tmpl/prog/en/includes/member-alt-contact-style.inc:162
-#: koha-tmpl/intranet-tmpl/prog/en/includes/member-main-address-style.inc:168
+#: koha-tmpl/intranet-tmpl/prog/en/includes/member-main-address-style.inc:170
 #, c-format
 msgid "%s State: "
 msgstr "%s Eyalet: "
@@ -6066,16 +6079,16 @@ msgstr "%s Halen ödünçte"
 
 #. For the first occurrence,
 #. %1$s:  END 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/member-alt-address-style.inc:102
-#: koha-tmpl/intranet-tmpl/prog/en/includes/member-main-address-style.inc:93
+#: koha-tmpl/intranet-tmpl/prog/en/includes/member-alt-address-style.inc:104
+#: koha-tmpl/intranet-tmpl/prog/en/includes/member-main-address-style.inc:95
 #, c-format
 msgid "%s Street number: "
 msgstr "%s Cadde numarası: "
 
 #. For the first occurrence,
 #. %1$s:  END 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/member-alt-address-style.inc:63
-#: koha-tmpl/intranet-tmpl/prog/en/includes/member-main-address-style.inc:54
+#: koha-tmpl/intranet-tmpl/prog/en/includes/member-alt-address-style.inc:64
+#: koha-tmpl/intranet-tmpl/prog/en/includes/member-main-address-style.inc:55
 #, c-format
 msgid "%s Street type: "
 msgstr "%s Cadde türü: "
@@ -6414,9 +6427,9 @@ msgstr "%s Listeleriniz %s %s &rsaquo; %s "
 
 #. For the first occurrence,
 #. %1$s:  END 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/member-alt-address-style.inc:132
+#: koha-tmpl/intranet-tmpl/prog/en/includes/member-alt-address-style.inc:134
 #: koha-tmpl/intranet-tmpl/prog/en/includes/member-alt-contact-style.inc:117
-#: koha-tmpl/intranet-tmpl/prog/en/includes/member-main-address-style.inc:123
+#: koha-tmpl/intranet-tmpl/prog/en/includes/member-main-address-style.inc:125
 #, c-format
 msgid "%s ZIP/Postal code: "
 msgstr "%s ZIP/Posta Kodu: "
@@ -8460,7 +8473,7 @@ msgstr "%st - yakın üst gövde"
 msgid "%s✓%s"
 msgstr "%s✓%s"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:810
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:805
 #, c-format
 msgid ""
 "&#1041;&#1098;&#1083;&#1075;&#1072;&#1088;&#1089;&#1082;&#1080; (Bulgarian) "
@@ -8468,14 +8481,14 @@ msgid ""
 msgstr ""
 "&#1041;&#1098;&#1083;&#1075;&#1072;&#1088;&#1089;&#1082;&#1080; (Bulgaristan)"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:844
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:839
 #, c-format
 msgid ""
 "&#1056;&#1091;&#1089;&#1089;&#1082;&#1080;&#1081; (Russian) Victor Titarchuk "
 "and Serhij Dubyk"
 msgstr "&#1056;&#1091;&#1089;&#1089;&#1082;&#1080;&#1081; (Rusya)"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:851
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:846
 #, c-format
 msgid ""
 "&#1059;&#1082;&#1088;&#1072;&#1111;&#1085;&#1089;&#1100;&#1082;&#1072; "
@@ -8484,63 +8497,63 @@ msgstr ""
 "&#1059;&#1082;&#1088;&#1072;&#1111;&#1085;&#1089;&#1100;&#1082;&#1072; "
 "(Ukrayna)"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:825
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:820
 #, c-format
 msgid "&#1506;&#1489;&#1512;&#1497;&#1514; (Hebrew)"
 msgstr "&#1506;&#1489;&#1512;&#1497;&#1514; (İbranice)"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:850
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:845
 #, c-format
 msgid "&#1575;&#1585;&#1583;&#1608;(Urdu) Ata ur Rehman"
 msgstr "&#1575;&#1585;&#1583;&#1608;(Urduca)"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:839
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:834
 #, c-format
 msgid "&#1601;&#1575;&#1585;&#1587;&#1609; (Persian)"
 msgstr "&#1601;&#1575;&#1585;&#1587;&#1609; (Farsça)"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:813
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:808
 #, c-format
 msgid "&#20013;&#25991; (Chinese)"
 msgstr "&#20013;&#25991; (Çince)"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:826
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:821
 #, c-format
 msgid "&#2361;&#2367;&#2344;&#2381;&#2342;&#2368; (Hindi)"
 msgstr "&#2361;&#2367;&#2344;&#2381;&#2342;&#2368; (Hintçe)"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:812
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:807
 #, c-format
 msgid ""
 "&#2476;&#2494;&#2434;&#2482;&#2494; (Bengali) Parthasarathi Mukhopadhyay"
 msgstr "&#2476;&#2494;&#2434;&#2482;&#2494; (Bengalce)"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:832
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:827
 #, c-format
 msgid "&#26085;&#26412;&#35486; (Japanese)"
 msgstr "&#26085;&#26412;&#35486; (Japonca)"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:840
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:835
 #, c-format
 msgid "&#2835;&#2908;&#2879;&#2822; (&#x014D;&#7771;iy&#257;)"
 msgstr "&#2835;&#2908;&#2879;&#2822; (&#x014D;&#7771;iy&#257;)"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:834
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:829
 #, c-format
 msgid "&#3221;&#3240;&#3277;&#3240;&#3233; (kanna&#7693;a)"
 msgstr "&#3221;&#3240;&#3277;&#3240;&#3233; (kanna&#7693;a)"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:838
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:833
 #, c-format
 msgid "&#3374;&#3378;&#3375;&#3390;&#3379;&#3330; (Malayalam)"
 msgstr "&#3374;&#3378;&#3375;&#3390;&#3379;&#3330; (Malayalam)"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:848
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:843
 #, c-format
 msgid "&#3616;&#3634;&#3625;&#3634;&#3652;&#3607;&#3618; (Thai)"
 msgstr "&#3616;&#3634;&#3625;&#3634;&#3652;&#3607;&#3618; (Tayland)"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:808
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:803
 #, c-format
 msgid ""
 "&#4768;&#4635;&#4653;&#4763; (Amharic) Getway II Ethiopia Co. (Yohannes "
@@ -8549,12 +8562,12 @@ msgstr ""
 "&#4768;&#4635;&#4653;&#4763; (Amharic) Getway II Ethiopia Co. (Yohannes "
 "Mulugeta (Ekip Lideri), Tegene Assefa, Abiyot Bayou)"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:833
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:828
 #, c-format
 msgid "&#54620;&#44397;&#50612; (Korean)"
 msgstr "&#54620;&#44397;&#50612; (Korece)"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:824
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:819
 #, c-format
 msgid ""
 "&#949;&#955;&#955;&#951;&#957;&#953;&#954;&#940; (Greek, Modern [1453- ]) "
@@ -8565,7 +8578,7 @@ msgstr ""
 "Koha Hellenic Users' Group (Georgia Katsarou, Dimitris Antonakis, Eugenios "
 "Papadopoulos), Theodoros Theodoropoulos, Panoraia Gaitanou and Kiriaki Roditi"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:815
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:810
 #, c-format
 msgid "&#x010D;e&#353;tina (Czech)"
 msgstr "&#x010D;e&#353;tina (Çekçe)"
@@ -10636,7 +10649,7 @@ msgstr ""
 "(Dahil, varsayılan olarak %s gün önceden bugüne kadar. Diğer tarih "
 "aralıklarını gerektiği gibi ayarlayın.)"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:830
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:825
 #, c-format
 msgid "(Indonesian)"
 msgstr "(Endonezya Dili)"
@@ -10978,7 +10991,7 @@ msgstr ") %s %s ( için süresi uzatıldı"
 msgid ") you selected does not exist. "
 msgstr ") seçmiş olduğunuz mevcut değildir. "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:572
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:567
 #, c-format
 msgid "), France"
 msgstr "), Fransa"
@@ -11008,30 +11021,30 @@ msgstr "). %s %s Materyal bekliyor olarak işaretlenmiş %s için %s ("
 msgid "** Vendor's listings already include tax."
 msgstr "** Sağlayıcı listesinde KDV dahildir."
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:518
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:513
 #, c-format
 msgid ", Auckland, New Zealand (OPAC 'star-ratings' sponsorship)"
 msgstr ", Auckland, New Zealand (OPAC 'star-ratings' sponsorship)"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:515
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:510
 #, c-format
 msgid ", Cyprus"
 msgstr ", Kıbrıs"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:512
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:507
 #, c-format
 msgid ", France (Koha 3.0 enhancements to patrons and holds modules)"
 msgstr ""
 ", Fransa (Koha 3.0 kullanıcılar ve rezervasyon modüllerinde "
 "zenginleştirmeler)"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:510
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:505
 #, c-format
 msgid ", France (Suggestions, Stats wizards and improved LDAP sponsorship)"
 msgstr ""
 ", Fransa (Öneriler, İstatistik sihirbazları ve iyileştirilmiş LDAP desteği)"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:511
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:506
 #, c-format
 msgid ""
 ", France (biblio frameworks, MARC authorities, OPAC basket, Serials "
@@ -11040,27 +11053,27 @@ msgstr ""
 ", Fransa (bibliyografik çerçeveler, MARC otoriteleri, OPAC sepeti, Süreli "
 "Yayınlar desteği)"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:508
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:503
 #, c-format
 msgid ", New Zealand, and Rosalie Blake, Head of Libraries, (Koha 1.0)"
 msgstr ", Yeni Zelanda, Kütüphaneler Yöneticisi Rosalie Blake (Koha 1.0)"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:514
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:509
 #, c-format
 msgid ", OH, USA (Koha 3.0 beta testing)"
 msgstr ", OH, ABD (Koha 3.0 beta testi)"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:509
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:504
 #, c-format
 msgid ", Ohio, USA (MARC sponsorship, documentation, template maintenance)"
 msgstr ", Ohio, ABD (MARC sponsorluğu, dokümantasyon, şablon bakımı)"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:513
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:508
 #, c-format
 msgid ", PA, USA (Koha 3.0 Zebra Integration sponsorship)"
 msgstr ", Pensilvanya, ABD (Koha 3.0 Zebra Entegrasyonu sponsorluğu)"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:821
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:816
 #, c-format
 msgid ", Pascale Nalon (ENSMP), and many more "
 msgstr "Pascale Nalon (ENSMP) ve daha fazlası"
@@ -11070,7 +11083,7 @@ msgstr "Pascale Nalon (ENSMP) ve daha fazlası"
 msgid ", Please transfer this item. "
 msgstr ", Lütfen bu materyali aktarın. "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:756
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:751
 #, c-format
 msgid ", by the "
 msgstr ", tarafından"
@@ -12073,6 +12086,7 @@ msgstr "Eğer hiç eşleşme bulunamadıysa işlem: "
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/subscription-frequencies.tt:136
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:271
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tags/review.tt:83
+#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:352
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/csv-profiles.tt:269
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/koha-news.tt:127
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/letter.tt:149
@@ -12080,7 +12094,6 @@ msgstr "Eğer hiç eşleşme bulunamadıysa işlem: "
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/problem-reports.tt:71
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/quotes-upload.tt:56
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:188
-#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:352
 #: koha-tmpl/intranet-tmpl/prog/en/includes/waiting_holds.inc:16
 #: koha-tmpl/intranet-tmpl/prog/en/includes/mana/mana-report-search-result.inc:44
 #: koha-tmpl/intranet-tmpl/prog/en/includes/mana/mana-subscription-search-result.inc:22
@@ -12524,8 +12537,8 @@ msgstr "Materyal türü ekle"
 msgid "Add item(s)"
 msgstr "Materyal(ler) ekle"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/stockrotation.tt:472
 #: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:398
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/stockrotation.tt:472
 #: koha-tmpl/intranet-tmpl/prog/en/includes/stockrotation-toolbar.inc:12
 #, c-format
 msgid "Add items"
@@ -13024,7 +13037,7 @@ msgstr "Ek parametreler"
 msgid "Additional subfields (XML)"
 msgstr "İlave alt alanlar (XML)"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:662
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:657
 #, c-format
 msgid "Additional thanks to..."
 msgstr "Ayrıca teşekkür etmek istediklerimiz..."
@@ -13369,7 +13382,7 @@ msgstr "Yaş kısıtlaması %s. %s Yine de ödünç verilsin mi? %s"
 msgid "Ages allowed are %s-%s. "
 msgstr "İzin verilen yaş aralığı %s-%s. "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:518
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:513
 #, c-format
 msgid "Albany Senior High School"
 msgstr "Albany Senior High School"
@@ -13420,7 +13433,7 @@ msgstr "Sağa hizala"
 msgid "Alignment"
 msgstr "Hizala"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:561
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:556
 #, c-format
 msgid "Alingsås Public Library, Sweden"
 msgstr "Alingsås Halk Kütüphanesi, İsveç"
@@ -13621,7 +13634,7 @@ msgid "All required Perl modules appear to be installed."
 msgstr "Gerekli tüm Perl modülleri yüklenmiş olarak görünüyor."
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/preferences.tt:231
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/preferences.tt:245
 msgid "All selected"
 msgstr "Tüm seçilen"
 
@@ -13651,7 +13664,7 @@ msgstr "Tüm işlemler"
 msgid "All vendors"
 msgstr "Tüm Sağlayıcılar"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:560
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:555
 #, c-format
 msgid "Allen Ginsberg Library, USA"
 msgstr "Allen Ginsberg Library, USA"
@@ -14025,7 +14038,7 @@ msgstr "Her zaman ödünç almaları anında göster"
 msgid "Amazon cover image"
 msgstr "Amazon kapak resmi"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:562
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:557
 #, c-format
 msgid "American Numismatic Society, USA"
 msgstr "American Numismatic Society, USA"
@@ -14033,6 +14046,7 @@ msgstr "American Numismatic Society, USA"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/acqui-home.tt:106
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoice.tt:146
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/offline.tt:192
+#: koha-tmpl/intranet-tmpl/prog/en/modules/offline_circ/list.tt:37
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/accountline-details.tt:49
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/accountline-details.tt:120
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/boraccount.tt:60
@@ -14040,7 +14054,6 @@ msgstr "American Numismatic Society, USA"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/pay.tt:58
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/paycollect.tt:119
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/paycollect.tt:197
-#: koha-tmpl/intranet-tmpl/prog/en/modules/offline_circ/list.tt:37
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/cash_register_stats.tt:148
 #, c-format
 msgid "Amount"
@@ -14312,7 +14325,7 @@ msgstr "Ödünç alma geçmişini anonimleştir"
 msgid "Another pattern with this name already exists."
 msgstr "Bu isimde bir örüntü zaten mevcut."
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:701
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:696
 #, c-format
 msgid "Antenna.io"
 msgstr "Antenna.io"
@@ -14461,7 +14474,7 @@ msgstr "Her hangi:"
 msgid "Anyone seeing this list"
 msgstr "Bu listeyi gören herkes"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:756
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:751
 #, c-format
 msgid "Apache License, Version 2.0"
 msgstr "Apache Lisansı, Sürüm 2.0 "
@@ -14550,7 +14563,7 @@ msgstr "Onaylanan etiketler"
 msgid "April"
 msgstr "Nisan"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:563
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:558
 #, c-format
 msgid "Arcadia Public Library, USA"
 msgstr "Arcadia Public Library, USA"
@@ -15144,7 +15157,7 @@ msgstr "Bölge"
 msgid "Area:"
 msgstr "Bölge:"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:809
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:804
 #, c-format
 msgid "Armenian Tigran Zargaryan"
 msgstr "Tigran Zargaryan"
@@ -15241,12 +15254,12 @@ msgstr "Birleştirmek için en az iki kayıt seçilmelidir."
 msgid "At library: %s"
 msgstr "Kütüphanede: %s"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:509
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:504
 #, c-format
 msgid "Athens County Public Libraries"
 msgstr "Atina İlçe Halk Kütüphaneleri"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:564
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:559
 #, c-format
 msgid "Athens County Public Libraries, USA"
 msgstr "Athens County Public Libraries, USA"
@@ -15373,11 +15386,11 @@ msgstr "Authname"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:227
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/itemslost.tt:68
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/result.tt:16
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/koha-news.tt:125
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/stockrotation.tt:403
 #: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:180
 #: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:292
 #: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:364
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/koha-news.tt:125
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/stockrotation.tt:403
 #: koha-tmpl/intranet-tmpl/prog/en/includes/cateditor-ui.inc:42
 #: koha-tmpl/intranet-tmpl/prog/en/includes/ill-availability-table.inc:7
 #: koha-tmpl/intranet-tmpl/prog/en/includes/ill-list-table.inc:10
@@ -15882,15 +15895,15 @@ msgstr "Ortalama ödünç verme zamanı"
 msgid "BIBTEX"
 msgstr "BIBTEX"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:774
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:769
 #, c-format
 msgid "BSD 3-clause Licence"
 msgstr "BSD 3-clause Lisansı"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:685
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:753
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:765
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:780
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:680
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:748
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:760
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:775
 #, c-format
 msgid "BSD License"
 msgstr "BSD Lisansı"
@@ -15900,7 +15913,7 @@ msgstr "BSD Lisansı"
 msgid "BT"
 msgstr "BT"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:572
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:567
 #, c-format
 msgid "BULAC"
 msgstr "BULAC"
@@ -16010,6 +16023,7 @@ msgstr "Çubuk"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/labels/result.tt:70
 #: koha-tmpl/intranet-tmpl/prog/en/modules/labels/search.tt:59
 #: koha-tmpl/intranet-tmpl/prog/en/modules/labels/search.tt:60
+#: koha-tmpl/intranet-tmpl/prog/en/modules/offline_circ/list.tt:35
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/accountline-details.tt:45
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/boraccount.tt:53
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/holdshistory.tt:45
@@ -16017,7 +16031,6 @@ msgstr "Çubuk"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:833
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/pay.tt:52
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/readingrec.tt:57
-#: koha-tmpl/intranet-tmpl/prog/en/modules/offline_circ/list.tt:35
 #: koha-tmpl/intranet-tmpl/prog/en/modules/patroncards/edit-layout.tt:277
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/cash_register_stats.tt:150
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/catalogue_out.tt:64
@@ -16604,7 +16617,7 @@ msgstr "Toplu iş:"
 msgid "Batches"
 msgstr "Toplu dosyalar"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:565
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:560
 #, c-format
 msgid "BdP de la Meuse, France"
 msgstr "BdP de la Meuse, France"
@@ -16669,7 +16682,7 @@ msgstr "İle başlayan:"
 msgid "Behavior"
 msgstr "Davranış"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:566
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:561
 #, c-format
 msgid "BibLibre, France"
 msgstr "BibLibre, France"
@@ -16837,7 +16850,7 @@ msgstr "Havuzdaki bibliyografik kayıtlar"
 msgid "Biblios: "
 msgstr "Bibliyografik kayıtlar:"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:567
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:562
 #, c-format
 msgid ""
 "Biblioteca Provincial Fr. Mamerto Esquiú (Provincia Franciscana de la "
@@ -16846,12 +16859,12 @@ msgstr ""
 "Biblioteca Provincial Fr. Mamerto Esquiú (Provincia Franciscana de la "
 "Asunción), Argentina"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:568
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:563
 #, c-format
 msgid "Bibliotheksservice-Zentrum Baden-Württemberg (BSZ), Germany"
 msgstr "Bibliotheksservice-Zentrum Baden-Württemberg (BSZ), Germany"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:572
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:567
 #, c-format
 msgid "Bibliothèque Universitaire des Langues et Civilisations ("
 msgstr "Bibliothèque Universitaire des Langues et Civilisations ("
@@ -16911,7 +16924,7 @@ msgstr "Fatura yeri:"
 msgid "Biography"
 msgstr "Biyografi"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:517
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:512
 #, c-format
 msgid ""
 "Birmingham (UK) based developer Mark James for the famfamfam Silk iconset."
@@ -16996,8 +17009,8 @@ msgstr "Satıcı fatura no: "
 msgid "Boolean"
 msgstr "Boolean"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:681
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:682
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:676
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:677
 #, c-format
 msgid "Bootstrap"
 msgstr "Önyükleyici"
@@ -17096,12 +17109,12 @@ msgstr "Birimler kısıtlaması"
 msgid "Branches limitation: "
 msgstr "Birimler kısıtlaması: "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:569
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:564
 #, c-format
 msgid "Briar Cliff University, USA"
 msgstr "Briar Cliff University, USA"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:694
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:689
 #, c-format
 msgid "Bridge Material Type Icons Project"
 msgstr "Bridge Materyal Türü Simgeleri Projesi"
@@ -17116,7 +17129,7 @@ msgstr "Kısa görünüm"
 msgid "Brightness"
 msgstr "Parlaklık"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:570
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:565
 #, c-format
 msgid "Brimbank City Council, Australia"
 msgstr "Brimbank City Council, Australia"
@@ -17126,12 +17139,12 @@ msgstr "Brimbank City Council, Australia"
 msgid "Broader Term"
 msgstr "Daha Geniş Terim"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:667
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:662
 #, c-format
 msgid "Brooke Johnson"
 msgstr "Brooke Johnson"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:571
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:566
 #, c-format
 msgid "Brooklyn Law School Library, USA"
 msgstr "Brooklyn Law School Library, USA"
@@ -17317,7 +17330,7 @@ msgstr "Yazar"
 msgid "By: "
 msgstr "Yazar: "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:573
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:568
 #, c-format
 msgid "ByWater Solutions, USA"
 msgstr "ByWater Solutions, USA"
@@ -17327,17 +17340,17 @@ msgstr "ByWater Solutions, USA"
 msgid "Bytes"
 msgstr "Bayt"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:584
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:579
 #, c-format
 msgid "C &amp; P Bibliography Services, USA"
 msgstr "C &amp; P Bibliography Services, USA"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:776
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:771
 #, c-format
 msgid "C3.js"
 msgstr "C3.js"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:777
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:772
 #, c-format
 msgid "C3.js v0.4.11"
 msgstr "C3.js v0.4.11"
@@ -17530,7 +17543,7 @@ msgstr "Takvim"
 msgid "Calendar information"
 msgstr "Takvim bilgisi"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:574
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:569
 #, c-format
 msgid "California College of the Arts, USA"
 msgstr "California College of the Arts, USA"
@@ -17583,11 +17596,11 @@ msgstr "Yer no"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/serials-collection.tt:76
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/serials-search.tt:58
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/subscription-batchedit.tt:42
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/inventory.tt:196
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/stockrotation.tt:404
 #: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:194
 #: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:294
 #: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:366
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/inventory.tt:196
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/stockrotation.tt:404
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/cn_browser.tt:41
 #: koha-tmpl/intranet-tmpl/prog/en/includes/resort_form.inc:33
 #: koha-tmpl/intranet-tmpl/prog/en/includes/waiting_holds.inc:13
@@ -17664,12 +17677,12 @@ msgstr "Yer numarası sınıflandırma şeması:"
 msgid "Callnumber: %s "
 msgstr "Yer numarası: %s "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:577
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:572
 #, c-format
 msgid "Calyx, Australia"
 msgstr "Calyx, Australia"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:575
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:570
 #, c-format
 msgid "Camden County, USA"
 msgstr "Camden County, USA"
@@ -17872,8 +17885,8 @@ msgstr "Aşağıdaki alanlar doldurulmadığı için bu kayıt kaydedilemez:"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/oai_set_mappings.tt:115
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/oai_sets.tt:54
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/patron-attr-types.tt:195
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/preferences.tt:172
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/preferences.tt:206
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/preferences.tt:186
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/preferences.tt:220
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/sms_providers.tt:87
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smtp_servers.tt:115
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smtp_servers.tt:197
@@ -17955,6 +17968,13 @@ msgstr "Aşağıdaki alanlar doldurulmadığı için bu kayıt kaydedilemez:"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:610
 #: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:618
 #: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:874
+#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/addbybiblionumber.tt:111
+#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/downloadshelf.tt:43
+#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/sendshelfform.tt:33
+#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:319
+#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:322
+#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:324
+#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:422
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/automatic_item_modification_by_age.tt:39
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:211
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:361
@@ -17981,13 +18001,6 @@ msgstr "Aşağıdaki alanlar doldurulmadığı için bu kayıt kaydedilemez:"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/stockrotation.tt:309
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/stockrotation.tt:390
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:84
-#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/addbybiblionumber.tt:111
-#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/downloadshelf.tt:43
-#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/sendshelfform.tt:33
-#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:319
-#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:322
-#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:324
-#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:422
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/EXAMPLE.tt:18
 #: koha-tmpl/intranet-tmpl/prog/en/includes/auth-finder-search.inc:161
 #: koha-tmpl/intranet-tmpl/prog/en/includes/borrower_debarments.inc:66
@@ -18574,7 +18587,7 @@ msgstr "Kart numaraları zaten listededir"
 msgid "Cardnumbers not found"
 msgstr "Kartnumarası bulunamadı"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:576
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:571
 #, c-format
 msgid "Carnegie Stout Library, USA"
 msgstr "Carnegie Stout Library, USA"
@@ -18776,7 +18789,7 @@ msgstr "Katalog tabloları"
 msgid "Cataloguing tables"
 msgstr "Kataloglama tabloları"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:578
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:573
 #, c-format
 msgid "Catalyst IT, New Zealand"
 msgstr "Catalyst IT, New Zealand"
@@ -18841,9 +18854,9 @@ msgstr "Kategori:"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:836
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember-brief.tt:72
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:470
+#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:297
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:53
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:107
-#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:297
 #: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:65
 #, c-format
 msgid "Category: "
@@ -18916,12 +18929,12 @@ msgstr "Yalnızca tahmini değerleri içeren hücreler."
 msgid "Center"
 msgstr "Merkez"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:579
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:574
 #, c-format
 msgid "Central Kansas Library System (CKLS), USA"
 msgstr "Central Kansas Library System (CKLS), USA"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:580
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:575
 #, c-format
 msgid "Centre collégial des services regroupés (CCSR), Canada"
 msgstr "Centre collégial des services regroupés (CCSR), Canada"
@@ -19752,7 +19765,7 @@ msgstr ""
 "MARC yapısını kontrol eder. MARC Bibliyografik çerçevenizi değiştirirseniz, "
 "tanımınızdaki hataları test etmek için bu aracı çalıştırmanız önerilir."
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:581
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:576
 #, c-format
 msgid "Cheshire Libraries, United Kingdom"
 msgstr "Cheshire Libraries, United Kingdom"
@@ -20345,7 +20358,7 @@ msgstr "Temizle"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/basket/basket.tt:6
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branch_transfer_limits.tt:31
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branch_transfer_limits.tt:45
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/preferences.tt:199
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/preferences.tt:213
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/detail.tt:277
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:73
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:53
@@ -20361,6 +20374,7 @@ msgstr "Temizle"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/checkexpiration.tt:66
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/serials-collection.tt:158
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/serials-search.tt:42
+#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:448
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:96
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:166
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:132
@@ -20372,7 +20386,6 @@ msgstr "Temizle"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/inventory.tt:269
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/modborrowers.tt:127
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/problem-reports.tt:54
-#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:448
 #: koha-tmpl/intranet-tmpl/prog/en/includes/branch-selector.inc:3
 #, c-format
 msgid "Clear all"
@@ -20617,12 +20630,12 @@ msgstr "Bu etiketi genişletmek için tıklayınız"
 msgid "Click to add item"
 msgstr "Materyal eklemek için tıklayınız"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/preferences.tt:126
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/preferences.tt:130
 #, c-format
 msgid "Click to collapse"
 msgstr "Daraltmak için tıklayın"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/preferences.tt:124
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/preferences.tt:128
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/systempreferences.tt:278
 #: koha-tmpl/intranet-tmpl/prog/en/modules/pos/pay.tt:188
 #, c-format
@@ -20705,7 +20718,7 @@ msgstr "Dolaşım ve ceza kurallarının klonlanması başarısız oldu!"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:28
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:191
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:261
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/preferences.tt:192
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/preferences.tt:206
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smtp_servers.tt:251
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/detail.tt:980
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:220
@@ -20735,6 +20748,7 @@ msgstr "Dolaşım ve ceza kurallarının klonlanması başarısız oldu!"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/subscription-add.tt:505
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/subscription-add.tt:511
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/subscription-renew.tt:26
+#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:397
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:167
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/koha-news.tt:172
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/letter.tt:73
@@ -20745,7 +20759,6 @@ msgstr "Dolaşım ve ceza kurallarının klonlanması başarısız oldu!"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:174
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:390
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:406
-#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:397
 #: koha-tmpl/intranet-tmpl/prog/en/includes/chart.inc:5
 #: koha-tmpl/intranet-tmpl/prog/en/includes/chart.inc:106
 #: koha-tmpl/intranet-tmpl/prog/en/includes/circ-menu.inc:185
@@ -20956,13 +20969,13 @@ msgstr "Kod örneği..."
 msgid "Code:"
 msgstr "Kod:"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:743
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:744
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:738
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:739
 #, c-format
 msgid "CodeMirror editing library"
 msgstr "CodeMirror düzenleme kütüphanesi"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:582
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:577
 #, c-format
 msgid "Coeur d'Alene Public Library, USA"
 msgstr "Coeur d'Alene Halk Kütüphanesi, ABD"
@@ -21793,7 +21806,7 @@ msgstr "Sözleşmeler"
 msgid "Contrast"
 msgstr "Karşıtlık"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:558
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:553
 #, c-format
 msgid "Contributing companies and institutions"
 msgstr "Katkıda bulunan şirketler ve kurumlar"
@@ -21969,12 +21982,12 @@ msgstr "Tüm kütüphanelere kopyala"
 msgid "Copyright"
 msgstr "Telif"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:708
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:703
 #, c-format
 msgid "Copyright &copy; 2003-2010 phpMyAdmin devel team"
 msgstr "Copyright &copy; 2003-2010 phpMyAdmin devel takımı"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:703
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:698
 #, c-format
 msgid "Copyright &copy; 2012-2016 "
 msgstr "Copyright &copy; 2012-2016 "
@@ -22011,7 +22024,7 @@ msgstr "Telif tarihi:"
 msgid "Corporate"
 msgstr "Tüzel"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:583
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:578
 #, c-format
 msgid "Corpus Christi Public Libraries, USA"
 msgstr "Corpus Christi Halk Kütüphaneleri, ABD"
@@ -22089,7 +22102,7 @@ msgstr "Belirtilen dize bulunamadı."
 msgid "Could not load emoticons"
 msgstr "İfadeler yüklenemedi"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:552
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:547
 #, c-format
 msgid ""
 "Could not read the contributors.yaml file. Please make sure &lt;docdir&gt; "
@@ -22098,7 +22111,7 @@ msgstr ""
 "contributors.yaml dosyası okunamadı. Lütfen &lt;docdir&gt; komutunun koha-"
 "conf.xml içerisinde doğru bir şekilde tanımlandığından emin olun."
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:876
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:871
 #, c-format
 msgid ""
 "Could not read the history.txt file. Please make sure &lt;docdir&gt; is "
@@ -22107,7 +22120,7 @@ msgstr ""
 "history.txt file. Okunamadı.  Lütfen &lt;docdir&gt;  koha-conf.xml "
 "içerisinde doğru bir şekilde tanımlandığından emin olun."
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:539
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:534
 #, c-format
 msgid ""
 "Could not read the teams.yaml file. Please make sure &lt;docdir&gt; is "
@@ -22261,7 +22274,7 @@ msgstr "Dersler"
 msgid "Cover image"
 msgstr "Kapak resmi"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:513
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:508
 #, c-format
 msgid "Crawford County Federated Library System"
 msgstr "Crawford County Bütünleşik Kütüphane Sistemi"
@@ -22569,12 +22582,12 @@ msgstr "Oluşturma Tarihi"
 msgid "Creation date: "
 msgstr "Oluşturma tarihi:"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:690
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:685
 #, c-format
 msgid "Creative Commons Attribution 2.5 License"
 msgstr "Creative Commons Attribution 2.5 Lisansı"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:696
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:691
 #, c-format
 msgid "Creative Commons Attribution-ShareAlike 2.5 License"
 msgstr "Creative Commons Attribution 2.5 Lisansı"
@@ -22718,7 +22731,7 @@ msgstr "Geçerli Kütüphane"
 msgid "Current library:"
 msgstr "Geçerli Kütüphane:"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:534
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:529
 #, c-format
 msgid "Current maintenance team"
 msgstr "Güncel bakım ekibi"
@@ -22844,17 +22857,17 @@ msgstr "Döngüsel"
 msgid "Cyclical:"
 msgstr "Döngüsel:"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:816
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:811
 #, c-format
 msgid "D&aelig;nsk (Danish)"
 msgstr "D&aelig;nsk (Danca)"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:773
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:768
 #, c-format
 msgid "D3.js"
 msgstr "D3.js"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:774
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:769
 #, c-format
 msgid "D3.js v3.5.17"
 msgstr "D3.js v3.5.17"
@@ -22880,7 +22893,7 @@ msgstr "DBMS otomatik artış düzeltmesi"
 msgid "DISABLED"
 msgstr "DEVRE DIŞI"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:753
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:748
 #, c-format
 msgid "DSpace project"
 msgstr "DSpace projesi"
@@ -23062,7 +23075,7 @@ msgstr "Veritabanı kullanıcısı : "
 msgid "Database: "
 msgstr "Veri tabanı: "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:862
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:857
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/booksellers.tt:92
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/transferorder.tt:45
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/search-history.tt:49
@@ -23077,13 +23090,13 @@ msgstr "Veri tabanı: "
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/request-article.tt:231
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:62
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:113
+#: koha-tmpl/intranet-tmpl/prog/en/modules/offline_circ/list.tt:33
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/accountline-details.tt:43
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/boraccount.tt:49
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/housebound.tt:383
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember-print.tt:103
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/pay.tt:51
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/readingrec.tt:53
-#: koha-tmpl/intranet-tmpl/prog/en/modules/offline_circ/list.tt:33
 #: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:201
 #: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:457
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tags/review.tt:85
@@ -23918,12 +23931,12 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/overdue.tt:197
 #: koha-tmpl/intranet-tmpl/prog/en/modules/labels/label-edit-batch.tt:133
 #: koha-tmpl/intranet-tmpl/prog/en/modules/labels/label-manage.tt:88
+#: koha-tmpl/intranet-tmpl/prog/en/modules/offline_circ/list.tt:83
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/apikeys.tt:74
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/files.tt:53
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/housebound.tt:401
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:105
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:345
-#: koha-tmpl/intranet-tmpl/prog/en/modules/offline_circ/list.tt:83
 #: koha-tmpl/intranet-tmpl/prog/en/modules/patroncards/edit-batch.tt:97
 #: koha-tmpl/intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:85
 #: koha-tmpl/intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:96
@@ -24540,7 +24553,7 @@ msgstr ""
 "Bölümler Ayrılmış Ders Materyalleri modülü için gereklidir ve bu modül "
 "içerisinde kullanılacaktır"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:401
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:396
 #, c-format
 msgid "Deprecation warning"
 msgstr "Kullanımdan kaldırma uyarısı"
@@ -24550,7 +24563,7 @@ msgstr "Kullanımdan kaldırma uyarısı"
 msgid "Dept."
 msgstr "Dept."
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:863
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:858
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoice-files.tt:37
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoice.tt:432
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/supplier.tt:357
@@ -24851,7 +24864,7 @@ msgstr "Ücretin detayları"
 msgid "Details of payment"
 msgstr "Ödemenin detayları"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:823
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:818
 #, c-format
 msgid ""
 "Deutsch (German) Friedrich zur Hellen, Robert Hillig, Katrin Fischer, Beda "
@@ -24860,7 +24873,7 @@ msgstr ""
 "Deutsch (German) Friedrich zur Hellen, Robert Hillig, Katrin Fischer, Beda "
 "Szukics, Mirko Tietgen and Marc Véron"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:585
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:580
 #, c-format
 msgid "Devinim, Turkey"
 msgstr "Devinim, Turkey"
@@ -25179,7 +25192,7 @@ msgstr "Kullanılabilirlik sonuçlarını görüntüleme"
 msgid "Div"
 msgstr "Div"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:586
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:581
 #, c-format
 msgid "Do Space, USA"
 msgstr "Do Space, USA"
@@ -25343,7 +25356,7 @@ msgstr "Vergiyi dahil etme"
 msgid "Done"
 msgstr "Tamamlandı"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:587
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:582
 #, c-format
 msgid "DoverNet, USA"
 msgstr "DoverNet, USA"
@@ -25483,7 +25496,7 @@ msgstr "Varsayılanı bırak"
 msgid "Dublin Core"
 msgstr "Dublin Core"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:589
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:584
 #, c-format
 msgid "Duchesne County Library, USA"
 msgstr "Duchesne County Library, USA"
@@ -25709,7 +25722,7 @@ msgstr "EDIFACT iletisi"
 msgid "EDIFACT messages"
 msgstr "EDIFACT iletileri"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:510
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:505
 #, c-format
 msgid "EMN (Ecole des Mines de Nantes)"
 msgstr "EMN (Ecole des Mines de Nantes)"
@@ -26054,8 +26067,8 @@ msgid "Edit item"
 msgstr "Materyal düzenle"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:513
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:264
 #: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:230
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:264
 #: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:39
 #: koha-tmpl/intranet-tmpl/prog/en/includes/serials-toolbar.inc:38
 #, c-format
@@ -26297,7 +26310,7 @@ msgstr "Baskılar"
 msgid "Editor"
 msgstr "Editör"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:401
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:396
 #, c-format
 msgid ""
 "Elasticsearch version 5.x is not supported in Koha 20.11 and greater. Please "
@@ -26361,7 +26374,7 @@ msgstr "Eposta: "
 msgid "Embed"
 msgstr "Katıştır"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:768
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:763
 #, c-format
 msgid "Emojiarea plug-in for jQuery"
 msgstr "JQery için Emojiarea eklentisi"
@@ -26519,7 +26532,7 @@ msgstr "Sonlanmış"
 msgid "Ended: "
 msgstr "Sonlanmış:"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:819
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:814
 #, c-format
 msgid "English"
 msgstr "İngilizce"
@@ -27049,12 +27062,12 @@ msgstr "Rapora yönelik parametreler işlenirken hatalar bulundu: %s"
 msgid "Errors occurred:"
 msgstr "Hatalar oluştu:"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:590
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:585
 #, c-format
 msgid "Escuela de Orientacion Lacaniana, Argentina"
 msgstr "Escuela de Orientacion Lacaniana, Argentina"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:845
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:840
 #, c-format
 msgid ""
 "Espa&ntilde;ol (Spanish) Bernardo González Kriegel, Héctor Castro and Tomás "
@@ -27580,7 +27593,7 @@ msgstr "ExtendedPatronAttributes"
 msgid "FINMARC"
 msgstr "FINMARC"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:594
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:589
 #, c-format
 msgid "FIT"
 msgstr "FIT"
@@ -27767,22 +27780,22 @@ msgstr "Resim yüklemesi başarısız oldu: _({0}"
 msgid "Fall"
 msgstr "Güz"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:689
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:684
 #, c-format
 msgid "FamFamFam Site"
 msgstr "FamFamFam Sitesi"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:687
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:682
 #, c-format
 msgid "Famfamfam iconset"
 msgstr "Famfamfam iconset"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:592
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:587
 #, c-format
 msgid "Fargo Public Library, USA"
 msgstr "Fargo Public Library, USA"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:593
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:588
 #, c-format
 msgid "Farmington Public Library, USA"
 msgstr "Farmington Halk Kütüphanesi, ABD"
@@ -27856,7 +27869,7 @@ msgstr "Kadın "
 msgid "Female "
 msgstr "Kadın "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:591
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:586
 #, c-format
 msgid "Fenway Library Organization, USA"
 msgstr "Fenway Library Organization, USA"
@@ -28090,8 +28103,8 @@ msgstr "Dosya: "
 msgid "File: %s"
 msgstr "Dosya: %s"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:746
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:747
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:741
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:742
 #, c-format
 msgid "FileSaver library"
 msgstr "FileSaver kütüphanesi"
@@ -28534,14 +28547,14 @@ msgstr "Aşağıdaki gerekli olan alanlar eksik:"
 msgid "Following required subfields are missing:"
 msgstr "Aşağıdaki gerekli olan alt alanlar eksik:"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:740
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:741
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:735
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:736
 #, c-format
 msgid "Font Awesome"
 msgstr "Awesome yazı tipi"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:779
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:780
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:774
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:775
 #, c-format
 msgid "Font Face Observer"
 msgstr "Font Face Observer"
@@ -28743,7 +28756,7 @@ msgstr "Biçimlendirme"
 msgid "Formatting:"
 msgstr "Biçimlendirme:"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:595
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:590
 #, c-format
 msgid "Foundations Bible College &amp; Seminary, USA"
 msgstr "Foundations Bible College &amp; Seminary, USA"
@@ -28767,7 +28780,7 @@ msgstr "Çerçeve kodu: "
 msgid "Framework description"
 msgstr "Çerçeve tanımı"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:821
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:816
 #, c-format
 msgid "Fran&ccedil;ais (French) "
 msgstr "Fran&ccedil;ais (Fransızca) "
@@ -29162,7 +29175,7 @@ msgstr "Fon: %s"
 msgid "Funds"
 msgstr "Fonlar"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:706
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:701
 #, c-format
 msgid "GPL License"
 msgstr "GPL Lisans"
@@ -29186,7 +29199,7 @@ msgstr "KDV %%"
 msgid "GST:"
 msgstr "KDV:"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:822
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:817
 #, c-format
 msgid "Galego (Galician) Ignacio Javier"
 msgstr "Galego (Galiçya) Ignacio Javier"
@@ -29208,7 +29221,7 @@ msgstr "Sütunlar arası boşluk:"
 msgid "Gap between rows:"
 msgstr "Satırlar arası boşluk:"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:514
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:509
 #, c-format
 msgid "Geauga County Public Library"
 msgstr "Geauga İlçe Halk Kütüphanesi"
@@ -29344,7 +29357,7 @@ msgstr "Kullan"
 msgid "Global system preferences"
 msgstr "Genel sistem tercihleri"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:682
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:677
 #, c-format
 msgid "Glyphicons Free"
 msgstr "Ücretsiz Glif ikonlar"
@@ -29427,7 +29440,7 @@ msgstr "En üste git"
 msgid "Go up"
 msgstr "Yukarı git"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:596
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:591
 #, c-format
 msgid "Goethe-Institut, Germany"
 msgstr "Goethe-Institut, Almanya"
@@ -29443,7 +29456,7 @@ msgstr "teslim edilmemiş/iade edilen posta"
 msgid "Gone no address flag"
 msgstr "Adres yok işareti"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:597
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:592
 #, c-format
 msgid "Gothenburg University Library, Sweden"
 msgstr "Göteborg Üniversitesi Kütüphanesi, İsveç"
@@ -29595,8 +29608,8 @@ msgstr "Kılavuzlu raporlar sihirbazı"
 msgid "H Align"
 msgstr "H Align"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:785
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:786
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:780
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:781
 #, c-format
 msgid "HC Sticky"
 msgstr "HC Sticky"
@@ -29611,7 +29624,7 @@ msgstr "HTML"
 msgid "HTML message:"
 msgstr "HTML iletisi:"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:598
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:593
 #, c-format
 msgid "Halland County Library, Sweden"
 msgstr "Halland County Kütüphanesi, İsveç"
@@ -29643,7 +29656,7 @@ msgstr "En son iade tarihi %s:"
 msgid "Hard due date: "
 msgstr "En son iade tarihi:"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:599
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:594
 #, c-format
 msgid "Harrison Carmel Public Library, USA"
 msgstr "Harrison Carmel Halk Kütüphanesi, ABD"
@@ -29653,7 +29666,7 @@ msgstr "Harrison Carmel Halk Kütüphanesi, ABD"
 msgid "Hashvalue"
 msgstr "Karma değeri"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:600
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:595
 #, c-format
 msgid "Hauraki District Libraries, New Zealand"
 msgstr "Hauraki District Libraries, New Zealand"
@@ -29947,7 +29960,7 @@ msgstr ""
 "Çok talep edilen materyal. Ödünç alma süresi %s –güne düşürüldü (süresi "
 "bitmiş %s). Yine de ödünç verilsin mi?"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:601
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:596
 #, c-format
 msgid "Higher Education Libraries of Massachusetts, USA"
 msgstr "Higher Education Libraries of Massachusetts, USA"
@@ -30005,7 +30018,7 @@ msgstr "Personel notu geçmişi:"
 msgid "History start date:"
 msgstr "Başlangıç tarih geçmişi:"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:602
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:597
 #, c-format
 msgid "Hochschule für Gesundheit (hsg), Germany"
 msgstr "Sağlık Bilimleri Üniversitesi (HSG), Almanya "
@@ -30178,6 +30191,7 @@ msgstr "Mevcut:"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation-home.tt:61
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/reserveratios.tt:40
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/reports-home.tt:55
+#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:220
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:110
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:181
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:144
@@ -30185,7 +30199,6 @@ msgstr "Mevcut:"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/letter.tt:171
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/letter.tt:317
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/letter.tt:319
-#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:220
 #: koha-tmpl/intranet-tmpl/prog/en/includes/reports-menu.inc:28
 #, c-format
 msgid "Holds"
@@ -30528,6 +30541,9 @@ msgstr "Belli sıradaki yıllık tekrarlayan tatiller"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/labels/label-home.tt:12
 #: koha-tmpl/intranet-tmpl/prog/en/modules/labels/label-manage.tt:25
 #: koha-tmpl/intranet-tmpl/prog/en/modules/labels/spinelabel-home.tt:12
+#: koha-tmpl/intranet-tmpl/prog/en/modules/offline_circ/enqueue_koc.tt:9
+#: koha-tmpl/intranet-tmpl/prog/en/modules/offline_circ/list.tt:13
+#: koha-tmpl/intranet-tmpl/prog/en/modules/offline_circ/process_koc.tt:13
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/accountline-details.tt:18
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/apikeys.tt:14
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/boraccount.tt:25
@@ -30554,9 +30570,6 @@ msgstr "Belli sıradaki yıllık tekrarlayan tatiller"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/readingrec.tt:18
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/routing-lists.tt:16
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/statistics.tt:21
-#: koha-tmpl/intranet-tmpl/prog/en/modules/offline_circ/enqueue_koc.tt:9
-#: koha-tmpl/intranet-tmpl/prog/en/modules/offline_circ/list.tt:13
-#: koha-tmpl/intranet-tmpl/prog/en/modules/offline_circ/process_koc.tt:13
 #: koha-tmpl/intranet-tmpl/prog/en/modules/patron_lists/add-modify.tt:18
 #: koha-tmpl/intranet-tmpl/prog/en/modules/patron_lists/list.tt:30
 #: koha-tmpl/intranet-tmpl/prog/en/modules/patron_lists/lists.tt:13
@@ -30616,6 +30629,7 @@ msgstr "Belli sıradaki yıllık tekrarlayan tatiller"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:58
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tags/list.tt:16
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tags/review.tt:21
+#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:39
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/access_files.tt:13
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/automatic_item_modification_by_age.tt:13
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:17
@@ -30648,7 +30662,6 @@ msgstr "Belli sıradaki yıllık tekrarlayan tatiller"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload-images.tt:17
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:23
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:141
-#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:39
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:19
 #: koha-tmpl/intranet-tmpl/prog/en/includes/mana/mana-report-search-result.inc:19
 #, c-format
@@ -30738,7 +30751,7 @@ msgstr "Yatay boşluk"
 msgid "Horizontal: "
 msgstr "Yatay: "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:508
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:503
 #, c-format
 msgid "Horowhenua Library Trust"
 msgstr "Horowhenua Library Trust"
@@ -30770,7 +30783,7 @@ msgstr "Ana bilgisayar adı/Bağlantı noktası"
 msgid "Hostname: "
 msgstr "Ana bilgisayar adı: "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:603
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:598
 #, c-format
 msgid "Hotchkiss School, USA"
 msgstr "Hotchkiss School, USA"
@@ -30849,7 +30862,7 @@ msgstr "Kullanıcılar nasıl silinmelidir?"
 msgid "How to process items: "
 msgstr "Materyallerin nasıl işleneceğine dair: "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:814
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:809
 #, c-format
 msgid "Hrvatski (Croatian)"
 msgstr "Hırvatça"
@@ -32727,7 +32740,7 @@ msgstr "Faturalama %s"
 msgid "Invoicing, "
 msgstr "Faturalama,"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:664
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:659
 #, c-format
 msgid "Irma Birchall"
 msgstr "Irma Birchall"
@@ -32871,7 +32884,7 @@ msgstr "Birim başına sayılar:"
 msgid "Issuing library"
 msgstr "Ödünç verme kütüphanesi"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:487
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:482
 #, c-format
 msgid "Issuing rules"
 msgstr "Düzenleme kuralları"
@@ -32889,7 +32902,7 @@ msgstr ""
 "Birleştirme nedeniyle çift kopyalı ayırtmaları kontrol etmek ve çözmek "
 "tavsiye edilir."
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:831
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:826
 #, c-format
 msgid ""
 "Italiano (Italian) for 3.2: Zeno Tajoli, Pietro Gozzetti and Paolo Pozzan; "
@@ -33323,9 +33336,9 @@ msgstr "Materyal tag'leri şu anda kaydedilemiyor"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/subscription-batchedit.tt:39
 #: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:961
 #: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:963
+#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:167
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:129
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:177
-#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:167
 #: koha-tmpl/intranet-tmpl/prog/en/includes/checkouts-table.inc:19
 #: koha-tmpl/intranet-tmpl/prog/en/includes/relatives-issues-table.inc:11
 #, c-format
@@ -33620,8 +33633,8 @@ msgstr "M-türü"
 msgid "JSON URL"
 msgstr "JSON URL"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:770
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:771
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:765
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:766
 #, c-format
 msgid "JSZip"
 msgstr "JSZip"
@@ -33631,26 +33644,26 @@ msgstr "JSZip"
 msgid "January"
 msgstr "Ocak"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:797
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:798
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:792
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:793
 #, c-format
 msgid "JavaScript Cookie"
 msgstr "JavaScript Çerezi"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:765
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:760
 #, c-format
 msgid "JavaScript library by Vladimir Agafonkinis licensed under the "
 msgstr ""
 "JavaScrip kütüphanesi Vladimir Agafonkinis tarafından şunun altında "
 "lisanslanmıştır"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:771
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:766
 #, c-format
 msgid "JavaScript library is licensed under both the "
 msgstr "JavaScrip kütüphanesi şu lisanslar altında lisanslanmıştır"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:731
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:732
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:726
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:727
 #, c-format
 msgid "Javascript Diff Algorithm"
 msgstr "Javascript Diff Algoritması"
@@ -33665,7 +33678,7 @@ msgstr "Jenkins maintainer:"
 msgid "Jenkins maintainers:"
 msgstr "Jenkins maintainers:"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:668
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:663
 #, c-format
 msgid "Jo Ransom"
 msgstr "Jo Ransom"
@@ -33714,17 +33727,17 @@ msgstr "iki yana hizala"
 msgid "Juvenile"
 msgstr "Çocuk koleksiyonu"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:605
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:600
 #, c-format
 msgid "KEEP SOLUTIONS, Portugal"
 msgstr "KEEP SOLUTIONS, Portugal"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:604
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:599
 #, c-format
 msgid "Katipo Communications, New Zealand"
 msgstr "Katipo Communications, Yeni Zelanda"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:703
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:698
 #, c-format
 msgid "Kazik Pietruszewski"
 msgstr "Kazik Pietruszewski"
@@ -33812,7 +33825,7 @@ msgstr "Anahtar kelimeler"
 msgid "Keywords:"
 msgstr "Anahtar kelimeler:"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:675
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:670
 #: koha-tmpl/intranet-tmpl/prog/en/modules/auth.tt:25
 #: koha-tmpl/intranet-tmpl/prog/en/modules/installer/auth.tt:18
 #: koha-tmpl/intranet-tmpl/prog/en/modules/installer/step1.tt:25
@@ -33832,7 +33845,7 @@ msgid "Koha %s"
 msgstr "Koha %s"
 
 #. %1$s:  short_version | html 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:525
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:520
 #, c-format
 msgid "Koha %s release team"
 msgstr "Koha %s sürüm ekibi"
@@ -36575,7 +36588,7 @@ msgstr ""
 msgid "Koha database schema"
 msgstr "Koha veri tabanı şeması"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:544
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:539
 #, c-format
 msgid "Koha development team"
 msgstr "Koha geliştirme takımı"
@@ -36597,7 +36610,7 @@ msgstr "Koha alanı:"
 msgid "Koha full call number"
 msgstr "Koha tam çağrı numarası"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:857
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:852
 #, c-format
 msgid "Koha history timeline"
 msgstr "Koha geçmişi zaman çizelgesi"
@@ -36607,7 +36620,7 @@ msgstr "Koha geçmişi zaman çizelgesi"
 msgid "Koha internal"
 msgstr "Koha dahili"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:677
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:672
 #, c-format
 msgid ""
 "Koha is free software; you can redistribute it and/or modify it under the "
@@ -36651,7 +36664,7 @@ msgstr "Koha çevrimdışı dolaşım"
 msgid "Koha plugins"
 msgstr "Koha eklentileri"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:521
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:516
 #, c-format
 msgid "Koha release teams"
 msgstr "Koha sürüm ekipleri"
@@ -36693,17 +36706,17 @@ msgstr "Koha'dan MARC'a eşleştirme"
 msgid "Koha version: "
 msgstr "Koha sürümü: "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:607
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:602
 #, c-format
 msgid "Koha-Suomi Oy, Finland"
 msgstr "Koha-Suomi Oy, Finland"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:606
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:601
 #, c-format
 msgid "KohaAloha, New Zealand"
 msgstr "KohaAloha, Yeni Zelanda"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:821
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:816
 #, c-format
 msgid "Kohala"
 msgstr "Kohala"
@@ -36745,12 +36758,12 @@ msgstr "LCCN:"
 msgid "LCCN: %s "
 msgstr "LCCN: %s  "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:738
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:733
 #, c-format
 msgid "LGPL v2.1"
 msgstr "LGPL v2.1"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:792
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:787
 #, c-format
 msgid "LGPL v3.0"
 msgstr "LGPL v3.0"
@@ -36882,7 +36895,7 @@ msgstr "Dil: "
 msgid "Languages"
 msgstr "Diller"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:836
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:831
 #, c-format
 msgid "Lao Anousak Anthony Souphavanh"
 msgstr "Lao Anousak Anthony Souphavanh"
@@ -37067,7 +37080,7 @@ msgid "Later you can modify your form and that's what matters on import."
 msgstr ""
 "Daha sonra formunuzu değiştirebilirsiniz ve içe aktarmada önemli olan budur."
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:835
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:830
 #, c-format
 msgid "Latina (Latin)"
 msgstr "Latina (Latin)"
@@ -37110,8 +37123,8 @@ msgstr "Yerleşim düzeni:"
 msgid "Layouts"
 msgstr "Sayfa düzenleri"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:764
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:765
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:759
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:760
 #, c-format
 msgid "Leaflet"
 msgstr "Kitapçık"
@@ -37234,7 +37247,7 @@ msgstr "Harf"
 msgid "Lib"
 msgstr "Küt"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:608
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:603
 #, c-format
 msgid "LibLime, USA"
 msgstr "LibLime, ABD"
@@ -37466,7 +37479,7 @@ msgstr "Kütüphane adı:"
 msgid "Library of Congress"
 msgstr "Kongre Kütüphanesi"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:609
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:604
 #, c-format
 msgid "Library of the Józef Piłsudski Institute of America, USA"
 msgstr "Library of the Józef Piłsudski Institute of America, USA"
@@ -37573,7 +37586,7 @@ msgstr "Kütüphane: %s"
 msgid "Library: %s &rArr; %s"
 msgstr "Kütüphane: %s &rArr; %s"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:610
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:605
 #, c-format
 msgid "Libriotech, Norway"
 msgstr "Libriotech, Norveç"
@@ -38186,7 +38199,7 @@ msgstr "Günlükler"
 msgid "Look for existing records in catalog?"
 msgstr "Katalogda var olan kayıtları ara?"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:611
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:606
 #, c-format
 msgid "Los Gatos Public Library, USA"
 msgstr "Los Gatos Public Library, USA"
@@ -38313,12 +38326,12 @@ msgstr "Alt sol Y koordinatı: "
 msgid "Lucida Console"
 msgstr "Lucida Console"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:612
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:607
 #, c-format
 msgid "Lund University Library, Sweden"
 msgstr "Lund Üniversitesi Kütüphanesi, İsveç"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:837
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:832
 #, c-format
 msgid "M&#257;ori"
 msgstr "Maori"
@@ -38342,10 +38355,10 @@ msgstr "MALMARC"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/basket/downloadcart.tt:16
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/detail.tt:120
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:173
+#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/downloadshelf.tt:33
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/export.tt:141
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/export.tt:215
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/stage-marc-import.tt:148
-#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/downloadshelf.tt:33
 #: koha-tmpl/intranet-tmpl/prog/en/includes/biblio-view-menu.inc:12
 #, c-format
 msgid "MARC"
@@ -38551,35 +38564,35 @@ msgstr "MARC21/USMARC"
 msgid "MARCXML"
 msgstr "MARCXML"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:701
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:732
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:735
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:741
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:762
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:696
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:727
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:730
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:736
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:757
 #, c-format
 msgid "MIT License"
 msgstr "MIT Lisansı"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:771
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:766
 #, c-format
 msgid "MIT and GPLv3 Licenses"
 msgstr "MIT ve GPLv3 Lisansları"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:777
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:772
 #, c-format
 msgid "MIT licence"
 msgstr "MIT lisansı"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:680
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:682
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:744
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:747
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:750
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:786
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:789
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:795
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:798
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:801
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:675
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:677
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:739
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:742
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:745
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:781
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:784
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:790
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:793
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:796
 #, c-format
 msgid "MIT license"
 msgstr "MIT Lisansı"
@@ -38610,7 +38623,7 @@ msgstr "Makrolar"
 msgid "Macros..."
 msgstr "Makrolar..."
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:827
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:822
 #, c-format
 msgid "Magyar (Hungarian)Agnes Imecs"
 msgstr "Macar Agnes Imecs"
@@ -39501,7 +39514,7 @@ msgstr "Orijinal bütçeyi inaktif olarak işaretleyin"
 msgid "Mark viewed"
 msgstr "Görüldü olarak işaretle"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:613
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:608
 #, c-format
 msgid "MassCat, USA"
 msgstr "MassCat, USA"
@@ -39892,7 +39905,7 @@ msgstr "Mikrosaniye"
 msgid "Middle"
 msgstr "Orta"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:614
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:609
 #, c-format
 msgid "Middletown Township Public Library, USA"
 msgstr "Middletown Township Public Library, USA"
@@ -39912,7 +39925,7 @@ msgstr "Milisaniye"
 msgid "Mine"
 msgstr "Benim olanı"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:511
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:506
 #, c-format
 msgid ""
 "Mines Paristech (previously Ecole Nationale Supérieure des Mines de Paris)"
@@ -40047,7 +40060,7 @@ msgstr "Cep telefonu"
 msgid "Mobile phone number"
 msgstr "Cep telefonu numarası"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/preferences.tt:193
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/preferences.tt:207
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/subscription-add.tt:506
 #: koha-tmpl/intranet-tmpl/prog/en/includes/circ-menu.inc:186
 #, c-format
@@ -40307,8 +40320,8 @@ msgstr "Modül güncelleştirilmesi gerekiyor"
 msgid "Modules:"
 msgstr "Modüller:"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:800
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:801
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:795
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:796
 #, c-format
 msgid "Moment.js"
 msgstr "Moment.js"
@@ -40756,8 +40769,8 @@ msgstr "Ad:"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smtp_servers.tt:128
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:286
 #: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep1.tt:27
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:301
 #: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:274
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:301
 #: koha-tmpl/intranet-tmpl/prog/en/includes/admin-items-search-field-form.inc:5
 #: koha-tmpl/intranet-tmpl/prog/en/includes/admin-items-search-field-form.inc:9
 #: koha-tmpl/intranet-tmpl/prog/en/includes/mana/mana-share-report.inc:21
@@ -40791,7 +40804,7 @@ msgstr "Adı: "
 msgid "Narrower Term"
 msgstr "Daha Dar Terim"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:615
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:610
 #, c-format
 msgid "National Library of Finland, Finland"
 msgstr "National Library of Finland, Finland"
@@ -40801,7 +40814,7 @@ msgstr "National Library of Finland, Finland"
 msgid "Navy Blue"
 msgstr "Lacivert"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:515
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:510
 #, c-format
 msgid "Near East University"
 msgstr "Yakın Doğu Üniversitesi"
@@ -40815,12 +40828,12 @@ msgstr ""
 "Gerekli Elasticsearch paketleri sunucunuzda yüklü değil. Elasticsearch'ü "
 "yapılandırmak istiyorsanız lütfen sunucu yöneticinize başvurun"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:818
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:813
 #, c-format
 msgid "Nederlands-Belgi&euml; (Dutch-Belgium)"
 msgstr "Hollanda- Belçika; ( Flemenk – Belçika)"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:817
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:812
 #, c-format
 msgid "Nederlands-Nederland (Dutch-The Netherlands) Sponsored by Rijksmuseum"
 msgstr ""
@@ -40934,12 +40947,12 @@ msgstr "Yeni Z39.50 sunucusu"
 msgid "New Z39.50 server"
 msgstr "Yeni Z39.50 sunucusu"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:617
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:612
 #, c-format
 msgid "New Zealand Central Agencies Library, New Zealand"
 msgstr "New Zealand Central Agencies Library, New Zealand"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:618
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:613
 #, c-format
 msgid "New Zealand Ministry of Education Library, New Zealand"
 msgstr "New Zealand Ministry of Education Library, New Zealand"
@@ -41398,7 +41411,7 @@ msgstr "Yeni sağlayıcı"
 msgid "New window"
 msgstr "Yeni pencere"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:616
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:611
 #, c-format
 msgid "Newcastle City Council, United Kingdom"
 msgstr "Newcastle City Council, United Kingdom"
@@ -41501,7 +41514,7 @@ msgstr "Bir sonraki açık gün"
 msgid "Next page"
 msgstr "Sonraki sayfa"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:669
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:664
 #, c-format
 msgid "Nicholas Rosasco (Documentation Compiler)"
 msgstr "Nicholas Rosasco (Dokümantasyon Derleyicisi)"
@@ -42075,7 +42088,7 @@ msgid "No match for borrowernumber (%s). %s"
 msgstr "Okuyucu numarası (%s) için eşleşme yok. %s"
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/preferences.tt:231
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/preferences.tt:245
 msgid "No matches found"
 msgstr "Eşleşme bulunamadı"
 
@@ -42403,7 +42416,7 @@ msgstr "Alınacak aktarım yok"
 msgid "No valid patrons to merge were found."
 msgstr "Birleştirilecek geçerli kullanıcı bulunamadı."
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:501
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:496
 #, c-format
 msgid "No warnings."
 msgstr "Hiçbir uyarı yok."
@@ -42695,22 +42708,22 @@ msgstr "Normal metin"
 msgid "Normalization rule: "
 msgstr "Normalize etme kuralı: "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:828
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:823
 #, c-format
 msgid "Norsk Bokmål (Norwegian) Axel Bojer and Thomas Gramstad"
 msgstr "(Bokmal Norveç Dili) Axel Bojer ve Thomas Gramstad"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:829
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:824
 #, c-format
 msgid "Norsk Nynorsk (Norwegian) Unni Knutsen and Marit Kristine Ådland"
 msgstr "(Norveççe) Unni Knutsen ve Marit Kristine Ådland"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:619
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:614
 #, c-format
 msgid "North Central Regional Library (NCRL), USA"
 msgstr "North Central Regional Library (NCRL), USA"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:620
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:615
 #, c-format
 msgid "Northeast Kansas Library System (NEKLS), USA"
 msgstr "Northeast Kansas Library System (NEKLS), USA"
@@ -43153,12 +43166,12 @@ msgstr "Uyarı tarihi"
 msgid "Notify manager:"
 msgstr "Yöneticiye bildir:"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:783
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:778
 #, c-format
 msgid "Noto"
 msgstr "Noto"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:782
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:777
 #, c-format
 msgid "Noto fonts"
 msgstr "Noto yazı tipleri"
@@ -43476,7 +43489,7 @@ msgstr "OAI ayarları"
 msgid "OAI sets configuration"
 msgstr "OAI setleri yapılandırması"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:752
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:747
 #, c-format
 msgid "OAI xslt stylesheet"
 msgstr "OAI xslt stil sayfası"
@@ -43647,12 +43660,12 @@ msgstr "OPAC görünümü:"
 msgid "OPAC/Staff interface login"
 msgstr "OPAC/Personel arayüzü girişi"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:621
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:616
 #, c-format
 msgid "OPUS"
 msgstr "OPUS"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:516
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:511
 #, c-format
 msgid ""
 "OPUS International Consultants, Wellington, New Zealand (Corporate Serials "
@@ -44063,22 +44076,22 @@ msgstr "Bağlantıyı şurada aç ..."
 msgid "Open on:"
 msgstr "Üzerinde aç:"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:755
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:750
 #, c-format
 msgid "OpenAPI 2.0 schema"
 msgstr "OpenAPI 2.0 şeması"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:756
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:751
 #, c-format
 msgid "OpenAPI Initiative (OAI)"
 msgstr "OpenAPI Initiative (OAI)"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:714
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:709
 #, c-format
 msgid "OpenJS Keyboard Shortcuts Library"
 msgstr "OpenJS Klavye Kısayolları Kütüphane"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:716
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:711
 #, c-format
 msgid "OpenJS keyboard shortcuts library"
 msgstr "OpenJS Klavye Kısayolları Kütüphane"
@@ -44380,7 +44393,7 @@ msgstr "Belirsiz fiyatlı siparişler"
 msgid "Orders with uncertain prices for vendor "
 msgstr "Sağlayıcı için belirsiz fiyatlı siparişler "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:622
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:617
 #, c-format
 msgid "Orex Digital, Spain"
 msgstr "Orex Digital, Spain"
@@ -44437,7 +44450,7 @@ msgstr "Özgün sürüm"
 msgid "Originating library: "
 msgstr "Kaynak kütüphane:"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:623
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:618
 #, c-format
 msgid "Oslo Public Library, Norway"
 msgstr "Oslo Halk Kütüphanesi, Norveç"
@@ -44712,12 +44725,12 @@ msgstr "PM"
 msgid "PSGI: "
 msgstr "PSGI:"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:628
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:623
 #, c-format
 msgid "PTFS Europe Ltd, United Kingdom"
 msgstr "PTFS Europe Ltd, Birleşik Krallık"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:627
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:622
 #, c-format
 msgid "PTFS, Maryland, USA"
 msgstr "PTFS, Maryland, ABD"
@@ -46523,12 +46536,12 @@ msgstr "Planlama "
 msgid "Planning for %s %s"
 msgstr "%s %s için planlama"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:624
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:619
 #, c-format
 msgid "Plano Independent School, USA"
 msgstr "Plano Independent School, USA"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:625
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:620
 #, c-format
 msgid "Plant and Food Research Limited, New Zealand"
 msgstr "Plant and Food Research Limited, New Zealand"
@@ -47034,7 +47047,7 @@ msgid "Please review the error log for more details."
 msgstr "Lütfen daha fazla ayrıntı için hata günlüğünü inceleyin."
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/preferences.tt:231
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/preferences.tt:245
 msgid "Please select ..."
 msgstr "Lütfen seçin ..."
 
@@ -47292,7 +47305,7 @@ msgstr "Satış noktası masaları"
 msgid "Policy for %s: %s"
 msgstr "%s: %s için kural"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:841
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:836
 #, c-format
 msgid "Polski (Polish)"
 msgstr "Polski (Polonya)"
@@ -47343,7 +47356,7 @@ msgstr "Bağlantı noktası"
 msgid "Port: "
 msgstr "Bağlantı noktası: "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:842
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:837
 #, c-format
 msgid "Portugu&ecirc;s (Portuguese)"
 msgstr "Portugu&ecirc;s (Portekiz)"
@@ -48071,7 +48084,7 @@ msgstr "İlerleme"
 msgid "Progress: "
 msgstr "İlerleme:"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:626
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:621
 #, c-format
 msgid "Prosentient Systems, Australia"
 msgstr "Prosentient Systems, Avustralya"
@@ -48079,10 +48092,10 @@ msgstr "Prosentient Systems, Avustralya"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/usage_statistics.tt:109
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/usage_statistics.tt:111
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:231
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:186
 #: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/addbybiblionumber.tt:99
 #: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:305
 #: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:307
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:186
 #, c-format
 msgid "Public"
 msgstr "Açık"
@@ -48573,7 +48586,7 @@ msgstr "Tavsiye edilen perakende fiyatı KDV dahil"
 msgid "RT"
 msgstr "RT"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:665
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:660
 #, c-format
 msgid "Rachel Hamilton-Williams (Kaitiaki from 2004 to present)"
 msgstr "Rachel Hamilton-Williams (2004'ten günümüze Kaitaki)"
@@ -49043,7 +49056,7 @@ msgstr "Kayıt tarihi: "
 msgid "Registration date: %s"
 msgstr "Kayıt tarihi: %s"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:670
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:665
 #, c-format
 msgid "Regula Sebastiao"
 msgstr "Regula Sebastiao"
@@ -49964,8 +49977,8 @@ msgstr "Güçlü şifre gerektir:"
 msgid "Require valid email address:"
 msgstr "Geçerli bir e-posta adresi gereklidir:"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:749
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:750
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:744
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:745
 #, c-format
 msgid "Require.js JS module system"
 msgstr "Require.js JS module system"
@@ -50061,6 +50074,7 @@ msgstr "Require.js JS module system"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:742
 #: koha-tmpl/intranet-tmpl/prog/en/modules/installer/step1.tt:63
 #: koha-tmpl/intranet-tmpl/prog/en/modules/installer/step1.tt:75
+#: koha-tmpl/intranet-tmpl/prog/en/modules/offline_circ/process_koc.tt:42
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/boraccount.tt:178
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/boraccount.tt:235
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/boraccount.tt:287
@@ -50102,7 +50116,6 @@ msgstr "Require.js JS module system"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1137
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1194
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1403
-#: koha-tmpl/intranet-tmpl/prog/en/modules/offline_circ/process_koc.tt:42
 #: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep1.tt:24
 #: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep1.tt:29
 #: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep2.tt:36
@@ -50145,6 +50158,7 @@ msgstr "Require.js JS module system"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/subscription-frequencies.tt:48
 #: koha-tmpl/intranet-tmpl/prog/en/modules/services/itemrecorddisplay.tt:33
 #: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:328
+#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:275
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:319
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/csv-profiles.tt:120
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/csv-profiles.tt:133
@@ -50161,21 +50175,20 @@ msgstr "Require.js JS module system"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/stockrotation.tt:298
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/stockrotation.tt:303
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload-images.tt:84
-#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:275
 #: koha-tmpl/intranet-tmpl/prog/en/includes/admin-items-search-field-form.inc:11
 #: koha-tmpl/intranet-tmpl/prog/en/includes/admin-items-search-field-form.inc:21
 #: koha-tmpl/intranet-tmpl/prog/en/includes/admin-items-search-field-form.inc:34
-#: koha-tmpl/intranet-tmpl/prog/en/includes/member-alt-address-style.inc:76
-#: koha-tmpl/intranet-tmpl/prog/en/includes/member-alt-address-style.inc:91
-#: koha-tmpl/intranet-tmpl/prog/en/includes/member-alt-address-style.inc:106
-#: koha-tmpl/intranet-tmpl/prog/en/includes/member-alt-address-style.inc:121
-#: koha-tmpl/intranet-tmpl/prog/en/includes/member-alt-address-style.inc:136
-#: koha-tmpl/intranet-tmpl/prog/en/includes/member-alt-address-style.inc:166
-#: koha-tmpl/intranet-tmpl/prog/en/includes/member-alt-address-style.inc:181
-#: koha-tmpl/intranet-tmpl/prog/en/includes/member-alt-address-style.inc:196
-#: koha-tmpl/intranet-tmpl/prog/en/includes/member-alt-address-style.inc:211
-#: koha-tmpl/intranet-tmpl/prog/en/includes/member-alt-address-style.inc:230
-#: koha-tmpl/intranet-tmpl/prog/en/includes/member-alt-address-style.inc:245
+#: koha-tmpl/intranet-tmpl/prog/en/includes/member-alt-address-style.inc:77
+#: koha-tmpl/intranet-tmpl/prog/en/includes/member-alt-address-style.inc:93
+#: koha-tmpl/intranet-tmpl/prog/en/includes/member-alt-address-style.inc:108
+#: koha-tmpl/intranet-tmpl/prog/en/includes/member-alt-address-style.inc:123
+#: koha-tmpl/intranet-tmpl/prog/en/includes/member-alt-address-style.inc:138
+#: koha-tmpl/intranet-tmpl/prog/en/includes/member-alt-address-style.inc:168
+#: koha-tmpl/intranet-tmpl/prog/en/includes/member-alt-address-style.inc:183
+#: koha-tmpl/intranet-tmpl/prog/en/includes/member-alt-address-style.inc:198
+#: koha-tmpl/intranet-tmpl/prog/en/includes/member-alt-address-style.inc:213
+#: koha-tmpl/intranet-tmpl/prog/en/includes/member-alt-address-style.inc:232
+#: koha-tmpl/intranet-tmpl/prog/en/includes/member-alt-address-style.inc:247
 #: koha-tmpl/intranet-tmpl/prog/en/includes/member-alt-contact-style.inc:61
 #: koha-tmpl/intranet-tmpl/prog/en/includes/member-alt-contact-style.inc:76
 #: koha-tmpl/intranet-tmpl/prog/en/includes/member-alt-contact-style.inc:91
@@ -50185,14 +50198,14 @@ msgstr "Require.js JS module system"
 #: koha-tmpl/intranet-tmpl/prog/en/includes/member-alt-contact-style.inc:166
 #: koha-tmpl/intranet-tmpl/prog/en/includes/member-alt-contact-style.inc:181
 #: koha-tmpl/intranet-tmpl/prog/en/includes/member-alt-contact-style.inc:196
-#: koha-tmpl/intranet-tmpl/prog/en/includes/member-main-address-style.inc:67
-#: koha-tmpl/intranet-tmpl/prog/en/includes/member-main-address-style.inc:82
-#: koha-tmpl/intranet-tmpl/prog/en/includes/member-main-address-style.inc:97
-#: koha-tmpl/intranet-tmpl/prog/en/includes/member-main-address-style.inc:112
-#: koha-tmpl/intranet-tmpl/prog/en/includes/member-main-address-style.inc:127
-#: koha-tmpl/intranet-tmpl/prog/en/includes/member-main-address-style.inc:157
-#: koha-tmpl/intranet-tmpl/prog/en/includes/member-main-address-style.inc:172
-#: koha-tmpl/intranet-tmpl/prog/en/includes/member-main-address-style.inc:187
+#: koha-tmpl/intranet-tmpl/prog/en/includes/member-main-address-style.inc:68
+#: koha-tmpl/intranet-tmpl/prog/en/includes/member-main-address-style.inc:84
+#: koha-tmpl/intranet-tmpl/prog/en/includes/member-main-address-style.inc:99
+#: koha-tmpl/intranet-tmpl/prog/en/includes/member-main-address-style.inc:114
+#: koha-tmpl/intranet-tmpl/prog/en/includes/member-main-address-style.inc:129
+#: koha-tmpl/intranet-tmpl/prog/en/includes/member-main-address-style.inc:159
+#: koha-tmpl/intranet-tmpl/prog/en/includes/member-main-address-style.inc:174
+#: koha-tmpl/intranet-tmpl/prog/en/includes/member-main-address-style.inc:189
 #: koha-tmpl/intranet-tmpl/prog/en/includes/transaction_types.inc:19
 #, c-format
 msgid "Required"
@@ -50740,7 +50753,7 @@ msgstr "Sağ"
 msgid "Right to left"
 msgstr "Sağdan sola"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:629
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:624
 #, c-format
 msgid "Rijksmuseum, Amsterdam, The Netherlands"
 msgstr "Rijksmuseum, Amsterdam, Hollanda"
@@ -50755,7 +50768,7 @@ msgstr "Kullanıcı adreslerinde kullanılacak yol türleri"
 msgid "Robots"
 msgstr "Robotlar"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:630
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:625
 #, c-format
 msgid "Rolling Hills Consolidated Libraries, USA"
 msgstr "Rolling Hills Consolidated Libraries, USA"
@@ -50770,7 +50783,7 @@ msgstr "Devir tarihi (Rollover at)"
 msgid "Rollover:"
 msgstr "Devir tarihi (Rollover):"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:843
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:838
 #, c-format
 msgid "Rom&acirc;n&#259; (Romanian)"
 msgstr "Rom&acirc;n&#259; (Romanya)"
@@ -50824,7 +50837,7 @@ msgstr "Saat yönünün tersine döndür"
 msgid "Rotating collections"
 msgstr "Dolaşımdaki koleksiyonlar"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:631
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:626
 #, c-format
 msgid "Round Rock Public Library, USA"
 msgstr "Round Rock Public Library, USA"
@@ -50967,12 +50980,12 @@ msgstr "Çalışıyor"
 msgid "SAN"
 msgstr "SAN"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:512
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:507
 #, c-format
 msgid "SAN-Ouest Provence"
 msgstr "SAN- Batı Provans"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:632
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:627
 #, c-format
 msgid "SAN-Ouest Provence, France"
 msgstr "SAN-Ouest Provence, Fransa"
@@ -50999,12 +51012,12 @@ msgstr "SI Santimetre"
 msgid "SI Millimeters"
 msgstr "SI Milimetre"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:741
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:736
 #, c-format
 msgid "SIL OFL 1.1"
 msgstr "SIL OFL 1.1"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:783
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:778
 #, c-format
 msgid "SIL Open Font License (OFL) v1.1"
 msgstr "SIL Open Font License (OFL) v1.1"
@@ -51119,7 +51132,7 @@ msgstr "STARTDATE:January 1 2010,TRACK:Day"
 msgid "STARTTLS"
 msgstr "STARTTLS"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:638
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:633
 #, c-format
 msgid "SWITCH Library Consortium, USA"
 msgstr "SWITCH Library Consortium, USA"
@@ -51199,7 +51212,7 @@ msgstr "Cumartesiler"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/oai_set_mappings.tt:115
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/oai_sets.tt:54
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/patron-attr-types.tt:194
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/preferences.tt:205
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/preferences.tt:219
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/share_content.tt:91
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:373
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:464
@@ -51241,6 +51254,11 @@ msgstr "Cumartesiler"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/subscription-frequencies.tt:89
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:157
 #: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:608
+#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/addbybiblionumber.tt:111
+#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/downloadshelf.tt:43
+#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:317
+#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:421
+#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:448
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/automatic_item_modification_by_age.tt:36
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:360
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:105
@@ -51253,11 +51271,6 @@ msgstr "Cumartesiler"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/stockrotation.tt:308
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/stockrotation.tt:389
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/stockrotation.tt:529
-#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/addbybiblionumber.tt:111
-#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/downloadshelf.tt:43
-#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:317
-#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:421
-#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:448
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:452
 #: koha-tmpl/intranet-tmpl/prog/en/includes/members-toolbar.inc:126
 #: koha-tmpl/intranet-tmpl/prog/en/includes/modals/cataloguing_create_av.inc:36
@@ -51280,7 +51293,7 @@ msgstr "Kaydet (eklentiyi kaydet etkinleştirilmişse)"
 #. For the first occurrence,
 #. %1$s:  TAB.tab_title | html 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/preferences.tt:44
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/preferences.tt:172
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/preferences.tt:186
 #, c-format
 msgid "Save all %s preferences"
 msgstr "Tüm %s tercihleri kaydet"
@@ -52228,7 +52241,7 @@ msgstr "Herkese açık sayfanıza bakın:"
 msgid "Seen"
 msgstr "Görüldü"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:633
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:628
 #, c-format
 msgid "Sefton Council, United Kingdom"
 msgstr "Sefton Council, United Kingdom"
@@ -52466,8 +52479,8 @@ msgstr "Bir zaman seçin"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/basket/basket.tt:6
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branch_transfer_limits.tt:31
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branch_transfer_limits.tt:45
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/preferences.tt:197
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/preferences.tt:231
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/preferences.tt:211
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/preferences.tt:245
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/detail.tt:276
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:71
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:53
@@ -52485,6 +52498,7 @@ msgstr "Bir zaman seçin"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/checkexpiration.tt:65
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/serials-collection.tt:155
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/serials-search.tt:40
+#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:448
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:96
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:166
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:131
@@ -52496,7 +52510,6 @@ msgstr "Bir zaman seçin"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/inventory.tt:269
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/modborrowers.tt:127
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/problem-reports.tt:53
-#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:448
 #: koha-tmpl/intranet-tmpl/prog/en/includes/branch-selector.inc:3
 #: koha-tmpl/intranet-tmpl/prog/en/includes/str/tinymce_i18n.inc:2
 #, c-format
@@ -52735,8 +52748,8 @@ msgstr "Materyaller olmadan seç"
 msgid "Select your MARC flavor"
 msgstr "Tercih ettiğiniz MARC formatını seçin"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:758
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:759
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:753
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:754
 #, c-format
 msgid "Select2"
 msgstr "Select2"
@@ -54198,12 +54211,12 @@ msgstr "Sınıflama kaynağı / raf düzeni"
 msgid "Source records"
 msgstr "Kaynak kayıtlar"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:636
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:631
 #, c-format
 msgid "South Taranaki District Council, New Zealand"
 msgstr "South Taranaki District Council, New Zealand"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:635
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:630
 #, c-format
 msgid "South-East Kansas Library System (SEKLS), USA"
 msgstr "South-East Kansas Library System (SEKLS), USA"
@@ -54234,7 +54247,7 @@ msgstr "Özel karakterler..."
 msgid "Special relationship: "
 msgstr "Özel bağıntı: "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:506
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:501
 #, c-format
 msgid "Special thanks to the following organizations"
 msgstr "Özellikle aşağıdaki kuruluşlara teşekkür ederiz"
@@ -54899,7 +54912,7 @@ msgstr "Adım 5: Tanımı doğrulayın"
 msgid "Step 6 of 6: Choose how you want the report ordered"
 msgstr "Adım 6 da 6: Raporu nasıl sıralamak istediğine karar ver"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:666
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:661
 #, c-format
 msgid "Stephen Hedges (early Documentation Manager)"
 msgstr "Stephen Hedges (ilk Belge Yöneticisi)"
@@ -54927,7 +54940,7 @@ msgstr "Stok rotasyonu"
 msgid "Stock rotation details for %s"
 msgstr "%s için stok rotasyonu detayları"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:637
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:632
 #, c-format
 msgid "Stockholm University Library, Sweden"
 msgstr "Stockholm University Library, Sweden"
@@ -55764,7 +55777,7 @@ msgstr "Askıya alma ücretlendirme zaman aralığı"
 msgid "Suspension in days (day)"
 msgstr "Gün(ler) olarak ceza erteleme"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:846
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:841
 #, c-format
 msgid "Svenska (Swedish)"
 msgstr "Svenska (İsveç)"
@@ -55789,8 +55802,8 @@ msgstr "Temel düzenleyiciye geç"
 msgid "Switch to or from fullscreen mode"
 msgstr "Tam ekran moduna geçme veya tam ekran modundan geçiş yapma"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:418
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:426
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:413
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:421
 #, c-format
 msgid "Switching to dom indexing"
 msgstr "Dom dizinlemeye geçiliyor"
@@ -55925,7 +55938,6 @@ msgstr ""
 "davranışlara neden olur: %s"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:377
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:382
 #, c-format
 msgid ""
 "System preference 'Pseudonymization' is set, but there is not "
@@ -55968,7 +55980,7 @@ msgstr "Sistem tercihleri araması:"
 msgid "System preferences"
 msgstr "Sistem tercihleri"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:849
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:844
 #, c-format
 msgid ""
 "T&uuml;rk&ccedil;e (Turkish) pre-3.8: Selma Aslan; for 3.8+, Suleyman "
@@ -56074,7 +56086,7 @@ msgstr "Tablo özellikleri"
 msgid "Table settings"
 msgstr "Tablo ayarları"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:762
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:757
 #, c-format
 msgid "TableDnD plug-in for jQuery"
 msgstr "JQery için TableDnD eklentisi"
@@ -56204,12 +56216,12 @@ msgstr "Onay bekleyen etiketler"
 msgid "Tags:"
 msgstr "Etiketler:"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:639
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:634
 #, c-format
 msgid "Talking Tech, Global"
 msgstr "Talking Tech, Global"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:640
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:635
 #, c-format
 msgid "Tamil, France"
 msgstr "Tamil, Fransa"
@@ -56401,7 +56413,7 @@ msgstr "Test çalıştırması: Kullanıcıları çıkarmayın."
 msgid "Test the regular expressions:"
 msgstr "Düzenli ifadeleri test edin:"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:847
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:842
 #, c-format
 msgid "Tetun (Tetum) Karen Myers"
 msgstr "Tetun (Tetum dili) Karen Myersi"
@@ -56487,26 +56499,26 @@ msgstr "Metinalani"
 msgid "That budget does not exist! Please select a budget to continue."
 msgstr "Bu bütçe mevcut değildir! Lütfen devam etmek için bir bütçe seçin."
 
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:504
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:508
 #: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:509
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:513
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:514
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:515
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:712
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:716
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:720
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:724
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:728
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:732
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:735
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:738
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:744
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:747
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:750
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:759
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:762
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:765
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:768
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:771
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:510
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:707
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:711
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:715
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:719
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:723
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:727
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:730
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:733
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:739
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:742
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:745
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:754
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:757
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:760
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:763
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:766
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/members-update.tt:171
 #, c-format
 msgid "The "
@@ -56522,7 +56534,7 @@ msgstr "Bu abonelikle ilgili en son %s sayılar:"
 #. %2$s:  unit.categorycode || 'categorycode=default' | html 
 #. %3$s:  unit.itemtype || 'itemtype=default' | html 
 #. %4$s:  unit.rule_value | html 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:491
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:486
 #, c-format
 msgid ""
 "The %s, %s, %s issuingrule will fallback to 'days' for 'lengthunit' as it is "
@@ -56531,7 +56543,7 @@ msgstr ""
 "%s, %s, %s issuingrule kuralı, %s olarak yanlış tanımlandığı için "
 "'lengthunit' için 'günler'e geri döner."
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:432
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:427
 #, c-format
 msgid ""
 "The &lt;use_zebra_facets&gt; entry is missing in your configuration file. "
@@ -56540,7 +56552,7 @@ msgstr ""
 "The &lt;zebra_auth_index_mode&gt; yapılandırma dosyanızda giriş eksik. "
 "Fasetler için standart hesaplama kullanılacaktır."
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:424
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:419
 #, c-format
 msgid ""
 "The &lt;zebra_auth_index_mode&gt; entry set to 'grs1', which is no longer "
@@ -56550,7 +56562,7 @@ msgstr ""
 "olarak ayarlanmış. Lütfen bunun yerine DOM kullanın. Geçiş yapmak için bu "
 "wiki sayfasını takip edin:"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:416
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:411
 #, c-format
 msgid ""
 "The &lt;zebra_bib_index_mode&gt; entry set to 'grs1', which is no longer "
@@ -56588,12 +56600,12 @@ msgid ""
 "private."
 msgstr "Bu liste tamamen gizli iken Herkes izninin gerçek bir etkisi yoktur."
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:692
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:687
 #, c-format
 msgid "The Bridge Material Type Icon Set"
 msgstr "The Bridge Materyal Türü Simge Seti"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:695
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:690
 #, c-format
 msgid "The Bridge Material Type Icon Set is licensed under a "
 msgstr "Bridge (Köprü) Materyal Türü Ikon Ayarı lisanslıdır. "
@@ -56816,7 +56828,7 @@ msgstr ""
 "göstermektedir."
 
 #. %1$s:  config_entry.lockdir | html 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:453
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:448
 #, c-format
 msgid ""
 "The configured &lt;lockdir&gt; entry in your koha-conf.xml file points to a "
@@ -57130,12 +57142,12 @@ msgstr ""
 msgid "The import id number "
 msgstr "id numarası içe aktar"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:756
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:751
 #, c-format
 msgid "The included "
 msgstr "Dahil edilen"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:753
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:748
 #, c-format
 msgid "The included OAI.xslt file by the "
 msgstr "Dahil edilen OAI.xslt dosyası sıralaması"
@@ -57671,7 +57683,7 @@ msgstr "İndirilen dosya zip dosyası değil. Dosyanın uzantısı '.zip' değil
 msgid "The value \"%s\" is not supported for mappings"
 msgstr "\"%s\" değeri eşleştirmeler için desteklenmiyor"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:641
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:636
 #, c-format
 msgid "Theke Solutions, Argentina"
 msgstr "Theke Solutions, Argentina"
@@ -59006,12 +59018,12 @@ msgstr "Zaman aşımı (saniye)"
 msgid "Timestamp"
 msgstr "İade kaşesi"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:737
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:732
 #, c-format
 msgid "TinyMCE WYSIWYG editor"
 msgstr "TinyMCE WYSIWYG editor"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:738
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:733
 #, c-format
 msgid "TinyMCE WYSIWYG editor v5.0.16 "
 msgstr "TinyMCE WYSIWYG editor v5.0.16 "
@@ -59078,6 +59090,9 @@ msgstr "TinyMCE WYSIWYG editor v5.0.16 "
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/serials-search.tt:54
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/subscription-batchedit.tt:35
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tags/list.tt:27
+#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:173
+#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:291
+#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:363
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:109
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:180
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:142
@@ -59091,9 +59106,6 @@ msgstr "TinyMCE WYSIWYG editor v5.0.16 "
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/inventory.tt:198
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/koha-news.tt:124
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/stockrotation.tt:402
-#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:173
-#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:291
-#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:363
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/cn_browser.tt:42
 #: koha-tmpl/intranet-tmpl/prog/en/includes/cateditor-ui.inc:42
 #: koha-tmpl/intranet-tmpl/prog/en/includes/checkouts-table.inc:17
@@ -60115,7 +60127,7 @@ msgstr "Diğer dillere tercüme et"
 msgid "Translate item type %s"
 msgstr "Materyal türünü çevirin %s"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:805
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:800
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/localization.tt:67
 #, c-format
 msgid "Translation"
@@ -60199,7 +60211,7 @@ msgstr "Salı"
 msgid "Tuesdays"
 msgstr "Salı günleri"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:642
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:637
 #, c-format
 msgid "Tulong Aklatan, Philippines"
 msgstr "Tulong Aklatan, Philippines"
@@ -60222,9 +60234,9 @@ msgstr "Turkuaz"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/readingrec.tt:52
 #: koha-tmpl/intranet-tmpl/prog/en/modules/pos/register.tt:316
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:223
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:335
 #: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:344
 #: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:347
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:335
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:121
 #: koha-tmpl/intranet-tmpl/prog/en/includes/borrower_debarments.inc:9
 #: koha-tmpl/intranet-tmpl/prog/en/includes/ill-list-table.inc:17
@@ -60302,7 +60314,7 @@ msgstr "ABD inç"
 msgid "UTF-8 (Default)"
 msgstr "UTF-8 (Varsayılan)"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:643
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:638
 #, c-format
 msgid "Uintah Library System, USA"
 msgstr "Uintah Library System, USA"
@@ -60573,47 +60585,47 @@ msgstr "Birimler:"
 msgid "Units: "
 msgstr "Birimler: "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:645
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:640
 #, c-format
 msgid "Universidad Empresarial Siglo 21, Argentina"
 msgstr "Universidad Empresarial Siglo 21, Argentina"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:646
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:641
 #, c-format
 msgid "Universidad Nacional de Córdoba, Argentina"
 msgstr "Universidad Nacional de Córdoba, Arjantin"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:647
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:642
 #, c-format
 msgid "Universidad ORT Uruguay"
 msgstr "Universidad ORT Uruguay"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:644
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:639
 #, c-format
 msgid "Universidad de El Salvador, El Salvador"
 msgstr "Universidad de El Salvador, El Salvador"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:652
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:647
 #, c-format
 msgid "University of the Arts London, United Kingdom"
 msgstr "University of the Arts London, United Kingdom"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:648
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:643
 #, c-format
 msgid "Université d'Aix-Marseille, France"
 msgstr "Université d'Aix-Marseille, France"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:649
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:644
 #, c-format
 msgid "Université de Lyon 3, France"
 msgstr "Université de Lyon 3, France"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:650
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:645
 #, c-format
 msgid "Université de Rennes 2, France"
 msgstr "Université de Rennes 2, France"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:651
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:646
 #, c-format
 msgid "Université de St Etienne, France"
 msgstr "Université de St Etienne, France"
@@ -60954,9 +60966,9 @@ msgstr "Karşıya yükleme dizini"
 msgid "Upload directory: "
 msgstr "Karşıya yükleme dizini: "
 
-#. INPUT type=submit name=upload
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/files.tt:78
+#. INPUT type=button
 #: koha-tmpl/intranet-tmpl/prog/en/modules/offline_circ/process_koc.tt:44
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/files.tt:78
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/stage-marc-import.tt:83
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload-images.tt:88
 #, c-format
@@ -61543,7 +61555,7 @@ msgstr "V Hizala"
 msgid "VHS tape / Videocassette"
 msgstr "VHS Teyp / Video Kaset"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:653
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:648
 #, c-format
 msgid "Vaara-kirjastot, Finland"
 msgstr "Vaara-kirjastot, Finland"
@@ -61612,7 +61624,7 @@ msgstr ""
 "Kullanıcıların sıralama 2 alanını doldurmak için girilebilen ve "
 "istatistiksel amaçlar için kullanılabilen değerler"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:654
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:649
 #, c-format
 msgid "Vanier College, Canada"
 msgstr "Vanier College, Canada"
@@ -61825,17 +61837,17 @@ msgstr ""
 msgid "Verify you want to delete patrons"
 msgstr "Kullanıcıları silmek istediğinizi doğrulayın"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:655
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:650
 #, c-format
 msgid "Vermont Organization of Koha Automated Libraries (VOKAL), USA"
 msgstr "Vermont Organization of Koha Automated Libraries (VOKAL), USA"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:791
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:786
 #, c-format
 msgid "Verovio"
 msgstr "Verovio"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:792
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:787
 #, c-format
 msgid ""
 "Verovio is developed by the Swiss RISM Office with the support of the Swiss "
@@ -62084,12 +62096,12 @@ msgstr "Görüntülenen"
 msgid "Viewing suggestions for library:"
 msgstr "Kütüphane için önerileri görüntüleme:"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:656
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:651
 #, c-format
 msgid "Ville de Victoriaville, Canada"
 msgstr "Ville de Victoriaville, Canada"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:657
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:652
 #, c-format
 msgid "Virginia Tech, USA"
 msgstr "Virginia Tech, USA"
@@ -62213,18 +62225,17 @@ msgstr "Uyar"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:372
 #: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:377
 #: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:382
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:387
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:394
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:415
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:423
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:431
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:438
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:445
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:452
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:459
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:466
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:474
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:490
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:389
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:410
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:418
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:426
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:433
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:440
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:447
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:454
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:461
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:469
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:485
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:152
 #, c-format
 msgid "Warning"
@@ -62408,7 +62419,7 @@ msgstr "Uyarı: materyal numarası bulunamadı"
 msgid "Warnings regarding the system configuration"
 msgstr "Sistem yapılandırması ile ilgili uyarılar"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:658
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:653
 #, c-format
 msgid "Washoe County Library System, USA"
 msgstr "Washoe County Library System, USA"
@@ -62850,7 +62861,7 @@ msgstr "X "
 msgid "XML"
 msgstr "XML"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:411
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:406
 #, c-format
 msgid "XML configuration file"
 msgstr "XML yapılandırma dosyası"
@@ -62860,12 +62871,12 @@ msgstr "XML yapılandırma dosyası"
 msgid "XSLT File(s) for transforming results: "
 msgstr "XSLT dosyaları dönüştürme sonuçları:"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:659
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:654
 #, c-format
 msgid "Xercode, Spain"
 msgstr "Xercode, İspanya"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:683
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:678
 #, c-format
 msgid "YUI"
 msgstr "YUI"
@@ -63209,7 +63220,7 @@ msgstr ""
 "tavsiye edilmez çünkü Bu hesap kullanıldığında Koha'nın bazı kısımları "
 "beklenildiği şekilde çalışmayacaktır."
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:446
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:441
 #, c-format
 msgid ""
 "You are missing the &lt;lockdir&gt; entry in your koha-conf.xml file. Please "
@@ -63218,7 +63229,7 @@ msgstr ""
 "koha-conf.xml dosyanızdaki &lt;lockdir&gt; girişi eksik. Lütfen Koha "
 "örneğinizin kilit dizinini işaret ederek ekleyin."
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:439
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:434
 #, c-format
 msgid ""
 "You are missing the &lt;log4perl_conf&gt; entry in your koha-conf.xml file. "
@@ -63237,7 +63248,7 @@ msgstr ""
 "etkinleştirmek bir performans artışı getirecektir."
 
 #. %1$s:  config_entry.effective_tmp_dir | html 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:475
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:470
 #, c-format
 msgid ""
 "You are missing the &lt;tmp_path&gt; entry in your koha-conf.xml file. "
@@ -63248,7 +63259,7 @@ msgstr ""
 "örneği için yapılandırılan dosya yükleme dizinini işaret ederek bunu "
 "ekleyin. Etkin geçici dizin '%s'."
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:460
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:455
 #, c-format
 msgid ""
 "You are missing the &lt;upload_path&gt; entry in your koha-conf.xml file. "
@@ -63258,7 +63269,7 @@ msgstr ""
 "koha-conf.xml dosyanız içinde &lt;upload_path&gt; girdisi eksik. Lütfen Koha "
 "örneği için yapılandırılan dosya yükleme dizinini işaret ederek bunu ekleyin."
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:467
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:462
 #, c-format
 msgid ""
 "You are missing the &lt;upload_path&gt; entry in your koha-conf.xml file. "
@@ -63326,12 +63337,12 @@ msgstr "Çevrimdışısınız ve bu nedenle veri tabanınızı senkronize edemez
 msgid "You are only viewing one item. "
 msgstr "Yalnızca bir materyal görüntülediniz. "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:527
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:522
 #, c-format
 msgid "You are running a development version of Koha"
 msgstr "Koha'nın geliştirme sürümünü çalıştırıyorsunuz"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:394
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:389
 #, c-format
 msgid ""
 "You are using the PayPal functionality, which is now deprecated and replaced "
@@ -64497,7 +64508,7 @@ msgstr "analitik."
 msgid "and"
 msgstr "ve"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:680
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:675
 #, c-format
 msgid "and "
 msgstr "ve "
@@ -64522,7 +64533,7 @@ msgstr "ve bir para birimini aktif olarak işaretleyin."
 msgid "and search for the \"data problems\" section"
 msgstr "ve \"veri sorunları\" bölümünü arayın"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:741
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:736
 #, c-format
 msgid "and the "
 msgstr "ve "
@@ -64550,7 +64561,7 @@ msgstr "herhangi bir kütüphane"
 msgid "any library "
 msgstr "herhangi bir kütüphane"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:756
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:751
 #, c-format
 msgid "api/swagger-v2-schema.json"
 msgstr "api/swagger-v2-schema.json"
@@ -64561,7 +64572,7 @@ msgstr "api/swagger-v2-schema.json"
 msgid "approved"
 msgstr "onaylanmış"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:680
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:675
 #, c-format
 msgid "are licensed under the "
 msgstr "altında lisanslıdır "
@@ -64765,43 +64776,43 @@ msgstr ""
 msgid "by %s: "
 msgstr "yazar %s:"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:724
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:719
 #, c-format
 msgid "by Allan Jardine is licensed under the BSD 3 and GPL v2 license."
 msgstr ""
 "Allan Jardine tarafından BSD 3 ve GPL v2 lisansı altında lisanslanmıştır."
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:716
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:711
 #, c-format
 msgid "by Binny V A is licensed under the BSD license."
 msgstr "Binny V A, BSD lisansı altındadır."
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:768
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:763
 #, c-format
 msgid "by DIY Co is licensed under the "
 msgstr "DIY Co tarafından şu lisans altında lisanslıdır "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:741
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:736
 #, c-format
 msgid "by Dave Gandy is licensed under the "
 msgstr "Dave Gandy tarafından şu lisans altında lisanslıdır "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:762
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:757
 #, c-format
 msgid "by Denis Howlett is licensed under the "
 msgstr "Denis Howlett tarafından şu lisans altında lisanslıdır"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:747
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:742
 #, c-format
 msgid "by Eli Grey is licensed under an "
 msgstr "Eli Grey tarafından şu lisans altında lisanslıdır"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:783
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:778
 #, c-format
 msgid "by Google is a family of fonts licensed under the "
 msgstr "Google tarafından şu lisans altına lisanslı bir font ailesidir "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:795
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:790
 #, c-format
 msgid ""
 "by Klaus Hartl is a jQuery plugin for setting, reading, and deleting browser "
@@ -64810,7 +64821,7 @@ msgstr ""
 "Klaus Hartl tarafından tarayıcı çerezlerini ayarlamak, okumak ve silmek için "
 "bir jQuery eklentisidir, şu lisans altında lisanslanmıştır"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:789
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:784
 #, c-format
 msgid ""
 "by Lars Jung is a JavaScript library that generates QR codes, licensed under "
@@ -64819,17 +64830,17 @@ msgstr ""
 "Lars Jung tarafından QR kodları üreten bir JavaScript kütüphanesidir, şu "
 "lisans altında lisanslanmıştır"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:744
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:739
 #, c-format
 msgid "by Marijn Haverbeke is licensed under an "
 msgstr "Marijn Haverbeke tarafından şu lisans altında lisanlıdır"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:738
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:733
 #, c-format
 msgid "by Moxiecode (Ephox) is licensed under the "
 msgstr "by Moxiecode (Ephox) şu lisans altında lisanslıdır"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:786
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:781
 #, c-format
 msgid ""
 "by Some Web Media is a JavaScript library that makes any element on your "
@@ -64838,12 +64849,12 @@ msgstr ""
 "Some Web Media tarafından, sayfanızdaki herhangi bir öğeyi kaydırırken "
 "görünür yapan bir JavaScript kitaplığıdır, şu lisans altında lisanslanmıştır"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:750
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:745
 #, c-format
 msgid "by The Dojo Foundation is licensed under an "
 msgstr "The Dojo Foundation tarafından şu lisans altında lisanslıdır"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:728
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:723
 #, c-format
 msgid "by Zhixin Wen is licensed under the MIT license."
 msgstr "Zhixin Wen tarafından MIT lisansı altında lisanslanmıştır."
@@ -64866,7 +64877,7 @@ msgstr "Kütüphanelere göre "
 msgid "by months"
 msgstr "aylara göre"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:696
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:691
 #, c-format
 msgid "by the Bridge Consortium of Carleton College and St. Olaf College."
 msgstr ""
@@ -64981,7 +64992,7 @@ msgstr "kapatıldı"
 msgid "club %s "
 msgstr "club %s"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:682
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:677
 #, c-format
 msgid "code and "
 msgstr "kod ve "
@@ -65036,7 +65047,7 @@ msgstr "içerir"
 msgid "continue creating your request"
 msgstr "isteğinizi oluşturmaya devam edin"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:724
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:719
 #, c-format
 msgid "controls for column visiblity in DataTables"
 msgstr "DataTables içinde sütun görünürlük kontrolleri"
@@ -65194,7 +65205,7 @@ msgstr "bu kütüphaneci için ayrıntıyı göster."
 msgid "do a catalog search"
 msgstr "Katalog araması yapın"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:588
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:583
 #, c-format
 msgid "doXulting"
 msgstr "doXulting"
@@ -65270,7 +65281,7 @@ msgstr "ending.ogg"
 msgid "euro-currency sign"
 msgstr "euro-para birimi simgesi"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:811
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:806
 #, c-format
 msgid ""
 "euskara (Basque) Fernando Berrizbeitia, the librarians of Eima Katalogoa, "
@@ -65319,7 +65330,7 @@ msgstr "güncelleştirme başarısız oldu"
 msgid "failed to run"
 msgstr "çalıştırılamadı"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:517
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:512
 #, c-format
 msgid "famfamfam.com"
 msgstr "famfamfam.com"
@@ -65334,7 +65345,7 @@ msgstr "alan "
 msgid "field(s) "
 msgstr "alan(lar)"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:756
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:751
 #, c-format
 msgid "file is licensed under the "
 msgstr "dosya şu lisans altında lisanslıdır "
@@ -65598,7 +65609,7 @@ msgstr "geçersiz otorite türleri"
 msgid "is"
 msgstr "is"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:798
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:793
 #, c-format
 msgid ""
 "is a \"simple, lightweight JavaScript API for handling cookies,\" licensed "
@@ -65607,19 +65618,19 @@ msgstr ""
 "\"çerezleri işlemek için basit, çok küçük boyutta bir JavaScript API'si dir,"
 "\" şu lisans altında lisanslanmıştır"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:777
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:772
 #, c-format
 msgid "is a D3-based reusable chart library under the "
 msgstr ""
 "şunun altında D3 tabanlı yeniden kullanılabilir bir grafik kütüphanesidir"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:780
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:775
 #, c-format
 msgid "is a JavaScript library by Bram Stein licensed under the "
 msgstr ""
 "Bram Stein tarafından şunun altında lisanslanan bir JavaScrip kütüphanesidir"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:774
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:769
 #, c-format
 msgid ""
 "is a JavaScript library for manipulating documents based on data. It is "
@@ -65660,12 +65671,12 @@ msgstr "eşittir"
 msgid "is exactly"
 msgstr "aynen"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:753
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:748
 #, c-format
 msgid "is licensed under a "
 msgstr "şu öğe altında lisanslıdır "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:701
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:696
 #, c-format
 msgid "is licensed under the "
 msgstr "altında lisanslıdır "
@@ -65690,7 +65701,7 @@ msgstr "%s tarihine kadar men edilmiştir."
 msgid "is on hold for "
 msgstr "için ayırtılmış "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:712
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:707
 #, c-format
 msgid "is released under MIT license by Ludo van den Boom."
 msgstr "Ludo van den Boom tarafından MIT Lisansı altında yayınlanır."
@@ -65809,43 +65820,43 @@ msgstr "itemtype yerleştirilmemiş"
 msgid "itype"
 msgstr "itype"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:680
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:675
 #, c-format
 msgid "jQuery"
 msgstr "jQuery"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:700
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:695
 #, c-format
 msgid "jQuery Bar Rating Plugin"
 msgstr "jQuery Bar Rating Eklentisi"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:701
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:696
 #, c-format
 msgid "jQuery Bar Rating Plugin v1.22 by "
 msgstr "tarafından jQuery Bar Derecelendirme Eklentisi v1.22"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:723
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:718
 #, c-format
 msgid "jQuery Colvis plugin"
 msgstr "jQuery Colvis eklentisi"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:734
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:735
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:729
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:730
 #, c-format
 msgid "jQuery Validation Plugin"
 msgstr "jQuery Validation Eklentisi"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:679
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:674
 #, c-format
 msgid "jQuery and jQueryUI"
 msgstr "jQuery ve jQueryUI"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:705
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:700
 #, c-format
 msgid "jQuery insertAtCaret Plugin"
 msgstr "jQuery insertAtCaret Eklentisi"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:706
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:701
 #, c-format
 msgid ""
 "jQuery insertAtCaret Plugin v1.0 by the phpMyAdmin devel team is licensed "
@@ -65854,49 +65865,49 @@ msgstr ""
 "phpMyAdmin devel ekibi tarafından jQuery insertAtCaret Eklentisi şu isim "
 "altında lisanslıdır"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:728
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:723
 #, c-format
 msgid "jQuery multiple select plugin"
 msgstr "jQuery çoklu seçim eklentisi"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:710
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:705
 #, c-format
 msgid "jQuery treetable Plugin"
 msgstr "jQuery treetable Eklentisi"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:712
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:707
 #, c-format
 msgid "jQuery treetable Plugin 3.1.0"
 msgstr "jQuery treetable Eklentisi 3.1.0"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:680
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:675
 #, c-format
 msgid "jQueryUI"
 msgstr "jQueryUI"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:794
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:795
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:789
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:790
 #, c-format
 msgid "jquery.cookie"
 msgstr "jquery.cookie"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:719
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:720
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:714
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:715
 #, c-format
 msgid "jquery.dataTables.grouping.js"
 msgstr "jquery.dataTables.grouping.js"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:767
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:762
 #, c-format
 msgid "jquery.emojiarea.js"
 msgstr "jquery.emojiarea.js"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:727
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:722
 #, c-format
 msgid "jquery.multiple.select.js"
 msgstr "jquery.multiple.select.js"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:761
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:756
 #, c-format
 msgid "jquery.tablednd.js"
 msgstr "jquery.tablednd.js"
@@ -65906,8 +65917,8 @@ msgstr "jquery.tablednd.js"
 msgid "kip sign"
 msgstr "kip simgesi"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:788
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:789
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:783
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:784
 #, c-format
 msgid "kjua"
 msgstr "kjua"
@@ -65956,7 +65967,7 @@ msgstr "son uzatma: %s tarihinde"
 msgid "let blank for the entire field"
 msgstr "alanın tamamı için boş bırak"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:759
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:754
 #, c-format
 msgid "library is licensed under "
 msgstr "kütüphane şu lisans altında lisanslıdır"
@@ -65966,8 +65977,8 @@ msgstr "kütüphane şu lisans altında lisanslıdır"
 msgid "library not defined"
 msgstr "kütüphane tanımlanmamış"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:682
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:801
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:677
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:796
 #, c-format
 msgid "licensed under the "
 msgstr "Altında lisanslanmıştır"
@@ -66274,9 +66285,9 @@ msgstr "ya da oluşturun"
 msgid "or create:"
 msgstr "ya da oluşturun:"
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/member-alt-address-style.inc:163
+#: koha-tmpl/intranet-tmpl/prog/en/includes/member-alt-address-style.inc:165
 #: koha-tmpl/intranet-tmpl/prog/en/includes/member-alt-contact-style.inc:148
-#: koha-tmpl/intranet-tmpl/prog/en/includes/member-main-address-style.inc:154
+#: koha-tmpl/intranet-tmpl/prog/en/includes/member-main-address-style.inc:156
 #, c-format
 msgid "or enter"
 msgstr "veya enter"
@@ -66368,12 +66379,12 @@ msgstr "sipariş vermek"
 msgid "please note your reason here..."
 msgstr "lütfen nedenini buraya not edin…"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:732
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:727
 #, c-format
 msgid "plugin by John Resig is licensed under the "
 msgstr "Eklenti John Regis tarafından şu lisans altında lisanslanmıştır"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:720
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:715
 #, c-format
 msgid "plugin by Jovan Popovic is licensed under the BSD and GPL v2 license."
 msgstr ""
@@ -66635,7 +66646,7 @@ msgstr "%s %s tarihinden itibaren materyal şu konuma aktarımdadır"
 msgid "since last transfer"
 msgstr "son transferden bu yana"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:634
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:629
 #, c-format
 msgid "software.coop, United Kingdom"
 msgstr "Software Coop, Birleşik Krallık"
@@ -66765,7 +66776,7 @@ msgstr "öneri"
 msgid "suggestion #%s"
 msgstr "öneri #%s"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:820
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:815
 #, c-format
 msgid "suomi, suomen kieli (Finnish) Pasi Korkalo"
 msgstr "Fince, Fince (Finlandiya), Pasi Korkalo"
@@ -66809,12 +66820,12 @@ msgstr "tenge simgesi"
 msgid "text/html; charset=utf-8"
 msgstr "text/html; charset=utf-8"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:768
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:763
 #, c-format
 msgid "the Apache License, Version 2.0"
 msgstr "Apache Lisansı, Sürüm 2.0"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:759
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:754
 #, c-format
 msgid ""
 "the Apache License, Version 2.0 (the \"Apache License\") or the GNU General "
@@ -67122,7 +67133,7 @@ msgstr "değere sahip"
 msgid "won sign"
 msgstr "won simgesi"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:735
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:730
 #, c-format
 msgid "written and maintained by Jörn Zaefferer is licensed under the "
 msgstr ""
@@ -67300,7 +67311,7 @@ msgstr "| Durum: %s"
 msgid "×"
 msgstr "×"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:807
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:802
 #, c-format
 msgid ""
 "العربية (Arabic) Version 3.2 to 3.4, 3.16 & 3.18 by KnowledgeWare "

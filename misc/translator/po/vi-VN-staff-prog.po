@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 20.11\n"
-"POT-Creation-Date: 2021-08-20 16:04-0300\n"
+"POT-Creation-Date: 2021-09-17 23:15-0300\n"
 "PO-Revision-Date: 2021-01-06 16:41+0000\n"
 "Last-Translator: vudoquynh <quynhvd@thanglong.edu.vn>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -160,7 +160,7 @@ msgid "# Subs"
 msgstr "Số ÂPĐK"
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/preferences.tt:231
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/preferences.tt:245
 #, fuzzy
 msgid "# of % selected"
 msgstr "Thanh toán từng khoản"
@@ -3468,6 +3468,19 @@ msgstr ""
 "%s %sChờ duyệt %sĐược chấp nhận %sĐã kiểm tra %sTừ chối %sSẵn sàng %sĐã đặt "
 "hàng %sTình trạng không rõ %s%s%s %s %s %s %s Không tên %s %s (%s)"
 
+#. %1$s:  SWITCH w 
+#. %2$s:  CASE "bcrypt_config_not_set" 
+#. %3$s:  CASE 
+#. %4$s:  w | html 
+#. %5$s:  END 
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/preferences.tt:173
+#, c-format
+msgid ""
+"%s %sPseudonymization must only be turned on if the 'bcrypt_settings' "
+"configuration entry exists and is correctly filled in the Koha configuration "
+"file. %sUnknown warning \"%s\" %s "
+msgstr ""
+
 #. %1$s:  SWITCH basket.create_items 
 #. %2$s:  CASE 'receiving' 
 #. %3$s:  CASE 'cataloguing' 
@@ -4411,18 +4424,18 @@ msgstr ""
 
 #. For the first occurrence,
 #. %1$s:  END 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/member-alt-address-style.inc:117
+#: koha-tmpl/intranet-tmpl/prog/en/includes/member-alt-address-style.inc:119
 #: koha-tmpl/intranet-tmpl/prog/en/includes/member-alt-contact-style.inc:102
-#: koha-tmpl/intranet-tmpl/prog/en/includes/member-main-address-style.inc:108
+#: koha-tmpl/intranet-tmpl/prog/en/includes/member-main-address-style.inc:110
 #, c-format
 msgid "%s Address 2: "
 msgstr "%s Địa chỉ 2: "
 
 #. For the first occurrence,
 #. %1$s:  END 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/member-alt-address-style.inc:87
+#: koha-tmpl/intranet-tmpl/prog/en/includes/member-alt-address-style.inc:89
 #: koha-tmpl/intranet-tmpl/prog/en/includes/member-alt-contact-style.inc:87
-#: koha-tmpl/intranet-tmpl/prog/en/includes/member-main-address-style.inc:78
+#: koha-tmpl/intranet-tmpl/prog/en/includes/member-main-address-style.inc:80
 #, c-format
 msgid "%s Address: "
 msgstr "%s Địa chỉ: "
@@ -4523,7 +4536,7 @@ msgstr "Số bản sao"
 #. %1$s:  FOR w IN warnHiddenBiblionumbers 
 #. %2$s:  w.frameworkcode | html 
 #. %3$s:  w.interface | html 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:387
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:382
 #, c-format
 msgid ""
 "%s Biblio framework \"%s\" has the biblionumber field hidden at the "
@@ -4591,9 +4604,9 @@ msgstr "%s Ghi chú lưu thông: "
 
 #. For the first occurrence,
 #. %1$s:  END 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/member-alt-address-style.inc:147
+#: koha-tmpl/intranet-tmpl/prog/en/includes/member-alt-address-style.inc:149
 #: koha-tmpl/intranet-tmpl/prog/en/includes/member-alt-contact-style.inc:132
-#: koha-tmpl/intranet-tmpl/prog/en/includes/member-main-address-style.inc:138
+#: koha-tmpl/intranet-tmpl/prog/en/includes/member-main-address-style.inc:140
 #, c-format
 msgid "%s City: "
 msgstr "%s Thành phố: "
@@ -4643,16 +4656,16 @@ msgid "%s Confirm password: "
 msgstr "%s Mật khẩu xác nhận: "
 
 #. %1$s:  END 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/member-alt-address-style.inc:241
+#: koha-tmpl/intranet-tmpl/prog/en/includes/member-alt-address-style.inc:243
 #, c-format
 msgid "%s Contact note: "
 msgstr "%s Ghi chú liên hệ: "
 
 #. For the first occurrence,
 #. %1$s:  END 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/member-alt-address-style.inc:192
+#: koha-tmpl/intranet-tmpl/prog/en/includes/member-alt-address-style.inc:194
 #: koha-tmpl/intranet-tmpl/prog/en/includes/member-alt-contact-style.inc:177
-#: koha-tmpl/intranet-tmpl/prog/en/includes/member-main-address-style.inc:183
+#: koha-tmpl/intranet-tmpl/prog/en/includes/member-main-address-style.inc:185
 #, c-format
 msgid "%s Country: "
 msgstr "%s Quốc gia "
@@ -4779,7 +4792,7 @@ msgid "%s Editing "
 msgstr "%sChỉnh sửa biểu ghi "
 
 #. %1$s:  END 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/member-alt-address-style.inc:222
+#: koha-tmpl/intranet-tmpl/prog/en/includes/member-alt-address-style.inc:224
 #, c-format
 msgid "%s Email: "
 msgstr "%s Thư điện tử: "
@@ -5558,7 +5571,7 @@ msgstr "%s Đang chờ xử lý %s Đang xử lý %s Đã hoàn thành %s Bị h
 
 #. For the first occurrence,
 #. %1$s:  END 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/member-alt-address-style.inc:207
+#: koha-tmpl/intranet-tmpl/prog/en/includes/member-alt-address-style.inc:209
 #: koha-tmpl/intranet-tmpl/prog/en/includes/member-alt-contact-style.inc:192
 #, c-format
 msgid "%s Phone: "
@@ -5768,9 +5781,9 @@ msgstr "%s Thống kê 2: "
 
 #. For the first occurrence,
 #. %1$s:  END 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/member-alt-address-style.inc:177
+#: koha-tmpl/intranet-tmpl/prog/en/includes/member-alt-address-style.inc:179
 #: koha-tmpl/intranet-tmpl/prog/en/includes/member-alt-contact-style.inc:162
-#: koha-tmpl/intranet-tmpl/prog/en/includes/member-main-address-style.inc:168
+#: koha-tmpl/intranet-tmpl/prog/en/includes/member-main-address-style.inc:170
 #, c-format
 msgid "%s State: "
 msgstr "%s Bang: "
@@ -5783,16 +5796,16 @@ msgstr "%sKhông được ghi mượn%s"
 
 #. For the first occurrence,
 #. %1$s:  END 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/member-alt-address-style.inc:102
-#: koha-tmpl/intranet-tmpl/prog/en/includes/member-main-address-style.inc:93
+#: koha-tmpl/intranet-tmpl/prog/en/includes/member-alt-address-style.inc:104
+#: koha-tmpl/intranet-tmpl/prog/en/includes/member-main-address-style.inc:95
 #, c-format
 msgid "%s Street number: "
 msgstr "%s Số nhà: "
 
 #. For the first occurrence,
 #. %1$s:  END 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/member-alt-address-style.inc:63
-#: koha-tmpl/intranet-tmpl/prog/en/includes/member-main-address-style.inc:54
+#: koha-tmpl/intranet-tmpl/prog/en/includes/member-alt-address-style.inc:64
+#: koha-tmpl/intranet-tmpl/prog/en/includes/member-main-address-style.inc:55
 #, c-format
 msgid "%s Street type: "
 msgstr "%s Số nhà: "
@@ -6123,9 +6136,9 @@ msgstr "%s Giá sách ảo của bạn %s %s &rsaquo; %s "
 
 #. For the first occurrence,
 #. %1$s:  END 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/member-alt-address-style.inc:132
+#: koha-tmpl/intranet-tmpl/prog/en/includes/member-alt-address-style.inc:134
 #: koha-tmpl/intranet-tmpl/prog/en/includes/member-alt-contact-style.inc:117
-#: koha-tmpl/intranet-tmpl/prog/en/includes/member-main-address-style.inc:123
+#: koha-tmpl/intranet-tmpl/prog/en/includes/member-main-address-style.inc:125
 #, fuzzy, c-format
 msgid "%s ZIP/Postal code: "
 msgstr "%s Mã bưu chính: "
@@ -8165,7 +8178,7 @@ msgstr "%st - Trực tiếp trong dữ liệu gốc"
 msgid "%s✓%s"
 msgstr "%s✓%s"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:810
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:805
 #, c-format
 msgid ""
 "&#1041;&#1098;&#1083;&#1075;&#1072;&#1088;&#1089;&#1082;&#1080; (Bulgarian) "
@@ -8174,7 +8187,7 @@ msgstr ""
 "&#1041;&#1098;&#1083;&#1075;&#1072;&#1088;&#1089;&#1082;&#1080; (Bulgarian) "
 "Radoslav Kolev"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:844
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:839
 #, c-format
 msgid ""
 "&#1056;&#1091;&#1089;&#1089;&#1082;&#1080;&#1081; (Russian) Victor Titarchuk "
@@ -8183,7 +8196,7 @@ msgstr ""
 "&#1056;&#1091;&#1089;&#1089;&#1082;&#1080;&#1081; (Russian) Victor Titarchuk "
 "and Serhij Dubyk"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:851
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:846
 #, c-format
 msgid ""
 "&#1059;&#1082;&#1088;&#1072;&#1111;&#1085;&#1089;&#1100;&#1082;&#1072; "
@@ -8192,64 +8205,64 @@ msgstr ""
 "&#1059;&#1082;&#1088;&#1072;&#1111;&#1085;&#1089;&#1100;&#1082;&#1072; "
 "(Ukrainian) Victor Titarchuk and Serhij Dubyk"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:825
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:820
 #, c-format
 msgid "&#1506;&#1489;&#1512;&#1497;&#1514; (Hebrew)"
 msgstr "&#1506;&#1489;&#1512;&#1497;&#1514; (Hebrew)"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:850
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:845
 #, c-format
 msgid "&#1575;&#1585;&#1583;&#1608;(Urdu) Ata ur Rehman"
 msgstr "&#1575;&#1585;&#1583;&#1608;(Urdu) Ata ur Rehman"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:839
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:834
 #, c-format
 msgid "&#1601;&#1575;&#1585;&#1587;&#1609; (Persian)"
 msgstr "&#1601;&#1575;&#1585;&#1587;&#1609; (Persian)"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:813
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:808
 #, c-format
 msgid "&#20013;&#25991; (Chinese)"
 msgstr "&#20013;&#25991; (Chinese)"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:826
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:821
 #, c-format
 msgid "&#2361;&#2367;&#2344;&#2381;&#2342;&#2368; (Hindi)"
 msgstr "&#2361;&#2367;&#2344;&#2381;&#2342;&#2368; (Hindi)"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:812
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:807
 #, c-format
 msgid ""
 "&#2476;&#2494;&#2434;&#2482;&#2494; (Bengali) Parthasarathi Mukhopadhyay"
 msgstr ""
 "&#2476;&#2494;&#2434;&#2482;&#2494; (Bengali) Parthasarathi Mukhopadhyay"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:832
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:827
 #, c-format
 msgid "&#26085;&#26412;&#35486; (Japanese)"
 msgstr "&#26085;&#26412;&#35486; (Japanese)"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:840
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:835
 #, c-format
 msgid "&#2835;&#2908;&#2879;&#2822; (&#x014D;&#7771;iy&#257;)"
 msgstr "&#2835;&#2908;&#2879;&#2822; (&#x014D;&#7771;iy&#257;)"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:834
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:829
 #, c-format
 msgid "&#3221;&#3240;&#3277;&#3240;&#3233; (kanna&#7693;a)"
 msgstr "&#3221;&#3240;&#3277;&#3240;&#3233; (kanna&#7693;a)"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:838
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:833
 #, c-format
 msgid "&#3374;&#3378;&#3375;&#3390;&#3379;&#3330; (Malayalam)"
 msgstr "&#3374;&#3378;&#3375;&#3390;&#3379;&#3330; (Malayalam)"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:848
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:843
 #, c-format
 msgid "&#3616;&#3634;&#3625;&#3634;&#3652;&#3607;&#3618; (Thai)"
 msgstr "&#3616;&#3634;&#3625;&#3634;&#3652;&#3607;&#3618; (Thai)"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:808
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:803
 #, c-format
 msgid ""
 "&#4768;&#4635;&#4653;&#4763; (Amharic) Getway II Ethiopia Co. (Yohannes "
@@ -8258,12 +8271,12 @@ msgstr ""
 "&#4768;&#4635;&#4653;&#4763; (Amharic) Getway II Ethiopia Co. (Yohannes "
 "Mulugeta (Team Leader), Tegene Assefa, Abiyot Bayou)"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:833
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:828
 #, c-format
 msgid "&#54620;&#44397;&#50612; (Korean)"
 msgstr "&#54620;&#44397;&#50612; (Korean)"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:824
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:819
 #, fuzzy, c-format
 msgid ""
 "&#949;&#955;&#955;&#951;&#957;&#953;&#954;&#940; (Greek, Modern [1453- ]) "
@@ -8273,7 +8286,7 @@ msgstr ""
 "&#949;&#955;&#955;&#951;&#957;&#953;&#954;&#940; (Greek, Modern [1453- ]) "
 "Georgia Katsarou, Panoraia Gaitanou and Kiriaki Roditi"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:815
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:810
 #, c-format
 msgid "&#x010D;e&#353;tina (Czech)"
 msgstr "&#x010D;e&#353;tina (Czech)"
@@ -10365,7 +10378,7 @@ msgstr ""
 "(Bao gồm, giá trị mặc định là %s ngày trước tới %s%s ngày trước%shôm nay%s, "
 "thiết lập khoảng thời gian khác nếu cần. )"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:830
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:825
 #, c-format
 msgid "(Indonesian)"
 msgstr "(Indonesian)"
@@ -10710,7 +10723,7 @@ msgstr ") được gia hạn cho %s %s ( "
 msgid ") you selected does not exist. "
 msgstr ") bạn chọn không tồn tại. "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:572
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:567
 #, fuzzy, c-format
 msgid "), France"
 msgstr "Tamil, France"
@@ -10738,27 +10751,27 @@ msgstr "). %s %s Tài liệu đang chờ bạn đọc %s đến lấy tại thư
 msgid "** Vendor's listings already include tax."
 msgstr " Danh sách nhà cung cấp đã tính thuế."
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:518
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:513
 #, c-format
 msgid ", Auckland, New Zealand (OPAC 'star-ratings' sponsorship)"
 msgstr ", Auckland, New Zealand (OPAC 'star-ratings' sponsorship)"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:515
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:510
 #, c-format
 msgid ", Cyprus"
 msgstr ", Cyprus"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:512
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:507
 #, c-format
 msgid ", France (Koha 3.0 enhancements to patrons and holds modules)"
 msgstr ", France (Koha 3.0 enhancements to patrons and holds modules)"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:510
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:505
 #, c-format
 msgid ", France (Suggestions, Stats wizards and improved LDAP sponsorship)"
 msgstr ", France (Suggestions, Stats wizards and improved LDAP sponsorship)"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:511
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:506
 #, c-format
 msgid ""
 ", France (biblio frameworks, MARC authorities, OPAC basket, Serials "
@@ -10767,27 +10780,27 @@ msgstr ""
 ", France (biblio frameworks, MARC authorities, OPAC basket, Serials "
 "sponsorship)"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:508
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:503
 #, c-format
 msgid ", New Zealand, and Rosalie Blake, Head of Libraries, (Koha 1.0)"
 msgstr ", New Zealand, and Rosalie Blake, Head of Libraries, (Koha 1.0)"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:514
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:509
 #, c-format
 msgid ", OH, USA (Koha 3.0 beta testing)"
 msgstr ", OH, USA (Koha 3.0 beta testing)"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:509
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:504
 #, c-format
 msgid ", Ohio, USA (MARC sponsorship, documentation, template maintenance)"
 msgstr ", Ohio, USA (MARC sponsorship, documentation, template maintenance)"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:513
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:508
 #, c-format
 msgid ", PA, USA (Koha 3.0 Zebra Integration sponsorship)"
 msgstr ", PA, USA (Koha 3.0 Zebra Integration sponsorship)"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:821
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:816
 #, c-format
 msgid ", Pascale Nalon (ENSMP), and many more "
 msgstr ", Pascale Nalon (ENSMP), and many more "
@@ -10797,7 +10810,7 @@ msgstr ", Pascale Nalon (ENSMP), and many more "
 msgid ", Please transfer this item. "
 msgstr ", bạn hãy chuyển tài liệu này tới bạn đọc. "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:756
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:751
 #, c-format
 msgid ", by the "
 msgstr ""
@@ -11794,7 +11807,6 @@ msgid "Actions"
 msgstr "Thao tác"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoices.tt:84
-#: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/searchresultlist.tt:58
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:8
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:163
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:212
@@ -11805,6 +11817,7 @@ msgstr "Thao tác"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:223
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/oai_sets.tt:92
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/z3950servers.tt:181
+#: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/searchresultlist.tt:58
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:133
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:188
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/additem.tt:92
@@ -12738,7 +12751,7 @@ msgstr "Thông số khác"
 msgid "Additional subfields (XML)"
 msgstr "Trường con bổ sung (XML)"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:662
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:657
 #, fuzzy, c-format
 msgid "Additional thanks to..."
 msgstr "Sự đóng góp của các cá nhân..."
@@ -13087,7 +13100,7 @@ msgstr ""
 msgid "Ages allowed are %s-%s. "
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:518
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:513
 #, c-format
 msgid "Albany Senior High School"
 msgstr "Albany Senior High School"
@@ -13140,7 +13153,7 @@ msgstr "Đánh dấu"
 msgid "Alignment"
 msgstr "Căn lề: "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:561
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:556
 #, c-format
 msgid "Alingsås Public Library, Sweden"
 msgstr ""
@@ -13342,7 +13355,7 @@ msgid "All required Perl modules appear to be installed."
 msgstr ""
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/preferences.tt:231
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/preferences.tt:245
 #, fuzzy
 msgid "All selected"
 msgstr "Thanh toán từng khoản"
@@ -13373,7 +13386,7 @@ msgstr "Tài lên giao dịch"
 msgid "All vendors"
 msgstr "Tất cả"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:560
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:555
 #, c-format
 msgid "Allen Ginsberg Library, USA"
 msgstr ""
@@ -13741,7 +13754,7 @@ msgstr ""
 msgid "Amazon cover image"
 msgstr "Hình ảnh khác"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:562
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:557
 #, c-format
 msgid "American Numismatic Society, USA"
 msgstr ""
@@ -14036,7 +14049,7 @@ msgstr "Xóa lịch sử ghi mượn"
 msgid "Another pattern with this name already exists."
 msgstr "Mẫu đánh số ÂPĐK khác với tên tương tự đã tồn tại."
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:701
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:696
 #, c-format
 msgid "Antenna.io"
 msgstr ""
@@ -14183,7 +14196,7 @@ msgstr ""
 msgid "Anyone seeing this list"
 msgstr "Gặp lỗi khi gửi giá sách ảo..."
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:756
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:751
 #, fuzzy, c-format
 msgid "Apache License, Version 2.0"
 msgstr "Apache version: "
@@ -14273,7 +14286,7 @@ msgstr "Từ khóa đã duyệt"
 msgid "April"
 msgstr "Tháng 4"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:563
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:558
 #, fuzzy, c-format
 msgid "Arcadia Public Library, USA"
 msgstr "Nelsonville Public Library, Ohio, USA"
@@ -14881,7 +14894,7 @@ msgstr "Phân hệ báo cáo"
 msgid "Area:"
 msgstr "Phân hệ:"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:809
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:804
 #, c-format
 msgid "Armenian Tigran Zargaryan"
 msgstr "Armenian Tigran Zargaryan"
@@ -14974,12 +14987,12 @@ msgstr "Bạn phải chọn hai biểu ghi cần sát nhập."
 msgid "At library: %s"
 msgstr "Tại thư viện: %s"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:509
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:504
 #, fuzzy, c-format
 msgid "Athens County Public Libraries"
 msgstr "Geauga County Public Library"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:564
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:559
 #, fuzzy, c-format
 msgid "Athens County Public Libraries, USA"
 msgstr "Geauga County Public Library"
@@ -15263,11 +15276,11 @@ msgid "Authorised values category: "
 msgstr "Giá trị định trước: "
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/intranet-main.tt:80
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/columns_settings.tt:203
 #: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:183
 #: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/detail.tt:20
 #: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/merge.tt:18
 #: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/searchresultlist.tt:13
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/columns_settings.tt:203
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:110
 #: koha-tmpl/intranet-tmpl/prog/en/includes/header.inc:42
 #: koha-tmpl/intranet-tmpl/prog/en/includes/prefs-menu.inc:34
@@ -15287,11 +15300,9 @@ msgstr "Dữ liệu kiểm soát"
 msgid "Authorities: "
 msgstr "Dữ liệu kiểm soát"
 
-#. For the first occurrence,
-#. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/searchresultlist-auth.tt:116
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/z3950servers.tt:124
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/z3950servers.tt:175
+#: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/searchresultlist-auth.tt:116
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/search-history.tt:28
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/stage-marc-import.tt:131
 #, c-format
@@ -15608,15 +15619,15 @@ msgstr "Thời gian ghi mượn trung bình"
 msgid "BIBTEX"
 msgstr "BibTex"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:774
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:769
 #, fuzzy, c-format
 msgid "BSD 3-clause Licence"
 msgstr "BSD License"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:685
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:753
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:765
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:780
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:680
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:748
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:760
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:775
 #, c-format
 msgid "BSD License"
 msgstr "BSD License"
@@ -15626,7 +15637,7 @@ msgstr "BSD License"
 msgid "BT"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:572
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:567
 #, c-format
 msgid "BULAC"
 msgstr ""
@@ -16329,7 +16340,7 @@ msgstr "Phù hợp"
 msgid "Batches"
 msgstr "Phù hợp"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:565
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:560
 #, c-format
 msgid "BdP de la Meuse, France"
 msgstr ""
@@ -16394,7 +16405,7 @@ msgstr "Bắt đầu với"
 msgid "Behavior"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:566
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:561
 #, c-format
 msgid "BibLibre, France"
 msgstr "BibLibre, France"
@@ -16564,19 +16575,19 @@ msgstr "Biểu ghi thư mục trong tệp tin dữ liệu"
 msgid "Biblios: "
 msgstr "Biểu ghi:"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:567
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:562
 #, c-format
 msgid ""
 "Biblioteca Provincial Fr. Mamerto Esquiú (Provincia Franciscana de la "
 "Asunción), Argentina"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:568
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:563
 #, c-format
 msgid "Bibliotheksservice-Zentrum Baden-Württemberg (BSZ), Germany"
 msgstr "Bibliotheksservice-Zentrum Baden-Württemberg (BSZ), Germany"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:572
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:567
 #, c-format
 msgid "Bibliothèque Universitaire des Langues et Civilisations ("
 msgstr ""
@@ -16634,7 +16645,7 @@ msgstr "Nơi thanh toán:"
 msgid "Biography"
 msgstr "Hồi ký, tiểu sử"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:517
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:512
 #, c-format
 msgid ""
 "Birmingham (UK) based developer Mark James for the famfamfam Silk iconset."
@@ -16721,8 +16732,8 @@ msgstr "Số hóa đơn: "
 msgid "Boolean"
 msgstr "Xóa"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:681
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:682
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:676
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:677
 #, c-format
 msgid "Bootstrap"
 msgstr "Bootstrap"
@@ -16825,12 +16836,12 @@ msgstr "Giới hạn thư viện"
 msgid "Branches limitation: "
 msgstr "Giới hạn thư viện: "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:569
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:564
 #, c-format
 msgid "Briar Cliff University, USA"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:694
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:689
 #, c-format
 msgid "Bridge Material Type Icons Project"
 msgstr "Bridge Material Type Icons Project"
@@ -16845,7 +16856,7 @@ msgstr "Hiển thị tóm tắt"
 msgid "Brightness"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:570
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:565
 #, c-format
 msgid "Brimbank City Council, Australia"
 msgstr ""
@@ -16856,12 +16867,12 @@ msgstr ""
 msgid "Broader Term"
 msgstr "%sg - Thuật ngữ rộng hơn"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:667
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:662
 #, c-format
 msgid "Brooke Johnson"
 msgstr "Brooke Johnson"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:571
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:566
 #, c-format
 msgid "Brooklyn Law School Library, USA"
 msgstr ""
@@ -17048,7 +17059,7 @@ msgstr "Người liên quan"
 msgid "By: "
 msgstr "Liệt kê theo: "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:573
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:568
 #, c-format
 msgid "ByWater Solutions, USA"
 msgstr "ByWater Solutions, USA"
@@ -17058,17 +17069,17 @@ msgstr "ByWater Solutions, USA"
 msgid "Bytes"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:584
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:579
 #, c-format
 msgid "C &amp; P Bibliography Services, USA"
 msgstr "C &amp; P Bibliography Services, USA"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:776
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:771
 #, c-format
 msgid "C3.js"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:777
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:772
 #, c-format
 msgid "C3.js v0.4.11"
 msgstr ""
@@ -17260,7 +17271,7 @@ msgstr "Lập lịch làm việc"
 msgid "Calendar information"
 msgstr "Lịch làm việc của thư viện"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:574
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:569
 #, c-format
 msgid "California College of the Arts, USA"
 msgstr ""
@@ -17394,12 +17405,12 @@ msgstr "Tạo khung phân loại"
 msgid "Callnumber: %s "
 msgstr "Ký hiệu phân loại: %s "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:577
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:572
 #, c-format
 msgid "Calyx, Australia"
 msgstr "Calyx, Australia"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:575
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:570
 #, c-format
 msgid "Camden County, USA"
 msgstr ""
@@ -17563,10 +17574,6 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/supplier.tt:123
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/transferorder.tt:123
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:93
-#: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:230
-#: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:232
-#: koha-tmpl/intranet-tmpl/prog/en/modules/basket/downloadcart.tt:28
-#: koha-tmpl/intranet-tmpl/prog/en/modules/basket/sendbasketform.tt:34
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/additional-fields.tt:163
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:181
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:256
@@ -17613,8 +17620,8 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/oai_set_mappings.tt:115
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/oai_sets.tt:54
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/patron-attr-types.tt:195
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/preferences.tt:172
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/preferences.tt:206
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/preferences.tt:186
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/preferences.tt:220
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/sms_providers.tt:87
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smtp_servers.tt:115
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smtp_servers.tt:197
@@ -17625,6 +17632,10 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/transport-cost-matrix.tt:85
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/usage_statistics.tt:235
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/z3950servers.tt:148
+#: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:230
+#: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:232
+#: koha-tmpl/intranet-tmpl/prog/en/modules/basket/downloadcart.tt:28
+#: koha-tmpl/intranet-tmpl/prog/en/modules/basket/sendbasketform.tt:34
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:634
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:638
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:642
@@ -18321,7 +18332,7 @@ msgstr "Số thẻ bạn đọc đã được sử dụng."
 msgid "Cardnumbers not found"
 msgstr "Không tìm thấy thẻ bạn đọc"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:576
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:571
 #, c-format
 msgid "Carnegie Stout Library, USA"
 msgstr ""
@@ -18523,7 +18534,7 @@ msgstr "Thông tin tài liệu"
 msgid "Cataloguing tables"
 msgstr "Thông tin tài liệu"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:578
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:573
 #, c-format
 msgid "Catalyst IT, New Zealand"
 msgstr "Catalyst IT, New Zealand"
@@ -18666,12 +18677,12 @@ msgstr "Các ô chỉ chứa giá trị được ước tính."
 msgid "Center"
 msgstr "Bạn đọc bình luận "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:579
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:574
 #, c-format
 msgid "Central Kansas Library System (CKLS), USA"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:580
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:575
 #, c-format
 msgid "Centre collégial des services regroupés (CCSR), Canada"
 msgstr ""
@@ -19493,7 +19504,7 @@ msgstr ""
 "Sử dụng để kiểm tra cấu trúc MARC của mẫu biên mục sau khi bạn thay đổi lại "
 "các định nghĩa trong mẫu biên mục."
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:581
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:576
 #, fuzzy, c-format
 msgid "Cheshire Libraries, United Kingdom"
 msgstr "software.coop, United Kingdom"
@@ -20080,10 +20091,10 @@ msgstr "Xóa"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:53
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/duplicate_orders.tt:135
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:75
-#: koha-tmpl/intranet-tmpl/prog/en/modules/basket/basket.tt:6
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branch_transfer_limits.tt:31
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branch_transfer_limits.tt:45
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/preferences.tt:199
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/preferences.tt:213
+#: koha-tmpl/intranet-tmpl/prog/en/modules/basket/basket.tt:6
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/detail.tt:277
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:73
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:53
@@ -20348,12 +20359,12 @@ msgstr "Mở rộng trường"
 msgid "Click to add item"
 msgstr "Kích vào đây để thêm tài liệu"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/preferences.tt:126
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/preferences.tt:130
 #, fuzzy, c-format
 msgid "Click to collapse"
 msgstr "Chọn vào đây để thu gọn phần này"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/preferences.tt:124
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/preferences.tt:128
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/systempreferences.tt:278
 #: koha-tmpl/intranet-tmpl/prog/en/modules/pos/pay.tt:188
 #, c-format
@@ -20380,9 +20391,9 @@ msgstr ""
 msgid "Clipboard"
 msgstr "Tạo ngày nghỉ này cho tất cả thư viện"
 
-#. IMG
-#: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:432
+#. INPUT type=submit
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:82
+#: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:432
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:881
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/additem.tt:219
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/serials-edit.tt:256
@@ -20429,13 +20440,13 @@ msgstr "Việc sao chép chính sách lưu thông bị lỗi!"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/lateorders.tt:258
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/parcel.tt:394
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:184
-#: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/searchresultlist-auth.tt:97
-#: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/searchresultlist-auth.tt:104
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:28
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:191
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:261
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/preferences.tt:192
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/preferences.tt:206
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smtp_servers.tt:251
+#: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/searchresultlist-auth.tt:97
+#: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/searchresultlist-auth.tt:104
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/detail.tt:980
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:220
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/editor.tt:286
@@ -20688,13 +20699,13 @@ msgstr ""
 msgid "Code:"
 msgstr "Mã thông báo:"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:743
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:744
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:738
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:739
 #, fuzzy, c-format
 msgid "CodeMirror editing library"
 msgstr "Thư viện sở hữu"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:582
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:577
 #, fuzzy, c-format
 msgid "Coeur d'Alene Public Library, USA"
 msgstr "Nelsonville Public Library, Ohio, USA"
@@ -21530,7 +21541,7 @@ msgstr "Hợp đồng"
 msgid "Contrast"
 msgstr "Hợp đồng"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:558
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:553
 #, c-format
 msgid "Contributing companies and institutions"
 msgstr "Contributing companies and institutions"
@@ -21704,12 +21715,12 @@ msgstr "Tạo ngày nghỉ này cho tất cả thư viện"
 msgid "Copyright"
 msgstr "Năm xuất bản"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:708
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:703
 #, c-format
 msgid "Copyright &copy; 2003-2010 phpMyAdmin devel team"
 msgstr "Copyright &copy; 2003-2010 phpMyAdmin devel team"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:703
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:698
 #, fuzzy, c-format
 msgid "Copyright &copy; 2012-2016 "
 msgstr "Copyright &copy; 2008 "
@@ -21746,7 +21757,7 @@ msgstr "Ngày suất bản"
 msgid "Corporate"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:583
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:578
 #, fuzzy, c-format
 msgid "Corpus Christi Public Libraries, USA"
 msgstr "Geauga County Public Library"
@@ -21826,7 +21837,7 @@ msgstr "Không tìm thấy thông số hệ thống có tên là "
 msgid "Could not load emoticons"
 msgstr "Thư viện hiện tại"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:552
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:547
 #, fuzzy, c-format
 msgid ""
 "Could not read the contributors.yaml file. Please make sure &lt;docdir&gt; "
@@ -21835,7 +21846,7 @@ msgstr ""
 "Could not read the history.txt file. Please make sure &lt;docdir&gt; is "
 "correctly defined in koha-conf.xml. "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:876
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:871
 #, c-format
 msgid ""
 "Could not read the history.txt file. Please make sure &lt;docdir&gt; is "
@@ -21844,7 +21855,7 @@ msgstr ""
 "Could not read the history.txt file. Please make sure &lt;docdir&gt; is "
 "correctly defined in koha-conf.xml. "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:539
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:534
 #, fuzzy, c-format
 msgid ""
 "Could not read the teams.yaml file. Please make sure &lt;docdir&gt; is "
@@ -21998,7 +22009,7 @@ msgstr "Khóa học"
 msgid "Cover image"
 msgstr "Hình ảnh khác"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:513
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:508
 #, c-format
 msgid "Crawford County Federated Library System"
 msgstr "Crawford County Federated Library System"
@@ -22305,12 +22316,12 @@ msgstr "Ngày tạo"
 msgid "Creation date: "
 msgstr "Ngày tạo"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:690
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:685
 #, c-format
 msgid "Creative Commons Attribution 2.5 License"
 msgstr "Creative Commons Attribution 2.5 License"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:696
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:691
 #, c-format
 msgid "Creative Commons Attribution-ShareAlike 2.5 License"
 msgstr "Creative Commons Attribution-ShareAlike 2.5 License"
@@ -22454,7 +22465,7 @@ msgstr "Thư viện hiện tại"
 msgid "Current library:"
 msgstr "Thư viện hiện tại"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:534
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:529
 #, fuzzy, c-format
 msgid "Current maintenance team"
 msgstr "tài liệu sẵn sàng."
@@ -22584,17 +22595,17 @@ msgstr ""
 msgid "Cyclical:"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:816
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:811
 #, c-format
 msgid "D&aelig;nsk (Danish)"
 msgstr "D&aelig;nsk (Danish)"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:773
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:768
 #, c-format
 msgid "D3.js"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:774
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:769
 #, c-format
 msgid "D3.js v3.5.17"
 msgstr ""
@@ -22620,7 +22631,7 @@ msgstr ""
 msgid "DISABLED"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:753
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:748
 #, c-format
 msgid "DSpace project"
 msgstr ""
@@ -22804,7 +22815,7 @@ msgstr "database user : "
 msgid "Database: "
 msgstr "Cơ sở dữ liệu: "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:862
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:857
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/booksellers.tt:92
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/transferorder.tt:45
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/search-history.tt:49
@@ -23596,8 +23607,6 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoice.tt:237
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoices.tt:100
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/supplier.tt:377
-#: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:435
-#: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/searchresultlist.tt:64
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/additional-fields.tt:110
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:17
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:21
@@ -23640,6 +23649,8 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smtp_servers.tt:271
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/systempreferences.tt:366
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/z3950servers.tt:187
+#: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:435
+#: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/searchresultlist.tt:64
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/search-history.tt:41
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/search-history.tt:82
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/search-history.tt:125
@@ -24275,7 +24286,7 @@ msgid ""
 "Departments are required by and will be used in the Course Reserves module"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:401
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:396
 #, fuzzy, c-format
 msgid "Deprecation warning"
 msgstr "Cảnh báo trùng lặp biểu ghi"
@@ -24285,7 +24296,7 @@ msgstr "Cảnh báo trùng lặp biểu ghi"
 msgid "Dept."
 msgstr "Đơn vị"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:863
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:858
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoice-files.tt:37
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoice.tt:432
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/supplier.tt:357
@@ -24544,8 +24555,8 @@ msgstr "Tin nhắn ghi trả: "
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/edifactmsgs.tt:39
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoices.tt:88
-#: koha-tmpl/intranet-tmpl/prog/en/modules/basket/basket.tt:118
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:367
+#: koha-tmpl/intranet-tmpl/prog/en/modules/basket/basket.tt:118
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/accountline-details.tt:152
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/boraccount.tt:96
 #: koha-tmpl/intranet-tmpl/prog/en/includes/circ-menu.inc:133
@@ -24580,7 +24591,7 @@ msgstr "Thông tin cá nhân"
 msgid "Details of payment"
 msgstr "Thư viện đích:"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:823
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:818
 #, c-format
 msgid ""
 "Deutsch (German) Friedrich zur Hellen, Robert Hillig, Katrin Fischer, Beda "
@@ -24589,7 +24600,7 @@ msgstr ""
 "Deutsch (German) Friedrich zur Hellen, Robert Hillig, Katrin Fischer, Beda "
 "Szukics, Mirko Tietgen and Marc Véron"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:585
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:580
 #, c-format
 msgid "Devinim, Turkey"
 msgstr ""
@@ -24915,7 +24926,7 @@ msgstr ""
 msgid "Div"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:586
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:581
 #, c-format
 msgid "Do Space, USA"
 msgstr ""
@@ -25082,7 +25093,7 @@ msgstr "Trước thuế"
 msgid "Done"
 msgstr "Thoát"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:587
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:582
 #, c-format
 msgid "DoverNet, USA"
 msgstr ""
@@ -25224,7 +25235,7 @@ msgstr "Không (mặc định)"
 msgid "Dublin Core"
 msgstr "Dublin Core (XML)"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:589
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:584
 #, fuzzy, c-format
 msgid "Duchesne County Library, USA"
 msgstr "Crawford County Federated Library System"
@@ -25451,7 +25462,7 @@ msgstr "Tin nhắn HTML:"
 msgid "EDIFACT messages"
 msgstr "Tin nhắn HTML:"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:510
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:505
 #, c-format
 msgid "EMN (Ecole des Mines de Nantes)"
 msgstr "EMN (Ecole des Mines de Nantes)"
@@ -25518,7 +25529,6 @@ msgstr "Đặt mượn đầu tiên"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/basketgroup.tt:332
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:216
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/supplier.tt:376
-#: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/searchresultlist.tt:61
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/additional-fields.tt:109
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:13
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:167
@@ -25554,6 +25564,7 @@ msgstr "Đặt mượn đầu tiên"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smtp_servers.tt:271
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/systempreferences.tt:366
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/z3950servers.tt:185
+#: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/searchresultlist.tt:61
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/detail.tt:562
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/detail.tt:568
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/additem.tt:100
@@ -26047,7 +26058,7 @@ msgstr "Ấn bảo"
 msgid "Editor"
 msgstr "Giao diện chỉnh sửa"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:401
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:396
 #, c-format
 msgid ""
 "Elasticsearch version 5.x is not supported in Koha 20.11 and greater. Please "
@@ -26109,7 +26120,7 @@ msgstr "Thư điện tử: "
 msgid "Embed"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:768
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:763
 #, c-format
 msgid "Emojiarea plug-in for jQuery"
 msgstr ""
@@ -26264,7 +26275,7 @@ msgstr "Người quản lý"
 msgid "Ended: "
 msgstr "Người quản lý"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:819
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:814
 #, c-format
 msgid "English"
 msgstr "English"
@@ -26791,12 +26802,12 @@ msgstr "Phát hiện lỗi khi xử lý các thông số của báo cáo: %s"
 msgid "Errors occurred:"
 msgstr "Các lỗi đã xảy ra:"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:590
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:585
 #, c-format
 msgid "Escuela de Orientacion Lacaniana, Argentina"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:845
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:840
 #, fuzzy, c-format
 msgid ""
 "Espa&ntilde;ol (Spanish) Bernardo González Kriegel, Héctor Castro and Tomás "
@@ -27334,7 +27345,7 @@ msgstr "Thuộc tính bạn đọc"
 msgid "FINMARC"
 msgstr "FINMARC"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:594
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:589
 #, c-format
 msgid "FIT"
 msgstr ""
@@ -27528,22 +27539,22 @@ msgstr "Không thể giải nén được tệp tin."
 msgid "Fall"
 msgstr "Mùa"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:689
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:684
 #, c-format
 msgid "FamFamFam Site"
 msgstr "FamFamFam Site"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:687
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:682
 #, c-format
 msgid "Famfamfam iconset"
 msgstr "Famfamfam iconset"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:592
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:587
 #, fuzzy, c-format
 msgid "Fargo Public Library, USA"
 msgstr "Nelsonville Public Library, Ohio, USA"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:593
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:588
 #, fuzzy, c-format
 msgid "Farmington Public Library, USA"
 msgstr "Nelsonville Public Library, Ohio, USA"
@@ -27617,7 +27628,7 @@ msgstr "Nữ "
 msgid "Female "
 msgstr "Nữ "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:591
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:586
 #, c-format
 msgid "Fenway Library Organization, USA"
 msgstr ""
@@ -27855,8 +27866,8 @@ msgstr "Tệp tin: "
 msgid "File: %s"
 msgstr "Tệp tin: %s"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:746
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:747
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:741
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:742
 #, fuzzy, c-format
 msgid "FileSaver library"
 msgstr "Chọn thư viện"
@@ -28303,14 +28314,14 @@ msgstr "Thiếu mã quy tắc phân loại"
 msgid "Following required subfields are missing:"
 msgstr "Thiếu mã quy tắc phân loại"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:740
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:741
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:735
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:736
 #, fuzzy, c-format
 msgid "Font Awesome"
 msgstr "Cỡ chữ: "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:779
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:780
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:774
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:775
 #, c-format
 msgid "Font Face Observer"
 msgstr ""
@@ -28509,7 +28520,7 @@ msgstr "Định dạng"
 msgid "Formatting:"
 msgstr "Định dạng"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:595
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:590
 #, c-format
 msgid "Foundations Bible College &amp; Seminary, USA"
 msgstr ""
@@ -28533,7 +28544,7 @@ msgstr "Mã khung mẫu: "
 msgid "Framework description"
 msgstr "Mô tả của khung mẫu"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:821
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:816
 #, c-format
 msgid "Fran&ccedil;ais (French) "
 msgstr "Fran&ccedil;ais (French) "
@@ -28924,7 +28935,7 @@ msgstr "Quỹ thanh toán: %s"
 msgid "Funds"
 msgstr "Quỹ"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:706
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:701
 #, c-format
 msgid "GPL License"
 msgstr "GPL License"
@@ -28948,7 +28959,7 @@ msgstr "Thuế suất %%"
 msgid "GST:"
 msgstr "Thuế suất:"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:822
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:817
 #, c-format
 msgid "Galego (Galician) Ignacio Javier"
 msgstr "Galego (Galician) Ignacio Javier"
@@ -28970,7 +28981,7 @@ msgstr "Khoảng cách cột:"
 msgid "Gap between rows:"
 msgstr "Khoảng cách dòng:"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:514
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:509
 #, c-format
 msgid "Geauga County Public Library"
 msgstr "Geauga County Public Library"
@@ -29104,7 +29115,7 @@ msgstr "Nhận!"
 msgid "Global system preferences"
 msgstr "Thông số chung của hệ thống"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:682
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:677
 #, c-format
 msgid "Glyphicons Free"
 msgstr "Glyphicons Free"
@@ -29189,7 +29200,7 @@ msgstr "Lên trên cùng"
 msgid "Go up"
 msgstr "Di chuyển lên"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:596
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:591
 #, c-format
 msgid "Goethe-Institut, Germany"
 msgstr ""
@@ -29205,7 +29216,7 @@ msgstr "Thiếu địa chỉ"
 msgid "Gone no address flag"
 msgstr "Không có địa chỉ"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:597
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:592
 #, c-format
 msgid "Gothenburg University Library, Sweden"
 msgstr ""
@@ -29357,8 +29368,8 @@ msgstr "Hướng dẫn tạo báo cáo"
 msgid "H Align"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:785
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:786
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:780
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:781
 #, c-format
 msgid "HC Sticky"
 msgstr ""
@@ -29373,7 +29384,7 @@ msgstr ""
 msgid "HTML message:"
 msgstr "Tin nhắn HTML:"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:598
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:593
 #, c-format
 msgid "Halland County Library, Sweden"
 msgstr ""
@@ -29406,7 +29417,7 @@ msgstr "Ngày hết hạn"
 msgid "Hard due date: "
 msgstr "Ngày hết hạn"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:599
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:594
 #, fuzzy, c-format
 msgid "Harrison Carmel Public Library, USA"
 msgstr "Nelsonville Public Library, Ohio, USA"
@@ -29416,7 +29427,7 @@ msgstr "Nelsonville Public Library, Ohio, USA"
 msgid "Hashvalue"
 msgstr "Giá trị"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:600
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:595
 #, c-format
 msgid "Hauraki District Libraries, New Zealand"
 msgstr ""
@@ -29723,7 +29734,7 @@ msgstr ""
 "Tài liệu có nhiều đặt mượn. Thời gian cho mượn bị rút ngắn %s ngày (Ngày hết "
 "hạn %s). Bạn có muốn tiếp tục ghi mượn?"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:601
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:596
 #, c-format
 msgid "Higher Education Libraries of Massachusetts, USA"
 msgstr ""
@@ -29780,7 +29791,7 @@ msgstr "Lịch sử ghi chú thủ thư"
 msgid "History start date:"
 msgstr "Ngày bắt đầu từng đặt:"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:602
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:597
 #, c-format
 msgid "Hochschule für Gesundheit (hsg), Germany"
 msgstr ""
@@ -30187,11 +30198,6 @@ msgstr "Kỳ nghỉ dài theo năm"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/supplier.tt:100
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/uncertainprice.tt:15
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:22
-#: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities-home.tt:11
-#: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:183
-#: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/detail.tt:20
-#: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/merge.tt:18
-#: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/searchresultlist.tt:13
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/additional-fields.tt:21
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/admin-home.tt:11
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/adveditorshortcuts.tt:15
@@ -30244,6 +30250,11 @@ msgstr "Kỳ nghỉ dài theo năm"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/transport-cost-matrix.tt:19
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/usage_statistics.tt:17
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/z3950servers.tt:25
+#: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities-home.tt:11
+#: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:183
+#: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/detail.tt:20
+#: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/merge.tt:18
+#: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/searchresultlist.tt:13
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/ISBDdetail.tt:19
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/MARCdetail.tt:20
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/advsearch.tt:31
@@ -30517,7 +30528,7 @@ msgstr "Chiều ngang: "
 msgid "Horizontal: "
 msgstr "Chiều ngang: "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:508
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:503
 #, c-format
 msgid "Horowhenua Library Trust"
 msgstr "Horowhenua Library Trust"
@@ -30549,7 +30560,7 @@ msgstr "Tên máy chủ/Cổng"
 msgid "Hostname: "
 msgstr "Tên máy chủ: "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:603
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:598
 #, c-format
 msgid "Hotchkiss School, USA"
 msgstr ""
@@ -30628,7 +30639,7 @@ msgstr "%s%s %s0 %s tài khoản bạn đọc sẽ bị xóa"
 msgid "How to process items: "
 msgstr "Xử lý bản tài liệu đính kèm: "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:814
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:809
 #, c-format
 msgid "Hrvatski (Croatian)"
 msgstr "Hrvatski (Croatian)"
@@ -32479,7 +32490,7 @@ msgstr "Hóa đơn: %s"
 msgid "Invoicing, "
 msgstr "Hóa đơn"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:664
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:659
 #, c-format
 msgid "Irma Birchall"
 msgstr ""
@@ -32622,7 +32633,7 @@ msgstr "Số kỳ ÂPĐK"
 msgid "Issuing library"
 msgstr "Main library"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:487
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:482
 #, fuzzy, c-format
 msgid "Issuing rules"
 msgstr "Quy tắc phân loại: "
@@ -32638,7 +32649,7 @@ msgid ""
 "It is advisable to check for and resolve duplicate holds due to merging."
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:831
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:826
 #, c-format
 msgid ""
 "Italiano (Italian) for 3.2: Zeno Tajoli, Pietro Gozzetti and Paolo Pozzan; "
@@ -33038,11 +33049,11 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:272
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:164
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:207
-#: koha-tmpl/intranet-tmpl/prog/en/modules/basket/basket.tt:252
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/itemtypes.tt:363
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:96
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:473
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:894
+#: koha-tmpl/intranet-tmpl/prog/en/modules/basket/basket.tt:252
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/detail.tt:296
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:23
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/article-requests.tt:117
@@ -33370,8 +33381,8 @@ msgstr "Kiểu tài liệu"
 msgid "JSON URL"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:770
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:771
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:765
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:766
 #, c-format
 msgid "JSZip"
 msgstr ""
@@ -33381,24 +33392,24 @@ msgstr ""
 msgid "January"
 msgstr "Tháng 1"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:797
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:798
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:792
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:793
 #, c-format
 msgid "JavaScript Cookie"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:765
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:760
 #, fuzzy, c-format
 msgid "JavaScript library by Vladimir Agafonkinis licensed under the "
 msgstr "is licensed under the "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:771
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:766
 #, fuzzy, c-format
 msgid "JavaScript library is licensed under both the "
 msgstr "is licensed under the "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:731
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:732
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:726
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:727
 #, c-format
 msgid "Javascript Diff Algorithm"
 msgstr ""
@@ -33413,7 +33424,7 @@ msgstr "(2.0 Release Maintainer)"
 msgid "Jenkins maintainers:"
 msgstr "(2.0 Release Maintainer)"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:668
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:663
 #, c-format
 msgid "Jo Ransom"
 msgstr "Jo Ransom"
@@ -33462,17 +33473,17 @@ msgstr ""
 msgid "Juvenile"
 msgstr "Vị thành niên"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:605
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:600
 #, c-format
 msgid "KEEP SOLUTIONS, Portugal"
 msgstr "KEEP SOLUTIONS, Portugal"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:604
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:599
 #, c-format
 msgid "Katipo Communications, New Zealand"
 msgstr "Katipo Communications, New Zealand"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:703
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:698
 #, c-format
 msgid "Kazik Pietruszewski"
 msgstr ""
@@ -33561,7 +33572,7 @@ msgstr "Từ khóa:"
 msgid "Keywords:"
 msgstr "Từ khóa:"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:675
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:670
 #: koha-tmpl/intranet-tmpl/prog/en/modules/auth.tt:25
 #: koha-tmpl/intranet-tmpl/prog/en/modules/installer/auth.tt:18
 #: koha-tmpl/intranet-tmpl/prog/en/modules/installer/step1.tt:25
@@ -33582,7 +33593,7 @@ msgid "Koha %s"
 msgstr "Koha"
 
 #. %1$s:  short_version | html 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:525
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:520
 #, fuzzy, c-format
 msgid "Koha %s release team"
 msgstr "Former Koha release team members"
@@ -36350,7 +36361,7 @@ msgstr ""
 msgid "Koha database schema"
 msgstr "Sơ đồ dữ liệu Koha"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:544
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:539
 #, c-format
 msgid "Koha development team"
 msgstr "Koha development team"
@@ -36372,7 +36383,7 @@ msgstr "Trường Koha:"
 msgid "Koha full call number"
 msgstr "Ký hiệu phân loại"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:857
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:852
 #, c-format
 msgid "Koha history timeline"
 msgstr "Koha history timeline"
@@ -36382,7 +36393,7 @@ msgstr "Koha history timeline"
 msgid "Koha internal"
 msgstr "Nội bộ Koha"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:677
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:672
 #, c-format
 msgid ""
 "Koha is free software; you can redistribute it and/or modify it under the "
@@ -36426,7 +36437,7 @@ msgstr "Lưu thông ngoại tuyến Koha"
 msgid "Koha plugins"
 msgstr "Liên kết Koha:"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:521
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:516
 #, fuzzy, c-format
 msgid "Koha release teams"
 msgstr "Former Koha release team members"
@@ -36468,17 +36479,17 @@ msgstr "Ánh xạ KOHA_MARC"
 msgid "Koha version: "
 msgstr "Koha version: "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:607
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:602
 #, c-format
 msgid "Koha-Suomi Oy, Finland"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:606
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:601
 #, c-format
 msgid "KohaAloha, New Zealand"
 msgstr "KohaAloha, New Zealand"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:821
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:816
 #, c-format
 msgid "Kohala"
 msgstr "Kohala"
@@ -36520,12 +36531,12 @@ msgstr "LCCN:"
 msgid "LCCN: %s "
 msgstr "LCCN: %s "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:738
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:733
 #, c-format
 msgid "LGPL v2.1"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:792
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:787
 #, c-format
 msgid "LGPL v3.0"
 msgstr ""
@@ -36657,7 +36668,7 @@ msgstr "Ngôn ngữ: "
 msgid "Languages"
 msgstr "Ngôn ngữ"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:836
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:831
 #, c-format
 msgid "Lao Anousak Anthony Souphavanh"
 msgstr "Lao Anousak Anthony Souphavanh"
@@ -36842,7 +36853,7 @@ msgstr "Đơn hàng chậm"
 msgid "Later you can modify your form and that's what matters on import."
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:835
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:830
 #, c-format
 msgid "Latina (Latin)"
 msgstr "Latina (Latin)"
@@ -36885,8 +36896,8 @@ msgstr "Tên nhãn: "
 msgid "Layouts"
 msgstr "Clay Fouts"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:764
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:765
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:759
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:760
 #, c-format
 msgid "Leaflet"
 msgstr ""
@@ -37010,7 +37021,7 @@ msgstr "Thông báo"
 msgid "Lib"
 msgstr "Hiển thị cho thư viện"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:608
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:603
 #, c-format
 msgid "LibLime, USA"
 msgstr "LibLime, USA"
@@ -37240,7 +37251,7 @@ msgstr "Mã thư viện: "
 msgid "Library of Congress"
 msgstr "Thư viện của bạn đọc:"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:609
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:604
 #, c-format
 msgid "Library of the Józef Piłsudski Institute of America, USA"
 msgstr ""
@@ -37347,7 +37358,7 @@ msgstr "Thư viện: %s"
 msgid "Library: %s &rArr; %s"
 msgstr "Thư viện: %s &rArr; %s"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:610
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:605
 #, c-format
 msgid "Libriotech, Norway"
 msgstr "Libriotech, Norway"
@@ -37951,7 +37962,7 @@ msgstr "Nhật ký hệ thống"
 msgid "Look for existing records in catalog?"
 msgstr "Tìm kiếm biểu ghi hiện tại trong CSDL?"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:611
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:606
 #, fuzzy, c-format
 msgid "Los Gatos Public Library, USA"
 msgstr "Nelsonville Public Library, Ohio, USA"
@@ -38078,12 +38089,12 @@ msgstr "Tọa độ Y: "
 msgid "Lucida Console"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:612
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:607
 #, c-format
 msgid "Lund University Library, Sweden"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:837
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:832
 #, c-format
 msgid "M&#257;ori"
 msgstr "M&#257;ori"
@@ -38314,35 +38325,35 @@ msgstr "MARC21/USMARC"
 msgid "MARCXML"
 msgstr "MARCXML"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:701
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:732
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:735
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:741
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:762
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:696
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:727
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:730
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:736
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:757
 #, c-format
 msgid "MIT License"
 msgstr "MIT license"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:771
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:766
 #, fuzzy, c-format
 msgid "MIT and GPLv3 Licenses"
 msgstr "MIT license"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:777
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:772
 #, fuzzy, c-format
 msgid "MIT licence"
 msgstr "MIT license"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:680
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:682
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:744
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:747
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:750
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:786
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:789
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:795
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:798
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:801
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:675
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:677
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:739
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:742
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:745
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:781
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:784
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:790
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:793
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:796
 #, c-format
 msgid "MIT license"
 msgstr "MIT license"
@@ -38375,7 +38386,7 @@ msgstr ""
 msgid "Macros..."
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:827
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:822
 #, c-format
 msgid "Magyar (Hungarian)Agnes Imecs"
 msgstr "Magyar (Hungarian)Agnes Imecs"
@@ -39242,7 +39253,7 @@ msgstr "Kích hoạt: "
 msgid "Mark viewed"
 msgstr "Đánh dấu tìm thấy và thoát"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:613
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:608
 #, c-format
 msgid "MassCat, USA"
 msgstr ""
@@ -39638,7 +39649,7 @@ msgstr "Micro giây"
 msgid "Middle"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:614
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:609
 #, fuzzy, c-format
 msgid "Middletown Township Public Library, USA"
 msgstr "Nelsonville Public Library, Ohio, USA"
@@ -39658,7 +39669,7 @@ msgstr "Mili giây"
 msgid "Mine"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:511
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:506
 #, c-format
 msgid ""
 "Mines Paristech (previously Ecole Nationale Supérieure des Mines de Paris)"
@@ -39795,7 +39806,7 @@ msgstr "Số di động"
 msgid "Mobile phone number"
 msgstr "Số di động"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/preferences.tt:193
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/preferences.tt:207
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/subscription-add.tt:506
 #: koha-tmpl/intranet-tmpl/prog/en/includes/circ-menu.inc:186
 #, fuzzy, c-format
@@ -40056,8 +40067,8 @@ msgstr "Module upgrade needed"
 msgid "Modules:"
 msgstr "Phân hệ áp dụng:"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:800
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:801
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:795
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:796
 #, fuzzy, c-format
 msgid "Moment.js"
 msgstr "Bình luận"
@@ -40547,7 +40558,7 @@ msgstr "Tên tệp tin: "
 msgid "Narrower Term"
 msgstr "%sh - Thuật ngữ hẹp hơn"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:615
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:610
 #, c-format
 msgid "National Library of Finland, Finland"
 msgstr ""
@@ -40557,7 +40568,7 @@ msgstr ""
 msgid "Navy Blue"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:515
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:510
 #, c-format
 msgid "Near East University"
 msgstr "Near East University"
@@ -40569,12 +40580,12 @@ msgid ""
 "contact your server admin if you wish to configure Elasticsearch"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:818
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:813
 #, c-format
 msgid "Nederlands-Belgi&euml; (Dutch-Belgium)"
 msgstr "Nederlands-Belgi&euml; (Dutch-Belgium)"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:817
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:812
 #, c-format
 msgid "Nederlands-Nederland (Dutch-The Netherlands) Sponsored by Rijksmuseum"
 msgstr "Nederlands-Nederland (Dutch-The Netherlands) Sponsored by Rijksmuseum"
@@ -40685,12 +40696,12 @@ msgstr "Tạo máy chủ Z39.50"
 msgid "New Z39.50 server"
 msgstr "Tạo máy chủ Z39.50"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:617
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:612
 #, c-format
 msgid "New Zealand Central Agencies Library, New Zealand"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:618
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:613
 #, c-format
 msgid "New Zealand Ministry of Education Library, New Zealand"
 msgstr ""
@@ -41152,7 +41163,7 @@ msgstr "Tạo nhà cung cấp"
 msgid "New window"
 msgstr "Thoát"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:616
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:611
 #, fuzzy, c-format
 msgid "Newcastle City Council, United Kingdom"
 msgstr "software.coop, United Kingdom"
@@ -41257,7 +41268,7 @@ msgstr "Tên cho ngày"
 msgid "Next page"
 msgstr "Trang tiếp"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:669
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:664
 #, fuzzy, c-format
 msgid "Nicholas Rosasco (Documentation Compiler)"
 msgstr "Nicholas Rosasco, (Documentation Compiler)"
@@ -41834,7 +41845,7 @@ msgid "No match for borrowernumber (%s). %s"
 msgstr "Số bạn đọc: "
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/preferences.tt:231
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/preferences.tt:245
 #, fuzzy
 msgid "No matches found"
 msgstr "Không tìm thấy biểu ghi phù hợp"
@@ -42163,7 +42174,7 @@ msgstr "Không có tài liệu được chuyển tới thư viện của bạn!"
 msgid "No valid patrons to merge were found."
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:501
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:496
 #, fuzzy, c-format
 msgid "No warnings."
 msgstr "No warnings"
@@ -42456,22 +42467,22 @@ msgstr "Hiển thị đơn giản"
 msgid "Normalization rule: "
 msgstr "Quy tắc chuẩn hóa: "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:828
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:823
 #, c-format
 msgid "Norsk Bokmål (Norwegian) Axel Bojer and Thomas Gramstad"
 msgstr "Norsk Bokmål (Norwegian) Axel Bojer and Thomas Gramstad"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:829
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:824
 #, c-format
 msgid "Norsk Nynorsk (Norwegian) Unni Knutsen and Marit Kristine Ådland"
 msgstr "Norsk Nynorsk (Norwegian) Unni Knutsen and Marit Kristine Ådland"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:619
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:614
 #, c-format
 msgid "North Central Regional Library (NCRL), USA"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:620
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:615
 #, c-format
 msgid "Northeast Kansas Library System (NEKLS), USA"
 msgstr ""
@@ -42769,8 +42780,8 @@ msgstr "Ghi chú: Một trong hai trường sau đây phải có giá trị là 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:274
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:166
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:209
-#: koha-tmpl/intranet-tmpl/prog/en/modules/basket/basket.tt:153
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:242
+#: koha-tmpl/intranet-tmpl/prog/en/modules/basket/basket.tt:153
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:367
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:368
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:63
@@ -42904,12 +42915,12 @@ msgstr "Ngày thông báo"
 msgid "Notify manager:"
 msgstr "Kiểu tài liệu:"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:783
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:778
 #, c-format
 msgid "Noto"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:782
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:777
 #, c-format
 msgid "Noto fonts"
 msgstr ""
@@ -43227,7 +43238,7 @@ msgstr "Bộ OAI"
 msgid "OAI sets configuration"
 msgstr "Cấu hình bộ OAI"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:752
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:747
 #, c-format
 msgid "OAI xslt stylesheet"
 msgstr ""
@@ -43399,12 +43410,12 @@ msgstr "Xem hiển thị OPAC:"
 msgid "OPAC/Staff interface login"
 msgstr "Tài khoản đăng nhập"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:621
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:616
 #, c-format
 msgid "OPUS"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:516
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:511
 #, c-format
 msgid ""
 "OPUS International Consultants, Wellington, New Zealand (Corporate Serials "
@@ -43807,22 +43818,22 @@ msgstr "Mở trong cửa sổ mới"
 msgid "Open on:"
 msgstr "Ngày tạo:"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:755
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:750
 #, c-format
 msgid "OpenAPI 2.0 schema"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:756
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:751
 #, c-format
 msgid "OpenAPI Initiative (OAI)"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:714
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:709
 #, c-format
 msgid "OpenJS Keyboard Shortcuts Library"
 msgstr "OpenJS keyboard shortcuts library"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:716
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:711
 #, c-format
 msgid "OpenJS keyboard shortcuts library"
 msgstr "OpenJS keyboard shortcuts library"
@@ -44125,7 +44136,7 @@ msgstr "Đơn hàng (với giá tham khảo)"
 msgid "Orders with uncertain prices for vendor "
 msgstr "Đơn hàng (với giá tham khảo) của nhà cung cấp "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:622
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:617
 #, c-format
 msgid "Orex Digital, Spain"
 msgstr ""
@@ -44183,7 +44194,7 @@ msgstr "Số đơn hàng gốc"
 msgid "Originating library: "
 msgstr "Main library"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:623
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:618
 #, fuzzy, c-format
 msgid "Oslo Public Library, Norway"
 msgstr "Nelsonville Public Library, Ohio, USA"
@@ -44458,12 +44469,12 @@ msgstr "PM"
 msgid "PSGI: "
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:628
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:623
 #, c-format
 msgid "PTFS Europe Ltd, United Kingdom"
 msgstr "PTFS Europe Ltd, United Kingdom"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:627
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:622
 #, c-format
 msgid "PTFS, Maryland, USA"
 msgstr "PTFS, Maryland, USA"
@@ -46261,12 +46272,12 @@ msgstr "Lập kế hoạch "
 msgid "Planning for %s %s"
 msgstr "Lập kế hoạch cho %s theo %s"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:624
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:619
 #, c-format
 msgid "Plano Independent School, USA"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:625
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:620
 #, c-format
 msgid "Plant and Food Research Limited, New Zealand"
 msgstr ""
@@ -46764,7 +46775,7 @@ msgstr ""
 "Bạn vui lòng kiểm tra lại nhật ký lỗi hệ thống để có thông tin chi tiết."
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/preferences.tt:231
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/preferences.tt:245
 #, fuzzy
 msgid "Please select ..."
 msgstr "Vui lòng lựa chọn %s."
@@ -47038,7 +47049,7 @@ msgstr "Số lần ghi mượn"
 msgid "Policy for %s: %s"
 msgstr "Chính sách cho %s: %s"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:841
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:836
 #, c-format
 msgid "Polski (Polish)"
 msgstr "Polski (Polish)"
@@ -47088,7 +47099,7 @@ msgstr "Cổng: "
 msgid "Port: "
 msgstr "Cổng: "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:842
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:837
 #, c-format
 msgid "Portugu&ecirc;s (Portuguese)"
 msgstr "Portugu&ecirc;s (Portuguese)"
@@ -47828,7 +47839,7 @@ msgstr "Tiến trình xử lý: "
 msgid "Progress: "
 msgstr "Tiến trình xử lý: "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:626
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:621
 #, c-format
 msgid "Prosentient Systems, Australia"
 msgstr ""
@@ -48334,7 +48345,7 @@ msgstr "Giá sau thuế"
 msgid "RT"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:665
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:660
 #, c-format
 msgid "Rachel Hamilton-Williams (Kaitiaki from 2004 to present)"
 msgstr "Rachel Hamilton-Williams (Kaitiaki from 2004 to present)"
@@ -48807,7 +48818,7 @@ msgstr "Ngày đăng ký: "
 msgid "Registration date: %s"
 msgstr "Ngày đăng ký: %s"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:670
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:665
 #, c-format
 msgid "Regula Sebastiao"
 msgstr "Regula Sebastiao"
@@ -49011,13 +49022,13 @@ msgstr "Hình ảnh khác:"
 #. SCRIPT
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/duplicate_orders.tt:307
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/histsearch.tt:131
-#: koha-tmpl/intranet-tmpl/prog/en/modules/basket/basket.tt:8
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:274
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:442
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/koha2marclinks.tt:47
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/library_groups.tt:252
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/oai_sets.tt:46
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/oai_sets.tt:122
+#: koha-tmpl/intranet-tmpl/prog/en/modules/basket/basket.tt:8
 #: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/course-details.tt:258
 #: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/course.tt:159
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:486
@@ -49727,8 +49738,8 @@ msgstr "Mật khẩu xác nhận (mới):"
 msgid "Require valid email address:"
 msgstr "Hãy nhập đúng địa chỉ thư điện tử."
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:749
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:750
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:744
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:745
 #, fuzzy, c-format
 msgid "Require.js JS module system"
 msgstr "Required module missing"
@@ -49745,7 +49756,6 @@ msgstr "Required module missing"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:362
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:727
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/supplier.tt:130
-#: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:416
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/additional-fields.tt:131
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:137
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:144
@@ -49814,6 +49824,7 @@ msgstr "Required module missing"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/z3950servers.tt:62
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/z3950servers.tt:67
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/z3950servers.tt:69
+#: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:416
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:855
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/additem.tt:222
 #: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/clubs-add-modify.tt:50
@@ -49821,9 +49832,9 @@ msgstr "Required module missing"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/course.tt:46
 #: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/course.tt:52
 #: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/course.tt:63
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:742
 #: koha-tmpl/intranet-tmpl/prog/en/modules/installer/step1.tt:63
 #: koha-tmpl/intranet-tmpl/prog/en/modules/installer/step1.tt:75
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:742
 #: koha-tmpl/intranet-tmpl/prog/en/modules/offline_circ/process_koc.tt:42
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/boraccount.tt:178
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/boraccount.tt:235
@@ -49928,17 +49939,17 @@ msgstr "Required module missing"
 #: koha-tmpl/intranet-tmpl/prog/en/includes/admin-items-search-field-form.inc:11
 #: koha-tmpl/intranet-tmpl/prog/en/includes/admin-items-search-field-form.inc:21
 #: koha-tmpl/intranet-tmpl/prog/en/includes/admin-items-search-field-form.inc:34
-#: koha-tmpl/intranet-tmpl/prog/en/includes/member-alt-address-style.inc:76
-#: koha-tmpl/intranet-tmpl/prog/en/includes/member-alt-address-style.inc:91
-#: koha-tmpl/intranet-tmpl/prog/en/includes/member-alt-address-style.inc:106
-#: koha-tmpl/intranet-tmpl/prog/en/includes/member-alt-address-style.inc:121
-#: koha-tmpl/intranet-tmpl/prog/en/includes/member-alt-address-style.inc:136
-#: koha-tmpl/intranet-tmpl/prog/en/includes/member-alt-address-style.inc:166
-#: koha-tmpl/intranet-tmpl/prog/en/includes/member-alt-address-style.inc:181
-#: koha-tmpl/intranet-tmpl/prog/en/includes/member-alt-address-style.inc:196
-#: koha-tmpl/intranet-tmpl/prog/en/includes/member-alt-address-style.inc:211
-#: koha-tmpl/intranet-tmpl/prog/en/includes/member-alt-address-style.inc:230
-#: koha-tmpl/intranet-tmpl/prog/en/includes/member-alt-address-style.inc:245
+#: koha-tmpl/intranet-tmpl/prog/en/includes/member-alt-address-style.inc:77
+#: koha-tmpl/intranet-tmpl/prog/en/includes/member-alt-address-style.inc:93
+#: koha-tmpl/intranet-tmpl/prog/en/includes/member-alt-address-style.inc:108
+#: koha-tmpl/intranet-tmpl/prog/en/includes/member-alt-address-style.inc:123
+#: koha-tmpl/intranet-tmpl/prog/en/includes/member-alt-address-style.inc:138
+#: koha-tmpl/intranet-tmpl/prog/en/includes/member-alt-address-style.inc:168
+#: koha-tmpl/intranet-tmpl/prog/en/includes/member-alt-address-style.inc:183
+#: koha-tmpl/intranet-tmpl/prog/en/includes/member-alt-address-style.inc:198
+#: koha-tmpl/intranet-tmpl/prog/en/includes/member-alt-address-style.inc:213
+#: koha-tmpl/intranet-tmpl/prog/en/includes/member-alt-address-style.inc:232
+#: koha-tmpl/intranet-tmpl/prog/en/includes/member-alt-address-style.inc:247
 #: koha-tmpl/intranet-tmpl/prog/en/includes/member-alt-contact-style.inc:61
 #: koha-tmpl/intranet-tmpl/prog/en/includes/member-alt-contact-style.inc:76
 #: koha-tmpl/intranet-tmpl/prog/en/includes/member-alt-contact-style.inc:91
@@ -49948,14 +49959,14 @@ msgstr "Required module missing"
 #: koha-tmpl/intranet-tmpl/prog/en/includes/member-alt-contact-style.inc:166
 #: koha-tmpl/intranet-tmpl/prog/en/includes/member-alt-contact-style.inc:181
 #: koha-tmpl/intranet-tmpl/prog/en/includes/member-alt-contact-style.inc:196
-#: koha-tmpl/intranet-tmpl/prog/en/includes/member-main-address-style.inc:67
-#: koha-tmpl/intranet-tmpl/prog/en/includes/member-main-address-style.inc:82
-#: koha-tmpl/intranet-tmpl/prog/en/includes/member-main-address-style.inc:97
-#: koha-tmpl/intranet-tmpl/prog/en/includes/member-main-address-style.inc:112
-#: koha-tmpl/intranet-tmpl/prog/en/includes/member-main-address-style.inc:127
-#: koha-tmpl/intranet-tmpl/prog/en/includes/member-main-address-style.inc:157
-#: koha-tmpl/intranet-tmpl/prog/en/includes/member-main-address-style.inc:172
-#: koha-tmpl/intranet-tmpl/prog/en/includes/member-main-address-style.inc:187
+#: koha-tmpl/intranet-tmpl/prog/en/includes/member-main-address-style.inc:68
+#: koha-tmpl/intranet-tmpl/prog/en/includes/member-main-address-style.inc:84
+#: koha-tmpl/intranet-tmpl/prog/en/includes/member-main-address-style.inc:99
+#: koha-tmpl/intranet-tmpl/prog/en/includes/member-main-address-style.inc:114
+#: koha-tmpl/intranet-tmpl/prog/en/includes/member-main-address-style.inc:129
+#: koha-tmpl/intranet-tmpl/prog/en/includes/member-main-address-style.inc:159
+#: koha-tmpl/intranet-tmpl/prog/en/includes/member-main-address-style.inc:174
+#: koha-tmpl/intranet-tmpl/prog/en/includes/member-main-address-style.inc:189
 #: koha-tmpl/intranet-tmpl/prog/en/includes/transaction_types.inc:19
 #, c-format
 msgid "Required"
@@ -50504,7 +50515,7 @@ msgstr "Số lần dùng"
 msgid "Right to left"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:629
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:624
 #, c-format
 msgid "Rijksmuseum, Amsterdam, The Netherlands"
 msgstr "Rijksmuseum, Amsterdam, The Netherlands"
@@ -50519,7 +50530,7 @@ msgstr ""
 msgid "Robots"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:630
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:625
 #, c-format
 msgid "Rolling Hills Consolidated Libraries, USA"
 msgstr ""
@@ -50534,7 +50545,7 @@ msgstr "Quay lại:"
 msgid "Rollover:"
 msgstr "Quay lại:"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:843
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:838
 #, c-format
 msgid "Rom&acirc;n&#259; (Romanian)"
 msgstr "Rom&acirc;n&#259; (Romanian)"
@@ -50591,7 +50602,7 @@ msgstr ""
 msgid "Rotating collections"
 msgstr "Bộ sưu tập luân phiên"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:631
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:626
 #, fuzzy, c-format
 msgid "Round Rock Public Library, USA"
 msgstr "Nelsonville Public Library, Ohio, USA"
@@ -50738,12 +50749,12 @@ msgstr "Warning"
 msgid "SAN"
 msgstr "Và "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:512
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:507
 #, c-format
 msgid "SAN-Ouest Provence"
 msgstr "SAN-Ouest Provence"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:632
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:627
 #, c-format
 msgid "SAN-Ouest Provence, France"
 msgstr "SAN-Ouest Provence, France"
@@ -50770,12 +50781,12 @@ msgstr ""
 msgid "SI Millimeters"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:741
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:736
 #, c-format
 msgid "SIL OFL 1.1"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:783
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:778
 #, c-format
 msgid "SIL Open Font License (OFL) v1.1"
 msgstr ""
@@ -50890,7 +50901,7 @@ msgstr "STARTDATE:January 1 2010,TRACK:Day"
 msgid "STARTTLS"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:638
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:633
 #, c-format
 msgid "SWITCH Library Consortium, USA"
 msgstr ""
@@ -50947,8 +50958,6 @@ msgstr "Thứ 7"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/supplier.tt:118
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/supplier.tt:276
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/uncertainprice.tt:128
-#: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:220
-#: koha-tmpl/intranet-tmpl/prog/en/modules/basket/downloadcart.tt:28
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/additional-fields.tt:162
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:180
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:254
@@ -50970,7 +50979,7 @@ msgstr "Thứ 7"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/oai_set_mappings.tt:115
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/oai_sets.tt:54
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/patron-attr-types.tt:194
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/preferences.tt:205
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/preferences.tt:219
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/share_content.tt:91
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:373
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:464
@@ -50982,6 +50991,8 @@ msgstr "Thứ 7"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/systempreferences.tt:362
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/transport-cost-matrix.tt:85
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/z3950servers.tt:148
+#: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:220
+#: koha-tmpl/intranet-tmpl/prog/en/modules/basket/downloadcart.tt:28
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:564
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:568
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:581
@@ -51051,7 +51062,7 @@ msgstr ""
 #. For the first occurrence,
 #. %1$s:  TAB.tab_title | html 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/preferences.tt:44
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/preferences.tt:172
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/preferences.tt:186
 #, c-format
 msgid "Save all %s preferences"
 msgstr "Lưu toàn bộ %s thông số "
@@ -52018,7 +52029,7 @@ msgstr ""
 msgid "Seen"
 msgstr "Tìm thấy?"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:633
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:628
 #, fuzzy, c-format
 msgid "Sefton Council, United Kingdom"
 msgstr "software.coop, United Kingdom"
@@ -52253,11 +52264,11 @@ msgstr "Xóa mẫu"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:51
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/duplicate_orders.tt:134
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:75
-#: koha-tmpl/intranet-tmpl/prog/en/modules/basket/basket.tt:6
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branch_transfer_limits.tt:31
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branch_transfer_limits.tt:45
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/preferences.tt:197
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/preferences.tt:231
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/preferences.tt:211
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/preferences.tt:245
+#: koha-tmpl/intranet-tmpl/prog/en/modules/basket/basket.tt:6
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/detail.tt:276
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:71
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:53
@@ -52524,8 +52535,8 @@ msgstr "ISO2709 không kèm tài liệu"
 msgid "Select your MARC flavor"
 msgstr "Select your MARC flavor"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:758
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:759
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:753
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:754
 #, fuzzy, c-format
 msgid "Select2"
 msgstr "Chọn"
@@ -53996,12 +54007,12 @@ msgstr "Source of classification / shelving scheme"
 msgid "Source records"
 msgstr "Biểu ghi nguồn"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:636
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:631
 #, c-format
 msgid "South Taranaki District Council, New Zealand"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:635
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:630
 #, c-format
 msgid "South-East Kansas Library System (SEKLS), USA"
 msgstr ""
@@ -54034,7 +54045,7 @@ msgstr "ký tự"
 msgid "Special relationship: "
 msgstr "Liên quan chi tiết: "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:506
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:501
 #, c-format
 msgid "Special thanks to the following organizations"
 msgstr "Special thanks to the following organizations"
@@ -54700,7 +54711,7 @@ msgstr "Bước 5: Xác nhận thiết lập"
 msgid "Step 6 of 6: Choose how you want the report ordered"
 msgstr "Bước 6/6: Chọn kiểu trình bày tăng giảm"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:666
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:661
 #, c-format
 msgid "Stephen Hedges (early Documentation Manager)"
 msgstr "Stephen Hedges (early Documentation Manager)"
@@ -54728,7 +54739,7 @@ msgstr "Kho tài liệu"
 msgid "Stock rotation details for %s"
 msgstr "&rsaquo; Thông tin chi tiết khóa học "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:637
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:632
 #, c-format
 msgid "Stockholm University Library, Sweden"
 msgstr ""
@@ -55442,9 +55453,9 @@ msgstr "Su"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/parcel.tt:124
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/parcel.tt:239
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/transferorder.tt:70
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/authtypes.tt:141
 #: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/searchresultlist-auth.tt:45
 #: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/searchresultlist.tt:33
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/authtypes.tt:141
 #: koha-tmpl/intranet-tmpl/prog/en/modules/labels/label-edit-batch.tt:112
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/purchase-suggestions.tt:39
 #: koha-tmpl/intranet-tmpl/prog/en/modules/pos/register.tt:59
@@ -55574,7 +55585,7 @@ msgstr "Thời gian phạt"
 msgid "Suspension in days (day)"
 msgstr "Khóa tài khoản (Ngày)"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:846
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:841
 #, c-format
 msgid "Svenska (Swedish)"
 msgstr "Svenska (Swedish)"
@@ -55600,8 +55611,8 @@ msgstr ""
 msgid "Switch to or from fullscreen mode"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:418
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:426
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:413
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:421
 #, fuzzy, c-format
 msgid "Switching to dom indexing"
 msgstr "Tìm kiếm nâng cao"
@@ -55733,7 +55744,6 @@ msgid ""
 msgstr ""
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:377
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:382
 #, c-format
 msgid ""
 "System preference 'Pseudonymization' is set, but there is not "
@@ -55770,7 +55780,7 @@ msgstr "Tìm tham số hệ thống:"
 msgid "System preferences"
 msgstr "Thông số chung hệ thống"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:849
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:844
 #, c-format
 msgid ""
 "T&uuml;rk&ccedil;e (Turkish) pre-3.8: Selma Aslan; for 3.8+, Suleyman "
@@ -55880,7 +55890,7 @@ msgstr "Các tùy chọn biến số:"
 msgid "Table settings"
 msgstr "Database settings:"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:762
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:757
 #, c-format
 msgid "TableDnD plug-in for jQuery"
 msgstr ""
@@ -56011,12 +56021,12 @@ msgstr "Từ khóa chờ duyệt"
 msgid "Tags:"
 msgstr "Từ khóa:"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:639
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:634
 #, c-format
 msgid "Talking Tech, Global"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:640
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:635
 #, c-format
 msgid "Tamil, France"
 msgstr "Tamil, France"
@@ -56206,7 +56216,7 @@ msgstr "Không loại bỏ bất kỳ bạn đọc này (đã từng hoạt đ�
 msgid "Test the regular expressions:"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:847
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:842
 #, c-format
 msgid "Tetun (Tetum) Karen Myers"
 msgstr "Tetun (Tetum) Karen Myers"
@@ -56294,26 +56304,26 @@ msgstr "Khung văn bản"
 msgid "That budget does not exist! Please select a budget to continue."
 msgstr ""
 
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:504
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:508
 #: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:509
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:513
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:514
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:515
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:712
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:716
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:720
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:724
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:728
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:732
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:735
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:738
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:744
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:747
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:750
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:759
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:762
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:765
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:768
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:771
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:510
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:707
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:711
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:715
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:719
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:723
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:727
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:730
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:733
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:739
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:742
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:745
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:754
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:757
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:760
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:763
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:766
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/members-update.tt:171
 #, c-format
 msgid "The "
@@ -56329,14 +56339,14 @@ msgstr "Hiện tại có %s kỳ phát hành mới nhất liên quan đến ÂP�
 #. %2$s:  unit.categorycode || 'categorycode=default' | html 
 #. %3$s:  unit.itemtype || 'itemtype=default' | html 
 #. %4$s:  unit.rule_value | html 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:491
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:486
 #, c-format
 msgid ""
 "The %s, %s, %s issuingrule will fallback to 'days' for 'lengthunit' as it is "
 "incorrectly defined as %s. "
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:432
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:427
 #, fuzzy, c-format
 msgid ""
 "The &lt;use_zebra_facets&gt; entry is missing in your configuration file. "
@@ -56345,14 +56355,14 @@ msgstr ""
 "The &lt;zebra_auth_index_mode&gt; entry is missing in your configuration "
 "file. It should be set to "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:424
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:419
 #, c-format
 msgid ""
 "The &lt;zebra_auth_index_mode&gt; entry set to 'grs1', which is no longer "
 "supported. Please use DOM instead. To switch follow this page of wiki: "
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:416
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:411
 #, c-format
 msgid ""
 "The &lt;zebra_bib_index_mode&gt; entry set to 'grs1', which is no longer "
@@ -56383,12 +56393,12 @@ msgid ""
 "private."
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:692
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:687
 #, c-format
 msgid "The Bridge Material Type Icon Set"
 msgstr "The Bridge Material Type Icon Set"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:695
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:690
 #, c-format
 msgid "The Bridge Material Type Icon Set is licensed under a "
 msgstr "The Bridge Material Type Icon Set is licensed under a "
@@ -56585,7 +56595,7 @@ msgid ""
 msgstr ""
 
 #. %1$s:  config_entry.lockdir | html 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:453
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:448
 #, c-format
 msgid ""
 "The configured &lt;lockdir&gt; entry in your koha-conf.xml file points to a "
@@ -56879,12 +56889,12 @@ msgstr ""
 msgid "The import id number "
 msgstr "Số báo cáo: "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:756
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:751
 #, c-format
 msgid "The included "
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:753
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:748
 #, c-format
 msgid "The included OAI.xslt file by the "
 msgstr ""
@@ -57387,7 +57397,7 @@ msgstr "Các tệp tin tải lên không phải tệp tin nén (phải có đị
 msgid "The value \"%s\" is not supported for mappings"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:641
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:636
 #, c-format
 msgid "Theke Solutions, Argentina"
 msgstr ""
@@ -58685,12 +58695,12 @@ msgstr "Thời gian chờ"
 msgid "Timestamp"
 msgstr "Thời gian thanh toán"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:737
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:732
 #, c-format
 msgid "TinyMCE WYSIWYG editor"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:738
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:733
 #, c-format
 msgid "TinyMCE WYSIWYG editor v5.0.16 "
 msgstr ""
@@ -59788,7 +59798,7 @@ msgstr "translation"
 msgid "Translate item type %s"
 msgstr "Kiểu tài liệu"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:805
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:800
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/localization.tt:67
 #, c-format
 msgid "Translation"
@@ -59873,7 +59883,7 @@ msgstr "Thứ 3"
 msgid "Tuesdays"
 msgstr "Thứ 3"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:642
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:637
 #, c-format
 msgid "Tulong Aklatan, Philippines"
 msgstr ""
@@ -59976,7 +59986,7 @@ msgstr ""
 msgid "UTF-8 (Default)"
 msgstr "UTF-8 (Default)"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:643
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:638
 #, fuzzy, c-format
 msgid "Uintah Library System, USA"
 msgstr "Crawford County Federated Library System"
@@ -60256,47 +60266,47 @@ msgstr "Đơn vị tính toán:"
 msgid "Units: "
 msgstr "Đơn vị tính toán: "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:645
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:640
 #, c-format
 msgid "Universidad Empresarial Siglo 21, Argentina"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:646
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:641
 #, c-format
 msgid "Universidad Nacional de Córdoba, Argentina"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:647
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:642
 #, c-format
 msgid "Universidad ORT Uruguay"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:644
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:639
 #, c-format
 msgid "Universidad de El Salvador, El Salvador"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:652
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:647
 #, fuzzy, c-format
 msgid "University of the Arts London, United Kingdom"
 msgstr "software.coop, United Kingdom"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:648
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:643
 #, c-format
 msgid "Université d'Aix-Marseille, France"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:649
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:644
 #, c-format
 msgid "Université de Lyon 3, France"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:650
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:645
 #, c-format
 msgid "Université de Rennes 2, France"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:651
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:646
 #, c-format
 msgid "Université de St Etienne, France"
 msgstr ""
@@ -61234,7 +61244,7 @@ msgstr ""
 msgid "VHS tape / Videocassette"
 msgstr "Băng VHS"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:653
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:648
 #, c-format
 msgid "Vaara-kirjastot, Finland"
 msgstr ""
@@ -61299,7 +61309,7 @@ msgid ""
 msgstr ""
 "Giá trị định trước liên quan đến bạn đọc, được sử dụng cho mục đích thống kê"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:654
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:649
 #, c-format
 msgid "Vanier College, Canada"
 msgstr ""
@@ -61512,17 +61522,17 @@ msgstr "Xác nhận bạn muốn xóa lịch sử ghi mượn"
 msgid "Verify you want to delete patrons"
 msgstr "Xác nhận bạn muốn xóa tài khoản bạn đọc"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:655
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:650
 #, c-format
 msgid "Vermont Organization of Koha Automated Libraries (VOKAL), USA"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:791
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:786
 #, c-format
 msgid "Verovio"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:792
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:787
 #, c-format
 msgid ""
 "Verovio is developed by the Swiss RISM Office with the support of the Swiss "
@@ -61769,12 +61779,12 @@ msgstr "Xem"
 msgid "Viewing suggestions for library:"
 msgstr "Đề xuất mua chờ duyệt"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:656
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:651
 #, c-format
 msgid "Ville de Victoriaville, Canada"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:657
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:652
 #, c-format
 msgid "Virginia Tech, USA"
 msgstr ""
@@ -61899,18 +61909,17 @@ msgstr "Warning"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:372
 #: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:377
 #: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:382
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:387
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:394
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:415
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:423
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:431
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:438
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:445
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:452
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:459
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:466
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:474
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:490
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:389
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:410
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:418
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:426
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:433
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:440
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:447
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:454
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:461
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:469
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:485
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:152
 #, c-format
 msgid "Warning"
@@ -62097,7 +62106,7 @@ msgstr "Cảnh báo: Không tìm thấy các đăng ký cá biệt này"
 msgid "Warnings regarding the system configuration"
 msgstr "Warnings regarding the system configuration"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:658
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:653
 #, fuzzy, c-format
 msgid "Washoe County Library System, USA"
 msgstr "Crawford County Federated Library System"
@@ -62534,7 +62543,7 @@ msgstr "X "
 msgid "XML"
 msgstr "MARCXML"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:411
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:406
 #, c-format
 msgid "XML configuration file"
 msgstr "XML configuration file"
@@ -62544,12 +62553,12 @@ msgstr "XML configuration file"
 msgid "XSLT File(s) for transforming results: "
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:659
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:654
 #, c-format
 msgid "Xercode, Spain"
 msgstr "Xercode, Spain"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:683
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:678
 #, c-format
 msgid "YUI"
 msgstr "YUI"
@@ -62894,14 +62903,14 @@ msgstr ""
 "recommended because some parts of Koha will not function as expected when "
 "using this account."
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:446
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:441
 #, c-format
 msgid ""
 "You are missing the &lt;lockdir&gt; entry in your koha-conf.xml file. Please "
 "add it, pointing to your Koha instance's lock dir. "
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:439
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:434
 #, c-format
 msgid ""
 "You are missing the &lt;log4perl_conf&gt; entry in your koha-conf.xml file. "
@@ -62916,7 +62925,7 @@ msgid ""
 msgstr ""
 
 #. %1$s:  config_entry.effective_tmp_dir | html 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:475
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:470
 #, c-format
 msgid ""
 "You are missing the &lt;tmp_path&gt; entry in your koha-conf.xml file. "
@@ -62924,7 +62933,7 @@ msgid ""
 "instance. The effective temporary directory is '%s'. "
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:460
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:455
 #, c-format
 msgid ""
 "You are missing the &lt;upload_path&gt; entry in your koha-conf.xml file. "
@@ -62932,7 +62941,7 @@ msgid ""
 "Koha instance. "
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:467
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:462
 #, c-format
 msgid ""
 "You are missing the &lt;upload_path&gt; entry in your koha-conf.xml file. "
@@ -63001,12 +63010,12 @@ msgstr ""
 msgid "You are only viewing one item. "
 msgstr "Bạn đang xem thông tin một tài liệu cụ thể. "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:527
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:522
 #, c-format
 msgid "You are running a development version of Koha"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:394
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:389
 #, c-format
 msgid ""
 "You are using the PayPal functionality, which is now deprecated and replaced "
@@ -64121,7 +64130,7 @@ msgstr "tài liệu chủ."
 msgid "and"
 msgstr "và"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:680
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:675
 #, c-format
 msgid "and "
 msgstr "Và "
@@ -64146,7 +64155,7 @@ msgstr "và xác định một đơn vị tiền tệ chính."
 msgid "and search for the \"data problems\" section"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:741
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:736
 #, c-format
 msgid "and the "
 msgstr "and the "
@@ -64174,7 +64183,7 @@ msgstr "Tất cả"
 msgid "any library "
 msgstr "Tất cả"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:756
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:751
 #, c-format
 msgid "api/swagger-v2-schema.json"
 msgstr ""
@@ -64185,7 +64194,7 @@ msgstr ""
 msgid "approved"
 msgstr "Chấp nhận"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:680
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:675
 #, c-format
 msgid "are licensed under the "
 msgstr "are licensed under the "
@@ -64392,78 +64401,78 @@ msgstr ""
 msgid "by %s: "
 msgstr "bởi %s: "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:724
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:719
 #, fuzzy, c-format
 msgid "by Allan Jardine is licensed under the BSD 3 and GPL v2 license."
 msgstr "by Binny V A is licensed under the BSD license."
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:716
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:711
 #, c-format
 msgid "by Binny V A is licensed under the BSD license."
 msgstr "by Binny V A is licensed under the BSD license."
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:768
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:763
 #, fuzzy, c-format
 msgid "by DIY Co is licensed under the "
 msgstr "is licensed under the "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:741
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:736
 #, fuzzy, c-format
 msgid "by Dave Gandy is licensed under the "
 msgstr "is licensed under the "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:762
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:757
 #, fuzzy, c-format
 msgid "by Denis Howlett is licensed under the "
 msgstr "is licensed under the "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:747
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:742
 #, fuzzy, c-format
 msgid "by Eli Grey is licensed under an "
 msgstr "is licensed under the "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:783
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:778
 #, fuzzy, c-format
 msgid "by Google is a family of fonts licensed under the "
 msgstr "is licensed under the "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:795
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:790
 #, c-format
 msgid ""
 "by Klaus Hartl is a jQuery plugin for setting, reading, and deleting browser "
 "cookies, licensed under the "
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:789
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:784
 #, fuzzy, c-format
 msgid ""
 "by Lars Jung is a JavaScript library that generates QR codes, licensed under "
 "the "
 msgstr "is licensed under the "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:744
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:739
 #, fuzzy, c-format
 msgid "by Marijn Haverbeke is licensed under an "
 msgstr "is licensed under the "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:738
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:733
 #, fuzzy, c-format
 msgid "by Moxiecode (Ephox) is licensed under the "
 msgstr "is licensed under the "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:786
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:781
 #, c-format
 msgid ""
 "by Some Web Media is a JavaScript library that makes any element on your "
 "page visible while you scroll, licensed under the "
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:750
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:745
 #, fuzzy, c-format
 msgid "by The Dojo Foundation is licensed under an "
 msgstr "The Bridge Material Type Icon Set is licensed under a "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:728
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:723
 #, fuzzy, c-format
 msgid "by Zhixin Wen is licensed under the MIT license."
 msgstr "by Binny V A is licensed under the BSD license."
@@ -64486,7 +64495,7 @@ msgstr "Phân bổ theo thư viện"
 msgid "by months"
 msgstr "tháng"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:696
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:691
 #, c-format
 msgid "by the Bridge Consortium of Carleton College and St. Olaf College."
 msgstr "by the Bridge Consortium of Carleton College and St. Olaf College."
@@ -64598,7 +64607,7 @@ msgstr "Đóng"
 msgid "club %s "
 msgstr "Mặt sau %s "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:682
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:677
 #, c-format
 msgid "code and "
 msgstr "code and "
@@ -64655,7 +64664,7 @@ msgstr "có chứa"
 msgid "continue creating your request"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:724
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:719
 #, c-format
 msgid "controls for column visiblity in DataTables"
 msgstr ""
@@ -64806,7 +64815,7 @@ msgstr "Hiển thị thông tin cho thủ thư."
 msgid "do a catalog search"
 msgstr "Tìm kiếm biểu ghi thư mục"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:588
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:583
 #, fuzzy, c-format
 msgid "doXulting"
 msgstr "Danh sách nhận"
@@ -64885,7 +64894,7 @@ msgstr "Chờ duyệt"
 msgid "euro-currency sign"
 msgstr "Tạo đơn vị tiền tệ"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:811
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:806
 #, c-format
 msgid ""
 "euskara (Basque) Fernando Berrizbeitia, the librarians of Eima Katalogoa, "
@@ -64936,7 +64945,7 @@ msgstr "Bộ sưu tập '%s' bị lỗi khi được cập nhật lại!"
 msgid "failed to run"
 msgstr "%s có lỗi khi giải nén tệp tin."
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:517
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:512
 #, c-format
 msgid "famfamfam.com"
 msgstr "famfamfam.com"
@@ -64951,7 +64960,7 @@ msgstr "trường "
 msgid "field(s) "
 msgstr "trường "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:756
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:751
 #, fuzzy, c-format
 msgid "file is licensed under the "
 msgstr "is licensed under the "
@@ -65214,24 +65223,24 @@ msgstr "Kiểu dữ liệu kiểm soát không phù hợp"
 msgid "is"
 msgstr "Avis"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:798
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:793
 #, c-format
 msgid ""
 "is a \"simple, lightweight JavaScript API for handling cookies,\" licensed "
 "under the "
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:777
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:772
 #, c-format
 msgid "is a D3-based reusable chart library under the "
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:780
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:775
 #, fuzzy, c-format
 msgid "is a JavaScript library by Bram Stein licensed under the "
 msgstr "is licensed under the "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:774
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:769
 #, fuzzy, c-format
 msgid ""
 "is a JavaScript library for manipulating documents based on data. It is "
@@ -65270,12 +65279,12 @@ msgstr "tương đương với"
 msgid "is exactly"
 msgstr "chính xác là"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:753
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:748
 #, fuzzy, c-format
 msgid "is licensed under a "
 msgstr "is licensed under the "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:701
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:696
 #, c-format
 msgid "is licensed under the "
 msgstr "is licensed under the "
@@ -65300,7 +65309,7 @@ msgstr "bị khóa cho tới ngày %s "
 msgid "is on hold for "
 msgstr "đang được bạn đọc "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:712
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:707
 #, c-format
 msgid "is released under MIT license by Ludo van den Boom."
 msgstr "is released under MIT license by Ludo van den Boom."
@@ -65418,43 +65427,43 @@ msgstr "itemtype không được ánh xạ"
 msgid "itype"
 msgstr "Kiểu tài liệu"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:680
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:675
 #, c-format
 msgid "jQuery"
 msgstr "jQuery"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:700
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:695
 #, fuzzy, c-format
 msgid "jQuery Bar Rating Plugin"
 msgstr "jQuery Star Rating Plugin"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:701
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:696
 #, fuzzy, c-format
 msgid "jQuery Bar Rating Plugin v1.22 by "
 msgstr "jQuery Star Rating Plugin v3.14 by "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:723
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:718
 #, fuzzy, c-format
 msgid "jQuery Colvis plugin"
 msgstr "jQuery treetable Plugin"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:734
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:735
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:729
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:730
 #, fuzzy, c-format
 msgid "jQuery Validation Plugin"
 msgstr "jQuery Star Rating Plugin"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:679
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:674
 #, c-format
 msgid "jQuery and jQueryUI"
 msgstr "jQuery and jQueryUI"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:705
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:700
 #, c-format
 msgid "jQuery insertAtCaret Plugin"
 msgstr "jQuery insertAtCaret Plugin"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:706
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:701
 #, fuzzy, c-format
 msgid ""
 "jQuery insertAtCaret Plugin v1.0 by the phpMyAdmin devel team is licensed "
@@ -65463,49 +65472,49 @@ msgstr ""
 "jQuery insertAtCaret Plugin v1.0 by the phpMyAdmin devel team is licensed "
 "under the the "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:728
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:723
 #, fuzzy, c-format
 msgid "jQuery multiple select plugin"
 msgstr "jQuery treetable Plugin"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:710
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:705
 #, c-format
 msgid "jQuery treetable Plugin"
 msgstr "jQuery treetable Plugin"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:712
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:707
 #, c-format
 msgid "jQuery treetable Plugin 3.1.0"
 msgstr "jQuery treetable Plugin 3.1.0"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:680
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:675
 #, c-format
 msgid "jQueryUI"
 msgstr "jQueryUI"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:794
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:795
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:789
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:790
 #, c-format
 msgid "jquery.cookie"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:719
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:720
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:714
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:715
 #, c-format
 msgid "jquery.dataTables.grouping.js"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:767
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:762
 #, c-format
 msgid "jquery.emojiarea.js"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:727
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:722
 #, c-format
 msgid "jquery.multiple.select.js"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:761
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:756
 #, c-format
 msgid "jquery.tablednd.js"
 msgstr ""
@@ -65515,8 +65524,8 @@ msgstr ""
 msgid "kip sign"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:788
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:789
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:783
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:784
 #, c-format
 msgid "kjua"
 msgstr ""
@@ -65565,7 +65574,7 @@ msgstr "lần cuối vào ngày: %s"
 msgid "let blank for the entire field"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:759
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:754
 #, fuzzy, c-format
 msgid "library is licensed under "
 msgstr "is licensed under the "
@@ -65575,8 +65584,8 @@ msgstr "is licensed under the "
 msgid "library not defined"
 msgstr "Thư viện không được định nghĩa"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:682
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:801
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:677
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:796
 #, fuzzy, c-format
 msgid "licensed under the "
 msgstr "is licensed under the "
@@ -65879,9 +65888,9 @@ msgstr "Tạo mới"
 msgid "or create:"
 msgstr "Tạo mới"
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/member-alt-address-style.inc:163
+#: koha-tmpl/intranet-tmpl/prog/en/includes/member-alt-address-style.inc:165
 #: koha-tmpl/intranet-tmpl/prog/en/includes/member-alt-contact-style.inc:148
-#: koha-tmpl/intranet-tmpl/prog/en/includes/member-main-address-style.inc:154
+#: koha-tmpl/intranet-tmpl/prog/en/includes/member-main-address-style.inc:156
 #, fuzzy, c-format
 msgid "or enter"
 msgstr "Bạn đọc bình luận "
@@ -65974,12 +65983,12 @@ msgstr "Khiếu nại đơn hàng"
 msgid "please note your reason here..."
 msgstr "Vui lòng cho biết lý do của bạn..."
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:732
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:727
 #, fuzzy, c-format
 msgid "plugin by John Resig is licensed under the "
 msgstr "is licensed under the "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:720
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:715
 #, fuzzy, c-format
 msgid "plugin by Jovan Popovic is licensed under the BSD and GPL v2 license."
 msgstr "by Binny V A is licensed under the BSD license."
@@ -66239,7 +66248,7 @@ msgstr "%s %s Tài liệu đang được vận chuyển tới  "
 msgid "since last transfer"
 msgstr "từ lần chuyển cuối"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:634
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:629
 #, c-format
 msgid "software.coop, United Kingdom"
 msgstr "software.coop, United Kingdom"
@@ -66375,7 +66384,7 @@ msgstr "Đề xuất mua"
 msgid "suggestion #%s"
 msgstr "Đề xuất mua số %s"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:820
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:815
 #, c-format
 msgid "suomi, suomen kieli (Finnish) Pasi Korkalo"
 msgstr "suomi, suomen kieli (Finnish) Pasi Korkalo"
@@ -66420,12 +66429,12 @@ msgstr ""
 msgid "text/html; charset=utf-8"
 msgstr "text/html; charset=utf-8"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:768
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:763
 #, c-format
 msgid "the Apache License, Version 2.0"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:759
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:754
 #, c-format
 msgid ""
 "the Apache License, Version 2.0 (the \"Apache License\") or the GNU General "
@@ -66737,7 +66746,7 @@ msgstr "với giá trị "
 msgid "won sign"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:735
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:730
 #, fuzzy, c-format
 msgid "written and maintained by Jörn Zaefferer is licensed under the "
 msgstr "is licensed under the "
@@ -66910,7 +66919,7 @@ msgstr "%s %s tới %s %s "
 msgid "×"
 msgstr "×"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:807
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:802
 #, c-format
 msgid ""
 "العربية (Arabic) Version 3.2 to 3.4, 3.16 & 3.18 by KnowledgeWare "
