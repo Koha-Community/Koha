@@ -283,9 +283,7 @@ if ($zebraqueue_days) {
             WHERE done=1 AND time < date_sub(curdate(), INTERVAL ? DAY)
         }
     );
-    if ( $confirm ) {
-        $sth->execute($zebraqueue_days) or die $dbh->errstr;
-    }
+    $sth->execute($zebraqueue_days) or die $dbh->errstr;
     $sth2 = $dbh->prepare(q{ DELETE FROM zebraqueue WHERE id=? });
     while ( my $record = $sth->fetchrow_hashref ) {
         if ( $confirm ) {
