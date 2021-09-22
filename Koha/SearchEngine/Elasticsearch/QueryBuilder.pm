@@ -714,6 +714,8 @@ sub _convert_index_fields {
     my %index_type_convert =
       ( __default => undef, phr => 'phrase', rtrn => 'right-truncate', 'st-year' => 'st-year' );
 
+    @indexes = grep(/.+/, @indexes); # Remove any blank indexes, i.e. keyword
+
     # Convert according to our table, drop anything that doesn't convert.
     # If a field starts with mc- we save it as it's used (and removed) later
     # when joining things, to indicate we make it an 'OR' join.
