@@ -561,6 +561,19 @@ th {
     border-radius: 0px;
 }
 
+.breadcrumb-item {
+    &.active {
+        a:link,
+        a:visited,
+        a:hover,
+        a:active {
+            color: #666;
+            cursor: text;
+            text-decoration: none;
+        }
+    }
+}
+
 #opac-main-search {
     background: #f0f3f3;
     margin: 7px 0;
@@ -1326,7 +1339,7 @@ nav {
         }
     }
 
-    background: #E6F0F2 none;
+    background: transparent none;
     border: 0;
 
     &.breadcrumb {

@@ -8,11 +8,25 @@
 [% INCLUDE 'masthead.inc' %]
 
     <div class="main">
-        <ul class="breadcrumb">
-            <li><a href="/cgi-bin/koha/opac-main.pl">Home</a></li>
-            <li><a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% biblionumber | uri %]">Details for [% bibliotitle | html %]</a></li>
-            <li><a href="#">[% IF ( typeissue ) %]Subscribe to a subscription alert [% ELSIF ( typeissuecancel ) %] Unsubscribe from a subscription alert [% END %]</a></li>
-        </ul>
+        <nav id="breadcrumbs" aria-label="Breadcrumb" class="breadcrumbs">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a href="/cgi-bin/koha/opac-main.pl">Home</a>
+                </li>
+                <li class="breadcrumb-item">
+                    <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% biblionumber | uri %]">Details for [% bibliotitle | html %]</a>
+                </li>
+                <li class="breadcrumb-item active">
+                    <a href="#" aria-current="page">
+                        [% IF ( typeissue ) %]
+                            Subscribe to a subscription alert
+                        [% ELSIF ( typeissuecancel ) %]
+                            Unsubscribe from a subscription alert
+                        [% END %]
+                    </a>
+                </li>
+            </ol>
+        </nav> <!-- /#breadcrumbs -->
 
         <div class="container-fluid">
             <div class="row">

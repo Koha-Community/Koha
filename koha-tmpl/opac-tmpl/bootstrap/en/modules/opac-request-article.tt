@@ -16,19 +16,19 @@
 [% SET disclaimer = AdditionalContents.get( location => "ArticleRequestsDisclaimerText", lang => lang, library => Branches.GetLoggedInBranchcode ) %]
 
 <div class="main">
-    <nav aria-label="breadcrumb">
-        <ul class="breadcrumb">
+    <nav id="breadcrumbs" aria-label="Breadcrumb" class="breadcrumbs">
+        <ol class="breadcrumb">
             <li class="breadcrumb-item">
                 <a href="/cgi-bin/koha/opac-main.pl">Home</a>
             </li>
             <li class="breadcrumb-item">
                 <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% biblio.biblionumber | uri %]">Details for: [% biblio.title | html %]</a>
             </li>
-            <li class="breadcrumb-item active" aria-current="page">
-                <a href="#">Request article</a>
+            <li class="breadcrumb-item active">
+                <a href="#" aria-current="page">Request article</a>
             </li>
-        </ul>
-    </nav>
+        </ol>
+    </nav> <!-- /#breadcrumbs -->
 
     <div class="container-fluid maincontent">
         <div class="row">

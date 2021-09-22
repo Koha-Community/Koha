@@ -9,19 +9,19 @@
 [% INCLUDE 'masthead.inc' %]
 
 <div class="main">
-    <nav aria-label="breadcrumb">
-        <ul class="breadcrumb">
+    <nav id="breadcrumbs" aria-label="Breadcrumb" class="breadcrumbs">
+        <ol class="breadcrumb">
             <li class="breadcrumb-item">
                 <a href="/cgi-bin/koha/opac-main.pl">Home</a>
             </li>
             <li class="breadcrumb-item">
                 <a href="/cgi-bin/koha/opac-user.pl">[% patron.firstname | html %] [% patron.surname | html %]</a>
             </li>
-            <li class="breadcrumb-item" aria-current="page">
-                <a href="#">Your consents</a>
+            <li class="breadcrumb-item active">
+                <a href="#" aria-current="page">Your consents</a>
             </li>
-        </ul>
-    </nav>
+        </ol>
+    </nav> <!-- /#breadcrumbs -->
 
     <div class="container-fluid">
         <div class="row">

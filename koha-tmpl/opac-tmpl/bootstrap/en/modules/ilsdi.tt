@@ -37,48 +37,50 @@
 [% INCLUDE 'masthead.inc' %]
 
     <div class="main">
-        <ul class="breadcrumb">
-            <li><a href="/cgi-bin/koha/opac-main.pl">Home</a></li>
-            [% IF ( GetAvailability ) %]
-                <li><a href="/cgi-bin/koha/ilsdi.pl">ILS-DI</a></li>
-                <li><a href="#">GetAvailability</a></li>
-            [% ELSIF ( GetRecords ) %]
-                <li><a href="/cgi-bin/koha/ilsdi.pl">ILS-DI</a></li>
-                <li><a href="#">GetRecords</a></li>
-            [% ELSIF ( GetAuthorityRecords ) %]
-                <li><a href="/cgi-bin/koha/ilsdi.pl">ILS-DI</a></li>
-                <li><a href="#">GetAuthorityRecords</a></li>
-            [% ELSIF ( LookupPatron ) %]
-                <li><a href="/cgi-bin/koha/ilsdi.pl">ILS-DI</a></li>
-                <li><a href="#">LookupPatron</a></li>
-            [% ELSIF ( AuthenticatePatron ) %]
-                <li><a href="/cgi-bin/koha/ilsdi.pl">ILS-DI</a></li>
-                <li><a href="#">AuthenticatePatron</a></li>
-            [% ELSIF ( GetPatronInfo ) %]
-                <li><a href="/cgi-bin/koha/ilsdi.pl">ILS-DI</a></li>
-                <li><a href="#">GetPatronInfo</a></li>
-            [% ELSIF ( GetPatronStatus ) %]
-                <li><a href="/cgi-bin/koha/ilsdi.pl">ILS-DI</a></li>
-                <li><a href="#">GetPatronStatus</a></li>
-            [% ELSIF ( GetServices ) %]
-                <li><a href="/cgi-bin/koha/ilsdi.pl">ILS-DI</a></li>
-                <li><a href="#">GetServices</a></li>
-            [% ELSIF ( RenewLoan ) %]
-                <li><a href="/cgi-bin/koha/ilsdi.pl">ILS-DI</a></li>
-                <li><a href="#">RenewLoan</a></li>
-            [% ELSIF ( HoldTitle ) %]
-                <li><a href="/cgi-bin/koha/ilsdi.pl">ILS-DI</a></li>
-                <li><a href="#">HoldTitle</a></li>
-            [% ELSIF ( HoldItem ) %]
-                <li><a href="/cgi-bin/koha/ilsdi.pl">ILS-DI</a></li>
-                <li><a href="#">HoldItem</a></li>
-            [% ELSIF ( CancelHold ) %]
-                <li><a href="/cgi-bin/koha/ilsdi.pl">ILS-DI</a></li>
-                <li><a href="#">CancelHold</a></li>
-            [% ELSE %]
-                <li><a href="#">ILS-DI</a></li>
-            [% END %]
-        </ul>
+        <nav id="breadcrumbs" aria-label="Breadcrumb" class="breadcrumbs">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="/cgi-bin/koha/opac-main.pl">Home</a></li>
+                [% IF ( GetAvailability ) %]
+                    <li class="breadcrumb-item"><a href="/cgi-bin/koha/ilsdi.pl">ILS-DI</a></li>
+                    <li class="breadcrumb-item active"><a href="#" aria-current="page">GetAvailability</a></li>
+                [% ELSIF ( GetRecords ) %]
+                    <li class="breadcrumb-item"><a href="/cgi-bin/koha/ilsdi.pl">ILS-DI</a></li>
+                    <li class="breadcrumb-item active"><a href="#" aria-current="page">GetRecords</a></li>
+                [% ELSIF ( GetAuthorityRecords ) %]
+                    <li class="breadcrumb-item"><a href="/cgi-bin/koha/ilsdi.pl">ILS-DI</a></li>
+                    <li class="breadcrumb-item active"><a href="#" aria-current="page">GetAuthorityRecords</a></li>
+                [% ELSIF ( LookupPatron ) %]
+                    <li class="breadcrumb-item"><a href="/cgi-bin/koha/ilsdi.pl">ILS-DI</a></li>
+                    <li class="breadcrumb-item active"><a href="#" aria-current="page">LookupPatron</a></li>
+                [% ELSIF ( AuthenticatePatron ) %]
+                    <li class="breadcrumb-item"><a href="/cgi-bin/koha/ilsdi.pl">ILS-DI</a></li>
+                    <li class="breadcrumb-item active"><a href="#" aria-current="page">AuthenticatePatron</a></li>
+                [% ELSIF ( GetPatronInfo ) %]
+                    <li class="breadcrumb-item"><a href="/cgi-bin/koha/ilsdi.pl">ILS-DI</a></li>
+                    <li class="breadcrumb-item active"><a href="#" aria-current="page">GetPatronInfo</a></li>
+                [% ELSIF ( GetPatronStatus ) %]
+                    <li class="breadcrumb-item"><a href="/cgi-bin/koha/ilsdi.pl">ILS-DI</a></li>
+                    <li class="breadcrumb-item active"><a href="#" aria-current="page">GetPatronStatus</a></li>
+                [% ELSIF ( GetServices ) %]
+                    <li class="breadcrumb-item"><a href="/cgi-bin/koha/ilsdi.pl">ILS-DI</a></li>
+                    <li class="breadcrumb-item active"><a href="#" aria-current="page">GetServices</a></li>
+                [% ELSIF ( RenewLoan ) %]
+                    <li class="breadcrumb-item"><a href="/cgi-bin/koha/ilsdi.pl">ILS-DI</a></li>
+                    <li class="breadcrumb-item active"><a href="#" aria-current="page">RenewLoan</a></li>
+                [% ELSIF ( HoldTitle ) %]
+                    <li class="breadcrumb-item"><a href="/cgi-bin/koha/ilsdi.pl">ILS-DI</a></li>
+                    <li class="breadcrumb-item active"><a href="#" aria-current="page">HoldTitle</a></li>
+                [% ELSIF ( HoldItem ) %]
+                    <li class="breadcrumb-item"><a href="/cgi-bin/koha/ilsdi.pl">ILS-DI</a></li>
+                    <li class="breadcrumb-item active"><a href="#" aria-current="page">HoldItem</a></li>
+                [% ELSIF ( CancelHold ) %]
+                    <li class="breadcrumb-item"><a href="/cgi-bin/koha/ilsdi.pl">ILS-DI</a></li>
+                    <li class="breadcrumb-item active"><a href="#" aria-current="page">CancelHold</a></li>
+                [% ELSE %]
+                    <li class="breadcrumb-item active"><a href="#" aria-current="page">ILS-DI</a></li>
+                [% END %]
+            </ol>
+        </nav> <!-- /#breadcrumbs -->
 
         <div class="container-fluid">
             <div class="row">

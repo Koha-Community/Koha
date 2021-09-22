@@ -8,8 +8,8 @@
 [% INCLUDE 'bodytag.inc' bodyid='opac-shareshelf' bodyclass='scrollto' %]
 [% INCLUDE 'masthead.inc' %]
 <div class="main">
-    <nav aria-label="breadcrumb">
-        <ul class="breadcrumb">
+    <nav id="breadcrumbs" aria-label="Breadcrumb" class="breadcrumbs">
+        <ol class="breadcrumb">
             <li class="breadcrumb-item">
                 <a href="/cgi-bin/koha/opac-main.pl">Home</a>
             </li>
@@ -21,11 +21,11 @@
             <li class="breadcrumb-item">
                 <a href="/cgi-bin/koha/opac-shelves.pl">Lists</a>
             </li>
-            <li class="breadcrumb-item active" aria-current="page">
-                Share a list
+            <li class="breadcrumb-item active">
+                <a href="#" aria-current="page">Share a list</a>
             </li>
-        </ul> <!-- / .breadcrumb -->
-    </nav>
+        </ol> <!-- / .breadcrumb -->
+    </nav> <!-- /#breadcrumbs -->
 
     <div class="container-fluid">
         <div class="row">

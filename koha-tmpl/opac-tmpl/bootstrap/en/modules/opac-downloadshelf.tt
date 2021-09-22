@@ -7,8 +7,8 @@
     [% INCLUDE 'bodytag.inc' bodyid='opac-downloadlist' %]
         [% INCLUDE 'masthead.inc' %]
         <div class="main">
-            <nav aria-label="breadcrumb">
-                <ul class="breadcrumb">
+            <nav id="breadcrumbs" aria-label="Breadcrumb" class="breadcrumbs">
+                <ol class="breadcrumb">
                     <li class="breadcrumb-item">
                         <a href="/cgi-bin/koha/opac-main.pl">Home</a>
                     </li>
@@ -22,11 +22,11 @@
                             <a href="/cgi-bin/koha/opac-shelves.pl?op=list&amp;category=2">Public lists</a>
                         [% END %]
                     </li>
-                    <li class="breadcrumb-item active" aria-current="page">
-                        Download list <em>[% shelf.shelfname | html %]</em>
+                    <li class="breadcrumb-item active">
+                        <a href="#" aria-current="page">Download list <em>[% shelf.shelfname | html %]</em></a>
                     </li>
                 </ul>
-            </nav>
+            </nav> <!-- /#breadcrumbs -->
 
             <div class="container-fluid">
                 <div class="row">
