@@ -1,5 +1,7 @@
+[% USE Context %]
+[% SET current_article_requests = Context.Scalar( Context.Scalar( patron, 'article_requests' ), 'filter_by_current' ) %]
 <div id="article-requests">
-[% IF patron.article_requests_current.count %]
+[% IF current_article_requests.count > 0 %]
     <table id="article-requests-table" class="table table-bordered table-striped">
         <thead>
             <tr>
@@ -20,7 +22,7 @@
         </thead>
 
         <tbody>
-            [% FOREACH ar IN patron.article_requests_current %]
+            [% FOREACH ar IN current_article_requests %]
                 <tr>
                     <td class="article-request-record-title">
                         <a class="article-request-title" href="/cgi-bin/koha/circ/request-article.pl?biblionumber=[% ar.biblionumber | html %]">

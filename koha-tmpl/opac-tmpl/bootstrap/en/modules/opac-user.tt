@@ -230,7 +230,7 @@
                             [% END %]
 
                             [% IF ( RESERVES.count ) %]<li><a href="#opac-user-holds">Holds ([% RESERVES.count | html %])</a></li>[% END %]
-                            [% IF Koha.Preference('ArticleRequests') && logged_in_user.article_requests_current %]<li><a href="#opac-user-article-requests">Article requests ([% logged_in_user.article_requests_current.count | html %])</a></li>[% END %]
+                            [% IF Koha.Preference('ArticleRequests') %]<li><a href="#opac-user-article-requests">Article requests ([% current_article_requests_count || 0 | html %])</a></li>[% END %]
                             [% IF ( OverDriveCirculation ) %]
                             <li><a href="#opac-user-overdrive">OverDrive account</a></li>
                             [% END %]
@@ -765,7 +765,7 @@
 
                         [% IF Koha.Preference('ArticleRequests') %]
                             <div id="opac-user-article-requests">
-                                [% IF logged_in_user.article_requests_current.count %]
+                                [% IF current_article_requests_count %]
                                     <table id="article-requests-table" class="table table-bordered table-striped">
                                         <caption>Article requests <span class="count"></span></caption>
                                         <thead>
@@ -788,7 +788,7 @@
                                         </thead>
 
                                         <tbody>
-                                        [% FOREACH ar IN logged_in_user.article_requests_current %]
+                                        [% FOREACH ar IN current_article_requests %]
                                                 <td class="article-request-record-title">
                                                     <a class="article-request-title" href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% ar.biblionumber | html %]">
                                                         [% INCLUDE 'biblio-title.inc' biblio=ar.biblio %]
@@ -866,7 +866,7 @@
                                     <caption class="sr-only">Article requests</caption>
                                     <tr><td>You have no article requests currently.</td></tr>
                                 </table>
-                            [% END # IF article_requests_current.count %]
+                            [% END # IF current_article_requests_count %]
                         </div> <!-- / #opac-user-article-requests -->
                     [% END %]
 
@@ -904,7 +904,7 @@
             }
         }
         $(document).ready(function(){
-            $('#opac-user-article-requests caption .count').html(AR_CAPTION_COUNT.format('[% logged_in_user.article_requests_current.count | html %]'));
+            $('#opac-user-article-requests caption .count').html(AR_CAPTION_COUNT.format('[% current_article_requests_count | html %]'));
             $('#opac-user-views').tabs();
             $(".modal-nojs").addClass("modal").addClass("hide").removeClass("modal-nojs");
             $(".suspend-until").prop("readonly",1);

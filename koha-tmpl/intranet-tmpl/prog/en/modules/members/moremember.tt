@@ -1,5 +1,6 @@
 [% USE raw %]
 [% USE Asset %]
+[% USE Context %]
 [% USE Koha %]
 [% USE Branches %]
 [% USE ItemTypes %]
@@ -695,8 +696,9 @@
                                 </li>
                             [% END %]
                             [% IF Koha.Preference('ArticleRequests') %]
+                                [% SET article_requests = Context.Scalar( Context.Scalar( patron, 'article_requests' ), 'filter_by_current') %]
                                 <li>
-                                    <a href="#article-requests" id="article-requests-tab"> [% patron.article_requests_current.count | html %] Article requests</a>
+                                    <a href="#article-requests" id="article-requests-tab"> [% article_requests.count | html %] Article requests</a>
                                 </li>
                             [% END %]
 

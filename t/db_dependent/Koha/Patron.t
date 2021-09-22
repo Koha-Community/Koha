@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 9;
+use Test::More tests => 10;
 use Test::Exception;
 use Test::Warn;
 
@@ -810,6 +810,39 @@ subtest 'can_request_article() tests' => sub {
     ok( !$patron->can_request_article,
         'Not passing the library_id param makes it fallback to userenv: denied'
     );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'article_requests() tests' => sub {
+
+    plan tests => 3;
+
+    $schema->storage->txn_begin;
+
+    my $patron = $builder->build_object( { class => 'Koha::Patrons' } );
+
+    my $article_requests = $patron->article_requests;
+    is( ref($article_requests), 'Koha::ArticleRequests',
+        'In scalar context, type is correct' );
+    is( $article_requests->count, 0, 'No article requests' );
+
+    foreach my $i ( 0 .. 3 ) {
+
+        my $item = $builder->build_sample_item;
+
+        Koha::ArticleRequest->new(
+            {
+                borrowernumber => $patron->id,
+                biblionumber   => $item->biblionumber,
+                itemnumber     => $item->id,
+                title          => "Title",
+            }
+        )->request;
+    }
+
+    $article_requests = $patron->article_requests;
+    is( $article_requests->count, 4, '4 article requests' );
 
     $schema->storage->txn_rollback;
 };

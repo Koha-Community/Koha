@@ -19,7 +19,7 @@ use Modern::Perl;
 
 use POSIX qw(strftime);
 
-use Test::More tests => 54;
+use Test::More tests => 45;
 use Test::MockModule;
 
 use t::lib::TestBuilder;
@@ -110,30 +110,7 @@ is( $article_request->biblio->id,   $biblio->id, '$ar->biblio() gets correspondi
 is( $article_request->item->id,     $item->id,   '$ar->item() gets corresponding Koha::Item object' );
 is( $article_request->borrower->id, $patron->id, '$ar->borrower() gets corresponding Koha::Patron object' );
 
-my $ar = $patron->article_requests();
-is( ref($ar),      'Koha::ArticleRequests', '$patron->article_requests returns Koha::ArticleRequests object' );
-is( $ar->next->id, $article_request->id,    'Returned article request matches' );
-
-is( $patron->article_requests_current()->count(), 1, 'Open request returned for article_requests_current' );
-$article_request->process();
-is( $patron->article_requests_current()->count(), 1, 'Processing request returned for article_requests_current' );
-$article_request->complete();
-is( $patron->article_requests_current()->count(), 0, 'Completed request not returned for article_requests_current' );
-$article_request->cancel();
-is( $patron->article_requests_current()->count(), 0, 'Canceled request not returned for article_requests_current' );
-
-$article_request->set_pending();
-
-is( $patron->article_requests_finished()->count(), 0, 'Open request returned for article_requests_finished' );
-$article_request->process();
-is( $patron->article_requests_finished()->count(), 0, 'Processing request returned for article_requests_finished' );
-$article_request->complete();
-$article_request->cancel();
-is( $patron->article_requests_finished()->count(), 1, 'Canceled request not returned for article_requests_finished' );
-
-$article_request->set_pending();
-
-$ar = $biblio->article_requests();
+my $ar = $biblio->article_requests();
 is( ref($ar),      'Koha::ArticleRequests', '$biblio->article_requests returns Koha::ArticleRequests object' );
 is( $ar->next->id, $article_request->id,    'Returned article request matches' );
 
