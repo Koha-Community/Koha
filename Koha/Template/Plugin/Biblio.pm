@@ -26,7 +26,6 @@ use Koha::Holds;
 use Koha::Biblios;
 use Koha::Patrons;
 use Koha::ArticleRequests;
-use Koha::ArticleRequest::Status;
 
 sub HoldsCount {
     my ( $self, $biblionumber ) = @_;
@@ -41,16 +40,9 @@ sub ArticleRequestsActiveCount {
 
     my $ar = Koha::ArticleRequests->search(
         {
-            biblionumber => $biblionumber,
-            status       => [
-                -or => [
-                    status => Koha::ArticleRequest::Status::Requested,
-                    status => Koha::ArticleRequest::Status::Pending,
-                    status => Koha::ArticleRequest::Status::Processing
-                ]
-            ]
+            biblionumber => $biblionumber
         }
-    );
+    )->filter_by_current;
 
     return $ar->count();
 }
