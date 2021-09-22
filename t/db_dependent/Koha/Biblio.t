@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 15;
+use Test::More tests => 16;
 
 use C4::Biblio qw( AddBiblio ModBiblio );
 use Koha::Database;
@@ -687,6 +687,40 @@ subtest 'host_items() tests' => sub {
     $host_items = $biblio->host_items;
     is( ref($host_items),   'Koha::Items' );
     is( $host_items->count, 0 );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'article_requests() tests' => sub {
+
+    plan tests => 3;
+
+    $schema->storage->txn_begin;
+
+    my $item   = $builder->build_sample_item;
+    my $biblio = $item->biblio;
+
+    my $article_requests = $biblio->article_requests;
+    is( ref($article_requests), 'Koha::ArticleRequests',
+        'In scalar context, type is correct' );
+    is( $article_requests->count, 0, 'No article requests' );
+
+    foreach my $i ( 0 .. 3 ) {
+
+        my $patron = $builder->build_object( { class => 'Koha::Patrons' } );
+
+        Koha::ArticleRequest->new(
+            {
+                borrowernumber => $patron->id,
+                biblionumber   => $biblio->id,
+                itemnumber     => $item->id,
+                title          => $biblio->title,
+            }
+        )->request;
+    }
+
+    $article_requests = $biblio->article_requests;
+    is( $article_requests->count, 4, '4 article requests' );
 
     $schema->storage->txn_rollback;
 };

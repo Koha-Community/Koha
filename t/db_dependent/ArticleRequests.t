@@ -19,7 +19,7 @@ use Modern::Perl;
 
 use POSIX qw(strftime);
 
-use Test::More tests => 45;
+use Test::More tests => 36;
 use Test::MockModule;
 
 use t::lib::TestBuilder;
@@ -109,28 +109,6 @@ $article_request->set_pending();
 is( $article_request->biblio->id,   $biblio->id, '$ar->biblio() gets corresponding Koha::Biblio object' );
 is( $article_request->item->id,     $item->id,   '$ar->item() gets corresponding Koha::Item object' );
 is( $article_request->borrower->id, $patron->id, '$ar->borrower() gets corresponding Koha::Patron object' );
-
-my $ar = $biblio->article_requests();
-is( ref($ar),      'Koha::ArticleRequests', '$biblio->article_requests returns Koha::ArticleRequests object' );
-is( $ar->next->id, $article_request->id,    'Returned article request matches' );
-
-is( $biblio->article_requests_current()->count(), 1, 'Open request returned for article_requests_current' );
-$article_request->process();
-is( $biblio->article_requests_current()->count(), 1, 'Processing request returned for article_requests_current' );
-$article_request->complete();
-is( $biblio->article_requests_current()->count(), 0, 'Completed request not returned for article_requests_current' );
-$article_request->cancel();
-is( $biblio->article_requests_current()->count(), 0, 'Canceled request not returned for article_requests_current' );
-
-$article_request->status(Koha::ArticleRequest::Status::Pending);
-$article_request->store();
-
-is( $biblio->article_requests_finished()->count(), 0, 'Open request returned for article_requests_finished' );
-$article_request->process();
-is( $biblio->article_requests_finished()->count(), 0, 'Processing request returned for article_requests_finished' );
-$article_request->complete();
-$article_request->cancel();
-is( $biblio->article_requests_finished()->count(), 1, 'Canceled request not returned for article_requests_finished' );
 
 my $rule = Koha::CirculationRules->set_rule(
     {

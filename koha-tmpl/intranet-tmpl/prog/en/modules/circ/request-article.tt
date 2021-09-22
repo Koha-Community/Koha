@@ -1,5 +1,6 @@
 [% USE raw %]
 [% USE Asset %]
+[% USE Context %]
 [% USE KohaDates %]
 [% USE Branches %]
 [% USE ItemTypes %]
@@ -284,7 +285,8 @@
 
                     [% END %]
 
-                    [% IF biblio.article_requests_current && !patron %]
+                    [% SET biblio_current_article_requests = Context.Scalar( Context.Scalar( biblio, 'article_requests' ), 'filter_by_current' ) %]
+                    [% IF biblio_current_article_requests.count > 0 && !patron %]
                         <fieldset class="rows left" id="current-article-requests-fieldset">
                             <legend>Current article requests</legend>
 
@@ -307,7 +309,7 @@
                                     <th>&nbsp;</th>
                                 </tr>
 
-                                [% FOREACH ar IN biblio.article_requests_current %]
+                                [% FOREACH ar IN biblio_current_article_requests %]
                                     <tr>
                                         <td>[% ar.created_on | $KohaDates %]</td>
                                         <td><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% ar.borrowernumber | uri %]">[% ar.borrower.firstname | html %] [% ar.borrower.surname | html %]</a></td>

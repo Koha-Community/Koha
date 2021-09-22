@@ -342,67 +342,16 @@ sub article_request_type_for_items {
 
 =head3 article_requests
 
-my @requests = $biblio->article_requests
+    my $article_requests = $biblio->article_requests
 
-Returns the article requests associated with this Biblio
+Returns the article requests associated with this biblio
 
 =cut
 
 sub article_requests {
-    my ( $self, $borrower ) = @_;
+    my ( $self ) = @_;
 
-    $self->{_article_requests} ||= Koha::ArticleRequests->search( { biblionumber => $self->biblionumber() } );
-
-    return wantarray ? $self->{_article_requests}->as_list : $self->{_article_requests};
-}
-
-=head3 article_requests_current
-
-my @requests = $biblio->article_requests_current
-
-Returns the article requests associated with this Biblio that are incomplete
-
-=cut
-
-sub article_requests_current {
-    my ( $self, $borrower ) = @_;
-
-    $self->{_article_requests_current} ||= Koha::ArticleRequests->search(
-        {
-            biblionumber => $self->biblionumber(),
-            -or          => [
-                { status => Koha::ArticleRequest::Status::Requested },
-                { status => Koha::ArticleRequest::Status::Pending },
-                { status => Koha::ArticleRequest::Status::Processing }
-            ]
-        }
-    );
-
-    return wantarray ? $self->{_article_requests_current}->as_list : $self->{_article_requests_current};
-}
-
-=head3 article_requests_finished
-
-my @requests = $biblio->article_requests_finished
-
-Returns the article requests associated with this Biblio that are completed
-
-=cut
-
-sub article_requests_finished {
-    my ( $self, $borrower ) = @_;
-
-    $self->{_article_requests_finished} ||= Koha::ArticleRequests->search(
-        {
-            biblionumber => $self->biblionumber(),
-            -or          => [
-                { status => Koha::ArticleRequest::Status::Completed },
-                { status => Koha::ArticleRequest::Status::Canceled }
-            ]
-        }
-    );
-
-    return wantarray ? $self->{_article_requests_finished}->as_list : $self->{_article_requests_finished};
+    return Koha::ArticleRequests->_new_from_dbic( scalar $self->_result->article_requests );
 }
 
 =head3 items
