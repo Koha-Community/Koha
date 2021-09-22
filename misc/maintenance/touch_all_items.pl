@@ -110,7 +110,7 @@ close($fh);
 # Benchmarking
 my $endtime = time();
 my $time = $endtime-$startime;
-my $accuracy = ($goodcount / $totalcount) * 100; # this is a percentage
+my $accuracy = $totalcount ? ($goodcount / $totalcount) * 100 : 0; # this is a percentage
 my $averagetime = 0;
 $averagetime = $time / $totalcount if $totalcount;
 print "Good: $goodcount, Bad: $badcount (of $totalcount) in $time seconds\n";
