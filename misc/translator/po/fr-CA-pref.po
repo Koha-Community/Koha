@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Koha 21.05\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2021-06-30 19:37+0000\n"
+"PO-Revision-Date: 2021-09-17 14:45+0000\n"
 "Last-Translator: Caroline Cyr-La-Rose <caroline.cyr-la-rose@inlibro.com>\n"
 "Language-Team: French Canada <koha-translate@lists.koha-community.org>\n"
 "Language: fr_CA\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Generator: Pootle 2.8\n"
-"X-POOTLE-MTIME: 1625081858.245258\n"
+"X-POOTLE-MTIME: 1631889938.186426\n"
 "X-Pootle-Path: /fr_CA/21.05/fr-CA-pref.po\n"
 "X-Pootle-Revision: 1\n"
 
@@ -9238,57 +9238,62 @@ msgid ""
 "op=search&searchfield=OPACSuggestionMandatoryFields"
 "\">OPACSuggestionMandatoryFields</a> unwanted fields "
 msgstr ""
+"<br />Note: Ne pas masquer des champs qui sont obligatoires dans <a href"
+"=\"/cgi-bin/koha/admin/preferences.pl?op=search&searchfield="
+"OPACSuggestionMandatoryFields\">OPACSuggestionMandatoryFields</a> "
 
 # OPAC > Policy
 msgid "opac.pref#OPACSuggestionUnwantedFields# Author"
-msgstr ""
+msgstr "Auteur"
 
 # OPAC > Policy
 msgid "opac.pref#OPACSuggestionUnwantedFields# Collection title"
-msgstr ""
+msgstr "Titre de série"
 
 # OPAC > Policy
 msgid "opac.pref#OPACSuggestionUnwantedFields# Copyright or publication date"
-msgstr ""
+msgstr "Date de publication"
 
 # OPAC > Policy
 msgid ""
 "opac.pref#OPACSuggestionUnwantedFields# Fields that should be hidden for "
 "patron purchase suggestions:"
 msgstr ""
+"Les champs qui devraient être masqués dans le formulaire de suggestion "
+"d'achat :"
 
 # OPAC > Policy
 msgid ""
 "opac.pref#OPACSuggestionUnwantedFields# ISBN, ISSN or other standard number"
-msgstr ""
+msgstr "Numéro standard (ISBN, ISSN ou autre)"
 
 # OPAC > Policy
 msgid "opac.pref#OPACSuggestionUnwantedFields# Item type"
-msgstr ""
+msgstr "Type de document"
 
 # OPAC > Policy
 msgid "opac.pref#OPACSuggestionUnwantedFields# Library or branch"
-msgstr ""
+msgstr "Bibliothèque"
 
 # OPAC > Policy
 msgid "opac.pref#OPACSuggestionUnwantedFields# Note"
-msgstr ""
+msgstr "Note"
 
 # OPAC > Policy
 msgid "opac.pref#OPACSuggestionUnwantedFields# Patron reason"
-msgstr ""
+msgstr "Raison"
 
 # OPAC > Policy
 msgid "opac.pref#OPACSuggestionUnwantedFields# Publication place"
-msgstr ""
+msgstr "Lieu de publication"
 
 # OPAC > Policy
 msgid "opac.pref#OPACSuggestionUnwantedFields# Publisher name"
-msgstr ""
+msgstr "Éditeur"
 
 # OPAC > Policy
 msgid "opac.pref#OPACSuggestionUnwantedFields# Quantity"
-msgstr ""
+msgstr "Quantité"
 
 # OPAC > Appearance
 msgid ""
@@ -9351,15 +9356,19 @@ msgid ""
 "on the OPAC."
 msgstr "les suggestions d'achat des autres utilisateurs."
 
-# OPAC > Appearance
+# OPAC > Appearance > OPACXSLTDetailsDisplay
 msgid ""
 "opac.pref#OPACXSLTDetailsDisplay# <br />Options:<ul><li><a href=\"#\" class="
 "\"set_syspref\" data-syspref=\"OPACXSLTDetailsDisplay\" data-value="
-"\"\">leave empty</a> for \"no xslt\"</li><li>enter \"<a href=\"#\" class="
+"\"\">leave empty</a> for \"no xslt\"</li><li>Enter \"<a href=\"#\" class="
 "\"set_syspref\" data-syspref=\"OPACXSLTDetailsDisplay\" data-value=\"default"
-"\">default</a>\" for the default one</li><li>put a path to define a xslt "
-"file</li><li>put an URL for an external specific stylesheet.</li></"
-"ul>{langcode} will be replaced with current interface language."
+"\">default</a>\" for the default stylesheet</li><li>Put a path to define an "
+"xslt file</li><li>Put a URL for an external specific stylesheet.</"
+"li><li>NOTE: The system preference <a href=\"/cgi-bin/koha/admin/preferences."
+"pl?op=search&searchfield=PassItemMarcToXSLT\">PassItemMarcToXSLT</a> must be "
+"enabled if your custom stylesheet utilizes data in the item fields</li></"
+"ul>If you have multiple stylesheets for different langues the placeholder "
+"{langcode} will be replaced with current interface language."
 msgstr ""
 
 # OPAC > Appearance
@@ -9370,15 +9379,19 @@ msgstr ""
 "Afficher les détails à l'OPAC en utilisant les feuilles de style XSLT à "
 "l'adresse: "
 
-# OPAC > Appearance
+# OPAC > Appearance > OPACXSLTListsDisplay
 msgid ""
 "opac.pref#OPACXSLTListsDisplay# <br />Options:<ul><li><a href=\"#\" class="
 "\"set_syspref\" data-syspref=\"OPACXSLTListsDisplay\" data-value=\"\">leave "
-"empty</a> for \"no xslt\"</li><li>enter \"<a href=\"#\" class=\"set_syspref"
+"empty</a> for \"no xslt\"</li><li>Enter \"<a href=\"#\" class=\"set_syspref"
 "\" data-syspref=\"OPACXSLTListsDisplay\" data-value=\"default\">default</a>"
-"\" for the default one</li><li> put a path to define a xslt file</li><li>put "
-"an URL for an external specific stylesheet.</li></ul>{langcode} will be "
-"replaced with current interface language."
+"\" for the default stylesheet</li><li>Put a path to define an xslt file</"
+"li><li>Put a URL for an external specific stylesheet.</li><li>NOTE: The "
+"system preference <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=PassItemMarcToXSLT\">PassItemMarcToXSLT</a> must be "
+"enabled if your custom stylesheet utilizes data in the item fields</li></"
+"ul>If you have multiple stylesheets for different langues the placeholder "
+"{langcode} will be replaced with current interface language."
 msgstr ""
 
 # OPAC > Appearance
@@ -9389,15 +9402,19 @@ msgstr ""
 "Afficher les listes dans l'OPAC en se servant de feuilles de style XSLT à "
 "partir de : "
 
-# OPAC > Appearance
+# OPAC > Appearance > OPACXSLTResultsDisplay
 msgid ""
 "opac.pref#OPACXSLTResultsDisplay# <br />Options:<ul><li><a href=\"#\" class="
 "\"set_syspref\" data-syspref=\"OPACXSLTResultsDisplay\" data-value="
-"\"\">leave empty</a> for \"no xslt\"</li><li>enter \"<a href=\"#\" class="
+"\"\">leave empty</a> for \"no xslt\"</li><li>Enter \"<a href=\"#\" class="
 "\"set_syspref\" data-syspref=\"OPACXSLTResultsDisplay\" data-value=\"default"
-"\">default</a>\" for the default one</li><li> put a path to define a xslt "
-"file</li><li>put an URL for an external specific stylesheet.</li></"
-"ul>{langcode} will be replaced with current interface language."
+"\">default</a>\" for the default stylesheet</li><li>Put a path to define an "
+"xslt file</li><li>Put a URL for an external specific stylesheet.</"
+"li><li>NOTE: The system preference <a href=\"/cgi-bin/koha/admin/preferences."
+"pl?op=search&searchfield=PassItemMarcToXSLT\">PassItemMarcToXSLT</a> must be "
+"enabled if your custom stylesheet utilizes data in the item fields</li></"
+"ul>If you have multiple stylesheets for different langues the placeholder "
+"{langcode} will be replaced with current interface language."
 msgstr ""
 
 # OPAC > Appearance
@@ -12392,6 +12409,22 @@ msgstr ""
 "le menu déroulant du nombre de résultats par page sur la page de résultats "
 "de l'OPAC."
 
+# Searching > Search form
+#, fuzzy
+msgid "searching.pref#PassItemMarcToXSLT# Do"
+msgstr "Formulaire de recherche"
+
+# Searching > Features
+#, fuzzy
+msgid "searching.pref#PassItemMarcToXSLT# Don't"
+msgstr "Ne pas conserver"
+
+# Searching > Results display > PassItemMarcToXSLT
+msgid ""
+"searching.pref#PassItemMarcToXSLT# make item MARC tags available to XSLT "
+"stylesheets. Default is \"Don't\", items are displayed using other methods."
+msgstr ""
+
 # Searching > Features
 msgid ""
 "searching.pref#QueryAutoTruncate# <br />(The * character would be used like "
@@ -13106,13 +13139,18 @@ msgid ""
 "editing certain HTML system preferences."
 msgstr ""
 
-# Staff interface > Appearance
+# Staff interface > Appearance > XSLTDetailsDisplay
 msgid ""
 "staff_interface.pref#XSLTDetailsDisplay# <br />Options:<ul><li>Enter \"<a "
 "href=\"#\" class=\"set_syspref\" data-syspref=\"XSLTDetailsDisplay\" data-"
-"value=\"default\">default</a>\" for the default one</li><li>Put a path to "
-"define a xslt file</li><li>Put an URL for an external specific stylesheet.</"
-"li></ul>{langcode} will be replaced with current interface language"
+"value=\"default\">default</a>\" for the default stylesheet</li><li>Put a "
+"path to define an xslt file</li><li>Put a URL for an external specific "
+"stylesheet.</li><li>NOTE: The system preference <a href=\"/cgi-bin/koha/"
+"admin/preferences.pl?op=search&searchfield=PassItemMarcToXSLT"
+"\">PassItemMarcToXSLT</a> must be enabled if your custom stylesheet utilizes "
+"data in the item fields</li></ul>If you have multiple stylesheets for "
+"different langues the placeholder {langcode} will be replaced with current "
+"interface language."
 msgstr ""
 
 # Staff interface > Appearance
@@ -13121,15 +13159,19 @@ msgid ""
 "interface using XSLT stylesheet at: "
 msgstr ""
 
-# Staff interface > Appearance
+# Staff interface > Appearance > XSLTListsDisplay
 msgid ""
 "staff_interface.pref#XSLTListsDisplay# <br />Options:<ul><li><a href=\"#\" "
 "class=\"set_syspref\" data-syspref=\"XSLTListsDisplay\" data-value="
-"\"\">Leave empty</a> for \"no xslt\"</li><li>enter \"<a href=\"#\" class="
+"\"\">Leave empty</a> for \"no xslt\"</li><li>Enter \"<a href=\"#\" class="
 "\"set_syspref\" data-syspref=\"XSLTListsDisplay\" data-value=\"default"
-"\">default</a>\" for the default one</li><li> put a path to define a xslt "
-"file</li><li>put an URL for an external specific stylesheet.</li></"
-"ul>{langcode} will be replaced with current interface language"
+"\">default</a>\" for the default stylesheet</li><li>Put a path to define an "
+"xslt file</li><li>Put a URL for an external specific stylesheet.</"
+"li><li>NOTE: The system preference <a href=\"/cgi-bin/koha/admin/preferences."
+"pl?op=search&searchfield=PassItemMarcToXSLT\">PassItemMarcToXSLT</a> must be "
+"enabled if your custom stylesheet utilizes data in the item fields</li></"
+"ul>If you have multiple stylesheets for different langues the placeholder "
+"{langcode} will be replaced with current interface language."
 msgstr ""
 
 # Staff interface > Appearance
@@ -13138,13 +13180,18 @@ msgid ""
 "using XSLT stylesheet at: "
 msgstr ""
 
-# Staff interface > Appearance
+# Staff interface > Appearance > XSLTResultsDisplay
 msgid ""
 "staff_interface.pref#XSLTResultsDisplay# <br />Options:<ul><li>Enter \"<a "
 "href=\"#\" class=\"set_syspref\" data-syspref=\"XSLTResultsDisplay\" data-"
-"value=\"default\">default</a>\" for the default one</li><li>Put a path to "
-"define a xslt file</li><li>Put an URL for an external specific stylesheet.</"
-"li></ul>{langcode} will be replaced with current interface language"
+"value=\"default\">default</a>\" for the default stylesheet</li><li>Put a "
+"path to define an xslt file</li><li>Put a URL for an external specific "
+"stylesheet.</li><li>NOTE: The system preference <a href=\"/cgi-bin/koha/"
+"admin/preferences.pl?op=search&searchfield=PassItemMarcToXSLT"
+"\">PassItemMarcToXSLT</a> must be enabled if your custom stylesheet utilizes "
+"data in the item fields</li></ul>If you have multiple stylesheets for "
+"different langues the placeholder {langcode} will be replaced with current "
+"interface language."
 msgstr ""
 
 # Staff interface > Appearance
