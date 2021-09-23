@@ -1577,6 +1577,7 @@ Note that permanent location is a code, and location may be an authval.
 
         [% IF bundlesEnabled %]
         var bundle_settings = [% TablesSettings.GetTableSettings('catalogue', 'detail','bundle_tables','json') | $raw %];
+        var bundle_lost_value = [% Koha.Preference('BundleLostValue') %];
         [% END %]
         $(document).ready(function() {
 
@@ -1668,10 +1669,10 @@ Note that permanent location is a code, and location may be an authval.
                             "searchable": false,
                             "orderable": true,
                             "render": function(data, type, row, meta) {
-                                if ( row.lost_status ) {
-                                    return "Lost: " + row.lost_status;
+                                if ( row.lost_status == bundle_lost_value ) {
+                                    return "Last seen: " + row.last_seen_date;
                                 }
-                                return "";
+                                return "Present";
                             }
                         },
                         {

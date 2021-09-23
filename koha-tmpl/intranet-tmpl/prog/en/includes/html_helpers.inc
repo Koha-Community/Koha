@@ -115,6 +115,8 @@
                             [% ELSE %]
                                 [% IF subfield.IS_LOST_AV && Koha.Preference("ClaimReturnedLostValue") && aval == Koha.Preference("ClaimReturnedLostValue") %]
                                     <option disabled="disabled" value="[%- aval | html -%]" title="Return claims must be processed from the patron details page">[%- mv.labels.$aval | html -%]</option>
+                                [% ELSIF subfield.IS_LOST_AV && Koha.Preference("BundleLostValue") && aval == Koha.Preference("BundleLostValue") %]
+                                    <option disabled="disabled" value="[%- aval | html -%]" title="Bundle losses are set at checkin automatically">[%- mv.labels.$aval | html -%]</option>
                                 [%  ELSE %]
                                     <option value="[%- aval | html -%]">[%- mv.labels.$aval | html -%]</option>
                                 [% END %]

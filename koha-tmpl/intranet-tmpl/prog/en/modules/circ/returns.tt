@@ -429,11 +429,14 @@
                                                         <th>[% t('Author') | html %]</th>
                                                         <th>[% t('Item type') | html %]</th>
                                                         <th>[% t('Barcode') | html %]</th>
+                                                        [% IF !item.onloan %]
                                                         <th>[% t('Status') | html %]</th>
+                                                        [% END %]
                                                     </tr>
                                                 </thead>
                                                 <tbody>
                                                     [% FOREACH bundle_item IN item.bundle_items %]
+                                                    [% IF !item.onloan %]
                                                     <tr data-barcode="[% bundle_item.barcode | html %]">
                                                         <td>[% INCLUDE 'biblio-title.inc' biblio=bundle_item.biblio link = 1 %]</td>
                                                         <td>[% bundle_item.biblio.author | html %]</td>
@@ -441,6 +444,14 @@
                                                         <td>[% bundle_item.barcode | html %]</td>
                                                         <td>[% INCLUDE 'item-status.inc' item=bundle_item %]</td>
                                                     </tr>
+                                                    [% ELSIF !bundle_item.itemlost %]
+                                                    <tr data-barcode="[% bundle_item.barcode | html %]">
+                                                        <td>[% INCLUDE 'biblio-title.inc' biblio=bundle_item.biblio link = 1 %]</td>
+                                                        <td>[% bundle_item.biblio.author | html %]</td>
+                                                        <td>[% ItemTypes.GetDescription(bundle_item.itype) | html %]</td>
+                                                        <td>[% bundle_item.barcode | html %]</td>
+                                                    </tr>
+                                                    [% END %]
                                                     [% END %]
                                                 </tbody>
                                             </table>
@@ -448,7 +459,11 @@
                                             <div class="form-group">
                                                 <label for="verify-items-bundle-contents-barcodes">Barcodes</label>
                                                 <textarea autocomplete="off" id="verify-items-bundle-contents-barcodes" name="verify-items-bundle-contents-barcodes" class="form-control"></textarea>
+                                                [% IF item.onloan %]
                                                 <div class="help-block">[% t('Scan all barcodes of items found in the items bundle. If any items are missing, they will be marked as lost') | html %]</div>
+                                                [% ELSE %]
+                                                <div class="help-block">[% t('Optionally scan all barcodes of items found in the items bundle to perform an inventory check. If any items are missing, they will be marked as lost') | html %]</div>
+                                                [% END %]
                                             </div>
 
                                         </div>
@@ -460,7 +475,11 @@
                                             <input type="hidden" name="dd-[% inputloo.counter | html %]" value="[% inputloo.duedate | html %]" />
                                             <input type="hidden" name="bn-[% inputloo.counter | html %]" value="[% inputloo.borrowernumber | html %]" />
                                             [% END %]
+                                            [% IF item.onloan %]
                                             <button type="submit" class="btn btn-default"><i class="fa fa-check"></i> [% t('Confirm checkin and mark missing items as lost') | html %]</button>
+                                            [% ELSE %]
+                                            <button type="submit" class="btn btn-default"><i class="fa fa-check"></i> [% t('Confirm inventory check and mark items as lost') | html %]</button>
+                                            [% END %]
                                             <button type="button" data-dismiss="modal" class="btn btn-default"><i class="fa fa-close"></i> [% t('Cancel') | html %]</button>
                                         </div>
                                     </form>

@@ -441,6 +441,20 @@ sub item_group {
     return $item_group;
 }
 
+=head3 return_claims
+
+  my $return_claims = $item->return_claims;
+
+Return any return_claims associated with this item
+
+=cut
+
+sub return_claims {
+    my ( $self, $params, $attrs ) = @_;
+    my $claims_rs = $self->_result->return_claims->search($params, $attrs);
+    return Koha::Checkouts::ReturnClaims->_new_from_dbic( $claims_rs );
+}
+
 =head3 holds
 
 my $holds = $item->holds();
@@ -1114,7 +1128,7 @@ Internal function, not exported, called only by Koha::Item->store.
 sub _set_found_trigger {
     my ( $self, $pre_mod_item ) = @_;
 
-    ## If item was lost, it has now been found, reverse any list item charges if necessary.
+    # Reverse any lost item charges if necessary.
     my $no_refund_after_days =
       C4::Context->preference('NoRefundOnLostReturnedItemsAge');
     if ($no_refund_after_days) {
