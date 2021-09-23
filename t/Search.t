@@ -181,8 +181,8 @@ subtest "searchResults PassItemMarcToXSLT test" => sub {
     t::lib::Mocks::mock_preference('marcflavour','MARC21');
     my $mock_xslt = Test::MockModule->new("C4::Search");
     $mock_xslt->mock( XSLTParse4Display => sub {
-        my $params = shift;
-        my $record = $params->{record};
+        my $biblionumber = shift;
+        my $record = shift;
         warn $record->field('952') ? "Item here" : "No item";
         return;
     });
