@@ -115,6 +115,11 @@
                                     </li>
 
                                     <li>
+                                        <label for="toc_request">Table of contents:</label>
+                                        <input type="checkbox" name="toc_request" value="1"/>
+                                    </li>
+
+                                    <li>
                                         [% IF mandatory_fields.search('pages') %]
                                             <label for="pages" class="required">Pages:</label>
                                             <input type="text" required="required" name="pages" id="pages" size="50" value="[% pageinfo | html %]"/>

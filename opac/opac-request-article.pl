@@ -62,6 +62,7 @@ if ( $action eq 'create' ) {
     my $chapters     = $cgi->param('chapters')     || undef;
     my $patron_notes = $cgi->param('patron_notes') || undef;
     my $format       = $cgi->param('format')       || undef;
+    my $toc_request  = $cgi->param('toc_request');
 
 
     my $success;
@@ -82,6 +83,7 @@ if ( $action eq 'create' ) {
                 chapters       => $chapters,
                 patron_notes   => $patron_notes,
                 format         => $format,
+                toc_request    => $toc_request ? 1 : 0,
             }
         )->request;
         $success = 1;

@@ -12,6 +12,7 @@
                 <th class="article-request-volume">Volume</th>
                 <th class="article-request-issue">Issue</th>
                 <th class="article-request-date">Date</th>
+                <th class="article-request-toc">TOC</th>
                 <th class="article-request-pages">Pages</th>
                 <th class="article-request-chapters">Chapters</th>
                 <th class="article-request-notes">Notes</th>
@@ -55,6 +56,10 @@
 
                     <td class="article-request-date">
                         [% ar.date | html %]
+                    </td>
+
+                    <td class="article-request-toc">
+                        [% IF ar.toc_request %]Yes[% END %]
                     </td>
 
                     <td class="article-request-pages">

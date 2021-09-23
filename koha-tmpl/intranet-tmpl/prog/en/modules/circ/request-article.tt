@@ -178,6 +178,11 @@
                                         </li>
 
                                         <li>
+                                            <label for="toc_request">Table of contents:</label>
+                                            <input type="checkbox" name="toc_request" value="1"/>
+                                        </li>
+
+                                        <li>
                                             <label for="pages">Pages:</label>
                                             <input type="text" name="pages" id="pages" size="50"/>
                                         </li>
@@ -299,6 +304,7 @@
                                     <th>Volume</th>
                                     <th>Issue</th>
                                     <th>Date</th>
+                                    <th>TOC</th>
                                     <th>Pages</th>
                                     <th>Chapters</th>
                                     <th>Patron notes</th>
@@ -318,6 +324,7 @@
                                         <td>[% ar.volume | html %]</td>
                                         <td>[% ar.issue | html %]</td>
                                         <td>[% ar.date | html %]</td>
+                                        <td>[% IF ar.toc_request %]Yes[% END %]</td>
                                         <td>[% ar.pages | html %]</td>
                                         <td>[% ar.chapters | html %]</td>
                                         <td>[% ar.patron_notes | html %]</td>
