@@ -756,6 +756,7 @@ CREATE TABLE `article_requests` (
   `cancellation_reason` varchar(80) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'optional authorised value AR_CANCELLATION',
   `created_on` timestamp NULL DEFAULT NULL COMMENT 'Be careful with two timestamps in one table not allowing NULL',
   `updated_on` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `toc_request` tinyint(4) NOT NULL DEFAULT 0 COMMENT 'borrower requested table of contents',
   PRIMARY KEY (`id`),
   KEY `borrowernumber` (`borrowernumber`),
   KEY `biblionumber` (`biblionumber`),
