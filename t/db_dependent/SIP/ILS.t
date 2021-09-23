@@ -74,7 +74,14 @@ is( $ils->test_cardnumber_compare( 'A1234', 'b1234' ),
 subtest add_hold => sub {
     plan tests => 4;
 
-    my $library = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $library = $builder->build_object(
+        {
+            class => 'Koha::Libraries',
+            value => {
+                pickup_location => 1
+            }
+        }
+    );
     my $patron = $builder->build_object(
         {
             class => 'Koha::Patrons',
