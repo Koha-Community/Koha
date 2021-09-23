@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 21.05\n"
-"POT-Creation-Date: 2021-08-20 15:04-0300\n"
+"POT-Creation-Date: 2021-09-13 00:04-0300\n"
 "PO-Revision-Date: 2021-07-16 16:32+0000\n"
 "Last-Translator: Akla Esmael <awismail1957@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -726,7 +726,7 @@ msgstr "%s Padam %s Padam senarai %s "
 #. %4$s:  ELSIF hold.found == 'T' 
 #. %5$s:  ELSE 
 #. %6$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:144
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:146
 #, c-format
 msgid "%s Fulfilled %s Cancelled %s Waiting %s In transit %s Pending %s "
 msgstr ""
@@ -1181,9 +1181,10 @@ msgstr "%s Anda tidak pernah meminjam apa-apa dari perpustakaan ini. %s "
 
 #. %1$s:  IF !holds 
 #. %2$s:  ELSE 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:64
+#. %3$s:  SET show_itemtype_column = Koha.Preference('AllowHoldItemTypeSelection') 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:65
 #, fuzzy, c-format
-msgid "%s You have never placed a hold from this library. %s "
+msgid "%s You have never placed a hold from this library. %s %s "
 msgstr "%s Anda tidak pernah meminjam apa-apa dari perpustakaan ini. %s "
 
 #. %1$s:  IF Koha.Preference('HoldFeeMode') == 'any_time_is_collected' 
@@ -3299,7 +3300,7 @@ msgstr "Sebarang format"
 msgid "Any item "
 msgstr "Semua jenis item"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:140
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:142
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:303
 #, fuzzy, c-format
 msgid "Any item type"
@@ -3521,7 +3522,7 @@ msgstr "Mengesahkan butiran login pengguna dan paparkan pengecam pengguna."
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-basket.tt:265
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-browse.tt:53
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-course-details.tt:66
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:99
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:101
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:134
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:266
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:645
@@ -3723,7 +3724,7 @@ msgstr ""
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:113
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1259
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:100
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:102
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-request-article.tt:145
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:353
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:250
@@ -4031,7 +4032,7 @@ msgstr "CancelHold"
 msgid "CancelRecall "
 msgstr "CancelRecall "
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:105
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:107
 #, fuzzy, c-format
 msgid "Cancellation date"
 msgstr "Julat tarikh penerbitan:"
@@ -5590,7 +5591,7 @@ msgstr "Dijangkakan"
 msgid "Expecting a specific item selection."
 msgstr "Menjangkakan pemilihan salinan spesifik."
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:103
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:105
 #, fuzzy, c-format
 msgid "Expiration date"
 msgstr "Penyata edisi:"
@@ -5992,7 +5993,7 @@ msgstr ""
 #. INPUT type=submit name=save
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-downloadcart.tt:26
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-downloadshelf.tt:77
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:80
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:82
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:63
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:208
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:316
@@ -6157,7 +6158,7 @@ msgstr "Sembunyikan tetingkap"
 msgid "Highlight"
 msgstr "Serlahan"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:102
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:104
 #, fuzzy, c-format
 msgid "Hold date"
 msgstr "Tarikh tempahan"
@@ -6238,8 +6239,8 @@ msgstr "Tempah "
 msgid "Holds (%s)"
 msgstr "Tempah (%s)"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:64
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:95
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:65
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:97
 #, fuzzy, c-format
 msgid "Holds history"
 msgstr "Sejarah penuh"
@@ -6265,7 +6266,7 @@ msgstr "Sejarah penuh"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-discharge.tt:14
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-downloadshelf.tt:13
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:61
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:44
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:45
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:23
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-imageviewer.tt:42
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-issue-note.tt:16
@@ -7077,7 +7078,7 @@ msgstr ""
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:602
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:128
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:101
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:103
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:205
 #, c-format
 msgid "Library"
@@ -8401,19 +8402,19 @@ msgstr ""
 msgid "Only items currently available for loan or reference"
 msgstr "Hanya item yang sedia ada untuk pinjaman atau rujukan"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:78
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:80
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:61
 #, fuzzy, c-format
 msgid "Order by author"
 msgstr "Susunkan mengikut tarikh"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:76
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:78
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:59
 #, c-format
 msgid "Order by date"
 msgstr "Susunkan mengikut tarikh"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:77
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:79
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:60
 #, c-format
 msgid "Order by title"
@@ -9804,7 +9805,7 @@ msgstr "Dicadangkan untuk"
 msgid "Requested from:"
 msgstr "Dicadangkan untuk"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:107
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:109
 #, fuzzy, c-format
 msgid "Requested item type"
 msgstr "Pilih salinan tertentu:"
@@ -10159,7 +10160,7 @@ msgstr "Imbas item baru atau masukkan barkodnya"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:440
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-browse.tt:82
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1205
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:174
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:176
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:209
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-search-history.tt:71
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-search-history.tt:116
@@ -10646,7 +10647,7 @@ msgstr "Login local"
 msgid "Show"
 msgstr "Tampilkan"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:90
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:92
 #, fuzzy, c-format
 msgid "Show 50 items"
 msgstr "Menampilkan 50 item terakhir"
@@ -10658,7 +10659,7 @@ msgid "Show _MENU_ entries"
 msgstr "Tampilkan _MENU_ entries"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:627
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:86
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:88
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:69
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/opac-facets.inc:12
 #, c-format
@@ -10720,7 +10721,7 @@ msgstr "Tampilkan tahun: "
 msgid "Showing %s of about %s results"
 msgstr ""
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:85
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:87
 #, fuzzy, c-format
 msgid "Showing 50 items. "
 msgstr "Menampilkan 50 item terakhir"
@@ -10730,7 +10731,7 @@ msgstr "Menampilkan 50 item terakhir"
 msgid "Showing _START_ to _END_ of _TOTAL_"
 msgstr "Menampilkan _START_ to _END_ of _TOTAL_"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:89
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:91
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:72
 #, fuzzy, c-format
 msgid "Showing all items. "
@@ -10999,7 +11000,7 @@ msgstr "Statistik"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:832
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1254
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:132
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:109
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:111
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:138
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:361
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:731
@@ -11988,7 +11989,7 @@ msgstr ""
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-basket.tt:264
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-browse.tt:55
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-course-details.tt:65
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:98
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:100
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:135
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:92
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:278
@@ -12463,7 +12464,7 @@ msgstr ""
 msgid "Volume:"
 msgstr ""
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:104
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:106
 #, fuzzy, c-format
 msgid "Waiting date"
 msgstr "Penyata edisi:"
@@ -13255,7 +13256,7 @@ msgstr ""
 msgid "Your download should begin automatically."
 msgstr "Muat turun anda akan bermula secara automatik."
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:50
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:51
 #, fuzzy, c-format
 msgid "Your holds history"
 msgstr "Sejarah pinjaman"
@@ -13264,7 +13265,7 @@ msgstr "Sejarah pinjaman"
 #. %2$s:  LibraryNameTitle | html 
 #. %3$s:  ELSE 
 #. %4$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:7
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:8
 #, c-format
 msgid "Your holds history &rsaquo; %s%s%sKoha online%s catalog"
 msgstr "Sejarah tempahan anda &rsaquo; %s%s%sKoha atas talian%s katalog"
@@ -13668,7 +13669,7 @@ msgstr "borrowernumber"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-discharge.tt:11
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-downloadshelf.tt:10
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:58
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:41
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:42
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:20
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-imageviewer.tt:39
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-issue-note.tt:13

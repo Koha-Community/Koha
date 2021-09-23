@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Koha 21.05\n"
 "POT-Creation-Date: 2015-04-15 09:41-0300\n"
-"PO-Revision-Date: 2021-06-14 07:19+0000\n"
-"Last-Translator: Veli-Matti Häkkinen <veli-matti.hakkinen@jyu.fi>\n"
+"PO-Revision-Date: 2021-09-14 10:39+0000\n"
+"Last-Translator: Anneli Österman <anneli.osterman@ouka.fi>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: fi\n"
 "MIME-Version: 1.0\n"
@@ -11,7 +11,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.8\n"
-"X-POOTLE-MTIME: 1623655196.691969\n"
+"X-POOTLE-MTIME: 1631615975.727302\n"
 "X-Pootle-Path: /fi/21.05/fi-FI-pref.po\n"
 "X-Pootle-Revision: 1\n"
 
@@ -4067,47 +4067,39 @@ msgid "circulation.pref#CumulativeRestrictionPeriods# the restriction periods."
 msgstr "rajoitusaikoja."
 
 # Circulation > Holds policy
-#, fuzzy
 msgid "circulation.pref#DefaultHoldExpirationdate# Don't set"
-msgstr "Älä priorisoi"
+msgstr "Älä aseta"
 
 # Circulation > Interface
-#, fuzzy
 msgid ""
 "circulation.pref#DefaultHoldExpirationdate# If enabled, set expiration date"
-msgstr "aikaisimmasta viimeisimpään"
+msgstr "Jos asetus on päällä, aseta vanhenemispäiväksi"
 
 # Circulation > Holds policy
-#, fuzzy
 msgid "circulation.pref#DefaultHoldExpirationdate# Set"
-msgstr "Priorisoi"
+msgstr "Aseta"
 
 # Circulation > Checkout policy
-#, fuzzy
 msgid "circulation.pref#DefaultHoldExpirationdate# days"
-msgstr "päivää."
+msgstr "päivää"
 
 # Circulation > Interface
-#, fuzzy
 msgid ""
 "circulation.pref#DefaultHoldExpirationdate# default expiration date for "
 "holds automatically."
-msgstr "Aseta Hyllyvaraukset-listan oletusalkamispäivämääräksi"
+msgstr "oletusvanhenemispäivä(ä) automaattisesti varauksille."
 
 # Circulation > Checkout policy
-#, fuzzy
 msgid "circulation.pref#DefaultHoldExpirationdate# from reserve date."
-msgstr "uusintapäivän mukaan (ts. tämä päivä)."
+msgstr "varauksen tekopäivästä."
 
 # Circulation > Holds policy
-#, fuzzy
 msgid "circulation.pref#DefaultHoldExpirationdate# months"
-msgstr "Älä priorisoi"
+msgstr "kuukautta"
 
 # Circulation > Holds policy
-#, fuzzy
 msgid "circulation.pref#DefaultHoldExpirationdate# years"
-msgstr "Priorisoi"
+msgstr "vuotta"
 
 # Circulation > Checkout policy
 msgid ""
@@ -4892,11 +4884,10 @@ msgid ""
 "bin/koha/admin/preferences.pl?op=search&searchfield=AllowHoldDateInFuture"
 "\">AllowHoldDateInFuture</a> must also be enabled)."
 msgstr ""
-"circulation.pref#OPACAllowHoldDateInFuture# asiakkaiden tehdä "
-"verkkokirjastossa varauksia, jotka astuvat voimaan tulevaisuudessa. (Jos "
-"käytössä, täytyy myös <a href=\"/cgi-bin/koha/admin/preferences.pl?"
-"op=search&searchfield=AllowHoldDateInFuture\">AllowHoldDateInFuture</a>-"
-"asetuksen olla sallittu)."
+"asiakkaiden tehdä verkkokirjastossa varauksia, jotka astuvat voimaan "
+"tulevaisuudessa. (Jos käytössä, täytyy myös <a href=\"/cgi-"
+"bin/koha/admin/preferences.pl?op=search&searchfield=AllowHoldDateInFuture\""
+">AllowHoldDateInFuture</a>-asetuksen olla sallittu)."
 
 # Circulation > Holds policy
 msgid "circulation.pref#OPACAllowUserToChooseBranch# Allow"
@@ -4918,22 +4909,21 @@ msgid ""
 "than the value of <a href=\"/cgi-bin/koha/admin/preferences.pl?"
 "op=search&searchfield=OPACFineNoRenewals\">OPACFineNoRenewals</a>,"
 msgstr ""
-"circulation.pref#OPACFineNoRenewalsBlockAutoRenew# Jos asiakkaalla on "
-"maksuja enemmän kuin <a href=\"/cgi-bin/koha/admin/preferences.pl?"
-"op=search&searchfield=OPACFineNoRenewals\">OPACFineNoRenewals</a>-"
-"asetuksessa määritetään,"
+"Jos asiakkaalla on maksuja enemmän kuin <a href=\"/cgi-bin/koha/admin/"
+"preferences.pl?op=search&searchfield=OPACFineNoRenewals"
+"\">OPACFineNoRenewals</a>-asetuksessa määritetään,"
 
 # Circulation > Checkout policy
 msgid "circulation.pref#OPACFineNoRenewalsBlockAutoRenew# allow"
-msgstr ""
+msgstr "salli"
 
 # Circulation > Checkout policy
 msgid "circulation.pref#OPACFineNoRenewalsBlockAutoRenew# block"
-msgstr ""
+msgstr "estä"
 
 # Circulation > Checkout policy
 msgid "circulation.pref#OPACFineNoRenewalsBlockAutoRenew# their auto-renewals."
-msgstr ""
+msgstr "automaattinen lainojen uusinta."
 
 # Circulation > Holds policy
 msgid "circulation.pref#OPACHoldsIfAvailableAtPickup# Allow"
@@ -5105,26 +5095,22 @@ msgid ""
 msgstr "tilastolainana, kun lainaamaton nide palautetaan."
 
 # Circulation > Checkout policy
-#, fuzzy
 msgid "circulation.pref#RecordStaffUserOnCheckout# When checking out an item, "
-msgstr "Kun lainataan nide, josta menee lainausmaksu, "
+msgstr "Kun lainataan nide, "
 
 # Circulation > Interface
-#, fuzzy
 msgid "circulation.pref#RecordStaffUserOnCheckout# don't record"
-msgstr "Älä tallenna"
+msgstr "älä tallenna"
 
 # Circulation > Interface
-#, fuzzy
 msgid "circulation.pref#RecordStaffUserOnCheckout# record"
-msgstr "Tallenna"
+msgstr "tallenna"
 
 # Circulation > Checkout policy
-#, fuzzy
 msgid ""
 "circulation.pref#RecordStaffUserOnCheckout# the user who checked out the "
 "item."
-msgstr "on-site -lainausominaisuus."
+msgstr "kuka käyttäjä lainauksen teki."
 
 # Circulation > Fines Policy
 msgid ""
@@ -7720,33 +7706,32 @@ msgid "logs.pref#AcquisitionLog# Log"
 msgstr "Kerää loki"
 
 # OPAC > Features
-#, fuzzy
 msgid "logs.pref#AcquisitionLog# when acquisition actions take place."
-msgstr "tilauksen tietoja verkkokirjaston perustiedot-näytöllä."
+msgstr "hankintoihin tehdyistä muutoksista."
 
 # Logging > Logging
 msgid "logs.pref#AuthFailureLog#  authentication failures."
-msgstr ""
+msgstr "epäonnistuneista kirjautumisista."
 
 # Logging > Logging
 msgid "logs.pref#AuthFailureLog# Don't log"
-msgstr ""
+msgstr "Älä kerää lokia"
 
 # Logging > Logging
 msgid "logs.pref#AuthFailureLog# Log"
-msgstr ""
+msgstr "Kerää lokia"
 
 # Logging > Logging
 msgid "logs.pref#AuthSuccessLog#  successful authentications."
-msgstr ""
+msgstr "onnistuneista kirjautumisista."
 
 # Logging > Logging
 msgid "logs.pref#AuthSuccessLog# Don't log"
-msgstr ""
+msgstr "Älä kerää lokia"
 
 # Logging > Logging
 msgid "logs.pref#AuthSuccessLog# Log"
-msgstr ""
+msgstr "Kerää lokia"
 
 # Logging > Logging
 msgid "logs.pref#AuthoritiesLog# Don't log"
@@ -7782,7 +7767,7 @@ msgstr "Kerää lokia"
 
 # Logging > Logging
 msgid "logs.pref#CataloguingLog# any changes to bibliographic or item records."
-msgstr ""
+msgstr "bibliografisiin ja nidetietueisiin tehdyistä muutoksista."
 
 # Logging > Logging
 #, fuzzy
@@ -7795,11 +7780,10 @@ msgid "logs.pref#ClaimsLog# Log"
 msgstr "Kerää lokia"
 
 # Logging > Logging
-#, fuzzy
 msgid ""
 "logs.pref#ClaimsLog# when an acquisitions claim or a serials claim notice is "
 "sent."
-msgstr "automaattisten palautuskehotusten lähettämisestä."
+msgstr "hankinnan ja kausijulkaisujen reklamaatioiden lähettämisestä."
 
 # Logging > Logging
 msgid "logs.pref#CronjobLog# Don't log"
@@ -7815,11 +7799,11 @@ msgstr "cron jobien tiedoista."
 
 # Logging > Debugging
 msgid "logs.pref#DumpSearchQueryTemplate# Do"
-msgstr ""
+msgstr "Dumppaa"
 
 # Logging > Debugging
 msgid "logs.pref#DumpSearchQueryTemplate# Don't"
-msgstr ""
+msgstr "Älä dumppaa"
 
 # Logging > Debugging > DumpSearchQueryTemplate
 msgid ""
@@ -7828,6 +7812,9 @@ msgid ""
 "op=search&searchfield=DumpTemplateVars\">DumpTemplateVars</a>[interface] to "
 "be visible."
 msgstr ""
+"hakulauseketta sivupohjan parametriksi, vaatii <a href=\"/cgi-"
+"bin/koha/admin/preferences.pl?op=search&searchfield=DumpTemplateVars\""
+">DumpTemplateVars</a>[käyttöliittymä] näkyäkseen."
 
 # Logging > Debugging
 msgid "logs.pref#DumpTemplateVarsIntranet# Do"
@@ -7867,7 +7854,7 @@ msgstr "Kerää lokia"
 
 # Logging > Logging
 msgid "logs.pref#FinesLog# when fines are charged, paid, or forgiven."
-msgstr "velotetuista, maksetuista ja poistetuista maksuista."
+msgstr "syntyneistä, maksetuista ja poistetuista maksuista."
 
 # Logging > Logging
 msgid "logs.pref#HoldsLog# Don't log"
@@ -7887,15 +7874,15 @@ msgstr ""
 
 # Logging > Logging
 msgid "logs.pref#IllLog# Don't log"
-msgstr ""
+msgstr "Älä kerää lokia"
 
 # Logging > Logging
 msgid "logs.pref#IllLog# Log"
-msgstr ""
+msgstr "Kerää lokia"
 
 # Logging > Logging
 msgid "logs.pref#IllLog# when changes to ILL requests take place."
-msgstr ""
+msgstr "kaukolainoihin tehdyistä muutoksista."
 
 # Logging > Logging
 msgid "logs.pref#IssueLog# Don't log"
@@ -7907,14 +7894,15 @@ msgstr "Kerää lokia"
 
 # Logging > Logging
 msgid "logs.pref#IssueLog# when items are checked out."
-msgstr "lainatuista niteistä."
+msgstr "kun niteet lainataan."
 
 # Logging > Logging
-#, fuzzy
 msgid ""
 "logs.pref#NewsLog#  changes to news entries and other contents managed in "
 "the news tool."
-msgstr "auktoriteettitietueiden muutoksista."
+msgstr ""
+"uutisin tehdyistä muutoksista sekä muihin uutistyökalulla tehdyistä "
+"muutoksista."
 
 # Logging > Logging
 #, fuzzy
@@ -7927,9 +7915,8 @@ msgid "logs.pref#NewsLog# Log"
 msgstr "Kerää lokia"
 
 # Logging > Logging
-#, fuzzy
 msgid "logs.pref#NoticesLog#  changes to notice templates."
-msgstr "auktoriteettitietueiden muutoksista."
+msgstr "viestipohjiin tehdyistä muutoksista."
 
 # Logging > Logging
 #, fuzzy
@@ -7975,7 +7962,7 @@ msgstr "Kerää lokia"
 
 # Logging > Logging
 msgid "logs.pref#ReturnLog# when items are checked in."
-msgstr ""
+msgstr "kun niteet palautetaan."
 
 # Logging > Logging
 msgid "logs.pref#SubscriptionLog# Don't log"
@@ -8905,15 +8892,19 @@ msgid ""
 "on the OPAC."
 msgstr "toisten käyttäjien tekemiä hankintaehdotuksia verkkokirjastossa."
 
-# OPAC > Appearance
+# OPAC > Appearance > OPACXSLTDetailsDisplay
 msgid ""
 "opac.pref#OPACXSLTDetailsDisplay# <br />Options:<ul><li><a href=\"#\" class="
 "\"set_syspref\" data-syspref=\"OPACXSLTDetailsDisplay\" data-value="
-"\"\">leave empty</a> for \"no xslt\"</li><li>enter \"<a href=\"#\" class="
+"\"\">leave empty</a> for \"no xslt\"</li><li>Enter \"<a href=\"#\" class="
 "\"set_syspref\" data-syspref=\"OPACXSLTDetailsDisplay\" data-value=\"default"
-"\">default</a>\" for the default one</li><li>put a path to define a xslt "
-"file</li><li>put an URL for an external specific stylesheet.</li></"
-"ul>{langcode} will be replaced with current interface language."
+"\">default</a>\" for the default stylesheet</li><li>Put a path to define an "
+"xslt file</li><li>Put a URL for an external specific stylesheet.</"
+"li><li>NOTE: The system preference <a href=\"/cgi-bin/koha/admin/preferences."
+"pl?op=search&searchfield=PassItemMarcToXSLT\">PassItemMarcToXSLT</a> must be "
+"enabled if your custom stylesheet utilizes data in the item fields</li></"
+"ul>If you have multiple stylesheets for different langues the placeholder "
+"{langcode} will be replaced with current interface language."
 msgstr ""
 
 # OPAC > Appearance
@@ -8923,15 +8914,19 @@ msgid ""
 msgstr ""
 "Käytä verkkokirjaston perustiedot-näytöllä XSLT-tyylitiedostoa osoitteesta: "
 
-# OPAC > Appearance
+# OPAC > Appearance > OPACXSLTListsDisplay
 msgid ""
 "opac.pref#OPACXSLTListsDisplay# <br />Options:<ul><li><a href=\"#\" class="
 "\"set_syspref\" data-syspref=\"OPACXSLTListsDisplay\" data-value=\"\">leave "
-"empty</a> for \"no xslt\"</li><li>enter \"<a href=\"#\" class=\"set_syspref"
+"empty</a> for \"no xslt\"</li><li>Enter \"<a href=\"#\" class=\"set_syspref"
 "\" data-syspref=\"OPACXSLTListsDisplay\" data-value=\"default\">default</a>"
-"\" for the default one</li><li> put a path to define a xslt file</li><li>put "
-"an URL for an external specific stylesheet.</li></ul>{langcode} will be "
-"replaced with current interface language."
+"\" for the default stylesheet</li><li>Put a path to define an xslt file</"
+"li><li>Put a URL for an external specific stylesheet.</li><li>NOTE: The "
+"system preference <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=PassItemMarcToXSLT\">PassItemMarcToXSLT</a> must be "
+"enabled if your custom stylesheet utilizes data in the item fields</li></"
+"ul>If you have multiple stylesheets for different langues the placeholder "
+"{langcode} will be replaced with current interface language."
 msgstr ""
 
 # OPAC > Appearance
@@ -8940,15 +8935,19 @@ msgid ""
 "stylesheet at: "
 msgstr "Näytä listat verkkokirjastossa käyttäen XSLT-mallipohjaa osoitteesta: "
 
-# OPAC > Appearance
+# OPAC > Appearance > OPACXSLTResultsDisplay
 msgid ""
 "opac.pref#OPACXSLTResultsDisplay# <br />Options:<ul><li><a href=\"#\" class="
 "\"set_syspref\" data-syspref=\"OPACXSLTResultsDisplay\" data-value="
-"\"\">leave empty</a> for \"no xslt\"</li><li>enter \"<a href=\"#\" class="
+"\"\">leave empty</a> for \"no xslt\"</li><li>Enter \"<a href=\"#\" class="
 "\"set_syspref\" data-syspref=\"OPACXSLTResultsDisplay\" data-value=\"default"
-"\">default</a>\" for the default one</li><li> put a path to define a xslt "
-"file</li><li>put an URL for an external specific stylesheet.</li></"
-"ul>{langcode} will be replaced with current interface language."
+"\">default</a>\" for the default stylesheet</li><li>Put a path to define an "
+"xslt file</li><li>Put a URL for an external specific stylesheet.</"
+"li><li>NOTE: The system preference <a href=\"/cgi-bin/koha/admin/preferences."
+"pl?op=search&searchfield=PassItemMarcToXSLT\">PassItemMarcToXSLT</a> must be "
+"enabled if your custom stylesheet utilizes data in the item fields</li></"
+"ul>If you have multiple stylesheets for different langues the placeholder "
+"{langcode} will be replaced with current interface language."
 msgstr ""
 
 # OPAC > Appearance
@@ -9591,15 +9590,15 @@ msgstr " palauttaa verkkokirjastossa salasanansa sähköpostitse."
 
 # OPAC > Features
 msgid "opac.pref#OpacResetPassword# Library patrons are "
-msgstr ""
+msgstr "Kirjaston käyttäjät "
 
 # OPAC > Features
 msgid "opac.pref#OpacResetPassword# allowed"
-msgstr "eivät saa"
+msgstr "saavat"
 
 # OPAC > Features
 msgid "opac.pref#OpacResetPassword# not allowed"
-msgstr "saavat"
+msgstr "eivät saa"
 
 # OPAC > Appearance
 msgid "opac.pref#OpacSeparateHoldings# Don't separate"
@@ -11824,6 +11823,22 @@ msgid ""
 "OPAC search results."
 msgstr ""
 
+# Searching > Search form
+#, fuzzy
+msgid "searching.pref#PassItemMarcToXSLT# Do"
+msgstr "näytä"
+
+# Searching > Features
+#, fuzzy
+msgid "searching.pref#PassItemMarcToXSLT# Don't"
+msgstr "Älä säilytä"
+
+# Searching > Results display > PassItemMarcToXSLT
+msgid ""
+"searching.pref#PassItemMarcToXSLT# make item MARC tags available to XSLT "
+"stylesheets. Default is \"Don't\", items are displayed using other methods."
+msgstr ""
+
 # Searching > Features
 msgid ""
 "searching.pref#QueryAutoTruncate# <br />(The * character would be used like "
@@ -12084,10 +12099,10 @@ msgid ""
 "preferences.pl?op=search&searchfield=maxRecordsForFacets"
 "\">maxRecordsForFacets</a> preference. Applies to OPAC and staff interface."
 msgstr ""
-"searching.pref#displayFacetCount# fasetin lukumäärä. Näiden numeroiden "
-"relevanssi riippuu <a href=\"/cgi-bin/koha/admin/preferences.pl?"
-"op=search&searchfield=maxRecordsForFacets\">maxRecordsForFacets</a>-"
-"asetuksesta. Koskee sekä verkkokirjastoa että virkailijaliittymää."
+"fasetin lukumäärä(ä). Näiden numeroiden relevanssi riippuu <a href=\"/cgi-"
+"bin/koha/admin/preferences.pl?op=search&searchfield=maxRecordsForFacets\""
+">maxRecordsForFacets</a>-asetuksesta. Koskee sekä verkkokirjastoa että "
+"virkailijaliittymää."
 
 # Searching > Search form
 msgid ""
@@ -12520,13 +12535,18 @@ msgid ""
 "editing certain HTML system preferences."
 msgstr ""
 
-# Staff interface > Appearance
+# Staff interface > Appearance > XSLTDetailsDisplay
 msgid ""
 "staff_interface.pref#XSLTDetailsDisplay# <br />Options:<ul><li>Enter \"<a "
 "href=\"#\" class=\"set_syspref\" data-syspref=\"XSLTDetailsDisplay\" data-"
-"value=\"default\">default</a>\" for the default one</li><li>Put a path to "
-"define a xslt file</li><li>Put an URL for an external specific stylesheet.</"
-"li></ul>{langcode} will be replaced with current interface language"
+"value=\"default\">default</a>\" for the default stylesheet</li><li>Put a "
+"path to define an xslt file</li><li>Put a URL for an external specific "
+"stylesheet.</li><li>NOTE: The system preference <a href=\"/cgi-bin/koha/"
+"admin/preferences.pl?op=search&searchfield=PassItemMarcToXSLT"
+"\">PassItemMarcToXSLT</a> must be enabled if your custom stylesheet utilizes "
+"data in the item fields</li></ul>If you have multiple stylesheets for "
+"different langues the placeholder {langcode} will be replaced with current "
+"interface language."
 msgstr ""
 
 # Staff interface > Appearance
@@ -12535,15 +12555,19 @@ msgid ""
 "interface using XSLT stylesheet at: "
 msgstr ""
 
-# Staff interface > Appearance
+# Staff interface > Appearance > XSLTListsDisplay
 msgid ""
 "staff_interface.pref#XSLTListsDisplay# <br />Options:<ul><li><a href=\"#\" "
 "class=\"set_syspref\" data-syspref=\"XSLTListsDisplay\" data-value="
-"\"\">Leave empty</a> for \"no xslt\"</li><li>enter \"<a href=\"#\" class="
+"\"\">Leave empty</a> for \"no xslt\"</li><li>Enter \"<a href=\"#\" class="
 "\"set_syspref\" data-syspref=\"XSLTListsDisplay\" data-value=\"default"
-"\">default</a>\" for the default one</li><li> put a path to define a xslt "
-"file</li><li>put an URL for an external specific stylesheet.</li></"
-"ul>{langcode} will be replaced with current interface language"
+"\">default</a>\" for the default stylesheet</li><li>Put a path to define an "
+"xslt file</li><li>Put a URL for an external specific stylesheet.</"
+"li><li>NOTE: The system preference <a href=\"/cgi-bin/koha/admin/preferences."
+"pl?op=search&searchfield=PassItemMarcToXSLT\">PassItemMarcToXSLT</a> must be "
+"enabled if your custom stylesheet utilizes data in the item fields</li></"
+"ul>If you have multiple stylesheets for different langues the placeholder "
+"{langcode} will be replaced with current interface language."
 msgstr ""
 
 # Staff interface > Appearance
@@ -12552,13 +12576,18 @@ msgid ""
 "using XSLT stylesheet at: "
 msgstr ""
 
-# Staff interface > Appearance
+# Staff interface > Appearance > XSLTResultsDisplay
 msgid ""
 "staff_interface.pref#XSLTResultsDisplay# <br />Options:<ul><li>Enter \"<a "
 "href=\"#\" class=\"set_syspref\" data-syspref=\"XSLTResultsDisplay\" data-"
-"value=\"default\">default</a>\" for the default one</li><li>Put a path to "
-"define a xslt file</li><li>Put an URL for an external specific stylesheet.</"
-"li></ul>{langcode} will be replaced with current interface language"
+"value=\"default\">default</a>\" for the default stylesheet</li><li>Put a "
+"path to define an xslt file</li><li>Put a URL for an external specific "
+"stylesheet.</li><li>NOTE: The system preference <a href=\"/cgi-bin/koha/"
+"admin/preferences.pl?op=search&searchfield=PassItemMarcToXSLT"
+"\">PassItemMarcToXSLT</a> must be enabled if your custom stylesheet utilizes "
+"data in the item fields</li></ul>If you have multiple stylesheets for "
+"different langues the placeholder {langcode} will be replaced with current "
+"interface language."
 msgstr ""
 
 # Staff interface > Appearance
