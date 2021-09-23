@@ -2433,6 +2433,12 @@ sub AddReturn {
         }
     }
 
+    # Check for bundle status
+    if ( $item->in_bundle ) {
+        my $host = $item->bundle_host;
+        $messages->{InBundle} = $host;
+    }
+
     my $indexer = Koha::SearchEngine::Indexer->new({ index => $Koha::SearchEngine::BIBLIOS_INDEX });
     $indexer->index_records( $item->biblionumber, "specialUpdate", "biblioserver" );
 

@@ -338,10 +338,18 @@ if ($barcode) {
     $template->param( 'multiple_confirmed' => 1 )
       if $query->param('multiple_confirm');
 
+    # Block return if bundle and confirm has not been received
+    my $bundle_confirm =
+         $item
+      && $item->is_bundle
+      && !$query->param('confirm_items_bundle_return');
+    $template->param( 'confirm_items_bundle_returned' => 1 )
+      if $query->param('confirm_items_bundle_return');
+
     # do the return
     ( $returned, $messages, $issue, $borrower ) =
       AddReturn( $barcode, $userenv_branch, $exemptfine, $return_date )
-          unless $needs_confirm;
+          unless ( $needs_confirm || $bundle_confirm );
 
     if ($returned) {
         my $time_now = dt_from_string()->truncate( to => 'minute');
@@ -382,7 +390,45 @@ if ($barcode) {
                 );
             }
         }
-    } elsif ( C4::Context->preference('ShowAllCheckins') and !$messages->{'BadBarcode'} and !$needs_confirm ) {
+
+        # Mark missing bundle items as lost and report unexpected items
+        if ( $item->is_bundle ) {
+            my $BundleLostValue = C4::Context->preference('BundleLostValue');
+            my $barcodes = $query->param('verify-items-bundle-contents-barcodes');
+            my @barcodes = map { s/^\s+|\s+$//gr } ( split /\n/, $barcodes );
+            my $expected_items = { map { $_->barcode => $_ } $item->bundle_items->as_list };
+            my $verify_items = Koha::Items->search( { barcode => { 'in' => \@barcodes } } );
+            my @unexpected_items;
+            my @missing_items;
+            my @bundle_items;
+            while ( my $verify_item = $verify_items->next ) {
+                # Fix and lost statuses
+                $verify_item->itemlost(0);
+
+                # Expected item, remove from lookup table
+                if ( delete $expected_items->{$verify_item->barcode} ) {
+                    push @bundle_items, $verify_item;
+                }
+                # Unexpected item, warn and remove from bundle
+                else {
+                    $verify_item->remove_from_bundle;
+                    push @unexpected_items, $verify_item;
+                }
+                # Store results
+                $verify_item->store();
+            }
+            for my $missing_item ( keys %{$expected_items} ) {
+                my $bundle_item = $expected_items->{$missing_item};
+                $bundle_item->itemlost($BundleLostValue)->store();
+                push @missing_items, $bundle_item;
+            }
+            $template->param(
+                unexpected_items => \@unexpected_items,
+                missing_items    => \@missing_items,
+                bundle_items     => \@bundle_items
+            );
+        }
+    } elsif ( C4::Context->preference('ShowAllCheckins') and !$messages->{'BadBarcode'} and !$needs_confirm and !$bundle_confirm ) {
         $input{duedate}   = 0;
         $returneditems{0} = $barcode;
         $riduedate{0}     = 0;
@@ -392,6 +438,12 @@ if ($barcode) {
 
     if ( $needs_confirm ) {
         $template->param( needs_confirm => $needs_confirm );
+    }
+
+    if ( $bundle_confirm ) {
+        $template->param(
+            items_bundle_return_confirmation => 1,
+        );
     }
 }
 $template->param( inputloop => \@inputloop );
@@ -631,6 +683,8 @@ foreach my $code ( keys %$messages ) {
         ;
     } elsif ( $code eq 'TransferredRecall' ) {
         ;
+    } elsif ( $code eq 'InBundle' ) {
+        $template->param( InBundle => $messages->{InBundle} );
     } else {
         die "Unknown error code $code";    # note we need all the (empty) elsif's above, or we die.
         # This forces the issue of staying in sync w/ Circulation.pm

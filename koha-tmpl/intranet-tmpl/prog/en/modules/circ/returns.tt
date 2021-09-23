@@ -6,6 +6,7 @@
 [% USE ItemTypes %]
 [% USE AuthorisedValues %]
 [% USE TablesSettings %]
+[% PROCESS 'i18n.inc' %]
 [% PROCESS 'member-display-address-style.inc' %]
 [% SET footerjs = 1 %]
 [% BLOCK display_bormessagepref %]
@@ -217,6 +218,36 @@
                                 </div>
                             [% END %]
 
+                            <!-- Bundle has items missing -->
+                            [% IF missing_items %]
+                                <div id="bundle_missing_items" class="dialog alert">
+                                    <h3>Bundle had missing items</h3>
+                                    <p>Bundle contents list updated</p>
+                                    <p><a class="btn btn-default btn-xs" role="button" data-toggle="modal" href="#bundleContentsModal"><i class="fa fa-eye" aria-hidden="true"></i> View updated contents list</a></p>
+                                </div>
+                            [% END %]
+
+                            <!-- Bundle contained unexpected items -->
+                            [% IF unexpected_items %]
+                                <div id="bundle_unexpected_items" class="dialog alert">
+                                    <h3>Bundle had unexpected items</h3>
+                                    <p>Please place the following items to one side</p>
+                                    <ul>
+                                    [% FOREACH unexpected_item IN unexpected_items %]
+                                        <li>[% INCLUDE 'biblio-title.inc' biblio=unexpected_item.biblio %] - [% unexpected_item.barcode | html %]</li>
+                                    [% END %]
+                                    </ul>
+                                </div>
+                            [% END %]
+
+                            <!-- Item checked in outside of bundle -->
+                            [% IF InBundle %]
+                                <div id="bundle_item_outside" class="dialog alert audio-alert-warning">
+                                    <h3>Item belongs in bundle</h3>
+                                    <p>This item belongs to a bundle: [% INCLUDE 'biblio-title.inc' biblio=InBundle.biblio %] - [% InBundle.barcode | html %]</p>
+                                    <p><button class="btn btn-default btn-xs bundle_remove" role="button" data-itemnumber="[% itemnumber | uri %]" data-hostnumber="[% InBundle.itemnumber | uri %]"><i class="fa fa-minus"></i> Remove from bundle</button></p>
+                                </div>
+                            [% END %]
 
                             [% IF ( errmsgloop ) %]
                                 <div class="dialog alert audio-alert-warning">
@@ -379,6 +410,63 @@
                                     </div>
                                 </div>
                             </div>
+                        [% END %]
+
+                        [% IF items_bundle_return_confirmation %]
+                        <div id="bundle-needsconfirmation-modal" class="modal fade audio-alert-action block">
+                            <div class="modal-dialog modal-wide">
+                                <div class="modal-content">
+                                    <form method="post">
+                                        <div class="modal-header">
+                                            <h3>Please confirm bundle contents</h3>
+                                        </div>
+                                        <div class="modal-body">
+
+                                            <table class="table table-condensed table-bordered" id="items-bundle-contents-table">
+                                                <thead>
+                                                    <tr>
+                                                        <th>[% t('Title') | html %]</th>
+                                                        <th>[% t('Author') | html %]</th>
+                                                        <th>[% t('Item type') | html %]</th>
+                                                        <th>[% t('Barcode') | html %]</th>
+                                                        <th>[% t('Status') | html %]</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    [% FOREACH bundle_item IN item.bundle_items %]
+                                                    <tr data-barcode="[% bundle_item.barcode | html %]">
+                                                        <td>[% INCLUDE 'biblio-title.inc' biblio=bundle_item.biblio link = 1 %]</td>
+                                                        <td>[% bundle_item.biblio.author | html %]</td>
+                                                        <td>[% ItemTypes.GetDescription(bundle_item.itype) | html %]</td>
+                                                        <td>[% bundle_item.barcode | html %]</td>
+                                                        <td>[% INCLUDE 'item-status.inc' item=bundle_item %]</td>
+                                                    </tr>
+                                                    [% END %]
+                                                </tbody>
+                                            </table>
+
+                                            <div class="form-group">
+                                                <label for="verify-items-bundle-contents-barcodes">Barcodes</label>
+                                                <textarea autocomplete="off" id="verify-items-bundle-contents-barcodes" name="verify-items-bundle-contents-barcodes" class="form-control"></textarea>
+                                                <div class="help-block">[% t('Scan all barcodes of items found in the items bundle. If any items are missing, they will be marked as lost') | html %]</div>
+                                            </div>
+
+                                        </div>
+                                        <div class="modal-footer">
+                                            <input type="hidden" name="barcode" value="[% item.barcode | html %]">
+                                            <input type="hidden" name="confirm_items_bundle_return" value="1">
+                                            [% FOREACH inputloo IN inputloop %]
+                                            <input type="hidden" name="ri-[% inputloo.counter | html %]" value="[% inputloo.barcode | html %]" />
+                                            <input type="hidden" name="dd-[% inputloo.counter | html %]" value="[% inputloo.duedate | html %]" />
+                                            <input type="hidden" name="bn-[% inputloo.counter | html %]" value="[% inputloo.borrowernumber | html %]" />
+                                            [% END %]
+                                            <button type="submit" class="btn btn-default"><i class="fa fa-check"></i> [% t('Confirm checkin and mark missing items as lost') | html %]</button>
+                                            <button type="button" data-dismiss="modal" class="btn btn-default"><i class="fa fa-close"></i> [% t('Cancel') | html %]</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
                         [% END %]
 
                         [% IF wrongbranch %]
@@ -1180,6 +1268,8 @@
         [% INCLUDE 'modals/resolve_return_claim.inc' %]
     [% END %]
 
+    [% INCLUDE 'modals/bundle_contents.inc' %]
+
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'datatables.inc' %]
     [% INCLUDE 'columns_settings.inc' %]
@@ -1364,8 +1454,52 @@
                 window.open("/cgi-bin/koha/members/printslip.pl?borrowernumber=" + borrowernumber + "&amp;print=checkinslip", "printwindow");
             });
 
+            // item bundles
+            $('#verify-items-bundle-contents-barcodes').on('input', function (ev) {
+                const barcodes = ev.target.value.split('\n').map(function(s) { return s.trim() });
+                $('#items-bundle-contents-table tr').each(function () {
+                    const barcode = this.getAttribute('data-barcode');
+                    if (barcodes.includes(barcode)) {
+                        this.classList.add('ok');
+                    } else {
+                        this.classList.remove('ok');
+                    }
+                })
+            });
+
+            $('.bundle_remove').on('click', function() {
+                var component_itemnumber = $(this).data('itemnumber');
+                var host_itemnumber = $(this).data('hostnumber');
+                var alert = $(this).closest('div');
+                var unlink_item_url = "/api/v1/items/" + host_itemnumber + "/bundled_items/item/" + component_itemnumber;
+                $.ajax({
+                    type: "DELETE",
+                    url: unlink_item_url,
+                    success: function(){
+                        alert.remove();
+                    }
+                });
+            });
+
+            // print modals
+            $('.modal.printable').on('shown.bs.modal', function() {
+                $('.modal-dialog', this).addClass('focused');
+                $('body').addClass('modalprinter');
+
+                if ($(this).hasClass('autoprint')) {
+                    window.print();
+                }
+            }).on('hidden.bs.modal', function() {
+                $('.modal-dialog', this).removeClass('focused');
+                $('body').removeClass('modalprinter');
+            });
+
+            $('.printModal').click(function() {
+                window.print();
+            });
         });
     </script>
+
 [% END %]
 
 [% INCLUDE 'intranet-bottom.inc' %]
