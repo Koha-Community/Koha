@@ -7,7 +7,7 @@ use Modern::Perl;
 
 use C4::SIP::ILS::Transaction;
 
-use C4::Reserves qw( CalculatePriority AddReserve ModReserve );
+use C4::Reserves qw( CalculatePriority AddReserve ModReserve CanItemBeReserved );
 use Koha::Holds;
 use Koha::Patrons;
 use Koha::Items;
@@ -61,18 +61,23 @@ sub do_hold {
         return $self;
     }
 
-    my $priority = C4::Reserves::CalculatePriority($item->biblionumber);
-    AddReserve(
-        {
-            priority       => $priority,
-            branchcode     => $branch,
-            borrowernumber => $patron->borrowernumber,
-            biblionumber   => $item->biblionumber
-        }
-    );
+    my $canReserve = CanItemBeReserved($patron, $item, $branch);
+    if ($canReserve->{status} eq 'OK') {
+        my $priority = C4::Reserves::CalculatePriority($item->biblionumber);
+        AddReserve(
+            {
+                priority       => $priority,
+                branchcode     => $branch,
+                borrowernumber => $patron->borrowernumber,
+                biblionumber   => $item->biblionumber
+            }
+        );
 
-    # unfortunately no meaningful return value
-    $self->ok(1);
+        $self->ok(1);
+    } else {
+        $self->ok(0);
+    }
+
     return $self;
 }
 
