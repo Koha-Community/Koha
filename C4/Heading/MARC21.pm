@@ -168,12 +168,12 @@ my $bib_heading_fields = {
 my $auth_heading_fields = {
     '100' => {
         auth_type  => 'PERSO_NAME',
-        subfields  => 'abcdfghjklmnopqrstvxyz68',
+        subfields  => 'abcdefghjklmnopqrstvxyz68',
         main_entry => 1
     },
     '110' => {
         auth_type  => 'CORPO_NAME',
-        subfields  => 'abcdfghklmnoprstvxyz68',
+        subfields  => 'abcdefghklmnoprstvxyz68',
         main_entry => 1
     },
     '111' => {
