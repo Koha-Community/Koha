@@ -148,4 +148,125 @@ sub pickup_locations {
     };
 }
 
+=head3 bundled_items
+
+Controller function that handles bundled_items Koha::Item objects
+
+=cut
+
+sub bundled_items {
+    my $c = shift->openapi->valid_input or return;
+
+    my $item_id = $c->validation->param('item_id');
+    my $item = Koha::Items->find( $item_id );
+
+    unless ($item) {
+        return $c->render(
+            status  => 404,
+            openapi => { error => "Item not found" }
+        );
+    }
+
+    return try {
+        my $items_set = $item->bundle_items;
+        my $items     = $c->objects->search( $items_set );
+        return $c->render(
+            status  => 200,
+            openapi => $items
+        );
+    }
+    catch {
+        $c->unhandled_exception($_);
+    };
+}
+
+=head3 add_to_bundle
+
+Controller function that handles adding items to this bundle
+
+=cut
+
+sub add_to_bundle {
+    my $c = shift->openapi->valid_input or return;
+
+    my $item_id = $c->validation->param('item_id');
+    my $item = Koha::Items->find( $item_id );
+
+    unless ($item) {
+        return $c->render(
+            status  => 404,
+            openapi => { error => "Item not found" }
+        );
+    }
+
+
+    my $bundle_item_id = $c->validation->param('body')->{'external_id'};
+    my $bundle_item = Koha::Items->find( { barcode => $bundle_item_id } );
+
+    unless ($bundle_item) {
+        return $c->render(
+            status  => 404,
+            openapi => { error => "Bundle item not found" }
+        );
+    }
+
+    return try {
+        my $link = $item->add_to_bundle($bundle_item);
+        return $c->render(
+            status  => 201,
+            openapi => $bundle_item
+        );
+    }
+    catch {
+        if ( ref($_) eq 'Koha::Exceptions::Object::DuplicateID' ) {
+            return $c->render(
+                status  => 409,
+                openapi => {
+                    error => 'Item is already bundled',
+                    key   => $_->duplicate_id
+                }
+            );
+        }
+        else {
+            $c->unhandled_exception($_);
+        }
+    };
+}
+
+=head3 remove_from_bundle
+
+Controller function that handles removing items from this bundle
+
+=cut
+
+sub remove_from_bundle {
+    my $c = shift->openapi->valid_input or return;
+
+    my $item_id = $c->validation->param('item_id');
+    my $item = Koha::Items->find( $item_id );
+
+    unless ($item) {
+        return $c->render(
+            status  => 404,
+            openapi => { error => "Item not found" }
+        );
+    }
+
+    my $bundle_item_id = $c->validation->param('bundled_item_id');
+    my $bundle_item = Koha::Items->find( { itemnumber => $bundle_item_id } );
+
+    unless ($bundle_item) {
+        return $c->render(
+            status  => 404,
+            openapi => { error => "Bundle item not found" }
+        );
+    }
+
+    $bundle_item->remove_from_bundle;
+    return $c->render(
+        status  => 204,
+        openapi => q{}
+    );
+}
+
 1;

@@ -525,6 +525,28 @@ modules:
             -
               columnname: checkin_on
 
+      bundle_tables:
+        columns:
+            -
+              columnname: title
+              cannot_be_toggled: 1
+            -
+              columnname: author
+            -
+              columnname: collection_code
+            -
+              columnname: item_type
+            -
+              columnname: callnumber
+            -
+              columnname: external_id
+            -
+              columnname: status
+            -
+              columnname: bundle_actions
+              cannot_be_toggled: 1
+              cannot_be_modified: 1
+
   cataloguing:
     addbooks:
       reservoir-table:

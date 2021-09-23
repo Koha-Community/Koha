@@ -93,6 +93,163 @@
     x-koha-authorization:
       permissions:
         catalogue: "1"
+"/items/{item_id}/bundled_items":
+  post:
+    x-mojo-to: Items#add_to_bundle
+    operationId: addToBundle
+    tags:
+      - items
+    summary: Add item to bundle
+    parameters:
+      - $ref: "../swagger.yaml#/parameters/item_id_pp"
+      - name: body
+        in: body
+        description: A JSON object containing information about the new bundle link
+        required: true
+        schema:
+          $ref: "../swagger.yaml#/definitions/bundle_link"
+    consumes:
+      - application/json
+    produces:
+      - application/json
+    responses:
+      "201":
+        description: A successfully created bundle link
+        schema:
+          items:
+            $ref: "../swagger.yaml#/definitions/item"
+      "400":
+        description: Bad parameter
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "401":
+        description: Authentication required
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "403":
+        description: Access forbidden
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "404":
+        description: Resource not found
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "409":
+        description: Conflict in creating resource
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "500":
+        description: Internal server error
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "503":
+        description: Under maintenance
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+    x-koha-authorization:
+      permissions:
+        catalogue: 1
+  get:
+    x-mojo-to: Items#bundled_items
+    operationId: bundledItems
+    tags:
+      - items
+    summary: List bundled items
+    parameters:
+      - $ref: "../swagger.yaml#/parameters/item_id_pp"
+      - name: external_id
+        in: query
+        description: Search on the item's barcode
+        required: false
+        type: string
+      - $ref: "../swagger.yaml#/parameters/match"
+      - $ref: "../swagger.yaml#/parameters/order_by"
+      - $ref: "../swagger.yaml#/parameters/page"
+      - $ref: "../swagger.yaml#/parameters/per_page"
+      - $ref: "../swagger.yaml#/parameters/q_param"
+      - $ref: "../swagger.yaml#/parameters/q_body"
+      - $ref: "../swagger.yaml#/parameters/q_header"
+    consumes:
+      - application/json
+    produces:
+      - application/json
+    responses:
+      "200":
+        description: A list of item
+        schema:
+          type: array
+          items:
+            $ref: "../swagger.yaml#/definitions/item"
+      "401":
+        description: Authentication required
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "403":
+        description: Access forbidden
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "500":
+        description: Internal server error
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "503":
+        description: Under maintenance
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+    x-koha-authorization:
+      permissions:
+        catalogue: "1"
+    x-koha-embed:
+      - biblio
+      - checkout
+"/items/{item_id}/bundled_items/{bundled_item_id}":
+  delete:
+    x-mojo-to: Items#remove_from_bundle
+    operationId: removeFromBundle
+    tags:
+      - items
+    summary: Remove item from bundle
+    parameters:
+      - $ref: "../swagger.yaml#/parameters/item_id_pp"
+      - name: bundled_item_id
+        in: path
+        description: Internal identifier for the bundled item
+        required: true
+        type: string
+    consumes:
+      - application/json
+    produces:
+      - application/json
+    responses:
+      "204":
+        description: Bundle link deleted
+      "400":
+        description: Bad parameter
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "401":
+        description: Authentication required
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "403":
+        description: Access forbidden
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "404":
+        description: Resource not found
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "500":
+        description: Internal server error
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "503":
+        description: Under maintenance
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+    x-koha-authorization:
+      permissions:
+        catalogue: 1
 "/items/{item_id}/pickup_locations":
   get:
     x-mojo-to: Items#pickup_locations

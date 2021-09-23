@@ -368,12 +368,12 @@
                 [% IF ( analyze ) %]<th id="[% tab | html %]_usedin" data-colname="[% tab | html %]_usedin">Used in</th><th></th>[% END %]
                 [% IF ( ShowCourseReserves ) %]<th id="[% tab | html %]_course_reserves" data-colname="[% tab | html %]_course_reserves">Course reserves</th>[% END %]
                 [% IF ( SpineLabelShowPrintOnBibDetails ) %]<th id="[% tab | html %]_spinelabel" data-colname="[% tab | html %]_spinelabel" class="NoSort">Spine label</th>[% END %]
-                [% IF ( CAN_user_editcatalogue_edit_items ) %]<th id="[% tab | html %]_actions" data-colname="[% tab | html %]_actions"class="NoSort">&nbsp;</th>[% END %]
+                [% IF ( CAN_user_editcatalogue_edit_items ) %]<th id="[% tab | html %]_actions" data-colname="[% tab | html %]_actions"class="NoSort noExport">&nbsp;</th>[% END %]
             </tr>
         </thead>
         <tbody>
             [% FOREACH item IN items %]
-                <tr>
+                <tr id="item_[% item.itemnumber | html %]" data-itemnumber="[% item.itemnumber | html %]">
                 [% IF (StaffDetailItemSelection) %]
                     <td style="text-align:center;vertical-align:middle">
                         <input type="checkbox" value="[% item.itemnumber | html %]" name="itemnumber" />
@@ -545,6 +545,11 @@ Note that permanent location is a code, and location may be an authval.
                         [% IF ( item.restricted ) %]
                             <span class="restricted">([% item.restrictedvalue | html %])</span>
                         [% END %]
+
+                        [% IF ( item.bundle_host ) %]
+                            <span class="bundled">In bundle: [% INCLUDE 'biblio-title.inc' biblio = item.bundle_host.biblio link = 1 %]</span>
+                        [% END %]
+
                     </td>
                     <td class="datelastseen" data-order="[% item.datelastseen | html %]">[% item.datelastseen | $KohaDates %]</td>
                     <td class="issues" data-order="[% item.issues || 0 | html %]">[% item.issues || 0 | html %]</td>
@@ -630,6 +635,9 @@ Note that permanent location is a code, and location may be an authval.
                             [% ELSE %]
                                 <a class="btn btn-default btn-xs" href="/cgi-bin/koha/cataloguing/additem.pl?op=edititem&biblionumber=[% item.biblionumber | html %]&itemnumber=[% item.itemnumber | html %]#edititem"><i class="fa fa-pencil"></i> Edit</a>
                             [% END %]
+                        [% END %]
+                        [% IF bundlesEnabled %]
+                            <button class="btn btn-default btn-xs details-control"><i class="fa fa-folder"></i> Manage bundle</button>
                         [% END %]
                     </td>
                 [% END %]
@@ -1222,6 +1230,37 @@ Note that permanent location is a code, and location may be an authval.
     </div>
 </div>
 
+    [% IF bundlesEnabled %]
+    <div class="modal" id="bundleItemsModal" tabindex="-1" role="dialog" aria-labelledby="bundleItemsLabel">
+        <form id="bundleItemsForm" action="">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="closebtn" data-dismiss="modal" aria-hidden="true">×</button>
+                        <h3 id="bundleItemsLabel">Add to bundle</h3>
+                    </div>
+                    <div class="modal-body">
+                        <div id="result"></div>
+                        <fieldset class="rows">
+                            <ol>
+                                <li>
+                                    <label class="required" for="external_id">Item barcode: </label>
+                                    <input type="text" id="external_id" name="external_id" required="required">
+                                    <span class="required">Required</span>
+                                </li>
+                            </ol>
+                        </fieldset>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-default">Submit</button>
+                        <button class="btn btn-default" data-dismiss="modal" aria-hidden="true">Close</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    [% END %]
+
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'catalog-strings.inc' %]
     [% Asset.js("js/catalog.js") | $raw %]
@@ -1528,6 +1567,7 @@ Note that permanent location is a code, and location may be an authval.
     [% INCLUDE 'datatables.inc' %]
     [% Asset.js("lib/jquery/plugins/jquery.dataTables.columnFilter.js") | $raw %]
     [% INCLUDE 'columns_settings.inc' %]
+    [% INCLUDE 'js-date-format.inc' %]
     [% Asset.js("js/browser.js") | $raw %]
     [% Asset.js("js/table_filters.js") | $raw %]
     <script>
@@ -1535,7 +1575,198 @@ Note that permanent location is a code, and location may be an authval.
         browser = KOHA.browser('[% searchid | html %]', parseInt(biblionumber, 10));
         browser.show();
 
+        [% IF bundlesEnabled %]
+        var bundle_settings = [% TablesSettings.GetTableSettings('catalogue', 'detail','bundle_tables','json') | $raw %];
+        [% END %]
         $(document).ready(function() {
+
+            [% IF bundlesEnabled %] // Bundle handling
+            function createChild ( row, itemnumber ) {
+
+                // Toolbar
+                var bundle_toolbar = $('<div id="toolbar" class="btn-toolbar"><a class="btn btn-default" data-toggle="modal" data-target="#bundleItemsModal" data-item="' + itemnumber + '"><i class="fa fa-plus"></i> Add to bundle</a></div>');
+
+                // This is the table we'll convert into a DataTable
+                var bundles_table = $('<table class="display tbundle" data-itemnumber="'+itemnumber+'" id="bundle_table_'+itemnumber+'" width="100%"/>');
+
+                // Display it the child row
+                row.child( bundle_toolbar.add(bundles_table) ).show();
+
+                // Initialise as a DataTable
+                var bundle_table_url = "/api/v1/items/" + itemnumber + "/bundled_items?";
+                var bundle_table = bundles_table.kohaTable({
+                    "ajax": {
+                        "url": bundle_table_url
+                    },
+                    "header_filter": false,
+                    "embed": [
+                        "biblio"
+                    ],
+                    "order": [[ 1, "asc" ]],
+                    "columnDefs": [ {
+                        "targets": [0,1,2,3,4,5],
+                        "render": function (data, type, row, meta) {
+                            if ( data && type == 'display' ) {
+                                return data.escapeHtml();
+                            }
+                            return data;
+                        }
+                    } ],
+                    "columns": [
+                        {
+                            "data": "biblio.title:biblio.medium",
+                            "title": "Title",
+                            "searchable": true,
+                            "orderable": true,
+                            "render": function(data, type, row, meta) {
+                                var title = "";
+                                if ( row.biblio.title ) {
+                                    title = title.concat('<span class="biblio-title">',row.biblio.title,'</span>');
+                                }
+                                if ( row.biblio.subtitle ) {
+                                    title = title.concat('<span class="biblio-subtitle">',row.biblio.subtitle,'</span>');
+                                }
+                                if ( row.biblio.medium ) {
+                                    title = title.concat('<span class="biblio-medium">',row.biblio.medium,'</span>');
+                                }
+                                return title;
+                            }
+                        },
+                        {
+                            "data": "biblio.author",
+                            "title": "Author",
+                            "searchable": true,
+                            "orderable": true,
+                        },
+                        {
+                            "data": "collection_code",
+                            "title": "Collection code",
+                            "searchable": true,
+                            "orderable": true,
+                        },
+                        {
+                            "data": "item_type",
+                            "title": "Item Type",
+                            "searchable": false,
+                            "orderable": true,
+                        },
+                        {
+                            "data": "callnumber",
+                            "title": "Callnumber",
+                            "searchable": true,
+                            "orderable": true,
+                        },
+                        {
+                            "data": "external_id",
+                            "title": "Barcode",
+                            "searchable": true,
+                            "orderable": true,
+                        },
+                        {
+                            "data": "lost_status:last_seen_date",
+                            "title": "Status",
+                            "searchable": false,
+                            "orderable": true,
+                            "render": function(data, type, row, meta) {
+                                if ( row.lost_status ) {
+                                    return "Lost: " + row.lost_status;
+                                }
+                                return "";
+                            }
+                        },
+                        {
+                            "data": function( row, type, val, meta ) {
+                                var result = '<button class="btn btn-default btn-xs remove" role="button" data-itemnumber="'+row.item_id+'"><i class="fa fa-minus" aria-hidden="true"></i> '+_("Remove")+'</button>\n';
+                                return result;
+                            },
+                            "title": "Actions",
+                            "searchable": false,
+                            "orderable": false,
+                            "class": "noExport"
+                        }
+                    ]
+                }, bundle_settings, 1);
+
+                $(".tbundle").on("click", ".remove", function(){
+                    var bundle_table = $(this).closest('table');
+                    var host_itemnumber = bundle_table.data('itemnumber');
+                    var component_itemnumber = $(this).data('itemnumber');
+                    var unlink_item_url = "/api/v1/items/" + host_itemnumber + "/bundled_items/" + component_itemnumber;
+                    $.ajax({
+                        type: "DELETE",
+                        url: unlink_item_url,
+                        success: function(){
+                            bundle_table.DataTable({ 'retrieve': true }).draw(false);
+                        }
+                    });
+                });
+
+                return;
+            }
+
+            var bundle_changed;
+            var bundle_form_active;
+            $("#bundleItemsModal").on("shown.bs.modal", function(e){
+                var button = $(e.relatedTarget);
+                var item_id = button.data('item');
+                $("#result").replaceWith('<div id="result"></div>');
+                $("#bundleItemsForm").attr('action', '/api/v1/items/' + item_id + '/bundled_items');
+                $("#external_id").focus();
+                bundle_changed = 0;
+                bundle_form_active = item_id;
+            });
+
+            $("#bundleItemsForm").submit(function(event) {
+
+                  /* stop form from submitting normally */
+                  event.preventDefault();
+
+                  /* get the action attribute from the <form action=""> element */
+                  var $form = $(this),
+                  url = $form.attr('action');
+
+                  /* Send the data using post with external_id */
+                  var posting = $.post({
+                      url: url,
+                      data: JSON.stringify({ external_id: $('#external_id').val()}),
+                      contentType: "application/json; charset=utf-8",
+                      dataType: "json"
+                  });
+
+                  /* Report the results */
+                  posting.done(function(data) {
+                      var barcode = $('#external_id').val();
+                      $('#result').replaceWith('<div id="result" class="alert alert-success">Success: Added '+barcode+'</div>');
+                      $('#external_id').val('').focus();
+                      bundle_changed = 1;
+                  });
+                  posting.fail(function(data) {
+                      var barcode = $('#external_id').val();
+                      if ( data.status === 409 ) {
+                          var response = data.responseJSON;
+                          if ( response.key === "PRIMARY" ) {
+                              $('#result').replaceWith('<div id="result" class="alert alert-warning">Warning: Item '+barcode+' already attached</div>');
+                          } else {
+                              $('#result').replaceWith('<div id="result" class="alert alert-danger">Failure: Item '+barcode+' belongs to another bundle</div>');
+                          }
+                      } else {
+                          $('#result').replaceWith('<div id="result" class="alert alert-danger">Failure: Check the logs for details</div>');
+                      }
+                      $('#external_id').val('').focus();
+                  });
+            });
+
+            $("#bundleItemsModal").on("hidden.bs.modal", function(e){
+                if ( bundle_changed ) {
+                    $('#bundle_table_'+bundle_form_active).DataTable({ 'retrieve': true }).ajax.reload();
+                }
+                bundle_form_active = 0;
+                bundle_changed = 0;
+            });
+
+            // End bundle handling
+            [% END %]
+
             var table_names = [ 'holdings_table', 'otherholdings_table' ];
             var table_settings = [ [% TablesSettings.GetTableSettings('catalogue', 'detail','holdings_table','json') | $raw %], [% TablesSettings.GetTableSettings('catalogue', 'detail','otherholdings_table','json')  | $raw %] ];
             var has_images = [ "[% itemloop_has_images | html %]", "[% otheritemloop_has_images | html %]" ];
@@ -1551,6 +1782,28 @@ Note that permanent location is a code, and location may be an authval.
                     "sDom": 'C<"top pager"ilpfB><"#filter_c">tr<"bottom pager"ip>',
                 };
                 var table = KohaTable( table_name, dt_parameters, table_settings[index], 'with_filters' );
+
+                [% IF bundlesEnabled %]
+                // Add event listener for opening and closing bundle details
+                $('#' + table_name + ' tbody').on('click', 'button.details-control', function () {
+                    var tr = $(this).closest('tr');
+                    var dTable = $(this).closest('table').DataTable({ 'retrieve': true });
+
+                    var itemnumber = tr.data('itemnumber');
+                    var row = dTable.row( tr );
+
+                    if ( row.child.isShown() ) {
+                        // This row is already open - close it
+                        row.child.hide();
+                        tr.removeClass('shown');
+                    }
+                    else {
+                        // Open this row
+                        createChild(row, itemnumber);
+                        tr.addClass('shown');
+                    }
+                } );
+                [% END %]
             });
 
             [% IF Koha.Preference('AcquisitionDetails') %]
@@ -1572,6 +1825,7 @@ Note that permanent location is a code, and location may be an authval.
                     "sPaginationType": "full"
                 }));
             [% END %]
+
         });
 
         [% IF (found1) %]

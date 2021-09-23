@@ -10,6 +10,8 @@ definitions:
     $ref: ./definitions/allows_renewal.yaml
   basket:
     $ref: ./definitions/basket.yaml
+  bundle_link:
+    $ref: ./definitions/bundle_link.yaml
   cashup:
     $ref: ./definitions/cashup.yaml
   checkout:
@@ -169,6 +171,10 @@ paths:
     $ref: ./paths/items.yaml#/~1items
   "/items/{item_id}":
     $ref: "./paths/items.yaml#/~1items~1{item_id}"
+  "/items/{item_id}/bundled_items":
+    $ref: ./paths/items.yaml#/~1items~1{item_id}~1bundled_items
+  "/items/{item_id}/bundled_items/{bundled_item_id}":
+    $ref: ./paths/items.yaml#/~1items~1{item_id}~1bundled_items~1{bundled_item_id}
   "/items/{item_id}/pickup_locations":
     $ref: "./paths/items.yaml#/~1items~1{item_id}~1pickup_locations"
   /libraries:

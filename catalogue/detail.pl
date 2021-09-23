@@ -206,6 +206,11 @@ if (@hostitems){
 
 my $dat = &GetBiblioData($biblionumber);
 
+#is biblio a collection and are bundles enabled
+my $leader = $record->leader();
+$dat->{bundlesEnabled} = ( ( substr( $leader, 7, 1 ) eq 'c' )
+      && C4::Context->preference('BundleNotLoanValue') ) ? 1 : 0;
+
 #coping with subscriptions
 my $subscriptionsnumber = CountSubscriptionFromBiblionumber($biblionumber);
 my @subscriptions       = SearchSubscriptions({ biblionumber => $biblionumber, orderby => 'title' });
@@ -449,6 +454,15 @@ foreach my $item (@items) {
             $item->{recalled} = 1;
             $item->{recall} = $recall;
         }
+    }
+
+    if ($item_object->is_bundle) {
+        $itemfields{bundles} = 1;
+        $item->{is_bundle} = 1;
+    }
+
+    if ($item_object->in_bundle) {
+        $item->{bundle_host} = $item_object->bundle_host;
     }
 
     if ($currentbranch and C4::Context->preference('SeparateHoldings')) {
