@@ -56,7 +56,7 @@ if ( $op eq 'cud-del_reserve' ) {
     }
 }
 
-my $course          = GetCourse($course_id);
+my $course          = Koha::Courses->find($course_id);
 my $course_reserves = GetCourseReserves(
     course_id       => $course_id,
     include_items   => 1,

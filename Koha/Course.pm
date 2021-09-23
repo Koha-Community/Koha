@@ -17,14 +17,32 @@ package Koha::Course;
 
 use Modern::Perl;
 
-
 use base qw(Koha::Object);
 
 =head1 NAME
 
 Koha::Course - Koha Course Object class
 
-=head1 API
+=head2 Relations
+
+=head3 instructors
+
+  my $instructors = $course->instructors();
+
+Returns the related Koha::Patrons object containing the instructors for this course
+
+=cut
+
+sub instructors {
+    my ($self) = @_;
+
+    my $instructors = Koha::Patrons->search(
+        { 'course_instructors.course_id' => $self->course_id },
+        { join                           => 'course_instructors' }
+    );
+
+    return $instructors;
+}
 
 =head2 Internal methods
 
