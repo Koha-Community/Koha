@@ -293,12 +293,8 @@ UPCOMINGITEM: foreach my $upcoming ( @$upcoming_dues ) {
             my $item = Koha::Items->find( $upcoming->{itemnumber} );
             my $letter_type = 'DUE';
             $sth->execute($upcoming->{'borrowernumber'},$upcoming->{'itemnumber'},'0');
-            my $titles = "";
-            my @issues;
-            while ( my $item_info = $sth->fetchrow_hashref()) {
-                push( @issues, $item_info );
-                $titles .= C4::Letters::get_item_content( { item => $item_info, item_content_fields => \@item_content_fields } );
-            }
+            my $item_info = $sth->fetchrow_hashref();
+            my $title = C4::Letters::get_item_content( { item => $item_info, item_content_fields => \@item_content_fields } );
 
             ## Get branch info for borrowers home library.
             foreach my $transport ( keys %{$borrower_preferences->{'transports'}} ) {
@@ -309,8 +305,8 @@ UPCOMINGITEM: foreach my $upcoming ( @$upcoming_dues ) {
                                       biblionumber   => $item->biblionumber,
                                       itemnumber     => $upcoming->{'itemnumber'},
                                       substitute     => {
-                                          'items.content' => $titles,
-                                          issue          => $issues[0],
+                                          'items.content' => $title,
+                                          issue           => $item_info,
                                       },
                                       message_transport_type => $transport,
                                     } )
@@ -346,12 +342,8 @@ UPCOMINGITEM: foreach my $upcoming ( @$upcoming_dues ) {
             my $item = Koha::Items->find( $upcoming->{itemnumber} );
             my $letter_type = 'PREDUE';
             $sth->execute($upcoming->{'borrowernumber'},$upcoming->{'itemnumber'},$borrower_preferences->{'days_in_advance'});
-            my $titles = "";
-            my @issues;
-            while ( my $item_info = $sth->fetchrow_hashref()) {
-                push( @issues, $item_info );
-                $titles .= C4::Letters::get_item_content( { item => $item_info, item_content_fields => \@item_content_fields } );
-            }
+            my $item_info = $sth->fetchrow_hashref();
+            my $title = C4::Letters::get_item_content( { item => $item_info, item_content_fields => \@item_content_fields } );
 
             ## Get branch info for borrowers home library.
             foreach my $transport ( keys %{$borrower_preferences->{'transports'}} ) {
@@ -362,8 +354,8 @@ UPCOMINGITEM: foreach my $upcoming ( @$upcoming_dues ) {
                                       biblionumber   => $item->biblionumber,
                                       itemnumber     => $upcoming->{'itemnumber'},
                                       substitute     => {
-                                          'items.content' => $titles,
-                                          issue           => $issues[0],
+                                          'items.content' => $title,
+                                          issue           => $item_info,
                                       },
                                       message_transport_type => $transport,
                                     } )
