@@ -1,72 +1,54 @@
-[% USE Branches %]
 [% USE AuthorisedValues %]
-[% SET itemavailable = 1 %]
+[% USE Branches %]
+[% USE Koha %]
+[% USE KohaDates %]
 
-[%#- This include takes two parameters: an item structure -%]
-[%#- and an optional loan (issue) structure.  The issue -%]
-[%#- structure is used by course reserves pages, which do -%]
-[%#- not use an API to fetch items that populates item.datedue. -%]
+[% SET itemavailable = 1 %]
 
 [% IF ( item.itemlost ) %]
     [% SET itemavailable = 0 %]
-    [% av_lib_include = AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.itemlost', authorised_value => item.itemlost ) %]
-    [% IF ( av_lib_include ) %]
-        <span class="item-status lost">[% av_lib_include | html %]</span>
+    [% itemlost_description = AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.itemlost', authorised_value => item.itemlost ) %]
+    [% IF ( itemlost_description ) %]
+        <span class="item-status lost">[% itemlost_description | html %]</span>
     [% ELSE %]
-        <span class="item-status lost">Item lost</span>
+        <span class="item-status lost">Lost</span>
     [% END %]
 [% END %]
 
-[% IF item.isa('Koha::Item') %]
-    [% SET datedue = issue.date_due %]
-    [% SET onsite_checkout = issue.onsite_checkout %]
-[% ELSE %]
-    [% SET datedue = item.datedue || issue.date_due %]
-    [% SET onsite_checkout = item.onsite_checkout %]
-[% END %]
-[% IF datedue %]
+[% checkout = item.checkout %]
+[% IF ( checkout ) %]
     [% SET itemavailable = 0 %]
-    [% IF onsite_checkout %]
-        [% IF ( OPACShowCheckoutName ) %]
-            <span class="item-status checkedout">Currently in local use by [% item.firstname | html %] [% item.surname | html %] [% IF ( item.cardnumber ) %]([% item.cardnumber | html %])[% END %]</span>
-        [% ELSE %]
-            <span class="item-status checkedout">Currently in local use</span>
-        [% END %]
+    [% IF checkout.onsite_checkout %]
+        <span class="item-status checkedout">Currently in local use by [% INCLUDE 'patron-title.inc' patron=checkout.patron hide_patron_infos_if_needed=1 %]</span>
     [% ELSE %]
-        [% IF ( OPACShowCheckoutName ) %]
-            <span class="item-status checkedout">Checked out to [% item.firstname | html %] [% item.surname | html %] [% IF ( item.cardnumber ) %]([% item.cardnumber | html %])[% END %]</span>
-        [% ELSE %]
-            <span class="item-status checkedout">Checked out</span>
-        [% END %]
+        <span class="item-status checkedout">Checked out to [% INCLUDE 'patron-title.inc' patron=checkout.patron hide_patron_infos_if_needed=1 %]</span>
     [% END %]
+    <span class="item-status due">Due: [% checkout.date_due | $KohaDates %]</span>
 [% END %]
 
-[% IF NOT ( item.isa('Koha::Item') ) AND item.transfertwhen %] [%# transfertwhen is set in C4::Search, do not have it for course reserves %]
+[% transfer = item.get_transfer %]
+[% IF ( transfer.in_transit ) %]
     [% SET itemavailable = 0 %]
-    <span class="item-status intransit">In transit from [% Branches.GetName( item.transfertfrom ) | html %]
-    to [% Branches.GetName( item.transfertto ) | html %] since [% item.transfertwhen | $KohaDates %]</span>
-[% END %]
-
-[% IF NOT( item.isa('Koha::Item') ) AND item.waiting %] [%# Not sure where does come from this waiting flag %]
-    [% SET itemavailable = 0 %]
-    <span class="item-status onhold">On hold</span>
+    <span class="item-status intransit">In transit from [% Branches.GetName( transfer.frombranch ) | html %]
+    to [% Branches.GetName( transfer.tobranch ) | html %] since [% transfer.datesent | $KohaDates %]</span>
 [% END %]
 
 [% IF ( item.withdrawn ) %]
     [% SET itemavailable = 0 %]
-    [% av_lib_include = AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.withdrawn', authorised_value => item.withdrawn ) %]
-    [% IF av_lib_include %]
-        <span class="item-status withdrawn">[% av_lib_include | html %]</span>
+    [% withdrawn_description = AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.withdrawn', authorised_value => item.withdrawn ) %]
+    [% IF withdrawn_description %]
+        <span class="item-status withdrawn">[% withdrawn_description | html %]</span>
     [% ELSE %]
-        <span class="item-status withdrawn">Item withdrawn</span>
+        <span class="item-status withdrawn">Withdrawn</span>
     [% END %]
 [% END %]
 
-[% IF ( item.notforloan ) %]
+[% IF ( item.notforloan || item.effective_itemtype.notforloan ) %]
     [% SET itemavailable = 0 %]
-    [% av_lib_include = AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.notforloan', authorised_value => item.notforloan ) %]
-    [% IF av_lib_include %]
-        <span class="item-status notforloan">[% av_lib_include | html %]</span>
+    [% SET notforloan = item.notforloan || item.effective_itemtype.notforloan %]
+    [% notforloan_description = AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.notforloan', authorised_value => notforloan ) %]
+    [% IF notforloan_description %]
+        <span class="item-status notforloan">[% notforloan_description | html %]</span>
     [% ELSE %]
         <span class="item-status notforloan">Not for loan</span>
     [% END %]
@@ -74,21 +56,11 @@
 
 [% IF ( item.damaged ) %]
     [% SET itemavailable = 0 %]
-    [% av_lib_include = AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.damaged', authorised_value => item.damaged ) %]
-    [% IF av_lib_include %]
-        <span class="item-status damaged">[% av_lib_include | html %]</span>
+    [% damaged_description = AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.damaged', authorised_value => item.damaged ) %]
+    [% IF damaged_description %]
+        <span class="item-status damaged">[% damaged_description | html %]</span>
     [% ELSE %]
-        <span class="item-status damaged">Item damaged</span>
-    [% END %]
-[% END %]
-
-[% IF ( item.restricted ) %]
-    [% SET itemavailable = 0 %]
-    [% av_lib_include = AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.restricted', authorised_value => item.restricted ) %]
-    [% IF av_lib_include %]
-        <span class="item-status restricted">[% av_lib_include | html %]</span>
-    [% ELSE %]
-        <span class="item-status restricted">On order</span>
+        <span class="item-status damaged">Damaged</span>
     [% END %]
 [% END %]
 
@@ -97,6 +69,29 @@
     <span class="item-status pendinghold">Pending hold</span>
 [% END %]
 
+[% hold = item.holds.next %]
+[% IF hold %]
+        [% IF hold.waitingdate %]
+            [% SET itemavailable = 0 %]
+            <span class="item-status holdwaiting">Waiting at [% Branches.GetName(hold.get_column('branchcode')) | html %] since [% hold.waitingdate | $KohaDates %].</span>
+        [% ELSE %]
+            <span class="item-status itemhold">Item-level hold (placed [% hold.reservedate | $KohaDates %]) for delivery at [% Branches.GetName(hold.get_column('branchcode')) | html %].</span>
+        [% END %]
+        [% IF Koha.Preference('canreservefromotherbranches') %]
+            <span class="item-status holdfor">Hold for: [% INCLUDE 'patron-title.inc' patron=hold.borrower hide_patron_infos_if_needed=1 %]</span>
+        [% END %]
+    </span>
+[% END %]
+
 [% IF ( itemavailable ) %]
     <span class="item-status available">Available</span>
+[% END %]
+
+[% IF ( item.restricted ) %]
+    [% restricted_description = AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.restricted', authorised_value => item.restricted ) %]
+    [% IF restricted_description %]
+        <span class="item-status restricted">[% restricted_description | html %]</span>
+    [% ELSE %]
+        <span class="item-status restricted">Restricted</span>
+    [% END %]
 [% END %]
