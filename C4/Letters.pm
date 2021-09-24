@@ -342,6 +342,7 @@ sub SendAlerts {
             ) or return;
 
             # FIXME: This 'default' behaviour should be moved to Koha::Email
+            my $success = try {
             my $mail = Koha::Email->create(
                 {
                     to       => $email,
@@ -359,7 +360,6 @@ sub SendAlerts {
                 $mail->text_body( $letter->{content} );
             }
 
-            my $success = try {
                 $mail->send_or_die({ transport => $library->smtp_server->transport });
             }
             catch {
@@ -493,6 +493,7 @@ sub SendAlerts {
 
         # ... then send mail
         my $library = Koha::Libraries->find( $userenv->{branch} );
+        my $success = try {
         my $mail = Koha::Email->create(
             {
                 to => join( ',', @email ),
@@ -519,7 +520,6 @@ sub SendAlerts {
             $mail->text_body( "" . $letter->{content} );
         }
 
-        my $success = try {
             $mail->send_or_die({ transport => $library->smtp_server->transport });
         }
         catch {
@@ -1359,6 +1359,7 @@ sub _send_message_by_email {
         $branch_returnpath = $library->branchreturnpath;
     }
 
+    try {
     my $email = Koha::Email->create(
         {
             to => $to_address,
@@ -1406,7 +1407,6 @@ sub _send_message_by_email {
       if !$message->{to_address}
       || $message->{to_address} ne $email->email->header('To');
 
-    try {
         $email->send_or_die({ transport => $smtp_server->transport });
 
         _set_message_status(
