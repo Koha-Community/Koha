@@ -1284,7 +1284,7 @@ sub to_api_mapping {
         ccode                    => 'collection_code',
         materials                => 'materials_notes',
         uri                      => 'uri',
-        itype                    => 'item_type',
+        itype                    => 'item_type_id',
         more_subfields_xml       => 'extended_subfields',
         enumchron                => 'serial_issue_number',
         copynumber               => 'copy_number',
