@@ -14,9 +14,7 @@ $h4-font-size: $font-size-base * 1.2;
 $h5-font-size: $font-size-base * 1.1;
 $h6-font-size: $font-size-base;
 
-$input-btn-focus-width: 1px;
-$input-btn-focus-color: #85CA11;
-$input-btn-focus-box-shadow: 0 1px 1px $input-btn-focus-width $input-btn-focus-color;
+$base-theme-color: #548300;
 
 $color: #999999;
 $links: #0074AD;
@@ -37,7 +35,7 @@ $high-contrast-grey: #666666;
 }
 
 @mixin input-focus {
-    border-color: #85CA11;
+    border-color: $base-theme-color;
     box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px rgba(194, 228, 136, .6);
 }
 
@@ -121,29 +119,6 @@ caption {
     text-align: left;
 }
 
-h1 {
-    &#libraryname {
-        background: transparent url( "../images/logo-koha.png" ) no-repeat scroll 0%;
-        border: 0;
-        float: left !important;
-        margin: 0;
-        padding: 0;
-        width: 120px;
-
-        a {
-            border: 0;
-            cursor: pointer;
-            display: block;
-            height: 0 !important;
-            margin: 0;
-            overflow: hidden;
-            padding: 40px 0 0;
-            text-decoration: none;
-            width: 120px;
-        }
-    }
-}
-
 .dropdown-menu-right {
     left: auto;
     right: 0;
@@ -206,11 +181,8 @@ h1 {
 }
 
 .btn-primary {
-    $base-bg: #548300;
-    background-image: linear-gradient(to bottom, lighten(saturate($base-bg, 0.5), 4), $base-bg);
-    background-color: $base-bg;
-    background-position: 0;
-    border: 1px solid darken($base-bg, 5%);
+    background-color: $base-theme-color;
+    border: 1px solid darken($base-theme-color, 10%);
     color: #FFF;
 
     &:link,
@@ -220,15 +192,14 @@ h1 {
 
     &:hover,
     &:active {
-        $base-bg: darken( $base-bg, 2);
-        background-color: $base-bg;
-        border-color: darken($base-bg, 5%);
-        box-shadow: 0 0 0 1px lighten(saturate($base-bg, 0.5), 4);
+        background-color: $base-theme-color;
+        border-color: lighten($base-theme-color, 5%);
+        box-shadow: 0 0 0 1px lighten(saturate($base-theme-color, 0.5), 4);
         color: #FFF;
     }
 
     &:focus {
-        box-shadow: 0 0 0 2px lighten($base-bg, 10%);
+        box-shadow: 0 0 0 2px lighten($base-theme-color, 10%);
     }
 }
 
@@ -296,7 +267,7 @@ select,
 textarea,
 .form-control {
     &:focus {
-        border-color: #85ca11;
+        border-color: $base-theme-color;
         box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(194,228,136,.6)
     }
 }
@@ -317,10 +288,10 @@ textarea,
     vertical-align: middle;
 
     &:hover {
-        color: #005580;
+        color: $links-hover;
 
         &::before {
-            color: #44AE89;
+            color: #338468;
         }
     }
 
@@ -444,7 +415,7 @@ div.dt-button-collection button.dt-button.buttons-columnVisibility.active:not(.d
 }
 
 div.dt-button-collection button.dt-button.buttons-columnVisibility.active:before {
-    color: #538200;
+    color: $base-theme-color;
     content: "\f00c";
     display: inline-block;
     font-family: FontAwesome;
@@ -505,7 +476,7 @@ div.dt-button-collection button.dt-button.buttons-print:not(.disabled):before {
     margin-top: -100px;
     margin-left: -200px;
     background-color: #FFF;
-    border: 2px solid #005580;
+    border: 2px solid $links-hover;
     box-shadow: 3px 3px 8px rgba(0, 0, 0, 0.3);
     border-radius: 3px;
     text-align: center;
@@ -556,7 +527,7 @@ div.dt-button-collection button.dt-button.buttons-print:not(.disabled):before {
 .buttons-renewall {
     &:hover {
         i.fa {
-            color: #44AE89;
+            color: #338468;
         }
     }
 }
@@ -934,7 +905,7 @@ ul {
 }
 
 .close:hover {
-    color: #005580;
+    color: $links-hover;
     filter: inherit;
     font-size: inherit;
     opacity: inherit;
@@ -1094,15 +1065,15 @@ button {
                 > a {
                     &:focus {
                         .caret {
-                            border-bottom-color: #85CA11;
-                            border-top-color: #85CA11;
+                            border-bottom-color: $base-theme-color;
+                            border-top-color: $base-theme-color;
                         }
                     }
 
                     &:hover {
                         .caret {
-                            border-bottom-color: #85CA11;
-                            border-top-color: #85CA11;
+                            border-bottom-color: $base-theme-color;
+                            border-top-color: $base-theme-color;
                         }
                     }
                 }
@@ -1139,11 +1110,11 @@ button {
                 text-shadow: none;
 
                 &:hover {
-                    color: #85CA11;
+                    color: $base-theme-color;
                 }
 
                 &:focus {
-                    color: #85CA11;
+                    color: $base-theme-color;
                 }
             }
 
@@ -1151,15 +1122,15 @@ button {
                 > a {
                     &:hover {
                         .caret {
-                            border-bottom-color: #85CA11;
-                            border-top-color: #85CA11;
+                            border-bottom-color: $base-theme-color;
+                            border-top-color: $base-theme-color;
                         }
                     }
 
                     &:focus {
                         .caret {
-                            border-bottom-color: #85CA11;
-                            border-top-color: #85CA11;
+                            border-bottom-color: $base-theme-color;
+                            border-top-color: $base-theme-color;
                         }
                     }
                 }
@@ -1167,15 +1138,15 @@ button {
                 &.open {
                     > .dropdown-toggle {
                         background-color: transparent;
-                        color: #85CA11;
+                        color: $base-theme-color;
 
                         .caret {
-                            border-bottom-color: #85CA11;
-                            border-top-color: #85CA11;
+                            border-bottom-color: $base-theme-color;
+                            border-top-color: $base-theme-color;
 
                             &:hover {
-                                border-bottom-color: #85CA11;
-                                border-top-color: #85CA11;
+                                border-bottom-color: $base-theme-color;
+                                border-top-color: $base-theme-color;
                             }
                         }
                     }
@@ -1233,7 +1204,7 @@ button {
 
         a {
             &:hover {
-                color: #85CA11;
+                color: $base-theme-color;
             }
         }
 
@@ -1275,10 +1246,10 @@ button {
         > a {
             font-size: 90%;
             &:hover {
-                background: #85ca11 none;
+                background: $base-theme-color none;
             }
             &:focus {
-            background: #85ca11 none;
+                background: $base-theme-color none;
             }
         }
     }
