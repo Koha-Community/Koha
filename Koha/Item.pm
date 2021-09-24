@@ -1232,6 +1232,23 @@ sub public_read_list {
     ];
 }
 
+=head3 to_api
+
+Overloaded to_api method to ensure item-level itypes is adhered to.
+
+=cut
+
+sub to_api {
+    my ($self, $params) = @_;
+
+    my $response = $self->SUPER::to_api($params);
+    my $overrides = {};
+
+    $overrides->{effective_item_type_id} = $self->effective_itemtype;
+
+    return { %$response, %$overrides };
+}
+
 =head3 to_api_mapping
 
 This method returns the mapping for representing a Koha::Item object
