@@ -43,10 +43,9 @@
     [% END %]
 [% END %]
 
-[% IF ( item.notforloan || item.effective_itemtype.notforloan ) %]
+[% IF ( item.not_for_loan ) %]
     [% SET itemavailable = 0 %]
-    [% SET notforloan = item.notforloan || item.effective_itemtype.notforloan %]
-    [% notforloan_description = AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.notforloan', authorised_value => notforloan ) %]
+    [% notforloan_description = AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.notforloan', authorised_value => item.not_for_loan ) %]
     [% IF notforloan_description %]
         <span class="item-status notforloan">[% notforloan_description | html %]</span>
     [% ELSE %]

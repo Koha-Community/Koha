@@ -1835,6 +1835,19 @@ sub item_type {
     return shift->itemtype;
 }
 
+=head3 not_for_loan
+
+  my $nfl = $item->not_for_loan;
+
+Returns the effective not for loan status of the item
+
+=cut
+
+sub not_for_loan {
+    my ($self) = @_;
+    return $self->notforloan ? $self->notforloan : $self->itemtype->notforloan;
+}
+
 =head3 orders
 
   my $orders = $item->orders();
