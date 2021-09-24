@@ -966,15 +966,15 @@ sub _availability {
     my $itemcallnumber = $item->itemcallnumber;
 
     if ( $item->notforloan ) {
-        return ( $biblionumber, 'not available', 'Not for loan', $location );
+        return ( $biblionumber, 'not available', 'Not for loan', $location, $itemcallnumber );
     } elsif ( $item->onloan ) {
-        return ( $biblionumber, 'not available', 'Checked out', $location );
+        return ( $biblionumber, 'not available', 'Checked out', $location, $itemcallnumber );
     } elsif ( $item->itemlost ) {
-        return ( $biblionumber, 'not available', 'Item lost', $location );
+        return ( $biblionumber, 'not available', 'Item lost', $location, $itemcallnumber );
     } elsif ( $item->withdrawn ) {
-        return ( $biblionumber, 'not available', 'Item withdrawn', $location );
+        return ( $biblionumber, 'not available', 'Item withdrawn', $location, $itemcallnumber );
     } elsif ( $item->damaged ) {
-        return ( $biblionumber, 'not available', 'Item damaged', $location );
+        return ( $biblionumber, 'not available', 'Item damaged', $location, $itemcallnumber );
     } else {
         return ( $biblionumber, 'available', undef, $location, $itemcallnumber );
     }
