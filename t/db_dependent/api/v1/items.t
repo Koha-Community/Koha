@@ -101,7 +101,7 @@ subtest 'list() tests' => sub {
 
 subtest 'get() tests' => sub {
 
-    plan tests => 9;
+    plan tests => 17;
 
     $schema->storage->txn_begin;
 
@@ -138,6 +138,26 @@ subtest 'get() tests' => sub {
     $t->get_ok( "//$userid:$password@/api/v1/items/" . $non_existent_code )
       ->status_is(404)
       ->json_is( '/error' => 'Item not found' );
+
+    t::lib::Mocks::mock_preference( 'item-level_itypes', 0 );
+
+    my $biblio = $builder->build_sample_biblio;
+    my $itype =
+      $builder->build_object( { class => 'Koha::ItemTypes' } )->itemtype;
+    $item = $builder->build_sample_item(
+        { biblionumber => $biblio->biblionumber, itype => $itype } );
+
+    $t->get_ok( "//$userid:$password@/api/v1/items/" . $item->itemnumber )
+      ->status_is( 200, 'SWAGGER3.2.2' )
+      ->json_is( '/item_type_id' => $itype, 'item-level_itypes:0' )
+      ->json_is( '/effective_item_type_id' => $biblio->itemtype, 'item-level_itypes:0' );
+
+    t::lib::Mocks::mock_preference( 'item-level_itypes', 1 );
+
+    $t->get_ok( "//$userid:$password@/api/v1/items/" . $item->itemnumber )
+      ->status_is( 200, 'SWAGGER3.2.2' )
+      ->json_is( '/item_type_id' => $itype, 'item-level_itype:1' )
+      ->json_is( '/effective_item_type_id' => $itype, 'item-level_itypes:1' );
 
     $schema->storage->txn_rollback;
 };
