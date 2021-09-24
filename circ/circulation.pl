@@ -226,25 +226,8 @@ if ($findborrower) {
     if ( $patron ) {
         $borrowernumber = $patron->borrowernumber;
     } else {
-        my $dt_params = { iDisplayLength => -1 };
-        my $results = C4::Utils::DataTables::Members::search(
-            {
-                searchmember => $findborrower,
-                searchtype   => $searchtype,
-                dt_params    => $dt_params,
-            }
-        );
-        my $borrowers = $results->{patrons};
-        if ( scalar @$borrowers == 1 ) {
-            $borrowernumber = $borrowers->[0]->{borrowernumber};
-            $query->param( 'borrowernumber', $borrowernumber );
-            $query->param( 'barcode',           '' );
-        } elsif ( @$borrowers ) {
-            $template->param( borrowers => $borrowers );
-        } else {
-            $query->param( 'findborrower', '' );
-            $message = "'$findborrower'";
-        }
+        print $query->redirect( "/cgi-bin/koha/members/member.pl?quicksearch=1&circsearch=1&searchmember=" . $findborrower );
+        exit;
     }
 }
 

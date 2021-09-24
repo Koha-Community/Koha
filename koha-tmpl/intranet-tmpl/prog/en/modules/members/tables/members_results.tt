@@ -16,7 +16,7 @@
                     "<input type='checkbox' id='check[% data.borrowernumber | html %]' class='selection' name='borrowernumber' value='[% data.borrowernumber | html %]' />",
                 [% END %]
                 "dt_cardnumber":
-                    "<label for='check[% data.borrowernumber | html %]'>[% data.cardnumber | html | $To %]</label>",
+                "<label for='check[% data.borrowernumber | html %]'>[% data.cardnumber | html | $To %]</br><a class='btn' href='/cgi-bin/koha/circ/circulation.pl?borrowernumber=[% data.borrowernumber | html %]'>Check out</a></label>",
                 "dt_name":
                     "<a href=\"/cgi-bin/koha/members/moremember.pl?borrowernumber=[% data.borrowernumber | html %]\" class=\"patron_preview\" data-borrowernumber=\"[% data.borrowernumber | html %]\" style='white-space:nowrap'>[% INCLUDE 'patron-title.inc' borrowernumber = data.borrowernumber category_type = data.category_type firstname = data.firstname surname = data.surname othernames = data.othernames invert_name = 1 | $To %]</a><br /><div class='address'><ul>[%~ INCLUDE 'display-address-style' patron=data no_line_break=1 | $To ~%][% IF data.email %]<li>Email: <a href='mailto:[% data.email | html | $To %]'>[% data.email | html | $To %]</a></li>[% END %]</ul></div>",
     "dt_dateofbirth":

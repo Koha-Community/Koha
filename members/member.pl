@@ -43,8 +43,9 @@ my $theme = $input->param('theme') || "default";
 
 my $searchmember = $input->param('searchmember');
 my $quicksearch = $input->param('quicksearch') // 0;
+my $circsearch = $input->param('circsearch') // 0;
 
-if ( $quicksearch and $searchmember ) {
+if ( $quicksearch and $searchmember && !$circsearch ) {
     my $branchcode;
     if ( C4::Context::only_my_library ) {
         my $userenv = C4::Context->userenv;
@@ -66,7 +67,7 @@ my $searchfieldstype = $input->param('searchfieldstype') || 'standard';
 
 $template->param( 'alphabet' => C4::Context->preference('alphabet') || join ' ', 'A' .. 'Z' );
 
-my $view = $input->request_method() eq "GET" ? "show_form" : "show_results";
+my $view = $input->request_method() eq "GET"  && !$circsearch ? "show_form" : "show_results";
 
 $template->param(
     patron_lists => [ GetPatronLists() ],
@@ -77,6 +78,7 @@ $template->param(
     searchfieldstype    => $searchfieldstype,
     PatronsPerPage      => C4::Context->preference("PatronsPerPage") || 20,
     view                => $view,
+    circsearch          => $circsearch,
 );
 
 output_html_with_http_headers $input, $cookie, $template->output;
