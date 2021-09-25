@@ -1,9 +1,7 @@
 [% USE raw %]
 
 [% IF ( OpacNav ) %]
-    <div id="opacnav">
-        [% PROCESS koha_news_block news => OpacNav %]
-    </div>
+    [% PROCESS koha_news_block news => OpacNav %]
 [% END %]
 
 [% IF IsPatronPage %]
