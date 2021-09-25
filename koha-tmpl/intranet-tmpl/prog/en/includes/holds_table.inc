@@ -22,6 +22,7 @@
         <th>&nbsp;</th>
     </tr>
     [%- SET first_priority = 0 -%]
+    [%- SET found_holds = 0 -%]
     [%- SET last_priority  = holds.last.priority -%]
 
     [% BLOCK priority_dropdown %]
