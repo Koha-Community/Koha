@@ -657,7 +657,6 @@ foreach my $biblionumber (@biblionumbers) {
         } @reserves
       )
     {
-        my $priority = $res->priority();
         my %reserve;
         if ( $res->is_found() ) {
             $reserve{'holdingbranch'} = $res->item()->holdingbranch();
