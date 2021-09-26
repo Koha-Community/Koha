@@ -247,7 +247,7 @@
                                             <strong>Too many holds: </strong> Patron can only place a maximum of [% maxreserves | html %] total holds.
                                         </div>
                                     [% END %]
-                                    [% IF ( member.expiry ) %]
+                                    [% IF ( patron.is_expired ) %]
                                         <div>
                                             <i class="fa fa-warning"></i>
                                             <strong>Account has expired</strong>
@@ -259,7 +259,7 @@
                                             <strong>Patron has restrictions</strong>
                                         </div>
                                     [% END %]
-                                    [% IF amount_outstanding && Koha.Preference('maxoutstanding') && amount_outstanding > Koha.Preference('maxoutstanding') %]
+                                    [% IF member.amount_outstanding && Koha.Preference('maxoutstanding') && member.amount_outstanding > Koha.Preference('maxoutstanding') %]
                                         <div>
                                             <i class="fa fa-warning"></i>
                                             <strong>Patron has outstanding fines: [% member.amount_outstanding | $Price %]</strong>
