@@ -385,10 +385,10 @@
                     </div>
                 [% END # /IF ( exceeded_maxreserves || ... %]
 
-                [% IF ( expiry || diffbranch || patron.is_debarred || ( amount_outstanding && Koha.Preference('maxoutstanding') && amount_outstanding > Koha.Preference('maxoutstanding') ) ) %]
+                [% IF ( patron.is_expired || diffbranch || patron.is_debarred || ( amount_outstanding && Koha.Preference('maxoutstanding') && amount_outstanding > Koha.Preference('maxoutstanding') ) ) %]
                     <div class="dialog message">
                         <ul>
-                            [% IF ( expiry ) %]
+                            [% IF ( patron.is_expired ) %]
                                 <li><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% patron.borrowernumber | uri %]">[% patron.firstname | html %] [% patron.surname | html %]</a>: <strong>Account has expired</strong></li>
                             [% END %]
 
@@ -405,7 +405,7 @@
                             [% END %]
                         </ul> <!-- /.dialog.message -->
                     </div>
-                [% END # /IF expiry || diffbranch ... %]
+                [% END # /IF patron.is_expired || diffbranch ... %]
 
                 [% IF ( messageborrower ) %]
                     <div class="dialog alert">

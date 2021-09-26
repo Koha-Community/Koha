@@ -226,14 +226,6 @@ if ($borrowernumber_hold && !$action) {
         );
     }
 
-    # we check the date expiry of the borrower (only if there is an expiry date, otherwise, set to 1 (warn)
-    my $expiry_date = $patron->dateexpiry;
-    my $expiry = 0; # flag set if patron account has expired
-    if ($expiry_date and
-        Date_to_Days(split /-/,$date) > Date_to_Days(split /-/,$expiry_date)) {
-        $expiry = 1;
-    }
-
     # check if the borrower make the reserv in a different branch
     if ( $patron->branchcode ne C4::Context->userenv->{'branch'} ) {
         $diffbranch = 1;
@@ -242,7 +234,6 @@ if ($borrowernumber_hold && !$action) {
     my $amount_outstanding = $patron->account->balance;
     $template->param(
                 patron              => $patron,
-                expiry              => $expiry,
                 diffbranch          => $diffbranch,
                 messages            => $messages,
                 warnings            => $warnings,
