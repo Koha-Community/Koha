@@ -378,12 +378,6 @@ if ($op eq ""){
             my @serials      = $input->multi_param('serial');
             my @ind_tag   = $input->multi_param('ind_tag');
             my @indicator = $input->multi_param('indicator');
-            my $item;
-            push @{ $item->{tags} },         $tags[0];
-            push @{ $item->{subfields} },    $subfields[0];
-            push @{ $item->{field_values} }, $field_values[0];
-            push @{ $item->{ind_tag} },      $ind_tag[0];
-            push @{ $item->{indicator} },    $indicator[0];
             my $xml = TransformHtmlToXml( \@tags, \@subfields, \@field_values, \@indicator, \@ind_tag );
             my $record = MARC::Record::new_from_xml( $xml, 'UTF-8' );
             for (my $qtyloop=1;$qtyloop <= $c_quantity;$qtyloop++) {
