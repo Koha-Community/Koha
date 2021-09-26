@@ -117,9 +117,6 @@ if ($op eq "action") {
     my @replaces  = $input->multi_param('regex_replace');
     my @modifiers = $input->multi_param('regex_modifiers');
     my @disabled  = $input->multi_param('disable_input');
-    # build indicator hash.
-    my @ind_tag   = $input->multi_param('ind_tag');
-    my @indicator = $input->multi_param('indicator');
 
     # Is there something to modify ?
     # TODO : We shall use this var to warn the user in case no modification was done to the items
@@ -131,7 +128,7 @@ if ($op eq "action") {
     #initializing values for updates
     my (  $itemtagfield,   $itemtagsubfield) = &GetMarcFromKohaField( "items.itemnumber" );
     if ($values_to_modify){
-        my $xml = TransformHtmlToXml(\@tags,\@subfields,\@values,\@indicator,\@ind_tag, 'ITEM');
+        my $xml = TransformHtmlToXml(\@tags,\@subfields,\@values,undef,undef, 'ITEM');
         $marcitem = MARC::Record::new_from_xml($xml, 'UTF-8');
     }
     if ($values_to_blank){

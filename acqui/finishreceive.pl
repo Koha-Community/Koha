@@ -139,8 +139,6 @@ if ($quantityrec > $origquantityrec ) {
         my @field_values = $input->multi_param('field_value');
         my @serials      = $input->multi_param('serial');
         my @itemid       = $input->multi_param('itemid');
-        my @ind_tag      = $input->multi_param('ind_tag');
-        my @indicator    = $input->multi_param('indicator');
         #Rebuilding ALL the data for items into a hash
         # parting them on $itemid.
         my %itemhash;
@@ -153,16 +151,14 @@ if ($quantityrec > $origquantityrec ) {
             push @{$itemhash{$itemid[$i]}->{'tags'}},$tags[$i];
             push @{$itemhash{$itemid[$i]}->{'subfields'}},$subfields[$i];
             push @{$itemhash{$itemid[$i]}->{'field_values'}},$field_values[$i];
-            push @{$itemhash{$itemid[$i]}->{'ind_tag'}},$ind_tag[$i];
-            push @{$itemhash{$itemid[$i]}->{'indicator'}},$indicator[$i];
         }
         my $new_order = Koha::Acquisition::Orders->find( $new_ordernumber );
         foreach my $item (keys %itemhash){
             my $xml = TransformHtmlToXml( $itemhash{$item}->{'tags'},
                                           $itemhash{$item}->{'subfields'},
                                           $itemhash{$item}->{'field_values'},
-                                          $itemhash{$item}->{'indicator'},
-                                          $itemhash{$item}->{'ind_tag'},
+                                          undef,
+                                          undef,
                                           'ITEM' );
             my $record=MARC::Record::new_from_xml($xml, 'UTF-8');
             my (undef,$bibitemnum,$itemnumber) = AddItemFromMarc($record,$biblionumber);

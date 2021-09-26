@@ -376,9 +376,7 @@ if ($op eq ""){
             my @subfields    = $input->multi_param('subfield');
             my @field_values = $input->multi_param('field_value');
             my @serials      = $input->multi_param('serial');
-            my @ind_tag   = $input->multi_param('ind_tag');
-            my @indicator = $input->multi_param('indicator');
-            my $xml = TransformHtmlToXml( \@tags, \@subfields, \@field_values, \@indicator, \@ind_tag );
+            my $xml = TransformHtmlToXml( \@tags, \@subfields, \@field_values );
             my $record = MARC::Record::new_from_xml( $xml, 'UTF-8' );
             for (my $qtyloop=1;$qtyloop <= $c_quantity;$qtyloop++) {
                 my ( $biblionumber, $bibitemnum, $itemnumber ) = AddItemFromMarc( $record, $biblionumber );

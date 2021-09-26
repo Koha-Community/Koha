@@ -285,8 +285,6 @@ if ( $op and $op eq 'serialchangestatus' ) {
         my @serials      = $query->multi_param('serial');
         my @bibnums      = $query->multi_param('bibnum');
         my @itemid       = $query->multi_param('itemid');
-        my @ind_tag      = $query->multi_param('ind_tag');
-        my @indicator    = $query->multi_param('indicator');
         my @num_copies   = $query->multi_param('number_of_copies');
 
         #Rebuilding ALL the data for items into a hash
@@ -313,8 +311,6 @@ if ( $op and $op eq 'serialchangestatus' ) {
             push @{ $itemhash{ $itemid[$i] }->{'subfields'} }, $subfields[$i];
             push @{ $itemhash{ $itemid[$i] }->{'field_values'} },
               $field_values[$i];
-            push @{ $itemhash{ $itemid[$i] }->{'ind_tag'} },   $ind_tag[$i];
-            push @{ $itemhash{ $itemid[$i] }->{'indicator'} }, $indicator[$i];
         }
         foreach my $item ( keys %itemhash ) {
 
@@ -334,8 +330,8 @@ if ( $op and $op eq 'serialchangestatus' ) {
                     $itemhash{$item}->{'tags'},
                     $itemhash{$item}->{'subfields'},
                     $itemhash{$item}->{'field_values'},
-                    $itemhash{$item}->{'indicator'},
-                    $itemhash{$item}->{'ind_tag'}
+                    undef,
+                    undef
                 );
 
                 # warn $xml;
