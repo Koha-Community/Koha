@@ -21,7 +21,7 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use Test::More tests => 13;
+use Test::More tests => 14;
 use Test::Exception;
 use Test::MockObject;
 use Test::MockModule;
@@ -110,6 +110,56 @@ subtest 'Test hold_patron_bcode' => sub {
     plan tests => 2;
     $C4::SIP::Sip::protocol_version = 2;
     test_hold_patron_bcode();
+    $schema->storage->txn_rollback;
+};
+
+subtest 'UseLocationAsAQInSIP syspref tests' => sub {
+    plan tests => 2;
+
+    my $schema = Koha::Database->new->schema;
+    $schema->storage->txn_begin;
+
+    my $builder = t::lib::TestBuilder->new();
+
+    my $branchcode = $builder->build({ source => 'Branch' })->{branchcode};
+    my $branchcode_permanent_location = $builder->build({ source => 'Branch' })->{branchcode};
+
+    my $mocks = create_mocks( \$branchcode, \$branchcode_permanent_location );
+
+    t::lib::Mocks::mock_preference('UseLocationAsAQInSIP', 0);
+
+     my $item = $builder->build_sample_item(
+        {
+            damaged       => 0,
+            withdrawn     => 0,
+            itemlost      => 0,
+            restricted    => 0,
+            homebranch    => $branchcode,
+            holdingbranch => $branchcode,
+            permanent_location => $branchcode_permanent_location
+        }
+    );
+
+    my $sip_item = C4::SIP::ILS::Item->new( $item->barcode );
+    is( $sip_item->permanent_location, $branchcode, "When UseLocationAsAQInSIP is not set SIP item has permanent_location set to value of homebranch" );
+
+    t::lib::Mocks::mock_preference('UseLocationAsAQInSIP', 1);
+
+    $item = $builder->build_sample_item(
+        {
+            damaged       => 0,
+            withdrawn     => 0,
+            itemlost      => 0,
+            restricted    => 0,
+            homebranch    => $branchcode,
+            holdingbranch => $branchcode,
+            permanent_location => $branchcode_permanent_location
+        }
+    );
+
+    $sip_item = C4::SIP::ILS::Item->new( $item->barcode );
+    is( $sip_item->permanent_location, $branchcode_permanent_location, "When UseLocationAsAQInSIP is set SIP item has permanent_location set to value of item permanent_location" );
+
     $schema->storage->txn_rollback;
 };
 
