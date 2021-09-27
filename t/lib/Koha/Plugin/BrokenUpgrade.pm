@@ -16,12 +16,26 @@ our $metadata = {
     version         => $VERSION,
 };
 
+=head1 METHODS
+
+=head2 new
+
+Instantiate the plugin
+
+=cut
+
 sub new {
     my ( $class, $args ) = @_;
     $args->{'metadata'} = $metadata;
     my $self = $class->SUPER::new($args);
     return $self;
 }
+
+=head2 upgrade
+
+upgrade method that dies
+
+=cut
 
 sub upgrade {
     die "Why Liz? WHY?";
