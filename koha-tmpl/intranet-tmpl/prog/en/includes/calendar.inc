@@ -47,7 +47,12 @@
                     .addClass("fa fa-fw fa-remove")
                     .attr("aria-hidden", true)
                     .attr("aria-label", _("Clear date") )
-                );
+                ).keydown(function(e) {
+                    var key = (event.keyCode ? event.keyCode : event.which);
+                    if ( key == 40 ) {
+                        instance.set('allowInput',false);
+                    }
+                });
         },
         onClose: function( selectedDates, dateText, instance) {
             validate_date( selectedDates, instance );
@@ -66,6 +71,7 @@
                 validate_date( selectedDates, instance );
             },
         });
+
     });
 </script>
 [% END %]
