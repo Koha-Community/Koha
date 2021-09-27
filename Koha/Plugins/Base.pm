@@ -21,11 +21,14 @@ use Modern::Perl;
 
 use Cwd qw( abs_path );
 use List::Util qw( max );
+use Try::Tiny;
 
 use base qw{Module::Bundled::Files};
 
 use C4::Context;
 use C4::Output qw( output_with_http_headers );
+
+use Koha::Exceptions::Plugin;
 
 =head1 NAME
 
@@ -48,21 +51,31 @@ sub new {
 
     ## Run the installation method if it exists and hasn't been run before
     if ( $self->can('install') && !$self->retrieve_data('__INSTALLED__') ) {
-        if ( $self->install() ) {
-            $self->store_data( { '__INSTALLED__' => 1, '__ENABLED__' => 1 } );
-            if ( my $version = $plugin_version ) {
-                $self->store_data({ '__INSTALLED_VERSION__' => $version });
+        try {
+            if ( $self->install() ) {
+                $self->store_data( { '__INSTALLED__' => 1, '__ENABLED__' => 1 } );
+                if ( my $version = $plugin_version ) {
+                    $self->store_data({ '__INSTALLED_VERSION__' => $version });
+                }
+            } else {
+                warn "Plugin $class failed during installation!";
             }
-        } else {
-            warn "Plugin $class failed during installation!";
         }
+        catch {
+            Koha::Exceptions::Plugin::InstallDied->throw( plugin_class => $class );
+        };
     } elsif ( $self->can('upgrade') ) {
         if ( _version_compare( $plugin_version, $database_version ) == 1 ) {
-            if ( $self->upgrade() ) {
-                $self->store_data({ '__INSTALLED_VERSION__' => $plugin_version });
-            } else {
-                warn "Plugin $class failed during upgrade!";
+            try {
+                if ( $self->upgrade() ) {
+                    $self->store_data({ '__INSTALLED_VERSION__' => $plugin_version });
+                } else {
+                    warn "Plugin $class failed during upgrade!";
+                }
             }
+            catch {
+                Koha::Exceptions::Plugin::UpgradeDied->throw( plugin_class => $class );
+            };
         }
     } elsif ( $plugin_version ne $database_version ) {
         $self->store_data({ '__INSTALLED_VERSION__' => $plugin_version });
