@@ -28,7 +28,7 @@
         plugins : "autoresize table hr link image charmap lists code emoticons",
         toolbar : [
             "formatselect | bold italic | cut copy paste | alignleft aligncenter alignright | outdent indent | image link unlink anchor cleanup hr",
-            "table | bullist numlist | undo redo | removeformat | emoticons charmap | forecolor backcolor | code visualaid help"
+            "table | bullist numlist | undo redo | removeformat | emoticons charmap | forecolor backcolor | code"
         ],
         init_instance_callback: function (editor) {
             editor.on('Dirty', function (e) {
