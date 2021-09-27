@@ -25,7 +25,8 @@ use File::Temp qw( tempdir tempfile );
 use FindBin qw($Bin);
 use Module::Load::Conditional qw(can_load);
 use Test::MockModule;
-use Test::More tests => 55;
+use Test::More tests => 58;
+use Test::Warn;
 
 use C4::Context;
 use Koha::Database;
@@ -47,7 +48,8 @@ BEGIN {
 my $schema = Koha::Database->new->schema;
 
 subtest 'call() tests' => sub {
-    plan tests => 3;
+
+    plan tests => 4;
 
     $schema->storage->txn_begin;
     # Temporarily remove any installed plugins data
@@ -55,7 +57,13 @@ subtest 'call() tests' => sub {
 
     t::lib::Mocks::mock_config('enable_plugins', 1);
     my $plugins = Koha::Plugins->new({ enable_plugins => 1 });
-    my @plugins = $plugins->InstallPlugins;
+
+    my @plugins;
+
+    warnings_are
+     { @plugins = $plugins->InstallPlugins; }
+     [ "Calling 'install' died for plugin Koha::Plugin::BrokenInstall", "Calling 'upgrade' died for plugin Koha::Plugin::BrokenUpgrade" ];
+
     foreach my $plugin (@plugins) {
         $plugin->enable();
     }
@@ -80,14 +88,16 @@ subtest 'call() tests' => sub {
 
 subtest 'GetPlugins() tests' => sub {
 
-    plan tests => 2;
+    plan tests => 3;
 
     $schema->storage->txn_begin;
     # Temporarily remove any installed plugins data
     Koha::Plugins::Methods->delete;
 
     my $plugins = Koha::Plugins->new({ enable_plugins => 1 });
-    $plugins->InstallPlugins;
+
+    warnings_are { $plugins->InstallPlugins; }
+    [ "Calling 'install' died for plugin Koha::Plugin::BrokenInstall", "Calling 'upgrade' died for plugin Koha::Plugin::BrokenUpgrade" ];
 
     my @plugins = $plugins->GetPlugins({ method => 'report', all => 1 });
 
@@ -148,7 +158,8 @@ subtest 'is_enabled() tests' => sub {
 $schema->storage->txn_begin;
 Koha::Plugins::Methods->delete;
 
-Koha::Plugins->new( { enable_plugins => 1 } )->InstallPlugins();
+warnings_are { Koha::Plugins->new( { enable_plugins => 1 } )->InstallPlugins(); }
+[ "Calling 'install' died for plugin Koha::Plugin::BrokenInstall", "Calling 'upgrade' died for plugin Koha::Plugin::BrokenUpgrade" ];
 
 ok( Koha::Plugins::Methods->search( { plugin_class => 'Koha::Plugin::Test' } )->count, 'Test plugin methods added to database' );
 is( Koha::Plugins::Methods->search({ plugin_class => 'Koha::Plugin::Test', plugin_method => '_private_sub' })->count, 0, 'Private methods are skipped' );
@@ -262,7 +273,9 @@ for my $pass ( 1 .. 2 ) {
 
     ok( -f $plugins_dir . "/Koha/Plugin/Com/ByWaterSolutions/KitchenSink.pm", "KitchenSink plugin installed successfully" );
     $INC{$pm_path} = $full_pm_path; # FIXME I do not really know why, but if this is moved before the $plugin constructor, it will fail with Can't locate object method "new" via package "Koha::Plugin::Com::ByWaterSolutions::KitchenSink"
-    Koha::Plugins->new( { enable_plugins => 1 } )->InstallPlugins();
+    warnings_are
+        { Koha::Plugins->new( { enable_plugins => 1 } )->InstallPlugins(); }
+        [ "Calling 'install' died for plugin Koha::Plugin::BrokenInstall", "Calling 'upgrade' died for plugin Koha::Plugin::BrokenUpgrade" ];
     ok( -f $full_pm_path, "Koha::Plugins::Handler::delete works correctly (pass $pass)" );
     Koha::Plugins::Handler->delete({ class => "Koha::Plugin::Com::ByWaterSolutions::KitchenSink", enable_plugins => 1 });
     my $sth = C4::Context->dbh->table_info( undef, undef, $table, 'TABLE' );
