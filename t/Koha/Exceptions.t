@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 8;
+use Test::More tests => 9;
 use Test::MockObject;
 use Test::Exception;
 
@@ -308,4 +308,31 @@ subtest 'Koha::Exceptions::Patron tests' => sub {
         'Koha::Exceptions::Patron::MissingMandatoryExtendedAttribute',
         'Exception is thrown :-D';
     is( "$@", 'Manual message exception', 'Exception not stringified if manually passed' );
+};
+
+subtest 'Koha::Exceptions::Plugin tests' => sub {
+
+    plan tests => 5;
+
+    use_ok("Koha::Exceptions::Plugin");
+
+    my $plugin_class = 'yahey';
+
+    throws_ok
+        { Koha::Exceptions::Plugin::InstallDied->throw(
+            plugin_class => $plugin_class ); }
+        'Koha::Exceptions::Plugin::InstallDied',
+        'Exception is thrown :-D';
+
+    # stringify the exception
+    is( "$@", "Calling 'install' died for plugin $plugin_class", 'Exception stringified correctly' );
+
+    throws_ok
+        { Koha::Exceptions::Plugin::UpgradeDied->throw(
+            plugin_class => $plugin_class ); }
+        'Koha::Exceptions::Plugin::UpgradeDied',
+        'Exception is thrown :-D';
+
+    # stringify the exception
+    is( "$@", "Calling 'upgrade' died for plugin $plugin_class", 'Exception stringified correctly' );
 };

@@ -31,7 +31,17 @@ use Exception::Class (
         isa         => 'Koha::Exceptions::Plugin',
         description => 'Required method is missing',
         fields      =>  ['plugin_name','method']
-    }
+    },
+    'Koha::Exceptions::Plugin::InstallDied' => {
+        isa         => 'Koha::Exceptions::Plugin',
+        description => 'The plugin died on install',
+        fields      => ['plugin_class'],
+    },
+    'Koha::Exceptions::Plugin::UpgradeDied' => {
+        isa         => 'Koha::Exceptions::Plugin',
+        description => 'The plugin died on upgrade',
+        fields      => ['plugin_class'],
+    },
 );
 
 sub full_message {
@@ -42,6 +52,12 @@ sub full_message {
     unless ( $msg) {
         if ( $self->isa('Koha::Exceptions::Plugin::MissingMethod') ) {
             $msg = sprintf("Cannot use plugin (%s) because the it doesn't implement the '%s' method which is required.", $self->plugin_name, $self->method );
+        }
+        elsif ( $self->isa('Koha::Exceptions::Plugin::InstallDied') ) {
+            $msg = sprintf("Calling 'install' died for plugin %s", $self->plugin_class);
+        }
+        elsif ( $self->isa('Koha::Exceptions::Plugin::UpgradeDied') ) {
+            $msg = sprintf("Calling 'upgrade' died for plugin %s", $self->plugin_class);
         }
     }
 
@@ -70,6 +86,30 @@ method and it doesn't.
 =item plugin_name: the plugin name for display purposes
 
 =item method: the missing method
+
+=back
+
+=head2 Koha::Exceptions::Plugin::InstallDied
+
+Exception to be used when a plugin 'install' method explodes.
+
+=head3 Parameters
+
+=over
+
+=item plugin_class: the plugin class
+
+=back
+
+=head2 Koha::Exceptions::Plugin::UpgradeDied
+
+Exception to be used when a plugin 'upgrade' method explodes.
+
+=head3 Parameters
+
+=over
+
+=item plugin_class: the plugin class
 
 =back
 
