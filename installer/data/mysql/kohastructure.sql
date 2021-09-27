@@ -5188,7 +5188,8 @@ DROP TABLE IF EXISTS `user_permissions`;
 CREATE TABLE `user_permissions` (
   `borrowernumber` int(11) NOT NULL DEFAULT 0,
   `module_bit` int(11) NOT NULL DEFAULT 0,
-  `code` varchar(64) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `code` varchar(64) COLLATE utf8mb4_unicode_ci NOT NULL,
+  PRIMARY KEY (`borrowernumber`,`module_bit`,`code`),
   KEY `user_permissions_ibfk_1` (`borrowernumber`),
   KEY `user_permissions_ibfk_2` (`module_bit`,`code`),
   CONSTRAINT `user_permissions_ibfk_1` FOREIGN KEY (`borrowernumber`) REFERENCES `borrowers` (`borrowernumber`) ON DELETE CASCADE ON UPDATE CASCADE,
