@@ -32,10 +32,10 @@
             <a href="/cgi-bin/koha/tools/tools-home.pl">Tools</a>
         </li>
 
-        [% IF op == 'add_form' %]
             <li>
                 <a href="/cgi-bin/koha/tools/additional-contents.pl">Additional contents</a>
             </li>
+        [% IF op == 'add_form' %]
             <li>
                 [% IF category == 'news' %]
                     <a href="/cgi-bin/koha/tools/additional-contents.pl?category=news">News</a>
@@ -55,11 +55,15 @@
         [% ELSE %]
             <li>
                 <a href="#" aria-current="page">
-                    Additional contents
-                    ([% IF category == 'news' %]News[% ELSE %]HTML customizations[% END %])
+                    [% IF category == 'news' %]
+                        News
+                    [% ELSE %]
+                        HTML customizations
+                    [% END %]
                 </a>
             </li>
         [% END %]
+
     </ol>
 </nav>
 
