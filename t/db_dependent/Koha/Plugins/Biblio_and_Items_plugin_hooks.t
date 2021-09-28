@@ -71,12 +71,13 @@ subtest 'after_biblio_action() and after_item_action() hooks tests' => sub {
             qr/after_item_action called with action: modify, ref: Koha::Item item_id defined: yes itemnumber defined: yes/,
             'ModItem calls the hook with action=modify';
 
+    my $itemnumber = $item->id;
     warning_like { $item->delete; }
-            qr/after_item_action called with action: delete/,
+            qr/after_item_action called with action: delete, id: $itemnumber/,
             'DelItem calls the hook with action=delete, item_id passed';
 
     warning_like { C4::Biblio::DelBiblio( $biblio_id ); }
-            qr/after_biblio_action called with action: delete/,
+            qr/after_biblio_action called with action: delete, id: $biblio_id/,
             'DelBiblio calls the hook with action=delete biblio_id passed';
 
     $schema->storage->txn_rollback;

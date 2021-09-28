@@ -142,7 +142,7 @@ sub after_biblio_action {
         Koha::Exceptions::Exception->throw("after_biblio_action called with action: $action, ref: " . ref($biblio) );
     }
     else {
-        Koha::Exceptions::Exception->throw("after_biblio_action called with action: $action") if $biblio_id;
+        Koha::Exceptions::Exception->throw("after_biblio_action called with action: $action, id: $biblio_id") if $biblio_id;
     }
 }
 
@@ -160,7 +160,7 @@ sub after_item_action {
                                            "itemnumber defined: $itemnumber_defined" );
     }
     else {
-        Koha::Exceptions::Exception->throw("after_item_action called with action: $action" ) if $item_id;
+        Koha::Exceptions::Exception->throw("after_item_action called with action: $action, id: $item_id" ) if $item_id;
     }
 }
 
