@@ -374,19 +374,6 @@ foreach my $biblionumber (@biblionumbers) {
     my $count = Koha::Holds->search( { biblionumber => $biblionumber } )->count();
     my $totalcount = $count;
 
-    # FIXME think @optionloop, is maybe obsolete, or  must be switchable by a systeme preference fixed rank or not
-    # make priorities options
-
-    my @optionloop;
-    for ( 1 .. $count + 1 ) {
-        push(
-             @optionloop,
-             {
-              num      => $_,
-              selected => ( $_ == $count + 1 ),
-             }
-            );
-    }
     # adding a fixed value for priority options
     my $fixedRank = $count+1;
 
@@ -711,7 +698,6 @@ foreach my $biblionumber (@biblionumbers) {
 
     # display infos
     $template->param(
-                     optionloop        => \@optionloop,
                      bibitemloop       => \@bibitemloop,
                      itemdata_enumchron => $itemdata_enumchron,
                      itemdata_ccode    => $itemdata_ccode,
