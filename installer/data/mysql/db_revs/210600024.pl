@@ -6,12 +6,9 @@ return {
     up => sub {
         my ($args) = @_;
         my ($dbh, $out) = @$args{qw(dbh out)};
-        # Do you stuffs here
         $dbh->do(q{
             UPDATE systempreferences SET value = IF(value = 'yes',1,0)
             WHERE variable = 'DefaultHoldExpirationdate';
         });
-        # Print useful stuff here
-        say $out "DefaultHoldExpirationdate values updated";
     },
 }
