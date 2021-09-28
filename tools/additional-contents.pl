@@ -174,7 +174,7 @@ elsif ( $op eq 'add_validate' ) {
 elsif ( $op eq 'delete_confirmed' ) {
     my @ids = $cgi->multi_param('ids');
     my $deleted =
-        map { Koha::AdditionalContents->find($_)->delete() } @ids;
+        eval { Koha::AdditionalContents->search( { idnew => \@ids } )->delete; };
 
     if ( $@ or not $deleted ) {
         push @messages, { type => 'error', code => 'error_on_delete' };
