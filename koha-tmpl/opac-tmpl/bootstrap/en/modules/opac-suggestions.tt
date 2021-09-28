@@ -497,7 +497,7 @@
 
 [% INCLUDE 'opac-bottom.inc' %]
 [% BLOCK jsinclude %]
-[% IF ( Koha.Preference("OPACSuggestionAutoFill") ) %]
+[% IF ( Koha.Preference("OPACSuggestionAutoFill") != 'no' ) %]
     [% Asset.js("js/autofill.js") | $raw %]
 [% END %]
 [% INCLUDE 'datatables.inc' %]
