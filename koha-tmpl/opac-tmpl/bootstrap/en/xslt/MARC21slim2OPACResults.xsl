@@ -1052,12 +1052,15 @@
     <xsl:if test="marc:datafield[@tag=028]">
          <span class="results_summary publisher_number ">
             <span class="label">Publisher number: </span>
-            <xsl:for-each select="marc:datafield[@tag=028]">
-                <xsl:call-template name="subfieldSelect">
-                    <xsl:with-param name="codes">abq</xsl:with-param>
-                    <xsl:with-param name="delimeter"><xsl:text> | </xsl:text></xsl:with-param>
-                </xsl:call-template>
-            </xsl:for-each>
+            <ul class="resource_list">
+                <xsl:for-each select="marc:datafield[@tag=028]">
+                    <li>
+                        <xsl:call-template name="subfieldSelect">
+                            <xsl:with-param name="codes">abq</xsl:with-param>
+                        </xsl:call-template>
+                    </li>
+                </xsl:for-each>
+            </ul>
         </span>
     </xsl:if>
 
@@ -1130,13 +1133,15 @@
     <xsl:if test="marc:datafield[@tag=246]">
     <span class="results_summary other_title">
     <span class="label">Other title: </span>
+        <ul class="resource_list">
             <xsl:for-each select="marc:datafield[@tag=246]">
+                <li>
                     <xsl:call-template name="subfieldSelect">
                         <xsl:with-param name="codes">ab</xsl:with-param>
                     </xsl:call-template>
-                <!-- #13386 added separator | -->
-                <xsl:choose><xsl:when test="position()=last()"><xsl:text>.</xsl:text></xsl:when><xsl:otherwise><span class="separator"><xsl:text> | </xsl:text></span></xsl:otherwise></xsl:choose>
+                </li>
             </xsl:for-each>
+        </ul>
 	</span>
     </xsl:if>
     <xsl:if test="marc:datafield[@tag=242]">
@@ -1153,7 +1158,7 @@
     <xsl:if test="marc:datafield[@tag=856]">
          <span class="results_summary online_resources">
 			   <span class="label">Online access: </span>
-                    <ul>
+                    <ul class="resource_list">
                             <xsl:for-each select="marc:datafield[@tag=856]">
                             <xsl:variable name="SubqText"><xsl:value-of select="marc:subfield[@code='q']"/></xsl:variable>
                             <xsl:if test="$OPACURLOpenInNewWindow='0'">

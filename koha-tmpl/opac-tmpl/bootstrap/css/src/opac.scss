@@ -1153,19 +1153,17 @@ div {
     }
 }
 
-.online_resources {
-    ul {
-        display: inline-block;
-        margin: 0 auto;
-        padding-left: 0;
-    }
+.resource_list {
+    display: inline-block;
+    margin: 0 auto;
+    padding-left: 0;
 
     li {
         display: inline-block;
-        white-space: nowrap;
 
         &::after {
-            content: " | ";
+            content: "|";
+            padding: 0 .2em;
         }
 
         &:last-child {
@@ -1173,9 +1171,7 @@ div {
                 content: "";
             }
         }
-
     }
-
 }
 
 #views {
