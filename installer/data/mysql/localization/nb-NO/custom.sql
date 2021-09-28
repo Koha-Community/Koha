@@ -30,3 +30,19 @@ UPDATE systempreferences SET value = '<a href="https://worldcat.org/search?q={TI
 UPDATE systempreferences SET value = '1' WHERE variable = 'CalendarFirstDayOfWeek';
 UPDATE systempreferences SET value = 'A B C D E F G H I J K L M N O P Q R S T U V W X Y Z Æ Ø Å' WHERE variable = 'alphabet';
 UPDATE systempreferences SET value = 'nor' WHERE variable = 'DefaultLanguageField008';
+
+UPDATE `currency` SET `active` = 0;
+INSERT INTO `currency` (`currency`, `rate`, `symbol`, `active`) VALUES ('NOK', 1.0, 'kr', '1');
+
+INSERT INTO z3950servers (host, port, db, userid, password, servername, id, checked, `rank`, syntax, timeout, servertype, encoding) VALUES
+('lx2.loc.gov',210,'LCDB','','','LIBRARY OF CONGRESS',1,0,0,'USMARC',0,'zed','utf8'),
+('z3950.bibsys.no',2100,'BIBSYS','','','BIBSYS',12,1,1,'MARC21',0,'zed','ISO_8859-1'),
+('z3950.nb.no',2100,'Norbok','','','NORBOK',13,0,0,'MARC21',0,'zed','ISO_8859-1'),
+('z3950.nb.no',2100,'Sambok','','','SAMBOK',14,0,0,'MARC21',0,'zed','ISO_8859-1'),
+('z3950.deich.folkebibl.no',210,'data','','','DEICHMAN',15,0,0,'MARC21',0,'zed','ISO_8859-1');
+
+#Insert SRU server
+INSERT INTO z3950servers
+(host, port, db, servername, syntax, encoding, servertype, sru_fields)
+VALUES
+('lx2.loc.gov',210,'LCDB','LIBRARY OF CONGRESS SRU','USMARC','utf8','sru','title=dc.title,isbn=bath.isbn,srchany=cql.anywhere,author=dc.author,issn=bath.issn,subject=dc.subject,stdid=bath.standardIdentifier');
