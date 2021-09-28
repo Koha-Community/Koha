@@ -17,6 +17,25 @@ package Koha::SearchEngine::Zebra::QueryBuilder;
 # You should have received a copy of the GNU General Public License
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
+=head1 NAME
+
+Koha::SearchEngine::Zebra::QueryBuilder - Zebra query objects from user-supplied queries
+Several methods are pass-throughs to C4 methods or other methods here
+
+=head1 DESCRIPTION
+
+This provides the functions that take a user-supplied search query, and
+provides something that can be given to Zebra to get answers.
+
+=head1 SYNOPSIS
+
+    use Koha::SearchEngine::Zebra::QueryBuilder;
+    $builder = Koha::SearchEngine::Zebra::QueryBuilder->new({ index => $index });
+    my $simple_query = $builder->build_query("hello");
+
+=head1 METHODS
+
+=cut
 use Modern::Perl;
 
 use base qw(Class::Accessor);
@@ -24,10 +43,23 @@ use base qw(Class::Accessor);
 use C4::Search;
 use C4::AuthoritiesMarc;
 
+=head2 build_query
+
+    Pass-through to C4::Search::buildQuery
+
+=cut
+
 sub build_query {
     shift;
     C4::Search::buildQuery @_;
 }
+
+=head2 build_query_compat
+
+    my ($error,$query,$simple_query,$query_cgi,$query_desc,$limit,$limit_cgi,$limit_desc,$query_type) =
+        build_query_compat($operators, $operands, $indexes, $limits, $sort_by, $scan, $lang, $params)
+
+=cut
 
 sub build_query_compat {
     my $self = shift;
@@ -55,6 +87,12 @@ sub build_query_compat {
     return ($error,$query,$simple_query,$query_cgi,$query_desc,$limit,$limit_cgi,$limit_desc,$query_type);
 }
 
+=head2 build_authorities_query
+
+    my $query = build_authorities_query( \@query );
+
+=cut
+
 sub build_authorities_query {
     shift;
     return {
@@ -67,6 +105,12 @@ sub build_authorities_query {
         orderby      => $_[6],
     };
 }
+
+=head2 build_authorities_query_compat
+
+   Pass-through to build_authorities_query
+
+=cut
 
 sub build_authorities_query_compat {
     # Pass straight through as well
