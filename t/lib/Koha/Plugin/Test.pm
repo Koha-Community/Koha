@@ -164,6 +164,13 @@ sub after_item_action {
     }
 }
 
+sub after_authority_action {
+    my ( $self, $params ) = @_;
+    my $action = $params->{action} // q{};
+    my $id = $params->{authority_id} // 0;
+    Koha::Exceptions::Exception->throw("after_authority_action called with action: $action, id: $id");
+}
+
 sub after_circ_action {
     my ( $self, $params ) = @_;
 
