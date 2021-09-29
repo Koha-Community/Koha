@@ -158,6 +158,24 @@ sub filter_out_lost {
     return $self->search( $params );
 }
 
+=head3 filter_by_bookable
+
+  my $filterd_items = $items->filter_by_bookable;
+
+Returns a new resultset, containing only those items that are allowed to be booked.
+
+=cut
+
+sub filter_by_bookable {
+    my ($self) = @_;
+
+    return $self->search(
+        {
+            notforloan => [ 0, undef ],
+            withdrawn  => [ 0, undef ]
+        }
+    );
+}
 
 =head3 move_to_biblio
 

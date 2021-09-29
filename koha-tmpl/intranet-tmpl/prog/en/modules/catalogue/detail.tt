@@ -1353,6 +1353,9 @@
 
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'catalog-strings.inc' %]
+    [% INCLUDE 'calendar.inc' %]
+    [% INCLUDE 'select2.inc' %]
+    [% INCLUDE 'js-date-format.inc' %]
     [% Asset.js("js/catalog.js") | $raw %]
     [% Asset.js("js/recalls.js") | $raw %]
     [% Asset.js("js/coce.js") | $raw %]
@@ -1822,6 +1825,7 @@
     [% INCLUDE 'js-biblio-format.inc' %]
     [% Asset.js("js/browser.js") | $raw %]
     [% Asset.js("js/table_filters.js") | $raw %]
+    [% Asset.js("js/place_booking_modal.js") | $raw %]
     <script>
         var browser;
         browser = KOHA.browser('[% searchid | html %]', parseInt(biblionumber, 10));

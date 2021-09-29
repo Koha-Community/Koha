@@ -218,6 +218,7 @@ sub can_article_request {
     return q{};
 }
 
+
 =head3 check_booking
 
   my $bookable =
@@ -236,7 +237,7 @@ sub check_booking {
     my $end_date   = dt_from_string( $params->{end_date} );
     my $booking_id = $params->{booking_id};
 
-    my $bookable_items = $self->items;
+    my $bookable_items = $self->bookable_items;
     my $total_bookable = $bookable_items->count;
 
     my $dtf = Koha::Database->new->schema->storage->datetime_parser;
@@ -303,8 +304,8 @@ sub place_booking {
         {
             start_date     => $params->{start_date},
             end_date       => $params->{end_date},
-            borrowernumber => $patron->borrowernumber,
-            biblionumber   => $self->biblionumber
+            patron_id      => $patron->borrowernumber,
+            biblio_id      => $self->biblionumber
         }
     )->store();
     return $booking;
@@ -594,6 +595,20 @@ sub items {
     push @itemnumbers, @{ $host_itemnumbers };
     return Koha::Items->search({ "me.itemnumber" => { -in => \@itemnumbers } });
 }
+
+=head3 bookable_items
+
+  my $bookable_items = $biblio->bookable_items;
+
+Returns the related Koha::Items resultset filtered to those items that can be booked.
+
+=cut
+
+sub bookable_items {
+    my ($self) = @_;
+    return $self->items->filter_by_bookable;
+}
+
 
 =head3 host_items
 
