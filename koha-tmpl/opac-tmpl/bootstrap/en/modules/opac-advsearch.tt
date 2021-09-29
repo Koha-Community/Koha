@@ -544,7 +544,7 @@ $(document).ready(function() {
 
     $(document).on("click", '.ButtonLess', function(e) {
         e.preventDefault();
-        if($(this).parent().parent().siblings().length < 2 ) {
+        if( $("a.ButtonLess").length <= 2 ) {
            $('.ButtonLess').hide();
         }
         $(this).parent().parent().remove();
