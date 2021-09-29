@@ -100,7 +100,7 @@ my %required = (
 # List of optional arguments
 my %optional = (
     'Describe'            => [],
-    'GetAvailability'     => [ 'return_type', 'return_fmt' ],
+    'GetAvailability'     => [ 'return_type', 'return_fmt', 'language' ],
     'GetRecords'          => ['schema'],
     'GetAuthorityRecords' => ['schema'],
     'LookupPatron'        => ['id_type'],

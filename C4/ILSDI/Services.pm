@@ -956,8 +956,10 @@ sub _availability {
     my ($itemnumber) = @_;
     my $item = Koha::Items->find($itemnumber);
 
+    use Koha::I18N;
+
     unless ( $item ) {
-        return ( undef, 'unknown', 'Error: could not retrieve availability for this ID', undef );
+        return ( undef, __('unknown'), __('Error: could not retrieve availability for this ID'), undef );
     }
 
     my $biblionumber = $item->biblioitemnumber;
@@ -966,17 +968,17 @@ sub _availability {
     my $itemcallnumber = $item->itemcallnumber;
 
     if ( $item->notforloan ) {
-        return ( $biblionumber, 'not available', 'Not for loan', $location, $itemcallnumber );
+        return ( $biblionumber, __('not available'), __('Not for loan'), $location, $itemcallnumber );
     } elsif ( $item->onloan ) {
-        return ( $biblionumber, 'not available', 'Checked out', $location, $itemcallnumber );
+        return ( $biblionumber, __('not available'), __('Checked out'), $location, $itemcallnumber );
     } elsif ( $item->itemlost ) {
-        return ( $biblionumber, 'not available', 'Item lost', $location, $itemcallnumber );
+        return ( $biblionumber, __('not available'), __('Item lost'), $location, $itemcallnumber );
     } elsif ( $item->withdrawn ) {
-        return ( $biblionumber, 'not available', 'Item withdrawn', $location, $itemcallnumber );
+        return ( $biblionumber, __('not available'), __('Item withdrawn'), $location, $itemcallnumber );
     } elsif ( $item->damaged ) {
-        return ( $biblionumber, 'not available', 'Item damaged', $location, $itemcallnumber );
+        return ( $biblionumber, __('not available'), __('Item damaged'), $location, $itemcallnumber );
     } else {
-        return ( $biblionumber, 'available', undef, $location, $itemcallnumber );
+        return ( $biblionumber, __('available'), undef, $location, $itemcallnumber );
     }
 }
 
