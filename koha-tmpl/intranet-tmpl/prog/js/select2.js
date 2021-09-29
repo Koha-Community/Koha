@@ -6,20 +6,20 @@ $.fn.select2.defaults.set("width", "element" );
 // Internationalization
 $.fn.select2.defaults.set("language", {
     errorLoading:function(){ return __("The results could not be loaded"); },
-    inputTooLong:function(e){
-        var n = e.input.length - e.max;
-        return __("Please delete %d character(s)").format(n);
+    inputTooLong:function(args){
+        var n = args.input.length - args.maximum;
+        return __("Please delete %s character(s)").format(n);
     },
-    inputTooShort:function(e){
-        var n = e.min - e.input.length;
-        return __("Please enter %n or more characters").format(n);
+    inputTooShort:function(args){
+        var n = args.minimum - args.input.length;
+        return __("Please enter %s or more characters").format(n);
     },
     formatResult: function(item) {
         return $('<div>', {title: item.element[0].title}).text(item.text);
     },
     loadingMore:function(){ return __("Loading more results…"); },
-    maximumSelected:function(e){
-        return __("You can only select %s item(s)").format(e.max);
+    maximumSelected:function(args){
+        return __("You can only select %s item(s)").format(args.maximum);
     },
     noResults:function(){return __("No results found"); },
     searching:function(){return __("Searching…"); },
