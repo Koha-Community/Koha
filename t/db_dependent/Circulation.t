@@ -3191,7 +3191,7 @@ subtest 'AddReturn | is_overdue' => sub {
     };
 
     subtest 'enh 23091 | Lost item return policies' => sub {
-        plan tests => 4;
+        plan tests => 5;
 
         my $manager = $builder->build_object({ class => "Koha::Patrons" });
 
@@ -3252,6 +3252,21 @@ subtest 'AddReturn | is_overdue' => sub {
             }
         );
 
+        my $branchcode_refund_unpaid =
+        $builder->build( { source => 'Branch' } )->{branchcode};
+        my $specific_rule_refund_unpaid = $builder->build(
+            {
+                source => 'CirculationRule',
+                value  => {
+                    branchcode   => $branchcode_refund_unpaid,
+                    categorycode => undef,
+                    itemtype     => undef,
+                    rule_name    => 'lostreturn',
+                    rule_value   => 'refund_unpaid'
+                }
+            }
+        );
+
         my $replacement_amount = 99.00;
         t::lib::Mocks::mock_preference( 'AllowReturnToBranch', 'anywhere' );
         t::lib::Mocks::mock_preference( 'WhenLostChargeReplacementFee', 1 );
@@ -3261,6 +3276,181 @@ subtest 'AddReturn | is_overdue' => sub {
             'CheckinLibrary' );
         t::lib::Mocks::mock_preference( 'NoRefundOnLostReturnedItemsAge',
             undef );
+
+        subtest 'lostreturn | refund_unpaid' => sub {
+            plan tests => 21;
+
+            t::lib::Mocks::mock_userenv({ patron => $manager, branchcode => $branchcode_refund_unpaid });
+
+            my $item = $builder->build_sample_item(
+                {
+                    replacementprice => $replacement_amount
+                }
+            );
+
+            # Issue the item
+            my $issue = C4::Circulation::AddIssue( $patron->unblessed, $item->barcode );
+
+            # Mark item as lost
+            $item->itemlost(3)->store;
+            C4::Circulation::LostItem( $item->itemnumber, 1 );
+
+            my $lost_fee_lines = Koha::Account::Lines->search(
+                {
+                    borrowernumber  => $patron->id,
+                    itemnumber      => $item->itemnumber,
+                    debit_type_code => 'LOST'
+                }
+            );
+            is( $lost_fee_lines->count, 1, 'Lost item fee produced' );
+            my $lost_fee_line = $lost_fee_lines->next;
+            is( int($lost_fee_line->amount),
+                $replacement_amount, 'The right LOST amount is generated' );
+            is( int($lost_fee_line->amountoutstanding),
+                $replacement_amount,
+                'The right LOST amountoutstanding is generated' );
+            is( $lost_fee_line->status, undef, 'The LOST status was not set' );
+
+            is(
+                int($patron->account->balance),
+                $replacement_amount ,
+                "Account balance equals the replacement amount after being charged lost fee when no payments has been made"
+            );
+
+            # Return lost item without any payments having been made
+            my ( $returned, $message ) = AddReturn( $item->barcode, $branchcode_refund_unpaid );
+
+            $lost_fee_line->discard_changes;
+
+            is( int($lost_fee_line->amount), $replacement_amount, 'The LOST amount is left intact' );
+            is( int($lost_fee_line->amountoutstanding) , 0, 'The LOST amountoutstanding is zero' );
+            is( $lost_fee_line->status, 'FOUND', 'The FOUND status was set' );
+            is(
+                int($patron->account->balance),
+                0,
+                'Account balance should be zero after returning item with lost fee when no payments has been made'
+            );
+
+            # Create a second item
+            $item = $builder->build_sample_item(
+                {
+                    replacementprice => $replacement_amount
+                }
+            );
+
+            # Issue the item
+            $issue = C4::Circulation::AddIssue( $patron->unblessed, $item->barcode );
+
+            # Mark item as lost
+            $item->itemlost(3)->store;
+            C4::Circulation::LostItem( $item->itemnumber, 1 );
+
+            $lost_fee_lines = Koha::Account::Lines->search(
+                {
+                    borrowernumber  => $patron->id,
+                    itemnumber      => $item->itemnumber,
+                    debit_type_code => 'LOST'
+                }
+            );
+            is( $lost_fee_lines->count, 1, 'Lost item fee produced' );
+            $lost_fee_line = $lost_fee_lines->next;
+
+            # Make partial payment
+            $patron->account->payin_amount({
+                type => 'PAYMENT',
+                interface => 'intranet',
+                payment_type => 'CASH',
+                user_id => $patron->borrowernumber,
+                amount => 39.00,
+                lines => [$lost_fee_line]
+            });
+
+            $lost_fee_line->discard_changes;
+
+            is( int($lost_fee_line->amountoutstanding),
+                60,
+                'The LOST amountoutstanding is the expected amount after partial payment of lost fee'
+            );
+
+            is(
+                int($patron->account->balance),
+                60,
+                'Account balance is the expected amount after partial payment of lost fee'
+            );
+
+             # Return lost item with partial payment having been made
+            ( $returned, $message ) = AddReturn( $item->barcode, $branchcode_refund_unpaid );
+
+            $lost_fee_line->discard_changes;
+
+            is( int($lost_fee_line->amountoutstanding) , 0, 'The LOST amountoutstanding is zero after returning lost item with partial payment' );
+            is( $lost_fee_line->status, 'FOUND', 'The FOUND status was set for lost item with partial payment' );
+            is(
+                int($patron->account->balance),
+                0,
+                'Account balance should be zero after returning item with lost fee when partial payment has been made'
+            );
+
+            # Create a third item
+            $item = $builder->build_sample_item(
+                {
+                    replacementprice => $replacement_amount
+                }
+            );
+
+            # Issue the item
+            $issue = C4::Circulation::AddIssue( $patron->unblessed, $item->barcode );
+
+            # Mark item as lost
+            $item->itemlost(3)->store;
+            C4::Circulation::LostItem( $item->itemnumber, 1 );
+
+            $lost_fee_lines = Koha::Account::Lines->search(
+                {
+                    borrowernumber  => $patron->id,
+                    itemnumber      => $item->itemnumber,
+                    debit_type_code => 'LOST'
+                }
+            );
+            is( $lost_fee_lines->count, 1, 'Lost item fee produced' );
+            $lost_fee_line = $lost_fee_lines->next;
+
+            # Make full payment
+            $patron->account->payin_amount({
+                type => 'PAYMENT',
+                interface => 'intranet',
+                payment_type => 'CASH',
+                user_id => $patron->borrowernumber,
+                amount => $replacement_amount,
+                lines => [$lost_fee_line]
+            });
+
+            $lost_fee_line->discard_changes;
+
+            is( int($lost_fee_line->amountoutstanding),
+                0,
+                'The LOST amountoutstanding is the expected amount after partial payment of lost fee'
+            );
+
+            is(
+                int($patron->account->balance),
+                0,
+                'Account balance is the expected amount after partial payment of lost fee'
+            );
+
+             # Return lost item with partial payment having been made
+            ( $returned, $message ) = AddReturn( $item->barcode, $branchcode_refund_unpaid );
+
+            $lost_fee_line->discard_changes;
+
+            is( int($lost_fee_line->amountoutstanding) , 0, 'The LOST amountoutstanding is zero after returning lost item with full payment' );
+            is( $lost_fee_line->status, 'FOUND', 'The FOUND status was set for lost item iwth partial payment' );
+            is(
+                int($patron->account->balance),
+                0,
+                'Account balance should be zero after returning item with lost fee when full payment has been made'
+            );
+        };
 
         subtest 'lostreturn | false' => sub {
             plan tests => 12;

@@ -1190,14 +1190,26 @@ sub _set_found_trigger {
             if ( $patron ) {
 
                 my $account = $patron->account;
-                my $total_to_refund = 0;
+
+                # Credit outstanding amount
+                my $credit_total = $lost_charge->amountoutstanding;
 
                 # Use cases
-                if ( $lost_charge->amount > $lost_charge->amountoutstanding ) {
-
+                if (
+                    $lost_charge->amount > $lost_charge->amountoutstanding &&
+                    $lostreturn_policy ne "refund_unpaid"
+                ) {
                     # some amount has been cancelled. collect the offsets that are not writeoffs
                     # this works because the only way to subtract from this kind of a debt is
                     # using the UI buttons 'Pay' and 'Write off'
+
+                    # We don't credit any payments if return policy is
+                    # "refund_unpaid"
+                    #
+                    # In that case only unpaid/outstanding amount
+                    # will be credited wich settles the debt without
+                    # creating extra credits
+
                     my $credit_offsets = $lost_charge->debit_offsets(
                         {
                             'credit_id'               => { '!=' => undef },
@@ -1206,12 +1218,14 @@ sub _set_found_trigger {
                         { join => 'credit' }
                     );
 
-                    $total_to_refund = ( $credit_offsets->count > 0 )
-                      ? $credit_offsets->total * -1    # credits are negative on the DB
-                      : 0;
+                    my $total_to_refund = ( $credit_offsets->count > 0 ) ?
+                        # credits are negative on the DB
+                        $credit_offsets->total * -1 :
+                        0;
+                    # Credit the outstanding amount, then add what has been
+                    # paid to create a net credit for this amount
+                    $credit_total += $total_to_refund;
                 }
-
-                my $credit_total = $lost_charge->amountoutstanding + $total_to_refund;
 
                 my $credit;
                 if ( $credit_total > 0 ) {
