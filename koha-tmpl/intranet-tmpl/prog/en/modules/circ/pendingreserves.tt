@@ -126,7 +126,7 @@
         <td>
             [% IF ( hold_info.barcodes.size ) %]
                 [% SET barcode = hold_info.barcodes.first %]
-                [% IF ( hold_info.itemnumber ) %]Only [% barcode | html %][% ELSE %][% barcode | html %] or any available.[% END %]
+                [% IF ( hold_info.item ) %]Only [% barcode | html %][% ELSE %][% barcode | html %] or any available.[% END %]
             [% END %]
         </td>
         <td>
