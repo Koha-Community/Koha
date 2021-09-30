@@ -36,55 +36,47 @@ sub new {
     my ($biblionumber) = $args{identifier} =~ /^$prefix(.*)/;
     my $items_included = $repository->items_included( $args{metadataPrefix} );
     my $dbh = C4::Context->dbh;
-    my $sql = "
-        SELECT timestamp
-        FROM   biblioitems
-        WHERE  biblionumber=?
-    ";
+    my $sql;
     my @bind_params = ($biblionumber);
     if ( $items_included ) {
         # Take latest timestamp of biblio and any items
         # Or timestamp of deleted items where bib not deleted
         $sql .= "
-            UNION
+            SELECT timestamp
+            FROM   biblio_metadata
+            WHERE  biblionumber=?
+              UNION
             SELECT deleteditems.timestamp FROM deleteditems JOIN biblio USING (biblionumber)
-            WHERE deleteditems.biblionumber=?
-            UNION
+            WHERE  deleteditems.biblionumber=?
+              UNION
             SELECT timestamp from items
-            WHERE biblionumber=?
+            WHERE  biblionumber=?
         ";
         push @bind_params, $biblionumber;
         push @bind_params, $biblionumber;
         $sql = "
-            SELECT max(timestamp)
+            SELECT max(timestamp) as timestamp
             FROM ($sql) bib
+        ";
+    } else {
+        $sql = "
+            SELECT max(timestamp) as timestamp
+            FROM   biblio_metadata
+            WHERE  biblionumber=?
         ";
     }
 
     my $sth = $dbh->prepare( $sql ) || die( 'Could not prepare statement: ' . $dbh->errstr );
     $sth->execute( @bind_params ) || die( 'Could not execute statement: ' . $sth->errstr );
     my ($timestamp, $deleted);
+    # If there are no rows in biblio_metadata, try deletedbiblio_metadata
     unless ( ($timestamp = $sth->fetchrow) ) {
         $sql = "
-            SELECT timestamp
-            FROM deletedbiblio
-            WHERE biblionumber=?
+            SELECT max(timestamp)
+            FROM   deletedbiblio_metadata
+            WHERE  biblionumber=?
         ";
         @bind_params = ($biblionumber);
-
-        if ( $items_included ) {
-            # Take latest timestamp among biblio and items
-            $sql .= "
-                UNION
-                SELECT timestamp from deleteditems
-                WHERE biblionumber=?
-            ";
-            push @bind_params, $biblionumber;
-            $sql = "
-                SELECT max(timestamp)
-                FROM ($sql) bib
-            ";
-        }
 
         $sth = $dbh->prepare($sql) || die('Could not prepare statement: ' . $dbh->errstr);
         $sth->execute( @bind_params ) || die('Could not execute statement: ' . $sth->errstr);
@@ -114,10 +106,7 @@ sub new {
     } else {
         # We fetch it using this method, rather than the database directly,
         # so it'll include the item data
-        my $marcxml;
-        $marcxml = $repository->get_biblio_marcxml($biblionumber, $args{metadataPrefix})
-            unless $deleted;
-
+        my $marcxml = $repository->get_biblio_marcxml($biblionumber, $args{metadataPrefix});
         $self->record(
             Koha::OAI::Server::Record->new($repository, $marcxml, $timestamp, \@setSpecs, %args)
         );

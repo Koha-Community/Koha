@@ -63,75 +63,70 @@ sub GetRecords {
 
         my @part_bind_params = ($next_id);
 
-        my $where = "biblionumber >= ?";
+        # Note: "main" is alias of the main table in the SELECT statement to avoid ambiquity with joined tables
+        my $where = "main.biblionumber >= ?";
         if ( $from ) {
-            $where .= " AND timestamp >= ?";
+            $where .= " AND main.timestamp >= ?";
             push @part_bind_params, $from;
         }
         if ( $until ) {
-            $where .= " AND timestamp <= ?";
+            $where .= " AND main.timestamp <= ?";
             push @part_bind_params, $until;
         }
         if ( defined $set ) {
-            $where .= " AND biblionumber in (SELECT osb.biblionumber FROM oai_sets_biblios osb WHERE osb.set_id = ?)";
+            $where .= " AND main.biblionumber in (SELECT osb.biblionumber FROM oai_sets_biblios osb WHERE osb.set_id = ?)";
             push @part_bind_params, $set->{'id'};
         }
 
         my @bind_params = @part_bind_params;
 
-        my $criteria = "WHERE $where ORDER BY biblionumber LIMIT " . ($max + 1);
+        my $order_limit = 'ORDER BY main.biblionumber LIMIT ' . ($max + 1);
 
-        my $sql = "
-            SELECT biblionumber
-            FROM $table
-            $criteria
-        ";
+        my $sql;
+        my $ts_sql;
 
         # If items are included, fetch a set of potential biblionumbers from items tables as well.
         # Then merge them, sort them and take the required number of them from the resulting list.
         # This may seem counter-intuitive as in worst case we fetch 3 times the biblionumbers needed,
         # but avoiding joins or subqueries makes this so much faster that it does not matter.
-        if ( $include_items )  {
-            $sql = "($sql) UNION (SELECT DISTINCT(biblionumber) FROM deleteditems $criteria)";
+        if ( $include_items && !$deleted )  {
+            $sql = "
+                (SELECT biblionumber
+                FROM $table main
+                WHERE $where $order_limit)
+                  UNION
+                (SELECT DISTINCT(biblionumber) FROM deleteditems main JOIN biblio USING (biblionumber) WHERE $where
+                $order_limit)
+                  UNION
+                (SELECT DISTINCT(biblionumber) FROM items main WHERE $where $order_limit)";
             push @bind_params, @part_bind_params;
-            if (!$deleted) {
-                $sql .= " UNION (SELECT DISTINCT(biblionumber) FROM items $criteria)";
-                push @bind_params, @part_bind_params;
-            }
-            $sql = "SELECT biblionumber FROM ($sql) bibnos ORDER BY biblionumber LIMIT " . ($max + 1);
+            push @bind_params, @part_bind_params;
+            $sql = "SELECT biblionumber FROM ($sql) main $order_limit";
+
+            $ts_sql = "
+                SELECT MAX(timestamp)
+                FROM (
+                    SELECT timestamp FROM biblio_metadata WHERE biblionumber = ?
+                    UNION
+                    SELECT timestamp FROM deleteditems WHERE biblionumber = ?
+                    UNION
+                    SELECT timestamp FROM items WHERE biblionumber = ?
+                ) bi
+            ";
+        } else {
+            $sql = "
+                SELECT biblionumber
+                FROM $table main
+                WHERE $where
+            ";
+
+            $ts_sql = "SELECT max(timestamp) FROM $table WHERE biblionumber = ?";
         }
 
         my $sth = $dbh->prepare( $sql ) || die( 'Could not prepare statement: ' . $dbh->errstr );
-        $sth->execute( @bind_params ) || die( 'Could not execute statement: ' . $sth->errstr );
-
-        my $ts_sql;
-        if ( $include_items ) {
-            if ( $deleted ) {
-                $ts_sql = "
-                    SELECT MAX(timestamp)
-                    FROM (
-                        SELECT timestamp FROM deletedbiblio_metadata WHERE biblionumber = ?
-                        UNION
-                        SELECT timestamp FROM deleteditems WHERE biblionumber = ?
-                    ) bis
-                ";
-            } else {
-                $ts_sql = "
-                    SELECT MAX(timestamp)
-                    FROM (
-                        SELECT timestamp FROM biblio_metadata WHERE biblionumber = ?
-                        UNION
-                        SELECT timestamp FROM deleteditems WHERE biblionumber = ?
-                        UNION
-                        SELECT timestamp FROM items WHERE biblionumber = ?
-                    ) bi
-                ";
-            }
-        } else {
-            $ts_sql = "SELECT timestamp FROM $table WHERE biblionumber = ?";
-        }
         my $ts_sth = $dbh->prepare( $ts_sql ) || die( 'Could not prepare statement: ' . $dbh->errstr );
 
+        $sth->execute( @bind_params ) || die( 'Could not execute statement: ' . $sth->errstr );
         foreach my $row (@{ $sth->fetchall_arrayref() }) {
             my $biblionumber = $row->[0];
             $count++;
@@ -150,7 +145,7 @@ sub GetRecords {
                 last STAGELOOP;
             }
             my @params = ($biblionumber);
-            if ( $include_items ) {
+            if ( $include_items && !$deleted ) {
                 push @params, $deleted ? ( $biblionumber ) : ( $biblionumber, $biblionumber );
             }
             $ts_sth->execute( @params ) || die( 'Could not execute statement: ' . $ts_sth->errstr );

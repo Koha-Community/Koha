@@ -19,9 +19,9 @@
 
 use Modern::Perl;
 use Test::Deep qw( cmp_deeply re );
-use Test::MockTime qw/set_fixed_time restore_time/;
+use Test::MockTime qw/set_fixed_time set_relative_time restore_time/;
 
-use Test::More tests => 32;
+use Test::More tests => 33;
 use DateTime;
 use File::Basename;
 use File::Spec;
@@ -31,6 +31,7 @@ use XML::Simple;
 use YAML::XS;
 
 use t::lib::Mocks;
+use t::lib::TestBuilder;
 
 use C4::Biblio;
 use C4::Context;
@@ -507,6 +508,342 @@ subtest 'ListSets tests' => sub {
           }
         }
     );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'Tests for timestamp handling' => sub {
+
+    plan tests => 27;
+
+    t::lib::Mocks::mock_preference( 'OAI::PMH'         => 1 );
+    t::lib::Mocks::mock_preference( 'OAI-PMH:MaxCount' => 3 );
+    t::lib::Mocks::mock_preference( 'OAI-PMH:ConfFile' =>  File::Spec->rel2abs(dirname(__FILE__)) . '/oaiconf_items.yaml' );
+
+    $schema->storage->txn_begin;
+
+    my $sth_metadata = $dbh->prepare('UPDATE biblio_metadata SET timestamp=? WHERE biblionumber=?');
+    my $sth_del_metadata = $dbh->prepare('UPDATE deletedbiblio_metadata SET timestamp=? WHERE biblionumber=?');
+    my $sth_item = $dbh->prepare('UPDATE items SET timestamp=? WHERE itemnumber=?');
+    my $sth_del_item = $dbh->prepare('UPDATE deleteditems SET timestamp=? WHERE itemnumber=?');
+
+    my $builder = t::lib::TestBuilder->new;
+
+    set_fixed_time(CORE::time());
+
+    my $utc_datetime = dt_from_string(undef, undef, 'UTC');
+    my $utc_timestamp = $utc_datetime->ymd . 'T' . $utc_datetime->hms . 'Z';
+    my $timestamp = dt_from_string(undef, 'sql');
+
+    # Test a bib with one item
+    my $biblio1 = $builder->build_sample_biblio();
+    $sth_metadata->execute($timestamp, $biblio1->biblionumber);
+    my $item1 = $builder->build_sample_item(
+        {
+            biblionumber => $biblio1->biblionumber
+        }
+    );
+    $sth_item->execute($timestamp, $item1->itemnumber);
+
+    my $list_items = {
+        verb => 'ListRecords',
+        metadataPrefix => 'marc21',
+        from => $utc_timestamp
+    };
+    my $list_no_items = {
+        verb => 'ListRecords',
+        metadataPrefix => 'marcxml',
+        from => $utc_timestamp
+    };
+
+    my $get_items = {
+        verb => 'GetRecord',
+        metadataPrefix => 'marc21',
+        identifier => 'TEST:' . $biblio1->biblionumber
+    };
+    my $get_no_items = {
+        verb => 'GetRecord',
+        metadataPrefix => 'marcxml',
+        identifier => 'TEST:' . $biblio1->biblionumber
+    };
+
+    my $expected = {
+        record => {
+            header => {
+                datestamp => $utc_timestamp,
+                identifier => 'TEST:' . $biblio1->biblionumber
+            },
+            metadata => {
+                record => XMLin(
+                    GetMarcBiblio({ biblionumber => $biblio1->biblionumber, embed_items => 1, opac => 1 })->as_xml_record()
+                )
+            }
+        }
+    };
+    my $expected_no_items = {
+        record => {
+            header => {
+                datestamp => $utc_timestamp,
+                identifier => 'TEST:' . $biblio1->biblionumber
+            },
+            metadata => {
+                record => XMLin(
+                    GetMarcBiblio({ biblionumber => $biblio1->biblionumber, embed_items => 0, opac => 1 })->as_xml_record()
+                )
+            }
+        }
+    };
+
+    test_query(
+        'ListRecords - biblio with a single item',
+        $list_items,
+        { ListRecords => $expected }
+    );
+    test_query(
+        'ListRecords - biblio with a single item (items not returned)',
+        $list_no_items,
+        { ListRecords => $expected_no_items }
+    );
+    test_query(
+        'GetRecord - biblio with a single item',
+        $get_items,
+        { GetRecord => $expected }
+    );
+    test_query(
+        'GetRecord - biblio with a single item (items not returned)',
+        $get_no_items,
+        { GetRecord => $expected_no_items }
+    );
+
+    # Add an item 10 seconds later and check results
+    set_relative_time(10);
+
+    $utc_datetime = dt_from_string(undef, undef, 'UTC');
+    $utc_timestamp = $utc_datetime->ymd . 'T' . $utc_datetime->hms . 'Z';
+    $timestamp = dt_from_string(undef, 'sql');
+
+    my $item2 = $builder->build_sample_item(
+        {
+            biblionumber => $biblio1->biblionumber
+        }
+    );
+    $sth_item->execute($timestamp, $item2->itemnumber);
+
+    $expected->{record}{header}{datestamp} = $utc_timestamp;
+    $expected->{record}{metadata}{record} = XMLin(
+        GetMarcBiblio({ biblionumber => $biblio1->biblionumber, embed_items => 1, opac => 1 })->as_xml_record()
+    );
+
+    test_query(
+        'ListRecords - biblio with two items',
+        $list_items,
+        { ListRecords => $expected }
+    );
+    test_query(
+        'ListRecords - biblio with two items (items not returned)',
+        $list_no_items,
+        { ListRecords => $expected_no_items }
+    );
+    test_query(
+        'GetRecord - biblio with a two items',
+        $get_items,
+        { GetRecord => $expected }
+    );
+    test_query(
+        'GetRecord - biblio with a two items (items not returned)',
+        $get_no_items,
+        { GetRecord => $expected_no_items }
+    );
+
+    # Set biblio timestamp 10 seconds later and check results
+    set_relative_time(10);
+    $utc_datetime = dt_from_string(undef, undef, 'UTC');
+    $utc_timestamp= $utc_datetime->ymd . 'T' . $utc_datetime->hms . 'Z';
+    $timestamp = dt_from_string(undef, 'sql');
+
+    $sth_metadata->execute($timestamp, $biblio1->biblionumber);
+
+    $expected->{record}{header}{datestamp} = $utc_timestamp;
+    $expected_no_items->{record}{header}{datestamp} = $utc_timestamp;
+
+    test_query(
+        "ListRecords - biblio with timestamp higher than item's",
+        $list_items,
+        { ListRecords => $expected }
+    );
+    test_query(
+        "ListRecords - biblio with timestamp higher than item's (items not returned)",
+        $list_no_items,
+        { ListRecords => $expected_no_items }
+    );
+    test_query(
+        "GetRecord - biblio with timestamp higher than item's",
+        $get_items,
+        { GetRecord => $expected }
+    );
+    test_query(
+        "GetRecord - biblio with timestamp higher than item's (items not returned)",
+        $get_no_items,
+        { GetRecord => $expected_no_items }
+    );
+
+    # Delete an item 10 seconds later and check results
+    set_relative_time(10);
+    $utc_datetime = dt_from_string(undef, undef, 'UTC');
+    $utc_timestamp = $utc_datetime->ymd . 'T' . $utc_datetime->hms . 'Z';
+
+    $item1->safe_delete({ skip_record_index =>1 });
+    $sth_del_item->execute($timestamp, $item1->itemnumber);
+
+    $expected->{record}{header}{datestamp} = $utc_timestamp;
+    $expected->{record}{metadata}{record} = XMLin(
+        GetMarcBiblio({ biblionumber => $biblio1->biblionumber, embed_items => 1, opac => 1 })->as_xml_record()
+    );
+
+    test_query(
+        'ListRecords - biblio with existing and deleted item',
+        $list_items,
+        { ListRecords => $expected }
+    );
+    test_query(
+        'ListRecords - biblio with existing and deleted item (items not returned)',
+        $list_no_items,
+        { ListRecords => $expected_no_items }
+    );
+    test_query(
+        'GetRecord - biblio with existing and deleted item',
+        $get_items,
+        { GetRecord => $expected }
+    );
+    test_query(
+        'GetRecord - biblio with existing and deleted item (items not returned)',
+        $get_no_items,
+        { GetRecord => $expected_no_items }
+    );
+
+    # Delete also the second item and verify results
+    $item2->safe_delete({ skip_record_index =>1 });
+    $sth_del_item->execute($timestamp, $item2->itemnumber);
+
+    $expected->{record}{metadata}{record} = XMLin(
+        GetMarcBiblio({ biblionumber => $biblio1->biblionumber, embed_items => 1, opac => 1 })->as_xml_record()
+    );
+
+    test_query(
+        'ListRecords - biblio with two deleted items',
+        $list_items,
+        { ListRecords => $expected }
+    );
+    test_query(
+        'ListRecords - biblio with two deleted items (items not returned)',
+        $list_no_items,
+        { ListRecords => $expected_no_items }
+    );
+    test_query(
+        'GetRecord - biblio with two deleted items',
+        $get_items,
+        { GetRecord => $expected }
+    );
+    test_query(
+        'GetRecord - biblio with two deleted items (items not returned)',
+        $get_no_items,
+        { GetRecord => $expected_no_items }
+    );
+
+    # Delete the biblio 10 seconds later and check results
+    set_relative_time(10);
+    $utc_datetime = dt_from_string(undef, undef, 'UTC');
+    $utc_timestamp = $utc_datetime->ymd . 'T' . $utc_datetime->hms . 'Z';
+    $timestamp = dt_from_string(undef, 'sql');
+
+    is(undef, DelBiblio($biblio1->biblionumber, { skip_record_index =>1 }), 'Biblio deleted');
+    $sth_del_metadata->execute($timestamp, $biblio1->biblionumber);
+
+    my $expected_header = {
+        record => {
+            header => {
+                datestamp => $utc_timestamp,
+                identifier => 'TEST:' . $biblio1->biblionumber,
+                status => 'deleted'
+            }
+        }
+    };
+
+    test_query(
+        'ListRecords - deleted biblio with two deleted items',
+        $list_items,
+        { ListRecords => $expected_header }
+    );
+    test_query(
+        'ListRecords - deleted biblio with two deleted items (items not returned)',
+        $list_no_items,
+        { ListRecords => $expected_header }
+    );
+    test_query(
+        'GetRecord - deleted biblio with two deleted items',
+        $get_items,
+        { GetRecord => $expected_header }
+    );
+    test_query(
+        'GetRecord - deleted biblio with two deleted items (items not returned)',
+        $get_no_items,
+        { GetRecord => $expected_header }
+    );
+
+    # Add a second biblio 10 seconds later and check that both are returned properly
+    set_relative_time(10);
+    $utc_datetime = dt_from_string(undef, undef, 'UTC');
+    $utc_timestamp = $utc_datetime->ymd . 'T' . $utc_datetime->hms . 'Z';
+    $timestamp = dt_from_string(undef, 'sql');
+
+    my $biblio2 = $builder->build_sample_biblio();
+    $sth_metadata->execute($timestamp, $biblio2->biblionumber);
+
+    my $expected2 = {
+        record => [
+            $expected_header->{record},
+            {
+                header => {
+                    datestamp => $utc_timestamp,
+                    identifier => 'TEST:' . $biblio2->biblionumber
+                },
+                metadata => {
+                    record => XMLin(
+                        GetMarcBiblio({ biblionumber => $biblio2->biblionumber, embed_items => 1, opac => 1 })->as_xml_record()
+                    )
+                }
+            }
+        ]
+    };
+    my $expected2_no_items = {
+        record => [
+            $expected_header->{record},
+            {
+                header => {
+                    datestamp => $utc_timestamp,
+                    identifier => 'TEST:' . $biblio2->biblionumber
+                },
+                metadata => {
+                    record => XMLin(
+                        GetMarcBiblio({ biblionumber => $biblio2->biblionumber, embed_items => 0, opac => 1 })->as_xml_record()
+                    )
+                }
+            }
+        ]
+    };
+
+    test_query(
+        'ListRecords - deleted biblio and normal biblio',
+        $list_items,
+        { ListRecords => $expected2 }
+    );
+    test_query(
+        'ListRecords - deleted biblio and normal biblio (items not returned)',
+        $list_no_items,
+        { ListRecords => $expected2_no_items }
+    );
+
+    restore_time();
 
     $schema->storage->txn_rollback;
 };
