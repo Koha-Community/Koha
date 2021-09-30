@@ -19,7 +19,7 @@ use Modern::Perl;
 
 use POSIX qw(strftime);
 
-use Test::More tests => 55;
+use Test::More tests => 54;
 use Test::MockModule;
 
 use t::lib::TestBuilder;
@@ -251,26 +251,3 @@ subtest 'may_article_request' => sub {
 };
 
 $schema->storage->txn_rollback();
-
-subtest 'set_pending() tests' => sub {
-
-    plan tests => 2;
-
-    $schema->storage->txn_begin;
-
-    my $ar_mock = Test::MockModule->new('Koha::ArticleRequest');
-    $ar_mock->mock( 'notify', sub { ok( 1, '->notify() called' ); } );
-
-    my $ar = $builder->build_object(
-        {
-            class => 'Koha::ArticleRequests',
-            value => { status => Koha::ArticleRequest::Status::Requested }
-        }
-    );
-
-    $ar->set_pending()->discard_changes;
-
-    is( $ar->status, Koha::ArticleRequest::Status::Pending );
-
-    $schema->storage->txn_rollback;
-};
