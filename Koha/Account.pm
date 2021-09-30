@@ -113,7 +113,12 @@ sub pay {
     }
 
     my $patron = Koha::Patrons->find( $self->{patron_id} );
-    my @account_offsets = $payment->credit_offsets->as_list;
+    my @account_offsets = $payment->credit_offsets(
+        {
+            type => $Koha::Account::offset_type->{$type},
+            -not => { debit_id => undef }
+        }
+    )->as_list;
     if ( C4::Context->preference('UseEmailReceipts') ) {
         if (
             my $letter = C4::Letters::GetPreparedLetter(
