@@ -288,8 +288,9 @@ sub create_input {
     
     my $index_subfield = CreateKey(); # create a specifique key for each subfield
 
-    # if there is no value provided but a default value in parameters, get it
-    if ( $value eq '' ) {
+    # Apply optional framework default value when it is a new record
+    # Substitute date parts, user name
+    if ( $value eq '' && !$cgi->param('biblionumber') ) {
         $value = $tagslib->{$tag}->{$subfield}->{defaultvalue} // q{};
 
         # get today date & replace <<YYYY>>, <<YY>>, <<MM>>, <<DD>> if provided in the default value
@@ -305,8 +306,8 @@ sub create_input {
         # And <<USER>> with surname (?)
         my $username=(C4::Context->userenv?C4::Context->userenv->{'surname'}:"superlibrarian");
         $value=~s/<<USER>>/$username/g;
-    
     }
+
     my $dbh = C4::Context->dbh;
 
     # map '@' as "subfield" label for fixed fields
