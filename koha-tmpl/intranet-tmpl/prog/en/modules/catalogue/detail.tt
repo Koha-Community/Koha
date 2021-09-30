@@ -1590,7 +1590,7 @@ Note that permanent location is a code, and location may be an authval.
                 var bundles_table = $('<table class="display tbundle" data-itemnumber="'+itemnumber+'" id="bundle_table_'+itemnumber+'" width="100%"/>');
 
                 // Display it the child row
-                row.child( bundle_toolbar.add(bundles_table) ).show();
+                row.child( bundle_toolbar.add(bundles_table), 'bundle' ).show();
 
                 // Initialise as a DataTable
                 var bundle_table_url = "/api/v1/items/" + itemnumber + "/bundled_items?";
