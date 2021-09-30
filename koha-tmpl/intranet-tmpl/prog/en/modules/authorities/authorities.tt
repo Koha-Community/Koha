@@ -6,7 +6,11 @@
 [% INCLUDE 'doc-head-close.inc' %]
 [% Asset.js("lib/hc-sticky.js") | $raw %]
 <script>
-    var CAN_user_parameters_manage_auth_values = "[% CAN_user_parameters_manage_auth_values | html %]";
+    [% IF Koha.Preference('CreateAVFromCataloguing') && CAN_user_parameters_manage_auth_values %]
+        var auth_values_creation = 1;
+    [% ELSE %]
+        var auth_values_creation = 0;
+    [% END %]
 </script>
 [% INCLUDE 'select2.inc' %]
 [% Asset.js("js/cataloging.js") | $raw %]

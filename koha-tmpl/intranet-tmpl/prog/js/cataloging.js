@@ -89,7 +89,7 @@ var Select2Utils = {
 
     initSelect2: function(selects) {
         if ($.fn.select2) {
-            if ( window.CAN_user_parameters_manage_auth_values === undefined || ! CAN_user_parameters_manage_auth_values ) {
+            if ( window.auth_values_creation === undefined || ! auth_values_creation ) {
                 $(selects).select2().on("select2:clear", function () {
                     $(this).on("select2:opening.cancelOpen", function (evt) {
                         evt.preventDefault();
