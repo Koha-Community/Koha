@@ -678,7 +678,7 @@ subtest 'reconcile_balance' => sub {
 
 subtest 'pay() tests' => sub {
 
-    plan tests => 5;
+    plan tests => 6;
 
     $schema->storage->txn_begin;
 
@@ -731,6 +731,45 @@ subtest 'pay() tests' => sub {
     ok($result, "Koha::Account->pay functions without a userenv");
     my $payment = Koha::Account::Lines->find({accountlines_id => $result->{payment_id}});
     is($payment->manager_id, undef, "manager_id left undefined when no userenv found");
+
+    subtest 'UseEmailReceipts tests' => sub {
+
+        plan tests => 5;
+
+        t::lib::Mocks::mock_preference( 'UseEmailReceipts', 1 );
+
+        my %params;
+
+        my $mocked_letters = Test::MockModule->new('C4::Letters');
+        # we want to test the params
+        $mocked_letters->mock( 'GetPreparedLetter', sub {
+            %params = @_;
+            return 1;
+        });
+        # we don't care about EnqueueLetter for now
+        $mocked_letters->mock( 'EnqueueLetter', sub {
+            return 1;
+        });
+
+        $schema->storage->txn_begin;
+
+        my $patron  = $builder->build_object({ class => 'Koha::Patrons' });
+        my $account = $patron->account;
+
+        my $debit_1 = $account->add_debit( { amount => 5,  interface => 'commandline', type => 'OVERDUE' } );
+        my $debit_2 = $account->add_debit( { amount => 10,  interface => 'commandline', type => 'OVERDUE' } );
+
+        $account->pay({ amount => 6, lines => [ $debit_1, $debit_2 ] });
+        my @offsets = @{$params{substitute}{offsets}};
+
+        is( scalar @offsets, 2, 'Two offsets related to payment' );
+        is( ref($offsets[0]), 'Koha::Account::Offset', 'Type is correct' );
+        is( ref($offsets[1]), 'Koha::Account::Offset', 'Type is correct' );
+        is( $offsets[0]->type, $Koha::Account::offset_type->{PAYMENT}, 'Only APPLY offsets are passed to the notice' );
+        is( $offsets[1]->type, $Koha::Account::offset_type->{PAYMENT}, 'Only APPLY offsets are passed to the notice' );
+
+        $schema->storage->txn_rollback;
+    };
 
     $schema->storage->txn_rollback;
 };
