@@ -145,6 +145,13 @@ Return the credit_offsets linked to this account line if some exist
 
 sub credit_offsets {
     my ( $self, $cond, $attr ) = @_;
+
+    unless ( $self->is_credit ) {
+        Koha::Exceptions::Account::IsNotCredit->throw(
+            error => 'Account line ' . $self->id . ' is not a credit'
+        );
+    }
+
     my $rs = $self->_result->search_related( 'account_offsets_credits', $cond, $attr);
     return unless $rs;
     return Koha::Account::Offsets->_new_from_dbic($rs);
@@ -158,11 +165,17 @@ Return the debit_offsets linked to this account line if some exist
 
 sub debit_offsets {
     my ( $self, $cond, $attr ) = @_;
+
+    unless ( $self->is_debit ) {
+        Koha::Exceptions::Account::IsNotDebit->throw(
+            error => 'Account line ' . $self->id . ' is not a debit'
+        );
+    }
+
     my $rs = $self->_result->search_related( 'account_offsets_debits', $cond, $attr);
     return unless $rs;
     return Koha::Account::Offsets->_new_from_dbic($rs);
 }
-
 
 =head3 credits
 
