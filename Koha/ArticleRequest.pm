@@ -42,6 +42,10 @@ Koha::ArticleRequest - Koha Article Request Object class
 
 =head3 request
 
+    $article_request->request;
+
+Marks the article as requested. Send a notification if appropriate.
+
 =cut
 
 sub request {
@@ -54,6 +58,10 @@ sub request {
 }
 
 =head3 set_pending
+
+    $article_request->set_pending;
+
+Marks the article as pending. Send a notification if appropriate.
 
 =cut
 
@@ -68,6 +76,10 @@ sub set_pending {
 
 =head3 process
 
+    $article_request->process;
+
+Marks the article as in process. Send a notification if appropriate.
+
 =cut
 
 sub process {
@@ -80,6 +92,10 @@ sub process {
 }
 
 =head3 complete
+
+    $article_request->complete;
+
+Marks the article as completed. Send a notification if appropriate.
 
 =cut
 
@@ -94,6 +110,10 @@ sub complete {
 
 =head3 cancel
 
+    $article_request->cancel;
+
+Marks the article as cancelled. Send a notification if appropriate.
+
 =cut
 
 sub cancel {
@@ -104,43 +124,6 @@ sub cancel {
     $self->store();
     $self->notify();
     return $self;
-}
-
-=head3 notify
-
-=cut
-
-sub notify {
-    my ($self) = @_;
-
-    my $status = $self->status;
-
-    require C4::Letters;
-    if (
-        my $letter = C4::Letters::GetPreparedLetter(
-            module                 => 'circulation',
-            letter_code            => "AR_$status", # AR_REQUESTED, AR_PENDING, AR_PROCESSING, AR_COMPLETED, AR_CANCELED
-            message_transport_type => 'email',
-            lang                   => $self->borrower->lang,
-            tables                 => {
-                article_requests => $self->id,
-                borrowers        => $self->borrowernumber,
-                biblio           => $self->biblionumber,
-                biblioitems      => $self->biblionumber,
-                items            => $self->itemnumber,
-                branches         => $self->branchcode,
-            },
-        )
-      )
-    {
-        C4::Letters::EnqueueLetter(
-            {
-                letter                 => $letter,
-                borrowernumber         => $self->borrowernumber,
-                message_transport_type => 'email',
-            }
-        ) or warn "can't enqueue letter ". $letter->{code};
-    }
 }
 
 =head3 biblio
@@ -217,6 +200,48 @@ sub store {
 }
 
 =head2 Internal methods
+
+=head3 notify
+
+    $self->notify();
+
+internal method to be called when changing an article request status.
+If a letter exists for the new status, it enqueues it.
+
+=cut
+
+sub notify {
+    my ($self) = @_;
+
+    my $status = $self->status;
+
+    require C4::Letters;
+    if (
+        my $letter = C4::Letters::GetPreparedLetter(
+            module                 => 'circulation',
+            letter_code            => "AR_$status", # AR_REQUESTED, AR_PENDING, AR_PROCESSING, AR_COMPLETED, AR_CANCELED
+            message_transport_type => 'email',
+            lang                   => $self->borrower->lang,
+            tables                 => {
+                article_requests => $self->id,
+                borrowers        => $self->borrowernumber,
+                biblio           => $self->biblionumber,
+                biblioitems      => $self->biblionumber,
+                items            => $self->itemnumber,
+                branches         => $self->branchcode,
+            },
+        )
+      )
+    {
+        C4::Letters::EnqueueLetter(
+            {
+                letter                 => $letter,
+                borrowernumber         => $self->borrowernumber,
+                message_transport_type => 'email',
+            }
+        ) or warn "can't enqueue letter ". $letter->{code};
+    }
+}
 
 =head3 _type
 
