@@ -44,6 +44,12 @@
         <div class="col-sm-10 col-sm-push-2">
             <main>
 
+    [% IF ( unknownbiblionumber ) %]
+        <div class="dialog message">The record you requested does not exist ([% biblionumber | html %]).</div>
+    [% ELSE %]
+
+                [% INCLUDE 'cat-toolbar.inc' %]
+
                 <h1>
                     [% IF ( unknownbiblionumber ) %]
                         Unknown record
@@ -52,13 +58,6 @@
                     [% END %]
                 </h1>
 
-    [% IF ( unknownbiblionumber ) %]
-        <div class="dialog message">The record you requested does not exist ([% biblionumber | html %]).</div>
-    [% ELSE %]
-
-					[% INCLUDE 'cat-toolbar.inc' %]
-
-					[% END %]
                     <p><strong>With framework:
                     <select name="Frameworks" id="Frameworks" onchange="Changefwk(this);">
                         <option value="">Default</option>

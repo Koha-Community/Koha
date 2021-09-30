@@ -83,14 +83,6 @@
             <main>
                 <div class="row">
 
-                    <h1>
-                        [% IF ( unknownbiblionumber ) %]
-                            Unknown record
-                        [% ELSE %]
-                            Details for [% INCLUDE 'biblio-title-head.inc' %]
-                        [% END %]
-                    </h1>
-
 [% IF ( unknownbiblionumber ) %]
   <div class="dialog message">The record you requested does not exist ([% biblionumber | html %]).</div>
 [% ELSE %]

@@ -42,10 +42,10 @@
         <div class="col-sm-10 col-sm-push-2">
             <main>
 
-                <h1>Circulation statistics for [% title | html %]</h1>
+                <h1>Circulation statistics for [% title | html %] [% IF ( author ) %] by [% author |html %][% END %]</h1>
 
 [% INCLUDE 'blocking_errors.inc' %]
-<h2>[% title |html %] [% IF ( author ) %] by [% author |html %][% END %]</h2>
+
 <h3>Barcode [% barcode | html %]</h3>
 <table>
         <tr><th>Home library</th><th>Current library</th><th>Date arrived<br />at current library </th><th>Number of checkouts<br />since last transfer</th></tr>
