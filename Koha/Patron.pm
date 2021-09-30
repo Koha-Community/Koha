@@ -960,9 +960,10 @@ sub move_to_deleted {
 
 =head3 can_request_article
 
-my $can_request = $borrower->can_request_article
+    if ( $patron->can_request_article ) { ... }
 
-Returns true if patron can request articles
+Returns true if the patron can request articles. As limits apply for the patron
+on on the same day, those completed the same day are considered as current.
 
 =cut
 
@@ -972,12 +973,11 @@ sub can_request_article {
 
     return 1 unless defined $limit;
 
-    my $dtf = Koha::Database->new->schema->storage->datetime_parser;
-    my $compdate = dt_from_string->add( days => -1 );
-    my $count = Koha::ArticleRequests->search([
-        { borrowernumber => $self->borrowernumber, status => ['REQUESTED','PENDING','PROCESSING'] },
-        { borrowernumber => $self->borrowernumber, status => 'COMPLETED', updated_on => { '>', $dtf->format_date($compdate) }},
-    ])->count;
+    my $count = Koha::ArticleRequests->search(
+        [   { borrowernumber => $self->borrowernumber, status => [ 'REQUESTED', 'PENDING', 'PROCESSING' ] },
+            { borrowernumber => $self->borrowernumber, status => 'COMPLETED', updated_on => { '>=' => \'CAST(NOW() AS DATE)' } },
+        ]
+    )->count;
     return $count < $limit ? 1 : 0;
 }
 

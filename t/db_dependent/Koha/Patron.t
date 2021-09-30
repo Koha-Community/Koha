@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 9;
+use Test::More tests => 10;
 use Test::Exception;
 use Test::Warn;
 
@@ -828,6 +828,58 @@ subtest 'can_request_article() tests' => sub {
     );
     is( $patron->article_requests->count,
         3, 'There are 3 current article requests' );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'can_request_article() tests' => sub {
+
+    plan tests => 3;
+
+    $schema->storage->txn_begin;
+
+    my $category = $builder->build_object(
+        {
+            class => 'Koha::Patron::Categories',
+            value => { article_request_limit => 4 }
+        }
+    );
+    my $patron = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => { categorycode => $category->id }
+        }
+    );
+
+    $builder->build_object( { class => 'Koha::ArticleRequests', value => { status => 'REQUESTED',  borrowernumber => $patron->id } } );
+    $builder->build_object( { class => 'Koha::ArticleRequests', value => { status => 'PENDING',    borrowernumber => $patron->id } } );
+    $builder->build_object( { class => 'Koha::ArticleRequests', value => { status => 'PROCESSING', borrowernumber => $patron->id } } );
+    $builder->build_object( { class => 'Koha::ArticleRequests', value => { status => 'CANCELED',   borrowernumber => $patron->id } } );
+
+    ok( $patron->can_request_article, 'Patron has 3 current requests, 4 is the limit: allowed' );
+
+    # Completed request, same day
+    my $completed = $builder->build_object(
+        {
+            class => 'Koha::ArticleRequests',
+            value => {
+                status         => 'COMPLETED',
+                borrowernumber => $patron->id
+            }
+        }
+    );
+
+    ok( !$patron->can_request_article, 'Patron has 3 current requests and a completed one the same day: denied' );
+
+    $completed->updated_on(
+        dt_from_string->add( days => -1 )->set(
+            hour   => 23,
+            minute => 59,
+            second => 59,
+        )
+    )->store;
+
+    ok( $patron->can_request_article, 'Patron has 3 current requests and a completed one the day before: allowed' );
 
     $schema->storage->txn_rollback;
 };
