@@ -24471,6 +24471,15 @@ if( CheckVersion( $DBversion ) ) {
     NewVersion( $DBversion, "", "Koha 21.05.04 release" );
 }
 
+$DBversion = '21.05.04.001';
+if( CheckVersion( $DBversion ) ) {
+    $dbh->do(q{
+        UPDATE systempreferences SET value = IF(value = 'yes',1,0)
+        WHERE variable = 'DefaultHoldExpirationdate';
+    });
+    NewVersion( $DBversion, "29073", "Make DefaultHoldExpirationdate use 1/0 values" );
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 my $update_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/atomicupdate/';
