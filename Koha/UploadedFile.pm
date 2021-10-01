@@ -78,8 +78,10 @@ sub delete {
     return $retval if $params->{keep_file};
 
     if( ! -e $file ) {
-        warn "Removing record for $name within category ".
-            $self->uploadcategorycode. ", but file was missing.";
+        if ( $self->permanent ) {
+            warn "Removing record for $name within category ".
+                $self->uploadcategorycode. ", but file was missing.";
+        }
     } elsif( ! unlink($file) ) {
         warn "Problem while deleting: $file";
     }
