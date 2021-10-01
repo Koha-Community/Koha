@@ -596,7 +596,12 @@ sub MapItemsToHoldRequests {
         }
 
         unless ($itemnumber) {
-            $pull_branches = [keys %items_by_branch];
+            # not found yet, fall back to basics
+            if ($branches_to_use) {
+                $pull_branches = $branches_to_use;
+            } else {
+                $pull_branches = [keys %items_by_branch];
+            }
 
             # Try picking items where the home and pickup branch match first
             PULL_BRANCHES:
