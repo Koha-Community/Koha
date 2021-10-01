@@ -21,6 +21,8 @@ use JSON qw( encode_json decode_json );
 use Koha::BackgroundJobs;
 use Koha::DateUtils qw( dt_from_string );
 use Koha::Holds;
+use Koha::Patrons;
+use Koha::Holds;
 
 use base 'Koha::BackgroundJob';
 
@@ -89,16 +91,11 @@ sub process {
                 type        => 'error',
                 code        => 'hold_not_cancelled',
                 patron_id   => defined $patron ? $patron->borrowernumber : '',
-                patron_name => defined $patron
-                ? ( $patron->firstname ? $patron->firstname . ', ' : '' )
-                  . $patron->surname
-                : '',
                 biblio_id    => defined $biblio ? $biblio->biblionumber : '',
-                biblio_title => defined $biblio ? $biblio->title        : '',
                 hold_id      => $hold_id,
                 error        => defined $hold
                 ? ( $@ ? $@ : 0 )
-                : 'No hold with id ' . $hold_id . ' found',
+                : 'hold_not_found',
               };
         }
         else {
@@ -107,11 +104,7 @@ sub process {
                 type      => 'success',
                 code      => 'hold_cancelled',
                 patron_id => $patron->borrowernumber,
-                patron_name =>
-                  ( $patron->firstname ? $patron->firstname . ', ' : '' )
-                  . $patron->surname,
                 biblio_id    => $biblio->biblionumber,
-                biblio_title => $biblio->title,
                 hold_id      => $hold_id,
               };
             $report->{total_success}++;
@@ -149,6 +142,24 @@ sub enqueue {
             job_args => { hold_ids => \@hold_ids, reason => $args->{reason} }
         }
     );
+}
+
+=head3 additional_report
+
+Pass the biblio's title and patron's name
+
+=cut
+
+sub additional_report {
+    my ( $self, $args ) = @_;
+
+    my $job = Koha::BackgroundJobs->find( $args->{job_id} );
+    my $messages = $job->messages;
+    for my $m ( @$messages ) {
+        $m->{patron} = Koha::Patrons->find($m->{patron_id});
+        $m->{biblio} = Koha::Biblios->find($m->{biblio_id});
+    }
+    return { report_messages => $messages };
 }
 
 1;
