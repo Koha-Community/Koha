@@ -61,8 +61,10 @@ my ($template, $loggedinuser, $cookie) = get_template_and_user(
     }
 );
 
-# TODO: order?
-my $rules = Koha::MarcOverlayRules->search->unblessed;
+my $get_rules = sub {
+    return Koha::MarcOverlayRules->search( undef, { order_by => { -asc => 'id' } } )->unblessed;
+};
+my $rules = $get_rules->();
 
 if ($op eq 'remove' || $op eq 'doremove') {
     my @remove_ids = $input->multi_param('batchremove');
@@ -78,6 +80,8 @@ if ($op eq 'remove' || $op eq 'doremove') {
         my @remove_ids = $input->multi_param('batchremove');
         push @remove_ids, scalar $input->param('id') if $input->param('id');
         Koha::MarcOverlayRules->search({ id => { in => \@remove_ids } })->delete();
+        # Update $rules after deletion
+        $rules = $get_rules->();
     }
 }
 elsif ($op eq 'edit') {
@@ -123,6 +127,8 @@ elsif ($op eq 'doedit' || $op eq 'add') {
             $rule->set($rule_data);
             $rule->store();
         }
+        # Update $rules after edit/add
+        $rules = $get_rules->();
     }
 }
 
