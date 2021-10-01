@@ -526,6 +526,85 @@ sub bookings {
     return Koha::Bookings->_new_from_dbic( $bookings_rs );
 }
 
+=head3 find_booking
+
+Find the first booking that would conflict with the passed checkout dates
+
+=cut
+
+sub find_booking {
+    my ( $self, $params ) = @_;
+
+    my $checkout_date = $params->{checkout_date};
+    my $due_date      = $params->{due_date};
+    my $biblio        = $self->biblio;
+
+    my $dtf      = Koha::Database->new->schema->storage->datetime_parser;
+    my $bookings = $biblio->bookings(
+        [
+            # Checkout starts during booked period
+            start_date => {
+                '-between' => [
+                    $dtf->format_datetime($checkout_date),
+                    $dtf->format_datetime($due_date)
+                ]
+            },
+
+            # Checkout is due during booked period
+            end_date => {
+                '-between' => [
+                    $dtf->format_datetime($checkout_date),
+                    $dtf->format_datetime($due_date)
+                ]
+            },
+
+            # Checkout contains booked period
+            {
+                start_date => { '<' => $dtf->format_datetime($checkout_date) },
+                end_date   => { '>' => $dtf->format_datetime($due_date) }
+            }
+        ],
+        {
+            order_by => { '-asc' => 'start_date' }
+        }
+    );
+
+    my $checkouts      = {};
+    my $loanable_items = {};
+    my $bookable_items = $biblio->bookable_items;
+    while ( my $item = $bookable_items->next ) {
+        $loanable_items->{ $item->itemnumber } = 1;
+        if ( my $checkout = $item->checkout ) {
+            $checkouts->{ $item->itemnumber } =
+              dt_from_string( $checkout->date_due );
+        }
+    }
+
+    while ( my $booking = $bookings->next ) {
+
+        # Booking for this item
+        if ( defined( $booking->item_id )
+            && $booking->item_id == $self->itemnumber )
+        {
+            return $booking;
+        }
+
+        # Booking for another item
+        elsif ( defined( $booking->item_id ) ) {
+            # Due for another booking, remove from pool
+            delete $loanable_items->{ $booking->item_id };
+            next;
+
+        }
+
+        # Booking for any item
+        else {
+            # Can another item satisfy this booking?
+        }
+    }
+    return;
+}
+
 =head3 check_booking
 
   my $bookable =
@@ -613,9 +692,9 @@ sub place_booking {
         {
             start_date     => $params->{start_date},
             end_date       => $params->{end_date},
-            borrowernumber => $patron->borrowernumber,
-            biblionumber   => $self->biblionumber,
-            itemnumber     => $self->itemnumber,
+            patron_id      => $patron->borrowernumber,
+            biblio_id      => $self->biblionumber,
+            item_id        => $self->itemnumber,
         }
     )->store();
     return $booking;

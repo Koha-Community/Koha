@@ -202,6 +202,10 @@ if( $onsite_checkout && !$duedatespec_allow ) {
         }
     }
 }
+my $reduced_datedue = $query->param('reduceddue');
+if ( $reduced_datedue ) {
+    $datedue = dt_from_string( $reduced_datedue );
+}
 
 my $inprocess = (@$barcodes == 0) ? '' : $query->param('inprocess');
 if ( @$barcodes == 0 && $charges eq 'yes' ) {
@@ -370,9 +374,16 @@ if (@$barcodes) {
         ? qw( UNKNOWN_BARCODE NO_OPEN_DAYS )
         : ( keys %$error );
 
+    if ( $error->{BOOKED_TO_ANOTHER} ) {
+        $template_params->{BOOKED_TO_ANOTHER} = $error->{BOOKED_TO_ANOTHER};
+        $template_params->{IMPOSSIBLE} = 1;
+        $blocker = 1;
+    }
+
     foreach my $code ( @blocking_error_codes ) {
         if ($error->{$code}) {
             $template_params->{$code} = $error->{$code};
+
             $template_params->{IMPOSSIBLE} = 1;
             $blocker = 1;
         }
@@ -397,6 +408,10 @@ if (@$barcodes) {
                 $template_params->{getBarcodeMessageIteminfo} = $item->barcode;
                 $template_params->{NEEDSCONFIRMATION} = 1;
                 $confirm_required = 1;
+                if ( $needsconfirmation eq 'BOOKED_TO_ANOTHER' ) {
+                    my $reduceddue = dt_from_string($$question{$needsconfirmation}->start_date)->subtract( days => 1 );
+                    $template_params->{reduceddue} = $reduceddue;
+                }
             }
         }
         unless($confirm_required) {
@@ -413,7 +428,20 @@ if (@$barcodes) {
                 );
                 $recall_id = ( $recall and $recall->id ) ? $recall->id : undef;
             }
-            my $issue = AddIssue( $patron, $barcode, $datedue, $cancelreserve, undef, undef, { onsite_checkout => $onsite_checkout, auto_renew => $session->param('auto_renew'), switch_onsite_checkout => $switch_onsite_checkout, cancel_recall => $cancel_recall, recall_id => $recall_id, } );
+            # If booked (alerts or confirmation) update datedue to end of booking
+            if ( my $booked = $question->{BOOKED_EARLY} // $alerts->{BOOKED} ) {
+                $datedue = $booked->end_date;
+            }
+            my $issue = AddIssue(
+                $patron, $barcode, $datedue,
+                $cancelreserve,
+                undef, undef,
+                {
+                    onsite_checkout        => $onsite_checkout,        auto_renew    => $session->param('auto_renew'),
+                    switch_onsite_checkout => $switch_onsite_checkout, cancel_recall => $cancel_recall,
+                    recall_id              => $recall_id,
+                }
+            );
             $template_params->{issue} = $issue;
             $session->clear('auto_renew');
             $inprocess = 1;

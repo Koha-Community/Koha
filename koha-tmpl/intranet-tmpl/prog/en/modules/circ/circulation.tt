@@ -92,6 +92,10 @@
                         <div class="dialog alert">Item was checked out to [% INCLUDE 'patron-title.inc' patron = alert.RETURNED_FROM_ANOTHER.patron %] and was returned automatically.</div>
                     [% END %]
 
+                    [% IF alert.BOOKED %]
+                        <div class="dialog alert">Item is booked by this user<div>
+                    [% END %]
+
                     [% IF ( nopermission ) %]
                         <div class="dialog alert">Staff members are not allowed to discharge borrowers, nor borrowers to request a discharge.</div>
                     [% END %]
@@ -244,6 +248,17 @@
                                     [% END %]
                                 [% END %]
 
+                                [% IF ( BOOKED_TO_ANOTHER ) %]
+                                    <li>
+                                        Due for another patron booking by: [% BOOKED_TO_ANOTHER.start_date | $KohaDates %]
+                                    </li>
+                                [% END %]
+
+                                [% IF ( BOOKED_EARLY ) %]
+                                    <li>
+                                        Patron has this item booked for checkout on [% BOOKED_EARLY.start_date | $KohaDates %]
+                                    </li>
+                                [% END %]
                             </ul>
 
                             [% IF CAN_user_circulate_force_checkout or HIGHHOLDS %]
@@ -322,6 +337,19 @@
                                         </p>
                                     [% ELSE %]
                                         <input type="hidden" name="duedatespec" value="[% duedatespec | html %]" />
+                                    [% END %]
+
+                                    [% IF ( BOOKED_TO_ANOTHER ) %]
+                                        <p>
+                                            <label for="reduceddue">Reducing due date to: <label>
+                                            <input type="text" size="20" id="reudceddue" name="reduceddue" value="[% reduceddue | $KohaDates with_hours => 1 %]" readonly="readonly">
+                                        </p>
+                                    [% END %]
+
+                                    [% IF ( BOOKED_EARLY ) %]
+                                        <p>
+                                            Allow early collection?
+                                        </p>
                                     [% END %]
 
                                     <input type="hidden" name="stickyduedate" value="[% stickyduedate | html %]" />
@@ -529,6 +557,10 @@
 
                                 [% IF (forceallow) %]
                                     <li>Restriction overridden temporarily.</li>
+                                [% END %]
+
+                                [% IF ( BOOKED_TO_ANOTHER ) %]
+                                    <li>!!A booking exists!!</li>
                                 [% END %]
                             </ul>
                         </div> <!-- /#circ_impossible -->
