@@ -556,6 +556,13 @@
             return false;
         }
 
+        $('#memberresultst tbody').on('click','td',function(e){
+            var $checkbox = $(this).find("input[type=checkbox]");
+            if (e.target.type != "checkbox") {
+                $checkbox.prop('checked', !$checkbox.prop("checked"));
+            }
+        });
+
         // User has clicked on the Clear button
         function clearFilters(redraw) {
             $("#searchform select").val('');
