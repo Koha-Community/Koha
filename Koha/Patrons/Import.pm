@@ -24,6 +24,7 @@ use Encode qw( decode_utf8 );
 use Try::Tiny qw( catch try );
 
 use C4::Members qw( checkcardnumber );
+use C4::Letters qw( GetPreparedLetter EnqueueLetter );
 
 use Koha::Libraries;
 use Koha::Patrons;
@@ -74,6 +75,7 @@ sub import_patrons {
     my $overwrite_cardnumber = $params->{overwrite_cardnumber};
     my $overwrite_passwords  = $params->{overwrite_passwords};
     my $dry_run              = $params->{dry_run};
+    my $send_welcome         = $params->{send_welcome};
     my $extended             = C4::Context->preference('ExtendedPatronAttributes');
     my $set_messaging_prefs  = C4::Context->preference('EnhancedMessagingPreferences');
 
@@ -196,11 +198,13 @@ sub import_patrons {
             }
         }
 
+        my $is_new = 0;
         if ($patron) {
             $member = $patron->unblessed;
             $borrowernumber = $member->{'borrowernumber'};
         } else {
             $member = {};
+            $is_new = 1;
         }
 
         if ( C4::Members::checkcardnumber( $borrower{cardnumber}, $borrowernumber ) ) {
@@ -277,7 +281,6 @@ sub import_patrons {
                 }
             }
 
-            my $patron = Koha::Patrons->find( $borrowernumber );
             try {
                 $schema->storage->txn_do(sub {
                     $patron->set(\%borrower)->store;
@@ -373,7 +376,7 @@ sub import_patrons {
         else {
             try {
                 $schema->storage->txn_do(sub {
-                    my $patron = Koha::Patron->new(\%borrower)->store;
+                    $patron = Koha::Patron->new(\%borrower)->store;
                     $borrowernumber = $patron->id;
 
                     if ( $patron->is_debarred ) {
@@ -438,6 +441,49 @@ sub import_patrons {
         }
 
         next LINE unless $success;
+
+        # Send ACCTDETAILS welcome email is the user is new and we're set to send mail
+        if ($send_welcome && $is_new) {
+            my $emailaddr = $patron->notice_email_address;
+
+            # if we manage to find a valid email address, send notice
+            if ($emailaddr) {
+                eval {
+                    my $letter = GetPreparedLetter(
+                        module      => 'members',
+                        letter_code => 'ACCTDETAILS',
+                        branchcode  => $patron->branchcode,,
+                        lang        => $patron->lang || 'default',
+                        tables      => {
+                            'branches'  => $patron->branchcode,
+                            'borrowers' => $patron->borrowernumber,
+                        },
+                        want_librarian => 1,
+                    ) or return;
+
+                    my $message_id = EnqueueLetter(
+                        {
+                            letter                 => $letter,
+                            borrowernumber         => $patron->id,
+                            to_address             => $emailaddr,
+                            message_transport_type => 'email'
+                        }
+                    );
+                };
+                if ($@) {
+                    push @errors, { welcome_email_err => 1, borrowernumber => $borrowernumber };
+                } else {
+                    push(
+                        @feedback,
+                        {
+                            feedback     => 1,
+                            name         => 'welcome_sent',
+                            value        => $borrower{'surname'} . ' / ' . $borrowernumber . ' / ' . $emailaddr
+                        }
+                    );
+                }
+            }
+        }
 
         # Add a guarantor if we are given a relationship
         if ( $guarantor_id ) {

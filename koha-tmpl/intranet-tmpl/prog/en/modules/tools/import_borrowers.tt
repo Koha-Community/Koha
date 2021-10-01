@@ -343,6 +343,17 @@
             </fieldset>
         [% END %]
 
+        <fieldset class="rows">
+            <legend>Welcome email</legend>
+            <ul>
+                <li>
+                    <input class="welcome_new" type="checkbox" id="welcome_new" name="welcome_new"/>
+                    <label class="welcome_new" for="welcome_new">Send email to new patrons</label>
+                    <span class="hint"> ACCTDETAILS notice is used</span>
+                </li>
+            </ul>
+        </fieldset>
+
         <fieldset class="action">
             <input type="hidden" name="csrf_token" value="[% csrf_token | html %]" />
             <input type="submit" value="Import" />

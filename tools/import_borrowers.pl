@@ -95,6 +95,7 @@ my @preserve_fields = $input->multi_param('preserve_existing');
 
 my $uploadborrowers = $input->param('uploadborrowers');
 my $matchpoint      = $input->param('matchpoint');
+my $welcome_new     = $input->param('welcome_new');
 if ($matchpoint) {
     $matchpoint =~ s/^patron_attribute_//;
 }
@@ -126,6 +127,7 @@ if ( $uploadborrowers && length($uploadborrowers) > 0 ) {
             overwrite_passwords          => $overwrite_passwords,
             preserve_extended_attributes => scalar $input->param( 'ext_preserve' ) || 0,
             preserve_fields              => \@preserve_fields,
+            send_welcome                 => $welcome_new,
         }
     );
 
