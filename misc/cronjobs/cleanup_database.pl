@@ -530,14 +530,13 @@ if ($pStatistics) {
     }
 }
 
-$return_claims = C4::Context->preference('CleanUpDatabaseReturnClaims') if $return_claims;
-if ($return_claims) {
-    print "Purging return claims older than $return_claims days.\n" if $verbose;
+if( $return_claims && ( my $days = C4::Context->preference('CleanUpDatabaseReturnClaims') )) {
+    print "Purging return claims older than $days days.\n" if $verbose;
 
     $return_claims = Koha::Checkouts::ReturnClaims->filter_by_last_update(
         {
             timestamp_column_name => 'resolved_on',
-            days => $return_claims
+            days => $days,
         }
     );
 
