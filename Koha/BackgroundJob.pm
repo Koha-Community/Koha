@@ -228,19 +228,40 @@ sub cancel {
     $self->status('cancelled')->store;
 }
 
+=head2 Internal methods
+
+=head3 _derived_class
+
+=cut
+
 sub _derived_class {
     my ( $self ) = @_;
     my $job_type = $self->type;
-    return $job_type eq 'batch_biblio_record_modification'
-      ? Koha::BackgroundJob::BatchUpdateBiblio->new
-      : $job_type eq 'batch_authority_record_modification'
-      ? Koha::BackgroundJob::BatchUpdateAuthority->new
-      : $job_type eq 'batch_biblio_record_deletion'
-      ? Koha::BackgroundJob::BatchDeleteBiblio->new
-      : $job_type eq 'batch_authority_record_deletion'
-      ? Koha::BackgroundJob::BatchDeleteAuthority->new
-      : Koha::Exceptions::Exception->throw($job_type . ' is not a valid job_type')
+
+    my $class = $self->type_to_class_mapping->{$job_type};
+
+    Koha::Exceptions::Exception->throw($job_type . ' is not a valid job_type')
+        unless $class;
+
+    return $class->new;
 }
+
+=head3 type_to_class_mapping
+
+=cut
+
+sub type_to_class_mapping {
+    return {
+        batch_authority_record_deletion     => 'Koha::BackgroundJob::BatchDeleteAuthority',
+        batch_authority_record_modification => 'Koha::BackgroundJob::BatchUpdateAuthority',
+        batch_biblio_record_deletion        => 'Koha::BackgroundJob::BatchDeleteBiblio',
+        batch_biblio_record_modification    => 'Koha::BackgroundJob::BatchUpdateBiblio',
+    };
+}
+
+=head3 _type
+
+=cut
 
 sub _type {
     return 'BackgroundJob';
