@@ -720,7 +720,9 @@ subtest 'context option in ModBiblio is handled correctly' => sub {
             [ '500', 'a', 'One bottle of beer in the fridge' ],       # original
             [ '999', 'c', $biblionumber, 'd', $biblioitemnumber ],    # created by AddBiblio
     ]);
-    $expected_record->leader('00196    a2200073   4500');
+
+    # Make sure leader is equal after AddBiblio
+    $expected_record->leader($saved_record->leader());
 
     is(
         $saved_record->as_formatted,
@@ -744,7 +746,9 @@ subtest 'context option in ModBiblio is handled correctly' => sub {
             [ '500', 'a', 'One cold bottle of beer in the fridge' ],
             [ '999', 'c', $biblionumber, 'd', $biblioitemnumber ],    # created by AddBiblio
     ]);
-    $expected_record->leader('00250    a2200085   4500');
+
+    # Make sure leader is equal after ModBiblio
+    $expected_record->leader($updated_record->leader());
 
     is(
         $updated_record->as_formatted,
