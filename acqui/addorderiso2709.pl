@@ -163,6 +163,8 @@ if ($op eq ""){
         $c_discount = $c_discount / 100 if $c_discount > 1;
         my $c_sort1 = shift( @sort1 ) || $input->param('all_sort1') || '';
         my $c_sort2 = shift( @sort2 ) || $input->param('all_sort2') || '';
+        my $c_replacement_price = shift( @orderreplacementprices );
+        my $c_price = shift( @prices ) || GetMarcPrice($marcrecord, C4::Context->preference('marcflavour'));
 
         # Insert the biblio, or find it through matcher
         unless ( $biblionumber ) {
@@ -323,24 +325,23 @@ if ($op eq ""){
                 order_internalnote => $cgiparams->{'all_order_internalnote'},
                 order_vendornote   => $cgiparams->{'all_order_vendornote'},
                 currency           => $cgiparams->{'all_currency'},
-                replacementprice   => shift( @orderreplacementprices ),
+                replacementprice   => $c_replacement_price,
             );
             # get the price if there is one.
-            my $price= shift( @prices ) || GetMarcPrice($marcrecord, C4::Context->preference('marcflavour'));
-            if ($price){
+            if ($c_price){
                 # in France, the cents separator is the , but sometimes, ppl use a .
                 # in this case, the price will be x100 when unformatted ! Replace the . by a , to get a proper price calculation
-                $price =~ s/\./,/ if C4::Context->preference("CurrencyFormat") eq "FR";
-                $price = Koha::Number::Price->new($price)->unformat;
+                $c_price =~ s/\./,/ if C4::Context->preference("CurrencyFormat") eq "FR";
+                $c_price = Koha::Number::Price->new($c_price)->unformat;
                 $orderinfo{tax_rate} = $bookseller->tax_rate;
                 my $c = $c_discount ? $c_discount : $bookseller->discount / 100;
                 $orderinfo{discount} = $c;
                 if ( $c_discount ) {
-                    $orderinfo{ecost} = $price;
+                    $orderinfo{ecost} = $c_price;
                     $orderinfo{rrp}   = $orderinfo{ecost} / ( 1 - $c );
                 } else {
-                    $orderinfo{ecost} = $price * ( 1 - $c );
-                    $orderinfo{rrp}   = $price;
+                    $orderinfo{ecost} = $c_price * ( 1 - $c );
+                    $orderinfo{rrp}   = $c_price;
                 }
                 $orderinfo{listprice} = $orderinfo{rrp} / $active_currency->rate;
                 $orderinfo{unitprice} = $orderinfo{ecost};
