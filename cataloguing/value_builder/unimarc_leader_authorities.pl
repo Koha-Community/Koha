@@ -20,10 +20,10 @@
 use Modern::Perl;
 
 use Koha::Util::FrameworkPlugin qw(wrapper);
-use C4::Auth;
+use C4::Auth qw( get_template_and_user );
 use CGI qw ( -utf8 );
 use C4::Context;
-use C4::Output;
+use C4::Output qw( output_html_with_http_headers );
 
 
 sub plugin_javascript {
@@ -52,35 +52,27 @@ sub plugin {
     my $index  = $input->param('index');
     my $result = $input->param('result');
 
-    my $dbh = C4::Context->dbh;
-
-    #my $defaultlanguage = C4::Context->preference("UNIMARCField100Language");
-    # $defaultlanguage = "fre" if (!$defaultlanguage || length($defaultlanguage) != 3);
-
     my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
         {
             template_name => "cataloguing/value_builder/unimarc_leader_authorities.tt",
             query         => $input,
             type          => "intranet",
-            authnotrequired => 0,
             flagsrequired   => { editcatalogue => '*' },
-            debug           => 1,
         }
     );
     $result = "     nz  a22     3  4500" unless $result;
 
-
-    my $f5  = substr( $result, 5, 1 ); $f5  = wrapper( $f5 ) if $f5;
-    my $f6  = substr( $result, 6, 1 ); $f6  = wrapper( $f6 ) if $f6;
-    my $f9  = substr( $result, 9, 1 ); $f9  = wrapper( $f9 ) if $f9;
-    my $f17  = substr( $result, 17, 1 ); $f17  = wrapper( $f17 ) if $f17;
+    my $f5  = substr( $result, 5, 1 ); $f5   = wrapper( $f5 ) if $f5;
+    my $f6  = substr( $result, 6, 1 ); $f6   = wrapper( $f6 ) if $f6;
+    my $f9  = substr( $result, 9, 1 ); $f9   = wrapper( $f9 ) if $f9;
+    my $f17 = substr( $result, 17, 1 ); $f17 = wrapper( $f17 ) if $f17;
 
     $template->param(
         index     => $index,
         "f5$f5"   => 1,
         "f6$f6"   => 1,
         "f9$f9"   => 1,
-        "f17$f17"   => 1,
+        "f17$f17" => 1,
 );
     output_html_with_http_headers $input, $cookie, $template->output;
 }
