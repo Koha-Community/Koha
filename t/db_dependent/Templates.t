@@ -101,7 +101,7 @@ subtest 'Testing themelanguage' => sub {
 };
 
 subtest 'Testing gettemplate/badtemplatecheck' => sub {
-    plan tests => 7;
+    plan tests => 8;
 
     my $cgi = CGI->new;
     my $template;
@@ -118,6 +118,12 @@ subtest 'Testing gettemplate/badtemplatecheck' => sub {
     warning_like { eval { C4::Templates::badtemplatecheck( '/tmp/about.tt' ) }; warn $@ if $@; } undef, 'No warn on template from plugin dir';
     # Refuse wrong extension
     warning_like { eval { C4::Templates::badtemplatecheck( '/tmp/about.tmpl' ) }; warn $@ if $@; } qr/bad template/, 'Warn on bad extension';
+
+    # Make sure badtemplatecheck works on a copy of pluginsdir and doesn't modify its values
+    t::lib::Mocks::mock_config( 'pluginsdir', [ '/tmp', '/tmp2' ] );
+    C4::Templates::badtemplatecheck('/tmp/test.tt');
+    cmp_deeply( C4::Context->config('pluginsdir'), ['/tmp', '/tmp2'], "Doesn't modify configuration values" );
+
 };
 
 subtest "Absolute path change in _get_template_file" => sub {
