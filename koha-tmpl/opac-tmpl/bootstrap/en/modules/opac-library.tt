@@ -16,7 +16,16 @@
     [% END %] catalog
 </title>
 [% INCLUDE 'doc-head-close.inc' %]
-[% BLOCK cssinclude %][% END %]
+[% BLOCK cssinclude %]
+    <style>
+        .section_library {
+            margin-top: 1rem;
+            margin-bottom: 1rem;
+            border: 0;
+            border-bottom: 1px solid rgba(0,0,0,.1);
+        }
+    </style>
+[% END %]
 </head>
 
 [% INCLUDE 'bodytag.inc' bodyid='opac-library' bodyclass='scrollto' %]
@@ -33,13 +42,13 @@
         [% PROCESS 'display-library-address' %]
     </div> <!-- /div property=address -->
     [% IF ( library.branchphone ) %]
-        <p>Phone: <a href="tel:[% library.branchphone | url %]" property="telephone">[% library.branchphone | html %]</a></p>
+        <p class="branchphone">Phone: <a href="tel:[% library.branchphone | url %]" property="telephone">[% library.branchphone | html %]</a></p>
     [% END %]
     [% IF ( library.branchfax ) %]
-        <p>Fax: <span property="faxNumber">[% library.branchfax | html %]</span></p>
+        <p class="branchfax">Fax: <span property="faxNumber">[% library.branchfax | html %]</span></p>
     [% END %]
     [% IF ( library.branchurl ) %]
-        <p><a href="[% library.branchurl | url %]" property="url">[% library.branchurl | html %]</a></p>
+        <p class="branchurl"><a href="[% library.branchurl | url %]" property="url">[% library.branchurl | html %]</a></p>
     [% END %]
 [% END %]
 
@@ -86,8 +95,10 @@
                             <div class="col-lg-8">
                                 [% PROCESS library_info %]
                                 [% IF ( library.opac_info ) %]
-                                    <hr />
-                                    [% PROCESS library_description %]
+                                    <div class="library_description">
+                                        <hr />
+                                        [% PROCESS library_description %]
+                                    </div>
                                 [% END %]
                             </div>
                             <div class="col-lg-4">
@@ -96,13 +107,13 @@
                                         <ul class="fa-ul">
                                             [% FOREACH library IN libraries %]
                                                 [% IF ( branchcode == library.branchcode ) %]
-                                                    <li class="current">
+                                                    <li id="menu_[% library.branchcode| html %]" class="current">
                                                         <a href="/cgi-bin/koha/opac-library.pl?branchcode=[% library.branchcode | url %]">
                                                             <i class="fa fa-li fa-map-pin" aria-hidden="true"></i> [% library.branchname | html %]
                                                         </a>
                                                     </li>
                                                 [% ELSE %]
-                                                    <li>
+                                                    <li id="menu_[% library.branchcode| html %]">
                                                         <a href="/cgi-bin/koha/opac-library.pl?branchcode=[% library.branchcode | url %]">
                                                             <i class="fa fa-li" aria-hidden="true"></i> [% library.branchname | html %]
                                                         </a>
@@ -121,17 +132,20 @@
                         <h1>[% IF ( singleBranchMode ) %]Library[% ELSE %]Libraries[% END %]</h1>
 
                         [% FOREACH library IN libraries %]
-                            <h2 property="name">
-                                [% IF ( libraries.count > 1 ) %]
-                                    <a href="/cgi-bin/koha/opac-library.pl?branchcode=[% library.branchcode | url %]">[% library.branchname | html %]</a>
-                                [% ELSE %]
-                                    [% library.branchname | html %]
-                                [% END %]
-                            </h2>
-                            [% PROCESS library_info %]
-                            <hr>
+                            <div class="section_library" id="section_[% library.branchcode | html %]">
+                                <h2 property="name">
+                                    [% IF ( libraries.count > 1 ) %]
+                                        <a href="/cgi-bin/koha/opac-library.pl?branchcode=[% library.branchcode | url %]">[% library.branchname | html %]</a>
+                                    [% ELSE %]
+                                        [% library.branchname | html %]
+                                    [% END %]
+                                </h2>
+                                [% PROCESS library_info %]
+                            </div>
                             [% IF ( libraries.count == 1 ) %]
-                                [% PROCESS library_description %]
+                                <div class="library_description">
+                                    [% PROCESS library_description %]
+                                </div>
                             [% END %]
                         [% END %]
                     </div> <!-- /#library_info -->
