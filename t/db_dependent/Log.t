@@ -21,7 +21,6 @@ use C4::Context;
 use C4::Log qw( logaction cronlogaction );
 use C4::Auth qw( checkpw );
 use Koha::Database;
-use Koha::DateUtils;
 use Koha::ActionLogs;
 
 use t::lib::Mocks qw/mock_preference/; # to mock CronjobLog

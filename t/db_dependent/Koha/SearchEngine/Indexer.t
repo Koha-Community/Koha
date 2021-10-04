@@ -20,7 +20,6 @@ use C4::Biblio qw( ModZebra ModBiblio ModBiblioMarc DelBiblio );
 use C4::Circulation qw( MarkIssueReturned AddReturn LostItem );
 use C4::Items qw( ModDateLastSeen ModItemTransfer );
 use Koha::Database;
-use Koha::DateUtils;
 use Koha::SearchEngine::Elasticsearch;
 use Koha::SearchEngine::Indexer;
 

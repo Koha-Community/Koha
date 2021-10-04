@@ -29,7 +29,6 @@ use C4::Reserves qw( AddReserve );
 use C4::Circulation qw( AddIssue );
 use Koha::CirculationRules;
 use Koha::Database;
-use Koha::DateUtils;
 use Koha::Holds;
 
 BEGIN {

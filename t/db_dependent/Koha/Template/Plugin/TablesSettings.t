@@ -3,7 +3,6 @@
 use Modern::Perl;
 
 use C4::Context;
-use Koha::DateUtils;
 
 use Test::MockModule;
 use Test::More tests => 3;

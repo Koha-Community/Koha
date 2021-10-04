@@ -24,7 +24,6 @@ use C4::Circulation qw( IsItemIssued AddIssue AddReturn );
 use C4::Items;
 use C4::Biblio qw( AddBiblio );
 use Koha::Database;
-use Koha::DateUtils;
 use Koha::Items;
 use Koha::Patrons;
 
