@@ -76,6 +76,10 @@ our $RULE_KINDS = {
     article_requests => {
         scope => [ 'branchcode', 'categorycode', 'itemtype' ],
     },
+    max_daily_article_requests => {
+        scope => [ 'branchcode', 'categorycode' ],
+    },
+
     auto_renew => {
         scope => [ 'branchcode', 'categorycode', 'itemtype' ],
     },

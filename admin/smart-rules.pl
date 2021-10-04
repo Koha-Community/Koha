@@ -457,6 +457,75 @@ elsif ($op eq "add-branch-cat") {
         );
     }
 }
+elsif ( $op eq "add-max-daily-article-requests" ) {
+    my $categorycode               = $input->param('categorycode');
+    my $max_daily_article_requests = strip_non_numeric( scalar $input->param('max_daily_article_requests') );
+
+    if ( $branch eq "*" ) {
+        if ( $categorycode eq "*" ) {
+            Koha::CirculationRules->set_rules(
+                {   categorycode => undef,
+                    branchcode   => undef,
+                    rules        => { max_daily_article_requests => $max_daily_article_requests, }
+                }
+            );
+        } else {
+            Koha::CirculationRules->set_rules(
+                {   categorycode => $categorycode,
+                    branchcode   => undef,
+                    rules        => { max_daily_article_requests => $max_daily_article_requests, }
+                }
+            );
+        }
+    } elsif ( $categorycode eq "*" ) {
+        Koha::CirculationRules->set_rules(
+            {   categorycode => undef,
+                branchcode   => $branch,
+                rules        => { max_daily_article_requests => $max_daily_article_requests, }
+            }
+        );
+    } else {
+        Koha::CirculationRules->set_rules(
+            {   categorycode => $categorycode,
+                branchcode   => $branch,
+                rules        => { max_daily_article_requests => $max_daily_article_requests, }
+            }
+        );
+    }
+} elsif ( $op eq 'del-max-daily-article-requests' ) {
+    my $categorycode = $input->param('categorycode');
+    if ( $branch eq "*" ) {
+        if ( $categorycode eq "*" ) {
+            Koha::CirculationRules->set_rules(
+                {   branchcode   => undef,
+                    categorycode => undef,
+                    rules        => { max_daily_article_requests => undef, }
+                }
+            );
+        } else {
+            Koha::CirculationRules->set_rules(
+                {   categorycode => $categorycode,
+                    branchcode   => undef,
+                    rules        => { max_daily_article_requests => undef, }
+                }
+            );
+        }
+    } elsif ( $categorycode eq "*" ) {
+        Koha::CirculationRules->set_rules(
+            {   branchcode   => $branch,
+                categorycode => undef,
+                rules        => { max_daily_article_requests => undef, }
+            }
+        );
+    } else {
+        Koha::CirculationRules->set_rules(
+            {   categorycode => $categorycode,
+                branchcode   => $branch,
+                rules        => { max_daily_article_requests => undef, }
+            }
+        );
+    }
+}
 elsif ($op eq "add-branch-item") {
     my $itemtype                = $input->param('itemtype');
     my $holdallowed             = $input->param('holdallowed');
