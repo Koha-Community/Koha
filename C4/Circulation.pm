@@ -2268,6 +2268,7 @@ sub AddReturn {
                 item     => $item->unblessed,
                 borrower => $patron->unblessed,
                 branch   => $branch,
+                issue    => $issue
             });
         }
 
@@ -3533,8 +3534,8 @@ B<Example>:
 
 sub SendCirculationAlert {
     my ($opts) = @_;
-    my ($type, $item, $borrower, $branch) =
-        ($opts->{type}, $opts->{item}, $opts->{borrower}, $opts->{branch});
+    my ($type, $item, $borrower, $branch, $issue) =
+        ($opts->{type}, $opts->{item}, $opts->{borrower}, $opts->{branch}, $opts->{issue});
     my %message_name = (
         CHECKIN  => 'Item_Check_in',
         CHECKOUT => 'Item_Checkout',
@@ -3544,7 +3545,21 @@ sub SendCirculationAlert {
         borrowernumber => $borrower->{borrowernumber},
         message_name   => $message_name{$type},
     });
-    my $issues_table = ( $type eq 'CHECKOUT' || $type eq 'RENEWAL' ) ? 'issues' : 'old_issues';
+
+
+    my $tables = {
+        items => $item->{itemnumber},
+        biblio      => $item->{biblionumber},
+        biblioitems => $item->{biblionumber},
+        borrowers   => $borrower,
+        branches    => $branch,
+    };
+
+    if( $type eq 'CHECKIN' ){
+        $tables->{old_issues} = $issue->issue_id;
+    } else {
+        $tables->{issues} = $item->{itemnumber};
+    }
 
     my $schema = Koha::Database->new->schema;
     my @transports = keys %{ $borrower_preferences->{transports} };
@@ -3562,14 +3577,7 @@ sub SendCirculationAlert {
             branchcode => $branch,
             message_transport_type => $mtt,
             lang => $borrower->{lang},
-            tables => {
-                $issues_table => $item->{itemnumber},
-                'items'       => $item->{itemnumber},
-                'biblio'      => $item->{biblionumber},
-                'biblioitems' => $item->{biblionumber},
-                'borrowers'   => $borrower,
-                'branches'    => $branch,
-            }
+            tables => $tables,
         ) or next;
 
         C4::Context->dbh->do(q|LOCK TABLE message_queue READ|) unless $do_not_lock;
