@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 3;
+use Test::More tests => 2;
 use Test::MockModule;
 
 use Koha::ArticleRequest::Status;
@@ -79,9 +79,9 @@ subtest 'requested() tests' => sub {
     $schema->storage->txn_rollback;
 };
 
-subtest 'filter_by_current() tests' => sub {
+subtest 'filter_by_current / filter_by_finished tests' => sub {
 
-    plan tests => 1;
+    plan tests => 2;
 
     $schema->storage->txn_begin;
 
@@ -128,55 +128,6 @@ subtest 'filter_by_current() tests' => sub {
     my $current_article_requests = $article_requests->filter_by_current;
 
     is( $current_article_requests->count, 3, 'Count is correct' );
-
-    $schema->storage->txn_rollback;
-};
-
-subtest 'filter_by_current() tests' => sub {
-
-    plan tests => 1;
-
-    $schema->storage->txn_begin;
-
-    my $ar_requested = $builder->build_object(
-        {
-            class => 'Koha::ArticleRequests',
-            value => { status => Koha::ArticleRequest::Status::Requested }
-        }
-    );
-    my $ar_pending = $builder->build_object(
-        {
-            class => 'Koha::ArticleRequests',
-            value => { status => Koha::ArticleRequest::Status::Pending }
-        }
-    );
-    my $ar_processing = $builder->build_object(
-        {
-            class => 'Koha::ArticleRequests',
-            value => { status => Koha::ArticleRequest::Status::Processing }
-        }
-    );
-    my $ar_completed = $builder->build_object(
-        {
-            class => 'Koha::ArticleRequests',
-            value => { status => Koha::ArticleRequest::Status::Completed }
-        }
-    );
-    my $ar_cancelled = $builder->build_object(
-        {
-            class => 'Koha::ArticleRequests',
-            value => { status => Koha::ArticleRequest::Status::Canceled }
-        }
-    );
-
-    my $article_requests = Koha::ArticleRequests->search(
-        {
-            id => [
-                $ar_requested->id, $ar_pending->id, $ar_processing->id,
-                $ar_completed->id, $ar_cancelled->id
-            ]
-        }
-    );
 
     my $finished_article_requests = $article_requests->filter_by_finished;
 
