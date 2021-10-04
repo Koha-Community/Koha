@@ -6,8 +6,25 @@
 <script>
     var debug    = "[% debug | html %]";
     var dateformat_pref = "[% Koha.Preference('dateformat ') | html %]";
-    var dateformat_string = [% IF ( dateformat == "us" ) %]"mm/dd/yy"[% ELSIF ( dateformat == "metric" ) %]"dd/mm/yy"[% ELSIF ( dateformat == "dmydot" ) %]"dd.mm.yy"[% ELSE %]"yy-mm-dd"[% END %];
-    var flatpickr_dateformat_string = [% IF ( dateformat == "us" ) %]"m/d/Y"[% ELSIF ( dateformat == "metric" ) %]"d/m/Y"[% ELSIF ( dateformat == "dmydot" ) %]"d.m.Y"[% ELSE %]"Y-m-d"[% END %];
+    var dateformat_string = "";
+    var flatpickr_dateformat_string = "";
+    switch ( dateformat_pref ){
+        case "us":
+            dateformat_string = "mm/dd/yy";
+            flatpickr_dateformat_string = "m/d/Y";
+            break;
+        case "metric":
+            dateformat_string = "dd/mm/yy";
+            flatpickr_dateformat_string = "d/m/Y";
+            break;
+        case "dmydot":
+            dateformat_string = "dd.mm.yy";
+            flatpickr_dateformat_string = "d.m.Y";
+            break;
+        default:
+            dateformat_string = "yy-mm-dd";
+            flatpickr_dateformat_string = "Y-m-d";
+    }
     var sentmsg = 0;
     var bidi = [% IF(bidi) %] true[% ELSE %] false[% END %];
     var calendarFirstDayOfWeek = '[% Koha.Preference('CalendarFirstDayOfWeek') | html %]';
