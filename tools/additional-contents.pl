@@ -107,7 +107,7 @@ elsif ( $op eq 'add_validate' ) {
     my $number = $cgi->param('number');
 
     my $success = 1;
-    for my $lang ( @lang ) {
+    for my $lang ( sort {$a ne 'default'} @lang ) { # Process 'default' first
         my $title = shift @title;
         my $content = shift @content;
         my $additional_content = Koha::AdditionalContents->find(
@@ -161,7 +161,7 @@ elsif ( $op eq 'add_validate' ) {
             my $additional_content = Koha::AdditionalContent->new(
                 {
                     category       => $category,
-                    code           => $code,
+                    code           => $code || 'tmp_code',
                     location       => $location,
                     branchcode     => $branchcode,
                     title          => $title,
@@ -173,7 +173,16 @@ elsif ( $op eq 'add_validate' ) {
                     borrowernumber => $borrowernumber,
                 }
             )->store;
-            eval { $additional_content->store; };
+            eval {
+                $additional_content->store;
+                unless ($code) {
+                    $additional_content->discard_changes;
+                    $code = $category eq 'news'
+                      ? 'News_' . $additional_content->idnew
+                      : $location . '_' . $additional_content->idnew;
+                    $additional_content->code($code)->store;
+                }
+            };
             if ($@) {
                 $success = 0;
                 push @messages, { type => 'error', code => 'error_on_insert' };
