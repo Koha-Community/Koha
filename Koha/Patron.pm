@@ -31,6 +31,7 @@ use Koha::ArticleRequests;
 use C4::Letters;
 use Koha::AuthUtils;
 use Koha::Checkouts;
+use Koha::CirculationRules;
 use Koha::Club::Enrollments;
 use Koha::Database;
 use Koha::DateUtils qw( dt_from_string );
@@ -960,16 +961,29 @@ sub move_to_deleted {
 
 =head3 can_request_article
 
-    if ( $patron->can_request_article ) { ... }
+    if ( $patron->can_request_article( $library->id ) ) { ... }
 
 Returns true if the patron can request articles. As limits apply for the patron
-on on the same day, those completed the same day are considered as current.
+on the same day, those completed the same day are considered as current.
+
+A I<library_id> can be passed as parameter, falling back to userenv if absent.
 
 =cut
 
 sub can_request_article {
-    my ($self) = @_;
-    my $limit = $self->category->article_request_limit;
+    my ($self, $library_id) = @_;
+
+    $library_id //= C4::Context->userenv ? C4::Context->userenv->{'branch'} : undef;
+
+    my $rule = Koha::CirculationRules->get_effective_rule(
+        {
+            branchcode   => $library_id,
+            categorycode => $self->categorycode,
+            rule_name    => 'max_daily_article_requests'
+        }
+    );
+
+    my $limit = ($rule) ? $rule->rule_value : undef;
 
     return 1 unless defined $limit;
 

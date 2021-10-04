@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 10;
+use Test::More tests => 9;
 use Test::Exception;
 use Test::Warn;
 
@@ -720,7 +720,7 @@ subtest 'can_log_into() tests' => sub {
 
 subtest 'can_request_article() tests' => sub {
 
-    plan tests => 13;
+    plan tests => 4;
 
     $schema->storage->txn_begin;
 
@@ -728,135 +728,50 @@ subtest 'can_request_article() tests' => sub {
 
     my $item = $builder->build_sample_item;
 
-    my $category = $builder->build_object(
+    my $library_1 = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $library_2 = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $patron    = $builder->build_object( { class => 'Koha::Patrons' } );
+
+    t::lib::Mocks::mock_userenv( { branchcode => $library_2->id } );
+
+    Koha::CirculationRules->set_rule(
         {
-            class => 'Koha::Patron::Categories',
-            value => {
-                article_request_limit => 1
-            }
-        }
-    );
-    my $patron = $builder->build_object(
-        {
-            class => 'Koha::Patrons',
-            value => {
-                categorycode => $category->categorycode
-            },
-        }
-    );
-
-    is( $patron->can_request_article,
-        1, 'There are no AR, so patron can request more articles' );
-
-    my $article_request_1 = Koha::ArticleRequest->new(
-        {
-            borrowernumber => $patron->id,
-            biblionumber   => $item->biblionumber,
-            itemnumber     => $item->itemnumber,
-            title          => 'an article request',
-        }
-    )->request;
-
-    is( $patron->can_request_article,
-        0, 'Limit is 1, so patron cannot request more articles' );
-    is( $patron->article_requests->count,
-        1, 'There is one current article request' );
-
-    throws_ok {
-        Koha::ArticleRequest->new(
-            {
-                borrowernumber => $patron->id,
-                biblionumber   => $item->biblionumber,
-                itemnumber     => $item->itemnumber,
-                title          => 'a second article request',
-            }
-        )->request;
-    }
-    'Koha::Exceptions::ArticleRequest::LimitReached',
-      'When limit was reached and we ask for a new AR, Limit reached is thrown';
-
-    is( $patron->can_request_article,
-        0, 'There is still an AR, so patron cannot request more articles' );
-    is( $patron->article_requests->count,
-        1, 'There is still one article request' );
-
-    $article_request_1->complete();
-
-    is( $patron->can_request_article, 0,
-'AR was completed but within one day, so patron cannot request more articles'
-    );
-
-    $article_request_1->updated_on( dt_from_string->add( days => -2 ) )
-      ->store();
-
-    is( $patron->can_request_article, 1,
-'There are no completed AR within one day, so patron can request more articles'
-    );
-
-    my $article_request_3 = Koha::ArticleRequest->new(
-        {
-            borrowernumber => $patron->id,
-            biblionumber   => $item->biblionumber,
-            itemnumber     => $item->itemnumber,
-            title          => 'a third article request',
-        }
-    )->request;
-
-    is( $patron->can_request_article,
-        0, 'A new AR was created, so patron cannot request more articles' );
-    is( $patron->article_requests->count, 2, 'There are 2 article requests' );
-
-    $article_request_3->cancel();
-
-    is( $patron->can_request_article,
-        1, 'New AR was cancelled, so patron can request more articles' );
-
-    my $article_request_4 = Koha::ArticleRequest->new(
-        {
-            borrowernumber => $patron->id,
-            biblionumber   => $item->biblionumber,
-            itemnumber     => $item->itemnumber,
-            title          => 'an fourth article request',
-        }
-    )->request;
-
-    $article_request_4->updated_on( dt_from_string->add( days => -30 ) )
-      ->store();
-
-    is( $patron->can_request_article, 0,
-'There is an old AR but not completed or cancelled, so patron cannot request more articles'
-    );
-    is( $patron->article_requests->count,
-        3, 'There are 3 current article requests' );
-
-    $schema->storage->txn_rollback;
-};
-
-subtest 'can_request_article() tests' => sub {
-
-    plan tests => 3;
-
-    $schema->storage->txn_begin;
-
-    my $category = $builder->build_object(
-        {
-            class => 'Koha::Patron::Categories',
-            value => { article_request_limit => 4 }
-        }
-    );
-    my $patron = $builder->build_object(
-        {
-            class => 'Koha::Patrons',
-            value => { categorycode => $category->id }
+            categorycode => undef,
+            branchcode   => $library_1->id,
+            rule_name    => 'max_daily_article_requests',
+            rule_value   => 4,
         }
     );
 
-    $builder->build_object( { class => 'Koha::ArticleRequests', value => { status => 'REQUESTED',  borrowernumber => $patron->id } } );
-    $builder->build_object( { class => 'Koha::ArticleRequests', value => { status => 'PENDING',    borrowernumber => $patron->id } } );
-    $builder->build_object( { class => 'Koha::ArticleRequests', value => { status => 'PROCESSING', borrowernumber => $patron->id } } );
-    $builder->build_object( { class => 'Koha::ArticleRequests', value => { status => 'CANCELED',   borrowernumber => $patron->id } } );
+    $builder->build_object(
+        {
+            class => 'Koha::ArticleRequests',
+            value => { status => 'REQUESTED', borrowernumber => $patron->id }
+        }
+    );
+    $builder->build_object(
+        {
+            class => 'Koha::ArticleRequests',
+            value => { status => 'PENDING', borrowernumber => $patron->id }
+        }
+    );
+    $builder->build_object(
+        {
+            class => 'Koha::ArticleRequests',
+            value => { status => 'PROCESSING', borrowernumber => $patron->id }
+        }
+    );
+    $builder->build_object(
+        {
+            class => 'Koha::ArticleRequests',
+            value => { status => 'CANCELED', borrowernumber => $patron->id }
+        }
+    );
 
-    ok( $patron->can_request_article, 'Patron has 3 current requests, 4 is the limit: allowed' );
+    ok(
+        $patron->can_request_article( $library_1->id ),
+        '3 current requests, 4 is the limit: allowed'
+    );
 
     # Completed request, same day
     my $completed = $builder->build_object(
@@ -869,7 +784,8 @@ subtest 'can_request_article() tests' => sub {
         }
     );
 
-    ok( !$patron->can_request_article, 'Patron has 3 current requests and a completed one the same day: denied' );
+    ok( !$patron->can_request_article( $library_1->id ),
+        '3 current requests and a completed one the same day: denied' );
 
     $completed->updated_on(
         dt_from_string->add( days => -1 )->set(
@@ -879,7 +795,21 @@ subtest 'can_request_article() tests' => sub {
         )
     )->store;
 
-    ok( $patron->can_request_article, 'Patron has 3 current requests and a completed one the day before: allowed' );
+    ok( $patron->can_request_article( $library_1->id ),
+        '3 current requests and a completed one the day before: allowed' );
+
+    Koha::CirculationRules->set_rule(
+        {
+            categorycode => undef,
+            branchcode   => $library_2->id,
+            rule_name    => 'max_daily_article_requests',
+            rule_value   => 3,
+        }
+    );
+
+    ok( !$patron->can_request_article,
+        'Not passing the library_id param makes it fallback to userenv: denied'
+    );
 
     $schema->storage->txn_rollback;
 };
