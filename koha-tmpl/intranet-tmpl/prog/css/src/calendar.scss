@@ -1,0 +1,149 @@
+$daySize: 45px;
+$exception_bg: #B3D4FF;
+$holiday_bg: #FFAEAE;
+$repeatableweekly_bg: #FFFF99;
+$repeatableyearly_bg: #FFCC66;
+$selected: #B9DB88;
+
+@import "flatpickr";
+
+.controls {
+    display: block;
+    padding: 3px 0;
+}
+
+.key {
+    line-height: 230%;
+    padding: 3px;
+    white-space: nowrap;
+
+    &.exception {
+        background-color: $exception_bg;
+    }
+
+    &.holiday {
+        background-color: $holiday_bg;
+    }
+
+    &.repeatableweekly {
+        background-color: $repeatableweekly_bg;
+    }
+
+    &.repeatableyearly {
+        background-color: $repeatableyearly_bg;
+    }
+}
+
+.flatpickr-day {
+    &.selected {
+        background-color: $selected;
+        border: 0;
+    }
+
+    &.exception {
+        background-color: $exception_bg;
+
+        &.selected {
+            border: 3px solid $selected;
+        }
+    }
+
+    &.holiday {
+        background-color: $holiday_bg;
+
+        &.selected {
+            border: 3px solid $selected;
+        }
+    }
+
+    &.repeatableweekly {
+        background-color: $repeatableweekly_bg;
+
+        &.selected {
+            border: 3px solid $selected;
+        }
+    }
+
+    &.repeatableyearly {
+        background-color: $repeatableyearly_bg;
+
+        &.selected {
+            border: 3px solid $selected;
+        }
+    }
+}
+
+#holidayexceptions th.exception {
+    background-color: $exception_bg;
+}
+
+#holidaysunique th.holiday {
+    background-color: $holiday_bg;
+
+    &.selected {
+        border: 2px solid #fff4c6;
+    }
+}
+
+#holidayweeklyrepeatable th.repeatableweekly {
+    background-color: $repeatableweekly_bg;
+}
+
+#holidaysyearlyrepeatable th.repeatableyearly {
+    background-color: $repeatableyearly_bg;
+}
+
+.panel {
+    border: 1px solid #B9D8D9;
+    border-radius: 4px;
+    box-shadow: none;
+    padding: 0;
+    display: none;
+    margin: 1em 0;
+    z-index: 1;
+}
+
+fieldset.brief {
+    border: 0;
+    border-radius: 4px;
+    margin: 0;
+}
+
+#showHoliday {
+    margin: .5em 0;
+}
+
+fieldset.brief ol {
+    font-size: 100%;
+}
+
+fieldset.brief li,
+fieldset.brief li.radio {
+    padding: 0.2em 0;
+}
+
+#holidayweeklyrepeatable,
+#holidaysyearlyrepeatable,
+#holidaysunique,
+#holidayexceptions {
+    font-size: 90%;
+    margin-bottom: 1em;
+}
+
+#calendar-container {
+    margin: 1em 0;
+}
+
+#calendar-anchor {
+    display: none;
+}
+
+.flatpickr-calendar {
+    border-radius: 0;
+    border: 1px solid #B9D8D9;
+    box-shadow: none;
+}
+
+.dayContainer {
+    gap: 3px;
+}

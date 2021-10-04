@@ -41,11 +41,6 @@
                             [% PROCESS options_for_libraries libraries => Branches.all( selected => branch ) %]
                         </select>
 
-                        <!-- ******************************** FLAT PANELS ******************************************* -->
-                        <!-- *****           Makes all the flat panel to deal with holidays                     ***** -->
-                        <!-- **************************************************************************************** -->
-
-                        <!-- ********************** Panel for showing already loaded holidays *********************** -->
                         <div class="panel" id="showHoliday">
                             <form action="/cgi-bin/koha/tools/exceptionHolidays.pl" method="post">
                                 <input type="hidden" id="showHolidayType" name="showHolidayType" value="" />
@@ -76,7 +71,7 @@
                                         </li>
                                         <li class="dateinsert">
                                             <strong>To date: </strong>
-                                            <input type="text" id="datecancelrange" name="datecancelrange" size="20" value="[% datecancelrange | html %]" class="datepicker"/>
+                                            <input type="text" id="datecancelrange" name="datecancelrange" size="20" value="[% datecancelrange | html %]" />
                                         </li>
                                         <li>
                                             <label for="showTitle">Title: </label><input type="text" name="showTitle" id="showTitle" size="35" />
@@ -141,7 +136,7 @@
                             </form>
                         </div> <!-- /#showHoliday -->
 
-                        <!-- ***************************** Panel to deal with new holidays **********************  -->
+                        <!-- Panel to deal with new holidays -->
                         <div class="panel" id="newHoliday">
                             <form action="/cgi-bin/koha/tools/newHolidays.pl" method="post">
                                 <fieldset class="brief">
@@ -174,7 +169,7 @@
                                         </li>
                                         <li class="dateinsert">
                                             <strong>To date: </strong>
-                                            <input type="text" id="dateofrange" name="dateofrange" size="20" value="[% dateofrange | html %]" class="datepicker" />
+                                            <input type="text" id="dateofrange" name="dateofrange" size="20" value="[% dateofrange | html %]" />
                                         </li>
                                         <li>
                                             <label for="title">Title: </label>
@@ -228,15 +223,10 @@
                             </form>
                         </div> <!-- /#newHoliday -->
 
-                        <!-- *************************************************************************************** -->
-                        <!-- ******                          END OF FLAT PANELS                               ****** -->
-                        <!-- *************************************************************************************** -->
-
-                        <!-- ************************************************************************************** -->
-                        <!-- ******                              MAIN SCREEN CODE                            ****** -->
-                        <!-- ************************************************************************************** -->
-                        <h3>Calendar information</h3>
-                        <div id="jcalendar-container"></div>
+                        <div id="calendar-container">
+                            <h3>Calendar information</h3>
+                            <span id="calendar-anchor"></span>
+                        </div>
                         <div style="margin-top: 2em;">
                             <form action="copy-holidays.pl" method="post">
                                 <input type="hidden" name="from_branchcode" value="[% branch | html %]" />
@@ -497,35 +487,48 @@
             location.href='/cgi-bin/koha/tools/holidays.pl?branch=' + branch + '&calendardate=' + "[% calendardate | html %]";
         }
 
-        function Help() {
-            newin=window.open("/cgi-bin/koha/help.pl","KohaHelp",'width=600,height=600,toolbar=false,scrollbars=yes');
-        }
-
-        /* This function gives css clases to each kind of day */
-        function dateStatusHandler(date) {
-            date = new Date(date);
-            var day = date.getDate();
-            var month = date.getMonth() + 1;
-            var year = date.getFullYear();
-            var weekDay = date.getDay();
+        /**
+        * Build settings to be passed to the formatDay function for each day in the calendar
+        * @param  {object} dayElem - HTML node passed from Flatpickr
+        * @return {void}
+        */
+        function dateStatusHandler( dayElem ) {
+            var day = dayElem.dateObj.getDate();
+            var month = dayElem.dateObj.getMonth() + 1;
+            var year = dayElem.dateObj.getFullYear();
+            var weekDay = dayElem.dateObj.getDay();
             var dayMonth = month + '/' + day;
             var dateString = year + '/' + month + '/' + day;
             if (exception_holidays[dateString] != null) {
-                return [true, "exception", _("Exception: %s").format(exception_holidays[dateString].title)];
+                formatDay( [ "exception", _("Exception: %s").format(exception_holidays[dateString].title)], dayElem );
             } else if ( week_days[weekDay] != null ){
-                return [true, "repeatableweekly", _("Weekly holiday: %s").format(week_days[weekDay].title)];
+                formatDay( [ "repeatableweekly", _("Weekly holiday: %s").format(week_days[weekDay].title)], dayElem );
             } else if ( day_month_holidays[dayMonth] != null ) {
-                return [true, "repeatableyearly", _("Yearly holiday: %s").format(day_month_holidays[dayMonth].title)];
+                formatDay( [ "repeatableyearly", _("Yearly holiday: %s").format(day_month_holidays[dayMonth].title)], dayElem );
             } else if (holidays[dateString] != null) {
-                return [true, "holiday", _("Single holiday: %s").format(holidays[dateString].title)];
+                formatDay( [ "holiday", _("Single holiday: %s").format(holidays[dateString].title)], dayElem );
             } else {
-                return [true, "normalday", _("Normal day")];
+                formatDay( [ "normalday", _("Normal day")], dayElem );
             }
         }
 
-        /* This function is in charge of showing the correct panel considering the kind of holiday */
-        function dateChanged(calendar) {
-            calendar = new Date(calendar);
+        /**
+        * Adds style and title attribute to a day on the calendar
+        * @param  {object} settings - span class attribute ([0]) and title attribute ([1])
+        * @param  {node}   dayElem  - HTML node passed from Flatpickr
+        * @return {void}
+        */
+        function formatDay( settings, dayElem ){
+            $(dayElem).attr("title", settings[1]).addClass( settings[0]);
+        }
+
+        /**
+        * Triggers an action based on a click on a calendar day: If a holiday exists on
+        * that day it loads an edit form. If there is no existing holiday one can be created
+        * @param  {object} calendar - a Date object corresponding to the clicked day
+        * @return {void}
+        */
+        function dateChanged( calendar ) {
             var day = calendar.getDate();
             var month = calendar.getMonth() + 1;
             var year = calendar.getFullYear();
@@ -579,7 +582,7 @@
                 "sDom": 't',
                 "bPaginate": false
             }));
-            var tables = $("#holidayexceptions,#holidaysyearlyrepeatable,#holidaysunique").DataTable($.extend(true, {}, dataTablesDefaults, {
+            var tables = $("#holidayexceptions, #holidaysyearlyrepeatable, #holidaysunique").DataTable($.extend(true, {}, dataTablesDefaults, {
                 "sDom": 't',
                 "bPaginate": false,
                 "createdRow": function( row, data, dataIndex ) {
@@ -597,46 +600,44 @@
             $("a.helptext").click(function(){
                 $(this).parent().find(".hint").toggle(); return false;
             });
-            $("#dateofrange").datepicker({
-                beforeShow: function() {
-                    var startdate = $("#jcalendar-container").datepicker("getDate");
-                    if (startdate !== null) {
-                        var sd = new Date(startdate);
-                        var ed = new Date($(this).datepicker("getDate"));
-                        if (ed < sd) {
-                            $(this).datepicker("setDate", startdate);
-                            $(this).datepicker("option", "defaultDate", startdate);
-                        }
-                    }
-                }
-            });
-            $("#datecancelrange").datepicker();
+
+            var dateofrange = $("#dateofrange").flatpickr();
+
+            var datecancelrange = $("#datecancelrange").flatpickr();
+
             $("#dateofrange").each(function () { this.value = "" });
             $("#datecancelrange").each(function () { this.value = "" });
-            $("#jcalendar-container").datepicker({
-                beforeShowDay: function(thedate) {
-                    var day = thedate.getDate();
-                    var month = thedate.getMonth() + 1;
-                    var year = thedate.getFullYear();
-                    var dateString = year + '/' + month + '/' + day;
-                    return dateStatusHandler(dateString);
+
+            var maincalendar = $("#calendar-anchor").flatpickr({
+                inline: true,
+                onReady: function(){
+                    return;
                 },
-                onSelect: function(dateText, inst) {
-                    dateChanged($(this).datepicker("getDate"));
-                    var enddate = $("#dateofrange").datepicker("getDate");
-                    $("#dateofrange").datepicker("option", "defaultDate", $(this).datepicker("getDate"));
-                    $("#dateofrange").datepicker( "option", "minDate", $(this).datepicker("getDate")); //ensure end date can't be before start date
-                    if (enddate !== null) {
-                        var ed = new Date(enddate);
-                        var sd = new Date($(this).datepicker("getDate"));
-                        if (ed < sd) {
-                            $("#dateofrange").datepicker("setDate", $(this).datepicker("getDate"));
-                            $("#dateofrange").datepicker("option", "defaultDate", enddate);
+                onDayCreate: function( dObj, dStr, fp, dayElem ){
+                    /* for each day on the calendar, get the
+                      correct status information for the date */
+                    dateStatusHandler( dayElem );
+                },
+                onChange: function( selectedDates, dateStr, instance ){
+                    var fromdate = selectedDates[0];
+                    var enddate = dateofrange.selectedDates[0];
+
+                    dateChanged( fromdate );
+
+                    dateofrange.set( 'defaultDate', fromdate );
+                    dateofrange.set( 'minDate', fromdate );
+
+                    if ( enddate != undefined ) {
+                        if ( enddate < fromdate ) {
+                            dateofrange.set("defaultDate", fromdate);
+                            dateofrange.setDate(fromdate);
                         }
                     }
+
                 },
                 defaultDate: new Date("[% keydate | html %]")
             });
+
             $(".hidePanel").on("click",function(){
                 if( $(this).hasClass("showHoliday") ){
                     hidePanel("showHoliday");
