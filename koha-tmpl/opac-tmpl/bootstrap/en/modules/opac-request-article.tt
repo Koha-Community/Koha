@@ -219,7 +219,10 @@
                 [% ELSIF error_message %]
                     <h1 class="title">[% biblio.title | html %]</h1>
                     <div class="alert alert-info">
-                        [% error_message | html %]
+                        [% SWITCH error_message %]
+                            [% CASE 'article_request_limit_reached'       %]You reached your article requests daily limit.
+                            [% CASE 'article_request_unhandled_exception' %]An error has occurred.
+                        [% END %]
                     </div>
                 [% ELSE %]
                     <h1 class="title">[% biblio.title | html %]</h1>

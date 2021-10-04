@@ -25,8 +25,11 @@ use C4::Utils::DataTables::Members;
 use C4::Search qw( enabled_staff_search_views );
 use C4::Serials qw( CountSubscriptionFromBiblionumber );
 use Koha::Biblios;
+use Koha::Logger;
 use Koha::Patrons;
 use Koha::ArticleRequests;
+
+use Scalar::Util qw( blessed );
 use Try::Tiny;
 
 my $cgi = CGI->new;
@@ -86,11 +89,19 @@ if ( $action eq 'create' ) {
                 patron_notes   => $patron_notes,
                 format         => $format,
             }
-        )->store();
+        )->request;
     } catch {
-        $template->param(
-            error_message => $_->{message}
-        );
+        if ( blessed $_ and $_->isa('Koha::Exceptions::ArticleRequest::LimitReached') ) {
+            $template->param(
+                error_message => 'article_request_limit_reached'
+            );
+        }
+        else {
+            Koha::Logger->get->debug("Unhandled exception when placing an article request ($_)");
+            $template->param(
+                error_message => 'article_request_unhandled_exception'
+            );
+        }
     };
 
 }
@@ -119,7 +130,7 @@ if ( !$patron && $patron_cardnumber ) {
 if( $patron && !$patron->can_request_article) {
     $patron = undef;
     $template->param(
-        error_message => 'Patron cannot request more articles for today'
+        error_message => 'article_request_limit_reached'
     );
 }
 

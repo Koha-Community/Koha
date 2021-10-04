@@ -25,7 +25,10 @@ use C4::Auth qw( get_template_and_user );
 use C4::Output qw( output_html_with_http_headers );
 
 use Koha::Biblios;
+use Koha::Logger;
 use Koha::Patrons;
+
+use Scalar::Util qw( blessed );
 use Try::Tiny;
 
 my $cgi = CGI->new;
@@ -60,6 +63,9 @@ if ( $action eq 'create' ) {
     my $patron_notes = $cgi->param('patron_notes') || undef;
     my $format       = $cgi->param('format')       || undef;
 
+
+    my $success;
+
     try {
         my $ar = Koha::ArticleRequest->new(
             {
@@ -77,16 +83,26 @@ if ( $action eq 'create' ) {
                 patron_notes   => $patron_notes,
                 format         => $format,
             }
-        )->store();
+        )->request;
+        $success = 1;
+    } catch {
+        if ( blessed $_ and $_->isa('Koha::Exceptions::ArticleRequest::LimitReached') ) {
+            $template->param(
+                error_message => 'article_request_limit_reached'
+            );
+        }
+        else {
+            Koha::Logger->get->debug("Unhandled exception when placing an article request ($_)");
+            $template->param(
+                error_message => 'article_request_unhandled_exception'
+            );
+        }
+    };
 
+    if ( $success ) {
         print $cgi->redirect("/cgi-bin/koha/opac-user.pl#opac-user-article-requests");
         exit;
-    } catch {
-        exit unless $_->[0] && $_->[0] eq 'EXIT';
-        $template->param(
-            error_message => $_->{message}
-        );
-    };
+    }
 # Should we redirect?
 }
 elsif ( !$action && C4::Context->preference('ArticleRequestsOpacHostRedirection') ) {
@@ -106,7 +122,7 @@ my $patron = Koha::Patrons->find($borrowernumber);
 
 if(!$patron->can_request_article) {
     $template->param(
-        error_message => 'You cannot request more articles for today'
+        error_message => 'article_request_limit_reached'
     );
 }
 

@@ -48,7 +48,10 @@
                     <h1>Request article from [% INCLUDE 'biblio-title.inc' link = 1 %]</h1>
                     [% IF error_message %]
                         <div class="dialog alert">
-                            <p>[% error_message | html %]</p>
+                        [% SWITCH error_message %]
+                            [% CASE 'article_request_limit_reached'       %]<p>Patron reached daily limit.</p>
+                            [% CASE 'article_request_unhandled_exception' %]<p>An error has occurred. Check the logs.</p>
+                        [% END %]
                         </div>
                     [% END %]
                     [% IF no_patrons_found %]
