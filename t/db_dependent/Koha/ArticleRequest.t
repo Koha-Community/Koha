@@ -116,7 +116,7 @@ subtest 'complete() tests' => sub {
 
 subtest 'cancel() tests' => sub {
 
-    plan tests => 2;
+    plan tests => 4;
 
     $schema->storage->txn_begin;
 
@@ -129,9 +129,14 @@ subtest 'cancel() tests' => sub {
         }
     );
 
-    $ar->cancel()->discard_changes;
+    my $reason = "Hey, ho";
+    my $notes  = "Let's go!";
+
+    $ar->cancel({ cancellation_reason => $reason, notes => $notes })->discard_changes;
 
     is( $ar->status, Koha::ArticleRequest::Status::Canceled );
+    is( $ar->cancellation_reason, $reason, 'Cancellation reason stored correctly' );
+    is( $ar->notes, $notes, 'Notes stored correctly' );
 
     $schema->storage->txn_rollback;
 };

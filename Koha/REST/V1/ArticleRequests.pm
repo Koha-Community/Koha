@@ -52,11 +52,16 @@ sub cancel {
     }
 
     my $reason = $c->validation->param('cancellation_reason');
-    my $notes = $c->validation->param('notes');
+    my $notes  = $c->validation->param('notes');
 
     return try {
 
-        $article_request->cancel($reason, $notes);
+        $article_request->cancel(
+            {
+                cancellation_reason => $reason,
+                notes               => $notes
+            }
+        );
         return $c->render(
             status  => 204,
             openapi => q{}
@@ -96,11 +101,16 @@ sub patron_cancel {
     }
 
     my $reason = $c->validation->param('cancellation_reason');
-    my $notes = $c->validation->param('notes');
+    my $notes  = $c->validation->param('notes');
 
     return try {
 
-        $article_request->cancel( $reason, $notes );
+        $article_request->cancel(
+            {
+                cancellation_reason => $reason,
+                notes               => $notes
+            }
+        );
         return $c->render(
             status  => 204,
             openapi => q{}

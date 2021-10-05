@@ -45,7 +45,7 @@ my $ar = Koha::ArticleRequests->find($id);
 
 if ($ar) {
     if ( $action eq 'cancel' ) {
-        $ar = $ar->cancel( $notes );
+        $ar = $ar->cancel({ notes => $notes });
     }
     elsif ( $action eq 'process' ) {
         $ar = $ar->process();

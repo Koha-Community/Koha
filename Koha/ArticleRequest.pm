@@ -122,7 +122,10 @@ Marks the article as cancelled. Send a notification if appropriate.
 =cut
 
 sub cancel {
-    my ( $self, $cancellation_reason, $notes ) = @_;
+    my ( $self, $params ) = @_;
+
+    my $cancellation_reason = $params->{cancellation_reason};
+    my $notes = $params->{notes};
 
     $self->status(Koha::ArticleRequest::Status::Canceled);
     $self->cancellation_reason($cancellation_reason) if $cancellation_reason;
