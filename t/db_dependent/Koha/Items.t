@@ -1510,7 +1510,7 @@ subtest 'can_be_transferred' => sub {
 };
 
 subtest 'filter_by_for_hold' => sub {
-    plan tests => 4;
+    plan tests => 8;
 
     my $biblio = $builder->build_sample_biblio;
     is( $biblio->items->filter_by_for_hold->count, 0, 'no item yet' );
@@ -1520,6 +1520,21 @@ subtest 'filter_by_for_hold' => sub {
     is( $biblio->items->filter_by_for_hold->count, 1, '1 item for hold' );
     $builder->build_sample_item( { biblionumber => $biblio->biblionumber, notforloan => -1 } );
     is( $biblio->items->filter_by_for_hold->count, 2, '2 items for hold' );
+
+    $builder->build_sample_item( { biblionumber => $biblio->biblionumber, itemlost => 0 } );
+    $builder->build_sample_item( { biblionumber => $biblio->biblionumber, itemlost => 1 } );
+    is( $biblio->items->filter_by_for_hold->count, 3, '3 items for hold - itemlost' );
+
+    $builder->build_sample_item( { biblionumber => $biblio->biblionumber, withdrawn => 0 } );
+    $builder->build_sample_item( { biblionumber => $biblio->biblionumber, withdrawn => 1 } );
+    is( $biblio->items->filter_by_for_hold->count, 4, '4 items for hold - withdrawn' );
+
+    $builder->build_sample_item( { biblionumber => $biblio->biblionumber, damaged => 0 } );
+    $builder->build_sample_item( { biblionumber => $biblio->biblionumber, damaged => 1 } );
+    t::lib::Mocks::mock_preference('AllowHoldsOnDamagedItems', 0);
+    is( $biblio->items->filter_by_for_hold->count, 5, '5 items for hold - not damaged if not AllowHoldsOnDamagedItems' );
+    t::lib::Mocks::mock_preference('AllowHoldsOnDamagedItems', 1);
+    is( $biblio->items->filter_by_for_hold->count, 6, '6 items for hold - damaged if AllowHoldsOnDamagedItems' );
 
     $biblio->delete;
 };

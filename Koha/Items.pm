@@ -65,7 +65,7 @@ sub filter_by_for_hold {
             withdrawn  => 0,
             notforloan => { '<=' => 0 }
             ,    # items with negative or zero notforloan value are holdable
-            ( C4::Context->preference('AllowHoldsOnDamagedItems') ? ( damaged => 0 ) : () ),
+            ( ! C4::Context->preference('AllowHoldsOnDamagedItems' ) ? ( damaged => 0 ) : () ),
             itype        => { -not_in => \@hold_not_allowed_itypes },
         }
     );
