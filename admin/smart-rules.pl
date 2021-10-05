@@ -22,6 +22,7 @@ use CGI qw ( -utf8 );
 use C4::Context;
 use C4::Output qw( output_html_with_http_headers );
 use C4::Auth qw( get_template_and_user );
+use Koha::Exceptions::Exception;
 use Koha::DateUtils qw( dt_from_string output_pref );
 use Koha::Database;
 use Koha::Logger;
@@ -460,6 +461,10 @@ elsif ($op eq "add-branch-cat") {
 elsif ( $op eq "add-max-daily-article-requests" ) {
     my $categorycode               = $input->param('categorycode');
     my $max_daily_article_requests = strip_non_numeric( scalar $input->param('max_daily_article_requests') );
+
+    Koha::Exceptions::Exception->throw("No value passed for article request limit")
+      if not defined $max_daily_article_requests # There is a JS check for that
+      || $max_daily_article_requests eq '';
 
     if ( $branch eq "*" ) {
         if ( $categorycode eq "*" ) {

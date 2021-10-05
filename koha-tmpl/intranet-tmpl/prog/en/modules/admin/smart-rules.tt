@@ -795,7 +795,7 @@
         <h3>Default article requests limits</h3>
     [% END %]
         <p>Specify the maximum number simultaneous current article requests a patron of a given category can have.</p>
-        <form method="post" action="/cgi-bin/koha/admin/smart-rules.pl">
+        <form id="set-article-requests-daily-limit" method="post" action="/cgi-bin/koha/admin/smart-rules.pl">
             <input type="hidden" name="op" value="add-max-daily-article-requests" />
             <input type="hidden" name="branch" value="[% current_branch | html %]"/>
             <table>
@@ -1228,6 +1228,14 @@
             $(".clear_edit").on("click",function(e){
                 e.preventDefault();
                 clear_edit();
+            });
+
+            $("#set-article-requests-daily-limit").on("submit", function(){
+                if (! $("input[name='max_daily_article_requests'").val().length){
+                    alert("Please set a daily limit for this patron's category");
+                    return false;
+                }
+                return true;
             });
         });
     </script>
