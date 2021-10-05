@@ -5,41 +5,43 @@
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Item circulation alerts &rsaquo; Administration &rsaquo; Koha</title>
 [% INCLUDE 'doc-head-close.inc' %]
-<style>
-table.grid thead th {
-  vertical-align: bottom;
-}
+[% FILTER collapse %]
+    <style>
+        table.grid thead th {
+            vertical-align: bottom;
+        }
 
-table.grid tbody th {
-  text-align: right;
-}
+        table.grid tbody th {
+            text-align: right;
+        }
 
-table.grid tbody td {
-  font-size: xx-small;
-}
+        table.grid tbody td {
+            font-size: xx-small;
+        }
 
-table.grid tbody td.info {
-  background: #fff;
-}
+        table.grid tbody td.info {
+            background-color: #fff !important;
+        }
 
-table.grid.active tbody td {
-  width: 10%;
-  cursor: pointer;
-}
+        table.grid.active tbody td {
+            width: 10%;
+            cursor: pointer;
+        }
 
-table.grid tbody td {
-  background: #cfc;
-  color: #111;
-}
+        table.grid tbody td {
+            background-color: #cfc !important;
+            color: #111;
+        }
 
-table.grid td.disabled {
-  background: #fcc;
-}
+        table.grid td.disabled {
+            background-color: #fcc !important;
+        }
 
-table.grid td.default {
-  background: #f88;
-}
-</style>
+        table.grid td.default {
+            background-color: #f88 !important;
+        }
+    </style>
+[% END %]
 </head>
 
 <body id="admin_item_circulation_alerts" class="admin">
