@@ -97,8 +97,8 @@ __PACKAGE__->table("article_requests");
 =head2 status
 
   data_type: 'enum'
-  default_value: 'PENDING'
-  extra: {list => ["PENDING","PROCESSING","COMPLETED","CANCELED"]}
+  default_value: 'REQUESTED'
+  extra: {list => ["REQUESTED","PENDING","PROCESSING","COMPLETED","CANCELED"]}
   is_nullable: 0
 
 =head2 notes
@@ -165,8 +165,10 @@ __PACKAGE__->add_columns(
   "status",
   {
     data_type => "enum",
-    default_value => "PENDING",
-    extra => { list => ["PENDING", "PROCESSING", "COMPLETED", "CANCELED"] },
+    default_value => "REQUESTED",
+    extra => {
+      list => ["REQUESTED", "PENDING", "PROCESSING", "COMPLETED", "CANCELED"],
+    },
     is_nullable => 0,
   },
   "notes",
@@ -280,8 +282,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2021-07-12 13:41:15
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:GVaBsoeXb0EiuKTJYkWLEg
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2021-10-05 09:41:35
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:ggHkJJqH+JUwQSAi7yDI1w
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
