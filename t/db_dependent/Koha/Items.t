@@ -1471,7 +1471,7 @@ subtest 'can_be_transferred' => sub {
 };
 
 subtest 'filter_by_for_hold' => sub {
-    plan tests => 8;
+    plan tests => 9;
 
     my $biblio = $builder->build_sample_biblio;
     is( $biblio->items->filter_by_for_hold->count, 0, 'no item yet' );
@@ -1496,6 +1496,23 @@ subtest 'filter_by_for_hold' => sub {
     is( $biblio->items->filter_by_for_hold->count, 5, '5 items for hold - not damaged if not AllowHoldsOnDamagedItems' );
     t::lib::Mocks::mock_preference('AllowHoldsOnDamagedItems', 1);
     is( $biblio->items->filter_by_for_hold->count, 6, '6 items for hold - damaged if AllowHoldsOnDamagedItems' );
+
+    my $not_holdable_itemtype = $builder->build_object({ class => 'Koha::ItemTypes' })->itemtype;
+    $builder->build_sample_item(
+        {
+            biblionumber => $biblio->biblionumber,
+            itype        => $not_holdable_itemtype,
+        }
+    );
+    Koha::CirculationRules->set_rule(
+        {
+            branchcode   => undef,
+            itemtype     => $not_holdable_itemtype,
+            rule_name    => 'holdallowed',
+            rule_value   => 'not_allowed',
+        }
+    );
+    is( $biblio->items->filter_by_for_hold->count, 6, '6 items for hold - holdallowed=not_allowed' );
 
     $biblio->delete;
 };
