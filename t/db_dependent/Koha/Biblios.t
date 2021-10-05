@@ -193,12 +193,13 @@ subtest 'can_be_transferred' => sub {
 };
 
 subtest 'custom_cover_image_url' => sub {
-    plan tests => 4;
+    plan tests => 6;
 
     t::lib::Mocks::mock_preference( 'CustomCoverImagesURL', 'https://my_url/{isbn}_{issn}.png' );
 
     my $isbn       = '0553573403 | 9780553573404 (pbk.).png';
     my $issn       = 'my_issn';
+    my $cf_value   = 'from_control_field';
     my $marc_record = MARC::Record->new;
     my ( $biblionumber, undef ) = C4::Biblio::AddBiblio($marc_record, '');
 
@@ -221,6 +222,12 @@ subtest 'custom_cover_image_url' => sub {
     $biblio->biblioitem->isbn('')->store;
     is( $biblio->custom_cover_image_url, undef, "Don't generate the url if the biblio does not have the value needed to generate it" );
 
+    t::lib::Mocks::mock_preference( 'CustomCoverImagesURL', 'https://my_url/{001}.png' );
+    is( $biblio->custom_cover_image_url, undef, 'Record does not have 001' );
+    $marc_record->append_fields(MARC::Field->new('001', $cf_value));
+    C4::Biblio::ModBiblio( $marc_record, $biblio->biblionumber );
+    $biblio = Koha::Biblios->find( $biblionumber );
+    is( $biblio->get_from_storage->custom_cover_image_url, "https://my_url/$cf_value.png", 'URL generated using 001' );
 };
 
 $schema->storage->txn_rollback;
