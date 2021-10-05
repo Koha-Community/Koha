@@ -76,7 +76,7 @@ our $RULE_KINDS = {
     article_requests => {
         scope => [ 'branchcode', 'categorycode', 'itemtype' ],
     },
-    max_daily_article_requests => {
+    open_article_requests_limit => {
         scope => [ 'branchcode', 'categorycode' ],
     },
 

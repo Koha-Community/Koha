@@ -738,7 +738,7 @@ subtest 'can_request_article() tests' => sub {
         {
             categorycode => undef,
             branchcode   => $library_1->id,
-            rule_name    => 'max_daily_article_requests',
+            rule_name    => 'open_article_requests_limit',
             rule_value   => 4,
         }
     );
@@ -802,7 +802,7 @@ subtest 'can_request_article() tests' => sub {
         {
             categorycode => undef,
             branchcode   => $library_2->id,
-            rule_name    => 'max_daily_article_requests',
+            rule_name    => 'open_article_requests_limit',
             rule_value   => 3,
         }
     );

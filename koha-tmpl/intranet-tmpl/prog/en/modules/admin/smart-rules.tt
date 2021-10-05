@@ -788,15 +788,15 @@
     [% END %]
 
     [% IF Koha.Preference('ArticleRequests') %]
-    <div id="max-daily-article-requests-patron-category" class="container">
+    <div id="open-article-requests-limit-patron-category" class="container">
     [% IF humanbranch %]
-        <h3>Article requests limits for [% Branches.GetName( humanbranch ) | html %]</h3>
+        <h3>Daily open article requests limit for [% Branches.GetName( humanbranch ) | html %]</h3>
     [% ELSE %]
-        <h3>Default article requests limits</h3>
+        <h3>Default open article requests limit</h3>
     [% END %]
         <p>Specify the maximum number simultaneous current article requests a patron of a given category can have.</p>
         <form id="set-article-requests-daily-limit" method="post" action="/cgi-bin/koha/admin/smart-rules.pl">
-            <input type="hidden" name="op" value="add-max-daily-article-requests" />
+            <input type="hidden" name="op" value="add-open-article-requests-limit" />
             <input type="hidden" name="branch" value="[% current_branch | html %]"/>
             <table>
                 <tr>
@@ -806,23 +806,23 @@
                 </tr>
                 [% FOREACH c IN categorycodes %]
                     [% NEXT UNLESS c %]
-                    [% SET max_daily_article_requests = CirculationRules.Search( branchcode, c, undef, 'max_daily_article_requests' ) %]
+                    [% SET open_article_requests_limit = CirculationRules.Search( branchcode, c, undef, 'open_article_requests_limit' ) %]
 
-                    [% IF ( max_daily_article_requests.defined && max_daily_article_requests != '' ) %]
+                    [% IF ( open_article_requests_limit.defined && open_article_requests_limit != '' ) %]
                     <tr>
                         <td>
                             [% Categories.GetName(c) | html %]
                         </td>
                         <td>
-                            [% IF max_daily_article_requests.defined && max_daily_article_requests != '' %]
-                                [% max_daily_article_requests | html %]
+                            [% IF open_article_requests_limit.defined && open_article_requests_limit != '' %]
+                                [% open_article_requests_limit | html %]
                             [% ELSE %]
                                 <span>Unlimited</span>
                             [% END %]
                         </td>
 
                         <td class="actions">
-                            <a class="btn btn-default btn-xs delete" href="/cgi-bin/koha/admin/smart-rules.pl?op=del-max-daily-article-requests&amp;categorycode=[% c | html %]&amp;branch=[% current_branch | html %]"><i class="fa fa-trash"></i> Delete</a>
+                            <a class="btn btn-default btn-xs delete" href="/cgi-bin/koha/admin/smart-rules.pl?op=del-open-article-requests-limit&amp;categorycode=[% c | html %]&amp;branch=[% current_branch | html %]"><i class="fa fa-trash"></i> Delete</a>
                         </td>
                     </tr>
                     [% END %]
@@ -835,7 +835,7 @@
                         [% END %]
                         </select>
                     </td>
-                    <td><input name="max_daily_article_requests" size="3" type="text" /></td>
+                    <td><input name="open_article_requests_limit" size="3" type="text" /></td>
                     <td class="actions"><button type="submit" class="btn btn-default btn-xs"><i class="fa fa-plus"></i> Add</td>
                 </tr>
             </table>
@@ -1231,7 +1231,7 @@
             });
 
             $("#set-article-requests-daily-limit").on("submit", function(){
-                if (! $("input[name='max_daily_article_requests'").val().length){
+                if (! $("input[name='open_article_requests_limit'").val().length){
                     alert("Please set a daily limit for this patron's category");
                     return false;
                 }

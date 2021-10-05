@@ -979,7 +979,7 @@ sub can_request_article {
         {
             branchcode   => $library_id,
             categorycode => $self->categorycode,
-            rule_name    => 'max_daily_article_requests'
+            rule_name    => 'open_article_requests_limit'
         }
     );
 

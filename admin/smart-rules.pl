@@ -458,27 +458,27 @@ elsif ($op eq "add-branch-cat") {
         );
     }
 }
-elsif ( $op eq "add-max-daily-article-requests" ) {
-    my $categorycode               = $input->param('categorycode');
-    my $max_daily_article_requests = strip_non_numeric( scalar $input->param('max_daily_article_requests') );
+elsif ( $op eq "add-open-article-requests-limit" ) {
+    my $categorycode                = $input->param('categorycode');
+    my $open_article_requests_limit = strip_non_numeric( scalar $input->param('open_article_requests_limit') );
 
     Koha::Exceptions::Exception->throw("No value passed for article request limit")
-      if not defined $max_daily_article_requests # There is a JS check for that
-      || $max_daily_article_requests eq '';
+      if not defined $open_article_requests_limit # There is a JS check for that
+      || $open_article_requests_limit eq '';
 
     if ( $branch eq "*" ) {
         if ( $categorycode eq "*" ) {
             Koha::CirculationRules->set_rules(
                 {   categorycode => undef,
                     branchcode   => undef,
-                    rules        => { max_daily_article_requests => $max_daily_article_requests, }
+                    rules        => { open_article_requests_limit => $open_article_requests_limit, }
                 }
             );
         } else {
             Koha::CirculationRules->set_rules(
                 {   categorycode => $categorycode,
                     branchcode   => undef,
-                    rules        => { max_daily_article_requests => $max_daily_article_requests, }
+                    rules        => { open_article_requests_limit => $open_article_requests_limit, }
                 }
             );
         }
@@ -486,32 +486,32 @@ elsif ( $op eq "add-max-daily-article-requests" ) {
         Koha::CirculationRules->set_rules(
             {   categorycode => undef,
                 branchcode   => $branch,
-                rules        => { max_daily_article_requests => $max_daily_article_requests, }
+                rules        => { open_article_requests_limit => $open_article_requests_limit, }
             }
         );
     } else {
         Koha::CirculationRules->set_rules(
             {   categorycode => $categorycode,
                 branchcode   => $branch,
-                rules        => { max_daily_article_requests => $max_daily_article_requests, }
+                rules        => { open_article_requests_limit => $open_article_requests_limit, }
             }
         );
     }
-} elsif ( $op eq 'del-max-daily-article-requests' ) {
+} elsif ( $op eq 'del-open-article-requests-limit' ) {
     my $categorycode = $input->param('categorycode');
     if ( $branch eq "*" ) {
         if ( $categorycode eq "*" ) {
             Koha::CirculationRules->set_rules(
                 {   branchcode   => undef,
                     categorycode => undef,
-                    rules        => { max_daily_article_requests => undef, }
+                    rules        => { open_article_requests_limit => undef, }
                 }
             );
         } else {
             Koha::CirculationRules->set_rules(
                 {   categorycode => $categorycode,
                     branchcode   => undef,
-                    rules        => { max_daily_article_requests => undef, }
+                    rules        => { open_article_requests_limit => undef, }
                 }
             );
         }
@@ -519,14 +519,14 @@ elsif ( $op eq "add-max-daily-article-requests" ) {
         Koha::CirculationRules->set_rules(
             {   branchcode   => $branch,
                 categorycode => undef,
-                rules        => { max_daily_article_requests => undef, }
+                rules        => { open_article_requests_limit => undef, }
             }
         );
     } else {
         Koha::CirculationRules->set_rules(
             {   categorycode => $categorycode,
                 branchcode   => $branch,
-                rules        => { max_daily_article_requests => undef, }
+                rules        => { open_article_requests_limit => undef, }
             }
         );
     }
