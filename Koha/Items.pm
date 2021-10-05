@@ -43,7 +43,10 @@ Koha::Items - Koha Item object set class
 
     my $filtered_items = $items->filter_by_for_hold;
 
-Return the items of the set that are holdable
+Return the items of the set that are *potentially* holdable
+
+Caller has the responsability to call C4::Reserves::CanItemBeReserved before
+placing a hold on one of those items.
 
 =cut
 
