@@ -24,15 +24,8 @@ use Modern::Perl;
 use CGI qw ( -utf8 );
 use C4::Auth qw( get_template_and_user );
 use C4::Output qw( output_html_with_http_headers );
-use C4::Context;
-use C4::ClassSource;
-use C4::Acquisition qw/GetOrderFromItemnumber ModOrder GetOrder/;
 
 use Koha::Biblios;
-
-
-use MARC::File::XML;
-
 use Koha::Items;
 
 my $query = CGI->new;
@@ -51,8 +44,6 @@ my ($template, $loggedinuser, $cookie) = get_template_and_user(
         flagsrequired   => { editcatalogue => 'edit_items' },
     }
 );
-
-
 
 my $biblio = Koha::Biblios->find( $biblionumber );
 $template->param(biblio => $biblio);
@@ -102,6 +93,5 @@ else {
     if ( !$barcode )      { $template->param( missingbarcode      => 1 ); }
     if ( !$biblionumber ) { $template->param( missingbiblionumber => 1 ); }
 }
-
 
 output_html_with_http_headers $query, $cookie, $template->output;
