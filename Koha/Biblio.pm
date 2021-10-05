@@ -774,12 +774,18 @@ sub custom_cover_image_url {
         $url =~ s|{issn}|$issn|g;
     }
 
-    my $re = qr|{(?<field>\d{3})\$(?<subfield>.)}|;
+    my $re = qr|{(?<field>\d{3})(\$(?<subfield>.))?}|;
     if ( $url =~ $re ) {
         my $field = $+{field};
         my $subfield = $+{subfield};
         my $marc_record = $self->metadata->record;
-        my $value = $marc_record->subfield($field, $subfield);
+        my $value;
+        if ( $subfield ) {
+            $value = $marc_record->subfield( $field, $subfield );
+        } else {
+            my $controlfield = $marc_record->field($field);
+            $value = $controlfield->data() if $controlfield;
+        }
         return unless $value;
         $url =~ s|$re|$value|;
     }
