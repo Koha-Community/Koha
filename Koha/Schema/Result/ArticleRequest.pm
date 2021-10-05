@@ -118,6 +118,14 @@ __PACKAGE__->table("article_requests");
   data_type: 'mediumtext'
   is_nullable: 1
 
+=head2 cancellation_reason
+
+  data_type: 'varchar'
+  is_nullable: 1
+  size: 80
+
+optional authorised value AR_CANCELLATION
+
 =head2 created_on
 
   data_type: 'timestamp'
@@ -182,6 +190,8 @@ __PACKAGE__->add_columns(
   },
   "urls",
   { data_type => "mediumtext", is_nullable => 1 },
+  "cancellation_reason",
+  { data_type => "varchar", is_nullable => 1, size => 80 },
   "created_on",
   {
     data_type => "timestamp",
@@ -282,8 +292,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2021-10-05 09:41:35
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:ggHkJJqH+JUwQSAi7yDI1w
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2021-10-05 09:43:22
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:yBNVe7a+BlTtg4I4YCBP1Q
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
