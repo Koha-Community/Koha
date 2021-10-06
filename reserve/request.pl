@@ -595,8 +595,20 @@ foreach my $biblionumber (@biblionumbers) {
                     # If AllowHoldPolicyOverride is set, it should override EVERY restriction, not just branch item rules
                     # with the exception of itemAlreadyOnHold because, you know, the item is already on hold
                     if ( $can_item_be_reserved ne 'itemAlreadyOnHold' ) {
-                        $item->{override} = 1;
-                        $num_override++;
+                        # Send the pickup locations count to the UI, the pickup locations will be pulled using the API
+                        my $pickup_locations = $item_object->pickup_locations({ patron => $patron });
+                        $item->{pickup_locations_count} = $pickup_locations->count;
+                        if ( $item->{pickup_locations_count} > 0 ) {
+                            $item->{override} = 1;
+                            $num_override++;
+                            # pass the holding branch for use as default
+                            my $default_pickup_location = $pickup_locations->search({ branchcode => $item->{holdingbranch} })->next;
+                            $item->{default_pickup_location} = $default_pickup_location;
+                        }
+                        else {
+                            $item->{available} = 0;
+                            $item->{not_holdable} = "no_valid_pickup_location";
+                        }
                     } else { $num_alreadyheld++ }
 
                     push( @available_itemtypes, $item->{itype} );
