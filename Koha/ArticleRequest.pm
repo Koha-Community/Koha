@@ -57,7 +57,7 @@ sub request {
     ) unless $self->borrower->can_request_article;
 
     $self->status(Koha::ArticleRequest::Status::Requested);
-    $self->SUPER::store();
+    $self->store();
     $self->notify();
     return $self;
 }
@@ -74,7 +74,7 @@ sub set_pending {
     my ($self) = @_;
 
     $self->status(Koha::ArticleRequest::Status::Pending);
-    $self->SUPER::store();
+    $self->store();
     $self->notify();
     return $self;
 }
@@ -204,7 +204,7 @@ sub store {
         return $self->SUPER::store;
     } else {
         $self->created_on( dt_from_string() );
-        return $self->request;
+        return $self->SUPER::store;
     }
 }
 
