@@ -23,49 +23,61 @@ use Test::MockModule;
 use t::lib::TestBuilder;
 use t::lib::Mocks;
 
+use Koha::ArticleRequests;
+
 my $schema  = Koha::Database->new->schema;
 my $builder = t::lib::TestBuilder->new;
 
 subtest 'request() tests' => sub {
 
-    plan tests => 2;
+    plan tests => 3;
 
     $schema->storage->txn_begin;
+
+    my $patron = $builder->build_object({ class => 'Koha::Patrons' });
+    my $biblio = $builder->build_sample_biblio;
 
     my $ar_mock = Test::MockModule->new('Koha::ArticleRequest');
     $ar_mock->mock( 'notify', sub { ok( 1, '->notify() called' ); } );
 
-    my $ar = $builder->build_object(
-        {   class => 'Koha::ArticleRequests',
-            value => { status => Koha::ArticleRequest::Status::Pending }
+    my $ar = Koha::ArticleRequest->new(
+        {
+            borrowernumber => $patron->id,
+            biblionumber   => $biblio->id,
         }
     );
 
     $ar->request()->discard_changes;
 
     is( $ar->status, Koha::ArticleRequest::Status::Requested );
+    ok( defined $ar->created_on, 'created_on is set' );
 
     $schema->storage->txn_rollback;
 };
 
 subtest 'set_pending() tests' => sub {
 
-    plan tests => 2;
+    plan tests => 3;
 
     $schema->storage->txn_begin;
+
+    my $patron = $builder->build_object({ class => 'Koha::Patrons' });
+    my $biblio = $builder->build_sample_biblio;
 
     my $ar_mock = Test::MockModule->new('Koha::ArticleRequest');
     $ar_mock->mock( 'notify', sub { ok( 1, '->notify() called' ); } );
 
-    my $ar = $builder->build_object(
-        {   class => 'Koha::ArticleRequests',
-            value => { status => Koha::ArticleRequest::Status::Requested }
+    my $ar = Koha::ArticleRequest->new(
+        {
+            borrowernumber => $patron->id,
+            biblionumber   => $biblio->id,
         }
     );
 
     $ar->set_pending()->discard_changes;
 
     is( $ar->status, Koha::ArticleRequest::Status::Pending );
+    ok( defined $ar->created_on, 'created_on is set' );
 
     $schema->storage->txn_rollback;
 };
