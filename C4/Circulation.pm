@@ -3475,6 +3475,8 @@ sub SendCirculationAlert {
         branches    => $branch,
     };
 
+    # TODO: Currently, we need to pass an issue_id as identifier for old_issues, but still an itemnumber for issues.
+    # See C4::Letters:: _parseletter_sth
     if( $type eq 'CHECKIN' ){
         $tables->{old_issues} = $issue->issue_id;
     } else {
