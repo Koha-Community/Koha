@@ -200,12 +200,12 @@ will have notifications sent.
 
 sub store {
     my ($self) = @_;
-    if ( $self->in_storage ) {
-        return $self->SUPER::store;
-    } else {
+
+    if ( !$self->in_storage ) {
         $self->created_on( dt_from_string() );
-        return $self->SUPER::store;
     }
+
+    return $self->SUPER::store;
 }
 
 =head2 Internal methods
