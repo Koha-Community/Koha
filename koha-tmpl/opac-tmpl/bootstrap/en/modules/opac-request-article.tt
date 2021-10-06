@@ -274,7 +274,7 @@ $(document).ready( function() {
             }
 
             // Check if all fields are blank
-            if( m.length == 0 && $('#title').val()=='' && $('#author').val()=='' && $('#volume').val()=='' && $('#issue').val()=='' && $('#date').val()=='' && $('#pages').val()=='' && $('#chapters').val()=='' && $('#patron_notes').val()=='' ) {
+            if( m.length == 0 && $('#title').val()=='' && $('#author').val()=='' && $('#volume').val()=='' && $('#issue').val()=='' && $('#date').val()=='' && $('#pages').val()=='' && $('#chapters').val()=='' && $('#patron_notes').val()=='' && !$('input[name="toc_request"]').prop('checked') ) {
                 alert( _("Please fill in at least one field.") );
                 return 0;
             }
