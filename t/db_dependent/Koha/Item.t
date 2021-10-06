@@ -1137,8 +1137,8 @@ subtest 'columns_to_str' => sub {
     my $s = $item->columns_to_str;
     is( $s->{itemlost}, 'Lost' );
     is( $s->{dateaccessioned}, '2020-12-15');
-    is( $s->{é}, 'value é');
-    is( $s->{è}, $library->branchname );
+    is( $s->{'é'}, 'value é');
+    is( $s->{'è'}, $library->branchname );
 
     $cache->clear_from_cache("MarcStructure-0-");
     $cache->clear_from_cache("MarcStructure-1-");
