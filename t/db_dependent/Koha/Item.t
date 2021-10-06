@@ -1103,7 +1103,7 @@ subtest 'columns_to_str' => sub {
 
     my $biblio = $builder->build_sample_biblio({ frameworkcode => '' });
     my $item = $builder->build_sample_item({ biblionumber => $biblio->biblionumber });
-    my $itemlost = Koha::AuthorisedValues->search({ category => 'LOST' })->next->authorised_value;
+    my $lost_av = $builder->build_object({ class => 'Koha::AuthorisedValues', value => { category => 'LOST', authorised_value => '42' }});
     my $dateaccessioned = '2020-12-15';
     my $library = Koha::Libraries->search->next;
     my $branchcode = $library->branchcode;
@@ -1126,7 +1126,7 @@ subtest 'columns_to_str' => sub {
 
     $item->update(
         {
-            itemlost           => $itemlost,
+            itemlost           => $lost_av->authorised_value,
             dateaccessioned    => $dateaccessioned,
             more_subfields_xml => $some_marc_xml,
         }
@@ -1135,9 +1135,9 @@ subtest 'columns_to_str' => sub {
     $item = $item->get_from_storage;
 
     my $s = $item->columns_to_str;
-    is( $s->{itemlost}, 'Lost' );
-    is( $s->{dateaccessioned}, '2020-12-15');
-    is( $s->{'é'}, 'value é');
+    is( $s->{itemlost}, $lost_av->lib, 'Attributes linked with AV replaced with description' );
+    is( $s->{dateaccessioned}, '2020-12-15', 'Date attributes iso formatted');
+    is( $s->{'é'}, 'value é', 'subfield ok with more than a-Z');
     is( $s->{'è'}, $library->branchname );
 
     $cache->clear_from_cache("MarcStructure-0-");
