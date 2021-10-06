@@ -96,7 +96,7 @@ subtest 'authorised values' => sub {
     subtest 'branches' => sub {
         plan tests => 2;
         my ( $subfield ) = grep { $_->{kohafield} eq 'items.homebranch' } @$subfields;
-        my $libraries = Koha::Libraries->search;
+        my $libraries = Koha::Libraries->search({}, { order_by => 'branchname' });
         is_deeply(
             $subfield->{marc_value}->{values},
             [ $libraries->get_column('branchcode') ]
