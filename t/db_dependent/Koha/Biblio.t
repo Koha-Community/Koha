@@ -651,8 +651,10 @@ subtest 'get_marc_notes() UNIMARC tests' => sub {
     $schema->storage->txn_rollback;
 };
 
-subtest 'host_items' => sub {
+subtest 'host_items() tests' => sub {
     plan tests => 6;
+
+    $schema->storage->txn_begin;
 
     my $biblio = $builder->build_sample_biblio( { frameworkcode => '' } );
 
@@ -686,4 +688,5 @@ subtest 'host_items' => sub {
     is( ref($host_items),   'Koha::Items' );
     is( $host_items->count, 0 );
 
+    $schema->storage->txn_rollback;
 };
