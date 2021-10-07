@@ -1560,7 +1560,7 @@
 
             $("body").on('click',".fetch_chart_data",function(){
                 if( [% unlimited_total || 0 | $raw %] > 1000 ){
-                    if( confirm( _("Fetching full chart data for reports with many rows can cause performance issues. Are you sure you with to chart this report?") ) ){
+                    if( confirm( _("Fetching full chart data for reports with many rows can cause performance issues. Are you sure you want to chart this report?") ) ){
                         return true;
                     } else {
                         return false;
