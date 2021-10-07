@@ -378,17 +378,17 @@
                                                                 [% END %]
                                                             )</span>
                                                         [% ELSIF ( ISSUE.on_reserve ) %]
-                                                            Not renewable <span class="renewals">(on hold)</span>
+                                                            <span class="usr-msg no-renew-hold">Not renewable <span class="renewals">(on hold)</span></span>
                                                         [% ELSIF ( ISSUE.too_many ) %]
-                                                            Not renewable
+                                                            <span class="usr-msg no-renew-too-many">Not renewable</span>
                                                         [% ELSIF ( ISSUE.too_unseen ) %]
-                                                            Item must be renewed at the library. [% ISSUE.renewsleft | html %] renewals remaining
+                                                            <span class="usr-msg no-renew-unseen">Item must be renewed at the library. [% ISSUE.renewsleft | html %] renewals remaining</span>
                                                         [% ELSIF ( ISSUE.norenew_overdue ) %]
-                                                            Not allowed <span class="renewals">(overdue)</span>
+                                                            <span class="usr-msg no-renew-overdue">Not allowed <span class="renewals">(overdue)</span></span>
                                                         [% ELSIF ( ISSUE.auto_too_late ) %]
-                                                            No longer renewable
+                                                            <span class="usr-msg no-renew-too-late">No longer renewable</span>
                                                         [% ELSIF ISSUE.auto_too_much_oweing %]
-                                                            Automatic renewal failed, you have unpaid fines.
+                                                            <span class="usr-msg auto-renew-fines">Automatic renewal failed, you have unpaid fines.</span>
                                                             <span class="renewals">(
                                                                 [% ISSUE.renewsleft | html %] of [% ISSUE.renewsallowed | html %] renewals remaining
                                                                 [% IF Koha.Preference('UnseenRenewals') && ISSUE.unseenallowed %]
@@ -396,7 +396,7 @@
                                                                 [% END %]
                                                             )</span>
                                                         [% ELSIF ISSUE.auto_account_expired %]
-                                                            Automatic renewal failed, your account is expired.
+                                                            <span class="usr-msg auto-renew-expired">Automatic renewal failed, your account is expired.</span>
                                                             <span class="renewals">(
                                                                 [% ISSUE.renewsleft | html %] of [% ISSUE.renewsallowed | html %] renewals remaining
                                                                 [% IF Koha.Preference('UnseenRenewals') && ISSUE.unseenallowed %]
@@ -404,7 +404,7 @@
                                                                 [% END %]
                                                             )</span>
                                                         [% ELSIF ( ISSUE.too_soon ) %]
-                                                            No renewal before [% ISSUE.soonestrenewdate | html %]
+                                                            <span class="usr-msg no-renewal-before">No renewal before [% ISSUE.soonestrenewdate | html %]</span>
                                                             <span class="renewals">(
                                                                 [% ISSUE.renewsleft | html %] of [% ISSUE.renewsallowed | html %] renewals remaining
                                                                 [% IF Koha.Preference('UnseenRenewals') && ISSUE.unseenallowed %]
@@ -412,7 +412,7 @@
                                                                 [% END %]
                                                             )</span>
                                                         [% ELSIF ( ISSUE.auto_renew || ISSUE.auto_too_soon ) %]
-                                                            Automatic renewal
+                                                            <span class="usr-msg automatic-renewal">Automatic renewal</span>
                                                             <span class="renewals">(
                                                                 [% ISSUE.renewsleft | html %] of [% ISSUE.renewsallowed | html %] renewals remaining
                                                                 [% IF Koha.Preference('UnseenRenewals') && ISSUE.unseenallowed %]
