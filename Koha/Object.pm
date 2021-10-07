@@ -554,12 +554,9 @@ sub to_api {
     my $json_object = $self->TO_JSON;
 
     # Remove forbidden attributes if required
-    # FIXME: We should eventually require public_read_list in all objects and drop the conditional here.
-    if (    $params->{public}
-        and $self->can('public_read_list') )
-    {
+    if ( $params->{public} ) {
         for my $field ( keys %{$json_object} ) {
-            delete $json_object->{$field} unless any { $_ eq $field } @{$self->public_read_list};
+            delete $json_object->{$field} unless any { $_ eq $field } @{ $self->public_read_list };
         }
     }
 
@@ -647,6 +644,24 @@ own mapping returned.
 
 sub to_api_mapping {
     return {};
+}
+
+=head3 public_read_list
+
+
+    my @public_read_list = @{$object->public_read_list};
+
+Generic method that returns the list of database columns that are allowed to
+be passed to render objects on the public API.
+
+Note: this only returns an empty I<arrayref>. Each class should have its
+own implementation.
+
+=cut
+
+sub public_read_list
+ {
+    return [];
 }
 
 =head3 from_api_mapping
