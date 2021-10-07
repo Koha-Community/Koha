@@ -18,7 +18,7 @@
 use Modern::Perl;
 use utf8;
 
-use Test::More tests => 55;
+use Test::More tests => 56;
 use Test::Exception;
 use Test::MockModule;
 use Test::Deep qw( cmp_deeply );
@@ -51,6 +51,7 @@ use Koha::Subscriptions;
 use Koha::Account::Lines;
 use Koha::Account::Offsets;
 use Koha::ActionLogs;
+use Koha::Notice::Messages;
 
 sub set_userenv {
     my ( $library ) = @_;
@@ -4917,6 +4918,61 @@ subtest "updateWrongTransfer tests" => sub {
     my $original_transfer = $transfer->get_from_storage;
     ok( defined($original_transfer->datecancelled), "Original transfer was cancelled");
     is( $original_transfer->cancellation_reason, 'WrongTransfer', "Original transfer cancellation reason is 'WrongTransfer'");
+};
+
+subtest "SendCirculationAlert" => sub {
+    plan tests => 2;
+
+    # Setup branch, borrowr, and notice
+    my $library = $builder->build_object({ class => 'Koha::Libraries' });
+    set_userenv( $library->unblessed);
+    my $patron = $builder->build_object({ class => 'Koha::Patrons' });
+    C4::Members::Messaging::SetMessagingPreference({
+        borrowernumber => $patron->id,
+        message_transport_types => ['email'],
+        message_attribute_id => 5
+    });
+    my $item = $builder->build_sample_item();
+    my $checkin_notice = $builder->build_object({
+        class => 'Koha::Notice::Templates',
+        value =>{
+            module => 'circulation',
+            code => 'CHECKIN',
+            branchcode => $library->branchcode,
+            name => 'Test Checkin',
+            is_html => 0,
+            content => "Checkins:\n----\n[% biblio.title %]-[% old_checkout.issue_id %]\n----Thank you.",
+            message_transport_type => 'email',
+            lang => 'default'
+        }
+    })->store;
+
+    # Checkout an item, mark it returned, generate a notice
+    my $issue_1 = AddIssue( $patron->unblessed, $item->barcode);
+    MarkIssueReturned( $patron->borrowernumber, $item->itemnumber, undef, 0, { skip_record_index => 1} );
+    C4::Circulation::SendCirculationAlert({
+        type => 'CHECKIN',
+        item => $item->unblessed,
+        borrower => $patron->unblessed,
+        branch => $library->branchcode,
+        issue => $issue_1
+    });
+    my $notice = Koha::Notice::Messages->find({ borrowernumber => $patron->id, letter_code => 'CHECKIN' });
+    is($notice->content,"Checkins:\n".$item->biblio->title."-".$issue_1->id."\nThank you.", 'Letter generated with expected output on first checkin' );
+
+    # Checkout an item, mark it returned, generate a notice
+    my $issue_2 = AddIssue( $patron->unblessed, $item->barcode);
+    MarkIssueReturned( $patron->borrowernumber, $item->itemnumber, undef, 0, { skip_record_index => 1} );
+    C4::Circulation::SendCirculationAlert({
+        type => 'CHECKIN',
+        item => $item->unblessed,
+        borrower => $patron->unblessed,
+        branch => $library->branchcode,
+        issue => $issue_2
+    });
+    $notice->discard_changes();
+    is($notice->content,"Checkins:\n".$item->biblio->title."-".$issue_1->id."\n".$item->biblio->title."-".$issue_2->id."\nThank you.", 'Letter appended with expected output on second checkin' );
+
 };
 
 $schema->storage->txn_rollback;
