@@ -40,7 +40,7 @@ what storage index this map is for
 =head2 marc_type
 
   data_type: 'enum'
-  extra: {list => ["marc21","unimarc","normarc"]}
+  extra: {list => ["marc21","unimarc"]}
   is_nullable: 0
 
 what MARC type this map is for
@@ -67,7 +67,7 @@ __PACKAGE__->add_columns(
   "marc_type",
   {
     data_type => "enum",
-    extra => { list => ["marc21", "unimarc", "normarc"] },
+    extra => { list => ["marc21", "unimarc"] },
     is_nullable => 0,
   },
   "marc_field",
@@ -122,8 +122,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2015-10-12 16:41:47
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:nKMOxnAJST3zNN6Kxj2ynA
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2021-10-07 13:47:10
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:HQY44LzIK/SztomgBeycbg
 
 __PACKAGE__->many_to_many("search_fields", "search_marc_to_fields", "search_field");
 
