@@ -475,6 +475,12 @@ subtest 'update() tests' => sub {
         $newpatron->{ userid }     = "user" . $patron_1->id.$patron_2->id;
         $newpatron->{ surname }    = "user" . $patron_1->id.$patron_2->id;
 
+        ## Trying to set to null on specially handled cases
+        # Special case: a date
+        $newpatron->{ date_of_birth } = undef;
+        # Special case: a date-time
+        $newpatron->{ last_seen } = undef;
+
         my $result = $t->put_ok( "//$userid:$password@/api/v1/patrons/" . $patron_2->borrowernumber => json => $newpatron )
           ->status_is(200, 'Patron updated successfully');
 
