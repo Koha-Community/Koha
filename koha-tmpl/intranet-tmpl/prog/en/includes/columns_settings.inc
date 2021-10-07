@@ -138,7 +138,9 @@ function KohaTable(id_selector, dt_parameters, columns_settings, add_filters) {
     if ( new_parameters["aoColumnDefs"] === undefined ) {
         new_parameters["aoColumnDefs"] = default_column_defs;
     } else {
-        $.extend(true, new_parameters, default_column_defs);
+        $(default_column_defs).each(function(){
+            new_parameters["aoColumnDefs"].push(this);
+        });
     }
 
     table.dataTable(new_parameters);
