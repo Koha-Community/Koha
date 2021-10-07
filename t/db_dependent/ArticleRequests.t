@@ -76,7 +76,7 @@ my $article_request = Koha::ArticleRequest->new(
         itemnumber     => $item->itemnumber,
         title          => $article_request_title,
     }
-)->store();
+)->request();
 
 my $notify_message = Koha::Notice::Messages->search->next;
 is( $notify_message->letter_code, "AR_".Koha::ArticleRequest::Status::Requested);
