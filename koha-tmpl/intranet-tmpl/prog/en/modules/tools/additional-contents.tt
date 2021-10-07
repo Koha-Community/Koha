@@ -202,7 +202,7 @@
                 [% UNLESS languages.size %]
                     <li>
                         <label for="title" class="required">Title: </label>
-                        <input id="title" size="100" maxlength="250" type="text" name="title" value="[% additional_content.title | html %]" required="required" class="required" /> <span class="required">Required</span>
+                        <input id="title" size="100" maxlength="250" type="text" name="title_default" value="[% additional_content.title | html %]" required="required" class="required" /> <span class="required">Required</span>
                     </li>
                 [% END %]
                 <li>
@@ -250,11 +250,11 @@
                             <ol>
                                 <li style="list-style: none;">
                                     <label for="title_[% language.lang | html %]">Title: </label>
-                                    <input id="title_[% language.lang| html %]" size="100" maxlength="250" type="text" name="title" value="[% translated_contents.item(language.lang).title | html %]">
+                                    <input id="title_[% language.lang| html %]" size="100" maxlength="250" type="text" name="title_[% language.lang | html %]" value="[% translated_contents.item(language.lang).title | html %]">
                                 </li>
                                 <li style="list-style: none;">
                                     <label for="content_[% language.lang | html %]">Content: </label>
-                                    <textarea name="content" id="content_[% language.lang | html %]" data-lang="[% language.lang | html%]" cols="75" rows="10">[% translated_contents.item(language.lang).content | html %]</textarea>
+                                    <textarea name="content_[% language.lang | html %]" id="content_[% language.lang | html %]" data-lang="[% language.lang | html%]" cols="75" rows="10">[% translated_contents.item(language.lang).content | html %]</textarea>
                                     <input type="hidden" name="lang" value="[% language.lang | html %]" />
                                 </li>
                             </ol>

@@ -83,8 +83,6 @@ elsif ( $op eq 'add_validate' ) {
     my $code       = $cgi->param('code');
     my $branchcode = $cgi->param('branchcode') || undef;
 
-    my @title      = $cgi->multi_param('title');
-    my @content    = $cgi->multi_param('content');
     my @lang       = $cgi->multi_param('lang');
 
     my $expirationdate;
@@ -108,8 +106,8 @@ elsif ( $op eq 'add_validate' ) {
 
     my $success = 1;
     for my $lang ( sort {$a ne 'default'} @lang ) { # Process 'default' first
-        my $title = shift @title;
-        my $content = shift @content;
+        my $title   = $cgi->param( 'title_' . $lang );
+        my $content = $cgi->param( 'content_' . $lang );
         my $additional_content = Koha::AdditionalContents->find(
             {
                 category   => $category,
