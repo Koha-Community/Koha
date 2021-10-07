@@ -230,7 +230,7 @@
                             [% END %]
 
                             [% IF ( RESERVES.count ) %]<li><a href="#opac-user-holds">Holds ([% RESERVES.count | html %])</a></li>[% END %]
-                            [% IF Koha.Preference('ArticleRequests') %]<li><a href="#opac-user-article-requests">Article requests ([% current_article_requests_count || 0 | html %])</a></li>[% END %]
+                            [% IF Koha.Preference('ArticleRequests') %]<li><a href="#opac-user-article-requests">Article requests ([% current_article_requests.size || 0 | html %])</a></li>[% END %]
                             [% IF ( OverDriveCirculation ) %]
                             <li><a href="#opac-user-overdrive">OverDrive account</a></li>
                             [% END %]
@@ -765,7 +765,7 @@
 
                         [% IF Koha.Preference('ArticleRequests') %]
                             <div id="opac-user-article-requests">
-                                [% IF current_article_requests_count %]
+                                [% IF current_article_requests.size %]
                                     <table id="article-requests-table" class="table table-bordered table-striped">
                                         <caption>Article requests <span class="count"></span></caption>
                                         <thead>
@@ -866,7 +866,7 @@
                                     <caption class="sr-only">Article requests</caption>
                                     <tr><td>You have no article requests currently.</td></tr>
                                 </table>
-                            [% END # IF current_article_requests_count %]
+                            [% END # IF current_article_requests.size %]
                         </div> <!-- / #opac-user-article-requests -->
                     [% END %]
 

@@ -387,10 +387,8 @@ if (   C4::Context->preference('AllowPatronToSetFinesVisibilityForGuarantor')
 }
 
 if ( C4::Context->preference("ArticleRequests") ) {
-    my @current_article_requests = $patron->article_requests->filter_by_current->as_list;
     $template->param(
-        current_article_requests => \@current_article_requests,
-        current_article_requests_count => scalar @current_article_requests,
+        current_article_requests => [$patron->article_requests->filter_by_current->as_list],
     );
 }
 
