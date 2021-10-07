@@ -520,81 +520,105 @@ subtest 'new_from_api() tests' => sub {
 
 subtest 'attributes_from_api() tests' => sub {
 
-    plan tests => 12;
+    plan tests => 2;
 
-    my $patron = Koha::Patron->new();
+    subtest 'date and date-time handling tests' => sub {
 
-    my $attrs = $patron->attributes_from_api(
-        {
-            updated_on => '2019-12-27T14:53:00',
-        }
-    );
+        plan tests => 12;
 
-    ok( exists $attrs->{updated_on},
-        'No translation takes place if no mapping' );
-    is(
-        ref( $attrs->{updated_on} ),
-        'DateTime',
-        'Given a string, a timestamp field is converted into a DateTime object'
-    );
+        my $patron = Koha::Patron->new();
 
-    $attrs = $patron->attributes_from_api(
-        {
-            last_seen  => '2019-12-27T14:53:00'
-        }
-    );
+        my $attrs = $patron->attributes_from_api(
+            {
+                updated_on     => '2019-12-27T14:53:00',
+                last_seen      => '2019-12-27T14:53:00',
+                date_of_birth  => '2019-12-27',
+            }
+        );
 
-    ok( exists $attrs->{lastseen},
-        'Translation takes place because of the defined mapping' );
-    is(
-        ref( $attrs->{lastseen} ),
-        'DateTime',
-        'Given a string, a datetime field is converted into a DateTime object'
-    );
+        ok( exists $attrs->{updated_on},
+            'No translation takes place if no mapping' );
+        is(
+            ref( $attrs->{updated_on} ),
+            'DateTime',
+            'Given a string, a timestamp field is converted into a DateTime object'
+        );
 
-    $attrs = $patron->attributes_from_api(
-        {
-            date_of_birth  => '2019-12-27'
-        }
-    );
+        ok( exists $attrs->{lastseen},
+            'Translation takes place because of the defined mapping' );
+        is(
+            ref( $attrs->{lastseen} ),
+            'DateTime',
+            'Given a string, a datetime field is converted into a DateTime object'
+        );
 
-    ok( exists $attrs->{dateofbirth},
-        'Translation takes place because of the defined mapping' );
-    is(
-        ref( $attrs->{dateofbirth} ),
-        'DateTime',
-        'Given a string, a date field is converted into a DateTime object'
-    );
+        ok( exists $attrs->{dateofbirth},
+            'Translation takes place because of the defined mapping' );
+        is(
+            ref( $attrs->{dateofbirth} ),
+            'DateTime',
+            'Given a string, a date field is converted into a DateTime object'
+        );
 
-    throws_ok
-        {
-            $attrs = $patron->attributes_from_api(
-                {
-                    date_of_birth => '20141205',
-                }
-            );
-        }
-        'Koha::Exceptions::BadParameter',
-        'Bad date throws an exception';
+        $attrs = $patron->attributes_from_api(
+            {
+                last_seen      => undef,
+                date_of_birth  => undef,
+            }
+        );
 
-    is(
-        $@->parameter,
-        'date_of_birth',
-        'Exception parameter is the API field name, not the DB one'
-    );
+        ok( exists $attrs->{lastseen},
+            'undef parameter is not skipped (Bug 29157)' );
+        is(
+            $attrs->{lastseen},
+            undef,
+            'Given undef, a datetime field is set to undef (Bug 29157)'
+        );
 
-    # Booleans
-    $attrs = $patron->attributes_from_api(
-        {
-            incorrect_address => Mojo::JSON->true,
-            patron_card_lost  => Mojo::JSON->false,
-        }
-    );
+        ok( exists $attrs->{dateofbirth},
+            'undef parameter is not skipped (Bug 29157)' );
+        is(
+            $attrs->{dateofbirth},
+            undef,
+            'Given undef, a date field is set to undef (Bug 29157)'
+        );
 
-    ok( exists $attrs->{gonenoaddress}, 'Attribute gets translated' );
-    is( $attrs->{gonenoaddress}, 1, 'Boolean correctly translated to integer (true => 1)' );
-    ok( exists $attrs->{lost}, 'Attribute gets translated' );
-    is( $attrs->{lost}, 0, 'Boolean correctly translated to integer (false => 0)' );
+        throws_ok
+            {
+                $attrs = $patron->attributes_from_api(
+                    {
+                        date_of_birth => '20141205',
+                    }
+                );
+            }
+            'Koha::Exceptions::BadParameter',
+            'Bad date throws an exception';
+
+        is(
+            $@->parameter,
+            'date_of_birth',
+            'Exception parameter is the API field name, not the DB one'
+        );
+    };
+
+    subtest 'booleans handling tests' => sub {
+
+        plan tests => 4;
+
+        my $patron = Koha::Patron->new;
+
+        my $attrs = $patron->attributes_from_api(
+            {
+                incorrect_address => Mojo::JSON->true,
+                patron_card_lost  => Mojo::JSON->false,
+            }
+        );
+
+        ok( exists $attrs->{gonenoaddress}, 'Attribute gets translated' );
+        is( $attrs->{gonenoaddress}, 1, 'Boolean correctly translated to integer (true => 1)' );
+        ok( exists $attrs->{lost}, 'Attribute gets translated' );
+        is( $attrs->{lost}, 0, 'Boolean correctly translated to integer (false => 0)' );
+    };
 };
 
 subtest "Test update method" => sub {
