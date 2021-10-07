@@ -80,8 +80,8 @@ Usage: $0 [-h|--help] [--confirm] [--sessions] [--sessdays DAYS] [-v|--verbose] 
                       amountoutstanding is 0 or NULL.
                       In the case of --fees, DAYS must be greater than
                       or equal to 1.
-   --log_modules      Specify which action log modules to trim. Repeatable.
-   --preserve_logs    Specify which action logs to exclude. Repeatable.
+   --log-modules      Specify which action log modules to trim. Repeatable.
+   --preserve-logs    Specify which action logs to exclude. Repeatable.
    --logs DAYS        purge entries from action_logs older than DAYS days.
                       Defaults to 180 days if no days specified.
    --searchhistory DAYS  purge entries from search_history older than DAYS days.
@@ -167,8 +167,8 @@ GetOptions(
     'import:i'          => \$pImport,
     'z3950'             => \$pZ3950,
     'logs:i'            => \$pLogs,
-    'log_module:s'      => \@log_modules,
-    'preserve_log:s'    => \@preserve_logs,
+    'log-module:s'      => \@log_modules,
+    'preserve-log:s'    => \@preserve_logs,
     'messages:i'        => \$pMessages,
     'fees:i'            => \$fees_days,
     'searchhistory:i'   => \$pSearchhistory,
