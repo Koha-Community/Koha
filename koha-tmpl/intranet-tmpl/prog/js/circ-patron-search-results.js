@@ -7,7 +7,7 @@ $(document).ready(function() {
         {
             "aaSorting": [ 0, "asc" ],
             "sDom": "t",
-            "iDisplayLength": -1
+            "paging": false
         },
         columns_settings_borrowers_table, null);
 });
