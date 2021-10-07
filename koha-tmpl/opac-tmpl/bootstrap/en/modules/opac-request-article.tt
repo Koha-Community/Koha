@@ -33,7 +33,15 @@
     <div class="container-fluid maincontent">
         <div class="row">
             <div class="col">
-                [% IF !error_message && biblio.can_article_request( patron ) %]
+                [% IF error_message %]
+                    <h1 class="title">[% biblio.title | html %]</h1>
+                    <div class="alert alert-info">
+                        [% SWITCH error_message %]
+                            [% CASE 'article_request_limit_reached'       %]You reached your open article requests limit.
+                            [% CASE 'article_request_unhandled_exception' %]An error has occurred.
+                        [% END %]
+                    </div>
+                [% ELSIF biblio.can_article_request( patron ) %]
                     <h1>Place article request for [% biblio.title | html %]</h1>
                     [% IF ( disclaimer && !action) %]
                         <div class="alert alert-warning">
@@ -216,14 +224,6 @@
                             <input type="submit" class="btn btn-primary" value="Place request" />
                         </form>
                     [% END %]
-                [% ELSIF error_message %]
-                    <h1 class="title">[% biblio.title | html %]</h1>
-                    <div class="alert alert-info">
-                        [% SWITCH error_message %]
-                            [% CASE 'article_request_limit_reached'       %]You reached your article requests daily limit.
-                            [% CASE 'article_request_unhandled_exception' %]An error has occurred.
-                        [% END %]
-                    </div>
                 [% ELSE %]
                     <h1 class="title">[% biblio.title | html %]</h1>
                     <div class="alert alert-info">
