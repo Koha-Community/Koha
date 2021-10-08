@@ -321,12 +321,6 @@ sub intranet_catalog_biblio_tab {
     return @tabs;
 }
 
-sub test_call_recursive {
-    my ( $self, $value ) = @_;
-
-    return $value x 2;
-}
-
 sub _private_sub {
     return "";
 }
