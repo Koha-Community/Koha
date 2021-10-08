@@ -149,7 +149,7 @@
                 <div class="row">
                     <div class="col-sm-12">
                         [%# Following statement must be in one line for translatability %]
-                        [% IF ( CAN_user_tools_moderate_comments  && pendingcomments ) || ( CAN_user_tools_moderate_tags && pendingtags ) || ( CAN_user_borrowers_edit_borrowers && pending_borrower_modifications ) || ( CAN_user_suggestions_suggestions_manage && ( pendingsuggestions || all_pendingsuggestions )) || ( CAN_user_borrowers_edit_borrowers && pending_discharge_requests ) || pending_article_requests || ( Koha.Preference('AllowCheckoutNotes') && CAN_user_circulate_manage_checkout_notes && pending_checkout_notes.count ) || ( Koha.Preference('OPACReportProblem') && CAN_user_problem_reports && pending_problem_reports.count ) || already_ran_jobs %]
+                        [% IF ( CAN_user_tools_moderate_comments  && pendingcomments ) || ( CAN_user_tools_moderate_tags && pendingtags ) || ( CAN_user_borrowers_edit_borrowers && pending_borrower_modifications ) || ( CAN_user_suggestions_suggestions_manage && pendingsuggestions ) || ( CAN_user_borrowers_edit_borrowers && pending_discharge_requests ) || pending_article_requests || ( Koha.Preference('AllowCheckoutNotes') && CAN_user_circulate_manage_checkout_notes && pending_checkout_notes.count ) || ( Koha.Preference('OPACReportProblem') && CAN_user_problem_reports && pending_problem_reports.count ) || already_ran_jobs %]
                             <div id="area-pending">
                                 [% IF pending_article_requests %]
                                 <div class="pending-info" id="article_requests_pending">
@@ -215,6 +215,12 @@
                                     <div class="pending-info" id="problem_reports_pending">
                                         <a href="/cgi-bin/koha/tools/problem-reports.pl">OPAC problem reports pending</a>:
                                         <span class="pending-number-link">[% pending_problem_reports.count | html %]</span>
+                                    </div>
+                                [% END %]
+
+                                [% IF already_ran_jobs %]
+                                    <div class="pending-info" id="background_jobs">
+                                        <a href="/cgi-bin/koha/admin/background_jobs.pl">Access your background jobs</a>
                                     </div>
                                 [% END %]
 

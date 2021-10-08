@@ -31,24 +31,25 @@ my $input             = CGI->new;
 my $op                = $input->param('op') || 'list';
 my @messages;
 
-# The "view" view should be accessible for the user who create this job.
-my $flags_required = $op ne 'view' ? { parameters => 'manage_background_jobs' } : undef;
-
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
         template_name   => "admin/background_jobs.tt",
         query           => $input,
         type            => "intranet",
-        flagsrequired   => $flags_required,
+        flagsrequired   => { catalogue => 1 },
         debug           => 1,
     }
 );
+
+my $logged_in_user = Koha::Patrons->find($loggedinuser);
+my $can_manage_background_jobs =
+  $logged_in_user->has_permission( { parameters => 'manage_background_jobs' } );
 
 if ( $op eq 'view' ) {
     my $id = $input->param('id');
     if ( my $job = Koha::BackgroundJobs->find($id) ) {
         if ( $job->borrowernumber ne $loggedinuser
-            && !Koha::Patrons->find($loggedinuser)->has_permission( { parameters => 'manage_background_jobs' } ) )
+            && !$can_manage_background_jobs )
         {
             push @messages, { code => 'cannot_view_job' };
         }
@@ -70,15 +71,28 @@ if ( $op eq 'view' ) {
 
 if ( $op eq 'cancel' ) {
     my $id = $input->param('id');
-    if ( my $job = Koha::BackgroundJobs->find($id) ) { # FIXME Make sure logged in user can cancel this job
+    my $job = Koha::BackgroundJobs->find($id);
+    if (   $can_manage_background_jobs
+        || $job->borrowernumber eq $logged_in_user->borrowernumber )
+    {
         $job->cancel;
+    }
+    else {
+        push @messages, { code => 'cannot_cancel_job' };
     }
     $op = 'list';
 }
 
 
 if ( $op eq 'list' ) {
-    my $jobs = Koha::BackgroundJobs->search({}, { order_by => { -desc => 'enqueued_on' }});
+    my $jobs =
+      $can_manage_background_jobs
+      ? Koha::BackgroundJobs->search( {},
+        { order_by => { -desc => 'enqueued_on' } } )
+      : Koha::BackgroundJobs->search(
+        { borrowernumber => $logged_in_user->borrowernumber },
+        { order_by       => { -desc => 'enqueued_on' } }
+      );
     $template->param( jobs => $jobs );
 }
 

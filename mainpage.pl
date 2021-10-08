@@ -33,6 +33,7 @@ use Koha::ArticleRequests;
 use Koha::ProblemReports;
 use Koha::Quotes;
 use Koha::Suggestions;
+use Koha::BackgroundJobs;
 
 my $query = CGI->new;
 
@@ -44,6 +45,8 @@ my ( $template, $loggedinuser, $cookie, $flags ) = get_template_and_user(
         flagsrequired   => { catalogue => 1, },
     }
 );
+
+my $logged_in_user = Koha::Patrons->find($loggedinuser);
 
 my $homebranch;
 if (C4::Context->userenv) {
@@ -93,6 +96,12 @@ my $pending_article_requests = Koha::ArticleRequests->search_limited(
     }
 )->count;
 my $pending_problem_reports = Koha::ProblemReports->search({ status => 'New' });
+
+unless ( $logged_in_user->has_permission( { parameters => 'manage_background_jobs' } ) ) {
+    my $already_ran_jobs = Koha::BackgroundJobs->search(
+        { borrowernumber => $logged_in_user->borrowernumber } )->count ? 1 : 0;
+    $template->param( already_ran_jobs => $already_ran_jobs );
+}
 
 $template->param(
     pendingcomments                => $pendingcomments,
