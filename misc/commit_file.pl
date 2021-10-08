@@ -11,7 +11,7 @@ BEGIN {
 
 use Koha::Script;
 use C4::Context;
-use C4::ImportBatch qw( GetImportBatch BatchCommitRecords BatchRevertRecords );
+use C4::ImportBatch qw( GetAllImportBatches GetImportBatch BatchCommitRecords BatchRevertRecords );
 use Getopt::Long qw( GetOptions );
 
 $| = 1;
