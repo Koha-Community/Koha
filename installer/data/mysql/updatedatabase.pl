@@ -23702,6 +23702,15 @@ if( CheckVersion( $DBversion ) ) {
     NewVersion( $DBversion, 28826, "Add system preference FacetOrder");
 }
 
+$DBversion = '20.11.10.002';
+if( CheckVersion( $DBversion ) ) {
+    $dbh->do( q{
+        INSERT IGNORE INTO systempreferences (variable, value, options, explanation, type)
+        VALUES ('CreateAVFromCataloguing', '1', '', 'Ability to create authorized values from the cataloguing module', 'YesNo')
+    });
+    NewVersion( $DBversion, 29137, "Add system preference CreateAVFromCataloguing");
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 my $update_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/atomicupdate/';
