@@ -42,9 +42,9 @@ Koha::Items - Koha Item object set class
 
     my $filtered_items = $items->filter_by_for_hold;
 
-Return the items of the set that are *potentially* holdable
+Return the items of the set that are *potentially* holdable.
 
-Caller has the responsability to call C4::Reserves::CanItemBeReserved before
+Caller has the responsibility to call C4::Reserves::CanItemBeReserved before
 placing a hold on one of those items.
 
 =cut
@@ -65,9 +65,8 @@ sub filter_by_for_hold {
         {
             itemlost   => 0,
             withdrawn  => 0,
-            notforloan => { '<=' => 0 }
-            ,    # items with negative or zero notforloan value are holdable
-            ( ! C4::Context->preference('AllowHoldsOnDamagedItems' ) ? ( damaged => 0 ) : () ),
+            notforloan => { '<=' => 0 }, # items with negative or zero notforloan value are holdable
+            ( C4::Context->preference('AllowHoldsOnDamagedItems' ) ? () : ( damaged => 0 ) ),
             itype        => { -not_in => \@hold_not_allowed_itypes },
         }
     );
