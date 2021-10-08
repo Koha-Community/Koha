@@ -1471,7 +1471,7 @@ subtest 'can_be_transferred' => sub {
 };
 
 subtest 'filter_by_for_hold' => sub {
-    plan tests => 11;
+    plan tests => 12;
 
     my $biblio = $builder->build_sample_biblio;
     is( $biblio->items->filter_by_for_hold->count, 0, 'no item yet' );
@@ -1527,6 +1527,12 @@ subtest 'filter_by_for_hold' => sub {
     is( $biblio->items->filter_by_for_hold->count, 7, '7 items for hold - rule deleted' );
     $itemtype->notforloan(1)->store;
     is( $biblio->items->filter_by_for_hold->count, 6, '6 items for hold - notforloan' );
+
+    t::lib::Mocks::mock_preference('item-level_itypes', 0);
+    $biblio->biblioitem->itemtype($not_holdable_itemtype)->store;
+    is( $biblio->items->filter_by_for_hold->count, 0, '0 item-level_itypes=0' );
+
+    t::lib::Mocks::mock_preference('item-level_itypes', 1);
 
     $biblio->delete;
 };
