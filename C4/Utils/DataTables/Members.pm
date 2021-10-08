@@ -160,7 +160,7 @@ sub search {
 
 
         if ( $searchfieldstype eq 'standard' and C4::Context->preference('ExtendedPatronAttributes') and $searchmember ) {
-             push @where_strs_or, " borrowernumber IN ( SELECT DISTINCT borrowernumber FROM borrower_attributes JOIN borrower_attribute_types USING (code) WHERE staff_searchable = 1 AND attribute LIKE ? ) ";
+             push @where_strs_or, " borrowers.borrowernumber IN ( SELECT DISTINCT borrowernumber FROM borrower_attributes JOIN borrower_attribute_types USING (code) WHERE staff_searchable = 1 AND attribute LIKE ? ) ";
              push @where_args, $term;
         }
 
