@@ -155,14 +155,24 @@
 
         $(".tag_anchor").on("click", function(e){
             e.preventDefault();
-            var toolbar_height = $("#toolbar").outerHeight();
             $(".tag_anchor").removeClass("selected");
             $(this).addClass("selected");
             var link = this.href;
             var linkid = link.substring( link.indexOf("#") + 1 );
-            var dest = $("#" + linkid );
-            var yoffset = dest.offset();
-            window.scrollTo( 0, yoffset.top - toolbar_height - 20 );
+            window.scrollTo( 0, getScrollto( linkid, "toolbar" ) );
+        });
+
+        $("body").on("click", ".linkfield", function(e){
+            e.preventDefault();
+            var tab = $(this).data("tab");
+            var field = $(this).data("field");
+            var tablink = $("a[data-tabid='" + tab + "']" );
+            selectTab( tablink );
+            window.scrollTo( 0, getScrollto( field, "toolbar" ) );
+        });
+
+        $("body").on("click", ".show-errors", function(e){
+            document.getElementById("form-errors").scrollIntoView();
         });
 
     });
@@ -176,6 +186,26 @@
         $(".tag_anchors_" + tabid ).addClass("tab_selected").show();
     }
 
+    /**
+    * Returns a roughly ideal position to scroll an element into view
+    * @param {string} target - The HTML id of the element to scroll into view
+    * @param {string} elemid - The HTML id of the element which might obscure
+    *                          the view of the target element e.g. a floating toolbar
+    * @return {number} - The y-coordinate to pass to window.scrollTo()
+    */
+    function getScrollto( target, elemid ){
+        var dest = $("#" + target );
+        var yoffset = dest.offset();
+
+        if( elemid != "" ){
+            var element = $("#" + elemid );
+            var elem_height = element.outerHeight();
+        } else {
+            elem_height = 0;
+        }
+        return yoffset.top - elem_height - 20;
+    }
+
     function redirect(dest){
         $("#redirect").attr("value",dest);
         return Check();
@@ -185,7 +215,7 @@
         var onOption = function () {
             return Check();
         }
-[% END %]
+    [% END %]
 
 /**
 * this function append button for create new authority if not found
@@ -512,14 +542,14 @@ function PopupMARCFieldDoc(field) {
         var label = new Array();
         var flag=0;
         var tabflag= new Array();
-        var StrAlert = "";
+        var StrAlert = "<div id='form-errors' class='dialog alert list'>";
         var notFilledClass = "subfield_not_filled";
 
         if (mandatory) {
             [% FOREACH BIG_LOO IN BIG_LOOP %]
                 [% FOREACH innerloo IN BIG_LOO.innerloop %]
                     [% IF ( innerloo.mandatory ) %]
-                        fields.push(new Array("[% innerloo.tag | html %]","[% innerloo.index | html %][% innerloo.random | html %]","[% innerloo.index | html %]"));
+                        fields.push(new Array("[% innerloo.tag | html %]","[% innerloo.index | html %][% innerloo.random | html %]","[% innerloo.index | html %]", "[% BIG_LOO.number | html %]"));
                     [% END %]
                     [% FOREACH subfield_loo IN innerloo.subfield_loop %]
                         [% IF ( subfield_loo.mandatory ) %]subfields.push("[% subfield_loo.id | html %]");
@@ -529,12 +559,12 @@ function PopupMARCFieldDoc(field) {
                     [% END %]
                 [% END %]
             [% END %]
-            StrAlert = _("Can't save this record because the following field aren't filled:");
+            StrAlert += "<h4>" + _("The following subfields aren't filled:") + "</h4>";
         } else {
             [% FOREACH BIG_LOO IN BIG_LOOP %]
                 [% FOREACH innerloo IN BIG_LOO.innerloop %]
                     [% IF ( innerloo.important ) %]
-                    fields.push(new Array("[% innerloo.tag | html %]","[% innerloo.index | html %][% innerloo.random | html %]","[% innerloo.index | html %]"));
+                        fields.push(new Array("[% innerloo.tag | html %]","[% innerloo.index | html %][% innerloo.random | html %]","[% innerloo.index | html %]", "[% BIG_LOO.number | html %]"));
                     [% END %]
                     [% FOREACH subfield_loo IN innerloo.subfield_loop %]
                         [% IF ( subfield_loo.important ) %]subfields.push("[% subfield_loo.id | html %]");
@@ -544,11 +574,10 @@ function PopupMARCFieldDoc(field) {
                     [% END %]
                 [% END %]
             [% END %]
-            StrAlert = _("A few important fields are not filled:");
+            StrAlert += "<h4>" + _("A few important fields are not filled:") + "</h4>";
             notFilledClass = "important_subfield_not_filled";
         }
-
-        StrAlert += "\n\n";
+        StrAlert += "<ul>";
         for(var i=0,len=subfields.length; i<len ; i++){
             var tag=subfields[i].substr(4,3);
             var subfield=subfields[i].substr(17,1);
@@ -572,18 +601,23 @@ function PopupMARCFieldDoc(field) {
             } else {
                 tabflag[tag+subfield+tagnumber][0] = 1;
             }
+            tabflag[tag+subfield+tagnumber][3] = subfields[i];
         }
+
         for (var tagsubfieldid in tabflag){
             if (tabflag[tagsubfieldid][0]==0){
                 var tag=tagsubfieldid.substr(0,3);
                 var subfield=tagsubfieldid.substr(3,1);
-                StrAlert += "\t* "+_("tag %s subfield %s %s in tab %s").format(tag, subfield, tabflag[tagsubfieldid][1], tabflag[tagsubfieldid][2]) + "\n";
-                //StrAlert += "\t* "+label[i]+_(" in tab ")+tab[i]+"\n";
+                StrAlert += "<li>"+_("Tag %s subfield %s %s in tab %s").format(tag, subfield, formatFieldName( tabflag[tagsubfieldid][1] ), tabflag[tagsubfieldid][2]) + ' <a class="linkfield btn btn-link" href="#" data-tab="' + tabflag[tagsubfieldid][2] + '" data-field="' + tabflag[tagsubfieldid][3] + '"><i class="fa fa-arrow-right" aria-hidden="true"></i> Go to field</a></li>';
                 flag=1;
             }
         }
-
+        StrAlert += "</ul>";
         /* Check for mandatories/importants field(not subfields) */
+        /* Loop over array of fields identified as mandatory or
+           important to see if at least one subfield is filled */
+        mandatoryFields = new Object();
+
         for(var i=0,len=fields.length; i<len; i++){
             isempty  = true;
             arr      = fields[i];
@@ -600,8 +634,10 @@ function PopupMARCFieldDoc(field) {
                         inputregexp = new RegExp("^tag_" + arr[0] + "_subfield_" + eleminputs[j].value + "_" + arr[2]);
 
                         for( var k=0; k<len2; k++){
-                            if(eleminputs[k].id.match(inputregexp) && eleminputs[k].value){
-                                isempty = false
+                            if( eleminputs[k].id.match(inputregexp) ){
+                                if( eleminputs[k].value ){
+                                    isempty = false
+                                }
                             }
                         }
 
@@ -621,24 +657,45 @@ function PopupMARCFieldDoc(field) {
                         isempty = false;
                     }
                 }
+
             } else {
                 isempty = false;
             }
 
             if(isempty){
                 flag = 1;
-                StrAlert += "\t* ";
                 if (mandatory) {
-                    StrAlert += _("Field %s is mandatory, at least one of its subfields must be filled.").format(arr[0]);
+                    mandatoryFields[ arr[0] ] = {
+                        importance: "mandatory",
+                        elemid: "div_indicator_" + divid,
+                        tab: arr[3]
+                    }
                 } else {
-                    StrAlert += _("Field %s is important, at least one of its subfields must be filled.").format(arr[0]);
+                    mandatoryFields[ arr[0] ] = {
+                        importance: "important",
+                        elemid: "div_indicator_" + divid,
+                        tab: arr[3]
+                    }
                 }
-                StrAlert += "\n";
             }
 
         }
 
+        if( Object.entries(mandatoryFields).length > 0 ){
+            StrAlert += "<h4>" + _("The following fields aren't filled:") + "</h4>";
+            StrAlert += "<ul>";
+            for( var prop in mandatoryFields ){
+                if( mandatoryFields[prop]["importance"] == "mandatory" ){
+                    StrAlert += "<li>" + _("Field %s is mandatory, at least one of its subfields must be filled.").format( prop ) + ' <a class="linkfield btn btn-link" href="#" data-tab="' + mandatoryFields[prop]["tab"] + '" data-field="' + mandatoryFields[prop]["elemid"] + '"><i class="fa fa-arrow-right" aria-hidden="true"></i> Go to field</a></li>';
+                } else {
+                    StrAlert += "<li>" + _("Field %s is important, at least one of its subfields must be filled.").format(arr[0]) + ' <a class="linkfield btn btn-link" href="#" data-tab="' + mandatoryFields[prop]["tab"] + '" data-field="' + mandatoryFields[prop]["elemid"] + '"><i class="fa fa-arrow-right" aria-hidden="true"></i> Go to field</a></li>';
+                }
+            }
+            StrAlert += "</ul>";
+        }
+        StrAlert += "</div>";
         if(flag){
+            $("#show-errors").html('<button type="button" class="btn btn-danger show-errors"><i class="fa fa-warning"></i> Errors</span>');
             return StrAlert;
         } else {
             return flag;
@@ -663,7 +720,9 @@ function PopupMARCFieldDoc(field) {
             document.f.submit();
             return true;
         } else {
-            alert(StrAlert);
+            $("#check_errors").html( StrAlert );
+            $('html, body').animate({ scrollTop: 0 }, 'fast');
+            Sticky.hcSticky('refresh');
             return false;
         }
     }
@@ -704,6 +763,10 @@ function PopupMARCFieldDoc(field) {
         f.submit();
     }
 
+    /* Wrap a value in HTML without putting HTML in translatable string */
+    function formatFieldName( string ){
+        return "<strong><em>" + string + "</em></strong>";
+    }
 </script>
 [% Asset.css("css/addbiblio.css") | $raw %]
 </head>
@@ -738,6 +801,8 @@ function PopupMARCFieldDoc(field) {
     <div class="main container-fluid">
         <div class="row">
             <div class="col-md-10 col-md-offset-1">
+
+                <div id="check_errors"></div>
 
                 <h1>
                     [% IF ( biblionumber ) %]
@@ -881,8 +946,11 @@ function PopupMARCFieldDoc(field) {
                                 </div>
                             [% END %]
                         [% ELSE %]
-                            <a class="btn btn-default" id="cancel" href="/cgi-bin/koha/cataloguing/addbooks.pl">Cancel</a>
+                            <div class="btn-group">
+                                <a class="btn btn-default" id="cancel" href="/cgi-bin/koha/cataloguing/addbooks.pl">Cancel</a>
+                            </div>
                         [% END %]
+                        <div id="show-errors" class="btn-group"></div>
                     [% END # /UNLESS circborrowernumber %]
                     <div class="toolbar-tabs-container">
                         [% IF ( BIG_LOOP && BIG_LOOP.size > 1 ) %]
