@@ -67,6 +67,13 @@
         </ul>
     [% END %]
 
+    [% IF CAN_user_parameters_manage_background_jobs %]
+        <h5>Background jobs</h5>
+        <ul>
+            <li><a href="/cgi-bin/koha/admin/background_jobs.pl">Background jobs</a></li>
+        </ul>
+    [% END %]
+
     [% IF ( CAN_user_parameters_manage_marc_frameworks || CAN_user_parameters_manage_classifications || CAN_user_parameters_manage_matching_rules || CAN_user_parameters_manage_oai_sets || CAN_user_parameters_manage_item_search_fields || CAN_user_parameters_manage_search_engine_config ) %]
         <h5>Catalog</h5>
         <ul>
