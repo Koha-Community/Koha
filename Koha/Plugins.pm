@@ -44,6 +44,10 @@ BEGIN {
 
 Koha::Plugins - Module for loading and managing plugins.
 
+=head2 new
+
+Constructor
+
 =cut
 
 sub new {
@@ -61,6 +65,9 @@ sub new {
 Calls a plugin method for all enabled plugins
 
     @responses = Koha::Plugins->call($method, @args)
+
+Note: Pass your arguments as refs, when you want subsequent plugins to use the value
+updated by preceding plugins, provided that these plugins support that.
 
 =cut
 
@@ -96,7 +103,6 @@ method or metadata value.
     });
 
 The method and metadata parameters are optional.
-Available methods currently are: 'report', 'tool', 'to_marc', 'edifact'.
 If you pass multiple keys in the metadata hash, all keys must match.
 
 =cut
@@ -168,7 +174,7 @@ This method iterates through all plugins physically present on a system.
 For each plugin module found, it will test that the plugin can be loaded,
 and if it can, will store its available methods in the plugin_methods table.
 
-NOTE: We re-load all plugins here as a protective measure in case someone
+NOTE: We reload all plugins here as a protective measure in case someone
 has removed a plugin directly from the system without using the UI
 
 =cut
@@ -219,30 +225,6 @@ sub InstallPlugins {
 
 1;
 __END__
-
-=head1 AVAILABLE HOOKS
-
-=head2 after_hold_create
-
-=head3 Parameters
-
-=over
-
-=item * C<$hold> - A Koha::Hold object that has just been inserted in database
-
-=back
-
-=head3 Return value
-
-None
-
-=head3 Example
-
-    sub after_hold_create {
-        my ($self, $hold) = @_;
-
-        warn "New hold for borrower " . $hold->borrower->borrowernumber;
-    }
 
 =head1 AUTHOR
 
