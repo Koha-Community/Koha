@@ -110,7 +110,32 @@
                         i++;
                     });
                 }
+
+                function ReOrderSubField(){
+                    var isFirst=1;
+                    var subfield_start = $(field_start).children('ul')[0];
+                    var first = subfield_start.firstElementChild;
+
+                    [% FOREACH SUBFIELD IN SUBFIELD_LOOP %]
+                        // grab all subfields
+                        var subfield_name = "[% To.json(tag_number) | $raw %][% To.json(SUBFIELD.marc_subfield) | $raw %]"
+                        var re = new RegExp('^subfield' + subfield_name,'g');
+                        var subfields = $(subfield_start).children('li').filter( function() {return this.id.match(re); });
+                        for (var i=0; i<subfields.length; i++){
+                            var subfield = subfields[i];
+                            if (isFirst ==1){
+                                first = subfield_start.insertBefore(subfield, first);
+                                isFirst=0;
+                            }
+                            else{
+                                first = subfield_start.insertBefore(subfield, first.nextSibling);
+                            }
+                        }
+                    [% END %]
+                }
+
                 [% UNLESS ( clear ) %]
+                    ReOrderSubField()
                     [% FOREACH SUBFIELD_LOO IN SUBFIELD_LOOP %]
                         SetSubfieldValues(
                             "[% To.json(tag_number) | $raw %][% To.json(SUBFIELD_LOO.marc_subfield) | $raw %]"
