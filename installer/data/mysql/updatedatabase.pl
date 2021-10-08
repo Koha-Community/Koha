@@ -24496,6 +24496,16 @@ if( CheckVersion( $DBversion ) ) {
     NewVersion( $DBversion, "29073", "Make DefaultHoldExpirationdate use 1/0 values" );
 }
 
+$DBversion = '21.05.04.002';
+if( CheckVersion( $DBversion ) ) {
+    $dbh->do(q{
+        INSERT IGNORE INTO systempreferences
+        ( variable, value, options, explanation, type ) VALUES
+        ('FacetOrder','Alphabetical','Alphabetical|Usage','Specify the order of facets within each category','Choice')
+    });
+    NewVersion( $DBversion, 28826, "Add system preference FacetOrder");
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 my $update_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/atomicupdate/';
