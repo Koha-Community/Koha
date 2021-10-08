@@ -61,6 +61,7 @@ sub filter_by_for_hold {
             rule_value   => 'not_allowed',
         }
     )->get_column('itemtype');
+    push @hold_not_allowed_itypes, Koha::ItemTypes->search({ notforloan => 1 })->get_column('itemtype');
 
     return $self->search(
         {
