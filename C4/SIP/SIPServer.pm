@@ -351,6 +351,9 @@ sub read_request {
       my $raw_length;
       local $/ = "\015";
 
+      # SIP connections might be active for weeks, clear L1 cache on every request
+      Koha::Caches->flush_L1_caches();
+
     # proper SPEC: (octal) \015 = (hex) x0D = (dec) 13 = (ascii) carriage return
       my $buffer = <STDIN>;
       if ( defined $buffer ) {
