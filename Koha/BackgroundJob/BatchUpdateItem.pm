@@ -111,27 +111,22 @@ sub process {
     };
 
     try {
-        my $schema = Koha::Database->new->schema;
-        $schema->txn_do(
-            sub {
-                my ($results) =
-                  Koha::Items->search( { itemnumber => \@record_ids } )
-                  ->batch_update(
-                    {
-                        regex_mod  => $regex_mod,
-                        new_values => $new_values,
-                        exclude_from_local_holds_priority =>
-                          $exclude_from_local_holds_priority,
-                        callback => sub {
-                            my ($progress) = @_;
-                            $job->progress($progress)->store;
-                        },
-                    }
-                  );
-                $report->{modified_itemnumbers} = $results->{modified_itemnumbers};
-                $report->{modified_fields}      = $results->{modified_fields};
+        my ($results) =
+          Koha::Items->search( { itemnumber => \@record_ids } )
+          ->batch_update(
+            {
+                regex_mod  => $regex_mod,
+                new_values => $new_values,
+                exclude_from_local_holds_priority =>
+                  $exclude_from_local_holds_priority,
+                callback => sub {
+                    my ($progress) = @_;
+                    $job->progress($progress)->store;
+                },
             }
-        );
+          );
+        $report->{modified_itemnumbers} = $results->{modified_itemnumbers};
+        $report->{modified_fields}      = $results->{modified_fields};
     }
     catch {
         warn $_;
@@ -139,6 +134,7 @@ sub process {
           if ( $_ =~ /Rollback failed/ );    # Rollback failed
     };
 
+    $job->discard_changes;
     my $job_data = decode_json encode_utf8 $job->data;
     $job_data->{report} = $report;
 

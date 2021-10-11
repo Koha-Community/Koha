@@ -20,6 +20,7 @@ package Koha::Items;
 use Modern::Perl;
 use Array::Utils qw( array_minus );
 use List::MoreUtils qw( uniq );
+use Try::Tiny;
 
 use C4::Context;
 use C4::Biblio qw( GetMarcStructure GetMarcFromKohaField );
@@ -242,98 +243,101 @@ sub batch_update {
 
     my (@modified_itemnumbers, $modified_fields);
     my $i;
+    my $schema = Koha::Database->new->schema;
     while ( my $item = $self->next ) {
 
-        my $modified_holds_priority = 0;
-        if ( defined $exclude_from_local_holds_priority ) {
-            if(!defined $item->exclude_from_local_holds_priority || $item->exclude_from_local_holds_priority != $exclude_from_local_holds_priority) {
-                $item->exclude_from_local_holds_priority($exclude_from_local_holds_priority)->store;
-                $modified_holds_priority = 1;
+        try {$schema->txn_do(sub {
+            my $modified_holds_priority = 0;
+            if ( defined $exclude_from_local_holds_priority ) {
+                if(!defined $item->exclude_from_local_holds_priority || $item->exclude_from_local_holds_priority != $exclude_from_local_holds_priority) {
+                    $item->exclude_from_local_holds_priority($exclude_from_local_holds_priority)->store;
+                    $modified_holds_priority = 1;
+                }
             }
-        }
 
-        my $modified = 0;
-        my $new_values = {%$new_values};    # Don't modify the original
+            my $modified = 0;
+            my $new_values = {%$new_values};    # Don't modify the original
 
-        my $old_values = $item->unblessed;
-        if ( $item->more_subfields_xml ) {
-            $old_values = {
-                %$old_values,
-                %{$item->additional_attributes->to_hashref},
-            };
-        }
+            my $old_values = $item->unblessed;
+            if ( $item->more_subfields_xml ) {
+                $old_values = {
+                    %$old_values,
+                    %{$item->additional_attributes->to_hashref},
+                };
+            }
 
-        for my $attr ( keys %$regex_mod ) {
-            my $old_value = $old_values->{$attr};
+            for my $attr ( keys %$regex_mod ) {
+                my $old_value = $old_values->{$attr};
 
-            next unless $old_value;
+                next unless $old_value;
 
-            my $value = apply_regex(
-                {
-                    %{ $regex_mod->{$attr} },
-                    value => $old_value,
-                }
-            );
+                my $value = apply_regex(
+                    {
+                        %{ $regex_mod->{$attr} },
+                        value => $old_value,
+                    }
+                );
 
-            $new_values->{$attr} = $value;
-        }
+                $new_values->{$attr} = $value;
+            }
 
-        for my $attribute ( keys %$new_values ) {
-            next if $attribute eq 'more_subfields_xml'; # Already counted before
+            for my $attribute ( keys %$new_values ) {
+                next if $attribute eq 'more_subfields_xml'; # Already counted before
 
-            my $old = $old_values->{$attribute};
-            my $new = $new_values->{$attribute};
-            $modified++
-              if ( defined $old xor defined $new )
-              || ( defined $old && defined $new && $new ne $old );
-        }
+                my $old = $old_values->{$attribute};
+                my $new = $new_values->{$attribute};
+                $modified++
+                  if ( defined $old xor defined $new )
+                  || ( defined $old && defined $new && $new ne $old );
+            }
 
-        { # Dealing with more_subfields_xml
+            { # Dealing with more_subfields_xml
 
-            my $frameworkcode = $item->biblio->frameworkcode;
-            my $tagslib = C4::Biblio::GetMarcStructure( 1, $frameworkcode, { unsafe => 1 });
-            my ( $itemtag, $itemsubfield ) = C4::Biblio::GetMarcFromKohaField( "items.itemnumber" );
+                my $frameworkcode = $item->biblio->frameworkcode;
+                my $tagslib = C4::Biblio::GetMarcStructure( 1, $frameworkcode, { unsafe => 1 });
+                my ( $itemtag, $itemsubfield ) = C4::Biblio::GetMarcFromKohaField( "items.itemnumber" );
 
-            my @more_subfield_tags = map {
-                (
-                         ref($_)
-                      && %$_
-                      && !$_->{kohafield}    # Get subfields that are not mapped
-                  )
-                  ? $_->{tagsubfield}
-                  : ()
-            } values %{ $tagslib->{$itemtag} };
+                my @more_subfield_tags = map {
+                    (
+                             ref($_)
+                          && %$_
+                          && !$_->{kohafield}    # Get subfields that are not mapped
+                      )
+                      ? $_->{tagsubfield}
+                      : ()
+                } values %{ $tagslib->{$itemtag} };
 
-            my $more_subfields_xml = Koha::Item::Attributes->new(
-                {
-                    map {
-                        exists $new_values->{$_} ? ( $_ => $new_values->{$_} )
-                          : exists $old_values->{$_}
-                          ? ( $_ => $old_values->{$_} )
-                          : ()
-                    } @more_subfield_tags
-                }
-            )->to_marcxml($frameworkcode);
+                my $more_subfields_xml = Koha::Item::Attributes->new(
+                    {
+                        map {
+                            exists $new_values->{$_} ? ( $_ => $new_values->{$_} )
+                              : exists $old_values->{$_}
+                              ? ( $_ => $old_values->{$_} )
+                              : ()
+                        } @more_subfield_tags
+                    }
+                )->to_marcxml($frameworkcode);
 
-            $new_values->{more_subfields_xml} = $more_subfields_xml;
+                $new_values->{more_subfields_xml} = $more_subfields_xml;
 
-            delete $new_values->{$_} for @more_subfield_tags; # Clean the hash
+                delete $new_values->{$_} for @more_subfield_tags; # Clean the hash
 
-        }
+            }
 
-        if ( $modified ) {
-            my $itemlost_pre = $item->itemlost;
-            $item->set($new_values)->store({skip_record_index => 1});
+            if ( $modified ) {
+                my $itemlost_pre = $item->itemlost;
+                $item->set($new_values)->store({skip_record_index => 1});
 
-            LostItem(
-                $item->itemnumber, 'batchmod', undef,
-                { skip_record_index => 1 }
-            ) if $item->itemlost
-                  and not $itemlost_pre;
+                LostItem(
+                    $item->itemnumber, 'batchmod', undef,
+                    { skip_record_index => 1 }
+                ) if $item->itemlost
+                      and not $itemlost_pre;
 
-            push @modified_itemnumbers, $item->itemnumber if $modified || $modified_holds_priority;
-            $modified_fields += $modified + $modified_holds_priority;
-        }
+                push @modified_itemnumbers, $item->itemnumber if $modified || $modified_holds_priority;
+                $modified_fields += $modified + $modified_holds_priority;
+            }
+        })};
 
         if ( $callback ) {
             $callback->(++$i);
