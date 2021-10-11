@@ -1286,7 +1286,8 @@
                                 <xsl:with-param name="items" select="$available_items[items:resultbranch=$currentbranch]"/>
                                 <xsl:with-param name="max" select="$OPACResultsMaxItems"/>
                                 <xsl:with-param name="status_text" select="$currentbranch"/>
-                                <xsl:with-param name="class_status" select="ItemBranch"/>
+                                <xsl:with-param name="class_block" select="'available'"/>
+                                <xsl:with-param name="class_status" select="'ItemBranch'"/>
                                 <xsl:with-param name="OPACItemLocation" select="$OPACItemLocation"/>
                             </xsl:call-template>
                             </span>
@@ -1310,7 +1311,7 @@
                                     <xsl:with-param name="max" select="$OPACResultsMaxItems"/>
                                     <xsl:with-param name="status_text" select="concat($currentbranch,': ',$current_substatus)"/>
                                     <xsl:with-param name="class_block" select="concat('notforloandesc_',$current_substatus)"/>
-                                    <xsl:with-param name="class_status" select="ItemBranch"/>
+                                    <xsl:with-param name="class_status" select="'ItemBranch'"/>
                                     <xsl:with-param name="OPACItemLocation" select="$OPACItemLocation"/>
                                 </xsl:call-template>
                                 </span>
@@ -1354,7 +1355,7 @@
                                             </xsl:if>
                                         </xsl:with-param>
                                         <xsl:with-param name="class_block" select="concat('unavailable_',items:substatus)"/>
-                                        <xsl:with-param name="class_status" select="ItemBranch"/>
+                                        <xsl:with-param name="class_status" select="'ItemBranch'"/>
                                         <xsl:with-param name="OPACItemLocation" select="$OPACItemLocation"/>
                                     </xsl:call-template>
                             </xsl:for-each>
@@ -1471,8 +1472,11 @@
         <xsl:param name="class_status"/>
         <xsl:param name="OPACItemLocation"/>
         <xsl:if test="count($items)>0">
-            <span class="$class_block">
-                <span class="$class_status"><xsl:value-of select="$status_text"/></span>
+            <span><xsl:attribute name="class"><xsl:value-of select="$class_block"/></xsl:attribute>
+                <span>
+                    <xsl:attribute name="class"><xsl:value-of select="$class_status"/></xsl:attribute>
+                    <xsl:value-of select="$status_text"/>
+                </span>
                 <xsl:text> (</xsl:text>
                 <xsl:value-of select="count($items)"/>
                 <xsl:text>)</xsl:text>
