@@ -713,24 +713,27 @@
           </div> <!-- /#cancelledorders -->
         [% END %]
         <br />
+
         [% UNLESS ( closedate ) %]
-
-    <!-- Modal -->
-    <div id="addtoBasket" class="modal" tabindex="-1" role="dialog" aria-labelledby="addtoBasketLabel" aria-hidden="true">
-        <div class="modal-dialog">
-        <div class="modal-content">
-        <div class="modal-body">
-        [% IF active %]
-            [% INCLUDE 'acquisitions-add-to-basket.inc' %]
-        [% END %]
-        </div>
-        <div class="modal-footer">
-            <a href="#" class="cancel" data-dismiss="modal" aria-hidden="true">Cancel</a>
-        </div>
-        </div>
-        </div>
-    </div>
-
+            <!-- Modal -->
+            <div id="addtoBasket" class="modal" tabindex="-1" role="dialog" aria-labelledby="addtoBasketLabel" aria-hidden="true" data-basketno="[% basket.basketname | html %]">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="closebtn" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <h4 class="modal-title" id="addtoBasketLabel">Add order to basket</h4>
+                        </div>
+                        <div class="modal-body">
+                            [% IF active %]
+                                [% INCLUDE 'acquisitions-add-to-basket.inc' %]
+                            [% END %]
+                        </div>
+                        <div class="modal-footer">
+                            <a href="#" class="cancel" data-dismiss="modal" aria-hidden="true">Cancel</a>
+                        </div>
+                    </div><!-- /.modal-content -->
+                </div><!-- /.modal-dialog -->
+            </div><!-- /.modal -->
         [% END %]
 
 [% END %]
@@ -920,6 +923,13 @@
                 $("#set_basket_group").show();
             });
 
+            $(".modal").on("shown.bs.modal", function(){
+                var basket = $(this).data("basketno");
+                var legend = _("Add order to basket %s").format(basket);
+                $(this).find("h4").text( legend );
+                $(this).find("legend").html(legend);
+                $(this).find("input:text").focus();
+            });
         });
     </script>
 

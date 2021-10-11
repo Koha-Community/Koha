@@ -172,17 +172,21 @@
                                             [% END %]
                                             <!-- Modal -->
                                             <div id="addtoBasket[% basket.basketno | html %]" class="modal" tabindex="-1" role="dialog" aria-labelledby="addtoBasketLabel[% basket.basketno | html %]" aria-hidden="true" data-basketno="[% basket.basketname | html %]">
-                                                <div class="modal-dialog">
+                                                <div class="modal-dialog" role="document">
                                                     <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <button type="button" class="closebtn" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                                            <h4 class="modal-title" id="addtoBasketLabel[% basket.basketno | html %]">Add order to basket</h4>
+                                                        </div>
                                                         <div class="modal-body">
                                                             [% INCLUDE 'acquisitions-add-to-basket.inc' booksellerid=supplier.booksellerid basketno=basket.basketno %]
                                                         </div>
                                                         <div class="modal-footer">
                                                             <a href="#" class="cancel" data-dismiss="modal" aria-hidden="true">Cancel</a>
                                                         </div>
-                                                    </div>
-                                                </div>
-                                            </div>
+                                                    </div><!-- /.modal-content -->
+                                                </div><!-- /.modal-dialog -->
+                                            </div><!-- /.modal -->
                                         [% END %]
                                         </td>
                                     </tr>
@@ -230,10 +234,12 @@
                 var id = $(this).find("option:selected").val();
                 window.location.href = "#" + id;
             });
-            $(".modal").on("show", function(){
+            $(".modal").on("shown.bs.modal", function(){
                 var basket = $(this).data("basketno");
                 var legend = _("Add order to basket %s").format(basket);
+                $(this).find("h4").text( legend );
                 $(this).find("legend").html(legend);
+                $(this).find("input:text").focus();
             });
             $("#show_all_vendors").hide();
             $("#show_active_vendors").on('click', function(e){

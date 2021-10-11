@@ -1,5 +1,5 @@
 <fieldset class="acqui_basket_add">
-    <legend>Add order to basket</legend>
+    <legend class="sr-only">Add order to basket</legend>
     [% IF has_budgets %]
       <ul>
         <li>
