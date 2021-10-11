@@ -902,7 +902,7 @@
                         <p>
                             <span class="label">Total number of results:</span>
                             [% unlimited_total | html %]
-                            [% IF unlimited_total > limit %]
+                            [% IF unlimited_total >= limit %]
                                 ([% limit | html %] shown)
                             [% END %].
                         </p>
@@ -1015,12 +1015,12 @@
                                 <input type="hidden" name="limit" id="limit" value="20" />
                             </form> <!-- /#limitselect -->
 
-                            [% IF ( batch_biblionumbers || batch_itemnumbers || batch_cardnumbers ) || ( unlimited_total ) > limit %]
+                            [% IF ( batch_biblionumbers || batch_itemnumbers || batch_cardnumbers ) || ( unlimited_total > 10 && limit <= 1000 ) %]
                                 <div id="toolbar" class="btn-toolbar">
                                     [% IF ( batch_biblionumbers || batch_itemnumbers || batch_cardnumbers ) %]
                                         <div class="btn-group">
                                             <button class="btn btn-default btn-sm dropdown-toggle" type="button" id="batch_mod_menu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                                                Batch operations with [% IF unlimited_total > limit %][% limit | html %][% ELSE %][% unlimited_total | html %][% END %] visible records
+                                                Batch operations with [% IF unlimited_total >= limit %][% limit | html %][% ELSE %][% unlimited_total | html %][% END %] visible records
                                                 <span class="caret"></span>
                                             </button>
                                             <ul class="dropdown-menu" aria-labelledby="batch_mod_menu">
@@ -1063,7 +1063,7 @@
                                         </div> <!-- /.dropdown -->
                                     [% END # /IF ( batch_biblionumbers || batch_itemnumbers || batch_cardnumbers ) %]
 
-                                    [% IF ( unlimited_total > limit ) %]
+                                    [% IF ( unlimited_total > 10 && limit <= 1000 ) %]
                                         <div class="btn-group">
                                             <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                                 [% IF ( limit ) %]
@@ -1088,9 +1088,9 @@
                                                 [% END %]
                                             </ul>
                                         </div>
-                                    [% END # /IF ( unlimited_total > limit ) %]
+                                    [% END # /IF ( unlimited_total > 10 && limit <= 1000 ) %]
                                 </div> <!-- /#toolbar.btn-toolbar -->
-                            [% END # /IF batch operations || ( unlimited_total > limit ) %]
+                            [% END # /IF batch operations || ( unlimited_total > 10 && limit <= 1000 ) %]
 
                             <div class="pages">
                                 [% pagination_bar | $raw %]
