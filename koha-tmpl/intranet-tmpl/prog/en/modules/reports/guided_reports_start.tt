@@ -899,7 +899,7 @@
                 [% END # /IF ( enter_params ) %]
 
                 [% IF ( execute ) %]
-                    <h1>[% name | html %] <span id="report_id">([% id | html %])</span></h1>
+                    <h1>[% name | html %] <span class="report_heading_id"><span class="report_label">Report number:</span> <span class="report_number">[% id | html %]</span></span></h1>
                     [% IF ( notes ) %]
                         <p><span class="label">Notes:</span> [% notes | html %]</p>
                     [% END %]
