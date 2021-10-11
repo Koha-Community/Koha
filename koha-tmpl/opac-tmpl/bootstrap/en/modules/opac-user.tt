@@ -87,8 +87,8 @@
 
                     [% IF ( borrower.warndeparture ) %]
                         <div class="alert alert-warning" id="warndeparture">
-                            <strong>Please note:</strong><span> Your card will expire on <span id="warndeparture_date">[% borrower.warndeparture | $KohaDates %]</span>. Please contact the library for more information.</span>
-                                [% IF ( borrower.returnbeforeexpiry ) %]<span id="warndeparture_returnbeforeexpiry"> Also note that you must return all checked out items before your card expires.</span>[% END %]
+                            <strong>Please note:</strong><span> Your library card will expire on <span id="warndeparture_date">[% borrower.warndeparture | $KohaDates %]</span>. Please contact the library for more information.</span>
+                                [% IF ( borrower.returnbeforeexpiry ) %]<span id="warndeparture_returnbeforeexpiry"> Also note that you must return all checked out items before your library card expires.</span>[% END %]
                         </div>
                     [% END %]
 

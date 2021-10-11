@@ -256,7 +256,7 @@ legend:hover {
                             [% ELSE %]
                                 <input type="hidden" name="op" value="save" />
                                 [% IF step == 4 || step == 5 || step == 6 || step == 2 || step == 1 || step == 7 %]
-                                    [%# Only put the cardnumber if we arent showing it in the form later %]
+                                    [%# Only put the card number if we arent showing it in the form later %]
                                     [% IF cardnumber %]
                                         <input type="hidden" name="cardnumber" value="[% cardnumber | html %]" />
                                     [% END %]
@@ -889,7 +889,7 @@ legend:hover {
                                                 [% END %]
                                                 [% IF autoMemberNum %]
                                                     [% IF mandatorycardnumber %]
-                                                        <br/><span class="error">AutoMemberNum is set to enabled, but cardnumber is marked as mandatory in BorrowerMandatoryField: auto calc has been disabled.</span>
+                                                        <br/><span class="error">AutoMemberNum is set to enabled, but card number is marked as mandatory in BorrowerMandatoryField: auto calc has been disabled.</span>
                                                     [% ELSE %]
                                                         <br/>Leave blank for auto calc during registration
                                                     [% END %]
