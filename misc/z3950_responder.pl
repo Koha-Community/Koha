@@ -20,7 +20,7 @@
 use Modern::Perl;
 
 use File::Basename qw( fileparse );
-use Getopt::Long qw( GetOptions );
+use Getopt::Long qw( GetOptions :config no_ignore_case );
 use Pod::Usage qw( pod2usage );
 
 use Koha::Config;
