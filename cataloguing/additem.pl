@@ -420,6 +420,7 @@ if ($op eq "additem") {
     # FIXME Handle non existent item
     my $olditemlost = $item->itemlost;
     my @columns = Koha::Items->columns;
+    my $new_values = $item->unblessed;
     for my $c ( @columns ) {
         if ( $c eq 'more_subfields_xml' ) {
             my @more_subfields_xml = $input->multi_param("items.more_subfields_xml");
@@ -434,16 +435,22 @@ if ($op eq "additem") {
                 # used in the framework
                 $marc->append_fields(MARC::Field->new('999', ' ', ' ', @unlinked_item_subfields));
                 $marc->encoding("UTF-8");
-                $item->more_subfields_xml($marc->as_xml("USMARC"));
+                $new_values->{more_subfields_xml} = $marc->as_xml("USMARC");
                 next;
             }
             $item->more_subfields_xml(undef);
         } else {
-            my @v = $input->multi_param("items.".$c);
+            my @v = map { ( defined $_ && $_ eq '' ) ? undef : $_ } $input->multi_param( "items." . $c );
             next unless @v;
-            $item->$c(join ' | ', uniq @v);
+
+            if ( scalar(@v) == 1 && not defined $v[0] ) {
+                delete $new_values->{$c};
+            } else {
+                $new_values->{$c} = join ' | ', @v;
+            }
         }
     }
+    $item = $item->set_or_blank($new_values);
 
     # check that the barcode don't exist already
     if (
