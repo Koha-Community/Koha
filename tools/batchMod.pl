@@ -138,8 +138,7 @@ if ( $op eq "action" ) {
                   . encode_utf8($attr)
                   ;  # We need to deal correctly with encoding on subfield codes
 
-                if ( grep { $attr eq $_ } @subfields_to_blank ) {
-
+                if ( grep { $cgi_var_name eq $_ } @subfields_to_blank ) {
                     # Empty this column
                     $new_item_data->{$attr} = undef;
                 }

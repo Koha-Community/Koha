@@ -152,7 +152,7 @@
 
                     [% IF add_delete_checkbox %]
                         [% UNLESS ( subfield.mandatory ) %]
-                            <input type="checkbox" id="row[% subfield.tag | html %][% subfield.subfield | html %][% subfield.random | html %]" title="Check to delete subfield [% subfield.subfield | html %]" name="disable_input" value="[% subfield.subfield | html %]" />
+                            <input type="checkbox" id="row[% subfield.tag | html %][% subfield.subfield | html %][% subfield.random | html %]" title="Check to delete subfield [% subfield.subfield | html %]" name="disable_input" value="[% kohafield | html %]" />
                         [% ELSE %]
                             <span class="required">Required</span>
                         [% END %]
