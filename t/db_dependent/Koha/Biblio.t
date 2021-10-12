@@ -21,6 +21,7 @@ use Test::More tests => 16;
 
 use C4::Biblio qw( AddBiblio ModBiblio );
 use Koha::Database;
+use Koha::Caches;
 use Koha::Acquisition::Orders;
 use Koha::AuthorisedValueCategories;
 use Koha::AuthorisedValues;
@@ -605,6 +606,12 @@ subtest 'get_marc_notes() MARC21 tests' => sub {
     my $mss = Koha::MarcSubfieldStructures->find({tagfield => "590", tagsubfield => "a", frameworkcode => $biblio->frameworkcode });
     $mss->update({ authorised_value => "TEST" });
 
+    my $cache = Koha::Caches->get_instance;
+    $cache->clear_from_cache("MarcStructure-0-");
+    $cache->clear_from_cache("MarcStructure-1-");
+    $cache->clear_from_cache("default_value_for_mod_marc-");
+    $cache->clear_from_cache("MarcSubfieldStructure-");
+
     C4::Biblio::ModBiblio( $record, $biblio->biblionumber );
     $biblio = Koha::Biblios->find( $biblio->biblionumber);
 
@@ -623,6 +630,11 @@ subtest 'get_marc_notes() MARC21 tests' => sub {
     is( $notes->[3]->{marcnote}, 'Note5', 'Fifth note shows after fourth skipped' );
     is( $notes->[4]->{marcnote}, 'Description should show OPAC', 'Authorised value is correctly parsed for OPAC to show description rather than code' );
     is( @$notes, 5, 'No more notes' );
+
+    $cache->clear_from_cache("MarcStructure-0-");
+    $cache->clear_from_cache("MarcStructure-1-");
+    $cache->clear_from_cache("default_value_for_mod_marc-");
+    $cache->clear_from_cache("MarcSubfieldStructure-");
 
     $schema->storage->txn_rollback;
 };
