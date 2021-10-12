@@ -659,9 +659,9 @@ my $max_items_to_display = C4::Context->preference('OpacMaxItemsToDisplay') // 5
 
 # Get component parts details
 my $showcomp = C4::Context->preference('ShowComponentRecords');
+my $parts;
 if ( $showcomp eq 'both' || $showcomp eq 'opac' ) {
     if ( my $components = $biblio->get_marc_components(300) ) {
-        my $parts;
         for my $part ( @{$components} ) {
             $part = C4::Search::new_record_from_zebra( 'biblioserver', $part );
 
@@ -1207,6 +1207,8 @@ my $defaulttab =
         ? 'serialcollection' :
     $opac_serial_default eq 'holdings' && scalar (@itemloop) > 0
         ? 'holdings' :
+    ( $showcomp eq 'both' || $showcomp eq 'opac' ) && scalar (@itemloop) == 0 && $parts
+        ? 'components' :
     scalar (@itemloop) == 0
         ? 'media' :
     $subscriptionsnumber

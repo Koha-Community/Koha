@@ -402,7 +402,15 @@
                             [% IF SYNDETICS_SUMMARY %][% SET title_notes_count = title_notes_count + 1 %][% END %]
                             <li id="tab_descriptions"> <a href="#descriptions">Title notes ( [% title_notes_count | html %] )</a></li>
                         [% END %]
-                        [% IF ( ComponentParts ) %]<li><a href="#components">Components ([% ( ComponentParts.size || 1 ) %])</a></li>[% END %]
+                        [% IF ( ComponentParts ) %]
+                            [% IF defaulttab == 'components' %]
+                            <li id="tab_components" class="ui-tabs-active">
+                            [% ELSE %]
+                            <li id="tab_components">
+                            [% END %]
+                                <a href="#components">Components ([% ( ComponentParts.size || 1 ) %])</a>
+                            </li>
+                        [% END %]
                         [% IF ( SYNDETICS_TOC ) %]
                             <li id="tab_toc"> <a href="#toc">TOC</a></li>
                         [% END %]
