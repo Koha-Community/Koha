@@ -5,7 +5,7 @@
 [% USE KohaDates %]
 [% USE TablesSettings %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Items &rsaquo; [% biblio.title | html %] [% IF ( author ) %] by [% biblio.author | html %][% END %] (Record #[% biblio.biblionumber | html %]) &rsaquo; Cataloging &rsaquo; Koha</title>
+<title>Items &rsaquo; [% biblio.title | html %] [% IF ( biblio.author ) %] by [% biblio.author | html %][% END %] (Record #[% biblio.biblionumber | html %]) &rsaquo; Cataloging &rsaquo; Koha</title>
 [% INCLUDE 'doc-head-close.inc' %]
 [% Asset.css("css/addbiblio.css") | $raw %]
 [% INCLUDE 'datatables.inc' %]
@@ -38,7 +38,7 @@
             <a href="/cgi-bin/koha/cataloguing/addbooks.pl">Cataloging</a>
         </li>
         <li>
-            <a href="/cgi-bin/koha/cataloguing/addbiblio.pl?biblionumber=[% biblio.biblionumber | uri %]">Edit <em>[% biblio.title | html %] [% IF ( author ) %] by [% biblio.author | html %][% END %] (Record #[% biblio.biblionumber | html %])</em></a>
+            <a href="/cgi-bin/koha/cataloguing/addbiblio.pl?biblionumber=[% biblio.biblionumber | uri %]">Edit <em>[% biblio.title | html %] [% IF ( biblio.author ) %] by [% biblio.author | html %][% END %] (Record #[% biblio.biblionumber | html %])</em></a>
         </li>
         <li>
             <a href="#" aria-current="page">
@@ -53,7 +53,7 @@
         <div class="col-sm-12">
             <main>
                 [% INCLUDE 'blocking_errors.inc' %]
-<h1>Items for [% biblio.title | html %] [% IF ( author ) %] by [% biblio.author | html %][% END %] (Record #[% biblio.biblionumber | html %])</h1>
+<h1>Items for [% biblio.title | html %] [% IF ( biblio.author ) %] by [% biblio.author | html %][% END %] (Record #[% biblio.biblionumber | html %])</h1>
 
 [% IF ( barcode_not_unique ) %]<div class="dialog alert"><strong>Error saving item</strong>: Barcode must be unique.</div>[% END %]
 [% IF ( no_next_barcode ) %]<div class="dialog alert"><strong>Error saving items</strong>: Unable to automatically determine values for barcodes. No item has been inserted.</div>[% END %]
