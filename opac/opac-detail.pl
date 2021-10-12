@@ -32,6 +32,7 @@ use C4::Koha qw(
     GetNormalizedOCLCNumber
     GetNormalizedUPC
 );
+use C4::Search qw( new_record_from_zebra );
 use C4::Serials qw( CountSubscriptionFromBiblionumber SearchSubscriptions GetLatestSerials );
 use C4::Output qw( parametrized_url output_html_with_http_headers );
 use C4::Biblio qw(
@@ -233,7 +234,6 @@ if ($OpacBrowseResults) {
 my $session = get_session($query->cookie("CGISESSID"));
 my %paging = (previous => {}, next => {});
 if ($session->param('busc')) {
-    use C4::Search;
     use URI::Escape qw( uri_escape_utf8 uri_unescape );
 
     # Rebuild the string to store on session
@@ -663,7 +663,7 @@ if ( $showcomp eq 'both' || $showcomp eq 'opac' ) {
     if ( my $components = $biblio->get_marc_components(300) ) {
         my $parts;
         for my $part ( @{$components} ) {
-            $part = MARC::Record->new_from_xml( $part, 'UTF-8' );
+            $part = C4::Search::new_record_from_zebra( 'biblioserver', $part );
 
             push @{$parts},
               XSLTParse4Display(

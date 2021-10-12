@@ -39,7 +39,7 @@ use C4::Reserves;
 use C4::Serials qw( CountSubscriptionFromBiblionumber SearchSubscriptions GetLatestSerials );
 use C4::XISBN qw( get_xisbns );
 use C4::External::Amazon qw( get_amazon_tld );
-use C4::Search qw( z3950_search_args enabled_staff_search_views );
+use C4::Search qw( z3950_search_args enabled_staff_search_views new_record_from_zebra );
 use C4::Tags qw( get_tags );
 use C4::XSLT qw( XSLTParse4Display );
 use Koha::DateUtils qw( format_sqldatetime );
@@ -217,7 +217,7 @@ if ( $showcomp eq 'both' || $showcomp eq 'staff' ) {
     if ( my $components = $biblio->get_marc_components(300) ) {
         my $parts;
         for my $part ( @{$components} ) {
-            $part = MARC::Record->new_from_xml( $part, 'UTF-8' );
+            $part = C4::Search::new_record_from_zebra( 'biblioserver', $part );
 
             push @{$parts},
               XSLTParse4Display(
