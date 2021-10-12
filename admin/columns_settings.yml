@@ -1343,6 +1343,56 @@ modules:
             -
               columnname: non-public_note
 
+    print_summary:
+        print-summary-checkouts:
+            columns:
+                -
+                    columnname: title
+                -
+                    columnname: author
+                -
+                    columnname: call_number
+                -
+                    columnname: item_type
+                -
+                    columnname: date_due
+                -
+                    columnname: barcode
+                -
+                    columnname: inventory_number
+                -
+                    columnname: charge
+                -
+                    columnname: price
+                -
+                    columnname: status
+
+        print-summary-holds:
+            columns:
+                -
+                    columnname: title
+                -
+                    columnname: author
+                -
+                    columnname: placed_on
+                -
+                    columnname: expires_on
+                -
+                    columnname: pick up_location
+
+        print-summary-fines:
+            columns:
+                -
+                    columnname: date
+                -
+                    columnname: description_of_charges
+                -
+                    columnname: note
+                -
+                    columnname: amount
+                -
+                    columnname: outstanding
+
   opac:
     biblio-detail:
       holdingst:

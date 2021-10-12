@@ -26,6 +26,33 @@ table {
                 margin: 0 .5em 0 0;
             }
         }
+
+        button {
+            &.dt-button {
+                background: transparent none;
+                border: 0;
+                color: #595959;
+                font-size: 60%;
+                margin: 0 .5em;
+
+                &:hover:not(.disabled):active:not(.disabled) {
+                    background: transparent none;
+                    border: 0;
+                    box-shadow: none;
+                    color: #000;
+                }
+
+                &:hover:not(.disabled) {
+                    background: transparent none;
+                    border: 0;
+                    color: #000;
+                }
+            }
+        }
+
+        div.dt-button-collection {
+            font-size: 70%;
+        }
     }
 
     &.invis {
