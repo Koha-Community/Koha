@@ -13,8 +13,6 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('AdditionalFieldsInZ3950ResultSearch', '', NULL, 'Determines which MARC field/subfields are displayed in -Additional field- column in the result of a search Z3950', 'Free'),
 ('AddressForFailedOverdueNotices', '', NULL, 'Destination email for failed overdue notices. If left empty then it will fallback to the first defined address in the following list: Library ReplyTo, Library Email, ReplytoDefault and KohaAdminEmailAddress', 'free'),
 ('AddressFormat','us','us|de|fr','Choose format to display postal addresses', 'Choice'),
-('AdlibrisCoversEnabled','0',NULL,'Display cover images in OPAC results and detail listing from Swedish retailer Adlibris.','YesNo'),
-('AdlibrisCoversURL','http://www.adlibris.com/se/organisationer/showimagesafe.aspx',NULL,'Base URL for Adlibris cover image web service.','Free'),
 ('advancedMARCeditor','0','','If ON, the MARC editor won\'t display field/subfield descriptions','YesNo'),
 ('AdvancedSearchLanguages','','','ISO 639-2 codes of languages you wish to see appear as an Advanced search option.  Example: eng|fre|ita','Textarea'),
 ('AdvancedSearchTypes','itemtypes','itemtypes|ccode','Select which set of fields comprise the Type limit in the advanced search','Choice'),

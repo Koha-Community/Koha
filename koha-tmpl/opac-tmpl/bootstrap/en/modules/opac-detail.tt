@@ -13,8 +13,6 @@
 [% ELSE %]
     [% AmazonAssocTag = '' %]
 [% END %]
-[% SET AdlibrisEnabled = Koha.Preference('AdlibrisCoversEnabled') %]
-[% SET AdlibrisURL = Koha.Preference('AdlibrisCoversURL') %]
 
 [% ShowCourseReservesHeader = 0 %]
 [% IF Koha.Preference( 'UseCourseReserves' ) == 1 %]
@@ -67,10 +65,6 @@
 
                         [% IF ( OPACLocalCoverImages ) %]
                             <div title="[% img_title | html %]" class="[% biblio.biblionumber | html %]" id="local-thumbnail-preview"></div>
-                        [% END %]
-
-                        [% IF ( AdlibrisEnabled && normalized_isbn ) %]
-                            <a href="[% AdlibrisURL | url %]?isbn=[% normalized_isbn | uri %]"><img src="[% AdlibrisURL | url %]?isbn=[% normalized_isbn | uri %]" alt="Cover image" class="adlibris-cover-big" /></a>
                         [% END %]
 
                         [% IF ( OPACAmazonCoverImages ) %]

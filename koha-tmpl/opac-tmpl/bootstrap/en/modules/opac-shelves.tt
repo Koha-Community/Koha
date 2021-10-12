@@ -5,8 +5,6 @@
 [% SET PUBLIC = 2 %]
 [% SET TagsShowEnabled = ( ( Koha.Preference( 'TagsEnabled' ) == 1 ) && Koha.Preference('TagsShowOnList') ) %]
 [% SET TagsInputEnabled = ( ( Koha.Preference( 'opacuserlogin' ) == 1 ) && ( Koha.Preference( 'TagsEnabled' ) == 1 ) && Koha.Preference('TagsInputOnList') ) %]
-[% SET AdlibrisEnabled = Koha.Preference('AdlibrisCoversEnabled') %]
-[% SET AdlibrisURL = Koha.Preference('AdlibrisCoversURL') %]
 
 [% BLOCK delete_shelf %]
     <form action="/cgi-bin/koha/opac-shelves.pl" method="post" id="deleteshelf[% shelf.shelfnumber | html %]" class="d-inline">
@@ -401,9 +399,7 @@
                                                                 [% IF ( OPACLocalCoverImages ) %]
                                                                     <span title="[% img_title | html %]" class="[% itemsloo.biblionumber | html %]" id="local-thumbnail[% loop.count | html %]"></span>
                                                                 [% END %]
-                                                                [% IF ( AdlibrisEnabled && itemsloo.normalized_isbn ) %]
-                                                                    <img src="[% AdlibrisURL | html %]?isbn=[% itemsloo.normalized_isbn | html %]" class="adlibris-cover" alt="Adlibris cover image" />
-                                                                [% END %]
+
                                                                 [% IF ( OPACAmazonCoverImages ) %]
                                                                     [% IF ( itemsloo.normalized_isbn ) %]
                                                                         <span title="[% img_title | html %]" id="amazon-thumbnail[% loop.count | html %]"><img src="https://images-na.ssl-images-amazon.com/images/P/[% itemsloo.normalized_isbn | html %].01.TZZZZZZZ.jpg" alt="" /></span>

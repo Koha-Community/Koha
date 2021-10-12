@@ -3,8 +3,6 @@
 [% USE Koha %]
 [% SET TagsShowEnabled = ( ( Koha.Preference( 'TagsEnabled' ) == 1 ) && TagsShowOnList ) %]
 [% SET TagsInputEnabled = ( ( Koha.Preference( 'opacuserlogin' ) == 1 ) && ( Koha.Preference( 'TagsEnabled' ) == 1 ) && TagsInputOnList ) %]
-[% SET AdlibrisEnabled = Koha.Preference('AdlibrisCoversEnabled') %]
-[% SET AdlibrisURL = Koha.Preference('AdlibrisCoversURL') %]
 
 [% IF firstPage %]
      [% SET OverDriveEnabled = Koha.Preference('OverDriveLibraryID') && Koha.Preference('OverDriveClientKey') && Koha.Preference('OverDriveClientSecret') %]
@@ -362,12 +360,6 @@
                                                             <span title="[% img_title | html %]" class="[% SEARCH_RESULT.biblionumber | html %]" id="local-thumbnail[% loop.count | html %]"></span>
                                                         [% END %]
 
-                                                        [% IF ( AdlibrisEnabled && SEARCH_RESULT.normalized_isbn ) %]
-                                                            <span title="[% img_title | html %]" id="adlibris-thumbnail[% loop.count | html %]">
-                                                                <img src="[% AdlibrisURL | html %]?isbn=[% SEARCH_RESULT.normalized_isbn | html %]"
-                                                                     alt="Adlibris thumbnail for ISBN: [% SEARCH_RESULT.normalized_isbn | html %]" class="adlibris-cover" />
-                                                            </span>
-                                                        [% END %]
                                                         [% IF ( OPACAmazonCoverImages ) %]
                                                             [% IF ( SEARCH_RESULT.normalized_isbn ) %]
                                                                     <span title="[% img_title | html %]" id="amazon-thumbnail[% loop.count | html %]"><img src="https://images-na.ssl-images-amazon.com/images/P/[% SEARCH_RESULT.normalized_isbn | html %].01.TZZZZZZZ.jpg" alt="" class="item-thumbnail" /></span>

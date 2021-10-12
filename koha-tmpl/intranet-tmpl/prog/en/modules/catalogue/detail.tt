@@ -9,8 +9,6 @@
 [% USE Price %]
 [% USE TablesSettings %]
 [% PROCESS 'i18n.inc' %]
-[% SET AdlibrisEnabled = Koha.Preference('AdlibrisCoversEnabled') %]
-[% SET AdlibrisURL = Koha.Preference('AdlibrisCoversURL') %]
 
 [% IF Koha.Preference('AmazonAssocTag') %]
     [% AmazonAssocTag = '?tag=' _ Koha.Preference('AmazonAssocTag') %]
@@ -106,7 +104,7 @@
         <span class="Z3988" title="[% ocoins | html %]"></span>
     [% END %]
 
-    [% IF ( AmazonCoverImages  || LocalCoverImages || AdlibrisEnabled || IntranetCoce || (Koha.Preference('CustomCoverImages') && Koha.Preference('CustomCoverImagesURL')) ) %]
+    [% IF ( AmazonCoverImages  || LocalCoverImages || IntranetCoce || (Koha.Preference('CustomCoverImages') && Koha.Preference('CustomCoverImagesURL')) ) %]
         <div id="catalogue_detail_biblio" class="col-xs-9">
     [% ELSE %]
         <div id="catalogue_detail_biblio" class="col-xs-12">
@@ -194,7 +192,7 @@
             </span>
         [% END %]
 
-        [% IF ( AmazonCoverImages  || LocalCoverImages || AdlibrisEnabled || IntranetCoce || (Koha.Preference('CustomCoverImages') && Koha.Preference('CustomCoverImagesURL')) ) %]
+        [% IF ( AmazonCoverImages  || LocalCoverImages || IntranetCoce || (Koha.Preference('CustomCoverImages') && Koha.Preference('CustomCoverImagesURL')) ) %]
             </div>
             <div class="col-xs-3 bookcoverimg">
                 <div id="biblio-cover-slider" class="cover-slider">
@@ -209,15 +207,6 @@
                                 </div>
                             [% END %]
                         [% END %]
-                    [% END %]
-
-                    [% IF ( AdlibrisEnabled && normalized_isbn ) %]
-                        <div class="cover-image" id="adlibris-coverimg">
-                            <a href="[% AdlibrisURL | url %]?isbn=[% normalized_isbn | uri %]" title="Addlibris cover image">
-                                <img src="[% AdlibrisURL | url %]?isbn=[% normalized_isbn | uri %]" class="adlibris-cover-big" alt="Adlibris cover image" data-link="[% AdlibrisURL | url %]?isbn=[% normalized_isbn | uri %]" />
-                            </a>
-                            <div class="hint">Image from Adlibris</div>
-                        </div>
                     [% END %]
 
                     [% IF ( AmazonCoverImages && normalized_isbn) %]
@@ -1078,8 +1067,6 @@ Note that permanent location is a code, and location may be an authval.
                                 }
                                 div.find(".hint").html(coce_description);
                                 lightbox_descriptions.push(coce_description);
-                            } else if ( div.attr("id") == "adlibris-coverimg" ){
-                                lightbox_descriptions.push(_("Image from Adlibris (<a href='%s'>see the original image</a>)").format($(img).data('link')));
                             } else if ( div.attr("class") == "cover-image local-coverimg" ) {
                                 lightbox_descriptions.push(_("Local cover image (<a href='%s'>edit</a>)").format($(img).data('link')));
                             } else {
