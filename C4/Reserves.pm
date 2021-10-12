@@ -46,7 +46,6 @@ use Koha::Old::Hold;
 use Koha::Patrons;
 use Koha::Plugins;
 
-use Data::Dumper qw( Dumper );
 use List::MoreUtils qw( any );
 
 =head1 NAME
@@ -261,7 +260,7 @@ sub AddReserve {
     )->store();
     $hold->set_waiting() if $found && $found eq 'W';
 
-    logaction( 'HOLDS', 'CREATE', $hold->id, Dumper($hold->unblessed) )
+    logaction( 'HOLDS', 'CREATE', $hold->id, $hold )
         if C4::Context->preference('HoldsLog');
 
     my $reserve_id = $hold->id();
@@ -1053,14 +1052,14 @@ sub ModReserve {
         $hold->cancel({ cancellation_reason => $cancellation_reason });
     }
     elsif ($hold->found && $hold->priority eq '0' && $date) {
-        logaction( 'HOLDS', 'MODIFY', $hold->reserve_id, Dumper($hold->unblessed) )
+        logaction( 'HOLDS', 'MODIFY', $hold->reserve_id, $hold )
             if C4::Context->preference('HoldsLog');
 
         # The only column that can be updated for a found hold is the expiration date
         $hold->expirationdate(dt_from_string($date))->store();
     }
     elsif ($rank =~ /^\d+/ and $rank > 0) {
-        logaction( 'HOLDS', 'MODIFY', $hold->reserve_id, Dumper($hold->unblessed) )
+        logaction( 'HOLDS', 'MODIFY', $hold->reserve_id, $hold )
             if C4::Context->preference('HoldsLog');
 
         my $properties = {
@@ -1122,7 +1121,7 @@ sub ModReserveFill {
         }
     );
 
-    logaction( 'HOLDS', 'MODIFY', $hold->reserve_id, Dumper($hold->unblessed) )
+    logaction( 'HOLDS', 'MODIFY', $hold->reserve_id, $hold )
         if C4::Context->preference('HoldsLog');
 
     # FIXME Must call Koha::Hold->cancel ? => No, should call ->filled and add the correct log
@@ -1250,7 +1249,7 @@ sub ModReserveAffect {
     });
     $std->execute($hold->reserve_id);
 
-    logaction( 'HOLDS', 'MODIFY', $hold->reserve_id, Dumper($hold->get_from_storage->unblessed) )
+    logaction( 'HOLDS', 'MODIFY', $hold->reserve_id, $hold )
         if C4::Context->preference('HoldsLog');
 
     return;

@@ -76,6 +76,15 @@ sub logaction {
     $usernumber ||= 0;
     $interface //= C4::Context->interface;
 
+    if ( ref($infos) && ref($infos) !~ /HASH|ARRAY/ && $infos->isa('Koha::Object') ) {
+        $infos = $infos->get_from_storage if $infos->in_storage;
+        $infos = Dumper( $infos->unblessed );
+
+        if ( $infos->isa('Koha::Item') && $modulename eq 'CATALOGUING' && $actionname eq 'MODIFY' ) {
+            $infos = "item " . $infos;
+        }
+    }
+
     my $dbh = C4::Context->dbh;
     my $sth=$dbh->prepare("Insert into action_logs (timestamp,user,module,action,object,info,interface) values (now(),?,?,?,?,?,?)");
     $sth->execute($usernumber,$modulename,$actionname,$objectnumber,$infos,$interface);

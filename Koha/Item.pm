@@ -20,7 +20,6 @@ package Koha::Item;
 use Modern::Perl;
 
 use List::MoreUtils qw( any );
-use Data::Dumper qw( Dumper );
 
 use Koha::Database;
 use Koha::DateUtils qw( dt_from_string output_pref );
@@ -205,7 +204,7 @@ sub store {
     if ( $log_action && C4::Context->preference("CataloguingLog") ) {
         $action eq 'create'
           ? logaction( "CATALOGUING", "ADD", $self->itemnumber, "item" )
-          : logaction( "CATALOGUING", "MODIFY", $self->itemnumber, "item " . Dumper( $self->unblessed ) );
+          : logaction( "CATALOGUING", "MODIFY", $self->itemnumber, $self );
     }
     my $indexer = Koha::SearchEngine::Indexer->new({ index => $Koha::SearchEngine::BIBLIOS_INDEX });
     $indexer->index_records( $self->biblionumber, "specialUpdate", "biblioserver" )

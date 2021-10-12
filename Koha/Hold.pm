@@ -20,7 +20,6 @@ package Koha::Hold;
 
 use Modern::Perl;
 
-use Data::Dumper qw( Dumper );
 use List::MoreUtils qw( any );
 
 use C4::Context;
@@ -113,7 +112,7 @@ sub suspend_hold {
     $self->suspend_until($date);
     $self->store();
 
-    logaction( 'HOLDS', 'SUSPEND', $self->reserve_id, Dumper( $self->unblessed ) )
+    logaction( 'HOLDS', 'SUSPEND', $self->reserve_id, $self )
         if C4::Context->preference('HoldsLog');
 
     return $self;
@@ -133,7 +132,7 @@ sub resume {
 
     $self->store();
 
-    logaction( 'HOLDS', 'RESUME', $self->reserve_id, Dumper($self->unblessed) )
+    logaction( 'HOLDS', 'RESUME', $self->reserve_id, $self )
         if C4::Context->preference('HoldsLog');
 
     return $self;
@@ -150,7 +149,7 @@ sub delete {
 
     my $deleted = $self->SUPER::delete($self);
 
-    logaction( 'HOLDS', 'DELETE', $self->reserve_id, Dumper($self->unblessed) )
+    logaction( 'HOLDS', 'DELETE', $self->reserve_id, $self )
         if C4::Context->preference('HoldsLog');
 
     return $deleted;
@@ -568,7 +567,7 @@ sub cancel {
                 );
             }
 
-            C4::Log::logaction( 'HOLDS', 'CANCEL', $self->reserve_id, Dumper($self->unblessed) )
+            C4::Log::logaction( 'HOLDS', 'CANCEL', $self->reserve_id, $self )
                 if C4::Context->preference('HoldsLog');
         }
     );
