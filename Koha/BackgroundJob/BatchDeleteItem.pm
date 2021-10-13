@@ -211,7 +211,7 @@ sub enqueue {
     return unless exists $args->{record_ids};
 
     my @record_ids = @{ $args->{record_ids} };
-    my $delete_biblios = @{ $args->{delete_biblios} || [] };
+    my $delete_biblios = $args->{delete_biblios} || 0;
 
     $self->SUPER::enqueue(
         {
