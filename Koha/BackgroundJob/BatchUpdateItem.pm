@@ -177,14 +177,18 @@ sub additional_report {
     my $job = Koha::BackgroundJobs->find( $args->{job_id} );
 
     my $itemnumbers = $job->report->{modified_itemnumbers};
-    my $items_table =
-      Koha::UI::Table::Builder::Items->new( { itemnumbers => $itemnumbers } )
-      ->build_table;
+    if ( scalar(@$itemnumbers) > C4::Context->preference('MaxItemsToDisplayForBatchMod') ) {
+        return { too_many_items_display => 1 };
+    } else {
+        my $items_table =
+          Koha::UI::Table::Builder::Items->new( { itemnumbers => $itemnumbers } )
+          ->build_table;
 
-    return {
-        items            => $items_table->{items},
-        item_header_loop => $items_table->{headers},
-    };
+        return {
+            items            => $items_table->{items},
+            item_header_loop => $items_table->{headers},
+        };
+    }
 }
 
 1;
