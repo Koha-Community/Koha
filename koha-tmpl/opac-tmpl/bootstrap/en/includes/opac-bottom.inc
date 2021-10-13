@@ -139,9 +139,6 @@ $.widget.bridge('uitooltip', $.ui.tooltip);
         "[% Asset.url('lib/enquire.min.js') | $raw %]",
         "[% Asset.url('js/script.js') | $raw %]",
     ]);
-
-    // Fix for datepicker in a modal
-    $.fn.modal.Constructor.prototype.enforceFocus = function () {};
 </script>
 [% IF ( OPACAmazonCoverImages || SyndeticsCoverImages ) %]
 <script>

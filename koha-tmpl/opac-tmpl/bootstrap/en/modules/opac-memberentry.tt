@@ -344,13 +344,7 @@
                                             <li>
                                                 <label for="borrower_dateofbirth" class="[% required.dateofbirth | html %]">Date of birth:</label>
 
-                                                <input type="text" id="borrower_dateofbirth" name="borrower_dateofbirth" value="[% borrower.dateofbirth | $KohaDates %]" size="10" class="[% required.dateofbirth | html %]" />
-
-                                                [% UNLESS action == 'edit' && !OPACPatronDetails %]
-                                                    [% UNLESS ( mandatory.defined('dateofbirth') ) %]
-                                                        <a href="#" style="font-size:85%;text-decoration:none;" class="cleardate">Clear date</a>
-                                                    [% END %]
-                                                [% END %]
+                                                <input type="text" id="borrower_dateofbirth" name="borrower_dateofbirth" value="[% borrower.dateofbirth | $KohaDates %]" size="10" class="[% required.dateofbirth | html %] flatpickr pastdate" />
 
                                                 <div class="required_label [% required.dateofbirth | html %]">Required</div>
                                             </li>
@@ -1160,11 +1154,6 @@
                 return false;
             } );
         });
-
-    $(".cleardate").on("click", function(){
-        $('#borrower_dateofbirth').val('');
-        return false;
-    });
 
     [% IF action != 'edit' and Koha.Preference('PatronSelfRegistrationConfirmEmail') %]
         $("#borrower_email").bind("cut copy paste", function(e){

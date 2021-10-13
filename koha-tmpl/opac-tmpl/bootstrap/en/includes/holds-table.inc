@@ -157,7 +157,7 @@
                                                             <div class="modal-body">
                                                                 <input type="hidden" name="reserve_id" value="[% HOLD.reserve_id | html %]" />
                                                                 <label for="suspend_until_[% HOLD.reserve_id | html %]">Suspend until:</label>
-                                                                <input type="text" name="suspend_until" id="suspend_until_[% HOLD.reserve_id | html %]" class="suspend-until" size="10" />
+                                                                <input type="text" name="suspend_until" id="suspend_until_[% HOLD.reserve_id | html %]" class="suspend-until flatpickr futuredate" size="10" />
                                                                 [% INCLUDE 'date-format.inc' %]
                                                                 <p class="js-show"><a href="#" onclick="document.getElementById('suspend_until_[% HOLD.reserve_id | html %]').value='';return false;">Clear date to suspend indefinitely</a></p>
                                                                 <button class="btn btn-primary btn-sm js-hide" type="submit" name="submit">Suspend</button>

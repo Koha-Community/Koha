@@ -78,6 +78,8 @@ $high-contrast-grey: #666666;
 @import "../../../../../node_modules/bootstrap/scss/type";
 @import "../../../../../node_modules/bootstrap/scss/utilities";
 
+@import "flatpickr";
+
 /* Koha imports */
 @import "fonts";
 
@@ -621,7 +623,6 @@ div.dt-button-collection button.dt-button.buttons-print:not(.disabled):before {
 .ui-widget select,
 .ui-widget textarea,
 .ui-widget button {
-    font-family: 'NotoSans';
     font-size: inherit;
 }
 
@@ -798,35 +799,6 @@ ul {
 }
 
 /* End jQueryUI tab styles */
-
-/* jQuery UI Datepicker */
-
-.ui-datepicker {
-    @include shadowed;
-    table {
-        border: 0;
-        border-collapse: collapse;
-        font-size: .9em;
-        margin: 0 0 .4em;
-        width: 100%;
-    }
-
-    th {
-        background: transparent none;
-        border: 0;
-        font-weight: bold;
-        padding: .7em .3em;
-        text-align: center;
-    }
-}
-
-.ui-datepicker-trigger {
-    margin: 0 3px;
-    vertical-align: middle;
-}
-
-/* End jQueryUI datepicker styles */
-
 
 /* jQueryUI Core */
 

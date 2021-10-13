@@ -1066,22 +1066,6 @@
 
             [% END %]
 
-            $(".suspend-until").datepicker({
-                beforeShow: function(input, inst) {
-                    // https://stackoverflow.com/questions/662220/how-to-change-the-pop-up-position-of-the-jquery-datepicker-control#answer-10598178
-                    var calendar = inst.dpDiv;
-                    setTimeout(function() {
-                        calendar.position({
-                            my: 'left top',
-                            at: 'left bottom',
-                            collision: 'none',
-                            of: input
-                        });
-                    }, 1);
-                },
-                minDate: 1
-            });
-
             if ( $('#opac-user-clubs').length ) {
                 $('#opac-user-clubs-tab-link').on('click', function() {
                     $('#opac-user-clubs').text(_("Loading..."));

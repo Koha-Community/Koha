@@ -281,14 +281,14 @@
                                                 [% IF ( reserve_in_future ) %]
                                                     <li>
                                                         <label for="from[% bibitemloo.biblionumber | html %]">Hold starts on date:</label>
-                                                        <input type="text" name="reserve_date_[% bibitemloo.biblionumber | html %]" id="from[% bibitemloo.biblionumber | html %]" size="10" class="holddatefrom"/>
+                                                        <input type="text" name="reserve_date_[% bibitemloo.biblionumber | html %]" id="from[% bibitemloo.biblionumber | html %]" size="10" />
                                                         <span class="date-format from" data-biblionumber="[% bibitemloo.biblionumber | html %]">[% INCLUDE 'date-format.inc' %]</span>
                                                     </li>
                                                 [% END %]
 
                                                 <li>
                                                     <label for="to[% bibitemloo.biblionumber | html %]">Hold not needed after:</label>
-                                                    <input type="text" name="expiration_date_[% bibitemloo.biblionumber | html %]" id="to[% bibitemloo.biblionumber | html %]" size="10" class="holddateto" />
+                                                    <input type="text" name="expiration_date_[% bibitemloo.biblionumber | html %]" id="to[% bibitemloo.biblionumber | html %]" size="10" />
                                                     <span class="date-format to" data-biblionumber="[% bibitemloo.biblionumber | html %]">[% INCLUDE 'date-format.inc' %]</span>
                                                 </li>
 
@@ -473,7 +473,6 @@
 [% BLOCK jsinclude %]
 [% INCLUDE 'calendar.inc' %]
 <script>
-// <![CDATA[
     var MSG_NO_ITEM_SELECTED = _("Expecting a specific item selection.");
 
         // Clear the contents of an input field
@@ -538,20 +537,6 @@
               $("#holdnotes_[% bibitemloo.biblionumber | html %]").attr( 'required', true );
           [% END %]
         [% END %]
-
-        $(".date-format").each(function(){
-            if($(this).hasClass("to")){ var op = "to"; }
-            if($(this).hasClass("from")){ var op = "from"; }
-            var bibNum = $(this).data("biblionumber");
-            $(this).html("<a href=\"#\" class=\"clear-date\" data-op=\"" + op + "\" id=\"clear" + bibNum + "\">" + _("Clear date") + "</a>");
-        });
-
-        $(".clear-date").on("click",function(e){
-            e.preventDefault();
-            var fieldID = this.id.replace("clear","");
-            var op = $(this).data("op");
-            $("#" + op + fieldID).val("");
-        });
 
         // Replace non-JS single-selection with multi-selection capability.
         $(".reserve_mode").val("multi");
@@ -690,25 +675,22 @@
 
         [% FOREACH bibitemloo IN bibitemloop %]
             [% IF ( bibitemloo.holdable ) %]
-                // http://jqueryui.com/demos/datepicker/#date-range
-                var dates[% bibitemloo.biblionumber | html %] = $( "#from[% bibitemloo.biblionumber | html %], #to[% bibitemloo.biblionumber | html %]" ).datepicker({
-                    minDate: 0,
-                    changeMonth: true,
-                    numberOfMonths: 1,
-                    onSelect: function( selectedDate ) {
-                        var option = this.id == "from[% bibitemloo.biblionumber | html %]" ? "minDate" : "maxDate",
-                            instance = $( this ).data( "datepicker" );
-                            date = $.datepicker.parseDate(
-                                instance.settings.dateFormat ||
-                                $.datepicker._defaults.dateFormat,
-                                selectedDate, instance.settings );
-                        dates[% bibitemloo.biblionumber | html %].not( this ).datepicker( "option", option, date );
+
+                var startPicker[% bibitemloo.biblionumber | html %] = $("#from[% bibitemloo.biblionumber | html %]").flatpickr({
+                    onClose: function( selectedDates, dateText, instance) {
+                        validate_date( selectedDates, instance );
+                        endPicker[% bibitemloo.biblionumber | html %].set('minDate', selectedDates[0]);
                     }
                 });
+                var endPicker[% bibitemloo.biblionumber | html %] = $("#to[% bibitemloo.biblionumber | html %]").flatpickr({
+                    onClose: function( selectedDates, dateText, instance) {
+                        validate_date( selectedDates, instance );
+                    },
+                });
+
             [% END %]
         [% END %]
 
- });
-// ]]>
+    });
 </script>
 [% END %]
