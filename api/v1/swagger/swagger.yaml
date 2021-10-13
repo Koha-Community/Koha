@@ -48,6 +48,38 @@ info:
     Note: Some routes might offer additional attributes in their error responses but that's
     subject to change and thus not documented.
 
+    ## Filtering responses
+
+    The API allows for some advanced response filtering using a json based query syntax that
+    can be added as a query parameter, `q=` or in the request body.
+
+    For simple field equality matches we can use `{ "fieldname": "value" }` where the fieldname
+    matches one of the fields as described in the particular endpoints response object.
+
+    We can refine that with more complex matching clauses by nesting a the clause into the
+    object; `{ "fieldname": { "clause": "value" } }`.
+
+    Available matching clauses include ">", "<", ">=", "<=", "-like", and "-not_like".
+
+    We can filter on multiple fields by adding them to the JSON respresentation. Adding at `HASH`
+    level will result in an 'AND' query, whilst combinding them in an `ARRAY` wilth result in an
+    'OR' query: `{ "field1": 'value2', "field2": "value2" }` will filter the response to only those
+    results with both field1 containing value2 AND field2 containing value2 for example.
+
+    ### Examples
+
+    The following request would return any patron with firstname "Henry" and lastname "Acevedo";
+
+    `curl -u koha:koha --request GET 'http://127.0.0.1:8081/api/v1/patrons/' --data-raw '{ "surname": "Acevedo", "firstname": "Henry" }'`
+
+    The following request would return any patron whose lastname begins with "Ace";
+
+    `curl -u koha:koha --request GET 'http://127.0.0.1:8081/api/v1/patrons/' --data-raw '{ "surname": { "-like": "Ace%" }'`
+
+    The following request would return any patron whilse lastname is 'Acevedo' OR 'Bernardo'
+
+    `curl -u koha:koha --request GET 'http://127.0.0.1:8081/api/v1/patrons/' --data-raw '{ "surname": [ "Acevedo", "Bernardo" ] }'`
+
     ## Special headers
 
     ### x-koha-library
