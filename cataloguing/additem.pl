@@ -632,14 +632,14 @@ if ($op eq "additem") {
 } elsif ($op eq "dupeitem") {
 #-------------------------------------------------------------------------------
 # retrieve item if exist => then, it's a modif
-    my $item = Koha::Items->find($itemnumber);
+    $current_item = Koha::Items->find($itemnumber)->unblessed;
     # FIXME Handle non existent item
     if (C4::Context->preference('autoBarcode') eq 'incremental') {
         my ( $barcode ) = C4::Barcodes::ValueBuilder::incremental::get_barcode;
-        $item->barcode($barcode);
+        $current_item->{barcode} = $barcode;
     }
     else {
-        $item->barcode(undef); # Don't save it!
+        $current_item->{barcode} = undef; # Don't save it!
     }
 
     $nextop = "additem";
