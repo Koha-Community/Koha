@@ -134,6 +134,7 @@ function KohaTable(id_selector, dt_parameters, columns_settings, add_filters) {
         { "targets": [ "string-sort" ],  "type": "string" },
         { "targets": [ "anti-the" ],     "type": "anti-the" },
         { "targets": [ "NoSort" ],       "orderable": false, "searchable": false },
+        { "targets": [ "NoVisible" ],    "visible": false }
     ];
     if ( new_parameters["aoColumnDefs"] === undefined ) {
         new_parameters["aoColumnDefs"] = default_column_defs;

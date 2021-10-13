@@ -145,7 +145,7 @@
                                                 [% IF ( op == 'show' ) %]
                                                     <th class="NoSort">&nbsp;</th>
                                                 [% ELSE %]
-                                                    <th class="hidden">&nbsp;</th>
+                                                    <th class="NoVisible">&nbsp;</th>
                                                 [% END %]
                                                 <th>Card number</th>
                                                 <th>Surname</th>
@@ -179,7 +179,7 @@
                                                     [% IF ( op == 'show' ) %]
                                                         <td>
                                                     [% ELSE %]
-                                                        <td class="hidden">
+                                                        <td class="NoVisible">
                                                     [% END %]
                                                         <input type="checkbox" name="borrowernumber" value="[% borrower.borrowernumber | html %]" checked="checked" />
                                                     </td>
@@ -370,9 +370,6 @@
                 KohaTable("borrowerst", {
                     "order": [[ 1, "asc" ]],
                     "autoWidth": false,
-                    "columnDefs": [
-                        { "visible": false, "targets" : [ "hidden" ] }
-                    ]
                 }, table_settings);
 
                 $("#selectallbutton").click(function() {
