@@ -465,7 +465,7 @@ if ($op eq "additem") {
     $item->barcode(barcodedecode($item->barcode));
 
     # If we have to add or add & duplicate, we add the item
-    if ( $add_submit || $prefillitem) {
+    if ( $add_submit || $add_duplicate_submit || $prefillitem) {
 
         # check for item barcode # being unique
         if ( defined $item->barcode
