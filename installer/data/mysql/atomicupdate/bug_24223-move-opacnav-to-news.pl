@@ -10,7 +10,7 @@ return {
         # get list of installed translations
         require C4::Languages;
         my @langs;
-        my $tlangs = C4::Languages::getTranslatedLanguages();
+        my $tlangs = C4::Languages::getTranslatedLanguages('opac','bootstrap');
 
         foreach my $language ( @$tlangs ) {
             foreach my $sublanguage ( @{$language->{'sublanguages_loop'}} ) {
