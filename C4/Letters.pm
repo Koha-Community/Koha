@@ -1609,7 +1609,10 @@ sub _process_tt {
     $content = qq|[% USE KohaDates %][% USE Remove_MARC_punctuation %]$content|;
 
     my $output;
+    my $schema = Koha::Database->new->schema;
+    $schema->txn_begin;
     $template->process( \$content, $tt_params, \$output ) || croak "ERROR PROCESSING TEMPLATE: " . $template->error();
+    $schema->txn_rollback;
 
     return $output;
 }

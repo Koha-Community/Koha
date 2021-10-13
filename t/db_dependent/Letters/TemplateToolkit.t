@@ -19,7 +19,7 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use Test::More tests => 29;
+use Test::More tests => 30;
 use Test::MockModule;
 use Test::Warn;
 
@@ -1186,6 +1186,27 @@ EOF
         '2018-12-13',
     );
     is( $letter->{content}, $expected_content );
+};
+
+subtest 'Execute TT process in a DB transaction' => sub {
+    plan tests => 2;
+    my $code = 'TEST_TXN';
+    my $library = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $template = <<EOF;
+=[% branch.branchcode %]=
+[%~ branch.delete ~%]
+EOF
+    reset_template({ template => $template, code => $code, module => 'test' });
+    my $letter = GetPreparedLetter(
+        module      => 'test',
+        letter_code => $code,
+        tables      => {
+            branches => $library->branchcode,
+        }
+    );
+    my $branchcode = $library->branchcode;
+    like($letter->{content}, qr{=$branchcode=}, 'content generated with the library');
+    is( ref($library->get_from_storage), 'Koha::Library', 'calling ->delete on the object has not been comitted');
 };
 
 sub reset_template {
