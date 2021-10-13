@@ -356,20 +356,20 @@ if (@$barcodes) {
         }
     }
 
-    if ( $error->{DEBT_GUARANTORS} ) {
-        $template_params->{DEBT_GUARANTORS} = $error->{DEBT_GUARANTORS};
-        $template_params->{IMPOSSIBLE} = 1;
-        $blocker = 1;
-    }
+    # Only some errors will block when performing forced onsite checkout,
+    # for other cases all errors will block
+    my @blocking_error_codes = ($onsite_checkout and C4::Context->preference("OnSiteCheckoutsForce")) ?
+        qw( UNKNOWN_BARCODE ) : (keys %$error);
 
-    if ( $error->{UNKNOWN_BARCODE} or not $onsite_checkout or not C4::Context->preference("OnSiteCheckoutsForce") ) {
-        delete $question->{'DEBT'} if ($debt_confirmed);
-        foreach my $impossible ( keys %$error ) {
-            $template_params->{$impossible} = $$error{$impossible};
+    foreach my $code ( @blocking_error_codes ) {
+        if ($error->{$code}) {
+            $template_params->{$code} = $error->{$code};
             $template_params->{IMPOSSIBLE} = 1;
             $blocker = 1;
         }
     }
+
+    delete $question->{'DEBT'} if ($debt_confirmed);
 
     if( $item and ( !$blocker or $force_allow_issue ) ){
         my $confirm_required = 0;
