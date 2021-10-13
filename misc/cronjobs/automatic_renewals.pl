@@ -282,14 +282,20 @@ sub send_digests {
         next PATRON unless $borrower_preferences; # how could this happen?
 
         my $patron = Koha::Patrons->find( $borrowernumber );
-        my $library = Koha::Libraries->find( $params->{branchcode} );
+        my $branchcode;
+        if ( defined $params->{branchcode} ) {
+            $branchcode = $params->{branchcode};
+        } else {
+            $branchcode = $patron->branchcode;
+        }
+        my $library = Koha::Libraries->find( $branchcode );
         my $from_address = $library->from_email_address;
 
         foreach my $transport ( keys %{ $borrower_preferences->{'transports'} } ) {
             my $letter = C4::Letters::GetPreparedLetter (
                 module => 'circulation',
                 letter_code => $params->{letter_code},
-                branchcode => $params->{branchcode},
+                branchcode => $branchcode,
                 lang => $patron->lang,
                 substitute => {
                     error => $digest->{error}||0,
