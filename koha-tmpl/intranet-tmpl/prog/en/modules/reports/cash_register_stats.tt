@@ -231,20 +231,6 @@
         actTotal = "";
 
         $(document).ready(function() {
-            // http://jqueryui.com/demos/datepicker/#date-range
-            var dates = $( "#filter_date_begin, #filter_date_end" ).datepicker({
-                changeMonth: true,
-                numberOfMonths: 1,
-                onSelect: function( selectedDate ) {
-                    var option = this.id == "filter_date_begin" ? "minDate" : "maxDate",
-                        instance = $( this ).data( "datepicker" );
-                        date = $.datepicker.parseDate(
-                            instance.settings.dateFormat ||
-                            $.datepicker._defaults.dateFormat,
-                            selectedDate, instance.settings );
-                    dates.not( this ).datepicker( "option", option, date );
-                }
-            });
 
             $('#frmCashRegister').submit(function() {
                 var isFormValid = true;
