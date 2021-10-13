@@ -56,6 +56,8 @@
             <th>Checked out from</th>
             [% IF Koha.Preference('RecordStaffUserOnCheckout') %]
             <th>Checked out by</th>
+            [% ELSE %]
+            <th class="NoVisible">Checked out by</th>
             [% END %]
             <th>Renewed</th>
             <th>Checkout on</th>
@@ -83,13 +85,11 @@
                     [% ELSE %]
                         &nbsp;
                     [% END %]</td>
-                [% IF Koha.Preference('RecordStaffUserOnCheckout') %]
                 <td>[% IF checkout.issuer_id %]
                     <a href="/cgi-bin/koha/circ/circulation.pl?borrowernumber=[% checkout.issuer_id | uri %]">
                     [% INCLUDE 'patron-title.inc' patron=checkout.issuer %]
                     </a>
                     [% END %]</td>
-                [% END %]
                 <td>[% IF checkout.renewals %]
                         Yes[% IF checkout.lastreneweddate %], <small>last on: [% checkout.lastreneweddate |$KohaDates  with_hours => 1 %]</small>
                             [% END %]
@@ -138,11 +138,7 @@
             [% END %]
             var table = KohaTable("table_issues", {
                 "sDom": 'C<"top pager"ilpfB><"#filter_c">tr<"bottom pager"ip>',
-            [% IF Koha.Preference('RecordStaffUserOnCheckout') %]
                 "aaSorting": [[ 5, "desc" ]],
-            [% ELSE %]
-                "aaSorting": [[ 4, "desc" ]],
-            [% END %]
                 "sPaginationType": "full_numbers"
             }, columns_settings);
         });
