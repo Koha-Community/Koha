@@ -386,7 +386,7 @@
                 </li>
                 <li>
                   <label for="to">Expires before:</label>
-                  <input type="text" id="to" name="expiration_date_filter" value="[% expiration_date_filter | $KohaDates %]" size="10" maxlength="10" class="datepickerto" />
+                  <input type="text" id="to" name="expiration_date_filter" value="[% expiration_date_filter | $KohaDates %]" size="10" maxlength="10" class="flatpickr" />
                 </li>
 
                 [% FOR field IN additional_fields_for_subscription %]
@@ -514,7 +514,6 @@
                 $("label[for=bookseller], input#bookseller").hide();
                 $("label[for=branch], select#branch").hide();
                 $("label[for=to], input#to").hide();
-                $(".ui-datepicker-trigger").hide();
                 $("label[for=location], select#location_filter").hide();
                 [% FOR field IN additional_fields_for_subscription %]
                       $("label[for=additional_field_[% field.id | $raw %]], input#additional_field_[% field.id | $raw %]").hide();
