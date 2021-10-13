@@ -278,13 +278,13 @@
                                                 [% IF (usecache) %]
                                                     <th>Cache expiry (seconds)</th>
                                                 [% ELSE %]
-                                                    <th class="hidden">&nbsp;</th>
+                                                    <th class="NoVisible">Cache expiry (seconds)</th>
                                                 [% END %]
                                                 <th>Saved results</th>
                                                 [% IF has_obsolete_reports %]
                                                     <th>Update</th>
                                                 [% ELSE %]
-                                                    <th class="hidden">&nbsp;</th>
+                                                    <th class="NoVisible">Update</th>
                                                 [% END %]
                                                 <th class="NoSort noExport">Actions</th>
                                             </tr>
@@ -1755,9 +1755,6 @@
                     'bAutoWidth': false,
                     'sPaginationType': 'full',
                     'aaSorting': [[ 1, "asc" ]],
-                    'aoColumnDefs': [
-                        { "visible": false, "aTargets" : [ "hidden" ] }
-                    ],
                     'oLanguage': {
                         'sZeroRecords': _("No matching reports found")
                     },
