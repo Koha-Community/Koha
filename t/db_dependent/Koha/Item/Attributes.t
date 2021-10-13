@@ -66,7 +66,7 @@ my $some_marc_xml = q{<?xml version="1.0" encoding="UTF-8"?>
     <subfield code="y">value for y</subfield>
     <subfield code="é">value for é 1</subfield>
     <subfield code="é">value for é 2</subfield>
-    <subfield code="z">value for z 1|value for z 2</subfield>
+    <subfield code="z">value for z 1 | value for z 2</subfield>
   </datafield>
 </record>
 
@@ -76,19 +76,19 @@ $item->more_subfields_xml($some_marc_xml)->store;
 
 $attributes = $item->additional_attributes;
 is( ref($attributes), 'Koha::Item::Attributes' );
-is( $attributes->{'x'}, "value for x 1|value for x 2");
+is( $attributes->{'x'}, "value for x 1 | value for x 2");
 is( $attributes->{'y'}, "value for y");
-is( $attributes->{'é'}, "value for é 1|value for é 2");
-is( $attributes->{'z'}, "value for z 1|value for z 2");
+is( $attributes->{'é'}, "value for é 1 | value for é 2");
+is( $attributes->{'z'}, "value for z 1 | value for z 2");
 
 is( $attributes->to_marcxml, $some_marc_xml );
 is_deeply(
     $attributes->to_hashref,
     {
-        'x' => "value for x 1|value for x 2",
+        'x' => "value for x 1 | value for x 2",
         'y' => "value for y",
-        'é' => "value for é 1|value for é 2",
-        'z' => "value for z 1|value for z 2",
+        'é' => "value for é 1 | value for é 2",
+        'z' => "value for z 1 | value for z 2",
     }
 );
 

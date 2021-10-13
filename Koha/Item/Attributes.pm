@@ -60,7 +60,7 @@ sub new_from_marcxml {
         my $more_subfields = [ uniq map { $_->[0] } $field->subfields ];
         for my $more_subfield (@$more_subfields) {
             my @s = $field->subfield($more_subfield);
-            $self->{$more_subfield} = join '|', @s;
+            $self->{$more_subfield} = join ' | ', @s;
         }
     }
     return bless $self, $class;
@@ -113,7 +113,7 @@ sub to_marcxml {
           or $self->{$tagsubfield} eq "";
 
         if ( $tagslib->{$itemtag}->{$tagsubfield}->{repeatable} ) {
-            my @values = split '\|', $self->{$tagsubfield};
+            my @values = split ' \| ', $self->{$tagsubfield};
             push @subfields, ( $tagsubfield => $_ ) for @values;
         }
         else {
