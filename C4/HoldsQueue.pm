@@ -623,10 +623,6 @@ sub MapItemsToHoldRequests {
                     next unless _checkHoldPolicy($item, $request);
                     next unless $items_by_itemnumber{ $item->{itemnumber} }->{_object}->can_be_transferred( { to => $libraries->{ $request->{branchcode} } } );
 
-                    # Don't fill item level holds that contravene the hold pickup policy at this time
-                    next unless $item->{hold_fulfillment_policy} eq 'any'
-                        || $request->{branchcode} eq $item->{ $item->{hold_fulfillment_policy} };
-
                     # If hold itemtype is set, item's itemtype must match
                     next unless ( !$request->{itemtype}
                         || $item->{itype} eq $request->{itemtype} );
