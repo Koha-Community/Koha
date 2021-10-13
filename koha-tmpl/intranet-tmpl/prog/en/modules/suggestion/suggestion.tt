@@ -1352,45 +1352,44 @@
                     $(this).parent().parent().find("ol").toggle();
                     return false;
                 });
-                // http://jqueryui.com/demos/datepicker/#date-range
-                var dates = $( "#suggesteddate_from, #suggesteddate_to" ).datepicker({
-                    changeMonth: true,
-                    numberOfMonths: 1,
-                    onSelect: function( selectedDate ) {
-                        var option = this.id == "suggesteddate_from" ? "minDate" : "maxDate",
-                            instance = $( this ).data( "datepicker" );
-                            date = $.datepicker.parseDate(
-                                instance.settings.dateFormat ||
-                                $.datepicker._defaults.dateFormat,
-                                selectedDate, instance.settings );
-                        dates.not( this ).datepicker( "option", option, date );
+
+                /* Suggested date fields */
+                var suggesteddate_from = $("#suggesteddate_from").flatpickr({
+                    onClose: function( selectedDates, dateText, instance) {
+                        validate_date( selectedDates, instance );
+                        suggesteddate_to.set('minDate', selectedDates[0]);
                     }
                 });
-                var datesMD = $( "#manageddate_from, #manageddate_to" ).datepicker({
-                    changeMonth: true,
-                    numberOfMonths: 1,
-                    onSelect: function( selectedDate ) {
-                        var option = this.id == "manageddate_from" ? "minDate" : "maxDate",
-                            instance = $( this ).data( "datepicker" );
-                            date = $.datepicker.parseDate(
-                                instance.settings.dateFormat ||
-                                $.datepicker._defaults.dateFormat,
-                                selectedDate, instance.settings );
-                        datesMD.not( this ).datepicker( "option", option, date );
+                var suggesteddate_to = $("#suggesteddate_to").flatpickr({
+                    onClose: function( selectedDates, dateText, instance) {
+                        validate_date( selectedDates, instance );
+                    },
+                });
+
+                /* Managed date fields */
+                var manageddate_from = $("#manageddate_from").flatpickr({
+                    onClose: function( selectedDates, dateText, instance) {
+                        validate_date( selectedDates, instance );
+                        manageddate_to.set('minDate', selectedDates[0]);
                     }
                 });
-                var datesAD = $( "#accepteddate_from, #accepteddate_to" ).datepicker({
-                    changeMonth: true,
-                    numberOfMonths: 1,
-                    onSelect: function( selectedDate ) {
-                        var option = this.id == "accepteddate_from" ? "minDate" : "maxDate",
-                            instance = $( this ).data( "datepicker" );
-                            date = $.datepicker.parseDate(
-                                instance.settings.dateFormat ||
-                                $.datepicker._defaults.dateFormat,
-                                selectedDate, instance.settings );
-                        datesAD.not( this ).datepicker( "option", option, date );
+                var manageddate_to = $("#manageddate_to").flatpickr({
+                    onClose: function( selectedDates, dateText, instance) {
+                        validate_date( selectedDates, instance );
+                    },
+                });
+
+                /* Accepted date fields */
+                var accepteddate_from = $("#accepteddate_from").flatpickr({
+                    onClose: function( selectedDates, dateText, instance) {
+                        validate_date( selectedDates, instance );
+                        accepteddate_to.set('minDate', selectedDates[0]);
                     }
+                });
+                var accepteddate_to = $("#accepteddate_to").flatpickr({
+                    onClose: function( selectedDates, dateText, instance) {
+                        validate_date( selectedDates, instance );
+                    },
                 });
 
                 $("button[type='submit']").on("click", function(e) {
