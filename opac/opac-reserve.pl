@@ -275,7 +275,7 @@ if ( $query->param('place_reserve') ) {
             $startdate = $query->param("reserve_date_$biblioNum");
         }
 
-        my $expiration_date = $query->param("expiration_date_$biblioNum");
+        my $patron_expiration_date = $query->param("expiration_date_$biblioNum");
 
         my $rank = $biblioData->{rank};
         if ( $itemNum ne '' ) {
@@ -316,7 +316,7 @@ if ( $query->param('place_reserve') ) {
                     biblionumber     => $biblioNum,
                     priority         => $rank,
                     reservation_date => $startdate,
-                    expiration_date  => $expiration_date,
+                    expiration_date  => $patron_expiration_date,
                     notes            => $notes,
                     title            => $biblioData->{title},
                     itemnumber       => $itemNum,

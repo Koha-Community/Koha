@@ -185,16 +185,10 @@ sub set_waiting {
         desk_id => $desk_id,
     };
 
-    my $requested_expiration;
-    if ($self->expirationdate) {
-        $requested_expiration = dt_from_string($self->expirationdate);
-    }
-
     my $max_pickup_delay = C4::Context->preference("ReservesMaxPickUpDelay");
     my $cancel_on_holidays = C4::Context->preference('ExpireReservesOnHolidays');
 
-    my $expirationdate = $today->clone;
-    $expirationdate->add(days => $max_pickup_delay);
+    my $new_expiration_date = $today->clone->add(days => $max_pickup_delay);
 
     if ( C4::Context->preference("ExcludeHolidaysFromMaxPickUpDelay") ) {
         my $itemtype = $self->item ? $self->item->effective_itemtype : $self->biblio->itemtype;
@@ -207,13 +201,24 @@ sub set_waiting {
         );
         my $calendar = Koha::Calendar->new( branchcode => $self->branchcode, days_mode => $daysmode );
 
-        $expirationdate = $calendar->days_forward( dt_from_string(), $max_pickup_delay );
+        $new_expiration_date = $calendar->days_forward( dt_from_string(), $max_pickup_delay );
     }
 
     # If patron's requested expiration date is prior to the
     # calculated one, we keep the patron's one.
-    my $cmp = $requested_expiration ? DateTime->compare($requested_expiration, $expirationdate) : 0;
-    $values->{expirationdate} = $cmp == -1 ? $requested_expiration->ymd : $expirationdate->ymd;
+    if ( $self->patron_expiration_date ) {
+        my $requested_expiration = dt_from_string( $self->patron_expiration_date );
+
+        my $cmp =
+          $requested_expiration
+          ? DateTime->compare( $requested_expiration, $new_expiration_date )
+          : 0;
+
+        $new_expiration_date =
+          $cmp == -1 ? $requested_expiration : $new_expiration_date;
+    }
+
+    $values->{expirationdate} = $new_expiration_date->ymd;
 
     $self->set($values)->store();
 
@@ -585,6 +590,10 @@ sub store {
     my ($self) = @_;
 
     if ( !$self->in_storage ) {
+        if ( ! $self->expirationdate && $self->patron_expiration_date ) {
+            $self->expirationdate($self->patron_expiration_date);
+        }
+
         if (
             C4::Context->preference('DefaultHoldExpirationdate')
             and ( not defined $self->expirationdate

@@ -185,7 +185,7 @@ sub AddReserve {
     my $biblionumber   = $params->{biblionumber};
     my $priority       = $params->{priority};
     my $resdate        = $params->{reservation_date};
-    my $expdate        = $params->{expiration_date};
+    my $patron_expiration_date = $params->{expiration_date};
     my $notes          = $params->{notes};
     my $title          = $params->{title};
     my $checkitem      = $params->{itemnumber};
@@ -196,7 +196,7 @@ sub AddReserve {
     $resdate = output_pref( { str => dt_from_string( $resdate ), dateonly => 1, dateformat => 'iso' })
         or output_pref({ dt => dt_from_string, dateonly => 1, dateformat => 'iso' });
 
-    $expdate = output_pref({ str => $expdate, dateonly => 1, dateformat => 'iso' });
+    $patron_expiration_date = output_pref({ str => $patron_expiration_date, dateonly => 1, dateformat => 'iso' });
 
     # if we have an item selectionned, and the pickup branch is the same as the holdingbranch
     # of the document, we force the value $priority and $found .
@@ -252,7 +252,7 @@ sub AddReserve {
             itemnumber     => $checkitem,
             found          => $found,
             waitingdate    => $waitingdate,
-            expirationdate => $expdate,
+            patron_expiration_date => $patron_expiration_date,
             itemtype       => $itemtype,
             item_level_hold => $checkitem ? 1 : 0,
             non_priority   => $non_priority ? 1 : 0,
@@ -946,7 +946,13 @@ sub CancelExpiredReserves {
     my $expireWaiting = C4::Context->preference('ExpireReservesMaxPickUpDelay');
 
     my $dtf = Koha::Database->new->schema->storage->datetime_parser;
-    my $params = { expirationdate => { '<', $dtf->format_date($today) } };
+    my $params = {
+        -or => [
+            { expirationdate => { '<', $dtf->format_date($today) } },
+            { patron_expiration_date => { '<' => $dtf->format_date($today) } }
+        ]
+    };
+
     $params->{found} = [ { '!=', 'W' }, undef ]  unless $expireWaiting;
 
     # FIXME To move to Koha::Holds->search_expired (?)
@@ -2101,6 +2107,7 @@ sub RevertWaitingStatus {
             priority    => 1,
             found       => undef,
             waitingdate => undef,
+            expirationdate => $hold->patron_expiration_date,
             itemnumber  => $hold->item_level_hold ? $hold->itemnumber : undef,
         }
     )->store();
