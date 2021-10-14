@@ -80,7 +80,12 @@
                 });
         },
         onClose: function( selectedDates, dateText, instance) {
-            validate_date( selectedDates, instance );
+            validate_date( dateText, instance );
+            var thisInput = instance.input;
+            if ( thisInput.hasAttribute('data-start_for') ) {
+                var endPicker = document.querySelector("#"+thisInput.dataset.start_for)._flatpickr;
+                endPicker.set('minDate', selectedDates[0]);
+            }
         },
     });
 
@@ -120,20 +125,7 @@
     }
 
         $(document).ready(function(){
-
             $(".flatpickr").flatpickr();
-            var startPicker = $(".flatpickrfrom").flatpickr({
-                onClose: function( selectedDates, dateText, instance) {
-                    validate_date( selectedDates, instance );
-                    endPicker.set('minDate', selectedDates[0]);
-                }
-            });
-            var endPicker = $(".flatpickrto").flatpickr({
-                onClose: function( selectedDates, dateText, instance) {
-                    validate_date( selectedDates, instance );
-                },
-            });
         });
-
 
 </script>
