@@ -131,7 +131,7 @@ subtest 'buildKohaItemsNamespace status tests' => sub {
         }
     });
     $xml = C4::XSLT::buildKohaItemsNamespace( $item->biblionumber,[]);
-    like($xml,qr{<substatus>Waiting</substatus>},"Waiting status takes precedence over In transit (holds)");
+    like($xml,qr{<substatus>Hold waiting</substatus>},"Waiting status takes precedence over In transit (holds)");
     $hold->cancel;
 
     $builder->build({ source => "TmpHoldsqueue", value => {
@@ -151,7 +151,7 @@ subtest 'buildKohaItemsNamespace status tests' => sub {
     }});
     $recall->set_waiting;
     $xml = C4::XSLT::buildKohaItemsNamespace( $item->biblionumber,[]);
-    like($xml,qr{<status>Waiting</status>},"Waiting status takes precedence over In transit (recalls)");
+    like($xml,qr{<substatus>Recall waiting</substatus>},"Waiting status takes precedence over In transit (recalls)");
 
 };
 

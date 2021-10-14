@@ -22,7 +22,7 @@ use C4::Auth qw( get_template_and_user );
 use C4::Output qw( output_html_with_http_headers );
 use Koha::Recalls;
 use Koha::BiblioFrameworks;
-use Koha::DateUtils;
+use Koha::DateUtils qw( dt_from_string );
 use Koha::Patrons;
 
 my $query = CGI->new;

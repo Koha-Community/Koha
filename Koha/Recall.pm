@@ -20,7 +20,7 @@ package Koha::Recall;
 use Modern::Perl;
 
 use Koha::Database;
-use Koha::DateUtils;
+use Koha::DateUtils qw( dt_from_string );
 use Koha::Patron;
 use Koha::Biblio;
 use Koha::Item;

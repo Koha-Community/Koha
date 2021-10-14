@@ -21,7 +21,7 @@ use Test::More tests => 27;
 use t::lib::TestBuilder;
 use t::lib::Mocks;
 
-use Koha::DateUtils;
+use Koha::DateUtils qw( dt_from_string );
 
 BEGIN {
     require_ok('Koha::Recall');

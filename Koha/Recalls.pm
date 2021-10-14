@@ -21,7 +21,7 @@ use Modern::Perl;
 
 use Koha::Database;
 use Koha::Recall;
-use Koha::DateUtils;
+use Koha::DateUtils qw( dt_from_string );
 
 use C4::Stats qw( UpdateStats );
 

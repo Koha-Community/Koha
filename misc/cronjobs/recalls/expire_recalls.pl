@@ -31,7 +31,7 @@ BEGIN {
 # - recalls that have been awaiting pickup for longer than the specified recall_shelf_time circulation rule, or the RecallsMaxPickUpDelay if circ rule is unset
 
 use Koha::Script -cron;
-use Koha::DateUtils;
+use Koha::DateUtils qw( dt_from_string );
 use Koha::Recalls;
 use C4::Log;
 

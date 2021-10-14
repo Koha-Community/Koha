@@ -358,7 +358,8 @@ sub buildKohaItemsNamespace {
 
         if ( $recalls->count ) {
             # recalls take priority over holds
-            $status = 'Waiting';
+            $status = 'other';
+            $substatus = 'Recall waiting';
         }
         elsif ( $item->has_pending_hold ) {
             $status = 'other';
@@ -366,7 +367,7 @@ sub buildKohaItemsNamespace {
         }
         elsif ( $item->holds->waiting->count ) {
             $status = 'other';
-            $substatus = 'Waiting';
+            $substatus = 'Hold waiting';
         }
         elsif ($item->get_transfer) {
             $status = 'other';

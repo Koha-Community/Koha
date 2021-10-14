@@ -1171,7 +1171,11 @@ Return all active recalls attached to this biblio, sorted by oldest first
 =cut
 
 sub recalls {
-    my ( $self ) = @_;
+    my ( $self, $params ) = @_;
+    if ( $params->{borrowernumber} ) {
+        my @recalls_rs = Koha::Recalls->search({ biblionumber => $self->biblionumber, old => undef, borrowernumber => $params->{borrowernumber} }, { order_by => { -asc => 'recalldate' } });
+        return @recalls_rs;
+    }
     my @recalls_rs = Koha::Recalls->search({ biblionumber => $self->biblionumber, old => undef }, { order_by => { -asc => 'recalldate' } });
     return @recalls_rs;
 }
@@ -1204,7 +1208,9 @@ sub can_be_recalled {
     my @itemtypes;
     my @itemnumbers;
     my @items;
+    my @all_itemnumbers;
     foreach my $item ( @all_items ) {
+        push( @all_itemnumbers, $item->itemnumber );
         if ( $item->can_be_recalled({ patron => $patron }) ) {
             push( @itemtypes, $item->effective_itemtype );
             push( @itemnumbers, $item->itemnumber );
@@ -1251,7 +1257,7 @@ sub can_be_recalled {
         return 0 if ( $patron->recalls({ biblionumber => $self->biblionumber })->count >= $recalls_per_record );
 
         # check if any of the items under this biblio are already checked out by this borrower
-        return 0 if ( Koha::Checkouts->search({ itemnumber => [ @itemnumbers ], borrowernumber => $patron->borrowernumber })->count > 0 );
+        return 0 if ( Koha::Checkouts->search({ itemnumber => [ @all_itemnumbers ], borrowernumber => $patron->borrowernumber })->count > 0 );
     }
 
     # check item availability

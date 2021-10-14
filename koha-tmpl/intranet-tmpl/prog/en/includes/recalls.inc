@@ -43,7 +43,7 @@
 
                     [% UNLESS specific_patron %]
                         <td class="recall-patron">
-                            <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% recall.borrowernumber | uri %]">[% recall.patron.firstname | html %] [% recall.patron.surname | html %] ([% recall.patron.cardnumber | html %])</a>
+                            [% INCLUDE 'patron-title.inc' patron=recall.patron hide_patron_infos_if_needed=1 link_to="circulation_recalls" %]
                         </td>
                     [% END %]
 
