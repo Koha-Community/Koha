@@ -1578,9 +1578,11 @@ sub _find_value {
 
 =head2 PrepareItemrecordDisplay
 
-  PrepareItemrecordDisplay($itemrecord,$bibnum,$itemumber,$frameworkcode);
+  PrepareItemrecordDisplay($bibnum,$itemumber,$defaultvalues,$frameworkcode);
 
 Returns a hash with all the fields for Display a given item data in a template
+
+$defaultvalues should either contain a hashref of values for the new item, or be undefined.
 
 The $frameworkcode returns the item for the given frameworkcode, ONLY if bibnum is not provided
 

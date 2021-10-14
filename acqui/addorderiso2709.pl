@@ -105,11 +105,11 @@ if ($op eq ""){
     import_biblios_list($template, $cgiparams->{'import_batch_id'});
     if ( $basket->effective_create_items eq 'ordering' && !$basket->is_standing ) {
         # prepare empty item form
-        my $cell = PrepareItemrecordDisplay( '', '', '', 'ACQ' );
+        my $cell = PrepareItemrecordDisplay( '', '', undef, 'ACQ' );
 
         #     warn "==> ".Data::Dumper::Dumper($cell);
         unless ($cell) {
-            $cell = PrepareItemrecordDisplay( '', '', '', '' );
+            $cell = PrepareItemrecordDisplay( '', '', undef, '' );
             $template->param( 'NoACQframework' => 1 );
         }
         my @itemloop;
