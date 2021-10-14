@@ -941,12 +941,12 @@
     [% Asset.js("js/holds.js") | $raw %]
     [% INCLUDE 'str/members-menu.inc' %]
     [% Asset.js("js/members-menu.js") | $raw %]
-    [% Asset.js("js/messaging-preference-form.js") | $raw %]
     <script>
 
         columns_settings_issues_table = [% TablesSettings.GetColumns( 'members', 'moremember', 'issues-table', 'json' ) | $raw %]
 
         $(document).ready(function() {
+            $("#info_digests").tooltip();
 
             if ( $('#clubs-tab').length ) {
                 $('#clubs-tab-link').on('click', function() {
