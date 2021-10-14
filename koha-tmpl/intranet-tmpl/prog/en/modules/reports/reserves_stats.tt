@@ -125,9 +125,10 @@
                 <td><input type="radio" name="Column" value="reservedate" /></td>
                 <td>
                     <label for="filter_reservedate_begin">From</label>
-                    <input type="text" size="10" id="filter_reservedate_begin" name="filter_reservedate_begin" />
+                    <input type="text" size="10" id="filter_reservedate_begin" data-start_for="filter_reservedate_end" name="filter_reservedate_begin" class="flatpickr" />
+
                     <label for="filter_reservedate_end">To</label>
-                    <input size="10" id="filter_reservedate_end" name="filter_reservedate_end" value="" type="text" />
+                    <input size="10" id="filter_reservedate_end" name="filter_reservedate_end" value="" type="text" class="flatpickr" />
                 </td>
             </tr>
             <tr>
@@ -136,9 +137,10 @@
                 <td><input type="radio" name="Column" value="notificationdate" /></td>
                 <td>
                     <label for="filter_notificationdate_begin">From</label>
-                    <input type="text" size="10" id="filter_notificationdate_begin" name="filter_notificationdate_begin" />
+                    <input type="text" size="10" id="filter_notificationdate_begin" name="filter_notificationdate_begin" data-start_for="filter_notificationdate_end" class="flatpickr" />
+
                     <label for="filter_notificationdate_end">To</label>
-                    <input  size="10" id="filter_notificationdate_end" name="filter_notificationdate_end" value="" type="text" />
+                    <input  size="10" id="filter_notificationdate_end" name="filter_notificationdate_end" value="" type="text" class="flatpickr" />
                 </td>
              </tr>
             <tr>
@@ -147,9 +149,10 @@
                 <td><input type="radio" name="Column" value="reminderdate" /></td>
                 <td>
                     <label for="filter_reminderdate_begin">From</label>
-                    <input type="text" size="10" id="filter_reminderdate_begin" name="Filter" />
+                    <input type="text" size="10" id="filter_reminderdate_begin" name="Filter" data-start_for="filter_reminderdate_end" class="flatpickr" />
+
                     <label for="filter_reminderdate_end">To</label>
-                    <input size="10" id="filter_reminderdate_end" name="filter_reminderdate_end" value="" type="text" />
+                    <input size="10" id="filter_reminderdate_end" name="filter_reminderdate_end" value="" type="text" class="flatpickr" />
                 </td>
              </tr>
             <tr>
@@ -158,9 +161,10 @@
                 <td><input type="radio" name="Column" value="waitingdate" /></td>
                 <td>
                     <label for="filter_waitingdate_begin">From</label>
-                    <input type="text" size="10" id="filter_waitingdate_begin" name="filter_waitingdate_begin" />
+                    <input type="text" size="10" id="filter_waitingdate_begin" name="filter_waitingdate_begin" data-start_for="filter_waitingdate_end" class="flatpickr" />
+
                     <label for="filter_waitingdate_end">To</label>
-                    <input  size="10" id="filter_waitingdate_end" name="filter_waitingdate_end" value="" type="text" />
+                    <input  size="10" id="filter_waitingdate_end" name="filter_waitingdate_end" value="" type="text" class="flatpickr" />
                 </td>
              </tr>
 			 <tr>
@@ -169,9 +173,10 @@
                 <td><input type="radio" name="Column" value="cancellationdate" /></td>
                 <td>
                     <label for="filter_cancellationdate_begin">From</label>
-                    <input type="text" size="10" id="filter_cancellationdate_begin" name="filter_cancellationdate_begin" />
+                    <input type="text" size="10" id="filter_cancellationdate_begin" name="filter_cancellationdate_begin" data-start_for="filter_cancellationdate_end" class="flatpickr" />
+
                     <label for="filter_cancellationdate_end">To</label>
-                    <input  size="10" id="filter_cancellationdate_end" name="filter_cancellationdate_end" value="" type="text" />
+                    <input  size="10" id="filter_cancellationdate_end" name="filter_cancellationdate_end" value="" type="text" class="flatpickr" />
                 </td>
              </tr>
         <tr>
@@ -338,69 +343,6 @@
 
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'calendar.inc' %]
-    <script>
-        $(document).ready(function() {
-            var filter_reservedate_begin = $("#filter_reservedate_begin").flatpickr({
-                onClose: function( selectedDates, dateText, instance) {
-                    validate_date( selectedDates, instance );
-                    filter_reservedate_end.set('minDate', selectedDates[0]);
-                }
-            });
-            var filter_reservedate_end = $("#filter_reservedate_end").flatpickr({
-                onClose: function( selectedDates, dateText, instance) {
-                    validate_date( selectedDates, instance );
-                },
-            });
-
-            var filter_notificationdate_begin = $("#filter_notificationdate_begin").flatpickr({
-                onClose: function( selectedDates, dateText, instance) {
-                    validate_date( selectedDates, instance );
-                    filter_notificationdate_end.set('minDate', selectedDates[0]);
-                }
-            });
-            var filter_notificationdate_end = $("#filter_notificationdate_end").flatpickr({
-                onClose: function( selectedDates, dateText, instance) {
-                    validate_date( selectedDates, instance );
-                },
-            });
-
-            var filter_reminderdate_begin = $("#filter_reminderdate_begin").flatpickr({
-                onClose: function( selectedDates, dateText, instance) {
-                    validate_date( selectedDates, instance );
-                    filter_reminderdate_end.set('minDate', selectedDates[0]);
-                }
-            });
-            var filter_reminderdate_end = $("#filter_reminderdate_end").flatpickr({
-                onClose: function( selectedDates, dateText, instance) {
-                    validate_date( selectedDates, instance );
-                },
-            });
-
-            var filter_waitingdate_begin = $("#filter_waitingdate_begin").flatpickr({
-                onClose: function( selectedDates, dateText, instance) {
-                    validate_date( selectedDates, instance );
-                    filter_waitingdate_end.set('minDate', selectedDates[0]);
-                }
-            });
-            var filter_waitingdate_end = $("#filter_waitingdate_end").flatpickr({
-                onClose: function( selectedDates, dateText, instance) {
-                    validate_date( selectedDates, instance );
-                },
-            });
-
-            var filter_cancellationdate_begin = $("#filter_cancellationdate_begin").flatpickr({
-                onClose: function( selectedDates, dateText, instance) {
-                    validate_date( selectedDates, instance );
-                    filter_cancellationdate_end.set('minDate', selectedDates[0]);
-                }
-            });
-            var filter_cancellationdate_end = $("#filter_cancellationdate_end").flatpickr({
-                onClose: function( selectedDates, dateText, instance) {
-                    validate_date( selectedDates, instance );
-                },
-            });
-        });
-    </script>
 [% END %]
 
 [% INCLUDE 'intranet-bottom.inc' %]

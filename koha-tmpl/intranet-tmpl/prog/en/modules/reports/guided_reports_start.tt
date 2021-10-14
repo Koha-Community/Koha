@@ -619,9 +619,9 @@
                                                 [% IF ( criteri.daterange ) %]
                                                     <td>
                                                         from
-                                                        <input type="text" size="10" id="from_[% criteri.name.remove('\.') | html %]_value" name="from_[% criteri.name | html %]_value" value="" />
+                                                        <input type="text" size="10" id="from_[% criteri.name.remove('\.') | html %]_value" name="from_[% criteri.name | html %]_value" value="" data-start_for="to_[% criteri.name.remove('\.') | html %]_value" class="flatpickr" />
                                                         to
-                                                        <input type="text" size="10" id="to_[% criteri.name.remove('\.') | html %]_value" name="to_[% criteri.name | html %]_value" value="" />
+                                                        <input type="text" size="10" id="to_[% criteri.name.remove('\.') | html %]_value" name="to_[% criteri.name | html %]_value" value="" class="flatpickr" />
                                                         <span class="hint">[% INCLUDE 'date-format.inc' %]</span>
                                                     </td>
                                                 </tr>
@@ -2189,23 +2189,6 @@
                 readOnly: true
             });
         }
-        [% IF ( build4 ) %]
-            [% FOREACH criteri IN criteria %]
-                [% IF ( criteri.daterange ) %]
-                    var from_[% criteri.name.remove('\.') | html %]_value = $("#from_[% criteri.name.remove('\.') | html %]_value").flatpickr({
-                        onClose: function( selectedDates, dateText, instance) {
-                            validate_date( selectedDates, instance );
-                            to_[% criteri.name.remove('\.') | html %]_value.set('minDate', selectedDates[0]);
-                        }
-                    });
-                    var to_[% criteri.name.remove('\.') | html %]_value = $("#to_[% criteri.name.remove('\.') | html %]_value").flatpickr({
-                        onClose: function( selectedDates, dateText, instance) {
-                            validate_date( selectedDates, instance );
-                        },
-                    });
-                [% END %]
-            [% END %]
-        [% END %]
     </script>
 [% END %]
 

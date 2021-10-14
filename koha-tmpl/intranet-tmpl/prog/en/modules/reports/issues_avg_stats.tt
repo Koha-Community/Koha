@@ -105,9 +105,10 @@
                 <td><input type="radio" checked="checked" name="Column" value="timestamp" /></td>
                 <td>
                     <label for="checkoutfrom">From</label>
-                    <input type="text" size="10" id="checkoutfrom" name="Filter" />
+                    <input type="text" size="10" id="checkoutfrom" name="Filter" data-start_for="checkouto" class="flatpickr" />
+
                     <label for="checkouto">To</label>
-                    <input size="10" id="checkouto" name="Filter" value="" type="text" />
+                    <input size="10" id="checkouto" name="Filter" value="" type="text" class="flatpickr" />
                     <span class="hint">[% INCLUDE 'date-format.inc' %]</span>
 				</td>
 			</tr>
@@ -119,7 +120,7 @@
 					<option value ="2">Month</option>
 					<option value ="3">Year</option>
 					</select>
-					
+
 				</td>
 				<td><!--Preparing Month and Day Selection--><input type="hidden" name="Filter" value="" /><input type="hidden" name="Filter" value="" /></td>
 			</tr>
@@ -129,9 +130,10 @@
 				<td><input type="radio" name="Column" value="returndate" /></td>
                 <td>
                     <label for="checkinfrom">From</label>
-                    <input type="text" size="10" id="checkinfrom" name="Filter" />
+                    <input type="text" size="10" id="checkinfrom" name="Filter" data-start_for="checkinto" class="flatpickr" />
+
                     <label for="checkinto">To</label>
-                    <input type="text" size="10" id="checkinto" name="Filter" value="" />
+                    <input type="text" size="10" id="checkinto" name="Filter" value="" class="flatpickr" />
                     <span class="hint">[% INCLUDE 'date-format.inc' %]</span>
 				</td>
 			</tr>
@@ -266,33 +268,6 @@
 
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'calendar.inc' %]
-    <script>
-        $(document).ready(function() {
-            var checkoutfrom = $("#checkoutfrom").flatpickr({
-                onClose: function( selectedDates, dateText, instance) {
-                    validate_date( selectedDates, instance );
-                    checkouto.set('minDate', selectedDates[0]);
-                }
-            });
-            var checkouto = $("#checkouto").flatpickr({
-                onClose: function( selectedDates, dateText, instance) {
-                    validate_date( selectedDates, instance );
-                },
-            });
-
-            var checkinfrom = $("#checkinfrom").flatpickr({
-                onClose: function( selectedDates, dateText, instance) {
-                    validate_date( selectedDates, instance );
-                    checkinto.set('minDate', selectedDates[0]);
-                }
-            });
-            var checkinto = $("#checkinto").flatpickr({
-                onClose: function( selectedDates, dateText, instance) {
-                    validate_date( selectedDates, instance );
-                },
-            });
-        });
-    </script>
 [% END %]
 
 [% INCLUDE 'intranet-bottom.inc' %]

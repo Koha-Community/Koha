@@ -181,9 +181,9 @@
                 <td colspan="2"></td>
                 <td>
                     <label for="from">From</label>
-                    <input type="text" size="10" id="from" name="Filter" class="" />
+                    <input type="text" size="10" id="from" name="Filter" class="flatpickr"data-start_for="to" />
                     <label for="to">To</label>
-                    <input size="10" id="to" name="Filter" value="" type="text" class="" />
+                    <input size="10" id="to" name="Filter" value="" type="text" class="flatpickr" />
                     <span class="hint">[% INCLUDE 'date-format.inc' %]</span>
                 </td>
             </tr>
@@ -330,21 +330,6 @@
 
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'calendar.inc' %]
-    <script>
-        $(document).ready(function(){
-            var startPicker = $("#from").flatpickr({
-                onClose: function( selectedDates, dateText, instance) {
-                    validate_date( selectedDates, instance );
-                    endPicker.set('minDate', selectedDates[0]);
-                }
-            });
-            var endPicker = $("#to").flatpickr({
-                onClose: function( selectedDates, dateText, instance) {
-                    validate_date( selectedDates, instance );
-                },
-            });
-        });
-    </script>
 [% END %]
 
 [% INCLUDE 'intranet-bottom.inc' %]
