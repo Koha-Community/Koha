@@ -230,11 +230,11 @@ tr > td input,td input[type="submit"] { font-size: 85%; padding: 1px; }
 	    </li>
 	    <li>
 			<label for="from">Date: from </label>
-            <input type="text" size="10" id="from" name="from" value="[% filter_date_approved_from | html %]" class="flatpickrfrom" />
+            <input type="text" size="10" id="from" name="from" value="[% filter_date_approved_from | html %]" class="flatpickr" data-start_for="to" />
 			<div class="hint">[% INCLUDE 'date-format.inc' %]</div>
 
 			<label for="to">...to </label>
-            <input type="text" size="10" id="to" name="to" value="[% filter_date_approved_to | html %]" class="flatpickrto" />
+            <input type="text" size="10" id="to" name="to" value="[% filter_date_approved_to | html %]" class="flatpickr" />
 			<div class="hint">[% INCLUDE 'date-format.inc' %]</div>
 	    </li>
   </ol>

@@ -273,11 +273,11 @@
                                 [% END %]
                             </li>
 							<li>
-                                <label for="from"> Display from: </label> <input type="text" size="10" id="from" name="from" value="[% datefrom | html %]" class="flatpickrfrom" />
+                                <label for="from"> Display from: </label> <input type="text" size="10" id="from" name="from" value="[% datefrom | html %]" class="flatpickr" data-start_for="to" />
 				<div class="hint">[% INCLUDE 'date-format.inc' %]</div>
 							</li>
 							<li>
-                                <label for="to">Display to: </label> <input size="10" id="to" name="to" type="text" value="[% dateto | html %]" class="flatpickrto" />
+                                <label for="to">Display to: </label> <input size="10" id="to" name="to" type="text" value="[% dateto | html %]" class="flatpickr" />
 				<div class="hint">[% INCLUDE 'date-format.inc' %]</div>
 							</li>
 						</ol>

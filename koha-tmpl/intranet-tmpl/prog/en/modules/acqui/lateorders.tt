@@ -232,11 +232,11 @@
 <ol>
     <li><label for="delay">Order date:</label><input size="3" maxlength="3" id="delay" type="text" name="delay" value="[% delay | html %]" /> days ago</li>
     <li><label for="from">Estimated delivery date from: </label>
-        <input type="text" size="10" id="from" name="estimateddeliverydatefrom" value="[% estimateddeliverydatefrom | html %]" class="flatpickrfrom" />
+        <input type="text" size="10" id="from" name="estimateddeliverydatefrom" value="[% estimateddeliverydatefrom | html %]" class="flatpickr" data-start_for="to"/>
         <div class="hint">[% INCLUDE 'date-format.inc' %]</div>
     </li>
     <li><label for="to">To: </label>
-        <input type="text" size="10" id="to" name="estimateddeliverydateto" value="[% estimateddeliverydateto | html %]" class="flatpickrto" />
+        <input type="text" size="10" id="to" name="estimateddeliverydateto" value="[% estimateddeliverydateto | html %]" class="flatpickr" />
         <div class="hint">[% INCLUDE 'date-format.inc' %]</div>
     </li>
 

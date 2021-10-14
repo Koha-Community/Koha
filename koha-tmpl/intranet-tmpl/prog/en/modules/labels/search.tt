@@ -90,12 +90,12 @@ to add to Batch [% batch_id | html %]
 <ol>
     <li>
         <label for="from">Added on or after date: </label>
-        <input type="text" size="10" id="from" name="datefrom" class="flatpickrfrom" value="" />
+        <input type="text" size="10" id="from" name="datefrom" class="flatpickr" data-start_for="to" value="" />
         <div class="hint">[% INCLUDE 'date-format.inc' %]</div>
     </li>
     <li>
         <label for="to">Added on or before date: </label>
-        <input type="text" size="10" id="to" name="dateto" class="flatpickrto" value="" />
+        <input type="text" size="10" id="to" name="dateto" class="flatpickr" value="" />
         <div class="hint">[% INCLUDE 'date-format.inc' %]</div>
     </li>
 </ol>

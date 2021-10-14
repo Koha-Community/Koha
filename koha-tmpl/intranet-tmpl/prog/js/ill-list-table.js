@@ -335,32 +335,6 @@ $(document).ready(function() {
         $('#addcomment').toggleClass('content_hidden');
     });
 
-    var illfilter_dateplaced_start = $("#illfilter_dateplaced_start").flatpickr({
-        onClose: function( selectedDates, dateText, instance) {
-            validate_date( selectedDates, instance );
-            illfilter_dateplaced_end.set('minDate', selectedDates[0]);
-        }
-    });
-
-    var illfilter_dateplaced_end = $("#illfilter_dateplaced_end").flatpickr({
-        onClose: function( selectedDates, dateText, instance) {
-            validate_date( selectedDates, instance );
-        },
-    });
-
-    var illfilter_datemodified_start = $("#illfilter_datemodified_start").flatpickr({
-        onClose: function( selectedDates, dateText, instance) {
-            validate_date( selectedDates, instance );
-            illfilter_datemodified_end.set('minDate', selectedDates[0]);
-        }
-    });
-
-    var illfilter_datemodified_end = $("#illfilter_datemodified_end").flatpickr({
-        onClose: function( selectedDates, dateText, instance) {
-            validate_date( selectedDates, instance );
-        },
-    });
-
     // Filter partner list
     // Record the list of all options
     var ill_partner_options = $('#partners > option');

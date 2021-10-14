@@ -120,9 +120,9 @@
 				<td><input type="radio" name="Line" value="aqbasket.closedate" /></td>
 				<td><input type="radio" checked="checked" name="Column" value="aqbasket.closedate" /> </td>
                 <td>
-                    From <input type="text" size="10" id="placedonfrom" name="Filter" value="" />
+                    From <input type="text" size="10" id="placedonfrom" name="Filter" value="" class="flatpickr" data-start_for="placedonto" />
                     <span class="hint">[% INCLUDE 'date-format.inc' %]</span>
-                    To <input size="10" id="placedonto" name="Filter" type="text" value="" />
+                    To <input size="10" id="placedonto" name="Filter" type="text" value="" class="flatpickr" />
                     <span class="hint">[% INCLUDE 'date-format.inc' %]</span>
                 </td>
 			</tr>
@@ -143,9 +143,9 @@
 				<td><input type="radio" name="Line" value="aqorders.datereceived" /></td>
 				<td><input type="radio" name="Column" value="aqorders.datereceived" /></td>
                 <td>
-                    From <input type="text" size="10" id="receivedonfrom" name="Filter" value="" />
+                    From <input type="text" size="10" id="receivedonfrom" name="Filter" value="" class="flatpickr" data-start_for="receivedonto" />
                     <span class="hint">[% INCLUDE 'date-format.inc' %]</span>
-                    To <input type="text" size="10" id="receivedonto" name="Filter" value="" />
+                    To <input type="text" size="10" id="receivedonto" name="Filter" value="" class="flatpickr" />
                     <span class="hint">[% INCLUDE 'date-format.inc' %]</span>
                 </td>
 			</tr>
@@ -339,33 +339,6 @@
 
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'calendar.inc' %]
-    <script>
-        $(document).ready(function() {
-            var placedonfrom = $("#placedonfrom").flatpickr({
-                onClose: function( selectedDates, dateText, instance) {
-                    validate_date( selectedDates, instance );
-                    placedonto.set('minDate', selectedDates[0]);
-                }
-            });
-            var placedonto = $("#placedonto").flatpickr({
-                onClose: function( selectedDates, dateText, instance) {
-                    validate_date( selectedDates, instance );
-                },
-            });
-
-            var receivedonfrom = $("#receivedonfrom").flatpickr({
-                onClose: function( selectedDates, dateText, instance) {
-                    validate_date( selectedDates, instance );
-                    receivedonto.set('minDate', selectedDates[0]);
-                }
-            });
-            var receivedonto = $("#receivedonto").flatpickr({
-                onClose: function( selectedDates, dateText, instance) {
-                    validate_date( selectedDates, instance );
-                },
-            });
-        });
-    </script>
 [% END %]
 
 [% INCLUDE 'intranet-bottom.inc' %]

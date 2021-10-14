@@ -1055,7 +1055,7 @@ legend:hover {
                                                 [% END %]
                                                     Registration date:
                                                 </label>
-                                                <input type="text" id="from" name="dateenrolled"  maxlength="10" size="10" value="[% dateenrolled | html %]" class="flatpickrfrom" />
+                                                <input type="text" id="from" name="dateenrolled"  maxlength="10" size="10" value="[% dateenrolled | html %]" class="flatpickr" data-start_for="to" />
                                                 [% IF ( mandatorydateenrolled ) %]
                                                     <span class="required">Required</span>
                                                 [% END %]
@@ -1079,9 +1079,9 @@ legend:hover {
                                                     Expiry date (leave blank for auto calc):
                                                 </label>
                                                 [% UNLESS ( opadd ) %]
-                                                    <input type="text" id="to" name="dateexpiry" maxlength="10"  size="10" value="[% dateexpiry | html UNLESS opduplicate %]" class="flatpickrto" />
+                                                    <input type="text" id="to" name="dateexpiry" maxlength="10"  size="10" value="[% dateexpiry | html UNLESS opduplicate %]" class="flatpickr" />
                                                 [% ELSE %]
-                                                    <input type="text" id="to" name="dateexpiry" maxlength="10"  size="10" value="[% dateexpiry | html %]" class="flatpickrto" />
+                                                    <input type="text" id="to" name="dateexpiry" maxlength="10"  size="10" value="[% dateexpiry | html %]" class="flatpickr" />
                                                 [% END %]
                                                 [% IF ( mandatorydateexpiry ) %]
                                                     <span class="required">Required</span>

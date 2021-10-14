@@ -297,12 +297,12 @@
               <ol>
                 <li>
                   <label for="shipmentdatefrom">From:</label>
-                  <input type="text" id="shipmentdatefrom" name="shipmentdatefrom" size="10" value="[% shipmentdatefrom | $KohaDates %]" />
+                  <input type="text" id="shipmentdatefrom" name="shipmentdatefrom" size="10" value="[% shipmentdatefrom | $KohaDates %]" class="flatpickr" data-start_for="shipmentdateto" />
                   <div class="hint">[% INCLUDE 'date-format.inc' %]</div>
                 </li>
                 <li>
                   <label for="shipmentdateto">To:</label>
-                  <input type="text" id="shipmentdateto" name="shipmentdateto" size="10" value="[% shipmentdateto | $KohaDates %]" />
+                  <input type="text" id="shipmentdateto" name="shipmentdateto" size="10" value="[% shipmentdateto | $KohaDates %]" class="flatpickr" />
                   <div class="hint">[% INCLUDE 'date-format.inc' %]</div>
                 </li>
               </ol>
@@ -314,12 +314,12 @@
               <ol>
                 <li>
                   <label for="billingdatefrom">From:</label>
-                  <input type="text" id="billingdatefrom" name="billingdatefrom" size="10" value="[% billingdatefrom | $KohaDates %]" />
+                  <input type="text" id="billingdatefrom" name="billingdatefrom" size="10" value="[% billingdatefrom | $KohaDates %]" class="flatpickr" data-start_for="billingdateto" />
                   <div class="hint">[% INCLUDE 'date-format.inc' %]</div>
                 </li>
                 <li>
                   <label for="billingdateto">To:</label>
-                  <input type="text" id="billingdateto" name="billingdateto" size="10" value="[% billingdateto | $KohaDates %]" />
+                  <input type="text" id="billingdateto" name="billingdateto" size="10" value="[% billingdateto | $KohaDates %]" class="flatpickr" />
                   <div class="hint">[% INCLUDE 'date-format.inc' %]</div>
                 </li>
               </ol>
@@ -458,28 +458,6 @@
                     $('#merge_table tbody tr:first').click();
                     $('#merge_invoices').show();
                 }
-            });
-            var shipmentdatefrom = $("#shipmentdatefrom").flatpickr({
-                onClose: function( selectedDates, dateText, instance) {
-                    validate_date( selectedDates, instance );
-                    shipmentdateto.set('minDate', selectedDates[0]);
-                }
-            });
-            var shipmentdateto = $("#shipmentdateto").flatpickr({
-                onClose: function( selectedDates, dateText, instance) {
-                    validate_date( selectedDates, instance );
-                },
-            });
-            var billingdatefrom = $("#billingdatefrom").flatpickr({
-                onClose: function( selectedDates, dateText, instance) {
-                    validate_date( selectedDates, instance );
-                    billingdateto.set('minDate', selectedDates[0]);
-                }
-            });
-            var billingdateto = $("#billingdateto").flatpickr({
-                onClose: function( selectedDates, dateText, instance) {
-                    validate_date( selectedDates, instance );
-                },
             });
         });
     </script>
