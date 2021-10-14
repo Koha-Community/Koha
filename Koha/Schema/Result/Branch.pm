@@ -761,6 +761,21 @@ __PACKAGE__->has_many(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
+=head2 recalls
+
+Type: has_many
+
+Related object: L<Koha::Schema::Result::Recall>
+
+=cut
+
+__PACKAGE__->has_many(
+  "recalls",
+  "Koha::Schema::Result::Recall",
+  { "foreign.branchcode" => "self.branchcode" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
 =head2 repeatable_holidays
 
 Type: has_many
@@ -867,8 +882,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2021-11-19 14:20:11
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:v83MNP0UpFzlnax8rSQWSA
+# Created by DBIx::Class::Schema::Loader v0.07046 @ 2022-02-15 02:16:34
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:PR2GOpldAnNtyB2DRLsE9g
 
 __PACKAGE__->add_columns(
     '+pickup_location' => { is_boolean => 1 },

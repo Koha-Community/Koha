@@ -1559,6 +1559,21 @@ __PACKAGE__->has_many(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
+=head2 recalls
+
+Type: has_many
+
+Related object: L<Koha::Schema::Result::Recall>
+
+=cut
+
+__PACKAGE__->has_many(
+  "recalls",
+  "Koha::Schema::Result::Recall",
+  { "foreign.borrowernumber" => "self.borrowernumber" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
 =head2 reserves
 
 Type: has_many

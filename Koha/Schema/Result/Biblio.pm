@@ -375,6 +375,21 @@ __PACKAGE__->has_many(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
+=head2 recalls
+
+Type: has_many
+
+Related object: L<Koha::Schema::Result::Recall>
+
+=cut
+
+__PACKAGE__->has_many(
+  "recalls",
+  "Koha::Schema::Result::Recall",
+  { "foreign.biblionumber" => "self.biblionumber" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
 =head2 reserves
 
 Type: has_many
@@ -526,8 +541,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2021-09-20 12:00:15
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:troBZEbpX+2RhgH2jptVZQ
+# Created by DBIx::Class::Schema::Loader v0.07046 @ 2021-10-14 15:07:03
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:6YO2t5VoWcG/tM+8uOP/wg
 
 __PACKAGE__->has_many(
   "biblioitem",
