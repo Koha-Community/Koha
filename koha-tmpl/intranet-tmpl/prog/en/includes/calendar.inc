@@ -34,6 +34,7 @@
             $(instance.input)
                 /* Add a wrapper element so that we can prevent the clear button from wrapping */
                 .wrap("<span class='flatpickr_wrapper'></span>")
+                .attr("autocomplete", "off")
                 .after( $("<a/>")
                     .attr("href","#")
                     .addClass("clear_date")
