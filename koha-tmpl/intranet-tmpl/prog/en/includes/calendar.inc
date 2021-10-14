@@ -31,12 +31,6 @@
         },
         onReady: function( selectedDates, dateStr, instance ){
             /* When flatpickr instance is created, automatically append a "clear date" link */
-            if( $(instance.input).hasClass("futuredate") ){
-                instance.set("minDate", new Date().fp_incr(1));
-            }
-            if( $(instance.input).hasClass("pastdate") ){
-                instance.set("maxDate", new Date().fp_incr(-1));
-            }
             $(instance.input)
                 /* Add a wrapper element so that we can prevent the clear button from wrapping */
                 .wrap("<span class='flatpickr_wrapper'></span>")
@@ -67,7 +61,18 @@
         },
     });
     $(document).ready(function(){
-        $(".flatpickr").flatpickr();
+        $(".flatpickr").each(function(){
+            let options = {};
+
+            if( $(this).hasClass("futuredate") ) {
+                options['minDate'] = new Date().fp_incr(1);
+                options['allowInvalidPreload'] = true;
+            }
+            if( $(this).hasClass("pastdate") ) {
+                options['maxDate'] = new Date().fp_incr(-1);
+            }
+            $(this).flatpickr(options);
+        });
     });
 </script>
 [% END %]
