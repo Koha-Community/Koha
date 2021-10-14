@@ -2293,8 +2293,15 @@ sub AddReturn {
                 $validTransfer = 1 if $transfer->reason eq 'Reserve';
             }
             else {
-                $messages->{'WasTransfered'}   = $transfer->tobranch;
                 $messages->{'TransferTrigger'} = $transfer->reason;
+                if ( $transfer->frombranch eq $branch ) {
+                    $transfer->transit;
+                    $messages->{'WasTransfered'}   = $transfer->tobranch;
+                }
+                else {
+                    $messages->{'WrongTransfer'}     = $transfer->tobranch;
+                    $messages->{'WrongTransferItem'} = $item->itemnumber;
+                }
             }
         }
     }
