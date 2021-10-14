@@ -596,8 +596,7 @@ sub store {
 
         if (
             C4::Context->preference('DefaultHoldExpirationdate')
-            and ( not defined $self->expirationdate
-                or $self->expirationdate eq '' )
+                && !$self->expirationdate
           )
         {
             $self->_set_default_expirationdate;
@@ -611,9 +610,7 @@ sub store {
         if ( exists $updated_columns{reservedate} ) {
             if (
                 C4::Context->preference('DefaultHoldExpirationdate')
-                and ( not exists $updated_columns{expirationdate}
-                    or exists $updated_columns{expirationdate}
-                    and $updated_columns{expirationdate} eq '' )
+                && ! exists $updated_columns{expirationdate}
               )
             {
                 $self->_set_default_expirationdate;
