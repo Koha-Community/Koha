@@ -25,7 +25,7 @@ use File::Temp qw( tempdir tempfile );
 use FindBin qw($Bin);
 use Module::Load::Conditional qw(can_load);
 use Test::MockModule;
-use Test::More tests => 60;
+use Test::More tests => 61;
 use Test::Warn;
 
 use C4::Context;
@@ -43,6 +43,7 @@ BEGIN {
     use_ok('Koha::Plugins::Handler');
     use_ok('Koha::Plugins::Base');
     use_ok('Koha::Plugin::Test');
+    use_ok('Koha::Plugin::TestItemBarcodeTransform');
 }
 
 my $schema = Koha::Database->new->schema;
@@ -100,9 +101,11 @@ subtest 'more call() tests' => sub {
         $plugin->enable();
     }
 
+    # Barcode is multiplied by 2 by Koha::Plugin::Test, and again by 4 by Koha::Plugin::TestItemBarcodeTransform
+    # showing that call has passed the same ref to multiple plugins to operate on
     my $bc = 1;
     Koha::Plugins->call('item_barcode_transform', \$bc);
-    is( $bc, 4, "Got expected response" );
+    is( $bc, 8, "Got expected response" );
 
     my $cn = 'abcd';
     Koha::Plugins->call('item_barcode_transform', \$cn);

@@ -96,7 +96,9 @@ sub intranet_js {
 sub item_barcode_transform {
     my ( $self, $barcode ) = @_;
     my $param = $$barcode;
-    $$barcode = 4 if "$$barcode" eq 1;
+    if ( Scalar::Util::looks_like_number( $$barcode ) ) {
+        $$barcode = $$barcode * 2
+    }
     Koha::Exceptions::Exception->throw("item_barcode_transform called with parameter: $param");
 }
 
