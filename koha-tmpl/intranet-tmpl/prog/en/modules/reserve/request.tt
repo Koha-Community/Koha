@@ -492,15 +492,13 @@
                             [% IF ( reserve_in_future ) %]
                                 <li>
                                     <label for="from">Hold starts on date:</label>
-                                    <input id="reserve_date" name="reserve_date" id="from" size="10" type="text" >
-                                    <input type="hidden" class="datepickerfrom_hidden" />
+                                    <input id="reserve_date" name="reserve_date" id="from" size="10" type="text" data-start_for="expiration_date" class="flatpickr futuredate" />
                                 </li>
                             [% END %]
 
                             <li>
                                 <label for="to">Hold expires on date:</label>
-                                <input id="expiration_date" name="expiration_date" id="to" size="10" type="text" />
-                                <input type="hidden" class="datepickerto_hidden" />
+                                <input id="expiration_date" name="expiration_date" id="to" size="10" type="text" class="flatpickr" />
                             </li>
 
                             [% UNLESS ( multi_hold ) %]
@@ -1154,29 +1152,6 @@
             [% END %]
 
 
-            var startPicker = $("#reserve_date").flatpickr({
-                minDate: new Date().fp_incr(1), /* Require that "Hold starts on date" be in the future */
-                onChange: function(selectedDates, dateStr, instance) {
-                    altFormat = instance.formatDate(selectedDates[0], "Y-m-d");
-                    $(".datepickerfrom_hidden").val( altFormat ); /* Populate hidden field with ISO-formatted date */
-                },
-                onClose: function( selectedDates, dateText, instance) {
-                    validate_date( selectedDates, instance );
-                    endPicker.set('minDate', selectedDates[0]);
-                }
-            });
-
-            var endPicker = $("#expiration_date").flatpickr({
-                minDate: new Date().fp_incr(1), // Require that "Hold expires on date" be in the future
-                onChange: function(selectedDates, dateStr, instance) {
-                    altFormat = instance.formatDate(selectedDates[0], "Y-m-d");
-                    $(".datepickerto_hidden").val( altFormat ); /* Populate hidden field with ISO-formatted date */
-                },
-                onClose: function( selectedDates, dateText, instance) {
-                    validate_date( selectedDates, instance );
-                },
-            });
-
             var my_table = $("#requestspecific").dataTable($.extend(true, {}, dataTablesDefaults, {
                 'bPaginate': false,
                 "sDom": '<"top pager"ilf>t',
@@ -1203,10 +1178,6 @@
                     data.patron_id = $('input[name="borrowernumber"]').val();
                 if($('textarea[name="notes"]').length)
                     data.notes = $('textarea[name="notes"]').val()||null;
-                if($('.datepickerto_hidden').length)
-                    data.expiration_date = $('.datepickerto_hidden').val()||null;
-                if($('.datepickerfrom_hidden').length)
-                    data.hold_date = $('.datepickerfrom_hidden').val()||null;
                 if($('input[name="itemtype"]').length) {
                     data.item_type = $('input[name="itemtype"]').val()||null;
                 }
