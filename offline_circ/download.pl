@@ -36,7 +36,7 @@ my $req_data = $query->param('data') || '';
 my $patrons_query = q{SELECT
     borrowers.borrowernumber, cardnumber, surname, firstname, title,
     othernames, initials, streetnumber, streettype, address, address2, city,
-    state, zipcode, country, email, phone, mobile, fax, dateofbirth, branchcode,
+    state, zipcode, country, email, phone, mobile, fax, dateofbirth, borrowers.branchcode,
     categorycode, dateenrolled, dateexpiry, COALESCE(gonenoaddress, 0) AS gonenoaddress,
     COALESCE(lost, 0) AS lost, debarred,
     debarredcomment, SUM(accountlines.amountoutstanding) AS fine
