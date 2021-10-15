@@ -35,3 +35,7 @@ values
 (9, 'sms',   0, 'circulation', 'AUTO_RENEWALS'),
 (9, 'email', 1, 'circulation', 'AUTO_RENEWALS_DGST'),
 (9, 'sms',   1, 'circulation', 'AUTO_RENEWALS_DGST');
+(10, 'email', 0, 'circulation', 'HOLD_REMINDER'),
+(10, 'sms',   0, 'circulation', 'HOLD_REMINDER'),
+(10, 'phone', 0, 'circulation', 'HOLD_REMINDER'),
+(10, 'itiva', 0, 'circulation', 'HOLD_REMINDER'),
