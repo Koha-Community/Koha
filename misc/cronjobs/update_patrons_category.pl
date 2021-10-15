@@ -138,12 +138,6 @@ e.g.
 --where 'email IS NULL'
 will update all patrons with no value for email
 
---where 'categorycode LIKE "%CHILD"'
-will update all patrons with a category ending in CHILD.
-
---where 'categorycode LIKE RESIDENT%'
-will update all patrons whose category does not begin with RESIDENT.
-
 =back
 
 =head1 DESCRIPTION
