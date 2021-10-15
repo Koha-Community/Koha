@@ -43,12 +43,39 @@
                 <h1 id="logo"><a href="#">Koha</a></h1>
                 [% IF ( finish ) %]
                     <h2>Web installer &rsaquo; Installation complete</h2>
+
+                    <div id="steps">
+                        <ol>
+                            <li class="complete"><i class="fa fa-check-square-o" aria-hidden="true"></i> Choose your language</li>
+                            <li class="complete"><i class="fa fa-check-square-o" aria-hidden="true"></i> Check Perl dependencies</li>
+                            <li class="complete"><i class="fa fa-check-square-o" aria-hidden="true"></i> Database settings</li>
+                            <li class="complete"><i class="fa fa-check-square-o" aria-hidden="true"></i> Set up database</li>
+                            <li class="complete"><i class="fa fa-check-square-o" aria-hidden="true"></i> Install basic configuration settings</li>
+                            <li class="open"><i class="fa fa-square-o" aria-hidden="true"></i> Onboarding</li>
+                        </ol>
+                    </div>
+
                     <h3>Congratulations, installation complete</h3>
                     <p><a class="btn btn-primary" href="/cgi-bin/koha/installer/onboarding.pl">Begin the onboarding process</a></p>
                 [% END %]
 
                 [% IF ( choosemarc ) %]
                     <h2>Select your MARC flavor</h2>
+
+                    <div id="steps">
+                        <ol>
+                            <li class="complete"><i class="fa fa-check-square-o" aria-hidden="true"></i> Choose your language</li>
+                            <li class="complete"><i class="fa fa-check-square-o" aria-hidden="true"></i> Check Perl dependencies</li>
+                            <li class="complete"><i class="fa fa-check-square-o" aria-hidden="true"></i> Database settings</li>
+                            <li class="complete"><i class="fa fa-check-square-o" aria-hidden="true"></i> Set up database</li>
+                            <li class="current open"><i class="fa fa-square-o" aria-hidden="true"></i> Install basic configuration settings</li>
+                                <ol>
+                                    <li class="current open"><i class="fa fa-square-o" aria-hidden="true"></i> Select your MARC flavor</li>
+                                    <li class="open"><i class="fa fa-square-o" aria-hidden="true"></i> Selecting default settings</li>
+                                </ol>
+                            <li class="open"><i class="fa fa-square-o" aria-hidden="true"></i> Onboarding</li>
+                        </ol>
+                    </div>
 
                     <form name="frameworkselection" method="post" action="install.pl">
                         <input type="hidden" name="step" value="3" />
@@ -74,6 +101,20 @@
                 [% IF ( selectframeworks ) %]
                     <h2>Web installer &rsaquo; Selecting default settings</h2>
 
+                    <div id="steps">
+                        <ol>
+                            <li class="complete"><i class="fa fa-check-square-o" aria-hidden="true"></i> Choose your language</li>
+                            <li class="complete"><i class="fa fa-check-square-o" aria-hidden="true"></i> Check Perl dependencies</li>
+                            <li class="complete"><i class="fa fa-check-square-o" aria-hidden="true"></i> Database settings</li>
+                            <li class="complete"><i class="fa fa-check-square-o" aria-hidden="true"></i> Set up database</li>
+                            <li class="current open"><i class="fa fa-square-o" aria-hidden="true"></i> Install basic configuration settings</li>
+                                <ol>
+                                    <li class="complete"><i class="fa fa-check-square-o" aria-hidden="true"></i> Select your MARC flavor</li>
+                                    <li class="current open"><i class="fa fa-square-o" aria-hidden="true"></i> Selecting default settings</li>
+                                </ol>
+                            <li class="open"><i class="fa fa-square-o" aria-hidden="true"></i> Onboarding</li>
+                        </ol>
+                    </div>
 
                     <form name="frameworkselection" method="post" action="install.pl">
                         <input type="hidden" name="step" value="3" />
@@ -162,6 +203,22 @@
 
                 [% IF ( addframeworks ) %]
                     <h2>Web installer &rsaquo; Default data loaded</h2>
+
+                    <div id="steps">
+                        <ol>
+                            <li class="complete"><i class="fa fa-check-square-o" aria-hidden="true"></i> Choose your language</li>
+                            <li class="complete"><i class="fa fa-check-square-o" aria-hidden="true"></i> Check Perl dependencies</li>
+                            <li class="complete"><i class="fa fa-check-square-o" aria-hidden="true"></i> Database settings</li>
+                            <li class="complete"><i class="fa fa-check-square-o" aria-hidden="true"></i> Set up database</li>
+                            <li class="complete"><i class="fa fa-check-square-o" aria-hidden="true"></i> Install basic configuration settings</li>
+                                <ol>
+                                    <li class="complete"><i class="fa fa-check-square-o" aria-hidden="true"></i> Select your MARC flavor</li>
+                                    <li class="complete"><i class="fa fa-check-square-o" aria-hidden="true"></i> Selecting default settings</li>
+                                </ol>
+                            <li class="open"><i class="fa fa-square-o" aria-hidden="true"></i> Onboarding</li>
+                        </ol>
+                    </div>
+
                     [% FOREACH lis IN list %]
                         [% IF lis.level == 'mandatory' %]
                             <h3>Mandatory data added</h3>
@@ -213,6 +270,18 @@
                     [% ELSE %]
                         <h2>Web installer &rsaquo; Success</h2>
                         <div class="alert alert-success"><p>Database tables created</p></div>
+
+                        <div id="steps">
+                            <ol>
+                                <li class="complete"><i class="fa fa-check-square-o" aria-hidden="true"></i> Choose your language</li>
+                                <li class="complete"><i class="fa fa-check-square-o" aria-hidden="true"></i> Check Perl dependencies</li>
+                                <li class="complete"><i class="fa fa-check-square-o" aria-hidden="true"></i> Database settings</li>
+                                <li class="complete"><i class="fa fa-check-square-o" aria-hidden="true"></i> Set up database</li>
+                                <li class="open"><i class="fa fa-square-o" aria-hidden="true"></i> Install basic configuration settings</li>
+                                <li class="open"><i class="fa fa-square-o" aria-hidden="true"></i> Onboarding</li>
+                            </ol>
+                        </div>
+
                         <form action="install.pl" method="post">
                             <input type="hidden" name="step" value="3" />
                             <p><input value="Continue to the next step" class="btn btn-primary" type="submit" /></p>
@@ -222,6 +291,18 @@
 
                 [% IF ( proposeimport ) %]
                     <h2>Web installer &rsaquo; Set up database</h2>
+
+                    <div id="steps">
+                        <ol>
+                            <li class="complete"><i class="fa fa-check-square-o" aria-hidden="true"></i> Choose your language</li>
+                            <li class="complete"><i class="fa fa-check-square-o" aria-hidden="true"></i> Check Perl dependencies</li>
+                            <li class="complete"><i class="fa fa-check-square-o" aria-hidden="true"></i> Database settings</li>
+                            <li class="current open"><i class="fa fa-square-o" aria-hidden="true"></i> Set up database</li>
+                            <li class="open"><i class="fa fa-square-o" aria-hidden="true"></i> Install basic configuration settings</li>
+                            <li class="open"><i class="fa fa-square-o" aria-hidden="true"></i> Onboarding</li>
+                        </ol>
+                    </div>
+
                     <p>Now we're ready to create the database tables and fill them with some default data.</p>
                     <form action="install.pl" method="post">
                         <input type="hidden" name="step" value="3" />
@@ -237,6 +318,18 @@
                         <p><a href="install.pl?step=3&amp;op=updatestructure" class="btn btn-primary">Update your database</a></p>
                     [% ELSE %]
                         <h2>Web installer &rsaquo; Install basic configuration settings</h2>
+
+                        <div id="steps">
+                            <ol>
+                                <li class="complete"><i class="fa fa-check-square-o" aria-hidden="true"></i> Choose your language</li>
+                                <li class="complete"><i class="fa fa-check-square-o" aria-hidden="true"></i> Check Perl dependencies</li>
+                                <li class="complete"><i class="fa fa-check-square-o" aria-hidden="true"></i> Database settings</li>
+                                <li class="complete"><i class="fa fa-check-square-o" aria-hidden="true"></i> Set up database</li>
+                                <li class="current open"><i class="fa fa-square-o" aria-hidden="true"></i> Install basic configuration settings</li>
+                                <li class="open"><i class="fa fa-square-o" aria-hidden="true"></i> Onboarding</li>
+                            </ol>
+                        </div>
+
                         <p>We are ready to do some basic configuration.</p>
                         <form action="install.pl" method="post">
                             <input type="hidden" name="step" value="3" />

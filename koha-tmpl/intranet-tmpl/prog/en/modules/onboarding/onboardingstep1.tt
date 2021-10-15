@@ -13,6 +13,21 @@
 
                 [% INCLUDE 'onboarding_messages.inc' %]
 
+                <div id="steps">
+                    <ol>
+                        <li class="complete"><i class="fa fa-check-square-o" aria-hidden="true"></i> Installation</li>
+                        <li class="current open"><i class="fa fa-square-o" aria-hidden="true"></i> Onboarding
+                            <ol>
+                                <li class="current open"><i class="fa fa-square-o" aria-hidden="true"></i> Create a library</li>
+                                <li class="open"><i class="fa fa-square-o" aria-hidden="true"></i> Create a patron category</li>
+                                <li class="open"><i class="fa fa-square-o" aria-hidden="true"></i> Create Koha administrator patron</li>
+                                <li class="open"><i class="fa fa-square-o" aria-hidden="true"></i> Create a new item type</li>
+                                <li class="open"><i class="fa fa-square-o" aria-hidden="true"></i> Create a new circulation rule</li>
+                            </ol>
+                        </li>
+                    </ol>
+                </div>
+
                 <form name="LibraryCreation" method="post" action="onboarding.pl">
                     <fieldset class="rows" >
                         <input type="hidden" name="step" value="1"/>

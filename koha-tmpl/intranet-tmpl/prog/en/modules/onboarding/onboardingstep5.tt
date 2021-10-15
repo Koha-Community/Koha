@@ -19,6 +19,14 @@
 
                     <h2>Web installer &rsaquo; Complete</h2>
                     [% INCLUDE 'onboarding_messages.inc' %]
+
+                    <div id="steps">
+                        <ol>
+                            <li class="complete"><i class="fa fa-check-square-o" aria-hidden="true"></i> Installation</li>
+                            <li class="complete"><i class="fa fa-check-square-o" aria-hidden="true"></i> Onboarding</li>
+                        </ol>
+                    </div>
+
                     <h3>Congratulations you have finished and are ready to use Koha</h3>
                     <a class="btn btn-success" href="/cgi-bin/koha/mainpage.pl">Start using Koha</a>
 
@@ -27,6 +35,21 @@
                     <h2>Web installer &rsaquo; Create a new circulation rule </h2>
 
                     [% INCLUDE 'onboarding_messages.inc' %]
+
+                    <div id="steps">
+                        <ol>
+                            <li class="complete"><i class="fa fa-check-square-o" aria-hidden="true"></i> Installation</li>
+                            <li class="current open"><i class="fa fa-square-o" aria-hidden="true"></i> Onboarding
+                                <ol>
+                                    <li class="complete"><i class="fa fa-check-square-o" aria-hidden="true"></i> Create a library</li>
+                                    <li class="complete"><i class="fa fa-check-square-o" aria-hidden="true"></i> Create a patron category</li>
+                                    <li class="complete"><i class="fa fa-check-square-o" aria-hidden="true"></i> Create Koha administrator patron</li>
+                                    <li class="complete"><i class="fa fa-check-square-o" aria-hidden="true"></i> Create a new item type</li>
+                                    <li class="current open"><i class="fa fa-square-o" aria-hidden="true"></i> Create a new circulation rule</li>
+                                </ol>
+                            </li>
+                        </ol>
+                    </div>
 
                     <form name="createcirculationrule" method="post" action="onboarding.pl">
                         <fieldset class="rows">
