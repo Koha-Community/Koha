@@ -257,7 +257,7 @@
                                 </li>
                                 <li style="list-style: none;">
                                     <label for="content_[% language.lang | html %]">Content: </label>
-                                    <textarea name="content" id="content_[% language.lang | html %]"  cols="75" rows="10">[% translated_contents.item(language.lang).content | html %]</textarea>
+                                    <textarea name="content" id="content_[% language.lang | html %]" data-lang="[% language.lang | html%]" cols="75" rows="10">[% translated_contents.item(language.lang).content | html %]</textarea>
                                     <input type="hidden" name="lang" value="[% language.lang | html %]" />
                                 </li>
                             </ol>
@@ -268,7 +268,7 @@
         [% ELSE %]
             <div id="lang_default">
                 <div class="clearfix">
-                    <textarea name="content" id="content_default"  cols="75" rows="10">[% additional_content.content | html %]</textarea>
+                    <textarea name="content" id="content_default" data-lang="[% language.lang | html %]"  cols="75" rows="10">[% additional_content.content | html %]</textarea>
                 </div>
             </div>
         [% END %]
@@ -582,13 +582,16 @@
         [% Asset.js( "lib/linters/htmlhint.min.js" ) | $raw %]
         [% Asset.js( "lib/codemirror/html-lint.min.js" ) | $raw %]
         <script>
-            var editor = CodeMirror.fromTextArea(document.getElementById('content'), {
-                lineNumbers: true,
-                lineWrapping: true,
-                lint: true,
-                mode: "text/html",
-                gutters: ["CodeMirror-lint-markers"],
-                viewportMargin: Infinity,
+            $("textarea[name='content']").each( function(index) {
+                var this_lang = $(this).attr('data-lang');
+                var editor = CodeMirror.fromTextArea(document.getElementById('content_' + this_lang), {
+                    lineNumbers: true,
+                    lineWrapping: true,
+                    lint: true,
+                    mode: "text/html",
+                    gutters: ["CodeMirror-lint-markers"],
+                    viewportMargin: Infinity,
+                });
             });
         </script>
     [% ELSE %]
