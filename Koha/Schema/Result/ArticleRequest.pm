@@ -141,6 +141,14 @@ Be careful with two timestamps in one table not allowing NULL
   default_value: current_timestamp
   is_nullable: 0
 
+=head2 toc_request
+
+  data_type: 'tinyint'
+  default_value: 0
+  is_nullable: 0
+
+borrower requested table of contents
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -205,6 +213,8 @@ __PACKAGE__->add_columns(
     default_value => \"current_timestamp",
     is_nullable => 0,
   },
+  "toc_request",
+  { data_type => "tinyint", default_value => 0, is_nullable => 0 },
 );
 
 =head1 PRIMARY KEY
@@ -292,8 +302,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2021-10-05 09:43:22
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:yBNVe7a+BlTtg4I4YCBP1Q
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2021-10-15 09:05:08
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:U4C1bwfCj048twrT3yRD6Q
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
