@@ -819,7 +819,8 @@ for my $library ( @$libraries ) {
 # Using last created item if it exists
 if (   $prefillitem
     && $op ne "additem"
-    && $op ne "edititem" )
+    && $op ne "edititem"
+    && $op ne "dupeitem" )
 {
     my $item_from_cookie = get_item_from_cookie($input);
     $current_item = $item_from_cookie if $item_from_cookie;
@@ -852,6 +853,7 @@ foreach my $tag ( keys %{$tagslib} ) {
         # If the subfield must be prefilled with last catalogued item
         if (
             $nextop ne 'additem'
+            || $op eq 'dupeitem'
             || (
                 !$prefillitem
                 || ( $prefillitem && grep { $_ eq $subtag }
