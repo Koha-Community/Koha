@@ -33,7 +33,7 @@
     [% END %]
 
     [% IF too_many_items_display %]
-        <p>Too many items ([% too_many_items_display | html %]): You have edited more than [% Koha.Preference('MaxItemsToDisplayForBatchMod') | html %] items in a batch, items will not be shown.</p>
+        <p>Too many items ([% report.modified_itemnumbers.size | html %]): You have edited more than [% Koha.Preference('MaxItemsToDisplayForBatchMod') | html %] items in a batch, items will not be shown.</p>
     [% ELSIF items.size %]
         [% PROCESS items_table_batchmod headers => item_header_loop, items => items, display_columns_selection => 1 %]
     [% END %]
