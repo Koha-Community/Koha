@@ -1722,7 +1722,7 @@ sub get_volumes_query {
         }
     }
     else {
-        my $cleaned_title = $marc->title;
+        my $cleaned_title = $marc->subfield('245', "a");
         $cleaned_title =~ tr|/||;
         $cleaned_title = $builder->clean_search_term($cleaned_title);
         $searchstr = "ti,phr:($cleaned_title)";
