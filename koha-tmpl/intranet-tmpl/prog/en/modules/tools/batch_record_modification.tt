@@ -198,7 +198,7 @@
                                                     <td>[% biblio.biblionumber | html %]</td>
                                                     <td><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% biblio.biblionumber | uri %]">[% biblio.title | html %]</a></td>
                                                     <td class="actions">
-                                                        <a href="/cgi-bin/koha/svc/records/preview?record_type=biblio&record_id=[% biblio.biblionumber | uri %]&mmtid=[% mmtid | uri %]" class="previewMARC btn btn-default btn-xs" data-record_type="biblio" data-record_id="[% biblio.biblionumber | html %]" data-mmtid="[% mmtid | html %]" title="Preview MARC"><i class="fa fa-eye"></i> Show MARC</a>
+                                                        <a href="/cgi-bin/koha/svc/records/preview?record_type=biblio&record_id=[% biblio.biblionumber | uri %]&mmtid=[% mmtid | uri %]&overlay_context=batchmod" class="previewMARC btn btn-default btn-xs" data-record_type="biblio" data-record_id="[% biblio.biblionumber | html %]" data-mmtid="[% mmtid | html %]" title="Preview MARC"><i class="fa fa-eye"></i> Show MARC</a>
                                                     </td>
                                                 </tr>
                                             [% END %]
@@ -225,7 +225,7 @@
                                                     <td><input type="checkbox" name="record_id" value="[% authority.authid | html %]" data-usage="[% authority.count_usage | html %]" /></td>
                                                     <td><a href="/cgi-bin/koha/authorities/detail.pl?authid=[% authority.authid | uri %]">[% authority.authid | html %]</a></td>
                                                     <td>[% PROCESS authresult summary=authority.summary authid=authority.authid %]</td>
-                                                    <td class="actions"><a href="/cgi-bin/koha/svc/records/preview?record_type=authority&record_id=[% authority.authid | uri %]&mmtid=[% mmtid | uri %]" data-record_type="authority" data-record_id="[% authority.authid | html %]" data-mmtid="[% mmtid | html %]" class="previewMARC btn btn-default btn-xs"><i class='fa fa-eye'></i> Show MARC</a>
+                                                    <td class="actions"><a href="/cgi-bin/koha/svc/records/preview?record_type=authority&record_id=[% authority.authid | uri %]&mmtid=[% mmtid | uri %]&overlay_context=batchmod" data-record_type="authority" data-record_id="[% authority.authid | html %]" data-mmtid="[% mmtid | html %]" class="previewMARC btn btn-default btn-xs"><i class='fa fa-eye'></i> Show MARC</a>
                                                 </tr>
                                             [% END %]
                                         </tbody>
@@ -355,7 +355,7 @@
                 var url = "/cgi-bin/koha/svc/records/preview?"
                 var mmtid = $(this).val();
                 $("a.previewMARC").each(function() {
-                    $(this).attr("href", url + "record_type=" + $(this).attr("data-record_type") + "&record_id=" + $(this).attr("data-record_id") + "&mmtid=" + mmtid);
+                    $(this).attr("href", url + "record_type=" + $(this).attr("data-record_type") + "&record_id=" + $(this).attr("data-record_id") + "&mmtid=" + mmtid + "&overlay_context=batchmod");
                 });
             });
 
