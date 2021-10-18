@@ -230,6 +230,7 @@ if ( $showcomp eq 'both' || $showcomp eq 'staff' ) {
               );
         }
         $template->param( ComponentParts => $parts );
+        $template->param( ComponentPartsQuery => $biblio->get_components_query );
     }
 }
 

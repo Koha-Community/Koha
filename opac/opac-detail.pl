@@ -676,6 +676,7 @@ if ( $showcomp eq 'both' || $showcomp eq 'opac' ) {
               );
         }
         $template->param( ComponentParts => $parts );
+        $template->param( ComponentPartsQuery => $biblio->get_components_query );
     }
 }
 

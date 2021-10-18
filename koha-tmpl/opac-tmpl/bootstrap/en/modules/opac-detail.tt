@@ -408,7 +408,7 @@
                             [% ELSE %]
                             <li id="tab_components">
                             [% END %]
-                                <a href="#components">Components ([% ( ComponentParts.size || 1 ) %])</a>
+                                <a href="#components">Components ([% ( ComponentParts.size ) %])</a>
                             </li>
                         [% END %]
                         [% IF ( SYNDETICS_TOC ) %]
@@ -605,6 +605,9 @@
                                 </tr>
                                 [% END %]
                             </table>
+                            [% IF ComponentParts.size == 300 %]
+                            <p>Only 300 results are shown: <a href="/cgi-bin/koha/catalogue/search.pl?q=[% ComponentPartsQuery | uri %]"/>show all component parts</a></p>
+                            [% END %]
                         </div>
                     </div>
                     [% END %]
