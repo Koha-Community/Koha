@@ -62,6 +62,7 @@ my $filters = {
     holdingbranch => $holdingbranchfilter,
     dateduefrom   => $dateduefrom,
     datedueto     => $datedueto,
+    showall       => $showall,
 };
 
 my $isfiltered      = $op =~ /apply/i && $op =~ /filter/i;
@@ -266,7 +267,7 @@ if ($noreport) {
     LEFT JOIN biblio      ON (biblio.biblionumber=items.biblionumber )
     WHERE 1=1 "; # placeholder, since it is possible that none of the additional
                  # conditions will be selected by user
-    $strsth.=" AND date_due               < '" . $todaysdate     . "' " unless ($showall);
+    $strsth.=" AND date_due               < '" . $todaysdate     . "' " unless ($showall or $datedueto);
     $strsth.=" AND (borrowers.firstname like '".$bornamefilter."%' or borrowers.surname like '".$bornamefilter."%' or borrowers.cardnumber like '".$bornamefilter."%')" if($bornamefilter) ;
     $strsth.=" AND borrowers.categorycode = '" . $borcatfilter   . "' " if $borcatfilter;
     if( $itemtypefilter ){
