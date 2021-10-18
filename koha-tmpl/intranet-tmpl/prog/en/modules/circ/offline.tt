@@ -73,9 +73,9 @@
             <div id="offline-sync" style="display: none;" class="offline-sync">
                 <div id="toolbar" class="btn-toolbar">
                     [% IF (AllowOfflineCirculation) %]
-                        <a href="#" id="download-records" class="btn btn-default"><i class="fa fa-arrow-down"></i>Download records</a>
+                        <a href="#" id="download-records" class="btn btn-default"><i class="fa fa-arrow-down"></i> Download records</a>
                     [% END %]
-                    <a href="#" id="upload-transactions" class="btn btn-default"><i class="fa fa-arrow-up"></i>Upload transactions</a>
+                    <a href="#" id="upload-transactions" class="btn btn-default"><i class="fa fa-arrow-up"></i> Upload transactions</a>
                 </div>
                 <h1>Offline circulation</h1>
                 <div class="row">
@@ -648,24 +648,30 @@
         }
 
         // This next bit of code is to deal with the updated session issue
-        window.addEventListener('load', function(e) {
-            window.applicationCache.addEventListener('updateready', function(e) {
-                if (window.applicationCache.status == window.applicationCache.UPDATEREADY) {
-                    // Browser downloaded a new app cache.
-                    // Swap it in and reload the page to get the new hotness.
-                    window.applicationCache.swapCache();
-                    if (confirm(_("A new version of this site is available. Load it?"))) {
-                        window.location.reload();
+        if( typeof window.applicationCache !== "undefined" ){
+            window.addEventListener('load', function(e) {
+                window.applicationCache.addEventListener('updateready', function(e) {
+                    if (window.applicationCache.status == window.applicationCache.UPDATEREADY) {
+                        // Browser downloaded a new app cache.
+                        // Swap it in and reload the page to get the new hotness.
+                        window.applicationCache.swapCache();
+                        if (confirm(_("A new version of this site is available. Load it?"))) {
+                            window.location.reload();
+                        }
+                    } else {
+                    // Manifest didn't changed. Nothing new to server.
                     }
-                } else {
-                // Manifest didn't changed. Nothing new to server.
-                }
+                }, false);
             }, false);
-        }, false);
+        }
 
 
         $(document).ready(function () {
-            kohadb.initialize();
+            if( typeof window.applicationCache === "undefined" ){
+                $("#offline-home div").html('<div class="dialog alert"><h3>' + _("Offline circulation disabled") + '</h3><p>' + _("Your browser is not compatible with the built-in offline circulation tool.") + '</div>');
+            } else {
+                kohadb.initialize();
+            }
             $('#header_search #circ_search .tip').text(_("Enter patron card number:"));
 
             $('ul[aria-labelledby="logged-in-menu"]').html('<li><a class="toplinks">' + _("You cannot change your branch or logout while using offline circulation") + '</a></li>');
