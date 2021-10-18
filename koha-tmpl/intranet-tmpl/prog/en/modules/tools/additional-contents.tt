@@ -166,7 +166,11 @@
         <div class="btn-group">
             <button class="btn btn-default" id="submit_form"><i class="fa fa-save"></i> Save</button>
         </div>
-        <a class="btn btn-default cancel" href="/cgi-bin/koha/tools/additional-contents.pl"><i class="fa fa-remove"></i> Cancel</a>
+        [% IF category == 'news' %]
+            <a class="btn btn-default cancel" href="/cgi-bin/koha/tools/additional-contents.pl"><i class="fa fa-remove"></i> Cancel</a>
+        [% ELSE %]
+            <a class="btn btn-default cancel" href="/cgi-bin/koha/tools/additional-contents.pl?category=html_customizations"><i class="fa fa-remove"></i> Cancel</a>
+        [% END %]
     </div>
 
     <form id="add_additional_content" method="post" action="/cgi-bin/koha/tools/additional-contents.pl" class="validate">
