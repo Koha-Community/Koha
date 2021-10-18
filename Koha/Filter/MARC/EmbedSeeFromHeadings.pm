@@ -76,6 +76,15 @@ sub _processrecord {
     return $record;
 }
 
+=head2 fields
+
+    my @fields = $filter->fields($record);
+
+Retrieve the fields that would be embedded if the record were processed by the filter.
+Used during Elasticsearch indexing to give special treatment to these field (i.e. don't
+include in facets, sorting, or suggestion fields)
+
+=cut
 sub fields {
     my ($self, $record) = @_;
 
