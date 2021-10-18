@@ -30,6 +30,9 @@ use base qw(Net::Server::PreFork);
 
 use constant LOG_SIP => "local6"; # Local alias for the logging facility
 
+
+set_logger( Koha::Logger->get( { interface => 'sip' } ) );
+
 #
 # Main  # not really, since package SIPServer
 #
