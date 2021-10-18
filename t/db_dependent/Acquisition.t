@@ -19,7 +19,7 @@ use Modern::Perl;
 
 use POSIX qw(strftime);
 
-use Test::More tests => 66;
+use Test::More tests => 70;
 use t::lib::Mocks;
 use Koha::Database;
 use Koha::DateUtils qw(dt_from_string output_pref);
@@ -173,7 +173,7 @@ my ( $biblionumber5, $biblioitemnumber5 ) = AddBiblio( MARC::Record->new, '' );
 
 
 
-# Prepare 5 orders, and make distinction beween fields to be tested with eq and with ==
+# Prepare 6 orders, and make distinction beween fields to be tested with eq and with ==
 # Ex : a price of 50.1 will be stored internally as 5.100000
 
 my @order_content = (
@@ -183,8 +183,8 @@ my @order_content = (
             biblionumber   => $biblionumber1,
             budget_id      => $budget->{budget_id},
             uncertainprice => 0,
-            order_internalnote => "internal note",
-            order_vendornote   => "vendor note",
+            order_internalnote => "internal note foo",
+            order_vendornote   => "vendor note bar",
             ordernumber => '',
         },
         num => {
@@ -209,8 +209,8 @@ my @order_content = (
             biblionumber   => $biblionumber2,
             budget_id      => $budget->{budget_id},
             uncertainprice => 0,
-            order_internalnote => "internal note",
-            order_vendornote   => "vendor note"
+            order_internalnote => "internal note foo",
+            order_vendornote   => "vendor note bar"
         },
         num => {
             quantity  => 4,
@@ -246,8 +246,8 @@ my @order_content = (
             basketno     => $basketno,
             biblionumber => $biblionumber4,
             budget_id    => $budget->{budget_id},
-            order_internalnote => "internal note",
-            order_vendornote   => "vendor note"
+            order_internalnote => "internal note bar",
+            order_vendornote   => "vendor note foo"
         },
         num => {
             quantity       => 1,
@@ -281,7 +281,7 @@ my @order_content = (
     }
 );
 
-# Create 5 orders in database
+# Create 6 orders in database
 for ( 0 .. 5 ) {
     my %ocontent;
     @ocontent{ keys %{ $order_content[$_]->{num} } } =
@@ -444,7 +444,7 @@ is( $order2->{order_internalnote}, "my notes",
 my $order1 = GetOrder( $ordernumbers[0] );
 is(
     $order1->{order_internalnote},
-    "internal note",
+    "internal note foo",
     "ModReceiveOrder only changes the supplied orders internal notes"
 );
 
@@ -465,6 +465,15 @@ $orders = GetHistory( ordernumbers => [$ordernumbers[1]] );
 is( scalar( @$orders ), 1, 'GetHistory with a given ordernumbers returns 1 order' );
 $orders = GetHistory( ordernumbers => \@ordernumbers );
 is( scalar( @$orders ), scalar( @ordernumbers ) - 1, 'GetHistory with a list of ordernumbers returns N-1 orders (was has been deleted [3])' );
+
+$orders = GetHistory( internalnote => 'internal note foo' );
+is( scalar( @$orders ), 2, 'GetHistory returns correctly a search for internalnote' );
+$orders = GetHistory( vendornote => 'vendor note bar' );
+is( scalar( @$orders ), 2, 'GetHistory returns correctly a search for vendornote' );
+$orders = GetHistory( internalnote => 'internal note bar' );
+is( scalar( @$orders ), 1, 'GetHistory returns correctly a search for internalnote' );
+$orders = GetHistory( vendornote => 'vendor note foo' );
+is( scalar( @$orders ), 1, 'GetHistory returns correctly a search for vendornote' );
 
 
 # Test GetHistory() with and without SearchWithISBNVariations
