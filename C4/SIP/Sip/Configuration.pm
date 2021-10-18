@@ -9,8 +9,10 @@ package C4::SIP::Sip::Configuration;
 use strict;
 use warnings;
 use XML::Simple qw(:strict);
+use List::Util qw(uniq);
 
 use C4::SIP::Sip qw(siplog);
+use Koha::Libraries;
 
 my $parser = new XML::Simple(
     KeyAttr => {
@@ -46,6 +48,12 @@ sub new {
         $listeners{ lc $service->{port} } = $service;
     }
     $cfg->{listeners} = \%listeners;
+
+    my @branchcodes = Koha::Libraries->search()->get_column('branchcode');
+    my @institutions = uniq( keys %{ $cfg->{institutions} } );
+    foreach my $i ( @institutions ) {
+        siplog("LOG_ERR", "ERROR: Institution $i does does not match a branchcode. This can cause unexpected behavior.") unless grep( /^$i$/, @branchcodes );
+    }
 
     return bless $cfg, $class;
 }
