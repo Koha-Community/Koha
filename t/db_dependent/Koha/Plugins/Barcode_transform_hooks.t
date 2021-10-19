@@ -27,7 +27,7 @@ use t::lib::TestBuilder;
 
 BEGIN {
     # Mock pluginsdir before loading Plugins module
-    my $path = dirname(__FILE__) . '/../../../lib';
+    my $path = dirname(__FILE__) . '/../../../lib/plugins';
     t::lib::Mocks::mock_config( 'pluginsdir', $path );
 
     use_ok('Koha::Plugins');
@@ -53,10 +53,7 @@ subtest 'patron_barcode_transform() and item_barcode_transform() hook tests' => 
 
     my $plugins = Koha::Plugins->new;
 
-    warnings_are
-     { $plugins->InstallPlugins; }
-     [ "Calling 'install' died for plugin Koha::Plugin::BrokenInstall",
-       "Calling 'upgrade' died for plugin Koha::Plugin::BrokenUpgrade" ];
+    warning_is { $plugins->InstallPlugins; } undef;
 
     C4::Context->dbh->do("DELETE FROM plugin_methods WHERE plugin_class LIKE '%TestBarcodes%'");
 
