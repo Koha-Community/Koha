@@ -1,16 +1,16 @@
 [%- BLOCK account_type_description -%]
     <span>
     [%- IF account.credit_type_code -%]
-        [%- PROCESS credit_type_description credit_type = account.credit_type -%]
+        [%- PROCESS credit_type_description credit_type_code = account.credit_type_code -%]
     [%- ELSIF account.debit_type_code -%]
-        [%- PROCESS debit_type_description debit_type = account.debit_type -%]
+        [%- PROCESS debit_type_description debit_type_code = account.debit_type_code -%]
     [%- END -%]
     [%- PROCESS account_status_description account=account -%]
     </span>
 [%- END -%]
 
 [%- BLOCK debit_type_description -%]
-    [%- SWITCH debit_type.code -%]
+    [%- SWITCH debit_type_code -%]
         [%- CASE 'ACCOUNT'          -%]Account creation fee
         [%- CASE 'ACCOUNT_RENEW'    -%]Account renewal fee
         [%- CASE 'LOST'             -%]Lost item
@@ -30,7 +30,7 @@
 [%- END -%]
 
 [%- BLOCK credit_type_description -%]
-    [%- SWITCH credit_type.code -%]
+    [%- SWITCH credit_type_code -%]
         [%- CASE 'PAYMENT'      -%]Payment
         [%- CASE 'WRITEOFF'     -%]Writeoff
         [%- CASE 'FORGIVEN'     -%]Forgiven
