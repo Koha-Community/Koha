@@ -3,4 +3,4 @@
 [%- FOREACH row IN rows %]
     [% FOREACH field IN row; field IF !loop.last; ItemTypes.GetDescription(field) IF loop.last; sep IF !loop.last; END %]
 [%- END %]
-TOTAL[% sep %][%- FOREACH field IN total; field; sep IF !loop.last; END -%]
+TOTAL[% sep | html %][%- FOREACH field IN total; field; sep IF !loop.last; END -%]
