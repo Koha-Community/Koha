@@ -90,6 +90,7 @@ sub set_public {
     my $body      = $c->validation->param('body');
     my $patron_id = $c->validation->param('patron_id');
 
+    # short-circuit early
     unless ( C4::Context->preference('OpacPasswordChange') ) {
         return $c->render(
             status  => 403,
@@ -104,6 +105,15 @@ sub set_public {
             status  => 403,
             openapi => {
                 error => "Changing other patron's password is forbidden"
+            }
+        );
+    }
+
+    unless ( $user->category->effective_change_password ) {
+        return $c->render(
+            status  => 403,
+            openapi => {
+                error => "Changing password is forbidden"
             }
         );
     }
