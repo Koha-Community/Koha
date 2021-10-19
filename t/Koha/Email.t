@@ -191,7 +191,7 @@ subtest 'create() tests' => sub {
 
 subtest 'send_or_die() tests' => sub {
 
-    plan tests => 4;
+    plan tests => 7;
 
     my $email;
     my $args;
@@ -232,9 +232,10 @@ subtest 'send_or_die() tests' => sub {
     );
 
     $THE_email->send_or_die(
-        { transport => $transport, to => ['tomasito@mail.com'] } );
+        { transport => $transport, to => ['tomasito@mail.com'], from => 'returns@example.com' } );
     is_deeply( $args->{to}, ['tomasito@mail.com'],
         'If explicitly passed, "to" is preserved' );
+    is( $args->{from}, 'returns@example.com', 'If explicitly pass, "from" is preserved');
 
     $THE_email->send_or_die( { transport => $transport } );
     my @to = sort @{ $args->{to} };
@@ -247,4 +248,7 @@ subtest 'send_or_die() tests' => sub {
         'If "to" is not explicitly passed, extract recipients from headers'
     );
     is( $email->header_str('Bcc'), undef, 'The Bcc header is unset' );
+    my $from = $args->{from};
+    is( $from, 'sender@example.com', 'If "from" is not explicitly passed, extract from Sender header' );
+    is( $email->header_str('Sender'), undef, 'The Sender header is unset' );
 };
