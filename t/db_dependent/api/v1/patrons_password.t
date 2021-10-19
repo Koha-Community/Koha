@@ -117,11 +117,23 @@ subtest 'set() (authorized user tests)' => sub {
 
 subtest 'set_public() (unprivileged user tests)' => sub {
 
-    plan tests => 15;
+    plan tests => 18;
 
     $schema->storage->txn_begin;
 
-    my $patron   = $builder->build_object( { class => 'Koha::Patrons' } );
+    my $category = $builder->build_object(
+        {
+            class => 'Koha::Patron::Categories',
+            value => { change_password => 0 } # disallow changing password for the patron category
+        }
+    );
+    my $patron = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => { categorycode => $category->id }
+        }
+    );
+
     my $password = 'thePassword123';
     $patron->set_password( { password => $password, skip_validation => 1 } );
     my $userid       = $patron->userid;
@@ -164,6 +176,19 @@ subtest 'set_public() (unprivileged user tests)' => sub {
     )->status_is(403)
       ->json_is( '/error',
         "Authorization failure. Missing required permission(s)." );
+
+    $t->post_ok(
+            "//$userid:$password@/api/v1/public/patrons/"
+          . $patron->id
+          . "/password" => json => {
+            password          => $new_password,
+            password_repeated => $new_password,
+            old_password      => $password
+          }
+    )->status_is(403)->json_is({ error => 'Changing password is forbidden' });
+
+    # Allow password changing to the patron category
+    $category->change_password(1)->store;
 
     $t->post_ok(
             "//$userid:$password@/api/v1/public/patrons/"
