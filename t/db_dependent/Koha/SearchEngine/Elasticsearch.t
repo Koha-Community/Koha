@@ -29,7 +29,7 @@ use MARC::Record;
 use Try::Tiny;
 use List::Util qw( any );
 
-use C4::AuthoritiesMarc;
+use C4::AuthoritiesMarc qw( AddAuthority );
 
 use Koha::SearchEngine::Elasticsearch;
 use Koha::SearchEngine::Elasticsearch::Search;
@@ -98,16 +98,16 @@ subtest '_read_configuration() tests' => sub {
     is( $configuration->{cxn_pool}, 'Static', 'cxn_pool configuration set correctly to Static if not specified' );
     is_deeply( $configuration->{nodes}, \@servers , 'Server configuration parsed correctly' );
 
-    t::lib::Mocks::mock_config( 'elasticsearch', { server => \@servers, index_name => 'index', cxn_pool => 'Fluid' } );
+    t::lib::Mocks::mock_config( 'elasticsearch', { server => \@servers, index_name => 'index', cxn_pool => 'Sniff' } );
 
     $configuration = Koha::SearchEngine::Elasticsearch::_read_configuration;
-    is( $configuration->{cxn_pool}, 'Fluid', 'cxn_pool configuration parsed correctly' );
+    is( $configuration->{cxn_pool}, 'Sniff', 'cxn_pool configuration parsed correctly' );
     isnt( defined $configuration->{trace_to}, 'trace_to is not defined if not set' );
 
     my $params = Koha::SearchEngine::Elasticsearch::get_elasticsearch_params;
     is_deeply( $configuration->{nodes}, \@servers , 'get_elasticsearch_params is just a wrapper for _read_configuration' );
 
-    t::lib::Mocks::mock_config( 'elasticsearch', { server => \@servers, index_name => 'index', cxn_pool => 'Fluid', trace_to => 'Stderr' } );
+    t::lib::Mocks::mock_config( 'elasticsearch', { server => \@servers, index_name => 'index', cxn_pool => 'Sniff', trace_to => 'Stderr' } );
 
     $configuration = Koha::SearchEngine::Elasticsearch::_read_configuration;
     is( $configuration->{trace_to}, 'Stderr', 'trace_to configuration parsed correctly' );
@@ -858,6 +858,7 @@ subtest 'Koha::SearchEngine::Elasticsearch::marc_records_to_documents with Inclu
 
     t::lib::Mocks::mock_preference('marcflavour', 'MARC21');
     t::lib::Mocks::mock_preference('IncludeSeeFromInSearches', '1');
+    my $dbh = C4::Context->dbh;
 
     my $builder = t::lib::TestBuilder->new;
     my $auth_type = $builder->build_object({
@@ -871,7 +872,8 @@ subtest 'Koha::SearchEngine::Elasticsearch::marc_records_to_documents with Inclu
         MARC::Field->new(150, '', '', a => 'Foo'),
         MARC::Field->new(450, '', '', a => 'Bar'),
     );
-    my $authid = AddAuthority($authority_record, undef, $auth_type->authtypecode);
+    $dbh->do( "INSERT INTO auth_header (datecreated,marcxml) values (NOW(),?)", undef, ($authority_record->as_xml_record('MARC21') ) );
+    my $authid = $dbh->last_insert_id( undef, undef, 'auth_header', 'authid' );
 
     my @mappings = (
         {
