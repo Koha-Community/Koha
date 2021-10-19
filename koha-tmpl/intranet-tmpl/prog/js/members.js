@@ -148,7 +148,7 @@ function CalculateAge(dateofbirth) {
 }
 
 function write_age() {
-    var hint = $("#dateofbirth").siblings(".hint").first();
+    var hint = $("#dateofbirth_hint");
     hint.html(dateformat);
 
     var age = CalculateAge(document.form.dateofbirth.value);
