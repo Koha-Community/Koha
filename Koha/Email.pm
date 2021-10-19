@@ -177,6 +177,11 @@ sub send_or_die {
         $args->{to} = \@recipients;
     }
 
+    unless ( $args->{from} ) {    # don't do it if passed an explicit 'from' param
+        $args->{from} = $self->email->header_str('Sender');
+        $self->email->header_str_set('Sender'); # remove Sender header
+    }
+
     $self->SUPER::send_or_die($args);
 }
 
