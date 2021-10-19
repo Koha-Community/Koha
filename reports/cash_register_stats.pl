@@ -166,8 +166,7 @@ if ($do_it) {
                         $row->{bfirstname} . ' ' . $row->{bsurname},
                         $row->{branchname},
                         $row->{date},
-                        $row->{credit_type_code},
-                        $row->{debit_type_code},
+                        $row->{credit_type_code} || $row->{debit_type_code},
                         $row->{note},
                         $row->{amount},
                         $row->{title},
@@ -176,7 +175,7 @@ if ($do_it) {
                     push (@rows, \@rowValues) ;
                 }
                 my @total;
-                for (1..6){push(@total,"")};
+                for (1..7){push(@total,"")};
                 push(@total, $grantotal);
         print $input->header(
             -type       => 'text/csv',
