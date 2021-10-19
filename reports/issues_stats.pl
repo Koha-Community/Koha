@@ -312,7 +312,8 @@ sub calculate {
           ( $linesource eq 'items' )
           ? " LEFT JOIN items ON (statistics.itemnumber = items.itemnumber) "
           : " LEFT JOIN borrowers ON (statistics.borrowernumber = borrowers.borrowernumber) ";
-        $strsth .= " WHERE $line is not null AND $line != '' ";
+        $strsth .= " WHERE $line IS NOT NULL ";
+        $strsth .= " AND $line != '' " if $line ne "datetime";
     }
 
     if ( $line =~ /datetime/ ) {
@@ -400,7 +401,8 @@ sub calculate {
           ( $colsource eq 'items' )
           ? "LEFT JOIN items ON (statistics.itemnumber = items.itemnumber) "
           : "LEFT JOIN borrowers ON (statistics.borrowernumber = borrowers.borrowernumber) ";
-        $strsth2 .= " WHERE $column IS NOT NULL AND $column != '' ";
+        $strsth .= " WHERE $column IS NOT NULL";
+        $strsth .= " AND $column != '' " if $column ne "datetime";
     }
 
     if ( $column =~ /datetime/ ) {
