@@ -2129,8 +2129,8 @@ sub AddReturn {
     if ($item_was_lost) {
         $messages->{'WasLost'} = 1;
         unless ( C4::Context->preference("BlockReturnOfLostItems") ) {
-            $messages->{'LostItemFeeRefunded'} = $updated_item->{_refunded};
-            $messages->{'LostItemFeeRestored'} = $updated_item->{_restored};
+            $messages->{'LostItemFeeRefunded'} = 1 if $updated_item->{_refunded};
+            $messages->{'LostItemFeeRestored'} = 1 if $updated_item->{_restored};
 
             if ( $updated_item->{_charge} ) {
                 $issue //= Koha::Old::Checkouts->search(
