@@ -88,7 +88,8 @@ subtest 'call() tests' => sub {
 };
 
 subtest 'more call() tests' => sub {
-    plan tests => 3;
+
+    plan tests => 6;
 
     $schema->storage->txn_begin;
     # Temporarily remove any installed plugins data
@@ -96,7 +97,13 @@ subtest 'more call() tests' => sub {
 
     t::lib::Mocks::mock_config('enable_plugins', 1);
     my $plugins = Koha::Plugins->new({ enable_plugins => 1 });
-    my @plugins = $plugins->InstallPlugins;
+    my @plugins;
+
+    warnings_are
+     { @plugins = $plugins->InstallPlugins; }
+     [ "Calling 'install' died for plugin Koha::Plugin::BrokenInstall",
+       "Calling 'upgrade' died for plugin Koha::Plugin::BrokenUpgrade" ];
+
     foreach my $plugin (@plugins) {
         $plugin->enable();
     }
@@ -104,11 +111,17 @@ subtest 'more call() tests' => sub {
     # Barcode is multiplied by 2 by Koha::Plugin::Test, and again by 4 by Koha::Plugin::TestItemBarcodeTransform
     # showing that call has passed the same ref to multiple plugins to operate on
     my $bc = 1;
-    Koha::Plugins->call('item_barcode_transform', \$bc);
+    warnings_are
+        { Koha::Plugins->call('item_barcode_transform', \$bc); }
+        [ 'Plugin error (Test Plugin): item_barcode_transform called with parameter: 1',
+          'Plugin error (Test Plugin for item_barcode_transform): item_barcode_transform called with parameter: 2' ];
     is( $bc, 8, "Got expected response" );
 
     my $cn = 'abcd';
-    Koha::Plugins->call('item_barcode_transform', \$cn);
+    warnings_are
+        { Koha::Plugins->call('item_barcode_transform', \$bc); }
+        [ 'Plugin error (Test Plugin): item_barcode_transform called with parameter: 8',
+          'Plugin error (Test Plugin for item_barcode_transform): item_barcode_transform called with parameter: 16' ];
     is( $cn, 'abcd', "Got expected response" );
 
     t::lib::Mocks::mock_config('enable_plugins', 0);

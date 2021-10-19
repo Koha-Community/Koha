@@ -40,14 +40,24 @@ my $builder = t::lib::TestBuilder->new;
 
 t::lib::Mocks::mock_config( 'enable_plugins', 1 );
 
-subtest '() hook tests' => sub {
+subtest 'patron_barcode_transform() and item_barcode_transform() hook tests' => sub {
 
-    plan tests => 4;
+    plan tests => 6;
 
     $schema->storage->txn_begin;
 
+    # Avoid testing useless warnings
+    my $test_plugin = Test::MockModule->new('Koha::Plugin::Test');
+    $test_plugin->mock( 'after_item_action',   undef );
+    $test_plugin->mock( 'after_biblio_action', undef );
+
     my $plugins = Koha::Plugins->new;
-    $plugins->InstallPlugins;
+
+    warnings_are
+     { $plugins->InstallPlugins; }
+     [ "Calling 'install' died for plugin Koha::Plugin::BrokenInstall",
+       "Calling 'upgrade' died for plugin Koha::Plugin::BrokenUpgrade" ];
+
     C4::Context->dbh->do("DELETE FROM plugin_methods WHERE plugin_class LIKE '%TestBarcodes%'");
 
     my $plugin = Koha::Plugin::Test->new->enable;
@@ -81,18 +91,16 @@ subtest '() hook tests' => sub {
         }
     );
 
-    # Avoid testing useless warnings
-    my $test_plugin = Test::MockModule->new('Koha::Plugin::Test');
-    $test_plugin->mock( 'after_item_action',   undef );
-    $test_plugin->mock( 'after_biblio_action', undef );
+    my $item;
+    warning_like { $item = $builder->build_sample_item(); }
+        qr/Plugin error \(Test Plugin\): item_barcode_transform called with parameter: /,
+        'Koha::Item->store calls the item_barcode_transform hook';
 
-    my $biblio = $builder->build_sample_biblio();
-    my $item_1 = $builder->build_sample_item( { biblionumber => $biblio->biblionumber } );
-    $item_1->barcode('THISISATEST');
+    $item->barcode('THISISATEST');
 
-    warning_like { $item_1->store(); }
-        qr/item_barcode_transform called with parameter: THISISATEST/,
-        'AddReserve calls the after_hold_create hook';
+    warning_is { $item->store(); }
+        'Plugin error (Test Plugin): item_barcode_transform called with parameter: THISISATEST',
+        'Koha::Item->store calls the item_barcode_transform hook';
 
     $schema->storage->txn_rollback;
     Koha::Plugins::Methods->delete;
