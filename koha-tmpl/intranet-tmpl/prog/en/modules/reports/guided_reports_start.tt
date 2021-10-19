@@ -619,7 +619,7 @@
                                                 [% IF ( criteri.daterange ) %]
                                                     <td>
                                                         from
-                                                        <input type="text" size="10" id="from_[% criteri.name.remove('\.') | html %]_value" name="from_[% criteri.name | html %]_value" value="" data-start_for="to_[% criteri.name.remove('\.') | html %]_value" class="flatpickr" />
+                                                        <input type="text" size="10" id="from_[% criteri.name.remove('\.') | html %]_value" name="from_[% criteri.name | html %]_value" value="" data-date_to="to_[% criteri.name.remove('\.') | html %]_value" class="flatpickr" />
                                                         to
                                                         <input type="text" size="10" id="to_[% criteri.name.remove('\.') | html %]_value" name="to_[% criteri.name | html %]_value" value="" class="flatpickr" />
                                                         <span class="hint">[% INCLUDE 'date-format.inc' %]</span>

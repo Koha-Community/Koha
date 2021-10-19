@@ -103,7 +103,7 @@
     </li>
 
     <li><label for="from">From: </label>
-        <input type="text" size="10" id="from" name="from" value="[% filters.from_placed_on | $KohaDates %]" class="flatpickr" data-start_for="to" />
+        <input type="text" size="10" id="from" name="from" value="[% filters.from_placed_on | $KohaDates %]" class="flatpickr" data-date_to="to" />
         <div class="hint">[% INCLUDE 'date-format.inc' %]</div>
     </li>
     <li><label for="to">To: </label>

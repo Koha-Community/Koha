@@ -60,8 +60,8 @@
         onClose: function( selectedDates, dateText, instance) {
             validate_date( dateText, instance );
             var thisInput = instance.input;
-            if ( thisInput.hasAttribute('data-start_for') ) {
-                var endPicker = document.querySelector("#"+thisInput.dataset.start_for)._flatpickr;
+            if ( thisInput.hasAttribute('data-date_to') ) {
+                var endPicker = document.querySelector("#"+thisInput.dataset.date_to)._flatpickr;
                 endPicker.set('minDate', selectedDates[0]);
             }
         },
