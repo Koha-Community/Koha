@@ -1,0 +1,209 @@
+[% USE raw %]
+[% USE Asset %]
+[% USE Koha %]
+[% USE KohaDates %]
+[% USE TablesSettings %]
+[% PROCESS 'i18n.inc' %]
+[% SET footerjs = 1 %]
+[% INCLUDE 'doc-head-open.inc' %]
+<title>[% FILTER collapse %]
+    [% t("Bookings to collect") | html %] &rsaquo;
+    [% t("Circulation") | html %] &rsaquo;
+    [% t("Koha") | html %]
+[% END %]</title>
+[% INCLUDE 'doc-head-close.inc' %]
+</head>
+
+<body id="circ_pendingbookings" class="circ">
+    [% INCLUDE 'header.inc' %]
+    [% INCLUDE 'circ-search.inc' %]
+
+    <nav id="breadcrumbs" aria-label="Breadcrumb" class="breadcrumb">
+        <ol>
+            <li>
+                <a href="/cgi-bin/koha/mainpage.pl">Home</a>
+            </li>
+            <li>
+                <a href="/cgi-bin/koha/circ/circulation-home.pl">Circulation</a>
+            </li>
+            <li>
+                <a href="#" aria-current="page">
+                Bookings to collect
+            </a>
+            </li>
+        </ol>
+    </nav>
+
+    <div class="main container-fluid">
+        <div class="row">
+
+            <!-- Results -->
+            <div class="col-sm-10 col-sm-push-2">
+                <main>
+                    <h1>Items required for bookings between <span id="from_date">[% from | $KohaDates %]</span> and <span id="to_date">[% to | $KohaDates %]</span></h1>
+                    <h2>Reported on [% todaysdate | $KohaDates %]</h2>
+                    <p>The following items have not been collected for bookings. Please retrieve them
+                        and check them in.</p>
+                    <div id="searchresults">
+                        <table id="bookingst"></table>
+                    </div>
+                </main>
+            </div>
+
+            <!-- Filters -->
+            <div class="col-sm-2 col-sm-pull-10">
+                <aside>
+                    <div id="filters">
+                        <form id="bookingsf">
+                            <fieldset class="brief">
+                                <h4>Refine results</h4>
+                                <ol>
+                                    <li>
+                                        <label for="from">Start date: </label>
+                                        <input type="text" size="10" id="from" name="from" value="[% from | html %]" class="flatpickr" data-date_to="to"/>
+                                    </li>
+                                    <li>
+                                        <label for="to">End date: </label>
+                                        <input type="text" size="10" id="to" name="to" value="[% to | html %]" class="flatpickr"/>
+                                    </li>
+                                </ol>
+
+                                <fieldset class="action">
+                                    <input type="submit" name="run_report" value="Submit" class="submit"/>
+                                </fieldset>
+                            </fieldset>
+                        </form>
+                    </div>
+                </aside>
+            </div>
+        </div>
+        <!-- /.row -->
+
+        [% MACRO jsinclude BLOCK %]
+        [% INCLUDE 'calendar.inc' %]
+        [% INCLUDE 'datatables.inc' %]
+        [% INCLUDE 'columns_settings.inc' %]
+        [% Asset.js("lib/jquery/plugins/jquery.dataTables.columnFilter.js") | $raw %]
+        [% INCLUDE 'js-biblio-format.inc' %]
+        [% INCLUDE 'js-date-format.inc' %]
+        [% INCLUDE 'js-patron-format.inc' %]
+        <script>
+            let table_settings = [% TablesSettings.GetTableSettings( 'circ', 'bookings', 'bookings-to-collect', 'json' ) | $raw %];
+            $(document).ready(function() {
+
+                let additional_filters = {
+                    start_date: function() {
+                       let fromdate = $("#from");
+                       let isoFrom;
+                       if ( fromdate.val() !== '' ) {
+                         isoFrom = fromdate.get(0)._flatpickr.selectedDates[0].toISOString().substring(0,10);
+                       }
+
+                       let todate = $("#to");
+                       let isoTo;
+                       if ( todate.val() !== '' ) {
+                         isoTo = todate.get(0)._flatpickr.selectedDates[0].toISOString().substring(0,10);
+                       }
+
+                       return { '>=': isoFrom, '<=': isoTo };
+                    }
+                };
+
+                var bookings_table_url = '/api/v1/bookings?';
+                var bookings_table = $("#bookingst").kohaTable({
+                    "ajax": {
+                        "url": bookings_table_url
+                    },
+                    "embed": [
+                        "biblio",
+                        "item",
+                        "patron"
+                    ],
+                    "order": [[ 1, "asc" ]],
+                    "columns": [{
+                        "data": "booking_id",
+                        "title": "Booking ID",
+                        "visible": false
+                    },
+                    {
+                        "data": "biblio.title",
+                        "title": "Title",
+                        "searchable": true,
+                        "orderable": true,
+                        "render": function(data,type,row,meta) {
+                            return $biblio_to_html(row.biblio, {
+                                link: 'bookings'
+                            });
+                        }
+                    },
+                    {
+                        "data": "item.external_id",
+                        "title": "Item",
+                        "searchable": true,
+                        "orderable": true,
+                        "defaultContent": "Any item",
+                        "render": function(data,type,row,meta) {
+                            if ( row.item ) {
+                                return row.item.external_id + " (" + row.booking_id + ")";
+                            } else {
+                                return null;
+                            }
+                        }
+                    },
+                    {
+                        "data": "item.callnumber",
+                        "title": "Callnumber",
+                        "searchable": true,
+                        "orderable": true,
+                        "render": function(data,type,row,meta) {
+                            if ( row.item ) {
+                                return row.item.callnumber;
+                            } else {
+                                return null;
+                            }
+                        }
+                    },
+                    {
+                        "data": "patron.firstname:patron.surname",
+                        "title": "Patron",
+                        "searchable": true,
+                        "orderable": true,
+                        "render": function(data, type, row, meta) {
+                            return $patron_to_html(row.patron, {
+                                display_cardnumber: true,
+                                url: true
+                            });
+                        }
+                    },
+                    {
+                        "data": "start_date",
+                        "name": "start_date",
+                        "title": "Booking dates",
+                        "type": "date",
+                        "searchable": false,
+                        "orderable": true,
+                        "render": function(data, type, row, meta) {
+                            return $date(row.start_date) + ' - ' + $date(row.end_date);
+                        }
+                    },
+                    {
+                        "name": "actions",
+                        "title": "Actions",
+                        "searchable": false,
+                        "orderable": false,
+                        "render": function(data,type,row,meta){
+                            return "";
+                        }
+                    }]
+                }, table_settings, 1, additional_filters);
+
+                /** Date filtering */
+                $("#bookingsf").on("submit", function(e){
+                    /* stop form from submitting normally */
+                    e.preventDefault();
+                    bookings_table.DataTable().draw();
+                });
+            });
+        </script>
+        [% END %]
+        [% INCLUDE 'intranet-bottom.inc' %]
