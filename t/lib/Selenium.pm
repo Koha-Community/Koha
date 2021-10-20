@@ -119,7 +119,7 @@ sub fill_form {
         if ( $tag eq 'input' ) {
             $self->driver->find_element('//input[@id="'.$id.'"]')->send_keys($value);
         } elsif ( $tag eq 'select' ) {
-            $self->driver->find_element('//select[@id="'.$id.'"]/option[@value="'.$value.'"]')->click;
+            $self->driver->find_element('//select[@id="'.$id.'"]//option[@value="'.$value.'"]')->click;
         }
     }
 }
