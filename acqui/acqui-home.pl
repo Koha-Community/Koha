@@ -98,6 +98,8 @@ foreach my $budget ( @{$budget_arr} ) {
     }
     $budget->{'budget_avail'} =
       $budget->{'budget_amount'} - ( $budget->{'budget_spent'} + $budget->{'budget_ordered'} );
+    $budget->{'total_avail'} =
+      $budget->{'budget_amount'} - ( $budget->{'total_spent'} + $budget->{'total_ordered'} );
 
     $total      += $budget->{'budget_amount'};
     $totspent   += $budget->{'budget_spent'};
