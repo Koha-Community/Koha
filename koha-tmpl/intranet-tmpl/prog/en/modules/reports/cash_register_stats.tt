@@ -16,7 +16,6 @@
 <body id="cash_register_stats" class="rep">
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'cat-search.inc' %]
-[% INCLUDE 'accounts.inc' %]
 
 <div id="breadcrumbs">
     <a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/reports/reports-home.pl">Reports</a>
@@ -159,8 +158,7 @@
                 <td>[% loopresul.bfirstname | html %] [% loopresul.bsurname | html %]</td>
                 <td>[% loopresul.branchname | html %]</td>
                 <td>[% loopresul.date | $KohaDates %]</td>
-                <td>[% loopresul.timestamp | $KohaDates with_hours = 1 %]</td>
-                <td>[% PROCESS account_type_description account=loopresul %]</td>
+                <td>[% loopresul.type_description | html %]</td>
                 <td>[% loopresul.note | html %]</td>
                 <td style="text-align:right;">[% loopresul.amount | $Price %]</td>
                 <td><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% loopresul.biblionumber | uri %]">[% loopresul.title | html %]</a></td>
