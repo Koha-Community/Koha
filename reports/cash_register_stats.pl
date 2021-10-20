@@ -103,10 +103,10 @@ if ($do_it) {
     }
 
     my $query = "
-    SELECT round(amount,2) AS amount, description,
+    SELECT round(amount,2) AS amount, al.description,
         bo.surname AS bsurname, bo.firstname AS bfirstname, m.surname AS msurname, m.firstname AS mfirstname,
         bo.cardnumber, br.branchname, bo.borrowernumber,
-        al.borrowernumber, DATE(al.date) as date, al.credit_type_code, al.debit_type_code, al.amountoutstanding, al.note, al.timestamp,
+        al.borrowernumber, DATE(al.date) as date, al.credit_type_code, al.debit_type_code, COALESCE(act.description,al.credit_type_code,adt.description,al.debit_type_code) AS type_description, al.amountoutstanding, al.note, al.timestamp,
         bi.title, bi.biblionumber, i.barcode, i.itype
         FROM accountlines al
         LEFT JOIN borrowers bo ON (al.borrowernumber = bo.borrowernumber)
@@ -114,6 +114,8 @@ if ($do_it) {
         LEFT JOIN branches br ON (br.branchcode = m.branchcode )
         LEFT JOIN items i ON (i.itemnumber = al.itemnumber)
         LEFT JOIN biblio bi ON (bi.biblionumber = i.biblionumber)
+        LEFT JOIN account_credit_types act ON (al.credit_type_code = act.code)
+        LEFT JOIN account_debit_types adt ON (al.debit_type_code = adt.code)
         WHERE CAST(al.date AS DATE) BETWEEN ? AND ?
         $whereTType
         $whereBranchCode
@@ -167,7 +169,7 @@ if ($do_it) {
                         $row->{branchname},
                         $row->{date},
                         $row->{timestamp},
-                        $row->{credit_type_code} || $row->{debit_type_code},
+                        $row->{type_description},
                         $row->{note},
                         $row->{amount},
                         $row->{title},
