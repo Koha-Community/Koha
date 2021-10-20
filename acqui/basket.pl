@@ -132,7 +132,9 @@ if ( $op eq 'delete_confirm' ) {
     my $delbiblio  = $query->param('delbiblio');
     my $basket_obj = Koha::Acquisition::Baskets->find($basketno);
 
-    my $orders = $basket_obj->orders;
+    my $orders = $basket_obj->orders->search({
+        datecancellationprinted => undef
+    });
 
     my @cannotdelbiblios;
 
