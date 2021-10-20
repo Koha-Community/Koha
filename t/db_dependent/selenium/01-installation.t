@@ -15,6 +15,11 @@
 # You should have received a copy of the GNU General Public License
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
+# This test file is made to be run by our CI
+# - KOHA_TESTING must be set
+# - the database must exist but be empty
+# It will go through the installer process with all the sample data checked!
+
 use Modern::Perl;
 
 use Test::More tests => 2;
@@ -23,12 +28,13 @@ use t::lib::Selenium;
 use C4::Context;
 
 my $superlibrarian = {
-    surname    => 'Super',
-    firstname  => 'Librarian',
-    cardnumber => '143749305',
-    userid     => 'SuperL',
-    password   => 'aA1bB2cC3dD4'
+    surname    => 'koha',
+    firstname  => 'koha',
+    cardnumber => '42',
+    userid     => 'koha',
+    password   => 'koha'
 };
+
 my $languages = {
     en    => 'en',
     ar    => 'ar-Arab',
@@ -109,11 +115,10 @@ SKIP: {
     $s->submit_form;
 
     # Selecting default settings
-    # Do not check otherwise no onboarding
-    #my @checkboxes = $driver->find_elements('//input[@type="checkbox" and not(@checked="checked")]');
-    #for my $c ( @checkboxes ) {
-    #    $c->click;
-    #}
+    my @checkboxes = $driver->find_elements('//input[@type="checkbox" and not(@checked="checked")]');
+    for my $c ( @checkboxes ) {
+        $c->click;
+    }
     $s->submit_form;
 
     for (1..20){ # FIXME This is really ugly, but for an unknown reason the next submit_form is resubmitting the same form. So waiting for the next page to be effectively loaded
@@ -125,32 +130,20 @@ SKIP: {
     # Default data loaded
     $s->submit_form;
 
+    my $RequireStrongPassword = C4::Context->preference('RequireStrongPassword');
+    my $minPasswordLength     = C4::Context->preference('minPasswordLength');
+    C4::Context->set_preference('RequireStrongPassword', 0 );
+    C4::Context->set_preference('minPasswordLength', 3 );
+
+    # Installation complete
     $s->click( { href => '/installer/onboarding.pl', main => 'installer-step3' } );
 
-    # Create a library
-    $s->fill_form({ branchcode => 'CPL', branchname => 'Centerville' });
-    $s->submit_form;
-
-    # Library created!
-    $s->driver->find_element('//div[@class="alert alert-success"]');
-    # Create a patron category
-    $s->fill_form({ categorycode => 'S', description => 'Staff', enrolmentperiod => 12 });
-    $s->submit_form;
-
-    # Patron category created!
-    $s->driver->find_element('//div[@class="alert alert-success"]');
     # Create Koha administrator patron
     $s->fill_form({ %$superlibrarian, password2 => $superlibrarian->{password} });
     $s->submit_form;
+    C4::Context->set_preference('RequireStrongPassword', $RequireStrongPassword );
+    C4::Context->set_preference('minPasswordLength', $minPasswordLength );
 
-    #Administrator account created!
-    $s->driver->find_element('//div[@class="alert alert-success"]');
-    # Create a new item type
-    $s->fill_form({ itemtype => 'BK', description => 'Book' });
-    $s->submit_form;
-
-    # New item type created!
-    $s->driver->find_element('//div[@class="alert alert-success"]');
     # Create a new circulation rule
     # Keep default values
     $s->submit_form;
