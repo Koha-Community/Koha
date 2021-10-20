@@ -269,6 +269,42 @@ sub get_items {
     };
 }
 
+=head3 get_checkouts
+
+List Koha::Checkout objects
+
+=cut
+
+sub get_checkouts {
+    my $c = shift->openapi->valid_input or return;
+
+    my $checked_in = delete $c->validation->output->{checked_in};
+
+    try {
+        my $biblio = Koha::Biblios->find( $c->validation->param('biblio_id') );
+
+        unless ($biblio) {
+            return $c->render(
+                status  => 404,
+                openapi => { error => 'Object not found' }
+            );
+        }
+
+        my $checkouts =
+          ($checked_in)
+          ? $c->objects->search( scalar $biblio->old_checkouts )
+          : $c->objects->search( scalar $biblio->current_checkouts );
+
+        return $c->render(
+            status  => 200,
+            openapi => $checkouts
+        );
+    }
+    catch {
+        $c->unhandled_exception($_);
+    };
+}
+
 =head3 pickup_locations
 
 Method that returns the possible pickup_locations for a given biblio
