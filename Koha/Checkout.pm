@@ -102,7 +102,7 @@ Return the patron for who the checkout has been done
 
 sub patron {
     my ( $self ) = @_;
-    my $patron_rs = $self->_result->borrower;
+    my $patron_rs = $self->_result->patron;
     return Koha::Patron->_new_from_dbic( $patron_rs );
 }
 

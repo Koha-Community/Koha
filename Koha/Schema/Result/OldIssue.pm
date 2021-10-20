@@ -315,7 +315,7 @@ __PACKAGE__->add_columns(
 );
 
 __PACKAGE__->belongs_to(
-    "borrower",
+    "patron",
     "Koha::Schema::Result::Borrower",
     { borrowernumber => "borrowernumber" },
     { join_type => "LEFT", on_delete => "CASCADE", on_update => "CASCADE" },
