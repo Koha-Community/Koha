@@ -17,10 +17,12 @@
 
 use Modern::Perl;
 
-use Test::More tests => 18;
+use Test::More tests => 19;
 use Test::Warn;
 
 use C4::Biblio qw( AddBiblio ModBiblio ModBiblioMarc );
+use C4::Circulation qw( AddIssue AddReturn );
+
 use Koha::Database;
 use Koha::Caches;
 use Koha::Acquisition::Orders;
@@ -818,6 +820,41 @@ subtest 'article_requests() tests' => sub {
 
     $article_requests = $biblio->article_requests;
     is( $article_requests->count, 4, '4 article requests' );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'current_checkouts() and old_checkouts() tests' => sub {
+
+    plan tests => 4;
+
+    $schema->storage->txn_begin;
+
+    my $library = $builder->build_object({ class => 'Koha::Libraries' });
+
+    my $patron_1 = $builder->build_object({ class => 'Koha::Patrons' })->unblessed;
+    my $patron_2 = $builder->build_object({ class => 'Koha::Patrons' })->unblessed;
+
+    my $item_1 = $builder->build_sample_item;
+    my $item_2 = $builder->build_sample_item({ biblionumber => $item_1->biblionumber });
+
+    t::lib::Mocks::mock_userenv({ branchcode => $library->id });
+
+    AddIssue( $patron_1, $item_1->barcode );
+    AddIssue( $patron_1, $item_2->barcode );
+
+    AddReturn( $item_1->barcode );
+    AddIssue( $patron_2, $item_1->barcode );
+
+    my $biblio = $item_1->biblio;
+    my $current_checkouts = $biblio->current_checkouts;
+    my $old_checkouts = $biblio->old_checkouts;
+
+    is( ref($current_checkouts), 'Koha::Checkouts', 'Type is correct' );
+    is( ref($old_checkouts), 'Koha::Old::Checkouts', 'Type is correct' );
+
+    is( $current_checkouts->count, 2, 'Count is correct for current checkouts' );
+    is( $old_checkouts->count, 1, 'Count is correct for old checkouts' );
 
     $schema->storage->txn_rollback;
 };
