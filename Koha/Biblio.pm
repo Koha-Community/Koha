@@ -35,10 +35,12 @@ use Koha::Acquisition::Orders;
 use Koha::ArticleRequests;
 use Koha::Biblio::Metadatas;
 use Koha::Biblioitems;
+use Koha::Checkouts;
 use Koha::CirculationRules;
 use Koha::Item::Transfer::Limits;
 use Koha::Items;
 use Koha::Libraries;
+use Koha::Old::Checkouts;
 use Koha::Suggestions;
 use Koha::Subscriptions;
 use Koha::SearchEngine;
@@ -354,6 +356,36 @@ sub article_requests {
     my ( $self ) = @_;
 
     return Koha::ArticleRequests->_new_from_dbic( scalar $self->_result->article_requests );
+}
+
+=head3 current_checkouts
+
+    my $current_checkouts = $biblio->current_checkouts
+
+Returns the current checkouts associated with this biblio
+
+=cut
+
+sub current_checkouts {
+    my ($self) = @_;
+
+    return Koha::Checkouts->search( { "item.biblionumber" => $self->id },
+        { join => 'item' } );
+}
+
+=head3 old_checkouts
+
+    my $old_checkouts = $biblio->old_checkouts
+
+Returns the past checkouts associated with this biblio
+
+=cut
+
+sub old_checkouts {
+    my ( $self ) = @_;
+
+    return Koha::Old::Checkouts->search( { "item.biblionumber" => $self->id },
+        { join => 'item' } );
 }
 
 =head3 items
