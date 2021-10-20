@@ -101,6 +101,12 @@
             <span class="error"><br/> Error: [% decoding_error | html %]</span>
         </div>
     [% END %]
+    [% IF analytics_error %]
+        <div>
+           <span class="analytics_error">
+            There was an error searching for analytic records, please see the logs for details.</span>
+        </div>
+    [% END %]
     [% IF ( ocoins ) %]
         <!-- COinS / OpenURL -->
         <span class="Z3988" title="[% ocoins | html %]"></span>
