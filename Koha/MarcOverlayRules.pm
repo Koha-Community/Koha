@@ -160,7 +160,7 @@ sub merge_records {
         my %keys_index = map { $_ => undef } (keys %{$a}, keys %{$b});
         foreach my $key (keys %keys_index) {
             if ($a->{$key} && $b->{$key}) {
-                push @intersecting, $a->{$key};
+                push @intersecting, [$a->{$key}, $b->{$key}];
             }
             elsif ($a->{$key}) {
                 push @removed, $a->{$key};
@@ -254,7 +254,23 @@ sub merge_records {
             # First add common fields (intersection)
             # Unchanged
             if (@{$common_fields}) {
-                push @merged_fields, @{$common_fields};
+                if(
+                    $rule->{delete}->{allow} &&
+                    $rule->{add}->{allow} && (
+                        @{$common_fields} == 1 || (
+                            $rule->{append}->{allow} &&
+                            $rule->{remove}->{allow}
+                        )
+                    )
+                ) {
+                    # If overwritable apply possible subfield order
+                    # changes from incoming fields
+                    push @merged_fields, map { $_->[1] } @{$common_fields};
+                }
+                else {
+                    # else keep existing subfield order
+                    push @merged_fields, map { $_->[0] } @{$common_fields};
+                }
             }
             # Removed
             if (@{$current_fields_only}) {
