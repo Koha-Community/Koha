@@ -210,10 +210,15 @@ my $ean = GetNormalizedEAN( $record, $marcflavour );
       ( C4::Context->preference('UseControlNumber') and $record->field('001') )
       ? 'rcn:'. $record->field('001')->data . ' AND (bib-level:a OR bib-level:b)'
       : "Host-item:($cleaned_title)";
-    my ( $err, $result, $count ) = $searcher->simple_search_compat( $query, 0, 0 );
+    my ( $err, $result, $count );
+    eval {
+        ( $err, $result, $count ) =
+          $searcher->simple_search_compat( $query, 0, 0 );
 
-    warn "Warning from simple_search_compat: $err"
-       if $err;
+    };
+    if ($err || $@){
+        warn "Warning from simple_search_compat: $err.$@";
+    }
 
     my $variables = {
         anonymous_session   => ($borrowernumber) ? 0 : 1,
