@@ -44,6 +44,24 @@ SKIP: {
     eval { require Selenium::Remote::Driver; };
     skip "Selenium::Remote::Driver is needed for selenium tests.", 2 if $@;
 
+    skip "This test must be run with an empty DB. We are using KOHA_TESTING that is set by our CI\nIf you really want to run it, set this env var.", 2 unless $ENV{KOHA_TESTING};
+
+    my $dbh = eval { C4::Context->dbh; };
+    skip "Tests won't run if the database does not exist", 2 if $@;
+
+    {
+        my $dup_err;
+        local *STDERR;
+        open STDERR, ">>", \$dup_err;
+        $dbh->do(q|
+            SELECT * FROM systempreferences WHERE 1 = 0 |
+        );
+        close STDERR;
+        if ( $dup_err ) {
+            skip "Tests won't run if the database is not empty", 2 if $@;
+        }
+    }
+
     my $s = t::lib::Selenium->new;
 
     my $driver = $s->driver;
