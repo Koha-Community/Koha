@@ -132,6 +132,82 @@
       }
     }
   },
+  "/biblios/{biblio_id}/checkouts": {
+    "get": {
+      "x-mojo-to": "Biblios#get_checkouts",
+      "operationId": "listBiblioCheckouts",
+      "tags": [
+        "checkouts"
+      ],
+      "summary": "List checkouts for a biblio",
+      "parameters": [
+        {
+          "$ref": "../parameters.json#/biblio_id_pp"
+        },
+        {
+          "$ref": "../parameters.json#/page"
+        },
+        {
+          "$ref": "../parameters.json#/per_page"
+        },
+        {
+          "$ref": "../parameters.json#/match"
+        },
+        {
+          "$ref": "../parameters.json#/order_by"
+        },
+        {
+          "$ref": "../parameters.json#/q_param"
+        },
+        {
+          "$ref": "../parameters.json#/q_body"
+        },
+        {
+          "$ref": "../parameters.json#/q_header"
+        },
+        {
+          "name": "checked_in",
+          "in": "query",
+          "description": "By default, current checkouts are returned, when this is true then checked in checkouts are returned as result.",
+          "type": "boolean"
+        }
+      ],
+      "produces": [
+        "application/json"
+      ],
+      "responses": {
+        "200": {
+          "description": "A list of checkouts",
+          "schema": {
+            "$ref": "../definitions.json#/checkouts"
+          }
+        },
+        "403": {
+          "description": "Access forbidden",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "404": {
+          "description": "Biblio not found",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        }
+      },
+      "x-koha-authorization": {
+        "permissions": {
+          "circulate": "circulate_remaining_permissions"
+        }
+      },
+      "x-koha-embed": [
+        "issuer",
+        "item",
+        "patron",
+        "library"
+      ]
+    }
+  },
   "/biblios/{biblio_id}/items": {
     "get": {
       "x-mojo-to": "Biblios#get_items",
