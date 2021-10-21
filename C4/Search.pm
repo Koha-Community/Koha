@@ -1585,7 +1585,7 @@ sub _build_initial_query {
     my $operator = "";
     if ($params->{previous_operand}){
         #If there is a previous operand, add a supplied operator or the default 'and'
-        $operator = ($params->{operator}) ? " ".($params->{operator})." " : ' AND ';
+        $operator = ($params->{operator}) ? ($params->{operator}) : 'AND';
     }
 
     #NOTE: indexes_set is typically set when doing truncation or field weighting
@@ -1593,14 +1593,14 @@ sub _build_initial_query {
 
     #e.g. "kw,wrdl:test"
     #e.g. " and kw,wrdl:test"
-    $params->{query} .= $operator . $operand;
+    $params->{query} .= " " . $operator . " " . $operand;
 
     $params->{query_cgi} .= "&op=".uri_escape_utf8($operator) if $operator;
     $params->{query_cgi} .= "&idx=".uri_escape_utf8($params->{index}) if $params->{index};
     $params->{query_cgi} .= "&q=".uri_escape_utf8($params->{original_operand}) if ( $params->{original_operand} ne '' );
 
     #e.g. " and kw,wrdl: test"
-    $params->{query_desc} .= $operator . ( $params->{index_plus} // q{} ) . " " . ( $params->{original_operand} // q{} );
+    $params->{query_desc} .= " " . $operator . " " . ( $params->{index_plus} // q{} ) . " " . ( $params->{original_operand} // q{} );
 
     $params->{previous_operand} = 1 unless $params->{previous_operand}; #If there is no previous operand, mark this as one
 
