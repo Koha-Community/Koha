@@ -25,7 +25,7 @@ use C4::Context;
 use C4::Biblio qw( AddBiblio ModBiblio DelBiblio GetMarcBiblio );
 use Koha::Database;
 
-use Test::More tests => 23;
+use Test::More tests => 24;
 use Test::MockModule;
 
 use Koha::MarcOverlayRules;
@@ -566,6 +566,53 @@ subtest 'Record fields has been overwritten when add = 1, append = 1, remove = 1
         $merged_record->as_formatted,
         $incoming_record->as_formatted,
         'Incoming record erase original record'
+    );
+
+};
+
+subtest 'subfields order' => sub {
+    plan tests => 2;
+
+    $rule->set(
+        {
+            'add' => 0,
+            'append' => 0,
+            'remove' => 0,
+            'delete' => 0,
+        }
+    )->store();
+
+    my $incoming_record = build_record(
+        [
+            [ '250', 'a', '256 bottles of beer on the wall' ],
+            [ '250', 'a', '250 bottles of beer on the wall' ],
+            [ '500', 'a', 'One bottle of beer in the fridge' ],
+        ]
+    );
+
+    my $merged_record = Koha::MarcOverlayRules->merge_records($orig_record, $incoming_record, { 'source' => 'test' });
+
+    is(
+        $merged_record->as_formatted,
+        $orig_record->as_formatted,
+        'Original record not modified - order of subfields not modified'
+    );
+
+    $rule->set(
+        {
+            'add' => 1,
+            'append' => 1,
+            'remove' => 1,
+            'delete' => 1,
+        }
+    )->store();
+
+    $merged_record = Koha::MarcOverlayRules->merge_records($orig_record, $incoming_record, { 'source' => 'test' });
+
+    is(
+        $merged_record->as_formatted,
+        $incoming_record->as_formatted,
+        'Original record modified - order of subfields has been modified'
     );
 
 };
