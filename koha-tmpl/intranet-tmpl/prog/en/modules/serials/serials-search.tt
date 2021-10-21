@@ -229,10 +229,18 @@
 
                     [% INCLUDE 'serials-toolbar.inc' %]
 
-                    [% IF ( done_searched ) %]
-                        <h2>Serials subscriptions ([% total | html %] found)</h2>
+                    [% IF ( mana ) %]
+                        [% IF ( done_searched ) %]
+                            <h2>Mana subscriptions ([% total | html %] found)</h2>
+                        [% ELSE %]
+                            <h2>Mana subscriptions search</h2>
+                        [% END %]
                     [% ELSE %]
-                        <h2>Serials subscriptions search</h2>
+                        [% IF ( done_searched ) %]
+                            <h2>Serials subscriptions ([% total | html %] found)</h2>
+                        [% ELSE %]
+                            <h2>Serials subscriptions search</h2>
+                        [% END %]
                     [% END %]
 
                     [% UNLESS ( done_searched ) %]
@@ -255,7 +263,7 @@
                                                 <input type="text" id="ean" name="EAN_filter" value="[% EAN_filter | html %]" />
                                             </li>
                                         [% END %]
-                                        <li>
+                                        <li class="local">
                                             <label for="callnumber">Call number:</label>
                                             <input type="text" id="callnumber" name="callnumber_filter" value="[% callnumber_filter | html %]" />
                                         </li>
@@ -263,11 +271,11 @@
                                             <label for="publisher">Publisher:</label>
                                             <input type="text" id="publisher" name="publisher_filter" value="[% publisher_filter | html %]" />
                                         </li>
-                                        <li>
+                                        <li class="local">
                                             <label for="bookseller">Vendor:</label>
                                             <input type="text" id="bookseller" name="bookseller_filter" value="[% bookseller_filter | html %]" />
                                         </li>
-                                        <li>
+                                        <li class="local">
                                             <label for="branch">Library:</label>
                                             <select id="branch" name="branch_filter">
                                                 <option value="">All</option>
@@ -275,11 +283,11 @@
                                                 [% PROCESS options_for_libraries libraries => Branches.all( selected => branch_filter, unfiltered => 1 ) %]
                                             </select>
                                         </li>
-                                        <li>
+                                        <li class="local">
                                             <label for="location">Location:</label>
                                             [% PROCESS 'av-build-dropbox.inc' name="location_filter", category="LOC", default=location_filter, all=1 %]
                                         </li>
-                                        <li>
+                                        <li class="local">
                                             <label for="to">Expires before:</label>
                                             <input type="text" id="to" name="expiration_date_filter" value="[% expiration_date_filter | $KohaDates %]" size="10" maxlength="10" class="flatpickr" />
                                         </li>
@@ -518,11 +526,7 @@
             });
 
             [% IF ( mana ) %]
-                $("label[for=callnumber], input#callnumber").hide();
-                $("label[for=bookseller], input#bookseller").hide();
-                $("label[for=branch], select#branch").hide();
-                $("label[for=to], input#to").hide();
-                $("label[for=location], select#location_filter").hide();
+                $(".local").hide();
                 [% FOR field IN additional_fields_for_subscription %]
                       $("label[for=additional_field_[% field.id | $raw %]], input#additional_field_[% field.id | $raw %]").hide();
                 [% END %]
