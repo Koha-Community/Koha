@@ -1,9 +1,9 @@
 [%- BLOCK account_type_description -%]
     <span>
     [%- IF account.credit_type_code -%]
-        [%- PROCESS credit_type_description credit_type_code = account.credit_type -%]
+        [%- PROCESS credit_type_description credit_type = account.credit_type -%]
     [%- ELSIF account.debit_type_code -%]
-        [%- PROCESS debit_type_description debit_type_code = account.debit_type -%]
+        [%- PROCESS debit_type_description debit_type = account.debit_type -%]
     [%- END -%]
     [%- PROCESS account_status_description account=account -%]
     </span>
