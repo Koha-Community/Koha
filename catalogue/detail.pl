@@ -147,12 +147,15 @@ my $marcflavour  = C4::Context->preference("marcflavour");
 
     };
     if ($err || $@){
-        warn "Warning from simple_search_compat: $err.$@";
+        my $error = q{};
+        $error .= $err if $err;
+        $error .= $@ if $@;
+        warn "Warning from simple_search_compat: $error";
         $template->param( analytics_error => 1 );
     }
 
     my $variables = {
-        show_analytics_link => $count > 0 ? 1 : 0
+        show_analytics_link => defined $count && $count > 0 ? 1 : 0
     };
 
     $template->param(

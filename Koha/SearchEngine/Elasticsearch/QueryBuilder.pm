@@ -986,6 +986,7 @@ sub clean_search_term {
     $term =~ s/((?<!\\)(?:[\\]{2})*:[^:\s]+(?<!\\)(?:[\\]{2})*)(?=:)/$1\\/g;
 
     # screen all exclamation signs that either are the last symbol or have white space after them
+    # or are followed by close parentheses
     $term =~ s/(?:[\s\\]*!\s*)+(\s|$|\))/$1/g;
 
     # screen all brackets with backslash
