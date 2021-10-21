@@ -530,8 +530,8 @@ subtest 'attributes_from_api() tests' => sub {
 
         my $attrs = $patron->attributes_from_api(
             {
-                updated_on     => '2019-12-27T14:53:00',
-                last_seen      => '2019-12-27T14:53:00',
+                updated_on     => '2019-12-27T14:53:00Z',
+                last_seen      => '2019-12-27T14:53:00Z',
                 date_of_birth  => '2019-12-27',
             }
         );
@@ -539,25 +539,25 @@ subtest 'attributes_from_api() tests' => sub {
         ok( exists $attrs->{updated_on},
             'No translation takes place if no mapping' );
         is(
-            ref( $attrs->{updated_on} ),
-            'DateTime',
-            'Given a string, a timestamp field is converted into a DateTime object'
+            $attrs->{updated_on},
+            '2019-12-27 14:53:00',
+            'Given an rfc3339 formatted datetime string, a timestamp field is converted into an SQL formatted datetime string'
         );
 
         ok( exists $attrs->{lastseen},
             'Translation takes place because of the defined mapping' );
         is(
-            ref( $attrs->{lastseen} ),
-            'DateTime',
-            'Given a string, a datetime field is converted into a DateTime object'
+            $attrs->{lastseen},
+            '2019-12-27 14:53:00',
+            'Given an rfc3339 formatted datetime string, a datetime field is converted into an SQL formatted datetime string'
         );
 
         ok( exists $attrs->{dateofbirth},
             'Translation takes place because of the defined mapping' );
         is(
-            ref( $attrs->{dateofbirth} ),
-            'DateTime',
-            'Given a string, a date field is converted into a DateTime object'
+            $attrs->{dateofbirth},
+            '2019-12-27',
+            'Given an rfc3339 formatted date string, a date field is converted into an SQL formatted date string'
         );
 
         $attrs = $patron->attributes_from_api(
