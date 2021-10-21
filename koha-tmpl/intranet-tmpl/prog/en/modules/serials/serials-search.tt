@@ -13,415 +13,422 @@
 </head>
 
 <body id="ser_serials-home" class="ser">
-[% INCLUDE 'header.inc' %]
-[% INCLUDE 'serials-search.inc' %]
+    [% INCLUDE 'header.inc' %]
+    [% INCLUDE 'serials-search.inc' %]
 
-<nav id="breadcrumbs" aria-label="Breadcrumb" class="breadcrumb">
-    <ol>
-        <li>
-            <a href="/cgi-bin/koha/mainpage.pl">Home</a>
-        </li>
-        [% IF ( done_searched ) %]
+    <nav id="breadcrumbs" aria-label="Breadcrumb" class="breadcrumb">
+        <ol>
             <li>
-                <a href="/cgi-bin/koha/serials/serials-home.pl">Serials</a>
+                <a href="/cgi-bin/koha/mainpage.pl">Home</a>
             </li>
-            <li>
-                <a href="#" aria-current="page">
-                    Search results
-                </a>
-            </li>
-        [% ELSE %]
-            <li>
-                <a href="#" aria-current="page">
-                    Serials
-                </a>
-            </li>
-        [% END %]
-    </ol>
-</nav>
+            [% IF ( done_searched ) %]
+                <li>
+                    <a href="/cgi-bin/koha/serials/serials-home.pl">Serials</a>
+                </li>
+                <li>
+                    <a href="#" aria-current="page">
+                        Search results
+                    </a>
+                </li>
+            [% ELSE %]
+                <li>
+                    <a href="#" aria-current="page">
+                        Serials
+                    </a>
+                </li>
+            [% END %]
+        </ol>
+    </nav>
 
-[% url_params = [] %]
-[% FOREACH param IN CGI.params.pairs %]
-    [% escaped_value = BLOCK %][% param.value | uri %][% END %]
-    [% url_params.push(param.key _ '=' _ escaped_value) %]
-[% END %]
-[% SET referrer = '/cgi-bin/koha/serials/serials-search.pl?' %]
-[% referrer = BLOCK %][% referrer | url %][% url_params.join("&amp;") |uri %][% END %]
-[% SET edit_action_link = '/cgi-bin/koha/serials/subscription-batchedit.pl?referrer=' _ referrer %]
-
-[% BLOCK subscriptions_table %]
-  <form method="post">
-
-    [% IF closed %]
-        [% SET tab = 'closed' %]
-    [% ELSE %]
-        [% SET tab = 'opened' %]
+    [% url_params = [] %]
+    [% FOREACH param IN CGI.params.pairs %]
+        [% escaped_value = BLOCK %][% param.value | uri %][% END %]
+        [% url_params.push(param.key _ '=' _ escaped_value) %]
     [% END %]
-    [% IF CAN_user_serials_edit_subscription %]
-        <div class="actions">
-            <a class="select-all" href="#" data-tab="[% tab | html %]"><i class="fa fa-check"></i> Select all</a>
-            |
-            <a class="clear-all" href="#" data-tab="[% tab | html %]"><i class="fa fa-remove"></i> Clear all</a>
-            <span class="itemselection_actions">
-                | Actions:
-                <a class="itemselection_action_modify"><i class="fa fa-pencil"></i> Edit selected serials</a>
-            </span>
-        </div>
-    [% END %]
-    <table>
-      <thead>
-        <tr>
-            <th></th>
-            <th>ISSN</th>
-            <th class="anti-the">Title</th>
-            <th>Notes</th>
-            <th>Library</th>
-            <th>Location</th>
-            <th>Call number</th>
-            [% UNLESS closed %]
-                <th>Expiration date</th>
+
+    [% SET referrer = '/cgi-bin/koha/serials/serials-search.pl?' %]
+    [% referrer = BLOCK %][% referrer | url %][% url_params.join("&amp;") |uri %][% END %]
+    [% SET edit_action_link = '/cgi-bin/koha/serials/subscription-batchedit.pl?referrer=' _ referrer %]
+
+    [% BLOCK subscriptions_table %]
+        <form method="post">
+            [% IF closed %]
+                [% SET tab = 'closed' %]
+            [% ELSE %]
+                [% SET tab = 'opened' %]
             [% END %]
-            [% FOR field IN additional_fields_for_subscription %]
-              <th>[% field.name | html %]</th>
+            [% IF CAN_user_serials_edit_subscription %]
+                <div class="actions">
+                    <a class="select-all" href="#" data-tab="[% tab | html %]"><i class="fa fa-check"></i> Select all</a>
+                    |
+                    <a class="clear-all" href="#" data-tab="[% tab | html %]"><i class="fa fa-remove"></i> Clear all</a>
+                    <span class="itemselection_actions">
+                        | Actions:
+                        <a class="itemselection_action_modify"><i class="fa fa-pencil"></i> Edit selected serials</a>
+                    </span>
+                </div>
             [% END %]
-            <th class="NoSort noExport">Actions</th>
-        </tr>
-      </thead>
-      <tfoot>
-        <tr>
-          <td></td>
-          <td><input type="text" class="dt-filter" data-column_num="1" placeholder="Search ISSN" /></td>
-          <td><input type="text" class="dt-filter" data-column_num="2" placeholder="Search title" /></td>
-          <td><input type="text" class="dt-filter" data-column_num="3" placeholder="Search notes" /></td>
-          <td><input type="text" class="dt-filter" data-column_num="4" placeholder="Search library" /></td>
-          <td><input type="text" class="dt-filter" data-column_num="5" placeholder="Search location" /></td>
-          <td><input type="text" class="dt-filter" data-column_num="6" placeholder="Search callnumber" /></td>
-          [% SET column_num = 6 %]
-          [% UNLESS closed %]
-              <td><input type="text" class="dt-filter" data-column_num="7" placeholder="Search expiration date" /></td>
-              [% SET column_num = column_num + 1 %]
-          [% END %]
-          [% FOR field IN additional_fields_for_subscription %]
-            <td><input type="text" class="dt-filter" data-column_num="[% loop.count + column_num | html %]" placeholder="Search [% field.name | html %]" /></td>
-          [% END %]
-          <td></td>
-        </tr>
-      </tfoot>
-      <tbody>
-        [% FOREACH subscription IN subscriptions %]
-        [% UNLESS subscription.cannotdisplay %]
-          <tr>
-            <td>
-                [% UNLESS subscription.cannotedit %]
-                    <input type="checkbox" name="subscriptionid" value="[% subscription.subscriptionid | html %]" />
-                [% ELSE %]
-                    <input type="checkbox" name="subscriptionid" value="[% subscription.subscriptionid | html %]" disabled="disabled" title="You cannot edit this subscription" />
-                [% END %]
-            </td>
-            <td>
-            [% IF ( subscription.issn ) %][% subscription.issn | html %]
-            [% END %]
-            </td>
-            <td><a href="/cgi-bin/koha/serials/subscription-detail.pl?subscriptionid=[% subscription.subscriptionid | uri %]" class="button" title="subscription detail">[% subscription.title | html %]</a>
-            </td>
-            <td>[% IF ( subscription.publicnotes ) %][% subscription.publicnotes | html %][% END %]
-            [% IF ( subscription.internalnotes ) %]([% subscription.internalnotes | html %])[% END %]
-            </td>
-            <td>
-              [% IF ( subscription.branchcode ) %][% Branches.GetName( subscription.branchcode ) | html %][% END %]
-            </td>
-            <td>
-              [% IF ( subscription.location ) %][% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.location', authorised_value => subscription.location ) | html %][% END %]
-            </td>
-            <td>
-              [% IF ( subscription.callnumber ) %][% subscription.callnumber | html %][% END %]
-            </td>
-            [% UNLESS closed %]
-                <td data-order="[% subscription.enddate | html %]">
-                    [% subscription.enddate | $KohaDates %]
-                </td>
-            [% END %]
-
-            [% FOR field IN additional_fields_for_subscription %]
-              [% IF field.authorised_value_category %]
-                <td>[% AuthorisedValues.GetByCode( field.authorised_value_category, subscription.additional_fields.${field.name} ) | html %]</td>
-              [% ELSE %]
-                <td>[% subscription.additional_fields.${field.name} | html %]</td>
-              [% END %]
-            [% END %]
-
-            <td>
-                <div class="btn-group dropup">
-                    [% IF closed %]
-                        <a class="btn btn-default btn-xs dropdown-toggle" id="closedsubactions[% subscription.subscriptionid | html %]" role="button" data-toggle="dropdown" href="#">
-                           Actions <b class="caret"></b>
-                        </a>
-                        <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="closedsubactions[% subscription.subscriptionid | html %]">
-
-                            [% IF ( routing && CAN_user_serials_routing ) %]
-                                [% UNLESS ( subscription.cannotedit ) %]
-                                    <li>
-                                        <a href="/cgi-bin/koha/serials/serials-search.pl?subscriptionid=[% subscription.subscriptionid | uri %]&amp;op=reopen&amp;routing=[% subscription.routing | uri %]&amp;searched=1&amp;title_filter=[% title_filter | uri %]&amp;ISSN_filter=[% ISSN_filter | uri %]&amp;EAN_filter=[% EAN_filter | uri %]&amp;published_filter=[% publisher_filter | uri %]&amp;bookseller_filter=[% bookseller_filter | uri %]&amp;branch_filter=[% branch_filter | uri %]" id="reopensub"> <i class="fa fa-repeat"></i> Reopen</a>
-                                    </li>
-                                [% END %]
-                            [% END # IF ( routing && CAN_user_serials_routing ) %]
-
-                            <li>
-                                <a href="/cgi-bin/koha/serials/serials-collection.pl?subscriptionid=[% subscription.subscriptionid | uri %]"><i class="fa fa-list-alt"></i> Issue history</a>
-                            </li>
-
-                        </ul>
-                    [% ELSE %]
-                        <div class="btn-group">
-                            [% IF ( CAN_user_serials_receive_serials ) %]
-                                [%# There should be no space between these two buttons, it would render badly %]
-                                <a class="btn btn-default btn-xs" role="button"
-                                   href="/cgi-bin/koha/serials/serials-edit.pl?subscriptionid=[% subscription.subscriptionid | html %]&amp;serstatus=1,3,7"><i
-                                   class="fa fa-inbox"></i> Serial receive</a><a
-                                   class="btn btn-default btn-xs dropdown-toggle" id="subactions[% subscription.subscriptionid | html %]" role="button"
-                                   data-toggle="dropdown" href="#"><b class="caret"></b></a>
-                            [% ELSE %]
-                                <a class="btn btn-default btn-xs dropdown-toggle" id="subactions[% subscription.subscriptionid | html %]" role="button" data-toggle="dropdown" href="#">Actions <b class="caret"></b></a>
-                            [% END %]
-                        <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="subactions[% subscription.subscriptionid | html %]">
-
-                            [% IF ( routing && CAN_user_serials_routing ) %]
-                                [% IF ( subscription.cannotedit ) %]
-                                [% ELSE %]
-                                    [% IF ( subscription.routingedit ) %]
-                                        <li>
-                                            <a href="/cgi-bin/koha/serials/routing.pl?subscriptionid=[% subscription.subscriptionid | uri %]"><i class="fa fa-pencil"></i> Edit routing list ([% subscription.routingedit | html %])</a>
-                                        </li>
+            <table>
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>ISSN</th>
+                        <th class="anti-the">Title</th>
+                        <th>Notes</th>
+                        <th>Library</th>
+                        <th>Location</th>
+                        <th>Call number</th>
+                        [% UNLESS closed %]
+                            <th>Expiration date</th>
+                        [% END %]
+                        [% FOR field IN additional_fields_for_subscription %]
+                            <th>[% field.name | html %]</th>
+                        [% END %]
+                        <th class="NoSort noExport">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    [% FOREACH subscription IN subscriptions %]
+                        [% UNLESS subscription.cannotdisplay %]
+                            <tr>
+                                <td>
+                                    [% UNLESS subscription.cannotedit %]
+                                        <input type="checkbox" name="subscriptionid" value="[% subscription.subscriptionid | html %]" />
                                     [% ELSE %]
-                                        <li>
-                                            <a href="/cgi-bin/koha/serials/routing.pl?subscriptionid=[% subscription.subscriptionid | uri %]&amp;op=new"> <i class="fa fa-plus"></i> New routing list</a>
-                                        </li>
+                                        <input type="checkbox" name="subscriptionid" value="[% subscription.subscriptionid | html %]" disabled="disabled" title="You cannot edit this subscription" />
+                                    [% END %]
+                                </td>
+                                <td>
+                                    [% IF ( subscription.issn ) %]
+                                        [% subscription.issn | html %]
+                                    [% END %]
+                                </td>
+                                <td>
+                                    <a href="/cgi-bin/koha/serials/subscription-detail.pl?subscriptionid=[% subscription.subscriptionid | uri %]" class="button" title="subscription detail">[% subscription.title | html %]</a>
+                                </td>
+                                <td>
+                                    [% IF ( subscription.publicnotes ) %][% subscription.publicnotes | html %][% END %]
+                                    [% IF ( subscription.internalnotes ) %]([% subscription.internalnotes | html %])[% END %]
+                                </td>
+                                <td>
+                                    [% IF ( subscription.branchcode ) %][% Branches.GetName( subscription.branchcode ) | html %][% END %]
+                                </td>
+                                <td>
+                                    [% IF ( subscription.location ) %]
+                                        [% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.location', authorised_value => subscription.location ) | html %]
+                                    [% END %]
+                                </td>
+                                <td>
+                                    [% IF ( subscription.callnumber ) %][% subscription.callnumber | html %][% END %]
+                                </td>
+                                [% UNLESS closed %]
+                                    <td data-order="[% subscription.enddate | html %]">
+                                        [% subscription.enddate | $KohaDates %]
+                                    </td>
+                                [% END %]
+
+                                [% FOR field IN additional_fields_for_subscription %]
+                                    [% IF field.authorised_value_category %]
+                                        <td>[% AuthorisedValues.GetByCode( field.authorised_value_category, subscription.additional_fields.${field.name} ) | html %]</td>
+                                    [% ELSE %]
+                                        <td>[% subscription.additional_fields.${field.name} | html %]</td>
                                     [% END %]
                                 [% END %]
-                            [% END # IF ( routing && CAN_user_serials_routing ) %]
 
-                            <li>
-                                <a href="/cgi-bin/koha/serials/serials-collection.pl?subscriptionid=[% subscription.subscriptionid | uri %]"><i class="fa fa-list-alt"></i> Issue history</a>
-                            </li>
-                        </ul>
+                                <td>
+                                    <div class="btn-group dropup">
+                                        [% IF closed %]
+                                            <a class="btn btn-default btn-xs dropdown-toggle" id="closedsubactions[% subscription.subscriptionid | html %]" role="button" data-toggle="dropdown" href="#">
+                                            Actions <b class="caret"></b>
+                                            </a>
+                                            <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="closedsubactions[% subscription.subscriptionid | html %]">
+
+                                                [% IF ( routing && CAN_user_serials_routing ) %]
+                                                    [% UNLESS ( subscription.cannotedit ) %]
+                                                        <li>
+                                                            <a href="/cgi-bin/koha/serials/serials-search.pl?subscriptionid=[% subscription.subscriptionid | uri %]&amp;op=reopen&amp;routing=[% subscription.routing | uri %]&amp;searched=1&amp;title_filter=[% title_filter | uri %]&amp;ISSN_filter=[% ISSN_filter | uri %]&amp;EAN_filter=[% EAN_filter | uri %]&amp;published_filter=[% publisher_filter | uri %]&amp;bookseller_filter=[% bookseller_filter | uri %]&amp;branch_filter=[% branch_filter | uri %]" id="reopensub"> <i class="fa fa-repeat"></i> Reopen</a>
+                                                        </li>
+                                                    [% END %]
+                                                [% END # IF ( routing && CAN_user_serials_routing ) %]
+
+                                                <li>
+                                                    <a href="/cgi-bin/koha/serials/serials-collection.pl?subscriptionid=[% subscription.subscriptionid | uri %]"><i class="fa fa-list-alt"></i> Issue history</a>
+                                                </li>
+
+                                            </ul>
+                                        [% ELSE %]
+                                            <div class="btn-group">
+                                                [% IF ( CAN_user_serials_receive_serials ) %]
+                                                    [%# There should be no space between these two buttons, it would render badly %]
+                                                    <a class="btn btn-default btn-xs" role="button"
+                                                    href="/cgi-bin/koha/serials/serials-edit.pl?subscriptionid=[% subscription.subscriptionid | html %]&amp;serstatus=1,3,7"><i
+                                                    class="fa fa-inbox"></i> Serial receive</a><a
+                                                    class="btn btn-default btn-xs dropdown-toggle" id="subactions[% subscription.subscriptionid | html %]" role="button"
+                                                    data-toggle="dropdown" href="#"><b class="caret"></b></a>
+                                                [% ELSE %]
+                                                    <a class="btn btn-default btn-xs dropdown-toggle" id="subactions[% subscription.subscriptionid | html %]" role="button" data-toggle="dropdown" href="#">Actions <b class="caret"></b></a>
+                                                [% END %]
+                                            <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="subactions[% subscription.subscriptionid | html %]">
+
+                                                [% IF ( routing && CAN_user_serials_routing ) %]
+                                                    [% IF ( subscription.cannotedit ) %]
+                                                    [% ELSE %]
+                                                        [% IF ( subscription.routingedit ) %]
+                                                            <li>
+                                                                <a href="/cgi-bin/koha/serials/routing.pl?subscriptionid=[% subscription.subscriptionid | uri %]"><i class="fa fa-pencil"></i> Edit routing list ([% subscription.routingedit | html %])</a>
+                                                            </li>
+                                                        [% ELSE %]
+                                                            <li>
+                                                                <a href="/cgi-bin/koha/serials/routing.pl?subscriptionid=[% subscription.subscriptionid | uri %]&amp;op=new"> <i class="fa fa-plus"></i> New routing list</a>
+                                                            </li>
+                                                        [% END %]
+                                                    [% END %]
+                                                [% END # IF ( routing && CAN_user_serials_routing ) %]
+
+                                                <li>
+                                                    <a href="/cgi-bin/koha/serials/serials-collection.pl?subscriptionid=[% subscription.subscriptionid | uri %]"><i class="fa fa-list-alt"></i> Issue history</a>
+                                                </li>
+                                            </ul>
+                                            </div>
+                                        [% END %]
+                                    </div>
+                                </td>
+
+                            </tr>
+                        [% END %]
+                    [% END %]
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td></td>
+                        <td><input type="text" class="dt-filter" data-column_num="1" placeholder="Search ISSN" /></td>
+                        <td><input type="text" class="dt-filter" data-column_num="2" placeholder="Search title" /></td>
+                        <td><input type="text" class="dt-filter" data-column_num="3" placeholder="Search notes" /></td>
+                        <td><input type="text" class="dt-filter" data-column_num="4" placeholder="Search library" /></td>
+                        <td><input type="text" class="dt-filter" data-column_num="5" placeholder="Search location" /></td>
+                        <td><input type="text" class="dt-filter" data-column_num="6" placeholder="Search callnumber" /></td>
+                        [% SET column_num = 6 %]
+                        [% UNLESS closed %]
+                            <td><input type="text" class="dt-filter" data-column_num="7" placeholder="Search expiration date" /></td>
+                            [% SET column_num = column_num + 1 %]
+                        [% END %]
+                        [% FOR field IN additional_fields_for_subscription %]
+                            <td><input type="text" class="dt-filter" data-column_num="[% loop.count + column_num | html %]" placeholder="Search [% field.name | html %]" /></td>
+                        [% END %]
+                        <td></td>
+                    </tr>
+                </tfoot>
+            </table>
+        </form>
+    [% END %]
+
+    <div class="main container-fluid">
+        <div class="row">
+            <div class="col-sm-10 col-sm-push-2">
+                <main>
+
+                    [% INCLUDE 'serials-toolbar.inc' %]
+
+                    [% IF ( done_searched ) %]
+                        <h2>Serials subscriptions ([% total | html %] found)</h2>
+                    [% ELSE %]
+                        <h2>Serials subscriptions search</h2>
+                    [% END %]
+
+                    [% UNLESS ( done_searched ) %]
+                        <div id="advsearch" style="padding-bottom:3em;">
+                            <form action="/cgi-bin/koha/serials/serials-search.pl" method="get">
+                                <fieldset class="rows">
+                                    <legend>Search subscriptions</legend>
+                                    <ol>
+                                        <li>
+                                            <label for="issn">ISSN:</label>
+                                            <input type="text" id="issn" name="ISSN_filter" value="[% ISSN_filter | html %]" />
+                                        </li>
+                                        <li>
+                                            <label for="title">Title:</label>
+                                            <input type="text" id="title" name="title_filter" value="[% title_filter | html %]" />
+                                        </li>
+                                        [% IF ( marcflavour == "UNIMARC" ) %]
+                                            <li>
+                                                <label for="ean">EAN:</label>
+                                                <input type="text" id="ean" name="EAN_filter" value="[% EAN_filter | html %]" />
+                                            </li>
+                                        [% END %]
+                                        <li>
+                                            <label for="callnumber">Call number:</label>
+                                            <input type="text" id="callnumber" name="callnumber_filter" value="[% callnumber_filter | html %]" />
+                                        </li>
+                                        <li>
+                                            <label for="publisher">Publisher:</label>
+                                            <input type="text" id="publisher" name="publisher_filter" value="[% publisher_filter | html %]" />
+                                        </li>
+                                        <li>
+                                            <label for="bookseller">Vendor:</label>
+                                            <input type="text" id="bookseller" name="bookseller_filter" value="[% bookseller_filter | html %]" />
+                                        </li>
+                                        <li>
+                                            <label for="branch">Library:</label>
+                                            <select id="branch" name="branch_filter">
+                                                <option value="">All</option>
+                                                [%# FIXME Should not we filter the libraries? %]
+                                                [% PROCESS options_for_libraries libraries => Branches.all( selected => branch_filter, unfiltered => 1 ) %]
+                                            </select>
+                                        </li>
+                                        <li>
+                                            <label for="location">Location:</label>
+                                            [% PROCESS 'av-build-dropbox.inc' name="location_filter", category="LOC", default=location_filter, all=1 %]
+                                        </li>
+                                        <li>
+                                            <label for="to">Expires before:</label>
+                                            <input type="text" id="to" name="expiration_date_filter" value="[% expiration_date_filter | $KohaDates %]" size="10" maxlength="10" class="flatpickr" />
+                                        </li>
+                                        [% INCLUDE 'additional-fields-entry.inc' available=additional_fields_for_subscription values=additional_field_filters wrap_fieldset=0 %]
+                                    </ol>
+                                    <input type="hidden" name="searched" value="1" />
+                                    [% IF ( mana ) %]
+                                        <input type="hidden" name="mana" value="1" />
+                                    [% END %]
+                                    <fieldset class="action">
+                                        <input type="submit" value="Search" />
+                                    </fieldset>
+                                </fieldset>
+                            </form>
                         </div>
                     [% END %]
-                </div>
-            </td>
-
-          </tr>
-          [% END %]
-        [% END %]
-      </tbody>
-    </table>
-  </form>
-[% END %]
-
-<div class="main container-fluid">
-    <div class="row">
-        <div class="col-sm-10 col-sm-push-2">
-            <main>
-
-      [% INCLUDE 'serials-toolbar.inc' %]
-
-      [% IF ( done_searched ) %]
-        <h2>Serials subscriptions ([% total | html %] found)</h2>
-      [% ELSE %]
-        <h2>Serials subscriptions search</h2>
-      [% END %]
-
-      [% UNLESS ( done_searched ) %]
-      <div id="advsearch" style="padding-bottom:3em;">
-        <form action="/cgi-bin/koha/serials/serials-search.pl" method="get">
-          <fieldset class="rows">
-          <legend>Search subscriptions</legend>
-              <ol>
-                <li>
-                  <label for="issn">ISSN:</label>
-                  <input type="text" id="issn" name="ISSN_filter" value="[% ISSN_filter | html %]" />
-                </li>
-                <li>
-                  <label for="title">Title:</label>
-                  <input type="text" id="title" name="title_filter" value="[% title_filter | html %]" />
-                </li>
-                [% IF ( marcflavour == "UNIMARC" ) %]
-                <li>
-                  <label for="ean">EAN:</label>
-                  <input type="text" id="ean" name="EAN_filter" value="[% EAN_filter | html %]" />
-                </li>
-                [% END %]
-                <li>
-                  <label for="callnumber">Call number:</label>
-                  <input type="text" id="callnumber" name="callnumber_filter" value="[% callnumber_filter | html %]" />
-                </li>
-                <li>
-                  <label for="publisher">Publisher:</label>
-                  <input type="text" id="publisher" name="publisher_filter" value="[% publisher_filter | html %]" />
-                </li>
-                <li>
-                  <label for="bookseller">Vendor:</label>
-                  <input type="text" id="bookseller" name="bookseller_filter" value="[% bookseller_filter | html %]" />
-                </li>
-                <li>
-                  <label for="branch">Library:</label>
-                  <select id="branch" name="branch_filter">
-                    <option value="">All</option>
-                    [%# FIXME Should not we filter the libraries? %]
-                    [% PROCESS options_for_libraries libraries => Branches.all( selected => branch_filter, unfiltered => 1 ) %]
-                  </select>
-                </li>
-                <li>
-                  <label for="location">Location:</label>
-                  [% PROCESS 'av-build-dropbox.inc' name="location_filter", category="LOC", default=location_filter, all=1 %]
-                </li>
-                <li>
-                  <label for="to">Expires before:</label>
-                  <input type="text" id="to" name="expiration_date_filter" value="[% expiration_date_filter | $KohaDates %]" size="10" maxlength="10" class="flatpickr" />
-                </li>
-                [% INCLUDE 'additional-fields-entry.inc' available=additional_fields_for_subscription values=additional_field_filters wrap_fieldset=0 %]
-              </ol>
-              <input type="hidden" name="searched" value="1" />
-              [% IF ( mana ) %]<input type="hidden" name="mana" value="1" />[% END %]
-              <fieldset class="action">
-                <input type="submit" value="Search" />
-              </fieldset>
-          </fieldset>
-        </form>
-      </div>
-      [% END %]
-      [% IF ( done_searched ) %]
-        [% IF ( total ) %]
-          <div id="serialstabs" class="toptabs" style="clear:both;">
-            <ul class="ui-tabs-nav">
-              [% IF mana %]
-                <li><a href="#mana">Mana ([% total || 0 | html %])</a></li>
-              [% ELSE %]
-                <li><a href="#opened">Open ([% openedsubscriptions.size || 0 | html %])</a></li>
-                <li><a href="#closed">Closed ([% closedsubscriptions.size || 0 | html %])</a></li>
-              [% END %]
-            </ul>
-            [% IF mana %]
-                <div id="mana">
-                    [% INCLUDE 'mana/mana-subscription-search-result.inc' %]
-                </div>
-            [% ELSE %]
-            <div id="opened">
-              [% IF openedsubscriptions %]
-                  [% INCLUDE subscriptions_table subscriptions = openedsubscriptions %]
-              [% ELSE %]
-                <div class="dialog message">
-                  <p>Your search returned no open subscriptions.</p>
-                </div>
-              [% END %]
-            </div>
-            <div id="closed">
-              [% IF closedsubscriptions %]
-                [% INCLUDE subscriptions_table subscriptions = closedsubscriptions closed = 1 %]
-              [% ELSE %]
-                <div class="dialog message">
-                  <p>Your search returned no closed subscriptions.</p>
-                </div>
-              [% END %]
-            </div>
-            [% END %]
-          </div>
-        [% ELSE %]
-            <div class="dialog message">
-              <p>Your search returned no results.</p>
-            </div>
-        [% END %]
-      [% END %]
-
-            </main>
-        </div> <!-- /.col-sm-10.col-sm-push-2 -->
-
-        <div class="col-sm-2 col-sm-pull-10">
-            <aside>
-
-    [% INCLUDE 'serials-menu.inc' %]
-    [% IF ( done_searched ) %]
-    [% UNLESS ( mana ) %]
-    <div id="advsearch">
-        <form action="/cgi-bin/koha/serials/serials-search.pl" method="get">
-          <fieldset class="brief">
-            <h4>Search subscriptions</h4>
-              <ol>
-                <li>
-                  <label for="issn">ISSN:</label>
-                  <input type="text" id="issn" name="ISSN_filter" value="[% ISSN_filter | html %]" />
-                </li>
-                <li>
-                  <label for="title">Title:</label>
-                  <input type="text" id="title" name="title_filter" value="[% title_filter | html %]" />
-                </li>
-                [% IF ( marcflavour == "UNIMARC" ) %]
-                <li>
-                  <label for="ean">EAN:</label>
-                  <input type="text" id="ean" name="EAN_filter" value="[% EAN_filter | html %]" />
-                </li>
-                [% END %]
-                <li>
-                  <label for="callnumber">Call number:</label>
-                  <input type="text" id="callnumber" name="callnumber_filter" value="[% callnumber_filter | html %]" />
-                </li>
-                <li>
-                  <label for="publisher">Publisher:</label>
-                  <input type="text" id="publisher" name="publisher_filter" value="[% publisher_filter | html %]" />
-                </li>
-                <li>
-                  <label for="bookseller">Vendor:</label>
-                  <input type="text" id="bookseller" name="bookseller_filter" value="[% bookseller_filter | html %]" />
-                </li>
-                <li>
-                  <label for="branch">Library:</label>
-                  <select id="branch" name="branch_filter">
-                    <option value="">All</option>
-                    [%# FIXME Should not we filter the libraries? %]
-                    [% PROCESS options_for_libraries libraries => Branches.all( selected => branch_filter, unfiltered => 1 ) %]
-                  </select>
-                </li>
-                <li>
-                  <label for="location">Location:</label>
-                  [% PROCESS 'av-build-dropbox.inc' name="location_filter", category="LOC", default=location_filter, all=1 %]
-                </li>
-                <li>
-                  <label for="to">Expires before:</label>
-                  <input type="text" id="to" name="expiration_date_filter" value="[% expiration_date_filter | $KohaDates %]" size="10" maxlength="10" class="flatpickr" />
-                </li>
-
-                [% FOR field IN additional_fields_for_subscription %]
-                  <li>
-                    <label for="additional_field_[% field.id | html %]ID"> [% field.name | html %]: </label>
-                    [% IF field.authorised_value_category %]
-                      <select id="additional_field_[% field.id | html %]" name="additional_field_[% field.id | html %]">
-                        <option value="">All</option>
-                        [% FOREACH av IN AuthorisedValues.GetAuthValueDropbox(field.authorised_value_category) %]
-                          [% IF av.authorised_value == additional_field_filters.${field.id} %]
-                            <option value="[% av.authorised_value | html %]" selected="selected">[% av.lib | html %]</option>
-                          [% ELSE %]
-                            <option value="[% av.authorised_value | html %]">[% av.lib | html %]</option>
-                          [% END %]
+                    [% IF ( done_searched ) %]
+                        [% IF ( total ) %]
+                            <div id="serialstabs" class="toptabs" style="clear:both;">
+                                <ul class="ui-tabs-nav">
+                                    [% IF mana %]
+                                        <li><a href="#mana">Mana ([% total || 0 | html %])</a></li>
+                                    [% ELSE %]
+                                        <li><a href="#opened">Open ([% openedsubscriptions.size || 0 | html %])</a></li>
+                                        <li><a href="#closed">Closed ([% closedsubscriptions.size || 0 | html %])</a></li>
+                                    [% END %]
+                                </ul>
+                                [% IF mana %]
+                                    <div id="mana">
+                                        [% INCLUDE 'mana/mana-subscription-search-result.inc' %]
+                                    </div>
+                                [% ELSE %]
+                                    <div id="opened">
+                                        [% IF openedsubscriptions %]
+                                            [% INCLUDE subscriptions_table subscriptions = openedsubscriptions %]
+                                        [% ELSE %]
+                                            <div class="dialog message">
+                                                <p>Your search returned no open subscriptions.</p>
+                                            </div>
+                                        [% END %]
+                                    </div>
+                                    <div id="closed">
+                                        [% IF closedsubscriptions %]
+                                            [% INCLUDE subscriptions_table subscriptions = closedsubscriptions closed = 1 %]
+                                        [% ELSE %]
+                                            <div class="dialog message">
+                                                <p>Your search returned no closed subscriptions.</p>
+                                            </div>
+                                        [% END %]
+                                    </div>
+                                [% END %]
+                            </div>
+                        [% ELSE %]
+                            <div class="dialog message">
+                                <p>Your search returned no results.</p>
+                            </div>
                         [% END %]
-                      </select>
-                    [% ELSE %]
-                      <input id="additional_field_[% field.id | html %]" type="text" value="[% additional_field_filters.${field.id} | html %]" name="additional_field_[% field.id | html %]" />
                     [% END %]
-                  </li>
-                [% END %]
-              </ol>
-              <input type="hidden" name="searched" value="1" />
-              <fieldset class="action">
-                <input type="submit" value="Search" />
-              </fieldset>
 
-            </div>
-          </fieldset>
-        </form>
-      [% END %]
-      [% END %]
-            </aside>
-        </div> <!-- /.col-sm-2.col-sm-pull-10 -->
-     </div> <!-- /.row -->
+                </main>
+            </div> <!-- /.col-sm-10.col-sm-push-2 -->
+
+            <div class="col-sm-2 col-sm-pull-10">
+                <aside>
+
+                    [% INCLUDE 'serials-menu.inc' %]
+                    [% IF ( done_searched ) %]
+                        [% UNLESS ( mana ) %]
+                            <div id="advsearch">
+                                <form action="/cgi-bin/koha/serials/serials-search.pl" method="get">
+                                    <fieldset class="brief">
+                                        <h4>Search subscriptions</h4>
+                                        <ol>
+                                            <li>
+                                                <label for="issn">ISSN:</label>
+                                                <input type="text" id="issn" name="ISSN_filter" value="[% ISSN_filter | html %]" />
+                                            </li>
+                                            <li>
+                                                <label for="title">Title:</label>
+                                                <input type="text" id="title" name="title_filter" value="[% title_filter | html %]" />
+                                            </li>
+                                            [% IF ( marcflavour == "UNIMARC" ) %]
+                                                <li>
+                                                    <label for="ean">EAN:</label>
+                                                    <input type="text" id="ean" name="EAN_filter" value="[% EAN_filter | html %]" />
+                                                </li>
+                                            [% END %]
+                                            <li>
+                                                <label for="callnumber">Call number:</label>
+                                                <input type="text" id="callnumber" name="callnumber_filter" value="[% callnumber_filter | html %]" />
+                                            </li>
+                                            <li>
+                                                <label for="publisher">Publisher:</label>
+                                                <input type="text" id="publisher" name="publisher_filter" value="[% publisher_filter | html %]" />
+                                            </li>
+                                            <li>
+                                                <label for="bookseller">Vendor:</label>
+                                                <input type="text" id="bookseller" name="bookseller_filter" value="[% bookseller_filter | html %]" />
+                                            </li>
+                                            <li>
+                                                <label for="branch">Library:</label>
+                                                <select id="branch" name="branch_filter">
+                                                    <option value="">All</option>
+                                                    [%# FIXME Should not we filter the libraries? %]
+                                                    [% PROCESS options_for_libraries libraries => Branches.all( selected => branch_filter, unfiltered => 1 ) %]
+                                                </select>
+                                            </li>
+                                            <li>
+                                                <label for="location">Location:</label>
+                                                [% PROCESS 'av-build-dropbox.inc' name="location_filter", category="LOC", default=location_filter, all=1 %]
+                                            </li>
+                                            <li>
+                                                <label for="to">Expires before:</label>
+                                                <input type="text" id="to" name="expiration_date_filter" value="[% expiration_date_filter | $KohaDates %]" size="10" maxlength="10" class="flatpickr" />
+                                            </li>
+
+                                            [% FOR field IN additional_fields_for_subscription %]
+                                                <li>
+                                                    <label for="additional_field_[% field.id | html %]ID"> [% field.name | html %]: </label>
+                                                    [% IF field.authorised_value_category %]
+                                                        <select id="additional_field_[% field.id | html %]" name="additional_field_[% field.id | html %]">
+                                                            <option value="">All</option>
+                                                            [% FOREACH av IN AuthorisedValues.GetAuthValueDropbox(field.authorised_value_category) %]
+                                                                [% IF av.authorised_value == additional_field_filters.${field.id} %]
+                                                                    <option value="[% av.authorised_value | html %]" selected="selected">[% av.lib | html %]</option>
+                                                                [% ELSE %]
+                                                                    <option value="[% av.authorised_value | html %]">[% av.lib | html %]</option>
+                                                                [% END %]
+                                                            [% END %]
+                                                        </select>
+                                                    [% ELSE %]
+                                                        <input id="additional_field_[% field.id | html %]" type="text" value="[% additional_field_filters.${field.id} | html %]" name="additional_field_[% field.id | html %]" />
+                                                    [% END %]
+                                                </li>
+                                            [% END %]
+                                        </ol>
+                                        <input type="hidden" name="searched" value="1" />
+                                        <fieldset class="action">
+                                            <input type="submit" value="Search" />
+                                        </fieldset>
+
+                                    </fieldset>
+                                </form>
+                            </div>
+                        [% END %]
+                    [% END %]
+                </aside>
+            </div> <!-- /.col-sm-2.col-sm-pull-10 -->
+        </div> <!-- /.row -->
 
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'calendar.inc' %]
