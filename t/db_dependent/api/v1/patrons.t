@@ -189,7 +189,7 @@ subtest 'add() tests' => sub {
     $schema->storage->txn_rollback;
 
     subtest 'librarian access tests' => sub {
-        plan tests => 22;
+        plan tests => 24;
 
         $schema->storage->txn_begin;
 
@@ -284,6 +284,11 @@ subtest 'add() tests' => sub {
         delete $newpatron->{anonymized};
         $patron_to_delete->delete;
 
+        # Set a date field
+        $newpatron->{date_of_birth} = '1980-06-18';
+        # Set a date-time field
+        $newpatron->{last_seen} = output_pref({ dt => dt_from_string->add( days => -1 ), dateformat => 'rfc3339' });
+
         $t->post_ok("//$userid:$password@/api/v1/patrons" => json => $newpatron)
           ->status_is(201, 'Patron created successfully')
           ->header_like(
@@ -291,9 +296,11 @@ subtest 'add() tests' => sub {
             'SWAGGER3.4.1'
           )
           ->json_has('/patron_id', 'got a patron_id')
-          ->json_is( '/cardnumber' => $newpatron->{ cardnumber })
-          ->json_is( '/surname'    => $newpatron->{ surname })
-          ->json_is( '/firstname'  => $newpatron->{ firstname });
+          ->json_is( '/cardnumber'    => $newpatron->{ cardnumber })
+          ->json_is( '/surname'       => $newpatron->{ surname })
+          ->json_is( '/firstname'     => $newpatron->{ firstname })
+          ->json_is( '/date_of_birth' => $newpatron->{ date_of_birth }, 'Date field set (Bug 28585)' )
+          ->json_is( '/last_seen'     => $newpatron->{ last_seen }, 'Date-time field set (Bug 28585)' );
 
         warning_like {
             $t->post_ok("//$userid:$password@/api/v1/patrons" => json => $newpatron)
@@ -432,7 +439,7 @@ subtest 'update() tests' => sub {
     $schema->storage->txn_rollback;
 
     subtest 'librarian access tests' => sub {
-        plan tests => 42;
+        plan tests => 44;
 
         $schema->storage->txn_begin;
 
@@ -548,7 +555,6 @@ subtest 'update() tests' => sub {
         is_deeply($got, $newpatron, 'Returned patron from update matches expected');
         t::lib::Dates::compare( $updated_on_got, $updated_on_expected, 'updated_on values matched' );
 
-
         is(Koha::Patrons->find( $patron_2->id )->cardnumber,
            $newpatron->{ cardnumber }, 'Patron is really updated!');
 
@@ -611,9 +617,16 @@ subtest 'update() tests' => sub {
         delete $newpatron->{email};
         delete $newpatron->{secondary_email};
         delete $newpatron->{altaddress_email};
+
+        # Set a date field
+        $newpatron->{date_of_birth} = '1980-06-18';
+        # Set a date-time field
+        $newpatron->{last_seen} = output_pref({ dt => dt_from_string->add( days => -1 ), dateformat => 'rfc3339' });
+
         $t->put_ok( "//$userid:$password@/api/v1/patrons/" . $superlibrarian->borrowernumber => json => $newpatron )
-          ->status_is(200, "Non-superlibrarian user can edit superlibrarian successfully if not changing email");
-#  ->json_is( { error => "Not enough privileges to change a superlibrarian's email" } );
+          ->status_is(200, "Non-superlibrarian user can edit superlibrarian successfully if not changing email")
+          ->json_is( '/date_of_birth' => $newpatron->{ date_of_birth }, 'Date field set (Bug 28585)' )
+          ->json_is( '/last_seen'     => $newpatron->{ last_seen }, 'Date-time field set (Bug 28585)' );
 
         $schema->storage->txn_rollback;
     };
