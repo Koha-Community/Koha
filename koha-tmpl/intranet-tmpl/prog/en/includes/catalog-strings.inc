@@ -10,6 +10,7 @@
     [% SET cancelled = Context.Scalar(orders, "filter_by_cancelled") %]
     var countorders = [% current.count || 0 | html %];
     var countdeletedorders = [% cancelled.count || 0 | html %];
+    var subscriptionscount = [% biblio.subscriptions.count || 0 | html %];
     var searchid = '[% searchid | html %]';
 
     /* provide Z3950 search points */
