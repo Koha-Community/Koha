@@ -40,12 +40,12 @@
           <th>Holds</th>
           <th>Items</th>
           <th>Hold ratio</th>
-          <th>Title</th>
+          <th class="anti-the">Title</th>
           <th>Home libraries</th>
           <th>Holding libraries</th>
           <th>Location</th>
           <th>Itype</th>
-          <th>Call numbers</th>
+          <th class="natural">Call numbers</th>
           <th>Items needed</th>
         </tr>
       </thead>
@@ -182,8 +182,8 @@
             KohaTable("holdst", {
                 "aaSorting": [ [2,'desc'], [3,'asc'] ],
                   "aoColumnDefs": [
-                      { "aTargets": [ 8 ], "sType": "natural" },
-                      { "aTargets": [ 3 ], "sType": "anti-the" },
+                      { "sType": "anti-the", "aTargets" : [ "anti-the" ] },
+                      { "sType": "natural", "aTargets" : [ "natural" ] },
                     ],
                 "sPaginationType": "full",
                 "autoWidth": false
