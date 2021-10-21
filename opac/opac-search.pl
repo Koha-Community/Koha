@@ -574,7 +574,10 @@ if ($tag) {
 
 # use Data::Dumper; print STDERR "-" x 25, "\n", Dumper($results_hashref);
 if (not $tag and ( $@ || $error)) {
-    $template->param(query_error => $error.$@);
+    my $query_error = q{};
+    $query_error .= $error if $error;
+    $query_error .= $@ if $@;
+    $template->param(query_error => $query_error);
     output_html_with_http_headers $cgi, $cookie, $template->output;
     exit;
 }
