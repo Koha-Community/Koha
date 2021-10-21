@@ -44,6 +44,8 @@ function confirm_deletion(link) {
         }
     } else if ( holdcount > 0 ) {
         is_confirmed = confirm( __("%s holds(s) for this record. Are you sure you want to delete this record?").format(holdcount));
+    } else if (subscriptionscount > 0){
+        is_confirmed = alert(__("%s subscription(s) are attached to this record. You must delete all subscription before deleting this record.").format(subscriptionscount));
     } else {
         is_confirmed = confirm( __("Are you sure you want to delete this record?") );
     }
