@@ -51,7 +51,6 @@ use Koha::Plugins;
 use Koha::Database;
 use Koha::BiblioFrameworks;
 use Koha::Items;
-use Koha::Patron::Messages;
 use Koha::SearchEngine;
 use Koha::SearchEngine::Search;
 use Koha::Patron::Modifications;
@@ -523,10 +522,8 @@ if ( $patron ) {
     }
 }
 
-my $patron_messages = Koha::Patron::Messages->search(
-    {
-        'me.borrowernumber' => $borrowernumber,
-    },
+my $patron_messages = $patron->messages->search(
+    {},
     {
        join => 'manager',
        '+select' => ['manager.surname', 'manager.firstname' ],
@@ -579,7 +576,7 @@ if ($restoreduedatespec || $stickyduedate) {
 }
 
 $template->param(
-    patron_messages           => $patron_messages,
+    patron_messages   => $patron_messages,
     borrowernumber    => $borrowernumber,
     branch            => $branch,
     was_renewed       => scalar $query->param('was_renewed') ? 1 : 0,

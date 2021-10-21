@@ -44,6 +44,7 @@ use Koha::Patron::Debarments;
 use Koha::Patron::HouseboundProfile;
 use Koha::Patron::HouseboundRole;
 use Koha::Patron::Images;
+use Koha::Patron::Messages;
 use Koha::Patron::Modifications;
 use Koha::Patron::Relationships;
 use Koha::Patrons;
@@ -1700,6 +1701,20 @@ sub extended_attributes {
     my $rs = $self->_result->borrower_attributes;
     # We call search to use the filters in Koha::Patron::Attributes->search
     return Koha::Patron::Attributes->_new_from_dbic($rs)->search;
+}
+
+=head3 messages
+
+    my $messages = $patron->messages;
+
+Return the message attached to the patron.
+
+=cut
+
+sub messages {
+    my ( $self ) = @_;
+    my $messages_rs = $self->_result->messages_borrowernumbers->search;
+    return Koha::Patron::Messages->_new_from_dbic($messages_rs);
 }
 
 =head3 lock

@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 13;
+use Test::More tests => 14;
 use Test::Exception;
 use Test::Warn;
 
@@ -1018,6 +1018,35 @@ subtest 'add_article_request_fee_if_needed() tests' => sub {
         'branchcode set to userenv session library' );
     is( $debit->itemnumber, undef,
         'itemnumber set correctly to undef' );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'messages' => sub {
+    plan tests => 4;
+
+    $schema->storage->txn_begin;
+
+    my $patron = $builder->build_object( { class => 'Koha::Patrons' } );
+    my $messages = $patron->messages;
+    is( $messages->count, 0, "No message yet" );
+    my $message_1 = $builder->build_object(
+        {
+            class => 'Koha::Patron::Messages',
+            value => { borrowernumber => $patron->borrowernumber }
+        }
+    );
+    my $message_2 = $builder->build_object(
+        {
+            class => 'Koha::Patron::Messages',
+            value => { borrowernumber => $patron->borrowernumber }
+        }
+    );
+
+    $messages = $patron->messages;
+    is( $messages->count, 2, "There are two messages for this patron" );
+    is( $messages->next->message, $message_1->message );
+    is( $messages->next->message, $message_2->message );
 
     $schema->storage->txn_rollback;
 };
