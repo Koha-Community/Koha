@@ -107,6 +107,9 @@
     <legend>Search for </legend>
     [% FOREACH query IN queries %]
         [% IF ( expanded_options ) %]
+        [% IF loop.first %]
+        <div class="search-term-row" style="text-indent: 4.25em;">
+        [% ELSE %]
         <div class="search-term-row">
             [% SET opindex = loop.index - 1 %]
             <select name="op">
@@ -124,6 +127,7 @@
                 <option value="NOT">not</option>
             [% END %]
             </select>
+        [% END %]
         [% ELSE %]
         <div>
         [% END %]
@@ -131,7 +135,9 @@
         [% INCLUDE 'search_indexes.inc' %]
         <input type="text" size="30" name="q" title="Enter search terms" value="[% query | html %]" />
         [% IF ( expanded_options ) %]
+          [% IF ( loop.last ) %]
             <a href="JavaScript:add_field();" id="ButtonPlus" title="Add another field">[+]</a>
+          [% END %]
           [% IF ( loop.first ) %]
             <label for="scan">Scan indexes:</label> <input type="checkbox" name="scan" id="scan" value="1" />
           [% END %]
@@ -237,7 +243,6 @@
 </fieldset>
 <!-- /BASIC LIMITS -->
 [% END %]
-
 
 [% IF ( UNIMARC ) %]
 [% INCLUDE 'subtypes_unimarc.inc' %]
