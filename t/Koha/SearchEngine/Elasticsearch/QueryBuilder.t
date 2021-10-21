@@ -187,7 +187,7 @@ subtest '_split_query() tests' => sub {
 };
 
 subtest 'clean_search_term() tests' => sub {
-    plan tests => 24;
+    plan tests => 25;
 
     my $qb;
     ok(
@@ -238,6 +238,9 @@ subtest 'clean_search_term() tests' => sub {
 
     $res = $qb->clean_search_term('test! and more');
     is($res, 'test and more', 'remove exclamation sign at with space after it');
+
+    $res = $qb->clean_search_term('test! and more (and more!)');
+    is($res, 'test and more (and more)', 'remove exclamation sign followed by close parentheses');
 
     $res = $qb->clean_search_term('!test');
     is($res, '!test', 'exclamation sign left untouched');
