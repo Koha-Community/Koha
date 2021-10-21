@@ -97,7 +97,7 @@ dump_instance()
 
         # Dump configs, logs, etc.
         metadump="$backupdir/$name-$date.tar.gz"
-        [ "$quiet" = "no" ] && echo "* configs, files, logs to $metadump"
+        output="* configs, logs"
 
         if [ "$exclude_indexes" = "yes" ]; then
             excludes="--exclude=var/lib/koha/$name/biblios \
@@ -107,13 +107,21 @@ dump_instance()
         if [ "$uploaded_files" = "yes" ]; then
             # Remove leading /
             uploaded_files_dir=$(echo $(get_upload_path $name) | cut -c 2-)
+            output="$output, uploaded files"
         fi
 
         if [ "$uploaded_temp_files" = "yes" ]; then
             # Remove leading /
             tempdir=$(echo $(get_tmp_path $name) | cut -c 2-)
             uploaded_temp_files_dir="$tempdir/koha_${name}_upload"
+            if ! [ -d /$uploaded_temp_files_dir ]; then
+                mkdir /$uploaded_temp_files_dir
+            fi
+            output="$output, uploaded temporary files"
         fi
+
+        output="$output to $metadump"
+        [ "$quiet" = "no" ] && echo "$output"
 
         tar -czf "$metadump" -C / $excludes \
             "etc/koha/sites/$name" \
