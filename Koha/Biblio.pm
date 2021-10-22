@@ -495,13 +495,14 @@ sub get_marc_components {
 
     my $searchstr = $self->get_components_query;
 
+    my $components;
     if (defined($searchstr)) {
         my $searcher = Koha::SearchEngine::Search->new({index => $Koha::SearchEngine::BIBLIOS_INDEX});
         my ( $errors, $results, $total_hits ) = $searcher->simple_search_compat( $searchstr, 0, $max_results );
-        $self->{_components} = $results if ( defined($results) && scalar(@$results) );
+        $components = $results if defined($results) && @$results;
     }
 
-    return $self->{_components} || [];
+    return $components // [];
 }
 
 =head2 get_components_query
