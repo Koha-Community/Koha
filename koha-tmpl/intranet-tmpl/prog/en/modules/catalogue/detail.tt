@@ -269,7 +269,7 @@
         </li>
     [% END %]
 [% IF ( MARCNOTES || notes ) %]<li><a href="#description">Descriptions ([% ( MARCNOTES.size || 1 ) | html %])</a></li>[% END %]
-[% IF ( ComponentParts ) %]<li id="components_tab"><a href="#components">Components ([% ( ComponentParts.size ) %])</a></li>[% END %]
+[% IF ComponentParts && ComponentParts.size %]<li id="components_tab"><a href="#components">Components ([% ComponentParts.size | html %])</a></li>[% END %]
 [% IF ( subscriptionsnumber ) %]<li><a href="#subscriptions">Subscriptions</a></li>[% END %]
 [% IF Koha.Preference('AcquisitionDetails') %]<li><a href="#acq_details">Acquisition details</a></li>[% END %]
 [% IF suggestions.count %]<li><a href="#suggestion_details">Suggestion details</a></li>[% END %]
@@ -675,7 +675,7 @@ Note that permanent location is a code, and location may be an authval.
 
 [% END %]
 
-[% IF ComponentParts.size %]
+[% IF ComponentParts && ComponentParts.size %]
 <div id="components">
     <div class="content_set">
         <table>
@@ -688,7 +688,7 @@ Note that permanent location is a code, and location may be an authval.
             [% END %]
         </table>
         [% IF ComponentParts.size == Koha.Preference('MaxComponentRecords')%]
-        <p>Only [% ComponentParts.size %] results are shown: <a href="/cgi-bin/koha/catalogue/search.pl?q=[% ComponentPartsQuery | uri %]"/>show all component parts</a></p>
+        <p>Only [% ComponentParts.size | html %] results are shown: <a href="/cgi-bin/koha/catalogue/search.pl?q=[% ComponentPartsQuery | uri %]"/>show all component parts</a></p>
         [% END %]
 </div>
 
@@ -1264,7 +1264,7 @@ Note that permanent location is a code, and location may be an authval.
             [% IF count == 0 %]
                 [% IF ( Koha.Preference('HTML5MediaEnabled') == 'staff' or Koha.Preference('HTML5MediaEnabled') == 'both' ) && HTML5MediaSets.size %]
                     $('#bibliodetails').tabs("option", "active", $('#media_tab').index() );
-                [% ELSIF ComponentParts %]
+                [% ELSIF ComponentParts && ComponentParts.size %]
                     $('#bibliodetails').tabs("option", "active", $('#components_tab').index() );
                 [% END %]
             [% END %]
