@@ -605,8 +605,8 @@
                                 </tr>
                                 [% END %]
                             </table>
-                            [% IF ComponentParts.size == 300 %]
-                            <p>Only 300 results are shown: <a href="/cgi-bin/koha/catalogue/search.pl?q=[% ComponentPartsQuery | uri %]"/>show all component parts</a></p>
+                            [% IF ComponentParts.size == Koha.Preference('MaxComponentRecords')%]
+                            <p>Only [% ComponentParts.size %] results are shown: <a href="/cgi-bin/koha/opac-search.pl?q=[% ComponentPartsQuery | uri %]"/>show all component parts</a></p>
                             [% END %]
                         </div>
                     </div>

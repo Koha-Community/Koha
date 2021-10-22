@@ -214,7 +214,7 @@ foreach my $subscription (@subscriptions) {
 # Get component parts details
 my $showcomp = C4::Context->preference('ShowComponentRecords');
 if ( $showcomp eq 'both' || $showcomp eq 'staff' ) {
-    if ( my $components = $biblio->get_marc_components(300) ) {
+    if ( my $components = $biblio->get_marc_components(C4::Context->preference('MaxComponentRecords')) ) {
         my $parts;
         for my $part ( @{$components} ) {
             $part = C4::Search::new_record_from_zebra( 'biblioserver', $part );

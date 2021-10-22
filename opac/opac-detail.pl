@@ -661,7 +661,7 @@ my $max_items_to_display = C4::Context->preference('OpacMaxItemsToDisplay') // 5
 my $showcomp = C4::Context->preference('ShowComponentRecords');
 my $parts;
 if ( $showcomp eq 'both' || $showcomp eq 'opac' ) {
-    if ( my $components = $biblio->get_marc_components(300) ) {
+    if ( my $components = $biblio->get_marc_components(C4::Context->preference('MaxComponentRecords')) ) {
         for my $part ( @{$components} ) {
             $part = C4::Search::new_record_from_zebra( 'biblioserver', $part );
 
