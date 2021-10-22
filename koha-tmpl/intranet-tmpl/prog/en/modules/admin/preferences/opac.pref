@@ -888,6 +888,12 @@ OPAC:
             - '<br>If you choose <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=EmailAddressForPatronRegistrations">EmailAddressForPatronRegistrations</a> you have to enter a valid email address: '
             - pref: EmailAddressForPatronRegistrations
               class: email
+        -
+            - pref: PatronSelfRegistrationAlert
+              choices:
+                0: "Don't show"
+                1: "Show"
+            - an alert on staff interface home page when there are patrons in the category defined by <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=PatronSelfRegistrationDefaultCategory">PatronSelfRegistrationDefaultCategory</a>.
     Suggestions:
         -
             - pref: OpacSuggestionManagedBy

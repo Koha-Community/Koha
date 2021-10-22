@@ -138,6 +138,18 @@ if ( C4::Context->preference('CurbsidePickup') ) {
     );
 }
 
+if ( C4::Context->preference('PatronSelfRegistrationAlert') ) {
+    my $categorycode = C4::Context->preference('PatronSelfRegistrationDefaultCategory');
+    my $branchcode   = C4::Context::mybranch();
+
+    my $rs = Koha::Patrons->search( { categorycode => $categorycode } );
+
+    $template->param(
+        self_registered_count          => $rs->count,
+        self_registered_mybranch_count => $rs->search( { branchcode => $branchcode } )->count,
+    );
+}
+
 $template->param(
     pendingcomments                => $pendingcomments,
     pendingtags                    => $pendingtags,
