@@ -1626,7 +1626,7 @@ subtest 'ModReserve can only update expirationdate for found holds' => sub {
     my $borrowernumber = Koha::Patron->new(
         {
             firstname    => 'my firstname',
-            surname      => 'my surname ' . $_,
+            surname      => 'whatever surname',
             categorycode => $category->{categorycode},
             branchcode   => $branch,
         }
