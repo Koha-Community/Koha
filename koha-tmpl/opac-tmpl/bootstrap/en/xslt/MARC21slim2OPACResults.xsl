@@ -1330,7 +1330,8 @@
                             <status english="Damaged">Damaged</status>
                             <status english="Pending hold">Pending hold</status>
                             <status english="In transit">In transit</status>
-                            <status english="Waiting">On hold</status>
+                            <status english="Hold waiting">On hold</status>
+                            <status english="Recall waiting">Waiting recall</status>
                         </xsl:variable>
                         <xsl:variable name="unavailable_items" select="key('item-by-status', 'reallynotforloan')|key('item-by-status', 'other')"/>
                         <xsl:choose>
