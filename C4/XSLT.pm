@@ -281,24 +281,6 @@ sub XSLTParse4Display {
         }
     }
 
-    # possibly show analytics link in Detail views
-    if ( $xslsyspref eq "OPACXSLTDetailsDisplay" || $xslsyspref eq "XSLTDetailsDisplay" ) {
-        $biblio //= Koha::Biblios->find( $biblionumber );
-        my $components = $biblio->get_marc_components();
-        $variables->{show_analytics_link} = ( scalar @{$components} == 0 ) ? 0 : 1;
-
-        my $showcomp = C4::Context->preference('ShowComponentRecords');
-        if (
-            $variables->{show_analytics_link}
-            && (   $showcomp eq 'both'
-                || ( $showcomp eq 'staff' && $xslsyspref !~ m/OPAC/ )
-                || ( $showcomp eq 'opac'  && $xslsyspref =~ m/OPAC/ ) )
-          )
-        {
-             $variables->{show_analytics_link} = 0;
-        }
-    }
-
     my $varxml = "<variables>\n";
     while (my ($key, $value) = each %$variables) {
         $varxml .= "<variable name=\"$key\">$value</variable>\n";

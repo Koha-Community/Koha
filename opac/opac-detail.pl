@@ -195,38 +195,6 @@ SetUTF8Flag($record);
 my $marcflavour      = C4::Context->preference("marcflavour");
 my $ean = GetNormalizedEAN( $record, $marcflavour );
 
-{
-    my $variables = {
-        anonymous_session   => ($borrowernumber) ? 0 : 1,
-    };
-
-    my $lang   = C4::Languages::getlanguage();
-    my @plugin_responses = Koha::Plugins->call(
-        'opac_detail_xslt_variables',
-        {
-            biblio_id => $biblionumber,
-            lang      => $lang,
-            patron_id => $borrowernumber
-
-        }
-    );
-    for my $plugin_variables ( @plugin_responses ) {
-        $variables = { %$variables, %$plugin_variables };
-    }
-
-    $template->param(
-        XSLTBloc => XSLTParse4Display(
-            {
-                biblionumber   => $biblionumber,
-                record         => $record,
-                xsl_syspref    => 'OPACXSLTDetailsDisplay',
-                fix_amps       => 1,
-                xslt_variables => $variables
-            }
-        ),
-    );
-}
-
 my $OpacBrowseResults = C4::Context->preference("OpacBrowseResults");
 
 # We look for the busc param to build the simple paging from the search
@@ -659,16 +627,18 @@ my $max_items_to_display = C4::Context->preference('OpacMaxItemsToDisplay') // 5
 
 # Get component parts details
 my $showcomp = C4::Context->preference('ShowComponentRecords');
-my $parts;
+my ( $parts, $show_analytics );
 if ( $showcomp eq 'both' || $showcomp eq 'opac' ) {
     if ( my $components = $biblio->get_marc_components(C4::Context->preference('MaxComponentRecords')) ) {
+        $show_analytics = 1; # just show link when having results
         for my $part ( @{$components} ) {
             $part = C4::Search::new_record_from_zebra( 'biblioserver', $part );
+            my $id = Koha::SearchEngine::Search::extract_biblionumber( $part );
 
             push @{$parts},
               XSLTParse4Display(
                 {
-                    biblionumber => $biblionumber,
+                    biblionumber => $id,
                     record       => $part,
                     xsl_syspref  => 'OPACXSLTResultsDisplay',
                     fix_amps     => 1,
@@ -678,7 +648,34 @@ if ( $showcomp eq 'both' || $showcomp eq 'opac' ) {
         $template->param( ComponentParts => $parts );
         $template->param( ComponentPartsQuery => $biblio->get_components_query );
     }
+} else { # check if we should show analytics anyway
+    $show_analytics = 1 if @{$biblio->get_marc_components(1)}; # count matters here, results does not
 }
+
+# XSLT processing of some stuff
+my $variables = {};
+my @plugin_responses = Koha::Plugins->call(
+    'opac_detail_xslt_variables',
+    {
+        biblio_id => $biblionumber,
+        lang      => C4::Languages::getlanguage(),
+        patron_id => $borrowernumber,
+    },
+);
+for my $plugin_variables ( @plugin_responses ) {
+    $variables = { %$variables, %$plugin_variables };
+}
+$variables->{anonymous_session} = $borrowernumber ? 0 : 1;
+$variables->{show_analytics_link} = $show_analytics;
+$template->param(
+    XSLTBloc => XSLTParse4Display({
+        biblionumber   => $biblionumber,
+        record         => $record,
+        xsl_syspref    => 'OPACXSLTDetailsDisplay',
+        fix_amps       => 1,
+        xslt_variables => $variables,
+    }),
+);
 
 # Get items on order
 my ( @itemnumbers_on_order );

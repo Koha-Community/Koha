@@ -123,22 +123,6 @@ my $fw           = GetFrameworkCode($biblionumber);
 my $showallitems = $query->param('showallitems');
 my $marcflavour  = C4::Context->preference("marcflavour");
 
-{
-    # XSLT processing of some stuff
-
-    $template->param(
-        XSLTDetailsDisplay => '1',
-        XSLTBloc => XSLTParse4Display(
-            {
-                biblionumber   => $biblionumber,
-                record         => $record,
-                xsl_syspref    => "XSLTDetailsDisplay",
-                fix_amps       => 1,
-            }
-        ),
-    );
-}
-
 $template->param( 'SpineLabelShowPrintOnBibDetails' => C4::Context->preference("SpineLabelShowPrintOnBibDetails") );
 
 # Catch the exception as Koha::Biblio::Metadata->record can explode if the MARCXML is invalid
@@ -213,16 +197,19 @@ foreach my $subscription (@subscriptions) {
 
 # Get component parts details
 my $showcomp = C4::Context->preference('ShowComponentRecords');
+my $show_analytics;
 if ( $showcomp eq 'both' || $showcomp eq 'staff' ) {
     if ( my $components = $biblio->get_marc_components(C4::Context->preference('MaxComponentRecords')) ) {
+        $show_analytics = 1; # just show link when having results
         my $parts;
         for my $part ( @{$components} ) {
             $part = C4::Search::new_record_from_zebra( 'biblioserver', $part );
+            my $id = Koha::SearchEngine::Search::extract_biblionumber( $part );
 
             push @{$parts},
               XSLTParse4Display(
                 {
-                    biblionumber => $biblionumber,
+                    biblionumber => $id,
                     record       => $part,
                     xsl_syspref  => "XSLTResultsDisplay",
                     fix_amps     => 1,
@@ -232,7 +219,22 @@ if ( $showcomp eq 'both' || $showcomp eq 'staff' ) {
         $template->param( ComponentParts => $parts );
         $template->param( ComponentPartsQuery => $biblio->get_components_query );
     }
+} else { # check if we should show analytics anyway
+    $show_analytics = 1 if @{$biblio->get_marc_components(1)}; # count matters here, results does not
 }
+
+# XSLT processing of some stuff
+my $xslt_variables = { show_analytics_link => $show_analytics };
+$template->param(
+    XSLTDetailsDisplay => '1',
+    XSLTBloc => XSLTParse4Display({
+        biblionumber   => $biblionumber,
+        record         => $record,
+        xsl_syspref    => "XSLTDetailsDisplay",
+        fix_amps       => 1,
+        xslt_variables => $xslt_variables,
+    }),
+);
 
 # Get acquisition details
 if ( C4::Context->preference('AcquisitionDetails') ) {
