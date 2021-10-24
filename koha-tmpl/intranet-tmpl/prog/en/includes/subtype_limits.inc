@@ -104,7 +104,7 @@
         [% IF (limits.$lformat.0 == 'tc or fb' ) %]
             <option value="l-format:tc or fb" selected="selected" >Braille</option>
         [% ELSE %]
-            <option value="l-format:tc or l-format:fb" >Braille</option>
+            <option value="l-format:tc or fb" >Braille</option>
         [% END %]
             <option value="" >-----------</option>
         [% IF (limits.$lformat.0 == 'sd' ) %]
