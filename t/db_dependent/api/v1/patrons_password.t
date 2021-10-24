@@ -158,8 +158,7 @@ subtest 'set_public() (unprivileged user tests)' => sub {
           }
     )->status_is(403)->json_is(
         {
-            error =>
-              'Configuration prevents password changes by unprivileged users'
+            error => 'Changing password is forbidden'
         }
     );
 
