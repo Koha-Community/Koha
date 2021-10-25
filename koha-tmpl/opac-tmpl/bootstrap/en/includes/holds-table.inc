@@ -205,8 +205,7 @@
 
                         [% IF AutoResumeSuspendedHolds %]
                             <label for="suspend_until"> until </label>
-                            <input type="text" name="suspend_until" id="suspend_until" class="suspend-until" readonly="readonly" size="10" />
-                            <a href="#" style="font-size:85%;text-decoration:none;" onclick="document.getElementById('suspend_until').value='';return false;">Clear date to suspend indefinitely</a>
+                            <input type="text" name="suspend_until" id="suspend_until" class="flatpickr futuredate" size="10" />
                         [% END %]
                     </form>
                 </div>
