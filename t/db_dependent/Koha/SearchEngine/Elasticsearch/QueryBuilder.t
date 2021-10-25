@@ -723,7 +723,6 @@ subtest 'build_query_compat() SearchLimitLibrary tests' => sub {
 
     my $query_builder = Koha::SearchEngine::Elasticsearch::QueryBuilder->new({index => $Koha::SearchEngine::BIBLIOS_INDEX});
     t::lib::Mocks::mock_preference('SearchLimitLibrary', 'both');
-    diag(" SearchLimitLibrary set to 'both'");
     my ( undef, undef, undef, undef, undef, $limit, $limit_cgi, $limit_desc, undef ) =
         $query_builder->build_query_compat( undef, undef, undef, [ "branch:CPL" ], undef, undef, undef, undef );
     is( $limit, "(homebranch: CPL OR holdingbranch: CPL)", "Branch limit expanded to home/holding branch");
@@ -736,7 +735,6 @@ subtest 'build_query_compat() SearchLimitLibrary tests' => sub {
     is( $limit_cgi, "&limit=multibranchlimit%3A$groupid", "Multibranch limit cgi does not get expanded");
 
     t::lib::Mocks::mock_preference('SearchLimitLibrary', 'homebranch');
-    diag(" SearchLimitLibrary set to 'homebranch'");
     ( undef, undef, undef, undef, undef, $limit, $limit_cgi, $limit_desc, undef ) =
         $query_builder->build_query_compat( undef, undef, undef, [ "branch:CPL" ], undef, undef, undef, undef );
     is( $limit, "(homebranch: CPL)", "branch limit expanded to home branch");
@@ -749,7 +747,6 @@ subtest 'build_query_compat() SearchLimitLibrary tests' => sub {
     is( $limit_cgi, "&limit=multibranchlimit%3A$groupid", "Limit cgi does not get expanded");
 
     t::lib::Mocks::mock_preference('SearchLimitLibrary', 'holdingbranch');
-    diag(" SearchLimitLibrary set to 'homebranch'");
     ( undef, undef, undef, undef, undef, $limit, $limit_cgi, $limit_desc, undef ) =
         $query_builder->build_query_compat( undef, undef, undef, [ "branch:CPL" ], undef, undef, undef, undef );
     is( $limit, "(holdingbranch: CPL)", "branch limit expanded to holding branch");
