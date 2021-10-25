@@ -193,6 +193,14 @@ $contextmodule->mock('preference', sub {
         return '0';
     } elsif ($pref eq 'OPACPlayMusicalInscripts') {
         return '0';
+    } elsif ($pref eq 'Reference_NFL_Statuses') {
+        return '0';
+    } elsif ($pref eq 'FacetOrder') {
+        return 'Alphabetical';
+    } elsif ($pref eq 'OPACResultsUnavailableGroupingBy') {
+        return 'branch';
+    } elsif ($pref eq 'SearchLimitLibrary') {
+        return 'both';
     } else {
         warn "The syspref $pref was requested but I don't know what to say; this indicates that the test requires updating"
             unless $pref =~ m/(XSLT|item|branch|holding|image)/i;
