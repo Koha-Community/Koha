@@ -11,37 +11,37 @@
             <option value="aud:a">Preschool</option>
         [% END %]
         [% IF (limits.aud.0 == 'b' ) %]
-            <option value="aud:b">Primary</option>
+            <option value="aud:b" selected="selected">Primary</option>
         [% ELSE %]
             <option value="aud:b">Primary</option>
         [% END %]
         [% IF (limits.aud.0 == 'c' ) %]
-            <option value="aud:c">Pre-adolescent</option>
+            <option value="aud:c" selected="selected">Pre-adolescent</option>
         [% ELSE %]
             <option value="aud:c">Pre-adolescent</option>
         [% END %]
         [% IF (limits.aud.0 == 'd' ) %]
-            <option value="aud:d">Adolescent</option>
+            <option value="aud:d" selected="selected">Adolescent</option>
         [% ELSE %]
             <option value="aud:d">Adolescent</option>
         [% END %]
         [% IF (limits.aud.0 == 'e' ) %]
-            <option value="aud:e">Adult</option>
+            <option value="aud:e" selected="selected">Adult</option>
         [% ELSE %]
             <option value="aud:e">Adult</option>
         [% END %]
         [% IF (limits.aud.0 == 'f' ) %]
-            <option value="aud:f">Specialized</option>
+            <option value="aud:f" selected="selected">Specialized</option>
         [% ELSE %]
             <option value="aud:f">Specialized</option>
         [% END %]
         [% IF (limits.aud.0 == 'g' ) %]
-            <option value="aud:g">General</option>
+            <option value="aud:g" selected="selected">General</option>
         [% ELSE %]
             <option value="aud:g">General</option>
         [% END %]
         [% IF (limits.aud.0 == 'j' ) %]
-            <option value="aud:j">Juvenile</option>
+            <option value="aud:j" selected="selected">Juvenile</option>
         [% ELSE %]
             <option value="aud:j">Juvenile</option>
         [% END %]
