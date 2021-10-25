@@ -23,6 +23,7 @@ use CGI qw ( -utf8 );
 
 use C4::Auth qw(:DEFAULT get_session);
 use C4::Output;
+use C4::Context;
 
 my $cgi = CGI->new;
 
@@ -31,8 +32,7 @@ my ($template, $loggedinuser, $cookie)
 = get_template_and_user({template_name => "opac-overdrive-search.tt",
                                 query => $cgi,
                                 type => "opac",
-                                authnotrequired => 1,
-                                flagsrequired => {borrowers => 'edit_borrowers'},
+                                authnotrequired => ( C4::Context->preference("OpacPublic") ? 1 : 0 ),
                                 debug => 1,
                                 });
 
