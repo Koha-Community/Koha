@@ -28,12 +28,14 @@ use C4::Output qw( output_html_with_http_headers );
 my $cgi = CGI->new;
 
 # Getting the template and auth
-my ($template, $loggedinuser, $cookie)
-= get_template_and_user({template_name => "opac-overdrive-search.tt",
-                                query => $cgi,
-                                type => "opac",
-                                authnotrequired => ( C4::Context->preference("OpacPublic") ? 1 : 0 ),
-                                });
+my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
+    {
+        template_name   => "opac-overdrive-search.tt",
+        query           => $cgi,
+        type            => "opac",
+        authnotrequired => ( C4::Context->preference("OpacPublic") ? 1 : 0 ),
+    }
+);
 
 $template->{'VARS'}->{'q'} = $cgi->param('q');
 $template->{'VARS'}->{'limit'} = C4::Context->preference('OPACnumSearchResults') || 20;
