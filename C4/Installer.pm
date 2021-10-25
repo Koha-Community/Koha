@@ -364,7 +364,6 @@ sub load_sql_in_order {
     push @fnames, "$global_mandatory_dir/userflags.sql",
                   "$global_mandatory_dir/userpermissions.sql",
                   "$global_mandatory_dir/audio_alerts.sql",
-                  "$global_mandatory_dir/account_offset_types.sql",
                   "$global_mandatory_dir/account_credit_types.sql",
                   "$global_mandatory_dir/account_debit_types.sql",
                   ;
