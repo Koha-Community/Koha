@@ -40,6 +40,7 @@ use Koha::BiblioFrameworks;
 use Koha::SearchEngine::Search;
 use Koha::SearchEngine::QueryBuilder;
 use Koha::Z3950Servers;
+use Business::ISBN;
 
 my $input = CGI->new;
 
@@ -108,19 +109,11 @@ if ($query) {
 my $countbr = 0;
 my @resultsbr;
 if ($query) {
-# fill isbn or title, depending on what has been entered
-#u must do check on isbn because u can find number in beginning of title
-#check is on isbn legnth 13 for new isbn and 10 for old isbn
     my ( $title, $isbn );
-    if ($query=~/\d/) {
-        my $clean_query = $query;
-        $clean_query =~ s/-//g; # remove hyphens
-        my $querylength = length $clean_query;
-        if ( $querylength == 13 || $querylength == 10 ) {
-            $isbn = $query;
-        }
-    }
-    if (!$isbn) {
+    my $isbn_valid = Business::ISBN->new($query);
+    if ( $isbn_valid && $isbn_valid->is_valid() ) {
+        $isbn = $query;
+    } else {
         $title = $query;
     }
     ( $countbr, @resultsbr ) = BreedingSearch( $title, $isbn );
