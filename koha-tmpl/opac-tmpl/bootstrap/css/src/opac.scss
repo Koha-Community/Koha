@@ -1339,40 +1339,31 @@ nav {
         }
     }
 
-    background: transparent none;
-    border: 0;
-
     &.breadcrumb {
         background-color: #F0F3F3;
+        border-radius: 0;
         font-size: 85%;
-        list-style: none outside none;
         margin: 15px;
         padding: 5px 10px;
-        border-radius: 0px;
-
-        ol {
-            margin: 0;
-            padding-left: 0;
-            list-style: none;
-        }
-
-                                                                                             li {
-            display: inline;
-
-            &+li::before {
-                background: transparent url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNiIgaGVpZ2h0PSIxNiIgZmlsbD0iY3VycmVudENvbG9yIiBjbGFzcz0iYmkgYmktY2hldnJvbi1yaWdodCI+PHBhdGggZmlsbC1ydWxlPSJldmVub2RkIiBkPSJNNy4zNyAwbDUuMzUgNy4zYy4yLjIuMi41MSAwIC43bC01LjM4IDhoLTQuMmw1LjY0LTguMzVMMy4xMy4wMXoiLz48L3N2Zz4=") 50% 50% no-repeat;
-                background-size: 8px;
-                content: '';
-                display: inline-block;
-                height: .8em;
-                width: .8em;
-            }
-        }
 
         [aria-current="page"] {
             color: #000;
             font-weight: 700;
             text-decoration: none;
+        }
+    }
+}
+
+.breadcrumb-item {
+    + .breadcrumb-item {
+        &::before {
+            background: transparent url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' %3E%3Cpath fill-rule='evenodd' d='M7.37 0l5.35 7.3c.2.2.2.51 0 .7l-5.38 8h-4.2l5.64-8.35L3.13.01z'/%3E%3C/svg%3E") 50% 50% no-repeat;
+            background-size: 8px;
+            display: inline-block;
+            content: '';
+            float: none;
+            height: .8em;
+            width: .8em;
         }
     }
 }
