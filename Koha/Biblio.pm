@@ -510,6 +510,7 @@ sub get_marc_components {
                 {
                     type    => 'error',
                     message => 'component_search',
+                    payload => $error,
                 }
             );
         }
