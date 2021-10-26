@@ -1116,11 +1116,11 @@
                                         </li>
                                         <li>
                                             <label for="suggesteddate_from">Suggested date from:</label>
-                                            <input type="text" id="suggesteddate_from" size="10" name="suggesteddate_from" value="[% suggesteddate_from | html %]" />
+                                            <input type="text" id="suggesteddate_from" size="10" name="suggesteddate_from" value="[% suggesteddate_from | html %]" data-date_to="suggesteddate_to" class="flatpickr" />
                                         </li>
                                         <li>
                                             <label for="suggesteddate_to">To:</label>
-                                            <input type="text" id="suggesteddate_to" size="10" name="suggesteddate_to" value="[% suggesteddate_to | html %]" />
+                                            <input type="text" id="suggesteddate_to" size="10" name="suggesteddate_to" value="[% suggesteddate_to | html %]" class="flatpickr" />
                                         </li>
                                         <li>
                                             <label for="managedby"> Managed by:</label>
@@ -1137,11 +1137,11 @@
                                         </li>
                                         <li>
                                             <label for="manageddate_from">Management date from:</label>
-                                            <input type="text" id="manageddate_from" size="10" name="manageddate_from" value="[% manageddate_from | html %]" />
+                                            <input type="text" id="manageddate_from" size="10" name="manageddate_from" value="[% manageddate_from | html %]" data-date_to="manageddate_to" class="flatpickr" />
                                         </li>
                                         <li>
                                             <label for="manageddate_to">To:</label>
-                                            <input type="text" id="manageddate_to" size="10" name="manageddate_to" value="[% manageddate_to | html %]" />
+                                            <input type="text" id="manageddate_to" size="10" name="manageddate_to" value="[% manageddate_to | html %]" class="flatpickr" />
                                         </li>
                                         <li>
                                             <label for="acceptedby"> Accepted by:</label>
@@ -1158,11 +1158,11 @@
                                         </li>
                                         <li>
                                             <label for="accepteddate_from">Accepted date from:</label>
-                                            <input type="text" id="accepteddate_from" size="10" name="accepteddate_from" value="[% accepteddate_from | html %]" />
+                                            <input type="text" id="accepteddate_from" size="10" name="accepteddate_from" value="[% accepteddate_from | html %]" data-date_to="accepteddate_to" class="flatpickr" />
                                         </li>
                                         <li>
                                             <label for="accepteddate_to">To:</label>
-                                            <input type="text" id="accepteddate_to" size="10" name="accepteddate_to" value="[% accepteddate_to | html %]" />
+                                            <input type="text" id="accepteddate_to" size="10" name="accepteddate_to" value="[% accepteddate_to | html %]" class="flatpickr" />
                                         </li>
                                         <li>
                                             <input type="submit" value="Go" />
@@ -1351,45 +1351,6 @@
                 $("h4.local_collapse a").click(function(){
                     $(this).parent().parent().find("ol").toggle();
                     return false;
-                });
-
-                /* Suggested date fields */
-                var suggesteddate_from = $("#suggesteddate_from").flatpickr({
-                    onClose: function( selectedDates, dateText, instance) {
-                        validate_date( selectedDates, instance );
-                        suggesteddate_to.set('minDate', selectedDates[0]);
-                    }
-                });
-                var suggesteddate_to = $("#suggesteddate_to").flatpickr({
-                    onClose: function( selectedDates, dateText, instance) {
-                        validate_date( selectedDates, instance );
-                    },
-                });
-
-                /* Managed date fields */
-                var manageddate_from = $("#manageddate_from").flatpickr({
-                    onClose: function( selectedDates, dateText, instance) {
-                        validate_date( selectedDates, instance );
-                        manageddate_to.set('minDate', selectedDates[0]);
-                    }
-                });
-                var manageddate_to = $("#manageddate_to").flatpickr({
-                    onClose: function( selectedDates, dateText, instance) {
-                        validate_date( selectedDates, instance );
-                    },
-                });
-
-                /* Accepted date fields */
-                var accepteddate_from = $("#accepteddate_from").flatpickr({
-                    onClose: function( selectedDates, dateText, instance) {
-                        validate_date( selectedDates, instance );
-                        accepteddate_to.set('minDate', selectedDates[0]);
-                    }
-                });
-                var accepteddate_to = $("#accepteddate_to").flatpickr({
-                    onClose: function( selectedDates, dateText, instance) {
-                        validate_date( selectedDates, instance );
-                    },
                 });
 
                 $("button[type='submit']").on("click", function(e) {
