@@ -558,6 +558,8 @@ sub BatchCommitRecords {
     my $batch_id = shift;
     my $framework = shift;
 
+    my $schema = Koha::Database->schema;
+
     # optional callback to monitor status 
     # of job
     my $progress_interval = 0;
@@ -592,11 +594,17 @@ sub BatchCommitRecords {
     $sth->execute($batch_id);
     my $marcflavour = C4::Context->preference('marcflavour');
     my $rec_num = 0;
+    $schema->txn_begin; # We commit in a transaction
     while (my $rowref = $sth->fetchrow_hashref) {
         $record_type = $rowref->{'record_type'};
+
         $rec_num++;
+
         if ($progress_interval and (0 == ($rec_num % $progress_interval))) {
-            &$progress_callback($rec_num);
+            # report progress and commit
+            $schema->txn_commit;
+            &$progress_callback( $rec_num );
+            $schema->txn_begin;
         }
         if ($rowref->{'status'} eq 'error' or $rowref->{'status'} eq 'imported') {
             $num_ignored++;
@@ -705,6 +713,7 @@ sub BatchCommitRecords {
             SetImportRecordStatus($rowref->{'import_record_id'}, 'ignored');
         }
     }
+    $schema->txn_commit; # Commit final records that may not have hit callback threshold
     $sth->finish();
     SetImportBatchStatus($batch_id, 'imported');
     return ($num_added, $num_updated, $num_items_added, $num_items_replaced, $num_items_errored, $num_ignored);
