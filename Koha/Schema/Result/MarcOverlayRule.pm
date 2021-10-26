@@ -38,7 +38,6 @@ __PACKAGE__->table("marc_overlay_rules");
 =head2 module
 
   data_type: 'varchar'
-  is_foreign_key: 1
   is_nullable: 0
   size: 127
 
@@ -81,7 +80,7 @@ __PACKAGE__->add_columns(
   "tag",
   { data_type => "varchar", is_nullable => 0, size => 255 },
   "module",
-  { data_type => "varchar", is_foreign_key => 1, is_nullable => 0, size => 127 },
+  { data_type => "varchar", is_nullable => 0, size => 127 },
   "filter",
   { data_type => "varchar", is_nullable => 0, size => 255 },
   "add",
@@ -111,26 +110,9 @@ __PACKAGE__->add_columns(
 
 __PACKAGE__->set_primary_key("id");
 
-=head1 RELATIONS
 
-=head2 module
-
-Type: belongs_to
-
-Related object: L<Koha::Schema::Result::MarcOverlayRulesModule>
-
-=cut
-
-__PACKAGE__->belongs_to(
-  "module",
-  "Koha::Schema::Result::MarcOverlayRulesModule",
-  { name => "module" },
-  { is_deferrable => 1, on_delete => "CASCADE", on_update => "CASCADE" },
-);
-
-
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2021-03-26 17:56:31
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:zSQHbrkBihPcEkzjW1M2bg
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2021-10-26 13:45:44
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:fA/OqudFcHff0itNGDnjZw
 
 __PACKAGE__->add_columns(
     '+add'    => { is_boolean => 1 },
