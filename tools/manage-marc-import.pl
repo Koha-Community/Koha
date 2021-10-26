@@ -235,21 +235,17 @@ sub commit_batch {
     my ( $num_added, $num_updated, $num_items_added,
         $num_items_replaced, $num_items_errored, $num_ignored );
     my $schema = Koha::Database->new->schema;
-    $schema->storage->txn_do(
-        sub {
-            my $callback = sub { };
-            if ($runinbackground) {
-                $job = put_in_background($import_batch_id);
-                $callback = progress_callback( $job, $dbh );
-            }
-            (
-                $num_added, $num_updated, $num_items_added,
-                $num_items_replaced, $num_items_errored, $num_ignored
-              )
-              = BatchCommitRecords( $import_batch_id, $framework, 50,
-                $callback );
-        }
-    );
+    my $callback = sub { };
+    if ($runinbackground) {
+        $job = put_in_background($import_batch_id);
+        $callback = progress_callback( $job );
+    }
+    (
+        $num_added, $num_updated, $num_items_added,
+        $num_items_replaced, $num_items_errored, $num_ignored
+      )
+      = BatchCommitRecords( $import_batch_id, $framework, 50,
+        $callback );
 
     my $results = {
         did_commit => 1,
@@ -281,7 +277,7 @@ sub revert_batch {
             my $callback = sub { };
             if ($runinbackground) {
                 $job = put_in_background($import_batch_id);
-                $callback = progress_callback( $job, $dbh );
+                $callback = progress_callback( $job );
             }
             (
                 $num_deleted,       $num_errors, $num_reverted,
@@ -347,11 +343,9 @@ sub put_in_background {
 
 sub progress_callback {
     my $job = shift;
-    my $dbh = shift;
     return sub {
         my $progress = shift;
         $job->progress($progress);
-        $dbh->commit();
     }
 }
 
