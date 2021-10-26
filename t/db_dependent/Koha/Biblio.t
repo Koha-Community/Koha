@@ -18,6 +18,7 @@
 use Modern::Perl;
 
 use Test::More tests => 18;
+use Test::Warn;
 
 use C4::Biblio qw( AddBiblio ModBiblio ModBiblioMarc );
 use Koha::Database;
@@ -26,6 +27,7 @@ use Koha::Acquisition::Orders;
 use Koha::AuthorisedValueCategories;
 use Koha::AuthorisedValues;
 use Koha::MarcSubfieldStructures;
+use Koha::Exceptions::Exception;
 
 use MARC::Field;
 use MARC::Record;
@@ -509,7 +511,7 @@ subtest 'suggestions() tests' => sub {
 
 subtest 'get_marc_components() tests' => sub {
 
-    plan tests => 3;
+    plan tests => 5;
 
     $schema->storage->txn_begin;
 
@@ -519,12 +521,12 @@ subtest 'get_marc_components() tests' => sub {
     my $search_mod = Test::MockModule->new( 'Koha::SearchEngine::Zebra::Search' );
     $search_mod->mock( 'simple_search_compat', \&search_component_record2 );
 
-    my @components = $host_biblio->get_marc_components;
-    is( ref(\@components), 'ARRAY', 'Return type is correct' );
+    my $components = $host_biblio->get_marc_components;
+    is( ref($components), 'ARRAY', 'Return type is correct' );
 
     is_deeply(
-        [@components],
-        [[]],
+        $components,
+        [],
         '->get_marc_components returns an empty ARRAY'
     );
 
@@ -534,8 +536,26 @@ subtest 'get_marc_components() tests' => sub {
 
     is_deeply(
         $host_biblio->get_marc_components,
-        [($component_record)],
+        [$component_record],
         '->get_marc_components returns the related component part record'
+    );
+    $search_mod->unmock( 'simple_search_compat');
+
+    $search_mod->mock( 'simple_search_compat',
+        sub { Koha::Exceptions::Exception->throw("error searching analytics") }
+    );
+    warning_like { $components = $host_biblio->get_marc_components }
+        qr{^Warning from simple_search_compat: 'error searching analytics'};
+
+    is_deeply(
+        $host_biblio->messages,
+        [
+            {
+                type    => 'error',
+                message => 'component_search',
+                payload => "error searching analytics"
+            }
+        ]
     );
     $search_mod->unmock( 'simple_search_compat');
 

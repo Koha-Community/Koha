@@ -505,7 +505,7 @@ sub get_marc_components {
         if( $error || $@ ) {
             $error //= q{};
             $error .= $@ if $@;
-            warn "Warning from simple_search_compat: $error";
+            warn "Warning from simple_search_compat: '$error'";
             $self->add_message(
                 {
                     type    => 'error',
