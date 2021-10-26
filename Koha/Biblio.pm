@@ -498,7 +498,21 @@ sub get_marc_components {
     my $components;
     if (defined($searchstr)) {
         my $searcher = Koha::SearchEngine::Search->new({index => $Koha::SearchEngine::BIBLIOS_INDEX});
-        my ( $errors, $results, $total_hits ) = $searcher->simple_search_compat( $searchstr, 0, $max_results );
+        my ( $error, $results, $total_hits );
+        eval {
+            ( $error, $results, $total_hits ) = $searcher->simple_search_compat( $searchstr, 0, $max_results );
+        };
+        if( $error || $@ ) {
+            $error //= q{};
+            $error .= $@ if $@;
+            warn "Warning from simple_search_compat: $error";
+            $self->add_message(
+                {
+                    type    => 'error',
+                    message => 'component_search',
+                }
+            );
+        }
         $components = $results if defined($results) && @$results;
     }
 

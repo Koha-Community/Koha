@@ -630,7 +630,7 @@ my $showcomp = C4::Context->preference('ShowComponentRecords');
 my ( $parts, $show_analytics );
 if ( $showcomp eq 'both' || $showcomp eq 'opac' ) {
     if ( my $components = $biblio->get_marc_components(C4::Context->preference('MaxComponentRecords')) ) {
-        $show_analytics = 1; # just show link when having results
+        $show_analytics = 1 if @{$components}; # just show link when having results
         for my $part ( @{$components} ) {
             $part = C4::Search::new_record_from_zebra( 'biblioserver', $part );
             my $id = Koha::SearchEngine::Search::extract_biblionumber( $part );
