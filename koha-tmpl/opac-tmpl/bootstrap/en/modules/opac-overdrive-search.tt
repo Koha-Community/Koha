@@ -78,13 +78,17 @@
             $availability_summary.html( '<span class="label">' + _("Availability:") + ' </span> ' + _("Loading...") );
 
             KOHA.OverDrive.Get(
-                prod.links.availability.href,
-                {},
+                prod.links.availabilityV2.href,
+                { version: 2},
                 function ( data ) {
                     if ( data.error ) return;
 
                     if( data.availabilityType == 'AlwaysAvailable' ){
                         $availability_summary.html( '<span class="label">' + _("Availability:") + ' </span> ' + '<span class="available"><b>' + _("Always available") + '</b></span>' );
+                     } else if ( data.availabilityType == 'LimitedAvailability' && data.available ) {
+                        $availability_summary.html( '<span class="label">' + _("Availability:") + ' </span> ' + '<span class="available"><b>' + _("Currently available") + '</b></span>' );
+                     } else if ( !data.available ) {
+                        $availability_summary.html( '<span class="label">' + _("Availability:") + ' </span> ' + '<span class="unavailable"><b>' + _("Currently unavailable") + '</b></span>' );
                      } else {
                         $availability_summary.html( '<span class="label">' + _("Availability:") + ' </span> ' + '<span class="available"><b>' + _("Items available:") + ' </b>' +  data.copiesAvailable + " " + _("out of") + ' ' + data.copiesOwned + '</span>' );
                     }
@@ -94,7 +98,7 @@
                     }
 
                     $tr.find( '.info' ).each(function() {
-                        KOHA.OverDriveCirculation.add_actions(this, data.id, data.copiesAvailable);
+                        KOHA.OverDriveCirculation.add_actions(this, data.reserveId, data.copiesAvailable);
                     });
                 }
             );

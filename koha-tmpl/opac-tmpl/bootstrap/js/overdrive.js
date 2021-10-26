@@ -11,7 +11,7 @@ KOHA.OverDrive = ( function() {
         Get: function( url, params, callback ) {
             $.ajax( {
                 type: 'GET',
-                url: url.replace( /https?:\/\/api.overdrive.com\/v1/, proxy_base_url ),
+                url: url.replace( /https?:\/\/api.overdrive.com\/v[1|2]/, proxy_base_url ),
                 dataType: 'json',
                 data: params,
                 error: function( xhr, error ) {
