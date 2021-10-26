@@ -59,10 +59,11 @@ if ( !(C4::Context->preference('OverDriveClientKey') && C4::Context->preference(
 
     exit;
 }
+my $version = $query->param('version') // 1;
 my $fixed_query = $query->query_string;
 $fixed_query =~ tr/;/&/;
 
-my $request = HTTP::Request::Common::GET( "https://api.overdrive.com/v1" . $query->path_info . '?' . $fixed_query );
+my $request = HTTP::Request::Common::GET( "https://api.overdrive.com/v$version" . $query->path_info . '?' . $fixed_query );
 $request->header( Authorization => $token );
 
 my $ua = LWP::UserAgent->new( "Koha " . Koha::version() );
