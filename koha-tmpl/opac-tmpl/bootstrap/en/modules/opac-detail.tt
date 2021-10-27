@@ -521,12 +521,10 @@
                         [% IF (SeparateHoldings) %]
                             <li><a href="#otherholdings">Other holdings [% ' ( ' _ (otheritemloop.size || 0) _ ' )' | html %]</a></li>
                         [% END %]
-                        [% IF ( MARCNOTES || notes || ( SyndeticsEnabled && SyndeticsSummary && SYNDETICS_SUMMARY )) %]
+                        [% IF ( MARCNOTES || ( SyndeticsEnabled && SyndeticsSummary && SYNDETICS_SUMMARY )) %]
                             [% SET title_notes_count = 0 %]
                             [% IF MARCNOTES %]
                                 [% SET title_notes_count = MARCNOTES.size %]
-                            [% ELSIF notes %]
-                                [% SET title_notes_count = 1 %]
                             [% END %]
                             [% IF SYNDETICS_SUMMARY %][% SET title_notes_count = title_notes_count + 1 %][% END %]
                             <li id="tab_descriptions"> <a href="#descriptions">Title notes ( [% title_notes_count | html %] )</a></li>
@@ -682,7 +680,7 @@
                         </div>
                     [% END # / SeparateHoldings %]
 
-                    [% IF ( MARCNOTES || notes || ( SyndeticsEnabled && SyndeticsSummary && SYNDETICS_SUMMARY )) %]
+                    [% IF ( MARCNOTES || ( SyndeticsEnabled && SyndeticsSummary && SYNDETICS_SUMMARY )) %]
                         <div id="descriptions">
                             <div class="content_set">
 
@@ -703,15 +701,11 @@
                                         </p>
                                     [% END %]
                                     </div>
-                                [% ELSE %]
-                                    [% IF ( notes ) %]
-                                        <p>[% notes | html %]</p>
-                                    [% END %]
                                 [% END %]
 
                             </div> <!-- /.content_set -->
                         </div> <!-- / #descriptions -->
-                    [% END # / IF MARCNOTES || notes %]
+                    [% END # / IF MARCNOTES %]
 
                     [% IF ( SyndeticsEnabled ) %]
                         [% IF ( SyndeticsTOC && SYNDETICS_TOC ) %]

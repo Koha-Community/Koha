@@ -274,7 +274,7 @@
             <a href="#holdings">Holdings ([% itemloop.size() || 0 | html %])</a>
         </li>
     [% END %]
-[% IF ( MARCNOTES || notes ) %]<li><a href="#description">Descriptions ([% ( MARCNOTES.size || 1 ) | html %])</a></li>[% END %]
+[% IF ( MARCNOTES ) %]<li><a href="#description">Descriptions ([% ( MARCNOTES.size || 1 ) | html %])</a></li>[% END %]
 [% IF ( subscriptionsnumber ) %]<li><a href="#subscriptions">Subscriptions</a></li>[% END %]
 [% IF Koha.Preference('AcquisitionDetails') %]<li><a href="#acq_details">Acquisition details</a></li>[% END %]
 [% IF suggestions.count %]<li><a href="#suggestion_details">Suggestion details</a></li>[% END %]
@@ -655,12 +655,11 @@ Note that permanent location is a code, and location may be an authval.
     </div>
 [% END %]
 
-[% IF ( MARCNOTES || notes ) %]
+[% IF ( MARCNOTES ) %]
 
 <div id="description">
 <div class="content_set">
 
-[% IF ( MARCNOTES ) %]
     [% FOREACH MARCNOTE IN MARCNOTES %]
         <p>
         [% IF MARCNOTE.marcnote.match('^https?://\S+$') %]
@@ -669,11 +668,6 @@ Note that permanent location is a code, and location may be an authval.
             [% MARCNOTE.marcnote | html | html_line_break %]
         [% END %]
         </p>
-    [% END %]
-[% ELSE %]
-    [% IF ( notes ) %]
-        <p>[% notes | html %]</p>
-    [% END %]
 [% END %]
 </div>
 </div>
