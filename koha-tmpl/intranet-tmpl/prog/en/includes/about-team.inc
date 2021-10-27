@@ -139,6 +139,12 @@
         </li>
         [% END %]
 
+        [% IF t.newsletter %]
+        <li><strong>Newletter editor:</strong>
+            [% INCLUDE person p=t.newsletter %]
+        </li>
+        [% END %]
+
         [% IF t.translation %]
         <li><strong>Translation manager:</strong>
             [% INCLUDE person p=t.translation %]
