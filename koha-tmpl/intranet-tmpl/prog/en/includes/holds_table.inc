@@ -20,6 +20,7 @@
         [% END %]
         <th>&nbsp;</th>
         <th>&nbsp;</th>
+        <th>Print hold/transfer slip</th>
     </tr>
     [%- SET first_priority = 0 -%]
     [%- SET found_holds = 0 -%]
@@ -207,6 +208,7 @@
                     <input type="button" id="revert_hold_[% hold.reserve_id | html %]" value="[% IF hold.intransit %]Revert transit status[% ELSE %]Revert waiting status[% END %]" onclick="window.location.href='request.pl?action=move&amp;where=down&amp;first_priority=[% first_priority | uri %]&amp;last_priority=[% last_priority | uri %]&amp;prev_priority=0&amp;next_priority=1&amp;borrowernumber=[% hold.borrowernumber | uri %]&amp;biblionumber=[% hold.biblionumber | uri %]&amp;itemnumber=[% hold.itemnumber | uri %]&amp;reserve_id=[% hold.reserve_id | uri %]&amp;date=[% hold.date | uri %]'">
                 [%- END -%]
             </td>
+            <td><input class="printholdslip" type="button" name="printholdslip" value="Print slip" data-reserve_id=[% hold.reserve_id | html %]></td>
         </tr>
     [% END %]
 </table>
