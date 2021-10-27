@@ -716,6 +716,92 @@ sub get_components_query {
     return ($query, $query_str, $sort);
 }
 
+=head3 get_marc_volumes
+
+  my $volumes = $self->get_marc_volumes();
+
+Returns an array of MARCXML data, which are volumes parts of
+this object (MARC21 773$w points to this)
+
+=cut
+
+sub get_marc_volumes {
+    my ( $self, $max_results ) = @_;
+
+    return $self->{_volumes} if defined( $self->{_volumes} );
+
+    my $searchstr = $self->get_volumes_query;
+
+    if ( defined($searchstr) ) {
+        my $searcher = Koha::SearchEngine::Search->new( { index => $Koha::SearchEngine::BIBLIOS_INDEX } );
+        my ( $errors, $results, $total_hits ) = $searcher->simple_search_compat( $searchstr, 0, $max_results );
+        $self->{_volumes} =
+            ( defined($results) && scalar(@$results) ) ? $results : [];
+    } else {
+        $self->{_volumes} = [];
+    }
+
+    return $self->{_volumes};
+}
+
+=head2 get_volumes_query
+
+Returns a query which can be used to search for all component parts of MARC21 biblios
+
+=cut
+
+sub get_volumes_query {
+    my ($self) = @_;
+
+    # MARC21 Only for now
+    return if ( C4::Context->preference('marcflavour') ne 'MARC21' );
+
+    my $marc = $self->metadata->record;
+
+    # Only build volumes query if we're in a 'Set' record
+    # or we have a monographic series.
+    my $leader19 = substr( $marc->leader, 19, 1 );
+    my $pf008    = $marc->field('008') || '';
+    my $mseries  = ( $pf008 && substr( $pf008->data(), 21, 1 ) eq 'm' ) ? 1 : 0;
+    return unless ( $leader19 eq 'a' || $mseries );
+
+    my $builder = Koha::SearchEngine::QueryBuilder->new( { index => $Koha::SearchEngine::BIBLIOS_INDEX } );
+
+    my $searchstr;
+    if ( C4::Context->preference('UseControlNumber') ) {
+        my $pf001 = $marc->field('001') || undef;
+
+        if ( defined($pf001) ) {
+            $searchstr = "(";
+            my $pf003 = $marc->field('003') || undef;
+
+            if ( !defined($pf003) ) {
+
+                # search for 773$w='Host001'
+                $searchstr .= "rcn:" . $pf001->data();
+            } else {
+                $searchstr .= "(";
+
+                # search for (773$w='Host001' and 003='Host003') or 773$w='(Host003)Host001'
+                $searchstr .= "(rcn:" . $pf001->data() . " AND cni:" . $pf003->data() . ")";
+                $searchstr .= " OR rcn:\"" . $pf003->data() . " " . $pf001->data() . "\"";
+                $searchstr .= ")";
+            }
+
+            # exclude monograph and serial component part records
+            $searchstr .= " NOT (bib-level:a OR bib-level:b)";
+            $searchstr .= ")";
+        }
+    } else {
+        my $cleaned_title = $marc->subfield( '245', "a" );
+        $cleaned_title =~ tr|/||;
+        $cleaned_title = $builder->clean_search_term($cleaned_title);
+        $searchstr     = "ti,phr:($cleaned_title)";
+    }
+
+    return $searchstr;
+}
+
 =head3 subscriptions
 
 my $subscriptions = $self->subscriptions
@@ -1656,79 +1742,6 @@ sub opac_summary_html {
     $summary_html =~ s/{BIBLIONUMBER}/$biblionumber/g;
 
     return $summary_html;
-}
-
-=head3 get_marc_volumes
-
-  my $volumes = $self->get_marc_volumes();
-
-Returns an array of MARCXML data, which are volumes parts of
-this object (MARC21 773$w points to this)
-
-=cut
-
-sub get_marc_volumes {
-    my ($self, $max_results) = @_;
-
-    return [] if (C4::Context->preference('marcflavour') ne 'MARC21');
-
-    my $searchstr = $self->get_volumes_query;
-
-    if (defined($searchstr)) {
-        my $searcher = Koha::SearchEngine::Search->new({index => $Koha::SearchEngine::BIBLIOS_INDEX});
-        my ( $errors, $results, $total_hits ) = $searcher->simple_search_compat( $searchstr, 0, $max_results );
-        $self->{_volumes} = $results if ( defined($results) && scalar(@$results) );
-    }
-
-    return $self->{_volumes} || [];
-}
-
-=head2 get_volumes_query
-
-Returns a query which can be used to search for all component parts of MARC21 biblios
-
-=cut
-
-sub get_volumes_query {
-    my ($self) = @_;
-
-    my $builder = Koha::SearchEngine::QueryBuilder->new(
-        { index => $Koha::SearchEngine::BIBLIOS_INDEX } );
-    my $marc = $self->metadata->record;
-
-    my $searchstr;
-    if ( C4::Context->preference('UseControlNumber') ) {
-        my $pf001 = $marc->field('001') || undef;
-
-        if ( defined($pf001) ) {
-            $searchstr = "(";
-            my $pf003 = $marc->field('003') || undef;
-
-            if ( !defined($pf003) ) {
-                # search for 773$w='Host001'
-                $searchstr .= "rcn:" . $pf001->data();
-            }
-            else {
-                $searchstr .= "(";
-                # search for (773$w='Host001' and 003='Host003') or 773$w='(Host003)Host001'
-                $searchstr .= "(rcn:" . $pf001->data() . " AND cni:" . $pf003->data() . ")";
-                $searchstr .= " OR rcn:\"" . $pf003->data() . " " . $pf001->data() . "\"";
-                $searchstr .= ")";
-            }
-
-            # exclude monograph and serial component part records
-            $searchstr .= " NOT (bib-level:a OR bib-level:b)";
-            $searchstr .= ")";
-        }
-    }
-    else {
-        my $cleaned_title = $marc->subfield('245', "a");
-        $cleaned_title =~ tr|/||;
-        $cleaned_title = $builder->clean_search_term($cleaned_title);
-        $searchstr = "ti,phr:($cleaned_title)";
-    }
-
-    return $searchstr;
 }
 
 =head2 Internal methods

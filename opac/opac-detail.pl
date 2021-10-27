@@ -620,6 +620,9 @@ if ( $showcomp eq 'both' || $showcomp eq 'opac' ) {
     $show_analytics = 1 if @{$biblio->get_marc_components(1)}; # count matters here, results does not
 }
 
+# Display volumes link
+my $show_volumes = 1 if @{$biblio->get_marc_volumes(1)};
+
 # XSLT processing of some stuff
 my $variables = {};
 my $lang = C4::Languages::getlanguage();
@@ -636,6 +639,7 @@ for my $plugin_variables ( @plugin_responses ) {
 }
 $variables->{anonymous_session} = $borrowernumber ? 0 : 1;
 $variables->{show_analytics_link} = $show_analytics;
+$variables->{show_volumes_link} = $show_volumes;
 $template->param(
     XSLTBloc => XSLTParse4Display({
         biblionumber   => $biblionumber,

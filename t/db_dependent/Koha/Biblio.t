@@ -622,6 +622,13 @@ subtest 'get_volumes_query' => sub {
     my $biblionumber = $biblio->biblionumber;
     my $record       = $biblio->metadata->record;
 
+    # Ensure our mocked record is captured as a set or monographic series
+    my $ldr = $record->leader();
+    substr( $ldr, 19, 1 ) = 'a';
+    $record->leader($ldr);
+    C4::Biblio::ModBiblio( $record, $biblio->biblionumber );
+    $biblio = Koha::Biblios->find( $biblio->biblionumber );
+
     t::lib::Mocks::mock_preference( 'UseControlNumber', '0' );
     is( $biblio->get_volumes_query, "ti,phr:(Some boring read)", "UseControlNumber disabled" );
 
@@ -632,7 +639,7 @@ subtest 'get_volumes_query' => sub {
     $biblio = Koha::Biblios->find( $biblio->biblionumber );
 
     is(
-        $biblio->get_volumes_query, "rcn:$biblionumber NOT (bib-level:a OR bib-level:b)",
+        $biblio->get_volumes_query, "(rcn:$biblionumber NOT (bib-level:a OR bib-level:b))",
         "UseControlNumber enabled without MarcOrgCode"
     );
 
@@ -643,7 +650,7 @@ subtest 'get_volumes_query' => sub {
 
     is(
         $biblio->get_volumes_query,
-        "((rcn:$biblionumber AND cni:OSt) OR rcn:OSt $biblionumber) NOT (bib-level:a OR bib-level:b)",
+        "(((rcn:$biblionumber AND cni:OSt) OR rcn:\"OSt $biblionumber\") NOT (bib-level:a OR bib-level:b))",
         "UseControlNumber enabled with MarcOrgCode"
     );
 };

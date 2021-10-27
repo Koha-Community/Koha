@@ -269,8 +269,14 @@ if ( $showcomp eq 'both' || $showcomp eq 'staff' ) {
     $template->param( analytics_error => 1 ) if grep { $_->message eq 'component_search' } @{$biblio->object_messages};
 }
 
+# Display volumes link
+my $show_volumes = 1 if @{$biblio->get_marc_volumes(1)};
+
 # XSLT processing of some stuff
-my $xslt_variables = { show_analytics_link => $show_analytics };
+my $xslt_variables = {
+    show_analytics_link => $show_analytics,
+    show_volumes_link   => $show_volumes
+};
 $template->param(
     XSLTDetailsDisplay => '1',
     XSLTBloc => XSLTParse4Display({
