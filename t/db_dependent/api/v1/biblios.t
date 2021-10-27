@@ -20,7 +20,7 @@ use Modern::Perl;
 use utf8;
 use Encode;
 
-use Test::More tests => 6;
+use Test::More tests => 7;
 use Test::MockModule;
 use Test::Mojo;
 use Test::Warn;
@@ -29,8 +29,12 @@ use t::lib::Mocks;
 use t::lib::TestBuilder;
 
 use C4::Auth;
+use C4::Circulation qw( AddIssue AddReturn );
+
 use Koha::Biblios;
 use Koha::Database;
+use Koha::Checkouts;
+use Koha::Old::Checkouts;
 
 my $schema  = Koha::Database->new->schema;
 my $builder = t::lib::TestBuilder->new;
@@ -575,6 +579,67 @@ subtest 'get_items_public() tests' => sub {
         ],
         'The items are returned, the patron category has an override'
           );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'get_checkouts() tests' => sub {
+
+    plan tests => 14;
+
+    $schema->storage->txn_begin;
+
+    my $patron = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => { flags => 0 }
+        }
+    );
+    my $password = 'thePassword123';
+    $patron->set_password( { password => $password, skip_validation => 1 } );
+    $patron->discard_changes;
+    my $userid = $patron->userid;
+
+    my $biblio = $builder->build_sample_biblio();
+    $t->get_ok("//$userid:$password@/api/v1/biblios/" . $biblio->biblionumber . "/checkouts")
+      ->status_is(403);
+
+    $patron->flags(1)->store; # circulate permissions
+
+    $t->get_ok( "//$userid:$password@/api/v1/biblios/" . $biblio->biblionumber . "/checkouts")
+      ->status_is(200)
+      ->json_is( '' => [], 'No checkouts on the biblio' );
+
+    my $item_1 = $builder->build_sample_item({ biblionumber => $biblio->biblionumber });
+    my $item_2 = $builder->build_sample_item({ biblionumber => $biblio->biblionumber });
+
+    AddIssue( $patron->unblessed, $item_1->barcode );
+    AddIssue( $patron->unblessed, $item_2->barcode );
+
+    my $ret = $t->get_ok( "//$userid:$password@/api/v1/biblios/" . $biblio->biblionumber . "/checkouts")
+      ->status_is(200)
+      ->tx->res->json;
+
+    my $checkout_1 = Koha::Checkouts->find({ itemnumber => $item_1->id });
+    my $checkout_2 = Koha::Checkouts->find({ itemnumber => $item_2->id });
+
+    is_deeply( $ret, [ $checkout_1->to_api, $checkout_2->to_api ] );
+
+    AddReturn( $item_1->barcode );
+
+    $ret = $t->get_ok( "//$userid:$password@/api/v1/biblios/" . $biblio->biblionumber . "/checkouts")
+      ->status_is(200)
+      ->tx->res->json;
+
+    is_deeply( $ret, [ $checkout_2->to_api ] );
+
+    $ret = $t->get_ok( "//$userid:$password@/api/v1/biblios/" . $biblio->biblionumber . "/checkouts?checked_in=1")
+      ->status_is(200)
+      ->tx->res->json;
+
+    my $old_checkout_1 = Koha::Old::Checkouts->find( $checkout_1->id );
+
+    is_deeply( $ret, [ $old_checkout_1->to_api ] );
 
     $schema->storage->txn_rollback;
 };
