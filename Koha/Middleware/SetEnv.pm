@@ -66,6 +66,7 @@ name.
 my $allowed_setenvs = qr/^(
     OVERRIDE_SYSPREF_(\w+) |
     OVERRIDE_SYSPREF_NAMES |
+    OPAC_BRANCH_DEFAULT |
     OPAC_CSS_OVERRIDE |
     OPAC_SEARCH_LIMIT |
     OPAC_LIMIT_OVERRIDE |
