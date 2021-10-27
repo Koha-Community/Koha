@@ -157,7 +157,7 @@ subtest '->author' => sub {
 
 subtest '->search_for_display' => sub {
 
-    plan tests => 3;
+    plan tests => 4;
 
     $schema->storage->txn_begin;
 
@@ -243,13 +243,17 @@ subtest '->search_for_display' => sub {
     });
 
     my $news = Koha::AdditionalContents->search_for_display({ location => 'staff_only' });
-    is($news->count, 3, "There are 3 news for staff");
+    is($news->count, 1, "There is 1 news for all staff");
+
+    $news = Koha::AdditionalContents->search_for_display(
+        { location => 'staff_only', library_id => $library1->branchcode } );
+    is( $news->count, 2, "There are 2 news for staff at library1" );
 
     $news = Koha::AdditionalContents->search_for_display({ location => 'opac_only' });
-    is($news->count, 0, "There are 0 news for OPAC");
+    is($news->count, 0, "There are 0 news for OPAC only");
 
     $news = Koha::AdditionalContents->search_for_display({ location => 'staff_and_opac' });
-    is($news->count, 1, "There is 1 news for staff and OPAC");
+    is($news->count, 1, "There is 1 news for all staff and all OPAC ");
 
     # TODO We should add more tests here
 
