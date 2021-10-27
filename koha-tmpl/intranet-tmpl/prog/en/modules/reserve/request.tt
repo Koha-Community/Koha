@@ -1608,6 +1608,11 @@
             });
 
         });
+        $('.printholdslip').click(function(){
+                var reserve_id = $(this).attr('data-reserve_id');
+                window.open("/cgi-bin/koha/circ/hold-transfer-slip.pl?reserve_id=" + reserve_id);
+                return false;
+        })
     </script>
 [% END %]
 
