@@ -18,7 +18,9 @@ package Koha::Import::Record;
 use Modern::Perl;
 
 use Carp;
+use MARC::Record;
 
+use C4::Context;
 use Koha::Database;
 
 use base qw(Koha::Object);
@@ -28,6 +30,39 @@ use base qw(Koha::Object);
 Koha::Import::Record - Koha Import Record Object class
 
 =head1 API
+
+=head2 Public methods
+
+=head3 get_marc_record
+
+Returns a MARC::Record object
+
+    my $marc_record = $import_record->get_marc_record({ embed_items => $embed_items })
+
+If $embed_items is true then items from import_items are embedded into the
+MARC::Record returned
+
+=cut
+
+sub get_marc_record {
+    my ($self, $args) = @_;
+
+    my $marcflavour = C4::Context->preference('marcflavour');
+
+    my $format = $marcflavour eq 'UNIMARC' ? 'UNIMARC' : 'USMARC';
+    if ($marcflavour eq 'UNIMARC' && $self->record_type eq 'auth') {
+        $format = 'UNIMARCAUTH';
+    }
+
+    my $record = MARC::Record->new_from_xml($self->marcxml, $self->encoding, $format);
+
+    if ($self->record_type eq 'biblio' && $args->{embed_items}) {
+        require C4::ImportBatch;
+        C4::ImportBatch::EmbedItemsInImportBiblio($record, $self->id);
+    }
+
+    return $record;
+}
 
 =head2 Internal methods
 

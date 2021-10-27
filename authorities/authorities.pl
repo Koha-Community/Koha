@@ -24,13 +24,13 @@ use CGI qw ( -utf8 );
 use C4::Auth qw( get_template_and_user );
 use C4::Output qw( output_html_with_http_headers );
 use C4::AuthoritiesMarc qw( AddAuthority ModAuthority GetAuthority GetTagsLabels GetAuthMARCFromKohaField FindDuplicateAuthority );
-use C4::ImportBatch qw( GetImportRecordMarc );
 use C4::Context;
 use Date::Calc qw( Today );
 use MARC::File::USMARC;
 use MARC::File::XML;
 use C4::Biblio qw( TransformHtmlToMarc );
 use Koha::Authority::Types;
+use Koha::Import::Records;
 use Koha::ItemTypes;
 use vars qw( $tagslib);
 use vars qw( $authorised_values_sth);
@@ -47,21 +47,6 @@ our($authorised_values_sth,$is_a_modif,$usedTagsLib,$mandatory_z3950);
 builds list, depending on authorised value...
 
 =cut
-
-sub MARCfindbreeding_auth {
-    my ( $id ) = @_;
-    my ($marc, $encoding) = GetImportRecordMarc($id);
-    if ($marc) {
-        my $record = MARC::Record->new_from_usmarc($marc);
-        if ( !defined(ref($record)) ) {
-                return -1;
-        } else {
-            return $record, $encoding;
-        }
-    } else {
-        return -1;
-    }
-}
 
 sub build_authorized_values_list {
     my ( $tag, $subfield, $value, $dbh, $authorised_values_sth,$index_tag,$index_subfield ) = @_;
@@ -329,7 +314,7 @@ sub GetMandatoryFieldZ3950 {
 }
 
 sub build_tabs {
-    my ( $template, $record, $dbh, $encoding,$input ) = @_;
+    my ( $template, $record, $dbh, $input ) = @_;
 
     # fill arrays
     my @loop_data = ();
@@ -365,7 +350,7 @@ sub build_tabs {
 
             # if MARC::Record is not empty =>use it as master loop, then add missing subfields that should be in the tab.
             # if MARC::Record is empty => use tab as master loop.
-            if ( $record != -1 && ( $record->field($tag) || $tag eq '000' ) ) {
+            if ( $record && ( $record->field($tag) || $tag eq '000' ) ) {
                 my @fields;
                 if ( $tag ne '000' ) {
                                 @fields = $record->field($tag);
@@ -571,13 +556,14 @@ $template->param(nonav   => $nonav,index=>$myindex,authtypecode=>$authtypecode,b
 $tagslib = GetTagsLabels(1,$authtypecode);
 $mandatory_z3950 = GetMandatoryFieldZ3950($authtypecode);
 
-my $record=-1;
-my $encoding="";
-if (($authid) && !($breedingid)){
-    $record = GetAuthority($authid);
-}
+my $record;
 if ($breedingid) {
-    ( $record, $encoding ) = MARCfindbreeding_auth( $breedingid );
+    my $import_record = Koha::Import::Records->find($breedingid);
+    if ($import_record) {
+        $record = $import_record->get_marc_record();
+    }
+} elsif ($authid) {
+    $record = GetAuthority($authid);
 }
 
 my ($oldauthnumtagfield,$oldauthnumtagsubfield);
@@ -619,7 +605,7 @@ if ($op eq "add") {
         exit;
     } else {
     # it may be a duplicate, warn the user and do nothing
-        build_tabs($template, $record, $dbh, $encoding,$input);
+        build_tabs($template, $record, $dbh, $input);
         build_hidden_data;
         $template->param(authid =>$authid,
                         duplicateauthid     => $duplicateauthid,
@@ -640,7 +626,7 @@ if ($op eq "duplicate")
         {
                 $authid = "";
         }
-        build_tabs ($template, $record, $dbh,$encoding,$input);
+        build_tabs ($template, $record, $dbh, $input);
         build_hidden_data;
         $template->param(oldauthtypetagfield=>$oldauthtypetagfield, oldauthtypetagsubfield=>$oldauthtypetagsubfield,
                         oldauthnumtagfield=>$oldauthnumtagfield, oldauthnumtagsubfield=>$oldauthnumtagsubfield,

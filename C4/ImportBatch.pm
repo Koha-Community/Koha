@@ -46,8 +46,6 @@ BEGIN {
       GetZ3950BatchId
       GetWebserviceBatchId
       GetImportRecordMarc
-      GetImportRecordMarcXML
-      GetRecordFromImportBiblio
       AddImportBatch
       GetImportBatch
       AddAuthToBatch
@@ -191,17 +189,6 @@ sub GetImportRecordMarc {
     return $marc, $encoding;
 }
 
-sub GetRecordFromImportBiblio {
-    my ( $import_record_id, $embed_items ) = @_;
-
-    my ($marc) = GetImportRecordMarc($import_record_id);
-    my $record = MARC::Record->new_from_usmarc($marc);
-
-    EmbedItemsInImportBiblio( $record, $import_record_id ) if $embed_items;
-
-    return $record;
-}
-
 sub EmbedItemsInImportBiblio {
     my ( $record, $import_record_id ) = @_;
     my ( $itemtag, $itemsubfield ) = GetMarcFromKohaField( "items.itemnumber" );
@@ -218,24 +205,6 @@ sub EmbedItemsInImportBiblio {
     }
     $record->append_fields(@item_fields);
     return $record;
-}
-
-=head2 GetImportRecordMarcXML
-
-  my $marcxml = GetImportRecordMarcXML($import_record_id);
-
-=cut
-
-sub GetImportRecordMarcXML {
-    my ($import_record_id) = @_;
-
-    my $dbh = C4::Context->dbh;
-    my $sth = $dbh->prepare("SELECT marcxml FROM import_records WHERE import_record_id = ?");
-    $sth->execute($import_record_id);
-    my ($marcxml) = $sth->fetchrow();
-    $sth->finish();
-    return $marcxml;
-
 }
 
 =head2 AddImportBatch
