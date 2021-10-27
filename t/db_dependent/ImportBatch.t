@@ -10,6 +10,7 @@ use t::lib::Mocks;
 use t::lib::TestBuilder;
 
 use Koha::Database;
+use Koha::Import::Records;
 
 BEGIN {
     # Mock pluginsdir before loading Plugins module
@@ -17,7 +18,7 @@ BEGIN {
     t::lib::Mocks::mock_config( 'pluginsdir', $path );
 
     use_ok('Koha::Plugins');
-    use_ok('C4::ImportBatch', qw( AddImportBatch GetImportBatch AddBiblioToBatch AddItemsToImportBiblio GetRecordFromImportBiblio SetMatchedBiblionumber GetImportBiblios GetItemNumbersFromImportBatch CleanBatch DeleteBatch RecordsFromMarcPlugin ));
+    use_ok('C4::ImportBatch', qw( AddImportBatch GetImportBatch AddBiblioToBatch AddItemsToImportBiblio SetMatchedBiblionumber GetImportBiblios GetItemNumbersFromImportBatch CleanBatch DeleteBatch RecordsFromMarcPlugin ));
 }
 
 # Start transaction
@@ -93,47 +94,83 @@ my $original_record = MARC::Record->new;
 $record->leader('03174nam a2200445 a 4500');
 $original_record->leader('03174nam a2200445 a 4500');
 my ($item_tag, $item_subfield) = C4::Biblio::GetMarcFromKohaField( 'items.itemnumber' );
-my @fields = (
-    MARC::Field->new(
-        100, '1', ' ',
-        a => 'Knuth, Donald Ervin',
-        d => '1938',
-    ),
-    MARC::Field->new(
-        245, '1', '4',
-        a => 'The art of computer programming',
-        c => 'Donald E. Knuth.',
-    ),
-    MARC::Field->new(
-        650, ' ', '0',
-        a => 'Computer programming.',
-        9 => '462',
-    ),
-    MARC::Field->new(
-        $item_tag, ' ', ' ',
-        e => 'my edition ❤',
-        i => 'my item part',
-    ),
-    MARC::Field->new(
-        $item_tag, ' ', ' ',
-        e => 'my edition 2',
-        i => 'my item part 2',
-    ),
-);
+my @fields;
+if (C4::Context->preference('marcflavour') eq 'UNIMARC') {
+    @fields = (
+        MARC::Field->new(
+            100, ' ', ' ',
+            a => '20220520d        u||y0frey50      ba',
+        ),
+        MARC::Field->new(
+            700, ' ', ' ',
+            a => 'Knuth, Donald Ervin',
+            f => '1938',
+        ),
+        MARC::Field->new(
+            200, ' ', ' ',
+            a => 'The art of computer programming',
+            f => 'Donald E. Knuth.',
+        ),
+        MARC::Field->new(
+            650, ' ', '0',
+            a => 'Computer programming.',
+            9 => '462',
+        ),
+        MARC::Field->new(
+            $item_tag, ' ', ' ',
+            e => 'my edition ❤',
+            i => 'my item part',
+        ),
+        MARC::Field->new(
+            $item_tag, ' ', ' ',
+            e => 'my edition 2',
+            i => 'my item part 2',
+        ),
+    );
+} else {
+    @fields = (
+        MARC::Field->new(
+            100, '1', ' ',
+            a => 'Knuth, Donald Ervin',
+            d => '1938',
+        ),
+        MARC::Field->new(
+            245, '1', '4',
+            a => 'The art of computer programming',
+            c => 'Donald E. Knuth.',
+        ),
+        MARC::Field->new(
+            650, ' ', '0',
+            a => 'Computer programming.',
+            9 => '462',
+        ),
+        MARC::Field->new(
+            $item_tag, ' ', ' ',
+            e => 'my edition ❤',
+            i => 'my item part',
+        ),
+        MARC::Field->new(
+            $item_tag, ' ', ' ',
+            e => 'my edition 2',
+            i => 'my item part 2',
+        ),
+    );
+}
 $record->append_fields(@fields);
 $original_record->append_fields(@fields);
 my $import_record_id = AddBiblioToBatch( $id_import_batch1, 0, $record, 'utf8', int(rand(99999)), 0 );
 AddItemsToImportBiblio( $id_import_batch1, $import_record_id, $record, 0 );
 
-my $record_from_import_biblio_with_items = C4::ImportBatch::GetRecordFromImportBiblio( $import_record_id, 'embed_items' );
+my $import_record = Koha::Import::Records->find($import_record_id);
+my $record_from_import_biblio_with_items = $import_record->get_marc_record({ embed_items => 1 });
 $original_record->leader($record_from_import_biblio_with_items->leader());
-is_deeply( $record_from_import_biblio_with_items, $original_record, 'GetRecordFromImportBiblio should return the record with items if specified' );
+is_deeply( $record_from_import_biblio_with_items, $original_record, 'Koha::Import::Record::get_marc_record should return the record with items if specified' );
 my $utf8_field = $record_from_import_biblio_with_items->subfield($item_tag, 'e');
 is($utf8_field, 'my edition ❤');
 $original_record->delete_fields($original_record->field($item_tag)); #Remove items fields
-my $record_from_import_biblio_without_items = C4::ImportBatch::GetRecordFromImportBiblio( $import_record_id );
+my $record_from_import_biblio_without_items = $import_record->get_marc_record();
 $original_record->leader($record_from_import_biblio_without_items->leader());
-is_deeply( $record_from_import_biblio_without_items, $original_record, 'GetRecordFromImportBiblio should return the record without items by default' );
+is_deeply( $record_from_import_biblio_without_items, $original_record, 'Koha::Import::Record::get_marc_record should return the record without items by default' );
 
 my $another_biblio = $builder->build_sample_biblio;
 C4::ImportBatch::SetMatchedBiblionumber( $import_record_id, $another_biblio->biblionumber );
@@ -175,7 +212,7 @@ my $id_import_batch3 = C4::ImportBatch::AddImportBatch($sample_import_batch3);
 
 # Test CleanBatch
 C4::ImportBatch::CleanBatch( $id_import_batch3 );
-my $import_record = get_import_record( $id_import_batch3 );
+$import_record = get_import_record( $id_import_batch3 );
 is( $import_record, "0E0", "Batch 3 has been cleaned" );
 
 # Test DeleteBatch
@@ -221,7 +258,20 @@ subtest "RecordsFromMarcPlugin" => sub {
 
     # Create a test file
     my ( $fh, $name ) = tempfile();
-    print $fh q|
+    if (C4::Context->preference('marcflavour') eq 'UNIMARC') {
+        print $fh q{
+003 = NLAmRIJ
+100,a = 20220520d        u||y0frey50      ba
+700,a = Author
+200,ind2 = 0
+200,a = Silence in the library
+500 , a= Some note
+
+700,a = Another
+245,a = Noise in the library};
+        close $fh;
+    } else {
+        print $fh q|
 003 = NLAmRIJ
 100,a = Author
 245,ind2 = 0
@@ -230,7 +280,8 @@ subtest "RecordsFromMarcPlugin" => sub {
 
 100,a = Another
 245,a = Noise in the library|;
-    close $fh;
+        close $fh;
+    }
 
     t::lib::Mocks::mock_config( 'enable_plugins', 1 );
 
@@ -241,10 +292,17 @@ subtest "RecordsFromMarcPlugin" => sub {
     my $records = C4::ImportBatch::RecordsFromMarcPlugin( $name, ref $plugin, 'UTF-8' );
     is( @$records, 2, 'Two results returned' );
     is( ref $records->[0], 'MARC::Record', 'Returned MARC::Record object' );
-    is( $records->[0]->subfield('245', 'a'), 'Silence in the library',
-        'Checked one field in first record' );
-    is( $records->[1]->subfield('100', 'a'), 'Another',
-        'Checked one field in second record' );
+    if (C4::Context->preference('marcflavour') eq 'UNIMARC') {
+        is( $records->[0]->subfield('200', 'a'), 'Silence in the library',
+            'Checked one field in first record' );
+        is( $records->[1]->subfield('700', 'a'), 'Another',
+            'Checked one field in second record' );
+    } else {
+        is( $records->[0]->subfield('245', 'a'), 'Silence in the library',
+            'Checked one field in first record' );
+        is( $records->[1]->subfield('100', 'a'), 'Another',
+            'Checked one field in second record' );
+    }
 };
 
 sub get_import_record {
