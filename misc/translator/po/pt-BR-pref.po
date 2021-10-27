@@ -755,9 +755,35 @@ msgstr "admin.pref#ElasticsearchMARCFormat# ISO2709 (formato de troca)"
 msgid "admin.pref#ElasticsearchMARCFormat# Searchable array"
 msgstr "admin.pref#ElasticsearchMARCFormat# Matriz pesquisável"
 
+# Patrons > Notices and notifications > PhoneNotification
+#, fuzzy
+msgid ""
+"admin.pref#GoogleOAuth2ClientID# Along with <a href=\"/cgi-bin/koha/admin/"
+"preferences.pl?op=search&searchfield=GoogleOAuth2ClientSecret"
+"\">GoogleOAuth2ClientSecret</a>, enables <a href=\"/cgi-bin/koha/admin/"
+"preferences.pl?op=search&searchfield=GoogleOpenIDConnect"
+"\">GoogleOpenIDConnect.</a>"
+msgstr ""
+" <br/><i class=\"fa fa-exclamation-triangle\"></i> Se "
+"<code>PhoneNotification</code> estiver ativo, "
+"<code>TalkingTechItivaPhoneNotification</code> devera ser desabilitado."
+
 # Administration > Google OpenID Connect
 msgid "admin.pref#GoogleOAuth2ClientID# Google OAuth2 Client ID: "
 msgstr "Google OAuth2 Client ID: "
+
+# Patrons > Notices and notifications > PhoneNotification
+#, fuzzy
+msgid ""
+"admin.pref#GoogleOAuth2ClientSecret# Along with <a href=\"/cgi-bin/koha/"
+"admin/preferences.pl?op=search&searchfield=GoogleOAuth2ClientID"
+"\">GoogleOAuth2ClientID</a>, enables <a href=\"/cgi-bin/koha/admin/"
+"preferences.pl?op=search&searchfield=GoogleOpenIDConnect"
+"\">GoogleOpenIDConnect.</a>"
+msgstr ""
+" <br/><i class=\"fa fa-exclamation-triangle\"></i> Se "
+"<code>PhoneNotification</code> estiver ativo, "
+"<code>TalkingTechItivaPhoneNotification</code> devera ser desabilitado."
 
 # Administration > Google OpenID Connect
 msgid "admin.pref#GoogleOAuth2ClientSecret# Google OAuth2 Client Secret: "
@@ -768,7 +794,9 @@ msgid "admin.pref#GoogleOpenIDConnect# No"
 msgstr "Não"
 
 # Administration > Google OpenID Connect
-msgid "admin.pref#GoogleOpenIDConnect# Use Google OpenID Connect login: "
+#, fuzzy
+msgid ""
+"admin.pref#GoogleOpenIDConnect# Use Google OpenID Connect login in the OPAC: "
 msgstr "Use Google OpenID Connect login: "
 
 # Administration > Google OpenID Connect
@@ -776,11 +804,16 @@ msgid "admin.pref#GoogleOpenIDConnect# Yes"
 msgstr "Sim"
 
 # Administration > Google OpenID Connect
+#, fuzzy
 msgid ""
 "admin.pref#GoogleOpenIDConnect# You will need to select OAuth2 when creating "
 "an app in the Google cloud console, and set the web origin to your_opac_url "
 "and the redirect url to your_opac_url/cgi-bin/koha/svc/auth/"
-"googleopenidconnect ."
+"googleopenidconnect. Requires <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=GoogleOAuth2ClientID\">GoogleOAuth2ClientID</a> and <a "
+"href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=GoogleOAuth2ClientSecret\">GoogleOAuth2ClientSecret</"
+"a> to be set."
 msgstr ""
 "admin.pref # GoogleOpenIDConnect # Você precisará selecionar OAuth2 ao criar "
 "um aplicativo no console da nuvem do Google e definir a origem da web para "
@@ -796,16 +829,23 @@ msgid "admin.pref#GoogleOpenIDConnectAutoRegister# Don't allow"
 msgstr "admin.pref # GoogleOpenIDConnectAutoRegister # Não permitir"
 
 # Administration > Google OpenID Connect
+#, fuzzy
 msgid ""
 "admin.pref#GoogleOpenIDConnectAutoRegister# patrons logging in with Google "
-"Open ID to automatically register."
+"Open ID to automatically register. Requires <a href=\"/cgi-bin/koha/admin/"
+"preferences.pl?op=search&searchfield=GoogleOpenIDConnect"
+"\">GoogleOpenIDConnect</a>."
 msgstr ""
 "admin.pref # GoogleOpenIDConnectAutoRegister # patrons fazendo login com o "
 "Google Open ID para se registrar automaticamente."
 
-# Administration > Google OpenID Connect
-msgid "admin.pref#GoogleOpenIDConnectDefaultBranch# ."
-msgstr "admin.pref # GoogleOpenIDConnectDefaultBranch #."
+# Patrons > General
+#, fuzzy
+msgid ""
+"admin.pref#GoogleOpenIDConnectDefaultBranch# Requires <a href=\"/cgi-bin/"
+"koha/admin/preferences.pl?op=search&searchfield=GoogleOpenIDConnect"
+"\">GoogleOpenIDConnect</a>."
+msgstr "Requer que OPACPatronDetails seja ativado."
 
 # Administration > Google OpenID Connect
 msgid ""
@@ -815,9 +855,13 @@ msgstr ""
 "admin.pref # GoogleOpenIDConnectDefaultBranch # Use este código de agência "
 "ao registrar automaticamente um usuário do Google Open ID: "
 
-# Administration > Google OpenID Connect
-msgid "admin.pref#GoogleOpenIDConnectDefaultCategory# ."
-msgstr "admin.pref # GoogleOpenIDConnectDefaultCategory # ."
+# Patrons > General
+#, fuzzy
+msgid ""
+"admin.pref#GoogleOpenIDConnectDefaultCategory# Requires <a href=\"/cgi-bin/"
+"koha/admin/preferences.pl?op=search&searchfield=GoogleOpenIDConnect"
+"\">GoogleOpenIDConnect</a>."
+msgstr "Requer que OPACPatronDetails seja ativado."
 
 # Administration > Google OpenID Connect
 msgid ""
@@ -827,12 +871,15 @@ msgstr ""
 "admin.pref # GoogleOpenIDConnectDefaultCategory # Use este código de "
 "categoria ao registrar automaticamente um usuário do Google Open ID: "
 
-# Administration > Google OpenID Connect
+# OPAC > OpenURL
+#, fuzzy
 msgid ""
-"admin.pref#GoogleOpenIDConnectDomain# . Leave blank for all Google domains."
+"admin.pref#GoogleOpenIDConnectDomain# Leave blank for all Google domains. "
+"Requires <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=GoogleOpenIDConnect\">GoogleOpenIDConnect</a>."
 msgstr ""
-"admin.pref # GoogleOpenIDConnectDomain #. Deixe em branco para todos os "
-"domínios do Google."
+"Texto de links OpenURL (ou título da imagem se OpenURLImageLocation estiver "
+"definido):"
 
 # Administration > Google OpenID Connect
 msgid ""
@@ -2580,6 +2627,23 @@ msgid ""
 msgstr ""
 "Use uma linha por tag no formato BT_TAG: TAG $ SUBFIELD (por exemplo, lccn: "
 "010 $ a)."
+
+# Cataloging > Interface
+#, fuzzy
+msgid "cataloguing.pref#CreateAVFromCataloguing# Allow"
+msgstr "Ative"
+
+# Cataloging > Interface
+#, fuzzy
+msgid "cataloguing.pref#CreateAVFromCataloguing# Don't allow"
+msgstr "Não ativar"
+
+# Cataloging > Interface > CreateAVFromCataloguing
+msgid ""
+"cataloguing.pref#CreateAVFromCataloguing# authorized values to be created "
+"within the cataloguing module. Librarien will need the manage_auth_values "
+"subpermission."
+msgstr ""
 
 # Cataloging > Interface
 msgid "cataloguing.pref#DefaultClassificationSource# Use"
@@ -12423,6 +12487,26 @@ msgstr "Mostrar-se para"
 msgid "searching.pref#FacetMaxCount# facets for each category."
 msgstr "resultados em cada categoria."
 
+# Searching > Results display
+#, fuzzy
+msgid "searching.pref#FacetOrder# Sort facets"
+msgstr "Exibir resultados para"
+
+# Searching > Features
+#, fuzzy
+msgid "searching.pref#FacetOrder# alphabetically"
+msgstr "automaticamente."
+
+# Searching > Results display
+#, fuzzy
+msgid "searching.pref#FacetOrder# by usage count"
+msgstr "Mostrar-se para"
+
+# Searching > Results display
+#, fuzzy
+msgid "searching.pref#FacetOrder# for each category."
+msgstr "resultados em cada categoria."
+
 # Searching > Features
 msgid ""
 "searching.pref#IncludeSeeFromInSearches# <em>see from</em> (non-preferred "
@@ -14086,6 +14170,22 @@ msgid ""
 "reports web service."
 msgstr ""
 "linhas de um relatório solicitado através dos relatórios do serviço web."
+
+# Administration > Google OpenID Connect
+#~ msgid "admin.pref#GoogleOpenIDConnectDefaultBranch# ."
+#~ msgstr "admin.pref # GoogleOpenIDConnectDefaultBranch #."
+
+# Administration > Google OpenID Connect
+#~ msgid "admin.pref#GoogleOpenIDConnectDefaultCategory# ."
+#~ msgstr "admin.pref # GoogleOpenIDConnectDefaultCategory # ."
+
+# Administration > Google OpenID Connect
+#~ msgid ""
+#~ "admin.pref#GoogleOpenIDConnectDomain# . Leave blank for all Google "
+#~ "domains."
+#~ msgstr ""
+#~ "admin.pref # GoogleOpenIDConnectDomain #. Deixe em branco para todos os "
+#~ "domínios do Google."
 
 # Circulation > Batch checkout
 #~ msgid ""

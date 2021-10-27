@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Koha 21.05\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2021-09-03 13:54+0000\n"
-"Last-Translator: Eugenios Papadopoulos <eugenios.papadopoulos@gmail.com>\n"
+"PO-Revision-Date: 2021-10-14 20:45+0000\n"
+"Last-Translator: dataly <gveranis@dataly.gr>\n"
 "Language-Team: Koha Translation Team <koha-translate@nongnu.org>\n"
 "Language: el\n"
 "MIME-Version: 1.0\n"
@@ -11,7 +11,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8-bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.8\n"
-"X-POOTLE-MTIME: 1630677241.930396\n"
+"X-POOTLE-MTIME: 1634244313.587239\n"
 "X-Pootle-Path: /el/21.05/el-GR-pref.po\n"
 "X-Pootle-Revision: 1\n"
 
@@ -709,9 +709,27 @@ msgstr ""
 msgid "admin.pref#ElasticsearchMARCFormat# Searchable array"
 msgstr ""
 
+# Administration > Google OpenID Connect > GoogleOAuth2ClientID
+msgid ""
+"admin.pref#GoogleOAuth2ClientID# Along with <a href=\"/cgi-bin/koha/admin/"
+"preferences.pl?op=search&searchfield=GoogleOAuth2ClientSecret"
+"\">GoogleOAuth2ClientSecret</a>, enables <a href=\"/cgi-bin/koha/admin/"
+"preferences.pl?op=search&searchfield=GoogleOpenIDConnect"
+"\">GoogleOpenIDConnect.</a>"
+msgstr ""
+
 # Administration > Google OpenID Connect
 msgid "admin.pref#GoogleOAuth2ClientID# Google OAuth2 Client ID: "
 msgstr "Google OAuth2 Client ID: "
+
+# Administration > Google OpenID Connect > GoogleOAuth2ClientSecret
+msgid ""
+"admin.pref#GoogleOAuth2ClientSecret# Along with <a href=\"/cgi-bin/koha/"
+"admin/preferences.pl?op=search&searchfield=GoogleOAuth2ClientID"
+"\">GoogleOAuth2ClientID</a>, enables <a href=\"/cgi-bin/koha/admin/"
+"preferences.pl?op=search&searchfield=GoogleOpenIDConnect"
+"\">GoogleOpenIDConnect.</a>"
+msgstr ""
 
 # Administration > Google OpenID Connect
 msgid "admin.pref#GoogleOAuth2ClientSecret# Google OAuth2 Client Secret: "
@@ -722,19 +740,25 @@ msgid "admin.pref#GoogleOpenIDConnect# No"
 msgstr "Όχι"
 
 # Administration > Google OpenID Connect
-msgid "admin.pref#GoogleOpenIDConnect# Use Google OpenID Connect login: "
+#, fuzzy
+msgid ""
+"admin.pref#GoogleOpenIDConnect# Use Google OpenID Connect login in the OPAC: "
 msgstr "Χρήση της σύνδεσης Google OpenID Connect: "
 
 # Administration > Google OpenID Connect
 msgid "admin.pref#GoogleOpenIDConnect# Yes"
 msgstr "Ναι"
 
-# Administration > Google OpenID Connect
+# Administration > Google OpenID Connect > GoogleOpenIDConnect
 msgid ""
 "admin.pref#GoogleOpenIDConnect# You will need to select OAuth2 when creating "
 "an app in the Google cloud console, and set the web origin to your_opac_url "
 "and the redirect url to your_opac_url/cgi-bin/koha/svc/auth/"
-"googleopenidconnect ."
+"googleopenidconnect. Requires <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=GoogleOAuth2ClientID\">GoogleOAuth2ClientID</a> and <a "
+"href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=GoogleOAuth2ClientSecret\">GoogleOAuth2ClientSecret</"
+"a> to be set."
 msgstr ""
 
 # Administration > Google OpenID Connect
@@ -745,14 +769,19 @@ msgstr ""
 msgid "admin.pref#GoogleOpenIDConnectAutoRegister# Don't allow"
 msgstr ""
 
-# Administration > Google OpenID Connect
+# Administration > Google OpenID Connect > GoogleOpenIDConnectAutoRegister
 msgid ""
 "admin.pref#GoogleOpenIDConnectAutoRegister# patrons logging in with Google "
-"Open ID to automatically register."
+"Open ID to automatically register. Requires <a href=\"/cgi-bin/koha/admin/"
+"preferences.pl?op=search&searchfield=GoogleOpenIDConnect"
+"\">GoogleOpenIDConnect</a>."
 msgstr ""
 
-# Administration > Google OpenID Connect
-msgid "admin.pref#GoogleOpenIDConnectDefaultBranch# ."
+# Administration > Google OpenID Connect > GoogleOpenIDConnectDefaultBranch
+msgid ""
+"admin.pref#GoogleOpenIDConnectDefaultBranch# Requires <a href=\"/cgi-bin/"
+"koha/admin/preferences.pl?op=search&searchfield=GoogleOpenIDConnect"
+"\">GoogleOpenIDConnect</a>."
 msgstr ""
 
 # Administration > Google OpenID Connect
@@ -761,8 +790,11 @@ msgid ""
 "automatically registering a Google Open ID patron: "
 msgstr ""
 
-# Administration > Google OpenID Connect
-msgid "admin.pref#GoogleOpenIDConnectDefaultCategory# ."
+# Administration > Google OpenID Connect > GoogleOpenIDConnectDefaultCategory
+msgid ""
+"admin.pref#GoogleOpenIDConnectDefaultCategory# Requires <a href=\"/cgi-bin/"
+"koha/admin/preferences.pl?op=search&searchfield=GoogleOpenIDConnect"
+"\">GoogleOpenIDConnect</a>."
 msgstr ""
 
 # Administration > Google OpenID Connect
@@ -771,9 +803,11 @@ msgid ""
 "automatically registering a Google Open ID patron: "
 msgstr ""
 
-# Administration > Google OpenID Connect
+# Administration > Google OpenID Connect > GoogleOpenIDConnectDomain
 msgid ""
-"admin.pref#GoogleOpenIDConnectDomain# . Leave blank for all Google domains."
+"admin.pref#GoogleOpenIDConnectDomain# Leave blank for all Google domains. "
+"Requires <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=GoogleOpenIDConnect\">GoogleOpenIDConnect</a>."
 msgstr ""
 
 # Administration > Google OpenID Connect
@@ -2435,6 +2469,23 @@ msgstr ""
 msgid ""
 "cataloguing.pref#BibtexExportAdditionalFields# Use one line per tag in the "
 "format BT_TAG: TAG$SUBFIELD ( e.g. lccn: 010$a )."
+msgstr ""
+
+# Cataloging > Spine labels
+#, fuzzy
+msgid "cataloguing.pref#CreateAVFromCataloguing# Allow"
+msgstr "να γίνεται"
+
+# Cataloging > Interface
+#, fuzzy
+msgid "cataloguing.pref#CreateAVFromCataloguing# Don't allow"
+msgstr "Απενεργοποίηση"
+
+# Cataloging > Interface > CreateAVFromCataloguing
+msgid ""
+"cataloguing.pref#CreateAVFromCataloguing# authorized values to be created "
+"within the cataloguing module. Librarien will need the manage_auth_values "
+"subpermission."
 msgstr ""
 
 # Cataloging > Interface
@@ -4947,16 +4998,16 @@ msgid "circulation.pref#OPACAllowHoldDateInFuture# Don't allow"
 msgstr "Να μην επιτρέπεται"
 
 # Circulation > Holds policy
-#, fuzzy
 msgid ""
 "circulation.pref#OPACAllowHoldDateInFuture# patrons to place holds that "
 "don't enter the waiting list until a certain future date. (<a href=\"/cgi-"
 "bin/koha/admin/preferences.pl?op=search&searchfield=AllowHoldDateInFuture"
 "\">AllowHoldDateInFuture</a> must also be enabled)."
 msgstr ""
-"στα μέλη να κάνουν κρατήσεις που δεν μπαίνουν στη λίστα αναμονής μέχρι μία "
-"συγκεκριμένη μελλοντική ημερομηνία (το AllowHoldDateInFuture πρέπει να είναι "
-"ενεργοποιημένο)."
+"τα μέλη να κάνουν κρατήσεις που δεν μπαίνουν στη λίστα αναμονής μέχρι μία "
+"συγκεκριμένη μελλοντική ημερομηνία (το <a href=\"/cgi-bin/koha/admin/"
+"preferences.pl?op=search&searchfield=AllowHoldDateInFuture"
+"\">AllowHoldDateInFuture</a> πρέπει να είναι ενεργοποιημένο)."
 
 # Circulation > Holds policy
 msgid "circulation.pref#OPACAllowUserToChooseBranch# Allow"
@@ -7360,7 +7411,6 @@ msgid "enhanced_content.pref#SyndeticsEditions# Show"
 msgstr "Να εμφανίζονται"
 
 # Enhanced content > Syndetics
-#, fuzzy
 msgid ""
 "enhanced_content.pref#SyndeticsEditions# information about other editions of "
 "a title from Syndetics on item detail pages on the OPAC (when <a href=\"/cgi-"
@@ -7368,7 +7418,9 @@ msgid ""
 "\">OPACFRBRizeEditions</a> is on)."
 msgstr ""
 "πληροφορίες για άλλες εκδόσεις ενός τίτλου από το Syndetics στις σελίδες "
-"στοιχείων του OPAC (όταν το OPACFRBRizeEditions είναι ανοικτό)."
+"στοιχείων του OPAC (όταν το <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=OPACFRBRizeEditions\">OPACFRBRizeEditions</a> είναι "
+"ανοικτό)."
 
 # Enhanced content > Syndetics
 msgid "enhanced_content.pref#SyndeticsEnabled# Don't use"
@@ -7565,7 +7617,6 @@ msgid "enhanced_content.pref#ThingISBN# Use"
 msgstr "Να χρησιμοποιείται"
 
 # Enhanced content > Library Thing
-#, fuzzy
 msgid ""
 "enhanced_content.pref#ThingISBN# the ThingISBN service to show other "
 "editions of a title (when either <a href=\"/cgi-bin/koha/admin/preferences."
@@ -7574,9 +7625,12 @@ msgid ""
 "\">OPACFRBRizeEditions</a> is on). This is separate from Library Thing for "
 "Libraries."
 msgstr ""
-"η υπηρεσία ThingISBN για εμφάνιση άλλων εκδόσεων του τίτλους (όταν είτε το "
-"FRBRizeEdition είτε το OPACFRBRizeEditions είναι ανοικτό). Αυτό είναι "
-"ξεχωριστό από το Library Thing for Libraries."
+"η υπηρεσία ThingISBN για εμφάνιση άλλων εκδόσεων του τίτλους (όταν είτε το<a "
+"href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=FRBRizeEditions\">FRBRizeEditions</a> είτε το <a href="
+"\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=OPACFRBRizeEditions\">OPACFRBRizeEditions</a> είναι "
+"ανοικτό). Αυτό είναι ξεχωριστό από το Library Thing for Libraries."
 
 # I18N/L10N
 msgid "i18n_l10n.pref"
@@ -9550,7 +9604,6 @@ msgstr ""
 "του λογαριασμού χρήστη στον OPAC (γενικά σύνδεσμοι πλοήγησης):"
 
 # OPAC > Appearance
-#, fuzzy
 msgid ""
 "opac.pref#OpacNavBottom# Show the following HTML on the left hand column of "
 "the main page and patron account on the OPAC, after <a href=\"/cgi-bin/koha/"
@@ -9558,8 +9611,9 @@ msgid ""
 "patron account links if available:"
 msgstr ""
 "Να εμφανίζεται η ακόλουθη HTML στην αριστερή στήλη της κύριας σελίδας και "
-"του λογαριασμού χρήστη στον OPAC μετά το OpacNav, και πριν τους συνδέσμους "
-"λογαριασμού χρήστη αν είναι διαθέσιμοι:"
+"του λογαριασμού χρήστη στον OPAC μετά το  <a href=\"/cgi-bin/koha/admin/"
+"preferences.pl?op=search&searchfield=OpacNav\">OpacNav</a>, και πριν τους "
+"συνδέσμους λογαριασμού χρήστη αν είναι διαθέσιμοι:"
 
 # OPAC > Features
 msgid "opac.pref#OpacNewsLibrarySelect# Display"
@@ -10549,7 +10603,6 @@ msgid "patrons.pref#CardnumberLength# Card numbers for patrons must be"
 msgstr "Ο αριθμός κάρτας του μέλους πρέπει να είναι "
 
 # Patrons > Patron forms
-#, fuzzy
 msgid ""
 "patrons.pref#CardnumberLength# If <code>cardnumber</code> is included in the "
 "<a href=\"/cgi-bin/koha/admin/preferences.pl?"
@@ -10557,9 +10610,11 @@ msgid ""
 "list, the minimum length, if not specified here, defaults to one. Maximum "
 "cannot be bigger than the database field size of 32."
 msgstr ""
-"Εάν το 'cardnumber' περιλαμβάνεται στο BorrowerMandatoryField, το ελάχιστο "
-"μήκος, εάν δεν προσδιορίζεται εδώ, είναι το ένα. Το μέγιστο δεν μπορεί να "
-"υπερβαίνει το 32 ως μήκος του πεδίου στη βάση δεδομένων."
+"Εάν το <code>cardnumber</code> περιλαμβάνεται στην λίστα <a href=\"/cgi-bin/"
+"koha/admin/preferences.pl?op=search&searchfield=BorrowerMandatoryField"
+"\">BorrowerMandatoryField</a>, το ελάχιστο μήκος, εάν δεν προσδιορίζεται "
+"εδώ, είναι το ένα. Το μέγιστο δεν μπορεί να υπερβαίνει το 32 ως μήκος του "
+"πεδίου στη βάση δεδομένων."
 
 # Patrons > Patron forms
 msgid ""
@@ -10859,7 +10914,6 @@ msgid "patrons.pref#GDPR_Policy# permissive"
 msgstr ""
 
 # OPAC > Self registration and modification
-#, fuzzy
 msgid ""
 "patrons.pref#LockExpiredDelay# <br><strong>NOTE:</strong> This system "
 "preference requires the misc/cronjobs/cleanup_database.pl cronjob. Ask your "
@@ -10867,8 +10921,8 @@ msgid ""
 msgstr ""
 "opac.pref#PatronSelfRegistrationExpireTemporaryAccountsDelay# "
 "<br><strong>Σημείωση:</strong> Αυτή η επιλογή συστήματος απαιτεί το "
-"χρονοπρογραμματισμό <code>misc/cronjobs/cleanup_database.pl</code> Ζητήστε "
-"από τον διαχειριστή συστήματός σας να το ενεργοποιήσει."
+"χρονοπρογραμματισμό misc/cronjobs/cleanup_database.pl .Ζητήστε από τον "
+"διαχειριστή συστήματός σας να το ενεργοποιήσει."
 
 # Patrons > General > LockExpiredDelay
 msgid "patrons.pref#LockExpiredDelay# Lock expired patrons after"
@@ -11707,6 +11761,26 @@ msgid "searching.pref#FacetMaxCount# facets for each category."
 msgstr ""
 
 # Searching > Features
+#, fuzzy
+msgid "searching.pref#FacetOrder# Sort facets"
+msgstr "Χαρακτηριστικά"
+
+# Searching > Features
+#, fuzzy
+msgid "searching.pref#FacetOrder# alphabetically"
+msgstr "αυτόματα,"
+
+# Searching > Features
+#, fuzzy
+msgid "searching.pref#FacetOrder# by usage count"
+msgstr "Χαρακτηριστικά"
+
+# Cataloging > Display
+#, fuzzy
+msgid "searching.pref#FacetOrder# for each category."
+msgstr "η οικεία βιβλιοθήκη"
+
+# Searching > Features
 msgid ""
 "searching.pref#IncludeSeeFromInSearches# <em>see from</em> (non-preferred "
 "form) headings in bibliographic searches. Please note: you will need to "
@@ -12179,7 +12253,6 @@ msgid "searching.pref#displayFacetCount# Show"
 msgstr "Να εμφανίζονται"
 
 # Searching > Results display
-#, fuzzy
 msgid ""
 "searching.pref#displayFacetCount# facet counts. The relevance of these "
 "numbers highly depends on the value of the <a href=\"/cgi-bin/koha/admin/"
@@ -12187,7 +12260,9 @@ msgid ""
 "\">maxRecordsForFacets</a> preference. Applies to OPAC and staff interface."
 msgstr ""
 "οι μετρήσεις προσδιοριστικών τμημάτων. Η σχετικότητα αυτών των αριθμό "
-"εξαρτάται σε μεγάλο βαθμό από την τιμή στην προτίμηση maxRecordsForFacets. "
+"εξαρτάται σε μεγάλο βαθμό από την τιμή στην προτίμηση maxRecordsForFacets <a "
+"href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=maxRecordsForFacets\">maxRecordsForFacets</a>. "
 "Εφαρμόζεται στον OPAC και στη διεπαφή προσωπικού."
 
 # Searching > Search form

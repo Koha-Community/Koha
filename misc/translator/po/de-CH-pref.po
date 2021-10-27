@@ -708,9 +708,27 @@ msgstr ""
 msgid "admin.pref#ElasticsearchMARCFormat# Searchable array"
 msgstr ""
 
+# Administration > Google OpenID Connect > GoogleOAuth2ClientID
+msgid ""
+"admin.pref#GoogleOAuth2ClientID# Along with <a href=\"/cgi-bin/koha/admin/"
+"preferences.pl?op=search&searchfield=GoogleOAuth2ClientSecret"
+"\">GoogleOAuth2ClientSecret</a>, enables <a href=\"/cgi-bin/koha/admin/"
+"preferences.pl?op=search&searchfield=GoogleOpenIDConnect"
+"\">GoogleOpenIDConnect.</a>"
+msgstr ""
+
 # Administration > Google OpenID Connect
 msgid "admin.pref#GoogleOAuth2ClientID# Google OAuth2 Client ID: "
 msgstr "Google OAuth2 Client ID: "
+
+# Administration > Google OpenID Connect > GoogleOAuth2ClientSecret
+msgid ""
+"admin.pref#GoogleOAuth2ClientSecret# Along with <a href=\"/cgi-bin/koha/"
+"admin/preferences.pl?op=search&searchfield=GoogleOAuth2ClientID"
+"\">GoogleOAuth2ClientID</a>, enables <a href=\"/cgi-bin/koha/admin/"
+"preferences.pl?op=search&searchfield=GoogleOpenIDConnect"
+"\">GoogleOpenIDConnect.</a>"
+msgstr ""
 
 # Administration > Google OpenID Connect
 msgid "admin.pref#GoogleOAuth2ClientSecret# Google OAuth2 Client Secret: "
@@ -721,19 +739,25 @@ msgid "admin.pref#GoogleOpenIDConnect# No"
 msgstr "Nein"
 
 # Administration > Google OpenID Connect
-msgid "admin.pref#GoogleOpenIDConnect# Use Google OpenID Connect login: "
+#, fuzzy
+msgid ""
+"admin.pref#GoogleOpenIDConnect# Use Google OpenID Connect login in the OPAC: "
 msgstr "Verwende Google OpenID Connect Login: "
 
 # Administration > Google OpenID Connect
 msgid "admin.pref#GoogleOpenIDConnect# Yes"
 msgstr "Ja"
 
-# Administration > Google OpenID Connect
+# Administration > Google OpenID Connect > GoogleOpenIDConnect
 msgid ""
 "admin.pref#GoogleOpenIDConnect# You will need to select OAuth2 when creating "
 "an app in the Google cloud console, and set the web origin to your_opac_url "
 "and the redirect url to your_opac_url/cgi-bin/koha/svc/auth/"
-"googleopenidconnect ."
+"googleopenidconnect. Requires <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=GoogleOAuth2ClientID\">GoogleOAuth2ClientID</a> and <a "
+"href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=GoogleOAuth2ClientSecret\">GoogleOAuth2ClientSecret</"
+"a> to be set."
 msgstr ""
 
 # Administration > Google OpenID Connect
@@ -744,15 +768,24 @@ msgstr "Erlaube"
 msgid "admin.pref#GoogleOpenIDConnectAutoRegister# Don't allow"
 msgstr ""
 
-# Administration > Google OpenID Connect
+# OPAC > Appearance
+#, fuzzy
 msgid ""
 "admin.pref#GoogleOpenIDConnectAutoRegister# patrons logging in with Google "
-"Open ID to automatically register."
+"Open ID to automatically register. Requires <a href=\"/cgi-bin/koha/admin/"
+"preferences.pl?op=search&searchfield=GoogleOpenIDConnect"
+"\">GoogleOpenIDConnect</a>."
 msgstr ""
+"Zeige folgendes HTML wenn der Systemparameter OpacMaintenance aktiv ist:"
 
-# Administration > Google OpenID Connect
-msgid "admin.pref#GoogleOpenIDConnectDefaultBranch# ."
+# OPAC > Appearance
+#, fuzzy
+msgid ""
+"admin.pref#GoogleOpenIDConnectDefaultBranch# Requires <a href=\"/cgi-bin/"
+"koha/admin/preferences.pl?op=search&searchfield=GoogleOpenIDConnect"
+"\">GoogleOpenIDConnect</a>."
 msgstr ""
+"Zeige folgendes HTML wenn der Systemparameter OpacMaintenance aktiv ist:"
 
 # Administration > Google OpenID Connect
 msgid ""
@@ -760,9 +793,14 @@ msgid ""
 "automatically registering a Google Open ID patron: "
 msgstr ""
 
-# Administration > Google OpenID Connect
-msgid "admin.pref#GoogleOpenIDConnectDefaultCategory# ."
+# OPAC > Appearance
+#, fuzzy
+msgid ""
+"admin.pref#GoogleOpenIDConnectDefaultCategory# Requires <a href=\"/cgi-bin/"
+"koha/admin/preferences.pl?op=search&searchfield=GoogleOpenIDConnect"
+"\">GoogleOpenIDConnect</a>."
 msgstr ""
+"Zeige folgendes HTML wenn der Systemparameter OpacMaintenance aktiv ist:"
 
 # Administration > Google OpenID Connect
 msgid ""
@@ -770,10 +808,14 @@ msgid ""
 "automatically registering a Google Open ID patron: "
 msgstr ""
 
-# Administration > Google OpenID Connect
+# OPAC > Appearance
+#, fuzzy
 msgid ""
-"admin.pref#GoogleOpenIDConnectDomain# . Leave blank for all Google domains."
+"admin.pref#GoogleOpenIDConnectDomain# Leave blank for all Google domains. "
+"Requires <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=GoogleOpenIDConnect\">GoogleOpenIDConnect</a>."
 msgstr ""
+"Zeige folgendes HTML wenn der Systemparameter OpacMaintenance aktiv ist:"
 
 # Administration > Google OpenID Connect
 msgid ""
@@ -2425,6 +2467,23 @@ msgstr ""
 msgid ""
 "cataloguing.pref#BibtexExportAdditionalFields# Use one line per tag in the "
 "format BT_TAG: TAG$SUBFIELD ( e.g. lccn: 010$a )."
+msgstr ""
+
+# Cataloging > Interface
+#, fuzzy
+msgid "cataloguing.pref#CreateAVFromCataloguing# Allow"
+msgstr "Aktiviere"
+
+# Cataloging > Interface
+#, fuzzy
+msgid "cataloguing.pref#CreateAVFromCataloguing# Don't allow"
+msgstr "Deaktiviere"
+
+# Cataloging > Interface > CreateAVFromCataloguing
+msgid ""
+"cataloguing.pref#CreateAVFromCataloguing# authorized values to be created "
+"within the cataloguing module. Librarien will need the manage_auth_values "
+"subpermission."
 msgstr ""
 
 # Cataloging > Interface
@@ -11711,6 +11770,26 @@ msgstr "Zeige bis zu"
 
 # Searching > Results display
 msgid "searching.pref#FacetMaxCount# facets for each category."
+msgstr "Facetten je Kategorie."
+
+# Searching > Results display
+#, fuzzy
+msgid "searching.pref#FacetOrder# Sort facets"
+msgstr "Facetten anzeigen für "
+
+# Searching > Features
+#, fuzzy
+msgid "searching.pref#FacetOrder# alphabetically"
+msgstr "automatisch durchführen."
+
+# Searching > Results display
+#, fuzzy
+msgid "searching.pref#FacetOrder# by usage count"
+msgstr "Zeige bis zu"
+
+# Searching > Results display
+#, fuzzy
+msgid "searching.pref#FacetOrder# for each category."
 msgstr "Facetten je Kategorie."
 
 # Searching > Features

@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Koha 21.05\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2021-08-30 07:59+0000\n"
+"PO-Revision-Date: 2021-10-25 07:00+0000\n"
 "Last-Translator: Magnus Enger <magnus@enger.priv.no>\n"
 "Language-Team: NorwegianBokmal <>\n"
 "Language: nb\n"
@@ -11,7 +11,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.8\n"
-"X-POOTLE-MTIME: 1630310349.622184\n"
+"X-POOTLE-MTIME: 1635145202.194667\n"
 "X-Pootle-Path: /nb/21.05/nb-NO-pref.po\n"
 "X-Pootle-Revision: 1\n"
 
@@ -199,6 +199,8 @@ msgid ""
 "a receipt, update the item's subfields if they were created when placing an "
 "order (e.g. o=5|a=\"bar foo\"):"
 msgstr ""
+"Oppdater et eksemplars delfelt når et mottak avbrytes, hvis delfeltene ble "
+"opprettet da en bestilling ble lagt inn (f.eks. o=5|a=\"bar foo\")."
 
 # Acquisitions > Policy
 msgid ""
@@ -206,6 +208,8 @@ msgid ""
 "update their subfields if they were created when placing an order (e.g. o=5|"
 "a=\"foo bar\"):"
 msgstr ""
+"Oppdater delfeltene når eksemplarer mottas, hvis eksemplarene ble opprettet "
+"da en bestilling ble lagt inn (f.eks. o=5|a=\"foo bar\")."
 
 # Acquisitions > Policy
 msgid "acquisitions.pref#AcqViewBaskets# Show baskets"
@@ -290,25 +294,25 @@ msgstr "Vis valutaer i følgende format"
 msgid ""
 "acquisitions.pref#EdifactInvoiceImport#  automatically import EDIFACT "
 "invoice message files when they are downloaded."
-msgstr ""
+msgstr " EDIFACT fakturameldingsfiler når de er nedlastet."
 
 # Acquisitions > EDIFACT
 msgid "acquisitions.pref#EdifactInvoiceImport# Do"
-msgstr ""
+msgstr "Importer "
 
 # Acquisitions > EDIFACT
 msgid "acquisitions.pref#EdifactInvoiceImport# Don't"
-msgstr ""
+msgstr "Ikke importer "
 
 # Acquisitions > Policy
 msgid ""
 "acquisitions.pref#EmailPurchaseSuggestions# Choose email address that new "
 "purchase suggestions will be sent to: "
-msgstr ""
+msgstr "Velg epostadresse nye innkjøpsforslag vil bli sendt til: "
 
 # Acquisitions > Policy
 msgid "acquisitions.pref#EmailPurchaseSuggestions# EmailAddressForSuggestions"
-msgstr ""
+msgstr "EmailAddressForSuggestions"
 
 # Acquisitions > Policy > EmailPurchaseSuggestions
 msgid ""
@@ -316,18 +320,22 @@ msgid ""
 "koha/admin/preferences.pl?op=search&searchfield=EmailAddressForSuggestions"
 "\">EmailAddressForSuggestions</a> you have to enter a valid email address:"
 msgstr ""
+"Om du velger <a href=\"/cgi-"
+"bin/koha/admin/preferences.pl?op=search&searchfield="
+"EmailAddressForSuggestions\">EmailAddressForSuggestions</a> må du legge inn "
+"en gyldig epostadresse: "
 
 # Acquisitions > Policy
 msgid "acquisitions.pref#EmailPurchaseSuggestions# KohaAdminEmailAddress"
-msgstr ""
+msgstr "KohaAdminEmailAddress"
 
 # Acquisitions > Policy
 msgid "acquisitions.pref#EmailPurchaseSuggestions# email address of branch"
-msgstr ""
+msgstr "bibliotekets epostadresse"
 
 # Acquisitions > Policy
 msgid "acquisitions.pref#EmailPurchaseSuggestions# none"
-msgstr ""
+msgstr "ingen"
 
 # Acquisitions > Policy
 msgid ""
@@ -407,18 +415,20 @@ msgid ""
 "acquisitions.pref#OrderPriceRounding# Determines whether full precision "
 "values or rounded values should be used in price calculations."
 msgstr ""
+"Bestemmer om verdier med full presisjon eller avrundede verdier skal brukes "
+"i prisberegninger."
 
 # Acquisitions > Policy
 msgid "acquisitions.pref#OrderPriceRounding# Don't round"
-msgstr ""
+msgstr "Ikke rund av"
 
 # Acquisitions > Policy
 msgid "acquisitions.pref#OrderPriceRounding# Round"
-msgstr ""
+msgstr "Rund av"
 
 # Acquisitions > Policy
 msgid "acquisitions.pref#OrderPriceRounding# to nearest cent.<br>"
-msgstr ""
+msgstr "til nærmeste øre.<br>"
 
 # Acquisitions > Policy
 msgid ""
@@ -714,9 +724,27 @@ msgstr ""
 msgid "admin.pref#ElasticsearchMARCFormat# Searchable array"
 msgstr ""
 
+# Administration > Google OpenID Connect > GoogleOAuth2ClientID
+msgid ""
+"admin.pref#GoogleOAuth2ClientID# Along with <a href=\"/cgi-bin/koha/admin/"
+"preferences.pl?op=search&searchfield=GoogleOAuth2ClientSecret"
+"\">GoogleOAuth2ClientSecret</a>, enables <a href=\"/cgi-bin/koha/admin/"
+"preferences.pl?op=search&searchfield=GoogleOpenIDConnect"
+"\">GoogleOpenIDConnect.</a>"
+msgstr ""
+
 # Administration > Google OpenID Connect
 msgid "admin.pref#GoogleOAuth2ClientID# Google OAuth2 Client ID: "
 msgstr "Google OAuth2-klient-ID: "
+
+# Administration > Google OpenID Connect > GoogleOAuth2ClientSecret
+msgid ""
+"admin.pref#GoogleOAuth2ClientSecret# Along with <a href=\"/cgi-bin/koha/"
+"admin/preferences.pl?op=search&searchfield=GoogleOAuth2ClientID"
+"\">GoogleOAuth2ClientID</a>, enables <a href=\"/cgi-bin/koha/admin/"
+"preferences.pl?op=search&searchfield=GoogleOpenIDConnect"
+"\">GoogleOpenIDConnect.</a>"
+msgstr ""
 
 # Administration > Google OpenID Connect
 msgid "admin.pref#GoogleOAuth2ClientSecret# Google OAuth2 Client Secret: "
@@ -727,19 +755,25 @@ msgid "admin.pref#GoogleOpenIDConnect# No"
 msgstr "Nei"
 
 # Administration > Google OpenID Connect
-msgid "admin.pref#GoogleOpenIDConnect# Use Google OpenID Connect login: "
+#, fuzzy
+msgid ""
+"admin.pref#GoogleOpenIDConnect# Use Google OpenID Connect login in the OPAC: "
 msgstr "Bruk Google OpenID Connect-pålogging: "
 
 # Administration > Google OpenID Connect
 msgid "admin.pref#GoogleOpenIDConnect# Yes"
 msgstr "Ja"
 
-# Administration > Google OpenID Connect
+# Administration > Google OpenID Connect > GoogleOpenIDConnect
 msgid ""
 "admin.pref#GoogleOpenIDConnect# You will need to select OAuth2 when creating "
 "an app in the Google cloud console, and set the web origin to your_opac_url "
 "and the redirect url to your_opac_url/cgi-bin/koha/svc/auth/"
-"googleopenidconnect ."
+"googleopenidconnect. Requires <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=GoogleOAuth2ClientID\">GoogleOAuth2ClientID</a> and <a "
+"href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=GoogleOAuth2ClientSecret\">GoogleOAuth2ClientSecret</"
+"a> to be set."
 msgstr ""
 
 # Administration > Google OpenID Connect
@@ -750,15 +784,25 @@ msgstr "Tillat"
 msgid "admin.pref#GoogleOpenIDConnectAutoRegister# Don't allow"
 msgstr ""
 
-# Administration > Google OpenID Connect
+# OPAC > Appearance
 msgid ""
 "admin.pref#GoogleOpenIDConnectAutoRegister# patrons logging in with Google "
-"Open ID to automatically register."
+"Open ID to automatically register. Requires <a href=\"/cgi-bin/koha/admin/"
+"preferences.pl?op=search&searchfield=GoogleOpenIDConnect"
+"\">GoogleOpenIDConnect</a>."
 msgstr ""
+"lånere som logger inn med Google Open ID registrere seg automatisk. Krever <"
+"a href=\"/cgi-bin/koha/admin/preferences.pl?op=search&searchfield="
+"GoogleOpenIDConnect\">GoogleOpenIDConnect</a>."
 
-# Administration > Google OpenID Connect
-msgid "admin.pref#GoogleOpenIDConnectDefaultBranch# ."
+# OPAC > Appearance
+msgid ""
+"admin.pref#GoogleOpenIDConnectDefaultBranch# Requires <a href=\"/cgi-bin/"
+"koha/admin/preferences.pl?op=search&searchfield=GoogleOpenIDConnect"
+"\">GoogleOpenIDConnect</a>."
 msgstr ""
+"Krever <a href=\"/cgi-bin/koha/admin/preferences.pl?op=search&searchfield="
+"GoogleOpenIDConnect\">GoogleOpenIDConnect</a>."
 
 # Administration > Google OpenID Connect
 msgid ""
@@ -766,9 +810,14 @@ msgid ""
 "automatically registering a Google Open ID patron: "
 msgstr ""
 
-# Administration > Google OpenID Connect
-msgid "admin.pref#GoogleOpenIDConnectDefaultCategory# ."
+# OPAC > Appearance
+msgid ""
+"admin.pref#GoogleOpenIDConnectDefaultCategory# Requires <a href=\"/cgi-bin/"
+"koha/admin/preferences.pl?op=search&searchfield=GoogleOpenIDConnect"
+"\">GoogleOpenIDConnect</a>."
 msgstr ""
+"Krever <a href=\"/cgi-bin/koha/admin/preferences.pl?op=search&searchfield="
+"GoogleOpenIDConnect\">GoogleOpenIDConnect</a>."
 
 # Administration > Google OpenID Connect
 msgid ""
@@ -776,10 +825,15 @@ msgid ""
 "automatically registering a Google Open ID patron: "
 msgstr ""
 
-# Administration > Google OpenID Connect
+# OPAC > Appearance
 msgid ""
-"admin.pref#GoogleOpenIDConnectDomain# . Leave blank for all Google domains."
+"admin.pref#GoogleOpenIDConnectDomain# Leave blank for all Google domains. "
+"Requires <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=GoogleOpenIDConnect\">GoogleOpenIDConnect</a>."
 msgstr ""
+"La stå tom for alle Google-domener. Krever <a href=\"/cgi-"
+"bin/koha/admin/preferences.pl?op=search&searchfield=GoogleOpenIDConnect\""
+">GoogleOpenIDConnect</a>."
 
 # Administration > Google OpenID Connect
 msgid ""
@@ -2438,6 +2492,23 @@ msgstr ""
 msgid ""
 "cataloguing.pref#BibtexExportAdditionalFields# Use one line per tag in the "
 "format BT_TAG: TAG$SUBFIELD ( e.g. lccn: 010$a )."
+msgstr ""
+
+# Cataloging > Interface
+#, fuzzy
+msgid "cataloguing.pref#CreateAVFromCataloguing# Allow"
+msgstr "Aktiver"
+
+# Cataloging > Interface
+#, fuzzy
+msgid "cataloguing.pref#CreateAVFromCataloguing# Don't allow"
+msgstr "Ikke aktiver"
+
+# Cataloging > Interface > CreateAVFromCataloguing
+msgid ""
+"cataloguing.pref#CreateAVFromCataloguing# authorized values to be created "
+"within the cataloguing module. Librarien will need the manage_auth_values "
+"subpermission."
 msgstr ""
 
 # Cataloging > Interface
@@ -11717,6 +11788,26 @@ msgstr "Vis opptil"
 
 # Searching > Results display
 msgid "searching.pref#FacetMaxCount# facets for each category."
+msgstr "fasetter for hver kategori."
+
+# Searching > Results display
+#, fuzzy
+msgid "searching.pref#FacetOrder# Sort facets"
+msgstr "Vis fasetter for "
+
+# Searching > Features
+#, fuzzy
+msgid "searching.pref#FacetOrder# alphabetically"
+msgstr "automatisk"
+
+# Searching > Results display
+#, fuzzy
+msgid "searching.pref#FacetOrder# by usage count"
+msgstr "Vis opptil"
+
+# Searching > Results display
+#, fuzzy
+msgid "searching.pref#FacetOrder# for each category."
 msgstr "fasetter for hver kategori."
 
 # Searching > Features

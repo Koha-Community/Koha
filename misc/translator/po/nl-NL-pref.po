@@ -789,9 +789,33 @@ msgstr "admin.pref#ElasticsearchMARCFormat# ISO2709 (uitwisselingsformat)"
 msgid "admin.pref#ElasticsearchMARCFormat# Searchable array"
 msgstr "admin.pref#ElasticsearchMARCFormat# Doorzoekbare reeks"
 
+# OPAC > Privacy
+#, fuzzy
+msgid ""
+"admin.pref#GoogleOAuth2ClientID# Along with <a href=\"/cgi-bin/koha/admin/"
+"preferences.pl?op=search&searchfield=GoogleOAuth2ClientSecret"
+"\">GoogleOAuth2ClientSecret</a>, enables <a href=\"/cgi-bin/koha/admin/"
+"preferences.pl?op=search&searchfield=GoogleOpenIDConnect"
+"\">GoogleOpenIDConnect.</a>"
+msgstr ""
+"opac.pref#OPACPrivacy# dat lenen hun eigen privacy-instelling voor hun "
+"leesgeschiedenis kiezen. Dit vereist opacreadinghistory en AnonymousPatron"
+
 # Administration > Google OpenID Connect
 msgid "admin.pref#GoogleOAuth2ClientID# Google OAuth2 Client ID: "
 msgstr "admin.pref#GoogleOAuth2ClientID# Google OAuth2 Client ID: "
+
+# OPAC > Privacy
+#, fuzzy
+msgid ""
+"admin.pref#GoogleOAuth2ClientSecret# Along with <a href=\"/cgi-bin/koha/"
+"admin/preferences.pl?op=search&searchfield=GoogleOAuth2ClientID"
+"\">GoogleOAuth2ClientID</a>, enables <a href=\"/cgi-bin/koha/admin/"
+"preferences.pl?op=search&searchfield=GoogleOpenIDConnect"
+"\">GoogleOpenIDConnect.</a>"
+msgstr ""
+"opac.pref#OPACPrivacy# dat lenen hun eigen privacy-instelling voor hun "
+"leesgeschiedenis kiezen. Dit vereist opacreadinghistory en AnonymousPatron"
 
 # Administration > Google OpenID Connect
 msgid "admin.pref#GoogleOAuth2ClientSecret# Google OAuth2 Client Secret: "
@@ -802,7 +826,9 @@ msgid "admin.pref#GoogleOpenIDConnect# No"
 msgstr "admin.pref#GoogleOpenIDConnect# Nee"
 
 # Administration > Google OpenID Connect
-msgid "admin.pref#GoogleOpenIDConnect# Use Google OpenID Connect login: "
+#, fuzzy
+msgid ""
+"admin.pref#GoogleOpenIDConnect# Use Google OpenID Connect login in the OPAC: "
 msgstr "admin.pref#GoogleOpenIDConnect# Gebruik Google OpenID Connect login: "
 
 # Administration > Google OpenID Connect
@@ -815,7 +841,11 @@ msgid ""
 "admin.pref#GoogleOpenIDConnect# You will need to select OAuth2 when creating "
 "an app in the Google cloud console, and set the web origin to your_opac_url "
 "and the redirect url to your_opac_url/cgi-bin/koha/svc/auth/"
-"googleopenidconnect ."
+"googleopenidconnect. Requires <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=GoogleOAuth2ClientID\">GoogleOAuth2ClientID</a> and <a "
+"href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=GoogleOAuth2ClientSecret\">GoogleOAuth2ClientSecret</"
+"a> to be set."
 msgstr ""
 "admin.pref#GoogleOpenIDConnect# Selecteer OAuth2 bij het creëren van een app "
 "in de Google cloud console, en stel de web origin in op your_opac_url en de "
@@ -834,15 +864,22 @@ msgstr "admin.pref#GoogleOpenIDConnectAutoRegister# Niet toestaan dat"
 #, fuzzy
 msgid ""
 "admin.pref#GoogleOpenIDConnectAutoRegister# patrons logging in with Google "
-"Open ID to automatically register."
+"Open ID to automatically register. Requires <a href=\"/cgi-bin/koha/admin/"
+"preferences.pl?op=search&searchfield=GoogleOpenIDConnect"
+"\">GoogleOpenIDConnect</a>."
 msgstr ""
 "admin.pref#GoogleOpenIDConnectAutoRegister# gebruikers inloggen met Google "
 "Open ID om automatisch te registreren."
 
-# Administration > Google OpenID Connect
+# OPAC > Appearance
 #, fuzzy
-msgid "admin.pref#GoogleOpenIDConnectDefaultBranch# ."
-msgstr "admin.pref#GoogleOpenIDConnect# Nee"
+msgid ""
+"admin.pref#GoogleOpenIDConnectDefaultBranch# Requires <a href=\"/cgi-bin/"
+"koha/admin/preferences.pl?op=search&searchfield=GoogleOpenIDConnect"
+"\">GoogleOpenIDConnect</a>."
+msgstr ""
+"opac.pref#OpacMaintenanceNotice# Toon de volgende HTML als OpacMaintenance "
+"ingeschakeld is:"
 
 # Administration > Google OpenID Connect
 #, fuzzy
@@ -853,10 +890,15 @@ msgstr ""
 "admin.pref#GoogleOpenIDConnectDefaultBranch# Gebruik deze branch code bij "
 "het automatisch registeren van een Google Open ID lener."
 
-# Administration > Google OpenID Connect
+# OPAC > Appearance
 #, fuzzy
-msgid "admin.pref#GoogleOpenIDConnectDefaultCategory# ."
-msgstr "admin.pref#GoogleOpenIDConnect# Nee"
+msgid ""
+"admin.pref#GoogleOpenIDConnectDefaultCategory# Requires <a href=\"/cgi-bin/"
+"koha/admin/preferences.pl?op=search&searchfield=GoogleOpenIDConnect"
+"\">GoogleOpenIDConnect</a>."
+msgstr ""
+"opac.pref#OpacMaintenanceNotice# Toon de volgende HTML als OpacMaintenance "
+"ingeschakeld is:"
 
 # Administration > Google OpenID Connect
 #, fuzzy
@@ -867,12 +909,16 @@ msgstr ""
 "admin.pref#GoogleOpenIDConnectDefaultCategory# Gebruik deze categoriecode "
 "bij het automatisch registreren van een Google Open ID lener."
 
-# Administration > Google OpenID Connect
+# OPAC > Policy
 #, fuzzy
 msgid ""
-"admin.pref#GoogleOpenIDConnectDomain# . Leave blank for all Google domains."
+"admin.pref#GoogleOpenIDConnectDomain# Leave blank for all Google domains. "
+"Requires <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=GoogleOpenIDConnect\">GoogleOpenIDConnect</a>."
 msgstr ""
-"admin.pref#GoogleOpenIDConnectDomain# Laat leeg voor alle Google domeinen"
+"opac.pref#OpacHiddenItemsExceptions# Lijst van lenercategorieën, gescheiden "
+"door |, die wel items kunnen zien die verborgen zijn door "
+"<code>OpacHiddenItems</code>"
 
 # Administration > Google OpenID Connect
 #, fuzzy
@@ -2702,6 +2748,23 @@ msgid ""
 msgstr ""
 "cataloguing.pref#BibtexExportAdditionalFields# Gebruik een regel per tag in "
 "het format BT_TAG: TAG$SUBFIELD ( bv. lccn: 010$a )"
+
+# Cataloging > Interface
+#, fuzzy
+msgid "cataloguing.pref#CreateAVFromCataloguing# Allow"
+msgstr "cataloguing.pref#EnableAdvancedCatalogingEditor# Activeer"
+
+# Cataloging > Interface
+#, fuzzy
+msgid "cataloguing.pref#CreateAVFromCataloguing# Don't allow"
+msgstr "cataloguing.pref#EnableAdvancedCatalogingEditor# Activeer niet"
+
+# Cataloging > Interface > CreateAVFromCataloguing
+msgid ""
+"cataloguing.pref#CreateAVFromCataloguing# authorized values to be created "
+"within the cataloguing module. Librarien will need the manage_auth_values "
+"subpermission."
+msgstr ""
 
 # Cataloging > Interface
 msgid "cataloguing.pref#DefaultClassificationSource# Use"
@@ -13381,6 +13444,26 @@ msgstr "Показати до"
 msgid "searching.pref#FacetMaxCount# facets for each category."
 msgstr ""
 
+# Searching > Results Display
+#, fuzzy
+msgid "searching.pref#FacetOrder# Sort facets"
+msgstr "Показати до"
+
+# Cataloging > Record Structure
+#, fuzzy
+msgid "searching.pref#FacetOrder# alphabetically"
+msgstr "cataloguing.pref#autoBarcode# niet automatisch genereerd."
+
+# Searching > Results Display
+#, fuzzy
+msgid "searching.pref#FacetOrder# by usage count"
+msgstr "Показати до"
+
+# Searching > Results Display
+#, fuzzy
+msgid "searching.pref#FacetOrder# for each category."
+msgstr "Показати до"
+
 # Searching > Features
 msgid ""
 "searching.pref#IncludeSeeFromInSearches# <em>see from</em> (non-preferred "
@@ -15197,6 +15280,24 @@ msgid ""
 "web_services.pref#SvcMaxReportRows# rows of a report requested via the "
 "reports web service."
 msgstr ""
+
+# Administration > Google OpenID Connect
+#, fuzzy
+#~ msgid "admin.pref#GoogleOpenIDConnectDefaultBranch# ."
+#~ msgstr "admin.pref#GoogleOpenIDConnect# Nee"
+
+# Administration > Google OpenID Connect
+#, fuzzy
+#~ msgid "admin.pref#GoogleOpenIDConnectDefaultCategory# ."
+#~ msgstr "admin.pref#GoogleOpenIDConnect# Nee"
+
+# Administration > Google OpenID Connect
+#, fuzzy
+#~ msgid ""
+#~ "admin.pref#GoogleOpenIDConnectDomain# . Leave blank for all Google "
+#~ "domains."
+#~ msgstr ""
+#~ "admin.pref#GoogleOpenIDConnectDomain# Laat leeg voor alle Google domeinen"
 
 # Circulation > Article Requests
 #, fuzzy

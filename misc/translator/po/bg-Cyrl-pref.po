@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Koha 21.05\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-05-16 03:25+0200\n"
-"PO-Revision-Date: 2021-06-23 16:48+0000\n"
+"PO-Revision-Date: 2021-10-10 10:54+0000\n"
 "Last-Translator: Илиян Дамянов <aioiliyan@gmail.com>\n"
 "Language-Team: Koha Translation Team <koha-translate@nongnu.org>\n"
 "Language: bg\n"
@@ -14,7 +14,7 @@ msgstr ""
 "X-Generator: Pootle 2.8\n"
 "X-Pootle-Path: /bg/21.05/bg-Cyrl-pref.po\n"
 "X-Pootle-Revision: 1\n"
-"X-POOTLE-MTIME: 1624466923.240332\n"
+"X-POOTLE-MTIME: 1633863279.536227\n"
 
 msgid "accounting.pref"
 msgstr "Транзакции"
@@ -733,9 +733,27 @@ msgstr "ISO 2709 (формат за обмен)"
 msgid "admin.pref#ElasticsearchMARCFormat# Searchable array"
 msgstr "За търсене масив"
 
+# Administration > Google OpenID Connect > GoogleOAuth2ClientID
+msgid ""
+"admin.pref#GoogleOAuth2ClientID# Along with <a href=\"/cgi-bin/koha/admin/"
+"preferences.pl?op=search&searchfield=GoogleOAuth2ClientSecret"
+"\">GoogleOAuth2ClientSecret</a>, enables <a href=\"/cgi-bin/koha/admin/"
+"preferences.pl?op=search&searchfield=GoogleOpenIDConnect"
+"\">GoogleOpenIDConnect.</a>"
+msgstr ""
+
 # Administration > Google OpenID Connect
 msgid "admin.pref#GoogleOAuth2ClientID# Google OAuth2 Client ID: "
 msgstr "Google OAuth2 Клиент ID: "
+
+# Administration > Google OpenID Connect > GoogleOAuth2ClientSecret
+msgid ""
+"admin.pref#GoogleOAuth2ClientSecret# Along with <a href=\"/cgi-bin/koha/"
+"admin/preferences.pl?op=search&searchfield=GoogleOAuth2ClientID"
+"\">GoogleOAuth2ClientID</a>, enables <a href=\"/cgi-bin/koha/admin/"
+"preferences.pl?op=search&searchfield=GoogleOpenIDConnect"
+"\">GoogleOpenIDConnect.</a>"
+msgstr ""
 
 # Administration > Google OpenID Connect
 msgid "admin.pref#GoogleOAuth2ClientSecret# Google OAuth2 Client Secret: "
@@ -746,7 +764,9 @@ msgid "admin.pref#GoogleOpenIDConnect# No"
 msgstr "Не"
 
 # Administration > Google OpenID Connect
-msgid "admin.pref#GoogleOpenIDConnect# Use Google OpenID Connect login: "
+#, fuzzy
+msgid ""
+"admin.pref#GoogleOpenIDConnect# Use Google OpenID Connect login in the OPAC: "
 msgstr "Използвайте вход в Google OpenID Connect: "
 
 # Administration > Google OpenID Connect
@@ -754,11 +774,16 @@ msgid "admin.pref#GoogleOpenIDConnect# Yes"
 msgstr "Да"
 
 # Administration > Google OpenID Connect
+#, fuzzy
 msgid ""
 "admin.pref#GoogleOpenIDConnect# You will need to select OAuth2 when creating "
 "an app in the Google cloud console, and set the web origin to your_opac_url "
 "and the redirect url to your_opac_url/cgi-bin/koha/svc/auth/"
-"googleopenidconnect ."
+"googleopenidconnect. Requires <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=GoogleOAuth2ClientID\">GoogleOAuth2ClientID</a> and <a "
+"href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=GoogleOAuth2ClientSecret\">GoogleOAuth2ClientSecret</"
+"a> to be set."
 msgstr ""
 "Ще трябва да изберете OAuth2, когато създавате приложение в облачната "
 "конзола на google, и зададете уеб източника на your_opac_url, а URL адреса "
@@ -774,15 +799,21 @@ msgid "admin.pref#GoogleOpenIDConnectAutoRegister# Don't allow"
 msgstr "Не позволявайте"
 
 # Administration > Google OpenID Connect
+#, fuzzy
 msgid ""
 "admin.pref#GoogleOpenIDConnectAutoRegister# patrons logging in with Google "
-"Open ID to automatically register."
+"Open ID to automatically register. Requires <a href=\"/cgi-bin/koha/admin/"
+"preferences.pl?op=search&searchfield=GoogleOpenIDConnect"
+"\">GoogleOpenIDConnect</a>."
 msgstr ""
 "на потребителите влизащи с Google Open ID автоматично да се регистрират."
 
-# Administration > Google OpenID Connect
-msgid "admin.pref#GoogleOpenIDConnectDefaultBranch# ."
-msgstr "."
+# Administration > Google OpenID Connect > GoogleOpenIDConnectDefaultBranch
+msgid ""
+"admin.pref#GoogleOpenIDConnectDefaultBranch# Requires <a href=\"/cgi-bin/"
+"koha/admin/preferences.pl?op=search&searchfield=GoogleOpenIDConnect"
+"\">GoogleOpenIDConnect</a>."
+msgstr ""
 
 # Administration > Google OpenID Connect
 msgid ""
@@ -792,9 +823,12 @@ msgstr ""
 "Използвайте този филиал код, когато автоматично регистрирате читател на "
 "Google Open ID."
 
-# Administration > Google OpenID Connect
-msgid "admin.pref#GoogleOpenIDConnectDefaultCategory# ."
-msgstr "."
+# Administration > Google OpenID Connect > GoogleOpenIDConnectDefaultCategory
+msgid ""
+"admin.pref#GoogleOpenIDConnectDefaultCategory# Requires <a href=\"/cgi-bin/"
+"koha/admin/preferences.pl?op=search&searchfield=GoogleOpenIDConnect"
+"\">GoogleOpenIDConnect</a>."
+msgstr ""
 
 # Administration > Google OpenID Connect
 msgid ""
@@ -804,10 +838,12 @@ msgstr ""
 "Използвайте този код на категорията, когато автоматично регистрирате читател "
 "на Google Open ID: "
 
-# Administration > Google OpenID Connect
+# Administration > Google OpenID Connect > GoogleOpenIDConnectDomain
 msgid ""
-"admin.pref#GoogleOpenIDConnectDomain# . Leave blank for all Google domains."
-msgstr ". Оставете празно за всички домейни в Google"
+"admin.pref#GoogleOpenIDConnectDomain# Leave blank for all Google domains. "
+"Requires <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=GoogleOpenIDConnect\">GoogleOpenIDConnect</a>."
+msgstr ""
 
 # Administration > Google OpenID Connect
 msgid ""
@@ -2558,6 +2594,23 @@ msgid ""
 msgstr ""
 "Използвайте на един ред, маркер във формат BT_TAG: TAG $ SUBFIELD (например "
 "lccn: 010 $a)"
+
+# Cataloging > Interface
+#, fuzzy
+msgid "cataloguing.pref#CreateAVFromCataloguing# Allow"
+msgstr "Активирайте"
+
+# Cataloging > Interface
+#, fuzzy
+msgid "cataloguing.pref#CreateAVFromCataloguing# Don't allow"
+msgstr "Не активирайте"
+
+# Cataloging > Interface > CreateAVFromCataloguing
+msgid ""
+"cataloguing.pref#CreateAVFromCataloguing# authorized values to be created "
+"within the cataloguing module. Librarien will need the manage_auth_values "
+"subpermission."
+msgstr ""
 
 # Cataloging > Interface
 msgid "cataloguing.pref#DefaultClassificationSource# Use"
@@ -9423,7 +9476,6 @@ msgstr ""
 "Показване на подробности в OPAC, използвайки таблицата със стилове XSLT на: "
 
 # OPAC > Appearance
-#, fuzzy
 msgid ""
 "opac.pref#OPACXSLTListsDisplay# <br />Options:<ul><li><a href=\"#\" class="
 "\"set_syspref\" data-syspref=\"OPACXSLTListsDisplay\" data-value=\"\">leave "
@@ -9438,12 +9490,17 @@ msgid ""
 "{langcode} will be replaced with current interface language."
 msgstr ""
 "<br />Опции:<ul><li><a href=\"#\" class=\"set_syspref\" data-syspref="
-"\"OPACXSLTListsDisplay\" data-value=\"\"> Оставете празно </a> за \"no xslt"
+"\"OPACXSLTListsDisplay\" data-value=\"\"> оставете празно </a> за \"no xslt"
 "\"</li><li>въведете \"<a href=\"#\" class=\"set_syspref\" data-syspref="
 "\"OPACXSLTListsDisplay\"data-value=\"default\">по подразбиране</a>\" за това "
 "по подразбиране</li><li> постави път за дефиниране на xslt файл</"
-"li><li>постави URL адрес за външен специфичен лист стилове.</li></"
-"ul>{langcode} ще бъде заменен с текущ език на интерфейса"
+"li><li>постави URL адрес за външен специфичен лист стилове.</"
+"li><li>ЗАБЕЛЕЖКА: Системната настройка<a href=\"/cgi-bin/koha/admin/"
+"preferences.pl?op=search&searchfield=PassItemMarcToXSLT"
+"\">PassItemMarcToXSLT</a> трябва да бъде активирана, ако вашата "
+"персонализирана таблица със стилове използва данни в полетата за библиотечни "
+"документи</li></ul>Ако имате няколко таблици със стилове за различни езици, "
+"{langcode} ще бъде заменен с текущ език на интерфейса"
 
 # OPAC > Appearance
 msgid ""
@@ -12272,6 +12329,26 @@ msgstr "Показва се до"
 msgid "searching.pref#FacetMaxCount# facets for each category."
 msgstr "фасети за всяка категория."
 
+# Searching > Results display
+#, fuzzy
+msgid "searching.pref#FacetOrder# Sort facets"
+msgstr "Показване на аспекти за"
+
+# Searching > Features
+#, fuzzy
+msgid "searching.pref#FacetOrder# alphabetically"
+msgstr "автоматично."
+
+# Searching > Results display
+#, fuzzy
+msgid "searching.pref#FacetOrder# by usage count"
+msgstr "Показва се до"
+
+# Searching > Results display
+#, fuzzy
+msgid "searching.pref#FacetOrder# for each category."
+msgstr "фасети за всяка категория."
+
 # Searching > Features
 msgid ""
 "searching.pref#IncludeSeeFromInSearches# <em>see from</em> (non-preferred "
@@ -14004,6 +14081,20 @@ msgid ""
 "web_services.pref#SvcMaxReportRows# rows of a report requested via the "
 "reports web service."
 msgstr "реда от доклад, поискан чрез уеб услугата на отчетите."
+
+# Administration > Google OpenID Connect
+#~ msgid "admin.pref#GoogleOpenIDConnectDefaultBranch# ."
+#~ msgstr "."
+
+# Administration > Google OpenID Connect
+#~ msgid "admin.pref#GoogleOpenIDConnectDefaultCategory# ."
+#~ msgstr "."
+
+# Administration > Google OpenID Connect
+#~ msgid ""
+#~ "admin.pref#GoogleOpenIDConnectDomain# . Leave blank for all Google "
+#~ "domains."
+#~ msgstr ". Оставете празно за всички домейни в Google"
 
 # Circulation > Article requests
 #, fuzzy

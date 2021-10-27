@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: Koha 21.05\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-05-02 08:01+0200\n"
-"PO-Revision-Date: 2021-05-24 07:49+0000\n"
-"Last-Translator: chrisc <chris@bigballofwax.co.nz>\n"
+"PO-Revision-Date: 2021-10-26 05:07+0000\n"
+"Last-Translator: alexbuckley <alexbuckley@catalyst.net.nz>\n"
 "Language-Team: en_NZ <koha-translate@lists.koha-community.org>\n"
 "Language: en_NZ\n"
 "MIME-Version: 1.0\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.8\n"
 "X-Poedit-Bookmarks: -1,-1,-1,867,-1,-1,-1,-1,-1,-1\n"
-"X-POOTLE-MTIME: 1621842556.596465\n"
+"X-POOTLE-MTIME: 1635224832.676988\n"
 "X-Pootle-Path: /en_NZ/21.05/en-NZ-pref.po\n"
 "X-Pootle-Revision: 1\n"
 
@@ -702,9 +702,27 @@ msgstr ""
 msgid "admin.pref#ElasticsearchMARCFormat# Searchable array"
 msgstr ""
 
+# Administration > Google OpenID Connect > GoogleOAuth2ClientID
+msgid ""
+"admin.pref#GoogleOAuth2ClientID# Along with <a href=\"/cgi-bin/koha/admin/"
+"preferences.pl?op=search&searchfield=GoogleOAuth2ClientSecret"
+"\">GoogleOAuth2ClientSecret</a>, enables <a href=\"/cgi-bin/koha/admin/"
+"preferences.pl?op=search&searchfield=GoogleOpenIDConnect"
+"\">GoogleOpenIDConnect.</a>"
+msgstr ""
+
 # Administration > Google OpenID Connect
 msgid "admin.pref#GoogleOAuth2ClientID# Google OAuth2 Client ID: "
 msgstr " Google OAuth2 Client ID: "
+
+# Administration > Google OpenID Connect > GoogleOAuth2ClientSecret
+msgid ""
+"admin.pref#GoogleOAuth2ClientSecret# Along with <a href=\"/cgi-bin/koha/"
+"admin/preferences.pl?op=search&searchfield=GoogleOAuth2ClientID"
+"\">GoogleOAuth2ClientID</a>, enables <a href=\"/cgi-bin/koha/admin/"
+"preferences.pl?op=search&searchfield=GoogleOpenIDConnect"
+"\">GoogleOpenIDConnect.</a>"
+msgstr ""
 
 # Administration > Google OpenID Connect
 msgid "admin.pref#GoogleOAuth2ClientSecret# Google OAuth2 Client Secret: "
@@ -715,19 +733,25 @@ msgid "admin.pref#GoogleOpenIDConnect# No"
 msgstr " No"
 
 # Administration > Google OpenID Connect
-msgid "admin.pref#GoogleOpenIDConnect# Use Google OpenID Connect login: "
+#, fuzzy
+msgid ""
+"admin.pref#GoogleOpenIDConnect# Use Google OpenID Connect login in the OPAC: "
 msgstr " Use Google OpenID Connect login: "
 
 # Administration > Google OpenID Connect
 msgid "admin.pref#GoogleOpenIDConnect# Yes"
 msgstr " Yes"
 
-# Administration > Google OpenID Connect
+# Administration > Google OpenID Connect > GoogleOpenIDConnect
 msgid ""
 "admin.pref#GoogleOpenIDConnect# You will need to select OAuth2 when creating "
 "an app in the Google cloud console, and set the web origin to your_opac_url "
 "and the redirect url to your_opac_url/cgi-bin/koha/svc/auth/"
-"googleopenidconnect ."
+"googleopenidconnect. Requires <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=GoogleOAuth2ClientID\">GoogleOAuth2ClientID</a> and <a "
+"href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=GoogleOAuth2ClientSecret\">GoogleOAuth2ClientSecret</"
+"a> to be set."
 msgstr ""
 
 # Administration > Google OpenID Connect
@@ -738,15 +762,27 @@ msgstr " Allow"
 msgid "admin.pref#GoogleOpenIDConnectAutoRegister# Don't allow"
 msgstr ""
 
-# Administration > Google OpenID Connect
+# OPAC > Appearance
+#, fuzzy
 msgid ""
 "admin.pref#GoogleOpenIDConnectAutoRegister# patrons logging in with Google "
-"Open ID to automatically register."
+"Open ID to automatically register. Requires <a href=\"/cgi-bin/koha/admin/"
+"preferences.pl?op=search&searchfield=GoogleOpenIDConnect"
+"\">GoogleOpenIDConnect</a>."
 msgstr ""
+" the bibliographic record when all its items are hidden by <a href='/cgi-bin/"
+"koha/admin/preferences.pl?"
+"op=search&searchfield=OpacHiddenItems'>OpacHiddenItems</a>."
 
-# Administration > Google OpenID Connect
-msgid "admin.pref#GoogleOpenIDConnectDefaultBranch# ."
+# OPAC > Appearance
+#, fuzzy
+msgid ""
+"admin.pref#GoogleOpenIDConnectDefaultBranch# Requires <a href=\"/cgi-bin/"
+"koha/admin/preferences.pl?op=search&searchfield=GoogleOpenIDConnect"
+"\">GoogleOpenIDConnect</a>."
 msgstr ""
+" Show the following HTML when <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=OpacMaintenance\">OpacMaintenance</a> is enabled:"
 
 # Administration > Google OpenID Connect
 msgid ""
@@ -754,9 +790,15 @@ msgid ""
 "automatically registering a Google Open ID patron: "
 msgstr ""
 
-# Administration > Google OpenID Connect
-msgid "admin.pref#GoogleOpenIDConnectDefaultCategory# ."
+# OPAC > Appearance
+#, fuzzy
+msgid ""
+"admin.pref#GoogleOpenIDConnectDefaultCategory# Requires <a href=\"/cgi-bin/"
+"koha/admin/preferences.pl?op=search&searchfield=GoogleOpenIDConnect"
+"\">GoogleOpenIDConnect</a>."
 msgstr ""
+" Show the following HTML when <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=OpacMaintenance\">OpacMaintenance</a> is enabled:"
 
 # Administration > Google OpenID Connect
 msgid ""
@@ -764,10 +806,16 @@ msgid ""
 "automatically registering a Google Open ID patron: "
 msgstr ""
 
-# Administration > Google OpenID Connect
+# OPAC > Appearance
+#, fuzzy
 msgid ""
-"admin.pref#GoogleOpenIDConnectDomain# . Leave blank for all Google domains."
+"admin.pref#GoogleOpenIDConnectDomain# Leave blank for all Google domains. "
+"Requires <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=GoogleOpenIDConnect\">GoogleOpenIDConnect</a>."
 msgstr ""
+" the bibliographic record when all its items are hidden by <a href='/cgi-bin/"
+"koha/admin/preferences.pl?"
+"op=search&searchfield=OpacHiddenItems'>OpacHiddenItems</a>."
 
 # Administration > Google OpenID Connect
 msgid ""
@@ -2411,6 +2459,23 @@ msgstr ""
 msgid ""
 "cataloguing.pref#BibtexExportAdditionalFields# Use one line per tag in the "
 "format BT_TAG: TAG$SUBFIELD ( e.g. lccn: 010$a )."
+msgstr ""
+
+# Cataloging > Spine labels
+#, fuzzy
+msgid "cataloguing.pref#CreateAVFromCataloguing# Allow"
+msgstr "do"
+
+# Cataloging > Display
+#, fuzzy
+msgid "cataloguing.pref#CreateAVFromCataloguing# Don't allow"
+msgstr "Don't separate"
+
+# Cataloging > Interface > CreateAVFromCataloguing
+msgid ""
+"cataloguing.pref#CreateAVFromCataloguing# authorized values to be created "
+"within the cataloguing module. Librarien will need the manage_auth_values "
+"subpermission."
 msgstr ""
 
 # Cataloging > Interface
@@ -4794,11 +4859,10 @@ msgid "circulation.pref#MarkLostItemsAsReturned# when cataloguing an item"
 msgstr ""
 
 # Circulation > Checkout policy
-#, fuzzy
 msgid ""
 "circulation.pref#MarkLostItemsAsReturned# when marking an item as a return "
 "claim"
-msgstr "When issuing an item that has been marked as lost, "
+msgstr ""
 
 # Circulation > Checkout policy
 msgid ""
@@ -11597,6 +11661,26 @@ msgstr " Show up to"
 
 # Searching > Results display
 msgid "searching.pref#FacetMaxCount# facets for each category."
+msgstr " facets for each category."
+
+# Searching > Results display
+#, fuzzy
+msgid "searching.pref#FacetOrder# Sort facets"
+msgstr "Show facets for"
+
+# Searching > Features
+#, fuzzy
+msgid "searching.pref#FacetOrder# alphabetically"
+msgstr "automatically."
+
+# Searching > Results display
+#, fuzzy
+msgid "searching.pref#FacetOrder# by usage count"
+msgstr " Show up to"
+
+# Searching > Results display
+#, fuzzy
+msgid "searching.pref#FacetOrder# for each category."
 msgstr " facets for each category."
 
 # Searching > Features
