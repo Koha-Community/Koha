@@ -27,7 +27,7 @@ use C4::ImportBatch;
 use Koha::MarcOverlayRules;
 use Koha::Patron::Categories;
 
-my $input = new CGI;
+my $input = CGI->new;
 my $op = $input->param('op') || '';
 my $errors = [];
 
