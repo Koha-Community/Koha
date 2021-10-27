@@ -456,6 +456,9 @@ sub get_template_and_user {
                 some_public_shelves  => $some_public_shelves,
             );
         }
+
+        # Set default branch if one has been passed by the environment.
+        $template->param( branchcode => $ENV{OPAC_BRANCH_DEFAULT} ) if $ENV{OPAC_BRANCH_DEFAULT};
     }
 
     # Sysprefs disabled via URL param
