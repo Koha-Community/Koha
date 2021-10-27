@@ -119,7 +119,7 @@ sub generate_subfield_form {
       $subfield->{kohafield} || 'items.more_subfields_xml';
 
     if ( $prefill_with_default_values && ( !defined($value) || $value eq '' ) ) {
-        $value = $subfield->{defaultvalue};
+        $value = $subfield->{defaultvalue} if !$item->{itemnumber}; # apply defaultvalue only to new items
         if ($value) {
 
 # get today date & replace <<YYYY>>, <<YY>>, <<MM>>, <<DD>> if provided in the default value
