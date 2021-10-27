@@ -36,7 +36,6 @@ use vars qw( $tagslib);
 use vars qw( $authorised_values_sth);
 use vars qw( $is_a_modif );
 
-my $itemtype; # created here because it can be used in build_authorized_values_list sub
 our($authorised_values_sth,$is_a_modif,$usedTagsLib,$mandatory_z3950);
 
 =head1 FUNCTIONS
@@ -70,50 +69,34 @@ sub build_authorized_values_list {
     my @authorised_values;
     my %authorised_lib;
 
-
-    #---- branch
     my $category = $tagslib->{$tag}->{$subfield}->{'authorised_value'};
-    if ( $category eq "branches" ) {
-        my $sth =
-        $dbh->prepare(
-            "select branchcode,branchname from branches order by branchname");
-        $sth->execute;
-        push @authorised_values, ""
-        unless ( $tagslib->{$tag}->{$subfield}->{mandatory} );
+    push @authorised_values, q{} unless $tagslib->{$tag}->{$subfield}->{mandatory} && $value;
 
+    if ( $category eq "branches" ) {
+        my $sth = $dbh->prepare( "select branchcode,branchname from branches order by branchname" );
+        $sth->execute;
         while ( my ( $branchcode, $branchname ) = $sth->fetchrow_array ) {
             push @authorised_values, $branchcode;
             $authorised_lib{$branchcode} = $branchname;
         }
     }
     elsif ( $category eq "itemtypes" ) {
-        push @authorised_values, ""
-          unless ( $tagslib->{$tag}->{$subfield}->{mandatory}
-            && ( $value || $tagslib->{$tag}->{$subfield}->{defaultvalue} ) );
-
-        my $itemtype;
         my $itemtypes = Koha::ItemTypes->search_with_localization;
-        while ( $itemtype = $itemtypes->next ) {
+        while ( my $itemtype = $itemtypes->next ) {
             push @authorised_values, $itemtype->itemtype;
             $authorised_lib{$itemtype->itemtype} = $itemtype->translated_description;
         }
-        $value = $itemtype unless ($value);
-
-        #---- "true" authorised value
     }
-    else {
+    else { # "true" authorised value
         $authorised_values_sth->execute(
-            $tagslib->{$tag}->{$subfield}->{authorised_value} );
-
-        push @authorised_values, ""
-          unless ( $tagslib->{$tag}->{$subfield}->{mandatory}
-            && ( $value || $tagslib->{$tag}->{$subfield}->{defaultvalue} ) );
-
+            $tagslib->{$tag}->{$subfield}->{authorised_value}
+        );
         while ( my ( $value, $lib ) = $authorised_values_sth->fetchrow_array ) {
             push @authorised_values, $value;
             $authorised_lib{$value} = $lib;
         }
     }
+
     return {
         type     => 'select',
         id       => "tag_".$tag."_subfield_".$subfield."_".$index_tag."_".$index_subfield,
@@ -125,7 +108,6 @@ sub build_authorized_values_list {
     };
 }
 
-
 =item create_input
 
 builds the <input ...> entry for a subfield.
@@ -133,7 +115,7 @@ builds the <input ...> entry for a subfield.
 =cut
 
 sub create_input {
-    my ( $tag, $subfield, $value, $index_tag, $rec, $authorised_values_sth,$cgi ) = @_;
+    my ( $tag, $subfield, $value, $index_tag, $rec, $authorised_values_sth, $cgi ) = @_;
 
     my $index_subfield = CreateKey(); # create a specifique key for each subfield
 
@@ -147,7 +129,7 @@ sub create_input {
 
     # if there is no value provided but a default value in parameters, get it
     if ($value eq '') {
-        $value = $tagslib->{$tag}->{$subfield}->{defaultvalue};
+        $value = $tagslib->{$tag}->{$subfield}->{defaultvalue} if !$cgi->param('authid'); # only for new records
         if (!defined $value) {
             $value = q{};
         }
