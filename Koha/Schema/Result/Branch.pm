@@ -191,6 +191,14 @@ MARC Organization Code, see http://www.loc.gov/marc/organizations/orgshome.html,
 
 the ability to act as a pickup location
 
+=head2 public
+
+  data_type: 'tinyint'
+  default_value: 1
+  is_nullable: 0
+
+whether this library should show in the opac
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -239,6 +247,8 @@ __PACKAGE__->add_columns(
   "marcorgcode",
   { data_type => "varchar", is_nullable => 1, size => 16 },
   "pickup_location",
+  { data_type => "tinyint", default_value => 1, is_nullable => 0 },
+  "public",
   { data_type => "tinyint", default_value => 1, is_nullable => 0 },
 );
 
@@ -887,8 +897,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2021-07-16 07:12:03
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:EZYvCbpv41QSEhHRPVFImA
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2021-10-27 13:48:49
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:SVuazNjL6+ziK2Uwcc7OwA
 
 __PACKAGE__->add_columns(
     '+pickup_location' => { is_boolean => 1 }
