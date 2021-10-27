@@ -1485,6 +1485,7 @@ CREATE TABLE `branches` (
   `geolocation` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'geolocation of your library',
   `marcorgcode` varchar(16) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'MARC Organization Code, see http://www.loc.gov/marc/organizations/orgshome.html, when empty defaults to syspref MARCOrgCode',
   `pickup_location` tinyint(1) NOT NULL DEFAULT 1 COMMENT 'the ability to act as a pickup location',
+  `public` tinyint(1) NOT NULL DEFAULT 1 COMMENT 'whether this library should show in the opac',
   PRIMARY KEY (`branchcode`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
