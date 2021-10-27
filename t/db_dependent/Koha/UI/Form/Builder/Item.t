@@ -134,7 +134,7 @@ subtest 'authorised values' => sub {
 };
 
 subtest 'prefill_with_default_values' => sub {
-    plan tests => 2;
+    plan tests => 3;
 
     my $biblio = $builder->build_sample_biblio({ value => {frameworkcode => ''}});
     my $subfields =
@@ -153,6 +153,14 @@ subtest 'prefill_with_default_values' => sub {
     ($subfield) = grep { $_->{subfield} eq 'é' } @$subfields;
     is( $subfield->{marc_value}->{value}, 'ééé', 'default value should be set if prefill_with_default_values passed');
 
+    # Do the same for an existing item; we do not expect the defaultvalue to popup
+    my $item = $builder->build_sample_item;
+    $subfields = Koha::UI::Form::Builder::Item->new({
+        biblionumber => $biblio->biblionumber,
+        item => $item->unblessed,
+    })->edit_form({ prefill_with_default_values => 1 });
+    ($subfield) = grep { $_->{subfield} eq 'é' } @$subfields;
+    is( $subfield->{marc_value}->{value}, q{}, 'default value not applied to existing item');
 
 };
 
