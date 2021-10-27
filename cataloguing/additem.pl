@@ -565,7 +565,7 @@ my $branchcode = $input->param('branch') || C4::Context->userenv->{branch};
 # OR
 # If the subfield must be prefilled with last catalogued item
 my @subfields_to_prefill;
-if ( $nextop eq 'additem' && $prefillitem ) {
+if ( $nextop eq 'additem' && $op ne 'dupeitem' && $prefillitem ) {
     @subfields_to_prefill = split(' ', C4::Context->preference('SubfieldsToUseWhenPrefill'));
     # Setting to 1 element if SubfieldsToUseWhenPrefill is empty to prevent all the subfields to be prefilled
     @subfields_to_prefill = ("") unless @subfields_to_prefill;
