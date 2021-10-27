@@ -17,7 +17,6 @@
 # You should have received a copy of the GNU General Public License
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
-
 use Modern::Perl;
 
 use CGI qw ( -utf8 );
@@ -27,7 +26,7 @@ use Koha::Libraries;
 
 my $query = CGI->new();
 
-my $branchcode   = $query->param('branchcode');
+my $branchcode = $query->param('branchcode');
 
 my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
     {
@@ -38,15 +37,22 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
     }
 );
 
-if( $branchcode ){
-    my $library = Koha::Libraries->find( $branchcode );
-    $template->param( library => $library );
+my $found;
+if ($branchcode) {
+    my $library = Koha::Libraries->find($branchcode);
+    if ( $library->public ) {
+        $found++;
+        $template->param( library => $library );
+    }
 }
 
-my $libraries = Koha::Libraries->search( {}, { order_by => ['branchname'] }, );
-$template->param(
-    libraries => $libraries,
-    branchcode => $branchcode,
-);
+unless ($found) {
+    my $libraries = Koha::Libraries->search( { public => 1 }, { order_by => ['branchname'] } );
+
+    $template->param(
+        libraries  => $libraries,
+        branchcode => $branchcode,
+    );
+}
 
 output_html_with_http_headers $query, $cookie, $template->output;

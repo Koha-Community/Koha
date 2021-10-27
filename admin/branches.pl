@@ -84,6 +84,7 @@ if ( $op eq 'add_form' ) {
       opac_info
       marcorgcode
       pickup_location
+      public
     );
     my $is_a_modif = $input->param('is_a_modif');
 
