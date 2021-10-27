@@ -30,10 +30,11 @@ use C4::Output qw( output_html_with_http_headers );
 use C4::Auth qw( get_template_and_user );
 use C4::Biblio qw( GetMarcBiblio );
 use C4::Auth qw( get_template_and_user );
-use C4::ImportBatch qw( GetRecordFromImportBiblio GetImportBiblios );
+use C4::ImportBatch qw( GetImportBiblios );
 use C4::AuthoritiesMarc qw( GetAuthority );
 
 use Koha::Biblios;
+use Koha::Import::Records;
 
 # Input params
 my $input        = CGI->new;
@@ -79,7 +80,8 @@ if( $record ) {
 }
 
 if( $importid ) {
-    $recordImportid = C4::ImportBatch::GetRecordFromImportBiblio( $importid, 'embed_items' );
+    my $import_record = Koha::Import::Records->find($importid);
+    my $recordImportid = $import_record->get_marc_record({ embed_items => 1 });
     $formatted2 = $recordImportid->as_formatted;
     my $biblio = GetImportBiblios($importid);
     $importTitle = $biblio->[0]->{'title'};
