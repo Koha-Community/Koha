@@ -5,9 +5,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 18.05\n"
-"POT-Creation-Date: 2021-09-18 00:45-0300\n"
-"PO-Revision-Date: 2021-07-20 08:16+0000\n"
-"Last-Translator: Frank Chou <frank@sris.com.tw>\n"
+"POT-Creation-Date: 2021-10-20 13:58-0300\n"
+"PO-Revision-Date: 2021-10-08 09:05+0000\n"
+"Last-Translator: Atron Chen <atron@customer-support.com.tw>\n"
 "Language-Team: koha_TW <kohataiwan@googlegroups.com>\n"
 "Language: zh_TW\n"
 "MIME-Version: 1.0\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8-bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Generator: Pootle 2.8\n"
-"X-POOTLE-MTIME: 1626769007.154638\n"
+"X-POOTLE-MTIME: 1633683944.741254\n"
 "X-Pootle-Path: /zh_TW/18.05/zh-Hans-TW-staff-prog.po\n"
 "X-Pootle-Revision: 1\n"
 
@@ -5990,7 +5990,7 @@ msgstr "%s 說明被標記為已讀。"
 #. SCRIPT
 #: intranet-tmpl/prog/en/includes/strings.inc:1
 msgid "%s of %s renewals remaining"
-msgstr "%s 裡的 %s 仍在續借中"
+msgstr "續借剩 %s 次(共 %s 次)"
 
 #. %1$s:  hits_to_paginate | html 
 #. %2$s:  total | html 
@@ -7560,7 +7560,7 @@ msgstr "%s是的%s&nbsp;%s"
 #. %2$s:  ELSE 
 #. %3$s:  END 
 #: intranet-tmpl/prog/en/modules/tools/upload.tt:173
-#: intranet-tmpl/prog/en/modules/members/apikeys.tt:67
+#: intranet-tmpl/prog/en/modules/members/apikeys.tt:87
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:297
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:308
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:310
@@ -11100,7 +11100,7 @@ msgstr "若找不到對映書目時，則："
 #: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:271
 #: intranet-tmpl/prog/en/modules/serials/serials-search.tt:65
 #: intranet-tmpl/prog/en/modules/members/boraccount.tt:57
-#: intranet-tmpl/prog/en/modules/members/apikeys.tt:58
+#: intranet-tmpl/prog/en/modules/members/apikeys.tt:79
 #: intranet-tmpl/prog/en/modules/members/housebound.tt:383
 #: intranet-tmpl/prog/en/modules/members/pay.tt:47
 #: intranet-tmpl/prog/en/modules/clubs/clubs.tt:62
@@ -11185,7 +11185,7 @@ msgstr "作業於 "
 msgid "Actions:"
 msgstr "動作："
 
-#: intranet-tmpl/prog/en/modules/members/apikeys.tt:85
+#: intranet-tmpl/prog/en/modules/members/apikeys.tt:105
 #, c-format
 msgid "Activate"
 msgstr "使用中"
@@ -11196,7 +11196,7 @@ msgid "Activate filters"
 msgstr "運作中的篩選器"
 
 #: intranet-tmpl/prog/en/modules/tools/stockrotation.tt:64
-#: intranet-tmpl/prog/en/modules/members/apikeys.tt:57
+#: intranet-tmpl/prog/en/modules/members/apikeys.tt:78
 #: intranet-tmpl/prog/en/modules/acqui/acqui-home.tt:88
 #: intranet-tmpl/prog/en/modules/admin/currency.tt:184
 #: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:65
@@ -13693,7 +13693,7 @@ msgid "Are you sure you want to delete this item?"
 msgstr "確定刪除此館藏嗎？"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/members/apikeys.tt:111
+#: intranet-tmpl/prog/en/modules/members/apikeys.tt:131
 msgid "Are you sure you want to delete this key?"
 msgstr "確定刪除它嗎？"
 
@@ -16603,7 +16603,7 @@ msgstr "不能儲存此紀錄，因為以下欄位尚未填入資料："
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1109
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:340
 #: intranet-tmpl/prog/en/modules/members/update-child.tt:44
-#: intranet-tmpl/prog/en/modules/members/apikeys.tt:40
+#: intranet-tmpl/prog/en/modules/members/apikeys.tt:62
 #: intranet-tmpl/prog/en/modules/members/mancredit.tt:60
 #: intranet-tmpl/prog/en/modules/members/paycollect.tt:166
 #: intranet-tmpl/prog/en/modules/members/paycollect.tt:213
@@ -19127,9 +19127,14 @@ msgstr "勾選以展開此區塊"
 msgid "Click to fill with a randomly generated suggestion. "
 msgstr "勾選填入隨機產生的建議。"
 
-#: intranet-tmpl/prog/en/modules/members/apikeys.tt:55
+#: intranet-tmpl/prog/en/modules/members/apikeys.tt:77
 #, c-format
 msgid "Client ID"
+msgstr "客戶 ID"
+
+#: intranet-tmpl/prog/en/modules/members/apikeys.tt:40
+#, fuzzy, c-format
+msgid "Client ID: "
 msgstr "客戶 ID"
 
 #: intranet-tmpl/prog/en/modules/cataloguing/editor.tt:112
@@ -22170,7 +22175,7 @@ msgstr "延遲是逾期後的天數，屆時才啟發逾期通知。"
 #: intranet-tmpl/prog/en/modules/members/files.tt:53
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:98
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:338
-#: intranet-tmpl/prog/en/modules/members/apikeys.tt:74
+#: intranet-tmpl/prog/en/modules/members/apikeys.tt:94
 #: intranet-tmpl/prog/en/modules/members/housebound.tt:401
 #: intranet-tmpl/prog/en/modules/acqui/invoice.tt:88
 #: intranet-tmpl/prog/en/modules/acqui/invoice.tt:163
@@ -22791,7 +22796,7 @@ msgstr "系所"
 #: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:268
 #: intranet-tmpl/prog/en/modules/members/files.tt:40
 #: intranet-tmpl/prog/en/modules/members/update-child.tt:24
-#: intranet-tmpl/prog/en/modules/members/apikeys.tt:54
+#: intranet-tmpl/prog/en/modules/members/apikeys.tt:76
 #: intranet-tmpl/prog/en/modules/members/paycollect.tt:99
 #: intranet-tmpl/prog/en/modules/members/paycollect.tt:189
 #: intranet-tmpl/prog/en/modules/members/pay.tt:49
@@ -22886,7 +22891,8 @@ msgstr "說明："
 #: intranet-tmpl/prog/en/modules/rotating_collections/editCollections.tt:118
 #: intranet-tmpl/prog/en/modules/serials/subscription-frequencies.tt:47
 #: intranet-tmpl/prog/en/modules/members/maninvoice.tt:58
-#: intranet-tmpl/prog/en/modules/members/apikeys.tt:37
+#: intranet-tmpl/prog/en/modules/members/apikeys.tt:36
+#: intranet-tmpl/prog/en/modules/members/apikeys.tt:59
 #: intranet-tmpl/prog/en/modules/members/mancredit.tt:54
 #: intranet-tmpl/prog/en/modules/onboarding/onboardingstep4.tt:33
 #: intranet-tmpl/prog/en/modules/onboarding/onboardingstep2.tt:40
@@ -27231,12 +27237,12 @@ msgstr "一般設定"
 msgid "Generate EDIFACT order"
 msgstr "產生 EDIFACT 順序"
 
-#: intranet-tmpl/prog/en/modules/members/apikeys.tt:49
+#: intranet-tmpl/prog/en/modules/members/apikeys.tt:71
 #, c-format
 msgid "Generate a new client id/key pair"
 msgstr "新增客戶 id/key 配對"
 
-#: intranet-tmpl/prog/en/modules/members/apikeys.tt:94
+#: intranet-tmpl/prog/en/modules/members/apikeys.tt:114
 #, c-format
 msgid "Generate a new client id/secret pair"
 msgstr "新增客戶 id/secret 配對"
@@ -27256,7 +27262,7 @@ msgstr "產生離館除籍"
 msgid "Generate exceptions on a range of dates."
 msgstr "產生例外的日期。"
 
-#: intranet-tmpl/prog/en/modules/members/apikeys.tt:34
+#: intranet-tmpl/prog/en/modules/members/apikeys.tt:56
 #, c-format
 msgid "Generate new client id/secret pair"
 msgstr "新增客戶 id/secret 配對"
@@ -35907,6 +35913,12 @@ msgstr "成為預設"
 msgid "Make payment"
 msgstr "付款"
 
+#: intranet-tmpl/prog/en/modules/members/apikeys.tt:33
+#, c-format
+msgid ""
+"Make sure to copy your API secret now. You won’t be able to see it again!"
+msgstr ""
+
 #: intranet-tmpl/prog/en/modules/tools/holidays.tt:168
 #, c-format
 msgid ""
@@ -39053,7 +39065,7 @@ msgstr "搜尋未找到館藏。"
 msgid "No itemtype"
 msgstr "無 itemtype"
 
-#: intranet-tmpl/prog/en/modules/members/apikeys.tt:94
+#: intranet-tmpl/prog/en/modules/members/apikeys.tt:114
 #, c-format
 msgid "No keys defined for the current patron. "
 msgstr "當前讀者未設定鍵值。"
@@ -47195,7 +47207,7 @@ msgstr "審核者"
 msgid "Reviews"
 msgstr "審核"
 
-#: intranet-tmpl/prog/en/modules/members/apikeys.tt:82
+#: intranet-tmpl/prog/en/modules/members/apikeys.tt:102
 #, c-format
 msgid "Revoke"
 msgstr "撤銷"
@@ -47627,7 +47639,7 @@ msgstr "星期六"
 #: intranet-tmpl/prog/en/modules/members/maninvoice.tt:64
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:152
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:154
-#: intranet-tmpl/prog/en/modules/members/apikeys.tt:39
+#: intranet-tmpl/prog/en/modules/members/apikeys.tt:61
 #: intranet-tmpl/prog/en/modules/members/housebound.tt:315
 #: intranet-tmpl/prog/en/modules/members/member-password.tt:83
 #: intranet-tmpl/prog/en/modules/clubs/templates-add-modify.tt:181
@@ -48590,9 +48602,9 @@ msgstr "次要電話："
 msgid "Seconds (default)"
 msgstr "次要(預設)"
 
-#: intranet-tmpl/prog/en/modules/members/apikeys.tt:56
-#, c-format
-msgid "Secret"
+#: intranet-tmpl/prog/en/modules/members/apikeys.tt:44
+#, fuzzy, c-format
+msgid "Secret: "
 msgstr "機密"
 
 #: intranet-tmpl/prog/en/modules/course_reserves/course-reserves.tt:38
