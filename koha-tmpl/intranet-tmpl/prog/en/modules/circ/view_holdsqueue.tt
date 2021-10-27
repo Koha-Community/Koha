@@ -65,9 +65,9 @@
     [% IF ( total ) %]
         <div class="results">[% total | html %] items found for
             [% IF ( branchlimit ) %][% Branches.GetName( branchlimit ) | html %][% ELSE %]All libraries[% END %]
-            [% IF ( itemtypeslimit ) %] and item type:([% ItemTypes.GetDescription( itemtypeslimit ) | html %])[% END %]
-            [% IF ( ccodeslimit ) %] and collection code:([% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.ccode' authorised_value = ccodeslimit ) | html %])[% END %]
-            [% IF ( locationslimit ) %] and shelving location:([% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.location' authorised_value = locationslimit ) | html %])[% END %]
+            [% IF ( itemtypeslimit ) %] and item type: [% ItemTypes.GetDescription( itemtypeslimit ) | html %][% END %]
+            [% IF ( ccodeslimit ) %] and collection: [% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.ccode' authorised_value = ccodeslimit ) | html %][% END %]
+            [% IF ( locationslimit ) %] and shelving location: [% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.location' authorised_value = locationslimit ) | html %][% END %]
         </div>
     [% ELSE %]
         <div class="dialog message">No items found.</div>
@@ -249,7 +249,7 @@
                     </select>
                 </li>
                 <li>
-                    <label for="ccodeslimit">Collection code: </label>
+                    <label for="ccodeslimit">Collection: </label>
                     <select name="ccodeslimit" id="ccodeslimit">
                         <option value="">All</option>
                         [% PROCESS options_for_authorised_values authorised_values => AuthorisedValues.GetAuthValueDropbox( 'CCODE' ), selected_av => ccodeslimit %]
