@@ -333,10 +333,10 @@ sub batch_update {
                     { skip_record_index => 1 }
                 ) if $item->itemlost
                       and not $itemlost_pre;
-
-                push @modified_itemnumbers, $item->itemnumber if $modified || $modified_holds_priority;
-                $modified_fields += $modified + $modified_holds_priority;
             }
+
+            push @modified_itemnumbers, $item->itemnumber if $modified || $modified_holds_priority;
+            $modified_fields += $modified + $modified_holds_priority;
         })};
 
         if ( $callback ) {
