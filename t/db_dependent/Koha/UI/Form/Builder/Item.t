@@ -17,6 +17,7 @@
 
 use Modern::Perl;
 use Test::More tests => 7;
+use Data::Dumper qw( Dumper );
 use utf8;
 
 use List::MoreUtils qw( uniq );
@@ -122,7 +123,9 @@ subtest 'authorised values' => sub {
                   $itemtypes->as_list
             ],
             "Item types should be sorted by description and an empty entries should be shown"
-        );
+        )
+        or diag("Itemtypes details: ".Dumper($subfield->{marc_value}->{values}, [map { $_->itemtype } $itemtypes->as_list]));
+
         is_deeply( $subfield->{marc_value}->{labels},
             { map { $_->itemtype => $_->description } $itemtypes->as_list },
             'Labels should be correctly displayed'
