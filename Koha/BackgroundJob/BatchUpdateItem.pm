@@ -106,7 +106,6 @@ sub process {
 
     my $report = {
         total_records            => scalar @record_ids,
-        modified_itemitemnumbers => [],
         modified_fields          => 0,
     };
 
