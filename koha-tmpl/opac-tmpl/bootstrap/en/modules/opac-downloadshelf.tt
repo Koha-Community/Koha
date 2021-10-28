@@ -16,10 +16,10 @@
                         <li class="breadcrumb-item"><a href="/cgi-bin/koha/opac-user.pl">[% INCLUDE 'patron-title.inc' patron = logged_in_user %]</a></li>
                     [% END %]
                     <li class="breadcrumb-item">
-                        [% IF shelf.category == 1 %]
-                            <a href="/cgi-bin/koha/opac-shelves.pl?op=list&amp;public=0">Your lists</a>
-                        [% ELSE %]
+                        [% IF shelf.public %]
                             <a href="/cgi-bin/koha/opac-shelves.pl?op=list&amp;public=1">Public lists</a>
+                        [% ELSE %]
+                            <a href="/cgi-bin/koha/opac-shelves.pl?op=list&amp;public=0">Your lists</a>
                         [% END %]
                     </li>
                     <li class="breadcrumb-item active">

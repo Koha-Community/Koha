@@ -179,7 +179,7 @@ subtest 'XSS vulnerabilities in pagination' => sub {
             {
                 class => 'Koha::Virtualshelves',
                 value => {
-                    category                 => 2,
+                    public                   => 1,
                     allow_change_from_owner  => 1,
                     allow_change_from_others => 0,
                     owner                    => $patron->borrowernumber
@@ -193,7 +193,7 @@ subtest 'XSS vulnerabilities in pagination' => sub {
     $patron->set_password({ password => $password });
     $s->opac_auth( $patron->userid, $password );
 
-    my $public_lists = $s->opac_base_url . q|opac-shelves.pl?op=list&category=2|;
+    my $public_lists = $s->opac_base_url . q|opac-shelves.pl?op=list&public=1|;
     $driver->get($public_lists);
 
     $s->remove_error_handler;
@@ -202,7 +202,7 @@ subtest 'XSS vulnerabilities in pagination' => sub {
     is( $alert_text, undef, 'No alert box displayed' );
 
     my $booh_alert = 'booh!';
-    $public_lists = $s->opac_base_url . qq|opac-shelves.pl?op=list&category=2"><script>alert('$booh_alert')</script>|;
+    $public_lists = $s->opac_base_url . qq|opac-shelves.pl?op=list&public=1"><script>alert('$booh_alert')</script>|;
     $driver->get($public_lists);
 
     $s->remove_error_handler;
@@ -211,7 +211,7 @@ subtest 'XSS vulnerabilities in pagination' => sub {
     is( $alert_text, undef, 'No alert box displayed, even if evil intent' );
 
     my $second_page = $driver->find_element('//div[@class="pages"]/span[@class="currentPage"]/following-sibling::a');
-    like( $second_page->get_attribute('href'), qr{(?|&)category=2(&|$)}, 'The second page should display category without the invalid value' );
+    like( $second_page->get_attribute('href'), qr{(?|&)public=1(&|$)}, 'The second page should display category without the invalid value' );
 
     push @cleanup, $patron, $patron->category, $patron->library;
 

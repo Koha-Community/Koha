@@ -44,9 +44,9 @@ addbybiblionumber.pl
     if this parameter exists, then it must be equals to the name of the shelf
     to add.
 
-=item category
+=item public
 
-    if this script has to add a shelf, it add one with this category.
+    if this script has to add a shelf, it adds one with this 'public' setting.
 
 =item newshelf
 
@@ -69,7 +69,7 @@ my $query           = CGI->new;
 my $shelfnumber     = $query->param('shelfnumber');
 my $newvirtualshelf = $query->param('newvirtualshelf');
 my $newshelf        = $query->param('newshelf');
-my $category        = $query->param('category');
+my $public          = $query->param('public');
 my $sortfield       = $query->param('sortfield');
 my $confirmed       = $query->param('confirmed') || 0;
 my ( $errcode, $authorized ) = ( 0, 1 );
@@ -95,7 +95,7 @@ if ($newvirtualshelf) {
         Koha::Virtualshelf->new(
             {
                 shelfname => $newvirtualshelf,
-                category  => $category,
+                public    => $public,
                 sortfield => $sortfield,
                 owner     => $loggedinuser,
             }
@@ -149,21 +149,21 @@ if ($newvirtualshelf) {
 
 } else {
     my $private_shelves = Koha::Virtualshelves->search(
-        {   category => 1,
-            owner    => $loggedinuser,
+        {   public                  => 0,
+            owner                   => $loggedinuser,
             allow_change_from_owner => 1,
         },
         { order_by => 'shelfname' }
     );
     my $shelves_shared_with_me = Koha::Virtualshelves->search(
-        {   category                            => 1,
+        {   public                              => 0,
             'virtualshelfshares.borrowernumber' => $loggedinuser,
             allow_change_from_others            => 1,
         },
         { join => 'virtualshelfshares', }
     );
     my $public_shelves = Koha::Virtualshelves->search(
-        {   category => 2,
+        {   public   => 1,
             -or      => [
                 -and => {
                     allow_change_from_owner => 1,
