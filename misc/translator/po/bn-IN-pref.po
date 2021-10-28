@@ -3,16 +3,16 @@ msgstr ""
 "Project-Id-Version: Koha 21.05\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-05-14 17:47+0200\n"
-"PO-Revision-Date: 2018-01-13 17:28+0000\n"
-"Last-Translator: Nazmus <sakib9239@gmail.com>\n"
+"PO-Revision-Date: 2021-10-24 13:18+0000\n"
+"Last-Translator: Sujan Saha <sujan.lib@gmail.com>\n"
 "Language-Team: Koha Translation Team <koha-translate@nongnu.org>\n"
 "Language: bn\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8-bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Pootle 2.5.1.1\n"
-"X-POOTLE-MTIME: 1515864490.000000\n"
+"X-Generator: Pootle 2.8\n"
+"X-POOTLE-MTIME: 1635081518.040810\n"
 "X-Pootle-Path: /bn/21.05/bn-IN-pref.po\n"
 "X-Pootle-Revision: 1\n"
 
@@ -142,7 +142,7 @@ msgstr ""
 
 # Acquisitions > Policy
 msgid "acquisitions.pref Policy"
-msgstr "একুইজিসনস.পছন্দ করুন নীতি  বা কর্মপদ্ধতি"
+msgstr "acquisitions.pref নীতি"
 
 # Acquisitions > Printing
 msgid "acquisitions.pref Printing"
@@ -162,7 +162,7 @@ msgstr ""
 
 # Acquisitions > Policy
 msgid "acquisitions.pref#AcqCreateItem# cataloging the record."
-msgstr "সংগ্রহ.pref#AcqCreateItem# সূচীকরণ দলিল "
+msgstr "acquisitions.pref#AcqCreateItem# রেকর্ডের ক্যাটালগ করা।"
 
 # Acquisitions > Policy
 msgid "acquisitions.pref#AcqCreateItem# placing an order."
@@ -170,23 +170,22 @@ msgstr ""
 
 # Acquisitions > Policy
 msgid "acquisitions.pref#AcqCreateItem# receiving an order."
-msgstr "একুইজিসনস.পছন্দ করা#একুইজিসন তৈরি করুন # একটি  অর্ডার গ্রহণ"
+msgstr "acquisitions.pref#AcqCreateItem# একটি অর্ডার গ্রহণ করছে।"
 
 # Acquisitions > Policy
 msgid "acquisitions.pref#AcqEnableFiles# Do"
-msgstr "সংগ্রহ.pref#AcqEnableFiles#সম্পন্ন"
+msgstr "করুন"
 
 # Acquisitions > Policy
 msgid "acquisitions.pref#AcqEnableFiles# Don't"
-msgstr "সংগ্রহ.pref#AcqEnableFiles#না"
+msgstr "করবেন না"
 
 # Acquisitions > Policy
 msgid ""
 "acquisitions.pref#AcqEnableFiles# enable the ability to upload and attach "
 "arbitrary files to invoices."
 msgstr ""
-"সংগ্রহ.pref#AcqEnableFiles#আপলোড করার জন্য এবং ইচ্ছামত ফাইলগুলি চালানোর ক্ষমতাগুলি "
-"সক্ষম করুন।"
+"আপলোড করার ক্ষমতা সক্ষম করুন এবং চালানের সাথে ইচ্ছামত ফাইল সংযুক্ত করুন।"
 
 # Acquisitions > Policy
 msgid ""
@@ -667,8 +666,26 @@ msgstr ""
 msgid "admin.pref#ElasticsearchMARCFormat# Searchable array"
 msgstr ""
 
+# Administration > Google OpenID Connect > GoogleOAuth2ClientID
+msgid ""
+"admin.pref#GoogleOAuth2ClientID# Along with <a href=\"/cgi-bin/koha/admin/"
+"preferences.pl?op=search&searchfield=GoogleOAuth2ClientSecret"
+"\">GoogleOAuth2ClientSecret</a>, enables <a href=\"/cgi-bin/koha/admin/"
+"preferences.pl?op=search&searchfield=GoogleOpenIDConnect"
+"\">GoogleOpenIDConnect.</a>"
+msgstr ""
+
 # Administration > Google OpenID Connect
 msgid "admin.pref#GoogleOAuth2ClientID# Google OAuth2 Client ID: "
+msgstr ""
+
+# Administration > Google OpenID Connect > GoogleOAuth2ClientSecret
+msgid ""
+"admin.pref#GoogleOAuth2ClientSecret# Along with <a href=\"/cgi-bin/koha/"
+"admin/preferences.pl?op=search&searchfield=GoogleOAuth2ClientID"
+"\">GoogleOAuth2ClientID</a>, enables <a href=\"/cgi-bin/koha/admin/"
+"preferences.pl?op=search&searchfield=GoogleOpenIDConnect"
+"\">GoogleOpenIDConnect.</a>"
 msgstr ""
 
 # Administration > Google OpenID Connect
@@ -679,20 +696,25 @@ msgstr ""
 msgid "admin.pref#GoogleOpenIDConnect# No"
 msgstr ""
 
-# Administration > Google OpenID Connect
-msgid "admin.pref#GoogleOpenIDConnect# Use Google OpenID Connect login: "
+# Administration > Google OpenID Connect > GoogleOpenIDConnect
+msgid ""
+"admin.pref#GoogleOpenIDConnect# Use Google OpenID Connect login in the OPAC: "
 msgstr ""
 
 # Administration > Google OpenID Connect
 msgid "admin.pref#GoogleOpenIDConnect# Yes"
 msgstr ""
 
-# Administration > Google OpenID Connect
+# Administration > Google OpenID Connect > GoogleOpenIDConnect
 msgid ""
 "admin.pref#GoogleOpenIDConnect# You will need to select OAuth2 when creating "
 "an app in the Google cloud console, and set the web origin to your_opac_url "
 "and the redirect url to your_opac_url/cgi-bin/koha/svc/auth/"
-"googleopenidconnect ."
+"googleopenidconnect. Requires <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=GoogleOAuth2ClientID\">GoogleOAuth2ClientID</a> and <a "
+"href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=GoogleOAuth2ClientSecret\">GoogleOAuth2ClientSecret</"
+"a> to be set."
 msgstr ""
 
 # Administration > Google OpenID Connect
@@ -703,14 +725,19 @@ msgstr ""
 msgid "admin.pref#GoogleOpenIDConnectAutoRegister# Don't allow"
 msgstr ""
 
-# Administration > Google OpenID Connect
+# Administration > Google OpenID Connect > GoogleOpenIDConnectAutoRegister
 msgid ""
 "admin.pref#GoogleOpenIDConnectAutoRegister# patrons logging in with Google "
-"Open ID to automatically register."
+"Open ID to automatically register. Requires <a href=\"/cgi-bin/koha/admin/"
+"preferences.pl?op=search&searchfield=GoogleOpenIDConnect"
+"\">GoogleOpenIDConnect</a>."
 msgstr ""
 
-# Administration > Google OpenID Connect
-msgid "admin.pref#GoogleOpenIDConnectDefaultBranch# ."
+# Administration > Google OpenID Connect > GoogleOpenIDConnectDefaultBranch
+msgid ""
+"admin.pref#GoogleOpenIDConnectDefaultBranch# Requires <a href=\"/cgi-bin/"
+"koha/admin/preferences.pl?op=search&searchfield=GoogleOpenIDConnect"
+"\">GoogleOpenIDConnect</a>."
 msgstr ""
 
 # Administration > Google OpenID Connect
@@ -719,8 +746,11 @@ msgid ""
 "automatically registering a Google Open ID patron: "
 msgstr ""
 
-# Administration > Google OpenID Connect
-msgid "admin.pref#GoogleOpenIDConnectDefaultCategory# ."
+# Administration > Google OpenID Connect > GoogleOpenIDConnectDefaultCategory
+msgid ""
+"admin.pref#GoogleOpenIDConnectDefaultCategory# Requires <a href=\"/cgi-bin/"
+"koha/admin/preferences.pl?op=search&searchfield=GoogleOpenIDConnect"
+"\">GoogleOpenIDConnect</a>."
 msgstr ""
 
 # Administration > Google OpenID Connect
@@ -729,9 +759,11 @@ msgid ""
 "automatically registering a Google Open ID patron: "
 msgstr ""
 
-# Administration > Google OpenID Connect
+# Administration > Google OpenID Connect > GoogleOpenIDConnectDomain
 msgid ""
-"admin.pref#GoogleOpenIDConnectDomain# . Leave blank for all Google domains."
+"admin.pref#GoogleOpenIDConnectDomain# Leave blank for all Google domains. "
+"Requires <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=GoogleOpenIDConnect\">GoogleOpenIDConnect</a>."
 msgstr ""
 
 # Administration > Google OpenID Connect
@@ -2049,24 +2081,24 @@ msgid "authorities.pref#AutoCreateAuthorities# When editing records,"
 msgstr "autorités.pref#AutoCreateAuthorities# En modification de notice,"
 
 # Authorities > General
-#, fuzzy
 msgid ""
 "authorities.pref#AutoCreateAuthorities# authority records that are missing "
 "(<a href=\"/cgi-bin/koha/admin/preferences.pl?"
 "op=search&searchfield=BiblioAddsAuthorities\">BiblioAddsAuthorities</a> must "
 "be set to \"allow\" for this to have any effect)."
 msgstr ""
-"autorités.pref#AutoCreateAuthorities# les notices autorités manquantes "
-"(BiblioAddsAuthorities doit avoir été fixé à \"allow\" for this to have any "
-"effect)."
+"অথরিটি রেকর্ড অনুপস্থিত (<a href=\"/cgi-"
+"bin/koha/admin/preferences.pl?op=search&searchfield=BiblioAddsAuthorities\""
+">BiblioAddsAuthorities</a> কোনরকম পরিবর্তনের জন্য অবশ্যই \"allow\" সেট করতে "
+"হবে)।"
 
 # Authorities > General
 msgid "authorities.pref#AutoCreateAuthorities# don't generate"
-msgstr ""
+msgstr "তৈরি করবেন না"
 
 # Authorities > General
 msgid "authorities.pref#AutoCreateAuthorities# generate"
-msgstr "authorités.pref#AutoCreateAuthorities# générer"
+msgstr "সৃষ্টি করা"
 
 # Authorities > General
 msgid "authorities.pref#BiblioAddsAuthorities# When editing records,"
@@ -2354,6 +2386,21 @@ msgstr ""
 msgid ""
 "cataloguing.pref#BibtexExportAdditionalFields# Use one line per tag in the "
 "format BT_TAG: TAG$SUBFIELD ( e.g. lccn: 010$a )."
+msgstr ""
+
+# Cataloging > Interface > CreateAVFromCataloguing
+msgid "cataloguing.pref#CreateAVFromCataloguing# Allow"
+msgstr ""
+
+# Cataloging > Interface > CreateAVFromCataloguing
+msgid "cataloguing.pref#CreateAVFromCataloguing# Don't allow"
+msgstr ""
+
+# Cataloging > Interface > CreateAVFromCataloguing
+msgid ""
+"cataloguing.pref#CreateAVFromCataloguing# authorized values to be created "
+"within the cataloguing module. Librarien will need the manage_auth_values "
+"subpermission."
 msgstr ""
 
 # Cataloging > Interface
@@ -11291,6 +11338,22 @@ msgstr ""
 
 # Searching > Results display
 msgid "searching.pref#FacetMaxCount# facets for each category."
+msgstr ""
+
+# Searching > Results display > FacetOrder
+msgid "searching.pref#FacetOrder# Sort facets"
+msgstr ""
+
+# Searching > Results display > FacetOrder
+msgid "searching.pref#FacetOrder# alphabetically"
+msgstr ""
+
+# Searching > Results display > FacetOrder
+msgid "searching.pref#FacetOrder# by usage count"
+msgstr ""
+
+# Searching > Results display > FacetOrder
+msgid "searching.pref#FacetOrder# for each category."
 msgstr ""
 
 # Searching > Features

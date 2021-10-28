@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: Koha 21.05\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2021-08-16 04:50+0000\n"
+"PO-Revision-Date: 2021-10-05 03:58+0000\n"
 "Last-Translator: Igor A. Sychev <Igor.A.Sychev@mail.ru>\n"
 "Language-Team: Koha Translation Team\n"
 "Language: ru\n"
@@ -16,7 +16,7 @@ msgstr ""
 "X-Generator: Pootle 2.8\n"
 "X-Pootle-Path: /ru/21.05/ru-RU-pref.po\n"
 "X-Pootle-Revision: 1\n"
-"X-POOTLE-MTIME: 1629089450.749174\n"
+"X-POOTLE-MTIME: 1633406288.253677\n"
 
 # Accounting
 msgid "accounting.pref"
@@ -749,9 +749,35 @@ msgstr "ISO2709 (формат обмена)"
 msgid "admin.pref#ElasticsearchMARCFormat# Searchable array"
 msgstr "Доступный для поиска массив"
 
+# Patrons > Notices and notifications > PhoneNotification
+#, fuzzy
+msgid ""
+"admin.pref#GoogleOAuth2ClientID# Along with <a href=\"/cgi-bin/koha/admin/"
+"preferences.pl?op=search&searchfield=GoogleOAuth2ClientSecret"
+"\">GoogleOAuth2ClientSecret</a>, enables <a href=\"/cgi-bin/koha/admin/"
+"preferences.pl?op=search&searchfield=GoogleOpenIDConnect"
+"\">GoogleOpenIDConnect.</a>"
+msgstr ""
+"<br/><i class=\"fa fa-exclamation-triangle\"></i> Если "
+"<code>PhoneNotification</code> включен, "
+"<code>TalkingTechItivaPhoneNotification</code> должен быть отключен."
+
 # Administration > Google OpenID Connect
 msgid "admin.pref#GoogleOAuth2ClientID# Google OAuth2 Client ID: "
 msgstr "Google OAuth2 Client ID:"
+
+# Patrons > Notices and notifications > PhoneNotification
+#, fuzzy
+msgid ""
+"admin.pref#GoogleOAuth2ClientSecret# Along with <a href=\"/cgi-bin/koha/"
+"admin/preferences.pl?op=search&searchfield=GoogleOAuth2ClientID"
+"\">GoogleOAuth2ClientID</a>, enables <a href=\"/cgi-bin/koha/admin/"
+"preferences.pl?op=search&searchfield=GoogleOpenIDConnect"
+"\">GoogleOpenIDConnect.</a>"
+msgstr ""
+"<br/><i class=\"fa fa-exclamation-triangle\"></i> Если "
+"<code>PhoneNotification</code> включен, "
+"<code>TalkingTechItivaPhoneNotification</code> должен быть отключен."
 
 # Administration > Google OpenID Connect
 msgid "admin.pref#GoogleOAuth2ClientSecret# Google OAuth2 Client Secret: "
@@ -762,7 +788,9 @@ msgid "admin.pref#GoogleOpenIDConnect# No"
 msgstr "Нет"
 
 # Administration > Google OpenID Connect
-msgid "admin.pref#GoogleOpenIDConnect# Use Google OpenID Connect login: "
+#, fuzzy
+msgid ""
+"admin.pref#GoogleOpenIDConnect# Use Google OpenID Connect login in the OPAC: "
 msgstr "Использовать логин Google OpenID Connect:"
 
 # Administration > Google OpenID Connect
@@ -770,11 +798,16 @@ msgid "admin.pref#GoogleOpenIDConnect# Yes"
 msgstr "Да"
 
 # Administration > Google OpenID Connect
+#, fuzzy
 msgid ""
 "admin.pref#GoogleOpenIDConnect# You will need to select OAuth2 when creating "
 "an app in the Google cloud console, and set the web origin to your_opac_url "
 "and the redirect url to your_opac_url/cgi-bin/koha/svc/auth/"
-"googleopenidconnect ."
+"googleopenidconnect. Requires <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=GoogleOAuth2ClientID\">GoogleOAuth2ClientID</a> and <a "
+"href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=GoogleOAuth2ClientSecret\">GoogleOAuth2ClientSecret</"
+"a> to be set."
 msgstr ""
 "Вам будет необходимо выбрать OAuth2 при создании приложения в облачной "
 "консоли Google и установить веб-источник на your_opac_url и перенаправить на "
@@ -789,16 +822,23 @@ msgid "admin.pref#GoogleOpenIDConnectAutoRegister# Don't allow"
 msgstr "Запретить"
 
 # Administration > Google OpenID Connect
+#, fuzzy
 msgid ""
 "admin.pref#GoogleOpenIDConnectAutoRegister# patrons logging in with Google "
-"Open ID to automatically register."
+"Open ID to automatically register. Requires <a href=\"/cgi-bin/koha/admin/"
+"preferences.pl?op=search&searchfield=GoogleOpenIDConnect"
+"\">GoogleOpenIDConnect</a>."
 msgstr ""
 "пользователям, входящим в систему с помощью Google Open ID, автоматически "
 "регистрироваться."
 
-# Administration > Google OpenID Connect
-msgid "admin.pref#GoogleOpenIDConnectDefaultBranch# ."
-msgstr "."
+# Patrons > General
+#, fuzzy
+msgid ""
+"admin.pref#GoogleOpenIDConnectDefaultBranch# Requires <a href=\"/cgi-bin/"
+"koha/admin/preferences.pl?op=search&searchfield=GoogleOpenIDConnect"
+"\">GoogleOpenIDConnect</a>."
+msgstr "Для активации требуется OPACPatronDetails."
 
 # Administration > Google OpenID Connect
 msgid ""
@@ -808,9 +848,13 @@ msgstr ""
 "Использовать этот код подразделения при автоматической регистрации читателя "
 "Google Open ID."
 
-# Administration > Google OpenID Connect
-msgid "admin.pref#GoogleOpenIDConnectDefaultCategory# ."
-msgstr "."
+# Patrons > General
+#, fuzzy
+msgid ""
+"admin.pref#GoogleOpenIDConnectDefaultCategory# Requires <a href=\"/cgi-bin/"
+"koha/admin/preferences.pl?op=search&searchfield=GoogleOpenIDConnect"
+"\">GoogleOpenIDConnect</a>."
+msgstr "Для активации требуется OPACPatronDetails."
 
 # Administration > Google OpenID Connect
 msgid ""
@@ -820,10 +864,15 @@ msgstr ""
 "Использовать этот код типа при автоматической регистрации читателя Google "
 "Open ID."
 
-# Administration > Google OpenID Connect
+# OPAC > OpenURL
+#, fuzzy
 msgid ""
-"admin.pref#GoogleOpenIDConnectDomain# . Leave blank for all Google domains."
-msgstr "Оставить пустым для всех доменов Google"
+"admin.pref#GoogleOpenIDConnectDomain# Leave blank for all Google domains. "
+"Requires <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=GoogleOpenIDConnect\">GoogleOpenIDConnect</a>."
+msgstr ""
+"Текст ссылок OpenURL (или заглавие изображения, если определен "
+"OpenURLImageLocation):"
 
 # Administration > Google OpenID Connect
 msgid ""
@@ -2589,6 +2638,23 @@ msgstr ""
 "(например, lccn:010$a)."
 
 # Cataloging > Interface
+#, fuzzy
+msgid "cataloguing.pref#CreateAVFromCataloguing# Allow"
+msgstr "Включить"
+
+# Cataloging > Interface
+#, fuzzy
+msgid "cataloguing.pref#CreateAVFromCataloguing# Don't allow"
+msgstr "Не включать"
+
+# Cataloging > Interface > CreateAVFromCataloguing
+msgid ""
+"cataloguing.pref#CreateAVFromCataloguing# authorized values to be created "
+"within the cataloguing module. Librarien will need the manage_auth_values "
+"subpermission."
+msgstr ""
+
+# Cataloging > Interface
 msgid "cataloguing.pref#DefaultClassificationSource# Use"
 msgstr "Использовать "
 
@@ -4141,15 +4207,15 @@ msgstr ""
 "вам следует включить это."
 
 # Circulation > Checkin policy
-#, fuzzy
 msgid ""
 "circulation.pref#CalculateFinesOnReturn# <br /><strong>NOTE:</strong> This "
 "system preference requires <a href=\"/cgi-bin/koha/admin/preferences.pl?"
 "op=search&searchfield=FinesMode\">FinesMode</a> to be set to \"Calculate and "
 "charge.\""
 msgstr ""
-" <br /><strong>Примечание:</strong> Данная системная настройка требует "
-"установки FinesMode 'Подсчитывать и взимать.'"
+"Примечание: Данная системная настройка требует установки <a href=\"/cgi-bin/"
+"koha/admin/preferences.pl?op=search&searchfield=FinesMode\">FinesMode</a> "
+"\"Подсчитывать и взимать\"."
 
 # Circulation > Checkin policy
 msgid "circulation.pref#CalculateFinesOnReturn# Do"
@@ -12459,6 +12525,26 @@ msgstr "Показать до"
 msgid "searching.pref#FacetMaxCount# facets for each category."
 msgstr "фасетов для каждой категории."
 
+# Searching > Results Display
+#, fuzzy
+msgid "searching.pref#FacetOrder# Sort facets"
+msgstr "Показывать"
+
+# Searching > Features
+#, fuzzy
+msgid "searching.pref#FacetOrder# alphabetically"
+msgstr "автоматически"
+
+# Searching > Results display
+#, fuzzy
+msgid "searching.pref#FacetOrder# by usage count"
+msgstr "Показать до"
+
+# Searching > Results display
+#, fuzzy
+msgid "searching.pref#FacetOrder# for each category."
+msgstr "фасетов для каждой категории."
+
 # Searching > Features
 msgid ""
 "searching.pref#IncludeSeeFromInSearches# <em>see from</em> (non-preferred "
@@ -12922,7 +13008,7 @@ msgstr "дате добавления"
 
 # Searching > Results Display
 msgid "searching.pref#defaultSortField# date of publication"
-msgstr "дате пибликации"
+msgstr "дате публикации"
 
 # Searching > Results Display
 msgid "searching.pref#defaultSortField# descending."
@@ -12938,7 +13024,7 @@ msgstr "от Я до А."
 
 # Searching > Results Display
 msgid "searching.pref#defaultSortField# relevance"
-msgstr "ранжировке"
+msgstr "релевантности"
 
 # Searching > Results Display
 msgid "searching.pref#defaultSortField# title"
@@ -14223,6 +14309,20 @@ msgid ""
 "web_services.pref#SvcMaxReportRows# rows of a report requested via the "
 "reports web service."
 msgstr "строк отчета, запрошенного через веб-службу отчетов."
+
+# Administration > Google OpenID Connect
+#~ msgid "admin.pref#GoogleOpenIDConnectDefaultBranch# ."
+#~ msgstr "."
+
+# Administration > Google OpenID Connect
+#~ msgid "admin.pref#GoogleOpenIDConnectDefaultCategory# ."
+#~ msgstr "."
+
+# Administration > Google OpenID Connect
+#~ msgid ""
+#~ "admin.pref#GoogleOpenIDConnectDomain# . Leave blank for all Google "
+#~ "domains."
+#~ msgstr "Оставить пустым для всех доменов Google"
 
 # I18N/L10N
 #~ msgid ""
