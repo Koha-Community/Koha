@@ -89,7 +89,10 @@ get '/libraries/:library_id_1/:library_id_2' => sub {
     my $library_id_1 = $c->param('library_id_1');
     my $library_id_2 = $c->param('library_id_2');
 
-    my $libraries_rs = Koha::Libraries->search({ branchcode => [ $library_id_1, $library_id_2 ] });
+    my $libraries_rs = Koha::Libraries->search(
+        { branchcode => [ $library_id_1, $library_id_2 ] },
+        { order_by   => 'branchname' }
+    );
     my $libraries    = $c->objects->search( $libraries_rs );
 
     $c->render(
@@ -538,8 +541,8 @@ subtest 'objects.search helper, public requests' => sub {
 
     $schema->storage->txn_begin;
 
-    my $library_1 = $builder->build_object({ class => 'Koha::Libraries' });
-    my $library_2 = $builder->build_object({ class => 'Koha::Libraries' });
+    my $library_1 = $builder->build_object({ class => 'Koha::Libraries', value => { branchname => 'A' } });
+    my $library_2 = $builder->build_object({ class => 'Koha::Libraries', value => { branchname => 'B' } });
 
     my $t = Test::Mojo->new;
 
