@@ -1550,6 +1550,11 @@
                     $("#paramLabel").val( _("Patron category") );
                     $("#param_category").val("categorycode");
                     break;
+                case "insertList":
+                    modalTitle.text( _("Insert list parameter") );
+                    $("#paramLabel").val( _("List of values") );
+                    $("#param_category").val("list");
+                    break;
                 case "insertText":
                     modalTitle.text( _("Insert text parameter") );
                     $("#paramLabel").val( _("Text") );
@@ -2280,6 +2285,7 @@
             <li><a href="#" class="insertParam" id="insertDate">Date</a></li>
             <li><a href="#" class="insertParam" id="insertItemtypes">Item types</a></li>
             <li><a href="#" class="insertParam" id="insertBranches">Libraries</a></li>
+            <li><a href="#" class="insertParam" id="insertList">List</a></li>
             <li><a href="#" class="insertParam" id="insertCategorycode">Patron categories</a></li>
             <li><a href="#" class="insertParam" id="insertText">Text field</a></li>
         </ul>
