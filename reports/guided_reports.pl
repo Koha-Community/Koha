@@ -38,6 +38,7 @@ use Koha::Libraries;
 use Koha::Patron::Categories;
 use Koha::SharedContent;
 use Koha::Util::OpenDocument qw( generate_ods );
+use C4::ClassSource qw( GetClassSources );
 
 =head1 NAME
 
