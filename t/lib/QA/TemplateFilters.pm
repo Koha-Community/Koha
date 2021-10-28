@@ -30,6 +30,7 @@ our @tt_directives = (
 
 our @tt_methods = (
     qr{\.push\(},
+    qr{\.delete\(},
 );
 
 sub fix_filters {

@@ -307,10 +307,12 @@ subtest 'Do not escape TT methods' => sub {
     plan tests => 2;
     my $input = <<INPUT;
 [% my_array.push(a_var) %]
+[% my_hash.delete(a_key) %]
 INPUT
 
     my $expected = <<EXPECTED;
 [% my_array.push(a_var) %]
+[% my_hash.delete(a_key) %]
 EXPECTED
 
     my $new_content = t::lib::QA::TemplateFilters::fix_filters($input);
