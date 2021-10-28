@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Koha 20.11\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-09-13 00:53-0300\n"
-"PO-Revision-Date: 2021-08-30 13:46+0000\n"
+"POT-Creation-Date: 2021-10-20 12:09-0300\n"
+"PO-Revision-Date: 2021-10-01 02:30+0000\n"
 "Last-Translator: Ricardo Quaglio <ricardoquaglio@hotmail.com>\n"
 "Language-Team: Portuguese/Brazil <koha-br@lists.koha.org>\n"
 "Language: pt_BR\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Generator: Pootle 2.8\n"
-"X-POOTLE-MTIME: 1630331200.400938\n"
+"X-POOTLE-MTIME: 1633055443.894257\n"
 "X-Pootle-Path: /pt_BR/20.11/pt-BR-opac-bootstrap.po\n"
 "X-Pootle-Revision: 1\n"
 
@@ -1137,9 +1137,9 @@ msgstr "%s Você nunca emprestou materiais nesta biblioteca. %s "
 #. %2$s:  ELSE 
 #. %3$s:  SET show_itemtype_column = Koha.Preference('AllowHoldItemTypeSelection') 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:56
-#, fuzzy, c-format
+#, c-format
 msgid "%s You have never placed a hold from this library. %s %s "
-msgstr "%s Você nunca suspendeu esta biblioteca. %s "
+msgstr "%s Você nunca reservou esta biblioteca. %s %s "
 
 #. %1$s:  IF Koha.Preference('HoldFeeMode') == 'any_time_is_collected' 
 #. %2$s:  RESERVE_CHARGE | $Price 
@@ -5572,7 +5572,7 @@ msgstr "Não tem cadastro da biblioteca?"
 msgid "Don't have a password yet?"
 msgstr "Ainda não tem senha?"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:208
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:206
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:102
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/masthead.inc:404
 #, c-format
@@ -6130,7 +6130,7 @@ msgstr ""
 "para usuários que desejam acompanhar o que estão lendo."
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth.tt:198
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:203
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:201
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/masthead.inc:399
 #, c-format
 msgid "Forgot your password?"
@@ -7555,7 +7555,7 @@ msgstr "Localização"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth.tt:27
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth.tt:192
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:194
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:192
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:100
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:399
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/masthead.inc:412
@@ -7607,7 +7607,7 @@ msgstr "Faça login na sua conta OverDrive"
 msgid "Log in to your account"
 msgstr "Acesse sua conta"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:188
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:186
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:86
 #, c-format
 msgid "Log in to your account:"
@@ -7659,7 +7659,6 @@ msgstr "Faça logoff da sua conta OverDrive"
 msgid "Logging on to the catalog has not been enabled by the library."
 msgstr "A autenticação no catálogo não foi habilitada pela biblioteca."
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth.tt:184
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/overdrive-login.inc:5
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/overdrive-login.inc:18
 #, c-format
@@ -7671,7 +7670,8 @@ msgstr "Login"
 msgid "Login page"
 msgstr "Página de login"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:189
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth.tt:184
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:187
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:124
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:87
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:394
@@ -8786,7 +8786,6 @@ msgstr "Páginas:"
 msgid "Parameters"
 msgstr "Parâmetros"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth.tt:188
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:897
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:915
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:926
@@ -8844,7 +8843,8 @@ msgstr "A senha não deve conter espaços em branco iniciais ou finais."
 msgid "Password updated"
 msgstr "Senha atualizada"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:191
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth.tt:188
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:189
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:55
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:93
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:396
@@ -9662,7 +9662,7 @@ msgstr "Filtre sua pesquisa"
 msgid "Register a new account"
 msgstr "Registrar nova conta"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:208
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:206
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:102
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/masthead.inc:404
 #, c-format
@@ -12476,7 +12476,7 @@ msgstr "Qua"
 msgid "Wednesday"
 msgstr "Quarta-feira"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:218
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:216
 #, c-format
 msgid "Welcome, "
 msgstr "Bem-vindo(a), "
@@ -13019,9 +13019,8 @@ msgstr ""
 #. INPUT type=checkbox name=digest
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:158
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:160
-#, fuzzy
 msgid "You must select a digestible transport to select digests"
-msgstr "Tem de escolher pelo menos um item. "
+msgstr "Você deve selecionar um transporte para selecionar resumos"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:98
 #, c-format
@@ -13619,7 +13618,7 @@ msgstr "número da carteirinha"
 msgid "change your password"
 msgstr "Altere sua senha"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:221
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:219
 #, c-format
 msgid "checkout(s)"
 msgstr "empréstimo(s)"
@@ -13683,7 +13682,7 @@ msgstr ""
 msgid "desired_due_date"
 msgstr "desired_due_date"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:233
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:231
 #, c-format
 msgid "due in fines and charges"
 msgstr "devido em multas e encargos"
@@ -13720,12 +13719,12 @@ msgstr "para mais informações sobre o que isso faz e como configurar."
 msgid "here"
 msgstr "aqui"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:227
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:225
 #, c-format
 msgid "hold(s) pending"
 msgstr "reserva(s) pendente(s) "
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:230
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:228
 #, c-format
 msgid "hold(s) waiting"
 msgstr "reserva(s) em aprovação"
@@ -13899,7 +13898,7 @@ msgstr "ou "
 msgid "out of"
 msgstr "fora"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:224
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:222
 #, c-format
 msgid "overdue(s)"
 msgstr "atraso(s)"

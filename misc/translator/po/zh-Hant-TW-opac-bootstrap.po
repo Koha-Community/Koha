@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Koha 20.11\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-09-13 01:04-0300\n"
-"PO-Revision-Date: 2021-06-21 07:20+0000\n"
+"POT-Creation-Date: 2021-10-20 12:21-0300\n"
+"PO-Revision-Date: 2021-10-22 06:40+0000\n"
 "Last-Translator: Frank Chou <frank@sris.com.tw>\n"
 "Language-Team: koha_TW <kohataiwan@googlegroups.com>\n"
 "Language: zh_TW\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8-bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Generator: Pootle 2.8\n"
-"X-POOTLE-MTIME: 1624260022.376654\n"
+"X-POOTLE-MTIME: 1634884831.221604\n"
 "X-Pootle-Path: /zh_TW/20.11/zh-Hant-TW-opac-bootstrap.po\n"
 "X-Pootle-Revision: 1\n"
 
@@ -1094,9 +1094,9 @@ msgstr "%s 您未曾從本館借出任何館藏。%s "
 #. %2$s:  ELSE 
 #. %3$s:  SET show_itemtype_column = Koha.Preference('AllowHoldItemTypeSelection') 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:56
-#, fuzzy, c-format
+#, c-format
 msgid "%s You have never placed a hold from this library. %s %s "
-msgstr "%s 您未曾從本館借出任何館藏。%s "
+msgstr "%s 您未曾從本館預約任何館藏。%s %s "
 
 #. %1$s:  IF Koha.Preference('HoldFeeMode') == 'any_time_is_collected' 
 #. %2$s:  RESERVE_CHARGE | $Price 
@@ -4065,7 +4065,7 @@ msgstr "可借 %s"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-serial-issues.tt:137
 #, c-format
 msgid "Available issues"
-msgstr "在館內的刊期"
+msgstr "曾訂購的刊期"
 
 #. For the first occurrence,
 #. %1$s:  rating_avg | html 
@@ -5456,7 +5456,7 @@ msgstr "沒有讀者證嗎？"
 msgid "Don't have a password yet?"
 msgstr "沒有密碼嗎？"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:208
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:206
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:102
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/masthead.inc:404
 #, c-format
@@ -6000,7 +6000,7 @@ msgid ""
 msgstr "永久有效：永久保留我的閱讀記錄。這是讀者想要保留追踪閱讀記錄的選項。"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth.tt:198
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:203
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:201
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/masthead.inc:399
 #, c-format
 msgid "Forgot your password?"
@@ -7392,7 +7392,7 @@ msgstr "位置"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth.tt:27
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth.tt:192
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:194
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:192
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:100
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:399
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/masthead.inc:412
@@ -7444,7 +7444,7 @@ msgstr "以您的 OverDrive 帳號登入"
 msgid "Log in to your account"
 msgstr "以您的帳號登入"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:188
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:186
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:86
 #, c-format
 msgid "Log in to your account:"
@@ -7496,7 +7496,6 @@ msgstr "以您的 OverDrive 帳號登出"
 msgid "Logging on to the catalog has not been enabled by the library."
 msgstr "圖書館尚未啟用登入目錄功能。"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth.tt:184
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/overdrive-login.inc:5
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/overdrive-login.inc:18
 #, c-format
@@ -7508,7 +7507,8 @@ msgstr "登入"
 msgid "Login page"
 msgstr "登入首頁面"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:189
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth.tt:184
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:187
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:124
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:87
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:394
@@ -8602,7 +8602,6 @@ msgstr "頁面："
 msgid "Parameters"
 msgstr "參數"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth.tt:188
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:897
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:915
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:926
@@ -8657,7 +8656,8 @@ msgstr "密碼前後不能有空格。"
 msgid "Password updated"
 msgstr "更新密碼"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:191
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth.tt:188
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:189
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:55
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:93
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:396
@@ -9447,7 +9447,7 @@ msgstr "縮小您的搜尋"
 msgid "Register a new account"
 msgstr "註冊新帳號"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:208
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:206
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:102
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/masthead.inc:404
 #, c-format
@@ -12197,7 +12197,7 @@ msgstr "星期三"
 msgid "Wednesday"
 msgstr "星期三"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:218
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:216
 #, c-format
 msgid "Welcome, "
 msgstr "歡迎， "
@@ -13280,7 +13280,7 @@ msgstr "讀者證號碼："
 msgid "change your password"
 msgstr "修改您的密碼"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:221
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:219
 #, c-format
 msgid "checkout(s)"
 msgstr "借出"
@@ -13341,7 +13341,7 @@ msgstr "設定搜尋用的記錄辨識碼類型，可能的值是："
 msgid "desired_due_date"
 msgstr "desired_due_date"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:233
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:231
 #, c-format
 msgid "due in fines and charges"
 msgstr "罰款和費用"
@@ -13378,12 +13378,12 @@ msgstr "有關內容及組態的更多資訊。"
 msgid "here"
 msgstr "這裡"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:227
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:225
 #, c-format
 msgid "hold(s) pending"
 msgstr "預約暫停"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:230
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:228
 #, c-format
 msgid "hold(s) waiting"
 msgstr "預約停止"
@@ -13557,7 +13557,7 @@ msgstr "或"
 msgid "out of"
 msgstr "out of"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:224
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:222
 #, c-format
 msgid "overdue(s)"
 msgstr "逾期"

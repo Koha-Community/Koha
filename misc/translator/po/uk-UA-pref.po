@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Koha 20.11\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2021-09-22 20:32+0000\n"
+"PO-Revision-Date: 2021-10-25 12:32+0000\n"
 "Last-Translator: Serhij Dubyk <dubyk@ukr.net>\n"
 "Language-Team: Ukrainian Linux Team <translation@linux.org.ua>\n"
 "Language: uk\n"
@@ -13,7 +13,7 @@ msgstr ""
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 "X-Generator: Pootle 2.8\n"
 "X-Poedit-SourceCharset: utf-8\n"
-"X-POOTLE-MTIME: 1632342730.614341\n"
+"X-POOTLE-MTIME: 1635165140.212161\n"
 "X-Pootle-Path: /uk/20.11/uk-UA-pref.po\n"
 "X-Pootle-Revision: 1\n"
 
@@ -65,13 +65,14 @@ msgstr "Автоматично генерувати номери кредиті�
 msgid ""
 "accounting.pref#AutoCreditNumber# Automatically generate credit numbers in "
 "the form <branchcode>yyyymm0001"
-msgstr "Автоматично генерувати номери кредитів у формі <branchcode>ррррмм0001"
+msgstr ""
+"Автоматично генерувати номери кредитів у формі <кодпідрозділу>ррррмм0001"
 
 # Accounting > Features
 msgid ""
 "accounting.pref#AutoCreditNumber# Automatically generate credit numbers in "
 "the form <year>-0001"
-msgstr "Автоматично генерувати номери кредитів у формі <year>-0001"
+msgstr "Автоматично генерувати номери кредитів у формі <рік>-0001"
 
 # Accounting > Features
 msgid ""
@@ -421,6 +422,8 @@ msgid ""
 "acquisitions.pref#OrderPriceRounding# Determines whether full precision "
 "values or rounded values should be used in price calculations."
 msgstr ""
+"При розрахунках цін визначає, чи слід використовувати значення ціни з "
+"точністю до копійки або ж округлювати значення."
 
 # Acquisitions > Policy
 msgid "acquisitions.pref#OrderPriceRounding# Don't round"
@@ -480,7 +483,7 @@ msgstr ""
 msgid ""
 "acquisitions.pref#UseACQFrameworkForBiblioRecords#  the framework 'ACQ' for "
 "bibliographic records fields."
-msgstr ""
+msgstr " структуру „ACQ“ для полів бібліографічних записів."
 
 # Acquisitions > Policy
 msgid "acquisitions.pref#UseACQFrameworkForBiblioRecords# Don't use"
@@ -1897,15 +1900,15 @@ msgstr ""
 
 # Administration > CAS authentication
 msgid "admin.pref#casAuthentication# No"
-msgstr ""
+msgstr "ні"
 
 # Administration > CAS authentication
 msgid "admin.pref#casAuthentication# Use CAS for login authentication: "
-msgstr ""
+msgstr "Використовувати CAS для автентифікації входу: "
 
 # Administration > CAS authentication
 msgid "admin.pref#casAuthentication# Yes"
-msgstr "Так"
+msgstr "так"
 
 # Administration > CAS authentication
 msgid "admin.pref#casLogout# Logout of CAS when logging out of Koha: "
@@ -1923,7 +1926,7 @@ msgstr "так"
 msgid ""
 "admin.pref#casServerUrl# URL of the Central Authentication Service (CAS) "
 "server: "
-msgstr ""
+msgstr "URL-адреса сервера центральної служби автентифікації (CAS): "
 
 # Administration > CAS authentication > casServerVersion
 msgid "admin.pref#casServerVersion# CAS 2 or earlier"
@@ -3453,11 +3456,11 @@ msgstr ""
 
 # Circulation > Interface
 msgid "circulation.pref#AllowOfflineCirculation# Don't enable"
-msgstr ""
+msgstr "Не задіювати"
 
 # Circulation > Interface
 msgid "circulation.pref#AllowOfflineCirculation# Enable"
-msgstr ""
+msgstr "Задіяти"
 
 # Circulation > Interface
 msgid ""
@@ -3465,6 +3468,9 @@ msgid ""
 "circulation computers. (<strong>NOTE:</strong> This system preference does "
 "not affect the Firefox add-on or the desktop application)."
 msgstr ""
+"офлайн-режим обігу на комп’ютерах із звичайним обігом "
+"(<strong>увага:</strong> цей системний параметр не впливає на втулок Firefox "
+"чи настільний застосунок)."
 
 # Circulation > Holds policy
 msgid "circulation.pref#AllowRenewalIfOtherItemsAvailable# Allow"
@@ -4280,7 +4286,7 @@ msgstr ""
 
 # Circulation > Holds policy
 msgid "circulation.pref#ExpireReservesMaxPickUpDelayCharge# ."
-msgstr ""
+msgstr " ."
 
 # Circulation > Holds policy
 msgid ""
@@ -4321,13 +4327,15 @@ msgstr " параметри експорту історії видач."
 msgid ""
 "circulation.pref#ExportRemoveFields# (separate fields with space, e.g. 100a "
 "200b 300c)."
-msgstr ""
+msgstr "(відокремлювати поля пробілом, наприклад 700a 200b 300a)."
 
 # Circulation > Interface
 msgid ""
 "circulation.pref#ExportRemoveFields# The following fields should be excluded "
 "from the patron checkout history CSV or MARC (ISO 2709) export:"
 msgstr ""
+"Наступні поля повинні слід вилучати з експорту історії обігу в CSV або MARC ("
+"ISO 2709): "
 
 # Circulation > Interface
 msgid "circulation.pref#FilterBeforeOverdueReport# Don't require"
@@ -4514,12 +4522,15 @@ msgid ""
 "circulation.pref#HoldsToPullStartDate# Set the default start date for the "
 "Holds to pull list to"
 msgstr ""
+"Встановити за умовчанням початкову дату для списку невиконаних замовлень на"
 
 # Circulation > Interface
 msgid ""
 "circulation.pref#HoldsToPullStartDate# day(s) ago. Note that the default end "
 "date is controlled by the system preference ConfirmFutureHolds."
 msgstr ""
+"(дні) назад. Зауважте, що умовчальна кінцева дата регулюється системним "
+"параметром „ConfirmFutureHolds“."
 
 # Circulation > Checkout policy
 msgid ""
@@ -4873,13 +4884,15 @@ msgstr ""
 
 # Circulation > Interface
 msgid "circulation.pref#NoticeCSS# Include the stylesheet at"
-msgstr ""
+msgstr "Використовувати таблицю стилів за адресою "
 
 # Circulation > Interface
 msgid ""
 "circulation.pref#NoticeCSS# on notices. (This should be a complete URL, "
 "starting with <code>http://</code>)"
 msgstr ""
+"для сповіщень (це має бути повна URL -адреса, починаючи з "
+"<code>http://</code>)."
 
 # Circulation > Holds policy
 msgid "circulation.pref#OPACAllowHoldDateInFuture# Allow"
@@ -4970,6 +4983,7 @@ msgid ""
 "circulation.pref#OnSiteCheckoutAutoCheck# on-site checkout by default if "
 "last checkout was an on-site one."
 msgstr ""
+"за умовчанням видачі по місцю, якщо остання видача була видачею по місцю."
 
 # Circulation > Checkout policy
 msgid "circulation.pref#OnSiteCheckouts# Disable"
@@ -4985,17 +4999,19 @@ msgstr "можливість видач по місцю."
 
 # Circulation > Checkout policy
 msgid "circulation.pref#OnSiteCheckoutsForce# Disable"
-msgstr ""
+msgstr "Вимкнути"
 
 # Circulation > Checkout policy
 msgid "circulation.pref#OnSiteCheckoutsForce# Enable"
-msgstr ""
+msgstr "Увімкнути"
 
 # Circulation > Checkout policy
 msgid ""
 "circulation.pref#OnSiteCheckoutsForce# the on-site checkout for all cases "
 "(even if a patron is debarred, etc.)."
 msgstr ""
+"можливість видач по місцю в усіх випадках (навіть якщо користувача "
+"заблоковано і т.п.)."
 
 # Circulation > Checkout policy
 msgid "circulation.pref#OverdueNoticeCalendar# Ignore calendar"
@@ -5273,7 +5289,7 @@ msgstr "Позначити замовлення як проблематичне,
 
 # Circulation > Holds policy
 msgid "circulation.pref#ReservesMaxPickUpDelay# days."
-msgstr ""
+msgstr " (дні)."
 
 # Circulation > Holds policy
 msgid "circulation.pref#ReservesNeedReturns# Automatically"
@@ -5461,7 +5477,7 @@ msgstr ""
 
 # Circulation > Interface
 msgid "circulation.pref#ShowAllCheckins# Don't show"
-msgstr ""
+msgstr "Не показувати"
 
 # Circulation > Interface
 msgid "circulation.pref#ShowAllCheckins# Show"
@@ -5472,6 +5488,8 @@ msgid ""
 "circulation.pref#ShowAllCheckins# all items in the \"Checked-in items\" "
 "list, even items that were not checked out."
 msgstr ""
+"усі примірники у переліку „Повернуті екземпляри“, навіть примірники, що не "
+"були видані."
 
 # Circulation > Self check-out module
 msgid "circulation.pref#ShowPatronImageInWebBasedSelfCheck# Don't show"
@@ -5634,7 +5652,7 @@ msgstr "Не дозволяти "
 msgid ""
 "circulation.pref#SuspendHoldsIntranet# holds to be suspended from the staff "
 "interface."
-msgstr ""
+msgstr "призупиняти замовлення з інтерфейсу бібліотекаря."
 
 # Circulation > Holds policy
 msgid "circulation.pref#SuspendHoldsOpac# Allow"
@@ -5664,17 +5682,17 @@ msgstr "при обрахунку завершення тимчасового п
 
 # Circulation > Checkout policy
 msgid "circulation.pref#SwitchOnSiteCheckouts# Don't switch"
-msgstr ""
+msgstr "Не перемикатись"
 
 # Circulation > Checkout policy
 msgid "circulation.pref#SwitchOnSiteCheckouts# Switch"
-msgstr ""
+msgstr "Перемикатись"
 
 # Circulation > Checkout policy
 msgid ""
 "circulation.pref#SwitchOnSiteCheckouts# on-site checkouts to normal "
 "checkouts when checked out."
-msgstr ""
+msgstr "з видачі по місцю на звичайну видачу при видачі."
 
 # Circulation > Holds policy
 msgid "circulation.pref#TransferWhenCancelAllWaitingHolds# Don't transfer"
@@ -5863,11 +5881,11 @@ msgstr ""
 
 # Circulation > Interface
 msgid "circulation.pref#UpdateTotalIssuesOnCirc# Do"
-msgstr ""
+msgstr "Виконувати"
 
 # Circulation > Interface
 msgid "circulation.pref#UpdateTotalIssuesOnCirc# Don't"
-msgstr ""
+msgstr "Не виконувати"
 
 # Circulation > Interface
 msgid ""
@@ -5876,6 +5894,10 @@ msgid ""
 "increases server load significantly; if performance is a concern, use the "
 "update_totalissues.pl cron job to update the total checkouts count)."
 msgstr ""
+"оновлення загальної кількості видач у бібліографічному записі під час видачі "
+"примірника (УВАГА: це значно збільшує навантаження на сервер; якщо турбує "
+"продуктивність, скористайтесь періодичним завданням (cron) "
+"update_totalissues.pl для оновлення загальної кількості видач)."
 
 # Circulation > Checkout policy
 msgid "circulation.pref#UseBranchTransferLimits# ."
@@ -6084,13 +6106,15 @@ msgstr "Не задіювати"
 
 # Circulation > Holds policy
 msgid "circulation.pref#emailLibrarianWhenHoldIsPlaced# Enable"
-msgstr ""
+msgstr "Задіювати"
 
 # Circulation > Holds policy
 msgid ""
 "circulation.pref#emailLibrarianWhenHoldIsPlaced# sending an email to the "
 "Koha administrator email address whenever a hold request is placed."
 msgstr ""
+"надсилання електронного листа на адресу електронної пошти адміністратора "
+"Коха щоразу, коли користувачі створюють замовлення."
 
 # Circulation > Fines Policy
 msgid "circulation.pref#finesCalendar# Ignore the calendar"
@@ -7568,6 +7592,9 @@ msgid ""
 "the \"Notices and slips\" interface. The language used to send a notice to a "
 "patron will be the one defined for the patron."
 msgstr ""
+"Якщо дозволено, сповіщення можуть бути перекладені у розділі „Сповіщення та "
+"квитанції“. Мова, що використовується для надсилання повідомлення "
+"користувачу, визначатиметься для кожного користувача."
 
 # I18N/L10N
 msgid "i18n_l10n.pref#TranslateNotices# notices to be translated."
@@ -7579,6 +7606,10 @@ msgid ""
 "the 'surname' column of the 'borrowers' table is helpful to make browsing by "
 "last name work in members-home.pl when using an alphabet outside of A-Z."
 msgstr ""
+"<br/> Підказка: зміна параметрів порівняння (collation) у базі даних для "
+"стовпця „surname“ (прізвище) з таблиці „borrowers“ (користувачі) допомагає "
+"відкорегувати перегляд за прізвищами для сторінки „members-home.pl“ при "
+"використанні алфавіту за межами A-Z."
 
 # I18N/L10N
 msgid "i18n_l10n.pref#alphabet# Use the alphabet"
@@ -8480,7 +8511,7 @@ msgstr ""
 
 # OPAC > Features
 msgid "opac.pref#OPACReportProblem# <br/>"
-msgstr "<br/>"
+msgstr "<br />"
 
 # OPAC > Features
 msgid ""
@@ -10089,19 +10120,19 @@ msgstr ""
 
 # OPAC > Privacy
 msgid "opac.pref#TrackClicks# Don't track"
-msgstr ""
+msgstr "Не відстежувати"
 
 # OPAC > Privacy
 msgid "opac.pref#TrackClicks# Track"
-msgstr ""
+msgstr "Відстежувати"
 
 # OPAC > Privacy
 msgid "opac.pref#TrackClicks# Track anonymously"
-msgstr ""
+msgstr "Відстежувати анонімно"
 
 # OPAC > Privacy
 msgid "opac.pref#TrackClicks# links that patrons click on."
-msgstr ""
+msgstr "посилання, на які користувачі натискають."
 
 # OPAC > Appearance
 msgid "opac.pref#hidelostitems# Don't show"
