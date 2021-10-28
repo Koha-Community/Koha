@@ -1536,6 +1536,11 @@
                     $("#paramLabel").val( _("Source of classification or shelving scheme") );
                     $("#param_category").val("cn_source");
                     break;
+                case "insertFramework":
+                    modalTitle.text( _("Insert bibliographic framework parameter") );
+                    $("#paramLabel").val( _("Framework") );
+                    $("#param_category").val("biblio_framework");
+                    break;
                 case "insertDate":
                     modalTitle.text( _("Insert date parameter") );
                     $("#paramLabel").val( _("Date") );
@@ -2289,6 +2294,7 @@
         </button>
         <ul class="dropdown-menu">
             <li><a href="#" class="insertParam" id="insertAuthVal">Authorized values</a></li>
+            <li><a href="#" class="insertParam" id="insertFramework">Bibliographic framework</a></li>
             <li><a href="#" class="insertParam" id="insertCnSource">Classification sources</a></li>
             <li><a href="#" class="insertParam" id="insertDate">Date</a></li>
             <li><a href="#" class="insertParam" id="insertItemtypes">Item types</a></li>
