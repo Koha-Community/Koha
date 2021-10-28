@@ -24,6 +24,7 @@ use Try::Tiny;
 
 use C4::Context;
 use C4::Biblio qw( GetMarcStructure GetMarcFromKohaField );
+use C4::Circulation;
 
 use Koha::Database;
 use Koha::SearchEngine::Indexer;
@@ -328,7 +329,7 @@ sub batch_update {
                 my $itemlost_pre = $item->itemlost;
                 $item->set($new_values)->store({skip_record_index => 1});
 
-                LostItem(
+                C4::Circulation::LostItem(
                     $item->itemnumber, 'batchmod', undef,
                     { skip_record_index => 1 }
                 ) if $item->itemlost
@@ -337,7 +338,10 @@ sub batch_update {
 
             push @modified_itemnumbers, $item->itemnumber if $modified || $modified_holds_priority;
             $modified_fields += $modified + $modified_holds_priority;
-        })};
+        })}
+        catch {
+            warn $_
+        };
 
         if ( $callback ) {
             $callback->(++$i);
