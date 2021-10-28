@@ -9,8 +9,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 20.11\n"
-"POT-Creation-Date: 2021-09-17 23:14-0300\n"
-"PO-Revision-Date: 2021-09-22 20:33+0000\n"
+"POT-Creation-Date: 2021-10-20 12:19-0300\n"
+"PO-Revision-Date: 2021-10-22 13:03+0000\n"
 "Last-Translator: Serhij Dubyk <dubyk@ukr.net>\n"
 "Language-Team: Ukrainian Linux Team <translation@linux.org.ua>\n"
 "Language: uk\n"
@@ -21,7 +21,7 @@ msgstr ""
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 "X-Generator: Pootle 2.8\n"
 "X-Poedit-SourceCharset: utf-8\n"
-"X-POOTLE-MTIME: 1632342799.519329\n"
+"X-POOTLE-MTIME: 1634907799.313736\n"
 "X-Pootle-Path: /uk/20.11/uk-UA-staff-prog.po\n"
 "X-Pootle-Revision: 1\n"
 
@@ -142,7 +142,7 @@ msgstr "\", %s \"dt_cardnumber\": \"%s\", \"dt_name\": \""
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tags/review.tt:53
 #, c-format
 msgid "\"Date from\" is not a legal value (\"%s\"). %s"
-msgstr "„Дата від“ не є правильною датою („%s“). %s"
+msgstr "„Дата від“ містить некоректне значення („%s“). %s"
 
 #. %1$s:  message_loo.date_to | html 
 #. %2$s:  ELSIF ( message_loo.failed_ok ) 
@@ -1682,7 +1682,7 @@ msgstr ""
 #. %32$s: - BLOCK person -
 #. %33$s:  IF p.openhub 
 #: koha-tmpl/intranet-tmpl/prog/en/includes/about-team.inc:1
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s %s %sRelease manager %sRelease manager assistant %sRelease manager mentor "
 "%sQuality assurance manager %sQuality assurance team %sDocumentation manager "
@@ -1704,7 +1704,8 @@ msgstr ""
 "інтеграцію %s Відповідальний за підготовку пакунків %s Помічник "
 "відповідального за підготовку пакунків %s Голова засідань %s Редактор "
 "бюлетеня %s Координатор модулів %s Координатор віртуальної машини %s "
-"Фахівець з документації %s Координатор підготовки Live CD %s %s %s %s"
+"Фахівець з документації %s Координатор підготовки Live CD %s Захисник "
+"доступності %s Ведучий зустрічей %s %s %s %s"
 
 #. %1$s:  FOR e IN log4perl_errors 
 #. %2$s:  SWITCH e 
@@ -2515,11 +2516,12 @@ msgstr "%s %s Типово %s Назавжди %s Ніколи %s "
 #. %9$s:  letter.message_transport_type | html 
 #. %10$s:  END 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/letter.tt:406
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s %s Email %s Print %s SMS %s Feed %s Phone ( Itiva ) %s Phone %s %s %s "
 msgstr ""
-"%s %s Електронна пошта %s Друк %s SMS %s Стрічка новин %s Телефон %s %s %s "
+"%s %s Електронна пошта %s Друк %s SMS %s Стрічка новин %s Телефон (Itiva) %s "
+"Телефон %s %s %s "
 
 #. %1$s:  SWITCH mtt 
 #. %2$s:  CASE 'email' 
@@ -3956,9 +3958,9 @@ msgstr "%s %s / %s%s %s ("
 #. %2$s:  INCLUDE 'biblio-title.inc' link = 1 
 #. %3$s:  END 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/request-article.tt:21
-#, fuzzy, c-format
+#, c-format
 msgid "%s &rsaquo; %s &rsaquo; Request article %s "
-msgstr "%s &rsaquo; Замовлення статті %s %s"
+msgstr "%s &rsaquo; %s &rsaquo; Замовлення статті %s "
 
 #. %1$s:  IF op == 'add_form'  
 #. %2$s:  IF cash_register 
@@ -4470,7 +4472,7 @@ msgstr "%s (може бути незаповненим)"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:269
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:732
 msgid "%s - Click to Expand this Tag"
-msgstr "%s — клацніть, щоб розкрити цю ознаку"
+msgstr "%s — натисніть, щоб розкрити цю ознаку"
 
 #. For the first occurrence,
 #. %1$s:  report.total_success | html 
@@ -4791,7 +4793,7 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:755
 #, c-format
 msgid "%s Article requests"
-msgstr "%s Запити на статтю"
+msgstr "%s Замовлення на статтю"
 
 #. For the first occurrence,
 #. %1$s:  ELSE 
@@ -5931,14 +5933,14 @@ msgstr "%s Замінити існуючий запис записом, що і�
 #. %6$s:  END 
 #. %7$s:  END 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:162
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s Replace existing record with incoming record %s Add incoming record %s "
 "Ignore incoming record (its items may still be processed) %s %s %s %s "
 msgstr ""
 "%s Замінити існуючий запис вхідним записом %s Додавати вхідний запис %s "
 "Ігнорувати вхідний запис (його примірники все ще можуть бути опрацьовані) %s "
-"%s %s %s"
+"%s %s %s "
 
 #. %1$s:  END 
 #: koha-tmpl/intranet-tmpl/prog/en/includes/tools-item-action.inc:26
@@ -7177,7 +7179,7 @@ msgstr "%s | Простір імен: %s"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:522
 #, c-format
 msgid "%s | Previously was %s %s (%s) %s "
-msgstr ""
+msgstr "%s | Попередня особа: %s %s (%s) %s "
 
 #. %1$s:  END 
 #. %2$s:  IF memcached_servers 
@@ -8326,7 +8328,7 @@ msgstr "%s Так %s&nbsp;%s"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:216
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:217
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/z3950servers.tt:170
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/apikeys.tt:67
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/apikeys.tt:87
 #, c-format
 msgid "%sYes%sNo%s"
 msgstr "%sТак%sНі%s"
@@ -8600,9 +8602,9 @@ msgid "&#x010D;e&#353;tina (Czech)"
 msgstr "&#x010D;e&#353;tina (чеська мова)"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:281
-#, fuzzy, c-format
+#, c-format
 msgid "&lt;&lt; Back to suggestions"
-msgstr "&lt;&lt;Повернутися до списку"
+msgstr "&lt;&lt; Назад до пропозицій"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/parcels.tt:110
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/result.tt:53
@@ -9318,9 +9320,9 @@ msgstr ""
 #. %2$s:  ELSE 
 #. %3$s:  IF ( add_validate or copy_validate) 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/letter.tt:41
-#, fuzzy, c-format
+#, c-format
 msgid "&rsaquo; Add notice %s %s %s "
-msgstr "&rsaquo; Додавання сповіщення %s%s%s "
+msgstr "&rsaquo; Створення сповіщення %s %s %s "
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/rotating_collections/addItems.tt:13
 #, fuzzy, c-format
@@ -9527,9 +9529,9 @@ msgstr "&rsaquo; Оновлення записів відвідувачів"
 #. %3$s:  END 
 #. %4$s:  END 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/letter.tt:50
-#, fuzzy, c-format
+#, c-format
 msgid "&rsaquo; Confirm deletion %s Notices &amp; slips %s %s %s "
-msgstr "&rsaquo; Підтвердження вилучення %s Сповіщення й квитанції %s%s%s"
+msgstr "&rsaquo; Підтвердження вилучення %s Сповіщення й квитанції %s %s %s "
 
 #. %1$s:  ELSE 
 #. %2$s:  END 
@@ -9910,9 +9912,9 @@ msgstr "&rsaquo; Зміна передплати %s Нова передплат�
 #. %1$s:  ELSE 
 #. %2$s:  IF ( delete_confirm ) 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/letter.tt:46
-#, fuzzy, c-format
+#, c-format
 msgid "&rsaquo; Notice added %s %s "
-msgstr "&rsaquo; Сповіщення додано %s%s "
+msgstr "&rsaquo; Сповіщення створено %s%s "
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/problem-reports.tt:17
 #, c-format
@@ -9983,7 +9985,7 @@ msgstr "&rsaquo; Очікуючі запити на обхідні листи "
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/on-site_checkouts.tt:17
 #, c-format
 msgid "&rsaquo; Pending on-site checkouts"
-msgstr "&rsaquo; Очікуючі видачі на місці"
+msgstr "&rsaquo; Видачі на місці"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/plugins/plugins-home.tt:16
 #, c-format
@@ -11278,7 +11280,8 @@ msgid ""
 "manager you selected does not have sufficient permissions. %s %s %s "
 msgstr ""
 ". Натисніть „Підтвердити свою пропозицію“, щоб проігнорувати це "
-"повідомлення. %s Вибраний Вами менеджер не має достатніх привілеїв. %s %s %s "
+"повідомлення. %s Вибрана Вами відповідальна особа не має достатніх "
+"привілеїв. %s %s %s "
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:274
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/itemtypes.tt:88
@@ -11771,14 +11774,14 @@ msgid "Access to the files stored on the server "
 msgstr "Доступ до файлів, що зберігаються на сервері "
 
 #: koha-tmpl/intranet-tmpl/prog/en/includes/about-team.inc:209
-#, fuzzy, c-format
+#, c-format
 msgid "Accessibility advocate:"
-msgstr "Дата надходження: "
+msgstr "Захисник доступності: "
 
 #: koha-tmpl/intranet-tmpl/prog/en/includes/about-team.inc:201
-#, fuzzy, c-format
+#, c-format
 msgid "Accessibility advocates:"
-msgstr "Дата надходження: "
+msgstr "Захисники доступності: "
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/labels/result.tt:68
 #, c-format
@@ -11937,7 +11940,7 @@ msgstr "Відомості про надходження"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:1140
 #, c-format
 msgid "Acquisition information"
-msgstr "Інформацією про надходження…"
+msgstr "Інформаця про надходження"
 
 #: koha-tmpl/intranet-tmpl/prog/en/includes/permissions.inc:31
 #, c-format
@@ -12013,9 +12016,9 @@ msgid "Acquisitions statistics "
 msgstr "Статистика щодо надходжень "
 
 #: koha-tmpl/intranet-tmpl/prog/en/includes/acquisitions-menu.inc:16
-#, fuzzy, c-format
+#, c-format
 msgid "Acquisitions statistics wizard"
-msgstr "Статистика щодо надходжень "
+msgstr "Майстер статистики за надходженнями"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/basketgroup.tt:313
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/basketgroup.tt:352
@@ -12102,7 +12105,7 @@ msgstr "Дія, якщо відповідності не знайдено: "
 #: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/clubs.tt:62
 #: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/course-details.tt:95
 #: koha-tmpl/intranet-tmpl/prog/en/modules/labels/label-manage.tt:70
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/apikeys.tt:58
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/apikeys.tt:79
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/boraccount.tt:62
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/housebound.tt:383
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/pay.tt:48
@@ -12171,7 +12174,7 @@ msgstr "Дії для "
 msgid "Actions:"
 msgstr "Дії: "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/apikeys.tt:85
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/apikeys.tt:105
 #, c-format
 msgid "Activate"
 msgstr "Активувати"
@@ -12179,7 +12182,7 @@ msgstr "Активувати"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/acqui-home.tt:100
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:68
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/currency.tt:184
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/apikeys.tt:57
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/apikeys.tt:78
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/stockrotation.tt:64
 #, c-format
 msgid "Active"
@@ -13155,13 +13158,13 @@ msgstr "Вартість доставки для рахунку-фактури "
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoice.tt:137
 #, c-format
 msgid "Adjustments"
-msgstr ""
+msgstr "Коригування"
 
 #. %1$s:  total_adj + shipmentcost | $Price 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoice.tt:420
 #, c-format
 msgid "Adjustments plus shipping: %s"
-msgstr ""
+msgstr "Коригування плюс доставка: %s"
 
 #. IMG
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/detail.tt:191
@@ -14927,7 +14930,7 @@ msgid "Are you sure you want to delete this item?"
 msgstr "Чи Ви справді хочете вилучити цей примірник?"
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/apikeys.tt:111
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/apikeys.tt:131
 #, fuzzy
 msgid "Are you sure you want to delete this key?"
 msgstr "Чи Ви справді хочете вилучити цей примірник?"
@@ -15285,7 +15288,7 @@ msgstr "Використано"
 #: koha-tmpl/intranet-tmpl/prog/en/includes/about-team.inc:242
 #, c-format
 msgid "Assistant:"
-msgstr ""
+msgstr "Помічник: "
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:223
 #, c-format
@@ -15489,12 +15492,12 @@ msgstr "Автор: "
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:33
 #, c-format
 msgid "Author (meeting / conference): "
-msgstr ""
+msgstr "Автор (зустріч/конференція): "
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/sru_modmapping_auth.tt:39
-#, fuzzy, c-format
+#, c-format
 msgid "Author (meeting/conference): "
-msgstr "Автор: "
+msgstr "Автор (зустріч/конференція): "
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/sru_modmapping_auth.tt:31
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:31
@@ -15898,7 +15901,7 @@ msgstr "Доступні шифри зберігання"
 #. INPUT type=text
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:210
 msgid "Available copy"
-msgstr ""
+msgstr "Доступні примірники"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:62
 #, c-format
@@ -16775,9 +16778,9 @@ msgid "Biblio count"
 msgstr "Кількість бібліотечних записів"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:193
-#, fuzzy, c-format
+#, c-format
 msgid "Biblio level hold."
-msgstr "Резервування примірників"
+msgstr "Замовлення на рівні біб-запису."
 
 #: koha-tmpl/intranet-tmpl/prog/en/columns.def:120
 #, c-format
@@ -16821,7 +16824,7 @@ msgstr "Бібліографічні дані для друку"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:985
 #, c-format
 msgid "Bibliographic information"
-msgstr "Бібліографічною інформацією…"
+msgstr "Бібліографічна інформація"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/matching-rules.tt:124
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/matching-rules.tt:127
@@ -17790,7 +17793,7 @@ msgstr ""
 #. DIV
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/basket.tt:152
 msgid "Can not reopen baskets that are part of a basket group."
-msgstr ""
+msgstr "Неможливо знову відкрити кошики, які входять до групи кошиків."
 
 #. %1$s:  IF ( error.cardnumber ) 
 #. %2$s:  error.cardnumber | html 
@@ -17903,6 +17906,8 @@ msgstr "Неможливо зберегти цей запис, бо наступ
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:93
 #: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:230
 #: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:232
+#: koha-tmpl/intranet-tmpl/prog/en/modules/basket/downloadcart.tt:28
+#: koha-tmpl/intranet-tmpl/prog/en/modules/basket/sendbasketform.tt:34
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/additional-fields.tt:163
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:181
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:256
@@ -17961,8 +17966,6 @@ msgstr "Неможливо зберегти цей запис, бо наступ
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/transport-cost-matrix.tt:85
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/usage_statistics.tt:235
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/z3950servers.tt:148
-#: koha-tmpl/intranet-tmpl/prog/en/modules/basket/downloadcart.tt:28
-#: koha-tmpl/intranet-tmpl/prog/en/modules/basket/sendbasketform.tt:34
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:634
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:638
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:642
@@ -17995,7 +17998,7 @@ msgstr "Неможливо зберегти цей запис, бо наступ
 #: koha-tmpl/intranet-tmpl/prog/en/modules/labels/label-edit-template.tt:146
 #: koha-tmpl/intranet-tmpl/prog/en/modules/labels/label-print.tt:107
 #: koha-tmpl/intranet-tmpl/prog/en/modules/labels/search.tt:102
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/apikeys.tt:40
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/apikeys.tt:62
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/boraccount.tt:199
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/boraccount.tt:256
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/boraccount.tt:295
@@ -18219,9 +18222,9 @@ msgid "Cancel receipt"
 msgstr "Скасувати отримання"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/article-requests.tt:33
-#, fuzzy, c-format
+#, c-format
 msgid "Cancel request "
-msgstr "Скасування фільтрації"
+msgstr "Скасувати замовлення "
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/branchtransfers.tt:67
 #, c-format
@@ -19097,9 +19100,9 @@ msgid "Change password"
 msgstr "Змінити пароль"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:820
-#, fuzzy, c-format
+#, c-format
 msgid "Change selected suggestions"
-msgstr "Оновлення підписки"
+msgstr "Зміна вибраних пропозицій"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/paycollect.tt:147
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/paycollect.tt:278
@@ -20439,10 +20442,10 @@ msgstr "Очистити"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:53
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/duplicate_orders.tt:135
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:75
+#: koha-tmpl/intranet-tmpl/prog/en/modules/basket/basket.tt:6
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branch_transfer_limits.tt:31
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branch_transfer_limits.tt:45
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/preferences.tt:213
-#: koha-tmpl/intranet-tmpl/prog/en/modules/basket/basket.tt:6
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/detail.tt:277
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:73
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:53
@@ -20555,7 +20558,7 @@ msgstr "Створити нове авторитетне джерело"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/quotes-upload.tt:85
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/quotes.tt:74
 msgid "Click ID to select/deselect quote"
-msgstr "Клацніть на ідентифікатор для вибору чи скасування вибору цитати"
+msgstr "Натисніть на ідентифікатор для вибору чи скасування вибору цитати"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:215
 #, c-format
@@ -20569,15 +20572,15 @@ msgid "Click here to define a printer profile."
 msgstr "Натисніть тут, щоб визначити профіль друкарки."
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/basket.tt:188
-#, fuzzy, c-format
+#, c-format
 msgid "Click here to go back to booksellers page"
-msgstr "Клацніть по кнопці «Далі», щоб продовжити"
+msgstr "Натисніть тут, щоб повернутися на сторінку продавців книг"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/merge.tt:50
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/merge.tt:42
 #, c-format
 msgid "Click here to see the merged record."
-msgstr "Натисніть тут, щоб побачити об’єднаний запис."
+msgstr "Натисніть тут, щоб побачити об’єднаний бібзапис."
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/detail.tt:892
 #, c-format
@@ -20591,13 +20594,13 @@ msgid ""
 "Click on any field to edit the contents; Press the &lt;Enter&gt; key to save "
 "edit."
 msgstr ""
-"Клацніть на будь-яке поле щоб редагувати вміст, далі натисніть клавішу "
+"Натисніть на будь-яке поле щоб редагувати вміст, далі натисніть клавішу "
 "<Enter> щоб зберегти поредаговане."
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/transport-cost-matrix.tt:48
 #, c-format
 msgid "Click on individual cells to edit."
-msgstr ""
+msgstr "Натискайте на окремі клітинки для редагування."
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/quotes-upload.tt:37
 #, c-format
@@ -20605,7 +20608,7 @@ msgid ""
 "Click on one or more quote numbers to select entire quotes for deletion; "
 "Click the 'Delete Quote(s)' button to delete selected quotes."
 msgstr ""
-"Клацніть на один чи декілька номерів цитат для вибору цитат для вилучення; "
+"Натисніть на один чи декілька номерів цитат для вибору цитат для вилучення; "
 "далі натисніть кнопку „Вилучити цитату(и)“ для вилучення вибраного. "
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/quotes.tt:31
@@ -20614,7 +20617,7 @@ msgid ""
 "Click on one or more quote numbers to select entire quotes for deletion; "
 "Click the 'Delete quote(s)' button to delete selected quotes."
 msgstr ""
-"Клацніть на один чи декілька номерів цитат для вибору цитат для вилучення; "
+"Натисніть на один чи декілька номерів цитат для вибору цитат для вилучення; "
 "далі натисніть кнопку „Вилучити цитату(и)“ для вилучення вибраного."
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/quotes.tt:28
@@ -20630,22 +20633,25 @@ msgstr ""
 #, c-format
 msgid "Click on the following link(s) to download the exported batch(es)."
 msgstr ""
+"Натисніть на наступні посилання, щоб звантажити експортован(у/і) парті(ю/ї)."
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/labels/label-print.tt:13
 #, c-format
 msgid "Click on the following links to download the exported batch(es)."
 msgstr ""
-"Клацніть на наступні посилання, щоб звантажити експортован(у/і) парті(ю/ї)."
+"Натисніть на наступні посилання, щоб звантажити експортован(у/і) парті(ю/ї)."
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/item_circulation_alerts.tt:94
 #, c-format
 msgid "Click on the grid to toggle the settings."
-msgstr "Клацайте на клітинки для перемикання налаштувань."
+msgstr "Натискайте на клітинки для перемикання налаштувань."
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/patroncards/print.tt:40
 #, c-format
 msgid "Click on the link to download the patron cards from the patron list."
 msgstr ""
+"Натисніть на наступне посилання, щоб звантажити квитки користувачів зі "
+"списку користувачів."
 
 #. SCRIPT
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/usage_statistics.tt:253
@@ -20658,7 +20664,7 @@ msgid ""
 "Click on the quote's id to select or deselect the quote. Multiple quotes may "
 "be selected."
 msgstr ""
-"Клацніть на ідентифікаторі цитати, щоб вибрати або скасувати вибір цитати. "
+"Натисніть на ідентифікаторі цитати, щоб вибрати або скасувати вибір цитати. "
 "Можуть бути обрані кілька цитат."
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/quotes-upload.tt:30
@@ -20693,46 +20699,51 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:212
 #, c-format
 msgid "Click the date to add or edit a holiday."
-msgstr "Клацніть на дату, щоб додати або змінити святковий день."
+msgstr "Натисніть на дату, щоб додати або змінити святковий день."
 
 #. A
 #: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:329
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:773
 msgid "Click to Expand this Tag"
-msgstr "Клацніть, щоб розкрити цю ознаку"
+msgstr "Натисніть, щоб розкрити цю ознаку"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/serials-edit.tt:220
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/serials-edit.tt:373
-#, fuzzy, c-format
+#, c-format
 msgid "Click to add item"
-msgstr "Клацніть, щоб Розширити цю Ознаку"
+msgstr "Натисніть, щоб додати примірник"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/preferences.tt:130
 #, c-format
 msgid "Click to collapse"
-msgstr "Клацніть, щоб згорнути"
+msgstr "Натисніть, щоб згорнути"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/preferences.tt:128
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/systempreferences.tt:278
 #: koha-tmpl/intranet-tmpl/prog/en/modules/pos/pay.tt:188
 #, c-format
 msgid "Click to edit"
-msgstr "Клацніть, щоб редагувати"
+msgstr "Натисніть, щоб редагувати"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/pos/pay.tt:84
 #, c-format
 msgid "Click to edit item cost or quantities"
-msgstr ""
+msgstr "Натисніть, щоб змінити вартість одиниць або їх кількість"
 
 #. SCRIPT
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/member-password.tt:104
 msgid "Click to fill with a randomly generated suggestion. "
 msgstr "Натисніть, щоб заповнити випадково утвореною пропозицією. "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/apikeys.tt:55
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/apikeys.tt:77
 #, c-format
 msgid "Client ID"
 msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/apikeys.tt:40
+#, fuzzy, c-format
+msgid "Client ID: "
+msgstr "Ідент. населеного пункту: "
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/editor.tt:112
 #, c-format
@@ -21120,7 +21131,7 @@ msgstr "Шифр зібрання"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/rotating_collections/editCollections.tt:58
 #, c-format
 msgid "Collection deleted successfully"
-msgstr ""
+msgstr "Зібрання успішно вилучене"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/rotating_collections/editCollections.tt:62
 #, c-format
@@ -21391,9 +21402,9 @@ msgid "Complete"
 msgstr "Компактний вигляд"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/article-requests.tt:28
-#, fuzzy, c-format
+#, c-format
 msgid "Complete request "
-msgstr "Компактний вигляд"
+msgstr "Завершити замовлення "
 
 #. SCRIPT
 #: koha-tmpl/intranet-tmpl/prog/en/includes/ill-list-table-strings.inc:2
@@ -21575,7 +21586,7 @@ msgstr "Підтвердити замовлення "
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:681
 #, c-format
 msgid "Confirm hold and transfer "
-msgstr "Підтвердити замовлення та переміщення "
+msgstr "Підтвердити замовлення та перемістити "
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:85
 #, c-format
@@ -21602,7 +21613,7 @@ msgstr "Зачинити це меню"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:606
 #: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:614
 msgid "Confirm your suggestion"
-msgstr "Підтвердьте свою пропозицію"
+msgstr "Подати мою пропозицію"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:22
 #, c-format
@@ -22533,9 +22544,9 @@ msgid "Create items when:"
 msgstr "Створювати примірники в наступних випадках: "
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:370
-#, fuzzy, c-format
+#, c-format
 msgid "Create label batch"
-msgstr "(Утворити партію етикеток)"
+msgstr "Створити партію наклейок"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/boraccount.tt:41
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/mancredit.tt:37
@@ -22788,9 +22799,9 @@ msgid "Currency: "
 msgstr "Грошова одиниця: "
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/request-article.tt:221
-#, fuzzy, c-format
+#, c-format
 msgid "Current article requests"
-msgstr "Поточні терміни"
+msgstr "Поточні замовлення статей"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:99
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:476
@@ -23362,17 +23373,17 @@ msgstr "Дата коли останній раз бачено"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/detail.tt:678
 #, c-format
 msgid "Date published"
-msgstr "Дата опублікування"
+msgstr "Дата публікації"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/serials-collection.tt:167
-#, fuzzy, c-format
+#, c-format
 msgid "Date published "
-msgstr "Дата публікації"
+msgstr "Дата публікації "
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/serials-collection.tt:169
-#, fuzzy, c-format
+#, c-format
 msgid "Date published (text) "
-msgstr "Дата публікації"
+msgstr "Дата публікації (текст) "
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/dictionary.tt:193
 #, fuzzy, c-format
@@ -24036,7 +24047,7 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/overdue.tt:197
 #: koha-tmpl/intranet-tmpl/prog/en/modules/labels/label-edit-batch.tt:133
 #: koha-tmpl/intranet-tmpl/prog/en/modules/labels/label-manage.tt:88
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/apikeys.tt:74
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/apikeys.tt:94
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/files.tt:53
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/housebound.tt:401
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:105
@@ -24121,7 +24132,7 @@ msgid "Delete SQL reports "
 msgstr "Вилучення SQL-звітів "
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:175
-#, fuzzy, c-format
+#, c-format
 msgid "Delete a batch of bibliographic or authority records"
 msgstr "Вилучення групи записів (бібліографічних чи авторитетних)"
 
@@ -24383,7 +24394,7 @@ msgstr "Вилучити рядок"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/koha-news.tt:205
 #, c-format
 msgid "Delete selected"
-msgstr "Вилучити позначене"
+msgstr "Вилучити вибране"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:126
 #, c-format
@@ -24393,7 +24404,7 @@ msgstr "Вилучити вибрані попередження"
 #. INPUT type=button
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/serials-collection.tt:151
 msgid "Delete selected issues"
-msgstr ""
+msgstr "Вилучити вибрані випуски"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/detail.tt:281
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:208
@@ -24697,7 +24708,7 @@ msgstr "Факультет"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/patron-clubs-tab.tt:10
 #: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/patron-clubs-tab.tt:43
 #: koha-tmpl/intranet-tmpl/prog/en/modules/labels/label-manage.tt:69
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/apikeys.tt:54
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/apikeys.tt:76
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/files.tt:40
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/pay.tt:50
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/paycollect.tt:117
@@ -24808,7 +24819,8 @@ msgstr "Опис: "
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/library_groups.tt:174
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/matching-rules.tt:113
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/patron-attr-types.tt:76
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/apikeys.tt:37
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/apikeys.tt:36
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/apikeys.tt:59
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/mancredit.tt:57
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/maninvoice.tt:70
 #: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep2.tt:40
@@ -24933,8 +24945,8 @@ msgstr "Детальні повідомлення: "
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/edifactmsgs.tt:39
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoices.tt:88
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:367
 #: koha-tmpl/intranet-tmpl/prog/en/modules/basket/basket.tt:118
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:367
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/accountline-details.tt:152
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/boraccount.tt:96
 #: koha-tmpl/intranet-tmpl/prog/en/includes/circ-menu.inc:133
@@ -25342,9 +25354,9 @@ msgid "Do not use plugin"
 msgstr "Не вилучати"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/stage-marc-import.tt:104
-#, fuzzy, c-format
+#, c-format
 msgid "Do not use profile"
-msgstr "Не вилучати"
+msgstr "Не використовувати профіль"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/stage-marc-import.tt:164
 #, fuzzy, c-format
@@ -29411,12 +29423,12 @@ msgstr "Загальні налаштування"
 msgid "Generate EDIFACT order"
 msgstr "Сформувати наступне"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/apikeys.tt:49
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/apikeys.tt:71
 #, fuzzy, c-format
 msgid "Generate a new client id/key pair"
 msgstr "Створити нове місто"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/apikeys.tt:94
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/apikeys.tt:114
 #, c-format
 msgid "Generate a new client id/secret pair"
 msgstr ""
@@ -29436,7 +29448,7 @@ msgstr "Сформувати обхідний лист"
 msgid "Generate exceptions on a range of dates."
 msgstr "Створюємо виняток в діапазоні дат."
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/apikeys.tt:34
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/apikeys.tt:56
 #, c-format
 msgid "Generate new client id/secret pair"
 msgstr ""
@@ -30169,9 +30181,9 @@ msgstr "Замовлення"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:100
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:485
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:656
-#, fuzzy, c-format
+#, c-format
 msgid "Hold at"
-msgstr "Тримайте"
+msgstr "Замовлення на підрозділ: "
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:970
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/holdshistory.tt:47
@@ -30216,20 +30228,20 @@ msgid "Hold for:"
 msgstr "Замовлено для: "
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:443
-#, fuzzy, c-format
+#, c-format
 msgid "Hold found (item is already waiting): "
-msgstr "Тримайте Знайдено (елемент вже чекає): "
+msgstr "Виявлено замовлення (примірник вже очікує): "
 
 #. %1$s:  nextreservtitle | html 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:72
-#, fuzzy, c-format
+#, c-format
 msgid "Hold found for (%s), please transfer"
-msgstr "Тримайте знайдено (%s), будь ласка transfer"
+msgstr "Виявлено замовлення для назви (%s), будь ласка, перемістіть"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:602
 #, c-format
 msgid "Hold found: "
-msgstr ""
+msgstr "Виявлено замовлення: "
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:574
 #, fuzzy, c-format
@@ -31681,7 +31693,7 @@ msgid ""
 "to a vendor. Click OK to ignore or Cancel to return and enter a vendor"
 msgstr ""
 "Якщо Ви хочете заявити про запізнення або пропущені випуски, потрібно "
-"звʼязати цю передплату з постачальником. Клацніть „Гаразд“, щоб ігнорувати "
+"звʼязати цю передплату з постачальником. Натисніть „Гаразд“, щоб ігнорувати "
 "або „Скасувати“, щоб повернутися та ввести до постачальника"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/installer/step3.tt:199
@@ -32003,7 +32015,7 @@ msgstr "Імпорт запису у форматах ISO2709 (*.iso, *.mrc) ч�
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:64
 #, c-format
 msgid "Import batch deleted successfully"
-msgstr "Партія імпорту успішно видалена"
+msgstr "Партія імпорту успішно вилучена"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:180
 #, c-format
@@ -33460,11 +33472,11 @@ msgstr "Ознаки примірника не можуть бути збере�
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:272
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:164
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:207
+#: koha-tmpl/intranet-tmpl/prog/en/modules/basket/basket.tt:252
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/itemtypes.tt:363
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:96
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:473
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:894
-#: koha-tmpl/intranet-tmpl/prog/en/modules/basket/basket.tt:252
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/detail.tt:296
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:23
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/article-requests.tt:117
@@ -35484,7 +35496,7 @@ msgstr "Коха &rsaquo; Обіг &rsaquo; Елементи, що Запізн�
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/on-site_checkouts.tt:9
 #, c-format
 msgid "Koha &rsaquo; Circulation &rsaquo; Pending on-site checkouts"
-msgstr "Коха &rsaquo; Обіг &rsaquo; Очікуючі видачі на місці"
+msgstr "Коха &rsaquo; Обіг &rsaquo; Видачі на місці"
 
 #. %1$s:  title | html 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/renew.tt:8
@@ -36366,15 +36378,15 @@ msgstr "Коха &rsaquo; Інструменти &rsaquo; Новини"
 #. %8$s:  IF ( delete_confirm ) 
 #. %9$s:  END 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/letter.tt:9
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Koha &rsaquo; Tools &rsaquo; Notices %s %s &rsaquo; Modify notice %s "
 "&rsaquo; Add notice %s %s %s &rsaquo; Notice added %s %s &rsaquo; Confirm "
 "deletion %s "
 msgstr ""
-"Коха &rsaquo; Інструменти &rsaquo; Сповіщення %s%s &rsaquo; Редагування "
-"сповіщення %s &rsaquo; Утворення сповіщення %s%s%s &rsaquo; Сповіщення "
-"додано %s%s &rsaquo; Підтвердження вилучення %s"
+"Коха &rsaquo; Інструменти &rsaquo; Сповіщення %s %s &rsaquo; Редагування "
+"сповіщення %s &rsaquo; Створення сповіщення %s %s %s &rsaquo; Сповіщення "
+"створено %s %s &rsaquo; Підтвердження вилучення %s "
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/overduerules.tt:7
 #, c-format
@@ -37185,15 +37197,15 @@ msgid "Last modification by - on"
 msgstr "Остання зміна ким - коли"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:700
-#, fuzzy, c-format
+#, c-format
 msgid "Last modification on"
-msgstr "Останнє розташування"
+msgstr "Остання зміна"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:237
 #: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:498
-#, fuzzy, c-format
+#, c-format
 msgid "Last modification on:"
-msgstr "Останнє розташування"
+msgstr "Остання зміна:"
 
 #: koha-tmpl/intranet-tmpl/prog/en/includes/last-borrower.inc:2
 #, c-format
@@ -37279,7 +37291,7 @@ msgstr "Затримані замовлення"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/stage-marc-import.tt:107
 #, c-format
 msgid "Later you can modify your form and that's what matters on import."
-msgstr ""
+msgstr "Пізніше Ви можете змінити свою форму, і це важливо для імпорту."
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:830
 #, c-format
@@ -37522,8 +37534,8 @@ msgstr "Бібліотеки/підрозділи: "
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/bookcount.tt:39
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/on-site_checkouts.tt:36
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/request-article.tt:52
-#: koha-tmpl/intranet-tmpl/prog/en/modules/common/patron_search.tt:81
 #: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/clubs.tt:61
+#: koha-tmpl/intranet-tmpl/prog/en/modules/common/patron_search.tt:81
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/discharges.tt:27
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/holdshistory.tt:46
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/member.tt:102
@@ -37561,9 +37573,9 @@ msgid "Library"
 msgstr "Бібліотека"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/serials-collection.tt:179
-#, fuzzy, c-format
+#, c-format
 msgid "Library "
-msgstr "Бібліотека № 2"
+msgstr "Бібліотека/підрозділ "
 
 #. %1$s:  branchcode | html 
 #. %2$s:  Branches.GetName( branchcode ) | html 
@@ -37720,9 +37732,9 @@ msgstr "Бібліотечне використання"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/auth.tt:80
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoices.tt:295
-#: koha-tmpl/intranet-tmpl/prog/en/modules/common/patron_search.tt:34
 #: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/clubs-add-modify.tt:69
 #: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/templates-add-modify.tt:82
+#: koha-tmpl/intranet-tmpl/prog/en/modules/common/patron_search.tt:34
 #: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:67
 #: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:208
 #: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:381
@@ -37746,7 +37758,7 @@ msgstr "Бібліотечне використання"
 #: koha-tmpl/intranet-tmpl/prog/en/includes/subscriptions-search.inc:31
 #, c-format
 msgid "Library:"
-msgstr "Бібліотека: "
+msgstr "Бібліотека/підрозділ: "
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:282
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:396
@@ -37770,7 +37782,7 @@ msgstr "Бібліотека: "
 #: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:54
 #, c-format
 msgid "Library: "
-msgstr "Бібліотека: "
+msgstr "Бібліотека/підрозділ: "
 
 #. For the first occurrence,
 #. %1$s:  Branches.GetName( branch ) | html 
@@ -37778,14 +37790,14 @@ msgstr "Бібліотека: "
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember-print.tt:29
 #, c-format
 msgid "Library: %s"
-msgstr "Бібліотека: %s"
+msgstr "Бібліотека/підрозділ: %s"
 
 #. %1$s:  update.old_branch or "?" | html 
 #. %2$s:  update.new_branch or "?" | html 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/set-library.tt:49
 #, c-format
 msgid "Library: %s &rArr; %s"
-msgstr "Бібліотека: %s &rArr; %s"
+msgstr "Бібліотека/підрозділ: %s &rArr; %s"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:605
 #, c-format
@@ -38330,6 +38342,7 @@ msgid "Log entries"
 msgstr "Записи журналу"
 
 #. INPUT type=submit
+#: koha-tmpl/intranet-tmpl/prog/en/modules/auth.tt:115
 #: koha-tmpl/intranet-tmpl/prog/en/modules/installer/auth.tt:57
 #: koha-tmpl/intranet-tmpl/prog/en/includes/header.inc:199
 #, c-format
@@ -38387,11 +38400,6 @@ msgstr "Ви увійшли як: "
 #, c-format
 msgid "Logging system does not behave correctly"
 msgstr ""
-
-#. INPUT type=submit
-#: koha-tmpl/intranet-tmpl/prog/en/modules/auth.tt:115
-msgid "Login"
-msgstr "Вхід"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:143
 #: koha-tmpl/intranet-tmpl/prog/en/includes/prefs-menu.inc:94
@@ -38910,6 +38918,12 @@ msgstr " (типово)"
 #, c-format
 msgid "Make payment"
 msgstr "Здійснити оплату"
+
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/apikeys.tt:33
+#, c-format
+msgid ""
+"Make sure to copy your API secret now. You won’t be able to see it again!"
+msgstr ""
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:151
 #, c-format
@@ -39520,7 +39534,7 @@ msgstr "Ведеться ким - коли"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:1091
 #, c-format
 msgid "Managed by:"
-msgstr "Ведеться ким: "
+msgstr "Ведеться: "
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:89
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:142
@@ -39535,9 +39549,9 @@ msgid "Managed on"
 msgstr "Ведеться з"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:514
-#, fuzzy, c-format
+#, c-format
 msgid "Managed on:"
-msgstr "Ведеться з"
+msgstr "Ведеться з:"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:230
 #, c-format
@@ -40366,7 +40380,7 @@ msgid "Modify a CSV profile"
 msgstr "Редагуємо правило відповідності записів"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:180
-#, fuzzy, c-format
+#, c-format
 msgid "Modify a batch of bibliographic or authority records"
 msgstr "Редагування групи записів (бібліографічних чи авторитетних)"
 
@@ -40872,11 +40886,11 @@ msgstr "БВТ"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/sms_providers.tt:31
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smtp_servers.tt:226
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/request-article.tt:49
-#: koha-tmpl/intranet-tmpl/prog/en/modules/common/patron_search.tt:80
 #: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/club-enrollments.tt:27
 #: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/clubs.tt:57
 #: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/patron-clubs-tab.tt:9
 #: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/patron-clubs-tab.tt:42
+#: koha-tmpl/intranet-tmpl/prog/en/modules/common/patron_search.tt:80
 #: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/course-reserves.tt:38
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/files.tt:38
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/member.tt:99
@@ -41848,6 +41862,8 @@ msgid ""
 "No (If you do not check for items while staging you may not change this "
 "option later) "
 msgstr ""
+"ні (якщо Ви не перевіряєте примірники під час створення, Ви не можете "
+"змінити цей вибір пізніше) "
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:418
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:426
@@ -42281,7 +42297,7 @@ msgstr "Не знайдено жодного примірника."
 msgid "No items were found by searching."
 msgstr "При пошуку не знайдено жодних примірників."
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/apikeys.tt:94
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/apikeys.tt:114
 #, fuzzy, c-format
 msgid "No keys defined for the current patron. "
 msgstr "Не визначається ще"
@@ -42440,7 +42456,7 @@ msgstr "Не заповнені кошики замовлень"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/on-site_checkouts.tt:64
 #, c-format
 msgid "No pending on-site checkout."
-msgstr "Немає очікуючої видачі на місці."
+msgstr "Немає видач на місці."
 
 #. For the first occurrence,
 #. SCRIPT
@@ -42520,9 +42536,9 @@ msgstr "Назва пори року"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:851
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:843
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:993
-#, fuzzy, c-format
+#, c-format
 msgid "No reason given"
-msgstr "Назва пори року"
+msgstr "Причину не вказано"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:31
 #, fuzzy, c-format
@@ -43284,8 +43300,8 @@ msgstr "Примітка: одне з двох наступних полів п�
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:274
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:166
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:209
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:242
 #: koha-tmpl/intranet-tmpl/prog/en/modules/basket/basket.tt:153
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:242
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:367
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:368
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:63
@@ -43415,9 +43431,9 @@ msgid "Notification date"
 msgstr "Дата публікації"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:534
-#, fuzzy, c-format
+#, c-format
 msgid "Notify manager:"
-msgstr "Відповідальний за документування: "
+msgstr "Повідомити відповідального: "
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:778
 #, c-format
@@ -44254,14 +44270,13 @@ msgstr ""
 "привілеї), повертаються в результатах пошуку"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/common/patron_search.tt:57
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Only staff with superlibrarian or suggestions_manage permissions are "
 "returned in the search results"
 msgstr ""
-"Лише працівники бібліотеки, які мають привілеї супербібліотекаря або модуля "
-"надходжень (чи привілей керування замовленнями, якщо включені підрозділені "
-"привілеї), повертаються в результатах пошуку"
+"У результатах пошуку повертається лише працівники бібліотеки, які мають "
+"привілей супербібліотекаря або привілей керування замовленнями"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:434
 #, fuzzy, c-format
@@ -45563,7 +45578,7 @@ msgstr "Відвідувач має видану(их) %s одиницю(ць)%s
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:298
 #, c-format
 msgid "Patron has an indefinite restriction."
-msgstr ""
+msgstr "Користувач має невизначене обмеження."
 
 #. %1$s:  checkout_info.USERBLOCKEDREMAINING | html 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:263
@@ -45700,9 +45715,9 @@ msgid "Patron is from different library"
 msgstr " в поточну бібліотеку "
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:22
-#, fuzzy, c-format
+#, c-format
 msgid "Patron is not notified."
-msgstr "Відвідувач не знайдений: "
+msgstr "Користувача не повідомлено."
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:403
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/offline.tt:230
@@ -46322,12 +46337,12 @@ msgstr "Пакетне редагування відвідувачів "
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tags/review.tt:165
 #, c-format
 msgid "Pending"
-msgstr "Очікує"
+msgstr "На розгляді"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/article-requests.tt:92
-#, fuzzy, c-format
+#, c-format
 msgid "Pending ("
-msgstr "Очікує"
+msgstr "На розгляді ("
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/discharges.tt:21
 #, c-format
@@ -46355,7 +46370,7 @@ msgstr "Незавершені дії з автономного обігу"
 #: koha-tmpl/intranet-tmpl/prog/en/includes/circ-nav.inc:47
 #, c-format
 msgid "Pending on-site checkouts"
-msgstr "Очікуючі видачі по місцю"
+msgstr "Видачі на місці"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/parcel.tt:101
 #, c-format
@@ -46650,9 +46665,9 @@ msgstr "Замовлення книжок для користувачів"
 #. %3$s:  patron.surname | html 
 #. %4$s:  patron.cardnumber | html 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/request-article.tt:92
-#, fuzzy, c-format
+#, c-format
 msgid "Place article request from %s for %s %s ( %s )"
-msgstr "Результати пошуку від %s до %s зі %s ( %s )"
+msgstr "Замовлення статті з біб-запису „%s“ для користувача: %s %s (%s)"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/basket/basket.tt:15
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:133
@@ -47319,9 +47334,8 @@ msgstr "Будь ласка, виберіть принаймні один еле
 
 #. SCRIPT
 #: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:1269
-#, fuzzy
 msgid "Please select a manager to assign to the selected suggestions"
-msgstr "Будь ласка, виберіть принаймні одну пропозицію на вилучення"
+msgstr "Виберіть відповідального для призначення вибраних пропозицій"
 
 #. SCRIPT
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:271
@@ -47418,9 +47432,8 @@ msgstr "Будь ласка, виберіть принаймні один кви
 
 #. SCRIPT
 #: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:1269
-#, fuzzy
 msgid "Please select at least one suggestion"
-msgstr "Будь ласка, виберіть принаймні одну пропозицію на вилучення"
+msgstr "Будь ласка, виберіть принаймні одну пропозицію"
 
 #. SCRIPT
 #: koha-tmpl/intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:146
@@ -47688,7 +47701,7 @@ msgstr "середній шкільний"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/stage-marc-import.tt:102
 #, c-format
 msgid "Pre-fill values with profile"
-msgstr ""
+msgstr "Попередньо заповнювати значення згідно профілю"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:86
 #, c-format
@@ -48070,9 +48083,9 @@ msgid "Print slip and confirm "
 msgstr "Друк квитанції та підтвердження"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:684
-#, fuzzy, c-format
+#, c-format
 msgid "Print slip, transfer, and confirm "
-msgstr "Роздрукувати картку та"
+msgstr "Роздрукувати квитанцію, перемістити та підтвердити "
 
 #: koha-tmpl/intranet-tmpl/prog/en/includes/members-toolbar.inc:24
 #, c-format
@@ -48206,9 +48219,9 @@ msgid "Process images"
 msgstr "Обробити зображення"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/article-requests.tt:23
-#, fuzzy, c-format
+#, c-format
 msgid "Process request "
-msgstr "Обробити зображення"
+msgstr "Взяти замовлення в обробку "
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/reserves_stats.tt:91
 #, c-format
@@ -48218,7 +48231,7 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/article-requests.tt:98
 #, c-format
 msgid "Processing ("
-msgstr ""
+msgstr "В обробці ("
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/stage-marc-import.tt:40
 #, fuzzy, c-format
@@ -48295,15 +48308,13 @@ msgstr "Опис профілю: "
 
 #. SCRIPT
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/stage-marc-import.tt:240
-#, fuzzy
 msgid "Profile must have a name"
-msgstr "До шифру замовлення примірника: "
+msgstr "Профіль має мати назву"
 
 #. INPUT type=text name=profile_name
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/stage-marc-import.tt:215
-#, fuzzy
 msgid "Profile name"
-msgstr "Назва профілю: "
+msgstr "Назва профілю"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/csv-profiles.tt:118
 #, c-format
@@ -48312,9 +48323,8 @@ msgstr "Назва профілю: "
 
 #. SCRIPT
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/stage-marc-import.tt:240
-#, fuzzy
 msgid "Profile saved"
-msgstr "Профілі"
+msgstr "Профіль збережено"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/labels/label-edit-profile.tt:27
 #: koha-tmpl/intranet-tmpl/prog/en/modules/patroncards/edit-profile.tt:27
@@ -48684,7 +48694,7 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoice.tt:336
 #, c-format
 msgid "Qty."
-msgstr "Кі-сть"
+msgstr "К-сть"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:255
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/edi_ean_accounts.tt:140
@@ -48941,9 +48951,9 @@ msgstr "Причина пропозиції: "
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:58
 #: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:190
 #: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:429
-#, fuzzy, c-format
+#, c-format
 msgid "Reason:"
-msgstr "Причина"
+msgstr "Причина:"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoice.tt:261
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoice.tt:273
@@ -49333,9 +49343,9 @@ msgstr "Подробиці ротації фондів для %s"
 #. %1$s:  updated.old_register or "?" | html 
 #. %2$s:  Registers.session_register_name or "?" | html 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/set-library.tt:55
-#, fuzzy, c-format
+#, c-format
 msgid "Register: %s &rArr; %s"
-msgstr "Бібліотека: %s &rArr; %s"
+msgstr "Реєстрація: %s &rArr; %s"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/modborrowers.tt:154
 #: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:38
@@ -49499,15 +49509,15 @@ msgid "Remember return date for next check in"
 msgstr "запам’ятати очікувану дату повернення для наступного повернення"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/reserves_stats.tt:114
-#, fuzzy, c-format
+#, c-format
 msgid "Reminder date"
 msgstr "Дата нагадування"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:295
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:298
-#, fuzzy, c-format
+#, c-format
 msgid "Reminder: "
-msgstr "Дата нагадування"
+msgstr "Нагадування: "
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:189
 #, c-format
@@ -49526,7 +49536,7 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:225
 #, c-format
 msgid "Reminder: this action will modify all selected authorities!"
-msgstr ""
+msgstr "Нагадування: ця дія змінить усі вибрані авторитетні джерела!"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:199
 #, c-format
@@ -49534,9 +49544,9 @@ msgid "Reminder: this action will modify all selected biblios!"
 msgstr "Нагадування: ця дія змінить усі вибрані бібліографічні записи!"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:153
-#, fuzzy, c-format
+#, c-format
 msgid "Reminder: this action will modify all selected checkouts!"
-msgstr "Нагадування: ця дія змінить усі вибрані бібліографічні записи!"
+msgstr "Нагадування: ця дія змінить усі вибрані видачі!"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:250
 #, c-format
@@ -49562,13 +49572,13 @@ msgstr "Віддалене зображення: "
 #. SCRIPT
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/duplicate_orders.tt:307
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/histsearch.tt:131
+#: koha-tmpl/intranet-tmpl/prog/en/modules/basket/basket.tt:8
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:274
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:442
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/koha2marclinks.tt:47
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/library_groups.tt:252
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/oai_sets.tt:46
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/oai_sets.tt:122
-#: koha-tmpl/intranet-tmpl/prog/en/modules/basket/basket.tt:8
 #: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/course-details.tt:258
 #: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/course.tt:159
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:486
@@ -49668,9 +49678,9 @@ msgid "Remove owner"
 msgstr "Вилучення власника"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/stage-marc-import.tt:216
-#, fuzzy, c-format
+#, c-format
 msgid "Remove profile"
-msgstr "Вилучення власника"
+msgstr "Вилучити профіль"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/patron_lists/list.tt:111
 #: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:155
@@ -50221,9 +50231,9 @@ msgstr "Замовити статтю"
 
 #. %1$s:  INCLUDE 'biblio-title.inc' link = 1 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/request-article.tt:36
-#, fuzzy, c-format
+#, c-format
 msgid "Request article from %s"
-msgstr "Дата видачі, від: %s"
+msgstr "Замовлення статті з біб-запису: %s"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:369
 #: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:580
@@ -50262,9 +50272,9 @@ msgstr "Запитано"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/article-requests.tt:115
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/article-requests.tt:216
-#, fuzzy, c-format
+#, c-format
 msgid "Requested article"
-msgstr "обов’язкове"
+msgstr "Замовлена стаття"
 
 #. SCRIPT
 #: koha-tmpl/intranet-tmpl/prog/en/includes/ill-list-table-strings.inc:2
@@ -51042,7 +51052,7 @@ msgstr "Рецензент"
 msgid "Reviews"
 msgstr "рецензії"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/apikeys.tt:82
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/apikeys.tt:102
 #, c-format
 msgid "Revoke"
 msgstr ""
@@ -51514,6 +51524,7 @@ msgstr "По суботах"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/supplier.tt:276
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/uncertainprice.tt:128
 #: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:220
+#: koha-tmpl/intranet-tmpl/prog/en/modules/basket/downloadcart.tt:28
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/additional-fields.tt:162
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:180
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:254
@@ -51547,7 +51558,6 @@ msgstr "По суботах"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/systempreferences.tt:362
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/transport-cost-matrix.tt:85
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/z3950servers.tt:148
-#: koha-tmpl/intranet-tmpl/prog/en/modules/basket/downloadcart.tt:28
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:564
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:568
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:581
@@ -51559,7 +51569,7 @@ msgstr "По суботах"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/labels/label-edit-layout.tt:176
 #: koha-tmpl/intranet-tmpl/prog/en/modules/labels/label-edit-profile.tt:102
 #: koha-tmpl/intranet-tmpl/prog/en/modules/labels/label-edit-template.tt:146
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/apikeys.tt:39
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/apikeys.tt:61
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/housebound.tt:315
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/maninvoice.tt:76
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/member-flags.tt:32
@@ -51698,9 +51708,9 @@ msgid "Save description"
 msgstr "Зберегти опис"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/stage-marc-import.tt:214
-#, fuzzy, c-format
+#, c-format
 msgid "Save profile"
-msgstr "Профілі форматування CSV"
+msgstr "Зберегти профіль"
 
 #: koha-tmpl/intranet-tmpl/prog/en/includes/quotes-upload-toolbar.inc:2
 #, c-format
@@ -52538,9 +52548,9 @@ msgstr "Додатковий телефон: "
 msgid "Seconds (default)"
 msgstr "секунди (типово)"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/apikeys.tt:56
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/apikeys.tt:44
 #, c-format
-msgid "Secret"
+msgid "Secret: "
 msgstr ""
 
 # розділ «Аналітична геометрія» курсу вищої математики, може бути число чи абревіатура
@@ -52783,7 +52793,7 @@ msgid "Select a library:"
 msgstr "Вибираємо бібліотеку: "
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/letter.tt:95
-#, fuzzy, c-format
+#, c-format
 msgid "Select a library: "
 msgstr "Вибираємо бібліотеку: "
 
@@ -52825,11 +52835,11 @@ msgstr "Вилучити список"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:51
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/duplicate_orders.tt:134
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:75
+#: koha-tmpl/intranet-tmpl/prog/en/modules/basket/basket.tt:6
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branch_transfer_limits.tt:31
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branch_transfer_limits.tt:45
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/preferences.tt:211
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/preferences.tt:245
-#: koha-tmpl/intranet-tmpl/prog/en/modules/basket/basket.tt:6
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/detail.tt:276
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:71
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:53
@@ -52917,9 +52927,9 @@ msgid "Select files: "
 msgstr "Вибір файлів: "
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/request-article.tt:152
-#, fuzzy, c-format
+#, c-format
 msgid "Select item:"
-msgstr "Вибір сповіщення: "
+msgstr "Вибір примірника:"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/stockrotation.tt:522
 #, c-format
@@ -52933,9 +52943,9 @@ msgstr "Виберіть локальні бази даних"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:527
 #: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:903
-#, fuzzy, c-format
+#, c-format
 msgid "Select manager"
-msgstr "Вибір власника"
+msgstr "Вибрати відповідального"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/issues_stats.tt:135
 #, c-format
@@ -55557,12 +55567,12 @@ msgstr "Теми: "
 #: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:747
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/members-update.tt:179
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/update-child.tt:43
+#: koha-tmpl/intranet-tmpl/prog/en/modules/patron_lists/list.tt:88
 #: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep1.tt:35
 #: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep2.tt:122
 #: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep3.tt:109
 #: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep4.tt:42
 #: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:145
-#: koha-tmpl/intranet-tmpl/prog/en/modules/patron_lists/list.tt:88
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/acquisitions_stats.tt:296
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/bor_issues_top.tt:177
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/borrowers_out.tt:113
@@ -55689,9 +55699,9 @@ msgid "Subscription batch edit"
 msgstr "Дата початку підписки: "
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/serials_stats.tt:35
-#, fuzzy, c-format
+#, c-format
 msgid "Subscription begin"
-msgstr "Ідентифікатор підписки"
+msgstr "Початок передплати"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/detail.tt:730
 #, c-format
@@ -55712,9 +55722,9 @@ msgid "Subscription details"
 msgstr "Подробиці передплати"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/serials_stats.tt:36
-#, fuzzy, c-format
+#, c-format
 msgid "Subscription end"
-msgstr "Ідентифікатор підписки"
+msgstr "Завершення передплати"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/subscription-history.tt:35
 #, c-format
@@ -55727,9 +55737,9 @@ msgid "Subscription end date:"
 msgstr "Дата завершення передплати: "
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/serials-collection.tt:90
-#, fuzzy, c-format
+#, c-format
 msgid "Subscription expired"
-msgstr "Підписка закінчилася"
+msgstr "Термін дії передплати завершився"
 
 #. %1$s:  bibliotitle | html 
 #. %2$s:  IF closed 
@@ -55980,7 +55990,7 @@ msgstr "Інформацією щодо пропозиції…"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:381
 #, c-format
 msgid "Suggestion management"
-msgstr "Керування пропозицією"
+msgstr "Завідування пропозицією"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/newordersuggestion.tt:23
 #: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:61
@@ -57967,9 +57977,9 @@ msgid "The subscription has linked items"
 msgstr " передплату"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/subscription-detail.tt:47
-#, fuzzy, c-format
+#, c-format
 msgid "The subscription has not expired yet"
-msgstr " передплату"
+msgstr "Термін дії передплати ще не завершився"
 
 #. SCRIPT
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/member-flags.tt:104
@@ -58371,7 +58381,7 @@ msgstr "Є замовлення на цей примірник (пріорите
 #. SCRIPT
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/stage-marc-import.tt:240
 msgid "There is another profile with this name."
-msgstr ""
+msgstr "Є ще один профіль з такою ж назвою."
 
 #. %1$s:  itemtags | html 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/checkmarc.tt:58
@@ -58538,6 +58548,8 @@ msgid ""
 "These patrons will be permanently removed from the database and cannot be "
 "recovered"
 msgstr ""
+"Ці користувачі будуть назавжди вилучені з бази даних і не можуть бути "
+"відновлені"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/advsearch.tt:251
 #, c-format
@@ -59727,7 +59739,7 @@ msgstr "Щоб повідомити користувачів про нові с�
 #. SCRIPT
 #: koha-tmpl/intranet-tmpl/prog/en/includes/str/tinymce_i18n.inc:2
 msgid "To open the popup, press Shift+Enter"
-msgstr ""
+msgstr "Щоб відкрити спливаюче вікно, натисніть Shift+Enter"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:42
 #, c-format
@@ -60090,9 +60102,9 @@ msgstr "Загалом (ПДВ %s)"
 
 #. %1$s:  currency.symbol | html 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoice.tt:404
-#, fuzzy, c-format
+#, c-format
 msgid "Total + adjustments + shipment cost (%s)"
-msgstr "Загалом + вартість доставки (%s)"
+msgstr "Загалом + коригування + вартість доставки (%s)"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/orders_by_budget.tt:41
 #, fuzzy, c-format
@@ -60434,9 +60446,9 @@ msgstr "Управління замовленнями"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:98
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:483
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:654
-#, fuzzy, c-format
+#, c-format
 msgid "Transfer to:"
-msgstr "Переміщені одиниці"
+msgstr "Переміщення до підрозділу: "
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/edifactmsgs.tt:36
 #, c-format
@@ -61140,9 +61152,8 @@ msgstr "Поновити SQL"
 
 #. INPUT type=submit
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoice.tt:312
-#, fuzzy
 msgid "Update adjustments"
-msgstr "Інша дія"
+msgstr "Оновити коригування"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:259
 #, c-format
@@ -61172,14 +61183,14 @@ msgstr "Оновити замовлення"
 
 #. %1$s:  PROCESS 'av-build-dropbox.inc' name="suggestion_itemtype", category="SUGGEST_FORMAT", size = 20   name=suggestion_itemtype
 #: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:888
-#, fuzzy, c-format
+#, c-format
 msgid "Update item types with: %s "
-msgstr "Обмежити наступними типами одиниць: %s "
+msgstr "Змінити типи одиниць на: %s "
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:902
-#, fuzzy, c-format
+#, c-format
 msgid "Update manager"
-msgstr "Відповідальний за випуск: "
+msgstr "Зміна відповідального"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/members-update.tt:98
 #, c-format
@@ -62480,9 +62491,9 @@ msgid "Viewed"
 msgstr "Перегляд"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:632
-#, fuzzy, c-format
+#, c-format
 msgid "Viewing suggestions for library:"
-msgstr "Очікуючі пропозиції"
+msgstr "Перегляд пропозицій для бібліотеки/підрозділу:"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:651
 #, c-format
@@ -62657,8 +62668,8 @@ msgid ""
 "Warning! Present pattern has planned irregularities. Click on 'Test "
 "prediction pattern' to check if it's still valid"
 msgstr ""
-"Увага! Нинішня схема має заплановані нерегулярності. Клацніть на „Перевірити "
-"схему прогнозування“, щоб перевірити, чи вона все ще дійсна"
+"Увага! Нинішня схема має заплановані нерегулярності. Натисніть на "
+"„Перевірити схему прогнозування“, щоб перевірити, чи вона все ще дійсна"
 
 #. %1$s:  encumbrance | html 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/addorder.tt:23
@@ -63035,7 +63046,7 @@ msgstr "Коли стягувати плату"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/stage-marc-import.tt:106
 #, c-format
 msgid "When you select a profile it pre-fills your form with profile values."
-msgstr ""
+msgstr "При виборі профілю будуть заповнюватися значення з профілю."
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/installer/step3.tt:161
 #, c-format
@@ -63567,7 +63578,7 @@ msgstr "ТакНі(Ввімкн./Вимкн.)"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:521
 #, c-format
 msgid "You"
-msgstr ""
+msgstr "мною"
 
 #. SCRIPT
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/member.tt:198
@@ -65262,9 +65273,9 @@ msgstr ""
 "Олафа."
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:518
-#, fuzzy, c-format
+#, c-format
 msgid "by:"
-msgstr "за"
+msgstr "ким:"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:47
 #, c-format
@@ -67460,9 +67471,9 @@ msgid "which should be set up by your system administrator. "
 msgstr " яке повинно бути налаштоване Вашим системним адміністратором. "
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:109
-#, fuzzy, c-format
+#, c-format
 msgid "who are in patron list: "
-msgstr "Ваші списки відвідувачів"
+msgstr "які є у списку користувачів: "
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:91
 #, fuzzy, c-format
@@ -67847,6 +67858,9 @@ msgstr ""
 
 #~ msgid "Koha &rsaquo; Download shelf"
 #~ msgstr "Коха &rsaquo; Звантаження списку"
+
+#~ msgid "Login"
+#~ msgstr "Вхід"
 
 #, fuzzy
 #~ msgid "Payment type: "
