@@ -249,7 +249,7 @@ $(document).ready(function() {
                             data: function (params) {
                                 var search_term = (params.term === undefined) ? '' : params.term;
                                 var query = {
-                                    "q": JSON.stringify({"name":{"-like":search_term+'%'}}),
+                                    "q": JSON.stringify({"name":{"-like":'%'+search_term+'%'}}),
                                     "_order_by": "name",
                                     "_per_page": -1
                                 };
