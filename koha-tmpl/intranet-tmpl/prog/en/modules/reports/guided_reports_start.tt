@@ -1531,6 +1531,11 @@
                     $("label[for='authorised_value']").addClass("required");
                     $("#authorised_value").prop("required", true ).attr("required", "required").addClass("required");
                     break;
+                case "insertCnSource":
+                    modalTitle.text( _("Insert classification source parameter") );
+                    $("#paramLabel").val( _("Source of classification or shelving scheme") );
+                    $("#param_category").val("cn_source");
+                    break;
                 case "insertDate":
                     modalTitle.text( _("Insert date parameter") );
                     $("#paramLabel").val( _("Date") );
@@ -2283,7 +2288,8 @@
             Insert runtime parameter <span class="caret"></span>
         </button>
         <ul class="dropdown-menu">
-            <li><a href="#" class="insertParam" id="insertAuthVal">Authorized value</a></li>
+            <li><a href="#" class="insertParam" id="insertAuthVal">Authorized values</a></li>
+            <li><a href="#" class="insertParam" id="insertCnSource">Classification sources</a></li>
             <li><a href="#" class="insertParam" id="insertDate">Date</a></li>
             <li><a href="#" class="insertParam" id="insertItemtypes">Item types</a></li>
             <li><a href="#" class="insertParam" id="insertBranches">Libraries</a></li>
