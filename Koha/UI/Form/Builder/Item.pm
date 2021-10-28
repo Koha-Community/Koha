@@ -16,6 +16,7 @@ package Koha::UI::Form::Builder::Item;
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
+use MARC::Record;
 use C4::Context;
 use C4::Biblio qw( GetFrameworkCode GetMarcBiblio GetMarcStructure IsMarcStructureInternal );
 use C4::Koha qw( GetAuthorisedValues );
@@ -475,7 +476,13 @@ sub edit_form {
         $library->{selected} = 1 if $branchcode && $library->{branchcode} eq $branchcode;
     }
 
-    my $item           = $self->{item};
+    my $item                = $self->{item};
+    my $marc_more_subfields = $item->{more_subfields_xml}
+      ?
+        # FIXME Use Maybe MARC::Record::new_from_xml if encoding issues on subfield (??)
+        MARC::Record->new_from_xml( $item->{more_subfields_xml}, 'UTF-8' )
+      : undef;
+
     my $biblionumber   = $self->{biblionumber};
     my $frameworkcode  = $biblionumber ? GetFrameworkCode($biblionumber) : q{};
     my $marc_record    = $biblionumber ? GetMarcBiblio( { biblionumber => $biblionumber } ) : undef;
@@ -527,9 +534,8 @@ sub edit_form {
                 }
                 else {
                   # Not mapped, picked the values from more_subfields_xml's MARC
-                    my $marc_more = $item->{marc_more_subfields_xml};
-                    if ($marc_more) {
-                        for my $f ( $marc_more->fields($tag) ) {
+                    if ($marc_more_subfields) {
+                        for my $f ( $marc_more_subfields->fields($tag) ) {
                             push @values, $f->subfield($subfieldtag);
                         }
                     }

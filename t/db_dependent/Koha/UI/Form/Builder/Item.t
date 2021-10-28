@@ -16,7 +16,7 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use Test::More tests => 6;
+use Test::More tests => 7;
 use utf8;
 
 use List::MoreUtils qw( uniq );
@@ -151,6 +151,25 @@ subtest 'prefill_with_default_values' => sub {
     is( $subfield->{marc_value}->{value}, 'ééé', 'default value should be set if prefill_with_default_values passed');
 
 
+};
+
+subtest 'subfields_to_prefill' => sub {
+    plan tests => 2;
+
+    my $biblio = $builder->build_sample_biblio({ value => {frameworkcode => ''}});
+
+    my $more_subfields_xml = Koha::Item::Attributes->new({ "é" => "prefill é" })->to_marcxml;
+    my $subfields =
+      Koha::UI::Form::Builder::Item->new(
+        { biblionumber => $biblio->biblionumber, item => {more_subfields_xml => $more_subfields_xml}})->edit_form({subfields_to_prefill => ['é']});
+    my ($subfield) = grep { $_->{subfield} eq 'é' } @$subfields;
+    is( $subfield->{marc_value}->{value}, 'prefill é', 'Not mapped subfield prefilled if needed' );
+
+    $subfields =
+      Koha::UI::Form::Builder::Item->new(
+        { biblionumber => $biblio->biblionumber, item => {itemnotes => 'prefill z'}})->edit_form({subfields_to_prefill => ['z']});
+    ($subfield) = grep { $_->{subfield} eq 'z' } @$subfields;
+    is( $subfield->{marc_value}->{value}, 'prefill z', 'Mapped subfield prefilled if needed');
 };
 
 subtest 'branchcode' => sub {
