@@ -1379,9 +1379,9 @@
                     <input type="hidden" name="param_category" id="param_category" />
                     <div class="modal-body">
                         <div class="form-group">
-                            <label for="paramLabel">Parameter label: </label>
-                            <input class="form-control" type="text" name="paramLabel" id="paramLabel">
-                            <div class="hint">Optional. The label for the field shown when the report is run, e.g. "Select a library."</div>
+                            <label for="paramLabel" class="required">Parameter label: </label>
+                            <input class="form-control required" type="text" name="paramLabel" id="paramLabel" required="required" />
+                            <div class="hint">The label for the field shown when the report is run, e.g. "Select a library."</div>
                         </div>
                         <div id="authorised_value_category" class="form-group" style="display:none">
                             <label for="authorised_value">Authorized value category:</label>
@@ -1528,7 +1528,8 @@
                     modalTitle.text( _("Insert authorized value parameter") );
                     $("#paramLabel").val( _("Authorized value") );
                     $("#authorised_value_category").show();
-                    $("#authorised_value").prop("required", true ).attr("required", "required");
+                    $("label[for='authorised_value']").addClass("required");
+                    $("#authorised_value").prop("required", true ).attr("required", "required").addClass("required");
                     break;
                 case "insertDate":
                     modalTitle.text( _("Insert date parameter") );
@@ -1958,7 +1959,8 @@
                 $("#runtime_parameters").on("hide.bs.modal", function(){
                     $("#send_runtime_parameter")[0].reset();
                     $("#authorised_value_category").val("").hide();
-                    $("#authorised_value").prop("required", false ).removeAttr("required");
+                    $("label[for='authorised_value']").removeClass("required");
+                    $("#authorised_value").prop("required", false ).removeAttr("required").removeClass("required");
                 });
 
                 $("#send_runtime_parameter").on("submit", function(e){
