@@ -566,8 +566,9 @@ my $branchcode = $input->param('branch') || C4::Context->userenv->{branch};
 # If the subfield must be prefilled with last catalogued item
 my @subfields_to_prefill;
 if ( $nextop eq 'additem' && $prefillitem ) {
+    @subfields_to_prefill = split(' ', C4::Context->preference('SubfieldsToUseWhenPrefill'));
     # Setting to 1 element if SubfieldsToUseWhenPrefill is empty to prevent all the subfields to be prefilled
-    @subfields_to_prefill = split(' ', C4::Context->preference('SubfieldsToUseWhenPrefill')) || ("");
+    @subfields_to_prefill = ("") unless @subfields_to_prefill;
 }
 
 # Getting list of subfields to keep when restricted editing is enabled
