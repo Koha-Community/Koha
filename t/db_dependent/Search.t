@@ -521,6 +521,7 @@ ok(MARC::Record::new_from_xml($results_hashref->{biblioserver}->{RECORDS}->[0],'
     my $fw = C4::Biblio::GetFrameworkCode($biblio_id);
 
     my $dbh = C4::Context->dbh;
+    # FIXME This change is revert in END
     # Hide subfield 'p' in OPAC
     $dbh->do(qq{
         UPDATE marc_subfield_structure
@@ -979,3 +980,15 @@ subtest 'FindDuplicate' => sub {
 # Make sure that following tests are not using our config settings
 Koha::Caches->get_instance('config')->flush_all;
 
+END {
+    my $dbh = C4::Context->dbh;
+    # Restore visibility of subfields in OPAC
+    $dbh->do(q{
+        UPDATE marc_subfield_structure
+        SET hidden=0
+        WHERE tagfield=952 AND
+              ( tagsubfield IN ('p', 'y') )
+    });
+
+    Koha::Caches->get_instance->flush_all;
+};
