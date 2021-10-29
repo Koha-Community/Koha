@@ -34,15 +34,13 @@ my $builder = sub {
 /* from: cataloguing/value_builder/dateaccessioned.pl */
 
 \$(document).ready(function(){
-    \$("#$function_name").datepicker({
-        dateFormat: "yy-mm-dd"
+    \$("#$function_name").flatpickr({
+        dateFormat: "Y-m-d"
     });
 });
 
 function Focus$function_name(event) {
     set_to_today(event.data.id);
-    \$("#$function_name").datepicker("show");
-
 }
 
 function Click$function_name(event) {
