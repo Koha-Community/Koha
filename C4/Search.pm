@@ -1996,7 +1996,7 @@ sub searchResults {
                 $can_place_holds = 0;
             }
         } else {
-            $can_place_holds = $biblio_object->items->filter_by_for_hold()->count;
+            $can_place_holds = $biblio_object->items->filter_by_for_hold()->count if $biblio_object;
         }
         $oldbiblio->{norequests} = 1 unless $can_place_holds;
         $oldbiblio->{items_count}          = $items_count;
