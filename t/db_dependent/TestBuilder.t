@@ -278,7 +278,7 @@ subtest 'Tests for delete method' => sub {
     # Test delete in table without primary key (..)
     is( $schema->source('TmpHoldsqueue')->primary_columns, 0,
         'Table without primary key detected' );
-    my $bibno = 123; # just a number
+    my $bibno = $builder->build_sample_biblio->biblionumber;
     my $cnt1 = $schema->resultset('TmpHoldsqueue')->count;
     # Insert a new record in TmpHoldsqueue with that biblionumber
     my $val = { biblionumber => $bibno };
