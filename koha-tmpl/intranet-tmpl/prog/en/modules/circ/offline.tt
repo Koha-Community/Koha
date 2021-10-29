@@ -199,7 +199,7 @@
                             <button id="pay-fine" class="submit">Pay fine</button>
 
                             <table id="session-payments" style="display: none;">
-                                <thead><tr><th>Amount</th><th>Timestamp</th></tr></thead>
+                                <thead><tr><th>Amount</th><th>Date</th></tr></thead>
                                 <tbody></tbody>
                             </table>
                         </fieldset>
@@ -260,6 +260,10 @@
         var start;
 
         var dateformat = '[% IF ( dateformat_us ) %]mm/dd/yy[% ELSIF ( dateformat_metric ) %]dd/mm/yy[% ELSE %]yy-mm-dd[% END %]';
+        var flatpickr_dateformat_string = [% IF ( dateformat == "us" ) %]"m/d/Y"[% ELSIF ( dateformat == "metric" ) %]"d/m/Y"[% ELSIF ( dateformat == "dmydot" ) %]"d.m.Y"[% ELSE %]"Y-m-d"[% END %];
+        var flatpickr_timeformat_string = [% IF Koha.Preference('TimeFormat') == '12hr' %]"G:i K"[% ELSE %]"H:i"[% END %];
+        var flatpickr_timestamp_string = "Y-m-d H:i";
+        var flatpickr_datetime_string = flatpickr_dateformat_string + " " + flatpickr_timeformat_string;
 
         function checkin(barcode, item, error) {
             var alerts = checkAlerts(barcode, item);
@@ -360,10 +364,15 @@
 
         }
 
+        function fPformatTimeStamp( timestamp ){
+            var datetimeObj = flatpickr.parseDate( timestamp, flatpickr_timestamp_string );
+            return flatpickr.formatDate( datetimeObj, flatpickr_datetime_string );
+        }
+
         function showTimestamp(key, value) {
             if (typeof value !== 'undefined') {
                 var ts = new Date(value);
-                $('#' + key).text($.datepicker.formatDate(dateformat, ts) + ' ' + ts.toTimeString());
+                $('#' + key).text( fPformatTimeStamp( ts ) + ' ' + ts.toTimeString());
             } else {
                 $('#' + key).text(_("(never)"));
             }
@@ -473,7 +482,7 @@
                 $('#oldissuest tbody').empty();
                 issuesidx.each(function (item) {
                     $('#oldissues').show();
-                    $('#oldissuest tbody').append("<tr><td>" + item.value.date_due + "</td><td>" + item.value.title + "</td><td>" + item.value.barcode + "</td><td>" + item.value.itype + "</td><td>" + item.value.issuedate + "</td><td>" + item.value.issuebranch + "</td><td>" + item.value.callnumber + "</td><td>" + "" + "</td></tr>");
+                    $('#oldissuest tbody').append("<tr><td>" + fPformatTimeStamp( item.value.date_due ) + "</td><td>" + item.value.title + "</td><td>" + item.value.barcode + "</td><td>" + item.value.itype + "</td><td>" + fPformatTimeStamp( item.value.issuedate ) + "</td><td>" + item.value.issuebranch + "</td><td>" + item.value.callnumber + "</td><td>" + "" + "</td></tr>");
                     $('.checkout-count').text(parseInt($('.checkout-count').text()) + 1);
                 }, barcode);
             });
@@ -495,7 +504,7 @@
                 setTimeout(function() { $('#duedatespec').trigger('focus'), 1 });
                 return;
             }
-            var date_due = new Date($('#duedatespec').datepicker('getDate'));
+            var date_due = flatpickr.parseDate( $('#duedatespec').val(), flatpickr_datetime_string );
             var trans = { "timestamp" : new Date().toMySQLString(),
                           "barcode" : barcode,
                           "cardnumber" : curpatron.cardnumber,
@@ -505,7 +514,7 @@
             $('#alerts').empty();
             kohadb.recordTransaction(trans, function () {
                 $('#session-issues').show();
-                $('#issuest tbody').prepend('<tr><td>' + $.datepicker.formatDate(dateformat, date_due) + date_due.toTimeString() + '</td><td>' + item.title + '</td><td>' + barcode + '</td><td>' + item.itemtype + '</td><td>' + $.datepicker.formatDate(dateformat, new Date()) + '</td><td>' + kohadb.settings.branchcode + '</td><td>' + item.callnumber + '</td><td></td></tr>');
+                $('#issuest tbody').prepend('<tr><td>' + flatpickr.formatDate( date_due, flatpickr_datetime_string ) + '</td><td>' + item.title + '</td><td>' + barcode + '</td><td>' + item.itemtype + '</td><td>' + flatpickr.formatDate( new Date(), flatpickr_datetime_string ) + '</td><td>' + kohadb.settings.branchcode + '</td><td>' + item.callnumber + '</td><td></td></tr>');
                 $('.checkout-count').text(parseInt($('.checkout-count').text()) + 1);
                 if (alerts.length > 0) {
                     $('#alerts').append('<div class="dialog alert"><h3>' + _("Check out message") + '</h3></div>');
@@ -526,7 +535,7 @@
                         };
             kohadb.recordTransaction(trans, function () {
                 $('#session-payments').show();
-                $('#session-payments tbody').prepend('<tr><td>' + amount + '</td><td>' + $.datepicker.formatDate(dateformat, timestamp) + timestamp.toTimeString() + '</td></tr>');
+                $('#session-payments tbody').prepend('<tr><td>' + amount + '</td><td>' + fPformatTimeStamp( timestamp ) + '</td></tr>');
                 $('.fine-amount').text(parseInt($('.fine-amount').text()) - amount);
             });
         }
@@ -544,13 +553,13 @@
                 }
                 if (patron.debarred !== null) {
                     if (patron.debarred != '9999-12-31') {
-                        alerts.push(ALERT_PATRON_BLOCKED_TEMPORARY.format($.datepicker.formatDate(dateformat, new Date(patron.debarred))));
+                        alerts.push( ALERT_PATRON_BLOCKED_TEMPORARY.format( flatpickr.formatDate( new Date(patron.debarred), flatpickr_datetime_string ) ) );
                     } else {
                         alerts.push(ALERT_PATRON_RESTRICTED);
                     }
                 }
                 if (new Date(patron.dateexpiry) < new Date()) {
-                    alerts.push(ALERT_PATRON_EXPIRED.format($.datepicker.formatDate(dateformat, new Date(patron.dateexpiry))));
+                    alerts.push( ALERT_PATRON_EXPIRED.format( flatpickr.formatDate( new Date(patron.dateexpiry), flatpickr_datetime_string ) ) );
                 }
                 if (parseInt(patron.fine) > [% maxoutstanding | html %]) {
                     alerts.push(ALERT_PATRON_FINE_OVER_LIMIT.format(patron.fine));
@@ -766,22 +775,14 @@
 
             $('#patronlists').tabs();
 
-            $("#newduedate").datetimepicker({
-                minDate: 1, // require that renewal date is after today
-                hour: 23,
-                minute: 59
+            $("#duedatespec").flatpickr({
+                enableTime: true,
+                dateFormat: flatpickr_datetime_string,
+                onClose: function() {
+                    $("#checkout-barcode").focus();
+                }
             });
-            $("#duedatespec").datetimepicker({
-                onClose: function(dateText, inst) {
-                    if (validate_date(dateText, inst) ) {
-                        setTimeout(function() { $('#checkout-barcode').trigger('focus'), 1 });
-                    }
-                },
-                hour: 23,
-                minute: 59
-            }).on("change", function(e, value) {
-                if ( ! is_valid_date( $(this).val() ) ) {$(this).val("");}
-            });
+
             $('#mainform').submit(function (event) {
                 event.preventDefault();
                 var barcode = $('#checkout-barcode').val();
