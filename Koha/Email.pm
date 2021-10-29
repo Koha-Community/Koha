@@ -150,9 +150,15 @@ sub create {
 
     $email->send_or_die({ transport => $transport [, $args] });
 
-Overloaded Email::Stuffer I<send_or_die> method, that takes care of Bcc handling.
+Overloaded Email::Stuffer I<send_or_die> method, that takes care of Bcc and Return-path
+handling.
+
 Bcc is removed from the message headers, and included in the recipients list to be
 passed to I<send_or_die>.
+
+Return-path, 'MAIL FROM', is set to the 'Sender' email header unless an explicit 'from'
+parameter is passed to send_or_die.  'Return-path' headers are actually set by the MTA,
+usually using the 'MAIL FROM' information set at mail server connection time.
 
 =cut
 
