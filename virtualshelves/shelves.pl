@@ -21,6 +21,7 @@ use Modern::Perl;
 use CGI qw ( -utf8 );
 use C4::Auth qw( get_template_and_user );
 use C4::Biblio qw( GetMarcBiblio );
+use C4::Circulation qw( barcodedecode );
 use C4::Koha qw(
     GetNormalizedEAN
     GetNormalizedISBN
@@ -157,7 +158,7 @@ if ( $op eq 'add_form' ) {
             if ( $shelf->can_biblios_be_added( $loggedinuser ) ) {
                 my @barcodes = split /\n/, $barcodes; # Entries are effectively passed in as a <cr> separated list
                 foreach my $barcode (@barcodes){
-                    $barcode =~ s/\r$//; # strip any naughty return chars
+                    $barcode = barcodedecode( $barcode ) if $barcode;
                     next if $barcode eq '';
                     my $item = Koha::Items->find({barcode => $barcode});
                     if ( $item ) {
