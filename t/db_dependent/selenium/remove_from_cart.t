@@ -39,6 +39,8 @@ my $opac_base_url = $s->opac_base_url;
 my $base_url = $s->base_url;
 my $builder = t::lib::TestBuilder->new;
 
+my $marcflavour = C4::Context->preference('marcflavour') || 'MARC21';
+
 my $SearchEngine_value = C4::Context->preference('SearchEngine');
 C4::Context->set_preference('SearchEngine', 'Zebra');
 
@@ -50,23 +52,13 @@ my $mock_zebra = t::lib::Mocks::Zebra->new(
 );
 
 subtest 'OPAC - Remove from cart' => sub {
-    plan tests => 22;
+    plan tests => 4;
 
-    #-------------------------------- Test with greek and corean chars;
-    # launch the zebra saerch process
+    my $sourcedir = dirname(__FILE__) . "/../data";
+    $mock_zebra->load_records(
+        sprintf( "%s/%s/zebraexport/biblio", $sourcedir, lc($marcflavour) ),
+        'iso2709', 'biblios', 1 );
     $mock_zebra->launch_zebra;
-    # launch the zebra index process
-    $mock_zebra->launch_indexer;
-
-    my $marcflavour = C4::Context->preference('marcflavour') || 'MARC21';
-
-    my $testdir = File::Spec->rel2abs( dirname(__FILE__) . '/../www/');
-    my $file =
-      $marcflavour eq 'UNIMARC'
-      ? "$testdir/data/unimarcutf8record.mrc"
-      : "$testdir/data/marc21utf8record.mrc";
-
-    my $batch_id = $mock_zebra->load_records($file);
 
     # We need to prevent scrolling to prevent the floating toolbar from overlapping buttons we are testing
     my $window_size = $driver->get_window_size();
@@ -104,7 +96,6 @@ subtest 'OPAC - Remove from cart' => sub {
     # Reset window size
     $driver->set_window_size($window_size->{'height'}, $window_size->{'width'});
 
-    $mock_zebra->clean_records($batch_id);
     $mock_zebra->cleanup;
 };
 
