@@ -44,11 +44,8 @@ C4::Context->set_preference('SearchEngine', 'Zebra');
 
 my $mock_zebra = t::lib::Mocks::Zebra->new(
     {
-        koha_conf => $ENV{KOHA_CONF},
-        user      => $ENV{KOHA_USER},
-        password  => $ENV{KOHA_PASS},
-        intranet  => $ENV{KOHA_INTRANET_URL},
-        opac      => $ENV{KOHA_OPAC_URL},
+        koha_conf   => $ENV{KOHA_CONF},
+        marcflavour => $marcflavour,
     }
 );
 

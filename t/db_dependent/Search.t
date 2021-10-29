@@ -30,6 +30,7 @@ use Test::More tests => 3;
 use Test::MockModule;
 use Test::Warn;
 use t::lib::Mocks;
+use t::lib::Mocks::Zebra;
 
 use Koha::Caches;
 
@@ -41,56 +42,9 @@ use File::Find;
 use File::Temp qw/ tempdir /;
 use File::Path;
 
-our $child;
-our $datadir;
-
-sub index_sample_records_and_launch_zebra {
-    my ($datadir, $marc_type) = @_;
-
-    my $sourcedir = dirname(__FILE__) . "/data";
-    unlink("$datadir/zebra.log");
-    if (-f "$sourcedir/${marc_type}/zebraexport/biblio/exported_records") {
-        my $zebra_bib_cfg = 'zebra-biblios-dom.cfg';
-        system("zebraidx -c $datadir/etc/koha/zebradb/$zebra_bib_cfg  -v none,fatal -g iso2709 -d biblios init");
-        system("zebraidx -c $datadir/etc/koha/zebradb/$zebra_bib_cfg  -v none,fatal -g iso2709 -d biblios update $sourcedir/${marc_type}/zebraexport/biblio");
-        system("zebraidx -c $datadir/etc/koha/zebradb/$zebra_bib_cfg  -v none,fatal -g iso2709 -d biblios commit");
-    }
-    # ... and add large bib records, if present
-    if (-f "$sourcedir/${marc_type}/zebraexport/large_biblio/exported_records.xml") {
-        my $zebra_bib_cfg = 'zebra-biblios-dom.cfg';
-        system("zebraidx -c $datadir/etc/koha/zebradb/$zebra_bib_cfg  -v none,fatal -g marcxml -d biblios update $sourcedir/${marc_type}/zebraexport/large_biblio");
-        system("zebraidx -c $datadir/etc/koha/zebradb/$zebra_bib_cfg  -v none,fatal -g marcxml -d biblios commit");
-    }
-    if (-f "$sourcedir/${marc_type}/zebraexport/authority/exported_records") {
-        my $zebra_auth_cfg = 'zebra-authorities-dom.cfg';
-        system("zebraidx -c $datadir/etc/koha/zebradb/$zebra_auth_cfg  -v none,fatal -g iso2709 -d authorities init");
-        system("zebraidx -c $datadir/etc/koha/zebradb/$zebra_auth_cfg  -v none,fatal -g iso2709 -d authorities update $sourcedir/${marc_type}/zebraexport/authority");
-        system("zebraidx -c $datadir/etc/koha/zebradb/$zebra_auth_cfg  -v none,fatal -g iso2709 -d authorities commit");
-    }
-
-    $child = fork();
-    if ($child == 0) {
-        exec("zebrasrv -f $datadir/etc/koha-conf.xml -v none,request -l $datadir/zebra.log");
-        exit;
-    }
-
-    sleep(1);
-}
-
-sub cleanup {
-    if ($child) {
-        kill 9, $child;
-
-        # Clean up the Zebra files since the child process was just shot
-        rmtree $datadir;
-    }
-}
-
 # Fall back to make sure that the Zebra process
 # and files get cleaned up
-END {
-    cleanup();
-}
+our @cleanup;
 
 sub matchesExplodedTerms {
     my ($message, $query, @terms) = @_;
@@ -211,7 +165,7 @@ our $bibliomodule = Test::MockModule->new('C4::Biblio');
 
 sub mock_GetMarcSubfieldStructure {
     my $marc_type = shift;
-    if ($marc_type eq 'marc21') {
+    if ($marc_type eq 'MARC21') {
         $bibliomodule->mock('GetMarcSubfieldStructure', sub {
             return {
                     'biblio.biblionumber' => [{ tagfield =>  '999', tagsubfield => 'c' }],
@@ -259,14 +213,12 @@ sub mock_GetMarcSubfieldStructure {
 }
 
 sub run_marc21_search_tests {
-    $datadir = tempdir();
-    system(dirname(__FILE__) . "/zebra_config.pl $datadir marc21");
 
-    Koha::Caches->get_instance('config')->flush_all;
+    $marcflavour = 'MARC21';
+    my $mock_zebra = t::lib::Mocks::Zebra->new({marcflavour => $marcflavour});
+    push @cleanup, $mock_zebra;
 
-    mock_GetMarcSubfieldStructure('marc21');
-    my $context = C4::Context->new("$datadir/etc/koha-conf.xml");
-    $context->set_context();
+    mock_GetMarcSubfieldStructure($marcflavour);
 
     use_ok('C4::Search', qw( getIndexes FindDuplicate SimpleSearch getRecords buildQuery searchResults ));
 
@@ -275,7 +227,6 @@ sub run_marc21_search_tests {
     $QueryAutoTruncate = 0;
     $QueryWeightFields = 0;
     $QueryFuzzy = 0;
-    $marcflavour = 'MARC21';
 
     my $indexes = C4::Search::getIndexes();
     is(scalar(grep(/^ti$/, @$indexes)), 1, "Title index supported");
@@ -310,7 +261,23 @@ sub run_marc21_search_tests {
         'VM' => { 'imageurl' => 'bridge/dvd.png', 'summary' => '', 'itemtype' => 'VM', 'description' => 'Visual Materials' },
     );
 
-    index_sample_records_and_launch_zebra($datadir, 'marc21');
+    my $sourcedir = dirname(__FILE__) . "/data";
+    $mock_zebra->load_records(
+        sprintf( "%s/%s/zebraexport/biblio", $sourcedir, lc($marcflavour) ),
+        'iso2709', 'biblios', 1 );
+    $mock_zebra->load_records(
+        sprintf(
+            "%s/%s/zebraexport/large_biblio",
+            $sourcedir, lc($marcflavour)
+        ),
+        'marcxml', 'biblios', 0
+    );
+    $mock_zebra->load_records(
+        sprintf( "%s/%s/zebraexport/authority", $sourcedir, lc($marcflavour) ),
+        'iso2709', 'authorities', 1
+    );
+
+    $mock_zebra->launch_zebra;
 
     my ($biblionumber, $title);
     my $record = MARC::Record->new;
@@ -830,18 +797,16 @@ ok(MARC::Record::new_from_xml($results_hashref->{biblioserver}->{RECORDS}->[0],'
     is_deeply( $facets_info, $expected_facets_info_marc21,
         "_get_facets_info returns the correct data");
 
-    cleanup();
+    $mock_zebra->cleanup;
 }
 
 sub run_unimarc_search_tests {
-    $datadir = tempdir();
-    system(dirname(__FILE__) . "/zebra_config.pl $datadir unimarc");
 
-    Koha::Caches->get_instance('config')->flush_all;
+    $marcflavour = 'UNIMARC';
+    my $mock_zebra = t::lib::Mocks::Zebra->new({marcflavour => $marcflavour});
+    push @cleanup, $mock_zebra;
 
-    mock_GetMarcSubfieldStructure('unimarc');
-    my $context = C4::Context->new("$datadir/etc/koha-conf.xml");
-    $context->set_context();
+    mock_GetMarcSubfieldStructure($marcflavour);
 
     use_ok('C4::Search', qw( getIndexes FindDuplicate SimpleSearch getRecords buildQuery searchResults ));
 
@@ -850,9 +815,23 @@ sub run_unimarc_search_tests {
     $QueryAutoTruncate = 0;
     $QueryWeightFields = 0;
     $QueryFuzzy = 0;
-    $marcflavour = 'UNIMARC';
 
-    index_sample_records_and_launch_zebra($datadir, 'unimarc');
+    my $sourcedir = dirname(__FILE__) . "/data";
+    $mock_zebra->load_records(
+        sprintf( "%s/%s/zebraexport/biblio", $sourcedir, lc($marcflavour) ),
+        'iso2709', 'biblios', 1 );
+    $mock_zebra->load_records(
+        sprintf(
+            "%s/%s/zebraexport/large_biblio",
+            $sourcedir, lc($marcflavour)
+        ),
+        'marcxml', 'biblios', 0
+    );
+    $mock_zebra->load_records(
+        sprintf( "%s/%s/zebraexport/authority", $sourcedir, lc($marcflavour) ),
+        'iso2709', 'authorities', 1
+    );
+    $mock_zebra->launch_zebra;
 
     my ( $error, $marcresults, $total_hits ) = SimpleSearch("ti=Järnvägarnas efterfrågan och den svenska industrin", 0, 10);
     is($total_hits, 1, 'UNIMARC title search');
@@ -916,7 +895,7 @@ sub run_unimarc_search_tests {
     is_deeply( $facets_info, $expected_facets_info_unimarc,
         "_get_facets_info returns the correct data");
 
-    cleanup();
+    $mock_zebra->cleanup;
 }
 
 subtest 'MARC21 + DOM' => sub {
@@ -933,8 +912,8 @@ subtest 'UNIMARC + DOM' => sub {
 subtest 'FindDuplicate' => sub {
     plan tests => 6;
     Koha::Caches->get_instance('config')->flush_all;
-    t::lib::Mocks::mock_preference('marcflavour', 'marc21' );
-    mock_GetMarcSubfieldStructure('marc21');
+    t::lib::Mocks::mock_preference('marcflavour', 'MARC21' );
+    mock_GetMarcSubfieldStructure('MARC21');
     my $z_searcher = Test::MockModule->new('C4::Search');
     $z_searcher->mock('SimpleSearch', sub {
         warn shift @_;
@@ -980,6 +959,8 @@ subtest 'FindDuplicate' => sub {
 Koha::Caches->get_instance('config')->flush_all;
 
 END {
+
+    $_->cleanup for @cleanup;
     my $dbh = C4::Context->dbh;
     # Restore visibility of subfields in OPAC
     $dbh->do(q{

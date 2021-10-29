@@ -34,9 +34,6 @@ use t::lib::Mocks::Zebra;
 my $testdir = File::Spec->rel2abs( dirname(__FILE__) );
 # global variables that will be used when forking
 
-my $koha_conf = $ENV{KOHA_CONF};
-my $xml       = XMLin($koha_conf);
-
 my $marcflavour = C4::Context->preference('marcflavour') || 'MARC21';
 
 my $file1 =
@@ -54,8 +51,6 @@ my $file3 =
   ? "$testdir/data/unimarcutf8supprec.mrc"
   : "$testdir/data/marc21utf8supprec.mrc";
 
-my $user     = $ENV{KOHA_USER} || $xml->{config}->{user};
-my $password = $ENV{KOHA_PASS} || $xml->{config}->{pass};
 our $intranet = $ENV{KOHA_INTRANET_URL};
 our $opac     = $ENV{KOHA_OPAC_URL};
 
@@ -76,11 +71,9 @@ $opac     =~ s#/$##;
 
 my $mock_zebra = t::lib::Mocks::Zebra->new(
     {
-        koha_conf => $koha_conf,
-        user      => $user,
-        password  => $password,
         intranet  => $intranet,
-        opac      => $opac
+        opac      => $opac,
+        koha_conf => $ENV{KOHA_CONF},
     }
 );
 
@@ -99,12 +92,12 @@ if ( not defined $mock_zebra->{indexer_pid} ) {
 our $agent = Test::WWW::Mechanize->new( autocheck => 1 );
 $agent->get_ok( "$intranet/cgi-bin/koha/mainpage.pl", 'connect to intranet' );
 $agent->form_name('loginform');
-$agent->field( 'password', $password );
-$agent->field( 'userid',   $user );
+$agent->field( 'userid', $ENV{KOHA_PASS} );
+$agent->field( 'password', $ENV{KOHA_USER} );
 $agent->field( 'branch',   '' );
 $agent->click_ok( '', 'login to staff interface' );
 
-my $batch_id = $mock_zebra->load_records($file1);
+my $batch_id = $mock_zebra->load_records_ui($file1);
 my $utf8_reg1 = qr/学協会. μμ/;
 test_search('Αθήνα', 'deuteros', $utf8_reg1);
 $mock_zebra->clean_records($batch_id);
@@ -119,7 +112,7 @@ $mock_zebra->launch_indexer;
 if ( not defined $mock_zebra->{indexer_pid} ) {
     plan skip_all => "Tests skip. Error starting the indexer daemon to do those tests\n";
 }
-$batch_id = $mock_zebra->load_records($file2);
+$batch_id = $mock_zebra->load_records_ui($file2);
 my $utf8_reg2 = qr/Tòmas/;
 test_search('Ramòn', 'Tòmas',$utf8_reg2);
 $mock_zebra->clean_records($batch_id);
@@ -134,7 +127,7 @@ $mock_zebra->launch_indexer;
 if ( not defined $mock_zebra->{indexer_pid} ) {
     plan skip_all => "Tests skip. Error starting the indexer daemon to do those tests\n";
 }
-$batch_id = $mock_zebra->load_records($file3);
+$batch_id = $mock_zebra->load_records_ui($file3);
 my $utf8_reg3 = qr/😀/;
 test_search("𠻺tomasito𠻺", 'A tiny record', $utf8_reg3);
 $mock_zebra->clean_records($batch_id);

@@ -1,5 +1,20 @@
 package t::lib::Mocks::Zebra;
 
+# This file is part of Koha.
+#
+# Koha is free software; you can redistribute it and/or modify it
+# under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 3 of the License, or
+# (at your option) any later version.
+#
+# Koha is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with Koha; if not, see <http://www.gnu.org/licenses>.
+
 use Modern::Perl;
 use Test::More;
 use File::Basename qw(dirname );
@@ -8,18 +23,50 @@ use File::Path qw( rmtree );
 use JSON qw( decode_json );
 use C4::ImportBatch;
 
+=head1 NAME
+
+t::lib::Mocks::Zebra - Trying to mock zebra index
+
+IMPORTANT NOTE: This module is not working as you may think it could work.
+
+It will effectively create a new koha-conf.xml file in a temporary directory with zebra config files correctly.
+So it will not affect the koha-conf used by plack (and so the UI).
+
+If you pass koha_conf to the constructor the usual zebra db will be used, otherwise a new koha-conf.xml file will be generated
+and the usual zebra db will not be affected. However you must pass $ENV{KOHA_CONF} if you want to test the UI.
+
+=cut
+
+
 sub new {
     my ( $class, $params ) = @_;
 
-    my $datadir = tempdir();;
+    my $marcflavour = $params->{marcflavour} ? lc($params->{marcflavour}) : 'marc21';
+    my $koha_conf = $params->{koha_conf};
+
+    my $datadir = tempdir();
+    my $zebra_db_dir;
+    unless ( $koha_conf ) {
+        system(dirname(__FILE__) . "/../../db_dependent/zebra_config.pl $datadir $marcflavour");
+
+        Koha::Caches->get_instance('config')->flush_all;
+        $koha_conf = "$datadir/etc/koha-conf.xml";
+        my $context = C4::Context->new($koha_conf);
+        $context->set_context();
+        $zebra_db_dir = "$datadir/etc/koha/zebradb/";
+    } else {
+        $koha_conf = $ENV{KOHA_CONF};
+        $zebra_db_dir = dirname($koha_conf);
+    }
+
     my $self = {
         datadir   => $datadir,
-        koha_conf => $params->{koha_conf},
-        user      => $params->{user},
-        password  => $params->{password},
+        koha_conf => $koha_conf,
+        zebra_db_dir => $zebra_db_dir,
         intranet  => $params->{intranet},
         opac      => $params->{opac}
     };
+
     return bless $self, $class;
 }
 
@@ -30,6 +77,7 @@ sub launch_zebra {
     my $datadir = $self->{datadir};
     my $koha_conf = $self->{koha_conf};
 
+    unlink("$datadir/zebra.log");
     my $zebra_pid = fork();
     if ( $zebra_pid == 0 ) {
         exec("zebrasrv -f $koha_conf -v none,request -l $datadir/zebra.log");
@@ -55,6 +103,25 @@ sub launch_indexer {
 }
 
 sub load_records {
+    my ( $self, $marc_dir, $marc_format, $record_type, $init ) = @_;
+
+    my $datadir = $self->{datadir};
+    my $zebra_cfg = $self->{zebra_db_dir}
+      . ( $record_type eq 'biblios'
+        ? '/zebra-biblios-dom.cfg'
+        : '/zebra-authorities-dom.cfg' );
+
+    my @cmds;
+    push @cmds, "zebraidx -c $zebra_cfg  -v none,fatal -g $marc_format -d $record_type init" if $init;
+    push @cmds, "zebraidx -c $zebra_cfg  -v none,fatal -g $marc_format -d $record_type update $marc_dir";
+    push @cmds, "zebraidx -c $zebra_cfg  -v none,fatal -g $marc_format -d $record_type commit";
+
+    for my $cmd ( @cmds ) {
+        system($cmd);
+    }
+}
+
+sub load_records_ui {
     my ( $self, $file ) = @_;
     my $jsonresponse;
     my $cgi_root = $self->{intranet} . '/cgi-bin/koha';
@@ -62,8 +129,8 @@ sub load_records {
     our $agent = Test::WWW::Mechanize->new( autocheck => 1 );
     $agent->get_ok( "$cgi_root/mainpage.pl", 'connect to intranet' );
     $agent->form_name('loginform');
-    $agent->field( 'password', $self->{password} );
-    $agent->field( 'userid',   $self->{user} );
+    $agent->field( 'userid', $ENV{KOHA_PASS} );
+    $agent->field( 'password', $ENV{KOHA_USER} );
     $agent->field( 'branch',   '' );
     $agent->click_ok( '', 'login to staff interface' );
 
