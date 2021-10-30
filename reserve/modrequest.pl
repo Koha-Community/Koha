@@ -106,6 +106,6 @@ if ( $from eq 'borrower'){
     print $query->redirect("/cgi-bin/koha/circ/circulation.pl?borrowernumber=$borrower[0]");
 } else {
      my $url = URI->new("/cgi-bin/koha/reserve/request.pl");
-     $url->query_form( biblionumber => @biblionumber);
+     $url->query_form( biblionumber => [@biblionumber]);
      print $query->redirect($url);
 }

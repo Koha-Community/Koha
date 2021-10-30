@@ -152,7 +152,7 @@ if ( $type eq 'str8' && $patron ) {
         push @biblionumbers, @bad_bibs;
     }
     my $redirect_url = URI->new("request.pl");
-    $redirect_url->query_form( biblionumber => @biblionumbers);
+    $redirect_url->query_form( biblionumber => [@biblionumbers]);
     print $input->redirect($redirect_url);
 }
 elsif ( $borrowernumber eq '' ) {
