@@ -63,7 +63,7 @@ if ($barcode) {
 
         if ($issue) {
 
-            $borrower = $issue->borrower();
+            $borrower = $issue->patron();
             
             if ( ( $borrower->debarred() || q{} ) lt dt_from_string()->ymd() ) {
                 my $can_renew;

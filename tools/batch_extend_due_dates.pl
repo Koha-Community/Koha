@@ -59,7 +59,7 @@ elsif ( $op eq 'list' ) {
     my $dtf = Koha::Database->new->schema->storage->datetime_parser;
     my $search_params;
     if (@categorycodes) {
-        $search_params->{'borrower.categorycode'} = { -in => \@categorycodes };
+        $search_params->{'patron.categorycode'} = { -in => \@categorycodes };
     }
     if (@branchcodes) {
         $search_params->{'me.branchcode'} = { -in => \@branchcodes };
@@ -98,7 +98,7 @@ elsif ( $op eq 'list' ) {
     my $checkouts = Koha::Checkouts->search(
         $search_params,
         {
-            join => [ 'item', 'borrower' ]
+            join => [ 'item', 'patron' ]
         }
     );
 

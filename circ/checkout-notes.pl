@@ -56,7 +56,7 @@ if ( $action eq 'seen' ) {
     }
 }
 
-my $notes = Koha::Checkouts->search({ 'me.note' => { '!=', undef } }, { prefetch => [ 'borrower', { item => 'biblionumber' } ] });
+my $notes = Koha::Checkouts->search({ 'me.note' => { '!=', undef } }, { prefetch => [ 'patron', { item => 'biblionumber' } ] });
 $template->param(
     selected_count => scalar(@issue_ids),
     action         => $action,
