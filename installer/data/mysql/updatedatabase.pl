@@ -24515,6 +24515,11 @@ if( CheckVersion( $DBversion ) ) {
     NewVersion( $DBversion, 29137, "Add system preference CreateAVFromCataloguing");
 }
 
+$DBversion = '21.05.05.003';
+if( CheckVersion( $DBversion ) ) {
+    NewVersion( $DBversion, "", "Koha 21.05.05 release" );
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 my $update_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/atomicupdate/';
