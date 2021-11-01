@@ -901,7 +901,8 @@ __PACKAGE__->has_many(
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:SVuazNjL6+ziK2Uwcc7OwA
 
 __PACKAGE__->add_columns(
-    '+pickup_location' => { is_boolean => 1 }
+    '+pickup_location' => { is_boolean => 1 },
+    '+public'          => { is_boolean => 1 }
 );
 
 sub koha_object_class {
