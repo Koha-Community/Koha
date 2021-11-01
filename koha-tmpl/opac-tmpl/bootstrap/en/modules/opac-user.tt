@@ -865,6 +865,38 @@
     </div> <!-- /.container-fluid -->
 </div> <!-- /#main -->
 
+[% # hold suspend modal form %]
+<div id="suspendHoldModal" class="modal" tabindex="-1" role="dialog" aria-labelledby="suspendModalLabel" aria-hidden="true" data-focus="false">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form action="/cgi-bin/koha/opac-modrequest-suspend.pl" method="post">
+                <div class="modal-header">
+                    [% IF HOLD.suspend %]
+                        <h5 class="modal-title" id="suspendModalLabel">Resume hold</h5>
+                    [% ELSE %]
+                        <h5 class="modal-title" id="suspendModalLabel">Suspend hold</h5>
+                    [% END %]
+                    <button type="button" class="closebtn" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">x</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <h6 id="suspendHoldTitle"></h6>
+                    <input type="hidden" name="reserve_id" id="suspendHoldReserveId" value="" />
+                    <label for="suspend_untilDate">Suspend until:</label>
+                    <input type="text" name="suspend_until" id="suspend_untilDate" size="10" />
+                    [% INCLUDE 'date-format.inc' %]
+                    <p><a href="#" id="suspend-modal-clear-date">Clear date to suspend indefinitely</a></p>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-primary"><i class="fa fa-check" aria-hidden="true"></i> Suspend</button>
+                    <button data-dismiss="modal" class="btn btn-secondary"><i class="fa fa-remove" aria-hidden="true"></i> Do not suspend</button>
+                </div>
+            </form>
+        </div> <!-- /.modal-content -->
+    </div> <!-- /.modal-dialog -->
+</div>  <!-- /#suspendModal -->
+
 [% IF ( OverDriveCirculation ) %]
     [% INCLUDE 'overdrive-checkout.inc' %]
     [% IF ( Koha.Preference('OverDrivePasswordRequired') ) %]
@@ -939,6 +971,31 @@
                     };
                     confirmModal( article_request, _("Are you sure you want to cancel this article request?"), _("Yes, cancel article request"), _("No, do not cancel article request"), doCancel);
                 })($(this))
+            });
+
+            /* We initiate this flatpickr instance here so that we can use the variable later */
+            var suspend_until_date = $("#suspend_untilDate").flatpickr({
+                minDate: "today"
+            });
+
+            $(".suspend_hold").on("click", function(e){
+                e.preventDefault();
+                var title = $(this).data("title");
+                var reserve_id = $(this).data("reserve_id");
+                $("#suspendHoldReserveId").val( reserve_id );
+                $("#suspendHoldTitle").html( "<em>" + title + "</em>" );
+                $("#suspendHoldModal").modal("show");
+            });
+
+            $("#suspend-modal-clear-date").on( "click", function(e) {
+                e.preventDefault();
+                suspend_until_date.clear();
+            });
+
+            $("#suspendHoldModal").on("hidden.bs.modal", function(){
+                $("#suspendHoldTitle").html("");
+                $("#suspendHoldReserveId").val("");
+                suspend_until_date.clear();
             });
 
             $("#suspend_all_submit").on("click", function(e){
