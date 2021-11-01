@@ -521,7 +521,7 @@ if (C4::Context->preference("virtualshelves") ) {
     my $shelves = Koha::Virtualshelves->search(
         {
             biblionumber => $biblionumber,
-            category => 2,
+            public => 1,
         },
         {
             join => 'virtualshelfcontents',
