@@ -140,7 +140,7 @@
         [% END %]
 
         [% IF t.newsletter %]
-        <li><strong>Newletter editor:</strong>
+        <li><strong>Newsletter editor:</strong>
             [% INCLUDE person p=t.newsletter %]
         </li>
         [% END %]
