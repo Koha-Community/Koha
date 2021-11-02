@@ -77,6 +77,7 @@
 	<thead>
     <tr>
         <th class="hq-title anti-the">Title</th>
+        <th class="hq-holdingbranch">Current library</th>
         <th class="hq-collection">Collection</th>
         <th class="hq-itemtype">Item type</th>
         <th class="hq-callnumber">Call number</th>
@@ -93,6 +94,11 @@
         <td class="hq-title">
             <span class="filter_column filter_text">
                 <input class="text_filter" type="text" placeholder="Title">
+            </span>
+        </td>
+        <td class="hq-holdingbranch">
+            <span class="filter_column filter_text">
+                <input class="text_filter" type="text" placeholder="Current library">
             </span>
         </td>
         <td class="hq-collection">
@@ -179,6 +185,7 @@
                     </div>
                 </p>
             </td>
+            <td class="hq-holdingbranch">[% Branches.GetName( itemsloo.holdingbranch ) | html %]</td>
             <td class="hq-collection">[% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.ccode', authorised_value => itemsloo.ccode ) | html %]</td>
             <td class="hq-itemtype">[% ItemTypes.GetDescription( itemsloo.itype ) | html %]</td>
             <td class="hq-callnumber">[% IF ( itemsloo.location ) %]<em>[% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.location', authorised_value => itemsloo.location ) | html %]</em> [% END %][% itemsloo.itemcallnumber | html %]</td>
