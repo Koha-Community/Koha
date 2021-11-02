@@ -84,8 +84,8 @@ if ( $op eq 'form' ) {
         view => 'form',
         lists => scalar Koha::Virtualshelves->search(
             [
-                { category => 1, owner => $loggedinuser },
-                { category => 2 }
+                { public => 0, owner => $loggedinuser },
+                { public => 1 }
             ]
         )
     );
