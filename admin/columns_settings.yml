@@ -465,6 +465,21 @@ modules:
               columnname: checkin_on
 
   cataloguing:
+    addbooks:
+      reservoir-table:
+        columns:
+            -
+              columnname: title
+            -
+              columnname: isbn
+            -
+              columnname: coming_from
+            -
+              columnname: import_date
+            -
+              columnname: actions
+              cannot_be_toggled: 1
+              cannot_be_modified: 1
     additem:
       itemst:
         # NOTE: These columns are in the same order as kohastructure.sql, and contain all items

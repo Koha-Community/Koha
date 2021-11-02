@@ -79,8 +79,13 @@ sub BreedingSearch {
     # normalise ISBN like at import
     my @isbns = C4::Koha::GetVariationsOfISBN($term);
 
-    $query = "SELECT import_record_id, file_name, isbn, title, author
-              FROM  import_biblios 
+    $query = "SELECT import_biblios.import_record_id,
+                import_batches.file_name,
+                import_biblios.isbn,
+                import_biblios.title,
+                import_biblios.author,
+                import_batches.upload_timestamp
+              FROM  import_biblios
               JOIN import_records USING (import_record_id)
               JOIN import_batches USING (import_batch_id)
               WHERE title LIKE ? OR author LIKE ? OR isbn IN (" . join(',',('?') x @isbns) . ")";

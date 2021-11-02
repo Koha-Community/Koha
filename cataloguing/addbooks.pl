@@ -112,11 +112,10 @@ for my $resultsbr (@resultsbr) {
     push @{$breeding_loop}, {
         id               => $resultsbr->{import_record_id},
         isbn             => $resultsbr->{isbn},
-        copyrightdate    => $resultsbr->{copyrightdate},
-        editionstatement => $resultsbr->{editionstatement},
         file             => $resultsbr->{file_name},
         title            => $resultsbr->{title},
         author           => $resultsbr->{author},
+        upload_timestamp => $resultsbr->{upload_timestamp}
     };
 }
 
