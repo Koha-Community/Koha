@@ -1131,6 +1131,7 @@
     [% Asset.js("lib/hc-sticky.js") | $raw %]
     [% Asset.js("js/circ-patron-search-results.js") | $raw %]
     [% INCLUDE 'select2.inc' %]
+    [% Asset.js("js/holds.js") | $raw%]
     <script>
         var Sticky;
         var biblionumber = "[% biblionumber | $raw %]";
@@ -1290,22 +1291,6 @@
                 });
             [% END %]
 
-            function display_pickup_location (state) {
-                var $text;
-                if ( state.needs_override === true ) {
-                    $text = $(
-                        '<span>' + state.text + '</span> <span style="float:right;" title="' +
-                        _("This pickup location is not allowed according to circulation rules") +
-                        '"><i class="fa fa-exclamation-circle" aria-hidden="true"></i></span>'
-                    );
-                }
-                else {
-                    $text = $('<span>'+state.text+'</span>');
-                }
-
-                return $text;
-            };
-
             $(".pickup_location_dropdown").each( function () {
                 var this_dropdown = $(this);
                 var hold_id = $(this).data('hold_id');
@@ -1321,13 +1306,14 @@
                             var query = {
                                 "q": JSON.stringify({"name":{"-like":'%'+search_term+'%'}}),
                                 "_order_by": "name",
-                                "_per_page": -1
+                                "_page": params.page
                             };
+
                             return query;
                         },
-                        processResults: function (data) {
+                        processResults: function (data, params) {
                             var results = [];
-                            data.forEach( function ( pickup_location ) {
+                            data.results.forEach( function ( pickup_location ) {
                                 results.push(
                                     {
                                         "id": pickup_location.library_id.escapeHtml(),
@@ -1336,8 +1322,9 @@
                                     }
                                 );
                             });
-                            return { "results": results };
-                        }
+                            return { "results": results, "pagination": { "more": data.pagination.more } };
+                        },
+                        transport: kohaSelect2Transport
                     },
                     templateResult: display_pickup_location
                 });
@@ -1384,13 +1371,13 @@
                                 "q": JSON.stringify({"name":{"-like":'%'+search_term+'%'}}),
                                 "_order_by": "name",
                                 "patron_id": patron_id,
-                                "_per_page": -1
+                                "_page": params.page
                             };
                             return query;
                         },
                         processResults: function (data) {
                             var results = [];
-                            data.forEach( function ( pickup_location ) {
+                            data.results.forEach( function ( pickup_location ) {
                                 results.push(
                                     {
                                         "id": pickup_location.library_id.escapeHtml(),
@@ -1399,8 +1386,9 @@
                                     }
                                 );
                             });
-                            return { "results": results };
-                        }
+                            return { "results": results, "pagination": { "more": data.pagination.more } };
+                        },
+                        transport: kohaSelect2Transport,
                     },
                     templateResult: display_pickup_location
                 });
@@ -1422,13 +1410,13 @@
                                 "q": JSON.stringify({"name":{"-like":'%'+search_term+'%'}}),
                                 "_order_by": "name",
                                 "patron_id": patron_id,
-                                "_per_page": -1
+                                "_page": params.page
                             };
                             return query;
                         },
                         processResults: function (data) {
                             var results = [];
-                            data.forEach( function ( pickup_location ) {
+                            data.results.forEach( function ( pickup_location ) {
                                 results.push(
                                     {
                                         "id": pickup_location.library_id.escapeHtml(),
@@ -1437,8 +1425,9 @@
                                     }
                                 );
                             });
-                            return { "results": results };
-                        }
+                            return { "results": results, "pagination": { "more": data.pagination.more } };
+                        },
+                        transport: kohaSelect2Transport
                     },
                     templateResult: display_pickup_location
                 });

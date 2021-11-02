@@ -1,3 +1,19 @@
+function display_pickup_location (state) {
+    var $text;
+    if ( state.needs_override === true ) {
+        $text = $(
+            '<span>' + state.text + '</span> <span style="float:right;" title="' +
+            _("This pickup location is not allowed according to circulation rules") +
+            '"><i class="fa fa-exclamation-circle" aria-hidden="true"></i></span>'
+        );
+    }
+    else {
+        $text = $('<span>'+state.text+'</span>');
+    }
+
+    return $text;
+};
+
 /* global __ dataTablesDefaults borrowernumber SuspendHoldsIntranet */
 $(document).ready(function() {
     var holdsTable;
@@ -219,22 +235,6 @@ $(document).ready(function() {
                     });
                 });
 
-                function display_pickup_location (state) {
-                    var $text;
-                    if ( state.needs_override === true ) {
-                        $text = $(
-                            '<span>' + state.text + '</span> <span style="float:right;" title="' +
-                            _("This pickup location is not allowed according to circulation rules") +
-                            '"><i class="fa fa-exclamation-circle" aria-hidden="true"></i></span>'
-                        );
-                    }
-                    else {
-                        $text = $('<span>'+state.text+'</span>');
-                    }
-
-                    return $text;
-                };
-
                 $(".hold_location_select").each( function () {
                     var this_dropdown = $(this);
                     var hold_id = $(this).data('hold-id');
@@ -251,13 +251,13 @@ $(document).ready(function() {
                                 var query = {
                                     "q": JSON.stringify({"name":{"-like":'%'+search_term+'%'}}),
                                     "_order_by": "name",
-                                    "_per_page": -1
+                                    "_page": params.page
                                 };
                                 return query;
                             },
                             processResults: function (data) {
                                 var results = [];
-                                data.forEach( function ( pickup_location ) {
+                                data.results.forEach( function ( pickup_location ) {
                                     results.push(
                                         {
                                             "id": pickup_location.library_id.escapeHtml(),
@@ -266,8 +266,9 @@ $(document).ready(function() {
                                         }
                                     );
                                 });
-                                return { "results": results };
-                            }
+                                return { "results": results, "pagination": { "more": data.pagination.more } };
+                            },
+                            transport: kohaSelect2Transport
                         },
                         templateResult: display_pickup_location
                     });
