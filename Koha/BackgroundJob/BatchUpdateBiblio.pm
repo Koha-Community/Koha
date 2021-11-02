@@ -100,7 +100,7 @@ sub process {
                 type => 'error',
                 code => 'biblio_not_modified',
                 biblionumber => $biblionumber,
-                error => ($@ ? $@ : $error),
+                error => ($@ ? "$@" : $error),
             };
         } else {
             push @messages, {
