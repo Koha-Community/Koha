@@ -23,6 +23,7 @@ use CGI qw ( -utf8 );
 
 use C4::Auth qw( get_template_and_user );
 use C4::Output;
+use C4::Letters;
 use Koha::Patron::Message;
 
 my $input = CGI->new;
@@ -41,6 +42,8 @@ my $borrowernumber   = $input->param('borrowernumber');
 my $branchcode       = $input->param('branchcode');
 my $message_type     = $input->param('message_type');
 my $borrower_message = $input->param('borrower_message');
+my $borrower_subject = $input->param('borrower_subject');
+my $letter_code      = $input->param('select_patron_notice');
 my $batch            = $input->param('batch');
 
 if ( $op eq 'cud-edit_message' && $message_id) {
@@ -48,14 +51,41 @@ if ( $op eq 'cud-edit_message' && $message_id) {
     $message->update( { message => $borrower_message } ) if $message;
 }
 elsif( $op eq 'cud-add_message' ) {
-    Koha::Patron::Message->new(
-        {
-            borrowernumber => $borrowernumber,
-            branchcode     => $branchcode,
-            message_type   => $message_type,
-            message        => $borrower_message,
+    if ( $message_type eq 'L' or $message_type eq 'B' ) {
+        Koha::Patron::Message->new(
+            {
+                borrowernumber => $borrowernumber,
+                branchcode     => $branchcode,
+                message_type   => $message_type,
+                message        => $borrower_message,
+            }
+        )->store;
+    }
+
+    if ( $message_type eq 'E' ) {
+        my $letter = {
+            title   => $borrower_subject,
+            content => $borrower_message
+        };
+
+        if ( $letter_code ) {
+            $letter = C4::Letters::GetPreparedLetter(
+                module      => 'members',
+                letter_code => $letter_code,
+                tables      => {
+                    'borrowers'   => $borrowernumber
+                },
+            );
         }
-    )->store;
+
+        C4::Letters::EnqueueLetter(
+            {
+                letter         => $letter,
+                borrowernumber => $borrowernumber,
+                message_transport_type => 'email',
+            }
+        ) or warn "can't enqueue letter";
+    }
 }
 
 my $url = $input->referer;

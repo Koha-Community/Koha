@@ -77,6 +77,39 @@ $(document).ready(function(){
         startup();
     });
 
+    $("#message_type").on("change",function(){
+        if ($(this).val() == 'E') {
+            $("label[for='borrower_message']").show();
+            $('#subject_form').show();
+            $("label[for='select_patron_notice']").show();
+            $('#select_patron_notice').show();
+            $("label[for='select_patron_messages']").hide();
+            $('#select_patron_messages').hide();
+            $('#borrower_message').val('');
+            $('#select_patron_notice').val('');
+        } else {
+            $('#subject_form').hide();
+            $("label[for='borrower_message']").hide();
+            $("label[for='select_patron_notice']").hide();
+            $('#select_patron_notice').hide();
+            $("label[for='select_patron_messages']").show();
+            $('#select_patron_messages').show();
+            $('#borrower_subject').prop( "disabled", false );
+            $('#borrower_message').prop( "disabled", false );
+            $('#select_patron_messages').val('');
+        }
+    });
+
+    $("#select_patron_notice").on("change",function(){
+        if ($(this).val()) {
+            $('#borrower_subject').prop( "disabled", true );
+            $('#borrower_message').prop( "disabled", true );
+        } else {
+            $('#borrower_subject').prop( "disabled", false );
+            $('#borrower_message').prop( "disabled", false );
+        }
+    });
+
     $(".edit-patronimage").on("click", function(e){
         e.preventDefault();
         var borrowernumber = $(this).data("borrowernumber");

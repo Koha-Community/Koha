@@ -3,6 +3,7 @@
 [% USE Categories %]
 [% USE Notices %]
 [% USE AuthorisedValues %]
+[% USE NoticeTemplates %]
 [% USE scalar %]
 <div id="toolbar" class="btn-toolbar">
     [% IF CAN_user_borrowers_edit_borrowers %]
@@ -136,6 +137,7 @@
                         <select name="message_type" id="message_type">
                             <option value="L">Staff - Internal note</option>
                             <option value="B">OPAC - [% patron.firstname | html %] [% patron.surname | html %]</option>
+                            <option value="E">Email - email addresses of patron</option>
                         </select>
                     </div>
                     [% bor_notes = AuthorisedValues.Get( 'BOR_NOTES' ) %]
@@ -150,8 +152,33 @@
                             </select>
                         </div>
                     [% END %]
+
+                    [% patron_letters = NoticeTemplates.GetByModule( 'members' ) %]
+                    [% IF patron_letters %]
+                        <div class="form-group">
+                            <label for="select_patron_notice" style="display:none;">Patron notice: </label>
+                            <select name="select_patron_notice" id="select_patron_notice" style="display:none;">
+                                <option value="">Select notice</option>
+                                [% FOREACH letter IN patron_letters %]
+                                    <option value="[% letter.code | html %]">[% letter.name | html %]</option>
+                                [% END %]
+                            </select>
+                        </div>
+                    [% END %]
+
                     <div class="form-group">
-                        <textarea rows="3" class="modal-textarea" name="borrower_message" id="borrower_message" ></textarea>
+                        <fieldset class="rows">
+                            <ol>
+                                <li id="subject_form" style="display: none;">
+                                    <label for="borrower_subject">Subject:</label>
+                                    <input type="text" size="60" name="borrower_subject" id="borrower_subject"/>
+                                </li>
+                                <li>
+                                    <label for="borrower_message" style="display: none;">Body:</label>
+                                    <textarea cols="65" rows="5" name="borrower_message" id="borrower_message" ></textarea>
+                                </li>
+                            </ol>
+                        </fieldset>
                     </div>
                     <input type="hidden" name="borrowernumber" value="[% patron.borrowernumber | html %]" />
                     <input type="hidden" name="batch" value="[% batch | html %]" />
