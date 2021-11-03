@@ -129,7 +129,11 @@
                     [%- IF Koha.Preference('IndependentBranches') && Branches.all().size == 1 -%]
                         [% Branches.GetName(hold.branchcode) | html %] <input type="hidden" name="pickup" value="[% hold.branchcode | html %]" />
                     [%- ELSE -%]
-                        <select class="pickup_location_dropdown" data-selected="[% hold.branchcode | html %]" data-hold_id="[% hold.reserve_id | html %]" name="pickup">
+                        <select class="pickup_location_dropdown"
+                                data-selected="[% hold.branchcode | html %]"
+                                data-hold-id="[% hold.reserve_id | html %]"
+                                data-pickup-location-source="hold"
+                                name="pickup">
                             <option selected="selected" value="[% hold.branchcode | html %]">[% Branches.GetName(hold.branchcode) | html %]</option>
                             <option value="" disabled="disabled" class="loading">Loading...</option>
                         </select>

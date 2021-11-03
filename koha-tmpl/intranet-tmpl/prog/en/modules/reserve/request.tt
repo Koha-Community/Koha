@@ -486,7 +486,10 @@
                             <li>
                                 <label for="pickup">Pickup at:</label>
                             [% UNLESS ( multi_hold ) %]
-                                <select name="pickup" id="pickup" data-biblio-id="[% biblio.biblionumber | html %]" data-patron-id="[% patron.borrowernumber | html %]">
+                                <select name="pickup" id="pickup"
+                                        data-biblio-id="[% biblio.biblionumber | html %]"
+                                        data-patron-id="[% patron.borrowernumber | html %]"
+                                        data-pickup-location-source="biblio">
                                     [% PROCESS options_for_libraries libraries => Branches.pickup_locations({ search_params => { biblio => biblionumber, patron => patron }, selected => pickup }) %]
                             [% ELSE %]
                                 <select name="pickup" id="pickup_multi" data-patron-id="[% patron.borrowernumber | html %]">
@@ -763,7 +766,8 @@
                                                     [% IF (itemloo.pickup_locations_count > 0) %]
                                                         <select name="item_pickup_[% itemloo.itemnumber | html %]" class="pickup_locations"
                                                                 data-item-id="[% itemloo.itemnumber | html %]"
-                                                                data-patron-id="[% patron.borrowernumber | html %]">
+                                                                data-patron-id="[% patron.borrowernumber | html %]"
+                                                                data-pickup-location-source="item">
                                                         [% IF (itemloo.default_pickup_location) %]
                                                             <option value="[% itemloo.default_pickup_location.branchcode | html %]" selected="selected">[% itemloo.default_pickup_location.branchname | html %]</option>
                                                         [% END %]
@@ -1292,42 +1296,7 @@
             [% END %]
 
             $(".pickup_location_dropdown").each( function () {
-                var this_dropdown = $(this);
-                var hold_id = $(this).data('hold_id');
-
-                this_dropdown.select2({
-                    allowClear: false,
-                    ajax: {
-                        url: '/api/v1/holds/' + encodeURIComponent(hold_id) + '/pickup_locations',
-                        delay: 300, // wait 300 milliseconds before triggering the request
-                        dataType: 'json',
-                        data: function (params) {
-                            var search_term = (params.term === undefined) ? '' : params.term;
-                            var query = {
-                                "q": JSON.stringify({"name":{"-like":'%'+search_term+'%'}}),
-                                "_order_by": "name",
-                                "_page": params.page
-                            };
-
-                            return query;
-                        },
-                        processResults: function (data, params) {
-                            var results = [];
-                            data.results.forEach( function ( pickup_location ) {
-                                results.push(
-                                    {
-                                        "id": pickup_location.library_id.escapeHtml(),
-                                        "text": pickup_location.name.escapeHtml(),
-                                        "needs_override": pickup_location.needs_override
-                                    }
-                                );
-                            });
-                            return { "results": results, "pagination": { "more": data.pagination.more } };
-                        },
-                        transport: kohaSelect2Transport
-                    },
-                    templateResult: display_pickup_location
-                });
+                $(this).pickup_locations_dropdown();
             });
 
             $("#pickup_multi").select2({
@@ -1354,83 +1323,11 @@
             });
 
             $("#pickup").each( function () {
-                var this_dropdown = $(this);
-                var patron_id = $(this).data('patron-id');
-                var biblio_id = $(this).data('biblio-id');
-
-                this_dropdown.select2({
-                    width: 'style',
-                    allowClear: false,
-                    ajax: {
-                        url: '/api/v1/biblios/' + encodeURIComponent(biblio_id) + '/pickup_locations',
-                        delay: 300, // wait 300 milliseconds before triggering the request
-                        dataType: 'json',
-                        data: function (params) {
-                            var search_term = (params.term === undefined) ? '' : params.term;
-                            var query = {
-                                "q": JSON.stringify({"name":{"-like":'%'+search_term+'%'}}),
-                                "_order_by": "name",
-                                "patron_id": patron_id,
-                                "_page": params.page
-                            };
-                            return query;
-                        },
-                        processResults: function (data) {
-                            var results = [];
-                            data.results.forEach( function ( pickup_location ) {
-                                results.push(
-                                    {
-                                        "id": pickup_location.library_id.escapeHtml(),
-                                        "text": pickup_location.name.escapeHtml(),
-                                        "needs_override": pickup_location.needs_override
-                                    }
-                                );
-                            });
-                            return { "results": results, "pagination": { "more": data.pagination.more } };
-                        },
-                        transport: kohaSelect2Transport,
-                    },
-                    templateResult: display_pickup_location
-                });
+                $(this).pickup_locations_dropdown();
             });
-            $(".pickup_locations").each( function () {
-                var this_dropdown = $(this);
-                var patron_id = $(this).data('patron-id');
-                var item_id   = $(this).data('item-id');
 
-                this_dropdown.select2({
-                    allowClear: true,
-                    ajax: {
-                        url: '/api/v1/items/' + encodeURIComponent(item_id) + '/pickup_locations',
-                        delay: 300, // wait 300 milliseconds before triggering the request
-                        dataType: 'json',
-                        data: function (params) {
-                            var search_term = (params.term === undefined) ? '' : params.term;
-                            var query = {
-                                "q": JSON.stringify({"name":{"-like":'%'+search_term+'%'}}),
-                                "_order_by": "name",
-                                "patron_id": patron_id,
-                                "_page": params.page
-                            };
-                            return query;
-                        },
-                        processResults: function (data) {
-                            var results = [];
-                            data.results.forEach( function ( pickup_location ) {
-                                results.push(
-                                    {
-                                        "id": pickup_location.library_id.escapeHtml(),
-                                        "text": pickup_location.name.escapeHtml(),
-                                        "needs_override": pickup_location.needs_override
-                                    }
-                                );
-                            });
-                            return { "results": results, "pagination": { "more": data.pagination.more } };
-                        },
-                        transport: kohaSelect2Transport
-                    },
-                    templateResult: display_pickup_location
-                });
+            $(".pickup_locations").each(function () {
+                $(this).pickup_locations_dropdown();
             });
         });
 

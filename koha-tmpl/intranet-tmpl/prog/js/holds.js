@@ -14,6 +14,84 @@ function display_pickup_location (state) {
     return $text;
 };
 
+(function ($) {
+
+    /**
+     * Generate a Select2 dropdown for pickup locations
+     *
+     * It expects the select object to contain several data-* attributes
+     * - data-pickup-location-source: 'biblio', 'item' or 'hold' (default)
+     * - data-patron-id: required for 'biblio' and 'item'
+     * - data-biblio-id: required for 'biblio' only
+     * - data-item-id: required for 'item' only
+     *
+     * @return {Object} The Select2 instance
+     */
+
+    $.fn.pickup_locations_dropdown = function () {
+        var select = $(this);
+        var pickup_location_source = $(this).data('pickup-location-source');
+        var patron_id = $(this).data('patron-id');
+        var biblio_id = $(this).data('biblio-id');
+        var item_id = $(this).data('item-id');
+        var hold_id = $(this).data('hold-id');
+
+        var url;
+
+        if ( pickup_location_source === 'biblio' ) {
+            url = '/api/v1/biblios/' + encodeURIComponent(biblio_id) + '/pickup_locations';
+        }
+        else if ( pickup_location_source === 'item' ) {
+            url = '/api/v1/items/' + encodeURIComponent(item_id) + '/pickup_locations';
+        }
+        else { // hold
+            url = '/api/v1/holds/' + encodeURIComponent(hold_id) + '/pickup_locations';
+        }
+
+        select.select2({
+            width: 'style',
+            allowClear: false,
+            ajax: {
+                url: url,
+                delay: 300, // wait 300 milliseconds before triggering the request
+                cache: true,
+                dataType: 'json',
+                data: function (params) {
+                    var search_term = (params.term === undefined) ? '' : params.term;
+                    var query = {
+                        "q": JSON.stringify({"name":{"-like":'%'+search_term+'%'}}),
+                        "_order_by": "name",
+                        "_page": params.page
+                    };
+
+                    if ( pickup_location_source !== 'hold' ) {
+                        query["patron_id"] = patron_id;
+                    }
+
+                    return query;
+                },
+                processResults: function (data) {
+                    var results = [];
+                    data.results.forEach( function ( pickup_location ) {
+                        results.push(
+                            {
+                                "id": pickup_location.library_id.escapeHtml(),
+                                "text": pickup_location.name.escapeHtml(),
+                                "needs_override": pickup_location.needs_override
+                            }
+                        );
+                    });
+                    return { "results": results, "pagination": { "more": data.pagination.more } };
+                },
+                transport: kohaSelect2Transport,
+            },
+            templateResult: display_pickup_location
+        });
+
+        return select;
+    };
+})(jQuery);
+
 /* global __ dataTablesDefaults borrowernumber SuspendHoldsIntranet */
 $(document).ready(function() {
     var holdsTable;
@@ -94,7 +172,7 @@ $(document).ready(function() {
                     {
                         "mDataProp": function( oObj ) {
                             if( oObj.branches.length > 1 && oObj.found !== 'W' && oObj.found !== 'T' ){
-                                var branchSelect='<select priority='+oObj.priority+' class="hold_location_select" data-hold-id="'+oObj.reserve_id+'" reserve_id="'+oObj.reserve_id+'" name="pick-location">';
+                                var branchSelect='<select priority='+oObj.priority+' class="hold_location_select" data-hold-id="'+oObj.reserve_id+'" reserve_id="'+oObj.reserve_id+'" name="pick-location" data-pickup-location-source="hold">';
                                 for ( var i=0; i < oObj.branches.length; i++ ){
                                     var selectedbranch;
                                     var setbranch;
@@ -235,45 +313,7 @@ $(document).ready(function() {
                     });
                 });
 
-                $(".hold_location_select").each( function () {
-                    var this_dropdown = $(this);
-                    var hold_id = $(this).data('hold-id');
-
-                    this_dropdown.select2({
-                        allowClear: false,
-                        ajax: {
-                            url: '/api/v1/holds/' + encodeURIComponent(hold_id) + '/pickup_locations',
-                            delay: 300, // wait 300 milliseconds before triggering the request
-                            dataType: 'json',
-                            cache: true,
-                            data: function (params) {
-                                var search_term = (params.term === undefined) ? '' : params.term;
-                                var query = {
-                                    "q": JSON.stringify({"name":{"-like":'%'+search_term+'%'}}),
-                                    "_order_by": "name",
-                                    "_page": params.page
-                                };
-                                return query;
-                            },
-                            processResults: function (data) {
-                                var results = [];
-                                data.results.forEach( function ( pickup_location ) {
-                                    results.push(
-                                        {
-                                            "id": pickup_location.library_id.escapeHtml(),
-                                            "text": pickup_location.name.escapeHtml(),
-                                            "needs_override": pickup_location.needs_override
-                                        }
-                                    );
-                                });
-                                return { "results": results, "pagination": { "more": data.pagination.more } };
-                            },
-                            transport: kohaSelect2Transport
-                        },
-                        templateResult: display_pickup_location
-                    });
-                    $('.select2-container').css('width','100%');
-                });
+                $(".hold_location_select").each(function(){ $(this).pickup_locations_dropdown(); });
 
                 $(".hold_location_select").on("change", function(){
                     $(this).prop("disabled",true);
