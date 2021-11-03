@@ -40,7 +40,7 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
 my $found;
 if ($branchcode) {
     my $library = Koha::Libraries->find($branchcode);
-    if ( $library->public ) {
+    if ( $library && $library->public ) {
         $found++;
         $template->param( library => $library );
     }
