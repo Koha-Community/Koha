@@ -23186,10 +23186,11 @@ $DBversion = '20.06.00.058';
 if( CheckVersion( $DBversion ) ) {
 
     # Adding the ON DELETE CASCASE ON UPDATE CASCADE, in case it's missing (from 9016 - 3.15.00.039)
-    $dbh->do( q{
-        ALTER TABLE letter DROP FOREIGN KEY message_transport_type_fk
-    } );
-
+    if ( foreign_key_exists( 'letter', 'message_transport_type_fk' ) ) {
+        $dbh->do( q{
+            ALTER TABLE letter DROP FOREIGN KEY message_transport_type_fk
+        } );
+    }
     $dbh->do( q{
         ALTER TABLE letter ADD CONSTRAINT message_transport_type_fk FOREIGN KEY (message_transport_type) REFERENCES message_transport_types(message_transport_type) ON DELETE CASCADE ON UPDATE CASCADE
     } );
