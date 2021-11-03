@@ -163,7 +163,7 @@ my $post_data = {
 };
 my $patch_data = {
     priority        => 2,
-    suspended_until => output_pref( { dt => $suspended_until, dateformat => 'iso', dateonly => 1 } ),
+    suspended_until => output_pref( { dt => $suspended_until, dateformat => 'rfc3339' } ),
 };
 
 subtest "Test endpoints without authentication" => sub {
