@@ -517,7 +517,7 @@ jQuery.fn.dataTable.ext.errMode = function(settings, note, message) {
 
 (function($) {
 
-    $.fn.api = function(options, columns_settings, add_filters, default_filters) {
+    $.fn.kohaTable = function(options, columns_settings, add_filters, default_filters) {
         var settings = null;
 
         if ( add_filters ) {
