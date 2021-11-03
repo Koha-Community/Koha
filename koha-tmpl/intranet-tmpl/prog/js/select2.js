@@ -58,8 +58,15 @@ function kohaSelect2Transport(params, success, failure) {
     $request.fail(failure);
 }
 
-/* wrapper that nests paging information into the results object for use with koha REST apis */
 (function($) {
+
+    /**
+    * Create a new Select2 instance that uses the Koha RESTful API response headers to
+    * read pagination information
+    * @param  {Object}  config  Please see the Select2 documentation for further details
+    * @return {Object}          The Select2 instance
+    */
+
     $.fn.kohaSelect = function(config) {
         if (config.hasOwnProperty('ajax')) {
             config.ajax.transport = function(params, success, failure) {
