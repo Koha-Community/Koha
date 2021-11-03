@@ -425,7 +425,7 @@
 
 
         var cashups_table_url = "/api/v1/cash_registers/[% register.id | html %]/cashups?";
-        var cashups_table = $("#table_cashups").api({
+        var cashups_table = $("#table_cashups").kohaTable({
             "ajax": {
                 "url": cashups_table_url
             },

@@ -227,7 +227,7 @@
             cities_table_url += 'q='+ encodeURIComponent(JSON.stringify(city_name_filter));
         [% END %]
 
-            var cities_table = $("#table_cities").api({
+            var cities_table = $("#table_cities").kohaTable({
                 "ajax": {
                     "url": cities_table_url
                 },

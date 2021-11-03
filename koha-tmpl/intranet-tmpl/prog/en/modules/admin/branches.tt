@@ -345,7 +345,7 @@ Libraries &rsaquo; Administration &rsaquo; Koha
         $(document).ready(function() {
 
             var libraries_url = '/api/v1/libraries';
-            var libraries = $("#libraries").api({
+            var libraries = $("#libraries").kohaTable({
                 "ajax": {
                     "url": libraries_url
                 },

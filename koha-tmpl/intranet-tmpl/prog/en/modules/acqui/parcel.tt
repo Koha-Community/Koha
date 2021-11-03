@@ -377,7 +377,7 @@
                 }));
             }
 
-            var pending_orders_table = $("#pending_orders").api({
+            var pending_orders_table = $("#pending_orders").kohaTable({
                 "ajax": {
                     "url": '/api/v1/acquisitions/orders?only_active=1'
                 },
