@@ -751,7 +751,7 @@ sub attributes_from_api {
         elsif ( _date_or_datetime_column_type( $columns_info->{$koha_field_name}->{data_type} ) ) {
             try {
                 if ( $columns_info->{$koha_field_name}->{data_type} eq 'date' ) {
-                    $value = $dtf->format_date(dt_from_string($value, 'rfc3339'))
+                    $value = $dtf->format_date(dt_from_string($value, 'iso'))
                         if defined $value;
                 }
                 else {
