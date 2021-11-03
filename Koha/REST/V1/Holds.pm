@@ -185,7 +185,7 @@ sub add {
 
         # AddReserve expects date to be in syspref format
         if ($expiration_date) {
-            $expiration_date = output_pref( dt_from_string( $expiration_date, 'rfc3339' ) );
+            $expiration_date = output_pref( { dt => dt_from_string($expiration_date, 'iso'), dateformat => 'iso', dateonly => 1 } );
         }
 
         my $hold_id = C4::Reserves::AddReserve(
@@ -286,7 +286,9 @@ sub edit {
             reserve_id    => $hold_id,
             branchcode    => $pickup_library_id,
             rank          => $priority,
-            suspend_until => $suspended_until ? output_pref(dt_from_string($suspended_until, 'rfc3339')) : '',
+            suspend_until => $suspended_until
+              ? output_pref({ dt => dt_from_string($suspended_until, 'iso'), dateformat => 'iso', dateonly => 1 })
+              : '',
             itemnumber    => $hold->itemnumber
         };
 
@@ -351,15 +353,15 @@ sub suspend {
     }
 
     return try {
-        my $date = ($end_date) ? dt_from_string( $end_date, 'rfc3339' ) : undef;
+        my $date = ($end_date) ? dt_from_string( $end_date, 'iso' ) : undef;
         $hold->suspend_hold($date);
         $hold->discard_changes;
         $c->res->headers->location( $c->req->url->to_string );
         my $suspend_end_date;
         if ($hold->suspend_until) {
             $suspend_end_date = output_pref({
-                dt         => dt_from_string( $hold->suspend_until ),
-                dateformat => 'rfc3339',
+                dt         => dt_from_string( $hold->suspend_until, 'iso' ),
+                dateformat => 'iso',
                 dateonly   => 1
                 }
             );

@@ -159,11 +159,11 @@ my $post_data = {
     biblio_id         => $biblio_1->biblionumber,
     item_id           => $item_1->itemnumber,
     pickup_library_id => $branchcode,
-    expiration_date   => output_pref( { dt => $expiration_date, dateformat => 'rfc3339', dateonly => 1 } ),
+    expiration_date   => output_pref( { dt => $expiration_date, dateformat => 'iso', dateonly => 1 } ),
 };
 my $patch_data = {
     priority        => 2,
-    suspended_until => output_pref( { dt => $suspended_until, dateformat => 'rfc3339' } ),
+    suspended_until => output_pref( { dt => $suspended_until, dateformat => 'iso', dateonly => 1 } ),
 };
 
 subtest "Test endpoints without authentication" => sub {
@@ -254,7 +254,7 @@ subtest "Test endpoints with permission" => sub {
     $t->get_ok( "//$userid_1:$password@/api/v1/holds?patron_id=" . $patron_1->borrowernumber )
       ->status_is(200)
       ->json_is('/0/hold_id', $reserve_id)
-      ->json_is('/0/expiration_date', output_pref({ dt => $expiration_date, dateformat => 'rfc3339', dateonly => 1 }))
+      ->json_is('/0/expiration_date', output_pref({ dt => $expiration_date, dateformat => 'iso', dateonly => 1 }))
       ->json_is('/0/pickup_library_id', $branchcode);
 
     $t->post_ok( "//$userid_3:$password@/api/v1/holds" => json => $post_data )
@@ -329,8 +329,8 @@ subtest 'test AllowHoldDateInFuture' => sub {
         biblio_id         => $biblio_1->biblionumber,
         item_id           => $item_1->itemnumber,
         pickup_library_id => $branchcode,
-        expiration_date   => output_pref( { dt => $expiration_date,  dateformat => 'rfc3339', dateonly => 1 } ),
-        hold_date         => output_pref( { dt => $future_hold_date, dateformat => 'rfc3339', dateonly => 1 } ),
+        expiration_date   => output_pref( { dt => $expiration_date,  dateformat => 'iso', dateonly => 1 } ),
+        hold_date         => output_pref( { dt => $future_hold_date, dateformat => 'iso', dateonly => 1 } ),
     };
 
     t::lib::Mocks::mock_preference( 'AllowHoldDateInFuture', 0 );
@@ -349,7 +349,7 @@ subtest 'test AllowHoldDateInFuture' => sub {
 
     $t->post_ok( "//$userid_3:$password@/api/v1/holds" => json => $post_data )
       ->status_is(201)
-      ->json_is('/hold_date', output_pref({ dt => $future_hold_date, dateformat => 'rfc3339', dateonly => 1 }));
+      ->json_is('/hold_date', output_pref({ dt => $future_hold_date, dateformat => 'iso', dateonly => 1 }));
 };
 
 $schema->storage->txn_rollback;
@@ -486,7 +486,7 @@ subtest 'suspend and resume tests' => sub {
 
     my $end_date = output_pref({
       dt         => dt_from_string( undef ),
-      dateformat => 'rfc3339',
+      dateformat => 'iso',
       dateonly   => 1
     });
 
@@ -499,7 +499,7 @@ subtest 'suspend and resume tests' => sub {
       '/end_date',
       output_pref({
         dt         => dt_from_string( $hold->suspend_until ),
-        dateformat => 'rfc3339',
+        dateformat => 'iso',
         dateonly   => 1
       }),
       'Hold suspension has correct end date'
@@ -516,11 +516,11 @@ subtest 'suspend and resume tests' => sub {
             . $hold->id
             . "/suspension" => json => {
             end_date =>
-                output_pref( { dt => $date, dateformat => 'rfc3339', dateonly => 1 } )
+                output_pref( { dt => $date, dateformat => 'iso', dateonly => 1 } )
             }
     )->status_is( 201, 'Hold suspension created' )
         ->json_is( '/end_date',
-        output_pref( { dt => $date, dateformat => 'rfc3339', dateonly => 1 } ) )
+        output_pref( { dt => $date, dateformat => 'iso', dateonly => 1 } ) )
         ->header_is( Location => "/api/v1/holds/" . $hold->id . "/suspension", 'The Location header is set' );
 
     $t->delete_ok( "//$userid:$password@/api/v1/holds/" . $hold->id . "/suspension" )
