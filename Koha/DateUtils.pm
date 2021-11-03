@@ -162,6 +162,10 @@ sub dt_from_string {
     $regex .= $time_re unless ( $date_format eq 'rfc3339' );
     $fallback_re .= $time_re;
 
+    # Ensure we only accept date strings and not other characters.
+    $regex = '^' . $regex . '$';
+    $fallback_re = '^' . $fallback_re . '$';
+
     my %dt_params;
     my $ampm;
     if ( $date_string =~ $regex ) {
