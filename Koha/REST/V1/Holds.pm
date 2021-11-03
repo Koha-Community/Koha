@@ -280,14 +280,17 @@ sub edit {
         $pickup_library_id //= $hold->branchcode;
         my $priority         = $body->{priority} // $hold->priority;
         # suspended_until can also be set to undef
-        my $suspended_until   = exists $body->{suspended_until} ? $body->{suspended_until} : $hold->suspend_until;
+        my $suspended_until =
+          exists $body->{suspended_until}
+          ? dt_from_string( $body->{suspended_until}, 'rfc3339' )
+          : dt_from_string( $hold->suspend_until,     'iso' );
 
         my $params = {
             reserve_id    => $hold_id,
             branchcode    => $pickup_library_id,
             rank          => $priority,
             suspend_until => $suspended_until
-              ? output_pref({ dt => dt_from_string($suspended_until, 'iso'), dateformat => 'iso', dateonly => 1 })
+              ? output_pref({ dt => $suspended_until, dateformat => 'iso', dateonly => 1 })
               : '',
             itemnumber    => $hold->itemnumber
         };
