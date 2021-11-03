@@ -46,6 +46,7 @@ use Koha::Items;
 use Koha::Item::Transfers;
 use Koha::Checkouts;
 use Koha::Patrons;
+use Koha::Patron::Debarments qw( GetDebarments AddDebarment DelUniqueDebarment );
 use Koha::Holds;
 use Koha::CirculationRules;
 use Koha::Subscriptions;

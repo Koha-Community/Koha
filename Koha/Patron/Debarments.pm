@@ -21,19 +21,23 @@ use Modern::Perl;
 
 use C4::Context;
 
-use parent qw( Exporter );
+our ( @ISA, @EXPORT_OK );
 
-our @EXPORT = qw(
-  GetDebarments
+BEGIN {
+    require Exporter;
+    @ISA       = qw(Exporter);
+    @EXPORT_OK = qw(
+      GetDebarments
 
-  AddDebarment
-  DelDebarment
-  ModDebarment
+      AddDebarment
+      DelDebarment
+      ModDebarment
 
-  AddUniqueDebarment
-  DelUniqueDebarment
+      AddUniqueDebarment
+      DelUniqueDebarment
 
-);
+    );
+}
 
 =head1 Koha::Patron::Debarments
 

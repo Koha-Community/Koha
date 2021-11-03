@@ -30,7 +30,7 @@ use Koha::Database;
 use Koha::DateUtils qw(dt_from_string);
 use Koha::Old::Checkouts;
 use Koha::Patrons;
-use Koha::Patron::Debarments;
+use Koha::Patron::Debarments qw( GetDebarments AddUniqueDebarment );
 
 my $schema = Koha::Database->schema;
 my $builder = t::lib::TestBuilder->new;

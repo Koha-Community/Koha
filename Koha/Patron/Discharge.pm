@@ -11,7 +11,7 @@ use C4::Letters qw( GetPreparedLetter );
 use Koha::Database;
 use Koha::DateUtils qw( dt_from_string output_pref );
 use Koha::Patrons;
-use Koha::Patron::Debarments;
+use Koha::Patron::Debarments qw( AddDebarment );
 
 sub count {
     my ($params) = @_;

@@ -32,7 +32,7 @@ use Koha::DateUtils qw(dt_from_string output_pref);
 use Koha::Exceptions::Patron;
 use Koha::Exceptions::Patron::Attribute;
 use Koha::Patron::Attributes;
-use Koha::Patron::Debarments qw/AddDebarment/;
+use Koha::Patron::Debarments qw( AddDebarment );
 
 use JSON qw(encode_json);
 

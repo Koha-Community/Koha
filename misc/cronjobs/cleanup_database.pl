@@ -52,6 +52,7 @@ use Koha::Old::Patrons;
 use Koha::Item::Transfers;
 use Koha::PseudonymizedTransactions;
 use Koha::Patron::Messages;
+use Koha::Patron::Debarments qw( DelDebarment );
 
 sub usage {
     print STDERR <<USAGE;

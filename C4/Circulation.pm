@@ -48,7 +48,7 @@ use Koha::Checkouts;
 use Koha::Illrequests;
 use Koha::Items;
 use Koha::Patrons;
-use Koha::Patron::Debarments qw( DelUniqueDebarment GetDebarments );
+use Koha::Patron::Debarments qw( DelUniqueDebarment GetDebarments AddUniqueDebarment );
 use Koha::Database;
 use Koha::Libraries;
 use Koha::Account::Lines;
