@@ -659,7 +659,14 @@ subtest 'update() tests' => sub {
         my $updated_on_got = delete $got->{updated_on};
         my $updated_on_expected = delete $newpatron->{updated_on};
         is_deeply($got, $newpatron, 'Returned patron from update matches expected');
-        is( t::lib::Dates::compare( $updated_on_got, $updated_on_expected ), 0, 'updated_on values matched' );
+        is(
+            t::lib::Dates::compare(
+                dt_from_string( $updated_on_got,      'rfc3339' ),
+                dt_from_string( $updated_on_expected, 'rfc3339' )
+            ),
+            0,
+            'updated_on values matched'
+        );
 
         is(Koha::Patrons->find( $patron_2->id )->cardnumber,
            $newpatron->{ cardnumber }, 'Patron is really updated!');
