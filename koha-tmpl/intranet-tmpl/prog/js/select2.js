@@ -38,26 +38,6 @@ $(document).ready(function(){
     });
 });
 
-function kohaSelect2Transport(params, success, failure) {
-    var read_headers = function (data, textStatus, jqXHR) {
-        var more = false;
-        var link = jqXHR.getResponseHeader('Link') || '';
-        if (link.search(/<([^>]+)>;\s*rel\s*=\s*['"]?next['"]?\s*(,|$)/i) > -1) {
-            more = true;
-        }
-
-        return {
-            results: data,
-            pagination: {
-                more: more
-            }
-        };
-    };
-    var $request = $.ajax(params);
-    $request.then(read_headers).then(success);
-    $request.fail(failure);
-}
-
 (function($) {
 
     /**

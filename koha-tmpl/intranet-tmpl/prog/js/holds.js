@@ -48,7 +48,7 @@ function display_pickup_location (state) {
             url = '/api/v1/holds/' + encodeURIComponent(hold_id) + '/pickup_locations';
         }
 
-        select.select2({
+        select.kohaSelect({
             width: 'style',
             allowClear: false,
             ajax: {
@@ -82,8 +82,7 @@ function display_pickup_location (state) {
                         );
                     });
                     return { "results": results, "pagination": { "more": data.pagination.more } };
-                },
-                transport: kohaSelect2Transport,
+                }
             },
             templateResult: display_pickup_location
         });
