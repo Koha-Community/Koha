@@ -23,6 +23,8 @@ use Carp qw( croak );
 
 use Digest::MD5 qw( md5_base64 );
 use CGI::Session;
+use URI;
+use URI::QueryParam;
 
 use C4::Context;
 use C4::Templates;    # to get the template

@@ -57,8 +57,10 @@ my $query = CGI->new;
 
 # CAS single logout handling
 # Will print header and exit
-require C4::Auth_with_cas;
-C4::Context->preference('casAuthentication') and C4::Auth_with_cas::logout_if_required($query);
+if ( C4::Context->preference('casAuthentication') ) {
+    require C4::Auth_with_cas;
+    C4::Auth_with_cas::logout_if_required($query);
+}
 
 my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
     {

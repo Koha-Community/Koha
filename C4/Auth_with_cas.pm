@@ -25,6 +25,7 @@ use Koha::AuthUtils qw( get_script_name );
 use Authen::CAS::Client;
 use CGI qw ( -utf8 );
 use YAML::XS;
+use URI::Escape;
 
 use Koha::Logger;
 
