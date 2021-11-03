@@ -23195,6 +23195,11 @@ if( CheckVersion( $DBversion ) ) {
         ALTER TABLE letter ADD CONSTRAINT message_transport_type_fk FOREIGN KEY (message_transport_type) REFERENCES message_transport_types(message_transport_type) ON DELETE CASCADE ON UPDATE CASCADE
     } );
 
+    # Foreign keys should prevent this, however, it has been found in many production databases
+    $dbh->do( q{
+        DELETE borrower_message_transport_preferences FROM borrower_message_transport_preferences LEFT JOIN borrower_message_preferences USING (borrower_message_preference_id) WHERE borrower_message_preferences.borrower_message_preference_id IS NULL
+    } );
+
     $dbh->do(q{
         UPDATE message_transport_types SET message_transport_type = "itiva" WHERE message_transport_type = "phone"
     });
