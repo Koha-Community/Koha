@@ -517,6 +517,18 @@ jQuery.fn.dataTable.ext.errMode = function(settings, note, message) {
 
 (function($) {
 
+    /**
+    * Create a new dataTables instance that uses the Koha RESTful API's as a data source
+    * @param  {Object}  options         Please see the dataTables documentation for further details
+    *                                   We extend the options set with the `criteria` key which allows
+    *                                   the developer to select the match type to be applied during searches
+    *                                   Valid keys are: `contains`, `starts_with`, `ends_with` and `exact`
+    * @param  {Object}  column_settings The arrayref as returned by TableSettings.GetColums function available
+    *                                   from the columns_settings template toolkit include
+    * @param  {Boolean} add_filters     Add a filters row as the top row of the table
+    * @param  {Object}  default_filters Add a set of default search filters to apply at table initialisation
+    * @return {Object}                  The dataTables instance
+    */
     $.fn.kohaTable = function(options, columns_settings, add_filters, default_filters) {
         var settings = null;
 
