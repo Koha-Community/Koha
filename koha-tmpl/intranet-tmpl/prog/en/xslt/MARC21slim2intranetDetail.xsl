@@ -97,13 +97,6 @@
             </xsl:choose>
         </xsl:variable>
 
-        <!-- Indicate if record is suppressed in OPAC -->
-        <xsl:if test="$OpacSuppression = 1">
-            <xsl:if test="marc:datafield[@tag=942][marc:subfield[@code='n'] = '1']">
-                <span class="results_summary suppressed_opac">Suppressed in OPAC</span>
-            </xsl:if>
-        </xsl:if>
-
         <!-- Title Statement -->
         <!-- Alternate Graphic Representation (MARC 880) -->
         <xsl:if test="$display880">
@@ -1428,11 +1421,24 @@
             </xsl:for-each>
         </xsl:if>
 
-        <xsl:if test="$OPACBaseURL!=''">
-        <span class="results_summary opac_view"><span class="label">OPAC view: </span>
-            <a><xsl:attribute name="href"><xsl:value-of select="$OPACBaseURL"/>/cgi-bin/koha/opac-detail.pl?biblionumber=<xsl:value-of select="str:encode-uri(marc:datafield[@tag=999]/marc:subfield[@code='c'], true())"/></xsl:attribute><xsl:attribute name="target">_blank</xsl:attribute>Open in new window</a>.
-        </span>
-        </xsl:if>
+        <!-- Indicate if record is suppressed in OPAC -->
+        <xsl:choose>
+            <xsl:when test="$OpacSuppression = 1 and marc:datafield[@tag=942][marc:subfield[@code='n'] = '1']">
+                <span class="results_summary suppressed_opac">
+                    <span class="label">OPAC view: </span>
+                    Suppressed in OPAC
+                </span>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:if test="$OPACBaseURL!=''">
+                    <span class="results_summary opac_view"><span class="label">OPAC view: </span>
+                        <a><xsl:attribute name="href"><xsl:value-of select="$OPACBaseURL"/>/cgi-bin/koha/opac-detail.pl?biblionumber=<xsl:value-of select="str:encode-uri(marc:datafield[@tag=999]/marc:subfield[@code='c'], true())"/></xsl:attribute><xsl:attribute name="target">_blank</xsl:attribute>Open in new window</a>.
+                    </span>
+                </xsl:if>
+            </xsl:otherwise>
+        </xsl:choose>
+
+
 
     </xsl:template>
 
