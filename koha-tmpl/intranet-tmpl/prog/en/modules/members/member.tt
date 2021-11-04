@@ -444,7 +444,12 @@
                                 var borrowernumber = json.aaData[0].borrowernumber;
                                 /* Overwrite history state of firstletter search since only one result was returned; This prevents a loop upon clicking back */
                                 history.replaceState( {}, null, window.location.href.split("?" )[0]);
-                                document.location.href="/cgi-bin/koha/members/moremember.pl?borrowernumber="+borrowernumber;
+                                [% IF circsearch == 1 %]
+                                    [% SET redirect = "circ/circulation" %]
+                                [% ELSE %]
+                                    [% SET redirect = "members/moremember" %]
+                                [% END %]
+                                document.location.href="/cgi-bin/koha/[% redirect | $raw %].pl?borrowernumber="+borrowernumber;
                                 return false;
                             }
                             fnCallback(json);
