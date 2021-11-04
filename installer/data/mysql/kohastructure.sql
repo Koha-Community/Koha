@@ -944,7 +944,7 @@ CREATE TABLE `background_jobs` (
   `size` int(11) DEFAULT NULL,
   `borrowernumber` int(11) DEFAULT NULL,
   `type` varchar(64) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `data` text COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `data` LONGTEXT COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `enqueued_on` datetime DEFAULT NULL,
   `started_on` datetime DEFAULT NULL,
   `ended_on` datetime DEFAULT NULL,
