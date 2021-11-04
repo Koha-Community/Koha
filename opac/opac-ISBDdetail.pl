@@ -188,7 +188,6 @@ if( $allow_onshelf_holds || CountItemsIssued($biblionumber) || $biblio->has_item
 my $norequests = ! $items->filter_by_for_hold->count;
 
 $template->param(
-    RequestOnOpac       => C4::Context->preference("RequestOnOpac"),
     norequests   => $norequests,
     ISBD         => $res,
     biblio       => $biblio,

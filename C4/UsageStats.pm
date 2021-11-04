@@ -305,7 +305,7 @@ sub _shared_preferences {
         OpacTopissue
         opacuserlogin
         QuoteOfTheDay
-        RequestOnOpac
+        OPACHoldRequests
         OPACComments
         ShowReviewer
         ShowReviewerPhoto

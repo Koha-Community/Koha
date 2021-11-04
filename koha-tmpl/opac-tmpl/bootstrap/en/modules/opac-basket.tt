@@ -60,7 +60,7 @@
                                         [% IF ( ( Koha.Preference( 'virtualshelves' ) == 1 ) && loggedinusername ) %]
                                             <a href="#" class="btn btn-link btn-sm newshelf disabled" aria-disabled="true"><i class="fa fa-fw fa-list" aria-hidden="true"></i> Add to a list</a>
                                         [% END %]
-                                        [% IF ( Koha.Preference( 'RequestOnOpac' ) == 1 ) %]
+                                        [% IF ( Koha.Preference( 'OPACHoldRequests' ) == 1 ) %]
                                             <a href="#" class="btn btn-link btn-sm hold disabled" aria-disabled="true"><i class="fa fa-fw fa-bookmark" aria-hidden="true"></i> Place hold</a>
                                         [% END %]
                                         [% IF ( TagsInputEnabled && loggedinusername ) %]

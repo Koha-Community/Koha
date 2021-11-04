@@ -800,7 +800,6 @@ my $norequests = ! $biblio->items->filter_by_for_hold->count;
     $template->param(
                      MARCNOTES               => $marcnotesarray,
                      norequests              => $norequests,
-                     RequestOnOpac           => C4::Context->preference("RequestOnOpac"),
                      itemdata_ccode          => $itemfields{ccode},
                      itemdata_materials      => $itemfields{materials},
                      itemdata_enumchron      => $itemfields{enumchron},

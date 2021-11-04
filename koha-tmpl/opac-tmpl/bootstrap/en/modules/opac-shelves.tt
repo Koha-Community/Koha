@@ -337,7 +337,7 @@
                                     </div>
                                     <div class="links">
                                         <span class="selections">Select titles to: </span>
-                                        [% IF ( ( Koha.Preference( 'opacuserlogin' ) == 1 ) && ( Koha.Preference( 'RequestOnOpac' ) == 1 ) ) %]
+                                        [% IF ( ( Koha.Preference( 'opacuserlogin' ) == 1 ) && ( Koha.Preference( 'OPACHoldRequests' ) == 1 ) ) %]
                                             <span id="placehold">
                                                 <a href="#" class="btn btn-link hold tag_hides disabled"><i class="fa fa-fw fa-bookmark" aria-hidden="true"></i> Place hold</a>
                                             </span>
@@ -765,7 +765,7 @@ var MSG_REMOVE_ONE_FROM_LIST = _("Are you sure you want to remove this item from
 var MSG_CONFIRM_DELETE_LIST = _("Are you sure you want to delete this list?");
 var MSG_CONFIRM_REMOVE_SHARE = _("Are you sure you want to remove this share?");
 
-[% IF ( ( Koha.Preference( 'opacuserlogin' ) == 1 ) && ( Koha.Preference( 'RequestOnOpac' ) == 1 ) ) %]
+[% IF ( ( Koha.Preference( 'opacuserlogin' ) == 1 ) && ( Koha.Preference( 'OPACHoldRequests' ) == 1 ) ) %]
     function holdSelections() {
         var checkedBoxes = $("input:checkbox:checked");
         if ($(checkedBoxes).size() == 0) {
@@ -838,7 +838,7 @@ function enableCheckboxActions(){
 $(function() {
     [% IF Koha.Preference( 'opacbookbag' ) == 1 %]$(".addtocart,.cartRemove").removeClass("hidden");[% END %]
 
-    [% IF ( ( Koha.Preference( 'opacuserlogin' ) == 1 ) && ( Koha.Preference( 'RequestOnOpac' ) == 1 ) ) %]
+    [% IF ( ( Koha.Preference( 'opacuserlogin' ) == 1 ) && ( Koha.Preference( 'OPACHoldRequests' ) == 1 ) ) %]
         $(".selections-toolbar a.hold").click(function(e){
             e.preventDefault();
             holdSelections();

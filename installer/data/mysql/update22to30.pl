@@ -414,7 +414,7 @@ my $DBversion = "3.00.00.000";
             },
         {
                 uniquefieldrequired => 'variable',
-                variable            => 'RequestOnOpac',
+                variable            => 'OPACHoldRequests',
                 value               => '1',
                 forceupdate         => { 'explanation' => 1,
                                         'type' => 1},

@@ -121,7 +121,7 @@
                                             </td>
                                             [% IF Koha.Preference( 'opacuserlogin' ) == 1 %]
                                                 <td>
-                                                    [% IF Koha.Preference( 'RequestOnOpac' ) == 1 %]
+                                                    [% IF Koha.Preference( 'OPACHoldRequests' ) == 1 %]
                                                         [% UNLESS ( result.norequests ) %]
                                                             <a class="btn btn-link btn-sm hold" href="/cgi-bin/koha/opac-reserve.pl?biblionumber=[% result.biblionumber | uri %]"><i class="fa fa-fw fa-bookmark" aria-hidden="true"></i> Place hold</a>
                                                         [% END %]

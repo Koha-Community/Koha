@@ -155,12 +155,6 @@ if( $allow_onshelf_holds || CountItemsIssued($biblionumber) || $biblio->has_item
     $template->param( ReservableItems => 1 );
 }
 
-# adding the $RequestOnOpac param
-my $RequestOnOpac;
-if (C4::Context->preference("RequestOnOpac")) {
-	$RequestOnOpac = 1;
-}
-
 # fill arrays
 my @loop_data = ();
 

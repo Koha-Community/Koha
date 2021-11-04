@@ -597,7 +597,6 @@ sub get_template_and_user {
             OPACPrivacy                           => C4::Context->preference("OPACPrivacy"),
             OPACFinesTab                          => C4::Context->preference("OPACFinesTab"),
             OpacTopissue                          => C4::Context->preference("OpacTopissue"),
-            RequestOnOpac                         => C4::Context->preference("RequestOnOpac"),
             'Version'                             => C4::Context->preference('Version'),
             hidelostitems                         => C4::Context->preference("hidelostitems"),
             mylibraryfirst                        => ( C4::Context->preference("SearchMyLibraryFirst") && C4::Context->userenv ) ? C4::Context->userenv->{'branch'} : '',

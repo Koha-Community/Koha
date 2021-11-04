@@ -1,5 +1,5 @@
 <div class="actions-menu noprint">
-    [% IF Koha.Preference( 'RequestOnOpac' ) == 1 %]
+    [% IF Koha.Preference( 'OPACHoldRequests' ) == 1 %]
         [% UNLESS ( items.norequests ) %]
             [% IF Koha.Preference( 'opacuserlogin' ) == 1 %]
                 [% IF ( shelf AND op == 'view' ) # Lists view has more granular checking of hold availability %]
@@ -15,7 +15,7 @@
                 [% END %]
             [% END # / IF opacuserlogin %]
         [% END # / UNLESS items.norequests %]
-    [% END # / RequestOnOpac %]
+    [% END # / OPACHoldRequests %]
 
     [% IF ( Koha.Preference( 'opacuserlogin' ) == 1 ) %]
         [% IF items.artreqpossible %]

@@ -47,8 +47,8 @@ my $maxreserves = C4::Context->preference("maxreserves");
 
 my $query = CGI->new;
 
-# if RequestOnOpac (for placing holds) is disabled, leave immediately
-if ( ! C4::Context->preference('RequestOnOpac') ) {
+# if OPACHoldRequests (for placing holds) is disabled, leave immediately
+if ( ! C4::Context->preference('OPACHoldRequests') ) {
     print $query->redirect("/cgi-bin/koha/errors/404.pl");
     exit;
 }
