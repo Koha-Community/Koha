@@ -4683,7 +4683,7 @@ CREATE TABLE background_jobs (
     size INT(11),
     borrowernumber INT(11),
     type VARCHAR(64),
-    data TEXT,
+    data LONGTEXT,
     enqueued_on DATETIME DEFAULT NULL,
     started_on DATETIME DEFAULT NULL,
     ended_on DATETIME DEFAULT NULL,
