@@ -257,7 +257,7 @@ my @mandatoryfields;
     }
     if ( $biblionumber ) {
         my $biblio = Koha::Biblios->find($biblionumber);
-        $template->param(
+        $suggestion = {
             biblionumber    => $biblio->biblionumber,
             title           => $biblio->title,
             author          => $biblio->author,
@@ -266,7 +266,7 @@ my @mandatoryfields;
             publishercode   => $biblio->biblioitem->publishercode,
             collectiontitle => $biblio->biblioitem->collectiontitle,
             place           => $biblio->biblioitem->place,
-        );
+        };
     }
 }
 
