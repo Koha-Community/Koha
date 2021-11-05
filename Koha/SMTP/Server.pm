@@ -64,6 +64,7 @@ sub transport {
     $params->{sasl_password} = $self->password
         if $self->password;
 
+    $params->{debug} = $self->debug;
 
     my $transport = Email::Sender::Transport::SMTP->new( $params );
 
