@@ -586,6 +586,7 @@
             var $checkbox = $(this).find("input[type=checkbox]");
             if (e.target.type != "checkbox") {
                 $checkbox.prop('checked', !$checkbox.prop("checked"));
+                $checkbox.change();
             }
         });
 
