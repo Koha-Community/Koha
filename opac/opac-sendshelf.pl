@@ -26,7 +26,6 @@ use Try::Tiny qw( catch try );
 
 use C4::Auth qw( get_template_and_user );
 use C4::Biblio qw(
-    GetBiblioData
     GetFrameworkCode
     GetMarcBiblio
     GetMarcISBN
@@ -84,15 +83,15 @@ if ( $shelf and $shelf->can_be_viewed( $borrowernumber ) ) {
 
     while ( my $content = $contents->next ) {
         my $biblionumber = $content->biblionumber;
+        my $biblio       = Koha::Biblios->find( $biblionumber ) or next;
+        my $dat          = $biblio->unblessed;
         my $record           = GetMarcBiblio({
             biblionumber => $biblionumber,
             embed_items  => 1,
             opac         => 1,
             borcat       => $borcat });
         next unless $record;
-        my $biblio           = Koha::Biblios->find( $biblionumber );
         my $fw               = GetFrameworkCode($biblionumber);
-        my $dat              = GetBiblioData($biblionumber);
 
         my $marcauthorsarray = $biblio->get_marc_authors;
         my $marcsubjctsarray = GetMarcSubjects( $record, $marcflavour );
