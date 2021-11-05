@@ -8,6 +8,7 @@
 [% USE AdditionalContents %]
 [% SET DISPLAY_PAYMENT_BLOCK = 0 %]
 [% SET OpacNav = AdditionalContents.get( location => "OpacNav", lang => lang, library => logged_in_user.branchcode, blocktitle => 0 ) %]
+[% SET OpacNavBottom = AdditionalContents.get( location => "OpacNavBottom", lang => lang, library => logged_in_user.branchcode, blocktitle => 0 ) %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Your charges &rsaquo; [% IF ( LibraryNameTitle ) %][% LibraryNameTitle | html %][% ELSE %]Koha online[% END %] catalog</title>
 [% INCLUDE 'doc-head-close.inc' %]

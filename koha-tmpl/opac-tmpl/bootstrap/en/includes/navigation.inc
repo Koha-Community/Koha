@@ -9,7 +9,5 @@
 [% END %]
 
 [% IF ( OpacNavBottom ) %]
-    <div id="opacnavbottom">
-        [% OpacNavBottom | $raw %]
-    </div>
+    [% PROCESS koha_news_block news => OpacNavBottom %]
 [% END %]
