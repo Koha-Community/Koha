@@ -61,8 +61,7 @@ my $dbh          = C4::Context->dbh;
 
 my $shelf = Koha::Virtualshelves->find( $shelfid );
 if ( $shelf and $shelf->can_be_viewed( $borrowernumber ) ) {
-
-if ( $email ) {
+  if ( $email ) {
     my $comment    = $query->param('comment');
 
     my ( $template2, $borrowernumber, $cookie ) = get_template_and_user(
@@ -180,14 +179,12 @@ END_OF_BODY
     );
     output_html_with_http_headers $query, $cookie, $template->output, undef, { force_no_caching => 1 };
 
-
-}else{
+  } else {
     $template->param( shelfid => $shelfid,
                       url     => "/cgi-bin/koha/opac-sendshelf.pl",
                     );
     output_html_with_http_headers $query, $cookie, $template->output, undef, { force_no_caching => 1 };
-}
-
+  }
 } else {
     $template->param( invalidlist => 1,
                       url     => "/cgi-bin/koha/opac-sendshelf.pl",
