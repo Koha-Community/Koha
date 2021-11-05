@@ -245,8 +245,7 @@ foreach my $suggestion(@$suggestions_loop) {
 my $patron_reason_loop = GetAuthorisedValues("OPAC_SUG", "opac");
 
 my @mandatoryfields;
-{
-    last unless ($op eq 'add');
+if ( $op eq 'add' ) {
     my $fldsreq_sp = C4::Context->preference("OPACSuggestionMandatoryFields") || 'title';
     @mandatoryfields = sort split(/\s*\,\s*/, $fldsreq_sp);
     foreach (@mandatoryfields) {
