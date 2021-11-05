@@ -21,7 +21,6 @@ use CGI qw ( -utf8 );
 
 use C4::Koha;
 use C4::Biblio qw(
-    GetBiblioData
     GetFrameworkCode
     GetMarcBiblio
     GetMarcSeries
@@ -78,9 +77,8 @@ my $rules = C4::Context->yaml_preference('OpacHiddenItems');
 foreach my $biblionumber ( @bibs ) {
     $template->param( biblionumber => $biblionumber );
 
-    my $dat              = &GetBiblioData($biblionumber);
-    next unless $dat;
-    my $biblio           = Koha::Biblios->find( $biblionumber );
+    my $biblio           = Koha::Biblios->find( $biblionumber ) or next;
+    my $dat              = $biblio->unblessed;
 
     # No filtering on the item records needed for the record itself
     # since the only reason item information is grabbed is because of branchcodes.

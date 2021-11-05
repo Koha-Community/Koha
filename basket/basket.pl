@@ -20,7 +20,6 @@ use Modern::Perl;
 use CGI qw ( -utf8 );
 use C4::Koha;
 use C4::Biblio qw(
-    GetBiblioData
     GetMarcBiblio
     GetMarcSeries
     GetMarcSubjects
@@ -66,9 +65,8 @@ if (C4::Context->preference('TagsEnabled')) {
 foreach my $biblionumber ( @bibs ) {
     $template->param( biblionumber => $biblionumber );
 
-    my $dat              = &GetBiblioData($biblionumber);
-    next unless $dat;
-    my $biblio           = Koha::Biblios->find( $biblionumber );
+    my $biblio           = Koha::Biblios->find( $biblionumber ) or next;
+    my $dat              = $biblio->unblessed;
     my $record           = &GetMarcBiblio({ biblionumber => $biblionumber });
     my $marcnotesarray   = $biblio->get_marc_notes({ marcflavour => $marcflavour });
     my $marcauthorsarray = $biblio->get_marc_authors;

@@ -25,7 +25,6 @@ use Carp qw( carp );
 use Try::Tiny qw( catch try );
 
 use C4::Biblio qw(
-    GetBiblioData
     GetMarcBiblio
     GetMarcSubjects
 );
@@ -78,9 +77,8 @@ if ( $email_add ) {
     foreach my $biblionumber (@bibs) {
         $template2->param( biblionumber => $biblionumber );
 
-        my $dat              = GetBiblioData($biblionumber);
-        next unless $dat;
-        my $biblio           = Koha::Biblios->find( $biblionumber );
+        my $biblio           = Koha::Biblios->find( $biblionumber ) or next;
+        my $dat              = $biblio->unblessed;
         my $record           = GetMarcBiblio({
             biblionumber => $biblionumber,
             embed_items  => 1,
