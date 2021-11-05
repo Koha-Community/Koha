@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 4;
+use Test::More tests => 5;
 
 use Test::MockModule;
 use Test::Exception;
@@ -265,4 +265,29 @@ subtest 'is_valid' => sub {
     isnt(Koha::Email->is_valid('@example.com'), 1);
     isnt(Koha::Email->is_valid('example.com'), 1);
     isnt(Koha::Email->is_valid('from'), 1);
+};
+
+subtest 'new_from_string() tests' => sub {
+
+    plan tests => 1;
+
+    my $html_body = '<h1>Title</h1><p>Message</p>';
+    my $email_1 = Koha::Email->create(
+        {
+            from        => 'Fróm <from@example.com>',
+            to          => 'Tö <to@example.com>',
+            cc          => 'cc@example.com',
+            bcc         => 'bcc@example.com',
+            reply_to    => 'reply_to@example.com',
+            sender      => 'sender@example.com',
+            subject     => 'Some subject',
+            html_body   => $html_body,
+            body_params => { charset => 'iso-8859-1' },
+        }
+    );
+
+    my $string = $email_1->as_string;
+    my $email_2 = Koha::Email->new_from_string( $string );
+
+    is( $email_1->as_string, $email_2->as_string, 'Emails match' );
 };

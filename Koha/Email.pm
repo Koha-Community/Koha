@@ -22,7 +22,9 @@ use Modern::Perl;
 
 use Email::Address;
 use Email::MessageID;
+use Email::MIME;
 use List::Util qw( pairs );
+use Scalar::Util qw( blessed );
 
 use Koha::Exceptions;
 
@@ -37,6 +39,31 @@ Koha::Email - A wrapper around Email::Stuffer
 =head1 API
 
 =head2 Class methods
+
+=head3 new_from_string
+
+    my $email = Koha::Email->new_from_string( $email_string );
+
+Constructor for the Koha::Email class. The I<$email_string> (mandatory)
+parameter will be parsed with I<Email::MIME>.
+
+Note: I<$email_string> can be the produced by the I<as_string> method from
+B<Koha::Email> or B<Email::MIME>.
+
+=cut
+
+sub new_from_string {
+    my ( $class, $email_string ) = @_;
+
+    Koha::Exceptions::MissingParameter->throw("Mandatory string parameter missing.")
+        unless $email_string;
+
+    my $self = $class->SUPER::new();
+    my $mime = Email::MIME->new( $email_string );
+    $self->{email} = $mime;
+
+    return $self;
+}
 
 =head3 create
 
@@ -126,7 +153,22 @@ sub create {
     $args->{bcc} = $addresses->{bcc}
         if $addresses->{bcc};
 
-    my $email = $self->SUPER::new( $args );
+    my $email;
+    # FIXME: This is ugly, but aids backportability
+    # TODO: Remove this and move address and default headers handling
+    #       to separate subs to be (re)used
+    if ( blessed($self) ) {
+        $email = $self;
+        $email->to( $args->{to} )             if $args->{to};
+        $email->from( $args->{from} )         if $args->{from};
+        $email->cc( $args->{cc} )             if $args->{cc};
+        $email->bcc( $args->{bcc} )           if $args->{bcc};
+        $email->reply_to( $args->{reply_to} ) if $args->{reply_to};
+        $email->subject( $args->{subject} )   if $args->{subject};
+    }
+    else {
+        $email = $self->SUPER::new( $args );
+    }
 
     $email->header( 'Reply-To', $addresses->{reply_to} )
         if $addresses->{reply_to};
