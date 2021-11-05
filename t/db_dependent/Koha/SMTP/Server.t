@@ -31,14 +31,14 @@ my $builder = t::lib::TestBuilder->new;
 
 subtest 'transport() tests' => sub {
 
-    plan tests => 4;
+    plan tests => 6;
 
     $schema->storage->txn_begin;
 
     my $server = $builder->build_object(
         {
             class => 'Koha::SMTP::Servers',
-            value => { ssl_mode => 'disabled' }
+            value => { ssl_mode => 'disabled', debug => 0 }
         }
     );
 
@@ -52,6 +52,12 @@ subtest 'transport() tests' => sub {
 
     is( ref($transport), 'Email::Sender::Transport::SMTP', 'Type is correct' );
     is( $transport->ssl, '1', 'SSL is set' );
+    is( $transport->debug, '0', 'Debug setting honoured (disabled)' );
+
+    $server->set({ debug => 1 })->store;
+    $transport = $server->transport;
+
+    is( $transport->debug, '1', 'Debug setting honoured (enabled)' );
 
     $schema->storage->txn_rollback;
 };
