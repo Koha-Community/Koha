@@ -401,8 +401,8 @@ sub calculate {
           ( $colsource eq 'items' )
           ? "LEFT JOIN items ON (statistics.itemnumber = items.itemnumber) "
           : "LEFT JOIN borrowers ON (statistics.borrowernumber = borrowers.borrowernumber) ";
-        $strsth .= " WHERE $column IS NOT NULL";
-        $strsth .= " AND $column != '' " if $column ne "datetime";
+        $strsth2 .= " WHERE $column IS NOT NULL";
+        $strsth2 .= " AND $column != '' " if $column ne "datetime";
     }
 
     if ( $column =~ /datetime/ ) {
