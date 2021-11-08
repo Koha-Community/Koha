@@ -57,9 +57,8 @@ cataloguing reservoir features.
 
 =head2 BreedingSearch
 
-($count, @results) = &BreedingSearch($title,$isbn);
-C<$title> contains the title,
-C<$isbn> contains isbn or issn,
+($count, @results) = &BreedingSearch($term);
+C<$term> contains the term to search, it will be searched as title,author, or isbn
 
 C<$count> is the number of items in C<@results>. C<@results> is an
 array of references-to-hash; the keys are the items from the C<import_records> and
@@ -68,34 +67,25 @@ C<import_biblios> tables of the Koha database.
 =cut
 
 sub BreedingSearch {
-    my ($search,$isbn) = @_;
+    my ($term) = @_;
     my $dbh   = C4::Context->dbh;
     my $count = 0;
     my ($query,@bind);
     my $sth;
     my @results;
 
+    my $authortitle = $term;
+    $authortitle =~ s/(\s+)/\%/g; #Replace spaces with wildcard
+    $authortitle = "%" . $authortitle . "%"; #Add wildcard to start and end of string
     # normalise ISBN like at import
-    $isbn = C4::Koha::GetNormalizedISBN($isbn);
+    my @isbns = C4::Koha::GetVariationsOfISBN($term);
 
     $query = "SELECT import_record_id, file_name, isbn, title, author
               FROM  import_biblios 
               JOIN import_records USING (import_record_id)
               JOIN import_batches USING (import_batch_id)
-              WHERE ";
-    @bind=();
-    if (defined($search) && length($search)>0) {
-        $search =~ s/(\s+)/\%/g;
-        $query .= "title like ? OR author like ?";
-        push(@bind,"%$search%", "%$search%");
-    }
-    if ($#bind!=-1 && defined($isbn) && length($isbn)>0) {
-        $query .= " and ";
-    }
-    if (defined($isbn) && length($isbn)>0) {
-        $query .= "isbn like ?";
-        push(@bind,"$isbn%");
-    }
+              WHERE title LIKE ? OR author LIKE ? OR isbn IN (" . join(',',('?') x @isbns) . ")";
+    @bind=( $authortitle, $authortitle, @isbns );
     $sth = $dbh->prepare($query);
     $sth->execute(@bind);
     while (my $data = $sth->fetchrow_hashref) {

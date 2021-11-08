@@ -109,14 +109,7 @@ if ($query) {
 my $countbr = 0;
 my @resultsbr;
 if ($query) {
-    my ( $title, $isbn );
-    my $isbn_valid = Business::ISBN->new($query);
-    if ( $isbn_valid && $isbn_valid->is_valid() ) {
-        $isbn = $query;
-    } else {
-        $title = $query;
-    }
-    ( $countbr, @resultsbr ) = BreedingSearch( $title, $isbn );
+    ( $countbr, @resultsbr ) = BreedingSearch( $query );
 }
 my $breeding_loop = [];
 for my $resultsbr (@resultsbr) {
