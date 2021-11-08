@@ -333,22 +333,26 @@ form {
 h1 {
     font-size: 161.6%;
     font-weight: bold;
-
-    &#logo {
-        border: 0 none;
-        float: left;
-        margin: .75em .3em .75em .7em;
-        padding: 0;
-        width: 180px;
-    }
 }
 
 #logo {
-     border: 0 none;
-     float: left;
-     margin: .75em .3em .75em .7em;
-     padding: 0;
-     width: 180px;
+    background: transparent url("../img/koha-logo-medium.png") no-repeat 50% 50%;
+    border: 0 none;
+    margin: 2rem 1rem;
+    padding: 0;
+    width: 180px;
+
+    a {
+        border: 0;
+        cursor: pointer;
+        display: block;
+        height: 0 !important;
+        margin: 0;
+        overflow: hidden;
+        padding: 44px 0 0;
+        text-decoration: none;
+        width: 180px;
+    }
 }
 
 h2 {
@@ -627,8 +631,8 @@ ol {
 
 .gradient {
     background-image: linear-gradient(to bottom, rgb(230, 240, 242) 1%, rgb(255, 255, 255) 99%);
-    display: inline-block;
-    width: 100%;
+    align-items: flex-start;
+    display: flex;
 }
 
 .cart-controls {
@@ -2019,24 +2023,6 @@ i {
         li {
             list-style-type: none;
         }
-    }
-}
-
-
-#logo {
-    background: transparent url("../img/koha-logo-medium.png") no-repeat scroll 0%;
-    margin: .75em .3em .75em .7em;
-
-    a {
-        border: 0;
-        cursor: pointer;
-        display: block;
-        height: 0 !important;
-        margin: 0;
-        overflow: hidden;
-        padding: 44px 0 0;
-        text-decoration: none;
-        width: 180px;
     }
 }
 
@@ -4692,9 +4678,13 @@ div .suggestion_note {
         }
     }
 
-    div#logo {
-        float: none;
-        margin: auto;
+    .gradient {
+        align-items: center;
+        flex-direction: column;
+    }
+
+    #logo {
+        margin: 1rem;
     }
 
     #marcPreview {
