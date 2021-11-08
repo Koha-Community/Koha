@@ -50,7 +50,12 @@
     .cm-columnPlaceholder {
         color: #BF2D5D;
     }
-    #mana_search_errortext { font-family: monospace; font-weight: bold; }
+    #mana_search_errortext {
+        font-family: monospace; font-weight: bold;
+    }
+    .data-plain {
+        display: none;
+    }
 </style>
 [% Asset.css("css/reports.css") | $raw %]
 [% Asset.css("lib/d3c3/c3.min.css") | $raw %]
@@ -1089,6 +1094,15 @@
                                             </ul>
                                         </div>
                                     [% END # /IF ( unlimited_total > 10 && limit <= 1000 ) %]
+
+                                    [% IF ( batch_biblionumbers || batch_itemnumbers || batch_cardnumbers ) %]
+                                        <a href="#" class="btn btn-link" id="toggle_auto_links">
+                                            <i class="fa fa-eye autolink" style="display:none"></i>
+                                            <i class="fa fa-eye-slash autolink"></i>
+                                            <span class="autolink" style="display:none">Show data menus</span>
+                                            <span class="autolink">Hide data menus</span>
+                                        </a>
+                                    [% END %]
                                 </div> <!-- /#toolbar.btn-toolbar -->
                             [% END # /IF batch operations || ( unlimited_total > 10 && limit <= 1000 ) %]
 
@@ -1100,19 +1114,82 @@
                     [% END # IF ( execute ) %]
 
                     [% UNLESS ( errors ) %]
-                        <table>
-                            <tr>
-                                [% FOREACH header_ro IN header_row %]
-                                    <th>[% header_ro.cell | html %]</th>
-                                [% END %]
-                            </tr>
-                            [% FOREACH result IN results %]
+                        <table id="report_results">
+                            <thead>
                                 <tr>
-                                    [% FOREACH cells IN result.cells %]
-                                        <td>[% cells.cell | $raw %]</td>
+                                    [% FOREACH header_ro IN header_row %]
+                                        [% IF header_ro.has_itemnumbers && ( header_ro.cell == 'itemnumber' || header_types.item( header_ro.cell ) == 'itemnumber' ) %]
+                                            <th class="itemnumber">[% header_ro.cell | html %]</th>
+                                        [% ELSIF header_ro.has_biblionumbers && ( header_ro.cell == 'biblionumber' || header_types.item( header_ro.cell ) == 'biblionumber' ) %]
+                                            <th class="biblionumber">[% header_ro.cell | html %]</th>
+                                        [% ELSIF header_ro.cell == 'cardnumber' || header_types.item( header_ro.cell ) == 'cardnumber' %]
+                                            <th class="cardnumber">[% header_ro.cell | html %]</th>
+                                        [% ELSIF header_ro.cell == 'borrowernumber' || header_types.item( header_ro.cell ) == 'borrowernumber' %]
+                                            <th class="borrowernumber">[% header_ro.cell | html %]</th>
+                                        [% ELSE %]
+                                            <th>[% header_ro.cell | html %]</th>
+                                        [% END %]
                                     [% END %]
                                 </tr>
-                            [% END %]
+                            </thead>
+                            <tbody>
+                                [% FOREACH result IN results %]
+                                    <tr>
+                                        [% FOREACH cells IN result.cells %]
+                                            [% place = loop.index %]
+                                            [%- IF header_row.$place.cell == 'itemnumber' || header_types.item(header_row.$place.cell) == 'itemnumber' %]
+                                                <td class="batch-op itemnumber" data-number="itemnumber">
+                                                    <span class="data-plain">[% cells.cell | $raw %]</span>
+                                                    <div id="itemnumber_autolink" class="btn-group dropup autolink"><a class="btn btn-link dropdown-toggle" role="button" data-toggle="dropdown" href="#">[% cells.cell | $raw %] <b class="caret"></b></a>
+                                                        <ul class="dropdown-menu pull-right" role="menu">
+                                                            <li><a target="_blank" href="/cgi-bin/koha/cataloguing/additem.pl?op=edititem&itemnumber=[% cells.cell | $raw %]"><i class="fa fa-fw fa-pencil"></i> Edit record</a></li>
+                                                            <li role="separator" class="divider"></li>
+                                                            <li><a target="_blank" href="/cgi-bin/koha/catalogue/moredetail.pl?itemnumber=[% cells.cell | $raw %]"><i class="fa fa-fw fa-eye"></i> View record</a></li>
+                                                        </ul>
+                                                    </div>
+                                                </td>
+                                            [% ELSIF header_row.$place.cell == 'biblionumber' || header_types.item(header_row.$place.cell) == 'biblionumber' %]
+                                                <td class="batch-op biblionumber" data-number="biblionumber">
+                                                    <span class="data-plain">[% cells.cell | $raw %]</span>
+                                                    <div id="biblionumber_autolink" class="btn-group dropup autolink"><a class="btn btn-link dropdown-toggle" role="button" data-toggle="dropdown" href="#">[% cells.cell | $raw %] <b class="caret"></b></a>
+                                                        <ul class="dropdown-menu pull-right" role="menu">
+                                                            <li><a target="_blank" href="/cgi-bin/koha/cataloguing/addbiblio.pl?biblionumber=[% cells.cell | $raw %]"><i class="fa fa-pencil"></i> Edit record</a></li>
+                                                            <li role="separator" class="divider"></li>
+                                                            <li><a target="_blank" href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% cells.cell | $raw %]"><i class="fa fa-eye"></i> View record</a></li>
+                                                        </ul>
+                                                    </div>
+                                                </td>
+                                            [% ELSIF header_row.$place.cell == 'borrowernumber' || header_types.item(header_row.$place.cell) == 'borrowernumber' %]
+                                                <td class="batch-op borrowernumber" data-number="borrowernumber">
+                                                    <span class="data-plain">[% cells.cell | $raw %]</span>
+                                                    <div id="borrowernumber_autolink" class="btn-group dropup autolink"><a class="btn btn-link dropdown-toggle" role="button" data-toggle="dropdown" href="#">[% cells.cell | $raw %] <b class="caret"></b></a>
+                                                        <ul class="dropdown-menu pull-right" role="menu">
+                                                            <li><a target="_blank" href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% cells.cell | $raw %]"><i class="fa fa-eye"></i> View patron</a></li>
+                                                            <li role="separator" class="divider"></li>
+                                                            <li><a target="_blank" href="/cgi-bin/koha/members/memberentry.pl?op=modify&borrowernumber=[% cells.cell | $raw %]"><i class="fa fa-pencil"></i> Edit patron</a></li>
+                                                            <li role="separator" class="divider"></li>
+                                                            <li><a target="_blank" href="/cgi-bin/koha/circ/circulation.pl?borrowernumber=[% cells.cell | $raw %]"><i class="fa fa-barcode"></i> Check out</a></li>
+                                                        </ul>
+                                                    </div>
+                                                </td>
+                                            [% ELSIF header_row.$place.cell == 'cardnumber' || header_types.item(header_row.$place.cell) == 'cardnumber' %]
+                                                <td class="batch-op cardnumber" data-number="cardnumber">
+                                                    <span class="data-plain">[% cells.cell | $raw %]</span>
+                                                    <div id="cardnumber_autolink" class="btn-group dropup autolink"><a class="btn btn-link dropdown-toggle" role="button" data-toggle="dropdown" href="#">[% cells.cell | $raw %] <b class="caret"></b></a>
+                                                        <ul class="dropdown-menu pull-right" role="menu">
+                                                            <li><a target="_blank" href="/cgi-bin/koha/circ/circulation.pl?findborrower=[% cells.cell | $raw %]"><i class="fa fa-barcode"></i> Check out</a></li>
+                                                        </ul>
+                                                    </div>
+                                                </td>
+                                            [% ELSE %]
+                                                <td>
+                                                    [% cells.cell | $raw %]
+                                                </td>
+                                            [% END %]
+                                        [% END %]
+                                    </tr>
+                                [% END %]
+                            </tbody>
                         </table>
                     [% END %]
                     <div class="pages">[% pagination_bar | $raw %]</div>
@@ -2065,6 +2142,21 @@
             });
 
         });
+
+        $("#toggle_auto_links").on("click", function(e){
+            e.preventDefault();
+            if( $(".data-plain").is(":visible") ){
+                /* if a data-plain element is visible, this click hides it and shows auto-links */
+                localStorage.removeItem("reports_auto_link_off");
+            } else {
+                /* if a data-plain element is hidden, this click shows it  and hides auto-links */
+                localStorage.setItem("reports_auto_link_off", 1);
+            }
+            $(".data-plain,.autolink").toggle();
+        });
+        if ( localStorage.getItem("reports_auto_link_off") == 1 ){
+            $("#toggle_auto_links").click();
+        }
 
         function tabsInit( ui, rtable ){
             var thisTab = ui.newTab ? ui.newTab : ui.tab;
