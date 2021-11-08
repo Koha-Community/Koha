@@ -57,7 +57,7 @@ sub process {
                 type => 'error',
                 code => 'authority_not_deleted',
                 authid => $authid,
-                error => ($@ ? $@ : 0),
+                error => "$@",
             };
             $schema->storage->txn_rollback;
             next;

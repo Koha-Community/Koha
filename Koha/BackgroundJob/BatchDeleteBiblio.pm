@@ -101,7 +101,7 @@ sub process {
                     code => 'reserve_not_cancelled',
                     biblionumber => $biblionumber,
                     reserve_id => $hold->reserve_id,
-                    error => $@,
+                    error => "$@",
                 };
                 $schema->storage->txn_rollback;
                 $job->progress( ++$job_progress )->store;

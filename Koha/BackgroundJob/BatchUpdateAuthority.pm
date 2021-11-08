@@ -90,7 +90,7 @@ sub process {
                 type => 'error',
                 code => 'authority_not_modified',
                 authid => $authid,
-                error => ($@ ? $@ : 0),
+                error => ($@ ? "$@" : 0),
             };
         } else {
             push @messages, {

@@ -94,7 +94,7 @@ sub process {
                 biblio_id    => defined $biblio ? $biblio->biblionumber : '',
                 hold_id      => $hold_id,
                 error        => defined $hold
-                ? ( $@ ? $@ : 0 )
+                ? ( $@ ? "$@" : 0 )
                 : 'hold_not_found',
               };
         }
