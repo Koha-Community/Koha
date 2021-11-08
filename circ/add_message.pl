@@ -25,6 +25,7 @@ use C4::Auth qw( get_template_and_user );
 use C4::Output;
 use C4::Letters;
 use Koha::Patron::Message;
+use Koha::Patrons;
 
 my $input = CGI->new;
 
@@ -60,6 +61,7 @@ elsif( $op eq 'cud-add_message' ) {
                 message        => $borrower_message,
             }
         )->store;
+
     }
 
     if ( $message_type eq 'E' ) {
@@ -68,10 +70,13 @@ elsif( $op eq 'cud-add_message' ) {
             content => $borrower_message
         };
 
+        my $patron = Koha::Patrons->find( $borrowernumber );
+
         if ( $letter_code ) {
             $letter = C4::Letters::GetPreparedLetter(
                 module      => 'members',
                 letter_code => $letter_code,
+                lang        => $patron->lang,
                 tables      => {
                     'borrowers'   => $borrowernumber
                 },
