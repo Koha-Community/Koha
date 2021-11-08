@@ -1253,7 +1253,7 @@ sub _add_attachments {
     foreach my $attachment ( @$attachments ) {
         $message->attach(
             Encode::encode( "UTF-8", $attachment->{content} ),
-            content_type => 'application/octet-stream',
+            content_type => $attachment->{type} || 'application/octet-stream',
             name         => $attachment->{filename},
             disposition  => 'attachment',
         );
