@@ -1,3 +1,4 @@
+[% USE Koha %]
 [% PROCESS 'form-blocks.inc' %]
 
 <div id="toolbar" class="btn-toolbar">
@@ -143,16 +144,36 @@
                 <select name="relationship" id="relationship">
                     [% selected=relationship | html %]
                     [% PROCESS selectoptionopen value='' %]None specified</option>
-                    [% PROCESS selectoptionopen value='a' %]a - Earlier heading</option>
-                    [% PROCESS selectoptionopen value='b' %]b - Later heading</option>
-                    [% PROCESS selectoptionopen value='d' %]d - Acronym</option>
-                    [% PROCESS selectoptionopen value='f' %]f - Musical composition</option>
-                    [% PROCESS selectoptionopen value='g' %]g - Broader term</option>
-                    [% PROCESS selectoptionopen value='h' %]h - Narrower term</option>
-                    [% PROCESS selectoptionopen value='i' %]i - Reference instruction phrase in subfield $i</option>
-                    [% PROCESS selectoptionopen value='n' %]n - Not applicable</option>
-                    [% PROCESS selectoptionopen value='r' %]r - Relationship designation in $i or $4</option>
-                    [% PROCESS selectoptionopen value='t' %]t - Immediate parent body</option>
+                    [% IF Koha.Preference('marcflavour') == 'MARC21' %]
+                      [% PROCESS selectoptionopen value='a' %]a - Earlier heading</option>
+                      [% PROCESS selectoptionopen value='b' %]b - Later heading</option>
+                      [% PROCESS selectoptionopen value='d' %]d - Acronym</option>
+                      [% PROCESS selectoptionopen value='f' %]f - Musical composition</option>
+                      [% PROCESS selectoptionopen value='g' %]g - Broader term</option>
+                      [% PROCESS selectoptionopen value='h' %]h - Narrower term</option>
+                      [% PROCESS selectoptionopen value='i' %]i - Reference instruction phrase in subfield $i</option>
+                      [% PROCESS selectoptionopen value='n' %]n - Not applicable</option>
+                      [% PROCESS selectoptionopen value='r' %]r - Relationship designation in $i or $4</option>
+                      [% PROCESS selectoptionopen value='t' %]t - Immediate parent body</option>
+                    [% ELSIF Koha.Preference('marcflavour') == 'UNIMARC' %]
+                      [% PROCESS selectoptionopen value='a' %]a = earlier name</option>
+                      [% PROCESS selectoptionopen value='b' %]b = later name</option>
+                      [% PROCESS selectoptionopen value='c' %]c = official name</option>
+                      [% PROCESS selectoptionopen value='d' %]d = acronym / initial / abbreviation</option>
+                      [% PROCESS selectoptionopen value='e' %]e = pseudonym</option>
+                      [% PROCESS selectoptionopen value='f' %]f = real name</option>
+                      [% PROCESS selectoptionopen value='g' %]g = broader term or name</option>
+                      [% PROCESS selectoptionopen value='h' %]h = narrower term or name</option>
+                      [% PROCESS selectoptionopen value='i' %]i = name in religion</option>
+                      [% PROCESS selectoptionopen value='j' %]j = married name</option>
+                      [% PROCESS selectoptionopen value='k' %]k = name before marriage</option>
+                      [% PROCESS selectoptionopen value='l' %]l = shared pseudonym</option>
+                      [% PROCESS selectoptionopen value='m' %]m = secular name</option>
+                      [% PROCESS selectoptionopen value='n' %]n = different rule form of a name</option>
+                      [% PROCESS selectoptionopen value='o' %]o = attributed name / conventional title of a work</option>
+                      [% PROCESS selectoptionopen value='x' %]x = not applicable</option>
+                      [% PROCESS selectoptionopen value='z' %]z = other</option>
+                    [% END %]
                 </select>
             </li>
             </ol>
