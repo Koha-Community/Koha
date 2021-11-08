@@ -787,7 +787,7 @@
     </div>
     [% END %]
 
-    [% IF Koha.Preference('ArticleRequests') %]
+[% IF Koha.Preference('ArticleRequests') %]
     <div id="open-article-requests-limit-patron-category" class="container">
     [% IF humanbranch %]
         <h3>Daily open article requests limit for [% Branches.GetName( humanbranch ) | html %]</h3>
@@ -841,7 +841,66 @@
             </table>
         </form>
     </div>
+    <div id="article-request-fee-category" class="container">
+    [% IF humanbranch %]
+        <h3>Article request fees for [% Branches.GetName( humanbranch ) | html %]</h3>
+    [% ELSE %]
+        <h3>Default article request fees</h3>
     [% END %]
+        <p>Specify the article request fee for a given patron category.</p>
+        <form id="set-article-request-fee" method="post" action="/cgi-bin/koha/admin/smart-rules.pl">
+            <input type="hidden" name="op" value="set-article-request-fee" />
+            <input type="hidden" name="branch" value="[% current_branch | html %]"/>
+            <table>
+                <tr>
+                    <th>Patron category</th>
+                    <th>Fee</th>
+                    <th>&nbsp;</th>
+                </tr>
+                [% FOREACH c IN categorycodes %]
+                    [% SET c = '*' UNLESS c.defined AND c != '' %]
+
+                    [% SET article_request_fee = CirculationRules.Search( current_branch, c, undef, 'article_request_fee' ) %]
+
+                    [% IF ( article_request_fee.defined && article_request_fee != '' ) %]
+                    <tr>
+                        <td>
+                            [% IF c == '*' %]
+                                <em>All</em>
+                            [% ELSE %]
+                                [% Categories.GetName(c) | html %]
+                            [% END %]
+                        </td>
+                        <td>
+                            [% IF article_request_fee.defined && article_request_fee != '' %]
+                                [% article_request_fee | html %]
+                            [% ELSE %]
+                                <span>0</span>
+                            [% END %]
+                        </td>
+                        <td class="actions">
+                            <a class="btn btn-default btn-xs delete" href="/cgi-bin/koha/admin/smart-rules.pl?op=del-article-request-fee&amp;article_request_fee_category=[% c | uri %]&amp;branch=[% current_branch | uri %]"><i class="fa fa-trash"></i> Delete</a>
+                        </td>
+                    </tr>
+                    [% END %]
+                [% END %]
+                <tr>
+                    <td>
+                        <select name="article_request_fee_category" id="article_request_fee_category">
+                            <option value="*">All</option>
+                        [% FOREACH patron_category IN patron_categories%]
+                            <option value="[% patron_category.categorycode | html %]">[% patron_category.description | html %]</option>
+                        [% END %]
+                        </select>
+                    </td>
+                    <td><input name="article_request_fee" size="3" type="text" /></td>
+                    <td class="actions"><button type="submit" class="btn btn-default btn-xs"><i class="fa fa-plus"></i> Add</td>
+                </tr>
+            </table>
+        </form>
+    </div>
+
+[% END %]
 
     <div id="refund-lost-item-fee-on-return" class="container">
         [% IF current_branch == '*' %]
@@ -1233,6 +1292,14 @@
             $("#set-article-requests-daily-limit").on("submit", function(){
                 if (! $("input[name='open_article_requests_limit'").val().length){
                     alert("Please set a daily limit for this patron's category");
+                    return false;
+                }
+                return true;
+            });
+
+            $("#set-article-request-fee").on("submit", function(){
+                if (! $("input[name='article_request_fee'").val().length){
+                    alert("Please set a valid value for the fee");
                     return false;
                 }
                 return true;

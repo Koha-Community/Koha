@@ -76,6 +76,9 @@ our $RULE_KINDS = {
     article_requests => {
         scope => [ 'branchcode', 'categorycode', 'itemtype' ],
     },
+    article_request_fee => {
+        scope => [ 'branchcode', 'categorycode' ],
+    },
     open_article_requests_limit => {
         scope => [ 'branchcode', 'categorycode' ],
     },

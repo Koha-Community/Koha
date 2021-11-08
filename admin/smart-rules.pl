@@ -531,6 +531,33 @@ elsif ( $op eq "add-open-article-requests-limit" ) {
         );
     }
 }
+elsif ( $op eq "set-article-request-fee" ) {
+
+    my $category = $input->param('article_request_fee_category');
+    my $fee      = strip_non_numeric( scalar $input->param('article_request_fee') );
+
+    Koha::Exceptions::Exception->throw("No value passed for article request fee")
+      if not defined $fee # There is a JS check for that
+      || $fee eq '';
+
+    Koha::CirculationRules->set_rules(
+        {   categorycode => ( $category  eq '*' ) ? undef : $category,
+            branchcode   => ( $branch    eq '*' ) ? undef : $branch,
+            rules        => { article_request_fee => $fee },
+        }
+    );
+
+} elsif ( $op eq 'del-article-request-fee' ) {
+
+    my $category  = $input->param('article_request_fee_category');
+
+    Koha::CirculationRules->set_rules(
+        {   categorycode => ( $category eq  '*' ) ? undef : $category,
+            branchcode   => ( $branch eq    '*' ) ? undef : $branch,
+            rules        => { article_request_fee => undef },
+        }
+    );
+}
 elsif ($op eq "add-branch-item") {
     my $itemtype                = $input->param('itemtype');
     my $holdallowed             = $input->param('holdallowed');
