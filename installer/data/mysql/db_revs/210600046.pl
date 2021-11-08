@@ -13,14 +13,10 @@ return {
         |);
         if( $opacnavbottom ){
             # If there is a value in the OpacNavBottom preference, insert it into additional_contents
-            foreach my $lang ( 'default' ) {
-                say $out "Inserting OpacNavBottom contents into default";
-                $dbh->do( "INSERT INTO additional_contents ( category, code, location, branchcode, title, content, lang, published_on ) VALUES ('html_customizations', 'OpacNavBottom', 'OpacNavBottom', NULL, ?, ?, ?, CAST(NOW() AS date) )", undef, "OpacNavBottom $lang", $opacnavbottom, $lang );
-            }
+            $dbh->do( "INSERT INTO additional_contents ( category, code, location, branchcode, title, content, lang, published_on ) VALUES ('html_customizations', 'OpacNavBottom', 'OpacNavBottom', NULL, ?, ?, 'default', CAST(NOW() AS date) )", undef, "OpacNavBottom default", $opacnavbottom );
 
             # Remove the OpacNavBottom system preference
             $dbh->do("DELETE FROM systempreferences WHERE variable='OpacNavBottom'");
-            say $out "Bug 24223 update done";
         } else {
             say $out "No OpacNavBottom preference found. Update has already been run.";
         }
