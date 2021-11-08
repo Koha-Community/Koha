@@ -13,14 +13,10 @@ return {
         |);
         if( $opacnav ){
             # If there is a value in the OpacNav preference, insert it into additional_contents
-            foreach my $lang ( 'default' ) {
-                say $out "Inserting OpacNav contents into default";
-                $dbh->do( "INSERT INTO additional_contents ( category, code, location, branchcode, title, content, lang, published_on ) VALUES ('html_customizations', 'OpacNav', 'OpacNav', NULL, ?, ?, ?, CAST(NOW() AS date) )", undef, "OpacNav $lang", $opacnav, $lang );
-            }
+            $dbh->do( "INSERT INTO additional_contents ( category, code, location, branchcode, title, content, lang, published_on ) VALUES ('html_customizations', 'OpacNav', 'OpacNav', NULL, ?, ?, 'default', CAST(NOW() AS date) )", undef, "OpacNav default", $opacnav );
 
             # Remove the OpacNav system preference
             $dbh->do("DELETE FROM systempreferences WHERE variable='OpacNav'");
-            say $out "Bug 24223 update done";
         } else {
             say $out "No OpacNav preference found. Update has already been run.";
         }
