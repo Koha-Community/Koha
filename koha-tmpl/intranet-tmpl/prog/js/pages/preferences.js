@@ -226,13 +226,18 @@ $( document ).ready( function () {
     $(".modalselect").on("click", function(){
         var datasource = $(this).data("source");
         var exclusions = $(this).data("exclusions").split('|');
+        var required = $(this).data("required").split('|');
         var pref_name = this.id.replace(/pref_/, '');
         var pref_value = this.value;
         var prefs = pref_value.split("|");
 
+
+
         $.getJSON( themelang + "/modules/admin/preferences/" + datasource + ".json", function( data ){
             var items = [];
             var checked = "";
+            var readonly = "";
+            var disabled = "";
             var style = "";
             $.each( data, function( key, val ){
                 if( prefs.indexOf( val ) >= 0 ){
@@ -240,7 +245,10 @@ $( document ).ready( function () {
                 } else {
                     checked = "";
                 }
-                if( exclusions.indexOf( val ) >= 0 ){
+                if( required.indexOf( val ) >= 0 ){
+                    style = "required";
+                    checked  = ' checked="checked" ';
+                } else if( exclusions.indexOf( val ) >= 0 ){
                     style = "disabled";
                     disabled = ' disabled="disabled" ';
                     checked  = "";
@@ -283,11 +291,15 @@ $( document ).ready( function () {
 
     $("#select_all").on("click",function(e){
         e.preventDefault();
-        $(".dbcolumn_selection:not(:disabled)").prop("checked", true);
+        $("label:not(.required) .dbcolumn_selection:not(:disabled)").prop("checked", true);
     });
     $("#clear_all").on("click",function(e){
         e.preventDefault();
-        $(".dbcolumn_selection").prop("checked", false);
+        $("label:not(.required) .dbcolumn_selection").prop("checked", false);
+    });
+
+    $("body").on("click", "label.required input.dbcolumn_selection", function(e){
+        e.preventDefault();
     });
 
 } );

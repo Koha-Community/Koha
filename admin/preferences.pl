@@ -62,6 +62,7 @@ sub _get_chunk {
     if( $options{'type'} && $options{'type'} eq 'modalselect' ){
         $chunk->{'source'} = $options{'source'};
         $chunk->{'exclusions'} = $options{'exclusions'} // "";
+        $chunk->{'required'} = $options{'required'} // "";
         $chunk->{'type'} = 'modalselect';
     }
 

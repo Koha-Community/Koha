@@ -609,12 +609,14 @@ OPAC:
             - pref: OPACSuggestionMandatoryFields
               type: modalselect
               source: suggestions
+              required: title
             - "<br />Note: if none of the above options are selected, 'Title' field would be mandatory anyway, by default."
         -
             - "Fields that should be hidden for patron purchase suggestions:"
             - pref: OPACSuggestionUnwantedFields
               type: modalselect
               source: suggestions
+              exclusions: title
             - '<br />Note: Do not make <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=OPACSuggestionMandatoryFields">OPACSuggestionMandatoryFields</a> unwanted fields '
         -
             - pref: OpacHiddenItems
