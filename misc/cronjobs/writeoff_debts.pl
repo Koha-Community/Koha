@@ -72,10 +72,10 @@ while ( my $line = $lines->next ) {
                 my $writeoff = Koha::Account::Line->new(
                     {
                         date              => \'NOW()',
-                        amount            => 0 - $line->amount,
+                        amount            => 0 - $line->amountoutstanding,
                         credit_type_code  => 'WRITEOFF',
                         status            => 'ADDED',
-                        amountoutstanding => 0 - $line->amount,
+                        amountoutstanding => 0 - $line->amountoutstanding,
                         manager_id        => undef,
                         borrowernumber    => $line->borrowernumber,
                         interface         => 'intranet',
@@ -87,7 +87,7 @@ while ( my $line = $lines->next ) {
                     {
                         credit_id => $writeoff->accountlines_id,
                         type      => 'WRITEOFF',
-                        amount    => $line->amount
+                        amount    => $line->amountoutstanding
                     }
                 )->store();
 
