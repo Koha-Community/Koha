@@ -11,18 +11,19 @@ use Koha::DateUtils qw( dt_from_string );
 
 use Koha::Script -cron;
 
-my ( $help, $verbose, @type, $added, $file, $confirm );
+my ( $help, $verbose, @type, $before, $after, $file, $confirm );
 GetOptions(
     'h|help'            => \$help,
     'v|verbose+'        => \$verbose,
     't|type:s'          => \@type,
-    'ab|added_before:s' => \$added,
+    'ab|added_before:s' => \$before,
+    'aa|added_after:s'  => \$after,
     'f|file:s'          => \$file,
     'c|confirm'         => \$confirm,
 );
 @type = split( /,/, join( ',', @type ) );
 
-pod2usage(1) if ( $help || !$confirm && !$verbose || !$file && !@type && !$added );
+pod2usage(1) if ( $help || !$confirm && !$verbose || !$file && !@type && !$before && !$after );
 
 my $where = { 'amountoutstanding' => { '>' => 0 } };
 my $attr = {};
@@ -43,17 +44,26 @@ if (@type) {
     $where->{debit_type_code} = \@type;
 }
 
-if ($added) {
-    my $added_before = dt_from_string( $added, 'iso' );
-    my $dtf = Koha::Database->new->schema->storage->datetime_parser;
-    $where->{date} = { '<' => $dtf->format_datetime($added_before) };
+my $dtf;
+if ($before||$after) {
+    $dtf = Koha::Database->new->schema->storage->datetime_parser;
+}
+
+if ($before) {
+    my $added_before = dt_from_string( $before, 'iso' );
+    $where->{date}->{'<'} = $dtf->format_datetime($added_before);
+}
+
+if ($after) {
+    my $added_after = dt_from_string( $after, 'iso' );
+    $where->{date}->{'>'} = $dtf->format_datetime($added_after);
 }
 
 my $lines = Koha::Account::Lines->search( $where, $attr );
 if ( $verbose ) {
     print "Attempting to write off " . $lines->count . " debts";
     print " of type " . join(',',@type) if @type;
-    print " added before " . $added if $added;
+    print " added before " . $before if $before;
     print " from the passed list" if $file;
     print "\n";
 }
