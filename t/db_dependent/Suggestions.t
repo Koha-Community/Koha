@@ -485,10 +485,10 @@ subtest 'DelSuggestionsOlderThan' => sub {
     # Add four suggestions; note that STATUS needs uppercase (FIXME)
     my $d1 = output_pref({ dt => dt_from_string->add(days => -2), dateformat => 'sql' });
     my $d2 = output_pref({ dt => dt_from_string->add(days => -4), dateformat => 'sql' });
-    my $sugg01 = $builder->build({ source => 'Suggestion', value => { date => $d1, STATUS => 'ASKED' }});
-    my $sugg02 = $builder->build({ source => 'Suggestion', value => { date => $d1, STATUS => 'CHECKED' }});
-    my $sugg03 = $builder->build({ source => 'Suggestion', value => { date => $d2, STATUS => 'ASKED' }});
-    my $sugg04 = $builder->build({ source => 'Suggestion', value => { date => $d2, STATUS => 'ACCEPTED' }});
+    my $sugg01 = $builder->build({ source => 'Suggestion', value => { manageddate => $d1, date => $d2, STATUS => 'ASKED' }});
+    my $sugg02 = $builder->build({ source => 'Suggestion', value => { manageddate => $d1, date => $d2, STATUS => 'CHECKED' }});
+    my $sugg03 = $builder->build({ source => 'Suggestion', value => { manageddate => $d2, date => $d2, STATUS => 'ASKED' }});
+    my $sugg04 = $builder->build({ source => 'Suggestion', value => { manageddate => $d2, date => $d2, STATUS => 'ACCEPTED' }});
 
     # Test no parameter: should do nothing
     C4::Suggestions::DelSuggestionsOlderThan();
