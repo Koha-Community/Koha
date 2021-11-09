@@ -23,7 +23,7 @@ use CGI qw ( -utf8 );
 use C4::Context;
 use C4::Output qw( output_html_with_http_headers );
 use C4::Auth qw( get_template_and_user );
-use C4::Circulation qw( GetTransfers GetTransfersFromTo );
+use C4::Circulation qw( GetTransfersFromTo );
 use C4::Members;
 use Date::Calc qw( Add_Delta_Days Date_to_Days Today );
 
