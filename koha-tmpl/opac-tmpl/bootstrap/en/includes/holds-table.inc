@@ -18,7 +18,7 @@
                     [% END %]
                     <th>Expires on</th>
                     [% UNLESS( singleBranchMode) %]
-                        <th>Pick up location</th>
+                        <th>Pickup location</th>
                     [% END %]
                     [% IF ( showpriority ) %]
                         <th class="psort">Priority</th>
@@ -81,7 +81,7 @@
                         </td>
                         [% UNLESS( singleBranchMode) %]
                             <td class="branch">
-                                <span class="tdlabel">Pick up location:</span>
+                                <span class="tdlabel">Pickup location:</span>
                                 [% HOLD.branch.branchname | html %]
                                 [% IF ( HOLD.can_change_branch_opac ) %]
                                     <button type="button" class="btn btn-sm btn-link" data-toggle="modal" data-target="#changePickup[% HOLD.reserve_id | html %]">
