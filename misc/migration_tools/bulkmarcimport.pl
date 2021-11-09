@@ -444,30 +444,45 @@ RECORD: foreach my $record (@{$marc_records}) {
     unless ($test_parameter) {
         if ($authorities) {
             my $authtypecode = GuessAuthTypeCode($record, $heading_fields);
-            my $authid = ($matched_record_id? $matched_record_id : GuessAuthId($record));
-            if ($authid && GetAuthority($authid) && $update) {
-            ## Authority has an id and is in database : Replace
-                eval { ( $authid ) = ModAuthority($authid, $record, $authtypecode) };
-                if ($@) {
-                    warn "Problem with authority $authid Cannot Modify";
-                    printlog({ id => $authid, op => "edit", status => "ERROR" }) if ($logfile);
+            my $authid;
+
+            if ($matched_record_id) {
+                if ($update) {
+                    ## Authority has an id and is in database: update
+                    eval { ($authid) = ModAuthority($matched_record_id, $record, $authtypecode) };
+                    if ($@) {
+                        warn "ERROR: Update authority $matched_record_id failed: $@\n";
+                        printlog({ id => $matched_record_id, op => "update", status => "ERROR" }) if ($logfile);
+                    }
+                    else {
+                        printlog({ id => $authid, op => "update", status => "ok" }) if ($logfile);
+                    }
                 }
-                else{
-                    printlog({ id=> $authid, op=> "edit", status => "ok"}) if ($logfile);
+                elsif ($logfile) {
+                    warn "WARNING: Update authority $originalid skipped";
+                    printlog({
+                        id => $matched_record_id,
+                        op => "update",
+                        status => "warning: authority already in database and option -update not enabled, skipping..."
+                    });
                 }
             }
-            else {
-            ## True insert in database
-                eval { ( $authid ) = AddAuthority($record, "", $authtypecode) };
+            elsif ($insert) {
+                ## An authid is defined but no authority in database: insert
+                eval { ($authid) = AddAuthority($record, undef, $authtypecode) };
                 if ($@) {
-                    warn "Problem with authority $originalid Cannot Add ".$@;
+                    warn "ERROR: Insert authority $originalid failed: $@\n";
                     printlog({ id => $originalid, op => "insert", status => "ERROR" }) if ($logfile);
                 }
                 else {
                     printlog({ id => $authid, op => "insert", status => "ok" }) if ($logfile);
                 }
-
             }
+            else {
+                warn "WARNING: Insert authority $originalid skipped";
+                printlog( { id => $originalid, op => "insert", status => "warning : biblio not in database and option -insert not enabled, skipping..." } ) if ($logfile);
+            }
+
             if ($yamlfile) {
                 $yamlhash->{$originalid} = YAMLFileEntry(
                     $record,
@@ -497,9 +512,8 @@ RECORD: foreach my $record (@{$marc_records}) {
                 }
             }
 
-            # create biblio, unless we already have it ( either match or isbn )
+            # Create biblio, unless we already have it (either match or ISBN)
             if ($matched_record_id) {
-                # TODO: Implement also for authority records!
                 eval{
                     $biblioitemnumber = Koha::Biblios->find( $matched_record_id )->biblioitem->biblioitemnumber;
                 };
@@ -507,12 +521,12 @@ RECORD: foreach my $record (@{$marc_records}) {
                     my $success;
                     eval { $success = ModBiblio($record, $matched_record_id, GetFrameworkCode($matched_record_id), $modify_biblio_marc_options) };
                     if ($@) {
-                        warn "ERROR: Edit biblio $matched_record_id failed: $@\n";
+                        warn "ERROR: Update biblio $matched_record_id failed: $@\n";
                         printlog( { id => $matched_record_id, op => "update", status => "ERROR" } ) if ($logfile);
                         next RECORD;
                     }
                     elsif (!$success) {
-                        warn "ERROR: Edit biblio $matched_record_id failed for unkown reason";
+                        warn "ERROR: Update biblio $matched_record_id failed for unkown reason";
                         printlog( { id => $matched_record_id, op => "update", status => "ERROR" } ) if ($logfile);
                         next RECORD;
                     }
@@ -522,23 +536,24 @@ RECORD: foreach my $record (@{$marc_records}) {
                     }
                 }
                 else {
+                    warn "WARNING: Update biblio $originalid skipped";
                     printlog( { id => $matched_record_id, op => "update", status => "warning : already in database and option -update not enabled, skipping..." } ) if ($logfile);
                 }
             }
             elsif ($insert) {
                 eval { ($record_id, $biblioitemnumber) = AddBiblio($record, $framework, { defer_marc_save => 1 }) };
                 if ($@) {
-                    warn "ERROR: Adding biblio $record_id failed: $@\n";
-                    printlog( { id => $record_id, op => "insert", status => "ERROR" } ) if ($logfile);
+                    warn "ERROR: Insert biblio $originalid failed: $@\n";
+                    printlog( { id => $originalid, op => "insert", status => "ERROR" } ) if ($logfile);
                     next RECORD;
                 }
                 else {
-                    printlog( { id => $record_id, op => "insert", status => "ok" } ) if ($logfile);
+                    printlog( { id => $originalid, op => "insert", status => "ok" } ) if ($logfile);
                 }
             }
             else {
-                warn "WARNING: Updating record ".($originalid)." failed";
-                printlog( { id => $originalid, op => "insert", status => "warning : not in database and option -insert not enabled, skipping..." } ) if ($logfile);
+                warn "WARNING: Insert biblio $originalid skipped";
+                printlog( { id => $originalid, op => "insert", status => "warning : biblio not in database and option -insert not enabled, skipping..." } ) if ($logfile);
                 next RECORD;
             }
             my $record_has_added_items = 0;
@@ -546,6 +561,7 @@ RECORD: foreach my $record (@{$marc_records}) {
                 $yamlhash->{$originalid} = $record_id if $yamlfile;
                 eval { ($itemnumbers_ref, $errors_ref) = AddItemBatchFromMarc($record, $record_id, $biblioitemnumber, $framework); };
                 $record_has_added_items = @{$itemnumbers_ref};
+
                 my $error_adding = $@;
                 # Work on a clone so that if there are real errors, we can maybe
                 # fix them up later.
