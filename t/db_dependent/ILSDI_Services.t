@@ -19,11 +19,12 @@ use Modern::Perl;
 
 use CGI qw ( -utf8 );
 
-use Test::More tests => 10;
+use Test::More tests => 11;
 use Test::MockModule;
 use t::lib::Mocks;
 use t::lib::TestBuilder;
 use t::lib::Dates;
+use XML::LibXML;
 
 use C4::Items qw( ModItemTransfer );
 use C4::Circulation qw( AddIssue );
@@ -32,7 +33,7 @@ use Koha::AuthUtils;
 use Koha::DateUtils qw( dt_from_string );
 
 BEGIN {
-    use_ok('C4::ILSDI::Services', qw( AuthenticatePatron GetPatronInfo LookupPatron HoldTitle HoldItem GetRecords RenewLoan ));
+    use_ok('C4::ILSDI::Services', qw( AuthenticatePatron GetPatronInfo LookupPatron HoldTitle HoldItem GetRecords RenewLoan GetAvailability ));
 }
 
 my $schema  = Koha::Database->schema;
@@ -785,6 +786,76 @@ subtest 'GetPatronInfo paginated loans' => sub {
     is($reply->{total_loans}, 3, 'total_loans == 3');
     is(scalar @{ $reply->{loans}->{loan} }, 1, 'GetPatronInfo returned only 1 loan');
     is($reply->{loans}->{loan}->[0]->{itemnumber}, $item1->itemnumber);
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'GetAvailability itemcallnumber' => sub {
+
+    plan tests => 4;
+
+    $schema->storage->txn_begin;
+
+    t::lib::Mocks::mock_preference( 'ILS-DI', 1 );
+
+    my $item1 = $builder->build_sample_item(
+        {
+            itemcallnumber => "callnumber",
+        }
+    );
+
+    my $item2 = $builder->build_sample_item( {} );
+
+    # Build the query
+    my $cgi = CGI->new;
+    $cgi->param( service => 'GetAvailability' );
+    $cgi->param( id      => $item1->itemnumber );
+    $cgi->param( id_type => 'item' );
+
+    # Output of GetAvailability is a string containing XML
+    my $reply = C4::ILSDI::Services::GetAvailability($cgi);
+
+    # Parse the output and get info
+    my $result_XML = XML::LibXML->load_xml( string => $reply );
+    my $reply_callnumber =
+      $result_XML->findnodes('//dlf:itemcallnumber')->to_literal();
+
+    # Test the output
+    is( $reply_callnumber, $item1->itemcallnumber,
+        "GetAvailability item has an itemcallnumber tag" );
+
+    $cgi = CGI->new;
+    $cgi->param( service => 'GetAvailability' );
+    $cgi->param( id      => $item2->itemnumber );
+    $cgi->param( id_type => 'item' );
+    $reply      = C4::ILSDI::Services::GetAvailability($cgi);
+    $result_XML = XML::LibXML->load_xml( string => $reply );
+    $reply_callnumber =
+      $result_XML->findnodes('//dlf:itemcallnumber')->to_literal();
+    is( $reply_callnumber, '',
+        "As expected, GetAvailability item has no itemcallnumber tag" );
+
+    $cgi = CGI->new;
+    $cgi->param( service => 'GetAvailability' );
+    $cgi->param( id      => $item1->biblionumber );
+    $cgi->param( id_type => 'biblio' );
+    $reply      = C4::ILSDI::Services::GetAvailability($cgi);
+    $result_XML = XML::LibXML->load_xml( string => $reply );
+    $reply_callnumber =
+      $result_XML->findnodes('//dlf:itemcallnumber')->to_literal();
+    is( $reply_callnumber, $item1->itemcallnumber,
+        "GetAvailability biblio has an itemcallnumber tag" );
+
+    $cgi = CGI->new;
+    $cgi->param( service => 'GetAvailability' );
+    $cgi->param( id      => $item2->biblionumber );
+    $cgi->param( id_type => 'biblio' );
+    $reply      = C4::ILSDI::Services::GetAvailability($cgi);
+    $result_XML = XML::LibXML->load_xml( string => $reply );
+    $reply_callnumber =
+      $result_XML->findnodes('//dlf:itemcallnumber')->to_literal();
+    is( $reply_callnumber, '',
+        "As expected, GetAvailability biblio has no itemcallnumber tag" );
 
     $schema->storage->txn_rollback;
 };
