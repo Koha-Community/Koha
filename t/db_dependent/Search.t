@@ -31,6 +31,7 @@ use Test::MockModule;
 use Test::Warn;
 use t::lib::Mocks;
 use t::lib::Mocks::Zebra;
+use t::lib::TestBuilder;
 
 use Koha::Caches;
 
@@ -686,14 +687,18 @@ ok(MARC::Record::new_from_xml($results_hashref->{biblioserver}->{RECORDS}->[0],'
 
     # make one of the test items appear to be in transit
     my $circ_module = Test::MockModule->new('C4::Circulation');
-    $circ_module->mock('GetTransfers', sub {
-        my $itemnumber = shift // -1;
-        if ($itemnumber == 11) {
-            return ('2013-07-19', 'MPL', 'CPL');
-        } else {
-            return;
+    my $builder = t::lib::TestBuilder->new;
+    my $transfer = $builder->build(
+        {
+            source => 'Branchtransfer',
+            value => {
+                itemnumber => 11,
+                frombranch => 'MPL',
+                tobranch => 'CPL',
+                datesent => \'NOW()'
+            }
         }
-    });
+    );
 
     ($error, $results_hashref, $facets_loop) = getRecords("TEST12121212","TEST12121212",[ ], [ 'biblioserver' ],20,0,\%branches,\%itemtypes,$query_type,0);
     @newresults = searchResults({'interface'=>'intranet'}, $query_desc, $results_hashref->{'biblioserver'}->{'hits'}, 17, 0, 0,
