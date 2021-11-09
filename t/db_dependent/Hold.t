@@ -29,7 +29,7 @@ use Koha::Item;
 use Koha::DateUtils qw( dt_from_string );
 use t::lib::TestBuilder;
 
-use Test::More tests => 35;
+use Test::More tests => 36;
 use Test::Exception;
 use Test::Warn;
 
@@ -385,4 +385,54 @@ subtest 'suspend() tests' => sub {
     is( $new_logs_count, $logs_count + 1, 'If logging is enabled, suspending a hold gets logged' );
 
     $schema->storage->txn_rollback;
+};
+
+subtest 'can_change_branch_opac() tests' => sub {
+
+    plan tests => 8;
+
+    $schema->storage->txn_begin;
+
+    my $hold = $builder->build_object(
+        {   class => 'Koha::Holds',
+            value => { found => undef, suspend => 0, suspend_until => undef, waitingdate => undef }
+        }
+    );
+
+    t::lib::Mocks::mock_preference( 'OPACAllowUserToChangeBranch', '' );
+    $hold->found(undef);
+    is( $hold->can_change_branch_opac, 0, "Pending hold pickup can't be changed (No change allowed)" );
+
+    $hold->found('T');
+    is( $hold->can_change_branch_opac, 0, "In transit hold pickup can't be changed (No change allowed)" );
+
+    $hold->found('W');
+    is( $hold->can_change_branch_opac, 0, "Waiting hold pickup can't be changed (No change allowed)" );
+
+    $hold->found(undef);
+    $dt = dt_from_string();
+
+    $hold->suspend_hold( $dt );
+    is( $hold->can_change_branch_opac, 0, "Suspended hold pickup can't be changed (No change allowed)" );
+    $hold->resume();
+
+    t::lib::Mocks::mock_preference( 'OPACAllowUserToChangeBranch', 'pending,intransit,suspended' );
+    $hold->found(undef);
+    is( $hold->can_change_branch_opac, 1, "Pending hold pickup can be changed (pending,intransit,suspended allowed)" );
+
+    $hold->found('T');
+    is( $hold->can_change_branch_opac, 1, "In transit hold pickup can be changed (pending,intransit,suspended allowed)" );
+
+    $hold->found('W');
+    is( $hold->can_change_branch_opac, 0, "Waiting hold pickup can't be changed (pending,intransit,suspended allowed)" );
+
+    $hold->found(undef);
+    $dt = dt_from_string();
+    $hold->suspend_hold( $dt );
+    is( $hold->can_change_branch_opac, 1, "Suspended hold pickup can be changed (pending,intransit,suspended allowed)" );
+    $hold->resume();
+
+
+    $schema->storage->txn_rollback;
+
 };
