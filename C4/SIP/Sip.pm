@@ -99,7 +99,7 @@ sub maybe_add {
         return q{} if first { $_ eq $fid } @fields;
     }
 
-    if ( $fid eq FID_SCREEN_MSG && $server->{account}->{screen_msg_regex} ) {
+    if ( $fid eq FID_SCREEN_MSG && $server->{account}->{screen_msg_regex} && defined($value)) {
         foreach my $regex (
             ref $server->{account}->{screen_msg_regex} eq "ARRAY"
             ? @{ $server->{account}->{screen_msg_regex} }
