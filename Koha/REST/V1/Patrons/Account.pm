@@ -74,6 +74,32 @@ sub get {
     };
 }
 
+=head3 list_credits
+
+=cut
+
+sub list_credits {
+    my $c = shift->openapi->valid_input or return;
+
+    my $patron_id = $c->validation->param('patron_id');
+    my $patron    = Koha::Patrons->find($patron_id);
+
+    unless ($patron) {
+        return $c->render( status => 404, openapi => { error => "Patron not found." } );
+    }
+
+    return try {
+        my $account = $patron->account;
+
+        my $credits_set = $account->credits;
+        my $credits = $c->objects->search( $credits_set );
+        return $c->render( status => 200, openapi => $credits );
+    }
+    catch {
+        $c->unhandled_exception($_);
+    };
+}
+
 =head3 add_credit
 
 Controller function that handles adding a credit to a patron's account
@@ -147,6 +173,32 @@ sub add_credit {
             status  => 201,
             openapi => $credit->to_api
         );
+    }
+    catch {
+        $c->unhandled_exception($_);
+    };
+}
+
+=head3 list_debits
+
+=cut
+
+sub list_debits {
+    my $c = shift->openapi->valid_input or return;
+
+    my $patron_id = $c->validation->param('patron_id');
+    my $patron    = Koha::Patrons->find($patron_id);
+
+    unless ($patron) {
+        return $c->render( status => 404, openapi => { error => "Patron not found." } );
+    }
+
+    return try {
+        my $account = $patron->account;
+
+        my $debits_set = $account->debits;
+        my $debits = $c->objects->search( $debits_set );
+        return $c->render( status => 200, openapi => $debits );
     }
     catch {
         $c->unhandled_exception($_);

@@ -1,4 +1,3 @@
----
 type: object
 properties:
   account_line_id:
@@ -9,42 +8,25 @@ properties:
     description: Internal account line identifier
   amount:
     type: number
-    description: Account line amount
+    minimum: 0
+    description: Debit amount
   amount_outstanding:
     type: number
-    readOnly: true
     description: Outstanding amount
   cash_register_id:
     type:
       - integer
       - "null"
-    description: Internal identifier for the cash register used for the payment (if any)
+    description: Internal identifier for the cash register used for the payout (if any)
   checkout_id:
     type:
       - integer
       - "null"
     description: Internal identifier for the checkout the account line is related to
-  credit_number:
-    type:
-      - string
-      - "null"
-    readOnly: true
-    description: Internally generated identifier for credits
-  credit_type:
-    type:
-      - string
-      - "null"
-    description: Account line credit type
   date:
     type: string
     format: date-time
-    readOnly: true
     description: Date the account line was created
-  debit_type:
-    type:
-      - string
-      - "null"
-    description: Account line debit type
   description:
     type:
       - string
@@ -55,7 +37,6 @@ properties:
     type:
       - string
       - "null"
-    readOnly: true
     description: 'Interface in which the account line was generated (values can be: api, cron, commandline, intranet, opac and sip)'
   internal_note:
     type:
@@ -74,13 +55,7 @@ properties:
     description: Internal identifier for the library in which the transaction took place
   patron_id:
     type: integer
-    readOnly: true
     description: Internal identifier for the patron the account line belongs to
-  payment_type:
-    type:
-      - string
-      - "null"
-    description: Payment type
   payout_type:
     type:
       - string
@@ -90,13 +65,16 @@ properties:
     type:
       - string
       - "null"
-    readOnly: true
-    description: The credit/debit status
+    description: The debit status
   timestamp:
     type: string
     format: date-time
-    readOnly: true
     description: Timestamp for the latest line update
+  type:
+    type:
+      - string
+      - "null"
+    description: Account debit type
   user_id:
     type:
       - integer

@@ -9,7 +9,8 @@ properties:
     description: Internal account line identifier
   amount:
     type: number
-    description: Account line amount
+    minimum: 0
+    description: Credit amount
   amount_outstanding:
     type: number
     readOnly: true
@@ -19,32 +20,17 @@ properties:
       - integer
       - "null"
     description: Internal identifier for the cash register used for the payment (if any)
-  checkout_id:
-    type:
-      - integer
-      - "null"
-    description: Internal identifier for the checkout the account line is related to
   credit_number:
     type:
       - string
       - "null"
     readOnly: true
     description: Internally generated identifier for credits
-  credit_type:
-    type:
-      - string
-      - "null"
-    description: Account line credit type
   date:
     type: string
     format: date-time
     readOnly: true
     description: Date the account line was created
-  debit_type:
-    type:
-      - string
-      - "null"
-    description: Account line debit type
   description:
     type:
       - string
@@ -62,11 +48,6 @@ properties:
       - string
       - "null"
     description: Internal note
-  item_id:
-    type:
-      - integer
-      - "null"
-    description: Internal identifier for the item the account line is related to
   library_id:
     type:
       - string
@@ -81,22 +62,22 @@ properties:
       - string
       - "null"
     description: Payment type
-  payout_type:
-    type:
-      - string
-      - "null"
-    description: Payout type
   status:
     type:
       - string
       - "null"
     readOnly: true
-    description: The credit/debit status
+    description: The credit status
   timestamp:
     type: string
     format: date-time
     readOnly: true
     description: Timestamp for the latest line update
+  type:
+    type:
+      - string
+      - "null"
+    description: Account credit type
   user_id:
     type:
       - integer

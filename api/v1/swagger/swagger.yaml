@@ -30,6 +30,10 @@ definitions:
     $ref: ./definitions/circ-rule-kind.yaml
   city:
     $ref: ./definitions/city.yaml
+  credit:
+    $ref: ./definitions/credit.yaml
+  debit:
+    $ref: ./definitions/debit.yaml
   erm_agreement:
     $ref: ./definitions/erm_agreement.yaml
   erm_eholdings_title:
@@ -285,6 +289,8 @@ paths:
     $ref: "./paths/patrons_account.yaml#/~1patrons~1{patron_id}~1account"
   "/patrons/{patron_id}/account/credits":
     $ref: "./paths/patrons_account.yaml#/~1patrons~1{patron_id}~1account~1credits"
+  "/patrons/{patron_id}/account/debits":
+    $ref: "./paths/patrons_account.yaml#/~1patrons~1{patron_id}~1account~1debits"
   "/patrons/{patron_id}/extended_attributes":
     $ref: "./paths/patrons_extended_attributes.yaml#/~1patrons~1{patron_id}~1extended_attributes"
   "/patrons/{patron_id}/extended_attributes/{extended_attribute_id}":

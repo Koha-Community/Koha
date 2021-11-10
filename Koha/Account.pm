@@ -30,6 +30,8 @@ use C4::Stats qw( UpdateStats );
 use C4::Overdues qw(GetFine);
 
 use Koha::Patrons;
+use Koha::Account::Credits;
+use Koha::Account::Debits;
 use Koha::Account::Lines;
 use Koha::Account::Offsets;
 use Koha::Account::DebitTypes;
@@ -745,6 +747,43 @@ sub lines {
     return Koha::Account::Lines->search(
         {
             borrowernumber => $self->{patron_id},
+        }
+    );
+}
+
+
+=head3 credits
+
+  my $credits = $self->credits;
+
+Return all credits for the user
+
+=cut
+
+sub credits {
+    my ($self) = @_;
+
+    return Koha::Account::Credits->search(
+        {
+            borrowernumber => $self->{patron_id}
+        }
+    );
+}
+
+=head3 debits
+
+  my $debits = $self->debits;
+
+Return all debits for the user
+
+=cut
+
+sub debits {
+    my ($self) = @_;
+
+    return Koha::Account::Debits->search(
+        {
+            borrowernumber   => $self->{patron_id},
         }
     );
 }

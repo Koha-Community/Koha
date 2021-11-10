@@ -43,6 +43,47 @@
         borrowers: edit_borrowers
         updatecharges: remaining_permissions
 "/patrons/{patron_id}/account/credits":
+  get:
+    x-mojo-to: Patrons::Account#list_credits
+    operationId: listPatronCredits
+    tags:
+      - patrons
+      - credits
+    summary: List patron credits
+    produces:
+      - application/json
+    parameters:
+      - $ref: "../swagger.yaml#/parameters/patron_id_pp"
+      - $ref: "../swagger.yaml#/parameters/match"
+      - $ref: "../swagger.yaml#/parameters/order_by"
+      - $ref: "../swagger.yaml#/parameters/page"
+      - $ref: "../swagger.yaml#/parameters/per_page"
+      - $ref: "../swagger.yaml#/parameters/q_param"
+      - $ref: "../swagger.yaml#/parameters/q_body"
+      - $ref: "../swagger.yaml#/parameters/q_header"
+    responses:
+      "200":
+        description: A list of credits
+        schema:
+          type: array
+          items:
+            $ref: "../swagger.yaml#/definitions/credit"
+      "403":
+        description: Access forbidden
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "500":
+        description: Internal error
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "503":
+        description: Under maintenance
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+    x-koha-authorization:
+      permissions:
+        borrowers: edit_borrowers
+        updatecharges: remaining_permissions
   post:
     x-mojo-to: Patrons::Account#add_credit
     operationId: addPatronCredit
@@ -89,4 +130,50 @@
           $ref: "../swagger.yaml#/definitions/error"
     x-koha-authorization:
       permissions:
+        updatecharges: remaining_permissions
+"/patrons/{patron_id}/account/debits":
+  get:
+    x-mojo-to: Patrons::Account#list_debits
+    operationId: listPatronDebits
+    tags:
+      - patrons
+      - debits
+    summary: List patron debits
+    produces:
+      - application/json
+    parameters:
+      - $ref: "../swagger.yaml#/parameters/patron_id_pp"
+      - $ref: "../swagger.yaml#/parameters/match"
+      - $ref: "../swagger.yaml#/parameters/order_by"
+      - $ref: "../swagger.yaml#/parameters/page"
+      - $ref: "../swagger.yaml#/parameters/per_page"
+      - $ref: "../swagger.yaml#/parameters/q_param"
+      - $ref: "../swagger.yaml#/parameters/q_body"
+      - $ref: "../swagger.yaml#/parameters/q_header"
+    responses:
+      "200":
+        description: A list of debits
+        schema:
+          type: array
+          items:
+            $ref: "../swagger.yaml#/definitions/debit"
+      "403":
+        description: Access forbidden
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "404":
+        description: Patron not found
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "500":
+        description: Internal error
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "503":
+        description: Under maintenance
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+    x-koha-authorization:
+      permissions:
+        borrowers: edit_borrowers
         updatecharges: remaining_permissions
