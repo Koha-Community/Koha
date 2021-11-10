@@ -1721,15 +1721,25 @@ nav {
 }
 
 #hierarchies {
-    margin: 1em 0;
+    margin-bottom: 1em;
 
     a {
         color: #069;
         font-weight: normal;
         text-decoration: underline;
 
-        &:hover {
-            color: #990033;
+        &.jstree-anchor {
+            &.jstree-hovered {
+                background: transparent none;
+                box-shadow: none;
+                color: #005580;
+            }
+
+            &.jstree-clicked {
+                background: transparent none;
+                box-shadow: none;
+                border: 0;
+            }
         }
     }
 }

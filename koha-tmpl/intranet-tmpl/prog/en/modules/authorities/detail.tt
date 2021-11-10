@@ -11,6 +11,9 @@
 </title>
 [% INCLUDE 'doc-head-close.inc' %]
 [% Asset.css("css/addbiblio.css") | $raw %]
+[% IF ( displayhierarchy ) %]
+    [% Asset.css("lib/jquery/plugins/jstree/themes/default/style.min.css") | $raw %]
+[% END %]
 </head>
 
 <body id="auth_detail" class="auth">
@@ -129,7 +132,7 @@
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'authorities_js.inc' %]
     [% IF ( displayhierarchy ) %]
-        [% Asset.js("lib/jquery/plugins/jquery.jstree.js") | $raw %]
+        [% Asset.js("lib/jquery/plugins/jstree/jstree-3.3.12.min.js") | $raw %]
     [% END %]
     <script>
         $(document).ready(function() {
@@ -141,16 +144,18 @@
                 }
             });
             [% IF ( displayhierarchy ) %]
-                var current_nodes = [];
-                $('.currentauth').each(function() {
-                    current_nodes.push('#' + $(this).parent().parents('li:first').attr('id'));
-                    });
                 $('#hierarchies').jstree({
-                        "plugins": [ "themes", "html_data"],
-                        "themes": { "theme": "classic",
-                                    "icons": false },
-                        "core": { "initially_open": current_nodes }
-                    });
+                    "types" : {
+                        "default" : {
+                            "icon" : "fa fa-file-o"
+                        }
+                    },
+                    "plugins" : [ "types" ]
+                }).on('ready.jstree', function(){ $(this).jstree('open_all')
+                }).bind("select_node.jstree", function (e, data) {
+                    e.preventDefault();
+                    document.location.href = data.node.a_attr.href;
+                });
             [% END %]
          });
     </script>

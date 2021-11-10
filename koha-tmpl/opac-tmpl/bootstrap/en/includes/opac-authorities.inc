@@ -1,6 +1,6 @@
 [% BLOCK showhierarchy %]
     [% FOREACH tree IN trees %]
-        [% PROCESS showtree tree = tree %]
+        [% PROCESS showtree tree = tree marc = marc %]
     [% END %]
 [% END %]
 
@@ -11,10 +11,10 @@
             [% IF ( node.current_value ) %]
                 <span class="currentauth">[% node.value | html %]</span>
             [% ELSE %]
-                <a href="opac-authoritiesdetail.pl?authid=[% node.authid | uri %]" title="Term">[% node.value | html %]</a>
+                <a href="opac-authoritiesdetail.pl?authid=[% node.authid | uri %]&marc=[% marc | uri %]" title="Term">[% node.value | html %]</a>
             [% END %]
             [% IF ( node.children && node.children.size > 0 ) %]
-                [% PROCESS showtree tree = node.children %]
+                [% PROCESS showtree tree = node.children marc = marc %]
             [% END %]
             </li>
         [% END %]

@@ -8,7 +8,11 @@
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Entry [% authtypetext | html %] &rsaquo; [% IF ( LibraryNameTitle ) %][% LibraryNameTitle | html %][% ELSE %]Koha online[% END %] catalog</title>
 [% INCLUDE 'doc-head-close.inc' %]
-[% BLOCK cssinclude %][% END %]
+[% BLOCK cssinclude %]
+    [% IF ( displayhierarchy ) %]
+        [% Asset.css("lib/jquery/plugins/jstree/themes/default/style.min.css") | $raw %]
+    [% END %]
+[% END %]
 </head>
 [% INCLUDE 'bodytag.inc' bodyid='opac-authoritiesdetail' bodyclass='scrollto' %]
 [% INCLUDE 'masthead.inc' %]
@@ -52,7 +56,7 @@
 
                         [% IF ( displayhierarchy ) %]
                             <div id="hierarchies">
-                                [% PROCESS showhierarchy trees = loophierarchies %]
+                                [% PROCESS showhierarchy trees = loophierarchies marc = 1 %]
                             </div>
                         [% END %]
 
@@ -76,20 +80,22 @@
 
 [% INCLUDE 'opac-bottom.inc' %]
 [% BLOCK jsinclude %]
-    [% Asset.js("lib/jquery/plugins/jquery.jstree.js") | $raw %]
+    [% Asset.js("lib/jquery/plugins/jstree/jstree-3.3.12.min.js") | $raw %]
     <script>
         $(document).ready(function() {
             [% IF ( displayhierarchy ) %]
-                var current_nodes = [];
-                $('.currentauth').each(function() {
-                    current_nodes.push('#' + $(this).parent().parents('li:first').attr('id'));
-                    });
                 $('#hierarchies').jstree({
-                        "plugins": [ "themes", "html_data"],
-                        "themes": { "theme": "classic",
-                                    "icons": false },
-                        "core": { "initially_open": current_nodes }
-                    });
+                    "types" : {
+                        "default" : {
+                            "icon" : "fa fa-file-o"
+                        }
+                    },
+                    "plugins" : [ "types" ]
+                }).on('ready.jstree', function(){ $(this).jstree('open_all')
+                }).bind("select_node.jstree", function (e, data) {
+                    e.preventDefault();
+                    document.location.href = data.node.a_attr.href;
+                });
             [% END %]
         });
     </script>
