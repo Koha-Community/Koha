@@ -153,7 +153,7 @@
                         </div>
                     [% END %]
 
-                    [% patron_letters = NoticeTemplates.GetByModule( 'members' ) %]
+                    [% patron_letters = NoticeTemplates.GetByModule( 'add_message' ) %]
                     [% IF patron_letters %]
                         <div class="form-group">
                             <label for="select_patron_notice" style="display:none;">Patron notice: </label>

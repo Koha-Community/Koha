@@ -61,7 +61,6 @@ elsif( $op eq 'cud-add_message' ) {
                 message        => $borrower_message,
             }
         )->store;
-
     }
 
     if ( $message_type eq 'E' ) {
@@ -74,7 +73,7 @@ elsif( $op eq 'cud-add_message' ) {
 
         if ( $letter_code ) {
             $letter = C4::Letters::GetPreparedLetter(
-                module      => 'members',
+                module      => 'add_message',
                 letter_code => $letter_code,
                 lang        => $patron->lang,
                 tables      => {
