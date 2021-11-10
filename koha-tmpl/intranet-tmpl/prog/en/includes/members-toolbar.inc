@@ -137,7 +137,9 @@
                         <select name="message_type" id="message_type">
                             <option value="L">Staff - Internal note</option>
                             <option value="B">OPAC - [% patron.firstname | html %] [% patron.surname | html %]</option>
-                            <option value="E">Email - email addresses of patron</option>
+                            [% IF CAN_user_borrowers_send_messages_to_borrowers %]
+                                <option value="E">Email - email addresses of patron</option>
+                            [% END %]
                         </select>
                     </div>
                     [% bor_notes = AuthorisedValues.Get( 'BOR_NOTES' ) %]

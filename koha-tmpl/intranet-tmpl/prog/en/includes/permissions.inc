@@ -322,6 +322,11 @@
             View patron infos from any libraries. If not set the logged in user could only access patron infos from its own library or group of libraries.
         </span>
         <span class="permissioncode">([% name | html %])</span>
+    [%- CASE 'send_messages_to_borrowers' -%]
+        <span class="sub_permission send_messages_to_borrowers_subpermission">
+            Send messages to patrons
+        </span>
+        <span class="permissioncode">([% name | html %])</span>
     [%- CASE 'modify_holds_priority' -%]
         <span class="sub_permission modify_holds_priority_subpermission">
             Modify holds priority

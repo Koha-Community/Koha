@@ -64,6 +64,11 @@ elsif( $op eq 'cud-add_message' ) {
     }
 
     if ( $message_type eq 'E' ) {
+        my $logged_in_patron = Koha::Patrons->find( $loggedinuser );
+        if ( !$logged_in_patron->has_permission({ borrowers => 'send_messages_to_borrowers' }) ) {
+            C4::Output::output_and_exit( $input, $cookie, $template, 'insufficient_permission' )
+        }
+
         my $letter = {
             title   => $borrower_subject,
             content => $borrower_message
