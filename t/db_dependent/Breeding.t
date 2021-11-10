@@ -26,10 +26,11 @@
 
 use Modern::Perl;
 use File::Temp qw/tempfile/;
-use Test::More tests => 5;
+use Test::More tests => 6;
 use Test::Warn;
 
 use t::lib::Mocks qw( mock_preference );
+use t::lib::TestBuilder;
 
 use C4::Context;
 use C4::Breeding;
@@ -37,6 +38,7 @@ use Koha::Database;
 use Koha::XSLT::Base;
 
 my $schema = Koha::Database->new->schema;
+my $builder = t::lib::TestBuilder->new;
 $schema->storage->txn_begin;
 
 #Group 1: testing _build_query and _translate_query (part of Z3950Search)
@@ -82,6 +84,39 @@ subtest ImportBreedingAuth => sub {
     );
     my $breedingid_2 = C4::Breeding::ImportBreedingAuth($record_1,"kidclamp","UTF-8",'Cooper, Susan' );
     isnt( $breedingid, $breedingid_2, "For a new record, we get a new id");
+};
+
+subtest BreedingSearch => sub {
+    plan tests => 5;
+
+    my $import_biblio_1 = $builder->build({ source => 'ImportBiblio', value => {
+            title => 'Unique title the first adventure',
+            author => 'Firstnamey Surnamey',
+            isbn  => '1407239961'
+        }
+    });
+    my $import_biblio_2 = $builder->build({ source => 'ImportBiblio', value => {
+            title => 'Unique title the adventure continues',
+            author => 'Firstnamey Surnamey',
+            isbn  => '9798200834976'
+        }
+    });
+
+    my ($count, @results) = C4::Breeding::BreedingSearch("Firstnamey Surnamey");
+    is( $count, 2, "Author search returns two results");
+
+    ($count, @results) = C4::Breeding::BreedingSearch("first adventure");
+    is( $count, 1, "Title search returns one result");
+
+    ($count, @results) = C4::Breeding::BreedingSearch("adventure continues");
+    is( $count, 1, "Title search returns one result");
+
+    ($count, @results) = C4::Breeding::BreedingSearch("9781407239965");
+    is( $count, 1, "ISBN search matches normalized DB value");
+
+    ($count, @results) = C4::Breeding::BreedingSearch("9798200834976");
+    is( $count, 1, "ISBN search for 13 digit ISBN matches 13 digit ISBN in database");
+    # FIXME - Import doesn't currently store these, but this proves the search works
 };
 
 $schema->storage->txn_rollback;
