@@ -169,12 +169,9 @@ Returns a new resultset, containing only those items that are allowed to be book
 sub filter_by_bookable {
     my ($self) = @_;
 
-    return $self->search(
-        {
-            notforloan => [ 0, undef ],
-            withdrawn  => [ 0, undef ]
-        }
-    );
+    my $params = { bookable => 1 };
+
+    return $self->search( $params );
 }
 
 =head3 move_to_biblio

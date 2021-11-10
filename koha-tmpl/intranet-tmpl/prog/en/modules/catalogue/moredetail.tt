@@ -317,6 +317,7 @@
                                                 <li><span class="label">Withdrawn on:</span>[% ITEM_DAT.withdrawn_on | $KohaDates %]</li>
                                             [% END %]
                                         [% END %]
+
                                 </ol> <!-- /.bibliodetails -->
                                     </div> <!-- /.rows -->
                             </div> <!-- /.listgroup -->
@@ -344,6 +345,30 @@
                                                 <input type="submit" name="submit" class="btn btn-primary btn-xs" value="Update" />
                                             </form>
                                         </li>
+                                        <li>
+                                            <span class="label">Bookable:</span>
+                                            [% IF ( CAN_user_circulate ) %]
+                                                <form action="updateitem.pl" method="post">
+                                                    <input type="hidden" name="biblionumber" value="[% ITEM_DAT.biblionumber | html %]" />
+                                                    <input type="hidden" name="biblioitemnumber" value="[% ITEM_DAT.biblioitemnumber | html %]" />
+                                                    <input type="hidden" name="itemnumber" value="[% ITEM_DAT.itemnumber | html %]" />
+                                                    <select name="bookable">
+                                                        [% IF ITEM_DAT.bookable == 1 %]
+                                                        <option value="1" selected="selected">Yes</option>
+                                                        <option value="0">No</option>
+                                                        [% ELSE %]
+                                                        <option value="1">Yes</option>
+                                                        <option value="0" selected="selected">No</option>
+                                                        [% END %]
+                                                    </select>
+                                                    <input type="hidden" name="op" value="set_bookable" />
+                                                    <input type="submit" name="submit" class="btn btn-primary btn-xs" value="Update" />
+                                                </form>
+                                            [% ELSE %]
+                                                [% IF ITEM_DAT.bookable == 1 %] Yes [% ELSE %] No [% END %]
+                                            [% END %]
+                                        </li>
+
                                     </ol> <!-- /.bibliodetails -->
                                     </div> <!-- /.rows -->
                             </div> <!-- /.listgroup -->

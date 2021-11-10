@@ -65,4 +65,11 @@ sub RecallsCount {
     return $recalls->count;
 }
 
+sub CanBook {
+    my ( $self, $biblionumber ) = @_;
+
+    my $biblio = Koha::Biblios->find( $biblionumber );
+    return $biblio->bookable_items->count ? 1 : 0;
+}
+
 1;

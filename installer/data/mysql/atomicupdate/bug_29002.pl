@@ -1,12 +1,12 @@
 use Modern::Perl;
 
 return {
-    bug_number => "29002",
+    bug_number  => "29002",
     description => "Add bookings table",
-    up => sub {
+    up          => sub {
         my ($args) = @_;
-        my ($dbh, $out) = @$args{qw(dbh out)};
-        if( !TableExists( 'bookings' ) ) {
+        my ( $dbh, $out ) = @$args{qw(dbh out)};
+        if ( !TableExists('bookings') ) {
             $dbh->do(q{
                 CREATE TABLE `bookings` (
                   `booking_id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'primary key',
@@ -25,5 +25,17 @@ return {
                 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
             });
         }
+
+        if ( !column_exists( 'items', 'bookable' ) ) {
+            $dbh->do(q{
+                ALTER TABLE items ADD COLUMN `bookable` tinyint(1) NOT NULL DEFAULT 0 COMMENT 'boolean value defining whether this this item is available for bookings or not' AFTER `barcode`
+            });
+        }
+
+        if ( !column_exists( 'deleteditems', 'bookable' ) ) {
+            $dbh->do(q{
+                ALTER TABLE items ADD COLUMN `bookable` tinyint(1) NOT NULL DEFAULT 0 COMMENT 'boolean value defining whether this this item is available for bookings or not' AFTER `barcode`
+            });
+        }
     },
-}
+};
