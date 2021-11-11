@@ -8,7 +8,11 @@ return {
         my ($dbh, $out) = @$args{qw(dbh out)};
 
         $dbh->do(q{
-            UPDATE letter SET content = CONCAT('[% USE KohaDates %][% USE Branches %][% USE Price %]', content), is_html = 1 WHERE code = 'RECEIPT';
+            UPDATE letter
+                SET content = CONCAT('[% USE KohaDates %][% USE Branches %][% USE Price %]', content),
+                    is_html = 1
+            WHERE   code = 'RECEIPT'
+                AND content NOT LIKE '%[\% USE KohaDates \%][\% USE Branches \%][\% USE Price \%]%';
         });
         say $out "Added KohaDates, Branches and Price plugins";
 
