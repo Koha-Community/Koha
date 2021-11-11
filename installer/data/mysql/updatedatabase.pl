@@ -24520,6 +24520,15 @@ if( CheckVersion( $DBversion ) ) {
     NewVersion( $DBversion, "", "Koha 21.05.05 release" );
 }
 
+$DBversion = '21.05.05.004';
+if( CheckVersion( $DBversion ) ) {
+    $dbh->do(q|
+        ALTER TABLE background_jobs
+        CHANGE COLUMN `data` `data` LONGTEXT DEFAULT NULL
+    |);
+    NewVersion( $DBversion, "29386", "Extend background_jobs.data to LONGTEXT" );
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 my $update_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/atomicupdate/';
