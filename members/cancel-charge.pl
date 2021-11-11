@@ -50,7 +50,7 @@ my $charge = Koha::Account::Lines->find($accountlines_id);
 $charge->cancel(
     {
         branch   => C4::Context->userenv->{'branch'},
-        staff_id => $user
+        staff_id => C4::Context->userenv->{'number'}
     }
 );
 
