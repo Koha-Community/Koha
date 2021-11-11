@@ -195,11 +195,6 @@
                                     </fieldset>
                                 </fieldset>
 
-                                [% IF Koha.Preference('OpacPasswordChange') && Categories.can_any_reset_password %]
-                                    <div id="forgotpassword">
-                                        <a href="/cgi-bin/koha/opac-password-recovery.pl">Forgot your password?</a>
-                                    </div>
-                                [% END %]
                                 <div id="nologininstructions">
                                     [% IF OpacLoginInstructions %]
                                         [% PROCESS koha_news_block news => OpacLoginInstructions %]
@@ -209,13 +204,19 @@
                                         <h2>Don't have a library card?</h2>
                                         <p>If you don't have a library card, stop by your local library to sign up.</p>
                                     [% END # / IF OpacLoginInstructions %]
-
-                                    [% IF PatronSelfRegistration && PatronSelfRegistrationDefaultCategory %]
-                                        <span id="registrationinstructions">
+                                </div>
+                                [% IF Koha.Preference('OpacPasswordChange') && Categories.can_any_reset_password %]
+                                    <div id="forgotpassword">
+                                        <a href="/cgi-bin/koha/opac-password-recovery.pl">Forgot your password?</a>
+                                    </div>
+                                [% END %]
+                                [% IF PatronSelfRegistration && PatronSelfRegistrationDefaultCategory %]
+                                    <div id="registrationinstructions">
+                                        <span>
                                             <a href="/cgi-bin/koha/opac-memberentry.pl">You may register here.</a>
                                         </span>
-                                    [% END %]
-                                </div>
+                                    </div>
+                                [% END %]
                             </form>
                         [% END # / IF !OPACShibOnly or SCO_login or SCI_login %]
                     [% END # / IF loginprompt %]
