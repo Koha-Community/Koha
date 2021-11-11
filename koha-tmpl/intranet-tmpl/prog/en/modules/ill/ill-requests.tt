@@ -839,12 +839,12 @@
         var prefilters = '[% prefilters | $raw %]';
         // Set column settings
         var columns_settings = [% TablesSettings.GetColumns( 'illrequests', 'ill-requests', 'ill-requests', 'json' ) %];
-        $("#ill_checkout_duedate_input").datetimepicker({
-            hour: 23,
-            minute: 59
-        }).on("change", function(e, value) {
-            if ( ! is_valid_date( $(this).val() ) ) {$(this).val("");}
+
+        $("#ill_checkout_duedate_input").flatpickr({
+            enableTime: true,
+            dateFormat: flatpickr_dateformat_string + " " + flatpickr_timeformat_string,
         });
+
         [% IF services_json.length > 0 %]
         var services = [% services_json | $raw %];
         [% ELSE %]

@@ -29,23 +29,17 @@ $(document).ready(function() {
         radioCheckBox($(this));
     });
 
-    $("#newduedate, #newonholdduedate input").datetimepicker({
-        onClose: function(dateText, inst) {
-            validate_date(dateText, inst);
-        },
-        minDate: 1, // require that renewal date is after today
-        hour: 23,
-        minute: 59
-    }).on("change", function(e) {
-        if ( ! is_valid_date( $(this).val() ) ) {$(this).val("");}
-    });
-
     $("#duedatespec").flatpickr({
         enableTime: true,
         dateFormat: flatpickr_dateformat_string + " " + flatpickr_timeformat_string,
         onClose: function() {
             $("#barcode").focus();
         }
+    });
+
+    $("#newduedate, #newonholdduedate input").flatpickr({
+        enableTime: true,
+        dateFormat: flatpickr_dateformat_string + " " + flatpickr_timeformat_string,
     });
 
     $(".clear_date").on("click", function(){

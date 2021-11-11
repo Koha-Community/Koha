@@ -808,11 +808,8 @@
                                         <div class="date-select" id="return_date_override_fields">
                                             <div class="hint">Specify return date [% INCLUDE 'date-format.inc' %]: </div>
 
-                                            <input type="text" size="13" id="return_date_override" name="return_date_override" value="[% return_date_override | html %]" />
+                                            <input type="text" size="20" class="pastdate" id="return_date_override" name="return_date_override" value="[% return_date_override | html %]" />
 
-
-
-                                            <button type="button" class="action btn btn-default btn-xs" id="cleardate" name="cleardate">Clear</button>
                                             <div class="circ-setting">
                                                 [% IF ( return_date_override_remember ) %]
                                                     <input type="checkbox" id="return_date_override_remember" name="return_date_override_remember" checked="checked" />
@@ -1041,43 +1038,14 @@
                     "dom": 'B<"clearfix">t',
                     }, columns_settings);
 
-            $("#return_date_override").datetimepicker({
-                onClose: function(dateText, inst) {
-                    if (validate_date(dateText, inst) ) {
-                        $("#barcode").focus();
-                    }
-                },
-                defaultDate: -1,
-                hour: 23,
-                minute: 59,
-                maxDate: 0
-            }).on("change", function(e, value) {
-                if ( ! is_valid_date( $(this).val() ) ) {$(this).val("");}
-            });
-            $("#return_date_override").on("blur", function() {
-                check_valid_return_date();
-            });
-            $("#checkin-form").submit(function( event ) {
-                if ( !check_valid_return_date() ) {
-                    event.preventDefault();
+            $("#return_date_override").flatpickr({
+                enableTime: true,
+                dateFormat: flatpickr_dateformat_string + " " + flatpickr_timeformat_string,
+                maxDate: "today",
+                onClose: function() {
+                    $("#barcode").focus();
                 }
             });
-
-            function check_valid_return_date() {
-                if ( $("#return_date_override").val() ) {
-                    var datetime = DateTime_from_syspref( $("#return_date_override").val() );
-                    var now = new Date();
-                    if ( !datetime || datetime > now ) {
-                        alert("Invalid return date/time!");
-                        $("#return_date_override").val("")
-                        return false;
-                    }
-                }
-                // Add saved date information to onscreen message, which
-                // may or may not be hidden
-                $("#saved_return_date").text( $("#return_date_override").val() );
-                return true;
-            }
 
             $("#exemptcheck").change(function () {
                 if (this.checked == true) {
@@ -1089,22 +1057,22 @@
                 }
                 $("#barcode").focus();
             });
+
             $("#dropboxcheck").change(function () {
                 if (this.checked == true) {
                     $("#barcode").addClass("input-warning");
                     $("#dropboxmode").show();
 
                     $("#return_date_override_fields :input").prop('disabled', true);
-                    $("#return_date_override").datetimepicker("disable");
                 } else {
                     $("#barcode").removeClass("input-warning");
                     $("#dropboxmode").hide();
 
                     $("#return_date_override_fields :input").prop('disabled', false);
-                    $("#return_date_override").datetimepicker("enable");
                 }
                 $("#barcode").focus();
             });
+
             $("#forgivemanualholdsexpire").change(function () {
                 if (this.checked == true) {
                     $("#barcode").addClass("input-warning");
