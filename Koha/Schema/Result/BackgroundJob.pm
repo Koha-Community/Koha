@@ -58,7 +58,7 @@ __PACKAGE__->table("background_jobs");
 
 =head2 data
 
-  data_type: 'text'
+  data_type: 'longtext'
   is_nullable: 1
 
 =head2 enqueued_on
@@ -95,7 +95,7 @@ __PACKAGE__->add_columns(
   "type",
   { data_type => "varchar", is_nullable => 1, size => 64 },
   "data",
-  { data_type => "text", is_nullable => 1 },
+  { data_type => "longtext", is_nullable => 1 },
   "enqueued_on",
   {
     data_type => "datetime",
@@ -129,8 +129,8 @@ __PACKAGE__->add_columns(
 __PACKAGE__->set_primary_key("id");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07046 @ 2020-02-20 15:09:04
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:W4AN0tDu8476YvcYbHc1DA
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2021-11-11 12:24:23
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:TrU5mNPYzIW1mcL6pUyGQQ
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
