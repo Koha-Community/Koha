@@ -28,7 +28,10 @@ use base ("HTTP::OAI::Identify");
 sub new {
     my ($class, $repository) = @_;
 
-    my ($baseURL) = $repository->self_url() =~ /(.*)\?.*/;
+    my $baseURL = $repository->self_url();
+    $baseURL = $+{base_url}
+        if $baseURL =~ m/(?<base_url>.*)\?.*/;
+
     my $self = $class->SUPER::new(
         baseURL             => $baseURL,
         repositoryName      => C4::Context->preference("LibraryName"),
