@@ -514,7 +514,7 @@ subtest 'ListSets tests' => sub {
 
 subtest 'Tests for timestamp handling' => sub {
 
-    plan tests => 27;
+    plan tests => 28;
 
     t::lib::Mocks::mock_preference( 'OAI::PMH'         => 1 );
     t::lib::Mocks::mock_preference( 'OAI-PMH:MaxCount' => 3 );
@@ -613,6 +613,21 @@ subtest 'Tests for timestamp handling' => sub {
         'GetRecord - biblio with a single item (items not returned)',
         $get_no_items,
         { GetRecord => $expected_no_items }
+    );
+    test_query(
+        'Identify - earliestDatestamp in the right format',
+        { verb => 'Identify' },
+        {   Identify => {
+                adminEmail        => 'root@localhost',
+                baseURL           => 'http://localhost',
+                compression       => 'gzip',
+                deletedRecord     => 'persistent',
+                earliestDatestamp => '2014-05-07T13:36:23Z',
+                granularity       => 'YYYY-MM-DDThh:mm:ssZ',
+                protocolVersion   => '2.0',
+                repositoryName    => 'My Library',
+            }
+        }
     );
 
     # Add an item 10 seconds later and check results
