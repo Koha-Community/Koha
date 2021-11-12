@@ -26,6 +26,7 @@ use warnings;
 
 use Data::Dumper qw( Dumper );
 use JSON qw( to_json );
+use Scalar::Util qw( blessed );
 
 use C4::Context;
 use Koha::Logger;
@@ -77,13 +78,14 @@ sub logaction {
     $usernumber ||= 0;
     $interface //= C4::Context->interface;
 
-    if ( ref($infos) && ref($infos) !~ /HASH|ARRAY/ && $infos->isa('Koha::Object') ) {
+    if( blessed($infos) && $infos->isa('Koha::Object') ) {
         $infos = $infos->get_from_storage if $infos->in_storage;
         local $Data::Dumper::Sortkeys = 1;
-        $infos = Dumper( $infos->unblessed );
 
         if ( $infos->isa('Koha::Item') && $modulename eq 'CATALOGUING' && $actionname eq 'MODIFY' ) {
-            $infos = "item " . $infos;
+            $infos = "item " . Dumper( $infos->unblessed );
+        } else {
+            $infos = Dumper( $infos->unblessed );
         }
     }
 
