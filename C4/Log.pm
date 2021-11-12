@@ -79,6 +79,7 @@ sub logaction {
 
     if ( ref($infos) && ref($infos) !~ /HASH|ARRAY/ && $infos->isa('Koha::Object') ) {
         $infos = $infos->get_from_storage if $infos->in_storage;
+        local $Data::Dumper::Sortkeys = 1;
         $infos = Dumper( $infos->unblessed );
 
         if ( $infos->isa('Koha::Item') && $modulename eq 'CATALOGUING' && $actionname eq 'MODIFY' ) {
