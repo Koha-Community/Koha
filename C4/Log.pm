@@ -24,6 +24,7 @@ package C4::Log;
 use strict;
 use warnings;
 
+use Data::Dumper qw( Dumper );
 use JSON qw( to_json );
 
 use C4::Context;
