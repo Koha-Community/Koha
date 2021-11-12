@@ -27,7 +27,7 @@ VALUES
 ('members', 'PROBLEM_REPORT','OPAC problem report','OPAC problem report','Username: <<problem_reports.username>>\n\nProblem page: <<problem_reports.problempage>>\n\nTitle: <<problem_reports.title>>\n\nMessage: <<problem_reports.content>>','email');
 
 INSERT INTO `letter` (module, code, name, title, content, is_html, message_transport_type)
-VALUES ('suggestions','NEW_SUGGESTION','New suggestion','New suggestion','<h3>Suggestion pendin    g approval</h3>
+VALUES ('suggestions','NEW_SUGGESTION','New suggestion','New suggestion','<h3>Suggestion pending approval</h3>
     <p><h4>Suggested by</h4>
     <ul>
     <li><<borrowers.firstname>> <<borrowers.surname>></li>
