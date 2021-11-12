@@ -20,8 +20,10 @@
 package Koha::OAI::Server::Identify;
 
 use Modern::Perl;
+
 use HTTP::OAI;
 use C4::Context;
+use Koha::DateUtils qw(dt_from_string);
 
 use base ("HTTP::OAI::Identify");
 
@@ -59,12 +61,12 @@ sub _get_earliest_datestamp {
     my $dbh = C4::Context->dbh;
     # We do not need to perform timezone conversion here, because the time zone
     # is set to UTC for the entire SQL session in Koha/OAI/Server/Repository.pm
-    my $query = q{
-        SELECT DATE_FORMAT(MIN(timestamp), '%Y-%m-%dT%H:%i:%SZ') AS earliest
+    my ( $earliest ) = $dbh->selectrow_array(q{
+        SELECT MIN(timestamp) AS earliest
         FROM biblio
-    };
-    my ( $earliest ) = $dbh->selectrow_array($query);
-    return $earliest
+    });
+
+    return dt_from_string( $earliest, 'sql' )->strftime('%FT%TZ');
 }
 
 1;
