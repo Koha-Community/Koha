@@ -45,6 +45,8 @@ use Koha::Subscriptions;
 
 use vars qw(@ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 
+use constant SERIALIZED_EMAIL_CONTENT_TYPE => 'message/rfc822';
+
 BEGIN {
     require Exporter;
     @ISA = qw(Exporter);
@@ -1239,7 +1241,7 @@ sub ResendMessage {
   This routine picks the I<content> of I<letter> and generates a MIME
   email, attaching the passed I<attachments> using Koha::Email. The
   content is replaced by the string representation of the MIME object,
-  and the content-type is updated to B<MIME> for later handling.
+  and the content-type is updated for later handling.
 
 =cut
 
@@ -1268,7 +1270,7 @@ sub _add_attachments {
         );
     }
 
-    $letter->{'content-type'} = 'MIME';
+    $letter->{'content-type'} = SERIALIZED_EMAIL_CONTENT_TYPE;
     $letter->{content} = $message->as_string;
 
     return $letter;
@@ -1420,7 +1422,7 @@ sub _send_message_by_email {
             subject  => "" . $message->{subject}
         };
 
-        if ( $message->{'content_type'} && $message->{'content_type'} eq 'MIME' ) {
+        if ( $message->{'content_type'} && $message->{'content_type'} eq SERIALIZED_EMAIL_CONTENT_TYPE ) {
 
             # The message has been previously composed as a valid MIME object
             # and serialized as a string on the DB
