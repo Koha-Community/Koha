@@ -28,6 +28,7 @@ use Try::Tiny;
 
 use Koha::BackgroundJobs;
 use Koha::DateUtils qw( dt_from_string );
+use Koha::Items;
 
 use base 'Koha::BackgroundJob';
 
