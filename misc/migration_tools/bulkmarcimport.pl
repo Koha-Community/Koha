@@ -546,7 +546,9 @@ RECORD: foreach my $record (@{$marc_records}) {
                 }
             }
             elsif ($insert) {
-                eval { ($record_id, $biblioitemnumber) = AddBiblio($record, $framework, $add_biblio_options) };
+                my $record_clone = $record->clone();
+                C4::Biblio::_strip_item_fields($record_clone);
+                eval { ($record_id, $biblioitemnumber) = AddBiblio($record_clone, $framework, $add_biblio_options) };
                 if ($@) {
                     warn "ERROR: Insert biblio $originalid failed: $@\n";
                     printlog( { id => $originalid, op => "insert", status => "ERROR" } ) if ($logfile);
@@ -555,6 +557,11 @@ RECORD: foreach my $record (@{$marc_records}) {
                 else {
                     printlog( { id => $originalid, op => "insert", status => "ok" } ) if ($logfile);
                 }
+                # If incoming record has bib ids set we need to transfer
+                # new ids from record_clone to incoming record to avoid
+                # working on wrong record (the original record) later on
+                # when adding items for example
+                C4::Biblio::_koha_marc_update_bib_ids($record, $framework, $record_id, $biblioitemnumber);
             }
             else {
                 warn "WARNING: Insert biblio $originalid skipped";
