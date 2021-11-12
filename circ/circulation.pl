@@ -26,6 +26,7 @@
 
 use Modern::Perl;
 use CGI qw ( -utf8 );
+use URI::Escape qw( uri_escape_utf8 );
 use DateTime;
 use DateTime::Duration;
 use Scalar::Util qw( looks_like_number );
@@ -227,7 +228,7 @@ if ($findborrower) {
     if ( $patron ) {
         $borrowernumber = $patron->borrowernumber;
     } else {
-        print $query->redirect( "/cgi-bin/koha/members/member.pl?quicksearch=1&circsearch=1&searchmember=" . $findborrower );
+        print $query->redirect( "/cgi-bin/koha/members/member.pl?quicksearch=1&circsearch=1&searchmember=" . uri_escape_utf8($findborrower) );
         exit;
     }
 }
