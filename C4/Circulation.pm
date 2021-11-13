@@ -2795,6 +2795,9 @@ sub CanBookBeRenewed {
             branchcode => $branchcode,
             issue      => $issue
         });
+        return ( 0, $auto_renew  ) if $auto_renew =~ 'too_soon' && $cron;
+        # cron wants 'too_soon' over 'on_reserve' for performance and to avoid
+        # extra notices being sent. Cron also implies no override
         return ( 0, $auto_renew  ) if $auto_renew =~ 'auto_account_expired';
         return ( 0, $auto_renew  ) if $auto_renew =~ 'auto_too_late';
         return ( 0, $auto_renew  ) if $auto_renew =~ 'auto_too_much_oweing';
@@ -2858,13 +2861,9 @@ sub CanBookBeRenewed {
             }
         }
     }
-    if( $cron ) { #The cron wants to return 'too_soon' over 'on_reserve'
-        return ( 0, $auto_renew  ) if $auto_renew =~ 'too_soon';#$auto_renew ne "no" && $auto_renew ne "ok";
-        return ( 0, "on_reserve" ) if $resfound;    # '' when no hold was found
-    } else { # For other purposes we want 'on_reserve' before 'too_soon'
-        return ( 0, "on_reserve" ) if $resfound;    # '' when no hold was found
-        return ( 0, $auto_renew  ) if $auto_renew =~ 'too_soon';#$auto_renew ne "no" && $auto_renew ne "ok";
-    }
+
+    return ( 0, "on_reserve" ) if $resfound;    # '' when no hold was found
+    return ( 0, $auto_renew  ) if $auto_renew =~ 'too_soon';#$auto_renew ne "no" && $auto_renew ne "ok";
 
     return ( 0, "auto_renew" ) if $auto_renew eq "ok" && !$override_limit; # 0 if auto-renewal should not succeed
 
