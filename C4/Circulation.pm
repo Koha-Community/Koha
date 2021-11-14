@@ -4271,6 +4271,8 @@ sub _CanBookBeAutoRenewed {
     my $branchcode = $params->{branchcode};
     my $issue = $params->{issue};
 
+    return "no" unless $issue->auto_renew && $patron->autorenew_checkouts;
+
     my $issuing_rule = Koha::CirculationRules->get_effective_rules(
         {
             categorycode => $patron->categorycode,
@@ -4285,63 +4287,59 @@ sub _CanBookBeAutoRenewed {
         }
     );
 
-    if ( $issue->auto_renew && $patron->autorenew_checkouts ) {
+    if ( $patron->category->effective_BlockExpiredPatronOpacActions and $patron->is_expired ) {
+        return 'auto_account_expired';
+    }
 
-        if ( $patron->category->effective_BlockExpiredPatronOpacActions and $patron->is_expired ) {
-            return 'auto_account_expired';
-        }
-
-        if ( defined $issuing_rule->{no_auto_renewal_after}
-                and $issuing_rule->{no_auto_renewal_after} ne "" ) {
-            # Get issue_date and add no_auto_renewal_after
-            # If this is greater than today, it's too late for renewal.
-            my $maximum_renewal_date = dt_from_string($issue->issuedate, 'sql');
-            $maximum_renewal_date->add(
-                $issuing_rule->{lengthunit} => $issuing_rule->{no_auto_renewal_after}
-            );
-            my $now = dt_from_string;
-            if ( $now >= $maximum_renewal_date ) {
-                return "auto_too_late";
-            }
-        }
-        if ( defined $issuing_rule->{no_auto_renewal_after_hard_limit}
-                      and $issuing_rule->{no_auto_renewal_after_hard_limit} ne "" ) {
-            # If no_auto_renewal_after_hard_limit is >= today, it's also too late for renewal
-            if ( dt_from_string >= dt_from_string( $issuing_rule->{no_auto_renewal_after_hard_limit} ) ) {
-                return "auto_too_late";
-            }
-        }
-
-        if ( C4::Context->preference('OPACFineNoRenewalsBlockAutoRenew') ) {
-            my $fine_no_renewals = C4::Context->preference("OPACFineNoRenewals");
-            my $amountoutstanding =
-              C4::Context->preference("OPACFineNoRenewalsIncludeCredit")
-              ? $patron->account->balance
-              : $patron->account->outstanding_debits->total_outstanding;
-            if ( $amountoutstanding and $amountoutstanding > $fine_no_renewals ) {
-                return "auto_too_much_oweing";
-            }
-        }
-
-        if ( defined $issuing_rule->{norenewalbefore}
-            and $issuing_rule->{norenewalbefore} ne "" ) {
-            if ( GetSoonestRenewDate($patron->id, $item->id) > dt_from_string()) {
-                return "auto_too_soon";
-            } else {
-                return "ok";
-            }
-        }
-
-        # Fallback for automatic renewals:
-        # If norenewalbefore is undef, don't renew before due date.
+    if ( defined $issuing_rule->{no_auto_renewal_after}
+            and $issuing_rule->{no_auto_renewal_after} ne "" ) {
+        # Get issue_date and add no_auto_renewal_after
+        # If this is greater than today, it's too late for renewal.
+        my $maximum_renewal_date = dt_from_string($issue->issuedate, 'sql');
+        $maximum_renewal_date->add(
+            $issuing_rule->{lengthunit} => $issuing_rule->{no_auto_renewal_after}
+        );
         my $now = dt_from_string;
-        if ( $now >= dt_from_string( $issue->date_due, 'sql' ) ){
-            return "ok";
-        } else {
-            return "auto_too_soon";
+        if ( $now >= $maximum_renewal_date ) {
+            return "auto_too_late";
         }
     }
-    return "no";
+    if ( defined $issuing_rule->{no_auto_renewal_after_hard_limit}
+                  and $issuing_rule->{no_auto_renewal_after_hard_limit} ne "" ) {
+        # If no_auto_renewal_after_hard_limit is >= today, it's also too late for renewal
+        if ( dt_from_string >= dt_from_string( $issuing_rule->{no_auto_renewal_after_hard_limit} ) ) {
+            return "auto_too_late";
+        }
+    }
+
+    if ( C4::Context->preference('OPACFineNoRenewalsBlockAutoRenew') ) {
+        my $fine_no_renewals = C4::Context->preference("OPACFineNoRenewals");
+        my $amountoutstanding =
+          C4::Context->preference("OPACFineNoRenewalsIncludeCredit")
+          ? $patron->account->balance
+          : $patron->account->outstanding_debits->total_outstanding;
+        if ( $amountoutstanding and $amountoutstanding > $fine_no_renewals ) {
+            return "auto_too_much_oweing";
+        }
+    }
+
+    if ( defined $issuing_rule->{norenewalbefore}
+        and $issuing_rule->{norenewalbefore} ne "" ) {
+        if ( GetSoonestRenewDate($patron->id, $item->id) > dt_from_string()) {
+            return "auto_too_soon";
+        } else {
+            return "ok";
+        }
+    }
+
+    # Fallback for automatic renewals:
+    # If norenewalbefore is undef, don't renew before due date.
+    my $now = dt_from_string;
+    if ( $now >= dt_from_string( $issue->date_due, 'sql' ) ){
+        return "ok";
+    } else {
+        return "auto_too_soon";
+    }
 }
 
 sub _item_denied_renewal {
