@@ -2795,7 +2795,7 @@ sub CanBookBeRenewed {
             branchcode => $branchcode,
             issue      => $issue
         });
-        return ( 0, $auto_renew  ) if $auto_renew =~ 'too_soon' && $cron;
+        return ( 0, $auto_renew  ) if $auto_renew =~ 'auto_too_soon' && $cron;
         # cron wants 'too_soon' over 'on_reserve' for performance and to avoid
         # extra notices being sent. Cron also implies no override
         return ( 0, $auto_renew  ) if $auto_renew =~ 'auto_account_expired';
@@ -2864,6 +2864,9 @@ sub CanBookBeRenewed {
 
     return ( 0, "on_reserve" ) if $resfound;    # '' when no hold was found
     return ( 0, $auto_renew  ) if $auto_renew =~ 'too_soon';#$auto_renew ne "no" && $auto_renew ne "ok";
+    if ( GetSoonestRenewDate($borrowernumber, $itemnumber) > dt_from_string() ){
+        return (0, "too_soon") unless $override_limit;
+    }
 
     return ( 0, "auto_renew" ) if $auto_renew eq "ok" && !$override_limit; # 0 if auto-renewal should not succeed
 
@@ -4319,35 +4322,18 @@ sub _CanBookBeAutoRenewed {
                 return "auto_too_much_oweing";
             }
         }
-    }
 
-    if ( defined $issuing_rule->{norenewalbefore}
-        and $issuing_rule->{norenewalbefore} ne "" )
-    {
-
-        # Calculate soonest renewal by subtracting 'No renewal before' from due date
-        my $soonestrenewal = dt_from_string( $issue->date_due, 'sql' )->subtract(
-            $issuing_rule->{lengthunit} => $issuing_rule->{norenewalbefore} );
-
-        # Depending on syspref reset the exact time, only check the date
-        if ( C4::Context->preference('NoRenewalBeforePrecision') eq 'date'
-            and $issuing_rule->{lengthunit} eq 'days' )
-        {
-            $soonestrenewal->truncate( to => 'day' );
+        if ( defined $issuing_rule->{norenewalbefore}
+            and $issuing_rule->{norenewalbefore} ne "" ) {
+            if ( GetSoonestRenewDate($patron->id, $item->id) > dt_from_string()) {
+                return "auto_too_soon";
+            } else {
+                return "ok";
+            }
         }
 
-        if ( $soonestrenewal > dt_from_string() )
-        {
-            return ($issue->auto_renew && $patron->autorenew_checkouts) ? "auto_too_soon" : "too_soon";
-        }
-        elsif ( $issue->auto_renew && $patron->autorenew_checkouts ) {
-            return "ok";
-        }
-    }
-
-    # Fallback for automatic renewals:
-    # If norenewalbefore is undef, don't renew before due date.
-    if ( $issue->auto_renew && $patron->autorenew_checkouts ) {
+        # Fallback for automatic renewals:
+        # If norenewalbefore is undef, don't renew before due date.
         my $now = dt_from_string;
         if ( $now >= dt_from_string( $issue->date_due, 'sql' ) ){
             return "ok";
