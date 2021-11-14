@@ -18,7 +18,7 @@
 use Modern::Perl;
 use utf8;
 
-use Test::More tests => 56;
+use Test::More tests => 57;
 use Test::Exception;
 use Test::MockModule;
 use Test::Deep qw( cmp_deeply );
@@ -418,7 +418,7 @@ subtest "GetIssuingCharges tests" => sub {
 
 my ( $reused_itemnumber_1, $reused_itemnumber_2 );
 subtest "CanBookBeRenewed tests" => sub {
-    plan tests => 95;
+    plan tests => 93;
 
     C4::Context->set_preference('ItemsDeniedRenewal','');
     # Generate test biblio
@@ -855,24 +855,6 @@ subtest "CanBookBeRenewed tests" => sub {
     ( $renewokay, $error ) = CanBookBeRenewed($renewing_borrowernumber, $item_1->itemnumber);
     is( $renewokay, 0, 'Bug 7413: Cannot renew, renewal is premature');
     is( $error, 'too_soon', 'Bug 7413: Cannot renew, renewal is premature (returned code is too_soon)');
-
-    # Bug 14395
-    # Test 'exact time' setting for syspref NoRenewalBeforePrecision
-    t::lib::Mocks::mock_preference( 'NoRenewalBeforePrecision', 'exact_time' );
-    is(
-        GetSoonestRenewDate( $renewing_borrowernumber, $item_1->itemnumber ),
-        $datedue->clone->add( days => -7 ),
-        'Bug 14395: Renewals permitted 7 days before due date, as expected'
-    );
-
-    # Bug 14395
-    # Test 'date' setting for syspref NoRenewalBeforePrecision
-    t::lib::Mocks::mock_preference( 'NoRenewalBeforePrecision', 'date' );
-    is(
-        GetSoonestRenewDate( $renewing_borrowernumber, $item_1->itemnumber ),
-        $datedue->clone->add( days => -7 )->truncate( to => 'day' ),
-        'Bug 14395: Renewals permitted 7 days before due date, as expected'
-    );
 
     # Bug 14101
     # Test premature automatic renewal
@@ -4972,6 +4954,65 @@ subtest "SendCirculationAlert" => sub {
     $notice->discard_changes();
     is($notice->content,"Checkins:\n".$item->biblio->title."-".$issue_1->id."\n".$item->biblio->title."-".$issue_2->id."\nThank you.", 'Letter appended with expected output on second checkin' );
 
+};
+
+subtest "GetSoonestRenewDate tests" => sub {
+    plan tests => 4;
+    Koha::CirculationRules->set_rule(
+        {
+            categorycode => undef,
+            branchcode   => undef,
+            itemtype     => undef,
+            rule_name    => 'norenewalbefore',
+            rule_value   => '7',
+        }
+    );
+    my $patron = $builder->build_object({ class => 'Koha::Patrons' });
+    my $item = $builder->build_sample_item();
+    my $issue = AddIssue( $patron->unblessed, $item->barcode);
+    my $datedue = dt_from_string( $issue->date_due() );
+
+    # Bug 14395
+    # Test 'exact time' setting for syspref NoRenewalBeforePrecision
+    t::lib::Mocks::mock_preference( 'NoRenewalBeforePrecision', 'exact_time' );
+    is(
+        GetSoonestRenewDate( $patron->id, $item->itemnumber ),
+        $datedue->clone->add( days => -7 ),
+        'Bug 14395: Renewals permitted 7 days before due date, as expected'
+    );
+
+    # Bug 14395
+    # Test 'date' setting for syspref NoRenewalBeforePrecision
+    t::lib::Mocks::mock_preference( 'NoRenewalBeforePrecision', 'date' );
+    is(
+        GetSoonestRenewDate( $patron->id, $item->itemnumber ),
+        $datedue->clone->add( days => -7 )->truncate( to => 'day' ),
+        'Bug 14395: Renewals permitted 7 days before due date, as expected'
+    );
+
+
+    Koha::CirculationRules->set_rule(
+        {
+            categorycode => undef,
+            branchcode   => undef,
+            itemtype     => undef,
+            rule_name    => 'norenewalbefore',
+            rule_value   => undef,
+        }
+    );
+
+    is(
+        GetSoonestRenewDate( $patron->id, $item->itemnumber ),
+        dt_from_string,
+        'Checkouts without auto-renewal can be renewed immediately if no norenewalbefore'
+    );
+
+    $issue->auto_renew(1)->store;
+    is(
+        GetSoonestRenewDate( $patron->id, $item->itemnumber ),
+        $datedue,
+        'Checkouts with auto-renewal can be renewed earliest on due date if no renewalbefore'
+    );
 };
 
 $schema->storage->txn_rollback;
