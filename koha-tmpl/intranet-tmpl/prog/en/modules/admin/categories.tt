@@ -597,6 +597,7 @@
                                                 [% ELSIF ( prefs.Ill_ready ) %]Interlibrary loan ready
                                                 [% ELSIF ( prefs.Ill_unavailable ) %]Interlibrary loan unavailable
                                                 [% ELSIF ( prefs.Auto_Renewals ) %]Auto renewal
+                                                [% ELSIF ( prefs.Hold_Reminder ) %]Hold reminder
                                                 [% ELSE %]Unknown
                                                 [% END %]:
                                                 <strong>[% transport.transport | html %]</strong><br />
