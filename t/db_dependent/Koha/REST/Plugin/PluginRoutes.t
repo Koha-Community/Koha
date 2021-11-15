@@ -32,7 +32,7 @@ use Mojolicious::Lite;
 
 BEGIN {
     # Mock pluginsdir before loading Plugins module
-    my $path = dirname(__FILE__) . '/../../../../lib';
+    my $path = dirname(__FILE__) . '/../../../../lib/plugins';
     t::lib::Mocks::mock_config( 'pluginsdir', $path );
 }
 

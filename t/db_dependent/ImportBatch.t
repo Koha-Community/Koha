@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 
 use Modern::Perl;
-use Test::More tests => 16;
+use Test::More tests => 17;
 use utf8;
 use File::Basename;
 use File::Temp qw/tempfile/;
@@ -10,12 +10,13 @@ use t::lib::Mocks;
 use t::lib::TestBuilder;
 
 use Koha::Database;
-use Koha::Plugins;
 
 BEGIN {
     # Mock pluginsdir before loading Plugins module
-    my $path = dirname(__FILE__) . '/../lib';
+    my $path = dirname(__FILE__) . '/../lib/plugins';
     t::lib::Mocks::mock_config( 'pluginsdir', $path );
+
+    use_ok('Koha::Plugins');
     use_ok('C4::ImportBatch', qw( AddImportBatch GetImportBatch AddBiblioToBatch AddItemsToImportBiblio GetRecordFromImportBiblio SetMatchedBiblionumber GetImportBiblios GetItemNumbersFromImportBatch CleanBatch DeleteBatch RecordsFromMarcPlugin ));
 }
 
