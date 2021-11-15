@@ -27,7 +27,7 @@ use Encode;
 use Koha::DateUtils qw( dt_from_string output_pref );
 use C4::Context;
 use C4::Stats qw( UpdateStats );
-use C4::Reserves qw( CheckReserves CanItemBeReserved MoveReserve ModReserve ModReserveMinusPriority RevertWaitingStatus IsItemOnHoldAndFound IsAvailableForItemLevelRequest );
+use C4::Reserves qw( CheckReserves CanItemBeReserved MoveReserve ModReserve ModReserveMinusPriority RevertWaitingStatus IsItemOnHoldAndFound IsAvailableForItemLevelRequest ItemsAnyAvailableAndNotRestricted );
 use C4::Biblio qw( UpdateTotalIssues );
 use C4::Items qw( ModItemTransfer ModDateLastSeen CartToShelf );
 use C4::Accounts;
@@ -2958,19 +2958,23 @@ sub CanBookBeRenewed {
             # can be filled with available items. We can get the union of the sets simply
             # by pushing all the elements onto an array and removing the duplicates.
             my @reservable;
-            ITEM: while ( my $item = $items->next ) {
-                next if IsItemOnHoldAndFound( $item->itemnumber );
-                while ( my $patron = $patrons->next ) {
-                    next unless IsAvailableForItemLevelRequest($item, $patron);
-                    next unless CanItemBeReserved($patron,$item,undef,{ignore_hold_counts=>1})->{status} eq 'OK';
-                    push @reservable, $item->itemnumber;
+            my %matched_items;
+            PATRON: while ( my $patron = $patrons->next ) {
+                my $items_any_available = ItemsAnyAvailableAndNotRestricted( { biblionumber => $item->biblionumber, patron => $patron });
+                while ( my $other_item = $items->next ) {
+                    next if $matched_items{$other_item->itemnumber} == 1;
+                    next if IsItemOnHoldAndFound( $other_item->itemnumber );
+                    next unless IsAvailableForItemLevelRequest($other_item, $patron, undef, $items_any_available);
+                    next unless CanItemBeReserved($patron,$other_item,undef,{ignore_hold_counts=>1})->{status} eq 'OK';
+                    push @reservable, $other_item->itemnumber;
                     if (@reservable >= @borrowernumbers) {
                         $resfound = 0;
-                        last ITEM;
+                        last PATRON;
                     }
+                    $matched_items{$other_item->itemnumber} = 1;
                     last;
                 }
-                $patrons->reset;
+                $items->reset;
             }
         }
     }
