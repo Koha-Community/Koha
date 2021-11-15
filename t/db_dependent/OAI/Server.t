@@ -614,6 +614,7 @@ subtest 'Tests for timestamp handling' => sub {
         $get_no_items,
         { GetRecord => $expected_no_items }
     );
+    t::lib::Mocks::mock_preference('KohaAdminEmailAddress', 'root@localhost');
     test_query(
         'Identify - earliestDatestamp in the right format',
         { verb => 'Identify' },
