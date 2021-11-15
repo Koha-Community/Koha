@@ -9,7 +9,7 @@ return {
 
         unless ( column_exists('branches', 'public') ) {
             $dbh->do(q{
-                ALTER TABLE branches ADD public tinyint DEFAULT 1 AFTER pickup_location
+                ALTER TABLE branches ADD public tinyint(1) NOT NULL DEFAULT 1 AFTER pickup_location
             });
         }
     },
