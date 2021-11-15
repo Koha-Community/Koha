@@ -43,6 +43,8 @@
         nextArrow: '<i class="fa fa-fw fa-arrow-right"></i>',
         prevArrow: '<i class="fa fa-fw fa-arrow-left"></i>',
         time_24hr: flatpickr_timeformat,
+        defaultHour: 23,
+        defaultMinute: 59,
         locale: {
             "firstDayOfWeek": calendarFirstDayOfWeek
         },
