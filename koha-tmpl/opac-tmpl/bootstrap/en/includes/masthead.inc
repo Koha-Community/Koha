@@ -388,9 +388,9 @@
                         [% UNLESS Koha.Preference('opacShibOnly') %]
                             <input type="hidden" name="koha_login_context" value="opac" />
                             <fieldset class="brief">
-                                <label for="muserid">Login:</label><input type="text" id="muserid" name="userid" />
-                                <label for="mpassword">Password:</label><input type="password" id="mpassword" name="password" />
-                                [% IF ( OpacLoginInstructions ) %]
+                                <label for="muserid">Login:</label><input type="text" id="muserid" name="userid" autocomplete="off" />
+                                <label for="mpassword">Password:</label><input type="password" id="mpassword" name="password" autocomplete="off" />
+                                [% IF OpacLoginInstructions %]
                                     <div id="nologininstructions-modal" class="nologininstructions">
                                         [% PROCESS koha_news_block news => OpacLoginInstructions %]
                                     </div>
