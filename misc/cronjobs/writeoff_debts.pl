@@ -13,13 +13,13 @@ use Koha::Script -cron;
 
 my ( $help, $verbose, @type, $before, $after, $file, $confirm );
 GetOptions(
-    'h|help'            => \$help,
-    'v|verbose+'        => \$verbose,
-    't|type:s'          => \@type,
-    'ab|added_before:s' => \$before,
-    'aa|added_after:s'  => \$after,
-    'f|file:s'          => \$file,
-    'c|confirm'         => \$confirm,
+    'h|help'                         => \$help,
+    'v|verbose+'                     => \$verbose,
+    't|type:s'                       => \@type,
+    'ab|added_before|added-before:s' => \$before,
+    'aa|added_after|added-after:s'   => \$after,
+    'f|file:s'                       => \$file,
+    'c|confirm'                      => \$confirm,
 );
 @type = split( /,/, join( ',', @type ) );
 
@@ -154,9 +154,16 @@ This is to prevent an accidental 'writeoff all' operation.
 
 Prints this help message
 
-=item B<--added_before>
+=item B<--added-before>
 
 Writeoff debts added before the date passed.
+
+Dates should be in ISO format, e.g., 2013-07-19, and can be generated
+with `date -d '-3 month' --iso-8601`.
+
+=item B<--added-after>
+
+Writeoff debts added after the date passed.
 
 Dates should be in ISO format, e.g., 2013-07-19, and can be generated
 with `date -d '-3 month' --iso-8601`.
