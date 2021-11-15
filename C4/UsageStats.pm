@@ -346,7 +346,6 @@ sub _shared_preferences {
         defaultSortField
         displayFacetCount
         OPACdefaultSortField
-        OPACItemsResultsDisplay
         expandedSearchOption
         IntranetNumbersPreferPhrase
         OPACNumbersPreferPhrase

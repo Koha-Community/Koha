@@ -763,7 +763,6 @@ for (my $i=0;$i<@servers;$i++) {
 
             $template->param(
                 SEARCH_RESULTS => \@newresults,
-                OPACItemsResultsDisplay => (C4::Context->preference("OPACItemsResultsDisplay")),
                 suppress_result_number => $hide,
                             );
             if (C4::Context->preference("OPACLocalCoverImages")){
