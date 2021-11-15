@@ -536,7 +536,9 @@ subtest 'Tests for timestamp handling' => sub {
     my $timestamp = dt_from_string(undef, 'sql');
 
     # Test a bib with one item
-    my $biblio1 = $builder->build_sample_biblio();
+    my $biblio1 = $builder->build_sample_biblio;
+    Koha::Biblios->find($biblio1->biblionumber)->timestamp('1970-05-07 13:36:23')->store;
+
     $sth_metadata->execute($timestamp, $biblio1->biblionumber);
     my $item1 = $builder->build_sample_item(
         {
@@ -623,7 +625,7 @@ subtest 'Tests for timestamp handling' => sub {
                 baseURL           => 'http://localhost',
                 compression       => 'gzip',
                 deletedRecord     => 'persistent',
-                earliestDatestamp => '2014-05-07T13:36:23Z',
+                earliestDatestamp => '1970-05-07T13:36:23Z',
                 granularity       => 'YYYY-MM-DDThh:mm:ssZ',
                 protocolVersion   => '2.0',
                 repositoryName    => 'My Library',
