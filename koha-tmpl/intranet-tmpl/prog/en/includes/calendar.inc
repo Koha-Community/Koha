@@ -34,6 +34,7 @@
 <!-- / calendar.inc -->
 [% Asset.js("js/calendar.js") | $raw %]
 [% Asset.js("lib/flatpickr/flatpickr.min.js") | $raw %]
+[% Asset.js("lib/flatpickr/shortcut-buttons-flatpickr.min.js") | $raw %]
 <script>
     flatpickr.l10ns.default.weekdays = flatpickr_weekdays;
     flatpickr.l10ns.default.months   = flatpickr_months;
@@ -84,6 +85,38 @@
                 $(on_close_focus).focus();
             }
         },
+        plugins: [
+          ShortcutButtonsPlugin({
+            button: [
+              {
+                label: __("Yesterday")
+              },
+              {
+                label: __("Today")
+              },
+              {
+                label: __("Tomorrow")
+              }
+            ],
+            label: "or",
+            onClick: (index, fp) => {
+              let date;
+              switch (index) {
+                case 0:
+                  date = new Date(Date.now() - 24 * 60 * 60 * 1000);
+                  break;
+                case 1:
+                  date = new Date();
+                  break;
+                case 2:
+                  date = new Date(Date.now() + 24 * 60 * 60 * 1000);
+                  break;
+              }
+              date.setHours(23, 59, 0, 0);
+              fp.setDate(date);
+            }
+          })
+        ]
     });
     $(document).ready(function(){
         $(".flatpickr").each(function(){
