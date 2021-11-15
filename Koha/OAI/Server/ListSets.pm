@@ -34,6 +34,17 @@ sub new {
     my $token = Koha::OAI::Server::ResumptionToken->new(%args);
     my $sets = GetOAISets;
     my $pos = 0;
+
+    return HTTP::OAI::Response->new(
+        requestURL => $repository->self_url(),
+        errors     => [
+            HTTP::OAI::Error->new(
+                code    => 'noSetHierarchy',
+                message => 'There are no OAI sets defined',
+            )
+        ],
+    ) unless @$sets;
+
     foreach my $set (@$sets) {
         if ($pos < $token->{cursor}) {
             $pos++;
