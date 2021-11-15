@@ -21,7 +21,7 @@ use Modern::Perl;
 use Test::Deep qw( cmp_deeply re );
 use Test::MockTime qw/set_fixed_time set_relative_time restore_time/;
 
-use Test::More tests => 33;
+use Test::More tests => 34;
 use DateTime;
 use File::Basename;
 use File::Spec;
@@ -862,6 +862,46 @@ subtest 'Tests for timestamp handling' => sub {
     );
 
     restore_time();
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'ListSets() tests' => sub {
+
+    plan tests => 2;
+
+    $schema->storage->txn_begin;
+
+    # initial cleanup
+    $schema->resultset('OaiSet')->delete;
+
+    test_query(
+        'ListSets - no sets should return a noSetHierarchy exception',
+        { verb => 'ListSets' },
+        {
+            error => {
+                code    => 'noSetHierarchy',
+                content => 'There are no OAI sets defined',
+            }
+        }
+    );
+
+    # Add a couple sets
+    AddOAISet({ spec => 'set_1', name => 'Set 1' });
+    AddOAISet({ spec => 'set_2', name => 'Set 2' });
+
+    test_query(
+        'ListSets - no sets should return a noSetHierarchy exception',
+        { verb => 'ListSets' },
+        {
+            ListSets => {
+                set => [
+                    { setSpec => 'set_1', setName => 'Set 1' },
+                    { setSpec => 'set_2', setName => 'Set 2' },
+                ]
+            }
+        }
+    );
 
     $schema->storage->txn_rollback;
 };
