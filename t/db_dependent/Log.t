@@ -15,7 +15,8 @@
 # with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use Test::More tests => 3;
+use Data::Dumper qw( Dumper );
+use Test::More tests => 4;
 
 use C4::Context;
 use C4::Log qw( logaction cronlogaction );
@@ -148,6 +149,37 @@ subtest 'GDPR logging' => sub {
     );
 
     is( $logs->count, 1, 'We expect only one auth success line for this patron' );
+};
+
+subtest 'Reduce log size by unblessing Koha objects' => sub {
+    plan tests => 7;
+
+    my $builder = t::lib::TestBuilder->new;
+    my $item = $builder->build_sample_item;
+
+    logaction( 'MY_MODULE', 'TEST01', $item->itemnumber, $item, 'opac' );
+    my $str = Dumper($item->unblessed);
+    my $logs = Koha::ActionLogs->search({ module => 'MY_MODULE', action => 'TEST01', object => $item->itemnumber });
+    is( $logs->count, 1, 'Action found' );
+    is( length($logs->next->info), length($str), 'Length exactly identical' );
+
+    logaction( 'CATALOGUING', 'MODIFY', $item->itemnumber, $item, 'opac' );
+    $logs = Koha::ActionLogs->search({ module => 'CATALOGUING', action => 'MODIFY', object => $item->itemnumber });
+    is( substr($logs->next->info, 0, 5), 'item ', 'Prefix item' );
+    is( length($logs->reset->next->info), 5+length($str), 'Length + 5' );
+
+    my $hold = $builder->build_object({ class => 'Koha::Holds' });
+    logaction( 'MY_CIRC_MODULE', 'TEST', $item->itemnumber, $hold, 'opac' );
+    $logs = Koha::ActionLogs->search({ module => 'MY_CIRC_MODULE', action => 'TEST', object => $item->itemnumber });
+    is( length($logs->next->info), length( Dumper($hold->unblessed)), 'Length of dumped unblessed hold' );
+
+    logaction( 'MY_MODULE', 'TEST02', $item->itemnumber, [], 'opac' );
+    $logs = Koha::ActionLogs->search({ module => 'MY_MODULE', action => 'TEST02', object => $item->itemnumber });
+    like( $logs->next->info, qr/^ARRAY\(/, 'Dumped arrayref' );
+
+    logaction( 'MY_MODULE', 'TEST03', $item->itemnumber, $builder, 'opac' );
+    $logs = Koha::ActionLogs->search({ module => 'MY_MODULE', action => 'TEST03', object => $item->itemnumber });
+    like( $logs->next->info, qr/^t::lib::TestBuilder/, 'Dumped TestBuilder object' );
 };
 
 $schema->storage->txn_rollback;
