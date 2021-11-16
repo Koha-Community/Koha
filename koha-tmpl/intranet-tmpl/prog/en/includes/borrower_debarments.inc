@@ -62,7 +62,7 @@
                     <li><label for="rcomment">Comment:</label> <input type="text" id="rcomment" name="comment" /></li>
                     <li>
                         <label for="rexpiration">Expiration:</label>
-                        <input name="expiration" id="rexpiration" size="20" value="" class="flatpickr futuredate" type="text" />
+                        <input name="expiration" id="rexpiration" size="20" value="" class="flatpickr" data-flatpickr-futuredate="true" type="text" />
                     </li>
                 </ol>
             <fieldset class="action"><input type="submit" value="Add restriction" /> <a href="#" class="cancel" id="cancel_manual_restriction">Cancel</a></fieldset>

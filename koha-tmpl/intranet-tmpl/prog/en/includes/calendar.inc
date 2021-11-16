@@ -78,19 +78,28 @@
                 var endPicker = document.querySelector("#"+thisInput.dataset.date_to)._flatpickr;
                 endPicker.set('minDate', selectedDates[0]);
             }
+
+            let = on_close_focus = $(thisInput).data('flatpickr-on-close-focus');
+            if ( on_close_focus ) {
+                $(on_close_focus).focus();
+            }
         },
     });
     $(document).ready(function(){
         $(".flatpickr").each(function(){
             let options = {};
 
-            if( $(this).hasClass("futuredate") ) {
+            if( $(this).data("flatpickr-futuredate") === true ) {
                 options['minDate'] = new Date().fp_incr(1);
                 options['allowInvalidPreload'] = true;
             }
-            if( $(this).hasClass("pastdate") ) {
+            if( $(this).data("flatpickr-pastdate") === true ) {
                 options['maxDate'] = new Date().fp_incr(-1);
             }
+            if ( $(this).data('flatpickr-enable-time') === true ) {
+                options['enableTime'] = true;
+            }
+
             $(this).flatpickr(options);
         });
     });

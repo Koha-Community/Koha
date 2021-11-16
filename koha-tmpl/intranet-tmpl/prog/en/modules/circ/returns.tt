@@ -808,7 +808,7 @@
                                         <div class="date-select" id="return_date_override_fields">
                                             <div class="hint">Specify return date [% INCLUDE 'date-format.inc' %]: </div>
 
-                                            <input type="text" size="20" class="pastdate" id="return_date_override" name="return_date_override" value="[% return_date_override | html %]" />
+                                            <input type="text" size="20" id="return_date_override" name="return_date_override" value="[% return_date_override | html %]" class="flatpickr" data-flatpickr-pastdate="true" data-flatpickr-enable-time="true" data-flatpickr-on-close-focus="#barcode" />
 
                                             <div class="circ-setting">
                                                 [% IF ( return_date_override_remember ) %]
@@ -1037,15 +1037,6 @@
                     "bSort":false,
                     "dom": 'B<"clearfix">t',
                     }, columns_settings);
-
-            $("#return_date_override").flatpickr({
-                enableTime: true,
-                dateFormat: flatpickr_dateformat_string + " " + flatpickr_timeformat_string,
-                maxDate: "today",
-                onClose: function() {
-                    $("#barcode").focus();
-                }
-            });
 
             $("#exemptcheck").change(function () {
                 if (this.checked == true) {

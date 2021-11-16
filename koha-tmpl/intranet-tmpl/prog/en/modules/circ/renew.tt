@@ -147,7 +147,8 @@
                                     <input type="hidden" name="override_limit" value="1" />
                                     <input type="hidden" name="override_holds" value="1" />
                                     <div>
-                                        <label for="renewonholdduedate">Renewal due date:</label> <input type="text" size="20" id="renewonholdduedate" name="renewonholdduedate" value="" />
+                                        <label for="renewonholdduedate">Renewal due date:</label>
+                                        <input type="text" size="20" id="renewonholdduedate" name="renewonholdduedate" value="" class="flatpickr" data-flatpickr-futuredate="true" data-flatpickr-enable-time="true" />
                                     </div>
                                     <button type="submit" class="approve"><i class="fa fa-check"></i> Override and renew</button>
                                 </form>
@@ -170,7 +171,11 @@
                             [% END %]
 
                                 <form method="get" action="/cgi-bin/koha/circ/renew.pl">
-                                    <input type="hidden" name="hard_due_date" value="[% hard_due_date | html %]" />
+                                    [% IF Koha.Preference('SpecifyDueDate') %]
+                                        <input type="hidden" name="hard_due_date" value="[% hard_due_date | html %]" class="flatpickr flatpickr-enable-time" />
+                                    [% ELSE %]
+                                        <input type="hidden" name="hard_due_date" value="[% hard_due_date | html %]" />
+                                    [% END %]
                                     <button type="submit" class="deny"><i class="fa fa-times"></i> Continue without renewing</button>
                                 </form>
                     </div>
@@ -251,22 +256,6 @@
             });
         </script>
     [% END %]
-    <script>
-        $( document ).ready(function() {
-            var renewonholdduedate = $("#renewonholdduedate").flatpickr({
-                enableTime: true,
-                dateFormat: flatpickr_dateformat_string + " " + flatpickr_timeformat_string,
-                minDate: new Date().fp_incr(1)
-            });
-
-            [% IF Koha.Preference('SpecifyDueDate') %]
-                var hard_due_date = $("#hard_due_date").flatpickr({
-                    enableTime: true,
-                    dateFormat: flatpickr_dateformat_string + " " + flatpickr_timeformat_string,
-                });
-            [% END %]
-        });
-    </script>
 [% END %]
 
 [% INCLUDE 'intranet-bottom.inc' %]

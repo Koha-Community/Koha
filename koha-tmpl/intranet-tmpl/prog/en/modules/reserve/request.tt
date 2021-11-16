@@ -518,7 +518,7 @@
                             [% IF ( reserve_in_future ) %]
                                 <li>
                                     <label for="from">Hold starts on date:</label>
-                                    <input id="reserve_date" name="reserve_date" id="from" size="10" type="text" data-date_to="expiration_date" class="flatpickr futuredate" />
+                                    <input id="reserve_date" name="reserve_date" id="from" size="10" type="text" data-date_to="expiration_date" class="flatpickr" data-flatpickr-futuredate="true" />
                                 </li>
                             [% END %]
 
@@ -1208,13 +1208,6 @@
                     window.location.replace(url);
                 });
             [% END %]
-
-            [% IF AutoResumeSuspendedHolds %]
-                $(".suspend_until_datepicker").flatpickr({
-                    minDate: new Date().fp_incr(1) /* Require that "until date" be in the future */
-                });
-            [% END %]
-
 
             var my_table = $("#requestspecific").dataTable($.extend(true, {}, dataTablesDefaults, {
                 'bPaginate': false,
