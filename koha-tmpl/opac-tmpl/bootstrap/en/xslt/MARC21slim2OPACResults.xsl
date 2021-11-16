@@ -1510,7 +1510,7 @@
                     <span class="CallNumberAndLabel">
                     <span class="LabelCallNumber">
                         <xsl:if test="$OPACItemLocation='callnum'">Call number: </xsl:if>
-                        <xsl:if test="$OPACItemLocation='ccode'">Collection code, call number: </xsl:if>
+                        <xsl:if test="$OPACItemLocation='ccode'">Collection, call number: </xsl:if>
                         <xsl:if test="$OPACItemLocation='location'">Location, call number: </xsl:if>
                     </span>
                     <span class="CallNumber">
