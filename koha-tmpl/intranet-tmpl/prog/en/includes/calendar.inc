@@ -93,11 +93,15 @@
                 options['minDate'] = new Date().fp_incr(1);
                 options['allowInvalidPreload'] = true;
             }
+            if( $(this).data("flatpickr-pastinclusive") === true ) {
+                options['maxDate'] = "today";
+            }
             if( $(this).data("flatpickr-pastdate") === true ) {
                 options['maxDate'] = new Date().fp_incr(-1);
             }
             if ( $(this).data('flatpickr-enable-time') === true ) {
                 options['enableTime'] = true;
+                options['dateFormat'] = flatpickr_dateformat_string + " " + flatpickr_timeformat_string;
             }
 
             $(this).flatpickr(options);

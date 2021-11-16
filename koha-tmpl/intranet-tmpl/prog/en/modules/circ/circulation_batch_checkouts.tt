@@ -112,11 +112,7 @@
           <fieldset class="rows">
               <legend>Due date: </legend>
               <label for="duedatespec">Hard due date [% INCLUDE 'date-format.inc' %]:</label>
-              [% IF Koha.Preference('SpecifyDueDate') %]
-                  <input type="text" size="20" id="duedatespec" name="duedatespec" value="[% duedatespec | $KohaDates with_hours => 1 %]" class="flatpickr" data-flatpickr-enable-time="true" />
-              [% ELSE %]
-                  <input type="text" size="20" id="duedatespec" name="duedatespec" value="[% duedatespec | $KohaDates with_hours => 1 %]" />
-              [% END %]
+                <input type="text" size="20" id="duedatespec" name="duedatespec" value="[% duedatespec | $KohaDates with_hours => 1 %]" class="flatpickr" data-flatpickr-enable-time="true" />
           </fieldset>
       [% END %]
       <input type="hidden" name="op" value="show" />

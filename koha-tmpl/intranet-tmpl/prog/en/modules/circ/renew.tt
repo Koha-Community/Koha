@@ -171,11 +171,7 @@
                             [% END %]
 
                                 <form method="get" action="/cgi-bin/koha/circ/renew.pl">
-                                    [% IF Koha.Preference('SpecifyDueDate') %]
-                                        <input type="hidden" name="hard_due_date" value="[% hard_due_date | html %]" class="flatpickr flatpickr-enable-time" />
-                                    [% ELSE %]
-                                        <input type="hidden" name="hard_due_date" value="[% hard_due_date | html %]" />
-                                    [% END %]
+                                    <input type="hidden" name="hard_due_date" value="[% hard_due_date | html %]" />
                                     <button type="submit" class="deny"><i class="fa fa-times"></i> Continue without renewing</button>
                                 </form>
                     </div>
@@ -224,7 +220,7 @@
                         <div class="circ-settings show">
                             <div class="date-select" id="renew_date_override_fields">
                                 <div><label for="hard_due_date" class="hint">Renewal due date [% INCLUDE 'date-format.inc' %]:</label></div>
-                                <input type="text" size="20" id="hard_due_date" name="hard_due_date" value="[% hard_due_date | $KohaDates with_hours => 1 %]" />
+                                <input type="text" size="20" id="hard_due_date" name="hard_due_date" value="[% hard_due_date | $KohaDates with_hours => 1 %]" class="flatpickr" data-flatpickr-futuredate="true" data-flatpickr-enable-time="true" />
                             </div> <!-- /.date-select -->
                         </div>
                     </fieldset>
