@@ -98,18 +98,18 @@
                 label: __("Tomorrow")
               }
             ],
-            label: "or",
+            label: __("or"),
             onClick: (index, fp) => {
               let date;
               switch (index) {
                 case 0:
-                  date = new Date(Date.now() - 24 * 60 * 60 * 1000);
+                  date = new Date().fp_incr(-1);
                   break;
                 case 1:
                   date = new Date();
                   break;
                 case 2:
-                  date = new Date(Date.now() + 24 * 60 * 60 * 1000);
+                  date = new Date().fp_incr(1);
                   break;
               }
               date.setHours(23, 59, 0, 0);
