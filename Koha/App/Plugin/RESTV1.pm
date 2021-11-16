@@ -26,7 +26,7 @@ use Koha::REST::V1;
 sub register {
     my ($self, $app) = @_;
 
-    $app->routes->any('/api')->detour(app => Koha::REST::V1->new);
+    $app->routes->any('/api')->partial(1)->to(app => Koha::REST::V1->new);
 }
 
 1;
