@@ -20,7 +20,7 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use POSIX qw( ceil exit );
+use POSIX qw( ceil );
 use CGI qw ( -utf8 );
 use CGI::Cookie;     # need to check cookies before having CGI parse the POST request
 use URI::Escape qw( uri_escape_utf8 );
