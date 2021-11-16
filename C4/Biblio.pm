@@ -1217,14 +1217,8 @@ sub GetMarcBiblio {
         return;
     }
 
-    my $dbh          = C4::Context->dbh;
-    my $sth          = $dbh->prepare("SELECT biblioitemnumber FROM biblioitems WHERE biblionumber=? ");
-    $sth->execute($biblionumber);
-    my $row     = $sth->fetchrow_hashref;
-    my $biblioitemnumber = $row->{'biblioitemnumber'};
     my $marcxml = GetXmlBiblio( $biblionumber );
     $marcxml = StripNonXmlChars( $marcxml );
-    my $frameworkcode = GetFrameworkCode($biblionumber);
     MARC::File::XML->default_record_format( C4::Context->preference('marcflavour') );
     my $record = MARC::Record->new();
 
@@ -1236,8 +1230,6 @@ sub GetMarcBiblio {
         if ($@) { warn " problem with :$biblionumber : $@ \n$marcxml"; }
         return unless $record;
 
-        C4::Biblio::_koha_marc_update_bib_ids( $record, $frameworkcode, $biblionumber,
-            $biblioitemnumber );
         C4::Biblio::EmbedItemsInMarcBiblio({
             marc_record  => $record,
             biblionumber => $biblionumber,
