@@ -1767,7 +1767,7 @@
 
             [% IF (saved1) %]
                 var rtable = KohaTable("table_reports", {
-                    'iDisplayLength': [% Koha.Preference('NumSavedReports') | html %],
+                    'pageLength': [% Koha.Preference('NumSavedReports') | html %],
                     'bAutoWidth': false,
                     'sPaginationType': 'full',
                     'aaSorting': [[ 1, "asc" ]],
