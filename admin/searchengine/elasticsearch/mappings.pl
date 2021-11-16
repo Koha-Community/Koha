@@ -51,7 +51,7 @@ unless ( can_load( modules => { 'Koha::SearchEngine::Elasticsearch::Indexer' => 
 
 my $index = $input->param('index') || 'biblios';
 my $op    = $input->param('op')    || 'list';
-my @messages;
+my ( @messages, @errors );
 push @messages, { type => 'message', code => 'elasticsearch_disabled' }
   if ( C4::Context->preference('SearchEngine') ne 'Elasticsearch' );
 
@@ -69,7 +69,7 @@ my $update_mappings = sub {
             $indexer->update_mappings();
         } catch {
             my $conf = $indexer->get_elasticsearch_params();
-            push @messages, {
+            push @errors, {
                 type => 'error',
                 code => 'error_on_update_es_mappings',
                 message => $_[0],
@@ -125,7 +125,7 @@ if ( $op eq 'edit' ) {
                 $search_field->weight(undef);
             }
             elsif ($field_weight <= 0 || !looks_like_number($field_weight)) {
-                push @messages, { type => 'error', code => 'invalid_field_weight', 'weight' => $field_weight };
+                push @errors, { type => 'error', code => 'invalid_field_weight', 'weight' => $field_weight };
             }
             else {
                 $search_field->weight($field_weight);
@@ -171,10 +171,10 @@ if ( $op eq 'edit' ) {
                 search => $mapping_search
             });
         }
-        push @messages, { type => 'error', code => 'missing_mandatory_fields' } if $mandatory_after < $mandatory_before;
+        push @errors, { type => 'error', code => 'missing_mandatory_fields' } if $mandatory_after < $mandatory_before;
     };
-    if ($@ || @messages) {
-        push @messages, { type => 'error', code => 'error_on_update', message => $@, };
+    if ($@ || @errors) {
+        push @errors, { type => 'error', code => 'error_on_update', message => $@, }; # FIXME $@ can be empty but @errors
         $schema->storage->txn_rollback;
     } else {
         push @messages, { type => 'message', code => 'success_on_update' };
@@ -204,14 +204,14 @@ for my $index_name (@index_names) {
     if (!$indexer->is_index_status_ok) {
         my $conf = $indexer->get_elasticsearch_params();
         if ($indexer->is_index_status_reindex_required) {
-            push @messages, {
+            push @errors, {
                 type => 'error',
                 code => 'reindex_required',
                 index => $conf->{index_name},
             };
         }
         elsif($indexer->is_index_status_recreate_required) {
-            push @messages, {
+            push @errors, {
                 type => 'error',
                 code => 'recreate_required',
                 index => $conf->{index_name},
@@ -278,6 +278,7 @@ while ( my $search_field = $search_fields->next ) {
     push @all_search_fields, $search_field_unblessed;
 }
 
+push @messages, @errors;
 $template->param(
     indexes           => \@indexes,
     all_search_fields => \@all_search_fields,
