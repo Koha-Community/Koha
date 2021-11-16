@@ -199,8 +199,13 @@
                 </li>
                 [% UNLESS languages.size %]
                     <li>
-                        <label for="title" class="required">Title: </label>
-                        <input id="title" size="100" maxlength="250" type="text" name="title_default" value="[% additional_content.title | html %]" required="required" class="required" /> <span class="required">Required</span>
+                        [% IF category == 'news' %]
+                            <label for="title" class="required">Title: </label>
+                            <input id="title" size="100" maxlength="250" type="text" name="title_default" value="[% additional_content.title | html %]" required="required" class="required" /> <span class="required">Required</span>
+                        [% ELSE %]
+                            <label for="title">Title: </label>
+                            <input id="title" size="100" maxlength="250" type="text" name="title_default" value="[% additional_content.title | html %]" />
+                        [% END %]
                     </li>
                 [% END %]
                 <li>
@@ -554,6 +559,7 @@
         <script>
             $(document).ready(function() {
                 $("#tabs").tabs();
+                [% IF category == 'news' %]
                 $("#add_additional_content").validate({
                     submitHandler: function(form){
                         if ( ! $("#title_default").val().length > 0 ) {
@@ -564,6 +570,7 @@
                         form.submit();
                     }
                 });
+                [% END %]
 
                 $("#submit_form").on("click",function(){
                     $("#add_additional_content").submit();
