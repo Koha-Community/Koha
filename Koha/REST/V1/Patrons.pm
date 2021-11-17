@@ -74,8 +74,8 @@ sub get {
     my $c = shift->openapi->valid_input or return;
 
     return try {
-        my $patron_id = $c->validation->param('patron_id');
-        my $patron    = $c->objects->find( Koha::Patrons->search_limited, $patron_id );
+        my $patron_id = $c->param('patron_id');
+        my $patron    = $c->objects->find( Koha::Patrons->new, $patron_id );
 
         unless ($patron) {
             return $c->render(
