@@ -37,6 +37,8 @@ sub _check_params {
         'oblique_title',
         'font',
         'font_size',
+        'scale_width',
+        'scale_height',
         'callnum_split',
         'justify',
         'format_string',
@@ -225,8 +227,8 @@ sub _BAR {
     my $self = shift;
     my $barcode_llx = $self->{'llx'} + $self->{'left_text_margin'};     # this places the bottom left of the barcode the left text margin distance to right of the left edge of the label ($llx)
     my $barcode_lly = $self->{'lly'} + $self->{'top_text_margin'};      # this places the bottom left of the barcode the top text margin distance above the bottom of the label ($lly)
-    my $barcode_width = 0.8 * $self->{'width'};                         # this scales the barcode width to 80% of the label width
-    my $barcode_y_scale_factor = 0.01 * $self->{'height'};              # this scales the barcode height to 10% of the label height
+    my $barcode_width = $self->{'scale_width'} * $self->{'width'};      # You can choose the width of barcode, default value is 0.8 : 80% of the label width
+    my $barcode_y_scale_factor = $self->{'scale_height'} * $self->{'height'};      # You can choose the height of barcode, default value is 0.01 : 10% of the label height
     return 0, 0, 0, $barcode_llx, $barcode_lly, $barcode_width, $barcode_y_scale_factor;
 }
 
@@ -234,8 +236,8 @@ sub _BIBBAR {
     my $self = shift;
     my $barcode_llx = $self->{'llx'} + $self->{'left_text_margin'};     # this places the bottom left of the barcode the left text margin distance to right of the left edge of the label ($self->{'llx'})
     my $barcode_lly = $self->{'lly'} + $self->{'top_text_margin'};      # this places the bottom left of the barcode the top text margin distance above the bottom of the label ($lly)
-    my $barcode_width = 0.8 * $self->{'width'};                         # this scales the barcode width to 80% of the label width
-    my $barcode_y_scale_factor = 0.01 * $self->{'height'};              # this scales the barcode height to 10% of the label height
+    my $barcode_width = $self->{'scale_width'} * $self->{'width'};      # You can choose the width of barcode, default value is 0.8 : 80% of the label width
+    my $barcode_y_scale_factor = $self->{'scale_height'} * $self->{'height'};       # You can choose the height of barcode, default value is 0.01 : 10% of the label height
     my $line_spacer = ($self->{'font_size'} * 1);       # number of pixels between text rows (This is actually leading: baseline to baseline minus font size. Recommended starting point is 20% of font size.).
     my $text_lly = ($self->{'lly'} + ($self->{'height'} - $self->{'top_text_margin'}));
     return $self->{'llx'}, $text_lly, $line_spacer, $barcode_llx, $barcode_lly, $barcode_width, $barcode_y_scale_factor;
@@ -245,8 +247,8 @@ sub _BARBIB {
     my $self = shift;
     my $barcode_llx = $self->{'llx'} + $self->{'left_text_margin'};                             # this places the bottom left of the barcode the left text margin distance to right of the left edge of the label ($self->{'llx'})
     my $barcode_lly = ($self->{'lly'} + $self->{'height'}) - $self->{'top_text_margin'};        # this places the bottom left of the barcode the top text margin distance below the top of the label ($self->{'lly'})
-    my $barcode_width = 0.8 * $self->{'width'};                                                 # this scales the barcode width to 80% of the label width
-    my $barcode_y_scale_factor = 0.01 * $self->{'height'};                                      # this scales the barcode height to 10% of the label height
+    my $barcode_width = $self->{'scale_width'} * $self->{'width'};                              # You can choose the width of barcode, default value is 0.8 : 80% of the label width
+    my $barcode_y_scale_factor = $self->{'scale_height'} * $self->{'height'};                   # You can choose the height of barcode, default value is 0.01 : 10% of the label height
     my $line_spacer = ($self->{'font_size'} * 1);                               # number of pixels between text rows (This is actually leading: baseline to baseline minus font size. Recommended starting point is 20% of font size.).
     my $text_lly = (($self->{'lly'} + $self->{'height'}) - $self->{'top_text_margin'} - (($self->{'lly'} + $self->{'height'}) - $barcode_lly));
     return $self->{'llx'}, $text_lly, $line_spacer, $barcode_llx, $barcode_lly, $barcode_width, $barcode_y_scale_factor;
@@ -270,6 +272,8 @@ sub new {
         oblique_title           => $params{'oblique_title'},
         font                    => $params{'font'},
         font_size               => $params{'font_size'},
+        scale_width             => $params{'scale_width'},
+        scale_height            => $params{'scale_height'},
         callnum_split           => $params{'callnum_split'},
         justify                 => $params{'justify'},
         format_string           => $params{'format_string'},

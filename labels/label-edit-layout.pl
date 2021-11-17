@@ -112,6 +112,8 @@ elsif  ($op eq 'save') {
                     oblique_title   => ($cgi->param('oblique_title') ? 1 : 0),
                     font            => scalar $cgi->param('font') || 'TR',
                     font_size       => scalar $cgi->param('font_size') || 3,
+                    scale_width     => scalar $cgi->param('scale_width') || 0.8,
+                    scale_height    => scalar $cgi->param('scale_height') || 0.01,
                     callnum_split   => ($cgi->param('callnum_split') ? 1 : 0),
                     text_justify    => scalar $cgi->param('text_justify') || 'L',
                     format_string   => scalar $cgi->param('format_string') || 'title, author, isbn, issn, itemtype, barcode, itemcallnumber',
@@ -150,6 +152,8 @@ $template->param(
         guidebox        => $layout->get_attr('guidebox'),
         oblique_title   => $layout->get_attr('oblique_title'),
         font_size       => $layout->get_attr('font_size'),
+        scale_width     => $layout->get_attr('scale_width'),
+        scale_height    => $layout->get_attr('scale_height'),
         callnum_split   => $layout->get_attr('callnum_split'),
         format_string   => $layout->get_attr('format_string'),
         layout_string   => 1,   # FIXME: This should not be hard-coded; It should perhaps be yet another syspref... CN
