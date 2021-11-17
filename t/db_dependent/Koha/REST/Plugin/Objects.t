@@ -116,8 +116,21 @@ get '/my_patrons' => sub {
     );
 };
 
+get '/my_patrons/:patron_id' => sub {
+
+    my $c = shift;
+
+    my $patron_id = $c->param('patron_id');
+    my $patron    = $c->objects->find( scalar Koha::Patrons->new, $patron_id );
+
+    $c->render(
+        status => 200,
+        json   => $patron
+    );
+};
+
 # The tests
-use Test::More tests => 14;
+use Test::More tests => 15;
 use Test::Mojo;
 
 use t::lib::Mocks;
@@ -615,6 +628,47 @@ subtest 'objects.search helper, search_limited() tests' => sub {
       ->tx->res->json;
 
     is( scalar @{$res}, 1, 'Only one patron returned' );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'objects.find helper, search_limited() tests' => sub {
+
+    plan tests => 12;
+
+    $schema->storage->txn_begin;
+
+    my $library_1 = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $library_2 = $builder->build_object( { class => 'Koha::Libraries' } );
+
+    my $patron_1 = $builder->build_object( { class => 'Koha::Patrons', value => { branchcode => $library_1->id } } );
+    my $patron_2 = $builder->build_object( { class => 'Koha::Patrons', value => { branchcode => $library_2->id } } );
+
+    my @libraries_where_can_see_patrons = ( $library_1->id, $library_2->id );
+
+    my $t = Test::Mojo->new;
+
+    my $mocked_patron = Test::MockModule->new('Koha::Patron');
+    $mocked_patron->mock(
+        'libraries_where_can_see_patrons',
+        sub {
+            return @libraries_where_can_see_patrons;
+        }
+    );
+
+    my $patron = $builder->build_object( { class => 'Koha::Patrons' } );
+
+    t::lib::Mocks::mock_userenv( { patron => $patron } );
+
+    $t->get_ok( "/my_patrons/" . $patron_1->id )->status_is(200)->json_is( '/patron_id' => $patron_1->id );
+
+    $t->get_ok( "/my_patrons/" . $patron_2->id )->status_is(200)->json_is( '/patron_id' => $patron_2->id );
+
+    @libraries_where_can_see_patrons = ( $library_2->id );
+
+    $t->get_ok( "/my_patrons/" . $patron_1->id )->status_is(200)->json_is(undef);
+
+    $t->get_ok( "/my_patrons/" . $patron_2->id )->status_is(200)->json_is( '/patron_id' => $patron_2->id );
 
     $schema->storage->txn_rollback;
 };
