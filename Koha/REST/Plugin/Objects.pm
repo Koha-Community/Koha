@@ -62,6 +62,9 @@ the requested object. It passes through any embeds if specified.
                 }
             );
 
+            $result_set = $result_set->search_limited
+                if $result_set->can('search_limited');
+
             my $object = $result_set->find( $id, $attributes );
 
             return unless $object;
