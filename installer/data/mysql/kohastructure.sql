@@ -1964,10 +1964,7 @@ CREATE TABLE `pseudonymized_transactions` (
   `location` varchar(80) default NULL,
   `itemcallnumber` varchar(255) default NULL,
   `ccode` varchar(80) default NULL,
-  PRIMARY KEY (`id`),
-  CONSTRAINT `pseudonymized_transactions_ibfk_1` FOREIGN KEY (`categorycode`) REFERENCES `categories` (`categorycode`),
-  CONSTRAINT `pseudonymized_transactions_borrowers_ibfk_2` FOREIGN KEY (`branchcode`) REFERENCES `branches` (`branchcode`),
-  CONSTRAINT `pseudonymized_transactions_borrowers_ibfk_3` FOREIGN KEY (`transaction_branchcode`) REFERENCES `branches` (`branchcode`)
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
