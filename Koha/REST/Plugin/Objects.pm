@@ -86,6 +86,9 @@ The result object can then be used for further processing.
                 }
             );
 
+            $result_set = $result_set->search_limited
+                if $result_set->can('search_limited');
+
             my $object = $result_set->find( $id, $attributes );
 
             return $object;
