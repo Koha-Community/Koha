@@ -932,6 +932,10 @@
             </div> <!-- /.row -->
         </main>
 
+        [% IF Koha.Preference('ClaimReturnedLostValue') %]
+            [% INCLUDE 'modals/resolve_return_claim.inc' %]
+        [% END %]
+
 <!-- Modal -->
 <div id="barcodeSubmittedModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="barcodeSubmittedModalLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -978,6 +982,9 @@
     </script>
     [% Asset.js("js/pages/circulation.js") | $raw %]
     [% Asset.js("js/checkouts.js") | $raw %]
+    [% IF Koha.Preference('ClaimReturnedLostValue') %]
+        [% Asset.js("js/resolve_claim_modal.js") | $raw %]
+    [% END %]
     [% Asset.js("js/holds.js") | $raw %]
     [% INCLUDE 'calendar.inc' %]
     <script>

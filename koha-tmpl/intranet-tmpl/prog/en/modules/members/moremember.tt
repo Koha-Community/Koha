@@ -853,6 +853,10 @@
             </div> <!-- /.col-sm-2.col-sm-pull-10 -->
         </div> <!-- /.row -->
 
+        [% IF Koha.Preference('ClaimReturnedLostValue') %]
+            [% INCLUDE 'modals/resolve_return_claim.inc' %]
+        [% END %]
+
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'datatables.inc' %]
     [% Asset.js("lib/jquery/plugins/rowGroup/dataTables.rowGroup.min.js") | $raw %]
@@ -885,6 +889,9 @@
     </script>
     [% Asset.js("js/pages/circulation.js") | $raw %]
     [% Asset.js("js/checkouts.js") | $raw %]
+    [% IF Koha.Preference('ClaimReturnedLostValue') %]
+        [% Asset.js("js/resolve_claim_modal.js") | $raw %]
+    [% END %]
     [% Asset.js("js/holds.js") | $raw %]
     [% INCLUDE 'calendar.inc' %]
     [% INCLUDE 'str/members-menu.inc' %]
