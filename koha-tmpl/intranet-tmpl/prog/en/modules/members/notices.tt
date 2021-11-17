@@ -10,7 +10,6 @@
 [% INCLUDE 'doc-head-close.inc' %]
 <style>
     .notice { display: none; }
-    .notice-title { font-weight: bold; display: block; }
 </style>
 </head>
 
@@ -58,10 +57,8 @@
                                 [% FOREACH QUEUED_MESSAGE IN QUEUED_MESSAGES %]
                                     <tr>
                                         <td>
-                                            <a class="notice-title" data-noticeid="[% QUEUED_MESSAGE.message_id | html %]" href="#">[% QUEUED_MESSAGE.subject | html %]</a>
-                                            <div id="notice[% QUEUED_MESSAGE.message_id | html %]" class="notice">
-                                                <iframe srcdoc="[% QUEUED_MESSAGE.content | html | html_line_break %]"></iframe>
-                                            </div>
+                                            <a class="notice-title" data-noticeid="[% QUEUED_MESSAGE.message_id | html %]" href="/cgi-bin/koha/members/notices.pl?borrowernumber=[% borrowernumber | uri %]&amp;noticeid=[% QUEUED_MESSAGE.message_id | uri %]">[% QUEUED_MESSAGE.subject | html %]</a>
+                                            <iframe class="notice" id="notice[% QUEUED_MESSAGE.message_id | html %]" srcdoc="[% QUEUED_MESSAGE.content | html | html_line_break %]"></iframe>
                                         </td>
                                         <td>
                                             [% IF ( QUEUED_MESSAGE.message_transport_type == 'email' ) %]email
@@ -77,14 +74,11 @@
                                             [% ELSIF ( QUEUED_MESSAGE.status == 'deleted' ) %]deleted
                                             [% ELSE %][% QUEUED_MESSAGE.status | html %][% END %]
                                             [% IF ( QUEUED_MESSAGE.status != 'pending' ) %]
-                                                <div id="resend_notice[% QUEUED_MESSAGE.message_id | html %]"  class="notice">
-                                                    <form action="/cgi-bin/koha/members/notices.pl?borrowernumber=[% borrowernumber | html %]" method="POST">
+                                                <div class="notice">
+                                                    <form id="resend_notice[% QUEUED_MESSAGE.message_id | html %]" action="/cgi-bin/koha/members/notices.pl?borrowernumber=[% borrowernumber | html %]" method="POST">
                                                         <input type="hidden" name="op" value="resend_notice" />
                                                         <input type="hidden" name="borrowernumber" value="[% borrowernumber | html %]" />
                                                         <input type="hidden" name="message_id" value="[% QUEUED_MESSAGE.message_id | html %]" />
-                                                        <fieldset class="action">
-                                                            <button class="btn btn-default btn-xs" type="submit">Resend</button>
-                                                        </fieldset>
                                                     </form>
                                                 </div>
                                             [% END %]
@@ -124,6 +118,27 @@
             </div> <!-- /.col-sm-2.col-sm-pull-10 -->
         </div> <!-- /.row -->
 
+        <!-- Modal -->
+        <div class="modal" id="noticeModal" tabindex="-1" aria-labelledby="noticeModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="closebtn" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        <h5 class="modal-title" id="noticeModalLabel">Notice</h5>
+                    </div>
+                    <div class="modal-body">
+                        ...
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" id="resend-notice" class="btn btn-default" style="display:none"><i class="fa fa-refresh" aria-hidden="true"></i> Resend</button>
+                        <button type="button" class="btn btn-default deny cancel" data-dismiss="modal"><i class="fa fa-remove"></i> Close</button>
+                    </div>
+                </div> <!-- /.modal-content -->
+            </div> <!-- /.modal-dialog -->
+        </div> <!-- /.modal -->
+
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'datatables.inc' %]
     <script>
@@ -135,17 +150,28 @@
 
             $("#noticestable").on("click", ".notice-title", function(e){
                 e.preventDefault();
-                var rowid = $(this).data("noticeid");
-                $("#notice"+rowid).toggle();
-                $("#resend_notice"+rowid).toggle();
-                var iframe = $("#notice"+rowid).children('iframe');
-                // Adding some padding to the height and width to remove scrollbars
-                var height = iframe.get(0).contentWindow.document.body.scrollHeight + 25;
-                var width = iframe.get(0).contentWindow.document.body.scrollWidth + 25;
-                iframe.css({
-                    'width':  width + 'px',
-                    'height': height + 'px'
-                });
+                var title = $(this).text();
+                var noticeid = $(this).data("noticeid");
+                var body = $("#notice" + noticeid ).attr("srcdoc");
+                if( $("#resend_notice" + noticeid ).length ){
+                    $("#resend-notice").show();
+                }
+                $("#resend-notice").data("noticeid", noticeid );
+                $("#noticeModalLabel").text( title );
+                $("#noticeModal .modal-body").html( body );
+                $("#noticeModal").modal("show");
+            });
+
+            $("#resend-notice").on("click", function(e){
+                e.preventDefault();
+                var noticeid = $(this).data("noticeid");
+                $("#resend_notice" + noticeid ).submit();
+            });
+
+            $("#noticeModal").on("hide.bs.modal", function(){
+                $("#resend-notice").removeData("noticeid").hide();
+                $("#noticeModalLabel").text("");
+                $("#noticeModal .modal-body").html("");
             });
         });
     </script>
