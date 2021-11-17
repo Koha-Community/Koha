@@ -4388,7 +4388,6 @@ CREATE TABLE `return_claims` (
   KEY `rc_created_by_ibfk` (`created_by`),
   KEY `rc_updated_by_ibfk` (`updated_by`),
   KEY `rc_resolved_by_ibfk` (`resolved_by`),
-  CONSTRAINT `issue_id` FOREIGN KEY (`issue_id`) REFERENCES `issues` (`issue_id`) ON DELETE SET NULL ON UPDATE CASCADE,
   CONSTRAINT `rc_borrowers_ibfk` FOREIGN KEY (`borrowernumber`) REFERENCES `borrowers` (`borrowernumber`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `rc_created_by_ibfk` FOREIGN KEY (`created_by`) REFERENCES `borrowers` (`borrowernumber`) ON DELETE SET NULL ON UPDATE CASCADE,
   CONSTRAINT `rc_items_ibfk` FOREIGN KEY (`itemnumber`) REFERENCES `items` (`itemnumber`) ON DELETE CASCADE ON UPDATE CASCADE,
