@@ -4209,10 +4209,7 @@ CREATE TABLE `pseudonymized_transactions` (
   PRIMARY KEY (`id`),
   KEY `pseudonymized_transactions_ibfk_1` (`categorycode`),
   KEY `pseudonymized_transactions_borrowers_ibfk_2` (`branchcode`),
-  KEY `pseudonymized_transactions_borrowers_ibfk_3` (`transaction_branchcode`),
-  CONSTRAINT `pseudonymized_transactions_borrowers_ibfk_2` FOREIGN KEY (`branchcode`) REFERENCES `branches` (`branchcode`),
-  CONSTRAINT `pseudonymized_transactions_borrowers_ibfk_3` FOREIGN KEY (`transaction_branchcode`) REFERENCES `branches` (`branchcode`),
-  CONSTRAINT `pseudonymized_transactions_ibfk_1` FOREIGN KEY (`categorycode`) REFERENCES `categories` (`categorycode`)
+  KEY `pseudonymized_transactions_borrowers_ibfk_3` (`transaction_branchcode`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
