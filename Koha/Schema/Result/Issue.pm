@@ -373,6 +373,21 @@ __PACKAGE__->belongs_to(
   },
 );
 
+=head2 return_claim
+
+Type: might_have
+
+Related object: L<Koha::Schema::Result::ReturnClaim>
+
+=cut
+
+__PACKAGE__->might_have(
+    "return_claim",
+    "Koha::Schema::Result::ReturnClaim",
+    { "foreign.issue_id" => "self.issue_id" },
+    { cascade_copy       => 0, cascade_delete => 0 },
+);
+
 sub koha_object_class {
     'Koha::Checkout';
 }
