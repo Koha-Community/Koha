@@ -53,6 +53,16 @@ sub store {
         Koha::Exceptions::Checkouts::ReturnClaims::NoCreatedBy->throw();
     }
 
+    unless ( !$self->issue_id
+        || Koha::Checkouts->find( $self->issue_id )
+        || Koha::Old::Checkouts->find( $self->issue_id ) )
+    {
+        Koha::Exceptions::Object::FKConstraint->throw(
+            error     => 'Broken FK constraint',
+            broken_fk => 'issue_id'
+        );
+    }
+
     return $self->SUPER::store;
 }
 
