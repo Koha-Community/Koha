@@ -44,7 +44,8 @@ my $t = Test::Mojo->new('Koha::REST::V1');
 t::lib::Mocks::mock_preference( 'RESTBasicAuth', 1 );
 
 subtest 'list() tests' => sub {
-    plan tests => 2;
+
+    plan tests => 3;
 
     $schema->storage->txn_begin;
     unauthorized_access_tests('GET', undef, undef);
@@ -138,6 +139,56 @@ subtest 'list() tests' => sub {
               ->status_is(200)
               ->json_is( '/0/patron_id' => $patron->id, 'Filtering by date-time works' );
         };
+
+        $schema->storage->txn_rollback;
+    };
+
+    subtest 'search_limited() tests' => sub {
+
+        plan tests => 9;
+
+        $schema->storage->txn_begin;
+
+        my $library_1 = $builder->build_object({ class => 'Koha::Libraries' });
+        my $library_2 = $builder->build_object({ class => 'Koha::Libraries' });
+
+        my $patron_1 = $builder->build_object({ class => 'Koha::Patrons', value => { branchcode => $library_1->id } });
+        my $patron_2 = $builder->build_object({ class => 'Koha::Patrons', value => { branchcode => $library_1->id } });
+        my $patron_3 = $builder->build_object({ class => 'Koha::Patrons', value => { branchcode => $library_2->id } });
+
+        my @libraries_where_can_see_patrons = ($library_1->id, $library_2->id);
+
+        my $mocked_patron = Test::MockModule->new('Koha::Patron');
+        $mocked_patron->mock( 'libraries_where_can_see_patrons', sub
+            {
+                return @libraries_where_can_see_patrons;
+            }
+        );
+
+        my $librarian = $builder->build_object(
+            {
+                class => 'Koha::Patrons',
+                value => { flags => 2**4 }    # borrowers flag = 4
+            }
+        );
+        my $password = 'thePassword123';
+        $librarian->set_password( { password => $password, skip_validation => 1 } );
+        my $userid = $librarian->userid;
+
+        $t->get_ok("//$userid:$password@/api/v1/patrons?_order_by=patron_id&q=" . encode_json({ library_id => [ $library_1->id, $library_2->id ] }))
+          ->status_is(200)
+          ->json_is( '/0/patron_id' => $patron_1->id )
+          ->json_is( '/1/patron_id' => $patron_2->id )
+          ->json_is( '/2/patron_id' => $patron_3->id );
+
+        @libraries_where_can_see_patrons = ($library_2->id);
+
+        my $res = $t->get_ok("//$userid:$password@/api/v1/patrons?_order_by=patron_id&q=" . encode_json({ library_id => [ $library_1->id, $library_2->id ] }))
+          ->status_is(200)
+          ->json_is( '/0/patron_id' => $patron_3->id, 'Returns the only allowed patron' )
+          ->tx->res->json;
+
+        is( scalar @{$res}, 1, 'Only one patron returned' );
 
         $schema->storage->txn_rollback;
     };
