@@ -51,7 +51,7 @@ sub list {
         $query->{debarred} = { '!=' => undef }
             if $restricted;
 
-        my $patrons_rs = Koha::Patrons->search($query);
+        my $patrons_rs = Koha::Patrons->search_limited($query);
         my $patrons    = $c->objects->search( $patrons_rs );
 
         return $c->render(
