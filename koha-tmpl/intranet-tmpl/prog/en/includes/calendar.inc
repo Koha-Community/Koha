@@ -101,18 +101,23 @@
             label: __("or"),
             onClick: (index, fp) => {
               let date;
+              let hh = 23, mm = 59;
               switch (index) {
                 case 0:
                   date = new Date().fp_incr(-1);
                   break;
                 case 1:
                   date = new Date();
+                  if ( $(fp.input).data("flatpickr-pastinclusive") === true ) {
+                    hh = date.getHours();
+                    mm = date.getMinutes();
+                  }
                   break;
                 case 2:
                   date = new Date().fp_incr(1);
                   break;
               }
-              date.setHours(23, 59, 0, 0);
+              date.setHours(hh, mm, 0, 0);
               fp.setDate(date);
             }
           })
@@ -121,6 +126,7 @@
     $(document).ready(function(){
         $(".flatpickr").each(function(){
             let options = {};
+            let refresh_max_date = 0;
 
             if( $(this).data("flatpickr-futuredate") === true ) {
                 let original_date = $(this).val();
@@ -139,7 +145,8 @@
                 }
             }
             if( $(this).data("flatpickr-pastinclusive") === true ) {
-                options['maxDate'] = "today";
+                options['maxDate'] = new Date(); /* Not today or hh:mm will be 00:00 */
+                refresh_max_date = 1;
             }
             if( $(this).data("flatpickr-pastdate") === true ) {
                 options['maxDate'] = new Date().fp_incr(-1);
@@ -149,7 +156,12 @@
                 options['dateFormat'] = flatpickr_dateformat_string + " " + flatpickr_timeformat_string;
             }
 
-            $(this).flatpickr(options);
+            let fp = $(this).flatpickr(options);
+            if ( refresh_max_date ) {
+                /* Refresh the maxDate every 30 secondes to make sure the user will not
+                   be stuck with the minute passed */
+                setInterval(() => { fp.set("maxDate", new Date()) }, 30000);
+            }
         });
     });
 </script>
