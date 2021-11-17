@@ -150,6 +150,11 @@ for API rendering.
 
                 $filtered_params = $c->merge_q_params( $filtered_params, $query_params, $result_set );
             }
+
+            # If search_limited exists, use it
+            $result_set = $result_set->search_limited,
+                if $result_set->can('search_limited');
+
             # Perform search
             my $objects = $result_set->search( $filtered_params, $attributes );
             my $total   = $result_set->search->count;
