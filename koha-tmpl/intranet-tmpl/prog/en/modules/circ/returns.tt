@@ -192,7 +192,7 @@
                                     <ul>
                                         [% FOREACH rc IN ReturnClaims %]
                                             <li>
-                                                [% INCLUDE 'patron-title.inc' patron=rc.patron hide_patron_infos_if_needed=1 invert_name=1 %]
+                                                [% INCLUDE 'patron-title.inc' patron=rc.patron hide_patron_infos_if_needed=1 invert_name=1 %] <a class="btn btn-default btn-xs return-claim-tools-resolve" role="button" data-return-claim-id="[% rc.id | html %]" data-current-lost-status="0"><i class="fa fa-check-square"></i> Resolve</a>
                                             </li>
                                         [% END %]
                                     </ul>
@@ -983,12 +983,23 @@
             </div> <!-- /.col-sm-12 -->
         </div> <!-- /.row -->
 
+    [% IF ( ReturnClaims ) %]
+        [% INCLUDE 'modals/resolve_return_claim.inc' %]
+    [% END %]
+
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'datatables.inc' %]
     [% INCLUDE 'columns_settings.inc' %]
     [% INCLUDE 'calendar.inc' %]
     [% Asset.js("lib/jquery/plugins/jquery-ui-timepicker-addon.min.js") | $raw %]
     [% Asset.js("js/pages/circulation.js") | $raw %]
+    [% IF ( ReturnClaims ) %]
+        <script>
+            /* Set a variable needed by resolve_claim_modal.js */
+            var logged_in_user_borrowernumber = "[% logged_in_user.borrowernumber | html %]";
+        </script>
+        [% Asset.js("js/resolve_claim_modal.js") | $raw %]
+    [% END %]
     [% INCLUDE 'timepicker.inc' %]
 
     <script>
