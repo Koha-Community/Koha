@@ -20,6 +20,9 @@ use Modern::Perl;
 use Koha::Acquisition::Orders;
 use Koha::Cities;
 use Koha::Biblios;
+use Koha::Patrons;
+
+use Mojo::JSON qw(encode_json);
 
 # Dummy app for testing the plugin
 use Mojolicious::Lite;
@@ -101,8 +104,20 @@ get '/libraries/:library_id_1/:library_id_2' => sub {
     );
 };
 
+get '/my_patrons' => sub {
+
+    my $c = shift;
+
+    my $patrons = $c->objects->search( scalar Koha::Patrons->search( {}, { order_by   => 'borrowernumber' }) );
+
+    $c->render(
+        status => 200,
+        json   => $patrons
+    );
+};
+
 # The tests
-use Test::More tests => 13;
+use Test::More tests => 14;
 use Test::Mojo;
 
 use t::lib::Mocks;
@@ -549,6 +564,57 @@ subtest 'objects.search helper, public requests' => sub {
     $t->get_ok( '/libraries/'.$library_1->id.'/'.$library_2->id )
       ->json_is('/0' => $library_1->to_api({ public => 1 }), 'Public representation of $library_1 is retrieved')
       ->json_is('/1' => $library_2->to_api({ public => 1 }), 'Public representation of $library_2 is retrieved');
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'objects.search helper, search_limited() tests' => sub {
+
+    plan tests => 9;
+
+    $schema->storage->txn_begin;
+
+    my $library_1 = $builder->build_object({ class => 'Koha::Libraries' });
+    my $library_2 = $builder->build_object({ class => 'Koha::Libraries' });
+
+    my $patron_1 = $builder->build_object({ class => 'Koha::Patrons', value => { branchcode => $library_1->id } });
+    my $patron_2 = $builder->build_object({ class => 'Koha::Patrons', value => { branchcode => $library_1->id } });
+    my $patron_3 = $builder->build_object({ class => 'Koha::Patrons', value => { branchcode => $library_2->id } });
+
+    my @libraries_where_can_see_patrons = ( $library_1->id, $library_2->id );
+
+    my $t = Test::Mojo->new;
+
+    my $mocked_patron = Test::MockModule->new('Koha::Patron');
+    $mocked_patron->mock( 'libraries_where_can_see_patrons', sub
+        {
+            return @libraries_where_can_see_patrons;
+        }
+    );
+
+    my $patron = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => { flags => 2**4 }    # borrowers flag = 4
+        }
+    );
+
+    t::lib::Mocks::mock_userenv({ patron => $patron });
+
+    $t->get_ok( "/my_patrons?q=" . encode_json( { library_id => [ $library_1->id, $library_2->id ] } ) )
+      ->status_is(200)
+      ->json_is( '/0/patron_id' => $patron_1->id )
+      ->json_is( '/1/patron_id' => $patron_2->id )
+      ->json_is( '/2/patron_id' => $patron_3->id );
+
+    @libraries_where_can_see_patrons = ( $library_2->id );
+
+    my $res = $t->get_ok( "/my_patrons?q=" . encode_json( { library_id => [ $library_1->id, $library_2->id ] } ) )
+      ->status_is(200)
+      ->json_is( '/0/patron_id' => $patron_3->id, 'Returns the only allowed patron' )
+      ->tx->res->json;
+
+    is( scalar @{$res}, 1, 'Only one patron returned' );
 
     $schema->storage->txn_rollback;
 };
