@@ -75,7 +75,7 @@ sub get {
 
     return try {
         my $patron_id = $c->validation->param('patron_id');
-        my $patron    = $c->objects->find( Koha::Patrons->new, $patron_id );
+        my $patron    = $c->objects->find( scalar Koha::Patrons->search_limited, $patron_id );
 
         unless ($patron) {
             return $c->render(
