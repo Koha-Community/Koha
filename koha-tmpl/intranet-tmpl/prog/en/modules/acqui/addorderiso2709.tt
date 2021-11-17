@@ -295,7 +295,7 @@ Batch list
                                         [% END %]
 
                                         [% IF ( iteminformatio.marc_value.type == 'select' ) %]
-                                            <select name="field_value">
+                                            <select name="field_value" class="input_marceditor">
                                             [% FOREACH value IN iteminformatio.marc_value.values %]
                                                 [% IF ( value == iteminformatio.marc_value.default ) %]
                                                     <option value="[% value | html %]" selected="selected">[% iteminformatio.marc_value.labels.$value | html %]</option>
