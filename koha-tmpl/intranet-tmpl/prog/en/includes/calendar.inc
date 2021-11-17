@@ -90,8 +90,20 @@
             let options = {};
 
             if( $(this).data("flatpickr-futuredate") === true ) {
-                options['minDate'] = new Date().fp_incr(1);
-                options['allowInvalidPreload'] = true;
+                let original_date = $(this).val();
+                if ( original_date ) {
+                    original_date = Date_from_syspref( original_date ).getTime();
+                    let tomorrow = new Date().fp_incr(1).getTime();
+
+                    options['enable'] = [function(date){
+                        date = date.getTime();
+                        if ( date == original_date ) return true;
+                        if ( date >= tomorrow)       return true;
+                    }];
+                }
+                else {
+                    options['minDate'] = new Date().fp_incr(1);
+                }
             }
             if( $(this).data("flatpickr-pastinclusive") === true ) {
                 options['maxDate'] = "today";
