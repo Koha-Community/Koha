@@ -42,7 +42,6 @@ ID of the item
 =head2 issue_id
 
   data_type: 'integer'
-  is_foreign_key: 1
   is_nullable: 1
 
 ID of the checkout that triggered the claim
@@ -126,7 +125,7 @@ __PACKAGE__->add_columns(
   "itemnumber",
   { data_type => "integer", is_foreign_key => 1, is_nullable => 0 },
   "issue_id",
-  { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
+  { data_type => "integer", is_nullable => 1 },
   "borrowernumber",
   { data_type => "integer", is_foreign_key => 1, is_nullable => 0 },
   "notes",
@@ -222,26 +221,6 @@ __PACKAGE__->belongs_to(
   },
 );
 
-=head2 issue
-
-Type: belongs_to
-
-Related object: L<Koha::Schema::Result::Issue>
-
-=cut
-
-__PACKAGE__->belongs_to(
-  "issue",
-  "Koha::Schema::Result::Issue",
-  { issue_id => "issue_id" },
-  {
-    is_deferrable => 1,
-    join_type     => "LEFT",
-    on_delete     => "SET NULL",
-    on_update     => "CASCADE",
-  },
-);
-
 =head2 itemnumber
 
 Type: belongs_to
@@ -298,8 +277,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2021-01-21 13:39:29
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:qcgfUNzvsOB0UMm/94mZMQ
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2021-11-17 10:01:24
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:Ik93SD3kLNecIyRgsBVKDQ
 
 sub koha_objects_class {
     'Koha::Checkouts::ReturnClaims';
