@@ -72,10 +72,21 @@ sub store {
 sub checkout {
     my ($self) = @_;
 
-    my $checkout = Koha::Checkouts->find( $self->issue_id )
-      || Koha::Old::Checkouts->find( $self->issue_id );
+    my $checkout_rs = $self->_result->checkout;
+    return unless $checkout_rs;
+    return Koha::Checkout->_new_from_dbic($checkout_rs);
+}
 
-    return $checkout;
+=head3 old_checkout
+
+=cut
+
+sub old_checkout {
+    my ($self) = @_;
+
+    my $old_checkout_rs = $self->_result->old_checkout;
+    return unless $old_checkout_rs;
+    return Koha::Old::Checkout->_new_from_dbic($old_checkout_rs);
 }
 
 =head3 patron
