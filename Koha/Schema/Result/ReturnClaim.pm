@@ -256,7 +256,7 @@ __PACKAGE__->belongs_to(
 # Created by DBIx::Class::Schema::Loader v0.07049 @ 2022-02-23 19:37:50
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:3V5bUmu5W3+XS0fa8uR04w
 
-=head2 issue
+=head2 checkout
 
 Type: belongs_to
 
@@ -265,7 +265,7 @@ Related object: L<Koha::Schema::Result::Issue>
 =cut
 
 __PACKAGE__->belongs_to(
-    "issue",
+    "checkout",
     "Koha::Schema::Result::Issue",
     { issue_id => "issue_id" },
     {
@@ -274,7 +274,7 @@ __PACKAGE__->belongs_to(
     },
 );
 
-=head2 old_issue
+=head2 old_checkout
 
 Type: belongs_to
 
@@ -283,7 +283,7 @@ Related object: L<Koha::Schema::Result::OldIssue>
 =cut
 
 __PACKAGE__->belongs_to(
-    "old_issue",
+    "old_checkout",
     "Koha::Schema::Result::OldIssue",
     { issue_id => "issue_id" },
     {
