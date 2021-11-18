@@ -1,4 +1,8 @@
-<table id="clubs-table" class="selections-table">
+[% IF destination == 'holds' %]
+    <table id="clubs-table" class="selections-table">
+[% ELSE %]
+    <table id="clubs-table">
+[% END %]
     <thead>
         <tr>
             <th>Name</th>
@@ -26,10 +30,11 @@
                     [% SET data_url = "/cgi-bin/koha/reserve/request.pl?club=" _ c.id _ "&amp;biblionumber=" _ biblionumber %]
                 [% END %]
                 <tr class="clickable" data-url="[% data_url | html %]">
+                    <td><a href="[% data_url | url %]">[% c.name | html %]</a></td>
             [% ELSE %]
                 <tr>
+                    <td>[% c.name | html %]</td>
             [% END %]
-                <td><a href="[% data_url | url %]">[% c.name | html %]</a></td>
                 <td>[% c.club_template.name | html %]</td>
                 <td>[% c.description | html %]</td>
                 [% UNLESS destination == 'holds' %]
