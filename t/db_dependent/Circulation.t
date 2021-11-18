@@ -1623,16 +1623,30 @@ subtest "Bug 13841 - Do not create new 0 amount fines" => sub {
 };
 
 subtest "AllowRenewalIfOtherItemsAvailable tests" => sub {
-    $dbh->do('DELETE FROM issues');
-    $dbh->do('DELETE FROM items');
-    $dbh->do('DELETE FROM circulation_rules');
+    plan tests => 9;
+    my $biblio = $builder->build_sample_biblio();
+    my $item_1 = $builder->build_sample_item(
+        {
+            biblionumber     => $biblio->biblionumber,
+            library          => $library2->{branchcode},
+        }
+    );
+    my $item_2= $builder->build_sample_item(
+        {
+            biblionumber     => $biblio->biblionumber,
+            library          => $library2->{branchcode},
+            itype            => $item_1->effective_itemtype,
+        }
+    );
+
     Koha::CirculationRules->set_rules(
         {
             categorycode => undef,
-            itemtype     => undef,
+            itemtype     => $item_1->effective_itemtype,
             branchcode   => undef,
             rules        => {
                 reservesallowed => 25,
+                holds_per_record => 25,
                 issuelength     => 14,
                 lengthunit      => 'days',
                 renewalsallowed => 1,
@@ -1645,23 +1659,7 @@ subtest "AllowRenewalIfOtherItemsAvailable tests" => sub {
             }
         }
     );
-    my $biblio = $builder->build_sample_biblio();
 
-    my $item_1 = $builder->build_sample_item(
-        {
-            biblionumber     => $biblio->biblionumber,
-            library          => $library2->{branchcode},
-            itype            => $itemtype,
-        }
-    );
-
-    my $item_2= $builder->build_sample_item(
-        {
-            biblionumber     => $biblio->biblionumber,
-            library          => $library2->{branchcode},
-            itype            => $itemtype,
-        }
-    );
 
     my $borrowernumber1 = Koha::Patron->new({
         firstname    => 'Kyle',
@@ -1673,6 +1671,22 @@ subtest "AllowRenewalIfOtherItemsAvailable tests" => sub {
         firstname    => 'Chelsea',
         surname      => 'Hall',
         categorycode => $patron_category->{categorycode},
+        branchcode   => $library2->{branchcode},
+    })->store->borrowernumber;
+    my $patron_category_2 = $builder->build(
+        {
+            source => 'Category',
+            value  => {
+                category_type                 => 'P',
+                enrolmentfee                  => 0,
+                BlockExpiredPatronOpacActions => -1, # Pick the pref value
+            }
+        }
+    );
+    my $borrowernumber3 = Koha::Patron->new({
+        firstname    => 'Carnegie',
+        surname      => 'Hall',
+        categorycode => $patron_category_2->{categorycode},
         branchcode   => $library2->{branchcode},
     })->store->borrowernumber;
 
@@ -1696,7 +1710,7 @@ subtest "AllowRenewalIfOtherItemsAvailable tests" => sub {
     Koha::CirculationRules->set_rules(
         {
             categorycode => undef,
-            itemtype     => undef,
+            itemtype     => $item_1->effective_itemtype,
             branchcode   => undef,
             rules        => {
                 onshelfholds => 0,
@@ -1707,16 +1721,6 @@ subtest "AllowRenewalIfOtherItemsAvailable tests" => sub {
     ( $renewokay, $error ) = CanBookBeRenewed( $borrowernumber1, $item_1->itemnumber );
     is( $renewokay, 0, 'Bug 14337 - Verify the borrower cannot renew with a hold on the record if AllowRenewalIfOtherItemsAvailable and onshelfholds are disabled' );
 
-    Koha::CirculationRules->set_rules(
-        {
-            categorycode => undef,
-            itemtype     => undef,
-            branchcode   => undef,
-            rules        => {
-                onshelfholds => 0,
-            }
-        }
-    );
     t::lib::Mocks::mock_preference( 'AllowRenewalIfOtherItemsAvailable', 1 );
     ( $renewokay, $error ) = CanBookBeRenewed( $borrowernumber1, $item_1->itemnumber );
     is( $renewokay, 0, 'Bug 14337 - Verify the borrower cannot renew with a hold on the record if AllowRenewalIfOtherItemsAvailable is enabled and onshelfholds is disabled' );
@@ -1724,7 +1728,7 @@ subtest "AllowRenewalIfOtherItemsAvailable tests" => sub {
     Koha::CirculationRules->set_rules(
         {
             categorycode => undef,
-            itemtype     => undef,
+            itemtype     => $item_1->effective_itemtype,
             branchcode   => undef,
             rules        => {
                 onshelfholds => 1,
@@ -1735,25 +1739,53 @@ subtest "AllowRenewalIfOtherItemsAvailable tests" => sub {
     ( $renewokay, $error ) = CanBookBeRenewed( $borrowernumber1, $item_1->itemnumber );
     is( $renewokay, 0, 'Bug 14337 - Verify the borrower cannot renew with a hold on the record if AllowRenewalIfOtherItemsAvailable is disabled and onshelfhold is enabled' );
 
-    Koha::CirculationRules->set_rules(
-        {
-            categorycode => undef,
-            itemtype     => undef,
-            branchcode   => undef,
-            rules        => {
-                onshelfholds => 1,
-            }
-        }
-    );
     t::lib::Mocks::mock_preference( 'AllowRenewalIfOtherItemsAvailable', 1 );
     ( $renewokay, $error ) = CanBookBeRenewed( $borrowernumber1, $item_1->itemnumber );
     is( $renewokay, 1, 'Bug 14337 - Verify the borrower can renew with a hold on the record if AllowRenewalIfOtherItemsAvailable and onshelfhold are enabled' );
+
+    AddReserve(
+        {
+            branchcode     => $library2->{branchcode},
+            borrowernumber => $borrowernumber3,
+            biblionumber   => $biblio->biblionumber,
+            priority       => 1,
+        }
+    );
+
+    ( $renewokay, $error ) = CanBookBeRenewed( $borrowernumber1, $item_1->itemnumber );
+    is( $renewokay, 0, 'Verify the borrower cannot renew with 2 holds on the record if AllowRenewalIfOtherItemsAvailable and onshelfhold are enabled and one other item on record' );
+
+    my $item_3= $builder->build_sample_item(
+        {
+            biblionumber     => $biblio->biblionumber,
+            library          => $library2->{branchcode},
+            itype            => $item_1->effective_itemtype,
+        }
+    );
+
+    ( $renewokay, $error ) = CanBookBeRenewed( $borrowernumber1, $item_1->itemnumber );
+    is( $renewokay, 1, 'Verify the borrower cannot renew with 2 holds on the record if AllowRenewalIfOtherItemsAvailable and onshelfhold are enabled and two other items on record' );
+
+    Koha::CirculationRules->set_rules(
+        {
+            categorycode => $patron_category_2->{categorycode},
+            itemtype     => $item_1->effective_itemtype,
+            branchcode   => undef,
+            rules        => {
+                reservesallowed => 0,
+            }
+        }
+    );
+
+    ( $renewokay, $error ) = CanBookBeRenewed( $borrowernumber1, $item_1->itemnumber );
+    is( $renewokay, 0, 'Verify the borrower cannot renew with 2 holds on the record, but only one of those holds can be filled when AllowRenewalIfOtherItemsAvailable and onshelfhold are enabled and two other items on record' );
 
     # Setting item not checked out to be not for loan but holdable
     $item_2->notforloan(-1)->store;
 
     ( $renewokay, $error ) = CanBookBeRenewed( $borrowernumber1, $item_1->itemnumber );
     is( $renewokay, 0, 'Bug 14337 - Verify the borrower can not renew with a hold on the record if AllowRenewalIfOtherItemsAvailable is enabled but the only available item is notforloan' );
+
 };
 
 {
@@ -1836,6 +1868,25 @@ subtest 'CanBookBeIssued & AllowReturnToBranch' => sub {
         {
             homebranch    => $homebranch->{branchcode},
             holdingbranch => $holdingbranch->{branchcode},
+        }
+    );
+    Koha::CirculationRules->set_rules(
+        {
+            categorycode => undef,
+            itemtype     => $item->effective_itemtype,
+            branchcode   => undef,
+            rules        => {
+                reservesallowed => 25,
+                issuelength     => 14,
+                lengthunit      => 'days',
+                renewalsallowed => 1,
+                renewalperiod   => 7,
+                norenewalbefore => undef,
+                auto_renew      => 0,
+                fine            => .10,
+                chargeperiod    => 1,
+                maxissueqty     => 20
+            }
         }
     );
 
@@ -2053,6 +2104,26 @@ subtest 'CanBookBeIssued + Koha::Patron->is_debarred|has_overdues' => sub {
             library => $library->{branchcode},
         }
     );
+    Koha::CirculationRules->set_rules(
+        {
+            categorycode => undef,
+            itemtype     => undef,
+            branchcode   => $library->{branchcode},
+            rules        => {
+                reservesallowed => 25,
+                issuelength     => 14,
+                lengthunit      => 'days',
+                renewalsallowed => 1,
+                renewalperiod   => 7,
+                norenewalbefore => undef,
+                auto_renew      => 0,
+                fine            => .10,
+                chargeperiod    => 1,
+                maxissueqty     => 20
+            }
+        }
+    );
+
 
     my ( $error, $question, $alerts );
 
@@ -2247,6 +2318,26 @@ subtest 'CanBookBeIssued + AllowMultipleIssuesOnABiblio' => sub {
         {
             biblionumber => $biblionumber,
             library      => $library->{branchcode},
+        }
+    );
+
+    Koha::CirculationRules->set_rules(
+        {
+            categorycode => undef,
+            itemtype     => undef,
+            branchcode   => $library->{branchcode},
+            rules        => {
+                reservesallowed => 25,
+                issuelength     => 14,
+                lengthunit      => 'days',
+                renewalsallowed => 1,
+                renewalperiod   => 7,
+                norenewalbefore => undef,
+                auto_renew      => 0,
+                fine            => .10,
+                chargeperiod    => 1,
+                maxissueqty     => 20
+            }
         }
     );
 
