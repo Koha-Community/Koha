@@ -442,7 +442,14 @@
                                                         <td>[% bundle_item.biblio.author | html %]</td>
                                                         <td>[% ItemTypes.GetDescription(bundle_item.itype) | html %]</td>
                                                         <td>[% bundle_item.barcode | html %]</td>
-                                                        <td>[% INCLUDE 'item-status.inc' item=bundle_item %]</td>
+                                                        <td>
+                                                            [% IF bundle_item.itemlost %]
+                                                                [% itemlost_description = AuthorisedValues.GetDescriptionByKohaField({ kohafield = 'items.itemlost', authorised_value = bundle_item.itemlost }) %]
+                                                                <span class="lost">[% itemlost_description | html %]</span>
+                                                            [% ELSE %]
+                                                                Present
+                                                            [% END %]
+                                                        </td>
                                                     </tr>
                                                     [% ELSIF !bundle_item.itemlost %]
                                                     <tr data-barcode="[% bundle_item.barcode | html %]">
