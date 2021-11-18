@@ -44,5 +44,12 @@ return {
               ( 'BundleNotLoanValue', $nfl_val, '', 'Sets the NOT_LOAN AV value that represents "Added to bundle" as a not for loan value', 'Free')
         });
         say $out "System preferences added and set";
+
+        if( index_exists( 'return_claims', 'issue_id' ) ) {
+            $dbh->do(q{
+                ALTER TABLE return_claims DROP INDEX issue_id
+            });
+            say $out "Dropped unique constraint on issue_id in return_claims";
+        }
     }
 }
