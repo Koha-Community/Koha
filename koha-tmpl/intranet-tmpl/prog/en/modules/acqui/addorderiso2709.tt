@@ -23,7 +23,27 @@ Batch list
 <body id="acq_addorderiso2709" class="acq">
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'acquisitions-search.inc' %]
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a> &rsaquo; <a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% booksellerid | html %]">[% booksellername | html %]</a> &rsaquo; <a href="/cgi-bin/koha/acqui/basket.pl?basketno=[% basketno | html %]">Basket [% basketno | html %]</a> &rsaquo; Add orders from MARC file</div>
+
+    <nav id="breadcrumbs" aria-label="Breadcrumb" class="breadcrumb">
+        <ol>
+            <li>
+                <a href="/cgi-bin/koha/mainpage.pl">Home</a>
+            </li>
+            <li>
+                <a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a>
+            </li>
+            <li>
+                <a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% booksellerid | html %]">[% booksellername | html %]</a>
+            </li>
+            <li>
+                <a href="/cgi-bin/koha/acqui/basket.pl?basketno=[% basketno | html %]">Basket [% basketno | html %]</a>
+            </li>
+            <li>
+                <a href="#" aria-current="page">Add orders from MARC file</a>
+            </li>
+        </ol>
+    </nav>
+
     <div class="container-fluid">
         <div class="row">
             <div class="col-sm-6 col-sm-offset-3 col-md-8 col-md-offset-2">
