@@ -24,6 +24,7 @@ package C4::Reserves;
 use Modern::Perl;
 
 use C4::Accounts;
+use C4::Biblio qw( GetMarcFromKohaField );
 use C4::Circulation qw( CheckIfIssuedToPatron GetAgeRestriction GetBranchItemRule );
 use C4::Context;
 use C4::Items qw( CartToShelf get_hostitemnumbers_of );
@@ -398,7 +399,6 @@ sub CanItemBeReserved {
 
     # we retrieve borrowers and items informations #
     # item->{itype} will come for biblioitems if necessery
-    my $biblio   = $item->biblio;
     my $borrower = $patron->unblessed;
 
     # If an item is damaged and we don't allow holds on damaged items, we can stop right here
@@ -406,10 +406,13 @@ sub CanItemBeReserved {
       if ( $item->damaged
         && !C4::Context->preference('AllowHoldsOnDamagedItems') );
 
-    # Check for the age restriction
-    my ( $ageRestriction, $daysToAgeRestriction ) =
-      C4::Circulation::GetAgeRestriction( $biblio->biblioitem->agerestriction, $borrower );
-    return { status => 'ageRestricted' } if $daysToAgeRestriction && $daysToAgeRestriction > 0;
+    if( GetMarcFromKohaField('biblioitems.agerestriction') ){
+        my $biblio = $item->biblio;
+        # Check for the age restriction
+        my ( $ageRestriction, $daysToAgeRestriction ) =
+          C4::Circulation::GetAgeRestriction( $biblio->biblioitem->agerestriction, $borrower );
+        return { status => 'ageRestricted' } if $daysToAgeRestriction && $daysToAgeRestriction > 0;
+    }
 
     # Check that the patron doesn't have an item level hold on this item already
     return { status =>'itemAlreadyOnHold' }
@@ -417,7 +420,7 @@ sub CanItemBeReserved {
 
     # Check that patron have not checked out this biblio (if AllowHoldsOnPatronsPossessions set)
     if ( !C4::Context->preference('AllowHoldsOnPatronsPossessions')
-        && C4::Circulation::CheckIfIssuedToPatron( $patron->borrowernumber, $biblio->biblionumber ) ) {
+        && C4::Circulation::CheckIfIssuedToPatron( $patron->borrowernumber, $item->biblionumber ) ) {
         return { status =>'alreadypossession' };
     }
 
