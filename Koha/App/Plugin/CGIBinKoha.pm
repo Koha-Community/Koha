@@ -24,7 +24,6 @@ use Mojo::Base 'Mojolicious::Plugin';
 use CGI;
 use CGI::Compile;
 use CGI::Emulate::PSGI;
-use IO::Scalar;
 
 sub register {
     my ($self, $app, $conf) = @_;
@@ -80,9 +79,10 @@ sub _psgi_env {
     my $env = $c->req->env;
 
     my $body = $c->req->build_body;
+    open my $input, '<', \$body or die "Can't open in-memory scalar: $!";
     $env = {
         %$env,
-        'psgi.input' => IO::Scalar->new(\$body),
+        'psgi.input' => $input,
         'psgi.errors' => *STDERR,
         REQUEST_METHOD => $c->req->method,
         QUERY_STRING => $c->req->url->query->to_string,
