@@ -237,11 +237,21 @@
       </li>
     </ol>
   </fieldset>
+
+    <fieldset class="rows" id="save_profile">
+        <legend>Save profile</legend>
+        <ol>
+            <li>
+                <label for="profile_name">Profile name:</label>
+                <input type="text" id="profile_name" name="profile_name" />
+                <button class="btn btn-default btn-xs" id="add_profile" disabled>Save profile</button>
+                <button class="btn btn-link" id="del_profile" disabled><i class="fa fa-trash"></i> <span>Remove profile</span></button>
+            </li>
+        </ol>
+    </fieldset>
+
   <fieldset class="action">
     <input type="button" id="mainformsubmit" value="Stage for import" />
-    <button id="add_profile" disabled>Save profile</button>
-    <input type="text" id="profile_name" name="profile_name" placeholder="Profile name"/>
-    <button id="del_profile" disabled>Remove profile</button>
   </fieldset>
  
        <div id="jobpanel"><div id="jobstatus" class="progress_panel">Job progress: <div id="jobprogress"></div> <span id="jobprogresspercent">0</span>%</div>
@@ -306,10 +316,12 @@
                     $("#parse_itemsyes").prop("checked", true).change();
                     $("#item_action").val('always_add').change();
                     $("#profile_name").val('').keyup();
+                    $("#del_profile span").text( _("Remove profile") );
                 } else {
                     const profile = $('option:selected', this).data('profile');
                     $("#profile_id").val(profile.profile_id);
                     $("#mod_profile, #del_profile").prop("disabled", null);
+                    $("#del_profile span").text( _("Remove profile") + ": " + profile.name );
                     $("#comments").val(profile.comments);
                     $("#record_type").val(profile.record_type).change();
                     $("#encoding").val(profile.encoding).change();
@@ -324,7 +336,7 @@
                 }
             });
 
-            $("#profile_name").keyup(function(){
+            $("#profile_name").on("change keyup", function(){
                 $("#add_profile").prop("disabled", this.value.trim()=='');
             });
 
