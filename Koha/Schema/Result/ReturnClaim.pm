@@ -316,6 +316,21 @@ __PACKAGE__->belongs_to(
     },
 );
 
+=head2 item
+
+Type: belongs_to
+
+Related object: L<Koha::Schema::Result::Item>
+
+=cut
+
+__PACKAGE__->belongs_to(
+  "item",
+  "Koha::Schema::Result::Item",
+  { itemnumber => "itemnumber" },
+  { is_deferrable => 1, on_delete => "CASCADE", on_update => "CASCADE" },
+);
+
 sub koha_objects_class {
     'Koha::Checkouts::ReturnClaims';
 }

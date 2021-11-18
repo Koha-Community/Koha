@@ -101,6 +101,20 @@ sub patron {
     return Koha::Patron->_new_from_dbic( $borrower ) if $borrower;
 }
 
+=head3 item
+
+  my $item = $claim->item;
+
+Return the return claim item
+
+=cut
+
+sub item {
+    my ( $self ) = @_;
+    my $item_rs = $self->_result->item;
+    return Koha::Item->_new_from_dbic( $item_rs );
+}
+
 =head3 resolve
 
     $claim->resolve(
@@ -137,7 +151,7 @@ sub resolve {
             )->store;
 
             if ( defined $params->{new_lost_status} ) {
-                $self->checkout->item->itemlost( $params->{new_lost_status} )->store;
+                $self->item->itemlost( $params->{new_lost_status} )->store;
             }
         }
     );
