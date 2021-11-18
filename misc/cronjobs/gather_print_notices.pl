@@ -20,8 +20,8 @@ use Getopt::Long qw( GetOptions );
 use C4::Log qw( cronlogaction );
 
 use Koha::DateUtils qw( dt_from_string output_pref );
+use Koha::Email;
 use Koha::Util::OpenDocument qw( generate_ods );
-use MIME::Lite;
 
 my (
     $help,
@@ -287,11 +287,12 @@ sub send_files {
     my $from = $params->{from};
     return unless $to and $from;
 
-    my $mail = MIME::Lite->new(
-        From     => $from,
-        To       => $to,
-        Subject  => 'Print notices for ' . $today_syspref,
-        Type     => 'multipart/mixed',
+    my $email = Koha::Email->create(
+        {
+            from    => $from,
+            to      => $to,
+            subject => 'Print notices for ' . $today_syspref,
+        }
     );
 
     while ( my ( $type, $filenames ) = each %$files ) {
@@ -306,20 +307,20 @@ sub send_files {
 
             next unless $mimetype;
 
-            my $filepath = File::Spec->catdir( $directory, $filename );
+            my $filepath = File::Spec->catfile( $directory, $filename );
 
             next unless $filepath or -f $filepath;
 
-            $mail->attach(
-              Type     => $mimetype,
-              Path     => $filepath,
-              Filename => $filename,
-              Encoding => 'base64',
+            $email->attach_file(
+                $filepath,
+                content_type => $mimetype,
+                name         => $filename,
+                disposition  => 'attachment',
             );
         }
     }
 
-    $mail->send;
+    $email->send_or_die;
 }
 
 =head1 NAME
