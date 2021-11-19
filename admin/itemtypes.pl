@@ -62,7 +62,7 @@ if ( $op eq 'add_form' ) {
     my $parent_types = Koha::ItemTypes->search({parent_type=>undef,itemtype => {'!='=>$itemtype_code}});
     my $imagesets = C4::Koha::getImageSets( checked => ( $itemtype ? $itemtype->imageurl : undef ) );
     my $searchcategory = GetAuthorisedValues("ITEMTYPECAT");
-    my $translated_languages = C4::Languages::getTranslatedLanguages( undef , C4::Context->preference('template') );
+    my $translated_languages = C4::Languages::getTranslatedLanguages( "both", C4::Context->preference('template') );
     $template->param(
         itemtype  => $itemtype,
         parent_type => $parent_type,
