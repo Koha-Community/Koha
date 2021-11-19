@@ -27,7 +27,10 @@ use Koha::Notice::Templates;
 sub GetByModule {
     my ( $self, $module ) = @_;
 
-    return Koha::Notice::Templates->search({ module => $module });
+    return Koha::Notice::Templates->search(
+        { module => $module },
+        { group_by => 'code' }
+    );
 }
 
 =head1 NAME
