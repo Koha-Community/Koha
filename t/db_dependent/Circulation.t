@@ -1623,7 +1623,7 @@ subtest "Bug 13841 - Do not create new 0 amount fines" => sub {
 };
 
 subtest "AllowRenewalIfOtherItemsAvailable tests" => sub {
-    plan tests => 9;
+    plan tests => 13;
     my $biblio = $builder->build_sample_biblio();
     my $item_1 = $builder->build_sample_item(
         {
@@ -1780,11 +1780,61 @@ subtest "AllowRenewalIfOtherItemsAvailable tests" => sub {
     ( $renewokay, $error ) = CanBookBeRenewed( $borrowernumber1, $item_1->itemnumber );
     is( $renewokay, 0, 'Verify the borrower cannot renew with 2 holds on the record, but only one of those holds can be filled when AllowRenewalIfOtherItemsAvailable and onshelfhold are enabled and two other items on record' );
 
+    Koha::CirculationRules->set_rules(
+        {
+            categorycode => $patron_category_2->{categorycode},
+            itemtype     => $item_1->effective_itemtype,
+            branchcode   => undef,
+            rules        => {
+                reservesallowed => 25,
+            }
+        }
+    );
+
     # Setting item not checked out to be not for loan but holdable
     $item_2->notforloan(-1)->store;
 
     ( $renewokay, $error ) = CanBookBeRenewed( $borrowernumber1, $item_1->itemnumber );
     is( $renewokay, 0, 'Bug 14337 - Verify the borrower can not renew with a hold on the record if AllowRenewalIfOtherItemsAvailable is enabled but the only available item is notforloan' );
+
+    my $mock_circ = Test::MockModule->new("C4::Circulation");
+    $mock_circ->mock( CanItemBeReserved => sub {
+        warn "Checked";
+        return { status => 'no' }
+    } );
+
+    $item_2->notforloan(0)->store;
+    $item_3->delete();
+    # Two items total, one item available, one issued, two holds on record
+
+    warnings_are{
+       ( $renewokay, $error ) = CanBookBeRenewed( $borrowernumber1, $item_1->itemnumber );
+    } [], "CanItemBeReserved not called when there are more possible holds than available items";
+    is( $renewokay, 0, 'Borrower cannot renew when there are more holds than available items' );
+
+    $item_3 = $builder->build_sample_item(
+        {
+            biblionumber     => $biblio->biblionumber,
+            library          => $library2->{branchcode},
+            itype            => $item_1->effective_itemtype,
+        }
+    );
+
+    Koha::CirculationRules->set_rules(
+        {
+            categorycode => undef,
+            itemtype     => $item_1->effective_itemtype,
+            branchcode   => undef,
+            rules        => {
+                reservesallowed => 0,
+            }
+        }
+    );
+
+    warnings_are{
+       ( $renewokay, $error ) = CanBookBeRenewed( $borrowernumber1, $item_1->itemnumber );
+    } ["Checked","Checked"], "CanItemBeReserved only called once per available item if it returns a negative result for all items for a borrower";
+    is( $renewokay, 0, 'Borrower cannot renew when there are more holds than available items' );
 
 };
 

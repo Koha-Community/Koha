@@ -2916,6 +2916,8 @@ sub CanBookBeRenewed {
         }
     }
 
+    # Note: possible_reserves will contain all title level holds on this bib and item level
+    # holds on the checked out item
     my ( $resfound, $resrec, $possible_reserves ) = C4::Reserves::CheckReserves($itemnumber);
 
     # If next hold is non priority, then check if any hold with priority (non_priority = 0) exists for the same biblionumber.
@@ -2940,34 +2942,48 @@ sub CanBookBeRenewed {
         else {
 
             # Get all other items that could possibly fill reserves
+            # FIXME We could join reserves (or more tables) here to eliminate some checks later
             my $items = Koha::Items->search({
                 biblionumber => $resrec->{biblionumber},
                 onloan       => undef,
                 notforloan   => 0,
                 -not         => { itemnumber => $itemnumber }
             });
+            my $item_count = $items->count();
 
             # Get all other reserves that could have been filled by this item
             my @borrowernumbers = map { $_->{borrowernumber} } @$possible_reserves;
+            # Note: fetching the patrons in this manner means that a patron with 2 holds will
+            # not block renewal if one reserve can be satisfied i.e. each patron is checked once
             my $patrons = Koha::Patrons->search({
                 borrowernumber => { -in => \@borrowernumbers }
             });
+            my $patron_count = $patrons->count();
 
-            # If the count of the union of the lists of reservable items for each borrower
-            # is equal or greater than the number of borrowers, we know that all reserves
-            # can be filled with available items. We can get the union of the sets simply
-            # by pushing all the elements onto an array and removing the duplicates.
-            my @reservable;
+            return ( 0, "on_reserve" ) if ($patron_count > $item_count);
+            # We cannot possibly fill all reserves if we don't have enough items
+
+            # If we can fill each hold that has been found with the available items on the record
+            # then the patron can renew. If we cannot, they cannot renew.
+            # FIXME This code does not check whether the item we are renewing can fill
+            # any of the existing reserves.
+            my $reservable = 0;
             my %matched_items;
+            my $seen = 0;
             PATRON: while ( my $patron = $patrons->next ) {
+                # If there is a reserve that cannot be filled we are done
+                return ( 0, "on_reserve" ) if ( $seen > $reservable );
                 my $items_any_available = ItemsAnyAvailableAndNotRestricted( { biblionumber => $item->biblionumber, patron => $patron });
                 while ( my $other_item = $items->next ) {
-                    next if $matched_items{$other_item->itemnumber} == 1;
+                    next if defined $matched_items{$other_item->itemnumber};
                     next if IsItemOnHoldAndFound( $other_item->itemnumber );
                     next unless IsAvailableForItemLevelRequest($other_item, $patron, undef, $items_any_available);
                     next unless CanItemBeReserved($patron,$other_item,undef,{ignore_hold_counts=>1})->{status} eq 'OK';
-                    push @reservable, $other_item->itemnumber;
-                    if (@reservable >= @borrowernumbers) {
+                    # NOTE: At checkin we call 'CheckReserves' which checks hold 'policy'
+                    # CanItemBeReserved checks 'rules' and 'policies' which means
+                    # items will fill holds at checkin that are rejected here
+                    $reservable++;
+                    if ($reservable >= $patron_count) {
                         $resfound = 0;
                         last PATRON;
                     }
@@ -2975,6 +2991,7 @@ sub CanBookBeRenewed {
                     last;
                 }
                 $items->reset;
+                $seen++;
             }
         }
     }
