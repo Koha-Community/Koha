@@ -19,7 +19,7 @@
             <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a>
         </li>
         <li>
-            <a href="#" aria-current="page">Koha to MARC Mapping</a>
+            <a href="#" aria-current="page">Koha to MARC mapping</a>
         </li>
     </ol>
 </nav>
@@ -85,7 +85,7 @@
     [% Asset.js("js/admin-menu.js") | $raw %]
     <script>
         function AddFld(kohafield) {
-            var fieldstr = prompt( _("Adding a mapping for: %s.").format(kohafield) + "\n" + _("Please enter field tag and subfield code, separated by a comma. (For control fields: add '@' as subfield code.)\nThe change will be applied immediately.") );
+            var fieldstr = prompt( _("Adding a mapping for: %s.").format(kohafield) + "\n" + _("Please enter field tag and subfield code, separated by a comma. (For control fields: add '@' as subfield code.)") + "\n" + _("The change will be applied immediately.") );
             var temp = fieldstr.split(',');
             if( temp.length == 2 ) {
                 $('#add_field').val( kohafield+','+fieldstr );
