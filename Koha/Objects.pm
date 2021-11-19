@@ -142,6 +142,21 @@ sub search {
     return $class->_new_from_dbic($rs);
 }
 
+=head3 search_limited
+
+    my $rs = $self->search_limited
+
+Generic method that is just a pass through for I<search>. It is expected to be overloaded
+locally on classes. It's main purpose is to avoid the need to check if the class implements
+the method locally.
+
+=cut
+
+sub search_limited {
+    my ( $self, $params, $attributes ) = @_;
+    return $self->search( $params, $attributes );
+}
+
 =head3 search_related
 
     my $objects = Koha::Objects->search_related( $rel_name, $cond?, \%attrs? );
