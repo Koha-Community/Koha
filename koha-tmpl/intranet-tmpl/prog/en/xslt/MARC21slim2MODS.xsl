@@ -1470,33 +1470,6 @@
 		</xsl:choose>
 	</xsl:template>
 
-	<xsl:template name="part">
-		<xsl:variable name="partNumber">
-			<xsl:call-template name="specialSubfieldSelect">
-				<xsl:with-param name="axis">n</xsl:with-param>
-				<xsl:with-param name="anyCodes">n</xsl:with-param>
-				<xsl:with-param name="afterCodes">fghkdlmor</xsl:with-param>
-			</xsl:call-template>
-		</xsl:variable>
-		<xsl:variable name="partName">
-			<xsl:call-template name="specialSubfieldSelect">
-				<xsl:with-param name="axis">p</xsl:with-param>
-				<xsl:with-param name="anyCodes">p</xsl:with-param>
-				<xsl:with-param name="afterCodes">fghkdlmor</xsl:with-param>
-			</xsl:call-template>
-		</xsl:variable>
-		<xsl:if test="string-length(normalize-space($partNumber))">
-			<partNumber>
-				<xsl:value-of select="$partNumber"/>
-			</partNumber>
-		</xsl:if>
-		<xsl:if test="string-length(normalize-space($partName))">
-			<partName>
-				<xsl:value-of select="$partName"/>
-			</partName>
-		</xsl:if>
-	</xsl:template>
-
 	<xsl:template name="relatedPart">
 		<xsl:for-each select="marc:subfield[@code='n'][preceding-sibling::marc:subfield[@code='t']]">
 			<partNumber>
