@@ -378,6 +378,14 @@
                                         <p class="ret_checkinmsg">[% checkinmsg | html_line_break %]</p>
                                     </div>
                             [% END # /IF checkinmsg %]
+
+                            [% IF bundle_items && !missing_items %]
+                                <div class="dialog message">
+                                    <h3>Bundle varified</h3>
+                                    <p>The bundle content was varified</p>
+                                    <p><a class="btn btn-default btn-xs" role="button" data-toggle="modal" href="#bundleContentsModal"><i class="fa fa-eye" aria-hidden="true"></i> View contents list</a></p>
+                                </div>
+                            [% END %]
                         [% END # /BLOCK all_checkin_messages %]
 
                         [% IF needs_confirm %]
