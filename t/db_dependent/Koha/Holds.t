@@ -532,6 +532,13 @@ subtest 'Desks' => sub {
 subtest 'get_items_that_can_fill' => sub {
     plan tests => 6;
 
+    Koha::CirculationRules->search(
+        {
+            rule_name    => 'holdallowed',
+            rule_value   => 'not_allowed',
+        }
+    )->delete;
+
     my $biblio = $builder->build_sample_biblio;
     my $itype_1 = $builder->build_object({ class => 'Koha::ItemTypes' }); # For 1, 2, 3, 4
     my $itype_2 = $builder->build_object({ class => 'Koha::ItemTypes' });
