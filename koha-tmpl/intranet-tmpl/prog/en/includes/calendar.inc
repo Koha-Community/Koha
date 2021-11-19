@@ -159,8 +159,15 @@
             let fp = $(this).flatpickr(options);
             if ( refresh_max_date ) {
                 /* Refresh the maxDate every 30 secondes to make sure the user will not
-                   be stuck with the minute passed */
-                setInterval(() => { fp.set("maxDate", new Date()) }, 30000);
+                   be stuck with the minute passed.
+                   Adding 1 minute to not introduce a gap.
+                   Example: last update at 40s, a new minute passed at 00.
+                   Between 00 and 10s the user won't be able click 'Today'.
+                */
+                setInterval(() => {
+                    let now = new Date();
+                    fp.set("maxDate", now.setMinutes(now.getMinutes() + 1));
+                }, 30000);
             }
         });
     });
