@@ -225,7 +225,7 @@ subtest 'TO_JSON tests' => sub {
 
 subtest "to_api() tests" => sub {
 
-    plan tests => 31;
+    plan tests => 32;
 
     $schema->storage->txn_begin;
 
@@ -531,6 +531,41 @@ subtest "to_api() tests" => sub {
             },
             'Authorised value for country expanded'
         );
+
+        $schema->storage->txn_rollback;
+    };
+
+    subtest 'accessible usage tests' => sub {
+
+        plan tests => 2;
+
+        $schema->storage->txn_begin;
+
+        my $library_1 = $builder->build_object( { class => 'Koha::Libraries' } );
+        my $library_2 = $builder->build_object( { class => 'Koha::Libraries' } );
+
+        my $patron = $builder->build_object(
+            {
+                class => 'Koha::Patrons',
+                value => {
+                    flags      => 2**2,            # only has catalogue permissions
+                    branchcode => $library_1->id
+                }
+            }
+        );
+
+
+        my $patron_1 = $builder->build_object(
+            { class => 'Koha::Patrons', value => { branchcode => $library_1->id } }
+        );
+        my $patron_2 = $builder->build_object(
+            { class => 'Koha::Patrons', value => { branchcode => $library_2->id } }
+        );
+
+        t::lib::Mocks::mock_userenv( { patron => $patron } );
+
+        is( ref($patron_1->to_api), 'HASH', 'Returns the object hash' );
+        is( $patron_2->to_api, undef, 'Not accessible, returns undef' );
 
         $schema->storage->txn_rollback;
     };
