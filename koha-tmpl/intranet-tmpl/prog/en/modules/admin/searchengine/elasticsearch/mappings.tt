@@ -214,7 +214,7 @@ a.add, a.delete {
                       </td>
                         <td data-order="[% search_field.weight | html %]">
                             [% IF search_field.mapped_biblios %]
-                                <input type="text" inputmode="numeric" pattern="[0-9\.]*" name="search_field_weight" value="[% search_field.weight | html %]" />
+                                <input type="text" inputmode="decimal" pattern="[0-9\.]*" name="search_field_weight" value="[% search_field.weight | html %]" />
                             [% ELSE %]
                                 <input type="text" name="search_field_weight" value="">
                             [% END %]
