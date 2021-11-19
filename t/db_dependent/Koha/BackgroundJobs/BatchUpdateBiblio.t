@@ -25,6 +25,8 @@ use JSON qw( encode_json decode_json );
 
 use Koha::Database;
 use Koha::BackgroundJobs;
+use Koha::BackgroundJob::BatchUpdateBiblio;
+use Koha::Exceptions::Exception;
 use t::lib::TestBuilder;
 
 my $schema = Koha::Database->new->schema;
