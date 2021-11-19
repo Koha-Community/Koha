@@ -2288,6 +2288,8 @@ sub to_api {
 
     my $json_patron = $self->SUPER::to_api( $params );
 
+    return unless $json_patron;
+
     $json_patron->{restricted} = ( $self->is_debarred )
                                     ? Mojo::JSON->true
                                     : Mojo::JSON->false;

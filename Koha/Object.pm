@@ -551,6 +551,9 @@ Returns a representation of the object, suitable for API output.
 
 sub to_api {
     my ( $self, $params ) = @_;
+
+    return unless $self->accessible;
+
     my $json_object = $self->TO_JSON;
 
     # Make sure we duplicate the $params variable to avoid
