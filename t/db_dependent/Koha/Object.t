@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 21;
+use Test::More tests => 22;
 use Test::Exception;
 use Test::Warn;
 
@@ -1117,6 +1117,40 @@ subtest 'messages() and add_message() tests' => sub {
 
     isnt( $patron->object_messages, undef, '->messages initializes the array if required' );
     is( scalar @{ $patron->object_messages }, 0, '->messages returns an empty arrayref' );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'accessible() tests' => sub {
+
+    plan tests => 2;
+
+    $schema->storage->txn_begin;
+
+    my $library_1 = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $library_2 = $builder->build_object( { class => 'Koha::Libraries' } );
+
+    my $patron = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => {
+                flags      => 2**2,            # only has catalogue permissions
+                branchcode => $library_1->id
+            }
+        }
+    );
+
+    my $patron_1 = $builder->build_object(
+        { class => 'Koha::Patrons', value => { branchcode => $library_1->id } }
+    );
+    my $patron_2 = $builder->build_object(
+        { class => 'Koha::Patrons', value => { branchcode => $library_2->id } }
+    );
+
+    t::lib::Mocks::mock_userenv( { patron => $patron } );
+
+    ok( $patron_1->accessible,  'Has access to the patron' );
+    ok( !$patron_2->accessible, 'Does not have access to the patron' );
 
     $schema->storage->txn_rollback;
 };

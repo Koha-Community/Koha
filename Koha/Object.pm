@@ -893,6 +893,19 @@ sub _get_object_class {
     return ${type};
 }
 
+sub _get_objects_class {
+    my ( $self ) = @_;
+    return unless $self;
+
+    if ( $self->_result->can('koha_objects_class') ) {
+        return $self->_result->koha_objects_class;
+    }
+    my $type = ref($self);
+
+    $type =~ s|Schema::Result::||;
+    return $type . "s";
+}
+
 =head3 AUTOLOAD
 
 The autoload method is used only to get and set values for an objects properties.
@@ -975,6 +988,28 @@ sub _handle_to_api_child {
     }
 
     return $res;
+}
+
+=head3 accessible
+
+    if ( $object->accessible ) { ... }
+
+Whether the object should be accessible in the current context (requesting user).
+It relies on the plural class properly implementing the I<search_limited> method.
+
+=cut
+
+sub accessible {
+    my ($self) = @_;
+
+    return $self->_get_objects_class->search_limited(
+        {
+            map { $_ => $self->$_ }
+              $self->_result->result_source->primary_columns
+        }
+      )->count > 0
+      ? 1
+      : 0;
 }
 
 sub DESTROY { }
