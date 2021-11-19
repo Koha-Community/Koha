@@ -22,7 +22,7 @@
 # These subroutines are actually internal, but these tests may pave the way for
 # a more comprehensive test of Z3950Search itself.
 #
-# TODO We need additional tests for Z3950SearchAuth, BreedingSearch
+# TODO We need additional tests for Z3950SearchAuth
 
 use Modern::Perl;
 use File::Temp qw/tempfile/;
