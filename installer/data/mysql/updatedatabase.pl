@@ -23725,6 +23725,18 @@ if( CheckVersion( $DBversion ) ) {
     NewVersion( $DBversion, "29386", "Extend background_jobs.data to LONGTEXT" );
 }
 
+$DBversion = '20.11.11.002';
+if( CheckVersion( $DBversion ) ) {
+    for my $fk ( qw( pseudonymized_transactions_borrowers_ibfk_2 pseudonymized_transactions_borrowers_ibfk_3 pseudonymized_transactions_ibfk_1 ) ) {
+        if ( foreign_key_exists( 'pseudonymized_transactions', $fk ) ) {
+            $dbh->do(qq{
+                ALTER TABLE pseudonymized_transactions DROP FOREIGN KEY $fk
+            });
+        }
+    }
+    NewVersion( $DBversion, "29341", "Remove foreign keys on pseudonymized_transactions" );
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 my $update_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/atomicupdate/';
