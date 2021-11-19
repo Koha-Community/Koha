@@ -40,7 +40,6 @@ use Koha::BiblioFrameworks;
 use Koha::SearchEngine::Search;
 use Koha::SearchEngine::QueryBuilder;
 use Koha::Z3950Servers;
-use Business::ISBN;
 
 my $input = CGI->new;
 
