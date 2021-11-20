@@ -705,36 +705,6 @@ __PACKAGE__->has_many(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
-=head2 pseudonymized_transactions_branchcodes
-
-Type: has_many
-
-Related object: L<Koha::Schema::Result::PseudonymizedTransaction>
-
-=cut
-
-__PACKAGE__->has_many(
-  "pseudonymized_transactions_branchcodes",
-  "Koha::Schema::Result::PseudonymizedTransaction",
-  { "foreign.branchcode" => "self.branchcode" },
-  { cascade_copy => 0, cascade_delete => 0 },
-);
-
-=head2 pseudonymized_transactions_transaction_branchcodes
-
-Type: has_many
-
-Related object: L<Koha::Schema::Result::PseudonymizedTransaction>
-
-=cut
-
-__PACKAGE__->has_many(
-  "pseudonymized_transactions_transaction_branchcodes",
-  "Koha::Schema::Result::PseudonymizedTransaction",
-  { "foreign.transaction_branchcode" => "self.branchcode" },
-  { cascade_copy => 0, cascade_delete => 0 },
-);
-
 =head2 repeatable_holidays
 
 Type: has_many
@@ -841,8 +811,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07046 @ 2020-11-11 14:23:25
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:pOqM3Rfe/H4J+m1XxVfaUQ
+# Created by DBIx::Class::Schema::Loader v0.07048 @ 2021-11-20 03:03:09
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:mir1TkkAHCxat1P/rgJGfg
 
 __PACKAGE__->add_columns(
     '+pickup_location' => { is_boolean => 1 }
