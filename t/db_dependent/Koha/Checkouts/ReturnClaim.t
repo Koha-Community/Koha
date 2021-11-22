@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 2;
+use Test::More tests => 6;
 use Test::Exception;
 
 use Koha::Database;
@@ -281,6 +281,187 @@ subtest "resolve() tests" => sub {
     # Make sure $item is refreshed
     $item->discard_changes;
     is( $item->itemlost, $new_lost_status, 'Item lost status is updated' );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'item() tests' => sub {
+
+    plan tests => 3;
+
+    $schema->storage->txn_begin;
+
+    my $librarian = $builder->build_object({ class => 'Koha::Patrons' });
+    my $patron    = $builder->build_object({ class => 'Koha::Patrons' });
+    my $item      = $builder->build_sample_item;
+    my $checkout = $builder->build_object(
+        {
+            class => 'Koha::Checkouts',
+            value => {
+                borrowernumber => $patron->borrowernumber,
+                itemnumber     => $item->itemnumber,
+                branchcode     => $patron->branchcode
+            }
+        }
+    );
+
+    my $claim = Koha::Checkouts::ReturnClaim->new(
+        {
+            issue_id       => $checkout->id,
+            itemnumber     => $checkout->itemnumber,
+            borrowernumber => $checkout->borrowernumber,
+            notes          => 'Some notes',
+            created_by     => $librarian->borrowernumber
+        }
+    )->store;
+
+    my $return_claim_item = $claim->item;
+    is( ref( $return_claim_item ), 'Koha::Item', 'Koha::Checkouts::ReturnClaim->item should return a Koha::Item' );
+    is( $claim->itemnumber, $return_claim_item->itemnumber, 'Koha::Checkouts::ReturnClaim->item should return the correct item' );
+
+    my $itemnumber = $item->itemnumber;
+    $checkout->delete; # Required to allow deletion of item
+    $item->delete;
+
+    my $claims = Koha::Checkouts::ReturnClaims->search({ itemnumber => $itemnumber });
+    is( $claims->count, 0, 'Koha::Checkouts::ReturnClaim is deleted on item deletion' );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'patron() tests' => sub {
+
+    plan tests => 3;
+
+    $schema->storage->txn_begin;
+
+    my $librarian = $builder->build_object({ class => 'Koha::Patrons' });
+    my $patron    = $builder->build_object({ class => 'Koha::Patrons' });
+    my $item      = $builder->build_sample_item;
+    my $checkout = $builder->build_object(
+        {
+            class => 'Koha::Checkouts',
+            value => {
+                borrowernumber => $patron->borrowernumber,
+                itemnumber     => $item->itemnumber,
+                branchcode     => $patron->branchcode
+            }
+        }
+    );
+
+    my $claim = Koha::Checkouts::ReturnClaim->new(
+        {
+            issue_id       => $checkout->id,
+            itemnumber     => $checkout->itemnumber,
+            borrowernumber => $checkout->borrowernumber,
+            notes          => 'Some notes',
+            created_by     => $librarian->borrowernumber
+        }
+    )->store;
+
+    my $return_claim_patron = $claim->patron;
+    is( ref( $return_claim_patron ), 'Koha::Patron', 'Koha::Checkouts::ReturnClaim->patron should return a Koha::Patron' );
+    is( $claim->borrowernumber, $return_claim_patron->borrowernumber, 'Koha::Checkouts::ReturnClaim->patron should return the correct borrower' );
+
+    my $borrowernumber = $patron->borrowernumber;
+    $checkout->delete; # Required to allow deletion of patron
+    $patron->delete;
+
+    my $claims = Koha::Checkouts::ReturnClaims->search({ borrowernumber => $borrowernumber });
+    is( $claims->count, 0, 'Koha::Checkouts::ReturnClaim is deleted on borrower deletion' );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'old_checkout() tests' => sub {
+
+    plan tests => 4;
+
+    $schema->storage->txn_begin;
+
+    my $librarian = $builder->build_object({ class => 'Koha::Patrons' });
+    my $patron    = $builder->build_object({ class => 'Koha::Patrons' });
+    my $item      = $builder->build_sample_item;
+    my $old_checkout = $builder->build_object(
+        {
+            class => 'Koha::Old::Checkouts',
+            value => {
+                borrowernumber => $patron->borrowernumber,
+                itemnumber     => $item->itemnumber,
+                branchcode     => $patron->branchcode
+            }
+        }
+    );
+
+    my $claim = Koha::Checkouts::ReturnClaim->new(
+        {
+            issue_id       => $old_checkout->id,
+            itemnumber     => $old_checkout->itemnumber,
+            borrowernumber => $old_checkout->borrowernumber,
+            notes          => 'Some notes',
+            created_by     => $librarian->borrowernumber
+        }
+    )->store;
+
+    my $return_claim_old_checkout = $claim->old_checkout;
+    is( ref( $return_claim_old_checkout ), 'Koha::Old::Checkout', 'Koha::Checkouts::ReturnClaim->old_checkout should return a Koha::Old::Checkout' );
+    is( $claim->issue_id, $return_claim_old_checkout->issue_id, 'Koha::Checkouts::ReturnClaim->old_checkout should return the correct borrower' );
+
+    my $issue_id = $old_checkout->issue_id;
+    $old_checkout->delete;
+
+    my $claims = Koha::Checkouts::ReturnClaims->search({ issue_id => $issue_id });
+    is( $claims->count, 1, 'Koha::Checkouts::ReturnClaim remains on old_checkout deletion' );
+    # FIXME: Should we actually set null on OldCheckout deletion?
+
+    $claim->issue_id(undef)->store;
+    is( $claim->old_checkout, undef, 'Koha::Checkouts::ReturnClaim->old_checkout should return undef if no old_checkout linked' );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'checkout() tests' => sub {
+
+    plan tests => 4;
+
+    $schema->storage->txn_begin;
+
+    my $librarian = $builder->build_object({ class => 'Koha::Patrons' });
+    my $patron    = $builder->build_object({ class => 'Koha::Patrons' });
+    my $item      = $builder->build_sample_item;
+    my $checkout = $builder->build_object(
+        {
+            class => 'Koha::Checkouts',
+            value => {
+                borrowernumber => $patron->borrowernumber,
+                itemnumber     => $item->itemnumber,
+                branchcode     => $patron->branchcode
+            }
+        }
+    );
+
+    my $claim = Koha::Checkouts::ReturnClaim->new(
+        {
+            issue_id       => $checkout->id,
+            itemnumber     => $checkout->itemnumber,
+            borrowernumber => $checkout->borrowernumber,
+            notes          => 'Some notes',
+            created_by     => $librarian->borrowernumber
+        }
+    )->store;
+
+    my $return_claim_checkout = $claim->checkout;
+    is( ref( $return_claim_checkout ), 'Koha::Checkout', 'Koha::Checkouts::ReturnClaim->checkout should return a Koha::Checkout' );
+    is( $claim->issue_id, $return_claim_checkout->issue_id, 'Koha::Checkouts::ReturnClaim->checkout should return the correct borrower' );
+
+    my $issue_id = $checkout->issue_id;
+    $checkout->delete;
+
+    my $claims = Koha::Checkouts::ReturnClaims->search({ issue_id => $issue_id });
+    is( $claims->count, 1, 'Koha::Checkouts::ReturnClaim remains on checkout deletion' );
+
+    $claim->issue_id(undef)->store;
+    is( $claim->checkout, undef, 'Koha::Checkouts::ReturnClaim->checkout should return undef if no checkout linked' );
 
     $schema->storage->txn_rollback;
 };
