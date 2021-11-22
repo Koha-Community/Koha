@@ -38,7 +38,7 @@ an XML format such as OAI DC, RSS2, MARCXML, or MODS.
 
 use CGI qw ( -utf8 );
 use C4::Context;
-use C4::Biblio;
+use C4::Biblio qw( GetXmlBiblio );
 use Koha::XSLT::Base;
 
 my $cgi = CGI->new();
