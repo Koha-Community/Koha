@@ -224,7 +224,7 @@ if ( $op eq 'insert' || $op eq 'modify' || $op eq 'save' || $op eq 'duplicate' )
 # remove keys from %newdata that is not part of patron's attributes
 {
     my @keys_to_delete = (
-        qr/^(borrowernumber|date_renewed|debarred|debarredcomment|flags|privacy|privacy_guarantor_fines|privacy_guarantor_checkouts|checkprevcheckout|updated_on|lastseen|lang|login_attempts|overdrive_auth_token|anonymized)$/, # Bug 28935
+        qr/^(borrowernumber|date_renewed|debarred|debarredcomment|flags|privacy|updated_on|lastseen|login_attempts|overdrive_auth_token|anonymized)$/, # Bug 28935
         qr/^BorrowerMandatoryField$/,
         qr/^category_type$/,
         qr/^check_member$/,
