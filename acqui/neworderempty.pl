@@ -364,9 +364,7 @@ if ($basketobj->effective_create_items eq 'ordering' && !$ordernumber) {
     );
 }
 
-# Get the item types list, but only if item_level_itype is YES. Otherwise, it will be in the item, no need to display it in the biblio
-my @itemtypes;
-@itemtypes = Koha::ItemTypes->search->as_list unless C4::Context->preference('item-level_itypes');
+my @itemtypes = Koha::ItemTypes->search->as_list;
 
 if ( defined $from_subscriptionid ) {
     # Get the last received order for this subscription
