@@ -234,7 +234,7 @@
                                 [% END %]
                             </ul>
 
-                            [% IF CAN_user_circulate_force_checkout or HIGHHOLDS %]
+                            [% IF CAN_user_circulate_force_checkout or HIGHHOLDS or ADDITIONAL_MATERIALS %]
                                 <form method="post" action="/cgi-bin/koha/circ/circulation.pl" autocomplete="off">
                                     <input type="hidden" name="restoreduedatespec" />
 
@@ -327,7 +327,7 @@
                                 <input type="hidden" name="duedatespec" value="[% duedatespec | html %]" />
                                 <input type="hidden" name="restoreduedatespec" />
                                 <input type="hidden" name="stickyduedate" value="[% stickyduedate | html %]" />
-                                [% IF CAN_user_circulate_force_checkout or HIGHHOLDS %]
+                                [% IF CAN_user_circulate_force_checkout or HIGHHOLDS or ADDITIONAL_MATERIALS %]
                                     [% IF ( RENEW_ISSUE ) %]
                                         <button type="submit" class="deny" accesskey="n"><i class="fa fa-times"></i> No, don't renew (N)</button>
                                     [% ELSE %]
