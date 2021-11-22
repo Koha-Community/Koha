@@ -31,7 +31,7 @@ my $builder = t::lib::TestBuilder->new;
 
 subtest "store() tests" => sub {
 
-    plan tests => 11;
+    plan tests => 13;
 
     $schema->storage->txn_begin;
 
@@ -60,23 +60,38 @@ subtest "store() tests" => sub {
             }
           )->store }
         'Koha::Exceptions::Checkouts::ReturnClaims::NoCreatedBy',
-        'Exception thrown correctly';
+        'Exception thrown if no created_by passed on creation';
 
-    my $nullified_created_by = $builder->build_object(
+    my $old_checkout = $builder->build_object(
         {
-            class => 'Koha::Checkouts::ReturnClaims',
+            class => 'Koha::Old::Checkouts',
             value => {
-                created_by => undef
+                borrowernumber => $patron->borrowernumber,
+                itemnumber     => $item->itemnumber,
+                branchcode     => $patron->branchcode
             }
         }
     );
 
-    is( $nullified_created_by->created_by, undef, 'Is undef' );
-    ok( $nullified_created_by->in_storage, 'In storage' );
+    my $nullable_created_by = Koha::Checkouts::ReturnClaim->new(
+        {
+            issue_id       => $old_checkout->id,
+            itemnumber     => $old_checkout->itemnumber,
+            borrowernumber => $old_checkout->borrowernumber,
+            notes          => 'Some notes',
+            created_by     => $librarian->borrowernumber
+        }
+    )->store;
+    is( $nullable_created_by->created_by, $librarian->borrowernumber, 'Claim created with created_by set' );
+    ok( $nullable_created_by->in_storage, 'In storage' );
+
+    $nullable_created_by->created_by(undef)->store();
+    is( $nullable_created_by->created_by, undef, 'Deletion was deleted' );
+    ok( $nullable_created_by->in_storage, 'In storage' );
     is(
-        ref($nullified_created_by->notes('Some other note')->store),
+        ref($nullable_created_by->notes('Some other note')->store),
         'Koha::Checkouts::ReturnClaim',
-        'No exception, store success'
+        'Subsequent store succeeds after created_by has been unset'
     );
 
     is( Koha::Checkouts::ReturnClaims->search({ issue_id => $checkout->id })->count, 0, 'No claims stored' );
