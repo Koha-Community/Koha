@@ -20,6 +20,7 @@
 use Modern::Perl;
 use Test::YAML::Valid;
 use File::Find;
+use FindBin ();
 
 use Test::More;
 

@@ -32,6 +32,7 @@ use Time::HiRes qw( gettimeofday );
 use Getopt::Long qw( GetOptions );
 use IO::File;
 use Pod::Usage qw( pod2usage );
+use FindBin ();
 
 use Koha::Logger;
 use Koha::Biblios;
