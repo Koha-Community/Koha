@@ -127,6 +127,7 @@
         $(".flatpickr").each(function(){
             let options = {};
             let refresh_max_date = 0;
+            let disable_buttons = [];
 
             if( $(this).data("flatpickr-futuredate") === true ) {
                 let original_date = $(this).val();
@@ -143,13 +144,17 @@
                 else {
                     options['minDate'] = new Date().fp_incr(1);
                 }
+                disable_buttons.push(0); /* Yesterday */
             }
             if( $(this).data("flatpickr-pastinclusive") === true ) {
                 options['maxDate'] = new Date(); /* Not today or hh:mm will be 00:00 */
                 refresh_max_date = 1;
+                disable_buttons.push(2); /* Tomorrow */
             }
             if( $(this).data("flatpickr-pastdate") === true ) {
                 options['maxDate'] = new Date().fp_incr(-1);
+                disable_buttons.push(1); /* Today */
+                disable_buttons.push(2); /* Tomorrow */
             }
             if ( $(this).data('flatpickr-enable-time') === true ) {
                 options['enableTime'] = true;
@@ -157,6 +162,11 @@
             }
 
             let fp = $(this).flatpickr(options);
+
+            $(disable_buttons).each(function(index, value){
+                $(fp.calendarContainer).find(".shortcut-buttons-flatpickr-button[data-index='"+value+"']").prop("disabled", "disabled").css("color", "#999");
+            });
+
             if ( refresh_max_date ) {
                 /* Refresh the maxDate every 30 secondes to make sure the user will not
                    be stuck with the minute passed.
