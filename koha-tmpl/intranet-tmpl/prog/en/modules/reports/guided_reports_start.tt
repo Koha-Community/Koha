@@ -1663,6 +1663,53 @@
             }
         }
 
+        /**
+         * Process the value of the NumSavedReports system preference for use as
+            a DataTable pageLenth option
+         * @param {string} pageLength - The value of the NumSavedReports system
+            preference, passed via the template during table initiation
+         * @return {number} - The number of results to show by default in the
+            DataTable (-1 for "all")
+         */
+        function getPageLength( pageLength ){
+            if( pageLength !== "" ){
+                if( Number( pageLength ) > 0 ){
+                    return Number( pageLength );
+                } else {
+                    return 20; /* Negative or non-numeric value passed. Use default 20 */
+                }
+            } else {
+                return -1;
+            }
+        }
+
+        /**
+         * Rebuild the DataTable's lengthMenu array, adding the value of the NumSavedReports
+            system preference
+         * @param {string} pageLength - The value of the NumSavedReports system
+            preference, passed via the template during table initiation
+         * @return {Array} - An array of two arrays: 1. The numeric values for
+            options in the pageLenth <select>; 2. The text values for options in
+            the pageLength <select>;
+         */
+        function buildLengthMenu( num ){
+            var lengthMenu = dataTablesDefaults.lengthMenu;
+            var pageLength = getPageLength( num );
+            if( !lengthMenu[0].includes( pageLength ) ){
+                /* extend lengthMenu with custom value */
+                lengthMenu.forEach( function( item ){
+                    item.pop(); /* Remove the last entry, "all" */
+                    item.push( Number( pageLength ) ); /* Add the value from NumSavedReports */
+                    item.sort(function( a, b ){ /* Re-sort the values */
+                        return a - b;
+                    });
+                });
+                lengthMenu[0].push(-1); /* Add the numeric "all" option */
+                lengthMenu[1].push( _("All") ); /* Add the textual "all" option */
+            }
+            return lengthMenu;
+        }
+
         $(document).ready(function(){
 
             var activeTab = localStorage.getItem("sql_reports_activetab");
@@ -1838,13 +1885,14 @@
 
             [% IF (saved1) %]
                 var rtable = KohaTable("table_reports", {
-                    'pageLength': [% Koha.Preference('NumSavedReports') | html %],
+                    "pageLength": getPageLength( "[% Koha.Preference('NumSavedReports') | html %]" ),
+                    "lengthMenu": buildLengthMenu( "[% Koha.Preference('NumSavedReports') | html %]" ),
                     'bAutoWidth': false,
                     'sPaginationType': 'full',
                     'aaSorting': [[ 1, "asc" ]],
                     'oLanguage': {
                         'sZeroRecords': _("No matching reports found")
-                    },
+                    }
                 }, columns_settings);
 
                 var rtabs = $("#tabs").tabs({
