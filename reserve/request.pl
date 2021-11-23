@@ -578,7 +578,7 @@ if (   ( $findborrower && $borrowernumber_hold || $findclub && $club_hold )
 
                         $item->{'holdallowed'} = $branchitemrule->{'holdallowed'};
 
-                        my $can_item_be_reserved = CanItemBeReserved( $patron->borrowernumber, $itemnumber )->{status};
+                        my $can_item_be_reserved = CanItemBeReserved( $patron, $item_object )->{status};
                         $item->{not_holdable} = $can_item_be_reserved unless ( $can_item_be_reserved eq 'OK' );
 
                         $item->{item_level_holds} = Koha::CirculationRules->get_opacitemholds_policy( { item => $item_object, patron => $patron } );

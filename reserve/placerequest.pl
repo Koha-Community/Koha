@@ -49,8 +49,7 @@ my $expirationdate = $input->param('expiration_date');
 my $itemtype       = $input->param('itemtype') || undef;
 my $non_priority   = $input->param('non_priority');
 
-my $borrower = Koha::Patrons->find( $borrowernumber );
-$borrower = $borrower->unblessed if $borrower;
+my $patron = Koha::Patrons->find( $borrowernumber );
 
 my $biblionumbers = $input->param('biblionumbers');
 $biblionumbers ||= $biblionumber . '/';
@@ -70,7 +69,7 @@ foreach my $bibnum (@biblionumbers) {
 
 my $found;
 
-if ( $type eq 'str8' && $borrower ) {
+if ( $type eq 'str8' && $patron ) {
 
     foreach my $biblionumber ( keys %bibinfos ) {
         my $count = @bibitems;
@@ -97,13 +96,13 @@ if ( $type eq 'str8' && $borrower ) {
                 $biblionumber = $item->biblionumber;
             }
 
-            my $can_item_be_reserved = CanItemBeReserved($borrower->{'borrowernumber'}, $item->itemnumber, $item_pickup_location)->{status};
+            my $can_item_be_reserved = CanItemBeReserved($patron, $item, $item_pickup_location)->{status};
 
             if ( $can_item_be_reserved eq 'OK' || ( $can_item_be_reserved ne 'itemAlreadyOnHold' && $can_override ) ) {
                 AddReserve(
                     {
                         branchcode       => $item_pickup_location,
-                        borrowernumber   => $borrower->{'borrowernumber'},
+                        borrowernumber   => $patron->borrowernumber,
                         biblionumber     => $biblionumber,
                         priority         => $rank[0],
                         reservation_date => $startdate,
@@ -121,11 +120,11 @@ if ( $type eq 'str8' && $borrower ) {
 
         } elsif (@biblionumbers > 1) {
             my $bibinfo = $bibinfos{$biblionumber};
-            if ( $can_override || CanBookBeReserved($borrower->{'borrowernumber'}, $biblionumber)->{status} eq 'OK' ) {
+            if ( $can_override || CanBookBeReserved($patron->borrowernumber, $biblionumber)->{status} eq 'OK' ) {
                 AddReserve(
                     {
                         branchcode       => $bibinfo->{pickup},
-                        borrowernumber   => $borrower->{'borrowernumber'},
+                        borrowernumber   => $patron->borrowernumber,
                         biblionumber     => $biblionumber,
                         priority         => $bibinfo->{rank},
                         reservation_date => $startdate,
@@ -142,11 +141,11 @@ if ( $type eq 'str8' && $borrower ) {
         } else {
             # place a request on 1st available
             for ( my $i = 0 ; $i < $holds_to_place_count ; $i++ ) {
-                if ( $can_override || CanBookBeReserved($borrower->{'borrowernumber'}, $biblionumber)->{status} eq 'OK' ) {
+                if ( $can_override || CanBookBeReserved($patron->borrowernumber, $biblionumber)->{status} eq 'OK' ) {
                     AddReserve(
                         {
                             branchcode       => $branch,
-                            borrowernumber   => $borrower->{'borrowernumber'},
+                            borrowernumber   => $patron->borrowernumber,
                             biblionumber     => $biblionumber,
                             priority         => $rank[0],
                             reservation_date => $startdate,

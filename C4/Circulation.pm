@@ -1166,7 +1166,7 @@ sub CanBookBeIssued {
 
     ## check for high holds decreasing loan period
     if ( C4::Context->preference('decreaseLoanHighHolds') ) {
-        my $check = checkHighHolds( $item_unblessed, $patron_unblessed );
+        my $check = checkHighHolds( $item_object, $patron );
 
         if ( $check->{exceeded} ) {
             if ($override_high_holds) {
@@ -1278,9 +1278,8 @@ sub CanBookBeReturned {
 =cut
 
 sub checkHighHolds {
-    my ( $item, $borrower ) = @_;
-    my $branchcode = _GetCircControlBranch( $item, $borrower );
-    my $item_object = Koha::Items->find( $item->{itemnumber} );
+    my ( $item, $patron ) = @_;
+    my $branchcode = _GetCircControlBranch( $item->unblessed, $patron->unblessed );
 
     my $return_data = {
         exceeded    => 0,
@@ -1289,7 +1288,7 @@ sub checkHighHolds {
         due_date    => undef,
     };
 
-    my $holds = Koha::Holds->search( { biblionumber => $item->{'biblionumber'} } );
+    my $holds = Koha::Holds->search( { biblionumber => $item->biblionumber } );
 
     if ( $holds->count() ) {
         $return_data->{outstanding} = $holds->count();
@@ -1322,7 +1321,7 @@ sub checkHighHolds {
             }
 
             # Remove any items that are not holdable for this patron
-            @items = grep { CanItemBeReserved( $borrower->{borrowernumber}, $_->itemnumber, undef, { ignore_found_holds => 1 } )->{status} eq 'OK' } @items;
+            @items = grep { CanItemBeReserved( $patron , $_, undef, { ignore_found_holds => 1 } )->{status} eq 'OK' } @items;
 
             my $items_count = scalar @items;
 
@@ -1337,22 +1336,22 @@ sub checkHighHolds {
 
         my $issuedate = dt_from_string();
 
-        my $itype = $item_object->effective_itemtype;
+        my $itype = $item->effective_itemtype;
         my $daysmode = Koha::CirculationRules->get_effective_daysmode(
             {
-                categorycode => $borrower->{categorycode},
+                categorycode => $patron->categorycode,
                 itemtype     => $itype,
                 branchcode   => $branchcode,
             }
         );
         my $calendar = Koha::Calendar->new( branchcode => $branchcode, days_mode => $daysmode );
 
-        my $orig_due = C4::Circulation::CalcDateDue( $issuedate, $itype, $branchcode, $borrower );
+        my $orig_due = C4::Circulation::CalcDateDue( $issuedate, $itype, $branchcode, $patron->unblessed );
 
         my $rule = Koha::CirculationRules->get_effective_rule(
             {
-                categorycode => $borrower->{categorycode},
-                itemtype     => $item_object->effective_itemtype,
+                categorycode => $patron->categorycode,
+                itemtype     => $item->effective_itemtype,
                 branchcode   => $branchcode,
                 rule_name    => 'decreaseloanholds',
             }
@@ -2849,7 +2848,7 @@ sub CanBookBeRenewed {
                 next if IsItemOnHoldAndFound( $item->itemnumber );
                 while ( my $patron = $patrons->next ) {
                     next unless IsAvailableForItemLevelRequest($item, $patron);
-                    next unless CanItemBeReserved($patron->borrowernumber,$item->itemnumber,undef,{ignore_hold_counts=>1})->{status} eq 'OK';
+                    next unless CanItemBeReserved($patron,$item,undef,{ignore_hold_counts=>1})->{status} eq 'OK';
                     push @reservable, $item->itemnumber;
                     if (@reservable >= @borrowernumbers) {
                         $resfound = 0;

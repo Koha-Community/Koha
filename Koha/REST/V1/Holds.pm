@@ -166,7 +166,7 @@ sub add {
 
         my $can_place_hold
             = $item_id
-            ? C4::Reserves::CanItemBeReserved( $patron_id, $item_id )
+            ? C4::Reserves::CanItemBeReserved( $patron, $item )
             : C4::Reserves::CanBookBeReserved( $patron_id, $biblio_id );
 
         if ( $patron->holds->count + 1 > C4::Context->preference('maxreserves') ) {

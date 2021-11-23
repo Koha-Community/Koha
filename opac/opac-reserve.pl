@@ -239,9 +239,9 @@ if ( $query->param('place_reserve') ) {
             $branch = $patron->branchcode;
         }
 
+        my $item = $itemNum ? Koha::Items->find( $itemNum ) : undef;
         # When choosing a specific item, the default pickup library should be dictated by the default hold policy
         if ( ! C4::Context->preference("OPACAllowUserToChooseBranch") && $itemNum ) {
-            my $item = Koha::Items->find( $itemNum );
             my $type = $item->effective_itemtype;
             my $rule = GetBranchItemRule( $patron->branchcode, $type );
 
@@ -256,8 +256,7 @@ if ( $query->param('place_reserve') ) {
         }
 
 #item may belong to a host biblio, if yes change biblioNum to hosts bilbionumber
-        if ( $itemNum ne '' ) {
-            my $item = Koha::Items->find( $itemNum );
+        if ( $itemNum ) {
             my $hostbiblioNum = $item->biblio->biblionumber;
             if ( $hostbiblioNum ne $biblioNum ) {
                 $biblioNum = $hostbiblioNum;
@@ -278,8 +277,9 @@ if ( $query->param('place_reserve') ) {
         my $patron_expiration_date = $query->param("expiration_date_$biblioNum");
 
         my $rank = $biblioData->{rank};
-        if ( $itemNum ne '' ) {
-            $canreserve = 1 if CanItemBeReserved( $borrowernumber, $itemNum, $branch )->{status} eq 'OK';
+        my $patron = Koha::Patrons->find( $borrowernumber );
+        if ( $itemNum ) {
+            $canreserve = 1 if CanItemBeReserved( $patron, $item, $branch )->{status} eq 'OK';
         }
         else {
             $canreserve = 1 if CanBookBeReserved( $borrowernumber, $biblioNum, $branch )->{status} eq 'OK';
@@ -569,7 +569,7 @@ foreach my $biblioNum (@biblionumbers) {
         # items_any_available defined outside of the current loop,
         # so we avoiding loop inside IsAvailableForItemLevelRequest:
         $policy_holdallowed &&=
-            CanItemBeReserved( $borrowernumber, $itemNum )->{status} eq 'OK' &&
+            CanItemBeReserved( $patron, $tem )->{status} eq 'OK' &&
             IsAvailableForItemLevelRequest($item, $patron, undef, $items_any_available);
 
         if ($policy_holdallowed) {

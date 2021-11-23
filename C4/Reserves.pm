@@ -330,16 +330,24 @@ sub CanBookBeReserved{
         return { status =>'alreadypossession' };
     }
 
-    my @itemnumbers = Koha::Items->search({ biblionumber => $biblionumber})->get_column("itemnumber");
+    my $items;
     #get items linked via host records
-    my @hostitems = get_hostitemnumbers_of($biblionumber);
-    if (@hostitems){
-        push (@itemnumbers, @hostitems);
+    my @hostitemnumbers = get_hostitemnumbers_of($biblionumber);
+    if (@hostitemnumbers){
+        $items = Koha::Items->search({
+            -or => [
+                biblionumber => $biblionumber,
+                itemnumber => { -in => @hostitemnumbers }
+            ]
+        });
+    } else {
+        $items = Koha::Items->search({ biblionumber => $biblionumber});
     }
 
     my $canReserve = { status => '' };
-    foreach my $itemnumber (@itemnumbers) {
-        $canReserve = CanItemBeReserved( $borrowernumber, $itemnumber, $pickup_branchcode, $params );
+    my $patron = Koha::Patrons->find( $borrowernumber );
+    while ( my $item = $items->next ) {
+        $canReserve = CanItemBeReserved( $patron, $item, $pickup_branchcode, $params );
         return { status => 'OK' } if $canReserve->{status} eq 'OK';
     }
     return $canReserve;
@@ -347,7 +355,7 @@ sub CanBookBeReserved{
 
 =head2 CanItemBeReserved
 
-  $canReserve = &CanItemBeReserved($borrowernumber, $itemnumber, $branchcode, $params)
+  $canReserve = &CanItemBeReserved($patron, $item, $branchcode, $params)
   if ($canReserve->{status} eq 'OK') { #We can reserve this Item! }
 
   current params are:
@@ -372,7 +380,7 @@ sub CanBookBeReserved{
 =cut
 
 sub CanItemBeReserved {
-    my ( $borrowernumber, $itemnumber, $pickup_branchcode, $params ) = @_;
+    my ( $patron, $item, $pickup_branchcode, $params ) = @_;
 
     my $dbh = C4::Context->dbh;
     my $ruleitemtype;    # itemtype of the matching issuing rule
@@ -380,9 +388,7 @@ sub CanItemBeReserved {
 
     # we retrieve borrowers and items informations #
     # item->{itype} will come for biblioitems if necessery
-    my $item       = Koha::Items->find($itemnumber);
     my $biblio     = $item->biblio;
-    my $patron = Koha::Patrons->find( $borrowernumber );
     my $borrower = $patron->unblessed;
 
     # If an item is damaged and we don't allow holds on damaged items, we can stop right here
@@ -397,7 +403,7 @@ sub CanItemBeReserved {
 
     # Check that the patron doesn't have an item level hold on this item already
     return { status =>'itemAlreadyOnHold' }
-      if ( !$params->{ignore_hold_counts} && Koha::Holds->search( { borrowernumber => $borrowernumber, itemnumber => $itemnumber } )->count() );
+      if ( !$params->{ignore_hold_counts} && Koha::Holds->search( { borrowernumber => $patron->borrowernumber, itemnumber => $item->itemnumber } )->count() );
 
     # Check that patron have not checked out this biblio (if AllowHoldsOnPatronsPossessions set)
     if ( !C4::Context->preference('AllowHoldsOnPatronsPossessions')
@@ -454,7 +460,7 @@ sub CanItemBeReserved {
     my $holds_per_day    = $rights->{holds_per_day};
 
     my $search_params = {
-        borrowernumber => $borrowernumber,
+        borrowernumber => $patron->borrowernumber,
         biblionumber   => $item->biblionumber,
     };
     $search_params->{found} = undef if $params->{ignore_found_holds};
@@ -470,7 +476,7 @@ sub CanItemBeReserved {
     }
 
     my $today_holds = Koha::Holds->search({
-        borrowernumber => $borrowernumber,
+        borrowernumber => $patron->borrowernumber,
         reservedate    => dt_from_string->date
     });
 
@@ -495,10 +501,10 @@ sub CanItemBeReserved {
     my $sthcount = $dbh->prepare($querycount);
 
     if ( defined $ruleitemtype ) {
-        $sthcount->execute( $borrowernumber, $branchcode, $ruleitemtype );
+        $sthcount->execute( $patron->borrowernumber, $branchcode, $ruleitemtype );
     }
     else {
-        $sthcount->execute( $borrowernumber, $branchcode );
+        $sthcount->execute( $patron->borrowernumber, $branchcode );
     }
 
     my $reservecount = "0";
@@ -519,7 +525,7 @@ sub CanItemBeReserved {
     # Now we need to check hold limits by patron category
     my $rule = Koha::CirculationRules->get_effective_rule(
         {
-            categorycode => $borrower->{categorycode},
+            categorycode => $patron->categorycode,
             branchcode   => $branchcode,
             rule_name    => 'max_holds',
         }
@@ -527,7 +533,7 @@ sub CanItemBeReserved {
     if (!$params->{ignore_hold_counts} && $rule && defined( $rule->rule_value ) && $rule->rule_value ne '' ) {
         my $total_holds_count = Koha::Holds->search(
             {
-                borrowernumber => $borrower->{borrowernumber}
+                borrowernumber => $patron->borrowernumber
             }
         )->count();
 
@@ -535,7 +541,7 @@ sub CanItemBeReserved {
     }
 
     my $reserves_control_branch =
-      GetReservesControlBranch( $item->unblessed(), $borrower );
+      GetReservesControlBranch( $item->unblessed(), $patron->unblessed );
     my $branchitemrule =
       C4::Circulation::GetBranchItemRule( $reserves_control_branch, $item->effective_itemtype );
 
@@ -551,7 +557,7 @@ sub CanItemBeReserved {
 
     my $item_library = Koha::Libraries->find( {branchcode => $item->homebranch} );
     if ( $branchitemrule->{holdallowed} eq 'from_local_hold_group') {
-        if($borrower->{branchcode} ne $item->homebranch && !$item_library->validate_hold_sibling( {branchcode => $borrower->{branchcode}} )) {
+        if($patron->branchcode ne $item->homebranch && !$item_library->validate_hold_sibling( {branchcode => $patron->branchcode} )) {
             return { status => 'branchNotInHoldGroup' };
         }
     }
@@ -561,7 +567,7 @@ sub CanItemBeReserved {
     if ( C4::Context->preference('IndependentBranches')
         and !C4::Context->preference('canreservefromotherbranches') )
     {
-        if ( $item->homebranch ne $borrower->{branchcode} ) {
+        if ( $item->homebranch ne $patron->branchcode ) {
             return { status => 'cannotReserveFromOtherBranches' };
         }
     }
@@ -1429,7 +1435,7 @@ sub ItemsAnyAvailableAndNotRestricted {
             || Koha::ItemTypes->find( $i->effective_itemtype() )->notforloan
             || $branchitemrule->{holdallowed} eq 'from_home_library' && $param->{patron}->branchcode ne $i->homebranch
             || $branchitemrule->{holdallowed} eq 'from_local_hold_group' && ! $item_library->validate_hold_sibling( { branchcode => $param->{patron}->branchcode } )
-            || CanItemBeReserved( $param->{patron}->borrowernumber, $i->id )->{status} ne 'OK';
+            || CanItemBeReserved( $param->{patron}, $i )->{status} ne 'OK';
     }
 
     return 0;

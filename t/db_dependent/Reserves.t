@@ -1239,8 +1239,7 @@ subtest 'AllowHoldOnPatronPossession test' => sub {
        'alreadypossession',
        'Patron cannot place hold on a book loaned to itself');
 
-    is(C4::Reserves::CanItemBeReserved($patron->borrowernumber,
-                                       $item->itemnumber)->{status},
+    is(C4::Reserves::CanItemBeReserved( $patron, $item )->{status},
        'alreadypossession',
        'Patron cannot place hold on an item loaned to itself');
 
@@ -1251,8 +1250,7 @@ subtest 'AllowHoldOnPatronPossession test' => sub {
        'OK',
        'Patron can place hold on a book loaned to itself');
 
-    is(C4::Reserves::CanItemBeReserved($patron->borrowernumber,
-                                       $item->itemnumber)->{status},
+    is(C4::Reserves::CanItemBeReserved( $patron, $item )->{status},
        'OK',
        'Patron can place hold on an item loaned to itself');
 };

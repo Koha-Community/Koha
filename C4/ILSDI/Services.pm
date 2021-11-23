@@ -874,7 +874,7 @@ sub HoldItem {
     }
 
     # Check for item disponibility
-    my $canitembereserved = C4::Reserves::CanItemBeReserved( $borrowernumber, $itemnumber, $branch )->{status};
+    my $canitembereserved = C4::Reserves::CanItemBeReserved( $patron, $item, $branch )->{status};
     return { code => $canitembereserved } unless $canitembereserved eq 'OK';
 
     my $resdate;
