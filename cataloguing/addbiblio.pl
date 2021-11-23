@@ -580,7 +580,7 @@ sub build_tabs {
                     }
 
                     # now, loop again to add parameter subfield that are not in the MARC::Record
-                    foreach my $subfield ( keys %{ $tagslib->{$tag} } )
+                    foreach my $subfield ( sort( keys %{ $tagslib->{$tag} } ) )
                     {
                         next if ( length $subfield != 1 );
                         next if ( $tagslib->{$tag}->{$subfield}->{tab} ne $tabloop );
