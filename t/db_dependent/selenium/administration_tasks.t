@@ -181,14 +181,14 @@ SKIP: {
             }
         );
         $s->driver->accept_alert; # Accept the modal "Are you sure you want to delete this authorized value?"
+
+        # For an unknown reason the click on the next admin-home link does not work
+        # We were still on the authorised value list view.
+        # A workaround (and dirty fix) is to wait for 1 second and see if it fixes the problem
+        sleep 1;
     };
 
     { # Patron categories
-        # For an unknown reason the click on the admin-home link does not work
-        # At this point we were still on the authorised value list view.
-        # A workaround (and dirty fix) is to logout/login and see if it fixes the problem
-        $driver->get( $mainpage . q|?logout.x=1| );
-        $s->auth;
         $driver->get($mainpage);
         $s->click( { href => '/admin/admin-home.pl', main => 'container-main' } ); # Koha administration
         $s->click( { href => '/admin/categories.pl', main_class => 'main container-fluid' } ); # Patron categories
