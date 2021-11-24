@@ -1286,6 +1286,8 @@ sub CloneBudgetHierarchy {
                 budget_period_id => $new_budget_period_id
             }
         );
+        my @borrowernumbers = GetBudgetUsers($budget->{budget_id});
+        ModBudgetUsers($new_budget_id, @borrowernumbers);
         CloneBudgetHierarchy(
             {
                 budgets              => $budgets,
