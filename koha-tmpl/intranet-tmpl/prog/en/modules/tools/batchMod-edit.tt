@@ -225,6 +225,7 @@
         [% INCLUDE 'datatables.inc' %]
         [% Asset.js("js/pages/batchMod.js") | $raw %]
         [% INCLUDE 'select2.inc' %]
+        [% INCLUDE 'calendar.inc' %]
         <script>
             // Prepare array of all column headers, incrementing each index by
             // two to accommodate control and title columns
@@ -283,7 +284,7 @@
             [%- UNLESS (too_many_items_process) -%]
                 [%- FOREACH subfield IN subfields -%]
                     [% SET mv = subfield.marc_value %]
-                    [%- IF ( mv.type == 'text2' ) -%]
+                    [%- IF ( mv.type == 'text_plugin' ) -%]
                         <!-- subfield[% subfield.tag | html %][% subfield.subfield | html %][% subfield.random | html %] -->
                         [% mv.javascript | $raw %]
                     [%- END -%]
