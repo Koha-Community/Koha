@@ -125,13 +125,14 @@ if ($op eq "action") {
 
     # Clear the fields we are not editing, leave fields we are blanking
     foreach( my $i = 0; $i < scalar @values; $i++ ){
-        unless( $values[$i] || $searches[$i] || grep { $subfields[$i] } @disabled ){
+        unless( $values[$i] ne q{} || $searches[$i] ne q{}  || grep { $subfields[$i] } @disabled ){
             splice(@values,$i,1);
             splice(@subfields,$i,1);
             splice(@tags,$i,1);
             splice(@searches,$i,1);
             splice(@replaces,$i,1);
             splice(@modifiers,$i,1);
+            $i--; # We made the arrays smaller - go back a step in interation
         }
     }
 
