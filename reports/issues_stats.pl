@@ -506,7 +506,7 @@ sub calculate {
             $strcalc .= " LEFT JOIN borrower_attributes AS attribute_$_ ON (statistics.borrowernumber = attribute_$_.borrowernumber AND attribute_$_.code = '$_') ";
         }
     }
-    $strcalc .= "LEFT JOIN items ON statistics.itemnumber=items.itemnumber "
+    $strcalc .= "LEFT JOIN (SELECT * FROM items UNION SELECT * FROM deleteditems) items ON statistics.itemnumber=items.itemnumber "
       if ( $linefield =~ /^items\./
         or $colfield =~ /^items\./
         or $process == 5
