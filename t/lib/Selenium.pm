@@ -47,7 +47,7 @@ sub new {
     );
     bless $self, $class;
     $self->add_error_handler;
-    $self->driver->set_implicit_wait_timeout(5000);
+    $self->driver->set_implicit_wait_timeout(10000);
     return $self;
 }
 
