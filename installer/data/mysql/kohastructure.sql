@@ -1,8 +1,8 @@
--- MySQL dump 10.16  Distrib 10.1.48-MariaDB, for debian-linux-gnu (x86_64)
+-- MySQL dump 10.19  Distrib 10.3.31-MariaDB, for debian-linux-gnu (x86_64)
 --
 -- Host: db    Database: koha_kohadev
 -- ------------------------------------------------------
--- Server version	10.5.10-MariaDB-1:10.5.10+maria~focal
+-- Server version	10.6.5-MariaDB-1:10.6.5+maria~focal
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -178,6 +178,36 @@ CREATE TABLE `action_logs` (
   KEY `object_idx` (`object`),
   KEY `info_idx` (`info`(191)),
   KEY `interface` (`interface`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `additional_contents`
+--
+
+DROP TABLE IF EXISTS `additional_contents`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `additional_contents` (
+  `idnew` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'unique identifier for the additional content',
+  `category` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'category for the additional content',
+  `code` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'code to group content per lang',
+  `location` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'location of the additional content',
+  `branchcode` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'branch code users to create branch specific additional content, NULL is every branch.',
+  `title` varchar(250) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT 'title of the additional content',
+  `content` mediumtext COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'the body of your additional content',
+  `lang` varchar(25) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT 'location for the additional content(koha is the staff interface, slip is the circulation receipt and language codes are for the opac)',
+  `published_on` date DEFAULT NULL COMMENT 'publication date',
+  `updated_on` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp() COMMENT 'last modification',
+  `expirationdate` date DEFAULT NULL COMMENT 'date the additional content is set to expire or no longer be visible',
+  `number` int(11) DEFAULT NULL COMMENT 'the order in which this additional content appears in that specific location',
+  `borrowernumber` int(11) DEFAULT NULL COMMENT 'The user who created the additional content',
+  PRIMARY KEY (`idnew`),
+  UNIQUE KEY `additional_contents_uniq` (`category`,`code`,`branchcode`,`lang`),
+  KEY `additional_contents_borrowernumber_fk` (`borrowernumber`),
+  KEY `additional_contents_branchcode_ibfk` (`branchcode`),
+  CONSTRAINT `additional_contents_branchcode_ibfk` FOREIGN KEY (`branchcode`) REFERENCES `branches` (`branchcode`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `borrowernumber_fk` FOREIGN KEY (`borrowernumber`) REFERENCES `borrowers` (`borrowernumber`) ON DELETE SET NULL ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -749,10 +779,10 @@ CREATE TABLE `article_requests` (
   `pages` mediumtext COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `chapters` mediumtext COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `patron_notes` mediumtext COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `status` enum('REQUESTED', 'PENDING','PROCESSING','COMPLETED','CANCELED') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'REQUESTED',
+  `status` enum('REQUESTED','PENDING','PROCESSING','COMPLETED','CANCELED') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'REQUESTED',
   `notes` mediumtext COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `format` enum('PHOTOCOPY', 'SCAN') NOT NULL DEFAULT 'PHOTOCOPY',
-  `urls` MEDIUMTEXT,
+  `format` enum('PHOTOCOPY','SCAN') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'PHOTOCOPY',
+  `urls` mediumtext COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `cancellation_reason` varchar(80) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'optional authorised value AR_CANCELLATION',
   `created_on` timestamp NULL DEFAULT NULL COMMENT 'Be careful with two timestamps in one table not allowing NULL',
   `updated_on` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
@@ -944,7 +974,7 @@ CREATE TABLE `background_jobs` (
   `size` int(11) DEFAULT NULL,
   `borrowernumber` int(11) DEFAULT NULL,
   `type` varchar(64) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `data` LONGTEXT COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `data` longtext COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `enqueued_on` datetime DEFAULT NULL,
   `started_on` datetime DEFAULT NULL,
   `ended_on` datetime DEFAULT NULL,
@@ -1294,7 +1324,7 @@ CREATE TABLE `borrower_modifications` (
   `privacy` int(11) DEFAULT NULL,
   `extended_attributes` mediumtext COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `gdpr_proc_consent` datetime DEFAULT NULL COMMENT 'data processing consent',
-  `primary_contact_method` varchar(45) DEFAULT NULL COMMENT 'useful for reporting purposes',
+  `primary_contact_method` varchar(45) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'useful for reporting purposes',
   PRIMARY KEY (`verification_token`(191),`borrowernumber`),
   KEY `verification_token` (`verification_token`(191)),
   KEY `borrowernumber` (`borrowernumber`)
@@ -1421,7 +1451,7 @@ CREATE TABLE `borrowers` (
   `overdrive_auth_token` mediumtext COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'persist OverDrive auth token',
   `anonymized` tinyint(1) NOT NULL DEFAULT 0 COMMENT 'flag for data anonymization',
   `autorenew_checkouts` tinyint(1) NOT NULL DEFAULT 1 COMMENT 'flag for allowing auto-renewal',
-  `primary_contact_method` varchar(45) DEFAULT NULL COMMENT 'useful for reporting purposes',
+  `primary_contact_method` varchar(45) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'useful for reporting purposes',
   PRIMARY KEY (`borrowernumber`),
   UNIQUE KEY `cardnumber` (`cardnumber`),
   UNIQUE KEY `userid` (`userid`),
@@ -1523,7 +1553,7 @@ CREATE TABLE `branchtransfers` (
   `tobranch` varchar(10) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT 'the branch the transfer was going to',
   `comments` longtext COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'any comments related to the transfer',
   `reason` enum('Manual','StockrotationAdvance','StockrotationRepatriation','ReturnToHome','ReturnToHolding','RotatingCollection','Reserve','LostReserve','CancelReserve','TransferCancellation') COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'what triggered the transfer',
-  `cancellation_reason` enum('Manual','StockrotationAdvance','StockrotationRepatriation','ReturnToHome','ReturnToHolding','RotatingCollection','Reserve','LostReserve','CancelReserve','ItemLost', 'WrongTransfer') COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'what triggered the transfer cancellation',
+  `cancellation_reason` enum('Manual','StockrotationAdvance','StockrotationRepatriation','ReturnToHome','ReturnToHolding','RotatingCollection','Reserve','LostReserve','CancelReserve','ItemLost','WrongTransfer') COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'what triggered the transfer cancellation',
   PRIMARY KEY (`branchtransfer_id`),
   KEY `frombranch` (`frombranch`),
   KEY `tobranch` (`tobranch`),
@@ -2049,9 +2079,9 @@ CREATE TABLE `course_items` (
   KEY `fk_course_items_biblionumber` (`biblionumber`),
   CONSTRAINT `course_items_ibfk_1` FOREIGN KEY (`itemnumber`) REFERENCES `items` (`itemnumber`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `course_items_ibfk_2` FOREIGN KEY (`holdingbranch`) REFERENCES `branches` (`branchcode`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `fk_course_items_biblionumber` FOREIGN KEY (`biblionumber`) REFERENCES `biblio` (`biblionumber`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `fk_course_items_homebranch` FOREIGN KEY (`homebranch`) REFERENCES `branches` (`branchcode`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `fk_course_items_homebranch_storage` FOREIGN KEY (`homebranch_storage`) REFERENCES `branches` (`branchcode`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `fk_course_items_biblionumber` FOREIGN KEY (`biblionumber`) REFERENCES `biblio` (`biblionumber`) ON DELETE CASCADE ON UPDATE CASCADE
+  CONSTRAINT `fk_course_items_homebranch_storage` FOREIGN KEY (`homebranch_storage`) REFERENCES `branches` (`branchcode`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -2429,7 +2459,7 @@ CREATE TABLE `deletedborrowers` (
   `overdrive_auth_token` mediumtext COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'persist OverDrive auth token',
   `anonymized` tinyint(1) NOT NULL DEFAULT 0 COMMENT 'flag for data anonymization',
   `autorenew_checkouts` tinyint(1) NOT NULL DEFAULT 1 COMMENT 'flag for allowing auto-renewal',
-  `primary_contact_method` varchar(45) DEFAULT NULL COMMENT 'useful for reporting purposes',
+  `primary_contact_method` varchar(45) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'useful for reporting purposes',
   KEY `borrowernumber` (`borrowernumber`),
   KEY `cardnumber` (`cardnumber`),
   KEY `sms_provider_id` (`sms_provider_id`)
@@ -3345,8 +3375,8 @@ CREATE TABLE `linktracker` (
   KEY `borridx` (`borrowernumber`),
   KEY `dateidx` (`timeclicked`),
   CONSTRAINT `linktracker_biblio_ibfk` FOREIGN KEY (`biblionumber`) REFERENCES `biblio` (`biblionumber`) ON DELETE SET NULL ON UPDATE SET NULL,
-  CONSTRAINT `linktracker_item_ibfk` FOREIGN KEY (`itemnumber`) REFERENCES `items` (`itemnumber`) ON DELETE SET NULL ON UPDATE SET NULL,
-  CONSTRAINT `linktracker_borrower_ibfk` FOREIGN KEY (`borrowernumber`) REFERENCES `borrowers` (`borrowernumber`) ON DELETE SET NULL ON UPDATE SET NULL
+  CONSTRAINT `linktracker_borrower_ibfk` FOREIGN KEY (`borrowernumber`) REFERENCES `borrowers` (`borrowernumber`) ON DELETE SET NULL ON UPDATE SET NULL,
+  CONSTRAINT `linktracker_item_ibfk` FOREIGN KEY (`itemnumber`) REFERENCES `items` (`itemnumber`) ON DELETE SET NULL ON UPDATE SET NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -3386,23 +3416,6 @@ CREATE TABLE `marc_matchers` (
   KEY `record_type` (`record_type`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `marc_overlay_rules`
---
-
-DROP TABLE IF EXISTS `marc_overlay_rules`;
-CREATE TABLE IF NOT EXISTS `marc_overlay_rules` (
-  `id`     int(11) NOT NULL auto_increment,
-  `tag`    varchar(255) NOT NULL, -- can be regexp, so need > 3 chars
-  `module` varchar(127) NOT NULL,
-  `filter` varchar(255) NOT NULL,
-  `add`    TINYINT(1) NOT NULL DEFAULT 0,
-  `append` TINYINT(1) NOT NULL DEFAULT 0,
-  `remove` TINYINT(1) NOT NULL DEFAULT 0,
-  `delete` TINYINT(1) NOT NULL DEFAULT 0,
-  PRIMARY KEY(`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Table structure for table `marc_modification_template_actions`
@@ -3449,6 +3462,26 @@ CREATE TABLE `marc_modification_templates` (
   `template_id` int(11) NOT NULL AUTO_INCREMENT,
   `name` mediumtext COLLATE utf8mb4_unicode_ci NOT NULL,
   PRIMARY KEY (`template_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `marc_overlay_rules`
+--
+
+DROP TABLE IF EXISTS `marc_overlay_rules`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `marc_overlay_rules` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `tag` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `module` varchar(127) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `filter` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `add` tinyint(1) NOT NULL DEFAULT 0,
+  `append` tinyint(1) NOT NULL DEFAULT 0,
+  `remove` tinyint(1) NOT NULL DEFAULT 0,
+  `delete` tinyint(1) NOT NULL DEFAULT 0,
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -3911,36 +3944,6 @@ CREATE TABLE `old_reserves` (
   CONSTRAINT `old_reserves_ibfk_2` FOREIGN KEY (`biblionumber`) REFERENCES `biblio` (`biblionumber`) ON DELETE SET NULL ON UPDATE SET NULL,
   CONSTRAINT `old_reserves_ibfk_3` FOREIGN KEY (`itemnumber`) REFERENCES `items` (`itemnumber`) ON DELETE SET NULL ON UPDATE SET NULL,
   CONSTRAINT `old_reserves_ibfk_4` FOREIGN KEY (`itemtype`) REFERENCES `itemtypes` (`itemtype`) ON DELETE SET NULL ON UPDATE SET NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `additional_contents`
---
-
-DROP TABLE IF EXISTS `additional_contents`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `additional_contents` (
-  `idnew` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'unique identifier for the additional content',
-  `category` varchar(20) NOT NULL COMMENT 'category for the additional content',
-  `code` varchar(20) NOT NULL COMMENT 'code to group content per lang',
-  `location` varchar(255) NOT NULL COMMENT 'location of the additional content',
-  `branchcode` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'branch code users to create branch specific additional content, NULL is every branch.',
-  `title` varchar(250) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT 'title of the additional content',
-  `content` mediumtext COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'the body of your additional content',
-  `lang` varchar(25) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT 'location for the additional content(koha is the staff interface, slip is the circulation receipt and language codes are for the opac)',
-  `published_on` date DEFAULT NULL COMMENT 'publication date',
-  `updated_on` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp() COMMENT 'last modification',
-  `expirationdate` date DEFAULT NULL COMMENT 'date the additional content is set to expire or no longer be visible',
-  `number` int(11) DEFAULT NULL COMMENT 'the order in which this additional content appears in that specific location',
-  `borrowernumber` int(11) DEFAULT NULL COMMENT 'The user who created the additional content',
-  PRIMARY KEY (`idnew`),
-  UNIQUE KEY `additional_contents_uniq` (`category`,`code`,`branchcode`,`lang`),
-  KEY `additional_contents_borrowernumber_fk` (`borrowernumber`),
-  KEY `additional_contents_branchcode_ibfk` (`branchcode`),
-  CONSTRAINT `borrowernumber_fk` FOREIGN KEY (`borrowernumber`) REFERENCES `borrowers` (`borrowernumber`) ON DELETE SET NULL ON UPDATE CASCADE,
-  CONSTRAINT `additional_contents_branchcode_ibfk` FOREIGN KEY (`branchcode`) REFERENCES `branches` (`branchcode`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -5121,6 +5124,8 @@ CREATE TABLE `tmp_holdsqueue` (
   `notes` mediumtext COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `item_level_request` tinyint(4) NOT NULL DEFAULT 0,
   KEY `tmp_holdsqueue_ibfk_1` (`itemnumber`),
+  KEY `tmp_holdsqueue_ibfk_2` (`biblionumber`),
+  KEY `tmp_holdsqueue_ibfk_3` (`borrowernumber`),
   CONSTRAINT `tmp_holdsqueue_ibfk_1` FOREIGN KEY (`itemnumber`) REFERENCES `items` (`itemnumber`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `tmp_holdsqueue_ibfk_2` FOREIGN KEY (`biblionumber`) REFERENCES `biblio` (`biblionumber`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `tmp_holdsqueue_ibfk_3` FOREIGN KEY (`borrowernumber`) REFERENCES `borrowers` (`borrowernumber`) ON DELETE CASCADE ON UPDATE CASCADE
@@ -5291,7 +5296,7 @@ CREATE TABLE `virtualshelves` (
   `shelfnumber` int(11) NOT NULL AUTO_INCREMENT COMMENT 'unique identifier assigned by Koha',
   `shelfname` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'name of the list',
   `owner` int(11) DEFAULT NULL COMMENT 'foreign key linking to the borrowers table (using borrowernumber) for the creator of this list (changed from varchar(80) to int)',
-  `public` TINYINT(1) NOT NULL DEFAULT 0 COMMENT 'If the list is public',
+  `public` tinyint(1) NOT NULL DEFAULT 0 COMMENT 'If the list is public',
   `sortfield` varchar(16) COLLATE utf8mb4_unicode_ci DEFAULT 'title' COMMENT 'the field this list is sorted on',
   `lastmodified` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp() COMMENT 'date and time the list was last modified',
   `created_on` datetime NOT NULL COMMENT 'creation time',
@@ -5361,4 +5366,4 @@ CREATE TABLE `zebraqueue` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-05-27 10:16:37
+-- Dump completed on 2021-11-24  9:48:17
