@@ -9,7 +9,7 @@ package C4::SIP::Sip::Configuration;
 use strict;
 use warnings;
 use XML::Simple qw(:strict);
-use List::Util qw(uniq);
+use List::MoreUtils qw(uniq);
 
 use C4::SIP::Sip qw(siplog);
 use Koha::Libraries;
