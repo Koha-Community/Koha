@@ -426,7 +426,7 @@
                                 <div class="modal-content">
                                     <form method="post">
                                         <div class="modal-header">
-                                            <h3>Please confirm bundle contents</h3>
+                                            <h3>Please confirm bundle contents for [% item.barcode | html %]</h3>
                                         </div>
                                         <div class="modal-body">
 
@@ -1514,6 +1514,13 @@
                     }
                 });
             });
+
+            $('#items-bundle-contents-table').dataTable($.extend(true, {}, dataTablesDefaults, {
+                "bFilter": false,
+                "bPaginate": false,
+                "bInfo": false,
+                "order": [[ 1, 'asc' ], [ 0, 'asc' ]]
+            }));
 
             // print modals
             $('.modal.printable').on('shown.bs.modal', function() {
