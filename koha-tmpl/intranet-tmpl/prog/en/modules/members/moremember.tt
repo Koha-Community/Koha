@@ -671,7 +671,7 @@
                                 </li>
                             [% END %]
 
-                            [% IF Koha.Preference('ClaimReturnedLostValue') %]
+                            [% IF Koha.Preference('ClaimReturnedLostValue') || Koha.Preference('BundleLostValue') %]
                                 <li>
                                     [% IF ( patron.return_claims.count ) %]
                                         <a href="#return-claims" id="return-claims-tab">

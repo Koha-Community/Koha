@@ -842,7 +842,7 @@
                             </li>
                         [% END %]
 
-                        [% IF Koha.Preference('ClaimReturnedLostValue') %]
+                        [% IF Koha.Preference('ClaimReturnedLostValue') || Koha.Preference('BundleLostValue') %]
                             <li>
                                 [% IF ( patron.return_claims.count ) %]
                                     <a href="#return-claims" id="return-claims-tab">
@@ -970,7 +970,7 @@
                         </div>
                     [% END %]
 
-                    [% IF Koha.Preference('ClaimReturnedLostValue') %]
+                    [% IF Koha.Preference('ClaimReturnedLostValue') || Koha.Preference('BundleLostValue') %]
                         [% INCLUDE 'patron-return-claims.inc' %]
                     [% END %]
 
@@ -1006,7 +1006,7 @@
             </div> <!-- /.row -->
         </main>
 
-        [% IF Koha.Preference('ClaimReturnedLostValue') %]
+        [% IF Koha.Preference('ClaimReturnedLostValue') || Koha.Preference('BundleLostValue') %]
             [% INCLUDE 'modals/resolve_return_claim.inc' %]
         [% END %]
 
@@ -1054,7 +1054,7 @@
     </script>
     [% Asset.js("js/pages/circulation.js") | $raw %]
     [% Asset.js("js/checkouts.js") | $raw %]
-    [% IF Koha.Preference('ClaimReturnedLostValue') %]
+    [% IF Koha.Preference('ClaimReturnedLostValue') || Koha.Preference('BundleLostValue') %]
         [% Asset.js("js/resolve_claim_modal.js") | $raw %]
     [% END %]
     [% Asset.js("js/holds.js") | $raw %]
