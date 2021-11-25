@@ -481,6 +481,8 @@
                                                 [% END %]
                                             </div>
 
+                                            <div id="bundle-feedback" class="alert" style="display:none"></div>
+
                                         </div>
                                         <div class="modal-footer">
                                             <input type="hidden" name="barcode" value="[% item.barcode | html %]">
@@ -1490,15 +1492,34 @@
 
             // item bundles
             $('#verify-items-bundle-contents-barcodes').on('input', function (ev) {
-                const barcodes = ev.target.value.split('\n').map(function(s) { return s.trim() });
-                $('#items-bundle-contents-table tr').each(function () {
-                    const barcode = this.getAttribute('data-barcode');
-                    if (barcodes.includes(barcode)) {
-                        this.classList.add('ok');
+                let char = ev.target.value.slice(-1);
+                if ( char.match(/\n/) ) {
+                    const barcodes = ev.target.value.split('\n').map(function(s) { return s.trim() });
+                    const expected = [];
+                    $('#items-bundle-contents-table tr').each(function () {
+                        const barcode = this.getAttribute('data-barcode');
+                        expected.push(barcode);
+                        if (barcodes.includes(barcode)) {
+                            this.classList.add('ok');
+                        } else {
+                            this.classList.remove('ok');
+                        }
+                    });
+                    const last = barcodes[barcodes.length -2];
+                    const feedback = $('#bundle-feedback');
+                    let string;
+                    if ( !expected.includes(last) ) {
+                        feedback.fadeOut(100, function(){
+                            string = _("Unexpected: ") +last;
+                            feedback.addClass('alert-danger').removeClass('alert-success').html(string).fadeIn(100);
+                        });
                     } else {
-                        this.classList.remove('ok');
+                        feedback.fadeOut(100, function(){
+                            string = _("Varified: ")+last;
+                            feedback.addClass('alert-success').removeClass('alert-danger').html(string).fadeIn(100);
+                        });
                     }
-                })
+                }
             });
 
             $('.bundle_remove').on('click', function() {
