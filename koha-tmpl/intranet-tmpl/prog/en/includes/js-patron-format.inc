@@ -1,6 +1,13 @@
 <!-- js-patron-title.inc -->
 <script>
     (function() {
+        /**
+        * Format the patron response from a Koha RESTful API request.
+        * @param  {Object}  patron  The patron json object as returned from the Koha RESTful API
+        * @param  {Object}  config  A configuration object
+        *                           Valid keys are: `invert_name`, `display_cardnumber` and `url`
+        * @return {string}          The formatted HTML string
+        */
         window.$patron_to_html = function( patron, config ) {
 
             if ( patron === undefined ) {
