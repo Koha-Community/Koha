@@ -45,6 +45,16 @@ $cache->clear_from_cache("MarcSubfieldStructure-");
 # 952$t is linked with items.copynumber and is not repeatable
 setup_mss();
 
+# FIXME Later in this script we are comparing itemtypes, ordered by their description.
+# MySQL and Perl don't sort _ identically.
+# If you have one itemtype BK and another one B_K, MySQL will sort B_K first when Perl will sort it last
+my @itemtypes = Koha::ItemTypes->search->as_list;
+for my $itemtype ( @itemtypes ) {
+    my $d = $itemtype->description;
+    $d =~ s|_||g;
+    $itemtype->description($d)->store;
+}
+
 subtest 'authorised values' => sub {
     #plan tests => 1;
 
@@ -111,29 +121,23 @@ subtest 'authorised values' => sub {
     subtest 'itemtypes' => sub {
         plan tests => 2;
         my ($subfield) = grep { $_->{kohafield} eq 'items.itype' } @$subfields;
-        my $itemtypes = Koha::ItemTypes->search;
+        my @itemtypes = Koha::ItemTypes->search->as_list;
 
         my $expected = [
             "",
-                map    { $_->itemtype }
-                  # We need to sort using uc or perl won't be case insensitive
-                  sort { uc($a->translated_description) cmp uc($b->translated_description) }
-                  $itemtypes->as_list
-            ];
+            map    { $_->itemtype }
+              # We need to sort using uc or perl won't be case insensitive
+              sort { uc($a->translated_description) cmp uc($b->translated_description) }
+              @itemtypes
+        ];
         is_deeply(
             $subfield->{marc_value}->{values},
             $expected,
             "Item types should be sorted by description and an empty entry should be shown"
-        )
-        or diag("Itemtypes details: " . Dumper(
-            $subfield->{marc_value}->{values},
-            $expected,
-            { map { $_->itemtype => $_->translated_description } $itemtypes->as_list },
-            $Koha::Schema::Result::Itemtype::LANGUAGE,
-        ));
+        );
 
         is_deeply( $subfield->{marc_value}->{labels},
-            { map { $_->itemtype => $_->description } $itemtypes->as_list },
+            { map { $_->itemtype => $_->description } @itemtypes},
             'Labels should be correctly displayed'
         );
     };
