@@ -15,7 +15,7 @@
             }
 
             var title = null;
-            if ( patron.title != null ) {
+            if ( patron.title != null && patron.title != '' ) {
                 title = '<span class="patron-title">' + escape_str(patron.title) + '</span>';
             }
 
@@ -23,7 +23,7 @@
             var firstname = escape_str(patron.firstname);
             var surname   = escape_str(patron.surname);
 
-            if ( patron.other_name != null ) {
+            if ( patron.other_name != null && patron.other_name != '' ) {
                 firstname += ' (' + escape_str(patron.other_name) + ')';
             }
             if ( config && config.invert_name ) {
