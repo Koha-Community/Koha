@@ -113,18 +113,24 @@ subtest 'authorised values' => sub {
         my ($subfield) = grep { $_->{kohafield} eq 'items.itype' } @$subfields;
         my $itemtypes = Koha::ItemTypes->search;
 
-        is_deeply(
-            $subfield->{marc_value}->{values},
-            [
-                "",
+        my $expected = [
+            "",
                 map    { $_->itemtype }
                   # We need to sort using uc or perl won't be case insensitive
                   sort { uc($a->translated_description) cmp uc($b->translated_description) }
                   $itemtypes->as_list
-            ],
-            "Item types should be sorted by description and an empty entries should be shown"
+            ];
+        is_deeply(
+            $subfield->{marc_value}->{values},
+            $expected,
+            "Item types should be sorted by description and an empty entry should be shown"
         )
-        or diag("Itemtypes details: ".Dumper($subfield->{marc_value}->{values}, [map { $_->itemtype } $itemtypes->as_list]));
+        or diag("Itemtypes details: " . Dumper(
+            $subfield->{marc_value}->{values},
+            $expected,
+            { map { $_->itemtype => $_->translated_description } $itemtypes->as_list },
+            $Koha::Schema::Result::Itemtype::LANGUAGE,
+        ));
 
         is_deeply( $subfield->{marc_value}->{labels},
             { map { $_->itemtype => $_->description } $itemtypes->as_list },
