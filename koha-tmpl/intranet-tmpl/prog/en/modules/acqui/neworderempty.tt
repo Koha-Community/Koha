@@ -388,7 +388,7 @@
                         <option value="[% budget_loo.b_id | html %]" class="[% bdgclass | html %]" data-sort1-authcat="[% budget_loo.b_sort1_authcat | html %]" data-sort2-authcat="[% budget_loo.b_sort2_authcat | html %]"
                         >
                     [% END %]
-                        [% level_indent | $raw %][% budget_loo.b_txt | html %][% IF !budget_loo.b_active %] (inactive)[% END %]
+                        [% level_indent | html %][% budget_loo.b_txt | html %][% IF !budget_loo.b_active %] (inactive)[% END %]
                     </option>
                 [% END %]
                 </select>
