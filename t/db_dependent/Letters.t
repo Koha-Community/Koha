@@ -987,7 +987,7 @@ subtest 'Test message_id parameter for SendQueuedMessages' => sub {
         'borrowernumber'         => $borrowernumber,
         'to_address'             => 'to@example.org',
         'message_transport_type' => 'email',
-        'from_address'           => 'root@localhost.' # invalid KohaAdminEmailAddress
+        'from_address'           => '@example.com' # invalid KohaAdminEmailAddress
     };
     my $message_id = C4::Letters::EnqueueLetter($my_message);
     throws_ok {
