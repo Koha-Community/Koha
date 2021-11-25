@@ -455,6 +455,23 @@ sub return_claims {
     return Koha::Checkouts::ReturnClaims->_new_from_dbic( $claims_rs );
 }
 
+=head3 return_claim
+
+  my $return_claim = $item->return_claim;
+
+Returns the most recent unresolved return_claims associated with this item
+
+=cut
+
+sub return_claim {
+    my ($self) = @_;
+    my $claims_rs =
+      $self->_result->return_claims->search( { resolution => undef },
+        { order_by => { '-desc' => 'created_on' }, rows => 1 } )->single;
+    return unless $claims_rs;
+    return Koha::Checkouts::ReturnClaim->_new_from_dbic($claims_rs);
+}
+
 =head3 holds
 
 my $holds = $item->holds();

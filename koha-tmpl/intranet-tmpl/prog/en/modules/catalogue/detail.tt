@@ -1568,6 +1568,7 @@ Note that permanent location is a code, and location may be an authval.
     [% Asset.js("lib/jquery/plugins/jquery.dataTables.columnFilter.js") | $raw %]
     [% INCLUDE 'columns_settings.inc' %]
     [% INCLUDE 'js-date-format.inc' %]
+    [% INCLUDE 'js-patron-format.inc' %]
     [% Asset.js("js/browser.js") | $raw %]
     [% Asset.js("js/table_filters.js") | $raw %]
     <script>
@@ -1601,7 +1602,8 @@ Note that permanent location is a code, and location may be an authval.
                     },
                     "header_filter": false,
                     "embed": [
-                        "biblio"
+                        "biblio",
+                        "return_claim.patron"
                     ],
                     "order": [[ 1, "asc" ]],
                     "columnDefs": [ {
@@ -1664,15 +1666,22 @@ Note that permanent location is a code, and location may be an authval.
                             "orderable": true,
                         },
                         {
-                            "data": "lost_status:last_seen_date",
+                            "data": "lost_status:last_seen_date:return_claim.patron",
                             "title": "Status",
                             "searchable": false,
                             "orderable": true,
                             "render": function(data, type, row, meta) {
                                 if ( row.lost_status == bundle_lost_value ) {
-                                    return "Last seen: " + row.last_seen_date;
+                                    let out = '<span class="lost">' + _("Last seen") + ': ' + row.last_seen_date + '</span>';
+                                    if ( row.return_claim ) {
+                                        out = out + '<span class="claims_return">' + _("Claims returned by") + ': ' + $patron_to_html( row.return_claim.patron, { display_cardnumber: false, url: true } ) + '</span>';
+                                    }
+                                    return out;
                                 }
-                                return "Present";
+                                else if ( row.lost_status !== 0 ) {
+                                    return '<span class="lost">' + _("Lost") + ': ' + row.lost_status + '</span>';
+                                }
+                                return '<span class="available">' + _("Present") + '</span>';
                             }
                         },
                         {
@@ -1687,7 +1696,6 @@ Note that permanent location is a code, and location may be an authval.
                         }
                     ]
                 }, bundle_settings, 1);
-
                 $(".tbundle").on("click", ".remove", function(){
                     var bundle_table = $(this).closest('table');
                     var host_itemnumber = bundle_table.data('itemnumber');

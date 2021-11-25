@@ -212,6 +212,14 @@ properties:
   exclude_from_local_holds_priority:
     type: boolean
     description: Exclude this item from local holds priority.
+  return_claims:
+    type: array
+    description: An array of all return claims associated with this item
+  return_claim:
+    type:
+      - object
+      - "null"
+    description: A return claims object if one exists that's unresolved
 additionalProperties: false
 required:
   - item_id
