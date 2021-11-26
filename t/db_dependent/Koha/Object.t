@@ -385,16 +385,16 @@ subtest "to_api() tests" => sub {
 
     my $patron_api = $patron->to_api(
         {
-            embed => { holds_count => { is_count => 1 } }
+            embed => { holds_count => { is_count => 1 } },
+            user  => $patron
         }
     );
     is( $patron_api->{holds_count}, $patron->holds->count, 'Count embeds are supported and work as expected' );
 
-    throws_ok
-        {
-            $patron->to_api({ embed => { holds_count => {} } });
-        }
-        'Koha::Exceptions::Object::MethodNotCoveredByTests',
+    throws_ok {
+        $patron->to_api( { embed => { holds_count => {} }, user => $patron } );
+    }
+    'Koha::Exceptions::Object::MethodNotCoveredByTests',
         'Unknown method exception thrown if is_count not specified';
 
     subtest 'unprivileged request tests' => sub {
@@ -564,8 +564,8 @@ subtest "to_api() tests" => sub {
 
         t::lib::Mocks::mock_userenv( { patron => $patron } );
 
-        is( ref($patron_1->to_api), 'HASH', 'Returns the object hash' );
-        is( $patron_2->to_api, undef, 'Not accessible, returns undef' );
+        is( ref($patron_1->to_api({ user => $patron })), 'HASH', 'Returns the object hash' );
+        is( $patron_2->to_api({ user => $patron }), undef, 'Not accessible, returns undef' );
 
         $schema->storage->txn_rollback;
     };
@@ -1156,7 +1156,7 @@ subtest 'messages() and add_message() tests' => sub {
     $schema->storage->txn_rollback;
 };
 
-subtest 'accessible() tests' => sub {
+subtest 'is_accessible() tests' => sub {
 
     plan tests => 2;
 
@@ -1184,8 +1184,8 @@ subtest 'accessible() tests' => sub {
 
     t::lib::Mocks::mock_userenv( { patron => $patron } );
 
-    ok( $patron_1->accessible,  'Has access to the patron' );
-    ok( !$patron_2->accessible, 'Does not have access to the patron' );
+    ok( $patron_1->is_accessible( { user  => $patron } ), 'Has access to the patron' );
+    ok( !$patron_2->is_accessible( { user => $patron } ), 'Does not have access to the patron' );
 
     $schema->storage->txn_rollback;
 };

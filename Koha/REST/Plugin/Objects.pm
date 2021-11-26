@@ -316,11 +316,15 @@ Returns the API representation of the passed resultset.
             my $embed   = $c->stash('koha.embed');
             my $strings = $c->stash('koha.strings');
 
+            # Grab user
+            my $user = $c->stash('koha.user');
+
             return $object->to_api(
                 {
                     embed   => $embed,
                     public  => $public,
-                    strings => $strings
+                    strings => $strings,
+                    user    => $user
                 }
             );
         }

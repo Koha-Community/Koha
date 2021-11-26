@@ -2274,6 +2274,30 @@ sub set_default_messaging_preferences {
     return $self;
 }
 
+=head3 is_accessible
+
+    if ( $patron->is_accessible({ user => $logged_in_user }) ) { ... }
+
+This overloaded method validates wether the current I<Koha::Patron> object can be accessed
+by the logged in user.
+
+Returns 0 if the I<user> parameter is missing.
+
+=cut
+
+sub is_accessible {
+    my ( $self, $params ) = @_;
+
+    # FIXME? It felt tempting to return 0 instead
+    # but it would mean needing to explicitly add the 'user'
+    # param in all tests...
+    return 1
+      unless $params->{user};
+
+    my $consumer = $params->{user};
+    return $consumer->can_see_patron_infos($self);
+}
+
 =head3 to_api
 
     my $json = $patron->to_api;

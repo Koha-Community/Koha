@@ -552,7 +552,7 @@ Returns a representation of the object, suitable for API output.
 sub to_api {
     my ( $self, $params ) = @_;
 
-    return unless $self->accessible;
+    return unless $self->is_accessible($params);
 
     my $json_object = $self->TO_JSON;
 
@@ -993,26 +993,18 @@ sub _handle_to_api_child {
     return $res;
 }
 
-=head3 accessible
+=head3 is_accessible
 
-    if ( $object->accessible ) { ... }
+    if ( $object->is_accessible ) { ... }
 
-Whether the object should be accessible in the current context (requesting user).
-It relies on the plural class properly implementing the I<search_limited> method.
+Stub method that is expected to be overloaded (if required) by implementing classes.
 
 =cut
 
-sub accessible {
+sub is_accessible {
     my ($self) = @_;
 
-    return $self->_get_objects_class->search_limited(
-        {
-            map { $_ => $self->$_ }
-              $self->_result->result_source->primary_columns
-        }
-      )->count > 0
-      ? 1
-      : 0;
+    return 1;
 }
 
 sub DESTROY { }
