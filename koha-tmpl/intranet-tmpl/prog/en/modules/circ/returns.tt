@@ -472,7 +472,7 @@
                                             </table>
 
                                             <div class="form-group">
-                                                <label for="verify-items-bundle-contents-barcodes">Barcodes</label>
+                                                <label for="verify-items-bundle-contents-barcodes">Barcodes <span id="verify-progress" class="pull-right" style="display: none"><span id="verified">0</span> of <span id="expected"></span> verified</span></label>
                                                 <textarea autocomplete="off" id="verify-items-bundle-contents-barcodes" name="verify-items-bundle-contents-barcodes" class="form-control"></textarea>
                                                 [% IF item.onloan %]
                                                 <div class="help-block">[% t('Scan all barcodes of items found in the items bundle. If any items are missing, they will be marked as lost') | html %]</div>
@@ -1496,11 +1496,13 @@
                 if ( char.match(/\n/) ) {
                     const barcodes = ev.target.value.split('\n').map(function(s) { return s.trim() });
                     const expected = [];
+                    let found = 0;
                     $('#items-bundle-contents-table tr').each(function () {
                         const barcode = this.getAttribute('data-barcode');
                         expected.push(barcode);
                         if (barcodes.includes(barcode)) {
                             this.classList.add('ok');
+                            found++;
                         } else {
                             this.classList.remove('ok');
                         }
@@ -1519,6 +1521,9 @@
                             feedback.addClass('alert-success').removeClass('alert-danger').html(string).fadeIn(100);
                         });
                     }
+                    $('#verify-progress').show();
+                    $('#verified').text(found);
+                    $('#expected').text(expected.length);
                 }
             });
 
