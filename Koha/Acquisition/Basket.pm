@@ -250,13 +250,14 @@ suitable for API output.
 sub to_api {
     my ( $self, $params ) = @_;
 
-    my $json = $self->SUPER::to_api( $params );
+    my $json_basket = $self->SUPER::to_api( $params );
+    return unless $json_basket;
 
-    $json->{closed} = ( $self->closedate )
+    $json_basket->{closed} = ( $self->closedate )
                                     ? Mojo::JSON->true
                                     : Mojo::JSON->false;
 
-    return $json;
+    return $json_basket;
 }
 
 =head3 to_api_mapping

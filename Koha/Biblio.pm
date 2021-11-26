@@ -1424,14 +1424,16 @@ on the API.
 sub to_api {
     my ($self, $args) = @_;
 
-    my $response = $self->SUPER::to_api( $args );
+    my $json_biblio = $self->SUPER::to_api( $args );
+    return unless $json_biblio;
 
     $args = defined $args ? {%$args} : {};
     delete $args->{embed};
 
-    my $biblioitem = $self->biblioitem->to_api( $args );
+    my $json_biblioitem = $self->biblioitem->to_api( $args );
+    return unless $json_biblioitem;
 
-    return { %$response, %$biblioitem };
+    return { %$json_biblio, %$json_biblioitem };
 }
 
 =head3 to_api_mapping

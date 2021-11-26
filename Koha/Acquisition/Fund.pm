@@ -62,6 +62,8 @@ sub to_api {
     my $budget_period_id = $self->budget_period_id;
 
     my $json_fund = $self->SUPER::to_api($args);
+    return unless $json_fund;
+
     $json_fund->{fund_id}   = $budget_id;
     $json_fund->{budget_id} = $budget_period_id;
 

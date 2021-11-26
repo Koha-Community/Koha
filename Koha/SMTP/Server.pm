@@ -135,10 +135,11 @@ suitable for API output.
 sub to_api {
     my ( $self, $params ) = @_;
 
-    my $json = $self->SUPER::to_api( $params );
-    delete $json->{password};
+    my $json_smtp = $self->SUPER::to_api( $params );
+    return unless $json_smtp;
+    delete $json_smtp->{password};
 
-    return $json;
+    return $json_smtp;
 }
 
 =head3 to_api_mapping
