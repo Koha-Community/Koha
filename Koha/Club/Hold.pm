@@ -28,6 +28,7 @@ use base qw(Koha::Object);
 use Koha::Exceptions;
 use Koha::Exceptions::ClubHold;
 use Koha::Club::Hold::PatronHold;
+use Koha::Club::Holds;
 use Koha::Clubs;
 use Koha::Patrons;
 
