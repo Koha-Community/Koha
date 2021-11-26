@@ -40,7 +40,7 @@ my $op                = $query->param("op") || '';
 my $output_format     = $query->param("format") || $query->param("output_format") || 'iso2709';
 my $backupdir         = C4::Context->config('backupdir');
 my $filename;
-if ( $record_type eq 'auths' ) {
+if ( $record_type && $record_type eq 'auths' ) {
     $filename = $query->param("filename_auth") || ( $output_format eq 'xml' ? 'koha.xml' : 'koha.mrc' );
 } else {
     $filename = $query->param("filename") || ( $output_format eq 'csv' ? 'koha.csv' : 'koha.mrc' );
