@@ -7,9 +7,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Koha 21.05\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-05-11 20:36-0300\n"
-"PO-Revision-Date: 2021-04-28 23:11+0000\n"
-"Last-Translator: Humberto <development@cm-portimao.pt>\n"
+"POT-Creation-Date: 2021-11-14 09:06-0300\n"
+"PO-Revision-Date: 2021-11-16 17:55+0000\n"
+"Last-Translator: vfernandes <vfernandes@keep.pt>\n"
 "Language-Team: none\n"
 "Language: pt\n"
 "MIME-Version: 1.0\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.8\n"
-"X-POOTLE-MTIME: 1619651497.220730\n"
+"X-POOTLE-MTIME: 1637085341.997511\n"
 "X-Pootle-Path: /pt/21.05/pt-PT-messages.po\n"
 "X-Pootle-Revision: 1\n"
 
@@ -59,7 +59,11 @@ msgctxt "Cancel hold button"
 msgid "Cancel"
 msgstr "Cancelar"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1266
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/tables/members_results.tt:20
+msgid "Check out"
+msgstr "Emprestar"
+
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1326
 msgctxt "patron restriction created on"
 msgid "Created"
 msgstr "Criado"
@@ -85,6 +89,12 @@ msgstr "Criado por:"
 msgid "Elasticsearch is currently disabled."
 msgstr "O Elasticsearch não se encontra ativo."
 
+#: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:944
+msgid "Hold"
+msgid_plural "Holds"
+msgstr[0] "Reserva"
+msgstr[1] "Reservas"
+
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:59
 #, perl-brace-format
 msgid "Index '{index}' needs to be recreated."
@@ -101,28 +111,23 @@ msgid "Invalid field weight '{weight}', must be a positive decimal number."
 msgstr ""
 "Peso de campo '{weight}' inválido, deve ser um número decimal positivo."
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:129
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:271
+#: koha-tmpl/intranet-tmpl/prog/en/includes/html_helpers.inc:268
 msgid "Item does not belong to your library"
 msgstr "O exemplar não pertence à sua biblioteca"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:130
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:272
+#: koha-tmpl/intranet-tmpl/prog/en/includes/html_helpers.inc:269
 msgid "Item has a waiting hold"
 msgstr "O exemplar tem uma reserva em espera"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:131
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:273
+#: koha-tmpl/intranet-tmpl/prog/en/includes/html_helpers.inc:270
 msgid "Item has linked analytics"
 msgstr "O exemplar está em uso por analíticos"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:128
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:270
+#: koha-tmpl/intranet-tmpl/prog/en/includes/html_helpers.inc:267
 msgid "Item is checked out"
 msgstr "O exemplar está emprestado"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:132
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:274
+#: koha-tmpl/intranet-tmpl/prog/en/includes/html_helpers.inc:271
 msgid "Last item for bibliographic record with biblio-level hold on it"
 msgstr "Último exemplar de um registo com uma reserva ao nível de registo"
 
@@ -134,8 +139,8 @@ msgstr "Mapeamentos repostos com sucesso."
 msgid "Mappings updated successfully."
 msgstr "Mapeamentos atualizados com sucesso."
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/basket.tt:422
-#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/basket.tt:625
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/basket.tt:436
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/basket.tt:639
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/ordered.tt:46
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/parcel.tt:258
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/spent.tt:46
@@ -154,7 +159,21 @@ msgctxt "verb"
 msgid "Order"
 msgstr "Encomenda"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/detail.tt:821
+#: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/course-details.tt:69
+#: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/course-reserves.tt:52
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-course-reserves.tt:45
+msgctxt "Semester"
+msgid "Term"
+msgstr "Termo"
+
+#: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/course.tt:83
+#: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/course.tt:96
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-course-details.tt:44
+msgctxt "Semester"
+msgid "Term:"
+msgstr "Termo:"
+
+#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/detail.tt:845
 #, perl-brace-format
 msgctxt "pluralization"
 msgid "There is one archived suggestion."
@@ -162,10 +181,13 @@ msgid_plural "There are {count} archived suggestions."
 msgstr[0] "Existe uma sugestão arquivada."
 msgstr[1] "Existem {count} sugestões arquivadas."
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:133
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:275
+#: koha-tmpl/intranet-tmpl/prog/en/includes/html_helpers.inc:272
 msgid "Unknown reason"
 msgstr "Causa desconhecida"
+
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/tables/members_results.tt:22
+msgid "View"
+msgstr "Ver"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:53
 msgid ""
@@ -178,35 +200,35 @@ msgstr ""
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:228
 msgid "checkout"
 msgid_plural "checkouts"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "empréstimo"
+msgstr[1] "empréstimos"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:244
 msgid "hold pending"
 msgid_plural "holds pending"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "reserva pendente"
+msgstr[1] "reservas pendentes"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:252
 msgid "hold waiting"
 msgid_plural "holds waiting"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "reserva em espera"
+msgstr[1] "reservas em espera"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:269
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:276
 msgid "message"
 msgid_plural "messages"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "mensagem"
+msgstr[1] "mensagens"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:236
 msgid "overdue"
 msgid_plural "overdues"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "atraso"
+msgstr[1] "atrasos"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:564
+#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:555
 #, perl-brace-format
 msgid "{count} item"
 msgid_plural "{count} items"

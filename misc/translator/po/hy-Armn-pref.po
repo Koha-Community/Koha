@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Koha 21.05\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-05-10 19:14+0200\n"
-"PO-Revision-Date: 2021-05-17 12:22+0000\n"
+"PO-Revision-Date: 2021-11-25 07:48+0000\n"
 "Last-Translator: tigran <tigran@flib.sci.am>\n"
 "Language-Team: Koha Translation Team <koha-translate@nongnu.org>\n"
 "Language: hy\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Generator: Pootle 2.8\n"
 "X-Poedit-Bookmarks: 1755,-1,-1,-1,-1,-1,-1,-1,-1,-1\n"
-"X-POOTLE-MTIME: 1621254164.166453\n"
+"X-POOTLE-MTIME: 1637826491.497388\n"
 "X-Pootle-Path: /hy/21.05/hy-Armn-pref.po\n"
 "X-Pootle-Revision: 1\n"
 
@@ -786,9 +786,37 @@ msgstr "admin.pref#ElasticsearchMARCFormat# ISO2709 (փոխանակման ձևա
 msgid "admin.pref#ElasticsearchMARCFormat# Searchable array"
 msgstr "admin.pref#ElasticsearchMARCFormat# Փնտրովի զանգված"
 
+# Patrons > Notices and notifications > PhoneNotification
+msgid ""
+"admin.pref#GoogleOAuth2ClientID# Along with <a href=\"/cgi-bin/koha/admin/"
+"preferences.pl?op=search&searchfield=GoogleOAuth2ClientSecret"
+"\">GoogleOAuth2ClientSecret</a>, enables <a href=\"/cgi-bin/koha/admin/"
+"preferences.pl?op=search&searchfield=GoogleOpenIDConnect"
+"\">GoogleOpenIDConnect.</a>"
+msgstr ""
+"admin.pref#GoogleOAuth2ClientID# Along with <a href=\"/cgi-bin/koha/admin/"
+"preferences.pl?op=search&searchfield=GoogleOAuth2ClientSecret"
+"\">GoogleOAuth2ClientSecret</a>, enables <a href=\"/cgi-bin/koha/admin/"
+"preferences.pl?op=search&searchfield=GoogleOpenIDConnect"
+"\">GoogleOpenIDConnect.</a>"
+
 # Administration > Google OpenID Connect
 msgid "admin.pref#GoogleOAuth2ClientID# Google OAuth2 Client ID: "
 msgstr "admin.pref#GoogleOAuth2ClientID# Google OAuth2 Client ID: "
+
+# Patrons > Notices and notifications > PhoneNotification
+msgid ""
+"admin.pref#GoogleOAuth2ClientSecret# Along with <a href=\"/cgi-bin/koha/"
+"admin/preferences.pl?op=search&searchfield=GoogleOAuth2ClientID"
+"\">GoogleOAuth2ClientID</a>, enables <a href=\"/cgi-bin/koha/admin/"
+"preferences.pl?op=search&searchfield=GoogleOpenIDConnect"
+"\">GoogleOpenIDConnect.</a>"
+msgstr ""
+"admin.pref#GoogleOAuth2ClientSecret# Along with <a href=\"/cgi-bin/koha/"
+"admin/preferences.pl?op=search&searchfield=GoogleOAuth2ClientID"
+"\">GoogleOAuth2ClientID</a>, enables <a href=\"/cgi-bin/koha/admin/"
+"preferences.pl?op=search&searchfield=GoogleOpenIDConnect"
+"\">GoogleOpenIDConnect.</a>"
 
 # Administration > Google OpenID Connect
 msgid "admin.pref#GoogleOAuth2ClientSecret# Google OAuth2 Client Secret: "
@@ -799,9 +827,11 @@ msgid "admin.pref#GoogleOpenIDConnect# No"
 msgstr "admin.pref#GoogleOpenIDConnect# Ոչ"
 
 # Administration > Google OpenID Connect
-msgid "admin.pref#GoogleOpenIDConnect# Use Google OpenID Connect login: "
+msgid ""
+"admin.pref#GoogleOpenIDConnect# Use Google OpenID Connect login in the OPAC: "
 msgstr ""
-"admin.pref#GoogleOpenIDConnect# Օգտագործիր Google OpenID Connect login: "
+"admin.pref#GoogleOpenIDConnect# Օգտագործիր ՀՕԱՔ-ում Google OpenID Connect "
+"գրանցումը: "
 
 # Administration > Google OpenID Connect
 msgid "admin.pref#GoogleOpenIDConnect# Yes"
@@ -812,11 +842,20 @@ msgid ""
 "admin.pref#GoogleOpenIDConnect# You will need to select OAuth2 when creating "
 "an app in the Google cloud console, and set the web origin to your_opac_url "
 "and the redirect url to your_opac_url/cgi-bin/koha/svc/auth/"
-"googleopenidconnect ."
+"googleopenidconnect. Requires <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=GoogleOAuth2ClientID\">GoogleOAuth2ClientID</a> and <a "
+"href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=GoogleOAuth2ClientSecret\">GoogleOAuth2ClientSecret</"
+"a> to be set."
 msgstr ""
 "admin.pref#GoogleOpenIDConnect# Google ամպային վահանակում ծրագիր ստեղծելիս "
 "պետք է ընտրեք OAuth2, և վեբ ծագումը դնեք your_opac_url և ուղղորդեք url դեպի "
-"your_opac_url/cgi-bin/koha/svc/auth/googleopenidconnect ."
+"your_opac_url/cgi-bin/koha/svc/auth/googleopenidconnect. Պահանջում է <a href="
+"\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=GoogleOAuth2ClientID\">GoogleOAuth2ClientID</a> and <a "
+"href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=GoogleOAuth2ClientSecret\">GoogleOAuth2ClientSecret</"
+"a> կարգաբերման համար։"
 
 # Administration > Google OpenID Connect
 msgid "admin.pref#GoogleOpenIDConnectAutoRegister# Allow"
@@ -829,14 +868,24 @@ msgstr "admin.pref#GoogleOpenIDConnectAutoRegister# Մի թույլատրի"
 # Administration > Google OpenID Connect
 msgid ""
 "admin.pref#GoogleOpenIDConnectAutoRegister# patrons logging in with Google "
-"Open ID to automatically register."
+"Open ID to automatically register. Requires <a href=\"/cgi-bin/koha/admin/"
+"preferences.pl?op=search&searchfield=GoogleOpenIDConnect"
+"\">GoogleOpenIDConnect</a>."
 msgstr ""
 "admin.pref#GoogleOpenIDConnectAutoRegister# օգտվողները, ովքեր մուտք են "
-"գործում Google Open ID- ով, ինքնաշխատ կերպով գրանցվելու համար:"
+"գործում Google Open IDինքնաշխատ կերպով գրանցվելու համար:. Պահանջում է <a "
+"href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=GoogleOpenIDConnect\">GoogleOpenIDConnect</a>."
 
-# Administration > Google OpenID Connect
-msgid "admin.pref#GoogleOpenIDConnectDefaultBranch# ."
-msgstr "admin.pref#GoogleOpenIDConnectDefaultBranch# ."
+# Patrons > General
+msgid ""
+"admin.pref#GoogleOpenIDConnectDefaultBranch# Requires <a href=\"/cgi-bin/"
+"koha/admin/preferences.pl?op=search&searchfield=GoogleOpenIDConnect"
+"\">GoogleOpenIDConnect</a>."
+msgstr ""
+"admin.pref#GoogleOpenIDConnectDefaultBranch# Պահանջում է <a href=\"/cgi-bin/"
+"koha/admin/preferences.pl?op=search&searchfield=GoogleOpenIDConnect"
+"\">GoogleOpenIDConnect</a>."
 
 # Administration > Google OpenID Connect
 msgid ""
@@ -846,9 +895,15 @@ msgstr ""
 "admin.pref#GoogleOpenIDConnectDefaultBranch# Google Open ID օգտվողին "
 "ինքնաշխատ կերպով գրանցելու ժամանակ օգտագործեք այս մասնաճյուղի կոդը. "
 
-# Administration > Google OpenID Connect
-msgid "admin.pref#GoogleOpenIDConnectDefaultCategory# ."
-msgstr "admin.pref#GoogleOpenIDConnectDefaultCategory# ."
+# Patrons > General
+msgid ""
+"admin.pref#GoogleOpenIDConnectDefaultCategory# Requires <a href=\"/cgi-bin/"
+"koha/admin/preferences.pl?op=search&searchfield=GoogleOpenIDConnect"
+"\">GoogleOpenIDConnect</a>."
+msgstr ""
+"admin.pref#GoogleOpenIDConnectDefaultCategory# Պահանջում է <a href=\"/cgi-"
+"bin/koha/admin/preferences.pl?op=search&searchfield=GoogleOpenIDConnect"
+"\">GoogleOpenIDConnect</a>."
 
 # Administration > Google OpenID Connect
 msgid ""
@@ -858,12 +913,15 @@ msgstr ""
 "admin.pref#GoogleOpenIDConnectDefaultCategory# Google Open ID օգտվողին "
 "ինքնաշխատ գրանցելու ժամանակ օգտագործեք այս դասի կոդը. "
 
-# Administration > Google OpenID Connect
+# OPAC > OpenURL
 msgid ""
-"admin.pref#GoogleOpenIDConnectDomain# . Leave blank for all Google domains."
+"admin.pref#GoogleOpenIDConnectDomain# Leave blank for all Google domains. "
+"Requires <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=GoogleOpenIDConnect\">GoogleOpenIDConnect</a>."
 msgstr ""
-"admin.pref#GoogleOpenIDConnectDomain# . Դատարկ թողեք Google-ի բոլոր "
-"տիրույթների համար:"
+"admin.pref#GoogleOpenIDConnectDomain# Թող դատարկ Google բոլոր դոմեյների "
+"համար։ Պահանջում է <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=GoogleOpenIDConnect\">GoogleOpenIDConnect</a>."
 
 # Administration > Google OpenID Connect
 msgid ""
@@ -2667,6 +2725,24 @@ msgstr ""
 "օգտագործեք մեկ տող BT_TAG ձևաչափով: TAG$SUBFIELD ( օր․՝ lccn: 010$a )."
 
 # Cataloging > Interface
+msgid "cataloguing.pref#CreateAVFromCataloguing# Allow"
+msgstr "cataloguing.pref#CreateAVFromCataloguing# Թույլատրել"
+
+# Cataloging > Interface
+msgid "cataloguing.pref#CreateAVFromCataloguing# Don't allow"
+msgstr "cataloguing.pref#CreateAVFromCataloguing# Չթույլատրել"
+
+# Cataloging > Interface > CreateAVFromCataloguing
+msgid ""
+"cataloguing.pref#CreateAVFromCataloguing# authorized values to be created "
+"within the cataloguing module. Librarian will need the manage_auth_values "
+"subpermission."
+msgstr ""
+"cataloguing.pref#CreateAVFromCataloguing# թույլատրված արժեքներ, որոնք պետք է "
+"ստեղծվեն քարտագրման մոդուլի շրջանակներում: Գրադարանավարին անհրաժեշտ կլինի "
+"manage_auth_values ենթաթույլտվություն:"
+
+# Cataloging > Interface
 msgid "cataloguing.pref#DefaultClassificationSource# Use"
 msgstr "cataloguing.pref#DefaultClassificationSource# Օգտագործիր"
 
@@ -2762,10 +2838,10 @@ msgstr ""
 # Cataloging > Interface
 msgid ""
 "cataloguing.pref#EnableAdvancedCatalogingEditor# Currently does not include "
-"support for UNIMARC or NORMARC fixed fields."
+"support for UNIMARC fixed fields."
 msgstr ""
 "cataloguing.pref#EnableAdvancedCatalogingEditor# Այս պահին չի ներառում "
-"աջակցություն UNIMARC կամ NORMARC սևեռված դաշտերի համար։"
+"աջակցություն UNIMARC սևեռված դաշտերի համար։"
 
 # Cataloging > Interface
 msgid "cataloguing.pref#EnableAdvancedCatalogingEditor# Don't enable"
@@ -2847,6 +2923,23 @@ msgstr ""
 "cataloguing.pref#MARCOrgCode# որպես լռակյաց նոր MARC21 գրառումներում (թող "
 "դատարկ արգելելու համար)։ Սա կարող է նաև լինել բազմություն գրադարանների "
 "մակարդակով։"
+
+# Cataloging > Display
+msgid "cataloguing.pref#MARCOverlayRules# Don't use"
+msgstr "cataloguing.pref#MARCOverlayRules# Մի օգտագործիր"
+
+# Cataloging > Importing > MARCOverlayRules
+msgid ""
+"cataloguing.pref#MARCOverlayRules# MARC overlay rules for incoming records, "
+"to decide which action to take for each field."
+msgstr ""
+"cataloguing.pref#MARCOverlayRules# ՄԵԸՔ ծածկույթի կանոններ մուտքային "
+"գրառումների համար՝ որոշելու, թե որ գործողությունն իրականացնել յուրաքանչյուր "
+"դաշտի համար:"
+
+# Cataloging > Display
+msgid "cataloguing.pref#MARCOverlayRules# Use"
+msgstr "cataloguing.pref#MARCOverlayRules# Օգտագործիր"
 
 # Cataloging > Display
 msgid ""
@@ -3174,6 +3267,47 @@ msgstr ""
 "cataloguing.pref#SeparateHoldings# նյութերը արտածվում են երկու ներդիրներում, "
 "որտեղ առաջին ներդիրը պարունակում է նյութեր, որոնց"
 
+# Cataloging > Display > ShowComponentRecords
+msgid "cataloguing.pref#ShowComponentRecords# <br/> UNIMARC is not supported."
+msgstr "cataloguing.pref#ShowComponentRecords# <br/> UNIMARC-ը չի աջակցվում։"
+
+# Cataloging > Display > ShowComponentRecords
+msgid "cataloguing.pref#ShowComponentRecords# A maximum of"
+msgstr "cataloguing.pref#ShowComponentRecords# Առավելագույնը"
+
+# Cataloging > Record structure
+msgid "cataloguing.pref#ShowComponentRecords# OPAC"
+msgstr "cataloguing.pref#ShowComponentRecords# ՀՕԱՔ"
+
+# Cataloging > Display > ShowComponentRecords
+msgid ""
+"cataloguing.pref#ShowComponentRecords# Show a list of component records, as "
+"linked via field 773, in"
+msgstr ""
+"cataloguing.pref#ShowComponentRecords# Ցույց տալ բաղադրիչի գրառումների "
+"ցանկը, ինչպես կապված է 773 դաշտի միջոցով,"
+
+# Cataloging > Display
+msgid "cataloguing.pref#ShowComponentRecords# both staff interface and OPAC"
+msgstr ""
+"cataloguing.pref#ShowComponentRecords# երկուսն էլ, աշխատակազմի միջերես և ՀՕԱՔ"
+
+# Cataloging > Spine labels
+msgid "cataloguing.pref#ShowComponentRecords# no"
+msgstr "cataloguing.pref#ShowComponentRecords# ոչ"
+
+# Cataloging > Record structure
+msgid "cataloguing.pref#ShowComponentRecords# record detail pages."
+msgstr "cataloguing.pref#ShowComponentRecords# գրառման մանրամասների էջերը:"
+
+# Cataloging > Interface
+msgid "cataloguing.pref#ShowComponentRecords# records will be displayed."
+msgstr "cataloguing.pref#ShowComponentRecords# գրառումները կարտածվեն։"
+
+# Cataloging > Record structure
+msgid "cataloguing.pref#ShowComponentRecords# staff interface"
+msgstr "cataloguing.pref#ShowComponentRecords# անձնակազմի միջերես"
+
 # Cataloging > Spine labels
 msgid ""
 "cataloguing.pref#SpineLabelAutoPrint# When using the quick spine label "
@@ -3491,10 +3625,6 @@ msgid "cataloguing.pref#marcflavour# MARC21"
 msgstr "cataloguing.pref#marcflavour# MARC21"
 
 # Cataloging > Record structure
-msgid "cataloguing.pref#marcflavour# NORMARC"
-msgstr "cataloguing.pref#marcflavour# NORMARC"
-
-# Cataloging > Record structure
 msgid "cataloguing.pref#marcflavour# UNIMARC"
 msgstr "cataloguing.pref#marcflavour# UNIMARC"
 
@@ -3633,12 +3763,17 @@ msgstr "circulation.pref#AllFinesNeedOverride# Պահանջիր"
 msgid ""
 "circulation.pref#AllFinesNeedOverride# staff to manually override all fines, "
 "even fines less than set in the <a href=\"/cgi-bin/koha/admin/preferences.pl?"
-"op=search&searchfield=noissuescharge\">noissuescharge</a> system preference."
+"op=search&searchfield=noissuescharge\">noissuescharge</a> system preference. "
+"Enabling this system preference will block all checkouts for patrons with "
+"fines both via the web-based self checkout system and via SIP."
 msgstr ""
 "circulation.pref#AllFinesNeedOverride# աշխատակազմը ձեռքով վերագրի բոլոր "
-"տուգանքները, նույնիսկ նրանք որ փոքր են քան <a href=\"/cgi-bin/koha/admin/"
-"preferences.pl?op=search&searchfield=noissuescharge\">noissuescharge</a> "
-"համակարգային կարգաբերված նախապատվությունում։"
+"տուգանքները, նույնիսկ նրանք որ փոքր են քան <a href=\"/cgi-"
+"bin/koha/admin/preferences.pl?op=search&searchfield=noissuescharge\""
+">noissuescharge</a> համակարգային կարգաբերված նախապատվությունում։ Համակարգի "
+"այս նախապատվությունը միացնելու դեպքում կարգելափակվեն տուգանքների ենթարկված "
+"այցելուների բոլոր դուրս տրումները և՛ վեբի վրա հիմնված ինքնատացքի համակարգի, "
+"և՛ SIP-ի միջոցով:"
 
 # Circulation > Interface
 msgid "circulation.pref#AllowAllMessageDeletion# Allow"
@@ -4123,6 +4258,44 @@ msgstr "circulation.pref#ArticleRequestsMandatoryFieldsRecordOnly# Վերնագ�
 msgid "circulation.pref#ArticleRequestsMandatoryFieldsRecordOnly# Volume"
 msgstr "circulation.pref#ArticleRequestsMandatoryFieldsRecordOnly# Հատոր"
 
+# Circulation > Article requests > ArticleRequestsOpacHostRedirection
+msgid ""
+"circulation.pref#ArticleRequestsOpacHostRedirection#  redirection from child "
+"to host based on MARC21 773$w when the child has no items when requesting "
+"articles on the Opac."
+msgstr ""
+"circulation.pref#ArticleRequestsOpacHostRedirection#  վերահասցեավորում "
+"երեխայից դեպի հյուրընկալող՝ հիմնվելով MARC21 773$w -ի վրա, երբ երեխան չունի "
+"նյութեր ՀՕԱՔ-ից հոդվածներ պատվիրելիս"
+
+# Circulation > Article requests
+msgid "circulation.pref#ArticleRequestsOpacHostRedirection# Disable"
+msgstr "circulation.pref#ArticleRequestsOpacHostRedirection# Մի թույլատրեք"
+
+# Circulation > Article requests
+msgid "circulation.pref#ArticleRequestsOpacHostRedirection# Enable"
+msgstr "circulation.pref#ArticleRequestsOpacHostRedirection# Թույլատրեք"
+
+# Circulation > Article requests > ArticleRequestsSupportedFormats
+msgid ""
+"circulation.pref#ArticleRequestsSupportedFormats# (Valid choices are "
+"currently: PHOTOCOPY and SCAN. Separate the supported formats by a vertical "
+"bar. The first listed format is selected by default when you request via the "
+"OPAC.)"
+msgstr ""
+"circulation.pref#ArticleRequestsSupportedFormats# (Ներկայիս գործող "
+"ընտրանքներն են՝ ՖՈՏՈՊԱՏՃԵՆ և ՍՔԱՆ: Առանձնացրեք աջակցվող ձևաչափերն ուղղահայաց "
+"գծիկով: Առաջին թվարկված ձևաչափը ընտրվում է լռելյայն, երբ դուք հարցում եք "
+"կատարում ՀՕԱՔ-ով:)"
+
+# Circulation > Article requests
+msgid ""
+"circulation.pref#ArticleRequestsSupportedFormats# The following article "
+"request formats are supported:"
+msgstr ""
+"circulation.pref#ArticleRequestsSupportedFormats# Հոդվածի հարցման հետևյալ "
+"ձևաչափերը աջակցվում են."
+
 # Circulation > Checkout policy
 msgid "circulation.pref#AutoRemoveOverduesRestrictions# Do"
 msgstr "circulation.pref#AutoRemoveOverduesRestrictions# Արա"
@@ -4529,6 +4702,26 @@ msgstr ""
 msgid "circulation.pref#ClaimReturnedWarningThreshold# items."
 msgstr "circulation.pref#ClaimReturnedWarningThreshold# նյութեր։"
 
+# Circulation > Return claims > CleanUpDatabaseReturnClaims
+msgid ""
+"circulation.pref#CleanUpDatabaseReturnClaims# <span class=\"hint\">This "
+"system preference is used by the cleanup_database.pl cronjob.</span>"
+msgstr ""
+"circulation.pref#CleanUpDatabaseReturnClaims# <span class=\"hint\">Համակարգի "
+"այս նախապատվությունն օգտագործվում է cleanup_database.pl cronjob.</span>"
+
+# Circulation > Return claims > CleanUpDatabaseReturnClaims
+msgid ""
+"circulation.pref#CleanUpDatabaseReturnClaims# Remove resolved return claims "
+"older than"
+msgstr ""
+"circulation.pref#CleanUpDatabaseReturnClaims# Հեռացնել լուծում ստացած "
+"վերադարձի պահանջները, որոնք ավելի հին են, քան"
+
+# Circulation > Return claims
+msgid "circulation.pref#CleanUpDatabaseReturnClaims# days."
+msgstr "circulation.pref#CleanUpDatabaseReturnClaims# օր։"
+
 # Circulation > Holds policy
 msgid ""
 "circulation.pref#ConfirmFutureHolds# Confirm future hold requests (starting "
@@ -4851,20 +5044,30 @@ msgstr ""
 "իրենց սպասման տևողությունը վճարել լրանալուց"
 
 # Circulation > Holds policy
-msgid "circulation.pref#ExpireReservesOnHolidays# Allow"
-msgstr "circulation.pref#ExpireReservesOnHolidays# Թույլ տուր"
+msgid ""
+"circulation.pref#ExpireReservesOnHolidays# If using <a href=\"/cgi-bin/koha/"
+"admin/preferences.pl?op=search&searchfield=ExpireReservesMaxPickUpDelay"
+"\">ExpireReservesMaxPickUpDelay</a>,"
+msgstr ""
+"circulation.pref#ExpireReservesOnHolidays# Եթե օգտագործվում է <a href=\"/cgi-"
+"bin/koha/admin/preferences.pl?op=search&searchfield="
+"ExpireReservesMaxPickUpDelay\">ExpireReservesMaxPickUpDelay</a>,"
 
 # Circulation > Holds policy
-msgid "circulation.pref#ExpireReservesOnHolidays# Don't allow"
-msgstr "circulation.pref#ExpireReservesOnHolidays# Մի թույլ տուր"
+msgid "circulation.pref#ExpireReservesOnHolidays# allow"
+msgstr "circulation.pref#ExpireReservesOnHolidays# թույլ տուր"
+
+# Circulation > Holds policy
+msgid "circulation.pref#ExpireReservesOnHolidays# don't allow"
+msgstr "circulation.pref#ExpireReservesOnHolidays# մի թույլ տուր"
 
 # Circulation > Holds policy
 msgid ""
 "circulation.pref#ExpireReservesOnHolidays# expired holds to be canceled on "
-"days the library is closed."
+"days the library is closed per the calendar."
 msgstr ""
 "circulation.pref#ExpireReservesOnHolidays# ժամկետանց պահումները պետք է "
-"չեղյալ արվեն գրադարանի փակ օրերին։"
+"չեղյալ արվեն գրադարանի օրացույցային փակ օրերին։"
 
 # Circulation > Interface
 msgid "circulation.pref#ExportCircHistory# Don't show"
@@ -5994,8 +6197,8 @@ msgstr ""
 "բազմության սահմանափակման համար։"
 
 # Circulation > Holds policy
-msgid "circulation.pref#ReservesControlBranch# Check the"
-msgstr "circulation.pref#ReservesControlBranch# Ընդունիր"
+msgid "circulation.pref#ReservesControlBranch# Check the rule from the"
+msgstr "circulation.pref#ReservesControlBranch# Ստուգիր կարգը"
 
 # Circulation > Holds policy
 msgid "circulation.pref#ReservesControlBranch# item's home library"
@@ -6055,8 +6258,12 @@ msgid "circulation.pref#RestrictionBlockRenewing# block"
 msgstr "circulation.pref#RestrictionBlockRenewing# արգելափակել"
 
 # Circulation > Checkout policy
-msgid "circulation.pref#RestrictionBlockRenewing# renewing of items."
-msgstr "circulation.pref#RestrictionBlockRenewing# նյութերի թարմացում։"
+msgid ""
+"circulation.pref#RestrictionBlockRenewing# renewing of items from the staff "
+"interface."
+msgstr ""
+"circulation.pref#RestrictionBlockRenewing# նյութերի թարմացում աշխատակազմի "
+"միջերեսից։"
 
 # Circulation > Checkout policy
 msgid "circulation.pref#ReturnBeforeExpiry# Don't require"
@@ -7247,10 +7454,6 @@ msgstr ""
 msgid "enhanced_content.pref"
 msgstr "enhanced_content.pref"
 
-# Enhanced content > Adlibris
-msgid "enhanced_content.pref Adlibris"
-msgstr "enhanced_content.pref Adlibris"
-
 # Enhanced content > All
 msgid "enhanced_content.pref All"
 msgstr "enhanced_content.pref Բոլորը"
@@ -7315,15 +7518,6 @@ msgstr "enhanced_content.pref Syndetics"
 msgid "enhanced_content.pref Tagging"
 msgstr "enhanced_content.pref Tagging"
 
-# Enhanced content > Adlibris
-msgid ""
-"enhanced_content.pref## <strong>NOTE:</strong> Using resources such as "
-"external images might leak sensitive data to third parties."
-msgstr ""
-"enhanced_content.pref## <strong>ՆՇՈՒՄ:</strong> Պաշարների օգտագործումը, "
-"ինչպիսիք են արտաքին պատկերները, կարող են տրամադրել զգայուն տվյալներ երրորդ "
-"կողմին։"
-
 # Enhanced content > All
 msgid ""
 "enhanced_content.pref## <strong>NOTE:</strong> you can only choose one "
@@ -7333,36 +7527,6 @@ msgstr ""
 "enhanced_content.pref## <strong>Նկատի առ:</strong> դու կարող ես ընտրել միայն "
 "մեկ կազմի պատկեր, հակառակ դեպքում Կոհան ցույց կտա պատկերները ընտրված բոլոր "
 "աղբյուրներից։"
-
-# Enhanced content > Adlibris
-msgid "enhanced_content.pref#AdlibrisCoversEnabled# Don't show"
-msgstr "enhanced_content.pref#AdlibrisCoversEnabled# Ցույց մի տուր"
-
-# Enhanced content > Adlibris
-msgid "enhanced_content.pref#AdlibrisCoversEnabled# Show"
-msgstr "enhanced_content.pref#AdlibrisCoversEnabled# Ցույց տուր"
-
-# Enhanced content > Adlibris
-msgid ""
-"enhanced_content.pref#AdlibrisCoversEnabled# cover images in OPAC results "
-"and detail listing from Swedish retailer <a href=\"https://www.adlibris.com/"
-"se\">Adlibris</a>."
-msgstr ""
-"enhanced_content.pref#AdlibrisCoversEnabled# կազմերի պատկերներ ՀՕԱՔ "
-"արդյունքներից և մանրամասն ցուցակներ շվեդական մանրածախ վաճառողից <a href="
-"\"https://www.adlibris.com/se\">Adlibris</a>."
-
-# Enhanced content > Adlibris
-msgid "enhanced_content.pref#AdlibrisCoversURL# Use base URL: "
-msgstr "enhanced_content.pref#AdlibrisCoversURL# Օգտագործիր հիմնային URL -ը։ "
-
-# Enhanced content > Adlibris
-msgid ""
-"enhanced_content.pref#AdlibrisCoversURL# for the <a href=\"https://www."
-"adlibris.com/se\">Adlibris</a> cover service."
-msgstr ""
-"enhanced_content.pref#AdlibrisCoversURL# for the <a href=\"https://www."
-"adlibris.com/se\">Adlibris</a> կազմի ծառայություն։"
 
 # Enhanced content > Local or remote cover images
 msgid "enhanced_content.pref#AllowMultipleCovers# Allow"
@@ -7578,6 +7742,14 @@ msgstr "enhanced_content.pref#CustomCoverImages# Արտածել"
 # Enhanced content > Local or remote cover images
 msgid "enhanced_content.pref#CustomCoverImages# Don't display"
 msgstr "enhanced_content.pref#CustomCoverImages# Մի արտածիր"
+
+# Enhanced content > Local or remote cover images
+msgid ""
+"enhanced_content.pref#CustomCoverImages# For control fields you can use just "
+"{field}, like {001}."
+msgstr ""
+"enhanced_content.pref#CustomCoverImages# Վերահսկման դաշտերի համար կարող եք "
+"օգտագործել պարզապես {field}, ինչպես {001}."
 
 # Enhanced content > Local or remote cover images
 msgid ""
@@ -8649,14 +8821,8 @@ msgstr ""
 "օգտագործվող լեզուների տեսակավորման թարմացման համար։"
 
 # I18N/L10N
-msgid ""
-"i18n_l10n.pref#TimeFormat# . <br/> <strong>NOTE:</strong> Do not change this "
-"preference on a production server with overdue items that are accruing "
-"fines. Doing so will result in duplicate fines!"
-msgstr ""
-"i18n_l10n.pref#TimeFormat# . <br/> <strong>ՆՇՈՒՄ:</strong> Մի փոխեք այս "
-"նախապատվությունը թողարկող կայանում ժամկետանց նյութերով, որոնք տուգանքներ են "
-"կուտակում։ Փոփոխությունը կհանգեցնի կրկնվող տուգանքների։"
+msgid "i18n_l10n.pref#TimeFormat# ."
+msgstr "i18n_l10n.pref#TimeFormat# ."
 
 # I18N/L10N
 msgid "i18n_l10n.pref#TimeFormat# 12 hour format ( e.g. \"02:18 PM\" )"
@@ -8716,14 +8882,8 @@ msgstr ""
 "մեծատառերից կազմված և բացատով տարանջատված ցուցակ։"
 
 # I18N/L10N
-msgid ""
-"i18n_l10n.pref#dateformat# . <br/> <strong>NOTE:</strong> Do not change this "
-"preference on a production server with overdue items that are accruing "
-"fines. Doing so will result in duplicate fines!"
-msgstr ""
-"i18n_l10n.pref#dateformat# . <br/> <strong>ՆՇՈՒՄ:</strong> Մի փոխիր այս "
-"նախապատվությունը ժամկետանց նյութերով թողարկող կայանում որոնք տուգանքներ են "
-"կուտակում։ Փոփոխությունը կհանգեցնի կրկնվող տուգանքների։"
+msgid "i18n_l10n.pref#dateformat# ."
+msgstr "i18n_l10n.pref#dateformat# ."
 
 # I18N/L10N
 msgid "i18n_l10n.pref#dateformat# Format dates like"
@@ -9003,6 +9163,22 @@ msgstr "logs.pref#IssueLog# Գրանցվի"
 # Logging > Logging
 msgid "logs.pref#IssueLog# when items are checked out."
 msgstr "logs.pref#IssueLog# երբ նյութերը դուրս են տրված։"
+
+# Logging > Logging
+msgid ""
+"logs.pref#NewsLog#  changes to news entries and other contents managed in "
+"the news tool."
+msgstr ""
+"logs.pref#NewsLog#  նորությունների գործիքի մեջ նորությունների գրառումների և "
+"այլ բովանդակության փոփոխություններ:"
+
+# Logging > Logging
+msgid "logs.pref#NewsLog# Don't log"
+msgstr "logs.pref#NewsLog# Մի գրանցվիր"
+
+# Logging > Logging
+msgid "logs.pref#NewsLog# Log"
+msgstr "logs.pref#NewsLog# Գրանցվիր"
 
 # Logging > Logging
 msgid "logs.pref#NoticesLog#  changes to notice templates."
@@ -9295,35 +9471,6 @@ msgstr ""
 "opac.pref#EnableOpacSearchHistory# ընթերցողի որոնման պատմություն ՀՕԱՔ-ում։"
 
 # OPAC > Appearance
-msgid ""
-"opac.pref#HighlightOwnItemsOnOPAC#  by moving the results to the front and "
-"increasing the size or highlighting the rows for those results (non-XSLT "
-"only)."
-msgstr ""
-"opac.pref#HighlightOwnItemsOnOPAC#  արդյունքները տեղափոխելով առաջ և "
-"մեծացնելով չափը կամ ընդգծելով այդ արդյունքների շարքերը (միայն non-XSLT)։"
-
-# OPAC > Appearance
-msgid "opac.pref#HighlightOwnItemsOnOPAC# Don't emphasize"
-msgstr "opac.pref#HighlightOwnItemsOnOPAC# Մի շեշտիր"
-
-# OPAC > Appearance
-msgid "opac.pref#HighlightOwnItemsOnOPAC# Emphasize"
-msgstr "opac.pref#HighlightOwnItemsOnOPAC# Շեշտիր"
-
-# OPAC > Appearance
-msgid "opac.pref#HighlightOwnItemsOnOPAC# OPAC's library via the URL"
-msgstr "opac.pref#HighlightOwnItemsOnOPAC# ՀՕՔԱ գրադարան URL միջով"
-
-# OPAC > Appearance
-msgid "opac.pref#HighlightOwnItemsOnOPAC# patron's home library"
-msgstr "opac.pref#HighlightOwnItemsOnOPAC# օգտատերի տան գրադարան"
-
-# OPAC > Appearance
-msgid "opac.pref#HighlightOwnItemsOnOPAC# results from the "
-msgstr "opac.pref#HighlightOwnItemsOnOPAC# արդյունքներ "
-
-# OPAC > Appearance
 msgid "opac.pref#LibraryName# Show"
 msgstr "opac.pref#LibraryName# Ցույց տուր"
 
@@ -9519,6 +9666,21 @@ msgid ""
 msgstr ""
 "opac.pref#OPACFinesTab# ընթերցողները, որ կարողանան մուտք ունենալ ծախսերի "
 "ներդիր ՀՕԱՔ-ի իրենց հաշվի էջից։"
+
+# OPAC > Privacy
+msgid "opac.pref#OPACHoldRequests# Allow"
+msgstr "opac.pref#OPACHoldRequests# Թույլատրել"
+
+# OPAC > Privacy
+msgid "opac.pref#OPACHoldRequests# Don't allow"
+msgstr "opac.pref#OPACHoldRequests# Չթույլատրել"
+
+# OPAC > Features
+msgid ""
+"opac.pref#OPACHoldRequests# patrons to place holds on items from the OPAC."
+msgstr ""
+"opac.pref#OPACHoldRequests# ընթերցողներ որ ՀՕԱՔ-ից նյութերի վրա պետք է դնեն "
+"պահումներ։"
 
 # OPAC > Appearance
 msgid "opac.pref#OPACHoldingsDefaultSortField# First column of the table"
@@ -9738,6 +9900,49 @@ msgstr "opac.pref#OPACResultsLibrary# ընթացիկ գրադարան"
 # OPAC > Appearance
 msgid "opac.pref#OPACResultsLibrary# home library"
 msgstr "opac.pref#OPACResultsLibrary# տնային գրադարան"
+
+# OPAC > Appearance > OPACResultsMaxItems
+msgid ""
+"opac.pref#OPACResultsMaxItems# (available) individual items on the OPAC XSLT "
+"search results, and show no more than"
+msgstr ""
+"opac.pref#OPACResultsMaxItems# (հասանելի) առանձին տարրեր ՀՕԱՔ XSLT որոնման "
+"արդյունքներում և ցուցադրել ոչ ավելի, քան"
+
+# OPAC > Appearance > OPACResultsMaxItems
+msgid ""
+"opac.pref#OPACResultsMaxItems# (unavailable) individual items for categories "
+"like Checked out, Damaged, On Hold, but only when you group them by branch."
+"<br>"
+msgstr ""
+"opac.pref#OPACResultsMaxItems# (անհասանելի) առանձին նյութեր այնպիսի դասերի "
+"համար, ինչպիսիք են Դուրս տրված, Վնասված, Պահման մեջ, բայց միայն այն դեպքում, "
+"երբ դրանք խմբավորեք ըստ ճյուղերի:<br>"
+
+# OPAC > Appearance > OPACResultsMaxItems
+msgid ""
+"opac.pref#OPACResultsMaxItems# . (NOTE: For large consortia we recommend to "
+"group unavailable items by substatus, listing item counts only.)"
+msgstr ""
+"opac.pref#OPACResultsMaxItems# . (ԾԱՆՈԹԱԳՐՈՒԹՅՈՒՆ. Խոշոր կոնսորցիումների "
+"համար մենք խորհուրդ ենք տալիս խմբավորել անհասանելի նյութերը ըստ "
+"ենթակարգավիճակի, թվարկելով միայն նյութերի հաշվառումը:)"
+
+# OPAC > Appearance
+msgid "opac.pref#OPACResultsMaxItems# Group unavailable items by"
+msgstr "opac.pref#OPACResultsMaxItems# Խմբավորել անհասանելի նյութերը ըստ"
+
+# OPAC > Appearance
+msgid "opac.pref#OPACResultsMaxItems# Show no more than"
+msgstr "opac.pref#OPACResultsMaxItems# Ցույց տալ ոչ ավելի, քան"
+
+# OPAC > Appearance
+msgid "opac.pref#OPACResultsMaxItems# branch"
+msgstr "opac.pref#OPACResultsMaxItems# մասնաճյուղ"
+
+# OPAC > Appearance
+msgid "opac.pref#OPACResultsMaxItems# substatus"
+msgstr "opac.pref#OPACResultsMaxItems# ենթակարգավիճակ"
 
 # OPAC > Appearance
 msgid ""
@@ -10083,23 +10288,28 @@ msgstr ""
 "opac.pref#OPACViewOthersSuggestions# ՀՕԱՔ-ից գնման առաջարկենր այլ "
 "ընթերցողների կողմից։"
 
-# OPAC > Appearance
+# Staff interface > Appearance
 msgid ""
-"opac.pref#OPACXSLTDetailsDisplay# <br />Options:<ul><li><a href=\"#\" class="
-"\"set_syspref\" data-syspref=\"OPACXSLTDetailsDisplay\" data-value="
-"\"\">leave empty</a> for \"no xslt\"</li><li>enter \"<a href=\"#\" class="
-"\"set_syspref\" data-syspref=\"OPACXSLTDetailsDisplay\" data-value=\"default"
-"\">default</a>\" for the default one</li><li>put a path to define a xslt "
-"file</li><li>put an URL for an external specific stylesheet.</li></"
-"ul>{langcode} will be replaced with current interface language."
+"opac.pref#OPACXSLTDetailsDisplay# <br />Options:<ul><li>Enter \"<a href=\"#"
+"\" class=\"set_syspref\" data-syspref=\"OPACXSLTDetailsDisplay\" data-value="
+"\"default\">default</a>\" for the default stylesheet</li><li>Put a path to "
+"define an xslt file</li><li>Put a URL for an external specific stylesheet.</"
+"li><li>NOTE: The system preference <a href=\"/cgi-bin/koha/admin/preferences."
+"pl?op=search&searchfield=PassItemMarcToXSLT\">PassItemMarcToXSLT</a> must be "
+"enabled if your custom stylesheet utilizes data in the item fields</li></"
+"ul>If you have multiple stylesheets for different langues the placeholder "
+"{langcode} will be replaced with current interface language."
 msgstr ""
-"opac.pref#OPACXSLTDetailsDisplay# <br />Ընտրանքներ:<ul><li><a href=\"#\" "
-"class=\"set_syspref\" data-syspref=\"OPACXSLTDetailsDisplay\" data-value="
-"\"\">leave empty</a> for \"no xslt\"</li><li>enter \"<a href=\"#\" class="
-"\"set_syspref\" data-syspref=\"OPACXSLTDetailsDisplay\" data-value=\"default"
-"\">default</a>\" լռելյայնի համար</li><li>նշեք ուղին սահմանելու xslt նիշքը</"
-"li><li>դրեքn URL արտաքին հատուկ ոճաթերթերի համար։</li></ul>{langcode} "
-"կփոխարինվի ներկայիս միջերեի լեզվով:"
+"opac.pref#OPACXSLTDetailsDisplay# <br />Ընտրանքներ:<ul><li>Մուտք արեքEnter \""
+"<a href=\"#\" class=\"set_syspref\" data-syspref=\"OPACXSLTDetailsDisplay\" "
+"data-value=\"default\">default</a>\" լռելյայն ոճաթերթի համար</li><li>"
+"Տեղադրեք ուղի xslt նիշք սահմանելու համար</li><li>Տեղադրեք URL արտաքին հատուկ "
+"ոճաթերթի համար:</li><li>ՆՇՈՒՄ: Համակարգային նախապատվությունը <a href=\"/cgi-"
+"bin/koha/admin/preferences.pl?op=search&searchfield=PassItemMarcToXSLT\""
+">PassItemMarcToXSLT</a> պետք է միացված լինի, եթե ձեր հատուկ ոճաթերթը "
+"օգտագործում է տվյալներ նյութի դաշտերում</li></ul>Եթե ունեք մի քանի ոճաթերթեր "
+"տարբեր լեզուների համար, {langcode} տեղապահը կփոխարինվի ընթացիկ միջերեսի "
+"լեզվով:"
 
 # OPAC > Appearance
 msgid ""
@@ -10109,23 +10319,28 @@ msgstr ""
 "opac.pref#OPACXSLTDetailsDisplay# Արտածիր ՀՕԱՔ-ի մանրամասները օգտագործելով "
 "XSLT ձևաթուղթը: "
 
-# OPAC > Appearance
+# Staff interface > Appearance
 msgid ""
-"opac.pref#OPACXSLTListsDisplay# <br />Options:<ul><li><a href=\"#\" class="
-"\"set_syspref\" data-syspref=\"OPACXSLTListsDisplay\" data-value=\"\">leave "
-"empty</a> for \"no xslt\"</li><li>enter \"<a href=\"#\" class=\"set_syspref"
-"\" data-syspref=\"OPACXSLTListsDisplay\" data-value=\"default\">default</a>"
-"\" for the default one</li><li> put a path to define a xslt file</li><li>put "
-"an URL for an external specific stylesheet.</li></ul>{langcode} will be "
-"replaced with current interface language."
+"opac.pref#OPACXSLTListsDisplay# <br />Options:<ul><li>Enter \"<a href=\"#\" "
+"class=\"set_syspref\" data-syspref=\"OPACXSLTListsDisplay\" data-value="
+"\"default\">default</a>\" for the default stylesheet</li><li>Put a path to "
+"define an xslt file</li><li>Put a URL for an external specific stylesheet.</"
+"li><li>NOTE: The system preference <a href=\"/cgi-bin/koha/admin/preferences."
+"pl?op=search&searchfield=PassItemMarcToXSLT\">PassItemMarcToXSLT</a> must be "
+"enabled if your custom stylesheet utilizes data in the item fields</li></"
+"ul>If you have multiple stylesheets for different langues the placeholder "
+"{langcode} will be replaced with current interface language."
 msgstr ""
-"opac.pref#OPACXSLTListsDisplay# <br />Ընտրանքներ:<ul><li><a href=\"#\" class="
-"\"set_syspref\" data-syspref=\"OPACXSLTListsDisplay\" data-value=\"\">թողեք "
-"դատարկ</a> for \"no xslt\"</li><li>enter \"<a href=\"#\" class=\"set_syspref"
-"\" data-syspref=\"OPACXSLTListsDisplay\" data-value=\"default\">default</a>"
-"\" լռակյացի համար</li><li> դրեք ուղին, սահմանելու xslt նիշքը</li><li>դրեք "
-"URL արտաքին հատուկ ոճաթերթի համար։</li></ul>{langcode} կփոխարինվի ներկայիս "
-"միջերեսի լեզվով:."
+"opac.pref#OPACXSLTListsDisplay# <br />Ընտրանքներ:<ul><li>Մուտք արեք \"<a "
+"href=\"#\" class=\"set_syspref\" data-syspref=\"OPACXSLTListsDisplay\" data-"
+"value=\"default\">default</a>\" լռելյայն ոճաթերթի համար</li><li>Տեղադրեք "
+"ուղի xslt նիշք սահմանելու համար</li><li>Put a URL for an external specific "
+"stylesheet.</li><li>ՆՇՈՒՄ: Համակարգային նախապատվությունը <a href=\"/cgi-"
+"bin/koha/admin/preferences.pl?op=search&searchfield=PassItemMarcToXSLT\""
+">PassItemMarcToXSLT</a> պետք է միացված լինի, եթե ձեր հատուկ ոճաթերթը "
+"օգտագործում է տվյալներ ապրանքի դաշտերում</li></ul>Եթե ունեք մի քանի "
+"ոճաթերթեր տարբեր լեզուների համար, տեղապահը {langcode} կփոխարինվի ընթացիկ "
+"միջերեսի լեզվով:"
 
 # OPAC > Appearance
 msgid ""
@@ -10135,23 +10350,28 @@ msgstr ""
 "opac.pref#OPACXSLTListsDisplay# Արտածում է ցուցակները ՀՕԱՔ-ում օգտագործելով "
 "XSLT ձևաթղթերը: "
 
-# OPAC > Appearance
+# Staff interface > Appearance
 msgid ""
-"opac.pref#OPACXSLTResultsDisplay# <br />Options:<ul><li><a href=\"#\" class="
-"\"set_syspref\" data-syspref=\"OPACXSLTResultsDisplay\" data-value="
-"\"\">leave empty</a> for \"no xslt\"</li><li>enter \"<a href=\"#\" class="
-"\"set_syspref\" data-syspref=\"OPACXSLTResultsDisplay\" data-value=\"default"
-"\">default</a>\" for the default one</li><li> put a path to define a xslt "
-"file</li><li>put an URL for an external specific stylesheet.</li></"
-"ul>{langcode} will be replaced with current interface language."
+"opac.pref#OPACXSLTResultsDisplay# <br />Options:<ul><li>Enter \"<a href=\"#"
+"\" class=\"set_syspref\" data-syspref=\"OPACXSLTResultsDisplay\" data-value="
+"\"default\">default</a>\" for the default stylesheet</li><li>Put a path to "
+"define an xslt file</li><li>Put a URL for an external specific stylesheet.</"
+"li><li>NOTE: The system preference <a href=\"/cgi-bin/koha/admin/preferences."
+"pl?op=search&searchfield=PassItemMarcToXSLT\">PassItemMarcToXSLT</a> must be "
+"enabled if your custom stylesheet utilizes data in the item fields</li></"
+"ul>If you have multiple stylesheets for different langues the placeholder "
+"{langcode} will be replaced with current interface language."
 msgstr ""
-"opac.pref#OPACXSLTResultsDisplay# <br />Ընտրանքներ:<ul><li><a href=\"#\" "
-"class=\"set_syspref\" data-syspref=\"OPACXSLTResultsDisplay\" data-value="
-"\"\">leave empty</a> for \"no xslt\"</li><li>enter \"<a href=\"#\" class="
-"\"set_syspref\" data-syspref=\"OPACXSLTResultsDisplay\" data-value=\"default"
-"\">լռակյաց</a>\" որպես լռակյաց</li><li> դրեք ուղին սահմանելու համար xslt "
-"նիշքը</li><li>դրեք URL արտաքին հատուկ ոճաթերթի համար։</li></ul>{langcode} "
-"կփոխարինվի ներկայիս միջերեսի լեզվով:."
+"opac.pref#OPACXSLTResultsDisplay# <br />Ընտրանքներ:<ul><li>Մուտքագրեք \"<a "
+"href=\"#\" class=\"set_syspref\" data-syspref=\"OPACXSLTResultsDisplay\" "
+"data-value=\"default\">default</a>\" լռելյայն ոճաթերթի համար</li><li>"
+"Տեղադրեք ուղին սահմանելու համար xslt նիշքը</li><li>Տեղադրեք URL արտաքին "
+"հատուկ ոճաթերթի համար:</li><li>Նշում. Համակարգի նախապատվությունը <a href"
+"=\"/cgi-bin/koha/admin/preferences.pl?op=search&searchfield="
+"PassItemMarcToXSLT\">PassItemMarcToXSLT</a> պետք է միացված լինի, եթե ձեր "
+"հատուկ ոճաթերթը օգտագործում է տվյալներ նյութի դաշտերում</li></ul>Եթե ունեք "
+"մի քանի ոճաթերթեր տարբեր լեզուների համար, {langcode} տեղապահը կփոխարինվի "
+"ընթացիկ միջերեսի լեզվով:"
 
 # OPAC > Appearance
 msgid ""
@@ -10721,26 +10941,6 @@ msgstr ""
 "opac.pref#OpacMoreSearches# Լրացուցիչ տարրեր ավելացրեք ՀՕԱՔ-ի «Ավելի "
 "որոնումներ» դաշտում, հետևյալ HTML-ի կիրառմամբ (թող դատարկ արգելելու համար):"
 
-# OPAC > Appearance
-msgid ""
-"opac.pref#OpacNav# Show the following HTML on the left hand column of the "
-"main page and patron account on the OPAC (generally navigation links):"
-msgstr ""
-"opac.pref#OpacNav# Ցույց տուր հետևյալ HTML-ը հիմնական էջի ձախ մասում և "
-"ընթերցողի հաշիվը ՀՕԱՔ-ում (որպես կանոն նավիգացիայի կապեր):"
-
-# OPAC > Appearance
-msgid ""
-"opac.pref#OpacNavBottom# Show the following HTML on the left hand column of "
-"the main page and patron account on the OPAC, after <a href=\"/cgi-bin/koha/"
-"admin/preferences.pl?op=search&searchfield=OpacNav\">OpacNav</a>, and before "
-"patron account links if available:"
-msgstr ""
-"opac.pref#OpacNavBottom# Ցույց տուր հետևյալ HTML-ը հիմնական էջի ձախ մասի "
-"սյունակում և ընթերցողի հաշիվը ՀՕԱՔ-ում, <a href=\"/cgi-bin/koha/admin/"
-"preferences.pl?op=search&searchfield=OpacNav\">OpacNav</a> հետո, և մինչ "
-"ընթերցողի հաշվի հղումները հասանելի են։"
-
 # OPAC > Features
 msgid "opac.pref#OpacNewsLibrarySelect# Display"
 msgstr "opac.pref#OpacNewsLibrarySelect# Արտածիր"
@@ -11308,20 +11508,6 @@ msgid ""
 msgstr ""
 "opac.pref#Reference_NFL_Statuses# ՀՕԱՔ-ի որոնման արդյունքներում վկայակոչման "
 "համար նշեք հետևյալները որպես տացքի համար ոչ ենթակա."
-
-# OPAC > Features
-msgid "opac.pref#RequestOnOpac# Allow"
-msgstr "opac.pref#RequestOnOpac# Թույլատրի"
-
-# OPAC > Features
-msgid "opac.pref#RequestOnOpac# Don't allow"
-msgstr "opac.pref#RequestOnOpac# Մի թույլատրի"
-
-# OPAC > Features
-msgid "opac.pref#RequestOnOpac# patrons to place holds on items from the OPAC."
-msgstr ""
-"opac.pref#RequestOnOpac# ընթերցողներ որ ՀՕԱՔ-ից նյութերի վրա պետք է դնեն "
-"պահումներ։"
 
 # OPAC > Restricted page
 msgid ""
@@ -12844,11 +13030,13 @@ msgstr "patrons.pref#TrackLastPatronActivity# Մի արա"
 
 # Patrons > General
 msgid ""
-"patrons.pref#TrackLastPatronActivity# Every time a patron will connect, the "
-"borrowers.lastseen will be updated with the current time."
+"patrons.pref#TrackLastPatronActivity# The first time each day that a patron "
+"logs into the OPAC, connects to Koha via SIP or ILS-DI, or checks an item "
+"out the borrowers.lastseen will update with the current date and time."
 msgstr ""
-"patrons.pref#TrackLastPatronActivity# Ամեն անգամ երբ հաճախորդը կմիանա, "
-"borrowers.lastseen կթարմացվի ըստ ընթացիկ ժամանակի։"
+"atrons.pref#TrackLastPatronActivity# Ամեն օր առաջին անգամ երբ հաճախորդը "
+"մուտք է գործում ՀՕԱՔ կամ միանում է Կոհային SIP- ով, կամ ILS-D -ով, կամ նյութ "
+"է սպասարկվում՝ borrowers.lastseen կթարմացվի ընթացիկ ամսաթվով և ժամով։"
 
 # Patrons > General
 msgid "patrons.pref#TrackLastPatronActivity# track last patron activity."
@@ -13225,6 +13413,22 @@ msgstr "searching.pref#FacetMaxCount# Ցույց տուր մինչև"
 msgid "searching.pref#FacetMaxCount# facets for each category."
 msgstr "searching.pref#FacetMaxCount# ամեն դասի համար ֆասետ։"
 
+# Searching > Results display
+msgid "searching.pref#FacetOrder# Sort facets"
+msgstr "searching.pref#DisplayLibraryFacets# Տեսակավորիր ֆասետները"
+
+# Searching > Features
+msgid "searching.pref#FacetOrder# alphabetically"
+msgstr "searching.pref#QueryAutoTruncate# այբբենական կարգով"
+
+# Searching > Results display
+msgid "searching.pref#FacetOrder# by usage count"
+msgstr "searching.pref#FacetMaxCount# ըստ օգտագործման քանակի"
+
+# Searching > Results display
+msgid "searching.pref#FacetOrder# for each category."
+msgstr "searching.pref#FacetMaxCount# ամեն դասի համար։"
+
 # Searching > Features
 msgid ""
 "searching.pref#IncludeSeeFromInSearches# <em>see from</em> (non-preferred "
@@ -13455,6 +13659,23 @@ msgid ""
 msgstr ""
 "searching.pref#OPACnumSearchResultsDropdown# արդյունքները ՀՕԱՔ-ի որոնման "
 "արդյունքների բացվողում ըստ էջի:"
+
+# Searching > Search form
+msgid "searching.pref#PassItemMarcToXSLT# Do"
+msgstr "searching.pref#PassItemMarcToXSLT# Կատարել"
+
+# Searching > Features
+msgid "searching.pref#PassItemMarcToXSLT# Don't"
+msgstr "searching.pref#PassItemMarcToXSLT# Մի կատարիր"
+
+# Searching > Results display > PassItemMarcToXSLT
+msgid ""
+"searching.pref#PassItemMarcToXSLT# make item MARC tags available to XSLT "
+"stylesheets. Default is \"Don't\", items are displayed using other methods."
+msgstr ""
+"searching.pref#PassItemMarcToXSLT# նյութի ՄԵԸՔ պիտակները հասանելի դարձրեք "
+"XSLT ոճաթերթերին: Լռելյայնը «Մի կատարիր» է, տարրերը ցուցադրվում են այլ "
+"մեթոդներով:"
 
 # Searching > Features
 msgid ""
@@ -14253,15 +14474,25 @@ msgstr ""
 msgid ""
 "staff_interface.pref#XSLTDetailsDisplay# <br />Options:<ul><li>Enter \"<a "
 "href=\"#\" class=\"set_syspref\" data-syspref=\"XSLTDetailsDisplay\" data-"
-"value=\"default\">default</a>\" for the default one</li><li>Put a path to "
-"define a xslt file</li><li>Put an URL for an external specific stylesheet.</"
-"li></ul>{langcode} will be replaced with current interface language"
+"value=\"default\">default</a>\" for the default stylesheet</li><li>Put a "
+"path to define an xslt file</li><li>Put a URL for an external specific "
+"stylesheet.</li><li>NOTE: The system preference <a href=\"/cgi-bin/koha/"
+"admin/preferences.pl?op=search&searchfield=PassItemMarcToXSLT"
+"\">PassItemMarcToXSLT</a> must be enabled if your custom stylesheet utilizes "
+"data in the item fields</li></ul>If you have multiple stylesheets for "
+"different langues the placeholder {langcode} will be replaced with current "
+"interface language."
 msgstr ""
-"staff_interface.pref#XSLTDetailsDisplay# <br />Ընտրանքներ:<ul><li>Մուտքագրեք "
-"\"<a href=\"#\" class=\"set_syspref\" data-syspref=\"XSLTDetailsDisplay\" "
-"data-value=\"default\">լռակյաց</a>\" լռակյացի համար</li><li>Դրեք ուղին, "
-"սահմանելու համար xslt նիշքը</li><li>Դրեք URL արտաքին հատուկ ոճաթերթիկի համար:"
-"</li></ul>{langcode} կփոխարինվի միջերեսի ներկայիս լեզվով"
+"staff_interface.pref#XSLTDetailsDisplay# <br />Options:<ul><li>Enter \"<a "
+"href=\"#\" class=\"set_syspref\" data-syspref=\"XSLTDetailsDisplay\" data-"
+"value=\"default\">default</a>\" for the default stylesheet</li><li>Put a "
+"path to define an xslt file</li><li>Put a URL for an external specific "
+"stylesheet.</li><li>NOTE: The system preference <a href=\"/cgi-bin/koha/"
+"admin/preferences.pl?op=search&searchfield=PassItemMarcToXSLT"
+"\">PassItemMarcToXSLT</a> must be enabled if your custom stylesheet utilizes "
+"data in the item fields</li></ul>If you have multiple stylesheets for "
+"different langues the placeholder {langcode} will be replaced with current "
+"interface language."
 
 # Staff interface > Appearance
 msgid ""
@@ -14273,21 +14504,26 @@ msgstr ""
 
 # Staff interface > Appearance
 msgid ""
-"staff_interface.pref#XSLTListsDisplay# <br />Options:<ul><li><a href=\"#\" "
-"class=\"set_syspref\" data-syspref=\"XSLTListsDisplay\" data-value="
-"\"\">Leave empty</a> for \"no xslt\"</li><li>enter \"<a href=\"#\" class="
-"\"set_syspref\" data-syspref=\"XSLTListsDisplay\" data-value=\"default"
-"\">default</a>\" for the default one</li><li> put a path to define a xslt "
-"file</li><li>put an URL for an external specific stylesheet.</li></"
-"ul>{langcode} will be replaced with current interface language"
+"staff_interface.pref#XSLTListsDisplay# <br />Options:<ul><li>Enter \"<a href="
+"\"#\" class=\"set_syspref\" data-syspref=\"XSLTListsDisplay\" data-value="
+"\"default\">default</a>\" for the default stylesheet</li><li>Put a path to "
+"define an xslt file</li><li>Put a URL for an external specific stylesheet.</"
+"li><li>NOTE: The system preference <a href=\"/cgi-bin/koha/admin/preferences."
+"pl?op=search&searchfield=PassItemMarcToXSLT\">PassItemMarcToXSLT</a> must be "
+"enabled if your custom stylesheet utilizes data in the item fields</li></"
+"ul>If you have multiple stylesheets for different langues the placeholder "
+"{langcode} will be replaced with current interface language."
 msgstr ""
-"staff_interface.pref#XSLTListsDisplay# <br />Ընտրանքներ:<ul><li><a href=\"#"
-"\" class=\"set_syspref\" data-syspref=\"XSLTListsDisplay\" data-value="
-"\"\">թողեք դատարկ</a> for \"no xslt\"</li><li>enter \"<a href=\"#\" class="
-"\"set_syspref\" data-syspref=\"XSLTListsDisplay\" data-value=\"լռակյաց"
-"\">լռակյաց</a>\" լռակյացի համար</li><li> դրեք ուղին սահմանելու xslt նիշքը</"
-"li><li>դրեք URL -ը արտաքին հատուկ ոճաթերթիկի համար:</li></ul>{langcode} "
-"կփոխարինվի միջերեսի ներկայիս լեզվով"
+"staff_interface.pref#XSLTListsDisplay# <br />Ընտրանքներ։<ul><li>Մուտքագրեք \""
+"<a href=\"#\" class=\"set_syspref\" data-syspref=\"XSLTListsDisplay\" data-"
+"value=\"default\">default</a>\" լռելյայն ոճաթերթի համար</li><li>Տեղադրեք "
+"ուղին, սահմանելու համար xslt նիշքը</li><li>Տեղադրեք URL արտաքին հատուկ "
+"ոճաթերթի համար:</li><li>Նշում. Համակարգի նախապատվությունը <a href=\"/cgi-"
+"bin/koha/admin/preferences.pl?op=search&searchfield=PassItemMarcToXSLT\""
+">PassItemMarcToXSLT</a> պետք է միացված լինի, եթե ձեր հատուկ ոճաթերթը "
+"օգտագործում է տվյալներ նյութի դաշտերում</li></ul>Եթե ունեք մի քանի ոճաթերթեր "
+"տարբեր լեզուների համար, {langcode} տեղապահը կփոխարինվի ընթացիկ միջերեսի "
+"լեզվով:"
 
 # Staff interface > Appearance
 msgid ""
@@ -14301,16 +14537,25 @@ msgstr ""
 msgid ""
 "staff_interface.pref#XSLTResultsDisplay# <br />Options:<ul><li>Enter \"<a "
 "href=\"#\" class=\"set_syspref\" data-syspref=\"XSLTResultsDisplay\" data-"
-"value=\"default\">default</a>\" for the default one</li><li>Put a path to "
-"define a xslt file</li><li>Put an URL for an external specific stylesheet.</"
-"li></ul>{langcode} will be replaced with current interface language"
+"value=\"default\">default</a>\" for the default stylesheet</li><li>Put a "
+"path to define an xslt file</li><li>Put a URL for an external specific "
+"stylesheet.</li><li>NOTE: The system preference <a href=\"/cgi-bin/koha/"
+"admin/preferences.pl?op=search&searchfield=PassItemMarcToXSLT"
+"\">PassItemMarcToXSLT</a> must be enabled if your custom stylesheet utilizes "
+"data in the item fields</li></ul>If you have multiple stylesheets for "
+"different langues the placeholder {langcode} will be replaced with current "
+"interface language."
 msgstr ""
-"staff_interface.pref#XSLTResultsDisplay# <br />Ընտրանքներ:"
-"<ul><li>Մուտքագրեքr \"<a href=\"#\" class=\"set_syspref\" data-syspref="
-"\"XSLTResultsDisplay\" data-value=\"default\">լռակյաց</a>\" լռակյացի համար</"
-"li><li>Դրեք ուղին, սահմանելու համար xslt նիշքը</li><li>Դրեք URL արտաքին "
-"հատուկ ոճաթերթիկի համար:</li></ul>{langcode} կփոխարինվի միջերեսի ներկայիս "
-"լեզվով"
+"staff_interface.pref#XSLTResultsDisplay# <br />Options:<ul><li>Enter \"<a "
+"href=\"#\" class=\"set_syspref\" data-syspref=\"XSLTResultsDisplay\" data-"
+"value=\"default\">default</a>\" for the default stylesheet</li><li>Put a "
+"path to define an xslt file</li><li>Put a URL for an external specific "
+"stylesheet.</li><li>NOTE: The system preference <a href=\"/cgi-bin/koha/"
+"admin/preferences.pl?op=search&searchfield=PassItemMarcToXSLT"
+"\">PassItemMarcToXSLT</a> must be enabled if your custom stylesheet utilizes "
+"data in the item fields</li></ul>If you have multiple stylesheets for "
+"different langues the placeholder {langcode} will be replaced with current "
+"interface language."
 
 # Staff interface > Appearance
 msgid ""
@@ -14532,6 +14777,26 @@ msgstr "tools.pref Հաշվետվություններ"
 msgid "tools.pref Upload"
 msgstr "tools.pref Upload"
 
+# Tools > News
+msgid "tools.pref#AdditionalContentsEditor# ."
+msgstr "tools.pref#AdditionalContentsEditor# ."
+
+# Tools > News
+msgid ""
+"tools.pref#AdditionalContentsEditor# By default edit additional contents and "
+"news items with"
+msgstr ""
+"tools.pref#AdditionalContentsEditor# Որպես լռելյայն խմբագրել լրացուցիչ "
+"բովանդակությունը և նորությունները"
+
+# Tools > News
+msgid "tools.pref#AdditionalContentsEditor# a WYSIWYG editor (TinyMCE)"
+msgstr "tools.pref#AdditionalContentsEditor# WYSIWYG խմբագրիչ (TinyMCE)"
+
+# Tools > News
+msgid "tools.pref#AdditionalContentsEditor# a text editor (CodeMirror)"
+msgstr "tools.pref#AdditionalContentsEditor# տեքստային խմբագրիչ (CodeMirror)"
+
 # Tools > Barcodes
 msgid ""
 "tools.pref#BarcodeSeparators# Split barcodes on the following separator chars"
@@ -14623,24 +14888,6 @@ msgstr "tools.pref#NewsAuthorDisplay# ամենևին ոչ"
 # Tools > News
 msgid "tools.pref#NewsAuthorDisplay# staff interface only"
 msgstr "tools.pref#NewsAuthorDisplay# միայն աշխատակազմի միջերես"
-
-# Tools > News
-msgid "tools.pref#NewsToolEditor# ."
-msgstr "tools.pref#NewsToolEditor# ."
-
-# Tools > News
-msgid "tools.pref#NewsToolEditor# By default edit news items with"
-msgstr ""
-"tools.pref#NewsToolEditor# Լռելյայն խմբագրել նորությունների նյութերը "
-"հետևյալով՝"
-
-# Tools > News
-msgid "tools.pref#NewsToolEditor# a WYSIWYG editor (TinyMCE)"
-msgstr "tools.pref#NewsToolEditor# a WYSIWYG editor (TinyMCE)"
-
-# Tools > News
-msgid "tools.pref#NewsToolEditor# a text editor (CodeMirror)"
-msgstr "tools.pref#NewsToolEditor# տեքստային խմբագրիչ (CodeMirror)"
 
 # Tools > Reports
 msgid "tools.pref#NumSavedReports# By default, show"
@@ -15070,6 +15317,22 @@ msgstr ""
 "web_services.pref#SvcMaxReportRows# հաշվետվության տողերը պահանջվում են "
 "հաշվետվության վեբ ծառայության միջոցով։"
 
+# Administration > Google OpenID Connect
+#~ msgid "admin.pref#GoogleOpenIDConnectDefaultBranch# ."
+#~ msgstr "admin.pref#GoogleOpenIDConnectDefaultBranch# ."
+
+# Administration > Google OpenID Connect
+#~ msgid "admin.pref#GoogleOpenIDConnectDefaultCategory# ."
+#~ msgstr "admin.pref#GoogleOpenIDConnectDefaultCategory# ."
+
+# Administration > Google OpenID Connect
+#~ msgid ""
+#~ "admin.pref#GoogleOpenIDConnectDomain# . Leave blank for all Google "
+#~ "domains."
+#~ msgstr ""
+#~ "admin.pref#GoogleOpenIDConnectDomain# . Դատարկ թողեք Google-ի բոլոր "
+#~ "տիրույթների համար:"
+
 # Circulation > Batch checkout
 #~ msgid ""
 #~ "circulation.pref#BatchCheckoutsValidCategories# (list of patron "
@@ -15085,6 +15348,70 @@ msgstr ""
 #~ msgstr ""
 #~ "circulation.pref#OPACHoldsIfAvailableAtPickupExceptions# (ընթերցողական "
 #~ "դասերի ցուցակը բաժանված '|')"
+
+# Enhanced content > Adlibris
+#~ msgid "enhanced_content.pref Adlibris"
+#~ msgstr "enhanced_content.pref Adlibris"
+
+# Enhanced content > Adlibris
+#~ msgid ""
+#~ "enhanced_content.pref## <strong>NOTE:</strong> Using resources such as "
+#~ "external images might leak sensitive data to third parties."
+#~ msgstr ""
+#~ "enhanced_content.pref## <strong>ՆՇՈՒՄ:</strong> Պաշարների օգտագործումը, "
+#~ "ինչպիսիք են արտաքին պատկերները, կարող են տրամադրել զգայուն տվյալներ "
+#~ "երրորդ կողմին։"
+
+# Enhanced content > Adlibris
+#~ msgid "enhanced_content.pref#AdlibrisCoversEnabled# Don't show"
+#~ msgstr "enhanced_content.pref#AdlibrisCoversEnabled# Ցույց մի տուր"
+
+# Enhanced content > Adlibris
+#~ msgid "enhanced_content.pref#AdlibrisCoversEnabled# Show"
+#~ msgstr "enhanced_content.pref#AdlibrisCoversEnabled# Ցույց տուր"
+
+# Enhanced content > Adlibris
+#~ msgid ""
+#~ "enhanced_content.pref#AdlibrisCoversEnabled# cover images in OPAC results "
+#~ "and detail listing from Swedish retailer <a href=\"https://www.adlibris."
+#~ "com/se\">Adlibris</a>."
+#~ msgstr ""
+#~ "enhanced_content.pref#AdlibrisCoversEnabled# կազմերի պատկերներ ՀՕԱՔ "
+#~ "արդյունքներից և մանրամասն ցուցակներ շվեդական մանրածախ վաճառողից <a href="
+#~ "\"https://www.adlibris.com/se\">Adlibris</a>."
+
+# Enhanced content > Adlibris
+#~ msgid "enhanced_content.pref#AdlibrisCoversURL# Use base URL: "
+#~ msgstr ""
+#~ "enhanced_content.pref#AdlibrisCoversURL# Օգտագործիր հիմնային URL -ը։ "
+
+# Enhanced content > Adlibris
+#~ msgid ""
+#~ "enhanced_content.pref#AdlibrisCoversURL# for the <a href=\"https://www."
+#~ "adlibris.com/se\">Adlibris</a> cover service."
+#~ msgstr ""
+#~ "enhanced_content.pref#AdlibrisCoversURL# for the <a href=\"https://www."
+#~ "adlibris.com/se\">Adlibris</a> կազմի ծառայություն։"
+
+# I18N/L10N
+#~ msgid ""
+#~ "i18n_l10n.pref#TimeFormat# . <br/> <strong>NOTE:</strong> Do not change "
+#~ "this preference on a production server with overdue items that are "
+#~ "accruing fines. Doing so will result in duplicate fines!"
+#~ msgstr ""
+#~ "i18n_l10n.pref#TimeFormat# . <br/> <strong>ՆՇՈՒՄ:</strong> Մի փոխեք այս "
+#~ "նախապատվությունը թողարկող կայանում ժամկետանց նյութերով, որոնք տուգանքներ "
+#~ "են կուտակում։ Փոփոխությունը կհանգեցնի կրկնվող տուգանքների։"
+
+# I18N/L10N
+#~ msgid ""
+#~ "i18n_l10n.pref#dateformat# . <br/> <strong>NOTE:</strong> Do not change "
+#~ "this preference on a production server with overdue items that are "
+#~ "accruing fines. Doing so will result in duplicate fines!"
+#~ msgstr ""
+#~ "i18n_l10n.pref#dateformat# . <br/> <strong>ՆՇՈՒՄ:</strong> Մի փոխիր այս "
+#~ "նախապատվությունը ժամկետանց նյութերով թողարկող կայանում որոնք տուգանքներ "
+#~ "են կուտակում։ Փոփոխությունը կհանգեցնի կրկնվող տուգանքների։"
 
 # I18N/L10N
 #~ msgid ""
@@ -15154,6 +15481,139 @@ msgstr ""
 #~ msgid "opac.pref#EnablePayPalOpacPayments# sandbox"
 #~ msgstr "opac.pref#EnablePayPalOpacPayments# sandbox"
 
+# OPAC > Appearance
+#~ msgid ""
+#~ "opac.pref#HighlightOwnItemsOnOPAC#  by moving the results to the front "
+#~ "and increasing the size or highlighting the rows for those results (non-"
+#~ "XSLT only)."
+#~ msgstr ""
+#~ "opac.pref#HighlightOwnItemsOnOPAC#  արդյունքները տեղափոխելով առաջ և "
+#~ "մեծացնելով չափը կամ ընդգծելով այդ արդյունքների շարքերը (միայն non-XSLT)։"
+
+# OPAC > Appearance
+#~ msgid "opac.pref#HighlightOwnItemsOnOPAC# Don't emphasize"
+#~ msgstr "opac.pref#HighlightOwnItemsOnOPAC# Մի շեշտիր"
+
+# OPAC > Appearance
+#~ msgid "opac.pref#HighlightOwnItemsOnOPAC# Emphasize"
+#~ msgstr "opac.pref#HighlightOwnItemsOnOPAC# Շեշտիր"
+
+# OPAC > Appearance
+#~ msgid "opac.pref#HighlightOwnItemsOnOPAC# OPAC's library via the URL"
+#~ msgstr "opac.pref#HighlightOwnItemsOnOPAC# ՀՕՔԱ գրադարան URL միջով"
+
+# OPAC > Appearance
+#~ msgid "opac.pref#HighlightOwnItemsOnOPAC# patron's home library"
+#~ msgstr "opac.pref#HighlightOwnItemsOnOPAC# օգտատերի տան գրադարան"
+
+# OPAC > Appearance
+#~ msgid "opac.pref#HighlightOwnItemsOnOPAC# results from the "
+#~ msgstr "opac.pref#HighlightOwnItemsOnOPAC# արդյունքներ "
+
+# OPAC > Appearance
+#~ msgid ""
+#~ "opac.pref#OPACXSLTDetailsDisplay# <br />Options:<ul><li><a href=\"#\" "
+#~ "class=\"set_syspref\" data-syspref=\"OPACXSLTDetailsDisplay\" data-value="
+#~ "\"\">leave empty</a> for \"no xslt\"</li><li>Enter \"<a href=\"#\" class="
+#~ "\"set_syspref\" data-syspref=\"OPACXSLTDetailsDisplay\" data-value="
+#~ "\"default\">default</a>\" for the default stylesheet</li><li>Put a path "
+#~ "to define an xslt file</li><li>Put a URL for an external specific "
+#~ "stylesheet.</li><li>NOTE: The system preference <a href=\"/cgi-bin/koha/"
+#~ "admin/preferences.pl?op=search&searchfield=PassItemMarcToXSLT"
+#~ "\">PassItemMarcToXSLT</a> must be enabled if your custom stylesheet "
+#~ "utilizes data in the item fields</li></ul>If you have multiple "
+#~ "stylesheets for different langues the placeholder {langcode} will be "
+#~ "replaced with current interface language."
+#~ msgstr ""
+#~ "opac.pref#OPACXSLTDetailsDisplay# <br />Ընտրանքներ:<ul><li><a href=\"#\" "
+#~ "class=\"set_syspref\" data-syspref=\"OPACXSLTDetailsDisplay\" data-value="
+#~ "\"\">leave empty</a> for \"no xslt\"</li><li>Enter \"<a href=\"#\" class="
+#~ "\"set_syspref\" data-syspref=\"OPACXSLTDetailsDisplay\" data-value="
+#~ "\"default\">default</a>\" for the default stylesheet</li><li>նշեք ուղին "
+#~ "սահմանելու xslt նիշքը</li><li>Դրեք URL -ը արտաքին հատուկ ոճաթերթի համար։</"
+#~ "li><li>ՆՇՈՒՄ: Համակարգային նախապատվությունը <a href=\"/cgi-bin/koha/admin/"
+#~ "preferences.pl?op=search&searchfield=PassItemMarcToXSLT"
+#~ "\">PassItemMarcToXSLT</a> պետք է միացված լինի, եթե ձեր անհատականացված "
+#~ "ոճաթերթը օգտագործում է տարրերի դաշտերի տվյալները</li></ul>Եթե ունեք "
+#~ "բազմաթիվ ոճաթերթեր տարբեր լեզուների համար, {langcode} տեղապահը կփոխարինվի "
+#~ "ընթացիկ միջերեսի լեզվով:"
+
+# OPAC > Appearance
+#~ msgid ""
+#~ "opac.pref#OPACXSLTListsDisplay# <br />Options:<ul><li><a href=\"#\" class="
+#~ "\"set_syspref\" data-syspref=\"OPACXSLTListsDisplay\" data-value="
+#~ "\"\">leave empty</a> for \"no xslt\"</li><li>Enter \"<a href=\"#\" class="
+#~ "\"set_syspref\" data-syspref=\"OPACXSLTListsDisplay\" data-value=\"default"
+#~ "\">default</a>\" for the default stylesheet</li><li>Put a path to define "
+#~ "an xslt file</li><li>Put a URL for an external specific stylesheet.</"
+#~ "li><li>NOTE: The system preference <a href=\"/cgi-bin/koha/admin/"
+#~ "preferences.pl?op=search&searchfield=PassItemMarcToXSLT"
+#~ "\">PassItemMarcToXSLT</a> must be enabled if your custom stylesheet "
+#~ "utilizes data in the item fields</li></ul>If you have multiple "
+#~ "stylesheets for different langues the placeholder {langcode} will be "
+#~ "replaced with current interface language."
+#~ msgstr ""
+#~ "opac.pref#OPACXSLTListsDisplay# <br />Ընտրանքներ:<ul><li><a href=\"#\" "
+#~ "class=\"set_syspref\" data-syspref=\"OPACXSLTListsDisplay\" data-value="
+#~ "\"\">leave empty</a> for \"no xslt\"</li><li>Enter \"<a href=\"#\" class="
+#~ "\"set_syspref\" data-syspref=\"OPACXSLTListsDisplay\" data-value=\"default"
+#~ "\">default</a>\" for the default stylesheet</li><li>Put a path to define "
+#~ "an xslt file</li><li>Put a URL for an external specific stylesheet.</"
+#~ "li><li>NOTE: The system preference <a href=\"/cgi-bin/koha/admin/"
+#~ "preferences.pl?op=search&searchfield=PassItemMarcToXSLT"
+#~ "\">PassItemMarcToXSLT</a> պետք է միացված լինի, եթե ձեր անհատականացված "
+#~ "ոճաթերթը օգտագործում է տարրերի դաշտերի տվյալները</li></ul>Եթե ունեք "
+#~ "բազմաթիվ ոճաթերթեր տարբեր լեզուների համար, {langcode} տեղապահը կփոխարինվի "
+#~ "ընթացիկ միջերեսի լեզվով:"
+
+# OPAC > Appearance
+#~ msgid ""
+#~ "opac.pref#OPACXSLTResultsDisplay# <br />Options:<ul><li><a href=\"#\" "
+#~ "class=\"set_syspref\" data-syspref=\"OPACXSLTResultsDisplay\" data-value="
+#~ "\"\">leave empty</a> for \"no xslt\"</li><li>Enter \"<a href=\"#\" class="
+#~ "\"set_syspref\" data-syspref=\"OPACXSLTResultsDisplay\" data-value="
+#~ "\"default\">default</a>\" for the default stylesheet</li><li>Put a path "
+#~ "to define an xslt file</li><li>Put a URL for an external specific "
+#~ "stylesheet.</li><li>NOTE: The system preference <a href=\"/cgi-bin/koha/"
+#~ "admin/preferences.pl?op=search&searchfield=PassItemMarcToXSLT"
+#~ "\">PassItemMarcToXSLT</a> must be enabled if your custom stylesheet "
+#~ "utilizes data in the item fields</li></ul>If you have multiple "
+#~ "stylesheets for different langues the placeholder {langcode} will be "
+#~ "replaced with current interface language."
+#~ msgstr ""
+#~ "opac.pref#OPACXSLTResultsDisplay# <br />Options:<ul><li><a href=\"#\" "
+#~ "class=\"set_syspref\" data-syspref=\"OPACXSLTResultsDisplay\" data-value="
+#~ "\"\">leave empty</a> for \"no xslt\"</li><li>Enter \"<a href=\"#\" class="
+#~ "\"set_syspref\" data-syspref=\"OPACXSLTResultsDisplay\" data-value="
+#~ "\"default\">default</a>\" for the default stylesheet</li><li>Put a path "
+#~ "to define an xslt file</li><li>Put a URL for an external specific "
+#~ "stylesheet.</li><li>NOTE: The system preference <a href=\"/cgi-bin/koha/"
+#~ "admin/preferences.pl?op=search&searchfield=PassItemMarcToXSLT"
+#~ "\">PassItemMarcToXSLT</a> must be enabled if your custom stylesheet "
+#~ "utilizes data in the item fields</li></ul>If you have multiple "
+#~ "stylesheets for different langues the placeholder {langcode} will be "
+#~ "replaced with current interface language."
+
+# OPAC > Appearance
+#~ msgid ""
+#~ "opac.pref#OpacNav# Show the following HTML on the left hand column of the "
+#~ "main page and patron account on the OPAC (generally navigation links):"
+#~ msgstr ""
+#~ "opac.pref#OpacNav# Ցույց տուր հետևյալ HTML-ը հիմնական էջի ձախ մասում և "
+#~ "ընթերցողի հաշիվը ՀՕԱՔ-ում (որպես կանոն նավիգացիայի կապեր):"
+
+# OPAC > Appearance
+#~ msgid ""
+#~ "opac.pref#OpacNavBottom# Show the following HTML on the left hand column "
+#~ "of the main page and patron account on the OPAC, after <a href=\"/cgi-bin/"
+#~ "koha/admin/preferences.pl?op=search&searchfield=OpacNav\">OpacNav</a>, "
+#~ "and before patron account links if available:"
+#~ msgstr ""
+#~ "opac.pref#OpacNavBottom# Ցույց տուր հետևյալ HTML-ը հիմնական էջի ձախ մասի "
+#~ "սյունակում և ընթերցողի հաշիվը ՀՕԱՔ-ում, <a href=\"/cgi-bin/koha/admin/"
+#~ "preferences.pl?op=search&searchfield=OpacNav\">OpacNav</a> հետո, և մինչ "
+#~ "ընթերցողի հաշվի հղումները հասանելի են։"
+
 # OPAC > Payments
 #~ msgid "opac.pref#PayPalChargeDescription# ."
 #~ msgstr "opac.pref#PayPalChargeDescription# ."
@@ -15221,6 +15681,14 @@ msgstr ""
 #~ "opac.pref#PayPalUser# Էլ․ փոստի հասցե PayPal վճարումներ ստանալու համար "
 
 # OPAC > Features
+#~ msgid "opac.pref#RequestOnOpac# Allow"
+#~ msgstr "opac.pref#RequestOnOpac# Թույլատրի"
+
+# OPAC > Features
+#~ msgid "opac.pref#RequestOnOpac# Don't allow"
+#~ msgstr "opac.pref#RequestOnOpac# Մի թույլատրի"
+
+# OPAC > Features
 #~ msgid "opac.pref#reviewson# Allow"
 #~ msgstr "opac.pref#reviewson# Թույլատրի"
 
@@ -15255,3 +15723,31 @@ msgstr ""
 #~ "կարգաբերումը չի ազդի Զեբրա ինդեքսավորման վրա, այն պետք է միայն "
 #~ "օգտագործվի, որ Կոհային ասի որ դու ակտիվացրել ես ICU ինդեքսավորումը, եթե "
 #~ "դու սա արել ես , քանի որ Կոհան հնարավորություն չունի սա հասկանալու։"
+
+# Staff interface > Appearance
+#~ msgid ""
+#~ "staff_interface.pref#XSLTListsDisplay# <br />Options:<ul><li><a href=\"#"
+#~ "\" class=\"set_syspref\" data-syspref=\"XSLTListsDisplay\" data-value="
+#~ "\"\">Leave empty</a> for \"no xslt\"</li><li>Enter \"<a href=\"#\" class="
+#~ "\"set_syspref\" data-syspref=\"XSLTListsDisplay\" data-value=\"default"
+#~ "\">default</a>\" for the default stylesheet</li><li>Put a path to define "
+#~ "an xslt file</li><li>Put a URL for an external specific stylesheet.</"
+#~ "li><li>NOTE: The system preference <a href=\"/cgi-bin/koha/admin/"
+#~ "preferences.pl?op=search&searchfield=PassItemMarcToXSLT"
+#~ "\">PassItemMarcToXSLT</a> must be enabled if your custom stylesheet "
+#~ "utilizes data in the item fields</li></ul>If you have multiple "
+#~ "stylesheets for different langues the placeholder {langcode} will be "
+#~ "replaced with current interface language."
+#~ msgstr ""
+#~ "staff_interface.pref#XSLTListsDisplay# <br />Options:<ul><li><a href=\"#"
+#~ "\" class=\"set_syspref\" data-syspref=\"XSLTListsDisplay\" data-value="
+#~ "\"\">Leave empty</a> for \"no xslt\"</li><li>Enter \"<a href=\"#\" class="
+#~ "\"set_syspref\" data-syspref=\"XSLTListsDisplay\" data-value=\"default"
+#~ "\">default</a>\" for the default stylesheet</li><li>Put a path to define "
+#~ "an xslt file</li><li>Put a URL for an external specific stylesheet.</"
+#~ "li><li>NOTE: The system preference <a href=\"/cgi-bin/koha/admin/"
+#~ "preferences.pl?op=search&searchfield=PassItemMarcToXSLT"
+#~ "\">PassItemMarcToXSLT</a> must be enabled if your custom stylesheet "
+#~ "utilizes data in the item fields</li></ul>If you have multiple "
+#~ "stylesheets for different langues the placeholder {langcode} will be "
+#~ "replaced with current interface language."

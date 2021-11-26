@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Koha 21.05\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-05-16 03:25+0200\n"
-"PO-Revision-Date: 2021-05-15 10:59+0000\n"
+"PO-Revision-Date: 2021-11-22 09:54+0000\n"
 "Last-Translator: Nikunj Tyagi <nikunj1@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: hi\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.8\n"
-"X-POOTLE-MTIME: 1621076342.240166\n"
+"X-POOTLE-MTIME: 1637574883.405415\n"
 "X-Pootle-Path: /hi/21.05/hi-pref.po\n"
 "X-Pootle-Revision: 1\n"
 
@@ -768,9 +768,37 @@ msgstr "admin.pref#ElasticsearchMARCFormat# ISO2709 (विनिमय प्�
 msgid "admin.pref#ElasticsearchMARCFormat# Searchable array"
 msgstr "admin.pref#ElasticsearchMARCFormat# खोजा जाने वाला व्यूह"
 
+# Patrons > Notices and notifications > PhoneNotification
+msgid ""
+"admin.pref#GoogleOAuth2ClientID# Along with <a href=\"/cgi-bin/koha/admin/"
+"preferences.pl?op=search&searchfield=GoogleOAuth2ClientSecret"
+"\">GoogleOAuth2ClientSecret</a>, enables <a href=\"/cgi-bin/koha/admin/"
+"preferences.pl?op=search&searchfield=GoogleOpenIDConnect"
+"\">GoogleOpenIDConnect.</a>"
+msgstr ""
+"admin.pref#GoogleOAuth2ClientID# Along with <a href=\"/cgi-bin/koha/admin/"
+"preferences.pl?op=search&searchfield=GoogleOAuth2ClientSecret"
+"\">GoogleOAuth2ClientSecret</a>, सक्षम बनाता है <a href=\"/cgi-bin/koha/admin/"
+"preferences.pl?op=search&searchfield=GoogleOpenIDConnect\">गूगलओपनआईडीकनेक्ट.</"
+"a>"
+
 # Administration > Google OpenID Connect
 msgid "admin.pref#GoogleOAuth2ClientID# Google OAuth2 Client ID: "
 msgstr "admin.pref#GoogleOAuth2ClientID# गूगल OAuth2 क्लाइंट आईडी:"
+
+# Patrons > Notices and notifications > PhoneNotification
+msgid ""
+"admin.pref#GoogleOAuth2ClientSecret# Along with <a href=\"/cgi-bin/koha/"
+"admin/preferences.pl?op=search&searchfield=GoogleOAuth2ClientID"
+"\">GoogleOAuth2ClientID</a>, enables <a href=\"/cgi-bin/koha/admin/"
+"preferences.pl?op=search&searchfield=GoogleOpenIDConnect"
+"\">GoogleOpenIDConnect.</a>"
+msgstr ""
+"admin.pref#GoogleOAuth2ClientSecret# साथ में <a href=\"/cgi-bin/koha/admin/"
+"preferences.pl?op=search&searchfield=GoogleOAuth2ClientID"
+"\">GoogleOAuth2ClientID</a>, सक्षम बनाता है <a href=\"/cgi-bin/koha/admin/"
+"preferences.pl?op=search&searchfield=GoogleOpenIDConnect\">गूगलओपनआईडीकनेक्ट.</"
+"a>"
 
 # Administration > Google OpenID Connect
 msgid "admin.pref#GoogleOAuth2ClientSecret# Google OAuth2 Client Secret: "
@@ -781,8 +809,10 @@ msgid "admin.pref#GoogleOpenIDConnect# No"
 msgstr "admin.pref#GoogleOpenIDConnect# नही"
 
 # Administration > Google OpenID Connect
-msgid "admin.pref#GoogleOpenIDConnect# Use Google OpenID Connect login: "
-msgstr "admin.pref#GoogleOpenIDConnect# Google OpenID कनेक्ट लॉगिन का उपयोग करें: "
+msgid ""
+"admin.pref#GoogleOpenIDConnect# Use Google OpenID Connect login in the OPAC: "
+msgstr ""
+"admin.pref#GoogleOpenIDConnect# ओपेक में गूगल ओपनआईडी कनेक्ट लॉगिन का प्रयोग करें:"
 
 # Administration > Google OpenID Connect
 msgid "admin.pref#GoogleOpenIDConnect# Yes"
@@ -793,11 +823,20 @@ msgid ""
 "admin.pref#GoogleOpenIDConnect# You will need to select OAuth2 when creating "
 "an app in the Google cloud console, and set the web origin to your_opac_url "
 "and the redirect url to your_opac_url/cgi-bin/koha/svc/auth/"
-"googleopenidconnect ."
+"googleopenidconnect. Requires <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=GoogleOAuth2ClientID\">GoogleOAuth2ClientID</a> and <a "
+"href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=GoogleOAuth2ClientSecret\">GoogleOAuth2ClientSecret</"
+"a> to be set."
 msgstr ""
-"admin.pref # GoogleOpenIDConnect # आप जब गूगल क्लाउड कंसोल में एक app बनाने OAuth2 "
-"का चयन करें, और वेब मूल your_opac_url करने और पुनर्निर्देशित URL स्थापित करने के लिए "
-"your_opac_url/cgi-bin/koha/svc/auth/googleopenidconnect की जरूरत होगी।"
+"admin.pref#GoogleOpenIDConnect# You will need to select OAuth2 when creating "
+"an app in the Google cloud console, and set the web origin to your_opac_url "
+"and the redirect url to your_opac_url/cgi-bin/koha/svc/auth/"
+"googleopenidconnect. Requires <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=GoogleOAuth2ClientID\">GoogleOAuth2ClientID</a> और <a "
+"href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=GoogleOAuth2ClientSecret\">GoogleOAuth2ClientSecret</"
+"a> सेट किया जाना."
 
 # Administration > Google OpenID Connect
 msgid "admin.pref#GoogleOpenIDConnectAutoRegister# Allow"
@@ -810,14 +849,24 @@ msgstr "admin.pref#GoogleOpenIDConnectAutoRegister# अनुमति नही
 # Administration > Google OpenID Connect
 msgid ""
 "admin.pref#GoogleOpenIDConnectAutoRegister# patrons logging in with Google "
-"Open ID to automatically register."
+"Open ID to automatically register. Requires <a href=\"/cgi-bin/koha/admin/"
+"preferences.pl?op=search&searchfield=GoogleOpenIDConnect"
+"\">GoogleOpenIDConnect</a>."
 msgstr ""
-"admin.pref#GoogleOpenIDConnectAutoRegister# स्वचालित रूप से पंजीकरण करने के लिए "
-"Google ओपन आईडी के साथ लॉगिंग करने वाले संरक्षक."
+"admin.pref#GoogleOpenIDConnectAutoRegister# गुगलओपन आईडी के साथ लॉग इन करने वाले "
+"संरक्षक स्वचालित रूप से पंजीकरण करने के लिए। आवश्यक है<a href=\"/cgi-bin/koha/admin/"
+"preferences.pl?op=search&searchfield=GoogleOpenIDConnect"
+"\">GoogleOpenIDConnect</a>."
 
-# Administration > Google OpenID Connect
-msgid "admin.pref#GoogleOpenIDConnectDefaultBranch# ."
-msgstr "admin.pref#GoogleOpenIDConnectDefaultBranch# ."
+# Patrons > General
+msgid ""
+"admin.pref#GoogleOpenIDConnectDefaultBranch# Requires <a href=\"/cgi-bin/"
+"koha/admin/preferences.pl?op=search&searchfield=GoogleOpenIDConnect"
+"\">GoogleOpenIDConnect</a>."
+msgstr ""
+"admin.pref#GoogleOpenIDConnectDefaultBranch# आवश्यक है <a href=\"/cgi-bin/koha/"
+"admin/preferences.pl?op=search&searchfield=GoogleOpenIDConnect"
+"\">GoogleOpenIDConnect</a>."
 
 # Administration > Google OpenID Connect
 msgid ""
@@ -827,9 +876,15 @@ msgstr ""
 "admin.pref#GoogleOpenIDConnectDefaultBranch# उपयोगकर्ताओं को स्वचालित रूप से "
 "रजिस्टर करने के लिए गुगल ओपन आईडी के साथ प्रवेश करना"
 
-# Administration > Google OpenID Connect
-msgid "admin.pref#GoogleOpenIDConnectDefaultCategory# ."
-msgstr "admin.pref#GoogleOpenIDConnectDefaultCategory# ."
+# Patrons > General
+msgid ""
+"admin.pref#GoogleOpenIDConnectDefaultCategory# Requires <a href=\"/cgi-bin/"
+"koha/admin/preferences.pl?op=search&searchfield=GoogleOpenIDConnect"
+"\">GoogleOpenIDConnect</a>."
+msgstr ""
+"admin.pref#GoogleOpenIDConnectDefaultCategory# आवश्यक है <a href=\"/cgi-bin/"
+"koha/admin/preferences.pl?op=search&searchfield=GoogleOpenIDConnect"
+"\">GoogleOpenIDConnect</a>."
 
 # Administration > Google OpenID Connect
 msgid ""
@@ -839,10 +894,15 @@ msgstr ""
 "admin.pref#GoogleOpenIDConnectDefaultCategory# जब स्वचालित रूप से एक गूगल ओपन "
 "आईडी संरक्षक दर्ज की इस श्रेणी कोड का उपयोग करें: "
 
-# Administration > Google OpenID Connect
+# OPAC > OpenURL
 msgid ""
-"admin.pref#GoogleOpenIDConnectDomain# . Leave blank for all Google domains."
-msgstr "admin.pref#GoogleOpenIDConnectDomain# सभी गूगल डोमेन के लिए खाली छोड़ दो"
+"admin.pref#GoogleOpenIDConnectDomain# Leave blank for all Google domains. "
+"Requires <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=GoogleOpenIDConnect\">GoogleOpenIDConnect</a>."
+msgstr ""
+"admin.pref#GoogleOpenIDConnectDomain# सभी गुगल डोमेन के लिए खाली छोड़ दें। आवश्यक "
+"है<a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=GoogleOpenIDConnect\">GoogleOpenIDConnect</a>."
 
 # Administration > Google OpenID Connect
 msgid ""
@@ -2622,6 +2682,23 @@ msgstr ""
 "उपयोग करें BT_TAG: TAG$SUBFIELD ( e.g. lccn: 010$a )."
 
 # Cataloging > Interface
+msgid "cataloguing.pref#CreateAVFromCataloguing# Allow"
+msgstr "cataloguing.pref#CreateAVFromCataloguing# अनुमति देना"
+
+# Cataloging > Interface
+msgid "cataloguing.pref#CreateAVFromCataloguing# Don't allow"
+msgstr "cataloguing.pref#CreateAVFromCataloguing# अनुमति नही देना"
+
+# Cataloging > Interface > CreateAVFromCataloguing
+msgid ""
+"cataloguing.pref#CreateAVFromCataloguing# authorized values to be created "
+"within the cataloguing module. Librarian will need the manage_auth_values "
+"subpermission."
+msgstr ""
+"cataloguing.pref#CreateAVFromCataloguing# कैटलॉगिंग मॉड्यूल के भीतर बनाए जाने के "
+"लिए अधिकृत मान। लाइब्रेरियन को manage_auth_values सबपरमिशन की आवश्यकता होगी।"
+
+# Cataloging > Interface
 msgid "cataloguing.pref#DefaultClassificationSource# Use"
 msgstr "cataloguing.pref # DefaultClassificationSource # का उपयोग करें"
 
@@ -2712,10 +2789,10 @@ msgstr ""
 # Cataloging > Interface
 msgid ""
 "cataloguing.pref#EnableAdvancedCatalogingEditor# Currently does not include "
-"support for UNIMARC or NORMARC fixed fields."
+"support for UNIMARC fixed fields."
 msgstr ""
-"cataloguing.pref#EnableAdvancedCatalogingEditor# वर्तमान में UNIMARC या NORMARC "
-"निश्चित क्षेत्रों के लिए समर्थन शामिल नहीं है।"
+"cataloguing.pref#EnableAdvancedCatalogingEditor# वर्तमान में UNIMARC निश्चित "
+"क्षेत्रों के लिए समर्थन शामिल नहीं है।"
 
 # Cataloging > Interface
 msgid "cataloguing.pref#EnableAdvancedCatalogingEditor# Don't enable"
@@ -2793,6 +2870,22 @@ msgid ""
 msgstr ""
 "cataloguing.pref#MARCOrgCode# नए मार्क21 अभिलेखों में डिफ़ॉल्ट रूप से (निष्क्रिय करने के "
 "लिए रिक्त छोड़ दें) इसे पुस्तकालय स्तर पर भी सेट किया जा सकता है."
+
+# Cataloging > Display
+msgid "cataloguing.pref#MARCOverlayRules# Don't use"
+msgstr "cataloguing.pref#MARCOverlayRules# उपयोग न करें"
+
+# Cataloging > Importing > MARCOverlayRules
+msgid ""
+"cataloguing.pref#MARCOverlayRules# MARC overlay rules for incoming records, "
+"to decide which action to take for each field."
+msgstr ""
+"cataloguing.pref#MARCOverlayRules# आने वाले रिकॉर्ड के लिए मार्क ओवरले नियम, "
+"यह तय करने के लिए कि प्रत्येक फ़ील्ड के लिए कौन सी कार्रवाई करनी है।"
+
+# Cataloging > Display
+msgid "cataloguing.pref#MARCOverlayRules# Use"
+msgstr "cataloguing.pref#MARCOverlayRules# उपयोग करें"
 
 # Cataloging > Display
 msgid ""
@@ -3117,6 +3210,46 @@ msgstr ""
 "cataloguing.pref # SeparateHoldings # आइटम दो टैब, जहां पहला टैब जिसका आइटम "
 "शामिल हैं में प्रदर्शित"
 
+# Cataloging > Display > ShowComponentRecords
+msgid "cataloguing.pref#ShowComponentRecords# <br/> UNIMARC is not supported."
+msgstr "cataloguing.pref#ShowComponentRecords# <br/> UNIMARC समर्थित नहीं है।"
+
+# Cataloging > Display > ShowComponentRecords
+msgid "cataloguing.pref#ShowComponentRecords# A maximum of"
+msgstr "cataloguing.pref#ShowComponentRecords# एक अधिकतम"
+
+# Cataloging > Record structure
+msgid "cataloguing.pref#ShowComponentRecords# OPAC"
+msgstr "cataloguing.pref#ShowComponentRecords# ओपेक"
+
+# Cataloging > Display > ShowComponentRecords
+msgid ""
+"cataloguing.pref#ShowComponentRecords# Show a list of component records, as "
+"linked via field 773, in"
+msgstr ""
+"cataloguing.pref#ShowComponentRecords# घटक रिकॉर्ड की एक सूची दिखाएं, जैसा कि"
+" फ़ील्ड 773 के माध्यम से लिंक किया गया है, अंदर"
+
+# Cataloging > Display
+msgid "cataloguing.pref#ShowComponentRecords# both staff interface and OPAC"
+msgstr "cataloguing.pref#ShowComponentRecords# दोनों स्टाफ इंटरफेस और ओपेक"
+
+# Cataloging > Spine labels
+msgid "cataloguing.pref#ShowComponentRecords# no"
+msgstr "cataloguing.pref#ShowComponentRecords# नही"
+
+# Cataloging > Record structure
+msgid "cataloguing.pref#ShowComponentRecords# record detail pages."
+msgstr "cataloguing.pref#ShowComponentRecords# रिकॉर्ड विवरण पृष्ठ।"
+
+# Cataloging > Interface
+msgid "cataloguing.pref#ShowComponentRecords# records will be displayed."
+msgstr "cataloguing.pref#ShowComponentRecords# रिकॉर्ड प्रदर्शित किए जाएंगे।"
+
+# Cataloging > Record structure
+msgid "cataloguing.pref#ShowComponentRecords# staff interface"
+msgstr "cataloguing.pref#ShowComponentRecords# स्टाफ इंटरफ़ेस"
+
 # Cataloging > Spine labels
 msgid ""
 "cataloguing.pref#SpineLabelAutoPrint# When using the quick spine label "
@@ -3424,10 +3557,6 @@ msgid "cataloguing.pref#marcflavour# MARC21"
 msgstr "cataloguing.pref # marcflavour # MARC21"
 
 # Cataloging > Record structure
-msgid "cataloguing.pref#marcflavour# NORMARC"
-msgstr "cataloguing.pref # marcflavour # NORMARC"
-
-# Cataloging > Record structure
 msgid "cataloguing.pref#marcflavour# UNIMARC"
 msgstr "cataloguing.pref # marcflavour # Unimarc"
 
@@ -3562,10 +3691,13 @@ msgid "circulation.pref#AllFinesNeedOverride# Require"
 msgstr "circulation.pref # AllFinesNeedOverride # आवश्यकता"
 
 # Circulation > Checkout policy
+#, fuzzy
 msgid ""
 "circulation.pref#AllFinesNeedOverride# staff to manually override all fines, "
 "even fines less than set in the <a href=\"/cgi-bin/koha/admin/preferences.pl?"
-"op=search&searchfield=noissuescharge\">noissuescharge</a> system preference."
+"op=search&searchfield=noissuescharge\">noissuescharge</a> system preference. "
+"Enabling this system preference will block all checkouts for patrons with "
+"fines both via the web-based self checkout system and via SIP."
 msgstr ""
 "circulation.pref#AllFinesNeedOverride# कर्मचारियों को सभी जुर्माने को मैन्युअल रूप से "
 "ओवरराइड करने के लिए, यहां तक ​​कि निर्धारित से कम जुर्माना भी <a href=\"/cgi-bin/koha/"
@@ -4046,6 +4178,43 @@ msgstr "circulation.pref#ArticleRequestsMandatoryFieldsRecordOnly# शीर्�
 msgid "circulation.pref#ArticleRequestsMandatoryFieldsRecordOnly# Volume"
 msgstr "circulation.pref#ArticleRequestsMandatoryFieldsRecordOnly# खंड"
 
+# Circulation > Article requests > ArticleRequestsOpacHostRedirection
+msgid ""
+"circulation.pref#ArticleRequestsOpacHostRedirection#  redirection from child "
+"to host based on MARC21 773$w when the child has no items when requesting "
+"articles on the Opac."
+msgstr ""
+"circulation.pref#ArticleRequestsOpacHostRedirection#  ओपेक पर लेखों का अनुरोध "
+"करते समय बच्चे के पास कोई आइटम नहीं होने पर मार्क21 773$w के आधार पर बच्चे से होस्ट पर "
+"पुनर्निर्देशन."
+
+# Circulation > Article requests
+msgid "circulation.pref#ArticleRequestsOpacHostRedirection# Disable"
+msgstr "circulation.pref#ArticleRequestsOpacHostRedirection# असक्षम"
+
+# Circulation > Article requests
+msgid "circulation.pref#ArticleRequestsOpacHostRedirection# Enable"
+msgstr "circulation.pref#ArticleRequestsOpacHostRedirection# सक्षम"
+
+# Circulation > Article requests > ArticleRequestsSupportedFormats
+msgid ""
+"circulation.pref#ArticleRequestsSupportedFormats# (Valid choices are "
+"currently: PHOTOCOPY and SCAN. Separate the supported formats by a vertical "
+"bar. The first listed format is selected by default when you request via the "
+"OPAC.)"
+msgstr ""
+"circulation.pref#ArticleRequestsSupportedFormats# (वर्तमान में मान्य विकल्प हैं: "
+"फोटोकॉपी और स्कैन। समर्थित प्रारूपों को एक लंबवत बार से अलग करें। पहला सूचीबद्ध प्रारूप "
+"डिफ़ॉल्ट रूप से चुना जाता है जब आप ओपेक के माध्यम से अनुरोध करते हैं।)"
+
+# Circulation > Article requests
+msgid ""
+"circulation.pref#ArticleRequestsSupportedFormats# The following article "
+"request formats are supported:"
+msgstr ""
+"circulation.pref#ArticleRequestsSupportedFormats# निम्नलिखित लेख अनुरोध प्रारूप "
+"समर्थित हैं:"
+
 # Circulation > Checkout policy
 msgid "circulation.pref#AutoRemoveOverduesRestrictions# Do"
 msgstr "circulation.pref # AutoRemoveOverduesRestrictions # Do"
@@ -4450,6 +4619,23 @@ msgstr ""
 msgid "circulation.pref#ClaimReturnedWarningThreshold# items."
 msgstr "circulation.pref#ClaimReturnedWarningThreshold# आइटमस."
 
+# Circulation > Return claims > CleanUpDatabaseReturnClaims
+msgid ""
+"circulation.pref#CleanUpDatabaseReturnClaims# <span class=\"hint\">This "
+"system preference is used by the cleanup_database.pl cronjob.</span>"
+msgstr ""
+
+# Circulation > Return claims > CleanUpDatabaseReturnClaims
+msgid ""
+"circulation.pref#CleanUpDatabaseReturnClaims# Remove resolved return claims "
+"older than"
+msgstr ""
+
+# Circulation > Return claims
+#, fuzzy
+msgid "circulation.pref#CleanUpDatabaseReturnClaims# days."
+msgstr "circulation.pref#ClaimReturnedChargeFee# ."
+
 # Circulation > Holds policy
 msgid ""
 "circulation.pref#ConfirmFutureHolds# Confirm future hold requests (starting "
@@ -4768,17 +4954,33 @@ msgstr ""
 "अवधि के शुल्क को समाप्त करने की अनुमति देता है"
 
 # Circulation > Holds policy
-msgid "circulation.pref#ExpireReservesOnHolidays# Allow"
+#, fuzzy
+msgid ""
+"circulation.pref#ExpireReservesOnHolidays# If using <a href=\"/cgi-bin/koha/"
+"admin/preferences.pl?op=search&searchfield=ExpireReservesMaxPickUpDelay"
+"\">ExpireReservesMaxPickUpDelay</a>,"
+msgstr ""
+"circulation.pref#ExpireReservesMaxPickUpDelayCharge# यदि उपयोग कर रहे हैं<a "
+"href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=ExpireReservesMaxPickUpDelay"
+"\">ExpireReservesMaxPickUpDelay</a>, एक संरक्षक को चार्ज करें, जो उनकी प्रतीक्षा "
+"अवधि के शुल्क को समाप्त करने की अनुमति देता है"
+
+# Circulation > Holds policy
+#, fuzzy
+msgid "circulation.pref#ExpireReservesOnHolidays# allow"
 msgstr "circulation.pref # ExpireReservesOnHolidays # अनुमति दें"
 
 # Circulation > Holds policy
-msgid "circulation.pref#ExpireReservesOnHolidays# Don't allow"
+#, fuzzy
+msgid "circulation.pref#ExpireReservesOnHolidays# don't allow"
 msgstr "circulation.pref # ExpireReservesOnHolidays # अनुमति न दें"
 
 # Circulation > Holds policy
+#, fuzzy
 msgid ""
 "circulation.pref#ExpireReservesOnHolidays# expired holds to be canceled on "
-"days the library is closed."
+"days the library is closed per the calendar."
 msgstr ""
 "circulation.pref # ExpireReservesOnHolidays # समाप्त हो गई है दिन पुस्तकालय बंद "
 "कर दिया है पर रद्द कर दिया करने के लिए रखती है।"
@@ -5885,8 +6087,8 @@ msgstr ""
 "op=search&searchfield=noissuescharge\">noissuescharge</a> सिस्टम वरीयता ."
 
 # Circulation > Holds policy
-msgid "circulation.pref#ReservesControlBranch# Check the"
-msgstr "circulation.pref # ReservesControlBranch # जाँच करें"
+msgid "circulation.pref#ReservesControlBranch# Check the rule from the"
+msgstr "circulation.pref#ReservesControlBranch# से नियम की जाँच करें"
 
 # Circulation > Holds policy
 msgid "circulation.pref#ReservesControlBranch# item's home library"
@@ -5946,8 +6148,11 @@ msgid "circulation.pref#RestrictionBlockRenewing# block"
 msgstr "circulation.pref#RestrictionBlockRenewing# ब्लॉक"
 
 # Circulation > Checkout policy
-msgid "circulation.pref#RestrictionBlockRenewing# renewing of items."
-msgstr "circulation.pref # RestrictionBlockRenewing # आइटम की renewing।"
+msgid ""
+"circulation.pref#RestrictionBlockRenewing# renewing of items from the staff "
+"interface."
+msgstr ""
+"circulation.pref#RestrictionBlockRenewing# स्टाफ इंटरफेस से आइटमों का नवीनीकरण।"
 
 # Circulation > Checkout policy
 msgid "circulation.pref#ReturnBeforeExpiry# Don't require"
@@ -6055,7 +6260,7 @@ msgid ""
 "(available at: /cgi-bin/koha/sci/sci-main.pl)."
 msgstr ""
 "circulation.pref#SelfCheckInModule# वह स्वसंपूर्ण स्व-चेक-इन मॉड्यूल (यहां उपलब्ध है: /"
-"cgi-bin/koha/sci/sci-main.pl)"
+"cgi-bin/koha/sci/sci-main.pl)."
 
 # Circulation > Self check-in module
 msgid ""
@@ -6732,7 +6937,7 @@ msgid ""
 "(available at: /cgi-bin/koha/sco/sco-main.pl)."
 msgstr ""
 "circulation.pref#WebBasedSelfCheck# वेब आधारित आत्म जांच प्रणाली। (उपलब्ध है: /cgi-"
-"bin/koha/sco/sco-main.pl)"
+"bin/koha/sco/sco-main.pl)."
 
 # Circulation > Fines Policy
 msgid "circulation.pref#WhenLostChargeReplacementFee# Charge"
@@ -7121,10 +7326,6 @@ msgstr ""
 msgid "enhanced_content.pref"
 msgstr "enhanced_content.pref"
 
-# Enhanced content > Adlibris
-msgid "enhanced_content.pref Adlibris"
-msgstr "enhanced_content.pref Adlibris"
-
 # Enhanced content > All
 msgid "enhanced_content.pref All"
 msgstr "enhanced_content.pref सभी"
@@ -7189,14 +7390,6 @@ msgstr "enhanced_content.pref Syndetics"
 msgid "enhanced_content.pref Tagging"
 msgstr "enhanced_content.pref टैगिंग"
 
-# Enhanced content > Adlibris
-msgid ""
-"enhanced_content.pref## <strong>NOTE:</strong> Using resources such as "
-"external images might leak sensitive data to third parties."
-msgstr ""
-"enhanced_content.pref## <strong>नोट:</strong> बाहरी छवियों जैसे संसाधनों का उपयोग "
-"करना संवेदनशील डेटा को तीसरे पक्ष को लीक कर सकता है।"
-
 # Enhanced content > All
 msgid ""
 "enhanced_content.pref## <strong>NOTE:</strong> you can only choose one "
@@ -7205,35 +7398,6 @@ msgid ""
 msgstr ""
 "enhanced_content.pref## <strong> नोट: </strong> आप केवल नीचे से कवर छवियों का एक "
 "स्रोत चुन सकते हैं, अन्यथा Koha चयनित सभी स्रोतों से छवियों को दिखा देंगे।"
-
-# Enhanced content > Adlibris
-msgid "enhanced_content.pref#AdlibrisCoversEnabled# Don't show"
-msgstr "enhanced_content.pref#AdlibrisCoversEnabled# दिखाओ मत"
-
-# Enhanced content > Adlibris
-msgid "enhanced_content.pref#AdlibrisCoversEnabled# Show"
-msgstr "enhanced_content.pref#AdlibrisCoversEnabled# दिखाओ"
-
-# Enhanced content > Adlibris
-msgid ""
-"enhanced_content.pref#AdlibrisCoversEnabled# cover images in OPAC results "
-"and detail listing from Swedish retailer <a href=\"https://www.adlibris.com/"
-"se\">Adlibris</a>."
-msgstr ""
-"enhanced_content.pref#AdlibrisCoversEnabled# ओपेक परिणाम और स्वीडिश रिटेलर से "
-"विस्तार सूची में छवियों पर <a href=\"https://www.adlibris.com/se\">Adlibris</a>."
-
-# Enhanced content > Adlibris
-msgid "enhanced_content.pref#AdlibrisCoversURL# Use base URL: "
-msgstr "enhanced_content.pref#AdlibrisCoversURL# आधार URL का उपयोग करें:"
-
-# Enhanced content > Adlibris
-msgid ""
-"enhanced_content.pref#AdlibrisCoversURL# for the <a href=\"https://www."
-"adlibris.com/se\">Adlibris</a> cover service."
-msgstr ""
-"enhanced_content.pref#AdlibrisCoversURL# for the <a href=\"https://www."
-"adlibris.com/se\">Adlibris</a> कवर सेवा."
 
 # Enhanced content > Local or remote cover images
 msgid "enhanced_content.pref#AllowMultipleCovers# Allow"
@@ -7450,6 +7614,14 @@ msgstr "enhanced_content.pref#CustomCoverImages# प्रदर्शन"
 # Enhanced content > Local or remote cover images
 msgid "enhanced_content.pref#CustomCoverImages# Don't display"
 msgstr "enhanced_content.pref#CustomCoverImages# प्रदर्शन नही करें"
+
+# Enhanced content > Local or remote cover images
+msgid ""
+"enhanced_content.pref#CustomCoverImages# For control fields you can use just "
+"{field}, like {001}."
+msgstr ""
+"enhanced_content.pref#CustomCoverImages# नियंत्रण क्षेत्रों के लिए आप केवल "
+"{field}, का उपयोग कर सकते हैं, जैसे {001}."
 
 # Enhanced content > Local or remote cover images
 msgid ""
@@ -8502,14 +8674,8 @@ msgstr ""
 "लिए सॉर्ट किया जा सकता है।"
 
 # I18N/L10N
-msgid ""
-"i18n_l10n.pref#TimeFormat# . <br/> <strong>NOTE:</strong> Do not change this "
-"preference on a production server with overdue items that are accruing "
-"fines. Doing so will result in duplicate fines!"
-msgstr ""
-"i18n_l10n.pref#TimeFormat# . <br/> <strong>नोट:</strong> अतिदेय वस्तुओं के साथ "
-"उत्पादन सर्वर पर इस वरीयता को न बदलें जो जुर्माना लगा रहे हैं। ऐसा करने पर नकली जुर्माना "
-"लगेगा!"
+msgid "i18n_l10n.pref#TimeFormat# ."
+msgstr "i18n_l10n.pref#TimeFormat# ."
 
 # I18N/L10N
 msgid "i18n_l10n.pref#TimeFormat# 12 hour format ( e.g. \"02:18 PM\" )"
@@ -8568,14 +8734,8 @@ msgstr ""
 "एक अलग सूची अंतरिक्ष होना चाहिए।"
 
 # I18N/L10N
-msgid ""
-"i18n_l10n.pref#dateformat# . <br/> <strong>NOTE:</strong> Do not change this "
-"preference on a production server with overdue items that are accruing "
-"fines. Doing so will result in duplicate fines!"
-msgstr ""
-"i18n_l10n.pref#dateformat# . <br/> <strong>NOTE:</strong> अतिदेय वस्तुओं के साथ "
-"उत्पादन सर्वर पर इस वरीयता को न बदलें जो जुर्माना लगा रहे हैं। ऐसा करने पर नकली जुर्माना "
-"लगेगा!"
+msgid "i18n_l10n.pref#dateformat# ."
+msgstr "i18n_l10n.pref#dateformat# ."
 
 # I18N/L10N
 msgid "i18n_l10n.pref#dateformat# Format dates like"
@@ -8850,6 +9010,22 @@ msgstr "logs.pref # IssueLog # लॉग"
 # Logging > Logging
 msgid "logs.pref#IssueLog# when items are checked out."
 msgstr "logs.pref # IssueLog # जब आइटम बाहर की जाँच कर रहे हैं।"
+
+# Logging > Logging
+msgid ""
+"logs.pref#NewsLog#  changes to news entries and other contents managed in "
+"the news tool."
+msgstr ""
+"logs.pref#NewsLog#  समाचार उपकरण में प्रबंधित समाचार प्रविष्टियों और अन्य सामग्री में "
+"परिवर्तन।"
+
+# Logging > Logging
+msgid "logs.pref#NewsLog# Don't log"
+msgstr "logs.pref#NewsLog# लॉग न करें"
+
+# Logging > Logging
+msgid "logs.pref#NewsLog# Log"
+msgstr "logs.pref#NewsLog# लॉग"
 
 # Logging > Logging
 msgid "logs.pref#NoticesLog#  changes to notice templates."
@@ -9134,35 +9310,6 @@ msgid "opac.pref#EnableOpacSearchHistory# patron search history in the OPAC."
 msgstr "ओपेक में opac.pref # EnableOpacSearchHistory # संरक्षक खोज इतिहास।"
 
 # OPAC > Appearance
-msgid ""
-"opac.pref#HighlightOwnItemsOnOPAC#  by moving the results to the front and "
-"increasing the size or highlighting the rows for those results (non-XSLT "
-"only)."
-msgstr ""
-"opac.pref # HighlightOwnItemsOnOPAC # सामने करने के लिए परिणाम चलती है और आकार में "
-"वृद्धि या उन परिणामों के लिए पंक्तियों पर प्रकाश डाला द्वारा। (गैर-XSLT केवल)"
-
-# OPAC > Appearance
-msgid "opac.pref#HighlightOwnItemsOnOPAC# Don't emphasize"
-msgstr "opac.pref # HighlightOwnItemsOnOPAC # ज़ोर देना नहीं है"
-
-# OPAC > Appearance
-msgid "opac.pref#HighlightOwnItemsOnOPAC# Emphasize"
-msgstr "opac.pref # HighlightOwnItemsOnOPAC # पर जोर"
-
-# OPAC > Appearance
-msgid "opac.pref#HighlightOwnItemsOnOPAC# OPAC's library via the URL"
-msgstr "opac.pref#HighlightOwnItemsOnOPAC# URL के माध्यम से ओपैक की लाइब्रेरी"
-
-# OPAC > Appearance
-msgid "opac.pref#HighlightOwnItemsOnOPAC# patron's home library"
-msgstr "opac.pref#HighlightOwnItemsOnOPAC# संरक्षक का गृह पुस्तकालय"
-
-# OPAC > Appearance
-msgid "opac.pref#HighlightOwnItemsOnOPAC# results from the "
-msgstr "से opac.pref # HighlightOwnItemsOnOPAC # परिणाम "
-
-# OPAC > Appearance
 msgid "opac.pref#LibraryName# Show"
 msgstr "opac.pref # LibraryName # दिखाएँ"
 
@@ -9351,6 +9498,22 @@ msgid ""
 "page on the OPAC."
 msgstr ""
 "opac.pref#OPACFinesTab# ओपेक पर अपने खाते के पृष्ठ पर शुल्क टैब तक पहुंचने के लिए संरक्षक."
+
+# OPAC > Privacy
+#, fuzzy
+msgid "opac.pref#OPACHoldRequests# Allow"
+msgstr "opac.pref#OPACHoldsHistory# अनुमति दें"
+
+# OPAC > Privacy
+#, fuzzy
+msgid "opac.pref#OPACHoldRequests# Don't allow"
+msgstr "opac.pref#OPACHoldsHistory# अनुमति न दें"
+
+# OPAC > Features
+#, fuzzy
+msgid ""
+"opac.pref#OPACHoldRequests# patrons to place holds on items from the OPAC."
+msgstr "opac.pref # RequestOnOpac # जगह पर संरक्षक ओपेक से आइटम पर रखती है।"
 
 # OPAC > Appearance
 msgid "opac.pref#OPACHoldingsDefaultSortField# First column of the table"
@@ -9566,6 +9729,45 @@ msgstr "opac.pref#OPACResultsLibrary# वर्तमान पुस्तक�
 # OPAC > Appearance
 msgid "opac.pref#OPACResultsLibrary# home library"
 msgstr "opac.pref#OPACResultsLibrary# होम पुस्तकालय"
+
+# OPAC > Appearance > OPACResultsMaxItems
+msgid ""
+"opac.pref#OPACResultsMaxItems# (available) individual items on the OPAC XSLT "
+"search results, and show no more than"
+msgstr ""
+
+# OPAC > Appearance > OPACResultsMaxItems
+msgid ""
+"opac.pref#OPACResultsMaxItems# (unavailable) individual items for categories "
+"like Checked out, Damaged, On Hold, but only when you group them by branch."
+"<br>"
+msgstr ""
+
+# OPAC > Appearance > OPACResultsMaxItems
+msgid ""
+"opac.pref#OPACResultsMaxItems# . (NOTE: For large consortia we recommend to "
+"group unavailable items by substatus, listing item counts only.)"
+msgstr ""
+
+# OPAC > Appearance
+#, fuzzy
+msgid "opac.pref#OPACResultsMaxItems# Group unavailable items by"
+msgstr "opac.pref#OPACResultsLibrary# होम पुस्तकालय"
+
+# OPAC > Appearance
+#, fuzzy
+msgid "opac.pref#OPACResultsMaxItems# Show no more than"
+msgstr "opac.pref#OPACResultsLibrary# होम पुस्तकालय"
+
+# OPAC > Appearance
+#, fuzzy
+msgid "opac.pref#OPACResultsMaxItems# branch"
+msgstr "opac.pref#OPACResultsLibrary# होम पुस्तकालय"
+
+# OPAC > Appearance
+#, fuzzy
+msgid "opac.pref#OPACResultsMaxItems# substatus"
+msgstr "opac.pref#OPACResultsLibrary# वर्तमान पुस्तकालय"
 
 # OPAC > Appearance
 msgid ""
@@ -9901,23 +10103,28 @@ msgid ""
 "on the OPAC."
 msgstr "opac.pref ओपेक पर दूसरे संरक्षक से # OPACViewOthersSuggestions # खरीद सुझाव।"
 
-# OPAC > Appearance
+# Staff interface > Appearance
+#, fuzzy
 msgid ""
-"opac.pref#OPACXSLTDetailsDisplay# <br />Options:<ul><li><a href=\"#\" class="
-"\"set_syspref\" data-syspref=\"OPACXSLTDetailsDisplay\" data-value="
-"\"\">leave empty</a> for \"no xslt\"</li><li>enter \"<a href=\"#\" class="
-"\"set_syspref\" data-syspref=\"OPACXSLTDetailsDisplay\" data-value=\"default"
-"\">default</a>\" for the default one</li><li>put a path to define a xslt "
-"file</li><li>put an URL for an external specific stylesheet.</li></"
-"ul>{langcode} will be replaced with current interface language."
+"opac.pref#OPACXSLTDetailsDisplay# <br />Options:<ul><li>Enter \"<a href=\"#"
+"\" class=\"set_syspref\" data-syspref=\"OPACXSLTDetailsDisplay\" data-value="
+"\"default\">default</a>\" for the default stylesheet</li><li>Put a path to "
+"define an xslt file</li><li>Put a URL for an external specific stylesheet.</"
+"li><li>NOTE: The system preference <a href=\"/cgi-bin/koha/admin/preferences."
+"pl?op=search&searchfield=PassItemMarcToXSLT\">PassItemMarcToXSLT</a> must be "
+"enabled if your custom stylesheet utilizes data in the item fields</li></"
+"ul>If you have multiple stylesheets for different langues the placeholder "
+"{langcode} will be replaced with current interface language."
 msgstr ""
-"opac.pref#OPACXSLTDetailsDisplay# <br />विकल्प:<ul><li><a href=\"#\" class="
-"\"set_syspref\" data-syspref=\"OPACXSLTDetailsDisplay\" data-value=\"\">खाली "
-"छोड़े</a> for \"no xslt\"</li><li>एन्टर \"<a href=\"#\" class=\"set_syspref\" "
-"data-syspref=\"OPACXSLTDetailsDisplay\" data-value=\"default\">डिफ़ॉल्ट</a>\" "
-"डिफ़ॉल्ट एक के लिए</li><li>एक XSLT फ़ाइल को परिभाषित करने के लिए एक पथ डाल</"
-"li><li>एक बाहरी विशिष्ट stylesheet के के लिए एक यूआरएल डाल.</li></ul>{langcode} "
-"वर्तमान इंटरफ़ेस भाषा के साथ प्रतिस्थापित किया जाएगा"
+"staff_interface.pref#XSLTDetailsDisplay# <br />विकल्पों:<ul><li>Enter \"<a "
+"href=\"#\" class=\"set_syspref\" data-syspref=\"XSLTDetailsDisplay\" data-"
+"value=\"default\">डिफाल्ट</a>\" for the default stylesheet</li><li>xslt फ़ाइल "
+"को परिभाषित करने के लिए पथ रखें</li><li>किसी बाहरी विशिष्ट स्टाइलशीट के लिए URL डालें."
+"</li><li>नोट: सिस्टम वरीयता <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=PassItemMarcToXSLT\">PassItemMarcToXSLT</a> यदि आपकी "
+"कस्टम स्टाइलशीट आइटम फ़ील्ड में डेटा का उपयोग करती है तो सक्षम होना चाहिए</li></"
+"ul>यदि आपके पास विभिन्न भाषाओं के लिए एकाधिक स्टाइलशीट हैं तो प्लेसहोल्डर {langcode} "
+"को वर्तमान इंटरफ़ेस भाषा से बदल दिया जाएगा."
 
 # OPAC > Appearance
 msgid ""
@@ -9927,23 +10134,28 @@ msgstr ""
 "opac.pref # OPACXSLTDetailsDisplay # प्रदर्शन ओपेक विवरण को XSLT स्टाइलशीट का "
 "उपयोग करते हुए: "
 
-# OPAC > Appearance
+# Staff interface > Appearance
+#, fuzzy
 msgid ""
-"opac.pref#OPACXSLTListsDisplay# <br />Options:<ul><li><a href=\"#\" class="
-"\"set_syspref\" data-syspref=\"OPACXSLTListsDisplay\" data-value=\"\">leave "
-"empty</a> for \"no xslt\"</li><li>enter \"<a href=\"#\" class=\"set_syspref"
-"\" data-syspref=\"OPACXSLTListsDisplay\" data-value=\"default\">default</a>"
-"\" for the default one</li><li> put a path to define a xslt file</li><li>put "
-"an URL for an external specific stylesheet.</li></ul>{langcode} will be "
-"replaced with current interface language."
+"opac.pref#OPACXSLTListsDisplay# <br />Options:<ul><li>Enter \"<a href=\"#\" "
+"class=\"set_syspref\" data-syspref=\"OPACXSLTListsDisplay\" data-value="
+"\"default\">default</a>\" for the default stylesheet</li><li>Put a path to "
+"define an xslt file</li><li>Put a URL for an external specific stylesheet.</"
+"li><li>NOTE: The system preference <a href=\"/cgi-bin/koha/admin/preferences."
+"pl?op=search&searchfield=PassItemMarcToXSLT\">PassItemMarcToXSLT</a> must be "
+"enabled if your custom stylesheet utilizes data in the item fields</li></"
+"ul>If you have multiple stylesheets for different langues the placeholder "
+"{langcode} will be replaced with current interface language."
 msgstr ""
-"opac.pref#OPACXSLTListsDisplay# <br />विकल्पों:<ul><li><a href=\"#\" class="
-"\"set_syspref\" data-syspref=\"OPACXSLTListsDisplay\" data-value=\"\">खाली "
-"छोड़े</a> for \"no xslt\"</li><li>दर्ज करें\"<a href=\"#\" class=\"set_syspref\" "
-"data-syspref=\"OPACXSLTListsDisplay\" data-value=\"default\">डिफॉल्ट</a>\" "
-"for the default one</li><li> एक XSLT फ़ाइल को परिभाषित करने के लिए एक पथ डाले</"
-"li><li>एक बाहरी विशिष्ट शैली के लिए एक यूआरएल डाले.</li></ul>{langcode}वर्तमान "
-"इंटरफ़ेस भाषा के साथ प्रतिस्थापित किया जाएगा"
+"staff_interface.pref#XSLTResultsDisplay# <br />विकल्पों:<ul><li>Enter \"<a "
+"href=\"#\" class=\"set_syspref\" data-syspref=\"XSLTResultsDisplay\" data-"
+"value=\"default\">डिफाल्ट</a>\" for the default stylesheet</li><li>xslt फ़ाइल "
+"को परिभाषित करने के लिए पथ रखें</li><li>बाहरी विशिष्ट स्टाइलशीट के लिए URL डालें।</"
+"li><li>नोट: सिस्टम वरीयता <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=PassItemMarcToXSLT\">PassItemMarcToXSLT</a> यदि आपकी "
+"कस्टम स्टाइलशीट आइटम फ़ील्ड में डेटा का उपयोग करती है तो सक्षम होना चाहिए</li></"
+"ul>यदि आपके पास विभिन्न भाषाओं के लिए एकाधिक स्टाइलशीट हैं तो प्लेसहोल्डर {langcode} "
+"को वर्तमान इंटरफ़ेस भाषा से बदल दिया जाएगा."
 
 # OPAC > Appearance
 msgid ""
@@ -9953,23 +10165,28 @@ msgstr ""
 "opac.pref#OPACXSLTListsDisplay# ओपेक में प्रदर्शन सूचियों में XSLT स्टाइलशीट का उपयोग "
 "कर: "
 
-# OPAC > Appearance
+# Staff interface > Appearance
+#, fuzzy
 msgid ""
-"opac.pref#OPACXSLTResultsDisplay# <br />Options:<ul><li><a href=\"#\" class="
-"\"set_syspref\" data-syspref=\"OPACXSLTResultsDisplay\" data-value="
-"\"\">leave empty</a> for \"no xslt\"</li><li>enter \"<a href=\"#\" class="
-"\"set_syspref\" data-syspref=\"OPACXSLTResultsDisplay\" data-value=\"default"
-"\">default</a>\" for the default one</li><li> put a path to define a xslt "
-"file</li><li>put an URL for an external specific stylesheet.</li></"
-"ul>{langcode} will be replaced with current interface language."
+"opac.pref#OPACXSLTResultsDisplay# <br />Options:<ul><li>Enter \"<a href=\"#"
+"\" class=\"set_syspref\" data-syspref=\"OPACXSLTResultsDisplay\" data-value="
+"\"default\">default</a>\" for the default stylesheet</li><li>Put a path to "
+"define an xslt file</li><li>Put a URL for an external specific stylesheet.</"
+"li><li>NOTE: The system preference <a href=\"/cgi-bin/koha/admin/preferences."
+"pl?op=search&searchfield=PassItemMarcToXSLT\">PassItemMarcToXSLT</a> must be "
+"enabled if your custom stylesheet utilizes data in the item fields</li></"
+"ul>If you have multiple stylesheets for different langues the placeholder "
+"{langcode} will be replaced with current interface language."
 msgstr ""
-"opac.pref#OPACXSLTResultsDisplay# <br />विकल्पो:<ul><li><a href=\"#\" class="
-"\"set_syspref\" data-syspref=\"OPACXSLTResultsDisplay\" data-value=\"\">रिक्त "
-"छोड़े</a> for \"no xslt\"</li><li>प्रविष्ट करे \"<a href=\"#\" class=\"set_syspref"
-"\" data-syspref=\"OPACXSLTResultsDisplay\" data-value=\"default\">डिफॉल्ट</a>"
-"\" डिफ़ॉल्ट के लिए</li><li> एक xslt फ़ाइल को परिभाषित करने के लिए एक रास्ता रखो</"
-"li><li>बाहरी विशिष्ट स्टाइलशीट के लिए एक URL डालें.</li></ul>{langcode} वर्तमान "
-"इंटरफ़ेस भाषा के साथ बदल दिया जाएगा"
+"staff_interface.pref#XSLTResultsDisplay# <br />विकल्पों:<ul><li>Enter \"<a "
+"href=\"#\" class=\"set_syspref\" data-syspref=\"XSLTResultsDisplay\" data-"
+"value=\"default\">डिफाल्ट</a>\" for the default stylesheet</li><li>xslt फ़ाइल "
+"को परिभाषित करने के लिए पथ रखें</li><li>बाहरी विशिष्ट स्टाइलशीट के लिए URL डालें।</"
+"li><li>नोट: सिस्टम वरीयता <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=PassItemMarcToXSLT\">PassItemMarcToXSLT</a> यदि आपकी "
+"कस्टम स्टाइलशीट आइटम फ़ील्ड में डेटा का उपयोग करती है तो सक्षम होना चाहिए</li></"
+"ul>यदि आपके पास विभिन्न भाषाओं के लिए एकाधिक स्टाइलशीट हैं तो प्लेसहोल्डर {langcode} "
+"को वर्तमान इंटरफ़ेस भाषा से बदल दिया जाएगा."
 
 # OPAC > Appearance
 msgid ""
@@ -10518,26 +10735,6 @@ msgid ""
 msgstr ""
 "opac.pref#OpacMoreSearches# ओपैक पर \"अधिक खोजें\" बार में अतिरिक्त तत्व जोड़ें, निम्न "
 "HTML के साथ (अक्षम करने के लिए खाली छोड़ें):"
-
-# OPAC > Appearance
-msgid ""
-"opac.pref#OpacNav# Show the following HTML on the left hand column of the "
-"main page and patron account on the OPAC (generally navigation links):"
-msgstr ""
-"opac.pref # OpacNav # मुख्य पृष्ठ और ओपेक (आम तौर पर नेविगेशन लिंक) पर संरक्षक खाते के "
-"बाएं हाथ के कॉलम पर निम्न HTML दिखाएँ:"
-
-# OPAC > Appearance
-msgid ""
-"opac.pref#OpacNavBottom# Show the following HTML on the left hand column of "
-"the main page and patron account on the OPAC, after <a href=\"/cgi-bin/koha/"
-"admin/preferences.pl?op=search&searchfield=OpacNav\">OpacNav</a>, and before "
-"patron account links if available:"
-msgstr ""
-"opac.pref#OpacNavBottom# मुख्य पृष्ठ के बाएँ हाथ के कॉलम पर निम्नलिखित HTML और OPAC "
-"पर संरक्षक खाता, बाद में दिखाएँ <a href=\"/cgi-bin/koha/admin/preferences.pl?"
-"op=search&searchfield=OpacNav\">OpacNav</a>, और संरक्षक खाता लिंक से पहले यदि "
-"उपलब्ध हो तो :"
 
 # OPAC > Features
 msgid "opac.pref#OpacNewsLibrarySelect# Display"
@@ -11090,18 +11287,6 @@ msgid ""
 msgstr ""
 "opac.pref#Reference_NFL_Statuses# ओपेक खोज परिणामों में संदर्भ के लिए उपलब्ध ऋण "
 "स्थितियों के लिए निम्नलिखित की सूची बनाएं:"
-
-# OPAC > Features
-msgid "opac.pref#RequestOnOpac# Allow"
-msgstr "opac.pref # RequestOnOpac # अनुमति दें"
-
-# OPAC > Features
-msgid "opac.pref#RequestOnOpac# Don't allow"
-msgstr "opac.pref # RequestOnOpac # अनुमति न दें"
-
-# OPAC > Features
-msgid "opac.pref#RequestOnOpac# patrons to place holds on items from the OPAC."
-msgstr "opac.pref # RequestOnOpac # जगह पर संरक्षक ओपेक से आइटम पर रखती है।"
 
 # OPAC > Restricted page
 msgid ""
@@ -12569,11 +12754,13 @@ msgstr "patrons.pref#TrackLastPatronActivity# नही करें"
 
 # Patrons > General
 msgid ""
-"patrons.pref#TrackLastPatronActivity# Every time a patron will connect, the "
-"borrowers.lastseen will be updated with the current time."
+"patrons.pref#TrackLastPatronActivity# The first time each day that a patron "
+"logs into the OPAC, connects to Koha via SIP or ILS-DI, or checks an item "
+"out the borrowers.lastseen will update with the current date and time."
 msgstr ""
-"patrons.pref#TrackLastPatronActivity# हर बार जब एक संरक्षक कनेक्ट होगा, तो "
-"उधारकर्ताओं को चालू समय के साथ अद्यतन किया जाएगा."
+"patrons.pref#TrackLastPatronActivity# हर दिन पहली बार जब कोई संरक्षक ओपेक में लॉग "
+"इन करता है, एसआईपी या आईएलएस-डीआई के माध्यम से कोहा से जुड़ता है, या उधारकर्ताओं से "
+"किसी आइटम की जांच करता है। लास्टसीन वर्तमान तिथि और समय के साथ अपडेट होगा."
 
 # Patrons > General
 msgid "patrons.pref#TrackLastPatronActivity# track last patron activity."
@@ -12938,6 +13125,22 @@ msgstr "searching.pref # FacetMaxCount # अप करने के लिए �
 msgid "searching.pref#FacetMaxCount# facets for each category."
 msgstr "searching.pref # FacetMaxCount # पहलुओं प्रत्येक श्रेणी के लिए।"
 
+# Searching > Results display
+msgid "searching.pref#FacetOrder# Sort facets"
+msgstr "searching.pref#FacetOrder# पहलुओं को छाँटें"
+
+# Searching > Features
+msgid "searching.pref#FacetOrder# alphabetically"
+msgstr "searching.pref#FacetOrder# वर्णानुक्रम"
+
+# Searching > Results display
+msgid "searching.pref#FacetOrder# by usage count"
+msgstr "searching.pref#FacetOrder# उपयोग गणना द्वारा"
+
+# Searching > Results display
+msgid "searching.pref#FacetOrder# for each category."
+msgstr "searching.pref#FacetOrder# या प्रत्येक श्रेणी।"
+
 # Searching > Features
 msgid ""
 "searching.pref#IncludeSeeFromInSearches# <em>see from</em> (non-preferred "
@@ -13166,6 +13369,22 @@ msgid ""
 msgstr ""
 "searching.pref#OPACnumSearchResultsDropdown# ओपेक खोज परिणामों पर प्रति पृष्ठ "
 "ड्रॉपडाउन के परिणाम।"
+
+# Searching > Search form
+msgid "searching.pref#PassItemMarcToXSLT# Do"
+msgstr "searching.pref#PassItemMarcToXSLT# करें"
+
+# Searching > Features
+msgid "searching.pref#PassItemMarcToXSLT# Don't"
+msgstr "searching.pref#PassItemMarcToXSLT# नही करें"
+
+# Searching > Results display > PassItemMarcToXSLT
+msgid ""
+"searching.pref#PassItemMarcToXSLT# make item MARC tags available to XSLT "
+"stylesheets. Default is \"Don't\", items are displayed using other methods."
+msgstr ""
+"searching.pref#PassItemMarcToXSLT# एक्सएसएलटी स्टाइलशीट में आइटम मार्क टैग उपलब्ध "
+"कराएं। डिफ़ॉल्ट \"मत करो\" है, आइटम अन्य विधियों का उपयोग करके प्रदर्शित किए जाते हैं."
 
 # Searching > Features
 msgid ""
@@ -13942,15 +14161,24 @@ msgstr ""
 msgid ""
 "staff_interface.pref#XSLTDetailsDisplay# <br />Options:<ul><li>Enter \"<a "
 "href=\"#\" class=\"set_syspref\" data-syspref=\"XSLTDetailsDisplay\" data-"
-"value=\"default\">default</a>\" for the default one</li><li>Put a path to "
-"define a xslt file</li><li>Put an URL for an external specific stylesheet.</"
-"li></ul>{langcode} will be replaced with current interface language"
+"value=\"default\">default</a>\" for the default stylesheet</li><li>Put a "
+"path to define an xslt file</li><li>Put a URL for an external specific "
+"stylesheet.</li><li>NOTE: The system preference <a href=\"/cgi-bin/koha/"
+"admin/preferences.pl?op=search&searchfield=PassItemMarcToXSLT"
+"\">PassItemMarcToXSLT</a> must be enabled if your custom stylesheet utilizes "
+"data in the item fields</li></ul>If you have multiple stylesheets for "
+"different langues the placeholder {langcode} will be replaced with current "
+"interface language."
 msgstr ""
-"staff_interface.pref#XSLTDetailsDisplay#<br />विकल्प:<ul><li>दर्ज करे \"<a href="
-"\"#\" class=\"set_syspref\" data-syspref=\"XSLTDetailsDisplay\" data-value="
-"\"default\">डिफाल्ट</a>\" डिफ़ॉल्ट एक के लिए</li><li>एक xslt फ़ाइल को परिभाषित "
-"करने के लिए एक रास्ता रखो</li><li>बाहरी विशिष्ट स्टाइलशीट के लिए एक URL डालें.</li></"
-"ul>{langcode} वर्तमान इंटरफ़ेस भाषा के साथ बदल दिया जाएगा"
+"staff_interface.pref#XSLTDetailsDisplay# <br />विकल्पों:<ul><li>Enter \"<a "
+"href=\"#\" class=\"set_syspref\" data-syspref=\"XSLTDetailsDisplay\" data-"
+"value=\"default\">डिफाल्ट</a>\" for the default stylesheet</li><li>xslt फ़ाइल "
+"को परिभाषित करने के लिए पथ रखें</li><li>किसी बाहरी विशिष्ट स्टाइलशीट के लिए URL डालें."
+"</li><li>नोट: सिस्टम वरीयता <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=PassItemMarcToXSLT\">PassItemMarcToXSLT</a> यदि आपकी "
+"कस्टम स्टाइलशीट आइटम फ़ील्ड में डेटा का उपयोग करती है तो सक्षम होना चाहिए</li></"
+"ul>यदि आपके पास विभिन्न भाषाओं के लिए एकाधिक स्टाइलशीट हैं तो प्लेसहोल्डर {langcode} "
+"को वर्तमान इंटरफ़ेस भाषा से बदल दिया जाएगा."
 
 # Staff interface > Appearance
 msgid ""
@@ -13961,22 +14189,27 @@ msgstr ""
 "इंटरफ़ेस में विवरण दिखाएं: "
 
 # Staff interface > Appearance
+#, fuzzy
 msgid ""
-"staff_interface.pref#XSLTListsDisplay# <br />Options:<ul><li><a href=\"#\" "
-"class=\"set_syspref\" data-syspref=\"XSLTListsDisplay\" data-value="
-"\"\">Leave empty</a> for \"no xslt\"</li><li>enter \"<a href=\"#\" class="
-"\"set_syspref\" data-syspref=\"XSLTListsDisplay\" data-value=\"default"
-"\">default</a>\" for the default one</li><li> put a path to define a xslt "
-"file</li><li>put an URL for an external specific stylesheet.</li></"
-"ul>{langcode} will be replaced with current interface language"
+"staff_interface.pref#XSLTListsDisplay# <br />Options:<ul><li>Enter \"<a href="
+"\"#\" class=\"set_syspref\" data-syspref=\"XSLTListsDisplay\" data-value="
+"\"default\">default</a>\" for the default stylesheet</li><li>Put a path to "
+"define an xslt file</li><li>Put a URL for an external specific stylesheet.</"
+"li><li>NOTE: The system preference <a href=\"/cgi-bin/koha/admin/preferences."
+"pl?op=search&searchfield=PassItemMarcToXSLT\">PassItemMarcToXSLT</a> must be "
+"enabled if your custom stylesheet utilizes data in the item fields</li></"
+"ul>If you have multiple stylesheets for different langues the placeholder "
+"{langcode} will be replaced with current interface language."
 msgstr ""
-"staff_interface.pref#XSLTListsDisplay# <br />विकल्पों:<ul><li><a href=\"#\" "
-"class=\"set_syspref\" data-syspref=\"XSLTListsDisplay\" data-value=\"\">खाली "
-"छोड़े</a> for \"no xslt\"</li><li>दर्ज करें \"<a href=\"#\" class=\"set_syspref\" "
-"data-syspref=\"XSLTListsDisplay\" data-value=\"default\">डिफॉल्ट</a>\" for "
-"the default one</li><li> एक XSLT फ़ाइल को परिभाषित करने के लिए एक पथ डाले</"
-"li><li>एक बाहरी विशिष्ट शैली के लिए एक यूआरएल डाले.</li></ul>{langcode} वर्तमान "
-"इंटरफ़ेस भाषा के साथ प्रतिस्थापित किया जाएगा"
+"staff_interface.pref#XSLTResultsDisplay# <br />विकल्पों:<ul><li>Enter \"<a "
+"href=\"#\" class=\"set_syspref\" data-syspref=\"XSLTResultsDisplay\" data-"
+"value=\"default\">डिफाल्ट</a>\" for the default stylesheet</li><li>xslt फ़ाइल "
+"को परिभाषित करने के लिए पथ रखें</li><li>बाहरी विशिष्ट स्टाइलशीट के लिए URL डालें।</"
+"li><li>नोट: सिस्टम वरीयता <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=PassItemMarcToXSLT\">PassItemMarcToXSLT</a> यदि आपकी "
+"कस्टम स्टाइलशीट आइटम फ़ील्ड में डेटा का उपयोग करती है तो सक्षम होना चाहिए</li></"
+"ul>यदि आपके पास विभिन्न भाषाओं के लिए एकाधिक स्टाइलशीट हैं तो प्लेसहोल्डर {langcode} "
+"को वर्तमान इंटरफ़ेस भाषा से बदल दिया जाएगा."
 
 # Staff interface > Appearance
 msgid ""
@@ -13990,15 +14223,24 @@ msgstr ""
 msgid ""
 "staff_interface.pref#XSLTResultsDisplay# <br />Options:<ul><li>Enter \"<a "
 "href=\"#\" class=\"set_syspref\" data-syspref=\"XSLTResultsDisplay\" data-"
-"value=\"default\">default</a>\" for the default one</li><li>Put a path to "
-"define a xslt file</li><li>Put an URL for an external specific stylesheet.</"
-"li></ul>{langcode} will be replaced with current interface language"
+"value=\"default\">default</a>\" for the default stylesheet</li><li>Put a "
+"path to define an xslt file</li><li>Put a URL for an external specific "
+"stylesheet.</li><li>NOTE: The system preference <a href=\"/cgi-bin/koha/"
+"admin/preferences.pl?op=search&searchfield=PassItemMarcToXSLT"
+"\">PassItemMarcToXSLT</a> must be enabled if your custom stylesheet utilizes "
+"data in the item fields</li></ul>If you have multiple stylesheets for "
+"different langues the placeholder {langcode} will be replaced with current "
+"interface language."
 msgstr ""
-"staff_interface.pref#XSLTResultsDisplay# <br />विकल्प:<ul><li>दर्ज करे \"<a "
-"href=\"#\" class=\"set_syspref\" data-syspref=\"XSLTDetailsDisplay\" data-"
-"value=\"default\">डिफाल्ट</a>\" डिफ़ॉल्ट एक के लिए</li><li>एक xslt फ़ाइल को "
-"परिभाषित करने के लिए एक रास्ता रखो</li><li>बाहरी विशिष्ट स्टाइलशीट के लिए एक URL "
-"डालें.</li></ul>{langcode} वर्तमान इंटरफ़ेस भाषा के साथ बदल दिया जाएगा"
+"staff_interface.pref#XSLTResultsDisplay# <br />विकल्पों:<ul><li>Enter \"<a "
+"href=\"#\" class=\"set_syspref\" data-syspref=\"XSLTResultsDisplay\" data-"
+"value=\"default\">डिफाल्ट</a>\" for the default stylesheet</li><li>xslt फ़ाइल "
+"को परिभाषित करने के लिए पथ रखें</li><li>बाहरी विशिष्ट स्टाइलशीट के लिए URL डालें।</"
+"li><li>नोट: सिस्टम वरीयता <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=PassItemMarcToXSLT\">PassItemMarcToXSLT</a> यदि आपकी "
+"कस्टम स्टाइलशीट आइटम फ़ील्ड में डेटा का उपयोग करती है तो सक्षम होना चाहिए</li></"
+"ul>यदि आपके पास विभिन्न भाषाओं के लिए एकाधिक स्टाइलशीट हैं तो प्लेसहोल्डर {langcode} "
+"को वर्तमान इंटरफ़ेस भाषा से बदल दिया जाएगा."
 
 # Staff interface > Appearance
 msgid ""
@@ -14212,6 +14454,28 @@ msgstr "tools.pref रिपोर्ट"
 msgid "tools.pref Upload"
 msgstr "tools.pref अपलोड"
 
+# Tools > News
+#, fuzzy
+msgid "tools.pref#AdditionalContentsEditor# ."
+msgstr "tools.pref#NewsToolEditor# ."
+
+# Tools > News
+#, fuzzy
+msgid ""
+"tools.pref#AdditionalContentsEditor# By default edit additional contents and "
+"news items with"
+msgstr "tools.pref#NewsToolEditor# डिफ़ॉल्ट रूप से समाचार आइटम संपादित करें"
+
+# Tools > News
+#, fuzzy
+msgid "tools.pref#AdditionalContentsEditor# a WYSIWYG editor (TinyMCE)"
+msgstr "tools.pref#NewsToolEditor# एक WYSIWYG संपादक (TinyMCE)"
+
+# Tools > News
+#, fuzzy
+msgid "tools.pref#AdditionalContentsEditor# a text editor (CodeMirror)"
+msgstr "tools.pref#NewsToolEditor# एक पाठ संपादक (CodeMirror)"
+
 # Tools > Barcodes
 msgid ""
 "tools.pref#BarcodeSeparators# Split barcodes on the following separator chars"
@@ -14297,22 +14561,6 @@ msgstr "tools.pref#NewsAuthorDisplay# बिल्कुल नहीं"
 # Tools > News
 msgid "tools.pref#NewsAuthorDisplay# staff interface only"
 msgstr "tools.pref#NewsAuthorDisplay# केवल स्टाफ इंटरफ़ेस"
-
-# Tools > News
-msgid "tools.pref#NewsToolEditor# ."
-msgstr "tools.pref#NewsToolEditor# ."
-
-# Tools > News
-msgid "tools.pref#NewsToolEditor# By default edit news items with"
-msgstr "tools.pref#NewsToolEditor# डिफ़ॉल्ट रूप से समाचार आइटम संपादित करें"
-
-# Tools > News
-msgid "tools.pref#NewsToolEditor# a WYSIWYG editor (TinyMCE)"
-msgstr "tools.pref#NewsToolEditor# एक WYSIWYG संपादक (TinyMCE)"
-
-# Tools > News
-msgid "tools.pref#NewsToolEditor# a text editor (CodeMirror)"
-msgstr "tools.pref#NewsToolEditor# एक पाठ संपादक (CodeMirror)"
 
 # Tools > Reports
 msgid "tools.pref#NumSavedReports# By default, show"
@@ -14741,6 +14989,21 @@ msgstr ""
 "web_services.pref # SvcMaxReportRows # एक रिपोर्ट रिपोर्टों वेब सेवा के माध्यम से "
 "अनुरोध किया की पंक्तियों।"
 
+# Administration > Google OpenID Connect
+#~ msgid "admin.pref#GoogleOpenIDConnectDefaultBranch# ."
+#~ msgstr "admin.pref#GoogleOpenIDConnectDefaultBranch# ."
+
+# Administration > Google OpenID Connect
+#~ msgid "admin.pref#GoogleOpenIDConnectDefaultCategory# ."
+#~ msgstr "admin.pref#GoogleOpenIDConnectDefaultCategory# ."
+
+# Administration > Google OpenID Connect
+#~ msgid ""
+#~ "admin.pref#GoogleOpenIDConnectDomain# . Leave blank for all Google "
+#~ "domains."
+#~ msgstr ""
+#~ "admin.pref#GoogleOpenIDConnectDomain# सभी गूगल डोमेन के लिए खाली छोड़ दो"
+
 # Circulation > Batch checkout
 #~ msgid ""
 #~ "circulation.pref#BatchCheckoutsValidCategories# (list of patron "
@@ -14756,6 +15019,68 @@ msgstr ""
 #~ msgstr ""
 #~ "circulation.pref#OPACHoldsIfAvailableAtPickupExceptions# (एक पाइप '|' के "
 #~ "साथ विभाजित संरक्षक श्रेणियों की सूची)"
+
+# Enhanced content > Adlibris
+#~ msgid "enhanced_content.pref Adlibris"
+#~ msgstr "enhanced_content.pref Adlibris"
+
+# Enhanced content > Adlibris
+#~ msgid ""
+#~ "enhanced_content.pref## <strong>NOTE:</strong> Using resources such as "
+#~ "external images might leak sensitive data to third parties."
+#~ msgstr ""
+#~ "enhanced_content.pref## <strong>नोट:</strong> बाहरी छवियों जैसे संसाधनों का "
+#~ "उपयोग करना संवेदनशील डेटा को तीसरे पक्ष को लीक कर सकता है।"
+
+# Enhanced content > Adlibris
+#~ msgid "enhanced_content.pref#AdlibrisCoversEnabled# Don't show"
+#~ msgstr "enhanced_content.pref#AdlibrisCoversEnabled# दिखाओ मत"
+
+# Enhanced content > Adlibris
+#~ msgid "enhanced_content.pref#AdlibrisCoversEnabled# Show"
+#~ msgstr "enhanced_content.pref#AdlibrisCoversEnabled# दिखाओ"
+
+# Enhanced content > Adlibris
+#~ msgid ""
+#~ "enhanced_content.pref#AdlibrisCoversEnabled# cover images in OPAC results "
+#~ "and detail listing from Swedish retailer <a href=\"https://www.adlibris."
+#~ "com/se\">Adlibris</a>."
+#~ msgstr ""
+#~ "enhanced_content.pref#AdlibrisCoversEnabled# ओपेक परिणाम और स्वीडिश रिटेलर से "
+#~ "विस्तार सूची में छवियों पर <a href=\"https://www.adlibris.com/se\">Adlibris</"
+#~ "a>."
+
+# Enhanced content > Adlibris
+#~ msgid "enhanced_content.pref#AdlibrisCoversURL# Use base URL: "
+#~ msgstr "enhanced_content.pref#AdlibrisCoversURL# आधार URL का उपयोग करें:"
+
+# Enhanced content > Adlibris
+#~ msgid ""
+#~ "enhanced_content.pref#AdlibrisCoversURL# for the <a href=\"https://www."
+#~ "adlibris.com/se\">Adlibris</a> cover service."
+#~ msgstr ""
+#~ "enhanced_content.pref#AdlibrisCoversURL# for the <a href=\"https://www."
+#~ "adlibris.com/se\">Adlibris</a> कवर सेवा."
+
+# I18N/L10N
+#~ msgid ""
+#~ "i18n_l10n.pref#TimeFormat# . <br/> <strong>NOTE:</strong> Do not change "
+#~ "this preference on a production server with overdue items that are "
+#~ "accruing fines. Doing so will result in duplicate fines!"
+#~ msgstr ""
+#~ "i18n_l10n.pref#TimeFormat# . <br/> <strong>नोट:</strong> अतिदेय वस्तुओं के साथ "
+#~ "उत्पादन सर्वर पर इस वरीयता को न बदलें जो जुर्माना लगा रहे हैं। ऐसा करने पर नकली "
+#~ "जुर्माना लगेगा!"
+
+# I18N/L10N
+#~ msgid ""
+#~ "i18n_l10n.pref#dateformat# . <br/> <strong>NOTE:</strong> Do not change "
+#~ "this preference on a production server with overdue items that are "
+#~ "accruing fines. Doing so will result in duplicate fines!"
+#~ msgstr ""
+#~ "i18n_l10n.pref#dateformat# . <br/> <strong>NOTE:</strong> अतिदेय वस्तुओं के "
+#~ "साथ उत्पादन सर्वर पर इस वरीयता को न बदलें जो जुर्माना लगा रहे हैं। ऐसा करने पर नकली "
+#~ "जुर्माना लगेगा!"
 
 # I18N/L10N
 #~ msgid ""
@@ -14824,6 +15149,136 @@ msgstr ""
 # OPAC > Payments
 #~ msgid "opac.pref#EnablePayPalOpacPayments# sandbox"
 #~ msgstr "opac.pref # EnablePayPalOpacPayments # सैंडबॉक्स"
+
+# OPAC > Appearance
+#~ msgid ""
+#~ "opac.pref#HighlightOwnItemsOnOPAC#  by moving the results to the front "
+#~ "and increasing the size or highlighting the rows for those results (non-"
+#~ "XSLT only)."
+#~ msgstr ""
+#~ "opac.pref # HighlightOwnItemsOnOPAC # सामने करने के लिए परिणाम चलती है और "
+#~ "आकार में वृद्धि या उन परिणामों के लिए पंक्तियों पर प्रकाश डाला द्वारा। (गैर-XSLT केवल)"
+
+# OPAC > Appearance
+#~ msgid "opac.pref#HighlightOwnItemsOnOPAC# Don't emphasize"
+#~ msgstr "opac.pref # HighlightOwnItemsOnOPAC # ज़ोर देना नहीं है"
+
+# OPAC > Appearance
+#~ msgid "opac.pref#HighlightOwnItemsOnOPAC# Emphasize"
+#~ msgstr "opac.pref # HighlightOwnItemsOnOPAC # पर जोर"
+
+# OPAC > Appearance
+#~ msgid "opac.pref#HighlightOwnItemsOnOPAC# OPAC's library via the URL"
+#~ msgstr "opac.pref#HighlightOwnItemsOnOPAC# URL के माध्यम से ओपैक की लाइब्रेरी"
+
+# OPAC > Appearance
+#~ msgid "opac.pref#HighlightOwnItemsOnOPAC# patron's home library"
+#~ msgstr "opac.pref#HighlightOwnItemsOnOPAC# संरक्षक का गृह पुस्तकालय"
+
+# OPAC > Appearance
+#~ msgid "opac.pref#HighlightOwnItemsOnOPAC# results from the "
+#~ msgstr "से opac.pref # HighlightOwnItemsOnOPAC # परिणाम "
+
+# OPAC > Appearance
+#~ msgid ""
+#~ "opac.pref#OPACXSLTDetailsDisplay# <br />Options:<ul><li><a href=\"#\" "
+#~ "class=\"set_syspref\" data-syspref=\"OPACXSLTDetailsDisplay\" data-value="
+#~ "\"\">leave empty</a> for \"no xslt\"</li><li>Enter \"<a href=\"#\" class="
+#~ "\"set_syspref\" data-syspref=\"OPACXSLTDetailsDisplay\" data-value="
+#~ "\"default\">default</a>\" for the default stylesheet</li><li>Put a path "
+#~ "to define an xslt file</li><li>Put a URL for an external specific "
+#~ "stylesheet.</li><li>NOTE: The system preference <a href=\"/cgi-bin/koha/"
+#~ "admin/preferences.pl?op=search&searchfield=PassItemMarcToXSLT"
+#~ "\">PassItemMarcToXSLT</a> must be enabled if your custom stylesheet "
+#~ "utilizes data in the item fields</li></ul>If you have multiple "
+#~ "stylesheets for different langues the placeholder {langcode} will be "
+#~ "replaced with current interface language."
+#~ msgstr ""
+#~ "opac.pref#OPACXSLTDetailsDisplay# <br />विकल्प:<ul><li><a href=\"#\" class="
+#~ "\"set_syspref\" data-syspref=\"OPACXSLTDetailsDisplay\" data-value="
+#~ "\"\">खाली छोड़े</a> के लिए \"no xslt\"</li><li>Enter \"<a href=\"#\" class="
+#~ "\"set_syspref\" data-syspref=\"OPACXSLTDetailsDisplay\" data-value="
+#~ "\"default\">डिफॉल्ट</a>\" डिफ़ॉल्ट स्टाइलशीट के लिए</li><li>xslt फ़ाइल को "
+#~ "परिभाषित करने के लिए पथ रखें</li><li>किसी बाहरी विशिष्ट स्टाइलशीट के लिए URL डालें."
+#~ "</li><li>नोट: सिस्टम वरीयता <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+#~ "op=search&searchfield=PassItemMarcToXSLT\">PassItemMarcToXSLT</a> यदि "
+#~ "आपकी कस्टम स्टाइलशीट आइटम फ़ील्ड में डेटा का उपयोग करती है तो सक्षम होना चाहिए </"
+#~ "li></ul>यदि आपके पास विभिन्न भाषाओं के लिए एकाधिक स्टाइलशीट हैं तो प्लेसहोल्डर "
+#~ "{langcode} को वर्तमान इंटरफ़ेस भाषा से बदल दिया जाएगा."
+
+# OPAC > Appearance
+#~ msgid ""
+#~ "opac.pref#OPACXSLTListsDisplay# <br />Options:<ul><li><a href=\"#\" class="
+#~ "\"set_syspref\" data-syspref=\"OPACXSLTListsDisplay\" data-value="
+#~ "\"\">leave empty</a> for \"no xslt\"</li><li>Enter \"<a href=\"#\" class="
+#~ "\"set_syspref\" data-syspref=\"OPACXSLTListsDisplay\" data-value=\"default"
+#~ "\">default</a>\" for the default stylesheet</li><li>Put a path to define "
+#~ "an xslt file</li><li>Put a URL for an external specific stylesheet.</"
+#~ "li><li>NOTE: The system preference <a href=\"/cgi-bin/koha/admin/"
+#~ "preferences.pl?op=search&searchfield=PassItemMarcToXSLT"
+#~ "\">PassItemMarcToXSLT</a> must be enabled if your custom stylesheet "
+#~ "utilizes data in the item fields</li></ul>If you have multiple "
+#~ "stylesheets for different langues the placeholder {langcode} will be "
+#~ "replaced with current interface language."
+#~ msgstr ""
+#~ "opac.pref#OPACXSLTListsDisplay# <br />विकल्पों:<ul><li><a href=\"#\" class="
+#~ "\"set_syspref\" data-syspref=\"OPACXSLTListsDisplay\" data-value="
+#~ "\"\">खाली छोडो</a> \"नो एक्सएसएलटी\" के लिए</li><li>Enter \"<a href=\"#\" "
+#~ "class=\"set_syspref\" data-syspref=\"OPACXSLTListsDisplay\" data-value="
+#~ "\"default\">default</a>\" for the default stylesheet</li><li>xslt फ़ाइल को "
+#~ "परिभाषित करने के लिए पथ रखें</li><li>किसी बाहरी विशिष्ट स्टाइलशीट के लिए URL डालें."
+#~ "</li><li>नोट: सिस्टम वरीयता <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+#~ "op=search&searchfield=PassItemMarcToXSLT\">PassItemMarcToXSLT</a> यदि "
+#~ "आपकी कस्टम स्टाइलशीट आइटम फ़ील्ड में डेटा का उपयोग करती है तो सक्षम होना चाहिए</"
+#~ "li></ul>यदि आपके पास विभिन्न भाषाओं के लिए एकाधिक स्टाइलशीट हैं तो प्लेसहोल्डर "
+#~ "{langcode} को वर्तमान इंटरफ़ेस भाषा से बदल दिया जाएगा."
+
+# OPAC > Appearance
+#~ msgid ""
+#~ "opac.pref#OPACXSLTResultsDisplay# <br />Options:<ul><li><a href=\"#\" "
+#~ "class=\"set_syspref\" data-syspref=\"OPACXSLTResultsDisplay\" data-value="
+#~ "\"\">leave empty</a> for \"no xslt\"</li><li>Enter \"<a href=\"#\" class="
+#~ "\"set_syspref\" data-syspref=\"OPACXSLTResultsDisplay\" data-value="
+#~ "\"default\">default</a>\" for the default stylesheet</li><li>Put a path "
+#~ "to define an xslt file</li><li>Put a URL for an external specific "
+#~ "stylesheet.</li><li>NOTE: The system preference <a href=\"/cgi-bin/koha/"
+#~ "admin/preferences.pl?op=search&searchfield=PassItemMarcToXSLT"
+#~ "\">PassItemMarcToXSLT</a> must be enabled if your custom stylesheet "
+#~ "utilizes data in the item fields</li></ul>If you have multiple "
+#~ "stylesheets for different langues the placeholder {langcode} will be "
+#~ "replaced with current interface language."
+#~ msgstr ""
+#~ "opac.pref#OPACXSLTResultsDisplay# <br />विकल्पों:<ul><li><a href=\"#\" "
+#~ "class=\"set_syspref\" data-syspref=\"OPACXSLTResultsDisplay\" data-value="
+#~ "\"\">खाली छोडो</a> \"नो एक्सएसएलटी\" के लिए</li><li>Enter \"<a href=\"#\" "
+#~ "class=\"set_syspref\" data-syspref=\"OPACXSLTResultsDisplay\" data-value="
+#~ "\"default\">default</a>\" for the default stylesheet</li><li>xslt फ़ाइल को "
+#~ "परिभाषित करने के लिए पथ रखें</li><li>किसी बाहरी विशिष्ट स्टाइलशीट के लिए URL डालें."
+#~ "</li><li>नोट: सिस्टम वरीयता <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+#~ "op=search&searchfield=PassItemMarcToXSLT\">PassItemMarcToXSLT</a> यदि "
+#~ "आपकी कस्टम स्टाइलशीट आइटम फ़ील्ड में डेटा का उपयोग करती है तो सक्षम होना चाहिए</"
+#~ "li></ul>यदि आपके पास विभिन्न भाषाओं के लिए एकाधिक स्टाइलशीट हैं तो प्लेसहोल्डर "
+#~ "{langcode} को वर्तमान इंटरफ़ेस भाषा से बदल दिया जाएगा."
+
+# OPAC > Appearance
+#~ msgid ""
+#~ "opac.pref#OpacNav# Show the following HTML on the left hand column of the "
+#~ "main page and patron account on the OPAC (generally navigation links):"
+#~ msgstr ""
+#~ "opac.pref # OpacNav # मुख्य पृष्ठ और ओपेक (आम तौर पर नेविगेशन लिंक) पर संरक्षक खाते "
+#~ "के बाएं हाथ के कॉलम पर निम्न HTML दिखाएँ:"
+
+# OPAC > Appearance
+#~ msgid ""
+#~ "opac.pref#OpacNavBottom# Show the following HTML on the left hand column "
+#~ "of the main page and patron account on the OPAC, after <a href=\"/cgi-bin/"
+#~ "koha/admin/preferences.pl?op=search&searchfield=OpacNav\">OpacNav</a>, "
+#~ "and before patron account links if available:"
+#~ msgstr ""
+#~ "opac.pref#OpacNavBottom# मुख्य पृष्ठ के बाएँ हाथ के कॉलम पर निम्नलिखित HTML और "
+#~ "OPAC पर संरक्षक खाता, बाद में दिखाएँ <a href=\"/cgi-bin/koha/admin/preferences."
+#~ "pl?op=search&searchfield=OpacNav\">OpacNav</a>, और संरक्षक खाता लिंक से पहले "
+#~ "यदि उपलब्ध हो तो :"
 
 # OPAC > Payments
 #~ msgid "opac.pref#PayPalChargeDescription# ."
@@ -14894,6 +15349,14 @@ msgstr ""
 #~ msgstr "पेपैल भुगतान प्राप्त करने के opac.pref # PayPalUser # ईमेल पता है "
 
 # OPAC > Features
+#~ msgid "opac.pref#RequestOnOpac# Allow"
+#~ msgstr "opac.pref # RequestOnOpac # अनुमति दें"
+
+# OPAC > Features
+#~ msgid "opac.pref#RequestOnOpac# Don't allow"
+#~ msgstr "opac.pref # RequestOnOpac # अनुमति न दें"
+
+# OPAC > Features
 #~ msgid "opac.pref#reviewson# Allow"
 #~ msgstr "opac.pref # reviewson # अनुमति दें"
 
@@ -14928,3 +15391,30 @@ msgstr ""
 #~ "अनुक्रमण को प्रभावित नहीं करेगा, यह केवल Koha बताने के लिए अगर आप वास्तव में ऐसा "
 #~ "किया है के बाद से वहाँ Koha अपने दम पर यह पता लगाने के लिए कोई रास्ता नहीं है कि आप "
 #~ "आईसीयू अनुक्रमण सक्रिय कर लिया है इस्तेमाल किया जाना चाहिए।"
+
+# Staff interface > Appearance
+#~ msgid ""
+#~ "staff_interface.pref#XSLTListsDisplay# <br />Options:<ul><li><a href=\"#"
+#~ "\" class=\"set_syspref\" data-syspref=\"XSLTListsDisplay\" data-value="
+#~ "\"\">Leave empty</a> for \"no xslt\"</li><li>Enter \"<a href=\"#\" class="
+#~ "\"set_syspref\" data-syspref=\"XSLTListsDisplay\" data-value=\"default"
+#~ "\">default</a>\" for the default stylesheet</li><li>Put a path to define "
+#~ "an xslt file</li><li>Put a URL for an external specific stylesheet.</"
+#~ "li><li>NOTE: The system preference <a href=\"/cgi-bin/koha/admin/"
+#~ "preferences.pl?op=search&searchfield=PassItemMarcToXSLT"
+#~ "\">PassItemMarcToXSLT</a> must be enabled if your custom stylesheet "
+#~ "utilizes data in the item fields</li></ul>If you have multiple "
+#~ "stylesheets for different langues the placeholder {langcode} will be "
+#~ "replaced with current interface language."
+#~ msgstr ""
+#~ "staff_interface.pref#XSLTListsDisplay# <br />विकल्पों:<ul><li><a href=\"#\" "
+#~ "class=\"set_syspref\" data-syspref=\"XSLTListsDisplay\" data-value="
+#~ "\"\">खाली छोड़े</a> for \"no xslt\"</li><li>Enter \"<a href=\"#\" class="
+#~ "\"set_syspref\" data-syspref=\"XSLTListsDisplay\" data-value=\"default"
+#~ "\">डिफॉल्ट</a>\" for the default stylesheet</li><li>किसी xslt फ़ाइल को "
+#~ "परिभाषित करने के लिए पथ रखें</li><li>बाहरी विशिष्ट स्टाइलशीट के लिए URL डालें।</"
+#~ "li><li>नोट: सिस्टम वरीयता <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+#~ "op=search&searchfield=PassItemMarcToXSLT\">PassItemMarcToXSLT</a> यदि "
+#~ "आपकी कस्टम स्टाइलशीट आइटम फ़ील्ड में डेटा का उपयोग करती है तो सक्षम होना चाहिए</"
+#~ "li></ul>यदि आपके पास विभिन्न भाषाओं के लिए एकाधिक स्टाइलशीट हैं तो प्लेसहोल्डर "
+#~ "{langcode} को वर्तमान इंटरफ़ेस भाषा से बदल दिया जाएगा।"

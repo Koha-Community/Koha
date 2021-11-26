@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 21.05\n"
-"POT-Creation-Date: 2021-05-11 19:39-0300\n"
-"PO-Revision-Date: 2021-03-29 09:37+0000\n"
-"Last-Translator: bargioni <bargioni@pusc.it>\n"
+"POT-Creation-Date: 2021-11-14 02:36-0300\n"
+"PO-Revision-Date: 2021-11-17 21:06+0000\n"
+"Last-Translator: ztajoli <ztajoli@gmail.com>\n"
 "Language-Team: CILEA <z.tajoli@cineca.it>\n"
 "Language: it\n"
 "MIME-Version: 1.0\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.8\n"
 "X-Poedit-SourceCharset: UTF-8\n"
-"X-POOTLE-MTIME: 1617010660.519925\n"
+"X-POOTLE-MTIME: 1637183175.103366\n"
 "X-Pootle-Path: /it/21.05/it-IT-marc-UNIMARC.po\n"
 "X-Pootle-Revision: 1\n"
 
@@ -61,12 +61,15 @@ msgid "(Complete with 0 on the left)"
 msgstr "(Completa con 0 sulla sinistra)"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_leader.tt:13
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_leader_authorities.tt:13
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_leader_authorities.tt:148
 #, c-format
 msgid "(auto-calculated)"
 msgstr "(calcolato automaticamente)"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_leader.tt:223
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_leader.tt:290
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_leader_authorities.tt:176
 #, c-format
 msgid "(auto-filled)"
 msgstr "(riempito automaticamente)"
@@ -267,6 +270,12 @@ msgstr ", relatore"
 msgid ", translator"
 msgstr ", traduttore"
 
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_leader_authorities.tt:156
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_leader_authorities.tt:158
+#, c-format
+msgid "- Full"
+msgstr "- Full"
+
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_leader.tt:194
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_leader.tt:196
 #, c-format
@@ -388,6 +397,11 @@ msgstr "0- Non è una pubblicazione di convegno"
 #, c-format
 msgid "0- unmodified record"
 msgstr "0- record non modificato"
+
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_leader_authorities.tt:6
+#, c-format
+msgid "000 - Leader"
+msgstr "000 - Leader"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_100.tt:431
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_100.tt:433
@@ -552,6 +566,7 @@ msgid "1- modified record"
 msgstr "1- Record modificato"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_leader.tt:12
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_leader_authorities.tt:12
 #, c-format
 msgid "1-4 Record length"
 msgstr "1-4 Lunghezza del record"
@@ -597,6 +612,11 @@ msgstr "1/8 in."
 #, c-format
 msgid "10 cm x 6.3 cm or 3 in. 7/8 x 2 in. 1/2"
 msgstr "10 cm x 6,3 cm (3 7/8 x 2 1/2 in.)"
+
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_leader_authorities.tt:147
+#, c-format
+msgid "10-16 indicator/subfields/size"
+msgstr "10-16 indicatori/sottocampi/dimensione"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_130.tt:120
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_130.tt:122
@@ -683,6 +703,7 @@ msgid "160 rpm"
 msgstr "160 rpm"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_leader.tt:226
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_leader_authorities.tt:152
 #, c-format
 msgid "17- Encoding level"
 msgstr "17- Livello di codifica"
@@ -697,6 +718,11 @@ msgstr "17,78 cm (7 in.)"
 #, c-format
 msgid "18- Descriptive cataloging form"
 msgstr "18 - Modulo per la catalogazione descrittiva"
+
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_leader_authorities.tt:170
+#, c-format
+msgid "18-19 Undefined"
+msgstr "18-19 Non definito"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_leader.tt:289
 #, c-format
@@ -749,11 +775,22 @@ msgstr "Bidimensionale"
 msgid "2/8"
 msgstr "2/8"
 
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_leader_authorities.tt:175
+#, c-format
+msgid "20-24 Entry map &amp; lengths"
+msgstr "20-24 Mappa d'accesso &amp; lunghezze"
+
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_126a.tt:246
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_126a.tt:248
 #, c-format
 msgid "25.4 cm or 10 in."
 msgstr "25,4 cm (10 in.)"
+
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_leader_authorities.tt:161
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_leader_authorities.tt:163
+#, c-format
+msgid "3 - Partial"
+msgstr "3 - Parziale"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_leader.tt:251
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_leader.tt:253
@@ -864,11 +901,12 @@ msgid "45 rpm"
 msgstr "45 rpm"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_4XX.tt:5
-#, fuzzy, c-format
+#, c-format
 msgid "4XX plugin &rsaquo; Cataloging &rsaquo; Koha"
-msgstr "Koha &rsaquo; Catalogazione &rsaquo; plugin 4XX"
+msgstr "Plugin 4XX &rsaquo; Catalogazione &rsaquo; Koha"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_leader.tt:16
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_leader_authorities.tt:16
 #, c-format
 msgid "5- Record status"
 msgstr "5- Status del record"
@@ -912,6 +950,7 @@ msgid "6 x 9 in."
 msgstr "16 x 23 cm"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_leader.tt:54
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_leader_authorities.tt:38
 #, c-format
 msgid "6- Type of record"
 msgstr "6- Tipo di record"
@@ -944,6 +983,11 @@ msgstr "19 cm/s (7 1/2 ips. )"
 #, c-format
 msgid "7- Bibliographic level"
 msgstr "7- Livello bibliografico"
+
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_leader_authorities.tt:63
+#, c-format
+msgid "7-8 Undefined"
+msgstr "7-8 Non definito"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_126a.tt:231
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_126a.tt:233
@@ -997,6 +1041,11 @@ msgstr "2 cm/s (8/10 ips)"
 #, c-format
 msgid "9 x 19 cm"
 msgstr "9 x 19 cm"
+
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_leader_authorities.tt:68
+#, c-format
+msgid "9- Type of entity"
+msgstr "9- Tipo di record"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_leader.tt:222
 #, c-format
@@ -1498,6 +1547,7 @@ msgstr "Cadice (Spagna)"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_686a.tt:67
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_700-4.tt:47
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_leader.tt:293
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_leader_authorities.tt:179
 #, c-format
 msgid "Cancel"
 msgstr "Cancella"
@@ -3124,6 +3174,7 @@ msgstr "Riduzione normale (16x - 30x)"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_225a.tt:25
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_700-4.tt:47
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_leader.tt:293
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_leader_authorities.tt:179
 msgid "OK"
 msgstr "OK"
 
@@ -4509,9 +4560,9 @@ msgid "UNIMARC field 210c builder"
 msgstr "Template del campo 210c (UNIMARC)"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_210c_bis.tt:3
-#, fuzzy, c-format
+#, c-format
 msgid "UNIMARC field 210c builder &rsaquo; Koha"
-msgstr "Template del campo 210c (UNIMARC)"
+msgstr "Plugin per costruire 210c &rsaquo; Koha"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_225a.tt:3
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_225a.tt:8
@@ -4521,9 +4572,9 @@ msgid "UNIMARC field 225a builder"
 msgstr "Template del campo 225a (UNIMARC)"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_225a_bis.tt:3
-#, fuzzy, c-format
+#, c-format
 msgid "UNIMARC field 225a builder &rsaquo; Koha"
-msgstr "Template del campo 225a (UNIMARC)"
+msgstr "Plugin per costruire 225a &rsaquo; Koha"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_4XX.tt:11
 #, c-format
@@ -4544,6 +4595,7 @@ msgstr "Template del campo 700-4 (UNIMARC)"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_leader.tt:3
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_leader.tt:8
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_leader_authorities.tt:2
 #, c-format
 msgid "UNIMARC leader builder"
 msgstr "Template del Leader (UNIMARC)"
@@ -4883,6 +4935,12 @@ msgstr "a - Parte componente (analitico)"
 #, c-format
 msgid "a - Language materials, printed"
 msgstr "a - Materiale testuale"
+
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_leader_authorities.tt:72
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_leader_authorities.tt:74
+#, c-format
+msgid "a - Personal name entry"
+msgstr "a - Nome di persona"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_105.tt:1111
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_105.tt:1113
@@ -5329,6 +5387,12 @@ msgstr "azimutale, altro specifico tipo conosciuto"
 msgid "azimuthal, specific type unknown"
 msgstr "Azimutale, tipo specifico sconosciuto"
 
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_leader_authorities.tt:78
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_leader_authorities.tt:80
+#, c-format
+msgid "b - Corporate name entry"
+msgstr "b - Nome di ente"
+
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_leader.tt:70
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_leader.tt:72
 #, c-format
@@ -5707,6 +5771,12 @@ msgstr "con tecniche passive di rilevazione remote"
 msgid "c - Collection - bibliographic item that is a made-up collection"
 msgstr "c - collezione"
 
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_leader_authorities.tt:20
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_leader_authorities.tt:22
+#, c-format
+msgid "c - Corrected or revised"
+msgstr "c- Corretto o rivisto"
+
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_leader.tt:26
 #, c-format
 msgid "c - Corrected or updated record"
@@ -5722,6 +5792,12 @@ msgstr "c- Record corretto o rivisto"
 #, c-format
 msgid "c - Music scores, printed"
 msgstr "c - partiture musicali a stampa"
+
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_leader_authorities.tt:84
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_leader_authorities.tt:86
+#, c-format
+msgid "c - Territorial or geographical name"
+msgstr "c - Nome geografico"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_105.tt:1122
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_105.tt:1124
@@ -6447,6 +6523,12 @@ msgstr "cilindrico, altro tipo specifico conosciuto"
 msgid "cylindrical, specific type unknown"
 msgstr "cilindrico, tipo specifico sconosciuto"
 
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_leader_authorities.tt:25
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_leader_authorities.tt:27
+#, c-format
+msgid "d - Deleted"
+msgstr "d - Cancellato"
+
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_leader.tt:31
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_leader.tt:33
 #, c-format
@@ -6458,6 +6540,12 @@ msgstr "d - Cancella il record"
 #, c-format
 msgid "d - Music scores, manuscript"
 msgstr "d- Spartiti musicali manoscritti"
+
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_leader_authorities.tt:90
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_leader_authorities.tt:92
+#, c-format
+msgid "d - Trademark"
+msgstr "d - Trademark"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_105.tt:430
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_105.tt:432
@@ -6819,6 +6907,12 @@ msgstr "materiale duplicato"
 msgid "e - Cartographic materials, printed"
 msgstr "e- Materiale cartografico a stampa"
 
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_leader_authorities.tt:96
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_leader_authorities.tt:98
+#, c-format
+msgid "e - Family name"
+msgstr "e - Nome di famiglia"
+
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_105.tt:435
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_105.tt:437
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_105.tt:574
@@ -7081,6 +7175,12 @@ msgstr "Ottimo"
 #, c-format
 msgid "f - Cartographic materials, manuscript"
 msgstr "f - Materiale cartografico manoscritto"
+
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_leader_authorities.tt:102
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_leader_authorities.tt:104
+#, c-format
+msgid "f - Uniform name"
+msgstr "f - Nome uniforme"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_105.tt:440
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_105.tt:442
@@ -7348,6 +7448,12 @@ msgstr "impronta piena"
 msgid "furniture"
 msgstr "arredi"
 
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_leader_authorities.tt:108
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_leader_authorities.tt:110
+#, c-format
+msgid "g - Collective uniform name"
+msgstr "g - Nome d'ente uniforme"
+
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_leader.tt:100
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_leader.tt:102
 #, c-format
@@ -7524,6 +7630,12 @@ msgstr "grafite"
 #, c-format
 msgid "greater than 9 kilometres"
 msgstr "più grande di 9 chilometri"
+
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_leader_authorities.tt:114
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_leader_authorities.tt:116
+#, c-format
+msgid "h - Name/title"
+msgstr "h - Nome/titolo"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_105.tt:64
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_105.tt:66
@@ -7741,6 +7853,12 @@ msgstr "i - il record è parzialmente conforme a ISBD"
 #, c-format
 msgid "i - Integrating resource"
 msgstr "i - risorsa integrativa"
+
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_leader_authorities.tt:120
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_leader_authorities.tt:122
+#, c-format
+msgid "i - Name/collective uniform title"
+msgstr "i - Nome/titolo uniforme"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_leader.tt:106
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_leader.tt:108
@@ -8100,6 +8218,12 @@ msgstr "avorio"
 msgid "j - Sound recordings, musical performance"
 msgstr "j - registrazioni sonore musicali"
 
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_leader_authorities.tt:126
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_leader_authorities.tt:128
+#, c-format
+msgid "j - Topical subject"
+msgstr "j - Soggetto topico"
+
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_100.tt:81
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_100.tt:83
 #, c-format
@@ -8175,6 +8299,12 @@ msgstr "letteratura giovanile"
 msgid "juvenile, general"
 msgstr "giovanile, generale"
 
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_leader_authorities.tt:132
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_leader_authorities.tt:134
+#, c-format
+msgid "k - Place access"
+msgstr "k - Luogo"
+
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_leader.tt:118
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_leader.tt:120
 #, c-format
@@ -8240,6 +8370,12 @@ msgstr "ka- Coreano"
 #, c-format
 msgid "l - Electronic resources"
 msgstr "l - risorsa elettronica"
+
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_leader_authorities.tt:138
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_leader_authorities.tt:140
+#, c-format
+msgid "l - Form, genre or physical characteristics"
+msgstr "l - Forma, genere o caratteristiche fisiche"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_105.tt:84
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_105.tt:86
@@ -9233,6 +9369,12 @@ msgstr "letteratura devozionale"
 #, c-format
 msgid "n - In non-ISBD form"
 msgstr "n - il record non è conforme a ISBD"
+
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_leader_authorities.tt:30
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_leader_authorities.tt:32
+#, c-format
+msgid "n - New"
+msgstr "n - Nuovo"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_leader.tt:36
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_leader.tt:38
@@ -12926,6 +13068,12 @@ msgstr "consumato"
 msgid "writing ink"
 msgstr "inchiostro per scrivere"
 
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_leader_authorities.tt:42
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_leader_authorities.tt:44
+#, c-format
+msgid "x - Authority entry record"
+msgstr "x - Record di authority"
+
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_100_authorities.tt:30
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_100_authorities.tt:32
 #, c-format
@@ -12943,6 +13091,12 @@ msgstr "x- non applicabile"
 #, c-format
 msgid "xx- not applicable"
 msgstr "xx- non applicabile"
+
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_leader_authorities.tt:48
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_leader_authorities.tt:50
+#, c-format
+msgid "y - Reference entry record"
+msgstr "y - Record di reference"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_105.tt:297
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_105.tt:299
@@ -13010,6 +13164,12 @@ msgstr "striscia gialla"
 #, c-format
 msgid "young adult"
 msgstr "giovane"
+
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_leader_authorities.tt:54
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_leader_authorities.tt:56
+#, c-format
+msgid "z - General explanatory entry record"
+msgstr "z - Record di spiegazione generale"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_105.tt:1086
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_105.tt:1088

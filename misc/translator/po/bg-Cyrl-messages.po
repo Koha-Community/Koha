@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Koha 21.05\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-05-11 18:03-0300\n"
-"PO-Revision-Date: 2021-04-28 13:09+0000\n"
+"POT-Creation-Date: 2021-11-11 22:55-0300\n"
+"PO-Revision-Date: 2021-11-16 14:59+0000\n"
 "Last-Translator: Илиян Дамянов <aioiliyan@gmail.com>\n"
 "Language-Team: none\n"
 "Language: bg\n"
@@ -19,7 +19,7 @@ msgstr ""
 "X-Generator: Pootle 2.8\n"
 "X-Pootle-Path: /bg/21.05/bg-Cyrl-messages.po\n"
 "X-Pootle-Revision: 1\n"
-"X-POOTLE-MTIME: 1619615355.269305\n"
+"X-POOTLE-MTIME: 1637074779.522308\n"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:49
 #, perl-brace-format
@@ -59,7 +59,11 @@ msgctxt "Cancel hold button"
 msgid "Cancel"
 msgstr "Отказ"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1266
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/tables/members_results.tt:20
+msgid "Check out"
+msgstr "Заемане"
+
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1326
 msgctxt "patron restriction created on"
 msgid "Created"
 msgstr "Създаден"
@@ -85,6 +89,12 @@ msgstr "Създадено от:"
 msgid "Elasticsearch is currently disabled."
 msgstr "Elasticsearch в момента е деактивиран."
 
+#: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:944
+msgid "Hold"
+msgid_plural "Holds"
+msgstr[0] "Резервация"
+msgstr[1] "Резервации"
+
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:59
 #, perl-brace-format
 msgid "Index '{index}' needs to be recreated."
@@ -102,28 +112,23 @@ msgstr ""
 "Невалидно тегло на полето '{weight}', трябва да бъде положително десетично "
 "число."
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:129
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:271
+#: koha-tmpl/intranet-tmpl/prog/en/includes/html_helpers.inc:268
 msgid "Item does not belong to your library"
 msgstr "Екземпляра не принадлежи на тази библиотека"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:130
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:272
+#: koha-tmpl/intranet-tmpl/prog/en/includes/html_helpers.inc:269
 msgid "Item has a waiting hold"
 msgstr "Библиотечният документ има резервация в очакване"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:131
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:273
+#: koha-tmpl/intranet-tmpl/prog/en/includes/html_helpers.inc:270
 msgid "Item has linked analytics"
 msgstr "Има свързани записи с екземпляра"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:128
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:270
+#: koha-tmpl/intranet-tmpl/prog/en/includes/html_helpers.inc:267
 msgid "Item is checked out"
 msgstr "Библиотечният документ е проверен"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:132
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:274
+#: koha-tmpl/intranet-tmpl/prog/en/includes/html_helpers.inc:271
 msgid "Last item for bibliographic record with biblio-level hold on it"
 msgstr ""
 "Последен екземпляр за библиографски запис със резервация на библиографско "
@@ -137,8 +142,8 @@ msgstr "Съпоставянията са възстановени успешн�
 msgid "Mappings updated successfully."
 msgstr "Съпоставянето е актуализирано успешно."
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/basket.tt:422
-#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/basket.tt:625
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/basket.tt:436
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/basket.tt:639
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/ordered.tt:46
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/parcel.tt:258
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/spent.tt:46
@@ -157,18 +162,35 @@ msgctxt "verb"
 msgid "Order"
 msgstr "Поръчка"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/detail.tt:821
+#: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/course-details.tt:69
+#: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/course-reserves.tt:52
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-course-reserves.tt:45
+msgctxt "Semester"
+msgid "Term"
+msgstr "Термин"
+
+#: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/course.tt:83
+#: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/course.tt:96
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-course-details.tt:44
+msgctxt "Semester"
+msgid "Term:"
+msgstr "Термин:"
+
+#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/detail.tt:845
 #, perl-brace-format
 msgctxt "pluralization"
 msgid "There is one archived suggestion."
 msgid_plural "There are {count} archived suggestions."
 msgstr[0] "Има едно архивирано предложение"
-msgstr[1] "Има {count} архивирани предложения"
+msgstr[1] ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:133
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:275
+#: koha-tmpl/intranet-tmpl/prog/en/includes/html_helpers.inc:272
 msgid "Unknown reason"
 msgstr "Неизвестна причина"
+
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/tables/members_results.tt:22
+msgid "View"
+msgstr "Изглед"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:53
 msgid ""
@@ -181,35 +203,35 @@ msgstr ""
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:228
 msgid "checkout"
 msgid_plural "checkouts"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Заемане"
+msgstr[1] "Заемания"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:244
 msgid "hold pending"
 msgid_plural "holds pending"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "резервация в очакване"
+msgstr[1] "резервации в очакване"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:252
 msgid "hold waiting"
 msgid_plural "holds waiting"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "резервация в очакване"
+msgstr[1] "резервации в очакване"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:269
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:276
 msgid "message"
 msgid_plural "messages"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "съобщение"
+msgstr[1] "съобщения"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:236
 msgid "overdue"
 msgid_plural "overdues"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "просрочено"
+msgstr[1] "просрочени"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:564
+#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:555
 #, perl-brace-format
 msgid "{count} item"
 msgid_plural "{count} items"
@@ -220,8 +242,8 @@ msgstr[1] "{count} екземпляри"
 #, perl-brace-format
 msgid "{count} library limitation"
 msgid_plural "{count} library limitations"
-msgstr[0] "{count} ограничение на библиотеката"
-msgstr[1] "{count} ограничение на библиотеките"
+msgstr[0] "{count} ограничение"
+msgstr[1] "{count} ограничения"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/batch_rm_items.tt:60
 #, perl-brace-format

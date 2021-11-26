@@ -720,9 +720,35 @@ msgstr "ISO2709 (تبديل التنسيق)"
 msgid "admin.pref#ElasticsearchMARCFormat# Searchable array"
 msgstr "مصفوفة قابلة للبحث"
 
+# Patrons > Notices and notifications > PhoneNotification
+#, fuzzy
+msgid ""
+"admin.pref#GoogleOAuth2ClientID# Along with <a href=\"/cgi-bin/koha/admin/"
+"preferences.pl?op=search&searchfield=GoogleOAuth2ClientSecret"
+"\">GoogleOAuth2ClientSecret</a>, enables <a href=\"/cgi-bin/koha/admin/"
+"preferences.pl?op=search&searchfield=GoogleOpenIDConnect"
+"\">GoogleOpenIDConnect.</a>"
+msgstr ""
+"<br/><i class=\"fa fa-exclamation-triangle\"></i> إذا تم تفعيل "
+"<code>PhoneNotification</code>, <code>TalkingTechItivaPhoneNotification</"
+"code> يجب تعطيله."
+
 # Administration > Google OpenID Connect
 msgid "admin.pref#GoogleOAuth2ClientID# Google OAuth2 Client ID: "
 msgstr "معرف عميل OAuth2 من قوقل"
+
+# Patrons > Notices and notifications > PhoneNotification
+#, fuzzy
+msgid ""
+"admin.pref#GoogleOAuth2ClientSecret# Along with <a href=\"/cgi-bin/koha/"
+"admin/preferences.pl?op=search&searchfield=GoogleOAuth2ClientID"
+"\">GoogleOAuth2ClientID</a>, enables <a href=\"/cgi-bin/koha/admin/"
+"preferences.pl?op=search&searchfield=GoogleOpenIDConnect"
+"\">GoogleOpenIDConnect.</a>"
+msgstr ""
+"<br/><i class=\"fa fa-exclamation-triangle\"></i> إذا تم تفعيل "
+"<code>PhoneNotification</code>, <code>TalkingTechItivaPhoneNotification</"
+"code> يجب تعطيله."
 
 # Administration > Google OpenID Connect
 msgid "admin.pref#GoogleOAuth2ClientSecret# Google OAuth2 Client Secret: "
@@ -733,7 +759,9 @@ msgid "admin.pref#GoogleOpenIDConnect# No"
 msgstr "لا"
 
 # Administration > Google OpenID Connect
-msgid "admin.pref#GoogleOpenIDConnect# Use Google OpenID Connect login: "
+#, fuzzy
+msgid ""
+"admin.pref#GoogleOpenIDConnect# Use Google OpenID Connect login in the OPAC: "
 msgstr "استخدم بيانات الدخول الخاصة بـ Google OpenID"
 
 # Administration > Google OpenID Connect
@@ -741,11 +769,16 @@ msgid "admin.pref#GoogleOpenIDConnect# Yes"
 msgstr "نعم"
 
 # Administration > Google OpenID Connect
+#, fuzzy
 msgid ""
 "admin.pref#GoogleOpenIDConnect# You will need to select OAuth2 when creating "
 "an app in the Google cloud console, and set the web origin to your_opac_url "
 "and the redirect url to your_opac_url/cgi-bin/koha/svc/auth/"
-"googleopenidconnect ."
+"googleopenidconnect. Requires <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=GoogleOAuth2ClientID\">GoogleOAuth2ClientID</a> and <a "
+"href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=GoogleOAuth2ClientSecret\">GoogleOAuth2ClientSecret</"
+"a> to be set."
 msgstr ""
 "يجب عليك تحديد OAuth2 عند إنشاء تطبيق في جهاز سحابة جوجل، وضبط أصل الويب إلى "
 "your_opac_url وإعادة توجيه عنوان الurl إلى your_opac_url/cgi-bin/koha/svc/"
@@ -760,14 +793,21 @@ msgid "admin.pref#GoogleOpenIDConnectAutoRegister# Don't allow"
 msgstr "عدم السماح"
 
 # Administration > Google OpenID Connect
+#, fuzzy
 msgid ""
 "admin.pref#GoogleOpenIDConnectAutoRegister# patrons logging in with Google "
-"Open ID to automatically register."
+"Open ID to automatically register. Requires <a href=\"/cgi-bin/koha/admin/"
+"preferences.pl?op=search&searchfield=GoogleOpenIDConnect"
+"\">GoogleOpenIDConnect</a>."
 msgstr "للمستخدمين مسجلي الدخول بمعرف جوجل أوبن Google Open بالتسجيل تلقائياً."
 
-# Administration > Google OpenID Connect
-msgid "admin.pref#GoogleOpenIDConnectDefaultBranch# ."
-msgstr "."
+# Patrons > General
+#, fuzzy
+msgid ""
+"admin.pref#GoogleOpenIDConnectDefaultBranch# Requires <a href=\"/cgi-bin/"
+"koha/admin/preferences.pl?op=search&searchfield=GoogleOpenIDConnect"
+"\">GoogleOpenIDConnect</a>."
+msgstr "يتطلب تفعيل OPACPatronDetails."
 
 # Administration > Google OpenID Connect
 msgid ""
@@ -775,9 +815,13 @@ msgid ""
 "automatically registering a Google Open ID patron: "
 msgstr "استخدم رمز هذا الفرع عند تسجيل مستفيد بمعرف Google Open تلقائياً:"
 
-# Administration > Google OpenID Connect
-msgid "admin.pref#GoogleOpenIDConnectDefaultCategory# ."
-msgstr "."
+# Patrons > General
+#, fuzzy
+msgid ""
+"admin.pref#GoogleOpenIDConnectDefaultCategory# Requires <a href=\"/cgi-bin/"
+"koha/admin/preferences.pl?op=search&searchfield=GoogleOpenIDConnect"
+"\">GoogleOpenIDConnect</a>."
+msgstr "يتطلب تفعيل OPACPatronDetails."
 
 # Administration > Google OpenID Connect
 msgid ""
@@ -785,10 +829,13 @@ msgid ""
 "automatically registering a Google Open ID patron: "
 msgstr "اسنخدم رمز هذه الفئة عند تسجيل مستفيد بمعرف Google Open تلقائياً:"
 
-# Administration > Google OpenID Connect
+# OPAC > OpenURL
+#, fuzzy
 msgid ""
-"admin.pref#GoogleOpenIDConnectDomain# . Leave blank for all Google domains."
-msgstr ". اتركه فارغاً لكل نطاقات جوجل."
+"admin.pref#GoogleOpenIDConnectDomain# Leave blank for all Google domains. "
+"Requires <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=GoogleOpenIDConnect\">GoogleOpenIDConnect</a>."
+msgstr "نص روابط OpenURL (أو عنوان الصورة إذا تم تعريف OpenURLImageLocation):"
 
 # Administration > Google OpenID Connect
 msgid ""
@@ -2499,6 +2546,23 @@ msgstr ""
 "استخدم سطراً واحداً لكل وسم بتنسيق BT_TAG: TAG$SUBFIELD ( مثال: lccn: 010$a )."
 
 # Cataloging > Interface
+#, fuzzy
+msgid "cataloguing.pref#CreateAVFromCataloguing# Allow"
+msgstr "تفعيل"
+
+# Cataloging > Interface
+#, fuzzy
+msgid "cataloguing.pref#CreateAVFromCataloguing# Don't allow"
+msgstr "عدم تفعيل"
+
+# Cataloging > Interface > CreateAVFromCataloguing
+msgid ""
+"cataloguing.pref#CreateAVFromCataloguing# authorized values to be created "
+"within the cataloguing module. Librarian will need the manage_auth_values "
+"subpermission."
+msgstr ""
+
+# Cataloging > Interface
 msgid "cataloguing.pref#DefaultClassificationSource# Use"
 msgstr " استخدام"
 
@@ -2583,9 +2647,10 @@ msgid ""
 msgstr "<br/> <strong>ملاحظة:</strong>"
 
 # Cataloging > Interface
+#, fuzzy
 msgid ""
 "cataloguing.pref#EnableAdvancedCatalogingEditor# Currently does not include "
-"support for UNIMARC or NORMARC fixed fields."
+"support for UNIMARC fixed fields."
 msgstr "لا يحتوي حاليا على دعم لحقول يونيمارك أو نورمارك الثابتة."
 
 # Cataloging > Interface
@@ -2659,6 +2724,22 @@ msgid ""
 msgstr ""
 "افتراضياً في تسجيلات مارك21 الجديدة (اتركه خاليا للتعطيل). كما يمكن ضبط ذلك "
 "أيضاً على مستوى المكتبات."
+
+# Cataloging > Display
+#, fuzzy
+msgid "cataloguing.pref#MARCOverlayRules# Don't use"
+msgstr "عدم استخدام"
+
+# Cataloging > Importing > MARCOverlayRules
+msgid ""
+"cataloguing.pref#MARCOverlayRules# MARC overlay rules for incoming records, "
+"to decide which action to take for each field."
+msgstr ""
+
+# Cataloging > Display
+#, fuzzy
+msgid "cataloguing.pref#MARCOverlayRules# Use"
+msgstr " استخدام"
 
 # Cataloging > Display
 msgid ""
@@ -2944,6 +3025,50 @@ msgid ""
 "first tab contains items whose"
 msgstr "عرض المواد إلى تبويبين ، حيث يحتوي التبويب الأول على المواد التي"
 
+# Cataloging > Display > ShowComponentRecords
+msgid "cataloguing.pref#ShowComponentRecords# <br/> UNIMARC is not supported."
+msgstr ""
+
+# Cataloging > Display > ShowComponentRecords
+msgid "cataloguing.pref#ShowComponentRecords# A maximum of"
+msgstr ""
+
+# Cataloging > Record structure
+#, fuzzy
+msgid "cataloguing.pref#ShowComponentRecords# OPAC"
+msgstr "نومارك"
+
+# Cataloging > Display > ShowComponentRecords
+msgid ""
+"cataloguing.pref#ShowComponentRecords# Show a list of component records, as "
+"linked via field 773, in"
+msgstr ""
+
+# Cataloging > Display
+#, fuzzy
+msgid "cataloguing.pref#ShowComponentRecords# both staff interface and OPAC"
+msgstr "استخدم التالي كقالب تدمك لواجهة الموظف:"
+
+# Cataloging > Spine labels
+#, fuzzy
+msgid "cataloguing.pref#ShowComponentRecords# no"
+msgstr "القيام بـ"
+
+# Cataloging > Record structure
+#, fuzzy
+msgid "cataloguing.pref#ShowComponentRecords# record detail pages."
+msgstr "الباركود هو"
+
+# Cataloging > Interface
+#, fuzzy
+msgid "cataloguing.pref#ShowComponentRecords# records will be displayed."
+msgstr "عدم عرض"
+
+# Cataloging > Record structure
+#, fuzzy
+msgid "cataloguing.pref#ShowComponentRecords# staff interface"
+msgstr "بنية التسجيلة"
+
 # Cataloging > Spine labels
 msgid ""
 "cataloguing.pref#SpineLabelAutoPrint# When using the quick spine label "
@@ -3221,10 +3346,6 @@ msgid "cataloguing.pref#marcflavour# MARC21"
 msgstr "مارك21"
 
 # Cataloging > Record structure
-msgid "cataloguing.pref#marcflavour# NORMARC"
-msgstr "نومارك"
-
-# Cataloging > Record structure
 msgid "cataloguing.pref#marcflavour# UNIMARC"
 msgstr "يونيمارك"
 
@@ -3360,7 +3481,9 @@ msgstr "تطلب"
 msgid ""
 "circulation.pref#AllFinesNeedOverride# staff to manually override all fines, "
 "even fines less than set in the <a href=\"/cgi-bin/koha/admin/preferences.pl?"
-"op=search&searchfield=noissuescharge\">noissuescharge</a> system preference."
+"op=search&searchfield=noissuescharge\">noissuescharge</a> system preference. "
+"Enabling this system preference will block all checkouts for patrons with "
+"fines both via the web-based self checkout system and via SIP."
 msgstr ""
 "للموظفين بتخطي كل الغرامات يدوياً، حتى الغرامات الأقل من القيمة المحددة في "
 "تفضيل النظام noissuescharge"
@@ -3806,6 +3929,38 @@ msgstr "العنوان"
 msgid "circulation.pref#ArticleRequestsMandatoryFieldsRecordOnly# Volume"
 msgstr "المجلد"
 
+# Circulation > Article requests > ArticleRequestsOpacHostRedirection
+msgid ""
+"circulation.pref#ArticleRequestsOpacHostRedirection#  redirection from child "
+"to host based on MARC21 773$w when the child has no items when requesting "
+"articles on the Opac."
+msgstr ""
+
+# Circulation > Article requests
+#, fuzzy
+msgid "circulation.pref#ArticleRequestsOpacHostRedirection# Disable"
+msgstr "قم بتمكين"
+
+# Circulation > Article requests
+#, fuzzy
+msgid "circulation.pref#ArticleRequestsOpacHostRedirection# Enable"
+msgstr "قم بتمكين"
+
+# Circulation > Article requests > ArticleRequestsSupportedFormats
+msgid ""
+"circulation.pref#ArticleRequestsSupportedFormats# (Valid choices are "
+"currently: PHOTOCOPY and SCAN. Separate the supported formats by a vertical "
+"bar. The first listed format is selected by default when you request via the "
+"OPAC.)"
+msgstr ""
+
+# Circulation > Article requests
+#, fuzzy
+msgid ""
+"circulation.pref#ArticleRequestsSupportedFormats# The following article "
+"request formats are supported:"
+msgstr "روابط طلب المقال في نتائج البحث."
+
 # Circulation > Checkout policy
 msgid "circulation.pref#AutoRemoveOverduesRestrictions# Do"
 msgstr "القيام بـ"
@@ -4171,6 +4326,23 @@ msgstr ""
 msgid "circulation.pref#ClaimReturnedWarningThreshold# items."
 msgstr "مواد."
 
+# Circulation > Return claims > CleanUpDatabaseReturnClaims
+msgid ""
+"circulation.pref#CleanUpDatabaseReturnClaims# <span class=\"hint\">This "
+"system preference is used by the cleanup_database.pl cronjob.</span>"
+msgstr ""
+
+# Circulation > Return claims > CleanUpDatabaseReturnClaims
+msgid ""
+"circulation.pref#CleanUpDatabaseReturnClaims# Remove resolved return claims "
+"older than"
+msgstr ""
+
+# Circulation > Return claims
+#, fuzzy
+msgid "circulation.pref#CleanUpDatabaseReturnClaims# days."
+msgstr "."
+
 # Circulation > Holds policy
 msgid ""
 "circulation.pref#ConfirmFutureHolds# Confirm future hold requests (starting "
@@ -4458,17 +4630,30 @@ msgstr ""
 "بانتهاء حجزه الموجود في الانتظار بقيمة "
 
 # Circulation > Holds policy
-msgid "circulation.pref#ExpireReservesOnHolidays# Allow"
+#, fuzzy
+msgid ""
+"circulation.pref#ExpireReservesOnHolidays# If using <a href=\"/cgi-bin/koha/"
+"admin/preferences.pl?op=search&searchfield=ExpireReservesMaxPickUpDelay"
+"\">ExpireReservesMaxPickUpDelay</a>,"
+msgstr ""
+"عند استخدام ExpireReservesMaxPickUpDelay، قم بفرض رسم على المستفيد الذي يسمح "
+"بانتهاء حجزه الموجود في الانتظار بقيمة "
+
+# Circulation > Holds policy
+#, fuzzy
+msgid "circulation.pref#ExpireReservesOnHolidays# allow"
 msgstr "السماح"
 
 # Circulation > Holds policy
-msgid "circulation.pref#ExpireReservesOnHolidays# Don't allow"
+#, fuzzy
+msgid "circulation.pref#ExpireReservesOnHolidays# don't allow"
 msgstr "عدم السماح"
 
 # Circulation > Holds policy
+#, fuzzy
 msgid ""
 "circulation.pref#ExpireReservesOnHolidays# expired holds to be canceled on "
-"days the library is closed."
+"days the library is closed per the calendar."
 msgstr "ليتم إلغاء الحجوزات المنتهية في أيام غلق المكتبة."
 
 # Circulation > Interface
@@ -5462,7 +5647,8 @@ msgstr ""
 "رسوم الإيجار عند حساب الرسوم للحد التي تم ضبطه في التفضيل noissuescharge."
 
 # Circulation > Holds policy
-msgid "circulation.pref#ReservesControlBranch# Check the"
+#, fuzzy
+msgid "circulation.pref#ReservesControlBranch# Check the rule from the"
 msgstr " التحقق من"
 
 # Circulation > Holds policy
@@ -5518,7 +5704,10 @@ msgid "circulation.pref#RestrictionBlockRenewing# block"
 msgstr "حظر"
 
 # Circulation > Checkout policy
-msgid "circulation.pref#RestrictionBlockRenewing# renewing of items."
+#, fuzzy
+msgid ""
+"circulation.pref#RestrictionBlockRenewing# renewing of items from the staff "
+"interface."
 msgstr "تجديد المواد"
 
 # Circulation > Checkout policy
@@ -6576,10 +6765,6 @@ msgstr "تكلفة الاستبدال الافتراضية المعرفة لنو
 msgid "enhanced_content.pref"
 msgstr "سياسات المحتوى المُحسّن - "
 
-# Enhanced content > Adlibris
-msgid "enhanced_content.pref Adlibris"
-msgstr "Adlibris"
-
 # Enhanced content > All
 msgid "enhanced_content.pref All"
 msgstr " الكل"
@@ -6644,14 +6829,6 @@ msgstr "Syndetics"
 msgid "enhanced_content.pref Tagging"
 msgstr " الوسم"
 
-# Enhanced content > Adlibris
-msgid ""
-"enhanced_content.pref## <strong>NOTE:</strong> Using resources such as "
-"external images might leak sensitive data to third parties."
-msgstr ""
-"<strong>ملاحظة:</strong> يمكن أن يؤدي استخدام الموارد كالصور الخارجية إلى "
-"تسريب بيانات حساسة إلى أطراف ثالثة."
-
 # Enhanced content > All
 msgid ""
 "enhanced_content.pref## <strong>NOTE:</strong> you can only choose one "
@@ -6660,33 +6837,6 @@ msgid ""
 msgstr ""
 "<strong>ملاحظة:</strong> يمكنك فقط اختيار أحد مصادر صور الغلاف أدناه، وإلا "
 "سيقوم كوها بعرض الصور من جميع المصادر المحددة."
-
-# Enhanced content > Adlibris
-msgid "enhanced_content.pref#AdlibrisCoversEnabled# Don't show"
-msgstr "عدم عرض"
-
-# Enhanced content > Adlibris
-msgid "enhanced_content.pref#AdlibrisCoversEnabled# Show"
-msgstr "عرض"
-
-# Enhanced content > Adlibris
-msgid ""
-"enhanced_content.pref#AdlibrisCoversEnabled# cover images in OPAC results "
-"and detail listing from Swedish retailer <a href=\"https://www.adlibris.com/"
-"se\">Adlibris</a>."
-msgstr ""
-"صور الغلاف في نتائج وتفاصيل الأوباك مدرجة من البائع السويدي Adlibris<a href="
-"\"https://www.adlibris.com/se\"></a>"
-
-# Enhanced content > Adlibris
-msgid "enhanced_content.pref#AdlibrisCoversURL# Use base URL: "
-msgstr "استخدم عنوان URL الأساسي:"
-
-# Enhanced content > Adlibris
-msgid ""
-"enhanced_content.pref#AdlibrisCoversURL# for the <a href=\"https://www."
-"adlibris.com/se\">Adlibris</a> cover service."
-msgstr "لخدمة الغلاف <a href=\"https://www.adlibris.com/se\">من Adlibris</a> ."
 
 # Enhanced content > Local or remote cover images
 msgid "enhanced_content.pref#AllowMultipleCovers# Allow"
@@ -6886,6 +7036,13 @@ msgstr "عرض"
 # Enhanced content > Local or remote cover images
 msgid "enhanced_content.pref#CustomCoverImages# Don't display"
 msgstr "عدم عرض"
+
+# Enhanced content > Local or remote cover images
+#, fuzzy
+msgid ""
+"enhanced_content.pref#CustomCoverImages# For control fields you can use just "
+"{field}, like {001}."
+msgstr "تخصيص صور url البعيدة في واجهة الموظف.<br/>"
 
 # Enhanced content > Local or remote cover images
 msgid ""
@@ -7856,14 +8013,9 @@ msgid ""
 msgstr "يمكن فرز هذه القائمة لتعديل ترتيب اللغات في الواجهة."
 
 # I18N/L10N
-msgid ""
-"i18n_l10n.pref#TimeFormat# . <br/> <strong>NOTE:</strong> Do not change this "
-"preference on a production server with overdue items that are accruing "
-"fines. Doing so will result in duplicate fines!"
-msgstr ""
-"<br/> <strong>ملاحظة:</strong> لا تقم بتغيير هذا التفضيل على خادم الإنتاج "
-"للمواد المتأخرة التي لا تزال تحقق غرامات. القيام بذلك سيؤدي إلى مضاعفة "
-"الغرامات!"
+#, fuzzy
+msgid "i18n_l10n.pref#TimeFormat# ."
+msgstr ". "
 
 # I18N/L10N
 msgid "i18n_l10n.pref#TimeFormat# 12 hour format ( e.g. \"02:18 PM\" )"
@@ -7920,13 +8072,9 @@ msgstr ""
 "لقوائم الأحرف القابلة للتصفح. يجب أن تكون قائمة من أحرف كبيرة منفصلة بمسافة"
 
 # I18N/L10N
-msgid ""
-"i18n_l10n.pref#dateformat# . <br/> <strong>NOTE:</strong> Do not change this "
-"preference on a production server with overdue items that are accruing "
-"fines. Doing so will result in duplicate fines!"
-msgstr ""
-"<br/> <strong>ملاحظة:</strong> لا تقم بتغيير هذا التفضيل على خادم الإنتاج "
-"بالمواد المتأخرة التي تحقق غرامات. القيام بذلك سيؤدي إلى مضاعفة الغرامات!"
+#, fuzzy
+msgid "i18n_l10n.pref#dateformat# ."
+msgstr "يوم. شهر . سنة"
 
 # I18N/L10N
 msgid "i18n_l10n.pref#dateformat# Format dates like"
@@ -8194,6 +8342,23 @@ msgstr "تسجيل"
 # Logging > Logging
 msgid "logs.pref#IssueLog# when items are checked out."
 msgstr "عندما تكون المواد معارة."
+
+# Logging > Logging
+#, fuzzy
+msgid ""
+"logs.pref#NewsLog#  changes to news entries and other contents managed in "
+"the news tool."
+msgstr "التغييرات في تسجيلات الاستناد."
+
+# Logging > Logging
+#, fuzzy
+msgid "logs.pref#NewsLog# Don't log"
+msgstr "عدم تسجيل"
+
+# Logging > Logging
+#, fuzzy
+msgid "logs.pref#NewsLog# Log"
+msgstr "تسجيل"
 
 # Logging > Logging
 #, fuzzy
@@ -8466,35 +8631,6 @@ msgid "opac.pref#EnableOpacSearchHistory# patron search history in the OPAC."
 msgstr "تاريخ بحث المستفيد في واجهة المستفبد (OPAC)."
 
 # OPAC > Appearance
-msgid ""
-"opac.pref#HighlightOwnItemsOnOPAC#  by moving the results to the front and "
-"increasing the size or highlighting the rows for those results (non-XSLT "
-"only)."
-msgstr ""
-"عن طريق نقل النتائج إلى الأمام وزيادة حجم أو تظليل الصفوف لتلك النتائج. (Non-"
-"XSLT فقط)"
-
-# OPAC > Appearance
-msgid "opac.pref#HighlightOwnItemsOnOPAC# Don't emphasize"
-msgstr "عدم التشديد على"
-
-# OPAC > Appearance
-msgid "opac.pref#HighlightOwnItemsOnOPAC# Emphasize"
-msgstr "التشديد على"
-
-# OPAC > Appearance
-msgid "opac.pref#HighlightOwnItemsOnOPAC# OPAC's library via the URL"
-msgstr "مكتبة الأوباك عبر عنوان ال URL"
-
-# OPAC > Appearance
-msgid "opac.pref#HighlightOwnItemsOnOPAC# patron's home library"
-msgstr "مكتبة المستفيد الرئيسية"
-
-# OPAC > Appearance
-msgid "opac.pref#HighlightOwnItemsOnOPAC# results from the "
-msgstr "النتائج من"
-
-# OPAC > Appearance
 msgid "opac.pref#LibraryName# Show"
 msgstr "عرض"
 
@@ -8676,6 +8812,22 @@ msgid ""
 "page on the OPAC."
 msgstr ""
 "للمستفيدين بالوصول إلى تبويب الغرامات على صفحة الحساب الخاصة بهم في الأوباك."
+
+# OPAC > Privacy
+#, fuzzy
+msgid "opac.pref#OPACHoldRequests# Allow"
+msgstr "السماح"
+
+# OPAC > Privacy
+#, fuzzy
+msgid "opac.pref#OPACHoldRequests# Don't allow"
+msgstr "عدم السماح"
+
+# OPAC > Features
+#, fuzzy
+msgid ""
+"opac.pref#OPACHoldRequests# patrons to place holds on items from the OPAC."
+msgstr "للمستفيدين بوضع حجوزات على المواد من واجهة المستفيد OPAC."
 
 # OPAC > Appearance
 msgid "opac.pref#OPACHoldingsDefaultSortField# First column of the table"
@@ -8876,6 +9028,45 @@ msgstr "المكتبة الحالية"
 # OPAC > Appearance
 msgid "opac.pref#OPACResultsLibrary# home library"
 msgstr "المكتبة الأصل"
+
+# OPAC > Appearance > OPACResultsMaxItems
+msgid ""
+"opac.pref#OPACResultsMaxItems# (available) individual items on the OPAC XSLT "
+"search results, and show no more than"
+msgstr ""
+
+# OPAC > Appearance > OPACResultsMaxItems
+msgid ""
+"opac.pref#OPACResultsMaxItems# (unavailable) individual items for categories "
+"like Checked out, Damaged, On Hold, but only when you group them by branch."
+"<br>"
+msgstr ""
+
+# OPAC > Appearance > OPACResultsMaxItems
+msgid ""
+"opac.pref#OPACResultsMaxItems# . (NOTE: For large consortia we recommend to "
+"group unavailable items by substatus, listing item counts only.)"
+msgstr ""
+
+# OPAC > Appearance
+#, fuzzy
+msgid "opac.pref#OPACResultsMaxItems# Group unavailable items by"
+msgstr "المكتبة الأصل"
+
+# OPAC > Appearance
+#, fuzzy
+msgid "opac.pref#OPACResultsMaxItems# Show no more than"
+msgstr "المكتبة الأصل"
+
+# OPAC > Appearance
+#, fuzzy
+msgid "opac.pref#OPACResultsMaxItems# branch"
+msgstr "المكتبة الأصل"
+
+# OPAC > Appearance
+#, fuzzy
+msgid "opac.pref#OPACResultsMaxItems# substatus"
+msgstr "المكتبة الحالية"
 
 # OPAC > Appearance
 msgid ""
@@ -9194,22 +9385,24 @@ msgid ""
 "on the OPAC."
 msgstr "مقترحات الشراء من المستفيدين الآخرين في واجهة المستفيد (OPAC)."
 
-# OPAC > Appearance
+# Staff interface > Appearance
+#, fuzzy
 msgid ""
-"opac.pref#OPACXSLTDetailsDisplay# <br />Options:<ul><li><a href=\"#\" class="
-"\"set_syspref\" data-syspref=\"OPACXSLTDetailsDisplay\" data-value="
-"\"\">leave empty</a> for \"no xslt\"</li><li>enter \"<a href=\"#\" class="
-"\"set_syspref\" data-syspref=\"OPACXSLTDetailsDisplay\" data-value=\"default"
-"\">default</a>\" for the default one</li><li>put a path to define a xslt "
-"file</li><li>put an URL for an external specific stylesheet.</li></"
-"ul>{langcode} will be replaced with current interface language."
+"opac.pref#OPACXSLTDetailsDisplay# <br />Options:<ul><li>Enter \"<a href=\"#"
+"\" class=\"set_syspref\" data-syspref=\"OPACXSLTDetailsDisplay\" data-value="
+"\"default\">default</a>\" for the default stylesheet</li><li>Put a path to "
+"define an xslt file</li><li>Put a URL for an external specific stylesheet.</"
+"li><li>NOTE: The system preference <a href=\"/cgi-bin/koha/admin/preferences."
+"pl?op=search&searchfield=PassItemMarcToXSLT\">PassItemMarcToXSLT</a> must be "
+"enabled if your custom stylesheet utilizes data in the item fields</li></"
+"ul>If you have multiple stylesheets for different langues the placeholder "
+"{langcode} will be replaced with current interface language."
 msgstr ""
-"<br />الخيارات:<ul><li><a href=\"#\" class=\"set_syspref\" data-syspref="
-"\"OPACXSLTDetailsDisplay\" data-value=\"\">اتركه فارغاً</a>للقيمة \"بدون xslt"
-"\"</li><li>قم بإدخال\"<a href=\"#\" class=\"set_syspref\" data-syspref="
-"\"OPACXSLTDetailsDisplay\" data-value=\"default\">افتراضي</a>\" للإعدادات "
-"الافتراضية</li><li> ضع مساراً لتحدد ملف xslt </li><li> ضع عنوان URL نمط خارجي "
-"محدد. </li></ul>{langcode} سيتم استبدالها بلغة الواجهة الحالية."
+"<br />الخيارات:<ul><li>إدخال\"<a href=\"#\" class=\"set_syspref\" data-"
+"syspref=\"XSLTDetailsDisplay\" data-value=\"default\"> الافتراضي</a>\" "
+"للإعداد الافتراضي</li><li>قم بوضع مسار لتعريف ملف xslt</li><li> قم بوضع "
+"عنوان URL للنمط الخارجي المحدد.</li></ul> سيتم استبدال {langcode} بلغة "
+"الواجهة الحالية"
 
 # OPAC > Appearance
 msgid ""
@@ -9217,22 +9410,23 @@ msgid ""
 "at: "
 msgstr "عرض تفاصيل أوباك بإستخدام أنماط XSLTعلى : "
 
-# OPAC > Appearance
+# Staff interface > Appearance
+#, fuzzy
 msgid ""
-"opac.pref#OPACXSLTListsDisplay# <br />Options:<ul><li><a href=\"#\" class="
-"\"set_syspref\" data-syspref=\"OPACXSLTListsDisplay\" data-value=\"\">leave "
-"empty</a> for \"no xslt\"</li><li>enter \"<a href=\"#\" class=\"set_syspref"
-"\" data-syspref=\"OPACXSLTListsDisplay\" data-value=\"default\">default</a>"
-"\" for the default one</li><li> put a path to define a xslt file</li><li>put "
-"an URL for an external specific stylesheet.</li></ul>{langcode} will be "
-"replaced with current interface language."
+"opac.pref#OPACXSLTListsDisplay# <br />Options:<ul><li>Enter \"<a href=\"#\" "
+"class=\"set_syspref\" data-syspref=\"OPACXSLTListsDisplay\" data-value="
+"\"default\">default</a>\" for the default stylesheet</li><li>Put a path to "
+"define an xslt file</li><li>Put a URL for an external specific stylesheet.</"
+"li><li>NOTE: The system preference <a href=\"/cgi-bin/koha/admin/preferences."
+"pl?op=search&searchfield=PassItemMarcToXSLT\">PassItemMarcToXSLT</a> must be "
+"enabled if your custom stylesheet utilizes data in the item fields</li></"
+"ul>If you have multiple stylesheets for different langues the placeholder "
+"{langcode} will be replaced with current interface language."
 msgstr ""
-"<br />الخيارات:<ul><li><a href=\"#\" class=\"set_syspref\" data-syspref="
-"\"OPACXSLTListsDisplay\" data-value=\"\">اتركه فارغاً</a> لـ \"no xslt\"</"
-"li><li>قم بإدخال\"<a href=\"#\" class=\"set_syspref\" data-syspref="
-"\"OPACXSLTListsDisplay\" data-value=\"default\">الافتراضي</a>\" للافتراضي</"
-"li><li> ضع مسار لتعريف ملف xslt </li><li>ضع عنوان URL لنمط خارجي محدد.</li></"
-"ul>{langcode} سيتم استبداله بلغة الواجهة الحالية."
+"<br />الخيارات:<ul><li>إدخال<a href=\"#\" class=\"set_syspref\" data-syspref="
+"\"XSLTResultsDisplay\" data-value=\"default\"> الافتراضي</a>\" للإعداد "
+"الافتراضي</li><li>قم بوضع مسار لتعريف ملف xslt</li><li> قم بوضع عنوان URL "
+"للنمط الخارجي المحدد.</li></ul> سيتم استبدال {langcode} بلغة الواجهة الحالية"
 
 # OPAC > Appearance
 msgid ""
@@ -9240,22 +9434,23 @@ msgid ""
 "stylesheet at: "
 msgstr "عرض القوائم في الأوباك باستخدام نمط XSLT  في:"
 
-# OPAC > Appearance
+# Staff interface > Appearance
+#, fuzzy
 msgid ""
-"opac.pref#OPACXSLTResultsDisplay# <br />Options:<ul><li><a href=\"#\" class="
-"\"set_syspref\" data-syspref=\"OPACXSLTResultsDisplay\" data-value="
-"\"\">leave empty</a> for \"no xslt\"</li><li>enter \"<a href=\"#\" class="
-"\"set_syspref\" data-syspref=\"OPACXSLTResultsDisplay\" data-value=\"default"
-"\">default</a>\" for the default one</li><li> put a path to define a xslt "
-"file</li><li>put an URL for an external specific stylesheet.</li></"
-"ul>{langcode} will be replaced with current interface language."
+"opac.pref#OPACXSLTResultsDisplay# <br />Options:<ul><li>Enter \"<a href=\"#"
+"\" class=\"set_syspref\" data-syspref=\"OPACXSLTResultsDisplay\" data-value="
+"\"default\">default</a>\" for the default stylesheet</li><li>Put a path to "
+"define an xslt file</li><li>Put a URL for an external specific stylesheet.</"
+"li><li>NOTE: The system preference <a href=\"/cgi-bin/koha/admin/preferences."
+"pl?op=search&searchfield=PassItemMarcToXSLT\">PassItemMarcToXSLT</a> must be "
+"enabled if your custom stylesheet utilizes data in the item fields</li></"
+"ul>If you have multiple stylesheets for different langues the placeholder "
+"{langcode} will be replaced with current interface language."
 msgstr ""
-"<br />الخيارات:<ul><li><a href=\"#\" class=\"set_syspref\" data-syspref="
-"\"OPACXSLTResultsDisplay\" data-value=\"\"> اتركه فارغاً </a>لقيمة \"بدون xslt"
-"\"</li><li>قم بإدخال\"<a href=\"#\" class=\"set_syspref\" data-syspref="
-"\"OPACXSLTResultsDisplay\" data-value=\"default\">الافتراضي</a> للإعداد "
-"الافتراضي</li><li> ضع مساراً لتحدد ملفxslt </li><li> ضع عنوان URL لنمط خارجي "
-"محدد.</li></ul> {langcode} سيتم استبدالها بلغة الواجهة الحالية."
+"<br />الخيارات:<ul><li>إدخال<a href=\"#\" class=\"set_syspref\" data-syspref="
+"\"XSLTResultsDisplay\" data-value=\"default\"> الافتراضي</a>\" للإعداد "
+"الافتراضي</li><li>قم بوضع مسار لتعريف ملف xslt</li><li> قم بوضع عنوان URL "
+"للنمط الخارجي المحدد.</li></ul> سيتم استبدال {langcode} بلغة الواجهة الحالية"
 
 # OPAC > Appearance
 msgid ""
@@ -9780,25 +9975,6 @@ msgstr ""
 "قم بإضافة عناصر إضافية إلى شريط \"مزيد من البحث\" في الأوباك، بالـ HTML "
 "التالي (اتركه خاليًا للتعطيل):"
 
-# OPAC > Appearance
-msgid ""
-"opac.pref#OpacNav# Show the following HTML on the left hand column of the "
-"main page and patron account on the OPAC (generally navigation links):"
-msgstr ""
-" عرض HTML التالية على العمود الأيمن من الصفحة الرئيسية وحساب المستفيد على  "
-"واجهة المستفيد OPAC (عموما تصفح الروابط):"
-
-# OPAC > Appearance
-#, fuzzy
-msgid ""
-"opac.pref#OpacNavBottom# Show the following HTML on the left hand column of "
-"the main page and patron account on the OPAC, after <a href=\"/cgi-bin/koha/"
-"admin/preferences.pl?op=search&searchfield=OpacNav\">OpacNav</a>, and before "
-"patron account links if available:"
-msgstr ""
-"عرض HTML التالية على العمود الأيمن من الصفحة الرئيسية وحساب المستفيد على "
-"واجهة المستفيد  OPAC، بعد OpacNav، وقبل روابط حساب المستفيد إذا كانت متوفرة:"
-
 # OPAC > Features
 msgid "opac.pref#OpacNewsLibrarySelect# Display"
 msgstr "عرض"
@@ -10302,18 +10478,6 @@ msgid ""
 "opac.pref#Reference_NFL_Statuses# List the following not for loan statuses "
 "as available for reference in OPAC search results:"
 msgstr ""
-
-# OPAC > Features
-msgid "opac.pref#RequestOnOpac# Allow"
-msgstr "السماح"
-
-# OPAC > Features
-msgid "opac.pref#RequestOnOpac# Don't allow"
-msgstr "عدم السماح"
-
-# OPAC > Features
-msgid "opac.pref#RequestOnOpac# patrons to place holds on items from the OPAC."
-msgstr "للمستفيدين بوضع حجوزات على المواد من واجهة المستفيد OPAC."
 
 # OPAC > Restricted page
 msgid ""
@@ -11693,9 +11857,11 @@ msgid "patrons.pref#TrackLastPatronActivity# Don't"
 msgstr "لا تفعل"
 
 # Patrons > General
+#, fuzzy
 msgid ""
-"patrons.pref#TrackLastPatronActivity# Every time a patron will connect, the "
-"borrowers.lastseen will be updated with the current time."
+"patrons.pref#TrackLastPatronActivity# The first time each day that a patron "
+"logs into the OPAC, connects to Koha via SIP or ILS-DI, or checks an item "
+"out the borrowers.lastseen will update with the current date and time."
 msgstr ""
 "في كل مرة سيقوم بها المستفيد بالاتصال، سيتم تحديث borrowers.lastseen بالوقت "
 "الحالي."
@@ -12031,6 +12197,26 @@ msgstr "عرض حتى"
 msgid "searching.pref#FacetMaxCount# facets for each category."
 msgstr "واجهات لكل فئة."
 
+# Searching > Results display
+#, fuzzy
+msgid "searching.pref#FacetOrder# Sort facets"
+msgstr "عرض الواجهات لـ"
+
+# Searching > Features
+#, fuzzy
+msgid "searching.pref#FacetOrder# alphabetically"
+msgstr "تلقائياً."
+
+# Searching > Results display
+#, fuzzy
+msgid "searching.pref#FacetOrder# by usage count"
+msgstr "عرض حتى"
+
+# Searching > Results display
+#, fuzzy
+msgid "searching.pref#FacetOrder# for each category."
+msgstr "واجهات لكل فئة."
+
 # Searching > Features
 msgid ""
 "searching.pref#IncludeSeeFromInSearches# <em>see from</em> (non-preferred "
@@ -12242,6 +12428,22 @@ msgid ""
 "searching.pref#OPACnumSearchResultsDropdown# results per page dropdown on "
 "OPAC search results."
 msgstr "قائمة نتيجة لكل صفحة المنسدلة من نتائج بحث الأوباك."
+
+# Searching > Search form
+#, fuzzy
+msgid "searching.pref#PassItemMarcToXSLT# Do"
+msgstr "نموذج البحث"
+
+# Searching > Features
+#, fuzzy
+msgid "searching.pref#PassItemMarcToXSLT# Don't"
+msgstr "عدم الاحتفاظ بـ"
+
+# Searching > Results display > PassItemMarcToXSLT
+msgid ""
+"searching.pref#PassItemMarcToXSLT# make item MARC tags available to XSLT "
+"stylesheets. Default is \"Don't\", items are displayed using other methods."
+msgstr ""
 
 # Searching > Features
 msgid ""
@@ -12969,12 +13171,18 @@ msgid ""
 msgstr "محرر WYSIWYG عند تحرير مفضلات نظام HTML معينة"
 
 # Staff interface > Appearance
+#, fuzzy
 msgid ""
 "staff_interface.pref#XSLTDetailsDisplay# <br />Options:<ul><li>Enter \"<a "
 "href=\"#\" class=\"set_syspref\" data-syspref=\"XSLTDetailsDisplay\" data-"
-"value=\"default\">default</a>\" for the default one</li><li>Put a path to "
-"define a xslt file</li><li>Put an URL for an external specific stylesheet.</"
-"li></ul>{langcode} will be replaced with current interface language"
+"value=\"default\">default</a>\" for the default stylesheet</li><li>Put a "
+"path to define an xslt file</li><li>Put a URL for an external specific "
+"stylesheet.</li><li>NOTE: The system preference <a href=\"/cgi-bin/koha/"
+"admin/preferences.pl?op=search&searchfield=PassItemMarcToXSLT"
+"\">PassItemMarcToXSLT</a> must be enabled if your custom stylesheet utilizes "
+"data in the item fields</li></ul>If you have multiple stylesheets for "
+"different langues the placeholder {langcode} will be replaced with current "
+"interface language."
 msgstr ""
 "<br />الخيارات:<ul><li>إدخال\"<a href=\"#\" class=\"set_syspref\" data-"
 "syspref=\"XSLTDetailsDisplay\" data-value=\"default\"> الافتراضي</a>\" "
@@ -12989,21 +13197,22 @@ msgid ""
 msgstr "عرض التفاصيل في واجهة الموظف باستخدام نمط XSLT في: "
 
 # Staff interface > Appearance
+#, fuzzy
 msgid ""
-"staff_interface.pref#XSLTListsDisplay# <br />Options:<ul><li><a href=\"#\" "
-"class=\"set_syspref\" data-syspref=\"XSLTListsDisplay\" data-value="
-"\"\">Leave empty</a> for \"no xslt\"</li><li>enter \"<a href=\"#\" class="
-"\"set_syspref\" data-syspref=\"XSLTListsDisplay\" data-value=\"default"
-"\">default</a>\" for the default one</li><li> put a path to define a xslt "
-"file</li><li>put an URL for an external specific stylesheet.</li></"
-"ul>{langcode} will be replaced with current interface language"
+"staff_interface.pref#XSLTListsDisplay# <br />Options:<ul><li>Enter \"<a href="
+"\"#\" class=\"set_syspref\" data-syspref=\"XSLTListsDisplay\" data-value="
+"\"default\">default</a>\" for the default stylesheet</li><li>Put a path to "
+"define an xslt file</li><li>Put a URL for an external specific stylesheet.</"
+"li><li>NOTE: The system preference <a href=\"/cgi-bin/koha/admin/preferences."
+"pl?op=search&searchfield=PassItemMarcToXSLT\">PassItemMarcToXSLT</a> must be "
+"enabled if your custom stylesheet utilizes data in the item fields</li></"
+"ul>If you have multiple stylesheets for different langues the placeholder "
+"{langcode} will be replaced with current interface language."
 msgstr ""
-"<br/>خيارات:<ul><li><a href=\"#\" class=\"set_syspref\" data-syspref="
-"\"XSLTListsDisplay\" data-value=\"\">اتركها فارغة</a>لـ \"no xslt\"</"
-"li><li>قم بإدخال\"<a href=\"#\" class=\"set_syspref\" data-syspref="
-"\"XSLTListsDisplay\" data-value=\"الافتراضي\">default</a>\" للإعداد "
-"الافتراضي</li><li> ضع مسار لتعريف xslt file</li><li>ضع عنوان URL لنمط خارجي "
-"محدد</li></ul>{langcode} سوف يتم استبدالها بلغة الواجهة الحالية"
+"<br />الخيارات:<ul><li>إدخال<a href=\"#\" class=\"set_syspref\" data-syspref="
+"\"XSLTResultsDisplay\" data-value=\"default\"> الافتراضي</a>\" للإعداد "
+"الافتراضي</li><li>قم بوضع مسار لتعريف ملف xslt</li><li> قم بوضع عنوان URL "
+"للنمط الخارجي المحدد.</li></ul> سيتم استبدال {langcode} بلغة الواجهة الحالية"
 
 # Staff interface > Appearance
 msgid ""
@@ -13012,12 +13221,18 @@ msgid ""
 msgstr "عرض القوائم في واجهة الموظف باستخدام نمط XSLT في: "
 
 # Staff interface > Appearance
+#, fuzzy
 msgid ""
 "staff_interface.pref#XSLTResultsDisplay# <br />Options:<ul><li>Enter \"<a "
 "href=\"#\" class=\"set_syspref\" data-syspref=\"XSLTResultsDisplay\" data-"
-"value=\"default\">default</a>\" for the default one</li><li>Put a path to "
-"define a xslt file</li><li>Put an URL for an external specific stylesheet.</"
-"li></ul>{langcode} will be replaced with current interface language"
+"value=\"default\">default</a>\" for the default stylesheet</li><li>Put a "
+"path to define an xslt file</li><li>Put a URL for an external specific "
+"stylesheet.</li><li>NOTE: The system preference <a href=\"/cgi-bin/koha/"
+"admin/preferences.pl?op=search&searchfield=PassItemMarcToXSLT"
+"\">PassItemMarcToXSLT</a> must be enabled if your custom stylesheet utilizes "
+"data in the item fields</li></ul>If you have multiple stylesheets for "
+"different langues the placeholder {langcode} will be replaced with current "
+"interface language."
 msgstr ""
 "<br />الخيارات:<ul><li>إدخال<a href=\"#\" class=\"set_syspref\" data-syspref="
 "\"XSLTResultsDisplay\" data-value=\"default\"> الافتراضي</a>\" للإعداد "
@@ -13223,6 +13438,28 @@ msgstr "تقارير tools.pref"
 msgid "tools.pref Upload"
 msgstr "تحميل tools.pref"
 
+# Tools > News
+#, fuzzy
+msgid "tools.pref#AdditionalContentsEditor# ."
+msgstr "."
+
+# Tools > News
+#, fuzzy
+msgid ""
+"tools.pref#AdditionalContentsEditor# By default edit additional contents and "
+"news items with"
+msgstr "تحرير الأخبار افتراضياً بـ"
+
+# Tools > News
+#, fuzzy
+msgid "tools.pref#AdditionalContentsEditor# a WYSIWYG editor (TinyMCE)"
+msgstr "محرر WYSIWYG (TinyMCE)"
+
+# Tools > News
+#, fuzzy
+msgid "tools.pref#AdditionalContentsEditor# a text editor (CodeMirror)"
+msgstr "محرر نص (CodeMirror)"
+
 # Tools > Barcodes
 msgid ""
 "tools.pref#BarcodeSeparators# Split barcodes on the following separator chars"
@@ -13302,22 +13539,6 @@ msgstr "على الإطلاق"
 # Tools > News
 msgid "tools.pref#NewsAuthorDisplay# staff interface only"
 msgstr "واجهة الموظف فقط"
-
-# Tools > News
-msgid "tools.pref#NewsToolEditor# ."
-msgstr "."
-
-# Tools > News
-msgid "tools.pref#NewsToolEditor# By default edit news items with"
-msgstr "تحرير الأخبار افتراضياً بـ"
-
-# Tools > News
-msgid "tools.pref#NewsToolEditor# a WYSIWYG editor (TinyMCE)"
-msgstr "محرر WYSIWYG (TinyMCE)"
-
-# Tools > News
-msgid "tools.pref#NewsToolEditor# a text editor (CodeMirror)"
-msgstr "محرر نص (CodeMirror)"
 
 # Tools > Reports
 msgid "tools.pref#NumSavedReports# By default, show"
@@ -13707,6 +13928,20 @@ msgid ""
 "reports web service."
 msgstr "صفوف التقارير قد طلبت عبر خدمة تقارير ويب."
 
+# Administration > Google OpenID Connect
+#~ msgid "admin.pref#GoogleOpenIDConnectDefaultBranch# ."
+#~ msgstr "."
+
+# Administration > Google OpenID Connect
+#~ msgid "admin.pref#GoogleOpenIDConnectDefaultCategory# ."
+#~ msgstr "."
+
+# Administration > Google OpenID Connect
+#~ msgid ""
+#~ "admin.pref#GoogleOpenIDConnectDomain# . Leave blank for all Google "
+#~ "domains."
+#~ msgstr ". اتركه فارغاً لكل نطاقات جوجل."
+
 # Circulation > Batch checkout
 #~ msgid ""
 #~ "circulation.pref#BatchCheckoutsValidCategories# (list of patron "
@@ -13718,6 +13953,65 @@ msgstr "صفوف التقارير قد طلبت عبر خدمة تقارير و�
 #~ "circulation.pref#OPACHoldsIfAvailableAtPickupExceptions# (list of patron "
 #~ "categories separated with a pipe '|')"
 #~ msgstr "(قائمة بفئات المستفيد المفصولة بعلامة العمود  '|')"
+
+# Enhanced content > Adlibris
+#~ msgid "enhanced_content.pref Adlibris"
+#~ msgstr "Adlibris"
+
+# Enhanced content > Adlibris
+#~ msgid ""
+#~ "enhanced_content.pref## <strong>NOTE:</strong> Using resources such as "
+#~ "external images might leak sensitive data to third parties."
+#~ msgstr ""
+#~ "<strong>ملاحظة:</strong> يمكن أن يؤدي استخدام الموارد كالصور الخارجية إلى "
+#~ "تسريب بيانات حساسة إلى أطراف ثالثة."
+
+# Enhanced content > Adlibris
+#~ msgid "enhanced_content.pref#AdlibrisCoversEnabled# Don't show"
+#~ msgstr "عدم عرض"
+
+# Enhanced content > Adlibris
+#~ msgid "enhanced_content.pref#AdlibrisCoversEnabled# Show"
+#~ msgstr "عرض"
+
+# Enhanced content > Adlibris
+#~ msgid ""
+#~ "enhanced_content.pref#AdlibrisCoversEnabled# cover images in OPAC results "
+#~ "and detail listing from Swedish retailer <a href=\"https://www.adlibris."
+#~ "com/se\">Adlibris</a>."
+#~ msgstr ""
+#~ "صور الغلاف في نتائج وتفاصيل الأوباك مدرجة من البائع السويدي Adlibris<a "
+#~ "href=\"https://www.adlibris.com/se\"></a>"
+
+# Enhanced content > Adlibris
+#~ msgid "enhanced_content.pref#AdlibrisCoversURL# Use base URL: "
+#~ msgstr "استخدم عنوان URL الأساسي:"
+
+# Enhanced content > Adlibris
+#~ msgid ""
+#~ "enhanced_content.pref#AdlibrisCoversURL# for the <a href=\"https://www."
+#~ "adlibris.com/se\">Adlibris</a> cover service."
+#~ msgstr ""
+#~ "لخدمة الغلاف <a href=\"https://www.adlibris.com/se\">من Adlibris</a> ."
+
+# I18N/L10N
+#~ msgid ""
+#~ "i18n_l10n.pref#TimeFormat# . <br/> <strong>NOTE:</strong> Do not change "
+#~ "this preference on a production server with overdue items that are "
+#~ "accruing fines. Doing so will result in duplicate fines!"
+#~ msgstr ""
+#~ "<br/> <strong>ملاحظة:</strong> لا تقم بتغيير هذا التفضيل على خادم الإنتاج "
+#~ "للمواد المتأخرة التي لا تزال تحقق غرامات. القيام بذلك سيؤدي إلى مضاعفة "
+#~ "الغرامات!"
+
+# I18N/L10N
+#~ msgid ""
+#~ "i18n_l10n.pref#dateformat# . <br/> <strong>NOTE:</strong> Do not change "
+#~ "this preference on a production server with overdue items that are "
+#~ "accruing fines. Doing so will result in duplicate fines!"
+#~ msgstr ""
+#~ "<br/> <strong>ملاحظة:</strong> لا تقم بتغيير هذا التفضيل على خادم الإنتاج "
+#~ "بالمواد المتأخرة التي تحقق غرامات. القيام بذلك سيؤدي إلى مضاعفة الغرامات!"
 
 # I18N/L10N
 #~ msgid ""
@@ -13782,6 +14076,125 @@ msgstr "صفوف التقارير قد طلبت عبر خدمة تقارير و�
 #~ msgid "opac.pref#EnablePayPalOpacPayments# sandbox"
 #~ msgstr "Sandbox"
 
+# OPAC > Appearance
+#~ msgid ""
+#~ "opac.pref#HighlightOwnItemsOnOPAC#  by moving the results to the front "
+#~ "and increasing the size or highlighting the rows for those results (non-"
+#~ "XSLT only)."
+#~ msgstr ""
+#~ "عن طريق نقل النتائج إلى الأمام وزيادة حجم أو تظليل الصفوف لتلك النتائج. "
+#~ "(Non-XSLT فقط)"
+
+# OPAC > Appearance
+#~ msgid "opac.pref#HighlightOwnItemsOnOPAC# Don't emphasize"
+#~ msgstr "عدم التشديد على"
+
+# OPAC > Appearance
+#~ msgid "opac.pref#HighlightOwnItemsOnOPAC# Emphasize"
+#~ msgstr "التشديد على"
+
+# OPAC > Appearance
+#~ msgid "opac.pref#HighlightOwnItemsOnOPAC# OPAC's library via the URL"
+#~ msgstr "مكتبة الأوباك عبر عنوان ال URL"
+
+# OPAC > Appearance
+#~ msgid "opac.pref#HighlightOwnItemsOnOPAC# patron's home library"
+#~ msgstr "مكتبة المستفيد الرئيسية"
+
+# OPAC > Appearance
+#~ msgid "opac.pref#HighlightOwnItemsOnOPAC# results from the "
+#~ msgstr "النتائج من"
+
+# OPAC > Appearance
+#, fuzzy
+#~ msgid ""
+#~ "opac.pref#OPACXSLTDetailsDisplay# <br />Options:<ul><li><a href=\"#\" "
+#~ "class=\"set_syspref\" data-syspref=\"OPACXSLTDetailsDisplay\" data-value="
+#~ "\"\">leave empty</a> for \"no xslt\"</li><li>Enter \"<a href=\"#\" class="
+#~ "\"set_syspref\" data-syspref=\"OPACXSLTDetailsDisplay\" data-value="
+#~ "\"default\">default</a>\" for the default stylesheet</li><li>Put a path "
+#~ "to define an xslt file</li><li>Put a URL for an external specific "
+#~ "stylesheet.</li><li>NOTE: The system preference <a href=\"/cgi-bin/koha/"
+#~ "admin/preferences.pl?op=search&searchfield=PassItemMarcToXSLT"
+#~ "\">PassItemMarcToXSLT</a> must be enabled if your custom stylesheet "
+#~ "utilizes data in the item fields</li></ul>If you have multiple "
+#~ "stylesheets for different langues the placeholder {langcode} will be "
+#~ "replaced with current interface language."
+#~ msgstr ""
+#~ "<br />الخيارات:<ul><li><a href=\"#\" class=\"set_syspref\" data-syspref="
+#~ "\"OPACXSLTDetailsDisplay\" data-value=\"\">اتركه فارغاً</a>للقيمة \"بدون "
+#~ "xslt\"</li><li>قم بإدخال\"<a href=\"#\" class=\"set_syspref\" data-"
+#~ "syspref=\"OPACXSLTDetailsDisplay\" data-value=\"default\">افتراضي</a>\" "
+#~ "للإعدادات الافتراضية</li><li> ضع مساراً لتحدد ملف xslt </li><li> ضع عنوان "
+#~ "URL نمط خارجي محدد. </li></ul>{langcode} سيتم استبدالها بلغة الواجهة "
+#~ "الحالية."
+
+# OPAC > Appearance
+#, fuzzy
+#~ msgid ""
+#~ "opac.pref#OPACXSLTListsDisplay# <br />Options:<ul><li><a href=\"#\" class="
+#~ "\"set_syspref\" data-syspref=\"OPACXSLTListsDisplay\" data-value="
+#~ "\"\">leave empty</a> for \"no xslt\"</li><li>Enter \"<a href=\"#\" class="
+#~ "\"set_syspref\" data-syspref=\"OPACXSLTListsDisplay\" data-value=\"default"
+#~ "\">default</a>\" for the default stylesheet</li><li>Put a path to define "
+#~ "an xslt file</li><li>Put a URL for an external specific stylesheet.</"
+#~ "li><li>NOTE: The system preference <a href=\"/cgi-bin/koha/admin/"
+#~ "preferences.pl?op=search&searchfield=PassItemMarcToXSLT"
+#~ "\">PassItemMarcToXSLT</a> must be enabled if your custom stylesheet "
+#~ "utilizes data in the item fields</li></ul>If you have multiple "
+#~ "stylesheets for different langues the placeholder {langcode} will be "
+#~ "replaced with current interface language."
+#~ msgstr ""
+#~ "<br />الخيارات:<ul><li><a href=\"#\" class=\"set_syspref\" data-syspref="
+#~ "\"OPACXSLTListsDisplay\" data-value=\"\">اتركه فارغاً</a> لـ \"no xslt\"</"
+#~ "li><li>قم بإدخال\"<a href=\"#\" class=\"set_syspref\" data-syspref="
+#~ "\"OPACXSLTListsDisplay\" data-value=\"default\">الافتراضي</a>\" "
+#~ "للافتراضي</li><li> ضع مسار لتعريف ملف xslt </li><li>ضع عنوان URL لنمط "
+#~ "خارجي محدد.</li></ul>{langcode} سيتم استبداله بلغة الواجهة الحالية."
+
+# OPAC > Appearance
+#, fuzzy
+#~ msgid ""
+#~ "opac.pref#OPACXSLTResultsDisplay# <br />Options:<ul><li><a href=\"#\" "
+#~ "class=\"set_syspref\" data-syspref=\"OPACXSLTResultsDisplay\" data-value="
+#~ "\"\">leave empty</a> for \"no xslt\"</li><li>Enter \"<a href=\"#\" class="
+#~ "\"set_syspref\" data-syspref=\"OPACXSLTResultsDisplay\" data-value="
+#~ "\"default\">default</a>\" for the default stylesheet</li><li>Put a path "
+#~ "to define an xslt file</li><li>Put a URL for an external specific "
+#~ "stylesheet.</li><li>NOTE: The system preference <a href=\"/cgi-bin/koha/"
+#~ "admin/preferences.pl?op=search&searchfield=PassItemMarcToXSLT"
+#~ "\">PassItemMarcToXSLT</a> must be enabled if your custom stylesheet "
+#~ "utilizes data in the item fields</li></ul>If you have multiple "
+#~ "stylesheets for different langues the placeholder {langcode} will be "
+#~ "replaced with current interface language."
+#~ msgstr ""
+#~ "<br />الخيارات:<ul><li><a href=\"#\" class=\"set_syspref\" data-syspref="
+#~ "\"OPACXSLTResultsDisplay\" data-value=\"\"> اتركه فارغاً </a>لقيمة \"بدون "
+#~ "xslt\"</li><li>قم بإدخال\"<a href=\"#\" class=\"set_syspref\" data-"
+#~ "syspref=\"OPACXSLTResultsDisplay\" data-value=\"default\">الافتراضي</a> "
+#~ "للإعداد الافتراضي</li><li> ضع مساراً لتحدد ملفxslt </li><li> ضع عنوان URL "
+#~ "لنمط خارجي محدد.</li></ul> {langcode} سيتم استبدالها بلغة الواجهة الحالية."
+
+# OPAC > Appearance
+#~ msgid ""
+#~ "opac.pref#OpacNav# Show the following HTML on the left hand column of the "
+#~ "main page and patron account on the OPAC (generally navigation links):"
+#~ msgstr ""
+#~ " عرض HTML التالية على العمود الأيمن من الصفحة الرئيسية وحساب المستفيد "
+#~ "على  واجهة المستفيد OPAC (عموما تصفح الروابط):"
+
+# OPAC > Appearance
+#, fuzzy
+#~ msgid ""
+#~ "opac.pref#OpacNavBottom# Show the following HTML on the left hand column "
+#~ "of the main page and patron account on the OPAC, after <a href=\"/cgi-bin/"
+#~ "koha/admin/preferences.pl?op=search&searchfield=OpacNav\">OpacNav</a>, "
+#~ "and before patron account links if available:"
+#~ msgstr ""
+#~ "عرض HTML التالية على العمود الأيمن من الصفحة الرئيسية وحساب المستفيد على "
+#~ "واجهة المستفيد  OPAC، بعد OpacNav، وقبل روابط حساب المستفيد إذا كانت "
+#~ "متوفرة:"
+
 # OPAC > Payments
 #~ msgid "opac.pref#PayPalChargeDescription# ."
 #~ msgstr ". "
@@ -13844,6 +14257,14 @@ msgstr "صفوف التقارير قد طلبت عبر خدمة تقارير و�
 #~ msgstr "عنوان البريد الالكتروني لاستلام مدفوعات PayPal  هو"
 
 # OPAC > Features
+#~ msgid "opac.pref#RequestOnOpac# Allow"
+#~ msgstr "السماح"
+
+# OPAC > Features
+#~ msgid "opac.pref#RequestOnOpac# Don't allow"
+#~ msgstr "عدم السماح"
+
+# OPAC > Features
 #~ msgid "opac.pref#reviewson# Allow"
 #~ msgstr "السماح"
 
@@ -13877,3 +14298,26 @@ msgstr "صفوف التقارير قد طلبت عبر خدمة تقارير و�
 #~ "زيبرا ، يستخدم فقط ليخبر كوها أنك قد فعلت فهرسة الـICU ، عند تفعيلك "
 #~ "إياها ، وإذا لم تفعل فإن كوها لن يستخدمها من تلقاء نفسه ، (مستحسن "
 #~ "استخدامه لفهارس للغات غير اللاتينية) مثل العربية."
+
+# Staff interface > Appearance
+#, fuzzy
+#~ msgid ""
+#~ "staff_interface.pref#XSLTListsDisplay# <br />Options:<ul><li><a href=\"#"
+#~ "\" class=\"set_syspref\" data-syspref=\"XSLTListsDisplay\" data-value="
+#~ "\"\">Leave empty</a> for \"no xslt\"</li><li>Enter \"<a href=\"#\" class="
+#~ "\"set_syspref\" data-syspref=\"XSLTListsDisplay\" data-value=\"default"
+#~ "\">default</a>\" for the default stylesheet</li><li>Put a path to define "
+#~ "an xslt file</li><li>Put a URL for an external specific stylesheet.</"
+#~ "li><li>NOTE: The system preference <a href=\"/cgi-bin/koha/admin/"
+#~ "preferences.pl?op=search&searchfield=PassItemMarcToXSLT"
+#~ "\">PassItemMarcToXSLT</a> must be enabled if your custom stylesheet "
+#~ "utilizes data in the item fields</li></ul>If you have multiple "
+#~ "stylesheets for different langues the placeholder {langcode} will be "
+#~ "replaced with current interface language."
+#~ msgstr ""
+#~ "<br/>خيارات:<ul><li><a href=\"#\" class=\"set_syspref\" data-syspref="
+#~ "\"XSLTListsDisplay\" data-value=\"\">اتركها فارغة</a>لـ \"no xslt\"</"
+#~ "li><li>قم بإدخال\"<a href=\"#\" class=\"set_syspref\" data-syspref="
+#~ "\"XSLTListsDisplay\" data-value=\"الافتراضي\">default</a>\" للإعداد "
+#~ "الافتراضي</li><li> ضع مسار لتعريف xslt file</li><li>ضع عنوان URL لنمط "
+#~ "خارجي محدد</li></ul>{langcode} سوف يتم استبدالها بلغة الواجهة الحالية"

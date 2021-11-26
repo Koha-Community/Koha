@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Koha 21.05\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-05-11 18:11-0300\n"
-"PO-Revision-Date: 2021-01-06 21:05+0000\n"
+"POT-Creation-Date: 2021-11-16 07:48-0300\n"
+"PO-Revision-Date: 2021-11-14 20:34+0000\n"
 "Last-Translator: m23 <black23@gmail.com>\n"
 "Language-Team: none\n"
 "Language: cs\n"
@@ -17,17 +17,16 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
 "X-Generator: Pootle 2.8\n"
-"X-POOTLE-MTIME: 1609967152.333716\n"
+"X-POOTLE-MTIME: 1636922084.688459\n"
 "X-Pootle-Path: /cs/21.05/cs-CZ-messages-js.po\n"
 "X-Pootle-Revision: 1\n"
 
-#: koha-tmpl/intranet-tmpl/prog/js/holds.js:88
-#, fuzzy
+#: koha-tmpl/intranet-tmpl/prog/js/holds.js:182
 msgid " (current) "
 msgstr " (aktuální) "
 
-#: koha-tmpl/opac-tmpl/bootstrap/js/basket.js:192
-#: koha-tmpl/opac-tmpl/bootstrap/js/basket.js:195
+#: koha-tmpl/opac-tmpl/bootstrap/js/basket.js:166
+#: koha-tmpl/opac-tmpl/bootstrap/js/basket.js:169
 msgctxt "Bibliographic record"
 msgid " item(s) added to your cart"
 msgstr " položka(y) vložena(y) do košíku"
@@ -73,17 +72,17 @@ msgstr "%s rezervací na tento záznam. Opravdu chcete tento záznam odstranit?"
 #: koha-tmpl/intranet-tmpl/prog/js/pages/tags-review.js:53
 #, javascript-format
 msgid "%s is neither permitted nor prohibited!"
-msgstr ""
+msgstr "%s není ani povoleno ani zakázáno!"
 
 #: koha-tmpl/intranet-tmpl/prog/js/pages/tags-review.js:47
 #, javascript-format
 msgid "%s is permitted!"
-msgstr ""
+msgstr "%s je povoleno!"
 
 #: koha-tmpl/intranet-tmpl/prog/js/pages/tags-review.js:50
 #, javascript-format
 msgid "%s is prohibited!"
-msgstr ""
+msgstr "%s je zakázáno!"
 
 #: koha-tmpl/intranet-tmpl/prog/js/basket.js:208
 #: koha-tmpl/intranet-tmpl/prog/js/basket.js:213
@@ -97,14 +96,16 @@ msgid ""
 "%s item(s) are attached to this record. You must delete all items before "
 "deleting this record."
 msgstr ""
+"%s jednotka(tek) je napojena(o) na tento záznam. Musíte nejdříve odstranit "
+"všechny takové jednotky před odstraněním tohoto záznamu."
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:572
-#, fuzzy, javascript-format
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:580
+#, javascript-format
 msgid "%s of %s renewals remaining"
 msgstr "zbývá %s z %s prodloužení"
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:574
-#, fuzzy, javascript-format
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:582
+#, javascript-format
 msgid "%s of %s unseen renewals remaining"
 msgstr "zbývá %s z %s prodloužení"
 
@@ -114,46 +115,51 @@ msgid ""
 "%s order(s) are using this record. You need order managing permissions to "
 "delete this record."
 msgstr ""
+"%s objednávek používá tento záznam. Je nutné mít oprávnění pro správu "
+"objednávek, chcete-li odstranit tento záznam."
 
 #: koha-tmpl/intranet-tmpl/prog/js/datatables.js:18
 msgid "(filtered from _MAX_ total entries)"
 msgstr "(vybráno z _MAX_ celkových záznamů)"
 
-#: koha-tmpl/intranet-tmpl/prog/js/cataloging.js:120
-#, fuzzy
+#: koha-tmpl/intranet-tmpl/prog/js/cataloging.js:121
 msgid "(select to create)"
-msgstr "Zvolte datum"
+msgstr "(vyberte k vytvoření)"
 
 #: koha-tmpl/intranet-tmpl/prog/js/marc_modification_templates.js:31
 msgid "A control field cannot be used with a regular field."
-msgstr ""
+msgstr "Kontrolní pole nemůže být použito současně s běžným polem."
 
 #: koha-tmpl/intranet-tmpl/prog/js/letter.js:21
 #, javascript-format
 msgid "A default letter with the code '%s' already exists."
-msgstr ""
+msgstr "Výchozí oznámení oznámení s kódem '%s' již existuje."
 
 #: koha-tmpl/intranet-tmpl/prog/js/letter.js:23
 #, javascript-format
 msgid "A letter with the code '%s' already exists for '%s'."
-msgstr ""
+msgstr "Oznámení s kódem '%s' již je pro knihovnu '%s' definováno."
 
 #: koha-tmpl/intranet-tmpl/prog/js/pages/tags-review.js:159
 #, javascript-format
 msgid "AJAX error (%s alert)"
-msgstr ""
+msgstr "chyba AJAX (%s varování)"
 
 #: koha-tmpl/intranet-tmpl/prog/js/pages/tags-review.js:38
 #, javascript-format
 msgid "AJAX failed to approve tag: %s"
-msgstr ""
+msgstr "AJAXu se nepodařilo schválit štítek: %s"
 
 #: koha-tmpl/intranet-tmpl/prog/js/pages/tags-review.js:44
 #, javascript-format
 msgid "AJAX failed to reject tag: %s"
-msgstr ""
+msgstr "AJAXu se nepodařilo zamítnout štítek: %s"
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1019
+#: koha-tmpl/opac-tmpl/bootstrap/js/overdrive.js:310
+msgid "Access online"
+msgstr "Dostupné online"
+
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1041
 msgid "Actions"
 msgstr "Akce"
 
@@ -163,7 +169,7 @@ msgstr "Zapnout filtry"
 
 #: koha-tmpl/intranet-tmpl/prog/js/additem.js:186
 msgid "Add"
-msgstr ""
+msgstr "Přidat"
 
 #: koha-tmpl/intranet-tmpl/prog/js/sms_providers.js:36
 msgid "Add an SMS cellular provider"
@@ -171,50 +177,59 @@ msgstr "Přidat SMS operátora"
 
 #: koha-tmpl/intranet-tmpl/prog/js/additem.js:181
 msgid "Add item"
-msgstr ""
+msgstr "Přidat jednotku"
 
 #: koha-tmpl/intranet-tmpl/prog/js/additem.js:183
 msgid "Add multiple items"
-msgstr ""
+msgstr "Přidat více jednotek"
 
 #: koha-tmpl/intranet-tmpl/prog/js/basket.js:490
 #: koha-tmpl/intranet-tmpl/prog/js/basket.js:498
 #: koha-tmpl/intranet-tmpl/prog/js/basket.js:501
 #: koha-tmpl/intranet-tmpl/prog/js/basket.js:512
 #: koha-tmpl/intranet-tmpl/prog/js/catalog.js:113
-#: koha-tmpl/opac-tmpl/bootstrap/js/basket.js:472
-#: koha-tmpl/opac-tmpl/bootstrap/js/basket.js:480
-#: koha-tmpl/opac-tmpl/bootstrap/js/basket.js:488
-#: koha-tmpl/opac-tmpl/bootstrap/js/basket.js:491
+#: koha-tmpl/opac-tmpl/bootstrap/js/basket.js:421
+#: koha-tmpl/opac-tmpl/bootstrap/js/basket.js:429
+#: koha-tmpl/opac-tmpl/bootstrap/js/basket.js:437
+#: koha-tmpl/opac-tmpl/bootstrap/js/basket.js:440
 msgid "Add to cart"
 msgstr "Přidat do košíku"
 
 #: koha-tmpl/intranet-tmpl/prog/js/datatables.js:51
-#: koha-tmpl/intranet-tmpl/prog/js/marc_modification_templates.js:118
+#: koha-tmpl/intranet-tmpl/prog/js/marc_modification_templates.js:122
 msgid "All"
 msgstr "Vše"
 
 #: koha-tmpl/intranet-tmpl/prog/js/pages/tags-review.js:133
 msgid "Approve"
-msgstr ""
+msgstr "Schválit"
 
 #: koha-tmpl/intranet-tmpl/prog/js/pages/tags-review.js:114
 #: koha-tmpl/intranet-tmpl/prog/js/pages/tags-review.js:117
 msgid "Approved"
-msgstr ""
+msgstr "Schváleno"
 
-#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:116
+#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:115
+#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:170
 msgid "Apr"
 msgstr "Dub"
 
-#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:113
+#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:112
+#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:171
 msgid "April"
 msgstr "Duben"
 
+#: koha-tmpl/opac-tmpl/bootstrap/js/overdrive.js:384
+msgid "Are you sure you want to cancel this hold?"
+msgstr "Opravdu chcete zrušit tuto rezervaci?"
+
+#: koha-tmpl/opac-tmpl/bootstrap/js/overdrive.js:348
+msgid "Are you sure you want to check out this item?"
+msgstr "Opravdu chcete vypůjčit tuto jednotku?"
+
 #: koha-tmpl/intranet-tmpl/prog/js/serials-toolbar.js:4
-#, fuzzy
 msgid "Are you sure you want to close this subscription?"
-msgstr "Opravdu chcete odstranit z košíku všechny položky?"
+msgstr "Opravdu chcete uzavřít toto předplatné?"
 
 #: koha-tmpl/intranet-tmpl/prog/js/sms_providers.js:69
 #, javascript-format
@@ -228,61 +243,49 @@ msgstr ""
 "Opravdu jste si jistý/á, že chcete odstranit %s? %s čtenář(ů) ho používá!"
 
 #: koha-tmpl/intranet-tmpl/prog/js/catalog.js:66
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Are you sure you want to delete the %s attached items?"
 msgstr "Opravdu chcete odstranit %s připojené jednotky?"
 
 #: koha-tmpl/intranet-tmpl/prog/js/audio_alerts.js:64
-#, fuzzy
 msgid "Are you sure you want to delete the selected audio alerts?"
-msgstr "Opravdu chcete odstranit vybrané položky?"
+msgstr "Opravdu chcete odstranit vybraná zvuková upozornění?"
 
 #: koha-tmpl/intranet-tmpl/prog/js/item_search_fields.js:18
-#, fuzzy
 msgid "Are you sure you want to delete this field?"
-msgstr "Opravdu chcete odstranit vybrané položky?"
+msgstr "Opravdu chcete odstranit toto pole?"
 
 #: koha-tmpl/intranet-tmpl/prog/js/catalog.js:48
-#, fuzzy
 msgid "Are you sure you want to delete this record?"
-msgstr "Opravdu chcete odstranit vybrané položky?"
+msgstr "Opravdu chcete odstranit tento záznam?"
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1120
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1173
 #, fuzzy
 msgid "Are you sure you want to delete this return claim?"
 msgstr "Opravdu chcete odstranit z košíku všechny položky?"
 
 #: koha-tmpl/intranet-tmpl/prog/js/serials-toolbar.js:17
-#, fuzzy
 msgid "Are you sure you want to delete this subscription?"
-msgstr "Opravdu chcete odstranit z košíku všechny položky?"
+msgstr "Opravdu chcete odstranit toto předplatné?"
 
 #: koha-tmpl/intranet-tmpl/prog/js/basket.js:287
 #: koha-tmpl/intranet-tmpl/prog/js/basket.js:339
-#: koha-tmpl/opac-tmpl/bootstrap/js/basket.js:271
-#: koha-tmpl/opac-tmpl/bootstrap/js/basket.js:327
+#: koha-tmpl/opac-tmpl/bootstrap/js/basket.js:245
+#: koha-tmpl/opac-tmpl/bootstrap/js/basket.js:300
 msgid "Are you sure you want to empty your cart?"
 msgstr "Opravdu chcete odstranit z košíku všechny položky?"
 
 #: koha-tmpl/intranet-tmpl/prog/js/basket.js:358
-#, fuzzy
 msgid "Are you sure you want to remove the selected items?"
 msgstr "Opravdu chcete odstranit vybrané položky?"
 
-#: koha-tmpl/opac-tmpl/bootstrap/js/basket.js:341
-msgctxt "Bibliographic records"
-msgid "Are you sure you want to remove the selected items?"
-msgstr "Opravdu chcete odstranit vybrané položky?"
-
-#: koha-tmpl/intranet-tmpl/prog/js/members-menu.js:144
-#, fuzzy
+#: koha-tmpl/intranet-tmpl/prog/js/members-menu.js:146
 msgid "Are you sure you want to renew this patron's registration?"
-msgstr "Opravdu chcete odstranit vybrané položky?"
+msgstr "Opravdu chcete prodloužit registraci tomuto čtenáři?"
 
 #: koha-tmpl/intranet-tmpl/prog/js/serials-toolbar.js:10
-#, fuzzy
 msgid "Are you sure you want to reopen this subscription?"
-msgstr "Opravdu chcete odstranit vybrané položky?"
+msgstr "Opravdu chcete znovu otevřít toto předplatné?"
 
 #: koha-tmpl/intranet-tmpl/prog/js/biblio_framework.js:57
 #, javascript-format
@@ -291,100 +294,127 @@ msgid ""
 "framework structure? The existing structure will be overwritten! For safety "
 "reasons, it is recommended to use the export option to make a backup first."
 msgstr ""
+"Opravdu chcete nahradit pole a podpole ve struktuře šablony %s ? Současná "
+"struktura bude přepsána! Z důvodu bezpečnosti je doporučeno použít možnost "
+"exportu a vytvořit tak nejdříve zálohu."
 
-#: koha-tmpl/intranet-tmpl/prog/js/members-menu.js:129
+#: koha-tmpl/opac-tmpl/bootstrap/js/overdrive.js:330
+msgid "Are you sure you want to return this item?"
+msgstr "Opravdu chcete vrátit tuto jednotku?"
+
+#: koha-tmpl/intranet-tmpl/prog/js/members-menu.js:131
 msgid ""
 "Are you sure you want to update this child to an Adult category? This cannot "
 "be undone."
 msgstr ""
-
-#: koha-tmpl/intranet-tmpl/prog/js/marc_modification_templates.js:260
-#, fuzzy
-msgid "Are you sure you wish to delete this template action?"
-msgstr "Opravdu chcete odstranit z košíku všechny položky?"
+"Opravdu chcete převést toto dítě do kategorie dospělých? Tuto operaci nelze "
+"vrátit zpět."
 
 #: koha-tmpl/intranet-tmpl/prog/js/marc_modification_templates.js:264
-#, fuzzy
-msgid "Are you sure you wish to delete this template?"
-msgstr "Opravdu chcete odstranit vybrané položky?"
+msgid "Are you sure you wish to delete this template action?"
+msgstr "Opravdu chcete odstranit tuto akci se šablonou?"
 
-#: koha-tmpl/intranet-tmpl/prog/js/pages/results.js:455
+#: koha-tmpl/intranet-tmpl/prog/js/marc_modification_templates.js:268
+msgid "Are you sure you wish to delete this template?"
+msgstr "Opravdu chcete odstranit tuto šablonu?"
+
+#: koha-tmpl/intranet-tmpl/prog/js/pages/results.js:446
 msgid "At least two records must be selected for merging"
 msgstr "Pro sloučení je třeba vybrat dva záznamy"
 
-#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:117
+#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:116
+#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:170
 msgid "Aug"
 msgstr "Srp"
 
-#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:114
+#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:113
+#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:171
 msgid "August"
 msgstr "Srpen"
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:521
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:529
 msgid "Automatic renewal failed, account expired"
 msgstr "Automatické prodloužení selhalo, registrace čtenáře již skončila"
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:514
-#, fuzzy
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:522
 msgid "Automatic renewal failed, patron has unpaid fines"
 msgstr "Automatické prodloužení selhalo, čtenář má neuhrazené poplatky"
 
 #: koha-tmpl/intranet-tmpl/prog/js/marc_modification_templates.js:17
 msgid "Both subfield values should be filled or empty."
-msgstr ""
+msgstr "Obě hodnoty podpole by měly být vyplněné nebo prázdné."
 
-#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:702
+#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:714
 #: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:286
 msgid "CSV"
-msgstr ""
+msgstr "CSV"
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:507
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:515
 msgid "Can no longer be auto-renewed - number of checkout days exceeded"
 msgstr "Již nelze automaticky prodloužit - dosažena maximální délka výpůjčky"
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1081
-#: koha-tmpl/intranet-tmpl/prog/js/holds.js:276
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1134
+#: koha-tmpl/intranet-tmpl/prog/js/holds.js:372
 msgid "Cancel"
 msgstr "Zrušit"
+
+#: koha-tmpl/opac-tmpl/bootstrap/js/overdrive.js:383
+msgid "Cancel hold"
+msgstr "Zrušit rezervaci"
 
 #: koha-tmpl/intranet-tmpl/prog/js/categories.js:10
 msgid ""
 "Category code can only contain the following characters: letters, numbers, - "
 "and _."
 msgstr ""
+"Kód kategorie může obsahovat pouze následující znaky: písmena, čísla, - a _."
+
+#: koha-tmpl/opac-tmpl/bootstrap/js/overdrive.js:329
+msgid "Check in"
+msgstr "Vrácení"
+
+#: koha-tmpl/opac-tmpl/bootstrap/js/overdrive.js:347
+msgid "Check out"
+msgstr "Půjčování"
 
 #: koha-tmpl/intranet-tmpl/prog/js/audio_alerts.js:66
 msgid "Check the box next to the alert you want to delete."
-msgstr ""
+msgstr "Zaškrtněte políčko vedle upozornění, které chcete odstranit."
 
 #: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:121
 #: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:123
 msgid "Checked in"
 msgstr "Vráceno"
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:604
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:606
+#: koha-tmpl/opac-tmpl/bootstrap/js/overdrive.js:290
+msgid "Checked out until: "
+msgstr "Vypůjčeno do: "
+
+#: koha-tmpl/opac-tmpl/bootstrap/js/overdrive.js:145
+msgid "Checkouts"
+msgstr "Výpůjčky"
+
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:612
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:614
 msgid "Claim returned"
 msgstr ""
 
 #: koha-tmpl/intranet-tmpl/prog/js/additem.js:182
 msgid "Clear"
-msgstr ""
+msgstr "Vymazat"
 
 #: koha-tmpl/intranet-tmpl/prog/js/pages/tags-review.js:71
-#, fuzzy
 msgid "Clear all"
-msgstr "Vymazat filtr"
+msgstr "Smazat vše"
 
-#: koha-tmpl/intranet-tmpl/prog/js/holds.js:270
-#, fuzzy
+#: koha-tmpl/intranet-tmpl/prog/js/holds.js:366
 msgid "Clear date to suspend indefinitely"
-msgstr "Smazáním data konce pozastavíte rezervaci na neomezeně dlouho "
+msgstr "Smazáním data konce pozastavíte rezervaci na neomezeně dlouho"
 
 #: koha-tmpl/intranet-tmpl/prog/js/datatables.js:37
 #: koha-tmpl/intranet-tmpl/prog/js/datatables.js:39
-#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:730
-#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:732
+#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:742
+#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:744
 #: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:314
 #: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:316
 msgid "Clear filter"
@@ -394,25 +424,25 @@ msgstr "Vymazat filtr"
 #: koha-tmpl/intranet-tmpl/prog/js/pages/preferences.js:159
 #: koha-tmpl/intranet-tmpl/prog/js/pages/preferences.js:171
 msgid "Click to collapse this section"
-msgstr ""
+msgstr "Klikněte pro sbalení této sekce"
 
 #: koha-tmpl/intranet-tmpl/prog/js/pages/preferences.js:156
 msgid "Click to expand this section"
-msgstr ""
+msgstr "Klikněte pro rozbalení této sekce"
 
-#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:748
+#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:760
 #: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:332
 msgid "Columns"
-msgstr ""
+msgstr "Sloupce"
 
-#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:747
+#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:759
 #: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:331
 msgid "Columns settings"
-msgstr ""
+msgstr "Nastavení sloupců"
 
 #: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:144
 msgid "Confirm"
-msgstr ""
+msgstr "Potvrdit"
 
 #: koha-tmpl/intranet-tmpl/prog/js/datatables.js:28
 #, javascript-format
@@ -423,56 +453,66 @@ msgstr "%d řádků zkopírováno do schránky"
 msgid "Copied one row to clipboard"
 msgstr "Jeden řádek byl zkopírován do schránky"
 
-#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:710
+#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:722
 #: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:294
 msgid "Copy"
-msgstr ""
+msgstr "Kopírovat"
 
 #: koha-tmpl/intranet-tmpl/prog/js/datatables.js:25
 msgid "Copy to clipboard"
 msgstr "Zkopírovat do schránky"
 
-#: koha-tmpl/intranet-tmpl/prog/js/members-menu.js:120
+#: koha-tmpl/intranet-tmpl/prog/js/members-menu.js:122
 msgid "Dates of birth should be entered in the format 'DD.MM.YYYY'"
-msgstr ""
+msgstr "Data narození by měla být zadána ve formátu 'DD.MM.RRRR'"
 
-#: koha-tmpl/intranet-tmpl/prog/js/members-menu.js:118
+#: koha-tmpl/intranet-tmpl/prog/js/members-menu.js:120
 msgid "Dates of birth should be entered in the format 'DD/MM/YYYY'"
-msgstr ""
-
-#: koha-tmpl/intranet-tmpl/prog/js/members-menu.js:114
-msgid "Dates of birth should be entered in the format 'MM/DD/YYYY'"
-msgstr ""
+msgstr "Data narození by měla být zadána ve formátu 'DD/MM/YYYY'"
 
 #: koha-tmpl/intranet-tmpl/prog/js/members-menu.js:116
+msgid "Dates of birth should be entered in the format 'MM/DD/YYYY'"
+msgstr "Data narození by měla být zadána ve formátu 'MM/DD/RRRR'"
+
+#: koha-tmpl/intranet-tmpl/prog/js/members-menu.js:118
 msgid "Dates of birth should be entered in the format 'YYYY-MM-DD'"
-msgstr ""
+msgstr "Data narození by měla být zadána ve formátu 'YYYY-MM-DD'"
 
 #: koha-tmpl/intranet-tmpl/prog/js/table_filters.js:26
 msgid "Deactivate filters"
 msgstr "Vypnout filtry"
 
-#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:117
+#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:116
+#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:170
 msgid "Dec"
 msgstr "Pro"
 
-#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:114
+#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:113
+#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:171
 msgid "December"
 msgstr "Prosinec"
 
 #: koha-tmpl/intranet-tmpl/prog/js/additem.js:94
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1011
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1033
 #: koha-tmpl/intranet-tmpl/prog/js/elasticsearch-mappings.js:11
 msgid "Delete"
 msgstr "Smazat"
 
-#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:109
+#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:108
 msgid "Done"
 msgstr "Hotovo"
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:979
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1001
 msgid "Double click to edit"
 msgstr "Upravte dvojitým kliknutím"
+
+#: koha-tmpl/opac-tmpl/bootstrap/js/overdrive.js:296
+msgid "Download"
+msgstr "Stáhnout"
+
+#: koha-tmpl/opac-tmpl/bootstrap/js/overdrive.js:321
+msgid "Download as:"
+msgstr "Stáhnout jako:"
 
 #: koha-tmpl/intranet-tmpl/prog/js/acq.js:7
 msgid ""
@@ -483,14 +523,14 @@ msgstr ""
 
 #: koha-tmpl/intranet-tmpl/prog/js/additem.js:91
 msgid "Edit"
-msgstr ""
+msgstr "Upravit"
 
-#: koha-tmpl/intranet-tmpl/prog/js/marc_modification_templates.js:310
-#, fuzzy, javascript-format
+#: koha-tmpl/intranet-tmpl/prog/js/marc_modification_templates.js:314
+#, javascript-format
 msgid "Edit action %s"
-msgstr "Upravit poskytovatele %s"
+msgstr "Upravit akci %s"
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1022
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1044
 msgid "Edit notes"
 msgstr "Upravit poznámku"
 
@@ -508,35 +548,39 @@ msgid ""
 "Error: presence of invalid data prevent saving. Please make the corrections "
 "and try again."
 msgstr ""
+"Chyba: záznam nebyl uložen, protože obsahuje neplatná informace. Opravte je "
+"a zkuste to znovu."
 
 #: koha-tmpl/intranet-tmpl/prog/js/ajax.js:31
 msgid "Error; your data might not have been saved"
-msgstr ""
+msgstr "Chyba; vaše data nemusela být uložena"
 
-#: koha-tmpl/intranet-tmpl/prog/js/marc_modification_templates.js:116
+#: koha-tmpl/intranet-tmpl/prog/js/marc_modification_templates.js:120
 msgid "Every"
-msgstr ""
+msgstr "Každý"
 
-#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:694
+#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:706
 #: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:278
 msgid "Excel"
-msgstr ""
+msgstr "Excel"
 
-#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:763
+#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:775
 #: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:347
 msgid "Export"
-msgstr ""
+msgstr "Exportovat"
 
-#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:762
+#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:774
 #: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:346
 msgid "Export or print"
-msgstr ""
+msgstr "Export nebo tisk"
 
-#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:116
+#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:115
+#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:170
 msgid "Feb"
 msgstr "Úno"
 
-#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:113
+#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:112
+#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:171
 msgid "February"
 msgstr "Únor"
 
@@ -544,15 +588,17 @@ msgstr "Únor"
 msgid "First"
 msgstr "První"
 
-#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:121
+#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:120
 msgid "Fr"
 msgstr "Pá"
 
-#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:120
+#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:119
+#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:165
 msgid "Fri"
 msgstr "Pá"
 
-#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:119
+#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:118
+#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:166
 msgid "Friday"
 msgstr "Pátek"
 
@@ -564,47 +610,57 @@ msgstr "Zvolená velikost fondu přesahuje nadřízený rozpočet"
 msgid "Fund amount exceeds period allocation"
 msgstr "Zvolená velikost fondu přesahuje celkový rozpočet"
 
-#: koha-tmpl/intranet-tmpl/prog/js/holds.js:147
+#: koha-tmpl/intranet-tmpl/prog/js/browser.js:120
+msgid "Go back to the results"
+msgstr "Zpět na výsledky"
+
+#: koha-tmpl/intranet-tmpl/prog/js/holds.js:241
 msgid "Hold is <strong>suspended</strong>"
 msgstr "Rezervace je <strong>pozastavena</strong>"
 
+#: koha-tmpl/opac-tmpl/bootstrap/js/overdrive.js:155
+msgid "Holds"
+msgstr "Rezervace"
+
 #: koha-tmpl/intranet-tmpl/prog/js/marc_modification_templates.js:26
 msgid "If the field is a control field, the subfield should be empty"
-msgstr ""
+msgstr "Pokud je pole kontrolní, podpole by mělo být prázdné"
 
 #: koha-tmpl/intranet-tmpl/prog/js/biblio_framework.js:59
 #, javascript-format
 msgid "Importing to framework: %s. Importing from file: %s."
-msgstr ""
+msgstr "Importuji do šablony: %s. Importuji ze souboru: %s."
 
 #: koha-tmpl/intranet-tmpl/prog/js/basket.js:493
 #: koha-tmpl/intranet-tmpl/prog/js/basket.js:515
-#: koha-tmpl/opac-tmpl/bootstrap/js/basket.js:469
-#: koha-tmpl/opac-tmpl/bootstrap/js/basket.js:477
+#: koha-tmpl/opac-tmpl/bootstrap/js/basket.js:418
+#: koha-tmpl/opac-tmpl/bootstrap/js/basket.js:426
 msgid "In your cart"
 msgstr "V košíku"
 
 #: koha-tmpl/intranet-tmpl/prog/js/ajax.js:18
 msgid "Internal Server Error, please reload the page"
-msgstr ""
+msgstr "Vnitřní chyba serveru, prosím znovunačtěte stránku"
 
-#: koha-tmpl/intranet-tmpl/prog/js/holds.js:179
-#, fuzzy, javascript-format
+#: koha-tmpl/opac-tmpl/bootstrap/js/overdrive.js:412
+msgid "Item cannot be checked out. There are no available formats"
+msgstr "Jednotku nelze vypůjčit, protože není dostupná v žádném formátu"
+
+#: koha-tmpl/intranet-tmpl/prog/js/holds.js:273
+#, javascript-format
 msgid "Item hasn't been transferred yet from %s"
 msgstr "Jednotka dosud nebyla přesunuta z %s"
 
-#: koha-tmpl/intranet-tmpl/prog/js/holds.js:177
+#: koha-tmpl/intranet-tmpl/prog/js/holds.js:271
 #, javascript-format
 msgid "Item is <strong>in transit</strong> from %s since %s"
 msgstr "Jednotka je <strong>na cestě</strong> z: %s od %s"
 
-#: koha-tmpl/intranet-tmpl/prog/js/holds.js:163
-#, fuzzy
+#: koha-tmpl/intranet-tmpl/prog/js/holds.js:257
 msgid "Item is <strong>waiting here</strong>"
 msgstr "Jednotka čeká na <strong>vyzvednutí</strong>"
 
-#: koha-tmpl/intranet-tmpl/prog/js/holds.js:168
-#, fuzzy
+#: koha-tmpl/intranet-tmpl/prog/js/holds.js:262
 msgid "Item is <strong>waiting</strong>"
 msgstr "Jednotka čeká na <strong>vyzvednutí</strong>"
 
@@ -614,27 +670,33 @@ msgstr "Jednotka čeká na <strong>vyzvednutí</strong>"
 msgid "Items in your cart: %s"
 msgstr "Položek ve vašem košíku: %s"
 
-#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:116
+#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:115
+#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:170
 msgid "Jan"
 msgstr "Led"
 
-#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:113
+#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:112
+#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:171
 msgid "January"
 msgstr "Leden"
 
-#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:117
+#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:116
+#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:170
 msgid "Jul"
 msgstr "Čec"
 
-#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:114
+#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:113
+#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:171
 msgid "July"
 msgstr "Červenec"
 
-#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:116
+#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:115
+#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:170
 msgid "Jun"
 msgstr "Čer"
 
-#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:113
+#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:112
+#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:171
 msgid "June"
 msgstr "Červen"
 
@@ -643,13 +705,13 @@ msgid "Last"
 msgstr "Poslední"
 
 #: koha-tmpl/intranet-tmpl/prog/js/addorderiso2709.js:90
-#: koha-tmpl/intranet-tmpl/prog/js/z3950_search.js:124
+#: koha-tmpl/intranet-tmpl/prog/js/z3950_search.js:113
 msgid "Loading"
 msgstr "Načítá se"
 
 #: koha-tmpl/intranet-tmpl/prog/js/select2.js:20
 msgid "Loading more results…"
-msgstr ""
+msgstr "Nahrávám další výsledky…"
 
 #: koha-tmpl/intranet-tmpl/prog/js/ajax.js:35
 #: koha-tmpl/intranet-tmpl/prog/js/datatables.js:20
@@ -657,70 +719,90 @@ msgstr ""
 msgid "Loading..."
 msgstr "Načítá se…"
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:265
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:274
 msgid "Loading... you may continue scanning."
 msgstr "Nahrává se... můžete pokračovat v načítání kódů."
 
-#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:116
+#: koha-tmpl/opac-tmpl/bootstrap/js/overdrive.js:79
+msgid "Log in to your OverDrive account"
+msgstr "Přihlaste se ke svému účtu v systému OverDrive"
+
+#: koha-tmpl/opac-tmpl/bootstrap/js/overdrive.js:138
+msgid "Log out of your OverDrive account"
+msgstr "Odhlášení z účtu OverDrive"
+
+#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:115
+#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:170
 msgid "Mar"
 msgstr "Bře"
 
-#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:113
+#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:112
+#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:171
 msgid "March"
 msgstr "Březen"
 
-#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:113
-#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:116
+#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:112
+#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:115
+#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:170
+#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:171
 msgid "May"
 msgstr "Květen"
 
-#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:121
+#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:120
 msgid "Mo"
 msgstr "Po"
 
-#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:120
+#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:119
+#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:165
 msgid "Mon"
 msgstr "Po"
 
-#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:119
+#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:118
+#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:166
 msgid "Monday"
 msgstr "Pondělí"
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:472
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:480
 msgid "Must be renewed at the library"
-msgstr ""
+msgstr "Musí být prodlouženo v knihovně"
 
 #: koha-tmpl/intranet-tmpl/prog/js/additem.js:187
 msgid ""
 "NOTE: Fields listed in the 'UniqueItemsFields' system preference will not be "
 "copied"
 msgstr ""
+"POZNÁMKA: Pole uvedená v systémovém nastavení 'UniqueItemsFields' nebudou "
+"zkopírována"
 
 #: koha-tmpl/intranet-tmpl/prog/js/acq.js:341
 msgid "New budget-parent is beneath budget"
-msgstr ""
+msgstr "Nový mateřský rozpočet je dílčímrozpočtem tohoto rozpočtu"
 
-#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:111
+#: koha-tmpl/intranet-tmpl/prog/js/browser.js:93
+#: koha-tmpl/intranet-tmpl/prog/js/browser.js:95
+#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:110
 #: koha-tmpl/intranet-tmpl/prog/js/datatables.js:12
 msgid "Next"
 msgstr "Následující"
 
-#: koha-tmpl/intranet-tmpl/prog/js/holds.js:155
+#: koha-tmpl/intranet-tmpl/prog/js/holds.js:249
 #, javascript-format
 msgid "Next available %s item"
 msgstr "Další dostupná %s jednotka"
 
-#: koha-tmpl/intranet-tmpl/prog/js/holds.js:117
+#: koha-tmpl/intranet-tmpl/prog/js/holds.js:211
 msgid "No"
 msgstr "Ne"
 
 #: koha-tmpl/intranet-tmpl/prog/js/localcovers.js:46
 #: koha-tmpl/intranet-tmpl/prog/js/pages/results.js:98
+#: koha-tmpl/opac-tmpl/bootstrap/js/localcovers.js:25
+#: koha-tmpl/opac-tmpl/bootstrap/js/localcovers.js:54
 msgid "No cover image available"
 msgstr "Obálka není dostupná"
 
 #: koha-tmpl/intranet-tmpl/prog/js/datatables.js:15
-#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:538
+#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:550
 msgid "No data available in table"
 msgstr "Tabulka neobsahuje žádné údaje"
 
@@ -728,15 +810,14 @@ msgstr "Tabulka neobsahuje žádné údaje"
 msgid "No entries to show"
 msgstr "Žádné záznamy k zobrazení"
 
-#: koha-tmpl/opac-tmpl/bootstrap/js/basket.js:203
+#: koha-tmpl/opac-tmpl/bootstrap/js/basket.js:177
 msgctxt "Bibliographic record"
 msgid "No item was added to your cart"
 msgstr "Do košíku nebyly vloženy žádné položky"
 
 #: koha-tmpl/intranet-tmpl/prog/js/basket.js:221
-#, fuzzy
 msgid "No item was added to your cart (already in your cart)!"
-msgstr "Do košíku nebyly vloženy žádné položky"
+msgstr "Do košíku nebyla přidána žádná položka (již máte v košíku)!"
 
 #: koha-tmpl/intranet-tmpl/prog/js/basket.js:218
 #: koha-tmpl/intranet-tmpl/prog/js/basket.js:311
@@ -746,21 +827,19 @@ msgstr "Do košíku nebyly vloženy žádné položky"
 #: koha-tmpl/intranet-tmpl/prog/js/cart.js:6
 #: koha-tmpl/intranet-tmpl/prog/js/cart.js:32
 #: koha-tmpl/intranet-tmpl/prog/js/cart.js:52
-#, fuzzy
 msgid "No item was selected"
 msgstr "Není vybrána žádná jednotka"
 
-#: koha-tmpl/opac-tmpl/bootstrap/js/basket.js:200
-#: koha-tmpl/opac-tmpl/bootstrap/js/basket.js:296
-#: koha-tmpl/opac-tmpl/bootstrap/js/basket.js:391
-#: koha-tmpl/opac-tmpl/bootstrap/js/basket.js:423
-#: koha-tmpl/opac-tmpl/bootstrap/js/basket.js:437
+#: koha-tmpl/opac-tmpl/bootstrap/js/basket.js:174
+#: koha-tmpl/opac-tmpl/bootstrap/js/basket.js:269
+#: koha-tmpl/opac-tmpl/bootstrap/js/basket.js:351
+#: koha-tmpl/opac-tmpl/bootstrap/js/basket.js:382
+#: koha-tmpl/opac-tmpl/bootstrap/js/basket.js:397
 msgctxt "Bibliographic record"
 msgid "No item was selected"
 msgstr "Není vybrána žádná jednotka"
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:665
-#, fuzzy
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:673
 msgid "No itemtype"
 msgstr "Typ jednotky neuveden"
 
@@ -768,112 +847,116 @@ msgstr "Typ jednotky neuveden"
 msgid "No matching records found"
 msgstr "Nebyly nalezeny žádné odpovídající záznamy"
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:493
-#, fuzzy, javascript-format
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:501
+#, javascript-format
 msgid "No renewal before %s"
 msgstr "Prodloužit lze až po %s"
 
 #: koha-tmpl/intranet-tmpl/prog/js/select2.js:24
 msgid "No results found"
-msgstr ""
+msgstr "Nenalezeny žádné výsledky"
 
 #: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:202
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:486
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:494
 msgid "Not allowed: overdue"
 msgstr "Není povoleno: výpůjčky po datu vrácení"
 
 #: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:200
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:479
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:487
 msgid "Not allowed: patron restricted"
 msgstr "Nelze provést: čtenář má omezené služby"
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:465
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:473
 msgid "Not renewable"
 msgstr "Nelze prodloužit"
 
 #: koha-tmpl/intranet-tmpl/prog/js/pages/preferences.js:190
 msgid "Note: _ALL_ value will override all other values"
-msgstr ""
+msgstr "Poznámka: _ALL_ hodnota přepíše všechny ostatní hodnoty"
 
 #: koha-tmpl/intranet-tmpl/prog/js/pages/results.js:337
-#: koha-tmpl/intranet-tmpl/prog/js/pages/results.js:373
-#: koha-tmpl/intranet-tmpl/prog/js/pages/results.js:381
-#, fuzzy
+#: koha-tmpl/intranet-tmpl/prog/js/pages/results.js:364
+#: koha-tmpl/intranet-tmpl/prog/js/pages/results.js:372
 msgid "Nothing is selected"
-msgstr "Není vybrána žádná jednotka"
+msgstr "Nic není vybráno"
 
 #: koha-tmpl/intranet-tmpl/prog/js/pages/preferences.js:25
-#, fuzzy
 msgid "Nothing to save"
-msgstr "Není vybrána žádná jednotka"
+msgstr "Nic k uložení"
 
-#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:117
+#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:116
+#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:170
 msgid "Nov"
 msgstr "Lis"
 
-#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:114
+#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:113
+#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:171
 msgid "November"
 msgstr "Listopad"
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:671
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:679
 msgid "Number of checkouts by item type"
-msgstr ""
+msgstr "Počet výpůjček podle typu jednotky"
 
 #: koha-tmpl/intranet-tmpl/prog/js/additem.js:185
 msgid "Number of items to add"
-msgstr ""
+msgstr "Počet jednotek k přidání"
 
-#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:117
+#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:116
+#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:170
 msgid "Oct"
 msgstr "Říj"
 
-#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:114
+#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:113
+#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:171
 msgid "October"
 msgstr "Říjen"
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:458
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:587
-#, fuzzy
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:466
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:595
+#: koha-tmpl/opac-tmpl/bootstrap/js/overdrive.js:341
 msgid "On hold"
 msgstr "Rezervováno"
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:360
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:751
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:368
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:759
 msgid "On-site checkout"
 msgstr "Prezenční výpůjčka"
 
-#: koha-tmpl/intranet-tmpl/prog/js/pages/results.js:345
-msgid "One or more selected items cannot be placed on hold."
-msgstr ""
+#: koha-tmpl/opac-tmpl/bootstrap/js/overdrive.js:127
+msgid "OverDrive account page"
+msgstr "Účet OverDrive"
 
 #: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:125
-#, fuzzy
 msgid "Patron note"
 msgstr "Poznámka ke čtenáři"
 
 #: koha-tmpl/intranet-tmpl/prog/js/cart.js:86
-#: koha-tmpl/intranet-tmpl/prog/js/pages/results.js:363
+#: koha-tmpl/intranet-tmpl/prog/js/pages/results.js:354
+#: koha-tmpl/opac-tmpl/bootstrap/js/overdrive.js:377
 msgid "Place hold"
-msgstr ""
+msgstr "Rezervovat"
 
 #: koha-tmpl/intranet-tmpl/prog/js/categories.js:21
-#: koha-tmpl/intranet-tmpl/prog/js/categories.js:96
-#: koha-tmpl/intranet-tmpl/prog/js/categories.js:99
+#: koha-tmpl/intranet-tmpl/prog/js/categories.js:95
+#: koha-tmpl/intranet-tmpl/prog/js/categories.js:98
 msgid "Please choose an enrollment period in months OR by date."
 msgstr ""
+"Prosím zvolte délku registrace zadáním počtu měsíců NEBO data jejího konce."
 
 #: koha-tmpl/intranet-tmpl/prog/js/z3950_search.js:52
 msgid "Please choose at least one external target"
-msgstr ""
+msgstr "Vyberte, prosím, alespoň jeden Z39.50 server"
 
 #: koha-tmpl/intranet-tmpl/prog/js/select2.js:11
 #, javascript-format
-msgid "Please delete %d character(s)"
-msgstr ""
+msgid "Please delete %s character(s)"
+msgstr "Prosím odstraňte %s znak(ů)"
 
 #: koha-tmpl/intranet-tmpl/prog/js/select2.js:15
-msgid "Please enter %n or more characters"
-msgstr ""
+#, javascript-format
+msgid "Please enter %s or more characters"
+msgstr "Zadejte %s nebo více znaků"
 
 #: koha-tmpl/intranet-tmpl/prog/js/calendar.js:3
 #, javascript-format
@@ -882,25 +965,27 @@ msgstr "Zadejte platné datum (ve tvaru %s)."
 
 #: koha-tmpl/intranet-tmpl/prog/js/letter.js:96
 msgid "Please fill at least one template."
-msgstr ""
+msgstr "Vyberte prosím alespoň jednu šablonu."
 
 #: koha-tmpl/intranet-tmpl/prog/js/catalog.js:12
 msgid "Please note that this external search could replace the current record."
 msgstr ""
+"Vezměte prosím na vědomí, že Váš současný záznam bude nahrazen importovaným "
+"záznamem."
 
 #: koha-tmpl/intranet-tmpl/prog/js/biblio_framework.js:43
 #: koha-tmpl/intranet-tmpl/prog/js/biblio_framework.js:73
 msgid "Please select a CSV (.csv) or ODS (.ods) spreadsheet file."
-msgstr ""
+msgstr "Vyberte soubor ve formátu CSV (.csv) či ODS (.ods)."
 
 #: koha-tmpl/intranet-tmpl/prog/js/audio_alerts.js:42
 msgid "Please select or enter a sound."
-msgstr ""
+msgstr "Vyberte nebo vložte zvukový soubor."
 
 #: koha-tmpl/intranet-tmpl/prog/js/letter.js:87
 #, javascript-format
 msgid "Please specify title and content for %s"
-msgstr ""
+msgstr "Prosím upřesněte název a obsah pro %s"
 
 #: koha-tmpl/intranet-tmpl/prog/js/datatables.js:26
 msgid ""
@@ -911,25 +996,26 @@ msgstr ""
 "tabulky<br>do schránky v systému.<br><br>Pokud chcete odejít, klikněte na "
 "tuto zprávu nebo stiskněte tlačítko ESC."
 
-#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:110
+#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:109
 msgid "Prev"
 msgstr "Předchozí"
 
+#: koha-tmpl/intranet-tmpl/prog/js/browser.js:88
+#: koha-tmpl/intranet-tmpl/prog/js/browser.js:90
 #: koha-tmpl/intranet-tmpl/prog/js/datatables.js:13
 msgid "Previous"
 msgstr "Předchozí"
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:284
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:652
-#, fuzzy
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:293
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:660
 msgid "Previous checkouts"
 msgstr "Předchozí výpůjčky"
 
-#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:718
+#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:730
 #: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:32
 #: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:302
 msgid "Print"
-msgstr ""
+msgstr "Tisk "
 
 #: koha-tmpl/intranet-tmpl/prog/js/datatables.js:21
 msgid "Processing..."
@@ -937,30 +1023,30 @@ msgstr "Zpracovává se..."
 
 #: koha-tmpl/intranet-tmpl/prog/js/pages/tags-review.js:112
 msgid "Reject"
-msgstr ""
+msgstr "Zamítnout"
 
 #: koha-tmpl/intranet-tmpl/prog/js/pages/tags-review.js:135
 #: koha-tmpl/intranet-tmpl/prog/js/pages/tags-review.js:138
 msgid "Rejected"
-msgstr ""
+msgstr "Zamítnuto"
 
 #: koha-tmpl/intranet-tmpl/prog/js/select2.js:26
 msgid "Remove all items"
-msgstr ""
+msgstr "Odstranit všechny položky"
 
 #: koha-tmpl/intranet-tmpl/prog/js/select2.js:27
 msgid "Remove item"
-msgstr ""
+msgstr "Odstranit položku"
 
-#: koha-tmpl/intranet-tmpl/prog/js/pages/circulation.js:90
+#: koha-tmpl/intranet-tmpl/prog/js/pages/circulation.js:87
 msgid "Remove restriction?"
-msgstr ""
+msgstr "Odstranit omezení?"
 
 #: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:190
 msgid "Renew failed:"
 msgstr "Prodloužení se nezdařilo:"
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:537
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:545
 msgid "Renewal denied by syspref"
 msgstr "Prodloužení je zakázáno systémovým nastavením"
 
@@ -968,39 +1054,43 @@ msgstr "Prodloužení je zakázáno systémovým nastavením"
 msgid "Renewed, due:"
 msgstr "Prodlouženo do:"
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1014
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1036
 msgid "Resolve"
 msgstr "Vyřešit"
 
-#: koha-tmpl/intranet-tmpl/prog/js/holds.js:135
+#: koha-tmpl/intranet-tmpl/prog/js/browser.js:97
+msgid "Results"
+msgstr "Výsledky"
+
+#: koha-tmpl/intranet-tmpl/prog/js/holds.js:229
 msgid "Resume"
 msgstr "Pokračovat"
 
-#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:121
+#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:120
 msgid "Sa"
 msgstr "So"
 
-#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:120
+#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:119
+#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:165
 msgid "Sat"
 msgstr "So"
 
-#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:119
+#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:118
+#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:166
 msgid "Saturday"
 msgstr "Sobota"
 
 #: koha-tmpl/intranet-tmpl/prog/js/pages/preferences.js:41
 #, javascript-format
 msgid "Saved preference %s"
-msgstr ""
+msgstr "Uloženo nastavení %s"
 
 #: koha-tmpl/intranet-tmpl/prog/js/pages/preferences.js:28
-#, fuzzy
 msgid "Saving..."
-msgstr "Načítá se…"
+msgstr "Ukládá se…"
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:500
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:528
-#, fuzzy
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:508
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:536
 msgid "Scheduled for automatic renewal"
 msgstr "Naplánováno automatické prodloužení"
 
@@ -1009,29 +1099,44 @@ msgid "Search:"
 msgstr "Hledat:"
 
 #: koha-tmpl/intranet-tmpl/prog/js/select2.js:25
-#, fuzzy
 msgid "Searching…"
-msgstr "Hledat:"
+msgstr "Hledá se…"
 
 #: koha-tmpl/intranet-tmpl/prog/js/pages/tags-review.js:71
 msgid "Select all"
-msgstr ""
+msgstr "Označit vše"
 
 #: koha-tmpl/intranet-tmpl/prog/js/pages/tags-review.js:71
 msgid "Select all pending"
-msgstr ""
+msgstr "Označit všechny nevyřízené"
 
-#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:171
+#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:180
 msgid "Select date"
 msgstr "Zvolte datum"
 
-#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:117
+#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:116
+#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:170
 msgid "Sep"
 msgstr "Zář"
 
-#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:114
+#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:113
+#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:171
 msgid "September"
 msgstr "Září"
+
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1107
+msgid "Show 1 claim"
+msgid_plural "Show all {count} claims"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1112
+msgid "Show 1 unresolved claim"
+msgid_plural "Show {count} unresolved claims"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
 
 #: koha-tmpl/intranet-tmpl/prog/js/datatables.js:19
 msgid "Show _MENU_ entries"
@@ -1044,66 +1149,70 @@ msgstr "Zobrazuje se _START_ až _END_ z _TOTAL_záznamů"
 #: koha-tmpl/intranet-tmpl/prog/js/viewlog.js:35
 #, javascript-format
 msgid "Showing results for %s"
-msgstr ""
+msgstr "Zobrazují se výsledky pro %s"
 
 #: koha-tmpl/intranet-tmpl/prog/js/addorderiso2709.js:70
 msgid "Some budgets are not defined in item records"
-msgstr ""
+msgstr "Některé rozpočty nejsou obsaženy v záznamech jednotek"
 
-#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:121
+#: koha-tmpl/intranet-tmpl/prog/js/cataloging.js:628
+msgid "Something went wrong. Maybe the value already exists?"
+msgstr "Něco se pokazilo. Možná už hodnota existuje?"
+
+#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:120
 msgid "Su"
 msgstr "Ne"
 
-#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:120
+#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:119
+#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:165
 msgid "Sun"
 msgstr "Ne"
 
-#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:119
+#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:118
+#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:166
 msgid "Sunday"
 msgstr "Neděle"
 
-#: koha-tmpl/intranet-tmpl/prog/js/holds.js:138
-#: koha-tmpl/intranet-tmpl/prog/js/holds.js:275
-#, fuzzy
+#: koha-tmpl/intranet-tmpl/prog/js/holds.js:232
+#: koha-tmpl/intranet-tmpl/prog/js/holds.js:371
 msgid "Suspend"
 msgstr "Pozastavit"
 
-#: koha-tmpl/intranet-tmpl/prog/js/holds.js:261
+#: koha-tmpl/intranet-tmpl/prog/js/holds.js:357
 msgid "Suspend hold on"
-msgstr ""
+msgstr "Pozastavit rezervaci do"
 
-#: koha-tmpl/intranet-tmpl/prog/js/holds.js:267
+#: koha-tmpl/intranet-tmpl/prog/js/holds.js:363
 msgid "Suspend until:"
 msgstr "Pozastavit do:"
 
 #: koha-tmpl/intranet-tmpl/prog/js/pages/tags-review.js:148
-#, fuzzy
 msgid "Testing..."
-msgstr "Zpracovává se..."
+msgstr "Testování..."
 
-#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:121
+#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:120
 msgid "Th"
 msgstr "Čt"
 
 #: koha-tmpl/intranet-tmpl/prog/js/marc_modification_templates.js:51
 msgid "The conditional comparison operator should be filled."
-msgstr ""
+msgstr "Operátor porovnání musí být vyplněn."
 
 #: koha-tmpl/intranet-tmpl/prog/js/marc_modification_templates.js:47
 msgid "The conditional field should be filled."
-msgstr ""
+msgstr "Pole musí být vyplněno."
 
 #: koha-tmpl/intranet-tmpl/prog/js/marc_modification_templates.js:57
 msgid "The conditional regular expression should be filled."
-msgstr ""
+msgstr "Regulární výraz musí být vyplněn."
 
 #: koha-tmpl/intranet-tmpl/prog/js/marc_modification_templates.js:60
 msgid "The conditional value should be filled."
-msgstr ""
+msgstr "Hodnota musí být vyplněna."
 
 #: koha-tmpl/intranet-tmpl/prog/js/marc_modification_templates.js:21
 msgid "The destination should be filled."
-msgstr ""
+msgstr "Cíl by měl být vyplněn."
 
 #: koha-tmpl/intranet-tmpl/prog/js/merge-record.js:72
 msgctxt "Bibliographic record"
@@ -1111,51 +1220,52 @@ msgid ""
 "The field is non-repeatable and already exists in the destination record. "
 "Therefore, you cannot add it."
 msgstr ""
+"Pole je neopakovatelné a již v cílovém záznamu existuje. Nelze ho tedy "
+"přidat."
 
 #: koha-tmpl/intranet-tmpl/prog/js/pages/preferences.js:201
 msgid "The following values are not formatted correctly:"
-msgstr ""
+msgstr "Následující hodnoty nejsou ve správném formátu:"
 
-#: koha-tmpl/opac-tmpl/bootstrap/js/basket.js:135
+#: koha-tmpl/opac-tmpl/bootstrap/js/basket.js:128
 msgctxt "Bibliographic record"
 msgid "The item has been added to your cart"
 msgstr "Jednotka byla vložena do košíku"
 
 #: koha-tmpl/intranet-tmpl/prog/js/basket.js:260
-#, fuzzy
 msgid "The item has been removed from your cart"
 msgstr "Položka byla odstraněna ze košíku"
 
-#: koha-tmpl/opac-tmpl/bootstrap/js/basket.js:244
+#: koha-tmpl/opac-tmpl/bootstrap/js/basket.js:218
 msgctxt "Bibliographic record"
 msgid "The item has been removed from your cart"
 msgstr "Položka byla odstraněna ze košíku"
 
-#: koha-tmpl/opac-tmpl/bootstrap/js/basket.js:118
+#: koha-tmpl/opac-tmpl/bootstrap/js/basket.js:111
 msgctxt "Bibliographic record"
 msgid "The item is already in your cart"
 msgstr "Tuto jednotku již v košíku máte"
 
 #: koha-tmpl/intranet-tmpl/prog/js/z3950_search.js:9
 msgid "The page entered is not a number."
-msgstr ""
+msgstr "Zadaná stránka není číslo."
 
 #: koha-tmpl/intranet-tmpl/prog/js/z3950_search.js:12
 #, javascript-format
 msgid "The page should be a number between 1 and %s."
-msgstr ""
+msgstr "Stránka by měla být číslo mezi 1 a %s."
 
 #: koha-tmpl/intranet-tmpl/prog/js/select2.js:8
 msgid "The results could not be loaded"
-msgstr ""
+msgstr "Výsledky se nepodařilo načíst"
 
 #: koha-tmpl/intranet-tmpl/prog/js/marc_modification_templates.js:42
 msgid "The source field should be filled."
-msgstr ""
+msgstr "Zdrojové pole musí být vyplněno."
 
 #: koha-tmpl/intranet-tmpl/prog/js/marc_modification_templates.js:37
 msgid "The source subfield should be filled for update."
-msgstr ""
+msgstr "Zdrojové podpole by mělo být vyplněno, chcete-li provádět úpravu pole."
 
 #: koha-tmpl/intranet-tmpl/prog/js/merge-record.js:107
 msgctxt "Bibliographic record"
@@ -1163,6 +1273,8 @@ msgid ""
 "The subfield is non-repeatable and already exists in the destination record. "
 "Therefore, you cannot add it."
 msgstr ""
+"Podpole je neopakovatelné a již v cílovém záznamu existuje. Proto ho nelze "
+"přidat."
 
 #: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:58
 msgid "The vendor does not exist"
@@ -1174,48 +1286,50 @@ msgstr "Není vybraný žádný seznam"
 
 #: koha-tmpl/intranet-tmpl/prog/js/elasticsearch-mappings.js:53
 msgid "This field is mandatory and must have at least one mapping"
-msgstr ""
+msgstr "Toto pole je povinné a musí obsahovat alespoň jedno mapování"
 
 #: koha-tmpl/intranet-tmpl/prog/js/basket.js:136
-#, fuzzy
 msgid "This item has been added to your cart"
 msgstr "Jednotka byla vložena do košíku"
 
 #: koha-tmpl/intranet-tmpl/prog/js/basket.js:119
-#, fuzzy
 msgid "This item is already in your cart"
 msgstr "Tuto jednotku již v košíku máte"
 
 #: koha-tmpl/intranet-tmpl/prog/js/catalog.js:78
 msgid "This record has no items."
-msgstr ""
+msgstr "Tento záznam nemá žádné jednotky."
 
-#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:120
+#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:119
+#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:165
 msgid "Thu"
 msgstr "Čt"
 
-#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:119
+#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:118
+#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:166
 msgid "Thursday"
 msgstr "Čtvrtek"
 
-#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:112
+#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:111
 msgid "Today"
 msgstr "Dnes"
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:282
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:650
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:291
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:658
 msgid "Today's checkouts"
 msgstr "Dnešní výpůjčky"
 
-#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:121
+#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:120
 msgid "Tu"
 msgstr "Út"
 
-#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:120
+#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:119
+#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:165
 msgid "Tue"
 msgstr "Út"
 
-#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:119
+#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:118
+#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:166
 msgid "Tuesday"
 msgstr "Úterý"
 
@@ -1223,40 +1337,38 @@ msgstr "Úterý"
 msgid "Unable to check in"
 msgstr "Vrácení není možné"
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:920
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:928
 msgid "Unable to claim as returned"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/js/holds.js:215
+#: koha-tmpl/intranet-tmpl/prog/js/holds.js:309
 msgid "Unable to resume, hold not found"
 msgstr "Není možné pokračovat, rezervace nebyla nalezena"
 
-#: koha-tmpl/intranet-tmpl/prog/js/holds.js:298
+#: koha-tmpl/intranet-tmpl/prog/js/holds.js:396
 msgid "Unable to suspend hold, hold not found"
-msgstr ""
+msgstr "Nebylo možné pozastavit rezervaci, rezervace nebyla nalezena"
 
-#: koha-tmpl/intranet-tmpl/prog/js/holds.js:295
+#: koha-tmpl/intranet-tmpl/prog/js/holds.js:393
 msgid "Unable to suspend hold, invalid date"
-msgstr ""
+msgstr "Nebylo možné pozastavit rezervaci, neplatné datum"
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1080
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1133
 msgid "Update"
 msgstr "Aktualizovat"
 
-#: koha-tmpl/intranet-tmpl/prog/js/marc_modification_templates.js:313
-#, fuzzy
+#: koha-tmpl/intranet-tmpl/prog/js/marc_modification_templates.js:317
 msgid "Update action"
-msgstr "Aktualizovat"
+msgstr "Aktualizovat akci"
 
 #: koha-tmpl/intranet-tmpl/prog/js/additem.js:17
 #: koha-tmpl/intranet-tmpl/prog/js/additem.js:50
-#, fuzzy
 msgid "Update item"
-msgstr "Aktualizovat"
+msgstr "Aktualizovat jednotku"
 
 #: koha-tmpl/intranet-tmpl/prog/js/viewlog.js:18
 msgid "View comparison"
-msgstr ""
+msgstr "Zobrazit srovnání"
 
 #: koha-tmpl/intranet-tmpl/prog/js/catalog.js:35
 #, javascript-format
@@ -1264,65 +1376,68 @@ msgid ""
 "Warning: This record is used in %s order(s). Deleting it could cause serious "
 "issues on acquisition module. Are you sure you want to delete this record?"
 msgstr ""
+"Varování: Tento záznam je použit v %s objednávkách. Smazání by mohlo "
+"způsobit vážné problémy v modulu Akvizice. Opravdu chcete tento záznam "
+"smazat?"
 
-#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:121
+#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:120
 msgid "We"
 msgstr "St"
 
-#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:120
+#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:119
+#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:165
 msgid "Wed"
 msgstr "St"
 
-#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:119
+#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:118
+#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:166
 msgid "Wednesday"
 msgstr "Středa"
 
-#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:122
+#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:121
 msgid "Wk"
 msgstr "Týden"
 
-#: koha-tmpl/intranet-tmpl/prog/js/holds.js:118
+#: koha-tmpl/intranet-tmpl/prog/js/holds.js:212
 msgid "Yes"
 msgstr "Ano"
 
 #: koha-tmpl/intranet-tmpl/prog/js/select2.js:22
 #, javascript-format
 msgid "You can only select %s item(s)"
-msgstr ""
+msgstr "Můžete vybrat maximálně %s položek"
 
 #: koha-tmpl/intranet-tmpl/prog/js/viewlog.js:42
 msgid "You can select maximum of two checkboxes"
-msgstr ""
+msgstr "Můžete zaškrtnout maximálně dvě políčka"
 
 #: koha-tmpl/intranet-tmpl/prog/js/additem.js:22
 msgid "You can't receive any more items"
-msgstr ""
+msgstr "Nemůžete přijmout žádné další jednotky"
 
 #: koha-tmpl/intranet-tmpl/prog/js/pages/preferences.js:63
 msgid "You have made changes to system preferences."
-msgstr ""
+msgstr "Provedli jste změny systémových nastaveních."
 
-#: koha-tmpl/intranet-tmpl/prog/js/pages/results.js:433
-#: koha-tmpl/intranet-tmpl/prog/js/pages/results.js:444
+#: koha-tmpl/intranet-tmpl/prog/js/pages/results.js:424
+#: koha-tmpl/intranet-tmpl/prog/js/pages/results.js:435
 msgid "You must select at least one record"
 msgstr "Musíte vybrat alespoň jeden záznam"
 
-#: koha-tmpl/intranet-tmpl/prog/js/pages/circulation.js:116
-#, fuzzy
+#: koha-tmpl/intranet-tmpl/prog/js/pages/circulation.js:113
 msgid "You must select checkout(s) to export"
-msgstr "Musíte vybrat alespoň jeden záznam"
+msgstr "Musíte vybrat výpůjčku(y) k exportu"
 
 #: koha-tmpl/intranet-tmpl/prog/js/viewlog.js:128
-#, fuzzy
 msgid "You must select two entries to compare"
-msgstr "Musíte vybrat alespoň jeden záznam"
+msgstr "Musíte vybrat dvě položky, které chcete porovnat"
 
 #: koha-tmpl/intranet-tmpl/prog/js/ajax.js:25
 msgid "You need to log in again, your session has timed out"
-msgstr ""
+msgstr "Musíte se přihlásit znovu, vaše stávající přihlášení vypršelo"
 
 #: koha-tmpl/intranet-tmpl/prog/js/basket.js:91
-#: koha-tmpl/opac-tmpl/bootstrap/js/basket.js:89
+#: koha-tmpl/opac-tmpl/bootstrap/js/basket.js:82
 msgid "Your cart is currently empty"
 msgstr "Váš košík je nyní prázdný"
 
@@ -1332,36 +1447,35 @@ msgstr " "
 
 #: koha-tmpl/intranet-tmpl/prog/js/additem.js:299
 msgid "already exists in database"
-msgstr ""
+msgstr "již v databázi existuje"
 
-#: koha-tmpl/opac-tmpl/bootstrap/js/basket.js:192
-#: koha-tmpl/opac-tmpl/bootstrap/js/basket.js:203
+#: koha-tmpl/opac-tmpl/bootstrap/js/basket.js:166
+#: koha-tmpl/opac-tmpl/bootstrap/js/basket.js:177
 msgid "already in your cart"
 msgstr "již jsou v košíku"
 
-#: koha-tmpl/intranet-tmpl/prog/js/holds.js:165
-#: koha-tmpl/intranet-tmpl/prog/js/holds.js:169
-#: koha-tmpl/intranet-tmpl/prog/js/holds.js:171
+#: koha-tmpl/intranet-tmpl/prog/js/holds.js:259
+#: koha-tmpl/intranet-tmpl/prog/js/holds.js:263
+#: koha-tmpl/intranet-tmpl/prog/js/holds.js:265
 #, javascript-format
 msgid "at %s"
 msgstr "v %s"
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:339
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:730
-#: koha-tmpl/intranet-tmpl/prog/js/holds.js:42
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:347
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:738
+#: koha-tmpl/intranet-tmpl/prog/js/holds.js:136
 msgid "by _AUTHOR_"
 msgstr "od _AUTHOR_"
 
 #: koha-tmpl/intranet-tmpl/prog/js/additem.js:274
 msgid "is duplicated"
-msgstr ""
+msgstr "je duplicitní"
 
 #: koha-tmpl/intranet-tmpl/prog/js/pages/preferences.js:57
 msgid "modified"
-msgstr ""
+msgstr "změněno"
 
 #: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:192
-#, fuzzy
 msgid "not checked out"
 msgstr "nevypůjčeno"
 
@@ -1380,12 +1494,20 @@ msgstr "neznámý důvod"
 #: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:196
 msgid "too many consecutive renewals without being seen by the library"
 msgstr ""
+"příliš mnoho po sobě jdoucích prodloužení, aniž by knihovna jednotky viděla"
 
 #: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:194
 msgid "too many renewals"
 msgstr "příliš mnoho prodloužení"
 
-#: koha-tmpl/intranet-tmpl/prog/js/holds.js:149
-#, fuzzy, javascript-format
+#: koha-tmpl/intranet-tmpl/prog/js/holds.js:243
+#, javascript-format
 msgid "until %s"
 msgstr "do %s"
+
+#~ msgctxt "Bibliographic records"
+#~ msgid "Are you sure you want to remove the selected items?"
+#~ msgstr "Opravdu chcete odstranit vybrané položky?"
+
+#~ msgid "One or more selected items cannot be placed on hold."
+#~ msgstr "Jednu nebo více vybraných jednotek nelze rezervovat."

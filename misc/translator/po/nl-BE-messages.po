@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Koha 21.05\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-05-11 20:11-0300\n"
+"POT-Creation-Date: 2021-11-14 07:06-0300\n"
 "PO-Revision-Date: 2021-01-22 13:57+0000\n"
 "Last-Translator: Fridolin SOMERS <fridolin.somers@biblibre.com>\n"
 "Language-Team: none\n"
@@ -60,7 +60,11 @@ msgctxt "Cancel hold button"
 msgid "Cancel"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1266
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/tables/members_results.tt:20
+msgid "Check out"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1326
 msgctxt "patron restriction created on"
 msgid "Created"
 msgstr "Aangemaakt"
@@ -86,6 +90,12 @@ msgstr "Gemaakt door:"
 msgid "Elasticsearch is currently disabled."
 msgstr "Elasticsearch is nu niet ingesteld."
 
+#: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:944
+msgid "Hold"
+msgid_plural "Holds"
+msgstr[0] ""
+msgstr[1] ""
+
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:59
 #, perl-brace-format
 msgid "Index '{index}' needs to be recreated."
@@ -102,29 +112,24 @@ msgid "Invalid field weight '{weight}', must be a positive decimal number."
 msgstr ""
 "Ongeldig veld gewicht '{weight}', moet een positief decimaal getal zijn."
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:129
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:271
+#: koha-tmpl/intranet-tmpl/prog/en/includes/html_helpers.inc:268
 #, fuzzy
 msgid "Item does not belong to your library"
 msgstr "Het item behoort niet tot uw bibliotheek"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:130
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:272
+#: koha-tmpl/intranet-tmpl/prog/en/includes/html_helpers.inc:269
 msgid "Item has a waiting hold"
 msgstr "Item heeft een wachtende reservering"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:131
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:273
+#: koha-tmpl/intranet-tmpl/prog/en/includes/html_helpers.inc:270
 msgid "Item has linked analytics"
 msgstr "Item heeft gekoppelde analyses"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:128
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:270
+#: koha-tmpl/intranet-tmpl/prog/en/includes/html_helpers.inc:267
 msgid "Item is checked out"
 msgstr "Item is uitgeleend"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:132
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:274
+#: koha-tmpl/intranet-tmpl/prog/en/includes/html_helpers.inc:271
 #, fuzzy
 msgid "Last item for bibliographic record with biblio-level hold on it"
 msgstr ""
@@ -138,8 +143,8 @@ msgstr "Mappings succesvol gereset."
 msgid "Mappings updated successfully."
 msgstr "Mappings succesvol geüpdatet. "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/basket.tt:422
-#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/basket.tt:625
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/basket.tt:436
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/basket.tt:639
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/ordered.tt:46
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/parcel.tt:258
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/spent.tt:46
@@ -158,7 +163,21 @@ msgctxt "verb"
 msgid "Order"
 msgstr "Bestelling"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/detail.tt:821
+#: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/course-details.tt:69
+#: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/course-reserves.tt:52
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-course-reserves.tt:45
+msgctxt "Semester"
+msgid "Term"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/course.tt:83
+#: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/course.tt:96
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-course-details.tt:44
+msgctxt "Semester"
+msgid "Term:"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/detail.tt:845
 #, perl-brace-format
 msgctxt "pluralization"
 msgid "There is one archived suggestion."
@@ -166,10 +185,13 @@ msgid_plural "There are {count} archived suggestions."
 msgstr[0] "Er is één gearchiveerde suggestie."
 msgstr[1] "Er zijn {count} gearchiveerde suggesties."
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:133
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:275
+#: koha-tmpl/intranet-tmpl/prog/en/includes/html_helpers.inc:272
 msgid "Unknown reason"
 msgstr "Onbekende reden"
+
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/tables/members_results.tt:22
+msgid "View"
+msgstr ""
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:53
 msgid ""
@@ -208,7 +230,7 @@ msgid_plural "overdues"
 msgstr[0] ""
 msgstr[1] ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:564
+#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:555
 #, perl-brace-format
 msgid "{count} item"
 msgid_plural "{count} items"

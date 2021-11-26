@@ -7,9 +7,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Koha 21.05\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-05-11 18:06-0300\n"
-"PO-Revision-Date: 2020-10-29 20:19+0000\n"
-"Last-Translator: Sujan Saha <sujan.lib@gmail.com>\n"
+"POT-Creation-Date: 2021-11-11 23:10-0300\n"
+"PO-Revision-Date: 2021-11-09 18:30+0000\n"
+"Last-Translator: Alexander <alexjohn2000@gmail.com>\n"
 "Language-Team: none\n"
 "Language: bn\n"
 "MIME-Version: 1.0\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.8\n"
-"X-POOTLE-MTIME: 1604002769.316184\n"
+"X-POOTLE-MTIME: 1636482617.923546\n"
 "X-Pootle-Path: /bn/21.05/bn-IN-messages.po\n"
 "X-Pootle-Revision: 1\n"
 
@@ -30,8 +30,8 @@ msgstr "(অনুসন্ধান ক্ষেত্র {field_name} ম্�
 #, perl-brace-format
 msgid "({age} year)"
 msgid_plural "({age} years)"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "({age} বছর)"
+msgstr[1] "({age} বছরগুলো)"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:48
 msgid ""
@@ -43,19 +43,24 @@ msgstr "বর্তমান ম্যাপিংটি ডিলিট কর
 #, perl-brace-format
 msgid ""
 "An error occurred when updating Elasticsearch index mappings: {message}."
-msgstr "Elasticsearch সূচি ম্যাপিং আপডেট করার সময় একটি ত্রুটি হয়েছে : {message}"
+msgstr "Elasticsearch সূচি ম্যাপিং আপডেট করার সময় একটি ত্রুটি হয়েছে: {message}."
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:46
 #, perl-brace-format
 msgid "An error occurred when updating mappings: {message}."
-msgstr "ম্যাপিংগুলি আপডেট করার সময় একটি ভুল হয়েছে: {message}"
+msgstr "ম্যাপিংগুলি আপডেট করার সময় একটি ভুল হয়েছে: {message}."
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:189
 msgctxt "Cancel hold button"
 msgid "Cancel"
-msgstr ""
+msgstr "বাতিল"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1266
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/tables/members_results.tt:20
+#, fuzzy
+msgid "Check out"
+msgstr "চেকআউট"
+
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1326
 msgctxt "patron restriction created on"
 msgid "Created"
 msgstr "তৈরি হয়েছে"
@@ -64,27 +69,33 @@ msgstr "তৈরি হয়েছে"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/transferorder.tt:44
 msgctxt "basket created by"
 msgid "Created by"
-msgstr "দ্বারা তৈরী হয়েছে "
+msgstr "দ্বারা তৈরী হয়েছে"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/basket.tt:245
 msgctxt "basket created by"
 msgid "Created by:"
-msgstr "দ্বারা তৈরী হয়েছে "
+msgstr "দ্বারা তৈরী হয়েছে:"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:242
 #: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:500
 msgctxt "purchase suggestion created by"
 msgid "Created by:"
-msgstr "তৈরি করেছে"
+msgstr "তৈরি করেছে:"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:65
 msgid "Elasticsearch is currently disabled."
-msgstr "Elasticsearch বর্তমানে অক্ষম"
+msgstr "ইলাস্টিকসার্চ বর্তমানে নিষ্ক্রিয় আছে।"
+
+#: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:944
+msgid "Hold"
+msgid_plural "Holds"
+msgstr[0] ""
+msgstr[1] ""
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:59
 #, perl-brace-format
 msgid "Index '{index}' needs to be recreated."
-msgstr "ইনডেক্স '{index}' পুনরায় তৈরি করা দরকার।"
+msgstr "ইনডেক্স '{index}' পুনরায় তৈরি করা দরকার."
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:57
 #, perl-brace-format
@@ -96,32 +107,25 @@ msgstr "ইনডেক্স '{index}' পুনরায় সূচি ক�
 msgid "Invalid field weight '{weight}', must be a positive decimal number."
 msgstr "অবৈধ ফিল্ড ওজন '{weight}', একটি ধনাত্মক দশমিক সংখ্যা হতে হবে।"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:129
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:271
-#, fuzzy
+#: koha-tmpl/intranet-tmpl/prog/en/includes/html_helpers.inc:268
 msgid "Item does not belong to your library"
 msgstr "আইটেমটি আপনার লাইব্রেরির অন্তর্ভুক্ত নয়"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:130
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:272
+#: koha-tmpl/intranet-tmpl/prog/en/includes/html_helpers.inc:269
 msgid "Item has a waiting hold"
 msgstr "আইটেমটির একটি ওয়েটিং হোল্ড রয়েছে"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:131
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:273
+#: koha-tmpl/intranet-tmpl/prog/en/includes/html_helpers.inc:270
 msgid "Item has linked analytics"
-msgstr "আইটেমটি এনালিটিক্স যুক্ত  "
+msgstr "আইটেমটিতে এনালিটিক্স যুক্ত আছে"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:128
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:270
+#: koha-tmpl/intranet-tmpl/prog/en/includes/html_helpers.inc:267
 msgid "Item is checked out"
-msgstr "আইটেমটি ইস্যু করা হয়েছে "
+msgstr "আইটেমটি ইস্যু করা হয়েছে"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:132
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:274
-#, fuzzy
+#: koha-tmpl/intranet-tmpl/prog/en/includes/html_helpers.inc:271
 msgid "Last item for bibliographic record with biblio-level hold on it"
-msgstr "গ্রন্থপঞ্জি রেকর্ডের শেষ আইটেমটি বিবলিও স্তরের জন্য হোল্ড করে রাখা আছে"
+msgstr "এটি গ্রন্থপঞ্জির জন্য সর্বশেষ আইটেম যার উপর একটি গ্রন্থ-স্তর হোল্ড করা রয়েছে"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:63
 msgid "Mappings have been reset successfully."
@@ -131,8 +135,8 @@ msgstr "ম্যাপিংগুলি সফলভাবে পুনরা�
 msgid "Mappings updated successfully."
 msgstr "ম্যাপিংগুলি সফলভাবে আপডেট হয়েছে।"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/basket.tt:422
-#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/basket.tt:625
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/basket.tt:436
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/basket.tt:639
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/ordered.tt:46
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/parcel.tt:258
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/spent.tt:46
@@ -151,73 +155,92 @@ msgctxt "verb"
 msgid "Order"
 msgstr "নির্দেশ"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/detail.tt:821
+#: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/course-details.tt:69
+#: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/course-reserves.tt:52
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-course-reserves.tt:45
+msgctxt "Semester"
+msgid "Term"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/course.tt:83
+#: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/course.tt:96
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-course-details.tt:44
+msgctxt "Semester"
+msgid "Term:"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/detail.tt:845
 #, perl-brace-format
 msgctxt "pluralization"
 msgid "There is one archived suggestion."
 msgid_plural "There are {count} archived suggestions."
-msgstr[0] "এখানে একটি সঞ্চিত পরামর্শ আছে"
-msgstr[1] "এখানে একাধিক {count} সঞ্চিত পরামর্শ রয়েছে"
+msgstr[0] "এখানে একটি সঞ্চিত পরামর্শ আছে."
+msgstr[1] "এখানে একাধিক সঞ্চিত পরামর্শ রয়েছে."
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:133
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:275
+#: koha-tmpl/intranet-tmpl/prog/en/includes/html_helpers.inc:272
 msgid "Unknown reason"
 msgstr "অজানা কারণ"
+
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/tables/members_results.tt:22
+msgid "View"
+msgstr ""
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:53
 msgid ""
 "You attempted to delete all mappings for a required index, you must leave at "
 "least one mapping"
 msgstr ""
+"আপনি প্রয়োজনীয় সূচকের জন্য সমস্ত ম্যাপিং মুছে ফেলার চেষ্টা করেছেন, আপনাকে অন্তত একটি "
+"ম্যাপিং ছেড়ে যেতে হবে"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:228
 msgid "checkout"
 msgid_plural "checkouts"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "চেকআউট"
+msgstr[1] "একাধিক চেকআউট"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:244
 msgid "hold pending"
 msgid_plural "holds pending"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "হোল্ড পেন্ডিং"
+msgstr[1] "হোল্ডগুলি পেন্ডিং"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:252
 msgid "hold waiting"
 msgid_plural "holds waiting"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "হোল্ড অপেক্ষারত"
+msgstr[1] "হোল্ডগুলি অপেক্ষারত"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:269
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:276
 msgid "message"
 msgid_plural "messages"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "বার্তা"
+msgstr[1] "বার্তাগুলি"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:236
 msgid "overdue"
 msgid_plural "overdues"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "বিলম্বিত"
+msgstr[1] "একাধিক বিলম্বিত"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:564
+#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:555
 #, perl-brace-format
 msgid "{count} item"
 msgid_plural "{count} items"
-msgstr[0] "{count} আইটেম "
-msgstr[1] "{count} আইটেম "
+msgstr[0] "{count} আইটেম"
+msgstr[1] "{count} আইটেম"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/credit_types.tt:194
 #, perl-brace-format
 msgid "{count} library limitation"
 msgid_plural "{count} library limitations"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "{count} গ্রন্থাগার পরিধি"
+msgstr[1] "{count} গ্রন্থাগার পরিধিসমূহ"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/batch_rm_items.tt:60
 #, perl-brace-format
 msgid "{title} ({barcode}) was removed from {count} course."
 msgid_plural "{title} ({barcode}) was removed from {count} courses."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "{title} ({barcode}) সরানো হয়েছে {count} course."
+msgstr[1] "{title} ({barcode}) সরানো হয়েছে {count} courses."

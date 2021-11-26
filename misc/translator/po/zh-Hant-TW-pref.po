@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: Koha 21.05\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-05-10 19:14+0200\n"
-"PO-Revision-Date: 2021-05-11 06:24+0000\n"
-"Last-Translator: Atron Chen <atron@customer-support.com.tw>\n"
+"PO-Revision-Date: 2021-11-17 09:28+0000\n"
+"Last-Translator: Frank Chou <frank@sris.com.tw>\n"
 "Language-Team: koha_TW <kohataiwan@googlegroups.com>\n"
 "Language: zh_TW\n"
 "MIME-Version: 1.0\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8-bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Generator: Pootle 2.8\n"
-"X-POOTLE-MTIME: 1620714252.233852\n"
+"X-POOTLE-MTIME: 1637141311.319425\n"
 "X-Pootle-Path: /zh_TW/21.05/zh-Hant-TW-pref.po\n"
 "X-Pootle-Revision: 1\n"
 
@@ -78,13 +78,15 @@ msgid ""
 msgstr "accounting.pref#AutoCreditNumber# 請勿自動產生信用號碼"
 
 # Accounting > Features
-#, fuzzy
 msgid ""
 "accounting.pref#EnablePointOfSale#  the point of sale feature to allow "
 "anonymous transactions with the accounting system. (Requires <a href=\"/cgi-"
 "bin/koha/admin/preferences.pl?op=search&searchfield=UseCashRegisters"
 "\">UseCashRegisters</a>)"
-msgstr "銷售點功能允許與會計系統進行匿名交易。 (須使用 UseCashRegisters)"
+msgstr ""
+"accounting.pref#EnablePointOfSale#  銷售點功能允許與會計系統進行匿名交易。 "
+"(須使用  <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=UseCashRegisters\"> UseCashRegisters</a>)"
 
 # Accounting > Features
 msgid "accounting.pref#EnablePointOfSale# Disable"
@@ -311,12 +313,14 @@ msgid "acquisitions.pref#EmailPurchaseSuggestions# EmailAddressForSuggestions"
 msgstr "EmailAddressForSuggestions"
 
 # Acquisitions > Policy
-#, fuzzy
 msgid ""
 "acquisitions.pref#EmailPurchaseSuggestions# If you choose <a href=\"/cgi-bin/"
 "koha/admin/preferences.pl?op=search&searchfield=EmailAddressForSuggestions"
 "\">EmailAddressForSuggestions</a> you have to enter a valid email address:"
-msgstr "若已勾選 EmailAddressForSuggestions 偏好需輸入有效電子郵件信箱："
+msgstr ""
+"acquisitions.pref#EmailPurchaseSuggestions# 若已勾選 <a href=\"/cgi-bin/koha/"
+"admin/preferences.pl?op=search&searchfield=EmailAddressForSuggestions\"> "
+"EmailAddressForSuggestions</a> 偏好需輸入有效電子郵件信箱："
 
 # Acquisitions > Policy
 msgid "acquisitions.pref#EmailPurchaseSuggestions# KohaAdminEmailAddress"
@@ -531,7 +535,6 @@ msgstr ""
 "至："
 
 # Administration > Interface options
-#, fuzzy
 msgid ""
 "admin.pref#AddressForFailedOverdueNotices# If left empty then it will "
 "fallback to the first defined address in the following list: Library "
@@ -541,7 +544,10 @@ msgid ""
 "\">KohaAdminEmailAddress</a>"
 msgstr ""
 "admin.pref#AddressForFailedOverdueNotices# 如果留空, 它會使用在下列清單中第一"
-"個定義的地址: 圖書館回信至, 圖書館電子信箱, 回信至預設以及Koha管理者電子信箱"
+"個定義的地址: 圖書館回信至, 圖書館電子信箱, <a href=\"/cgi-bin/koha/admin/"
+"preferences.pl?op=search&searchfield=ReplytoDefault\">回信至預設</a>以及 <a "
+"href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=KohaAdminEmailAddress\">Koha管理者電子信箱</a>"
 
 # Administration > SSL client certificate authentication
 msgid "admin.pref#AllowPKIAuth# Common Name"
@@ -708,9 +714,36 @@ msgstr "ISO2709 (交換格式)"
 msgid "admin.pref#ElasticsearchMARCFormat# Searchable array"
 msgstr "可搜尋陣列"
 
+# Patrons > Patron forms
+msgid ""
+"admin.pref#GoogleOAuth2ClientID# Along with <a href=\"/cgi-bin/koha/admin/"
+"preferences.pl?op=search&searchfield=GoogleOAuth2ClientSecret"
+"\">GoogleOAuth2ClientSecret</a>, enables <a href=\"/cgi-bin/koha/admin/"
+"preferences.pl?op=search&searchfield=GoogleOpenIDConnect"
+"\">GoogleOpenIDConnect.</a>"
+msgstr ""
+"admin.pref#GoogleOAuth2ClientID# 連同 <a href=\"/cgi-bin/koha/admin/"
+"preferences.pl?op=search&searchfield=GoogleOAuth2ClientSecret"
+"\">GoogleOAuth2ClientSecret</a>, 啟用 <a href=\"/cgi-bin/koha/admin/"
+"preferences.pl?op=search&searchfield=GoogleOpenIDConnect"
+"\">GoogleOpenIDConnect.</a>"
+
 # Administration > Google OpenID Connect
 msgid "admin.pref#GoogleOAuth2ClientID# Google OAuth2 Client ID: "
 msgstr "Google OAuth2 客戶 ID："
+
+# Patrons > Patron forms
+msgid ""
+"admin.pref#GoogleOAuth2ClientSecret# Along with <a href=\"/cgi-bin/koha/"
+"admin/preferences.pl?op=search&searchfield=GoogleOAuth2ClientID"
+"\">GoogleOAuth2ClientID</a>, enables <a href=\"/cgi-bin/koha/admin/"
+"preferences.pl?op=search&searchfield=GoogleOpenIDConnect"
+"\">GoogleOpenIDConnect.</a>"
+msgstr ""
+"admin.pref#GoogleOAuth2ClientSecret# 連同<a href=\"/cgi-bin/koha/admin/"
+"preferences.pl?op=search&searchfield=GoogleOAuth2ClientID"
+"\">GoogleOAuth2ClientID</a>, 啟用<a href=\"/cgi-bin/koha/admin/preferences."
+"pl?op=search&searchfield=GoogleOpenIDConnect\">GoogleOpenIDConnect.</a>"
 
 # Administration > Google OpenID Connect
 msgid "admin.pref#GoogleOAuth2ClientSecret# Google OAuth2 Client Secret: "
@@ -721,7 +754,9 @@ msgid "admin.pref#GoogleOpenIDConnect# No"
 msgstr "不是"
 
 # Administration > Google OpenID Connect
-msgid "admin.pref#GoogleOpenIDConnect# Use Google OpenID Connect login: "
+#, fuzzy
+msgid ""
+"admin.pref#GoogleOpenIDConnect# Use Google OpenID Connect login in the OPAC: "
 msgstr "使用 Google OpenID 連結登入："
 
 # Administration > Google OpenID Connect
@@ -733,11 +768,19 @@ msgid ""
 "admin.pref#GoogleOpenIDConnect# You will need to select OAuth2 when creating "
 "an app in the Google cloud console, and set the web origin to your_opac_url "
 "and the redirect url to your_opac_url/cgi-bin/koha/svc/auth/"
-"googleopenidconnect ."
+"googleopenidconnect. Requires <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=GoogleOAuth2ClientID\">GoogleOAuth2ClientID</a> and <a "
+"href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=GoogleOAuth2ClientSecret\">GoogleOAuth2ClientSecret</"
+"a> to be set."
 msgstr ""
 "admin.pref#GoogleOpenIDConnect# 您需要在谷歌雲控制台建立應用時選擇OAuth2，並"
 "將網址設置為your_opac_url, 並轉址至 your_opac_url/cgi-bin/koha/svc/auth/"
-"googleopenidconnect ."
+"googleopenidconnect. 需要 <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=GoogleOAuth2ClientID\">GoogleOAuth2ClientID</a> 及 <a "
+"href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=GoogleOAuth2ClientSecret\">GoogleOAuth2ClientSecret</a>"
+"設定起來. ."
 
 # Administration > Google OpenID Connect
 msgid "admin.pref#GoogleOpenIDConnectAutoRegister# Allow"
@@ -750,14 +793,23 @@ msgstr "admin.pref#GoogleOpenIDConnectAutoRegister# 不允許"
 # Administration > Google OpenID Connect
 msgid ""
 "admin.pref#GoogleOpenIDConnectAutoRegister# patrons logging in with Google "
-"Open ID to automatically register."
+"Open ID to automatically register. Requires <a href=\"/cgi-bin/koha/admin/"
+"preferences.pl?op=search&searchfield=GoogleOpenIDConnect"
+"\">GoogleOpenIDConnect</a>."
 msgstr ""
 "admin.pref#GoogleOpenIDConnectAutoRegister# 讀者使用Google Open ID自動登入及"
-"註冊。"
+"註冊。需要 <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=GoogleOpenIDConnect\">GoogleOpenIDConnect</a>."
 
-# Administration > Google OpenID Connect
-msgid "admin.pref#GoogleOpenIDConnectDefaultBranch# ."
-msgstr "admin.pref#GoogleOpenIDConnectDefaultBranch# ."
+# OPAC > Appearance
+msgid ""
+"admin.pref#GoogleOpenIDConnectDefaultBranch# Requires <a href=\"/cgi-bin/"
+"koha/admin/preferences.pl?op=search&searchfield=GoogleOpenIDConnect"
+"\">GoogleOpenIDConnect</a>."
+msgstr ""
+"admin.pref#GoogleOpenIDConnectDefaultBranch# 需要 <a href=\"/cgi-bin/koha/"
+"admin/preferences.pl?op=search&searchfield=GoogleOpenIDConnect"
+"\">GoogleOpenIDConnect</a>."
 
 # Administration > Google OpenID Connect
 msgid ""
@@ -767,9 +819,15 @@ msgstr ""
 "admin.pref#GoogleOpenIDConnectDefaultBranch# 使用此圖書館代碼當自動註冊"
 "Google Open ID讀者:"
 
-# Administration > Google OpenID Connect
-msgid "admin.pref#GoogleOpenIDConnectDefaultCategory# ."
-msgstr "admin.pref#GoogleOpenIDConnectDefaultCategory# ."
+# OPAC > OpenURL
+msgid ""
+"admin.pref#GoogleOpenIDConnectDefaultCategory# Requires <a href=\"/cgi-bin/"
+"koha/admin/preferences.pl?op=search&searchfield=GoogleOpenIDConnect"
+"\">GoogleOpenIDConnect</a>."
+msgstr ""
+"admin.pref#GoogleOpenIDConnectDefaultCategory# 需要 <a href=\"/cgi-bin/koha/"
+"admin/preferences.pl?op=search&searchfield=GoogleOpenIDConnect"
+"\">GoogleOpenIDConnect</a>."
 
 # Administration > Google OpenID Connect
 msgid ""
@@ -779,10 +837,15 @@ msgstr ""
 "admin.pref#GoogleOpenIDConnectDefaultCategory# 使用此讀者類型代碼當自動註冊"
 "Google Open ID讀者時。"
 
-# Administration > Google OpenID Connect
+# OPAC > OpenURL
 msgid ""
-"admin.pref#GoogleOpenIDConnectDomain# . Leave blank for all Google domains."
-msgstr "admin.pref#GoogleOpenIDConnectDomain# . 留空則適用於所有Google網域"
+"admin.pref#GoogleOpenIDConnectDomain# Leave blank for all Google domains. "
+"Requires <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=GoogleOpenIDConnect\">GoogleOpenIDConnect</a>."
+msgstr ""
+"admin.pref#GoogleOpenIDConnectDomain# 所有Google網域都留空．需要 <a href=\"/"
+"cgi-bin/koha/admin/preferences.pl?op=search&searchfield=GoogleOpenIDConnect"
+"\">GoogleOpenIDConnect</a>."
 
 # Administration > Google OpenID Connect
 msgid ""
@@ -948,15 +1011,15 @@ msgid "admin.pref#UsageStats# ."
 msgstr "admin.pref#UsageStats# ."
 
 # Administration > Share anonymous usage statistics
-#, fuzzy
 msgid ""
 "admin.pref#UsageStats# <br><strong>NOTE:</strong> The other <a href=\"/cgi-"
 "bin/koha/admin/preferences.pl?op=search&searchfield=UsageStats\">UsageStats</"
 "a> system preferences have no effect if this system preference is set to \"No"
 "\" (don't share)."
 msgstr ""
-"admin.pref#UsageStats# <br><strong>註記:</strong> 其它 UsageStats 系統偏好將"
-"無影響如此系統偏好設為\"不\" (不要分享)．"
+"admin.pref#UsageStats# <br><strong>註記:</strong> 其它 <a href=\"/cgi-bin/"
+"koha/admin/preferences.pl?op=search&searchfield=UsageStats\">UsageStats</a> "
+"系統偏好將無影響如此系統偏好設為\"不\" (不要分享)．"
 
 # Administration > Share anonymous usage statistics
 msgid ""
@@ -1016,15 +1079,15 @@ msgstr ""
 "community.org\">Hea Koha 社群網站</a>."
 
 # Administration > Share anonymous usage statistics
-#, fuzzy
 msgid ""
 "admin.pref#UsageStatsCountry# <br><strong>NOTE:</strong> This value has no "
 "effect if the <a href=\"/cgi-bin/koha/admin/preferences.pl?"
 "op=search&searchfield=UsageStats\">UsageStats</a> system preference is set "
 "to \"No\" (don't share)."
 msgstr ""
-"admin.pref#UsageStatsCountry# <br><strong>註記:</strong> 此值無影響如果 "
-"UsageStats 系統偏好設定為 \"不\" (不分享)."
+"admin.pref#UsageStatsCountry# <br><strong>註記:</strong> 此值無影響如果 <a "
+"href=\"/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=UsageStats"
+"\">UsageStats</a> 系統偏好設定為 \"不\" (不分享)."
 
 # Administration > Share anonymous usage statistics
 msgid "admin.pref#UsageStatsCountry# Afghanistan"
@@ -1809,15 +1872,15 @@ msgid "admin.pref#UsageStatsCountry# Zimbabwe"
 msgstr "辛巴威"
 
 # Administration > Share anonymous usage statistics
-#, fuzzy
 msgid ""
 "admin.pref#UsageStatsGeolocation# <br><strong>NOTE:</strong> This value has "
 "no effect if the <a href=\"/cgi-bin/koha/admin/preferences.pl?"
 "op=search&searchfield=UsageStats\">UsageStats</a> system preference is set "
 "to \"No\" (don't share)."
 msgstr ""
-"admin.pref#UsageStatsGeolocation# <br><strong>註記:</strong> 此值無影響如果 "
-"UsageStats 系統偏好設定為 \"不\" (不分享)."
+"admin.pref#UsageStatsGeolocation# <br><strong>註記:</strong> 此值無影響如果"
+"<a href=\"/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=UsageStats"
+"\">UsageStats</a> 系統偏好設定成 \"不\" (不分享)."
 
 # Administration > Share anonymous usage statistics
 msgid ""
@@ -1834,15 +1897,16 @@ msgid "admin.pref#UsageStatsGeolocation# Geolocation of the main library: "
 msgstr "總館的地理位置："
 
 # Administration > Share anonymous usage statistics
-#, fuzzy
 msgid ""
 "admin.pref#UsageStatsLibrariesInfo# <br><strong>NOTE:</strong> This value "
 "has no effect if the <a href=\"/cgi-bin/koha/admin/preferences.pl?"
 "op=search&searchfield=UsageStats\">UsageStats</a> system preference is set "
 "to \"No\" (don't share)."
 msgstr ""
-"admin.pref#UsageStatsLibrariesInfo# <br><strong>註記:</strong> 此值無影如果 "
-"UsageStats 系統偏好設定為 \"不\" (不分享)."
+"admin.pref#UsageStatsLibrariesInfo# <br><strong>註記:</strong> 此值如果無影"
+"響 <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=UsageStats\">UsageStats</a> 系統偏好設定為 \"不\" (不分"
+"享)。"
 
 # Administration > Share anonymous usage statistics
 msgid "admin.pref#UsageStatsLibrariesInfo# Don't share"
@@ -1865,15 +1929,15 @@ msgid ""
 msgstr "admin.pref#UsageStatsLibraryName# . 如果此欄為空，此資料會以匿名寄出。"
 
 # Administration > Share anonymous usage statistics
-#, fuzzy
 msgid ""
 "admin.pref#UsageStatsLibraryName# <br><strong>NOTE:</strong> This value has "
 "no effect if the <a href=\"/cgi-bin/koha/admin/preferences.pl?"
 "op=search&searchfield=UsageStats\">UsageStats</a> system preference is set "
 "to \"No\" (don't share)."
 msgstr ""
-"admin.pref#UsageStatsLibraryName# <br><strong>註記:</strong> 此值無影響如果 "
-"UsageStats 系統偏好設定為 \"不\" (不分享)."
+"admin.pref#UsageStatsLibraryName# <br><strong>註記:</strong> 此值如果無影響 "
+"<a href=\"/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=UsageStats"
+"\">UsageStats</a>系統偏好設定為 \"不\" (不分享)。"
 
 # Administration > Share anonymous usage statistics
 msgid ""
@@ -1886,15 +1950,15 @@ msgid "admin.pref#UsageStatsLibraryType# "
 msgstr " "
 
 # Administration > Share anonymous usage statistics
-#, fuzzy
 msgid ""
 "admin.pref#UsageStatsLibraryType# <br><strong>NOTE:</strong> This value has "
 "no effect if the <a href=\"/cgi-bin/koha/admin/preferences.pl?"
 "op=search&searchfield=UsageStats\">UsageStats</a> system preference is set "
 "to \"No\" (don't share)."
 msgstr ""
-"admin.pref#UsageStatsLibraryType# <br><strong>註記:</strong> 此值無影響如果 "
-"UsageStats 系統偏好設定為 \"不\" (不分享)."
+"admin.pref#UsageStatsLibraryType# <br><strong>註記:</strong> 此值如果無影響 "
+"<a href=\"/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=UsageStats"
+"\">UsageStats</a> 系統偏好設定為 \"不\" (不分享)。"
 
 # Administration > Share anonymous usage statistics
 msgid ""
@@ -1943,15 +2007,15 @@ msgid "admin.pref#UsageStatsLibraryType# subscription"
 msgstr "訂閱"
 
 # Administration > Share anonymous usage statistics
-#, fuzzy
 msgid ""
 "admin.pref#UsageStatsLibraryUrl# <br><strong>NOTE:</strong> This value has "
 "no effect if the <a href=\"/cgi-bin/koha/admin/preferences.pl?"
 "op=search&searchfield=UsageStats\">UsageStats</a> system preference is set "
 "to \"No\" (don't share)."
 msgstr ""
-"admin.pref#UsageStatsLibraryUrl# <br><strong>註記:</strong> 此值無影響如果"
-"UsageStats 系統偏好設定成「不」(不分享)"
+"admin.pref#UsageStatsLibraryUrl# <br><strong>註記:</strong> 此值如果無影響 "
+"<a href=\"/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=UsageStats"
+"\">UsageStats</a> 系統偏好設定為 \"不\" (不分享)。"
 
 # Administration > Share anonymous usage statistics
 msgid ""
@@ -2156,14 +2220,15 @@ msgid "authorities.pref#AutoCreateAuthorities# When editing records,"
 msgstr "編輯記錄時，"
 
 # Authorities > General
-#, fuzzy
 msgid ""
 "authorities.pref#AutoCreateAuthorities# authority records that are missing "
 "(<a href=\"/cgi-bin/koha/admin/preferences.pl?"
 "op=search&searchfield=BiblioAddsAuthorities\">BiblioAddsAuthorities</a> must "
 "be set to \"allow\" for this to have any effect)."
 msgstr ""
-"遺失的權威記錄 (BiblioAddsAuthorities 必須設定為 \"允許\" 才能啟用此設定)。"
+"authority.pref#AutoCreateAuthorities# 權威記錄缺少（<a href=\"/cgi-bin/koha/"
+"admin/preferences.pl?op=search&searchfield=BiblioAddsAuthorities"
+"\">BiblioAddsAuthorities</a> 必須設置為\"允許\"這有任何影響）。"
 
 # Authorities > General
 msgid "authorities.pref#AutoCreateAuthorities# don't generate"
@@ -2466,6 +2531,23 @@ msgid ""
 msgstr "每個標籤使用一行，格式為 BT_TAG: TAG$SUBFIELD（例如 lccn: 010$a）。"
 
 # Cataloging > Interface
+#, fuzzy
+msgid "cataloguing.pref#CreateAVFromCataloguing# Allow"
+msgstr "啟用"
+
+# Cataloging > Interface
+#, fuzzy
+msgid "cataloguing.pref#CreateAVFromCataloguing# Don't allow"
+msgstr "不啟用"
+
+# Cataloging > Interface > CreateAVFromCataloguing
+msgid ""
+"cataloguing.pref#CreateAVFromCataloguing# authorized values to be created "
+"within the cataloguing module. Librarian will need the manage_auth_values "
+"subpermission."
+msgstr ""
+
+# Cataloging > Interface
 msgid "cataloguing.pref#DefaultClassificationSource# Use"
 msgstr "使用"
 
@@ -2549,9 +2631,10 @@ msgid ""
 msgstr "<br/> <strong>說明:</strong>"
 
 # Cataloging > Interface
+#, fuzzy
 msgid ""
 "cataloguing.pref#EnableAdvancedCatalogingEditor# Currently does not include "
-"support for UNIMARC or NORMARC fixed fields."
+"support for UNIMARC fixed fields."
 msgstr "目前不支援 UNIMARC 或 NORMARC 固定長度欄位。"
 
 # Cataloging > Interface
@@ -2623,6 +2706,22 @@ msgid ""
 "cataloguing.pref#MARCOrgCode# by default in new MARC21 records (leave blank "
 "to disable). This can be also set on libraries level."
 msgstr "預設為新增 MARC 21 記錄 (空白即停用)。也可設定至圖書館層次。"
+
+# Cataloging > Display
+#, fuzzy
+msgid "cataloguing.pref#MARCOverlayRules# Don't use"
+msgstr "不用"
+
+# Cataloging > Importing > MARCOverlayRules
+msgid ""
+"cataloguing.pref#MARCOverlayRules# MARC overlay rules for incoming records, "
+"to decide which action to take for each field."
+msgstr ""
+
+# Cataloging > Display
+#, fuzzy
+msgid "cataloguing.pref#MARCOverlayRules# Use"
+msgstr "使用"
 
 # Cataloging > Display
 msgid ""
@@ -2903,6 +3002,50 @@ msgid ""
 "first tab contains items whose"
 msgstr "館藏顯示為兩個分頁，第一分頁包括館藏是"
 
+# Cataloging > Display > ShowComponentRecords
+msgid "cataloguing.pref#ShowComponentRecords# <br/> UNIMARC is not supported."
+msgstr ""
+
+# Cataloging > Display > ShowComponentRecords
+msgid "cataloguing.pref#ShowComponentRecords# A maximum of"
+msgstr ""
+
+# Cataloging > Record structure
+#, fuzzy
+msgid "cataloguing.pref#ShowComponentRecords# OPAC"
+msgstr "NORMARC"
+
+# Cataloging > Display > ShowComponentRecords
+msgid ""
+"cataloguing.pref#ShowComponentRecords# Show a list of component records, as "
+"linked via field 773, in"
+msgstr ""
+
+# Cataloging > Display
+#, fuzzy
+msgid "cataloguing.pref#ShowComponentRecords# both staff interface and OPAC"
+msgstr "cataloguing.pref#ISBD# 使用下述館員介面ISBD樣版:"
+
+# Cataloging > Spine labels
+#, fuzzy
+msgid "cataloguing.pref#ShowComponentRecords# no"
+msgstr "要"
+
+# Cataloging > Record structure
+#, fuzzy
+msgid "cataloguing.pref#ShowComponentRecords# record detail pages."
+msgstr "條碼是"
+
+# Cataloging > Interface
+#, fuzzy
+msgid "cataloguing.pref#ShowComponentRecords# records will be displayed."
+msgstr "不顯示"
+
+# Cataloging > Record structure
+#, fuzzy
+msgid "cataloguing.pref#ShowComponentRecords# staff interface"
+msgstr "記錄結構"
+
 # Cataloging > Spine labels
 msgid ""
 "cataloguing.pref#SpineLabelAutoPrint# When using the quick spine label "
@@ -3182,10 +3325,6 @@ msgid "cataloguing.pref#marcflavour# MARC21"
 msgstr "MARC21"
 
 # Cataloging > Record structure
-msgid "cataloguing.pref#marcflavour# NORMARC"
-msgstr "NORMARC"
-
-# Cataloging > Record structure
 msgid "cataloguing.pref#marcflavour# UNIMARC"
 msgstr "UNIMARC"
 
@@ -3316,8 +3455,13 @@ msgstr "需要"
 msgid ""
 "circulation.pref#AllFinesNeedOverride# staff to manually override all fines, "
 "even fines less than set in the <a href=\"/cgi-bin/koha/admin/preferences.pl?"
-"op=search&searchfield=noissuescharge\">noissuescharge</a> system preference."
-msgstr "館員調整罰款，即使罰款金額小於 noissuescharge 系統偏好的設置。"
+"op=search&searchfield=noissuescharge\">noissuescharge</a> system preference. "
+"Enabling this system preference will block all checkouts for patrons with "
+"fines both via the web-based self checkout system and via SIP."
+msgstr ""
+"circulation.pref#AllFinesNeedOverride# 工作人員手動覆蓋所有罰款，即使罰款低於"
+"<a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=noissuescharge\">noissuescharge</a>系統偏好。"
 
 # Circulation > Interface
 msgid "circulation.pref#AllowAllMessageDeletion# Allow"
@@ -3356,15 +3500,16 @@ msgid "circulation.pref#AllowFineOverride# Don't allow"
 msgstr "不允許"
 
 # Circulation > Checkout policy
-#, fuzzy
 msgid ""
 "circulation.pref#AllowFineOverride# staff to manually override and check out "
 "items to patrons who have more in fines than set in the <a href=\"/cgi-bin/"
 "koha/admin/preferences.pl?op=search&searchfield=noissuescharge"
 "\">noissuescharge</a> system preference."
 msgstr ""
-"館員可以手動借出館藏給讀者，即使該讀者的罰款金額高於 noissuescharge 系統偏好"
-"設定。"
+"circulation.pref#AllowFineOverride# 館員手動覆蓋和借出館藏給那些罰款多於<a "
+"href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=noissuescharge\">noissuescharge</a> 系統偏好設置的讀"
+"者。"
 
 # Circulation > Holds policy
 msgid "circulation.pref#AllowHoldDateInFuture# Allow"
@@ -3749,6 +3894,38 @@ msgstr "題名"
 msgid "circulation.pref#ArticleRequestsMandatoryFieldsRecordOnly# Volume"
 msgstr "卷"
 
+# Circulation > Article requests > ArticleRequestsOpacHostRedirection
+msgid ""
+"circulation.pref#ArticleRequestsOpacHostRedirection#  redirection from child "
+"to host based on MARC21 773$w when the child has no items when requesting "
+"articles on the Opac."
+msgstr ""
+
+# Circulation > Article requests
+#, fuzzy
+msgid "circulation.pref#ArticleRequestsOpacHostRedirection# Disable"
+msgstr "啟用"
+
+# Circulation > Article requests
+#, fuzzy
+msgid "circulation.pref#ArticleRequestsOpacHostRedirection# Enable"
+msgstr "啟用"
+
+# Circulation > Article requests > ArticleRequestsSupportedFormats
+msgid ""
+"circulation.pref#ArticleRequestsSupportedFormats# (Valid choices are "
+"currently: PHOTOCOPY and SCAN. Separate the supported formats by a vertical "
+"bar. The first listed format is selected by default when you request via the "
+"OPAC.)"
+msgstr ""
+
+# Circulation > Article requests
+#, fuzzy
+msgid ""
+"circulation.pref#ArticleRequestsSupportedFormats# The following article "
+"request formats are supported:"
+msgstr "在搜尋結果列出請求論文的連結。"
+
 # Circulation > Checkout policy
 msgid "circulation.pref#AutoRemoveOverduesRestrictions# Do"
 msgstr "做"
@@ -3936,15 +4113,15 @@ msgstr ""
 "小時借出, 您必須將此啟用."
 
 # Circulation > Checkin policy
-#, fuzzy
 msgid ""
 "circulation.pref#CalculateFinesOnReturn# <br /><strong>NOTE:</strong> This "
 "system preference requires <a href=\"/cgi-bin/koha/admin/preferences.pl?"
 "op=search&searchfield=FinesMode\">FinesMode</a> to be set to \"Calculate and "
 "charge.\""
 msgstr ""
-"circulation.pref#CalculateFinesOnReturn#  <br /><strong>註記:</strong> 此系統"
-"偏好需要 FinesMode 設定成 '計算並收費 '"
+"circulation.pref#CalculateFinesOnReturn# <br /><strong>注意：</strong>此系統"
+"偏好需要 <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=FinesMode\">FinesMode< /a> 設定成\"計算並收費\"。"
 
 # Circulation > Checkin policy
 msgid "circulation.pref#CalculateFinesOnReturn# Do"
@@ -3976,7 +4153,6 @@ msgid ""
 msgstr "不允許標記館藏為遺失"
 
 # Circulation > Holds policy
-#, fuzzy
 msgid ""
 "circulation.pref#CanMarkHoldsToPullAsLost# from the 'Holds to pull' page. "
 "Values to be applied must be defined in <a href=\"/cgi-bin/koha/admin/"
@@ -3984,7 +4160,9 @@ msgid ""
 "\">UpdateItemWhenLostFromHoldList</a>."
 msgstr ""
 "circulation.pref#CanMarkHoldsToPullAsLost# 從\"預約在館待取得\"頁. 數值必須在"
-"UpdateItemWhenLostFromHoldList 定義。"
+"<a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=UpdateItemWhenLostFromHoldList"
+"\">UpdateItemWhenLostFromHoldList</a>定義。"
 
 # Circulation > Interface
 msgid "circulation.pref#CircAutoPrintQuickSlip# ."
@@ -4107,6 +4285,23 @@ msgstr "警示館員，該讀者宣稱已還入的館藏超過"
 # Circulation > Return claims
 msgid "circulation.pref#ClaimReturnedWarningThreshold# items."
 msgstr "館藏。"
+
+# Circulation > Return claims > CleanUpDatabaseReturnClaims
+msgid ""
+"circulation.pref#CleanUpDatabaseReturnClaims# <span class=\"hint\">This "
+"system preference is used by the cleanup_database.pl cronjob.</span>"
+msgstr ""
+
+# Circulation > Return claims > CleanUpDatabaseReturnClaims
+msgid ""
+"circulation.pref#CleanUpDatabaseReturnClaims# Remove resolved return claims "
+"older than"
+msgstr ""
+
+# Circulation > Return claims
+#, fuzzy
+msgid "circulation.pref#CleanUpDatabaseReturnClaims# days."
+msgstr "."
 
 # Circulation > Holds policy
 msgid ""
@@ -4359,7 +4554,6 @@ msgid "circulation.pref#ExpireReservesMaxPickUpDelay# Don't allow"
 msgstr "不允許"
 
 # Circulation > Holds policy
-#, fuzzy
 msgid ""
 "circulation.pref#ExpireReservesMaxPickUpDelay# holds to expire automatically "
 "if they have not been picked by within the time period specified in the <a "
@@ -4369,16 +4563,18 @@ msgid ""
 "the <code>misc/cronjobs/holds/cancel_expired_holds.pl</code> cronjob. Ask "
 "your system administrator to schedule it."
 msgstr ""
-"未能於 ReservesMaxPickUpDelay 系統偏好指定的時間提取，該預約自動失效。"
-"<br><strong>說明：</strong> 此系統偏好需啟用 <code>misc/cronjobs/holds/"
-"cancel_expired_holds.pl</code> 工作排程。請洽系統管理員。"
+"circulation.pref#ExpireReservesMaxPickUpDelay# 如果他們無法在系統偏好 <a "
+"href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=ReservesMaxPickUpDelay\">ReservesMaxPickUpDelay</a> 設"
+"定的期間內取書的話, 預約會自動失效。<br><strong>說明：</strong> 此系統偏好需"
+"啟用 <code>misc/cronjobs/holds/cancel_expired_holds.pl</code> 工作排程。請洽"
+"系統管理員。"
 
 # Circulation > Holds policy
 msgid "circulation.pref#ExpireReservesMaxPickUpDelayCharge# ."
 msgstr "。"
 
 # Circulation > Holds policy
-#, fuzzy
 msgid ""
 "circulation.pref#ExpireReservesMaxPickUpDelayCharge# If using <a href=\"/cgi-"
 "bin/koha/admin/preferences.pl?"
@@ -4386,21 +4582,40 @@ msgid ""
 "\">ExpireReservesMaxPickUpDelay</a>, charge a patron who allows their "
 "waiting hold to expire a fee of"
 msgstr ""
-"如果使用 ExpireReservesMaxPickUpDelay, 罰款一位讀者將容許他們的預約等候失效的"
-"費用"
+"circulation.pref#ExpireReservesMaxPickUpDelayCharge# 如果使用 <a href=\"/cgi-"
+"bin/koha/admin/preferences.pl?"
+"op=search&searchfield=ExpireReservesMaxPickUpDelay"
+"\">ExpireReservesMaxPickUpDelay</a>, 罰款一位讀者將容許他們的預約等候失效的費"
+"用"
 
 # Circulation > Holds policy
-msgid "circulation.pref#ExpireReservesOnHolidays# Allow"
+#, fuzzy
+msgid ""
+"circulation.pref#ExpireReservesOnHolidays# If using <a href=\"/cgi-bin/koha/"
+"admin/preferences.pl?op=search&searchfield=ExpireReservesMaxPickUpDelay"
+"\">ExpireReservesMaxPickUpDelay</a>,"
+msgstr ""
+"circulation.pref#ExpireReservesMaxPickUpDelayCharge# 如果使用 <a href=\"/cgi-"
+"bin/koha/admin/preferences.pl?"
+"op=search&searchfield=ExpireReservesMaxPickUpDelay"
+"\">ExpireReservesMaxPickUpDelay</a>, 罰款一位讀者將容許他們的預約等候失效的費"
+"用"
+
+# Circulation > Holds policy
+#, fuzzy
+msgid "circulation.pref#ExpireReservesOnHolidays# allow"
 msgstr "允許"
 
 # Circulation > Holds policy
-msgid "circulation.pref#ExpireReservesOnHolidays# Don't allow"
+#, fuzzy
+msgid "circulation.pref#ExpireReservesOnHolidays# don't allow"
 msgstr "不允許"
 
 # Circulation > Holds policy
+#, fuzzy
 msgid ""
 "circulation.pref#ExpireReservesOnHolidays# expired holds to be canceled on "
-"days the library is closed."
+"days the library is closed per the calendar."
 msgstr "圖書館閉館之後該預約失效。"
 
 # Circulation > Interface
@@ -4540,12 +4755,14 @@ msgid "circulation.pref#HoldsInNoissuesCharge# Include"
 msgstr "包括"
 
 # Circulation > Checkout policy
-#, fuzzy
 msgid ""
 "circulation.pref#HoldsInNoissuesCharge# hold charges when summing up charges "
 "for limit set in the <a href=\"/cgi-bin/koha/admin/preferences.pl?"
 "op=search&searchfield=noissuescharge\">noissuescharge</a> system preference."
-msgstr "對在 noissuescharge 系統偏好中的限額進行加總時，收取預約費用。"
+msgstr ""
+"circulation.pref#HoldsInNoissuesCharge# 對在<a href=\"/cgi-bin/koha/admin/"
+"preferences.pl?op=search&searchfield=noissuescharge\">noissuescharge</a> 系統"
+"偏好中的限額進行加總時，收取預約費用。"
 
 # Circulation > Checkin policy
 msgid "circulation.pref#HoldsNeedProcessingSIP# Don't fulfill"
@@ -4616,13 +4833,15 @@ msgid ""
 msgstr "設定預約的預設開始日期，以產生下拉選單至"
 
 # Circulation > Interface
-#, fuzzy
 msgid ""
 "circulation.pref#HoldsToPullStartDate# day(s) ago. Note that the default end "
 "date is controlled by the system preference <a href=\"/cgi-bin/koha/admin/"
 "preferences.pl?op=search&searchfield=ConfirmFutureHolds"
 "\">ConfirmFutureHolds</a>."
-msgstr "天前。注意，預設的終止日期由 ConfirmFutureHolds 系統偏好控制。"
+msgstr ""
+"circulation.pref#HoldsToPullStartDate# 天前。注意，預設的終止日期由 <a href="
+"\"/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=ConfirmFutureHolds"
+"\">ConfirmFutureHolds</a> 系統偏好控制。"
 
 # Circulation > Checkout policy
 msgid ""
@@ -4864,14 +5083,15 @@ msgid "circulation.pref#ManInvInNoissuesCharge# Include"
 msgstr "包括"
 
 # Circulation > Checkout policy
-#, fuzzy
 msgid ""
 "circulation.pref#ManInvInNoissuesCharge# custom debit type charges when "
 "summing up charges for limit set in the <a href=\"/cgi-bin/koha/admin/"
 "preferences.pl?op=search&searchfield=noissuescharge\">noissuescharge</a> "
 "system preference."
 msgstr ""
-"加總在 noissuescharge 系統偏好中設定的限制費用時，向讀者的借方類型收費。"
+"circulation.pref#ManInvInNoissuesCharge# 加總在 <a href=\"/cgi-bin/koha/"
+"admin/preferences.pl?op=search&searchfield=noissuescharge\">noissuescharge</"
+"a> 系統偏好中設定的限制費用時，向讀者的借方類型收費。"
 
 # Circulation > Checkout policy
 msgid "circulation.pref#MarkLostItemsAsReturned# ."
@@ -4998,13 +5218,15 @@ msgid "circulation.pref#OPACAllowHoldDateInFuture# Don't allow"
 msgstr "不允許"
 
 # Circulation > Holds policy
-#, fuzzy
 msgid ""
 "circulation.pref#OPACAllowHoldDateInFuture# patrons to place holds that "
 "don't enter the waiting list until a certain future date. (<a href=\"/cgi-"
 "bin/koha/admin/preferences.pl?op=search&searchfield=AllowHoldDateInFuture"
 "\">AllowHoldDateInFuture</a> must also be enabled)."
-msgstr "讀者把預約置於將來的某一天。(必須先啟用 AllowHoldDateInFuture)。"
+msgstr ""
+"circulation.pref#OPACAllowHoldDateInFuture# 讀者把預約置於將來的某一天。(必須"
+"先啟用 (<a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=AllowHoldDateInFuture\">AllowHoldDateInFuture</a>)。"
 
 # Circulation > Holds policy
 msgid "circulation.pref#OPACAllowUserToChooseBranch# Allow"
@@ -5021,12 +5243,14 @@ msgid ""
 msgstr "讀者選擇提取預約館藏的圖書館。"
 
 # Circulation > Checkout policy
-#, fuzzy
 msgid ""
 "circulation.pref#OPACFineNoRenewalsBlockAutoRenew# If a patron owes more "
 "than the value of <a href=\"/cgi-bin/koha/admin/preferences.pl?"
 "op=search&searchfield=OPACFineNoRenewals\">OPACFineNoRenewals</a>,"
-msgstr "若讀者欠款超過 OPACFineNoRenewals 的限額，"
+msgstr ""
+"circulation.pref#OPACFineNoRenewalsBlockAutoRenew# 若讀者欠款超過 <a href=\"/"
+"cgi-bin/koha/admin/preferences.pl?op=search&searchfield=OPACFineNoRenewals"
+"\">OPACFineNoRenewals</a> 的限額，"
 
 # Circulation > Checkout policy
 msgid "circulation.pref#OPACFineNoRenewalsBlockAutoRenew# allow"
@@ -5055,13 +5279,16 @@ msgid ""
 msgstr "從圖書館提取預約到館館藏。"
 
 # Circulation > Holds policy
-#, fuzzy
 msgid ""
 "circulation.pref#OPACHoldsIfAvailableAtPickupExceptions# Patron categories "
 "not affected by <a href=\"/cgi-bin/koha/admin/preferences.pl?"
 "op=search&searchfield=OPACHoldsIfAvailableAtPickup"
 "\">OPACHoldsIfAvailableAtPickup</a>:"
-msgstr "不受 OPACHoldsIfAvailableAtPickup 影響的讀者類型:"
+msgstr ""
+"circulation.pref#OPACHoldsIfAvailableAtPickupExceptions# 不受 <a href=\"/cgi-"
+"bin/koha/admin/preferences.pl?"
+"op=search&searchfield=OPACHoldsIfAvailableAtPickup"
+"\">OPACHoldsIfAvailableAtPickup</a> 影響的讀者類型:"
 
 # Circulation > Checkout policy
 msgid "circulation.pref#OnSiteCheckoutAutoCheck# Don't enable"
@@ -5353,15 +5580,18 @@ msgid "circulation.pref#RentalsInNoissuesCharge# Include"
 msgstr "包括"
 
 # Circulation > Checkout policy
-#, fuzzy
 msgid ""
 "circulation.pref#RentalsInNoissuesCharge# rental charges when summing up "
 "charges for limit set in the <a href=\"/cgi-bin/koha/admin/preferences.pl?"
 "op=search&searchfield=noissuescharge\">noissuescharge</a> system preference."
-msgstr "對在 noissuescharge 系統偏好中的限額進行加總時，收取預約費用。"
+msgstr ""
+"circulation.pref#RentalsInNoissuesCharge# 對在 <a href=\"/cgi-bin/koha/admin/"
+"preferences.pl?op=search&searchfield=noissuescharge\">noissuescharge</a> 系統"
+"偏好中的限額進行加總時，收取預約費用。"
 
 # Circulation > Holds policy
-msgid "circulation.pref#ReservesControlBranch# Check the"
+#, fuzzy
+msgid "circulation.pref#ReservesControlBranch# Check the rule from the"
 msgstr "檢查"
 
 # Circulation > Holds policy
@@ -5415,7 +5645,10 @@ msgid "circulation.pref#RestrictionBlockRenewing# block"
 msgstr ""
 
 # Circulation > Checkout policy
-msgid "circulation.pref#RestrictionBlockRenewing# renewing of items."
+#, fuzzy
+msgid ""
+"circulation.pref#RestrictionBlockRenewing# renewing of items from the staff "
+"interface."
 msgstr "續借館藏。"
 
 # Circulation > Checkout policy
@@ -5944,7 +6177,6 @@ msgid ""
 msgstr ""
 
 # Circulation > Holds policy
-#, fuzzy
 msgid ""
 "circulation.pref#UpdateItemWhenLostFromHoldList# Example: \"itemlost: 1\" to "
 "set items.itemlost to 1 when the item is marked as lost. (Requires <a href="
@@ -5952,8 +6184,10 @@ msgid ""
 "op=search&searchfield=CanMarkHoldsToPullAsLost\">CanMarkHoldsToPullAsLost</"
 "a>)"
 msgstr ""
-"範例: 「館藏遺失: 1」來設定 items.itemlost 為1, 當館藏被標記為遺失. (需要 "
-"CanMarkHoldsToPullAsLost)"
+"circulation.pref#UpdateItemWhenLostFromHoldList# 範例: 「館藏遺失: 1」來設定 "
+"items.itemlost 為1, 當館藏被標記為遺失. (需要 <a href=\"/cgi-bin/koha/admin/"
+"preferences.pl?op=search&searchfield=CanMarkHoldsToPullAsLost"
+"\">CanMarkHoldsToPullAsLost</a>)"
 
 # Circulation > Checkin policy
 msgid ""
@@ -6215,7 +6449,6 @@ msgid "circulation.pref#finesCalendar# when calculating the period for fines."
 msgstr "計算罰款的日數。"
 
 # Circulation > Fines Policy
-#, fuzzy
 msgid ""
 "circulation.pref#finesMode# <br><strong>NOTE:</strong> If the cronjobs/fines."
 "pl cronjob is being run, accruing and final fines will be calculated when "
@@ -6225,8 +6458,9 @@ msgid ""
 "enabled, final fines will be calculated when an item is returned.<br/>"
 msgstr ""
 "circulation.pref#finesMode# <br><strong>註:</strong> 如果 cronjobs/fines.pl "
-"cronjob 被執行, 一本館藏被還入時, 應計及最後罰款會被計算. 當 "
-"CalculateFinesOnReturn 啟用, 當館藏還入, 最後罰款會被計算.<br/>"
+"cronjob 被執行, 一本館藏被還入時, 應計及最後罰款會被計算. 當 <a href=\"/cgi-"
+"bin/koha/admin/preferences.pl?op=search&searchfield=CalculateFinesOnReturn"
+"\">CalculateFinesOnReturn</a> 啟用, 當館藏還入, 最後罰款會被計算.<br/>"
 
 # Circulation > Fines Policy
 msgid "circulation.pref#finesMode# Calculate and charge"
@@ -6423,10 +6657,6 @@ msgstr ""
 msgid "enhanced_content.pref"
 msgstr "強化內容"
 
-# Enhanced content > Adlibris
-msgid "enhanced_content.pref Adlibris"
-msgstr "Adlibris"
-
 # Enhanced content > All
 msgid "enhanced_content.pref All"
 msgstr "全部"
@@ -6491,12 +6721,6 @@ msgstr "Syndetics"
 msgid "enhanced_content.pref Tagging"
 msgstr "標籤"
 
-# Enhanced content > Adlibris
-msgid ""
-"enhanced_content.pref## <strong>NOTE:</strong> Using resources such as "
-"external images might leak sensitive data to third parties."
-msgstr "<strong>說明：</strong> 使用外部圖片等資源可能洩露敏感資料給第三方。"
-
 # Enhanced content > All
 msgid ""
 "enhanced_content.pref## <strong>NOTE:</strong> you can only choose one "
@@ -6505,33 +6729,6 @@ msgid ""
 msgstr ""
 "<strong>附註：</strong> 您祗能從以下清單選擇封面的來源，否則 Koha 將顯示所有"
 "選定來源的封面。"
-
-# Enhanced content > Adlibris
-msgid "enhanced_content.pref#AdlibrisCoversEnabled# Don't show"
-msgstr "不顯示"
-
-# Enhanced content > Adlibris
-msgid "enhanced_content.pref#AdlibrisCoversEnabled# Show"
-msgstr "顯示"
-
-# Enhanced content > Adlibris
-msgid ""
-"enhanced_content.pref#AdlibrisCoversEnabled# cover images in OPAC results "
-"and detail listing from Swedish retailer <a href=\"https://www.adlibris.com/"
-"se\">Adlibris</a>."
-msgstr ""
-"OPAC 搜尋結果與詳情頁面的封面來自瑞典廠商 <a href=\"https://www.adlibris.com/"
-"se\">Adlibris</a>。"
-
-# Enhanced content > Adlibris
-msgid "enhanced_content.pref#AdlibrisCoversURL# Use base URL: "
-msgstr "使用 URL："
-
-# Enhanced content > Adlibris
-msgid ""
-"enhanced_content.pref#AdlibrisCoversURL# for the <a href=\"https://www."
-"adlibris.com/se\">Adlibris</a> cover service."
-msgstr "採用 <a href=\"https://www.adlibris.com/se\">Adlibris</a> 封面服務。"
 
 # Enhanced content > Local or remote cover images
 msgid "enhanced_content.pref#AllowMultipleCovers# Allow"
@@ -6725,6 +6922,13 @@ msgid "enhanced_content.pref#CustomCoverImages# Don't display"
 msgstr "不顯示"
 
 # Enhanced content > Local or remote cover images
+# Enhanced content > Local or remote cover images
+msgid ""
+"enhanced_content.pref#CustomCoverImages# For control fields you can use just "
+"{field}, like {001}."
+msgstr "enhanced_content.pref#CustomCoverImages# 針對控制段, 你可以使用{field}, 像是{001}."
+
+# Enhanced content > Local or remote cover images
 msgid ""
 "enhanced_content.pref#CustomCoverImages# Or you can use the following syntax "
 "to specify a field$subfield value: {field$subfield}. For instance {024$a}."
@@ -6839,13 +7043,15 @@ msgid ""
 msgstr ""
 
 # Enhanced content > Manual
-#, fuzzy
 msgid ""
 "enhanced_content.pref#KohaManualBaseURL# If starts with '/',  the value of "
 "<a href=\"/cgi-bin/koha/admin/preferences.pl?"
 "op=search&searchfield=staffClientBaseURL\">staffClientBaseURL</a> will be "
 "used as a prefix."
-msgstr "若以 '/' 起頭，  則 staffClientBaseURL 的值將用於前綴。"
+msgstr ""
+"enhanced_content.pref#KohaManualBaseURL# 若以 '/' 起頭，  則 <a href=\"/cgi-"
+"bin/koha/admin/preferences.pl?op=search&searchfield=staffClientBaseURL"
+"\">staffClientBaseURL</a> 的值將用於前綴。"
 
 # Enhanced content > Manual
 msgid "enhanced_content.pref#KohaManualBaseURL# Location of the Koha manual"
@@ -7369,15 +7575,15 @@ msgid "enhanced_content.pref#SyndeticsEditions# Show"
 msgstr "顯示"
 
 # Enhanced content > Syndetics
-#, fuzzy
 msgid ""
 "enhanced_content.pref#SyndeticsEditions# information about other editions of "
 "a title from Syndetics on item detail pages on the OPAC (when <a href=\"/cgi-"
 "bin/koha/admin/preferences.pl?op=search&searchfield=OPACFRBRizeEditions"
 "\">OPACFRBRizeEditions</a> is on)."
 msgstr ""
-"得自 Syndetics 書目中心的其他版本資訊，在 OPAC (當 OPACFRBRizeEditions 啟"
-"用)。"
+"enhanced_content.pref#SyndeticsEditions# 得自 Syndetics 書目中心的其他版本資"
+"訊，在 OPAC (當 <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=OPACFRBRizeEditions\">OPACFRBRizeEditions</a> 啟用)。"
 
 # Enhanced content > Syndetics
 msgid "enhanced_content.pref#SyndeticsEnabled# Don't use"
@@ -7559,7 +7765,6 @@ msgid "enhanced_content.pref#ThingISBN# Use"
 msgstr "使用"
 
 # Enhanced content > Library Thing
-#, fuzzy
 msgid ""
 "enhanced_content.pref#ThingISBN# the ThingISBN service to show other "
 "editions of a title (when either <a href=\"/cgi-bin/koha/admin/preferences."
@@ -7568,8 +7773,11 @@ msgid ""
 "\">OPACFRBRizeEditions</a> is on). This is separate from Library Thing for "
 "Libraries."
 msgstr ""
-"ThingISBN 服務，顯示其他版本(當 FRBRizeEditions 或 OPACFRBRizeEditions 開"
-"啟)。此服務獨立於 Library Thing 之外。"
+"enhanced_content.pref#ThingISBN# ThingISBN 服務，顯示其他版本(當 <a href=\"/"
+"cgi-bin/koha/admin/preferences.pl?op=search&searchfield=FRBRizeEditions"
+"\">FRBRizeEditions</a> 或 <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=OPACFRBRizeEditions\">OPACFRBRizeEditions</a> 開啟)。此"
+"服務獨立於 Library Thing 之外。"
 
 # I18N/L10N
 msgid "i18n_l10n.pref"
@@ -7655,11 +7863,9 @@ msgid ""
 msgstr "此清單可以修改介面的語文順序。"
 
 # I18N/L10N
-msgid ""
-"i18n_l10n.pref#TimeFormat# . <br/> <strong>NOTE:</strong> Do not change this "
-"preference on a production server with overdue items that are accruing "
-"fines. Doing so will result in duplicate fines!"
-msgstr ""
+#, fuzzy
+msgid "i18n_l10n.pref#TimeFormat# ."
+msgstr "時間格式"
 
 # I18N/L10N
 msgid "i18n_l10n.pref#TimeFormat# 12 hour format ( e.g. \"02:18 PM\" )"
@@ -7710,11 +7916,9 @@ msgid ""
 msgstr "可瀏覽的字母清單。此清單應為空格區隔的大寫字母清單。"
 
 # I18N/L10N
-msgid ""
-"i18n_l10n.pref#dateformat# . <br/> <strong>NOTE:</strong> Do not change this "
-"preference on a production server with overdue items that are accruing "
-"fines. Doing so will result in duplicate fines!"
-msgstr ""
+#, fuzzy
+msgid "i18n_l10n.pref#dateformat# ."
+msgstr "dd.mm.yyyy"
 
 # I18N/L10N
 msgid "i18n_l10n.pref#dateformat# Format dates like"
@@ -7895,15 +8099,16 @@ msgid "logs.pref#DumpSearchQueryTemplate# Don't"
 msgstr "不執行"
 
 # Logging > Debugging
-#, fuzzy
 msgid ""
 "logs.pref#DumpSearchQueryTemplate# dump search query as a template "
 "parameter, requires <a href=\"/cgi-bin/koha/admin/preferences.pl?"
 "op=search&searchfield=DumpTemplateVars\">DumpTemplateVars</a>[interface] to "
 "be visible."
 msgstr ""
-"拋棄 搜尋 詢問 當作一個模版參數, 要求 DumpTemplateVars[interface] 是可被看見"
-"的."
+"logs.pref#DumpSearchQueryTemplate# 拋棄 搜尋 詢問 當作一個模版參數, 需要 <a "
+"href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=DumpTemplateVars\">DumpTemplateVars</a>[interface] 是可"
+"被看見的."
 
 # Logging > Debugging
 msgid "logs.pref#DumpTemplateVarsIntranet# Do"
@@ -7982,6 +8187,23 @@ msgstr "記錄"
 # Logging > Logging
 msgid "logs.pref#IssueLog# when items are checked out."
 msgstr "借出館藏時。"
+
+# Logging > Logging
+#, fuzzy
+msgid ""
+"logs.pref#NewsLog#  changes to news entries and other contents managed in "
+"the news tool."
+msgstr "改變權威記錄。"
+
+# Logging > Logging
+#, fuzzy
+msgid "logs.pref#NewsLog# Don't log"
+msgstr "不登入"
+
+# Logging > Logging
+#, fuzzy
+msgid "logs.pref#NewsLog# Log"
+msgstr "記錄"
 
 # Logging > Logging
 #, fuzzy
@@ -8242,33 +8464,6 @@ msgid "opac.pref#EnableOpacSearchHistory# patron search history in the OPAC."
 msgstr "在 OPAC 的讀者檢索記錄。"
 
 # OPAC > Appearance
-msgid ""
-"opac.pref#HighlightOwnItemsOnOPAC#  by moving the results to the front and "
-"increasing the size or highlighting the rows for those results (non-XSLT "
-"only)."
-msgstr ""
-
-# OPAC > Appearance
-msgid "opac.pref#HighlightOwnItemsOnOPAC# Don't emphasize"
-msgstr "不強調"
-
-# OPAC > Appearance
-msgid "opac.pref#HighlightOwnItemsOnOPAC# Emphasize"
-msgstr "強調"
-
-# OPAC > Appearance
-msgid "opac.pref#HighlightOwnItemsOnOPAC# OPAC's library via the URL"
-msgstr ""
-
-# OPAC > Appearance
-msgid "opac.pref#HighlightOwnItemsOnOPAC# patron's home library"
-msgstr ""
-
-# OPAC > Appearance
-msgid "opac.pref#HighlightOwnItemsOnOPAC# results from the "
-msgstr "結果來自 "
-
-# OPAC > Appearance
 msgid "opac.pref#LibraryName# Show"
 msgstr "顯示"
 
@@ -8356,12 +8551,14 @@ msgid ""
 msgstr "在 OPAC 書目詳情頁面顯示 QR 碼的選項。"
 
 # OPAC > Appearance
-#, fuzzy
 msgid ""
 "opac.pref#OPACDisplay856uAsImage# . Note: The corresponding <a href=\"/cgi-"
 "bin/koha/admin/preferences.pl?op=search&searchfield=OPACXSLT\">OPACXSLT</a> "
 "option must be turned on."
-msgstr "。附註：必須打開對應的 OPACXSLT 選項。"
+msgstr ""
+"opac.pref#OPACDisplay856uAsImage# 。附註：必須打開對應的 <a href=\"/cgi-bin/"
+"koha/admin/preferences.pl?op=search&searchfield=OPACXSLT\">OPACXSLT</a> 選"
+"項。"
 
 # OPAC > Appearance
 msgid ""
@@ -8442,6 +8639,22 @@ msgid ""
 "opac.pref#OPACFinesTab# patrons to access the charges tab on their account "
 "page on the OPAC."
 msgstr ""
+
+# OPAC > Privacy
+#, fuzzy
+msgid "opac.pref#OPACHoldRequests# Allow"
+msgstr "允許"
+
+# OPAC > Privacy
+#, fuzzy
+msgid "opac.pref#OPACHoldRequests# Don't allow"
+msgstr "不允許"
+
+# OPAC > Features
+#, fuzzy
+msgid ""
+"opac.pref#OPACHoldRequests# patrons to place holds on items from the OPAC."
+msgstr "讀者從 OPAC 預約。"
 
 # OPAC > Appearance
 msgid "opac.pref#OPACHoldingsDefaultSortField# First column of the table"
@@ -8592,12 +8805,14 @@ msgid "opac.pref#OPACReportProblem# <br/>"
 msgstr "<br/>"
 
 # OPAC > Features
-#, fuzzy
 msgid ""
 "opac.pref#OPACReportProblem# <strong>NOTE:</strong> You must have <a href=\"/"
 "cgi-bin/koha/admin/preferences.pl?op=search&searchfield=KohaAdminEmailAddress"
 "\">KohaAdminEmailAddress</a> enabled."
-msgstr "<strong>注意:</strong> 你必須有已啟用的 KohaAdminEmailAddress"
+msgstr ""
+"opac.pref#OPACReportProblem# <strong>注意:</strong> 你必須有已啟用的  <a "
+"href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=KohaAdminEmailAddress\">KohaAdminEmailAddress</a>."
 
 # OPAC > Features
 msgid "opac.pref#OPACReportProblem# Allow"
@@ -8630,6 +8845,45 @@ msgstr ""
 
 # OPAC > Appearance
 msgid "opac.pref#OPACResultsLibrary# home library"
+msgstr "所屬圖書館"
+
+# OPAC > Appearance > OPACResultsMaxItems
+msgid ""
+"opac.pref#OPACResultsMaxItems# (available) individual items on the OPAC XSLT "
+"search results, and show no more than"
+msgstr ""
+
+# OPAC > Appearance > OPACResultsMaxItems
+msgid ""
+"opac.pref#OPACResultsMaxItems# (unavailable) individual items for categories "
+"like Checked out, Damaged, On Hold, but only when you group them by branch."
+"<br>"
+msgstr ""
+
+# OPAC > Appearance > OPACResultsMaxItems
+msgid ""
+"opac.pref#OPACResultsMaxItems# . (NOTE: For large consortia we recommend to "
+"group unavailable items by substatus, listing item counts only.)"
+msgstr ""
+
+# OPAC > Appearance
+#, fuzzy
+msgid "opac.pref#OPACResultsMaxItems# Group unavailable items by"
+msgstr "所屬圖書館"
+
+# OPAC > Appearance
+#, fuzzy
+msgid "opac.pref#OPACResultsMaxItems# Show no more than"
+msgstr "所屬圖書館"
+
+# OPAC > Appearance
+#, fuzzy
+msgid "opac.pref#OPACResultsMaxItems# branch"
+msgstr "所屬圖書館"
+
+# OPAC > Appearance
+#, fuzzy
+msgid "opac.pref#OPACResultsMaxItems# substatus"
 msgstr "所屬圖書館"
 
 # OPAC > Appearance
@@ -8938,15 +9192,17 @@ msgid ""
 "on the OPAC."
 msgstr "OPAC 其他讀者的採購建議。"
 
-# OPAC > Appearance
+# OPAC > Appearance > OPACXSLTDetailsDisplay
 msgid ""
-"opac.pref#OPACXSLTDetailsDisplay# <br />Options:<ul><li><a href=\"#\" class="
-"\"set_syspref\" data-syspref=\"OPACXSLTDetailsDisplay\" data-value="
-"\"\">leave empty</a> for \"no xslt\"</li><li>enter \"<a href=\"#\" class="
-"\"set_syspref\" data-syspref=\"OPACXSLTDetailsDisplay\" data-value=\"default"
-"\">default</a>\" for the default one</li><li>put a path to define a xslt "
-"file</li><li>put an URL for an external specific stylesheet.</li></"
-"ul>{langcode} will be replaced with current interface language."
+"opac.pref#OPACXSLTDetailsDisplay# <br />Options:<ul><li>Enter \"<a href=\"#"
+"\" class=\"set_syspref\" data-syspref=\"OPACXSLTDetailsDisplay\" data-value="
+"\"default\">default</a>\" for the default stylesheet</li><li>Put a path to "
+"define an xslt file</li><li>Put a URL for an external specific stylesheet.</"
+"li><li>NOTE: The system preference <a href=\"/cgi-bin/koha/admin/preferences."
+"pl?op=search&searchfield=PassItemMarcToXSLT\">PassItemMarcToXSLT</a> must be "
+"enabled if your custom stylesheet utilizes data in the item fields</li></"
+"ul>If you have multiple stylesheets for different langues the placeholder "
+"{langcode} will be replaced with current interface language."
 msgstr ""
 
 # OPAC > Appearance
@@ -8955,15 +9211,17 @@ msgid ""
 "at: "
 msgstr "使用 XSLT 樣式表顯示 OPAC 的詳情："
 
-# OPAC > Appearance
+# OPAC > Appearance > OPACXSLTListsDisplay
 msgid ""
-"opac.pref#OPACXSLTListsDisplay# <br />Options:<ul><li><a href=\"#\" class="
-"\"set_syspref\" data-syspref=\"OPACXSLTListsDisplay\" data-value=\"\">leave "
-"empty</a> for \"no xslt\"</li><li>enter \"<a href=\"#\" class=\"set_syspref"
-"\" data-syspref=\"OPACXSLTListsDisplay\" data-value=\"default\">default</a>"
-"\" for the default one</li><li> put a path to define a xslt file</li><li>put "
-"an URL for an external specific stylesheet.</li></ul>{langcode} will be "
-"replaced with current interface language."
+"opac.pref#OPACXSLTListsDisplay# <br />Options:<ul><li>Enter \"<a href=\"#\" "
+"class=\"set_syspref\" data-syspref=\"OPACXSLTListsDisplay\" data-value="
+"\"default\">default</a>\" for the default stylesheet</li><li>Put a path to "
+"define an xslt file</li><li>Put a URL for an external specific stylesheet.</"
+"li><li>NOTE: The system preference <a href=\"/cgi-bin/koha/admin/preferences."
+"pl?op=search&searchfield=PassItemMarcToXSLT\">PassItemMarcToXSLT</a> must be "
+"enabled if your custom stylesheet utilizes data in the item fields</li></"
+"ul>If you have multiple stylesheets for different langues the placeholder "
+"{langcode} will be replaced with current interface language."
 msgstr ""
 
 # OPAC > Appearance
@@ -8972,15 +9230,17 @@ msgid ""
 "stylesheet at: "
 msgstr "顯示 OPAC 的清單，採用的 XSLT 樣式表在："
 
-# OPAC > Appearance
+# OPAC > Appearance > OPACXSLTResultsDisplay
 msgid ""
-"opac.pref#OPACXSLTResultsDisplay# <br />Options:<ul><li><a href=\"#\" class="
-"\"set_syspref\" data-syspref=\"OPACXSLTResultsDisplay\" data-value="
-"\"\">leave empty</a> for \"no xslt\"</li><li>enter \"<a href=\"#\" class="
-"\"set_syspref\" data-syspref=\"OPACXSLTResultsDisplay\" data-value=\"default"
-"\">default</a>\" for the default one</li><li> put a path to define a xslt "
-"file</li><li>put an URL for an external specific stylesheet.</li></"
-"ul>{langcode} will be replaced with current interface language."
+"opac.pref#OPACXSLTResultsDisplay# <br />Options:<ul><li>Enter \"<a href=\"#"
+"\" class=\"set_syspref\" data-syspref=\"OPACXSLTResultsDisplay\" data-value="
+"\"default\">default</a>\" for the default stylesheet</li><li>Put a path to "
+"define an xslt file</li><li>Put a URL for an external specific stylesheet.</"
+"li><li>NOTE: The system preference <a href=\"/cgi-bin/koha/admin/preferences."
+"pl?op=search&searchfield=PassItemMarcToXSLT\">PassItemMarcToXSLT</a> must be "
+"enabled if your custom stylesheet utilizes data in the item fields</li></"
+"ul>If you have multiple stylesheets for different langues the placeholder "
+"{langcode} will be replaced with current interface language."
 msgstr ""
 
 # OPAC > Appearance
@@ -9271,6 +9531,9 @@ msgid ""
 "|, that can see items otherwise hidden by <a href=\"/cgi-bin/koha/admin/"
 "preferences.pl?op=search&searchfield=OpacHiddenItems\">OpacHiddenItems</a>:"
 msgstr ""
+"opac.pref#OpacHiddenItemsExceptions# 以直線 | 區隔，列出各讀者類型，可查看被"
+"偏好 <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=OpacHiddenItems\">OpacHiddenItems</a> 隱藏的館藏"
 
 # OPAC > Appearance
 #, fuzzy
@@ -9283,12 +9546,14 @@ msgid "opac.pref#OpacHiddenItemsHidesRecord# Hide"
 msgstr "強調"
 
 # OPAC > Appearance
-#, fuzzy
 msgid ""
 "opac.pref#OpacHiddenItemsHidesRecord# the bibliographic record when all its "
 "items are hidden by <a href='/cgi-bin/koha/admin/preferences.pl?"
 "op=search&searchfield=OpacHiddenItems'>OpacHiddenItems</a>."
-msgstr "啟用 OpacMaintenance 時顯示以下的 HTML："
+msgstr ""
+"opac.pref#OpacHiddenItemsHidesRecord# 書目記錄當它的館藏被 <a href='/cgi-bin/"
+"koha/admin/preferences.pl?"
+"op=search&searchfield=OpacHiddenItems'>OpacHiddenItems</a> 隱藏. "
 
 # OPAC > Appearance
 msgid "opac.pref#OpacHighlightedWords# (separate columns with |)."
@@ -9448,12 +9713,14 @@ msgid ""
 msgstr "警語， OPAC 維修時。注意：資料庫昇級時，也使用同樣的警語。"
 
 # OPAC > Appearance
-#, fuzzy
 msgid ""
 "opac.pref#OpacMaintenanceNotice# Show the following HTML when <a href=\"/cgi-"
 "bin/koha/admin/preferences.pl?op=search&searchfield=OpacMaintenance"
 "\">OpacMaintenance</a> is enabled:"
-msgstr "啟用 OpacMaintenance 時顯示以下的 HTML："
+msgstr ""
+"opac.pref#OpacMaintenanceNotice# 啟用 <a href=\"/cgi-bin/koha/admin/"
+"preferences.pl?op=search&searchfield=OpacMaintenance\">OpacMaintenance</a> "
+"is enabled: 時顯示以下的 HTML："
 
 # OPAC > Appearance
 msgid "opac.pref#OpacMaxItemsToDisplay# Display up to"
@@ -9478,24 +9745,6 @@ msgid ""
 "bar on the OPAC, with the following HTML (leave blank to disable):"
 msgstr ""
 "加入以下列的 HTML (空白則停用)，可在 OPAC 的 \"其他搜尋\" 列加入額外的元素："
-
-# OPAC > Appearance
-msgid ""
-"opac.pref#OpacNav# Show the following HTML on the left hand column of the "
-"main page and patron account on the OPAC (generally navigation links):"
-msgstr ""
-"顯示以下的 HTML 內容，在主頁的左邊，以及 OPAC 的讀者帳號頁面(通常是連結)："
-
-# OPAC > Appearance
-#, fuzzy
-msgid ""
-"opac.pref#OpacNavBottom# Show the following HTML on the left hand column of "
-"the main page and patron account on the OPAC, after <a href=\"/cgi-bin/koha/"
-"admin/preferences.pl?op=search&searchfield=OpacNav\">OpacNav</a>, and before "
-"patron account links if available:"
-msgstr ""
-"在首頁左邊的欄位及 OPAC 的讀者帳號裡，在 OpacNav 與讀者帳號連結間，顯示以下"
-"的 HTML："
 
 # OPAC > Features
 msgid "opac.pref#OpacNewsLibrarySelect# Display"
@@ -9553,15 +9802,15 @@ msgstr ""
 "opac.pref#OpacPublic# 當Koha OPAC是public.在進入OPAC前私有OPAC要求認證方式. "
 
 # OPAC > Appearance
-#, fuzzy
 msgid ""
 "opac.pref#OpacPublic# Note: This does not affect the public API, see the <a "
 "href=\"/cgi-bin/koha/admin/preferences.pl?"
 "op=search&searchfield=RESTPublicAnonymousRequests"
 "\">RESTPublicAnonymousRequests</a> to control the API."
 msgstr ""
-"opac.pref#OpacPublic# 注意: 這個不影響公用的API, 看"
-"<code>RESTPublicAnonymousRequests</code> 以控制API."
+"opac.pref#OpacPublic# 注意: 這個不影響公用的API, 看<a href=\"/cgi-bin/koha/"
+"admin/preferences.pl?op=search&searchfield=RESTPublicAnonymousRequests"
+"\">RESTPublicAnonymousRequests</a> 以控制API."
 
 # OPAC > Policy
 msgid "opac.pref#OpacRenewalAllowed# Allow"
@@ -9755,12 +10004,14 @@ msgstr ""
 "開頭："
 
 # OPAC > OpenURL
-#, fuzzy
 msgid ""
 "opac.pref#OpenURLText# Text of OpenURL links (or image title if <a href=\"/"
 "cgi-bin/koha/admin/preferences.pl?op=search&searchfield=OpenURLImageLocation"
 "\">OpenURLImageLocation</a> is defined):"
-msgstr "OpenURL 連結的文字 (若已在 OpenURLImageLocation 內設定則為影像題名)："
+msgstr ""
+"opac.pref#OpenURLText# OpenURL 連結的文字 (若已在 <a href=\"/cgi-bin/koha/"
+"admin/preferences.pl?op=search&searchfield=OpenURLImageLocation"
+"\">OpenURLImageLocation</a> 內設定則為影像題名)："
 
 # OPAC > Self registration and modification
 msgid ""
@@ -9773,15 +10024,16 @@ msgstr ""
 "html' target='blank'>資料庫欄位</a> 將不會顯示在讀者自助修改的螢幕："
 
 # OPAC > Self registration and modification
-#, fuzzy
 msgid ""
 "opac.pref#PatronSelfRegistration# <br><strong>NOTE:</strong> This needs <a "
 "href='/cgi-bin/koha/admin/preferences.pl?"
 "op=search&searchfield=PatronSelfRegistrationDefaultCategory'>PatronSelfRegistrationDefaultCategory</"
 "a> to be set to a valid patron category code."
 msgstr ""
-"<br><strong>說明：</strong> 此偏好 PatronSelfRegistrationDefaultCategory 需設"
-"定為有效的讀者類型代碼。"
+"opac.pref#PatronSelfRegistration# <br><strong>說明：</strong> 此偏好 <a "
+"href='/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=PatronSelfRegistrationDefaultCategory'>PatronSelfRegistrationDefaultCategory</"
+"a> 需設定為有效的讀者類型代碼。"
 
 # OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistration# Allow"
@@ -9889,13 +10141,16 @@ msgstr ""
 "cleanup_database.pl</code> 工作排程。請洽您的系統管理員。"
 
 # OPAC > Self registration and modification
-#, fuzzy
 msgid ""
 "opac.pref#PatronSelfRegistrationExpireTemporaryAccountsDelay# Delete patrons "
 "still in the category indicated by <a href=\"/cgi-bin/koha/admin/preferences."
 "pl?op=search&searchfield=PatronSelfRegistrationDefaultCategory"
 "\">PatronSelfRegistrationDefaultCategory</a>"
-msgstr "用PatronSelfRegistrationDefaultCategory來刪除還在指定類別裡的顧客"
+msgstr ""
+"opac.pref#PatronSelfRegistrationExpireTemporaryAccountsDelay# 用<a href=\"/"
+"cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=PatronSelfRegistrationDefaultCategory"
+"\">PatronSelfRegistrationDefaultCategory</a> 來刪除還在指定類別裡的顧客"
 
 # OPAC > Self registration and modification
 msgid ""
@@ -9982,18 +10237,6 @@ msgid ""
 "opac.pref#Reference_NFL_Statuses# List the following not for loan statuses "
 "as available for reference in OPAC search results:"
 msgstr ""
-
-# OPAC > Features
-msgid "opac.pref#RequestOnOpac# Allow"
-msgstr "允許"
-
-# OPAC > Features
-msgid "opac.pref#RequestOnOpac# Don't allow"
-msgstr "不允許"
-
-# OPAC > Features
-msgid "opac.pref#RequestOnOpac# patrons to place holds on items from the OPAC."
-msgstr "讀者從 OPAC 預約。"
 
 # OPAC > Restricted page
 msgid ""
@@ -10120,14 +10363,14 @@ msgid "opac.pref#ShowReviewerPhoto# Show"
 msgstr "顯示"
 
 # OPAC > Features
-#, fuzzy
 msgid ""
 "opac.pref#ShowReviewerPhoto# reviewer's avatar beside comments in OPAC. The "
 "avatar will be searched on <a href=\"https://www.libravatar.org\" target="
 "\"_blank\">Libravatar</a> using the patron's e-mail address."
 msgstr ""
-"在 OPAC 評論旁的評論者圖像。可以從 www.libravatar.org 以讀者的電子郵件信箱搜"
-"尋其圖像。"
+"opac.pref#ShowReviewerPhoto# 在 OPAC 評論旁的評論者圖像。可以從 <a href="
+"\"https://www.libravatar.org\" target=\"_blank\">Libravatar</a> 以讀者的電子"
+"郵件信箱搜尋其圖像。"
 
 # OPAC > Features
 msgid "opac.pref#SocialNetworks# Email"
@@ -10431,7 +10674,6 @@ msgid "patrons.pref#AutoRenewalNotices# never"
 msgstr "送出"
 
 # Patrons > Patron forms
-#, fuzzy
 msgid ""
 "patrons.pref#BorrowerMandatoryField# <strong>NOTE:</strong> If <a href=\"/"
 "cgi-bin/koha/admin/preferences.pl?op=search&searchfield=autoMemberNum"
@@ -10440,8 +10682,11 @@ msgid ""
 "\">BorrowerMandatoryField</a> must not contain the field <code>cardnumber</"
 "code>."
 msgstr ""
-"<strong>說明：</strong> 若啟用 autoMemberNum 偏好，則另個系統偏好 "
-"BorrowerMandatoryField 必須含有 cardnumber的欄位。"
+"patrons.pref#BorrowerMandatoryField# <strong>說明：</strong> 若啟用 <a href="
+"\"/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=autoMemberNum"
+"\">autoMemberNum</a>偏好，則另個系統偏好 <a href=\"/cgi-bin/koha/admin/"
+"preferences.pl?op=search&searchfield=BorrowerMandatoryField"
+"\">BorrowerMandatoryField</a> 必須未含有 <code>cardnumber</code>的欄位。"
 
 # Patrons > Patron forms
 msgid ""
@@ -10496,7 +10741,6 @@ msgid "patrons.pref#CardnumberLength# Card numbers for patrons must be"
 msgstr "讀者證號碼必須"
 
 # Patrons > Patron forms
-#, fuzzy
 msgid ""
 "patrons.pref#CardnumberLength# If <code>cardnumber</code> is included in the "
 "<a href=\"/cgi-bin/koha/admin/preferences.pl?"
@@ -10504,8 +10748,11 @@ msgid ""
 "list, the minimum length, if not specified here, defaults to one. Maximum "
 "cannot be bigger than the database field size of 32."
 msgstr ""
-"若 BorrowerMandatoryField 清單包括 'cardnumber'，但未在此指明，則預設一個。最"
-"大值不能超過資料庫欄位的大小 32。"
+"patrons.pref#CardnumberLength# 如果<code>cardnumber</code>未包括在<a href=\"/"
+"cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=BorrowerMandatoryField\">BorrowerMandatoryField</a>清單"
+"裡，但未在此指明，最小長度，如果未在此處指明，則預設一個。最大值不能超過資料"
+"庫欄位的大小設定 32。"
 
 # Patrons > Patron forms
 msgid ""
@@ -10658,7 +10905,6 @@ msgid ""
 msgstr "啟用上傳與附加檔案至借閱者記錄功能。"
 
 # Patrons > Notices and notifications
-#, fuzzy
 msgid ""
 "patrons.pref#EnhancedMessagingPreferences# <br><strong>NOTE:</strong> This "
 "only applies to courtesy notices. To manage if patrons have also access to "
@@ -10666,8 +10912,10 @@ msgid ""
 "op=search&searchfield=EnhancedMessagingPreferencesOPAC"
 "\">EnhancedMessagingPreferencesOPAC</a>."
 msgstr ""
-"<br><strong>說明：</strong> 祗適用於禮貌性通知。近用此設定的讀者，可使用 "
-"EnhancedMessagingPreferencesOPAC 管理其內容。"
+"patrons.pref#EnhancedMessagingPreferences# <br><strong>說明：</strong> 只適用"
+"於禮貌性通知。如要讓讀者可自行設定，請使用 <a href=\"/cgi-bin/koha/admin/"
+"preferences.pl?op=search&searchfield=EnhancedMessagingPreferencesOPAC"
+"\">EnhancedMessagingPreferencesOPAC</a> 偏好設定.。"
 
 # Patrons > Notices and notifications
 msgid ""
@@ -10695,13 +10943,16 @@ msgid ""
 msgstr ""
 
 # Patrons > Notices and notifications
-#, fuzzy
 msgid ""
 "patrons.pref#EnhancedMessagingPreferencesOPAC# <br><strong>NOTE:</strong> <a "
 "href=\"/cgi-bin/koha/admin/preferences.pl?"
 "op=search&searchfield=EnhancedMessagingPreferences"
 "\">EnhancedMessagingPreferences</a> must be enabled."
-msgstr "<br><strong>說明：</strong> 必須啟用 EnhancedMessagingPreferences。"
+msgstr ""
+"patrons.pref#EnhancedMessagingPreferencesOPAC# <br><strong>說明：</strong> 必"
+"須啟用偏好 <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=EnhancedMessagingPreferences"
+"\">EnhancedMessagingPreferences</a> 。"
 
 # Patrons > Notices and notifications
 msgid "patrons.pref#EnhancedMessagingPreferencesOPAC# Don't show"
@@ -10776,15 +11027,15 @@ msgid ""
 msgstr ""
 
 # Patrons > Privacy
-#, fuzzy
 msgid ""
 "patrons.pref#GDPR_Policy# <br><strong>NOTE:</strong> If you enable this you "
 "will also have to set the URL of your public privacy policy with the <a href="
 "\"/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=PrivacyPolicyURL"
 "\">PrivacyPolicyURL</a> setting."
 msgstr ""
-"<br><strong>說明：</strong> 若啟用它，必須同時設定 PrivacyPolicyURL 偏好隱私"
-"權政策的 URL。"
+"patrons.pref#GDPR_Policy# <br><strong>說明：</strong> 若啟用它，必須同時設定"
+"您的公眾隱私規範的URL偏好 <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=PrivacyPolicyURL\">PrivacyPolicyURL</a> setting.。"
 
 # Patrons > Privacy
 msgid "patrons.pref#GDPR_Policy# Set GDPR policy to:"
@@ -10803,14 +11054,13 @@ msgid "patrons.pref#GDPR_Policy# permissive"
 msgstr ""
 
 # OPAC > Self registration and modification
-#, fuzzy
 msgid ""
 "patrons.pref#LockExpiredDelay# <br><strong>NOTE:</strong> This system "
 "preference requires the misc/cronjobs/cleanup_database.pl cronjob. Ask your "
 "system administrator to schedule it."
 msgstr ""
-"<br><strong>說明：</strong> 此系統偏好必須用到 <code>misc/cronjobs/"
-"cleanup_database.pl</code> 工作排程。請洽您的系統管理員。"
+"patrons.pref#LockExpiredDelay# <br><strong>說明：</strong> 此系統偏好必須用"
+"到 misc/cronjobs/cleanup_database.pl cronjob 工作排程。請洽您的系統管理員。"
 
 # Patrons > Privacy
 #, fuzzy
@@ -11065,12 +11315,14 @@ msgid ""
 msgstr "當加入一位擔保者的擔保品, 從擔保者記錄, 讀者需填以下欄位在擔保品項目: "
 
 # Patrons > Privacy
-#, fuzzy
 msgid ""
 "patrons.pref#PrivacyPolicyURL# <br><strong>NOTE:</strong> The URL will only "
 "be displayed if <a href=\"/cgi-bin/koha/admin/preferences.pl?"
 "op=search&searchfield=GDPR_Policy\">GDPR_Policy</a> is set."
-msgstr "<br><strong>說明：</strong> URL 祗顯示在設定後的 GDPR_Policy。"
+msgstr ""
+"patrons.pref#PrivacyPolicyURL# <br><strong>說明：</strong> 如果<a href=\"/"
+"cgi-bin/koha/admin/preferences.pl?op=search&searchfield=GDPR_Policy"
+"\">GDPR_Policy</a> 有設定, URL 才會顯示。"
 
 # Patrons > Privacy
 msgid "patrons.pref#PrivacyPolicyURL# Use the following URL"
@@ -11317,9 +11569,11 @@ msgid "patrons.pref#TrackLastPatronActivity# Don't"
 msgstr "不做"
 
 # Patrons > General
+#, fuzzy
 msgid ""
-"patrons.pref#TrackLastPatronActivity# Every time a patron will connect, the "
-"borrowers.lastseen will be updated with the current time."
+"patrons.pref#TrackLastPatronActivity# The first time each day that a patron "
+"logs into the OPAC, connects to Koha via SIP or ILS-DI, or checks an item "
+"out the borrowers.lastseen will update with the current date and time."
 msgstr "連繫讀者後，borrowers.lastseen 將更新為當時的時間。"
 
 # Patrons > General
@@ -11369,7 +11623,6 @@ msgid ""
 msgstr "以電子郵件送出收款及豁免收條。"
 
 # Patrons > Patron forms
-#, fuzzy
 msgid ""
 "patrons.pref#autoMemberNum# <strong>NOTE:</strong> If <a href=\"/cgi-bin/"
 "koha/admin/preferences.pl?op=search&searchfield=autoMemberNum"
@@ -11378,8 +11631,11 @@ msgid ""
 "\">BorrowerMandatoryField</a> must not contain the field <code>cardnumber</"
 "code>."
 msgstr ""
-"<strong>說明：</strong> 若啟用 autoMemberNum，系統偏好 "
-"BorrowerMandatoryField 不能含有 cardnumber 欄位。"
+"patrons.pref#autoMemberNum# <strong>說明：</strong> 若啟用 <a href=\"/cgi-"
+"bin/koha/admin/preferences.pl?op=search&searchfield=autoMemberNum"
+"\">autoMemberNum</a>, 系統偏好 <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=BorrowerMandatoryField\">BorrowerMandatoryField</a> 不"
+"能提供<code>cardnumber</code> 讀者證號欄位。"
 
 # Patrons > Patron forms
 msgid "patrons.pref#autoMemberNum# Do"
@@ -11638,6 +11894,26 @@ msgstr "最多顯示"
 msgid "searching.pref#FacetMaxCount# facets for each category."
 msgstr "每個類型的分面。"
 
+# Searching > Results display
+#, fuzzy
+msgid "searching.pref#FacetOrder# Sort facets"
+msgstr "顯示分面"
+
+# Searching > Features
+#, fuzzy
+msgid "searching.pref#FacetOrder# alphabetically"
+msgstr "自動。"
+
+# Searching > Results display
+#, fuzzy
+msgid "searching.pref#FacetOrder# by usage count"
+msgstr "最多顯示"
+
+# Searching > Results display
+#, fuzzy
+msgid "searching.pref#FacetOrder# for each category."
+msgstr "每個類型的分面。"
+
 # Searching > Features
 msgid ""
 "searching.pref#IncludeSeeFromInSearches# <em>see from</em> (non-preferred "
@@ -11843,6 +12119,22 @@ msgid ""
 "searching.pref#OPACnumSearchResultsDropdown# results per page dropdown on "
 "OPAC search results."
 msgstr "下拉每頁OPAC搜索結果上的結果列表."
+
+# Searching > Search form
+#, fuzzy
+msgid "searching.pref#PassItemMarcToXSLT# Do"
+msgstr "查詢表單"
+
+# Searching > Features
+#, fuzzy
+msgid "searching.pref#PassItemMarcToXSLT# Don't"
+msgstr "不保留"
+
+# Searching > Results display > PassItemMarcToXSLT
+msgid ""
+"searching.pref#PassItemMarcToXSLT# make item MARC tags available to XSLT "
+"stylesheets. Default is \"Don't\", items are displayed using other methods."
+msgstr ""
 
 # Searching > Features
 msgid ""
@@ -12095,15 +12387,15 @@ msgid "searching.pref#displayFacetCount# Show"
 msgstr "顯示"
 
 # Searching > Results display
-#, fuzzy
 msgid ""
 "searching.pref#displayFacetCount# facet counts. The relevance of these "
 "numbers highly depends on the value of the <a href=\"/cgi-bin/koha/admin/"
 "preferences.pl?op=search&searchfield=maxRecordsForFacets"
 "\">maxRecordsForFacets</a> preference. Applies to OPAC and staff interface."
 msgstr ""
-"面數的計算值。其相關度有賴 maxRecordsForFacets 參數的值。適用於 OPAC 與館員介"
-"面。"
+"searching.pref#displayFacetCount# 分面的計算值。其相關度有賴偏好 <a href=\"/"
+"cgi-bin/koha/admin/preferences.pl?op=search&searchfield=maxRecordsForFacets"
+"\">maxRecordsForFacets</a> 的參數值。適用於 OPAC 與館員介面。"
 
 # Searching > Search form
 msgid ""
@@ -12534,13 +12826,18 @@ msgid ""
 "editing certain HTML system preferences."
 msgstr ""
 
-# Staff interface > Appearance
+# Staff interface > Appearance > XSLTDetailsDisplay
 msgid ""
 "staff_interface.pref#XSLTDetailsDisplay# <br />Options:<ul><li>Enter \"<a "
 "href=\"#\" class=\"set_syspref\" data-syspref=\"XSLTDetailsDisplay\" data-"
-"value=\"default\">default</a>\" for the default one</li><li>Put a path to "
-"define a xslt file</li><li>Put an URL for an external specific stylesheet.</"
-"li></ul>{langcode} will be replaced with current interface language"
+"value=\"default\">default</a>\" for the default stylesheet</li><li>Put a "
+"path to define an xslt file</li><li>Put a URL for an external specific "
+"stylesheet.</li><li>NOTE: The system preference <a href=\"/cgi-bin/koha/"
+"admin/preferences.pl?op=search&searchfield=PassItemMarcToXSLT"
+"\">PassItemMarcToXSLT</a> must be enabled if your custom stylesheet utilizes "
+"data in the item fields</li></ul>If you have multiple stylesheets for "
+"different langues the placeholder {langcode} will be replaced with current "
+"interface language."
 msgstr ""
 
 # Staff interface > Appearance
@@ -12549,15 +12846,17 @@ msgid ""
 "interface using XSLT stylesheet at: "
 msgstr ""
 
-# Staff interface > Appearance
+# Staff interface > Appearance > XSLTListsDisplay
 msgid ""
-"staff_interface.pref#XSLTListsDisplay# <br />Options:<ul><li><a href=\"#\" "
-"class=\"set_syspref\" data-syspref=\"XSLTListsDisplay\" data-value="
-"\"\">Leave empty</a> for \"no xslt\"</li><li>enter \"<a href=\"#\" class="
-"\"set_syspref\" data-syspref=\"XSLTListsDisplay\" data-value=\"default"
-"\">default</a>\" for the default one</li><li> put a path to define a xslt "
-"file</li><li>put an URL for an external specific stylesheet.</li></"
-"ul>{langcode} will be replaced with current interface language"
+"staff_interface.pref#XSLTListsDisplay# <br />Options:<ul><li>Enter \"<a href="
+"\"#\" class=\"set_syspref\" data-syspref=\"XSLTListsDisplay\" data-value="
+"\"default\">default</a>\" for the default stylesheet</li><li>Put a path to "
+"define an xslt file</li><li>Put a URL for an external specific stylesheet.</"
+"li><li>NOTE: The system preference <a href=\"/cgi-bin/koha/admin/preferences."
+"pl?op=search&searchfield=PassItemMarcToXSLT\">PassItemMarcToXSLT</a> must be "
+"enabled if your custom stylesheet utilizes data in the item fields</li></"
+"ul>If you have multiple stylesheets for different langues the placeholder "
+"{langcode} will be replaced with current interface language."
 msgstr ""
 
 # Staff interface > Appearance
@@ -12566,13 +12865,18 @@ msgid ""
 "using XSLT stylesheet at: "
 msgstr ""
 
-# Staff interface > Appearance
+# Staff interface > Appearance > XSLTResultsDisplay
 msgid ""
 "staff_interface.pref#XSLTResultsDisplay# <br />Options:<ul><li>Enter \"<a "
 "href=\"#\" class=\"set_syspref\" data-syspref=\"XSLTResultsDisplay\" data-"
-"value=\"default\">default</a>\" for the default one</li><li>Put a path to "
-"define a xslt file</li><li>Put an URL for an external specific stylesheet.</"
-"li></ul>{langcode} will be replaced with current interface language"
+"value=\"default\">default</a>\" for the default stylesheet</li><li>Put a "
+"path to define an xslt file</li><li>Put a URL for an external specific "
+"stylesheet.</li><li>NOTE: The system preference <a href=\"/cgi-bin/koha/"
+"admin/preferences.pl?op=search&searchfield=PassItemMarcToXSLT"
+"\">PassItemMarcToXSLT</a> must be enabled if your custom stylesheet utilizes "
+"data in the item fields</li></ul>If you have multiple stylesheets for "
+"different langues the placeholder {langcode} will be replaced with current "
+"interface language."
 msgstr ""
 
 # Staff interface > Appearance
@@ -12757,6 +13061,28 @@ msgstr "報表"
 msgid "tools.pref Upload"
 msgstr "上傳"
 
+# Tools > News
+#, fuzzy
+msgid "tools.pref#AdditionalContentsEditor# ."
+msgstr "新聞工具編輯器"
+
+# Tools > News
+#, fuzzy
+msgid ""
+"tools.pref#AdditionalContentsEditor# By default edit additional contents and "
+"news items with"
+msgstr "預設編輯新聞館藏用"
+
+# Tools > News
+#, fuzzy
+msgid "tools.pref#AdditionalContentsEditor# a WYSIWYG editor (TinyMCE)"
+msgstr "一個所見即所得編輯器 (TinyMCE)"
+
+# Tools > News
+#, fuzzy
+msgid "tools.pref#AdditionalContentsEditor# a text editor (CodeMirror)"
+msgstr "一個文字編輯器 (CodeMirror)"
+
 # Tools > Barcodes
 msgid ""
 "tools.pref#BarcodeSeparators# Split barcodes on the following separator chars"
@@ -12835,22 +13161,6 @@ msgstr ""
 # Tools > News
 msgid "tools.pref#NewsAuthorDisplay# staff interface only"
 msgstr ""
-
-# Tools > News
-msgid "tools.pref#NewsToolEditor# ."
-msgstr "新聞工具編輯器"
-
-# Tools > News
-msgid "tools.pref#NewsToolEditor# By default edit news items with"
-msgstr "預設編輯新聞館藏用"
-
-# Tools > News
-msgid "tools.pref#NewsToolEditor# a WYSIWYG editor (TinyMCE)"
-msgstr "一個所見即所得編輯器 (TinyMCE)"
-
-# Tools > News
-msgid "tools.pref#NewsToolEditor# a text editor (CodeMirror)"
-msgstr "一個文字編輯器 (CodeMirror)"
 
 # Tools > Reports
 msgid "tools.pref#NumSavedReports# By default, show"
@@ -13068,7 +13378,6 @@ msgid ""
 msgstr ""
 
 # Web services > OAI-PMH
-#, fuzzy
 msgid ""
 "web_services.pref#OAI-PMH:ConfFile# . If empty, Koha OAI Server operates in "
 "normal mode, otherwise it operates in extended mode. In extended mode, it's "
@@ -13078,9 +13387,11 @@ msgid ""
 "available metadata formats and XSL file used to create them from marcxml "
 "records."
 msgstr ""
-"若空白，Koha OAI 伺服器以標準模式運作，否則以延伸模式運作。在延伸模式裡，可使"
-"用 marcxml 或 Doblin Core 以外的格式。OAI-PMH:ConfFile 指定 YAML 組態檔列出可"
-"用的元資料格式與 XSL 檔案供新增 marcxml 記錄之用。"
+"web_services.pref#OAI-PMH:ConfFile#  . 若為空白，Koha OAI 伺服器以標準模式運"
+"作，否則以延伸模式運作。在延伸模式裡，可使用 marcxml 或 Doblin Core 以外的格"
+"式。 <a href=\"/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=OAI-"
+"PMH:ConfFile\">OAI-PMH:ConfFile</a> 指定 YAML 組態檔列出可用的元資料格式與 "
+"XSL 檔案供新增 marcxml 記錄之用。"
 
 # Web services > OAI-PMH
 msgid ""
@@ -13227,6 +13538,20 @@ msgid ""
 "reports web service."
 msgstr "經由報表頁面服務指定報表的列數。"
 
+# Administration > Google OpenID Connect
+#~ msgid "admin.pref#GoogleOpenIDConnectDefaultBranch# ."
+#~ msgstr "admin.pref#GoogleOpenIDConnectDefaultBranch# ."
+
+# Administration > Google OpenID Connect
+#~ msgid "admin.pref#GoogleOpenIDConnectDefaultCategory# ."
+#~ msgstr "admin.pref#GoogleOpenIDConnectDefaultCategory# ."
+
+# Administration > Google OpenID Connect
+#~ msgid ""
+#~ "admin.pref#GoogleOpenIDConnectDomain# . Leave blank for all Google "
+#~ "domains."
+#~ msgstr "admin.pref#GoogleOpenIDConnectDomain# . 留空則適用於所有Google網域"
+
 # Circulation > Batch checkout
 #~ msgid ""
 #~ "circulation.pref#BatchCheckoutsValidCategories# (list of patron "
@@ -13240,6 +13565,45 @@ msgstr "經由報表頁面服務指定報表的列數。"
 #~ "circulation.pref#OPACHoldsIfAvailableAtPickupExceptions# (list of patron "
 #~ "categories separated with a pipe '|')"
 #~ msgstr "(讀者類型以直線 '|' 區隔)"
+
+# Enhanced content > Adlibris
+#~ msgid "enhanced_content.pref Adlibris"
+#~ msgstr "Adlibris"
+
+# Enhanced content > Adlibris
+#~ msgid ""
+#~ "enhanced_content.pref## <strong>NOTE:</strong> Using resources such as "
+#~ "external images might leak sensitive data to third parties."
+#~ msgstr ""
+#~ "<strong>說明：</strong> 使用外部圖片等資源可能洩露敏感資料給第三方。"
+
+# Enhanced content > Adlibris
+#~ msgid "enhanced_content.pref#AdlibrisCoversEnabled# Don't show"
+#~ msgstr "不顯示"
+
+# Enhanced content > Adlibris
+#~ msgid "enhanced_content.pref#AdlibrisCoversEnabled# Show"
+#~ msgstr "顯示"
+
+# Enhanced content > Adlibris
+#~ msgid ""
+#~ "enhanced_content.pref#AdlibrisCoversEnabled# cover images in OPAC results "
+#~ "and detail listing from Swedish retailer <a href=\"https://www.adlibris."
+#~ "com/se\">Adlibris</a>."
+#~ msgstr ""
+#~ "OPAC 搜尋結果與詳情頁面的封面來自瑞典廠商 <a href=\"https://www.adlibris."
+#~ "com/se\">Adlibris</a>。"
+
+# Enhanced content > Adlibris
+#~ msgid "enhanced_content.pref#AdlibrisCoversURL# Use base URL: "
+#~ msgstr "使用 URL："
+
+# Enhanced content > Adlibris
+#~ msgid ""
+#~ "enhanced_content.pref#AdlibrisCoversURL# for the <a href=\"https://www."
+#~ "adlibris.com/se\">Adlibris</a> cover service."
+#~ msgstr ""
+#~ "採用 <a href=\"https://www.adlibris.com/se\">Adlibris</a> 封面服務。"
 
 # I18N/L10N
 #~ msgid ""
@@ -13287,6 +13651,36 @@ msgstr "經由報表頁面服務指定報表的列數。"
 #~ "OPAC via PayPal in"
 #~ msgstr "於 OPAC 使用 PayPal 支付讀者的款項"
 
+# OPAC > Appearance
+#~ msgid "opac.pref#HighlightOwnItemsOnOPAC# Don't emphasize"
+#~ msgstr "不強調"
+
+# OPAC > Appearance
+#~ msgid "opac.pref#HighlightOwnItemsOnOPAC# Emphasize"
+#~ msgstr "強調"
+
+# OPAC > Appearance
+#~ msgid "opac.pref#HighlightOwnItemsOnOPAC# results from the "
+#~ msgstr "結果來自 "
+
+# OPAC > Appearance
+#~ msgid ""
+#~ "opac.pref#OpacNav# Show the following HTML on the left hand column of the "
+#~ "main page and patron account on the OPAC (generally navigation links):"
+#~ msgstr ""
+#~ "顯示以下的 HTML 內容，在主頁的左邊，以及 OPAC 的讀者帳號頁面(通常是連結)："
+
+# OPAC > Appearance
+#~ msgid ""
+#~ "opac.pref#OpacNavBottom# Show the following HTML on the left hand column "
+#~ "of the main page and patron account on the OPAC, after <a href=\"/cgi-bin/"
+#~ "koha/admin/preferences.pl?op=search&searchfield=OpacNav\">OpacNav</a>, "
+#~ "and before patron account links if available:"
+#~ msgstr ""
+#~ "opac.pref#OpacNavBottom# 在首頁左邊的欄位及 OPAC 的讀者帳號裡，在 <a href="
+#~ "\"/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=OpacNav"
+#~ "\">OpacNav</a> 與讀者帳號連結間，顯示以下的 HTML："
+
 # OPAC > Payments
 #~ msgid ""
 #~ "opac.pref#PayPalChargeDescription# The patron should see the charge "
@@ -13328,6 +13722,14 @@ msgstr "經由報表頁面服務指定報表的列數。"
 #~ msgid ""
 #~ "opac.pref#PayPalUser# The email address to receive PayPal payments is "
 #~ msgstr "收取 PayPal 款項的電子郵件帳號是 "
+
+# OPAC > Features
+#~ msgid "opac.pref#RequestOnOpac# Allow"
+#~ msgstr "允許"
+
+# OPAC > Features
+#~ msgid "opac.pref#RequestOnOpac# Don't allow"
+#~ msgstr "不允許"
 
 # OPAC > Features
 #~ msgid "opac.pref#reviewson# Allow"

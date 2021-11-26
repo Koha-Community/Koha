@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Koha 21.05\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2021-03-08 23:58+0000\n"
-"Last-Translator: Dataly Tech <gveranis@gmail.com>\n"
+"PO-Revision-Date: 2021-10-14 20:45+0000\n"
+"Last-Translator: dataly <gveranis@dataly.gr>\n"
 "Language-Team: Koha Translation Team <koha-translate@nongnu.org>\n"
 "Language: el\n"
 "MIME-Version: 1.0\n"
@@ -11,7 +11,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8-bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.8\n"
-"X-POOTLE-MTIME: 1615247932.706532\n"
+"X-POOTLE-MTIME: 1634244313.587239\n"
 "X-Pootle-Path: /el/21.05/el-GR-pref.po\n"
 "X-Pootle-Revision: 1\n"
 
@@ -709,9 +709,27 @@ msgstr ""
 msgid "admin.pref#ElasticsearchMARCFormat# Searchable array"
 msgstr ""
 
+# Administration > Google OpenID Connect > GoogleOAuth2ClientID
+msgid ""
+"admin.pref#GoogleOAuth2ClientID# Along with <a href=\"/cgi-bin/koha/admin/"
+"preferences.pl?op=search&searchfield=GoogleOAuth2ClientSecret"
+"\">GoogleOAuth2ClientSecret</a>, enables <a href=\"/cgi-bin/koha/admin/"
+"preferences.pl?op=search&searchfield=GoogleOpenIDConnect"
+"\">GoogleOpenIDConnect.</a>"
+msgstr ""
+
 # Administration > Google OpenID Connect
 msgid "admin.pref#GoogleOAuth2ClientID# Google OAuth2 Client ID: "
 msgstr "Google OAuth2 Client ID: "
+
+# Administration > Google OpenID Connect > GoogleOAuth2ClientSecret
+msgid ""
+"admin.pref#GoogleOAuth2ClientSecret# Along with <a href=\"/cgi-bin/koha/"
+"admin/preferences.pl?op=search&searchfield=GoogleOAuth2ClientID"
+"\">GoogleOAuth2ClientID</a>, enables <a href=\"/cgi-bin/koha/admin/"
+"preferences.pl?op=search&searchfield=GoogleOpenIDConnect"
+"\">GoogleOpenIDConnect.</a>"
+msgstr ""
 
 # Administration > Google OpenID Connect
 msgid "admin.pref#GoogleOAuth2ClientSecret# Google OAuth2 Client Secret: "
@@ -722,19 +740,25 @@ msgid "admin.pref#GoogleOpenIDConnect# No"
 msgstr "Όχι"
 
 # Administration > Google OpenID Connect
-msgid "admin.pref#GoogleOpenIDConnect# Use Google OpenID Connect login: "
+#, fuzzy
+msgid ""
+"admin.pref#GoogleOpenIDConnect# Use Google OpenID Connect login in the OPAC: "
 msgstr "Χρήση της σύνδεσης Google OpenID Connect: "
 
 # Administration > Google OpenID Connect
 msgid "admin.pref#GoogleOpenIDConnect# Yes"
 msgstr "Ναι"
 
-# Administration > Google OpenID Connect
+# Administration > Google OpenID Connect > GoogleOpenIDConnect
 msgid ""
 "admin.pref#GoogleOpenIDConnect# You will need to select OAuth2 when creating "
 "an app in the Google cloud console, and set the web origin to your_opac_url "
 "and the redirect url to your_opac_url/cgi-bin/koha/svc/auth/"
-"googleopenidconnect ."
+"googleopenidconnect. Requires <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=GoogleOAuth2ClientID\">GoogleOAuth2ClientID</a> and <a "
+"href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=GoogleOAuth2ClientSecret\">GoogleOAuth2ClientSecret</"
+"a> to be set."
 msgstr ""
 
 # Administration > Google OpenID Connect
@@ -745,14 +769,19 @@ msgstr ""
 msgid "admin.pref#GoogleOpenIDConnectAutoRegister# Don't allow"
 msgstr ""
 
-# Administration > Google OpenID Connect
+# Administration > Google OpenID Connect > GoogleOpenIDConnectAutoRegister
 msgid ""
 "admin.pref#GoogleOpenIDConnectAutoRegister# patrons logging in with Google "
-"Open ID to automatically register."
+"Open ID to automatically register. Requires <a href=\"/cgi-bin/koha/admin/"
+"preferences.pl?op=search&searchfield=GoogleOpenIDConnect"
+"\">GoogleOpenIDConnect</a>."
 msgstr ""
 
-# Administration > Google OpenID Connect
-msgid "admin.pref#GoogleOpenIDConnectDefaultBranch# ."
+# Administration > Google OpenID Connect > GoogleOpenIDConnectDefaultBranch
+msgid ""
+"admin.pref#GoogleOpenIDConnectDefaultBranch# Requires <a href=\"/cgi-bin/"
+"koha/admin/preferences.pl?op=search&searchfield=GoogleOpenIDConnect"
+"\">GoogleOpenIDConnect</a>."
 msgstr ""
 
 # Administration > Google OpenID Connect
@@ -761,8 +790,11 @@ msgid ""
 "automatically registering a Google Open ID patron: "
 msgstr ""
 
-# Administration > Google OpenID Connect
-msgid "admin.pref#GoogleOpenIDConnectDefaultCategory# ."
+# Administration > Google OpenID Connect > GoogleOpenIDConnectDefaultCategory
+msgid ""
+"admin.pref#GoogleOpenIDConnectDefaultCategory# Requires <a href=\"/cgi-bin/"
+"koha/admin/preferences.pl?op=search&searchfield=GoogleOpenIDConnect"
+"\">GoogleOpenIDConnect</a>."
 msgstr ""
 
 # Administration > Google OpenID Connect
@@ -771,9 +803,11 @@ msgid ""
 "automatically registering a Google Open ID patron: "
 msgstr ""
 
-# Administration > Google OpenID Connect
+# Administration > Google OpenID Connect > GoogleOpenIDConnectDomain
 msgid ""
-"admin.pref#GoogleOpenIDConnectDomain# . Leave blank for all Google domains."
+"admin.pref#GoogleOpenIDConnectDomain# Leave blank for all Google domains. "
+"Requires <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=GoogleOpenIDConnect\">GoogleOpenIDConnect</a>."
 msgstr ""
 
 # Administration > Google OpenID Connect
@@ -2123,15 +2157,16 @@ msgid "authorities.pref#AutoCreateAuthorities# When editing records,"
 msgstr "Κατά την επεξεργασία των εγγραφών,"
 
 # Authorities > General
-#, fuzzy
 msgid ""
 "authorities.pref#AutoCreateAuthorities# authority records that are missing "
 "(<a href=\"/cgi-bin/koha/admin/preferences.pl?"
 "op=search&searchfield=BiblioAddsAuthorities\">BiblioAddsAuthorities</a> must "
 "be set to \"allow\" for this to have any effect)."
 msgstr ""
-"οι εγγραφές καθιερωμένων όρων που λείπουν (η ρύθμιση BiblioAddsAuthorities "
-"πρέπει να είναι ορισμένη σε \"να επιτρέπεται\" για έχει ισχύ)."
+"οι εγγραφές καθιερωμένων όρων που λείπουν (<a href=\"/cgi-bin/koha/admin/"
+"preferences.pl?op=search&searchfield=BiblioAddsAuthorities"
+"\">BiblioAddsAuthorities</a> πρέπει να οριστεί σε \"να επιτρέπεται\" για "
+"έχει ισχύ)."
 
 # Authorities > General
 msgid "authorities.pref#AutoCreateAuthorities# don't generate"
@@ -2436,6 +2471,23 @@ msgid ""
 "format BT_TAG: TAG$SUBFIELD ( e.g. lccn: 010$a )."
 msgstr ""
 
+# Cataloging > Spine labels
+#, fuzzy
+msgid "cataloguing.pref#CreateAVFromCataloguing# Allow"
+msgstr "να γίνεται"
+
+# Cataloging > Interface
+#, fuzzy
+msgid "cataloguing.pref#CreateAVFromCataloguing# Don't allow"
+msgstr "Απενεργοποίηση"
+
+# Cataloging > Interface > CreateAVFromCataloguing
+msgid ""
+"cataloguing.pref#CreateAVFromCataloguing# authorized values to be created "
+"within the cataloguing module. Librarian will need the manage_auth_values "
+"subpermission."
+msgstr ""
+
 # Cataloging > Interface
 msgid "cataloguing.pref#DefaultClassificationSource# Use"
 msgstr "Χρησιμοποίησε"
@@ -2515,10 +2567,11 @@ msgid ""
 msgstr ""
 
 # Cataloging > Interface
+#, fuzzy
 msgid ""
 "cataloguing.pref#EnableAdvancedCatalogingEditor# Currently does not include "
-"support for UNIMARC or NORMARC fixed fields."
-msgstr ""
+"support for UNIMARC fixed fields."
+msgstr "Απενεργοποίηση"
 
 # Cataloging > Interface
 msgid "cataloguing.pref#EnableAdvancedCatalogingEditor# Don't enable"
@@ -2591,6 +2644,22 @@ msgid ""
 "cataloguing.pref#MARCOrgCode# by default in new MARC21 records (leave blank "
 "to disable). This can be also set on libraries level."
 msgstr ""
+
+# Cataloging > Display
+#, fuzzy
+msgid "cataloguing.pref#MARCOverlayRules# Don't use"
+msgstr "Να μη χρησιμοποιείται"
+
+# Cataloging > Importing > MARCOverlayRules
+msgid ""
+"cataloguing.pref#MARCOverlayRules# MARC overlay rules for incoming records, "
+"to decide which action to take for each field."
+msgstr ""
+
+# Cataloging > Display
+#, fuzzy
+msgid "cataloguing.pref#MARCOverlayRules# Use"
+msgstr "Να χρησιμοποιείται"
 
 # Cataloging > Display
 msgid ""
@@ -2863,6 +2932,49 @@ msgstr ""
 "η προβολή των τεκμηρίων σε δύο καρτέλες, όπου η πρώτη περιέχει τα τεκμήρια "
 "όπου"
 
+# Cataloging > Display > ShowComponentRecords
+msgid "cataloguing.pref#ShowComponentRecords# <br/> UNIMARC is not supported."
+msgstr ""
+
+# Cataloging > Display > ShowComponentRecords
+msgid "cataloguing.pref#ShowComponentRecords# A maximum of"
+msgstr ""
+
+# Cataloging > Record structure
+#, fuzzy
+msgid "cataloguing.pref#ShowComponentRecords# OPAC"
+msgstr "NORMARC"
+
+# Cataloging > Display > ShowComponentRecords
+msgid ""
+"cataloguing.pref#ShowComponentRecords# Show a list of component records, as "
+"linked via field 773, in"
+msgstr ""
+
+# Cataloging > Display > ShowComponentRecords
+msgid "cataloguing.pref#ShowComponentRecords# both staff interface and OPAC"
+msgstr ""
+
+# Cataloging > Spine labels
+#, fuzzy
+msgid "cataloguing.pref#ShowComponentRecords# no"
+msgstr "να γίνεται"
+
+# Cataloging > Record structure
+#, fuzzy
+msgid "cataloguing.pref#ShowComponentRecords# record detail pages."
+msgstr "Τα barcode"
+
+# Cataloging > Interface
+#, fuzzy
+msgid "cataloguing.pref#ShowComponentRecords# records will be displayed."
+msgstr "Εμφάνιση"
+
+# Cataloging > Interface
+#, fuzzy
+msgid "cataloguing.pref#ShowComponentRecords# staff interface"
+msgstr "Διεπαφή"
+
 # Cataloging > Spine labels
 msgid ""
 "cataloguing.pref#SpineLabelAutoPrint# When using the quick spine label "
@@ -3131,10 +3243,6 @@ msgid "cataloguing.pref#marcflavour# MARC21"
 msgstr "MARC21"
 
 # Cataloging > Record structure
-msgid "cataloguing.pref#marcflavour# NORMARC"
-msgstr "NORMARC"
-
-# Cataloging > Record structure
 msgid "cataloguing.pref#marcflavour# UNIMARC"
 msgstr "UNIMARC"
 
@@ -3265,7 +3373,9 @@ msgstr "Να απαιτείται"
 msgid ""
 "circulation.pref#AllFinesNeedOverride# staff to manually override all fines, "
 "even fines less than set in the <a href=\"/cgi-bin/koha/admin/preferences.pl?"
-"op=search&searchfield=noissuescharge\">noissuescharge</a> system preference."
+"op=search&searchfield=noissuescharge\">noissuescharge</a> system preference. "
+"Enabling this system preference will block all checkouts for patrons with "
+"fines both via the web-based self checkout system and via SIP."
 msgstr ""
 
 # Circulation > Interface
@@ -3697,6 +3807,38 @@ msgstr ""
 msgid "circulation.pref#ArticleRequestsMandatoryFieldsRecordOnly# Volume"
 msgstr ""
 
+# Circulation > Article requests > ArticleRequestsOpacHostRedirection
+msgid ""
+"circulation.pref#ArticleRequestsOpacHostRedirection#  redirection from child "
+"to host based on MARC21 773$w when the child has no items when requesting "
+"articles on the Opac."
+msgstr ""
+
+# Circulation > Article requests
+#, fuzzy
+msgid "circulation.pref#ArticleRequestsOpacHostRedirection# Disable"
+msgstr "Ενεργοποίηση"
+
+# Circulation > Article requests
+#, fuzzy
+msgid "circulation.pref#ArticleRequestsOpacHostRedirection# Enable"
+msgstr "Ενεργοποίηση"
+
+# Circulation > Article requests > ArticleRequestsSupportedFormats
+msgid ""
+"circulation.pref#ArticleRequestsSupportedFormats# (Valid choices are "
+"currently: PHOTOCOPY and SCAN. Separate the supported formats by a vertical "
+"bar. The first listed format is selected by default when you request via the "
+"OPAC.)"
+msgstr ""
+
+# Circulation > Article requests
+#, fuzzy
+msgid ""
+"circulation.pref#ArticleRequestsSupportedFormats# The following article "
+"request formats are supported:"
+msgstr "στα μέλη να κάνουν αιτήματα άρθρου."
+
 # Circulation > Checkout policy
 msgid "circulation.pref#AutoRemoveOverduesRestrictions# Do"
 msgstr "Να"
@@ -4054,6 +4196,23 @@ msgstr ""
 msgid "circulation.pref#ClaimReturnedWarningThreshold# items."
 msgstr ""
 
+# Circulation > Return claims > CleanUpDatabaseReturnClaims
+msgid ""
+"circulation.pref#CleanUpDatabaseReturnClaims# <span class=\"hint\">This "
+"system preference is used by the cleanup_database.pl cronjob.</span>"
+msgstr ""
+
+# Circulation > Return claims > CleanUpDatabaseReturnClaims
+msgid ""
+"circulation.pref#CleanUpDatabaseReturnClaims# Remove resolved return claims "
+"older than"
+msgstr ""
+
+# Circulation > Return claims
+#, fuzzy
+msgid "circulation.pref#CleanUpDatabaseReturnClaims# days."
+msgstr "circulation.pref#ClaimReturnedChargeFee# ."
+
 # Circulation > Holds policy
 msgid ""
 "circulation.pref#ConfirmFutureHolds# Confirm future hold requests (starting "
@@ -4333,18 +4492,28 @@ msgid ""
 "waiting hold to expire a fee of"
 msgstr ""
 
+# Circulation > Holds policy > ExpireReservesOnHolidays
+msgid ""
+"circulation.pref#ExpireReservesOnHolidays# If using <a href=\"/cgi-bin/koha/"
+"admin/preferences.pl?op=search&searchfield=ExpireReservesMaxPickUpDelay"
+"\">ExpireReservesMaxPickUpDelay</a>,"
+msgstr ""
+
 # Circulation > Holds policy
-msgid "circulation.pref#ExpireReservesOnHolidays# Allow"
+#, fuzzy
+msgid "circulation.pref#ExpireReservesOnHolidays# allow"
 msgstr "Να επιτρέπεται"
 
 # Circulation > Holds policy
-msgid "circulation.pref#ExpireReservesOnHolidays# Don't allow"
+#, fuzzy
+msgid "circulation.pref#ExpireReservesOnHolidays# don't allow"
 msgstr "Να μην επιτρέπεται"
 
 # Circulation > Holds policy
+#, fuzzy
 msgid ""
 "circulation.pref#ExpireReservesOnHolidays# expired holds to be canceled on "
-"days the library is closed."
+"days the library is closed per the calendar."
 msgstr ""
 "οι κρατήσεις που έχουν λήξει να ακυρώνονται τις μέρες που η βιβλιοθήκη είναι "
 "κλειστή."
@@ -4946,16 +5115,16 @@ msgid "circulation.pref#OPACAllowHoldDateInFuture# Don't allow"
 msgstr "Να μην επιτρέπεται"
 
 # Circulation > Holds policy
-#, fuzzy
 msgid ""
 "circulation.pref#OPACAllowHoldDateInFuture# patrons to place holds that "
 "don't enter the waiting list until a certain future date. (<a href=\"/cgi-"
 "bin/koha/admin/preferences.pl?op=search&searchfield=AllowHoldDateInFuture"
 "\">AllowHoldDateInFuture</a> must also be enabled)."
 msgstr ""
-"στα μέλη να κάνουν κρατήσεις που δεν μπαίνουν στη λίστα αναμονής μέχρι μία "
-"συγκεκριμένη μελλοντική ημερομηνία (το AllowHoldDateInFuture πρέπει να είναι "
-"ενεργοποιημένο)."
+"τα μέλη να κάνουν κρατήσεις που δεν μπαίνουν στη λίστα αναμονής μέχρι μία "
+"συγκεκριμένη μελλοντική ημερομηνία (το <a href=\"/cgi-bin/koha/admin/"
+"preferences.pl?op=search&searchfield=AllowHoldDateInFuture"
+"\">AllowHoldDateInFuture</a> πρέπει να είναι ενεργοποιημένο)."
 
 # Circulation > Holds policy
 msgid "circulation.pref#OPACAllowUserToChooseBranch# Allow"
@@ -5309,7 +5478,8 @@ msgid ""
 msgstr ""
 
 # Circulation > Holds policy
-msgid "circulation.pref#ReservesControlBranch# Check the"
+#, fuzzy
+msgid "circulation.pref#ReservesControlBranch# Check the rule from the"
 msgstr "Να ελέγχεται"
 
 # Circulation > Holds policy
@@ -5367,7 +5537,10 @@ msgid "circulation.pref#RestrictionBlockRenewing# block"
 msgstr ""
 
 # Circulation > Checkout policy
-msgid "circulation.pref#RestrictionBlockRenewing# renewing of items."
+#, fuzzy
+msgid ""
+"circulation.pref#RestrictionBlockRenewing# renewing of items from the staff "
+"interface."
 msgstr "η ανανέωση των αντιτύπων."
 
 # Circulation > Checkout policy
@@ -6390,10 +6563,6 @@ msgstr ""
 msgid "enhanced_content.pref"
 msgstr "Εμπλουτισμένο Περιεχόμενο"
 
-# Enhanced content > Adlibris
-msgid "enhanced_content.pref Adlibris"
-msgstr ""
-
 # Enhanced content > All
 msgid "enhanced_content.pref All"
 msgstr "Όλα"
@@ -6458,42 +6627,11 @@ msgstr "Syndetics"
 msgid "enhanced_content.pref Tagging"
 msgstr "Tagging"
 
-# Enhanced content > Adlibris
-msgid ""
-"enhanced_content.pref## <strong>NOTE:</strong> Using resources such as "
-"external images might leak sensitive data to third parties."
-msgstr ""
-
 # Enhanced content > All
 msgid ""
 "enhanced_content.pref## <strong>NOTE:</strong> you can only choose one "
 "source of cover images from below, otherwise Koha will show the images from "
 "all sources selected."
-msgstr ""
-
-# Enhanced content > Adlibris
-msgid "enhanced_content.pref#AdlibrisCoversEnabled# Don't show"
-msgstr ""
-
-# Enhanced content > Adlibris
-msgid "enhanced_content.pref#AdlibrisCoversEnabled# Show"
-msgstr ""
-
-# Enhanced content > Adlibris
-msgid ""
-"enhanced_content.pref#AdlibrisCoversEnabled# cover images in OPAC results "
-"and detail listing from Swedish retailer <a href=\"https://www.adlibris.com/"
-"se\">Adlibris</a>."
-msgstr ""
-
-# Enhanced content > Adlibris
-msgid "enhanced_content.pref#AdlibrisCoversURL# Use base URL: "
-msgstr ""
-
-# Enhanced content > Adlibris
-msgid ""
-"enhanced_content.pref#AdlibrisCoversURL# for the <a href=\"https://www."
-"adlibris.com/se\">Adlibris</a> cover service."
 msgstr ""
 
 # Enhanced content > Local or remote cover images
@@ -6695,6 +6833,15 @@ msgstr ""
 # Enhanced content > Local or remote cover images
 msgid "enhanced_content.pref#CustomCoverImages# Don't display"
 msgstr ""
+
+# Enhanced content > Local or remote cover images
+#, fuzzy
+msgid ""
+"enhanced_content.pref#CustomCoverImages# For control fields you can use just "
+"{field}, like {001}."
+msgstr ""
+"των τοπικών εικόνων εξώφυλλων στις αναζητήσεις και τις σελίδες λεπτομερειών "
+"στον OPAC."
 
 # Enhanced content > Local or remote cover images
 msgid ""
@@ -7355,7 +7502,6 @@ msgid "enhanced_content.pref#SyndeticsEditions# Show"
 msgstr "Να εμφανίζονται"
 
 # Enhanced content > Syndetics
-#, fuzzy
 msgid ""
 "enhanced_content.pref#SyndeticsEditions# information about other editions of "
 "a title from Syndetics on item detail pages on the OPAC (when <a href=\"/cgi-"
@@ -7363,7 +7509,9 @@ msgid ""
 "\">OPACFRBRizeEditions</a> is on)."
 msgstr ""
 "πληροφορίες για άλλες εκδόσεις ενός τίτλου από το Syndetics στις σελίδες "
-"στοιχείων του OPAC (όταν το OPACFRBRizeEditions είναι ανοικτό)."
+"στοιχείων του OPAC (όταν το <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=OPACFRBRizeEditions\">OPACFRBRizeEditions</a> είναι "
+"ανοικτό)."
 
 # Enhanced content > Syndetics
 msgid "enhanced_content.pref#SyndeticsEnabled# Don't use"
@@ -7560,7 +7708,6 @@ msgid "enhanced_content.pref#ThingISBN# Use"
 msgstr "Να χρησιμοποιείται"
 
 # Enhanced content > Library Thing
-#, fuzzy
 msgid ""
 "enhanced_content.pref#ThingISBN# the ThingISBN service to show other "
 "editions of a title (when either <a href=\"/cgi-bin/koha/admin/preferences."
@@ -7569,9 +7716,12 @@ msgid ""
 "\">OPACFRBRizeEditions</a> is on). This is separate from Library Thing for "
 "Libraries."
 msgstr ""
-"η υπηρεσία ThingISBN για εμφάνιση άλλων εκδόσεων του τίτλους (όταν είτε το "
-"FRBRizeEdition είτε το OPACFRBRizeEditions είναι ανοικτό). Αυτό είναι "
-"ξεχωριστό από το Library Thing for Libraries."
+"η υπηρεσία ThingISBN για εμφάνιση άλλων εκδόσεων του τίτλους (όταν είτε το<a "
+"href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=FRBRizeEditions\">FRBRizeEditions</a> είτε το <a href="
+"\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=OPACFRBRizeEditions\">OPACFRBRizeEditions</a> είναι "
+"ανοικτό). Αυτό είναι ξεχωριστό από το Library Thing for Libraries."
 
 # I18N/L10N
 msgid "i18n_l10n.pref"
@@ -7659,11 +7809,9 @@ msgstr ""
 "αλλάξει η σειρά των γλωσσών στη διεπαφή."
 
 # I18N/L10N
-msgid ""
-"i18n_l10n.pref#TimeFormat# . <br/> <strong>NOTE:</strong> Do not change this "
-"preference on a production server with overdue items that are accruing "
-"fines. Doing so will result in duplicate fines!"
-msgstr ""
+#, fuzzy
+msgid "i18n_l10n.pref#TimeFormat# ."
+msgstr "Μορφή ώρας"
 
 # I18N/L10N
 msgid "i18n_l10n.pref#TimeFormat# 12 hour format ( e.g. \"02:18 PM\" )"
@@ -7717,11 +7865,9 @@ msgstr ""
 "από ένα κενό διάστημα."
 
 # I18N/L10N
-msgid ""
-"i18n_l10n.pref#dateformat# . <br/> <strong>NOTE:</strong> Do not change this "
-"preference on a production server with overdue items that are accruing "
-"fines. Doing so will result in duplicate fines!"
-msgstr ""
+#, fuzzy
+msgid "i18n_l10n.pref#dateformat# ."
+msgstr "i18n_l10n.pref#dateformat# ηη.μμ.εεεε"
 
 # I18N/L10N
 msgid "i18n_l10n.pref#dateformat# Format dates like"
@@ -7997,6 +8143,23 @@ msgstr "όταν γίνονται δανεισμοί τεκμηρίων."
 
 # Logging > Logging
 #, fuzzy
+msgid ""
+"logs.pref#NewsLog#  changes to news entries and other contents managed in "
+"the news tool."
+msgstr "αλλαγών σε εγγραφές καθιερωμένων όρων."
+
+# Logging > Logging
+#, fuzzy
+msgid "logs.pref#NewsLog# Don't log"
+msgstr "Να μην καταγράφεται το ιστορικό"
+
+# Logging > Logging
+#, fuzzy
+msgid "logs.pref#NewsLog# Log"
+msgstr "Να καταγράφεται το ιστορικό"
+
+# Logging > Logging
+#, fuzzy
 msgid "logs.pref#NoticesLog#  changes to notice templates."
 msgstr "αλλαγών σε εγγραφές καθιερωμένων όρων."
 
@@ -8254,33 +8417,6 @@ msgid "opac.pref#EnableOpacSearchHistory# patron search history in the OPAC."
 msgstr "το ιστορικό αναζήτησης των μελών στον OPAC."
 
 # OPAC > Appearance
-msgid ""
-"opac.pref#HighlightOwnItemsOnOPAC#  by moving the results to the front and "
-"increasing the size or highlighting the rows for those results (non-XSLT "
-"only)."
-msgstr ""
-
-# OPAC > Appearance
-msgid "opac.pref#HighlightOwnItemsOnOPAC# Don't emphasize"
-msgstr ""
-
-# OPAC > Appearance
-msgid "opac.pref#HighlightOwnItemsOnOPAC# Emphasize"
-msgstr ""
-
-# OPAC > Appearance
-msgid "opac.pref#HighlightOwnItemsOnOPAC# OPAC's library via the URL"
-msgstr ""
-
-# OPAC > Appearance
-msgid "opac.pref#HighlightOwnItemsOnOPAC# patron's home library"
-msgstr ""
-
-# OPAC > Appearance
-msgid "opac.pref#HighlightOwnItemsOnOPAC# results from the "
-msgstr "αποτελέσματα από "
-
-# OPAC > Appearance
 msgid "opac.pref#LibraryName# Show"
 msgstr "Εμφάνιση του"
 
@@ -8457,6 +8593,22 @@ msgid ""
 "opac.pref#OPACFinesTab# patrons to access the charges tab on their account "
 "page on the OPAC."
 msgstr ""
+
+# OPAC > Privacy
+#, fuzzy
+msgid "opac.pref#OPACHoldRequests# Allow"
+msgstr "Να επιτρέπεται"
+
+# OPAC > Privacy
+#, fuzzy
+msgid "opac.pref#OPACHoldRequests# Don't allow"
+msgstr "Να μην επιτρέπεται"
+
+# OPAC > Features
+#, fuzzy
+msgid ""
+"opac.pref#OPACHoldRequests# patrons to place holds on items from the OPAC."
+msgstr "στα μέλη να κάνουν κρατήσεις στα τεκμήρια από τον OPAC."
 
 # OPAC > Appearance
 msgid "opac.pref#OPACHoldingsDefaultSortField# First column of the table"
@@ -8647,6 +8799,44 @@ msgstr ""
 # OPAC > Appearance
 msgid "opac.pref#OPACResultsLibrary# home library"
 msgstr ""
+
+# OPAC > Appearance > OPACResultsMaxItems
+msgid ""
+"opac.pref#OPACResultsMaxItems# (available) individual items on the OPAC XSLT "
+"search results, and show no more than"
+msgstr ""
+
+# OPAC > Appearance > OPACResultsMaxItems
+msgid ""
+"opac.pref#OPACResultsMaxItems# (unavailable) individual items for categories "
+"like Checked out, Damaged, On Hold, but only when you group them by branch."
+"<br>"
+msgstr ""
+
+# OPAC > Appearance > OPACResultsMaxItems
+msgid ""
+"opac.pref#OPACResultsMaxItems# . (NOTE: For large consortia we recommend to "
+"group unavailable items by substatus, listing item counts only.)"
+msgstr ""
+
+# OPAC > Appearance > OPACResultsMaxItems
+msgid "opac.pref#OPACResultsMaxItems# Group unavailable items by"
+msgstr ""
+
+# OPAC > Features
+#, fuzzy
+msgid "opac.pref#OPACResultsMaxItems# Show no more than"
+msgstr "opac.pref#OPACpatronimages# Afficher"
+
+# OPAC > Appearance
+#, fuzzy
+msgid "opac.pref#OPACResultsMaxItems# branch"
+msgstr "Να συμπεριλαμβάνονται"
+
+# OPAC > Appearance
+#, fuzzy
+msgid "opac.pref#OPACResultsMaxItems# substatus"
+msgstr "Να συμπεριλαμβάνονται"
 
 # OPAC > Appearance
 msgid ""
@@ -8966,15 +9156,17 @@ msgid ""
 "on the OPAC."
 msgstr "οι προτάσεις αγοράς από άλλα μέλη στον OPAC."
 
-# OPAC > Appearance
+# OPAC > Appearance > OPACXSLTDetailsDisplay
 msgid ""
-"opac.pref#OPACXSLTDetailsDisplay# <br />Options:<ul><li><a href=\"#\" class="
-"\"set_syspref\" data-syspref=\"OPACXSLTDetailsDisplay\" data-value="
-"\"\">leave empty</a> for \"no xslt\"</li><li>enter \"<a href=\"#\" class="
-"\"set_syspref\" data-syspref=\"OPACXSLTDetailsDisplay\" data-value=\"default"
-"\">default</a>\" for the default one</li><li>put a path to define a xslt "
-"file</li><li>put an URL for an external specific stylesheet.</li></"
-"ul>{langcode} will be replaced with current interface language."
+"opac.pref#OPACXSLTDetailsDisplay# <br />Options:<ul><li>Enter \"<a href=\"#"
+"\" class=\"set_syspref\" data-syspref=\"OPACXSLTDetailsDisplay\" data-value="
+"\"default\">default</a>\" for the default stylesheet</li><li>Put a path to "
+"define an xslt file</li><li>Put a URL for an external specific stylesheet.</"
+"li><li>NOTE: The system preference <a href=\"/cgi-bin/koha/admin/preferences."
+"pl?op=search&searchfield=PassItemMarcToXSLT\">PassItemMarcToXSLT</a> must be "
+"enabled if your custom stylesheet utilizes data in the item fields</li></"
+"ul>If you have multiple stylesheets for different langues the placeholder "
+"{langcode} will be replaced with current interface language."
 msgstr ""
 
 # OPAC > Appearance
@@ -8983,15 +9175,17 @@ msgid ""
 "at: "
 msgstr ""
 
-# OPAC > Appearance
+# OPAC > Appearance > OPACXSLTListsDisplay
 msgid ""
-"opac.pref#OPACXSLTListsDisplay# <br />Options:<ul><li><a href=\"#\" class="
-"\"set_syspref\" data-syspref=\"OPACXSLTListsDisplay\" data-value=\"\">leave "
-"empty</a> for \"no xslt\"</li><li>enter \"<a href=\"#\" class=\"set_syspref"
-"\" data-syspref=\"OPACXSLTListsDisplay\" data-value=\"default\">default</a>"
-"\" for the default one</li><li> put a path to define a xslt file</li><li>put "
-"an URL for an external specific stylesheet.</li></ul>{langcode} will be "
-"replaced with current interface language."
+"opac.pref#OPACXSLTListsDisplay# <br />Options:<ul><li>Enter \"<a href=\"#\" "
+"class=\"set_syspref\" data-syspref=\"OPACXSLTListsDisplay\" data-value="
+"\"default\">default</a>\" for the default stylesheet</li><li>Put a path to "
+"define an xslt file</li><li>Put a URL for an external specific stylesheet.</"
+"li><li>NOTE: The system preference <a href=\"/cgi-bin/koha/admin/preferences."
+"pl?op=search&searchfield=PassItemMarcToXSLT\">PassItemMarcToXSLT</a> must be "
+"enabled if your custom stylesheet utilizes data in the item fields</li></"
+"ul>If you have multiple stylesheets for different langues the placeholder "
+"{langcode} will be replaced with current interface language."
 msgstr ""
 
 # OPAC > Appearance
@@ -9000,15 +9194,17 @@ msgid ""
 "stylesheet at: "
 msgstr ""
 
-# OPAC > Appearance
+# OPAC > Appearance > OPACXSLTResultsDisplay
 msgid ""
-"opac.pref#OPACXSLTResultsDisplay# <br />Options:<ul><li><a href=\"#\" class="
-"\"set_syspref\" data-syspref=\"OPACXSLTResultsDisplay\" data-value="
-"\"\">leave empty</a> for \"no xslt\"</li><li>enter \"<a href=\"#\" class="
-"\"set_syspref\" data-syspref=\"OPACXSLTResultsDisplay\" data-value=\"default"
-"\">default</a>\" for the default one</li><li> put a path to define a xslt "
-"file</li><li>put an URL for an external specific stylesheet.</li></"
-"ul>{langcode} will be replaced with current interface language."
+"opac.pref#OPACXSLTResultsDisplay# <br />Options:<ul><li>Enter \"<a href=\"#"
+"\" class=\"set_syspref\" data-syspref=\"OPACXSLTResultsDisplay\" data-value="
+"\"default\">default</a>\" for the default stylesheet</li><li>Put a path to "
+"define an xslt file</li><li>Put a URL for an external specific stylesheet.</"
+"li><li>NOTE: The system preference <a href=\"/cgi-bin/koha/admin/preferences."
+"pl?op=search&searchfield=PassItemMarcToXSLT\">PassItemMarcToXSLT</a> must be "
+"enabled if your custom stylesheet utilizes data in the item fields</li></"
+"ul>If you have multiple stylesheets for different langues the placeholder "
+"{langcode} will be replaced with current interface language."
 msgstr ""
 
 # OPAC > Appearance
@@ -9511,26 +9707,6 @@ msgid ""
 "bar on the OPAC, with the following HTML (leave blank to disable):"
 msgstr ""
 
-# OPAC > Appearance
-msgid ""
-"opac.pref#OpacNav# Show the following HTML on the left hand column of the "
-"main page and patron account on the OPAC (generally navigation links):"
-msgstr ""
-"Να εμφανίζεται η ακόλουθη HTML στην αριστερή στήλη της κύριας σελίδας και "
-"του λογαριασμού χρήστη στον OPAC (γενικά σύνδεσμοι πλοήγησης):"
-
-# OPAC > Appearance
-#, fuzzy
-msgid ""
-"opac.pref#OpacNavBottom# Show the following HTML on the left hand column of "
-"the main page and patron account on the OPAC, after <a href=\"/cgi-bin/koha/"
-"admin/preferences.pl?op=search&searchfield=OpacNav\">OpacNav</a>, and before "
-"patron account links if available:"
-msgstr ""
-"Να εμφανίζεται η ακόλουθη HTML στην αριστερή στήλη της κύριας σελίδας και "
-"του λογαριασμού χρήστη στον OPAC μετά το OpacNav, και πριν τους συνδέσμους "
-"λογαριασμού χρήστη αν είναι διαθέσιμοι:"
-
 # OPAC > Features
 msgid "opac.pref#OpacNewsLibrarySelect# Display"
 msgstr "Προβολή"
@@ -10009,18 +10185,6 @@ msgid ""
 "opac.pref#Reference_NFL_Statuses# List the following not for loan statuses "
 "as available for reference in OPAC search results:"
 msgstr ""
-
-# OPAC > Features
-msgid "opac.pref#RequestOnOpac# Allow"
-msgstr "Να επιτρέπεται"
-
-# OPAC > Features
-msgid "opac.pref#RequestOnOpac# Don't allow"
-msgstr "Να μην επιτρέπεται"
-
-# OPAC > Features
-msgid "opac.pref#RequestOnOpac# patrons to place holds on items from the OPAC."
-msgstr "στα μέλη να κάνουν κρατήσεις στα τεκμήρια από τον OPAC."
 
 # OPAC > Restricted page
 msgid ""
@@ -10519,7 +10683,6 @@ msgid "patrons.pref#CardnumberLength# Card numbers for patrons must be"
 msgstr "Ο αριθμός κάρτας του μέλους πρέπει να είναι "
 
 # Patrons > Patron forms
-#, fuzzy
 msgid ""
 "patrons.pref#CardnumberLength# If <code>cardnumber</code> is included in the "
 "<a href=\"/cgi-bin/koha/admin/preferences.pl?"
@@ -10527,9 +10690,11 @@ msgid ""
 "list, the minimum length, if not specified here, defaults to one. Maximum "
 "cannot be bigger than the database field size of 32."
 msgstr ""
-"Εάν το 'cardnumber' περιλαμβάνεται στο BorrowerMandatoryField, το ελάχιστο "
-"μήκος, εάν δεν προσδιορίζεται εδώ, είναι το ένα. Το μέγιστο δεν μπορεί να "
-"υπερβαίνει το 32 ως μήκος του πεδίου στη βάση δεδομένων."
+"Εάν το <code>cardnumber</code> περιλαμβάνεται στην λίστα <a href=\"/cgi-bin/"
+"koha/admin/preferences.pl?op=search&searchfield=BorrowerMandatoryField"
+"\">BorrowerMandatoryField</a>, το ελάχιστο μήκος, εάν δεν προσδιορίζεται "
+"εδώ, είναι το ένα. Το μέγιστο δεν μπορεί να υπερβαίνει το 32 ως μήκος του "
+"πεδίου στη βάση δεδομένων."
 
 # Patrons > Patron forms
 msgid ""
@@ -10829,7 +10994,6 @@ msgid "patrons.pref#GDPR_Policy# permissive"
 msgstr ""
 
 # OPAC > Self registration and modification
-#, fuzzy
 msgid ""
 "patrons.pref#LockExpiredDelay# <br><strong>NOTE:</strong> This system "
 "preference requires the misc/cronjobs/cleanup_database.pl cronjob. Ask your "
@@ -10837,8 +11001,8 @@ msgid ""
 msgstr ""
 "opac.pref#PatronSelfRegistrationExpireTemporaryAccountsDelay# "
 "<br><strong>Σημείωση:</strong> Αυτή η επιλογή συστήματος απαιτεί το "
-"χρονοπρογραμματισμό <code>misc/cronjobs/cleanup_database.pl</code> Ζητήστε "
-"από τον διαχειριστή συστήματός σας να το ενεργοποιήσει."
+"χρονοπρογραμματισμό misc/cronjobs/cleanup_database.pl .Ζητήστε από τον "
+"διαχειριστή συστήματός σας να το ενεργοποιήσει."
 
 # Patrons > General > LockExpiredDelay
 msgid "patrons.pref#LockExpiredDelay# Lock expired patrons after"
@@ -11348,10 +11512,11 @@ msgstr "Να"
 msgid "patrons.pref#TrackLastPatronActivity# Don't"
 msgstr "Να μην"
 
-# Patrons > General
+# Patrons > General > TrackLastPatronActivity
 msgid ""
-"patrons.pref#TrackLastPatronActivity# Every time a patron will connect, the "
-"borrowers.lastseen will be updated with the current time."
+"patrons.pref#TrackLastPatronActivity# The first time each day that a patron "
+"logs into the OPAC, connects to Koha via SIP or ILS-DI, or checks an item "
+"out the borrowers.lastseen will update with the current date and time."
 msgstr ""
 
 # Patrons > General
@@ -11676,6 +11841,26 @@ msgid "searching.pref#FacetMaxCount# facets for each category."
 msgstr ""
 
 # Searching > Features
+#, fuzzy
+msgid "searching.pref#FacetOrder# Sort facets"
+msgstr "Χαρακτηριστικά"
+
+# Searching > Features
+#, fuzzy
+msgid "searching.pref#FacetOrder# alphabetically"
+msgstr "αυτόματα,"
+
+# Searching > Features
+#, fuzzy
+msgid "searching.pref#FacetOrder# by usage count"
+msgstr "Χαρακτηριστικά"
+
+# Cataloging > Display
+#, fuzzy
+msgid "searching.pref#FacetOrder# for each category."
+msgstr "η οικεία βιβλιοθήκη"
+
+# Searching > Features
 msgid ""
 "searching.pref#IncludeSeeFromInSearches# <em>see from</em> (non-preferred "
 "form) headings in bibliographic searches. Please note: you will need to "
@@ -11875,6 +12060,22 @@ msgstr ""
 msgid ""
 "searching.pref#OPACnumSearchResultsDropdown# results per page dropdown on "
 "OPAC search results."
+msgstr ""
+
+# Searching > Search form
+#, fuzzy
+msgid "searching.pref#PassItemMarcToXSLT# Do"
+msgstr "να εμφανίζεται"
+
+# Searching > Features
+#, fuzzy
+msgid "searching.pref#PassItemMarcToXSLT# Don't"
+msgstr "Να μην κρατείται"
+
+# Searching > Results display > PassItemMarcToXSLT
+msgid ""
+"searching.pref#PassItemMarcToXSLT# make item MARC tags available to XSLT "
+"stylesheets. Default is \"Don't\", items are displayed using other methods."
 msgstr ""
 
 # Searching > Features
@@ -12132,7 +12333,6 @@ msgid "searching.pref#displayFacetCount# Show"
 msgstr "Να εμφανίζονται"
 
 # Searching > Results display
-#, fuzzy
 msgid ""
 "searching.pref#displayFacetCount# facet counts. The relevance of these "
 "numbers highly depends on the value of the <a href=\"/cgi-bin/koha/admin/"
@@ -12140,7 +12340,9 @@ msgid ""
 "\">maxRecordsForFacets</a> preference. Applies to OPAC and staff interface."
 msgstr ""
 "οι μετρήσεις προσδιοριστικών τμημάτων. Η σχετικότητα αυτών των αριθμό "
-"εξαρτάται σε μεγάλο βαθμό από την τιμή στην προτίμηση maxRecordsForFacets. "
+"εξαρτάται σε μεγάλο βαθμό από την τιμή στην προτίμηση maxRecordsForFacets <a "
+"href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=maxRecordsForFacets\">maxRecordsForFacets</a>. "
 "Εφαρμόζεται στον OPAC και στη διεπαφή προσωπικού."
 
 # Searching > Search form
@@ -12574,13 +12776,18 @@ msgid ""
 "editing certain HTML system preferences."
 msgstr ""
 
-# Staff interface > Appearance
+# Staff interface > Appearance > XSLTDetailsDisplay
 msgid ""
 "staff_interface.pref#XSLTDetailsDisplay# <br />Options:<ul><li>Enter \"<a "
 "href=\"#\" class=\"set_syspref\" data-syspref=\"XSLTDetailsDisplay\" data-"
-"value=\"default\">default</a>\" for the default one</li><li>Put a path to "
-"define a xslt file</li><li>Put an URL for an external specific stylesheet.</"
-"li></ul>{langcode} will be replaced with current interface language"
+"value=\"default\">default</a>\" for the default stylesheet</li><li>Put a "
+"path to define an xslt file</li><li>Put a URL for an external specific "
+"stylesheet.</li><li>NOTE: The system preference <a href=\"/cgi-bin/koha/"
+"admin/preferences.pl?op=search&searchfield=PassItemMarcToXSLT"
+"\">PassItemMarcToXSLT</a> must be enabled if your custom stylesheet utilizes "
+"data in the item fields</li></ul>If you have multiple stylesheets for "
+"different langues the placeholder {langcode} will be replaced with current "
+"interface language."
 msgstr ""
 
 # Staff interface > Appearance
@@ -12589,15 +12796,17 @@ msgid ""
 "interface using XSLT stylesheet at: "
 msgstr ""
 
-# Staff interface > Appearance
+# Staff interface > Appearance > XSLTListsDisplay
 msgid ""
-"staff_interface.pref#XSLTListsDisplay# <br />Options:<ul><li><a href=\"#\" "
-"class=\"set_syspref\" data-syspref=\"XSLTListsDisplay\" data-value="
-"\"\">Leave empty</a> for \"no xslt\"</li><li>enter \"<a href=\"#\" class="
-"\"set_syspref\" data-syspref=\"XSLTListsDisplay\" data-value=\"default"
-"\">default</a>\" for the default one</li><li> put a path to define a xslt "
-"file</li><li>put an URL for an external specific stylesheet.</li></"
-"ul>{langcode} will be replaced with current interface language"
+"staff_interface.pref#XSLTListsDisplay# <br />Options:<ul><li>Enter \"<a href="
+"\"#\" class=\"set_syspref\" data-syspref=\"XSLTListsDisplay\" data-value="
+"\"default\">default</a>\" for the default stylesheet</li><li>Put a path to "
+"define an xslt file</li><li>Put a URL for an external specific stylesheet.</"
+"li><li>NOTE: The system preference <a href=\"/cgi-bin/koha/admin/preferences."
+"pl?op=search&searchfield=PassItemMarcToXSLT\">PassItemMarcToXSLT</a> must be "
+"enabled if your custom stylesheet utilizes data in the item fields</li></"
+"ul>If you have multiple stylesheets for different langues the placeholder "
+"{langcode} will be replaced with current interface language."
 msgstr ""
 
 # Staff interface > Appearance
@@ -12606,13 +12815,18 @@ msgid ""
 "using XSLT stylesheet at: "
 msgstr ""
 
-# Staff interface > Appearance
+# Staff interface > Appearance > XSLTResultsDisplay
 msgid ""
 "staff_interface.pref#XSLTResultsDisplay# <br />Options:<ul><li>Enter \"<a "
 "href=\"#\" class=\"set_syspref\" data-syspref=\"XSLTResultsDisplay\" data-"
-"value=\"default\">default</a>\" for the default one</li><li>Put a path to "
-"define a xslt file</li><li>Put an URL for an external specific stylesheet.</"
-"li></ul>{langcode} will be replaced with current interface language"
+"value=\"default\">default</a>\" for the default stylesheet</li><li>Put a "
+"path to define an xslt file</li><li>Put a URL for an external specific "
+"stylesheet.</li><li>NOTE: The system preference <a href=\"/cgi-bin/koha/"
+"admin/preferences.pl?op=search&searchfield=PassItemMarcToXSLT"
+"\">PassItemMarcToXSLT</a> must be enabled if your custom stylesheet utilizes "
+"data in the item fields</li></ul>If you have multiple stylesheets for "
+"different langues the placeholder {langcode} will be replaced with current "
+"interface language."
 msgstr ""
 
 # Staff interface > Appearance
@@ -12797,6 +13011,24 @@ msgstr ""
 msgid "tools.pref Upload"
 msgstr ""
 
+# Tools > News > AdditionalContentsEditor
+msgid "tools.pref#AdditionalContentsEditor# ."
+msgstr ""
+
+# Tools > News > AdditionalContentsEditor
+msgid ""
+"tools.pref#AdditionalContentsEditor# By default edit additional contents and "
+"news items with"
+msgstr ""
+
+# Tools > News > AdditionalContentsEditor
+msgid "tools.pref#AdditionalContentsEditor# a WYSIWYG editor (TinyMCE)"
+msgstr ""
+
+# Tools > News > AdditionalContentsEditor
+msgid "tools.pref#AdditionalContentsEditor# a text editor (CodeMirror)"
+msgstr ""
+
 # Tools > Barcodes
 msgid ""
 "tools.pref#BarcodeSeparators# Split barcodes on the following separator chars"
@@ -12872,22 +13104,6 @@ msgstr ""
 
 # Tools > News
 msgid "tools.pref#NewsAuthorDisplay# staff interface only"
-msgstr ""
-
-# Tools > News
-msgid "tools.pref#NewsToolEditor# ."
-msgstr ""
-
-# Tools > News
-msgid "tools.pref#NewsToolEditor# By default edit news items with"
-msgstr ""
-
-# Tools > News
-msgid "tools.pref#NewsToolEditor# a WYSIWYG editor (TinyMCE)"
-msgstr ""
-
-# Tools > News
-msgid "tools.pref#NewsToolEditor# a text editor (CodeMirror)"
 msgstr ""
 
 # Tools > Reports
@@ -13276,6 +13492,38 @@ msgstr ""
 
 # OPAC > Payments
 #~ msgid "opac.pref#EnablePayPalOpacPayments# Don't allow"
+#~ msgstr "Να μην επιτρέπεται"
+
+# OPAC > Appearance
+#~ msgid "opac.pref#HighlightOwnItemsOnOPAC# results from the "
+#~ msgstr "αποτελέσματα από "
+
+# OPAC > Appearance
+#~ msgid ""
+#~ "opac.pref#OpacNav# Show the following HTML on the left hand column of the "
+#~ "main page and patron account on the OPAC (generally navigation links):"
+#~ msgstr ""
+#~ "Να εμφανίζεται η ακόλουθη HTML στην αριστερή στήλη της κύριας σελίδας και "
+#~ "του λογαριασμού χρήστη στον OPAC (γενικά σύνδεσμοι πλοήγησης):"
+
+# OPAC > Appearance
+#~ msgid ""
+#~ "opac.pref#OpacNavBottom# Show the following HTML on the left hand column "
+#~ "of the main page and patron account on the OPAC, after <a href=\"/cgi-bin/"
+#~ "koha/admin/preferences.pl?op=search&searchfield=OpacNav\">OpacNav</a>, "
+#~ "and before patron account links if available:"
+#~ msgstr ""
+#~ "Να εμφανίζεται η ακόλουθη HTML στην αριστερή στήλη της κύριας σελίδας και "
+#~ "του λογαριασμού χρήστη στον OPAC μετά το  <a href=\"/cgi-bin/koha/admin/"
+#~ "preferences.pl?op=search&searchfield=OpacNav\">OpacNav</a>, και πριν τους "
+#~ "συνδέσμους λογαριασμού χρήστη αν είναι διαθέσιμοι:"
+
+# OPAC > Features
+#~ msgid "opac.pref#RequestOnOpac# Allow"
+#~ msgstr "Να επιτρέπεται"
+
+# OPAC > Features
+#~ msgid "opac.pref#RequestOnOpac# Don't allow"
 #~ msgstr "Να μην επιτρέπεται"
 
 # OPAC > Features
