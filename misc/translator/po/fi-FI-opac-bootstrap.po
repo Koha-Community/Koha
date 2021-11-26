@@ -6,8 +6,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 21.05\n"
-"POT-Creation-Date: 2021-10-20 05:17-0300\n"
-"PO-Revision-Date: 2021-10-01 13:55+0000\n"
+"POT-Creation-Date: 2021-11-16 08:36-0300\n"
+"PO-Revision-Date: 2021-11-11 01:46+0000\n"
 "Last-Translator: Lari Taskula <lari.taskula@hypernova.fi>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: fi\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.8\n"
-"X-POOTLE-MTIME: 1633096535.834645\n"
+"X-POOTLE-MTIME: 1636595197.203909\n"
 "X-Pootle-Path: /fi/21.05/fi-FI-opac-bootstrap.po\n"
 "X-Pootle-Revision: 1\n"
 
@@ -84,7 +84,7 @@ msgstr "%s %s %s %s%s/%s/images/favicon.ico %s "
 
 #. %1$s: - END -
 #. %2$s: - BLOCK debit_type_description -
-#. %3$s: - SWITCH debit_type.code -
+#. %3$s: - SWITCH debit_type_code -
 #. %4$s: - CASE 'ACCOUNT'          -
 #. %5$s: - CASE 'ACCOUNT_RENEW'    -
 #. %6$s: - CASE 'LOST'             -
@@ -104,7 +104,7 @@ msgstr "%s %s %s %s%s/%s/images/favicon.ico %s "
 #. %20$s: - END -
 #. %21$s: - END -
 #. %22$s: - BLOCK credit_type_description -
-#. %23$s: - SWITCH credit_type.code -
+#. %23$s: - SWITCH credit_type_code -
 #. %24$s: - CASE 'PAYMENT'      -
 #. %25$s: - CASE 'WRITEOFF'     -
 #. %26$s: - CASE 'FORGIVEN'     -
@@ -1155,6 +1155,9 @@ msgid ""
 "holds must be item level. %s You already have at least one record level hold "
 "on this title. All further holds must be record level. %s "
 msgstr ""
+"%s Sinulla on jo nidevaraus tähän teokseen. Uusien varauksien tulee olla "
+"myös nidevarauksia. %s Sinulla on jo nimekevaraus tähän teokseen. Uusien "
+"varauksien tulee olla myös nimekevarauksia. %s "
 
 #. %1$s:  ELSE 
 #. %2$s:  END 
@@ -1237,6 +1240,7 @@ msgstr "%s kappaletta tilauksessa."
 #, c-format
 msgid "%s of %s results loaded, refine your search to view other records"
 msgstr ""
+"%s / %s hakutulosta ladattu, tarkenna hakuasi nähdäksesi muita tietueita"
 
 #. %1$s:  ISSUE.itemtype_object.rentalcharge_daily | $Price 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:368
@@ -2419,6 +2423,8 @@ msgid ""
 "( %s of %s renewals remaining %s / %s of %s renewals left before the item "
 "must be seen by the library %s )"
 msgstr ""
+"( %s / %s uusintaa jäljellä %s / %s / %s uusintaa jäljellä ennen kuin nide "
+"on vietävä kirjastoon %s )"
 
 #. %1$s:  LEVEL_LOO.number | html 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-browser.tt:64
@@ -3416,6 +3422,8 @@ msgid ""
 "At any step, clicking the 'Cancel' button will erase the scanned barcodes "
 "and start over."
 msgstr ""
+"Peruuta-painikkeen painaltaminen tyhjentää luetut viivakoodit ja aloittaa "
+"alusta kaikissa vaiheissa."
 
 #. OPTION
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:263
@@ -4388,9 +4396,9 @@ msgid "Collection"
 msgstr "Kokoelma"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:194
-#, fuzzy, c-format
+#, c-format
 msgid "Collection library:"
-msgstr "Kokoelman nimi:"
+msgstr "Noutopaikka:"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:139
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:143
@@ -4715,9 +4723,9 @@ msgstr "Luo uusi lista"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/account-table.inc:9
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/account-table.inc:95
-#, fuzzy, c-format
+#, c-format
 msgid "Created"
-msgstr "Sopimukset "
+msgstr "Luotu"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/ilsdi.tt:729
 #, c-format
@@ -4750,9 +4758,9 @@ msgid "Credits (%s)"
 msgstr "Maksut (%s)"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1230
-#, fuzzy, c-format
+#, c-format
 msgid "Current library"
-msgstr "Kotikirjasto"
+msgstr "Nykyinen kirjasto"
 
 #. A
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-authoritiessearchresultlist.tt:18
@@ -6566,7 +6574,7 @@ msgstr "Luennoitsijat:"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:245
 #, c-format
 msgid "Interlibrary loan item availability"
-msgstr ""
+msgstr "Kaukolainaniteen saatavuus"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:675
 #, c-format
@@ -6759,7 +6767,7 @@ msgstr "Niteet saatavilla:"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-browser.tt:53
 #, c-format
 msgid "Items in catalog"
-msgstr ""
+msgstr "Niteet luettelossa"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-basket.tt:260
 #, fuzzy, c-format
@@ -7014,9 +7022,9 @@ msgid "Limit to any of the following:"
 msgstr "Rajoita johonkin seuraavista:"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/opac-facets.inc:14
-#, fuzzy, c-format
+#, c-format
 msgid "Limit to currently available items"
-msgstr "Rajoita vain saatavilla oleviin."
+msgstr "Rajoita saatavilla oleviin niteisiin"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/opac-topissues.inc:49
 #, c-format
@@ -7691,7 +7699,7 @@ msgstr "Seuraava"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1087
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/page-numbers.inc:29
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/shelfbrowser.inc:89
-#, fuzzy, c-format
+#, c-format
 msgid "Next "
 msgstr "Seuraava"
 
@@ -8004,7 +8012,7 @@ msgid "Not checked in %s"
 msgstr "Lainassa (%s)"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:664
-#, fuzzy, c-format
+#, c-format
 msgid "Not finding what you're looking for? "
 msgstr "Etkö löydä hakemaasi?"
 
@@ -8637,9 +8645,9 @@ msgid "Place hold"
 msgstr "Varaa"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:279
-#, fuzzy, c-format
+#, c-format
 msgid "Place hold "
-msgstr "Varaa"
+msgstr "Varaa "
 
 #. INPUT type=submit
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-request-article.tt:197
@@ -8848,7 +8856,7 @@ msgstr "Syötä enintään {0} merkkiä."
 msgid ""
 "Please enter numbers only. Prefix the number with + if including the country "
 "code."
-msgstr ""
+msgstr "Syötä vain numeroita. Laita numeron eteen + jos se sisältää maakoodin."
 
 #. SCRIPT
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/validator-strings.inc:2
@@ -8859,7 +8867,7 @@ msgstr "Yritä myöhemmin uudelleen."
 #. SCRIPT
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/password_check.inc:2
 msgid "Please enter the same password as above"
-msgstr ""
+msgstr "Anna sama salasana kuin yllä"
 
 #. SCRIPT
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/validator-strings.inc:2
@@ -8950,7 +8958,7 @@ msgstr "Huomaa: "
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-patron-consent.tt:39
 #, c-format
 msgid "Please save your consent below or log out. Thank you!"
-msgstr ""
+msgstr "Tallenna alla oleva suostumus tai kirjaudu ulos. Kiitos!"
 
 #. SCRIPT
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-request-article.tt:213
@@ -9037,9 +9045,9 @@ msgid "Preferred form: "
 msgstr "Suositeltu muoto: "
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:207
-#, fuzzy, c-format
+#, c-format
 msgid "Preferred language for notices: "
-msgstr "Suositeltu muoto: "
+msgstr "Ilmoitusten kieli: "
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:330
 #, c-format
@@ -9052,6 +9060,9 @@ msgid ""
 "Press <i>ctrl</i> or <i>⌘</i> + <i>C</i> to copy the table data<br>to your "
 "system clipboard.<br><br>To cancel, click this message or press escape."
 msgstr ""
+"Paina <i>ctrl</i> tai <i>⌘</i> + <i>C</i> kopioidaksesi taulukon "
+"tiedot<br>järjestelmäsi leikepöydälle.<br><br>Peruuttaaksesi, klikkaa tätä "
+"ilmoitusta tai paina Esc (escape)."
 
 #. SCRIPT
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/calendar.inc:2
@@ -9112,7 +9123,7 @@ msgstr "Tulosta lista"
 #. SCRIPT
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:445
 msgid "Print receipt and end session"
-msgstr ""
+msgstr "Tulosta kuitti ja päätä istunto"
 
 #. %1$s:  borrowernumber | html 
 #. %2$s:  IF ( LibraryNameTitle ) 
@@ -9164,7 +9175,7 @@ msgstr "Minulle jaetut yksityiset listat"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reportproblem.tt:71
 #, c-format
 msgid "Problem found on page: "
-msgstr ""
+msgstr "Ongelma havaittu sivulla: "
 
 #. SCRIPT
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/datatables.inc:4
@@ -9342,7 +9353,7 @@ msgstr "Kirjoita uudelleen uusi salasana:"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-browse.tt:74
 #, c-format
 msgid "Really fuzzy "
-msgstr ""
+msgstr "Erittäin sumea "
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:204
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:213
@@ -9405,9 +9416,9 @@ msgid "Record title"
 msgstr "Teoksen nimeke"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:224
-#, fuzzy, c-format
+#, c-format
 msgid "RecordedBooks account"
-msgstr "OverDrive-haku '%s'"
+msgstr "RecordedBooks-tili"
 
 #. For the first occurrence,
 #. %1$s:  q | html 
@@ -9806,7 +9817,7 @@ msgstr "OverDrive-haku '%s'"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:190
 #, c-format
 msgid "Results per page: "
-msgstr ""
+msgstr "Tuloksia sivulla: "
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:137
 #, c-format
@@ -9985,9 +9996,9 @@ msgid "Save to another list"
 msgstr "Vie toiseen listaan"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/title-actions-menu.inc:54
-#, fuzzy, c-format
+#, c-format
 msgid "Save to lists"
-msgstr "Vie listalle"
+msgstr "Lisää listalle"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/opac-detail-sidebar.inc:24
 #, c-format
@@ -10025,7 +10036,7 @@ msgstr ""
 msgid ""
 "Scan each item or enter its barcode. A list with the entered barcodes will "
 "be displayed."
-msgstr ""
+msgstr "Lue niteen viivakoodi. Syötetyt viivakoodit ilmestyvät listaan."
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sci/sci-main.tt:118
 #, fuzzy, c-format
@@ -10217,12 +10228,12 @@ msgstr "Katso myös:"
 #. A
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1087
 msgid "See: %s%s%snext biblio%s"
-msgstr ""
+msgstr "Katso teosta: %s%s%sseuraava teos%s"
 
 #. A
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1076
 msgid "See: %s%s%sprevious biblio%s"
-msgstr ""
+msgstr "Katso teosta: %s%s%sedellinen teos%s"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-addbybiblionumber.tt:29
 #, c-format
@@ -10295,7 +10306,7 @@ msgstr "Valitse teokset: "
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sci/sci-main.tt:27
 #, c-format
 msgid "Self check-in &rsaquo; %s%s%sKoha %s"
-msgstr ""
+msgstr "Itsepalvelulainaus &rsaquo; %s%s%sKoha %s"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sci/sci-main.tt:169
 #, fuzzy, c-format
@@ -10309,7 +10320,7 @@ msgstr "Itsepalvelulainauksen ohje"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:9
 #, c-format
 msgid "Self checkout &rsaquo; %s%s%sKoha %s"
-msgstr ""
+msgstr "Itsepalvelulainaus &rsaquo; %s%s%sKoha %s"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/help.tt:27
 #, c-format
@@ -10346,12 +10357,12 @@ msgstr "Lähetä lista"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reportproblem.tt:60
 #, c-format
 msgid "Send problem report to: "
-msgstr ""
+msgstr "Lähetä virheraportti: "
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/opac-detail-sidebar.inc:50
 #, c-format
 msgid "Send to device"
-msgstr ""
+msgstr "Jaa toiseen laitteeseen"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-sendbasketform.tt:31
 #, c-format
@@ -10501,9 +10512,9 @@ msgid "Share on Twitter"
 msgstr "Jaa LinkedInillä"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1239
-#, fuzzy, c-format
+#, c-format
 msgid "Shelving location"
-msgstr "Nykyinen sijainti"
+msgstr "Hyllypaikka"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth.tt:98
 #, c-format
@@ -10545,9 +10556,8 @@ msgstr "Näytä kaikki kohteet"
 
 #. SCRIPT
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-account.tt:81
-#, fuzzy
 msgid "Show all transactions"
-msgstr "Näytä kaikki kohteet"
+msgstr "Näytä kaikki tapahtumat"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:73
 #, c-format
@@ -10622,6 +10632,8 @@ msgstr "Näytetään vain saatavilla olevat"
 #, c-format
 msgid "Sign in to view availability and checkout items or place holds"
 msgstr ""
+"Kirjaudu sisään tarkastellaksesi saatavuustietoja ja lainaamaan tai "
+"varaamaan teoksia"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:556
 #, c-format
@@ -10738,7 +10750,7 @@ msgstr "Sinulla ei ole käyttöoikeutta tälle sivulle. "
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-browse.tt:95
 #, c-format
 msgid "Sorry, there are no results. Try a different search term."
-msgstr ""
+msgstr "Ei hakutuloksia. Kokeile toista hakutermiä."
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:56
 #, c-format
@@ -11126,9 +11138,9 @@ msgid "Sudoc"
 msgstr "Sudoc"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/opac-detail-sidebar.inc:37
-#, fuzzy, c-format
+#, c-format
 msgid "Suggest for purchase"
-msgstr "Ehdotettu toimipisteelle"
+msgstr "Tee hankintaehdotus"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:306
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:309
@@ -12145,9 +12157,9 @@ msgstr ""
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/account-table.inc:10
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/account-table.inc:96
-#, fuzzy, c-format
+#, c-format
 msgid "Updated"
-msgstr "Päivitä"
+msgstr "Päivitetty"
 
 #. %1$s:  IF ( LibraryNameTitle ) 
 #. %2$s:  LibraryNameTitle | html 
@@ -13062,7 +13074,7 @@ msgid "Your checkout history &rsaquo; %s%s%sKoha online%s catalog"
 msgstr "Lainahistoria &rsaquo; %s%s%sKohan verkkokirjasto%s"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-privacy.tt:38
-#, fuzzy, c-format
+#, c-format
 msgid "Your checkout history has been deleted."
 msgstr "Lainahistoria poistettu"
 
@@ -13221,11 +13233,9 @@ msgstr "Viestiasetukset"
 #. %3$s:  ELSE 
 #. %4$s:  END 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:3
-#, fuzzy, c-format
+#, c-format
 msgid "Your messaging settings &rsaquo; %s%s%sKoha online%s catalog"
-msgstr ""
-"Viestiasetukset &rsaquo; %s%s%s%sKohan verkkokirjasto%s%sKohan verkkokirjasto"
-"%s"
+msgstr "Viestiasetukset &rsaquo; %s%s%sKohan verkkokirjasto%s tietokanta"
 
 #. SCRIPT
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:842
@@ -13393,9 +13403,9 @@ msgstr "Hakuhistoria &rsaquo; %s%s%sKohan verkkokirjasto%s"
 
 #. %1$s:  total | html 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:121
-#, fuzzy, c-format
+#, c-format
 msgid "Your search returned %s results. "
-msgstr "%s hakutulosta"
+msgstr "%s hakutulosta."
 
 #. For the first occurrence,
 #. SCRIPT
@@ -14238,7 +14248,7 @@ msgid "your charges"
 msgstr "Maksut"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/usermenu.inc:66
-#, fuzzy, c-format
+#, c-format
 msgid "your checkout history"
 msgstr "Lainahistoria"
 

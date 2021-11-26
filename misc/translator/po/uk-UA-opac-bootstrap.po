@@ -2,8 +2,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 21.05\n"
-"POT-Creation-Date: 2021-10-20 10:29-0300\n"
-"PO-Revision-Date: 2021-10-22 06:03+0000\n"
+"POT-Creation-Date: 2021-11-16 09:14-0300\n"
+"PO-Revision-Date: 2021-11-18 14:49+0000\n"
 "Last-Translator: Serhij Dubyk <dubyk@ukr.net>\n"
 "Language-Team: Koha Translation Team\n"
 "Language: uk\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 "X-Generator: Pootle 2.8\n"
-"X-POOTLE-MTIME: 1634882583.304735\n"
+"X-POOTLE-MTIME: 1637246995.029844\n"
 "X-Pootle-Path: /uk/21.05/uk-UA-opac-bootstrap.po\n"
 "X-Pootle-Revision: 1\n"
 
@@ -83,7 +83,7 @@ msgstr "%s %s %s %s%s/%s/images/favicon.ico %s "
 
 #. %1$s: - END -
 #. %2$s: - BLOCK debit_type_description -
-#. %3$s: - SWITCH debit_type.code -
+#. %3$s: - SWITCH debit_type_code -
 #. %4$s: - CASE 'ACCOUNT'          -
 #. %5$s: - CASE 'ACCOUNT_RENEW'    -
 #. %6$s: - CASE 'LOST'             -
@@ -103,7 +103,7 @@ msgstr "%s %s %s %s%s/%s/images/favicon.ico %s "
 #. %20$s: - END -
 #. %21$s: - END -
 #. %22$s: - BLOCK credit_type_description -
-#. %23$s: - SWITCH credit_type.code -
+#. %23$s: - SWITCH credit_type_code -
 #. %24$s: - CASE 'PAYMENT'      -
 #. %25$s: - CASE 'WRITEOFF'     -
 #. %26$s: - CASE 'FORGIVEN'     -
@@ -776,17 +776,17 @@ msgid ""
 "RenewLoan %s ILS-DI &rsaquo; HoldTitle %s ILS-DI &rsaquo; HoldItem %s ILS-DI "
 "&rsaquo; CancelHold %s ILS-DI %s &rsaquo; %s%s%sKoha online%s catalog "
 msgstr ""
-"%s ILS-DI (інтерфейс розкриття АБІС) &rsaquo; GetAvailability %s ILS-DI ("
-"інтерфейс розкриття АБІС) &rsaquo; GetRecords %s ILS-DI (інтерфейс розкриття "
-"АБІС) &rsaquo; GetAuthorityRecords %s ILS-DI (інтерфейс розкриття АБІС) "
-"&rsaquo; LookupPatron %s ILS-DI (інтерфейс розкриття АБІС) &rsaquo; "
+"%s ILS-DI (інтерфейс розкриття АБІС) &rsaquo; GetAvailability %s ILS-DI "
+"(інтерфейс розкриття АБІС) &rsaquo; GetRecords %s ILS-DI (інтерфейс "
+"розкриття АБІС) &rsaquo; GetAuthorityRecords %s ILS-DI (інтерфейс розкриття "
+"АБІС) &rsaquo; LookupPatron %s ILS-DI (інтерфейс розкриття АБІС) &rsaquo; "
 "AuthenticatePatron %s ILS-DI (інтерфейс розкриття АБІС) &rsaquo; "
-"GetPatronInfo %s ILS-DI (інтерфейс розкриття АБІС) &rsaquo; GetPatronStatus %"
-"s ILS-DI (інтерфейс розкриття АБІС) &rsaquo; GetServices %s ILS-DI ("
-"інтерфейс розкриття АБІС) &rsaquo; RenewLoan %s ILS-DI (інтерфейс розкриття "
+"GetPatronInfo %s ILS-DI (інтерфейс розкриття АБІС) &rsaquo; GetPatronStatus "
+"%s ILS-DI (інтерфейс розкриття АБІС) &rsaquo; GetServices %s ILS-DI "
+"(інтерфейс розкриття АБІС) &rsaquo; RenewLoan %s ILS-DI (інтерфейс розкриття "
 "АБІС) &rsaquo; HoldTitle %s ILS-DI (інтерфейс розкриття АБІС) &rsaquo; "
-"HoldItem %s ILS-DI (інтерфейс розкриття АБІС) &rsaquo; CancelHold %s ILS-DI ("
-"інтерфейс розкриття АБІС) %s &rsaquo; %s%s%s Коха %s &rsaquo; Електронний "
+"HoldItem %s ILS-DI (інтерфейс розкриття АБІС) &rsaquo; CancelHold %s ILS-DI "
+"(інтерфейс розкриття АБІС) %s &rsaquo; %s%s%s Коха %s &rsaquo; Електронний "
 "каталог "
 
 #. %1$s:  ELSIF ( Koha.Preference( 'KohaAdminEmailAddress' ) ) 
@@ -848,6 +848,8 @@ msgid ""
 "%s Log in to your account %s Catalog login disabled %s &rsaquo; %s%s%sKoha "
 "online%s catalog "
 msgstr ""
+"%s Вхід у Ваш обліковий запис %s Вхід у каталог вимкнено %s &rsaquo; %s%s%s "
+"Коха %s &rsaquo; Електронний каталог"
 
 #. %1$s:  ELSIF ( ISSUE.auto_too_late ) 
 #. %2$s:  ELSIF ISSUE.auto_too_much_oweing 
@@ -945,7 +947,7 @@ msgid ""
 "password for you. %s "
 msgstr ""
 "%s Паролі не збігаються. Будь ласка, ще раз введіть новий пароль. %s %s "
-"Пароль повинен бути не менше %s символів. %s %s  Пароль повинен містити "
+"Пароль повинен бути не менше %s (символи). %s %s  Пароль повинен містити "
 "принаймні одну цифру, одну малу і одну велику літеру. %s %s Пароль не "
 "повинен містити початкового або завершального пробілу. %s %s   Ваш чинний "
 "пароль введений неправильно. Якщо ця проблема залишатиметься, будь ласка, "
@@ -1040,9 +1042,9 @@ msgstr "%s Система самостійної видачі"
 #. %2$s:  ELSE 
 #. %3$s:  END 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-tags.tt:88
-#, fuzzy, c-format
+#, c-format
 msgid "%s Tags to show from other users: %s Tags to show: %s "
-msgstr "%s Показувати міток від інших користувачів %s Показувати міток %s:  "
+msgstr "%s Показувати міток від інших користувачів: %s Показувати міток: %s "
 
 #. %1$s:  ELSIF (errLinkNotValid) 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:105
@@ -1342,12 +1344,12 @@ msgstr "%s%s %s одиниця %s одиниць(і) %s%s Пусто %s"
 #. %7$s:  ELSE 
 #. %8$s:  END 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth-detail.tt:6
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s%s (%s)%s &rsaquo; Authority search &rsaquo; %s%s%sKoha online%s catalog"
 msgstr ""
-"%s%s%s Коха %s &rsaquo; Електронний каталог &rsaquo; Пошук серед "
-"авторитетних джерел &rsaquo; %s%s (%s)%s"
+"%s%s (%s)%s &rsaquo; Пошук серед авторитетних джерел &rsaquo; %s%s%s Коха %s "
+"&rsaquo; Електронний каталог"
 
 #. %1$s:  INCLUDE 'doc-head-open.inc' 
 #. %2$s:  IF ( LibraryNameTitle ) 
@@ -1596,6 +1598,8 @@ msgstr "%s Зібрання %s Тип одиниці %s"
 #, c-format
 msgid "%sContents of %s%sYour lists%s &rsaquo; %s%s%sKoha online%s catalog"
 msgstr ""
+"%s Вміст списку „%s“ %s Ваші списки %s &rsaquo; %s%s%s Коха %s &rsaquo; "
+"Електронний каталог"
 
 #. %1$s:  IF ( op_add ) 
 #. %2$s:  END 
@@ -1606,13 +1610,13 @@ msgstr ""
 #. %7$s:  ELSE 
 #. %8$s:  END 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:10
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%sEnter a new purchase suggestion%s %sPurchase suggestions%s &rsaquo; %s%s"
 "%sKoha online%s catalog"
 msgstr ""
-"%s Пропозиції на придбання %s %s Мої пропозиції на придбання %s Пропозиції "
-"на придбання  &rsaquo; %s%s%sKoha online%s catalog"
+"%s Додавання нової пропозиції на придбання %s %s Пропозиції на придбання %s "
+"&rsaquo; %s%s%s Коха %s &rsaquo; Електронний каталог"
 
 #. %1$s:  IF ( serial.status1 ) 
 #. %2$s:  END 
@@ -3273,7 +3277,7 @@ msgid "All libraries"
 msgstr "Усі бібліотеки/підрозділи"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-tags.tt:61
-#, fuzzy, c-format
+#, c-format
 msgid "All tags"
 msgstr "Усі мітки"
 
@@ -3353,9 +3357,9 @@ msgstr "Сума до оплати: "
 #. %3$s:  ELSE 
 #. %4$s:  END 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/errors/errorpage.tt:2
-#, fuzzy, c-format
+#, c-format
 msgid "An error has occurred &rsaquo; %s%s%sKoha online%s catalog"
-msgstr "%s%s%s Коха %s &rsaquo; Електронний каталог"
+msgstr "Сталася помилка &rsaquo; %s%s%s Коха %s &rsaquo; Електронний каталог "
 
 #. %1$s:  shelfname | html 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:186
@@ -3504,11 +3508,12 @@ msgstr "Чи Ви справді хочете очистити Вашу істо
 
 #. SCRIPT
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:831
-#, fuzzy
 msgid ""
 "Are you sure you want to remove sharing? You will no longer have access to "
 "the list."
-msgstr "Чи Ви справді хочете вилучити ці записи зі списку?"
+msgstr ""
+"Чи Ви справді хочете вилучити спільний доступ? Ви більше не матимете доступу "
+"до списку."
 
 #. SCRIPT
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:831
@@ -3753,9 +3758,9 @@ msgid "Authors"
 msgstr "Автори"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:169
-#, fuzzy, c-format
+#, c-format
 msgid "Auto-renewal"
-msgstr "Дозволити автоматичне продовження: "
+msgstr "Автоматичне продовження"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/opac-facets.inc:8
 #, c-format
@@ -3942,9 +3947,10 @@ msgstr "Перегляд нашого каталогу"
 #. %4$s:  END 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-browse.tt:5
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-browser.tt:3
-#, fuzzy, c-format
+#, c-format
 msgid "Browse our catalog &rsaquo; %s%s%sKoha online%s catalog"
-msgstr "%s%s%s Коха %s &rsaquo; Електронний каталог"
+msgstr ""
+"Перегляд нашого каталогу &rsaquo; %s%s%s Коха %s &rsaquo; Електронний каталог"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1066
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1068
@@ -3964,9 +3970,9 @@ msgstr "Огляд пошуку"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1354
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1356
-#, fuzzy, c-format
+#, c-format
 msgid "Browse shelf"
-msgstr "Огляд полиці "
+msgstr "Огляд полиці"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth.tt:103
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth.tt:128
@@ -4098,9 +4104,9 @@ msgid "Cancel"
 msgstr "Відміна"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:803
-#, fuzzy, c-format
+#, c-format
 msgid "Cancel article request"
-msgstr "Так, скасувати замовлення на статтю"
+msgstr "Скасувати замовлення на статтю"
 
 #. A
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:808
@@ -4152,9 +4158,9 @@ msgid "Cancellation date"
 msgstr "Дата скасування"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/accounts.inc:69
-#, fuzzy, c-format
+#, c-format
 msgid "Cancelled charge"
-msgstr "Скасовано"
+msgstr "Скасована оплата"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/ilsdi.tt:797
 #, c-format
@@ -4242,9 +4248,10 @@ msgstr "Зміна мого пароля "
 #. %3$s:  ELSE 
 #. %4$s:  END 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-passwd.tt:5
-#, fuzzy, c-format
+#, c-format
 msgid "Change your password &rsaquo; %s%s%sKoha online%s catalog"
-msgstr "%s%s%s Коха %s &rsaquo; Електронний каталог"
+msgstr ""
+"Зміна Вашого пароля &rsaquo; %s%s%s Коха %s &rsaquo; Електронний каталог"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:729
 #, c-format
@@ -4378,9 +4385,9 @@ msgid "Choose action"
 msgstr "Зібрання"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-downloadshelf.tt:61
-#, fuzzy, c-format
+#, c-format
 msgid "Choose format"
-msgstr "-- виберіть формат --"
+msgstr "Виберіть формат"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-idref.tt:32
 #, c-format
@@ -4638,9 +4645,10 @@ msgstr "Коментарі — "
 #. %4$s:  ELSE 
 #. %5$s:  END 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-review.tt:2
-#, fuzzy, c-format
+#, c-format
 msgid "Comments on %s &rsaquo; %s%s%sKoha online%s catalog"
-msgstr "%s%s%s Коха %s &rsaquo; Електронний каталог"
+msgstr ""
+"Коментарі щодо: „%s“ &rsaquo; %s%s%s Коха %s &rsaquo; Електронний каталог"
 
 #. %1$s:  ' ( ' _ (reviews.size || 0) _ ' )' | html 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:567
@@ -4741,7 +4749,7 @@ msgstr "Порядковый номер комплекта/экземпляра"
 #. SCRIPT
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/datatables.inc:4
 msgid "Copy to clipboard"
-msgstr "Копіювати в буфер обміну"
+msgstr "Копіювання у буфер обміну"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-basket.tt:155
 #, c-format
@@ -4904,9 +4912,9 @@ msgstr ""
 "примірник бібліографічного запису в Коха."
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/accounts.inc:62
-#, fuzzy, c-format
+#, c-format
 msgid "Credit applied"
-msgstr "Типи кредиту"
+msgstr "Кредит застосовано"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:506
 #, c-format
@@ -5076,14 +5084,14 @@ msgid "Default sorting"
 msgstr "Типове сортування"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-privacy.tt:54
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Default: keep my checkout history according to local laws. This is the "
 "default option : the library will keep your checkout history for the "
 "duration permitted by local laws."
 msgstr ""
-"За умовчанням: зберігати мою історію читання відповідно до місцевих законів. "
-"Це варіант за умовчанням: бібліотека зберігатиме історію читання на протязі "
+"За умовчанням: зберігати мою історію видач відповідно до місцевих законів. "
+"Це варіант за умовчанням: бібліотека зберігатиме історію видач на протязі "
 "терміну, що допускається місцевими законами."
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/ilsdi.tt:193
@@ -5312,9 +5320,9 @@ msgstr "Звантаження кошика"
 #. %3$s:  ELSE 
 #. %4$s:  END 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-downloadcart.tt:2
-#, fuzzy, c-format
+#, c-format
 msgid "Download cart &rsaquo; %s%s%sKoha online%s catalog"
-msgstr "%s%s%s Коха %s &rsaquo; Електронний каталог"
+msgstr "Звантаження кощика &rsaquo;%s%s%s Коха %s &rsaquo; Електронний каталог"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-downloadshelf.tt:25
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-downloadshelf.tt:52
@@ -5328,14 +5336,15 @@ msgstr "Звантажити список "
 #. %4$s:  ELSE 
 #. %5$s:  END 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-downloadshelf.tt:4
-#, fuzzy, c-format
+#, c-format
 msgid "Download list %s &rsaquo; %s%s%sKoha online%s catalog"
-msgstr "%s%s%s Коха %s &rsaquo; Електронний каталог"
+msgstr ""
+"Звантаження списку „%s“ &rsaquo; %s%s%s Коха %s &rsaquo; Електронний каталог"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-downloadshelf.tt:98
-#, fuzzy, c-format
+#, c-format
 msgid "Download list unsuccessful"
-msgstr "Звантажити список "
+msgstr "Не вдалося звантажити список"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/opac-detail-sidebar.inc:64
 #, c-format
@@ -5402,7 +5411,7 @@ msgstr "Редагувати список &nbsp;"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:625
 #, c-format
 msgid "Editing "
-msgstr "Редагування"
+msgstr "Редагування "
 
 #. For the first occurrence,
 #. %1$s:  title | html 
@@ -5469,9 +5478,8 @@ msgstr "енциклопедії "
 
 #. SCRIPT
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:445
-#, fuzzy
 msgid "End session"
-msgstr "Поточний сеанс"
+msgstr "Завершити сесію"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:476
 #, c-format
@@ -5534,9 +5542,9 @@ msgstr "Входження „%s“"
 #. %4$s:  ELSE 
 #. %5$s:  END 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth-MARCdetail.tt:6
-#, fuzzy, c-format
+#, c-format
 msgid "Entry %s &rsaquo; %s%s%sKoha online%s catalog"
-msgstr "%s%s%s Коха %s &rsaquo; Електронний каталог"
+msgstr "Входження „%s“ &rsaquo; %s%s%s Коха %s &rsaquo; Електронний каталог"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-request-article.tt:148
 #, c-format
@@ -5771,7 +5779,7 @@ msgstr "Менше параметрів"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:349
 #, c-format
 msgid "Fiction"
-msgstr "художня проза, белетристика"
+msgstr "художня література"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:412
 #, c-format
@@ -5873,12 +5881,12 @@ msgid "Forever"
 msgstr "Назавжди"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-privacy.tt:53
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Forever: keep my checkout history without limit. This is the option for "
 "users who want to keep track of what they are reading."
 msgstr ""
-"Назавжди: зберігати мою історію читання історії без обмежень. Це варіант для "
+"Назавжди: зберігати мою історію видач без обмежень. Це варіант для "
 "користувачів, які хочуть відстежувати те, що вони читають."
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth.tt:200
@@ -5899,11 +5907,11 @@ msgstr "Відновлення забутого пароля"
 #. %3$s:  ELSE 
 #. %4$s:  END 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:4
-#, fuzzy, c-format
+#, c-format
 msgid "Forgotten password recovery &rsaquo; %s%s%sKoha online%s catalog"
 msgstr ""
-"%s%s » Відновлення забутого пароля %s Коха %s Електронний каталог » "
-"Відновлення забутого пароля"
+"Відновлення забутого пароля &rsaquo; %s%s%s Коха %s &rsaquo; Електронний "
+"каталог"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:362
 #, c-format
@@ -6280,9 +6288,9 @@ msgid "Hold notes:"
 msgstr "Примітка щодо замовлення: "
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:161
-#, fuzzy, c-format
+#, c-format
 msgid "Hold requests"
-msgstr "Розмістити запит"
+msgstr "Запити на замовлення"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:283
 #, c-format
@@ -6488,9 +6496,10 @@ msgstr "Перегляд у ISBD"
 #. %3$s:  ELSE 
 #. %4$s:  END 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-ISBDdetail.tt:4
-#, fuzzy, c-format
+#, c-format
 msgid "ISBD view &rsaquo; %s%s%sKoha online%s catalog"
-msgstr "%s%s%s Коха %s &rsaquo; Електронний каталог"
+msgstr ""
+"Бібліографічний опис &rsaquo; %s%s%s Коха %s &rsaquo; Електронний каталог"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:111
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-basket.tt:96
@@ -6625,7 +6634,7 @@ msgid ""
 "still log in: "
 msgstr ""
 "Якщо у Вас немає облікового запису Google, але є локальний обліковий запис, "
-"Ви все ще можете увійти у систему: "
+"Ви все ще можете увійти: "
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth.tt:104
 #, c-format
@@ -6705,9 +6714,11 @@ msgstr "Зображення для %s "
 #. %4$s:  ELSE 
 #. %5$s:  END 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-imageviewer.tt:3
-#, fuzzy, c-format
+#, c-format
 msgid "Images for: %s &rsaquo; %s%s%sKoha online%s catalog"
-msgstr "%s%s%s Коха %s &rsaquo; Електронний каталог"
+msgstr ""
+"Зображення для заголовку: „%s“ &rsaquo; %s%s%s Коха %s &rsaquo; Електронний "
+"каталог"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-privacy.tt:138
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-privacy.tt:141
@@ -6977,20 +6988,19 @@ msgid "Items available:"
 msgstr "Доступні примірники: "
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-browser.tt:53
-#, c-format
+#, c-format, fuzzy
 msgid "Items in catalog"
-msgstr ""
+msgstr "Одиниці в каталозі"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-basket.tt:260
 #, fuzzy, c-format
 msgid "Items in your cart"
-msgstr "У Вашому кошику"
+msgstr "Одиниці у Вашому кошику"
 
 #. SCRIPT
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:831
-#, fuzzy
 msgid "Items on this list:"
-msgstr "Вилучити з цього списку"
+msgstr "Елементи цього списку:"
 
 # варіант змінних id_type, return_type функції GetAvailability з ILS-DI
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-sendbasket.tt:147
@@ -7067,9 +7077,9 @@ msgid "Koha administrator"
 msgstr "адміністратор Коха"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:69
-#, fuzzy, c-format
+#, c-format
 msgid "Koha home"
-msgstr "Koha "
+msgstr "Домівка Коха"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-basket.tt:207
 #, c-format
@@ -7144,7 +7154,7 @@ msgstr "Запізнюється"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:826
 #, c-format
 msgid "Latest serials"
-msgstr ""
+msgstr "Останні серіальні видання"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:406
 #, c-format
@@ -7432,9 +7442,9 @@ msgid "Log in to your account"
 msgstr "Увійти в обліковий запис"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:180
-#, fuzzy, c-format
+#, c-format
 msgid "Log in to your account."
-msgstr "Ввійти у Вашу облікову скриньку"
+msgstr "Вхід у Ваш обліковий запис."
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:190
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:86
@@ -7443,19 +7453,19 @@ msgid "Log in to your account:"
 msgstr "Увійти у обліковий запис:"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth.tt:136
-#, fuzzy, c-format
+#, c-format
 msgid "Log in using a CAS account."
-msgstr "увійти в систему за допомогою іншого облікового запису"
+msgstr "Вхід у систему за допомогою облікового запису CAS."
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/masthead.inc:382
-#, fuzzy, c-format
+#, c-format
 msgid "Log in using a Shibboleth account"
-msgstr "увійти в систему за допомогою іншого облікового запису"
+msgstr "Вхід з використанням облікового запису Шібболет"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth.tt:99
-#, fuzzy, c-format
+#, c-format
 msgid "Log in using a Shibboleth account."
-msgstr "увійти в систему за допомогою іншого облікового запису"
+msgstr "Вхід з використанням облікового запису Шібболет."
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth.tt:165
 #, c-format
@@ -7463,9 +7473,9 @@ msgid "Log in with Google"
 msgstr "Увійти за допомогою Google"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth.tt:116
-#, fuzzy, c-format
+#, c-format
 msgid "Log in."
-msgstr "Вхід"
+msgstr "Вхід."
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/masthead.inc:96
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/masthead.inc:122
@@ -7533,9 +7543,9 @@ msgid "LookupPatron"
 msgstr "LookupPatron"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/accounts.inc:66
-#, fuzzy, c-format
+#, c-format
 msgid "Lost item returned"
-msgstr "Відшкодування вартості за втрачений примірник "
+msgstr "Втрачений примірник повернуто"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-basket.tt:36
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-downloadcart.tt:19
@@ -7556,9 +7566,9 @@ msgid "MARC View"
 msgstr "Перегляд у МАРК"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-MARCdetail.tt:43
-#, fuzzy, c-format
+#, c-format
 msgid "MARC details"
-msgstr "Подробиці"
+msgstr "Подробиці в МАРК"
 
 #. %1$s:  biblio.biblionumber | html 
 #. %2$s:  IF ( LibraryNameTitle ) 
@@ -7569,6 +7579,8 @@ msgstr "Подробиці"
 #, c-format
 msgid "MARC details for record no. %s &rsaquo; %s%s%sKoha online%s catalog"
 msgstr ""
+"Подробиці в МАРК для бібзапису № %s &rsaquo; %s%s%s Коха %s &rsaquo; "
+"Електронний каталог"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-ISBDdetail.tt:31
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-MARCdetail.tt:31
@@ -7822,13 +7834,13 @@ msgid "Never expires %s %s "
 msgstr "Ніколи не закінчується термін дії %s %s "
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-privacy.tt:55
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Never: Delete my checkout history immediately. This will delete all record "
 "of the item that was checked-out upon check-in."
 msgstr ""
-"Ніколи: стерти мою історію читання негайно. Це вилучить усі записи про "
-"видані й повернуті примірники."
+"Ніколи: стерти мою історію видач негайно. Це вилучить усі записи про видані "
+"й повернуті примірники."
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:879
 #, c-format
@@ -7892,7 +7904,7 @@ msgstr "Нова мітка:"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:74
 #, c-format
 msgid "News"
-msgstr ""
+msgstr "Новини"
 
 #. %1$s:  IF ( LibraryNameTitle ) 
 #. %2$s:  LibraryNameTitle | html 
@@ -7963,9 +7975,9 @@ msgid "No changes were made."
 msgstr "Не було зроблено жодних змін."
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-privacy.tt:42
-#, fuzzy, c-format
+#, c-format
 msgid "No checkout history to delete"
-msgstr "Немає історії читання яку б можна було вилучити"
+msgstr "Немає історії видач яку б можна було вилучити"
 
 #. For the first occurrence,
 #. SCRIPT
@@ -8164,9 +8176,8 @@ msgstr "Ні, не вилучати пропозиції"
 
 #. SCRIPT
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:831
-#, fuzzy
 msgid "No, do not remove sharing"
-msgstr "Ні, не скидати зіставлення"
+msgstr "Ні, не вилучати спільний доступ"
 
 #. SCRIPT
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:842
@@ -8181,7 +8192,7 @@ msgstr "нікому"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:350
 #, c-format
 msgid "Non-fiction"
-msgstr "Не художня література"
+msgstr "документальна література"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:353
 #, c-format
@@ -8537,9 +8548,9 @@ msgid "Order by: "
 msgstr "Впорядкувати за: "
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:967
-#, fuzzy, c-format
+#, c-format
 msgid "Other editions"
-msgstr "Інші видання цієї праці"
+msgstr "Інші видання"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:965
 #, c-format
@@ -8585,9 +8596,9 @@ msgid "OutputRewritablePage "
 msgstr "OutputRewritablePage "
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:221
-#, fuzzy, c-format
+#, c-format
 msgid "OverDrive account"
-msgstr "Обліковий запис OverDrive "
+msgstr "Обліковий запис OverDrive"
 
 #. SCRIPT
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/opac-bottom.inc:154
@@ -8714,12 +8725,12 @@ msgid "Password must not contain leading or trailing whitespaces."
 msgstr "Пароль не повинен містити передуючі чи кінцеві прогалини! "
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:142
-#, fuzzy, c-format
+#, c-format
 msgid "Password not valid"
-msgstr "Паролі не збігаються! "
+msgstr "Пароль недійсний"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:120
-#, fuzzy, c-format
+#, c-format
 msgid "Password recovery"
 msgstr "Відновлення забутого пароля"
 
@@ -8840,9 +8851,9 @@ msgid "Place a hold on: "
 msgstr "Встановити замовлення на: "
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-request-article.tt:42
-#, fuzzy, c-format
+#, c-format
 msgid "Place article request"
-msgstr "Розмістити замовлення статті "
+msgstr "Розмістити замовлення статті"
 
 #. %1$s:  biblio.title | html 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-request-article.tt:39
@@ -8895,9 +8906,10 @@ msgstr "Встановити замовлення"
 #. %3$s:  ELSE 
 #. %4$s:  END 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:8
-#, fuzzy, c-format
+#, c-format
 msgid "Placing a hold &rsaquo; %s%s%sKoha online%s catalog"
-msgstr "%s%s%s Коха %s &rsaquo; Електронний каталог"
+msgstr ""
+"Встановлення замовлення &rsaquo; %s%s%s Коха %s &rsaquo; Електронний каталог"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:591
 #, c-format
@@ -9219,14 +9231,15 @@ msgstr "Будь ласка, введіть наступні символи в �
 #. %2$s:  ELSIF (errAlreadyStartRecovery) 
 #. %3$s:  IF username 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:86
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Please use the field 'Login' as well. %s This account has no email address "
 "we can send the email to. %s The process of password recovery has already "
 "been started for this account %s (\""
 msgstr ""
-"Будь-ласка, використовуйте також поле „Логін“. %s Процес відновлення пароля "
-"вже запущений для цього облікового запису %s (\""
+"Будь-ласка, використовуйте також поле „Логін“. %s Цей обліковий запис не має "
+"електронної адреси, на яку ми можемо надіслати електронний лист. %s Процес "
+"відновлення пароля вже запущений для цього облікового запису %s (\""
 
 #. OPTGROUP
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/resort_form.inc:2
@@ -9378,9 +9391,9 @@ msgid "Privacy"
 msgstr "Конфіденційність"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-privacy.tt:60
-#, fuzzy, c-format
+#, c-format
 msgid "Privacy rule"
-msgstr "Таємність"
+msgstr "Правило конфіденційності"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-addbybiblionumber.tt:83
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:671
@@ -9615,9 +9628,9 @@ msgstr "Останні коментарі "
 #. %3$s:  ELSE 
 #. %4$s:  END 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:5
-#, fuzzy, c-format
+#, c-format
 msgid "Recent comments &rsaquo; %s%s%sKoha online%s catalog"
-msgstr "%s%s%s Коха %s &rsaquo; Електронний каталог"
+msgstr "Недавні коментарі &rsaquo; %s%s%s Коха %s &rsaquo; Електронний каталог"
 
 # назва функції ILS-DI
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-course-details.tt:100
@@ -9630,9 +9643,10 @@ msgstr "URL запису"
 #. %3$s:  ELSE 
 #. %4$s:  END 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-blocked.tt:3
-#, fuzzy, c-format
+#, c-format
 msgid "Record blocked &rsaquo; %s %s %s Koha online %s catalog "
-msgstr "%s%s%s Коха %s &rsaquo; Електронний каталог"
+msgstr ""
+"Запис заблоковано &rsaquo; %s %s %s Коха %s &rsaquo; Електронний каталог"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:193
 #, c-format
@@ -9645,7 +9659,7 @@ msgid "Record title"
 msgstr "Назва запису"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:224
-#, fuzzy, c-format
+#, c-format
 msgid "RecordedBooks account"
 msgstr "Обліковий запис RecordedBooks"
 
@@ -9694,9 +9708,9 @@ msgid "Registration complete"
 msgstr "Реєстрацію завершено"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:44
-#, fuzzy, c-format
+#, c-format
 msgid "Registration complete!"
-msgstr "Реєстрацію завершено"
+msgstr "Реєстрація завершена!"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-registration-invalid.tt:36
 #, c-format
@@ -9724,9 +9738,9 @@ msgid "Relative issues"
 msgstr "Родич"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:207
-#, fuzzy, c-format
+#, c-format
 msgid "Relatives' charges"
-msgstr "Видачі родичів"
+msgstr "Сплати родичів"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:202
 #, c-format
@@ -9782,9 +9796,9 @@ msgid "Remove share"
 msgstr "Вилучити спільне використання списку"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:253
-#, fuzzy, c-format
+#, c-format
 msgid "Remove share "
-msgstr "Вилучити спільне використання списку"
+msgstr "Вилучити спільне використання списку "
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:254
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:362
@@ -9847,9 +9861,11 @@ msgstr "Повідомити про проблему"
 #. %3$s:  ELSE 
 #. %4$s:  END 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reportproblem.tt:3
-#, fuzzy, c-format
+#, c-format
 msgid "Report a problem &rsaquo; %s%s%sKoha online%s catalog"
-msgstr "%s%s%s Коха %s &rsaquo; Електронний каталог"
+msgstr ""
+"Повідомлення про проблему &rsaquo; %s%s%s Коха %s &rsaquo; Електронний "
+"каталог"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/errors/errorpage.tt:73
 #, c-format
@@ -9878,9 +9894,9 @@ msgstr "Замовити статтю"
 #. %3$s:  ELSE 
 #. %4$s:  END 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-request-article.tt:6
-#, fuzzy, c-format
+#, c-format
 msgid "Request article &rsaquo; %s%s%sKoha online%s catalog"
-msgstr "%s%s%s Коха %s &rsaquo; Електронний каталог"
+msgstr "Замовлення статті &rsaquo; %s%s%s Коха %s &rsaquo; Електронний каталог"
 
 # змінна функції HoldTitle з ILS-DI
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:237
@@ -10068,7 +10084,7 @@ msgstr "Продовжити Ваше замовлення на"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:129
 #, fuzzy, c-format
 msgid "Return"
-msgstr "(Повернуто)"
+msgstr "Повернути"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:105
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:135
@@ -10256,7 +10272,7 @@ msgid "Scan a new item or enter its barcode:"
 msgstr "Проскануйте нову одиницю або введіть її штрих-код:"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/help.tt:46
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Scan each item and wait for the page to reload before scanning the next "
 "item. The checked-out item should appear in your checkouts list. The submit "
@@ -10375,9 +10391,8 @@ msgstr "Результати пошуку"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recordedbooks-search.tt:44
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recordedbooks-search.tt:54
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/page-numbers.inc:3
-#, fuzzy
 msgid "Search results pagination"
-msgstr "Результати пошуку"
+msgstr "Пагінація результатів пошуку"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/svc/suggestion.tt:4
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/svc/suggestion.tt:14
@@ -10400,9 +10415,9 @@ msgid "Search type:"
 msgstr " з типом пошуку: "
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-retrieve-file.tt:4
-#, fuzzy, c-format
+#, c-format
 msgid "Search unsuccessful"
-msgstr "Пошук за грошовою одиницею"
+msgstr "Пошук не був успішний"
 
 #. SCRIPT
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/datatables.inc:4
@@ -10508,9 +10523,8 @@ msgstr "Не обирати жодного"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:318
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:321
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:325
-#, fuzzy
 msgid "Select search result: %s"
-msgstr "Виберіть пошуки, щоб: "
+msgstr "Виберіть результат пошуку: %s"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-search-history.tt:252
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-search-history.tt:260
@@ -10564,7 +10578,7 @@ msgstr "Допомога по самостійному поверненні"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:9
 #, c-format
 msgid "Self checkout &rsaquo; %s%s%sKoha %s"
-msgstr ""
+msgstr "Самостійна видача &rsaquo; %s%s%s Коха %s"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/help.tt:27
 #, c-format
@@ -10611,16 +10625,17 @@ msgstr "Надіслати на пристрій"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-sendbasketform.tt:31
 #, c-format
 msgid "Sending your cart"
-msgstr "Висилання Вашого кошика"
+msgstr "Надсилання Вашого кошика"
 
 #. %1$s:  IF ( LibraryNameTitle ) 
 #. %2$s:  LibraryNameTitle | html 
 #. %3$s:  ELSE 
 #. %4$s:  END 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-sendbasketform.tt:3
-#, fuzzy, c-format
+#, c-format
 msgid "Sending your cart &rsaquo; %s%s%sKoha online%s catalog"
-msgstr "%s%s%s Коха %s &rsaquo; Електронний каталог"
+msgstr ""
+"Надсилання Вашого кошика &rsaquo; %s%s%s Коха %s &rsaquo; Електронний каталог"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-sendshelfform.tt:34
 #, c-format
@@ -10632,9 +10647,10 @@ msgstr "Висилання Вашого списку"
 #. %3$s:  ELSE 
 #. %4$s:  END 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-sendshelfform.tt:3
-#, fuzzy, c-format
+#, c-format
 msgid "Sending your list &rsaquo; %s%s%sKoha online%s catalog"
-msgstr "%s%s%s Коха %s &rsaquo; Електронний каталог"
+msgstr ""
+"Надсилання Вашого списку &rsaquo; %s%s%s Коха %s &rsaquo; Електронний каталог"
 
 #. SCRIPT
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/calendar.inc:2
@@ -10658,7 +10674,7 @@ msgid "Serial collection"
 msgstr "Зібрання серіального видання"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:599
-#, fuzzy, c-format
+#, c-format
 msgid "Serial collections"
 msgstr "Зібрання серіального видання"
 
@@ -10710,18 +10726,18 @@ msgid "Share"
 msgstr "Поділитися"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shareshelf.tt:24
-#, fuzzy, c-format
+#, c-format
 msgid "Share a list "
-msgstr "Поділитися списком"
+msgstr "Поділитися списком "
 
 #. %1$s:  IF ( LibraryNameTitle ) 
 #. %2$s:  LibraryNameTitle | html 
 #. %3$s:  ELSE 
 #. %4$s:  END 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shareshelf.tt:3
-#, fuzzy, c-format
+#, c-format
 msgid "Share a list &rsaquo; %s%s%sKoha online%s catalog"
-msgstr "%s%s%s Коха %s &rsaquo; Електронний каталог"
+msgstr "Поділіться списком &rsaquo; %s%s%s Коха %s &rsaquo; Електронний каталог"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shareshelf.tt:44
 #, c-format
@@ -10888,19 +10904,19 @@ msgid "Simple DC-RDF"
 msgstr "Простий DC-RDF"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/masthead.inc:12
-#, fuzzy, c-format
+#, c-format
 msgid "Skip to main content"
-msgstr "Область застосування і зміст: "
+msgstr "Перейти до основного вмісту"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:179
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Some charges for text messages may be incurred when using this service. "
 "Please check with your mobile service provider if you have questions. "
 msgstr ""
 "Деякі сплати за текстові повідомлення можуть виникнути при використанні цієї "
 "служби. Будь ласка, зв’яжіться з постачальником послуг мобільного зв’язку, "
-"якщо у Вас є питання."
+"якщо у Вас є питання. "
 
 #. %1$s:  failaddress | html 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shareshelf.tt:106
@@ -11114,9 +11130,9 @@ msgid "Standard number (ISBN, ISSN or other):"
 msgstr "Стандартний номер (ISBN, ISSN чи інший): "
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:430
-#, fuzzy, c-format
+#, c-format
 msgid "Star ratings"
-msgstr "Ваша оцінка"
+msgstr "Оцінки зірочками"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:481
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:645
@@ -11211,9 +11227,9 @@ msgstr "Хмара тематик"
 #. %3$s:  ELSE 
 #. %4$s:  END 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-tags_subject.tt:3
-#, fuzzy, c-format
+#, c-format
 msgid "Subject cloud &rsaquo; %s%s%sKoha online%s catalog"
-msgstr "%s%s%s Коха %s &rsaquo; Електронний каталог"
+msgstr "Хмара тематик &rsaquo; %s%s%s Коха %s &rsaquo; Електронний каталог"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-basket.tt:145
 #, c-format
@@ -11551,9 +11567,9 @@ msgstr "Мітки"
 #. %3$s:  ELSE 
 #. %4$s:  END 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-tags.tt:6
-#, fuzzy, c-format
+#, c-format
 msgid "Tags &rsaquo; %s%s%sKoha online%s catalog"
-msgstr "%s%s%s Коха %s &rsaquo; Електронний каталог"
+msgstr "Мітки &rsaquo; %s%s%s Коха %s &rsaquo; Електронний каталог"
 
 #. For the first occurrence,
 #. SCRIPT
@@ -11611,13 +11627,13 @@ msgid "Thank you!"
 msgstr "Спасибі Вам!"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:55
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The \"Anyone\" permission has no actual effect while this list is strictly "
 "private."
 msgstr ""
 "Дозвіл „будь-кому“ не має реального ефекту, якщо цей список є строго "
-"приватним. "
+"приватним."
 
 #. %1$s:  subscription.opacdisplaycount | html 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:824
@@ -11755,13 +11771,13 @@ msgstr ""
 "ів)%s "
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-privacy.tt:40
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The deletion of your checkout history failed, because there is a problem "
 "with the configuration of this feature. Please help to fix the system by "
 "informing your library of this error"
 msgstr ""
-"Вилучення Вашої історії читання не вдалося, тому що виникла проблема з "
+"Вилучення Вашої історії видач не вдалося, тому що виникла проблема з "
 "конфігурацією цієї функціональності. Будь ласка, допоможіть виправити "
 "систему, проінформувавши Вашу бібліотеку про цю помилку"
 
@@ -11922,9 +11938,10 @@ msgstr "Даруйте, жоден з цих примірників не мож�
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:445
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:454
-#, fuzzy, c-format
+#, c-format
 msgid "There are no pending purchase suggestions matching your search."
-msgstr "Немає жодних, очікуючих на рішення, пропозицій для придбання."
+msgstr ""
+"Немає пропозицій на розгляді для придбання які відповідають Вашому пошуку."
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:449
 #, c-format
@@ -11942,15 +11959,15 @@ msgstr "Немає мінімальної чи максимальної кіль
 #. %4$s:  ELSIF ( ERROR.failed_delete ) 
 #. %5$s:  ERROR.failed_delete | html 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-tags.tt:64
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "There was a problem with this operation: %s ERROR: illegal parameter %s %s "
 "ERROR: You must log in to complete that action. %s ERROR: You cannot delete "
 "the tag %s. "
 msgstr ""
-"Була деяка проблема з цією операцією: %s На жаль, мітки не задіяні у цій "
-"системі. %s ПОМИЛКА: нечинний параметр „%s“ %s ПОМИЛКА: Ви повинні увійти в "
-"систему для завершення цієї дії. %s ПОМИЛКА: Ви не можете вилучити мітку %s. "
+"Була деяка проблема з цією операцією: %s ПОМИЛКА: нечинний параметр „%s“ %s "
+"ПОМИЛКА: Ви повинні увійти в систему для завершення цієї дії. %s ПОМИЛКА: Ви "
+"не можете вилучити мітку %s. "
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-passwd.tt:40
 #, c-format
@@ -12440,18 +12457,19 @@ msgstr "Оновити налаштування автоматичного пр�
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/account-table.inc:10
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/account-table.inc:96
-#, fuzzy, c-format
+#, c-format
 msgid "Updated"
-msgstr "Оновити"
+msgstr "Оновлено"
 
 #. %1$s:  IF ( LibraryNameTitle ) 
 #. %2$s:  LibraryNameTitle | html 
 #. %3$s:  ELSE 
 #. %4$s:  END 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-memberentry-update-submitted.tt:3
-#, fuzzy, c-format
+#, c-format
 msgid "Updates submitted &rsaquo; %s%s%sKoha online%s catalog"
-msgstr "%s%s%s Коха %s &rsaquo; Електронний каталог"
+msgstr ""
+"Оновлення надіслано &rsaquo; %s%s%s Коха %s &rsaquo; Електронний каталог"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-memberentry-update-submitted.tt:20
 #, c-format
@@ -12483,9 +12501,9 @@ msgid "Used for/see from:"
 msgstr "Використовується для / див. також:"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:220
-#, fuzzy, c-format
+#, c-format
 msgid "User summary"
-msgstr "Звіт про випуски"
+msgstr "Підсумок користувача"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:51
 #, c-format
@@ -12545,9 +12563,9 @@ msgstr "Перегляд"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/masthead.inc:52
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/masthead.inc:69
-#, fuzzy, c-format
+#, c-format
 msgid "View all"
-msgstr "Оглянути усі"
+msgstr "Переглянути усі"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:447
 #, c-format
@@ -12555,9 +12573,9 @@ msgid "View all suggestions"
 msgstr "Переглянути усі пропозиції"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:623
-#, fuzzy, c-format
+#, c-format
 msgid "View all the physical items."
-msgstr "Переглянути усі бібліотеки"
+msgstr "Переглянути усі фізичні одиниці."
 
 #. A
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-imageviewer.tt:78
@@ -12611,9 +12629,9 @@ msgid "View your search history"
 msgstr "Перегляд історії пошуків"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/accounts.inc:68
-#, fuzzy, c-format
+#, c-format
 msgid "Void payment"
-msgstr "Ваша оплата"
+msgstr "Недійсна оплата"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1246
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:363
@@ -12654,13 +12672,13 @@ msgid "We"
 msgstr "Ср"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-privacy.tt:50
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "We take great care in protecting your privacy. On this screen, you can "
 "define how long we keep your checkout history."
 msgstr ""
 "Ми приділяємо багато уваги захисту Вашої конфіденційності. На цьому екрані "
-"Ви можете встановити, як довго ми можемо зберігати Вашу історію читання."
+"Ви можете встановити, як довго ми можемо зберігати Вашу історію видач."
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:374
 #, c-format
@@ -12699,13 +12717,13 @@ msgid "What's next?"
 msgstr "Що далі?"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-privacy.tt:143
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Whatever your privacy rule you choose, you can delete all your checkout "
 "history immediately by clicking here. "
 msgstr ""
 "Незалежно від обраного Вами правила конфіденційності, Ви можете вилучити всю "
-"історію читання відразу, натиснувши тут. "
+"історію видач відразу, натиснувши тут. "
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-authorities-home.tt:66
 #, c-format
@@ -12820,9 +12838,8 @@ msgstr "Так, вилучити пропозиції"
 
 #. SCRIPT
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:831
-#, fuzzy
 msgid "Yes, remove sharing"
-msgstr "Так, скинути зіставлення"
+msgstr "Так, вилучити спільний доступ"
 
 #. SCRIPT
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:842
@@ -13098,14 +13115,14 @@ msgstr "Вам нічого не видано"
 
 #. %1$s:  Koha.Preference('MaxOpenSuggestions') | html 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:330
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "You have reached your limit for suggestions you can place at this time (%s)."
 msgstr "Ви сягнули межі пропозицій, які наразі можете розмістити (%s)."
 
 #. %1$s:  Koha.Preference('MaxOpenSuggestions') | html 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:51
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "You have reached your limit for suggestions you can place at this time (%s). "
 "Once the library has processed those suggestions you will be able to place "
@@ -13121,11 +13138,13 @@ msgstr "Ви сягнули межі пропозицій, які можете �
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:100
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:362
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "You have renewed this item the maximum number of consecutive times without "
 "it being seen by the library."
-msgstr "Ви продовжили цей примірник максимально дозволену кількість разів."
+msgstr ""
+"Ви продовжили цей примірник максимально дозволену кількість разів поспіль "
+"без його перегляду бібліотекою."
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:98
 #, c-format
@@ -13207,9 +13226,8 @@ msgstr ""
 #. INPUT type=checkbox name=digest
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:160
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:162
-#, fuzzy
 msgid "You must select a digestible transport to select digests"
-msgstr "Необхідно вибрати один або кілька звітів, які потрібно видалити"
+msgstr "Щоб вибрати підбірку, необхідно вибрати засіб транспорту підбірок"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:99
 #, c-format
@@ -13247,13 +13265,13 @@ msgstr ""
 "ще раз."
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shareshelf.tt:109
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "You will receive an email notification if someone accepts your share before "
 "it expires."
 msgstr ""
-"Ви отримаєте повідомлення електронною поштою, якщо хтось приймає Ваш список "
-"протягом двох тижнів."
+"Ви отримаєте повідомлення електронною поштою, якщо хтось приймає Ваш "
+"спільний доступ до закінчення терміну його дії."
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:170
 #, c-format
@@ -13342,9 +13360,9 @@ msgstr "Ваш кошик "
 #. %3$s:  ELSE 
 #. %4$s:  END 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-basket.tt:9
-#, fuzzy, c-format
+#, c-format
 msgid "Your cart &rsaquo; %s%s%sKoha online%s catalog"
-msgstr "%s%s%s Коха %s &rsaquo; Електронний каталог"
+msgstr "Ваш кошик &rsaquo; %s%s%s Коха %s &rsaquo; Електронний каталог"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/masthead.inc:26
 #, c-format
@@ -13367,9 +13385,9 @@ msgstr "Мої сплати"
 #. %3$s:  ELSE 
 #. %4$s:  END 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-account.tt:10
-#, fuzzy, c-format
+#, c-format
 msgid "Your charges &rsaquo; %s%s%sKoha online%s catalog"
-msgstr "%s%s%s Коха %s &rsaquo; Електронний каталог"
+msgstr "Ваші сплати &rsaquo; %s%s%s Коха %s &rsaquo; Електронний каталог"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:33
 #, c-format
@@ -13381,14 +13399,14 @@ msgstr "Моя історія видач"
 #. %3$s:  ELSE 
 #. %4$s:  END 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:6
-#, fuzzy, c-format
+#, c-format
 msgid "Your checkout history &rsaquo; %s%s%sKoha online%s catalog"
-msgstr "%s%s%s Коха %s &rsaquo; Електронний каталог"
+msgstr "Ваша історія видач &rsaquo; %s%s%s Коха %s &rsaquo; Електронний каталог"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-privacy.tt:38
-#, fuzzy, c-format
+#, c-format
 msgid "Your checkout history has been deleted."
-msgstr "Вашу історію читання витерто."
+msgstr "Вашу історію видач витерто."
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:899
 #, c-format
@@ -13499,9 +13517,10 @@ msgstr ""
 #. %3$s:  ELSE 
 #. %4$s:  END 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:15
-#, fuzzy, c-format
+#, c-format
 msgid "Your library home &rsaquo; %s%s%sKoha online%s catalog"
-msgstr "%s%s%s Коха %s &rsaquo; Електронний каталог"
+msgstr ""
+"Ваш читацький формуляр &rsaquo; %s%s%s Коха %s &rsaquo; Електронний каталог"
 
 #. %1$s:  shelfname | $raw 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-sendshelf.tt:2
@@ -13546,9 +13565,11 @@ msgstr "Мої налаштування отримання повідомлен�
 #. %3$s:  ELSE 
 #. %4$s:  END 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:3
-#, fuzzy, c-format
+#, c-format
 msgid "Your messaging settings &rsaquo; %s%s%sKoha online%s catalog"
-msgstr "%s%s%s Коха %s &rsaquo; Електронний каталог"
+msgstr ""
+"Налаштування отримання повідомлень для мене &rsaquo; %s%s%s Коха %s &rsaquo; "
+"Електронний каталог"
 
 #. SCRIPT
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:842
@@ -13594,8 +13615,8 @@ msgid ""
 "Your password must contain at least %s characters, including UPPERCASE, "
 "lowercase and numbers."
 msgstr ""
-"Ваш пароль повинен містити принаймні %s символів, включаючи ВЕРХНІЙ регістр, "
-"літери та цифри."
+"Ваш пароль повинен містити принаймні %s (символи), включаючи ВЕРХНІЙ "
+"регістр, літери та цифри."
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-account-pay-error.tt:19
 #, c-format
@@ -13630,9 +13651,10 @@ msgstr "Керування моєю конфіденційністю"
 #. %3$s:  ELSE 
 #. %4$s:  END 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-privacy.tt:3
-#, fuzzy, c-format
+#, c-format
 msgid "Your privacy management &rsaquo; %s%s%sKoha online%s catalog"
-msgstr "%s%s%s Коха %s &rsaquo; Електронний каталог"
+msgstr ""
+"Моя конфіденційність &rsaquo %s%s%s Коха %s &rsaquo; Електронний каталог"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-privacy.tt:46
 #, c-format
@@ -13711,9 +13733,10 @@ msgstr "Моя історія пошуків"
 #. %3$s:  ELSE 
 #. %4$s:  END 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-search-history.tt:6
-#, fuzzy, c-format
+#, c-format
 msgid "Your search history &rsaquo; %s%s%sKoha online%s catalog"
-msgstr "%s%s%s Коха %s &rsaquo; Електронний каталог"
+msgstr ""
+"Ваша історія пошуків &rsaquo; %s%s%s Коха %s &rsaquo; Електронний каталог"
 
 #. %1$s:  total | html 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:121
@@ -13767,9 +13790,9 @@ msgid "ZIP/Postal code:"
 msgstr "Поштовий індекс:"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:268
-#, fuzzy, c-format
+#, c-format
 msgid "[ More lists ]"
-msgstr "Ще списки"
+msgstr "[ Інші списки ]"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:270
 #, c-format

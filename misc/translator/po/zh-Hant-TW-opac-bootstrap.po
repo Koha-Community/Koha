@@ -6,9 +6,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Koha 21.05\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-10-20 11:36-0300\n"
-"PO-Revision-Date: 2021-10-22 06:40+0000\n"
-"Last-Translator: Frank Chou <frank@sris.com.tw>\n"
+"POT-Creation-Date: 2021-11-16 09:17-0300\n"
+"PO-Revision-Date: 2021-11-15 07:57+0000\n"
+"Last-Translator: jane <a230591160@gmail.com>\n"
 "Language-Team: koha_TW <kohataiwan@googlegroups.com>\n"
 "Language: zh_TW\n"
 "MIME-Version: 1.0\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8-bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Generator: Pootle 2.8\n"
-"X-POOTLE-MTIME: 1634884835.199363\n"
+"X-POOTLE-MTIME: 1636963046.602018\n"
 "X-Pootle-Path: /zh_TW/21.05/zh-Hant-TW-opac-bootstrap.po\n"
 "X-Pootle-Revision: 1\n"
 
@@ -83,7 +83,7 @@ msgstr "%s %s %s %s%s/%s/images/favicon.ico %s "
 
 #. %1$s: - END -
 #. %2$s: - BLOCK debit_type_description -
-#. %3$s: - SWITCH debit_type.code -
+#. %3$s: - SWITCH debit_type_code -
 #. %4$s: - CASE 'ACCOUNT'          -
 #. %5$s: - CASE 'ACCOUNT_RENEW'    -
 #. %6$s: - CASE 'LOST'             -
@@ -103,7 +103,7 @@ msgstr "%s %s %s %s%s/%s/images/favicon.ico %s "
 #. %20$s: - END -
 #. %21$s: - END -
 #. %22$s: - BLOCK credit_type_description -
-#. %23$s: - SWITCH credit_type.code -
+#. %23$s: - SWITCH credit_type_code -
 #. %24$s: - CASE 'PAYMENT'      -
 #. %25$s: - CASE 'WRITEOFF'     -
 #. %26$s: - CASE 'FORGIVEN'     -
@@ -481,7 +481,7 @@ msgid ""
 "%s(Broader heading) %s(Narrower heading) %s(Immediate parent body) %s "
 "%s(%s)%s %s "
 msgstr ""
-"%s %s(較早標題) %s(較新標題) %s(縮寫) %s(樂譜) %s(較廣標題) %s(較狹標題) "
+"%s %s(較早的標題) %s(較新標題) %s(縮寫) %s(樂譜) %s(較廣標題) %s(較狹標題) "
 "%s(上層標題) %s %s(%s)%s %s "
 
 #. %1$s:  SWITCH option 
@@ -560,13 +560,13 @@ msgstr "%s <?xml version=\"1.0\"?> "
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:673
 #, c-format
 msgid "%s Account frozen %s %s "
-msgstr "%s 帳號凍結 %s %s "
+msgstr "%s 凍結帳號 %s %s "
 
 #. %1$s:  ELSIF (errMultipleAccountsForEmail) 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:83
 #, c-format
 msgid "%s Account identification with this email address only is ambiguous. "
-msgstr "%s 以此電子郵件識別的帳號不明。"
+msgstr "%s 此電子郵件識別的帳號不明。"
 
 #. %1$s:  IF review.your_comment 
 #. %2$s:  review.datereviewed | $KohaDates 
@@ -624,7 +624,7 @@ msgstr "%s 自動續借 "
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:396
 #, c-format
 msgid "%s Automatic renewal failed, your account is expired. "
-msgstr "%s 自動續借失敗，帳號失效。"
+msgstr "%s 自動續借失敗，您的帳號已到期。 "
 
 #. %1$s:  IF ( Koha.Preference('SCOAllowCheckin') ) 
 #. %2$s:  ELSE 
@@ -633,7 +633,7 @@ msgstr "%s 自動續借失敗，帳號失效。"
 #, c-format
 msgid ""
 "%s Check out, return, or renew an item: %s Check out or renew an item: %s "
-msgstr "%s 借出, 還入或續借館藏: %s 借出或或續借館藏：%s "
+msgstr "%s 借出, 還入,或續借館藏: %s 借出或或續借館藏：%s "
 
 #. %1$s:  IF ( SEARCH_RESULT.onloancount ) 
 #. %2$s:  SEARCH_RESULT.onloancount | html 
@@ -672,7 +672,7 @@ msgstr ""
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/clubs/clubs-tab.tt:28
 #, c-format
 msgid "%s Contact your library to be disenrolled from this club. %s "
-msgstr "%s 退出讀者俱樂部請洽您的圖書館。%s "
+msgstr "%s 退出讀者俱樂部請聯繫您的圖書館。%s "
 
 #. %1$s:  IF (errcode==1) 
 #. %2$s:  ELSE 
@@ -692,7 +692,7 @@ msgstr ""
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:18
 #, c-format
 msgid "%s Delete %s Delete list %s "
-msgstr "%s 刪除 %s 剛除清單 %s"
+msgstr "%s 刪除 %s 刪除清單 %s"
 
 #. %1$s:  IF hold.found == 'F' 
 #. %2$s:  ELSIF hold.cancellationdate 
@@ -703,7 +703,7 @@ msgstr "%s 刪除 %s 剛除清單 %s"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:146
 #, c-format
 msgid "%s Fulfilled %s Cancelled %s Waiting %s In transit %s Pending %s "
-msgstr "%s 填滿 %s 取消 %s 等待 %s 轉移中 %s 延後 %s "
+msgstr "%s 填滿 %s 取消 %s 等待 %s 轉移中 %s 待決 %s "
 
 #. %1$s:  END 
 #. %2$s:  HOLDS.count | html 
@@ -751,7 +751,7 @@ msgstr ""
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/maintenance.tt:46
 #, c-format
 msgid "%s If you have any questions, please contact the "
-msgstr "%s 若有任何問題，請洽"
+msgstr "%s 若有任何問題，請洽 "
 
 #. %1$s:  SEARCH_RESULT.num_critics | html 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:560
@@ -764,19 +764,19 @@ msgstr "%s 網際網路使用者的批評"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-issue-note.tt:36
 #, c-format
 msgid "%s Issue notes have not been enabled. Please contact the library. %s "
-msgstr "%s 未啟用借出通知。請洽圖書館。%s "
+msgstr "%s 未啟用借出通知。請聯繫圖書館。%s "
 
 #. %1$s:  ELSE 
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:109
 #, c-format
 msgid "%s Item in transit to "
-msgstr "%s 館藏轉送到"
+msgstr "%s 館藏轉送到 "
 
 #. %1$s:  IF ( HOLD.is_at_destination ) 
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:99
 #, c-format
 msgid "%s Item waiting at "
-msgstr "%s 館藏處理中"
+msgstr "%s 館藏處理中 "
 
 #. %1$s:  issues_count | html 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:239
@@ -804,7 +804,7 @@ msgstr "%s 圖書館 %s 圖書館 %s "
 msgid ""
 "%s Log in to your account %s Catalog login disabled %s &rsaquo; %s%s%sKoha "
 "online%s catalog "
-msgstr ""
+msgstr "%s 登入您的帳號 %s 禁用目錄登入 %s &rsaquo; %s%s%sKoha 線上%s 目錄 "
 
 #. %1$s:  ELSIF ( ISSUE.auto_too_late ) 
 #. %2$s:  ELSIF ISSUE.auto_too_much_oweing 
@@ -819,7 +819,7 @@ msgstr "%s 不能續借 %s 自動續借失敗，尚有未付罰款。"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:404
 #, c-format
 msgid "%s No renewal before %s "
-msgstr "%s 在 %s 之前無可預約 "
+msgstr "%s 無之前的續借 %s "
 
 #. %1$s:  IF ( searchdesc ) 
 #. %2$s:  LibraryName | html 
@@ -990,13 +990,13 @@ msgstr "%s 自助借出系統"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-tags.tt:88
 #, c-format
 msgid "%s Tags to show from other users: %s Tags to show: %s "
-msgstr "%s 標籤來自其他讀者 %s 標籤顯示 %s："
+msgstr "%s 標籤來自其他讀者: %s 標籤顯示: %s "
 
 #. %1$s:  ELSIF (errLinkNotValid) 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:105
 #, c-format
 msgid "%s The link you clicked is either invalid, or expired. "
-msgstr "%s 勾選的連結不正確、或失效。"
+msgstr "%s 您點擊的連結不正確，或失效。 "
 
 #. %1$s:  ELSIF (errPassNotMatch) 
 #. %2$s:  ELSIF password_too_short 

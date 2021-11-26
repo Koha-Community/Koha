@@ -5,8 +5,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 21.05\n"
-"POT-Creation-Date: 2021-10-20 10:24-0300\n"
-"PO-Revision-Date: 2021-10-13 08:47+0000\n"
+"POT-Creation-Date: 2021-11-16 09:03-0300\n"
+"PO-Revision-Date: 2021-11-26 11:30+0000\n"
 "Last-Translator: vfernandes <vfernandes@keep.pt>\n"
 "Language-Team: <>\n"
 "Language: pt\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.8\n"
-"X-POOTLE-MTIME: 1634114828.531170\n"
+"X-POOTLE-MTIME: 1637926238.630728\n"
 "X-Pootle-Path: /pt/21.05/pt-PT-opac-bootstrap.po\n"
 "X-Pootle-Revision: 1\n"
 
@@ -83,7 +83,7 @@ msgstr "%s %s %s %s%s/%s/images/favicon.ico %s "
 
 #. %1$s: - END -
 #. %2$s: - BLOCK debit_type_description -
-#. %3$s: - SWITCH debit_type.code -
+#. %3$s: - SWITCH debit_type_code -
 #. %4$s: - CASE 'ACCOUNT'          -
 #. %5$s: - CASE 'ACCOUNT_RENEW'    -
 #. %6$s: - CASE 'LOST'             -
@@ -103,7 +103,7 @@ msgstr "%s %s %s %s%s/%s/images/favicon.ico %s "
 #. %20$s: - END -
 #. %21$s: - END -
 #. %22$s: - BLOCK credit_type_description -
-#. %23$s: - SWITCH credit_type.code -
+#. %23$s: - SWITCH credit_type_code -
 #. %24$s: - CASE 'PAYMENT'      -
 #. %25$s: - CASE 'WRITEOFF'     -
 #. %26$s: - CASE 'FORGIVEN'     -
@@ -1612,7 +1612,7 @@ msgstr ""
 #. %7$s:  ELSE 
 #. %8$s:  END 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:10
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%sEnter a new purchase suggestion%s %sPurchase suggestions%s &rsaquo; %s%s"
 "%sKoha online%s catalog"
@@ -3175,9 +3175,9 @@ msgid "All libraries"
 msgstr "Todas as bibliotecas"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-tags.tt:61
-#, fuzzy, c-format
+#, c-format
 msgid "All tags"
-msgstr "Todas as Etiquetas"
+msgstr "Todas as etiquetas"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:170
 #, c-format
@@ -3862,9 +3862,9 @@ msgstr "Navegar nos resultados"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1354
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1356
-#, fuzzy, c-format
+#, c-format
 msgid "Browse shelf"
-msgstr "Ver prateleira "
+msgstr "Ver prateleira"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth.tt:103
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth.tt:128
@@ -4563,9 +4563,9 @@ msgid "Confirm new password:"
 msgstr "Confirmar a nova palavra-passe:"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:822
-#, fuzzy, c-format
+#, c-format
 msgid "Confirm password:"
-msgstr "Confirmar palavra-passe"
+msgstr "Confirmar palavra-passe:"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:557
 #, c-format
@@ -7654,7 +7654,7 @@ msgstr "Títulos mais populares"
 #. %3$s:  ELSE 
 #. %4$s:  END 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-topissues.tt:6
-#, fuzzy, c-format
+#, c-format
 msgid "Most popular titles &rsaquo; %s%s%sKoha online%s catalog"
 msgstr "Títulos mais populares &rsaquo; %s%s%sKoha online%s catálogo"
 
@@ -7756,7 +7756,7 @@ msgstr "Nova palavra-chave:"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:468
 #, c-format
 msgid "New purchase suggestion"
-msgstr "Novo sugestão de aquisição"
+msgstr "Nova sugestão de aquisição"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:450
 #, c-format
@@ -8477,7 +8477,7 @@ msgid "OutputRewritablePage "
 msgstr "OutputRewritablePage "
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:221
-#, fuzzy, c-format
+#, c-format
 msgid "OverDrive account"
 msgstr "Conta OverDrive"
 
@@ -9243,9 +9243,10 @@ msgstr "Imprimir recibo e terminar sessão"
 #. %4$s:  ELSE 
 #. %5$s:  END 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/printslip.tt:5
-#, fuzzy, c-format
+#, c-format
 msgid "Print receipt for %s &rsaquo; Self checkout &rsaquo; %s%s%sKoha %s"
-msgstr "Imprimir recibo para %s &rsaquo; Auto-empréstimo %s%s%sKoha %s"
+msgstr ""
+"Imprimir recibo para %s &rsaquo; Auto-empréstimo &rsaquo; %s%s%sKoha %s"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:24
 #, c-format
@@ -9528,7 +9529,7 @@ msgid "Record title"
 msgstr "Título do registo"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:224
-#, fuzzy, c-format
+#, c-format
 msgid "RecordedBooks account"
 msgstr "Conta RecordedBooks"
 
@@ -10137,7 +10138,7 @@ msgstr "Digitalize um novo item ou introduza o seu código de barras:"
 
 # Traduzido por Ricardo Dias Marques em 28-Mai-2009
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/help.tt:46
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Scan each item and wait for the page to reload before scanning the next "
 "item. The checked-out item should appear in your checkouts list. The submit "
@@ -11367,7 +11368,7 @@ msgid "Switch languages"
 msgstr "Alterar idiomas"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/maintenance.tt:42
-#, fuzzy, c-format
+#, c-format
 msgid "System maintenance"
 msgstr "Manutenção do sistema"
 
@@ -12417,7 +12418,7 @@ msgstr "Ver"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/masthead.inc:52
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/masthead.inc:69
-#, fuzzy, c-format
+#, c-format
 msgid "View all"
 msgstr "Ver todos"
 
@@ -13419,11 +13420,9 @@ msgstr "As suas configurações de mensagens"
 #. %3$s:  ELSE 
 #. %4$s:  END 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:3
-#, fuzzy, c-format
+#, c-format
 msgid "Your messaging settings &rsaquo; %s%s%sKoha online%s catalog"
-msgstr ""
-"As suas preferências de mensagem &rsaquo; %s%s%s%sKoha online%s%sKoha online"
-"%s catálogo"
+msgstr "As suas preferências de mensagem &rsaquo; %s%s%sKoha online%s catálogo"
 
 #. SCRIPT
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:842

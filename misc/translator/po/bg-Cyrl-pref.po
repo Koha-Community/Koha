@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Koha 21.05\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-05-16 03:25+0200\n"
-"PO-Revision-Date: 2021-10-10 10:54+0000\n"
+"PO-Revision-Date: 2021-11-17 08:53+0000\n"
 "Last-Translator: Илиян Дамянов <aioiliyan@gmail.com>\n"
 "Language-Team: Koha Translation Team <koha-translate@nongnu.org>\n"
 "Language: bg\n"
@@ -14,7 +14,7 @@ msgstr ""
 "X-Generator: Pootle 2.8\n"
 "X-Pootle-Path: /bg/21.05/bg-Cyrl-pref.po\n"
 "X-Pootle-Revision: 1\n"
-"X-POOTLE-MTIME: 1633863279.536227\n"
+"X-POOTLE-MTIME: 1637139239.001770\n"
 
 msgid "accounting.pref"
 msgstr "Транзакции"
@@ -774,7 +774,6 @@ msgid "admin.pref#GoogleOpenIDConnect# Yes"
 msgstr "Да"
 
 # Administration > Google OpenID Connect
-#, fuzzy
 msgid ""
 "admin.pref#GoogleOpenIDConnect# You will need to select OAuth2 when creating "
 "an app in the Google cloud console, and set the web origin to your_opac_url "
@@ -788,7 +787,11 @@ msgstr ""
 "Ще трябва да изберете OAuth2, когато създавате приложение в облачната "
 "конзола на google, и зададете уеб източника на your_opac_url, а URL адреса "
 "на пренасочването към your_opac_url/cgi-bin/koha/svc/auth/"
-"googleopenidconnect ."
+"googleopenidconnect . Изисква да се зададе <a href=\"/cgi-bin/koha/admin/"
+"preferences.pl?op=search&searchfield=GoogleOAuth2ClientID"
+"\">GoogleOAuth2ClientID</a> и <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=GoogleOAuth2ClientSecret\">GoogleOAuth2ClientSecret</"
+"a>."
 
 # Administration > Google OpenID Connect
 msgid "admin.pref#GoogleOpenIDConnectAutoRegister# Allow"
@@ -799,14 +802,15 @@ msgid "admin.pref#GoogleOpenIDConnectAutoRegister# Don't allow"
 msgstr "Не позволявайте"
 
 # Administration > Google OpenID Connect
-#, fuzzy
 msgid ""
 "admin.pref#GoogleOpenIDConnectAutoRegister# patrons logging in with Google "
 "Open ID to automatically register. Requires <a href=\"/cgi-bin/koha/admin/"
 "preferences.pl?op=search&searchfield=GoogleOpenIDConnect"
 "\">GoogleOpenIDConnect</a>."
 msgstr ""
-"на потребителите влизащи с Google Open ID автоматично да се регистрират."
+"на потребителите влизащи с Google Open ID автоматично да се регистрират. "
+"Изисква се <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=GoogleOpenIDConnect\">GoogleOpenIDConnect</a>."
 
 # Administration > Google OpenID Connect > GoogleOpenIDConnectDefaultBranch
 msgid ""
@@ -2608,9 +2612,12 @@ msgstr "Не активирайте"
 # Cataloging > Interface > CreateAVFromCataloguing
 msgid ""
 "cataloguing.pref#CreateAVFromCataloguing# authorized values to be created "
-"within the cataloguing module. Librarien will need the manage_auth_values "
+"within the cataloguing module. Librarian will need the manage_auth_values "
 "subpermission."
 msgstr ""
+"константните стойности, да могат да се задават в рамките на модула за "
+"каталогизиране. Библиотекарят ще се нуждае от разрешение за "
+"manage_auth_values."
 
 # Cataloging > Interface
 msgid "cataloguing.pref#DefaultClassificationSource# Use"
@@ -2661,10 +2668,13 @@ msgid ""
 "in the advanced cataloging editor or exporting from the detail page in the "
 "staff interface, use the"
 msgstr ""
+"Когато записвате в MARC/MARCXML файл в разширения редактор на каталогизация "
+"или експортирате от страницата с подробности в интерфейса на персонала, "
+"използвайте"
 
 # Cataloging > Display
 msgid "cataloguing.pref#DefaultSaveRecordFileID# bibliographic record number"
-msgstr ""
+msgstr "номер на библиографски запис"
 
 # Cataloging > Interface
 msgid "cataloguing.pref#DefaultSaveRecordFileID# control number"
@@ -2712,7 +2722,7 @@ msgstr "Активирайте"
 msgid ""
 "cataloguing.pref#EnableAdvancedCatalogingEditor# the advanced cataloging "
 "editor."
-msgstr "подробният редактор за каталогизиране."
+msgstr "разширеният редактор за каталогизиране."
 
 # Cataloging > Display
 msgid ""
@@ -7113,6 +7123,15 @@ msgid "enhanced_content.pref#CustomCoverImages# Don't display"
 msgstr "Не показвайте"
 
 # Enhanced content > Local or remote cover images
+#, fuzzy
+msgid ""
+"enhanced_content.pref#CustomCoverImages# For control fields you can use just "
+"{field}, like {001}."
+msgstr ""
+"персонализирани отдалечени изображения в URL адреса в служеният интерфейс."
+"<br/>"
+
+# Enhanced content > Local or remote cover images
 msgid ""
 "enhanced_content.pref#CustomCoverImages# Or you can use the following syntax "
 "to specify a field$subfield value: {field$subfield}. For instance {024$a}."
@@ -9445,8 +9464,6 @@ msgid ""
 "on the OPAC."
 msgstr "предложения за покупка от други читатели в OPAC."
 
-# OPAC > Appearance
-#, fuzzy
 msgid ""
 "opac.pref#OPACXSLTDetailsDisplay# <br />Options:<ul><li><a href=\"#\" class="
 "\"set_syspref\" data-syspref=\"OPACXSLTDetailsDisplay\" data-value="
@@ -9461,12 +9478,17 @@ msgid ""
 "{langcode} will be replaced with current interface language."
 msgstr ""
 "<br />Опции:<ul><li><a href=\"#\" class=\"set_syspref\" data-syspref="
-"\"OPACXSLTDetailsDisplay\" data-value=\"\">Оставете празно</a> за \"no xslt"
+"\"OPACXSLTDetailsDisplay\" data-value=\"\"> оставете празно </a> за \"no xslt"
 "\"</li><li>въведете \"<a href=\"#\" class=\"set_syspref\" data-syspref="
 "\"OPACXSLTDetailsDisplay\" data-value=\"default\">по подразбиране</a>\" за "
 "това по подразбиране</li><li> постави път за дефиниране на xslt файл</"
-"li><li>постави URL адрес за външен специфичен лист стилове.</li></"
-"ul>{langcode} ще бъде заменен с текущ език на интерфейса"
+"li><li>постави URL адрес за външен специфичен лист стилове.</"
+"li><li>ЗАБЕЛЕЖКА: Системната настройка<a href=\"/cgi-bin/koha/admin/"
+"preferences.pl?op=search&searchfield=PassItemMarcToXSLT"
+"\">PassItemMarcToXSLT</a> трябва да бъде активирана, ако вашата "
+"персонализирана таблица със стилове използва данни в полетата за библиотечни "
+"документи</li></ul>Ако имате няколко таблици със стилове за различни езици, "
+"{langcode} ще бъде заменен с текущ език на интерфейса"
 
 # OPAC > Appearance
 msgid ""
@@ -9510,7 +9532,6 @@ msgstr ""
 "Показване на списъци в OPAC, използвайки таблицата със стилове XSLT на: "
 
 # OPAC > Appearance
-#, fuzzy
 msgid ""
 "opac.pref#OPACXSLTResultsDisplay# <br />Options:<ul><li><a href=\"#\" class="
 "\"set_syspref\" data-syspref=\"OPACXSLTResultsDisplay\" data-value="
@@ -9525,12 +9546,17 @@ msgid ""
 "{langcode} will be replaced with current interface language."
 msgstr ""
 "<br />Опции:<ul><li><a href=\"#\" class=\"set_syspref\" data-syspref="
-"\"OPACXSLTResultsDisplay\" data-value=\"\"> Оставете празно </a> за \"no xslt"
-"\"</li><li>въведете \"<a href=\"#\" class=\"set_syspref\" data-syspref="
-"\"OPACXSLTResultsDisplay\"data-value=\"default\">по подразбиране</a>\" за "
-"това по подразбиране</li><li> постави път за дефиниране на xslt файл</"
-"li><li>постави URL адрес за външен специфичен лист стилове.</li></"
-"ul>{langcode} ще бъде заменен с текущ език на интерфейса"
+"\"OPACXSLTResultsDisplay\" data-value=\"\">оставете празно</a> за \"no xslt"
+"\"</li><li>Въведете \"<a href=\"#\" class=\"set_syspref\" data-syspref="
+"\"OPACXSLTResultsDisplay\" data-value=\"default\">по подразбиране</a>\" за "
+"това по подразбиране</li><li>Постави път за дефиниране на xslt файл</"
+"li><li>Поставете URL адрес за външен специфичен лист стилове.</li><li>."
+"ЗАБЕЛЕЖКА: Системната настройка <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=PassItemMarcToXSLT\">PassItemMarcToXSLT</a> трябва да "
+"бъде активирана, ако вашата персонализирана таблица със стилове използва "
+"данни в полетата за библиотечни документи</li></ul>Ако имате няколко таблици "
+"със стилове за различни езици, {langcode} ще бъде заменен с текущият език на "
+"интерфейса."
 
 # OPAC > Appearance
 msgid ""

@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Koha 21.05\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-06-12 12:52+0000\n"
-"PO-Revision-Date: 2021-10-06 10:39+0000\n"
+"PO-Revision-Date: 2021-11-10 06:50+0000\n"
 "Last-Translator: Onur Erdem <onurerdem@sdu.edu.tr>\n"
 "Language-Team: Koha Translation Team\n"
 "Language: tr\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.8\n"
-"X-POOTLE-MTIME: 1633516752.865087\n"
+"X-POOTLE-MTIME: 1636527013.508823\n"
 "X-Pootle-Path: /tr/21.05/tr-TR-pref.po\n"
 "X-Pootle-Revision: 1\n"
 
@@ -737,7 +737,6 @@ msgid "admin.pref#ElasticsearchMARCFormat# Searchable array"
 msgstr "Aranabilir dizi"
 
 # Patrons > Notices and notifications > PhoneNotification
-#, fuzzy
 msgid ""
 "admin.pref#GoogleOAuth2ClientID# Along with <a href=\"/cgi-bin/koha/admin/"
 "preferences.pl?op=search&searchfield=GoogleOAuth2ClientSecret"
@@ -745,18 +744,17 @@ msgid ""
 "preferences.pl?op=search&searchfield=GoogleOpenIDConnect"
 "\">GoogleOpenIDConnect.</a>"
 msgstr ""
-"<br/><i class=\"fa fa-exclamation-triangle\"></i> <a href=\"/cgi-bin/koha/"
-"admin/preferences.pl?op=search&searchfield=PhoneNotification\">Telefon "
-"Bildirimi</a> etkinleştirilmişse, <a href=\"/cgi-bin/koha/admin/preferences."
-"pl?op=search&searchfield=TalkingTechItivaPhoneNotification"
-"\">TalkingTechItivaPhoneNotification</a> devre dışı bırakılmalıdır. "
+"<a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=GoogleOAuth2ClientSecret\">GoogleOAuth2ClientSecret</"
+"a>, <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=GoogleOpenIDConnect\">GoogleOpenIDConnect.</a> "
+"etkinleştirir"
 
 # Administration > Google OpenID Connect
 msgid "admin.pref#GoogleOAuth2ClientID# Google OAuth2 Client ID: "
 msgstr "Google OAuth2 İstemci Kimliği:"
 
 # Patrons > Notices and notifications > PhoneNotification
-#, fuzzy
 msgid ""
 "admin.pref#GoogleOAuth2ClientSecret# Along with <a href=\"/cgi-bin/koha/"
 "admin/preferences.pl?op=search&searchfield=GoogleOAuth2ClientID"
@@ -764,11 +762,10 @@ msgid ""
 "preferences.pl?op=search&searchfield=GoogleOpenIDConnect"
 "\">GoogleOpenIDConnect.</a>"
 msgstr ""
-"<br/><i class=\"fa fa-exclamation-triangle\"></i> <a href=\"/cgi-bin/koha/"
-"admin/preferences.pl?op=search&searchfield=PhoneNotification\">Telefon "
-"Bildirimi</a> etkinleştirilmişse, <a href=\"/cgi-bin/koha/admin/preferences."
-"pl?op=search&searchfield=TalkingTechItivaPhoneNotification"
-"\">TalkingTechItivaPhoneNotification</a> devre dışı bırakılmalıdır. "
+"<a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=GoogleOAuth2ClientID\">GoogleOAuth2ClientID</a>, <a "
+"href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=GoogleOpenIDConnect\">GoogleOpenIDConnect.</a>"
 
 # Administration > Google OpenID Connect
 msgid "admin.pref#GoogleOAuth2ClientSecret# Google OAuth2 Client Secret: "
@@ -779,17 +776,15 @@ msgid "admin.pref#GoogleOpenIDConnect# No"
 msgstr "Hayır"
 
 # Administration > Google OpenID Connect
-#, fuzzy
 msgid ""
 "admin.pref#GoogleOpenIDConnect# Use Google OpenID Connect login in the OPAC: "
-msgstr "Google OpenID Connect girişini kullanın:"
+msgstr "OPAC'ta Google OpenID Connect girişini kullanın:"
 
 # Administration > Google OpenID Connect
 msgid "admin.pref#GoogleOpenIDConnect# Yes"
 msgstr "Evet"
 
 # Administration > Google OpenID Connect
-#, fuzzy
 msgid ""
 "admin.pref#GoogleOpenIDConnect# You will need to select OAuth2 when creating "
 "an app in the Google cloud console, and set the web origin to your_opac_url "
@@ -802,7 +797,12 @@ msgid ""
 msgstr ""
 "Google bulut konsolunda bir uygulamayı oluştururken OAuth2 seçmeli, ve web "
 "kökenini your_opac_url için ayarlamalı ve url'nizi your_opac_url/cgi-bin/"
-"koha/svc/auth/googleopenidconnect için yeniden yönlendirmelisiniz."
+"koha/svc/auth/googleopenidconnect için yeniden yönlendirmelisiniz. <a href="
+"\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=GoogleOAuth2ClientID\">GoogleOAuth2ClientID</a> ve <a "
+"href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=GoogleOAuth2ClientSecret\">GoogleOAuth2ClientSecret</"
+"a> sistem tercihlerinin yapılandırılmış olmasını gerektirir."
 
 # Administration > Google OpenID Connect
 msgid "admin.pref#GoogleOpenIDConnectAutoRegister# Allow"
@@ -813,25 +813,26 @@ msgid "admin.pref#GoogleOpenIDConnectAutoRegister# Don't allow"
 msgstr "İzin verme"
 
 # Administration > Google OpenID Connect
-#, fuzzy
 msgid ""
 "admin.pref#GoogleOpenIDConnectAutoRegister# patrons logging in with Google "
 "Open ID to automatically register. Requires <a href=\"/cgi-bin/koha/admin/"
 "preferences.pl?op=search&searchfield=GoogleOpenIDConnect"
 "\">GoogleOpenIDConnect</a>."
 msgstr ""
-"otomatik olarak kaydolmak için Google Open ID ile giriş yapan kullanıcılar."
+"otomatik olarak kaydolmak için Google Open ID ile giriş yapan kullanıcılar. "
+"<a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=GoogleOpenIDConnect\">GoogleOpenIDConnect</a> "
+"gerektirir"
 
 # Patrons > General
-#, fuzzy
 msgid ""
 "admin.pref#GoogleOpenIDConnectDefaultBranch# Requires <a href=\"/cgi-bin/"
 "koha/admin/preferences.pl?op=search&searchfield=GoogleOpenIDConnect"
 "\">GoogleOpenIDConnect</a>."
 msgstr ""
 "<a href=\"/cgi-bin/koha/admin/preferences.pl?"
-"op=search&searchfield=OPACPatronDetails\">OPACPatronDetails</a> sistem "
-"tercihinin etkinleştirilmesini gerektirir."
+"op=search&searchfield=GoogleOpenIDConnect\">GoogleOpenIDConnect</a> "
+"gerektirir."
 
 # Administration > Google OpenID Connect
 msgid ""
@@ -842,15 +843,14 @@ msgstr ""
 "kullanın:"
 
 # Patrons > General
-#, fuzzy
 msgid ""
 "admin.pref#GoogleOpenIDConnectDefaultCategory# Requires <a href=\"/cgi-bin/"
 "koha/admin/preferences.pl?op=search&searchfield=GoogleOpenIDConnect"
 "\">GoogleOpenIDConnect</a>."
 msgstr ""
 "<a href=\"/cgi-bin/koha/admin/preferences.pl?"
-"op=search&searchfield=OPACPatronDetails\">OPACPatronDetails</a> sistem "
-"tercihinin etkinleştirilmesini gerektirir."
+"op=search&searchfield=GoogleOpenIDConnect\">GoogleOpenIDConnect</a> "
+"gerektirir."
 
 # Administration > Google OpenID Connect
 msgid ""
@@ -861,15 +861,14 @@ msgstr ""
 "kodunu kullanın:"
 
 # OPAC > OpenURL
-#, fuzzy
 msgid ""
 "admin.pref#GoogleOpenIDConnectDomain# Leave blank for all Google domains. "
 "Requires <a href=\"/cgi-bin/koha/admin/preferences.pl?"
 "op=search&searchfield=GoogleOpenIDConnect\">GoogleOpenIDConnect</a>."
 msgstr ""
-"OpenURL bağlantılarının metni (veya <a href=\"/cgi-bin/koha/admin/"
-"preferences.pl?op=search&searchfield=OpenURLImageLocation"
-"\">OpenURLImageLocation</a> tanımlanmışsa resim başlığı):"
+"Tüm Google etki alanları için boş bırakın. <a href=\"/cgi-bin/koha/admin/"
+"preferences.pl?op=search&searchfield=GoogleOpenIDConnect"
+"\">GoogleOpenIDConnect</a> gerektirir."
 
 # Administration > Google OpenID Connect
 msgid ""
@@ -2605,21 +2604,22 @@ msgstr ""
 "010$a). "
 
 # Cataloging > Interface
-#, fuzzy
 msgid "cataloguing.pref#CreateAVFromCataloguing# Allow"
-msgstr "Etkinleştir"
+msgstr "İzin ver"
 
 # Cataloging > Interface
-#, fuzzy
 msgid "cataloguing.pref#CreateAVFromCataloguing# Don't allow"
-msgstr "Etkinleştirme"
+msgstr "İzin verme"
 
 # Cataloging > Interface > CreateAVFromCataloguing
+#, fuzzy
 msgid ""
 "cataloguing.pref#CreateAVFromCataloguing# authorized values to be created "
-"within the cataloguing module. Librarien will need the manage_auth_values "
+"within the cataloguing module. Librarian will need the manage_auth_values "
 "subpermission."
 msgstr ""
+"kataloglama modülü içinde oluşturulacak yetkili değerler. Kütüphanecinin "
+"manage_auth_values alt iznine ihtiyacı olacaktır."
 
 # Cataloging > Interface
 msgid "cataloguing.pref#DefaultClassificationSource# Use"
@@ -7166,6 +7166,13 @@ msgid "enhanced_content.pref#CustomCoverImages# Don't display"
 msgstr "Görüntüleme"
 
 # Enhanced content > Local or remote cover images
+#, fuzzy
+msgid ""
+"enhanced_content.pref#CustomCoverImages# For control fields you can use just "
+"{field}, like {001}."
+msgstr "personel istemcisinde özel uzak URL görüntüleri.<br/>"
+
+# Enhanced content > Local or remote cover images
 msgid ""
 "enhanced_content.pref#CustomCoverImages# Or you can use the following syntax "
 "to specify a field$subfield value: {field$subfield}. For instance {024$a}."
@@ -9520,17 +9527,17 @@ msgid ""
 "ul>If you have multiple stylesheets for different langues the placeholder "
 "{langcode} will be replaced with current interface language."
 msgstr ""
-"<br />Seçenekler:<ul><li><a href=\"#\" class=\"set_syspref\" data-syspref="
-"\"OPACXSLTResultsDisplay\" data-value=\"\">boş bırakın</a> \"no xslt\" "
-"için< /li><li>Varsayılan stil sayfası için \"<a href=\"#\" class="
-"\"set_syspref\" data-syspref=\"OPACXSLTResultsDisplay\" data-value=\"default"
-"\">default</a>\" girin</li>< li>Xslt dosyasını tanımlamak için bir yol "
-"girin</li><li>Harici bir özel stil sayfası için bir URL girin.</li><li>NOT: "
-"Sistem tercihi <a href=\"/cgi-bin/koha/ admin/preferences.pl?"
-"op=search&searchfield=PassItemMarcToXSLT\">PassItemMarcToXSLT</a>, özel stil "
-"sayfanız öğe alanlarındaki verileri kullanıyorsa etkinleştirilmelidir</li></"
-"ul>Farklı diller için birden fazla stil sayfanız varsa, yer tutucu mevcut "
-"arayüz dili {langcode} ile değiştirilecektir."
+"<br />Options:<ul><li><a href=\"#\" class=\"set_syspref\" data-syspref="
+"\"OPACXSLTDetailsDisplay\" data-value=\"\">leave empty</a> for \"no xslt\"</"
+"li><li>Enter \"<a href=\"#\" class=\"set_syspref\" data-syspref="
+"\"OPACXSLTDetailsDisplay\" data-value=\"default\">default</a>\" for the "
+"default stylesheet</li><li>Put a path to define an xslt file</li><li>Put a "
+"URL for an external specific stylesheet.</li><li>NOTE: The system preference "
+"<a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=PassItemMarcToXSLT\">PassItemMarcToXSLT</a> must be "
+"enabled if your custom stylesheet utilizes data in the item fields</li></"
+"ul>If you have multiple stylesheets for different langues the placeholder "
+"{langcode} will be replaced with current interface language."
 
 # OPAC > Appearance
 msgid ""
@@ -9552,17 +9559,17 @@ msgid ""
 "ul>If you have multiple stylesheets for different langues the placeholder "
 "{langcode} will be replaced with current interface language."
 msgstr ""
-"<br />Seçenekler:<ul><li><a href=\"#\" class=\"set_syspref\" data-syspref="
-"\"OPACXSLTResultsDisplay\" data-value=\"\">boş bırakın</a> \"no xslt\" "
-"için< /li><li>Varsayılan stil sayfası için \"<a href=\"#\" class="
-"\"set_syspref\" data-syspref=\"OPACXSLTResultsDisplay\" data-value=\"default"
-"\">default</a>\" girin</li>< li>Xslt dosyasını tanımlamak için bir yol "
-"girin</li><li>Harici bir özel stil sayfası için bir URL girin.</li><li>NOT: "
-"Sistem tercihi <a href=\"/cgi-bin/koha/ admin/preferences.pl?"
-"op=search&searchfield=PassItemMarcToXSLT\">PassItemMarcToXSLT</a> özel stil "
-"sayfanız öğe alanlarındaki verileri kullanıyorsa etkinleştirilmelidir</li></"
-"ul>Farklı diller için birden fazla stil sayfanız varsa, yer tutucu mevcut "
-"arayüz dili [langcode] ile değiştirilecektir."
+"<br />Options:<ul><li><a href=\"#\" class=\"set_syspref\" data-syspref="
+"\"OPACXSLTListsDisplay\" data-value=\"\">leave empty</a> for \"no xslt\"</"
+"li><li>Enter \"<a href=\"#\" class=\"set_syspref\" data-syspref="
+"\"OPACXSLTListsDisplay\" data-value=\"default\">default</a>\" for the "
+"default stylesheet</li><li>Put a path to define an xslt file</li><li>Put a "
+"URL for an external specific stylesheet.</li><li>NOTE: The system preference "
+"<a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=PassItemMarcToXSLT\">PassItemMarcToXSLT</a> must be "
+"enabled if your custom stylesheet utilizes data in the item fields</li></"
+"ul>If you have multiple stylesheets for different langues the placeholder "
+"{langcode} will be replaced with current interface language."
 
 # OPAC > Appearance
 msgid ""
@@ -9585,17 +9592,17 @@ msgid ""
 "ul>If you have multiple stylesheets for different langues the placeholder "
 "{langcode} will be replaced with current interface language."
 msgstr ""
-"<br />Seçenekler:<ul><li><a href=\"#\" class=\"set_syspref\" data-syspref="
-"\"OPACXSLTResultsDisplay\" data-value=\"\">boş bırakın</a> \"no xslt\" "
-"için< /li><li>Varsayılan stil sayfası için \"<a href=\"#\" class="
-"\"set_syspref\" data-syspref=\"OPACXSLTResultsDisplay\" data-value=\"default"
-"\">default</a>\" girin</li>< li>Xslt dosyasını tanımlamak için bir yol "
-"girin</li><li>Harici bir özel stil sayfası için bir URL girin.</li><li>NOT: "
-"Sistem tercihi <a href=\"/cgi-bin/koha/ admin/preferences.pl?\n"
-"op=search&searchfield=PassItemMarcToXSLT\">PassItemMarcToXSLT</a>, özel stil "
-"sayfanız öğe alanlarındaki verileri kullanıyorsa etkinleştirilmelidir</li></"
-"ul>Farklı diller için birden fazla stil sayfanız varsa, yer tutucu mevcut "
-"arayüz dili {langcode} ile değiştirilecektir."
+"<br />Options:<ul><li><a href=\"#\" class=\"set_syspref\" data-syspref="
+"\"OPACXSLTResultsDisplay\" data-value=\"\">leave empty</a> for \"no xslt\"</"
+"li><li>Enter \"<a href=\"#\" class=\"set_syspref\" data-syspref="
+"\"OPACXSLTResultsDisplay\" data-value=\"default\">default</a>\" for the "
+"default stylesheet</li><li>Put a path to define an xslt file</li><li>Put a "
+"URL for an external specific stylesheet.</li><li>NOTE: The system preference "
+"<a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=PassItemMarcToXSLT\">PassItemMarcToXSLT</a> must be "
+"enabled if your custom stylesheet utilizes data in the item fields</li></"
+"ul>If you have multiple stylesheets for different langues the placeholder "
+"{langcode} will be replaced with current interface language."
 
 # OPAC > Appearance
 msgid ""
@@ -12455,24 +12462,20 @@ msgid "searching.pref#FacetMaxCount# facets for each category."
 msgstr "her kategori için fasetler."
 
 # Searching > Results display
-#, fuzzy
 msgid "searching.pref#FacetOrder# Sort facets"
-msgstr "Fasetleri göster"
+msgstr "Fasetleri sırala"
 
 # Searching > Features
-#, fuzzy
 msgid "searching.pref#FacetOrder# alphabetically"
-msgstr "otomatik olarak."
+msgstr "alfabetik olarak"
 
 # Searching > Results display
-#, fuzzy
 msgid "searching.pref#FacetOrder# by usage count"
-msgstr "Şu kadar göster"
+msgstr "kullanım sayısına göre"
 
 # Searching > Results display
-#, fuzzy
 msgid "searching.pref#FacetOrder# for each category."
-msgstr "her kategori için fasetler."
+msgstr "her kategori için."
 
 # Searching > Features
 msgid ""
@@ -13455,17 +13458,15 @@ msgid ""
 "different langues the placeholder {langcode} will be replaced with current "
 "interface language."
 msgstr ""
-"<br />Seçenekler:<ul><li><a href=\"#\" class=\"set_syspref\" data-syspref="
-"\"OPACXSLTDetailsDisplay\" data-value=\"\">boş bırakın</a> \"no xslt\" "
-"için< /li><li>Varsayılan stil sayfası için \"<a href=\"#\" class="
-"\"set_syspref\" data-syspref=\"OPACXSLTDetailsDisplay\" data-value=\"default"
-"\">default</a>\" girin</li>< li>Xslt dosyasını tanımlamak için bir yol "
-"girin</li><li>Harici bir özel stil sayfası için bir URL girin.</li><li>NOT: "
-"Sistem tercihi <a href=\"/cgi-bin/koha/ admin/preferences.pl?"
-"op=search&searchfield=PassItemMarcToXSLT\">PassItemMarcToXSLT</a>, özel stil "
-"sayfanız materyal alanlarındaki verileri kullanıyorsa etkinleştirilmelidir</"
-"li></ul>Farklı diller için birden fazla stil sayfanız varsa, yer tutucu "
-"mevcut arayüz dili {langcode} ile değiştirilecektir."
+"<br />Options:<ul><li>Enter \"<a href=\"#\" class=\"set_syspref\" data-"
+"syspref=\"XSLTDetailsDisplay\" data-value=\"default\">default</a>\" for the "
+"default stylesheet</li><li>Put a path to define an xslt file</li><li>Put a "
+"URL for an external specific stylesheet.</li><li>NOTE: The system preference "
+"<a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=PassItemMarcToXSLT\">PassItemMarcToXSLT</a> must be "
+"enabled if your custom stylesheet utilizes data in the item fields</li></"
+"ul>If you have multiple stylesheets for different langues the placeholder "
+"{langcode} will be replaced with current interface language."
 
 # Staff interface > Appearance
 msgid ""
@@ -13489,17 +13490,17 @@ msgid ""
 "ul>If you have multiple stylesheets for different langues the placeholder "
 "{langcode} will be replaced with current interface language."
 msgstr ""
-"<br />Seçenekler:<ul><li><a href=\"#\" class=\"set_syspref\" data-syspref="
-"\"OPACXSLTDetailsDisplay\" data-value=\"\">boş bırakın</a> \"no xslt\" "
-"için< /li><li>Varsayılan stil sayfası için \"<a href=\"#\" class="
-"\"set_syspref\" data-syspref=\"OPACXSLTDetailsDisplay\" data-value=\"default"
-"\">default</a>\" girin</li>< li>Xslt dosyasını tanımlamak için bir yol "
-"girin</li><li>Harici bir özel stil sayfası için bir URL girin.</li><li>NOT: "
-"Sistem tercihi <a href=\"/cgi-bin/koha/ admin/preferences.pl?"
-"op=search&searchfield=PassItemMarcToXSLT\">PassItemMarcToXSLT</a>, özel stil "
-"sayfanız materyal alanlarındaki verileri kullanıyorsa etkinleştirilmelidir</"
-"li></ul>Farklı diller için birden fazla stil sayfanız varsa, yer tutucu "
-"mevcut arayüz dili {langcode} ile değiştirilecektir. "
+" <br />Options:<ul><li><a href=\"#\" class=\"set_syspref\" data-syspref="
+"\"XSLTListsDisplay\" data-value=\"\">Leave empty</a> for \"no xslt\"</"
+"li><li>Enter \"<a href=\"#\" class=\"set_syspref\" data-syspref="
+"\"XSLTListsDisplay\" data-value=\"default\">default</a>\" for the default "
+"stylesheet</li><li>Put a path to define an xslt file</li><li>Put a URL for "
+"an external specific stylesheet.</li><li>NOTE: The system preference <a href="
+"\"/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=PassItemMarcToXSLT"
+"\">PassItemMarcToXSLT</a> must be enabled if your custom stylesheet utilizes "
+"data in the item fields</li></ul>If you have multiple stylesheets for "
+"different langues the placeholder {langcode} will be replaced with current "
+"interface language."
 
 # Staff interface > Appearance
 msgid ""
@@ -13522,17 +13523,15 @@ msgid ""
 "different langues the placeholder {langcode} will be replaced with current "
 "interface language."
 msgstr ""
-"<br />Seçenekler:<ul><li><a href=\"#\" class=\"set_syspref\" data-syspref="
-"\"OPACXSLTDetailsDisplay\" data-value=\"\">boş bırakın</a> \"no xslt\" "
-"için< /li><li>Varsayılan stil sayfası için \"<a href=\"#\" class="
-"\"set_syspref\" data-syspref=\"OPACXSLTDetailsDisplay\" data-value=\"default"
-"\">default</a>\" girin</li>< li>Xslt dosyasını tanımlamak için bir yol "
-"girin</li><li>Harici bir özel stil sayfası için bir URL girin.</li><li>NOT: "
-"Sistem tercihi <a href=\"/cgi-bin/koha/ admin/preferences.pl?"
-"op=search&searchfield=PassItemMarcToXSLT\">PassItemMarcToXSLT</a>, özel stil "
-"sayfanız materyal alanlarındaki verileri kullanıyorsa etkinleştirilmelidir</"
-"li></ul>Farklı diller için birden fazla stil sayfanız varsa, yer tutucu "
-"mevcut arayüz dili {langcode} ile değiştirilecektir."
+"<br />Options:<ul><li>Enter \"<a href=\"#\" class=\"set_syspref\" data-"
+"syspref=\"XSLTResultsDisplay\" data-value=\"default\">default</a>\" for the "
+"default stylesheet</li><li>Put a path to define an xslt file</li><li>Put a "
+"URL for an external specific stylesheet.</li><li>NOTE: The system preference "
+"<a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=PassItemMarcToXSLT\">PassItemMarcToXSLT</a> must be "
+"enabled if your custom stylesheet utilizes data in the item fields</li></"
+"ul>If you have multiple stylesheets for different langues the placeholder "
+"{langcode} will be replaced with current interface language."
 
 # Staff interface > Appearance
 msgid ""

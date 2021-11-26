@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: Koha 21.05\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2021-10-14 19:28+0000\n"
-"Last-Translator: Marjorie  Barry-Vila <marjorie.barry-vila@ccsr.qc.ca>\n"
+"PO-Revision-Date: 2021-11-19 21:08+0000\n"
+"Last-Translator: Caroline Cyr-La-Rose <caroline.cyr-la-rose@inlibro.com>\n"
 "Language-Team: French Canada <koha-translate@lists.koha-community.org>\n"
 "Language: fr_CA\n"
 "MIME-Version: 1.0\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Generator: Pootle 2.8\n"
-"X-POOTLE-MTIME: 1634239724.591725\n"
+"X-POOTLE-MTIME: 1637356124.455630\n"
 "X-Pootle-Path: /fr_CA/21.05/fr-CA-pref.po\n"
 "X-Pootle-Revision: 1\n"
 
@@ -742,7 +742,6 @@ msgid "admin.pref#ElasticsearchMARCFormat# Searchable array"
 msgstr " Tableau interrogeable"
 
 # Patrons > Patron forms
-#, fuzzy
 msgid ""
 "admin.pref#GoogleOAuth2ClientID# Along with <a href=\"/cgi-bin/koha/admin/"
 "preferences.pl?op=search&searchfield=GoogleOAuth2ClientSecret"
@@ -750,18 +749,16 @@ msgid ""
 "preferences.pl?op=search&searchfield=GoogleOpenIDConnect"
 "\">GoogleOpenIDConnect.</a>"
 msgstr ""
-"<strong>NOTE:</strong> Si <a href=\"/cgi-bin/koha/admin/preferences.pl?"
-"op=search&searchfield=autoMemberNum\">autoMemberNum</a> est activée, la "
-"préférence système <a href=\"/cgi-bin/koha/admin/preferences.pl?"
-"op=search&searchfield=BorrowerMandatoryField\">BorrowerMandatoryField</a> ne "
-"doit pas contenir le champ du numéro de carte <code>cardnumber</code>."
+"De même que <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=GoogleOAuth2ClientSecret\">GoogleOAuth2ClientSecret</"
+"a>, permettre <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=GoogleOpenIDConnect\">GoogleOpenIDConnect.</a>"
 
 # Administration > Google OpenID Connect
 msgid "admin.pref#GoogleOAuth2ClientID# Google OAuth2 Client ID: "
 msgstr " Identifiant du client Google OAuth2: "
 
 # Patrons > Patron forms
-#, fuzzy
 msgid ""
 "admin.pref#GoogleOAuth2ClientSecret# Along with <a href=\"/cgi-bin/koha/"
 "admin/preferences.pl?op=search&searchfield=GoogleOAuth2ClientID"
@@ -769,11 +766,10 @@ msgid ""
 "preferences.pl?op=search&searchfield=GoogleOpenIDConnect"
 "\">GoogleOpenIDConnect.</a>"
 msgstr ""
-"<strong>NOTE:</strong> Si <a href=\"/cgi-bin/koha/admin/preferences.pl?"
-"op=search&searchfield=autoMemberNum\">autoMemberNum</a> est activée, la "
-"préférence système <a href=\"/cgi-bin/koha/admin/preferences.pl?"
-"op=search&searchfield=BorrowerMandatoryField\">BorrowerMandatoryField</a> ne "
-"doit pas contenir le champ du numéro de carte <code>cardnumber</code>."
+"De même que  <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=GoogleOAuth2ClientID\">GoogleOAuth2ClientID</a>, "
+"permettre <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=GoogleOpenIDConnect\">GoogleOpenIDConnect.</a>"
 
 # Administration > Google OpenID Connect
 msgid "admin.pref#GoogleOAuth2ClientSecret# Google OAuth2 Client Secret: "
@@ -794,7 +790,6 @@ msgid "admin.pref#GoogleOpenIDConnect# Yes"
 msgstr "Oui"
 
 # Administration > Google OpenID Connect
-#, fuzzy
 msgid ""
 "admin.pref#GoogleOpenIDConnect# You will need to select OAuth2 when creating "
 "an app in the Google cloud console, and set the web origin to your_opac_url "
@@ -808,7 +803,12 @@ msgstr ""
 " Vous aurez besoin de sélectionner OAuth2 quand vous créerez une application "
 "dans la console infonuagique de google, et de paramétrer l'url_de_votre_opac "
 "comme l'origine du site web et l'url de redirection vers url_de_votre_opac/"
-"cgi-bin/koha/svc/auth/googleopenidconnect ."
+"cgi-bin/koha/svc/auth/googleopenidconnect. Nécessite l'avtivation de <a href="
+"\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=GoogleOAuth2ClientID\">GoogleOAuth2ClientID</a> et <a "
+"href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=GoogleOAuth2ClientSecret\">GoogleOAuth2ClientSecret</"
+"a>."
 
 # Administration > Google OpenID Connect
 msgid "admin.pref#GoogleOpenIDConnectAutoRegister# Allow"
@@ -819,7 +819,6 @@ msgid "admin.pref#GoogleOpenIDConnectAutoRegister# Don't allow"
 msgstr " Ne pas autoriser"
 
 # Administration > Google OpenID Connect
-#, fuzzy
 msgid ""
 "admin.pref#GoogleOpenIDConnectAutoRegister# patrons logging in with Google "
 "Open ID to automatically register. Requires <a href=\"/cgi-bin/koha/admin/"
@@ -827,18 +826,18 @@ msgid ""
 "\">GoogleOpenIDConnect</a>."
 msgstr ""
 " les utilisateurs se connectant avec un Google Open ID à s'inscrire "
-"automatiquement. "
+"automatiquement. Nécessite l'activation de <a href=\"/cgi-bin/koha/admin/"
+"preferences.pl?op=search&searchfield=GoogleOpenIDConnect"
+"\">GoogleOpenIDConnect</a>."
 
 # OPAC > Appearance
-#, fuzzy
 msgid ""
 "admin.pref#GoogleOpenIDConnectDefaultBranch# Requires <a href=\"/cgi-bin/"
 "koha/admin/preferences.pl?op=search&searchfield=GoogleOpenIDConnect"
 "\">GoogleOpenIDConnect</a>."
 msgstr ""
-"Afficher le code HTML suivant quand <a href=\"/cgi-bin/koha/admin/"
-"preferences.pl?op=search&searchfield=OpacMaintenance\">OpacMaintenance</a> "
-"est activée. "
+"Nécessite l'activation de <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=GoogleOpenIDConnect\">GoogleOpenIDConnect</a>."
 
 # Administration > Google OpenID Connect
 msgid ""
@@ -849,16 +848,13 @@ msgstr ""
 "Google Open ID: "
 
 # OPAC > OpenURL
-#, fuzzy
 msgid ""
 "admin.pref#GoogleOpenIDConnectDefaultCategory# Requires <a href=\"/cgi-bin/"
 "koha/admin/preferences.pl?op=search&searchfield=GoogleOpenIDConnect"
 "\">GoogleOpenIDConnect</a>."
 msgstr ""
-"Texte du lien OpenURL (ou titre de l'image si la préférence système <a href="
-"\"/cgi-bin/koha/admin/preferences.pl?"
-"op=search&searchfield=OpenURLImageLocation\">OpenURLImageLocation</a> est "
-"paramétrée):"
+"Nécessite l'activation de <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=GoogleOpenIDConnect\">GoogleOpenIDConnect</a>."
 
 # Administration > Google OpenID Connect
 msgid ""
@@ -869,16 +865,14 @@ msgstr ""
 "d'un utilisateur avec Google Open ID: "
 
 # OPAC > OpenURL
-#, fuzzy
 msgid ""
 "admin.pref#GoogleOpenIDConnectDomain# Leave blank for all Google domains. "
 "Requires <a href=\"/cgi-bin/koha/admin/preferences.pl?"
 "op=search&searchfield=GoogleOpenIDConnect\">GoogleOpenIDConnect</a>."
 msgstr ""
-"Texte du lien OpenURL (ou titre de l'image si la préférence système <a href="
-"\"/cgi-bin/koha/admin/preferences.pl?"
-"op=search&searchfield=OpenURLImageLocation\">OpenURLImageLocation</a> est "
-"paramétrée):"
+" Laissez vide pour tous les domaines Google. Nécessite l'activation de <a "
+"href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=GoogleOpenIDConnect\">GoogleOpenIDConnect</a>."
 
 # Administration > Google OpenID Connect
 msgid ""
@@ -2591,7 +2585,7 @@ msgstr " Ne pas afficher"
 # Cataloging > Interface > CreateAVFromCataloguing
 msgid ""
 "cataloguing.pref#CreateAVFromCataloguing# authorized values to be created "
-"within the cataloguing module. Librarien will need the manage_auth_values "
+"within the cataloguing module. Librarian will need the manage_auth_values "
 "subpermission."
 msgstr ""
 
@@ -7122,6 +7116,14 @@ msgstr "Afficher"
 # Enhanced content > Local or remote cover images
 # Enhanced content > Local or remote cover images
 msgid "enhanced_content.pref#CustomCoverImages# Don't display"
+msgstr "Ne pas afficher"
+
+# Enhanced content > Local or remote cover images
+# Enhanced content > Local or remote cover images
+#, fuzzy
+msgid ""
+"enhanced_content.pref#CustomCoverImages# For control fields you can use just "
+"{field}, like {001}."
 msgstr "Ne pas afficher"
 
 # Enhanced content > Local or remote cover images
@@ -13022,11 +13024,11 @@ msgstr "des numéros."
 
 # Serials
 msgid "serials.pref#makePreviousSerialAvailable# Don't make"
-msgstr ""
+msgstr "Ne pas rendre"
 
 # Serials
 msgid "serials.pref#makePreviousSerialAvailable# Make"
-msgstr "Permettre"
+msgstr "Rendre"
 
 # Serials > makePreviousSerialAvailable
 msgid ""
@@ -13037,6 +13039,12 @@ msgid ""
 "level_itypes\">item-level_itypes</a> system preference must be set to "
 "specific item."
 msgstr ""
+" le numéro précédent disponible lorsqu'un nouveau numéro est reçu. Il est "
+"aussi possible de changer le type de document du numéro précédent lors de la "
+"réception du nouveau numéro. Veuillez prendre note que la préférence système "
+"<a href=\"/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=item-"
+"level_itypes\">item-level_itypes</a> doit être réglée à exemplaire "
+"spécifique."
 
 # Serials
 msgid "serials.pref#opacSerialDefaultTab# Show"
