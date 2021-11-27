@@ -102,8 +102,9 @@
             [% INCLUDE 'patron-title.inc' patron=overdueloo.patron hide_patron_infos_if_needed=1 %]
             [% IF logged_in_user.can_see_patron_infos( overdueloo.patron ) %]
                 [% IF ( overdueloo.email ) %][<a href="mailto:[% overdueloo.email | uri %]?subject=[% INCLUDE subject %] [% overdueloo.title | uri %]">email</a>][% END %]
-                [% IF ( overdueloo.phone ) %]([% overdueloo.phone | html %])[% ELSIF ( overdueloo.mobile ) %]([% overdueloo.mobile | html %])[% ELSIF ( overdueloo.phonepro ) %]([% overdueloo.phonepro | html %])[% END %]</td>
+                [% IF ( overdueloo.phone ) %]([% overdueloo.phone | html %])[% ELSIF ( overdueloo.mobile ) %]([% overdueloo.mobile | html %])[% ELSIF ( overdueloo.phonepro ) %]([% overdueloo.phonepro | html %])[% END %]
             [% END %]
+          </td>
             <td>[% Categories.GetName( overdueloo.patron.categorycode ) | html %]</td>
             <td>[% Branches.GetName( overdueloo.patron.branchcode ) | html %]</td>
           <td>[% INCLUDE 'biblio-title.inc' biblio=overdueloo link = 1 %] [% IF ( overdueloo.author ) %], by [% overdueloo.author | html %][% END %][% IF ( overdueloo.enumchron ) %], [% overdueloo.enumchron | html %][% END %]</td>
