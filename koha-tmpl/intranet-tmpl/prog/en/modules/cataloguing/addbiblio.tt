@@ -608,7 +608,7 @@ function PopupMARCFieldDoc(field) {
             if (tabflag[tagsubfieldid][0]==0){
                 var tag=tagsubfieldid.substr(0,3);
                 var subfield=tagsubfieldid.substr(3,1);
-                StrAlert += "<li>"+_("Tag %s subfield %s %s in tab %s").format(tag, subfield, formatFieldName( tabflag[tagsubfieldid][1] ), tabflag[tagsubfieldid][2]) + ' <a class="linkfield btn btn-link" href="#" data-tab="' + tabflag[tagsubfieldid][2] + '" data-field="' + tabflag[tagsubfieldid][3] + '"><i class="fa fa-arrow-right" aria-hidden="true"></i> Go to field</a></li>';
+                StrAlert += "<li>"+_("Tag %s subfield %s %s in tab %s").format(tag, subfield, formatFieldName( tabflag[tagsubfieldid][1] ), tabflag[tagsubfieldid][2]) + ' <a class="linkfield btn btn-link" href="#" data-tab="' + tabflag[tagsubfieldid][2] + '" data-field="' + tabflag[tagsubfieldid][3] + '"><i class="fa fa-arrow-right" aria-hidden="true"></i> ' + _("Go to field") + '</a></li>';
                 flag=1;
             }
         }
@@ -686,16 +686,16 @@ function PopupMARCFieldDoc(field) {
             StrAlert += "<ul>";
             for( var prop in mandatoryFields ){
                 if( mandatoryFields[prop]["importance"] == "mandatory" ){
-                    StrAlert += "<li>" + _("Field %s is mandatory, at least one of its subfields must be filled.").format( prop ) + ' <a class="linkfield btn btn-link" href="#" data-tab="' + mandatoryFields[prop]["tab"] + '" data-field="' + mandatoryFields[prop]["elemid"] + '"><i class="fa fa-arrow-right" aria-hidden="true"></i> Go to field</a></li>';
+                    StrAlert += "<li>" + _("Field %s is mandatory, at least one of its subfields must be filled.").format( prop ) + ' <a class="linkfield btn btn-link" href="#" data-tab="' + mandatoryFields[prop]["tab"] + '" data-field="' + mandatoryFields[prop]["elemid"] + '"><i class="fa fa-arrow-right" aria-hidden="true"></i> ' + _("Go to field") + '</a></li>';
                 } else {
-                    StrAlert += "<li>" + _("Field %s is important, at least one of its subfields must be filled.").format(arr[0]) + ' <a class="linkfield btn btn-link" href="#" data-tab="' + mandatoryFields[prop]["tab"] + '" data-field="' + mandatoryFields[prop]["elemid"] + '"><i class="fa fa-arrow-right" aria-hidden="true"></i> Go to field</a></li>';
+                    StrAlert += "<li>" + _("Field %s is important, at least one of its subfields must be filled.").format(arr[0]) + ' <a class="linkfield btn btn-link" href="#" data-tab="' + mandatoryFields[prop]["tab"] + '" data-field="' + mandatoryFields[prop]["elemid"] + '"><i class="fa fa-arrow-right" aria-hidden="true"></i> ' + _("Go to field") + '</a></li>';
                 }
             }
             StrAlert += "</ul>";
         }
         StrAlert += "</div>";
-        if(flag){
-            $("#show-errors").html('<button type="button" class="btn btn-danger show-errors"><i class="fa fa-warning"></i> Errors</span>');
+        if (flag) {
+            $("#show-errors").html('<button type="button" class="btn btn-danger show-errors"><i class="fa fa-warning"></i> ' + _("Errors") + '</span>');
             return StrAlert;
         } else {
             return flag;
