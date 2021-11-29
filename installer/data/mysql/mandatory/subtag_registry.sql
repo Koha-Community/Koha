@@ -1874,3 +1874,29 @@ VALUES ('ik', 'language', 'Inupiaq', now());
 
 INSERT INTO language_rfc4646_to_iso639 (rfc4646_subtag, iso639_2_code)
 VALUES ('ik', 'ipk');
+
+-- Yiddish
+
+INSERT INTO language_subtag_registry( subtag, type, description, added)
+VALUES ( 'yi', 'language', 'Yiddish', NOW() );
+
+INSERT INTO language_rfc4646_to_iso639(rfc4646_subtag,iso639_2_code)
+VALUES ( 'yi','yid');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'yi', 'language', 'de', 'Jiddisch');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'yi', 'language', 'en', 'Yiddish');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'yi', 'language', 'es', 'Yidis');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'yi', 'language', 'fr', 'Yiddish');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'yi', 'language', 'yi', 'יידיש');
+
+INSERT INTO language_script_mapping(language_subtag,script_subtag)
+VALUES ( 'yi', 'Hebr');
