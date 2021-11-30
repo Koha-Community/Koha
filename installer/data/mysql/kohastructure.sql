@@ -3261,7 +3261,7 @@ DROP TABLE IF EXISTS `language_script_mapping`;
 CREATE TABLE `language_script_mapping` (
   `language_subtag` varchar(25) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `script_subtag` varchar(25) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  KEY `language_subtag` (`language_subtag`)
+  PRIMARY KEY `language_subtag` (`language_subtag`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
