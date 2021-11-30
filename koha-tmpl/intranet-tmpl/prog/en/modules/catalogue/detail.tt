@@ -1231,21 +1231,50 @@ Note that permanent location is a code, and location may be an authval.
 </div>
 
     [% IF bundlesEnabled %]
-    <div class="modal" id="bundleItemsModal" tabindex="-1" role="dialog" aria-labelledby="bundleItemsLabel">
-        <form id="bundleItemsForm" action="">
+    <div class="modal" id="addToBundleModal" tabindex="-1" role="dialog" aria-labelledby="addToBundleLabel">
+        <form id="addToBundleForm" action="">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="closebtn" data-dismiss="modal" aria-hidden="true">×</button>
-                        <h3 id="bundleItemsLabel">Add to bundle</h3>
+                        <h3 id="addToBundleLabel">Add to bundle</h3>
                     </div>
                     <div class="modal-body">
-                        <div id="result"></div>
+                        <div id="addResult"></div>
                         <fieldset class="rows">
                             <ol>
                                 <li>
                                     <label class="required" for="external_id">Item barcode: </label>
                                     <input type="text" id="external_id" name="external_id" required="required">
+                                    <span class="required">Required</span>
+                                </li>
+                            </ol>
+                        </fieldset>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-default">Submit</button>
+                        <button class="btn btn-default" data-dismiss="modal" aria-hidden="true">Close</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div class="modal" id="removeFromBundleModal" tabindex="-1" role="dialog" aria-labelledby="removeFromBundleLabel">
+        <form id="removeFromBundleForm" action="">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="closebtn" data-dismiss="modal" aria-hidden="true">×</button>
+                        <h3 id="removeFromBundleLabel">Remove from bundle</h3>
+                    </div>
+                    <div class="modal-body">
+                        <div id="removeResult"></div>
+                        <fieldset class="rows">
+                            <ol>
+                                <li>
+                                    <label class="required" for="external_id">Item barcode: </label>
+                                    <input type="text" id="rm_external_id" name="external_id" required="required">
                                     <span class="required">Required</span>
                                 </li>
                             </ol>
@@ -1586,7 +1615,9 @@ Note that permanent location is a code, and location may be an authval.
             function createChild ( row, itemnumber ) {
 
                 // Toolbar
-                var bundle_toolbar = $('<div id="toolbar" class="btn-toolbar"><a class="btn btn-default" data-toggle="modal" data-target="#bundleItemsModal" data-item="' + itemnumber + '"><i class="fa fa-plus"></i> Add to bundle</a></div>');
+                var bundle_toolbar = $('<div id="toolbar" class="btn-toolbar"></div>');
+                bundle_toolbar.append('<a class="btn btn-default" data-toggle="modal" data-target="#addToBundleModal" data-item="' + itemnumber + '"><i class="fa fa-plus"></i> Add to bundle</a>');
+                bundle_toolbar.append('<a class="btn btn-default" data-toggle="modal" data-target="#removeFromBundleModal" data-item="' + itemnumber + '"><i class="fa fa-minus"></i> Remove from bundle</a>');
 
                 // This is the table we'll convert into a DataTable
                 var bundles_table = $('<table class="display tbundle" data-itemnumber="'+itemnumber+'" id="bundle_table_'+itemnumber+'" width="100%"/>');
@@ -1715,17 +1746,17 @@ Note that permanent location is a code, and location may be an authval.
 
             var bundle_changed;
             var bundle_form_active;
-            $("#bundleItemsModal").on("shown.bs.modal", function(e){
+            $("#addToBundleModal").on("shown.bs.modal", function(e){
                 var button = $(e.relatedTarget);
                 var item_id = button.data('item');
-                $("#result").replaceWith('<div id="result"></div>');
-                $("#bundleItemsForm").attr('action', '/api/v1/items/' + item_id + '/bundled_items');
+                $("#addResult").replaceWith('<div id="addResult"></div>');
+                $("#addToBundleForm").attr('action', '/api/v1/items/' + item_id + '/bundled_items');
                 $("#external_id").focus();
                 bundle_changed = 0;
                 bundle_form_active = item_id;
             });
 
-            $("#bundleItemsForm").submit(function(event) {
+            $("#addToBundleForm").submit(function(event) {
 
                   /* stop form from submitting normally */
                   event.preventDefault();
@@ -1745,7 +1776,7 @@ Note that permanent location is a code, and location may be an authval.
                   /* Report the results */
                   posting.done(function(data) {
                       var barcode = $('#external_id').val();
-                      $('#result').replaceWith('<div id="result" class="alert alert-success">Success: Added '+barcode+'</div>');
+                      $('#addResult').replaceWith('<div id="addResult" class="alert alert-success">Success: Added '+barcode+'</div>');
                       $('#external_id').val('').focus();
                       bundle_changed = 1;
                   });
@@ -1754,18 +1785,18 @@ Note that permanent location is a code, and location may be an authval.
                       if ( data.status === 409 ) {
                           var response = data.responseJSON;
                           if ( response.key === "PRIMARY" ) {
-                              $('#result').replaceWith('<div id="result" class="alert alert-warning">Warning: Item '+barcode+' already attached</div>');
+                              $('#addResult').replaceWith('<div id="addResult" class="alert alert-warning">Warning: Item '+barcode+' already attached</div>');
                           } else {
-                              $('#result').replaceWith('<div id="result" class="alert alert-danger">Failure: Item '+barcode+' belongs to another bundle</div>');
+                              $('#addResult').replaceWith('<div id="addResult" class="alert alert-danger">Failure: Item '+barcode+' belongs to another bundle</div>');
                           }
                       } else {
-                          $('#result').replaceWith('<div id="result" class="alert alert-danger">Failure: Check the logs for details</div>');
+                          $('#addResult').replaceWith('<div id="addResult" class="alert alert-danger">Failure: Check the logs for details</div>');
                       }
                       $('#external_id').val('').focus();
                   });
             });
 
-            $("#bundleItemsModal").on("hidden.bs.modal", function(e){
+            $("#addToBundleModal").on("hidden.bs.modal", function(e){
                 if ( bundle_changed ) {
                     $('#bundle_table_'+bundle_form_active).DataTable({ 'retrieve': true }).ajax.reload();
                 }
@@ -1773,6 +1804,81 @@ Note that permanent location is a code, and location may be an authval.
                 bundle_changed = 0;
             });
 
+            $("#removeFromBundleModal").on("shown.bs.modal", function(e){
+                var button = $(e.relatedTarget);
+                var item_id = button.data('item');
+                $("#removeResult").replaceWith('<div id="removeResult"></div>');
+                $("#removeFromBundleForm").attr('action', '/api/v1/items/' + item_id + '/bundled_items/');
+                $("#rm_external_id").focus();
+                bundle_changed = 0;
+                bundle_form_active = item_id;
+            });
+
+            $("#removeFromBundleForm").submit(function(event) {
+
+                /* stop form from submitting normally */
+                event.preventDefault();
+
+                /* get the action attribute from the <form action=""> element */
+                var $form = $(this),
+                url = $form.attr('action');
+
+                var barcode = $('#rm_external_id').val();
+
+                /* Fetch itemnumber using rm_external_id */
+                var itemReq = $.get('/api/v1/items', { q: JSON.stringify({
+                    external_id: barcode
+                }) }, null, "json");
+
+                var itemnumber;
+                itemReq.done(function(data) {
+                    if (data.length === 1) {
+                        itemnumber = data[0].item_id;
+
+                        /* Remove link using fetch itemnumber */
+                        var deleteReq = $.ajax( url + itemnumber, {
+                            type : 'DELETE'
+                        });
+
+                        /* Report the results */
+                        deleteReq.done(function(data) {
+                            var barcode = $('#rm_external_id').val();
+                            $('#removeResult').replaceWith('<div id="removeResult" class="alert alert-success">'+_("Success: Removed ")+barcode+'</div>');
+                            $('#rm_external_id').val('').focus();
+                            bundle_changed = 1;
+                        });
+                        deleteReq.fail(function(data) {
+                            var barcode = $('#rm_external_id').val();
+                            if ( data.status === 409 ) {
+                                var response = data.responseJSON;
+                                if ( response.key === "PRIMARY" ) {
+                                    $('#removeResult').replaceWith('<div id="removeResult" class="alert alert-warning">Warning: Item '+barcode+' already attached</div>');
+                                } else {
+                                    $('#removeResult').replaceWith('<div id="removeResult" class="alert alert-danger">Failure: Item '+barcode+' belongs to another bundle</div>');
+                                }
+                            } else {
+                                $('#removeResult').replaceWith('<div id="removeResult" class="alert alert-danger">Failure: Check the logs for details</div>');
+                            }
+                            $('#rm_external_id').val('').focus();
+                        });
+                    } else {
+                        $('#removeResult').replaceWith('<div id="removeResult" class="alert alert-danger">'+_("Failed: Barcode matched more than one item ")+barcode+'</div>');
+                    }
+                });
+                itemReq.fail(function(data) {
+                     $('#removeResult').replaceWith('<div id="removeResult" class="alert alert-danger">'+_("Failed: Item not found ")+barcode+'</div>');
+                    $('#rm_external_id').val('').focus();
+
+                });
+            });
+
+            $("#removeFromBundleModal").on("hidden.bs.modal", function(e){
+                if ( bundle_changed ) {
+                    $('#bundle_table_'+bundle_form_active).DataTable({ 'retrieve': true }).ajax.reload();
+                }
+                bundle_form_active = 0;
+                bundle_changed = 0;
+            });
             // End bundle handling
             [% END %]
 
