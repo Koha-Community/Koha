@@ -3216,7 +3216,7 @@ CREATE TABLE `language_descriptions` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   PRIMARY KEY (`id`),
   KEY `lang` (`lang`),
-  KEY `subtag_type_lang` (`subtag`,`type`,`lang`)
+  UNIQUE KEY `uniq_desc` (`subtag`,`type`,`lang`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -3232,7 +3232,8 @@ CREATE TABLE `language_rfc4646_to_iso639` (
   `iso639_2_code` varchar(25) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `id` int(11) NOT NULL AUTO_INCREMENT,
   PRIMARY KEY (`id`),
-  KEY `rfc4646_subtag` (`rfc4646_subtag`)
+  KEY `rfc4646_subtag` (`rfc4646_subtag`),
+  UNIQUE KEY `uniq_code` (`rfc4646_subtag`, `iso639_2_code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -3278,7 +3279,8 @@ CREATE TABLE `language_subtag_registry` (
   `added` date DEFAULT NULL,
   `id` int(11) NOT NULL AUTO_INCREMENT,
   PRIMARY KEY (`id`),
-  KEY `subtag` (`subtag`)
+  KEY `subtag` (`subtag`),
+  UNIQUE KEY `uniq_lang` (`subtag`, `type`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
