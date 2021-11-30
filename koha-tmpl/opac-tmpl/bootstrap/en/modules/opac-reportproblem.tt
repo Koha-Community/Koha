@@ -42,12 +42,12 @@
                             [% SWITCH m.code %]
                             [% CASE 'success_on_send' %]
                                 [% IF recipient == 'admin' %]
-                                    Your problem report has been sent to the Koha administrator.
+                                    <span>Your problem report has been sent to the Koha administrator.</span>
                                 [% ELSE %]
-                                    Your problem report has been sent to the library.
+                                    <span>Your problem report has been sent to the library.</span>
                                 [% END %]
                             [% CASE 'error_on_send' #We really should avoid reaching this! %]
-                                Something wrong happened when sending the report. Please contact your library.
+                                <span>Something wrong happened when sending the report. Please contact your library.</span>
                             [% END %]
                         </div>
                     [% END %]

@@ -5,9 +5,9 @@
 
 [% BLOCK ServerType %]
     [% IF (server.servertype||type) == 'sru' %]
-        SRU
+        <span>SRU</span>
     [% ELSIF (server.servertype||type) == 'zed' %]
-        Z39.50
+        </span>Z39.50</span>
     [% END %]
 [% END %]
 

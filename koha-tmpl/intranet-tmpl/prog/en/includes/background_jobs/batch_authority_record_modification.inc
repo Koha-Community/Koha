@@ -1,3 +1,4 @@
+[% SET KohaSpan %]
 [% BLOCK report %]
     [% SET report = job.report %]
     [% IF report %]
@@ -25,11 +26,13 @@
             [% ELSIF m.type == 'error' %]
                 <i class="fa fa-exclamation error"></i>
             [% END %]
+            [% authority_link = BLOCK %]<a href="/cgi-bin/koha/authorities/detail.pl?authid=[% m.authid | uri %]">[% m.authid | html %]</a>[% END %]
             [% SWITCH m.code %]
             [% CASE 'authority_not_modified' %]
-                Authority record <a href="/cgi-bin/koha/authorities/detail.pl?authid=[% m.authid | uri %]">[% m.authid | html %]</a> has not been modified. An error occurred on modifying it[% IF m.error %] ([% m.error | html %])[% END %].
+                <span>Authority record [% authority_link | $KohaSpan %] has not been modified. An error occurred on modifying it</span>
+                [% IF m.error %] ([% m.error | html %])[% END %].
             [% CASE 'authority_modified' %]
-                Authority record <a href="/cgi-bin/koha/authorities/detail.pl?authid=[% m.authid | uri %]">[% m.authid | html %]</a> has successfully been modified..
+                <span>Authority record [% authority_link | $KohaSpan %] has successfully been modified.</span>
             [% END %]
         </div>
     [% END %]

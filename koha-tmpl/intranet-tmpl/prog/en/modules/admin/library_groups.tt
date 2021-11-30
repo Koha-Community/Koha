@@ -30,9 +30,9 @@
     <div class="dialog [% m.type | html %]">
         [% SWITCH m.code %]
         [% CASE 'error_on_insert' %]
-            An error occurred when adding this library. The library id might already exist in this group.
+            <span>An error occurred when adding this library. The library id might already exist in this group.</span>
         [% CASE %]
-            [% m.code | html %]
+            <span>[% m.code | html %]</span>
         [% END %]
     </div>
 [% END %]
@@ -40,17 +40,17 @@
 [% IF added %]
     <div class="dialog message group-added">
         [% IF added.branchcode %]
-            [% added.library.branchname | html | $KohaSpan class = 'name' %] added to group.
+            <span>[% added.library.branchname | html | $KohaSpan class = 'name' %] added to group.</span>
         [% ELSE %]
-            Group [% added.title | html | $KohaSpan class = 'name' %] created.
+            <span>Group [% added.title | html | $KohaSpan class = 'name' %] created.</span>
         [% END %]
     </div>
 [% ELSIF deleted %]
     <div class="dialog message group-deleted">
         [% IF deleted.title %]
-            Group [% deleted.title | html | $KohaSpan class = 'name' %] has been deleted.
+            <span>Group [% deleted.title | html | $KohaSpan class = 'name' %] has been deleted.</span>
         [% ELSE %]
-            [% deleted.library | html | $KohaSpan class = 'name' %] has been removed from group.
+            <span>[% deleted.library | html | $KohaSpan class = 'name' %] has been removed from group.</span>
         [% END %]
     </div>
 [% ELSIF error_duplicate_title %]

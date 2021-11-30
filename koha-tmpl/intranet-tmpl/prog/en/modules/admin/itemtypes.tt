@@ -131,23 +131,23 @@ Item types &rsaquo; Administration &rsaquo; Koha
     <div class="dialog [% m.type | html %]">
         [% SWITCH m.code %]
         [% CASE 'error_on_update' %]
-            An error occurred when updating this item type. Perhaps the value already exists.
+            <span>An error occurred when updating this item type. Perhaps the value already exists</span>
         [% CASE 'error_on_insert' %]
-            An error occurred when inserting this item type. Perhaps the value already exists.
+            <span>An error occurred when inserting this item type. Perhaps the value already exists</span>
         [% CASE 'error_on_delete' %]
-            An error occurred when deleting this item type. Check the logs.
+            <span>An error occurred when deleting this item type. Check the logs</span>
         [% CASE 'success_on_update' %]
-            Item type updated successfully.
+            <span>Item type updated successfully</span>
         [% CASE 'success_on_insert' %]
-            Item type inserted successfully.
+            <span>Item type inserted successfully</span>
         [% CASE 'success_on_delete' %]
-            Item type deleted successfully.
+            <span>Item type deleted successfully</span>
         [% CASE 'already_exists' %]
-            This item type already exists.
+            <span>This item type already exists</span>
         [% CASE 'cannot_be_deleted' %]
-            Cannot delete this item type. <p><strong>This record is in use</strong>. Deletion is not possible.</p>
+            <span>Cannot delete this item type. <p><strong>This record is in use</strong>. Deletion is not possible.</p></span>
         [% CASE %]
-            [% m.code | html %]
+            <span>[% m.code | html %]</span>
         [% END %]
     </div>
 [% END %]
@@ -222,9 +222,9 @@ Item types &rsaquo; Administration &rsaquo; Koha
                     </select>
                     <div class="hint">
                         [% IF ( CAN_user_parameters_manage_auth_values ) %]
-                            Options are defined by the authorized value <a target="_blank" href="/cgi-bin/koha/admin/authorised_values.pl?searchfield=ITEMTYPECAT">ITEMTYPECAT</a>.
+                            <span>Options are defined by the authorized value <a target="_blank" href="/cgi-bin/koha/admin/authorised_values.pl?searchfield=ITEMTYPECAT">ITEMTYPECAT</a>.</span>
                         [% ELSE %]
-                            Options are defined by the authorized value ITEMTYPECAT.
+                            <span>Options are defined by the authorized value ITEMTYPECAT.</span>
                         [% END %]
                     </div>
                 </li>
@@ -498,13 +498,13 @@ Item types &rsaquo; Administration &rsaquo; Koha
             <td>
                 [% IF itemtype.parent_type %]
                     [% IF itemtype.parent.translated_descriptions.size %]
-                        [% itemtype.parent.description | html %] (default)<br/>
+                        [% itemtype.parent.description | html %] <span>(default)</span><br/>
                     [% ELSE %]
                         [% itemtype.parent.description | html %]
                     [% END %]
                     </br>
                     [% IF itemtype.translated_descriptions.size %]
-                        [% itemtype.description | html %] (default)<br/>
+                        [% itemtype.description | html %] <span>(default)</span><br/>
                         [% FOR description IN itemtype.translated_descriptions %]
                             [% IF description.translation == itemtype.translated_description %]
                             --    <strong>[% description.translation | html %]</strong>
@@ -518,7 +518,7 @@ Item types &rsaquo; Administration &rsaquo; Koha
                     [% END %]
                 [% ELSE %]
                     [% IF itemtype.translated_descriptions.size %]
-                        [% itemtype.description | html %] (default)<br/>
+                        [% itemtype.description | html %] <span>(default)</span><br/>
                         [% FOR description IN itemtype.translated_descriptions %]
                             [% IF description.translation == itemtype.translated_description %]
                                 <strong>[% description.translation | html %]</strong>

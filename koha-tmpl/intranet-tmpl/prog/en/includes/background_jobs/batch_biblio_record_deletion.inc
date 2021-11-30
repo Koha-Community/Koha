@@ -29,17 +29,17 @@
             [% END %]
             [% SWITCH m.code %]
             [% CASE 'biblio_not_exists' %]
-                The biblionumber [% m.biblionumber | html %] does not exist in the database.
+                <span>The biblionumber [% m.biblionumber | html %] does not exist in the database.</span>
             [% CASE 'item_issued' %]
-                At least one item is checked out on bibliographic record [% m.biblionumber | html %].
+                <span>At least one item is checked out on bibliographic record [% m.biblionumber | html %].</span>
             [% CASE 'reserve_not_cancelled' %]
-                Bibliographic record [% m.biblionumber | html %] was not deleted. A hold could not be canceled (reserve_id [% m.reserve_id | html %]).
+                <span>Bibliographic record [% m.biblionumber | html %] was not deleted. A hold could not be canceled (reserve_id [% m.reserve_id | html %]).</span>
             [% CASE 'item_not_deleted' %]
-                The bibliographic record [% m.biblionumber | html %] was not deleted. An error was encountered when deleting an item (itemnumber [% m.itemnumber | html %]).
+                <span>The bibliographic record [% m.biblionumber | html %] was not deleted. An error was encountered when deleting an item (itemnumber [% m.itemnumber | html %]).</span>
             [% CASE 'biblio_not_deleted' %]
-                Bibliographic record [% m.biblionumber | html %] was not deleted. An error occurred.
+                <span>Bibliographic record [% m.biblionumber | html %] was not deleted. An error occurred.</span>
             [% CASE 'biblio_deleted' %]
-                Bibliographic record [% m.biblionumber | html %] has been deleted successfully.
+                <span>Bibliographic record [% m.biblionumber | html %] has been deleted successfully.</span>
             [% END %]
         </div>
     [% END %]

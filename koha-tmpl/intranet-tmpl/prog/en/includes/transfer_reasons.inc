@@ -1,14 +1,14 @@
 [%- BLOCK transfer_reason -%]
     [%- SWITCH transfer.reason -%]
-        [%- CASE 'Manual'                    -%]Manual
-        [%- CASE 'StockrotationAdvance'      -%]Stock rotation advance
-        [%- CASE 'StockrotationRepatriation' -%]Stock rotation repatriation
-        [%- CASE 'ReturnToHome'              -%]Automatic return to home
-        [%- CASE 'ReturnToHolding'           -%]Automatic return to holding
-        [%- CASE 'RotatingCollection'        -%]Rotating collection
-        [%- CASE 'Reserve'                   -%]Hold
-        [%- CASE 'LostReserve'               -%]Hold lost
-        [%- CASE 'CancelReserve'             -%]Hold cancelled
-        [%- CASE                             -%][% transfer.reason | html %]
+        [%- CASE 'Manual'                    -%]<span>Manual</span>
+        [%- CASE 'StockrotationAdvance'      -%]<span>Stock rotation advance</span>
+        [%- CASE 'StockrotationRepatriation' -%]<span>Stock rotation repatriation</span>
+        [%- CASE 'ReturnToHome'              -%]<span>Automatic return to home</span>
+        [%- CASE 'ReturnToHolding'           -%]<span>Automatic return to holding</span>
+        [%- CASE 'RotatingCollection'        -%]<span>Rotating collection</span>
+        [%- CASE 'Reserve'                   -%]<span>Hold</span>
+        [%- CASE 'LostReserve'               -%]<span>Hold lost</span>
+        [%- CASE 'CancelReserve'             -%]<span>Hold cancelled</span>
+        [%- CASE                             -%]<span>[% transfer.reason | html %]</span>
     [%- END -%]
 [%- END -%]

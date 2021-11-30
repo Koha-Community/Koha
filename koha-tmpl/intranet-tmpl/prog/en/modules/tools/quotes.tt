@@ -36,15 +36,15 @@
     <div class="dialog [% m.type | html %]" id="quote_action_result_dialog">
         [% SWITCH m.code %]
         [% CASE 'error_on_update' %]
-            An error occurred when updating this quote. Perhaps it already exists.
+            <span>An error occurred when updating this quote. Perhaps it already exists</span>
         [% CASE 'error_on_insert' %]
-            An error occurred when adding this quote.
+            <span>An error occurred when adding this quote</span>
         [% CASE 'success_on_update' %]
-            Quote updated successfully.
+            <span>Quote updated successfully</span>
         [% CASE 'success_on_insert' %]
-            Quote added successfully.
+            <span>Quote added successfully</span>
         [% CASE %]
-            [% m.code | html %]
+            <span>[% m.code | html %]</span>
         [% END %]
     </div>
 [% END %]

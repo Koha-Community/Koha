@@ -113,7 +113,7 @@
                 [% bdgclass=budgetsloo.active? "": "b_inactive" | html %]
                     <option class="[% bdgclass | html %]" value="[% budgetsloo.value | html %]">
             [% END %]
-            [% budgetsloo.description | html %] [% IF !budgetsloo.active %](inactive)[% END %]
+            [% budgetsloo.description | html %] [% IF !budgetsloo.active %]<span>(inactive)</span>[% END %]
             </option>
         [% END %]
         </select>

@@ -230,7 +230,7 @@
                     [% IF serial.publisheddate %]
                         [% serial.publisheddate | $KohaDates %]
                     [% ELSE %]
-                        Unknown
+                        <span>Unknown</span>
                     [% END %]
                 </td>
                 <td data-order="[% serial.publisheddatetext | html %]">
@@ -242,7 +242,7 @@
                     [% IF serial.planneddate %]
                         [% serial.planneddate | $KohaDates %]
                     [% ELSE %]
-                        Unknown
+                        <span>Unknown</span>
                     [% END %]
                 </td>
                 <td>

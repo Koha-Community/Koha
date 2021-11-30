@@ -238,17 +238,17 @@
                                                 <span class="label">Main contact method: </span>
                                                 [% SWITCH patron.primary_contact_method %]
                                                     [% CASE 'phone' %]
-                                                        Primary phone
+                                                        <span>Primary phone</span>
                                                     [% CASE 'phonepro' %]
-                                                        Secondary phone
+                                                        <span>Secondary phone</span>
                                                     [% CASE 'mobile' %]
-                                                        Other phone
+                                                        <span>Other phone</span>
                                                     [% CASE 'email' %]
-                                                        Primary email
+                                                        <span>Primary email</span>
                                                     [% CASE 'emailpro' %]
-                                                        Secondary email
+                                                        <span>Secondary email</span>
                                                     [% CASE 'fax' %]
-                                                        Fax
+                                                        <span>Fax</span>
                                                 [% END %]
                                             </li>
                                         [% END %]

@@ -65,9 +65,9 @@
                                 <div class="alert alert-[% m.type | html %]">
                                     [% SWITCH m.code %]
                                     [% CASE 'biblio_exists' %]
-                                        A similar document already exists: <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% m.id | uri %]">[% m.title | html %]</a>. Click on "Confirm your suggestion" to ignore this message.
+                                        <span>A similar document already exists: <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% m.id | uri %]">[% m.title | html %]</a>. Click on "Confirm your suggestion" to ignore this message.</span>
                                     [% CASE %]
-                                        [% m.code | html %]
+                                        <span>[% m.code | html %]</span>
                                     [% END %]
                                 </div>
                             [% END %]
@@ -287,15 +287,15 @@
                                 <div class="alert alert-[% m.type | html %]">
                                     [% SWITCH m.code %]
                                     [% CASE 'total_suggestions' %]
-                                        The suggestion has not been added. You have reached your limit for suggestions you can place at this time ([% Koha.Preference('MaxTotalSuggestions') | html %] in [% Koha.Preference('NumberOfSuggestionDays') | html %] days).
+                                        <span>The suggestion has not been added. You have reached your limit for suggestions you can place at this time ([% Koha.Preference('MaxTotalSuggestions') | html %] in [% Koha.Preference('NumberOfSuggestionDays') | html %] days).</span>
                                     [% CASE 'too_many' %]
-                                        The suggestion has not been added. You have reached your limit for suggestions you can place at this time ([% Koha.Preference('MaxOpenSuggestions') | html %]). Once the library has processed those suggestions you will be able to place more.
+                                        <span>The suggestion has not been added. You have reached your limit for suggestions you can place at this time ([% Koha.Preference('MaxOpenSuggestions') | html %]). Once the library has processed those suggestions you will be able to place more.</span>
                                     [% CASE 'already_exists' %]
-                                        The suggestion has not been added. A suggestion with this title already exists.
+                                        <span>The suggestion has not been added. A suggestion with this title already exists.</span>
                                     [% CASE 'success_on_inserted' %]
-                                        Your suggestion has been submitted.
+                                        <span>Your suggestion has been submitted.</span>
                                     [% CASE %]
-                                        [% m.code | html %]
+                                        <span>[% m.code | html %]</span>
                                     [% END %]
                                 </div>
                             [% END %]

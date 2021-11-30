@@ -633,35 +633,35 @@
                                                             <i class="fa fa-times fa-lg" title="Cannot be put on hold"></i>
                                                             [% IF itemloo.not_holdable %]
                                                                 [% IF itemloo.not_holdable == 'damaged' %]
-                                                                    Item damaged
+                                                                    <span>Item damaged</span>
                                                                 [% ELSIF itemloo.not_holdable == 'ageRestricted' %]
-                                                                    Age restricted
+                                                                    <span>Age restricted</span>
                                                                 [% ELSIF itemloo.not_holdable == 'tooManyHoldsForThisRecord' %]
-                                                                    Exceeded max holds per record
+                                                                    <span>Exceeded max holds per record</span>
                                                                 [% ELSIF itemloo.not_holdable == 'tooManyReservesToday' %]
-                                                                    Daily hold limit reached for patron
+                                                                    <span>Daily hold limit reached for patron</span>
                                                                 [% ELSIF itemloo.not_holdable == 'tooManyReserves' %]
-                                                                    Too many holds
+                                                                    <span>Too many holds</span>
                                                                 [% ELSIF itemloo.not_holdable == 'notReservable' %]
-                                                                    Not holdable
+                                                                    <span>Not holdable</span>
                                                                 [% ELSIF itemloo.not_holdable == 'cannotReserveFromOtherBranches' %]
-                                                                    Patron is from different library
+                                                                    <span>Patron is from different library</span>
                                                                 [% ELSIF itemloo.not_holdable == 'branchNotInHoldGroup' %]
-                                                                    Cannot place hold from patron's library
+                                                                    <span>Cannot place hold from patron's library</span>
                                                                 [% ELSIF itemloo.not_holdable == 'itemAlreadyOnHold' %]
-                                                                    Patron already has hold for this item
+                                                                    <span>Patron already has hold for this item</span>
                                                                 [% ELSIF itemloo.not_holdable == 'cannotBeTransferred' %]
-                                                                    Cannot be transferred to pickup library
+                                                                    <span>Cannot be transferred to pickup library</span>
                                                                 [% ELSIF itemloo.not_holdable == 'pickupNotInHoldGroup' %]
-                                                                    Only pickup locations within the same hold group are allowed
+                                                                    <span>Only pickup locations within the same hold group are allowed</span>
                                                                 [% ELSIF itemloo.not_holdable == 'noReservesAllowed' %]
-                                                                    No reserves are allowed on this item
+                                                                    <span>No reserves are allowed on this item</span>
                                                                 [% ELSIF itemloo.not_holdable == 'libraryNotPickupLocation' %]
-                                                                    Library is not a pickup location
+                                                                    <span>Library is not a pickup location</span>
                                                                 [% ELSIF itemloo.not_holdable == 'no_valid_pickup_location' %]
-                                                                    No valid pickup location
+                                                                    <span>No valid pickup location</span>
                                                                 [% ELSE %]
-                                                                    [% itemloo.not_holdable | html %]
+                                                                    <span>[% itemloo.not_holdable | html %]</span>
                                                                 [% END %]
                                                             [% END %]
                                                         </span>
@@ -1055,7 +1055,7 @@
                                                                 [% IF i %]
                                                                     [% ItemTypes.GetDescription( i ) | html %]
                                                                 [% ELSE %]
-                                                                    Any item type
+                                                                    <span>Any item type</span>
                                                                 [% END %]
                                                             </h5>
 

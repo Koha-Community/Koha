@@ -356,11 +356,11 @@
 
 [% IF close_form %]
   [% IF budget_periods.size == 0 %]
-    You cannot move funds of this budget, there is no active budget.
-    Please create a new active budget and retry.
+    <span>You cannot move funds of this budget, there is no active budget.
+    Please create a new active budget and retry.</span>
     <a href="/cgi-bin/koha/admin/aqbudgetperiods.pl">Back</a>
   [% ELSIF number_of_unreceived_orders == 0 %]
-    There are no unreceived orders for this budget.
+    <span>There are no unreceived orders for this budget.</span>
     <a href="/cgi-bin/koha/admin/aqbudgetperiods.pl">Back</a>
   [% ELSE %]
     <h3>The unreceived orders from the following funds will be moved</h3>

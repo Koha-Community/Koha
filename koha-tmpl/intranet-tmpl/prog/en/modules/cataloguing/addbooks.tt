@@ -124,7 +124,7 @@
                                                 [% IF ( resultsloo.publicationyear ) %] - [% resultsloo.publicationyear | html %][% END %]
                                                 [% IF ( resultsloo.publishercode ) %]- [% resultsloo.publishercode | html %][% END %]
                                                 [% IF ( resultsloo.copyrightdate ) %] - [% resultsloo.copyrightdate | html %][% END %]
-                                                [% IF ( resultsloo.edition ) %]Edition: [% resultsloo.edition | html %][% END %]
+                                                [% IF ( resultsloo.edition ) %]<span>Edition: </span>[% resultsloo.edition | html %][% END %]
                                                 [% IF ( resultsloo.place ) %] ; [% resultsloo.place | html %][% END %]
                                                 [% IF ( resultsloo.pages ) %] - [% resultsloo.pages | html %][% END %]
                                                 [% IF ( resultsloo.item('size') ) %] ; [% resultsloo.item('size') | html %][% END %]

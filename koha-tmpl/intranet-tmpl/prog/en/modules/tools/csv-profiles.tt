@@ -61,21 +61,21 @@
     <div class="dialog [% m.type | html %]">
         [% SWITCH m.code %]
         [% CASE 'error_on_update' %]
-            An error occurred when updating this CSV profile. Perhaps it already exists.
+            <span>An error occurred when updating this CSV profile. Perhaps it already exists</span>
         [% CASE 'error_on_insert' %]
-            An error occurred when adding this CSV profile.
+            <span>An error occurred when adding this CSV profile</span>
         [% CASE 'error_on_delete' %]
-            An error occurred when deleting this CSV profile. Check the logs.
+            <span>An error occurred when deleting this CSV profile. Check the logs</span>
         [% CASE 'success_on_update' %]
-            CSV profile updated successfully.
+            <span>CSV profile updated successfully</span>
         [% CASE 'success_on_insert' %]
-            CSV profile added successfully.
+            <span>CSV profile added successfully</span>
         [% CASE 'success_on_delete' %]
-            CSV profile deleted successfully.
+            <span>CSV profile deleted successfully</span>
         [% CASE 'already_exists' %]
-            This CSV profile already exists.
+            <span>This CSV profile already exists</span>
         [% CASE %]
-            [% m.code | html %]
+            <span>[% m.code | html %]</span>
         [% END %]
     </div>
 [% END %]
@@ -126,12 +126,12 @@
 [% END %]
 
 [% BLOCK used_for_description %]
-    [% IF used_for_code == 'export_records' %] Export records
-    [% ELSIF used_for_code == 'late_issues' %] Late serial issues claims
-    [% ELSIF used_for_code == 'late_orders' %] Export late orders
-    [% ELSIF used_for_code == 'export_basket' %] Basket export in acquisition
-    [% ELSIF used_for_code == 'export_lost_items' %] Export lost items in report
-    [% ELSE %] Unknown usage
+    [% IF used_for_code == 'export_records' ]<span> Export records</span>
+    [% ELSIF used_for_code == 'late_issues' ]<span> Late serial issues claims</span>
+    [% ELSIF used_for_code == 'late_orders' ]<span> Export late orders</span>
+    [% ELSIF used_for_code == 'export_basket' ]<span> Basket export in acquisition</span>
+    [% ELSIF used_for_code == 'export_lost_items' ]<span> Export lost items in report</span>
+    [% ELSE ]<span> Unknown usage</span>
     [% END %]
 [% END %]
 

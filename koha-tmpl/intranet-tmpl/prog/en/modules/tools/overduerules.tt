@@ -91,20 +91,13 @@
                 [% NEXT IF mtt == 'phone' AND !Koha.Preference('PhoneNotification') %]
                 <th scpre="col">
                   [% SWITCH mtt %]
-                  [% CASE 'email' %]
-                    Email
-                  [% CASE 'print' %]
-                    Print
-                  [% CASE 'sms' %]
-                    SMS
-                  [% CASE 'feed' %]
-                    Feed
-                  [% CASE 'itiva' %]
-                    Phone (i-tiva)
-                  [% CASE 'phone' %]
-                    Phone
-                  [% CASE %]
-                    [% mtt | html %]
+                  [% CASE 'email' %]<span>Email</span>
+                  [% CASE 'print' %]<span>Print</span>
+                  [% CASE 'sms' %]<span>SMS</span>
+                  [% CASE 'feed' %]<span>Feed</span>
+                  [% CASE 'itiva' %]<span>Phone (i-tiva)</span>
+                  [% CASE 'phone' %]<span>Phone</span>
+                  [% CASE %]<span>[% mtt | html %]</span>
                   [% END %]
                 </th>
               [% END %]

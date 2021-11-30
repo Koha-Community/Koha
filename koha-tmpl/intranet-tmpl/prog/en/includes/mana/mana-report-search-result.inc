@@ -104,9 +104,9 @@
                     [% ELSE %]
                         <h4>
                             [% IF ( msg ) %]
-                                [% msg | html %] (Statuscode: [% statuscode | html %])
+                                [% msg | html %] <span>(Status code: [% statuscode | html %])</span>
                             [% ELSE %]
-                                No results found
+                                <span>No results found</span>
                             [% END %]
                         </h4>
                     [% END %]

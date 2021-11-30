@@ -8,11 +8,11 @@
     <div class="dialog [% m.type | html %]">
         [% SWITCH m.code %]
         [% CASE 'unauthorized' %]
-            You do not have permission to view this list.
+            <span>You do not have permission to view this list.</span>
         [% CASE 'does_not_exist' %]
-            This list does not exist.
+            <span>This list does not exist.</span>
         [% CASE %]
-            [% m.code | html %]
+            <span>[% m.code | html %]</span>
         [% END %]
     </div>
 [% END %]

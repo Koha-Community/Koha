@@ -64,15 +64,15 @@
                 <div class="dialog [% m.type | html %]">
                     [% SWITCH m.code %]
                     [% CASE 'success_on_saving' %]
-                        Credit type saved successfully.
+                        <span>Credit type saved successfully</span>
                     [% CASE 'error_on_saving' %]
-                        An error occurred when saving this credit type.
+                        <span>An error occurred when saving this credit type</span>
                     [% CASE 'success_on_archive' %]
-                        Credit type archived successfully.
+                        <span>Credit type archived successfully</span>
                     [% CASE 'success_on_restore' %]
-                        Credit type restored successfully.
+                        <span>Credit type restored successfully</span>
                     [% CASE %]
-                        [% m.code | html %]
+                        <span>[% m.code | html %]</span>
                     [% END %]
                 </div>
                 [% END %]
@@ -127,7 +127,7 @@
                                 <li>
                                     <label for="branches">Libraries limitation: </label>
                                     [% IF credit_type && credit_type.is_system %]
-                                        No library limitation
+                                        <span>No library limitation</span>
                                     [% ELSE %]
                                         <select id="branches" name="branches" multiple size="10">
                                             <option value="">All libraries</option>
@@ -193,7 +193,7 @@
                                                 [% limits_count = credit_type.library_limits.count %]
                                                 [% tnx('{count} library limitation', '{count} library limitations', limits_count, { count => limits_count }) %]
                                         [% ELSE %]
-                                            No limitation
+                                            <span>No library limitation</span>
                                         [% END %]
                                     </td>
                                     <td class="actions">

@@ -70,15 +70,15 @@
                             [% ELSE %]
                                 <a class="dropdown-item" href="/cgi-bin/koha/opac-export.pl?op=export&amp;bib=[% biblio.biblionumber | html %]&amp;format=[% option | html %]">
                                     [% SWITCH option %]
-                                        [% CASE 'bibtex' %]BIBTEX
-                                        [% CASE 'endnote' %]EndNote
-                                        [% CASE 'marcxml' %]MARCXML
-                                        [% CASE 'marc8' %]MARC (non-Unicode/MARC-8)
-                                        [% CASE 'utf8' %]MARC (Unicode/UTF-8)
-                                        [% CASE 'marcstd' %]MARC (Unicode/UTF-8, Standard)
-                                        [% CASE 'mods' %]MODS (XML)
-                                        [% CASE 'ris' %]RIS
-                                        [% CASE 'isbd' %]ISBD
+                                        [% CASE 'bibtex' %]<span>BIBTEX</span>
+                                        [% CASE 'endnote' %]<span>EndNote</span>
+                                        [% CASE 'marcxml' %]<span>MARCXML</span>
+                                        [% CASE 'marc8' %]<span>MARC (non-Unicode/MARC-8)</span>
+                                        [% CASE 'utf8' %]<span>MARC (Unicode/UTF-8)</span>
+                                        [% CASE 'marcstd' %]<span>MARC (Unicode/UTF-8, Standard)</span>
+                                        [% CASE 'mods' %]<span>MODS (XML)</span>
+                                        [% CASE 'ris' %]<span>RIS</span>
+                                        [% CASE 'isbd' %]<span>ISBD</span>
                                     [% END %]
                                 </a>
                             [% END %]

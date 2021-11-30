@@ -1,3 +1,4 @@
+[% USE KohaSpan %]
 [% BLOCK report %]
     [% SET report = job.report %]
     [% IF report %]
@@ -7,8 +8,8 @@
             </div>
         [% ELSE %]
             <div class="dialog message">
-                [% report.total_success | html %] / [% report.total_holds | html %] holds have successfully been modified. Some errors occurred.
-                [% IF job.status == 'cancelled' %]The job has been cancelled before it finished.[% END %]
+                <span>[% report.total_success | html %] / [% report.total_holds | html %] holds have successfully been modified. Some errors occurred.</span>
+                [% IF job.status == 'cancelled' %]<span>The job has been cancelled before it finished.</span>[% END %]
             </div>
         [% END %]
     [% END %]
@@ -28,16 +29,18 @@
             [% SWITCH m.code %]
             [% CASE 'hold_not_cancelled' %]
                 [% IF m.biblio && m.patron %]
-                    Hold on <a href="/cgi-bin/koha/reserve/request.pl?biblionumber=[% m.biblio.biblionumber | uri %]">[% m.biblio.title | html %]</a> for <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% m.patron.borrowernumber | uri %]">[% INCLUDE 'patron-title.inc' patron=m.patron %]</a> has not been cancelled.
+                    <span>Hold on <a href="/cgi-bin/koha/reserve/request.pl?biblionumber=[% m.biblio.biblionumber | uri %]">[% m.biblio.title | html %]</a> for <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% m.patron.borrowernumber | uri %]">[% INCLUDE 'patron-title.inc' patron=m.patron %]</a> has not been cancelled.</span>
                 [% END %]
-                An error occurred on cancelling.
+                <span>An error occurred on cancelling.</span>
                 [% SWITCH m.error %]
                 [% CASE 'hold_not_found' %]
-                    No hold with id [% m.hold_id | html %] found.
-                [% CASE %]Unknown error '[% m.error | html %]'.
+                    <span>No hold with id [% m.hold_id | html %] found.</span>
+                [% CASE %]<span>Unknown error '[% m.error | html %]'.</span>
                 [% END %]
             [% CASE 'hold_cancelled' %]
-                Hold on <a href="/cgi-bin/koha/reserve/request.pl?biblionumber=[% m.biblio_id | uri %]">[% m.biblio.title | html %]</a> for <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% m.patron_id | uri %]">[% INCLUDE 'patron-title.inc' patron=m.patron %]</a> has successfully been cancelled.
+                [% biblio_link = BLOCK %]<a href="/cgi-bin/koha/reserve/request.pl?biblionumber=[% m.biblio_id | uri %]">[% m.biblio.title | html %]</a>[% END %]
+                [% patron_link = BLOCK %]<a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% m.patron_id | uri %]">[% INCLUDE 'patron-title.inc' patron=m.patron %]</a>[% END %]
+                <span>Hold on [% biblio_link | $KohaSpan %] for [% patron_link | $KohaSpan %] has successfully been cancelled.</span>
             [% END %]
         </div>
     [% END %]

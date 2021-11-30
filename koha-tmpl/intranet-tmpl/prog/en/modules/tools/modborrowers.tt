@@ -290,50 +290,28 @@
                                             <label for="[% field.name | html %]">
                                             [% END %]
                                             [% SWITCH ( field.name ) %]
-                                                [% CASE 'surname' %]
-                                                Surname:
-                                                [% CASE 'firstname' %]
-                                                First name:
-                                                [% CASE 'branchcode' %]
-                                                Library:
-                                                [% CASE 'categorycode' %]
-                                                Patron category:
-                                                [% CASE 'streetnumber' %]
-                                                Street number:
-                                                [% CASE 'address' %]
-                                                Address:
-                                                [% CASE 'address2' %]
-                                                Address 2:
-                                                [% CASE 'city' %]
-                                                City:
-                                                [% CASE 'state' %]
-                                                State:
-                                                [% CASE 'zipcode' %]
-                                                ZIP/Postal code:
-                                                [% CASE 'country' %]
-                                                Country:
-                                                [% CASE 'email' %]
-                                                Primary email:
-                                                [% CASE 'phone' %]
-                                                Phone:
-                                                [% CASE 'mobile' %]
-                                                Mobile:
-                                                [% CASE 'sort1' %]
-                                                Sort 1:
-                                                [% CASE 'sort2' %]
-                                                Sort 2:
-                                                [% CASE 'dateenrolled' %]
-                                                Registration date:
-                                                [% CASE 'dateexpiry' %]
-                                                Expiry date:
-                                                [% CASE 'borrowernotes' %]
-                                                Circulation note:
-                                                [% CASE 'opacnote' %]
-                                                OPAC note:
-                                                [% CASE 'debarred' %]
-                                                Restriction expiration:
-                                                [% CASE 'debarredcomment' %]
-                                                Restriction comment:
+                                                [% CASE 'surname' %]<span>Surname:</span>
+                                                [% CASE 'firstname' %]<span>First name:</span>
+                                                [% CASE 'branchcode' %]<span>Library:</span>
+                                                [% CASE 'categorycode' %]<span>Patron category:</span>
+                                                [% CASE 'streetnumber' %]<span>Street number:</span>
+                                                [% CASE 'address' %]<span>Address:</span>
+                                                [% CASE 'address2' %]<span>Address 2:</span>
+                                                [% CASE 'city' %]<span>City:</span>
+                                                [% CASE 'state' %]<span>State:</span>
+                                                [% CASE 'zipcode' %]<span>ZIP/Postal code:</span>
+                                                [% CASE 'country' %]<span>Country:</span>
+                                                [% CASE 'email' %]<span>Primary email:</span>
+                                                [% CASE 'phone' %]<span>Phone:</span>
+                                                [% CASE 'mobile' %]<span>Mobile:</span>
+                                                [% CASE 'sort1' %]<span>Sort 1:</span>
+                                                [% CASE 'sort2' %]<span>Sort 2:</span>
+                                                [% CASE 'dateenrolled' %]<span>Registration date:</span>
+                                                [% CASE 'dateexpiry' %]<span>Expiry date:</span>
+                                                [% CASE 'borrowernotes' %]<span>Circulation note:</span>
+                                                [% CASE 'opacnote' %]<span>OPAC note:</span>
+                                                [% CASE 'debarred' %]<span>Restriction expiration:</span>
+                                                [% CASE 'debarredcomment' %]<span>Restriction comment:</span>
                                             [% END %]
                                             </label>
                                             [% IF ( field.type == 'text' ) %]

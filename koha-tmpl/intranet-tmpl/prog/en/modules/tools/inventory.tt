@@ -314,17 +314,17 @@
             <td>
             [% FOREACH problem IN result.problems %]
                 [% IF problem.key == 'wrongplace' %]
-                    Found in wrong place<br/>
+                    <span>Found in wrong place<span><br/>
                 [% ELSIF problem.key == 'changestatus' %]
-                    Unknown not-for-loan status<br/>
+                    <span>Unknown not-for-loan status<span><br/>
                 [% ELSIF problem.key == 'not_scanned' %]
-                    Missing (not scanned)<br/>
+                    <span>Missing (not scanned)</span><br/>
                 [% ELSIF problem.key == 'checkedout' %]
-                    Still checked out<br/>
+                    <span>Still checked out</span><br/>
                 [% ELSIF problem.key == 'no_barcode' %]
-                    No barcode<br/>
+                    <span>No barcode</span><br/>
                 [% ELSIF problem.key == 'out_of_order' %]
-                    Item may be shelved out of order<br/>
+                    <span>Item may be shelved out of order</span><br/>
                 [% END %]
             [% END %]
             </td>

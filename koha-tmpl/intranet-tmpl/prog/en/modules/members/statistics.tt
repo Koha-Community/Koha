@@ -60,17 +60,17 @@
                           <th>
                             [% SWITCH cn %]
                             [% CASE 'itype' %]
-                                Item type
+                                <span>Item type</span>
                             [% CASE 'ccode' %]
-                                Collection
+                                <span>Collection</span>
                             [% CASE 'location' %]
-                                Shelving location
+                                <span>Shelving location</span>
                             [% CASE 'homebranch' %]
-                                Home library
+                                <span>Home library</span>
                             [% CASE 'holdingbranch' %]
-                                Holding library
+                                <span>Holding library</span>
                             [% CASE %]
-                                [% cn | html %]
+                                <span>[% cn | html %]</span>
                             [% END %]
                           </th>
                       [% END %]

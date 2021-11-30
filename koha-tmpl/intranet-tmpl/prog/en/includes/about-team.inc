@@ -1,32 +1,32 @@
 [%- BLOCK role -%]
   [%- SWITCH role.key -%]
-    [%- CASE 'manager'               -%]Release manager
-    [%- CASE 'manager_assistant'     -%]Release manager assistant
-    [%- CASE 'manager_mentor'        -%]Release manager mentor
-    [%- CASE 'qa_manager'            -%]Quality assurance manager
-    [%- CASE 'qa'                    -%]Quality assurance team
-    [%- CASE 'documentation'         -%]Documentation manager
-    [%- CASE 'documentation_team'    -%]Documentation team
-    [%- CASE 'translation'           -%]Translation manager
-    [%- CASE 'translations'          -%]Translation managers
-    [%- CASE 'translation_assistant' -%]Translation manager assistant
-    [%- CASE 'te'                    -%]Topic expert
-    [%- CASE 'bugwrangler'           -%]Bug wrangler
-    [%- CASE 'maintainer'            -%]Release maintainer
-    [%- CASE 'maintainer_assistant'  -%]Release maintainer assistant
-    [%- CASE 'maintainer_mentor'     -%]Release maintainer mentor
-    [%- CASE 'wiki'                  -%]Wiki curator
-    [%- CASE 'ci'                    -%]Continuous integration manager
-    [%- CASE 'packaging'             -%]Packaging manager
-    [%- CASE 'packaging_assistant'   -%]Packaging manager assistant
-    [%- CASE 'chairperson'           -%]Meetings chairperson
-    [%- CASE 'newsletter'            -%]Newsletter editor
-    [%- CASE 'mm'                    -%]Module maintainer
-    [%- CASE 'vm'                    -%]Virtual machine maintainer
-    [%- CASE 'database'              -%]Documentation specialist
-    [%- CASE 'live_cd'               -%]Live CD maintainer
-    [%- CASE 'accessibility_advocate'-%]Accessibility advocate
-    [%- CASE 'meeting_facilitator'   -%]Meeting facilitator
+    [%- CASE 'manager'               -%]<span>Release manager</span>
+    [%- CASE 'manager_assistant'     -%]<span>Release manager assistant</span>
+    [%- CASE 'manager_mentor'        -%]<span>Release manager mentor</span>
+    [%- CASE 'qa_manager'            -%]<span>Quality assurance manager</span>
+    [%- CASE 'qa'                    -%]<span>Quality assurance team</span>
+    [%- CASE 'documentation'         -%]<span>Documentation manager</span>
+    [%- CASE 'documentation_team'    -%]<span>Documentation team</span>
+    [%- CASE 'translation'           -%]<span>Translation manager</span>
+    [%- CASE 'translations'          -%]<span>Translation managers</span>
+    [%- CASE 'translation_assistant' -%]<span>Translation manager assistant</span>
+    [%- CASE 'te'                    -%]<span>Topic expert</span>
+    [%- CASE 'bugwrangler'           -%]<span>Bug wrangler</span>
+    [%- CASE 'maintainer'            -%]<span>Release maintainer</span>
+    [%- CASE 'maintainer_assistant'  -%]<span>Release maintainer assistant</span>
+    [%- CASE 'maintainer_mentor'     -%]<span>Release maintainer mentor</span>
+    [%- CASE 'wiki'                  -%]<span>Wiki curator</span>
+    [%- CASE 'ci'                    -%]<span>Continuous integration manager</span>
+    [%- CASE 'packaging'             -%]<span>Packaging manager</span>
+    [%- CASE 'packaging_assistant'   -%]<span>Packaging manager assistant</span>
+    [%- CASE 'chairperson'           -%]<span>Meetings chairperson</span>
+    [%- CASE 'newsletter'            -%]<span>Newsletter editor</span>
+    [%- CASE 'mm'                    -%]<span>Module maintainer</span>
+    [%- CASE 'vm'                    -%]<span>Virtual machine maintainer</span>
+    [%- CASE 'database'              -%]<span>Documentation specialist</span>
+    [%- CASE 'live_cd'               -%]<span>Live CD maintainer</span>
+    [%- CASE 'accessibility_advocate'-%]<span>Accessibility advocate</span>
+    [%- CASE 'meeting_facilitator'   -%]<span>Meeting facilitator</span>
   [%- END -%]
 [%- END -%]
 

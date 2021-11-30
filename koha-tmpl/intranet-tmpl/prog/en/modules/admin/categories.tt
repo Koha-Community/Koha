@@ -95,21 +95,21 @@
     <div class="dialog [% m.type | html %]">
         [% SWITCH m.code %]
         [% CASE 'error_on_update' %]
-            An error occurred when updating this patron category. Perhaps it already exists.
+            <span>An error occurred when updating this patron category. Perhaps it already exists.</span>
         [% CASE 'error_on_insert' %]
-            An error occurred when inserting this patron category. The patron category might already exist.
+            <span>An error occurred when inserting this patron category. The patron category might already exist.</span>
         [% CASE 'error_on_delete' %]
-            An error occurred when deleting this patron category. Check the logs.
+            <span>An error occurred when deleting this patron category. Check the logs.</span>
         [% CASE 'success_on_update' %]
-            Patron category updated successfully.
+            <span>Patron category updated successfully.</span>
         [% CASE 'success_on_insert' %]
-            Patron category inserted successfully.
+            <span>Patron category inserted successfully.</span>
         [% CASE 'success_on_delete' %]
-            Patron category deleted successfully.
+            <span>Patron category deleted successfully.</span>
         [% CASE 'already_exists' %]
-            This patron category already exists.
+            <span>This patron category already exists.</span>
         [% CASE %]
-            [% m.code | html %]
+            <span>[% m.code | html %]</span>
         [% END %]
     </div>
 [% END %]
@@ -462,11 +462,11 @@
                       <td>
                           [% SWITCH category.checkprevcheckout %]
                           [% CASE 'yes' %]
-                              Yes
+                              <span>Yes</span>
                           [% CASE 'no' %]
-                              No
+                              <span>No</span>
                           [% CASE 'inherit' %]
-                              Inherit
+                              <span>Inherit</span>
                           [% END %]
                       </td>
                   </tr>
@@ -476,11 +476,11 @@
                     <td>
                         [% SWITCH category.default_privacy %]
                         [% CASE 'default' %]
-                            Default
+                            <span>Default</span>
                         [% CASE 'never' %]
-                            Never
+                            <span>Never</span>
                         [% CASE 'forever' %]
-                            Forever
+                            <span>Forever</span>
                         [% END %]
                     </td>
                 </tr>
@@ -544,12 +544,12 @@
                         </td>
                         <td>
                             [% SWITCH category.category_type %]
-                                [% CASE 'A' %]Adult
-                                [% CASE 'C' %]Child
-                                [% CASE 'P' %]Prof.
-                                [% CASE 'I' %]Org.
-                                [% CASE 'S' %]Staff
-                                [% CASE 'X' %]Statistical
+                                [% CASE 'A' %]<span>Adult</span>
+                                [% CASE 'C' %]<span>Child</span>
+                                [% CASE 'P' %]<span>Prof.</span>
+                                [% CASE 'I' %]<span>Org.</span>
+                                [% CASE 'S' %]<span>Staff</span>
+                                [% CASE 'X' %]<span>Statistical</span>
                             [% END %]
                         </td>
                         <td>
@@ -589,19 +589,19 @@
                                         [% NEXT IF !Koha.Preference( 'ILLModule' ) && prefs.message_name.match('^Ill_') %]
                                         [% FOREACH transport IN prefs.transports %]
                                             [% IF ( transport.transport ) %]
-                                                [% IF ( prefs.Item_Due ) %]Item due
-                                                [% ELSIF ( prefs.Advance_Notice ) %]Advance notice
-                                                [% ELSIF ( prefs.Hold_Filled ) %]Hold filled
-                                                [% ELSIF ( prefs.Item_Check_in ) %]Item check-in
-                                                [% ELSIF ( prefs.Item_Checkout ) %]Item checkout
-                                                [% ELSIF ( prefs.Ill_ready ) %]Interlibrary loan ready
-                                                [% ELSIF ( prefs.Ill_unavailable ) %]Interlibrary loan unavailable
-                                                [% ELSIF ( prefs.Auto_Renewals ) %]Auto renewal
-                                                [% ELSIF ( prefs.Hold_Reminder ) %]Hold reminder
-                                                [% ELSE %]Unknown
+                                                [% IF ( prefs.Item_Due ) %]<span>Item due</span>
+                                                [% ELSIF ( prefs.Advance_Notice ) %]<span>Advance notice</span>
+                                                [% ELSIF ( prefs.Hold_Filled ) %]<span>Hold filled</span>
+                                                [% ELSIF ( prefs.Item_Check_in ) %]<span>Item check-in</span>
+                                                [% ELSIF ( prefs.Item_Checkout ) %]<span>Item checkout</span>
+                                                [% ELSIF ( prefs.Ill_ready ) %]<span>Interlibrary loan ready</span>
+                                                [% ELSIF ( prefs.Ill_unavailable ) %]<span>Interlibrary loan unavailable</span>
+                                                [% ELSIF ( prefs.Auto_Renewals ) %]<span>Auto renewal</span>
+                                                [% ELSIF ( prefs.Hold_Reminder ) %]<span>Hold reminder</span>
+                                                [% ELSE %]<span>Unknown</span>
                                                 [% END %]:
                                                 <strong>[% transport.transport | html %]</strong><br />
-                                            [% ELSE %]None<br />[% END %]
+                                            [% ELSE %]<span>None</span><br />[% END %]
                                         [% END %]
                                     [% END %]
                                 [% ELSE %]
@@ -634,29 +634,29 @@
                           <td>
                               [% SWITCH category.checkprevcheckout %]
                               [% CASE 'yes' %]
-                              Yes
+                              <span>Yes</span>
                               [% CASE 'no' %]
-                              No
+                              <span>No</span>
                               [% CASE 'inherit' %]
-                              Inherit
+                              <span>Inherit</span>
                               [% END %]
                           </td>
                         [% END %]
                         <td>
                             [% SWITCH category.default_privacy %]
                             [% CASE 'default' %]
-                                Default
+                                <span>Default</span>
                             [% CASE 'never' %]
-                                Never
+                                <span>Never</span>
                             [% CASE 'forever' %]
-                                Forever
+                                <span>Forever</span>
                             [% END %]
                         </td>
                         <td>
                             [% IF category.exclude_from_local_holds_priority %]
-                                Yes
+                                <span>Yes</span>
                             [% ELSE %]
-                                No
+                                <span>No</span>
                             [% END %]
                         </td>
                         <td class="actions">

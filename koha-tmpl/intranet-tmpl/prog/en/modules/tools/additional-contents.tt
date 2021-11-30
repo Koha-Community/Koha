@@ -46,9 +46,9 @@
             <li>
                 <a href="#" aria-current="page">
                     [% IF additional_content.idnew %]
-                        <span>Modify additional content<span>
+                        <span>Modify additional content</span>
                     [% ELSE %]
-                        <span>Add additional content<span>
+                        <span>Add additional content</span>
                     [% END %]
                     ([% IF category == 'news' %]<span>News</span>[% ELSE %]<span>HTML customizations</span>[% END %])
                 </a>
@@ -84,19 +84,19 @@
         <div class="dialog [% m.type | html %]">
             [% SWITCH m.code %]
             [% CASE 'error_on_update' %]
-                An error occurred when updating this content. Perhaps it already exists.
+                <span>An error occurred when updating this content. Perhaps it already exists</span>
             [% CASE 'error_on_insert' %]
-                An error occurred when adding this content. Check the logs
+                <span>An error occurred when adding this content. Check the logs
             [% CASE 'error_on_delete' %]
-                An error occurred when deleting this content. Check the logs.
+                <span>An error occurred when deleting this content. Check the logs</span>
             [% CASE 'success_on_update' %]
-                Content updated successfully.
+                <span>Content updated successfully</span>
             [% CASE 'success_on_insert' %]
-                Content added successfully.
+                <span>Content added successfully</span>
             [% CASE 'success_on_delete' %]
-                Content deleted successfully.
+                <span>Content deleted successfully</span>
             [% CASE %]
-                [% m.code | html %]
+                <span>[% m.code | html %]</span>
             [% END %]
         </div>
     [% END %]

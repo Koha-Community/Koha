@@ -186,8 +186,8 @@
                         [% FOR w IN LINE.WARNINGS %]
                             <div class="dialog alert">
                                 [% SWITCH w %]
-                                [% CASE "bcrypt_config_not_set" %]Pseudonymization must only be turned on if the 'bcrypt_settings' configuration entry exists and is correctly filled in the Koha configuration file.
-                                [% CASE %]Unknown warning "[% w | html %]"
+                                [% CASE "bcrypt_config_not_set" %]<span>Pseudonymization must only be turned on if the 'bcrypt_settings' configuration entry exists and is correctly filled in the Koha configuration file.</span>
+                                [% CASE %]<span>Unknown warning "[% w | html %]"</span>
                                 [% END %]
                             </div>
                         [% END %]

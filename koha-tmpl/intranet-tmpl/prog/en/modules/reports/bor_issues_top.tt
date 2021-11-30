@@ -54,27 +54,27 @@
                         <li>
                             [% SWITCH loopfilte.crit -%]
                                 [% CASE "Issue From" -%]
-                                    Checked out after [% loopfilte.filter | $KohaDates %]
+                                    <span>Checked out after [% loopfilte.filter | $KohaDates %]</span>
                                 [% CASE "Issue To" -%]
-                                    Checked out before [% loopfilte.filter | $KohaDates %]
+                                    <span>Checked out before [% loopfilte.filter | $KohaDates %]</span>
                                 [% CASE "Return From" -%]
-                                    Checked in after [% loopfilte.filter | $KohaDates %]
+                                    <span>Checked in after [% loopfilte.filter | $KohaDates %]</span>
                                 [% CASE "Return To" -%]
-                                    Checked in before [% loopfilte.filter | $KohaDates %]
+                                    <span>Checked in before [% loopfilte.filter | $KohaDates %]</span>
                                 [% CASE "Branch" -%]
-                                    Library is [% Branches.GetName( loopfilte.filter ) | html %]
+                                    <span>Library is [% Branches.GetName( loopfilte.filter ) | html %]</span>
                                 [% CASE "Doc Type" -%]
-                                    Item type is [% ItemTypes.GetDescription( loopfilte.filter ) | html %]
+                                    <span>Item type is [% ItemTypes.GetDescription( loopfilte.filter ) | html %]</span>
                                 [% CASE "Bor Cat" -%]
-                                    Patron category code is [% loopfilte.filter | html %]
+                                    <span>Patron category code is [% loopfilte.filter | html %]</span>
                                 [% CASE "Day" -%]
-                                    Day is [% loopfilte.filter | html %]
+                                    <span>Day is [% loopfilte.filter | html %]</span>
                                 [% CASE "Month" -%]
-                                    Month is [% loopfilte.filter | html %]
+                                    <span>Month is [% loopfilte.filter | html %]</span>
                                 [% CASE "Year" -%]
-                                    Year is [% loopfilte.filter | html %]
+                                    <span>Year is [% loopfilte.filter | html %]</span>
                                 [% CASE # default case -%]
-                                    [% loopfilte.crit | html %] = [% loopfilte.filter | html %]
+                                    <span>[% loopfilte.crit | html %] = [% loopfilte.filter | html %]</span>
                             [% END -%]
                         </li>
                     [% END %]

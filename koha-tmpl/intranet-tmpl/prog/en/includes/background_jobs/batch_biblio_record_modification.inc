@@ -1,12 +1,14 @@
+[% USE KohaSpan %]
 [% BLOCK report %]
     [% SET report = job.report %]
     [% IF report %]
         [% IF report.total_records == report.total_success %]
             <div class="dialog message">
-                All records have successfully been modified! <a href="/cgi-bin/koha/tools/batch_record_modification.pl" title="New batch record modification">New batch record modification</a>
+                <span>All records have successfully been modified!</span>
+                <a href="/cgi-bin/koha/tools/batch_record_modification.pl" title="New batch record modification">New batch record modification</a>
                 [% IF lists.count %]
                     <br />
-                    Add modified records to the following list:
+                    <span>Add modified records to the following list:</span>
                     <select name="add_bibs_to_list" id="add_bibs_to_list">
                         <option value="">Select a list</option>
                         [% FOREACH list IN lists %]
@@ -17,8 +19,8 @@
             </div>
         [% ELSE %]
             <div class="dialog message">
-                [% report.total_success | html %] / [% report.total_records | html %] records have successfully been modified. Some errors occurred.
-                [% IF job.status == 'cancelled' %]The job has been cancelled before it finished.[% END %]
+                <span>[% report.total_success | html %] / [% report.total_records | html %] records have successfully been modified. Some errors occurred.</span>
+                [% IF job.status == 'cancelled' %]<span>The job has been cancelled before it finished.</span>[% END %]
                 <a href="/cgi-bin/koha/tools/batch_record_modification.pl" title="New batch record modification">New batch record modification</a>
             </div>
         [% END %]
@@ -35,11 +37,13 @@
             [% ELSIF m.type == 'error' %]
                 <i class="fa fa-exclamation error"></i>
             [% END %]
+            [% biblio_link = BLOCK %]<a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% m.biblionumber | uri %]">[% m.biblionumber | html %]</a>[% END %]
             [% SWITCH m.code %]
             [% CASE 'biblio_not_modified' %]
-                Bibliographic record <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% m.biblionumber | uri %]">[% m.biblionumber | html %]</a> has not been modified. An error occurred on modifying it.[% IF m.error %] ([% m.error | html %])[% END %].
+                <span>Bibliographic record [% biblio_link %] has not been modified. An error occurred on modifying it.</span>
+                [% IF m.error %] ([% m.error | html %])[% END %].
             [% CASE 'biblio_modified' %]
-                Bibliographic record <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% m.biblionumber | uri %]">[% m.biblionumber | html %]</a> has successfully been modified.
+                <span>Bibliographic record [% biblio_link %] has successfully been modified.</span>
             [% END %]
         </div>
     [% END %]

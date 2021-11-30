@@ -74,21 +74,21 @@
     <div class="dialog [% m.type | html %]">
         [% SWITCH m.code %]
         [% CASE 'error_on_update' %]
-            An error occurred when updating this city. Perhaps it already exists.
+            <span>An error occurred when updating this city. Perhaps it already exists.</span>
         [% CASE 'error_on_insert' %]
-            An error occurred when adding this city. The city id might already exist.
+            <span>An error occurred when adding this city. The city id might already exist.</span>
         [% CASE 'error_on_delete' %]
-            An error occurred when deleting this city. Check the logs.
+            <span>An error occurred when deleting this city. Check the logs.</span>
         [% CASE 'success_on_update' %]
-            City updated successfully.
+            <span>City updated successfully.</span>
         [% CASE 'success_on_insert' %]
-            City added successfully.
+            <span>City added successfully.</span>
         [% CASE 'success_on_delete' %]
-            City deleted successfully.
+            <span>City deleted successfully.</span>
         [% CASE 'already_exists' %]
-            This city already exists.
+            <span>This city already exists.</span>
         [% CASE %]
-            [% m.code | html %]
+            <span>[% m.code | html %]</span>
         [% END %]
     </div>
 [% END %]

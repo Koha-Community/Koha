@@ -72,19 +72,19 @@
     <div class="dialog [% m.type | html %]">
         [% SWITCH m.code %]
         [% CASE 'error_on_update' %]
-            An error occurred when updating this currency. Perhaps it already exists.
+            <span>An error occurred when updating this currency. Perhaps it already exists</span>
         [% CASE 'error_on_insert' %]
-            An error occurred when adding this currency. The currency code might already exist.
+            <span>An error occurred when adding this currency. The currency code might already exist</span>
         [% CASE 'error_on_delete' %]
-            An error occurred when deleting this currency. Check the logs.
+            <span>An error occurred when deleting this currency. Check the logs</span>
         [% CASE 'success_on_update' %]
-            Currency updated successfully.
+            <span>Currency updated successfully</span>
         [% CASE 'success_on_insert' %]
-            Currency added successfully.
+            <span>Currency added successfully</span>
         [% CASE 'success_on_delete' %]
-            Currency deleted successfully.
+            <span>Currency deleted successfully</span>
         [% CASE %]
-            [% m.code | html %]
+            <span>[% m.code | html %]</span>
         [% END %]
     </div>
 [% END %]
@@ -98,9 +98,9 @@
     <fieldset class="rows">
         <legend>
             [% IF currency %]
-                Modify currency
+                <span>Modify currency</span>
             [% ELSE %]
-                New currency
+                <span>New currency</span>
             [% END %]
         </legend>
         <ol>
@@ -163,11 +163,11 @@
         <h3>Cannot delete currency [% currency.currency | $HtmlTags tag='span' attributes=>'class="ex"' %]</h3>
         <p>
             [% IF nb_of_orders %]
-                This currency is used by [% nb_of_orders | html %] orders.
+                <span>This currency is used by [% nb_of_orders | html %] orders.</span>
             [% ELSIF nb_of_vendors %]
-                This currency is used by [% nb_of_vendors | html %] vendors.
+                <span>This currency is used by [% nb_of_vendors | html %] vendors.</span>
             [% END %]
-            Deletion not possible
+            <span>Deletion not possible</span>
         </p>
         <form action="/cgi-bin/koha/admin/currency.pl" method="post">
             <button type="submit" class="approve"><i class="fa fa-fw fa-check"></i> OK</button>

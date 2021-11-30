@@ -97,11 +97,11 @@ Acquisitions &rsaquo; Koha
         </td>
         <td>
             [% SWITCH order.orderstatus %]
-                [% CASE 'new' %]New
-                [% CASE 'ordered' %]Ordered
-                [% CASE 'partial' %]Partially received
-                [% CASE 'complete' %]Received
-                [% CASE 'cancelled' %]Cancelled
+                [% CASE 'new' %]<span>New</span>
+                [% CASE 'ordered' %]<span>Ordered</span>
+                [% CASE 'partial' %]<span>Partially received</span>
+                [% CASE 'complete' %]<span>Received</span>
+                [% CASE 'cancelled' %]<span>Cancelled</span>
             [% END %]
         </td>
         <td>[% order.basketname | html %] (<a href="basket.pl?basketno=[% order.basketno | uri %]">[% order.basketno | html %]</a>)</td>

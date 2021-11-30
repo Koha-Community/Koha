@@ -40,7 +40,7 @@
 [% FOR m IN messages %]
     <div class="dialog [% m.type | html %]">
         [% SWITCH m.code %]
-        [% CASE 'invalid_mimetype' %]The file used does not have a valid format. Only csv and txt are allowed.
+        [% CASE 'invalid_mimetype' %]<span>The file used does not have a valid format. Only csv and txt are allowed.</span>
         [% CASE %][% m.code | html %]
         [% END %]
     </div>

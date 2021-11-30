@@ -93,8 +93,8 @@
                                     <td><a href="[% OPACBaseURL | url %][% report.problempage | url %]">[% OPACBaseURL | url %][% report.problempage | html %]</a></td>
                                     <td>
                                         [% SWITCH report.recipient %]
-                                        [% CASE 'admin' %]Koha administrator
-                                        [% CASE 'library' %]A librarian
+                                        [% CASE 'admin' %]<span>Koha administrator</span>
+                                        [% CASE 'library' %]<span>A librarian</span>
                                         [% END %]
                                     </td>
                                     <td data-order="[% report.created_on | html %]">[% report.created_on | $KohaDates with_hours => 1 %]</td>
@@ -102,10 +102,10 @@
                                     <td class="status[% report.status | html %]" name="status">
                                         <span id="status_[% report.reportid | html %]">
                                             [% SWITCH report.status %]
-                                            [% CASE 'New' %]New
-                                            [% CASE 'Closed' %]Closed
-                                            [% CASE 'Viewed' %]Viewed
-                                            [% CASE %]Unknown status ([% report.status | html %])
+                                            [% CASE 'New' %]<span>New</span>
+                                            [% CASE 'Closed' %]<span>Closed</span>
+                                            [% CASE 'Viewed' %]<span>Viewed</span>
+                                            [% CASE %]<span>Unknown status ([% report.status | html %])</span>
                                             [% END %]
                                         </span>
                                     </td>

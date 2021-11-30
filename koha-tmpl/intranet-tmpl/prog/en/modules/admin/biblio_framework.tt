@@ -75,21 +75,21 @@ MARC frameworks &rsaquo; Administration &rsaquo; Koha
     <div class="dialog [% m.type | html %]">
         [% SWITCH m.code %]
         [% CASE 'error_on_update' %]
-            An error occurred when updating this framework. Perhaps it already exists.
+            <span>An error occurred when updating this framework. Perhaps it already exists.</span>
         [% CASE 'error_on_insert' %]
-            An error occurred when adding this framework. The framework might already exist.
+            <span>An error occurred when adding this framework. The framework might already exist.</span>
         [% CASE 'error_on_delete' %]
-            An error occurred when deleting this framework. Check the logs.
+            <span>An error occurred when deleting this framework. Check the logs.</span>
         [% CASE 'success_on_update' %]
-            Framework updated successfully.
+            <span>Framework updated successfully.</span>
         [% CASE 'success_on_insert' %]
-            Framework added successfully.
+            <span>Framework added successfully.</span>
         [% CASE 'success_on_delete' %]
-            Framework deleted successfully.
+            <span>Framework deleted successfully.</span>
         [% CASE 'already_exists' %]
-            This framework code already exists.
+            <span>This framework code already exists.</span>
         [% CASE %]
-            [% m.code | html %]
+            <span>[% m.code | html %]</span>
         [% END %]
     </div>
 [% END %]

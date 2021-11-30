@@ -1,32 +1,32 @@
 [% SWITCH error %]
 [% CASE 'no_item' %]
-    No matching item could be found
+    <span>No matching item could be found</span>
 [% CASE 'no_checkout' %]
-    Item is not checked out
+    <span>Item is not checked out</span>
 [% CASE 'too_soon' %]
-    Cannot be renewed yet
+    <span>Cannot be renewed yet</span>
 [% CASE 'too_many' %]
-    Renewed the maximum number of times
+    <span>Renewed the maximum number of times</span>
 [% CASE 'auto_too_soon' %]
-    Scheduled for automatic renewal and cannot be renewed yet
+    <span>Scheduled for automatic renewal and cannot be renewed yet</span>
 [% CASE 'auto_too_late' %]
-    Scheduled for automatic renewal and cannot be renewed any more
+    <span>Scheduled for automatic renewal and cannot be renewed any more</span>
 [% CASE 'auto_account_expired' %]
-    Scheduled for automatic renewal and cannot be renewed because the patron's account has expired
+    <span>Scheduled for automatic renewal and cannot be renewed because the patron's account has expired</span>
 [% CASE 'auto_renew' %]
-    Scheduled for automatic renewal
+    <span>Scheduled for automatic renewal</span>
 [% CASE 'auto_too_much_oweing' %]
-    Scheduled for automatic renewal and cannot be renewed because the patron has too many outstanding charges
+    <span>Scheduled for automatic renewal and cannot be renewed because the patron has too many outstanding charges</span>
 [% CASE 'on_reserve' %]
-    On hold for another patron
+    <span>On hold for another patron</span>
 [% CASE 'patron_restricted' %]
-    Patron is currently restricted
+    <span>Patron is currently restricted</span>
 [% CASE 'item_denied_renewal' %]
-    Item is not allowed renewal
+    <span>Item is not allowed renewal</span>
 [% CASE 'onsite_checkout' %]
-    Item is an onsite checkout
+    <span>Item is an onsite checkout</span>
 [% CASE 'has_fine' %]
-    Item has an outstanding fine
+    <span>Item has an outstanding fine</span>
 [% CASE %]
-    Unknown error
+    <span>Unknown error</span>
 [% END %]

@@ -39,13 +39,13 @@
         [% UNLESS ( type=='seefrom' || type=='seealso' ) %]
         <span class="type">
             [% SWITCH type %]
-            [% CASE 'earlier' %](Earlier heading)
-            [% CASE 'later' %](Later heading)
-            [% CASE 'acronym' %](Acronym)
-            [% CASE 'musical' %](Musical composition)
-            [% CASE 'broader' %](Broader heading)
-            [% CASE 'narrower' %](Narrower heading)
-            [% CASE 'parent' %](Immediate parent body)
+            [% CASE 'earlier' %]<span>(Earlier heading)</span>
+            [% CASE 'later' %]<span>(Later heading)</span>
+            [% CASE 'acronym' %]<span>(Acronym)</span>
+            [% CASE 'musical' %]<span>(Musical composition)</span>
+            [% CASE 'broader' %]<span>(Broader heading)</span>
+            [% CASE 'narrower' %]<span>(Narrower heading)</span>
+            [% CASE 'parent' %]<span>(Immediate parent body)</span>
             [% CASE %][% IF type %]([% type | html %])
             [% END %]
         [% END %]
@@ -132,15 +132,15 @@
 
 [% BLOCK language %]
   [% SWITCH lang %]
-   [% CASE ['en', 'eng'] %]English
-   [% CASE ['fr', 'fre'] %]French
-   [% CASE ['it', 'ita'] %]Italian
-   [% CASE ['de', 'ger', 'deu'] %]German
-   [% CASE ['es', 'spa'] %]Spanish
-   [% CASE ['heb'] %]Hebrew
-   [% CASE ['ara'] %]Arabic
-   [% CASE ['gre'] %]Greek (modern)
-   [% CASE ['grc'] %]Greek (to 1453)
-   [% CASE %][% lang | html %]
+   [% CASE ['en', 'eng'] %]<span>English</span>
+   [% CASE ['fr', 'fre'] %]<span>French</span>
+   [% CASE ['it', 'ita'] %]<span>Italian</span>
+   [% CASE ['de', 'ger', 'deu'] %]<span>German</span>
+   [% CASE ['es', 'spa'] %]<span>Spanish</span>
+   [% CASE ['heb'] %]<span>Hebrew</span>
+   [% CASE ['ara'] %]<span>Arabic</span>
+   [% CASE ['gre'] %]<span>Greek (modern)</span>
+   [% CASE ['grc'] %]<span>Greek (to 1453)</span>
+   [% CASE %]<span>[% lang | html %]</span>
   [% END %]
 [% END %]

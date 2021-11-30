@@ -83,7 +83,7 @@ legend:hover {
                             <div class="dialog alert">Something went wrong when creating the patron. Check the logs.</div>
                         [% CASE 'error_on_update_patron' %]
                             <div class="dialog alert">Something went wrong when updating the patron. Check the logs.</div>
-                        [% CASE %]Unhandled error: [% message.error | html %]
+                        [% CASE %]<div class="dialog alert">Unhandled error: [% message.error | html %]</div>
                     [% END %]
                 [% END %]
             [% END %]
@@ -198,20 +198,20 @@ legend:hover {
                                 <input type="checkbox" id="toggle_hidden_fields" title="These fields are collapsed by default by the CollapseFieldsPatronAddForm system preference"><strong>Show collapsed fields:</strong>
                                 [% FOREACH field IN fieldstohide.split(',') %]
                                     [% SWITCH field %]
-                                        [% CASE 'identity' %] Patron identity |
-                                        [% CASE 'guarantor' %] Guarantor information |
-                                        [% CASE 'primary_address' %] Main address |
-                                        [% CASE 'primary_contact' %] Contact information |
-                                        [% CASE 'alt_address' %] Alternate address |
-                                        [% CASE 'alt_contact' %] Alternate contact |
-                                        [% CASE 'lib_mgmt' %] Library management |
-                                        [% CASE 'lib_setup' %] Library setup |
-                                        [% CASE 'login' %] OPAC/Staff interface login |
-                                        [% CASE 'flags' %] Patron account flags |
-                                        [% CASE 'debarments' %] Patron restrictions |
-                                        [% CASE 'housebound' %] Housebound roles |
-                                        [% CASE 'additional' %] Additional attributes and identifiers |
-                                        [% CASE 'messaging' %] Patron messaging preferences |
+                                        [% CASE 'identity' %] <span>Patron identity</span> |
+                                        [% CASE 'guarantor' %] <span>Guarantor information</span> |
+                                        [% CASE 'primary_address' %] <span>Main address</span> |
+                                        [% CASE 'primary_contact' %] <span>Contact information</span> |
+                                        [% CASE 'alt_address' %] <span>Alternate address</span> |
+                                        [% CASE 'alt_contact' %] <span>Alternate contact</span> |
+                                        [% CASE 'lib_mgmt' %] <span>Library management</span> |
+                                        [% CASE 'lib_setup' %] <span>Library setup</span> |
+                                        [% CASE 'login' %] <span>OPAC/Staff interface login</span> |
+                                        [% CASE 'flags' %] <span>Patron account flags</span> |
+                                        [% CASE 'debarments' %] <span>Patron restrictions</span> |
+                                        [% CASE 'housebound' %] <span>Housebound roles</span> |
+                                        [% CASE 'additional' %] <span>Additional attributes and identifiers</span> |
+                                        [% CASE 'messaging' %] <span>Patron messaging preferences</span> |
                                     [% END %]
                                 [% END %]
                             </p>

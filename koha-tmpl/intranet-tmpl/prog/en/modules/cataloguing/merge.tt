@@ -77,7 +77,7 @@ div#result { margin-top: 1em; }
                         <td>
                             [% record.biblionumber | html %]
                             [% IF loop.first %]
-                                (record kept)
+                                <span>(record kept)</span>
                             [% END %]
                         </td>
                         [% FOREACH key IN report_header.keys.sort %]

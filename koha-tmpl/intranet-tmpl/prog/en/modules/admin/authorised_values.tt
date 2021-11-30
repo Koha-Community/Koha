@@ -274,31 +274,31 @@
                         <div class="dialog [% m.type | html %]">
                             [% SWITCH m.code %]
                             [% CASE 'error_on_update' %]
-                                An error occurred when updating this authorized value. Perhaps the value already exists.
+                                <span>An error occurred when updating this authorized value. Perhaps the value already exists.</span>
                             [% CASE 'error_on_insert' %]
-                                An error occurred when inserting this authorized value. Perhaps the value or the category already exists.
+                                <span>An error occurred when inserting this authorized value. Perhaps the value or the category already exists.</span>
                             [% CASE 'error_on_insert_cat' %]
-                                An error occurred when inserting this authorized value category. Perhaps the category name already exists.
+                                <span>An error occurred when inserting this authorized value category. Perhaps the category name already exists.</span>
                             [% CASE 'error_on_delete' %]
-                                An error occurred when deleting this authorized value. Check the logs.
+                                <span>An error occurred when deleting this authorized value. Check the logs.</span>
                             [% CASE 'error_on_delete_category' %]
-                                An error occurred when deleting this authorized value category. Check the logs.
+                                <span>An error occurred when deleting this authorized value category. Check the logs.</span>
                             [% CASE 'success_on_update' %]
-                                Authorized value updated successfully.
+                                <span>Authorized value updated successfully.</span>
                             [% CASE 'success_on_insert' %]
-                                Authorized value added successfully.
+                                <span>Authorized value added successfully.</span>
                             [% CASE 'success_on_insert_cat' %]
-                                Authorized value category added successfully.
+                                <span>Authorized value category added successfully.</span>
                             [% CASE 'success_on_delete' %]
-                                Authorized value deleted successfully.
+                                <span>Authorized value deleted successfully.</span>
                             [% CASE 'success_on_delete_category' %]
-                                Authorized value category deleted successfully.
+                                <span>Authorized value category deleted successfully.</span>
                             [% CASE 'cat_already_exists' %]
-                                This authorized value category already exists.
+                                <span>This authorized value category already exists.</span>
                             [% CASE 'invalid_category_name' %]
-                                The authorized value category 'branches', 'itemtypes' and 'cn_source' are used internally by Koha and are not valid.
+                                <span>The authorized value category 'branches', 'itemtypes' and 'cn_source' are used internally by Koha and are not valid.</span>
                             [% CASE %]
-                                [% m.code | html %]
+                                <span>[% m.code | html %]</span>
                             [% END %]
                         </div>
                     [% END # /FOR m IN messages %]

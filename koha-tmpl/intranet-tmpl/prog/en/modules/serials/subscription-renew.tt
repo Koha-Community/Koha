@@ -49,9 +49,9 @@
                 <option value="[% value | html %]">
             [% END %]
             [% SWITCH subtype %]
-                [% CASE 'numberlength'%]issues
-                [% CASE 'weeklength'  %]weeks
-                [% CASE 'monthlength' %]months
+                [% CASE 'numberlength' %]<span>issues</span>
+                [% CASE 'weeklength'   %]<span>weeks</span>
+                [% CASE 'monthlength'  %]<span>months</span>
             [% END %]
             </option>
         [% END %]

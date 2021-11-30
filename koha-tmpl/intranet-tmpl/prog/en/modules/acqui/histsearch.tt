@@ -89,11 +89,11 @@
                     </td>
                     <td>
                         [% SWITCH order.orderstatus %]
-                            [% CASE 'new' %]New
-                            [% CASE 'ordered' %]Ordered
-                            [% CASE 'partial' %]Partially received
-                            [% CASE 'complete' %]Received
-                            [% CASE 'cancelled' %]Cancelled
+                            [% CASE 'new' %]<span>New</span>
+                            [% CASE 'ordered' %]<span>Ordered</span>
+                            [% CASE 'partial' %]<span>Partially received</span>
+                            [% CASE 'complete' %]<span>Received</span>
+                            [% CASE 'cancelled' %]<span>Cancelled</span>
                         [% END %]
                         [% IF order.is_standing %](standing order)[% END %]
                     </td>

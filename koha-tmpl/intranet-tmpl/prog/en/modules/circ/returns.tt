@@ -125,16 +125,16 @@
                                      <h3>Reason for transfer</h3>
                                      <p>
                                          [%- SWITCH trigger -%]
-                                             [%- CASE 'Manual' -%]Manual
-                                             [%- CASE 'StockrotationAdvance' -%]Stock rotation advance
-                                             [%- CASE 'StockrotationRepatriation' -%]Stock rotation repatriation
-                                             [%- CASE 'ReturnToHome' -%]Return to home library
-                                             [%- CASE 'ReturnToHolding' -%]Return to holding library
-                                             [%- CASE 'RotatingCollection' -%]Rotating collection
-                                             [%- CASE 'Reserve' -%]Reserve
-                                             [%- CASE 'LostReserve' -%]Lost reserve
-                                             [%- CASE 'CancelReserve' -%]Cancelled reserve
-                                             [%- CASE 'TransferCancellation' -%]Transfer was cancelled whilst in transit
+                                             [%- CASE 'Manual' -]<span>Manual</span>
+                                             [%- CASE 'StockrotationAdvance' -]<span>Stock rotation advance</span>
+                                             [%- CASE 'StockrotationRepatriation' -]<span>Stock rotation repatriation</span>
+                                             [%- CASE 'ReturnToHome' -]<span>Return to home library</span>
+                                             [%- CASE 'ReturnToHolding' -]<span>Return to holding library</span>
+                                             [%- CASE 'RotatingCollection' -]<span>Rotating collection</span>
+                                             [%- CASE 'Reserve' -]<span>Reserve</span>
+                                             [%- CASE 'LostReserve' -]<span>Lost reserve</span>
+                                             [%- CASE 'CancelReserve' -]<span>Cancelled reserve</span>
+                                             [%- CASE 'TransferCancellation' -]<span>Transfer was cancelled whilst in transit</span>
                                          [%- END -%]
                                      </p>
                                  </div>
@@ -1081,7 +1081,7 @@
                                                     [% riloo.duedate | html %]
                                                 [% END %]
                                             [% ELSE %]
-                                                Not checked out
+                                                <span>Not checked out</span>
                                             [% END %]
                                             [% IF ( riloo.damaged ) %]
                                                 <span class="dmg">[% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.damaged', authorised_value => riloo.damaged ) | html %]</span>

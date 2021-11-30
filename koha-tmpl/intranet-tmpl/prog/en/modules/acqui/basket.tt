@@ -218,15 +218,15 @@
             <div class="dialog [% m.type | html %]">
                 [% SWITCH m.code %]
                 [% CASE 'no_email' %]
-                    This vendor has no contact selected for sending orders to or is missing an e-mail address.
+                    <span>This vendor has no contact selected for sending orders to or is missing an e-mail address.</span>
                 [% CASE 'no_basketno' %]
-                    No basket given.
+                    <span>No basket given.</span>
                 [% CASE 'no_letter' %]
-                    There is no notice template with code ACQORDER defined.
+                    <span>There is no notice template with code ACQORDER defined.</span>
                 [% CASE 'email_sent' %]
-                    Order e-mail was sent to the vendor.
+                    <span>Order e-mail was sent to the vendor.</span>
                 [% CASE %]
-                    ERROR! - [% m.code | html %]
+                    <span>ERROR! - [% m.code | html %]</span>
                 [% END %]
             </div>
         [% END %]
@@ -318,9 +318,9 @@
                         [% IF ( ediaccount ) %]
                             [%- BLOCK edi_status -%]
                                 [%- SWITCH edi_order.status -%]
-                                    [%- CASE 'Pending'   -%]Pending
-                                    [%- CASE 'Sent'      -%]Sent
-                                    [%- CASE 'Processed' -%]Processed
+                                    [%- CASE 'Pending'   -%]<span>Pending</span>
+                                    [%- CASE 'Sent'      -%]<span>Sent</span>
+                                    [%- CASE 'Processed' -%]<span>Processed</span>
                                 [%- END -%]
                             [%- END -%]
                             [% IF ( edi_order ) %]
@@ -338,9 +338,9 @@
                             <li>
                                 <span class="label">Create items when:</span>
                                 [% SWITCH basket.create_items %]
-                                    [% CASE 'receiving' %]Receiving items
-                                    [% CASE 'cataloguing' %]Cataloguing items
-                                    [% CASE %]Placing orders
+                                    [% CASE 'receiving' ]<span>Receiving items</span>
+                                    [% CASE 'cataloguing' ]<span>Cataloguing items</span>
+                                    [% CASE ]<span>Placing orders</span>
                                 [% END %]
                             </li>
                         [% END %]
@@ -356,15 +356,15 @@
 
                                 [% IF basketgroup.closed %]
                                     [% IF ( CAN_user_acquisition_group_manage ) %]
-                                        <a href="basketgroup.pl?op=add&booksellerid=[% booksellerid | uri %]&basketgroupid=[% basketgroup.id | uri %]" title="basketgroup">[% basketgroup.name | html %] (closed)</a>
+                                        <a href="basketgroup.pl?op=add&booksellerid=[% booksellerid | uri %]&basketgroupid=[% basketgroup.id | uri %]" title="basketgroup">[% basketgroup.name | html %] <span>(closed)</span></a>
                                     [% ELSE %]
-                                        [% basketgroup.name | html %] (closed)
+                                        [% basketgroup.name | html %] <span>(closed)</span>
                                     [% END %]
                                 [% ELSIF ( ! CAN_user_acquisition_group_manage ) %]
                                     [%- IF basketgroup.id -%]
                                 [% basketgroup.name | html %]
                                     [%- ELSE -%]
-                                        No group
+                                        <span>No group</span>
                                     [%- END -%]
                                 [% ELSE %]
                                     [% IF ( CAN_user_acquisition_group_manage ) %]
@@ -392,7 +392,7 @@
                                                         [% UNLESS bg.closed %]
                                                             <option value="[% bg.id | html %]">[% bg.name | html %]</option>
                                                         [% ELSE %]
-                                                            <option value="[% bg.id | html %]" disabled="disabled">[% bg.name | html %] (closed)</option>
+                                                            <option value="[% bg.id | html %]" disabled="disabled">[% bg.name | html %] <span>(closed)</span></option>
                                                         [% END %]
                                                     [% END %]
                                                 [% END %]
@@ -577,7 +577,7 @@
                         </td>
                         [% SET zero_regex = "^0{1,}\.?0{1,}[^1-9]" %] [%# 0 or 0.0 or 0.00 or 00 or 00.0 or 00.00 or 0.000 ... %]
                         [%# FIXME: use of a regexp is not ideal; bugs 9410 and 10929 suggest better way of handling this %]
-                        <td class="number [% IF books_loo.rrp_tax_excluded.search(zero_regex) %]error[% END %]">[% books_loo.rrp_tax_excluded | $Price %] [% IF ( books_loo.uncertainprice ) %] (Uncertain) [% END %] </td>
+                        <td class="number [% IF books_loo.rrp_tax_excluded.search(zero_regex) %]error[% END %]">[% books_loo.rrp_tax_excluded | $Price %] [% IF ( books_loo.uncertainprice ) %] <span>(Uncertain)</span> [% END %] </td>
                         <td class="number [% IF books_loo.unitprice_tax_excluded.search(zero_regex) %]error[% END %]">[% books_loo.unitprice_tax_excluded | $Price %]</td>
                         <td class="number [% IF books_loo.ecost_tax_excluded.search(zero_regex) %]error[% END %]">[% books_loo.ecost_tax_excluded | $Price %]</td>
                         <td class="number [% IF books_loo.rrp_tax_included.search(zero_regex) %]error[% END %]">[% books_loo.rrp_tax_included | $Price %]</td>
@@ -702,7 +702,7 @@
                     <td class="number">
                         [% order.rrp_tax_excluded | $Price %]
                         [% IF ( order.uncertain ) %]
-                            (Uncertain)
+                            <span>(Uncertain)</span>
                         [% END %]
                     </td>
                     <td class="number">[% order.ecost_tax_excluded | $Price %]</td>

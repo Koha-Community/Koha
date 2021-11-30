@@ -44,11 +44,11 @@
                 <div class="dialog [% m.type | html %]">
                     [% SWITCH m.code %]
                     [% CASE 'invalid_tag_regexp' %]
-                      Invalid regular expression "[% m.tag | html %]".
+                      <span>Invalid regular expression "[% m.tag | html %]".</span>
                     [% CASE 'invalid_control_field_actions' %]
-                      Invalid combination of actions for tag [% m.tag | html %]. Control field rules do not allow "Appended: Append" and "Removed: Skip".
+                      <span>Invalid combination of actions for tag [% m.tag | html %]. Control field rules do not allow "Appended: Append" and "Removed: Skip".</span>
                     [% CASE %]
-                      [% m.code | html %]
+                      <span>[% m.code | html %]</span>
                     [% END %]
                 </div>
                 [% END %]

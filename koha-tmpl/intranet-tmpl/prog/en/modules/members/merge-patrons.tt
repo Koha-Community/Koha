@@ -51,30 +51,30 @@
 
 [% BLOCK display_names %]
     [% SWITCH rs %]
-        [% CASE 'Accountline'           %]account lines
-        [% CASE 'ArticleRequest'        %]article requests
-        [% CASE 'BorrowerAttribute'     %]extended patron attributes
-        [% CASE 'BorrowerDebarment'     %]patron restrictions
-        [% CASE 'BorrowerFile'          %]patrons files
-        [% CASE 'BorrowerModification'  %]patron modification requests
-        [% CASE 'ClubEnrollment'        %]club enrollments
-        [% CASE 'Issue'                 %]checkouts
-        [% CASE 'ItemsLastBorrower'     %]marks as last borrower of item
-        [% CASE 'Linktracker'           %]tracked link clicks
-        [% CASE 'Message'               %]patron messages
-        [% CASE 'MessageQueue'          %]patron notices
-        [% CASE 'OldIssue'              %]previous checkouts
-        [% CASE 'OldReserve'            %]filled holds
-        [% CASE 'Rating'                %]ratings
-        [% CASE 'Reserve'               %]current holds
-        [% CASE 'Review'                %]reviews
-        [% CASE 'Statistic'             %]statistics
-        [% CASE 'SearchHistory'         %]historical searches
-        [% CASE 'Suggestion'            %]purchase suggestions
-        [% CASE 'TagAll'                %]tags
-        [% CASE 'Virtualshelfcontent'   %]list items
-        [% CASE 'Virtualshelfshare'     %]list shares
-        [% CASE 'Virtualshelve'         %]lists
+        [% CASE 'Accountline'           %]<span>account lines</span>
+        [% CASE 'ArticleRequest'        %]<span>article requests</span>
+        [% CASE 'BorrowerAttribute'     %]<span>extended patron attributes</span>
+        [% CASE 'BorrowerDebarment'     %]<span>patron restrictions</span>
+        [% CASE 'BorrowerFile'          %]<span>patrons files</span>
+        [% CASE 'BorrowerModification'  %]<span>patron modification requests</span>
+        [% CASE 'ClubEnrollment'        %]<span>club enrollments</span>
+        [% CASE 'Issue'                 %]<span>checkouts</span>
+        [% CASE 'ItemsLastBorrower'     %]<span>marks as last borrower of item</span>
+        [% CASE 'Linktracker'           %]<span>tracked link clicks</span>
+        [% CASE 'Message'               %]<span>patron messages</span>
+        [% CASE 'MessageQueue'          %]<span>patron notices</span>
+        [% CASE 'OldIssue'              %]<span>previous checkouts</span>
+        [% CASE 'OldReserve'            %]<span>filled holds</span>
+        [% CASE 'Rating'                %]<span>ratings</span>
+        [% CASE 'Reserve'               %]<span>current holds</span>
+        [% CASE 'Review'                %]<span>reviews</span>
+        [% CASE 'Statistic'             %]<span>statistics</span>
+        [% CASE 'SearchHistory'         %]<span>historical searches</span>
+        [% CASE 'Suggestion'            %]<span>purchase suggestions</span>
+        [% CASE 'TagAll'                %]<span>tags</span>
+        [% CASE 'Virtualshelfcontent'   %]<span>list items</span>
+        [% CASE 'Virtualshelfshare'     %]<span>list shares</span>
+        [% CASE 'Virtualshelve'         %]<span>lists</span>
         [% CASE %][% rs | html %]
     [% END %]
 [% END %]

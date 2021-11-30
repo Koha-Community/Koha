@@ -1,6 +1,7 @@
 [% USE raw %]
 [% USE KohaDates %]
 [% USE To %]
+[% PROCESS 'i18n.inc' %]
 {
     "sEcho": [% sEcho | html %],
     "iTotalRecords": [% iTotalRecords | html %],
@@ -13,13 +14,13 @@
                 "dt_shelfname":
                     "<a href='/cgi-bin/koha/virtualshelves/shelves.pl?op=view&shelfnumber=[% data.shelfnumber | html %]'>[% data.shelfname | html | $To %]</a>",
                 "dt_count":
-                    "[% data.count | html %] item(s)",
+                    "[% tnx('{count} item', '{count} items', count, { count = data.count }) | $raw %]",
                 "dt_is_shared":
-                    "[% IF data.public %]Public[% ELSIF data.is_shared %]Shared[% ELSE %]Private[% END %]",
+                    "[% IF data.public %]<span>Public</span>[% ELSIF data.is_shared %]<span>Shared</span>[% ELSE %]<span>Private</span>[% END %]",
                 "dt_owner":
                     "<a href='/cgi-bin/koha/members/moremember.pl?borrowernumber=[% data.owner | html %]'>[% data.firstname | html | $To %] [% data.surname | html | $To %]</a>",
                 "dt_sortby":
-                    [% IF data.sortby == "author" %]"Author"[% ELSIF data.sortby == "copyrightdate" %]"Year"[% ELSIF data.sortby == "itemcallnumber" %]"Call number"[% ELSIF data.sortby == "dateadded" %]"Date added"[% ELSE %]"Title"[% END %],
+                    [% IF data.sortby == "author" %]"<span>Author</span>"[% ELSIF data.sortby == "copyrightdate" %]"<span>Year</span>"[% ELSIF data.sortby == "itemcallnumber" %]"<span>Call number</span>"[% ELSIF data.sortby == "dateadded" %]"<span>Date added</span>"[% ELSE %]"<span>Title</span>"[% END %],
                 "dt_created_on":
                     "[% data.created_on | $KohaDates %]",
                 "dt_modification_time":

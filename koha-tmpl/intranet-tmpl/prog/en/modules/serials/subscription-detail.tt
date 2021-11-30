@@ -333,14 +333,14 @@
                                         [% IF serialslis.planneddate %]
                                             [% serialslis.planneddate | html %]
                                         [% ELSE %]
-                                            Unknown
+                                            <span>Unknown</span>
                                         [% END %]
                                     </td>
                                     <td>
                                         [% IF serialslis.publisheddate %]
                                             [% serialslis.publisheddate | html %]
                                         [% ELSE %]
-                                            Unknown
+                                            <span>Unknown</span>
                                         [% END %]
                                     </td>
                                     <td>
@@ -468,11 +468,11 @@
                                                 <td data-order="[% order.basket.creationdate | uri %]">[% order.basket.creationdate | $KohaDates%]</td>
                                                 <td data-order="[% order.datereceived | uri %]">[% order.datereceived | $KohaDates %]</td>
                                                     [% SWITCH order.orderstatus %]
-                                                        [% CASE 'new' %]<td data-order="status_1">New
-                                                        [% CASE 'ordered' %]<td data-order="status_2">Ordered
-                                                        [% CASE 'partial' %]<td data-order="status_3">Partial
-                                                        [% CASE 'complete' %]<td data-order="status_4">Complete
-                                                        [% CASE 'cancelled' %]<td data-order="status_5">Cancelled
+                                                        [% CASE 'new' %]<td data-order="status_1"><span>New</span>
+                                                        [% CASE 'ordered' %]<td data-order="status_2"><span>Ordered</span>
+                                                        [% CASE 'partial' %]<td data-order="status_3"><span>Partial</span>
+                                                        [% CASE 'complete' %]<td data-order="status_4"><span>Complete</span>
+                                                        [% CASE 'cancelled' %]<td data-order="status_5"><span>Cancelled</span>
                                                     [% END %]
                                                 </td>
                                                 <td>[% order.order_internalnote | html %]</td>

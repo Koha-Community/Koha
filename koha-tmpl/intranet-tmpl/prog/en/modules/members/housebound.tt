@@ -20,22 +20,14 @@
           <li>
             <span class="label" class="required"> Delivery day:</span>
             [% hpd = housebound_profile.day %]
-            [% IF hpd == 'any' %]
-              Any
-            [% ELSIF hpd == 'monday' %]
-              Monday
-            [% ELSIF hpd == 'tuesday' %]
-              Tuesday
-            [% ELSIF hpd == 'wednesday' %]
-              Wednesday
-            [% ELSIF hpd == 'thursday' %]
-              Thursday
-            [% ELSIF hpd == 'friday' %]
-              Friday
-            [% ELSIF hpd == 'saturday' %]
-              Saturday
-            [% ELSIF hpd == 'sunday' %]
-              Sunday
+            [% IF hpd == 'any' %]<span>Any</span>
+            [% ELSIF hpd == 'monday' %]<span>Monday</span>
+            [% ELSIF hpd == 'tuesday' %]<span>Tuesday</span>
+            [% ELSIF hpd == 'wednesday' %]<span>Wednesday</span>
+            [% ELSIF hpd == 'thursday' %]<span>Thursday</span>
+            [% ELSIF hpd == 'friday' %]<span>Friday</span>
+            [% ELSIF hpd == 'saturday' %]<span>Saturday</span>
+            [% ELSIF hpd == 'sunday' %]<span>Sunday</span>
             [% END %]
           </li>
           <li>
@@ -96,21 +88,21 @@
                 <div class="dialog [% m.type | html %]">
                     [% SWITCH m.code %]
                     [% CASE 'error_on_profile_store' %]
-                        An error occurred whilst updating this housebound profile.
+                        <span>An error occurred whilst updating this housebound profile</span>
                     [% CASE 'error_on_profile_create' %]
-                        An error occurred whilst creating this housebound profile.
+                        <span>An error occurred whilst creating this housebound profile</span>
                     [% CASE 'error_on_visit_load' %]
-                        An error occurred whilst loading the housebound visit.
+                        <span>An error occurred whilst loading the housebound visit</span>
                     [% CASE 'error_on_visit_delete' %]
-                        An error occurred whilst deleting a housebound visit.
+                        <span>An error occurred whilst deleting a housebound visit</span>
                     [% CASE 'error_on_visit_store' %]
-                        An error occurred whilst updating a housebound visit.
+                        <span>An error occurred whilst updating a housebound visit</span>
                     [% CASE 'error_on_visit_create' %]
-                        An error occurred whilst creating a new housebound visit.
+                        <span>An error occurred whilst creating a new housebound visit</span>
                     [% CASE %]
-                        [% m.code | html %]
+                        <span>[% m.code | html %]</span>
                     [% END %]
-                    Please try again later.
+                    <span>Please try again later</span>
                 </div>
             [% END %]
 

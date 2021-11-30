@@ -38,8 +38,8 @@
                     <h1 class="title">[% biblio.title | html %]</h1>
                     <div class="alert alert-info">
                         [% SWITCH error_message %]
-                            [% CASE 'article_request_limit_reached'       %]You reached your open article requests limit.
-                            [% CASE 'article_request_unhandled_exception' %]An error has occurred.
+                            [% CASE 'article_request_limit_reached'       %]<span>You reached your open article requests limit.</span>
+                            [% CASE 'article_request_unhandled_exception' %]<span>An error has occurred.</span>
                         [% END %]
                     </div>
                 [% ELSIF biblio.can_article_request( patron ) %]

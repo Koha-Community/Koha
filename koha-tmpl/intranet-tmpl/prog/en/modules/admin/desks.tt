@@ -74,21 +74,21 @@
     <div class="dialog [% m.type | html %]">
         [% SWITCH m.code %]
         [% CASE 'error_on_update' %]
-            An error occurred when updating this desk. Perhaps it already exists.
+            <span>An error occurred when updating this desk. Perhaps it already exists</span>
         [% CASE 'error_on_insert' %]
-            An error occurred when adding this desk. The desk ID might already exist.
+            <span>An error occurred when adding this desk. The desk ID might already exist</span>
         [% CASE 'error_on_delete' %]
-            An error occurred when deleting this desk. Check the logs.
+            <span>An error occurred when deleting this desk. Check the logs</span>
         [% CASE 'success_on_update' %]
-            Desk updated successfully.
+            <span>Desk updated successfully</span>
         [% CASE 'success_on_insert' %]
-            Desk added successfully.
+            <span>Desk added successfully</span>
         [% CASE 'success_on_delete' %]
-            Desk deleted successfully.
+            <span>Desk deleted successfully</span>
         [% CASE 'already_exists' %]
-            This desk already exists.
+            <span>This desk already exists</span>
         [% CASE %]
-            [% m.code | html %]
+            <span>[% m.code | html %]</span>
         [% END %]
     </div>
 [% END %]

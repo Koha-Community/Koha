@@ -48,18 +48,18 @@
             [% FOREACH loopfilte IN mainloo.loopfilter %]
                 <p>
                     [% SWITCH loopfilte.crit %]
-                        [% CASE '0' %] Placed on (from)
-                        [% CASE '1' %] Placed on (to)
-                        [% CASE '2' %] Received on (from)
-                        [% CASE '3' %] Received on (to)
-                        [% CASE '4' %] Vendor
-                        [% CASE '5' %] Home library
-                        [% CASE '6' %] Collection
-                        [% CASE '7' %] Item type
-                        [% CASE '8' %] Fund
-                        [% CASE '9' %] Sort1
-                        [% CASE '10' %] Sort2
-                        [% CASE %] Unknown filter
+                        [% CASE '0' %]<span>Placed on (from)</span>
+                        [% CASE '1' %]<span>Placed on (to)</span>
+                        [% CASE '2' %]<span>Received on (from)</span>
+                        [% CASE '3' %]<span>Received on (to)</span>
+                        [% CASE '4' %]<span>Vendor</span>
+                        [% CASE '5' %]<span>Home library</span>
+                        [% CASE '6' %]<span>Collection</span>
+                        [% CASE '7' %]<span>Item type</span>
+                        [% CASE '8' %]<span>Fund</span>
+                        [% CASE '9' %]<span>Sort1</span>
+                        [% CASE '10' %]<span>Sort2</span>
+                        [% CASE %]<span>Unknown filter</span>
                     [% END %]
                     : [% loopfilte.filter | html %]
                 </p>
@@ -192,7 +192,7 @@
                     [% IF ccode_label %]
                         [% ccode_label | html %]
                     [% ELSE %]
-                        Collection
+                        <span>Collection</span>
                     [% END %]
                 </td>
                 <td><input type="radio" name="Line" value="items.ccode" /></td>

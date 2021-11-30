@@ -65,38 +65,38 @@
 
 [% BLOCK translate_log_module %]
 [%    SWITCH module %]
-[%        CASE 'AUTH'         %]Authentication[% UNLESS Koha.Preference('AuthFailureLog') || Koha.Preference('AuthScuccessLog') %] <i class="fa fa-warning" title="Log not enabled"></i>[% END %]
-[%        CASE 'CATALOGUING'  %]Catalog[% UNLESS Koha.Preference('CataloguingLog') %] <i class="fa fa-warning" title="Log not enabled"></i>[% END %]
+[%        CASE 'AUTH'         %]<span>Authentication</span>[% UNLESS Koha.Preference('AuthFailureLog') || Koha.Preference('AuthScuccessLog') %] <i class="fa fa-warning" title="Log not enabled"></i>[% END %]
+[%        CASE 'CATALOGUING'  %]<span>Catalog</span>[% UNLESS Koha.Preference('CataloguingLog') %] <i class="fa fa-warning" title="Log not enabled"></i>[% END %]
 
-[%        CASE 'AUTHORITIES'  %]Authorities[% UNLESS Koha.Preference('AuthoritiesLog') %] <i class="fa fa-warning" title="Log not enabled"></i>[% END %]
+[%        CASE 'AUTHORITIES'  %]<span>Authorities</span>[% UNLESS Koha.Preference('AuthoritiesLog') %] <i class="fa fa-warning" title="Log not enabled"></i>[% END %]
 
-[%        CASE 'MEMBERS'      %]Patrons[% UNLESS Koha.Preference('BorrowersLog') %] <i class="fa fa-warning" title="Log not enabled"></i>[% END %]
+[%        CASE 'MEMBERS'      %]<span>Patrons</span>[% UNLESS Koha.Preference('BorrowersLog') %] <i class="fa fa-warning" title="Log not enabled"></i>[% END %]
 
-[%        CASE 'ACQUISITIONS' %]Acquisitions [% UNLESS Koha.Preference('AcquisitionLog') %]<i class="fa fa-warning" title="Log not enabled"></i>[% END %]
+[%        CASE 'ACQUISITIONS' %]<span>Acquisitions</span>[% UNLESS Koha.Preference('AcquisitionLog') %]<i class="fa fa-warning" title="Log not enabled"></i>[% END %]
 
-[%        CASE 'SERIAL'       %]Serials[% UNLESS Koha.Preference('SubscriptionLog') %] <i class="fa fa-warning" title="Log not enabled"></i>[% END %]
+[%        CASE 'SERIAL'       %]<span>Serials</span>[% UNLESS Koha.Preference('SubscriptionLog') %] <i class="fa fa-warning" title="Log not enabled"></i>[% END %]
 
-[%        CASE 'HOLDS'        %]Holds[% UNLESS Koha.Preference('HoldsLog') %] <i class="fa fa-warning" title="Log not enabled"></i>[% END %]
+[%        CASE 'HOLDS'        %]<span>Holds</span>[% UNLESS Koha.Preference('HoldsLog') %] <i class="fa fa-warning" title="Log not enabled"></i>[% END %]
 
-[%        CASE 'ILL'          %]Interlibrary loans[% UNLESS Koha.Preference('IllLog') %] <i class="fa fa-warning" title="Log not enabled"></i>[% END %]
+[%        CASE 'ILL'          %]<span>Interlibrary loans</span>[% UNLESS Koha.Preference('IllLog') %] <i class="fa fa-warning" title="Log not enabled"></i>[% END %]
 
-[%        CASE 'CIRCULATION'  %]Circulation[% UNLESS Koha.Preference('IssueLog') %] <i class="fa fa-warning" title="Log not enabled"></i>[% END %]
+[%        CASE 'CIRCULATION'  %]<span>Circulation</span>[% UNLESS Koha.Preference('IssueLog') %] <i class="fa fa-warning" title="Log not enabled"></i>[% END %]
 
-[%        CASE 'CLAIMS'       %]Claims[% UNLESS Koha.Preference('ClaimsLog') %] <i class="fa fa-warning" title="Log not enabled"></i>[% END %]
+[%        CASE 'CLAIMS'       %]<span>Claims</span>[% UNLESS Koha.Preference('ClaimsLog') %] <i class="fa fa-warning" title="Log not enabled"></i>[% END %]
 
-[%        CASE 'FINES'        %]Fines[% UNLESS Koha.Preference('FinesLog') %] <i class="fa fa-warning" title="Log not enabled"></i>[% END %]
+[%        CASE 'FINES'        %]<span>Fines</span>[% UNLESS Koha.Preference('FinesLog') %] <i class="fa fa-warning" title="Log not enabled"></i>[% END %]
 
-[%        CASE 'SYSTEMPREFERENCE' %]System prefs
+[%        CASE 'SYSTEMPREFERENCE' %]<span>System prefs</span>
 
-[%        CASE 'CRONJOBS' %]Cron jobs[% UNLESS Koha.Preference('CronjobLog') %] <i class="fa fa-warning" title="Log not enabled"></i>[% END %]
+[%        CASE 'CRONJOBS' %]<span>Cron jobs</span>[% UNLESS Koha.Preference('CronjobLog') %] <i class="fa fa-warning" title="Log not enabled"></i>[% END %]
 
-[%        CASE 'REPORTS'      %]Reports[% UNLESS Koha.Preference('ReportsLog') %] <i class="fa fa-warning" title="Log not enabled"></i>[% END %]
+[%        CASE 'REPORTS'      %]<span>Reports</span>[% UNLESS Koha.Preference('ReportsLog') %] <i class="fa fa-warning" title="Log not enabled"></i>[% END %]
 
-[%        CASE 'SEARCHENGINE' %]Search engine
+[%        CASE 'SEARCHENGINE' %]<span>Search engine</span>
 
-[%        CASE 'NOTICES'      %]Notices[% UNLESS Koha.Preference('NoticesLog') %] <i class="fa fa-warning" title="Log not enabled"></i>[% END %]
-[%        CASE 'NEWS'      %]News[% UNLESS Koha.Preference('NewsLog') %] <i class="fa fa-warning" title="Log not enabled"></i>[% END %]
-[%        CASE 'RECALLS'      %]Recalls[% UNLESS Koha.Preference('RecallsLog') %] <i class="fa fa-warning" title="Log not enabled"></i>[% END %]
+[%        CASE 'NOTICES'      %]<span>Notices</span>[% UNLESS Koha.Preference('NoticesLog') %] <i class="fa fa-warning" title="Log not enabled"></i>[% END %]
+[%        CASE 'NEWS'      %]<span>News</span>[% UNLESS Koha.Preference('NewsLog') %] <i class="fa fa-warning" title="Log not enabled"></i>[% END %]
+[%        CASE 'RECALLS'      %]<span>Recalls</span>[% UNLESS Koha.Preference('RecallsLog') %] <i class="fa fa-warning" title="Log not enabled"></i>[% END %]
 
 [%        CASE %][% module | html %]
 [%    END %]
@@ -104,64 +104,64 @@
 
 [% BLOCK translate_log_action %]
 [%    SWITCH action %]
-[%        CASE 'ADD'    %]Add
-[%        CASE 'DELETE' %]Delete
-[%        CASE 'MODIFY' %]Modify
-[%        CASE 'ISSUE'  %]Checkout
-[%        CASE 'RETURN' %]Return
-[%        CASE 'CREATE' %]Create
-[%        CASE 'CANCEL' %]Cancel
-[%        CASE 'FILL'   %]Fill
-[%        CASE 'RESUME' %]Resume
-[%        CASE 'SUSPEND' %]Suspend
-[%        CASE 'RENEW'  %]Renew
-[%        CASE 'RENEWAL' %]Renew
-[%        CASE 'CHANGE PASS' %]Change password
-[%        CASE 'ADDCIRCMESSAGE' %]Add circulation message
-[%        CASE 'DELCIRCMESSAGE' %]Delete circulation message
-[%        CASE 'STATUS_CHANGE'  %]Change ILL request status
-[%        CASE 'PATRON_NOTICE'  %]ILL notice sent to patron
-[%        CASE 'ADD_BASKET' %]Create an acquisitions basket
-[%        CASE 'MODIFY_BASKET' %]Modify an acquisitions basket
-[%        CASE 'MODIFY_BASKET_HEADER' %]Modify an acquisitions basket header
-[%        CASE 'MODIFY_BASKET_USERS' %]Modify an acquisitions basket's users
-[%        CASE 'CLOSE_BASKET' %]Close an acquisitions basket
-[%        CASE 'APPROVE_BASKET' %]Approve an acquisitions basket
-[%        CASE 'REOPEN_BASKET' %]Reopen an acquisitions basket
-[%        CASE 'CANCEL_ORDER' %]Cancel an order
-[%        CASE 'CREATE_ORDER' %]Create an order
-[%        CASE 'MODIFY_ORDER' %]Modify an order
-[%        CASE 'CREATE_INVOICE_ADJUSTMENT' %]Create an invoice adjustment
-[%        CASE 'UPDATE_INVOICE_ADJUSTMENT' %]Modify an invoice adjustment
-[%        CASE 'DELETE_INVOICE_ADJUSTMENT' %]Delete an invoice adjustment
-[%        CASE 'RECEIVE_ORDER' %]Receive an order
-[%        CASE 'MODIFY_BUDGET' %]Modify a budget
-[%        CASE 'CREATE_FUND' %]Create a fund
-[%        CASE 'MODIFY_FUND' %]Modify a fund
-[%        CASE 'DELETE_FUND' %]Delete a fund
-[%        CASE 'Run'    %]Run
-[%        CASE 'EDIT_MAPPINGS' %]Edit mappings
-[%        CASE 'RESET_MAPPINGS' %]Reset mappings
-[%        CASE 'SERIAL CLAIM' %]Serial claim
-[%        CASE 'ACQUISITION CLAIM' %]Acquisition claim
-[%        CASE 'ACQUISITION ORDER' %]Acquisition order
-[%        CASE 'FULFILL' %]Fulfill
-[%        CASE 'OVERDUE' %]Overdue
-[%        CASE 'EXPIRE'  %]Expire
+[%        CASE 'ADD'    %]<span>Add</span>
+[%        CASE 'DELETE' %]<span>Delete</span>
+[%        CASE 'MODIFY' %]<span>Modify</span>
+[%        CASE 'ISSUE'  %]<span>Checkout</span>
+[%        CASE 'RETURN' %]<span>Return</span>
+[%        CASE 'CREATE' %]<span>Create</span>
+[%        CASE 'CANCEL' %]<span>Cancel</span>
+[%        CASE 'FILL'   %]<span>Fill</span>
+[%        CASE 'RESUME' %]<span>Resume</span>
+[%        CASE 'SUSPEND' %]<span>Suspend</span>
+[%        CASE 'RENEW'  %]<span>Renew</span>
+[%        CASE 'RENEWAL' %]<span>Renew</span>
+[%        CASE 'CHANGE PASS' %]<span>Change password</span>
+[%        CASE 'ADDCIRCMESSAGE' %]<span>Add circulation message</span>
+[%        CASE 'DELCIRCMESSAGE' %]<span>Delete circulation message</span>
+[%        CASE 'STATUS_CHANGE'  %]<span>Change ILL request status</span>
+[%        CASE 'PATRON_NOTICE'  %]<span>ILL notice sent to patron</span>
+[%        CASE 'ADD_BASKET' %]<span>Create an acquisitions basket</span>
+[%        CASE 'MODIFY_BASKET' %]<span>Modify an acquisitions basket</span>
+[%        CASE 'MODIFY_BASKET_HEADER' %]<span>Modify an acquisitions basket header</span>
+[%        CASE 'MODIFY_BASKET_USERS' %]<span>Modify an acquisitions basket's users</span>
+[%        CASE 'CLOSE_BASKET' %]<span>Close an acquisitions basket</span>
+[%        CASE 'APPROVE_BASKET' %]<span>Approve an acquisitions basket</span>
+[%        CASE 'REOPEN_BASKET' %]<span>Reopen an acquisitions basket</span>
+[%        CASE 'CANCEL_ORDER' %]<span>Cancel an order</span>
+[%        CASE 'CREATE_ORDER' %]<span>Create an order</span>
+[%        CASE 'MODIFY_ORDER' %]<span>Modify an order</span>
+[%        CASE 'CREATE_INVOICE_ADJUSTMENT' %]<span>Create an invoice adjustment</span>
+[%        CASE 'UPDATE_INVOICE_ADJUSTMENT' %]<span>Modify an invoice adjustment</span>
+[%        CASE 'DELETE_INVOICE_ADJUSTMENT' %]<span>Delete an invoice adjustment</span>
+[%        CASE 'RECEIVE_ORDER' %]<span>Receive an order</span>
+[%        CASE 'MODIFY_BUDGET' %]<span>Modify a budget</span>
+[%        CASE 'CREATE_FUND' %]<span>Create a fund</span>
+[%        CASE 'MODIFY_FUND' %]<span>Modify a fund</span>
+[%        CASE 'DELETE_FUND' %]<span>Delete a fund</span>
+[%        CASE 'Run'    %]<span>Run</span>
+[%        CASE 'EDIT_MAPPINGS' %]<span>Edit mappings</span>
+[%        CASE 'RESET_MAPPINGS' %]<span>Reset mappings</span>
+[%        CASE 'SERIAL CLAIM' %]<span>Serial claim</span>
+[%        CASE 'ACQUISITION CLAIM' %]<span>Acquisition claim</span>
+[%        CASE 'ACQUISITION ORDER' %]<span>Acquisition order</span>
+[%        CASE 'FULFILL' %]<span>Fulfill</span>
+[%        CASE 'OVERDUE' %]<span>Overdue</span>
+[%        CASE 'EXPIRE'  %]<span>Expire</span>
 [%        CASE %][% action | html %]
 [%    END %]
 [% END %]
 
 [% BLOCK translate_log_interface %]
 [%    SWITCH log_interface.upper %]
-[%        CASE 'INTRANET'    %]Intranet
-[%        CASE 'OPAC'        %]OPAC
-[%        CASE 'SIP'         %]SIP
-[%        CASE 'COMMANDLINE' %]Command-line
-[%        CASE 'API'         %]REST API
-[%        CASE 'CRON'        %]Cron job
-[%        CASE 'UPGRADE'     %]Upgrade
-[%        CASE %][% log_interface | html %]
+[%        CASE 'INTRANET'    %]<span>Intranet</span>
+[%        CASE 'OPAC'        %]<span>OPAC</span>
+[%        CASE 'SIP'         %]<span>SIP</span>
+[%        CASE 'COMMANDLINE' %]<span>Command-line</span>
+[%        CASE 'API'         %]<span>REST API</span>
+[%        CASE 'CRON'        %]<span>Cron job</span>
+[%        CASE 'UPGRADE'     %]<span>Upgrade</span>
+[%        CASE %]<span>[% log_interface | html %]</span>
 [%    END %]
 [% END %]
 

@@ -195,22 +195,22 @@
                                 <span class="label">Status:</span>
                                 [% SET status_found = 0 %]
                                 [% IF ( STATUS == 'ASKED' ) %]
-                                    Pending
+                                    <span>Pending</span>
                                     [% SET status_found = 1 %]
                                 [% ELSIF ( STATUS == 'ACCEPTED' ) %]
-                                    Accepted
+                                    <span>Accepted<span>
                                     [% SET status_found = 1 %]
                                 [% ELSIF ( STATUS == 'CHECKED' ) %]
-                                    Checked
+                                    <span>Checked</span>
                                     [% SET status_found = 1 %]
                                 [% ELSIF ( STATUS == 'REJECTED' ) %]
-                                    Rejected
+                                    <span>Rejected</span>
                                     [% SET status_found = 1 %]
                                 [% ELSIF ( STATUS == 'ORDERED' ) %]
-                                    Ordered
+                                    <span>Ordered</span>
                                     [% SET status_found = 1 %]
                                 [% ELSIF ( STATUS == 'AVAILABLE' ) %]
-                                    Available
+                                    <span>Available</span>
                                     [% SET status_found = 1 %]
                                 [% ELSE %]
                                     [% FOREACH s IN SuggestionStatuses %]
@@ -335,11 +335,11 @@
                 <div class="dialog [% m.type | html %]">
                     [% SWITCH m.code %]
                     [% CASE 'biblio_exists' %]
-                        A similar document already exists: <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% m.id | uri %]">[% m.title | html %]</a>. Click on "Confirm your suggestion" to ignore this message.
+                        <span>A similar document already exists: <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% m.id | uri %]">[% m.title | html %]</a>. Click on "Confirm your suggestion" to ignore this message.</span>
                     [%  CASE 'manager_not_enough_permissions' %]
-                        The manager you selected does not have sufficient permissions.
+                        <span>The manager you selected does not have sufficient permissions.</span>
                     [% CASE %]
-                        [% m.code | html %]
+                        <span>[% m.code | html %]</span>
                     [% END %]
                 </div> <!-- /.dialog -->
             [% END %]
@@ -675,11 +675,11 @@
                 <div class="dialog [% m.type | html %]">
                     [% SWITCH m.code %]
                     [% CASE 'already_exists' %]
-                        The suggestion has not been added. A suggestion with this title already exists (<a href='/cgi-bin/koha/suggestion/suggestion.pl?suggestionid=[% m.id | html %]&op=show'>suggestion #[% m.id | html %]</a>)
+                        <span>The suggestion has not been added. A suggestion with this title already exists (<a href='/cgi-bin/koha/suggestion/suggestion.pl?suggestionid=[% m.id | html %]&op=show'>suggestion #[% m.id | html %]</a>)</span>
                     [% CASE 'biblio_exists' %]
-                        A similar document already exists: <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% m.id | uri %]">[% m.title | html %]</a>. Click on "Confirm your suggestion" to ignore this message.
+                        <span>A similar document already exists: <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% m.id | uri %]">[% m.title | html %]</a>. Click on "Confirm your suggestion" to ignore this message.</span>
                     [% CASE %]
-                        [% m.code | html %]
+                        <span>[% m.code | html %]</span>
                     [% END %]
                 </div> <!-- /.dialog -->
             [% END # /FOR m %]
@@ -691,20 +691,20 @@
                                 <li>
                             <a href="#[% suggestion.suggestiontype | uri %]">
                             [% IF ( suggestion.suggestiontypelabel ) %]
-                                [% IF (suggestion.suggestiontypelabel == "Pending") %]Pending
-                                [% ELSIF (suggestion.suggestiontypelabel == "Accepted") %]Accepted
-                                [% ELSIF (suggestion.suggestiontypelabel == "Checked") %]Checked
-                                [% ELSIF (suggestion.suggestiontypelabel == "Rejected") %]Rejected
-                                [% ELSIF (suggestion.suggestiontypelabel == "Available") %]Available
-                                [% ELSIF (suggestion.suggestiontypelabel == "Ordered") %]Ordered
-                                [% ELSIF (suggestion.suggestiontypelabel == "Unknown") %]Status unknown
-                                [% ELSIF (suggestion.suggestiontypelabel == "__ANY__") %]Any
+                                [% IF (suggestion.suggestiontypelabel == "Pending") %]<span>Pending</span>
+                                [% ELSIF (suggestion.suggestiontypelabel == "Accepted") %]<span>Accepted</span>
+                                [% ELSIF (suggestion.suggestiontypelabel == "Checked") %]<span>Checked</span>
+                                [% ELSIF (suggestion.suggestiontypelabel == "Rejected") %]<span>Rejected</span>
+                                [% ELSIF (suggestion.suggestiontypelabel == "Available") %]<span>Available</span>
+                                [% ELSIF (suggestion.suggestiontypelabel == "Ordered") %]<span>Ordered</span>
+                                [% ELSIF (suggestion.suggestiontypelabel == "Unknown") %]<span>Status unknown</span>
+                                [% ELSIF (suggestion.suggestiontypelabel == "__ANY__") %]<span>Any</span>
                                 [% ELSE %][% suggestion.suggestiontypelabel | html %][% END %]
                             [% ELSE %]
                                 [% IF ( suggestion.suggestiontype ) %]
                                     [% AuthorisedValues.GetByCode( 'SUGGEST_STATUS', suggestion.suggestiontype ) | html %]
                                 [% ELSE %]
-                                    No name
+                                    <span>No name</span>
                                 [% END %]
                             [% END %]
                             ([% suggestion.suggestions_loop.size | html %])</a></li>

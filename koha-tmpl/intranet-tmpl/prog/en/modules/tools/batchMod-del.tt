@@ -43,10 +43,10 @@
         <div class="dialog alert" style="margin:auto;">
       [% END %]
       [% IF message.code == 'cannot_enqueue_job' %]
-          Cannot enqueue this job.
+          <span>Cannot enqueue this job.</span>
       [% END %]
       [% IF message.error %]
-        (The error was: [% message.error | html %], see the Koha log file for more information).
+        <span>(The error was: [% message.error | html %], see the Koha log file for more information).</span>
       [% END %]
       </div>
     [% END %]

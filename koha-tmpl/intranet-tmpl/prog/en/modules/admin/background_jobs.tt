@@ -6,17 +6,17 @@
 [% BLOCK show_job_status %]
     [% SWITCH job.status %]
         [% CASE "new" %]
-            New
+            <span>New</span>
         [% CASE "cancelled" %]
-            Cancelled
+            <span>Cancelled</span>
         [% CASE "finished" %]
-            Finished
+            <span>Finished</span>
         [% CASE "started" %]
-            Started
+            <span>Started</span>
         [% CASE "running" %]
-            Running
+            <span>Running</span>
         [% CASE "failed" %]
-            Failed
+            <span>Failed</span>
         [% CASE # Default case %]
             [% job.status | html %]
     [% END -%]
@@ -24,20 +24,20 @@
 [% BLOCK show_job_type %]
     [% SWITCH job_type %]
     [% CASE 'batch_biblio_record_modification' %]
-        Batch bibliographic record modification
+        <span>Batch bibliographic record modification</span>
     [% CASE 'batch_biblio_record_deletion' %]
-        Batch bibliographic record record deletion
+        <span>Batch bibliographic record record deletion</span>
     [% CASE 'batch_authority_record_modification' %]
-        Batch authority record modification
+        <span>Batch authority record modification</span>
     [% CASE 'batch_authority_record_deletion' %]
-        Batch authority record deletion
+        <span>Batch authority record deletion</span>
     [% CASE 'batch_item_record_modification' %]
-        Batch item record modification
+        <span>Batch item record modification</span>
     [% CASE 'batch_item_record_deletion' %]
-        Batch item record deletion
+        <span>Batch item record deletion</span>
     [% CASE "batch_hold_cancel" %]
-        Batch hold cancellation
-    [% CASE %]Unknown job type '[% job_type | html %]'
+        <span>Batch hold cancellation</span>
+    [% CASE %]<span>Unknown job type '[% job_type | html %]'</span>
     [% END %]
 
 [% END %]

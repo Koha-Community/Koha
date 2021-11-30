@@ -11,36 +11,36 @@
 
 [%- BLOCK debit_type_description -%]
     [%- SWITCH debit_type_code -%]
-        [%- CASE 'ACCOUNT'          -%]Account creation fee
-        [%- CASE 'ACCOUNT_RENEW'    -%]Account renewal fee
-        [%- CASE 'ARTICLE_REQUEST'  -%]Article request fee
-        [%- CASE 'LOST'             -%]Lost item
-        [%- CASE 'MANUAL'           -%]Manual fee
-        [%- CASE 'NEW_CARD'         -%]New card
-        [%- CASE 'OVERDUE'          -%]Fine
-        [%- CASE 'PROCESSING'       -%]Lost item processing fee
-        [%- CASE 'RENT'             -%]Rental fee
-        [%- CASE 'RENT_DAILY'       -%]Daily rental fee
-        [%- CASE 'RENT_RENEW'       -%]Renewal of rental item
-        [%- CASE 'RENT_DAILY_RENEW' -%]Renewal of daily rental item
-        [%- CASE 'RESERVE'          -%]Hold fee
-        [%- CASE 'RESERVE_EXPIRED'  -%]Hold waiting too long
-        [%- CASE 'Payout'           -%]Payout
-        [%- CASE                    -%][% debit_type.description | html %]
+        [%- CASE 'ACCOUNT'          -]<span>Account creation fee</span>
+        [%- CASE 'ACCOUNT_RENEW'    -]<span>Account renewal fee</span>
+        [%- CASE 'ARTICLE_REQUEST'  -]<span>Article request fee</span>
+        [%- CASE 'LOST'             -]<span>Lost item</span>
+        [%- CASE 'MANUAL'           -]<span>Manual fee</span>
+        [%- CASE 'NEW_CARD'         -]<span>New card</span>
+        [%- CASE 'OVERDUE'          -]<span>Fine</span>
+        [%- CASE 'PROCESSING'       -]<span>Lost item processing fee</span>
+        [%- CASE 'RENT'             -]<span>Rental fee</span>
+        [%- CASE 'RENT_DAILY'       -]<span>Daily rental fee</span>
+        [%- CASE 'RENT_RENEW'       -]<span>Renewal of rental item</span>
+        [%- CASE 'RENT_DAILY_RENEW' -]<span>Renewal of daily rental item</span>
+        [%- CASE 'RESERVE'          -]<span>Hold fee</span>
+        [%- CASE 'RESERVE_EXPIRED'  -]<span>Hold waiting too long</span>
+        [%- CASE 'Payout'           -]<span>Payout</span>
+        [%- CASE                    -]<span>[% debit_type.description | html %]</span>
     [%- END -%]
 [%- END -%]
 
 [%- BLOCK credit_type_description -%]
     [%- SWITCH credit_type_code -%]
-        [%- CASE 'PAYMENT'      -%]Payment
-        [%- CASE 'WRITEOFF'     -%]Writeoff
-        [%- CASE 'FORGIVEN'     -%]Forgiven
-        [%- CASE 'CREDIT'       -%]Credit
-        [%- CASE 'LOST_FOUND'   -%]Lost item fee refund
-        [%- CASE 'OVERPAYMENT'  -%]Overpayment refund
-        [%- CASE 'REFUND'       -%]Refund
-        [%- CASE 'CANCELLATION' -%]Cancelled charge
-        [%- CASE                -%][% credit_type.description | html %]
+        [%- CASE 'PAYMENT'      -]<span>Payment</span>
+        [%- CASE 'WRITEOFF'     -]<span>Writeoff</span>
+        [%- CASE 'FORGIVEN'     -]<span>Forgiven</span>
+        [%- CASE 'CREDIT'       -]<span>Credit</span>
+        [%- CASE 'LOST_FOUND'   -]<span>Lost item fee refund</span>
+        [%- CASE 'OVERPAYMENT'  -]<span>Overpayment refund</span>
+        [%- CASE 'REFUND'       -]<span>Refund</span>
+        [%- CASE 'CANCELLATION' -]<span>Cancelled charge</span>
+        [%- CASE                -]<span>[% credit_type.description | html %]</span>
     [%- END -%]
 [%- END -%]
 

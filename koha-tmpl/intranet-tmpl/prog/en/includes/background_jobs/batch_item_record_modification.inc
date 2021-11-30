@@ -5,12 +5,12 @@
     [% IF report %]
         <div class="dialog message">
             [% IF report.modified_itemnumbers.size %]
-                [% report.modified_itemnumbers.size | html %] item(s) modified (with [% report.modified_fields | html %] field(s) modified).
+                <span>[% report.modified_itemnumbers.size | html %] item(s) modified (with [% report.modified_fields | html %] field(s) modified).</span>
             [% ELSE %]
-                No items modified.
+                <span>No items modified.</span>
             [% END %]
 
-            [% IF job.status == 'cancelled' %]The job has been cancelled before it finished.[% END %]
+            [% IF job.status == 'cancelled' %]<span>The job has been cancelled before it finished.</span>[% END %]
             <a href="/cgi-bin/koha/tools/batchMod.pl" title="New batch item modification">New batch item modification</a>
         </div>
     [% END %]
@@ -27,7 +27,7 @@
                 <i class="fa fa-exclamation error"></i>
             [% END %]
             [% SWITCH m.code %]
-            [% CASE %]Unknown message '[% m.code | html %]'
+            [% CASE %]<span>Unknown message '[% m.code | html %]'</span>
             [% END %]
         </div>
     [% END %]

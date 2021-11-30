@@ -191,7 +191,7 @@
                                             [% IF lette.branchname %]
                                                 [% lette.branchname | html %]
                                             [% ELSE %]
-                                                (All libraries)
+                                                <span>(All libraries)</span>
                                             [% END %]
                                         </td>
                                         <td>
@@ -304,7 +304,7 @@
                                             [% IF ( branchcode ) %]
                                                [% Branches.GetName( branchcode ) | html %]
                                             [% ELSE %]
-                                                All libraries
+                                                <span>All libraries</span>
                                             [% END %]
                                         [% END %]
                                     </li>
@@ -439,20 +439,13 @@
                                     [% NEXT IF letter.message_transport_type == "phone" && !Koha.Preference('PhoneNotification') %]
                                     <h3>
                                         [% SWITCH letter.message_transport_type %]
-                                            [% CASE 'email' %]
-                                              Email
-                                            [% CASE 'print' %]
-                                              Print
-                                            [% CASE 'sms' %]
-                                              SMS
-                                            [% CASE 'feed' %]
-                                              Feed
-                                            [% CASE 'itiva' %]
-                                              Phone ( Itiva )
-                                            [% CASE 'phone' %]
-                                                Phone
-                                            [% CASE %]
-                                              [% letter.message_transport_type | html %]
+                                            [% CASE 'email' %]<span>Email</span>
+                                            [% CASE 'print' %]<span>Print</span>
+                                            [% CASE 'sms' %]<span>SMS</span>
+                                            [% CASE 'feed' %]<span>Feed</span>
+                                            [% CASE 'itiva' %]<span>Phone ( Itiva )</span>
+                                            [% CASE 'phone' %]<span>Phone</span>
+                                            [% CASE %]<span>[% letter.message_transport_type | html %]</span>
                                         [% END %]
                                     </h3>
                                     [% IF letter.message_transport_type == "sms" and not Koha.Preference("SMSSendDriver") %]
@@ -546,7 +539,7 @@
                             </tr>
                             </thead>
                             <tr>
-                                <td>[% IF letter.branchcode %][% Branches.GetName( letter.branchcode ) | html %][% ELSE %](All libraries)[% END %]</td>
+                                <td>[% IF letter.branchcode %][% Branches.GetName( letter.branchcode ) | html %][% ELSE %]<span>(All libraries)</span>[% END %]</td>
                                 <td>[% letter.module | html %]</td>
                                 <td>[% letter.code | html %]</td>
                                 <td>[% letter.name | html %]</td>
@@ -567,7 +560,7 @@
                 [% END # /IF delete_confirm %]
 
                 [% IF ( delete_confirmed ) %]
-                    Data deleted
+                    <span>Data deleted</span>
                     <form action="[% action | html %]" method="post">
                     <input type="submit" value="OK" />
                     </form>

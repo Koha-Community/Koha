@@ -203,7 +203,7 @@ fieldset.various li {
                                                                     [% IF ( basket.basketname ) %]
                                                                         [% basket.basketname | html %]
                                                                     [% ELSE %]
-                                                                        No name, basketnumber: [% basket.basketno | html %]
+                                                                        <span>No name, basketnumber: [% basket.basketno | html %]</span>
                                                                     [% END %]
                                                                 </a>, <br />
                                                                 Total: [% basket.total | $Price %]
@@ -352,7 +352,7 @@ fieldset.various li {
                                                     <td>[% IF ( basketgroup.name ) %]
                                                         [% basketgroup.name | html %]
                                                         [% ELSE %]
-                                                            Basket group no. [% basketgroup.id | html %]
+                                                            <span>Basket group no. [% basketgroup.id | html %]</span>
                                                         [% END %]
                                                     </td>
                                                     <td>[% basketgroup.id | html %]</td>
@@ -392,7 +392,7 @@ fieldset.various li {
                                                         [% IF ( basketgroup.name ) %]
                                                             [% basketgroup.name | html %]
                                                             [% ELSE %]
-                                                                Basket group no. [% basketgroup.id | html %]
+                                                                <span>Basket group no. [% basketgroup.id | html %]</span>
                                                             [% END %]
                                                     </td>
                                                     <td>[% basketgroup.id | html %]</td>

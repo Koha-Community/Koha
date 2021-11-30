@@ -21,13 +21,13 @@
                         <td>
                             [% SWITCH d.type %]
                                 [% CASE 'MANUAL' %]
-                                    Manual
+                                    <span>Manual</span>
                                 [% CASE 'OVERDUES' %]
-                                Overdues
+                                    <span>Overdues</span>
                                 [% CASE 'SUSPENSION' %]
-                                    Suspension
+                                    <span>Suspension</span>
                                 [% CASE 'DISCHARGE' %]
-                                    Discharge
+                                    <span>Discharge</span>
                             [% END %]
                         </td>
                         <td>

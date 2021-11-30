@@ -64,15 +64,15 @@
     <div class="dialog [% m.type | html %]" id="smtp_action_result_dialog">
         [% SWITCH m.code %]
         [% CASE 'error_on_update' %]
-            An error occurred trying to open the server for editing. The passed id is invalid.
+            <span>An error occurred trying to open the server for editing. The passed id is invalid.</span>
         [% CASE 'error_on_insert' %]
-            An error occurred when adding the server. The library already has an SMTP server set.
+            <span>An error occurred when adding the server. The library already has an SMTP server set.</span>
         [% CASE 'success_on_update' %]
-            Server updated successfully.
+            <span>Server updated successfully.</span>
         [% CASE 'success_on_insert' %]
-            Server added successfully.
+            <span>Server added successfully.</span>
         [% CASE %]
-            [% m.code | html %]
+            <span>[% m.code | html %]</span>
         [% END %]
     </div>
 [% END %]

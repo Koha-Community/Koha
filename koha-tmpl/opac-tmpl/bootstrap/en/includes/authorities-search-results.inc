@@ -33,13 +33,13 @@
         [% UNLESS ( type=='seefrom' || type=='seealso' ) %]
             <span class="type">
                 [% SWITCH type %]
-                    [% CASE 'earlier' %](Earlier heading)
-                    [% CASE 'later' %](Later heading)
-                    [% CASE 'acronym' %](Acronym)
-                    [% CASE 'musical' %](Musical composition)
-                    [% CASE 'broader' %](Broader heading)
-                    [% CASE 'narrower' %](Narrower heading)
-                    [% CASE 'parent' %](Immediate parent body)
+                    [% CASE 'earlier' ]<span>(Earlier heading)</span>
+                    [% CASE 'later' ]<span>(Later heading)</span>
+                    [% CASE 'acronym' ]<span>(Acronym)</span>
+                    [% CASE 'musical' ]<span>(Musical composition)</span>
+                    [% CASE 'broader' ]<span>(Broader heading)</span>
+                    [% CASE 'narrower' ]<span>(Narrower heading)</span>
+                    [% CASE 'parent' ]<span>(Immediate parent body)</span>
                     [% CASE %]
                         [% IF type %]([% type | html %])[% END %]
                     [% END %]

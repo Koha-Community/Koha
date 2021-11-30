@@ -142,7 +142,7 @@
                                           [% IF basket.basketgroup %]
                                             [% basketgroup = basket.basketgroup %]
                                             [% IF basketgroup.closed %]
-                                              [% basketgroup.name | html %] (closed)
+                                              [% basketgroup.name | html %] <span>(closed)</span>
                                             [% ELSE %]
                                               <a href="/cgi-bin/koha/acqui/basketgroup.pl?op=add&amp;booksellerid=[% basket.booksellerid | uri %]&amp;basketgroupid=[% basketgroup.id | uri %]">[% basketgroup.name | html %]</a>
                                             [% END %]

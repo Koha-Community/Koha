@@ -167,7 +167,7 @@
                                         [% IF ( current_matcher_id ) %]
                                             [% current_matcher_code | html %] ([% current_matcher_description | html %])
                                         [% ELSE %]
-                                            No matching rule in effect
+                                            <span>No matching rule in effect</span>
                                         [% END %]
                                     [% END %]
                                 </li>
@@ -178,13 +178,13 @@
                                     [% ELSE %]
                                         <span class="label">Action if matching record found:</span>
                                         [% IF ( overlay_action == 'replace' ) %]
-                                            Replace existing record with incoming record
+                                            <span>Replace existing record with incoming record</span>
                                         [% ELSIF ( overlay_action == 'create_new' ) %]
-                                            Add incoming record
+                                            <span>Add incoming record</span>
                                         [% ELSIF ( overlay_action == 'ignore' ) %]
-                                            Ignore incoming record (its items may still be processed)
+                                            <span>Ignore incoming record (its items may still be processed)</span>
                                         [% ELSE %]
-                                            [% overlay_action | html %]
+                                            <span>[% overlay_action | html %]</span>
                                         [% END %]
                                     [% END %]
                                 </li>
@@ -211,15 +211,15 @@
                                         [% ELSE %]
                                             <span class="label">Item processing:</span>
                                             [% IF ( item_action == 'always_add' ) %]
-                                                Always add items
+                                                <span>Always add items</span>
                                             [% ELSIF ( item_action == 'add_only_for_matches' ) %]
-                                                Add items only if matching bib was found
+                                                <span>Add items only if matching bib was found</span>
                                             [% ELSIF ( item_action == 'add_only_for_new' ) %]
-                                                Add items only if no matching bib was found
+                                                <span>Add items only if no matching bib was found</span>
                                             [% ELSIF ( item_action == 'ignore' ) %]
-                                                Ignore items
+                                                <span>Ignore items</span>
                                             [% ELSE %]
-                                                [% item_action | html %]
+                                                <span>[% item_action | html %]</span>
                                             [% END %]
                                         [% END %]
                                     </li>
@@ -365,19 +365,19 @@
                                     <td>[% IF ( batch_lis.record_type == 'auth' ) %]Authority[% ELSE %]Bibliographic[% END %]</td>
                                     <td>
                                         [% IF ( batch_lis.import_status == 'cleaned' ) %]
-                                            Cleaned
+                                            <span>Cleaned</span>
                                         [% ELSIF ( batch_lis.import_status == 'imported' ) %]
-                                            Imported
+                                            <span>Imported</span>
                                         [% ELSIF ( batch_lis.import_status == 'importing' ) %]
-                                            Importing
+                                            <span>Importing</span>
                                         [% ELSIF ( batch_lis.import_status == 'reverted' ) %]
-                                            Reverted
+                                            <span>Reverted</span>
                                         [% ELSIF ( batch_lis.import_status == 'reverting' ) %]
-                                            Reverting
+                                            <span>Reverting</span>
                                         [% ELSIF ( batch_lis.import_status == 'staged' ) %]
-                                            Staged
+                                            <span>Staged</span>
                                         [% ELSE %]
-                                            [% batch_lis.import_status | html %]
+                                            <span>[% batch_lis.import_status | html %]</span>
                                         [% END %]
                                     </td>
                                     <td>[% batch_lis.upload_timestamp | $KohaDates with_hours=1 %]</td>

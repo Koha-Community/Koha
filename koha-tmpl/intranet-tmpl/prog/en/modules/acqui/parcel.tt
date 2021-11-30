@@ -66,9 +66,9 @@
     [% END %]
     <h1>
         [% IF ( invoiceclosedate ) %]
-        Receipt summary for <em>[% name | html %]</em> [% IF ( invoice ) %] <em> [ [% invoice | html %] ] </em>[% END %]
+            <span>Receipt summary for <em>[% name | html %]</em><span> [% IF ( invoice ) %] <em> [ [% invoice | html %] ] </em>[% END %]
         [% ELSE %]
-            Receive orders from [% name | html %]
+            <span>Receive orders from [% name | html %]</span>
         [% END %]
     </h1>
 
@@ -85,7 +85,7 @@
 
     [% IF (error_cancelling_receipt) %]
       <div class="dialog alert">
-      Cannot cancel receipt. Possible reasons :
+      <span>Cannot cancel receipt. Possible reasons :</span>
       <ul>
         <li>
           The order line you are trying to cancel was created from a partial receipt
@@ -135,7 +135,7 @@
     </div>
 [% ELSE %]
     <p>
-        Invoice is closed, so you can't receive orders anymore.
+        <span>Invoice is closed, so you can't receive orders anymore.</span>
         [% IF CAN_user_acquisition_reopen_closed_invoices %]
             <a href="/cgi-bin/koha/acqui/invoice.pl?op=reopen&invoiceid=[% invoiceid | uri %]&referer=/cgi-bin/koha/acqui/parcel.pl%3Finvoiceid=[% invoiceid | uri %]">Reopen it</a>.
         [% END %]
@@ -269,17 +269,17 @@
                     [% IF loop_receive.cannot_cancel or ( order.basket.effective_create_items == "receiving" and loop_receive.holds > 0 ) %]
                       [% IF loop_receive.cannot_cancel %]
                         [% span_title = BLOCK %]
-                            Cannot cancel receipt of this order line because it
+                            <span>Cannot cancel receipt of this order line because it
                             was created from a partial receipt of order line no.
                             [% order.parent_ordernumber | html %], which is
                             already received. Try cancelling this one first and
-                            retry.
+                            retry.</span>
                         [% END %]
                       [% ELSE %]
                         [%# FIXME Here we block the cancellation if holds exist. Actually it could be possible if items will be exist after the deletion %]
                         [%# Some additional checks should be added in the pl file %]
                         [% span_title = BLOCK %]
-                          Cannot cancel receipt of this order line because at least one reservation exists on the records.
+                          <span>Cannot cancel receipt of this order line because at least one reservation exists on the records.</span>
                         [% END %]
                       [% END %]
                       <span title="[% span_title | collapse | html %]">

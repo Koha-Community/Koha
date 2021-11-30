@@ -65,7 +65,7 @@
           [% IF (prediction.publicationdate) %]
             [% prediction.publicationdate | $KohaDates %]
           [% ELSE %]
-            unknown
+            <span>unknown</span>
           [% END %]
         </td>
         [% IF (ask_for_irregularities) %]

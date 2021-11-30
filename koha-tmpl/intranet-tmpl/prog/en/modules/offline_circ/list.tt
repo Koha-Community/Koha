@@ -61,13 +61,13 @@
                             <td>
                                 [% SWITCH ( operation.action ) -%]
                                     [%   CASE "issue" -%]
-                                        Check out
+                                        <span>Check out</span>
                                     [%   CASE "return" -%]
-                                        Check in
+                                        <span>Check in</span>
                                     [%   CASE "payment" -%]
-                                        Payment
+                                        <span>Payment</span>
                                     [%   CASE # default case -%]
-                                        [% operation.action | html %]
+                                        <span>[% operation.action | html %]</span>
                                 [% END -%]
                             </td>
 			                <td>

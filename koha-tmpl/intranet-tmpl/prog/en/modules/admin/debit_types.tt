@@ -62,15 +62,15 @@
                 <div class="dialog [% m.type | html %]">
                     [% SWITCH m.code %]
                     [% CASE 'success_on_saving' %]
-                        Debit type saved successfully.
+                        <span>Debit type saved successfully</span>
                     [% CASE 'error_on_saving' %]
-                        An error occurred when saving this debit type.
+                        <span>An error occurred when saving this debit type</span>
                     [% CASE 'success_on_archive' %]
-                        Debit type archived successfully.
+                        <span>Debit type archived successfully</span>
                     [% CASE 'success_on_restore' %]
-                        Debit type restored successfully.
+                        <span>Debit type restored successfully</span>
                     [% CASE %]
-                        [% m.code | html %]
+                        <span>[% m.code | html %]</span>
                     [% END %]
                 </div>
                 [% END %]

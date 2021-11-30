@@ -76,23 +76,23 @@ Cash registers &rsaquo; Administration &rsaquo; Koha
                 <div class="dialog [% m.type | html %]">
                     [% SWITCH m.code %]
                     [% CASE 'success_on_insert' %]
-                        Cash register added successfully.
+                        <span>Cash register added successfully.</span>
                     [% CASE 'error_on_insert' %]
-                        An error occurred when adding this cash register.
+                        <span>An error occurred when adding this cash register.</span>
                     [% CASE 'success_on_update' %]
-                        Cash register updated successfully.
+                        <span>Cash register updated successfully.</span>
                     [% CASE 'error_on_update' %]
-                        An error occurred when updating this cash register.
+                        <span>An error occurred when updating this cash register.</span>
                     [% CASE 'success_on_default' %]
-                        Library default updated successfully.
+                        <span>Library default updated successfully.</span>
                     [% CASE 'error_on_update' %]
-                        An error on setting library default.
+                        <span>An error on setting library default.</span>
                     [% CASE 'success_on_archive' %]
-                        Cash register archived successfully.
+                        <span>Cash register archived successfully.</span>
                     [% CASE 'success_on_restore' %]
-                        Cash register restored successfully.
+                        <span>Cash register restored successfully.</span>
                     [% CASE %]
-                        [% m.code | html %]
+                        <span>[% m.code | html %]</span>
                     [% END %]
                 </div>
                 [% END %]

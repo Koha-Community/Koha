@@ -1,3 +1,4 @@
+[% USE KohaSpan %]
 [% BLOCK report %]
     [% SET report = job.report %]
     [% IF report %]
@@ -39,16 +40,17 @@
             [% END %]
             [% SWITCH m.code %]
                 [% CASE 'item_not_deleted' %]
-                    Item with barcode <a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% m.biblionumber | uri %]&itemnumber=[% m.itemnumber | uri %]">[% m.barcode | html %]</a> cannot be deleted:
+                    [% item_link = BLOCK %]<a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% m.biblionumber | uri %]&itemnumber=[% m.itemnumber | uri %]">[% m.barcode | html %]</a>[% END %]
+                    <span>Item with barcode [% item_link | $KohaSpan%] cannot be deleted:</span>
                     [% SWITCH m.reason %]
-                        [% CASE "book_on_loan" %]Item is checked out
-                        [% CASE "not_same_branch" %]Item does not belong to your library
-                        [% CASE "book_reserved" %]Item has a waiting hold
-                        [% CASE "linked_analytics" %]Item has linked analytics
-                        [% CASE "last_item_for_hold" %]Last item for bibliographic record with biblio-level hold on it
-                        [% CASE %]Unknown reason '[% m.reason | html %]'
+                        [% CASE "book_on_loan" %]<span>Item is checked out</span>
+                        [% CASE "not_same_branch" %]<span>Item does not belong to your library</span>
+                        [% CASE "book_reserved" %]<span>Item has a waiting hold</span>
+                        [% CASE "linked_analytics" %]<span>Item has linked analytics</span>
+                        [% CASE "last_item_for_hold" %]<span>Last item for bibliographic record with biblio-level hold on it</span>
+                        [% CASE %]<span>Unknown reason '[% m.reason | html %]'</span>
                     [% END %]
-                [% CASE %]Unknown message '[% m.code | html %]'
+                [% CASE %]<span>Unknown message '[% m.code | html %]'</span>
             [% END %]
         </div>
     [% END %]

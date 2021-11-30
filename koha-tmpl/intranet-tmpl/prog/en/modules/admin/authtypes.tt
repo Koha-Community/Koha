@@ -69,17 +69,17 @@ Authority types &rsaquo; Administration &rsaquo; Koha
     <div class="dialog [% m.type | html %]">
         [% SWITCH m.code %]
         [% CASE 'error_on_update' %]
-            An error occurred when updating this authority type. Perhaps it already exists.
+            <span>An error occurred when updating this authority type. Perhaps it already exists.</span>
         [% CASE 'error_on_insert' %]
-            An error occurred when adding this authority type. The authority type code might already exist.
+            <span>An error occurred when adding this authority type. The authority type code might already exist.</span>
         [% CASE 'error_on_delete' %]
-            An error occurred when deleting this authority type. Check the logs.
+            <span>An error occurred when deleting this authority type. Check the logs.</span>
         [% CASE 'success_on_update' %]
-            Authority type updated successfully.
+            <span>Authority type updated successfully.</span>
         [% CASE 'success_on_insert' %]
-            Authority type added successfully.
+            <span>Authority type added successfully.</span>
         [% CASE 'success_on_delete' %]
-            Authority type deleted successfully.
+            <span>Authority type deleted successfully.</span>
         [% CASE %]
             [% m.code | html %]
         [% END %]

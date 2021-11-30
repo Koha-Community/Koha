@@ -77,42 +77,42 @@ Libraries &rsaquo; Administration &rsaquo; Koha
     <div class="dialog [% m.type | html %]">
         [% SWITCH m.code %]
         [% CASE 'error_on_update' %]
-            An error occurred when updating this library. Perhaps it already exists.
+            <span>An error occurred when updating this library. Perhaps it already exists.</span>
         [% CASE 'error_on_insert' %]
-            An error occurred when adding this library. The branchcode might already exist.
+            <span>An error occurred when adding this library. The branchcode might already exist.</span>
         [% CASE 'error_on_delete' %]
-            An error occurred when deleting this library. Check the logs.
+            <span>An error occurred when deleting this library. Check the logs.</span>
         [% CASE 'success_on_update' %]
-            Library updated successfully.
+            <span>Library updated successfully.</span>
         [% CASE 'success_on_insert' %]
-            Library added successfully.
+            <span>Library added successfully.</span>
         [% CASE 'success_on_delete' %]
-            Library deleted successfully.
+            <span>Library deleted successfully.</span>
         [% CASE 'cannot_delete_library' %]
-            This library cannot be deleted. Patrons or items are still using it
+            <span>This library cannot be deleted. Patrons or items are still using it</span>
             [% IF m.data.patrons_count and m.data.items_count %]
-                ([% m.data.patrons_count | html %] patrons and [% m.data.items_count | html %] items).
+                <span>([% m.data.patrons_count | html %] patrons and [% m.data.items_count | html %] items).</span>
             [% ELSIF m.data.patrons_count %]
-                ([% m.data.patrons_count | html %] patrons).
+                <span>([% m.data.patrons_count | html %] patrons).</span>
             [% ELSIF m.data.items_count %]
-                ([% m.data.items_count | html %] items).
+                <span>([% m.data.items_count | html %] items).</span>
             [% END %]
         [% CASE 'error_on_update_category' %]
-            An error occurred when updating this library category. Perhaps it already exists.
+            <span>An error occurred when updating this library category. Perhaps it already exists.</span>
         [% CASE 'error_on_insert_category' %]
-            An error occurred when adding this library category. The categorycode might already exist.
+            <span>An error occurred when adding this library category. The categorycode might already exist.</span>
         [% CASE 'error_on_delete_category' %]
-            An error occurred when deleting this library category. Check the logs.
+            <span>An error occurred when deleting this library category. Check the logs.</span>
         [% CASE 'success_on_update_category' %]
-            Library category updated successfully.
+            <span>Library category updated successfully.</span>
         [% CASE 'success_on_insert_category' %]
-            Library category added successfully.
+            <span>Library category added successfully.</span>
         [% CASE 'success_on_delete_category' %]
-            Library category deleted successfully.
+            <span>Library category deleted successfully.</span>
         [% CASE 'cannot_delete_category' %]
-            This library category cannot be deleted. [% m.data.libraries_count | html %] libraries are still using it.
+            <span>This library category cannot be deleted. [% m.data.libraries_count | html %] libraries are still using it.</span>
         [% CASE %]
-            [% m.code | html %]
+            <span>[% m.code | html %]</span>
         [% END %]
     </div>
 [% END %]
