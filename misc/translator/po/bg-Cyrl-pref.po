@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Koha 20.11\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-05-16 03:25+0200\n"
-"PO-Revision-Date: 2021-09-13 06:57+0000\n"
+"PO-Revision-Date: 2021-11-17 11:50+0000\n"
 "Last-Translator: Илиян Дамянов <aioiliyan@gmail.com>\n"
 "Language-Team: Koha Translation Team <koha-translate@nongnu.org>\n"
 "Language: bg\n"
@@ -14,7 +14,7 @@ msgstr ""
 "X-Generator: Pootle 2.8\n"
 "X-Pootle-Path: /bg/20.11/bg-Cyrl-pref.po\n"
 "X-Pootle-Revision: 1\n"
-"X-POOTLE-MTIME: 1631516252.951622\n"
+"X-POOTLE-MTIME: 1637149824.549011\n"
 
 msgid "accounting.pref"
 msgstr "Транзакции"
@@ -2522,6 +2522,24 @@ msgstr ""
 "lccn: 010 $a)"
 
 # Cataloging > Interface
+msgid "cataloguing.pref#CreateAVFromCataloguing# Allow"
+msgstr "Разрешете"
+
+# Cataloging > Interface
+msgid "cataloguing.pref#CreateAVFromCataloguing# Don't allow"
+msgstr "Не разрешавайте"
+
+# Cataloging > Interface > CreateAVFromCataloguing
+msgid ""
+"cataloguing.pref#CreateAVFromCataloguing# authorized values to be created "
+"within the cataloguing module. Librarian will need the manage_auth_values "
+"subpermission."
+msgstr ""
+"константните стойности, да могат да се задават в рамките на модула за "
+"каталогизиране. Библиотекарят ще се нуждае от разрешение за "
+"manage_auth_values."
+
+# Cataloging > Interface
 msgid "cataloguing.pref#DefaultClassificationSource# Use"
 msgstr "Използвайте"
 
@@ -2602,7 +2620,7 @@ msgstr "Активирайте"
 msgid ""
 "cataloguing.pref#EnableAdvancedCatalogingEditor# the advanced cataloging "
 "editor."
-msgstr "подробният редактор за каталогизиране."
+msgstr "разширеният редактор за каталогизиране."
 
 # Cataloging > Display
 msgid ""
@@ -4463,11 +4481,11 @@ msgid ""
 "cancel_expired_holds.pl</code> cronjob. Ask your system administrator to "
 "schedule it."
 msgstr ""
-"резервациите изтичат автоматично, ако не са били осъществени в рамките на "
+"резервациите изтичат автоматично, ако не е била осъществена в рамките на "
 "периода, посочен в ReserveMaxPickUpDelay.<br><strong> ЗАБЕЛЕЖКА:</strong> "
-"Тази системна настройка изисква <code>misc/cronjobs/holds/"
-"cancel_expired_holds.pl</code> cronjob. Помолете системния администратор да "
-"го планира."
+"Тази системна настройка изисква "
+"<code>misc/cronjobs/holds/cancel_expired_holds.pl</code> cronjob. Помолете "
+"системния администратор да го планира."
 
 # Circulation > Holds policy
 msgid "circulation.pref#ExpireReservesMaxPickUpDelayCharge# ."
@@ -4480,11 +4498,11 @@ msgid ""
 "to expire a fee of"
 msgstr ""
 "Ако използвате ExpireReserveMaxPickUpDelay, за читател, който допусне срока "
-"на чакаща резервация без да я отмени да изтече, определете такса(глоба) от"
+"на резервацията му без да я отмени да изтече, определете такса(глоба) от"
 
 # Circulation > Holds policy
 msgid "circulation.pref#ExpireReservesOnHolidays# Allow"
-msgstr "Позволявайте"
+msgstr "Позволете"
 
 # Circulation > Holds policy
 msgid "circulation.pref#ExpireReservesOnHolidays# Don't allow"
@@ -5411,8 +5429,8 @@ msgid ""
 "system preference \"RenewalPeriodBase\" is set to \"due date\", renewed "
 "items may still be overdue."
 msgstr ""
-"библиотечният документ автоматично. Ако RenewalPeriodBase е зададен на "
-"\"крайна дата\", презаписаният библиотечен документ все още могат да бъдат "
+"библиотечният документ автоматично. Ако RenewalPeriodBase е зададен на \""
+"крайна дата\", презаписаните библиотечни документи все още могат да бъдат "
 "просрочени."
 
 # Circulation > Checkout policy
@@ -6981,6 +6999,12 @@ msgstr "Покажете"
 # Enhanced content > Local or remote cover images
 msgid "enhanced_content.pref#CustomCoverImages# Don't display"
 msgstr "Не показвайте"
+
+# Enhanced content > Local or remote cover images
+msgid ""
+"enhanced_content.pref#CustomCoverImages# For control fields you can use just "
+"{field}, like {001}."
+msgstr "За контролни полета можете да използвате само {field}, като {001}."
 
 # Enhanced content > Local or remote cover images
 msgid ""
@@ -8762,7 +8786,7 @@ msgid ""
 "opac.pref#OPACFineNoRenewalsIncludeCredits# outstanding/unapplied credits "
 "when applying the OPACFineNoRenewals rule to patrons."
 msgstr ""
-"неизплатени/неприложени кредити, когато прилагате правилото "
+"неизплатени/неприложени кредити, при прилагане на правилото "
 "OPACFineNoRenewals към потребителите."
 
 # OPAC > Features
@@ -10458,7 +10482,7 @@ msgstr "Не разрешавайте"
 
 # OPAC > Features
 msgid "opac.pref#RequestOnOpac# patrons to place holds on items from the OPAC."
-msgstr "читателите, за да заявяват резервации върху елементи от OPAC."
+msgstr "на читателите, за да заявяват резервации от OPAC."
 
 # OPAC > Restricted page
 msgid ""
@@ -12147,6 +12171,22 @@ msgstr "Показва се до"
 # Searching > Results display
 msgid "searching.pref#FacetMaxCount# facets for each category."
 msgstr "фасети за всяка категория."
+
+# Searching > Results display
+msgid "searching.pref#FacetOrder# Sort facets"
+msgstr "Сортирайте по аспект"
+
+# Searching > Features
+msgid "searching.pref#FacetOrder# alphabetically"
+msgstr "по азбучен ред"
+
+# Searching > Results display
+msgid "searching.pref#FacetOrder# by usage count"
+msgstr "според броя на употреба"
+
+# Searching > Results display
+msgid "searching.pref#FacetOrder# for each category."
+msgstr "за всяка категория."
 
 # Searching > Features
 msgid ""

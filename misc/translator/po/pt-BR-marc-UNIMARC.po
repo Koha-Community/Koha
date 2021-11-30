@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Koha 20.11\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-10-20 12:09-0300\n"
+"POT-Creation-Date: 2021-11-16 09:49-0300\n"
 "PO-Revision-Date: 2021-04-07 16:23+0000\n"
 "Last-Translator: Viviane <viviane.rosa@saobernardo.sp.gov.br>\n"
 "Language-Team: Portuguese/Brazil <koha-br@lists.koha.org>\n"
@@ -22,8 +22,8 @@ msgstr ""
 "X-Pootle-Path: /pt_BR/20.11/pt-BR-marc-UNIMARC.po\n"
 "X-Pootle-Revision: 1\n"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/xslt/UNIMARCslimUtils.xsl:370
 #: koha-tmpl/intranet-tmpl/prog/en/xslt/UNIMARCslimUtils.xsl:308
+#: koha-tmpl/opac-tmpl/bootstrap/en/xslt/UNIMARCslimUtils.xsl:370
 #, c-format
 msgid "%%20"
 msgstr "%%20"
@@ -67,12 +67,15 @@ msgid "(Complete with 0 on the left)"
 msgstr "(Complete com 0 à esquerda)"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_leader.tt:13
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_leader_authorities.tt:13
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_leader_authorities.tt:148
 #, c-format
 msgid "(auto-calculated)"
 msgstr "(auto-calculado)"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_leader.tt:223
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_leader.tt:290
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_leader_authorities.tt:176
 #, c-format
 msgid "(auto-filled)"
 msgstr "(auto-preenchido)"
@@ -273,6 +276,12 @@ msgstr ", thesis advisor"
 msgid ", translator"
 msgstr ", tradutor"
 
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_leader_authorities.tt:156
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_leader_authorities.tt:158
+#, c-format
+msgid "- Full"
+msgstr ""
+
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_leader.tt:194
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_leader.tt:196
 #, c-format
@@ -395,6 +404,11 @@ msgstr "0- Não é um publicação governamental"
 #, c-format
 msgid "0- unmodified record"
 msgstr "0- registro não modificado"
+
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_leader_authorities.tt:6
+#, c-format
+msgid "000 - Leader"
+msgstr ""
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_100.tt:431
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_100.tt:433
@@ -560,6 +574,7 @@ msgid "1- modified record"
 msgstr "1- registro alterado"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_leader.tt:12
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_leader_authorities.tt:12
 #, c-format
 msgid "1-4 Record length"
 msgstr "1-4 Tamanho do registro"
@@ -605,6 +620,11 @@ msgstr "1/8 pol."
 #, c-format
 msgid "10 cm x 6.3 cm or 3 in. 7/8 x 2 in. 1/2"
 msgstr "10 cm x 6.3 cm ou 3 pol. 7/8 x 2 pol. 1/2"
+
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_leader_authorities.tt:147
+#, fuzzy, c-format
+msgid "10-16 indicator/subfields/size"
+msgstr "9-16 Indicador/Subcampos/Tamanho"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_130.tt:120
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_130.tt:122
@@ -692,6 +712,7 @@ msgstr "160 rpm"
 
 # Traduzido do Francês por Ricardo Dias Marques (em 28-Mai-2009) - estava apenas 17- Encodage
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_leader.tt:226
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_leader_authorities.tt:152
 #, c-format
 msgid "17- Encoding level"
 msgstr "17- Nível de codificação"
@@ -706,6 +727,11 @@ msgstr "17.78 cm ou 7 pol."
 #, c-format
 msgid "18- Descriptive cataloging form"
 msgstr "18- Forma descritiva de catalogação"
+
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_leader_authorities.tt:170
+#, c-format
+msgid "18-19 Undefined"
+msgstr ""
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_leader.tt:289
 #, c-format
@@ -758,11 +784,22 @@ msgstr "2-dimensões"
 msgid "2/8"
 msgstr "2/8"
 
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_leader_authorities.tt:175
+#, fuzzy, c-format
+msgid "20-24 Entry map &amp; lengths"
+msgstr "19-24 Mapa de entrada &amp; comprimentos"
+
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_126a.tt:246
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_126a.tt:248
 #, c-format
 msgid "25.4 cm or 10 in."
 msgstr "25.4 cm ou 10 pol."
+
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_leader_authorities.tt:161
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_leader_authorities.tt:163
+#, c-format
+msgid "3 - Partial"
+msgstr ""
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_leader.tt:251
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_leader.tt:253
@@ -873,6 +910,7 @@ msgid "45 rpm"
 msgstr "45 rpm"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_leader.tt:16
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_leader_authorities.tt:16
 #, c-format
 msgid "5- Record status"
 msgstr "5- Situação do registro"
@@ -916,6 +954,7 @@ msgid "6 x 9 in."
 msgstr "6 x 9 pol."
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_leader.tt:54
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_leader_authorities.tt:38
 #, c-format
 msgid "6- Type of record"
 msgstr "6- Tipo de registro"
@@ -949,6 +988,11 @@ msgstr "7 1/2 pol. por segundo"
 #, c-format
 msgid "7- Bibliographic level"
 msgstr "7- Nível bibliográfico"
+
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_leader_authorities.tt:63
+#, c-format
+msgid "7-8 Undefined"
+msgstr ""
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_126a.tt:231
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_126a.tt:233
@@ -1003,6 +1047,11 @@ msgstr "8/10 in. por segundo"
 msgid "9 x 19 cm"
 msgstr "9·x·19·cm"
 
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_leader_authorities.tt:68
+#, fuzzy, c-format
+msgid "9- Type of entity"
+msgstr "6- Tipo de registro"
+
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_leader.tt:222
 #, c-format
 msgid "9-16 Indicator/Subfields/Size"
@@ -1035,8 +1084,8 @@ msgstr ""
 msgid "ATS"
 msgstr "ATS"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:296
 #: koha-tmpl/intranet-tmpl/prog/en/xslt/UNIMARCslim2intranetDetail.xsl:255
+#: koha-tmpl/opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:296
 #, c-format
 msgid "Abstract: "
 msgstr "Resumo: "
@@ -1141,22 +1190,12 @@ msgstr "Alto"
 msgid "Amsterdam, Netherlands"
 msgstr "Amsterdam, Netherlands"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:153
 #: koha-tmpl/intranet-tmpl/prog/en/includes/subtypes_unimarc.inc:159
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:153
 #, c-format
 msgid "Annual"
 msgstr "Anual"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:6
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:20
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:37
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:54
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:65
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:87
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:116
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:142
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:178
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:191
 #: koha-tmpl/intranet-tmpl/prog/en/includes/subtypes_unimarc.inc:12
 #: koha-tmpl/intranet-tmpl/prog/en/includes/subtypes_unimarc.inc:26
 #: koha-tmpl/intranet-tmpl/prog/en/includes/subtypes_unimarc.inc:43
@@ -1167,18 +1206,28 @@ msgstr "Anual"
 #: koha-tmpl/intranet-tmpl/prog/en/includes/subtypes_unimarc.inc:148
 #: koha-tmpl/intranet-tmpl/prog/en/includes/subtypes_unimarc.inc:185
 #: koha-tmpl/intranet-tmpl/prog/en/includes/subtypes_unimarc.inc:198
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:6
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:20
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:37
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:54
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:65
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:87
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:116
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:142
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:178
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:191
 #, c-format
 msgid "Any"
 msgstr "Qualquer"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:166
 #: koha-tmpl/intranet-tmpl/prog/en/includes/subtypes_unimarc.inc:172
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:166
 #, c-format
 msgid "Any regularity"
 msgstr "Qualquer regularidade"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:129
 #: koha-tmpl/intranet-tmpl/prog/en/includes/subtypes_unimarc.inc:135
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:129
 #, c-format
 msgid "Any type"
 msgstr "Qualquer tipo"
@@ -1211,8 +1260,8 @@ msgstr "Atitude do sensor"
 msgid "Audience"
 msgstr "Audiência"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:342
 #: koha-tmpl/intranet-tmpl/prog/en/xslt/UNIMARCslim2intranetDetail.xsl:301
+#: koha-tmpl/opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:342
 #: koha-tmpl/intranet-tmpl/prog/en/includes/subtypes_unimarc.inc:10
 #, c-format
 msgid "Audience: "
@@ -1327,20 +1376,20 @@ msgstr "Berne, Switzerland"
 msgid "Beta"
 msgstr "Beta"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:322
 #: koha-tmpl/intranet-tmpl/prog/en/xslt/UNIMARCslim2intranetDetail.xsl:281
+#: koha-tmpl/opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:322
 #, c-format
 msgid "Bibliography: "
 msgstr "Bibliografia: "
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:154
 #: koha-tmpl/intranet-tmpl/prog/en/includes/subtypes_unimarc.inc:160
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:154
 #, c-format
 msgid "Biennial"
 msgstr "Bienal"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:149
 #: koha-tmpl/intranet-tmpl/prog/en/includes/subtypes_unimarc.inc:155
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:149
 #, c-format
 msgid "Bimonthly"
 msgstr "Bimensalmente"
@@ -1380,8 +1429,8 @@ msgstr "Biografia:"
 msgid "Biography: "
 msgstr "Biografia: "
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:146
 #: koha-tmpl/intranet-tmpl/prog/en/includes/subtypes_unimarc.inc:152
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:146
 #, c-format
 msgid "Biweekly"
 msgstr "Bisemanalmente"
@@ -1413,8 +1462,8 @@ msgstr "Bonne"
 msgid "Bound with:"
 msgstr "Começa com:"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:24
 #: koha-tmpl/intranet-tmpl/prog/en/includes/subtypes_unimarc.inc:30
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:24
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_106.tt:33
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_106.tt:35
 #, c-format
@@ -1509,6 +1558,7 @@ msgstr "Cadiz, Spain"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_686a.tt:67
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_700-4.tt:47
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_leader.tt:293
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_leader_authorities.tt:179
 #, c-format
 msgid "Cancel"
 msgstr "Cancelar"
@@ -1621,8 +1671,8 @@ msgstr "Clarinet"
 msgid "Classification"
 msgstr "Classificação"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:261
 #: koha-tmpl/intranet-tmpl/prog/en/xslt/UNIMARCslim2intranetDetail.xsl:220
+#: koha-tmpl/opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:261
 #, c-format
 msgid "Classification: "
 msgstr "Classificação: "
@@ -1645,8 +1695,8 @@ msgstr "Limpar campo"
 msgid "Click here to access online"
 msgstr "Clique aqui para acessar online"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACResults.xsl:177
 #: koha-tmpl/intranet-tmpl/prog/en/xslt/UNIMARCslim2intranetDetail.xsl:388
+#: koha-tmpl/opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACResults.xsl:177
 #, c-format
 msgid "Click here to access online "
 msgstr "Clique aqui para acessar online "
@@ -1663,8 +1713,8 @@ msgstr "Fechar"
 msgid "Cloud cover"
 msgstr "Cobertura da nuvem"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:101
 #: koha-tmpl/intranet-tmpl/prog/en/xslt/UNIMARCslim2intranetDetail.xsl:71
+#: koha-tmpl/opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:101
 #, c-format
 msgid "Coauthor"
 msgstr "Co-autor"
@@ -1674,8 +1724,8 @@ msgstr "Co-autor"
 msgid "Code date publication "
 msgstr "Código da data de publicação "
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:2
 #: koha-tmpl/intranet-tmpl/prog/en/includes/subtypes_unimarc.inc:8
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:2
 #, c-format
 msgid "Coded fields"
 msgstr "Campos codificados"
@@ -1743,8 +1793,8 @@ msgstr "Conteúdo"
 msgid "Content: "
 msgstr "Conteúdo: "
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:279
 #: koha-tmpl/intranet-tmpl/prog/en/xslt/UNIMARCslim2intranetDetail.xsl:238
+#: koha-tmpl/opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:279
 #, c-format
 msgid "Contents note: "
 msgstr "Notas de conteúdo: "
@@ -1789,20 +1839,20 @@ msgstr "Cordoba, Argentina"
 msgid "Cornet"
 msgstr "Cornet"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:113
 #: koha-tmpl/intranet-tmpl/prog/en/xslt/UNIMARCslim2intranetDetail.xsl:83
+#: koha-tmpl/opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:113
 #, c-format
 msgid "Corporate Author (Coauthor)"
 msgstr "Autor Institucional (co-autor)"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:95
 #: koha-tmpl/intranet-tmpl/prog/en/xslt/UNIMARCslim2intranetDetail.xsl:65
+#: koha-tmpl/opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:95
 #, c-format
 msgid "Corporate Author (Main)"
 msgstr "Autor Institucional (Principal)"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:119
 #: koha-tmpl/intranet-tmpl/prog/en/xslt/UNIMARCslim2intranetDetail.xsl:89
+#: koha-tmpl/opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:119
 #, c-format
 msgid "Corporate Author (Secondary)"
 msgstr "Autor Institucional (Secundário)"
@@ -1815,8 +1865,8 @@ msgstr "Autor Institucional (Secundário)"
 msgid "Counter tenor"
 msgstr "Counter tenor"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:167
 #: koha-tmpl/intranet-tmpl/prog/en/xslt/UNIMARCslim2intranetDetail.xsl:125
+#: koha-tmpl/opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:167
 #, c-format
 msgid "Country: "
 msgstr "País: "
@@ -1843,8 +1893,8 @@ msgstr "DBX processado"
 msgid "DVD-Video"
 msgstr "DVD-Video"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:143
 #: koha-tmpl/intranet-tmpl/prog/en/includes/subtypes_unimarc.inc:149
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:143
 #, c-format
 msgid "Daily"
 msgstr "Diariamente"
@@ -1862,8 +1912,8 @@ msgstr "Danificado ("
 msgid "Dance orchestra"
 msgstr "Dança orquestrada"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:134
 #: koha-tmpl/intranet-tmpl/prog/en/includes/subtypes_unimarc.inc:140
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:134
 #, c-format
 msgid "Database"
 msgstr "Base de dados"
@@ -1906,8 +1956,8 @@ msgstr "Decímetros"
 msgid "Degree (complete with 0):"
 msgstr "Grau (completar com 0):"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/xslt/UNIMARCslimUtils.xsl:225
 #: koha-tmpl/intranet-tmpl/prog/en/xslt/UNIMARCslimUtils.xsl:64
+#: koha-tmpl/opac-tmpl/bootstrap/en/xslt/UNIMARCslimUtils.xsl:225
 #, c-format
 msgid "Description: "
 msgstr "Descrição: "
@@ -1917,8 +1967,8 @@ msgstr "Descrição: "
 msgid "Deterioration stage"
 msgstr "Estágio de deterioração"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:241
 #: koha-tmpl/intranet-tmpl/prog/en/xslt/UNIMARCslim2intranetDetail.xsl:200
+#: koha-tmpl/opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:241
 #, c-format
 msgid "Dewey: "
 msgstr "Dewey: "
@@ -2381,8 +2431,8 @@ msgstr "Horn"
 msgid "Hours:"
 msgstr "Horas:"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:196
 #: koha-tmpl/intranet-tmpl/prog/en/xslt/UNIMARCslim2intranetDetail.xsl:155
+#: koha-tmpl/opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:196
 #, c-format
 msgid "ISBN: "
 msgstr "ISBN: "
@@ -2393,8 +2443,8 @@ msgstr "ISBN: "
 msgid "ISO 10646 Level 3 (Unicode, UTF-8)"
 msgstr "ISO 10646 Level 3 (Unicode, UTF-8)"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:216
 #: koha-tmpl/intranet-tmpl/prog/en/xslt/UNIMARCslim2intranetDetail.xsl:175
+#: koha-tmpl/opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:216
 #, c-format
 msgid "ISSN: "
 msgstr "ISSN: "
@@ -2671,8 +2721,8 @@ msgstr "Landsat III"
 msgid "Language of cataloguing (mandatory)"
 msgstr "Idioma da catalogação (obrigatório)"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:137
 #: koha-tmpl/intranet-tmpl/prog/en/xslt/UNIMARCslim2intranetDetail.xsl:95
+#: koha-tmpl/opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:137
 #, c-format
 msgid "Language: "
 msgstr "Idioma: "
@@ -2782,8 +2832,8 @@ msgstr "Madras, India"
 msgid "Madrid, Spain"
 msgstr "Madrid, Spain"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:89
 #: koha-tmpl/intranet-tmpl/prog/en/xslt/UNIMARCslim2intranetDetail.xsl:59
+#: koha-tmpl/opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:89
 #, c-format
 msgid "Main Author"
 msgstr "Autor Principal"
@@ -2938,8 +2988,8 @@ msgstr "Código de registro modificado"
 msgid "Mollweide"
 msgstr "Mollweide"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:131
 #: koha-tmpl/intranet-tmpl/prog/en/includes/subtypes_unimarc.inc:137
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:131
 #, c-format
 msgid "Monographic series"
 msgstr "Séries monográficas"
@@ -2950,8 +3000,8 @@ msgstr "Séries monográficas"
 msgid "Month"
 msgstr "Mês"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:148
 #: koha-tmpl/intranet-tmpl/prog/en/includes/subtypes_unimarc.inc:154
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:148
 #, c-format
 msgid "Monthly"
 msgstr "Mensal"
@@ -3053,8 +3103,8 @@ msgstr "Indicador de texto narrativo"
 msgid "Nature of contents code"
 msgstr "Código da natureza dos conteúdos"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:132
 #: koha-tmpl/intranet-tmpl/prog/en/includes/subtypes_unimarc.inc:138
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:132
 #, c-format
 msgid "Newspaper"
 msgstr "Jornal"
@@ -3148,6 +3198,7 @@ msgstr "Normal (16x - 30x)"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_225a.tt:25
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_700-4.tt:47
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_leader.tt:293
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_leader_authorities.tt:179
 msgid "OK"
 msgstr "OK"
 
@@ -3188,8 +3239,8 @@ msgstr "Em aquisição ("
 msgid "Ondes Martenot"
 msgstr "Ondes Martenot"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:413
 #: koha-tmpl/intranet-tmpl/prog/en/xslt/UNIMARCslim2intranetDetail.xsl:372
+#: koha-tmpl/opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:413
 #, c-format
 msgid "Online Resources:"
 msgstr "Recursos online:"
@@ -3223,10 +3274,10 @@ msgstr "Ornamental device:"
 msgid "Oslo (Christiania), Norway"
 msgstr "Oslo (Christiania), Norway"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:136
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:160
 #: koha-tmpl/intranet-tmpl/prog/en/includes/subtypes_unimarc.inc:142
 #: koha-tmpl/intranet-tmpl/prog/en/includes/subtypes_unimarc.inc:166
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:136
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:160
 #, c-format
 msgid "Other"
 msgstr "Outro"
@@ -3314,8 +3365,8 @@ msgstr "Indicador de partes:"
 msgid "Peking, People's Republic of China"
 msgstr "Peking, People's Republic of China"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:130
 #: koha-tmpl/intranet-tmpl/prog/en/includes/subtypes_unimarc.inc:136
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:130
 #, c-format
 msgid "Periodical"
 msgstr "Periódico"
@@ -3379,8 +3430,8 @@ msgstr "Piano"
 msgid "Piccolo"
 msgstr "Piccolo"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:176
 #: koha-tmpl/intranet-tmpl/prog/en/includes/subtypes_unimarc.inc:182
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:176
 #, c-format
 msgid "Picture"
 msgstr "Fotografia"
@@ -3479,8 +3530,8 @@ msgstr "Dispositivo da impressora:"
 msgid "Production elements"
 msgstr "Elementos de produção"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:313
 #: koha-tmpl/intranet-tmpl/prog/en/xslt/UNIMARCslim2intranetDetail.xsl:272
+#: koha-tmpl/opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:313
 #, c-format
 msgid "Provenance note: "
 msgstr "Nota de contato: "
@@ -3495,8 +3546,8 @@ msgstr "Data de publicação 2"
 msgid "Publication date 1"
 msgstr "Data de publicação 1"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/xslt/UNIMARCslimUtils.xsl:194
 #: koha-tmpl/intranet-tmpl/prog/en/xslt/UNIMARCslimUtils.xsl:33
+#: koha-tmpl/opac-tmpl/bootstrap/en/xslt/UNIMARCslimUtils.xsl:194
 #, c-format
 msgid "Publication: "
 msgstr "Publicação: "
@@ -3525,8 +3576,8 @@ msgstr "Quadruplex (bobina)"
 msgid "Quality of image"
 msgstr "Qualidade de imagem"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:150
 #: koha-tmpl/intranet-tmpl/prog/en/includes/subtypes_unimarc.inc:156
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:150
 #, c-format
 msgid "Quarterly"
 msgstr "Trimestrais"
@@ -3626,8 +3677,8 @@ msgstr "SEN 2"
 msgid "SEN 3"
 msgstr "SEN 3"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:352
 #: koha-tmpl/intranet-tmpl/prog/en/xslt/UNIMARCslim2intranetDetail.xsl:311
+#: koha-tmpl/opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:352
 #, c-format
 msgid "SUDOC serial history: "
 msgstr "SUDOC histórico de periódico: "
@@ -3690,8 +3741,8 @@ msgstr "Seasat"
 msgid "Second (complete with 0):"
 msgstr "Segundo (completar com 0):"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:107
 #: koha-tmpl/intranet-tmpl/prog/en/xslt/UNIMARCslim2intranetDetail.xsl:77
+#: koha-tmpl/opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:107
 #, c-format
 msgid "Secondary Author"
 msgstr "Autor Secundário"
@@ -3716,20 +3767,20 @@ msgstr "Segundos:"
 msgid "Select a collection"
 msgstr "Selecionar uma coleção"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:152
 #: koha-tmpl/intranet-tmpl/prog/en/includes/subtypes_unimarc.inc:158
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:152
 #, c-format
 msgid "Semiannual"
 msgstr "Semestral"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:147
 #: koha-tmpl/intranet-tmpl/prog/en/includes/subtypes_unimarc.inc:153
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:147
 #, c-format
 msgid "Semimonthly"
 msgstr "Bimensal"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:144
 #: koha-tmpl/intranet-tmpl/prog/en/includes/subtypes_unimarc.inc:150
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:144
 #, c-format
 msgid "Semiweekly"
 msgstr "Bisemanal"
@@ -3744,14 +3795,14 @@ msgstr "Tipo de periódico"
 msgid "Serial type: "
 msgstr "Tipo de serial:"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:125
 #: koha-tmpl/intranet-tmpl/prog/en/includes/subtypes_unimarc.inc:131
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:125
 #, c-format
 msgid "Serials"
 msgstr "Periódicos"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:235
 #: koha-tmpl/intranet-tmpl/prog/en/xslt/UNIMARCslim2intranetDetail.xsl:194
+#: koha-tmpl/opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:235
 #, c-format
 msgid "Series"
 msgstr "Séries"
@@ -3905,56 +3956,56 @@ msgstr "Stockholm, Sweden"
 msgid "String orchestra"
 msgstr "Orchestra string"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:398
 #: koha-tmpl/intranet-tmpl/prog/en/xslt/UNIMARCslim2intranetDetail.xsl:357
+#: koha-tmpl/opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:398
 #, c-format
 msgid "Subject"
 msgstr "Assunto"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:378
 #: koha-tmpl/intranet-tmpl/prog/en/xslt/UNIMARCslim2intranetDetail.xsl:337
+#: koha-tmpl/opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:378
 #, c-format
 msgid "Subject - Author/Title"
 msgstr "Assunto - Autor/Título"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:368
 #: koha-tmpl/intranet-tmpl/prog/en/xslt/UNIMARCslim2intranetDetail.xsl:327
+#: koha-tmpl/opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:368
 #, c-format
 msgid "Subject - Corporate Author"
 msgstr "Assunto - Autor corporativo"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:373
 #: koha-tmpl/intranet-tmpl/prog/en/xslt/UNIMARCslim2intranetDetail.xsl:332
+#: koha-tmpl/opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:373
 #, c-format
 msgid "Subject - Family"
 msgstr "Assunto - Família"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:393
 #: koha-tmpl/intranet-tmpl/prog/en/xslt/UNIMARCslim2intranetDetail.xsl:352
+#: koha-tmpl/opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:393
 #, c-format
 msgid "Subject - Form"
 msgstr "Assunto - Forma"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:388
 #: koha-tmpl/intranet-tmpl/prog/en/xslt/UNIMARCslim2intranetDetail.xsl:347
+#: koha-tmpl/opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:388
 #, c-format
 msgid "Subject - Geographical Name"
 msgstr "Assunto - Nome geográfico"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:363
 #: koha-tmpl/intranet-tmpl/prog/en/xslt/UNIMARCslim2intranetDetail.xsl:322
+#: koha-tmpl/opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:363
 #, c-format
 msgid "Subject - Personal Name"
 msgstr "Assunto - Nome pessoal"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:383
 #: koha-tmpl/intranet-tmpl/prog/en/xslt/UNIMARCslim2intranetDetail.xsl:342
+#: koha-tmpl/opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:383
 #, c-format
 msgid "Subject - Topical Name"
 msgstr "Assunto - Nome tópico"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:403
 #: koha-tmpl/intranet-tmpl/prog/en/xslt/UNIMARCslim2intranetDetail.xsl:362
+#: koha-tmpl/opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:403
 #, c-format
 msgid "Subject Category"
 msgstr "Categoria de Assunto"
@@ -4087,26 +4138,26 @@ msgstr "Techniques (drawings, paintings) 3"
 msgid "Tenor"
 msgstr "Tenor"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:332
 #: koha-tmpl/intranet-tmpl/prog/en/xslt/UNIMARCslim2intranetDetail.xsl:291
+#: koha-tmpl/opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:332
 #, c-format
 msgid "Thesis: "
 msgstr "Teses: "
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:157
 #: koha-tmpl/intranet-tmpl/prog/en/includes/subtypes_unimarc.inc:163
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:157
 #, c-format
 msgid "Three times a month"
 msgstr "Três vezes por mês"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:156
 #: koha-tmpl/intranet-tmpl/prog/en/includes/subtypes_unimarc.inc:162
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:156
 #, c-format
 msgid "Three times a week"
 msgstr "Três vezes por semana"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:151
 #: koha-tmpl/intranet-tmpl/prog/en/includes/subtypes_unimarc.inc:157
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:151
 #, c-format
 msgid "Three times a year"
 msgstr "Três vezes por ano"
@@ -4157,8 +4208,8 @@ msgstr "Disponibilidade de código da página de título"
 msgid "Tokyo, Japan"
 msgstr "Tóquio, Japão"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:408
 #: koha-tmpl/intranet-tmpl/prog/en/xslt/UNIMARCslim2intranetDetail.xsl:367
+#: koha-tmpl/opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:408
 #, c-format
 msgid "Trademark"
 msgstr "Marca"
@@ -4217,8 +4268,8 @@ msgstr "Transparências 8 * 8 pol. (20 * 20 cm)"
 msgid "Transparencies 9 * 9 in. (22.5 * 22.5 cm)"
 msgstr "Transparências 9 * 9 pol. (22.5 * 22.5 cm)"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:155
 #: koha-tmpl/intranet-tmpl/prog/en/includes/subtypes_unimarc.inc:161
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:155
 #, c-format
 msgid "Triennial"
 msgstr "Trienal"
@@ -4556,6 +4607,7 @@ msgstr "UNIMARC field 700-4 builder"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_leader.tt:3
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_leader.tt:8
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_leader_authorities.tt:2
 #, c-format
 msgid "UNIMARC leader builder"
 msgstr "UNIMARC leader builder"
@@ -4584,8 +4636,8 @@ msgstr "Cabeçalho convencional uniforme"
 msgid "Uniform Title"
 msgstr "Título uniforme"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:159
 #: koha-tmpl/intranet-tmpl/prog/en/includes/subtypes_unimarc.inc:165
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:159
 #, c-format
 msgid "Unknown"
 msgstr "Desconhecido"
@@ -4678,14 +4730,14 @@ msgstr "Vozes não especificado"
 msgid "Unspecified woodwinds"
 msgstr "Woodwinds não especificado"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:133
 #: koha-tmpl/intranet-tmpl/prog/en/includes/subtypes_unimarc.inc:139
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:133
 #, c-format
 msgid "Updating loose-leaf"
 msgstr "Atualizando folhas-soltas"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:135
 #: koha-tmpl/intranet-tmpl/prog/en/includes/subtypes_unimarc.inc:141
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:135
 #, c-format
 msgid "Updating website"
 msgstr "Atualizando website"
@@ -4832,8 +4884,8 @@ msgstr "Washington, DC, USA"
 msgid "Watermark:"
 msgstr "Marca d'água:"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:145
 #: koha-tmpl/intranet-tmpl/prog/en/includes/subtypes_unimarc.inc:151
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:145
 #, c-format
 msgid "Weekly"
 msgstr "Semanalmente"
@@ -4848,8 +4900,8 @@ msgstr "Largura ou dimensões"
 msgid "Withdrawn ("
 msgstr "Descartado ("
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:158
 #: koha-tmpl/intranet-tmpl/prog/en/includes/subtypes_unimarc.inc:164
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:158
 #, c-format
 msgid "Without periodicity"
 msgstr "Sem periodicidade"
@@ -4895,6 +4947,12 @@ msgstr "a- Analítico (parte componente)"
 #, c-format
 msgid "a - Language materials, printed"
 msgstr "a - Material textual, impresso"
+
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_leader_authorities.tt:72
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_leader_authorities.tt:74
+#, fuzzy, c-format
+msgid "a - Personal name entry"
+msgstr "Assunto - Nome pessoal"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_105.tt:1111
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_105.tt:1113
@@ -5011,8 +5069,8 @@ msgstr "abcdfijkmnptvxyz"
 msgid "abcdjptvxyz"
 msgstr "abcdjptvxyz"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:284
 #: koha-tmpl/intranet-tmpl/prog/en/xslt/UNIMARCslim2intranetDetail.xsl:243
+#: koha-tmpl/opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:284
 #, c-format
 msgid "abcdjpvxyz"
 msgstr "abcdjpvxyz"
@@ -5029,8 +5087,8 @@ msgstr "abcdq"
 msgid "abcdu"
 msgstr "abcdu"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:91
 #: koha-tmpl/intranet-tmpl/prog/en/includes/subtypes_unimarc.inc:97
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:91
 #, c-format
 msgid "abstract"
 msgstr "resumo"
@@ -5047,8 +5105,8 @@ msgstr "resumo ou sumário"
 msgid "ac- sticker"
 msgstr "ac- autocolante"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:581
 #: koha-tmpl/intranet-tmpl/prog/en/xslt/UNIMARCslim2intranetDetail.xsl:434
+#: koha-tmpl/opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:581
 #, c-format
 msgid "acdeq"
 msgstr "acdeq"
@@ -5081,14 +5139,14 @@ msgstr "acrílicos"
 msgid "ad- poster"
 msgstr "ad- poster"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:13
 #: koha-tmpl/intranet-tmpl/prog/en/includes/subtypes_unimarc.inc:19
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:13
 #, c-format
 msgid "adult, General"
 msgstr "adulto, Geral"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:12
 #: koha-tmpl/intranet-tmpl/prog/en/includes/subtypes_unimarc.inc:18
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:12
 #, c-format
 msgid "adult, serious"
 msgstr "adulto, seriado"
@@ -5235,8 +5293,8 @@ msgstr "hino "
 msgid "aperture card"
 msgstr "cartão de abertura"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:553
 #: koha-tmpl/intranet-tmpl/prog/en/xslt/UNIMARCslim2intranetDetail.xsl:406
+#: koha-tmpl/opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:553
 #, c-format
 msgid "aq"
 msgstr "aq"
@@ -5307,8 +5365,8 @@ msgstr "atlas incluindo atlas publicado de folhas soltas"
 msgid "au- santino"
 msgstr "au- santino"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:56
 #: koha-tmpl/intranet-tmpl/prog/en/includes/subtypes_unimarc.inc:62
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:56
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_125b.tt:56
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_125b.tt:58
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_140.tt:1538
@@ -5340,6 +5398,12 @@ msgstr "azimutal, outro tipo específico conhecido"
 #, c-format
 msgid "azimuthal, specific type unknown"
 msgstr "azimutal, tipo específico desconhecido"
+
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_leader_authorities.tt:78
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_leader_authorities.tt:80
+#, fuzzy, c-format
+msgid "b - Corporate name entry"
+msgstr "Assunto - Autor corporativo"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_leader.tt:70
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_leader.tt:72
@@ -5479,14 +5543,14 @@ msgstr "batimetria - isolinhas"
 msgid "bathymetry - soundings"
 msgstr "batimetria - sondagens"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:589
 #: koha-tmpl/intranet-tmpl/prog/en/xslt/UNIMARCslim2intranetDetail.xsl:442
+#: koha-tmpl/opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:589
 #, c-format
 msgid "bc"
 msgstr "bc"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:88
 #: koha-tmpl/intranet-tmpl/prog/en/includes/subtypes_unimarc.inc:94
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:88
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_110.tt:210
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_110.tt:212
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_126a.tt:431
@@ -5643,8 +5707,8 @@ msgstr "vinculada num jornal, monografia, etc."
 msgid "bound with one or more others"
 msgstr "vinculada com um ou mais"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:193
 #: koha-tmpl/intranet-tmpl/prog/en/includes/subtypes_unimarc.inc:200
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:193
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_116.tt:105
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_116.tt:107
 #, c-format
@@ -5719,6 +5783,12 @@ msgstr "por técnicas sensoriais remotas passivas"
 msgid "c - Collection - bibliographic item that is a made-up collection"
 msgstr "c - Coleção - item bibliográfico que é um coleção"
 
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_leader_authorities.tt:20
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_leader_authorities.tt:22
+#, fuzzy, c-format
+msgid "c - Corrected or revised"
+msgstr "c - Registro corrigido"
+
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_leader.tt:26
 #, c-format
 msgid "c - Corrected or updated record"
@@ -5734,6 +5804,12 @@ msgstr "c - Registro corrigido"
 #, c-format
 msgid "c - Music scores, printed"
 msgstr "c - Partitura musical, impressa"
+
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_leader_authorities.tt:84
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_leader_authorities.tt:86
+#, fuzzy, c-format
+msgid "c - Territorial or geographical name"
+msgstr "Assunto - Nome geográfico"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_105.tt:1122
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_105.tt:1124
@@ -5861,8 +5937,8 @@ msgstr "cânone"
 msgid "cantata"
 msgstr "cantata"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:192
 #: koha-tmpl/intranet-tmpl/prog/en/includes/subtypes_unimarc.inc:199
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:192
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_116.tt:100
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_116.tt:102
 #, c-format
@@ -5895,8 +5971,8 @@ msgstr "canhão"
 msgid "cardboard"
 msgstr "papelão"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:194
 #: koha-tmpl/intranet-tmpl/prog/en/includes/subtypes_unimarc.inc:201
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:194
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_116.tt:110
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_116.tt:112
 #, c-format
@@ -5909,8 +5985,8 @@ msgstr "papelão/placa de ilustração"
 msgid "carol"
 msgstr "cântico"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:107
 #: koha-tmpl/intranet-tmpl/prog/en/includes/subtypes_unimarc.inc:113
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:107
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_110.tt:313
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_110.tt:315
 #, c-format
@@ -5927,8 +6003,8 @@ msgstr "banda desenha ou desenhos animados"
 msgid "casein"
 msgstr "caseína"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:89
 #: koha-tmpl/intranet-tmpl/prog/en/includes/subtypes_unimarc.inc:95
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:89
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_110.tt:217
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_110.tt:219
 #, c-format
@@ -5947,8 +6023,8 @@ msgstr "catálogo"
 msgid "catechism"
 msgstr "catecismo"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:574
 #: koha-tmpl/intranet-tmpl/prog/en/xslt/UNIMARCslim2intranetDetail.xsl:427
+#: koha-tmpl/opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:574
 #, c-format
 msgid "cdn"
 msgstr "cdn"
@@ -5997,8 +6073,8 @@ msgstr "cântico, cristão"
 msgid "chant, non christian"
 msgstr "cântico, não cristão"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:69
 #: koha-tmpl/intranet-tmpl/prog/en/includes/subtypes_unimarc.inc:75
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:69
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_140.tt:71
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_140.tt:73
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_140.tt:166
@@ -6029,8 +6105,8 @@ msgstr "gráficos"
 msgid "chiaroscuro woodcut"
 msgstr "xilogravura"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:10
 #: koha-tmpl/intranet-tmpl/prog/en/includes/subtypes_unimarc.inc:16
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:10
 #, c-format
 msgid "children (9-14)"
 msgstr "criança (9-14)"
@@ -6129,8 +6205,8 @@ msgstr "carvão"
 msgid "coarse/standard"
 msgstr "grosseiro/standard"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:74
 #: koha-tmpl/intranet-tmpl/prog/en/includes/subtypes_unimarc.inc:80
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:74
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_140.tt:86
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_140.tt:88
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_140.tt:181
@@ -6151,8 +6227,8 @@ msgstr "grosseiro/standard"
 msgid "coats of arms"
 msgstr "brasões"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:102
 #: koha-tmpl/intranet-tmpl/prog/en/xslt/UNIMARCslim2intranetDetail.xsl:72
+#: koha-tmpl/opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:102
 #, c-format
 msgid "coauthor"
 msgstr "co-autor"
@@ -6163,8 +6239,8 @@ msgstr "co-autor"
 msgid "coins"
 msgstr "moedas"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:179
 #: koha-tmpl/intranet-tmpl/prog/en/includes/subtypes_unimarc.inc:186
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:179
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_116.tt:446
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_116.tt:448
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_116.tt:647
@@ -6175,8 +6251,8 @@ msgstr "moedas"
 msgid "collage"
 msgstr "colagem"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:58
 #: koha-tmpl/intranet-tmpl/prog/en/includes/subtypes_unimarc.inc:64
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:58
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_140.tt:1548
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_140.tt:1550
 #, c-format
@@ -6343,8 +6419,8 @@ msgstr "recipientes"
 msgid "contains"
 msgstr "contém"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:59
 #: koha-tmpl/intranet-tmpl/prog/en/includes/subtypes_unimarc.inc:65
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:59
 #, c-format
 msgid "contains biographical data"
 msgstr "contém dados bibliográficos"
@@ -6395,20 +6471,20 @@ msgstr "cobre"
 msgid "cordiform"
 msgstr "cordiforme"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:114
 #: koha-tmpl/intranet-tmpl/prog/en/xslt/UNIMARCslim2intranetDetail.xsl:84
+#: koha-tmpl/opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:114
 #, c-format
 msgid "corporate_coauthor"
 msgstr "corporate_coauthor"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:96
 #: koha-tmpl/intranet-tmpl/prog/en/xslt/UNIMARCslim2intranetDetail.xsl:66
+#: koha-tmpl/opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:96
 #, c-format
 msgid "corporate_main_author"
 msgstr "corporate_main_author"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:120
 #: koha-tmpl/intranet-tmpl/prog/en/xslt/UNIMARCslim2intranetDetail.xsl:90
+#: koha-tmpl/opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:120
 #, c-format
 msgid "corporate_secondary_author"
 msgstr "corporate_secondary_author"
@@ -6459,6 +6535,12 @@ msgstr "cilíndrico, outro tipo específico conhecido"
 msgid "cylindrical, specific type unknown"
 msgstr "cilíndrico, tipo específico desconhecido"
 
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_leader_authorities.tt:25
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_leader_authorities.tt:27
+#, fuzzy, c-format
+msgid "d - Deleted"
+msgstr "d - Registro excluído"
+
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_leader.tt:31
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_leader.tt:33
 #, c-format
@@ -6470,6 +6552,12 @@ msgstr "d - Registro excluído"
 #, c-format
 msgid "d - Music scores, manuscript"
 msgstr "d - Partitura musical manuscrita"
+
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_leader_authorities.tt:90
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_leader_authorities.tt:92
+#, fuzzy, c-format
+msgid "d - Trademark"
+msgstr "Marca"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_105.tt:430
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_105.tt:432
@@ -6647,8 +6735,8 @@ msgstr "2/dia"
 msgid "diazo"
 msgstr "diazo"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:92
 #: koha-tmpl/intranet-tmpl/prog/en/includes/subtypes_unimarc.inc:98
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:92
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_110.tt:235
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_110.tt:237
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_140.tt:823
@@ -6693,8 +6781,8 @@ msgstr "dioramas"
 msgid "dir. de publication"
 msgstr "dir. de publicação"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:94
 #: koha-tmpl/intranet-tmpl/prog/en/includes/subtypes_unimarc.inc:100
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:94
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_110.tt:247
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_110.tt:249
 #, c-format
@@ -6753,14 +6841,14 @@ msgstr "obra discursiva"
 msgid "discussion, dissertation, thesis"
 msgstr "discussão, dissertação, tese"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:100
 #: koha-tmpl/intranet-tmpl/prog/en/includes/subtypes_unimarc.inc:106
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:100
 #, c-format
 msgid "dissertation or thesis"
 msgstr "dissertações ou teses"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:108
 #: koha-tmpl/intranet-tmpl/prog/en/includes/subtypes_unimarc.inc:114
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:108
 #, c-format
 msgid "dissertation or thesis (revised)"
 msgstr "dissertação ou tese (revisada)"
@@ -6783,8 +6871,8 @@ msgstr "bonecas"
 msgid "dot map"
 msgstr "mapa de pontos"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:39
 #: koha-tmpl/intranet-tmpl/prog/en/includes/subtypes_unimarc.inc:45
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:39
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_125b.tt:26
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_125b.tt:28
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_140.tt:1379
@@ -6793,8 +6881,8 @@ msgstr "mapa de pontos"
 msgid "drama"
 msgstr "drama"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:180
 #: koha-tmpl/intranet-tmpl/prog/en/includes/subtypes_unimarc.inc:187
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:180
 #, c-format
 msgid "drawing"
 msgstr "desenho"
@@ -6826,6 +6914,12 @@ msgstr "duplitised stock"
 #, c-format
 msgid "e - Cartographic materials, printed"
 msgstr "e - Material cartográfico, impresso"
+
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_leader_authorities.tt:96
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_leader_authorities.tt:98
+#, fuzzy, c-format
+msgid "e - Family name"
+msgstr "Assunto - Família"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_105.tt:435
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_105.tt:437
@@ -6967,8 +7061,8 @@ msgstr "gravação de vídeo electrónico"
 msgid "encaustic"
 msgstr "encáustico"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:93
 #: koha-tmpl/intranet-tmpl/prog/en/includes/subtypes_unimarc.inc:99
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:93
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_110.tt:241
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_110.tt:243
 #, c-format
@@ -7033,8 +7127,8 @@ msgstr "erótica"
 msgid "essay, feuilleton"
 msgstr "ensaio, folhetim"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:40
 #: koha-tmpl/intranet-tmpl/prog/en/includes/subtypes_unimarc.inc:46
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:40
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_125b.tt:66
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_125b.tt:68
 #, c-format
@@ -7069,8 +7163,8 @@ msgstr "gravura"
 msgid "ethnological information"
 msgstr "informações etnológicas"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:104
 #: koha-tmpl/intranet-tmpl/prog/en/includes/subtypes_unimarc.inc:110
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:104
 #, c-format
 msgid "examination paper"
 msgstr "artigo de examinação"
@@ -7090,6 +7184,12 @@ msgstr "excelente"
 #, c-format
 msgid "f - Cartographic materials, manuscript"
 msgstr "f - Material cartográfico, manuscrito"
+
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_leader_authorities.tt:102
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_leader_authorities.tt:104
+#, fuzzy, c-format
+msgid "f - Uniform name"
+msgstr "Título uniforme"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_105.tt:440
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_105.tt:442
@@ -7153,8 +7253,8 @@ msgstr "fa- Árabe"
 msgid "fable"
 msgstr "fábula"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:73
 #: koha-tmpl/intranet-tmpl/prog/en/includes/subtypes_unimarc.inc:79
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:73
 #, c-format
 msgid "facsimiles"
 msgstr "fac-símiles"
@@ -7199,16 +7299,16 @@ msgstr "fauna"
 msgid "felt-tip pen"
 msgstr "caneta de feltro"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:601
-#: koha-tmpl/opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:608
 #: koha-tmpl/intranet-tmpl/prog/en/xslt/UNIMARCslim2intranetDetail.xsl:454
 #: koha-tmpl/intranet-tmpl/prog/en/xslt/UNIMARCslim2intranetDetail.xsl:461
+#: koha-tmpl/opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:601
+#: koha-tmpl/opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:608
 #, c-format
 msgid "fghkdlmor"
 msgstr "fghkdlmor"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:38
 #: koha-tmpl/intranet-tmpl/prog/en/includes/subtypes_unimarc.inc:44
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:38
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_125b.tt:31
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_125b.tt:33
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_140.tt:1389
@@ -7307,8 +7407,8 @@ msgstr "contos populares"
 msgid "form lines"
 msgstr "linhas de forma"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:76
 #: koha-tmpl/intranet-tmpl/prog/en/includes/subtypes_unimarc.inc:82
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:76
 #, c-format
 msgid "forms"
 msgstr "formatos"
@@ -7356,6 +7456,12 @@ msgstr "faixa total"
 #, c-format
 msgid "furniture"
 msgstr "mobília"
+
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_leader_authorities.tt:108
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_leader_authorities.tt:110
+#, fuzzy, c-format
+msgid "g - Collective uniform name"
+msgstr "c - biografia colectiva"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_leader.tt:100
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_leader.tt:102
@@ -7424,8 +7530,8 @@ msgstr "jogos e recreação"
 msgid "gb_page_center[600,500]"
 msgstr "gb_page_center[600,500]"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:75
 #: koha-tmpl/intranet-tmpl/prog/en/includes/subtypes_unimarc.inc:81
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:75
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_140.tt:91
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_140.tt:93
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_140.tt:186
@@ -7446,8 +7552,8 @@ msgstr "gb_page_center[600,500]"
 msgid "genealogical tables"
 msgstr "tabelas geneológicas"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:195
 #: koha-tmpl/intranet-tmpl/prog/en/includes/subtypes_unimarc.inc:202
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:195
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_115a.tt:1087
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_115a.tt:1089
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_116.tt:116
@@ -7533,6 +7639,12 @@ msgstr "grafite"
 #, c-format
 msgid "greater than 9 kilometres"
 msgstr "maior que 9 quilómetros"
+
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_leader_authorities.tt:114
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_leader_authorities.tt:116
+#, fuzzy, c-format
+msgid "h - Name/title"
+msgstr "h - fac-símiles"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_105.tt:64
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_105.tt:66
@@ -7630,8 +7742,8 @@ msgstr "colorido à mão"
 msgid "hand-made paper"
 msgstr "artigo feito à mão"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:26
 #: koha-tmpl/intranet-tmpl/prog/en/includes/subtypes_unimarc.inc:32
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:26
 #, c-format
 msgid "hand-written"
 msgstr "escrito à mão"
@@ -7648,8 +7760,8 @@ msgstr "colorido à mão"
 msgid "handwritten"
 msgstr "escrito à mão"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:197
 #: koha-tmpl/intranet-tmpl/prog/en/includes/subtypes_unimarc.inc:204
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:197
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_116.tt:128
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_116.tt:130
 #, c-format
@@ -7712,8 +7824,8 @@ msgstr "obra histórica"
 msgid "history"
 msgstr "histórico"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:41
 #: koha-tmpl/intranet-tmpl/prog/en/includes/subtypes_unimarc.inc:47
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:41
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_140.tt:1442
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_140.tt:1444
 #, c-format
@@ -7749,6 +7861,12 @@ msgstr "i - Forma ISBD parcial ou incompleta"
 #, c-format
 msgid "i - Integrating resource"
 msgstr "i - Recurso integrado"
+
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_leader_authorities.tt:120
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_leader_authorities.tt:122
+#, c-format
+msgid "i - Name/collective uniform title"
+msgstr ""
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_leader.tt:106
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_leader.tt:108
@@ -7815,8 +7933,8 @@ msgstr "ia- Thai"
 msgid "ijknpxyz"
 msgstr "ijknpxyz"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:80
 #: koha-tmpl/intranet-tmpl/prog/en/includes/subtypes_unimarc.inc:86
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:80
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_140.tt:26
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_140.tt:28
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_140.tt:121
@@ -7835,8 +7953,8 @@ msgstr "iluminações"
 msgid "illustrateur"
 msgstr "ilustrador"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:66
 #: koha-tmpl/intranet-tmpl/prog/en/includes/subtypes_unimarc.inc:72
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:66
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_140.tt:21
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_140.tt:23
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_140.tt:116
@@ -7931,8 +8049,8 @@ msgstr "em partes"
 msgid "incomplete"
 msgstr "incompleto"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:90
 #: koha-tmpl/intranet-tmpl/prog/en/includes/subtypes_unimarc.inc:96
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:90
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_110.tt:223
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_110.tt:225
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_140.tt:818
@@ -7971,8 +8089,8 @@ msgstr "índice ou nome da lista do próprio item cartográfico"
 msgid "index or name list present but location not specified"
 msgstr "índice ou nome da lista presente mas localização não especificada"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:57
 #: koha-tmpl/intranet-tmpl/prog/en/includes/subtypes_unimarc.inc:63
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:57
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_140.tt:1543
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_140.tt:1545
 #, c-format
@@ -8067,8 +8185,8 @@ msgstr "intermezzo"
 msgid "interviews"
 msgstr "entrevistas"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:169
 #: koha-tmpl/intranet-tmpl/prog/en/includes/subtypes_unimarc.inc:175
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:169
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_110.tt:185
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_110.tt:187
 #, c-format
@@ -8104,6 +8222,12 @@ msgstr "ivory"
 #, c-format
 msgid "j - Sound recordings, musical performance"
 msgstr "j - Registros sonoros, performance musical"
+
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_leader_authorities.tt:126
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_leader_authorities.tt:128
+#, fuzzy, c-format
+msgid "j - Topical subject"
+msgstr "Assunto - Nome tópico"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_100.tt:81
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_100.tt:83
@@ -8161,9 +8285,9 @@ msgstr "jóias"
 msgid "jigsaws"
 msgstr "puzzles"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:285
 #: koha-tmpl/intranet-tmpl/prog/en/xslt/UNIMARCslim2intranetDetail.xsl:244
 #: koha-tmpl/intranet-tmpl/prog/en/xslt/UNIMARCslimUtils.xsl:269
+#: koha-tmpl/opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:285
 #, c-format
 msgid "jpxyz"
 msgstr "jpxyz"
@@ -8174,11 +8298,17 @@ msgstr "jpxyz"
 msgid "juvenile literature"
 msgstr "literatura juvenil"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:7
 #: koha-tmpl/intranet-tmpl/prog/en/includes/subtypes_unimarc.inc:13
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:7
 #, c-format
 msgid "juvenile, general"
 msgstr "juvenil, geral"
+
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_leader_authorities.tt:132
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_leader_authorities.tt:134
+#, c-format
+msgid "k - Place access"
+msgstr ""
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_leader.tt:118
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_leader.tt:120
@@ -8246,6 +8376,12 @@ msgstr "ka- Coreano"
 msgid "l - Electronic resources"
 msgstr "l - Recursos electrônicos"
 
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_leader_authorities.tt:138
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_leader_authorities.tt:140
+#, c-format
+msgid "l - Form, genre or physical characteristics"
+msgstr ""
+
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_105.tt:84
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_105.tt:86
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_105.tt:180
@@ -8302,8 +8438,8 @@ msgstr "lacado (acetato, por exemplo)"
 msgid "landforms"
 msgstr "landforms"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:22
 #: koha-tmpl/intranet-tmpl/prog/en/includes/subtypes_unimarc.inc:28
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:22
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_106.tt:22
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_106.tt:24
 #, c-format
@@ -8332,8 +8468,8 @@ msgstr "lavierung India ink"
 msgid "law reports and digests"
 msgstr "relatórios legais ou resumos"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:101
 #: koha-tmpl/intranet-tmpl/prog/en/includes/subtypes_unimarc.inc:107
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:101
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_110.tt:277
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_110.tt:279
 #, c-format
@@ -8392,8 +8528,8 @@ msgstr "legenda"
 msgid "less than 1 centimetre"
 msgstr "menos de 1 centímetro"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:42
 #: koha-tmpl/intranet-tmpl/prog/en/includes/subtypes_unimarc.inc:48
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:42
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_140.tt:1447
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_140.tt:1449
 #, c-format
@@ -8412,8 +8548,8 @@ msgstr "cartas"
 msgid "library catalogue"
 msgstr "catálogo"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:46
 #: koha-tmpl/intranet-tmpl/prog/en/includes/subtypes_unimarc.inc:52
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:46
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_140.tt:1384
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_140.tt:1386
 #, c-format
@@ -8458,8 +8594,8 @@ msgstr "escalar linear"
 msgid "lino-cut"
 msgstr "lino de corte"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:105
 #: koha-tmpl/intranet-tmpl/prog/en/includes/subtypes_unimarc.inc:111
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:105
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_110.tt:307
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_110.tt:309
 #, c-format
@@ -8622,8 +8758,8 @@ msgstr "meio de armazenamento magnético - compatível com computador"
 msgid "magnetic storage medium - not computer compatible"
 msgstr "meio de armazenamento magnético - não compatível com computador"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:90
 #: koha-tmpl/intranet-tmpl/prog/en/xslt/UNIMARCslim2intranetDetail.xsl:60
+#: koha-tmpl/opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:90
 #, c-format
 msgid "main_author"
 msgstr "main_author"
@@ -8676,8 +8812,8 @@ msgstr "mapa"
 msgid "map view"
 msgstr "ver mapa"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:67
 #: koha-tmpl/intranet-tmpl/prog/en/includes/subtypes_unimarc.inc:73
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:67
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_140.tt:66
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_140.tt:68
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_140.tt:161
@@ -8782,8 +8918,8 @@ msgstr "memórias"
 msgid "mental or cognitive map"
 msgstr "mapa mental ou cognitivo"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:205
 #: koha-tmpl/intranet-tmpl/prog/en/includes/subtypes_unimarc.inc:212
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:205
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_115a.tt:1101
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_116.tt:182
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_116.tt:184
@@ -8871,8 +9007,8 @@ msgstr "8·mm·(microfilme)"
 msgid "microfilm slip"
 msgstr "8·mm·(microfilme)"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:30
 #: koha-tmpl/intranet-tmpl/prog/en/includes/subtypes_unimarc.inc:36
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:30
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_106.tt:71
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_106.tt:73
 #, c-format
@@ -8897,8 +9033,8 @@ msgstr "microgroove/multa"
 msgid "microphotography"
 msgstr "microfotografia"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:25
 #: koha-tmpl/intranet-tmpl/prog/en/includes/subtypes_unimarc.inc:31
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:25
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_106.tt:39
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_106.tt:41
 #, c-format
@@ -8917,8 +9053,8 @@ msgstr "lâminas de microscópio"
 msgid "minerals"
 msgstr "minerais"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:28
 #: koha-tmpl/intranet-tmpl/prog/en/includes/subtypes_unimarc.inc:34
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:28
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_106.tt:59
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_106.tt:61
 #, c-format
@@ -8993,8 +9129,8 @@ msgstr "misturado"
 msgid "mixed base (nitrate and safety)"
 msgstr "base mista (nitmouse e de segurança)"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:201
 #: koha-tmpl/intranet-tmpl/prog/en/includes/subtypes_unimarc.inc:208
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:201
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_116.tt:158
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_116.tt:160
 #, c-format
@@ -9107,8 +9243,8 @@ msgstr "moteto"
 msgid "mother (positive)"
 msgstr "mãe (positivo)"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:117
 #: koha-tmpl/intranet-tmpl/prog/en/includes/subtypes_unimarc.inc:123
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:117
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_115a.tt:21
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_115a.tt:23
 #, c-format
@@ -9141,8 +9277,8 @@ msgstr "multi-canal, surround ou quadrafônico"
 msgid "multicoloured"
 msgstr "multi-colorido"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:27
 #: koha-tmpl/intranet-tmpl/prog/en/includes/subtypes_unimarc.inc:33
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:27
 #, c-format
 msgid "multimedia"
 msgstr "multimédia"
@@ -9178,8 +9314,8 @@ msgstr "múltiplos ou outros"
 msgid "multiple or other form"
 msgstr "forma múltipla ou outras"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:48
 #: koha-tmpl/intranet-tmpl/prog/en/includes/subtypes_unimarc.inc:54
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:48
 #, c-format
 msgid "multiple/other literary forms"
 msgstr "multipla/outras formas literárias"
@@ -9196,8 +9332,8 @@ msgstr "fotografia multi-espectral"
 msgid "multispectral scanning"
 msgstr "digitalização multi-espectral"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:72
 #: koha-tmpl/intranet-tmpl/prog/en/includes/subtypes_unimarc.inc:78
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:72
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_140.tt:81
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_140.tt:83
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_140.tt:176
@@ -9235,6 +9371,12 @@ msgstr "literatura mística"
 #, c-format
 msgid "n - In non-ISBD form"
 msgstr "n - Forma não-ISBD"
+
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_leader_authorities.tt:30
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_leader_authorities.tt:32
+#, fuzzy, c-format
+msgid "n - New"
+msgstr "n - Novo registro"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_leader.tt:36
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_leader.tt:38
@@ -9280,8 +9422,8 @@ msgstr "negativo"
 msgid "newspaper"
 msgstr "jornal"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:23
 #: koha-tmpl/intranet-tmpl/prog/en/includes/subtypes_unimarc.inc:29
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:23
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_106.tt:27
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_106.tt:29
 #, c-format
@@ -9354,8 +9496,8 @@ msgstr "sem deterioração"
 msgid "no frequency (i.e. irregular)"
 msgstr "sem frequência (irregular)"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:81
 #: koha-tmpl/intranet-tmpl/prog/en/includes/subtypes_unimarc.inc:87
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:81
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_140.tt:96
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_140.tt:98
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_140.tt:191
@@ -9562,8 +9704,8 @@ msgstr "não nitmouse - deterioração detectável (odor diacetato)"
 msgid "nonnitrate - disaster"
 msgstr "não nitmouse - catástrofe"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:168
 #: koha-tmpl/intranet-tmpl/prog/en/includes/subtypes_unimarc.inc:174
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:168
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_110.tt:179
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_110.tt:181
 #, c-format
@@ -9584,8 +9726,8 @@ msgstr "irregular normalizado"
 msgid "north"
 msgstr "nore"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:55
 #: koha-tmpl/intranet-tmpl/prog/en/includes/subtypes_unimarc.inc:61
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:55
 #, c-format
 msgid "not a biography"
 msgstr "não é biografia"
@@ -9596,8 +9738,8 @@ msgstr "não é biografia"
 msgid "not a conference publication"
 msgstr "não é uma publicação de evento"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:47
 #: koha-tmpl/intranet-tmpl/prog/en/includes/subtypes_unimarc.inc:53
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:47
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_140.tt:1517
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_140.tt:1519
 #, c-format
@@ -9780,8 +9922,8 @@ msgstr "novela"
 msgid "numeric"
 msgstr "numérico"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:102
 #: koha-tmpl/intranet-tmpl/prog/en/includes/subtypes_unimarc.inc:108
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:102
 #, c-format
 msgid "numeric table"
 msgstr "tabela numérica"
@@ -9816,56 +9958,56 @@ msgstr "o - Iluminações"
 msgid "o - numeric table"
 msgstr "o - tabela numérica"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:148
 #: koha-tmpl/intranet-tmpl/prog/en/xslt/UNIMARCslim2intranetDetail.xsl:106
+#: koha-tmpl/opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:148
 #, c-format
 msgid "of accompanying material, "
 msgstr "do suplemento, "
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:144
 #: koha-tmpl/intranet-tmpl/prog/en/xslt/UNIMARCslim2intranetDetail.xsl:102
+#: koha-tmpl/opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:144
 #, c-format
 msgid "of contents page, "
 msgstr "da página de conteúdo, "
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:141
 #: koha-tmpl/intranet-tmpl/prog/en/xslt/UNIMARCslim2intranetDetail.xsl:99
+#: koha-tmpl/opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:141
 #, c-format
 msgid "of intermediate text, "
 msgstr "de texto intermediário, "
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:147
 #: koha-tmpl/intranet-tmpl/prog/en/xslt/UNIMARCslim2intranetDetail.xsl:105
+#: koha-tmpl/opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:147
 #, c-format
 msgid "of libretto, "
 msgstr "de libretto, "
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:142
 #: koha-tmpl/intranet-tmpl/prog/en/xslt/UNIMARCslim2intranetDetail.xsl:100
+#: koha-tmpl/opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:142
 #, c-format
 msgid "of original work, "
 msgstr "de obra original,"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:149
 #: koha-tmpl/intranet-tmpl/prog/en/xslt/UNIMARCslim2intranetDetail.xsl:107
+#: koha-tmpl/opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:149
 #, c-format
 msgid "of subtitles, "
 msgstr "de subtítulos, "
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:143
 #: koha-tmpl/intranet-tmpl/prog/en/xslt/UNIMARCslim2intranetDetail.xsl:101
+#: koha-tmpl/opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:143
 #, c-format
 msgid "of summary, "
 msgstr "de sumário, "
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:145
 #: koha-tmpl/intranet-tmpl/prog/en/xslt/UNIMARCslim2intranetDetail.xsl:103
+#: koha-tmpl/opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:145
 #, c-format
 msgid "of title page, "
 msgstr "de título de página, "
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:146
 #: koha-tmpl/intranet-tmpl/prog/en/xslt/UNIMARCslim2intranetDetail.xsl:104
+#: koha-tmpl/opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:146
 #, c-format
 msgid "of title proper, "
 msgstr "de título apropriado, "
@@ -9972,8 +10114,8 @@ msgstr "carta ornamental"
 msgid "orthographic"
 msgstr "ortográfico"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:110
 #: koha-tmpl/intranet-tmpl/prog/en/includes/subtypes_unimarc.inc:116
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:110
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_110.tt:38
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_110.tt:40
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_110.tt:149
@@ -10184,8 +10326,8 @@ msgstr "outra forma"
 msgid "other form of material"
 msgstr "outra forma de material"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:31
 #: koha-tmpl/intranet-tmpl/prog/en/includes/subtypes_unimarc.inc:37
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:31
 #, c-format
 msgid "other form of textual material"
 msgstr "outro tipo de material textual"
@@ -10254,8 +10396,8 @@ msgstr "outros métodos de relevo de representação"
 msgid "other non photographic medium"
 msgstr "outro meio não fotográficos"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:188
 #: koha-tmpl/intranet-tmpl/prog/en/includes/subtypes_unimarc.inc:195
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:188
 #, c-format
 msgid "other non-projected graphic type"
 msgstr "outro tipo de gráfico não projectado"
@@ -10298,8 +10440,8 @@ msgstr "outro tipo de vídeo"
 msgid "other wide screen format"
 msgstr "outro formato de tela larga"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:207
 #: koha-tmpl/intranet-tmpl/prog/en/includes/subtypes_unimarc.inc:214
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:207
 #, c-format
 msgid "others"
 msgstr "outros"
@@ -10335,14 +10477,14 @@ msgstr ""
 msgid "p - technical report"
 msgstr "p - relatório técnico"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:181
 #: koha-tmpl/intranet-tmpl/prog/en/includes/subtypes_unimarc.inc:188
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:181
 #, c-format
 msgid "painting"
 msgstr "pintura"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:206
 #: koha-tmpl/intranet-tmpl/prog/en/includes/subtypes_unimarc.inc:213
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:206
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_116.tt:188
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_116.tt:190
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_117.tt:325
@@ -10455,8 +10597,8 @@ msgstr "mapeamento de microondas passivas"
 msgid "pastel"
 msgstr "pastel"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:98
 #: koha-tmpl/intranet-tmpl/prog/en/includes/subtypes_unimarc.inc:104
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:98
 #, c-format
 msgid "patent"
 msgstr "patente"
@@ -10525,20 +10667,20 @@ msgstr "fotografia"
 msgid "photolithography"
 msgstr "fotolitografia"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:182
 #: koha-tmpl/intranet-tmpl/prog/en/includes/subtypes_unimarc.inc:189
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:182
 #, c-format
 msgid "photomechanical reproduction"
 msgstr "reprodução fotomecânica"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:183
 #: koha-tmpl/intranet-tmpl/prog/en/includes/subtypes_unimarc.inc:190
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:183
 #, c-format
 msgid "photonegative"
 msgstr "negativo fotográfico"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:184
 #: koha-tmpl/intranet-tmpl/prog/en/includes/subtypes_unimarc.inc:191
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:184
 #, c-format
 msgid "photoprint"
 msgstr "fotocópia"
@@ -10567,8 +10709,8 @@ msgstr "mapa pictórico"
 msgid "pictorially"
 msgstr "pictoricamente"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:185
 #: koha-tmpl/intranet-tmpl/prog/en/includes/subtypes_unimarc.inc:192
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:185
 #, c-format
 msgid "picture"
 msgstr "imagem"
@@ -10591,8 +10733,8 @@ msgstr "plano"
 msgid "planimetric"
 msgstr "planimétrico"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:70
 #: koha-tmpl/intranet-tmpl/prog/en/includes/subtypes_unimarc.inc:76
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:70
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_140.tt:76
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_140.tt:78
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_140.tt:171
@@ -10613,8 +10755,8 @@ msgstr "planimétrico"
 msgid "plans"
 msgstr "planos"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:196
 #: koha-tmpl/intranet-tmpl/prog/en/includes/subtypes_unimarc.inc:203
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:196
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_116.tt:122
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_116.tt:124
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_117.tt:271
@@ -10651,14 +10793,14 @@ msgstr "plásticos (produzidos em massa)"
 msgid "plastic pressing"
 msgstr "prensagem de plástico"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:71
 #: koha-tmpl/intranet-tmpl/prog/en/includes/subtypes_unimarc.inc:77
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:71
 #, c-format
 msgid "plates"
 msgstr "placas"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:44
 #: koha-tmpl/intranet-tmpl/prog/en/includes/subtypes_unimarc.inc:50
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:44
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_125b.tt:21
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_125b.tt:23
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_140.tt:1369
@@ -10751,8 +10893,8 @@ msgstr "música popular"
 msgid "porcelain"
 msgstr "porcelana"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:198
 #: koha-tmpl/intranet-tmpl/prog/en/includes/subtypes_unimarc.inc:205
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:198
 #, c-format
 msgid "porcelaine"
 msgstr "porcelana"
@@ -10785,8 +10927,8 @@ msgstr "pórfiro"
 msgid "portrait"
 msgstr "retmouse"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:68
 #: koha-tmpl/intranet-tmpl/prog/en/includes/subtypes_unimarc.inc:74
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:68
 #, c-format
 msgid "portraits"
 msgstr "retmouses"
@@ -10817,8 +10959,8 @@ msgstr "cartazes"
 msgid "postface"
 msgstr "posfácio"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:8
 #: koha-tmpl/intranet-tmpl/prog/en/includes/subtypes_unimarc.inc:14
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:8
 #, c-format
 msgid "pre-primary (0-5)"
 msgstr "pré-escolar (0-5)"
@@ -10849,14 +10991,14 @@ msgstr "pedras preciosas"
 msgid "prelude and fugue"
 msgstr "prelúdio e fuga"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:9
 #: koha-tmpl/intranet-tmpl/prog/en/includes/subtypes_unimarc.inc:15
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:9
 #, c-format
 msgid "primary (5-8)"
 msgstr "primário (5-8)"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:186
 #: koha-tmpl/intranet-tmpl/prog/en/includes/subtypes_unimarc.inc:193
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:186
 #, c-format
 msgid "print"
 msgstr "imprimir"
@@ -10909,8 +11051,8 @@ msgstr "perfil"
 msgid "programme music"
 msgstr "música de programa"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:97
 #: koha-tmpl/intranet-tmpl/prog/en/includes/subtypes_unimarc.inc:103
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:97
 #, c-format
 msgid "programmed text books"
 msgstr "livros de texto programado"
@@ -10933,8 +11075,8 @@ msgstr "textos programados"
 msgid "programmes and pressbooks"
 msgstr "programas e livros de imprensa"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:95
 #: koha-tmpl/intranet-tmpl/prog/en/includes/subtypes_unimarc.inc:101
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:95
 #, c-format
 msgid "project description"
 msgstr "descrição do projecto"
@@ -11138,16 +11280,16 @@ msgstr "impressão de referência/visualização cópia"
 msgid "reference work"
 msgstr "trabalho de referência"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:167
 #: koha-tmpl/intranet-tmpl/prog/en/includes/subtypes_unimarc.inc:173
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:167
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_110.tt:173
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_110.tt:175
 #, c-format
 msgid "regular"
 msgstr "regular"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:21
 #: koha-tmpl/intranet-tmpl/prog/en/includes/subtypes_unimarc.inc:27
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:21
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_106.tt:17
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_106.tt:19
 #, c-format
@@ -11160,8 +11302,8 @@ msgstr "impressão normal"
 msgid "rehearsals"
 msgstr "ensaios"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:109
 #: koha-tmpl/intranet-tmpl/prog/en/includes/subtypes_unimarc.inc:115
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:109
 #, c-format
 msgid "religious text"
 msgstr "texto religioso"
@@ -11290,8 +11432,8 @@ msgstr "romance"
 msgid "rondo"
 msgstr "rondo"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/xslt/UNIMARCslimUtils.xsl:107
 #: koha-tmpl/intranet-tmpl/prog/en/xslt/UNIMARCslimUtils.xsl:190
+#: koha-tmpl/opac-tmpl/bootstrap/en/xslt/UNIMARCslimUtils.xsl:107
 #, c-format
 msgid "rtl"
 msgstr "rtl"
@@ -11362,8 +11504,8 @@ msgstr "base de segurança"
 msgid "safety film"
 msgstr "película de segurança"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:77
 #: koha-tmpl/intranet-tmpl/prog/en/includes/subtypes_unimarc.inc:83
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:77
 #, c-format
 msgid "samples"
 msgstr "exemplos"
@@ -11448,8 +11590,8 @@ msgstr "material de script"
 msgid "sculptures"
 msgstr "esculturas"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:108
 #: koha-tmpl/intranet-tmpl/prog/en/xslt/UNIMARCslim2intranetDetail.xsl:78
+#: koha-tmpl/opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:108
 #, c-format
 msgid "secondary_author"
 msgstr "secondary_author"
@@ -11494,8 +11636,8 @@ msgstr "sépia"
 msgid "sepia tone"
 msgstr "tom de sépia"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:236
 #: koha-tmpl/intranet-tmpl/prog/en/xslt/UNIMARCslim2intranetDetail.xsl:195
+#: koha-tmpl/opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:236
 #, c-format
 msgid "series"
 msgstr "periódicos"
@@ -11554,8 +11696,8 @@ msgstr "set_level"
 msgid "shellac pressing"
 msgstr "pressionando"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:43
 #: koha-tmpl/intranet-tmpl/prog/en/includes/subtypes_unimarc.inc:49
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:43
 #, c-format
 msgid "short stories"
 msgstr "contos"
@@ -11628,8 +11770,8 @@ msgstr "sexta faixa"
 msgid "sixteen track"
 msgstr "faixa dezasseis"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:203
 #: koha-tmpl/intranet-tmpl/prog/en/includes/subtypes_unimarc.inc:210
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:203
 #, c-format
 msgid "skin"
 msgstr "película"
@@ -11694,8 +11836,8 @@ msgstr "disco de som"
 msgid "sound on medium"
 msgstr "meio de som"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:78
 #: koha-tmpl/intranet-tmpl/prog/en/includes/subtypes_unimarc.inc:84
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:78
 #, c-format
 msgid "sound recordings"
 msgstr "gravações de som"
@@ -11752,8 +11894,8 @@ msgstr "modelo espacial em superfície de duas dimensões"
 msgid "specimens (biological etc.)"
 msgstr "espécimes (biológicos etc)"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:45
 #: koha-tmpl/intranet-tmpl/prog/en/includes/subtypes_unimarc.inc:51
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:45
 #, c-format
 msgid "speeches, oratory"
 msgstr "palestras, oratória"
@@ -11792,8 +11934,8 @@ msgstr "mancha"
 msgid "stamper (negative)"
 msgstr "batedor (negativo)"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:99
 #: koha-tmpl/intranet-tmpl/prog/en/includes/subtypes_unimarc.inc:105
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:99
 #, c-format
 msgid "standard"
 msgstr "standard"
@@ -11818,8 +11960,8 @@ msgstr "abertura silenciosa padrão (formato reduzido)"
 msgid "starts with"
 msgstr "começa por"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:96
 #: koha-tmpl/intranet-tmpl/prog/en/includes/subtypes_unimarc.inc:102
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:96
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_110.tt:259
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_110.tt:261
 #, c-format
@@ -11868,8 +12010,8 @@ msgstr "estereofónico"
 msgid "stills"
 msgstr "stills"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:199
 #: koha-tmpl/intranet-tmpl/prog/en/includes/subtypes_unimarc.inc:206
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:199
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_116.tt:140
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_116.tt:142
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_117.tt:295
@@ -11914,8 +12056,8 @@ msgstr "poema sinfónico"
 msgid "symphony"
 msgstr "sinfonia"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:202
 #: koha-tmpl/intranet-tmpl/prog/en/includes/subtypes_unimarc.inc:209
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:202
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_117.tt:361
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_117.tt:363
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_117.tt:541
@@ -11996,8 +12138,8 @@ msgstr "fita (rolo aberto)"
 msgid "tape duplication master"
 msgstr "mestre duplicação de fita"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:187
 #: koha-tmpl/intranet-tmpl/prog/en/includes/subtypes_unimarc.inc:194
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:187
 #, c-format
 msgid "technical drawing"
 msgstr "desenho técnico"
@@ -12034,8 +12176,8 @@ msgstr "informações técnicas sobre a música"
 msgid "technical or historical information on instruments"
 msgstr "informações técnicas ou históricas sobre os instrumentos"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:103
 #: koha-tmpl/intranet-tmpl/prog/en/includes/subtypes_unimarc.inc:109
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:103
 #, c-format
 msgid "technical report"
 msgstr "relatório técnico"
@@ -12109,8 +12251,8 @@ msgstr "text/html"
 msgid "textbook"
 msgstr "livro de texto"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:204
 #: koha-tmpl/intranet-tmpl/prog/en/includes/subtypes_unimarc.inc:211
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:204
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_117.tt:367
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_117.tt:369
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_117.tt:547
@@ -12214,8 +12356,8 @@ msgstr "matiz"
 msgid "tinted and toned"
 msgstr "matizado e tonificada"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACResults.xsl:52
 #: koha-tmpl/intranet-tmpl/prog/en/xslt/UNIMARCslim2intranetResults.xsl:38
+#: koha-tmpl/opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACResults.xsl:52
 #, c-format
 msgid "title"
 msgstr "title"
@@ -12262,8 +12404,8 @@ msgstr "tradutor"
 msgid "transfer line print"
 msgstr "impressão linha de transferência"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:79
 #: koha-tmpl/intranet-tmpl/prog/en/includes/subtypes_unimarc.inc:85
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:79
 #, c-format
 msgid "transparencies"
 msgstr "transparências"
@@ -12318,8 +12460,8 @@ msgid "travelogue"
 msgstr "conferência"
 
 # Traduzido por Ricardo Dias Marques em 26-Mai-2009
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:106
 #: koha-tmpl/intranet-tmpl/prog/en/includes/subtypes_unimarc.inc:112
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:106
 #, c-format
 msgid "treaties"
 msgstr "tratados"
@@ -12420,12 +12562,12 @@ msgstr "uniform_conventional_heading"
 msgid "uniform_title"
 msgstr "uniform_title"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:14
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:170
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:208
 #: koha-tmpl/intranet-tmpl/prog/en/includes/subtypes_unimarc.inc:20
 #: koha-tmpl/intranet-tmpl/prog/en/includes/subtypes_unimarc.inc:176
 #: koha-tmpl/intranet-tmpl/prog/en/includes/subtypes_unimarc.inc:215
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:14
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:170
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:208
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_110.tt:139
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_110.tt:141
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_115a.tt:78
@@ -12662,8 +12804,8 @@ msgid "vesicular"
 msgstr "vesicular"
 
 # Traduzido por Ricardo Dias Marques em 26-Mai-2009
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:119
 #: koha-tmpl/intranet-tmpl/prog/en/includes/subtypes_unimarc.inc:125
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:119
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_124g.tt:17
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_124g.tt:19
 #, c-format
@@ -12747,8 +12889,8 @@ msgstr "vinheta"
 msgid "viola d'amore"
 msgstr "viola d'amore"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:118
 #: koha-tmpl/intranet-tmpl/prog/en/includes/subtypes_unimarc.inc:124
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:118
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_115a.tt:26
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_115a.tt:28
 #, c-format
@@ -12859,8 +13001,8 @@ msgstr "xilogravura de linha branca"
 msgid "wire recording"
 msgstr "wire recording"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:200
 #: koha-tmpl/intranet-tmpl/prog/en/includes/subtypes_unimarc.inc:207
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:200
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_116.tt:146
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_116.tt:148
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_117.tt:283
@@ -12933,6 +13075,12 @@ msgstr "usado"
 msgid "writing ink"
 msgstr "tinta de escrever"
 
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_leader_authorities.tt:42
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_leader_authorities.tt:44
+#, fuzzy, c-format
+msgid "x - Authority entry record"
+msgstr "Tipo de autoridade"
+
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_100_authorities.tt:30
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_100_authorities.tt:32
 #, c-format
@@ -12950,6 +13098,12 @@ msgstr "x- não aplicável"
 #, c-format
 msgid "xx- not applicable"
 msgstr "xx- não aplicável"
+
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_leader_authorities.tt:48
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_leader_authorities.tt:50
+#, fuzzy, c-format
+msgid "y - Reference entry record"
+msgstr "c - Registro corrigido"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_105.tt:297
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_105.tt:299
@@ -12993,9 +13147,9 @@ msgstr "y- não foi usado esquema de transliteração"
 msgid "y- not a government publication"
 msgstr "y- não é uma publicação governamental"
 
+#: koha-tmpl/intranet-tmpl/prog/en/xslt/UNIMARCslim2intranetDetail.xsl:385
 #: koha-tmpl/opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:425
 #: koha-tmpl/opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACResults.xsl:174
-#: koha-tmpl/intranet-tmpl/prog/en/xslt/UNIMARCslim2intranetDetail.xsl:385
 #, c-format
 msgid "y3z"
 msgstr "y3z"
@@ -13012,11 +13166,17 @@ msgstr "livro do ano"
 msgid "yellow strip"
 msgstr "faixa amarela"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:11
 #: koha-tmpl/intranet-tmpl/prog/en/includes/subtypes_unimarc.inc:17
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:11
 #, c-format
 msgid "young adult"
 msgstr "jovem adulto"
+
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_leader_authorities.tt:54
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_leader_authorities.tt:56
+#, c-format
+msgid "z - General explanatory entry record"
+msgstr ""
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_105.tt:1086
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_105.tt:1088

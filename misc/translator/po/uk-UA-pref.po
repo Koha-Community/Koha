@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Koha 20.11\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2021-10-25 12:32+0000\n"
+"PO-Revision-Date: 2021-11-23 11:49+0000\n"
 "Last-Translator: Serhij Dubyk <dubyk@ukr.net>\n"
 "Language-Team: Ukrainian Linux Team <translation@linux.org.ua>\n"
 "Language: uk\n"
@@ -13,7 +13,7 @@ msgstr ""
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 "X-Generator: Pootle 2.8\n"
 "X-Poedit-SourceCharset: utf-8\n"
-"X-POOTLE-MTIME: 1635165140.212161\n"
+"X-POOTLE-MTIME: 1637668165.878795\n"
 "X-Pootle-Path: /uk/20.11/uk-UA-pref.po\n"
 "X-Pootle-Revision: 1\n"
 
@@ -342,7 +342,7 @@ msgstr "електронна адреса підрозділу"
 
 # Acquisitions > Policy
 msgid "acquisitions.pref#EmailPurchaseSuggestions# none"
-msgstr ""
+msgstr "немає"
 
 # Acquisitions > Policy
 msgid ""
@@ -802,6 +802,9 @@ msgid ""
 "superlibrarians) from viewing and approving/denying patron modification "
 "requests for patrons belonging to other libraries: "
 msgstr ""
+"Заборонити бібліотекарям (але не супербібліотекарям) переглядати, "
+"затверджувати/відхиляти запити на редагування користувачів про себе, що "
+"належать до інших бібліотек/підрозділів: "
 
 # Administration > Login options
 msgid "admin.pref#IndependentBranchesPatronModifications# Yes"
@@ -816,6 +819,8 @@ msgid ""
 "admin.pref#IndependentBranchesTransfers# Prevent staff (but not "
 "superlibrarians) from transfering items to other libraries: "
 msgstr ""
+"Заборонити бібліотекарям (але не супербібліотекарям) переміщувати примірники "
+"в інші бібліотеки/підрозділи: "
 
 # Administration > Login options
 msgid "admin.pref#IndependentBranchesTransfers# Yes"
@@ -849,6 +854,8 @@ msgid ""
 "admin.pref#ReturnpathDefault# If you leave this empty, the From address will "
 "be used (often defaulting to the admin address)."
 msgstr ""
+"Якщо залишити це поле порожнім, то використається адреса відправника (часто "
+"за умовчанням це адреса адміністратора)."
 
 # Administration > Interface options
 msgid ""
@@ -873,6 +880,8 @@ msgid ""
 "admin.pref#SendAllEmailsTo# (Leave this field empty to send messages to "
 "their normal recipient.)"
 msgstr ""
+" (залиште це поле порожнім, щоб надсилати повідомлення їх звичайному "
+"одержувачу)."
 
 # Administration > Interface options
 msgid "admin.pref#SendAllEmailsTo# Email to redirect all messages to: "
@@ -1952,7 +1961,7 @@ msgstr ""
 
 # Administration > Interface options
 msgid "admin.pref#delimiter# backslashes"
-msgstr "зворотний слеш \\"
+msgstr "зворотні слеші \\"
 
 # Administration > Interface options
 msgid "admin.pref#delimiter# commas"
@@ -2435,6 +2444,21 @@ msgid ""
 msgstr ""
 
 # Cataloging > Interface
+msgid "cataloguing.pref#CreateAVFromCataloguing# Allow"
+msgstr "Дозволити"
+
+# Cataloging > Interface
+msgid "cataloguing.pref#CreateAVFromCataloguing# Don't allow"
+msgstr "Не дозволяти"
+
+# Cataloging > Interface > CreateAVFromCataloguing
+msgid ""
+"cataloguing.pref#CreateAVFromCataloguing# authorized values to be created "
+"within the cataloguing module. Librarian will need the manage_auth_values "
+"subpermission."
+msgstr ""
+
+# Cataloging > Interface
 msgid "cataloguing.pref#DefaultClassificationSource# Use"
 msgstr "Використовувати "
 
@@ -2445,13 +2469,10 @@ msgid ""
 msgstr " у якості джерела класифікації за умовчанням."
 
 # Cataloging > Record structure
-#, fuzzy
 msgid ""
 "cataloguing.pref#DefaultCountryField008#  Empty defaults to ||| - No attempt "
 "to code."
 msgstr ""
-"Пусте значення за умовчанням відповідатиме значенню„xxu“ для Сполучених "
-"Штатів."
 
 # Cataloging > Record structure
 msgid ""
@@ -2939,7 +2960,7 @@ msgstr "Приклади: "
 msgid ""
 "cataloguing.pref#SubfieldsToAllowForRestrictedEditing# If the system "
 "preference is empty, no fields are restricted."
-msgstr ""
+msgstr "Якщо системний параметр пустий, жодні поля не будуть обмежені."
 
 # Cataloging > Record structure
 msgid ""
@@ -2952,7 +2973,7 @@ msgstr ""
 msgid ""
 "cataloguing.pref#SubfieldsToAllowForRestrictedEditing# MARC21: \"952$a 952$b "
 "952$c\""
-msgstr ""
+msgstr "MARC21: „952$a 952$b 952$c“"
 
 # Cataloging > Record structure
 msgid ""
@@ -2964,7 +2985,7 @@ msgstr ""
 msgid ""
 "cataloguing.pref#SubfieldsToAllowForRestrictedEditing# UNIMARC: \"995$f "
 "995$h 995$j\""
-msgstr ""
+msgstr "UNIMARC: „995$f 995$h 995$j“"
 
 # Cataloging > Record structure
 msgid ""
@@ -3401,13 +3422,10 @@ msgid "circulation.pref#AllowItemsOnHoldCheckoutSIP# Don't allow"
 msgstr "Не дозволяти"
 
 # Circulation > Checkout policy
-#, fuzzy
 msgid ""
 "circulation.pref#AllowItemsOnHoldCheckoutSIP# If allowed do not generate "
 "RESERVED warning."
-msgstr ""
-"Якщо це дозволено, не генерувати попередження „RESERVE_WAITING“ та "
-"„RESERVED“."
+msgstr "Якщо це дозволено, не генерувати попередження „RESERVED“."
 
 # Circulation > Checkout policy
 msgid ""
@@ -3468,9 +3486,9 @@ msgid ""
 "circulation computers. (<strong>NOTE:</strong> This system preference does "
 "not affect the Firefox add-on or the desktop application)."
 msgstr ""
-"офлайн-режим обігу на комп’ютерах із звичайним обігом "
-"(<strong>увага:</strong> цей системний параметр не впливає на втулок Firefox "
-"чи настільний застосунок)."
+"офлайн-режим обігу на комп’ютерах із звичайним обігом (<strong>увага:</"
+"strong> цей системний параметр не впливає на втулок Firefox чи настільний "
+"застосунок)."
 
 # Circulation > Holds policy
 msgid "circulation.pref#AllowRenewalIfOtherItemsAvailable# Allow"
@@ -3967,9 +3985,8 @@ msgid ""
 msgstr ""
 
 # Circulation > Checkout policy
-#, fuzzy
 msgid "circulation.pref#CircControl# Use the calendar and circulation rules of"
-msgstr "Використовувати правила обігу і штрафи "
+msgstr ""
 
 # Circulation > Checkout policy
 msgid "circulation.pref#CircControl# the library the item is from."
@@ -4334,8 +4351,8 @@ msgid ""
 "circulation.pref#ExportRemoveFields# The following fields should be excluded "
 "from the patron checkout history CSV or MARC (ISO 2709) export:"
 msgstr ""
-"Наступні поля повинні слід вилучати з експорту історії обігу в CSV або MARC ("
-"ISO 2709): "
+"Наступні поля повинні слід вилучати з експорту історії обігу в CSV або MARC "
+"(ISO 2709): "
 
 # Circulation > Interface
 msgid "circulation.pref#FilterBeforeOverdueReport# Don't require"
@@ -4579,6 +4596,8 @@ msgid ""
 "circulation.pref#ILLDefaultStaffEmail# Fallback email address for staff ILL "
 "notices to be sent to in the absence of a library address:"
 msgstr ""
+"Запасна адреса електронної пошти для повідомлень персоналу МБА, на яку "
+"надсилається у разі відсутності адреси бібліотеки: "
 
 # Circulation > Interlibrary loans
 msgid ""
@@ -4881,6 +4900,7 @@ msgstr ""
 msgid ""
 "circulation.pref#NoticeBcc# Send all notices as a BCC to this email address:"
 msgstr ""
+"Надсилати усі повідомлення як приховану копію на цю електронну адресу: "
 
 # Circulation > Interface
 msgid "circulation.pref#NoticeCSS# Include the stylesheet at"
@@ -4891,8 +4911,8 @@ msgid ""
 "circulation.pref#NoticeCSS# on notices. (This should be a complete URL, "
 "starting with <code>http://</code>)"
 msgstr ""
-"для сповіщень (це має бути повна URL -адреса, починаючи з "
-"<code>http://</code>)."
+"для сповіщень (це має бути повна URL -адреса, починаючи з <code>http://</"
+"code>)."
 
 # Circulation > Holds policy
 msgid "circulation.pref#OPACAllowHoldDateInFuture# Allow"
@@ -5318,11 +5338,10 @@ msgid "circulation.pref#RestrictionBlockRenewing# block"
 msgstr ""
 
 # Circulation > Checkout policy
-#, fuzzy
 msgid ""
 "circulation.pref#RestrictionBlockRenewing# renewing of items from the staff "
 "interface."
-msgstr " продовження примірників."
+msgstr ""
 
 # Circulation > Checkout policy
 msgid "circulation.pref#ReturnBeforeExpiry# Don't require"
@@ -5727,10 +5746,12 @@ msgid ""
 "circulation.pref#TransfersMaxDaysWarning# Show a warning on the \"Transfers "
 "to receive\" screen if the transfer has not been received"
 msgstr ""
+"Показувати попередження на сторінці „Переміщення для отримання“, якщо "
+"передачу не отримано протягом"
 
 # Circulation > Checkout policy
 msgid "circulation.pref#TransfersMaxDaysWarning# days after it was sent."
-msgstr ""
+msgstr "дня(ів) після її відправлення."
 
 # Circulation > Checkin policy
 msgid "circulation.pref#TrapHoldsOnOrder# Don't trap"
@@ -6142,18 +6163,16 @@ msgid "circulation.pref#finesMode# Calculate and charge"
 msgstr "Підраховувати та стягувати"
 
 # Circulation > Fines Policy
-#, fuzzy
 msgid "circulation.pref#finesMode# Charge"
-msgstr "Підраховувати та стягувати"
+msgstr "Стягувати"
 
 # Circulation > Fines Policy
 msgid "circulation.pref#finesMode# Don't calculate"
 msgstr "Не підраховувати"
 
 # Circulation > Fines Policy
-#, fuzzy
 msgid "circulation.pref#finesMode# Don't charge"
-msgstr "Не підраховувати"
+msgstr "Не стягувати"
 
 # Circulation > Fines Policy
 msgid ""
@@ -6640,6 +6659,13 @@ msgstr ""
 # Enhanced content > Local or remote cover images
 msgid "enhanced_content.pref#CustomCoverImages# Don't display"
 msgstr ""
+
+# Enhanced content > Local or remote cover images
+msgid ""
+"enhanced_content.pref#CustomCoverImages# For control fields you can use just "
+"{field}, like {001}."
+msgstr ""
+"Для контрольних полів можна використовувати лише {поле}, наприклад {001}."
 
 # Enhanced content > Local or remote cover images
 msgid ""
@@ -7562,9 +7588,8 @@ msgid ""
 msgstr " першим днем тижня у календарі."
 
 # I18N/L10N
-#, fuzzy
 msgid "i18n_l10n.pref#TimeFormat# ."
-msgstr "Виводити час у "
+msgstr "."
 
 # I18N/L10N
 msgid "i18n_l10n.pref#TimeFormat# 12 hour format ( e.g. \"02:18 PM\" )"
@@ -7624,9 +7649,8 @@ msgstr ""
 "верхньому регістрі, розділених пробілами."
 
 # I18N/L10N
-#, fuzzy
 msgid "i18n_l10n.pref#dateformat# ."
-msgstr "дд.мм.рррр"
+msgstr "."
 
 # I18N/L10N
 msgid "i18n_l10n.pref#dateformat# Format dates like"
@@ -7952,9 +7976,8 @@ msgid "opac.pref Appearance"
 msgstr "Зовнішній вигляд"
 
 # Administration > CAS authentication
-#, fuzzy
 msgid "opac.pref Authentication"
-msgstr "Автентифікація CAS (Центральна служба автентифікації)"
+msgstr "Автентифікація"
 
 # OPAC > Features
 msgid "opac.pref Features"
@@ -8305,19 +8328,19 @@ msgstr ""
 
 # OPAC > Appearance
 msgid "opac.pref#OPACFallback# Use the"
-msgstr ""
+msgstr "Використовувати тему "
 
 # OPAC > Appearance
 msgid "opac.pref#OPACFallback# bootstrap"
-msgstr ""
+msgstr "bootstrap"
 
 # OPAC > Appearance
 msgid "opac.pref#OPACFallback# prog"
-msgstr ""
+msgstr "prog"
 
 # OPAC > Appearance
 msgid "opac.pref#OPACFallback# theme as the fallback theme on the OPAC."
-msgstr ""
+msgstr " як запасну тему для електронного каталогу."
 
 # OPAC > Policy
 msgid ""
@@ -8382,12 +8405,10 @@ msgid ""
 msgstr ""
 
 # OPAC > Privacy
-#, fuzzy
 msgid "opac.pref#OPACHoldsHistory# Allow"
 msgstr "Дозволяти"
 
 # OPAC > Privacy
-#, fuzzy
 msgid "opac.pref#OPACHoldsHistory# Don't allow"
 msgstr "Не дозволяти"
 
@@ -8599,20 +8620,17 @@ msgid ""
 msgstr ""
 
 # OPAC > Privacy
-#, fuzzy
 msgid "opac.pref#OPACShibOnly# Allow"
 msgstr "Дозволяти"
 
 # OPAC > Privacy
-#, fuzzy
 msgid "opac.pref#OPACShibOnly# Don't allow"
 msgstr "Не дозволяти"
 
 # OPAC > Privacy
-#, fuzzy
 msgid ""
 "opac.pref#OPACShibOnly# patrons to login by means other than Shibboleth."
-msgstr " користувачам бачити, які книги вони брали в минулому."
+msgstr ""
 
 # OPAC > Appearance
 msgid "opac.pref#OPACShowCheckoutName# Don't show"
@@ -8878,13 +8896,13 @@ msgid ""
 "file</li><li>put an URL for an external specific stylesheet.</li></"
 "ul>{langcode} will be replaced with current interface language."
 msgstr ""
-"<br />Варіанти:<ul><li><a href=\"#\" class=\"set_syspref\" data-syspref=\""
-"OPACXSLTDetailsDisplay\" data-value=\"\">залишити порожнім</a> для „не "
+"<br />Варіанти:<ul><li><a href=\"#\" class=\"set_syspref\" data-syspref="
+"\"OPACXSLTDetailsDisplay\" data-value=\"\">залишити порожнім</a> для „не "
 "використовувати xslt“</li><li>ввести „<a href=\"#\" class=\"set_syspref\" "
 "data-syspref=\"OPACXSLTDetailsDisplay\" data-value=\"default\">default</a>“ "
-"для виводу за умовчанням</li><li>ввести шлях для визначення "
-"xslt-файлу</li><li>ввести URL-адресу для зовнішньої таблиці "
-"стилів.</li></ul>{langcode} буде замінено поточною мовою інтерфейсу."
+"для виводу за умовчанням</li><li>ввести шлях для визначення xslt-файлу</"
+"li><li>ввести URL-адресу для зовнішньої таблиці стилів.</li></ul>{langcode} "
+"буде замінено поточною мовою інтерфейсу."
 
 # OPAC > Appearance
 msgid ""
@@ -9226,7 +9244,7 @@ msgstr ""
 
 # OPAC > Appearance
 msgid "opac.pref#OpacHighlightedWords# (separate columns with |)."
-msgstr ""
+msgstr " (відокремлювати слова з допомогою знаку „|“)."
 
 # OPAC > Appearance
 msgid "opac.pref#OpacHighlightedWords# Don't highlight"
@@ -9242,6 +9260,9 @@ msgid ""
 "search results and detail pages. To prevent certain words from ever being "
 "highlighted, enter a list of stopwords here:"
 msgstr ""
+"слова, які користувач шукав, у результатах пошуку та на сторінках з "
+"подробицями. Щоб запобігти підсвічуванню певних слів, введіть тут список "
+"таких стоп-слів: "
 
 # OPAC > Features
 msgid "opac.pref#OpacHoldNotes# Allow"
@@ -9926,11 +9947,11 @@ msgstr ""
 
 # OPAC > Payments
 msgid "opac.pref#PayPalUser# ."
-msgstr ""
+msgstr "."
 
 # OPAC > Payments
 msgid "opac.pref#PayPalUser# The email address to receive PayPal payments is "
-msgstr ""
+msgstr "Адреса електронної пошти для отримання платежів PayPal: "
 
 # OPAC > Features
 msgid "opac.pref#QuoteOfTheDay# OPAC"
@@ -10347,47 +10368,49 @@ msgstr ""
 
 # Patrons > Notices and notifications
 msgid "patrons.pref#AutoEmailOpacUser# Don't send"
-msgstr ""
+msgstr "Не надсилати"
 
 # Patrons > Notices and notifications
 msgid "patrons.pref#AutoEmailOpacUser# Send"
-msgstr ""
+msgstr "Надсилати"
 
 # Patrons > Notices and notifications
 msgid ""
 "patrons.pref#AutoEmailOpacUser# an email to newly created patrons with their "
 "account details."
 msgstr ""
+"електронний лист новоствореним користувачам з даними їх облікового запису."
 
 # Patrons > Notices and notifications
 msgid "patrons.pref#AutoEmailPrimaryAddress# Use"
-msgstr ""
+msgstr "Використовувати"
 
 # Patrons > Notices and notifications
 msgid "patrons.pref#AutoEmailPrimaryAddress# alternate"
-msgstr ""
+msgstr "запасну"
 
 # Patrons > Notices and notifications
 msgid "patrons.pref#AutoEmailPrimaryAddress# cardnumber as"
-msgstr ""
+msgstr "номер квитка користувача як"
 
 # Patrons > Notices and notifications
 msgid "patrons.pref#AutoEmailPrimaryAddress# first valid"
-msgstr ""
+msgstr "першу чинну"
 
 # Patrons > Notices and notifications
 msgid "patrons.pref#AutoEmailPrimaryAddress# home"
-msgstr ""
+msgstr "домашню"
 
 # Patrons > Notices and notifications
 msgid ""
 "patrons.pref#AutoEmailPrimaryAddress# patron email address for sending out "
 "emails."
 msgstr ""
+"адресу електронної пошти користувача для надсилання електронних листів."
 
 # Patrons > Notices and notifications
 msgid "patrons.pref#AutoEmailPrimaryAddress# work"
-msgstr ""
+msgstr "робочу"
 
 # Patrons > Patron forms
 msgid ""
@@ -10536,7 +10559,7 @@ msgstr "Основна адреса"
 
 # Patrons > Patron forms
 msgid "patrons.pref#CollapseFieldsPatronAddForm# OPAC/Staff interface login"
-msgstr "Вхід в електронний каталог, інтерфейс бібліотекаря"
+msgstr "Вхід в електронний формуляр (ЕК), інтерфейс бібліотекаря"
 
 # Patrons > Patron forms
 msgid ""
@@ -10831,7 +10854,6 @@ msgid "patrons.pref#PhoneNotification# Disable"
 msgstr "Вимкнути"
 
 # Circulation > Stock rotation module
-#, fuzzy
 msgid "patrons.pref#PhoneNotification# Enable"
 msgstr "Увімкнути"
 
@@ -11159,6 +11181,8 @@ msgid ""
 "patrons.pref#SMSSendDriver# <br>If you would prefer to send SMS via E-mail, "
 "set SMSSendDriver to: Email"
 msgstr ""
+"<br>Якщо Ви бажаєте надсилати SMS-повідомлення електронною поштою, "
+"встановіть для параметра „SMSSendDriver“ значення: Email"
 
 # Patrons > Notices and notifications
 msgid "patrons.pref#SMSSendDriver# Use the SMS::Send::"
@@ -11227,14 +11251,11 @@ msgid "patrons.pref#TrackLastPatronActivity# Don't"
 msgstr ""
 
 # Patrons > General
-#, fuzzy
 msgid ""
 "patrons.pref#TrackLastPatronActivity# Every time a patron will connect or "
 "checks an item out, the borrowers.lastseen will be updated with the current "
 "time."
 msgstr ""
-"Щоразу, коли користувач підключатимиться, значення „borrowers.lastseen“ буде "
-"оновлено поточним часом."
 
 # Patrons > General
 msgid "patrons.pref#TrackLastPatronActivity# track last patron activity."
@@ -11503,14 +11524,12 @@ msgid "searching.pref#DisplayLibraryFacets# home library"
 msgstr "джерельної бібліотеки"
 
 # Searching > Features
-#, fuzzy
 msgid "searching.pref#ElasticsearchCrossFields# Disable"
-msgstr "Вимкнути "
+msgstr "Вимкнути"
 
 # Searching > Features
-#, fuzzy
 msgid "searching.pref#ElasticsearchCrossFields# Enable"
-msgstr "Задіяти "
+msgstr "Задіяти"
 
 # Searching > Features > ElasticsearchCrossFields
 msgid ""
@@ -11556,6 +11575,22 @@ msgstr "Показувати до "
 # Searching > Results display
 msgid "searching.pref#FacetMaxCount# facets for each category."
 msgstr " граней для кожної категорії."
+
+# Searching > Results display
+msgid "searching.pref#FacetOrder# Sort facets"
+msgstr "Сортувати грані"
+
+# Searching > Features
+msgid "searching.pref#FacetOrder# alphabetically"
+msgstr "за алфавітом"
+
+# Searching > Results display
+msgid "searching.pref#FacetOrder# by usage count"
+msgstr "за частотою використання"
+
+# Searching > Results display
+msgid "searching.pref#FacetOrder# for each category."
+msgstr " для кожної категорії."
 
 # Searching > Features
 msgid ""
@@ -11808,16 +11843,12 @@ msgid "searching.pref#QueryFuzzy# Try"
 msgstr "Намагатися "
 
 # Searching > Features
-#, fuzzy
 msgid ""
 "searching.pref#QueryFuzzy# to match similarly spelled words in a search (for "
 "example, a search for <cite>flang</cite> would also match <cite>flange</"
 "cite> and <cite>fang</cite>; Currently only affects Zebra searches. Any "
 "Elasticsearch term can be made fuzzy by adding a ~ directly after the term.)."
 msgstr ""
-" добирати подібно написані слова у пошуку (наприклад, пошук за <cite>flang</"
-"cite> також буде відповідати <cite>flange</cite> та <cite>fang</cite>; "
-"потребує рушія Zebra)."
 
 # Searching > Features
 msgid "searching.pref#QueryRegexEscapeOptions# Don't escape"
@@ -12241,9 +12272,8 @@ msgid "staff_interface.pref Appearance"
 msgstr "Зовнішній вигляд"
 
 # Staff interface > Options
-#, fuzzy
 msgid "staff_interface.pref Authentication"
-msgstr "Опції"
+msgstr "Автентифікація"
 
 # Staff interface > Options
 msgid "staff_interface.pref Options"
@@ -12466,9 +12496,9 @@ msgid ""
 msgstr ""
 "<br />Варіанти:<ul><li>ввести „<a href=\"#\" class=\"set_syspref\" data-"
 "syspref=\"XSLTDetailsDisplay\" data-value=\"default\">default</a>“ для "
-"виводу за умовчанням</li><li>ввести шлях для визначення xslt-файлу</li><li>"
-"ввести URL-адресу для зовнішньої таблиці стилів.</li></ul>{langcode} буде "
-"замінено поточною мовою інтерфейсу."
+"виводу за умовчанням</li><li>ввести шлях для визначення xslt-файлу</"
+"li><li>ввести URL-адресу для зовнішньої таблиці стилів.</li></ul>{langcode} "
+"буде замінено поточною мовою інтерфейсу."
 
 # Staff interface > Appearance
 msgid ""
