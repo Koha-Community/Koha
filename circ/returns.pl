@@ -444,34 +444,39 @@ if ($barcode) {
         }
         for my $missing_item ( keys %{$expected_items} ) {
             my $bundle_item = $expected_items->{$missing_item};
-            $bundle_item->itemlost($BundleLostValue)->store();
-            # Add return_claim record if this is an actual checkin
-            if ($issue) {
-                $bundle_item->_result->create_related(
-                    'return_claims',
-                    {
-                        issue_id       => $issue->issue_id,
-                        itemnumber     => $bundle_item->itemnumber,
-                        borrowernumber => $issue->borrowernumber,
-                        created_by     => C4::Context->userenv()->{number},
-                        created_on     => dt_from_string
-                    }
-                );
-            }
-            push @missing_items, $bundle_item;
-            # NOTE: We cannot use C4::LostItem here because the item itself doesn't have a checkout
-            # and thus would not get charged.. it's checked out as part of the bundle.
-            if ( C4::Context->preference('WhenLostChargeReplacementFee') && $issue ) {
-                C4::Accounts::chargelostitem(
-                    $issue->borrowernumber,
-                    $bundle_item->itemnumber,
-                    $bundle_item->replacementprice,
-                    sprintf( "%s %s %s",
-                        $bundle_item->biblio->title  || q{},
-                        $bundle_item->barcode        || q{},
-                        $bundle_item->itemcallnumber || q{},
-                    ),
-                );
+            # Mark as lost if it's not already lost
+            if ( !$bundle_item->itemlost ) {
+                $bundle_item->itemlost($BundleLostValue)->store();
+
+                # Add return_claim record if this is an actual checkin
+                if ($issue) {
+                    $bundle_item->_result->create_related(
+                        'return_claims',
+                        {
+                            issue_id       => $issue->issue_id,
+                            itemnumber     => $bundle_item->itemnumber,
+                            borrowernumber => $issue->borrowernumber,
+                            created_by     => C4::Context->userenv()->{number},
+                            created_on     => dt_from_string
+                        }
+                    );
+                }
+                push @missing_items, $bundle_item;
+
+                # NOTE: We cannot use C4::LostItem here because the item itself doesn't have a checkout
+                # and thus would not get charged.. it's checked out as part of the bundle.
+                if ( C4::Context->preference('WhenLostChargeReplacementFee') && $issue ) {
+                    C4::Accounts::chargelostitem(
+                        $issue->borrowernumber,
+                        $bundle_item->itemnumber,
+                        $bundle_item->replacementprice,
+                        sprintf( "%s %s %s",
+                            $bundle_item->biblio->title  || q{},
+                            $bundle_item->barcode        || q{},
+                            $bundle_item->itemcallnumber || q{},
+                        ),
+                    );
+                }
             }
         }
         $template->param(
