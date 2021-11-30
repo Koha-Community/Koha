@@ -89,16 +89,16 @@
           ShortcutButtonsPlugin({
             button: [
               {
-                label: __("Yesterday")
+                label: _("Yesterday")
               },
               {
-                label: __("Today")
+                label: _("Today")
               },
               {
-                label: __("Tomorrow")
+                label: _("Tomorrow")
               }
             ],
-            label: __("or"),
+            label: _("or"),
             onClick: (index, fp) => {
               let date;
               let hh = 23, mm = 59;
