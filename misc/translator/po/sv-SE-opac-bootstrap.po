@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: Koha 20.11\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-10-20 12:14-0300\n"
-"PO-Revision-Date: 2021-10-12 10:52+0000\n"
-"Last-Translator: xolalb <albin.olsson@ub.gu.se>\n"
+"PO-Revision-Date: 2021-11-29 15:20+0000\n"
+"Last-Translator: maria.t <maria.thorgren@boden.se>\n"
 "Language-Team: \n"
 "Language: sv\n"
 "MIME-Version: 1.0\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.8\n"
-"X-POOTLE-MTIME: 1634035926.738953\n"
+"X-POOTLE-MTIME: 1638199222.638630\n"
 "X-Pootle-Path: /sv/20.11/sv-SE-opac-bootstrap.po\n"
 "X-Pootle-Revision: 1\n"
 
@@ -801,9 +801,9 @@ msgstr ""
 #. %1$s:  ELSIF ( ISSUE.too_soon ) 
 #. %2$s:  ISSUE.soonestrenewdate | html 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:405
-#, fuzzy, c-format
+#, c-format
 msgid "%s No renewal before %s "
-msgstr "Kan inte lånas om före %s"
+msgstr "%s Kan inte lånas om före %s "
 
 #. %1$s:  IF ( searchdesc ) 
 #. %2$s:  LibraryName | html 
@@ -1132,9 +1132,9 @@ msgstr "%s Du har aldrig lånat något från det här biblioteket. %s "
 #. %2$s:  ELSE 
 #. %3$s:  SET show_itemtype_column = Koha.Preference('AllowHoldItemTypeSelection') 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:56
-#, fuzzy, c-format
+#, c-format
 msgid "%s You have never placed a hold from this library. %s %s "
-msgstr "%s Du har aldrig lånat något från det här biblioteket. %s "
+msgstr "%s Du har aldrig reserverat något från det här biblioteket. %s %s "
 
 #. %1$s:  IF Koha.Preference('HoldFeeMode') == 'any_time_is_collected' 
 #. %2$s:  RESERVE_CHARGE | $Price 
@@ -1901,9 +1901,9 @@ msgstr "%s%s%sKoha online%s katalog &rsaquo; Dina medgivanden"
 #. %3$s:  ELSE 
 #. %4$s:  END 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:7
-#, fuzzy, c-format
+#, c-format
 msgid "%s%s%sKoha online%s catalog &rsaquo; Your holds history"
-msgstr "%s%s%sKoha online%s katalog &rsaquo; Din utlåningshistorik"
+msgstr "%s%s%sKoha online%s-katalog &rsaquo; Din reservationsshistorik"
 
 #. %1$s:  IF ( LibraryNameTitle ) 
 #. %2$s:  LibraryNameTitle | html 
@@ -2152,7 +2152,7 @@ msgstr ""
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-topissues.tt:85
 #, c-format
 msgid "%sCollection%sItem type%s"
-msgstr "%sSamling%sExemplartyp%s"
+msgstr "%sAvdelning%sExemplartyp%s"
 
 #. %1$s:  IF ( serial.status1 ) 
 #. %2$s:  END 
@@ -3646,7 +3646,7 @@ msgstr "Alla taggar "
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/opac-topissues.inc:51
 #, c-format
 msgid "All collections"
-msgstr "Alla samlingar "
+msgstr "Alla avdelningar "
 
 #. SCRIPT
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:837
@@ -4892,7 +4892,7 @@ msgstr "Samla exemplar du är intresserad av"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-topissues.tt:109
 #, c-format
 msgid "Collection"
-msgstr "Samling "
+msgstr "Avdelning "
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:191
 #, c-format
@@ -4908,7 +4908,7 @@ msgstr "Samlingstitel: "
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:221
 #, c-format
 msgid "Collection: "
-msgstr "Samling:"
+msgstr "Avdelning:"
 
 #. For the first occurrence,
 #. %1$s:  BIBLIO_RESULT.seriestitle | $raw 
@@ -4916,12 +4916,12 @@ msgstr "Samling:"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-sendshelf.tt:84
 #, c-format
 msgid "Collection: %s "
-msgstr "Samling: %s"
+msgstr "Avdelning: %s "
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/opac-facets.inc:30
 #, c-format
 msgid "Collections"
-msgstr "Samlingar "
+msgstr "Avdelningar"
 
 #. SCRIPT
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/columns_settings.inc:3
@@ -6532,9 +6532,9 @@ msgid "Holds (%s)"
 msgstr "Reservationer (%s) "
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:56
-#, fuzzy, c-format
+#, c-format
 msgid "Holds history"
-msgstr "Fullständig historik "
+msgstr "Reservationshistorik"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/ilsdi.tt:39
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-ISBDdetail.tt:15
@@ -8701,9 +8701,8 @@ msgstr "OverDrive-samling"
 
 #. SCRIPT
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/opac-bottom.inc:154
-#, fuzzy
 msgid "OverDrive account page"
-msgstr "OverDrive-samling"
+msgstr "OverDrive-kontosida"
 
 #. For the first occurrence,
 #. %1$s:  q | html 
@@ -9109,7 +9108,7 @@ msgid ""
 "email when the library processes your suggestion."
 msgstr ""
 "Fyll i formuläret för att lämna ett inköpsförslag. Biblioteket kommer att "
-"underrätta dig via e-post när ditt förslag behandlas. "
+"underrätta dig via e-post när ditt förslag behandlas."
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/errors/errorpage.tt:67
 #, c-format
@@ -10601,7 +10600,7 @@ msgstr "Dela på Twitter"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1233
 #, c-format
 msgid "Shelving location"
-msgstr "Hyllplats"
+msgstr "Placering"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth.tt:96
 #, c-format
@@ -13175,9 +13174,9 @@ msgid "Your download should begin automatically."
 msgstr "Nedladdningen ska börja automatiskt."
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:44
-#, fuzzy, c-format
+#, c-format
 msgid "Your holds history"
-msgstr "Din lånehistorik"
+msgstr "Din reservationshistorik"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:43
 #, c-format
@@ -14256,9 +14255,9 @@ msgid "your consents"
 msgstr "dina medgivanden"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/usermenu.inc:83
-#, fuzzy, c-format
+#, c-format
 msgid "your holds history"
-msgstr "din lånehistorik"
+msgstr "din reservationshistorik"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/usermenu.inc:139
 #, c-format
