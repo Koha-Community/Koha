@@ -213,7 +213,7 @@
                                             <a id="format" class="btn btn-link dropdown-toggle" data-toggle="dropdown" href="/cgi-bin/koha/opac-downloadshelf.pl?shelfnumber=[% shelf.shelfnumber | html %]"><i class="fa fa-fw fa-download" aria-hidden="true"></i> Download <b class="caret"></b></a>
                                             <div class="dropdown-menu pull-left" role="menu" aria-labelledby="format">
                                                 <a role="menuitem" class="dropdown-item download-list" data-format="bibtex" href="#">BibTeX</a>
-                                                <a role="menuitem" class="dropdown-item download-list" data-format="isbd" href="#">ISBD</a>
+                                                [% IF Koha.Preference('OPACISBD') %]<a role="menuitem" class="dropdown-item download-list" data-format="isbd" href="#">ISBD</a>[% END %]
                                                 <a role="menuitem" class="dropdown-item download-list" data-format="iso2709" href="#">MARC</a>
                                                 <a role="menuitem" class="dropdown-item download-list" data-format="ris" href="#">RIS (Zotero, EndNote, others)</a>
                                                 [% FOREACH csv_profile IN csv_profiles %]
