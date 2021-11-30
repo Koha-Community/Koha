@@ -2,6 +2,7 @@
 [% USE Asset %]
 [% SET footerjs = 1 %]
 [% USE Koha %]
+[% USE KohaSpan %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>MARC overlay rules &rsaquo; Koha &rsaquo; Administration</title>
 [% INCLUDE 'doc-head-close.inc' %]
@@ -53,8 +54,9 @@
                 [% END %]
 
                 [% UNLESS Koha.Preference( 'MARCOverlayRules' ) %]
+                [% SET pref_MARCOverlayRules_link = '<a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=MARCOverlayRules">MARCOverlayRules</a>' %]
                 <div class="dialog message">
-                    The <b>MARCOverlayRules</b> preference is not set, don't forget to enable it for rules to take effect.
+                    The [%  pref_MARCOverlayRules_link | $KohaSpan %] preference is not set, don't forget to enable it for rules to take effect.
                 </div>
                 [% END %]
                 [% IF removeConfirm %]
