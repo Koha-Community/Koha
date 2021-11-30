@@ -127,25 +127,13 @@ $.widget.bridge('uitooltip', $.ui.tooltip);
 </script>
 [% Asset.js("lib/bootstrap/js/bootstrap.bundle.min.js") | $raw %]
 [% Asset.js("lib/fontfaceobserver.min.js") | $raw %]
+[% Asset.js("lib/enquire.min.js") | $raw %]
 [% Asset.js("js/global.js") | $raw %]
-<script>
-    Modernizr.load([
-        // Test need for polyfill
-        {
-            test: window.matchMedia,
-            nope: "[% Asset.url('lib/media.match.min.js') | $raw %]"
-        },
-        // and then load enquire
-        "[% Asset.url('lib/enquire.min.js') | $raw %]",
-        "[% Asset.url('js/script.js') | $raw %]",
-    ]);
-</script>
 [% IF ( OPACAmazonCoverImages || SyndeticsCoverImages ) %]
-<script>
+    <script>
         var NO_AMAZON_IMAGE = _("No cover image available");
-
-</script>
-[% Asset.js("js/amazonimages.js") | $raw %]
+    </script>
+    [% Asset.js("js/amazonimages.js") | $raw %]
 [% END %]
 
 <script>
