@@ -1195,17 +1195,21 @@
                     </td>
                 [% END %]
                 [% IF ( OpacLocationBranchToDisplay == 'holding' || OpacLocationBranchToDisplay == 'both' ) %]
-                    <td class="location" property="seller">
+                    <td class="location" property="seller" data-order="[% ITEM_RESULT.branchname| html %]">
                         <link property="itemOffered" href="#record" />
                         <link property="businessFunction" href="http://purl.org/goodrelations/v1#LeaseOut">
-                        <span class="[% ITEM_RESULT.holding_branch_opac_info ? 'branch-info-tooltip-trigger' : '' %]" title="">
-                            [% IF ( ITEM_RESULT.branchurl ) %]
-                                <a href="[% ITEM_RESULT.branchurl | url %]">[% ITEM_RESULT.branchname | html %]</a>
-                            [% ELSE %]
-                                <span>[% ITEM_RESULT.branchname | html %]</span>
-                            [% END %]
-                        </span>
-                        <div class="branch-info-tooltip">[% ITEM_RESULT.holding_branch_opac_info | $raw %]</div>
+
+                        [% IF ( ITEM_RESULT.holding_branch_opac_info ) %]
+                            <a href="[% ITEM_RESULT.branchurl | url %]" class="library_info" data-branchcode="[% ITEM_RESULT.branchcode | html %]">
+                                <i class="fa fa-info-circle" aria-hidden="true"></i> [% ITEM_RESULT.branchname | html %]
+                            </a>
+                        [% ELSIF ( ITEM_RESULT.branchurl ) %]
+                            <a href="[% ITEM_RESULT.branchurl | url %]">
+                                [% ITEM_RESULT.branchname | html %]
+                            </a>
+                        [% ELSE %]
+                            <span>[% ITEM_RESULT.branchname | html %]</span>
+                        [% END %]
 
                         [% IF ( Koha.Preference('OpacLocationOnDetail') == 'holding' || Koha.Preference('OpacLocationOnDetail') == 'both' ) %]
                             <span class="shelvingloc">[% ITEM_RESULT.location_description | html %]</span>
@@ -1218,19 +1222,18 @@
                     <td class="location" property="seller">
                         <link property="itemOffered" href="#record" />
                         <link property="businessFunction" href="http://purl.org/goodrelations/v1#LeaseOut">
-                        <span class="[% ITEM_RESULT.home_branch_opac_info ? 'branch-info-tooltip-trigger' : '' %]" title="">
-                            [% IF Branches.GetURL( ITEM_RESULT.homebranch ) %]
-                                [% home_branch_url = Branches.GetURL( ITEM_RESULT.homebranch ) %]
-                                [% IF ( home_branch_url ) %]
-                                     <a href="[% home_branch_url | url %]">[% Branches.GetName( ITEM_RESULT.homebranch ) | html %]</a>
-                                [% ELSE %]
-                                    <span>[% Branches.GetName( ITEM_RESULT.homebranch ) | html %]</span>
-                                [% END %]
-                            [% ELSE %]
-                                <span>[% Branches.GetName( ITEM_RESULT.homebranch ) | html %]</span>
-                            [% END %]
-                        </span>
-                        <div class="branch-info-tooltip">[% ITEM_RESULT.home_branch_opac_info | $raw %]</div>
+
+                        [% IF ( ITEM_RESULT.holding_branch_opac_info ) %]
+                            <a href="[% Branches.GetURL( ITEM_RESULT.homebranch ) | url %]" class="library_info" data-branchcode="[% ITEM_RESULT.homebranch | html %]">
+                                <i class="fa fa-info-circle" aria-hidden="true"></i> [% Branches.GetName( ITEM_RESULT.homebranch ) | html %]
+                            </a>
+                        [% ELSIF ( Branches.GetURL( ITEM_RESULT.homebranch ) ) %]
+                            <a href="[% Branches.GetURL( ITEM_RESULT.homebranch ) | url %]">
+                                [% Branches.GetName( ITEM_RESULT.homebranch ) | html %]
+                            </a>
+                        [% ELSE %]
+                            <span>[% Branches.GetName( ITEM_RESULT.homebranch ) | html %]</span>
+                        [% END %]
 
                         [% IF ( Koha.Preference('OpacLocationOnDetail') == 'home' || Koha.Preference('OpacLocationOnDetail') == 'both' ) %]
                             <span class="shelvingloc">[% ITEM_RESULT.location_description | html %]</span>
@@ -1350,6 +1353,27 @@
         </tbody>
     </table>
 [% END %][%# end of items_table block %]
+
+<!-- Library Info Modal -->
+<div class="modal" id="libraryInfoModal" tabindex="-1" aria-labelledby="libraryInfoModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="libraryInfoModalLabel"></h5>
+                <button type="button" class="closebtn" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id="libraryInfo"></div>
+            </div>
+            <div class="modal-footer">
+                <a id="libraryInfoLink" href="" class="btn btn-primary">Visit web site</a>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div> <!-- /.modal-content -->
+    </div> <!-- /.modal-dialog -->
+</div> <!-- /.modal -->
 
 [% BLOCK jsinclude %]
     [% INCLUDE 'datatables.inc' %]
@@ -1596,15 +1620,6 @@
             [% END # /IF OPACDetailQRCode %]
 
             $('#bibliodescriptions').tabs();
-            $(".branch-info-tooltip-trigger").uitooltip({
-                position: { my: "left+15 center", at: "right center" },
-                show: 50,
-                hide: 50,
-                content: function(){
-                    var element = $(this).next("div");
-                    return element.html();
-                }
-            });
 
             [% IF ( Koha.Preference('OpacBrowseResults') && busc ) %]
                 $(".l_Results").show();
@@ -1908,6 +1923,37 @@
                     multiSearchRequest();
                 });
             } /* if( OPACPopupAuthorsSearch == "1" ) */
+
+            $(".library_info").on("click", function(e){
+                e.preventDefault();
+                var branchcode = $(this).data("branchcode");
+                var url = $(this).attr("href");
+                $.ajax({
+                    url: "/api/v1/libraries/" + branchcode,
+                    type: 'GET',
+                    dataType: 'json',
+                    success: function(result) {
+                        $("#libraryInfoModalLabel").html( result.name );
+                        $("#libraryInfo").html( result.opac_info );
+                        if( result.url ){
+                            $("#libraryInfoLink").attr("href", result.url );
+                            $("#libraryInfoLink").show();
+                        } else {
+                            $("#libraryInfoLink").hide();
+                        }
+                        $("#libraryInfoModal").modal("show");
+                    },
+                    error: function(xhr, status, error) {
+                        if( url ){
+                            location.href = url;
+                        }
+                    }
+                });
+            });
+            $("#libraryInfoModal").on("hide.bs.modal", function(){
+                $("#libraryInfoModalLabel, #libraryInfo").html("");
+                $("#libraryInfoLink").attr("href", "");
+            });
         });
 
         function multiSearchRequest(){
