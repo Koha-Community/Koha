@@ -38,7 +38,7 @@ $template->param (
     errno => 403,
 );
 my $status = '403 Forbidden';
-if ( any { /(^psgi\.|^plack\.)/i } keys %ENV ) {
+if ( C4::Context->is_internal_PSGI_request() ) {
     $status = '200 OK';
 }
 output_with_http_headers $query, $cookie, $template->output, 'html', $status;

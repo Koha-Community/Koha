@@ -38,7 +38,7 @@ $template->param (
     errno => 500,
 );
 my $status = '500 Internal Server Error';
-if ( any { /(^psgi\.|^plack\.)/i } keys %ENV ) {
+if ( C4::Context->is_internal_PSGI_request() ) {
     $status = '200 OK';
 }
 output_with_http_headers $query, $cookie, $template->output, 'html', $status;
