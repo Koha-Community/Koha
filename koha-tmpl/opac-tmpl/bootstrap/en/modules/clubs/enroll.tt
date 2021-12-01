@@ -27,12 +27,11 @@
                         <span class="hint">[% f.description | html %]</span>
                     </li>
                 [% END %]
-
-                <li>
-                    <button class="btn btn-default" onclick="addEnrollment(); return false;">Finish enrollment</button>
-                    <a href="#" onclick="showClubs(); return false;">Cancel</a>
-                </li>
             </ol>
+        </fieldset>
+        <fieldset class="action">
+            <button class="btn btn-primary" onclick="addEnrollment(); return false;">Finish enrollment</button>
+            <a href="#" class="cancel" onclick="showClubs(); return false;">Cancel</a>
         </fieldset>
     </form>
 </div>
