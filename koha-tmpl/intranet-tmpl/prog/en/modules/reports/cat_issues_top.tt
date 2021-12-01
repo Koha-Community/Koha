@@ -71,13 +71,7 @@
 							<td>
 
 [% IF ( loopcel.reference ) %]
-[% IF ( loopcel.BiblioDefaultViewmarc ) %]
-	<a href="/cgi-bin/koha/catalogue/MARCdetail.pl?biblionumber=[% loopcel.reference |url %]">
-[% ELSIF ( loopcel.BiblioDefaultViewisbd ) %]
-	<a href="/cgi-bin/koha/catalogue/ISBDdetail.pl?biblionumber=[% loopcel.reference |url %]">
-[% ELSE %]
-	<a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% loopcel.reference |url %]">
- [% END %]
+    <a href="[% PROCESS biblio_a_href biblionumber => loopcel.reference %]">
  [% END %]                                        
 								[% IF ( loopcel.value ) %][% loopcel.value | html %][% END %]
 								[% IF ( loopcel.reference ) %]</a>[% END %]

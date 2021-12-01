@@ -44,16 +44,8 @@
                                 <tr>
                                     <td>
                                         <p>
-                                            [% IF ( BiblioDefaultViewmarc ) %]
-                                                <a class="title" href="/cgi-bin/koha/opac-MARCdetail.pl?biblionumber=[% review.biblionumber |url %]" title="View details for this title">
-                                            [% ELSE %]
-                                                [% IF ( BiblioDefaultViewisbd ) %]
-                                                    <a class="title" href="/cgi-bin/koha/opac-ISBDdetail.pl?biblionumber=[% review.biblionumber |url %]" title="View details for this title">
-                                                [% ELSE %]
-                                                    <a class="title" href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% review.biblionumber |url %]#comments" title="View details for this title">
-                                                [% END %]
-                                            [% END %]
-                                            [% INCLUDE 'biblio-title.inc' biblio=review %]
+                                            <a class="title" href="[% PROCESS biblio_a_href biblionumber => review.biblionumber %]" title="View details for this title">
+                                                [% INCLUDE 'biblio-title.inc' biblio=review %]
                                             </a>
                                             [% IF ( review.author ) %]
                                                 by <a href="/cgi-bin/koha/opac-search.pl?q=au:[% review.author |url %]" title="Search for works by this author" class="author">[% review.author | html %]</a>
@@ -118,15 +110,7 @@
                                         </p>
                                     </td>
                                     <td>
-                                        [% IF ( review.BiblioDefaultViewmarc ) %]
-                                            <a class="title" href="/cgi-bin/koha/opac-MARCdetail.pl?biblionumber=[% review.biblionumber |url %]" title="View details for this title">
-                                        [% ELSE %]
-                                            [% IF ( review.BiblioDefaultViewisbd ) %]
-                                                <a class="title" href="/cgi-bin/koha/opac-ISBDdetail.pl?biblionumber=[% review.biblionumber |url %]" title="View details for this title">
-                                            [% ELSE %]
-                                                <a class="title" href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% review.biblionumber |url %]#comments" title="View details for this title">
-                                            [% END %]
-                                        [% END %]
+                                        <a class="title" href="[% PROCESS biblio_a_href biblionumber => review.biblionumber %]" title="View details for this title">
                                         [% IF ( OPACAmazonCoverImages ) %]
                                             [% IF ( review.normalized_isbn ) %]
                                                 <img src="https://images-na.ssl-images-amazon.com/images/P/[% review.normalized_isbn | html %].01.TZZZZZZZ.jpg" alt="" class="thumbnail" />

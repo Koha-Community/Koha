@@ -111,7 +111,7 @@
                                         <li><span class="label">Subscription ID: </span>[% subscriptionid | html %]</li>
                                         <li><span class="label">Librarian identity:</span> [% librarian | html %]</li>
                                         <li><span class="label">Vendor:</span> <a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% aqbooksellerid | uri %]">[% aqbooksellername | html %]</a></li>
-                                        <li><span class="label">Biblio:</span>  <a href="/cgi-bin/koha/catalogue/[% default_bib_view | uri %].pl?biblionumber=[% bibnum | uri %]">[% bibliotitle | html %]</a> <em>([% bibnum | html %])</em></li>
+                                        <li><span class="label">Biblio:</span>  <a href="[% PROCESS biblio_a_href biblionumber => bibnum %]">[% bibliotitle | html %]</a> <em>([% bibnum | html %])</em></li>
                                         [% IF ( OPACBaseURL ) %]
                                             <li>
                                                 <span class="label">OPAC view:</span>

@@ -31,11 +31,11 @@
         <div class="col-md-10 col-md-offset-1 col-lg-8 col-lg-offset-2">
 
 [% BLOCK actions %]
-                        [% IF ( BiblioDefaultViewmarc ) %]
+                        [% IF Koha.Preference('IntranetBiblioDefaultView') == 'marc' %]
                              <form action="/cgi-bin/koha/catalogue/MARCdetail.pl" method="post">
-                        [% ELSIF ( BiblioDefaultViewlabeled_marc ) %]
+                        [% ELSIF Koha.Preference('IntranetBiblioDefaultView') == 'labeled_marc' %]
                              <form action="/cgi-bin/koha/catalogue/labeledMARCdetail.pl" method="post">
-                        [% ELSIF ( BiblioDefaultViewisbd ) %]
+                        [% ELSIF Koha.Preference('IntranetBiblioDefaultView') == 'isbd' %]
                              <form action="/cgi-bin/koha/catalogue/ISBDdetail.pl" method="post">
                         [% ELSE %]
                              <form action="/cgi-bin/koha/catalogue/detail.pl" method="post">

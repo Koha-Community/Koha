@@ -22,3 +22,14 @@
         </div>
     [% END %]
 [% END %]
+
+[% BLOCK biblio_a_href -%]
+    [%- IF Koha.Preference('BiblioDefaultView') == 'marc' -%]
+        [%- SET this_biblio_href = "/cgi-bin/koha/opac-MARCdetail.pl?biblionumber=" -%]
+    [%- ELSIF Koha.Preference('BiblioDefaultView') == 'isbd' -%]
+        [%- SET this_biblio_href = "/cgi-bin/koha/opac-ISBDdetail.pl?biblionumber=" -%]
+    [%- ELSE -%]
+        [%- SET this_biblio_href = "/cgi-bin/koha/opac-detail.pl?biblionumber=" -%]
+    [%- END -%]
+    [%- this_biblio_href | url %][% biblionumber | url -%]
+[%- END %]

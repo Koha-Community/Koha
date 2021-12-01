@@ -463,15 +463,7 @@
                                                             [% IF Koha.Preference('OPACCustomCoverImages') AND Koha.Preference('CustomCoverImagesURL') %]
                                                                 [% SET custom_cover_image_url = itemsloo.biblio_object.custom_cover_image_url %]
                                                                 [% IF custom_cover_image_url %]
-                                                                    [% IF ( itemsloo.BiblioDefaultViewmarc ) %]
-                                                                        <a class="custom_cover_image" href="/cgi-bin/koha/opac-MARCdetail.pl?biblionumber=[% itemsloo.biblionumber |url %]">
-                                                                    [% ELSE %]
-                                                                        [% IF ( itemsloo.BiblioDefaultViewisbd ) %]
-                                                                            <a class="custom_cover_image" href="/cgi-bin/koha/opac-ISBDdetail.pl?biblionumber=[% itemsloo.biblionumber |url %]">
-                                                                        [% ELSE %]
-                                                                            <a class="custom_cover_image" href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% itemsloo.biblionumber |url %]">
-                                                                        [% END %]
-                                                                    [% END %]
+                                                                    <a class="custom_cover_image" href="[% PROCESS biblio_a_href biblionumber => itemsloo.biblionumber %]">
                                                                     <img alt="Cover image" src="[% custom_cover_image_url | url %]" /></a>
                                                                 [% END %]
                                                             [% END %]

@@ -1,13 +1,5 @@
 [% IF ( link ) %]
-    [% IF ( BiblioDefaultViewmarc ) %]
-        <a class="title" href="/cgi-bin/koha/catalogue/MARCdetail.pl?biblionumber=[% biblio.biblionumber |url %]">
-    [% ELSIF ( BiblioDefaultViewlabeled_marc ) %]
-        <a class="title" href="/cgi-bin/koha/catalogue/labeledMARCdetail.pl?biblionumber=[% biblio.biblionumber |url %]">
-    [% ELSIF ( BiblioDefaultViewisbd ) %]
-        <a class="title" href="/cgi-bin/koha/catalogue/ISBDdetail.pl?biblionumber=[% biblio.biblionumber |url %]">
-    [% ELSE %]
-        <a class="title" href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% biblio.biblionumber |url %]">
-    [% END %]
+    <a href="[% PROCESS biblio_a_href biblionumber => biblio.biblionumber %]" class="title">
 [% END %]
 
 [% IF ( biblio.title ) %]

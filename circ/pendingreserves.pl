@@ -300,7 +300,6 @@ $template->param(
     from                => $startdate,
     to                  => $enddate,
     holds_info          => \@holds_info,
-    "BiblioDefaultView".C4::Context->preference("BiblioDefaultView") => 1,
     HoldsToPullStartDate => C4::Context->preference('HoldsToPullStartDate') || PULL_INTERVAL,
     HoldsToPullEndDate  => C4::Context->preference('ConfirmFutureHolds') || 0,
     messages            => \@messages,

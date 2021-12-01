@@ -108,7 +108,6 @@ if ($date) {
         numsubscription     => scalar @subscriptions_loop,
         date                => $date,
         subscriptions_loop  => \@subscriptions_loop,
-        "BiblioDefaultView" . C4::Context->preference("BiblioDefaultView") => 1,
         searched                                                           => 1,
     );
 }

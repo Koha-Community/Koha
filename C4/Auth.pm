@@ -498,7 +498,6 @@ sub get_template_and_user {
     my $minPasswordLength = C4::Context->preference('minPasswordLength');
     $minPasswordLength = 3 if not $minPasswordLength or $minPasswordLength < 3;
     $template->param(
-        "BiblioDefaultView" . C4::Context->preference("BiblioDefaultView") => 1,
         EnhancedMessagingPreferences                                       => C4::Context->preference('EnhancedMessagingPreferences'),
         GoogleJackets                                                      => C4::Context->preference("GoogleJackets"),
         OpenLibraryCovers                                                  => C4::Context->preference("OpenLibraryCovers"),
@@ -520,7 +519,6 @@ sub get_template_and_user {
         $template->param(
             AmazonCoverImages                                                          => C4::Context->preference("AmazonCoverImages"),
             AutoLocation                                                               => C4::Context->preference("AutoLocation"),
-            "BiblioDefaultView" . C4::Context->preference("IntranetBiblioDefaultView") => 1,
             PatronAutoComplete                                                       => C4::Context->preference("PatronAutoComplete"),
             FRBRizeEditions                                                            => C4::Context->preference("FRBRizeEditions"),
             IndependentBranches                                                        => C4::Context->preference("IndependentBranches"),

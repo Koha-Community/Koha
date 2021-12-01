@@ -45,15 +45,8 @@
                     <a href="/cgi-bin/koha/opac-main.pl">Home</a>
                 </li>
                 <li class="breadcrumb-item">
-                    [% IF ( BiblioDefaultViewmarc ) %]
-                        <a href="/cgi-bin/koha/opac-MARCdetail.pl?biblionumber=[% biblionumber |url %]">
-                    [% ELSE %]
-                        [% IF ( BiblioDefaultViewisbd ) %]
-                            <a href="/cgi-bin/koha/opac-ISBDdetail.pl?biblionumber=[% biblionumber |url %]">
-                        [% ELSE %]
-                            <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% biblionumber |url %]">
-                        [% END %]
-                    [% END %][% INCLUDE 'biblio-title.inc' %]</a>
+                    <a href="[% PROCESS biblio_a_href biblionumber => biblionumber %]">
+                    [% INCLUDE 'biblio-title.inc' %]</a>
                 </li>
                 <li class="breadcrumb-item active">
                     <a href="#" aria-current="page">Images</a>
@@ -77,15 +70,8 @@
                     <div class="row">
                         <div class="col-lg-9 maincontent">
                             <h1 class="title">Images for
-                                [% IF ( BiblioDefaultViewmarc ) %]
-                                    <a class="title" href="/cgi-bin/koha/opac-MARCdetail.pl?biblionumber=[% biblionumber |url %]" title="View details for this title">
-                                [% ELSE %]
-                                    [% IF ( BiblioDefaultViewisbd ) %]
-                                        <a class="title" href="/cgi-bin/koha/opac-ISBDdetail.pl?biblionumber=[% biblionumber |url %]" title="View details for this title">
-                                    [% ELSE %]
-                                        <a class="title" href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% biblionumber |url %]" title="View details for this title">
-                                    [% END %]
-                                [% END %][% INCLUDE 'biblio-title.inc' %]</a> [% biblio.author | html %]
+                                <a class="title" href="[% PROCESS biblio_a_href biblionumber => biblionumber %]" title="View details for this title">
+                                [% INCLUDE 'biblio-title.inc' %]</a> [% biblio.author | html %]
                             </h1>
                         </div> <!-- / col-lg-9 -->
                     </div> <!-- / .row -->

@@ -471,7 +471,7 @@ $(document).ready(function() {
                             [% END %]
                         [% END %]
                     [% END %]
-                    <li><a href="/cgi-bin/koha/catalogue/[% default_bib_view | uri %].pl?biblionumber=[% biblionumber | uri %]" title="go to [% bibliotitle | html %]">Show biblio</a></li></ul>
+                    <li><a href="[% PROCESS biblio_a_href biblionumber => biblionumber %]" title="go to [% bibliotitle | html %]">Show biblio</a></li></ul>
             </aside>
         </div> <!-- /.col-sm-2.col-sm-pull-10 -->
      </div> <!-- /.row -->

@@ -934,23 +934,9 @@ function PopupMARCFieldDoc(field) {
                     </div> <!-- /.btn-group -->
                     [% UNLESS (circborrowernumber) %][%# Hide in fast cataloging %]
                         [% IF (biblionumber) %]
-                            [% IF ( BiblioDefaultViewmarc ) %]
-                                <div class="btn-group">
-                                    <a class="btn btn-default" id="cancel" href="/cgi-bin/koha/catalogue/MARCdetail.pl?biblionumber=[% biblionumber |url %]">Cancel</a>
-                                </div>
-                            [% ELSIF ( BiblioDefaultViewlabeled_marc ) %]
-                                <div class="btn-group">
-                                    <a class="btn btn-default" id="cancel" href="/cgi-bin/koha/catalogue/labeledMARCdetail.pl?biblionumber=[% biblionumber |url %]">Cancel</a>
-                                </div>
-                            [% ELSIF ( BiblioDefaultViewisbd ) %]
-                                <div class="btn-group">
-                                    <a class="btn btn-default" id="cancel" href="/cgi-bin/koha/catalogue/ISBDdetail.pl?biblionumber=[% biblionumber |url %]">Cancel</a>
-                                </div>
-                            [% ELSE %]
-                                <div class="btn-group">
-                                    <a class="btn btn-default" id="cancel" href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% biblionumber |url %]">Cancel</a>
-                                </div>
-                            [% END %]
+                            <div class="btn-group">
+                                <a href="[% PROCESS biblio_a_href biblionumber => biblionumber %]" class="btn btn-default" id="cancel">Cancel</a>
+                            </div>
                         [% ELSE %]
                             <div class="btn-group">
                                 <a class="btn btn-default" id="cancel" href="/cgi-bin/koha/cataloguing/addbooks.pl">Cancel</a>

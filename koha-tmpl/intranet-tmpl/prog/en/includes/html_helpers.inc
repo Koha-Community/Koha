@@ -69,6 +69,19 @@
     [% END %]
 [% END %]
 
+[% BLOCK biblio_a_href -%]
+    [%- IF Koha.Preference('IntranetBiblioDefaultView') == 'marc' && Koha.Preference('viewMARC') -%]
+        [%- SET this_biblio_href = "/cgi-bin/koha/catalogue/MARCdetail.pl?biblionumber=" -%]
+    [%- ELSIF Koha.Preference('IntranetBiblioDefaultView') == 'labeled_marc' && Koha.Preference('viewLabeledMARC') -%]
+        [%- SET this_biblio_href = "/cgi-bin/koha/catalogue/labeledMARCdetail.pl?biblionumber=" -%]
+    [%- ELSIF Koha.Preference('IntranetBiblioDefaultView') == 'isbd' && Koha.Preference('viewISBD') -%]
+        [%- SET this_biblio_href = "/cgi-bin/koha/catalogue/ISBDdetail.pl?biblionumber=" -%]
+    [%- ELSE -%]
+        [%- SET this_biblio_href = "/cgi-bin/koha/catalogue/detail.pl?biblionumber=" -%]
+    [%- END -%]
+    [%- this_biblio_href | url %][% biblionumber | url -%]
+[%- END %]
+
 [% BLOCK subfields_for_item %]
     <ol>
         [% FOREACH subfield IN subfields %]

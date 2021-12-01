@@ -439,8 +439,6 @@ sub plugin {
         }else{
             $to = $from + $resultsperpage ;
         }
-        my $defaultview =
-          'BiblioDefaultView' . C4::Context->preference('BiblioDefaultView');
 #         my $link="/cgi-bin/koha/cataloguing/value_builder/unimarc4XX.pl?op=do_search&q=$search_desc&resultsperpage=$resultsperpage&startfrom=$startfrom&search=$search";
 #           foreach my $sort (@sort_by){
 #             $link.="&sort_by=".$sort."&";
@@ -469,7 +467,6 @@ sub plugin {
             to             => $to,
             numbers        => \@numbers,
             search         => $search,
-            $defaultview   => 1,
             Search         => 0
         );
 

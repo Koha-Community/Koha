@@ -42,13 +42,7 @@
      <item>
        <title>[% INCLUDE 'biblio-title-head.inc' biblio=SEARCH_RESULT %]</title>
        <dc:identifier>ISBN:[% SEARCH_RESULT.isbn | html %]</dc:identifier>
-        [% IF ( SEARCH_RESULT.BiblioDefaultViewmarc ) %]
-        <link>[% OPACBaseURL | url %]/cgi-bin/koha/opac-MARCdetail.pl?biblionumber=[% SEARCH_RESULT.biblionumber | uri %]</link>
-        [% ELSIF ( SEARCH_RESULT.BiblioDefaultViewisbd ) %]
-        <link>[% OPACBaseURL | url %]/cgi-bin/koha/opac-ISBDdetail.pl?biblionumber=[% SEARCH_RESULT.biblionumber | uri %]</link>
-        [% ELSE %]
-        <link>[% OPACBaseURL | url %]/cgi-bin/koha/opac-detail.pl?biblionumber=[% SEARCH_RESULT.biblionumber | uri %]</link>
-        [% END %]
+        <link>[% OPACBaseURL | url %][% PROCESS biblio_a_href biblionumber => SEARCH_RESULT.biblionumber %]</link>
        <description><![CDATA[
 [% IF ( OPACAmazonCoverImages ) %][% IF ( SEARCH_RESULT.normalized_isbn ) %]<img src="https://images-na.ssl-images-amazon.com/images/P/[% SEARCH_RESULT.normalized_isbn | uri %].01.TZZZZZZZ.jpg" alt="" />[% END %][% END %]
 [% IF ( SyndeticsEnabled ) %][% IF ( SyndeticsCoverImages ) %][% IF ( SEARCH_RESULT.content_identifier_exists ) %]<img src="http://www.syndetics.com/index.aspx?isbn=[% SEARCH_RESULT.normalized_isbn | uri %]/SC.GIF&amp;client=[% SEARCH_RESULT.SyndeticsClientCode | uri %]&amp;type=xw10[% IF ( SEARCH_RESULT.normalized_upc ) %]&amp;upc=[% SEARCH_RESULT.normalized_upc | uri %][% END %][% IF ( SEARCH_RESULT.normalized_oclc ) %]&amp;oclc=[% SEARCH_RESULT.normalized_oclc | uri %][% END %]" alt="" />
@@ -116,7 +110,7 @@
    [% FOREACH SEARCH_RESULT IN SEARCH_RESULTS %]
    <entry>
      <title>[% SEARCH_RESULT.title | html %] [% FOREACH subtitl IN SEARCH_RESULT.subtitle %], [% subtitl.subfield | html %][% END %]</title>
-     <link>[% IF ( SEARCH_RESULT.BiblioDefaultViewmarc ) %][% OPACBaseURL | html %]/cgi-bin/koha/opac-MARCdetail.pl?biblionumber=[% SEARCH_RESULT.biblionumber | html %][% ELSE %][% IF ( SEARCH_RESULT.BiblioDefaultViewisbd ) %][% OPACBaseURL | html %]/cgi-bin/koha/opac-ISBDdetail.pl?biblionumber=[% SEARCH_RESULT.biblionumber | html %][% ELSE %][% OPACBaseURL | html %]/cgi-bin/koha/opac-detail.pl?biblionumber=[% SEARCH_RESULT.biblionumber | html %][% END %][% END %]</link>
+     <link>[% OPACBaseURL | url %][% PROCESS biblio_a_href biblionumber => SEARCH_RESULT.biblionumber %]</link>
      <!-- <id>urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a</id> -->
      <updated>[% SEARCH_RESULT.timestamp | html %]</updated>
      <id>[% OPACBaseURL | html %]/cgi-bin/koha/opac-detail.pl?biblionumber=[% SEARCH_RESULT.biblionumber | html %]</id>

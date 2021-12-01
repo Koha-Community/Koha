@@ -122,8 +122,6 @@ my @irregular_issues = split /;/, $subs->{irregularity};
 my $frequency = C4::Serials::Frequency::GetSubscriptionFrequency($subs->{periodicity});
 my $numberpattern = C4::Serials::Numberpattern::GetSubscriptionNumberpattern($subs->{numberpattern});
 
-my $default_bib_view = get_default_view();
-
 my $subscription_object = Koha::Subscriptions->find( $subscriptionid );
 $template->param(
     available_additional_fields => Koha::AdditionalFields->search( { tablename => 'subscription' } ),
@@ -165,25 +163,9 @@ $template->param(
     intranetstylesheet => C4::Context->preference('intranetstylesheet'),
     intranetcolorstylesheet => C4::Context->preference('intranetcolorstylesheet'),
     irregular_issues => scalar @irregular_issues,
-    default_bib_view => $default_bib_view,
     orders_grouped => $orders_grouped,
     (uc(C4::Context->preference("marcflavour"))) => 1,
     mana_comments => $subs->{comments},
 );
 
 output_html_with_http_headers $query, $cookie, $template->output;
-
-sub get_default_view {
-    my $defaultview = C4::Context->preference('IntranetBiblioDefaultView');
-    my %views       = C4::Search::enabled_staff_search_views();
-    if ( $defaultview eq 'isbd' && $views{can_view_ISBD} ) {
-        return 'ISBDdetail';
-    }
-    elsif ( $defaultview eq 'marc' && $views{can_view_MARC} ) {
-        return 'MARCdetail';
-    }
-    elsif ( $defaultview eq 'labeled_marc' && $views{can_view_labeledMARC} ) {
-        return 'labeledMARCdetail';
-    }
-    return 'detail';
-}
