@@ -32,8 +32,17 @@ return {
                 ADD CONSTRAINT `tmp_holdsqueue_ibfk_3` FOREIGN KEY (`borrowernumber`) REFERENCES `borrowers` (`borrowernumber`) ON DELETE CASCADE ON UPDATE CASCADE
             });
 
-            say $out "Added missing foreign key on tmp_holdsqueue"
+            say $out "Added missing foreign key on tmp_holdsqueue";
         }
 
+        $dbh->do(
+            q{
+                ALTER TABLE `account_offsets`
+                MODIFY COLUMN `type` enum( 'CREATE', 'APPLY', 'VOID', 'OVERDUE_INCREASE', 'OVERDUE_DECREASE' ) NOT NULL
+            }
+        );
+        say $out "Ensure NOT NULL on account_offsets.type";
+
     },
+
 }
