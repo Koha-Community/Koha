@@ -51,6 +51,14 @@ $template->param(
 
 my $issue_id = $query->param('issue_id');
 my $issue = Koha::Checkouts->find( $issue_id );
+
+
+if ( !$issue || $issue->borrowernumber != $borrowernumber ) {
+    # exit early
+    print $query->redirect("/cgi-bin/koha/opac-user.pl");
+    exit;
+}
+
 my $itemnumber = $issue->itemnumber;
 my $biblio = $issue->item->biblio;
 $template->param(
@@ -62,10 +70,11 @@ $template->param(
 );
 
 my $action = $query->param('action') || "";
-if ( $action eq 'issuenote' && C4::Context->preference('AllowCheckoutNotes') ) {
+if ( $action eq 'issuenote' && C4::Context->preference('AllowCheckoutNotes') && $issue ) {
     my $note = $query->param('note');
     my $scrubber = C4::Scrubber->new();
     my $clean_note = $scrubber->scrub($note);
+
     if ( $issue->set({ notedate => dt_from_string(), note => $clean_note, noteseen => 0 })->store ) {
         if ($clean_note) { # only send email if note not empty
             my $branch = Koha::Libraries->find( $issue->branchcode );
