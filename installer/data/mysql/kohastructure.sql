@@ -191,7 +191,7 @@ DROP TABLE IF EXISTS `additional_contents`;
 CREATE TABLE `additional_contents` (
   `idnew` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'unique identifier for the additional content',
   `category` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'category for the additional content',
-  `code` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'code to group content per lang',
+  `code` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'code to group content per lang',
   `location` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'location of the additional content',
   `branchcode` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'branch code users to create branch specific additional content, NULL is every branch.',
   `title` varchar(250) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT 'title of the additional content',
