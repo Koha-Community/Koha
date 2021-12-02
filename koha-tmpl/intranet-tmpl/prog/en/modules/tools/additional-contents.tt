@@ -46,10 +46,11 @@
             <li>
                 <a href="#" aria-current="page">
                     [% IF additional_content.idnew %]
-                        Modify additional content ([% IF category == 'news' %]News[% ELSE %]HTML customizations[% END %])
+                        <span>Modify additional content<span>
                     [% ELSE %]
-                        Add additional content ([% IF category == 'news' %]News[% ELSE %]HTML customizations[% END %])
+                        <span>Add additional content<span>
                     [% END %]
+                    ([% IF category == 'news' %]<span>News</span>[% ELSE %]<span>HTML customizations</span>[% END %])
                 </a>
             </li>
         [% ELSE %]
