@@ -34,7 +34,7 @@ return {
                         'VOID',
                         'OVERDUE_INCREASE',
                         'OVERDUE_DECREASE'
-                    )
+                    ) NOT NULL
                 AFTER `debit_id`
               }
         );
