@@ -107,7 +107,7 @@
       - vendors
     summary: Get vendor
     parameters:
-      - $ref: ../parameters.yaml#/vendoridPathParam
+      - $ref: ../parameters.yaml#/vendor_id_pp
     produces:
       - application/json
     responses:
@@ -145,7 +145,7 @@
       - vendors
     summary: Update vendor
     parameters:
-      - $ref: ../parameters.yaml#/vendoridPathParam
+      - $ref: ../parameters.yaml#/vendor_id_pp
       - name: body
         in: body
         description: A JSON object representing a vendor
@@ -189,7 +189,7 @@
       - vendors
     summary: Delete vendor
     parameters:
-      - $ref: ../parameters.yaml#/vendoridPathParam
+      - $ref: ../parameters.yaml#/vendor_id_pp
     produces:
       - application/json
     responses:
