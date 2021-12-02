@@ -57,22 +57,18 @@ sub pay {
         return { ok => 0 } if $account->balance < $amt;
     }
 
+    my $pay_options = {
+        amount        => $amt,
+        type          => $type,
+        payment_type  => 'SIP' . $sip_type,
+        interface     => C4::Context->interface,
+        cash_register => $register_id,
+    };
+
     if ($fee_id) {
         my $fee = Koha::Account::Lines->find($fee_id);
         if ( $fee ) {
-            my $pay_response = $account->pay(
-                {
-                    amount       => $amt,
-                    type         => $type,
-                    payment_type => 'SIP' . $sip_type,
-                    lines        => [$fee],
-                    interface    => C4::Context->interface
-                }
-            );
-            return {
-                ok           => 1,
-                pay_response => $pay_response
-            };
+            $pay_options->{lines} = [$fee];
         }
         else {
             return {
@@ -80,21 +76,11 @@ sub pay {
             };
         }
     }
-    else {
-        my $pay_response = $account->pay(
-            {
-                amount        => $amt,
-                type          => $type,
-                payment_type  => 'SIP' . $sip_type,
-                interface     => C4::Context->interface,
-                cash_register => $register_id
-            }
-        );
-        return {
-            ok           => 1,
-            pay_response => $pay_response
-        };
-    }
+    my $pay_response = $account->pay($pay_options);
+    return {
+        ok           => 1,
+        pay_response => $pay_response
+    };
 }
 
 #sub DESTROY {
