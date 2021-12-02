@@ -51,6 +51,14 @@ return {
         );
         say $out "Ensure additional_contents.code is VARCHAR(100)";
 
+        $dbh->do(
+            q{
+                ALTER TABLE `additional_contents`
+                MODIFY COLUMN `lang` VARCHAR(50) NOT NULL DEFAULT ''
+            }
+        );
+        say $out "Ensure additional_contents.lang is VARCHAR(50)";
+
     },
 
 }
