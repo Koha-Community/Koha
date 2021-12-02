@@ -22,6 +22,8 @@ use Carp qw( croak );
 
 use Koha::Exceptions;
 use Koha::CirculationRule;
+use Koha::Caches;
+use Koha::Cache::Memory::Lite;
 
 use base qw(Koha::Objects);
 
@@ -250,6 +252,28 @@ sub get_effective_rule {
     return $rule;
 }
 
+sub get_effective_rule_value {
+    my ( $self, $params ) = @_;
+
+    my $rule_name    = $params->{rule_name};
+    my $categorycode = $params->{categorycode};
+    my $itemtype     = $params->{itemtype};
+    my $branchcode   = $params->{branchcode};
+
+    my $memory_cache = Koha::Cache::Memory::Lite->get_instance;
+    my $cache_key = sprintf "CircRules:%s:%s:%s:%s", $rule_name // q{},
+      $categorycode // q{}, $branchcode // q{}, $itemtype // q{};
+
+    my $cached       = $memory_cache->get_from_cache($cache_key);
+    return $cached if $cached;
+
+    my $rule = $self->get_effective_rule($params);
+
+    my $value= $rule ? $rule->rule_value : undef;
+    $memory_cache->set_in_cache( $cache_key, $value );
+    return $value;
+}
+
 =head3 get_effective_rules
 
 =cut
@@ -264,7 +288,7 @@ sub get_effective_rules {
 
     my $r;
     foreach my $rule (@$rules) {
-        my $effective_rule = $self->get_effective_rule(
+        my $effective_rule = $self->get_effective_rule_value(
             {
                 rule_name    => $rule,
                 categorycode => $categorycode,
@@ -273,7 +297,7 @@ sub get_effective_rules {
             }
         );
 
-        $r->{$rule} = $effective_rule->rule_value if $effective_rule;
+        $r->{$rule} = $effective_rule if defined $effective_rule;
     }
 
     return $r;
@@ -352,6 +376,12 @@ sub set_rule {
         }
     }
 
+    my $memory_cache = Koha::Cache::Memory::Lite->get_instance;
+    my $cache_key = sprintf "CircRules:%s:%s:%s:%s", $rule_name // q{},
+      $categorycode // q{}, $branchcode // q{}, $itemtype // q{};
+
+    Koha::Cache::Memory::Lite->flush();
+
     return $rule;
 }
 
@@ -380,6 +410,7 @@ sub set_rules {
         push( @$rule_objects, $rule_object );
     }
 
+    Koha::Cache::Memory::Lite->flush();
     return $rule_objects;
 }
 

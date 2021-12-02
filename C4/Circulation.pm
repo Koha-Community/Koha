@@ -1433,7 +1433,7 @@ sub checkHighHolds {
 
         my $orig_due = C4::Circulation::CalcDateDue( $issuedate, $itype, $branchcode, $patron->unblessed );
 
-        my $rule = Koha::CirculationRules->get_effective_rule(
+        my $rule = Koha::CirculationRules->get_effective_rule_value(
             {
                 categorycode => $patron->categorycode,
                 itemtype     => $item->effective_itemtype,
@@ -1443,9 +1443,9 @@ sub checkHighHolds {
         );
 
         my $duration;
-        if ( defined($rule) && $rule->rule_value ne '' ){
+        if ( defined($rule) && $rule ne '' ){
             # overrides decreaseLoanHighHoldsDuration syspref
-            $duration = $rule->rule_value;
+            $duration = $rule;
         } else {
             $duration = C4::Context->preference('decreaseLoanHighHoldsDuration');
         }
@@ -1621,7 +1621,7 @@ sub AddIssue {
 
             # If automatic renewal wasn't selected while issuing, set the value according to the issuing rule.
             unless ($auto_renew) {
-                my $rule = Koha::CirculationRules->get_effective_rule(
+                my $rule = Koha::CirculationRules->get_effective_rule_value(
                     {
                         categorycode => $borrower->{categorycode},
                         itemtype     => $item_object->effective_itemtype,
@@ -1630,7 +1630,7 @@ sub AddIssue {
                     }
                 );
 
-                $auto_renew = $rule->rule_value if $rule;
+                $auto_renew = $rule if defined $rule && $rule ne '';
             }
 
             my $issue_attributes = {

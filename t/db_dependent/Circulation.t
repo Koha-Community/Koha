@@ -54,6 +54,7 @@ use Koha::Account::Lines;
 use Koha::Account::Offsets;
 use Koha::ActionLogs;
 use Koha::Notice::Messages;
+use Koha::Cache::Memory::Lite;
 
 sub set_userenv {
     my ( $library ) = @_;
@@ -830,6 +831,7 @@ subtest "CanBookBeRenewed tests" => sub {
     is( $renewokay, 0, 'Still should not be able to renew' );
     is( $error, 'on_reserve', 'returned code is on_reserve, auto_too_soon limit is overridden' );
     $dbh->do('UPDATE circulation_rules SET rule_value = 0 where rule_name = "norenewalbefore"');
+    Koha::Cache::Memory::Lite->flush();
     ( $renewokay, $error ) = CanBookBeRenewed( $renewing_borrowernumber, $item_4->itemnumber, 1 );
     is( $renewokay, 0, 'Still should not be able to renew' );
     is( $error, 'on_reserve', 'returned code is on_reserve, auto_renew only happens if not on reserve' );
@@ -880,6 +882,7 @@ subtest "CanBookBeRenewed tests" => sub {
     # Change policy so that loans can only be renewed exactly on due date (0 days prior to due date)
     # and test automatic renewal again
     $dbh->do(q{UPDATE circulation_rules SET rule_value = '0' WHERE rule_name = 'norenewalbefore'});
+    Koha::Cache::Memory::Lite->flush();
     ( $renewokay, $error, $info ) =
       CanBookBeRenewed( $renewing_borrowernumber, $item_4->itemnumber );
     is( $renewokay, 0, 'Bug 14101: Cannot renew, renewal is automatic and premature' );
@@ -898,6 +901,7 @@ subtest "CanBookBeRenewed tests" => sub {
     # Change policy so that loans can be renewed 99 days prior to the due date
     # and test automatic renewal again
     $dbh->do(q{UPDATE circulation_rules SET rule_value = '99' WHERE rule_name = 'norenewalbefore'});
+    Koha::Cache::Memory::Lite->flush();
     ( $renewokay, $error ) =
       CanBookBeRenewed( $renewing_borrowernumber, $item_4->itemnumber );
     is( $renewokay, 0, 'Bug 14101: Cannot renew, renewal is automatic' );
@@ -1241,6 +1245,7 @@ subtest "CanBookBeRenewed tests" => sub {
         $dbh->do(q{UPDATE circulation_rules SET rule_value = '10' WHERE rule_name = 'norenewalbefore'});
         $dbh->do(q{UPDATE circulation_rules SET rule_value = '15' WHERE rule_name = 'no_auto_renewal_after'});
         $dbh->do(q{UPDATE circulation_rules SET rule_value = NULL WHERE rule_name = 'no_auto_renewal_after_hard_limit'});
+        Koha::Cache::Memory::Lite->flush();
         Koha::CirculationRules->set_rules(
             {
                 categorycode => undef,
