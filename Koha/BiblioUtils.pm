@@ -124,7 +124,7 @@ records instead of all.
 =cut
 
 sub get_all_biblios_iterator {
-    my ($self, %options) = @_;
+    my ($class, %options) = @_;
 
     my $search_terms = {};
     my ($slice_modulo, $slice_count);
@@ -154,7 +154,7 @@ sub get_all_biblios_iterator {
                 biblionumber => $row->biblionumber,
                 embed_items  => 1 });
             my $next = eval {
-                __PACKAGE__->new($marc, $row->biblionumber);
+                $class->new($marc, $row->biblionumber);
             };
             if ($@) {
                 warn "Something went wrong reading record for biblio $row->biblionumber: $@\n";
