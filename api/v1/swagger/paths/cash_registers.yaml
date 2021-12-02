@@ -1,0 +1,68 @@
+---
+"/cash_registers/{cash_register_id}/cashups":
+  get:
+    x-mojo-to: CashRegisters::Cashups#list
+    operationId: listCashups
+    tags:
+      - cashups
+    summary: List cashups for the cash register
+    produces:
+      - application/json
+    parameters:
+      - $ref: ../parameters.yaml#/cash_register_id_pp
+      - $ref: ../parameters.yaml#/match
+      - $ref: ../parameters.yaml#/order_by
+      - $ref: ../parameters.yaml#/page
+      - $ref: ../parameters.yaml#/per_page
+      - $ref: ../parameters.yaml#/q_param
+      - $ref: ../parameters.yaml#/q_body
+      - $ref: ../parameters.yaml#/q_header
+    responses:
+      "200":
+        description: Cashups performed on this register
+        schema:
+          type: array
+          items:
+            $ref: ../definitions.yaml#/cashup
+      "403":
+        description: Access forbidden
+        schema:
+          $ref: ../definitions.yaml#/error
+      "404":
+        description: Register not found
+        schema:
+          $ref: ../definitions.yaml#/error
+    x-koha-authorization:
+      permissions:
+        cash_management: cashup
+    x-koha-embed:
+      - manager
+"/cashups/{cashup_id}":
+  get:
+    x-mojo-to: CashRegisters::Cashups#get
+    operationId: getCashup
+    tags:
+      - cashups
+    summary: Get cashup
+    parameters:
+      - $ref: ../parameters.yaml#/cashup_id_pp
+    produces:
+      - application/json
+    responses:
+      "200":
+        description: A cashup
+        schema:
+          $ref: ../definitions.yaml#/cashup
+      "403":
+        description: Access forbidden
+        schema:
+          $ref: ../definitions.yaml#/error
+      "404":
+        description: Patron not found
+        schema:
+          $ref: ../definitions.yaml#/error
+    x-koha-authorization:
+      permissions:
+        cash_management: cashup
+    x-koha-embed:
+      - summary

@@ -1,0 +1,21 @@
+---
+type: object
+properties:
+  allows_renewal:
+    type: boolean
+    description: Renewability status; true = renewable, false = not renewable
+  max_renewals:
+    type: integer
+    description: Maximum number of possible renewals
+  current_renewals:
+    type: integer
+    description: Current used renewals
+  unseen_renewals:
+    type: integer
+    description: Number of consecutive times the item was renewed without being seen
+  error:
+    type:
+      - string
+      - "null"
+    description: Description on false allows_renewal.
+additionalProperties: false

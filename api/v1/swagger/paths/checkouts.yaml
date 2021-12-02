@@ -1,0 +1,126 @@
+---
+/checkouts:
+  get:
+    x-mojo-to: Checkouts#list
+    operationId: listCheckouts
+    tags:
+      - checkouts
+    summary: List checkouts
+    parameters:
+      - $ref: ../parameters.yaml#/patron_id_qp
+      - $ref: ../parameters.yaml#/page
+      - $ref: ../parameters.yaml#/per_page
+      - $ref: ../parameters.yaml#/match
+      - $ref: ../parameters.yaml#/order_by
+      - $ref: ../parameters.yaml#/q_param
+      - $ref: ../parameters.yaml#/q_body
+      - $ref: ../parameters.yaml#/q_header
+      - name: checked_in
+        in: query
+        description: By default, current checkouts are returned, when this is true then
+          checked in checkouts are returned as result.
+        type: boolean
+    produces:
+      - application/json
+    responses:
+      "200":
+        description: A list of checkouts
+        schema:
+          $ref: ../definitions.yaml#/checkouts
+      "403":
+        description: Access forbidden
+        schema:
+          $ref: ../definitions.yaml#/error
+      "404":
+        description: Patron not found
+        schema:
+          $ref: ../definitions.yaml#/error
+    x-koha-authorization:
+      permissions:
+        circulate: circulate_remaining_permissions
+    x-koha-embed:
+      - issuer
+"/checkouts/{checkout_id}":
+  get:
+    x-mojo-to: Checkouts#get
+    operationId: getCheckout
+    tags:
+      - checkouts
+    summary: Get checkout
+    parameters:
+      - $ref: ../parameters.yaml#/checkout_id_pp
+    produces:
+      - application/json
+    responses:
+      "200":
+        description: Updated borrower's checkout
+        schema:
+          $ref: ../definitions.yaml#/checkout
+      "403":
+        description: Access forbidden
+        schema:
+          $ref: ../definitions.yaml#/error
+      "404":
+        description: Checkout not found
+        schema:
+          $ref: ../definitions.yaml#/error
+    x-koha-authorization:
+      permissions:
+        circulate: circulate_remaining_permissions
+    x-koha-embed:
+      - issuer
+"/checkouts/{checkout_id}/renewal":
+  post:
+    x-mojo-to: Checkouts#renew
+    operationId: renewCheckout
+    tags:
+      - checkouts
+    summary: Renew a checkout
+    parameters:
+      - $ref: ../parameters.yaml#/checkout_id_pp
+      - $ref: ../parameters.yaml#/seen_pp
+    produces:
+      - application/json
+    responses:
+      "201":
+        description: Updated borrower's checkout
+        schema:
+          $ref: ../definitions.yaml#/checkout
+      "403":
+        description: Cannot renew checkout
+        schema:
+          $ref: ../definitions.yaml#/error
+      "404":
+        description: Checkout not found
+        schema:
+          $ref: ../definitions.yaml#/error
+    x-koha-authorization:
+      permissions:
+        circulate: circulate_remaining_permissions
+"/checkouts/{checkout_id}/allows_renewal":
+  get:
+    x-mojo-to: Checkouts#allows_renewal
+    operationId: allows_renewalCheckout
+    tags:
+      - checkouts
+    summary: Get renewability for a checkout
+    parameters:
+      - $ref: ../parameters.yaml#/checkout_id_pp
+    produces:
+      - application/json
+    responses:
+      "200":
+        description: Checkout renewability information
+        schema:
+          $ref: ../definitions.yaml#/allows_renewal
+      "403":
+        description: Forbidden
+        schema:
+          $ref: ../definitions.yaml#/error
+      "404":
+        description: Checkout not found
+        schema:
+          $ref: ../definitions.yaml#/error
+    x-koha-authorization:
+      permissions:
+        circulate: circulate_remaining_permissions

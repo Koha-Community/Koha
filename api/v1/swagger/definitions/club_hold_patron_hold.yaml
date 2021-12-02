@@ -1,0 +1,29 @@
+---
+type: object
+properties:
+  club_hold_patron_hold_id:
+    type: integer
+    description: Internal club hold to patron hold identifier
+  club_hold_id:
+    type: integer
+    description: Internal club hold identifier
+  hold_id:
+    type:
+      - integer
+      - "null"
+    description: Internal hold identifier
+  patron_id:
+    type: integer
+    description: Internal patron identifier
+  error_code:
+    type:
+      - string
+      - "null"
+    format: date
+    description: Code returned by CanItemBeReserved
+  error_message:
+    type:
+      - string
+      - "null"
+    description: Generic error message
+additionalProperties: false

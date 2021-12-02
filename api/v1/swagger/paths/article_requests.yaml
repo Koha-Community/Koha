@@ -30,27 +30,27 @@
       "400":
         description: Bad request
         schema:
-          $ref: ../definitions.json#/error
+          $ref: ../definitions.yaml#/error
       "401":
         description: Authentication required
         schema:
-          $ref: ../definitions.json#/error
+          $ref: ../definitions.yaml#/error
       "403":
         description: Access forbidden
         schema:
-          $ref: ../definitions.json#/error
+          $ref: ../definitions.yaml#/error
       "404":
         description: Patron not found
         schema:
-          $ref: ../definitions.json#/error
+          $ref: ../definitions.yaml#/error
       "500":
         description: Internal server error
         schema:
-          $ref: ../definitions.json#/error
+          $ref: ../definitions.yaml#/error
       "503":
         description: Under maintenance
         schema:
-          $ref: ../definitions.json#/error
+          $ref: ../definitions.yaml#/error
     x-koha-authorization:
       permissions:
         circulate: circulate_remaining_permissions
@@ -62,7 +62,7 @@
       - article_requests
     summary: Cancel patron's article requests
     parameters:
-      - $ref: ../parameters.json#/patron_id_pp
+      - $ref: ../parameters.yaml#/patron_id_pp
       - name: article_request_id
         in: path
         description: Article request identifier
@@ -86,26 +86,26 @@
       "400":
         description: Bad request
         schema:
-          $ref: ../definitions.json#/error
+          $ref: ../definitions.yaml#/error
       "401":
         description: Authentication required
         schema:
-          $ref: ../definitions.json#/error
+          $ref: ../definitions.yaml#/error
       "403":
         description: Access forbidden
         schema:
-          $ref: ../definitions.json#/error
+          $ref: ../definitions.yaml#/error
       "404":
         description: Patron not found
         schema:
-          $ref: ../definitions.json#/error
+          $ref: ../definitions.yaml#/error
       "500":
         description: Internal server error
         schema:
-          $ref: ../definitions.json#/error
+          $ref: ../definitions.yaml#/error
       "503":
         description: Under maintenance
         schema:
-          $ref: ../definitions.json#/error
+          $ref: ../definitions.yaml#/error
     x-koha-authorization:
       allow-owner: true

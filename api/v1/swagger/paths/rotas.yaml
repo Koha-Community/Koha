@@ -1,0 +1,57 @@
+---
+"/rotas/{rota_id}/stages/{stage_id}/position":
+  put:
+    x-mojo-to: Stage#move
+    operationId: moveStage
+    summary: Update stage
+    tags:
+      - rotas
+    parameters:
+      - name: rota_id
+        in: path
+        required: true
+        description: A rotas ID
+        type: integer
+      - name: stage_id
+        in: path
+        required: true
+        description: A stages ID
+        type: integer
+      - name: position
+        in: body
+        required: true
+        description: A stages position in the rota
+        schema:
+          type: integer
+    produces:
+      - application/json
+    responses:
+      "200":
+        description: OK
+      "400":
+        description: Bad request
+        schema:
+          $ref: ../definitions.yaml#/error
+      "401":
+        description: Authentication required
+        schema:
+          $ref: ../definitions.yaml#/error
+      "403":
+        description: Access forbidden
+        schema:
+          $ref: ../definitions.yaml#/error
+      "404":
+        description: Position not found
+        schema:
+          $ref: ../definitions.yaml#/error
+      "500":
+        description: Internal server error
+        schema:
+          $ref: ../definitions.yaml#/error
+      "503":
+        description: Under maintenance
+        schema:
+          $ref: ../definitions.yaml#/error
+    x-koha-authorization:
+      permissions:
+        stockrotation: "1"

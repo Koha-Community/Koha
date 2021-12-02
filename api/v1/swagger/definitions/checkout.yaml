@@ -1,0 +1,102 @@
+---
+type: object
+properties:
+  checkout_id:
+    type: integer
+    description: internally assigned checkout identifier
+  patron_id:
+    $ref: ../x-primitives.yaml#/patron_id
+  item_id:
+    type: integer
+    description: internal identifier of checked out item
+  due_date:
+    type: string
+    format: date-time
+    description: Due date
+  library_id:
+    type:
+      - string
+      - "null"
+    description: code of the library the item was checked out
+  issuer_id:
+    type:
+      - integer
+      - "null"
+    description: internally assigned for the user that processed the checkout
+  checkin_date:
+    type:
+      - string
+      - "null"
+    format: date-time
+    description: Date the item was returned
+  last_renewed_date:
+    type:
+      - string
+      - "null"
+    format: date-time
+    description: Date the item was last renewed
+  renewals:
+    type:
+      - integer
+      - "null"
+    description: Number of renewals
+  unseen_renewals:
+    type:
+      - integer
+      - "null"
+    description: Number of consecutive unseen renewals
+  auto_renew:
+    type: boolean
+    description: Auto renewal
+  auto_renew_error:
+    type:
+      - string
+      - "null"
+    description: Auto renewal error
+  timestamp:
+    type: string
+    description: Last update time
+  checkout_date:
+    type: string
+    format: date-time
+    description: Date the item was issued
+  onsite_checkout:
+    type: boolean
+    description: On site checkout
+  note:
+    type:
+      - string
+      - "null"
+    description: Issue note text
+  note_date:
+    type:
+      - string
+      - "null"
+    format: date
+    description: Datetime of the issue note
+  note_seen:
+    type:
+      - boolean
+      - "null"
+    description: has the note been seen already
+  issuer:
+    type:
+      - object
+      - "null"
+    description: The object representing the checkout issuer
+  item:
+    type:
+      - object
+      - "null"
+    description: The object representing the checked out item
+  library:
+    type:
+      - object
+      - "null"
+    description: The object representing the checkout library
+  patron:
+    type:
+      - object
+      - "null"
+    description: The object representing the checkout patron
+additionalProperties: false

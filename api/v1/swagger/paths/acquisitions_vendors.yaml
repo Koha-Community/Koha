@@ -1,32 +1,22 @@
 ---
-/cities:
+/acquisitions/vendors:
   get:
-    x-mojo-to: Cities#list
-    operationId: listCities
+    x-mojo-to: Acquisitions::Vendors#list
+    operationId: listVendors
     tags:
-      - cities
-    summary: List cities
+      - vendors
+    summary: List vendors
     produces:
       - application/json
     parameters:
       - name: name
         in: query
-        description: Case insensative search on city name
+        description: Case insensitive search on vendor name
         required: false
         type: string
-      - name: state
+      - name: accountnumber
         in: query
-        description: Case insensative search on city state
-        required: false
-        type: string
-      - name: country
-        in: query
-        description: Case insensative search on city country
-        required: false
-        type: string
-      - name: postal_code
-        in: query
-        description: Case Insensative search on city postal code
+        description: Case insensitive search on vendor's account number
         required: false
         type: string
       - $ref: ../parameters.yaml#/match
@@ -38,17 +28,25 @@
       - $ref: ../parameters.yaml#/q_header
     responses:
       "200":
-        description: A list of cities
+        description: A list of vendors
         schema:
           type: array
           items:
-            $ref: ../definitions.yaml#/city
+            $ref: ../definitions.yaml#/vendor
+      "401":
+        description: Authentication required
+        schema:
+          $ref: ../definitions.yaml#/error
       "403":
         description: Access forbidden
         schema:
           $ref: ../definitions.yaml#/error
+      "404":
+        description: Vendor not found
+        schema:
+          $ref: ../definitions.yaml#/error
       "500":
-        description: Internal error
+        description: Internal server error
         schema:
           $ref: ../definitions.yaml#/error
       "503":
@@ -57,27 +55,27 @@
           $ref: ../definitions.yaml#/error
     x-koha-authorization:
       permissions:
-        catalogue: "1"
+        acquisition: vendors_manage
   post:
-    x-mojo-to: Cities#add
-    operationId: addCity
+    x-mojo-to: Acquisitions::Vendors#add
+    operationId: addVendor
     tags:
-      - cities
-    summary: Add city
+      - vendors
+    summary: Add vendor
     parameters:
       - name: body
         in: body
-        description: A JSON object containing informations about the new hold
+        description: A JSON object representing a vendor
         required: true
         schema:
-          $ref: ../definitions.yaml#/city
+          $ref: ../definitions.yaml#/vendor
     produces:
       - application/json
     responses:
       "201":
-        description: City added
+        description: Vendor added
         schema:
-          $ref: ../definitions.yaml#/city
+          $ref: ../definitions.yaml#/vendor
       "401":
         description: Authentication required
         schema:
@@ -86,8 +84,12 @@
         description: Access forbidden
         schema:
           $ref: ../definitions.yaml#/error
+      "404":
+        description: Vendor not found
+        schema:
+          $ref: ../definitions.yaml#/error
       "500":
-        description: Internal error
+        description: Internal server error
         schema:
           $ref: ../definitions.yaml#/error
       "503":
@@ -96,29 +98,37 @@
           $ref: ../definitions.yaml#/error
     x-koha-authorization:
       permissions:
-        parameters: manage_cities
-"/cities/{city_id}":
+        acquisition: vendors_manage
+"/acquisitions/vendors/{vendor_id}":
   get:
-    x-mojo-to: Cities#get
-    operationId: getCity
+    x-mojo-to: Acquisitions::Vendors#get
+    operationId: getVendor
     tags:
-      - cities
-    summary: Get city
+      - vendors
+    summary: Get vendor
     parameters:
-      - $ref: ../parameters.yaml#/city_id_pp
+      - $ref: ../parameters.yaml#/vendoridPathParam
     produces:
       - application/json
     responses:
       "200":
-        description: A city
+        description: A vendor
         schema:
-          $ref: ../definitions.yaml#/city
+          $ref: ../definitions.yaml#/vendor
+      "401":
+        description: Authentication required
+        schema:
+          $ref: ../definitions.yaml#/error
+      "403":
+        description: Access forbidden
+        schema:
+          $ref: ../definitions.yaml#/error
       "404":
-        description: City not found
+        description: Vendor not found
         schema:
           $ref: ../definitions.yaml#/error
       "500":
-        description: Internal error
+        description: Internal server error
         schema:
           $ref: ../definitions.yaml#/error
       "503":
@@ -127,28 +137,28 @@
           $ref: ../definitions.yaml#/error
     x-koha-authorization:
       permissions:
-        catalogue: "1"
+        acquisition: vendors_manage
   put:
-    x-mojo-to: Cities#update
-    operationId: updateCity
+    x-mojo-to: Acquisitions::Vendors#update
+    operationId: updateVendor
     tags:
-      - cities
-    summary: Update city
+      - vendors
+    summary: Update vendor
     parameters:
-      - $ref: ../parameters.yaml#/city_id_pp
+      - $ref: ../parameters.yaml#/vendoridPathParam
       - name: body
         in: body
-        description: A city object
+        description: A JSON object representing a vendor
         required: true
         schema:
-          $ref: ../definitions.yaml#/city
+          $ref: ../definitions.yaml#/vendor
     produces:
       - application/json
     responses:
       "200":
-        description: A city
+        description: A vendor
         schema:
-          $ref: ../definitions.yaml#/city
+          $ref: ../definitions.yaml#/vendor
       "401":
         description: Authentication required
         schema:
@@ -158,11 +168,11 @@
         schema:
           $ref: ../definitions.yaml#/error
       "404":
-        description: City not found
+        description: Vendor not found
         schema:
           $ref: ../definitions.yaml#/error
       "500":
-        description: Internal error
+        description: Internal server error
         schema:
           $ref: ../definitions.yaml#/error
       "503":
@@ -171,20 +181,20 @@
           $ref: ../definitions.yaml#/error
     x-koha-authorization:
       permissions:
-        parameters: manage_cities
+        acquisition: vendors_manage
   delete:
-    x-mojo-to: Cities#delete
-    operationId: deleteCity
+    x-mojo-to: Acquisitions::Vendors#delete
+    operationId: deleteVendor
     tags:
-      - cities
-    summary: Delete city
+      - vendors
+    summary: Delete vendor
     parameters:
-      - $ref: ../parameters.yaml#/city_id_pp
+      - $ref: ../parameters.yaml#/vendoridPathParam
     produces:
       - application/json
     responses:
       "204":
-        description: City deleted
+        description: Vendor deleted
       "401":
         description: Authentication required
         schema:
@@ -194,11 +204,11 @@
         schema:
           $ref: ../definitions.yaml#/error
       "404":
-        description: City not found
+        description: Vendor not found
         schema:
           $ref: ../definitions.yaml#/error
       "500":
-        description: Internal error
+        description: Internal server error
         schema:
           $ref: ../definitions.yaml#/error
       "503":
@@ -207,4 +217,4 @@
           $ref: ../definitions.yaml#/error
     x-koha-authorization:
       permissions:
-        parameters: manage_cities
+        acquisition: vendors_manage

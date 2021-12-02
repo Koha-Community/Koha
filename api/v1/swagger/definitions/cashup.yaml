@@ -1,0 +1,28 @@
+---
+type: object
+properties:
+  cashup_id:
+    type: integer
+    description: Internal cashup identifier
+  cash_register_id:
+    type: integer
+    description: Internal identifier for the register the cashup belongs to
+  manager_id:
+    type: integer
+    description: Internal identifier for the manager the cashup was performed by
+  manager:
+    type:
+      - object
+      - "null"
+    description: The object representing the manager the cashup was performed by
+  amount:
+    type: number
+    description: Account line amount
+  timestamp:
+    type: string
+    format: date-time
+    description: Timestamp for the latest line update
+  summary:
+    type: object
+    description: A summary of the cashup action
+additionalProperties: false

@@ -1,34 +1,14 @@
 ---
-/cities:
+/config/smtp_servers:
   get:
-    x-mojo-to: Cities#list
-    operationId: listCities
+    x-mojo-to: Config::SMTP::Servers#list
+    operationId: listSMTPServers
     tags:
-      - cities
-    summary: List cities
+      - smtp_servers
+    summary: List SMTP servers
     produces:
       - application/json
     parameters:
-      - name: name
-        in: query
-        description: Case insensative search on city name
-        required: false
-        type: string
-      - name: state
-        in: query
-        description: Case insensative search on city state
-        required: false
-        type: string
-      - name: country
-        in: query
-        description: Case insensative search on city country
-        required: false
-        type: string
-      - name: postal_code
-        in: query
-        description: Case Insensative search on city postal code
-        required: false
-        type: string
       - $ref: ../parameters.yaml#/match
       - $ref: ../parameters.yaml#/order_by
       - $ref: ../parameters.yaml#/page
@@ -38,11 +18,11 @@
       - $ref: ../parameters.yaml#/q_header
     responses:
       "200":
-        description: A list of cities
+        description: A list of SMTP servers
         schema:
           type: array
           items:
-            $ref: ../definitions.yaml#/city
+            $ref: ../definitions.yaml#/smtp_server
       "403":
         description: Access forbidden
         schema:
@@ -57,27 +37,27 @@
           $ref: ../definitions.yaml#/error
     x-koha-authorization:
       permissions:
-        catalogue: "1"
+        parameters: manage_smtp_servers
   post:
-    x-mojo-to: Cities#add
-    operationId: addCity
+    x-mojo-to: Config::SMTP::Servers#add
+    operationId: addSMTPServer
     tags:
-      - cities
-    summary: Add city
+      - smtp_servers
+    summary: Add SMTP server
     parameters:
       - name: body
         in: body
-        description: A JSON object containing informations about the new hold
+        description: A JSON object representing a new SMTP server configuration
         required: true
         schema:
-          $ref: ../definitions.yaml#/city
+          $ref: ../definitions.yaml#/smtp_server
     produces:
       - application/json
     responses:
       "201":
-        description: City added
+        description: An SMTP server object
         schema:
-          $ref: ../definitions.yaml#/city
+          $ref: ../definitions.yaml#/smtp_server
       "401":
         description: Authentication required
         schema:
@@ -86,6 +66,10 @@
         description: Access forbidden
         schema:
           $ref: ../definitions.yaml#/error
+      "409":
+        description: Conflict in creating resource
+        schema:
+          $ref: ../definitions.yaml#/error
       "500":
         description: Internal error
         schema:
@@ -96,25 +80,29 @@
           $ref: ../definitions.yaml#/error
     x-koha-authorization:
       permissions:
-        parameters: manage_cities
-"/cities/{city_id}":
+        parameters: manage_smtp_servers
+"/config/smtp_servers/{smtp_server_id}":
   get:
-    x-mojo-to: Cities#get
-    operationId: getCity
+    x-mojo-to: Config::SMTP::Servers#get
+    operationId: getSMTPServer
     tags:
-      - cities
-    summary: Get city
+      - smtp_servers
+    summary: Get SMTP server
     parameters:
-      - $ref: ../parameters.yaml#/city_id_pp
+      - $ref: ../parameters.yaml#/smtp_server_id_pp
     produces:
       - application/json
     responses:
       "200":
-        description: A city
+        description: An SMTP server object
         schema:
-          $ref: ../definitions.yaml#/city
+          $ref: ../definitions.yaml#/smtp_server
       "404":
-        description: City not found
+        description: Object not found
+        schema:
+          $ref: ../definitions.yaml#/error
+      "409":
+        description: Conflict updating resource
         schema:
           $ref: ../definitions.yaml#/error
       "500":
@@ -127,28 +115,28 @@
           $ref: ../definitions.yaml#/error
     x-koha-authorization:
       permissions:
-        catalogue: "1"
+        parameters: manage_smtp_servers
   put:
-    x-mojo-to: Cities#update
-    operationId: updateCity
+    x-mojo-to: Config::SMTP::Servers#update
+    operationId: updateSMTPServer
     tags:
-      - cities
-    summary: Update city
+      - smtp_servers
+    summary: Update SMTP server
     parameters:
-      - $ref: ../parameters.yaml#/city_id_pp
+      - $ref: ../parameters.yaml#/smtp_server_id_pp
       - name: body
         in: body
-        description: A city object
+        description: An SMTP server object
         required: true
         schema:
-          $ref: ../definitions.yaml#/city
+          $ref: ../definitions.yaml#/smtp_server
     produces:
       - application/json
     responses:
       "200":
-        description: A city
+        description: An SMTP server object
         schema:
-          $ref: ../definitions.yaml#/city
+          $ref: ../definitions.yaml#/smtp_server
       "401":
         description: Authentication required
         schema:
@@ -158,7 +146,7 @@
         schema:
           $ref: ../definitions.yaml#/error
       "404":
-        description: City not found
+        description: Object not found
         schema:
           $ref: ../definitions.yaml#/error
       "500":
@@ -171,20 +159,20 @@
           $ref: ../definitions.yaml#/error
     x-koha-authorization:
       permissions:
-        parameters: manage_cities
+        parameters: manage_smtp_servers
   delete:
-    x-mojo-to: Cities#delete
-    operationId: deleteCity
+    x-mojo-to: Config::SMTP::Servers#delete
+    operationId: deleteSMTPServer
     tags:
-      - cities
-    summary: Delete city
+      - smtp_servers
+    summary: Delete SMTP server
     parameters:
-      - $ref: ../parameters.yaml#/city_id_pp
+      - $ref: ../parameters.yaml#/smtp_server_id_pp
     produces:
       - application/json
     responses:
       "204":
-        description: City deleted
+        description: SMTP server deleted
       "401":
         description: Authentication required
         schema:
@@ -194,7 +182,7 @@
         schema:
           $ref: ../definitions.yaml#/error
       "404":
-        description: City not found
+        description: Object not found
         schema:
           $ref: ../definitions.yaml#/error
       "500":
@@ -207,4 +195,4 @@
           $ref: ../definitions.yaml#/error
     x-koha-authorization:
       permissions:
-        parameters: manage_cities
+        parameters: manage_smtp_servers
