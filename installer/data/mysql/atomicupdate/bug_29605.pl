@@ -43,6 +43,14 @@ return {
         );
         say $out "Ensure NOT NULL on account_offsets.type";
 
+        $dbh->do(
+            q{
+                ALTER TABLE `additional_contents`
+                MODIFY COLUMN `code` VARCHAR(100) NOT NULL
+            }
+        );
+        say $out "Ensure additional_contents.code is VARCHAR(100)";
+
     },
 
 }
