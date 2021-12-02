@@ -1,0 +1,60 @@
+---
+type: object
+properties:
+  profile_id:
+    type: integer
+    description: Internal profile identifier
+  name:
+    description: name of this profile
+    type: string
+  matcher_id:
+    description: the id of the match rule used (matchpoints.matcher_id)
+    type:
+      - integer
+      - "null"
+  template_id:
+    description: the id of the marc modification template
+    type:
+      - integer
+      - "null"
+  overlay_action:
+    description: how to handle duplicate records
+    type:
+      - string
+      - "null"
+  nomatch_action:
+    description: how to handle records where no match is found
+    type:
+      - string
+      - "null"
+  item_action:
+    description: what to do with item records
+    type:
+      - string
+      - "null"
+  parse_items:
+    description: should items be parsed
+    type:
+      - boolean
+      - "null"
+  record_type:
+    description: type of record in the batch
+    type:
+      - string
+      - "null"
+  encoding:
+    description: file encoding
+    type:
+      - string
+      - "null"
+  format:
+    description: marc format
+    type:
+      - string
+      - "null"
+  comments:
+    description: any comments added when the file was uploaded
+    type:
+      - string
+      - "null"
+additionalProperties: false

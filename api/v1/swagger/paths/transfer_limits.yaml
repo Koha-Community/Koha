@@ -1,105 +1,105 @@
----
-"/transfer_limits":
+/transfer_limits:
   get:
     x-mojo-to: TransferLimits#list
     operationId: listTransferLimits
-    description: "This resource returns a list of existing transfer limits."
+    description: This resource returns a list of existing transfer limits.
     summary: List transfer limits
     tags:
-    - transfer
+      - transfer
     parameters:
-    - name: to_library_id
-      in: query
-      description: Search on to_library_id
-      required: false
-      type: string
-    - name: from_library_id
-      in: query
-      description: Search on from_library_id
-      required: false
-      type: string
-    - name: item_type
-      in: query
-      description: Search on item_type
-      required: false
-      type: string
-    - name: collection_code
-      in: query
-      description: Search on collection_code
-      required: false
-      type: string
-    - "$ref": "../parameters.json#/match"
-    - "$ref": "../parameters.json#/order_by"
-    - "$ref": "../parameters.json#/page"
-    - "$ref": "../parameters.json#/per_page"
-    - "$ref": "../parameters.json#/q_param"
-    - "$ref": "../parameters.json#/q_body"
-    - "$ref": "../parameters.json#/q_header"
+      - name: to_library_id
+        in: query
+        description: Search on to_library_id
+        required: false
+        type: string
+      - name: from_library_id
+        in: query
+        description: Search on from_library_id
+        required: false
+        type: string
+      - name: item_type
+        in: query
+        description: Search on item_type
+        required: false
+        type: string
+      - name: collection_code
+        in: query
+        description: Search on collection_code
+        required: false
+        type: string
+      - $ref: ../parameters.yaml#/match
+      - $ref: ../parameters.yaml#/order_by
+      - $ref: ../parameters.yaml#/page
+      - $ref: ../parameters.yaml#/per_page
+      - $ref: ../parameters.yaml#/q_param
+      - $ref: ../parameters.yaml#/q_body
+      - $ref: ../parameters.yaml#/q_header
     produces:
-    - application/json
+      - application/json
     responses:
-      '200':
+      "200":
         description: A list of transfer limits
         schema:
           type: array
           items:
-            "$ref": "../definitions.json#/transfer_limit"
-      '500':
+            $ref: ../definitions.yaml#/transfer_limit
+      "500":
         description: Internal error
         schema:
-          "$ref": "../definitions.json#/error"
-      '503':
+          $ref: ../definitions.yaml#/error
+      "503":
         description: Under maintenance
         schema:
-          "$ref": "../definitions.json#/error"
+          $ref: ../definitions.yaml#/error
     x-koha-authorization:
       permissions:
         parameters: manage_transfers
   post:
     x-mojo-to: TransferLimits#add
     operationId: addTransferLimit
-    description: "This resource accepts a new transfer limit and creates it if it does not already exist."
+    description: This resource accepts a new transfer limit and creates it if it does not
+      already exist.
     tags:
-    - transfer
+      - transfer
     summary: Add a transfer limit
     parameters:
-    - name: body
-      in: body
-      description: A JSON object containing information about a new transfer limit
-      required: true
-      schema:
-        "$ref": "../definitions.json#/transfer_limit"
+      - name: body
+        in: body
+        description: A JSON object containing information about a new transfer limit
+        required: true
+        schema:
+          $ref: ../definitions.yaml#/transfer_limit
     produces:
-    - application/json
+      - application/json
     responses:
-      '201':
+      "201":
         description: Transfer limit added
         schema:
-          "$ref": "../definitions.json#/transfer_limit"
-      '400':
+          $ref: ../definitions.yaml#/transfer_limit
+      "400":
         description: Bad request
         schema:
-          "$ref": "../definitions.json#/error"
-      '401':
+          $ref: ../definitions.yaml#/error
+      "401":
         description: Authentication required
         schema:
-          "$ref": "../definitions.json#/error"
-      '403':
+          $ref: ../definitions.yaml#/error
+      "403":
         description: Access forbidden
         schema:
-          "$ref": "../definitions.json#/error"
-      '409':
+          $ref: ../definitions.yaml#/error
+      "409":
         description: Conflict in creating resource
         schema:
-          "$ref": "../definitions.json#/error"
-      '500':
+          $ref: ../definitions.yaml#/error
+      "500":
         description: Internal error
         schema:
-          "$ref": "../definitions.json#/error"
-      '503':
+          $ref: ../definitions.yaml#/error
+      "503":
         description: Under maintenance
         schema:
-          "$ref": "../definitions.json#/error"
+          $ref: ../definitions.yaml#/error
     x-koha-authorization:
       permissions:
         parameters: manage_transfers
@@ -107,191 +107,194 @@
   delete:
     x-mojo-to: TransferLimits#delete
     operationId: deleteTransferLimit
-    description: "This resource deletes a transfer limit for the given limit id"
+    description: This resource deletes a transfer limit for the given limit id
     tags:
-    - transfer
+      - transfer
     summary: Delete transfer limit
     parameters:
-    - "$ref": "../parameters.json#/transfer_limit_id_pp"
+      - $ref: ../parameters.yaml#/transfer_limit_id_pp
     produces:
-    - application/json
+      - application/json
     responses:
-      '204':
+      "204":
         description: Transfer limit deleted
         schema:
           type: string
-      '401':
+      "401":
         description: Authentication required
         schema:
-          "$ref": "../definitions.json#/error"
-      '403':
+          $ref: ../definitions.yaml#/error
+      "403":
         description: Access forbidden
         schema:
-          "$ref": "../definitions.json#/error"
-      '404':
+          $ref: ../definitions.yaml#/error
+      "404":
         description: Library not found
         schema:
-          "$ref": "../definitions.json#/error"
-      '500':
+          $ref: ../definitions.yaml#/error
+      "500":
         description: Internal error
         schema:
-          "$ref": "../definitions.json#/error"
-      '503':
+          $ref: ../definitions.yaml#/error
+      "503":
         description: Under maintenance
         schema:
-          "$ref": "../definitions.json#/error"
+          $ref: ../definitions.yaml#/error
     x-koha-authorization:
       permissions:
         parameters: manage_transfers
-"/transfer_limits/batch":
+/transfer_limits/batch:
   post:
     x-mojo-to: TransferLimits#batch_add
     operationId: batchAddTransferLimits
-    description: "This resource batch creates new transfer limits based on the given data.
+    description: >
 
-    For example, if the paramters `to_library_id: 'BranchA'` and `item_type: 'BOOK'` are passed in
-    new transfer limits for `BOOK`s will be created, with one transfer limit each for all the
-    branches defined in Koha. Given 4 branches, 3 limits would be created:
+      This resource batch creates new transfer limits based on the given data.
 
+      For example, if the paramters `to_library_id: 'BranchA'` and `item_type: 'BOOK'` are passed in
+      new transfer limits for `BOOK`s will be created, with one transfer limit each for all the
+      branches defined in Koha. Given 4 branches, 3 limits would be created:
 
-    * to_library_id: 'BranchA', from_library_id: 'BranchB', item_type: 'BOOK'
-
-    * to_library_id: 'BranchA', from_library_id: 'BranchC', item_type: 'BOOK'
-
-    * to_library_id: 'BranchA', from_library_id: 'BranchD', item_type: 'BOOK'
-
-
-    The body of the query would look like
-    ```
-    {
-        'to_library_id': 'BranchA',
-        'item_type': 'BOOK'
-
-    }
-    ```
+      * to_library_id: 'BranchA', from_library_id: 'BranchB', item_type: 'BOOK'
+      * to_library_id: 'BranchA', from_library_id: 'BranchC', item_type: 'BOOK'
+      * to_library_id: 'BranchA', from_library_id: 'BranchD', item_type: 'BOOK'
 
 
-    As another example, imagine we have an itemtype that is never supposed to be transferred to another library.
-    If we call that itemtype `LOCAL_ONLY` we would need to just pass `item_type: 'LOCAL_ONLY'`, which would create transfer
-    limits for all libraries, meaning those items would never be allowed to transfer to another
-    library. The body of the query would look like
-    ```
-    {
-        'item_type': 'LOCAL_ONLY'
-    }
-    ```"
+      The body of the query would look like
+
+      ```
+
+      {
+          'to_library_id': 'BranchA',
+          'item_type': 'BOOK'
+
+      }
+
+      ```
+
+      As another example, imagine we have an itemtype that is never supposed to be transferred to another library.
+      If we call that itemtype `LOCAL_ONLY` we would need to just pass `item_type: 'LOCAL_ONLY'`, which would create transfer
+      limits for all libraries, meaning those items would never be allowed to transfer to another
+      library. The body of the query would look like
+
+      ```
+
+      {
+          'item_type': 'LOCAL_ONLY'
+      }
+
+      ```
     tags:
-    - transfer
+      - transfer
     summary: Batch add transfer limits
     parameters:
-    - name: body
-      in: body
-      description: A JSON object containing information about new transfer limits.
-      required: true
-      schema:
-        type: object
-        properties:
-          to_library_id:
-            type: string
-            description: Internal library id for which library the item is going to
-          from_library_id:
-            type: string
-            description: Internal library id for which library the item is coming
-              from
-          item_type:
-            type:
-            - string
-            - 'null'
-            description: Itemtype defining the type for this limi
-          collection_code:
-            type:
-            - string
-            - 'null'
-            description: Authorized value for the collection code associated with
-              this limit
-        additionalProperties: false
+      - name: body
+        in: body
+        description: A JSON object containing information about new transfer limits.
+        required: true
+        schema:
+          type: object
+          properties:
+            to_library_id:
+              type: string
+              description: Internal library id for which library the item is going to
+            from_library_id:
+              type: string
+              description: Internal library id for which library the item is coming from
+            item_type:
+              type:
+                - string
+                - "null"
+              description: Itemtype defining the type for this limi
+            collection_code:
+              type:
+                - string
+                - "null"
+              description: Authorized value for the collection code associated with this
+                limit
+          additionalProperties: false
     produces:
-    - application/json
+      - application/json
     responses:
-      '201':
+      "201":
         description: A list of transfer limits
         schema:
           type: array
           items:
-            "$ref": "../definitions.json#/transfer_limit"
-      '500':
+            $ref: ../definitions.yaml#/transfer_limit
+      "500":
         description: Internal error
         schema:
-          "$ref": "../definitions.json#/error"
-      '503':
+          $ref: ../definitions.yaml#/error
+      "503":
         description: Under maintenance
         schema:
-          "$ref": "../definitions.json#/error"
+          $ref: ../definitions.yaml#/error
     x-koha-authorization:
       permissions:
         parameters: manage_transfers
   delete:
     x-mojo-to: TransferLimits#batch_delete
     operationId: batchDeleteTransferLimits
-    description: 'This endpoint works just like [the POST version](#op-post-transfer_limits-batch), except it deletes transfer in batch
-      rather than creating them.'
+    description: This endpoint works just like [the POST
+      version](#op-post-transfer_limits-batch), except it deletes transfer in
+      batch rather than creating them.
     tags:
-    - transfer
+      - transfer
     summary: Batch delete transfer limits
     parameters:
-    - name: body
-      in: body
-      description: A JSON object containing information about new transfer limits.
-      required: true
-      schema:
-        type: object
-        properties:
-          to_library_id:
-            type: string
-            description: Internal library id for which library the item is going to
-          from_library_id:
-            type: string
-            description: Internal library id for which library the item is coming
-              from
-          item_type:
-            type:
-            - string
-            - 'null'
-            description: Itemtype defining the type for this limi
-          collection_code:
-            type:
-            - string
-            - 'null'
-            description: Authorized value for the collection code associated with
-              this limit
-        additionalProperties: false
+      - name: body
+        in: body
+        description: A JSON object containing information about new transfer limits.
+        required: true
+        schema:
+          type: object
+          properties:
+            to_library_id:
+              type: string
+              description: Internal library id for which library the item is going to
+            from_library_id:
+              type: string
+              description: Internal library id for which library the item is coming from
+            item_type:
+              type:
+                - string
+                - "null"
+              description: Itemtype defining the type for this limi
+            collection_code:
+              type:
+                - string
+                - "null"
+              description: Authorized value for the collection code associated with this
+                limit
+          additionalProperties: false
     produces:
-    - application/json
+      - application/json
     responses:
-      '204':
+      "204":
         description: Transfer limits deleted
         schema:
           type: string
-      '401':
+      "401":
         description: Authentication required
         schema:
-          "$ref": "../definitions.json#/error"
-      '403':
+          $ref: ../definitions.yaml#/error
+      "403":
         description: Access forbidden
         schema:
-          "$ref": "../definitions.json#/error"
-      '404':
+          $ref: ../definitions.yaml#/error
+      "404":
         description: Library not found
         schema:
-          "$ref": "../definitions.json#/error"
-      '500':
+          $ref: ../definitions.yaml#/error
+      "500":
         description: Internal error
         schema:
-          "$ref": "../definitions.json#/error"
-      '503':
+          $ref: ../definitions.yaml#/error
+      "503":
         description: Under maintenance
         schema:
-          "$ref": "../definitions.json#/error"
+          $ref: ../definitions.yaml#/error
     x-koha-authorization:
       permissions:
         parameters: manage_transfers

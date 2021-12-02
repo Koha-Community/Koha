@@ -1,0 +1,22 @@
+---
+type: object
+properties:
+  club_hold_id:
+    type: integer
+    description: Internal club hold identifier
+  club_id:
+    type: integer
+    description: Internal club identifier
+  biblio_id:
+    type: integer
+    description: Internal biblio identifier
+  item_id:
+    type:
+      - string
+      - "null"
+    description: Internal item identifier
+  date_created:
+    type: string
+    format: date-time
+    description: Date and time the hold was created
+additionalProperties: false

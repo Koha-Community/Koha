@@ -1,0 +1,15 @@
+---
+type: object
+properties:
+  scope:
+    description: levels that this rule kind can be set for
+    type: array
+    items:
+      type: string
+      enum:
+        - branchcode
+        - categorycode
+        - itemtype
+additionalProperties: false
+required:
+  - scope

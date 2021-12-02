@@ -1,0 +1,262 @@
+---
+"/patrons/{patron_id}/extended_attributes":
+  get:
+    x-mojo-to: Patrons::Attributes#list_patron_attributes
+    operationId: getPatronAttributes
+    tags:
+      - patrons
+    summary: List extended attributes for a patron
+    parameters:
+      - $ref: ../parameters.yaml#/patron_id_pp
+      - $ref: ../parameters.yaml#/match
+      - $ref: ../parameters.yaml#/order_by
+      - $ref: ../parameters.yaml#/page
+      - $ref: ../parameters.yaml#/per_page
+      - $ref: ../parameters.yaml#/q_param
+      - $ref: ../parameters.yaml#/q_body
+      - $ref: ../parameters.yaml#/q_header
+    produces:
+      - application/json
+    responses:
+      "200":
+        description: The patron extended attributes
+        schema:
+          type: array
+          items:
+            $ref: ../definitions.yaml#/patron_extended_attribute
+      "401":
+        description: Authentication required
+        schema:
+          $ref: ../definitions.yaml#/error
+      "403":
+        description: Access forbidden
+        schema:
+          $ref: ../definitions.yaml#/error
+      "404":
+        description: Patron not found
+        schema:
+          $ref: ../definitions.yaml#/error
+      "500":
+        description: Internal server error
+        schema:
+          $ref: ../definitions.yaml#/error
+      "503":
+        description: Under maintenance
+        schema:
+          $ref: ../definitions.yaml#/error
+    x-koha-authorization:
+      permissions:
+        borrowers: edit_borrowers
+  post:
+    x-mojo-to: Patrons::Attributes#add
+    operationId: addPatronAttribute
+    tags:
+      - patrons
+    summary: Add extended attribute for a patron
+    parameters:
+      - $ref: ../parameters.yaml#/patron_id_pp
+      - name: body
+        in: body
+        description: A JSON representation of the patron extended attribute
+        required: true
+        schema:
+          $ref: ../definitions.yaml#/patron_extended_attribute
+    produces:
+      - application/json
+    responses:
+      "201":
+        description: A successfully created patron extended attribute
+        schema:
+          $ref: ../definitions.yaml#/patron_extended_attribute
+      "400":
+        description: Bad parameter
+        schema:
+          $ref: ../definitions.yaml#/error
+      "401":
+        description: Authentication required
+        schema:
+          $ref: ../definitions.yaml#/error
+      "403":
+        description: Access forbidden
+        schema:
+          $ref: ../definitions.yaml#/error
+      "404":
+        description: Patron not found
+        schema:
+          $ref: ../definitions.yaml#/error
+      "409":
+        description: Conflict in creating resource
+        schema:
+          $ref: ../definitions.yaml#/error
+      "500":
+        description: Internal server error
+        schema:
+          $ref: ../definitions.yaml#/error
+      "503":
+        description: Under maintenance
+        schema:
+          $ref: ../definitions.yaml#/error
+    x-koha-authorization:
+      permissions:
+        borrowers: edit_borrowers
+  put:
+    x-mojo-to: Patrons::Attributes#overwrite
+    operationId: overwritePatronAttributes
+    tags:
+      - patrons
+    summary: Overwrite extended attributes for a patron
+    parameters:
+      - $ref: ../parameters.yaml#/patron_id_pp
+      - name: body
+        in: body
+        description: A JSON representation of the patron extended attribute
+        required: true
+        schema:
+          type: array
+          items:
+            $ref: ../definitions.yaml#/patron_extended_attribute
+    produces:
+      - application/json
+    responses:
+      "200":
+        description: The successfully created patron extended attributes
+        schema:
+          type: array
+          items:
+            $ref: ../definitions.yaml#/patron_extended_attribute
+      "400":
+        description: Bad parameters
+        schema:
+          $ref: ../definitions.yaml#/error
+      "401":
+        description: Authentication required
+        schema:
+          $ref: ../definitions.yaml#/error
+      "403":
+        description: Access forbidden
+        schema:
+          $ref: ../definitions.yaml#/error
+      "404":
+        description: Patron not found
+        schema:
+          $ref: ../definitions.yaml#/error
+      "409":
+        description: Conflict in creating resource
+        schema:
+          $ref: ../definitions.yaml#/error
+      "500":
+        description: Internal server error
+        schema:
+          $ref: ../definitions.yaml#/error
+      "503":
+        description: Under maintenance
+        schema:
+          $ref: ../definitions.yaml#/error
+    x-koha-authorization:
+      permissions:
+        borrowers: edit_borrowers
+"/patrons/{patron_id}/extended_attributes/{extended_attribute_id}":
+  patch:
+    x-mojo-to: Patrons::Attributes#update
+    operationId: updatePatronAttribute
+    tags:
+      - patrons
+    summary: Update extended attribute
+    parameters:
+      - $ref: ../parameters.yaml#/patron_id_pp
+      - name: extended_attribute_id
+        in: path
+        description: Internal patron extended attribute identifier
+        type: integer
+        required: true
+      - name: body
+        in: body
+        description: An object containing the updated values for the patron extended
+          attribute
+        required: true
+        schema:
+          type: object
+          properties:
+            value:
+              description: Extended attribute value
+              type: string
+          additionalProperties: false
+    produces:
+      - application/json
+    responses:
+      "200":
+        description: A successfully updated patron extended attribute
+        schema:
+          $ref: ../definitions.yaml#/patron_extended_attribute
+      "400":
+        description: Bad parameter
+        schema:
+          $ref: ../definitions.yaml#/error
+      "401":
+        description: Authentication required
+        schema:
+          $ref: ../definitions.yaml#/error
+      "403":
+        description: Access forbidden
+        schema:
+          $ref: ../definitions.yaml#/error
+      "404":
+        description: Object not found
+        schema:
+          $ref: ../definitions.yaml#/error
+      "409":
+        description: Conflict in updating resource
+        schema:
+          $ref: ../definitions.yaml#/error
+      "500":
+        description: Internal server error
+        schema:
+          $ref: ../definitions.yaml#/error
+      "503":
+        description: Under maintenance
+        schema:
+          $ref: ../definitions.yaml#/error
+    x-koha-authorization:
+      permissions:
+        borrowers: edit_borrowers
+  delete:
+    x-mojo-to: Patrons::Attributes#delete
+    operationId: deletePatronAttribute
+    tags:
+      - patrons
+    summary: Delete extended attribute
+    parameters:
+      - $ref: ../parameters.yaml#/patron_id_pp
+      - name: extended_attribute_id
+        in: path
+        description: Internal patron extended attribute identifier
+        type: integer
+        required: true
+    produces:
+      - application/json
+    responses:
+      "204":
+        description: Extended patron attribute deleted
+      "401":
+        description: Authentication required
+        schema:
+          $ref: ../definitions.yaml#/error
+      "403":
+        description: Access forbidden
+        schema:
+          $ref: ../definitions.yaml#/error
+      "404":
+        description: Patron not found
+        schema:
+          $ref: ../definitions.yaml#/error
+      "500":
+        description: Internal server error
+        schema:
+          $ref: ../definitions.yaml#/error
+      "503":
+        description: Under maintenance
+        schema:
+          $ref: ../definitions.yaml#/error
+    x-koha-authorization:
+      permissions:
+        borrowers: edit_borrowers

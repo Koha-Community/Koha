@@ -1,0 +1,26 @@
+---
+type: object
+properties:
+  limit_id:
+    type: integer
+    description: Internal transfer limit identifier
+  to_library_id:
+    type: string
+    description: Internal library id for which library the item is going to
+  from_library_id:
+    type: string
+    description: Internal library id for which library the item is coming from
+  item_type:
+    type:
+      - string
+      - "null"
+    description: Itemtype defining the type for this limi
+  collection_code:
+    type:
+      - string
+      - "null"
+    description: Authorized value for the collection code associated with this limit
+additionalProperties: false
+required:
+  - to_library_id
+  - from_library_id
