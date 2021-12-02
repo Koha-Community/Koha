@@ -7,6 +7,6 @@ return {
         my ($args) = @_;
         my ($dbh, $out) = @$args{qw(dbh out)};
         $dbh->do(q{DELETE FROM search_marc_map WHERE marc_type='normarc'});
-        $dbh->do(q{ALTER TABLE search_marc_map MODIFY `marc_type` enum('marc21','unimarc') COMMENT 'what MARC type this map is for'});
+        $dbh->do(q{ALTER TABLE search_marc_map MODIFY `marc_type` enum('marc21','unimarc') NOT NULL COMMENT 'what MARC type this map is for'});
     },
 }
