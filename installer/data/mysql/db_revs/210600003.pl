@@ -14,19 +14,19 @@ use Modern::Perl;
                     `branchtransfers`
                 modify column
                     `cancellation_reason` enum(
-                        'manual',
-                        'stockrotationadvance',
-                        'stockrotationrepatriation',
-                        'returntohome',
-                        'returntoholding',
-                        'rotatingcollection',
-                        'reserve',
-                        'lostreserve',
-                        'cancelreserve',
-                        'itemlost',
-                        'wrongtransfer'
-                    )
-                after `comments`
+                        'Manual',
+                        'StockrotationAdvance',
+                        'StockrotationRepatriation',
+                        'ReturnToHome',
+                        'ReturnToHolding',
+                        'RotatingCollection',
+                        'Reserve',
+                        'LostReserve',
+                        'CancelReserve',
+                        'ItemLost',
+                        'WrongTransfer'
+                    ) DEFAULT NULL
+                after `reason`
               }
         );
     },
