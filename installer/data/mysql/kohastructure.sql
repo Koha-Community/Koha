@@ -196,7 +196,7 @@ CREATE TABLE `additional_contents` (
   `branchcode` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'branch code users to create branch specific additional content, NULL is every branch.',
   `title` varchar(250) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT 'title of the additional content',
   `content` mediumtext COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'the body of your additional content',
-  `lang` varchar(25) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT 'location for the additional content(koha is the staff interface, slip is the circulation receipt and language codes are for the opac)',
+  `lang` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT 'location for the additional content(koha is the staff interface, slip is the circulation receipt and language codes are for the opac)',
   `published_on` date DEFAULT NULL COMMENT 'publication date',
   `updated_on` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp() COMMENT 'last modification',
   `expirationdate` date DEFAULT NULL COMMENT 'date the additional content is set to expire or no longer be visible',
