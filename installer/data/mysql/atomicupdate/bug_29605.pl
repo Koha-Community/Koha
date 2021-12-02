@@ -62,6 +62,28 @@ return {
         $dbh->do(q{ALTER TABLE search_marc_map MODIFY `marc_type` enum('marc21','unimarc') NOT NULL COMMENT 'what MARC type this map is for'});
         say $out "Ensure NOT NULL on search_marc_map.marc_type";
 
+        $dbh->do(
+            q{
+                alter table
+                    `branchtransfers`
+                modify column
+                    `cancellation_reason` enum(
+                        'Manual',
+                        'StockrotationAdvance',
+                        'StockrotationRepatriation',
+                        'ReturnToHome',
+                        'ReturnToHolding',
+                        'RotatingCollection',
+                        'Reserve',
+                        'LostReserve',
+                        'CancelReserve',
+                        'ItemLost',
+                        'WrongTransfer'
+                    ) DEFAULT NULL
+                after `reason`
+              }
+        );
+        say $out "Ensure branchtransfers.cancellation_reason enum values are uppercase";
     },
 
 }
