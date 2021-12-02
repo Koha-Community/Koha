@@ -140,6 +140,7 @@
           | <a id="clearall" href="#"><i class="fa fa-remove"></i> Clear all</a>
           | <a id="selectwithoutitems" href="#">Select without items</a>
           | <a id="selectnotreserved" href="#">Select without holds</a>
+          | <a id="selectwithoutsubscriptions" href="#">Select without subscriptions</a>
         </div>
         <form action="/cgi-bin/koha/tools/batch_delete_records.pl" method="post" id="selectrecords">
           <table id="biblios" class="records">
@@ -151,17 +152,19 @@
                 <th>Items</th>
                 <th>Holds</th>
                 <th>Checkouts</th>
+                <th>Subscriptions</th>
               </tr>
             </thead>
             <tbody>
               [% FOR biblio IN records %]
                 <tr>
-                  <td><input type="checkbox" name="record_id" id="record_id_[% biblio.biblionumber | html %]" value="[% biblio.biblionumber | html %]" data-items="[% biblio.itemnumbers.size | html %]" data-issues="[% biblio.issues_count | html %]" data-reserves="[% biblio.holds_count | html %]" /></td>
+                  <td><input type="checkbox" name="record_id" id="record_id_[% biblio.biblionumber | html %]" value="[% biblio.biblionumber | html %]" data-items="[% biblio.itemnumbers.size | html %]" data-issues="[% biblio.issues_count | html %]" data-reserves="[% biblio.holds_count | html %]" data-subscriptions="[% biblio.subscriptions_count | html %]" /></td>
                   <td><label for="record_id_[% biblio.biblionumber | html %]">[% biblio.biblionumber | html %]</label></td>
                   <td>[% INCLUDE 'biblio-title.inc' link = 1 %]</td>
                   <td><a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% biblio.biblionumber | uri %]">[% biblio.itemnumbers.size | html %]</a></td>
                   <td><a href="/cgi-bin/koha/reserve/request.pl?biblionumber=[% biblio.biblionumber | uri %]">[% biblio.holds_count | html %]</a></td>
                   <td><a href="/cgi-bin/koha/catalogue/issuehistory.pl?biblionumber=[% biblio.biblionumber | uri %]">[% biblio.issues_count | html %]</a></td>
+                  <td><a href="/cgi-bin/koha/serials/serials-search.pl?searched=1&biblionumber=[% biblio.biblionumber | uri %]">[% biblio.subscriptions_count | html %]</a></td>
                 </tr>
               [% END %]
             </tbody>
@@ -274,6 +277,17 @@
                 e.preventDefault();
                 $(".records input[type='checkbox']:not(:disabled)").each(function(){
                     if( $(this).data("reserves") == 0 ){
+                        $(this).prop("checked", true );
+                    } else {
+                        $(this).prop("checked", false );
+                    }
+                });
+            });
+
+            $("#selectwithoutsubscriptions").click(function(e){
+                e.preventDefault();
+                $(".records input[type='checkbox']:not(:disabled)").each(function(){
+                    if( $(this).data("subscriptions") == 0 ){
                         $(this).prop("checked", true );
                     } else {
                         $(this).prop("checked", false );
