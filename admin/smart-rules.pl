@@ -258,7 +258,7 @@ elsif ($op eq 'add') {
     my $maxissueqty = strip_non_numeric( scalar $input->param('maxissueqty') );
     my $maxonsiteissueqty = strip_non_numeric( scalar $input->param('maxonsiteissueqty') );
     my $renewalsallowed  = $input->param('renewalsallowed');
-    my $unseen_renewals_allowed  = $input->param('unseen_renewals_allowed');
+    my $unseen_renewals_allowed  = strip_non_numeric( scalar $input->param('unseen_renewals_allowed') ) // '';
     my $renewalperiod    = $input->param('renewalperiod');
     my $norenewalbefore  = $input->param('norenewalbefore');
     $norenewalbefore = '' if $norenewalbefore =~ /^\s*$/;
@@ -272,21 +272,20 @@ elsif ($op eq 'add') {
     my $holds_per_record = strip_non_numeric( scalar $input->param('holds_per_record') );
     my $holds_per_day    = strip_non_numeric( scalar $input->param('holds_per_day') );
     my $onshelfholds     = $input->param('onshelfholds') || 0;
-    my $issuelength  = $input->param('issuelength');
-    $issuelength = $issuelength eq q{} ? undef : $issuelength;
+    my $issuelength  = $input->param('issuelength') || 0;
     my $daysmode = $input->param('daysmode');
     my $lengthunit  = $input->param('lengthunit');
-    my $hardduedate = $input->param('hardduedate') || undef;
+    my $hardduedate = $input->param('hardduedate') || '';
     $hardduedate = eval { dt_from_string( scalar $hardduedate ) } if ( $hardduedate );
     $hardduedate = output_pref( { dt => $hardduedate, dateonly => 1, dateformat => 'iso' } ) if ( $hardduedate );
     my $hardduedatecompare = $input->param('hardduedatecompare');
-    my $rentaldiscount = $input->param('rentaldiscount');
+    my $rentaldiscount = $input->param('rentaldiscount') || 0;
     my $opacitemholds = $input->param('opacitemholds') || 0;
     my $article_requests = $input->param('article_requests') || 'no';
     my $overduefinescap = $input->param('overduefinescap') || '';
     my $cap_fine_to_replacement_price = ($input->param('cap_fine_to_replacement_price') || '') eq 'on';
     my $note = $input->param('note');
-    my $decreaseloanholds = $input->param('decreaseloanholds') || undef;
+    my $decreaseloanholds = $input->param('decreaseloanholds') || '';
 
     my $rules = {
         maxissueqty                   => $maxissueqty,
