@@ -33,7 +33,7 @@ use C4::Koha qw(
 use C4::Serials qw( CountSubscriptionFromBiblionumber SearchSubscriptions GetLatestSerials );
 use C4::Output qw( output_html_with_http_headers );
 use C4::Biblio qw( GetBiblioData GetFrameworkCode );
-use C4::Items qw( GetAnalyticsCount GetHostItemsInfo GetItemsInfo );
+use C4::Items qw( GetAnalyticsCount );
 use C4::Circulation qw( GetTransfers );
 use C4::Reserves;
 use C4::Serials qw( CountSubscriptionFromBiblionumber SearchSubscriptions GetLatestSerials );
@@ -60,6 +60,7 @@ use Koha::Plugins;
 use Koha::Recalls;
 use Koha::SearchEngine::Search;
 use Koha::SearchEngine::QueryBuilder;
+use Koha::Serial::Items;
 
 my $query = CGI->new();
 
@@ -189,24 +190,24 @@ $template->param(
     content_identifier_exists =>  $content_identifier_exists,
 );
 
-my $itemtypes = { map { $_->{itemtype} => $_ } @{ Koha::ItemTypes->search->unblessed } };
-
-my $dbh = C4::Context->dbh;
-
-my @all_items = GetItemsInfo( $biblionumber );
+my $itemtypes = { map { $_->itemtype => $_ } @{ Koha::ItemTypes->search_with_localization->as_list } };
+my $all_items = $biblio->items->search_ordered;
 my @items;
 my $patron = Koha::Patrons->find( $borrowernumber );
-for my $itm (@all_items) {
-    push @items, $itm unless ( $itm->{itemlost} && $patron->category->hidelostitems && !$showallitems);
+while ( my $item = $all_items->next ) {
+    push @items, $item
+      unless $item->itemlost
+      && $patron->category->hidelostitems
+      && !$showallitems;
 }
 
 # flag indicating existence of at least one item linked via a host record
 my $hostrecords;
 # adding items linked via host biblios
-my @hostitems = GetHostItemsInfo($marc_record);
-if (@hostitems){
-    $hostrecords =1;
-    push (@items,@hostitems);
+my $hostitems = $biblio->host_items;
+if ( $hostitems->count ) {
+    $hostrecords = 1;
+    push @items, $hostitems->as_list;
 }
 
 my $dat = &GetBiblioData($biblionumber);
@@ -317,12 +318,12 @@ if ( C4::Context->preference('suggestion') ) {
 }
 
 if ( defined $dat->{'itemtype'} ) {
-    $dat->{imageurl} = getitemtypeimagelocation( 'intranet', $itemtypes->{ $dat->{itemtype} }{imageurl} );
+    $dat->{imageurl} = getitemtypeimagelocation( 'intranet', $itemtypes->{ $dat->{itemtype} }->imageurl );
 }
 
-$dat->{'count'} = scalar @all_items + @hostitems;
-$dat->{'showncount'} = scalar @items + @hostitems;
-$dat->{'hiddencount'} = scalar @all_items + @hostitems - scalar @items;
+$dat->{'count'} = $all_items->count + $hostitems->count;
+$dat->{'showncount'} = scalar @items + $hostitems->count;
+$dat->{'hiddencount'} = $all_items->count + $hostitems->count - scalar @items;
 
 my $shelflocations =
   { map { $_->{authorised_value} => $_->{lib} } Koha::AuthorisedValues->get_descriptions_by_koha_field( { frameworkcode => $fw, kohafield => 'items.location' } ) };
@@ -364,127 +365,128 @@ if ($currentbranch and C4::Context->preference('SeparateHoldings')) {
 }
 my $separatebranch = C4::Context->preference('SeparateHoldingsBranch') || 'homebranch';
 my ( $itemloop_has_images, $otheritemloop_has_images );
+
 foreach my $item (@items) {
-    my $itembranchcode = $item->{$separatebranch};
+    my $itembranchcode = $item->$separatebranch;
 
-    $item->{imageurl} = defined $item->{itype} ? getitemtypeimagelocation('intranet', $itemtypes->{ $item->{itype} }{imageurl})
-                                               : '';
-
-    $item->{datedue} = format_sqldatetime($item->{datedue});
+    my $item_info = $item->unblessed;
+    $item_info->{itemtype} = $itemtypes->{$item->effective_itemtype};
 
     #get shelf location and collection code description if they are authorised value.
     # same thing for copy number
-    my $shelfcode = $item->{'location'};
-    $item->{'location'} = $shelflocations->{$shelfcode} if ( defined( $shelfcode ) && defined($shelflocations) && exists( $shelflocations->{$shelfcode} ) );
-    my $ccode = $item->{'ccode'};
-    $item->{'ccode'} = $collections->{$ccode} if ( defined( $ccode ) && defined($collections) && exists( $collections->{$ccode} ) );
-    my $copynumber = $item->{'copynumber'};
-    $item->{'copynumber'} = $copynumbers->{$copynumber} if ( defined($copynumber) && defined($copynumbers) && exists( $copynumbers->{$copynumber} ) );
-    foreach (qw(ccode enumchron copynumber stocknumber itemnotes itemnotes_nonpublic uri publisheddate)) { # Warning when removing GetItemsInfo - publisheddate (at least) is not part of the items table
-        $itemfields{$_} = 1 if ( $item->{$_} );
+    my $shelfcode = $item->location;
+    $item_info->{'location'} = $shelflocations->{$shelfcode} if ( defined( $shelfcode ) && defined($shelflocations) && exists( $shelflocations->{$shelfcode} ) );
+    my $ccode = $item->ccode;
+    $item_info->{'ccode'} = $collections->{$ccode} if ( defined( $ccode ) && defined($collections) && exists( $collections->{$ccode} ) );
+    my $copynumber = $item->copynumber;
+    $item_info->{'copynumber'} = $copynumbers->{$copynumber} if ( defined($copynumber) && defined($copynumbers) && exists( $copynumbers->{$copynumber} ) );
+    foreach (qw(ccode enumchron copynumber stocknumber itemnotes itemnotes_nonpublic uri )) {
+        $itemfields{$_} = 1 if $item->$_;
     }
+
+    # FIXME The following must be Koha::Item->serial
+    my $serial_item = Koha::Serial::Items->find($item->itemnumber);
+    if ( $serial_item ) {
+        $item_info->{serial} = $serial_item;
+        $itemfields{publisheddate} = 1;
+    }
+
+    $item_info->{object} = $item;
 
     # checking for holds
-    my $item_object = Koha::Items->find( $item->{itemnumber} );
-    $item->{object} = $item_object;
-    my $holds = $item_object->current_holds;
+    my $holds = $item->current_holds;
     if ( my $first_hold = $holds->next ) {
-        $item->{first_hold} = $first_hold;
+        $item_info->{first_hold} = $first_hold;
     }
 
-    if ( my $checkout = $item_object->checkout ) {
-        $item->{CheckedOutFor} = $checkout->patron;
-    }
+    $item_info->{checkout} = $item->checkout;
 
     # Check the transit status
-    my ( $transfertwhen, $transfertfrom, $transfertto ) = GetTransfers($item->{itemnumber});
-    if ( defined( $transfertwhen ) && ( $transfertwhen ne '' ) ) {
-        $item->{transfertwhen} = $transfertwhen;
-        $item->{transfertfrom} = $transfertfrom;
-        $item->{transfertto}   = $transfertto;
-        $item->{nocancel} = 1;
+    my $transfer = $item->get_transfer;
+    if ( $transfer ) {
+        $item_info->{transfertwhen} = $transfer->datesent;
+        $item_info->{transfertfrom} = $transfer->frombranch;
+        $item_info->{transfertto}   = $transfer->tobranch;
+        $item_info->{nocancel} = 1;
     }
 
     foreach my $f (qw( itemnotes )) {
-        if ($item->{$f}) {
-            $item->{$f} =~ s|\n|<br />|g;
+        if ($item_info->{$f}) {
+            $item_info->{$f} =~ s|\n|<br />|g;
             $itemfields{$f} = 1;
         }
     }
 
     #item has a host number if its biblio number does not match the current bib
 
-    if ($item->{biblionumber} ne $biblionumber){
-        $item->{hostbiblionumber} = $item->{biblionumber};
-        $item->{hosttitle} = GetBiblioData($item->{biblionumber})->{title};
+    if ($item->biblionumber ne $biblionumber){
+        $item_info->{hostbiblionumber} = $item->biblionumber;
+        $item_info->{hosttitle} = $item->biblio->title;
     }
-	
+
 
     if ( $analyze ) {
         # count if item is used in analytical bibliorecords
         # The 'countanalytics' flag is only used in the templates if analyze is set
-        my $countanalytics = GetAnalyticsCount( $item->{itemnumber} );
+        my $countanalytics = GetAnalyticsCount( $item->itemnumber );
         if ($countanalytics > 0){
             $analytics_flag=1;
-            $item->{countanalytics} = $countanalytics;
+            $item_info->{countanalytics} = $countanalytics;
         }
     }
 
-    if (defined($item->{'materials'}) && $item->{'materials'} =~ /\S/){
+    if (defined($item->materials) && $item->materials =~ /\S/){
         $materials_flag = 1;
-        if (defined $materials_map{ $item->{materials} }) {
-            $item->{materials} = $materials_map{ $item->{materials} };
+        if (defined $materials_map{ $item->materials }) {
+            $item_info->{materials} = $materials_map{ $item->materials };
         }
     }
 
     if ( C4::Context->preference('UseCourseReserves') ) {
-        $item->{'course_reserves'} = GetItemCourseReservesInfo( itemnumber => $item->{'itemnumber'} );
+        $item_info->{'course_reserves'} = GetItemCourseReservesInfo( itemnumber => $item->itemnumber );
+    }
+
+    if ( C4::Context->preference("LocalCoverImages") == 1 ) {
+        $item_info->{cover_images} = $item->cover_images;
+    }
+
+    if ( C4::Context->preference('UseRecalls') ) {
+        $item_info->{recall} = $item->recall;
     }
 
     if ( C4::Context->preference('IndependentBranches') ) {
         my $userenv = C4::Context->userenv();
         if ( not C4::Context->IsSuperLibrarian()
-            and $userenv->{branch} ne $item->{homebranch} ) {
-            $item->{cannot_be_edited} = 1;
+            and $userenv->{branch} ne $item->homebranch ) {
+            $item_info->{cannot_be_edited} = 1;
+            $item_info->{not_same_branch} = 1;
         }
     }
 
-    if ( C4::Context->preference("LocalCoverImages") == 1 ) {
-        $item->{cover_images} = $item_object->cover_images;
-    }
-
-    if ( C4::Context->preference('UseRecalls') ) {
-        my $recall = Koha::Recalls->find({ item_id => $item->{itemnumber}, completed => 0 });
-        if ( defined $recall ) {
-            $item->{recalled} = 1;
-            $item->{recall} = $recall;
-        }
-    }
-
-    if ( $item_object->is_bundle ) {
-        $item->{bundled} =
-          $item_object->bundle_items->search( { itemlost => { '!=' => 0 } } )
+    if ( $item->is_bundle ) {
+        $item_info->{bundled} =
+          $item->bundle_items->search( { itemlost => { '!=' => 0 } } )
           ->count;
-        $item->{bundled_lost} =
-          $item_object->bundle_items->search( { itemlost => 0 } )->count;
-        $item->{is_bundle} = 1;
+        $item_info->{bundled_lost} =
+          $item->bundle_items->search( { itemlost => 0 } )->count;
+        $item_info->{is_bundle} = 1;
     }
 
-    if ($item_object->in_bundle) {
-        $item->{bundle_host} = $item_object->bundle_host;
+    if ($item->in_bundle) {
+        $item_info->{bundle_host} = $item->bundle_host;
     }
 
     if ($currentbranch and C4::Context->preference('SeparateHoldings')) {
         if ($itembranchcode and $itembranchcode eq $currentbranch) {
-            push @itemloop, $item;
-            $itemloop_has_images++ if $item_object->cover_images->count;
+            push @itemloop, $item_info;
+            $itemloop_has_images++ if $item->cover_images->count;
         } else {
-            push @otheritemloop, $item;
-            $otheritemloop_has_images++ if $item_object->cover_images->count;
+            push @otheritemloop, $item_info;
+            $otheritemloop_has_images++ if $item->cover_images->count;
         }
     } else {
-        push @itemloop, $item;
-        $itemloop_has_images++ if $item_object->cover_images->count;
+        push @itemloop, $item_info;
+        $itemloop_has_images++ if $item->cover_images->count;
     }
 }
 

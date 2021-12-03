@@ -397,13 +397,14 @@
 
                     [% IF ( item_level_itypes ) %]
                         <td class="itype">
-                            [% IF !noItemTypeImages && item.imageurl %]
-                                <img src="[% item.imageurl | html %]" alt="[% item.translated_description | html %]" title="[% item.translated_description | html %]" />
+                            [% SET itemtype = item.itemtype %]
+                            [% IF !noItemTypeImages && itemtype.image_location %]
+                                <img src="[% itemtype.image_location | html %]" alt="[% itemtype.translated_description | html %]" title="[% itemtype.translated_description | html %]" />
                             [% END %]
-                            <span class="itypedesc">[% item.translated_description | html %]</span>
+                            <span class="itypedesc">[% itemtype.translated_description | html %]</span>
                         </td>
                     [% END %]
-                    <td class="location">[% UNLESS ( singlebranchmode ) %][% Branches.GetName( item.branchcode ) | html %] [% END %]</td>
+                    <td class="location">[% UNLESS ( singlebranchmode ) %][% Branches.GetName( item.holdingbranch ) | html %] [% END %]</td>
                     <td class="homebranch">
                         <span class="homebranchdesc">[% Branches.GetName(item.homebranch) | html %]</span>
                         <span class="shelvingloc">
@@ -426,25 +427,26 @@ Note that permanent location is a code, and location may be an authval.
                     [% IF Koha.Preference('EnableItemGroups') %]<td class="item_group">[% item.object.item_group.description | html %]</td>[% END %]
                     <td class="itemcallnumber">[% IF ( item.itemcallnumber ) %] [% item.itemcallnumber | html %][% END %]</td>
                     [% IF ( volinfo ) %]
+                        [% SET serial = item.itemserial.serial %]
                         [% IF itemdata_publisheddate #If there is at least one published date, use it for sorting %]
-                            <td class="enumchron" data-order="[% item.publisheddate | html %]">
+                            <td class="enumchron" data-order="[% serial.publisheddate | html %]">
                         [% ELSE %]
                             <td class="enumchron">
                         [% END %]
                             [% IF ( itemdata_enumchron ) %]
-                                [% IF item.enumchron && item.serialseq %]
+                                [% IF item.enumchron && serial.serialseq %]
                                     <span class="enum">[% item.enumchron | html %]</span>
-                                    [% IF ( item.serialseq && item.enumchron!=item.serialseq ) %]
+                                    [% IF ( item.serialseq && item.enumchron != serial.serialseq ) %]
                                         <span class="sep"> -- </span>
-                                        <span class="serialseq">[% item.serialseq | html %]</span>
+                                        <span class="serialseq">[% serial.serialseq | html %]</span>
                                     [% END %]
                                 [% ELSIF item.enumchron %]
                                     <span class="enum">[% item.enumchron | html %]</span>
                                 [% ELSIF item.serialseq %]
-                                    <span class="serialseq">[% item.serialseq | html %]</span>
+                                    <span class="serialseq">[% serial.serialseq | html %]</span>
                                 [% END %]
-                                [% IF ( item.publisheddate ) %]
-                                    <span class="pubdate">([% item.publisheddate | $KohaDates %])</span>
+                                [% IF serial.publisheddate %]
+                                    <span class="pubdate">([% serial.publisheddate | $KohaDates %])</span>
                                 [% END %]
                             [% END %]
                             </span>
@@ -452,21 +454,21 @@ Note that permanent location is a code, and location may be an authval.
                     [% END %]
                     <td class="status">
 
-                        [% IF item.CheckedOutFor %]
-                          [% IF item.onsite_checkout %]
+                        [% IF item.checkout %]
+                          [% IF item.checkout.onsite_checkout %]
                             <span>Currently in local use
                           [% ELSE %]
                             <span class="datedue">Checked out
                           [% END %]
-                                [% UNLESS ( item.NOTSAMEBRANCH ) %]
-                                  [% IF item.onsite_checkout %]
+                                [% UNLESS ( item.not_same_branch) %]
+                                  [% IF item.checkout.onsite_checkout %]
                                     by
                                   [% ELSE %]
                                     to
                                   [% END %]
-                                  [% INCLUDE 'patron-title.inc' patron=item.CheckedOutFor hide_patron_infos_if_needed=1 %]
+                                  [% INCLUDE 'patron-title.inc' patron=item.checkout.patron hide_patron_infos_if_needed=1 %]
                                 [% END %]
-                                : due [% item.datedue | html %]
+                                : due [% item.checkout.date_due | $KohaDates as_due_date => 1 %]
                             </span>
                         [% ELSIF ( item.transfertwhen ) %]
                             <span class="intransit">In transit from [% Branches.GetName( item.transfertfrom ) | html %] to [% Branches.GetName( item.transfertto ) | html %] since [% item.transfertwhen | $KohaDates %]</span>
@@ -508,10 +510,11 @@ Note that permanent location is a code, and location may be an authval.
                             [% END %]
                         [% END %]
 
-                        [% IF ( item.itemnotforloan || item.notforloan_per_itemtype ) %]
+                        [% IF ( item.notforloan || item.itemtype.notforloan ) %]
                             <span class="notforloan">Not for loan
-                            [% IF ( item.notforloanvalue ) %]
-                                <span class="reason">([% item.notforloanvalue | html %])</span>
+                            [% SET not_for_loan_description = AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.notforloan', authorised_value => item.notforloan ) %]
+                            [% IF not_for_loan_description %]
+                                <span class="reason">([% not_for_loan_description | html %])</span>
                             [% END %]
                             </span>
                         [% END %]
@@ -529,21 +532,22 @@ Note that permanent location is a code, and location may be an authval.
                             [% END %]
                         [% END %]
 
-                        [% IF item.recalled %]
-                            [% IF item.recall.waiting_date %]
-                                <span>Waiting at [% Branches.GetName( item.recall.pickup_library_id ) | html %] since [% item.recall.waiting_date | $KohaDates %]</span>
+                        [% SET recall = item.recall %]
+                        [% IF recall %]
+                            [% IF recall.waiting_date %]
+                                <span>Waiting at [% Branches.GetName( recall.pickup_library_id ) | html %] since [% recall.waiting_date | $KohaDates %]</span>
                             [% ELSE %]
-                                [% patron_link = BLOCK %]<a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% item.recall.patron_id | uri %]">[% item.recall.patron.firstname | html %] [% item.recall.patron.surname | html %] ([% item.recall.patron.cardnumber | html %])</a>[% END %]
-                                <span>Item recalled by [% patron_link| $raw %] on [% item.recall.created_date | $KohaDates %]</span>
+                                [% patron_link = BLOCK %]<a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% recall.patron_id | uri %]">[% recall.patron.firstname | html %] [% recall.patron.surname | html %] ([% recall.patron.cardnumber | html %])</a>[% END %]
+                                <span>recalled by [% patron_link| $raw %] on [% recall.created_date | $KohaDates %]</span>
                             [% END %]
                         [% END %]
 
-                        [% UNLESS ( item.itemnotforloan || item.notforloan_per_itemtype || item.onloan || item.itemlost || item.withdrawn || item.damaged || item.transfertwhen || hold || item.recalled ) %]
+                        [% UNLESS ( item.itemnotforloan || item.notforloan_per_itemtype || item.onloan || item.itemlost || item.withdrawn || item.damaged || item.transfertwhen || hold || ( Koha.Preference('UseRecalls') && recall ) ) %]
                             <span>Available</span>
                         [% END %]
 
                         [% IF ( item.restricted ) %]
-                            <span class="restricted">([% item.restrictedvalue | html %])</span>
+                            <span class="restricted">([% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.restricted', authorised_value => item.restricted ) | html %])</span>
                         [% END %]
 
                         [% IF ( item.bundle_host ) %]
