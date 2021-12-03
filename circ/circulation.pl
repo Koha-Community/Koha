@@ -76,7 +76,7 @@ my $autoswitched;
 my $borrowernumber = $query->param('borrowernumber');
 
 if (C4::Context->preference("AutoSwitchPatron") && $barcode) {
-    my $new_barcode = $findborrower;
+    my $new_barcode = $barcode;
     Koha::Plugins->call( 'patron_barcode_transform', \$new_barcode );
     if (Koha::Patrons->search( { cardnumber => $new_barcode} )->count() > 0) {
         $findborrower = $barcode;
