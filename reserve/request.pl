@@ -569,13 +569,20 @@ foreach my $biblionumber (@biblionumbers) {
                   )
                 {
                     # Send the pickup locations count to the UI, the pickup locations will be pulled using the API
-                    my $pickup_locations = $item_object->pickup_locations({ patron => $patron });
-                    $item->{pickup_locations_count} = $pickup_locations->count;
-                    if ( $item->{pickup_locations_count} > 0 ) {
+                    my @pickup_locations = $item_object->pickup_locations({ patron => $patron })->as_list;
+                    $item->{pickup_locations_count} = scalar @pickup_locations;
+
+                    if ( @pickup_locations ) {
                         $num_available++;
                         $item->{available} = 1;
-                        # pass the holding branch for use as default
-                        my $default_pickup_location = $pickup_locations->search({ branchcode => $item->{holdingbranch} })->next;
+
+                        my $default_pickup_location;
+
+                        # Default to logged-in, if valid
+                        if ( C4::Context->userenv->{branch} ) {
+                            ($default_pickup_location) = grep { $_->branchcode eq C4::Context->userenv->{branch} } @pickup_locations;
+                        }
+
                         $item->{default_pickup_location} = $default_pickup_location;
                     }
                     else {
