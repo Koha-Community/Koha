@@ -8,6 +8,15 @@ return {
         my $dbh = $args->{dbh};
 
         if( !unique_key_exists( 'language_subtag_registry', 'uniq_lang' ) ) {
+
+            $dbh->do(q{
+                DELETE a
+                FROM language_subtag_registry AS a, language_subtag_registry AS b
+                WHERE a.id < b.id
+                AND a.subtag IS NOT NULL
+                AND a.subtag=b.subtag
+                AND a.type=b.type
+            });
             $dbh->do(q{
                 ALTER TABLE language_subtag_registry
                 ADD UNIQUE KEY uniq_lang (subtag, type)
