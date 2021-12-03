@@ -164,7 +164,7 @@
             let fp = $(this).flatpickr(options);
 
             $(disable_buttons).each(function(index, value){
-                $(fp.calendarContainer).find(".shortcut-buttons-flatpickr-button[data-index='"+value+"']").prop("disabled", "disabled").css("color", "#999");
+                $(fp.calendarContainer).find(".shortcut-buttons-flatpickr-button[data-index='"+value+"']").prop("disabled", "disabled");
             });
 
             if ( refresh_max_date ) {
