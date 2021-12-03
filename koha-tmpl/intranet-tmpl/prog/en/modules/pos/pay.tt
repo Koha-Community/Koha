@@ -342,7 +342,8 @@
                 {
                     iTotalPrice += aData[i][3]*1;
                 }
-                nFoot.getElementsByTagName('td')[1].innerHTML = iTotalPrice.format_price();
+                iTotalPrice = iTotalPrice.format_price();
+                nFoot.getElementsByTagName('td')[1].innerHTML = iTotalPrice;
                 $('#paid').val(iTotalPrice);
                 $('#paid').trigger('change');
             },
