@@ -1451,6 +1451,7 @@ sub SearchItems {
           LEFT JOIN biblio ON biblio.biblionumber = items.biblionumber
           LEFT JOIN biblioitems ON biblioitems.biblioitemnumber = items.biblioitemnumber
           LEFT JOIN biblio_metadata ON biblio_metadata.biblionumber = biblio.biblionumber
+          LEFT JOIN issues ON issues.itemnumber = items.itemnumber
           WHERE 1
     };
     if (defined $where_str and $where_str ne '') {
@@ -1463,10 +1464,17 @@ sub SearchItems {
     my @columns = Koha::Database->new()->schema()->resultset('Item')->result_source->columns;
     push @columns, Koha::Database->new()->schema()->resultset('Biblio')->result_source->columns;
     push @columns, Koha::Database->new()->schema()->resultset('Biblioitem')->result_source->columns;
-    my $sortby = (0 < grep {$params->{sortby} eq $_} @columns)
-        ? $params->{sortby} : 'itemnumber';
-    my $sortorder = (uc($params->{sortorder}) eq 'ASC') ? 'ASC' : 'DESC';
-    $query .= qq{ ORDER BY $sortby $sortorder };
+    push @columns, Koha::Database->new()->schema()->resultset('Issue')->result_source->columns;
+
+    if ( $params->{sortby} eq 'availability' ) {
+        my $sortorder = (uc($params->{sortorder}) eq 'ASC') ? 'ASC' : 'DESC';
+        $query .= qq{ ORDER BY onloan $sortorder, damaged $sortorder, withdrawn $sortorder, notforloan $sortorder, itemlost $sortorder };
+    } else {
+        my $sortby = (0 < grep {$params->{sortby} eq $_} @columns)
+            ? $params->{sortby} : 'itemnumber';
+        my $sortorder = (uc($params->{sortorder}) eq 'ASC') ? 'ASC' : 'DESC';
+        $query .= qq{ ORDER BY $sortby $sortorder };
+    }
 
     my $rows = $params->{rows};
     my @limit_args;
