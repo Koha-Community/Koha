@@ -25,8 +25,7 @@ use Modern::Perl;
 use CGI qw ( -utf8 );
 use C4::Auth qw( check_api_auth );
 use C4::Context;
-use C4::Members;
-use Koha::Patron::Images;
+use Koha::Patrons;
 
 $|=1;
 
@@ -55,8 +54,6 @@ unless ( $status eq 'ok' ) {
     exit 0;
 }
 
-
-
 if ($query->param('borrowernumber')) {
     $borrowernumber = $query->param('borrowernumber');
 } else {
@@ -64,9 +61,18 @@ if ($query->param('borrowernumber')) {
 }
 
 
-warn "Borrowernumber passed in: $borrowernumber" if $DEBUG;
+    warn "Borrowernumber passed in: $borrowernumber" if $DEBUG;
 
-my $patron_image = Koha::Patron::Images->find($borrowernumber);
+my $patron         = Koha::Patrons->find( $borrowernumber );
+my $userenv = C4::Context->userenv;
+my $logged_in_user = Koha::Patrons->find( $userenv->{number} );
+
+unless ( $logged_in_user->can_see_patron_infos( $patron ) ) {
+    print $query->header(-type => 'text/plain', -status => '403 Forbidden');
+    exit 0;
+}
+
+my $patron_image = $patron->image;
 
 # NOTE: Never dump the contents of $imagedata->{'patronimage'} via a warn to a log or nasty
 # things will result... you have been warned!
