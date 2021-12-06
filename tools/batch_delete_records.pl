@@ -26,7 +26,6 @@ use List::MoreUtils qw( uniq );
 use C4::Auth qw( get_template_and_user );
 use C4::Output qw( output_html_with_http_headers );
 use C4::Biblio qw( GetMarcBiblio );
-use C4::Serials qw( CountSubscriptionFromBiblionumber);
 use C4::AuthoritiesMarc;
 use Koha::Virtualshelves;
 
@@ -88,8 +87,8 @@ if ( $op eq 'form' ) {
     for my $record_id ( uniq @record_ids ) {
         if ( $recordtype eq 'biblio' ) {
             # Retrieve biblio information
-            my $biblio = Koha::Biblios->find( $record_id );
-            unless ( $biblio ) {
+            my $biblio_object = Koha::Biblios->find( $record_id );
+            unless ( $biblio_object ) {
                 push @messages, {
                     type => 'warning',
                     code => 'biblio_not_exists',
@@ -97,13 +96,12 @@ if ( $op eq 'form' ) {
                 };
                 next;
             }
-            my $holds_count = $biblio->holds->count;
-            $biblio = $biblio->unblessed;
+            my $biblio = $biblio_object->unblessed;
             my $record = &GetMarcBiblio({ biblionumber => $record_id });
             $biblio->{itemnumbers} = [Koha::Items->search({ biblionumber => $record_id })->get_column('itemnumber')];
-            $biblio->{holds_count} = $holds_count;
+            $biblio->{holds_count} = $biblio_object->holds->count;
             $biblio->{issues_count} = C4::Biblio::CountItemsIssued( $record_id );
-            $biblio->{subscriptions_count} = CountSubscriptionFromBiblionumber( $record_id );
+            $biblio->{subscriptions_count} = $biblio_object->subscriptions->count;
             push @records, $biblio;
         } else {
             # Retrieve authority information
