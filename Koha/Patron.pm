@@ -1594,6 +1594,20 @@ sub curbside_pickups {
     return Koha::CurbsidePickups->_new_from_dbic($curbside_pickups_rs);
 }
 
+=head3 bookings
+
+  my $bookings = $item->bookings();
+
+Returns the bookings for this patron.
+
+=cut
+
+sub bookings {
+    my ( $self, $params ) = @_;
+    my $bookings_rs = $self->_result->bookings->search($params);
+    return Koha::Bookings->_new_from_dbic( $bookings_rs );
+}
+
 =head3 return_claims
 
 my $return_claims = $patron->return_claims

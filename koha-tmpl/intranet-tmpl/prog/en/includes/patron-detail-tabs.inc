@@ -29,6 +29,10 @@
             [% WRAPPER tab_item tabname= "holds" %]
                 <span>Holds ([% holds_count || 0 | html %])</span>
             [% END %]
+            [% WRAPPER tab_item tabname="bookings" %]
+                [% SET bookings_count = patron.bookings.filter_by_future.count %]
+                <span>Bookings ([% bookings_count || 0 | html %])</span>
+            [% END %]
         [% END %]
 
         [% IF Koha.Preference('UseRecalls') %]
@@ -221,6 +225,14 @@
                     <p>Patron has nothing on hold.</p>
                 [% END %]
             [% END # /tab_panel#holds %]
+
+            [% WRAPPER tab_panel tabname="bookings" %]
+                [% IF ( bookings_count ) %]
+                    <table id="bookings-table" style="width: 100% !Important;"></table>
+                [% ELSE %]
+                    <p>Patron has nothing booked.</p>
+                [% END %]
+            [% END %]
         [% END %]
 
         [% IF Koha.Preference('UseRecalls') %]

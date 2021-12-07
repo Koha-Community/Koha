@@ -32,8 +32,6 @@ Koha::Bookings - Koha Booking object set class
 
 =head2 Class Methods
 
-=cut
-
 =head3 filter_by_future
 
     $bookings->filter_by_future;
@@ -48,8 +46,6 @@ sub filter_by_future {
 }
 
 =head2 Internal Methods
-
-=cut
 
 =head3 _type
 
