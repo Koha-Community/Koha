@@ -756,7 +756,7 @@ sub handle_checkin {
         $resp .= 'U';
     }
 
-    $resp .= $status->alert ? 'Y' : 'N';
+    $resp .= ( $status->alert || $item->magnetic_media ) ? 'Y' : 'N';
     $resp .= timestamp;
     $resp .= add_field( FID_INST_ID, $inst_id, $server );
     $resp .= add_field( FID_ITEM_ID, $item_id, $server );

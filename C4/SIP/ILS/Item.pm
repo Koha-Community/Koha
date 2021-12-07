@@ -106,7 +106,12 @@ sub new {
     my $it = $item->effective_itemtype;
     $self->{itemtype} = $it;
     my $itemtype = Koha::Database->new()->schema()->resultset('Itemtype')->find($it);
-    $self->{sip_media_type} = $itemtype->sip_media_type() if $itemtype;
+    if ($itemtype) {
+        $self->{sip_media_type} = $itemtype->sip_media_type;
+        if ( defined( $self->{sip_media_type} ) && $self->{sip_media_type} =~ m/^(00[4578]|010)/ ) {
+            $self->{magnetic_media} = 1;
+        }
+    }
 
     # check if its on issue and if so get the borrower
     my $issue = Koha::Checkouts->find( { itemnumber => $item->itemnumber } );
