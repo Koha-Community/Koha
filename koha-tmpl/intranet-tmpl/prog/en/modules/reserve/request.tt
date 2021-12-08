@@ -284,7 +284,7 @@
                                 <tr>
                                     <th>&nbsp;</th>
                                     <th>Title</th>
-                                    [% UNLESS ( item_level_itypes ) %]
+                                    [% UNLESS Koha.Preference('item-level_itypes') %]
                                         <th>Item type</th>
                                     [% END %]
                                     <th>Priority</th>
@@ -317,9 +317,9 @@
                                                 <span class="not_holdable" title="[% biblioloo.biblionumber | html %]"></span>
                                             [% END %]
                                         </td>
-                                        [% UNLESS ( item_level_itypes ) %]
+                                        [% UNLESS Koha.Preference('item-level_itypes') %]
                                             <td>
-                                                <img src="[% biblioloo.imageurl | html %]" alt="[% biblioloo.itypename | html %]" title="[% biblioloo.itypename | html %]" />
+                                                <img src="[% biblioloo.itemtype.image_location| html %]" alt="[% biblioloo.itemtype.translated_description | html %]" title="[% biblioloo.itemtype.translated_description | html %]" />
                                             </td>
                                         [% END %]
                                         <td>[% biblioloo.rank | html %]</td>
@@ -573,222 +573,222 @@
                                 [% END %]
                             </fieldset>
 
-                            [% FOREACH bibitemloo IN bibitemloop %]
-                                <ol>
-                                    [% UNLESS ( item_level_itypes ) %]
-                                        <li>
-                                            <span class="label">Item type:</span>
-                                            [% bibitemloo.description | html %]
-                                        </li>
-                                    [% END %]
+                            [% biblio = biblioloop.0 %]
 
-                                    [% IF ( bibitemloo.publicationyear ) %]
-                                        <li>
-                                            <span class="label">Publication year:</span>
-                                            [% bibitemloo.publicationyear | html %]
-                                        </li>
-                                    [% END %]
-                                </ol>
+                            <ol>
+                                [% UNLESS Koha.Preference('item-level_itypes') %]
+                                    <li>
+                                        <span class="label">Item typeX:</span>
+                                        [% biblio.itemtype.translated_description | html %]
+                                    </li>
+                                [% END %]
 
-                                <h2 style="padding: 0 1em;">
-                                    Place a hold on a specific item
-                                    [% IF bibitemloo.force_hold_level == 'item' %]
-                                         <span class="error"><em>(Required)</em></span>
-                                    [% END %]
-                                </h2>
+                                [% IF ( biblio.biblioitem.publicationyear ) %]
+                                    <li>
+                                        <span class="label">Publication year:</span>
+                                        [% biblio.biblioitem.publicationyear | $KohaDates %]
+                                    </li>
+                                [% END %]
+                            </ol>
 
-                                <table id="requestspecific">
-                                    <thead>
-                                        <tr>
-                                            <th>Hold</th>
-                                            [% IF ( item_level_itypes ) %]
-                                                <th>Item type</th>
-                                            [% END %]
-                                            <th>Barcode</th>
-                                            <th>Home library</th>
-                                            <th>Last location</th>
-                                            [% IF itemdata_ccode %]
-                                                <th>Collection</th>
-                                            [% END %]
-                                            <th>Call number</th>
-                                            <th>Copy number</th>
-                                            [% IF itemdata_enumchron %]
-                                                <th>Vol no.</th>
-                                            [% END %]
-                                            <th>Information</th>
-                                            <th>Allowed pickup locations</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        [% SET selected = 0 %]
-                                        [% FOREACH itemloo IN bibitemloo.itemloop %]
-                                            [% UNLESS ( itemloo.hide ) %]
-                                                <tr class="[% itemloo.backgroundcolor | html %]">
-                                                    <td>
-                                                        [% IF itemloo.force_hold_level == 'record' # Patron has placed a record level hold previously for this record %]
-                                                            <span class="error">
-                                                                <i class="fa fa-times fa-lg" title="Cannot be put on hold"></i>
-                                                                Hold must be record level
-                                                            </span>
-                                                        [% ELSIF ( itemloo.available ) %]
-                                                            <input type="radio" name="checkitem" value="[% itemloo.itemnumber | html %]" />
-                                                        [% ELSIF ( itemloo.override ) %]
-                                                            <input type="radio" name="checkitem" class="needsoverride" value="[% itemloo.itemnumber | html %]" />
-                                                            <i class="fa fa-exclamation-triangle fa-lg" style="color:gold" title="Requires override of hold policy"/></i>
-                                                        [% ELSE %]
-                                                            <span class="error">
-                                                                <i class="fa fa-times fa-lg" title="Cannot be put on hold"></i>
-                                                                [% IF itemloo.not_holdable %]
-                                                                    [% IF itemloo.not_holdable == 'damaged' %]
-                                                                        Item damaged
-                                                                    [% ELSIF itemloo.not_holdable == 'ageRestricted' %]
-                                                                        Age restricted
-                                                                    [% ELSIF itemloo.not_holdable == 'tooManyHoldsForThisRecord' %]
-                                                                        Exceeded max holds per record
-                                                                    [% ELSIF itemloo.not_holdable == 'tooManyReservesToday' %]
-                                                                        Daily hold limit reached for patron
-                                                                    [% ELSIF itemloo.not_holdable == 'tooManyReserves' %]
-                                                                        Too many holds
-                                                                    [% ELSIF itemloo.not_holdable == 'notReservable' %]
-                                                                        Not holdable
-                                                                    [% ELSIF itemloo.not_holdable == 'cannotReserveFromOtherBranches' %]
-                                                                        Patron is from different library
-                                                                    [% ELSIF itemloo.not_holdable == 'branchNotInHoldGroup' %]
-                                                                        Cannot place hold from patron's library
-                                                                    [% ELSIF itemloo.not_holdable == 'itemAlreadyOnHold' %]
-                                                                        Patron already has hold for this item
-                                                                    [% ELSIF itemloo.not_holdable == 'cannotBeTransferred' %]
-                                                                        Cannot be transferred to pickup library
-                                                                    [% ELSIF itemloo.not_holdable == 'pickupNotInHoldGroup' %]
-                                                                        Only pickup locations within the same hold group are allowed
-                                                                    [% ELSIF itemloo.not_holdable == 'noReservesAllowed' %]
-                                                                        No reserves are allowed on this item
-                                                                    [% ELSIF itemloo.not_holdable == 'libraryNotPickupLocation' %]
-                                                                        Library is not a pickup location
-                                                                    [% ELSIF itemloo.not_holdable == 'no_valid_pickup_location' %]
-                                                                        No valid pickup location
-                                                                    [% ELSE %]
-                                                                        [% itemloo.not_holdable | html %]
-                                                                    [% END %]
-                                                                [% END %]
-                                                            </span>
-                                                        [% END # /IF itemloo.force_hold_level %]
-                                                    </td>
-                                                    [% IF ( item_level_itypes ) %]
-                                                        <td>
-                                                            [% UNLESS ( noItemTypeImages ) %]
-                                                                [% IF ( itemloo.imageurl ) %]<img src="[% itemloo.imageurl | html %]" alt="" /> <br /> [% END %]
-                                                            [% END %]
-                                                            [% itemloo.itypename | html %]
-                                                        </td>
-                                                    [% END %]
-                                                    <td>
-                                                        [% itemloo.barcode | html %]
-                                                    </td>
-                                                    <td>
-                                                        [% Branches.GetName( itemloo.homebranch ) | html %]
-                                                    </td>
-                                                    <td>
-                                                        [% Branches.GetName( itemloo.holdingbranch ) | html %]
-                                                    </td>
-                                                    [% IF itemdata_ccode %]
-                                                        <td>
-                                                            [% IF ( itemloo.ccode ) %][% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.ccode', authorised_value => itemloo.ccode ) | html %][% END %]
-                                                        </td>
-                                                    [% END %]
-                                                    <td>
-                                                        [% itemloo.itemcallnumber | html %]
-                                                    </td>
-                                                    <td>
-                                                        [% IF ( itemloo.copynumber ) %][% itemloo.copynumber | html %][% ELSE %]&nbsp;[% END %]
-                                                    </td>
-                                                    [% IF itemdata_enumchron %]
-                                                        <td>
-                                                            [% itemloo.enumchron | html %]
-                                                        </td>
-                                                    [% END %]
-                                                    [% IF ( itemloo.onloan ) %]
-                                                        <td data-order="[% itemloo.date_due | html %]">
-                                                            <span class="checkedout">Due [% itemloo.date_due | $KohaDates  as_due_date => 1 %]</span>
+                            <h2 style="padding: 0 1em;">
+                                Place a hold on a specific item
+                                [% IF force_hold_level == 'item' %]
+                                     <span class="error"><em>(Required)</em></span>
+                                [% END %]
+                            </h2>
+
+                            <table id="requestspecific">
+                                <thead>
+                                    <tr>
+                                        <th>Hold</th>
+                                        [% IF Koha.Preference('item-level_itypes') %]
+                                            <th>Item type</th>
+                                        [% END %]
+                                        <th>Barcode</th>
+                                        <th>Home library</th>
+                                        <th>Last location</th>
+                                        [% IF itemdata_ccode %]
+                                            <th>Collection</th>
+                                        [% END %]
+                                        <th>Call number</th>
+                                        <th>Copy number</th>
+                                        [% IF itemdata_enumchron %]
+                                            <th>Vol no.</th>
+                                        [% END %]
+                                        <th>Information</th>
+                                        <th>Allowed pickup locations</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    [% SET selected = 0 %]
+                                    [% FOREACH itemloo IN biblio.itemloop %]
+                                        [% UNLESS ( itemloo.hide ) %]
+                                            <tr class="[% itemloo.backgroundcolor | html %]">
+                                                <td>
+                                                    [% IF force_hold_level == 'record' # Patron has placed a record level hold previously for this record %]
+                                                        <span class="error">
+                                                            <i class="fa fa-times fa-lg" title="Cannot be put on hold"></i>
+                                                            Hold must be record level
+                                                        </span>
+                                                    [% ELSIF ( itemloo.available ) %]
+                                                        <input type="radio" name="checkitem" value="[% itemloo.itemnumber | html %]" />
+                                                    [% ELSIF ( itemloo.override ) %]
+                                                        <input type="radio" name="checkitem" class="needsoverride" value="[% itemloo.itemnumber | html %]" />
+                                                        <i class="fa fa-exclamation-triangle fa-lg" style="color:gold" title="Requires override of hold policy"/></i>
                                                     [% ELSE %]
-                                                        <td>
-                                                            [% IF ( itemloo.transfertwhen ) %]
-                                                                In transit from [% Branches.GetName( itemloo.transfertfrom ) | html %],
-                                                                to [% Branches.GetName( itemloo.transfertto ) | html %], since [% itemloo.transfertwhen | html %]
-                                                            [% END %]
-                                                    [% END %]
-
-                                                        [% IF ( itemloo.reservedate ) %]
-                                                            [% IF ( itemloo.nocancel ) %]
-                                                                    Can't be cancelled when item is in transit
-                                                            [% ELSE %]
-                                                                [% IF ( itemloo.waitingdate ) %]Waiting[% ELSE %]On hold[% END %]
-                                                                [% IF ( itemloo.canreservefromotherbranches ) %]
-                                                                    for <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% itemloo.ReservedFor.borrowernumber | uri %]">[% itemloo.ReservedFor.firstname | html %] [% itemloo.ReservedFor.surname | html %]</a>
-                                                                [% END %]
-                                                                [% IF ( itemloo.waitingdate ) %]at[% ELSE %]expected at[% END %]
-                                                                [% Branches.GetName( itemloo.ExpectedAtLibrary ) | html %] since
-                                                                [% IF ( itemloo.waitingdate ) %]
-                                                                    [% itemloo.waitingdate | $KohaDates %]
+                                                        <span class="error">
+                                                            <i class="fa fa-times fa-lg" title="Cannot be put on hold"></i>
+                                                            [% IF itemloo.not_holdable %]
+                                                                [% IF itemloo.not_holdable == 'damaged' %]
+                                                                    Item damaged
+                                                                [% ELSIF itemloo.not_holdable == 'ageRestricted' %]
+                                                                    Age restricted
+                                                                [% ELSIF itemloo.not_holdable == 'tooManyHoldsForThisRecord' %]
+                                                                    Exceeded max holds per record
+                                                                [% ELSIF itemloo.not_holdable == 'tooManyReservesToday' %]
+                                                                    Daily hold limit reached for patron
+                                                                [% ELSIF itemloo.not_holdable == 'tooManyReserves' %]
+                                                                    Too many holds
+                                                                [% ELSIF itemloo.not_holdable == 'notReservable' %]
+                                                                    Not holdable
+                                                                [% ELSIF itemloo.not_holdable == 'cannotReserveFromOtherBranches' %]
+                                                                    Patron is from different library
+                                                                [% ELSIF itemloo.not_holdable == 'branchNotInHoldGroup' %]
+                                                                    Cannot place hold from patron's library
+                                                                [% ELSIF itemloo.not_holdable == 'itemAlreadyOnHold' %]
+                                                                    Patron already has hold for this item
+                                                                [% ELSIF itemloo.not_holdable == 'cannotBeTransferred' %]
+                                                                    Cannot be transferred to pickup library
+                                                                [% ELSIF itemloo.not_holdable == 'pickupNotInHoldGroup' %]
+                                                                    Only pickup locations within the same hold group are allowed
+                                                                [% ELSIF itemloo.not_holdable == 'noReservesAllowed' %]
+                                                                    No reserves are allowed on this item
+                                                                [% ELSIF itemloo.not_holdable == 'libraryNotPickupLocation' %]
+                                                                    Library is not a pickup location
+                                                                [% ELSIF itemloo.not_holdable == 'no_valid_pickup_location' %]
+                                                                    No valid pickup location
                                                                 [% ELSE %]
-                                                                    [% IF ( itemloo.reservedate ) %]
-                                                                        [% itemloo.reservedate | html %]
-                                                                    [% END %]
-                                                                [% END %].
-                                                                <a class="info cancel-hold" href="modrequest.pl?CancelBiblioNumber=[% itemloo.biblionumber | html %]&amp;CancelBorrowerNumber=[% itemloo.ReservedFor.borrowernumber | html %]&amp;CancelItemnumber=[% itemloo.itemnumber | html %]">Cancel hold</a>
-                                                            [% END # /IF itemloo.nocancel %]
-                                                        [% ELSE %]
-                                                            Not on hold
-                                                        [% END # /IF itemloo.reservedate %]
-
-                                                        [% IF itemloo.item_level_holds == "N" %]
-                                                            <br/>Item level hold not allowed from OPAC
-                                                        [% ELSIF itemloo.item_level_holds == "F" %]
-                                                            <br/>Item level hold forced from OPAC
-                                                        [% END %]
-
-                                                        [% IF ( itemloo.itemlost ) %]
-                                                           <span class="lost">[% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.itemlost', authorised_value => itemloo.itemlost ) | html %]</span>
-                                                        [% END %]
-
-                                                        [% IF ( itemloo.damaged ) %]
-                                                            <span class="dmg">[% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.damaged', authorised_value => itemloo.damaged ) | html %]</span>
-                                                        [% END %]
-
-                                                        [% IF ( itemloo.withdrawn ) %]
-                                                           <span class="wdn">[% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.withdrawn', authorised_value => itemloo.withdrawn ) | html %]</span>
-                                                        [% END %]
-
-                                                        [% IF ( itemloo.notforloan ) %]
-                                                           <span class="nfl">Not for loan ([% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.notforloan', authorised_value => itemloo.notforloan ) | html %])</span>
-                                                        [% END %]
-                                                    </td>
+                                                                    [% itemloo.not_holdable | html %]
+                                                                [% END %]
+                                                            [% END %]
+                                                        </span>
+                                                    [% END # /IF force_hold_level %]
+                                                </td>
+                                                [% IF Koha.Preference('item-level_itypes') %]
                                                     <td>
-                                                    [% IF (itemloo.pickup_locations_count > 0) %]
-                                                        <select name="item_pickup_[% itemloo.itemnumber | html %]" class="pickup_locations" style="width:100%;"
-                                                                data-item-id="[% itemloo.itemnumber | html %]"
-                                                                data-patron-id="[% patron.borrowernumber | html %]"
-                                                                data-pickup-location-source="item">
-                                                        [% IF (itemloo.default_pickup_location) %]
-                                                            <option value="[% itemloo.default_pickup_location.branchcode | html %]" selected="selected">[% itemloo.default_pickup_location.branchname | html %]</option>
+                                                        [% UNLESS ( noItemTypeImages ) %]
+                                                            [% IF ( itemloo.itemtype.image_location) %]<img src="[% itemloo.itemtype.image_location | html %]" alt="" /> <br /> [% END %]
                                                         [% END %]
-                                                        </select>
-                                                    [% END %]
+                                                        [% itemloo.itemtype.translated_description | html %]
                                                     </td>
-                                                </tr>
-                                            [% END # / UNLESS itemloo.hide %]
-                                        [% END # /FOREACH itemloo %]
-                                    </tbody>
-                                </table> <!-- /#requestspecific -->
+                                                [% END %]
+                                                <td>
+                                                    [% itemloo.barcode | html %]
+                                                </td>
+                                                <td>
+                                                    [% Branches.GetName( itemloo.homebranch ) | html %]
+                                                </td>
+                                                <td>
+                                                    [% Branches.GetName( itemloo.holdingbranch ) | html %]
+                                                </td>
+                                                [% IF itemdata_ccode %]
+                                                    <td>
+                                                        [% IF ( itemloo.ccode ) %][% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.ccode', authorised_value => itemloo.ccode ) | html %][% END %]
+                                                    </td>
+                                                [% END %]
+                                                <td>
+                                                    [% itemloo.itemcallnumber | html %]
+                                                </td>
+                                                <td>
+                                                    [% IF ( itemloo.copynumber ) %][% itemloo.copynumber | html %][% ELSE %]&nbsp;[% END %]
+                                                </td>
+                                                [% IF itemdata_enumchron %]
+                                                    <td>
+                                                        [% itemloo.enumchron | html %]
+                                                    </td>
+                                                [% END %]
+                                                [% IF ( itemloo.onloan ) %]
+                                                    <td data-order="[% itemloo.date_due | html %]">
+                                                        <span class="checkedout">Due [% itemloo.date_due | $KohaDates  as_due_date => 1 %]</span>
+                                                [% ELSE %]
+                                                    <td>
+                                                        [% IF ( itemloo.transfertwhen ) %]
+                                                            In transit from [% Branches.GetName( itemloo.transfertfrom ) | html %],
+                                                            to [% Branches.GetName( itemloo.transfertto ) | html %], since [% itemloo.transfertwhen | html %]
+                                                        [% END %]
+                                                [% END %]
 
-                                [% IF ( bibitemloo.hiddencount ) %]
-                                    <form>
-                                        <p class="hiddencount">
-                                            <a href="request.pl?biblionumber=[% bibitemloo.biblionumber | uri %]&amp;borrowernumber=[% bibitemloo.borrowernumber | uri %]&amp;showallitems=1">Show all items ([% bibitemloo.hiddencount | html %] hidden)</a>
-                                        </p>
-                                    </form>
-                                [% END # /IF bibitemloo.hiddencount %]
-                            [% END # /FOREACH bibitemloo %]
+                                                    [% IF ( itemloo.reservedate ) %]
+                                                        [% IF ( itemloo.nocancel ) %]
+                                                                Can't be cancelled when item is in transit
+                                                        [% ELSE %]
+                                                            [% IF ( itemloo.waitingdate ) %]Waiting[% ELSE %]On hold[% END %]
+                                                            [% IF ( itemloo.canreservefromotherbranches ) %]
+                                                                for <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% itemloo.ReservedFor.borrowernumber | uri %]">[% itemloo.ReservedFor.firstname | html %] [% itemloo.ReservedFor.surname | html %]</a>
+                                                            [% END %]
+                                                            [% IF ( itemloo.waitingdate ) %]at[% ELSE %]expected at[% END %]
+                                                            [% Branches.GetName( itemloo.ExpectedAtLibrary ) | html %] since
+                                                            [% IF ( itemloo.waitingdate ) %]
+                                                                [% itemloo.waitingdate | $KohaDates %]
+                                                            [% ELSE %]
+                                                                [% IF ( itemloo.reservedate ) %]
+                                                                    [% itemloo.reservedate | html %]
+                                                                [% END %]
+                                                            [% END %].
+                                                            <a class="info cancel-hold" href="modrequest.pl?CancelBiblioNumber=[% itemloo.biblionumber | html %]&amp;CancelBorrowerNumber=[% itemloo.ReservedFor.borrowernumber | html %]&amp;CancelItemnumber=[% itemloo.itemnumber | html %]">Cancel hold</a>
+                                                        [% END # /IF itemloo.nocancel %]
+                                                    [% ELSE %]
+                                                        Not on hold
+                                                    [% END # /IF itemloo.reservedate %]
+
+                                                    [% IF itemloo.item_level_holds == "N" %]
+                                                        <br/>Item level hold not allowed from OPAC
+                                                    [% ELSIF itemloo.item_level_holds == "F" %]
+                                                        <br/>Item level hold forced from OPAC
+                                                    [% END %]
+
+                                                    [% IF ( itemloo.itemlost ) %]
+                                                       <span class="lost">[% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.itemlost', authorised_value => itemloo.itemlost ) | html %]</span>
+                                                    [% END %]
+
+                                                    [% IF ( itemloo.damaged ) %]
+                                                        <span class="dmg">[% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.damaged', authorised_value => itemloo.damaged ) | html %]</span>
+                                                    [% END %]
+
+                                                    [% IF ( itemloo.withdrawn ) %]
+                                                       <span class="wdn">[% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.withdrawn', authorised_value => itemloo.withdrawn ) | html %]</span>
+                                                    [% END %]
+
+                                                    [% IF ( itemloo.notforloan ) %]
+                                                       <span class="nfl">Not for loan ([% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.notforloan', authorised_value => itemloo.notforloan ) | html %])</span>
+                                                    [% END %]
+                                                </td>
+                                                <td>
+                                                [% IF (itemloo.pickup_locations_count > 0) %]
+                                                    <select name="item_pickup_[% itemloo.itemnumber | html %]" class="pickup_locations" style="width:100%;"
+                                                            data-item-id="[% itemloo.itemnumber | html %]"
+                                                            data-patron-id="[% patron.borrowernumber | html %]"
+                                                            data-pickup-location-source="item">
+                                                    [% IF (itemloo.default_pickup_location) %]
+                                                        <option value="[% itemloo.default_pickup_location.branchcode | html %]" selected="selected">[% itemloo.default_pickup_location.branchname | html %]</option>
+                                                    [% END %]
+                                                    </select>
+                                                [% END %]
+                                                </td>
+                                            </tr>
+                                        [% END # / UNLESS itemloo.hide %]
+                                    [% END # /FOREACH itemloo %]
+                                </tbody>
+                            </table> <!-- /#requestspecific -->
+
+                            [% IF hiddencount %]
+                                <form>
+                                    <p class="hiddencount">
+                                        <a href="request.pl?biblionumber=[% biblio.biblionumber | uri %]&amp;borrowernumber=[% borrowernumber | uri %]&amp;showallitems=1">Show all items ([% biblio.hiddencount | html %] hidden)</a>
+                                    </p>
+                                </form>
+                            [% END # /IF hiddencount %]
 
                         [% ELSE # /UNLESS multi_hold %]
 
@@ -796,7 +796,7 @@
                                 <tr>
                                     <th>&nbsp;</th>
                                     <th>Title</th>
-                                    [% UNLESS ( item_level_itypes ) %]
+                                    [% UNLESS Koha.Preference('item-level_itypes') %]
                                         <th>Item type</th>
                                     [% END %]
                                     <th>Priority</th>
@@ -830,9 +830,9 @@
                                                 <span class="not_holdable" title="[% biblioloo.biblionumber | html %]"></span>
                                             [% END %]
                                         </td>
-                                        [% UNLESS ( item_level_itypes ) %]
+                                        [% UNLESS Koha.Preference('item-level_itypes') %]
                                             <td>
-                                                <img src="[% biblioloo.imageurl | html %]" alt="[% biblioloo.itypename | html %]" title="[% biblioloo.itypename | html %]" />
+                                                <img src="[% biblioloo.itemtype.image_location | html %]" alt="[% biblioloo.itemtype.translated_description | html %]" title="[% biblioloo.itemtype.translated_description | html %]" />
                                             </td>
                                         [% END %]
                                         <td>[% biblioloo.rank | html %]</td>
@@ -1146,18 +1146,18 @@
 
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'datatables.inc' %]
+    [% INCLUDE 'calendar.inc' %]
     [% INCLUDE 'columns_settings.inc' %]
     [% Asset.js("lib/hc-sticky.js") | $raw %]
     [% Asset.js("js/circ-patron-search-results.js") | $raw %]
     [% INCLUDE 'select2.inc' %]
     [% Asset.js("js/holds.js") | $raw%]
-    [% INCLUDE 'calendar.inc' %]
     <script>
         var Sticky;
         var biblionumber = "[% biblionumber | $raw %]";
         var borrowernumber = "[% patron.borrowernumber | $raw %]";
         var patron_homebranch = "[% To.json( Branches.GetName( patron.branchcode ) ) | $raw %]";
-        var override_items = {[% FOREACH bibitemloo IN bibitemloop %][% FOREACH itemloo IN bibitemloo.itemloop %][% IF ( itemloo.override ) %]
+        var override_items = {[% FOREACH biblio IN biblioloop %][% FOREACH itemloo IN biblio.itemloop %][% IF ( itemloo.override ) %]
         [% itemloo.itemnumber | html %]: {
             homebranch: "[% To.json( Branches.GetName( itemloo.homebranch ) ) | $raw %]",
             holdallowed: "[% itemloo.holdallowed | html %]"
