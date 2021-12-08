@@ -62,6 +62,11 @@
         [% ELSE %]
             <div class="dialog alert">
                 An error has occurred.
+                [% IF error_order_already_cancelled %]
+                    <p>The order has been cancelled already.</p>
+                [% ELSIF error_order_not_found %]
+                    <p>The order could not be found.</p>
+                [% END %]
                 [% IF ( error_delitem ) %]
                     <p>The order has been cancelled, although one or more items could not have been deleted.</p>
                 [% END %]
