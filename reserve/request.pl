@@ -401,7 +401,6 @@ if (   ( $findborrower && $borrowernumber_hold || $findclub && $club_hold )
         my @hostitems = get_hostitemnumbers_of($biblionumber);
         my @itemnumbers;
         if (@hostitems){
-            $template->param('hostitemsflag' => 1);
             push(@itemnumbers, @hostitems);
         }
 
@@ -449,10 +448,6 @@ if (   ( $findborrower && $borrowernumber_hold || $findclub && $club_hold )
                 my $num_alreadyheld = 0;
 
                 $biblioitem->{force_hold_level} = $force_hold_level;
-
-                if ( $biblioitem->{biblioitemnumber} ne $biblionumber ) {
-                    $biblioitem->{hostitemsflag} = 1;
-                }
 
                 $biblioloopiter{description} = $biblioitem->{description};
                 $biblioloopiter{itypename}   = $biblioitem->{description};
@@ -505,7 +500,6 @@ if (   ( $findborrower && $borrowernumber_hold || $findclub && $club_hold )
                     }
 
                     if($item->{biblionumber} ne $biblionumber){
-                        $item->{hostitemsflag} = 1;
                         $item->{hosttitle} = Koha::Biblios->find( $item->{biblionumber} )->title;
                     }
 

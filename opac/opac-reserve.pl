@@ -153,11 +153,9 @@ foreach my $biblioNumber (@biblionumbers) {
     my $marcrecord= GetMarcBiblio({ biblionumber => $biblioNumber });
 
     # flag indicating existence of at least one item linked via a host record
-    my $hostitemsflag;
     # adding items linked via host biblios
     my @hostitemInfos = GetHostItemsInfo($marcrecord);
     if (@hostitemInfos){
-        $hostitemsflag =1;
         push (@itemInfos,@hostitemInfos);
     }
 
@@ -554,7 +552,6 @@ foreach my $biblioNum (@biblionumbers) {
 
         # if the items belongs to a host record, show link to host record
         if ( $itemInfo->{biblionumber} ne $biblioNum ) {
-            $biblioLoopIter{hostitemsflag}    = 1;
             $itemLoopIter->{hostbiblionumber} = $itemInfo->{biblionumber};
             $itemLoopIter->{hosttitle}        = Koha::Biblios->find( $itemInfo->{biblionumber} )->title;
         }
