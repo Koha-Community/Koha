@@ -238,6 +238,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('hidelostitems','0','','If ON, disables display of\"lost\" items in OPAC.','YesNo'),
 ('HidePatronName','0','','If this is switched on, patron\'s cardnumber will be shown instead of their name on the holds and catalog screens','YesNo'),
 ('hide_marc','0',NULL,'If ON, disables display of MARC fields, subfield codes & indicators (still shows data)','YesNo'),
+('StaffHighlightedWords','1','','Highlight search terms on staff interface','YesNo'),
 ('HoldFeeMode','not_always','any_time_is_placed|not_always|any_time_is_collected','Set the hold fee mode','Choice'),
 ('HoldsAutoFill','0',NULL,'If on, librarian will not be asked if hold should be filled, it will be filled automatically','YesNo'),
 ('HoldsAutoFillPrintSlip','0',NULL,'If on, hold slip print dialog will be displayed automatically','YesNo'),

@@ -1,4 +1,4 @@
-/* global KOHA biblionumber new_results_browser addMultiple vShelfAdd openWindow search_result SEARCH_RESULTS PREF_LocalCoverImages PREF_IntranetCoce PREF_CoceProviders CoceHost CoceProviders addRecord delSingleRecord PREF_BrowseResultSelection resetSearchContext addBibToContext delBibToContext getContextBiblioNumbers holdfor_cardnumber holdforclub strQuery PREF_NotHighlightedWords __ Cookies */
+/* global KOHA biblionumber new_results_browser addMultiple vShelfAdd openWindow search_result SEARCH_RESULTS PREF_LocalCoverImages PREF_IntranetCoce PREF_CoceProviders CoceHost CoceProviders addRecord delSingleRecord PREF_BrowseResultSelection resetSearchContext addBibToContext delBibToContext getContextBiblioNumbers holdfor_cardnumber holdforclub strQuery PREF_StaffHighlightedWords PREF_NotHighlightedWords __ */
 
 function verify_cover_images() {
     /* Loop over each container in the template which contains covers */
@@ -202,16 +202,22 @@ $(document).ready(function() {
         while ( q_array.length > 0 && q_array[q_array.length-1] == "") {
             q_array = q_array.splice(0,-1);
         }
-        highlightOn();
-        $("#highlight_toggle_on" ).hide().click(function(e) {
-            e.preventDefault();
-            highlightOn();
-        });
-        $("#highlight_toggle_off").show().click(function(e) {
+        $("#highlight_toggle_off" ).hide().click(function(e) {
             e.preventDefault();
             highlightOff();
         });
+        $("#highlight_toggle_on").show().click(function(e) {
+            e.preventDefault();
+            highlightOn();
+        });
     }
+
+    if( PREF_StaffHighlightedWords == 1 ){
+        highlightOn();
+    } else {
+    highlightOff();
+    }
+
 
     if( SEARCH_RESULTS ){
         var browser = KOHA.browser( search_result.searchid, parseInt( biblionumber, 10));

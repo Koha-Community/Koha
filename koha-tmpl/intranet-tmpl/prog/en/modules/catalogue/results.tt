@@ -74,9 +74,11 @@
                             |
                             <a href="#" id="clear_all"><i class="fa fa-remove"></i> Clear all</a>
                             |
-                            <a href="#" class="highlight_toggle" id="highlight_toggle_off">Unhighlight</a>
-                            <a href="#" class="highlight_toggle" id="highlight_toggle_on">Highlight</a>
-                            |
+                            [% IF Koha.Preference("StaffHighlightedWords") == 1 %]
+                                <a href="#" class="highlight_toggle" id="highlight_toggle_off">Unhighlight</a>
+                                <a href="#" class="highlight_toggle" id="highlight_toggle_on">Highlight</a>
+                                |
+                            [% END %]
 
                             [% IF (Koha.Preference("intranetbookbag")) %]
                                 <div class="btn-group">
@@ -711,6 +713,7 @@
         var CoceHost = "[% CoceHost | html %]";
         var CoceProviders = "[% CoceProviders | html %]";
         var PREF_BrowseResultSelection = parseInt( "[% Koha.Preference('BrowseResultSelection') | html %]", 10);
+        var PREF_StaffHighlightedWords = "[% Koha.Preference('StaffHighlightedWords') | html %]";
         var PREF_NotHighlightedWords = "[% Koha.Preference('NotHighlightedWords') | html %]";
         var biblionumber = "[% biblionumber | html %]";
         var holdfor_cardnumber = "[% holdfor_cardnumber | html %]";
