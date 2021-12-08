@@ -29,7 +29,7 @@ sub GetByModule {
 
     return Koha::Notice::Templates->search(
         { module => $module },
-        { group_by => 'code' }
+        { group_by => 'code', order_by => ['name'] }
     );
 }
 
