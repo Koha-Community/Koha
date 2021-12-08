@@ -34,7 +34,6 @@ my $input = CGI->new();
 
 checkauth($input, 0, { reserveforothers => 'place_holds' }, 'intranet');
 
-my @bibitems       = $input->multi_param('biblioitem');
 my @reqbib         = $input->multi_param('reqbib');
 my $biblionumber   = $input->param('biblionumber');
 my $borrowernumber = $input->param('borrowernumber');
@@ -72,18 +71,6 @@ my $found;
 if ( $type eq 'str8' && $patron ) {
 
     foreach my $biblionumber ( keys %bibinfos ) {
-        my $count = @bibitems;
-        @bibitems = sort @bibitems;
-        my $i2 = 1;
-        my @realbi;
-        $realbi[0] = $bibitems[0];
-        for ( my $i = 1 ; $i < $count ; $i++ ) {
-            my $i3 = $i2 - 1;
-            if ( $realbi[$i3] ne $bibitems[$i] ) {
-                $realbi[$i2] = $bibitems[$i];
-                $i2++;
-            }
-        }
 
         my $can_override = C4::Context->preference('AllowHoldPolicyOverride');
         if ( defined $checkitem && $checkitem ne '' ) {
