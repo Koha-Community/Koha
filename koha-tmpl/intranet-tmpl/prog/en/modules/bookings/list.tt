@@ -52,6 +52,7 @@
         </div> <!-- /.col-sm-2.col-sm-pull-10 -->
     </div> <!-- /.row -->
 
+    [% INCLUDE modals/cancel_booking.inc %]
 
     [% MACRO jsinclude BLOCK %]
     [% Asset.js("lib/dayjs/dayjs.min.js") | $raw %]
@@ -61,6 +62,7 @@
     [% INCLUDE 'select2.inc' %]
     [% INCLUDE 'js-date-format.inc' %]
     [% Asset.js("js/place_booking_modal.js") | $raw %]
+    [% Asset.js("js/cancel_booking_modal.js") | $raw %]
 <script>
     var bookings_table;
     $(document).ready(function(){
@@ -126,6 +128,16 @@
                 "orderable": true,
                 "render": function(data, type, row, meta) {
                     return $date(row.end_date);
+                }
+            },
+            {
+                "data": "",
+                "title": "Actions",
+                "searchable": false,
+                "orderable": false,
+                "render": function(data, type, row, meta) {
+                    var result = '<button type="button" class="btn btn-default btn-xs cancel-action" data-toggle="modal" data-target="#cancelBookingModal" data-booking="'+row.booking_id+'"><i class="fa fa-trash" aria-hidden="true"></i> '+_("Cancel")+'</button>';
+                    return result;
                 }
             }]
         }, [], 1);
