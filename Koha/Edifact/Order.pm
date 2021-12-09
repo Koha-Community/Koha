@@ -390,17 +390,17 @@ sub order_line {
             my $i_obj = $schema->resultset('Item')->find( $item->itemnumber );
             if ( defined $i_obj ) {
                 push @items, {
-                    branchcode     => $item->{branchcode},
-                    itype          => $item->{itype},
-                    location       => $item->{location},
-                    itemcallnumber => $item->{itemcallnumber},
+                    branchcode     => $i_obj->get_column('homebranch'),
+                    itype          => $i_obj->effective_itemtype,
+                    location       => $i_obj->location,
+                    itemcallnumber => $i_obj->itemcallnumber,
                 };
             }
         }
     }
     else {
         my $item_hash = {
-            itemtype       => $biblioitem->itemtype,
+            itype          => $biblioitem->itemtype,
             itemcallnumber => $biblioitem->cn_class,
         };
         my $branch = $orderline->basketno->deliveryplace;
