@@ -251,6 +251,9 @@ sub XSLTParse4Display {
     my $variables    = $params->{xslt_variables};
     my $items_rs     = $params->{items_rs};
 
+    die "Mandatory \$params->{xsl_syspref} was not provided, called with biblionumber $params->{biblionumber}"
+        if not defined $params->{xsl_syspref};
+
     my $xslfilename = get_xsl_filename( $xslsyspref);
 
     # grab the XML, run it through our stylesheet, push it out to the browser
