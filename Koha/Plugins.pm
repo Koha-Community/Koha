@@ -30,6 +30,7 @@ use Try::Tiny;
 use C4::Context;
 use C4::Output;
 
+use Koha::Cache::Memory::Lite;
 use Koha::Exceptions::Plugin;
 use Koha::Plugins::Methods;
 
@@ -74,25 +75,59 @@ updated by preceding plugins, provided that these plugins support that.
 sub call {
     my ($class, $method, @args) = @_;
 
+    return unless C4::Context->config('enable_plugins');
+
     my @responses;
-    if (C4::Context->config('enable_plugins')) {
-        my @plugins = $class->new({ enable_plugins => 1 })->GetPlugins({ method => $method });
-        @plugins = grep { $_->can($method) } @plugins;
-        # TODO: Remove warn when after_hold_create is removed from the codebase
-        warn "after_hold_create is deprecated and will be removed soon. Contact the following plugin's authors: " . join( ', ', map {$_->{metadata}->{name}} @plugins)
-            if $method eq 'after_hold_create' and @plugins;
-        foreach my $plugin (@plugins) {
-            my $response = eval { $plugin->$method(@args) };
-            if ($@) {
-                warn sprintf("Plugin error (%s): %s", $plugin->get_metadata->{name}, $@);
+    my @plugins = $class->get_enabled_plugins();
+    @plugins = grep { $_->can($method) } @plugins;
+
+    # TODO: Remove warn when after_hold_create is removed from the codebase
+    warn "after_hold_create is deprecated and will be removed soon. Contact the following plugin's authors: " . join( ', ', map {$_->{metadata}->{name}} @plugins)
+        if $method eq 'after_hold_create' and @plugins;
+
+    foreach my $plugin (@plugins) {
+        my $response = eval { $plugin->$method(@args) };
+        if ($@) {
+            warn sprintf("Plugin error (%s): %s", $plugin->get_metadata->{name}, $@);
+            next;
+        }
+
+        push @responses, $response;
+    }
+
+    return @responses;
+}
+
+sub get_enabled_plugins {
+    my ($class) = @_;
+
+    return unless C4::Context->config('enable_plugins');
+
+    my $cache_key = 'enabled_plugins';
+    my $enabled_plugins = Koha::Cache::Memory::Lite->get_from_cache($cache_key);
+    unless ($enabled_plugins) {
+        $enabled_plugins = [];
+        my $rs = Koha::Database->schema->resultset('PluginData');
+        $rs = $rs->search({ plugin_key => '__ENABLED__', plugin_value => 1 });
+        my @plugin_classes = $rs->get_column('plugin_class')->all();
+        foreach my $plugin_class (@plugin_classes) {
+            unless (can_load(modules => { $plugin_class => undef }, nocache => 1)) {
+                warn "Failed to load $plugin_class: $Module::Load::Conditional::ERROR";
                 next;
             }
 
-            push @responses, $response;
-        }
+            my $plugin = eval { $plugin_class->new() };
+            if ($@ || !$plugin) {
+                warn "Failed to instantiate plugin $plugin_class: $@";
+                next;
+            }
 
+            push @$enabled_plugins, $plugin;
+        }
+        Koha::Cache::Memory::Lite->set_in_cache($cache_key, $enabled_plugins);
     }
-    return @responses;
+
+    return @$enabled_plugins;
 }
 
 =head2 GetPlugins

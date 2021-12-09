@@ -55,6 +55,7 @@ subtest 'call() tests' => sub {
     $schema->storage->txn_begin;
     # Temporarily remove any installed plugins data
     Koha::Plugins::Methods->delete;
+    $schema->resultset('PluginData')->delete();
 
     t::lib::Mocks::mock_config('enable_plugins', 1);
     my $plugins = Koha::Plugins->new({ enable_plugins => 1 });
