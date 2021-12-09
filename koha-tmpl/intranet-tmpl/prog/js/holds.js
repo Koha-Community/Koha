@@ -96,12 +96,15 @@ function display_pickup_location (state) {
 $(document).ready(function() {
 
     function suspend_hold(hold_id, end_date) {
+
+        var params;
+        if ( end_date !== null && end_date !== '' ) params = JSON.stringify({ "end_date": end_date });
+
         return $.ajax({
             method: 'POST',
             url: '/api/v1/holds/'+encodeURIComponent(hold_id)+'/suspension',
-            data: function () {
-                if ( end_date !== null ) return JSON.stringify({ "end_date": end_date })
-            }
+            contentType: 'application/json',
+            data: params
         });
     }
 
@@ -401,7 +404,7 @@ $(document).ready(function() {
 
     $("#suspend-modal-submit").on( "click", function( e ) {
         e.preventDefault();
-        var suspend_until_date = $("#suspend-modal-until").datepicker("getDate");
+        var suspend_until_date = $("#suspend-modal-until").val();
         if ( suspend_until_date !== null ) suspend_until_date = $date(suspend_until_date, {dateformat:"rfc3339"});
         suspend_hold(
             $(this).data('hold-id'),
