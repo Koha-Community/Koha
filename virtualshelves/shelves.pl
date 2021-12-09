@@ -268,7 +268,7 @@ if ( $op eq 'view' ) {
                     {
                         biblionumber => $biblionumber,
                         record       => $record,
-                        xsl_filename => "XSLTListsDisplay",
+                        xsl_syspref  => 'XSLTListsDisplay',
                         fix_amps     => 1,
                     }
                 );

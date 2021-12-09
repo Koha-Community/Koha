@@ -292,7 +292,7 @@ if ($loggedinuser) {
             {
                 biblionumber   => $tag->{biblionumber},
                 record         => $record,
-                xsl_filename   => 'OPACXSLTResultsDisplay',
+                xsl_syspref    => 'OPACXSLTResultsDisplay',
                 fix_amps       => 1,
                 hidden_items   => $hidden_items,
                 xslt_variables => $variables
