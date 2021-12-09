@@ -328,8 +328,11 @@ $(document).ready(function() {
                     }).error(function (jqXHR, textStatus, errorThrown) {
                         if (jqXHR.status === 404) {
                             alert(__("Unable to resume, hold not found"));
-                            holdsTable.api().ajax.reload();
                         }
+                        else {
+                            alert(_("Your request could not be processed. Check the logs"));
+                        }
+                        holdsTable.api().ajax.reload();
                     });
                 });
 
@@ -413,9 +416,12 @@ $(document).ready(function() {
             holdsTable.api().ajax.reload();
         }).error(function (jqXHR, textStatus, errorThrown) {
             if (jqXHR.status === 404) {
-                alert(__("Unable to resume, hold not found"));
-                holdsTable.api().ajax.reload();
+                alert(__("Unable to suspend, hold not found"));
             }
+            else {
+                alert(_("Your request could not be processed. Check the logs"));
+            }
+            holdsTable.api().ajax.reload();
         }).done(function() {
             $("#suspend-modal-until").val(""); // clean the input
             $('#suspend-modal').modal('hide');
