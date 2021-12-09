@@ -370,7 +370,7 @@ sub load_sql_in_order {
                   ;
     my $localization_file = C4::Context->config('intranetdir') .
                             "/installer/data/$self->{dbms}/localization/$langchoice/custom.sql";
-    if ( $langchoice ne 'en' and -f $localization_file ) {
+    if ( -f $localization_file ) {
         push @fnames, $localization_file;
     }
     foreach my $file (@fnames) {
