@@ -77,6 +77,15 @@ sub list {
             $c->stash('koha.embed', $fixed_embed);
         }
 
+        # Merge sorting into query attributes
+        $c->dbic_merge_sorting(
+            {
+                attributes => $attributes,
+                params     => $reserved_params,
+                result_set => $orders_rs,
+            }
+        );
+
         # If no pagination parameters are passed, default
         $reserved_params->{_per_page} //= C4::Context->preference('RESTdefaultPageSize');
         $reserved_params->{_page}     //= 1;
