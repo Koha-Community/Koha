@@ -37,7 +37,8 @@ t::lib::Mocks::mock_preference( 'RESTBasicAuth', 1 );
 my $t = Test::Mojo->new('Koha::REST::V1');
 
 subtest 'list() tests' => sub {
-    plan tests => 18;
+
+    plan tests => 19;
 
     $schema->storage->txn_begin;
 
@@ -133,6 +134,62 @@ subtest 'list() tests' => sub {
     $t->get_ok( "//$userid:$password@/api/v1/acquisitions/orders?order_blah=blah" )
       ->status_is(400)
       ->json_is( [{ path => '/query/order_blah', message => 'Malformed query string'}] );
+
+    subtest 'sorting tests' => sub {
+
+        plan tests => 10;
+
+        $schema->storage->txn_begin;
+
+        my $biblio_1 = $builder->build_sample_biblio();
+        my $biblio_2 = $builder->build_sample_biblio();
+
+        my $basket = $builder->build_object({ class => 'Koha::Acquisition::Baskets', value => { is_standing => 1 } });
+        my $order_1 = $builder->build_object(
+            {
+                class => 'Koha::Acquisition::Orders',
+                value => {
+                    basketno     => $basket->basketno,
+                    orderstatus  => 'new',
+                    biblionumber => $biblio_1->biblionumber
+                }
+            }
+        );
+        my $order_2 = $builder->build_object(
+            {
+                class => 'Koha::Acquisition::Orders',
+                value => {
+                    basketno     => $basket->basketno,
+                    orderstatus  => 'new',
+                    biblionumber => $biblio_2->biblionumber
+                }
+            }
+        );
+
+        # order by order_id
+        my $result =
+          $t->get_ok( "//$userid:$password@/api/v1/acquisitions/orders?_order_by=+me.order_id&basket_id=" . $basket->id )
+            ->status_is( 200, "query successful" )
+            ->tx->res->json;
+
+        is( scalar @$result, 2, 'Two elements returned' );
+
+        is( $result->[0]->{order_id}, $order_1->id, 'The first element is order_1' );
+        is( $result->[1]->{order_id}, $order_2->id, 'The second element is order_2' );
+
+        # now reverse order
+        $result =
+          $t->get_ok( "//$userid:$password@/api/v1/acquisitions/orders?_order_by=-me.order_id&basket_id=" . $basket->id )
+            ->status_is( 200, "query successful" )
+            ->tx->res->json;
+
+        is( scalar @$result, 2, 'Two elements returned' );
+
+        is( $result->[0]->{order_id}, $order_2->id, 'The first element is order_2' );
+        is( $result->[1]->{order_id}, $order_1->id, 'The second element is order_1' );
+
+        $schema->storage->txn_rollback;
+    };
 
     $schema->storage->txn_rollback;
 };
