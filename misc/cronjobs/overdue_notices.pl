@@ -368,6 +368,7 @@ if (@branchcodes) {
         my $branch_word = scalar @branches > 1 ? 'branches' : 'branch';
     $verbose and warn "$branch_word @branches have overdue rules\n";
 
+
     } else {
     
         $verbose and warn "No active overduerules for $branchcodes_word  '@branchcodes'\n";
@@ -841,25 +842,28 @@ END_SQL
         }
         $content .= join( "\n", @output_chunks );
 
-        my $attachment = {
-            filename => defined $csvfilename ? 'attachment.csv' : 'attachment.txt',
-            type => 'text/plain',
-            content => $content, 
-        };
+        my $EmailOverduesNoEmail = C4::Context->preference('EmailOverduesNoEmail');
+        if ( $EmailOverduesNoEmail == 0) {
+            my $attachment = {
+                filename => defined $csvfilename ? 'attachment.csv' : 'attachment.txt',
+                type => 'text/plain',
+                content => $content,
+            };
 
-        my $letter = {
-            title   => 'Overdue Notices',
-            content => 'These messages were not sent directly to the patrons.',
-        };
+            my $letter = {
+                title   => 'Overdue Notices',
+                content => 'These messages were not sent directly to the patrons.',
+            };
 
-        C4::Letters::EnqueueLetter(
-            {   letter                 => $letter,
-                borrowernumber         => undef,
-                message_transport_type => 'email',
-                attachments            => [$attachment],
-                to_address             => $branch_email_address,
-            }
-        ) unless $test_mode;
+            C4::Letters::EnqueueLetter(
+                {   letter                 => $letter,
+                    borrowernumber         => undef,
+                    message_transport_type => 'email',
+                    attachments            => [$attachment],
+                    to_address             => $branch_email_address,
+                }
+            ) unless $test_mode;
+        }
     }
 
 }
