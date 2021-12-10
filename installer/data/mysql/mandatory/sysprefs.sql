@@ -193,6 +193,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('ElasticsearchCrossFields', '1', '', 'Enable "cross_fields" option for searches using Elastic search.', 'YesNo'),
 ('EmailAddressForSuggestions','','',' If you choose EmailAddressForSuggestions you have to enter a valid email address: ','free'),
 ('emailLibrarianWhenHoldIsPlaced','0',NULL,'If ON, emails the librarian whenever a hold is placed','YesNo'),
+('EmailOverduesNoEmail','0',NULL,'Set mail sending to staff for patron has overdues but no email address','YesNo'),
 ('EmailPurchaseSuggestions','0','0|EmailAddressForSuggestions|BranchEmailAddress|KohaAdminEmailAddress','Choose email address that new purchase suggestions will be sent to: ','Choice'),
 ('EnableAdvancedCatalogingEditor','0','','Enable the Rancor advanced cataloging editor','YesNo'),
 ('EnableBorrowerFiles','0',NULL,'If enabled, allows librarians to upload and attach arbitrary files to a borrower record.','YesNo'),
