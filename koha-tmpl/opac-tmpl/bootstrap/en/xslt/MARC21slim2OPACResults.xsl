@@ -503,7 +503,6 @@
     </xsl:if>
     <!-- End of OpenURL -->
 
-    <p>
     <!-- Author Statement: Alternate Graphic Representation (MARC 880) -->
     <xsl:if test="$display880">
       <xsl:call-template name="m880Select">
@@ -515,9 +514,11 @@
     <xsl:choose>
     <xsl:when test="marc:datafield[@tag=100] or marc:datafield[@tag=110] or marc:datafield[@tag=111] or marc:datafield[@tag=700] or marc:datafield[@tag=710] or marc:datafield[@tag=711]">
 
-        <span class="byAuthor">by </span><span class="author">
+        <span class="byAuthor">by </span>
+        <ul class="author resource_list">
         <!-- #13383 -->
         <xsl:for-each select="marc:datafield[(@tag=100 or @tag=700 or @tag=110 or @tag=710 or @tag=111 or @tag=711) and @ind1!='z']">
+            <li>
             <xsl:call-template name="chopPunctuation">
                 <xsl:with-param name="chopString">
                     <xsl:call-template name="subfieldSelect">
@@ -633,15 +634,11 @@
                     <xsl:text>]</xsl:text>
                 </span>
             </xsl:if>
-            <xsl:choose>
-                <xsl:when test="position()=last()"><xsl:text>.</xsl:text></xsl:when><xsl:otherwise><span class="separator"><xsl:text> | </xsl:text></span></xsl:otherwise>
-            </xsl:choose>
+            </li>
         </xsl:for-each>
-
-    </span>
+        </ul>
     </xsl:when>
     </xsl:choose>
-    </p>
 
     <xsl:call-template name="show-series">
         <xsl:with-param name="searchurl">/cgi-bin/koha/opac-search.pl</xsl:with-param>

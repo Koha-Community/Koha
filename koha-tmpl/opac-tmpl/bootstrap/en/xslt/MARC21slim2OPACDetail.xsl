@@ -1718,6 +1718,10 @@
                     <!--#13382 Changed Additional author to contributor -->
                     <xsl:otherwise>Contributor(s): </xsl:otherwise>
                 </xsl:choose>
+           </xsl:for-each>
+            <ul class="resource_list">
+            <xsl:for-each select="$authorfield">
+            <li>
             <xsl:choose>
                 <xsl:when test="not(@tag=111) or @tag=700 or @tag=710 or @tag=711"/>
                 <xsl:when test="marc:subfield[@code='n']">
@@ -1971,10 +1975,9 @@
                     </xsl:element>
                 </a>
             </xsl:if>
-                <xsl:choose>
-                    <xsl:when test="position()=last()"><xsl:text></xsl:text></xsl:when><xsl:otherwise><span class="separator"><xsl:text> | </xsl:text></span></xsl:otherwise>
-                </xsl:choose>
+            </li>
             </xsl:for-each>
+        </ul>
         </span>
         </xsl:if>
     </xsl:template>
