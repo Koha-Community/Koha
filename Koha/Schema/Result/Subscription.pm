@@ -328,6 +328,14 @@ date of last renewal for the subscription
   data_type: 'integer'
   is_nullable: 1
 
+=head2 ccode
+
+  data_type: 'varchar'
+  is_nullable: 1
+  size: 80
+
+collection code to assign to serial items
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -417,6 +425,8 @@ __PACKAGE__->add_columns(
   { data_type => "varchar", is_nullable => 1, size => 10 },
   "mana_id",
   { data_type => "integer", is_nullable => 1 },
+  "ccode",
+  { data_type => "varchar", is_nullable => 1, size => 80 },
 );
 
 =head1 PRIMARY KEY
@@ -549,8 +559,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2021-01-21 13:39:29
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:RA/Z4pcP53tB0kXgo0W6fQ
+# Created by DBIx::Class::Schema::Loader v0.07046 @ 2021-12-13 16:00:51
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:RXlOmAbIjAyLxVqqt36LHQ
 
 __PACKAGE__->has_many(
   "additional_field_values",
