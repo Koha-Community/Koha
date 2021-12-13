@@ -104,6 +104,8 @@
             </div>
             <div class="btn-group">
                 <a class="btn btn-default toggle_sql" id="toggle_sql_hid" href="#"><i class="fa fa-eye"></i> Show SQL code</a>
+            </div>
+            <div class="btn-group">
                 <a class="btn btn-default toggle_sql" id="toggle_sql_vis" href="#" style="display:none;"><i class="fa fa-eye-slash"></i> Hide SQL code</a>
             </div>
             <div class="btn-group">
