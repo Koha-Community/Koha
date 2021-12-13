@@ -1043,9 +1043,6 @@
                                                         </li>
                                                     [% END %]
                                                     [% IF header_ro.has_itemnumbers && ( header_ro.cell == 'itemnumber' || header_types.item( header_ro.cell ) == 'itemnumber' ) %]
-                                                        [% IF ( batch_biblionumbers ) %]
-                                                            <li role="separator" class="divider"></li>
-                                                        [% END %]
                                                         <li class="dropdown-header">Item records</li>
                                                         <li>
                                                             <a href="#" data-submit="batch_item_modification" data-toggle="tooltip" data-placement="right" title="Send visible items to batch item modification" class="batch_op send_to_item_mod">Batch item modification</a>
@@ -1055,9 +1052,6 @@
                                                         </li>
                                                     [% END %]
                                                     [% IF header_ro.cell == 'cardnumber' || header_types.item( header_ro.cell ) == 'cardnumber' %]
-                                                        [% IF ( batch_biblionumbers || batch_itemnumbers ) %]
-                                                            <li role="separator" class="divider"></li>
-                                                        [% END %]
                                                         <li class="dropdown-header">Patron records</li>
                                                         <li>
                                                             <a href="#" data-submit="batch_patron_modification" data-toggle="tooltip" data-placement="right" title="Send visible results to batch patron modification" class="batch_op send_to_patron_mod">Batch patron modification</a>
