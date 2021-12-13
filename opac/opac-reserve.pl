@@ -24,10 +24,10 @@ use CGI qw ( -utf8 );
 use C4::Auth;    # checkauth, getborrowernumber.
 use C4::Koha;
 use C4::Circulation;
-use C4::Reserves;
 use C4::Biblio;
 use C4::Items;
 use C4::Output;
+use C4::Reserves qw( CanItemBeReserved CanBookBeReserved AddReserve GetReservesControlBranch ItemsAnyAvailableAndNotRestricted IsAvailableForItemLevelRequest );
 use C4::Context;
 use C4::Members;
 use C4::Overdues;
@@ -473,6 +473,12 @@ foreach my $biblioNum (@biblionumbers) {
     $biblioLoopIter{itemLoop} = [];
     my $numCopiesAvailable = 0;
     my $numCopiesOPACAvailable = 0;
+    # iterating through all items first to check if any of them available
+    # to pass this value further inside down to IsAvailableForItemLevelRequest to
+    # it's complicated logic to analyse.
+    # (before this loop was inside that sub loop so it was O(n^2) )
+    my $items_any_available;
+    $items_any_available = ItemsAnyAvailableAndNotRestricted( { biblionumber => $biblioNum, patron => $patron }) if $patron;
     foreach my $itemInfo (@{$biblioData->{itemInfos}}) {
         my $itemNum = $itemInfo->{itemnumber};
         my $item = $visible_items->{$itemNum};
@@ -560,9 +566,11 @@ foreach my $biblioNum (@biblionumbers) {
         my $branch = GetReservesControlBranch( $itemInfo, $patron_unblessed );
 
         my $policy_holdallowed = !$itemLoopIter->{already_reserved};
+        # items_any_available defined outside of the current loop,
+        # so we avoiding loop inside IsAvailableForItemLevelRequest:
         $policy_holdallowed &&=
-            IsAvailableForItemLevelRequest($item, $patron) &&
-            CanItemBeReserved( $borrowernumber, $itemNum )->{status} eq 'OK';
+            CanItemBeReserved( $borrowernumber, $itemNum )->{status} eq 'OK' &&
+            IsAvailableForItemLevelRequest($item, $patron, undef, $items_any_available);
 
         if ($policy_holdallowed) {
             my $opac_hold_policy = Koha::CirculationRules->get_opacitemholds_policy( { item => $item, patron => $patron } );
