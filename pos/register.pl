@@ -79,7 +79,7 @@ else {
       : $last_cashup              ? $last_cashup->timestamp
       :                             '';
     my $end               = dt_from_string($transactions_range_to);
-    $end = $end->add(days => 1); # To should be 'inclusive'
+    $end = $end->set({ hour => 23, minute => 59, second => 59 }); # To should be 'inclusive'
 
     if ($transactions_range_from) {
 
