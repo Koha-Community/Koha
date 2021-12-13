@@ -37,6 +37,7 @@ use Koha::Libraries;
 use Koha::Patron::Categories;
 use Koha::Patron::Debarments qw( AddDebarment DelDebarment GetDebarments );
 use Koha::Patrons;
+use List::MoreUtils qw(uniq);
 
 my $input = CGI->new;
 my $op = $input->param('op') || 'show_form';
@@ -95,6 +96,9 @@ if ( $op eq 'show' ) {
     }
 
     my $max_nb_attr = 0;
+
+    # Make sure there is only one of each patron id number
+    @patronidnumbers = uniq( @patronidnumbers );
 
     for my $patronidnumber ( @patronidnumbers ) {
         my $patron;
