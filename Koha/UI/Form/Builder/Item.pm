@@ -429,6 +429,8 @@ Flag to restrict the edition if the user does not have necessary permissions.
 
 List of subfields to prefill (value of syspref SubfieldsToUseWhenPrefill)
 
+If empty all subfields will be prefilled. For none, you can pass an array with a single false value.
+
 =item subfields_to_allow
 
 List of subfields to allow (value of syspref SubfieldsToAllowForRestrictedBatchmod or SubfieldsToAllowForRestrictedEditing)

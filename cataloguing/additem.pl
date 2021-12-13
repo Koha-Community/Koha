@@ -607,8 +607,6 @@ my $branchcode = $input->param('branch') || C4::Context->userenv->{branch};
 my @subfields_to_prefill;
 if ( $nextop eq 'additem' && $op ne 'dupeitem' && $prefillitem ) {
     @subfields_to_prefill = split(' ', C4::Context->preference('SubfieldsToUseWhenPrefill'));
-    # Setting to 1 element if SubfieldsToUseWhenPrefill is empty to prevent all the subfields to be prefilled
-    @subfields_to_prefill = ("") unless @subfields_to_prefill;
 }
 
 # Getting list of subfields to keep when restricted editing is enabled
