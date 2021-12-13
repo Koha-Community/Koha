@@ -636,6 +636,9 @@ sub _modify_values {
     my $regex = $params->{regex};
 
     if ( $regex and $regex->{search} ) {
+        my $replace = $regex->{replace};
+        $replace =~ s/"/\\"/g;                    # Protection from embedded code
+        $replace = '"' . $replace . '"'; # Put in a string for /ee
         $regex->{modifiers} //= q||;
         my @available_modifiers = qw( i g );
         my $modifiers = q||;
@@ -645,16 +648,16 @@ sub _modify_values {
         }
         foreach my $value ( @$values ) {
             if ( $modifiers =~ m/^(ig|gi)$/ ) {
-                $value =~ s/$regex->{search}/$regex->{replace}/ig;
+                $value =~ s/$regex->{search}/$replace/igee;
             }
             elsif ( $modifiers eq 'i' ) {
-                $value =~ s/$regex->{search}/$regex->{replace}/i;
+                $value =~ s/$regex->{search}/$replace/iee;
             }
             elsif ( $modifiers eq 'g' ) {
-                $value =~ s/$regex->{search}/$regex->{replace}/g;
+                $value =~ s/$regex->{search}/$replace/gee;
             }
             else {
-                $value =~ s/$regex->{search}/$regex->{replace}/;
+                $value =~ s/$regex->{search}/$replace/ee;
             }
         }
     }
