@@ -101,9 +101,7 @@ eval {
                 $action eq 'download-url' && do {
                     my $id = $cgi->param('id')
                       or response_bad_request("No 'id' specified");
-                    my $format = $cgi->param('format')
-                      or response_bad_request("No 'format' specified");
-                    $data{action} = $od->checkout_download_url($id, $format, $page_url, $page_url);
+                    $data{action} = $od->checkout_download_url($id);
                     last;
                 };
 
