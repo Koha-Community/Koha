@@ -1694,6 +1694,18 @@ sub PrepareItemrecordDisplay {
                         $defaultvalue = $defaultvalues->{location};
                     }
                 }
+                if (   ( $subfield->{kohafield} eq 'items.ccode' )
+                    && $defaultvalues
+                    && $defaultvalues->{'ccode'} ) {
+
+                    if ( $itemrecord and $defaultvalues and not $itemrecord->subfield($tag,$subfield->{subfield}) ) {
+                        # if the item record exists, only use default value if the item has no ccode
+                        $defaultvalue = $defaultvalues->{ccode};
+                    } elsif ( !$itemrecord and $defaultvalues ) {
+                        # if the item record *doesn't* exists, always use the default value
+                        $defaultvalue = $defaultvalues->{ccode};
+                    }
+                }
                 if ( $subfield->{authorised_value} ) {
                     my @authorised_values;
                     my %authorised_lib;

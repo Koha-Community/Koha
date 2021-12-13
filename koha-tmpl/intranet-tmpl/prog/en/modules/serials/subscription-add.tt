@@ -200,6 +200,18 @@ fieldset.rows table { clear: none; margin: 0; }
                                     </select>
                                 </li>
                                 <li>
+                                    <label for="ccode">Collection code:</label>
+                                    <select name="ccode" id="ccode">
+                                        [% FOREACH ccode_loo IN ccodes_loop %]
+                                            [% IF (ccode_loo.selected) %]
+                                                <option value="[% ccode_loo.authorised_value | html %]" selected="selected">[% ccode_loo.lib | html %]</option>
+                                            [% ELSE %]
+                                                <option value="[% ccode_loo.authorised_value | html %]">[% ccode_loo.lib | html %]</option>
+                                            [% END %]
+                                        [% END %]
+                                    </select>
+                                </li>
+                                <li>
                                     <label for="itemtype">Item type:</label>
                                     <select name="itemtype" id="itemtype">
                                         <option value=""></option>

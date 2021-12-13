@@ -1321,7 +1321,7 @@ sub ModSubscription {
     $biblionumber, $callnumber, $notes, $letter, $manualhistory,
     $internalnotes, $serialsadditems, $staffdisplaycount, $opacdisplaycount,
     $graceperiod, $location, $enddate, $subscriptionid, $skip_serialseq,
-    $itemtype, $previousitemtype, $mana_id
+    $itemtype, $previousitemtype, $mana_id, $ccode
     ) = @_;
 
     my $subscription = Koha::Subscriptions->find($subscriptionid);
@@ -1364,6 +1364,7 @@ sub ModSubscription {
             itemtype          => $itemtype,
             previousitemtype  => $previousitemtype,
             mana_id           => $mana_id,
+            ccode             => $ccode,
         }
     )->store;
     # FIXME Must be $subscription->serials
@@ -1401,7 +1402,7 @@ sub NewSubscription {
     $innerloop3, $status, $notes, $letter, $firstacquidate, $irregularity,
     $numberpattern, $locale, $callnumber, $manualhistory, $internalnotes,
     $serialsadditems, $staffdisplaycount, $opacdisplaycount, $graceperiod,
-    $location, $enddate, $skip_serialseq, $itemtype, $previousitemtype, $mana_id
+    $location, $enddate, $skip_serialseq, $itemtype, $previousitemtype, $mana_id, $ccode
     ) = @_;
     my $dbh = C4::Context->dbh;
 
@@ -1444,6 +1445,7 @@ sub NewSubscription {
             itemtype          => $itemtype,
             previousitemtype  => $previousitemtype,
             mana_id           => $mana_id,
+            ccode             => $ccode
         }
     )->store;
     $subscription->discard_changes;

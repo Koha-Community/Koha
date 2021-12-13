@@ -124,10 +124,12 @@ if ($op eq 'modify' || $op eq 'dup' || $op eq 'modsubscription') {
 }
 
 my $locations_loop = GetAuthorisedValues("LOC");
+my $ccodes_loop     = GetAuthorisedValues("CCODE");
 
 $template->param(
     branchcode => $subs->{branchcode},
     locations_loop=>$locations_loop,
+    ccodes_loop=>$ccodes_loop
 );
 
 my @additional_fields = Koha::AdditionalFields->search({ tablename => 'subscription' })->as_list;
@@ -328,6 +330,7 @@ sub redirect_add_subscription {
     my $itemtype          = $query->param('itemtype');
     my $previousitemtype  = $query->param('previousitemtype');
     my $skip_serialseq    = $query->param('skip_serialseq');
+    my $ccode             = $query->param('ccode');
 
     my $mana_id;
     if ( $query->param('mana_id') ne "" ) {
@@ -354,7 +357,7 @@ sub redirect_add_subscription {
         join(";",@irregularity), $numberpattern, $locale, $callnumber,
         $manualhistory, $internalnotes, $serialsadditems,
         $staffdisplaycount, $opacdisplaycount, $graceperiod, $location, $enddate,
-        $skip_serialseq, $itemtype, $previousitemtype, $mana_id
+        $skip_serialseq, $itemtype, $previousitemtype, $mana_id, $ccode
     );
     if ( (C4::Context->preference('Mana') == 1) and ( grep { $_ eq "subscription" } split(/,/, C4::Context->preference('AutoShareWithMana'))) ){
         my $result = Koha::SharedContent::send_entity( $query->param('mana_language') || '', $loggedinuser, $subscriptionid, 'subscription');
@@ -441,6 +444,7 @@ sub redirect_mod_subscription {
     my $itemtype          = $query->param('itemtype');
     my $previousitemtype  = $query->param('previousitemtype');
     my $skip_serialseq    = $query->param('skip_serialseq');
+    my $ccode             = $query->param('ccode');
 
     my $mana_id;
     if ( $query->param('mana_id') ne "" ) {
@@ -476,7 +480,7 @@ sub redirect_mod_subscription {
         $status, $biblionumber, $callnumber, $notes, $letter,
         $manualhistory, $internalnotes, $serialsadditems, $staffdisplaycount,
         $opacdisplaycount, $graceperiod, $location, $enddate, $subscriptionid,
-        $skip_serialseq, $itemtype, $previousitemtype, $mana_id
+        $skip_serialseq, $itemtype, $previousitemtype, $mana_id, $ccode
     );
 
     my @additional_fields;

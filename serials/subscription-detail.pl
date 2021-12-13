@@ -114,6 +114,8 @@ for my $date ( qw(startdate enddate firstacquidate histstartdate histenddate) ) 
 }
 my $av = Koha::AuthorisedValues->search({ category => 'LOC', authorised_value => $subs->{location} });
 $subs->{location} = $av->count ? $av->next->lib : '';
+$av = Koha::AuthorisedValues->search({ category => 'CCODE', authorised_value => $subs->{ccode} });
+$subs->{ccode} = $av->count ? $av->next->lib : '';
 $subs->{abouttoexpire}  = abouttoexpire($subs->{subscriptionid});
 $template->param(%{ $subs });
 $template->param(biblionumber_for_new_subscription => $subs->{bibnum});
