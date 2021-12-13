@@ -23,6 +23,7 @@ use Carp;
 use base qw(Koha::ExternalContent);
 use WebService::ILS::OverDrive::Patron;
 use C4::Context;
+use LWP::UserAgent;
 
 =head1 NAME
 
@@ -206,6 +207,29 @@ sub set_token_in_koha_session {
         ACCESS_TOKEN_SESSION_KEY,
         join($ACCESS_TOKEN_DELIMITER, $token, $token_type)
     );
+}
+
+=head2 checkout_download_url($item_id)
+
+  Input: id of the item to download
+
+  Returns: Fulfillment URL for reidrection
+
+=cut
+
+sub checkout_download_url {
+    my $self = shift;
+    my $item_id = shift or croak "Item ID not specified";
+
+    my $ua = LWP::UserAgent->new;
+    $ua->max_redirect(0);
+    my $response = $ua->get(
+        "https://patron.api.overdrive.com/v1/patrons/me/checkouts/".$item_id."/formats/downloadredirect",
+        'Authorization' => "Bearer ".$self->client->access_token,
+        );
+
+    my $redirect = { redirect => $response->{_headers}->{location} };
+    return $redirect;
 }
 
 =head1 OTHER METHODS
