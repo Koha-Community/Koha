@@ -3,7 +3,7 @@ function display_pickup_location (state) {
     if ( state.needs_override === true ) {
         $text = $(
             '<span>' + state.text + '</span> <span style="float:right;" title="' +
-            _("This pickup location is not allowed according to circulation rules") +
+            __("This pickup location is not allowed according to circulation rules") +
             '"><i class="fa fa-exclamation-circle" aria-hidden="true"></i></span>'
         );
     }
