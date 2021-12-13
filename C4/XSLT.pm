@@ -286,6 +286,7 @@ sub XSLTParse4Display {
 
     my $varxml = "<variables>\n";
     while (my ($key, $value) = each %$variables) {
+        $value //= q{};
         $varxml .= "<variable name=\"$key\">$value</variable>\n";
     }
     $varxml .= "</variables>\n";
