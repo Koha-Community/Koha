@@ -3199,7 +3199,7 @@ sub GetSoonestRenewDate {
         return $soonestrenewal if $now < $soonestrenewal;
     } elsif ( $itemissue->auto_renew && $patron->autorenew_checkouts ) {
         # Checkouts with auto-renewing fall back to due date
-        my $soonestrenewal = return dt_from_string( $itemissue->date_due );
+        my $soonestrenewal = dt_from_string( $itemissue->date_due );
         if ( C4::Context->preference('NoRenewalBeforePrecision') eq 'date'
             and $issuing_rule->{lengthunit} eq 'days' )
         {

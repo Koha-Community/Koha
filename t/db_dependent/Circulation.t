@@ -4957,7 +4957,7 @@ subtest "SendCirculationAlert" => sub {
 };
 
 subtest "GetSoonestRenewDate tests" => sub {
-    plan tests => 4;
+    plan tests => 5;
     Koha::CirculationRules->set_rule(
         {
             categorycode => undef,
@@ -5007,7 +5007,14 @@ subtest "GetSoonestRenewDate tests" => sub {
         'Checkouts without auto-renewal can be renewed immediately if no norenewalbefore'
     );
 
+    t::lib::Mocks::mock_preference( 'NoRenewalBeforePrecision', 'date' );
     $issue->auto_renew(1)->store;
+    is(
+        GetSoonestRenewDate( $patron->id, $item->itemnumber ),
+        $datedue->clone->truncate( to => 'day' ),
+        'Checkouts with auto-renewal can be renewed earliest on due date if no renewalbefore'
+    );
+    t::lib::Mocks::mock_preference( 'NoRenewalBeforePrecision', 'exact' );
     is(
         GetSoonestRenewDate( $patron->id, $item->itemnumber ),
         $datedue,
