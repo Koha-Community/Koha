@@ -41,7 +41,7 @@
         [% END %]
     [% END %]
 <div class="row">
-    [% IF ( suggestion && suggestions_count ) %]
+    [% IF ( suggestions_count || all_pendingsuggestions ) %]
         <div class="col-sm-6">
     [% ELSE %]
         <div class="col-sm-12">
@@ -58,7 +58,7 @@
 </div>
 </div>
 
-[% IF ( CAN_user_suggestions_suggestions_manage && suggestion && suggestions_count ) %]
+[% IF ( CAN_user_suggestions_suggestions_manage && ( suggestions_count || all_pendingsuggestions ) ) %]
 <div class="col-sm-6">
     <div id="acqui_acqui_home_suggestions">
         <fieldset>
