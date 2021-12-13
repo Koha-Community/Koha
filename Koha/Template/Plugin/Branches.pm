@@ -25,26 +25,22 @@ use base qw( Template::Plugin );
 
 use C4::Koha;
 use C4::Context;
+use Koha::Cache::Memory::Lite;
 use Koha::Libraries;
-
-sub new {
-    my ($self) = shift;
-    my (@params) = @_;
-    $self = $self->SUPER::new(@params);
-    #Initialize a cache of libraries for lookups of names,urls etc.
-    $self->{libraries} = {};
-
-    return $self;
-}
 
 sub GetName {
     my ( $self, $branchcode ) = @_;
 
-    unless (exists $self->{libraries}->{$branchcode} ){
-        my $l = Koha::Libraries->find($branchcode);
-        $self->{libraries}->{$branchcode} = $l if $l;
-    }
-    return $self->{libraries}->{$branchcode} ? $self->{libraries}->{$branchcode}->branchname : q{};
+    my $memory_cache = Koha::Cache::Memory::Lite->get_instance;
+    my $cache_key    = "Library_branchname:" . $branchcode;
+    my $cached       = $memory_cache->get_from_cache($cache_key);
+    return $cached if $cached;
+
+    my $l = Koha::Libraries->find($branchcode);
+
+    my $branchname = $l ? $l->branchname : q{};
+    $memory_cache->set_in_cache( $cache_key, $branchname );
+    return $branchname;
 }
 
 sub GetLoggedInBranchcode {
