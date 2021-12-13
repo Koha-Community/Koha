@@ -4878,6 +4878,7 @@ CREATE TABLE `subscription` (
   `itemtype` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `previousitemtype` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `mana_id` int(11) DEFAULT NULL,
+  `ccode` varchar(80) DEFAULT NULL COMMENT 'collection code to assign to serial items',
   PRIMARY KEY (`subscriptionid`),
   KEY `subscription_ibfk_1` (`periodicity`),
   KEY `subscription_ibfk_2` (`numberpattern`),
