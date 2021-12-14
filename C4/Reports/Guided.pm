@@ -32,6 +32,7 @@ use C4::Output;
 use C4::Log qw( logaction );
 use Koha::Notice::Templates;
 
+use Koha::Database::Columns;
 use Koha::Logger;
 use Koha::AuthorisedValues;
 use Koha::Patron::Categories;
@@ -212,7 +213,7 @@ sub _get_columns {
     my $sth         = $dbh->prepare("show columns from $tablename");
     $sth->execute();
     my @columns;
-	my $column_defs = _get_column_defs($cgi);
+    my $columns = Koha::Database::Columns->columns;
 	my %tablehash;
 	$tablehash{'table'}=$tablename;
     $tablehash{'__first__'} = $first;
@@ -220,7 +221,7 @@ sub _get_columns {
     while ( my $data = $sth->fetchrow_arrayref() ) {
         my %temphash;
         $temphash{'name'}        = "$tablename.$data->[0]";
-        $temphash{'description'} = $column_defs->{"$tablename.$data->[0]"};
+        $temphash{'description'} = $columns->{$tablename}->{$data->[0]};
         push @columns, \%temphash;
     }
     $sth->finish();
@@ -353,25 +354,26 @@ sub get_criteria {
 
 
     my $crit   = $criteria{$area};
-    my $column_defs = _get_column_defs($cgi);
+    my $columns = Koha::Database::Columns->columns;
     my @criteria_array;
     foreach my $localcrit (@$crit) {
         my ( $value, $type )   = split( /\|/, $localcrit );
         my ( $table, $column ) = split( /\./, $value );
+        my $description = $columns->{$table}->{$column};
         if ($type eq 'textrange') {
             my %temp;
             $temp{'name'}        = $value;
             $temp{'from'}        = "from_" . $value;
             $temp{'to'}          = "to_" . $value;
             $temp{'textrange'}   = 1;
-            $temp{'description'} = $column_defs->{$value};
+            $temp{'description'} = $description;
             push @criteria_array, \%temp;
         }
         elsif ($type eq 'date') {
             my %temp;
             $temp{'name'}        = $value;
             $temp{'date'}        = 1;
-            $temp{'description'} = $column_defs->{$value};
+            $temp{'description'} = $description;
             push @criteria_array, \%temp;
         }
         elsif ($type eq 'daterange') {
@@ -380,7 +382,7 @@ sub get_criteria {
             $temp{'from'}        = "from_" . $value;
             $temp{'to'}          = "to_" . $value;
             $temp{'daterange'}   = 1;
-            $temp{'description'} = $column_defs->{$value};
+            $temp{'description'} = $description;
             push @criteria_array, \%temp;
         }
         else {
@@ -407,12 +409,11 @@ sub get_criteria {
             }
             $sth->finish();
 
-            my %temp;
-            $temp{'name'}        = $value;
-            $temp{'description'} = $column_defs->{$value};
-            $temp{'values'}      = \@values;
-
-            push @criteria_array, \%temp;
+            push @criteria_array, {
+                name        => $value,
+                description => $description,
+                values      => \@values,
+            };
         }
     }
     return ( \@criteria_array );
@@ -909,30 +910,6 @@ sub get_results {
         FROM saved_reports
         WHERE report_id = ?
     |, { Slice => {} }, $report_id);
-}
-
-sub _get_column_defs {
-    my ($cgi) = @_;
-    my %columns;
-    my $columns_def_file = "columns.def";
-    my $htdocs = C4::Context->config('intrahtdocs');
-    my $section = 'intranet';
-
-    # We need the theme and the lang
-    # Since columns.def is not in the modules directory, we cannot sent it for the $tmpl var
-    my ($theme, $lang, $availablethemes) = C4::Templates::themelanguage($htdocs, 'about.tt', $section, $cgi);
-
-    my $full_path_to_columns_def_file="$htdocs/$theme/$lang/$columns_def_file";
-    open (my $fh, '<:encoding(utf-8)', $full_path_to_columns_def_file);
-    while ( my $input = <$fh> ){
-        chomp $input;
-        if ( $input =~ m|<field name="(.*)">(.*)</field>| ) {
-            my ( $field, $translation ) = ( $1, $2 );
-            $columns{$field} = $translation;
-        }
-    }
-    close $fh;
-    return \%columns;
 }
 
 =head2 GetReservedAuthorisedValues
