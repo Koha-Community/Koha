@@ -585,7 +585,7 @@
         [% Asset.js( "lib/linters/htmlhint.min.js" ) | $raw %]
         [% Asset.js( "lib/codemirror/html-lint.min.js" ) | $raw %]
         <script>
-            $("textarea[name='content']").each( function(index) {
+            $("textarea[name^='content_']").each( function(index) {
                 var this_lang = $(this).attr('data-lang');
                 var editor = CodeMirror.fromTextArea(document.getElementById('content_' + this_lang), {
                     lineNumbers: true,
