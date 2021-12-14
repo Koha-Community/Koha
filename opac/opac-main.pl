@@ -58,26 +58,9 @@ elsif (C4::Context->userenv and defined $input->param('branch') and length $inpu
    $homebranch = "";
 }
 
-my $news_id = $input->param('news_id');
-my $koha_news;
 
-if (defined $news_id){
-    $koha_news = Koha::AdditionalContents->search({ idnew => $news_id, location => ['opac_only', 'staff_and_opac'] }); # get news that is not staff-only news
-    if ( $koha_news->count > 0){
-        $template->param( news_item => $koha_news->next );
-    } else {
-        $template->param( single_news_error => 1 );
-    }
-} else {
-    $koha_news = Koha::AdditionalContents->search_for_display(
-        {
-            category   => 'news',
-            location   => ['opac_only', 'staff_and_opac'],
-            lang       => $template->lang,
-            library_id => $homebranch,
-        }
-    );
-}
+my $news_id = $input->param('news_id');
+$template->param( news_id => $news_id );
 
 # For dashboard
 my $patron = Koha::Patrons->find( $borrowernumber );
@@ -114,9 +97,8 @@ if ( $patron ) {
     }
 }
 
+$template->param( branchcode => $homebranch ) if $homebranch;
 $template->param(
-    koha_news           => $koha_news,
-    branchcode          => $homebranch,
     daily_quote         => Koha::Quotes->get_daily_quote(),
 );
 

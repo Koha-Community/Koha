@@ -72,7 +72,7 @@
         <h1 class="sr-only">Koha home</h1>
 
         [% IF Koha.Preference( 'OpacNewsLibrarySelect' ) %]
-            [% UNLESS news_item %]
+            [% UNLESS news_id %]
                 <form id="news-branch-select" class="form-inline" name="news-branch-select" method="get" action="/cgi-bin/koha/opac-main.pl">
                     <legend class="sr-only">News</legend>
                     <label for="news-branch">Display news for: </label>
@@ -88,67 +88,62 @@
             [% END %]
         [% END %]
 
-        [% IF koha_news.count %]
-
-            [% IF single_news_error %]
-
-                <div class="alert alert-error">
-                    This news item does not exist.
-                </div>
-
-            [% ELSE %]
-
-                <div id="news" class="newscontainer">
-                    [% SET show_author = Koha.Preference('NewsAuthorDisplay') == 'opac' || Koha.Preference('NewsAuthorDisplay') == 'both' %]
-                    [% FOREACH koha_new IN koha_news %]
-                    [% IF koha_new.category == 'news' %]
-                        <div class="newsitem">
-                            <h4 class="newsheader">
-                                [% IF ( news_item ) %]
-                                    [% koha_new.title | html %]
-                                [% ELSE %]
-                                    <a name="newsitem[% koha_new.idnew | html %]" href="/cgi-bin/koha/opac-main.pl?news_id=[% koha_new.idnew | uri %]">[% koha_new.title | html %]</a>
-                                [% END %]
-                            </h4>
-                            <div class="newsbody">[% koha_new.content | $raw %]</div>
-                            <div class="newsfooter">
-                                Published on [% koha_new.published_on | $KohaDates %]
-                                [% IF ( show_author && koha_new.author ) %]
-                                    by <span class="newsauthor">[% INCLUDE 'patron-title.inc' patron=koha_new.author %]</span>
-                                [% END %]
-                                [% IF ( news_item ) %]
-                                    &bull; <a href="/cgi-bin/koha/opac-main.pl">Show all news</a>
-                                [% END %]
-                            </div>
+        [% IF news_id %]
+            [% SET koha_news = AdditionalContents.get_opac_news_by_id( news_id => news_id ) %]
+        [% ELSE %]
+            [% SET koha_news = AdditionalContents.get( category => 'news', location => ['opac_only', 'staff_and_opac'], lang => lang, library => branchcode ) %]
+        [% END %]
+        [% IF koha_news.content.count %]
+            <div id="news" class="newscontainer">
+                [% SET show_author = Koha.Preference('NewsAuthorDisplay') == 'opac' || Koha.Preference('NewsAuthorDisplay') == 'both' %]
+                [% FOREACH koha_new IN koha_news.content %]
+                    <div class="newsitem">
+                        <h4 class="newsheader">
+                            [% IF ( news_item ) %]
+                                [% koha_new.title | html %]
+                            [% ELSE %]
+                                <a name="newsitem[% koha_new.idnew | html %]" href="/cgi-bin/koha/opac-main.pl?news_id=[% koha_new.idnew | uri %]">[% koha_new.title | html %]</a>
+                            [% END %]
+                        </h4>
+                        <div class="newsbody">[% koha_new.content | $raw %]</div>
+                        <div class="newsfooter">
+                            Published on [% koha_new.published_on | $KohaDates %]
+                            [% IF ( show_author && koha_new.author ) %]
+                                by <span class="newsauthor">[% INCLUDE 'patron-title.inc' patron=koha_new.author %]</span>
+                            [% END %]
+                            [% IF ( news_id ) %]
+                                &bull; <a href="/cgi-bin/koha/opac-main.pl">Show all news</a>
+                            [% END %]
                         </div>
-                    [% END %]
-                    [% END %]
+                    </div>
+                [% END %]
 
-                    [% UNLESS news_item %]
-                        <div id="rssnews-container">
-                            <!-- Logged in users have a branch code or it could be explicitly set -->
-                            <a href="[% OPACBaseURL | url %]/cgi-bin/koha/opac-news-rss.pl?branchcode=[% branchcode | uri %]">
-                                <i class="fa fa-rss" aria-hidden="true"></i>
-                                [% IF Branches.all.size == 1 %]
-                                    [% IF branchcode %]
-                                        <span>RSS feed for [% Branches.GetName( branchcode ) | html %] library news</span>
-                                    [% ELSE %]
-                                        <span>RSS feed for library news</span>
-                                    [% END %]
+                [% UNLESS news_id %]
+                    <div id="rssnews-container">
+                        <!-- Logged in users have a branch code or it could be explicitly set -->
+                        <a href="[% OPACBaseURL | url %]/cgi-bin/koha/opac-news-rss.pl?branchcode=[% branchcode | uri %]">
+                            <i class="fa fa-rss" aria-hidden="true"></i>
+                            [% IF Branches.all.size == 1 %]
+                                [% IF branchcode %]
+                                    <span>RSS feed for [% Branches.GetName( branchcode ) | html %] library news</span>
                                 [% ELSE %]
-                                    [% IF branchcode %]
-                                        <span>RSS feed for [% Branches.GetName( branchcode ) | html %] and system-wide library news</span>
-                                    [% ELSE %]
-                                        <span>RSS feed for system-wide library news</span>
-                                    [% END %]
+                                    <span>RSS feed for library news</span>
                                 [% END %]
-                            </a>
-                        </div>
-                    [% END %]
-                </div>
-
-            [% END # /IF single_news_error %]
-
+                            [% ELSE %]
+                                [% IF branchcode %]
+                                    <span>RSS feed for [% Branches.GetName( branchcode ) | html %] and system-wide library news</span>
+                                [% ELSE %]
+                                    <span>RSS feed for system-wide library news</span>
+                                [% END %]
+                            [% END %]
+                        </a>
+                    </div>
+                [% END %]
+            </div>
+        [% ELSIF news_id %] <!-- news_id but no koha_news.content -->
+            <div class="alert alert-error">
+                This news item does not exist.
+            </div>
         [% ELSE %] <!-- koha news -->
             [% IF Koha.Preference( 'OpacNewsLibrarySelect' ) %]
                 <div id="news" class="newscontainer">

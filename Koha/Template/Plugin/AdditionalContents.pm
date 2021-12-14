@@ -55,6 +55,26 @@ sub get {
     }
 }
 
+sub get_opac_news_by_id {
+    my ( $self, $params ) = @_;
+
+    my $news_id   = $params->{news_id};
+
+    my $content = Koha::AdditionalContents->search(
+        {
+            location   => ['opac_only', 'staff_and_opac'],
+            idnew => $news_id,
+            category => 'news',
+        }
+    );
+
+    if ( $content->count ) {
+        return {
+            content    => $content,
+        };
+    }
+}
+
 1;
 
 =head1 NAME
@@ -71,8 +91,22 @@ Koha::Template::Plugin::AdditionalContents - TT Plugin for displaying additional
 
 =head2 get
 
-In a template, you can get the all categories with
-the following TT code: [% AdditionalContents.get() %]
+In a template, you can get the news categories with
+the following TT code: [% AdditionalContents.get( category => 'news', location => ['opac_only', 'staff_and_opac'], lang => lang, library => branchcode ) %]
+
+The function returns a hashref with keys:
+ contents: a Koha::AdditionalContents object
+ location: the passed in location param returned
+ blocktitle: the passed in blocktitle param returned
+
+=head2 get_opac_news_by_id
+
+In a template, you can get a specific news item by passing
+the news id. E.g.:
+
+[% SET news_item = AdditionalContents.get_news_by_id( news_id => news_id ) %]
+
+The function returns a hashref with a Koha::AdditionalContents object in the 'contents' key
 
 =head1 AUTHOR
 
