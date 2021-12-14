@@ -1538,7 +1538,7 @@
                     const barcodes = ev.target.value.split('\n').map(function(s) { return s.trim() });
                     const expected = [];
                     let found = 0;
-                    $('#items-bundle-contents-table tr').each(function () {
+                    $('#items-bundle-contents-table tbody > tr').each(function () {
                         const barcode = this.getAttribute('data-barcode');
                         expected.push(barcode);
                         if (barcodes.includes(barcode)) {
