@@ -282,6 +282,7 @@
         // This is here because of its dependence on template variables, everything else should go in js/pages/preferences.js - jpw
         var to_highlight = "[% To.json( searchfield ) | html %]";
         var search_jumped = [% IF ( search_jumped ) %]true[% ELSE %]false[% END %];
+        var db_columns = [% To.json( db_columns ) | $raw %];
     </script>
     [% Asset.js("lib/jquery/plugins/humanmsg.js") | $raw %]
     [% Asset.js("js/ajax.js") | $raw %]

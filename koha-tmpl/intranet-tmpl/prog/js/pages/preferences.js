@@ -231,38 +231,36 @@ $( document ).ready( function () {
         var pref_value = this.value;
         var prefs = pref_value.split("|");
 
-
-
-        $.getJSON( themelang + "/modules/admin/preferences/" + datasource + ".json", function( data ){
-            var items = [];
-            var checked = "";
-            var readonly = "";
-            var disabled = "";
-            var style = "";
-            $.each( data, function( key, val ){
-                if( prefs.indexOf( val ) >= 0 ){
-                    checked = ' checked="checked" ';
-                } else {
-                    checked = "";
-                }
-                if( required.indexOf( val ) >= 0 ){
-                    style = "required";
-                    checked  = ' checked="checked" ';
-                } else if( exclusions.indexOf( val ) >= 0 ){
-                    style = "disabled";
-                    disabled = ' disabled="disabled" ';
-                    checked  = "";
-                } else {
-                    style = "";
-                    disabled = "";
-                }
-                items.push('<label class="' + style +'"><input class="dbcolumn_selection" type="checkbox" id="' + key + '"' + checked + disabled + ' name="pref" value="' + key + '" /> ' + val + ' (' + key + ')</label>');
-            });
-            $("<div/>", {
-                "class": "columns-2",
-                html: items.join("")
-            }).appendTo("#prefModalForm");
+        let data = db_columns[datasource];
+        var items = [];
+        var checked = "";
+        var readonly = "";
+        var disabled = "";
+        var style = "";
+        $.each( Object.keys(data).sort(), function( i, key ){
+            if( prefs.indexOf( key ) >= 0 ){
+                checked = ' checked="checked" ';
+            } else {
+                checked = "";
+            }
+            if( required.indexOf( key ) >= 0 ){
+                style = "required";
+                checked  = ' checked="checked" ';
+            } else if( exclusions.indexOf( key ) >= 0 ){
+                style = "disabled";
+                disabled = ' disabled="disabled" ';
+                checked  = "";
+            } else {
+                style = "";
+                disabled = "";
+            }
+            items.push('<label class="' + style +'"><input class="dbcolumn_selection" type="checkbox" id="' + key + '"' + checked + disabled + ' name="pref" value="' + key + '" /> ' + data[key]+ ' (' + key + ')</label>');
         });
+        $("<div/>", {
+            "class": "columns-2",
+            html: items.join("")
+        }).appendTo("#prefModalForm");
+
         $("#saveModalPrefs").data("target", this.id );
         $("#prefModalLabel").text( pref_name );
         $("#prefModal").modal("show");

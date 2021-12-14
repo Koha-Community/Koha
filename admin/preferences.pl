@@ -28,6 +28,7 @@ use C4::ClassSource qw( GetClassSources GetClassSource );
 use C4::Output qw( output_html_with_http_headers );
 use C4::Templates;
 use Koha::Acquisition::Currencies;
+use Koha::Database::Columns;
 use IO::File;
 use YAML::XS;
 use Encode;
@@ -401,6 +402,9 @@ if ( $tab ) {
     );
 }
 
-$template->param( TABS => \@TABS );
+$template->param(
+    TABS => \@TABS,
+    db_columns => Koha::Database::Columns->columns,
+);
 
 output_html_with_http_headers $input, $cookie, $template->output;
