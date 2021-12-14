@@ -149,7 +149,6 @@ function po_extract_staff () {
         'koha-tmpl/intranet-tmpl/prog/en/**/*.tt',
         'koha-tmpl/intranet-tmpl/prog/en/**/*.inc',
         'koha-tmpl/intranet-tmpl/prog/en/xslt/*.xsl',
-        'koha-tmpl/intranet-tmpl/prog/en/columns.def',
         '!koha-tmpl/intranet-tmpl/prog/en/**/*MARC21*',
         '!koha-tmpl/intranet-tmpl/prog/en/**/*UNIMARC*',
         '!koha-tmpl/intranet-tmpl/prog/en/**/*marc21*',
