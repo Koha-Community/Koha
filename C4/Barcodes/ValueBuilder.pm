@@ -56,23 +56,17 @@ sub get_barcode {
     $nextnum++;
     $nextnum = sprintf("%0*d", "4",$nextnum);
     $nextnum = $year . $month . $nextnum;
-    my $scr = "
-        var form = document.getElementById('f');
-        if ( !form ) {
-            form = document.getElementById('serials_edit');
+    my $scr = qq~
+        let elt = \$("#"+id);
+        let homebranch = elt.parents('fieldset.rows:first')
+                            .find('input[name="kohafield"][value="items.homebranch"]')
+                            .siblings("select")
+                            .val();
+
+        if ( \$(elt).val() == '' ) {
+            \$(elt).val(homebranch + '$nextnum');
         }
-        if ( !form ) {
-            form = document.getElementById('Aform');
-        }
-        for (i=0 ; i<form.field_value.length ; i++) {
-            if (form.tag[i].value == '$args->{loctag}' && form.subfield[i].value == '$args->{locsubfield}') {
-                fnum = i;
-            }
-        }
-    if (\$('#' + id).val() == '') {
-        \$('#' + id).val(form.field_value[fnum].value + '$nextnum');
-    }
-    ";
+    ~;
     return $nextnum, $scr;
 }
 
