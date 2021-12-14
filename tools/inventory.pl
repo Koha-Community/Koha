@@ -37,6 +37,7 @@ use C4::Charset qw( NormalizeString );
 
 use Koha::Biblios;
 use Koha::DateUtils qw( dt_from_string output_pref );
+use Koha::Database::Columns;
 use Koha::AuthorisedValues;
 use Koha::BiblioFrameworks;
 use Koha::ClassSources;
@@ -392,14 +393,7 @@ if (defined $input->param('CSVexport') && $input->param('CSVexport') eq 'on'){
         -attachment => 'inventory.csv',
     );
 
-    my $columns_def_hashref = C4::Reports::Guided::_get_column_defs($input);
-    foreach my $key ( keys %$columns_def_hashref ) {
-        my $initkey = $key;
-        $key =~ s/[^\.]*\.//;
-        $columns_def_hashref->{$initkey}=NormalizeString($columns_def_hashref->{$initkey} // '');
-        $columns_def_hashref->{$key} = $columns_def_hashref->{$initkey};
-    }
-
+    my $columns = Koha::Database::Columns->columns;
     my @translated_keys;
     for my $key (qw / biblioitems.title    biblio.author
                       items.barcode        items.itemnumber
@@ -408,7 +402,8 @@ if (defined $input->param('CSVexport') && $input->param('CSVexport') eq 'on'){
                       items.itemlost       items.damaged
                       items.withdrawn      items.stocknumber
                       / ) {
-       push @translated_keys, $columns_def_hashref->{$key};
+        my ( $table, $column ) = split '\.', $key;
+        push @translated_keys, NormalizeString($columns->{$table}->{$column} // '');
     }
     push @translated_keys, 'problem' if $uploadbarcodes;
 
