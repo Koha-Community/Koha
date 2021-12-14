@@ -61,8 +61,6 @@ my %args = (
     day         => '30',
     tag         => '952',
     subfield    => 'p',
-    loctag      => '952',
-    locsubfield => 'a'
 );
 
 my ($nextnum, $scr) = C4::Barcodes::ValueBuilder::incremental::get_barcode(\%args);

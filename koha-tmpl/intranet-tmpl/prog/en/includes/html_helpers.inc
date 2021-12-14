@@ -148,6 +148,7 @@
                         <input type="hidden" name="items.more_subfields_xml" value="[% subfield.subfield | html %]" />
                     [% END %]
                     <input type="hidden" name="tag"       value="[% subfield.tag | html %]" />
+                    <input type="hidden" name="kohafield" value="[% subfield.kohafield | html %]" /> [%# We should not need that but all item forms are not rewritten yet %]
                     <input type="hidden" name="subfield"  value="[% subfield.subfield | html %]" />
                     <input type="hidden" name="mandatory" value="[% subfield.mandatory | html %]" />
                     <input type="hidden" name="important" value="[% subfield.important | html %]" />

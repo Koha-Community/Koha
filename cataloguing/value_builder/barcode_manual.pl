@@ -38,7 +38,6 @@ my $builder = sub {
 # find today's date
     ($args{year}, $args{mon}, $args{day}) = split('-', output_pref({ dt => dt_from_string, dateformat => 'iso', dateonly => 1 }));
     ($args{tag},$args{subfield})       =  GetMarcFromKohaField( "items.barcode" );
-    ($args{loctag},$args{locsubfield}) =  GetMarcFromKohaField( "items.homebranch" );
 
     my $nextnum;
     my $scr;
