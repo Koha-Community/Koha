@@ -246,36 +246,35 @@
             </legend>
 
             <ol class="default_values" style="display:none;">
-                [% FOREACH borrower_field IN borrower_fields %]
-
-                    [% SWITCH borrower_field.field %]
+                [% FOREACH borrower_db_column IN borrower_fields.keys.sort %]
+                    [% SWITCH borrower_db_column %]
                     [% CASE 'branchcode' %]
                         <li>
-                            <label class="description" for="branchcode">[% borrower_field.description | html %]: </label>
+                            <label class="description" for="branchcode">[% borrower_fields.$borrower_db_column | html %]: </label>
                             <select id="branchcode" name="branchcode">
                                 <option value="" selected="selected"></option>
                                 [% FOREACH library IN Branches.all() %]
                                     <option value="[% library.branchcode | html %]">[% library.branchname | html %]</option>
                                 [% END %]
                             </select>
-                            <span class="field_hint">[% borrower_field.field | html %]</span>
+                            <span class="field_hint">[% borrower_db_column | html %]</span>
                         </li>
                     [% CASE 'categorycode' %]
                         <li>
-                            <label class="description" for="categorycode">[% borrower_field.description | html %]: </label>
+                            <label class="description" for="categorycode">[% borrower_fields.$borrower_db_column | html %]: </label>
                             <select id="categorycode" name="categorycode">
                                 <option value="" selected="selected"></option>
                                 [% FOREACH category IN categories %]
                                     <option value="[% category.categorycode | html %]">[% category.description | html %]</option>
                                 [% END %]
                             </select>
-                            <span class="field_hint">[% borrower_field.field | html %]</span>
+                            <span class="field_hint">[% borrower_db_column | html %]</span>
                         </li>
                     [% CASE %]
                         <li>
-                            <label class="description" for="[% borrower_field.field | html %]">[% borrower_field.description | html %]: </label>
-                            <input id="[% borrower_field.field | html %]" name="[% borrower_field.field | html %]" type="text" />
-                            <span class="field_hint">[% borrower_field.field | html %]</span>
+                            <label class="description" for="[% borrower_db_column| html %]">[% borrower_fields.$borrower_db_column | html %]: </label>
+                            <input id="[% borrower_db_column | html %]" name="[% borrower_db_column | html %]" type="text" />
+                            <span class="field_hint">[% borrower_db_column | html %]</span>
                         </li>
                     [% END %]
                 [% END %]
@@ -298,11 +297,11 @@
 
             <ol class="preserve_values" style="display:none;">
                 <div class="hint">Selected fields will be preserved from original patron record when overwriting existing patron.</div>
-                [% FOREACH borrower_field IN borrower_fields %]
+                [% FOREACH borrower_db_column IN borrower_fields.keys.sort %]
                         <li>
-                            <label class="description" for="preserve_existing_[% borrower_field.field | html %]">[% borrower_field.description | html %]: </label>
-                            <input name="preserve_existing" id="preserve_existing_[%  borrower_field.field | html %]" value="[%  borrower_field.field | html %]" type="checkbox">
-                            <span class="field_hint">[% borrower_field.field | html %]</span>
+                            <label class="description" for="preserve_existing_[% borrower_db_column | html %]">[% borrower_fields.$borrower_db_column | html %]: </label>
+                            <input name="preserve_existing" id="preserve_existing_[%  borrower_db_column | html %]" value="[%  borrower_db_column | html %]" type="checkbox">
+                            <span class="field_hint">[% borrower_db_column | html %]</span>
                         </li>
                 [% END %]
             </ol>
@@ -364,7 +363,7 @@
             OR choose which fields you want to supply from the following list:
             <ul>
                 <li>
-                    [% FOREACH columnkey IN borrower_fields %]'[% columnkey.field | html %]', [% END %]
+                    [% FOREACH columnkey IN borrower_fields.keys.sort %]'[% columnkey | html %]', [% END %]
                 </li>
             </ul>
         </li>

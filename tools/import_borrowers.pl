@@ -38,7 +38,7 @@ use Modern::Perl;
 
 use C4::Auth qw( get_template_and_user );
 use C4::Output qw( output_and_exit output_html_with_http_headers );
-use C4::Templates;
+use Koha::Database::Columns;
 use Koha::Patrons;
 use Koha::DateUtils qw( dt_from_string );
 use Koha::Token;
@@ -78,9 +78,7 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 # get the patron categories and pass them to the template
 my @patron_categories = Koha::Patron::Categories->search_with_library_limits({}, {order_by => ['description']})->as_list;
 $template->param( categories => \@patron_categories );
-my $columns = C4::Templates::GetColumnDefs( $input )->{borrowers};
-$columns = [ grep { $_->{field} ne 'borrowernumber' ? $_ : () } @$columns ];
-$template->param( borrower_fields => $columns );
+$template->param( borrower_fields => Koha::Database::Columns->columns->{borrowers} );
 
 if ( $input->param('sample') ) {
     our $csv = Text::CSV->new( { binary => 1 } );    # binary needed for non-ASCII Unicode

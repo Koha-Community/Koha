@@ -19,7 +19,7 @@ use Modern::Perl;
 
 use CGI;
 
-use Test::More tests => 8;
+use Test::More tests => 5;
 use Test::Deep;
 use Test::MockModule;
 use Test::Warn;
@@ -30,27 +30,20 @@ use t::lib::Mocks;
 use C4::Auth qw( get_template_and_user );
 
 BEGIN {
-    use_ok('C4::Templates', qw( GetColumnDefs getlanguagecookie setlanguagecookie themelanguage gettemplate param output availablethemes badtemplatecheck ));
-    can_ok( 'C4::Templates',
-         qw/ GetColumnDefs
-             getlanguagecookie
-             setlanguagecookie
-             themelanguage
-             gettemplate
-             _get_template_file
-             param
-             output /);
+    use_ok('C4::Templates', qw( getlanguagecookie setlanguagecookie themelanguage gettemplate param output availablethemes badtemplatecheck ));
+    can_ok(
+        'C4::Templates',
+        qw(
+          getlanguagecookie
+          setlanguagecookie
+          themelanguage
+          gettemplate
+          _get_template_file
+          param
+          output
+          )
+    );
 }
-
-my $query   = CGI->new();
-my $columns = C4::Templates::GetColumnDefs( $query );
-
-is( ref( $columns ) eq 'HASH', 1, 'GetColumnDefs returns a hashref' );
-# get the tables names, sorted
-my @keys = sort keys %{$columns};
-is( scalar @keys, 6, 'GetColumnDefs correctly returns the 5 tables defined in columns.def' );
-my @tables = qw( biblio biblioitems borrowers items statistics subscription );
-cmp_deeply( \@keys, \@tables, 'GetColumnDefs returns the expected tables');
 
 subtest 'Testing themelanguage' => sub {
     plan tests => 12;

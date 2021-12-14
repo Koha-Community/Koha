@@ -256,7 +256,7 @@ $( document ).ready( function () {
                     style = "";
                     disabled = "";
                 }
-                items.push('<label class="' + style +'"><input class="dbcolumn_selection" type="checkbox" id="' + key + '"' + checked + disabled + ' name="pref" value="' + val + '" /> ' + key + '</label>');
+                items.push('<label class="' + style +'"><input class="dbcolumn_selection" type="checkbox" id="' + key + '"' + checked + disabled + ' name="pref" value="' + key + '" /> ' + val + ' (' + key + ')</label>');
             });
             $("<div/>", {
                 "class": "columns-2",
