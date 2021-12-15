@@ -17,7 +17,7 @@
                                 <option value="[% av.authorised_value | html %]">[% av.lib | html %]</option>
                             [% END %]
                         [% END %]
-                    </select> (Authorised values for [% field.authorised_value_category | html %])
+                    </select> <span>(Authorised values for [% field.authorised_value_category | html %])</span>
                 [% ELSE %]
                     [% IF field.marcfield %]
                         <input type="text" value="[% values.${field.id} | html %]" id="additional_field_[% field.id | html %]" name="additional_field_[% field.id | html %]" readonly="readonly" />

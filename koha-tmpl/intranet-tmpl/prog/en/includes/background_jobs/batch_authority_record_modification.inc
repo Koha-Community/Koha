@@ -8,8 +8,8 @@
             </div>
         [% ELSE %]
             <div class="dialog message">
-                [% report.total_success | html %] / [% report.total_records | html %] records have successfully been modified. Some errors occurred.
-                [% IF job.status == 'cancelled' %]The job has been cancelled before it finished.[% END %]
+                <span>[% report.total_success | html %] / [% report.total_records | html %] records have successfully been modified. Some errors occurred.</span>
+                [% IF job.status == 'cancelled' %]<span>The job has been cancelled before it finished.</span>[% END %]
                 <a href="/cgi-bin/koha/tools/batch_record_modification.pl" title="New batch record modification">New batch record modification</a>
             </div>
         [% END %]

@@ -42,16 +42,16 @@
                 [% UNLESS destination == 'holds' %]
                     <td>
                         [% IF c.club_template.is_enrollable_from_opac %]
-                            Yes
+                            <span>Yes</span>
                         [% ELSE %]
-                            No
+                            <span>No</span>
                         [% END %]
                     </td>
                     <td>
                         [% IF c.club_template.is_email_required %]
-                            Yes
+                            <span>Yes</span>
                         [% ELSE %]
-                            No
+                            <span>No</span>
                         [% END %]
                     </td>
                 [% END %]

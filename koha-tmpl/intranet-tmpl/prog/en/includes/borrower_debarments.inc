@@ -31,12 +31,12 @@
                             [% END %]
                         </td>
                         <td>
-			    [% IF d.comment.search('OVERDUES_PROCESS') %]
-				Restriction added by overdues process [% d.comment.remove('OVERDUES_PROCESS ') | $raw %]
-			    [% ELSE %]
-                [% d.comment | $raw %]
-			    [% END %]
-			</td>
+                            [% IF d.comment.search('OVERDUES_PROCESS') %]
+                                <span>Restriction added by overdues process [% d.comment.remove('OVERDUES_PROCESS ') | $raw %]</span>
+                            [% ELSE %]
+                                [% d.comment | $raw %]
+                            [% END %]
+                        </td>
                         <td>[% IF d.expiration %] [% d.expiration | $KohaDates %] [% ELSE %] <em>Indefinite</em> [% END %]</td>
                         <td>[% d.created | $KohaDates %]</td>
                         [% IF CAN_user_borrowers_edit_borrowers && CAN_user_circulate_manage_restrictions %]

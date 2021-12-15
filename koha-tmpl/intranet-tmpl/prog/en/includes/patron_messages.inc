@@ -10,16 +10,17 @@
                 [% IF CAN_user_borrowers_edit_borrowers && ( !Koha.Preference('IndependentBranchesPatronModifications') || borrower.branch == branch ) %]
                     <a href="/cgi-bin/koha/members/members-update.pl?active=[% patron.borrowernumber | uri %]">Review pending modifications</a>
                 [% ELSE %]
-                    Patron has pending modifications
+                    <span>Patron has pending modifications</span>
                 [% END %]
             </li>
         [% END %]
 
         [% IF ( warndeparture ) %]
             <li class="warndeparture">
-                <span class="circ-hlt">Expiration:</span> Patron's card will expire soon.
-                Patron's card expires on [% expiry | $KohaDates %] <a href="/cgi-bin/koha/members/setstatus.pl?borrowernumber=[% patron.borrowernumber | uri %]&amp;destination=circ&amp;reregistration=y">Renew</a> or <a href="/cgi-bin/koha/members/memberentry.pl?op=modify&amp;destination=circ&amp;borrowernumber=[% patron.borrowernumber | html %]">Edit details</a>
-
+                <span class="circ-hlt">Expiration:</span>
+                <span>Patron's card will expire soon.</span>
+                <span>Patron's card expires on [% expiry | $KohaDates %]</span>
+                <a href="/cgi-bin/koha/members/setstatus.pl?borrowernumber=[% patron.borrowernumber | uri %]&amp;destination=circ&amp;reregistration=y">Renew</a> or <a href="/cgi-bin/koha/members/memberentry.pl?op=modify&amp;destination=circ&amp;borrowernumber=[% patron.borrowernumber | html %]">Edit details</a>
             </li>
         [% END %]
 
@@ -31,9 +32,10 @@
 
         [% IF ( expired ) %]
             <li class="expired">
-                <span class="circ-hlt">Expiration:</span> Patron's card has expired.
+                <span class="circ-hlt">Expiration:</span>
+                <span>Patron's card has expired.</span>
                 [% IF ( expiry ) %]
-                    Patron's card expired on [% expiry | $KohaDates %]
+                    <span>Patron's card expired on [% expiry | $KohaDates %]</span>
                 [% END %]
                 <a href="/cgi-bin/koha/members/setstatus.pl?borrowernumber=[% patron.borrowernumber | uri %]&amp;destination=circ&amp;reregistration=y">Renew</a> or <a href="/cgi-bin/koha/members/memberentry.pl?op=modify&amp;destination=circ&amp;borrowernumber=[% patron.borrowernumber | html %]">Edit details</a>
             </li>
@@ -150,7 +152,7 @@
                             ([% ItemTypes.GetDescription( w.item.effective_itemtype ) | html %]),
                             [% IF ( w.biblio.author ) %] by [% w.biblio.author | html %] [% END %]
                             [% IF ( w.item.itemcallnumber ) %] [[% w.item.itemcallnumber | html %]] [% END %]
-                            Hold placed on [% w.reservedate | $KohaDates %].
+                            <span>Hold placed on [% w.reservedate | $KohaDates %].</span>
                             <br />
                             <strong class="waitinghere">
                                 [% SET expires_on = w.expirationdate %]
@@ -172,7 +174,7 @@
                             ([% ItemTypes.GetDescription( w.item.effective_itemtype ) | html %]),
                             [% IF ( w.biblio.author ) %] by [% w.biblio.author | html %] [% END %]
                             [% IF ( w.item.itemcallnumber ) %] [[% w.item.itemcallnumber | html %]] [% END %]
-                            Hold placed on [% w.reservedate | $KohaDates %].
+                            <span>Hold placed on [% w.reservedate | $KohaDates %].</span>
                             <br />
                             <strong>
                                 [% SET expires_on = w.expirationdate %]

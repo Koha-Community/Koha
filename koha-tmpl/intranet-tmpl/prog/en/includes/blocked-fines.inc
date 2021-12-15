@@ -3,7 +3,7 @@
 [% IF fines and fines > 0 %]
     <li>
         <span class="circ-hlt">Charges:</span>
-        Patron has outstanding charges of [% fines | $Price %].
+        <span>Patron has outstanding charges of [% fines | $Price %].</span>
         [% IF !Koha.Preference('AllowFineOverride') && NoIssuesCharge && fines > NoIssuesCharge %]
            <span class="circ-hlt">Checkouts are BLOCKED because fine balance is OVER THE LIMIT.</span>
         [% END %]

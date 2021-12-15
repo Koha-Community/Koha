@@ -52,7 +52,7 @@
                 <li role="presentation">
                     <a href="#tabrecord[% record.recordid | uri %]" aria-controls="tabrecord[% record.recordid | uri %]" role="tab" data-toggle="tab">
                         [% record.recordid | html %]
-                        [% IF record.reference %](ref)[% END %]
+                        [% IF record.reference %]<span>(ref)</span>[% END %]
                     </a>
                 </li>
             [% END %]

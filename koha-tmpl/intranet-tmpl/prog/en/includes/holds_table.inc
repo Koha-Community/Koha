@@ -152,19 +152,19 @@
                             [%- hold.barcodenumber | html -%]
                             <input type="hidden" name="itemnumber" value="[% hold.itemnumber | html %]" />
                         [%- ELSE -%]
-                            No barcode
+                            <span>No barcode</span>
                         [%- END -%]
                     </a>
                 [%- ELSE -%]
                     [%- IF ( hold.item_level_hold ) -%]
                         <em>
-                            Only item
+                            <span>Only item</span>
                             <a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% hold.biblionumber | uri %]&amp;itemnumber=[% hold.itemnumber | uri %]#item[% hold.itemnumber | uri %]">
                                 [%- IF ( hold.barcodenumber ) -%]
                                     [%- hold.barcodenumber | html -%]
                                     <input type="hidden" name="itemnumber" value="[% hold.itemnumber | html %]" />
                                 [%- ELSE -%]
-                                    No barcode
+                                    <span>No barcode</span>
                                 [%- END -%]
                             </a>
                         </em>

@@ -5,7 +5,7 @@
 [% IF ( biblio.title ) %]
     <span class="biblio-title">[% biblio.title | html %]</span>
 [% ELSE %]
-    No title
+    <span>No title</span>
 [% END %]
 [% IF ( biblio.medium ) %]
     <span class="biblio-medium">[% biblio.medium | html %]</span>

@@ -59,7 +59,7 @@
                     </td>
 
                     <td class="article-request-toc">
-                        [% IF ar.toc_request %]Yes[% END %]
+                        [% IF ar.toc_request %]<span>Yes</span>[% END %]
                     </td>
 
                     <td class="article-request-pages">
@@ -74,17 +74,21 @@
                         [% ar.patron_notes | html %]
                     </td>
 
-                    <td class="article-request-format">[% IF ar.format == 'PHOTOCOPY' %]Copy[% ELSIF ar.format == 'SCAN' %]Scan[% END %]</td>
+                    <td class="article-request-format">
+                        [% IF ar.format == 'PHOTOCOPY' %]<span>Copy</span>
+                        [% ELSIF ar.format == 'SCAN' %]<span>Scan</span>
+                        [% END %]
+                    </td>
 
                     <td class="article-request-status">
                         [% IF ar.status == 'PENDING' %]
-                            Pending
+                            <span>Pending</span>
                         [% ELSIF ar.status == 'PROCESSING' %]
-                            Processing
+                            <span>Processing</span>
                         [% ELSIF ar.status == 'COMPLETED' %]
-                            Completed
+                            <span>Completed</span>
                         [% ELSIF ar.status == 'CANCELED' %]
-                            Canceled
+                            <span>Canceled</span>
                         [% END %]
                     </td>
 
@@ -96,6 +100,6 @@
         </tbody>
     </table>
     [% ELSE %]
-        Patron has no current article requests.
+        <span>Patron has no current article requests.</span>
     [% END %]
 </div>

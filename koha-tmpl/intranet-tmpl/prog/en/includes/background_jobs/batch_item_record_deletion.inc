@@ -9,7 +9,7 @@
                     <p>[% report.deleted_biblionumbers.size | html %] record(s) deleted.</p>
                 [% END %]
             [% ELSE %]
-                No items deleted.
+                <p>No items deleted.</p>
             [% END %]
         </div>
 
@@ -21,7 +21,7 @@
 
         [% IF job.status == 'cancelled' %]
             <div class="dialog error">
-                The job has been cancelled before it finished.
+                <span>The job has been cancelled before it finished.</span>
                 <a href="/cgi-bin/koha/tools/batchMod.pl" title="New batch item modification">New batch item modification</a>
             </div>
         [% END %]

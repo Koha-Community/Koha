@@ -28,11 +28,11 @@
                 <i class="fa fa-exclamation error"></i>
             [% END %]
             [% IF m.code == 'authority_not_exists' %]
-                The authority id [% m.authid | html %] does not exist in the database.
+                <span>The authority id [% m.authid | html %] does not exist in the database.</span>
             [% ELSIF m.code == 'authority_not_deleted' %]
-                Authority record [% m.authid | html %] was not deleted. An error occurred.
+                <span>Authority record [% m.authid | html %] was not deleted. An error occurred.</span>
             [% ELSIF m.code == 'authority_deleted' %]
-                Authority [% m.authid | html %] has been deleted successfully.
+                <span>Authority [% m.authid | html %] has been deleted successfully.</span>
             [% END %]
         </div>
     [% END %]
