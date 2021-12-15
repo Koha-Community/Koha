@@ -1845,39 +1845,16 @@ sub GetBranchItemRule {
     my ( $branchcode, $itemtype ) = @_;
 
     # Search for rules!
-    my $holdallowed_rule = Koha::CirculationRules->get_effective_rule(
-        {
-            branchcode => $branchcode,
-            itemtype   => $itemtype,
-            rule_name  => 'holdallowed',
-        }
-    );
-    my $hold_fulfillment_policy_rule = Koha::CirculationRules->get_effective_rule(
-        {
-            branchcode => $branchcode,
-            itemtype   => $itemtype,
-            rule_name  => 'hold_fulfillment_policy',
-        }
-    );
-    my $returnbranch_rule = Koha::CirculationRules->get_effective_rule(
-        {
-            branchcode => $branchcode,
-            itemtype   => $itemtype,
-            rule_name  => 'returnbranch',
-        }
-    );
+    my $rules = Koha::CirculationRules->get_effective_rules({
+        branchcode => $branchcode,
+        itemtype => $itemtype,
+        rules => ['holdallowed', 'hold_fulfillment_policy', 'returnbranch']
+    });
 
     # built-in default circulation rule
-    my $rules;
-    $rules->{holdallowed} = defined $holdallowed_rule
-        ? $holdallowed_rule->rule_value
-        : 'from_any_library';
-    $rules->{hold_fulfillment_policy} = defined $hold_fulfillment_policy_rule
-        ? $hold_fulfillment_policy_rule->rule_value
-        : 'any';
-    $rules->{returnbranch} = defined $returnbranch_rule
-        ? $returnbranch_rule->rule_value
-        : 'homebranch';
+    $rules->{holdallowed} //= 'from_any_library';
+    $rules->{hold_fulfillment_policy} //= 'any';
+    $rules->{returnbranch} //= 'homebranch';
 
     return $rules;
 }
