@@ -19,7 +19,7 @@ use Modern::Perl;
 
 use C4::Context;
 
-use Test::More tests => 6;
+use Test::More tests => 7;
 use Test::MockModule;
 
 use C4::Context;
@@ -253,9 +253,42 @@ subtest 'XSS vulnerabilities in pagination' => sub {
     like( $second_page->get_attribute('href'), qr{(?|&)category=2(&|$)}, 'The second page should display category without the invalid value' );
 
     push @cleanup, $patron, $patron->category, $patron->library;
-
-    $driver->quit();
 };
+
+subtest 'OPAC - Suggest for purchase' => sub {
+    plan tests => 4;
+
+    my $builder = t::lib::TestBuilder->new;
+
+    my $patron = $builder->build_object( { class => 'Koha::Patrons', value => { flags => 1 } } );
+    my $password = Koha::AuthUtils::generate_password( $patron->category );
+    t::lib::Mocks::mock_preference( 'RequireStrongPassword', 0 );
+    $patron->set_password( { password => $password } );
+    $s->opac_auth( $patron->userid, $password );
+
+    my ( $biblionumber, $biblioitemnumber ) = add_biblio();
+    my $biblio = Koha::Biblios->find($biblionumber);
+    $driver->get( $opac_base_url . "opac-detail.pl?biblionumber=$biblionumber" );
+
+    $s->click({ href => '/opac-suggestions.pl?op=add&biblionumber=' . $biblionumber });
+    is( $driver->find_element('//input[@id="title"]')->get_value(),
+        $biblio->title,
+        "Suggestion's title correctly filled in with biblio's title" );
+
+    $driver->find_element('//textarea[@id="note"]')->send_keys('some notes');
+    $s->submit_form;
+
+    my $suggestions = Koha::Suggestions->search( { biblionumber => $biblio->biblionumber } );
+    is( $suggestions->count, 1, 'Suggestion created' );
+    my $suggestion = $suggestions->next;
+    is( $suggestion->title, $biblio->title, q{suggestion's title has biblio's title} );
+    is( $suggestion->note, 'some notes', q{suggestion's note correctly saved} );
+
+    push @cleanup, $biblio, $suggestion;
+};
+
+
+$driver->quit();
 
 END {
     C4::Context->set_preference('SearchEngine', $SearchEngine_value);
