@@ -235,7 +235,7 @@
                                 [% END %]
                             </ul>
 
-                            [% IF CAN_user_circulate_force_checkout or HIGHHOLDS or ADDITIONAL_MATERIALS %]
+                            [% IF CAN_user_circulate_force_checkout or HIGHHOLDS %]
                                 <form method="post" action="/cgi-bin/koha/circ/circulation.pl" autocomplete="off">
                                     <input type="hidden" name="restoreduedatespec" />
 
@@ -311,6 +311,30 @@
                                     <input type="hidden" name="auto_renew" value="[% auto_renew | html %]" />
                                 </form>
                             [% END # /IF CAN_user_circulate_force_checkout or HIGHHOLDS %]
+
+                            [% IF ADDITIONAL_MATERIALS && !CAN_user_circulate_force_checkout %]
+                                <form method="post" action="/cgi-bin/koha/circ/circulation.pl" autocomplete="off">
+                                    <input type="hidden" name="restoreduedatespec" />
+
+                                    [% IF (forceallow) %]<input type="hidden" name="forceallow" value="1">[% END %]
+
+                                    <input type="hidden" name="barcode" value="[% barcode | html %]" />
+                                    <input type="hidden" name="borrowernumber" value="[% patron.borrowernumber | html %]" />
+                                    <input type="hidden" name="issueconfirmed" value="1" />
+                                    <input type="hidden" name="override_high_holds" value="[% override_high_holds | html %]"/>
+                                    <input type="hidden" name="stickyduedate" value="[% stickyduedate | html %]" />
+                                    <input type="hidden" name="branch" value="[% branch | html %]" />
+
+                                    [% IF ( RENEW_ISSUE ) %]
+                                        <button type="submit" class="approve" accesskey="y"><i class="fa fa-check"></i> Yes, renew (Y)</button>
+                                    [% ELSE %]
+                                        <button type="submit" class="approve" accesskey="y"><i class="fa fa-check"></i> Yes, check out (Y)</button>
+                                    [% END %]
+
+                                    <input type="hidden" name="onsite_checkout" value="[% onsite_checkout | html %]" />
+                                    <input type="hidden" name="auto_renew" value="[% auto_renew | html %]" />
+                                </form>
+                            [% END # /IF ADDITIONAL_MATERIALS %]
 
                             [% IF ( RESERVED or RESERVE_WAITING or TRANSFERRED or PROCESSING ) %]
                                 <form method="get" action="/cgi-bin/koha/circ/circulation.pl">
