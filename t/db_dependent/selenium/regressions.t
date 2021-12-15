@@ -20,7 +20,7 @@ use utf8;
 
 use C4::Context;
 
-use Test::More tests => 7;
+use Test::More tests => 8;
 use Test::MockModule;
 
 use C4::Context;
@@ -88,6 +88,40 @@ subtest 'OPAC - Bibliographic record detail page must contain the data-biblionum
     is( $elt->get_attribute( 'data-biblionumber', 1 ),
         $biblionumber, "#catalogue_detail_biblio contains data-biblionumber" );
 
+    push @cleanup, $biblio;
+};
+
+subtest 'Bibliographic record detail page must not explode even with invalid metadata' => sub {
+    plan tests => 2;
+
+    my $builder = t::lib::TestBuilder->new;
+    my $patron = $builder->build_object({ class => 'Koha::Patrons', value => { flags => 0 }});
+
+    my $mainpage = $s->base_url . q|mainpage.pl|;
+    $driver->get($mainpage . q|?logout.x=1|);
+    like( $driver->get_title(), qr(Log in to Koha), );
+    $s->auth;
+
+    my ( $biblionumber, $biblioitemnumber ) = add_biblio();
+    my $biblio = Koha::Biblios->find($biblionumber);
+
+    # Note that there are several "non xml chars" in the control fields
+    my $invalid_data = qq{<?xml version="1.0" encoding="UTF-8"?>
+    <record
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.loc.gov/MARC21/slim http://www.loc.gov/standards/marcxml/schema/MARC21slim.xsd"
+        xmlns="http://www.loc.gov/MARC21/slim">
+    <leader>00772nam0a2200277   4500</leader>
+    <controlfield tag="001">00aD000015937</controlfield>
+    <controlfield tag="004">00satmrnu0</controlfield>
+    <controlfield tag="008">00ar19881981bdkldan</controlfield>
+    </record>};
+    $biblio->metadata->metadata($invalid_data)->store();
+
+    $driver->get( $base_url . "/catalogue/detail.pl?biblionumber=$biblionumber" );
+
+    my $biberror = $driver->find_element('//span[@class="biberror"]')->get_text();
+    is( $biberror, "There is an error with this bibliographic record, the view may be degraded.");
     push @cleanup, $biblio;
 };
 
