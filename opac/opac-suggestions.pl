@@ -49,6 +49,7 @@ my $title_filter    = $input->param('title_filter');
 my $need_confirm    = 0;
 
 my $suggestion = {
+    biblionumber    => scalar $input->param('biblionumber'),
     title           => scalar $input->param('title'),
     author          => scalar $input->param('author'),
     copyrightdate   => scalar $input->param('copyrightdate'),
