@@ -7,8 +7,8 @@
 [% USE Price %]
 [% USE AuthorisedValues %]
 [% USE AdditionalContents %]
-[% SET OpacNav = AdditionalContents.get( location => "OpacNav", lang => lang, library => logged_in_user.branchcode, blocktitle => 0 ) %]
-[% SET OpacNavBottom = AdditionalContents.get( location => "OpacNavBottom", lang => lang, library => logged_in_user.branchcode, blocktitle => 0 ) %]
+[% SET OpacNav = AdditionalContents.get( location => "OpacNav", lang => lang, library => logged_in_user.branchcode || default_branch, blocktitle => 0 ) %]
+[% SET OpacNavBottom = AdditionalContents.get( location => "OpacNavBottom", lang => lang, library => logged_in_user.branchcode || default_branch, blocktitle => 0 ) %]
 
 [% SET borrower_club_enrollments =  logged_in_user.get_club_enrollments(1) %]
 [% SET borrower_enrollable_clubs = logged_in_user.get_enrollable_clubs(1,1) %]

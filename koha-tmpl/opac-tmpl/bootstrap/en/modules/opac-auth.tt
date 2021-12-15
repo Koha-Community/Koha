@@ -3,7 +3,7 @@
 [% USE Categories %]
 [% USE AdditionalContents %]
 [% PROCESS 'html_helpers.inc' %]
-[% SET OpacLoginInstructions = AdditionalContents.get( location => "OpacLoginInstructions", lang => lang, library => branchcode ) %]
+[% SET OpacLoginInstructions = AdditionalContents.get( location => "OpacLoginInstructions", lang => lang, library => branchcode || default_branch ) %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>
 [% IF Koha.Preference( 'opacuserlogin' ) == 1 %]

@@ -5,9 +5,9 @@
 [% USE AuthorisedValues %]
 [% USE KohaDates %]
 [% USE AdditionalContents %]
-[% SET opacsuggestion = AdditionalContents.get( location => "OpacSuggestioninstructions", lang => lang, library => logged_in_user.branchcode ) %]
-[% SET OpacNav = AdditionalContents.get( location => "OpacNav", lang => lang, library => logged_in_user.branchcode, blocktitle => 0 ) %]
-[% SET OpacNavBottom = AdditionalContents.get( location => "OpacNavBottom", lang => lang, library => logged_in_user.branchcode, blocktitle => 0 ) %]
+[% SET opacsuggestion = AdditionalContents.get( location => "OpacSuggestioninstructions", lang => lang, library => logged_in_user.branchcode || default_branch ) %]
+[% SET OpacNav = AdditionalContents.get( location => "OpacNav", lang => lang, library => logged_in_user.branchcode || default_branch, blocktitle => 0 ) %]
+[% SET OpacNavBottom = AdditionalContents.get( location => "OpacNavBottom", lang => lang, library => logged_in_user.branchcode || default_branch, blocktitle => 0 ) %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>[% IF ( op_add ) %]Enter a new purchase suggestion[% END %]
 [% IF ( op_else ) %]Purchase suggestions[% END %] &rsaquo;

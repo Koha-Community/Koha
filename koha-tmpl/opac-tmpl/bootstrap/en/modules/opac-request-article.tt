@@ -13,7 +13,7 @@
 [% INCLUDE 'bodytag.inc' bodyid='opac-request-article' %]
 [% INCLUDE 'masthead.inc' %]
 
-[% SET disclaimer = AdditionalContents.get( location => "ArticleRequestsDisclaimerText", lang => lang, library => logged_in_user.branchcode ) %]
+[% SET disclaimer = AdditionalContents.get( location => "ArticleRequestsDisclaimerText", lang => lang, library => logged_in_user.branchcode || default_branch ) %]
 
 <div class="main">
     <nav id="breadcrumbs" aria-label="Breadcrumb" class="breadcrumbs">

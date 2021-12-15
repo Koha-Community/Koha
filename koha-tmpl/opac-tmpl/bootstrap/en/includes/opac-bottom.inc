@@ -3,7 +3,7 @@
 [% USE AdditionalContents %]
 [%- USE KohaPlugins -%]
 [% USE Asset %]
-[% SET opaccredits = AdditionalContents.get( location => "opaccredits", lang => lang, library => branchcode ) %]
+[% SET opaccredits = AdditionalContents.get( location => "opaccredits", lang => lang, library => logged_in_user.branchcode || default_branch ) %]
 [% PROCESS 'html_helpers.inc' %]
 [% UNLESS ( is_popup ) %]
         [% SET OpacLangSelectorMode = Koha.Preference('OpacLangSelectorMode') %]
