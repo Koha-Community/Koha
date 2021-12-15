@@ -492,6 +492,7 @@ sub parse_letter {
         lang => $patron->lang,
         substitute => $params->{'substitute'},
         tables     => \%table_params,
+        ( $params->{itemnumbers} ? ( loops => { items => $params->{itemnumbers} } ) : () ),
         message_transport_type => $params->{message_transport_type},
     );
 }
@@ -587,7 +588,9 @@ sub send_digests {
             borrower_preferences => $borrower_preferences
         });
         my $titles = "";
+        my @itemnumbers;
         while ( my $item_info = $next_item_info->()) {
+            push @itemnumbers, $item_info->{itemnumber};
             $titles .= C4::Letters::get_item_content( { item => $item_info, item_content_fields => \@item_content_fields } );
         }
 
@@ -601,6 +604,7 @@ sub send_digests {
                         'items.content' => $titles,
                         %branch_info
                     },
+                    itemnumbers    => \@itemnumbers,
                     branchcode     => $branchcode,
                     message_transport_type => $transport
                 }
