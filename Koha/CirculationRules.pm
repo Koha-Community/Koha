@@ -25,7 +25,7 @@ use Koha::CirculationRule;
 
 use base qw(Koha::Objects);
 
-use constant GUESSED_ITEMTYPES_KEY => 'Koha_IssuingRules_last_guess';
+use constant GUESSED_ITEMTYPES_KEY => 'Koha_CirculationRules_last_guess';
 
 =head1 NAME
 
