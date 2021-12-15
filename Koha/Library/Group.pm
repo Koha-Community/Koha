@@ -145,14 +145,10 @@ sub all_libraries {
 
     my @libraries;
 
-    my @children = $self->children;
+    push (@libraries, $self->libraries);
+    my @children = $self->children->search({ branchcode => undef });
     foreach my $c (@children) {
-        if ( $c->branchcode ) {
-            push( @libraries, $c->library );
-        }
-        else {
-            push( @libraries, $c->all_libraries );
-        }
+        push( @libraries, $c->all_libraries );
     }
 
     my %seen;
