@@ -1535,11 +1535,11 @@
             $('#verify-items-bundle-contents-barcodes').on('input', function (ev) {
                 let char = ev.target.value.slice(-1);
                 if ( char.match(/\n/) ) {
-                    const barcodes = ev.target.value.split('\n').map(function(s) { return s.trim() });
+                    const barcodes = ev.target.value.split('\n').map(function(s) { return s.trim().toUpperCase() });
                     const expected = [];
                     let found = 0;
                     $('#items-bundle-contents-table tbody > tr').each(function () {
-                        const barcode = this.getAttribute('data-barcode');
+                        const barcode = this.getAttribute('data-barcode').toUpperCase();
                         expected.push(barcode);
                         if (barcodes.includes(barcode)) {
                             this.classList.add('ok');
