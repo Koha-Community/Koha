@@ -343,7 +343,8 @@
                                             </ul>
 
                                             [% IF bibitemloo.itemholdable %]
-                                                <table class="copiesrow table table-bordered table-striped" id="copiesrow_[% bibitemloo.biblionumber | html %]">
+                                                <div id="copiesrow_[% bibitemloo.biblionumber | html %]" class="copiesrow">
+                                                <table class="table table-bordered table-striped">
                                                     <caption>Select a specific item:</caption>
                                                     <thead>
                                                         <tr>
@@ -368,21 +369,32 @@
                                                     </thead>
                                                     <tbody>
 
+                                                    [% SET unholdable_items = 0 %]
                                                     [% FOREACH itemLoo IN bibitemloo.itemLoop %]
-                                                        <tr class="[% itemLoo.backgroundcolor | html %]">
-                                                            <td class="copynumber">
-                                                                [% IF ( itemLoo.available ) %]
-                                                                    <input type="radio" class="checkitem checkitem_[% bibitemloo.biblionumber | html %]" name="checkitem_[% bibitemloo.biblionumber | html %]" value="[% itemLoo.itemnumber | html %]" />
-                                                                [% ELSE %]
-                                                                    <input disabled="disabled" type="radio" aria-label="Cannot be put on hold" class="checkitem" name="checkitem" value="[% itemLoo.itemnumber | html %]"
+                                                        [% IF ( itemLoo.available ) %]
+                                                            [% IF ( itemLoo.onloan ) %]
+                                                                <tr class="holdable onloan">
+                                                            [% ELSE %]
+                                                                <tr class="holdable">
+                                                            [% END %]
+                                                                    <td class="copynumber">
+                                                                        <input type="radio" class="checkitem checkitem_[% bibitemloo.biblionumber | html %]" name="checkitem_[% bibitemloo.biblionumber | html %]" value="[% itemLoo.itemnumber | html %]" />
+                                                        [% ELSE %]
+                                                            [% SET unholdable_items = 1 %]
+                                                            [% IF ( itemLoo.onloan ) %]
+                                                                <tr class="unholdable onloan" style="display:none;">
+                                                            [% ELSE %]
+                                                                <tr class="unholdable" style="display:none;">
+                                                            [% END %]
+                                                                    <td class="copynumber">
+                                                                        <input disabled="disabled" type="radio" aria-label="Cannot be put on hold" class="checkitem" name="checkitem" value="[% itemLoo.itemnumber | html %]"
                                                                            style="display:none;" />
                                                                     <i class="fa fa-remove danger" aria-hidden="true" title="Cannot be put on hold"></i>
-                                                                [% END %]
-
+                                                        [% END %]
                                                                 [% IF ( itemLoo.copynumber ) %]
                                                                     [% itemLoo.copynumber | html %]
                                                                 [% END %]
-                                                            </td>
+                                                            </td> [%# copynumber %]
 
                                                             [% IF ( item_level_itypes ) %]
                                                                 <td class="itype">
@@ -452,6 +464,11 @@
                                                     [% END # / FOREACH itemLoo IN bibitemloo.itemLoop%]
                                                     </tbody>
                                                 </table> <!-- / #copiesrow_[% bibitemloo.biblionumber | html %] -->
+                                                [% IF unholdable_items %]
+                                                <button id="show_unholdable" class="btn btn-primary toggle_unholdable unholdable">Show unholdable items</button>
+                                                <button id="hide_unholdable" class="btn btn-primary toggle_unholdable unholdable" style="display:none;">Hide unholdable items</button>
+                                                [% END %]
+                                                </div>
                                             [% END # / IF ( bibitemloo.itemholdable )%]
                                         </div> <!-- / #hold-options-[% bibitemloo.biblionumber | html %] -->
                                     </fieldset>
@@ -489,6 +506,12 @@
     }
 
     $(document).ready(function() {
+
+        $(".toggle_unholdable").click(function(e){
+            e.preventDefault();
+            $(".unholdable").toggle();
+        });
+
         $("#hold-request-form").preventDoubleFormSubmit();
         var copiesRowId = null;
         var wasSpecific = false;
@@ -590,8 +613,8 @@
 
         // If the user is *allowed* to choose a specific item
         // The first one is preselected
-        $("table.copiesrow").each(function(){
-            var id = suffixOf($(this).attr("id"), "_");
+        $(".copiesrow table").each(function(){
+            var id = suffixOf($(this).closest('div').attr("id"), "_");
             select_first_available(id);
         });
 
