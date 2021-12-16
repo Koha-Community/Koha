@@ -1,5 +1,6 @@
 [% USE Koha %]
 [% USE AdditionalContents %]
+[% USE AuthorisedValues %]
 [% SET OpacNav = AdditionalContents.get( location => "OpacNav", lang => lang, library => logged_in_user.branchcode, blocktitle => 0 ) %]
 [% SET OpacNavBottom = AdditionalContents.get( location => "OpacNavBottom", lang => lang, library => logged_in_user.branchcode, blocktitle => 0 ) %]
 [% INCLUDE 'doc-head-open.inc' %]
@@ -131,6 +132,9 @@
                                     [% END %]
 
                                     <h3>[% subscription_LOO.branchname | html %]</h3>
+                                    [% IF ( subscription_LOO.location ) %]
+                                        <p>Location : <em>[% AuthorisedValues.GetByCode( 'LOC', subscription_LOO.location, 1 ) | html | html_line_break %]</em></p>
+                                    [% END %]
 
                                     [% IF ( subscription_LOO.notes ) %]
                                         <p>[% subscription_LOO.notes | html | html_line_break %]</p>

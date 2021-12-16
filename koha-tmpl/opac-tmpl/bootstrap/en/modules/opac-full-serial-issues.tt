@@ -4,6 +4,7 @@
 [% USE AdditionalContents %]
 [% SET OpacNav = AdditionalContents.get( location => "OpacNav", lang => lang, library => logged_in_user.branchcode, blocktitle => 0 ) %]
 [% SET OpacNavBottom = AdditionalContents.get( location => "OpacNavBottom", lang => lang, library => logged_in_user.branchcode, blocktitle => 0 ) %]
+[% USE AuthorisedValues %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Full subscription history for [% bibliotitle | html %] &rsaquo; [% IF ( LibraryNameTitle ) %][% LibraryNameTitle | html %][% ELSE %]Koha online[% END %] catalog</title>
 [% INCLUDE 'doc-head-close.inc' %]
@@ -129,6 +130,7 @@
                                         <tr>
                                             <th>Date</th>
                                             <th>Library</th>
+                                            <th>Location</th>
                                             <th>Notes</th>
                                             <th>Date received</th>
                                             <th>Number</th>
@@ -151,6 +153,7 @@
                                                     [% END %]
                                                 </td>
                                                 <td class="libraryfilterclass">[% Branches.GetName( serial.branchcode ) | html %]</td>
+                                                <td>[% AuthorisedValues.GetByCode( 'LOC', serial.location, 1 ) | html %]</td>
                                                 <td>[% serial.notes | html %]</td>
                                                 [% IF ( serial.status2 && serial.planneddate ) %]
                                                     <td data-order="[% serial.planneddate | html %]">

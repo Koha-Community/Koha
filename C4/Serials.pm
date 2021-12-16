@@ -471,7 +471,8 @@ sub GetFullSubscriptionsFromBiblionumber {
             year(IF(serial.publisheddate IS NULL,serial.planneddate,serial.publisheddate)) as year,
             biblio.title as bibliotitle,
             subscription.branchcode AS branchcode,
-            subscription.subscriptionid AS subscriptionid
+            subscription.subscriptionid AS subscriptionid,
+            subscription.location AS location
   FROM      serial 
   LEFT JOIN subscription ON 
           (serial.subscriptionid=subscription.subscriptionid)
