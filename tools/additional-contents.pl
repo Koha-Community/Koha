@@ -87,21 +87,9 @@ elsif ( $op eq 'add_validate' ) {
 
     my $expirationdate;
     if ( $cgi->param('expirationdate') ) {
-        $expirationdate = output_pref(
-            {
-                dt => dt_from_string( scalar $cgi->param('expirationdate') ),
-                dateformat => 'iso',
-                dateonly   => 1
-            }
-        );
+        $expirationdate = dt_from_string( scalar $cgi->param('expirationdate') );
     }
-    my $published_on = output_pref(
-        {
-            dt         => dt_from_string( scalar $cgi->param('published_on') ),
-            dateformat => 'iso',
-            dateonly   => 1
-        }
-    );
+    my $published_on = dt_from_string( scalar $cgi->param('published_on') );
     my $number = $cgi->param('number');
 
     my $success = 1;
