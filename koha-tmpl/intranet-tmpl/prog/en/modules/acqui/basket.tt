@@ -982,19 +982,16 @@
         [% END %]
     [% END %]
     <script>
-        var columns_settings = [% TablesSettings.GetColumns( 'acqui', 'basket', 'orders', 'json' ) | $raw %];
-        [% IF !(Koha.Preference('EDIFACT') && ediaccount) %]
-        columns_settings.splice(13,1);
-        [% END %]
-        [% SET table_settings = TablesSettings.GetTableSettings( 'acqui', 'basket', 'orders' ) %];
         $(document).ready(function() {
+            var table_settings = [% TablesSettings.GetTableSettings( 'acqui', 'basket', 'orders', 'json' ) | $raw %];
+            [% IF !(Koha.Preference('EDIFACT') && ediaccount) %]
+                table_settings['columns'].splice(13, 1);
+            [% END %]
             KohaTable("orders", {
                 "sPaginationType": "full",
                 "autoWidth": false,
                 "exportColumns": [0,1,2,3,4,5,6,7,8,9,10,11,12,13],
-                "iDisplayLength": [% table_settings.default_display_length | html %],
-                "order": [[ [% table_settings.default_sort_order | html %], 'asc']],
-            }, columns_settings);
+            }, table_settings);
 
             var cancelledorderst = $("#cancelledorderst").dataTable($.extend(true, {}, dataTablesDefaults, {
                 "sPaginationType": "full"

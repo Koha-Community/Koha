@@ -88,7 +88,13 @@ sub get_table_settings {
             tablename => $tablename,
         }
     )->next;
-    return $rs ? $rs : $list->{modules}{$module}{$page}{$tablename};
+
+    return {
+        default_display_length => $rs ? $rs->default_display_length
+        : $list->{modules}{$module}{$page}{$tablename}{default_display_length},
+        default_sort_order => $rs ? $rs->default_sort_order
+        : $list->{modules}{$module}{$page}{$tablename}{default_sort_order}
+    };
 }
 
 sub get_modules {

@@ -132,6 +132,9 @@ sub GetTableSettings {
     $format //= q{};
 
     my $settings = C4::Utils::DataTables::TablesSettings::get_table_settings( $module, $page, $table );
+    my $columns = C4::Utils::DataTables::TablesSettings::get_columns( $module, $page, $table );
+
+    $settings->{columns} = $columns;
 
     return $format eq 'json'
         ? to_json( $settings || {} )

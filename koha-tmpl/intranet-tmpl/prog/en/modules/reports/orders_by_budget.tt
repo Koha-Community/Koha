@@ -171,14 +171,11 @@
     [% INCLUDE 'datatables.inc' %]
     [% INCLUDE 'columns_settings.inc' %]
     <script>
-        var columns_settings = [% TablesSettings.GetColumns( 'reports', 'orders_by_fund', 'funds-table', 'json' ) | $raw %];
-        [% SET table_settings = TablesSettings.GetTableSettings( 'reports', 'orders_by_fund', 'funds-table' ) %];
+        var table_settings = [% TablesSettings.GetTableSettings( 'reports', 'orders_by_fund', 'funds-table', 'json' ) %];
         $(document).ready( function () {
             var funds_table = KohaTable("funds", {
-                "pageLength": [% table_settings.default_display_length | html %],
-                "order": [[ [% table_settings.default_sort_order | html %], 'asc']],
                 'autoWidth': false,
-            }, columns_settings );
+            }, table_settings );
 
             showallbudgets = $('#budgetfilter').html();
             $('#budgetfilter .b_inactive').remove();

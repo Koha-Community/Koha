@@ -3,11 +3,13 @@
 <!-- columns_settings.inc -->
 
 <script>
-function KohaTable(id_selector, dt_parameters, columns_settings, add_filters) {
+function KohaTable(id_selector, dt_parameters, table_settings, add_filters) {
     var counter = 0;
     var hidden_ids = [];
     var included_ids = [];
     var selector = '#' + id_selector;
+
+    var columns_settings = table_settings['columns'];
 
     $(columns_settings).each( function() {
         var named_id = $( 'thead th[data-colname="' + this.columnname + '"]', selector ).index( selector + ' th' );
@@ -180,6 +182,13 @@ function KohaTable(id_selector, dt_parameters, columns_settings, add_filters) {
         $(default_column_defs).each(function(){
             new_parameters["aoColumnDefs"].push(this);
         });
+    }
+
+    if ( table_settings.hasOwnProperty('default_display_length') ) {
+        new_parameters["pageLength"] = table_settings['default_display_length'];
+    }
+    if ( table_settings.hasOwnProperty('default_sort_order') ) {
+        new_parameters["order"] = [[ table_settings['default_sort_order'], 'asc' ]];
     }
 
     table.dataTable(new_parameters);
