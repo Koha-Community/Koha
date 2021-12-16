@@ -1231,7 +1231,7 @@
                     Dopop('hold-transfer-slip.pl?reserve_id=[% reserve_id | uri %]');
                 [% END %]
             [% END %]
-            var columns_settings = [% TablesSettings.GetColumns( 'circ', 'returns', 'checkedintable', 'json' ) | $raw %]
+            var table_settings = [% TablesSettings.GetTableSettings( 'circ', 'returns', 'checkedintable', 'json' ) | $raw %]
 
             [% IF recall_slip %]
                 Dopop('/cgi-bin/koha/recalls/recall_pickup_slip.pl?recall_id=[% recall_id | uri %]');
@@ -1243,7 +1243,7 @@
                     "bInfo":false,
                     "bSort":false,
                     "dom": 'B<"clearfix">t',
-                    }, columns_settings);
+                    }, table_settings);
 
             $("#exemptcheck").change(function () {
                 if (this.checked == true) {
