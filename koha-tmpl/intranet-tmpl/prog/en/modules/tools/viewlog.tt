@@ -479,7 +479,7 @@
     [% END %]
     [% Asset.js("lib/jsdiff/jsdiff.min.js") | $raw %]
     <script>
-        var columns_settings = [% TablesSettings.GetColumns('tools', 'logviewer', 'logst', 'json') | $raw %];
+        var table_settings = [% TablesSettings.GetTableSettings('tools', 'logviewer', 'logst', 'json') | $raw %];
     </script>
     [% Asset.js("js/viewlog.js") | $raw %]
 [% END %]

@@ -120,7 +120,7 @@ $(document).ready(function(){
         "autoWidth": false,
         "order": [[0, "desc"]],
         "pagingType" : "full"
-    }, columns_settings);
+    }, table_settings);
 
     $("body").on("click", ".compare_link", function(e){
         e.preventDefault();
