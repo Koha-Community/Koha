@@ -341,7 +341,7 @@ Libraries &rsaquo; Administration &rsaquo; Koha
     [% Asset.js("lib/tiny_mce/tinymce.min.js") | $raw %]
     [% INCLUDE 'str/tinymce_i18n.inc' %]
     <script>
-        var columns_settings = [% TablesSettings.GetColumns( 'admin', 'libraries', 'libraries', 'json' ) | $raw %];
+        var table_settings = [% TablesSettings.GetTableSettings( 'admin', 'libraries', 'libraries', 'json' ) | $raw %];
         $(document).ready(function() {
 
             var libraries_url = '/api/v1/libraries';
@@ -514,7 +514,7 @@ Libraries &rsaquo; Administration &rsaquo; Koha
                         "orderable": false
                     }
                 ]
-            }, columns_settings);
+            }, table_settings);
 
             [% UNLESS library %]
                 $("#Aform").on("submit", function( event ) {
