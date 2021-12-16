@@ -244,7 +244,6 @@
             $("#searchheader").hide();
             $("#patron_search_form").on('submit', function(){$("#searchheader").show();});
             $("#clear_search").on("click",function(e){$("#searchheader").hide();});
-
         });
 
         function patronListAdd(){
@@ -294,7 +293,7 @@
         var table_settings = [% TablesSettings.GetColumns( 'members', 'member', 'memberresultst', 'json' ) | $raw %];
         [% UNLESS CAN_user_borrowers_edit_borrowers OR CAN_user_tools_manage_patron_lists %]
             [%# Remove the first column if we do not display the checkbox %]
-            table_settings.splice(0, 1);
+            table_settings['columns'].splice(0, 1);
         [% END %]
     </script>
 
