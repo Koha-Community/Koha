@@ -334,12 +334,12 @@
 
             var txtActivefilter = _("Filter paid transactions");
             var txtInactivefilter = _("Show all transactions");
-            var columns_settings = [% TablesSettings.GetColumns('members', 'fines', 'account-fines', 'json') | $raw %];
+            var table_settings = [% TablesSettings.GetTableSettings('members', 'fines', 'account-fines', 'json') | $raw %];
             var table_account_fines = KohaTable("table_account_fines", {
                 "sPaginationType": "full",
                 'aaSorting': [[0, 'desc']],
                 "sDom": 'C<"top pager"ilpfB><"#filter_c">tr<"bottom pager"ip>',
-            }, columns_settings);
+            }, table_settings);
             $("#filter_c").html('<p><a href="#" id="filter_transacs"><i class="fa fa-filter"></i> '+txtActivefilter+'</a>');
             $('#filter_transacs').click(function(e) {
                 e.preventDefault();
