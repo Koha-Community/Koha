@@ -1468,7 +1468,7 @@ sub SearchItems {
 
     if ( $params->{sortby} eq 'availability' ) {
         my $sortorder = (uc($params->{sortorder}) eq 'ASC') ? 'ASC' : 'DESC';
-        $query .= qq{ ORDER BY onloan $sortorder, damaged $sortorder, withdrawn $sortorder, notforloan $sortorder, itemlost $sortorder };
+        $query .= qq{ ORDER BY onloan $sortorder };
     } else {
         my $sortby = (0 < grep {$params->{sortby} eq $_} @columns)
             ? $params->{sortby} : 'itemnumber';

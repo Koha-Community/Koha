@@ -37,6 +37,4 @@
 [%- delimiter | $raw -%]
 "[% (item.issues || 0) | $raw %]"
 [%- delimiter | $raw -%]
-"[% IF item.onloan %]Checked out[% ELSIF item.withdrawn || item.damaged || item.notforloan || item.itemlost %]Not available[% ELSE %]Available[% END %]"
-[%- delimiter | $raw -%]
 "[% IF item.checkout %][% item.checkout.date_due | $KohaDates | $raw %][% END %]"
