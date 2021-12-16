@@ -156,11 +156,11 @@
     [% INCLUDE 'columns_settings.inc' %]
     <script id="js">
         $(document).ready(function() {
-            var columns_settings = [% TablesSettings.GetColumns('members', 'checkouthistory', 'checkouthistory-table', 'json') %];
+            var table_settings = [% TablesSettings.GetTableSettings('members', 'checkouthistory', 'checkouthistory-table', 'json') %];
             var table = KohaTable("table_readingrec", {
                 "sPaginationType": "full",
                 "aaSorting": [[10, 'desc']]
-            }, columns_settings);
+            }, table_settings);
 
             $("#tabs a[data-toggle='tab']").on("shown.bs.tab", function (e) {
                 active_tab = $(this).data("tabname");
