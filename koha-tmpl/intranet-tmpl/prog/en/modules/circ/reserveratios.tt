@@ -191,7 +191,7 @@
     [% INCLUDE 'datatables.inc' %]
     [% INCLUDE 'columns_settings.inc' %]
     <script>
-        var columns_settings = [% TablesSettings.GetColumns( 'circ', 'holdsratios', 'holds-ratios', 'json' ) | $raw %];
+        var table_settings = [% TablesSettings.GetTableSettings( 'circ', 'holdsratios', 'holds-ratios', 'json' ) | $raw %];
         $(document).ready(function() {
             KohaTable("holdst", {
                 "aaSorting": [ [2,'desc'], [3,'asc'] ],
@@ -201,7 +201,7 @@
                     ],
                 "sPaginationType": "full",
                 "autoWidth": false
-            }, columns_settings);
+            }, table_settings);
        });
   </script>
 [% END %]
