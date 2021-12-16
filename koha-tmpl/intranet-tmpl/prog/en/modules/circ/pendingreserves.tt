@@ -301,10 +301,10 @@
     [% INCLUDE 'columns_settings.inc' %]
     <script>
         $(document).ready(function() {
-          var columns_settings = [% TablesSettings.GetColumns('circ', 'holds', 'holds-to-pull', 'json') | $raw %];
+          var table_settings = [% TablesSettings.GetTableSettings('circ', 'holds', 'holds-to-pull', 'json') | $raw %];
           var holdst = KohaTable("holdst", {
             "sPaginationType": "full_numbers"
-          }, columns_settings);
+          }, table_settings);
           holdst.fnAddFilters("filter");
           [%# add separateData function to cleanse jQuery select lists by breaking apart strings glued with BR tags and then de-duplicating any repeated library codes %]
           function separateData ( ColumnData ){
