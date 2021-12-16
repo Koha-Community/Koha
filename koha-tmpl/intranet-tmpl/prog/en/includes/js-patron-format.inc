@@ -1,4 +1,3 @@
-<!-- js-patron-title.inc -->
 <script>
     (function() {
         /**
@@ -50,4 +49,3 @@
         };
     })();
 </script>
-<!-- / js-patron-title.inc -->
