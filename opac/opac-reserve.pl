@@ -508,7 +508,7 @@ foreach my $biblioNum (@biblionumbers) {
         my $issue = Koha::Checkouts->find( { itemnumber => $itemNum } );
         if ( $issue ) {
             $itemLoopIter->{dateDue} = output_pref({ dt => dt_from_string($issue->date_due, 'sql'), as_due_date => 1 });
-            $itemLoopIter->{backgroundcolor} = 'onloan';
+            $itemLoopIter->{onloan} = 'onloan';
         }
 
         # checking reserve
