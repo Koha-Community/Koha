@@ -272,16 +272,15 @@
     [% Asset.js("js/z3950_search.js") | $raw %]
     <script>
         $(document).ready(function(){
-            var columns_settings = [% TablesSettings.GetColumns( 'cataloguing', 'z3950_search', 'resultst', 'json' ) | $raw %];
+            var table_settings = [% TablesSettings.GetTableSettings( 'cataloguing', 'z3950_search', 'resultst', 'json' ) | $raw %];
             var thetable = KohaTable("resultst", {
                 "aoColumnDefs": [
                     { "aTargets": [ 1 ], "sType": "nsb-nse" },
                 ],
-                "aaSorting": [[ 1, "asc" ]],
                 "bPaginate": false,
                 "searching": false,
                 "bInfo":false
-            }, columns_settings );
+            }, table_settings );
             InitLastAction();
         });
 
