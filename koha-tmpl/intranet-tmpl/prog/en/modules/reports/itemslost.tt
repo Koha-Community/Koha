@@ -211,7 +211,7 @@
     [% Asset.js("js/table_filters.js") | $raw %]
     <script>
         $(document).ready(function() {
-            var columns_settings = [% TablesSettings.GetColumns( 'reports', 'lostitems', 'lostitems-table', 'json' ) | $raw %];
+            var table_settings = [% TablesSettings.GetTableSettings( 'reports', 'lostitems', 'lostitems-table', 'json' ) | $raw %];
             var lostitems_table = KohaTable("lostitems-table", {
                 "aaSorting": [],
                 "aoColumnDefs": [
@@ -219,7 +219,7 @@
                 ],
                 'bAutoWidth': false,
                 "bPaginate": false,
-            }, columns_settings, 'with_filters');
+            }, table_settings, 'with_filters');
 
             function itemSelectionBuildExportLink() {
                 var itemnumbers = new Array();
