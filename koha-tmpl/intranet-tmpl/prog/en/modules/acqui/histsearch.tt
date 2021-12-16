@@ -160,10 +160,10 @@
     <script>
         var MSG_REMOVE_PATRON = _("Remove");
         $(document).ready(function() {
-            var columns_settings = [% TablesSettings.GetColumns( 'acqui', 'histsearch', 'histsearcht', 'json' ) | $raw %];
+            var table_settings = [% TablesSettings.GetTableSettings( 'acqui', 'histsearch', 'histsearcht', 'json' ) | $raw %];
             KohaTable("histsearcht", {
                 "sPaginationType": "full"
-            }, columns_settings );
+            }, table_settings );
 
             patron_autocomplete({
                 patron_container: $("#basket_creators"),
