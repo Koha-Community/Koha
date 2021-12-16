@@ -613,17 +613,15 @@ Item types &rsaquo; Administration &rsaquo; Koha
     [% INCLUDE 'columns_settings.inc' %]
     <script>
          $(document).ready(function() {
-            var columns_settings = [% TablesSettings.GetColumns( 'admin', 'itemtypes', 'table_item_type', 'json' ) | $raw %];
+            var table_settings = [% TablesSettings.GetTableSettings( 'admin', 'itemtypes', 'table_item_type', 'json' ) | $raw %];
             [% IF ( Koha.Preference('noItemTypeImages') && Koha.Preference('OpacNoItemTypeImages') ) %]
-                columns_settings.shift(); // Remove item type image column from configuration
+                table_settings['columns'].shift(); // Remove item type image column from configuration
             [% END %]
 
             $(document).ready(function() {
                 KohaTable("table_item_type", {
-                "aaSorting": [[ 1, "asc" ]],
-                "iDisplayLength": 10,
                 "sPaginationType": "full"
-                }, columns_settings);
+                }, table_settings);
             });
 
             $( "#itemtypeentry" ).validate({
