@@ -345,7 +345,8 @@
                                             [% IF bibitemloo.itemholdable %]
                                                 <table class="copiesrow table table-bordered table-striped" id="copiesrow_[% bibitemloo.biblionumber | html %]">
                                                     <caption>Select a specific item:</caption>
-                                                    <tr>
+                                                    <thead>
+                                                        <tr>
                                                         <th>Copy number</th>
                                                         [% IF ( item_level_itypes ) %]
                                                             <th>Item type</th>
@@ -363,7 +364,9 @@
                                                             <th>Vol info</th>
                                                         [% END %]
                                                         <th>Information</th>
-                                                    </tr>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
 
                                                     [% FOREACH itemLoo IN bibitemloo.itemLoop %]
                                                         <tr class="[% itemLoo.backgroundcolor | html %]">
@@ -447,6 +450,7 @@
                                                             </td>
                                                         </tr>
                                                     [% END # / FOREACH itemLoo IN bibitemloo.itemLoop%]
+                                                    </tbody>
                                                 </table> <!-- / #copiesrow_[% bibitemloo.biblionumber | html %] -->
                                             [% END # / IF ( bibitemloo.itemholdable )%]
                                         </div> <!-- / #hold-options-[% bibitemloo.biblionumber | html %] -->
