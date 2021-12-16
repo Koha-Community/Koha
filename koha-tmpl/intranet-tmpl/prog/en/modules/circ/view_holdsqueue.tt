@@ -298,13 +298,12 @@
             };
             $('#holdst thead input').on('change keyup keydown', filterColumn);
 
-            var columns_settings = [% TablesSettings.GetColumns('circ', 'view_holdsqueue', 'holds-table', 'json') | $raw %];
+            var table_settings = [% TablesSettings.GetTableSettings('circ', 'view_holdsqueue', 'holds-table', 'json') | $raw %];
             var holdst = KohaTable("holdst", {
-                "aaSorting": [[ 3, "asc" ]],
                 "sDom": 'B<"clearfix">t',
                 "bSortCellsTop": true,
                 "bPaginate": false
-            }, columns_settings);
+            }, table_settings);
 
         });
     </script>
