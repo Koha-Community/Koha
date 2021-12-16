@@ -303,7 +303,7 @@
 
         $(document).ready(function() {
 
-            var columns_settings = [% TablesSettings.GetColumns( 'acqui', 'lateorders', 'late_orders', 'json' ) | $raw %];
+            var table_settings = [% TablesSettings.GetTableSettings( 'acqui', 'lateorders', 'late_orders', 'json' ) | $raw %];
             late_orderst = KohaTable("late_orders", {
                 "sorting": [[ 1, "asc" ]],
                 "sPaginationType": "full",
@@ -314,7 +314,7 @@
                         $('input:checkbox[name=ordernumber]').bind('click', check_uncheck);
                     };
                 }
-            }, columns_settings );
+            }, table_settings );
             $('input:checkbox[name=ordernumber]').bind('click', check_uncheck);
             $('#CheckAll').click(function(e){
                 e.preventDefault();
