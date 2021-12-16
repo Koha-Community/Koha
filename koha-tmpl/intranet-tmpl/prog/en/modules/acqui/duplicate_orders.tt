@@ -327,10 +327,9 @@ Acquisitions &rsaquo; Koha
         var MSG_NO_FUND_SELECTED = _("No fund selected.");
         $(document).ready(function() {
             $('span.hint').hide();
-            var columns_settings;// = [% TablesSettings.GetColumns( 'acqui', 'histsearch', 'histsearcht', 'json' ) | $raw %];
             KohaTable("table_orders", {
                 "bPaginate": false
-            }, columns_settings );
+            });
 
             [% IF op == 'search' OR op == 'select' %]
                 patron_autocomplete({
