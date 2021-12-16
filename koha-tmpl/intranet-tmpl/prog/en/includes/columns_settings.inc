@@ -9,21 +9,23 @@ function KohaTable(id_selector, dt_parameters, table_settings, add_filters) {
     var included_ids = [];
     var selector = '#' + id_selector;
 
-    var columns_settings = table_settings['columns'];
+    if ( table_settings ) {
+        var columns_settings = table_settings['columns'];
 
-    $(columns_settings).each( function() {
-        var named_id = $( 'thead th[data-colname="' + this.columnname + '"]', selector ).index( selector + ' th' );
-        var used_id = dt_parameters.bKohaColumnsUseNames ? named_id : counter;
-        if ( used_id == -1 ) return;
+        $(columns_settings).each( function() {
+            var named_id = $( 'thead th[data-colname="' + this.columnname + '"]', selector ).index( selector + ' th' );
+            var used_id = dt_parameters.bKohaColumnsUseNames ? named_id : counter;
+            if ( used_id == -1 ) return;
 
-        if ( this['is_hidden'] == "1" ) {
-            hidden_ids.push( used_id );
-        }
-        if ( this['cannot_be_toggled'] == "0" ) {
-            included_ids.push( used_id );
-        }
-        counter++;
-    });
+            if ( this['is_hidden'] == "1" ) {
+                hidden_ids.push( used_id );
+            }
+            if ( this['cannot_be_toggled'] == "0" ) {
+                included_ids.push( used_id );
+            }
+            counter++;
+        });
+    }
 
     var exportColumns = ":visible:not(.noExport)";
     var exportRows = ":visible:not(.noExport)";
@@ -184,11 +186,13 @@ function KohaTable(id_selector, dt_parameters, table_settings, add_filters) {
         });
     }
 
-    if ( table_settings.hasOwnProperty('default_display_length') && table_settings['default_display_length'] != null ) {
-        new_parameters["pageLength"] = table_settings['default_display_length'];
-    }
-    if ( table_settings.hasOwnProperty('default_sort_order') && table_settings['default_sort_order'] != null ) {
-        new_parameters["order"] = [[ table_settings['default_sort_order'], 'asc' ]];
+    if ( table_settings ) {
+        if ( table_settings.hasOwnProperty('default_display_length') && table_settings['default_display_length'] != null ) {
+            new_parameters["pageLength"] = table_settings['default_display_length'];
+        }
+        if ( table_settings.hasOwnProperty('default_sort_order') && table_settings['default_sort_order'] != null ) {
+            new_parameters["order"] = [[ table_settings['default_sort_order'], 'asc' ]];
+        }
     }
 
     table.dataTable(new_parameters);

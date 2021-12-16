@@ -429,12 +429,11 @@
     [% INCLUDE 'columns_settings.inc' %]
     <script>
         $(document).ready(function() {
-            var columns_settings = []; // Empty because there are no columns we want to be configurable
 
             KohaTable("categoriest", {
                 "aaSorting": [[ 0, "asc" ]],
                 "sPaginationType": "full"
-            }, columns_settings);
+            });
 
             if ( $("#branches option:selected").length < 1 ) {
                 $("#branches option:first").attr("selected", "selected");
