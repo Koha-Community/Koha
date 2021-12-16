@@ -459,14 +459,14 @@
             [% END %]
             window.close();
         }
-        var columns_settings = [% TablesSettings.GetColumns( 'tools', 'upload', 'uploadresults', 'json' ) | $raw %];
+        var table_settings = [% TablesSettings.GetTableSettings( 'tools', 'upload', 'uploadresults', 'json' ) | $raw %];
         [% IF plugin %]
-            delete columns_settings[6];
-            delete columns_settings[5];
+            table_settings['columns'].splice(6, 1);
+            table_settings['columns'].splice(5, 1);
         [% END %]
         $(document).ready(function() {
             KohaTable("uploadresults",{
-            }, columns_settings);
+            }, table_settings);
 
             [% IF msg %]
                 ShowAlerts( [% msg | html %] );
