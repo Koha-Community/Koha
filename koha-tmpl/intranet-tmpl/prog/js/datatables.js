@@ -496,13 +496,13 @@ jQuery.fn.dataTable.ext.errMode = function(settings, note, message) {
     *                                   We extend the options set with the `criteria` key which allows
     *                                   the developer to select the match type to be applied during searches
     *                                   Valid keys are: `contains`, `starts_with`, `ends_with` and `exact`
-    * @param  {Object}  column_settings The arrayref as returned by TableSettings.GetColums function available
+    * @param  {Object}  table_settings The arrayref as returned by TableSettings.GetTableSettings function available
     *                                   from the columns_settings template toolkit include
     * @param  {Boolean} add_filters     Add a filters row as the top row of the table
     * @param  {Object}  default_filters Add a set of default search filters to apply at table initialisation
     * @return {Object}                  The dataTables instance
     */
-    $.fn.kohaTable = function(options, columns_settings, add_filters, default_filters) {
+    $.fn.kohaTable = function(options, table_settings, add_filters, default_filters) {
         var settings = null;
 
         if ( add_filters ) {
@@ -683,19 +683,23 @@ jQuery.fn.dataTable.ext.errMode = function(settings, note, message) {
         var hidden_ids = [];
         var included_ids = [];
 
-        $(columns_settings).each( function() {
-            var named_id = $( 'thead th[data-colname="' + this.columnname + '"]', this ).index( 'th' );
-            var used_id = settings.bKohaColumnsUseNames ? named_id : counter;
-            if ( used_id == -1 ) return;
 
-            if ( this['is_hidden'] == "1" ) {
-                hidden_ids.push( used_id );
-            }
-            if ( this['cannot_be_toggled'] == "0" ) {
-                included_ids.push( used_id );
-            }
-            counter++;
-        });
+        if ( table_settings ) {
+            var columns_settings = table_settings['columns'];
+            $(columns_settings).each( function() {
+                var named_id = $( 'thead th[data-colname="' + this.columnname + '"]', this ).index( 'th' );
+                var used_id = settings.bKohaColumnsUseNames ? named_id : counter;
+                if ( used_id == -1 ) return;
+
+                if ( this['is_hidden'] == "1" ) {
+                    hidden_ids.push( used_id );
+                }
+                if ( this['cannot_be_toggled'] == "0" ) {
+                    included_ids.push( used_id );
+                }
+                counter++;
+            });
+        }
 
         var exportColumns = ":visible:not(.noExport)";
         if( settings.hasOwnProperty("exportColumns") ){
@@ -797,6 +801,15 @@ jQuery.fn.dataTable.ext.errMode = function(settings, note, message) {
 
         if ( add_filters ) {
             settings['orderCellsTop'] = true;
+        }
+
+        if ( table_settings ) {
+            if ( table_settings.hasOwnProperty('default_display_length') && table_settings['default_display_length'] != null ) {
+                settings["pageLength"] = table_settings['default_display_length'];
+            }
+            if ( table_settings.hasOwnProperty('default_sort_order') && table_settings['default_sort_order'] != null ) {
+                settings["order"] = [[ table_settings['default_sort_order'], 'asc' ]];
+            }
         }
 
         var table = $(this).dataTable(settings);

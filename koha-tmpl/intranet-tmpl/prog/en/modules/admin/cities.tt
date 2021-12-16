@@ -214,7 +214,7 @@
     [% INCLUDE 'columns_settings.inc' %]
     <script>
 
-        var columns_settings = [% TablesSettings.GetColumns( 'admin', 'cities', 'table_cities', 'json' ) | $raw %];
+        var table_settings = [% TablesSettings.GetTableSettings( 'admin', 'cities', 'table_cities', 'json' ) | $raw %];
         $(document).ready(function() {
             var cities_table_url = '/api/v1/cities?';
 
@@ -279,7 +279,7 @@
                         "orderable": false
                     }
                 ]
-            }, columns_settings, 1);
+            }, table_settings, 1);
 
         });
     </script>
