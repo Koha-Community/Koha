@@ -31,12 +31,9 @@ $(document).ready(function() {
             "aTargets": [3, 4, 5],
             "sType": "natural"
         }, ],
-        "aaSorting": [
-            [1, "asc"]
-        ],
         "sPaginationType": "full",
         "exportColumns": [0,1,2,3,4,5,6,7,8,9,10,11,12],
-    }, columns_settings);
+    }, table_settings);
 
     if ($("#branches option:selected").length < 1) {
         $("#branches option:first").attr("selected", "selected");

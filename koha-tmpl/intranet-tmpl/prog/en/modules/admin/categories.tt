@@ -691,7 +691,7 @@
     [% INCLUDE 'datatables.inc' %]
     [% INCLUDE 'columns_settings.inc' %]
     <script>
-        var columns_settings = [% TablesSettings.GetColumns( 'admin', 'categories', 'patron_categories', 'json' ) | $raw %];
+        var table_settings = [% TablesSettings.GetTableSettings( 'admin', 'categories', 'patron_categories', 'json' ) | $raw %];
     </script>
     [% Asset.js("js/categories.js") | $raw %]
 [% END %]
