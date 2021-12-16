@@ -236,11 +236,10 @@
         $(document).ready(function() {
             $('#patrons_to_add_fieldset').hide();
 
-                var columns_settings_table = [% TablesSettings.GetColumns('members', 'patron-lists', 'patron-list-table', 'json') | $raw %]
+                var table_settings = [% TablesSettings.GetTableSettings('members', 'patron-lists', 'patron-list-table', 'json') | $raw %]
                 KohaTable('patron-list-table', {
-                    "order": [[ 3, "asc" ]],
                     "sPaginationType": "full"
-                }, columns_settings_table);
+                }, table_settings);
 
             patron_autocomplete({
                 patron_container: $("#patrons_to_add"),
