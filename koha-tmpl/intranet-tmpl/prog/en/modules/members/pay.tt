@@ -243,12 +243,11 @@
                 $(".add-note").show();
             });
 
-            var columns_settings = [% TablesSettings.GetColumns('members', 'pay', 'pay-fines-table', 'json') | $raw %];
+            var table_settings = [% TablesSettings.GetTableSettings('members', 'pay', 'pay-fines-table', 'json') | $raw %];
             KohaTable("finest", {
                 "paging": false,
-                'sorting': [[ 3, "asc" ]],
                 "autoWidth": false
-            }, columns_settings );
+            }, table_settings );
         });
     </script>
 [% END %]
