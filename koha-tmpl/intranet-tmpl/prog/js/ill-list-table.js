@@ -405,7 +405,8 @@ $(document).ready(function() {
             // Assemble an array of column definitions for passing
             // to datatables
             var colData = [];
-            columns_settings.forEach(function(thisCol) {
+            var columns = table_settings['columns'];
+            columns.forEach(function(thisCol) {
                 var colName = thisCol.columnname;
                 // Create the base column object
                 var colObj = $.extend({}, thisCol);
@@ -494,7 +495,7 @@ $(document).ready(function() {
                     }
 
                 }
-            }, columns_settings);
+            }, table_settings);
 
             // Custom date range filtering
             $.fn.dataTable.ext.search.push(function(settings, data, dataIndex) {

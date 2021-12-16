@@ -838,7 +838,7 @@
     <script>
         var prefilters = '[% prefilters | $raw %]';
         // Set column settings
-        var columns_settings = [% TablesSettings.GetColumns( 'illrequests', 'ill-requests', 'ill-requests', 'json' ) %];
+        var table_settings = [% TablesSettings.GetTableSettings( 'illrequests', 'ill-requests', 'ill-requests', 'json' ) %];
 
         [% IF services_json.length > 0 %]
         var services = [% services_json | $raw %];

@@ -188,51 +188,53 @@ $(document).ready(function() {
             // Initialise the table
             // Since we're not able to use the columns settings in core,
             // we need to mock the object that it would return
-            var columns_settings = [
-				{
-					cannot_be_modified: 0,
-					cannot_be_toggled: 0,
-					columnname: 'source',
-					is_hidden: 0
-				},
-				{
-					cannot_be_modified: 0,
-					cannot_be_toggled: 0,
-					columnname: 'title',
-					is_hidden: 0
-				},
-				{
-					cannot_be_modified: 0,
-					cannot_be_toggled: 0,
-					columnname: 'author',
-					is_hidden: 0
-				},
-				{
-					cannot_be_modified: 0,
-					cannot_be_toggled: 0,
-					columnname: 'isbn',
-					is_hidden: 0
-				},
-				{
-					cannot_be_modified: 0,
-					cannot_be_toggled: 0,
-					columnname: 'issn',
-					is_hidden: 0
-				},
-				{
-					cannot_be_modified: 0,
-					cannot_be_toggled: 0,
-					columnname: 'date',
-					is_hidden: 0
-				}
-            ];
+            var table_settings = {
+                "columns": [
+                    {
+                        cannot_be_modified : 0,
+                        cannot_be_toggled  : 0,
+                        columnname         : 'source',
+                        is_hidden          : 0
+                    },
+                    {
+                        cannot_be_modified : 0,
+                        cannot_be_toggled  : 0,
+                        columnname         : 'title',
+                        is_hidden          : 0
+                    },
+                    {
+                        cannot_be_modified : 0,
+                        cannot_be_toggled  : 0,
+                        columnname         : 'author',
+                        is_hidden          : 0
+                    },
+                    {
+                        cannot_be_modified : 0,
+                        cannot_be_toggled  : 0,
+                        columnname         : 'isbn',
+                        is_hidden          : 0
+                    },
+                    {
+                        cannot_be_modified : 0,
+                        cannot_be_toggled  : 0,
+                        columnname         : 'issn',
+                        is_hidden          : 0
+                    },
+                    {
+                        cannot_be_modified : 0,
+                        cannot_be_toggled  : 0,
+                        columnname         : 'date',
+                        is_hidden          : 0
+                    }
+                ]
+            };
             // Hide pagination buttons if appropriate
             tableDef.drawCallback = function() {
                 var pagination = $(this).closest('.dataTables_wrapper')
                     .find('.dataTables_paginate');
                 pagination.toggle(this.api().page.info().pages > 1);
             }
-            KohaTable(service.id, tableDef, columns_settings);
+            KohaTable(service.id, tableDef, table_settings);
         });
     }
 
