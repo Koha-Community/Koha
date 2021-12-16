@@ -44,8 +44,7 @@ __PACKAGE__->table("tables_settings");
 =head2 default_display_length
 
   data_type: 'smallint'
-  default_value: 20
-  is_nullable: 0
+  is_nullable: 1
 
 =head2 default_sort_order
 
@@ -63,7 +62,7 @@ __PACKAGE__->add_columns(
   "tablename",
   { data_type => "varchar", is_nullable => 0, size => 255 },
   "default_display_length",
-  { data_type => "smallint", default_value => 20, is_nullable => 0 },
+  { data_type => "smallint", is_nullable => 1 },
   "default_sort_order",
   { data_type => "varchar", is_nullable => 1, size => 255 },
 );
@@ -85,8 +84,8 @@ __PACKAGE__->add_columns(
 __PACKAGE__->set_primary_key("module", "page", "tablename");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07046 @ 2019-12-10 17:22:41
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:A2GDoSG702QYDH8nYPEJ2Q
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2021-12-16 11:41:48
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:42x+rSLgXvSZBVLx5mh2ng
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
