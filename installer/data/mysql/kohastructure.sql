@@ -5063,7 +5063,7 @@ CREATE TABLE `tables_settings` (
   `module` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `page` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `tablename` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `default_display_length` smallint(6) NOT NULL DEFAULT 20,
+  `default_display_length` smallint(6) DEFAULT NULL,
   `default_sort_order` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`module`(191),`page`(191),`tablename`(191))
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
