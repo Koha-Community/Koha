@@ -596,7 +596,7 @@
         var code = '[% code | html %]';
         var new_lettercode = '[% new_lettercode | html %]';
         var new_branchcode = '[% new_branchcode | html %]';
-        var columns_settings = [% TablesSettings.GetColumns( 'tools', 'notices', 'lettert', 'json' ) | $raw %];
+        var table_settings = [% TablesSettings.GetTableSettings( 'tools', 'notices', 'lettert', 'json' ) | $raw %];
      </script>
     [% Asset.js("js/letter.js") | $raw %]
 [% END %]

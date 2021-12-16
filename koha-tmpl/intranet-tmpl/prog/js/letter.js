@@ -1,5 +1,5 @@
 /* Variables defined in letter.tt: */
-/* global _ module add_form copy_form no_op_set code interface theme KohaTable columns_settings */
+/* global _ module add_form copy_form no_op_set code interface theme KohaTable table_settings */
 
 var modal_loading = "<div id=\"loading\"><img src=\"" + interface + "/" + theme + "/img/spinner-small.gif\" alt=\"\" /> "+ __('Loading...') +"</div>";
 
@@ -44,8 +44,7 @@ $(document).ready(function() {
     var ntable = KohaTable("lettert", {
         "autoWidth": false,
         "paging": false,
-        "aaSorting": [[ 3, "asc" ]],
-    }, columns_settings);
+    }, table_settings);
 
     if( no_op_set ){
         $('#branch').change(function() {
