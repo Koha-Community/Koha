@@ -297,13 +297,12 @@
         }
 
         $(document).ready(function(){
-            var columns_settings = [% TablesSettings.GetColumns( 'circ', 'overdues', 'circ-overdues', 'json' ) | $raw %];
+            var table_settings = [% TablesSettings.GetTableSettings( 'circ', 'overdues', 'circ-overdues', 'json' ) | $raw %];
             KohaTable("overduest", {
                 "sPaginationType": "full",
-                "aaSorting": [[0, 'asc']],
                 "autoWidth": false,
                 "stateSave": true
-            }, columns_settings);
+            }, table_settings);
 
             $("#showall").on("change", function(){
                 update_date_due_filters_visibility();
