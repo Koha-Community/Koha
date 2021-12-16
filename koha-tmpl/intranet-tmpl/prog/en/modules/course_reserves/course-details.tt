@@ -300,12 +300,12 @@
     [% INCLUDE 'datatables.inc' %]
     [% INCLUDE 'columns_settings.inc' %]
     <script>
-        var columns_settings = [% TablesSettings.GetColumns( 'coursereserves', 'reserves', 'course_reserves_table', 'json' ) | $raw %];
+        var table_settings = [% TablesSettings.GetTableSettings( 'coursereserves', 'reserves', 'course_reserves_table', 'json' ) | $raw %];
         $(document).ready(function(){
             var rtable = KohaTable("course_reserves_table", {
                 "sPaginationType": "full",
                 "bAutoWidth": false,
-            }, columns_settings );
+            }, table_settings );
 
             $(".delete_item").click(function(){
                 return confirmDelete(_("Are you sure you want to remove this item from the course?"));
