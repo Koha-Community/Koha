@@ -528,7 +528,7 @@
                 return false;
             })
 
-            var columns_settings = [% TablesSettings.GetColumns( 'serials', 'subscription-detail', 'orders', 'json' ) | $raw %];
+            var table_settings = [% TablesSettings.GetTableSettings( 'serials', 'subscription-detail', 'orders', 'json' ) | $raw %];
             var table = KohaTable("orders", {
                 "aoColumnDefs": [
                     { "bVisible": false, "aTargets": [ 'NoVisible' ] },
@@ -538,7 +538,7 @@
                 'bPaginate': false,
                 'bAutoWidth': false,
                 'bSort': false,
-            }, columns_settings);
+            }, table_settings);
 
             [% IF orders_grouped.size %]
                 $(table).treetable({
