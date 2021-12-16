@@ -20,6 +20,6 @@
     var MSG_CONFIRM_DELETE_ITEM = _("Are you sure you want to delete this item?");
     var MSG_CONFIRM_ADD_ITEM = _("Are you sure you want to add a new item? Any changes made on this page will be lost.");
     var MSG_CONFIRM_SAVE = _("Are you sure you want to save?");
-    var columns_settings = [% TablesSettings.GetColumns( 'cataloguing', 'additem', 'itemst', 'json' ) | $raw %];
+    var table_settings = [% TablesSettings.GetTableSettings( 'cataloguing', 'additem', 'itemst', 'json' ) | $raw %];
 </script>
 <!-- / str/cataloging_additem.inc -->

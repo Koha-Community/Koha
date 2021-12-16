@@ -42,14 +42,14 @@ $(document).ready(function(){
     });
 
     // Skip the first column
-    columns_settings.unshift( { cannot_be_toggled: "1" } );
+    table_settings['columns'].unshift( { cannot_be_toggled: "1" } );
 
     var itemst = KohaTable("itemst", {
         'bPaginate': false,
         'bInfo': false,
         "bAutoWidth": false,
         "bKohaColumnsUseNames": true
-    }, columns_settings);
+    }, table_settings);
 
     var multiCopyControl = $("#add_multiple_copies_span");
     var addMultipleBlock = $("#addmultiple");
