@@ -184,10 +184,10 @@ function KohaTable(id_selector, dt_parameters, table_settings, add_filters) {
         });
     }
 
-    if ( table_settings.hasOwnProperty('default_display_length') ) {
+    if ( table_settings.hasOwnProperty('default_display_length') && table_settings['default_display_length'] != null ) {
         new_parameters["pageLength"] = table_settings['default_display_length'];
     }
-    if ( table_settings.hasOwnProperty('default_sort_order') ) {
+    if ( table_settings.hasOwnProperty('default_sort_order') && table_settings['default_sort_order'] != null ) {
         new_parameters["order"] = [[ table_settings['default_sort_order'], 'asc' ]];
     }
 

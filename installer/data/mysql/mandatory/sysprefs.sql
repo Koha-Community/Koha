@@ -378,7 +378,6 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('NovelistSelectView','tab','tab|above|below|right','Where to display Novelist Select content','Choice'),
 ('NumberOfSuggestionDays','',NULL,'Number of days that will be used to determine the MaxTotalSuggestions limit','Free'),
 ('numReturnedItemsToShow','20',NULL,'Number of returned items to show on the check-in page','Integer'),
-('NumSavedReports', '20', NULL, 'By default, show this number of saved reports.', 'Integer'),
 ('numSearchResults','20',NULL,'Specify the maximum number of results to display on a page of results','Integer'),
 ('numSearchResultsDropdown', 0, NULL, 'Enable option list of number of results per page to show in staff interface search results','YesNo'),
 ('numSearchRSSResults','50',NULL,'Specify the maximum number of results to display on a RSS page of results','Integer'),
