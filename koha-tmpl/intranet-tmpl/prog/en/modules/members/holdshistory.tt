@@ -137,15 +137,15 @@
     [% Asset.js("js/members-menu.js") | $raw %]
     <script>
         $(document).ready(function() {
-            var columns_settings = [% TablesSettings.GetColumns('members', 'holdshistory', 'holdshistory-table', 'json') %];
+            var table_settings = [% TablesSettings.GetTableSettings('members', 'holdshistory', 'holdshistory-table', 'json') %];
             [% UNLESS show_itemtype_column %]
               //Remove item type column settings
-              columns_settings = columns_settings.filter(function(c){return c['columnname'] != 'itemtype';});
+              table_settings['columns'] = table_settings['columns'].filter(function(c){return c['columnname'] != 'itemtype';});
             [% END %]
             var table = KohaTable("table_holdshistory", {
                 "sPaginationType": "full",
                 "aaSorting": [[4, 'desc']]
-            }, columns_settings);
+            }, table_settings);
         });
     </script>
 [% END %]
