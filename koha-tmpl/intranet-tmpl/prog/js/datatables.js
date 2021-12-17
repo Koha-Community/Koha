@@ -813,6 +813,17 @@ jQuery.fn.dataTable.ext.errMode = function(settings, note, message) {
             }
         );
 
+        if ( CAN_user_parameters_manage_column_config ) {
+            settings[ "buttons" ].push(
+                {
+                    text: 'Configure this table',
+                    action: function() {
+                        window.location = '/cgi-bin/koha/admin/columns_settings.pl?module=' + table_settings['module'] + '#' + table_settings['page'] + '#' + table_settings['table'];
+                    },
+                }
+            );
+        }
+
         $(".dt_button_clear_filter, .columns_controls, .export_controls").tooltip();
 
         if ( add_filters ) {

@@ -161,6 +161,17 @@ function KohaTable(id_selector, dt_parameters, table_settings, add_filters) {
         }
     );
 
+    if ( CAN_user_parameters_manage_column_config ) {
+        dt_parameters[ "buttons" ].push(
+            {
+                text: 'Configure this table',
+                action: function() {
+                    window.location = '/cgi-bin/koha/admin/columns_settings.pl?module=' + table_settings['module'] + '#' + table_settings['page'] + '#' + table_settings['table'];
+                },
+            }
+        );
+    }
+
     var table = $(selector);
     if ( add_filters ) {
         // Duplicate the table header row for columnFilter

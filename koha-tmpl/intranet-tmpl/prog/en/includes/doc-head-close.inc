@@ -29,6 +29,11 @@
 
 <script>
 var Koha = {};
+[% IF CAN_user_parameters_manage_column_config %]
+    var CAN_user_parameters_manage_column_config = 1;
+[% ELSE %]
+    var CAN_user_parameters_manage_column_config = 0;
+[% END %]
 </script>
 
 [% IF lang && lang != 'en' %]
