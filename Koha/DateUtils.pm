@@ -145,7 +145,7 @@ sub dt_from_string {
     # Add the faculative time part [hh:mm[:ss]]
     my $time_re .= qr|
             (
-                T?
+                [Tt]?
                 \s*
                 (?<hour>\d{2})
                 :
