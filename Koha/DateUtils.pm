@@ -143,7 +143,7 @@ sub dt_from_string {
     }
 
     # Add the faculative time part [hh:mm[:ss]]
-    my $time_re .= qr|
+    my $time_re .= qr{
             (
                 [Tt]?
                 \s*
@@ -158,8 +158,11 @@ sub dt_from_string {
                     \s
                     (?<ampm>\w{2})
                 )?
+                (
+                    (?<utc>[Zz]$)|((?<offset>[\+|\-])(?<hours>[01][0-9]|2[0-3]):(?<minutes>[0-5][0-9]))
+                )?
             )?
-    |xms;
+    }xms;
     $regex .= $time_re unless ( $date_format eq 'rfc3339' );
     $fallback_re .= $time_re;
 
@@ -175,6 +178,9 @@ sub dt_from_string {
             second => $+{second},
         );
         $ampm = $+{ampm};
+        if ( $+{utc} ) {
+            $tz = DateTime::TimeZone->new( name => 'UTC' );
+        }
         if ( $+{offset} ) {
             # If offset given, set inbound timezone using it.
             $tz = DateTime::TimeZone->new( name => $+{offset} . $+{hours} . $+{minutes} );
