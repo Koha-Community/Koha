@@ -1345,7 +1345,9 @@ sub IsAvailableForItemLevelRequest {
     # FIXME - a lot of places in the code do this
     #         or something similar - need to be
     #         consolidated
-    my $itemtype = $item->effective_itemtype or return 0;
+    my $itemtype = $item->effective_itemtype;
+    return 0
+      unless defined $itemtype;
     my $notforloan_per_itemtype = Koha::ItemTypes->find($itemtype)->notforloan;
 
     return 0 if
