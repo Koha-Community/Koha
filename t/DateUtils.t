@@ -4,7 +4,7 @@ use DateTime::TimeZone;
 
 use C4::Context;
 
-use Test::More tests => 80;
+use Test::More tests => 79;
 
 use Test::MockModule;
 use Test::Warn;
@@ -140,12 +140,7 @@ cmp_ok( $dt0->epoch(), 'eq', '1325455199', 'dt_from_string handles seconds with 
 eval {
     $dt0 = dt_from_string( '2012-01-01T23:59:59.999Z+02:00', 'rfc3339' );
 };
-like( $@, qr/.*does not match the date format \(rfc3339\).*/, 'dt_from_string should die when passed a bad rfc3339 date string' );
-
-eval {
-    $dt0 = dt_from_string('2021-11-03T10:16:59+00:00', 'iso');
-};
-like( $@, qr/.*does not match the date format \(iso\).*/, 'dt_from_string should die when passed a bad iso date string' );
+like( $@, qr/.*does not match the date format \(rfc3339\).*/, 'dt_from_string should die when passed a bad date string' );
 
 # Return undef if passed mysql 0 dates
 $dt0 = dt_from_string( '0000-00-00', 'iso' );
