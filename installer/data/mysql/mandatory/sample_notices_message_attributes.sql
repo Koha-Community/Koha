@@ -8,6 +8,6 @@ values
 (6, 'Item_Checkout', 0),
 (7, 'Ill_ready', 0),
 (8, 'Ill_unavailable', 0),
-(9, 'Auto_Renewals', 0),
+(9, 'Auto_Renewals', 0);
 (10, 'Hold_Reminder', 0);
 
