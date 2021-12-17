@@ -24,6 +24,17 @@ return {
         };
 
         if( !unique_key_exists( 'language_descriptions', 'uniq_desc' ) ) {
+
+            $dbh->do(q{
+                DELETE a
+                FROM language_descriptions AS a, language_descriptions AS b
+                WHERE a.id < b.id
+                AND a.subtag IS NOT NULL
+                AND a.subtag=b.subtag
+                AND a.lang IS NOT NULL
+                AND a.lang=b.lang
+                AND a.type=b.type
+            });
             $dbh->do(q{
                 ALTER TABLE language_descriptions
                 ADD UNIQUE KEY uniq_desc (subtag, type, lang)
@@ -31,6 +42,15 @@ return {
         };
 
         if( !unique_key_exists( 'language_rfc4646_to_iso639', 'uniq_code' ) ) {
+
+            $dbh->do(q{
+                DELETE a
+                FROM language_rfc4646_to_iso639 AS a, language_rfc4646_to_iso639 AS b
+                WHERE a.id < b.id
+                AND a.rfc4646_subtag IS NOT NULL
+                AND a.rfc4646_subtag=b.rfc4646_subtag
+                AND a.iso639_2_code=b.iso639_2_code
+            });
             $dbh->do(q{
                 ALTER TABLE language_rfc4646_to_iso639
                 ADD UNIQUE KEY uniq_code (rfc4646_subtag, iso639_2_code)
