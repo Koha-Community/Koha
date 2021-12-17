@@ -19,10 +19,11 @@
 
 use Modern::Perl;
 
-use Test::More tests => 11;
+use Test::More tests => 13;
 use Test::Exception;
 use Test::Warn;
 
+use Koha::CirculationRules;
 use Koha::Database;
 use Koha::DateUtils qw(dt_from_string);
 use Koha::ArticleRequests;
@@ -820,6 +821,9 @@ subtest 'article_requests() tests' => sub {
 
     $schema->storage->txn_begin;
 
+    my $library = $builder->build_object({ class => 'Koha::Libraries' });
+    t::lib::Mocks::mock_userenv( { branchcode => $library->id } );
+
     my $patron = $builder->build_object( { class => 'Koha::Patrons' } );
 
     my $article_requests = $patron->article_requests;
@@ -907,6 +911,113 @@ subtest 'safe_to_delete() tests' => sub {
     ok( $patron->safe_to_delete, 'Can delete, all conditions met' );
     my $messages = $patron->safe_to_delete->messages;
     is_deeply( $messages, [], 'Patron can be deleted, no messages' );
+};
+
+subtest 'article_request_fee() tests' => sub {
+
+    plan tests => 3;
+
+    $schema->storage->txn_begin;
+
+    # Cleanup, to avoid interference
+    Koha::CirculationRules->search( { rule_name => 'article_request_fee' } )->delete;
+
+    t::lib::Mocks::mock_preference( 'ArticleRequests', 1 );
+
+    my $item = $builder->build_sample_item;
+
+    my $library_1 = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $library_2 = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $patron    = $builder->build_object( { class => 'Koha::Patrons' } );
+
+    # Rule that should never be picked, because the patron's category is always picked
+    Koha::CirculationRules->set_rule(
+        {   categorycode => undef,
+            branchcode   => undef,
+            rule_name    => 'article_request_fee',
+            rule_value   => 1,
+        }
+    );
+
+    is( $patron->article_request_fee( { library_id => $library_2->id } ), 1, 'library_id used correctly' );
+
+    Koha::CirculationRules->set_rule(
+        {   categorycode => $patron->categorycode,
+            branchcode   => undef,
+            rule_name    => 'article_request_fee',
+            rule_value   => 2,
+        }
+    );
+
+    Koha::CirculationRules->set_rule(
+        {   categorycode => $patron->categorycode,
+            branchcode   => $library_1->id,
+            rule_name    => 'article_request_fee',
+            rule_value   => 3,
+        }
+    );
+
+    is( $patron->article_request_fee( { library_id => $library_2->id } ), 2, 'library_id used correctly' );
+
+    t::lib::Mocks::mock_userenv( { branchcode => $library_1->id } );
+
+    is( $patron->article_request_fee(), 3, 'env used correctly' );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'add_article_request_fee_if_needed() tests' => sub {
+
+    plan tests => 12;
+
+    $schema->storage->txn_begin;
+
+    my $amount = 0;
+
+    my $patron_mock = Test::MockModule->new('Koha::Patron');
+    $patron_mock->mock( 'article_request_fee', sub { return $amount; } );
+
+    my $patron = $builder->build_object( { class => 'Koha::Patrons' } );
+
+    is( $patron->article_request_fee, $amount, 'article_request_fee mocked' );
+
+    my $library_1 = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $library_2 = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $staff     = $builder->build_object( { class => 'Koha::Patrons' } );
+    my $item      = $builder->build_sample_item;
+
+    t::lib::Mocks::mock_userenv(
+        { branchcode => $library_1->id, patron => $staff } );
+
+    my $debit = $patron->add_article_request_fee_if_needed();
+    is( $debit, undef, 'No fee, no debit line' );
+
+    # positive value
+    $amount = 1;
+
+    $debit = $patron->add_article_request_fee_if_needed({ item_id => $item->id });
+    is( ref($debit), 'Koha::Account::Line', 'Debit object type correct' );
+    is( $debit->amount, $amount,
+        'amount set to $patron->article_request_fee value' );
+    is( $debit->manager_id, $staff->id,
+        'manager_id set to userenv session user' );
+    is( $debit->branchcode, $library_1->id,
+        'branchcode set to userenv session library' );
+    is( $debit->debit_type_code, 'ARTICLE_REQUEST',
+        'debit_type_code set correctly' );
+    is( $debit->itemnumber, $item->id,
+        'itemnumber set correctly' );
+
+    $amount = 100;
+
+    $debit = $patron->add_article_request_fee_if_needed({ library_id => $library_2->id });
+    is( ref($debit), 'Koha::Account::Line', 'Debit object type correct' );
+    is( $debit->amount, $amount,
+        'amount set to $patron->article_request_fee value' );
+    is( $debit->branchcode, $library_2->id,
+        'branchcode set to userenv session library' );
+    is( $debit->itemnumber, undef,
+        'itemnumber set correctly to undef' );
 
     $schema->storage->txn_rollback;
 };

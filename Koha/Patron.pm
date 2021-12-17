@@ -1004,6 +1004,90 @@ sub can_request_article {
     return $count < $limit ? 1 : 0;
 }
 
+=head3 article_request_fee
+
+    my $fee = $patron->article_request_fee(
+        {
+          [ library_id => $library->id, ]
+        }
+    );
+
+Returns the fee to be charged to the patron when it places an article request.
+
+A I<library_id> can be passed as parameter, falling back to userenv if absent.
+
+=cut
+
+sub article_request_fee {
+    my ($self, $params) = @_;
+
+    my $library_id = $params->{library_id};
+
+    $library_id //= C4::Context->userenv ? C4::Context->userenv->{'branch'} : undef;
+
+    my $rule = Koha::CirculationRules->get_effective_rule(
+        {
+            branchcode   => $library_id,
+            categorycode => $self->categorycode,
+            rule_name    => 'article_request_fee'
+        }
+    );
+
+    my $fee = ($rule) ? $rule->rule_value + 0 : 0;
+
+    return $fee;
+}
+
+=head3 add_article_request_fee_if_needed
+
+    my $fee = $patron->add_article_request_fee_if_needed(
+        {
+          [ item_id    => $item->id,
+            library_id => $library->id, ]
+        }
+    );
+
+If an article request fee needs to be charged, it adds a debit to the patron's
+account.
+
+Returns the fee line.
+
+A I<library_id> can be passed as parameter, falling back to userenv if absent.
+
+=cut
+
+sub add_article_request_fee_if_needed {
+    my ($self, $params) = @_;
+
+    my $library_id = $params->{library_id};
+    my $item_id    = $params->{item_id};
+
+    $library_id //= C4::Context->userenv ? C4::Context->userenv->{'branch'} : undef;
+
+    my $amount = $self->article_request_fee(
+        {
+            library_id => $library_id,
+        }
+    );
+
+    my $debit_line;
+
+    if ( $amount > 0 ) {
+        $debit_line = $self->account->add_debit(
+            {
+                amount     => $amount,
+                user_id    => C4::Context->userenv ? C4::Context->userenv->{'number'} : undef,
+                interface  => C4::Context->interface,
+                library_id => $library_id,
+                type       => 'ARTICLE_REQUEST',
+                item_id    => $item_id,
+            }
+        );
+    }
+
+    return $debit_line;
+}
+
 =head3 article_requests
 
     my $article_requests = $patron->article_requests;
