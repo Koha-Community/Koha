@@ -30,12 +30,17 @@ my $builder = t::lib::TestBuilder->new;
 
 subtest 'request() tests' => sub {
 
-    plan tests => 3;
+    plan tests => 11;
 
     $schema->storage->txn_begin;
 
+    my $amount = 0;
+
+    my $patron_mock = Test::MockModule->new('Koha::Patron');
+    $patron_mock->mock( 'article_request_fee', sub { return $amount; } );
+
     my $patron = $builder->build_object({ class => 'Koha::Patrons' });
-    my $biblio = $builder->build_sample_biblio;
+    my $item   = $builder->build_sample_item;
 
     my $ar_mock = Test::MockModule->new('Koha::ArticleRequest');
     $ar_mock->mock( 'notify', sub { ok( 1, '->notify() called' ); } );
@@ -43,7 +48,7 @@ subtest 'request() tests' => sub {
     my $ar = Koha::ArticleRequest->new(
         {
             borrowernumber => $patron->id,
-            biblionumber   => $biblio->id,
+            biblionumber   => $item->biblionumber,
         }
     );
 
@@ -51,6 +56,29 @@ subtest 'request() tests' => sub {
 
     is( $ar->status, Koha::ArticleRequest::Status::Requested );
     ok( defined $ar->created_on, 'created_on is set' );
+
+    is( $ar->debit_id, undef, 'No fee linked' );
+    is( $patron->account->balance, 0, 'No outstanding fees' );
+
+    # set a fee amount
+    $amount = 10;
+
+    $ar = Koha::ArticleRequest->new(
+        {
+            borrowernumber => $patron->id,
+            biblionumber   => $item->biblionumber,
+            itemnumber     => $item->id,
+        }
+    );
+
+    $ar->request()->discard_changes;
+
+    is( $ar->status, Koha::ArticleRequest::Status::Requested );
+    is( $ar->itemnumber, $item->id, 'itemnumber set' );
+    ok( defined $ar->created_on, 'created_on is set' );
+
+    ok( defined $ar->debit_id, 'Fee linked' );
+    is( $patron->account->balance, $amount, 'Outstanding fees with the right value' );
 
     $schema->storage->txn_rollback;
 };

@@ -19,7 +19,7 @@ package Koha::ArticleRequest;
 
 use Modern::Perl;
 
-
+use Koha::Account::Lines;
 use Koha::Database;
 use Koha::Patrons;
 use Koha::Biblios;
@@ -57,6 +57,12 @@ sub request {
     ) unless $self->borrower->can_request_article;
 
     $self->status(Koha::ArticleRequest::Status::Requested);
+
+    # Handle possible fees
+    my $debit = $self->borrower->add_article_request_fee_if_needed({ item_id => $self->itemnumber });
+    $self->debit_id( $debit->id )
+        if $debit;
+
     $self->store();
     $self->notify();
     return $self;
@@ -147,6 +153,23 @@ sub biblio {
     $self->{_biblio} ||= Koha::Biblios->find( $self->biblionumber() );
 
     return $self->{_biblio};
+}
+
+=head3 debit
+
+    my $debit = $article_request->debit;
+
+Returns the related Koha::Account::Line object for this article request
+
+=cut
+
+sub debit {
+    my ($self) = @_;
+
+    my $debit_rs = $self->_result->debit;
+    return unless $debit_rs;
+
+    return Koha::Account::Line->_new_from_dbic( $debit_rs );
 }
 
 =head3 item
