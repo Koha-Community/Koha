@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 68;
+use Test::More tests => 69;
 use Test::MockModule;
 use Test::Warn;
 
@@ -1362,3 +1362,40 @@ sub place_item_hold {
 
 # we reached the finish
 $schema->storage->txn_rollback();
+
+subtest 'IsAvailableForItemLevelRequest() tests' => sub {
+
+    plan tests => 2;
+
+    $schema->storage->txn_begin;
+
+    my $patron = $builder->build_object( { class => 'Koha::Patrons' } );
+
+    my $item_type = undef;
+
+    my $item_mock = Test::MockModule->new('Koha::Item');
+    $item_mock->mock( 'effective_itemtype', sub { return $item_type; } );
+
+    my $item = $builder->build_sample_item;
+
+    ok(
+        !C4::Reserves::IsAvailableForItemLevelRequest( $item, $patron ),
+        "Item not available for item-level hold because no effective item type"
+    );
+
+    # Weird use case to highlight issue
+    $item_type = '0';
+    Koha::ItemTypes->search( { itemtype => $item_type } )->delete;
+    my $itemtype = $builder->build_object(
+        {
+            class => 'Koha::ItemTypes',
+            value => { itemtype => $item_type, notloan => 0 }
+        }
+    );
+    ok(
+        C4::Reserves::IsAvailableForItemLevelRequest( $item, $patron ),
+        "Item not available for item-level hold because no effective item type"
+    );
+
+    $schema->storage->txn_rollback;
+};
