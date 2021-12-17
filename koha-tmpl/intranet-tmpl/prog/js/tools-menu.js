@@ -18,5 +18,7 @@
           $('#navmenulist a[href$="/cgi-bin/koha/tools/stockrotation.pl"]').addClass("current");
       } else if (path.indexOf("plugins") >= 0 ) {
           $('#navmenulist a[href$="/cgi-bin/koha/plugins/plugins-home.pl?method=tool"]').addClass("current");
+      } else if (path.indexOf("page.pl") >= 0 ) {
+          $('#navmenulist a[href$="/cgi-bin/koha/tools/additional-contents.pl?category=pages"]').addClass("current");
       }
   });

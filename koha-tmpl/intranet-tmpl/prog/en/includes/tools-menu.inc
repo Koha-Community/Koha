@@ -110,6 +110,7 @@
     [% IF ( CAN_user_tools_edit_additional_contents ) %]
     <li><a href="/cgi-bin/koha/tools/additional-contents.pl?category=news">News</a></li>
     <li><a href="/cgi-bin/koha/tools/additional-contents.pl?category=html_customizations">HTML customizations</a></li>
+    <li><a href="/cgi-bin/koha/tools/additional-contents.pl?category=pages">Pages</a></li>
     [% END %]
     [% IF ( CAN_user_tools_schedule_tasks ) %]
 	<li><a href="/cgi-bin/koha/tools/scheduler.pl">Task scheduler</a></li>

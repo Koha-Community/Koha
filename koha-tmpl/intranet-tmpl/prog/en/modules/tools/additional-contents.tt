@@ -24,6 +24,12 @@
         .syspref-link::before {
             content: " | ";
         }
+        .customisation-link::before {
+            content: " | ";
+        }
+        .customisation-link:first-child::before {
+            content: none;
+        }
     </style>
 </head>
 
@@ -44,6 +50,8 @@
             <li>
                 [% IF category == 'news' %]
                     <a href="/cgi-bin/koha/tools/additional-contents.pl?category=news">News</a>
+                [% ELSIF category == 'pages' %]
+                    <a href="/cgi-bin/koha/tools/additional-contents.pl?category=pages">Pages</a>
                 [% ELSE %]
                     <a href="/cgi-bin/koha/tools/additional-contents.pl?category=html_customizations">HTML customizations</a>
                 [% END %]
@@ -55,7 +63,7 @@
                     [% ELSE %]
                         <span>Add additional content</span>
                     [% END %]
-                    ([% IF category == 'news' %]<span>News</span>[% ELSE %]<span>HTML customizations</span>[% END %])
+                    ([% IF category == 'news' %]<span>News</span>[% ELSIF category == 'pages' %]<span>Pages</span>[% ELSE %]<span>HTML customizations</span>[% END %])
                 </a>
             </li>
         [% ELSE %]
@@ -63,6 +71,8 @@
                 <a href="#" aria-current="page">
                     [% IF category == 'news' %]
                         News
+                    [% ELSIF category == 'pages' %]
+                        Pages
                     [% ELSE %]
                         HTML customizations
                     [% END %]
@@ -165,7 +175,7 @@
     [% IF additional_content %]
         <h1>Modify an additional content</h1>
     [% ELSE %]
-        <h1>New additional content ([% IF category == 'news' %]News[% ELSE %]HTML customizations[% END %])</h1>
+        <h1>New additional content ([% IF category == 'news' %]News[% ELSIF category == 'pages' %]Pages[% ELSE %]HTML customizations[% END %])</h1>
     [% END %]
 
     <div id="toolbar" class="btn-toolbar">
@@ -180,6 +190,8 @@
         </div>
         [% IF category == 'news' %]
             <a class="btn btn-default cancel" href="/cgi-bin/koha/tools/additional-contents.pl"><i class="fa fa-remove"></i> Cancel</a>
+        [% ELSIF category == 'pages' %]
+            <a class="btn btn-default cancel" href="/cgi-bin/koha/tools/additional-contents.pl?category=pages"><i class="fa fa-remove"></i> Cancel</a>
         [% ELSE %]
             <a class="btn btn-default cancel" href="/cgi-bin/koha/tools/additional-contents.pl?category=html_customizations"><i class="fa fa-remove"></i> Cancel</a>
         [% END %]
@@ -308,16 +320,17 @@
         </div>
     </div>
 
-    <h2>Additional contents ([% IF category == 'news' %]News[% ELSE %]HTML customizations[% END %])</h2>
-    [% IF category == 'news' %]
-        See <a href="/cgi-bin/koha/tools/additional-contents.pl?category=html_customizations">HTML customizations</a>
-    [% ELSE %]
-        See <a href="/cgi-bin/koha/tools/additional-contents.pl?category=news">News</a>
-    [% END %]
-    [% IF ( CAN_user_parameters_manage_sysprefs ) %]
-        <a class="syspref-link" href='/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=OPACUserJS'>OPACUserJS</a>
-        <a class="syspref-link" href='/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=OPACUserCSS'>OPACUserCSS</a>
-    [% END %]
+    <h2>Additional contents ([% IF category == 'news' %]News[% ELSIF category == 'pages' %]Pages[% ELSE %]HTML customizations[% END %])</h2>
+    <span id="additional_contents_links">
+        See
+        <a class="customisation-link" href="/cgi-bin/koha/tools/additional-contents.pl?category=news">News</a>
+        <a class="customisation-link" href="/cgi-bin/koha/tools/additional-contents.pl?category=html_customizations">HTML customizations</a>
+        <a class="customisation-link" href="/cgi-bin/koha/tools/additional-contents.pl?category=pages">Pages</a>
+        [% IF ( CAN_user_parameters_manage_sysprefs ) %]
+            <a class="syspref-link" href='/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=OPACUserJS'>OPACUserJS</a>
+            <a class="syspref-link" href='/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=OPACUserCSS'>OPACUserCSS</a>
+        [% END %]
+    </span>
 
     [% IF additional_contents.count %]
         <form id="del_form" method="post" action="/cgi-bin/koha/tools/additional-contents.pl">
@@ -332,7 +345,12 @@
                         <th>Expiration date</th>
                         <th class="anti-the">Title</th>
                         <th>Author</th>
-                        <th class="anti-the">News</th>
+                        [% IF category == 'pages' %]
+                            <th>Page URL</th>
+                            <th class="anti-the">Page</th>
+                        [% ELSE %]
+                            <th class="anti-the">News</th>
+                        [% END %]
                         <th class="NoSort noExport">Actions</th>
                     </tr>
                 </thead>
@@ -343,7 +361,7 @@
                             <input type="checkbox" name="ids" value="[% c.idnew | html %]" />
                         </td>
                         <td>
-                            [% IF c.category == 'news' %]
+                            [% IF c.category == 'news' || c.category == 'pages' %]
                                 [% IF c.location == 'staff_and_opac' %]<span>All</span>
                                 [% ELSIF c.location == 'staff_only' %]<span>Librarian interface</span>
                                 [% ELSIF c.location == 'opac_only' %]<span>OPAC</span>
@@ -365,6 +383,18 @@
                         <td data-order="[% c.expirationdate | html %]">[% c.expirationdate | $KohaDates %] [% IF ( c.is_expired ) %](<span class="expired">expired</span>)[% END %]</td>
                         <td>[% c.title | html %]</td>
                         <td>[% IF ( c.author) %][% INCLUDE 'patron-title.inc' patron=c.author %][% END %]</td>
+                        [% IF category == 'pages' %]
+                            <td class="actions">
+                                [% IF c.location == 'opac_only' %]
+                                <strong>OPAC</strong>: <a target="_blank" href="[% Koha.Preference('OPACBaseURL') | url %]/cgi-bin/koha/opac-page.pl?page_id=[% c.idnew | uri %]" title="View on OPAC">[% Koha.Preference('OPACBaseURL') | url %]/cgi-bin/koha/opac-page.pl?page_id=[% c.idnew | uri %]</a>
+                                [% ELSIF c.location == 'staff_only' %]
+                                <strong>Librarian interface</strong>: <a href="/cgi-bin/koha/tools/page.pl?page_id=[% c.idnew | uri %]" title="View on librarian interface">[% Koha.Preference('staffClientBaseURL') | url %]/cgi-bin/koha/tools/page.pl?page_id=[% c.idnew | uri %]</a>
+                                [% ELSIF c.location == 'staff_and_opac' %]
+                                <strong>OPAC</strong>: <a target="_blank" href="[% Koha.Preference('OPACBaseURL') | url %]/cgi-bin/koha/opac-page.pl?page_id=[% c.idnew | uri %]" title="View on OPAC">[% Koha.Preference('OPACBaseURL') | url %]/cgi-bin/koha/opac-page.pl?page_id=[% c.idnew | uri %]</a><br>
+                                <strong>Librarian interface</strong>: <a href="/cgi-bin/koha/tools/page.pl?page_id=[% c.idnew | uri %]" title="View on librarian interface">[% Koha.Preference('staffClientBaseURL') | url %]/cgi-bin/koha/tools/page.pl?page_id=[% c.idnew | uri %]</a>
+                                [% END %]
+                            </td>
+                        [% END %]
                         <td>
                             <div class="btn-group">
                                 <a class="preview_news btn btn-default btn-xs" data-number="[% loop.count | html %]"><i class="fa fa-eye" aria-hidden="true"></i> Preview content</a>
@@ -422,7 +452,7 @@
 [% END %]
 
 [% BLOCK locations_options %]
-    [% IF category == 'news' %]
+    [% IF category == 'news' || category == 'pages' %]
         [% IF location == "staff_and_opac" %]
             <option value="staff_and_opac" selected="selected">Librarian and OPAC interfaces</option>
         [% ELSE %]
@@ -441,10 +471,12 @@
             <option value="opac_only">OPAC</option>
         [% END %]
 
-        [% IF location == "slip" %]
-            <option value="slip" selected="selected">Slip</option>
-        [% ELSE %]
-            <option value="slip">Slip</option>
+        [% UNLESS category == 'pages' %]
+            [% IF location == "slip" %]
+                <option value="slip" selected="selected">Slip</option>
+            [% ELSE %]
+                <option value="slip">Slip</option>
+            [% END %]
         [% END %]
     [% ELSE %]
         [% FOREACH l IN [ 'OpacNavRight', 'opacheader', 'OpacCustomSearch', 'OpacMainUserBlock', 'opaccredits', 'OpacLoginInstructions', 'OpacNav', 'OpacNavBottom', 'OpacSuggestionInstructions', 'ArticleRequestsDisclaimerText', 'OpacMoreSearches', 'OpacMySummaryNote' ] %]

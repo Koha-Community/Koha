@@ -100,6 +100,7 @@
                 <div id="news" class="newscontainer">
                     [% SET show_author = Koha.Preference('NewsAuthorDisplay') == 'opac' || Koha.Preference('NewsAuthorDisplay') == 'both' %]
                     [% FOREACH koha_new IN koha_news %]
+                    [% IF koha_new.category == 'news' %]
                         <div class="newsitem">
                             <h4 class="newsheader">
                                 [% IF ( news_item ) %]
@@ -119,6 +120,7 @@
                                 [% END %]
                             </div>
                         </div>
+                    [% END %]
                     [% END %]
 
                     [% UNLESS news_item %]
