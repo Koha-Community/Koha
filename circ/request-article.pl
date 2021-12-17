@@ -129,10 +129,14 @@ if ( !$patron && $patron_cardnumber ) {
     }
 }
 
-if( $patron && !$patron->can_request_article) {
+if ( $patron && !$patron->can_request_article ) {
     $patron = undef;
+    $template->param( error_message => 'article_request_limit_reached' );
+}
+
+if ( $patron ) {
     $template->param(
-        error_message => 'article_request_limit_reached'
+        article_request_fee => $patron->article_request_fee
     );
 }
 

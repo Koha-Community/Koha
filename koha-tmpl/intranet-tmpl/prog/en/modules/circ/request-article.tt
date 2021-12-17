@@ -5,6 +5,7 @@
 [% USE Branches %]
 [% USE ItemTypes %]
 [% USE AuthorisedValues %]
+[% USE Price %]
 [% SET footerjs = 1 %]
 [% SET article_requests_view = 1 %]
 [% SET biblionumber = biblio.biblionumber %]
@@ -143,7 +144,11 @@
                         </form>
                     [% ELSE %]
                         [% IF biblio.can_article_request( patron ) %]
-
+                            [% IF article_request_fee > 0 %]
+                                <div class="dialog alert">
+                                    Patron will be charged with <strong>[% article_request_fee | $Price %]</strong> for every request
+                                </div>
+                            [% END %]
                             <form id="place-article-request" method="post" action="/cgi-bin/koha/circ/request-article.pl">
                                 <input type="hidden" name="action" value="create" />
                                 <input type="hidden" name="biblionumber" id="biblionumber" value="[% biblio.biblionumber | html %]" />

@@ -128,6 +128,9 @@ if(!$patron->can_request_article) {
     );
 }
 
+$template->param( article_request_fee => $patron->article_request_fee )
+  if $action ne 'create';
+
 $template->param(
     biblio => $biblio,
     patron => $patron,

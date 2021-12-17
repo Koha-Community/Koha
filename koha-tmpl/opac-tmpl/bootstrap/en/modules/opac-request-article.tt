@@ -2,6 +2,7 @@
 [% USE Branches %]
 [% USE ItemTypes %]
 [% USE AdditionalContents %]
+[% USE Price %]
 [% USE raw %]
 [% INCLUDE 'doc-head-open.inc' %]
 
@@ -56,6 +57,12 @@
                         [% IF article_request_type == 'bib_only' %]  [% SET mandatory_fields = Koha.Preference('ArticleRequestsMandatoryFieldsRecordOnly') %] [% END %]
                         [% IF article_request_type == 'item_only' %] [% SET mandatory_fields = Koha.Preference('ArticleRequestsMandatoryFieldsItemOnly') %]   [% END %]
 
+
+                    [% IF article_request_fee > 0 %]
+                        <div class="alert alert-warning">
+                            You will be charged with <strong>[% article_request_fee | $Price %]</strong> for every request
+                        </div>
+                    [% END %]
 
                         <form id="place-article-request" method="post" action="/cgi-bin/koha/opac-request-article.pl">
                             <legend class="sr-only">Place article request</legend>
