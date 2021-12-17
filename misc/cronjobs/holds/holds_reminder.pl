@@ -58,6 +58,7 @@ holds_reminder.pl
    -v                             verbose
    -c --confirm                   confirm, if not set no email will be sent
    -days          <days>          days waiting to deal with
+   -t --triggered                 include only holds <days> days waiting, and not longer
    -lettercode   <lettercode>     predefined notice to use, default is HOLD_REMINDER
    -library      <branchname>     only deal with holds from this library (repeatable : several libraries can be given)
    -holidays                      use the calendar to not count holidays as waiting days
@@ -93,6 +94,13 @@ the patrons are printed to standard out.
 Optional parameter, number of days an items has been 'waiting' on hold
 to send a message for. If not included a notice will be sent to all
 patrons with waiting holds.
+
+=item B<-triggered>
+
+Optional parameter, only sned notices for holds exactly <days> waiting.
+If not included a notice will be sent to all patrons with waiting holds
+equal to OR greater than <days>. This option is useful if the cron is
+being run daily to avoid spamming the patrons.
 
 =item B<-lettercode>
 
@@ -168,6 +176,7 @@ my $man     = 0;
 my $verbose = 0;
 my $confirm  = 0;
 my $days    ;
+my $triggered  = 0;
 my $lettercode;
 my @branchcodes; # Branch(es) passed as parameter
 my $use_calendar = 0;
@@ -181,6 +190,7 @@ GetOptions(
     'v'              => \$verbose,
     'c|confirm'      => \$confirm,
     'days=s'         => \$days,
+    'triggered'      => \$triggered,
     'lettercode=s'   => \$lettercode,
     'library=s'      => \@branchcodes,
     'date=s'         => \$date_input,
@@ -252,8 +262,9 @@ foreach my $branchcode (@branchcodes) { #BEGIN BRANCH LOOP
     # Find all the holds waiting since this date for the current branch
     my $dtf = Koha::Database->new->schema->storage->datetime_parser;
     my $waiting_since = $dtf->format_date( $waiting_date );
+    my $comparator = $triggered ? '=' : '<=';
     my $reserves = Koha::Holds->search({
-        waitingdate => {'<=' => $waiting_since },
+        waitingdate => {$comparator => $waiting_since },
         'me.branchcode'  => $branchcode,
     },{ prefetch => 'patron' });
 
