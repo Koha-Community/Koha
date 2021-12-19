@@ -2,7 +2,7 @@ use Modern::Perl;
 
 return {
     bug_number => "29557",
-    description => "Add auto_account_expired to AUTO_RENEWALS",
+    description => "Add auto_account_expired to AUTO_RENEWALS notice. Please update your AUTO_RENEWALS notice manually if you have changed or translated it.",
     up => sub {
         my ($args) = @_;
         my ($dbh, $out) = @$args{qw(dbh out)};
