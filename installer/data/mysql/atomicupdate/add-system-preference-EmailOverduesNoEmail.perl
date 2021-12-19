@@ -9,7 +9,7 @@ use Modern::Perl;
  
         $dbh->do(q{
             INSERT IGNORE INTO systempreferences (`variable`,`value`,`options`,`explanation`,`type`)
-            VALUES ('EmailOverduesNoEmail','0','','Set mail sending to staff for patron has overdues but no email address', 'YesNo')
+            VALUES ('EmailOverduesNoEmail','0','','Send send overdues of patrons without email address to staff', 'YesNo')
             });
     },
 }
