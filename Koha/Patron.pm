@@ -1910,6 +1910,51 @@ sub queue_notice {
     return \%return;
 }
 
+=head3 safe_to_delete
+
+    my $result = $patron->safe_to_delete;
+    if ( $result eq 'has_guarantees' ) { ... }
+    elsif ( $result ) { ... }
+    else { # cannot delete }
+
+This method tells if the Koha:Patron object can be deleted. Possible return values
+
+=over 4
+
+=item 'ok'
+
+=item 'has_checkouts'
+
+=item 'has_debt'
+
+=item 'has_guarantees'
+
+=item 'is_anonymous_patron'
+
+=back
+
+=cut
+
+sub safe_to_delete {
+    my ($self) = @_;
+
+    my $anonymous_patron = C4::Context->preference('AnonymousPatron');
+
+    return 'is_anonymous_patron'
+        if $anonymous_patron && $self->id eq $anonymous_patron;
+
+    return 'has_checkouts'
+        if $self->checkouts->count;
+
+    return 'has_debt'
+        if $self->account->outstanding_debits->total_outstanding > 0;
+
+    return 'has_guarantees'
+        if $self->guarantee_relationships->count;
+
+    return 'ok';
+}
+
 =head2 Internal methods
 
 =head3 _type
