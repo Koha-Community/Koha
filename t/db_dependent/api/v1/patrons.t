@@ -31,6 +31,7 @@ use Koha::Database;
 use Koha::DateUtils qw(dt_from_string output_pref);
 use Koha::Exceptions::Patron;
 use Koha::Exceptions::Patron::Attribute;
+use Koha::Old::Patrons;
 use Koha::Patron::Attributes;
 use Koha::Patron::Debarments qw/AddDebarment/;
 
@@ -640,7 +641,7 @@ subtest 'delete() tests' => sub {
     $schema->storage->txn_rollback;
 
     subtest 'librarian access test' => sub {
-        plan tests => 8;
+        plan tests => 18;
 
         $schema->storage->txn_begin;
 
@@ -665,10 +666,47 @@ subtest 'delete() tests' => sub {
           ->status_is(403, 'Anonymous patron cannot be deleted')
           ->json_is( { error => 'Anonymous patron cannot be deleted' } );
 
+        t::lib::Mocks::mock_preference( 'borrowerRelationship', 'parent' );
+
+        my $checkout = $builder->build_object(
+            {
+                class => 'Koha::Checkouts',
+                value => { borrowernumber => $patron->borrowernumber }
+            }
+        );
+        my $debit = $patron->account->add_debit({ amount => 10, interface => 'intranet', type => 'MANUAL' });
+        my $guarantee = $builder->build_object({ class => 'Koha::Patrons' });
+
+        $guarantee->add_guarantor({ guarantor_id => $patron->id, relationship => 'parent' });
+
+        $t->delete_ok("//$userid:$password@/api/v1/patrons/" . $patron->borrowernumber)
+          ->status_is(409, 'Patron with checkouts cannot be deleted')
+          ->json_is( { error => 'Pending checkouts prevent deletion' } );
+
+        # Make sure it has no pending checkouts
+        $checkout->delete;
+
+        $t->delete_ok("//$userid:$password@/api/v1/patrons/" . $patron->borrowernumber)
+          ->status_is(409, 'Patron with debt cannot be deleted')
+          ->json_is( { error => 'Pending debts prevent deletion' } );
+
+        # Make sure it has no debt
+        $patron->account->pay({ amount => 10, debits => [ $debit ] });
+
+        $t->delete_ok("//$userid:$password@/api/v1/patrons/" . $patron->borrowernumber)
+          ->status_is(409, 'Patron with guarantees cannot be deleted')
+          ->json_is( { error => 'Patron is a guarantor and it prevents deletion' } );
+
+        # Remove guarantee
+        $patron->guarantee_relationships->delete;
+
         t::lib::Mocks::mock_preference('AnonymousPatron', 0); # back to default
         $t->delete_ok("//$userid:$password@/api/v1/patrons/" . $patron->borrowernumber)
           ->status_is(204, 'SWAGGER3.2.4')
           ->content_is('', 'SWAGGER3.3.4');
+
+        my $deleted_patrons = Koha::Old::Patrons->search({ borrowernumber =>  $patron->borrowernumber });
+        is( $deleted_patrons->count, 1, 'The patron has been moved to the vault' );
 
         $schema->storage->txn_rollback;
     };
