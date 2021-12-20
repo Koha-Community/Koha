@@ -86,6 +86,32 @@ sub get_enrollable {
     }
 }
 
+=head3 filter_out_empty
+
+    Remove clubs without current enrollments.
+
+=cut
+
+sub filter_out_empty {
+    my ($self) = @_;
+    return $self->search(
+        {
+            -and => [
+                [
+                    { name        => { like => '%x%' } },
+                    { description => { like => '%x%' } },
+                ],
+                { 'club_enrollments.club_id'       => { '!=' => undef } },
+                { 'club_enrollments.date_canceled' => undef },
+            ]
+        },
+        {
+            join     => 'club_enrollments',
+            distinct => 1,
+        }
+    );
+}
+
 =head3 type
 
 =cut
