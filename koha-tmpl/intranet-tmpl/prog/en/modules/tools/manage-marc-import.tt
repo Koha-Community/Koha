@@ -585,7 +585,7 @@
                                 checked = "";
                             });
                             if( !any_checked ){ checked = 'checked="checked"'; }
-                            $('td:eq(4) ul', nRow).prepend('<li><label><input type="radio" data-import_record_id="'+aData['import_record_id']+'" class="chosen" name="import_record_id_'+aData['import_record_id']+'_match" value="none" ' + checked + disabled + ' > Ignore matches</label></li>');
+                            $('td:eq(4) ul', nRow).prepend('<li><label><input type="radio" data-import_record_id="'+aData['import_record_id']+'" class="chosen" name="import_record_id_'+aData['import_record_id']+'_match" value="none" ' + checked + disabled + ' > '+_("Ignore matches")+'</label></li>');
                             $('td:eq(5) ul', nRow).prepend('<li>&nbsp;</li>');
                         }
                         if (aData['diff_url']) {
@@ -624,7 +624,7 @@
                     url: '/api/v1/import/[% import_batch_id | html %]/records/'+$(this).data('import_record_id')+'/matches/chosen',
                     method: apimethod,
                     data: apidata
-                }).fail(function(){ alert("Unable to update match choices"); return false; });
+                }).fail(function(){ alert(_("Unable to update match choices")); return false; });
             });
 
             $("body").on("click", ".previewMARC", function(e) {
