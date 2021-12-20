@@ -145,6 +145,7 @@
                     options['minDate'] = new Date().fp_incr(1);
                 }
                 disable_buttons.push(0); /* Yesterday */
+                disable_buttons.push(1); /* Today */
             }
             if( $(this).data("flatpickr-pastinclusive") === true ) {
                 options['maxDate'] = new Date(); /* Not today or hh:mm will be 00:00 */
