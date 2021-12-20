@@ -1307,6 +1307,22 @@ tables:
             - "A hold has been placed on the following item : <<biblio.title>> (<<biblio.biblionumber>>) by the user <<borrowers.firstname>> <<borrowers.surname>> (<<borrowers.cardnumber>>)."
 
         - module: reserves
+          code: HOLD_CHANGED
+          branchcode: ""
+          name: "Canceled hold available for different patron"
+          is_html: 0
+          title: "Canceled hold available for different patron"
+          message_transport_type: email
+          lang: default
+          content:
+            - "The patron picking up <<biblio.title>> (<<items.barcode>>) has changed to <<borrowers.firstname>> <<borrowers.surname>> (<<borrowers.cardnumber>>)."
+            - "Please update the hold information for this item."
+            - "Title: <<biblio.title>>"
+            - "Author: <<biblio.author>>"
+            - "Item: <<items.itemcallnumber>>"
+            - "Pickup location: <<branches.branchname>>"
+
+        - module: reserves
           code: HOLD_REMINDER
           branchcode: ""
           name: "Waiting hold reminder"

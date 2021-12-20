@@ -770,17 +770,16 @@ Circulation:
               choices:
                   1: Allow
                   0: "Don't allow"
-            - 'holds to expire automatically if they have not been picked by within the time period specified in the <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=ReservesMaxPickUpDelay">ReservesMaxPickUpDelay</a> system preference.'
-            - '<br><strong>NOTE:</strong> This system preference requires the <code>misc/cronjobs/holds/cancel_expired_holds.pl</code> cronjob. Ask your system administrator to schedule it.<br>'
+            - 'holds to expire automatically if they have not been picked by within the time period specified in the <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=ReservesMaxPickUpDelay">ReservesMaxPickUpDelay</a> system preference.</br>'
             - pref: ExpireReservesAutoFill
               choices:
                   1: "Do"
                   0: "Don't"
-            - automatically fill the next hold using the item. If enabled, an email notification will be sent to either the email address defined in ExpireReservesAutoFillEmail, the item's holding library's email address, or the email address defined in KohaAdminEmailAddress in that order.
-        -
+            - automatically fill the next hold using the item.
             - Send email notification of the new hold filled with a canceled item to
             - pref: ExpireReservesAutoFillEmail
-            - . If no address is defined here, the email will be sent to either the item's holding library or the email address defined in KohaAdminEmailAddress in that order.
+            - . If no address is defined here, the email will be sent to the library's reply to address.
+            - '<br><strong>NOTE:</strong> These system preferences require the <code>misc/cronjobs/holds/cancel_expired_holds.pl</code> cronjob. Ask your system administrator to schedule it.<br>'
         -
             - If using <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=ExpireReservesMaxPickUpDelay">ExpireReservesMaxPickUpDelay</a>, charge a patron who allows their waiting hold to expire a fee of
             - pref: ExpireReservesMaxPickUpDelayCharge

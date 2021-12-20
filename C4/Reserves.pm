@@ -1875,7 +1875,6 @@ The following tables are availalbe witin the notice:
 
 sub _koha_notify_reserve {
     my $reserve_id = shift;
-    my $notify_library = shift;
 
     my $hold = Koha::Holds->find($reserve_id);
     my $borrowernumber = $hold->borrowernumber;
@@ -1891,15 +1890,14 @@ sub _koha_notify_reserve {
     } );
 
     my $library = Koha::Libraries->find( $hold->branchcode );
-    my $admin_email_address = $library->from_email_address;
-    $library = $library->unblessed;
+    my $inbound_email_address = $library->inbound_email_address;
 
     my %letter_params = (
         module => 'reserves',
         branchcode => $hold->branchcode,
         lang => $patron->lang,
         tables => {
-            'branches'       => $library,
+            'branches'       => $library->unblessed,
             'borrowers'      => $patron->unblessed,
             'biblio'         => $hold->biblionumber,
             'biblioitems'    => $hold->biblionumber,
@@ -1923,7 +1921,7 @@ sub _koha_notify_reserve {
         C4::Letters::EnqueueLetter( {
             letter => $letter,
             borrowernumber => $borrowernumber,
-            from_address => $admin_email_address,
+            from_address => $inbound_email_address,
             message_transport_type => $mtt,
         } );
     };
@@ -1944,37 +1942,6 @@ sub _koha_notify_reserve {
         &$send_notification('print', 'HOLD');
     }
 
-    if ($notify_library) {
-        my $letter = C4::Letters::GetPreparedLetter(
-            module      => 'reserves',
-            letter_code => 'HOLD_CHANGED',
-            branchcode  => $hold->branchcode,
-            substitute  => { today => output_pref( dt_from_string ) },
-            tables      => {
-                'branches'    => $library,
-                'borrowers'   => $patron->unblessed,
-                'biblio'      => $hold->biblionumber,
-                'biblioitems' => $hold->biblionumber,
-                'reserves'    => $hold->unblessed,
-                'items'       => $hold->itemnumber,
-            },
-        );
-
-        my $email =
-             C4::Context->preference('ExpireReservesAutoFillEmail')
-          || $library->{branchemail}
-          || C4::Context->preference('KohaAdminEmailAddress');
-
-        C4::Letters::EnqueueLetter(
-            {
-                letter                 => $letter,
-                borrowernumber         => $borrowernumber,
-                message_transport_type => 'email',
-                from_address           => $email,
-                to_address             => $email,
-            }
-        );
-    }
 }
 
 =head2 _koha_notify_hold_changed
@@ -2008,8 +1975,7 @@ sub _koha_notify_hold_changed {
 
     my $email =
          C4::Context->preference('ExpireReservesAutoFillEmail')
-      || $library->branchemail
-      || C4::Context->preference('KohaAdminEmailAddress');
+      || $library->inbound_email_address;
 
     C4::Letters::EnqueueLetter(
         {

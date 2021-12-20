@@ -637,12 +637,9 @@ Cancel a hold:
 
 sub cancel {
     my ( $self, $params ) = @_;
-<<<<<<< HEAD
-=======
 
     my $autofill_next = $params->{autofill} && $self->itemnumber && $self->found && $self->found eq 'W';
 
->>>>>>> Bug 14364: Allow automatically canceled expired waiting holds to fill the next hold
     $self->_result->result_source->schema->txn_do(
         sub {
             my $patron = $self->patron;
