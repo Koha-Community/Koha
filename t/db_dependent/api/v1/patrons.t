@@ -665,6 +665,7 @@ subtest 'delete() tests' => sub {
         $t->delete_ok("//$userid:$password@/api/v1/patrons/" . $patron->borrowernumber)
           ->status_is(403, 'Anonymous patron cannot be deleted')
           ->json_is( { error => 'Anonymous patron cannot be deleted' } );
+        t::lib::Mocks::mock_preference('AnonymousPatron', 0); # back to default
 
         t::lib::Mocks::mock_preference( 'borrowerRelationship', 'parent' );
 
@@ -700,7 +701,6 @@ subtest 'delete() tests' => sub {
         # Remove guarantee
         $patron->guarantee_relationships->delete;
 
-        t::lib::Mocks::mock_preference('AnonymousPatron', 0); # back to default
         $t->delete_ok("//$userid:$password@/api/v1/patrons/" . $patron->borrowernumber)
           ->status_is(204, 'SWAGGER3.2.4')
           ->content_is('', 'SWAGGER3.3.4');

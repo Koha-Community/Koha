@@ -20,6 +20,7 @@ use Modern::Perl;
 use Mojo::Base 'Mojolicious::Controller';
 
 use Koha::Database;
+use Koha::Exceptions;
 use Koha::Patrons;
 
 use Scalar::Util qw( blessed );
@@ -330,40 +331,48 @@ sub delete {
 
     return try {
 
-        if ( $patron->checkouts->count > 0 ) {
+        my $safe_to_delete = $patron->safe_to_delete;
+
+        if ( $safe_to_delete eq 'ok' ) {
+            $patron->_result->result_source->schema->txn_do(
+                sub {
+                    $patron->move_to_deleted;
+                    $patron->delete;
+
+                    return $c->render(
+                        status  => 204,
+                        openapi => q{}
+                    );
+                }
+            );
+        }
+        elsif ( $safe_to_delete eq 'has_checkouts' ) {
             return $c->render(
                 status  => 409,
                 openapi => { error => 'Pending checkouts prevent deletion' }
             );
         }
-
-        my $account = $patron->account;
-
-        if ( $account->outstanding_debits->total_outstanding > 0 ) {
+        elsif ( $safe_to_delete eq 'has_debt' ) {
             return $c->render(
                 status  => 409,
                 openapi => { error => 'Pending debts prevent deletion' }
             );
         }
-
-        if ( $patron->guarantee_relationships->count > 0 ) {
+        elsif ( $safe_to_delete eq 'has_guarantees' ) {
             return $c->render(
                 status  => 409,
                 openapi => { error => 'Patron is a guarantor and it prevents deletion' }
             );
         }
-
-        $patron->_result->result_source->schema->txn_do(
-            sub {
-                $patron->move_to_deleted;
-                $patron->delete;
-
-                return $c->render(
-                    status  => 204,
-                    openapi => q{}
-                );
-            }
-        );
+        elsif ( $safe_to_delete eq 'is_anonymous_patron' ) {
+            return $c->render(
+                status  => 403,
+                openapi => { error => 'Anonymous patron cannot be deleted' }
+            );
+        }
+        else {
+            Koha::Exceptions::Exception->throw( "Koha::Patron->safe_to_delete returned an unexpected value: $safe_to_delete" );
+        }
     } catch {
         if ( blessed $_ && $_->isa('Koha::Exceptions::Patron::FailedDeleteAnonymousPatron') ) {
             return $c->render(
