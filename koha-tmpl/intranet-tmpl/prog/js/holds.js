@@ -361,7 +361,7 @@ $(document).ready(function() {
                     <input type='hidden' id='suspend-modal-reserve_id' name='reserve_id' />\
 \
                     <label for='suspend-modal-until'>" + __("Suspend until:") + "</label>\
-                    <input name='suspend_until' id='suspend-modal-until' class='suspend-until' size='10' />\
+                    <input name='suspend_until' id='suspend-modal-until' class='suspend-until flatpickr' data-flatpickr-futuredate='true' size='10' />\
 \
                     <p><a class='btn btn-link' id='suspend-modal-clear-date' >" + __("Clear date to suspend indefinitely") + "</a></p>\
 \
@@ -377,9 +377,6 @@ $(document).ready(function() {
         </div>\
     ");
 
-    $("#suspend-modal-until").flatpickr({
-        minDate: new Date().fp_incr(1) // Require that "until date" be in the future
-    });
     $("#suspend-modal-clear-date").on( "click", function() { $("#suspend-modal-until").val(""); } );
 
     $("#suspend-modal-submit").on( "click", function( e ) {

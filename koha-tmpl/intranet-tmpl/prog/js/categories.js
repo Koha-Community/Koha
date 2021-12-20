@@ -38,10 +38,6 @@ $(document).ready(function() {
         "exportColumns": [0,1,2,3,4,5,6,7,8,9,10,11,12],
     }, columns_settings);
 
-    $("#enrolmentperioddate").flatpickr({
-        minDate: new Date().fp_incr(1)
-    });
-
     if ($("#branches option:selected").length < 1) {
         $("#branches option:first").attr("selected", "selected");
     }

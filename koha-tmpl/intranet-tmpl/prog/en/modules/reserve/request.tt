@@ -1130,12 +1130,12 @@
 
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'datatables.inc' %]
-    [% INCLUDE 'calendar.inc' %]
     [% INCLUDE 'columns_settings.inc' %]
     [% Asset.js("lib/hc-sticky.js") | $raw %]
     [% Asset.js("js/circ-patron-search-results.js") | $raw %]
     [% INCLUDE 'select2.inc' %]
     [% Asset.js("js/holds.js") | $raw%]
+    [% INCLUDE 'calendar.inc' %]
     <script>
         var Sticky;
         var biblionumber = "[% biblionumber | $raw %]";
