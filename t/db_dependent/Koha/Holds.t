@@ -19,13 +19,14 @@
 
 use Modern::Perl;
 
-use Test::More tests => 6;
+use Test::More tests => 7;
 use Test::Warn;
 
 use C4::Circulation qw( AddIssue );
 use C4::Reserves qw( AddReserve ModReserve ModReserveCancelAll );
 use Koha::AuthorisedValueCategory;
 use Koha::Database;
+use Koha::DateUtils qw( dt_from_string );
 use Koha::Holds;
 
 use t::lib::Mocks;
@@ -503,6 +504,110 @@ subtest 'get_items_that_can_fill' => sub {
         [ $item_2->itemnumber ], 'Only item 2 is available for filling the hold' );
 
 };
+
+subtest 'set_waiting+patron_expiration_date' => sub {
+    plan tests => 2;
+    my $library = $builder->build_object( { class => 'Koha::Libraries' } );
+
+    my $item =
+      $builder->build_sample_item( { library => $library->branchcode } );
+    my $manager = $builder->build_object( { class => "Koha::Patrons" } );
+    t::lib::Mocks::mock_userenv(
+        { patron => $manager, branchcode => $manager->branchcode } );
+
+    my $patron = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => { branchcode => $library->branchcode, }
+        }
+    );
+
+    subtest 'patron_expiration_date < expiration_date' => sub {
+        plan tests => 6;
+        t::lib::Mocks::mock_preference( 'ReservesMaxPickUpDelay', 5 );
+        my $patron_expiration_date = dt_from_string->add( days => 3 )->ymd;
+        my $reserve_id             = C4::Reserves::AddReserve(
+            {
+                branchcode      => $library->branchcode,
+                borrowernumber  => $patron->borrowernumber,
+                biblionumber    => $item->biblionumber,
+                priority        => 1,
+                itemnumber      => $item->itemnumber,
+                expiration_date => $patron_expiration_date,
+            }
+        );
+
+        my $hold = Koha::Holds->find($reserve_id);
+
+        is(
+            $hold->expirationdate,
+            $patron_expiration_date,
+            'expiration date set to patron expiration date'
+        );
+        is(
+            $hold->patron_expiration_date, $patron_expiration_date,
+            'patron expiration date correctly set'
+        );
+
+        $hold->set_waiting;
+
+        $hold = $hold->get_from_storage;
+        is( $hold->expirationdate,         $patron_expiration_date );
+        is( $hold->patron_expiration_date, $patron_expiration_date );
+
+        C4::Reserves::RevertWaitingStatus(
+            { itemnumber => $item->itemnumber }
+        );
+
+        $hold = $hold->get_from_storage;
+        is( $hold->expirationdate,         $patron_expiration_date );
+        is( $hold->patron_expiration_date, $patron_expiration_date );
+    };
+
+    subtest 'patron_expiration_date > expiration_date' => sub {
+        plan tests => 6;
+        t::lib::Mocks::mock_preference( 'ReservesMaxPickUpDelay', 5 );
+        my $new_expiration_date = dt_from_string->add( days => 5 )->ymd;
+        my $patron_expiration_date = dt_from_string->add( days => 6 )->ymd;
+        my $reserve_id             = C4::Reserves::AddReserve(
+            {
+                branchcode      => $library->branchcode,
+                borrowernumber  => $patron->borrowernumber,
+                biblionumber    => $item->biblionumber,
+                priority        => 1,
+                itemnumber      => $item->itemnumber,
+                expiration_date => $patron_expiration_date,
+            }
+        );
+
+        my $hold = Koha::Holds->find($reserve_id);
+
+        is(
+            $hold->expirationdate,
+            $patron_expiration_date,
+            'expiration date set to patron expiration date'
+        );
+        is(
+            $hold->patron_expiration_date, $patron_expiration_date,
+            'patron expiration date correctly set'
+        );
+
+        $hold->set_waiting;
+
+        $hold = $hold->get_from_storage;
+        is( $hold->expirationdate,         $new_expiration_date );
+        is( $hold->patron_expiration_date, $patron_expiration_date );
+
+        C4::Reserves::RevertWaitingStatus(
+            { itemnumber => $item->itemnumber }
+        );
+
+        $hold = $hold->get_from_storage;
+        is( $hold->expirationdate,         $patron_expiration_date );
+        is( $hold->patron_expiration_date, $patron_expiration_date );
+    };
+};
+
 
 $schema->storage->txn_rollback;
 
