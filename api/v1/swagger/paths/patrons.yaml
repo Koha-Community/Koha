@@ -546,6 +546,14 @@
         description: Patron not found
         schema:
           $ref: ../definitions.yaml#/error
+      "409":
+        description: Conflict
+        schema:
+          $ref: ../definitions.yaml#/error
+      "500":
+        description: Internal server error
+        schema:
+          $ref: ../definitions.yaml#/error
     x-koha-authorization:
       permissions:
         borrowers: delete_borrowers
