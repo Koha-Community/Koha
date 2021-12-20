@@ -27,6 +27,8 @@
       <arg choice="noreq">
         <option>--help</option>|<option>-h</option>
         <option>--exclude-indexes</option>
+        <option>--uploaded_files</option>
+        <option>--uploaded_temp_files</option>
         <option>--quiet</option>|<option>-q</option>
       </arg>
       <arg choice="req" rep="repeat"><replaceable>instancename</replaceable></arg>
@@ -48,6 +50,20 @@
         <term><option>--quiet</option>|<option>-q</option></term>
         <listitem>
           <para>Make <command>koha-dump</command> run silently.</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term><option>--uploaded_files</option></term>
+        <listitem>
+          <para>Make <command>koha-dump</command> include uploaded files</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term><option>--uploaded_temp_files</option></term>
+        <listitem>
+          <para>Make <command>koha-dump</command> include temporary uploaded files</para>
         </listitem>
       </varlistentry>
 
