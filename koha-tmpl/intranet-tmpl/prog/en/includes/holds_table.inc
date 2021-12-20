@@ -201,7 +201,7 @@
             <td>
                 [% IF Koha.Preference('SuspendHoldsIntranet') %]
                     [% UNLESS ( hold.found ) %]
-                        <button class="btn btn-default btn-xs" onclick="window.location.href='request.pl?action=toggleSuspend&amp;reserve_id=[% hold.reserve_id | html %]&amp;borrowernumber=[% hold.borrowernumber | html %]&amp;biblionumber=[% hold.biblionumber | html %]&amp;date=[% hold.date | html %]&amp;suspend_until=' + $('#suspend_until_[% hold.reserve_id | html %]').val()">
+                        <button class="btn btn-default btn-xs toggle-suspend" data-reserve-id="[% hold.reserve_id | html %]" data-borrowernumber="[% hold.borrowernumber | html %]" data-biblionumber="[% hold.biblionumber | html %]" data-date="[% hold.date | html %]">
                             [% IF ( hold.suspend ) %]
                                 <i class="fa fa-play" aria-hidden="true"></i> Unsuspend
                             [% ELSE %]

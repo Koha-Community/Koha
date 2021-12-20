@@ -427,4 +427,15 @@ $(document).ready(function() {
             $('#suspend-modal').modal('hide');
         });
     });
+
+    $(".toggle-suspend").on('click', function(e) {
+        e.preventDefault();
+        let reserve_id     = $(this).data('reserve-id');
+        let borrowernumber = $(this).data('borrowernumber');
+        let biblionumber   = $(this).data('biblionumber');
+        let date           = $(this).data('date');
+        let suspend_until  = $('#suspend_until_' + reserve_id).val();
+        window.location.href='request.pl?action=toggleSuspend&amp;reserve_id=' + reserve_id + '&amp;borrowernumber=' + borrowernumber + '&amp;biblionumber=' + biblionumber + '&amp;date=' + date + '&amp;suspend_until=' + suspend_until;
+        return false;
+    });
 });
