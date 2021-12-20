@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 10;
+use Test::More tests => 11;
 use Test::Exception;
 use Test::Warn;
 
@@ -843,6 +843,55 @@ subtest 'article_requests() tests' => sub {
 
     $article_requests = $patron->article_requests;
     is( $article_requests->count, 4, '4 article requests' );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'safe_to_delete() tests' => sub {
+
+    plan tests => 5;
+
+    $schema->storage->txn_begin;
+
+    my $patron = $builder->build_object({ class => 'Koha::Patrons' });
+
+    ## Make it the anonymous
+    t::lib::Mocks::mock_preference( 'AnonymousPatron', $patron->id );
+
+    is( $patron->safe_to_delete, 'is_anonymous_patron', 'Cannot delete, it is the anonymous patron' );
+    # cleanup
+    t::lib::Mocks::mock_preference( 'AnonymousPatron', 0 );
+
+    ## Make it have a checkout
+    my $checkout = $builder->build_object(
+        {
+            class => 'Koha::Checkouts',
+            value => { borrowernumber => $patron->id }
+        }
+    );
+
+    is( $patron->safe_to_delete, 'has_checkouts', 'Cannot delete, has checkouts' );
+    # cleanup
+    $checkout->delete;
+
+    ## Make it have a guarantee
+    t::lib::Mocks::mock_preference( 'borrowerRelationship', 'parent' );
+    $builder->build_object({ class => 'Koha::Patrons' })
+            ->add_guarantor({ guarantor_id => $patron->id, relationship => 'parent' });
+
+    is( $patron->safe_to_delete, 'has_guarantees', 'Cannot delete, has guarantees' );
+    # cleanup
+    $patron->guarantee_relationships->delete;
+
+    ## Make it have debt
+    my $debit = $patron->account->add_debit({ amount => 10, interface => 'intranet', type => 'MANUAL' });
+
+    is( $patron->safe_to_delete, 'has_debt', 'Cannot delete, has debt' );
+    # cleanup
+    $patron->account->pay({ amount => 10, debits => [ $debit ] });
+
+    ## Happy case :-D
+    is( $patron->safe_to_delete, 'ok', 'Can delete, all conditions met' );
 
     $schema->storage->txn_rollback;
 };
