@@ -222,7 +222,11 @@
                     <input type="button" id="revert_hold_[% hold.reserve_id | html %]" value="[% IF hold.intransit %]Revert transit status[% ELSE %]Revert waiting status[% END %]" onclick="window.location.href='request.pl?action=move&amp;where=down&amp;first_priority=[% first_priority | uri %]&amp;last_priority=[% last_priority | uri %]&amp;prev_priority=0&amp;next_priority=1&amp;borrowernumber=[% hold.borrowernumber | uri %]&amp;biblionumber=[% hold.biblionumber | uri %]&amp;itemnumber=[% hold.itemnumber | uri %]&amp;reserve_id=[% hold.reserve_id | uri %]&amp;date=[% hold.date | uri %]'">
                 [%- END -%]
             </td>
-            <td><input class="printholdslip" type="button" name="printholdslip" value="Print slip" data-reserve_id=[% hold.reserve_id | html %]></td>
+            [% IF ( hold.intransit || hold.atdestination ) %]
+                <td><input class="printholdslip" type="button" name="printholdslip" value="Print slip" data-reserve_id=[% hold.reserve_id | html %]></td>
+            [% ELSE %]
+                <td></td>
+            [% END %]
         </tr>
     [% END %]
 </table>
