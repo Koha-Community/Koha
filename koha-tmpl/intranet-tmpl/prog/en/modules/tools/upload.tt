@@ -460,6 +460,10 @@
             window.close();
         }
         var columns_settings = [% TablesSettings.GetColumns( 'tools', 'upload', 'uploadresults', 'json' ) | $raw %];
+        [% IF plugin %]
+            delete columns_settings[6];
+            delete columns_settings[5];
+        [% END %]
         $(document).ready(function() {
             KohaTable("uploadresults",{
             }, columns_settings);
