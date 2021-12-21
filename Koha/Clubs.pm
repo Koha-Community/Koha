@@ -87,7 +87,9 @@ sub get_enrollable {
 
 =head3 filter_out_empty
 
-    Remove clubs without current enrollments.
+    my $filtered_rs = $clubs_rs->filter_out_empty;
+
+Return a new I<Koha::Clubs> resultset, containing only clubs with current enrollments.
 
 =cut
 
@@ -96,10 +98,6 @@ sub filter_out_empty {
     return $self->search(
         {
             -and => [
-                [
-                    { name        => { like => '%x%' } },
-                    { description => { like => '%x%' } },
-                ],
                 { 'club_enrollments.club_id'       => { '!=' => undef } },
                 { 'club_enrollments.date_canceled' => undef },
             ]
