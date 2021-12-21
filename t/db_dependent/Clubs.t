@@ -233,11 +233,10 @@ is( $club->club_enrollments->count, 1, 'There is 1 enrollment for club' );
 $schema->storage->txn_rollback();
 
 subtest 'filter_out_empty' => sub {
-    plan tests => 2;
+
+    plan tests => 3;
 
     $schema->storage->txn_begin();
-
-    Koha::Clubs->delete;
 
     my $club_template = $builder->build_object({ class => 'Koha::Club::Templates' });
 
@@ -293,9 +292,14 @@ subtest 'filter_out_empty' => sub {
 
     $enrollment_2_1->cancel;
 
-    my $clubs = Koha::Clubs->search->filter_out_empty;
-    is( $clubs->count, 1, 'Only one club has patron enrolled' );
-    is( $clubs->next->id, $club_1->id, 'Correct club is considered non-empty');
+    my $clubs = Koha::Clubs->search({ club_template_id => $club_template->id });
+
+    is( $clubs->count, 3, 'Base resultset has all the clubs' );
+
+    my $filtered_out_rs = $clubs->filter_out_empty;
+
+    is( $filtered_out_rs->count, 1, 'Only one club has patron enrolled' );
+    is( $filtered_out_rs->next->id, $club_1->id, 'Correct club is considered non-empty');
 
     $schema->storage->txn_rollback();
 }
