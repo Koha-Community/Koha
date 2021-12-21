@@ -142,6 +142,35 @@ eval {
 };
 like( $@, qr/.*does not match the date format \(rfc3339\).*/, 'dt_from_string should die when passed a bad date string' );
 
+# ISO string tests
+subtest 'dt_from_string - iso format' => sub {
+    plan tests => 6;
+
+    # Dateonly
+    my $dt_iso = dt_from_string( '2012-01-01', 'iso' );
+    cmp_ok( $dt_iso->epoch(), 'eq', '1325376000', 'dt_from_string handles dateonly string' );
+
+    eval {
+        $dt_iso = dt_from_string( '2012-01-32', 'iso' );
+    };
+    like( $@, qr/^Validation failed/, 'Fail on invalid dateonly string');
+
+    # Datetime
+    $dt_iso = dt_from_string( '2012-01-01T23:59:59', 'iso' );
+    cmp_ok( $dt_iso->epoch(), 'eq', '1325455199', 'dt_from_string with no offset assumes "local"' );
+
+    # Datetime with timezone
+    $dt_iso = dt_from_string( '2012-01-01T23:59:59Z', 'iso' );
+    cmp_ok( $dt_iso->epoch(), 'eq', '1325455199', 'dt_from_string with UTC prescribed as Z' );
+
+    $dt_iso = dt_from_string( '2012-01-01T23:59:59+02:00', 'iso' );
+    cmp_ok( $dt_iso->epoch(), 'eq', '1325455199', 'dt_from_string with offset' );
+
+    $dt_iso = dt_from_string( '2012-01-01T23:59:59+02:00', 'iso' );
+    cmp_ok( $dt_iso->epoch(), 'eq', '1325455199', 'dt_from_string handles an offset' );
+
+};
+
 # Return undef if passed mysql 0 dates
 $dt0 = dt_from_string( '0000-00-00', 'iso' );
 is( $dt0, undef, "undefined returned for 0 iso date" );
