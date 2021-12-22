@@ -60,6 +60,50 @@ sub total {
       : 0;
 }
 
+=head3 filter_by_non_reversable
+
+=cut
+
+sub filter_by_non_reversable {
+    my ($self) = @_;
+
+    my $me = $self->_resultset()->current_source_alias;
+
+    my $where = {
+        debit_id                  => { '!='      => undef },
+        credit_id                 => { '!='      => undef },
+        type                      => 'APPLY',
+        'credit.credit_type_code' => [ 'WRITEOFF', 'DISCOUNT', 'CANCELLATION' ],
+        'credit.status'           => [ { '!=' => 'VOID' }, undef ],
+        $me . '.amount'           => { '<' => 0 }
+    };
+    my $attr = { join => 'credit' };
+
+    return $self->search( $where, $attr );
+}
+
+=head3 filter_by_reversable
+
+=cut
+
+sub filter_by_reversable {
+    my ($self) = @_;
+
+    my $me = $self->_resultset()->current_source_alias;
+
+    my $where = {
+        debit_id                  => { '!='      => undef },
+        credit_id                 => { '!='      => undef },
+        type                      => 'APPLY',
+        'credit.credit_type_code' => { -not_in => [ 'WRITEOFF', 'DISCOUNT', 'CANCELLATION' ] },
+        'credit.status'           => [ { '!=' => 'VOID' }, undef ],
+        $me . '.amount'           => { '<' => 0 }
+    };
+    my $attr = { join => 'credit' };
+
+    return $self->search( $where, $attr );
+}
+
 =head2 Internal methods
 
 =head3 _type
