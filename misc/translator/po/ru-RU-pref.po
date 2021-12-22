@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: Koha 21.05\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2021-11-18 13:43+0000\n"
+"PO-Revision-Date: 2021-12-20 16:41+0000\n"
 "Last-Translator: Igor A. Sychev <Igor.A.Sychev@mail.ru>\n"
 "Language-Team: Koha Translation Team\n"
 "Language: ru\n"
@@ -16,7 +16,7 @@ msgstr ""
 "X-Generator: Pootle 2.8\n"
 "X-Pootle-Path: /ru/21.05/ru-RU-pref.po\n"
 "X-Pootle-Revision: 1\n"
-"X-POOTLE-MTIME: 1637243032.481904\n"
+"X-POOTLE-MTIME: 1640018478.434519\n"
 
 # Accounting
 msgid "accounting.pref"
@@ -82,15 +82,15 @@ msgid ""
 msgstr "Не генерировать автоматически номера кредитов"
 
 # Accounting > Features
-#, fuzzy
 msgid ""
 "accounting.pref#EnablePointOfSale#  the point of sale feature to allow "
 "anonymous transactions with the accounting system. (Requires <a href=\"/cgi-"
 "bin/koha/admin/preferences.pl?op=search&searchfield=UseCashRegisters"
 "\">UseCashRegisters</a>)"
 msgstr ""
-"функцию точки продаж, позволяющей проводить анонимные транзакции с системой "
-"бухгалтерского учета. (Требуется UseCashRegisters)"
+"  функция продажи, чтобы обеспечить анонимные операции с системой учета. "
+"(Требуется <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=UseCashRegisters\">UseCashRegisters</a>)"
 
 # Accounting > Features
 msgid "accounting.pref#EnablePointOfSale# Disable"
@@ -326,14 +326,14 @@ msgid "acquisitions.pref#EmailPurchaseSuggestions# EmailAddressForSuggestions"
 msgstr "EmailAddressForSuggestions"
 
 # Acquisitions > Policy
-#, fuzzy
 msgid ""
 "acquisitions.pref#EmailPurchaseSuggestions# If you choose <a href=\"/cgi-bin/"
 "koha/admin/preferences.pl?op=search&searchfield=EmailAddressForSuggestions"
 "\">EmailAddressForSuggestions</a> you have to enter a valid email address:"
 msgstr ""
-"Если вы выбираете EmailAddressForSuggestions, вам необходимо ввести "
-"действующий e-mail:"
+"Если вы выбираете <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=EmailAddressForSuggestions"
+"\">EmailAddressForSuggestions</a>, вам необходимо ввести действующий email:"
 
 # Acquisitions > Policy
 msgid "acquisitions.pref#EmailPurchaseSuggestions# KohaAdminEmailAddress"
@@ -561,7 +561,6 @@ msgid ""
 msgstr "Недоставленные уведомления о просрочках отправляются по адресу:"
 
 # Administration > Interface options
-#, fuzzy
 msgid ""
 "admin.pref#AddressForFailedOverdueNotices# If left empty then it will "
 "fallback to the first defined address in the following list: Library "
@@ -571,8 +570,10 @@ msgid ""
 "\">KohaAdminEmailAddress</a>"
 msgstr ""
 "Если оставить пустым, он вернется к первому определенному адресу в следующем "
-"списке: Library ReplyTo, Library Email, ReplytoDefault и "
-"KohaAdminEmailAddress."
+"списке: Library ReplyTo, Library Email, <a href=\"/cgi-bin/koha/admin/"
+"preferences.pl?op=search&searchfield=ReplytoDefault\">ReplytoDefault</a> и "
+"<a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=KohaAdminEmailAddress\">KohaAdminEmailAddress</a>."
 
 # Administration > SSL client certificate authentication
 msgid "admin.pref#AllowPKIAuth# Common Name"
@@ -750,7 +751,6 @@ msgid "admin.pref#ElasticsearchMARCFormat# Searchable array"
 msgstr "Доступный для поиска массив"
 
 # Patrons > Notices and notifications > PhoneNotification
-#, fuzzy
 msgid ""
 "admin.pref#GoogleOAuth2ClientID# Along with <a href=\"/cgi-bin/koha/admin/"
 "preferences.pl?op=search&searchfield=GoogleOAuth2ClientSecret"
@@ -758,16 +758,16 @@ msgid ""
 "preferences.pl?op=search&searchfield=GoogleOpenIDConnect"
 "\">GoogleOpenIDConnect.</a>"
 msgstr ""
-"<br/><i class=\"fa fa-exclamation-triangle\"></i> Если "
-"<code>PhoneNotification</code> включен, "
-"<code>TalkingTechItivaPhoneNotification</code> должен быть отключен."
+"Наряду с <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=GoogleOAuth2ClientSecret\">GoogleOAuth2ClientSecret</"
+"a>, включает <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=GoogleOpenIDConnect\">GoogleOpenIDConnect.</a>"
 
 # Administration > Google OpenID Connect
 msgid "admin.pref#GoogleOAuth2ClientID# Google OAuth2 Client ID: "
 msgstr "Google OAuth2 Client ID:"
 
 # Patrons > Notices and notifications > PhoneNotification
-#, fuzzy
 msgid ""
 "admin.pref#GoogleOAuth2ClientSecret# Along with <a href=\"/cgi-bin/koha/"
 "admin/preferences.pl?op=search&searchfield=GoogleOAuth2ClientID"
@@ -775,9 +775,10 @@ msgid ""
 "preferences.pl?op=search&searchfield=GoogleOpenIDConnect"
 "\">GoogleOpenIDConnect.</a>"
 msgstr ""
-"<br/><i class=\"fa fa-exclamation-triangle\"></i> Если "
-"<code>PhoneNotification</code> включен, "
-"<code>TalkingTechItivaPhoneNotification</code> должен быть отключен."
+"Наряду с <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=GoogleOAuth2ClientID\">GoogleOAuth2ClientID</a>, "
+"включает <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=GoogleOpenIDConnect\">GoogleOpenIDConnect.</a>"
 
 # Administration > Google OpenID Connect
 msgid "admin.pref#GoogleOAuth2ClientSecret# Google OAuth2 Client Secret: "
@@ -798,7 +799,6 @@ msgid "admin.pref#GoogleOpenIDConnect# Yes"
 msgstr "Да"
 
 # Administration > Google OpenID Connect
-#, fuzzy
 msgid ""
 "admin.pref#GoogleOpenIDConnect# You will need to select OAuth2 when creating "
 "an app in the Google cloud console, and set the web origin to your_opac_url "
@@ -811,7 +811,11 @@ msgid ""
 msgstr ""
 "Вам будет необходимо выбрать OAuth2 при создании приложения в облачной "
 "консоли Google и установить веб-источник на your_opac_url и перенаправить на "
-"your_opac_url/cgi-bin/koha/svc/auth/googleopenidconnect."
+"your_opac_url/cgi-bin/koha/svc/auth/googleopenidconnect. Требует <a href=\"/"
+"cgi-bin/koha/admin/preferences.pl?op=search&searchfield=GoogleOAuth2ClientID"
+"\">GoogleOAuth2ClientID</a> и <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=GoogleOAuth2ClientSecret\">GoogleOAuth2ClientSecret</"
+"a> для установки."
 
 # Administration > Google OpenID Connect
 msgid "admin.pref#GoogleOpenIDConnectAutoRegister# Allow"
@@ -829,9 +833,8 @@ msgid ""
 "\">GoogleOpenIDConnect</a>."
 msgstr ""
 "пользователи, входящие в систему с помощью Google Open ID, автоматически "
-"регистрируются. Требуется <a href=\"/cgi-"
-"bin/koha/admin/preferences.pl?op=search&searchfield=GoogleOpenIDConnect\""
-">GoogleOpenIDConnect</a>. "
+"регистрируются. Требуется <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=GoogleOpenIDConnect\">GoogleOpenIDConnect</a>. "
 
 # Patrons > General
 msgid ""
@@ -839,8 +842,8 @@ msgid ""
 "koha/admin/preferences.pl?op=search&searchfield=GoogleOpenIDConnect"
 "\">GoogleOpenIDConnect</a>."
 msgstr ""
-"Требуется <a href=\"/cgi-bin/koha/admin/preferences.pl?op=search&searchfield="
-"GoogleOpenIDConnect\">GoogleOpenIDConnect</a>."
+"Требуется <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=GoogleOpenIDConnect\">GoogleOpenIDConnect</a>."
 
 # Administration > Google OpenID Connect
 msgid ""
@@ -856,8 +859,8 @@ msgid ""
 "koha/admin/preferences.pl?op=search&searchfield=GoogleOpenIDConnect"
 "\">GoogleOpenIDConnect</a>."
 msgstr ""
-"Требуется <a href=\"/cgi-bin/koha/admin/preferences.pl?op=search&searchfield="
-"GoogleOpenIDConnect\">GoogleOpenIDConnect</a>."
+"Требуется <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=GoogleOpenIDConnect\">GoogleOpenIDConnect</a>."
 
 # Administration > Google OpenID Connect
 msgid ""
@@ -873,9 +876,9 @@ msgid ""
 "Requires <a href=\"/cgi-bin/koha/admin/preferences.pl?"
 "op=search&searchfield=GoogleOpenIDConnect\">GoogleOpenIDConnect</a>."
 msgstr ""
-"Оставьте поле пустым для всех доменов Google. Требуется <a href=\"/cgi-"
-"bin/koha/admin/preferences.pl?op=search&searchfield=GoogleOpenIDConnect\""
-">GoogleOpenIDConnect</a>."
+"Оставьте поле пустым для всех доменов Google. Требуется <a href=\"/cgi-bin/"
+"koha/admin/preferences.pl?op=search&searchfield=GoogleOpenIDConnect"
+"\">GoogleOpenIDConnect</a>."
 
 # Administration > Google OpenID Connect
 msgid ""
@@ -1060,9 +1063,9 @@ msgid ""
 "\" (don't share)."
 msgstr ""
 "<br><strong>Примечание:</strong> Другие системные настройки <a href=\"/cgi-"
-"bin/koha/admin/preferences.pl?op=search&searchfield=UsageStats\""
-">UsageStats</a> не действуют, если для них установлено значение \"Нет\" (не "
-"предоставлять общий доступ)."
+"bin/koha/admin/preferences.pl?op=search&searchfield=UsageStats\">UsageStats</"
+"a> не действуют, если для них установлено значение \"Нет\" (не предоставлять "
+"общий доступ)."
 
 # Administration > Share anonymous usage statistics
 msgid ""
@@ -1131,9 +1134,9 @@ msgid ""
 "to \"No\" (don't share)."
 msgstr ""
 "<br><strong>Примечание:</strong> Это значение не действует, если для "
-"системной настройки <a href=\"/cgi-"
-"bin/koha/admin/preferences.pl?op=search&searchfield=UsageStats\""
-">UsageStats</a> установлено значение \"Нет\" (не предоставлять общий доступ)."
+"системной настройки <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=UsageStats\">UsageStats</a> установлено значение \"Нет"
+"\" (не предоставлять общий доступ)."
 
 # Administration > Share anonymous usage statistics
 msgid "admin.pref#UsageStatsCountry# Afghanistan"
@@ -1927,9 +1930,9 @@ msgid ""
 "to \"No\" (don't share)."
 msgstr ""
 " <br><strong>Примечание:</strong> Это значение не действует, если для "
-"системной настройки <a href=\"/cgi-"
-"bin/koha/admin/preferences.pl?op=search&searchfield=UsageStats\""
-">UsageStats</a> установлено значение \"Нет\" (не предоставлять общий доступ)."
+"системной настройки <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=UsageStats\">UsageStats</a> установлено значение \"Нет"
+"\" (не предоставлять общий доступ)."
 
 # Administration > Share anonymous usage statistics
 msgid ""
@@ -1953,9 +1956,9 @@ msgid ""
 "to \"No\" (don't share)."
 msgstr ""
 "<br><strong>Примечание:</strong> Это значение не действует, если для "
-"системной настройки <a href=\"/cgi-"
-"bin/koha/admin/preferences.pl?op=search&searchfield=UsageStats\""
-">UsageStats</a> установлено значение \"Нет\" (не предоставлять общий доступ)."
+"системной настройки <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=UsageStats\">UsageStats</a> установлено значение \"Нет"
+"\" (не предоставлять общий доступ)."
 
 # Administration > Share anonymous usage statistics
 msgid "admin.pref#UsageStatsLibrariesInfo# Don't share"
@@ -1985,9 +1988,9 @@ msgid ""
 "to \"No\" (don't share)."
 msgstr ""
 "<br><strong>Примечание:</strong> Это значение не действует, если для "
-"системной настройки <a href=\"/cgi-"
-"bin/koha/admin/preferences.pl?op=search&searchfield=UsageStats\""
-">UsageStats</a> установлено значение \"Нет\" (не предоставлять общий доступ)."
+"системной настройки <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=UsageStats\">UsageStats</a> установлено значение \"Нет"
+"\" (не предоставлять общий доступ)."
 
 # Administration > Share anonymous usage statistics
 msgid ""
@@ -2009,9 +2012,9 @@ msgid ""
 "to \"No\" (don't share)."
 msgstr ""
 "<br><strong>Примечание:</strong> Это значение не действует, если для "
-"системной настройки <a href=\"/cgi-"
-"bin/koha/admin/preferences.pl?op=search&searchfield=UsageStats\""
-">UsageStats</a> установлено значение \"Нет\" (не предоставлять общий доступ)."
+"системной настройки <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=UsageStats\">UsageStats</a> установлено значение \"Нет"
+"\" (не предоставлять общий доступ)."
 
 # Administration > Share anonymous usage statistics
 msgid ""
@@ -2067,9 +2070,9 @@ msgid ""
 "to \"No\" (don't share)."
 msgstr ""
 "<br><strong>Примечание:</strong> Это значение не действует, если для "
-"системной настройки <a href=\"/cgi-"
-"bin/koha/admin/preferences.pl?op=search&searchfield=UsageStats\""
-">UsageStats</a> установлено значение \"Нет\" (не предоставлять общий доступ)."
+"системной настройки <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=UsageStats\">UsageStats</a> установлено значение \"Нет"
+"\" (не предоставлять общий доступ)."
 
 # Administration > Share anonymous usage statistics
 msgid ""
@@ -2302,9 +2305,9 @@ msgid ""
 "be set to \"allow\" for this to have any effect)."
 msgstr ""
 " авторитетные записи, которые отсутствуют (чтобы из этого был хотя бы какой "
-"нибудь эффект также должен быть установлен параметр <a href=\"/cgi-"
-"bin/koha/admin/preferences.pl?op=search&searchfield=BiblioAddsAuthorities\""
-">BiblioAddsAuthorities</a> в \"разрешить\")."
+"нибудь эффект также должен быть установлен параметр <a href=\"/cgi-bin/koha/"
+"admin/preferences.pl?op=search&searchfield=BiblioAddsAuthorities"
+"\">BiblioAddsAuthorities</a> в \"разрешить\")."
 
 # Authorities > General
 msgid "authorities.pref#AutoCreateAuthorities# don't generate"
@@ -3605,11 +3608,10 @@ msgid ""
 "fines both via the web-based self checkout system and via SIP."
 msgstr ""
 " библиотекарь может вручную отменять все штрафы, даже если штрафы меньше, "
-"чем установлено в системном параметре <a href=\"/cgi-"
-"bin/koha/admin/preferences.pl?op=search&searchfield=noissuescharge\"> "
-"noissuescharge </a>. Включение этого системного параметра заблокирует все "
-"кассы для посетителей со штрафами как через веб-систему самообслуживания, "
-"так и через SIP."
+"чем установлено в системном параметре <a href=\"/cgi-bin/koha/admin/"
+"preferences.pl?op=search&searchfield=noissuescharge\"> noissuescharge </a>. "
+"Включение этого системного параметра заблокирует все кассы для посетителей "
+"со штрафами как через веб-систему самообслуживания, так и через SIP."
 
 # Circulation > Interface
 msgid "circulation.pref#AllowAllMessageDeletion# Allow"
@@ -3648,7 +3650,6 @@ msgid "circulation.pref#AllowFineOverride# Don't allow"
 msgstr "Запретить"
 
 # Circulation > Checkout policy
-#, fuzzy
 msgid ""
 "circulation.pref#AllowFineOverride# staff to manually override and check out "
 "items to patrons who have more in fines than set in the <a href=\"/cgi-bin/"
@@ -3656,7 +3657,9 @@ msgid ""
 "\">noissuescharge</a> system preference."
 msgstr ""
 "чтобы библиотекари вручную отменяли и выдавали экземпляры читателям, которые "
-"имеют больше штрафов, чем установлено в системной настройке noissuescharge."
+"имеют больше штрафов, чем установлено в системной настройке <a href=\"/cgi-"
+"bin/koha/admin/preferences.pl?op=search&searchfield=noissuescharge"
+"\">noissuescharge</a>."
 
 # Circulation > Holds Policy
 msgid "circulation.pref#AllowHoldDateInFuture# Allow"
@@ -4310,9 +4313,9 @@ msgid ""
 "op=search&searchfield=FinesMode\">FinesMode</a> to be set to \"Calculate and "
 "charge.\""
 msgstr ""
-"Примечание: Данная системная настройка требует установки <a href=\"/cgi-bin/"
-"koha/admin/preferences.pl?op=search&searchfield=FinesMode\">FinesMode</a> "
-"\"Подсчитывать и взимать\"."
+"<br /><strong>Примечание:</strong> Данная системная настройка требует <a "
+"href=\"/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=FinesMode"
+"\">FinesMode</a> установки \"Подсчитывать и взимать\"."
 
 # Circulation > Checkin policy
 msgid "circulation.pref#CalculateFinesOnReturn# Do"
@@ -4344,7 +4347,6 @@ msgid ""
 msgstr "Не разрешать отмечать экземпляры как утерянные"
 
 # Circulation > Holds policy
-#, fuzzy
 msgid ""
 "circulation.pref#CanMarkHoldsToPullAsLost# from the 'Holds to pull' page. "
 "Values to be applied must be defined in <a href=\"/cgi-bin/koha/admin/"
@@ -4352,7 +4354,9 @@ msgid ""
 "\">UpdateItemWhenLostFromHoldList</a>."
 msgstr ""
 "со страницы 'Резервирования, которые нужно поднять'. Применяемые значения "
-"должны быть определены в UpdateItemWhenLostFromHoldList."
+"должны быть определены в <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=UpdateItemWhenLostFromHoldList"
+"\">UpdateItemWhenLostFromHoldList</a>."
 
 # Circulation > Interface
 msgid "circulation.pref#CircAutoPrintQuickSlip# ."
@@ -4775,7 +4779,6 @@ msgid "circulation.pref#ExpireReservesMaxPickUpDelay# Don't allow"
 msgstr "Не разрешать"
 
 # Circulation > Holds policy
-#, fuzzy
 msgid ""
 "circulation.pref#ExpireReservesMaxPickUpDelay# holds to expire automatically "
 "if they have not been picked by within the time period specified in the <a "
@@ -4786,18 +4789,18 @@ msgid ""
 "your system administrator to schedule it."
 msgstr ""
 "резервированиям истечь автоматически, если они не были получены в течение "
-"периода времени, указанного в системной настройке ReservationsMaxPickUpDelay."
-"<br><strong>ПРИМЕЧАНИЕ.</strong> Для этой системной настройки требуется "
-"<code>misc/cronjobs/hold/cancel_expired_holds.pl</code>cron задача. "
-"Обратитесь к вашему системному администратору, чтобы установить эту задачу в "
-"расписание."
+"периода времени, указанного в системной настройке <a href=\"/cgi-bin/koha/"
+"admin/preferences.pl?op=search&searchfield=ReservesMaxPickUpDelay"
+"\">ReservesMaxPickUpDelay</a>.<br><strong>ПРИМЕЧАНИЕ.</strong> Для этой "
+"системной настройки требуется <code>misc/cronjobs/hold/cancel_expired_holds."
+"pl</code>cron задача. Обратитесь к вашему системному администратору, чтобы "
+"установить эту задачу в расписание."
 
 # Circulation > Holds policy
 msgid "circulation.pref#ExpireReservesMaxPickUpDelayCharge# ."
 msgstr "."
 
 # Circulation > Holds policy
-#, fuzzy
 msgid ""
 "circulation.pref#ExpireReservesMaxPickUpDelayCharge# If using <a href=\"/cgi-"
 "bin/koha/admin/preferences.pl?"
@@ -4805,18 +4808,20 @@ msgid ""
 "\">ExpireReservesMaxPickUpDelay</a>, charge a patron who allows their "
 "waiting hold to expire a fee of"
 msgstr ""
-"При использовании ExpireReservesMaxPickUpDelay, взимать с читателя, который "
-"позволяет истечь сроку ожидания резервирования, плату в размере"
+"При использовании <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=ExpireReservesMaxPickUpDelay"
+"\">ExpireReservesMaxPickUpDelay</a>, взимать с читателя, который позволяет "
+"истечь сроку ожидания резервирования, плату в размере"
 
 # Circulation > Holds policy
-#, fuzzy
 msgid ""
 "circulation.pref#ExpireReservesOnHolidays# If using <a href=\"/cgi-bin/koha/"
 "admin/preferences.pl?op=search&searchfield=ExpireReservesMaxPickUpDelay"
 "\">ExpireReservesMaxPickUpDelay</a>,"
 msgstr ""
-"При использовании ExpireReservesMaxPickUpDelay, взимать с читателя, который "
-"позволяет истечь сроку ожидания резервирования, плату в размере"
+"При использовании <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=ExpireReservesMaxPickUpDelay"
+"\">ExpireReservesMaxPickUpDelay</a>,"
 
 # Circulation > Holds policy
 #, fuzzy
@@ -4985,14 +4990,14 @@ msgid "circulation.pref#HoldsInNoissuesCharge# Include"
 msgstr "Включить"
 
 # Circulation > Checkout policy
-#, fuzzy
 msgid ""
 "circulation.pref#HoldsInNoissuesCharge# hold charges when summing up charges "
 "for limit set in the <a href=\"/cgi-bin/koha/admin/preferences.pl?"
 "op=search&searchfield=noissuescharge\">noissuescharge</a> system preference."
 msgstr ""
 "плату за резервирование при суммировании начислений для предела, "
-"установленного в системной настройке noissuescharge."
+"установленного в системной настройке <a href=\"/cgi-bin/koha/admin/"
+"preferences.pl?op=search&searchfield=noissuescharge\">noissuescharge</a>."
 
 # Circulation > Checkin policy
 msgid "circulation.pref#HoldsNeedProcessingSIP# Don't fulfill"
@@ -5069,7 +5074,6 @@ msgstr ""
 "поднять (Holds to pull)"
 
 # Circulation > Interface
-#, fuzzy
 msgid ""
 "circulation.pref#HoldsToPullStartDate# day(s) ago. Note that the default end "
 "date is controlled by the system preference <a href=\"/cgi-bin/koha/admin/"
@@ -5077,7 +5081,8 @@ msgid ""
 "\">ConfirmFutureHolds</a>."
 msgstr ""
 "дней назад. Обратите внимание, что по умолчанию конечная дата контролируется "
-"системной настройкой ConfirmFutureHolds."
+"системной настройкой <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=ConfirmFutureHolds\">ConfirmFutureHolds</a>."
 
 # Circulation > Checkout policy
 msgid ""
@@ -5335,7 +5340,6 @@ msgid "circulation.pref#ManInvInNoissuesCharge# Include"
 msgstr "Включить"
 
 # Circulation > Checkout policy
-#, fuzzy
 msgid ""
 "circulation.pref#ManInvInNoissuesCharge# custom debit type charges when "
 "summing up charges for limit set in the <a href=\"/cgi-bin/koha/admin/"
@@ -5343,7 +5347,9 @@ msgid ""
 "system preference."
 msgstr ""
 "начисления типа настраиваемого дебета при суммировании начислений для "
-"лимита, установленного в системной настройке системы noissuescharge."
+"лимита, установленного в системной настройке системы <a href=\"/cgi-bin/koha/"
+"admin/preferences.pl?op=search&searchfield=noissuescharge\">noissuescharge</"
+"a>."
 
 # Circulation > Checkout policy
 msgid "circulation.pref#MarkLostItemsAsReturned# ."
@@ -5480,7 +5486,6 @@ msgid "circulation.pref#OPACAllowHoldDateInFuture# Don't allow"
 msgstr "Запретить"
 
 # Circulation > Holds policy
-#, fuzzy
 msgid ""
 "circulation.pref#OPACAllowHoldDateInFuture# patrons to place holds that "
 "don't enter the waiting list until a certain future date. (<a href=\"/cgi-"
@@ -5488,8 +5493,9 @@ msgid ""
 "\">AllowHoldDateInFuture</a> must also be enabled)."
 msgstr ""
 "читателям размещать резервирования, которые не попадают в список ожидания до "
-"определенной даты в будущем. (AllowHoldDateInFuture также должен быть "
-"включен)."
+"определенной даты в будущем. (<a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=AllowHoldDateInFuture\">AllowHoldDateInFuture</a> "
+"также должен быть включен)."
 
 # Circulation > Holds policy
 msgid "circulation.pref#OPACAllowUserToChooseBranch# Allow"
@@ -5506,12 +5512,14 @@ msgid ""
 msgstr "пользователю выбирать библиотеку для получения резервирования."
 
 # Circulation > Checkout policy
-#, fuzzy
 msgid ""
 "circulation.pref#OPACFineNoRenewalsBlockAutoRenew# If a patron owes more "
 "than the value of <a href=\"/cgi-bin/koha/admin/preferences.pl?"
 "op=search&searchfield=OPACFineNoRenewals\">OPACFineNoRenewals</a>,"
-msgstr "Если читатель задолжал больше чем значение OPACFineNoRenewals,"
+msgstr ""
+"Если читатель задолжал больше чем значение <a href=\"/cgi-bin/koha/admin/"
+"preferences.pl?op=search&searchfield=OPACFineNoRenewals"
+"\">OPACFineNoRenewals</a>,"
 
 # Circulation > Checkout policy
 msgid "circulation.pref#OPACFineNoRenewalsBlockAutoRenew# allow"
@@ -5540,13 +5548,15 @@ msgid ""
 msgstr "получать резервирования в библиотеках, где экземпляр доступен."
 
 # Circulation > Holds policy
-#, fuzzy
 msgid ""
 "circulation.pref#OPACHoldsIfAvailableAtPickupExceptions# Patron categories "
 "not affected by <a href=\"/cgi-bin/koha/admin/preferences.pl?"
 "op=search&searchfield=OPACHoldsIfAvailableAtPickup"
 "\">OPACHoldsIfAvailableAtPickup</a>:"
-msgstr "Типы читателей, на которые не влияет OPACHoldsIfAvailableAtPickup:"
+msgstr ""
+"Типы читателей, на которые не влияет <a href=\"/cgi-bin/koha/admin/"
+"preferences.pl?op=search&searchfield=OPACHoldsIfAvailableAtPickup"
+"\">OPACHoldsIfAvailableAtPickup</a>:"
 
 # Circulation > Checkout policy
 msgid "circulation.pref#OnSiteCheckoutAutoCheck# Don't enable"
@@ -5766,16 +5776,16 @@ msgid "circulation.pref#RenewAccruingItemInOpac# renew"
 msgstr "продлевать"
 
 # Circulation > Checkout policy
-#, fuzzy
 msgid ""
 "circulation.pref#RenewAccruingItemInOpac# the item automatically. If the "
 "system preference <a href=\"/cgi-bin/koha/admin/preferences.pl?"
 "op=search&searchfield=RenewalPeriodBase\">RenewalPeriodBase</a> is set to "
 "\"due date\", renewed items may still be overdue."
 msgstr ""
-"экземпляр автоматически. Если системная настройка \"RenewalPeriodBase\" "
-"установлена на «дату возврата», продленные экземпляры могут все еще быть "
-"просроченными."
+"экземпляр автоматически. Если системная настройка <a href=\"/cgi-bin/koha/"
+"admin/preferences.pl?op=search&searchfield=RenewalPeriodBase"
+"\">RenewalPeriodBase</a> установлена на \"дату возврата\", продленные "
+"экземпляры могут все еще быть просроченными."
 
 # Circulation > Checkout policy
 msgid ""
@@ -5794,16 +5804,16 @@ msgid "circulation.pref#RenewAccruingItemWhenPaid# renew"
 msgstr "продлевать"
 
 # Circulation > Checkout policy
-#, fuzzy
 msgid ""
 "circulation.pref#RenewAccruingItemWhenPaid# the item automatically. If the "
 "system preference <a href=\"/cgi-bin/koha/admin/preferences.pl?"
 "op=search&searchfield=RenewalPeriodBase\">RenewalPeriodBase</a> is set to "
 "\"due date\", renewed items may still be overdue."
 msgstr ""
-"экземпляр автоматически. Если системная настройка \"RenewalPeriodBase\" "
-"установлена на «дату возврата», продленные экземпляры могут все еще быть "
-"просроченными."
+"экземпляр автоматически. Если системная настройка <a href=\"/cgi-bin/koha/"
+"admin/preferences.pl?op=search&searchfield=RenewalPeriodBase"
+"\">RenewalPeriodBase</a> установлена на \"дату возврата\", продленные "
+"экземпляры могут все еще быть просроченными."
 
 # Circulation > Checkout policy
 msgid ""
@@ -5862,14 +5872,14 @@ msgid "circulation.pref#RentalsInNoissuesCharge# Include"
 msgstr "Включать"
 
 # Circulation > Checkout policy
-#, fuzzy
 msgid ""
 "circulation.pref#RentalsInNoissuesCharge# rental charges when summing up "
 "charges for limit set in the <a href=\"/cgi-bin/koha/admin/preferences.pl?"
 "op=search&searchfield=noissuescharge\">noissuescharge</a> system preference."
 msgstr ""
 "арендную плату при суммировании комиссий для предела, установленного в "
-"системной настройке noissuescharge."
+"системной настройке <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=noissuescharge\">noissuescharge</a>."
 
 # Circulation > Holds policy
 #, fuzzy
@@ -6260,7 +6270,6 @@ msgid "circulation.pref#StoreLastBorrower# Store"
 msgstr "Хранить"
 
 # Circulation > Checkin policy
-#, fuzzy
 msgid ""
 "circulation.pref#StoreLastBorrower# the last patron to return an item. This "
 "setting is independent of the <a href=\"/cgi-bin/koha/admin/preferences.pl?"
@@ -6270,7 +6279,10 @@ msgid ""
 "preferences."
 msgstr ""
 "последнего читателя, который вернул экземпляр. Этот параметр не зависит от "
-"системных настроек opacreadinghistory и AnonymousPatron."
+"системных настроек <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=opacreadinghistory\">opacreadinghistory</a> и <a href="
+"\"/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=AnonymousPatron"
+"\">AnonymousPatron</a>."
 
 # Circulation > Holds policy
 msgid "circulation.pref#SuspendHoldsIntranet# Allow"
@@ -6518,7 +6530,6 @@ msgstr ""
 "утерянный со страницы 'Резервирования, которые нужно поднять'."
 
 # Circulation > Holds policy
-#, fuzzy
 msgid ""
 "circulation.pref#UpdateItemWhenLostFromHoldList# Example: \"itemlost: 1\" to "
 "set items.itemlost to 1 when the item is marked as lost. (Requires <a href="
@@ -6527,7 +6538,9 @@ msgid ""
 "a>)"
 msgstr ""
 "Например: \"itemlost: 1\" чтобы выбрать экземпляры.itemlost to 1 когда "
-"экземпляр отмечен как утерянный. (Требуется CanMarkHoldsToPullAsLost)"
+"экземпляр отмечен как утерянный. (<a href=\"/cgi-bin/koha/admin/preferences."
+"pl?op=search&searchfield=CanMarkHoldsToPullAsLost"
+"\">CanMarkHoldsToPullAsLost</a>)"
 
 # Circulation > Checkin policy
 msgid ""
@@ -6809,7 +6822,6 @@ msgid "circulation.pref#finesCalendar# when calculating the period for fines."
 msgstr "при расчете периода штрафов."
 
 # Circulation > Fines Policy
-#, fuzzy
 msgid ""
 "circulation.pref#finesMode# <br><strong>NOTE:</strong> If the cronjobs/fines."
 "pl cronjob is being run, accruing and final fines will be calculated when "
@@ -6818,11 +6830,12 @@ msgid ""
 "op=search&searchfield=CalculateFinesOnReturn\">CalculateFinesOnReturn</a> is "
 "enabled, final fines will be calculated when an item is returned.<br/>"
 msgstr ""
-" <br><strong>Примечание:</strong> Если cronjobs/fines.pl cronjob запущен, "
+"<br><strong>Примечание:</strong> Если cronjobs/fines.pl cronjob запущен, "
 "начисляемые и окончательные штрафы будут рассчитываться при запуске cron и "
-"начисляемые штрафы будут завершены при возврате экземпляра. Если "
-"CalculateFinesOnReturn включен, окончательные штрафы будут рассчитаны при "
-"возврате экземпляра."
+"начисляемые штрафы будут завершены при возврате экземпляра. Если <a href=\"/"
+"cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=CalculateFinesOnReturn\">CalculateFinesOnReturn</a> "
+"включен, окончательные штрафы будут рассчитаны при возврате экземпляра.<br/>"
 
 # Circulation > Fines Policy
 msgid "circulation.pref#finesMode# Calculate and charge"
@@ -7308,13 +7321,11 @@ msgid "enhanced_content.pref#CustomCoverImages# Don't display"
 msgstr "Не отображать"
 
 # Enhanced content > Local or remote cover images
-#, fuzzy
 msgid ""
 "enhanced_content.pref#CustomCoverImages# For control fields you can use just "
 "{field}, like {001}."
 msgstr ""
-"пользовательские (обычные) удаленные URL изображения в служебном интерфейсе."
-"<br/>"
+"Для контрольных полей вы можете использовать только {field}, как {001}."
 
 # Enhanced content > Local or remote cover images
 msgid ""
@@ -7441,15 +7452,15 @@ msgid ""
 msgstr "сервис кеширования изображений Coce в служебном интерфейсе."
 
 # Enhanced content > Manual
-#, fuzzy
 msgid ""
 "enhanced_content.pref#KohaManualBaseURL# If starts with '/',  the value of "
 "<a href=\"/cgi-bin/koha/admin/preferences.pl?"
 "op=search&searchfield=staffClientBaseURL\">staffClientBaseURL</a> will be "
 "used as a prefix."
 msgstr ""
-"Если начинается с '/', значение StaffClientBaseURL будет использоваться в "
-"качестве префикса."
+"Если начинается с '/', значение <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=staffClientBaseURL\">staffClientBaseURL</a> будет "
+"использоваться в качестве префикса."
 
 # Enhanced content > Manual
 msgid "enhanced_content.pref#KohaManualBaseURL# Location of the Koha manual"
@@ -8008,7 +8019,6 @@ msgid "enhanced_content.pref#SyndeticsEditions# Show"
 msgstr "Показать"
 
 # Enhanced content > Syndetics
-#, fuzzy
 msgid ""
 "enhanced_content.pref#SyndeticsEditions# information about other editions of "
 "a title from Syndetics on item detail pages on the OPAC (when <a href=\"/cgi-"
@@ -8016,7 +8026,8 @@ msgid ""
 "\">OPACFRBRizeEditions</a> is on)."
 msgstr ""
 "информацию о других изданиях заглавия из Syndetics на страницах сведений об "
-"экземпляре в ЭК (когда OPACFRBRizeEditions включен)."
+"экземпляре в ЭК (когда <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=OPACFRBRizeEditions\">OPACFRBRizeEditions</a> включен)."
 
 # Enhanced content > Syndetics
 msgid "enhanced_content.pref#SyndeticsEnabled# Don't use"
@@ -8209,7 +8220,6 @@ msgid "enhanced_content.pref#ThingISBN# Use"
 msgstr "Использовать"
 
 # Enhanced content > Library Thing
-#, fuzzy
 msgid ""
 "enhanced_content.pref#ThingISBN# the ThingISBN service to show other "
 "editions of a title (when either <a href=\"/cgi-bin/koha/admin/preferences."
@@ -8218,9 +8228,11 @@ msgid ""
 "\">OPACFRBRizeEditions</a> is on). This is separate from Library Thing for "
 "Libraries."
 msgstr ""
-"сервис ThingISBN для отображения других изданий заглавия (когда включен "
-"FRBRizeEditions или OPACFRBRizeEditions). Это отдельно от Library Thing для "
-"библиотек."
+"сервис ThingISBN для отображения других изданий заглавия (когда включен <a "
+"href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=FRBRizeEditions\">FRBRizeEditions</a> или <a href=\"/"
+"cgi-bin/koha/admin/preferences.pl?op=search&searchfield=OPACFRBRizeEditions"
+"\">OPACFRBRizeEditions</a>). Это отдельно от Library Thing для библиотек."
 
 # I18N/L10N
 msgid "i18n_l10n.pref"
@@ -8814,7 +8826,6 @@ msgid "opac.pref#AnonSuggestions# Don't allow"
 msgstr "Запретить"
 
 # OPAC > Privacy
-#, fuzzy
 msgid ""
 "opac.pref#AnonSuggestions# patrons that aren't logged in to make purchase "
 "suggestions. Suggestions are connected to the <a href=\"/cgi-bin/koha/admin/"
@@ -8822,7 +8833,8 @@ msgid ""
 "system preference."
 msgstr ""
 "читателям, которые не вошли в систему, вносить предложения о покупке. "
-"Предложения связаны с системной настройкой AnonymousPatron."
+"Предложения связаны с системной настройкой <a href=\"/cgi-bin/koha/admin/"
+"preferences.pl?op=search&searchfield=AnonymousPatron\">AnonymousPatron</a>."
 
 # OPAC > Privacy
 msgid "opac.pref#AnonymousPatron# Use borrowernumber"
@@ -9280,7 +9292,6 @@ msgid "opac.pref#OPACPrivacy# Don't allow"
 msgstr "Запретить"
 
 # OPAC > Privacy
-#, fuzzy
 msgid ""
 "opac.pref#OPACPrivacy# patrons to choose their own privacy settings for "
 "their checkout history. This requires <a href=\"/cgi-bin/koha/admin/"
@@ -9290,8 +9301,10 @@ msgid ""
 "preferences."
 msgstr ""
 "читателям выбирать собственные настройки конфиденциальности для своей "
-"истории книговыдачи. Для этого необходимы системные настройки "
-"opacreadinghistory и AnonymousPatron."
+"истории книговыдачи. Для этого необходимы системные настройки <a href=\"/cgi-"
+"bin/koha/admin/preferences.pl?op=search&searchfield=opacreadinghistory"
+"\">opacreadinghistory</a> и <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=AnonymousPatron\">AnonymousPatron</a>."
 
 # OPAC > Features
 msgid "opac.pref#OPACReportProblem# <br/>"
@@ -9704,7 +9717,6 @@ msgstr ""
 " предложения о приобретении от других посетителей в электронном каталоге."
 
 # Staff interface > Appearance
-#, fuzzy
 msgid ""
 "opac.pref#OPACXSLTDetailsDisplay# <br />Options:<ul><li>Enter \"<a href=\"#"
 "\" class=\"set_syspref\" data-syspref=\"OPACXSLTDetailsDisplay\" data-value="
@@ -9716,11 +9728,15 @@ msgid ""
 "ul>If you have multiple stylesheets for different langues the placeholder "
 "{langcode} will be replaced with current interface language."
 msgstr ""
-"<br />Опции:<ul><li>Ввести \"<a href=\"#\" class=\"set_syspref\" data-"
-"syspref=\"XSLTDetailsDisplay\" data-value=\"default\">по умолчанию</a>\" для "
-"значений по умолчанию</li><li>Указать путь для определения файла xslt</"
-"li><li>Указать URL-адрес для внешней конкретной таблицы стилей.</li></"
-"ul>{langcode} будет заменен на текущий язык интерфейса"
+"<br />Параметры:<ul><li>Введите \"<a href=\"#\" class=\"set_syspref\" data-"
+"syspref=\"OPACXSLTDetailsDisplay\" data-value=\"default\">по умолчанию</a>\" "
+"для значений по умолчанию</li><li>Укажите путь для определения файла xslt</"
+"li><li>Укажите URL-адрес для внешней таблицы стилей.</li><li>ПРИМЕЧАНИЕ. "
+"Системные настройки <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=PassItemMarcToXSLT\">PassItemMarcToXSLT</a> должны "
+"быть включены, если ваша настраиваемая таблица стилей использует данные в "
+"полях элементов.</li></ul>Если у вас несколько таблиц стилей для разных "
+"языков {langcode} будет заменен текущим языком интерфейса. "
 
 # OPAC > Appearance
 msgid ""
@@ -9729,7 +9745,6 @@ msgid ""
 msgstr "Показать детали ЭК с помощью таблицы стилей XSLT по:"
 
 # Staff interface > Appearance
-#, fuzzy
 msgid ""
 "opac.pref#OPACXSLTListsDisplay# <br />Options:<ul><li>Enter \"<a href=\"#\" "
 "class=\"set_syspref\" data-syspref=\"OPACXSLTListsDisplay\" data-value="
@@ -9741,11 +9756,15 @@ msgid ""
 "ul>If you have multiple stylesheets for different langues the placeholder "
 "{langcode} will be replaced with current interface language."
 msgstr ""
-"<br />Опции:<ul><li>Ввести \"<a href=\"#\" class=\"set_syspref\" data-"
-"syspref=\"XSLTResultsDisplay\" data-value=\"default\">по умолчанию</a>\" для "
-"значений по умолчанию</li><li>Указать путь для определения файла xslt</"
-"li><li>Указать URL-адрес для внешней конкретной таблицы стилей.</li></"
-"ul>{langcode} будет заменен на текущий язык интерфейса"
+"<br />Параметры:<ul><li>Ввести \"<a href=\"#\" class=\"set_syspref\" data-"
+"syspref=\"OPACXSLTListsDisplay\" data-value=\"default\">по умолчанию</a>\" "
+"для значений по умолчанию</li><li>Указать путь для определения файла xslt</"
+"li><li>Указать URL-адрес для внешней таблицы стилей.</li><li>ПРИМЕЧАНИЕ. "
+"Системные настройки <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=PassItemMarcToXSLT\">PassItemMarcToXSLT</a> должны "
+"быть включены, если ваша таблица стилей использует данные в полях элементов</"
+"li></ul>Если у вас несколько таблиц стилей для разных языков {langcode} "
+"будет заменен текущим языком интерфейса."
 
 # OPAC > Appearance
 msgid ""
@@ -9754,7 +9773,6 @@ msgid ""
 msgstr "Показать списки в ЭК с помощью таблицы стилей XSLT по:"
 
 # Staff interface > Appearance
-#, fuzzy
 msgid ""
 "opac.pref#OPACXSLTResultsDisplay# <br />Options:<ul><li>Enter \"<a href=\"#"
 "\" class=\"set_syspref\" data-syspref=\"OPACXSLTResultsDisplay\" data-value="
@@ -9766,11 +9784,15 @@ msgid ""
 "ul>If you have multiple stylesheets for different langues the placeholder "
 "{langcode} will be replaced with current interface language."
 msgstr ""
-"<br />Опции:<ul><li>Ввести \"<a href=\"#\" class=\"set_syspref\" data-"
-"syspref=\"XSLTResultsDisplay\" data-value=\"default\">по умолчанию</a>\" для "
-"значений по умолчанию</li><li>Указать путь для определения файла xslt</"
-"li><li>Указать URL-адрес для внешней конкретной таблицы стилей.</li></"
-"ul>{langcode} будет заменен на текущий язык интерфейса"
+"<br />Параметры:<ul><li>Ввести \"<a href=\"#\" class=\"set_syspref\" data-"
+"syspref=\"OPACXSLTResultsDisplay\" data-value=\"default\">по умолчанию</a>\" "
+"для значений по умолчанию</li><li>Указать путь для определения файла xslt</"
+"li><li>Указать URL-адрес для внешней таблицы стилей.</li><li>ПРИМЕЧАНИЕ: "
+"Системные настройки <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=PassItemMarcToXSLT\">PassItemMarcToXSLT</a> должны "
+"быть включены, если ваша настраиваемая таблица стилей использует данные в "
+"элементе поля</li></ul> Если несколько таблиц стилей для разных языков, "
+"{langcode} будет заменен текущим языком интерфейса. "
 
 # OPAC > Appearance
 msgid ""
@@ -10074,14 +10096,14 @@ msgstr ""
 "\">Koha wiki</a>."
 
 # OPAC > Policy
-#, fuzzy
 msgid ""
 "opac.pref#OpacHiddenItemsExceptions# List of patron categories, separated by "
 "|, that can see items otherwise hidden by <a href=\"/cgi-bin/koha/admin/"
 "preferences.pl?op=search&searchfield=OpacHiddenItems\">OpacHiddenItems</a>:"
 msgstr ""
 "Список типов читателей, разделенных знаком |, которые могут видеть "
-"экземпляры, иначе скрытые <code>OpacHiddenItems</code>"
+"экземпляры, иначе скрытые <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=OpacHiddenItems\">OpacHiddenItems</a>:"
 
 # OPAC > Appearance
 #, fuzzy
@@ -10094,14 +10116,14 @@ msgid "opac.pref#OpacHiddenItemsHidesRecord# Hide"
 msgstr "Выделять"
 
 # OPAC > Policy
-#, fuzzy
 msgid ""
 "opac.pref#OpacHiddenItemsHidesRecord# the bibliographic record when all its "
 "items are hidden by <a href='/cgi-bin/koha/admin/preferences.pl?"
 "op=search&searchfield=OpacHiddenItems'>OpacHiddenItems</a>."
 msgstr ""
-"Список типов читателей, разделенных знаком |, которые могут видеть "
-"экземпляры, иначе скрытые <code>OpacHiddenItems</code>"
+"библиографическая запись, когда все ее элементы скрыты <a href='/cgi-bin/"
+"koha/admin/preferences.pl?"
+"op=search&searchfield=OpacHiddenItems'>OpacHiddenItems</a>."
 
 # OPAC > Appearance
 msgid "opac.pref#OpacHighlightedWords# (separate columns with |)."
@@ -10270,12 +10292,14 @@ msgstr ""
 "данных, но безоговорочно."
 
 # OPAC > Appearance
-#, fuzzy
 msgid ""
 "opac.pref#OpacMaintenanceNotice# Show the following HTML when <a href=\"/cgi-"
 "bin/koha/admin/preferences.pl?op=search&searchfield=OpacMaintenance"
 "\">OpacMaintenance</a> is enabled:"
-msgstr "Показывать следующий HTML-код, когда OpacMain maintenance включен:"
+msgstr ""
+"Показывать следующий HTML-код, когда <a href=\"/cgi-bin/koha/admin/"
+"preferences.pl?op=search&searchfield=OpacMaintenance\">OpacMaintenance</a> "
+"включен:"
 
 # OPAC > Appearance
 msgid "opac.pref#OpacMaxItemsToDisplay# Display up to"
@@ -10365,15 +10389,16 @@ msgstr ""
 "доступом к ЭК."
 
 # OPAC > Appearance
-#, fuzzy
 msgid ""
 "opac.pref#OpacPublic# Note: This does not affect the public API, see the <a "
 "href=\"/cgi-bin/koha/admin/preferences.pl?"
 "op=search&searchfield=RESTPublicAnonymousRequests"
 "\">RESTPublicAnonymousRequests</a> to control the API."
 msgstr ""
-"Примечание. Это не влияет на общедоступный API. Для управления API см. "
-"<code>RESTPublicAnonymousRequests</code>."
+"Примечание. Это не влияет на общедоступный API. Для управления API см. <a "
+"href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=RESTPublicAnonymousRequests"
+"\">RESTPublicAnonymousRequests</a>."
 
 # OPAC > Policy
 msgid "opac.pref#OpacRenewalAllowed# Allow"
@@ -10575,14 +10600,14 @@ msgstr ""
 "code> или <code>https://</code>):"
 
 # OPAC > OpenURL
-#, fuzzy
 msgid ""
 "opac.pref#OpenURLText# Text of OpenURL links (or image title if <a href=\"/"
 "cgi-bin/koha/admin/preferences.pl?op=search&searchfield=OpenURLImageLocation"
 "\">OpenURLImageLocation</a> is defined):"
 msgstr ""
-"Текст ссылок OpenURL (или заглавие изображения, если определен "
-"OpenURLImageLocation):"
+"Текст ссылок OpenURL (или заглавие изображения, если определен <a href=\"/"
+"cgi-bin/koha/admin/preferences.pl?op=search&searchfield=OpenURLImageLocation"
+"\">OpenURLImageLocation</a>):"
 
 # OPAC > Self registration and modification
 msgid ""
@@ -10598,14 +10623,26 @@ msgstr ""
 # OPAC > Self registration and modification
 #, fuzzy
 msgid ""
+"opac.pref#PatronSelfModificationMandatoryField# The following <a "
+"href='http://schema.koha-community.org/__VERSION__/tables/borrowers.html' "
+"target='blank'>database columns</a> must be filled in on the patron "
+"modification screen:"
+msgstr ""
+"Следующие <a href='http://schema.koha-community.org/__VERSION__/tables/"
+"borrowers.html' target='blank'>столбцы базы данных</a> должны быть заполнены "
+"на экране записи читателя:"
+
+# OPAC > Self registration and modification
+msgid ""
 "opac.pref#PatronSelfRegistration# <br><strong>NOTE:</strong> This needs <a "
 "href='/cgi-bin/koha/admin/preferences.pl?"
 "op=search&searchfield=PatronSelfRegistrationDefaultCategory'>PatronSelfRegistrationDefaultCategory</"
 "a> to be set to a valid patron category code."
 msgstr ""
-"<br><strong>Примечание:</strong> Для этого необходимо, чтобы для "
-"PatronSelfRegistrationDefaultCategory был установлен действительный код типа "
-"читателя."
+"<br><strong>Примечание:</strong> Для этого необходимо, чтобы для <a href='/"
+"cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=PatronSelfRegistrationDefaultCategory'>PatronSelfRegistrationDefaultCategory</"
+"a> был установлен действительный код типа читателя."
 
 # OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistration# Allow"
@@ -10667,7 +10704,6 @@ msgid ""
 msgstr "от читателей подтверждать свой e-mail, вводя его дважды."
 
 # OPAC > Self registration and modification > PatronSelfRegistrationDefaultCategory
-#, fuzzy
 msgid ""
 "opac.pref#PatronSelfRegistrationDefaultCategory# <br><strong>WARNING: Do not "
 "use a regular patron category for self registration.</strong> If the "
@@ -10682,8 +10718,10 @@ msgstr ""
 "самостоятельной регистрации.</strong> Если cron задача <code>misc/cronjobs/"
 "cleanup_database.pl</code> настроена на удаление непроверенных и "
 "незавершенных саморегистраций ЭК, она навсегда и безвозвратно удалит всех "
-"читателей, которые зарегистрировались более чем "
-"PatronSelfRegistrationExpireTemporaryAccountsDelay дней назад."
+"читателей, которые зарегистрировались более чем <a href='/cgi-bin/koha/admin/"
+"preferences.pl?"
+"op=search&searchfield=PatronSelfRegistrationExpireTemporaryAccountsDelay'>PatronSelfRegistrationExpireTemporaryAccountsDelay</"
+"a> дней назад."
 
 # OPAC > Self registration and modification
 msgid ""
@@ -10727,15 +10765,16 @@ msgstr ""
 "системному администратору, чтобы установить эту задачу в расписание."
 
 # OPAC > Self registration and modification
-#, fuzzy
 msgid ""
 "opac.pref#PatronSelfRegistrationExpireTemporaryAccountsDelay# Delete patrons "
 "still in the category indicated by <a href=\"/cgi-bin/koha/admin/preferences."
 "pl?op=search&searchfield=PatronSelfRegistrationDefaultCategory"
 "\">PatronSelfRegistrationDefaultCategory</a>"
 msgstr ""
-"Удалить читателей, все еще находящихся в типе, обозначенном "
-"PatronSelfRegistrationDefaultCategory"
+"Удалить читателей, все еще находящихся в типе, обозначенном <a href=\"/cgi-"
+"bin/koha/admin/preferences.pl?"
+"op=search&searchfield=PatronSelfRegistrationDefaultCategory"
+"\">PatronSelfRegistrationDefaultCategory</a>"
 
 # OPAC > Self registration and modification
 msgid ""
@@ -11202,12 +11241,13 @@ msgid "patrons.pref#AutoApprovePatronProfileSettings# Enable"
 msgstr "Включить"
 
 # Patrons > General
-#, fuzzy
 msgid ""
 "patrons.pref#AutoApprovePatronProfileSettings# Requires <a href=\"/cgi-bin/"
 "koha/admin/preferences.pl?op=search&searchfield=OPACPatronDetails"
 "\">OPACPatronDetails</a> to be activated."
-msgstr "Для активации требуется OPACPatronDetails."
+msgstr ""
+"Для активации требуется <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=OPACPatronDetails\">OPACPatronDetails</a>."
 
 # Patrons > General
 msgid ""
@@ -11283,7 +11323,6 @@ msgid "patrons.pref#AutoRenewalNotices# never"
 msgstr "Отправлять"
 
 # Patrons > Patron forms
-#, fuzzy
 msgid ""
 "patrons.pref#BorrowerMandatoryField# <strong>NOTE:</strong> If <a href=\"/"
 "cgi-bin/koha/admin/preferences.pl?op=search&searchfield=autoMemberNum"
@@ -11292,8 +11331,11 @@ msgid ""
 "\">BorrowerMandatoryField</a> must not contain the field <code>cardnumber</"
 "code>."
 msgstr ""
-"<strong>Примечание:</strong> Если autoMemberNum включен, системная настройка "
-"BorrowerMandatoryField не должна содержать поле cardnumber."
+"<strong>Примечание:</strong> Если <a href=\"/cgi-bin/koha/admin/preferences."
+"pl?op=search&searchfield=autoMemberNum\">autoMemberNum</a> включен, "
+"системная настройка <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=BorrowerMandatoryField\">BorrowerMandatoryField</a> не "
+"должна содержать поле <code>cardnumber</code>."
 
 # Patrons > Patron forms
 msgid ""
@@ -11352,7 +11394,6 @@ msgstr ""
 "Пароли входа в Коха для персонала и посетителей должны состоять из не менее "
 
 # Patrons > Patron forms
-#, fuzzy
 msgid ""
 "patrons.pref#CardnumberLength# If <code>cardnumber</code> is included in the "
 "<a href=\"/cgi-bin/koha/admin/preferences.pl?"
@@ -11360,9 +11401,11 @@ msgid ""
 "list, the minimum length, if not specified here, defaults to one. Maximum "
 "cannot be bigger than the database field size of 32."
 msgstr ""
-"Если 'cardnumber' включен в список BorrowerMandatoryField, минимальная "
-"длина, если здесь не указано, по умолчанию равна единице. Максимум не может "
-"быть больше, чем размер поля базы данных 32."
+"Если <code>cardnumber</code> включен в список <a href=\"/cgi-"
+"bin/koha/admin/preferences.pl?op=search&searchfield=BorrowerMandatoryField\""
+">BorrowerMandatoryField</a>, минимальная длина, если здесь не указано, по "
+"умолчанию равна единице. Максимум не может быть больше, чем размер поля базы "
+"данных 32."
 
 # Patrons > Patron forms
 msgid ""
@@ -11529,8 +11572,7 @@ msgid ""
 msgstr ""
 " возможность выгружать и прикреплять произвольные файлы в аккаунт посетителя."
 
-# Patrons > Notices and notifications
-#, fuzzy
+# <br><strong>Примечание:</strong> Это относится только к извещениям вежливости. Чтобы указать, есть ли у читателей доступ к этим настройкам, используйте EnhancedMessagingPreferencesOPAC.
 msgid ""
 "patrons.pref#EnhancedMessagingPreferences# <br><strong>NOTE:</strong> This "
 "only applies to courtesy notices. To manage if patrons have also access to "
@@ -11538,9 +11580,11 @@ msgid ""
 "op=search&searchfield=EnhancedMessagingPreferencesOPAC"
 "\">EnhancedMessagingPreferencesOPAC</a>."
 msgstr ""
-"<br><strong>Примечание:</strong> Это относится только к извещениям "
-"вежливости. Чтобы указать, есть ли у читателей доступ к этим настройкам, "
-"используйте EnhancedMessagingPreferencesOPAC."
+"patrons.pref#EnhancedMessagingPreferences# <br><strong>Примечание:</strong> "
+"Это относится только к извещениям вежливости. Чтобы указать, есть ли у "
+"читателей доступ к этим настройкам, используйте <a href=\"/cgi-bin/koha/"
+"admin/preferences.pl?op=search&searchfield=EnhancedMessagingPreferencesOPAC"
+"\">EnhancedMessagingPreferencesOPAC</a>."
 
 # Patrons > Notices and notifications
 msgid ""
@@ -11570,16 +11614,17 @@ msgstr ""
 "сотрудникам определять, какие уведомления будут получать читатели и когда "
 "они их получат."
 
-# Patrons > Notices and notifications
-#, fuzzy
+# <br><strong>Примечание:</strong> EnhancedMessagingPreferences должно быть включено.
 msgid ""
 "patrons.pref#EnhancedMessagingPreferencesOPAC# <br><strong>NOTE:</strong> <a "
 "href=\"/cgi-bin/koha/admin/preferences.pl?"
 "op=search&searchfield=EnhancedMessagingPreferences"
 "\">EnhancedMessagingPreferences</a> must be enabled."
 msgstr ""
-"<br><strong>Примечание:</strong> EnhancedMessagingPreferences должно быть "
-"включено."
+"patrons.pref#EnhancedMessagingPreferencesOPAC# <br><strong>Примечание:</"
+"strong> <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=EnhancedMessagingPreferences"
+"\">EnhancedMessagingPreferences</a> должно быть включено."
 
 # Patrons > Notices and notifications
 msgid "patrons.pref#EnhancedMessagingPreferencesOPAC# Don't show"
@@ -11658,17 +11703,17 @@ msgstr ""
 "применении читатели должны дать согласие перед использованием ЭК. Если вы "
 "установите разрешающий режим, Koha будет предупреждать, но не принуждать."
 
-# Patrons > Privacy
-#, fuzzy
+# <br><strong>Примечание:</strong> Если вы включите это, вам также нужно будет установить URL-адрес вашей публичной политики конфиденциальности с помощью настройки PrivacyPolicyURL.
 msgid ""
 "patrons.pref#GDPR_Policy# <br><strong>NOTE:</strong> If you enable this you "
 "will also have to set the URL of your public privacy policy with the <a href="
 "\"/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=PrivacyPolicyURL"
 "\">PrivacyPolicyURL</a> setting."
 msgstr ""
-"<br><strong>Примечание:</strong> Если вы включите это, вам также нужно будет "
-"установить URL-адрес вашей публичной политики конфиденциальности с помощью "
-"настройки PrivacyPolicyURL."
+"patrons.pref#GDPR_Policy# <br><strong>Примечание:</strong> Если вы включите "
+"это, вам также нужно будет установить URL-адрес вашей публичной политики "
+"конфиденциальности с помощью настройки <a href=\"/cgi-bin/koha/admin/"
+"preferences.pl?op=search&searchfield=PrivacyPolicyURL\">PrivacyPolicyURL</a>."
 
 # Patrons > Privacy
 msgid "patrons.pref#GDPR_Policy# Set GDPR policy to:"
@@ -11686,15 +11731,16 @@ msgstr "принудительно"
 msgid "patrons.pref#GDPR_Policy# permissive"
 msgstr "разрешающий"
 
-# OPAC > Self registration and modification
+# <br><strong>Примечание:</strong> Эта системная настройка требует <code>misc/cronjobs/cleanup_database.pl</code> cronjob. Обратитесь к вашему системному администратору, чтобы установить эту задачу в расписание.
 msgid ""
 "patrons.pref#LockExpiredDelay# <br><strong>NOTE:</strong> This system "
 "preference requires the misc/cronjobs/cleanup_database.pl cronjob. Ask your "
 "system administrator to schedule it."
 msgstr ""
-"<br><strong>Примечание:</strong> Эта системная настройка требует <code>misc/"
-"cronjobs/cleanup_database.pl</code> cronjob. Обратитесь к вашему системному "
-"администратору, чтобы установить эту задачу в расписание."
+"patrons.pref#LockExpiredDelay# <br><strong>Примечание:</strong> Эта "
+"системная настройка требует misc/cronjobs/cleanup_database.pl cronjob. "
+"Обратитесь к вашему системному администратору, чтобы установить эту задачу в "
+"расписание."
 
 # Patrons > Privacy
 #, fuzzy
@@ -11805,7 +11851,6 @@ msgid "patrons.pref#PatronsPerPage# results per page in the staff interface."
 msgstr "результатов на страницу в служебном клиенте."
 
 # Patrons > Notices and notifications > PhoneNotification
-#, fuzzy
 msgid ""
 "patrons.pref#PhoneNotification# <br/><i class=\"fa fa-exclamation-triangle"
 "\"></i> If <a href=\"/cgi-bin/koha/admin/preferences.pl?"
@@ -11814,9 +11859,12 @@ msgid ""
 "op=search&searchfield=TalkingTechItivaPhoneNotification"
 "\">TalkingTechItivaPhoneNotification</a> should be disabled."
 msgstr ""
-"<br/><i class=\"fa fa-exclamation-triangle\"></i> Если "
-"<code>PhoneNotification</code> включен, "
-"<code>TalkingTechItivaPhoneNotification</code> должен быть отключен."
+"<br/><i class=\"fa fa-exclamation-triangle\"></i> Если <a href=\"/cgi-"
+"bin/koha/admin/preferences.pl?op=search&searchfield=PhoneNotification\""
+">PhoneNotification</a> включен, <a href=\"/cgi-"
+"bin/koha/admin/preferences.pl?op=search&searchfield="
+"TalkingTechItivaPhoneNotification\">TalkingTechItivaPhoneNotification</a> "
+"должен быть отключен."
 
 # Patrons > Notices and notifications
 msgid "patrons.pref#PhoneNotification# Disable"
@@ -11972,14 +12020,15 @@ msgstr ""
 "форме записи участника поручительства из записи поручителя:"
 
 # Patrons > Privacy
-#, fuzzy
 msgid ""
 "patrons.pref#PrivacyPolicyURL# <br><strong>NOTE:</strong> The URL will only "
 "be displayed if <a href=\"/cgi-bin/koha/admin/preferences.pl?"
 "op=search&searchfield=GDPR_Policy\">GDPR_Policy</a> is set."
 msgstr ""
 "<br><strong>Примечание:</strong> URL-адрес будет отображаться, только если "
-"установлено GDPR_Policy."
+"установлено <a href=\"/cgi-"
+"bin/koha/admin/preferences.pl?op=search&searchfield=GDPR_Policy\""
+">GDPR_Policy</a>."
 
 # Patrons > Privacy
 msgid "patrons.pref#PrivacyPolicyURL# Use the following URL"
@@ -12203,7 +12252,6 @@ msgstr ""
 "на вкладке статистики в записи читателя: "
 
 # Patrons > Notices and notifications > TalkingTechItivaPhoneNotification
-#, fuzzy
 msgid ""
 "patrons.pref#TalkingTechItivaPhoneNotification# <br/><i class=\"fa fa-"
 "exclamation-triangle\"></i> If <a href=\"/cgi-bin/koha/admin/preferences.pl?"
@@ -12212,9 +12260,11 @@ msgid ""
 "admin/preferences.pl?op=search&searchfield=PhoneNotification"
 "\">PhoneNotification</a> should be disabled."
 msgstr ""
-"<br/><i class=\"fa fa-exclamation-triangle\"></i> Если "
-"<code>TalkingTechItivaPhoneNotification</code> включен, "
-"<code>PhoneNotification</code> должен быть отключен."
+"<br/><i class=\"fa fa-exclamation-triangle\"></i> Если <a href=\"/cgi-"
+"bin/koha/admin/preferences.pl?op=search&searchfield="
+"TalkingTechItivaPhoneNotification\">TalkingTechItivaPhoneNotification</a> "
+"включен, <a href=\"/cgi-bin/koha/admin/preferences.pl?op=search&searchfield="
+"PhoneNotification\">PhoneNotification</a> должен быть отключен."
 
 # Patrons > Notices and notifications
 msgid "patrons.pref#TalkingTechItivaPhoneNotification# Disable"
@@ -12304,7 +12354,6 @@ msgid ""
 msgstr "квитанции читателям по e-mail для платежей и списаний."
 
 # Patrons > Patron forms
-#, fuzzy
 msgid ""
 "patrons.pref#autoMemberNum# <strong>NOTE:</strong> If <a href=\"/cgi-bin/"
 "koha/admin/preferences.pl?op=search&searchfield=autoMemberNum"
@@ -12313,8 +12362,11 @@ msgid ""
 "\">BorrowerMandatoryField</a> must not contain the field <code>cardnumber</"
 "code>."
 msgstr ""
-"<strong>Примечание:</strong> Если autoMemberNum включен, системная настройка "
-"BorrowerMandatoryField не должна содержать поле cardnumber."
+"<strong>Примечание:</strong> Если <a href=\"/cgi-"
+"bin/koha/admin/preferences.pl?op=search&searchfield=autoMemberNum\""
+">autoMemberNum</a> включен, системная настройка <a href=\"/cgi-"
+"bin/koha/admin/preferences.pl?op=search&searchfield=BorrowerMandatoryField\""
+">BorrowerMandatoryField</a> не должна содержать поле <code>cardnumber</code>."
 
 # Patrons > Patron forms
 msgid "patrons.pref#autoMemberNum# Do"
@@ -12462,8 +12514,8 @@ msgid ""
 "searching.pref#AdvancedSearchLanguages# Limit the languages listed in the "
 "advanced search drop-down to the"
 msgstr ""
-"Показывать в расширенном поиске (ЭК, рабочее место библиотекаря) вкладки для "
-"ограничения поиска по полям "
+"Ограничить количество языков, перечисленных в раскрывающемся списке "
+"расширенного поиска, до"
 
 # Searching > Search Form
 msgid ""
@@ -12471,9 +12523,9 @@ msgid ""
 "Item types (<strong>itemtypes</strong>), Collection Codes (<strong>ccode</"
 "strong>) and Shelving Location (<strong>loc</strong>)."
 msgstr ""
-"<em>В настоящее время поддерживаются значения</em>: типы единиц "
-"(<strong>itemtypes</strong>), виды собраний (<strong>ccode</strong>) и общее "
-"расположение полки (<strong>loc</strong>)."
+"<em>В настоящее время поддерживаются значения</em>: Классы экземпляров "
+"(<strong>itemtypes</strong>), Коды коллекций (<strong>ccode</strong>) и "
+"Полочное местоположение (<strong>loc</strong>)."
 
 # Searching > Search form
 msgid ""
@@ -12488,10 +12540,9 @@ msgid ""
 "searching.pref#AdvancedSearchTypes# fields (separate values with |). Tabs "
 "appear in the order listed.<br/>"
 msgstr ""
-" (значения отделять «|»). Вкладки будут появляться в указанном порядке.<br/>"
+"(значения отделять символом |). Вкладки появляются в указанном порядке.<br/>"
 
 # Searching > Results display
-#, fuzzy
 msgid ""
 "searching.pref#BiblioItemtypeInfo#  Koha record level itemtype info on "
 "detail and result pages in the OPAC and staff interface. This info also "
@@ -12501,8 +12552,9 @@ msgid ""
 msgstr ""
 "информация о классе экземпляра на уровне записи Koha на страницах с "
 "информацией и результатами в ЭК и служебном интерфейсе. Эта информация также "
-"отображается, если системная настройка item-level_itypes установлена на "
-"библиографическую запись."
+"отображается, если системная настройка <a href=\"/cgi-"
+"bin/koha/admin/preferences.pl?op=search&searchfield=item-level_itypes\">item-"
+"level_itypes</a> установлена на библиографическую запись."
 
 # Searching > Results display
 msgid "searching.pref#BiblioItemtypeInfo# Display"
@@ -12727,22 +12779,6 @@ msgstr ""
 # Searching > Results display
 msgid "searching.pref#MaxSearchResultsItemsPerRecordStatusCheck# items."
 msgstr "экземпляров."
-
-# Searching > Results Display
-msgid "searching.pref#OPACItemsResultsDisplay# Don't show"
-msgstr "Не показывать"
-
-# Searching > Results Display
-msgid "searching.pref#OPACItemsResultsDisplay# Show"
-msgstr "Показывать"
-
-# Searching > Results display
-msgid ""
-"searching.pref#OPACItemsResultsDisplay# an item's library, location and call "
-"number in OPAC search results."
-msgstr ""
-"библиотеку экземпляра, местоположение и расстановочный шифр в результатах "
-"поиска в ЭК."
 
 # Searching > Search form
 msgid "searching.pref#OPACNumbersPreferPhrase# By default,"
@@ -13119,16 +13155,16 @@ msgid "searching.pref#displayFacetCount# Show"
 msgstr "Показывать"
 
 # Searching > Results Display
-#, fuzzy
 msgid ""
 "searching.pref#displayFacetCount# facet counts. The relevance of these "
 "numbers highly depends on the value of the <a href=\"/cgi-bin/koha/admin/"
 "preferences.pl?op=search&searchfield=maxRecordsForFacets"
 "\">maxRecordsForFacets</a> preference. Applies to OPAC and staff interface."
 msgstr ""
-" количества граней поиска.  Актуальность этих цифр сильно зависит от "
-"значения параметра «maxRecordsForFacets».  Применяется к электронному "
-"каталогу и интерфейса библиотекаря."
+"фасет имеет значение. Актуальность этих чисел в значительной степени зависит "
+"от значения параметра <a href=\"/cgi-"
+"bin/koha/admin/preferences.pl?op=search&searchfield=maxRecordsForFacets\""
+">maxRecordsForFacets</a >. Применяется к OPAC и интерфейсу библиотекаря."
 
 # Searching > Search form
 msgid ""
@@ -13841,7 +13877,7 @@ msgstr "Запретить"
 msgid ""
 "staff_interface.pref#viewLabeledMARC# staff to view records in labeled MARC "
 "form on the staff interface."
-msgstr "сотрудникам просматривать записи в форме MARC в служебном клиенте."
+msgstr "сотрудникам просматривать записи в формате MARC в служебном клиенте."
 
 # Staff interface > Options
 msgid "staff_interface.pref#viewMARC# Allow"
@@ -14592,6 +14628,22 @@ msgstr "строк отчета, запрошенного через веб-сл
 # OPAC > Features
 #~ msgid "opac.pref#RequestOnOpac# Don't allow"
 #~ msgstr "Запретить"
+
+# Searching > Results Display
+#~ msgid "searching.pref#OPACItemsResultsDisplay# Don't show"
+#~ msgstr "Не показывать"
+
+# Searching > Results Display
+#~ msgid "searching.pref#OPACItemsResultsDisplay# Show"
+#~ msgstr "Показывать"
+
+# Searching > Results display
+#~ msgid ""
+#~ "searching.pref#OPACItemsResultsDisplay# an item's library, location and "
+#~ "call number in OPAC search results."
+#~ msgstr ""
+#~ "библиотеку экземпляра, местоположение и расстановочный шифр в результатах "
+#~ "поиска в ЭК."
 
 # Staff interface > Appearance
 #, fuzzy
