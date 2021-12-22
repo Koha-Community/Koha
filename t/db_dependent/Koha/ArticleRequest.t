@@ -156,18 +156,39 @@ subtest 'complete() tests' => sub {
 
 subtest 'cancel() tests' => sub {
 
-    plan tests => 4;
+    plan tests => 11;
 
     $schema->storage->txn_begin;
+
+    my $amount = 11;
+
+    my $patron_mock = Test::MockModule->new('Koha::Patron');
+    $patron_mock->mock( 'article_request_fee', sub { return $amount; } );
+
+    my $patron = $builder->build_object({ class => 'Koha::Patrons' });
+    my $item   = $builder->build_sample_item;
 
     my $ar_mock = Test::MockModule->new('Koha::ArticleRequest');
     $ar_mock->mock( 'notify', sub { ok( 1, '->notify() called' ); } );
 
-    my $ar = $builder->build_object(
-        {   class => 'Koha::ArticleRequests',
-            value => { status => Koha::ArticleRequest::Status::Requested }
+    my $ar = Koha::ArticleRequest->new(
+        {
+            borrowernumber => $patron->id,
+            biblionumber   => $item->biblionumber,
+            itemnumber     => $item->id,
         }
     );
+
+    $ar->request()->discard_changes;
+
+    is( $ar->status, Koha::ArticleRequest::Status::Requested );
+    is( $ar->itemnumber, $item->id, 'itemnumber set' );
+    ok( defined $ar->debit_id, 'Fee linked' );
+    is( $patron->account->balance, $amount, 'Outstanding fees with the right value' );
+
+    my $payed_amount = 5;
+    $patron->account->pay({ amount => $payed_amount, interface => 'intranet', lines => [ $ar->debit ] });
+    is( $patron->account->balance, $amount - $payed_amount, 'Outstanding fees with the right value' );
 
     my $reason = "Hey, ho";
     my $notes  = "Let's go!";
@@ -177,6 +198,8 @@ subtest 'cancel() tests' => sub {
     is( $ar->status, Koha::ArticleRequest::Status::Canceled );
     is( $ar->cancellation_reason, $reason, 'Cancellation reason stored correctly' );
     is( $ar->notes, $notes, 'Notes stored correctly' );
+
+    is( abs $patron->account->balance, $payed_amount, 'The patron has been refunded the right value' );
 
     $schema->storage->txn_rollback;
 };
