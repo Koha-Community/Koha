@@ -133,22 +133,13 @@ if ( $xslfile ) {
       ( C4::Context->preference('UseControlNumber') and $record->field('001') )
       ? 'rcn:'. $record->field('001')->data . ' AND (bib-level:a OR bib-level:b)'
       : "Host-item:($cleaned_title)";
-    my ( $err, $result, $count );
-    eval {
-        ( $err, $result, $count ) =
-          $searcher->simple_search_compat( $query, 0, 0 );
+    my ( $err, $result, $count ) = $searcher->simple_search_compat( $query, 0, 0 );
 
-    };
-    if ($err || $@){
-        my $error = q{};
-        $error .= $err if $err;
-        $error .= $@ if $@;
-        warn "Warning from simple_search_compat: $error";
-        $template->param( analytics_error => 1 );
-    }
+    warn "Warning from simple_search_compat: $err"
+        if $err;
 
     my $variables = {
-        show_analytics_link => defined $count && $count > 0 ? 1 : 0
+        show_analytics_link => $count > 0 ? 1 : 0
     };
 
     $template->param(
