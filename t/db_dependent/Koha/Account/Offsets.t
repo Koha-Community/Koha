@@ -73,7 +73,7 @@ subtest 'total() tests' => sub {
     $schema->storage->txn_rollback;
 };
 
-subtest 'filter_by_non_reversable() and filter_by_reversable() tests' => sub {
+subtest 'filter_by_non_reversible() and filter_by_reversible() tests' => sub {
 
     plan tests => 4;
 
@@ -90,16 +90,16 @@ subtest 'filter_by_non_reversable() and filter_by_reversable() tests' => sub {
     $account->pay( { amount => 4, type => 'PAYMENT' } );
     $account->pay( { amount => 5, type => 'CREDIT' } );
 
-    # non-reversable offsets
-    is( $manual_fee->debit_offsets->filter_by_non_reversable->count,
-        3, '3 non-reversable offsets' );
-    is( $manual_fee->debit_offsets->filter_by_non_reversable->total,
-        -6, '-6 the total amount of the non-reversable offsets' );
-    # reversable offsets
-    is( $manual_fee->debit_offsets->filter_by_reversable->count,
-        2, 'The right reversable offsets count' );
-    is( $manual_fee->debit_offsets->filter_by_reversable->total,
-        -5, 'The right total amount of the reversable offsets' );
+    # non-reversible offsets
+    is( $manual_fee->debit_offsets->filter_by_non_reversible->count,
+        3, '3 non-reversible offsets' );
+    is( $manual_fee->debit_offsets->filter_by_non_reversible->total,
+        -6, '-6 the total amount of the non-reversible offsets' );
+    # reversible offsets
+    is( $manual_fee->debit_offsets->filter_by_reversible->count,
+        2, 'The right reversible offsets count' );
+    is( $manual_fee->debit_offsets->filter_by_reversible->total,
+        -5, 'The right total amount of the reversible offsets' );
 
     $schema->storage->txn_rollback;
 };

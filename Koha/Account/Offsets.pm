@@ -34,13 +34,13 @@ Account offsets track the changes made to the balance of account lines
 
 =head2 Class methods
 
+=head3 total
+
     my $offsets = Koha::Account::Offsets->search({ ...  });
     my $total   = $offsets->total;
 
 Returns the sum of the amounts of the account offsets resultset. If the resultset is
 empty it returns 0.
-
-=head3 total
 
 =cut
 
@@ -60,11 +60,15 @@ sub total {
       : 0;
 }
 
-=head3 filter_by_non_reversable
+=head3 filter_by_non_reversible
+
+    my $non_reversible = $debit->->search(..)->filter_by_non_reversible;
+
+Filter offsets so only non-reversible ones are left in the resultset.
 
 =cut
 
-sub filter_by_non_reversable {
+sub filter_by_non_reversible {
     my ($self) = @_;
 
     my $me = $self->_resultset()->current_source_alias;
@@ -82,11 +86,15 @@ sub filter_by_non_reversable {
     return $self->search( $where, $attr );
 }
 
-=head3 filter_by_reversable
+=head3 filter_by_reversible
+
+    my $reversible = Koha::Account::Offsets->search(..)->filter_by_reversible;
+
+Filter offsets so only non ones are left in the resultset.
 
 =cut
 
-sub filter_by_reversable {
+sub filter_by_reversible {
     my ($self) = @_;
 
     my $me = $self->_resultset()->current_source_alias;
