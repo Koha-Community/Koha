@@ -292,7 +292,7 @@ sub build_query_compat {
         my $ea = each_array( @$operands, @$operators, @index_params );
         while ( my ( $oand, $otor, $index ) = $ea->() ) {
             next if ( !defined($oand) || $oand eq '' );
-            $oand = $self->clean_search_term($oand);
+            $oand = $self->_clean_search_term($oand);
             $oand = $self->_truncate_terms($oand) if ($truncate);
             push @search_params, {
                 operand => $oand,      # the search terms
@@ -445,7 +445,7 @@ sub build_authorities_query {
             my @tokens = $self->_split_query( $val );
             foreach my $token ( @tokens ) {
                 $token = $self->_truncate_terms(
-                    $self->clean_search_term( $token )
+                    $self->_clean_search_term( $token )
                 );
             }
             my $query = $self->_join_queries( @tokens );
@@ -644,7 +644,7 @@ sub _build_scan_query {
             terms => {
                 field => $index . '__facet',
                 order => { '_term' => 'asc' },
-                include => $self->_create_regex_filter($self->clean_search_term($term)) . '.*'
+                include => $self->_create_regex_filter($self->_clean_search_term($term)) . '.*'
             }
         }
     };
@@ -909,9 +909,9 @@ sub _create_query_string {
     } @queries;
 }
 
-=head2 clean_search_term
+=head2 _clean_search_term
 
-    my $term = $self->clean_search_term($term);
+    my $term = $self->_clean_search_term($term);
 
 This cleans a search term by removing any funny characters that may upset
 ES and give us an error. It also calls L<_convert_index_strings_freeform>
@@ -919,7 +919,7 @@ to ensure those parts are correct.
 
 =cut
 
-sub clean_search_term {
+sub _clean_search_term {
     my ( $self, $term ) = @_;
 
     # Lookahead for checking if we are inside quotes
@@ -930,6 +930,7 @@ sub clean_search_term {
     $term =~ s/=/:/g;
 
     $term = $self->_convert_index_strings_freeform($term);
+    $term =~ s/[{}]/"/g;
 
     # Remove unbalanced quotes
     my $unquoted = $term;
@@ -937,68 +938,14 @@ sub clean_search_term {
     if ($count % 2 == 1) {
         $term = $unquoted;
     }
+
+    # Remove unquoted colons that have whitespace on either side of them
+    $term =~ s/(:+)(\s+)$lookahead/$2/g;
+    $term =~ s/(\s+)(:+)$lookahead/$1/g;
+    $term =~ s/^://;
+
     $term = $self->_query_regex_escape_process($term);
 
-    # because of _truncate_terms and if QueryAutoTruncate enabled
-    # we will have any special operators ruined by _truncate_terms:
-    # for ex. search for "test [6 TO 7]" will be converted to "test* [6* TO* 7]"
-    # so no reason to keep ranges in QueryAutoTruncate==true case:
-    my $truncate = C4::Context->preference("QueryAutoTruncate") || 0;
-    unless($truncate) {
-        # replace all ranges with any square/curly brackets combinations to temporary substitutions (ex: "{a TO b]"" -> "~~LC~~a TO b~~RS~~")
-        # (where L is for left and C is for Curly and so on)
-        $term =~ s/
-            (?<!\\)
-            (?<backslashes>(?:[\\]{2})*)
-            (?<leftbracket>\{|\[)
-            (?<ranges>
-                [^\s\[\]\{\}]+\ TO\ [^\s\[\]\{\}]+
-                (?<!\\)
-                (?:[\\]{2})*
-            )
-            (?<rightbracket>\}|\])
-        /$+{backslashes}.'~~L'.($+{leftbracket} eq '[' ? 'S':'C').'~~'.$+{ranges}.'~~R'.($+{rightbracket} eq ']' ? 'S':'C').'~~'/gex;
-    }
-    # save all regex contents away before escaping brackets:
-    # (same trick as with brackets above, just RE for 'RegularExpression')
-    my @saved_regexes;
-    my $rgx_i = 0;
-    while(
-            $term =~ s@(
-                (?<!\\)(?:[\\]{2})*/
-                (?:[^/]+|(?<=\\)(?:[\\]{2})*/)+
-                (?<!\\)(?:[\\]{2})*/
-            )$lookahead@~~RE$rgx_i~~@x
-    ) {
-        @saved_regexes[$rgx_i++] = $1;
-    }
-
-    # remove leading and trailing colons mixed with optional slashes and spaces
-    $term =~ s/^([\s\\]*:\s*)+//;
-    $term =~ s/([\s\\]*:\s*)+$//;
-    # remove unquoted colons that have whitespace on either side of them
-    $term =~ s/([\s\\]*:\s*)+(\s+)$lookahead/$2/g;
-    $term =~ s/(\s+)([\s\\]*:\s*)+$lookahead/$1/g;
-    # replace with spaces all repeated colons no matter how they surrounded with spaces and slashes
-    $term =~ s/([\s\\]*:\s*){2,}$lookahead/ /g;
-    # screen all followups for colons after first colon,
-    # and correctly ignore unevenly backslashed:
-    $term =~ s/((?<!\\)(?:[\\]{2})*:[^:\s]+(?<!\\)(?:[\\]{2})*)(?=:)/$1\\/g;
-
-    # screen all exclamation signs that either are the last symbol or have white space after them
-    $term =~ s/(?:[\s\\]*!\s*)+(\s|$)/$1/g;
-
-    # screen all brackets with backslash
-    $term =~ s/(?<!\\)(?:[\\]{2})*([\{\}\[\]])$lookahead/\\$1/g;
-
-    # restore all regex contents after escaping brackets:
-    for (my $i = 0; $i < @saved_regexes; $i++) {
-        $term =~ s/~~RE$i~~/$saved_regexes[$i]/;
-    }
-    unless($truncate) {
-        # restore temporary weird substitutions back to normal brackets
-        $term =~ s/~~L(C|S)~~([^\s\[\]\{\}]+ TO [^\s\[\]\{\}]+)~~R(C|S)~~/($1 eq 'S' ? '[':'{').$2.($3 eq 'S' ? ']':'}')/ge;
-    }
     return $term;
 }
 
