@@ -90,8 +90,8 @@ subtest 'relationships_debt() tests' => sub {
 
     my $parent_1 = $builder->build_object({ class => 'Koha::Patrons', value => { firstname => "Parent 1" } });
     my $parent_2 = $builder->build_object({ class => 'Koha::Patrons', value => { firstname => "Parent 2" } });
-    my $child_1 = $builder->build_object({ class => 'Koha::Patrons', value => { firstname => "Child 1" } });
-    my $child_2 = $builder->build_object({ class => 'Koha::Patrons', value => { firstname => "Child 2" } });
+    my $child_1 = $builder->build_object({ class => 'Koha::Patrons', value => { firstname => " Child 1" } });
+    my $child_2 = $builder->build_object({ class => 'Koha::Patrons', value => { firstname => " Child 2" } });
 
     $child_1->add_guarantor({ guarantor_id => $parent_1->borrowernumber, relationship => 'parent' });
     $child_1->add_guarantor({ guarantor_id => $parent_2->borrowernumber, relationship => 'parent' });
@@ -135,7 +135,7 @@ subtest 'relationships_debt() tests' => sub {
 
 sub _test_combinations {
     my ( $patrons, $parent1_debt, $parent2_debt, $child1_debt, $child2_debt ) = @_;
-
+    diag("Testing with parent 1 debt $parent1_debt | Parent 2 debt $parent2_debt | Child 1 debt $child1_debt | Child 2 debt $child2_debt");
     # Options
     # P1 => P1 + C1 + C2 ( - P1 ) ( + P2 )
     # P2 => P2 + C1 + C2 ( - P2 ) ( + P1 )
@@ -146,6 +146,7 @@ sub _test_combinations {
     for my $i ( 0 .. 7 ) {
         my ( $only_this_guarantor, $include_guarantors, $include_this_patron )
           = split '', sprintf( "%03b", $i );
+        diag("---------------------");
         for my $patron ( @$patrons ) {
             if ( $only_this_guarantor
                 && !$patron->guarantee_relationships->count )
@@ -176,7 +177,7 @@ sub _test_combinations {
                     $debt += $child1_debt + $child2_debt;
                     $debt += $parent1_debt unless ($only_this_guarantor || !$include_guarantors);
                 }
-                elsif ( $patron->firstname eq 'Child 1' ) {
+                elsif ( $patron->firstname eq ' Child 1' ) {
                     $debt += $child1_debt if ($include_this_patron);
                     $debt += $child2_debt;
                     $debt += $parent1_debt + $parent2_debt if ($include_guarantors);
@@ -197,7 +198,7 @@ sub _test_combinations {
                     ),
                     $debt,
                     $patron->firstname
-                      . " debt of $debt calculated correctly for ( only_this_guarantor: $only_this_guarantor, include_guarantors: $include_guarantors, include_this_patron: $include_this_patron)"
+                      . " debt of " . sprintf('%02d',$debt) . " calculated correctly for ( only_this_guarantor: $only_this_guarantor, include_guarantors: $include_guarantors, include_this_patron: $include_this_patron)"
                 );
             }
         }
