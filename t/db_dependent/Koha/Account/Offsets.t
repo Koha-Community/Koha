@@ -19,8 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 1;
-use Test::Exception;
+use Test::More tests => 2;
 
 use Koha::Account::Offsets;
 
@@ -70,6 +69,37 @@ subtest 'total() tests' => sub {
 
     my $none = Koha::Account::Offsets->search( { debit_id => $line->id + 1 } );
     is( $none->total, 0, 'No offsets, returns 0' );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'filter_by_non_reversable() and filter_by_reversable() tests' => sub {
+
+    plan tests => 4;
+
+    $schema->storage->txn_begin;
+
+    my $patron  = $builder->build_object( { class => 'Koha::Patrons' } );
+    my $account = $patron->account;
+
+    my $manual_fee = $account->add_debit({ amount => 11, interface => 'intranet', type => 'MANUAL' });
+
+    $account->pay( { amount => 1, type => 'WRITEOFF' } );
+    $account->pay( { amount => 2, type => 'DISCOUNT' } );
+    $account->pay( { amount => 3, type => 'CANCELLATION' } );
+    $account->pay( { amount => 4, type => 'PAYMENT' } );
+    $account->pay( { amount => 5, type => 'CREDIT' } );
+
+    # non-reversable offsets
+    is( $manual_fee->debit_offsets->filter_by_non_reversable->count,
+        3, '3 non-reversable offsets' );
+    is( $manual_fee->debit_offsets->filter_by_non_reversable->total,
+        -6, '-6 the total amount of the non-reversable offsets' );
+    # reversable offsets
+    is( $manual_fee->debit_offsets->filter_by_reversable->count,
+        2, 'The right reversable offsets count' );
+    is( $manual_fee->debit_offsets->filter_by_reversable->total,
+        -5, 'The right total amount of the reversable offsets' );
 
     $schema->storage->txn_rollback;
 };
