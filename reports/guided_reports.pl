@@ -773,6 +773,30 @@ elsif ($phase eq 'Run this report'){
                         %authorised_lib = map { $_->categorycode => $_->description } @patron_categories;
                         push @authorised_values, $_->categorycode for @patron_categories;
                     }
+                    elsif ( $authorised_value eq "cash_registers" ) {
+                        my $sth = $dbh->prepare("SELECT id, name FROM cash_registers ORDER BY description");
+                        $sth->execute;
+                        while ( my ( $id, $name ) = $sth->fetchrow_array ) {
+                            push @authorised_values, $id;
+                            $authorised_lib{$id} = $name;
+                        }
+                    }
+                    elsif ( $authorised_value eq "debit_types" ) {
+                        my $sth = $dbh->prepare("SELECT code, description FROM account_debit_types ORDER BY code");
+                        $sth->execute;
+                        while ( my ( $code, $description ) = $sth->fetchrow_array ) {
+                           push @authorised_values, $code;
+                           $authorised_lib{$code} = $description;
+                        }
+                    }
+                    elsif ( $authorised_value eq "credit_types" ) {
+                        my $sth = $dbh->prepare("SELECT code, description FROM account_credit_types ORDER BY code");
+                        $sth->execute;
+                        while ( my ( $code, $description ) = $sth->fetchrow_array ) {
+                           push @authorised_values, $code;
+                           $authorised_lib{$code} = $description;
+                        }
+                    }
                     else {
                         if ( Koha::AuthorisedValues->search({ category => $authorised_value })->count ) {
                             my $query = '

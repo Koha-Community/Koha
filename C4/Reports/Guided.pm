@@ -936,7 +936,10 @@ sub GetReservedAuthorisedValues {
                               'itemtypes',
                               'cn_source',
                               'categorycode',
-                              'biblio_framework' );
+                              'biblio_framework',
+                              'cash_registers',
+                              'debit_types',
+                              'credit_types' );
 
    return \%reserved_authorised_values;
 }

@@ -1632,6 +1632,21 @@
                     $("#paramLabel").val( _("Patron category") );
                     $("#param_category").val("categorycode");
                     break;
+                case "insertCashregister":
+                    modalTitle.text( _("Insert cash register parameter") );
+                    $("#paramLabel").val( _("Cash register") );
+                    $("#param_category").val("cash_registers");
+                    break;
+                case "insertDebittypes":
+                    modalTitle.text( _("Insert debit types parameter") );
+                    $("#paramLabel").val( _("Debit types") );
+                    $("#param_category").val("debit_types");
+                    break;
+                case "insertCredittypes":
+                    modalTitle.text( _("Insert credit types parameter") );
+                    $("#paramLabel").val( _("Credit types") );
+                    $("#param_category").val("credit_types");
+                    break;
                 case "insertList":
                     modalTitle.text( _("Insert list parameter") );
                     $("#paramLabel").val( _("List of values") );
@@ -2435,6 +2450,9 @@
             <li><a href="#" class="insertParam" id="insertBranches">Libraries</a></li>
             <li><a href="#" class="insertParam" id="insertList">List</a></li>
             <li><a href="#" class="insertParam" id="insertCategorycode">Patron categories</a></li>
+            <li><a href="#" class="insertParam" id="insertCashregister">Cash register</a></li>
+            <li><a href="#" class="insertParam" id="insertDebittypes">Debit types</a></li>
+            <li><a href="#" class="insertParam" id="insertCredittypes">Credit types</a></li>
             <li><a href="#" class="insertParam" id="insertText">Text field</a></li>
         </ul>
     </div>
