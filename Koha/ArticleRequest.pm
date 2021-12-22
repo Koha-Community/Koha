@@ -138,6 +138,34 @@ sub cancel {
     $self->notes($notes) if $notes;
     $self->store();
     $self->notify();
+
+    my $debit = $self->debit;
+
+    if ( $debit ) {
+        # fees found, refund
+        my $account = $self->borrower->account;
+
+        my $total_reversible = $debit->debit_offsets->filter_by_reversible->total;
+        if ( $total_reversible ) {
+
+            $account->add_credit(
+                {
+                    amount       => abs $total_reversible,
+                    interface    => C4::Context->interface,
+                    type         => 'REFUND',
+                }
+            );
+        }
+
+        if ( $debit->amountoutstanding ) {
+            $debit->reduce({
+                reduction_type => 'REFUND',
+                amount         => $debit->amountoutstanding,
+                interface      => C4::Context->interface,
+            })->discard_changes;
+        }
+    }
+
     return $self;
 }
 
