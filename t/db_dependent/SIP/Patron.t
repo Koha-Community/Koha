@@ -4,7 +4,7 @@
 # This needs to be extended! Your help is appreciated..
 
 use Modern::Perl;
-use Test::More tests => 8;
+use Test::More tests => 9;
 
 use t::lib::Mocks;
 use t::lib::TestBuilder;
@@ -272,4 +272,41 @@ subtest "fine_items tests" => sub {
     is( @$fine_items, 0, "Got zero fine items" );
 };
 
+subtest "NoIssuesChargeGuarantorsWithGuarantees tests" => sub {
+
+    plan tests => 1;
+
+    t::lib::Mocks::mock_preference( 'borrowerRelationship', 'parent' );
+
+    my $patron = $builder->build_object({ class => 'Koha::Patrons' });
+    my $child  = $builder->build_object({ class => 'Koha::Patrons' });
+    $child->add_guarantor({ guarantor_id => $patron->borrowernumber, relationship => 'parent' });
+
+    t::lib::Mocks::mock_preference('NoIssuesChargeGuarantorsWithGuarantees', 1);
+
+    my $fee1 = $builder->build_object(
+        {
+            class => 'Koha::Account::Lines',
+            value  => {
+                borrowernumber => $patron->borrowernumber,
+                amountoutstanding => 11,
+            }
+        }
+    )->store;
+
+    my $fee2 = $builder->build_object(
+        {
+            class => 'Koha::Account::Lines',
+            value  => {
+                borrowernumber => $child->borrowernumber,
+                amountoutstanding => 0.11,
+            }
+        }
+    )->store;
+
+    my $sip_patron = C4::SIP::ILS::Patron->new( $patron->cardnumber );
+
+    is( $sip_patron->fines_amount, 11.11,"Guarantee fines correctly included");
+
+};
 $schema->storage->txn_rollback;
