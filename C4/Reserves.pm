@@ -398,11 +398,8 @@ sub CanBookBeReserved{
   if ($canReserve->{status} eq 'OK') { #We can reserve this Item! }
 
   current params are:
-  'ignore_found_holds' - if true holds that have been trapped are not counted
-  toward the patron limit, used by checkHighHolds to avoid counting the hold we will fill with the
-  current checkout against the high holds threshold
   'ignore_hold_counts' - we use this routine to check if an item can fill a hold - on this case we
-  should not check if there are too many holds as we only csre about reservability
+  should not check if there are too many holds as we only care about reservability
 
 @RETURNS { status => OK },              if the Item can be reserved.
          { status => ageRestricted },   if the Item is age restricted for this borrower.
@@ -515,7 +512,6 @@ sub CanItemBeReserved {
                 borrowernumber => $patron->borrowernumber,
                 biblionumber   => $item->biblionumber,
             };
-            $search_params->{found} = undef if $params->{ignore_found_holds};
             my $holds = Koha::Holds->search($search_params);
             return { status => "tooManyHoldsForThisRecord", limit => $holds_per_record } if $holds->count() >= $holds_per_record;
         }
